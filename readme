@@ -1,1 +1,11 @@
-# Sundog Theorem Simulation (MuJoCo)This repository contains a prototype simulation environment and agent wrapper for testing the **Sundog Theorem** — a novel framework for AI alignment based on indirect feedback: **torque resistance** and **shadow convergence**, rather than direct observation of targets.The simulation is built using [MuJoCo](https://mujoco.org/), and models a pole-based agent attempting to insert a screw vertically into a ceiling while aligning to a laser dot using indirect sensory data.---## Features- Articulated 2-segment pole agent with 3 DOF (base rotate, 2 pitch joints)- Overhead laser plumb point as the invisible target- Simulated torque feedback and positional shadow as alignment cues- Direct reward vs. indirect reward modes (for comparison)- Rendered environment with viewer support---## Requirements- `mujoco` >= 2.3.0  - `numpy`Install MuJoCo (with Python bindings) as described in the [official guide](https://mujoco.readthedocs.io/).```bashpip install mujoco numpy
+# Sundog Theorem Simulation (MuJoCo)
+This repository contains a prototype simulation environment and agent wrapper for testing the **Sundog Theorem** — a novel framework for AI alignment based on indirect feedback: **torque resistance** and **shadow convergence**, rather than direct observation of targets.The simulation is built using [MuJoCo](https://mujoco.org/), and models a pole-based agent attempting to insert a screw vertically into a ceiling while aligning to a laser dot using indirect sensory data.---
+
+## Features- Articulated 2-segment pole agent with 3 DOF (base rotate, 2 pitch joints)- Overhead laser plumb point as the invisible target- Simulated torque feedback and positional shadow as alignment cues- Direct reward vs. indirect reward modes (for comparison)- Rendered environment with viewer support---
+
+## Requirements
+- `mujoco` >= 2.3.0  
+- `numpy`
+Install MuJoCo (with Python bindings) as described in the [official guide](https://mujoco.readthedocs.io/).
+```bash 
+pip install mujoco numpy
