@@ -1,7 +1,7 @@
 import mujoco
 import mujoco.viewer
 import numpy as np
-from utils.sensors import estimate_shadow
+from sundog.utils.sensors import estimate_shadow
 
 class SundogEnv:
     def __init__(self, model_path):
