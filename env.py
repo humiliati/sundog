@@ -16,7 +16,7 @@ class SundogEnv:
 
     def step(self, ctrl):
         ctrl = np.clip(ctrl, -1, 1)
-        self.data.ctrl[:] = ctrl
+        self.data.ctrl[:] = ctrl[-2:]  # Trim to match pitch1 and pitch2 actuators
         mujoco.mj_step(self.model, self.data)
         return self._get_obs(), self._compute_reward(), False, {}
 
