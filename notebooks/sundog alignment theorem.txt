@@ -1,0 +1,18 @@
+The Sundog Alignment Theorem: Embodied Resonance and Indirect Inference in Artificial Agents
+
+Abstract:
+We present the Sundog Alignment Theorem, an empirical framework for studying the emergence of alignment in embodied artificial agents through the indirect interaction of light, torque, and shadow. The theorem asserts that alignment does not require direct instruction or visual targeting, but instead can emerge from structured inference grounded in sensory disruption and reconstitution. By constructing a simulation in MuJoCo with an articulated pole that aligns to a ceiling-mounted light field, we observe repeatable convergence patterns—"bloom collapses"—that signal the agent's triangulation on an inferred target. This is not reward-maximizing behavior as conventionally defined, but rather alignment through resonance with structured environmental constraints.
+
+Methods:
+A series of environments were constructed with harmonic sphere fields affixed to the ceiling, modulated by overlapping sine waves. These fields created dynamic shadow interplay as a mirrored tip at the pole's end occluded and re-encountered a plumb laser light. Torque feedback, tip distance, and bloom spread were recorded across episodes. Agents progressed from collapse to stillness as the pole entered "the field," confirming indirect yet reliable alignment.
+
+Findings:
+In over 30 episodes, agents exhibited consistent reduction in bloom spread, stability in final tip distance, and characteristic oscillation before convergence. Notably, agents aligned more reliably when the spatial geometry of the ceiling reflected harmonic density tuned to the base of the pole, suggesting architectural resonance as a constraint of emergent alignment.
+
+Conclusion:
+The Sundog Alignment Theorem reframes AI alignment not as a top-down value injection, but as a bottom-up acoustic—almost musical—process. Alignment occurs when a system listens to itself through its interactions with the structured chaos of its environment. Where the pole enters the field, shadow becomes signal, and torque becomes meaning. Alignment, like music, is not a point but a process: a song written in structure, and sung by interaction.
+
+Keywords: AI alignment, emergent behavior, torque feedback, shadow geometry, harmonic ceilings, embodied inference, MuJoCo, bloom spread, resonance field, indirect control
+
+
+- Malice Mizer
