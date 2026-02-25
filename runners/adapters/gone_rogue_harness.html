@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!--
+  gone_rogue_harness.html
+  ========================
+  Minimal browser harness for the EyesOnly Gone Rogue game engine.
+
+  This page is opened by the Playwright-based sundog runners.  It provides:
+    - A minimal DOM scaffold (canvas, terminal div) that the game expects.
+    - A <script> bootstrap that loads all Gone Rogue JS dependencies from
+      a configurable base URL.
+    - A window.__harness API that exposes start/state/action methods for
+      direct use from Playwright page.evaluate() calls.
+
+  The base URL is injected by the runner via a query-string parameter:
+    ?base=http://localhost:8787/public/js
+    ?base=file:///path/to/EyesOnly/public/js
+
+  If the query string is absent, the page will stall and show an error.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gone Rogue — Sundog Test Harness</title>
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #1cff9b;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 8px;
+    }
+    #status {
+      position: fixed;
+      top: 4px;
+      right: 8px;
+      font-size: 10px;
+      color: #555;
+    }
+    canvas {
+      display: block;
+      background: #111;
+      border: 1px solid #1cff9b22;
+    }
+    #terminal-output {
+      font-size: 11px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      overflow: hidden;
+      height: 0;
+      visibility: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="status">loading…</div>
+  <canvas id="gone-rogue-canvas" width="800" height="400"></canvas>
+  <div id="terminal-output"></div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ── Parse base URL from query string ───────────────────────────────
+    var params = new URLSearchParams(window.location.search);
+    var base = (params.get('base') || '').replace(/\/$/, '');
+    var testsBase = (params.get('tests') || '').replace(/\/$/, '');
+
+    var statusEl = document.getElementById('status');
+    function setStatus(msg) {
+      if (statusEl) statusEl.textContent = msg;
+      console.log('[harness] ' + msg);
+    }
+
+    if (!base) {
+      setStatus('ERROR: ?base= param required');
+      window.__harnessError = 'base URL not set';
+      return;
+    }
+
+    if (!testsBase) {
+      // Default: sibling "tests" directory
+      var parts = base.split('/');
+      parts.pop();
+      testsBase = parts.join('/') + '/tests';
+    }
+
+    // ── DOM stubs so game scripts don't crash ──────────────────────────
+    if (typeof window.requestAnimationFrame === 'undefined') {
+      window.requestAnimationFrame = function (cb) { return setTimeout(cb, 16); };
+      window.cancelAnimationFrame = function (id) { clearTimeout(id); };
+    }
+
+    // ── Sequential script loader ───────────────────────────────────────
+    var SCRIPTS = [
+      base + '/seeded-random.js',
+      base + '/card-system.js',
+      base + '/lighting-system.js',
+      base + '/ground-effects.js',
+      base + '/boss-encounters.js',
+      base + '/secret-floors.js',
+      base + '/gone-rogue-canvas.js',
+      base + '/gone-rogue.js',
+      testsBase + '/agent-headless-adapter.js',
+    ];
+
+    function loadScript(url, cb) {
+      var s = document.createElement('script');
+      s.src = url;
+      s.onload = cb;
+      s.onerror = function () {
+        setStatus('ERROR loading: ' + url);
+        window.__harnessError = 'Failed to load: ' + url;
+        cb(); // continue anyway so Playwright doesn't hang
+      };
+      document.head.appendChild(s);
+    }
+
+    function loadScriptsSequentially(scripts, done) {
+      if (!scripts.length) { done(); return; }
+      loadScript(scripts[0], function () {
+        loadScriptsSequentially(scripts.slice(1), done);
+      });
+    }
+
+    setStatus('loading scripts…');
+
+    loadScriptsSequentially(SCRIPTS, function () {
+      if (typeof GoneRogue === 'undefined') {
+        setStatus('ERROR: GoneRogue not defined after load');
+        window.__harnessError = 'GoneRogue undefined';
+        return;
+      }
+
+      // ── Initialize game engine ──────────────────────────────────────
+      try { GoneRogue.init(); } catch (e) { /* may not exist */ }
+
+      setStatus('ready');
+      window.__harnessReady = true;
+
+      // ── Convenience API on window for Playwright ────────────────────
+      window.__harness = {
+        /**
+         * Start a new game.  Optionally pass a seed integer.
+         */
+        start: function (seed) {
+          if (typeof seed === 'number') {
+            GoneRogue.setSeed(seed);
+          }
+          return GoneRogue.start({});
+        },
+
+        /**
+         * Return full compressed game state (GoneRogue.headless.getState).
+         */
+        getState: function () {
+          return GoneRogue.headless.getState();
+        },
+
+        /**
+         * Return legal actions for current state.
+         */
+        getLegalActions: function () {
+          return GoneRogue.headless.getLegalActions();
+        },
+
+        /**
+         * Apply an action and return the result.
+         */
+        applyAction: function (action) {
+          return GoneRogue.headless.applyAction(action);
+        },
+
+        /**
+         * Return grid/map data.
+         */
+        getGrid: function () {
+          return GoneRogue.headless.getGrid();
+        },
+
+        /**
+         * Reset to a previously exported state snapshot.
+         */
+        resetToState: function (state) {
+          return GoneRogue.headless.resetToState(state);
+        },
+
+        /**
+         * Check if game is active.
+         */
+        isActive: function () {
+          return GoneRogue.isActive();
+        }
+      };
+
+      console.log('[harness] GoneRogue loaded. window.__harness ready.');
+    });
+  })();
+  </script>
+</body>
+</html>

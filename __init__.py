@@ -15,6 +15,9 @@ Usage:
 """
 
 # You can optionally expose high-level accessors
-from .env import SundogEnv
-from .agents.doa import DirectObservationAgent
-from .agents.tsa import TorqueShadowAgent
+try:
+    from .env import SundogEnv
+    from .agents.doa import DirectObservationAgent
+    from .agents.tsa import TorqueShadowAgent
+except Exception:
+    pass
