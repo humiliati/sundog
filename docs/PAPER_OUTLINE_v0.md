@@ -246,13 +246,19 @@ refine. This is the trade-off the paper documents.
 
 ### A caveat that deserves call-out
 Photometric's mean terminal (0.945) is fractionally higher than DOA-direct's
-(0.936) — not statistically significant but notable. The reason is that
-DOA-direct's analytic solve uses a half-vector formula seeded by grid
-search; the joint-mirror-position coupling is approximated. Photometric
-does naive global optimization via SCAN and locates the empirical
-maximum directly. So in this geometry, "not knowing the target" is not
-a disadvantage — the SCAN phase makes the agent into an effective
-zeroth-order optimizer.
+(0.936) — not statistically significant but notable. The mechanism, as
+correctly described in the v1 draft §5.2: DOA-direct's solver is grid
+search seed + Nelder-Mead refinement on the analytic intensity (per
+`optics.optimal_joint_angles`), which terminates at f_atol=1e-6, and the
+returned joint targets are then servoed by MuJoCo's PD with non-zero
+steady-state error against gravity bias. Photometric, by contrast, does
+ESC refinement online while the joint is at its operating point, so
+its lock incorporates the steady-state error rather than ignoring it.
+That gap accumulates to ~0.01 in the headline.
+
+(Earlier outline drafts described DOA-direct as using a "half-vector
+formula"; that was leftover from a prior version of optics.py, replaced
+during development. The draft is correct; this outline is now reconciled.)
 
 ### Why this matters
 The result is small but it inverts the standard reading of indirect
