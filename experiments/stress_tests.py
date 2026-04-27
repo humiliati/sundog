@@ -22,13 +22,16 @@ Stressors implemented
 - laser_height     : Laser z-coordinate. Levels: 1.5, 2.0, 2.5, 3.0, 3.5.
 - joint_limit      : Symmetric joint limit in radians. Levels: 0.8, 1.0, 1.2, 1.5.
 - distractor_boost : Multiplicative boost on detector_4 (opposite the target)
-                     for the photometric agent's perceived intensities. Levels:
-                     1.0 (no boost), 1.5, 2.0, 3.0, 5.0.
+                     in the agent-visible obs. Levels: 1.0 (no boost), 1.5,
+                     2.0, 3.0, 5.0.
 
-The distractor_boost stressor is the one most likely to break the photometric
-agent: if a non-target detector reads brighter than the target, the SCAN
-phase will lock onto the wrong peak. It tests the implicit assumption that
-the target detector is identifiable by index alone.
+NOTE on distractor_boost (caveat). The current photometric agent reads only
+`obs.detector_intensities[TARGET_DETECTOR_INDEX]` (detector_0). Boosting a
+non-target detector therefore has *zero effect* on this agent. The stressor
+is included for completeness and to enable a planned max-intensity agent
+that picks the brightest detector and tries to align to it; that agent would
+genuinely fail under distractor boost. Until that agent exists, omitting
+distractor_boost from the headline sweep is the right call.
 """
 
 from __future__ import annotations

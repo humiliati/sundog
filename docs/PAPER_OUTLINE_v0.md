@@ -333,3 +333,121 @@ of last cycle's reception.
       task whose constraints match our setup.
 - [ ] Authors and affiliations.
 - [ ] Cite Hughes 2024 honestly (not buried).
+
+---
+
+# Stress test results (added after running task 6)
+
+Five-stressor sweep, 30 seeds each. Plots in sundog/results/stress_tests/<stressor>/stress_curve.png. Summary CSV at sundog/results/stress_tests/stress_summary.csv.
+
+## 4.6 Stress tests
+
+We sweep five perturbations in isolation, each at 4-5 levels, with the
+same 30-seed matched-scene design.
+
+### Detector noise (Section 4.6.1)
+Additive Gaussian noise on the agent-visible detector intensities. Levels
+sigma = 0.0, 0.02, 0.05, 0.10, 0.20.
+
+| sigma | photometric | doa_direct | doa_noisy |
+|-------|-------------|------------|-----------|
+| 0.00  | 0.945       | 0.936      | 0.911     |
+| 0.05  | 0.921       | 0.936      | 0.911     |
+| 0.10  | 0.894       | 0.936      | 0.911     |
+| 0.20  | 0.898       | 0.936      | 0.911     |
+
+Photometric degrades gracefully (~5% loss at sigma=0.20). Oracles
+unaffected (they don't read detector intensities). The 0.10->0.20
+plateau in photometric is consistent with the SCAN's argmax saturating
+under heavy noise: at sigma=0.20, the noise floor (~0.20) is comparable
+to the photometric peak the agent's SCAN locks onto, so additional
+noise stops moving the argmax.
+
+### Beam sigma (Section 4.6.2)
+Gaussian-spot width on the floor. Smaller sigma = sharper alignment
+landscape. Levels 0.05, 0.10, 0.15, 0.25, 0.40.
+
+| sigma | photometric | doa_direct | doa_noisy |
+|-------|-------------|------------|-----------|
+| 0.05  | 0.617       | 0.573      | 0.472     |
+| 0.10  | 0.881       | 0.863      | 0.815     |
+| 0.15  | 0.945       | 0.936      | 0.911     |
+| 0.25  | 0.978       | 0.976      | 0.967     |
+| 0.40  | 0.990       | 0.991      | 0.987     |
+
+All conditions degrade as sigma narrows. Photometric tracks DOA-direct
+closely; both lead DOA-noisy. At sigma=0.05, photometric is 4 points
+ahead of DOA-direct because the half-vector analytic solve has a small
+bias that matters when the peak is sharp.
+
+### Scan duration (Section 4.6.3)
+Photometric SCAN window. Levels 1, 2, 4, 8, 16 s. Episode is fixed at
+10 s (500 steps at 50 Hz).
+
+| scan_s | photometric | DOA baselines |
+|--------|-------------|---------------|
+| 1.0    | 0.899       | 0.936 / 0.911 |
+| 2.0    | 0.914       | 0.936 / 0.911 |
+| 4.0    | 0.945       | 0.936 / 0.911 |
+| 8.0    | 0.766       | 0.936 / 0.911 |
+| 16.0   | 0.349       | 0.936 / 0.911 |
+
+Inverted-U with peak at 4 s. Below 4 s the SCAN under-samples the
+joint workspace; above 4 s the TRACK phase has insufficient time to
+refine before the episode ends. At 16 s the SCAN never terminates and
+terminal intensity is whatever the Lissajous trajectory happens to
+output near step 500. Defends our headline parameter choice.
+
+### Laser height (Section 4.6.4)
+Laser z-coordinate. Levels 1.5, 2.0, 2.5, 3.0, 3.5 m.
+
+| lz  | photometric | doa_direct | doa_noisy |
+|-----|-------------|------------|-----------|
+| 1.5 | 0.809       | 0.814      | 0.824     |
+| 2.0 | 0.895       | 0.890      | 0.881     |
+| 2.5 | 0.945       | 0.936      | 0.911     |
+| 3.0 | 0.965       | 0.963      | 0.926     |
+| 3.5 | 0.977       | 0.977      | 0.942     |
+
+Photometric tracks DOA-direct within ~1% across the range. Lower laser
+heights make the geometry harder for both because the reflection
+angles become extreme.
+
+### Joint limit (Section 4.6.5) — *the honest limitation*
+Symmetric joint range. Levels 0.8, 1.0, 1.2, 1.5 rad.
+
+| limit | photometric | doa_direct | doa_noisy |
+|-------|-------------|------------|-----------|
+| 0.8   | 0.000       | 0.027      | 0.022     |
+| 1.0   | **0.114**   | **0.800**  | 0.534     |
+| 1.2   | 0.956       | 0.926      | 0.684     |
+| 1.5   | 0.945       | 0.936      | 0.911     |
+
+This is the result a reviewer will probe. At limit=1.0 rad, photometric
+collapses to 0.114 while DOA-direct keeps 0.800. The mechanism: when
+the optimum lies outside the joint range, DOA-direct's analytic solve
+returns the unconstrained optimum and clips to the limit, landing at a
+sub-optimal but informed pose. Photometric's SCAN sweeps the
+constrained workspace, finds whatever maximum exists there, and
+TRACKs that — but with limit=1.0 the maximum reachable target intensity
+across the workspace is itself low, and the SCAN's argmax becomes
+sensitive to where the trajectory happened to be when the laser
+position randomized.
+
+**Discussion implication.** The photometric agent assumes the SCAN
+covers a workspace where the optimum exists. When that assumption
+breaks (here: tight joint limits), the agent's information advantage
+over the analytic baseline reverses. Future work: an adaptive SCAN
+amplitude tied to detected-signal-during-sweep, or a fallback to
+"point at the brightest direction during SCAN even if intensity stayed
+below threshold."
+
+## What survived the stress tests
+
+The headline claim — terminal target intensity statistically
+indistinguishable from a target-aware analytic baseline — survives
+under detector noise (up to sigma=0.20), narrower beam sigma down to
+0.05, scan durations 1-4 s, and laser heights 1.5-3.5 m. It does NOT
+survive at joint limits below ~1.2 rad. The paper should report this
+honestly and frame the joint-limit asymmetry as a known boundary,
+with the adaptive-SCAN extension noted as future work.
