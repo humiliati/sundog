@@ -1,0 +1,34 @@
+{
+  "photometric": {
+    "n_seeds": 30,
+    "wall_time_s": 3.09,
+    "mean_terminal_intensity": 0.9450328920156512,
+    "std_terminal_intensity": 0.024318978554622228,
+    "min_terminal_intensity": 0.9010436726342447,
+    "max_terminal_intensity": 0.9814459404767646
+  },
+  "doa_direct": {
+    "n_seeds": 30,
+    "wall_time_s": 2.92,
+    "mean_terminal_intensity": 0.9359264439535153,
+    "std_terminal_intensity": 0.03131709227876122,
+    "min_terminal_intensity": 0.8641288048022236,
+    "max_terminal_intensity": 0.9816811187452705
+  },
+  "doa_noisy": {
+    "n_seeds": 30,
+    "wall_time_s": 2.46,
+    "mean_terminal_intensity": 0.9114715926263149,
+    "std_terminal_intensity": 0.0463329659413063,
+    "min_terminal_intensity": 0.8009058649181889,
+    "max_terminal_intensity": 0.9728911058949578
+  },
+  "random": {
+    "n_seeds": 30,
+    "wall_time_s": 1.92,
+    "mean_terminal_intensity": 6.160339323225958e-36,
+    "std_terminal_intensity": 3.317444252344141e-35,
+    "min_terminal_intensity": 0.0,
+    "max_terminal_intensity": 1.8481017969676902e-34
+  }
+}

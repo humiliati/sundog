@@ -1,0 +1,105 @@
+{
+  "conditions": {
+    "photometric": {
+      "n_seeds": 30,
+      "terminal_intensity": {
+        "mean": 0.9450328920156512,
+        "std": 0.02473471770483975,
+        "median": 0.9480618773978949,
+        "ci95": [
+          0.9364686764300245,
+          0.9536709108236213
+        ]
+      },
+      "time_to_threshold": {
+        "mean": 175.0,
+        "median": 188.0,
+        "n_failed": 0
+      },
+      "terminal_joint_std": {
+        "mean": 0.015085333564386376,
+        "median": 0.015075804169813148
+      }
+    },
+    "doa_direct": {
+      "n_seeds": 30,
+      "terminal_intensity": {
+        "mean": 0.9359264439535153,
+        "std": 0.03185246597062959,
+        "median": 0.9363606710510393,
+        "ci95": [
+          0.9246796424310998,
+          0.9467443341547158
+        ]
+      },
+      "time_to_threshold": {
+        "mean": 11.733333333333333,
+        "median": 11.5,
+        "n_failed": 0
+      },
+      "terminal_joint_std": {
+        "mean": 6.169012876613273e-16,
+        "median": 5.634269255050222e-16
+      }
+    },
+    "doa_noisy": {
+      "n_seeds": 30,
+      "terminal_intensity": {
+        "mean": 0.9114715926263149,
+        "std": 0.04712503982895874,
+        "median": 0.9188739883095015,
+        "ci95": [
+          0.8942049196678586,
+          0.9273099963830758
+        ]
+      },
+      "time_to_threshold": {
+        "mean": 78.56666666666666,
+        "median": 14.0,
+        "n_failed": 4
+      },
+      "terminal_joint_std": {
+        "mean": 4.3914000862741e-05,
+        "median": 1.144095940995209e-15
+      }
+    },
+    "random": {
+      "n_seeds": 30,
+      "terminal_intensity": {
+        "mean": 6.160339323225958e-36,
+        "std": 3.374156809216782e-35,
+        "median": 0.0,
+        "ci95": [
+          6.483395432800781e-74,
+          1.848101796967755e-35
+        ]
+      },
+      "time_to_threshold": {
+        "mean": 500.0,
+        "median": 500.0,
+        "n_failed": 30
+      },
+      "terminal_joint_std": {
+        "mean": 0.24064511129879534,
+        "median": 0.23541535713284595
+      }
+    }
+  },
+  "tests": {
+    "photometric_vs_doa_direct_terminal_intensity": {
+      "U": 526.0,
+      "p": 0.26432621279678536,
+      "mean_diff_photometric_minus_other": 0.009106448062135897
+    },
+    "photometric_vs_doa_noisy_terminal_intensity": {
+      "U": 649.0,
+      "p": 0.003338612259442543,
+      "mean_diff_photometric_minus_other": 0.033561299389336274
+    },
+    "photometric_vs_random_terminal_intensity": {
+      "U": 900.0,
+      "p": 1.9558095152782195e-11,
+      "mean_diff_photometric_minus_other": 0.9450328920156512
+    }
+  }
+}
