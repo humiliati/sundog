@@ -1,0 +1,4 @@
+mkdir -p /home/claude/sundog_leisure/env /home/claude/sundog_leisure/sundog/agents /home/claude/sundog_leisure/sundog/utils /home/claude/sundog_leisure/scripts
+Output
+
+exit code 0

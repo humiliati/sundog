@@ -1,0 +1,54 @@
+<!--
+  Sundog Pole v2 - MuJoCo model.
+  Detector ring radius set to 1.2 m so DOA-direct can reach intensity ~0.98
+  given joint limits +/- 1.5 rad and pole length 1.2 m. (Empirical scan
+  showed radius 1.0 caps DOA-direct at ~0.62, radius 1.4 at ~0.93,
+  radius 1.2 is optimal.)
+-->
+<mujoco model="sundog_pole_v2">
+  <compiler angle="radian" coordinate="local"/>
+  <option timestep="0.005" gravity="0 0 -9.81" integrator="implicit"/>
+
+  <default>
+    <joint armature="0.01" damping="2.0" limited="true"/>
+    <geom rgba="0.5 0.5 0.55 1"/>
+    <site rgba="0.8 0.8 0.8 1" size="0.02"/>
+  </default>
+
+  <worldbody>
+    <light name="key_light" pos="0 0 3" dir="0 0 -1" diffuse="0.9 0.9 0.9"/>
+
+    <geom name="floor" type="plane" size="2.5 2.5 0.05" rgba="0.15 0.15 0.18 1"/>
+    <geom name="ceiling" type="plane" size="2.5 2.5 0.01" pos="0 0 2.5"
+          rgba="0.10 0.10 0.15 0.25" contype="0" conaffinity="0"/>
+
+    <site name="laser_source" pos="0.3 0.4 2.5" size="0.04" rgba="1.0 0.25 0.25 1"/>
+
+    <site name="detector_0" pos=" 1.200  0.000 0.005" size="0.06" rgba="1.0 1.0 0.2 1"/>
+    <site name="detector_1" pos=" 0.849  0.849 0.005" size="0.06" rgba="0.55 0.55 0.55 1"/>
+    <site name="detector_2" pos=" 0.000  1.200 0.005" size="0.06" rgba="0.55 0.55 0.55 1"/>
+    <site name="detector_3" pos="-0.849  0.849 0.005" size="0.06" rgba="0.55 0.55 0.55 1"/>
+    <site name="detector_4" pos="-1.200  0.000 0.005" size="0.06" rgba="0.55 0.55 0.55 1"/>
+    <site name="detector_5" pos="-0.849 -0.849 0.005" size="0.06" rgba="0.55 0.55 0.55 1"/>
+    <site name="detector_6" pos=" 0.000 -1.200 0.005" size="0.06" rgba="0.55 0.55 0.55 1"/>
+    <site name="detector_7" pos=" 0.849 -0.849 0.005" size="0.06" rgba="0.55 0.55 0.55 1"/>
+
+    <body name="pole_base" pos="0 0 0.05">
+      <joint name="rx" type="hinge" axis="1 0 0" range="-1.5 1.5" pos="0 0 0"/>
+      <joint name="ry" type="hinge" axis="0 1 0" range="-1.5 1.5" pos="0 0 0"/>
+      <geom name="hub" type="sphere" size="0.04" rgba="0.3 0.3 0.3 1"/>
+
+      <body name="pole_shaft" pos="0 0 0.6">
+        <geom name="shaft" type="capsule" fromto="0 0 -0.6 0 0 0.6" size="0.025"
+              rgba="0.55 0.55 0.6 1"/>
+        <site name="mirror" pos="0 0 0.6" size="0.06" rgba="0.85 0.9 1.0 0.7"/>
+        <site name="mirror_normal_tip" pos="0 0 0.65" size="0.005" rgba="0.2 0.2 1 1"/>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <position name="rx_motor" joint="rx" kp="80" kv="8" ctrlrange="-1.5 1.5"/>
+    <position name="ry_motor" joint="ry" kp="80" kv="8" ctrlrange="-1.5 1.5"/>
+  </actuator>
+</mujoco>
