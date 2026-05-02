@@ -25,6 +25,9 @@ inspectable demonstration of the research program:
 - replay the photometric mirror-alignment experiment;
 - show the photometric agent, oracle baseline, noisy oracle, and random policy;
 - visualize the scan/seek/track loop;
+- provide knobs and widgets for changing experiment variables without code;
+- rerun or replay the experiment against different surface and geometry presets;
+- print graphs and run documents from adjusted experiments;
 - surface stress-test boundaries honestly;
 - link the core experiment to EyesOnly, Dungeon Gleaner, and Money Bags;
 - let technical readers inspect exported data and reproducibility notes.
@@ -147,6 +150,82 @@ Acceptance criteria:
 - each application has one highlight, one inspectable surface, and one future
   experiment;
 - product evidence is clearly separated from controlled research evidence.
+
+### 6. Experiment Workbench Mode
+
+Purpose: let a user adjust the experiment without opening code.
+
+This is the bridge from "watch the theorem" to "try to break the theorem."
+Users should be able to change the operating conditions with ordinary UI
+controls, rerun a small batch, and immediately see how the controller behaves.
+
+Knob families:
+
+| Family | Example controls | UI widget |
+| --- | --- | --- |
+| Geometry | laser height, laser xy range, detector ring radius, target detector | sliders, number inputs, segmented target picker |
+| Optics | beam sigma, detector noise, intensity clamp, floor absorption | sliders and toggles |
+| Controller | scan duration, scan amplitude, probe amplitude, gradient gain, reacquire threshold | sliders with safe ranges |
+| Mechanics | joint limit, servo stiffness, damping, initial joint perturbation | sliders and presets |
+| Surface presets | mirror, frosted glass, occluder block, noisy detector field, narrow beam, wide beam | visual preset cards |
+| Run plan | seed count, seed start, steps per episode, policies to include | steppers, checkboxes |
+
+Default posture:
+
+- safe preset first: baseline paper settings;
+- "stress me" preset second: detector noise, narrow beam, tight joint limits;
+- "explore" mode hides dangerous ranges until the user expands advanced
+  controls;
+- every modified run gets a manifest so screenshots and reports are traceable.
+
+Acceptance criteria:
+
+- a user can change at least five meaningful variables without editing files;
+- the app distinguishes replay-only knobs from live-run knobs;
+- invalid combinations are blocked or explained;
+- the workbench always preserves the baseline settings as a one-click reset;
+- custom runs produce results that can be compared against the recorded
+  baseline.
+
+### 7. Results Printer Mode
+
+Purpose: turn app runs into shareable research artifacts.
+
+The user should be able to click "Print Results" after a replay comparison or
+live experiment and receive a compact document package.
+
+Outputs:
+
+- `summary.html`: human-readable report;
+- `summary.md`: markdown report for GitHub or notes;
+- `summary.json`: machine-readable run manifest and metrics;
+- `convergence.png`: target intensity over time;
+- `terminal_intensity.png`: condition comparison chart;
+- `time_to_threshold.png`: convergence-time chart;
+- `stress_curve.png`: if a sweep was run;
+- `runs.csv`: per-seed metrics table;
+- `manifest.json`: app version, commit hash, settings, environment, and data
+  provenance.
+
+Report sections:
+
+1. Title and timestamp.
+2. Claim being tested.
+3. Settings changed from baseline.
+4. Conditions/policies run.
+5. Headline metrics.
+6. Graphs.
+7. Failure or boundary notes.
+8. Reproduction block.
+9. Caveat language.
+
+Acceptance criteria:
+
+- report generation works offline;
+- a report from baseline settings matches the known summary numbers;
+- changed knobs are printed prominently;
+- every generated graph includes axis labels and units;
+- the report can be opened without the app.
 
 ## Architecture Options
 
@@ -403,7 +482,213 @@ Exit criteria:
 - technical user can reach source/data within two clicks;
 - no screen overclaims beyond the evidence tier it belongs to.
 
-### Phase 6: Build APK
+### Phase 6: Add No-Code Knobs
+
+Deliverables:
+
+- Workbench panel with baseline, stress, and custom tabs;
+- typed experiment config schema;
+- UI controls for geometry, optics, controller, mechanics, surface presets,
+  and run plan;
+- config validation layer;
+- "reset to paper baseline" button;
+- "explain this knob" help text for every control;
+- config diff view showing what changed from the baseline.
+
+Initial safe controls:
+
+- detector noise;
+- beam sigma;
+- scan duration;
+- laser height;
+- joint limit;
+- seed count;
+- condition/policy selection.
+
+Second-wave controls:
+
+- scan amplitude;
+- probe amplitude;
+- gradient gain;
+- detector count or target detector;
+- occluder enabled/disabled;
+- occluder position and attenuation;
+- surface preset selection.
+
+Surface preset model:
+
+| Preset | Meaning | First implementation |
+| --- | --- | --- |
+| clean mirror | baseline paper setup | current optics |
+| noisy detector field | tests observation noise | additive intensity noise |
+| narrow beam | sharper alignment landscape | beam sigma sweep |
+| tight joints | reachable-workspace stress | joint-limit sweep |
+| high laser | easier reflection geometry | laser-height sweep |
+| occluded path | Phase-2 robustness | block attenuation model |
+| frosted glass | rougher reflection approximation | broadened/scattered intensity model |
+
+Config schema sketch:
+
+```json
+{
+  "name": "custom_joint_limit_scan",
+  "base": "paper_baseline",
+  "seed_start": 0,
+  "seed_count": 10,
+  "steps": 500,
+  "geometry": {
+    "laser_height": 2.5,
+    "detector_radius": 1.2,
+    "target_detector": 0
+  },
+  "optics": {
+    "beam_sigma": 0.15,
+    "detector_noise": 0.0,
+    "surface_preset": "clean_mirror"
+  },
+  "controller": {
+    "scan_duration_s": 4.0,
+    "scan_amplitude_rad": 1.4,
+    "gradient_gain": 8.0
+  },
+  "mechanics": {
+    "joint_limit_rad": 1.5
+  },
+  "conditions": ["photometric", "doa_direct", "doa_noisy", "random"]
+}
+```
+
+Exit criteria:
+
+- a custom config can be saved, reloaded, and rerun;
+- invalid values produce helpful UI messages;
+- the app can compare "baseline" vs "custom" without manual file handling;
+- every result has a config manifest attached.
+
+### Phase 7: Add Preset Sweeps
+
+Deliverables:
+
+- sweep builder UI;
+- one-variable sweep mode;
+- preset sweeps for detector noise, beam sigma, scan duration, laser height,
+  joint limit, and occlusion attenuation;
+- progress indicator for multi-run sweeps;
+- pause/cancel support;
+- automatic stress-curve chart generation.
+
+Sweep builder controls:
+
+- variable to sweep;
+- min/max/step or explicit values;
+- seeds per level;
+- conditions to include;
+- quick labels such as "fast smoke", "paper-scale", and "deep run".
+
+Example sweep presets:
+
+| Sweep | Values | Purpose |
+| --- | --- | --- |
+| detector noise | 0.00, 0.02, 0.05, 0.10, 0.20 | observation robustness |
+| beam sigma | 0.05, 0.10, 0.15, 0.25, 0.40 | landscape sharpness |
+| scan duration | 1, 2, 4, 8, 16 seconds | acquisition/refinement trade |
+| laser height | 1.5, 2.0, 2.5, 3.0, 3.5 meters | geometry sensitivity |
+| joint limit | 0.8, 1.0, 1.2, 1.5 radians | reachability boundary |
+| occlusion attenuation | 0.0, 0.25, 0.5, 0.75, 0.9 | Phase-2 block robustness |
+
+Exit criteria:
+
+- a user can create a one-variable sweep without code;
+- completed sweeps produce a chart and metrics table;
+- sweep outputs are stored under a named run folder;
+- cancellation leaves a partial report rather than corrupt output.
+
+### Phase 8: Build Results Printer
+
+Deliverables:
+
+- report generator service/module;
+- graph generator for convergence, terminal intensity, time-to-threshold, and
+  stress curves;
+- HTML and Markdown report templates;
+- CSV and JSON exports;
+- "Print Results" button;
+- "Open Report Folder" button;
+- optional browser print stylesheet for PDF export.
+
+Report folder layout:
+
+```text
+runs/
+  2026-05-01_1530_custom_joint_limit_scan/
+    manifest.json
+    summary.html
+    summary.md
+    summary.json
+    runs.csv
+    graphs/
+      convergence.png
+      terminal_intensity.png
+      time_to_threshold.png
+      stress_curve.png
+    data/
+      seed_000.json
+      seed_001.json
+```
+
+Graph requirements:
+
+- title includes run name and compared conditions;
+- axes include units;
+- baseline settings are annotated;
+- stress curves highlight the best and worst levels;
+- joint-limit reports call out the known failure boundary automatically;
+- charts have color palettes that remain readable in print.
+
+Document requirements:
+
+- one-page executive summary at the top;
+- expanded technical section below;
+- exact knob changes from baseline;
+- condition table;
+- per-seed metrics appendix;
+- reproduction command or app action list;
+- caveat block copied from `docs/SCIENTIFIC_CRITERIA.md` language.
+
+Exit criteria:
+
+- report generation works for replay, live run, and sweep outputs;
+- baseline report reproduces existing headline numbers;
+- markdown report can be pasted into GitHub without manual cleanup;
+- HTML report opens outside the app;
+- generated artifacts are deterministic for the same input data.
+
+### Phase 9: Add Comparison Library
+
+Deliverables:
+
+- local run library;
+- saved configs;
+- report browser;
+- compare two or more prior runs;
+- tag runs as baseline, stress, exploratory, or publication candidate;
+- delete/archive controls.
+
+Useful comparisons:
+
+- baseline vs custom knob run;
+- photometric only vs all baselines;
+- replay data vs fresh live run;
+- pre-occlusion vs occlusion preset;
+- short smoke run vs full 30-seed run.
+
+Exit criteria:
+
+- a user can return later and understand what they ran;
+- reports and configs remain linked;
+- no-code comparison produces charts and a summary table.
+
+### Phase 10: Build APK
 
 Deliverables:
 
@@ -423,7 +708,9 @@ Exit criteria:
 - installs on a modern Android device;
 - works offline;
 - replay mode performs smoothly;
-- app clearly labels itself as replay/educational, not live MuJoCo execution.
+- app clearly labels itself as replay/educational, not live MuJoCo execution;
+- reports can be exported or shared from the device when generated from replay
+  data.
 
 ## Repository Layout Proposal
 
@@ -440,6 +727,7 @@ app/
       stress/
 tools/
   export_observer_data.py
+  print_observer_results.py
 packaging/
   windows/
     run.ps1
@@ -450,6 +738,8 @@ docs/
   STANDALONE_APP_ROADMAP.md
 dist/
   SundogObserver/        # generated, not necessarily committed
+runs/
+  <timestamped-run>/     # generated local outputs
 ```
 
 ## Minimum Viable Demo
@@ -477,9 +767,29 @@ The version that feels real:
 - stress-test explorer;
 - guided voiceover-ready script;
 - exportable run card image or summary;
+- no-code knobs for common stress variables;
+- generated HTML/Markdown reports;
+- graph export for convergence and stress curves;
 - `run.exe` launcher;
 - optional live smoke run;
 - release zip with no global dependency requirement.
+
+## Workbench Polish
+
+The version that feels like a usable research toy:
+
+- knob panel with safe/advanced groups;
+- surface preset gallery with small visual previews;
+- baseline-vs-custom diff;
+- "rerun with these settings" button;
+- queue for sweeps and multi-seed batches;
+- live progress with estimated time remaining;
+- warnings when a setting leaves the paper-supported envelope;
+- result cards for each run;
+- one-click report generation;
+- local library of past runs.
+
+This is the level where the app stops being a demo and becomes a small lab.
 
 ## Risks
 
@@ -488,6 +798,9 @@ The version that feels real:
 | MuJoCo bundling is brittle. | Make replay mode the default; live mode optional. |
 | Data exports become too large. | Ship selected seeds first; compress or lazy-load later. |
 | Demo overclaims the theorem. | Keep evidence-tier labels visible. |
+| Knobs create invalid or misleading experiments. | Validate configs and show envelope warnings. |
+| Users mistake exploratory output for peer-reviewed results. | Stamp reports as exploratory unless they match a locked protocol. |
+| Graph/report generation drifts from analysis scripts. | Share metric definitions and add golden-output tests. |
 | `run.exe` triggers security warnings. | Consider signed builds later; provide static HTML fallback. |
 | UI becomes a paper in disguise. | Use guided visuals first, details on demand. |
 | Android live simulation is impractical. | APK is replay/education only. |
@@ -502,6 +815,9 @@ Before calling the app polished:
 - [ ] The experiment replay makes SCAN, SEEK, and TRACK visible.
 - [ ] Baselines are shown, not merely described.
 - [ ] The joint-limit failure boundary is included.
+- [ ] Common variables can be changed without editing code.
+- [ ] Custom runs preserve the exact config used.
+- [ ] Generated reports include graphs, tables, settings, and caveats.
 - [ ] The application futures are exciting but labeled as application evidence.
 - [ ] The research claim is stated narrowly and accurately.
 - [ ] The app links to source files and exported data.
@@ -517,13 +833,16 @@ Before calling the app polished:
 5. Add the theorem/story panels.
 6. Add `run.bat` or `run.ps1` that opens the static app.
 7. Package a first `dist/SundogObserver.zip`.
+8. Draft the experiment config schema before adding live knobs.
+9. Prototype a results-printer report from existing `results/analysis` data.
 
 ## Decision Record
 
 Current recommendation:
 
 > Build replay-first static HTML, then wrap it in a Windows launcher, then add
-> optional live local runs, then ship APK as a replay-focused educational app.
+> optional live local runs, then add no-code knobs and results printing, then
+> ship APK as a replay-focused educational app.
 
 This avoids letting native simulation packaging block the core promise:
 anyone can double-click and observe the theorem.
