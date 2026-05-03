@@ -43,22 +43,32 @@
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
+        #parhelion-canvas {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(244, 196, 48, 0.1) 0%, transparent 70%);
-            animation: pulse 8s ease-in-out infinite;
+            z-index: 0;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.5; }
+        .equation-display {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+            max-width: 90%;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .equation-display.visible {
+            opacity: 1;
         }
 
         .hero-content {
@@ -468,6 +478,8 @@
 <body>
     <!-- Hero Section -->
     <section class="hero">
+        <canvas id="parhelion-canvas"></canvas>
+        <div class="equation-display" id="equation-display"></div>
         <div class="hero-content">
             <h1>Sundog</h1>
             <p class="tagline">Alignment Without Sight</p>
@@ -717,5 +729,249 @@
             Media assets served from Cloudflare Workers
         </p>
     </footer>
+
+    <script>
+        // Parhelion Animation - Mathematical sundog arc drawing
+        (function() {
+            const canvas = document.getElementById('parhelion-canvas');
+            const ctx = canvas.getContext('2d');
+            const equationDisplay = document.getElementById('equation-display');
+
+            // Set canvas size
+            function resizeCanvas() {
+                const heroSection = document.querySelector('.hero');
+                canvas.width = Math.min(heroSection.offsetWidth, 800);
+                canvas.height = Math.min(heroSection.offsetHeight, 800);
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const sunRadius = 40;
+            const refractionAngle = 22; // 22-degree halo angle for parhelia
+
+            // Animation state
+            let animationStartTime = Date.now();
+            let currentPhase = 0;
+            const phaseDuration = 3000; // 3 seconds per arc
+
+            // Phases: left arc, right arc, top arc, bottom arc, inner circle (iris), outer halo
+            const phases = [
+                {
+                    name: 'Left Parhelion',
+                    equation: 'θ = arcsin(n·sin(α)) - α, n=1.31',
+                    draw: (progress) => drawLeftParhelion(progress)
+                },
+                {
+                    name: 'Right Parhelion',
+                    equation: 'Δθ = 2[arcsin(n·sin(α)) - α]',
+                    draw: (progress) => drawRightParhelion(progress)
+                },
+                {
+                    name: 'Upper Tangent Arc',
+                    equation: 'r(θ) = r₀·[1 + ε·cos(θ)]',
+                    draw: (progress) => drawUpperArc(progress)
+                },
+                {
+                    name: 'Lower Tangent Arc',
+                    equation: 'H(x) = dS/dτ = ∫ρ(r)·σ(θ)dΩ',
+                    draw: (progress) => drawLowerArc(progress)
+                },
+                {
+                    name: 'Inner Circle (Iris)',
+                    equation: 'r_inner = r₀·(1 - ε)',
+                    draw: (progress) => drawInnerCircle(progress)
+                },
+                {
+                    name: 'Outer Halo',
+                    equation: 'r_outer = r₀·(1 + ε)',
+                    draw: (progress) => drawOuterHalo(progress)
+                }
+            ];
+
+            function drawSun() {
+                // Draw central sun
+                ctx.fillStyle = 'rgba(244, 196, 48, 0.8)';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, sunRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Sun glow
+                const gradient = ctx.createRadialGradient(centerX, centerY, sunRadius, centerX, centerY, sunRadius * 2);
+                gradient.addColorStop(0, 'rgba(244, 196, 48, 0.3)');
+                gradient.addColorStop(1, 'rgba(244, 196, 48, 0)');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, sunRadius * 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            function drawLeftParhelion(progress) {
+                const haloRadius = sunRadius * 3.5;
+                const arcLength = Math.PI * 0.6;
+                const startAngle = Math.PI * 0.7;
+
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.9)';
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX - haloRadius * 1.8, centerY, haloRadius,
+                    startAngle, startAngle + arcLength * progress, false);
+                ctx.stroke();
+
+                // Add glow effect
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.3)';
+                ctx.lineWidth = 8;
+                ctx.stroke();
+            }
+
+            function drawRightParhelion(progress) {
+                const haloRadius = sunRadius * 3.5;
+                const arcLength = Math.PI * 0.6;
+                const startAngle = Math.PI * 1.7;
+
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.9)';
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX + haloRadius * 1.8, centerY, haloRadius,
+                    startAngle, startAngle + arcLength * progress, false);
+                ctx.stroke();
+
+                // Add glow effect
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.3)';
+                ctx.lineWidth = 8;
+                ctx.stroke();
+            }
+
+            function drawUpperArc(progress) {
+                const haloRadius = sunRadius * 3.2;
+                const arcLength = Math.PI * 0.5;
+                const startAngle = -Math.PI * 0.75;
+
+                ctx.strokeStyle = 'rgba(125, 162, 184, 0.8)';
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - haloRadius * 0.8, haloRadius,
+                    startAngle, startAngle + arcLength * progress, false);
+                ctx.stroke();
+            }
+
+            function drawLowerArc(progress) {
+                const haloRadius = sunRadius * 3.2;
+                const arcLength = Math.PI * 0.5;
+                const startAngle = Math.PI * 0.25;
+
+                ctx.strokeStyle = 'rgba(125, 162, 184, 0.8)';
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY + haloRadius * 0.8, haloRadius,
+                    startAngle, startAngle + arcLength * progress, false);
+                ctx.stroke();
+            }
+
+            function drawInnerCircle(progress) {
+                const radius = sunRadius * 5;
+                const arcLength = Math.PI * 2;
+
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.6)';
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, arcLength * progress, false);
+                ctx.stroke();
+            }
+
+            function drawOuterHalo(progress) {
+                const radius = sunRadius * 6.5;
+                const arcLength = Math.PI * 2;
+
+                ctx.strokeStyle = 'rgba(125, 162, 184, 0.5)';
+                ctx.lineWidth = 1.5;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, arcLength * progress, false);
+                ctx.stroke();
+            }
+
+            function drawPreviousPhases(currentPhaseIndex) {
+                // Draw all completed phases
+                for (let i = 0; i < currentPhaseIndex; i++) {
+                    phases[i].draw(1.0);
+                }
+            }
+
+            function updateEquation(phase) {
+                if (phase) {
+                    equationDisplay.textContent = phase.equation;
+                    equationDisplay.classList.add('visible');
+                }
+            }
+
+            function drawFinalEquation() {
+                equationDisplay.textContent = 'H(x) = dS/dτ = ∫∫ ρ(r)·σ(θ,φ)·cos(α) dΩ';
+                equationDisplay.style.fontSize = '1.4rem';
+                equationDisplay.classList.add('visible');
+            }
+
+            function animate() {
+                const elapsed = Date.now() - animationStartTime;
+                const totalDuration = phases.length * phaseDuration;
+
+                // Reset animation after completion (with 2 second pause)
+                if (elapsed > totalDuration + 2000) {
+                    animationStartTime = Date.now();
+                    currentPhase = 0;
+                    equationDisplay.classList.remove('visible');
+                }
+
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Always draw the sun
+                drawSun();
+
+                // Determine current phase and progress
+                currentPhase = Math.floor(elapsed / phaseDuration);
+
+                if (currentPhase < phases.length) {
+                    const phaseProgress = (elapsed % phaseDuration) / phaseDuration;
+
+                    // Draw all previous complete phases
+                    drawPreviousPhases(currentPhase);
+
+                    // Draw current phase with progress
+                    phases[currentPhase].draw(phaseProgress);
+
+                    // Update equation display
+                    if (phaseProgress < 0.1) {
+                        updateEquation(phases[currentPhase]);
+                    }
+                } else if (elapsed < totalDuration + 2000) {
+                    // All phases complete, draw everything
+                    drawPreviousPhases(phases.length);
+
+                    // Show final equation
+                    if (elapsed > totalDuration + 200) {
+                        drawFinalEquation();
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            // Start animation
+            animate();
+        })();
+    </script>
 </body>
 </html>
