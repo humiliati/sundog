@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Sundog Project: A framework for indirect measurement and agent reasoning under partial observability">
+    <title>Sundog — Alignment Without Sight</title>
+    <style>
+        :root {
+            --primary-dark: #1A3A52;
+            --primary-mid: #7DA2B8;
+            --accent-gold: #F4C430;
+            --bg-light: #FFFFFF;
+            --text-dark: #2D2D2D;
+            --text-light: #F5F5F5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2C5F7F 100%);
+            color: var(--text-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #parhelion-canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        .equation-display {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+            max-width: 90%;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .equation-display.visible {
+            opacity: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+            font-weight: 300;
+        }
+
+        .hero .value-prop {
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+        }
+
+        .btn-primary:hover {
+            background: #FFD54F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 196, 48, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border-color: var(--text-light);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-gold);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary-dark);
+            text-align: center;
+        }
+
+        section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        /* What It Is Section */
+        .what-section {
+            background: var(--bg-light);
+        }
+
+        .what-section .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Why It Matters Section */
+        .why-section {
+            background: #F8F9FA;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .benefit-card {
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .benefit-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Applications Section */
+        .applications-section {
+            background: var(--bg-light);
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .app-card {
+            background: white;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-gold);
+        }
+
+        .app-card-img {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-mid) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .app-card-content {
+            padding: 1.5rem;
+        }
+
+        .app-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .app-card .tier {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary-mid);
+            color: white;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .app-card p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .app-card a {
+            color: var(--primary-dark);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .app-card a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            background: #F8F9FA;
+        }
+
+        .comparison-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .comparison-side h4 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .comparison-side ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .comparison-side li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .comparison-side li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+        }
+
+        /* Visual Proof Section */
+        .proof-section {
+            background: var(--bg-light);
+        }
+
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .proof-item {
+            background: white;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .proof-item h4 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        .proof-placeholder {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #E0E0E0 0%, #F5F5F5 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-family: monospace;
+            margin-bottom: 1rem;
+        }
+
+        /* Research Posture Section */
+        .research-section {
+            background: #F8F9FA;
+        }
+
+        .research-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .research-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .research-highlight {
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .research-highlight h4 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--primary-dark);
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            color: var(--text-light);
+        }
+
+        .cta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .cta-link {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .cta-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-gold);
+            transform: translateY(-4px);
+        }
+
+        .cta-link h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: var(--text-light);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.2rem;
+            }
+
+            .hero .value-prop {
+                font-size: 1rem;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            section h2 {
+                font-size: 2rem;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .proof-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <canvas id="parhelion-canvas"></canvas>
+        <div class="equation-display" id="equation-display"></div>
+        <div class="hero-content">
+            <h1>Sundog</h1>
+            <p class="tagline">Alignment Without Sight</p>
+            <p style="font-size: 0.95rem; color: var(--accent-gold); margin-bottom: 1rem; font-style: italic;">
+                Featuring the world's first interactive mathematical proof of parhelion formation — watch the physics unfold in real-time above.
+            </p>
+            <p class="value-prop">
+                The Sundog Project turns indirect signals into usable control — building software that doesn't need perfect information to behave intelligently.
+            </p>
+            <div class="cta-buttons">
+                <a href="docs/presentation/README.md" class="btn btn-primary">Explore the Framework</a>
+                <a href="docs/APPLICATIONS.md" class="btn btn-secondary">View Applications</a>
+                <a href="https://github.com/humiliati/sundog" class="btn btn-secondary">GitHub Repository</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- What It Is Section -->
+    <section class="what-section">
+        <h2>Indirect Measurement, Direct Results</h2>
+        <div class="content">
+            <p>
+                Most systems do not reveal their truth directly. You infer them from signatures — shadows, feedback, distortions, response curves.
+            </p>
+            <p>
+                The Sundog Project is a framework for turning those indirect signals into actionable software control. Where conventional approaches demand complete world state, Sundog asks whether the partial signal — the shadow, the torque, the occlusion — already contains enough structure to act.
+            </p>
+            <p>
+                In the core experiment, a controller aligns a reflected beam without target coordinates, using only sparse photometric feedback. In product systems, the same pattern informs procedural agents acting under occluded state, cheaper physical-feeling simulation, and softbody motion made interpretable through graph signatures.
+            </p>
+        </div>
+    </section>
+
+    <!-- Why It Matters Section -->
+    <section class="why-section">
+        <h2>Why Indirect Signals Matter</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <h3>Works Where Direct Inspection Is Hard</h3>
+                <p>
+                    Occlusion, expense, or design constraints often make full state access impossible. Sundog operates from partial information.
+                </p>
+            </div>
+            <div class="benefit-card">
+                <h3>Agents With Incomplete Knowledge</h3>
+                <p>
+                    Agents that know less can feel more alive. Sundog enables coherent behavior from compressed state.
+                </p>
+            </div>
+            <div class="benefit-card">
+                <h3>Interpretable Proxy Signals</h3>
+                <p>
+                    Instead of raw simulation noise, Sundog transforms physical traces into legible metrics: alignment, torsion, deformation, recovery.
+                </p>
+            </div>
+            <div class="benefit-card">
+                <h3>Practical Value</h3>
+                <p>
+                    Demonstrated across procedural roguelikes, physical simulation, and softbody terrain systems in AI, games, simulation, and tooling.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section class="applications-section">
+        <h2>Working Systems</h2>
+        <div class="app-grid">
+            <div class="app-card">
+                <div class="app-card-img">Photometric Alignment</div>
+                <div class="app-card-content">
+                    <span class="tier">Research Result</span>
+                    <h3>Photometric Mirror Alignment</h3>
+                    <p>
+                        A controller aligns a reflected beam without target coordinates, matching oracle baseline accuracy in controlled experiments.
+                    </p>
+                    <a href="README.md">Learn More →</a>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-card-img">EyesOnly</div>
+                <div class="app-card-content">
+                    <span class="tier">Instrumented Prototype</span>
+                    <h3>EyesOnly / Gone Rogue</h3>
+                    <p>
+                        Procedural roguelike agents act from compressed perception using stop-conditioned action batches.
+                    </p>
+                    <a href="docs/APPLICATIONS.md#eyesonly--gone-rogue">Learn More →</a>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-card-img">Dungeon Gleaner</div>
+                <div class="app-card-content">
+                    <span class="tier">Product Expression</span>
+                    <h3>Dungeon Gleaner</h3>
+                    <p>
+                        Physical-feeling simulation: glass reflection and pressure-washing behavior at reduced computational cost.
+                    </p>
+                    <a href="docs/APPLICATIONS.md#dungeon-gleaner--dcgamejam2026">Learn More →</a>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-card-img">Money Bags</div>
+                <div class="app-card-content">
+                    <span class="tier">Instrumented Prototype</span>
+                    <h3>Money Bags</h3>
+                    <p>
+                        Softbody terrain system with graph-based telemetry: torsion, deformation, symmetry, and recovery made legible.
+                    </p>
+                    <a href="docs/APPLICATIONS.md#money-bags">Learn More →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison-section">
+        <h2>Classic AI vs Sundog AI</h2>
+        <div class="comparison-container">
+            <p style="text-align: center; margin-bottom: 2rem;">
+                Same environment. Same task. Different control logic. Observable difference in behavior.
+            </p>
+            <div class="comparison-grid">
+                <div class="comparison-side">
+                    <h4>Classic Approach</h4>
+                    <ul>
+                        <li>Requires complete world state</li>
+                        <li>Direct target coordinates</li>
+                        <li>Immediate convergence</li>
+                        <li>Brittle under constraints</li>
+                    </ul>
+                </div>
+                <div class="comparison-side">
+                    <h4>Sundog Approach</h4>
+                    <ul>
+                        <li>Operates from partial information</li>
+                        <li>Indirect signal observation</li>
+                        <li>Comparable terminal accuracy</li>
+                        <li>Graceful under occlusion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visual Proof Section -->
+    <section class="proof-section">
+        <h2>Evidence and Metrics</h2>
+        <div class="proof-grid">
+            <div class="proof-item">
+                <h4>Terminal Target Intensity</h4>
+                <div class="proof-placeholder">
+                    [Bar chart: photometric vs oracle]<br>
+                    p = 0.264
+                </div>
+                <p>Photometric controller reaches comparable terminal accuracy.</p>
+            </div>
+            <div class="proof-item">
+                <h4>Time-to-Convergence</h4>
+                <div class="proof-placeholder">
+                    [Line graph: convergence curves]<br>
+                    188 vs 11.5 steps
+                </div>
+                <p>The cost of indirect feedback is time, not accuracy.</p>
+            </div>
+            <div class="proof-item">
+                <h4>Stress Test Results</h4>
+                <div class="proof-placeholder">
+                    [Failure boundary curve]<br>
+                    Joint limits at 1.0 rad
+                </div>
+                <p>Known failure at tight joint limits.</p>
+            </div>
+            <div class="proof-item">
+                <h4>Application Metrics</h4>
+                <div class="proof-placeholder">
+                    [Multi-domain charts]<br>
+                    EyesOnly | Gleaner | Money Bags
+                </div>
+                <p>Utility demonstrated across domains.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Posture Section -->
+    <section class="research-section">
+        <h2>Ongoing Research</h2>
+        <div class="research-content">
+            <p>
+                The Sundog Project is an independent applied research initiative. The defensible scientific claim is narrow: photometric mirror alignment without target-position access in a controlled MuJoCo experiment. The broader applications demonstrate practical utility across procedural systems, simulation, and agent design.
+            </p>
+            <p>
+                We are continuing to formalize the mathematics, strengthen experimental evidence, and explore new application domains.
+            </p>
+        </div>
+        <div class="research-highlights">
+            <div class="research-highlight">
+                <h4>What We're Sharing</h4>
+                <p>Open repository, reproducible experiments, comprehensive documentation, and stress test results.</p>
+            </div>
+            <div class="research-highlight">
+                <h4>What We're Inviting</h4>
+                <p>Independent replication, collaboration on formalization, application-specific studies, and critical review.</p>
+            </div>
+            <div class="research-highlight">
+                <h4>Our Posture</h4>
+                <p>Independent applied research project with experimental software lab as secondary identity.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <h2>Explore Sundog</h2>
+        <div class="cta-grid">
+            <a href="https://github.com/humiliati/sundog" class="cta-link">
+                <h3>GitHub</h3>
+                <p>View the repository</p>
+            </a>
+            <a href="docs/README.md" class="cta-link">
+                <h3>Documentation</h3>
+                <p>Read the docs</p>
+            </a>
+            <a href="docs/presentation/youtube-plan.md" class="cta-link">
+                <h3>Videos</h3>
+                <p>Watch demos</p>
+            </a>
+            <a href="docs/RESEARCHER_GUIDE.md" class="cta-link">
+                <h3>Collaborate</h3>
+                <p>Get involved</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            The Sundog Project — <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
+            <a href="docs/presentation/claims-and-scope.md">Claims Policy</a>
+        </p>
+        <p style="margin-top: 2rem; font-size: 0.85rem; opacity: 0.7;">
+            Media assets served from Cloudflare Workers
+        </p>
+    </footer>
+
+    <script>
+        // Parhelion Animation - Mathematical sundog arc drawing
+        (function() {
+            const canvas = document.getElementById('parhelion-canvas');
+            const ctx = canvas.getContext('2d');
+            const equationDisplay = document.getElementById('equation-display');
+
+            // Set canvas size
+            function resizeCanvas() {
+                const heroSection = document.querySelector('.hero');
+                canvas.width = Math.min(heroSection.offsetWidth, 800);
+                canvas.height = Math.min(heroSection.offsetHeight, 800);
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const sunRadius = 40;
+            const refractionAngle = 22; // 22-degree halo angle for parhelia
+
+            // Animation state
+            let animationStartTime = Date.now();
+            let currentPhase = 0;
+            const phaseDuration = 3000; // 3 seconds per arc
+
+            // Phases: left arc, right arc, top arc, bottom arc, inner circle (iris), outer halo
+            const phases = [
+                {
+                    name: 'Left Parhelion',
+                    equation: 'θ = arcsin(n·sin(α)) - α, n=1.31',
+                    draw: (progress) => drawLeftParhelion(progress)
+                },
+                {
+                    name: 'Right Parhelion',
+                    equation: 'Δθ = 2[arcsin(n·sin(α)) - α]',
+                    draw: (progress) => drawRightParhelion(progress)
+                },
+                {
+                    name: 'Upper Tangent Arc',
+                    equation: 'r(θ) = r₀·[1 + ε·cos(θ)]',
+                    draw: (progress) => drawUpperArc(progress)
+                },
+                {
+                    name: 'Lower Tangent Arc',
+                    equation: 'H(x) = dS/dτ = ∫ρ(r)·σ(θ)dΩ',
+                    draw: (progress) => drawLowerArc(progress)
+                },
+                {
+                    name: 'Inner Circle (Iris)',
+                    equation: 'r_inner = r₀·(1 - ε)',
+                    draw: (progress) => drawInnerCircle(progress)
+                },
+                {
+                    name: 'Outer Halo',
+                    equation: 'r_outer = r₀·(1 + ε)',
+                    draw: (progress) => drawOuterHalo(progress)
+                }
+            ];
+
+            function drawSun() {
+                // Draw central sun
+                ctx.fillStyle = 'rgba(244, 196, 48, 0.8)';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, sunRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Sun glow
+                const gradient = ctx.createRadialGradient(centerX, centerY, sunRadius, centerX, centerY, sunRadius * 2);
+                gradient.addColorStop(0, 'rgba(244, 196, 48, 0.3)');
+                gradient.addColorStop(1, 'rgba(244, 196, 48, 0)');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, sunRadius * 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            function drawLeftParhelion(progress) {
+                const haloRadius = sunRadius * 3.5;
+                const arcLength = Math.PI * 0.6;
+                const startAngle = Math.PI * 0.7;
+
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.9)';
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX - haloRadius * 1.8, centerY, haloRadius,
+                    startAngle, startAngle + arcLength * progress, false);
+                ctx.stroke();
+
+                // Add glow effect
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.3)';
+                ctx.lineWidth = 8;
+                ctx.stroke();
+            }
+
+            function drawRightParhelion(progress) {
+                const haloRadius = sunRadius * 3.5;
+                const arcLength = Math.PI * 0.6;
+                const startAngle = Math.PI * 1.7;
+
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.9)';
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX + haloRadius * 1.8, centerY, haloRadius,
+                    startAngle, startAngle + arcLength * progress, false);
+                ctx.stroke();
+
+                // Add glow effect
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.3)';
+                ctx.lineWidth = 8;
+                ctx.stroke();
+            }
+
+            function drawUpperArc(progress) {
+                const haloRadius = sunRadius * 3.2;
+                const arcLength = Math.PI * 0.5;
+                const startAngle = -Math.PI * 0.75;
+
+                ctx.strokeStyle = 'rgba(125, 162, 184, 0.8)';
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - haloRadius * 0.8, haloRadius,
+                    startAngle, startAngle + arcLength * progress, false);
+                ctx.stroke();
+            }
+
+            function drawLowerArc(progress) {
+                const haloRadius = sunRadius * 3.2;
+                const arcLength = Math.PI * 0.5;
+                const startAngle = Math.PI * 0.25;
+
+                ctx.strokeStyle = 'rgba(125, 162, 184, 0.8)';
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY + haloRadius * 0.8, haloRadius,
+                    startAngle, startAngle + arcLength * progress, false);
+                ctx.stroke();
+            }
+
+            function drawInnerCircle(progress) {
+                const radius = sunRadius * 5;
+                const arcLength = Math.PI * 2;
+
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.6)';
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, arcLength * progress, false);
+                ctx.stroke();
+            }
+
+            function drawOuterHalo(progress) {
+                const radius = sunRadius * 6.5;
+                const arcLength = Math.PI * 2;
+
+                ctx.strokeStyle = 'rgba(125, 162, 184, 0.5)';
+                ctx.lineWidth = 1.5;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, arcLength * progress, false);
+                ctx.stroke();
+            }
+
+            function drawPreviousPhases(currentPhaseIndex) {
+                // Draw all completed phases
+                for (let i = 0; i < currentPhaseIndex; i++) {
+                    phases[i].draw(1.0);
+                }
+            }
+
+            function updateEquation(phase) {
+                if (phase) {
+                    equationDisplay.textContent = phase.equation;
+                    equationDisplay.classList.add('visible');
+                }
+            }
+
+            function drawFinalEquation() {
+                equationDisplay.textContent = 'H(x) = dS/dτ = ∫∫ ρ(r)·σ(θ,φ)·cos(α) dΩ';
+                equationDisplay.style.fontSize = '1.4rem';
+                equationDisplay.classList.add('visible');
+            }
+
+            function animate() {
+                const elapsed = Date.now() - animationStartTime;
+                const totalDuration = phases.length * phaseDuration;
+
+                // Reset animation after completion (with 2 second pause)
+                if (elapsed > totalDuration + 2000) {
+                    animationStartTime = Date.now();
+                    currentPhase = 0;
+                    equationDisplay.classList.remove('visible');
+                }
+
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Always draw the sun
+                drawSun();
+
+                // Determine current phase and progress
+                currentPhase = Math.floor(elapsed / phaseDuration);
+
+                if (currentPhase < phases.length) {
+                    const phaseProgress = (elapsed % phaseDuration) / phaseDuration;
+
+                    // Draw all previous complete phases
+                    drawPreviousPhases(currentPhase);
+
+                    // Draw current phase with progress
+                    phases[currentPhase].draw(phaseProgress);
+
+                    // Update equation display
+                    if (phaseProgress < 0.1) {
+                        updateEquation(phases[currentPhase]);
+                    }
+                } else if (elapsed < totalDuration + 2000) {
+                    // All phases complete, draw everything
+                    drawPreviousPhases(phases.length);
+
+                    // Show final equation
+                    if (elapsed > totalDuration + 200) {
+                        drawFinalEquation();
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            // Start animation
+            animate();
+        })();
+    </script>
+</body>
+</html>
