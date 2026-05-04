@@ -752,7 +752,7 @@
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
             const sunRadius = 40;
-            const refractionAngle = 22; // 22-degree halo angle for parhelia
+            const refractionAngle = 22; // Reference: 22° halo / parhelia.
 
             // Animation state
             let animationStartTime = Date.now();
@@ -763,22 +763,22 @@
             const phases = [
                 {
                     name: 'Left Parhelion',
-                    equation: 'θ = arcsin(n·sin(α)) - α, n=1.31',
+                    equation: '22° halo (prism model): δ(i)=i+e(i)−A;  sin i = n·sin r;  A=60°',
                     draw: (progress) => drawLeftParhelion(progress)
                 },
                 {
                     name: 'Right Parhelion',
-                    equation: 'Δθ = 2[arcsin(n·sin(α)) - α]',
+                    equation: 'Minimum deviation: δ_min(n)=2·arcsin(n·sin(A/2)) − A',
                     draw: (progress) => drawRightParhelion(progress)
                 },
                 {
                     name: 'Upper Tangent Arc',
-                    equation: 'r(θ) = r₀·[1 + ε·cos(θ)]',
+                    equation: 'Variables: i,e (external angles), r,r′ (internal), A (apex), n (index), δ (deviation)',
                     draw: (progress) => drawUpperArc(progress)
                 },
                 {
                     name: 'Lower Tangent Arc',
-                    equation: 'H(x) = dS/dτ = ∫ρ(r)·σ(θ)dΩ',
+                    equation: 'Domain: require n·sin(A/2) ≤ 1 (so arcsin is defined); for A=60°, n≲2',
                     draw: (progress) => drawLowerArc(progress)
                 },
                 {
