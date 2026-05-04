@@ -473,7 +473,19 @@
                 grid-template-columns: 1fr;
             }
         }
-        /* Theorem Proof Section */
+        .equation-anchor-link {
+            color: var(--accent-gold);
+            opacity: 0.7;
+            font-size: 0.85em;
+            margin-left: 0.5em;
+            text-decoration: none;
+        }
+
+        .equation-anchor-link:hover {
+            opacity: 1;
+        }
+
+
         .theorem-section {
             color: var(--text-light);
         }
@@ -1104,13 +1116,13 @@
             function updateEquation(phase) {
                 if (phase) {
                     equationDisplay.innerHTML = phase.equation +
-                        (phase.anchor ? ' <a href="#' + phase.anchor + '" style="color:var(--accent-gold);opacity:0.7;font-size:0.85em;margin-left:0.5em;text-decoration:none;">↓ read more</a>' : '');
+                        (phase.anchor ? ' <a href="#' + phase.anchor + '" class="equation-anchor-link">↓ read more</a>' : '');
                     equationDisplay.classList.add('visible');
                 }
             }
 
             function drawFinalEquation() {
-                equationDisplay.innerHTML = 'H(x) = ∂S/∂τ — the halo signature &nbsp;·&nbsp; <a href="#theorem-proof" style="color:var(--accent-gold);text-decoration:none;">↓ Read the full proof</a>';
+                equationDisplay.innerHTML = 'H(x) = ∂S/∂τ — the halo signature &nbsp;·&nbsp; <a href="#theorem-proof" class="equation-anchor-link" style="opacity:1;">↓ Read the full proof</a>';
                 equationDisplay.style.fontSize = '1.4rem';
                 equationDisplay.classList.add('visible');
             }
