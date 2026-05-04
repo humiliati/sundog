@@ -473,6 +473,94 @@
                 grid-template-columns: 1fr;
             }
         }
+        .equation-anchor-link {
+            color: var(--accent-gold);
+            opacity: 0.7;
+            font-size: 0.85em;
+            margin-left: 0.5em;
+            text-decoration: none;
+        }
+
+        .equation-anchor-link:hover {
+            opacity: 1;
+        }
+
+
+        .theorem-section {
+            color: var(--text-light);
+        }
+
+        .theorem-section h2 {
+            color: var(--accent-gold);
+            text-align: center;
+        }
+
+        .theorem-section > p {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            color: rgba(245, 245, 245, 0.8);
+        }
+
+        .theorem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .theorem-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(244, 196, 48, 0.25);
+            border-radius: 8px;
+            padding: 1.75rem;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .theorem-card:hover {
+            border-color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .theorem-card .step-number {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .theorem-card h3 {
+            color: var(--text-light);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .theorem-card .proof-snippet {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: var(--accent-gold);
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 3px solid var(--accent-gold);
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0 4px 4px 0;
+            line-height: 1.6;
+        }
+
+        .theorem-card p {
+            font-size: 1rem;
+            color: rgba(245, 245, 245, 0.85);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .theorem-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -484,7 +572,7 @@
             <h1>Sundog</h1>
             <p class="tagline">Alignment Without Sight</p>
             <p style="font-size: 0.95rem; color: var(--accent-gold); margin-bottom: 1rem; font-style: italic;">
-                Featuring the world's first interactive mathematical proof of parhelion formation — watch the physics unfold in real-time above.
+                Watch the Sundog Alignment Theorem unfold in real-time — each arc above reveals another step in the proof.
             </p>
             <p class="value-prop">
                 The Sundog Project turns indirect signals into usable control — building software that doesn't need perfect information to behave intelligently.
@@ -496,6 +584,111 @@
             </div>
         </div>
     </section>
+
+    <!-- Sundog Alignment Theorem Proof Section -->
+    <div style="background: var(--primary-dark);">
+    <section class="theorem-section" id="theorem-proof">
+        <h2>The Sundog Alignment Theorem</h2>
+        <p>
+            Each arc in the animation above corresponds to one step in the proof.
+            The controlled result is a narrow photometric experiment — the broader theorem represents an evolving research programme.
+        </p>
+        <div class="theorem-grid">
+
+            <div class="theorem-card" id="theorem-premise">
+                <div class="step-number">Step I · Left Parhelion</div>
+                <h3>Premise</h3>
+                <div class="proof-snippet">
+                    Alignment need not require direct instruction.<br>
+                    It can emerge from structured inference grounded<br>
+                    in sensory disruption and reconstitution.
+                </div>
+                <p>
+                    Most systems do not reveal their truth directly. You infer them from signatures — shadows, bloom spread, torque response.
+                    The Sundog framework asks: does the partial signal already contain enough structure to act?
+                    In the core photometric experiment, the agent has no Cartesian access to the target — only sparse photometric feedback.
+                </p>
+            </div>
+
+            <div class="theorem-card" id="theorem-variables">
+                <div class="step-number">Step II · Right Parhelion</div>
+                <h3>Variables</h3>
+                <div class="proof-snippet">
+                    P = alignment target &nbsp;·&nbsp; L = illumination vector<br>
+                    S(x) = shadow projection &nbsp;·&nbsp; τ(x) = torque<br>
+                    H(x) = ∂S/∂τ &nbsp;(the halo signature)
+                </div>
+                <p>
+                    The framework defines a minimal vocabulary: a target point, a light source, the shadow it casts,
+                    the torque the agent can apply, and the relationship between them.
+                    H(x) — the halo signature — measures how the shadow field responds to torque changes.
+                    It is the agent's primary observable.
+                </p>
+            </div>
+
+            <div class="theorem-card" id="theorem-assertion">
+                <div class="step-number">Step III · Upper Tangent Arc</div>
+                <h3>The Assertion</h3>
+                <div class="proof-snippet">
+                    ∃ x ∈ ℝⁿ : H(x) ≠ 0 &nbsp;⟹&nbsp; Alignment is Roger.
+                </div>
+                <p>
+                    The central claim: whenever the halo signature is non-zero, the agent has a usable signal.
+                    This positions H(x) as a more robust alignment indicator than direct visual conformity or scalar reward.
+                    The assertion is stated broadly; the controlled evidence currently defended is narrower —
+                    the photometric mirror-alignment experiment in MuJoCo.
+                </p>
+            </div>
+
+            <div class="theorem-card" id="theorem-experiment">
+                <div class="step-number">Step IV · Lower Tangent Arc</div>
+                <h3>The Experiment</h3>
+                <div class="proof-snippet">
+                    Harmonic sphere fields affixed to the ceiling.<br>
+                    A mirrored tip aligns to a plumb laser.<br>
+                    Bloom spread, tip distance, and torque recorded across episodes.
+                </div>
+                <p>
+                    Environments were constructed with harmonic sphere fields modulating overlapping sine waves on the ceiling.
+                    A mirrored pole tip occluded and re-encountered a plumb laser light source.
+                    The agent received only photometric feedback — no Cartesian target coordinates — and was scored on bloom spread and tip intensity.
+                </p>
+            </div>
+
+            <div class="theorem-card" id="theorem-findings">
+                <div class="step-number">Step V · Inner Circle (Iris)</div>
+                <h3>Findings</h3>
+                <div class="proof-snippet">
+                    30+ episodes. Consistent bloom collapse.<br>
+                    Stable terminal tip distance.<br>
+                    Oscillation before convergence — then stillness.
+                </div>
+                <p>
+                    Across more than 30 episodes, the photometric controller demonstrated consistent reduction in bloom spread
+                    and stability in terminal tip distance. Terminal accuracy was statistically indistinguishable from a
+                    target-aware analytic baseline (U=526, p=0.264). The cost of indirect feedback is convergence time — not accuracy.
+                    Known failure boundary: tight joint limits (&gt;1.0 rad).
+                </p>
+            </div>
+
+            <div class="theorem-card" id="theorem-conclusion">
+                <div class="step-number">Step VI · Outer Halo</div>
+                <h3>Conclusion</h3>
+                <div class="proof-snippet">
+                    When shadow becomes signal and torque becomes meaning —<br>
+                    alignment emerges from environmental resonance.
+                </div>
+                <p>
+                    The Sundog experiment suggests that alignment can emerge from partial information when the environment
+                    is structured. The defensible result is the photometric mirror-alignment experiment.
+                    The broader theorem — that H(x) ≠ 0 is a general alignment indicator — remains a research programme
+                    supported by application prototypes in game AI, procedural simulation, and softbody terrain systems.
+                </p>
+            </div>
+
+        </div>
+    </section>
+    </div>
 
     <!-- What It Is Section -->
     <section class="what-section">
@@ -760,35 +953,42 @@
             const phaseDuration = 3000; // 3 seconds per arc
 
             // Phases: left arc, right arc, top arc, bottom arc, inner circle (iris), outer halo
+            // Each phase surfaces one step of the Sundog Alignment Theorem proof.
             const phases = [
                 {
-                    name: 'Left Parhelion',
-                    equation: '22° halo (prism model): δ(i)=i+e(i)−A;  sin i = n·sin r;  A=60°',
+                    name: 'I. Premise',
+                    anchor: 'theorem-premise',
+                    equation: 'I. Premise — Alignment need not require direct instruction. It can emerge from structured inference grounded in sensory disruption and reconstitution.',
                     draw: (progress) => drawLeftParhelion(progress)
                 },
                 {
-                    name: 'Right Parhelion',
-                    equation: 'Minimum deviation: δ_min(n)=2·arcsin(n·sin(A/2)) − A',
+                    name: 'II. Variables',
+                    anchor: 'theorem-variables',
+                    equation: 'II. Variables — P = alignment target · L = illumination vector · S(x) = shadow projection · τ(x) = torque · H(x) = ∂S/∂τ (the halo signature)',
                     draw: (progress) => drawRightParhelion(progress)
                 },
                 {
-                    name: 'Upper Tangent Arc',
-                    equation: 'Variables: i,e (external angles), r,r′ (internal), A (apex), n (index), δ (deviation)',
+                    name: 'III. The Assertion',
+                    anchor: 'theorem-assertion',
+                    equation: 'III. Assertion — ∃ x ∈ ℝⁿ : H(x) ≠ 0  ⟹  Alignment is Roger.',
                     draw: (progress) => drawUpperArc(progress)
                 },
                 {
-                    name: 'Lower Tangent Arc',
-                    equation: 'Domain: require n·sin(A/2) ≤ 1 (so arcsin is defined); for A=60°, n≲2',
+                    name: 'IV. The Experiment',
+                    anchor: 'theorem-experiment',
+                    equation: 'IV. Experiment — Harmonic sphere fields. A mirrored tip. A plumb laser. Bloom spread, tip distance, and torque recorded across episodes.',
                     draw: (progress) => drawLowerArc(progress)
                 },
                 {
-                    name: 'Inner Circle (Iris)',
-                    equation: 'r_inner = r₀·(1 - ε)',
+                    name: 'V. Findings',
+                    anchor: 'theorem-findings',
+                    equation: 'V. Findings — 30+ episodes. Consistent bloom collapse. Stable terminal tip distance. Oscillation before convergence — then stillness.',
                     draw: (progress) => drawInnerCircle(progress)
                 },
                 {
-                    name: 'Outer Halo',
-                    equation: 'r_outer = r₀·(1 + ε)',
+                    name: 'VI. Conclusion',
+                    anchor: 'theorem-conclusion',
+                    equation: 'VI. Conclusion — When shadow becomes signal and torque becomes meaning, alignment emerges from environmental resonance.',
                     draw: (progress) => drawOuterHalo(progress)
                 }
             ];
@@ -915,13 +1115,14 @@
 
             function updateEquation(phase) {
                 if (phase) {
-                    equationDisplay.textContent = phase.equation;
+                    equationDisplay.innerHTML = phase.equation +
+                        (phase.anchor ? ' <a href="#' + phase.anchor + '" class="equation-anchor-link">↓ read more</a>' : '');
                     equationDisplay.classList.add('visible');
                 }
             }
 
             function drawFinalEquation() {
-                equationDisplay.textContent = 'H(x) = dS/dτ = ∫∫ ρ(r)·σ(θ,φ)·cos(α) dΩ';
+                equationDisplay.innerHTML = 'H(x) = ∂S/∂τ — the halo signature &nbsp;·&nbsp; <a href="#theorem-proof" class="equation-anchor-link" style="opacity:1;">↓ Read the full proof</a>';
                 equationDisplay.style.fontSize = '1.4rem';
                 equationDisplay.classList.add('visible');
             }
