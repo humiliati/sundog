@@ -1,0 +1,19 @@
+{
+  "name": "sundog-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "postbuild": "node scripts/copy-site-docs.mjs && node scripts/check-site-dist.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name sundog",
+    "cf:auth": "node scripts/check-cloudflare-auth.mjs",
+    "cf:inspect": "node scripts/inspect-cloudflare.mjs"
+  },
+  "devDependencies": {
+    "vite": "^8.0.10",
+    "wrangler": "^4.87.0"
+  }
+}
