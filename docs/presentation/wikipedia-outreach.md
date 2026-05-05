@@ -8,17 +8,31 @@ The Sundog Project has developed what we believe to be the **first interactive m
 
 ## Current Wikipedia Article Status
 
-The Wikipedia article on "Sun dog" (Parhelion) currently provides:
-- General description of the phenomenon
-- Mentions 22° halo angle and ice crystal refraction
-- Basic atmospheric conditions
-- Historical observations
+Article: [Sun dog](https://en.wikipedia.org/wiki/Sun_dog) · Talk: [Talk:Sun_dog](https://en.wikipedia.org/wiki/Talk:Sun_dog) · Last verified revision: `1339499942` (2026-02-20).
 
-**What's missing:**
-- Interactive mathematical demonstration
-- Step-by-step visual breakdown of arc formation
-- Real-time equation visualization showing the physics
-- Educational tools for understanding the optical geometry
+**Live table of contents** (the only sections that exist — anchor names are exact):
+
+1. `Formation_and_characteristics` — physics: refraction through plate-shaped hexagonal ice crystals (cirrus, cirrostratus, diamond dust), 22° minimum deflection, color order red→orange→blue, link to parhelic circle and circumzenithal arc, sun-altitude dependence, other-planet variants. Cites Atmospheric Optics (atoptics.org.uk) and Georgia State HyperPhysics.
+2. `Terminology`
+3. `Etymology`
+4. `History` (with subsections `Antiquity`, `Wars_of_the_Roses`, `Early_modern_era`, `Late_modern_era`)
+5. `See_also` — Anthelion, Circumhorizontal arc, Corona (optical phenomenon), Crown flash, Liljequist parhelion, Moon dog
+6. `References`
+7. `Further_reading` — single entry: Minnaert, *Light and Color in the Outdoors* (Springer, 1993)
+8. `External_links` — 7 entries (atoptics.org.uk, starrynightphotos, two YouTube videos, IOL news photo, NASA SDO Sundog Mystery, APOD jumping-sundog)
+
+**What the live article already covers** (don't claim we're filling these holes):
+- The 22° minimum-deflection physics
+- Plate-shaped hexagonal ice crystal mechanism
+- Color ordering and parhelic circle / circumzenithal arc relationships
+- Sun-altitude effect on sun-dog separation from the halo
+- Sun dogs on other planets (Mars CO₂-ice, Jupiter ammonia, etc.)
+
+**What is genuinely missing from the article:**
+- An *interactive* (rather than textual) walkthrough of arc assembly
+- A single-frame schematic that places parhelia, 22° halo, and tangent arcs in one labeled diagram (the four article images are photographs, not schematics)
+- Equation-to-arc correspondence shown visually
+- Open-source educational implementation
 
 ## Our Contribution
 
@@ -46,38 +60,44 @@ The Wikipedia article on "Sun dog" (Parhelion) currently provides:
 
 ## Proposed Wikipedia Enhancements
 
-### Option 1: External Link Addition
+### Option 1 (preferred): External link in the existing `External_links` section
 
-Add to the "External links" section:
-```
-* [Interactive Mathematical Visualization of Parhelion Formation](https://sundog-project.github.io) - Real-time demonstration of ice crystal refraction and halo geometry
-```
+This is the lowest-friction insertion. Match the wikitext style of the seven existing entries — bullet, single-bracket external URL, optional trailing description. Insert near the atoptics.org.uk and starrynightphotos entries (which are the closest-kin resources). Proposed entry:
 
-### Option 2: Educational Resources Section
-
-Create or enhance an "Educational resources" section:
-```
-== Educational Resources ==
-
-=== Interactive Demonstrations ===
-The Sundog Project provides an interactive mathematical visualization that demonstrates
-parhelion formation through real-time physics calculations. The visualization shows:
-* Sequential formation of left and right parhelion arcs
-* Upper and lower tangent arc development
-* Complete 22° halo system
-* Mathematical equations governing each optical phenomenon
-
-The demonstration uses actual refraction physics (n=1.31 for ice crystals) and displays
-the geometric equations as each arc forms, making the complex atmospheric optics more
-accessible to students and enthusiasts.
+```wikitext
+* [https://sundog.cc Sundog — Interactive parhelion formation visualization], step-by-step canvas demonstration of refraction (n = 1.31), 22° minimum-deviation halo, parhelia, and tangent arcs with the governing equations displayed alongside each arc.
 ```
 
-### Option 3: Visual Media Contribution
+Note: existing External-links entries use `*[https://… Title], description` format with a single space after `*`. Match that exactly. Do **not** use the markdown `[Title](URL)` form.
 
-Create static diagrams or animated GIFs from our visualization to contribute to Wikimedia Commons:
-- Step-by-step arc formation sequence
-- Labeled diagram showing equation correspondence
-- Before/after comparison of mathematical components
+### Option 2 (de-prioritized): "Educational resources" section does not exist
+
+The live article has no `Educational_resources` (or similar) section. Creating one is a substantially heavier lift than Option 1 — Wikipedia editors typically resist new top-level sections that look like external-resource directories, and treat them as WP:ELNO violations. Keep this option only as a fallback if Option 1 is rejected for being insufficiently encyclopedic, and pitch it on the Talk page first rather than landing it directly. If we do pursue it, the closest existing precedent on related articles is a short prose paragraph inside `Formation_and_characteristics`, not a new section.
+
+### Option 3: Wikimedia Commons + image into `Formation_and_characteristics`
+
+The article's `Formation_and_characteristics` section currently carries four photographs (Sun City West AZ, Salem MA, Hesse, Saskatoon) but **no labeled schematic**. A clean SVG schematic that labels parhelia, 22° halo, upper/lower tangent arcs, parhelic circle, and the deflection angle would fill a real gap.
+
+Upload target: [Wikimedia Commons category `Parhelion`](https://commons.wikimedia.org/wiki/Category:Parhelion) — the article's existing `{{Commons|Parhelion|Sun dog}}` template already points there.
+
+Proposed thumbnail wikitext (matches existing image syntax in the section):
+
+```wikitext
+[[File:Parhelion_schematic_with_deflection_equation.svg|thumb|upright=1.2|Schematic of a sun dog: parhelia (P) sit on the 22° halo at the same elevation as the Sun, with deflection D(α) = 40° − 2·[arcsin(n·sin α) − α] for ice (n = 1.31).]]
+```
+
+License: CC-BY-SA 4.0 or CC0. Source SVG should be derivable from the same equations the hero uses, so we can publish provenance ("rendered from the open-source Sundog hero canvas — github.com/humiliati/sundog").
+
+## Insertion Targets — Live Article Anchors
+
+| Asset | Section | Anchor URL | Existing neighbors to match in tone |
+|---|---|---|---|
+| External link to sundog.cc | External links | https://en.wikipedia.org/wiki/Sun_dog#External_links | atoptics.org.uk parhelia page; NASA SDO Sundog Mystery |
+| Schematic SVG | Formation and characteristics | https://en.wikipedia.org/wiki/Sun_dog#Formation_and_characteristics | Existing four photo thumbnails (Sun City West, Salem, Hesse, Saskatoon) |
+| Talk-page proposal | Talk:Sun dog | https://en.wikipedia.org/wiki/Talk:Sun_dog | Post under a new `== Proposal: …  ==` heading |
+| Commons upload | Category:Parhelion | https://commons.wikimedia.org/wiki/Category:Parhelion | The article's `{{Commons\|Parhelion\|Sun dog}}` already links here |
+
+The article also has `See_also`, `Further_reading`, and `References`, but none are appropriate insertion targets for our resource: `See_also` is reserved for inter-Wikipedia article links (we have no Wikipedia article), `Further_reading` is for printed/cited works (Minnaert 1993 is the lone entry), and `References` requires a published, citable source — eligible only after a paper lands.
 
 ## Implementation Strategy
 
@@ -191,32 +211,36 @@ Create static diagrams or animated GIFs from our visualization to contribute to 
 ### Talk Page Proposal Template
 
 ```
-== Proposal: Educational visualization of parhelion formation ==
+== Proposal: External link to interactive parhelion visualization ==
 
-I'd like to propose adding an interactive educational resource to this article.
+I'd like to propose adding a single entry to the External links section.
 
-The resource is an open-source mathematical visualization that demonstrates parhelion
-(sun dog) formation through real-time physics calculations. It shows:
+The resource ([https://sundog.cc sundog.cc]) is an open-source canvas-based
+visualization that animates the assembly of a sun-dog halo system step by step:
+left and right parhelia, upper and lower tangent arcs, the 22° halo, and the
+46° outer halo, with the governing equation shown alongside each step. The
+physics is the same as already described in the Formation and characteristics
+section — refraction through plate-shaped hexagonal ice crystals at n = 1.31,
+minimum deflection D(α) = 40° − 2·[arcsin(n·sin α) − α] — but rendered
+interactively rather than as text.
 
-* Sequential formation of left and right parhelion arcs
-* The 22° refraction angle through ice crystals
-* Upper and lower tangent arc development
-* Mathematical equations for each optical component
-* Complete halo system formation
+In tone and scope it's closest to the atoptics.org.uk pages already linked
+from External links.
 
-The visualization is based on established atmospheric optics equations (using n=1.31
-refractive index for ice crystals) and displays the geometric formulas as each arc
-forms. This makes the complex physics described in the article more accessible and
-concrete for readers.
+'''Disclosure''': I contributed to developing this visualization. The code
+is open source (MIT) at https://github.com/humiliati/sundog and the page
+itself contains no advertising or paywall.
 
-**Disclosure**: I contributed to developing this visualization. I'm proposing it because
-I believe it has genuine educational value for understanding atmospheric optics, not for
-promotional purposes. The code is open source and freely available.
+'''Proposed addition''' (External_links section, matching existing entry style):
 
-**Proposed addition**: External link in the "External links" section, or inclusion in
-a new "Educational resources" section if the community thinks that's more appropriate.
+* [https://sundog.cc Sundog — Interactive parhelion formation visualization],
+  step-by-step canvas demonstration of refraction, the 22° halo, parhelia,
+  and tangent arcs with the governing equations displayed alongside each arc.
 
-Thoughts? Is this the kind of resource that would benefit readers of this article?
+Happy to also upload a labeled SVG schematic to Commons:Category:Parhelion
+if editors think Formation and characteristics would benefit from a diagram
+to complement the existing four photographs.
+
 ~~~~
 ```
 

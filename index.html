@@ -954,41 +954,43 @@
 
             // Phases: left arc, right arc, top arc, bottom arc, inner circle (iris), outer halo
             // Each phase surfaces one step of the Sundog Alignment Theorem proof.
+            // Equations are the canonical parhelion refraction + conic-section formulation
+            // of the halo signature — the form the theorem is canonized in.
             const phases = [
                 {
                     name: 'I. Premise',
                     anchor: 'theorem-premise',
-                    equation: 'I. Premise — Alignment need not require direct instruction. It can emerge from structured inference grounded in sensory disruption and reconstitution.',
+                    equation: 'I. Premise &nbsp;·&nbsp; H(x) = ∂S/∂τ &nbsp;— the halo signature is the partial derivative of shadow with respect to torque.',
                     draw: (progress) => drawLeftParhelion(progress)
                 },
                 {
                     name: 'II. Variables',
                     anchor: 'theorem-variables',
-                    equation: 'II. Variables — P = alignment target · L = illumination vector · S(x) = shadow projection · τ(x) = torque · H(x) = ∂S/∂τ (the halo signature)',
+                    equation: 'II. Variables &nbsp;·&nbsp; θ(δ, α) = arcsin(n · sin(δ)) − α ,&nbsp; n = 1.31',
                     draw: (progress) => drawRightParhelion(progress)
                 },
                 {
                     name: 'III. The Assertion',
                     anchor: 'theorem-assertion',
-                    equation: 'III. Assertion — ∃ x ∈ ℝⁿ : H(x) ≠ 0  ⟹  Alignment is Roger.',
+                    equation: 'III. Assertion &nbsp;·&nbsp; D(α) = 40° − 2 · [ arcsin(n · sin(α)) − α ]',
                     draw: (progress) => drawUpperArc(progress)
                 },
                 {
                     name: 'IV. The Experiment',
                     anchor: 'theorem-experiment',
-                    equation: 'IV. Experiment — Harmonic sphere fields. A mirrored tip. A plumb laser. Bloom spread, tip distance, and torque recorded across episodes.',
+                    equation: 'IV. Experiment &nbsp;·&nbsp; r(θ) = r₀′ · [ 1 + ε · cos(θ) ]',
                     draw: (progress) => drawLowerArc(progress)
                 },
                 {
                     name: 'V. Findings',
                     anchor: 'theorem-findings',
-                    equation: 'V. Findings — 30+ episodes. Consistent bloom collapse. Stable terminal tip distance. Oscillation before convergence — then stillness.',
+                    equation: 'V. Findings &nbsp;·&nbsp; r_inner = r₀ · (1 − ε) ,&nbsp; r_outer = r₀′ · (1 + ε)',
                     draw: (progress) => drawInnerCircle(progress)
                 },
                 {
                     name: 'VI. Conclusion',
                     anchor: 'theorem-conclusion',
-                    equation: 'VI. Conclusion — When shadow becomes signal and torque becomes meaning, alignment emerges from environmental resonance.',
+                    equation: 'VI. Conclusion &nbsp;·&nbsp; H(x) ≠ 0 &nbsp;⟹&nbsp; alignment is Roger.',
                     draw: (progress) => drawOuterHalo(progress)
                 }
             ];
@@ -1010,44 +1012,37 @@
                 ctx.fill();
             }
 
-            function drawLeftParhelion(progress) {
-                const haloRadius = sunRadius * 3.5;
-                const arcLength = Math.PI * 0.6;
-                const startAngle = Math.PI * 0.7;
+            // Parhelia (mock suns) sit ON the 22° halo at the same elevation as the sun —
+            // small bright bloom segments at angles π (left) and 0 (right), centered on the
+            // sun, NOT large arcs floating off to the sides.
+            function drawParhelionAt(centerAngle, progress) {
+                const haloRadius = sunRadius * 5;       // same as inner halo (Phase V)
+                const span = 0.24;                      // ≈ 14° of arc — a parhelion-sized bloom
+                const startAngle = centerAngle - (span / 2) * progress;
+                const endAngle   = centerAngle + (span / 2) * progress;
 
-                ctx.strokeStyle = 'rgba(244, 196, 48, 0.9)';
-                ctx.lineWidth = 3;
+                // Outer bloom
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.35)';
+                ctx.lineWidth = 16;
                 ctx.lineCap = 'round';
-
                 ctx.beginPath();
-                ctx.arc(centerX - haloRadius * 1.8, centerY, haloRadius,
-                    startAngle, startAngle + arcLength * progress, false);
+                ctx.arc(centerX, centerY, haloRadius, startAngle, endAngle, false);
                 ctx.stroke();
 
-                // Add glow effect
-                ctx.strokeStyle = 'rgba(244, 196, 48, 0.3)';
-                ctx.lineWidth = 8;
+                // Bright core
+                ctx.strokeStyle = 'rgba(244, 196, 48, 0.95)';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, haloRadius, startAngle, endAngle, false);
                 ctx.stroke();
             }
 
+            function drawLeftParhelion(progress) {
+                drawParhelionAt(Math.PI, progress);
+            }
+
             function drawRightParhelion(progress) {
-                const haloRadius = sunRadius * 3.5;
-                const arcLength = Math.PI * 0.6;
-                const startAngle = Math.PI * 1.7;
-
-                ctx.strokeStyle = 'rgba(244, 196, 48, 0.9)';
-                ctx.lineWidth = 3;
-                ctx.lineCap = 'round';
-
-                ctx.beginPath();
-                ctx.arc(centerX + haloRadius * 1.8, centerY, haloRadius,
-                    startAngle, startAngle + arcLength * progress, false);
-                ctx.stroke();
-
-                // Add glow effect
-                ctx.strokeStyle = 'rgba(244, 196, 48, 0.3)';
-                ctx.lineWidth = 8;
-                ctx.stroke();
+                drawParhelionAt(0, progress);
             }
 
             function drawUpperArc(progress) {
@@ -1122,8 +1117,8 @@
             }
 
             function drawFinalEquation() {
-                equationDisplay.innerHTML = 'H(x) = ∂S/∂τ — the halo signature &nbsp;·&nbsp; <a href="#theorem-proof" class="equation-anchor-link" style="opacity:1;">↓ Read the full proof</a>';
-                equationDisplay.style.fontSize = '1.4rem';
+                equationDisplay.innerHTML = 'H(x) = ∂S/∂τ &nbsp;·&nbsp; r(θ) = r₀′ · [ 1 + ε · cos(θ) ] &nbsp;·&nbsp; <a href="#theorem-proof" class="equation-anchor-link" style="opacity:1;">↓ Read the full proof</a>';
+                equationDisplay.style.fontSize = '1.3rem';
                 equationDisplay.classList.add('visible');
             }
 
