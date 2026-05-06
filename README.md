@@ -30,6 +30,8 @@ boundaries.
 - [Researcher guide](docs/RESEARCHER_GUIDE.md): the shortest path through the
   repo for a reviewer, collaborator, or technically skeptical reader.
 - [Documentation index](docs/README.md): local map of the research-facing docs.
+- [Website development guide](docs/WEBSITE_DEVELOPMENT.md): minimal directions
+  for editing the public site and deploying it through Cloudflare Pages.
 - [Scientific criteria](docs/SCIENTIFIC_CRITERIA.md): what has been made
   testable, what has not, and what would strengthen the paper.
 - [Applications map](docs/APPLICATIONS.md): how EyesOnly, Dungeon Gleaner, and
@@ -52,6 +54,8 @@ boundaries.
 | `experiments/` | Reproducible experiment, analysis, and stress-test scripts. |
 | `results/` | Saved run artifacts, statistical summaries, and generated plots. |
 | `docs/` | Research landing docs, paper drafts, runners, and Phase-2 design notes. |
+| `index.html`, root `*.html` | Public website pages built by Vite and deployed through Cloudflare Pages. |
+| `scripts/` | Website build/deploy helpers, Cloudflare inspection scripts, and link checks. |
 | `runners/` | Turn-envelope runner framework used with EyesOnly / Gone Rogue. |
 | `SundogMujoco2.0/` | Earlier leisure-environment artifact and historical context. |
 | `sundog_alignment_theorem_final_fixed/`, `notebooks/` | Original theorem text and legacy paper materials. |
@@ -100,6 +104,26 @@ results/stress_tests/stress_summary.csv
 results/stress_tests/<stressor>/sweep_summary.json
 results/stress_tests/<stressor>/stress_curve.png
 ```
+
+## Website And Deployment
+
+The public site is served from `index.html` and any other root-level `*.html`
+pages. It builds with Vite and deploys to Cloudflare Pages.
+
+```bash
+npm install
+npm run dev -- --port 5173
+npm run build
+npm run deploy
+```
+
+Cloudflare Pages is configured for the `sundog` project, production branch
+`main`, build command `npm run build`, output directory `dist`, and custom
+domain `sundog.cc`. The deploy helper reads local scoped Cloudflare material
+from `C:\Users\hughe\syek.c`; keep that file outside the repo.
+
+See [Website development](docs/WEBSITE_DEVELOPMENT.md) before adding public
+pages or changing deployment behavior.
 
 ## Related Sundog Applications
 
