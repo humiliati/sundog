@@ -1,0 +1,199 @@
+
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+
+% Core packages
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\usepackage{tikz-cd}
+\usepackage{multicol}
+
+% Links and typography
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+
+% Paragraphs
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1\baselineskip}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\title{Notes on the Sundog Alignment Idea}
+\author{Working Draft}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document records a working mathematical formulation of a conjectural ``Sundog Alignment'' idea described on \texttt{sundog.cc} \cite{sundogSite}. The core idea is that an embodied agent may sometimes infer alignment-relevant directions to an unobserved target from indirect structure in the environment, rather than by directly observing the goal or optimizing an explicit reward tied to that goal. In the motivating setup, the indirect signals are torque feedback and a shadow or halo field produced by a reflected laser pattern. The point of the note is not to claim a finished result, but to identify a plausible formal route and the additional observability assumptions that a rigorous statement would need \cite{kalman1960,hermann1977}.
+\end{abstract}
+
+\section{Motivation}
+
+The motivating thought experiment is a control task in which an agent manipulates a pole with a mirrored tip while a laser projects upward toward a structured ceiling. The goal is to align the pole with a target direction or location, but the agent does not directly observe the target. Instead, it only receives indirect feedback from:
+
+\begin{itemize}
+    \item joint torque or resistance in the body of the mechanism, and
+    \item the deformation, concentration, or collapse of a shadow or halo pattern on the ceiling.
+\end{itemize}
+
+The proposed lesson is that successful behavior might emerge from stable coupling to environmental structure, not only from direct observation of the target or from an explicitly specified objective. This places the idea near established work on partial observability and history-dependent decision making, while remaining a separate conjectural framing \cite{kaelbling1998}.
+
+\section{Setup}
+
+Let $z_t$ denote the dynamical state of the agent--environment system. For local differential analysis, fix a regime in which the relevant observations admit differentiable reduced maps of local configuration coordinates $x \in \mathbb{R}^n$:
+
+\begin{itemize}
+    \item $S(x) \in \mathbb{R}^p$, a shadow-projection or halo observable summarizing the projected light field, and
+    \item $\tau(x) \in \mathbb{R}^q$, a torque or resistance observable summarizing embodied feedback.
+\end{itemize}
+
+Along an interaction trajectory and under a fixed local control law, these reduced maps induce time-indexed measurements $S_t=S(x_t)$ and $\tau_t=\tau(x_t)$; the later formalization returns to the more realistic history-dependent setting with explicit controls. We interpret $S$ broadly: for $p=1$ it may be a scalar concentration score, while for larger $p$ it may be an image-space summary or a higher-dimensional geometric descriptor of the projected light pattern, analogous in spirit to image-derived feedback in visual servoing \cite{chaumette2006}. Likewise, $\tau$ may denote either a full vector of torques or a lower-dimensional resistance feature vector; the use of contact, force, and tactile signals as task-relevant feedback is a standard theme in robotic sensing \cite{dahiya2010}.
+
+\begin{definition}[Halo coupling]
+Within this local reduction, let
+\[
+J_S(x) = \frac{\partial S}{\partial x}(x),
+\qquad
+J_\tau(x) = \frac{\partial \tau}{\partial x}(x).
+\]
+The halo coupling matrix is
+\[
+C(x) = J_S(x)J_\tau(x)^\top \in \mathbb{R}^{p \times q}.
+\]
+When a scalar summary is convenient, we write
+\[
+h(x) = \lVert C(x) \rVert_F.
+\]
+Informally, $C(x)$ measures whether local perturbations that change embodied resistance also change the halo observable in a systematic way.
+\end{definition}
+
+\section{Working Proposition}
+
+\begin{proposition}[Sundog alignment, working form]
+Suppose an embodied agent evolves in a structured environment with hidden goal residual $G(z_t) \in \mathbb{R}^m$, where $G(z_t)=0$ denotes perfect alignment, and suppose the agent does not observe $G$ directly. Instead, it observes only the histories of the halo and torque channels generated during interaction. If, in a neighborhood of the target set, the local coupling matrix
+\[
+C(x) = J_S(x)J_\tau(x)^\top
+\]
+has nontrivial sensitivity in directions that change $G$ and the observation history $(S_{0:t},\tau_{0:t},u_{0:t-1})$ satisfies a local observability condition for those directions, then there exists a history-dependent estimator or policy that can recover a locally alignment-improving direction without direct observation of the target.
+\end{proposition}
+
+This statement should be read as a working research proposition rather than a finished formal result. The technical burden is to make ``directions that change $G$'' and ``local observability condition'' precise enough to imply observability or convergence; the coupling statistic alone is not sufficient. Classical observability asks when hidden state can be reconstructed from outputs, while nonlinear observability requires additional local differential structure \cite{kalman1960,hermann1977}.
+
+\section{Interpretation}
+
+The proposition suggests the following chain of reasoning:
+
+\begin{enumerate}
+    \item The environment contains geometry that transforms small configuration changes into measurable changes in a projected light field.
+    \item The agent's body experiences related changes through torque or resistance.
+    \item If the mapping between these two channels is stable and sufficiently informative about changes in the hidden goal, then the agent can detect a regularity linking action, resistance, and projection.
+    \item That regularity can serve as an indirect alignment cue, even when the true target is hidden.
+\end{enumerate}
+
+Under this interpretation, alignment is not supplied directly as a symbolic objective. Instead, target-relevant information is extracted from repeated interaction with a world whose geometry makes some directions of progress legible through indirect cues.
+
+\section{A More Explicit Formalization}
+
+One possible route to a sharper result is the following. Let
+\[
+\mathcal{H}_t = (S_{0:t},\tau_{0:t},u_{0:t-1})
+\]
+denote the observable history, and let
+\[
+G(z_t) \in \mathbb{R}^m
+\]
+denote the hidden goal residual, with $G(z_t)=0$ meaning perfect alignment. The agent does not observe $G$ directly. A formal embodied-observability result would show that there exists either an estimator
+\[
+\hat d_t = \Phi(\mathcal{H}_t)
+\]
+producing a locally alignment-improving direction, or a policy
+\[
+u_t = \pi(\mathcal{H}_t)
+\]
+such that the induced dynamics reduce $\lVert G(z_t) \rVert$ over time. The use of histories rather than instantaneous observations follows the usual pressure in partially observable control: the agent must often act from accumulated observation-action information rather than from a directly observed Markov state \cite{kaelbling1998}.
+
+In that language, the Sundog idea becomes:
+
+\begin{quote}
+Indirect observables can guide alignment only when the environment couples them to the hidden goal in a way that is observable through interaction.
+\end{quote}
+
+The local coupling matrix $C(x)$ and scalar score $h(x)$ are therefore best read as surrogate diagnostics: they can indicate that the two indirect channels move together, but they do not by themselves guarantee informativeness about $G$.
+
+\section{Why This Matters}
+
+This viewpoint is relevant to at least three themes:
+
+\begin{itemize}
+    \item \textbf{Embodied AI:} agents often act under severe sensing constraints and must infer task structure from contact, force, and partial observation \cite{kaelbling1998}.
+    \item \textbf{Robotics:} many manipulation tasks already rely on tactile, force, visual, or impedance cues rather than direct line-of-sight supervision \cite{chaumette2006,dahiya2010}.
+    \item \textbf{Alignment-adjacent modeling:} the proposal suggests a route by which structured interaction, not only explicit rewards, can carry target-relevant information in embodied settings, though broader AI-alignment claims would require additional theory.
+\end{itemize}
+
+\section{Open Questions}
+
+Several pieces would be needed to convert this working draft into a rigorous result.
+
+\begin{itemize}
+    \item What regularity assumptions on the reduced maps $S$ and $\tau$ make the local coupling matrix $C(x)$ well-defined and useful?
+    \item What local sensitivity condition on $C(x)$ is actually sufficient: rank, transversality with $G$, observability, local identifiability, or something else?
+    \item When do observable histories $\mathcal{H}_t$ determine an alignment-improving direction or estimator of $G(z_t)$?
+    \item Under what dynamical assumptions does indirect inference provably converge?
+    \item How robust is the effect under noise, perturbation, or adversarial geometry?
+\end{itemize}
+
+\section{Conclusion}
+
+The Sundog Alignment idea is best read as a research program: in some partially observed embodied tasks, structured indirect feedback may be sufficient for target inference. The central mathematical challenge is to replace the present surrogate coupling criterion with an explicit observability or convergence statement linking histories of embodied interaction to reliable reduction of the hidden goal residual.
+
+\section*{Attribution and Scope}
+
+The Sundog-specific terminology in this note, including the ``halo coupling'' language and the motivating mirrored-pole thought experiment, is attributed to the public Sundog project materials \cite{sundogSite}. The mathematical framing borrows standard vocabulary from control observability, nonlinear observability, partially observable decision processes, visual servoing, and robotic tactile sensing \cite{kalman1960,hermann1977,kaelbling1998,chaumette2006,dahiya2010}. These citations are included to identify intellectual context, not to suggest that the cited authors endorse the Sundog conjecture or the specific proposed coupling statistic.
+
+\section*{Source Note}
+
+This draft is based on public descriptions of the Sundog alignment idea at \texttt{sundog.cc}. It is intentionally written as a cleaned-up working note rather than a verbatim reproduction.
+
+\begin{thebibliography}{9}
+
+\bibitem{sundogSite}
+The Sundog Project.
+\newblock \emph{Sundog: Alignment Without Sight}.
+\newblock \url{https://sundog.cc/}. Accessed 2026-05-06.
+
+\bibitem{kalman1960}
+R. E. Kalman.
+\newblock On the general theory of control systems.
+\newblock In \emph{Proceedings of the First International Congress on Automatic Control}, 1960.
+
+\bibitem{hermann1977}
+R. Hermann and A. J. Krener.
+\newblock Nonlinear controllability and observability.
+\newblock \emph{IEEE Transactions on Automatic Control}, AC-22(5):728--740, 1977.
+\newblock doi: \href{https://doi.org/10.1109/TAC.1977.1101601}{10.1109/TAC.1977.1101601}.
+
+\bibitem{kaelbling1998}
+L. P. Kaelbling, M. L. Littman, and A. R. Cassandra.
+\newblock Planning and acting in partially observable stochastic domains.
+\newblock \emph{Artificial Intelligence}, 101(1--2):99--134, 1998.
+\newblock doi: \href{https://doi.org/10.1016/S0004-3702(98)00023-X}{10.1016/S0004-3702(98)00023-X}.
+
+\bibitem{chaumette2006}
+F. Chaumette and S. Hutchinson.
+\newblock Visual servo control, Part I: Basic approaches.
+\newblock \emph{IEEE Robotics \& Automation Magazine}, 13(4):82--90, 2006.
+\newblock doi: \href{https://doi.org/10.1109/MRA.2006.250573}{10.1109/MRA.2006.250573}.
+
+\bibitem{dahiya2010}
+R. S. Dahiya, G. Metta, M. Valle, and G. Sandini.
+\newblock Tactile sensing--from humans to humanoids.
+\newblock \emph{IEEE Transactions on Robotics}, 26(1):1--20, 2010.
+\newblock doi: \href{https://doi.org/10.1109/TRO.2009.2033627}{10.1109/TRO.2009.2033627}.
+
+\end{thebibliography}
+
+\end{document}

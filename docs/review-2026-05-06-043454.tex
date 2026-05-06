@@ -1,0 +1,127 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.75\baselineskip}
+
+\title{Review of ``Notes on the Sundog Alignment Theorem''}
+\author{}
+\date{2026-05-06}
+
+\begin{document}
+\maketitle
+
+\section*{Overall assessment}
+
+This is a short, readable working note, and only a few concrete issues dominate the review. I explicitly checked the displayed equations and surrounding prose for symbol definitions, notation drift, sign conventions, branch conventions, dimensional/type consistency, and implementation ambiguity. The main problems are not algebraic sign mistakes or inverse-trig branch errors; they are conceptual and formal. In particular, the central quantity
+\[
+H(x) = \frac{\partial S}{\partial \tau}
+\]
+is not well defined under the paper's own broad definitions of $S$ and $\tau$, and the theorem's conclusion does not follow from the stated premise without an additional observability/identifiability assumption linking the indirect observables to the hidden goal residual $G$. The required notation-drift check found no initial/final or source/observer adjective conflict, but it did find important type drift: $S$ and $\tau$ are described in several incompatible ways while $H$ is written as a single scalar-style derivative.
+
+\section*{Most important technical findings}
+
+\subsection*{1. The halo signature is not yet mathematically well defined}
+
+\textbf{Type.} Definite error with implementation-facing ambiguity.
+
+\textbf{Location.} \emph{Setup}, Definition ``Halo signature''; repeated in \emph{Theorem Statement} and referenced again in \emph{A More Explicit Formalization}.
+
+\textbf{Problem.} The note first introduces $S(x)$ as ``a shadow-projection or halo field'' and $\tau(x)$ as ``the torque vector measured at the joints.'' A few lines later, $S$ is broadened to ``a scalar concentration score, an image-space observable, or a higher-dimensional geometric descriptor,'' while $\tau$ may be ``either a full vector of torques or a compressed resistance signal.'' After that type broadening, the manuscript still defines
+\[
+H(x) = \frac{\partial S}{\partial \tau}.
+\]
+As written, this derivative is not well defined unless the paper specifies the codomains of $S$ and $\tau$ and the rank/invertibility assumptions that make differentiation with respect to $\tau$ meaningful.
+
+\textbf{Why it matters.} This quantity is the core premise of the theorem. If its type is ambiguous, then statements such as ``$H(x)$ is nonzero'' and ``sufficiently coherent'' are also ambiguous, especially for any implementation-facing reading.
+
+\textbf{Suggested fix.} Make the spaces explicit, for example $S:\mathbb{R}^n \to \mathbb{R}^p$ and $\tau:\mathbb{R}^n \to \mathbb{R}^q$, and then choose one precise notion of coupling. Two workable options are:
+\begin{itemize}
+    \item define a coupling matrix from configuration-space Jacobians, e.g. $J_S(x)J_\tau(x)^\top$, if the intent is ``these observables vary together under local perturbations,'' or
+    \item if the intent really is $D_\tau S$, state the local rank assumptions and write something explicit such as $D_\tau S(x)=D_xS(x)\,(D_x\tau(x))^{\dagger}$ with the generalized inverse convention fixed.
+\end{itemize}
+
+\subsection*{2. The stated theorem premise does not support the stated conclusion}
+
+\textbf{Type.} Unsupported claim.
+
+\textbf{Location.} \emph{Theorem Statement} compared with \emph{A More Explicit Formalization}.
+
+\textbf{Problem.} The theorem claims that if $H(x)$ is nonzero and sufficiently coherent, then the agent can ``infer alignment-relevant structure from interaction alone.'' Later, the paper introduces a hidden goal residual $G(x)$ and correctly says that a formal result would need a statistic or controller that reduces $\lVert G(x) \rVert$ over time. Those two passages do not match. Nonzero coupling between $S$ and $\tau$ does \emph{not} by itself imply that either observable is informative about $G$; the coupling could reflect a nuisance geometric feature unrelated to progress toward the hidden goal.
+
+\textbf{Why it matters.} This is the main logical gap in the note. Without an explicit observability, identifiability, or informativeness assumption connecting $(S,\tau)$ to $G$, the document currently supports a heuristic intuition, not a theorem.
+
+\textbf{Suggested fix.} Downgrade the result to a conjecture or proposition unless stronger assumptions are added. If the theorem label is kept, add an assumption such as local observability of $G$ from trajectories of $(S,\tau)$, or a monotonic relation between an explicitly defined coupling statistic and descent in $\lVert G(x) \rVert$.
+
+\subsection*{3. The formalization removes the dynamics and memory that the prose relies on}
+
+\textbf{Type.} Likely issue.
+
+\textbf{Location.} \emph{Setup} (where $\tau$ is written as $\tau(x)$) and \emph{A More Explicit Formalization} (where $\pi:(S,\tau)\mapsto \Delta x$).
+
+\textbf{Problem.} The prose repeatedly emphasizes inference through \emph{interaction} and repeated sensing, but the formal model uses only instantaneous observations and makes torque a function of configuration alone. In embodied systems, torque/resistance usually depends on more than configuration: velocity, contact mode, actuation, friction, and recent history can all matter. Likewise, a one-step controller $\pi:(S,\tau)\mapsto \Delta x$ is too strong if different hidden states can produce the same instantaneous pair $(S,\tau)$.
+
+\textbf{Why it matters.} As written, the mathematics suppresses the very partial observability and dynamical structure that the note is trying to turn into a theorem.
+
+\textbf{Suggested fix.} Introduce a dynamical state $z_t$ and history-dependent observations, for example $S_t=S(z_t)$ and $\tau_t=\tau(z_t,u_t)$. Then replace the memoryless controller by a policy or estimator that depends on a history $\mathcal{H}_t=(S_{0:t},\tau_{0:t},u_{0:t-1})$ or on an internal belief state.
+
+\subsection*{4. The alignment framing is broader than the manuscript currently supports}
+
+\textbf{Type.} Unsupported claim.
+
+\textbf{Location.} Abstract; final sentence of \emph{Motivation}; \emph{Why This Matters}, especially the \textbf{AI alignment} bullet; \emph{Conclusion}.
+
+\textbf{Problem.} The note moves from a partially observed control thought experiment to the broader claim that ``some forms of alignment may arise from the dynamics of interaction and world structure, not only from externally specified reward functions.'' The manuscript does not yet provide a formal bridge from hidden-target inference in a mechanical setup to normative AI alignment.
+
+\textbf{Why it matters.} This broader framing invites readers to evaluate the note against a much stronger claim than the current mathematics can carry, which weakens the useful core idea about indirect observability in embodied control.
+
+\textbf{Suggested fix.} Narrow the framing to embodied control, robotics, or indirect observability unless the paper adds a formal reduction or literature-backed argument connecting the toy setup to AI alignment claims.
+
+\section*{Meaningful editorial findings}
+
+\subsection*{1. ``Resonance'' is too metaphorical at the key conceptual transition}
+
+\textbf{Location.} Final sentence of \emph{Motivation}: ``The proposed lesson for alignment is that successful behavior might emerge from resonance with environmental structure, not only from explicit objective specification.''
+
+\textbf{Problem.} ``Resonance'' sounds evocative, but it does not name the mathematical mechanism the draft is actually trying to formalize.
+
+\textbf{Why it matters.} This sentence is the reader's bridge from the thought experiment to the theorem. Vague wording there makes the central claim sound more mystical than structural.
+
+\textbf{Suggested fix.} Replace ``resonance'' with a phrase tied to observability or stable sensorimotor coupling.
+
+\textbf{Candidate rewrite.} ``The proposed lesson is that successful behavior might emerge from stable coupling to environmental structure, not only from direct observation of the target or from an explicitly specified objective.''
+
+\subsection*{2. The block quote overstates a conditional result as an unconditional slogan}
+
+\textbf{Location.} \emph{A More Explicit Formalization}, block quote: ``Indirect observables can be alignment-sufficient when the environment geometrically couples them to the hidden goal.''
+
+\textbf{Problem.} The phrase ``alignment-sufficient'' reads as settled, even though the surrounding text already admits that the missing burden is observability, identifiability, and convergence.
+
+\textbf{Why it matters.} This is the most quotable sentence in the note, so its calibration matters disproportionately.
+
+\textbf{Suggested fix.} Make the sentence explicitly conditional on an observability assumption.
+
+\textbf{Candidate rewrite.} ``Indirect observables can be informative enough for alignment only when the environment couples them to the hidden goal in an observable and controllable way.''
+
+\section*{Proofing sweep}
+
+I ran the mandatory micro-proofing scan with \texttt{scripts/proofing\_scan.py} on \texttt{main.pdf}. It returned no high-confidence hits. In particular, I did not find duplicated punctuation, capitalization defects, malformed equation-adjacent frames, or arctan-style branch ambiguities. A manual sweep likewise did not reveal obvious typos worth listing separately. The draft also contains no bibliography or reference list, so the reference-hygiene check was not applicable in this instance.
+
+\section*{Highest-priority fixes}
+
+\begin{itemize}
+    \item Redefine $H(x)$ in a mathematically typed way; the current $\partial S / \partial \tau$ notation is the most urgent defect because the theorem rests on it.
+    \item Either weaken the theorem to a heuristic/conjecture or add an explicit observability assumption connecting $(S,\tau)$ to $G$.
+    \item Replace the static map $\pi:(S,\tau)\mapsto \Delta x$ by a dynamical/history-dependent model if the paper wants to claim inference through interaction rather than one-shot sensing.
+    \item Narrow the AI-alignment framing until the broader claim has a formal bridge or external support.
+\end{itemize}
+
+\section*{Items needing external verification}
+
+\begin{itemize}
+    \item The \emph{Source Note} says the draft is based on the public description from \texttt{sundog.cc} ``as circulated in mirrored online copies.'' If the paper is meant for circulation, the attribution and exact provenance of the named theorem should be checked against a stable primary source rather than mirrored summaries.
+    \item If the broader AI-alignment framing is retained, it will need literature support external to this note; the manuscript itself does not currently establish that bridge.
+\end{itemize}
+
+\end{document}
