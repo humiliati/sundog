@@ -8,9 +8,11 @@
     "build": "vite build",
     "postbuild": "node scripts/copy-site-docs.mjs && node scripts/check-site-dist.mjs",
     "preview": "vite preview --host 127.0.0.1",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name sundog",
+    "deploy": "npm run build && node scripts/deploy-pages.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
-    "cf:inspect": "node scripts/inspect-cloudflare.mjs"
+    "cf:inspect": "node scripts/inspect-cloudflare.mjs",
+    "cf:pages": "node scripts/cloudflare-pages-project.mjs",
+    "cf:tokens": "node scripts/create-cloudflare-scoped-tokens.mjs"
   },
   "devDependencies": {
     "vite": "^8.0.10",
