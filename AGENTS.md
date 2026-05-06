@@ -26,6 +26,7 @@ npm run cf:auth
 npm run cf:inspect
 npm run cf:pages
 npm run cf:tokens
+npm run cf:domain
 ```
 
 `npm run dev` serves the source site locally. `npm run build` creates `dist/`
@@ -98,6 +99,10 @@ values, which are shown only once by Cloudflare.
 Workers editing, DNS editing, and readonly session-agent inspection, then writes
 their token IDs and one-time token values only to `C:\Users\hughe\syek.c`.
 Prefer those scoped tokens over the legacy global key for ordinary automation.
+
+`npm run cf:domain` ensures `sundog.cc` is attached as the apex custom domain
+for the `sundog` Pages project. It also creates the proxied apex CNAME to the
+project's `*.pages.dev` subdomain if Cloudflare has not already created it.
 
 ## Publishing Shape
 
