@@ -24,6 +24,8 @@ npm run preview
 npm run deploy
 npm run cf:auth
 npm run cf:inspect
+npm run cf:pages
+npm run cf:tokens
 ```
 
 `npm run dev` serves the source site locally. `npm run build` creates `dist/`
@@ -34,10 +36,12 @@ local links from `dist/index.html` resolve inside `dist`.
 `npm run deploy` rebuilds first, then runs:
 
 ```bash
-wrangler pages deploy dist --project-name sundog
+node scripts/deploy-pages.mjs
 ```
 
-In non-interactive shells, Wrangler requires `CLOUDFLARE_API_TOKEN`.
+The deploy helper loads `CLOUDFLARE_TOKEN_SUNDOG_PAGES_DEPLOY` from
+`C:\Users\hughe\syek.c` and passes it to Wrangler as `CLOUDFLARE_API_TOKEN`.
+If `CLOUDFLARE_API_TOKEN` is already set in the environment, that wins.
 
 ## Cloudflare Credentials
 
@@ -78,6 +82,22 @@ credential pair, without printing secrets.
 check, the local legacy credential verifies, `sundog.cc` is visible as a zone,
 token permission groups are readable, and there are no existing Pages projects
 in the visible account.
+
+`npm run cf:pages` ensures the `sundog` Pages project exists and is connected to
+`humiliati/sundog` on `main` with build command `npm run build` and output
+directory `dist`. It writes non-repo Cloudflare IDs/project metadata to:
+
+```text
+C:\Users\hughe\syek.c
+```
+
+Keep `C:\Users\hughe\syek.c` outside the repo. It may later hold scoped token
+values, which are shown only once by Cloudflare.
+
+`npm run cf:tokens` creates scoped Cloudflare API tokens for Pages deploy,
+Workers editing, DNS editing, and readonly session-agent inspection, then writes
+their token IDs and one-time token values only to `C:\Users\hughe\syek.c`.
+Prefer those scoped tokens over the legacy global key for ordinary automation.
 
 ## Publishing Shape
 
