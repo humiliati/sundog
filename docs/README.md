@@ -24,6 +24,8 @@ code, experiments, prior theorem materials, and application bridges.
 - [Runners](runners.md): Gone Rogue / EyesOnly runner integration.
 - [Phase-2 blocks design](PHASE2_BLOCKS_DESIGN.md): occlusion and block-based
   follow-up experiment design.
+- [Icon assets](ICON_ASSETS.md): favicon, app icon, manifest, and HTML tags for
+  `sundog.cc`.
 - [Website development](WEBSITE_DEVELOPMENT.md): how to edit root HTML pages,
   link docs, build `dist/`, and deploy through Cloudflare Pages.
 
