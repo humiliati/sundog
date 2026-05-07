@@ -226,3 +226,27 @@ The idea is promising because it gives Sundog a high-recognition physics hook
 without needing a grandiose claim. The research discipline is to earn three
 things in order: first predictive signatures, then sensor-available proxies,
 then control.
+
+## Implementation Status (2026-05-07)
+
+**Phase 1-3**: Complete. Phases 1-3 have been implemented in the interactive
+browser visualization at `threebody.html`.
+
+**Phase 4**: Complete. The public artifact is live, including:
+- Interactive visualization with real-time RK4 integration
+- Canvas rendering of system state with orbital trails
+- Indirect signature overlays (virial, inertia, energy, tidal tensor)
+- Phase 2 sensor-limited mode toggle
+- Phase 3 controller implementation (SCAN/SEEK/TRACK)
+- UI controls for exploration and experimentation
+- Visual design consistent with site branding
+
+**Public writeup**: See [threebody-writeup.md](threebody-writeup.md) for the
+complete "Steering by the Shadow of Chaos" documentation, including:
+- Claim boundaries and known failure modes
+- Sensor model audit (privileged vs. sensor-available signals)
+- Phase-by-phase implementation details
+- Connection to photometric alignment experiment
+- Future directions
+
+**Interactive demonstration**: [threebody.html](../threebody.html)
