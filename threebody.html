@@ -406,6 +406,18 @@
             <div class="value-display" id="time-speed-value">1.0x</div>
         </div>
 
+        <h3>Observation Mode</h3>
+
+        <div class="control-group">
+            <div class="toggle-checkbox">
+                <input type="checkbox" id="sensor-mode">
+                <label for="sensor-mode">Phase 2: Sensor-Limited View</label>
+            </div>
+            <p style="font-size: 0.75rem; color: rgba(245, 245, 245, 0.7); margin-top: 0.5rem; line-height: 1.4;">
+                When enabled, signatures are computed from local measurements only (test particle perspective).
+            </p>
+        </div>
+
         <h3>Signatures</h3>
 
         <div class="control-group">
@@ -420,6 +432,10 @@
             <div class="toggle-checkbox">
                 <input type="checkbox" id="show-energy" checked>
                 <label for="show-energy">System Energy</label>
+            </div>
+            <div class="toggle-checkbox">
+                <input type="checkbox" id="show-tidal" checked>
+                <label for="show-tidal">Tidal Tensor (Phase 2)</label>
             </div>
             <div class="toggle-checkbox">
                 <input type="checkbox" id="show-trails" checked>
@@ -471,7 +487,7 @@
                     Sundog does not solve the three-body problem. It asks whether the shadow of that chaos is enough to steer by. This experiment visualizes indirect observables that compress the 18D state into lower-dimensional diagnostics.
                 </p>
                 <p>
-                    The observables shown here (virial ratio, inertia tensor, system energy) are currently computed from privileged full state. Phase 2 work will replace them with locally measurable proxies. Phase 3 will build a controller.
+                    <strong>Phase 2 Status:</strong> The sensor-limited view demonstrates locally measurable proxies. The test particle (body 3) can measure its own acceleration and estimate the tidal tensor from acceleration gradients, without privileged access to the full system state or the positions of the two primaries. This replaces privileged diagnostics with sensor-available signals.
                 </p>
             </div>
 
@@ -516,6 +532,14 @@
                     For each of the three pairs, compute the two-body energy in their center-of-mass frame. In a stable hierarchical triple, one pair's energy is deeply negative (inner binary) and one is weakly negative (outer orbit). When these approach each other, the hierarchy is breaking.
                 </p>
             </div>
+
+            <div class="signature-card">
+                <h3>Tidal Tensor (Phase 2)</h3>
+                <div class="formula">Tᵢⱼ = ∂²Φ/∂xᵢ∂xⱼ ≈ Δaᵢ/Δxⱼ</div>
+                <p>
+                    <strong>Local proxy signal:</strong> The test particle estimates the gravitational field gradient by comparing its acceleration with that of nearby virtual probe points. This sensor-available measurement captures the tidal field strength without knowing the positions or masses of the primaries. High tidal magnitude indicates proximity to massive bodies or strong field gradients.
+                </p>
+            </div>
         </div>
     </section>
 
@@ -556,7 +580,9 @@
             let showVirial = true;
             let showInertia = true;
             let showEnergy = true;
+            let showTidal = true;
             let showTrails = true;
+            let sensorMode = false; // Phase 2: sensor-limited view
 
             // Canvas setup
             function resizeCanvas() {
@@ -741,6 +767,80 @@
                 };
             }
 
+            // Phase 2: Compute tidal tensor from local measurements
+            // The test particle (body 3) estimates field gradients using virtual probe points
+            function computeTidalTensor(state) {
+                const positions = state.slice(0, 6);
+                const x3 = positions[4]; // body 3 x
+                const y3 = positions[5]; // body 3 y
+
+                // Virtual probe separation (small compared to orbital scale)
+                const delta = 0.05;
+
+                // Compute acceleration at test particle position
+                const [a_x, a_y] = computeAcceleration(2, positions);
+
+                // Compute acceleration at nearby probe points
+                const positions_xp = [...positions];
+                positions_xp[4] = x3 + delta;
+                const [a_xp_x, a_xp_y] = computeAcceleration(2, positions_xp);
+
+                const positions_yp = [...positions];
+                positions_yp[5] = y3 + delta;
+                const [a_yp_x, a_yp_y] = computeAcceleration(2, positions_yp);
+
+                // Tidal tensor components (field gradient)
+                const T_xx = (a_xp_x - a_x) / delta;
+                const T_xy = (a_xp_y - a_x) / delta;
+                const T_yx = (a_yp_x - a_y) / delta;
+                const T_yy = (a_yp_y - a_y) / delta;
+
+                // Frobenius norm as a scalar tidal strength indicator
+                const tidalMagnitude = Math.sqrt(T_xx*T_xx + T_xy*T_xy + T_yx*T_yx + T_yy*T_yy);
+
+                return {
+                    magnitude: tidalMagnitude,
+                    T_xx: T_xx,
+                    T_xy: T_xy,
+                    T_yx: T_yx,
+                    T_yy: T_yy
+                };
+            }
+
+            // Phase 2: Compute sensor-limited signatures (test particle perspective only)
+            function computeSensorLimitedSignatures(state) {
+                const positions = state.slice(0, 6);
+                const velocities = state.slice(6, 12);
+
+                // Test particle can only observe its own state
+                const x3 = positions[4];
+                const y3 = positions[5];
+                const vx3 = velocities[4];
+                const vy3 = velocities[5];
+
+                // Local kinetic energy (only test particle)
+                const T_local = 0.5 * masses[2] * (vx3 * vx3 + vy3 * vy3);
+
+                // Local acceleration magnitude
+                const [ax, ay] = computeAcceleration(2, positions);
+                const accelMagnitude = Math.sqrt(ax * ax + ay * ay);
+
+                // Tidal tensor from local probes
+                const tidal = computeTidalTensor(state);
+
+                // Cannot compute full virial or system energy without privileged state
+                // Instead, use tidal magnitude as a proxy for field strength
+                return {
+                    virial: null, // not available from local sensors
+                    inertia: null, // not available from local sensors
+                    energy: null, // not available from local sensors
+                    tidalMagnitude: tidal.magnitude,
+                    localKineticEnergy: T_local,
+                    accelerationMagnitude: accelMagnitude,
+                    tidal: tidal
+                };
+            }
+
             // World to screen coordinates
             function worldToScreen(x, y) {
                 const scale = Math.min(canvas.width, canvas.height) / 6;
@@ -797,11 +897,28 @@
                 }
 
                 // Update signature display
-                const signatures = computeSignatures(state);
-                let displayText = [];
-                if (showVirial) displayText.push(`Virial: ${signatures.virial.toFixed(3)}`);
-                if (showInertia) displayText.push(`Inertia: ${signatures.inertia.toFixed(3)}`);
-                if (showEnergy) displayText.push(`Energy: ${signatures.energy.toFixed(4)}`);
+                let signatures, sensorSignatures, displayText = [];
+
+                if (sensorMode) {
+                    // Phase 2: sensor-limited view
+                    sensorSignatures = computeSensorLimitedSignatures(state);
+                    const tidal = computeTidalTensor(state);
+
+                    if (showVirial) displayText.push(`Virial: N/A (privileged)`);
+                    if (showInertia) displayText.push(`Inertia: N/A (privileged)`);
+                    if (showEnergy) displayText.push(`Energy: N/A (privileged)`);
+                    if (showTidal) displayText.push(`Tidal: ${tidal.magnitude.toFixed(4)}`);
+                } else {
+                    // Privileged full-state view
+                    signatures = computeSignatures(state);
+                    const tidal = computeTidalTensor(state);
+
+                    if (showVirial) displayText.push(`Virial: ${signatures.virial.toFixed(3)}`);
+                    if (showInertia) displayText.push(`Inertia: ${signatures.inertia.toFixed(3)}`);
+                    if (showEnergy) displayText.push(`Energy: ${signatures.energy.toFixed(4)}`);
+                    if (showTidal) displayText.push(`Tidal: ${tidal.magnitude.toFixed(4)}`);
+                }
+
                 signatureDisplay.textContent = displayText.join(' | ') || 'No signatures selected';
             }
 
@@ -866,8 +983,16 @@
                 showEnergy = this.checked;
             });
 
+            document.getElementById('show-tidal').addEventListener('change', function() {
+                showTidal = this.checked;
+            });
+
             document.getElementById('show-trails').addEventListener('change', function() {
                 showTrails = this.checked;
+            });
+
+            document.getElementById('sensor-mode').addEventListener('change', function() {
+                sensorMode = this.checked;
             });
 
             ['init-x', 'init-y', 'init-vx', 'init-vy'].forEach(id => {
