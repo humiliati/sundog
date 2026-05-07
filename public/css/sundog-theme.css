@@ -1,0 +1,339 @@
+/*
+  Sundog shared UI foundation.
+
+  This file intentionally sits after the page-local stylesheets. The current
+  pages still carry inline CSS, but these tokens and component overrides make
+  the visual system portable for the coming UI/UX overhaul.
+*/
+
+:root,
+body[data-sundog-theme="halo"] {
+  color-scheme: light;
+
+  --sd-ink: #142b3a;
+  --sd-ink-strong: #0b1720;
+  --sd-ink-soft: #263f4e;
+  --sd-sky: #7396a8;
+  --sd-ice: #dcebf0;
+  --sd-cloud: #f7faf8;
+  --sd-paper: #fffaf0;
+  --sd-paper-warm: #f1eadc;
+  --sd-brass: #d7a928;
+  --sd-amber: #f4c430;
+  --sd-copper: #b8653b;
+  --sd-signal: #67c9a6;
+  --sd-violet: #6c6a9f;
+  --sd-line: rgba(20, 43, 58, 0.14);
+  --sd-line-strong: rgba(20, 43, 58, 0.24);
+  --sd-shadow: 0 18px 45px rgba(11, 23, 32, 0.14);
+  --sd-shadow-soft: 0 10px 28px rgba(11, 23, 32, 0.10);
+
+  --sd-font-display: Georgia, "Times New Roman", serif;
+  --sd-font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --sd-font-data: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --sd-radius-sm: 4px;
+  --sd-radius-md: 8px;
+  --sd-page-max: 1120px;
+  --sd-space-page: clamp(1.25rem, 4vw, 2.5rem);
+  --sd-phase-duration: 260ms;
+
+  /* Backwards-compatible aliases for the current inline page CSS. */
+  --primary-dark: var(--sd-ink);
+  --primary-mid: var(--sd-sky);
+  --accent-gold: var(--sd-amber);
+  --bg-light: var(--sd-cloud);
+  --text-dark: #263036;
+  --text-light: #f8fbfc;
+  --muted: #64727b;
+  --line: var(--sd-line);
+}
+
+* {
+  text-rendering: geometricPrecision;
+}
+
+html {
+  background: var(--sd-cloud);
+}
+
+body {
+  font-family: var(--sd-font-body);
+  background:
+    radial-gradient(circle at 16% 0%, rgba(244, 196, 48, 0.12), transparent 28rem),
+    linear-gradient(180deg, #fbfdfb 0%, var(--sd-cloud) 42%, #eef5f3 100%);
+}
+
+.site-header {
+  background: rgba(11, 23, 32, 0.92);
+  border-bottom: 1px solid rgba(244, 196, 48, 0.28);
+  box-shadow: 0 8px 26px rgba(11, 23, 32, 0.12);
+}
+
+.site-nav {
+  max-width: var(--sd-page-max);
+}
+
+.site-brand {
+  font-family: var(--sd-font-data);
+  letter-spacing: 0.12em;
+}
+
+.site-links a {
+  border-bottom: 1px solid transparent;
+  transition: color var(--sd-phase-duration) ease, border-color var(--sd-phase-duration) ease;
+}
+
+.site-links a:hover,
+.site-links a[aria-current="page"] {
+  border-color: currentColor;
+}
+
+.hero,
+.page-hero {
+  isolation: isolate;
+  position: relative;
+}
+
+.hero {
+  min-height: calc(100vh - 58px);
+  background:
+    radial-gradient(circle at 50% 44%, rgba(244, 196, 48, 0.18), transparent 13rem),
+    radial-gradient(circle at 24% 50%, rgba(103, 201, 166, 0.18), transparent 18rem),
+    radial-gradient(circle at 76% 48%, rgba(108, 106, 159, 0.14), transparent 19rem),
+    linear-gradient(145deg, var(--sd-ink-strong) 0%, var(--sd-ink) 58%, #203a47 100%);
+}
+
+.hero::after,
+.page-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(244, 196, 48, 0.72), transparent);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.hero h1,
+.page-hero h1,
+section h2,
+.origin-card h2,
+.app-card h2,
+.app-card h3,
+.cta-link h3 {
+  letter-spacing: 0;
+}
+
+.hero h1,
+.page-hero h1 {
+  font-family: var(--sd-font-display);
+  font-weight: 700;
+}
+
+.eyebrow,
+.tier,
+.step-number,
+.site-brand {
+  font-family: var(--sd-font-data);
+}
+
+.btn,
+.button,
+.cta-link,
+.app-card,
+.benefit-card,
+.proof-item,
+.research-highlight,
+.origin-card {
+  border-radius: var(--sd-radius-md);
+}
+
+.btn,
+.button,
+.cta-link {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(244, 196, 48, 0.44);
+  transition:
+    transform var(--sd-phase-duration) ease,
+    border-color var(--sd-phase-duration) ease,
+    background var(--sd-phase-duration) ease,
+    box-shadow var(--sd-phase-duration) ease;
+}
+
+.btn::before,
+.button::before,
+.cta-link::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: calc(var(--sd-radius-md) - 2px);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 34%),
+    linear-gradient(315deg, rgba(103, 201, 166, 0.12), transparent 42%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--sd-phase-duration) ease;
+}
+
+.btn:hover::before,
+.button:hover::before,
+.cta-link:hover::before {
+  opacity: 1;
+}
+
+.btn:focus-visible,
+.button:focus-visible,
+.cta-link:focus-visible,
+.site-links a:focus-visible {
+  outline: 2px solid var(--sd-signal);
+  outline-offset: 3px;
+}
+
+.btn-primary,
+.button {
+  background: linear-gradient(180deg, #f8d35a 0%, var(--sd-brass) 100%);
+  color: var(--sd-ink-strong);
+  box-shadow: 0 12px 24px rgba(215, 169, 40, 0.18);
+}
+
+.btn-secondary {
+  border-color: rgba(248, 251, 252, 0.74);
+}
+
+.btn:hover,
+.button:hover,
+.cta-link:hover {
+  transform: translateY(-2px);
+}
+
+.app-card,
+.benefit-card,
+.proof-item,
+.research-highlight,
+.origin-card,
+.comparison-container {
+  border-color: var(--sd-line);
+  box-shadow: var(--sd-shadow-soft);
+}
+
+.app-card:hover,
+.benefit-card:hover,
+.origin-card:hover {
+  border-color: rgba(215, 169, 40, 0.58);
+  box-shadow: var(--sd-shadow);
+}
+
+.app-card-img {
+  background:
+    linear-gradient(135deg, rgba(11, 23, 32, 0.76), rgba(20, 43, 58, 0.90)),
+    repeating-linear-gradient(90deg, rgba(244, 196, 48, 0.18) 0 1px, transparent 1px 18px);
+  font-family: var(--sd-font-data);
+  letter-spacing: 0.04em;
+}
+
+.tier {
+  background: color-mix(in srgb, var(--sd-sky) 82%, var(--sd-ink));
+  border-radius: 999px;
+}
+
+.theorem-card {
+  border-color: rgba(244, 196, 48, 0.28);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.035)),
+    rgba(11, 23, 32, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.proof-snippet,
+.equation-display {
+  font-family: var(--sd-font-data);
+}
+
+.cta-section,
+footer {
+  background:
+    linear-gradient(180deg, var(--sd-ink) 0%, var(--sd-ink-strong) 100%);
+}
+
+/* BoxForge-inspired primitives for the upcoming hero graph/components pass. */
+.sd-boxforge-surface {
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 900px;
+}
+
+.sd-phase-button {
+  border: 1px solid var(--sd-line-strong);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(241, 234, 220, 0.78)),
+    var(--sd-paper);
+  color: var(--sd-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 8px 18px rgba(11, 23, 32, 0.10);
+}
+
+.sd-phase-button:hover,
+.sd-phase-button[data-state="active"] {
+  border-color: rgba(215, 169, 40, 0.72);
+  transform: translateY(-1px) rotateX(2deg);
+}
+
+.sd-signal-graph {
+  --graph-node: var(--sd-amber);
+  --graph-edge: rgba(103, 201, 166, 0.46);
+  position: relative;
+  min-height: 220px;
+  overflow: hidden;
+  border: 1px solid rgba(244, 196, 48, 0.20);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(244, 196, 48, 0.10), transparent 11rem),
+    linear-gradient(135deg, rgba(11, 23, 32, 0.96), rgba(20, 43, 58, 0.92));
+}
+
+.sd-signal-graph::before {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border: 1px solid var(--graph-edge);
+  border-radius: 50%;
+  transform: rotateX(64deg) rotateZ(-16deg);
+  animation: sd-graph-orbit 8s linear infinite;
+}
+
+.sd-signal-graph::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: calc(50% - 6px);
+  top: calc(50% - 6px);
+  border-radius: 50%;
+  background: var(--graph-node);
+  box-shadow:
+    -92px -28px 0 var(--sd-signal),
+    96px 18px 0 var(--sd-violet),
+    0 0 34px rgba(244, 196, 48, 0.45);
+}
+
+@keyframes sd-graph-orbit {
+  from { transform: rotateX(64deg) rotateZ(-16deg); }
+  to { transform: rotateX(64deg) rotateZ(344deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: calc(100vh - 96px);
+  }
+}
