@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog Three-Body Experiment: Real-time visualization of indirect signatures in chaotic dynamics">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <title>Sundog Three-Body Experiment</title>
+    <style>
+        :root {
+            --primary-dark: #1A3A52;
+            --primary-mid: #7DA2B8;
+            --accent-gold: #F4C430;
+            --bg-light: #FFFFFF;
+            --text-dark: #2D2D2D;
+            --text-light: #F5F5F5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--bg-light);
+            overflow-x: hidden;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(26, 58, 82, 0.96);
+            border-bottom: 1px solid rgba(244, 196, 48, 0.22);
+            backdrop-filter: blur(12px);
+        }
+
+        .site-nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .site-brand {
+            color: var(--text-light);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: 0.92rem;
+        }
+
+        .site-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .site-links a {
+            color: rgba(245, 245, 245, 0.82);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+        }
+
+        .site-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2C5F7F 100%);
+            color: var(--text-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #threebody-canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        .signature-display {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            color: var(--accent-gold);
+            text-align: center;
+            opacity: 0.9;
+            z-index: 2;
+            max-width: 90%;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            background: rgba(26, 58, 82, 0.7);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(244, 196, 48, 0.3);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero .tagline {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+            font-weight: 300;
+        }
+
+        .hero .value-prop {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        /* Controls Section */
+        .controls-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 280px;
+            background: rgba(26, 58, 82, 0.95);
+            border: 1px solid rgba(244, 196, 48, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            z-index: 15;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            backdrop-filter: blur(12px);
+        }
+
+        .controls-panel h3 {
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group label {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            margin-bottom: 0.3rem;
+        }
+
+        .control-group .value-display {
+            color: rgba(245, 245, 245, 0.7);
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        .control-group button {
+            width: 100%;
+            padding: 0.6rem;
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-group button:hover {
+            background: #FFD54F;
+            transform: translateY(-2px);
+        }
+
+        .control-group button:disabled {
+            background: rgba(125, 162, 184, 0.3);
+            color: rgba(245, 245, 245, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toggle-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .toggle-checkbox input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Content Section */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary-dark);
+            text-align: center;
+        }
+
+        section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .experiment-section {
+            background: var(--bg-light);
+        }
+
+        .experiment-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .claim-boundary {
+            background: #F8F9FA;
+            padding: 2rem;
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+
+        .claim-boundary h4 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        .signatures-section {
+            background: #F8F9FA;
+        }
+
+        .signatures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .signature-card {
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .signature-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .signature-card .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(26, 58, 82, 0.05);
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: var(--text-light);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .controls-panel {
+                position: static;
+                width: 100%;
+                margin: 1rem;
+                max-height: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.1rem;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="index.html">Home</a>
+                <a href="origin.html">Origin</a>
+                <a href="applications-gallery.html">Applications Gallery</a>
+                <a href="docs/README.md">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section with Canvas -->
+    <section class="hero">
+        <canvas id="threebody-canvas"></canvas>
+        <div class="signature-display" id="signature-display">
+            Virial Ratio: -- | Inertia Trace: -- | System Energy: --
+        </div>
+        <div class="hero-content">
+            <h1>Three-Body Dynamics</h1>
+            <p class="tagline">Steering by the Shadow of Chaos</p>
+            <p class="value-prop">
+                The three-body problem is famously intractable. Sundog asks a smaller question: can an agent act usefully by reading the signatures around instability instead of reconstructing the full state?
+            </p>
+        </div>
+    </section>
+
+    <!-- Interactive Controls -->
+    <div class="controls-panel">
+        <h3>Simulation Controls</h3>
+
+        <div class="control-group">
+            <button id="btn-play-pause">Pause</button>
+        </div>
+
+        <div class="control-group">
+            <button id="btn-reset">Reset System</button>
+        </div>
+
+        <div class="control-group">
+            <label>Mass Ratio (m₂/m₁)</label>
+            <input type="range" id="mass-ratio" min="0.1" max="2.0" step="0.1" value="1.0">
+            <div class="value-display" id="mass-ratio-value">1.0</div>
+        </div>
+
+        <div class="control-group">
+            <label>Time Speed</label>
+            <input type="range" id="time-speed" min="0.5" max="4.0" step="0.5" value="1.0">
+            <div class="value-display" id="time-speed-value">1.0x</div>
+        </div>
+
+        <h3>Signatures</h3>
+
+        <div class="control-group">
+            <div class="toggle-checkbox">
+                <input type="checkbox" id="show-virial" checked>
+                <label for="show-virial">Virial Ratio (2T/|W|)</label>
+            </div>
+            <div class="toggle-checkbox">
+                <input type="checkbox" id="show-inertia" checked>
+                <label for="show-inertia">Inertia Tensor</label>
+            </div>
+            <div class="toggle-checkbox">
+                <input type="checkbox" id="show-energy" checked>
+                <label for="show-energy">System Energy</label>
+            </div>
+            <div class="toggle-checkbox">
+                <input type="checkbox" id="show-trails" checked>
+                <label for="show-trails">Orbital Trails</label>
+            </div>
+        </div>
+
+        <h3>Initial Conditions</h3>
+
+        <div class="control-group">
+            <label>Body 3 Initial X</label>
+            <input type="range" id="init-x" min="-2.0" max="2.0" step="0.1" value="1.0">
+            <div class="value-display" id="init-x-value">1.0</div>
+        </div>
+
+        <div class="control-group">
+            <label>Body 3 Initial Y</label>
+            <input type="range" id="init-y" min="-2.0" max="2.0" step="0.1" value="0.0">
+            <div class="value-display" id="init-y-value">0.0</div>
+        </div>
+
+        <div class="control-group">
+            <label>Body 3 Initial VX</label>
+            <input type="range" id="init-vx" min="-2.0" max="2.0" step="0.1" value="0.0">
+            <div class="value-display" id="init-vx-value">0.0</div>
+        </div>
+
+        <div class="control-group">
+            <label>Body 3 Initial VY</label>
+            <input type="range" id="init-vy" min="-2.0" max="2.0" step="0.1" value="1.0">
+            <div class="value-display" id="init-vy-value">1.0</div>
+        </div>
+    </div>
+
+    <!-- Experiment Description Section -->
+    <section class="experiment-section">
+        <h2>The Experiment</h2>
+        <div class="experiment-content">
+            <p>
+                This browser-based visualization demonstrates the restricted three-body problem in real time. Two massive bodies (gold and blue) orbit their common center of mass, while a third test particle (white) moves in their gravitational field.
+            </p>
+            <p>
+                The full state is 18-dimensional: three position vectors, three velocity vectors. But many practical questions about three-body dynamics don't require tracking the full state at every instant. They require detecting signatures of dynamically important events: near-collisions, ejections, resonance capture, stability transitions.
+            </p>
+
+            <div class="claim-boundary">
+                <h4>Claim Boundary</h4>
+                <p>
+                    Sundog does not solve the three-body problem. It asks whether the shadow of that chaos is enough to steer by. This experiment visualizes indirect observables that compress the 18D state into lower-dimensional diagnostics.
+                </p>
+                <p>
+                    The observables shown here (virial ratio, inertia tensor, system energy) are currently computed from privileged full state. Phase 2 work will replace them with locally measurable proxies. Phase 3 will build a controller.
+                </p>
+            </div>
+
+            <p>
+                Adjust the initial conditions using the controls on the right and watch how the indirect signatures respond. The goal is to identify signatures that forecast useful events: escape, close approach, hierarchy break, or transition into chaotic scattering.
+            </p>
+        </div>
+    </section>
+
+    <!-- Indirect Signatures Section -->
+    <section class="signatures-section">
+        <h2>Indirect Signatures</h2>
+        <div class="signatures-grid">
+            <div class="signature-card">
+                <h3>Virial Ratio</h3>
+                <div class="formula">V = 2T / |W|</div>
+                <p>
+                    The ratio of kinetic to potential energy. For a bound system this oscillates around 1. When it persistently exceeds 1, the system is unbound or about to eject. This single scalar compresses all 18 dimensions into a stability diagnostic.
+                </p>
+            </div>
+
+            <div class="signature-card">
+                <h3>Inertia Tensor</h3>
+                <div class="formula">I = Σ mᵢ(rᵢ · rᵢ δⱼₖ - rᵢⱼ rᵢₖ)</div>
+                <p>
+                    A 3×3 matrix (or its scalar trace) compressing the 9D positional configuration. When a system undergoes a close encounter or ejection, the eigenvalue spectrum changes character before the event resolves.
+                </p>
+            </div>
+
+            <div class="signature-card">
+                <h3>System Energy</h3>
+                <div class="formula">E = T + W</div>
+                <p>
+                    Total energy (kinetic + potential) of the three-body system. In the absence of external forces, energy is conserved. Tracking energy helps verify integration accuracy and detect numerical drift.
+                </p>
+            </div>
+
+            <div class="signature-card">
+                <h3>Pairwise Energies</h3>
+                <div class="formula">Eᵢⱼ = ½μᵢⱼv²ᵢⱼ - Gmᵢmⱼ/rᵢⱼ</div>
+                <p>
+                    For each of the three pairs, compute the two-body energy in their center-of-mass frame. In a stable hierarchical triple, one pair's energy is deeply negative (inner binary) and one is weakly negative (outer orbit). When these approach each other, the hierarchy is breaking.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            The Sundog Project — <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="index.html">Home</a> |
+            <a href="origin.html">Origin</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SUNDOG_V_THREEBODY.md">Three-Body Roadmap</a>
+        </p>
+    </footer>
+
+    <script>
+        // Three-Body Simulation and Visualization
+        (function() {
+            const canvas = document.getElementById('threebody-canvas');
+            const ctx = canvas.getContext('2d');
+            const signatureDisplay = document.getElementById('signature-display');
+
+            // Simulation state
+            let isPlaying = true;
+            let timeSpeed = 1.0;
+            let dt = 0.01; // integration timestep
+            let G = 1.0; // gravitational constant
+
+            // System state: [x1, y1, x2, y2, x3, y3, vx1, vy1, vx2, vy2, vx3, vy3]
+            let masses = [1.0, 1.0, 0.01]; // m1, m2, m3 (test particle)
+            let state = [];
+            let trails = [[], [], []]; // position history for each body
+            const maxTrailLength = 200;
+
+            // Signature toggles
+            let showVirial = true;
+            let showInertia = true;
+            let showEnergy = true;
+            let showTrails = true;
+
+            // Canvas setup
+            function resizeCanvas() {
+                const heroSection = document.querySelector('.hero');
+                canvas.width = Math.min(heroSection.offsetWidth, 1000);
+                canvas.height = Math.min(heroSection.offsetHeight, 800);
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Initialize system
+            function initializeSystem() {
+                const initX = parseFloat(document.getElementById('init-x').value);
+                const initY = parseFloat(document.getElementById('init-y').value);
+                const initVX = parseFloat(document.getElementById('init-vx').value);
+                const initVY = parseFloat(document.getElementById('init-vy').value);
+
+                // Circular restricted three-body: two primaries orbit COM
+                const m1 = masses[0];
+                const m2 = masses[1];
+                const totalMass = m1 + m2;
+                const separation = 1.5;
+
+                // Primary positions (COM at origin)
+                const x1 = -m2 * separation / totalMass;
+                const x2 = m1 * separation / totalMass;
+
+                // Circular orbit velocities
+                const omega = Math.sqrt(G * totalMass / Math.pow(separation, 3));
+                const v1 = omega * Math.abs(x1);
+                const v2 = omega * Math.abs(x2);
+
+                state = [
+                    x1, 0,          // body 1 position
+                    x2, 0,          // body 2 position
+                    initX, initY,   // body 3 position (test particle)
+                    0, v1,          // body 1 velocity
+                    0, -v2,         // body 2 velocity
+                    initVX, initVY  // body 3 velocity
+                ];
+
+                trails = [[], [], []];
+            }
+
+            // Compute gravitational acceleration on body i due to all other bodies
+            function computeAcceleration(i, positions) {
+                let ax = 0, ay = 0;
+                const xi = positions[i * 2];
+                const yi = positions[i * 2 + 1];
+
+                for (let j = 0; j < 3; j++) {
+                    if (i === j) continue;
+
+                    const xj = positions[j * 2];
+                    const yj = positions[j * 2 + 1];
+                    const dx = xj - xi;
+                    const dy = yj - yi;
+                    const r2 = dx * dx + dy * dy;
+                    const r = Math.sqrt(r2);
+
+                    if (r < 0.01) continue; // collision avoidance
+
+                    const force = G * masses[j] / (r2 * r);
+                    ax += force * dx;
+                    ay += force * dy;
+                }
+
+                return [ax, ay];
+            }
+
+            // RK4 integration step
+            function integrateStep(state, dt) {
+                const n = 3; // number of bodies
+                const positions = state.slice(0, 6);
+                const velocities = state.slice(6, 12);
+
+                // k1
+                const k1_v = [];
+                for (let i = 0; i < n; i++) {
+                    const [ax, ay] = computeAcceleration(i, positions);
+                    k1_v.push(ax, ay);
+                }
+                const k1_x = velocities.slice();
+
+                // k2
+                const pos2 = positions.map((p, i) => p + 0.5 * dt * k1_x[i]);
+                const vel2 = velocities.map((v, i) => v + 0.5 * dt * k1_v[i]);
+                const k2_v = [];
+                for (let i = 0; i < n; i++) {
+                    const [ax, ay] = computeAcceleration(i, pos2);
+                    k2_v.push(ax, ay);
+                }
+                const k2_x = vel2.slice();
+
+                // k3
+                const pos3 = positions.map((p, i) => p + 0.5 * dt * k2_x[i]);
+                const vel3 = velocities.map((v, i) => v + 0.5 * dt * k2_v[i]);
+                const k3_v = [];
+                for (let i = 0; i < n; i++) {
+                    const [ax, ay] = computeAcceleration(i, pos3);
+                    k3_v.push(ax, ay);
+                }
+                const k3_x = vel3.slice();
+
+                // k4
+                const pos4 = positions.map((p, i) => p + dt * k3_x[i]);
+                const vel4 = velocities.map((v, i) => v + dt * k3_v[i]);
+                const k4_v = [];
+                for (let i = 0; i < n; i++) {
+                    const [ax, ay] = computeAcceleration(i, pos4);
+                    k4_v.push(ax, ay);
+                }
+                const k4_x = vel4.slice();
+
+                // Update
+                const newPositions = positions.map((p, i) =>
+                    p + (dt / 6) * (k1_x[i] + 2 * k2_x[i] + 2 * k3_x[i] + k4_x[i])
+                );
+                const newVelocities = velocities.map((v, i) =>
+                    v + (dt / 6) * (k1_v[i] + 2 * k2_v[i] + 2 * k3_v[i] + k4_v[i])
+                );
+
+                return [...newPositions, ...newVelocities];
+            }
+
+            // Compute indirect signatures
+            function computeSignatures(state) {
+                const positions = state.slice(0, 6);
+                const velocities = state.slice(6, 12);
+
+                // Kinetic energy
+                let T = 0;
+                for (let i = 0; i < 3; i++) {
+                    const vx = velocities[i * 2];
+                    const vy = velocities[i * 2 + 1];
+                    T += 0.5 * masses[i] * (vx * vx + vy * vy);
+                }
+
+                // Potential energy
+                let W = 0;
+                for (let i = 0; i < 3; i++) {
+                    for (let j = i + 1; j < 3; j++) {
+                        const dx = positions[j * 2] - positions[i * 2];
+                        const dy = positions[j * 2 + 1] - positions[i * 2 + 1];
+                        const r = Math.sqrt(dx * dx + dy * dy);
+                        if (r > 0.01) {
+                            W -= G * masses[i] * masses[j] / r;
+                        }
+                    }
+                }
+
+                // Virial ratio
+                const virialRatio = Math.abs(W) > 0.001 ? 2 * T / Math.abs(W) : 0;
+
+                // Inertia tensor trace (scalar approximation)
+                let inertiaTrace = 0;
+                const totalMass = masses.reduce((a, b) => a + b, 0);
+                // Center of mass
+                let cmx = 0, cmy = 0;
+                for (let i = 0; i < 3; i++) {
+                    cmx += masses[i] * positions[i * 2];
+                    cmy += masses[i] * positions[i * 2 + 1];
+                }
+                cmx /= totalMass;
+                cmy /= totalMass;
+                // Trace = sum of squared distances from COM
+                for (let i = 0; i < 3; i++) {
+                    const dx = positions[i * 2] - cmx;
+                    const dy = positions[i * 2 + 1] - cmy;
+                    inertiaTrace += masses[i] * (dx * dx + dy * dy);
+                }
+
+                // Total energy
+                const energy = T + W;
+
+                return {
+                    virial: virialRatio,
+                    inertia: inertiaTrace,
+                    energy: energy,
+                    kineticEnergy: T,
+                    potentialEnergy: W
+                };
+            }
+
+            // World to screen coordinates
+            function worldToScreen(x, y) {
+                const scale = Math.min(canvas.width, canvas.height) / 6;
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                return [centerX + x * scale, centerY - y * scale];
+            }
+
+            // Draw the system
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                const positions = state.slice(0, 6);
+
+                // Draw trails
+                if (showTrails) {
+                    const colors = ['rgba(244, 196, 48, 0.3)', 'rgba(125, 162, 184, 0.3)', 'rgba(255, 255, 255, 0.2)'];
+                    for (let i = 0; i < 3; i++) {
+                        ctx.strokeStyle = colors[i];
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        for (let j = 0; j < trails[i].length; j++) {
+                            const [sx, sy] = worldToScreen(trails[i][j][0], trails[i][j][1]);
+                            if (j === 0) ctx.moveTo(sx, sy);
+                            else ctx.lineTo(sx, sy);
+                        }
+                        ctx.stroke();
+                    }
+                }
+
+                // Draw bodies
+                const bodyColors = ['#F4C430', '#7DA2B8', '#FFFFFF'];
+                const bodyRadii = [12, 12, 6];
+                for (let i = 0; i < 3; i++) {
+                    const x = positions[i * 2];
+                    const y = positions[i * 2 + 1];
+                    const [sx, sy] = worldToScreen(x, y);
+
+                    // Glow
+                    const gradient = ctx.createRadialGradient(sx, sy, 0, sx, sy, bodyRadii[i] * 2);
+                    gradient.addColorStop(0, bodyColors[i] + 'AA');
+                    gradient.addColorStop(0.5, bodyColors[i] + '44');
+                    gradient.addColorStop(1, bodyColors[i] + '00');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, bodyRadii[i] * 2, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Body
+                    ctx.fillStyle = bodyColors[i];
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, bodyRadii[i], 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Update signature display
+                const signatures = computeSignatures(state);
+                let displayText = [];
+                if (showVirial) displayText.push(`Virial: ${signatures.virial.toFixed(3)}`);
+                if (showInertia) displayText.push(`Inertia: ${signatures.inertia.toFixed(3)}`);
+                if (showEnergy) displayText.push(`Energy: ${signatures.energy.toFixed(4)}`);
+                signatureDisplay.textContent = displayText.join(' | ') || 'No signatures selected';
+            }
+
+            // Update simulation
+            function update() {
+                if (!isPlaying) return;
+
+                // Multiple sub-steps for stability
+                const substeps = Math.ceil(timeSpeed);
+                const substepDt = dt * timeSpeed / substeps;
+
+                for (let i = 0; i < substeps; i++) {
+                    state = integrateStep(state, substepDt);
+                }
+
+                // Update trails
+                const positions = state.slice(0, 6);
+                for (let i = 0; i < 3; i++) {
+                    trails[i].push([positions[i * 2], positions[i * 2 + 1]]);
+                    if (trails[i].length > maxTrailLength) {
+                        trails[i].shift();
+                    }
+                }
+            }
+
+            // Animation loop
+            function animate() {
+                update();
+                draw();
+                requestAnimationFrame(animate);
+            }
+
+            // UI Controls
+            document.getElementById('btn-play-pause').addEventListener('click', function() {
+                isPlaying = !isPlaying;
+                this.textContent = isPlaying ? 'Pause' : 'Play';
+            });
+
+            document.getElementById('btn-reset').addEventListener('click', function() {
+                initializeSystem();
+            });
+
+            document.getElementById('mass-ratio').addEventListener('input', function() {
+                masses[1] = parseFloat(this.value);
+                document.getElementById('mass-ratio-value').textContent = this.value;
+            });
+
+            document.getElementById('time-speed').addEventListener('input', function() {
+                timeSpeed = parseFloat(this.value);
+                document.getElementById('time-speed-value').textContent = this.value + 'x';
+            });
+
+            document.getElementById('show-virial').addEventListener('change', function() {
+                showVirial = this.checked;
+            });
+
+            document.getElementById('show-inertia').addEventListener('change', function() {
+                showInertia = this.checked;
+            });
+
+            document.getElementById('show-energy').addEventListener('change', function() {
+                showEnergy = this.checked;
+            });
+
+            document.getElementById('show-trails').addEventListener('change', function() {
+                showTrails = this.checked;
+            });
+
+            ['init-x', 'init-y', 'init-vx', 'init-vy'].forEach(id => {
+                document.getElementById(id).addEventListener('input', function() {
+                    document.getElementById(id + '-value').textContent = this.value;
+                });
+            });
+
+            // Initialize and start
+            initializeSystem();
+            animate();
+        })();
+    </script>
+</body>
+</html>

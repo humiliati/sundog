@@ -170,6 +170,42 @@ Metrics:
 Exit criterion: the controller succeeds in a bounded operating envelope and
 loses cleanly where the signal-action coupling collapses.
 
+### Phase 3.5 - Real-time Web Projection
+
+Goal: port the restricted three-body diagnostic to an interactive browser
+visualization before finalizing the public artifact.
+
+Deliverables:
+
+- A standalone HTML page (`threebody.html`) implementing the restricted
+  three-body problem in JavaScript with real-time integration.
+- Canvas rendering showing:
+  - the simulated three-body system (two primaries and one test particle);
+  - shadow trails visualizing orbital history;
+  - indirect signature overlays (virial ratio, inertia tensor eigenvalues,
+    pairwise energies) as time-series graphs;
+  - control overlays showing scan/seek/track phases if Phase 3 work is ready.
+- Visual design consistent with the site hero graph (parhelion-canvas style):
+  gold accents, dark gradient backgrounds, clean typography, responsive layout.
+- UI controls for interactive exploration:
+  - adjust initial conditions (positions, velocities);
+  - modify system parameters (mass ratios, circular restricted vs full 3-body);
+  - toggle signature visibility;
+  - apply scan/seek/track control moves manually if Phase 3 controller exists,
+    or simulate passive observation if not.
+- The page serves as the application landing page for the three-body experiment
+  and directly supports Phase 4's public demonstration goal.
+
+Exit criterion: a working browser experiment demonstrates that indirect
+signatures respond coherently to changes in system state, providing a visual
+benchmark for the coupling claim before the full controller is built.
+
+Rationale: A public, visual artifact aligns with the Phase 4 objective and
+establishes a concrete demonstration environment early. The browser experiment
+can evolve from diagnostic (Phase 1/2 work) to interactive controller
+(Phase 3 integration) to final public artifact (Phase 4 refinement) without
+requiring a separate build for each stage.
+
 ### Phase 4 - Public Artifact
 
 Goal: turn the result into a strong, honest Sundog hook.
