@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Application evidence gallery for the Sundog Project.">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Sundog - Applications Gallery</title>
+    <style>
+        :root {
+            --primary-dark: #1A3A52;
+            --primary-mid: #7DA2B8;
+            --accent-gold: #F4C430;
+            --bg-light: #FFFFFF;
+            --text-dark: #2D2D2D;
+            --text-light: #F5F5F5;
+            --muted: #667582;
+            --line: #D9E2E7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: #F8FBFC;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(26, 58, 82, 0.96);
+            border-bottom: 1px solid rgba(244, 196, 48, 0.22);
+            backdrop-filter: blur(12px);
+        }
+
+        .site-nav {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0.85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .site-brand {
+            color: var(--text-light);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: 0.92rem;
+        }
+
+        .site-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .site-links a {
+            color: rgba(245, 245, 245, 0.82);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+        }
+
+        .site-links a:hover,
+        .site-links a[aria-current="page"] {
+            color: var(--accent-gold);
+        }
+
+        .page-hero {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 7rem 2rem 3rem;
+        }
+
+        .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            max-width: 880px;
+            color: var(--primary-dark);
+            font-size: clamp(2.5rem, 7vw, 5.25rem);
+            line-height: 0.98;
+            margin-bottom: 1.5rem;
+        }
+
+        .lede {
+            max-width: 780px;
+            color: #40505C;
+            font-size: 1.25rem;
+            line-height: 1.8;
+        }
+
+        .content {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+
+        .app-card {
+            background: var(--bg-light);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .app-card h2 {
+            color: var(--primary-dark);
+            font-size: 1.45rem;
+        }
+
+        .tier {
+            width: fit-content;
+            display: inline-flex;
+            min-height: 28px;
+            align-items: center;
+            padding: 0.25rem 0.7rem;
+            border-radius: 999px;
+            background: #EAF2F5;
+            color: var(--primary-dark);
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        .signal-list {
+            display: grid;
+            gap: 0.6rem;
+            color: #40505C;
+            font-size: 0.98rem;
+        }
+
+        .signal-list p {
+            margin: 0;
+        }
+
+        .stub-note {
+            border-top: 1px solid var(--line);
+            padding-top: 1rem;
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        .app-links {
+            display: flex;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .app-links a {
+            color: var(--primary-dark);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .app-links a:hover {
+            color: #A97700;
+        }
+
+        .next-panel {
+            margin-top: 2rem;
+            background: var(--primary-dark);
+            color: var(--text-light);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .next-panel h2 {
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .next-panel ul {
+            padding-left: 1.25rem;
+        }
+
+        .next-panel li {
+            margin-bottom: 0.6rem;
+        }
+
+        footer {
+            background: var(--text-dark);
+            color: var(--text-light);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+        }
+
+        @media (max-width: 760px) {
+            .site-nav {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 0.85rem 1.5rem;
+            }
+
+            .site-links {
+                justify-content: flex-start;
+            }
+
+            .page-hero {
+                padding: 5rem 1.5rem 3rem;
+            }
+
+            .content {
+                padding: 0 1.5rem 4rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="origin.html">Origin</a>
+                <a href="applications-gallery.html" aria-current="page">Applications Gallery</a>
+                <a href="docs/README.md">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <p class="eyebrow">Applications Gallery Stub</p>
+            <h1>Working systems that make indirect signals useful.</h1>
+            <p class="lede">
+                This gallery will become the proof layer for Sundog: controlled research, instrumented prototypes, product expressions, and future benchmarks gathered in one public inspection path.
+            </p>
+        </section>
+
+        <section class="content">
+            <div class="gallery-grid">
+                <article class="app-card" id="photometric-alignment">
+                    <span class="tier">Research Result</span>
+                    <h2>Photometric Mirror Alignment</h2>
+                    <div class="signal-list">
+                        <p><strong>Indirect signal:</strong> sparse detector intensity and proprioception.</p>
+                        <p><strong>Transformation:</strong> scan, seek, and track the photometric response.</p>
+                        <p><strong>Output:</strong> mirror alignment without target-position access.</p>
+                    </div>
+                    <p class="stub-note">Needs: experiment video, graph package, and short reviewer-facing summary.</p>
+                    <div class="app-links">
+                        <a href="README.md">Repo Summary</a>
+                        <a href="docs/RESEARCHER_GUIDE.md">Researcher Guide</a>
+                    </div>
+                </article>
+
+                <article class="app-card" id="eyesonly-gone-rogue">
+                    <span class="tier">Instrumented Prototype</span>
+                    <h2>EyesOnly / Gone Rogue</h2>
+                    <div class="signal-list">
+                        <p><strong>Indirect signal:</strong> compressed procedural game state.</p>
+                        <p><strong>Transformation:</strong> turn envelopes, policy axes, and stop conditions.</p>
+                        <p><strong>Output:</strong> coherent action batches under partial observation.</p>
+                    </div>
+                    <p class="stub-note">Needs: matched-seed study, behavior clips, and baseline comparison.</p>
+                    <div class="app-links">
+                        <a href="docs/APPLICATIONS.md#eyesonly--gone-rogue">Application Notes</a>
+                    </div>
+                </article>
+
+                <article class="app-card" id="dungeon-gleaner">
+                    <span class="tier">Product Expression</span>
+                    <h2>Dungeon Gleaner</h2>
+                    <div class="signal-list">
+                        <p><strong>Indirect signal:</strong> glass faces, hose path, pressure, kink, and surface contact.</p>
+                        <p><strong>Transformation:</strong> face-aware rendering and stateful spray approximation.</p>
+                        <p><strong>Output:</strong> physical-feeling glass and pressure-washing systems without full simulation.</p>
+                    </div>
+                    <p class="stub-note">Needs: performance harness, fixed scenes, and visual acceptability criteria.</p>
+                    <div class="app-links">
+                        <a href="docs/APPLICATIONS.md#dungeon-gleaner--dcgamejam2026">Application Notes</a>
+                    </div>
+                </article>
+
+                <article class="app-card" id="money-bags">
+                    <span class="tier">Instrumented Prototype</span>
+                    <h2>Money Bags</h2>
+                    <div class="signal-list">
+                        <p><strong>Indirect signal:</strong> spring graph motion, contact, deformation, torsion, and recovery.</p>
+                        <p><strong>Transformation:</strong> graph metrics over frame-by-frame softbody telemetry.</p>
+                        <p><strong>Output:</strong> legible terrain and rig behavior from raw simulation traces.</p>
+                    </div>
+                    <p class="stub-note">Needs: frozen terrain fixtures, disturbance scripts, and metric glossary.</p>
+                    <div class="app-links">
+                        <a href="docs/APPLICATIONS.md#money-bags">Application Notes</a>
+                    </div>
+                </article>
+            </div>
+
+            <aside class="next-panel">
+                <h2>Next Gallery Pass</h2>
+                <ul>
+                    <li>Add screenshots or short loops for each application.</li>
+                    <li>Promote measured artifacts before interpretive claims.</li>
+                    <li>Split each card into a full detail page once assets are ready.</li>
+                    <li>Keep evidence tiers visible so ambition and credibility stay aligned.</li>
+                </ul>
+            </aside>
+        </section>
+    </main>
+
+    <footer>
+        <p>Sundog - <a href="index.html">Home</a> | <a href="origin.html">Origin</a></p>
+    </footer>
+</body>
+</html>

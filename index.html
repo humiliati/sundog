@@ -33,6 +33,53 @@
             background: var(--bg-light);
         }
 
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(26, 58, 82, 0.96);
+            border-bottom: 1px solid rgba(244, 196, 48, 0.22);
+            backdrop-filter: blur(12px);
+        }
+
+        .site-nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .site-brand {
+            color: var(--text-light);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: 0.92rem;
+        }
+
+        .site-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .site-links a {
+            color: rgba(245, 245, 245, 0.82);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+        }
+
+        .site-links a:hover {
+            color: var(--accent-gold);
+        }
+
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -450,6 +497,17 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .site-nav {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 0.85rem 1.5rem;
+            }
+
+            .site-links {
+                justify-content: flex-start;
+                gap: 0.85rem;
+            }
+
             .hero h1 {
                 font-size: 2.5rem;
             }
@@ -566,9 +624,21 @@
                 grid-template-columns: 1fr;
             }
         }
-    </style>
+</style>
 </head>
 <body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="origin.html">Origin</a>
+                <a href="applications-gallery.html">Applications Gallery</a>
+                <a href="docs/README.md">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
     <!-- Hero Section -->
     <section class="hero">
         <canvas id="parhelion-canvas"></canvas>
@@ -584,6 +654,8 @@
             </p>
             <div class="cta-buttons">
                 <a href="docs/presentation/README.md" class="btn btn-primary">Explore the Framework</a>
+                <a href="origin.html" class="btn btn-secondary">Read the Origin</a>
+                <a href="applications-gallery.html" class="btn btn-secondary">Applications Gallery</a>
                 <a href="docs/Public-notes.tex" class="btn btn-secondary">Public LaTeX Notes</a>
                 <a href="docs/APPLICATIONS.md" class="btn btn-secondary">View Applications</a>
                 <a href="https://github.com/humiliati/sundog" class="btn btn-secondary">GitHub Repository</a>
@@ -755,7 +827,7 @@
                     <p>
                         A controller aligns a reflected beam without target coordinates, matching oracle baseline accuracy in controlled experiments.
                     </p>
-                    <a href="README.md">Learn More →</a>
+                    <a href="applications-gallery.html#photometric-alignment">Learn More →</a>
                 </div>
             </div>
 
@@ -767,7 +839,7 @@
                     <p>
                         Procedural roguelike agents act from compressed perception using stop-conditioned action batches.
                     </p>
-                    <a href="docs/APPLICATIONS.md#eyesonly--gone-rogue">Learn More →</a>
+                    <a href="applications-gallery.html#eyesonly-gone-rogue">Learn More →</a>
                 </div>
             </div>
 
@@ -779,7 +851,7 @@
                     <p>
                         Physical-feeling simulation: glass reflection and pressure-washing behavior at reduced computational cost.
                     </p>
-                    <a href="docs/APPLICATIONS.md#dungeon-gleaner--dcgamejam2026">Learn More →</a>
+                    <a href="applications-gallery.html#dungeon-gleaner">Learn More →</a>
                 </div>
             </div>
 
@@ -791,7 +863,7 @@
                     <p>
                         Softbody terrain system with graph-based telemetry: torsion, deformation, symmetry, and recovery made legible.
                     </p>
-                    <a href="docs/APPLICATIONS.md#money-bags">Learn More →</a>
+                    <a href="applications-gallery.html#money-bags">Learn More →</a>
                 </div>
             </div>
         </div>
@@ -905,6 +977,14 @@
                 <h3>Documentation</h3>
                 <p>Read the docs</p>
             </a>
+            <a href="origin.html" class="cta-link">
+                <h3>Origin</h3>
+                <p>Trace the physical discovery</p>
+            </a>
+            <a href="applications-gallery.html" class="cta-link">
+                <h3>Applications</h3>
+                <p>Inspect working systems</p>
+            </a>
             <a href="docs/presentation/youtube-plan.md" class="cta-link">
                 <h3>Videos</h3>
                 <p>Watch demos</p>
@@ -923,6 +1003,8 @@
         </p>
         <p style="margin-top: 1rem; font-size: 0.9rem;">
             <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="origin.html">Origin</a> |
+            <a href="applications-gallery.html">Applications Gallery</a> |
             <a href="docs/README.md">Documentation</a> |
             <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
             <a href="docs/presentation/claims-and-scope.md">Claims Policy</a>
