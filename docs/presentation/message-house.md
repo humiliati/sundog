@@ -89,7 +89,7 @@ The Sundog Project is a framework for indirect measurement and agent reasoning u
 
 The Sundog Project began as a mathematical intuition about alignment and indirect signals. Over the past year, we have applied that framework in software and found it useful in real systems — especially where behavior must be inferred from incomplete or occluded information.
 
-The core experiment demonstrates photometric mirror alignment without direct target access, reaching terminal accuracy comparable to oracle baselines in a controlled MuJoCo setting. Beyond the lab task, the same framework informs procedural agent design in EyesOnly, physical-feeling simulation in Dungeon Gleaner, and softbody interpretation in Money Bags.
+The core experiment demonstrates photometric mirror alignment without direct target access, reaching terminal accuracy comparable to oracle baselines in a controlled MuJoCo setting. Beyond the lab task, the same framework informs procedural agent design in EyesOnly, verb-field NPC behavior in Dungeon Gleaner, and softbody interpretation in Money Bags.
 
 We are continuing to formalize the mathematics, strengthen the experimental evidence, and explore new application domains.
 

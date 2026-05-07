@@ -142,7 +142,8 @@ Purpose: connect the theorem to product systems without overclaiming.
 Sections:
 
 - EyesOnly: procedural agent under compressed/occluded state.
-- Dungeon Gleaner: cheap physical-feeling glass and pressure-washing behavior.
+- Dungeon Gleaner: verb-field NPC behavior driven by unmet-need gradients over
+  satisfier nodes.
 - Money Bags: graph-readable softbody telemetry.
 
 Acceptance criteria:

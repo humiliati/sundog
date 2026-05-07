@@ -34,7 +34,7 @@ Use these tiers when discussing application evidence:
 | --- | --- | --- |
 | Research result | Controlled task, metrics, baselines, reproducible artifacts. | Photometric mirror alignment in this repo. |
 | Instrumented prototype | Product system with telemetry and repeatable harnesses, but not yet a paper-style study. | Money Bags playtest bundles, Sundog Gone Rogue runner. |
-| Product expression | Player-facing mechanic or agent system that embodies the idea, but needs formal measurement. | Dungeon Gleaner pressure washing and glass/window rendering. |
+| Product expression | Player-facing mechanic or agent system that embodies the idea, but needs formal measurement. | Dungeon Gleaner verb-field NPC behavior. |
 | Conceptual lineage | Historical or design-language connection without enough evidence yet. | Older theorem docs, broad broadcast language. |
 
 The public-facing story can mention all four. Academic writing should keep
@@ -129,94 +129,113 @@ Repository: [humiliati/DCgamejam2026](https://github.com/humiliati/DCgamejam2026
 Local sibling path on the maintainer machine:
 `C:\Users\hughe\Dev\Dungeon Gleaner Main`
 
+### Correction Note
+
+Prior versions of this document framed Dungeon Gleaner around two systems:
+glass/window reflection approximations and pressure-washing behavior. That was
+a misread of where the Sundog pattern actually appears in the project.
+
+The glass/window path is a face-aware billboard and glint system. The pressure
+washer is a stateful gameplay tool with hose pressure, kink, and spray state.
+Both are useful gameplay engineering, but neither currently demonstrates the
+Sundog indirect-signal-to-action pattern. The earlier one-twelfth-cost light
+claim should not be repeated unless a measurement harness is built and the
+claim is restated as ordinary rendering performance rather than theorem
+evidence.
+
+The corrected Sundog expression in Dungeon Gleaner is the verb-field NPC
+system.
+
 ### Sundog Expression
 
-Dungeon Gleaner applies Sundog to physical-feeling simulation in a raycast
-dungeon crawler. The broadcast identifies two major expressions:
+Dungeon Gleaner applies Sundog to NPC idle behavior in a raycast dungeon
+crawler. The product question is practical: how do you make a dungeon town feel
+inhabited without paying the compute and authoring cost of GOAP, hierarchical
+task networks, or hand-authored behavior trees?
 
-- approximate light reflection across glass surfaces at roughly one-twelfth
-  conventional computational cost;
-- a pressure-washing mechanic that produces coherent helical or arcing water
-  behavior.
+The shipped answer is verb-field diffusion. Each NPC carries a small set of
+prioritizing verbs such as `duty`, `social`, `errands`, and `rest`. Each verb
+has a need value that changes over time and a set of satisfier nodes in the
+world. A bonfire might satisfy `social`; a faction post might satisfy `duty` for
+matching-faction NPCs.
 
-The useful research framing is not "this is physically exact." It is:
+Each tick, reachable nodes are scored from the NPC's unmet verb needs, satisfier
+matches, inverse distance, linger gates, and small noise. The NPC takes a
+greedy step toward the strongest pull. Arrival drops the relevant need, the NPC
+lingers, and other verbs begin to reassert. The orbit emerges from the field.
 
-> Selected physical phenomena can be compressed into structured approximations
-> that retain player-facing coherence at lower computational cost.
-
-That is the same family as the photometric experiment: take an observable
-projection of physical structure, transform it cheaply, and use the result for
-software behavior.
+This is the same family as the photometric experiment in a non-optical domain:
+the agent does not need an authored plan for where it should go next. It reads
+an indirect signal, the gradient of unmet need over satisfier proximity, and
+acts from the transformed signal.
 
 ### Inspectable Surfaces
 
-Pressure washing:
-
-- `README.md`: cleaning and pressure-washing gameplay loops.
-- `docs/ADR-001-PRESSURE_WASHER_FPS_WEAPON.md`: pressure washer as
-  first-person physical tool, projectile model, bounce/arc model, kink readout,
-  and energy model.
-- `engine/hose-state.js`: hose energy, pressure, path length, and kink state.
-- `engine/spray-system.js`: spray activation and delivery.
-- `engine/spray-viewport-fx.js`: viewport water effects.
-- `engine/torch-hit-resolver.js`: pressure-wash hit resolution for torches.
-- `engine/torch-state.js`: torch state mutation under pressure washing.
-
-Glass and reflection:
-
-- `engine/window-sprites.js`: facade-facing glass panes, interior billboard
-  sprites, glint animation, exterior-face detection, and gap-filler logic.
-- `engine/texture-atlas.js`: procedural glass and window material generation.
-- `engine/tiles.js`: window tile contracts and transparency/collision rules.
+- `docs/VERB_FIELD_NPC_ROADMAP.md`: design doc for the verb-field NPC system;
+  algorithm, encounter taxonomy, archetype presets, and implementation phases.
+- `docs/NPC_SYSTEM_ROADMAP.md`: legacy patrol substrate the verb-field replaces
+  and coexists with.
+- `engine/verb-field.js`: per-tick verb-field resolution: decay, linger gate,
+  scoring, step, arrival, and satisfaction drop.
+- `engine/verb-nodes.js`: spatial node registry for satisfier sources.
+- `engine/dungeon-verb-nodes.js`, `engine/verb-node-seed.js`, and
+  `engine/verb-node-overrides-seed.js`: node populations and authored overrides
+  for shipping floors.
+- `engine/npc-system.js`: integration point wiring verb-field behavior beside
+  legacy patrol behavior.
+- `engine/reanimated-behavior.js`: second consumer of the same field tick for
+  reanimated friendly actors.
 
 ### What It Demonstrates
 
-Dungeon Gleaner demonstrates product-level compression of physical effects:
+Dungeon Gleaner demonstrates three bounded things:
 
-- water behavior is routed through stateful hose pressure, kink, energy, spray,
-  projectile, decal, and torch-interaction systems rather than a full fluid
-  simulation;
-- window/glass rendering uses face-aware heuristics, glints, transparent
-  cavities, and sprite billboards rather than expensive scene reflection;
-- the resulting player read is physical enough to support gameplay loops.
-
-This is a strong product expression of the theorem program because the player
-experiences physical coherence while the system avoids full simulation.
+- The Sundog indirect-signal pattern can transpose from optics to game-agent
+  behavior. Detector intensity becomes unmet-verb gradient; scan/seek/track
+  becomes need decay, node scoring, and greedy movement.
+- Verb diffusion can serve as a lightweight substitute for hand-authored idle
+  planners in a town-simulation context. The current evidence tier is Product
+  Expression because it is shipped behavior, not a controlled benchmark.
+- Personality can be represented as field weighting. Different archetypes share
+  a verb vocabulary, but their need rates and satisfier weights produce
+  different rhythms.
 
 ### What To Measure Next
 
-For the one-twelfth cost claim, add an inspection harness with:
-
-- the exact conventional baseline being compared;
-- the optimized Sundog-derived implementation path;
-- fixed scenes with representative glass/window cases;
-- per-frame timing under the same hardware and browser;
-- visual error or acceptability criteria;
-- a cold-start/warm-cache distinction.
-
-For pressure washing, add:
-
-- a deterministic spray scene;
-- frame cost with and without spray active;
-- hose path length, kink count, pressure, and energy traces;
-- coverage/decal metrics;
-- a qualitative or quantitative measure of helical/arc coherence;
-- side-by-side comparison against simpler hitscan spray.
+- Orbit telemetry: per-NPC traces of current verb, need values, current node,
+  target node, and dominant pull at a fixed cadence.
+- GOAP-substitution comparison: the same town fixture implemented with a
+  minimal GOAP or behavior-tree baseline, compared on authoring time, code size,
+  runtime cost, and observable variability.
+- Tuning sensitivity: sweeps over distance weight, noise, linger time, and
+  satisfaction drop to locate flicker, permanent attachment, and robotic
+  convergence regimes.
+- Archetype distinguishability: node residency time and orbit period across
+  archetypes on the same map.
+- Encounter rate and classification: how often NPCs converge on the same node,
+  and whether the encounter labels match outside observer reads.
 
 ### Claim Boundary
 
 Safe claim:
 
-> Dungeon Gleaner shows Sundog-shaped compression of physical-feeling effects:
-> glass/window rendering and pressure-washing behavior are made coherent enough
-> for gameplay without full physical simulation.
+> Dungeon Gleaner uses a verb-field diffusion model for NPC idle behavior in
+> lieu of GOAP, hierarchical task networks, or hand-authored behavior trees.
+> Each NPC's prioritizing verbs change over time; a per-tick score combines
+> unmet need with inverse distance to satisfier nodes; the NPC takes a greedy
+> step toward the strongest pull. Encounters and personality emerge from the
+> verb vocabulary plus per-archetype weighting. This is a product expression of
+> the same indirect-signal-to-action shape as the photometric mirror experiment,
+> applied to lightweight game agency.
 
 Avoid:
 
-> Dungeon Gleaner scientifically proves a general one-twelfth-cost physics
-> theorem.
+> Dungeon Gleaner proves verb-field diffusion outperforms GOAP for town
+> simulation.
 
-That claim requires the measurement harness above.
+The substitution claim is qualitative until the comparison and telemetry work
+above exists. Also avoid repeating the prior glass/window one-twelfth-cost or
+pressure-washing framing as Sundog evidence.
 
 ## Money Bags
 
@@ -343,7 +362,7 @@ matched experimental runs.
 | --- | --- | --- | --- | --- |
 | Sundog core | Photometric control | Detector intensity and proprioception | Scan, seek, extremum tracking | Mirror alignment without target position |
 | EyesOnly / Gone Rogue | Procedural agent play | Compressed and volatile game state | Turn envelope and stop conditions | Coherent action batches |
-| Dungeon Gleaner | Physical-feeling rendering and tools | Glass faces, hose path, pressure, kinks, impacts | Face heuristics, glints, spray/projectile/decal state | Cheap coherent reflection and water behavior |
+| Dungeon Gleaner | Procedural NPC behavior | Unmet-verb gradient over satisfier nodes | Need decay, inverse-distance scoring, linger gates, and noise | Emergent NPC idle orbits without scripted plans |
 | Money Bags | Softbody terrain physics | Spring graph, contact, deformation, torque, centroid motion | Graph metrics and playtest telemetry | Interpretable rig state and recovery analysis |
 
 ## Broadcast-Aligned Summary
@@ -353,8 +372,8 @@ For public communication, the applications can be summarized this way:
 > Since the initial theorem release, Sundog has moved from a single
 > mirror-alignment experiment into working systems. EyesOnly applies the idea
 > to procedural agent play under occluded state. Dungeon Gleaner applies it to
-> physical-feeling simulation, including glass/window reflection approximations
-> and pressure-washing behavior. Money Bags applies it to softbody rigs, where
+> verb-field NPC behavior, where unmet needs diffuse across satisfier nodes to
+> produce idle orbits without scripted planners. Money Bags applies it to softbody rigs, where
 > graph telemetry makes torsion, torque, center-of-gravity behavior, and
 > recovery legible frame by frame.
 
@@ -371,15 +390,16 @@ For academic communication, add the boundary:
 3. Inspect `docs/PAPER_v1_draft.md` and `results/analysis/analysis_summary.json`.
 4. Read `docs/runners.md` for the EyesOnly bridge.
 5. Inspect EyesOnly's headless and UI-bound agent surfaces.
-6. Inspect Dungeon Gleaner's pressure-washer ADR and window/glass modules.
+6. Inspect Dungeon Gleaner's verb-field NPC docs and runtime modules.
 7. Inspect Money Bags' playtest bundles and graph/rig telemetry.
 
 ## Next Documentation Tasks
 
 - Add an EyesOnly runner result table with matched-seed policy comparisons.
-- Add a Dungeon Gleaner performance note for the glass/window path and its
-  baseline.
-- Add a Dungeon Gleaner spray-system note with deterministic scene captures.
+- Add Dungeon Gleaner orbit telemetry for verb, need, node, and dominant-pull
+  traces.
+- Add a Dungeon Gleaner GOAP-substitution comparison and tuning-sensitivity
+  sweep.
 - Add a Money Bags metric glossary with formulas for alignment, torsion,
   symmetry, and recovery.
 - Add an "Applications as Experiments" appendix once each product has at least
