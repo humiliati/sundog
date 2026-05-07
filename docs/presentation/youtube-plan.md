@@ -70,12 +70,12 @@ The channel should organize around four core content types:
 **Video Topics:**
 1. Photometric mirror alignment demo (core experiment)
 2. EyesOnly / Gone Rogue demo (procedural agents)
-3. Dungeon Gleaner demo (pressure washing)
-4. Dungeon Gleaner demo (glass/window reflection)
+3. Dungeon Gleaner demo (verb-field NPC idle orbits)
+4. Dungeon Gleaner demo (GOAP-substitution comparison)
 5. Money Bags demo (softbody telemetry)
 6. Behavior comparisons: Classic AI vs Sundog AI
 7. Softbody rig analysis walkthrough
-8. Light reflection cost comparison
+8. Verb-field tuning sensitivity
 9. Before/after: agent behavior under occlusion
 10. Turn envelope demonstration
 
@@ -238,7 +238,7 @@ Launch with these five videos to establish the channel and cover essential groun
 
 3. **Demo 1: EyesOnly / Gone Rogue (2m):** Show agent operating in procedural roguelike. Highlight turn envelope, stop conditions, compressed state. Compare to debug-state agent.
 
-4. **Demo 2: Dungeon Gleaner (1.5m):** Show pressure-washing behavior. Highlight hose state, spray projection. Compare to simpler hitscan.
+4. **Demo 2: Dungeon Gleaner (1.5m):** Show verb-field NPC idle orbits. Highlight unmet needs, satisfier nodes, linger gates, and local movement. Compare to a simple scripted patrol.
 
 5. **Why It Matters (1m):** Agents feel more alive when they don't cheat. Partial information becomes a design feature. Performance can be better because the signal is compressed.
 

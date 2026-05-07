@@ -120,36 +120,36 @@ Procedural roguelike agents act from compressed perception using stop-conditione
 **Repository:** [humiliati/DCgamejam2026](https://github.com/humiliati/DCgamejam2026)
 
 **Summary:**
-Physical-feeling simulation in a raycast dungeon crawler. Two major expressions: glass/window reflection at claimed one-twelfth conventional cost, and pressure-washing mechanics with coherent helical/arcing water behavior.
+Verb-field NPC behavior in a raycast dungeon crawler. Unmet needs diffuse across satisfier nodes, producing lightweight idle orbits without GOAP, hierarchical task networks, or hand-authored behavior trees.
 
 **What It Demonstrates:**
-- Physical phenomena can be compressed into structured approximations
-- Player-facing coherence retained at lower computational cost
-- The same indirect-measurement pattern applies to visual simulation
+- The Sundog indirect-signal pattern can transpose from optics to NPC behavior
+- Lightweight verb diffusion can substitute for authored idle planners in a shipped game context
+- Personality can be represented as field weighting rather than bespoke behavior scripts
 
 **Key Mechanics:**
-- **Glass Reflection:** Face-aware heuristics, glints, transparent cavities, sprite billboards
-- **Pressure Washing:** Stateful hose pressure, kink, energy, spray, projectile, decal, torch interaction
+- **Verb Field:** Need decay, satisfier proximity scoring, linger gates, and greedy local movement
+- **Node Sources:** Work, social, errand, rest, and faction anchors act as satisfiers
+- **Archetypes:** Shared verbs with different weights produce different rhythms
 
 **Assets Available:**
-- Pressure washer ADR
-- Hose state and spray system code
-- Window/glass rendering code
-- Glass tile contracts
+- Verb-field NPC roadmap
+- NPC system roadmap
+- Verb-field and verb-node runtime modules
+- Reanimated-behavior consumer of the same field tick
 
 **Assets Needed:**
 - Application detail page
-- Demo video (pressure washing in action)
-- Demo video (glass reflection comparison)
-- Performance comparison graph (claimed 1/12 cost)
-- Side-by-side: full physics vs Sundog approximation
+- Demo video showing NPC idle orbits
+- Orbit telemetry visualization
+- GOAP-substitution comparison
+- Tuning-sensitivity graphs
 
 **What's Needed for Research Tier:**
-- Measurement harness with conventional baseline
-- Fixed test scenes
-- Per-frame timing data
-- Visual error/acceptability criteria
-- Spray coherence metrics
+- Deterministic NPC/town fixture
+- Per-NPC verb, need, node, and dominant-pull traces
+- GOAP or behavior-tree baseline
+- Tuning sweeps for flicker, attachment, and convergence failures
 
 **Links:**
 - [Application Map](../APPLICATIONS.md#dungeon-gleaner--dcgamejam2026)
@@ -216,7 +216,7 @@ This table provides a unified view of how the pattern manifests:
 |-------------|--------|----------------|----------------|-------------------|---------------|
 | Photometric Alignment | Optical control | Detector intensity, proprioception | Scan, seek, extremum tracking | Mirror alignment without target | Research Result |
 | EyesOnly / Gone Rogue | Procedural agents | Compressed game state | Turn envelope, stop conditions | Coherent action batches | Instrumented Prototype |
-| Dungeon Gleaner | Physical simulation | Glass faces, hose path, pressure | Face heuristics, spray state | Coherent rendering/tools | Product Expression |
+| Dungeon Gleaner | Procedural NPC behavior | Unmet-verb gradient over satisfier nodes | Need decay, inverse-distance scoring, linger gates | Emergent idle orbits without scripted plans | Product Expression |
 | Money Bags | Softbody physics | Spring graph, contact, deformation | Graph metrics, telemetry | Interpretable rig state | Instrumented Prototype |
 
 ---

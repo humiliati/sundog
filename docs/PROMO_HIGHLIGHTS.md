@@ -38,9 +38,9 @@ Sundog is a research and product program for transforming indirect observable
 phenomena into usable software control. In the core experiment, a controller
 aligns a reflected beam without target-position access, using only sparse
 photometric feedback and joint state. In product systems, the same idea appears
-as roguelike agents acting under occluded state, cheaper physical-feeling
-reflection and pressure-washing systems, and graph telemetry that makes
-softbody motion analyzable frame by frame. The claim is simple and dangerous:
+as roguelike agents acting under occluded state, verb-field NPC behavior, and
+graph telemetry that makes softbody motion analyzable frame by frame. The claim
+is simple and dangerous:
 some systems do not need to see the target directly. They can align by reading
 the structure of the disturbance.
 
@@ -55,8 +55,8 @@ The core repo now contains a defensible mirror-alignment experiment: a
 controller with no Cartesian target access reaches terminal accuracy comparable
 to a target-aware analytic baseline in the tested MuJoCo setting. EyesOnly
 extends the idea into procedural agent play under occluded state. Dungeon
-Gleaner pushes it into physical-feeling simulation, including glass/window
-reflection approximations and pressure-washing behavior. Money Bags brings it
+Gleaner pushes it into verb-field NPC behavior, where unmet needs diffuse across
+satisfier nodes instead of relying on scripted idle planners. Money Bags brings it
 into softbody terrain systems, where torsion, torque, center of gravity,
 deformation, and recovery become graph-readable telemetry.
 
@@ -291,7 +291,7 @@ We rebuilt Sundog as a research-facing artifact.
 The core result is narrow and measurable: mirror alignment without direct target
 coordinates, using sparse photometric feedback. The broader program now shows
 up in EyesOnly, Dungeon Gleaner, and Money Bags: procedural agents under
-occlusion, cheaper physical-feeling simulation, and graph-readable softbody
+occlusion, verb-field NPC behavior, and graph-readable softbody
 telemetry.
 
 The future we are chasing: systems that do not need perfect information to
@@ -308,8 +308,7 @@ The Sundog pattern:
 5. measure the failure boundary honestly.
 
 That pattern now spans photometric alignment, procedural roguelike agents,
-pressure-washing simulation, glass/window approximations, and softbody graph
-telemetry.
+verb-field NPC behavior, and softbody graph telemetry.
 
 ## Pitch Deck Outline
 

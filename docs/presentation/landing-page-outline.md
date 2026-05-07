@@ -50,7 +50,7 @@ Most systems do not reveal their truth directly. You infer them from signatures 
 
 The Sundog Project is a framework for turning those indirect signals into actionable software control. Where conventional approaches demand complete world state, Sundog asks whether the partial signal — the shadow, the torque, the occlusion — already contains enough structure to act.
 
-In the core experiment, a controller aligns a reflected beam without target coordinates, using only sparse photometric feedback. In product systems, the same pattern informs procedural agents acting under occluded state, cheaper physical-feeling simulation, and softbody motion made interpretable through graph signatures.
+In the core experiment, a controller aligns a reflected beam without target coordinates, using only sparse photometric feedback. In product systems, the same pattern informs procedural agents acting under occluded state, verb-field NPC behavior, and softbody motion made interpretable through graph signatures.
 
 **Visual:**
 - Diagram: direct perception vs indirect signal
@@ -109,7 +109,7 @@ Application cards linking to detailed pages. Each card includes:
 → Link to `/docs/applications/eyes-only`
 
 **3. Dungeon Gleaner**
-"Physical-feeling simulation: glass reflection and pressure-washing behavior at reduced computational cost."
+"Verb-field NPC behavior: unmet needs diffuse across dungeon nodes, producing idle orbits without scripted planners."
 → Link to `/docs/applications/gamejam2026`
 
 **4. Money Bags**

@@ -29,7 +29,7 @@ These claims are defensible with current evidence:
 
 ### Applications
 - EyesOnly/Gone Rogue demonstrates procedural agent control using compressed perception and stop-conditioned action batches.
-- Dungeon Gleaner demonstrates structured approximations of physical effects (glass reflection, pressure washing) that preserve player-facing coherence at lower computational cost.
+- Dungeon Gleaner demonstrates verb-field NPC behavior: unmet needs diffuse across satisfier nodes to produce lightweight idle orbits without scripted planners.
 - Money Bags demonstrates graph-based interpretation of softbody motion, making torsion, deformation, symmetry, and recovery metrics legible.
 
 ### Research Status
@@ -53,7 +53,8 @@ These claims are defensible with current evidence:
 
 ### Overpromising on Applications
 - ❌ "EyesOnly proves the theorem for procedural games." (needs formal study)
-- ❌ "Dungeon Gleaner scientifically proves a general one-twelfth-cost physics theorem." (needs measurement harness)
+- ❌ "Dungeon Gleaner proves verb-field diffusion outperforms GOAP for town simulation." (needs telemetry and a comparison harness)
+- ❌ "Dungeon Gleaner proves a one-twelfth-cost light or physics theorem." (old framing; do not repeat as Sundog evidence)
 - ❌ "Money Bags proves softbody alignment is solved." (needs controlled experiments)
 - ❌ "Our applications demonstrate universal applicability."
 
@@ -99,13 +100,15 @@ Define success metrics, compare against baselines with matched seeds, report whe
 
 ### Dungeon Gleaner
 **Safe:**
-"Dungeon Gleaner shows Sundog-shaped compression of physical-feeling effects: glass/window rendering and pressure-washing behavior are made coherent enough for gameplay without full physical simulation."
+"Dungeon Gleaner uses verb-field diffusion for NPC idle behavior: unmet needs are scored against nearby satisfier nodes, and NPCs take local steps toward the strongest pull. This is a product expression of the Sundog indirect-signal-to-action pattern, not yet a controlled benchmark."
 
 **Avoid:**
-"Dungeon Gleaner scientifically proves a general one-twelfth-cost physics theorem."
+"Dungeon Gleaner proves verb-field diffusion outperforms GOAP for town simulation."
+
+Also avoid repeating the old glass/window one-twelfth-cost or pressure-washing framing as Sundog evidence.
 
 **What's needed:**
-Measurement harness with conventional baseline, fixed test scenes, per-frame timing, visual error criteria.
+Orbit telemetry, GOAP-substitution comparison, tuning-sensitivity sweeps, and archetype distinguishability metrics.
 
 ### Money Bags
 **Safe:**

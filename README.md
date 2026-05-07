@@ -130,8 +130,9 @@ pages or changing deployment behavior.
 - [EyesOnly](https://github.com/humiliati/EyesOnly): live spy-game platform
   and Gone Rogue procedural roguelike integration.
 - [Dungeon Gleaner / DCgamejam2026](https://github.com/humiliati/DCgamejam2026):
-  Dungeon Crawler Game Jam 2026 entry using Sundog-shaped physical simulation
-  ideas in reflection and pressure-washing systems.
+  Dungeon Crawler Game Jam 2026 entry whose corrected Sundog expression is
+  verb-field NPC behavior: unmet needs diffuse across satisfier nodes to
+  produce lightweight idle orbits without scripted planners.
 - [Money Bags](https://github.com/humiliati/Money-Bags): upcoming Godot
   softbody/terrain prototype exploring torsion, torque, center-of-gravity, and
   graph-structured interpretation of frame-by-frame simulation data.
