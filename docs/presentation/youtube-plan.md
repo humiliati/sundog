@@ -356,7 +356,7 @@ Launch with these five videos to establish the channel and cover essential groun
 
 4. **The Result (2.5m):** Walk through the operating-envelope maps. Show the near-escape high-velocity pocket where the guarded accelerometer-proxy controller improves survival over passive and naive local baselines. Show the failure boundary: low-velocity cells and equal-mass configurations where the controller causes harm rather than helping.
 
-5. **The Claim Boundary (1.5m):** Be explicit. This is not a solution to the three-body problem. It is not a chaos predictor. It is a bounded operating-envelope result with an honest failure map. The naive baseline fails in this pocket. The oracle does better but costs less. The Sundog controller costs more delta-v and improves survival.
+5. **The Claim Boundary (1.5m):** Be explicit. This is not a solution to the three-body problem. It is not a chaos predictor. It is a bounded operating-envelope result with an honest failure map. The naive baseline fails in this pocket. The privileged heuristic oracle improves survival at lower delta-v cost. The Sundog controller spends more delta-v than the oracle and improves survival over passive and naive baselines.
 
 6. **Connection to the Broader Pattern (1m):** Show how this maps onto the photometric experiment and other applications. Deny full state → observe indirect signal → act from compressed signature → report the failure boundary.
 
