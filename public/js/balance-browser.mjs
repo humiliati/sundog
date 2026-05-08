@@ -1,5 +1,6 @@
 import {
   BALANCE_PRESETS,
+  clamp,
   computeBalanceControl,
   computeShadowGeometry,
   createBalanceRuntime,
@@ -70,6 +71,26 @@ function resetSimulation() {
   isPlaying = true;
   playPauseButton.textContent = "Pause";
   updateModeButtons();
+}
+
+function syncControlValue(input) {
+  const valueNode = document.querySelector(`[data-value-for="${input.id}"]`);
+  if (valueNode) valueNode.textContent = input.value;
+}
+
+function applyPresetControlDefaults() {
+  const preset = BALANCE_PRESETS[presetSelect.value];
+  const presetConfig = preset?.config ?? {};
+  const presetDefaults = normalizeBalanceConfig({ preset: presetSelect.value });
+  noiseInput.value = Object.hasOwn(presetConfig, "sensorNoiseStd")
+    ? presetConfig.sensorNoiseStd
+    : presetDefaults.sensorNoiseStd;
+  delayInput.value = Object.hasOwn(presetConfig, "sensorDelaySteps")
+    ? presetConfig.sensorDelaySteps
+    : presetDefaults.sensorDelaySteps;
+  for (const input of [presetSelect, lightElevationInput, noiseInput, delayInput, forceInput]) {
+    syncControlValue(input);
+  }
 }
 
 function resizeCanvas() {
@@ -381,12 +402,16 @@ disturbButton.addEventListener("click", () => {
   disturbanceTicks = 18;
 });
 
-for (const input of [presetSelect, lightElevationInput, noiseInput, delayInput, forceInput]) {
+for (const input of [lightElevationInput, noiseInput, delayInput, forceInput]) {
   input.addEventListener("input", () => {
-    document.querySelector(`[data-value-for="${input.id}"]`).textContent = input.value;
-    if (input === presetSelect) resetSimulation();
+    syncControlValue(input);
   });
 }
+
+presetSelect.addEventListener("change", () => {
+  applyPresetControlDefaults();
+  resetSimulation();
+});
 
 window.addEventListener("resize", () => {
   resizeCanvas();
@@ -394,6 +419,6 @@ window.addEventListener("resize", () => {
 });
 
 resizeCanvas();
+applyPresetControlDefaults();
 resetSimulation();
 requestAnimationFrame(animate);
-

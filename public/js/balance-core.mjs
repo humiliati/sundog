@@ -310,11 +310,11 @@ export function computeBalanceControl(state, sensor, controllerState = {}, confi
     reason = "cart centering only";
   } else if (mode === "naive_shadow") {
     const proxy = sensor.valid ? sensor.residual / Math.max(cfg.poleLength, 1e-6) : 0;
-    force = 18 * proxy - 2.8 * state.x - 2.3 * state.xDot;
+    force = 18 * proxy + 1.0 * state.x + 2.0 * state.xDot;
     phase = "SHADOW";
     reason = "shadow residual without dynamics";
   } else if (mode === "oracle") {
-    force = 82 * state.theta + 14 * state.thetaDot - 2.8 * state.x - 3.2 * state.xDot;
+    force = 50 * state.theta + 8 * state.thetaDot + 1.0 * state.x + 2.0 * state.xDot;
     phase = "ORACLE";
     reason = "privileged theta feedback";
   } else if (mode === "sundog_shadow") {
@@ -322,7 +322,7 @@ export function computeBalanceControl(state, sensor, controllerState = {}, confi
     const proxyVelocity = sensor.valid ? sensor.residualVelocity / Math.max(cfg.poleLength, 1e-6) : 0;
     const confidence = sensor.valid ? sensor.confidence : 0;
     const probe = Math.sin((controllerState.step ?? 0) * 0.11) * (1 - confidence) * 1.2;
-    force = confidence * (72 * proxy + 11 * proxyVelocity) - 2.6 * state.x - 3.0 * state.xDot + probe;
+    force = confidence * (50 * proxy + 8 * proxyVelocity) + 1.0 * state.x + 2.0 * state.xDot + probe;
     phase = confidence > 0.35 ? "TRACK" : "SCAN";
     reason = "shadow residual plus history";
   }
@@ -355,4 +355,3 @@ export function serializeBalanceSample(state, sensor, control, config = {}) {
     railHit: state.railHit,
   };
 }
-

@@ -59,8 +59,6 @@ body[data-sundog-theme="halo"] {
   --sd-manila-dark: #e8d5b7;
   --sd-manila-border: rgba(139, 90, 43, 0.2);
 
-  --sd-font-handwritten: 'Indie Flower', 'Patrick Hand', cursive;
-
   /* Backwards-compatible aliases for the current inline page CSS. */
   --primary-dark: var(--sd-ink);
   --primary-mid: var(--sd-sky);
@@ -788,21 +786,6 @@ footer {
     var(--sd-sticky-green) 0%,
     color-mix(in srgb, var(--sd-sticky-green) 95%, #000) 100%
   );
-}
-
-/* Handwritten typography for sticky notes */
-.sd-sticky-note p,
-.sd-sticky-note li,
-.sd-sticky-note span {
-  font-family: var(--sd-font-handwritten);
-  font-size: 1.05rem;
-  line-height: 1.7;
-}
-
-.sd-handwritten {
-  font-family: var(--sd-font-handwritten);
-  font-size: 1.1rem;
-  line-height: 1.6;
 }
 
 /* Tape Overlays */

@@ -168,6 +168,11 @@ hero graph markup, application cards, or generated BoxForge exports.
    generated files from `.boxforge.json` templates.
 6. When the canonical topography/typography direction lands, map it onto the
    existing `--sd-font-*` tokens first, then page sections second.
+   **Landed 2026-05-08:** Option C three-voice roster confirmed —
+   `--sd-font-display` (Georgia serif), `--sd-font-body` (system sans),
+   `--sd-font-data` (system mono). Handwritten token removed; production pages
+   migrated off `'Courier New'` literals onto `var(--sd-font-data)` and off
+   inline body-font duplicates onto the shared stylesheet.
 
 ## Guardrails
 
@@ -390,30 +395,25 @@ Workspace containers (nav, sidebars, main content areas) as manila folders:
 
 ### Typography Hierarchy
 
-#### Hand-Written Fonts (Sticky Notes & Paper)
+#### Hand-Written Fonts (Sticky Notes & Paper) — DEFERRED
 
-For informal, note-style content on sticky notes and paper cards:
+Status: **Not in Option C.** Retained here as reference material in case the
+direction shifts toward Option A or D in a future pass.
 
-**Recommended Google Fonts:**
+The 2026-05-08 typography audit removed the `--sd-font-handwritten` token, the
+`.sd-handwritten` class, and the sticky-note `font-family` rule from
+`public/css/sundog-theme.css`, and dropped the Google Fonts `<link>` tags from
+`paper-theme-demo.html`. Sticky-note color tokens remain available as accents,
+but their text inherits the body sans stack.
+
+If reactivating later:
+
 - `'Indie Flower'` — casual handwriting, high readability
 - `'Patrick Hand'` — clean hand-drawn style
 - `'Caveat'` — natural handwriting with personality
 - `'Shadows Into Light'` — friendly and legible
 
-**Usage:**
-```css
---sd-font-handwritten: 'Indie Flower', 'Patrick Hand', cursive;
-
-.sd-sticky-note,
-.sd-paper-annotation,
-.sd-handwritten {
-  font-family: var(--sd-font-handwritten);
-  font-size: 1.1rem;
-  line-height: 1.6;
-}
-```
-
-**Best practices:**
+**Best practices when reactivated:**
 - Use sparingly for emphasis and informal sections
 - Ensure adequate size (minimum 16px) for readability
 - Avoid for long-form text or critical data
