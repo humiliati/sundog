@@ -23,14 +23,14 @@ Where do you want to push on this?
 
 ## Ratification - 2026-05-07
 
-Status: ratified as a promising research direction and public hook, not yet as
-evidence for Sundog.
+Status: ratified first as a promising research direction, and now supported by
+a bounded operating-envelope result in the planar restricted prototype.
 
 The hook is strong because the three-body problem is a familiar symbol of
 dynamical complexity, and Sundog has a clean way to enter the conversation:
-not by claiming to solve the dynamics, but by asking whether lower-dimensional
-event signatures can be sufficient for useful action inside a bounded operating
-envelope.
+not by claiming to solve the dynamics, but by showing that lower-dimensional
+event signatures can support useful action inside a bounded operating envelope,
+while naming where that envelope fails.
 
 The actionable core is not "Sundog solves three-body." The actionable core is:
 
@@ -542,6 +542,14 @@ Current Phase 9 earned wording:
 > near-escape cells still show harms, and hazard-derived gates trade a smaller
 > candidate region for lower control effort.
 
+Current Phase 11 earned wording:
+
+> In the tested planar restricted setup, the guarded accelerometer-proxy TRACK
+> controller improves survival over passive and naive local baselines in a
+> robust high-velocity near-escape pocket. The result is not global: lower
+> velocity and equal-mass boundary cells still expose controller harms, mostly
+> through controller-shortened passive survival and control effort/saturation.
+
 Do not claim:
 
 - "Sundog solves three-body dynamics."
@@ -620,6 +628,12 @@ Initial Phase 11 results:
   oracle produced 34 of 81. This oracle is a heuristic, not an optimal
   controller.
 - Summary: `docs/THREEBODY_PHASE11_SUMMARY.md`.
+
+Phase 11 conclusion: the Phase 9 pocket is no longer just a tuned positive
+slice. It survives guard-quantile variation and matched baseline comparison in
+the favorable high-velocity near-escape region. The same runs also make the
+failure boundary sharper: lower velocities and equal-mass boundary cells are the
+first places where the controller should not be used.
 
 ## Recommendation
 
@@ -936,7 +950,21 @@ Current Phase 9 implementation:
   keeps 100 candidate rows out of 196, compared with 116 under constant gates,
   while reducing average delta-v from about `2.07` to `1.12`. It preserves the
   high-velocity pocket but does not remove the low-velocity failure boundary.
-- Next Phase 9 work: compare guard quantiles (`0.5`, `0.75`, `0.9`) and then
-  expand the mass-ratio/timestep probe outside the favorable pocket.
+- Phase 11 robustness result: `npm run threebody:phase11:guard-quantiles`
+  confirms the pocket survives guard quantiles `0.5`, `0.75`, and `0.9`, with
+  a clear survival/effort trade. `0.5` is cheapest, `0.9` has the largest
+  average survival delta, and `0.75` remains a viable middle setting.
+- Phase 11 outside-pocket result: `npm run threebody:phase11:outside-pocket`
+  expands beyond the favorable high-velocity slice. It finds 96 promising, 36
+  mixed, 9 negative, and 3 neutral best cells, with most harms concentrated at
+  lower velocity scales and equal mass ratio.
+- Phase 11 comparison result: `npm run threebody:phase11:compare` reruns the
+  favorable pocket against passive, naive local acceleration, guarded
+  accelerometer TRACK, and a privileged heuristic oracle. Guarded TRACK produces
+  81 candidate rows out of 81, the naive local baseline produces none, and the
+  heuristic oracle produces 34 of 81.
+- Next work: make the Phase 7/8 diagnostic-to-control chain visible in the
+  public figures, then decide whether to run a larger seed lock on the
+  outside-pocket boundary or start the spatial/3D extension.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)

@@ -138,8 +138,9 @@ The three-body experiment maps cleanly onto the existing Sundog pattern:
 1. **Deny full-state access**: Test particle cannot see primary positions or masses
 2. **Expose only indirect observables**: Tidal tensor, local acceleration, own velocity
 3. **Transform observables into control-relevant signatures**: Tidal magnitude as stability proxy
-4. **Compare against privileged baseline**: pending oracle controller with full
-   CR3BP state access
+4. **Compare against privileged baseline**: Phase 11 now includes a matched
+   privileged heuristic oracle comparison, while keeping clear that this oracle
+   is not an optimal controller
 5. **Report the failure boundary**: current maps expose low-velocity
    near-escape harms and controller-shortened passive survival cases
 
@@ -382,7 +383,7 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   the diagnostic-to-control chain from Phase 7/8 through Phase 9. The result
   should identify both the robust positive pocket and the first outside-pocket
   region where the Sundog controller should not be used.
-  This phase is now started. The guard-quantile sweep emitted 7,056 trials and
+  The initial Phase 11 pass is complete. The guard-quantile sweep emitted 7,056 trials and
   shows the pocket survives quantiles `0.5`, `0.75`, and `0.9`. The
   outside-pocket sweep emitted 6,912 trials and confirms lower velocities plus
   equal-mass boundary cells carry most harms. The comparison slate emitted 2,592
@@ -401,7 +402,8 @@ The three-body experiment is not a solution to celestial mechanics. It is an app
 The current result: locally motivated proxies can drive a guarded
 scan/seek/track-style controller usefully inside a measured high-velocity
 near-escape pocket. That pocket survives a larger seed slate, a scoped
-mass-ratio/timestep probe, and Phase 11 guard-quantile variation, but it does
+mass-ratio/timestep probe, Phase 11 guard-quantile variation, and matched
+comparison against naive local and privileged heuristic baselines, but it does
 not erase the low-velocity or equal-mass boundary harms.
 
 The target trade is the same as photometric alignment: useful action from
