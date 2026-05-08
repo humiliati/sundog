@@ -15,6 +15,10 @@ code, experiments, prior theorem materials, and application bridges.
   statements, and future-facing language.
 - [Standalone app roadmap](STANDALONE_APP_ROADMAP.md): plan for a no/low
   dependency `.html`, `.exe`, and eventual `.apk` observer app.
+- [Sundog Balance roadmap](SUNDOG_V_BALANCE.md): planned cart-pole workbench
+  for balancing from a shadow-derived signal.
+- [Third-party reuse ledger](THIRD_PARTY_REUSE.md): permissions and attribution
+  notes for borrowed design, code, and asset references.
 - [Paper draft](PAPER_v1_draft.md): current academic paper draft.
 - [Paper outline](PAPER_OUTLINE_v0.md): venue framing, reviewer risks, and
   stress-test interpretation.
