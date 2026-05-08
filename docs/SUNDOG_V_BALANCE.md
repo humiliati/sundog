@@ -45,14 +45,21 @@ triplet do not drift between the roadmap and the eventual writeup. When Phase
 
 ## Current State
 
-No Balance code, no `balance.html`, no Balance JS modules, no Balance
-simulation harness, no Balance results directory ships in the Sundog tree
-today. The roadmap below is the inspectable surface; everything past Phase 0
-is "not built yet."
+First executable scaffold started. The Sundog tree now includes:
+
+- `balance.html`: an unpromoted browser workbench tab;
+- `public/js/balance-core.mjs`: deterministic cart-pole dynamics, shadow
+  projection, sensor delay/noise scaffolding, and baseline controller modes;
+- `public/js/balance-browser.mjs`: canvas renderer, controls, telemetry strip,
+  and Lounas-derived robotics balance motif.
+
+No Balance simulation harness, no Balance results directory, no Phase 8 metric
+tables, and no Phase 10 operating-envelope verdict ships in the Sundog tree
+today. The current artifact is a Phase 1-4 scaffold, not evidence.
 
 This section is here so the broadcast surfaces (gallery card, APPLICATIONS.md,
-claims-and-scope.md) do not get a row until Phase 7 produces runnable
-artifacts. Until then, Balance sits at **Forward-Looking Application Design /
+claims-and-scope.md) do not get a row until the runnable-artifact gates below
+are met. Until then, Balance sits at **Forward-Looking Application Design /
 Conceptual Lineage** tier in the application family — sibling to LAGM in the
 EyesOnly section, not sibling to the EyesOnly headless runner.
 

@@ -23,7 +23,8 @@ Permission record:
 Expected Sundog usage:
 
 - `docs/SUNDOG_V_BALANCE.md`: roadmap and implementation plan.
-- Future `balance.html`: workbench background or robot-arm visual motif.
+- `balance.html` and `public/js/balance-browser.mjs`: workbench background and
+  robotics balance motif.
 - Future BoxForge/CSS arm template: reusable motion/arm visual component for
   Balance and the eventual index-page motion clip.
 
