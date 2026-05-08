@@ -329,6 +329,7 @@ Current command:
 
 ```bash
 npm run threebody:phase9
+npm run threebody:phase9:refine
 ```
 
 Sweep axes:
@@ -350,6 +351,10 @@ Outputs:
   sensor-noise, and guard setting;
 - `aggregate-envelope.csv`: same map aggregated across regimes;
 - `best-by-cell.csv`: best setting per regime/radius/velocity cell;
+- `cell-class-map.csv`: map-shaped view of best region class by radius and
+  velocity;
+- `cell-delta-map.csv`: map-shaped view of best survival delta by radius and
+  velocity;
 - `candidate-envelope.csv`: positive survival-delta candidates that pass the
   current worsened-rate filter;
 - success/failure heatmaps;
@@ -372,6 +377,22 @@ First Phase 9 smoke map:
   Stable cells are mostly neutral because passive already survives; chaotic
   cells are mostly neutral or risky. This is the right shape for an operating
   envelope, but it is not yet a public performance claim.
+
+Refined near-escape map:
+
+- `npm run threebody:phase9:refine` emits a denser 7x7 near-escape radius/velocity
+  map over radius scales `0.925..1.075`, velocity scales `0.85..1.15`, thrust
+  limits `0.4/0.5`, sensor noise `0/0.01`, guard acceleration `2.5`, and 6
+  seeds.
+- Default refined run emitted 2,352 trials.
+- Positive candidate rows: 116 of 196 `envelope-map.csv` rows.
+- Best-cell summary: 32 promising cells, 6 neutral, 4 mixed, 3 risky, and 4
+  negative.
+- The map is no longer just anecdotal: the strongest connected positive region
+  is the upper-right of the near-escape slice, roughly radius scale `>= 0.975`
+  and velocity scale `>= 0.95`, with especially strong deltas above velocity
+  scale `1.05`. Larger-radius but low-velocity cells are negative/risky, which
+  gives the first crisp local failure boundary.
 
 Exit criterion: the public page can show where the method works, where it
 fails, and where the result is inconclusive.
@@ -690,13 +711,19 @@ Current Phase 9 implementation:
   - `envelope-map.csv`
   - `aggregate-envelope.csv`
   - `best-by-cell.csv`
+  - `cell-class-map.csv`
+  - `cell-delta-map.csv`
   - `candidate-envelope.csv`
 - First result: 29 positive candidate rows out of 324 envelope rows. The
   best-cell table marks 4 cells promising, 21 neutral, and 2 risky. The positive
   pocket is near-escape; stable cells are mostly neutral and chaotic cells are
   mostly neutral or risky.
-- Next Phase 9 work: make the map less grid-coarse, add mass-ratio and timestep
-  axes, and replace the current tuned guard constants with thresholds derived
-  from local hazard scores.
+- Refined near-escape result: `npm run threebody:phase9:refine` emits a denser
+  7x7 radius/velocity map with 2,352 trials. The best-cell matrix shows 32
+  promising cells, 6 neutral cells, 4 mixed cells, 3 risky cells, and 4 negative
+  cells. The positive pocket is connected at moderate-to-high velocity scales;
+  larger-radius low-velocity cells are the local failure boundary.
+- Next Phase 9 work: add mass-ratio and timestep axes, then replace the current
+  tuned guard constants with thresholds derived from local hazard scores.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)

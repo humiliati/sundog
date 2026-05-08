@@ -324,6 +324,13 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   `results/threebody/phase9-operating-envelope/`. The first positive pocket is
   near-escape; stable cells are mostly neutral because passive already survives,
   and chaotic cells are mostly neutral or risky.
+  `npm run threebody:phase9:refine` now runs a denser 7x7 near-escape
+  radius/velocity map under `results/threebody/phase9-refined-near-escape/`.
+  That refined map emitted 2,352 trials and adds `cell-class-map.csv` plus
+  `cell-delta-map.csv` for reading the operating pocket directly. The strongest
+  connected positive region is moderate-to-high near-escape velocity, especially
+  above velocity scale `1.05`; larger-radius low-velocity cells form the first
+  crisp local failure boundary.
 - **Phase 10, claim ratchet**: Strengthen public language only when baseline
   metrics and failure maps justify it.
 - **Spatial extension**: Extend from planar to full 3D three-body problem.

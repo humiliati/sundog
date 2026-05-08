@@ -397,6 +397,36 @@ function makeBestByCellRows(envelopeRows) {
   ));
 }
 
+function velocityColumn(value) {
+  return `v_${String(value).replace(".", "p")}`;
+}
+
+function makeCellMatrixRows(bestByCellRows, valueKey) {
+  const velocities = [...new Set(bestByCellRows.map((row) => row.velocityScale))].sort((a, b) => a - b);
+  const groups = new Map();
+  for (const row of bestByCellRows) {
+    const key = `${row.regime}\t${row.radiusScale}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
+  }
+
+  return Array.from(groups.entries()).map(([key, rows]) => {
+    const [regime, radiusScaleText] = key.split("\t");
+    const byVelocity = new Map(rows.map((row) => [row.velocityScale, row]));
+    return {
+      regime,
+      radiusScale: Number.parseFloat(radiusScaleText),
+      ...Object.fromEntries(velocities.map((velocity) => [
+        velocityColumn(velocity),
+        byVelocity.get(velocity)?.[valueKey] ?? null,
+      ])),
+    };
+  }).sort((a, b) => (
+    a.regime.localeCompare(b.regime)
+    || a.radiusScale - b.radiusScale
+  ));
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(repoRoot, args.out);
@@ -458,6 +488,8 @@ async function main() {
   const envelopeRows = summarizeRows(pairedRows, args, true);
   const aggregateRows = summarizeRows(pairedRows, args, false);
   const bestByCellRows = makeBestByCellRows(envelopeRows);
+  const cellClassMapRows = makeCellMatrixRows(bestByCellRows, "bestRegionClass");
+  const cellDeltaMapRows = makeCellMatrixRows(bestByCellRows, "bestSurvivalDeltaVsPassive");
   const candidateRows = envelopeRows.filter((row) => row.candidateEnvelope);
 
   await writeFile(path.join(outDir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
@@ -465,6 +497,8 @@ async function main() {
   await writeFile(path.join(outDir, "envelope-map.csv"), rowsToCsv(envelopeRows), "utf8");
   await writeFile(path.join(outDir, "aggregate-envelope.csv"), rowsToCsv(aggregateRows), "utf8");
   await writeFile(path.join(outDir, "best-by-cell.csv"), rowsToCsv(bestByCellRows), "utf8");
+  await writeFile(path.join(outDir, "cell-class-map.csv"), rowsToCsv(cellClassMapRows), "utf8");
+  await writeFile(path.join(outDir, "cell-delta-map.csv"), rowsToCsv(cellDeltaMapRows), "utf8");
   await writeFile(
     path.join(outDir, "candidate-envelope.csv"),
     rowsToCsv(candidateRows, envelopeRows.length > 0 ? Object.keys(envelopeRows[0]) : []),
@@ -477,7 +511,7 @@ async function main() {
   }, {});
 
   console.log(`[threebody] wrote ${manifest.trials.length} phase 9 trials to ${path.relative(repoRoot, outDir)}`);
-  console.log(`[threebody] wrote paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, and candidate-envelope.csv`);
+  console.log(`[threebody] wrote paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv`);
   console.log(`[threebody] candidate envelope rows ${candidateRows.length}/${envelopeRows.length}`);
   console.log(`[threebody] outcomes ${JSON.stringify(outcomeCounts)}`);
 }
