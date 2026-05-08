@@ -15,6 +15,7 @@ const canvas = document.getElementById("balance-canvas");
 const ctx = canvas.getContext("2d");
 const modeButtons = Array.from(document.querySelectorAll("[data-mode]"));
 const presetSelect = document.getElementById("preset-select");
+const seedInput = document.getElementById("seed-input");
 const playPauseButton = document.getElementById("btn-play-pause");
 const resetButton = document.getElementById("btn-reset");
 const disturbButton = document.getElementById("btn-disturb");
@@ -23,6 +24,9 @@ const noiseInput = document.getElementById("sensor-noise");
 const delayInput = document.getElementById("sensor-delay");
 const forceInput = document.getElementById("force-limit");
 const diagnosticsCheckbox = document.getElementById("show-diagnostics");
+const copyReplayButton = document.getElementById("btn-copy-replay");
+const refreshReplayButton = document.getElementById("btn-refresh-replay");
+const replayToken = document.getElementById("replay-token");
 const statusDisplay = document.getElementById("balance-status");
 const metricsDisplay = document.getElementById("balance-metrics");
 const phaseDisplay = document.getElementById("phase-display");
@@ -38,12 +42,60 @@ let currentSensor = null;
 let currentControl = { force: 0, rawForce: 0, saturated: false, phase: "PASSIVE", reason: "no force" };
 let disturbanceTicks = 0;
 let lastFrameTime = performance.now();
+let initialStateOverride = null;
+let durationOverride = null;
 
 for (const [key, preset] of Object.entries(BALANCE_PRESETS)) {
   const option = document.createElement("option");
   option.value = key;
   option.textContent = preset.label;
   presetSelect.appendChild(option);
+}
+
+function finiteNumber(value, fallback = null) {
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function integerNumber(value, fallback = null) {
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function queryNumber(params, names, fallback = null) {
+  for (const name of names) {
+    if (params.has(name)) return finiteNumber(params.get(name), fallback);
+  }
+  return fallback;
+}
+
+function readReplaySettings() {
+  const params = new URLSearchParams(window.location.search);
+  const preset = BALANCE_PRESETS[params.get("preset")] ? params.get("preset") : null;
+  const mode = modeButtons.some((button) => button.dataset.mode === params.get("mode"))
+    ? params.get("mode")
+    : null;
+  const seed = queryNumber(params, ["seed"], null);
+  const initialState = ["x", "xDot", "theta", "thetaDot"].every((key) => params.has(key))
+    ? {
+        x: finiteNumber(params.get("x")),
+        xDot: finiteNumber(params.get("xDot")),
+        theta: finiteNumber(params.get("theta")),
+        thetaDot: finiteNumber(params.get("thetaDot")),
+      }
+    : null;
+
+  return {
+    preset,
+    mode,
+    seed,
+    lightElevationDeg: queryNumber(params, ["light", "elevation", "lightElevation"], null),
+    forceLimit: queryNumber(params, ["force", "forceLimit"], null),
+    sensorNoiseStd: queryNumber(params, ["noise", "sensorNoise", "sensorNoiseStd"], null),
+    sensorDelaySteps: queryNumber(params, ["delay", "sensorDelay", "sensorDelaySteps"], null),
+    duration: queryNumber(params, ["duration"], null),
+    initialState: initialState && Object.values(initialState).every(Number.isFinite) ? initialState : null,
+  };
 }
 
 function currentConfig(overrides = {}) {
@@ -54,7 +106,9 @@ function currentConfig(overrides = {}) {
     sensorNoiseStd: Number.parseFloat(noiseInput.value),
     sensorDelaySteps: Number.parseInt(delayInput.value, 10),
     forceLimit: Number.parseFloat(forceInput.value),
-    seed: 20260508,
+    seed: Math.max(0, integerNumber(seedInput.value, 20260508)),
+    ...(durationOverride ? { duration: durationOverride } : {}),
+    ...(initialStateOverride ? { initialState: initialStateOverride } : {}),
     ...overrides,
   });
 }
@@ -71,6 +125,7 @@ function resetSimulation() {
   isPlaying = true;
   playPauseButton.textContent = "Pause";
   updateModeButtons();
+  updateReplayToken();
 }
 
 function syncControlValue(input) {
@@ -88,9 +143,78 @@ function applyPresetControlDefaults() {
   delayInput.value = Object.hasOwn(presetConfig, "sensorDelaySteps")
     ? presetConfig.sensorDelaySteps
     : presetDefaults.sensorDelaySteps;
-  for (const input of [presetSelect, lightElevationInput, noiseInput, delayInput, forceInput]) {
+  for (const input of [presetSelect, seedInput, lightElevationInput, noiseInput, delayInput, forceInput]) {
     syncControlValue(input);
   }
+}
+
+function applyReplaySettings(settings) {
+  if (settings.preset) presetSelect.value = settings.preset;
+  if (settings.mode) currentMode = settings.mode;
+  if (Number.isFinite(settings.seed)) seedInput.value = String(Math.max(0, Math.round(settings.seed)));
+  if (Number.isFinite(settings.lightElevationDeg)) lightElevationInput.value = String(settings.lightElevationDeg);
+  if (Number.isFinite(settings.forceLimit)) forceInput.value = String(settings.forceLimit);
+  if (Number.isFinite(settings.sensorNoiseStd)) noiseInput.value = String(settings.sensorNoiseStd);
+  if (Number.isFinite(settings.sensorDelaySteps)) delayInput.value = String(Math.round(settings.sensorDelaySteps));
+  if (Number.isFinite(settings.duration) && settings.duration > 0) durationOverride = settings.duration;
+  if (settings.initialState) initialStateOverride = settings.initialState;
+  for (const input of [presetSelect, seedInput, lightElevationInput, noiseInput, delayInput, forceInput]) {
+    syncControlValue(input);
+  }
+}
+
+function getReplayInitialState() {
+  if (initialStateOverride) return initialStateOverride;
+  return BALANCE_PRESETS[presetSelect.value]?.state ?? BALANCE_PRESETS.easy.state;
+}
+
+function roundedParam(value, digits = 6) {
+  return String(Number.isFinite(value) ? Number.parseFloat(value.toFixed(digits)) : value);
+}
+
+function buildReplayUrl() {
+  const cfg = currentConfig();
+  const initial = getReplayInitialState();
+  const params = new URLSearchParams();
+  params.set("mode", currentMode);
+  params.set("preset", cfg.preset);
+  params.set("seed", String(cfg.seed));
+  params.set("light", roundedParam(cfg.lightElevationDeg, 3));
+  params.set("force", roundedParam(cfg.forceLimit, 3));
+  params.set("noise", roundedParam(cfg.sensorNoiseStd, 6));
+  params.set("delay", String(Math.round(cfg.sensorDelaySteps)));
+  params.set("duration", roundedParam(cfg.duration, 3));
+  params.set("x", roundedParam(initial.x));
+  params.set("xDot", roundedParam(initial.xDot));
+  params.set("theta", roundedParam(initial.theta));
+  params.set("thetaDot", roundedParam(initial.thetaDot));
+  return `${window.location.origin}${window.location.pathname}?${params}`;
+}
+
+function buildHarnessReplayCommand() {
+  return `npm run balance:phase7:replay -- "${buildReplayUrl()}"`;
+}
+
+function updateReplayToken() {
+  if (replayToken) replayToken.textContent = buildReplayUrl();
+}
+
+async function copyReplayUrl() {
+  const url = buildReplayUrl();
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(url);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = url;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+  }
+  replayToken.textContent = url;
 }
 
 function resizeCanvas() {
@@ -405,20 +529,51 @@ disturbButton.addEventListener("click", () => {
 for (const input of [lightElevationInput, noiseInput, delayInput, forceInput]) {
   input.addEventListener("input", () => {
     syncControlValue(input);
+    updateReplayToken();
   });
 }
 
+seedInput.addEventListener("change", () => {
+  syncControlValue(seedInput);
+  resetSimulation();
+});
+
+seedInput.addEventListener("input", () => {
+  syncControlValue(seedInput);
+  updateReplayToken();
+});
+
 presetSelect.addEventListener("change", () => {
+  initialStateOverride = null;
   applyPresetControlDefaults();
   resetSimulation();
 });
+
+copyReplayButton.addEventListener("click", () => {
+  copyReplayUrl().catch((error) => {
+    replayToken.textContent = `copy failed: ${error.message}`;
+  });
+});
+
+refreshReplayButton.addEventListener("click", updateReplayToken);
 
 window.addEventListener("resize", () => {
   resizeCanvas();
   draw();
 });
 
+window.__sundogBalanceReplay = () => ({
+  url: buildReplayUrl(),
+  harnessCommand: buildHarnessReplayCommand(),
+  config: currentConfig(),
+  initialState: getReplayInitialState(),
+  sample: serializeBalanceSample(state, currentSensor, currentControl, currentConfig()),
+});
+
+const replaySettings = readReplaySettings();
+if (replaySettings.preset) presetSelect.value = replaySettings.preset;
 resizeCanvas();
 applyPresetControlDefaults();
+applyReplaySettings(replaySettings);
 resetSimulation();
 requestAnimationFrame(animate);

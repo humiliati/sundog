@@ -103,26 +103,6 @@
             border-color: var(--accent-gold);
         }
 
-        /* Section Styles */
-        section {
-            padding: 6rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--primary-dark);
-            text-align: center;
-        }
-
-        section p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
         /* Page-local: section / card / grid styling lives in sundog-theme.css.
            Only retained: page-specific .app-card-img dimensions, .comparison-grid,
            and the .comparison-side list styling, which are not in shared. */
@@ -169,81 +149,15 @@
             color: var(--accent-gold);
         }
 
-        /* Visual Proof Section */
-        .proof-section {
-            background: var(--bg-light);
-        }
-
-        .proof-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .proof-item {
-            background: white;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
-            padding: 1.5rem;
-        }
-
-        .proof-item h4 {
-            color: var(--primary-dark);
-            margin-bottom: 1rem;
-        }
-
+        /* Page-local: .proof-placeholder dimensions retained — shared sets bg/border but not size */
         .proof-placeholder {
             width: 100%;
             height: 250px;
-            background: linear-gradient(135deg, #E0E0E0 0%, #F5F5F5 100%);
-            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #888;
-            font-family: var(--sd-font-data);
             margin-bottom: 1rem;
-        }
-
-        /* Research Posture Section */
-        .research-section {
-            background: #F8F9FA;
-        }
-
-        .research-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .research-highlights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .research-highlight {
-            padding: 1.5rem;
-            background: white;
-            border-radius: 8px;
-        }
-
-        .research-highlight h4 {
-            color: var(--primary-dark);
-            margin-bottom: 1rem;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: var(--primary-dark);
-            color: var(--text-light);
-            text-align: center;
-        }
-
-        .cta-section h2 {
-            color: var(--text-light);
         }
 
         .cta-grid {
