@@ -319,8 +319,9 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   thrust authority, target tidal magnitude, sensor noise, delay, and timestep to
   map success, failure, and ambiguity regions. `npm run threebody:phase9` now
   runs the first map for guarded accelerometer TRACK. The initial smoke map
-  emitted 1,944 trials and writes `envelope-map.csv`, `aggregate-envelope.csv`,
-  `best-by-cell.csv`, and `candidate-envelope.csv` under
+  emitted 1,944 trials and writes a primary `trial-outcomes.csv` plus
+  `envelope-map.csv`, `aggregate-envelope.csv`, `best-by-cell.csv`, and
+  `candidate-envelope.csv` under
   `results/threebody/phase9-operating-envelope/`. The first positive pocket is
   near-escape; stable cells are mostly neutral because passive already survives,
   and chaotic cells are mostly neutral or risky.
@@ -330,7 +331,23 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   `cell-delta-map.csv` for reading the operating pocket directly. The strongest
   connected positive region is moderate-to-high near-escape velocity, especially
   above velocity scale `1.05`; larger-radius low-velocity cells form the first
-  crisp local failure boundary.
+  crisp local failure boundary. The primary CSV now labels each trial as helped,
+  hurt, tied, time-helped, or time-hurt versus passive and adds a
+  `failure_mechanism` column. In the refined run, harmful rows are mostly
+  `controller_destabilized_or_shortened_passive`, with a smaller
+  `control_effort_or_saturation` bucket; the current failure boundary is not
+  primarily a sensor-noise-floor story.
+  `npm run threebody:phase9:lock` repeats the refined near-escape map with 24
+  seeds, emitting 9,408 trials under
+  `results/threebody/phase9-locked-near-escape/`. The pocket survives the
+  larger slate: 41 best cells are promising, 7 are mixed, and 1 is negative.
+  The strongest rows remain larger-radius, higher-velocity near-escape cells.
+  `npm run threebody:phase9:axes` then probes that locked high-velocity pocket
+  across mass ratios `0.01`, `0.3`, and `1` and timesteps `0.008`, `0.01`, and
+  `0.012`. The scoped run emitted 1,296 trials under
+  `results/threebody/phase9-mass-timestep/` and kept 72 candidate rows out of
+  81, suggesting the pocket is not merely an equal-mass/default-timestep
+  artifact inside the tested slice.
 - **Phase 10, claim ratchet**: Strengthen public language only when baseline
   metrics and failure maps justify it.
 - **Spatial extension**: Extend from planar to full 3D three-body problem.

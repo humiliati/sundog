@@ -26,13 +26,14 @@ function parseArgs(argv) {
     regimes: ["stable", "near_escape", "chaotic"],
     modes: ["off", "track_sensor_accel_guarded"],
     duration: 8,
-    dt: 0.01,
+    timesteps: [0.01],
     logEvery: 40,
-    massRatio: 1,
+    massRatios: [1],
     targetTidal: 2,
     tidalSpikeThreshold: 50,
     localAccelerationWarningThreshold: 10,
     eventWarningHorizon: 1,
+    sensorAuditEvery: 80,
     radiusScales: [0.95, 1, 1.05],
     velocityScales: [0.9, 1, 1.1],
     thrustLimits: [0.4, 0.6],
@@ -57,13 +58,16 @@ function parseArgs(argv) {
     else if (flag === "--regimes") args.regimes = parseList(value);
     else if (flag === "--modes") args.modes = parseList(value);
     else if (flag === "--duration") args.duration = Number.parseFloat(value);
-    else if (flag === "--dt") args.dt = Number.parseFloat(value);
+    else if (flag === "--dt") args.timesteps = [Number.parseFloat(value)];
+    else if (flag === "--timesteps") args.timesteps = parseNumberList(value);
     else if (flag === "--log-every") args.logEvery = Number.parseInt(value, 10);
-    else if (flag === "--mass-ratio") args.massRatio = Number.parseFloat(value);
+    else if (flag === "--mass-ratio") args.massRatios = [Number.parseFloat(value)];
+    else if (flag === "--mass-ratios") args.massRatios = parseNumberList(value);
     else if (flag === "--target-tidal") args.targetTidal = Number.parseFloat(value);
     else if (flag === "--tidal-spike-threshold") args.tidalSpikeThreshold = Number.parseFloat(value);
     else if (flag === "--local-acceleration-warning-threshold") args.localAccelerationWarningThreshold = Number.parseFloat(value);
     else if (flag === "--event-warning-horizon") args.eventWarningHorizon = Number.parseFloat(value);
+    else if (flag === "--sensor-audit-every") args.sensorAuditEvery = Number.parseInt(value, 10);
     else if (flag === "--radius-scales") args.radiusScales = parseNumberList(value);
     else if (flag === "--velocity-scales") args.velocityScales = parseNumberList(value);
     else if (flag === "--thrust-limits") args.thrustLimits = parseNumberList(value);
@@ -78,9 +82,13 @@ function parseArgs(argv) {
 
   if (!Number.isInteger(args.seeds) || args.seeds < 1) throw new Error("--seeds must be a positive integer");
   if (!Number.isFinite(args.duration) || args.duration <= 0) throw new Error("--duration must be positive");
-  if (!Number.isFinite(args.dt) || args.dt <= 0) throw new Error("--dt must be positive");
   if (!Number.isInteger(args.logEvery) || args.logEvery < 1) throw new Error("--log-every must be a positive integer");
+  if (!Number.isInteger(args.sensorAuditEvery) || args.sensorAuditEvery < 1) {
+    throw new Error("--sensor-audit-every must be a positive integer");
+  }
   for (const [name, values] of [
+    ["--mass-ratios", args.massRatios],
+    ["--timesteps", args.timesteps],
     ["--radius-scales", args.radiusScales],
     ["--velocity-scales", args.velocityScales],
     ["--thrust-limits", args.thrustLimits],
@@ -93,6 +101,8 @@ function parseArgs(argv) {
       throw new Error(`${name} must contain non-negative finite numbers`);
     }
   }
+  if (args.massRatios.some((value) => value <= 0)) throw new Error("--mass-ratios values must be positive");
+  if (args.timesteps.some((value) => value <= 0)) throw new Error("--timesteps values must be positive");
   if (!args.modes.includes("off")) {
     throw new Error("--modes must include off for matched passive baselines");
   }
@@ -100,6 +110,8 @@ function parseArgs(argv) {
   args.radiusScales = [...new Set(args.radiusScales)].sort((a, b) => a - b);
   args.velocityScales = [...new Set(args.velocityScales)].sort((a, b) => a - b);
   args.thrustLimits = [...new Set(args.thrustLimits)].sort((a, b) => a - b);
+  args.massRatios = [...new Set(args.massRatios)].sort((a, b) => a - b);
+  args.timesteps = [...new Set(args.timesteps)].sort((a, b) => a - b);
   args.sensorNoiseSweep = [...new Set(args.sensorNoiseSweep)].sort((a, b) => a - b);
   args.trackGuardMinRadiusSweep = [...new Set(args.trackGuardMinRadiusSweep)].sort((a, b) => a - b);
   args.trackGuardMaxLocalAccelerationSweep = [...new Set(args.trackGuardMaxLocalAccelerationSweep)].sort((a, b) => a - b);
@@ -148,6 +160,68 @@ function compareOutcome(outcome, baselineOutcome) {
   return (rank[outcome] ?? 0) - (rank[baselineOutcome] ?? 0);
 }
 
+function summarizeSensorAudit(sensorAudit) {
+  if (!Array.isArray(sensorAudit) || sensorAudit.length === 0) {
+    return {
+      sensorSampleCount: 0,
+      sensorDelayWarmupCount: 0,
+      meanSensorMagnitudeRelError: null,
+      meanSensorMagnitudeAbsError: null,
+      meanSensorComponentRmse: null,
+      maxSensorMagnitudeAbsError: null,
+    };
+  }
+
+  return {
+    sensorSampleCount: sensorAudit.length,
+    sensorDelayWarmupCount: sensorAudit.filter((sample) => sample.delayWarmup === true).length,
+    meanSensorMagnitudeRelError: mean(sensorAudit.map((sample) => sample.magnitudeRelError)),
+    meanSensorMagnitudeAbsError: mean(sensorAudit.map((sample) => sample.magnitudeAbsError)),
+    meanSensorComponentRmse: mean(sensorAudit.map((sample) => sample.componentRmse)),
+    maxSensorMagnitudeAbsError: Math.max(...sensorAudit.map((sample) => sample.magnitudeAbsError).filter(Number.isFinite)),
+  };
+}
+
+function outcomeEffect(row) {
+  if (!Number.isFinite(row.outcomeDeltaVsPassive)) return "unpaired";
+  if (row.outcomeDeltaVsPassive > 0) return "helped";
+  if (row.outcomeDeltaVsPassive < 0) return "hurt";
+  if (Number.isFinite(row.simulatedTimeDeltaVsPassive)) {
+    if (row.simulatedTimeDeltaVsPassive > 1e-9) return "time_helped";
+    if (row.simulatedTimeDeltaVsPassive < -1e-9) return "time_hurt";
+  }
+  return "tied";
+}
+
+function failureMechanism(row) {
+  const effect = outcomeEffect(row);
+  if (effect !== "hurt" && effect !== "time_hurt") return "none";
+
+  const passiveSurvived = row.passiveOutcome === "bounded";
+  const controllerFailed = row.terminalOutcome !== "bounded";
+  const passiveLastedLonger = Number.isFinite(row.simulatedTimeDeltaVsPassive)
+    && row.simulatedTimeDeltaVsPassive < -0.5;
+  const deltaVSpike = Number.isFinite(row.totalDeltaV)
+    && Number.isFinite(row.passiveTotalDeltaV)
+    && row.totalDeltaV > row.passiveTotalDeltaV + 0.5;
+  const saturationSpike = Number.isFinite(row.saturationCount)
+    && Number.isFinite(row.passiveSaturationCount)
+    && row.saturationCount > row.passiveSaturationCount + 10;
+  const noisyEstimate = Number.isFinite(row.meanSensorMagnitudeRelError)
+    && row.meanSensorMagnitudeRelError > 1;
+
+  if ((passiveSurvived && controllerFailed) || passiveLastedLonger) {
+    return "controller_destabilized_or_shortened_passive";
+  }
+  if (deltaVSpike || saturationSpike) {
+    return "control_effort_or_saturation";
+  }
+  if (noisyEstimate) {
+    return "sensor_noise_floor";
+  }
+  return "unclassified_harm";
+}
+
 function scaleInitialParticle(particle, radiusScale, velocityScale) {
   return {
     x: particle.x * radiusScale,
@@ -159,24 +233,30 @@ function scaleInitialParticle(particle, radiusScale, velocityScale) {
 
 function envelopeCases(args) {
   const cases = [];
-  for (const radiusScale of args.radiusScales) {
-    for (const velocityScale of args.velocityScales) {
-      for (const thrustLimit of args.thrustLimits) {
-        for (const sensorNoiseStd of args.sensorNoiseSweep) {
-          for (const trackGuardMinRadius of args.trackGuardMinRadiusSweep) {
-            for (const trackGuardMaxLocalAcceleration of args.trackGuardMaxLocalAccelerationSweep) {
-              for (const trackGuardMaxTidalMagnitude of args.trackGuardMaxTidalMagnitudeSweep) {
-                cases.push({
-                  radiusScale,
-                  velocityScale,
-                  thrustLimit,
-                  sensorNoiseStd,
-                  sensorDelaySteps: 0,
-                  microManeuverContaminationStd: 0.08,
-                  trackGuardMinRadius,
-                  trackGuardMaxLocalAcceleration,
-                  trackGuardMaxTidalMagnitude,
-                });
+  for (const massRatio of args.massRatios) {
+    for (const timestep of args.timesteps) {
+      for (const radiusScale of args.radiusScales) {
+        for (const velocityScale of args.velocityScales) {
+          for (const thrustLimit of args.thrustLimits) {
+            for (const sensorNoiseStd of args.sensorNoiseSweep) {
+              for (const trackGuardMinRadius of args.trackGuardMinRadiusSweep) {
+                for (const trackGuardMaxLocalAcceleration of args.trackGuardMaxLocalAccelerationSweep) {
+                  for (const trackGuardMaxTidalMagnitude of args.trackGuardMaxTidalMagnitudeSweep) {
+                    cases.push({
+                      massRatio,
+                      timestep,
+                      radiusScale,
+                      velocityScale,
+                      thrustLimit,
+                      sensorNoiseStd,
+                      sensorDelaySteps: 0,
+                      microManeuverContaminationStd: 0.08,
+                      trackGuardMinRadius,
+                      trackGuardMaxLocalAcceleration,
+                      trackGuardMaxTidalMagnitude,
+                    });
+                  }
+                }
               }
             }
           }
@@ -189,6 +269,8 @@ function envelopeCases(args) {
 
 function caseId(envelopeCase) {
   return [
+    `mu_${envelopeCase.massRatio}`,
+    `dt_${envelopeCase.timestep}`,
     `r_${envelopeCase.radiusScale}`,
     `v_${envelopeCase.velocityScale}`,
     `thrust_${envelopeCase.thrustLimit}`,
@@ -210,15 +292,16 @@ function makeTrialConfig(args, envelopeCase, seed, regime, mode) {
     regime,
     controllerMode: mode,
     duration: args.duration,
-    dt: args.dt,
+    dt: envelopeCase.timestep,
     logEvery: args.logEvery,
-    massRatio: args.massRatio,
+    massRatio: envelopeCase.massRatio,
     thrustLimit: envelopeCase.thrustLimit,
     targetTidal: args.targetTidal,
     tidalSpikeThreshold: args.tidalSpikeThreshold,
     localAccelerationWarningThreshold: args.localAccelerationWarningThreshold,
     eventWarningHorizon: args.eventWarningHorizon,
-    sensorAuditVariants: [],
+    sensorAuditVariants: ["accelerometer_array_noisy"],
+    sensorAuditEvery: args.sensorAuditEvery,
     sensorNoiseStd: envelopeCase.sensorNoiseStd,
     sensorDelaySteps: envelopeCase.sensorDelaySteps,
     microManeuverContaminationStd: envelopeCase.microManeuverContaminationStd,
@@ -237,11 +320,13 @@ function makePairedRows(trials) {
 
   return trials.filter((trial) => trial.controllerMode !== "off").map((trial) => {
     const passive = byKey.get(`${trial.caseId}\t${trial.regime}\t${trial.seed}\toff`);
-    return {
+    const row = {
       caseId: trial.caseId,
       regime: trial.regime,
       seed: trial.seed,
       controllerMode: trial.controllerMode,
+      massRatio: trial.massRatio,
+      timestep: trial.timestep,
       radiusScale: trial.radiusScale,
       velocityScale: trial.velocityScale,
       thrustLimit: trial.thrustLimit,
@@ -256,14 +341,31 @@ function makePairedRows(trials) {
       passiveSimulatedTime: passive?.summary.simulatedTime,
       simulatedTimeDeltaVsPassive: passive ? trial.summary.simulatedTime - passive.summary.simulatedTime : null,
       totalDeltaV: trial.summary.totalDeltaV,
+      passiveTotalDeltaV: passive?.summary.totalDeltaV,
+      deltaVDeltaVsPassive: passive ? trial.summary.totalDeltaV - passive.summary.totalDeltaV : null,
       minPrimaryDistance: trial.summary.minPrimaryDistance,
       passiveMinPrimaryDistance: passive?.summary.minPrimaryDistance,
+      minPrimaryDistanceDeltaVsPassive: passive ? trial.summary.minPrimaryDistance - passive.summary.minPrimaryDistance : null,
+      saturationCount: trial.summary.saturationCount,
+      passiveSaturationCount: passive?.summary.saturationCount,
+      saturationDeltaVsPassive: passive ? trial.summary.saturationCount - passive.summary.saturationCount : null,
+      targetBandLossCount: trial.summary.targetBandLossCount,
+      passiveTargetBandLossCount: passive?.summary.targetBandLossCount,
+      targetBandLossDeltaVsPassive: passive ? trial.summary.targetBandLossCount - passive.summary.targetBandLossCount : null,
+      maxRadius: trial.summary.maxRadius,
+      passiveMaxRadius: passive?.summary.maxRadius,
       tidalMagnitudeAuroc: trial.summary.tidalMagnitudeAuroc,
       localAccelerationMagnitudeAuroc: trial.summary.localAccelerationMagnitudeAuroc,
+      ...summarizeSensorAudit(trial.sensorAudit),
       log: trial.log,
     };
+    row.outcomeEffect = outcomeEffect(row);
+    row.failureMechanism = failureMechanism(row);
+    return row;
   }).sort((a, b) => (
     a.regime.localeCompare(b.regime)
+    || a.massRatio - b.massRatio
+    || a.timestep - b.timestep
     || a.radiusScale - b.radiusScale
     || a.velocityScale - b.velocityScale
     || a.thrustLimit - b.thrustLimit
@@ -274,12 +376,71 @@ function makePairedRows(trials) {
   ));
 }
 
+function makeTrialOutcomeRows(pairedRows) {
+  return pairedRows.map((row) => ({
+    seed: row.seed,
+    regime: row.regime,
+    mass_ratio: row.massRatio,
+    timestep: row.timestep,
+    radius_scale: row.radiusScale,
+    velocity_scale: row.velocityScale,
+    thrust_limit: row.thrustLimit,
+    sensor_noise_std: row.sensorNoiseStd,
+    guard_min_radius: row.trackGuardMinRadius,
+    guard_max_local_acceleration: row.trackGuardMaxLocalAcceleration,
+    guard_max_tidal_magnitude: row.trackGuardMaxTidalMagnitude,
+    controller_mode: row.controllerMode,
+    terminal_outcome: row.terminalOutcome,
+    passive_terminal_outcome: row.passiveOutcome,
+    outcome_delta_vs_passive: row.outcomeDeltaVsPassive,
+    outcome_effect: row.outcomeEffect,
+    failure_mechanism: row.failureMechanism,
+    simulated_time: row.simulatedTime,
+    passive_simulated_time: row.passiveSimulatedTime,
+    simulated_time_delta_vs_passive: row.simulatedTimeDeltaVsPassive,
+    total_delta_v: row.totalDeltaV,
+    passive_total_delta_v: row.passiveTotalDeltaV,
+    delta_v_delta_vs_passive: row.deltaVDeltaVsPassive,
+    min_primary_distance: row.minPrimaryDistance,
+    passive_min_primary_distance: row.passiveMinPrimaryDistance,
+    min_primary_distance_delta_vs_passive: row.minPrimaryDistanceDeltaVsPassive,
+    saturation_count: row.saturationCount,
+    passive_saturation_count: row.passiveSaturationCount,
+    saturation_delta_vs_passive: row.saturationDeltaVsPassive,
+    target_band_loss_count: row.targetBandLossCount,
+    passive_target_band_loss_count: row.passiveTargetBandLossCount,
+    target_band_loss_delta_vs_passive: row.targetBandLossDeltaVsPassive,
+    max_radius: row.maxRadius,
+    passive_max_radius: row.passiveMaxRadius,
+    tidal_magnitude_auroc: row.tidalMagnitudeAuroc,
+    local_acceleration_magnitude_auroc: row.localAccelerationMagnitudeAuroc,
+    sensor_sample_count: row.sensorSampleCount,
+    sensor_delay_warmup_count: row.sensorDelayWarmupCount,
+    mean_sensor_magnitude_rel_error: row.meanSensorMagnitudeRelError,
+    mean_sensor_magnitude_abs_error: row.meanSensorMagnitudeAbsError,
+    mean_sensor_component_rmse: row.meanSensorComponentRmse,
+    max_sensor_magnitude_abs_error: row.maxSensorMagnitudeAbsError,
+    trial_log: row.log,
+    case_id: row.caseId,
+  }));
+}
+
+function mostCommon(values) {
+  const counts = new Map();
+  for (const value of values.filter(Boolean)) {
+    counts.set(value, (counts.get(value) ?? 0) + 1);
+  }
+  return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] ?? null;
+}
+
 function summarizeRows(rows, args, includeRegime = true) {
   const groups = new Map();
   for (const row of rows) {
     const key = [
       ...(includeRegime ? [row.regime] : []),
       row.controllerMode,
+      row.massRatio,
+      row.timestep,
       row.radiusScale,
       row.velocityScale,
       row.thrustLimit,
@@ -307,6 +468,7 @@ function summarizeRows(rows, args, includeRegime = true) {
       ? survivalRate - passiveSurvivalRate
       : null;
     const worsenedRate = ratio(worsened, group.length);
+    const harmfulRows = group.filter((row) => row.failureMechanism && row.failureMechanism !== "none");
     const candidateEnvelope = survivalDeltaVsPassive !== null
       && survivalDeltaVsPassive >= args.candidateMinSurvivalDelta
       && worsenedRate !== null
@@ -321,13 +483,15 @@ function summarizeRows(rows, args, includeRegime = true) {
     return {
       regime,
       controllerMode,
-      radiusScale: Number.parseFloat(values[offset + 1]),
-      velocityScale: Number.parseFloat(values[offset + 2]),
-      thrustLimit: Number.parseFloat(values[offset + 3]),
-      sensorNoiseStd: Number.parseFloat(values[offset + 4]),
-      trackGuardMinRadius: Number.parseFloat(values[offset + 5]),
-      trackGuardMaxLocalAcceleration: Number.parseFloat(values[offset + 6]),
-      trackGuardMaxTidalMagnitude: Number.parseFloat(values[offset + 7]),
+      massRatio: Number.parseFloat(values[offset + 1]),
+      timestep: Number.parseFloat(values[offset + 2]),
+      radiusScale: Number.parseFloat(values[offset + 3]),
+      velocityScale: Number.parseFloat(values[offset + 4]),
+      thrustLimit: Number.parseFloat(values[offset + 5]),
+      sensorNoiseStd: Number.parseFloat(values[offset + 6]),
+      trackGuardMinRadius: Number.parseFloat(values[offset + 7]),
+      trackGuardMaxLocalAcceleration: Number.parseFloat(values[offset + 8]),
+      trackGuardMaxTidalMagnitude: Number.parseFloat(values[offset + 9]),
       n: group.length,
       bounded,
       passiveBounded,
@@ -340,9 +504,18 @@ function summarizeRows(rows, args, includeRegime = true) {
       meanOutcomeDeltaVsPassive: roundMetric(mean(group.map((row) => row.outcomeDeltaVsPassive))),
       meanTimeDeltaVsPassive: roundMetric(mean(group.map((row) => row.simulatedTimeDeltaVsPassive))),
       meanDeltaV: roundMetric(mean(group.map((row) => row.totalDeltaV))),
+      meanPassiveDeltaV: roundMetric(mean(group.map((row) => row.passiveTotalDeltaV))),
+      meanDeltaVDeltaVsPassive: roundMetric(mean(group.map((row) => row.deltaVDeltaVsPassive))),
       meanMinPrimaryDistance: roundMetric(mean(group.map((row) => row.minPrimaryDistance))),
+      meanPassiveSimulatedTime: roundMetric(mean(group.map((row) => row.passiveSimulatedTime))),
+      meanPassiveMinPrimaryDistance: roundMetric(mean(group.map((row) => row.passiveMinPrimaryDistance))),
+      meanSaturationCount: roundMetric(mean(group.map((row) => row.saturationCount))),
+      meanSaturationDeltaVsPassive: roundMetric(mean(group.map((row) => row.saturationDeltaVsPassive))),
+      meanSensorMagnitudeRelError: roundMetric(mean(group.map((row) => row.meanSensorMagnitudeRelError))),
+      meanSensorMagnitudeAbsError: roundMetric(mean(group.map((row) => row.meanSensorMagnitudeAbsError))),
       meanTidalMagnitudeAuroc: roundMetric(mean(group.map((row) => row.tidalMagnitudeAuroc))),
       meanLocalAccelerationMagnitudeAuroc: roundMetric(mean(group.map((row) => row.localAccelerationMagnitudeAuroc))),
+      dominantFailureMechanism: mostCommon(harmfulRows.map((row) => row.failureMechanism)),
       candidateEnvelope,
       regionClass,
     };
@@ -351,6 +524,8 @@ function summarizeRows(rows, args, includeRegime = true) {
     || (b.survivalDeltaVsPassive ?? -Infinity) - (a.survivalDeltaVsPassive ?? -Infinity)
     || (a.worsenedRate ?? Infinity) - (b.worsenedRate ?? Infinity)
     || a.regime.localeCompare(b.regime)
+    || a.massRatio - b.massRatio
+    || a.timestep - b.timestep
     || a.radiusScale - b.radiusScale
     || a.velocityScale - b.velocityScale
     || a.thrustLimit - b.thrustLimit
@@ -361,13 +536,13 @@ function summarizeRows(rows, args, includeRegime = true) {
 function makeBestByCellRows(envelopeRows) {
   const groups = new Map();
   for (const row of envelopeRows) {
-    const key = `${row.regime}\t${row.radiusScale}\t${row.velocityScale}`;
+    const key = `${row.regime}\t${row.massRatio}\t${row.timestep}\t${row.radiusScale}\t${row.velocityScale}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(row);
   }
 
   return Array.from(groups.entries()).map(([key, rows]) => {
-    const [regime, radiusScaleText, velocityScaleText] = key.split("\t");
+    const [regime, massRatioText, timestepText, radiusScaleText, velocityScaleText] = key.split("\t");
     const best = [...rows].sort((a, b) => (
       Number(b.candidateEnvelope) - Number(a.candidateEnvelope)
       || (b.survivalDeltaVsPassive ?? -Infinity) - (a.survivalDeltaVsPassive ?? -Infinity)
@@ -376,6 +551,8 @@ function makeBestByCellRows(envelopeRows) {
     ))[0];
     return {
       regime,
+      massRatio: Number.parseFloat(massRatioText),
+      timestep: Number.parseFloat(timestepText),
       radiusScale: Number.parseFloat(radiusScaleText),
       velocityScale: Number.parseFloat(velocityScaleText),
       bestControllerMode: best.controllerMode,
@@ -389,9 +566,12 @@ function makeBestByCellRows(envelopeRows) {
       bestSurvivalDeltaVsPassive: best.survivalDeltaVsPassive,
       bestWorsenedRate: best.worsenedRate,
       bestMeanDeltaV: best.meanDeltaV,
+      bestDominantFailureMechanism: best.dominantFailureMechanism,
     };
   }).sort((a, b) => (
     a.regime.localeCompare(b.regime)
+    || a.massRatio - b.massRatio
+    || a.timestep - b.timestep
     || a.radiusScale - b.radiusScale
     || a.velocityScale - b.velocityScale
   ));
@@ -405,16 +585,18 @@ function makeCellMatrixRows(bestByCellRows, valueKey) {
   const velocities = [...new Set(bestByCellRows.map((row) => row.velocityScale))].sort((a, b) => a - b);
   const groups = new Map();
   for (const row of bestByCellRows) {
-    const key = `${row.regime}\t${row.radiusScale}`;
+    const key = `${row.regime}\t${row.massRatio}\t${row.timestep}\t${row.radiusScale}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(row);
   }
 
   return Array.from(groups.entries()).map(([key, rows]) => {
-    const [regime, radiusScaleText] = key.split("\t");
+    const [regime, massRatioText, timestepText, radiusScaleText] = key.split("\t");
     const byVelocity = new Map(rows.map((row) => [row.velocityScale, row]));
     return {
       regime,
+      massRatio: Number.parseFloat(massRatioText),
+      timestep: Number.parseFloat(timestepText),
       radiusScale: Number.parseFloat(radiusScaleText),
       ...Object.fromEntries(velocities.map((velocity) => [
         velocityColumn(velocity),
@@ -423,6 +605,8 @@ function makeCellMatrixRows(bestByCellRows, valueKey) {
     };
   }).sort((a, b) => (
     a.regime.localeCompare(b.regime)
+    || a.massRatio - b.massRatio
+    || a.timestep - b.timestep
     || a.radiusScale - b.radiusScale
   ));
 }
@@ -465,6 +649,7 @@ async function main() {
             controllerMode: mode,
             log: relativePath,
             summary: trial.summary,
+            sensorAudit: trial.sensorAudit,
           };
           trials.push(row);
           manifest.trials.push({
@@ -477,6 +662,7 @@ async function main() {
             initialParticle: config.initialParticle,
             log: relativePath,
             summary: trial.summary,
+            sensorAuditSampleCount: trial.sensorAudit.length,
           });
         }
       }
@@ -485,6 +671,7 @@ async function main() {
 
   manifest.completedAt = new Date().toISOString();
   const pairedRows = makePairedRows(trials);
+  const trialOutcomeRows = makeTrialOutcomeRows(pairedRows);
   const envelopeRows = summarizeRows(pairedRows, args, true);
   const aggregateRows = summarizeRows(pairedRows, args, false);
   const bestByCellRows = makeBestByCellRows(envelopeRows);
@@ -493,6 +680,7 @@ async function main() {
   const candidateRows = envelopeRows.filter((row) => row.candidateEnvelope);
 
   await writeFile(path.join(outDir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+  await writeFile(path.join(outDir, "trial-outcomes.csv"), rowsToCsv(trialOutcomeRows), "utf8");
   await writeFile(path.join(outDir, "paired.csv"), rowsToCsv(pairedRows), "utf8");
   await writeFile(path.join(outDir, "envelope-map.csv"), rowsToCsv(envelopeRows), "utf8");
   await writeFile(path.join(outDir, "aggregate-envelope.csv"), rowsToCsv(aggregateRows), "utf8");
@@ -511,7 +699,7 @@ async function main() {
   }, {});
 
   console.log(`[threebody] wrote ${manifest.trials.length} phase 9 trials to ${path.relative(repoRoot, outDir)}`);
-  console.log(`[threebody] wrote paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv`);
+  console.log(`[threebody] wrote trial-outcomes.csv, paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv`);
   console.log(`[threebody] candidate envelope rows ${candidateRows.length}/${envelopeRows.length}`);
   console.log(`[threebody] outcomes ${JSON.stringify(outcomeCounts)}`);
 }

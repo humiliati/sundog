@@ -330,6 +330,8 @@ Current command:
 ```bash
 npm run threebody:phase9
 npm run threebody:phase9:refine
+npm run threebody:phase9:lock
+npm run threebody:phase9:axes
 ```
 
 Sweep axes:
@@ -345,10 +347,18 @@ Sweep axes:
 Outputs:
 
 - `results/threebody/phase9-operating-envelope/manifest.json`;
-- `paired.csv`: per-trial controller rows paired against matched passive
-  baselines;
+- `trial-outcomes.csv`: primary cold-open data artifact. One row per
+  non-passive controller trial with seed, regime, initial-condition scales,
+  thrust, sensor noise, guard thresholds, terminal outcome, simulated time,
+  delta-v, minimum primary distance, matched passive outcome/time, outcome
+  effect, and failure mechanism.
+- `paired.csv`: legacy/internal per-trial controller rows paired against
+  matched passive baselines. Downstream aggregates should be derivable from
+  `trial-outcomes.csv`;
 - `envelope-map.csv`: one row per regime, initial-condition scale, thrust,
-  sensor-noise, and guard setting;
+  sensor-noise, and guard setting, including survival deltas, passive survival
+  time, controller effort, sensor-error summaries, and dominant failure
+  mechanism;
 - `aggregate-envelope.csv`: same map aggregated across regimes;
 - `best-by-cell.csv`: best setting per regime/radius/velocity cell;
 - `cell-class-map.csv`: map-shaped view of best region class by radius and
@@ -393,6 +403,48 @@ Refined near-escape map:
   and velocity scale `>= 0.95`, with especially strong deltas above velocity
   scale `1.05`. Larger-radius but low-velocity cells are negative/risky, which
   gives the first crisp local failure boundary.
+- Mechanistic labels now separate `control_effort_or_saturation` from
+  `controller_destabilized_or_shortened_passive`. In the refined map, the
+  negative/risky rows are mostly the second mechanism: passive trajectories
+  often last longer or survive, while guarded TRACK shortens or destabilizes
+  them. A smaller subset shows high controller effort/saturation. No refined
+  failure rows currently point primarily to the accelerometer sensor-noise floor.
+
+Locked near-escape map:
+
+- `npm run threebody:phase9:lock` repeats the refined 7x7 near-escape map with
+  24 seeds, producing 9,408 trials under
+  `results/threebody/phase9-locked-near-escape/`.
+- Positive candidate rows: 132 of 196 `envelope-map.csv` rows.
+- Best-cell summary: 41 promising cells, 7 mixed cells, and 1 negative cell.
+- The connected positive pocket survives the larger seed slate. The strongest
+  rows are still at larger radius and higher velocity: radius scale `1.05..1.075`
+  and velocity scale `1.1..1.15` often reach survival deltas of `0.79..0.92`
+  versus matched passive baselines.
+- Failure mechanisms remain honest: harmful trial rows split into 585
+  `controller_destabilized_or_shortened_passive` and 359
+  `control_effort_or_saturation`. This says the remaining boundary is mostly
+  controller interaction with trajectories passive already handles, not a
+  detected sensor-noise-floor failure.
+
+Mass-ratio and timestep probe:
+
+- `npm run threebody:phase9:axes` adds the first scoped mass-ratio/timestep
+  check inside the locked high-velocity near-escape pocket. It sweeps mass
+  ratios `0.01`, `0.3`, and `1`, timesteps `0.008`, `0.01`, and `0.012`, radius
+  scales `1.025..1.075`, velocity scales `1.05..1.15`, thrust `0.4`, sensor
+  noise `0`, and 8 seeds.
+- Default axes run emitted 1,296 trials under
+  `results/threebody/phase9-mass-timestep/`.
+- Positive candidate rows: 72 of 81 `envelope-map.csv` rows.
+- Best-cell summary by mass/timestep: every equal-mass cell is promising; mass
+  ratio `0.3` has 8 promising and 1 mixed cell per timestep; mass ratio `0.01`
+  has 7 promising and 2 mixed cells per timestep.
+- Interpretation: within this already-favorable high-velocity near-escape
+  pocket, the effect is not obviously an equal-mass resonance and is not
+  sensitive to the small timestep band tested. The lower mass-ratio maps often
+  show larger mean survival deltas because passive escapes more often there.
+  This does not yet prove robustness outside the locked pocket.
 
 Exit criterion: the public page can show where the method works, where it
 fails, and where the result is inconclusive.
@@ -707,6 +759,7 @@ Current Phase 9 implementation:
   regimes; three radius scales; three velocity scales; two thrust limits; three
   accelerometer-noise levels; and two guard-acceleration thresholds.
 - Outputs:
+  - `trial-outcomes.csv`
   - `paired.csv`
   - `envelope-map.csv`
   - `aggregate-envelope.csv`
@@ -723,7 +776,23 @@ Current Phase 9 implementation:
   promising cells, 6 neutral cells, 4 mixed cells, 3 risky cells, and 4 negative
   cells. The positive pocket is connected at moderate-to-high velocity scales;
   larger-radius low-velocity cells are the local failure boundary.
-- Next Phase 9 work: add mass-ratio and timestep axes, then replace the current
-  tuned guard constants with thresholds derived from local hazard scores.
+- Mechanism read: `trial-outcomes.csv` is now the primary data artifact, and
+  `envelope-map.csv` carries dominant failure mechanisms. In the refined run,
+  harmful trial rows split into 119
+  `controller_destabilized_or_shortened_passive` and 65
+  `control_effort_or_saturation`; negative/risky map rows are mostly
+  controller-shortened passive cases.
+- Locked near-escape result: `npm run threebody:phase9:lock` emits 9,408 trials
+  over the same refined 7x7 pocket with 24 seeds. The pocket survives: 41
+  best-cell rows are promising, 7 are mixed, and 1 is negative. The strongest
+  survival deltas remain at larger radius and higher velocity.
+- Mass-ratio/timestep result: `npm run threebody:phase9:axes` emits 1,296 trials
+  inside the locked high-velocity pocket. The pocket survives mass ratios
+  `0.01`, `0.3`, and `1` across timesteps `0.008`, `0.01`, and `0.012`, with
+  72 candidate rows out of 81. This supports the pocket as broader than the
+  equal-mass/default-timestep geometry, within the scoped slice.
+- Next Phase 9 work: replace the current tuned guard constants with thresholds
+  derived from local hazard scores, then expand the mass-ratio/timestep probe
+  outside the favorable pocket.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)
