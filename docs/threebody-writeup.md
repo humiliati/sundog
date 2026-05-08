@@ -6,9 +6,12 @@ The three-body problem is famously intractable in closed form — no general ana
 
 **Can an agent act usefully in three-body dynamics by reading the signatures around instability instead of reconstructing the full state?**
 
-The current answer is: promising enough to study, but not yet validated. The
-browser artifact demonstrates the proposed signal/control structure; it does
-not yet establish controller performance against baselines.
+The current answer is bounded but no longer merely speculative. In the tested
+planar restricted setup, a guarded accelerometer-proxy TRACK controller improves
+survival over passive and naive local baselines in a robust high-velocity
+near-escape operating pocket. The effect is not global: low-velocity and
+equal-mass boundary cells still show harms, and guard quantile choice controls
+the survival/effort trade.
 
 ## The Pattern
 
@@ -91,10 +94,10 @@ baseline.
 ### What This Is
 
 - A demonstration that indirect dynamical signatures respond coherently to changes in system state
-- A prototype showing how locally motivated proxies (tidal tensor, local
-  acceleration) can be wired into control-relevant signals
-- An implementation scaffold for scan/seek/track control using a local tidal
-  proxy
+- A prototype and batch harness showing how locally motivated proxies (tidal
+  tensor, local acceleration) can be wired into control-relevant signals
+- A mapped near-escape operating-envelope result for guarded accelerometer-proxy
+  TRACK control
 - A real-time browser visualization showing the coupling between controller action and signature response
 
 ### What This Is Not
@@ -122,9 +125,11 @@ where:
 2. Thrust authority is sufficient relative to tidal gradients
 3. Events evolve at timescales comparable to or slower than controller response
 
-This is not a universal theorem, and the current artifact has not yet measured
-comparable control performance. The experiment still needs benchmark runs,
-oracle/no-control comparisons, and a documented operating envelope.
+This is not a universal theorem. The current evidence supports a bounded
+near-escape pocket, not general three-body control. Phase 11 shows the pocket is
+not an artifact of a single guard quantile, but also confirms that lower
+velocity and equal-mass boundary cells remain the first regions where the
+controller should not be used.
 
 ## Connection to Photometric Alignment
 
@@ -135,13 +140,13 @@ The three-body experiment maps cleanly onto the existing Sundog pattern:
 3. **Transform observables into control-relevant signatures**: Tidal magnitude as stability proxy
 4. **Compare against privileged baseline**: pending oracle controller with full
    CR3BP state access
-5. **Report the failure boundary**: pending systematic map of chaotic
-   scattering, insufficient thrust, and singular events
+5. **Report the failure boundary**: current maps expose low-velocity
+   near-escape harms and controller-shortened passive survival cases
 
 Where the photometric experiment achieved comparable terminal accuracy with
-slower convergence, the three-body prototype currently demonstrates the shape
-of the next experiment: indirect signatures, a sensor-model separation, and a
-controller scaffold.
+slower convergence, the three-body project now tests a harder transfer: useful
+action from a local proxy in a chaotic dynamical setting, with the operating
+envelope and failures made visible.
 
 ## Interactive Demonstration
 
@@ -377,6 +382,14 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   the diagnostic-to-control chain from Phase 7/8 through Phase 9. The result
   should identify both the robust positive pocket and the first outside-pocket
   region where the Sundog controller should not be used.
+  This phase is now started. The guard-quantile sweep emitted 7,056 trials and
+  shows the pocket survives quantiles `0.5`, `0.75`, and `0.9`. The
+  outside-pocket sweep emitted 6,912 trials and confirms lower velocities plus
+  equal-mass boundary cells carry most harms. The comparison slate emitted 2,592
+  trials: in the favorable pocket, guarded accelerometer TRACK produced 81
+  candidate rows out of 81, naive local control produced none, and the
+  privileged heuristic oracle produced 34 of 81. See
+  [THREEBODY_PHASE11_SUMMARY.md](THREEBODY_PHASE11_SUMMARY.md).
 - **Spatial extension**: Extend from planar to full 3D three-body problem.
 - **General three-body**: Move beyond circular restricted problem to include test particle mass and general initial conditions.
 - **Orbit family maintenance**: Demonstrate maintenance of specific orbit families (halo orbits around Lagrange points, periodic Lyapunov orbits) using only indirect signatures.
@@ -385,15 +398,16 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
 
 The three-body experiment is not a solution to celestial mechanics. It is an application of the Sundog pattern to a high-recognition physics problem.
 
-The current result: indirect signatures respond visibly in the simulation, and
-locally motivated proxies can be wired into a scan/seek/track controller. The
-stronger claim, that such a controller acts usefully within a measured operating
-envelope, remains the next experiment.
+The current result: locally motivated proxies can drive a guarded
+scan/seek/track-style controller usefully inside a measured high-velocity
+near-escape pocket. That pocket survives a larger seed slate, a scoped
+mass-ratio/timestep probe, and Phase 11 guard-quantile variation, but it does
+not erase the low-velocity or equal-mass boundary harms.
 
 The target trade is the same as photometric alignment: useful action from
 partial information, with known failure modes and a measurable cost. The honest
-claim today is not "Sundog solves three-body," but "the shadow of chaos is a
-promising signal to test."
+claim today is not "Sundog solves three-body," but "in a mapped restricted
+three-body pocket, the shadow of chaos is sometimes enough to steer by."
 
 ---
 

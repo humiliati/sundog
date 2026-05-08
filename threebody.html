@@ -276,6 +276,32 @@
             margin-bottom: 1rem;
         }
 
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .result-item {
+            border: 1px solid rgba(26, 58, 82, 0.14);
+            border-radius: 8px;
+            padding: 1rem;
+            background: white;
+        }
+
+        .result-item strong {
+            display: block;
+            color: var(--primary-dark);
+            margin-bottom: 0.35rem;
+        }
+
+        .result-item span {
+            color: #40505C;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
         .signatures-section {
             background: #F8F9FA;
         }
@@ -377,7 +403,7 @@
             <h1>Three-Body Dynamics</h1>
             <p class="tagline">Steering by the Shadow of Chaos</p>
             <p class="value-prop">
-                The three-body problem is famously intractable. Sundog asks a smaller question: can an agent act usefully by reading the signatures around instability instead of reconstructing the full state?
+                The three-body problem is famously intractable. Sundog asks a smaller question: when instability casts a local shadow, can a controller use that signal before reconstructing the full state?
             </p>
         </div>
     </section>
@@ -528,14 +554,28 @@
             <div class="claim-boundary">
                 <h4>Claim Boundary</h4>
                 <p>
-                    Sundog does not solve the three-body problem. It asks whether the shadow of that chaos is enough to steer by. This experiment visualizes indirect observables that compress the 18D state into lower-dimensional diagnostics.
+                    Sundog does not solve the three-body problem. It asks whether the shadow of that chaos is enough to steer by. The current result is bounded: a guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines in a robust high-velocity near-escape operating pocket, while low-velocity and equal-mass boundary cells still show harms.
                 </p>
                 <p>
                     <strong>Phase 2 Status:</strong> The sensor-limited view separates privileged diagnostics from local proxy signals. In the browser, tidal gradients are computed as simulated local probe samples; this models what an accelerometer array or small maneuver experiment would estimate, but it is not yet a hardware-valid sensor demonstration.
                 </p>
                 <p>
-                    <strong>Phase 3 Status:</strong> The controller implements prototype Scan/Seek/Track modes. SCAN perturbs the test particle, SEEK follows a local tidal-gradient proxy toward lower stress, and TRACK attempts to maintain a target tidal magnitude. Benchmark comparisons and failure-boundary maps are still pending.
+                    <strong>Phase 11 Status:</strong> Guard-quantile, outside-pocket, and comparison sweeps now test the Phase 9 pocket. The pocket survives quantiles 0.5, 0.75, and 0.9; lower velocities and equal-mass boundary cells remain the first regions where the controller should not be used.
                 </p>
+                <div class="result-grid" aria-label="Phase 9 result summary">
+                    <div class="result-item">
+                        <strong>Locked pocket</strong>
+                        <span>24-seed near-escape map: 41 promising cells, 7 mixed cells, 1 negative cell.</span>
+                    </div>
+                    <div class="result-item">
+                        <strong>Hazard gates</strong>
+                        <span>Phase 11 guard sweep: 300 candidate rows of 588 across quantiles 0.5, 0.75, and 0.9.</span>
+                    </div>
+                    <div class="result-item">
+                        <strong>Comparison slate</strong>
+                        <span>In the favorable pocket, guarded TRACK produced 81 candidate rows of 81; naive local control produced none.</span>
+                    </div>
+                </div>
             </div>
 
             <p>

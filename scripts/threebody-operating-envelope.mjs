@@ -39,7 +39,7 @@ function parseArgs(argv) {
     thrustLimits: [0.4, 0.6],
     sensorNoiseSweep: [0, 0.01, 0.03],
     trackGuardMode: "constant",
-    trackGuardQuantile: 0.75,
+    trackGuardQuantiles: [0.75],
     trackGuardMinRadiusSweep: [1.15],
     trackGuardMaxLocalAccelerationSweep: [2.5, 3.5],
     trackGuardMaxTidalMagnitudeSweep: [35],
@@ -75,7 +75,8 @@ function parseArgs(argv) {
     else if (flag === "--thrust-limits") args.thrustLimits = parseNumberList(value);
     else if (flag === "--sensor-noise-sweep") args.sensorNoiseSweep = parseNumberList(value);
     else if (flag === "--track-guard-mode") args.trackGuardMode = value;
-    else if (flag === "--track-guard-quantile") args.trackGuardQuantile = Number.parseFloat(value);
+    else if (flag === "--track-guard-quantile") args.trackGuardQuantiles = [Number.parseFloat(value)];
+    else if (flag === "--track-guard-quantiles") args.trackGuardQuantiles = parseNumberList(value);
     else if (flag === "--track-guard-min-radius-sweep") args.trackGuardMinRadiusSweep = parseNumberList(value);
     else if (flag === "--track-guard-max-local-acceleration-sweep") args.trackGuardMaxLocalAccelerationSweep = parseNumberList(value);
     else if (flag === "--track-guard-max-tidal-magnitude-sweep") args.trackGuardMaxTidalMagnitudeSweep = parseNumberList(value);
@@ -97,6 +98,7 @@ function parseArgs(argv) {
     ["--velocity-scales", args.velocityScales],
     ["--thrust-limits", args.thrustLimits],
     ["--sensor-noise-sweep", args.sensorNoiseSweep],
+    ["--track-guard-quantiles", args.trackGuardQuantiles],
     ["--track-guard-min-radius-sweep", args.trackGuardMinRadiusSweep],
     ["--track-guard-max-local-acceleration-sweep", args.trackGuardMaxLocalAccelerationSweep],
     ["--track-guard-max-tidal-magnitude-sweep", args.trackGuardMaxTidalMagnitudeSweep],
@@ -113,8 +115,8 @@ function parseArgs(argv) {
   if (!["constant", "hazard_quantile"].includes(args.trackGuardMode)) {
     throw new Error("--track-guard-mode must be constant or hazard_quantile");
   }
-  if (!Number.isFinite(args.trackGuardQuantile) || args.trackGuardQuantile < 0 || args.trackGuardQuantile > 1) {
-    throw new Error("--track-guard-quantile must be between 0 and 1");
+  if (args.trackGuardQuantiles.some((value) => value < 0 || value > 1)) {
+    throw new Error("--track-guard-quantile(s) must be between 0 and 1");
   }
 
   args.radiusScales = [...new Set(args.radiusScales)].sort((a, b) => a - b);
@@ -123,6 +125,7 @@ function parseArgs(argv) {
   args.massRatios = [...new Set(args.massRatios)].sort((a, b) => a - b);
   args.timesteps = [...new Set(args.timesteps)].sort((a, b) => a - b);
   args.sensorNoiseSweep = [...new Set(args.sensorNoiseSweep)].sort((a, b) => a - b);
+  args.trackGuardQuantiles = [...new Set(args.trackGuardQuantiles)].sort((a, b) => a - b);
   args.trackGuardMinRadiusSweep = [...new Set(args.trackGuardMinRadiusSweep)].sort((a, b) => a - b);
   args.trackGuardMaxLocalAccelerationSweep = [...new Set(args.trackGuardMaxLocalAccelerationSweep)].sort((a, b) => a - b);
   args.trackGuardMaxTidalMagnitudeSweep = [...new Set(args.trackGuardMaxTidalMagnitudeSweep)].sort((a, b) => a - b);
@@ -267,21 +270,22 @@ function nonHazardPassiveSamples(passiveTrials) {
   });
 }
 
-function deriveGuardThresholds(passiveTrials, args) {
+function deriveGuardThresholds(passiveTrials, args, envelopeCase) {
   const samples = nonHazardPassiveSamples(passiveTrials);
-  const tidalThreshold = quantile(samples.map((sample) => sample.tidalMagnitude), args.trackGuardQuantile);
+  const guardQuantile = envelopeCase.trackGuardQuantile;
+  const tidalThreshold = quantile(samples.map((sample) => sample.tidalMagnitude), guardQuantile);
   const localAccelerationThreshold = quantile(
     samples.map((sample) => sample.localAccelerationMagnitude),
-    args.trackGuardQuantile,
+    guardQuantile,
   );
   const radiusThreshold = quantile(
     samples.map((sample) => sample.events.testParticleRadius),
-    1 - args.trackGuardQuantile,
+    1 - guardQuantile,
   );
 
   return {
     trackGuardMode: args.trackGuardMode,
-    trackGuardQuantile: args.trackGuardQuantile,
+    trackGuardQuantile: guardQuantile,
     trackGuardMinRadius: radiusThreshold ?? 0,
     trackGuardMaxLocalAcceleration: localAccelerationThreshold ?? Infinity,
     trackGuardMaxTidalMagnitude: tidalThreshold ?? Infinity,
@@ -297,22 +301,25 @@ function envelopeCases(args) {
         for (const velocityScale of args.velocityScales) {
           for (const thrustLimit of args.thrustLimits) {
             for (const sensorNoiseStd of args.sensorNoiseSweep) {
-              for (const trackGuardMinRadius of args.trackGuardMinRadiusSweep) {
-                for (const trackGuardMaxLocalAcceleration of args.trackGuardMaxLocalAccelerationSweep) {
-                  for (const trackGuardMaxTidalMagnitude of args.trackGuardMaxTidalMagnitudeSweep) {
-                    cases.push({
-                      massRatio,
-                      timestep,
-                      radiusScale,
-                      velocityScale,
-                      thrustLimit,
-                      sensorNoiseStd,
-                      sensorDelaySteps: 0,
-                      microManeuverContaminationStd: 0.08,
-                      trackGuardMinRadius,
-                      trackGuardMaxLocalAcceleration,
-                      trackGuardMaxTidalMagnitude,
-                    });
+              for (const trackGuardQuantile of args.trackGuardQuantiles) {
+                for (const trackGuardMinRadius of args.trackGuardMinRadiusSweep) {
+                  for (const trackGuardMaxLocalAcceleration of args.trackGuardMaxLocalAccelerationSweep) {
+                    for (const trackGuardMaxTidalMagnitude of args.trackGuardMaxTidalMagnitudeSweep) {
+                      cases.push({
+                        massRatio,
+                        timestep,
+                        radiusScale,
+                        velocityScale,
+                        thrustLimit,
+                        sensorNoiseStd,
+                        sensorDelaySteps: 0,
+                        microManeuverContaminationStd: 0.08,
+                        trackGuardQuantile,
+                        trackGuardMinRadius,
+                        trackGuardMaxLocalAcceleration,
+                        trackGuardMaxTidalMagnitude,
+                      });
+                    }
                   }
                 }
               }
@@ -333,6 +340,7 @@ function caseId(envelopeCase) {
     `v_${envelopeCase.velocityScale}`,
     `thrust_${envelopeCase.thrustLimit}`,
     `noise_${envelopeCase.sensorNoiseStd}`,
+    `gq_${envelopeCase.trackGuardQuantile}`,
     `gminr_${envelopeCase.trackGuardMinRadius}`,
     `gaccel_${envelopeCase.trackGuardMaxLocalAcceleration}`,
     `gtidal_${envelopeCase.trackGuardMaxTidalMagnitude}`,
@@ -436,6 +444,7 @@ function makePairedRows(trials) {
     || a.velocityScale - b.velocityScale
     || a.thrustLimit - b.thrustLimit
     || a.sensorNoiseStd - b.sensorNoiseStd
+    || (a.trackGuardQuantile ?? -1) - (b.trackGuardQuantile ?? -1)
     || a.trackGuardMaxLocalAcceleration - b.trackGuardMaxLocalAcceleration
     || a.seed - b.seed
     || a.controllerMode.localeCompare(b.controllerMode)
@@ -699,7 +708,7 @@ async function main() {
   const manifest = {
     schema: `sundog.threebody.${args.phase}.v1`,
     startedAt: new Date().toISOString(),
-    purpose: "Phase 9 operating-envelope map for guarded sensor-tier control across initial-condition, thrust, noise, and guard settings.",
+    purpose: `${args.phase} operating-envelope map for guarded sensor-tier control across initial-condition, thrust, noise, and guard settings.`,
     args,
     cases,
     trials: [],
@@ -769,7 +778,7 @@ async function main() {
             && trial.caseId === caseId(envelopeCase)
             && trial.regime === regime
           ));
-          passiveCalibration.set(thresholdKey, deriveGuardThresholds(passiveRows, args));
+          passiveCalibration.set(thresholdKey, deriveGuardThresholds(passiveRows, args, envelopeCase));
         }
       }
     }
@@ -804,7 +813,7 @@ async function main() {
     return counts;
   }, {});
 
-  console.log(`[threebody] wrote ${manifest.trials.length} phase 9 trials to ${path.relative(repoRoot, outDir)}`);
+  console.log(`[threebody] wrote ${manifest.trials.length} ${args.phase} trials to ${path.relative(repoRoot, outDir)}`);
   console.log(`[threebody] wrote trial-outcomes.csv, paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv`);
   console.log(`[threebody] candidate envelope rows ${candidateRows.length}/${envelopeRows.length}`);
   console.log(`[threebody] outcomes ${JSON.stringify(outcomeCounts)}`);
