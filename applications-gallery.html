@@ -317,11 +317,11 @@
                     <span class="tier">Product Expression</span>
                     <h2>Dungeon Gleaner</h2>
                     <div class="signal-list">
-                        <p><strong>Indirect signal:</strong> unmet-verb gradients over satisfier nodes in the dungeon.</p>
-                        <p><strong>Transformation:</strong> need decay, inverse-distance scoring, linger gates, and small noise.</p>
-                        <p><strong>Output:</strong> emergent NPC idle orbits without scripted GOAP or behavior-tree plans.</p>
+                        <p><strong>Indirect signal:</strong> each NPC carries unmet needs (work, socializing, errands, rest) that grow over time. Places in the dungeon — bonfires, posts, shops, benches — satisfy specific needs. The signal at any tile is the sum of how strongly the NPC's unmet needs are pulled toward nearby satisfiers.</p>
+                        <p><strong>Transformation:</strong> per tick, every reachable place is scored by combined need × proximity, with a brief pause-on-arrival and a tiny noise term to break ties. The NPC takes one greedy step toward the strongest pull.</p>
+                        <p><strong>Output:</strong> NPCs orbit organically between work, social, and errand spots. No scripted schedules. No behavior trees. No goal-oriented action planner. Personality is just per-archetype weighting on the same vocabulary of verbs.</p>
                     </div>
-                    <p class="stub-note">Needs: orbit telemetry, GOAP-substitution comparison, and tuning-sensitivity sweeps.</p>
+                    <p class="stub-note">Needs: orbit telemetry capture, side-by-side comparison against a hand-authored planner, and a tuning-sensitivity sweep.</p>
                     <div class="app-links">
                         <a href="docs/APPLICATIONS.md#dungeon-gleaner--dcgamejam2026">Application Notes</a>
                     </div>

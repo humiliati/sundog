@@ -219,6 +219,169 @@ Deliverables:
   experiment;
 - a failure-boundary panel, not a footnote.
 
+## Validation Roadmap
+
+The browser prototype is useful, but it is not yet a completed experiment. The
+next phases turn the artifact into evidence by adding baseline comparisons,
+event labels, quantitative metrics, and a mapped operating envelope.
+
+### Phase 5 - Reproducible Experiment Harness
+
+Goal: move from manual browser exploration to repeatable trial batches.
+
+Deliverables:
+
+- A deterministic simulation harness that can run the same dynamics outside the
+  animation loop.
+- Seeded initial-condition generation for stable, near-escape, near-collision,
+  and chaotic-scattering regimes.
+- A trial manifest format recording mass ratio, initial state, controller mode,
+  thrust authority, target tidal magnitude, timestep, duration, and seed.
+- Per-trial logs for state, exposed signals, controller actions, event labels,
+  and terminal outcome.
+
+Exit criterion: a trial can be replayed exactly, and the browser demo can point
+to the same equations as the batch harness.
+
+### Phase 6 - Baseline Set
+
+Goal: establish what the Sundog controller is being compared against.
+
+Required baselines:
+
+- **Passive baseline:** no thrust; measures natural survival, escape, and close
+  approach rates.
+- **Naive local baseline:** uses only simple local acceleration magnitude or
+  radial heuristics, without tidal-gradient structure.
+- **Privileged oracle:** uses full simulator state, primary positions, and a
+  chosen target objective.
+- **Ablation controllers:** SCAN-only, SEEK-only, TRACK-only, and tidal-signal
+  shuffled/noised variants.
+
+Metrics:
+
+- time before escape or close approach;
+- time inside desired tidal band;
+- fuel or delta-v cost;
+- number of controller saturations;
+- terminal distance/energy class;
+- recovery after injected perturbations.
+
+Exit criterion: every claimed improvement is stated relative to at least one
+baseline, and every baseline uses the same initial-condition slate.
+
+### Phase 7 - Event Labels and Diagnostic Metrics
+
+Goal: test whether compressed signatures actually forecast useful events.
+
+Event labels:
+
+- escape/ejection;
+- close approach;
+- tidal spike;
+- controller saturation;
+- loss of target tidal band;
+- numerical instability or invalid trajectory.
+
+Diagnostic metrics:
+
+- lead time between warning threshold and event;
+- precision, recall, F1, and AUROC for event detection;
+- false alarm rate per unit simulated time;
+- robustness under sensor noise;
+- calibration curves for warning thresholds.
+
+Exit criterion: at least one privileged diagnostic and one sensor-motivated
+proxy show quantified predictive value over a naive threshold baseline.
+
+### Phase 8 - Sensor-Model Validation
+
+Goal: decide how much of the current "sensor-limited" mode is genuinely
+available to the controlled body.
+
+Sensor variants:
+
+- **Simulated local probe:** current browser implementation; nearby acceleration
+  samples are computed directly from the field model.
+- **Micro-maneuver estimate:** the controller applies small thrust probes and
+  estimates the response from its own acceleration history.
+- **Accelerometer-array estimate:** multiple local samples are modeled as if
+  measured by a short-baseline physical sensor.
+- **Noisy learned surrogate:** a learned or fitted local field model receives
+  only prior local observations.
+
+Audit questions:
+
+- Does the controller need hidden primary positions to compute the signal?
+- How much delay and noise can the proxy tolerate?
+- Does probe thrust contaminate the signal enough to change the control result?
+- Which sensor assumptions are plausible for spacecraft, simulation tooling, or
+  pure software agents?
+
+Exit criterion: the writeup labels each result by sensor tier, and no result
+computed from full state is described as sensor-only.
+
+### Phase 9 - Operating Envelope and Failure Map
+
+Goal: replace anecdotal failure boundaries with a map.
+
+Sweep axes:
+
+- initial position and velocity of the test particle;
+- mass ratio of the primaries;
+- thrust authority;
+- target tidal magnitude;
+- sensor noise and delay;
+- integration timestep;
+- perturbation impulse size.
+
+Outputs:
+
+- success/failure heatmaps;
+- escape and close-approach regions;
+- controller saturation regions;
+- cases where tidal proxies are misleading;
+- representative trajectories for wins, losses, and ambiguous regimes.
+
+Exit criterion: the public page can show where the method works, where it
+fails, and where the result is inconclusive.
+
+### Phase 10 - Claim Ratchet
+
+Goal: define exactly when the public claim is allowed to strengthen.
+
+Current safe claim:
+
+> The three-body page is an interactive prototype showing indirect signatures,
+> sensor-model separation, and a scan/seek/track controller scaffold.
+
+Claim after Phase 7:
+
+> In the tested planar restricted setup, selected compressed signatures forecast
+> escape or close-approach events with quantified lead time.
+
+Claim after Phase 8:
+
+> In the tested setup, a specified sensor-tier proxy preserves enough diagnostic
+> signal to support local control experiments.
+
+Claim after Phase 9:
+
+> In a mapped operating envelope, the Sundog-style controller outperforms
+> passive and naive local baselines on specified metrics, while losing to or
+> approaching a privileged oracle depending on regime.
+
+Do not claim:
+
+- "Sundog solves three-body dynamics."
+- "The controller predicts chaos."
+- "Sensor-only control is validated" before Phase 8 passes.
+- "Comparable utility from partial information" before baseline metrics show
+  the trade.
+
+Exit criterion: the writeup, page copy, and promo language all use the strongest
+claim actually earned by the completed validation phase, and no stronger one.
+
 ## Recommendation
 
 Proceed, but make the first milestone diagnostic rather than controller-first.
@@ -229,10 +392,13 @@ then control.
 
 ## Implementation Status (2026-05-07)
 
-**Phase 1-3**: Complete. Phases 1-3 have been implemented in the interactive
-browser visualization at `threebody.html`.
+**Phase 1-3**: Prototype implemented, validation pending. The interactive
+browser visualization at `threebody.html` now scaffolds the diagnostic signals,
+sensor-limited proxy mode, and SCAN/SEEK/TRACK controller modes. It does not yet
+complete the benchmark requirements for event prediction, oracle comparison, or
+failure-boundary mapping.
 
-**Phase 4**: Complete. The public artifact is live, including:
+**Phase 4**: Draft public artifact live, still evidence-bounded. It includes:
 - Interactive visualization with real-time RK4 integration
 - Canvas rendering of system state with orbital trails
 - Indirect signature overlays (virial, inertia, energy, tidal tensor)
@@ -243,10 +409,38 @@ browser visualization at `threebody.html`.
 
 **Public writeup**: See [threebody-writeup.md](threebody-writeup.md) for the
 complete "Steering by the Shadow of Chaos" documentation, including:
-- Claim boundaries and known failure modes
+- Claim boundaries and hypothesized failure modes
 - Sensor model audit (privileged vs. sensor-available signals)
 - Phase-by-phase implementation details
 - Connection to photometric alignment experiment
 - Future directions
+
+**Phase 5**: Started. A deterministic harness now lives at:
+
+```bash
+npm run threebody:phase5
+```
+
+Current Phase 5 implementation:
+
+- `public/js/threebody-core.mjs`: shared planar restricted three-body dynamics,
+  signature computation, tidal proxy computation, prototype controller logic,
+  event labels, and trial runner.
+- `scripts/threebody-harness.mjs`: CLI batch harness that writes a manifest and
+  per-trial JSONL logs.
+- Default smoke output: `results/threebody/phase5-smoke/` (ignored by git).
+
+Current status against Phase 5 exit criterion:
+
+- Deterministic replay: smoke trial logs reproduce byte-for-byte across reruns.
+- Manifest format: present, including seed, regime, controller mode, initial
+  state, mass ratio, timestep, duration, thrust authority, target tidal
+  magnitude, log path, and terminal summary.
+- Per-trial logs: present, including state, exposed signatures, tidal tensor,
+  thrust vector, event labels, and terminal outcome.
+- Browser equation sharing: partially complete. The harness uses
+  `public/js/threebody-core.mjs`; the browser still has inline mirrored
+  equations and should be refactored to import the same module before Phase 5 is
+  called complete.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)
