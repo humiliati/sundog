@@ -355,8 +355,28 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   produced no harmful trial rows, and reduced average controller delta-v versus
   the constant-gate axes probe. The next check is to run those derived gates
   across the full refined near-escape grid.
-- **Phase 10, claim ratchet**: Strengthen public language only when baseline
-  metrics and failure maps justify it.
+  `npm run threebody:phase9:hazard:refine` runs that full-grid check. It emitted
+  2,352 trials, kept 100 candidate rows out of 196 versus 116 for the
+  constant-gate refined run, and reduced average controller delta-v from about
+  `2.07` to about `1.12`. The high-velocity pocket remains, but the low-velocity
+  failure boundary remains too.
+- **Phase 10, writeup and claim ratchet**: Update the public-facing story to
+  reflect the Phase 9 result without inflating it. The earned wording is now
+  that a guarded accelerometer-proxy TRACK controller improves survival over
+  passive behavior in a connected near-escape operating pocket, while retaining
+  explicit low-velocity failure boundaries. This phase should update this
+  writeup, `threebody.html`, and the applications gallery with a clear "What
+  changed after Phase 9" panel, and should make the failure map part of the
+  main story rather than a caveat.
+- **Phase 11, robustness and outside-pocket expansion**: Test whether the Phase
+  9 pocket survives guard quantile changes and nearby parameter expansion. The
+  next scripts should compare passive hazard-gate quantiles `0.5`, `0.75`, and
+  `0.9`; expand mass-ratio/timestep probes outside the favorable high-velocity
+  near-escape pocket; rerun passive, naive local, guarded accelerometer TRACK,
+  and privileged heuristic oracle comparisons on the same slate; and summarize
+  the diagnostic-to-control chain from Phase 7/8 through Phase 9. The result
+  should identify both the robust positive pocket and the first outside-pocket
+  region where the Sundog controller should not be used.
 - **Spatial extension**: Extend from planar to full 3D three-body problem.
 - **General three-body**: Move beyond circular restricted problem to include test particle mass and general initial conditions.
 - **Orbit family maintenance**: Demonstrate maintenance of specific orbit families (halo orbits around Lagrange points, periodic Lyapunov orbits) using only indirect signatures.

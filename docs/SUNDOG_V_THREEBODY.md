@@ -333,6 +333,7 @@ npm run threebody:phase9:refine
 npm run threebody:phase9:lock
 npm run threebody:phase9:axes
 npm run threebody:phase9:hazard
+npm run threebody:phase9:hazard:refine
 ```
 
 Sweep axes:
@@ -469,12 +470,48 @@ Hazard-derived guard gates:
   effort. This is still scoped to the favorable pocket and should next be tested
   against the full refined near-escape grid.
 
+Full refined hazard-gate check:
+
+- `npm run threebody:phase9:hazard:refine` applies the same passive
+  quantile-derived guard gates to the full 7x7 refined near-escape grid.
+- Default run emitted 2,352 trials under
+  `results/threebody/phase9-hazard-refined-near-escape/`.
+- Positive candidate rows: 100 of 196 `envelope-map.csv` rows, versus 116 of
+  196 in the constant-gate refined run.
+- Best-cell summary: 27 promising, 8 neutral, 7 mixed, 5 risky, and 2 negative.
+- Delta-v check: average controller delta-v fell from about `2.07` in the
+  constant-gate refined run to about `1.12` in the hazard-gate refined run.
+- Interpretation: hazard-derived gates are not simply better everywhere. They
+  preserve the high-velocity positive pocket and sharply reduce control effort,
+  but they shrink the wider candidate region and still leave low-velocity
+  harms. This is a stronger, more honest controller: less tuned and less
+  aggressive, but still bounded by the same broad operating-envelope geometry.
+
 Exit criterion: the public page can show where the method works, where it
 fails, and where the result is inconclusive.
 
-### Phase 10 - Claim Ratchet
+### Phase 10 - Writeup and Claim Ratchet
 
-Goal: define exactly when the public claim is allowed to strengthen.
+Goal: update the public-facing story so it reflects the Phase 9 result without
+turning a bounded operating-envelope pocket into a general control claim.
+
+Immediate work:
+
+- Update `docs/threebody-writeup.md` so the headline status no longer says only
+  "promising enough to study." The earned claim is now that a guarded
+  accelerometer-proxy TRACK controller shows a reproducible positive pocket in
+  mapped near-escape regimes, with explicit low-velocity failure boundaries.
+- Update `threebody.html` copy and the applications gallery entry to make the
+  current result inspectable from the public site.
+- Add a short "What changed after Phase 9" panel: initial smoke pocket,
+  refined near-escape pocket, locked 24-seed result, mass-ratio/timestep slice,
+  and hazard-gate refinement.
+- Promote the failure map to first-class narrative material. The low-velocity
+  harm boundary and controller-shortened-passive rows are part of the result,
+  not a footnote.
+- Keep the sensor-tier wording strict: the current best controller is
+  accelerometer-proxy guarded TRACK in simulation, not a validated physical
+  spacecraft sensor stack.
 
 Current safe claim:
 
@@ -497,6 +534,14 @@ Claim after Phase 9:
 > passive and naive local baselines on specified metrics, while losing to or
 > approaching a privileged oracle depending on regime.
 
+Current Phase 9 earned wording:
+
+> In the tested planar restricted setup, a guarded accelerometer-proxy TRACK
+> controller improves survival over passive behavior in a connected
+> near-escape operating pocket. The effect is not global: low-velocity
+> near-escape cells still show harms, and hazard-derived gates trade a smaller
+> candidate region for lower control effort.
+
 Do not claim:
 
 - "Sundog solves three-body dynamics."
@@ -507,6 +552,55 @@ Do not claim:
 
 Exit criterion: the writeup, page copy, and promo language all use the strongest
 claim actually earned by the completed validation phase, and no stronger one.
+
+### Phase 11 - Robustness and Outside-Pocket Expansion
+
+Goal: find out whether the Phase 9 pocket is a real operating-envelope feature
+or a narrow artifact of one guard quantile, near-escape slice, and controller
+parameterization.
+
+Primary checks:
+
+- Guard-quantile sweep: compare passive hazard gates at quantiles `0.5`,
+  `0.75`, and `0.9` on the refined near-escape grid.
+- Outside-pocket expansion: rerun mass-ratio/timestep probes beyond the locked
+  high-velocity pocket, especially lower velocity scales and larger-radius
+  low-velocity cells where the current controller harms passive outcomes.
+- Diagnostic-to-control chain: summarize Phase 7/8 metrics alongside Phase 9
+  outcomes so the public claim reads as a sequence: hazard signatures forecast
+  events, sensor proxies preserve usable signal, controller improves outcomes
+  only where signal-action coupling remains intact.
+- Failure mechanism audit: separate controller-destabilized cases from pure
+  control-effort/saturation cases and check whether hazard gates reduce one
+  class while worsening another.
+- Naive/oracle comparison pass: rerun the best Phase 11 pocket against passive,
+  naive local acceleration, guarded accelerometer TRACK, and the privileged
+  heuristic oracle on the same slate.
+
+Suggested commands/scripts:
+
+```bash
+npm run threebody:phase11:guard-quantiles
+npm run threebody:phase11:outside-pocket
+npm run threebody:phase11:compare
+```
+
+These commands do not exist yet. They should wrap
+`scripts/threebody-operating-envelope.mjs` with explicit output directories and
+manifest labels, rather than replacing the Phase 9 artifacts.
+
+Outputs:
+
+- `results/threebody/phase11-guard-quantiles/`;
+- `results/threebody/phase11-outside-pocket/`;
+- `results/threebody/phase11-comparison/`;
+- a compact `phase11-summary.md` or CSV bundle suitable for the public writeup;
+- updated failure-boundary heatmaps for velocity/radius, mass ratio, timestep,
+  and guard quantile.
+
+Exit criterion: the project can say whether the Phase 9 positive pocket is
+robust to guard quantile and nearby parameter expansion, and can identify the
+first outside-pocket region where the Sundog controller should not be used.
 
 ## Recommendation
 
@@ -819,8 +913,11 @@ Current Phase 9 implementation:
   hazard-score gates. The scoped run keeps 81 candidate rows out of 81, records
   no harmful trial rows, and lowers average delta-v relative to the constant
   gate probe.
-- Next Phase 9 work: run hazard-derived gates across the full refined
-  near-escape grid, then expand the mass-ratio/timestep probe outside the
-  favorable pocket.
+- Full refined hazard-gate result: `npm run threebody:phase9:hazard:refine`
+  keeps 100 candidate rows out of 196, compared with 116 under constant gates,
+  while reducing average delta-v from about `2.07` to `1.12`. It preserves the
+  high-velocity pocket but does not remove the low-velocity failure boundary.
+- Next Phase 9 work: compare guard quantiles (`0.5`, `0.75`, `0.9`) and then
+  expand the mass-ratio/timestep probe outside the favorable pocket.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)
