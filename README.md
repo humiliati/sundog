@@ -34,8 +34,9 @@ boundaries.
   for editing the public site and deploying it through Cloudflare Pages.
 - [Scientific criteria](docs/SCIENTIFIC_CRITERIA.md): what has been made
   testable, what has not, and what would strengthen the paper.
-- [Applications map](docs/APPLICATIONS.md): how EyesOnly, Dungeon Gleaner, and
-  Money Bags express Sundog-derived alignment ideas in product systems.
+- [Applications map](docs/APPLICATIONS.md): how the three-body workbench,
+  EyesOnly, Dungeon Gleaner, and Money Bags express Sundog-derived alignment
+  ideas in test surfaces and product systems.
 - [Promo highlights](docs/PROMO_HIGHLIGHTS.md): hooks, headlines, and
   future-facing language for public communication.
 - [Standalone app roadmap](docs/STANDALONE_APP_ROADMAP.md): plan for a
@@ -127,6 +128,11 @@ pages or changing deployment behavior.
 
 ## Related Sundog Applications
 
+- [Three-body dynamics workbench](threebody.html): local experiment surface
+  whose Phase 11 result maps a bounded high-velocity near-escape pocket where
+  guarded accelerometer-proxy TRACK control improves survival over passive and
+  naive local baselines, while lower-velocity and equal-mass cells remain
+  explicit harm boundaries.
 - [EyesOnly](https://github.com/humiliati/EyesOnly): live spy-game platform
   and Gone Rogue procedural roguelike integration.
 - [Dungeon Gleaner / DCgamejam2026](https://github.com/humiliati/DCgamejam2026):
@@ -138,8 +144,9 @@ pages or changing deployment behavior.
   graph-structured interpretation of frame-by-frame simulation data.
 
 Those applications are not replacements for the scientific claim in this repo.
-They are external demonstrations that the same alignment vocabulary can be
-used across game systems, procedural control, and physics interpretation.
+They are demonstrations and workbenches showing that the same alignment
+vocabulary can be used across dynamics experiments, game systems, procedural
+control, and physics interpretation.
 
 ## Status
 

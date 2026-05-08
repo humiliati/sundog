@@ -15,9 +15,10 @@ Each application demonstrates the pattern: deny full state, observe indirect sig
 Applications are categorized by strength of evidence:
 
 1. **Research Result** — Controlled task, metrics, baselines, reproducible artifacts
-2. **Instrumented Prototype** — Product system with telemetry and repeatable harnesses
-3. **Product Expression** — Player-facing mechanic that embodies the idea
-4. **Conceptual Lineage** — Historical or design-language connection
+2. **Operating-Envelope Study** — Experiment workbench with bounded sweeps, baselines, and mapped failure regions
+3. **Instrumented Prototype** — Product system with telemetry and repeatable harnesses
+4. **Product Expression** — Player-facing mechanic that embodies the idea
+5. **Conceptual Lineage** — Historical or design-language connection
 
 Public-facing materials can mention all tiers. Academic writing must distinguish them.
 
@@ -66,7 +67,45 @@ A controller aligns a mirrored end-effector without direct target coordinates, u
 
 ---
 
-### 2. EyesOnly / Gone Rogue
+### 2. Three-Body Dynamics Workbench
+
+**Tier:** Operating-Envelope Study
+
+**Repository:** [humiliati/sundog](https://github.com/humiliati/sundog)
+
+**Summary:**
+The three-body tab tests whether guarded proxy control can improve survival from partial local signals in a planar restricted setup. Phase 11 supports a bounded positive claim in a high-velocity near-escape pocket while preserving the low-velocity and equal-mass harm boundaries.
+
+**What It Demonstrates:**
+- Guarded accelerometer-proxy TRACK control can beat passive and naive local baselines in the tested favorable pocket
+- Guard quantile changes preserve the pocket while changing the survival/effort trade
+- Outside-pocket expansion exposes where the controller harms outcomes
+- This is a workbench result, not a solution to arbitrary three-body control
+
+**Key Metrics:**
+- Guard-quantile sweep: 7,056 trials, 300 candidate envelope rows out of 588
+- Outside-pocket sweep: 6,912 trials, 96 promising best cells out of 144
+- Comparison slate: `track_sensor_accel_guarded` positive in 81/81 high-velocity near-escape rows; naive local baseline 0/81 candidate rows
+
+**Assets Available:**
+- Interactive experiment page (`threebody.html`)
+- Phase 11 summary
+- Roadmap and detailed writeup
+- Result directories for guard quantiles, outside-pocket expansion, and comparison
+
+**Assets Needed:**
+- Public Phase 11 charts
+- Failure-boundary visualization
+- Longer-horizon stress tests
+- Physical-sensor validation plan
+
+**Links:**
+- [Phase 11 Summary](../THREEBODY_PHASE11_SUMMARY.md)
+- [Research Roadmap](../SUNDOG_V_THREEBODY.md)
+
+---
+
+### 3. EyesOnly / Gone Rogue
 
 **Tier:** Instrumented Prototype
 
@@ -116,7 +155,7 @@ The headless Gone Rogue runner drives the real JavaScript game engine through `G
 
 ---
 
-### 3. Dungeon Gleaner / DCgamejam2026
+### 4. Dungeon Gleaner / DCgamejam2026
 
 **Tier:** Product Expression
 
@@ -160,7 +199,7 @@ Verb-field NPC behavior in a raycast dungeon crawler. Unmet needs diffuse across
 
 ---
 
-### 4. Money Bags
+### 5. Money Bags
 
 **Tier:** Instrumented Prototype
 
@@ -218,6 +257,7 @@ This table provides a unified view of how the pattern manifests:
 | Application | Domain | Indirect Signal | Transformation | Actionable Output | Evidence Tier |
 |-------------|--------|----------------|----------------|-------------------|---------------|
 | Photometric Alignment | Optical control | Detector intensity, proprioception | Scan, seek, extremum tracking | Mirror alignment without target | Research Result |
+| Three-Body Dynamics | Planar restricted dynamics | Local tidal-tensor proxy, acceleration magnitude, separated privileged diagnostics | Guarded TRACK control over sensor-motivated instability signature | High-velocity near-escape pocket with mapped failure boundaries | Operating-Envelope Study |
 | EyesOnly / Gone Rogue | Procedural agents | Floor/biome/HP/alert/inventory/gate/combat state | Perception compression, axis selection, stop-conditioned batches | Seedable JSONL runs for matched-seed studies | Instrumented Prototype |
 | Dungeon Gleaner | Procedural NPC behavior | Unmet-verb gradient over satisfier nodes | Need decay, inverse-distance scoring, linger gates | Emergent idle orbits without scripted plans | Product Expression |
 | Money Bags | Softbody physics | Spring graph, contact, deformation | Graph metrics, telemetry | Interpretable rig state | Instrumented Prototype |

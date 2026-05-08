@@ -6,8 +6,9 @@ the same alignment program in practical software.
 The root scientific claim still belongs to this repository: the current
 controlled result is the photometric mirror-alignment experiment. The
 applications below are not substitutes for that result. They are evidence that
-the same pattern can be turned into usable systems across different domains:
-procedural agents, physical-feeling game simulation, and softbody telemetry.
+the same pattern can be turned into usable systems and test surfaces across
+different domains: operating-envelope workbenches, procedural agents,
+physical-feeling game simulation, and softbody telemetry.
 
 ## Shared Pattern
 
@@ -33,12 +34,53 @@ Use these tiers when discussing application evidence:
 | Tier | Meaning | Current examples |
 | --- | --- | --- |
 | Research result | Controlled task, metrics, baselines, reproducible artifacts. | Photometric mirror alignment in this repo. |
+| Operating-envelope study | Experiment workbench with bounded sweeps, baselines, and mapped failure regions, but not a global domain solution. | Three-body dynamics Phase 11. |
 | Instrumented prototype | Product system with telemetry and repeatable harnesses, but not yet a paper-style study. | Money Bags playtest bundles, Sundog Gone Rogue runner. |
 | Product expression | Player-facing mechanic or agent system that embodies the idea, but needs formal measurement. | Dungeon Gleaner verb-field NPC behavior. |
 | Conceptual lineage | Historical or design-language connection without enough evidence yet. | Older theorem docs, broad broadcast language. |
 
-The public-facing story can mention all four. Academic writing should keep
+The public-facing story can mention all five. Academic writing should keep
 them separate.
+
+## Three-Body Dynamics Workbench
+
+Local page: [`threebody.html`](../threebody.html)
+
+Phase 11 summary:
+[`docs/THREEBODY_PHASE11_SUMMARY.md`](THREEBODY_PHASE11_SUMMARY.md)
+
+### Sundog Expression
+
+The three-body workbench asks whether a controller can act on an indirect,
+sensor-motivated instability signature rather than full privileged state. It
+keeps local proxy signals, privileged diagnostics, and evaluation metrics
+separate so the claim can stay audit-friendly.
+
+The useful current claim is bounded:
+
+> In the tested planar restricted setup, the guarded accelerometer-proxy TRACK
+> controller improves survival over passive and naive local baselines in a
+> robust high-velocity near-escape pocket. The result is not global: lower
+> velocity and equal-mass boundary cells still expose controller harms, mostly
+> through controller-shortened passive survival and control effort/saturation.
+
+### Evidence Shape
+
+Phase 11 is not a claim that Sundog solves arbitrary three-body control,
+long-term chaos prediction, or physical sensor validation. It is an
+operating-envelope result:
+
+- guard-quantile sweeps show the positive pocket survives `0.5`, `0.75`, and
+  `0.9` gates, with quantile controlling the survival/effort trade;
+- outside-pocket expansion maps the boundary: velocity is the clearest axis,
+  and equal-mass cells carry the negative best cases;
+- matched comparison shows `track_sensor_accel_guarded` positive in all 81
+  high-velocity near-escape comparison rows, while the naive local baseline has
+  no candidate rows in that slate.
+
+This makes the tab experiment a public workbench surface: it can demonstrate
+how Sundog-style proxy control is tested, where it works, and where it fails,
+without borrowing certainty from the photometric research result.
 
 ## EyesOnly / Gone Rogue
 
@@ -667,6 +709,7 @@ designed to interpret have not yet run.
 | Application | Domain | Indirect signal | Transformation | Actionable output |
 | --- | --- | --- | --- | --- |
 | Sundog core | Photometric control | Detector intensity and proprioception | Scan, seek, extremum tracking | Mirror alignment without target position |
+| Three-body dynamics | Planar restricted dynamics | Local tidal-tensor proxy, acceleration magnitude, and separated privileged diagnostics | Guarded TRACK control over a sensor-motivated instability signature | High-velocity near-escape operating pocket with mapped low-velocity and equal-mass harms |
 | EyesOnly / Gone Rogue | Procedural agent play | Floor, biome, HP, alert, inventory, gate, and combat state from `GoneRogue.headless.getState` | Perception compression plus axis-selected stop-conditioned batches through Playwright | Seedable, policy-pluggable JSONL runs ready for matched-seed comparison studies and future LAGM feeder data |
 | Dungeon Gleaner | Procedural NPC behavior | Unmet-verb gradient over satisfier nodes | Need decay, inverse-distance scoring, linger gates, and noise | Emergent NPC idle orbits without scripted plans |
 | Money Bags | Softbody terrain physics | Spring graph, contact, deformation, torque, centroid motion | Graph metrics and playtest telemetry; pre-registered falsification apparatus around the rotation-permissiveness bias axis | Interpretable rig state, recovery analysis, and a falsifiable hypothesis with verdict template committed before captures |
@@ -676,8 +719,10 @@ designed to interpret have not yet run.
 For public communication, the applications can be summarized this way:
 
 > Since the initial theorem release, Sundog has moved from a single
-> mirror-alignment experiment into working systems. EyesOnly applies the idea
-> to a headless turn-envelope runner against a real procedural roguelike engine,
+> mirror-alignment experiment into workbench and product systems. The
+> three-body dynamics tab tests guarded proxy control in a bounded
+> high-velocity near-escape pocket while preserving the failure map. EyesOnly
+> applies the idea to a headless turn-envelope runner against a real procedural roguelike engine,
 > while keeping sibling UX automation and unbuilt LAGM design in separate
 > evidence tiers. Dungeon Gleaner applies it to
 > verb-field NPC behavior, where unmet needs diffuse across satisfier nodes to
@@ -701,16 +746,19 @@ For academic communication, add the boundary:
 1. Read the root `README.md` in this repo.
 2. Read `docs/RESEARCHER_GUIDE.md`.
 3. Inspect `docs/PAPER_v1_draft.md` and `results/analysis/analysis_summary.json`.
-4. Read `docs/runners.md` for the EyesOnly bridge.
-5. Inspect EyesOnly's headless runner, UI automation neighbor, and LAGM design
+4. Read `docs/THREEBODY_PHASE11_SUMMARY.md` and launch `threebody.html`.
+5. Read `docs/runners.md` for the EyesOnly bridge.
+6. Inspect EyesOnly's headless runner, UI automation neighbor, and LAGM design
    surface as separate evidence tiers.
-6. Inspect Dungeon Gleaner's verb-field NPC docs and runtime modules.
-7. Inspect Money Bags' playtest bundles and graph/rig telemetry.
+7. Inspect Dungeon Gleaner's verb-field NPC docs and runtime modules.
+8. Inspect Money Bags' playtest bundles and graph/rig telemetry.
 
 ## Next Documentation Tasks
 
 - Add an EyesOnly matched-seed multi-policy study, compressed-perception
   ablation, volatility sweep, and behavior clips.
+- Promote the three-body workbench into the public gallery with Phase 11 charts,
+  the comparison slate, and an explicit failure-boundary view.
 - Add Dungeon Gleaner orbit telemetry for verb, need, node, and dominant-pull
   traces.
 - Add a Dungeon Gleaner GOAP-substitution comparison and tuning-sensitivity
