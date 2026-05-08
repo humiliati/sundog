@@ -549,4 +549,53 @@ Current status against Phase 7 exit criterion:
   tune threshold grids per regime, and run a larger seed slate before ratcheting
   any public claim.
 
+**Phase 8**: Started. The harness now emits a sensor-model audit for the tidal
+tensor proxy:
+
+```bash
+npm run threebody:phase8
+```
+
+Current Phase 8 implementation:
+
+- Sensor tiers:
+  - `simulated_local_probe`: exact virtual local probe samples from the simulator
+    field model; this is the current reference tier.
+  - `accelerometer_array_noisy`: short-baseline acceleration samples with
+    deterministic Gaussian noise.
+  - `delayed_local_probe`: exact virtual local probe estimate delayed by the
+    configured number of integration samples.
+  - `micro_maneuver_noisy`: larger-baseline probe with delay and extra
+    maneuver-contamination noise.
+- Sensor-tier controller modes:
+  - `seek_sensor_accel`, `track_sensor_accel`
+  - `seek_sensor_delayed`, `track_sensor_delayed`
+  - `seek_sensor_micro`, `track_sensor_micro`
+- Harness options:
+  - `--sensor-variants`
+  - `--sensor-audit-every`
+  - `--sensor-noise-std`
+  - `--sensor-delay-steps`
+  - `--micro-maneuver-contamination-std`
+- Additional Phase 8 outputs:
+  - `sensor-model-samples.csv`: per-trial/per-time sensor estimate rows.
+  - `sensor-model-summary.csv`: aggregate tensor magnitude and component errors
+    by regime, controller mode, and sensor variant.
+- Default smoke output: `results/threebody/phase8-sensor-model/` (ignored by
+  git).
+
+Current status against Phase 8 exit criterion:
+
+- Sensor-tier labels: present in the manifest and summary outputs.
+- Reference separation: present. The exact virtual probe is explicitly labeled
+  as a simulator-field reference, not as a hardware-valid sensor claim.
+- Interpretation: calibration only. The initial smoke run shows noisy
+  accelerometer-array estimates preserve the reference tensor far better than
+  delayed or contaminated micro-maneuver proxies in fast-changing regimes. When
+  those degraded estimates drive SEEK/TRACK, accelerometer-array control mostly
+  tracks the ideal behavior, while delayed and micro-maneuver variants break
+  more stable cases. This is still a small matched slate.
+- Next Phase 8 work: sweep sensor noise/delay and report whether controller
+  outcomes survive degraded sensor tiers before claiming sensor-only control.
+
 **Interactive demonstration**: [threebody.html](../threebody.html)

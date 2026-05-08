@@ -22,6 +22,12 @@ const MODE_DEFINITIONS = Object.freeze({
   track_noisy: "Tidal-signal ablation: TRACK with noisy tidal magnitude and gradient observations.",
   seek_shuffled: "Tidal-signal ablation: SEEK with deterministic shuffled tidal-gradient direction.",
   track_shuffled: "Tidal-signal ablation: TRACK with deterministic shuffled tidal-gradient direction.",
+  seek_sensor_accel: "Phase 8 sensor-tier controller: SEEK using noisy accelerometer-array tidal estimates.",
+  track_sensor_accel: "Phase 8 sensor-tier controller: TRACK using noisy accelerometer-array tidal estimates.",
+  seek_sensor_delayed: "Phase 8 sensor-tier controller: SEEK using delayed local-probe tidal estimates.",
+  track_sensor_delayed: "Phase 8 sensor-tier controller: TRACK using delayed local-probe tidal estimates.",
+  seek_sensor_micro: "Phase 8 sensor-tier controller: SEEK using noisy delayed micro-maneuver tidal estimates.",
+  track_sensor_micro: "Phase 8 sensor-tier controller: TRACK using noisy delayed micro-maneuver tidal estimates.",
   oracle: "Privileged full-state lookahead guard: scores candidate thrust vectors using simulator state; heuristic, not optimal.",
 });
 

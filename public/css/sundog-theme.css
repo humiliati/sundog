@@ -169,9 +169,9 @@ section h2,
 
 .cta-buttons {
   display: grid;
-  grid-template-columns: repeat(3, minmax(12rem, 1fr));
+  grid-template-columns: repeat(4, minmax(10rem, 1fr));
   gap: 1rem;
-  width: min(100%, 760px);
+  width: min(100%, 1000px);
 }
 
 .cta-buttons .btn {
@@ -180,7 +180,12 @@ section h2,
   justify-content: center;
   min-height: 3.3rem;
   padding: 0.82rem 1.15rem;
+  font-size: clamp(0.96rem, 1.25vw, 1.05rem);
   text-align: center;
+}
+
+.cta-buttons .btn-primary {
+  grid-column: span 2;
 }
 
 .hero .equation-display {
@@ -431,6 +436,10 @@ footer {
   .cta-buttons {
     grid-template-columns: 1fr;
     width: min(100%, 24rem);
+  }
+
+  .cta-buttons .btn-primary {
+    grid-column: span 1;
   }
 }
 
