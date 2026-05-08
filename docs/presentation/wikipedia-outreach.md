@@ -407,7 +407,7 @@ Before making this contribution, confirm:
 
 ### Timeline
 
-- **Now**: hold. The Phase 9/11 result is too prominent in the current threebody.html for a clean separation. The page presents the controller result as part of the artifact.
+- **Now:** hold. The Phase 9/11 result is too prominent in the current threebody.html for a clean separation. The page presents the controller result as part of the artifact.
 - **After a clean public-facing landing page exists** that separates the educational dynamics visualization from the research claims: submit a Talk page proposal.
 - **After a peer-reviewed paper**: standard citation path opens for the control result.
 
