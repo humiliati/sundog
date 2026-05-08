@@ -168,7 +168,7 @@ function getReplayInitialState() {
   return BALANCE_PRESETS[presetSelect.value]?.state ?? BALANCE_PRESETS.easy.state;
 }
 
-function roundedParam(value, digits = 6) {
+function roundedParam(value, digits = 9) {
   return String(Number.isFinite(value) ? Number.parseFloat(value.toFixed(digits)) : value);
 }
 

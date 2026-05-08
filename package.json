@@ -10,6 +10,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "balance:phase7": "node scripts/balance-harness.mjs --phase phase7-smoke --out results/balance/phase7-smoke --presets easy,recoverable,near_fall,noisy_shadow,delayed_shadow --modes passive,naive_cart,naive_shadow,sundog_shadow,oracle --light-elevations 28 --seeds 12",
     "balance:phase7:replay": "node scripts/balance-harness.mjs --phase phase7-replay --out results/balance/phase7-replay --replay-url",
+    "balance:phase7:verify": "node scripts/balance-verify-replays.mjs",
     "threebody:phase5": "node scripts/threebody-harness.mjs",
     "threebody:phase6": "node scripts/threebody-harness.mjs --phase phase6 --out results/threebody/phase6-baselines --modes off,naive,scan,seek,track,seek_noisy,track_noisy,seek_shuffled,track_shuffled,oracle --seeds 3",
     "threebody:phase7": "node scripts/threebody-harness.mjs --phase phase7 --out results/threebody/phase7-event-metrics --modes off,naive,scan,seek,track,seek_noisy,track_noisy,seek_shuffled,track_shuffled,oracle --seeds 3",

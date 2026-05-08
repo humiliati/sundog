@@ -33,7 +33,7 @@ function parseNumberList(value) {
   return parseList(value).map((item) => Number.parseFloat(item));
 }
 
-function parseArgs(argv) {
+export function parseArgs(argv) {
   const args = {
     phase: "phase7-smoke",
     out: "results/balance/phase7-smoke",
@@ -63,7 +63,12 @@ function parseArgs(argv) {
 
     if (flag === "--phase") args.phase = value;
     else if (flag === "--out") args.out = value;
-    else if (flag === "--replay-url") applyReplayUrl(args, value);
+    else if (flag === "--replay-url") {
+      if (!value || value.startsWith("--")) {
+        throw new Error("--replay-url requires a browser replay URL");
+      }
+      applyReplayUrl(args, value);
+    }
     else if (flag === "--initial-state") args.initialStateMode = value;
     else if (flag === "--seed") {
       args.seedStart = Number.parseInt(value, 10);
@@ -248,7 +253,7 @@ function terminalOutcome(state, cfg) {
   return "max_steps";
 }
 
-function roundedParam(value, digits = 6) {
+function roundedParam(value, digits = 9) {
   return String(Number.isFinite(value) ? Number.parseFloat(value.toFixed(digits)) : value);
 }
 
@@ -273,7 +278,7 @@ function makeHarnessReplayCommand(browserReplayUrl) {
   return `npm run balance:phase7:replay -- "${browserReplayUrl}"`;
 }
 
-function runTrial(args, { preset, mode, seed, lightElevationDeg }) {
+export function runTrial(args, { preset, mode, seed, lightElevationDeg }) {
   const initialState = selectInitialState(args, preset, seed);
   const cfg = normalizeBalanceConfig({
     preset,
@@ -490,9 +495,7 @@ function toCsv(rows, columns) {
   return `${lines.join("\n")}\n`;
 }
 
-async function main() {
-  const args = parseArgs(process.argv.slice(2));
-  const outDir = path.resolve(repoRoot, args.out);
+export function runSuite(args) {
   const results = [];
   const samples = [];
 
@@ -522,6 +525,26 @@ async function main() {
     browserReplayUrl: row.browserReplayUrl,
     harnessReplayCommand: row.harnessReplayCommand,
   }));
+
+  return {
+    results,
+    samples,
+    summaryRows,
+    comparisonRows,
+    replayIndex,
+  };
+}
+
+async function main() {
+  const args = parseArgs(process.argv.slice(2));
+  const outDir = path.resolve(repoRoot, args.out);
+  const {
+    results,
+    samples,
+    summaryRows,
+    comparisonRows,
+    replayIndex,
+  } = runSuite(args);
   const manifest = {
     schema: "sundog.balance.phase7.v2",
     generatedAt: new Date().toISOString(),
@@ -622,7 +645,9 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+if (path.resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}
