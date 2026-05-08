@@ -326,3 +326,95 @@ If Wikipedia contribution is rejected or controversial:
 ---
 
 **Key Principle**: We contribute to Wikipedia because we can genuinely help readers understand parhelion physics better, not because we want to promote the Sundog Project. The visualization stands on its educational merit.
+
+---
+
+## Three-Body Problem Outreach (Separate Track)
+
+The three-body workbench (`threebody.html`) is a different kind of artifact from
+the parhelion visualization. It requires a separate outreach strategy because
+the relevant Wikipedia article is different, the contribution type is different,
+and the timing is gated by peer review.
+
+### Target Article
+
+[Three-body problem](https://en.wikipedia.org/wiki/Three-body_problem)
+
+This article covers classical mechanics, the general intractability of the
+problem, restricted variants, numerical methods, and connections to chaos theory.
+It does not currently have interactive browser visualizations or
+sensor-limited control demonstrations in its External links.
+
+### What We Can Potentially Contribute
+
+**Near-term (visualization only, no research results):**
+
+The `threebody.html` browser visualization implements real-time RK4 integration
+of a planar restricted three-body system with:
+
+- Orbital trails for two primaries and a test particle
+- Live indirect signature overlays (virial ratio, inertia tensor trace,
+  pairwise energies, system energy)
+- Sensor-mode toggle showing locally measurable vs. privileged signals
+- Phase 3 Scan/Seek/Track controller demonstration
+
+As a standalone educational tool demonstrating three-body dynamics, the
+visualization could potentially be added to the External links section of the
+Three-body problem article, under the same reasoning as the parhelion case:
+it makes abstract dynamics visually concrete and is open source.
+
+**However**, note important differences from the parhelion case:
+
+- The parhelion visualization implements well-established, textbook physics.
+  The three-body workbench includes a control experiment (Phase 9/11 results)
+  that is original research not yet peer-reviewed.
+- A contribution that shows only the dynamics visualization (Phase 1 diagnostic
+  overlays, no Phase 3 controller claims) could pass WP:NOR. A contribution
+  that highlights the Sundog controller result would not.
+- Wikipedia's WP:ELNO discourages links to sites that primarily promote a
+  research program.
+
+**Gated on peer review (research results):**
+
+The Phase 11 bounded operating-envelope result cannot be cited in Wikipedia
+until it appears in a published, peer-reviewed venue. Once a paper lands, the
+standard Wikipedia citation path opens.
+
+### Proposed Contribution Wording (Visualization Only)
+
+If the article editors accept an External links entry for the visualization
+component only:
+
+```wikitext
+* [https://sundog.cc/threebody Three-body dynamics — Interactive browser visualization], real-time RK4 integration of the planar restricted problem with orbital trails and live diagnostic overlays (virial ratio, inertia tensor, pairwise energies).
+```
+
+**Disclosure language for Talk page:**
+
+> I contributed to the Sundog Project, which produced this visualization.
+> The code is open source (MIT) at https://github.com/humiliati/sundog.
+> I am proposing only the interactive dynamics visualization as an educational
+> resource; the research program built on top of it is not peer-reviewed and
+> I am not proposing to include any of its results in the article.
+
+### Decision Criteria
+
+Before making this contribution, confirm:
+
+1. The external link points to the visualization only, not to the research program or control claims.
+2. The `threebody.html` page (or its public URL) does not prominently pitch the Sundog controller result as a claim in the first visible content.
+3. Wikipedia editors on the Talk:Three-body problem page support the inclusion.
+
+### Timeline
+
+- **Now:** hold. The Phase 9/11 result is too prominent in the current threebody.html for a clean separation. The page presents the controller result as part of the artifact.
+- **After a clean public-facing landing page exists** that separates the educational dynamics visualization from the research claims: submit a Talk page proposal.
+- **After a peer-reviewed paper**: standard citation path opens for the control result.
+
+### Relationship to Sun Dog Wikipedia Track
+
+Keep these tracks strictly separate. The Sun dog (atmospheric optics) article
+has no connection to three-body dynamics. Do not mention the three-body
+workbench in the Sun dog article, and do not mention parhelion optics in
+proposals to the Three-body problem article.
+
