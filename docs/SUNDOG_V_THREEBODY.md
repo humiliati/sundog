@@ -585,22 +585,41 @@ npm run threebody:phase11:outside-pocket
 npm run threebody:phase11:compare
 ```
 
-These commands do not exist yet. They should wrap
-`scripts/threebody-operating-envelope.mjs` with explicit output directories and
-manifest labels, rather than replacing the Phase 9 artifacts.
+These commands wrap `scripts/threebody-operating-envelope.mjs` with explicit
+output directories and manifest labels, rather than replacing the Phase 9
+artifacts. The runner supports `--track-guard-quantiles` as a sweep axis for
+Phase 11 guard comparisons.
 
 Outputs:
 
 - `results/threebody/phase11-guard-quantiles/`;
 - `results/threebody/phase11-outside-pocket/`;
 - `results/threebody/phase11-comparison/`;
-- a compact `phase11-summary.md` or CSV bundle suitable for the public writeup;
+- `docs/THREEBODY_PHASE11_SUMMARY.md`;
 - updated failure-boundary heatmaps for velocity/radius, mass ratio, timestep,
   and guard quantile.
 
 Exit criterion: the project can say whether the Phase 9 positive pocket is
 robust to guard quantile and nearby parameter expansion, and can identify the
 first outside-pocket region where the Sundog controller should not be used.
+
+Initial Phase 11 results:
+
+- Guard-quantile sweep emitted 7,056 trials under
+  `results/threebody/phase11-guard-quantiles/`. The pocket survives quantiles
+  `0.5`, `0.75`, and `0.9`; `0.5` is cheapest, `0.9` has the strongest average
+  survival delta, and `0.75` remains a viable middle setting.
+- Outside-pocket expansion emitted 6,912 trials under
+  `results/threebody/phase11-outside-pocket/`. The high-velocity pocket remains
+  strong, while lower velocity scales and equal-mass boundary cells carry most
+  of the mixed and negative rows.
+- Comparison run emitted 2,592 trials under
+  `results/threebody/phase11-comparison/`. In the favorable high-velocity
+  pocket, guarded accelerometer TRACK produced 81 candidate rows out of 81,
+  while the naive local baseline produced none and the privileged heuristic
+  oracle produced 34 of 81. This oracle is a heuristic, not an optimal
+  controller.
+- Summary: `docs/THREEBODY_PHASE11_SUMMARY.md`.
 
 ## Recommendation
 
