@@ -39,6 +39,7 @@ function resetControllerState() {
   controllerState.step = 0;
   delete controllerState.rng;
   delete controllerState.shuffledGradient;
+  delete controllerState.sensorGradientStates;
 }
 
 function currentConfig(overrides = {}) {

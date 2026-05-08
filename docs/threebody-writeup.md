@@ -210,6 +210,20 @@ metrics are calibration data only: small-slate and label-degenerate regimes can
 produce blank AUROC or false-alarm values, and calibration bins may be
 non-monotone.
 
+**Phase 8 (Sensor-Model Validation)**: Started. `npm run threebody:phase8`
+runs the matched slate with sensor-tier tidal tensor audits and writes
+`sensor-model-samples.csv` plus `sensor-model-summary.csv` under
+`results/threebody/phase8-sensor-model/`. The current sensor tiers are exact
+simulated local probes, noisy accelerometer-array samples, delayed local probes,
+and noisy micro-maneuver proxies. This is not yet a sensor-only controller
+claim: it measures proxy error against the simulated reference and keeps the
+exact virtual probe labeled as a reference tier.
+Phase 8 also includes sensor-tier controller modes for SEEK/TRACK using noisy
+accelerometer-array, delayed local-probe, and noisy micro-maneuver tidal
+estimates. The first smoke slate suggests the accelerometer-array tier is much
+closer to ideal behavior than delayed or contaminated micro-maneuver control,
+but this remains calibration work.
+
 ## Sensor Model Audit
 
 ### Privileged Signals (Full State Required)
@@ -278,7 +292,8 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   summaries and larger seed slates.
 - **Phase 8, sensor-model validation**: Separate simulated local probes from
   micro-maneuver estimates, accelerometer-array estimates, and noisy learned
-  local field surrogates.
+  local field surrogates. Current next step is to sweep noise/delay for the
+  degraded sensor-tier controller modes.
 - **Phase 9, operating envelope map**: Sweep initial conditions, mass ratio,
   thrust authority, target tidal magnitude, sensor noise, delay, and timestep to
   map success, failure, and ambiguity regions.

@@ -386,6 +386,48 @@ export function computeTidalGradient(state, config = {}) {
   };
 }
 
+function controllerSensorVariant(mode) {
+  if (mode.endsWith("_sensor_accel")) return "accelerometer_array_noisy";
+  if (mode.endsWith("_sensor_delayed")) return "delayed_local_probe";
+  if (mode.endsWith("_sensor_micro")) return "micro_maneuver_noisy";
+  return null;
+}
+
+function computeSensorTidalGradient(state, config, variant, controllerState) {
+  const cfg = normalizeConfig(config);
+  const positions = state.slice(0, 6);
+  const x3 = positions[4];
+  const y3 = positions[5];
+  const delta = cfg.tidalProbeDelta;
+  if (!controllerState.sensorGradientStates) controllerState.sensorGradientStates = {};
+  if (!controllerState.sensorGradientStates[variant]) {
+    controllerState.sensorGradientStates[variant] = {
+      center: {},
+      xp: {},
+      yp: {},
+    };
+  }
+  const sensorStates = controllerState.sensorGradientStates[variant];
+  const tidal = computeSensorTidalTensor(state, cfg, variant, sensorStates.center);
+
+  const positionsXp = positions.slice();
+  positionsXp[4] = x3 + delta;
+  const tidalXp = computeSensorTidalTensor([...positionsXp, ...state.slice(6)], cfg, variant, sensorStates.xp);
+
+  const positionsYp = positions.slice();
+  positionsYp[5] = y3 + delta;
+  const tidalYp = computeSensorTidalTensor([...positionsYp, ...state.slice(6)], cfg, variant, sensorStates.yp);
+
+  return {
+    tidal,
+    gradX: (tidalXp.magnitude - tidal.magnitude) / delta,
+    gradY: (tidalYp.magnitude - tidal.magnitude) / delta,
+    sensorVariant: variant,
+    sensorTier: tidal.sensorTier,
+    delayWarmup: tidal.delayWarmup || tidalXp.delayWarmup || tidalYp.delayWarmup,
+  };
+}
+
 function limitVector(x, y, maxMagnitude) {
   const magnitude = Math.sqrt(x * x + y * y);
   if (magnitude <= 0.001) return [0, 0];
@@ -542,11 +584,20 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
     || mode === "track_noisy"
     || mode === "seek_shuffled"
     || mode === "track_shuffled"
+    || mode === "seek_sensor_accel"
+    || mode === "track_sensor_accel"
+    || mode === "seek_sensor_delayed"
+    || mode === "track_sensor_delayed"
+    || mode === "seek_sensor_micro"
+    || mode === "track_sensor_micro"
   ) {
-    let gradient = computeTidalGradient(state, cfg);
-    if (mode.endsWith("_noisy")) {
+    const sensorVariant = controllerSensorVariant(mode);
+    let gradient = sensorVariant
+      ? computeSensorTidalGradient(state, cfg, sensorVariant, controllerState)
+      : computeTidalGradient(state, cfg);
+    if (!sensorVariant && mode.endsWith("_noisy")) {
       gradient = perturbTidalGradient(gradient, controllerState, cfg);
-    } else if (mode.endsWith("_shuffled")) {
+    } else if (!sensorVariant && mode.endsWith("_shuffled")) {
       const shuffled = shuffledTidalGradient(controllerState, cfg);
       gradient = {
         ...gradient,
