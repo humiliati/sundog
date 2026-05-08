@@ -173,12 +173,25 @@ baselines is pending.
 
 **Phase 4 (Public Artifact)**: In progress. Browser visualization complete. This writeup documents claim boundaries. Sensor model audit below separates privileged diagnostics from valid indirect signals.
 
-**Phase 5 (Reproducible Harness)**: Started. `npm run threebody:phase5`
-produces a deterministic smoke batch under `results/threebody/phase5-smoke/`
-with a manifest and per-trial JSONL logs. The harness records state, exposed
-signatures, tidal proxy values, thrust vectors, event labels, and terminal
-outcomes. The browser still needs to import the shared dynamics module before
-this phase is complete.
+**Phase 5 (Reproducible Harness)**: Complete for the prototype tier.
+`npm run threebody:phase5` produces a deterministic smoke batch under
+`results/threebody/phase5-smoke/` with a manifest and per-trial JSONL logs. The
+harness records state, exposed signatures, tidal proxy values, thrust vectors,
+event labels, and terminal outcomes. The browser visualization now imports the
+same shared dynamics module as the harness, so initialization, integration,
+signature computation, tidal proxy computation, and prototype controller thrust
+use one equation source.
+
+**Phase 6 (Baseline Set)**: Started. `npm run threebody:phase6` runs a matched
+smoke slate across passive/no-control, naive local acceleration control,
+SCAN-only, SEEK, TRACK, noisy and shuffled tidal-signal ablations, and a
+privileged full-state lookahead guard. The output
+includes per-trial logs, `summary.csv` grouped by regime and controller mode,
+`paired.csv` with same-seed deltas against passive and oracle rows, and
+`comparison.csv` with aggregate improvement/tie/worsening counts. The current
+Phase 6 artifacts are calibration data only: the privileged baseline is
+heuristic, the seed count is small, and no public performance claim should be
+made from this slate.
 
 ## Sensor Model Audit
 
@@ -238,9 +251,11 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
 
 - **Phase 5, reproducible harness**: Run deterministic trial batches outside the
   browser animation loop, with seeded initial conditions and per-trial logs.
-- **Phase 6, baselines**: Compare passive/no-control, naive local control,
-  privileged oracle control, and SCAN/SEEK/TRACK ablations on the same trial
-  slate.
+- **Phase 6, baselines**: Expand the current passive/no-control, naive local
+  control, privileged lookahead, and SCAN/SEEK/TRACK matched slate into a larger
+  baseline comparison. Current primary metrics are terminal outcome, simulated
+  time, total delta-v, minimum primary distance, controller saturation count,
+  and target-band loss count.
 - **Phase 7, event metrics**: Add event labels for escape, close approach,
   tidal spikes, controller saturation, and loss of target band; report lead
   time, precision/recall, F1, AUROC, and false-alarm rate.

@@ -415,7 +415,8 @@ complete "Steering by the Shadow of Chaos" documentation, including:
 - Connection to photometric alignment experiment
 - Future directions
 
-**Phase 5**: Started. A deterministic harness now lives at:
+**Phase 5**: Complete for the prototype tier. A deterministic harness now lives
+at:
 
 ```bash
 npm run threebody:phase5
@@ -426,6 +427,8 @@ Current Phase 5 implementation:
 - `public/js/threebody-core.mjs`: shared planar restricted three-body dynamics,
   signature computation, tidal proxy computation, prototype controller logic,
   event labels, and trial runner.
+- `public/js/threebody-browser.mjs`: browser visualization wrapper that imports
+  the shared core module instead of carrying mirrored dynamics inline.
 - `scripts/threebody-harness.mjs`: CLI batch harness that writes a manifest and
   per-trial JSONL logs.
 - Default smoke output: `results/threebody/phase5-smoke/` (ignored by git).
@@ -438,9 +441,57 @@ Current status against Phase 5 exit criterion:
   magnitude, log path, and terminal summary.
 - Per-trial logs: present, including state, exposed signatures, tidal tensor,
   thrust vector, event labels, and terminal outcome.
-- Browser equation sharing: partially complete. The harness uses
-  `public/js/threebody-core.mjs`; the browser still has inline mirrored
-  equations and should be refactored to import the same module before Phase 5 is
-  called complete.
+- Browser equation sharing: complete. Both the browser and harness now use
+  `public/js/threebody-core.mjs` for initialization, integration, signatures,
+  tidal proxy computation, and prototype controller thrust.
+
+This does not make baseline or metric claims. It only completes the Phase 5
+reproducibility substrate needed for Phase 6 and Phase 7.
+
+**Phase 6**: Started. Baseline modes and a matched-slate runner now exist:
+
+```bash
+npm run threebody:phase6
+```
+
+Current Phase 6 implementation:
+
+- Passive baseline: `off`, no thrust.
+- Naive local baseline: `naive`, pushes against local acceleration plus simple
+  velocity damping, without tidal-gradient structure.
+- Sundog ablations: `scan`, `seek`, and `track`.
+- Tidal-signal ablations: `seek_noisy`, `track_noisy`, `seek_shuffled`, and
+  `track_shuffled`. The noisy variants perturb observed tidal magnitude and
+  gradient; the shuffled variants preserve controller wiring but replace the
+  tidal-gradient direction with a deterministic pseudo-random direction.
+- Privileged baseline: `oracle`, a full-state lookahead guard that scores
+  candidate thrust directions using simulator state. This is a privileged
+  heuristic, not an optimal controller.
+- Browser controls expose `naive`, `oracle`, and the tidal-signal ablation modes
+  for qualitative inspection.
+- Harness output includes:
+  - `summary.csv`: grouped by regime and controller mode.
+  - `paired.csv`: per-regime/per-seed deltas against matched passive and oracle
+    rows.
+  - `comparison.csv`: aggregate improvement/tie/worsening counts versus
+    passive, plus mean time and fuel deltas.
+- The manifest declares baseline mode definitions and primary metrics:
+  `terminalOutcome`, `simulatedTime`, `totalDeltaV`, `minPrimaryDistance`,
+  `saturationCount`, and `targetBandLossCount`.
+- Default smoke output: `results/threebody/phase6-baselines/` (ignored by git).
+
+Current status against Phase 6 exit criterion:
+
+- Matched slate: present for all current modes across stable, near-escape,
+  near-collision, and chaotic seed regimes.
+- Comparison artifacts: present via manifest, JSONL logs, summary CSV, paired
+  CSV, and aggregate comparison CSV.
+- Interpretation: not yet complete. The initial 3-seed smoke slate exposes hard
+  regimes and several weak controllers; it should be treated as calibration for
+  baseline design, not as evidence for or against the Sundog claim.
+- Next Phase 6 work: tune the privileged baseline objective, define a larger
+  seed slate, and decide whether the primary metric ordering should privilege
+  survival time, bounded outcome, or fuel cost before Phase 7 event-detection
+  work begins.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)
