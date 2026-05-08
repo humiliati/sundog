@@ -28,7 +28,9 @@ These claims are defensible with current evidence:
 - The pattern involves denying full world-state access, observing indirect signals, transforming them into control-relevant signatures, and acting from those signatures.
 
 ### Applications
-- EyesOnly/Gone Rogue demonstrates procedural agent control using compressed perception and stop-conditioned action batches.
+- EyesOnly/Gone Rogue demonstrates a headless turn-envelope runner operating
+  against a real procedural roguelike through compressed perception,
+  stop-conditioned action batches, and a seedable Playwright bridge.
 - Dungeon Gleaner demonstrates verb-field NPC behavior: unmet needs diffuse across satisfier nodes to produce lightweight idle orbits without scripted planners.
 - Money Bags demonstrates graph-based interpretation of softbody motion, making torsion, deformation, symmetry, and recovery metrics legible.
 
@@ -53,6 +55,8 @@ These claims are defensible with current evidence:
 
 ### Overpromising on Applications
 - ❌ "EyesOnly proves the theorem for procedural games." (needs formal study)
+- ❌ "The EyesOnly playtest agent demonstrates Sundog under tighter UI constraints." (its scope is UX regression automation)
+- ❌ "EyesOnly performs Sundog-driven level manipulation." (LAGM is a design doc, not shipping code)
 - ❌ "Dungeon Gleaner proves verb-field diffusion outperforms GOAP for town simulation." (needs telemetry and a comparison harness)
 - ❌ "Dungeon Gleaner proves a one-twelfth-cost light or physics theorem." (old framing; do not repeat as Sundog evidence)
 - ❌ "Money Bags proves softbody alignment is solved." (needs controlled experiments)
@@ -90,13 +94,15 @@ Replace risky language with measured alternatives:
 
 ### EyesOnly / Gone Rogue
 **Safe:**
-"EyesOnly shows Sundog-derived turn envelopes operating against a real procedural roguelike through compressed perception and stop-conditioned action batches."
+"EyesOnly's headless Gone Rogue runner is an instrumented prototype: it drives the real JavaScript game engine through `GoneRogue.headless`, compresses game state into a typed perception payload, selects policy axes, and executes stop-conditioned action batches. The apparatus is seedable and policy-pluggable, but the matched-seed comparison study has not run."
 
 **Avoid:**
 "EyesOnly proves the theorem for procedural games."
 
+Also avoid treating `playtest-agent.js` as Sundog evidence; it is UI regression automation. Treat Live Agentic Game Moderation as conceptual lineage / forward-looking design until code ships.
+
 **What's needed:**
-Define success metrics, compare against baselines with matched seeds, report where compressed perception helps and where it loses information.
+Matched-seed multi-policy study, compressed-perception ablation, volatility-threshold sweep, behavior clips, and JSONL telemetry bundles that can later feed the LAGM design.
 
 ### Dungeon Gleaner
 **Safe:**

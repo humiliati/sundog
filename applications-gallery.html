@@ -303,13 +303,15 @@
                     <span class="tier">Instrumented Prototype</span>
                     <h2>EyesOnly / Gone Rogue</h2>
                     <div class="signal-list">
-                        <p><strong>Indirect signal:</strong> compressed procedural game state.</p>
-                        <p><strong>Transformation:</strong> turn envelopes, policy axes, and stop conditions.</p>
-                        <p><strong>Output:</strong> coherent action batches under partial observation.</p>
+                        <p><strong>Indirect signal:</strong> floor, biome, HP, alert, inventory, gates, and combat state from <code>GoneRogue.headless</code>.</p>
+                        <p><strong>Transformation:</strong> perception compression, axis selection, and stop-conditioned action batches through Playwright.</p>
+                        <p><strong>Output:</strong> seedable JSONL runs ready for matched-seed policy comparison studies.</p>
                     </div>
-                    <p class="stub-note">Needs: matched-seed study, behavior clips, and baseline comparison.</p>
+                    <p class="stub-note">Needs: matched-seed multi-policy study, compressed-perception ablation, volatility sweep, and behavior clips.</p>
                     <div class="app-links">
                         <a href="docs/APPLICATIONS.md#eyesonly--gone-rogue">Application Notes</a>
+                        <a href="docs/runners.md">Runner Docs</a>
+                        <a href="docs/applications/EYES_ONLY_DETAILED.md">Detailed Scaffold</a>
                     </div>
                 </article>
 

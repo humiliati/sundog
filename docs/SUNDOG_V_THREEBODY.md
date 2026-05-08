@@ -577,10 +577,25 @@ Current Phase 8 implementation:
   - `--sensor-noise-std`
   - `--sensor-delay-steps`
   - `--micro-maneuver-contamination-std`
+- Calibration sweep:
+  - `npm run threebody:phase8:calibrate`
+  - Dedicated script: `scripts/threebody-sensor-calibration-sweep.mjs`.
+  - Sweeps accelerometer-array noise, delayed-probe latency, and
+    micro-maneuver noise/latency/contamination with matched passive baselines
+    for each regime and seed.
+  - Default output: `results/threebody/phase8-calibration-sweep/` (ignored by
+    git).
 - Additional Phase 8 outputs:
   - `sensor-model-samples.csv`: per-trial/per-time sensor estimate rows.
   - `sensor-model-summary.csv`: aggregate tensor magnitude and component errors
     by regime, controller mode, and sensor variant.
+- Additional calibration outputs:
+  - `paired.csv`: per-trial sensor-controller result paired against the passive
+    baseline for the same degradation setting, regime, and seed.
+  - `summary.csv`: outcome survival, passive deltas, delta-v, minimum-distance,
+    and warning-score aggregates by sensor tier and degradation setting.
+  - `sensor-error-summary.csv`: sensor-estimate magnitude/component error by
+    tier, degradation setting, regime, and controller mode.
 - Default smoke output: `results/threebody/phase8-sensor-model/` (ignored by
   git).
 
@@ -589,13 +604,24 @@ Current status against Phase 8 exit criterion:
 - Sensor-tier labels: present in the manifest and summary outputs.
 - Reference separation: present. The exact virtual probe is explicitly labeled
   as a simulator-field reference, not as a hardware-valid sensor claim.
+- Default calibration sweep: present. The first run emitted 1,044 matched
+  calibration trials. It writes paired passive-baseline comparisons, aggregate
+  survival rows, and sensor-error rows for accelerometer noise, delayed-probe
+  latency, and micro-maneuver degradation.
 - Interpretation: calibration only. The initial smoke run shows noisy
   accelerometer-array estimates preserve the reference tensor far better than
   delayed or contaminated micro-maneuver proxies in fast-changing regimes. When
   those degraded estimates drive SEEK/TRACK, accelerometer-array control mostly
   tracks the ideal behavior, while delayed and micro-maneuver variants break
-  more stable cases. This is still a small matched slate.
-- Next Phase 8 work: sweep sensor noise/delay and report whether controller
-  outcomes survive degraded sensor tiers before claiming sensor-only control.
+  more stable cases. The first calibration sweep keeps the same broad shape:
+  delayed and micro-maneuver tiers degrade quickly with latency, while
+  accelerometer-array error grows with noise. Some noisier controller settings
+  also produce better terminal survival on the tiny slate by changing thrust
+  behavior, so these rows should be treated as operating-envelope clues, not as
+  evidence that noise helps.
+- Next Phase 8 work: inspect the new calibration sweep rows, identify the
+  degradation envelope where sensor-tier controllers still survive matched
+  passive baselines, then rerun the most promising settings with a larger seed
+  slate before claiming sensor-only control.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)

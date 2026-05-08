@@ -297,9 +297,30 @@ section h2,
   box-shadow: var(--sd-shadow-soft);
 }
 
+.benefit-card,
+.proof-item,
+.research-highlight,
+.comparison-container,
+.origin-card {
+  background:
+    linear-gradient(transparent 96%, rgba(99, 163, 220, 0.11) 96%),
+    linear-gradient(90deg, rgba(255, 99, 99, 0.16) 0 2px, transparent 2px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 250, 240, 0.94)),
+    var(--sd-paper-ruled);
+  background-size: 100% 1.55rem, 100% 100%, 100% 100%, 100% 100%;
+}
+
+.app-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 250, 240, 0.98)),
+    var(--sd-paper);
+}
+
 .app-card:hover,
 .benefit-card:hover,
-.origin-card:hover {
+.origin-card:hover,
+.proof-item:hover,
+.research-highlight:hover {
   border-color: rgba(215, 169, 40, 0.58);
   box-shadow: var(--sd-shadow);
 }
@@ -315,6 +336,7 @@ section h2,
 .tier {
   background: color-mix(in srgb, var(--sd-sky) 82%, var(--sd-ink));
   border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
 }
 
 .theorem-card {
@@ -334,6 +356,44 @@ section h2,
 footer {
   background:
     linear-gradient(180deg, var(--sd-ink) 0%, var(--sd-ink-strong) 100%);
+}
+
+.proof-placeholder {
+  border: 1px solid rgba(20, 43, 58, 0.12);
+  background:
+    linear-gradient(135deg, rgba(20, 43, 58, 0.08), rgba(115, 150, 168, 0.08)),
+    repeating-linear-gradient(90deg, rgba(20, 43, 58, 0.05) 0 1px, transparent 1px 18px),
+    var(--sd-paper-warm);
+  color: var(--sd-ink-soft);
+}
+
+.controls-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 14rem),
+    rgba(11, 23, 32, 0.94);
+  border-color: rgba(244, 196, 48, 0.36);
+  box-shadow: 0 18px 36px rgba(11, 23, 32, 0.24);
+}
+
+.control-group button {
+  box-shadow: 0 8px 16px rgba(215, 169, 40, 0.16);
+}
+
+.control-group input[type="range"] {
+  accent-color: var(--sd-amber);
+}
+
+.control-group select,
+.controls-panel select {
+  background-color: rgba(248, 251, 252, 0.11) !important;
+  color: var(--text-light) !important;
+  border-color: rgba(244, 196, 48, 0.42) !important;
+}
+
+.control-group select option,
+.controls-panel select option {
+  background-color: var(--sd-ink);
+  color: var(--sd-cloud);
 }
 
 /* BoxForge-inspired primitives for the upcoming hero graph/components pass. */

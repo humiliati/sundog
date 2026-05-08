@@ -12,6 +12,7 @@
     "threebody:phase6": "node scripts/threebody-harness.mjs --phase phase6 --out results/threebody/phase6-baselines --modes off,naive,scan,seek,track,seek_noisy,track_noisy,seek_shuffled,track_shuffled,oracle --seeds 3",
     "threebody:phase7": "node scripts/threebody-harness.mjs --phase phase7 --out results/threebody/phase7-event-metrics --modes off,naive,scan,seek,track,seek_noisy,track_noisy,seek_shuffled,track_shuffled,oracle --seeds 3",
     "threebody:phase8": "node scripts/threebody-harness.mjs --phase phase8 --out results/threebody/phase8-sensor-model --modes off,naive,scan,seek,track,seek_sensor_accel,track_sensor_accel,seek_sensor_delayed,track_sensor_delayed,seek_sensor_micro,track_sensor_micro,oracle --seeds 3 --sensor-variants simulated_local_probe,accelerometer_array_noisy,delayed_local_probe,micro_maneuver_noisy",
+    "threebody:phase8:calibrate": "node scripts/threebody-sensor-calibration-sweep.mjs",
     "deploy": "npm run build && node scripts/deploy-pages.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
