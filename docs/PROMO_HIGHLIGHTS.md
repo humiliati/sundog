@@ -38,9 +38,11 @@ Sundog is a research and product program for transforming indirect observable
 phenomena into usable software control. In the core experiment, a controller
 aligns a reflected beam without target-position access, using only sparse
 photometric feedback and joint state. In product systems, the same idea appears
-as roguelike agents acting under occluded state, verb-field NPC behavior, and
-graph telemetry that makes softbody motion analyzable frame by frame. The claim
-is simple and dangerous:
+as roguelike agents acting under occluded state, verb-field NPC behavior, graph
+telemetry that makes softbody motion analyzable frame by frame, and a
+three-body dynamics workbench where a sensor-limited controller uses only local
+gravitational field readings to improve survival in a regime where a naive
+controller fails. The claim is simple and dangerous:
 some systems do not need to see the target directly. They can align by reading
 the structure of the disturbance.
 
@@ -58,7 +60,12 @@ extends the idea into procedural agent play under occluded state. Dungeon
 Gleaner pushes it into verb-field NPC behavior, where unmet needs diffuse across
 satisfier nodes instead of relying on scripted idle planners. Money Bags brings it
 into softbody terrain systems, where torsion, torque, center of gravity,
-deformation, and recovery become graph-readable telemetry.
+deformation, and recovery become graph-readable telemetry. The three-body
+workbench pushes the pattern into chaotic dynamics: a sensor-limited controller
+that reads only local gravitational field gradients — not the positions or
+masses of the primaries — improves survival in a bounded near-escape operating
+pocket where a naive local baseline fails. The full state is 18-dimensional.
+The controller uses three.
 
 The direction is bigger than any one demo: software systems that do not need
 perfect state to behave intelligently. Systems that can act from the halo.
@@ -128,6 +135,12 @@ audience is technical.
 - The next generation of simulation tools will not just compute physics. They
   will decide which physical signatures are worth keeping.
 
+- The shadow of chaos can be a compass.
+- Three-body dynamics are hard because no closed-form solution exists. Sundog asks whether you need one.
+- Full state is 18-dimensional. You need three.
+- The most chaotic systems still cast shadows before they break.
+- A tidal sensor in a gravitational field is already enough to tell you something useful.
+
 ## Product Highlights
 
 ### Sundog Core
@@ -189,6 +202,26 @@ Why it matters:
 - gives softbody design a graph vocabulary;
 - creates a path toward predicting recovery and controllability from motion
   signatures.
+
+### Three-Body Dynamics Workbench
+
+Highlight:
+
+> In the tested planar restricted setup, a sensor-limited controller using only
+> local gravitational field readings improves survival over passive and naive
+> local baselines in a robust high-velocity near-escape pocket. Full state is
+> 18-dimensional. The controller reads three.
+
+Why it matters:
+
+- pushes the Sundog pattern into a classically hard dynamical regime;
+- demonstrates that indirect dynamical signatures (tidal tensor, local
+  acceleration) can support useful control in three-body dynamics without
+  primary-position or mass access;
+- maps the operating envelope and failure boundary explicitly: low-velocity and
+  equal-mass cells are known harms, not hidden caveats;
+- shows the workbench as a living demonstration that claims discipline and
+  honest failure maps are part of the result, not footnotes.
 
 ## Future Bets
 
@@ -260,6 +293,9 @@ These are intentionally bold. They are not yet proven.
 - From Shadow Geometry To Software Control
 - The Disturbance Is The Data
 - H(x): The Signal Around The Signal
+- Steering By The Shadow Of Chaos
+- 18 Dimensions. Three Signals.
+- The Three-Body Problem Has A Shadow Too
 
 ## Taglines
 
@@ -290,9 +326,11 @@ We rebuilt Sundog as a research-facing artifact.
 
 The core result is narrow and measurable: mirror alignment without direct target
 coordinates, using sparse photometric feedback. The broader program now shows
-up in EyesOnly, Dungeon Gleaner, and Money Bags: procedural agents under
-occlusion, verb-field NPC behavior, and graph-readable softbody
-telemetry.
+up in EyesOnly, Dungeon Gleaner, Money Bags, and the three-body dynamics
+workbench: procedural agents under occlusion, verb-field NPC behavior,
+graph-readable softbody telemetry, and sensor-limited survival in a chaotic
+gravitational setting where the controller reads tidal field gradients instead
+of full system state.
 
 The future we are chasing: systems that do not need perfect information to
 behave intelligently.
@@ -308,7 +346,11 @@ The Sundog pattern:
 5. measure the failure boundary honestly.
 
 That pattern now spans photometric alignment, procedural roguelike agents,
-verb-field NPC behavior, and softbody graph telemetry.
+verb-field NPC behavior, softbody graph telemetry, and three-body dynamics
+control. In the three-body workbench, the agent reads local tidal gradients —
+not primary positions, not masses — and improves survival in a near-escape
+operating pocket where naive local control fails. The failure boundary is
+reported, not hidden.
 
 ## Pitch Deck Outline
 
@@ -319,8 +361,10 @@ verb-field NPC behavior, and softbody graph telemetry.
    access.
 5. The trade: comparable terminal accuracy, slower acquisition.
 6. The applications: EyesOnly, Dungeon Gleaner, Money Bags.
-7. The future: agents and simulations built around useful partial information.
-8. The ask: collaborators, replication, benchmarks, hardware validation, and
+7. The three-body result: sensor-limited survival in a chaotic dynamical setting,
+   with an honest operating envelope and failure map.
+8. The future: agents and simulations built around useful partial information.
+9. The ask: collaborators, replication, benchmarks, hardware validation, and
    application-specific studies.
 
 ## Boundary Language
@@ -329,9 +373,12 @@ Use this whenever the promo is likely to reach researchers:
 
 > The broad theorem is a research program. The controlled result currently
 > defended in the Sundog repo is narrower: photometric mirror alignment without
-> target-position access in a MuJoCo experiment. EyesOnly, Dungeon Gleaner, and
-> Money Bags are application expressions that motivate the next round of
-> controlled studies.
+> target-position access in a MuJoCo experiment. The three-body workbench is a
+> bounded operating-envelope study: a sensor-limited controller using local tidal
+> field readings improves survival over passive and naive baselines in a tested
+> near-escape pocket; lower-velocity and equal-mass cells remain known harm
+> boundaries. EyesOnly, Dungeon Gleaner, and Money Bags are application
+> expressions that motivate the next round of controlled studies.
 
 ## Closing Lines
 
