@@ -160,16 +160,18 @@ The visualization serves as both demonstration and research tool: it allows expl
 ## Status
 
 **Phase 1 (Diagnostic Benchmark)**: Instrumented, not complete. Privileged
-signatures are implemented and visualized; event labels, lead-time metrics, and
-precision/recall or AUROC are still pending.
+signatures are implemented and visualized. Initial event labels and tidal
+warning metrics now exist in the harness, but diagnostic comparisons against
+naive warning scores are still pending.
 
 **Phase 2 (Sensor-Available Proxies)**: Scaffolded, not validated. Tidal tensor
 estimation is implemented through simulated local probe samples; stricter sensor
 validation is pending.
 
 **Phase 3 (Scan/Seek/Track Controller)**: Prototype implemented. Controller
-modes exist, but performance comparison against passive, naive, and oracle
-baselines is pending.
+modes exist, and matched smoke-slate comparison against passive, naive, oracle,
+and tidal-signal ablation baselines has started. This is calibration work, not a
+validated performance result.
 
 **Phase 4 (Public Artifact)**: In progress. Browser visualization complete. This writeup documents claim boundaries. Sensor model audit below separates privileged diagnostics from valid indirect signals.
 
@@ -192,6 +194,20 @@ includes per-trial logs, `summary.csv` grouped by regime and controller mode,
 Phase 6 artifacts are calibration data only: the privileged baseline is
 heuristic, the seed count is small, and no public performance claim should be
 made from this slate.
+
+**Phase 7 (Event Metrics)**: Started. `npm run threebody:phase7` runs the same
+matched controller slate and writes `event-metrics.csv` under
+`results/threebody/phase7-event-metrics/`. The current diagnostic defines a
+hazard as escape or close approach, a warning as a tidal spike, and a positive
+sample as one that falls within the configured one-second warning horizon before
+the hazard. The output reports first hazard time, first warning time, lead time,
+sample confusion counts, precision, recall, F1, false-alarm rate, and AUROC for
+tidal magnitude. The harness also writes `threshold-sweep.csv`,
+`threshold-summary.csv`, and `calibration.csv` for threshold tradeoff and binned
+risk inspection. These metrics are calibration data only: small-slate and
+label-degenerate regimes can produce blank AUROC or false-alarm values,
+calibration bins may be non-monotone, and the tidal warning score still needs
+comparison against naive local-acceleration scores.
 
 ## Sensor Model Audit
 
@@ -256,9 +272,9 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   baseline comparison. Current primary metrics are terminal outcome, simulated
   time, total delta-v, minimum primary distance, controller saturation count,
   and target-band loss count.
-- **Phase 7, event metrics**: Add event labels for escape, close approach,
-  tidal spikes, controller saturation, and loss of target band; report lead
-  time, precision/recall, F1, AUROC, and false-alarm rate.
+- **Phase 7, event metrics**: Expand the current tidal-warning threshold sweeps
+  and calibration curves with naive local-acceleration warning comparisons and
+  reliability/error summaries.
 - **Phase 8, sensor-model validation**: Separate simulated local probes from
   micro-maneuver estimates, accelerometer-array estimates, and noisy learned
   local field surrogates.

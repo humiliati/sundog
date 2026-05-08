@@ -14,6 +14,7 @@ export const DEFAULT_THREEBODY_CONFIG = Object.freeze({
   tidalSpikeThreshold: 50,
   tidalNoiseStd: 0.15,
   tidalShufflePeriod: 25,
+  eventWarningHorizon: 1,
   logEvery: 10,
 });
 
@@ -529,6 +530,104 @@ export function summarizeOutcome(eventHistory) {
   };
 }
 
+function ratioOrNull(numerator, denominator) {
+  if (denominator <= 0) return null;
+  return numerator / denominator;
+}
+
+function computeAuroc(samples) {
+  const positives = samples.filter((sample) => sample.label);
+  const negatives = samples.filter((sample) => !sample.label);
+  if (positives.length === 0 || negatives.length === 0) return null;
+
+  let score = 0;
+  for (const positive of positives) {
+    for (const negative of negatives) {
+      if (positive.score > negative.score) score += 1;
+      else if (positive.score === negative.score) score += 0.5;
+    }
+  }
+  return score / (positives.length * negatives.length);
+}
+
+export function makeEventDiagnosticSamples(eventHistory, config = {}) {
+  const cfg = normalizeConfig(config);
+  const firstHazard = eventHistory.find((entry) => entry.events.escape || entry.events.closeApproach);
+  const hazardTime = firstHazard?.time ?? null;
+
+  return eventHistory.map((entry) => ({
+    time: entry.time,
+    label: hazardTime !== null
+      && entry.time <= hazardTime
+      && hazardTime - entry.time <= cfg.eventWarningHorizon,
+    score: entry.tidalMagnitude,
+    hazardTime,
+  }));
+}
+
+export function evaluateTidalWarningThreshold(eventHistory, threshold, config = {}) {
+  const cfg = normalizeConfig(config);
+  const samples = makeEventDiagnosticSamples(eventHistory, cfg);
+  const firstHazard = eventHistory.find((entry) => entry.events.escape || entry.events.closeApproach);
+  const hazardTime = firstHazard?.time ?? null;
+  const firstWarning = eventHistory.find((entry) => entry.tidalMagnitude > threshold);
+  const warningTime = firstWarning?.time ?? null;
+  const warningLeadTime = hazardTime !== null && warningTime !== null && warningTime <= hazardTime
+    ? hazardTime - warningTime
+    : null;
+
+  let truePositive = 0;
+  let falsePositive = 0;
+  let trueNegative = 0;
+  let falseNegative = 0;
+
+  for (const sample of samples) {
+    const warned = sample.score > threshold;
+    if (warned && sample.label) truePositive += 1;
+    else if (warned) falsePositive += 1;
+    else if (sample.label) falseNegative += 1;
+    else trueNegative += 1;
+  }
+
+  const precision = ratioOrNull(truePositive, truePositive + falsePositive);
+  const recall = ratioOrNull(truePositive, truePositive + falseNegative);
+  const f1 = precision !== null && recall !== null && precision + recall > 0
+    ? 2 * precision * recall / (precision + recall)
+    : null;
+  const falseAlarmRate = ratioOrNull(falsePositive, falsePositive + trueNegative);
+
+  return {
+    firstHazardTime: hazardTime,
+    firstTidalWarningTime: warningTime,
+    tidalWarningLeadTime: warningLeadTime,
+    tidalWarningThreshold: threshold,
+    eventWarningHorizon: cfg.eventWarningHorizon,
+    eventSampleCount: samples.length,
+    positiveEventSampleCount: truePositive + falseNegative,
+    tidalWarningCount: truePositive + falsePositive,
+    tidalWarningTruePositive: truePositive,
+    tidalWarningFalsePositive: falsePositive,
+    tidalWarningTrueNegative: trueNegative,
+    tidalWarningFalseNegative: falseNegative,
+    tidalWarningPrecision: precision === null ? null : roundNumber(precision, 6),
+    tidalWarningRecall: recall === null ? null : roundNumber(recall, 6),
+    tidalWarningF1: f1 === null ? null : roundNumber(f1, 6),
+    tidalWarningFalseAlarmRate: falseAlarmRate === null ? null : roundNumber(falseAlarmRate, 6),
+  };
+}
+
+export function summarizeEventDiagnostics(eventHistory, config = {}) {
+  const cfg = normalizeConfig(config);
+  const samples = makeEventDiagnosticSamples(eventHistory, cfg);
+  const thresholdMetrics = evaluateTidalWarningThreshold(eventHistory, cfg.tidalSpikeThreshold, cfg);
+  const auroc = computeAuroc(samples);
+
+  return {
+    ...thresholdMetrics,
+    tidalMagnitudeAuroc: auroc === null ? null : roundNumber(auroc, 6),
+  };
+}
+
 export function runTrial(config = {}) {
   const cfg = normalizeConfig(config);
   const steps = Math.max(1, Math.round(cfg.duration / cfg.dt));
@@ -545,7 +644,7 @@ export function runTrial(config = {}) {
     const tidal = computeTidalTensor(state, cfg);
     const events = classifyEvents(state, signatures, tidal, thrust, cfg);
     const thrustMagnitude = Math.sqrt(thrust[0] * thrust[0] + thrust[1] * thrust[1]);
-    eventHistory.push({ time, events });
+    eventHistory.push({ time, events, tidalMagnitude: tidal.magnitude });
 
     if (step % cfg.logEvery === 0 || step === steps || events.invalid || events.escape || events.closeApproach) {
       records.push({
@@ -583,8 +682,10 @@ export function runTrial(config = {}) {
   return {
     config: cfg,
     records,
+    eventHistory,
     summary: {
       ...summarizeOutcome(eventHistory),
+      ...summarizeEventDiagnostics(eventHistory, cfg),
       totalDeltaV: roundNumber(totalDeltaV),
       loggedRecords: records.length,
       simulatedTime: records.at(-1)?.time ?? 0,

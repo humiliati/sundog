@@ -477,7 +477,8 @@ Current Phase 6 implementation:
     passive, plus mean time and fuel deltas.
 - The manifest declares baseline mode definitions and primary metrics:
   `terminalOutcome`, `simulatedTime`, `totalDeltaV`, `minPrimaryDistance`,
-  `saturationCount`, and `targetBandLossCount`.
+  `saturationCount`, `targetBandLossCount`, and initial Phase 7 tidal-warning
+  diagnostics.
 - Default smoke output: `results/threebody/phase6-baselines/` (ignored by git).
 
 Current status against Phase 6 exit criterion:
@@ -491,7 +492,54 @@ Current status against Phase 6 exit criterion:
   baseline design, not as evidence for or against the Sundog claim.
 - Next Phase 6 work: tune the privileged baseline objective, define a larger
   seed slate, and decide whether the primary metric ordering should privilege
-  survival time, bounded outcome, or fuel cost before Phase 7 event-detection
-  work begins.
+  survival time, bounded outcome, or fuel cost.
+
+**Phase 7**: Started. The harness now computes event-diagnostic metrics from
+the per-step event history:
+
+```bash
+npm run threebody:phase7
+```
+
+Current Phase 7 implementation:
+
+- Hazard label: first escape or close-approach event.
+- Warning label: first tidal-spike event under the configured
+  `tidalSpikeThreshold`.
+- Warning window: samples within `eventWarningHorizon` seconds before a hazard.
+- Threshold sweep: configurable `thresholdSweep` values, with per-trial and
+  aggregate precision/recall/F1/false-alarm rows.
+- Calibration curve: quantile-binned tidal magnitude, with observed event-window
+  rate per regime and controller mode.
+- Per-trial diagnostics:
+  - first hazard time;
+  - first tidal-warning time;
+  - warning lead time;
+  - true/false positive and true/false negative sample counts;
+  - precision, recall, F1, false-alarm rate, and AUROC using tidal magnitude as
+    the warning score.
+- Harness output now includes `event-metrics.csv` alongside `summary.csv`,
+  `paired.csv`, and `comparison.csv`.
+- Additional Phase 7 outputs:
+  - `threshold-sweep.csv`: one row per trial and threshold.
+  - `threshold-summary.csv`: aggregate threshold metrics by regime and
+    controller mode.
+  - `calibration.csv`: binned tidal-magnitude calibration rows.
+- Default smoke output: `results/threebody/phase7-event-metrics/` (ignored by
+  git).
+
+Current status against Phase 7 exit criterion:
+
+- Event plumbing: present for the tidal-magnitude diagnostic.
+- Threshold sweeps and calibration rows: present, but only for the current small
+  smoke slate.
+- Interpretation: not yet complete. Some regimes are label-degenerate under the
+  one-second warning horizon, so AUROC or false-alarm rate may be blank when a
+  trial has no positive/negative comparison class. Calibration bins may also be
+  non-monotone, which means raw tidal magnitude is not yet a calibrated risk
+  probability.
+- Next Phase 7 work: compare tidal magnitude against naive local-acceleration
+  warning scores, add reliability/error summaries for the calibration bins, and
+  run a larger seed slate before ratcheting any public claim.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)

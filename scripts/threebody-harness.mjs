@@ -2,6 +2,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  evaluateTidalWarningThreshold,
+  makeEventDiagnosticSamples,
   normalizeConfig,
   runTrial,
   seededInitialParticle,
@@ -29,10 +31,40 @@ const PRIMARY_METRICS = Object.freeze([
   "minPrimaryDistance",
   "saturationCount",
   "targetBandLossCount",
+  "tidalWarningLeadTime",
+  "tidalWarningPrecision",
+  "tidalWarningRecall",
+  "tidalWarningF1",
+  "tidalWarningFalseAlarmRate",
+  "tidalMagnitudeAuroc",
+]);
+
+const EVENT_DIAGNOSTIC_METRICS = Object.freeze([
+  "firstHazardTime",
+  "firstTidalWarningTime",
+  "tidalWarningLeadTime",
+  "tidalWarningThreshold",
+  "eventWarningHorizon",
+  "eventSampleCount",
+  "positiveEventSampleCount",
+  "tidalWarningCount",
+  "tidalWarningTruePositive",
+  "tidalWarningFalsePositive",
+  "tidalWarningTrueNegative",
+  "tidalWarningFalseNegative",
+  "tidalWarningPrecision",
+  "tidalWarningRecall",
+  "tidalWarningF1",
+  "tidalWarningFalseAlarmRate",
+  "tidalMagnitudeAuroc",
 ]);
 
 function parseList(value) {
   return value.split(",").map((item) => item.trim()).filter(Boolean);
+}
+
+function parseNumberList(value) {
+  return parseList(value).map((item) => Number.parseFloat(item));
 }
 
 function parseArgs(argv) {
@@ -49,6 +81,10 @@ function parseArgs(argv) {
     massRatio: 1,
     thrustLimit: 0.5,
     targetTidal: 2,
+    tidalSpikeThreshold: 50,
+    eventWarningHorizon: 1,
+    thresholdSweep: [5, 10, 20, 35, 50, 75, 100, 150, 250],
+    calibrationBins: 8,
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -69,6 +105,10 @@ function parseArgs(argv) {
     else if (flag === "--mass-ratio") args.massRatio = Number.parseFloat(value);
     else if (flag === "--thrust-limit") args.thrustLimit = Number.parseFloat(value);
     else if (flag === "--target-tidal") args.targetTidal = Number.parseFloat(value);
+    else if (flag === "--tidal-spike-threshold") args.tidalSpikeThreshold = Number.parseFloat(value);
+    else if (flag === "--event-warning-horizon") args.eventWarningHorizon = Number.parseFloat(value);
+    else if (flag === "--threshold-sweep") args.thresholdSweep = parseNumberList(value);
+    else if (flag === "--calibration-bins") args.calibrationBins = Number.parseInt(value, 10);
     else throw new Error(`Unknown flag: ${flag}`);
   }
 
@@ -81,6 +121,22 @@ function parseArgs(argv) {
   if (!Number.isFinite(args.dt) || args.dt <= 0) {
     throw new Error("--dt must be positive");
   }
+  if (!Number.isFinite(args.eventWarningHorizon) || args.eventWarningHorizon <= 0) {
+    throw new Error("--event-warning-horizon must be positive");
+  }
+  if (!Number.isFinite(args.tidalSpikeThreshold) || args.tidalSpikeThreshold <= 0) {
+    throw new Error("--tidal-spike-threshold must be positive");
+  }
+  if (!Array.isArray(args.thresholdSweep) || args.thresholdSweep.length === 0) {
+    throw new Error("--threshold-sweep must contain at least one number");
+  }
+  if (args.thresholdSweep.some((threshold) => !Number.isFinite(threshold) || threshold <= 0)) {
+    throw new Error("--threshold-sweep values must be positive numbers");
+  }
+  if (!Number.isInteger(args.calibrationBins) || args.calibrationBins < 2) {
+    throw new Error("--calibration-bins must be an integer >= 2");
+  }
+  args.thresholdSweep = [...new Set(args.thresholdSweep)].sort((a, b) => a - b);
   return args;
 }
 
@@ -92,6 +148,21 @@ function mean(values) {
   const finite = values.filter((value) => Number.isFinite(value));
   if (finite.length === 0) return null;
   return finite.reduce((sum, value) => sum + value, 0) / finite.length;
+}
+
+function sum(values) {
+  return values.reduce((total, value) => total + (Number.isFinite(value) ? value : 0), 0);
+}
+
+function ratio(numerator, denominator) {
+  if (denominator <= 0) return null;
+  return numerator / denominator;
+}
+
+function roundMetric(value, digits = 6) {
+  if (!Number.isFinite(value)) return null;
+  const scale = 10 ** digits;
+  return Math.round(value * scale) / scale;
 }
 
 function csvValue(value) {
@@ -126,6 +197,12 @@ function makeSummaryRows(trials) {
       meanTargetBandLossCount: mean(group.map((trial) => trial.summary.targetBandLossCount)),
       meanMinPrimaryDistance: mean(group.map((trial) => trial.summary.minPrimaryDistance)),
       meanMaxRadius: mean(group.map((trial) => trial.summary.maxRadius)),
+      meanTidalWarningLeadTime: mean(group.map((trial) => trial.summary.tidalWarningLeadTime)),
+      meanTidalWarningPrecision: mean(group.map((trial) => trial.summary.tidalWarningPrecision)),
+      meanTidalWarningRecall: mean(group.map((trial) => trial.summary.tidalWarningRecall)),
+      meanTidalWarningF1: mean(group.map((trial) => trial.summary.tidalWarningF1)),
+      meanTidalWarningFalseAlarmRate: mean(group.map((trial) => trial.summary.tidalWarningFalseAlarmRate)),
+      meanTidalMagnitudeAuroc: mean(group.map((trial) => trial.summary.tidalMagnitudeAuroc)),
     };
   }).sort((a, b) => (
     a.regime.localeCompare(b.regime) || a.controllerMode.localeCompare(b.controllerMode)
@@ -184,6 +261,12 @@ function makePairedRows(trials) {
       minPrimaryDistance: trial.summary.minPrimaryDistance,
       passiveMinPrimaryDistance: passiveSummary?.minPrimaryDistance,
       oracleMinPrimaryDistance: oracleSummary?.minPrimaryDistance,
+      tidalWarningLeadTime: trial.summary.tidalWarningLeadTime,
+      tidalWarningPrecision: trial.summary.tidalWarningPrecision,
+      tidalWarningRecall: trial.summary.tidalWarningRecall,
+      tidalWarningF1: trial.summary.tidalWarningF1,
+      tidalWarningFalseAlarmRate: trial.summary.tidalWarningFalseAlarmRate,
+      tidalMagnitudeAuroc: trial.summary.tidalMagnitudeAuroc,
       log: trial.log,
     };
   }).sort((a, b) => (
@@ -216,9 +299,147 @@ function makeComparisonRows(pairedRows) {
       meanTimeDeltaVsOracle: mean(rows.map((row) => row.simulatedTimeDeltaVsOracle)),
       meanDeltaV: mean(rows.map((row) => row.totalDeltaV)),
       meanMinPrimaryDistance: mean(rows.map((row) => row.minPrimaryDistance)),
+      meanTidalWarningLeadTime: mean(rows.map((row) => row.tidalWarningLeadTime)),
+      meanTidalWarningF1: mean(rows.map((row) => row.tidalWarningF1)),
+      meanTidalWarningFalseAlarmRate: mean(rows.map((row) => row.tidalWarningFalseAlarmRate)),
+      meanTidalMagnitudeAuroc: mean(rows.map((row) => row.tidalMagnitudeAuroc)),
     };
   }).sort((a, b) => (
     a.regime.localeCompare(b.regime) || a.controllerMode.localeCompare(b.controllerMode)
+  ));
+}
+
+function makeEventMetricRows(trials) {
+  return trials.map((trial) => ({
+    regime: trial.regime,
+    seed: trial.seed,
+    controllerMode: trial.controllerMode,
+    terminalOutcome: trial.summary.terminalOutcome,
+    ...Object.fromEntries(EVENT_DIAGNOSTIC_METRICS.map((metric) => [metric, trial.summary[metric]])),
+    log: trial.log,
+  })).sort((a, b) => (
+    a.regime.localeCompare(b.regime)
+    || a.seed - b.seed
+    || a.controllerMode.localeCompare(b.controllerMode)
+  ));
+}
+
+function makeThresholdSweepRows(analysisTrials, thresholds) {
+  return analysisTrials.flatMap((trial) => thresholds.map((threshold) => {
+    const metrics = evaluateTidalWarningThreshold(trial.eventHistory, threshold, trial.config);
+    return {
+      regime: trial.regime,
+      seed: trial.seed,
+      controllerMode: trial.controllerMode,
+      terminalOutcome: trial.summary.terminalOutcome,
+      threshold,
+      firstHazardTime: metrics.firstHazardTime,
+      firstTidalWarningTime: metrics.firstTidalWarningTime,
+      tidalWarningLeadTime: metrics.tidalWarningLeadTime,
+      eventSampleCount: metrics.eventSampleCount,
+      positiveEventSampleCount: metrics.positiveEventSampleCount,
+      tidalWarningCount: metrics.tidalWarningCount,
+      tidalWarningTruePositive: metrics.tidalWarningTruePositive,
+      tidalWarningFalsePositive: metrics.tidalWarningFalsePositive,
+      tidalWarningTrueNegative: metrics.tidalWarningTrueNegative,
+      tidalWarningFalseNegative: metrics.tidalWarningFalseNegative,
+      tidalWarningPrecision: metrics.tidalWarningPrecision,
+      tidalWarningRecall: metrics.tidalWarningRecall,
+      tidalWarningF1: metrics.tidalWarningF1,
+      tidalWarningFalseAlarmRate: metrics.tidalWarningFalseAlarmRate,
+      log: trial.log,
+    };
+  })).sort((a, b) => (
+    a.regime.localeCompare(b.regime)
+    || a.seed - b.seed
+    || a.controllerMode.localeCompare(b.controllerMode)
+    || a.threshold - b.threshold
+  ));
+}
+
+function makeThresholdSummaryRows(thresholdSweepRows) {
+  const groups = new Map();
+  for (const row of thresholdSweepRows) {
+    const key = `${row.regime}\t${row.controllerMode}\t${row.threshold}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
+  }
+
+  return Array.from(groups.entries()).map(([key, rows]) => {
+    const [regime, controllerMode, thresholdText] = key.split("\t");
+    const truePositive = sum(rows.map((row) => row.tidalWarningTruePositive));
+    const falsePositive = sum(rows.map((row) => row.tidalWarningFalsePositive));
+    const trueNegative = sum(rows.map((row) => row.tidalWarningTrueNegative));
+    const falseNegative = sum(rows.map((row) => row.tidalWarningFalseNegative));
+    const precision = ratio(truePositive, truePositive + falsePositive);
+    const recall = ratio(truePositive, truePositive + falseNegative);
+    const f1 = precision !== null && recall !== null && precision + recall > 0
+      ? 2 * precision * recall / (precision + recall)
+      : null;
+    return {
+      regime,
+      controllerMode,
+      threshold: Number.parseFloat(thresholdText),
+      n: rows.length,
+      eventSampleCount: sum(rows.map((row) => row.eventSampleCount)),
+      positiveEventSampleCount: sum(rows.map((row) => row.positiveEventSampleCount)),
+      tidalWarningCount: sum(rows.map((row) => row.tidalWarningCount)),
+      tidalWarningTruePositive: truePositive,
+      tidalWarningFalsePositive: falsePositive,
+      tidalWarningTrueNegative: trueNegative,
+      tidalWarningFalseNegative: falseNegative,
+      meanTidalWarningLeadTime: mean(rows.map((row) => row.tidalWarningLeadTime)),
+      tidalWarningPrecision: roundMetric(precision),
+      tidalWarningRecall: roundMetric(recall),
+      tidalWarningF1: roundMetric(f1),
+      tidalWarningFalseAlarmRate: roundMetric(ratio(falsePositive, falsePositive + trueNegative)),
+    };
+  }).sort((a, b) => (
+    a.regime.localeCompare(b.regime)
+    || a.controllerMode.localeCompare(b.controllerMode)
+    || a.threshold - b.threshold
+  ));
+}
+
+function makeCalibrationRows(analysisTrials, binCount) {
+  const groups = new Map();
+  for (const trial of analysisTrials) {
+    const key = `${trial.regime}\t${trial.controllerMode}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(...makeEventDiagnosticSamples(trial.eventHistory, trial.config));
+  }
+
+  return Array.from(groups.entries()).flatMap(([key, samples]) => {
+    const [regime, controllerMode] = key.split("\t");
+    const sorted = samples
+      .filter((sample) => Number.isFinite(sample.score))
+      .sort((a, b) => a.score - b.score);
+    if (sorted.length === 0) return [];
+
+    const rows = [];
+    const effectiveBinCount = Math.min(binCount, sorted.length);
+    for (let bin = 0; bin < effectiveBinCount; bin += 1) {
+      const start = Math.floor(bin * sorted.length / effectiveBinCount);
+      const end = Math.floor((bin + 1) * sorted.length / effectiveBinCount);
+      const binSamples = sorted.slice(start, end);
+      const positives = binSamples.filter((sample) => sample.label).length;
+      rows.push({
+        regime,
+        controllerMode,
+        bin,
+        n: binSamples.length,
+        scoreMin: roundMetric(binSamples[0].score),
+        scoreMax: roundMetric(binSamples.at(-1).score),
+        meanTidalMagnitude: roundMetric(mean(binSamples.map((sample) => sample.score))),
+        positiveEventSamples: positives,
+        observedEventRate: roundMetric(ratio(positives, binSamples.length)),
+      });
+    }
+    return rows;
+  }).sort((a, b) => (
+    a.regime.localeCompare(b.regime)
+    || a.controllerMode.localeCompare(b.controllerMode)
+    || a.bin - b.bin
   ));
 }
 
@@ -233,6 +454,8 @@ function makeTrialConfig(args, seed, regime, mode) {
     massRatio: args.massRatio,
     thrustLimit: args.thrustLimit,
     targetTidal: args.targetTidal,
+    tidalSpikeThreshold: args.tidalSpikeThreshold,
+    eventWarningHorizon: args.eventWarningHorizon,
     initialParticle: seededInitialParticle(seed, regime),
   });
 }
@@ -254,9 +477,12 @@ async function main() {
     },
     modeDefinitions: MODE_DEFINITIONS,
     primaryMetrics: PRIMARY_METRICS,
+    eventDiagnosticMetrics: EVENT_DIAGNOSTIC_METRICS,
     args,
     trials: [],
   };
+
+  const analysisTrials = [];
 
   for (const regime of args.regimes) {
     for (const mode of args.modes) {
@@ -269,6 +495,15 @@ async function main() {
         const logPath = path.join(outDir, relativePath);
         const lines = trial.records.map((record) => JSON.stringify(record)).join("\n");
         await writeFile(logPath, `${lines}\n`, "utf8");
+        analysisTrials.push({
+          seed,
+          regime,
+          controllerMode: mode,
+          config,
+          log: relativePath,
+          summary: trial.summary,
+          eventHistory: trial.eventHistory,
+        });
         manifest.trials.push({
           id,
           seed,
@@ -284,6 +519,8 @@ async function main() {
             logEvery: config.logEvery,
             thrustLimit: config.thrustLimit,
             targetTidal: config.targetTidal,
+            tidalSpikeThreshold: config.tidalSpikeThreshold,
+            eventWarningHorizon: config.eventWarningHorizon,
           },
           log: relativePath,
           summary: trial.summary,
@@ -296,10 +533,18 @@ async function main() {
   const summaryRows = makeSummaryRows(manifest.trials);
   const pairedRows = makePairedRows(manifest.trials);
   const comparisonRows = makeComparisonRows(pairedRows);
+  const eventMetricRows = makeEventMetricRows(manifest.trials);
+  const thresholdSweepRows = makeThresholdSweepRows(analysisTrials, args.thresholdSweep);
+  const thresholdSummaryRows = makeThresholdSummaryRows(thresholdSweepRows);
+  const calibrationRows = makeCalibrationRows(analysisTrials, args.calibrationBins);
   await writeFile(path.join(outDir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   await writeFile(path.join(outDir, "summary.csv"), rowsToCsv(summaryRows), "utf8");
   await writeFile(path.join(outDir, "paired.csv"), rowsToCsv(pairedRows), "utf8");
   await writeFile(path.join(outDir, "comparison.csv"), rowsToCsv(comparisonRows), "utf8");
+  await writeFile(path.join(outDir, "event-metrics.csv"), rowsToCsv(eventMetricRows), "utf8");
+  await writeFile(path.join(outDir, "threshold-sweep.csv"), rowsToCsv(thresholdSweepRows), "utf8");
+  await writeFile(path.join(outDir, "threshold-summary.csv"), rowsToCsv(thresholdSummaryRows), "utf8");
+  await writeFile(path.join(outDir, "calibration.csv"), rowsToCsv(calibrationRows), "utf8");
 
   const outcomeCounts = manifest.trials.reduce((counts, trial) => {
     counts[trial.summary.terminalOutcome] = (counts[trial.summary.terminalOutcome] ?? 0) + 1;
@@ -308,7 +553,7 @@ async function main() {
 
   console.log(`[threebody] wrote ${manifest.trials.length} trials to ${path.relative(repoRoot, outDir)}`);
   console.log(`[threebody] wrote summary.csv with ${summaryRows.length} condition rows`);
-  console.log(`[threebody] wrote paired.csv and comparison.csv`);
+  console.log(`[threebody] wrote paired.csv, comparison.csv, event-metrics.csv, threshold-sweep.csv, threshold-summary.csv, and calibration.csv`);
   console.log(`[threebody] outcomes ${JSON.stringify(outcomeCounts)}`);
 }
 
