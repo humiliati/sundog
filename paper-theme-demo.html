@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog Paper-Inspired Theme Demo - Ruled paper, sticky notes, tape, and desk effects">
+    <title>Paper Theme Demo - Sundog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/sundog-theme.css">
+    <style>
+        /* Demo-specific styles */
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .demo-section {
+            margin-bottom: 4rem;
+        }
+
+        .demo-section h2 {
+            font-family: var(--sd-font-display);
+            font-size: 2rem;
+            color: var(--sd-ink-strong);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--sd-brass);
+            padding-bottom: 0.5rem;
+        }
+
+        .demo-section h3 {
+            font-family: var(--sd-font-body);
+            font-size: 1.5rem;
+            color: var(--sd-ink);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .demo-section p {
+            color: var(--sd-ink-soft);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .demo-item {
+            position: relative;
+        }
+
+        code {
+            font-family: var(--sd-font-data);
+            background: rgba(20, 43, 58, 0.08);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .demo-header {
+            background: linear-gradient(135deg, var(--sd-ink-strong) 0%, var(--sd-ink) 100%);
+            color: var(--sd-cloud);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .demo-header h1 {
+            font-family: var(--sd-font-display);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .demo-header p {
+            font-size: 1.2rem;
+            color: var(--sd-ice);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .sticky-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .sticky-row .sd-sticky-note {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .tape-demo-card {
+            position: relative;
+            background: var(--sd-paper);
+            padding: 2rem;
+            border-radius: var(--sd-radius-md);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-top: 2rem;
+        }
+
+        .desk-demo {
+            padding: 4rem 2rem;
+            border-radius: var(--sd-radius-md);
+            margin-top: 2rem;
+        }
+
+        .manila-demo {
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1>Paper-Inspired Theme Demo</h1>
+        <p>Exploring ruled paper cards, sticky notes, tape overlays, wooden desk backgrounds, and manila folder containers for the Sundog visual overhaul.</p>
+    </div>
+
+    <div class="demo-container">
+        <!-- Ruled Paper Cards -->
+        <section class="demo-section">
+            <h2>1. Ruled Paper Cards</h2>
+            <p>Cards styled as notebook paper with horizontal ruled lines and a left margin line. These mimic classic lined notebook pages.</p>
+
+            <div class="demo-grid">
+                <div class="sd-paper-card">
+                    <h3>Research Notes</h3>
+                    <p>The Sundog Project demonstrates that indirect measurement through photometric signals can provide sufficient information for navigation and control tasks.</p>
+                    <p>This ruled paper effect uses CSS gradients to create horizontal lines that repeat at consistent intervals, creating the familiar notebook aesthetic.</p>
+                </div>
+
+                <div class="sd-paper-card">
+                    <h3>Theorem Sketch</h3>
+                    <p>Given partial observability, an agent can still achieve alignment through careful measurement of indirect signals.</p>
+                    <p>The left margin line (in red/pink) adds authenticity to the notebook paper metaphor.</p>
+                </div>
+
+                <div class="sd-paper-card">
+                    <h3>Implementation Detail</h3>
+                    <p>CSS class: <code>.sd-paper-card</code></p>
+                    <p>Uses <code>linear-gradient</code> for ruled lines and <code>background-size</code> to control line spacing (1.5rem default).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sticky Notes -->
+        <section class="demo-section">
+            <h2>2. Sticky Note Sections</h2>
+            <p>Post-it style notes with subtle rotation at rest and enhanced tilt on hover. Available in multiple pastel colors.</p>
+
+            <h3>Yellow Sticky Notes (Default)</h3>
+            <div class="sticky-row">
+                <div class="sd-sticky-note">
+                    <p>Quick reminder: Update the documentation to reflect the new theme patterns.</p>
+                </div>
+                <div class="sd-sticky-note">
+                    <p>Note the handwritten font (Indie Flower) applied automatically to text within sticky notes!</p>
+                </div>
+            </div>
+
+            <h3>Color Variants</h3>
+            <div class="sticky-row">
+                <div class="sd-sticky-note sd-sticky-pink">
+                    <p>Pink sticky note for urgent items or special emphasis.</p>
+                </div>
+                <div class="sd-sticky-note sd-sticky-blue">
+                    <p>Blue sticky note for informational content or calm reminders.</p>
+                </div>
+                <div class="sd-sticky-note sd-sticky-green">
+                    <p>Green sticky note for success states or positive feedback.</p>
+                </div>
+            </div>
+
+            <p style="margin-top: 2rem;">Hover over any sticky note to see the enhanced tilt and shadow effect!</p>
+        </section>
+
+        <!-- Tape Overlays -->
+        <section class="demo-section">
+            <h2>3. Tape Overlays</h2>
+            <p>Semi-transparent tape effects that can "fasten" cards to the page. These decorative elements add tactile realism.</p>
+
+            <div class="tape-demo-card">
+                <div class="sd-tape-overlay"></div>
+                <h3>Card with Center Tape</h3>
+                <p>This card has a tape overlay positioned at the top center, as if it were fastened to a surface.</p>
+                <p>The tape has a subtle texture and frosted glass appearance with realistic shadows.</p>
+            </div>
+
+            <div class="demo-grid">
+                <div class="tape-demo-card">
+                    <div class="sd-tape-overlay sd-tape-top-left"></div>
+                    <h3>Left Tape Variant</h3>
+                    <p>Tape positioned at the top-left corner with a different rotation angle.</p>
+                </div>
+
+                <div class="tape-demo-card">
+                    <div class="sd-tape-overlay sd-tape-top-right"></div>
+                    <h3>Right Tape Variant</h3>
+                    <p>Tape positioned at the top-right corner for asymmetric visual interest.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wooden Desk Background -->
+        <section class="demo-section">
+            <h2>4. Wooden Desk Background</h2>
+            <p>A dark wood grain background that evokes a workspace surface. Apply <code>data-theme="desk"</code> to body or use <code>.sd-desk-bg</code> class.</p>
+
+            <div class="sd-desk-bg desk-demo">
+                <div class="sd-paper-card" style="max-width: 600px; margin: 0 auto;">
+                    <h3 style="color: var(--sd-ink-strong);">Paper on Desk</h3>
+                    <p>This paper card sits on a wooden desk background, creating a realistic workspace aesthetic.</p>
+                    <p>The wood grain texture is created entirely with CSS gradients—no images required.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manila Folder Containers -->
+        <section class="demo-section">
+            <h2>5. Manila Folder / Clipboard Containers</h2>
+            <p>Tan/cream containers styled as manila folders or clipboards, perfect for navigation or content areas.</p>
+
+            <div class="sd-manila-container manila-demo">
+                <h3>Standard Manila Container</h3>
+                <p>This container has a manila folder appearance with a subtle paper texture and realistic edge shadows.</p>
+                <p>The tan/cream color palette evokes traditional office filing systems.</p>
+            </div>
+
+            <div class="sd-manila-container with-tab manila-demo">
+                <h3>Manila Container with Tab</h3>
+                <p>Add the <code>.with-tab</code> modifier class to show a folder tab at the top.</p>
+                <p>This variant is ideal for sections that should appear as distinct folders or categories.</p>
+            </div>
+        </section>
+
+        <!-- Combined Example -->
+        <section class="demo-section">
+            <h2>6. Combined Effects</h2>
+            <p>Demonstrating multiple paper-inspired effects working together in harmony.</p>
+
+            <div class="sd-manila-container with-tab manila-demo">
+                <h3>Research Project Folder</h3>
+
+                <div class="sd-paper-card" style="margin: 1.5rem 0;">
+                    <div class="sd-tape-overlay"></div>
+                    <h3>Experiment Log</h3>
+                    <p>This paper card includes a tape overlay, creating a layered, realistic effect.</p>
+                    <p>The combination of ruled paper, tape fastening, and folder container creates a cohesive analog workspace aesthetic.</p>
+
+                    <div class="sticky-row">
+                        <div class="sd-sticky-note sd-sticky-yellow">
+                            <p>Remember to run Phase 6 baselines!</p>
+                        </div>
+                        <div class="sd-sticky-note sd-sticky-blue">
+                            <p>Check three-body integration tests.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p style="margin-top: 1.5rem;">All these effects work together to create a tactile, paper-based interface that maintains the scientific credibility of the Sundog brand.</p>
+            </div>
+        </section>
+
+        <!-- Typography Examples -->
+        <section class="demo-section">
+            <h2>7. Typography Hierarchy</h2>
+            <p>The paper-inspired theme introduces three distinct typography voices:</p>
+
+            <div class="demo-grid">
+                <div class="sd-paper-card">
+                    <h3 style="font-family: var(--sd-font-display);">Display Serif</h3>
+                    <p style="font-family: var(--sd-font-display); font-size: 1.1rem;">
+                        Used for major titles and prestigious headings. Georgia and Times New Roman provide classical authority.
+                    </p>
+                </div>
+
+                <div class="sd-paper-card">
+                    <h3 style="font-family: var(--sd-font-data);">Console Monospace</h3>
+                    <p style="font-family: var(--sd-font-data); font-size: 0.95rem;">
+                        Used for technical content, data labels, and code snippets. Maintains scientific credibility with clean monospace rendering.
+                    </p>
+                </div>
+
+                <div class="sd-sticky-note">
+                    <h3>Handwritten Casual</h3>
+                    <p>Used for sticky notes and informal annotations. Indie Flower and Patrick Hand provide friendly, readable handwriting style.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Usage Guidelines -->
+        <section class="demo-section">
+            <h2>8. Usage Guidelines</h2>
+
+            <div class="sd-manila-container">
+                <h3>When to Use Paper-Inspired Effects</h3>
+
+                <div class="sd-sticky-note sd-sticky-yellow" style="max-width: 500px;">
+                    <p><strong>✓ DO:</strong> Use ruled paper for research notes, evidence panels, and content cards</p>
+                </div>
+
+                <div class="sd-sticky-note sd-sticky-blue" style="max-width: 500px;">
+                    <p><strong>✓ DO:</strong> Use sticky notes for highlights, reminders, and informal asides</p>
+                </div>
+
+                <div class="sd-sticky-note sd-sticky-green" style="max-width: 500px;">
+                    <p><strong>✓ DO:</strong> Use manila containers for navigation areas and section groupings</p>
+                </div>
+
+                <div class="sd-paper-card" style="margin-top: 2rem; border-left-color: #dc2626;">
+                    <h3>Accessibility Considerations</h3>
+                    <p>• All paper effects degrade gracefully on older browsers</p>
+                    <p>• Handwritten fonts are kept at minimum 16px (1rem) for readability</p>
+                    <p>• <code>prefers-reduced-motion</code> removes tilt animations</p>
+                    <p>• WCAG AA contrast ratios maintained throughout (4.5:1 for body text)</p>
+                    <p>• Focus indicators remain visible on all interactive elements</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer style="background: var(--sd-ink-strong); color: var(--sd-cloud); padding: 2rem; text-align: center; margin-top: 4rem;">
+        <p style="color: var(--sd-ice);">Sundog Paper-Inspired Theme Demo</p>
+        <p style="font-family: var(--sd-font-data); font-size: 0.9rem; color: var(--sd-sky); margin-top: 0.5rem;">
+            Expanded typography overhaul with physical paper metaphors
+        </p>
+    </footer>
+</body>
+</html>
