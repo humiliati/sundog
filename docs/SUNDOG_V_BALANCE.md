@@ -52,14 +52,14 @@ First executable scaffold started. The Sundog tree now includes:
   projection, sensor delay/noise scaffolding, and baseline controller modes;
 - `public/js/balance-browser.mjs`: canvas renderer, controls, telemetry strip,
   and Lounas-derived robotics balance motif;
-- `scripts/balance-harness.mjs`: a Phase 7 smoke runner sharing the same
-  dynamics, shadow sensor, and controller modules as the browser page.
+- `scripts/balance-harness.mjs`: a Phase 7 smoke/replay runner sharing the
+  same dynamics, shadow sensor, and controller modules as the browser page.
 
 No committed Balance results directory, no Phase 8 metric tables, and no Phase
 10 operating-envelope verdict ships in the Sundog tree today. Local Phase 7
-smoke outputs are written under ignored `results/balance/` paths and are
-calibration artifacts, not public evidence. The current artifact is a Phase
-1-7 scaffold, not evidence.
+smoke and replay outputs are written under ignored `results/balance/` paths
+and are calibration artifacts, not public evidence. The current artifact is a
+Phase 1-7 scaffold, not evidence.
 
 This section is here so the broadcast surfaces (gallery card, APPLICATIONS.md,
 claims-and-scope.md) do not get a row until the runnable-artifact gates below
@@ -68,8 +68,40 @@ Conceptual Lineage** tier in the application family — sibling to LAGM in the
 EyesOnly section, not sibling to the EyesOnly headless runner.
 
 Promotion to **Planned Workbench** tier requires Phase 0–4 deliverables
-landing. Promotion to **Operating-Envelope Study** tier requires the
-Pre-Registered Verdict Template below to return a CONFIRM verdict.
+landing +++[forward-plan-A]+++ *(achieved 2026-05-08; phases 5–6 also landed,
+Phase 7 smoke in flight)* +++[/forward-plan-A]+++. Promotion to
+**Operating-Envelope Study** tier requires the Pre-Registered Verdict Template
+below to return a CONFIRM verdict.
+
++++[forward-plan-A]+++
+
+### Phase 7 Smoke Read (2026-05-08)
+
+A 12-seed smoke run of the Phase 7 harness produced a result shape that is
+encouraging signal for the workbench's central claim:
+
+- Sundog **survives all 12 seeds** on the `easy`, `recoverable`, and
+  `near_fall` lighting/disturbance presets.
+- Sundog **degrades** on the `noisy_shadow` preset (intermittent survival).
+- Sundog **fails** on the `delayed_shadow` preset (does not recover from
+  the standard impulse).
+
+The shape matches the Ratified Hook Language line — *"the shadow is enough,
+until it is not"* — at smoke scale. The overhead-light/high-delay regime
+collapses observability and the controller loses cleanly rather than
+thrashing.
+
+**Discipline guard.** This is signal, not verdict. The Pre-Registered Verdict
+Template below remains gated on Phase 10 operating-envelope data on a
+≥ 100-seed slate, not on the Phase 7 smoke result. A clean 12-seed smoke
+that fails to reproduce under the Phase 10 slate would still REFUTE; a
+smoke result that misses a lighting boundary the Phase 10 data recovers
+would still CONFIRM. The verdict gate does not move forward to Phase 7.
+The smoke result is here to inform the Phase 12–14 forward planning below
+under the assumption that Phase 10 returns CONFIRM, not to short-circuit
+Phase 10's reads.
+
++++[/forward-plan-A]+++
 
 ***[/must-fix #3]***
 
@@ -170,6 +202,38 @@ Avoid:
 - "This proves embodied alignment."
 - "The shadow controller beats the oracle."
 - "A gif is evidence."
+
++++[forward-plan-C]+++
+
+**Forward-planning Avoid additions** (gated to land alongside Phases 12–14
+when those phases ship; pre-registered here so the broadcast pass cannot
+drift):
+
+- "Sundog Balance is robotics-ready." Phase 13 produces a controller that
+  respects hardware-realistic constraints in sim. Hardware validity is a
+  separate tier (Phase 13.5). The safe phrasing is: *Sundog Balance's
+  controller respects hardware-realistic constraints in simulation;
+  hardware deployment is a separate engineering pass.*
+- "The Sundog controller can be deployed to a robot." Same reason as
+  above. The ROS-shaped state interface is documented, not deployed.
+- "Sundog Balance generalises to all robotic balance problems." Phase 14
+  tests a three-plant slate. Generalisation is bounded to the documented
+  family of plants tested. The safe phrasing is: *The pattern transfers
+  to N of M tested plants under documented operating envelopes; falsified
+  plants are reported alongside confirmed ones.*
+- "Beating a human player proves the controller is correct." Phase 12's
+  human-vs-agent mode is a falsification surface, not a benchmark.
+  Human-survival-margin distributions are reported as evidence about the
+  controller's failure modes, not as proof of correctness. A controller
+  that beats untrained humans on the easy preset and loses to skilled
+  humans on the noisy preset is teaching observers about its own limits;
+  that is the point.
+- "Losing to a human player refutes the theorem." Symmetric guard. Human
+  performance is a falsification *surface*, not a falsification *gate*.
+  The Phase 10 verdict template, not the human leaderboard, decides
+  CONFIRM / REFUTE / AMBIGUOUS.
+
++++[/forward-plan-C]+++
 
 ## Roadmap
 
@@ -358,6 +422,8 @@ Deliverables:
   limit, disturbance schedule, noise, delay, timestep, and initial state.
 - Per-trial JSONL or CSV logs for state, sensor outputs, controller action,
   observability, and terminal outcome.
+- Browser replay URLs and `npm run balance:phase7:replay` support so a workbench
+  configuration can round-trip through the headless runner.
 - NPM scripts mirroring the three-body pattern, for example:
 
 ```bash
@@ -367,6 +433,11 @@ npm run balance:phase9
 ```
 
 Exit criterion: a browser seed can be replayed exactly in the harness.
+
++++[forward-plan-A]+++ *Phase 7 continuation landed: the workbench now exposes
+seeded replay URLs, the harness accepts `--replay-url`, and local harness runs
+write `replay-index.json` entries with browser URLs plus replay commands. This
+is still replay infrastructure, not a verdict artifact.* +++[/forward-plan-A]+++
 
 ### Phase 8 - Recovery And Event Metrics
 
@@ -537,6 +608,174 @@ click into the workbench, and understand the theoremic move in under one
 minute: the hidden body is controlled through the visible shadow ***[must-fix #4]*** —
 *and* sees, in the same minute, that the shadow stops being enough at some
 boundary, with a one-click path to the operating-envelope map ***[/must-fix #4]***.
+
++++[forward-plan-B]+++
+
+## Post-Verdict / Conditional Roadmap
+
+The phases below are pre-registered against the assumption that Phase 10
+returns a CONFIRM verdict. They are *not* pre-emptive of that verdict. The
+Phase 7 smoke result is encouraging signal that informs forward planning;
+it does not move the verdict gate.
+
+If Phase 10 returns REFUTE or AMBIGUOUS, this section is reshaped or
+scrapped before the broadcast pass. Specifically: Phase 12 (UI feature) can
+ship regardless of verdict because it does not extend any research claim.
+Phase 13 and Phase 14 are gated on CONFIRM and do not run on a REFUTE
+verdict — they would extend a claim the Phase 10 data has refuted.
+
+This section is here so the *shape* of the broader-claim attack is
+pre-registered with the same discipline as the Phase 10 verdict template,
+rather than being authored after a CONFIRM verdict has changed what counts
+as a load-bearing claim.
+
+### Phase 12 - Human-vs-Agent Competition Mode
+
+Goal: install an input layer so observers can drive the cart against the
+Sundog controller on the same seed and disturbance schedule. The workbench's
+value is partly in *being attackable by viewers*; Phase 12 ships the UI
+that lets observers attack the claim themselves.
+
+**Gating:** parallel with Phase 11 acceptable. Does not require CONFIRM
+verdict because it is a UI feature, not a research claim.
+
+Deliverables:
+
+- Input map: WASD or arrow keys for desktop; on-screen left/right buttons
+  for touch. Both bind to bounded cart force commands with **identical
+  authority** to all controllers — no human-only force advantage.
+- Side-by-side mode in `balance.html` rendering two cart-pole simulations
+  on the same seed: one human-controlled, one Sundog-controlled. The
+  disturbance schedule fires identically on both runs at the same
+  simulated time.
+- Telemetry overlay: who survived longer, who recovered faster after the
+  impulse, hidden-angle integral comparison. The hidden-angle ghost
+  appears on both runs only when "show privileged diagnostics" is enabled,
+  matching Phase 6's privileged-audit discipline.
+- Optional: local-storage leaderboard scoped to seed + lighting preset.
+  No remote leaderboard — keeps the workbench inspectable without a
+  backend dependency.
+
+Exit criterion: a first-time visitor plays a head-to-head run against
+Sundog within two clicks of `balance.html`, and reads who survived
+longer without translating any units.
+
+**Falsification angle.** If humans consistently outperform Sundog inside
+the diagnostic-positive envelope, the workbench is teaching observers
+about a controller deficiency. This is itself reportable. The
+human-survival-margin distribution is filed as a Phase 8 metric category
+(see *Avoid list updates* below for the misread that needs guarding
+against — beating humans is not evidence of correctness).
+
+### Phase 13 - Robotics-Implementable Controller
+
+Goal: lift the SCAN/SEEK/TRACK controller from a sim-friendly form into a
+form that respects hardware-realistic constraints. Demonstrates that the
+indirect-signal-to-action discipline is not a sim artifact.
+
+**Gating:** requires Phase 10 CONFIRM verdict. A controller built against
+hardware-realistic constraints on a base claim that has been refuted is
+extending a refuted claim.
+
+Deliverables:
+
+- **Bounded actuator latency.** Control commands take effect after a
+  configurable delay (default 30 ms). The controller must reason about
+  command-vs-effect rather than assuming instantaneous force.
+- **Discrete sampling decoupling.** Sensor reads at a configurable fps
+  (default 30); control loop runs at a configurable rate (default 100 Hz);
+  the two are independent and the controller respects both.
+- **Force quantization.** Force command rounded to a configurable
+  resolution (default 0.05 N). Resists "infinitely smooth" sim
+  assumptions that would not survive on real actuators.
+- **Energy budget.** Cumulative `|force × velocity|` over a run is capped.
+  The controller must spend force only when shadow residual exceeds its
+  confidence band, not as continuous fine-tuning.
+- **ROS-friendly state shape.** Serialise state into a
+  `geometry_msgs/Pose2D` + `sensor_msgs/Image` analogue (or a documented
+  JSON shape) so the controller can be lifted into a ROS node without
+  re-architecting. The shape is documented; the ROS node itself is a
+  Phase 13.5 follow-up.
+- **Hardware-realistic disturbance.** Replace the Phase 8 impulse model
+  with a wind-gust-style stochastic forcing whose frequency content
+  matches real-world disturbances (low-frequency drift plus
+  high-frequency jitter).
+
+Exit criterion: SCAN/SEEK/TRACK survives the diagnostic-positive envelope
+while respecting all six constraints above, on a slate of ≥ 50 seeds.
+Below that floor, the workbench's "robotics implementable" claim is
+suspended pending controller iteration.
+
+**Phase 13.5 follow-up (separate evidence tier).** A physical cart-pole
+arm with a webcam reading the shadow, running the same controller. The
+boundary matters because hardware demos drift the claim from "shadow
+control in sim under hardware-realistic constraints" to "shadow control
+on hardware" — a separate evidence tier with its own audit surface
+(camera calibration, motor friction, real-world lighting, on-hardware
+seed equivalent). 13.5 is named here so it does not silently expand
+Phase 13's scope.
+
+### Phase 14 - Broader Claim: Sibling Plant Replication
+
+Goal: test whether the SCAN/SEEK/TRACK shadow-control pattern transfers
+to plants other than cart-pole, or whether the workbench's claim is
+plant-specific.
+
+**Gating:** requires Phase 10 CONFIRM verdict. Phase 13 should ideally
+land first so the constraint set is consistent across plants. If Phase
+13 is delayed, Phase 14 can run on the Phase 10 sim controller, but the
+broader claim it earns is "shadow control transfers in sim across
+plants" rather than "shadow control transfers under hardware-realistic
+constraints across plants."
+
+Sibling plants (initial slate of three):
+
+- **Furuta pendulum.** Rotational arm with a hanging pole; the shadow
+  projects from the rotational tip onto a horizontal floor. Different
+  geometry than cart-pole; same observability question.
+- **Reaction wheel pendulum.** Single-axis pendulum stabilised by a
+  flywheel; the shadow projects from the pendulum body. Different
+  actuation modality than cart-pole.
+- **Acrobot or pendubot.** Under-actuated two-link arm. Hardest case;
+  expected to either confirm the pattern's generality or expose a clean
+  failure mode.
+
+Per-plant deliverables:
+
+- Plant-specific physics module sharing the renderer-independent
+  constraint from Phase 1.
+- Plant-specific shadow projection adapted from the directional-light
+  model in Phase 2.
+- Plant-specific Phase 3 diagnostic benchmark — does shadow forecast
+  useful events for *this* plant?
+- Plant-specific operating-envelope map and a per-plant verdict
+  (CONFIRM / REFUTE / AMBIGUOUS) using the same template structure as
+  the cart-pole verdict.
+
+**Pre-registered prediction for the broader claim.** The failure-boundary
+*shape* transfers across plants (overhead light collapses signal,
+high delay destabilises recovery), but the operating envelope's *area*
+differs by plant. A plant whose failure boundary does *not* transfer is
+itself reportable — it identifies which dimensions of cart-pole were
+doing the structural work for the original claim.
+
+Exit criterion: at least one sibling plant returns either a CONFIRM or a
+REFUTE verdict with the per-plant template. Not all sibling plants need
+to CONFIRM. The pattern's robustness across plants is the read; the
+broadcast uses whichever verdicts land, and an even split (some CONFIRM,
+some REFUTE) is the most epistemically informative outcome — better than
+a uniform CONFIRM that would understate the pattern's brittleness.
+
+**Promotion to pattern-claim.** Success across at least two of three
+sibling plants lifts the workbench from a one-plant claim into a
+"shadow-control-for-balance" pattern claim. The pattern claim then
+enters `docs/APPLICATIONS.md § Cross-Application Comparison` as a
+*meta-row* describing the pattern itself, with the cart-pole and
+sibling-plant rows as evidence under that meta-row. The Pre-Committed
+Cross-Application Comparison Row below is updated at that point to
+distinguish the per-plant rows from the pattern meta-row.
+
++++[/forward-plan-B]+++
 
 ## Claim Boundary
 

@@ -1,10 +1,28 @@
-/*
-  Sundog shared UI foundation.
+/* ============================================================================
+   Sundog shared UI foundation.
 
-  This file intentionally sits after the page-local stylesheets. The current
-  pages still carry inline CSS, but these tokens and component overrides make
-  the visual system portable for the coming UI/UX overhaul.
-*/
+   This file intentionally sits after the page-local stylesheets. The current
+   pages still carry inline CSS, but these tokens and component overrides make
+   the visual system portable for the coming UI/UX overhaul.
+
+   Organized in five layers (Migration Step 2, landed 2026-05-08):
+     1. TOKENS       — :root custom properties (colors, fonts, spacing)
+     2. BASE         — universal selectors, html, body
+     3. COMPONENTS   — chrome, buttons, cards, footer, controls
+     4. PAGES        — hero, sections, page-level layout, grids
+     5. EXPERIMENTS  — BoxForge primitives, paper-inspired (deferred) extensions
+
+   Section markers are comment-only (no @layer at-rules) so the load-order
+   cascade with inline page <style> blocks is preserved unchanged. To promote
+   to formal @layer later, also wrap each page's inline <style> contents in
+   `@layer overrides { ... }` and declare `@layer overrides, tokens, base,
+   components, pages, experiments;` at the top.
+   ============================================================================ */
+
+
+/* ============================================================================
+   1. TOKENS
+   ============================================================================ */
 
 :root,
 body[data-sundog-theme="halo"] {
@@ -38,7 +56,7 @@ body[data-sundog-theme="halo"] {
   --sd-space-page: clamp(1.25rem, 4vw, 2.5rem);
   --sd-phase-duration: 260ms;
 
-  /* Paper-inspired theme tokens */
+  /* Paper-inspired theme tokens (deferred — see UI_UX_THEME_FOUNDATION.md) */
   --sd-paper-ruled: #fefdfb;
   --sd-paper-line: rgba(99, 163, 220, 0.15);
   --sd-paper-margin: rgba(255, 99, 99, 0.3);
@@ -70,6 +88,11 @@ body[data-sundog-theme="halo"] {
   --line: var(--sd-line);
 }
 
+
+/* ============================================================================
+   2. BASE
+   ============================================================================ */
+
 * {
   text-rendering: geometricPrecision;
 }
@@ -86,6 +109,13 @@ body {
     radial-gradient(circle at 16% 0%, rgba(244, 196, 48, 0.12), transparent 28rem),
     linear-gradient(180deg, #fbfdfb 0%, var(--sd-cloud) 42%, #eef5f3 100%);
 }
+
+
+/* ============================================================================
+   3. COMPONENTS
+   ============================================================================ */
+
+/* --- Chrome: header, nav, brand, links --------------------------------- */
 
 .site-header {
   position: sticky;
@@ -139,6 +169,253 @@ body {
   color: var(--accent-gold);
   border-color: currentColor;
 }
+
+/* --- Typography mixin (eyebrow / tier / step / brand) ------------------ */
+
+.eyebrow,
+.tier,
+.step-number,
+.site-brand {
+  font-family: var(--sd-font-data);
+}
+
+/* --- Buttons / interactive surfaces ------------------------------------ */
+
+.btn,
+.button,
+.cta-link,
+.app-card,
+.benefit-card,
+.proof-item,
+.research-highlight,
+.origin-card {
+  border-radius: var(--sd-radius-md);
+}
+
+.btn,
+.button,
+.cta-link {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(244, 196, 48, 0.44);
+  transition:
+    transform var(--sd-phase-duration) ease,
+    border-color var(--sd-phase-duration) ease,
+    background var(--sd-phase-duration) ease,
+    box-shadow var(--sd-phase-duration) ease;
+}
+
+.btn::before,
+.button::before,
+.cta-link::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: calc(var(--sd-radius-md) - 2px);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 34%),
+    linear-gradient(315deg, rgba(103, 201, 166, 0.12), transparent 42%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--sd-phase-duration) ease;
+}
+
+.btn:hover::before,
+.button:hover::before,
+.cta-link:hover::before {
+  opacity: 1;
+}
+
+.btn:focus-visible,
+.button:focus-visible,
+.cta-link:focus-visible,
+.site-links a:focus-visible {
+  outline: 2px solid var(--sd-signal);
+  outline-offset: 3px;
+}
+
+.btn-primary,
+.button {
+  background: linear-gradient(180deg, #f8d35a 0%, var(--sd-brass) 100%);
+  color: var(--sd-ink-strong);
+  box-shadow: 0 12px 24px rgba(215, 169, 40, 0.18);
+}
+
+.btn-secondary {
+  background: rgba(11, 23, 32, 0.42);
+  border-color: rgba(248, 251, 252, 0.74);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(6px);
+}
+
+.btn:hover,
+.button:hover,
+.cta-link:hover {
+  transform: translateY(-2px);
+}
+
+/* --- Cards: borders, shadows, paper-line backgrounds, hovers ----------- */
+
+.app-card,
+.benefit-card,
+.proof-item,
+.research-highlight,
+.origin-card,
+.comparison-container {
+  border-color: var(--sd-line);
+  box-shadow: var(--sd-shadow-soft);
+}
+
+.benefit-card,
+.proof-item,
+.research-highlight,
+.comparison-container,
+.origin-card {
+  background:
+    linear-gradient(transparent 96%, rgba(99, 163, 220, 0.075) 96%),
+    linear-gradient(90deg, rgba(255, 99, 99, 0.12) 0 2px, transparent 2px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 250, 240, 0.94)),
+    var(--sd-paper-ruled);
+  background-size: 100% 1.75rem, 100% 100%, 100% 100%, 100% 100%;
+}
+
+.app-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 250, 240, 0.98)),
+    var(--sd-paper);
+}
+
+.app-card:hover,
+.benefit-card:hover,
+.origin-card:hover,
+.proof-item:hover,
+.research-highlight:hover {
+  transform: translateY(-4px);
+  border-color: rgba(215, 169, 40, 0.58);
+  box-shadow: var(--sd-shadow);
+}
+
+.app-card,
+.benefit-card,
+.origin-card,
+.proof-item,
+.research-highlight,
+.comparison-container {
+  transition:
+    transform var(--sd-phase-duration) ease,
+    border-color var(--sd-phase-duration) ease,
+    box-shadow var(--sd-phase-duration) ease;
+}
+
+.benefit-card,
+.proof-item,
+.research-highlight {
+  padding: 1.75rem;
+}
+
+.app-card-content {
+  padding: 1.5rem;
+}
+
+.app-card-img {
+  background:
+    linear-gradient(135deg, rgba(11, 23, 32, 0.76), rgba(20, 43, 58, 0.90)),
+    repeating-linear-gradient(90deg, rgba(244, 196, 48, 0.18) 0 1px, transparent 1px 18px);
+  font-family: var(--sd-font-data);
+  letter-spacing: 0.04em;
+}
+
+.tier {
+  align-self: flex-start;
+  background: color-mix(in srgb, var(--sd-sky) 82%, var(--sd-ink));
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+}
+
+.theorem-card {
+  border-color: rgba(244, 196, 48, 0.28);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.035)),
+    rgba(11, 23, 32, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* --- Data text --------------------------------------------------------- */
+
+.proof-snippet,
+.equation-display {
+  font-family: var(--sd-font-data);
+}
+
+/* --- Footer + dark CTA section surfaces -------------------------------- */
+
+.cta-section,
+footer {
+  color: var(--text-light);
+  padding: 3rem 2rem;
+  text-align: center;
+  background:
+    linear-gradient(180deg, var(--sd-ink) 0%, var(--sd-ink-strong) 100%);
+}
+
+footer a {
+  color: var(--accent-gold);
+  text-decoration: none;
+  transition: color var(--sd-phase-duration) ease;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* --- Special surfaces -------------------------------------------------- */
+
+.proof-placeholder {
+  border: 1px solid rgba(20, 43, 58, 0.12);
+  background:
+    linear-gradient(135deg, rgba(20, 43, 58, 0.08), rgba(115, 150, 168, 0.08)),
+    repeating-linear-gradient(90deg, rgba(20, 43, 58, 0.05) 0 1px, transparent 1px 18px),
+    var(--sd-paper-warm);
+  color: var(--sd-ink-soft);
+}
+
+/* --- Controls (used by experiment pages: threebody, balance) ---------- */
+
+.controls-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 14rem),
+    rgba(11, 23, 32, 0.94);
+  border-color: rgba(244, 196, 48, 0.36);
+  box-shadow: 0 18px 36px rgba(11, 23, 32, 0.24);
+}
+
+.control-group button {
+  box-shadow: 0 8px 16px rgba(215, 169, 40, 0.16);
+}
+
+.control-group input[type="range"] {
+  accent-color: var(--sd-amber);
+}
+
+.control-group select,
+.controls-panel select {
+  background-color: rgba(248, 251, 252, 0.11) !important;
+  color: var(--text-light) !important;
+  border-color: rgba(244, 196, 48, 0.42) !important;
+}
+
+.control-group select option,
+.controls-panel select option {
+  background-color: var(--sd-ink);
+  color: var(--sd-cloud);
+}
+
+
+/* ============================================================================
+   4. PAGES
+   ============================================================================ */
+
+/* --- Hero ------------------------------------------------------------- */
 
 .hero,
 .page-hero {
@@ -235,233 +512,6 @@ section h2,
   line-height: 1.55;
 }
 
-.eyebrow,
-.tier,
-.step-number,
-.site-brand {
-  font-family: var(--sd-font-data);
-}
-
-.btn,
-.button,
-.cta-link,
-.app-card,
-.benefit-card,
-.proof-item,
-.research-highlight,
-.origin-card {
-  border-radius: var(--sd-radius-md);
-}
-
-.btn,
-.button,
-.cta-link {
-  position: relative;
-  overflow: hidden;
-  border-color: rgba(244, 196, 48, 0.44);
-  transition:
-    transform var(--sd-phase-duration) ease,
-    border-color var(--sd-phase-duration) ease,
-    background var(--sd-phase-duration) ease,
-    box-shadow var(--sd-phase-duration) ease;
-}
-
-.btn::before,
-.button::before,
-.cta-link::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: calc(var(--sd-radius-md) - 2px);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 34%),
-    linear-gradient(315deg, rgba(103, 201, 166, 0.12), transparent 42%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--sd-phase-duration) ease;
-}
-
-.btn:hover::before,
-.button:hover::before,
-.cta-link:hover::before {
-  opacity: 1;
-}
-
-.btn:focus-visible,
-.button:focus-visible,
-.cta-link:focus-visible,
-.site-links a:focus-visible {
-  outline: 2px solid var(--sd-signal);
-  outline-offset: 3px;
-}
-
-.btn-primary,
-.button {
-  background: linear-gradient(180deg, #f8d35a 0%, var(--sd-brass) 100%);
-  color: var(--sd-ink-strong);
-  box-shadow: 0 12px 24px rgba(215, 169, 40, 0.18);
-}
-
-.btn-secondary {
-  background: rgba(11, 23, 32, 0.42);
-  border-color: rgba(248, 251, 252, 0.74);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(6px);
-}
-
-.btn:hover,
-.button:hover,
-.cta-link:hover {
-  transform: translateY(-2px);
-}
-
-.app-card,
-.benefit-card,
-.proof-item,
-.research-highlight,
-.origin-card,
-.comparison-container {
-  border-color: var(--sd-line);
-  box-shadow: var(--sd-shadow-soft);
-}
-
-.benefit-card,
-.proof-item,
-.research-highlight,
-.comparison-container,
-.origin-card {
-  background:
-    linear-gradient(transparent 96%, rgba(99, 163, 220, 0.075) 96%),
-    linear-gradient(90deg, rgba(255, 99, 99, 0.12) 0 2px, transparent 2px),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 250, 240, 0.94)),
-    var(--sd-paper-ruled);
-  background-size: 100% 1.75rem, 100% 100%, 100% 100%, 100% 100%;
-}
-
-.app-card {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 250, 240, 0.98)),
-    var(--sd-paper);
-}
-
-.app-card:hover,
-.benefit-card:hover,
-.origin-card:hover,
-.proof-item:hover,
-.research-highlight:hover {
-  transform: translateY(-4px);
-  border-color: rgba(215, 169, 40, 0.58);
-  box-shadow: var(--sd-shadow);
-}
-
-.app-card,
-.benefit-card,
-.origin-card,
-.proof-item,
-.research-highlight,
-.comparison-container {
-  transition:
-    transform var(--sd-phase-duration) ease,
-    border-color var(--sd-phase-duration) ease,
-    box-shadow var(--sd-phase-duration) ease;
-}
-
-.benefit-card,
-.proof-item,
-.research-highlight {
-  padding: 1.75rem;
-}
-
-.app-card-content {
-  padding: 1.5rem;
-}
-
-.app-card-img {
-  background:
-    linear-gradient(135deg, rgba(11, 23, 32, 0.76), rgba(20, 43, 58, 0.90)),
-    repeating-linear-gradient(90deg, rgba(244, 196, 48, 0.18) 0 1px, transparent 1px 18px);
-  font-family: var(--sd-font-data);
-  letter-spacing: 0.04em;
-}
-
-.tier {
-  align-self: flex-start;
-  background: color-mix(in srgb, var(--sd-sky) 82%, var(--sd-ink));
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.34);
-}
-
-.theorem-card {
-  border-color: rgba(244, 196, 48, 0.28);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.035)),
-    rgba(11, 23, 32, 0.22);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-.proof-snippet,
-.equation-display {
-  font-family: var(--sd-font-data);
-}
-
-.cta-section,
-footer {
-  color: var(--text-light);
-  padding: 3rem 2rem;
-  text-align: center;
-  background:
-    linear-gradient(180deg, var(--sd-ink) 0%, var(--sd-ink-strong) 100%);
-}
-
-footer a {
-  color: var(--accent-gold);
-  text-decoration: none;
-  transition: color var(--sd-phase-duration) ease;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
-
-.proof-placeholder {
-  border: 1px solid rgba(20, 43, 58, 0.12);
-  background:
-    linear-gradient(135deg, rgba(20, 43, 58, 0.08), rgba(115, 150, 168, 0.08)),
-    repeating-linear-gradient(90deg, rgba(20, 43, 58, 0.05) 0 1px, transparent 1px 18px),
-    var(--sd-paper-warm);
-  color: var(--sd-ink-soft);
-}
-
-.controls-panel {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 14rem),
-    rgba(11, 23, 32, 0.94);
-  border-color: rgba(244, 196, 48, 0.36);
-  box-shadow: 0 18px 36px rgba(11, 23, 32, 0.24);
-}
-
-.control-group button {
-  box-shadow: 0 8px 16px rgba(215, 169, 40, 0.16);
-}
-
-.control-group input[type="range"] {
-  accent-color: var(--sd-amber);
-}
-
-.control-group select,
-.controls-panel select {
-  background-color: rgba(248, 251, 252, 0.11) !important;
-  color: var(--text-light) !important;
-  border-color: rgba(244, 196, 48, 0.42) !important;
-}
-
-.control-group select option,
-.controls-panel select option {
-  background-color: var(--sd-ink);
-  color: var(--sd-cloud);
-}
-
-/* Homepage Option C pass: professional optical/paper balance. */
 .hero-note {
   margin: 0 0 1rem;
   color: var(--sd-amber);
@@ -475,6 +525,8 @@ footer a:hover {
     linear-gradient(180deg, var(--sd-ink-strong) 0%, var(--sd-ink) 100%);
 }
 
+/* --- Sections: padding, backgrounds, generic h2/p defaults ------------ */
+
 .theorem-section,
 .what-section,
 .why-section,
@@ -486,6 +538,20 @@ footer a:hover {
   max-width: none;
   margin: 0;
   padding: clamp(4.5rem, 8vw, 7rem) var(--sd-space-page);
+}
+
+/* Generic section heading + paragraph defaults; page-local rules can still override. */
+section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--sd-ink-strong);
+  text-align: center;
+}
+
+section p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
 }
 
 .what-section,
@@ -539,6 +605,8 @@ footer a:hover {
   margin-bottom: 0;
 }
 
+/* --- Grids ----------------------------------------------------------- */
+
 .benefits-grid,
 .app-grid,
 .proof-grid,
@@ -562,6 +630,8 @@ footer a:hover {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.4rem;
 }
+
+/* --- Card layout (page-level layout for cards, not styling) ----------- */
 
 .benefit-card,
 .proof-item,
@@ -623,6 +693,8 @@ footer a:hover {
   margin-top: auto;
 }
 
+/* --- Comparison ------------------------------------------------------ */
+
 .comparison-lead {
   max-width: 620px;
   margin: 0 auto 2rem;
@@ -639,11 +711,15 @@ footer a:hover {
   background: rgba(255, 255, 255, 0.38);
 }
 
+/* --- Proof placeholder layout ---------------------------------------- */
+
 .proof-placeholder {
   min-height: 14rem;
   padding: 1.25rem;
   text-align: center;
 }
+
+/* --- CTA section layout ---------------------------------------------- */
 
 .cta-section {
   position: relative;
@@ -668,6 +744,8 @@ footer a:hover {
   gap: 1rem;
 }
 
+/* --- Footer extras --------------------------------------------------- */
+
 .footer-links {
   margin-top: 1rem;
   font-size: 0.9rem;
@@ -679,7 +757,13 @@ footer a:hover {
   opacity: 0.7;
 }
 
-/* BoxForge-inspired primitives for the upcoming hero graph/components pass. */
+
+/* ============================================================================
+   5. EXPERIMENTS
+   ============================================================================ */
+
+/* --- BoxForge primitives (upcoming hero graph / phase animation) ----- */
+
 .sd-boxforge-surface {
   position: relative;
   transform-style: preserve-3d;
@@ -743,6 +827,197 @@ footer a:hover {
   to { transform: rotateX(64deg) rotateZ(344deg); }
 }
 
+/* --- Paper-inspired components (deferred — see UI_UX_THEME_FOUNDATION.md) */
+
+/* Ruled / lined paper cards */
+.sd-paper-card {
+  position: relative;
+  background:
+    linear-gradient(transparent 95%, var(--sd-paper-line) 95%),
+    var(--sd-paper-ruled);
+  background-size: 100% 1.5rem;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(20, 43, 58, 0.08);
+  border-left: 2px solid var(--sd-paper-margin);
+  border-radius: var(--sd-radius-md);
+  padding: 1.5rem 1.5rem 1.5rem calc(2rem + 2px);
+  transition: box-shadow var(--sd-phase-duration) ease;
+}
+
+.sd-paper-card:hover {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.15),
+    0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Sticky note sections */
+.sd-sticky-note {
+  position: relative;
+  background: linear-gradient(135deg,
+    var(--sd-sticky-yellow) 0%,
+    color-mix(in srgb, var(--sd-sticky-yellow) 95%, #000) 100%
+  );
+  transform: rotate(-2deg);
+  transition: transform var(--sd-phase-duration) ease,
+              box-shadow var(--sd-phase-duration) ease;
+  box-shadow:
+    2px 4px 8px rgba(0, 0, 0, 0.15),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+  padding: 1rem 1.25rem;
+  margin: 1rem;
+}
+
+.sd-sticky-note:hover {
+  transform: rotate(-4deg) translateY(-4px);
+  box-shadow:
+    4px 8px 16px rgba(0, 0, 0, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sd-sticky-note.sd-sticky-pink {
+  background: linear-gradient(135deg,
+    var(--sd-sticky-pink) 0%,
+    color-mix(in srgb, var(--sd-sticky-pink) 95%, #000) 100%
+  );
+}
+
+.sd-sticky-note.sd-sticky-blue {
+  background: linear-gradient(135deg,
+    var(--sd-sticky-blue) 0%,
+    color-mix(in srgb, var(--sd-sticky-blue) 95%, #000) 100%
+  );
+}
+
+.sd-sticky-note.sd-sticky-green {
+  background: linear-gradient(135deg,
+    var(--sd-sticky-green) 0%,
+    color-mix(in srgb, var(--sd-sticky-green) 95%, #000) 100%
+  );
+}
+
+/* Tape overlays */
+.sd-tape-overlay {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 120px;
+  height: 32px;
+  background:
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.88) 0%,
+      rgba(255, 255, 255, 0.78) 100%
+    );
+  box-shadow:
+    0 2px 4px var(--sd-tape-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+  pointer-events: none;
+  opacity: 0.92;
+  z-index: 10;
+}
+
+.sd-tape-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      rgba(255, 255, 255, 0.15) 3px,
+      rgba(255, 255, 255, 0.15) 6px
+    );
+  border-radius: 2px;
+  mix-blend-mode: overlay;
+}
+
+.sd-tape-overlay.sd-tape-top-left {
+  left: 15%;
+  transform: translateX(0) rotate(8deg);
+}
+
+.sd-tape-overlay.sd-tape-top-right {
+  left: 85%;
+  transform: translateX(-100%) rotate(-8deg);
+}
+
+/* Wooden desk background */
+body[data-theme="desk"],
+.sd-desk-bg {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(139, 90, 43, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(101, 67, 33, 0.15), transparent 40%),
+    repeating-linear-gradient(
+      90deg,
+      var(--sd-wood-dark) 0px,
+      var(--sd-wood-mid) 2px,
+      var(--sd-wood-dark) 4px
+    ),
+    linear-gradient(180deg, var(--sd-wood-mid) 0%, var(--sd-wood-dark) 100%);
+  background-blend-mode: multiply, multiply, overlay, normal;
+  min-height: 100vh;
+}
+
+/* Manila folder / clipboard containers */
+.sd-manila-container {
+  position: relative;
+  background:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      transparent 20%
+    ),
+    var(--sd-manila-base);
+  border: 1px solid var(--sd-manila-border);
+  border-radius: var(--sd-radius-md);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.sd-manila-container.with-tab::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  right: 20%;
+  width: 120px;
+  height: 16px;
+  background: linear-gradient(180deg, var(--sd-manila-dark) 0%, var(--sd-manila-base) 100%);
+  border: 1px solid var(--sd-manila-border);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  z-index: -1;
+}
+
+.sd-manila-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    );
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+
+/* ============================================================================
+   MEDIA QUERIES (cross-cutting; affect multiple layers)
+   ============================================================================ */
+
+/* Reduced motion — universal */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -754,6 +1029,7 @@ footer a:hover {
   }
 }
 
+/* Tablet / narrow desktop */
 @media (max-width: 768px) {
   .site-nav {
     flex-direction: column;
@@ -810,6 +1086,7 @@ footer a:hover {
   }
 }
 
+/* Phone */
 @media (max-width: 520px) {
   .cta-buttons {
     grid-template-columns: 1fr;
@@ -821,192 +1098,7 @@ footer a:hover {
   }
 }
 
-/* Paper-inspired theme components */
-
-/* Ruled/Lined Paper Cards */
-.sd-paper-card {
-  position: relative;
-  background:
-    linear-gradient(transparent 95%, var(--sd-paper-line) 95%),
-    var(--sd-paper-ruled);
-  background-size: 100% 1.5rem;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.12),
-    0 4px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(20, 43, 58, 0.08);
-  border-left: 2px solid var(--sd-paper-margin);
-  border-radius: var(--sd-radius-md);
-  padding: 1.5rem 1.5rem 1.5rem calc(2rem + 2px);
-  transition: box-shadow var(--sd-phase-duration) ease;
-}
-
-.sd-paper-card:hover {
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.15),
-    0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-/* Sticky Note Sections */
-.sd-sticky-note {
-  position: relative;
-  background: linear-gradient(135deg,
-    var(--sd-sticky-yellow) 0%,
-    color-mix(in srgb, var(--sd-sticky-yellow) 95%, #000) 100%
-  );
-  transform: rotate(-2deg);
-  transition: transform var(--sd-phase-duration) ease,
-              box-shadow var(--sd-phase-duration) ease;
-  box-shadow:
-    2px 4px 8px rgba(0, 0, 0, 0.15),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.05);
-  border-radius: 2px;
-  padding: 1rem 1.25rem;
-  margin: 1rem;
-}
-
-.sd-sticky-note:hover {
-  transform: rotate(-4deg) translateY(-4px);
-  box-shadow:
-    4px 8px 16px rgba(0, 0, 0, 0.2),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.sd-sticky-note.sd-sticky-pink {
-  background: linear-gradient(135deg,
-    var(--sd-sticky-pink) 0%,
-    color-mix(in srgb, var(--sd-sticky-pink) 95%, #000) 100%
-  );
-}
-
-.sd-sticky-note.sd-sticky-blue {
-  background: linear-gradient(135deg,
-    var(--sd-sticky-blue) 0%,
-    color-mix(in srgb, var(--sd-sticky-blue) 95%, #000) 100%
-  );
-}
-
-.sd-sticky-note.sd-sticky-green {
-  background: linear-gradient(135deg,
-    var(--sd-sticky-green) 0%,
-    color-mix(in srgb, var(--sd-sticky-green) 95%, #000) 100%
-  );
-}
-
-/* Tape Overlays */
-.sd-tape-overlay {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-2deg);
-  width: 120px;
-  height: 32px;
-  background:
-    linear-gradient(135deg,
-      rgba(255, 255, 255, 0.88) 0%,
-      rgba(255, 255, 255, 0.78) 100%
-    );
-  box-shadow:
-    0 2px 4px var(--sd-tape-shadow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
-  border-radius: 2px;
-  pointer-events: none;
-  opacity: 0.92;
-  z-index: 10;
-}
-
-.sd-tape-overlay::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 3px,
-      rgba(255, 255, 255, 0.15) 3px,
-      rgba(255, 255, 255, 0.15) 6px
-    );
-  border-radius: 2px;
-  mix-blend-mode: overlay;
-}
-
-.sd-tape-overlay.sd-tape-top-left {
-  left: 15%;
-  transform: translateX(0) rotate(8deg);
-}
-
-.sd-tape-overlay.sd-tape-top-right {
-  left: 85%;
-  transform: translateX(-100%) rotate(-8deg);
-}
-
-/* Wooden Desk Background */
-body[data-theme="desk"],
-.sd-desk-bg {
-  background:
-    radial-gradient(circle at 20% 30%, rgba(139, 90, 43, 0.15), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(101, 67, 33, 0.15), transparent 40%),
-    repeating-linear-gradient(
-      90deg,
-      var(--sd-wood-dark) 0px,
-      var(--sd-wood-mid) 2px,
-      var(--sd-wood-dark) 4px
-    ),
-    linear-gradient(180deg, var(--sd-wood-mid) 0%, var(--sd-wood-dark) 100%);
-  background-blend-mode: multiply, multiply, overlay, normal;
-  min-height: 100vh;
-}
-
-/* Manila Folder/Clipboard Containers */
-.sd-manila-container {
-  position: relative;
-  background:
-    linear-gradient(180deg,
-      rgba(255, 255, 255, 0.3) 0%,
-      transparent 20%
-    ),
-    var(--sd-manila-base);
-  border: 1px solid var(--sd-manila-border);
-  border-radius: var(--sd-radius-md);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 2rem;
-  overflow: hidden;
-}
-
-.sd-manila-container.with-tab::before {
-  content: "";
-  position: absolute;
-  top: -16px;
-  right: 20%;
-  width: 120px;
-  height: 16px;
-  background: linear-gradient(180deg, var(--sd-manila-dark) 0%, var(--sd-manila-base) 100%);
-  border: 1px solid var(--sd-manila-border);
-  border-bottom: none;
-  border-radius: 4px 4px 0 0;
-  z-index: -1;
-}
-
-.sd-manila-container::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.02) 2px,
-      rgba(0, 0, 0, 0.02) 4px
-    );
-  pointer-events: none;
-  mix-blend-mode: multiply;
-}
-
-/* Accessibility: Reduced motion support for paper effects */
+/* Reduced motion — paper-effect overrides (experiments layer) */
 @media (prefers-reduced-motion: reduce) {
   .sd-sticky-note {
     transform: rotate(0deg);

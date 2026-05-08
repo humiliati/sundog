@@ -159,9 +159,40 @@ hero graph markup, application cards, or generated BoxForge exports.
 
 1. Move repeated header/footer CSS out of each HTML file into
    `public/css/sundog-theme.css`.
+   **Landed 2026-05-08:** Header chrome (`.site-header`, `.site-nav`,
+   `.site-brand`, `.site-links`, `.site-links a`, hovers, mobile @media)
+   and footer chrome (`footer`, `footer a`, `footer a:hover`) now live
+   exclusively in the shared stylesheet. Every production page
+   (index/origin/applications-gallery/threebody/balance) has had its
+   inline chrome blocks deleted; balance retains a trimmed `:root` for
+   workbench-specific `--ink`/`--paper` tokens. threebody picked up the
+   shared sheet link in this pass too — previously stranded.
 2. Split the shared stylesheet into layers when it grows:
    `tokens`, `base`, `components`, `pages`, `experiments`.
+   **Landed 2026-05-08:** `public/css/sundog-theme.css` reorganized into the
+   five named sections, with banner-comment markers labeling each. Implementation
+   uses comment markers rather than CSS `@layer` at-rules so the load-order
+   cascade with inline page `<style>` blocks is preserved unchanged — moving
+   shared rules into layers would have made them lose to unlayered inline
+   page rules and regressed `index.html .hero`, button hovers, and
+   `.cta-link:hover`. To promote to formal `@layer` later, also wrap each
+   page's inline `<style>` contents in `@layer overrides { ... }` and declare
+   `@layer overrides, tokens, base, components, pages, experiments;` at the
+   top of the shared sheet.
 3. Replace inline card/button styles with shared component classes.
+   **Partially landed 2026-05-08:** Lifted card-hover transform,
+   card transitions, default card padding, `.app-card-content` padding,
+   `.app-card h3/p/a` typography, generic `section h2`/`section p`
+   defaults into the shared sheet. Pulled the matching dead inline
+   blocks from `index.html` (sections, benefits, app-cards,
+   comparison/proof/research-section bgs, cta-section, button bases).
+   Hovers (`.btn-primary:hover`, `.btn-secondary:hover`, `.cta-link:hover`)
+   retained inline since they carry alive properties shared doesn't
+   replicate. Other pages keep their page-specific shapes
+   (`.signature-card`, `.theorem-card`, `.result-item`, `.timeline`,
+   `.era-list`, `.source-card`, `.trail-list`, `.story-panel`,
+   `.button` standalone) — those are not duplicates of shared, they're
+   genuinely page-local content shapes.
 4. Create one canonical hero graph component:
    optical halo plus theorem graph plus BoxForge phase animation discipline.
 5. Decide whether BoxForge exports live as hand-curated CSS snippets or as
