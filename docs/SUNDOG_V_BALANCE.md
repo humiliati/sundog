@@ -53,13 +53,15 @@ First executable scaffold started. The Sundog tree now includes:
 - `public/js/balance-browser.mjs`: canvas renderer, controls, telemetry strip,
   and Lounas-derived robotics balance motif;
 - `scripts/balance-harness.mjs`: a Phase 7 smoke/replay runner sharing the
-  same dynamics, shadow sensor, and controller modules as the browser page.
+  same dynamics, shadow sensor, and controller modules as the browser page;
+- `scripts/balance-phase8-metrics.mjs`: a Phase 8 recovery/event metrics runner
+  for local metric tables, recovery curves, and fall-warning threshold sweeps.
 
-No committed Balance results directory, no Phase 8 metric tables, and no Phase
-10 operating-envelope verdict ships in the Sundog tree today. Local Phase 7
-smoke and replay outputs are written under ignored `results/balance/` paths
-and are calibration artifacts, not public evidence. The current artifact is a
-Phase 1-7 scaffold, not evidence.
+No committed Balance results directory and no Phase 10 operating-envelope
+verdict ships in the Sundog tree today. Local Phase 7 smoke/replay outputs and
+Phase 8 metric outputs are written under ignored `results/balance/` paths and
+are calibration artifacts, not public evidence. The current artifact is a Phase
+1-8 scaffold, not evidence.
 
 This section is here so the broadcast surfaces (gallery card, APPLICATIONS.md,
 claims-and-scope.md) do not get a row until the runnable-artifact gates below
@@ -466,6 +468,12 @@ Deliverables:
 
 Exit criterion: the page can show a recovery curve, and the docs can distinguish
 successful balance from merely delaying a fall.
+
++++[forward-plan-A]+++ *Phase 8 first pass landed: `npm run balance:phase8`
+writes local ignored `trial-metrics.csv`, `event-log.csv`,
+`metric-summary.csv`, `warning-thresholds.csv`, `matched-comparison.csv`,
+`recovery-curves.csv`, and `samples.jsonl`. These are event/recovery metric
+tables for diagnosis, not Phase 10 operating-envelope evidence.* +++[/forward-plan-A]+++
 
 ### Phase 9 - Sensor Degradation And Observability Boundary
 

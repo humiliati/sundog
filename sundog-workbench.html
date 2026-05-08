@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog Workbench: parametric parhelion render — exercise the math, tune the eye">
+    <meta name="theme-color" content="#0b1720">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Sundog Workbench — Parhelion Eye</title>
+    <style>
+        /* Workbench-specific layout (chrome and tokens come from sundog-theme.css) */
+
+        :root {
+            /* Optical parameters — sliders write to these */
+            --sun-altitude: 18;             /* degrees above horizon */
+            --halo-22-intensity: 0.95;
+            --halo-46-intensity: 0.30;
+            --cza-intensity: 0.95;
+            --cza-curvature: 0.85;
+            --sun-pillar-intensity: 0.80;
+            --sun-pillar-length: 0.65;
+            --parhelic-circle-intensity: 0.45;
+            --parhelic-curvature: 0.66;     /* 0 = horizontal line; 1 = strong grin. 0.66 calibrated against source-photo overlay. */
+            --parhelia-intensity: 1.0;
+            --parhelia-dagger-length: 1.0;
+            --dispersion-width: 0.7;
+            --secondary-suns-strength: 0.0;
+            --ring-overlap-bias: 0.5;
+            --compass-ray-length: 1.0;
+            --rainbow-saturation: 0.85;
+            --idle-scintillation-amplitude: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .workbench {
+            min-height: calc(100vh - 58px);
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            background:
+                radial-gradient(circle at 50% 70%, #1a3850 0%, #0b1720 65%, #050a10 100%);
+        }
+
+        .stage {
+            position: relative;
+            min-height: calc(100vh - 58px);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #parhelion-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .stage-copy {
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            z-index: 5;
+            width: min(560px, calc(100% - 4rem));
+            color: var(--text-light);
+            pointer-events: none;
+        }
+
+        .stage-copy .eyebrow {
+            color: var(--accent-gold);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stage-copy h1 {
+            font-family: var(--sd-font-display);
+            font-size: clamp(2rem, 4.5vw, 3.4rem);
+            line-height: 1.04;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.6rem;
+        }
+
+        .stage-copy p {
+            color: rgba(245, 245, 245, 0.78);
+            font-size: 0.98rem;
+            max-width: 38rem;
+        }
+
+        /* --- Controls ----------------------------------------------------- */
+
+        .controls {
+            position: relative;
+            z-index: 10;
+            min-height: calc(100vh - 58px);
+            padding: 1.2rem;
+            color: var(--text-light);
+            background: rgba(11, 23, 32, 0.96);
+            border-left: 1px solid rgba(244, 196, 48, 0.22);
+            overflow-y: auto;
+            backdrop-filter: blur(8px);
+        }
+
+        .controls h2,
+        .controls h3 {
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .controls h2 {
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .controls h3 {
+            font-size: 0.74rem;
+            margin: 1.4rem 0 0.55rem;
+            opacity: 0.92;
+        }
+
+        .controls .lead {
+            font-size: 0.82rem;
+            color: rgba(245, 245, 245, 0.7);
+            line-height: 1.5;
+            margin-bottom: 0.6rem;
+        }
+
+        .control-group {
+            margin-bottom: 0.7rem;
+        }
+
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            color: rgba(245, 245, 245, 0.86);
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .control-group .value {
+            color: var(--accent-gold);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--sd-amber);
+        }
+
+        .control-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .control-actions button {
+            min-height: 2.2rem;
+            padding: 0.35rem 0.5rem;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(244, 196, 48, 0.30);
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 160ms ease, border-color 160ms ease;
+        }
+
+        .control-actions button:hover {
+            background: rgba(244, 196, 48, 0.16);
+            border-color: rgba(244, 196, 48, 0.6);
+        }
+
+        /* --- Atmospheric overlay (CSS, sits over SVG) --------------------- */
+
+        .atmosphere {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            background:
+                radial-gradient(circle at 50% 70%, rgba(244, 196, 48, calc(0.04 * var(--dispersion-width))), transparent 18rem),
+                radial-gradient(circle at 50% 36%, rgba(140, 200, 255, calc(0.05 * var(--dispersion-width))), transparent 22rem);
+            opacity: var(--dispersion-width);
+        }
+
+        /* --- SVG presentation hooks ------------------------------------- */
+
+        .layer-halos circle {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.95);
+            vector-effect: non-scaling-stroke;
+        }
+
+        .halo-22 {
+            stroke-width: 1.5;
+            opacity: var(--halo-22-intensity);
+        }
+
+        .halo-46 {
+            stroke-width: 1.2;
+            opacity: var(--halo-46-intensity);
+        }
+
+        .halo-secondary {
+            stroke-width: 1.1;
+            opacity: calc(0.9 * var(--secondary-suns-strength));
+        }
+
+        .layer-cza path {
+            fill: none;
+            stroke: url(#prismatic-gradient);
+            stroke-width: 6;
+            opacity: var(--cza-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+        }
+
+        .layer-cza .cza-secondary {
+            stroke-width: 4;
+            opacity: calc(0.75 * var(--cza-intensity));
+        }
+
+        .layer-parhelic path {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.6);
+            stroke-width: 1.2;
+            stroke-dasharray: 4 6;
+            opacity: var(--parhelic-circle-intensity);
+            vector-effect: non-scaling-stroke;
+        }
+
+        .layer-pillar line {
+            stroke: url(#pillar-gradient);
+            stroke-width: 6;
+            opacity: var(--sun-pillar-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+        }
+
+        .layer-parhelia .dagger {
+            opacity: var(--parhelia-intensity);
+        }
+
+        .layer-parhelia .dagger-core {
+            fill: url(#dagger-core-gradient);
+            filter: url(#soft-blur);
+        }
+
+        .layer-parhelia .dagger-streak {
+            stroke: url(#dagger-streak-gradient);
+            stroke-width: 6;
+            stroke-linecap: round;
+            opacity: 0.85;
+            filter: url(#soft-blur);
+        }
+
+        .layer-sun .sun-core {
+            fill: #fffbe8;
+            filter: url(#sun-glow);
+        }
+
+        .layer-sun .ray {
+            stroke: rgba(255, 248, 220, 0.92);
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            vector-effect: non-scaling-stroke;
+            filter: url(#sun-glow);
+        }
+
+        .layer-sun .ray-diagonal {
+            stroke: rgba(255, 248, 220, 0.55);
+            stroke-width: 1.4;
+        }
+
+        /* --- Idle scintillation (off when amplitude == 0) --------------- */
+
+        @keyframes scintillate {
+            0%, 100% { opacity: var(--halo-22-intensity); }
+            50%      { opacity: calc(var(--halo-22-intensity) * (1 - 0.18 * var(--idle-scintillation-amplitude))); }
+        }
+
+        .halo-22 {
+            animation: scintillate 7s ease-in-out infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .halo-22 { animation: none; }
+        }
+
+        /* --- Responsive --------------------------------------------------- */
+
+        @media (max-width: 900px) {
+            .workbench {
+                grid-template-columns: 1fr;
+            }
+            .stage {
+                min-height: 70vh;
+            }
+            .controls {
+                min-height: auto;
+                border-left: none;
+                border-top: 1px solid rgba(244, 196, 48, 0.22);
+            }
+            .stage-copy {
+                left: 1.25rem;
+                right: 1.25rem;
+                width: auto;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="index.html">Home</a>
+                <a href="origin.html">Origin</a>
+                <a href="applications-gallery.html">Applications</a>
+                <a href="threebody.html">Three-Body</a>
+                <a href="balance.html">Balance</a>
+                <a href="sundog-workbench.html" aria-current="page">Workbench</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="workbench" aria-label="Parhelion workbench">
+        <section class="stage" aria-label="Parhelion stage">
+            <svg id="parhelion-svg" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Parametric sundog rendering">
+                <defs>
+                    <!-- Prismatic gradient: ice-crystal dispersion, red-inside / blue-outside -->
+                    <linearGradient id="prismatic-gradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%"  stop-color="#ff6b6b" stop-opacity="0.85"/>
+                        <stop offset="22%" stop-color="#ffa552" stop-opacity="0.85"/>
+                        <stop offset="42%" stop-color="#fff080" stop-opacity="0.85"/>
+                        <stop offset="62%" stop-color="#9bf0a8" stop-opacity="0.85"/>
+                        <stop offset="82%" stop-color="#7cc6ff" stop-opacity="0.85"/>
+                        <stop offset="100%" stop-color="#a8a0ff" stop-opacity="0.85"/>
+                    </linearGradient>
+
+                    <!-- Sun pillar: white-hot core fading to amber at extremities -->
+                    <linearGradient id="pillar-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%"   stop-color="rgba(255,196,80,0)"/>
+                        <stop offset="35%"  stop-color="rgba(255,222,140,0.7)"/>
+                        <stop offset="50%"  stop-color="rgba(255,250,232,0.95)"/>
+                        <stop offset="65%"  stop-color="rgba(255,222,140,0.7)"/>
+                        <stop offset="100%" stop-color="rgba(255,196,80,0)"/>
+                    </linearGradient>
+
+                    <!-- Parhelion dagger core: hot center, prismatic shoulders -->
+                    <radialGradient id="dagger-core-gradient" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%"  stop-color="#fffbe8"/>
+                        <stop offset="35%" stop-color="#ffd06b" stop-opacity="0.95"/>
+                        <stop offset="70%" stop-color="#ff8a55" stop-opacity="0.5"/>
+                        <stop offset="100%" stop-color="#ff5a5a" stop-opacity="0"/>
+                    </radialGradient>
+
+                    <!-- Parhelion streak: red-inside, fading blue-outside -->
+                    <linearGradient id="dagger-streak-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%"  stop-color="#ff6a4a" stop-opacity="0.95"/>
+                        <stop offset="30%" stop-color="#ffd06b" stop-opacity="0.85"/>
+                        <stop offset="70%" stop-color="#cce6ff" stop-opacity="0.55"/>
+                        <stop offset="100%" stop-color="#7ca4ff" stop-opacity="0"/>
+                    </linearGradient>
+
+                    <!-- Sun glow: subtle bloom around the compass-rose core -->
+                    <filter id="sun-glow" x="-100%" y="-100%" width="300%" height="300%">
+                        <feGaussianBlur stdDeviation="1.4" result="blur"/>
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+
+                    <!-- Soft blur for arcs, pillar, dagger -->
+                    <filter id="soft-blur" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="0.6"/>
+                    </filter>
+                </defs>
+
+                <!-- Order: back to front -->
+
+                <!-- 46° halo (faint outer ring; mostly off-canvas at standard scale) -->
+                <g class="layer-halos">
+                    <circle class="halo-46" cx="500" cy="500" r="440"/>
+                </g>
+
+                <!-- Parhelic arc: curved band that passes through the sun and carries the daggers.
+                     Path is rebuilt by JS from --parhelic-curvature; defaults to gentle grin. -->
+                <g class="layer-parhelic">
+                    <path id="parhelic-path"
+                          d="M 0 500 Q 500 500 1000 500"/>
+                </g>
+
+                <!-- Sun pillar: vertical column through the sun -->
+                <g class="layer-pillar">
+                    <line id="pillar-line"
+                          x1="500" y1="500"
+                          x2="500" y2="500"/>
+                </g>
+
+                <!-- 22° halo: the iris ring -->
+                <g class="layer-halos">
+                    <circle class="halo-22" cx="500" cy="500" r="220"/>
+                </g>
+
+                <!-- Secondary halos from peripheral virtual suns
+                     (positioned upper-left and upper-right; intensity tied to --secondary-suns-strength) -->
+                <g class="layer-halos" id="layer-secondary-halos">
+                    <circle class="halo-secondary" cx="320" cy="320" r="160"/>
+                    <circle class="halo-secondary" cx="680" cy="320" r="160"/>
+                </g>
+
+                <!-- Circumzenithal arc (CZA): the eyelid -->
+                <g class="layer-cza">
+                    <!-- Primary CZA: inverted smile across upper third -->
+                    <path id="cza-primary"
+                          d="M 200 240 Q 500 80 800 240"/>
+                    <!-- Secondary upper arc (Parry / supralateral suggestion) -->
+                    <path class="cza-secondary"
+                          d="M 260 300 Q 500 200 740 300"/>
+                </g>
+
+                <!-- Parhelia: the daggers flanking the sun on the parhelic circle -->
+                <g class="layer-parhelia">
+                    <!-- Left dagger -->
+                    <g class="dagger">
+                        <line class="dagger-streak"
+                              x1="220" y1="500" x2="320" y2="500"/>
+                        <ellipse class="dagger-core"
+                                 cx="280" cy="500" rx="22" ry="14"/>
+                    </g>
+                    <!-- Right dagger -->
+                    <g class="dagger">
+                        <line class="dagger-streak"
+                              x1="780" y1="500" x2="680" y2="500"/>
+                        <ellipse class="dagger-core"
+                                 cx="720" cy="500" rx="22" ry="14"/>
+                    </g>
+                </g>
+
+                <!-- Compass-rose sun: X-only diagonals plus a bright core.
+                     The cardinal directions are already covered by the sun pillar (vertical)
+                     and parhelic arc (horizontal-ish) — the X is the sun's identity.
+                     Both ray length and core radius scale with --compass-ray-length. -->
+                <g class="layer-sun" id="layer-sun">
+                    <line class="ray ray-diagonal" x1="500" y1="500" x2="540" y2="460"/>
+                    <line class="ray ray-diagonal" x1="500" y1="500" x2="540" y2="540"/>
+                    <line class="ray ray-diagonal" x1="500" y1="500" x2="460" y2="540"/>
+                    <line class="ray ray-diagonal" x1="500" y1="500" x2="460" y2="460"/>
+                    <circle class="sun-core" id="sun-core" cx="500" cy="500" r="9"/>
+                </g>
+            </svg>
+
+            <div class="atmosphere" aria-hidden="true"></div>
+
+            <div class="stage-copy">
+                <div class="eyebrow">Parhelion Workbench</div>
+                <h1>The Sundog Eye</h1>
+                <p>A parametric exercise of the parhelion description. Tune the optics on the right; the static composition holds the still pose that the animation phases will narrate.</p>
+            </div>
+        </section>
+
+        <aside class="controls" aria-label="Parhelion controls">
+            <h2>Optical Parameters</h2>
+            <p class="lead">Each slider exposes one term of the parhelion description. Defaults render the canonical "sundog eye" still pose.</p>
+
+            <h3>Sun &amp; Pillar</h3>
+
+            <div class="control-group">
+                <label>Sun Altitude (°)<span class="value" id="sun-altitude-value">18</span></label>
+                <input type="range" id="sun-altitude" data-param="sun-altitude" min="0" max="60" step="1" value="18">
+            </div>
+
+            <div class="control-group">
+                <label>Sun Pillar Intensity<span class="value" id="sun-pillar-intensity-value">0.80</span></label>
+                <input type="range" id="sun-pillar-intensity" data-param="sun-pillar-intensity" min="0" max="1" step="0.01" value="0.80">
+            </div>
+
+            <div class="control-group">
+                <label>Sun Pillar Length<span class="value" id="sun-pillar-length-value">0.65</span></label>
+                <input type="range" id="sun-pillar-length" data-param="sun-pillar-length" min="0" max="1" step="0.01" value="0.65">
+            </div>
+
+            <div class="control-group">
+                <label>Compass Ray Length<span class="value" id="compass-ray-length-value">1.00</span></label>
+                <input type="range" id="compass-ray-length" data-param="compass-ray-length" min="0.4" max="2" step="0.05" value="1.0">
+            </div>
+
+            <h3>Halos</h3>
+
+            <div class="control-group">
+                <label>22° Halo<span class="value" id="halo-22-intensity-value">0.95</span></label>
+                <input type="range" id="halo-22-intensity" data-param="halo-22-intensity" min="0" max="1" step="0.01" value="0.95">
+            </div>
+
+            <div class="control-group">
+                <label>46° Halo<span class="value" id="halo-46-intensity-value">0.30</span></label>
+                <input type="range" id="halo-46-intensity" data-param="halo-46-intensity" min="0" max="1" step="0.01" value="0.30">
+            </div>
+
+            <h3>Arcs</h3>
+
+            <div class="control-group">
+                <label>CZA / Eyelid<span class="value" id="cza-intensity-value">0.95</span></label>
+                <input type="range" id="cza-intensity" data-param="cza-intensity" min="0" max="1" step="0.01" value="0.95">
+            </div>
+
+            <div class="control-group">
+                <label>CZA Curvature<span class="value" id="cza-curvature-value">0.85</span></label>
+                <input type="range" id="cza-curvature" data-param="cza-curvature" min="0.4" max="1.4" step="0.01" value="0.85">
+            </div>
+
+            <div class="control-group">
+                <label>Parhelic Arc Intensity<span class="value" id="parhelic-circle-intensity-value">0.45</span></label>
+                <input type="range" id="parhelic-circle-intensity" data-param="parhelic-circle-intensity" min="0" max="1" step="0.01" value="0.45">
+            </div>
+
+            <div class="control-group">
+                <label>Parhelic Arc Curvature (grin)<span class="value" id="parhelic-curvature-value">0.66</span></label>
+                <input type="range" id="parhelic-curvature" data-param="parhelic-curvature" min="0" max="1" step="0.01" value="0.66">
+            </div>
+
+            <h3>Parhelia (daggers)</h3>
+
+            <div class="control-group">
+                <label>Parhelia Intensity<span class="value" id="parhelia-intensity-value">1.00</span></label>
+                <input type="range" id="parhelia-intensity" data-param="parhelia-intensity" min="0" max="1" step="0.01" value="1.0">
+            </div>
+
+            <div class="control-group">
+                <label>Dagger Length<span class="value" id="parhelia-dagger-length-value">1.00</span></label>
+                <input type="range" id="parhelia-dagger-length" data-param="parhelia-dagger-length" min="0.4" max="1.8" step="0.05" value="1.0">
+            </div>
+
+            <h3>Composition</h3>
+
+            <div class="control-group">
+                <label>Secondary Suns<span class="value" id="secondary-suns-strength-value">0.00</span></label>
+                <input type="range" id="secondary-suns-strength" data-param="secondary-suns-strength" min="0" max="1" step="0.01" value="0.0">
+            </div>
+
+            <div class="control-group">
+                <label>Ring Overlap Bias<span class="value" id="ring-overlap-bias-value">0.50</span></label>
+                <input type="range" id="ring-overlap-bias" data-param="ring-overlap-bias" min="0" max="1" step="0.01" value="0.5">
+            </div>
+
+            <h3>Palette &amp; Atmosphere</h3>
+
+            <div class="control-group">
+                <label>Dispersion Width<span class="value" id="dispersion-width-value">0.70</span></label>
+                <input type="range" id="dispersion-width" data-param="dispersion-width" min="0" max="1" step="0.01" value="0.70">
+            </div>
+
+            <div class="control-group">
+                <label>Rainbow Saturation<span class="value" id="rainbow-saturation-value">0.85</span></label>
+                <input type="range" id="rainbow-saturation" data-param="rainbow-saturation" min="0" max="1" step="0.01" value="0.85">
+            </div>
+
+            <div class="control-group">
+                <label>Idle Scintillation<span class="value" id="idle-scintillation-amplitude-value">0.00</span></label>
+                <input type="range" id="idle-scintillation-amplitude" data-param="idle-scintillation-amplitude" min="0" max="1" step="0.01" value="0.0">
+            </div>
+
+            <div class="control-actions">
+                <button id="btn-reset" type="button">Reset</button>
+                <button id="btn-snapshot" type="button">Snapshot params</button>
+            </div>
+
+            <h3 style="margin-top: 1.4rem;">Notes</h3>
+            <p class="lead">
+                <strong>Sun</strong> is a compass rose, not an orb — pillar × parhelic cross.
+                <strong>Halo</strong> at 22° is the iris.
+                <strong>CZA</strong> is the upper eyelid.
+                <strong>Parhelia</strong> are outward-facing daggers.
+                <strong>Secondary Suns</strong> activates the 9-halo eye fiction.
+            </p>
+        </aside>
+    </main>
+
+    <script>
+        // --- Slider plumbing --------------------------------------------------
+
+        const sliders = document.querySelectorAll('input[type="range"][data-param]');
+        const root = document.documentElement;
+
+        function setParam(name, value) {
+            root.style.setProperty(`--${name}`, value);
+            const display = document.getElementById(`${name}-value`);
+            if (display) {
+                const num = parseFloat(value);
+                display.textContent = Number.isInteger(num) ? num.toString() : num.toFixed(2);
+            }
+            applyDerivedGeometry();
+        }
+
+        sliders.forEach(slider => {
+            slider.addEventListener('input', () => setParam(slider.dataset.param, slider.value));
+        });
+
+        // --- Derived geometry: positions that depend on parameters ----------
+
+        // Symmetric quadratic Bezier sampler for the parhelic arc.
+        // Endpoints (0, A) → control (500, B) → (1000, A); midpoint (sun) at y=500.
+        // Curvature c ∈ [0, 1]: A = 500 - 200c (canvas-edge above sun),
+        //                      B = 500 + 200c (control below), so midpoint stays at sun.
+        // Daggers grin upward; at c=0 the curve collapses to a flat horizontal.
+        function parhelicY(x, curvature) {
+            const A = 500 - 200 * curvature;
+            const B = 500 + 200 * curvature;
+            // For symmetric x0=0, x1=500, x2=1000, x(t) = 1000t. So t = x/1000.
+            const t = x / 1000;
+            const omt = 1 - t;
+            return omt * omt * A + 2 * t * omt * B + t * t * A;
+        }
+
+        function applyDerivedGeometry() {
+            const altitudeDeg = parseFloat(getComputedStyle(root).getPropertyValue('--sun-altitude'));
+            const pillarLen = parseFloat(getComputedStyle(root).getPropertyValue('--sun-pillar-length'));
+            const daggerLen = parseFloat(getComputedStyle(root).getPropertyValue('--parhelia-dagger-length'));
+            const compassLen = parseFloat(getComputedStyle(root).getPropertyValue('--compass-ray-length'));
+            const czaCurve = parseFloat(getComputedStyle(root).getPropertyValue('--cza-curvature'));
+            const overlapBias = parseFloat(getComputedStyle(root).getPropertyValue('--ring-overlap-bias'));
+            const parhelicCurvature = parseFloat(getComputedStyle(root).getPropertyValue('--parhelic-curvature'));
+
+            // Sun pillar: extend from sun (cy=500) up by pillar-length × 360 svg units, down by half.
+            const pillar = document.getElementById('pillar-line');
+            const pillarUp = 360 * pillarLen;
+            const pillarDown = 90 * pillarLen;
+            pillar.setAttribute('y1', 500 - pillarUp);
+            pillar.setAttribute('y2', 500 + pillarDown);
+
+            // Parhelic arc path: rebuilt from curvature.
+            const parhelicEndY = 500 - 200 * parhelicCurvature;
+            const parhelicCtrlY = 500 + 200 * parhelicCurvature;
+            const parhelic = document.getElementById('parhelic-path');
+            parhelic.setAttribute(
+                'd',
+                `M 0 ${parhelicEndY.toFixed(2)} Q 500 ${parhelicCtrlY.toFixed(2)} 1000 ${parhelicEndY.toFixed(2)}`
+            );
+
+            // Compass-rose ray length scales BOTH ray endpoints AND the sun core.
+            // Cache the original ray endpoints once; keep them as the unit-length basis.
+            const sunGroup = document.getElementById('layer-sun');
+            sunGroup.querySelectorAll('.ray').forEach(line => {
+                if (!line.dataset.basisX2) {
+                    line.dataset.basisX1 = line.getAttribute('x1');
+                    line.dataset.basisY1 = line.getAttribute('y1');
+                    line.dataset.basisX2 = line.getAttribute('x2');
+                    line.dataset.basisY2 = line.getAttribute('y2');
+                }
+                const x1 = parseFloat(line.dataset.basisX1);
+                const y1 = parseFloat(line.dataset.basisY1);
+                const x2 = parseFloat(line.dataset.basisX2);
+                const y2 = parseFloat(line.dataset.basisY2);
+                line.setAttribute('x2', x1 + (x2 - x1) * compassLen);
+                line.setAttribute('y2', y1 + (y2 - y1) * compassLen);
+            });
+            // Sun core radius scales with compass-ray-length (slight square-root softening
+            // so the core doesn't dwarf the rays at high values).
+            const sunCore = document.getElementById('sun-core');
+            sunCore.setAttribute('r', (9 * Math.sqrt(compassLen)).toFixed(2));
+
+            // Parhelion daggers ride the parhelic arc.
+            // Hilt anchor x: 280 (left) and 720 (right); their y is sampled from the curve.
+            const parheliaGroup = document.querySelector('.layer-parhelia');
+            const daggers = parheliaGroup.querySelectorAll('.dagger');
+            const leftHiltX = 280, rightHiltX = 720;
+            const leftHiltY = parhelicY(leftHiltX, parhelicCurvature);
+            const rightHiltY = parhelicY(rightHiltX, parhelicCurvature);
+            // Left dagger: streak runs from (hilt - 60·len) to (hilt + 40·len), all on the arc.
+            const leftStreak = daggers[0].querySelector('.dagger-streak');
+            const leftCore = daggers[0].querySelector('.dagger-core');
+            const lx1 = leftHiltX - 60 * daggerLen;
+            const lx2 = leftHiltX + 40 * daggerLen;
+            leftStreak.setAttribute('x1', lx1);
+            leftStreak.setAttribute('y1', parhelicY(lx1, parhelicCurvature));
+            leftStreak.setAttribute('x2', lx2);
+            leftStreak.setAttribute('y2', parhelicY(lx2, parhelicCurvature));
+            leftCore.setAttribute('cx', leftHiltX);
+            leftCore.setAttribute('cy', leftHiltY);
+            // Right dagger: mirror.
+            const rightStreak = daggers[1].querySelector('.dagger-streak');
+            const rightCore = daggers[1].querySelector('.dagger-core');
+            const rx1 = rightHiltX + 60 * daggerLen;
+            const rx2 = rightHiltX - 40 * daggerLen;
+            rightStreak.setAttribute('x1', rx1);
+            rightStreak.setAttribute('y1', parhelicY(rx1, parhelicCurvature));
+            rightStreak.setAttribute('x2', rx2);
+            rightStreak.setAttribute('y2', parhelicY(rx2, parhelicCurvature));
+            rightCore.setAttribute('cx', rightHiltX);
+            rightCore.setAttribute('cy', rightHiltY);
+
+            // CZA curvature: control the Q-curve apex height
+            const czaPrimary = document.getElementById('cza-primary');
+            const apexY = 240 - 160 * (czaCurve - 0.85);
+            czaPrimary.setAttribute('d', `M 200 240 Q 500 ${apexY} 800 240`);
+
+            // Ring overlap bias: shifts the secondary halos closer to (1.0) or
+            // further from (0.0) the primary, controlling the 9-ring intersection.
+            const secondaries = document.querySelectorAll('#layer-secondary-halos circle');
+            const offset = (overlapBias - 0.5) * 160;
+            const lx = 320 + offset, rx = 680 - offset;
+            const cy = 320 + offset * 0.5;
+            secondaries[0].setAttribute('cx', lx); secondaries[0].setAttribute('cy', cy);
+            secondaries[1].setAttribute('cx', rx); secondaries[1].setAttribute('cy', cy);
+
+            // Sun altitude: planned for v2 — would shift pillar y-anchor and parhelion x-spacing
+            // (parhelion azimuthal offset from sun grows with altitude per atmospheric optics).
+            // For static-first, altitude is a placeholder; geometry is fixed at canonical pose.
+            void altitudeDeg;
+        }
+
+        // Initial layout
+        applyDerivedGeometry();
+
+        // --- Reset / snapshot ------------------------------------------------
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            sliders.forEach(slider => {
+                slider.value = slider.defaultValue;
+                slider.dispatchEvent(new Event('input'));
+            });
+        });
+
+        document.getElementById('btn-snapshot').addEventListener('click', () => {
+            const params = {};
+            sliders.forEach(s => params[s.dataset.param] = parseFloat(s.value));
+            console.log('Sundog params snapshot:', JSON.stringify(params, null, 2));
+            try {
+                navigator.clipboard.writeText(JSON.stringify(params, null, 2));
+            } catch (e) { /* ignore */ }
+        });
+    </script>
+</body>
+</html>
