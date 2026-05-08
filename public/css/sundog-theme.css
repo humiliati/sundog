@@ -80,33 +80,63 @@ html {
 
 body {
   font-family: var(--sd-font-body);
+  color: var(--text-dark);
+  line-height: 1.6;
   background:
     radial-gradient(circle at 16% 0%, rgba(244, 196, 48, 0.12), transparent 28rem),
     linear-gradient(180deg, #fbfdfb 0%, var(--sd-cloud) 42%, #eef5f3 100%);
 }
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
   background: rgba(11, 23, 32, 0.92);
   border-bottom: 1px solid rgba(244, 196, 48, 0.28);
   box-shadow: 0 8px 26px rgba(11, 23, 32, 0.12);
+  backdrop-filter: blur(12px);
 }
 
 .site-nav {
   max-width: var(--sd-page-max);
+  margin: 0 auto;
+  padding: 0.85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
 }
 
 .site-brand {
+  color: var(--text-light);
   font-family: var(--sd-font-data);
+  font-weight: 700;
+  font-size: 0.92rem;
   letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.site-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .site-links a {
+  color: rgba(245, 245, 245, 0.82);
+  text-decoration: none;
+  font-size: 0.94rem;
+  font-weight: 600;
   border-bottom: 1px solid transparent;
   transition: color var(--sd-phase-duration) ease, border-color var(--sd-phase-duration) ease;
 }
 
 .site-links a:hover,
 .site-links a[aria-current="page"] {
+  color: var(--accent-gold);
   border-color: currentColor;
 }
 
@@ -662,6 +692,17 @@ footer {
 }
 
 @media (max-width: 768px) {
+  .site-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.85rem 1.5rem;
+  }
+
+  .site-links {
+    justify-content: flex-start;
+    gap: 0.85rem;
+  }
+
   .hero {
     min-height: calc(100vh - 96px);
     padding-block: 2.25rem;

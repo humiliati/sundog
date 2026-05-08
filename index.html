@@ -11,72 +11,12 @@
     <link rel="manifest" href="/site.webmanifest">
     <title>Sundog — Alignment Without Sight</title>
     <style>
-        :root {
-            --primary-dark: #1A3A52;
-            --primary-mid: #7DA2B8;
-            --accent-gold: #F4C430;
-            --bg-light: #FFFFFF;
-            --text-dark: #2D2D2D;
-            --text-light: #F5F5F5;
-        }
+        /* Page-local: header/nav/brand/links chrome lives in sundog-theme.css */
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        body {
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: var(--bg-light);
-        }
-
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            background: rgba(26, 58, 82, 0.96);
-            border-bottom: 1px solid rgba(244, 196, 48, 0.22);
-            backdrop-filter: blur(12px);
-        }
-
-        .site-nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.85rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-        }
-
-        .site-brand {
-            color: var(--text-light);
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            text-decoration: none;
-            font-size: 0.92rem;
-        }
-
-        .site-links {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .site-links a {
-            color: rgba(245, 245, 245, 0.82);
-            text-decoration: none;
-            font-size: 0.94rem;
-            font-weight: 600;
-        }
-
-        .site-links a:hover {
-            color: var(--accent-gold);
         }
 
         /* Hero Section */
@@ -496,17 +436,6 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .site-nav {
-                align-items: flex-start;
-                flex-direction: column;
-                padding: 0.85rem 1.5rem;
-            }
-
-            .site-links {
-                justify-content: flex-start;
-                gap: 0.85rem;
-            }
-
             .hero h1 {
                 font-size: 2.5rem;
             }
