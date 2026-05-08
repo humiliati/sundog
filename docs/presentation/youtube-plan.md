@@ -73,11 +73,12 @@ The channel should organize around four core content types:
 3. Dungeon Gleaner demo (verb-field NPC idle orbits)
 4. Dungeon Gleaner demo (GOAP-substitution comparison)
 5. Money Bags demo (softbody telemetry)
-6. Behavior comparisons: Classic AI vs Sundog AI
-7. Softbody rig analysis walkthrough
-8. Verb-field tuning sensitivity
-9. Before/after: agent behavior under occlusion
-10. Turn envelope demonstration
+6. Three-body dynamics workbench demo (sensor-limited control in a chaotic setting)
+7. Behavior comparisons: Classic AI vs Sundog AI
+8. Softbody rig analysis walkthrough
+9. Verb-field tuning sensitivity
+10. Before/after: agent behavior under occlusion
+11. Turn envelope demonstration
 
 **Tone:** Demonstrative, evidence-focused, comparative
 
@@ -107,6 +108,7 @@ The channel should organize around four core content types:
 8. What's defensible vs what's aspirational
 9. How we measure indirect signals
 10. Stress test interpretation
+11. Three-body claim boundary: what we can and can't say about chaotic control
 
 **Tone:** Honest, reflective, measured, credible
 
@@ -130,11 +132,12 @@ The channel should organize around four core content types:
 3. New graphs and metrics
 4. New experiments in progress
 5. Application updates (EyesOnly, Dungeon Gleaner, Money Bags)
-6. Benchmark results
-7. Integration examples
-8. Community contributions
-9. Roadmap updates
-10. Q&A sessions
+6. Three-body workbench: from browser visualization to operating-envelope maps
+7. Benchmark results
+8. Integration examples
+9. Community contributions
+10. Roadmap updates
+11. Q&A sessions
 
 **Tone:** Informal, conversational, progress-focused
 
@@ -338,6 +341,46 @@ Launch with these five videos to establish the channel and cover essential groun
 
 ---
 
+### Video 6 — "Steering by the Shadow of Chaos: Three-Body Workbench"
+
+**Purpose:** Show Sundog applied to a classically hard dynamical problem
+
+**Length:** 8-12 minutes
+
+**Outline:**
+1. **Hook (30s):** "The three-body problem has no general closed-form solution. Sundog does not solve it. It asks a smaller question: can a sensor-limited agent act usefully inside the chaos?"
+
+2. **Setup (1.5m):** Introduce the three-body problem and why it's hard. The full state is 18-dimensional. We give the controller access to three local measurements: tidal gradient, acceleration, and own velocity. It cannot see the other bodies' positions or masses.
+
+3. **The Pattern (1m):** Show the Sundog Scan/Seek/Track structure applied to this setting. The controller reads the local gravitational field gradient to detect rising escape risk and adjusts thrust to stay in a more favorable regime.
+
+4. **The Result (2.5m):** Walk through the operating-envelope maps. Show the near-escape high-velocity pocket where the guarded accelerometer-proxy controller improves survival over passive and naive local baselines. Show the failure boundary: low-velocity cells and equal-mass configurations where the controller causes harm rather than helping.
+
+5. **The Claim Boundary (1.5m):** Be explicit. This is not a solution to the three-body problem. It is not a chaos predictor. It is a bounded operating-envelope result with an honest failure map. The naive baseline fails in this pocket. The oracle does better but costs less. The Sundog controller costs more delta-v and improves survival.
+
+6. **Connection to the Broader Pattern (1m):** Show how this maps onto the photometric experiment and other applications. Deny full state → observe indirect signal → act from compressed signature → report the failure boundary.
+
+7. **Call to Action (30s):** "The workbench is open. Run the harness. Inspect the failure maps. Tell us where the pocket collapses."
+
+**Tone:** Measured, honest, technically exciting
+
+**Visuals:**
+- Three-body browser visualization with orbital trails and tidal overlays
+- Operating-envelope heatmaps (Phase 9/11)
+- Failure boundary cell map
+- Side-by-side survival curves: passive, naive, guarded controller
+- Pattern diagram connecting photometric experiment to three-body
+
+**Deliverables Needed:**
+- [ ] Script
+- [ ] Voiceover recording
+- [ ] Screen capture of threebody.html with Phase 3 controller active
+- [ ] Exported envelope/failure maps as clean graphics
+- [ ] Thumbnail
+- [ ] Description with workbench link
+
+---
+
 ## Video Script Structure Template
 
 Every script should follow this shape:
@@ -419,6 +462,7 @@ Every script should follow this shape:
 
 2. **Applications and Demos**
    - Video 3: Classic Game AI vs Sundog AI
+   - Video 6: Three-Body Workbench (Steering by the Shadow of Chaos)
    - All application-specific demos
    - Before/after comparisons
 
@@ -511,6 +555,14 @@ Every script should follow this shape:
 - [ ] Example outputs
 - [ ] Thumbnail
 
+**Video 6:**
+- [ ] Full script
+- [ ] Voiceover recording
+- [ ] Screen capture of threebody.html with Phase 3 controller active
+- [ ] Exported operating-envelope and failure-boundary maps
+- [ ] Survival comparison graphics (passive vs naive vs guarded controller)
+- [ ] Thumbnail
+
 **Channel Assets:**
 - [ ] Channel banner
 - [ ] Profile picture (Sundog logo)
@@ -523,7 +575,7 @@ Every script should follow this shape:
 
 ## Next Steps
 
-1. **Write full scripts** for Videos 1-5
+1. **Write full scripts** for Videos 1-6
 2. **Record voiceovers** or arrange for voice talent
 3. **Gather/create visual assets** (footage, diagrams, animations)
 4. **Edit videos** using consistent template
