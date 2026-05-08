@@ -15,6 +15,12 @@ export const DEFAULT_THREEBODY_CONFIG = Object.freeze({
   tidalNoiseStd: 0.15,
   tidalShufflePeriod: 25,
   eventWarningHorizon: 1,
+  localAccelerationWarningThreshold: 10,
+  sensorAuditVariants: [],
+  sensorAuditEvery: 20,
+  sensorNoiseStd: 0.03,
+  sensorDelaySteps: 5,
+  microManeuverContaminationStd: 0.08,
   logEvery: 10,
 });
 
@@ -268,6 +274,93 @@ export function computeTidalTensor(state, config = {}) {
   const magnitude = Math.sqrt(T_xx * T_xx + T_xy * T_xy + T_yx * T_yx + T_yy * T_yy);
 
   return { magnitude, T_xx, T_xy, T_yx, T_yy };
+}
+
+function tensorFromAccelerationSamples(center, xProbe, yProbe, delta) {
+  const T_xx = (xProbe[0] - center[0]) / delta;
+  const T_yx = (xProbe[1] - center[1]) / delta;
+  const T_xy = (yProbe[0] - center[0]) / delta;
+  const T_yy = (yProbe[1] - center[1]) / delta;
+  const magnitude = Math.sqrt(T_xx * T_xx + T_xy * T_xy + T_yx * T_yx + T_yy * T_yy);
+  return { magnitude, T_xx, T_xy, T_yx, T_yy };
+}
+
+function addAccelerationNoise(acceleration, rng, noiseStd) {
+  if (noiseStd <= 0) return acceleration;
+  const scale = Math.max(1, Math.sqrt(acceleration[0] * acceleration[0] + acceleration[1] * acceleration[1]));
+  return [
+    acceleration[0] + scale * noiseStd * normalSample(rng),
+    acceleration[1] + scale * noiseStd * normalSample(rng),
+  ];
+}
+
+function delayedEstimate(sensorState, estimate, delaySteps) {
+  if (delaySteps <= 0) return { ...estimate, delayWarmup: false };
+  if (!sensorState.buffer) sensorState.buffer = [];
+  sensorState.buffer.push(estimate);
+  if (sensorState.buffer.length <= delaySteps) return { ...estimate, delayWarmup: true };
+  return { ...sensorState.buffer.shift(), delayWarmup: false };
+}
+
+function sensorVariantSettings(variant, config) {
+  if (variant === "accelerometer_array_noisy") {
+    return {
+      delta: config.tidalProbeDelta,
+      noiseStd: config.sensorNoiseStd,
+      delaySteps: 0,
+      sensorTier: "accelerometer_array",
+    };
+  }
+  if (variant === "delayed_local_probe") {
+    return {
+      delta: config.tidalProbeDelta,
+      noiseStd: 0,
+      delaySteps: config.sensorDelaySteps,
+      sensorTier: "delayed_simulated_probe",
+    };
+  }
+  if (variant === "micro_maneuver_noisy") {
+    return {
+      delta: config.tidalProbeDelta * 2,
+      noiseStd: config.sensorNoiseStd + config.microManeuverContaminationStd,
+      delaySteps: config.sensorDelaySteps,
+      sensorTier: "micro_maneuver_proxy",
+    };
+  }
+  return {
+    delta: config.tidalProbeDelta,
+    noiseStd: 0,
+    delaySteps: 0,
+    sensorTier: "simulated_local_probe",
+  };
+}
+
+export function computeSensorTidalTensor(state, config = {}, variant = "simulated_local_probe", sensorState = {}) {
+  const cfg = normalizeConfig(config);
+  const settings = sensorVariantSettings(variant, cfg);
+  const positions = state.slice(0, 6);
+  const x3 = positions[4];
+  const y3 = positions[5];
+  const rng = controllerRng(sensorState, { ...cfg, controllerMode: `sensor_${variant}` });
+
+  const positionsXp = positions.slice();
+  positionsXp[4] = x3 + settings.delta;
+  const positionsYp = positions.slice();
+  positionsYp[5] = y3 + settings.delta;
+
+  const center = addAccelerationNoise(computeAcceleration(2, positions, cfg), rng, settings.noiseStd);
+  const xProbe = addAccelerationNoise(computeAcceleration(2, positionsXp, cfg), rng, settings.noiseStd);
+  const yProbe = addAccelerationNoise(computeAcceleration(2, positionsYp, cfg), rng, settings.noiseStd);
+  const estimate = {
+    ...tensorFromAccelerationSamples(center, xProbe, yProbe, settings.delta),
+    sensorVariant: variant,
+    sensorTier: settings.sensorTier,
+    noiseStd: settings.noiseStd,
+    delaySteps: settings.delaySteps,
+    probeDelta: settings.delta,
+  };
+
+  return delayedEstimate(sensorState, estimate, settings.delaySteps);
 }
 
 export function computeTidalGradient(state, config = {}) {
@@ -550,7 +643,7 @@ function computeAuroc(samples) {
   return score / (positives.length * negatives.length);
 }
 
-export function makeEventDiagnosticSamples(eventHistory, config = {}) {
+export function makeEventDiagnosticSamples(eventHistory, config = {}, scoreKey = "tidalMagnitude") {
   const cfg = normalizeConfig(config);
   const firstHazard = eventHistory.find((entry) => entry.events.escape || entry.events.closeApproach);
   const hazardTime = firstHazard?.time ?? null;
@@ -560,17 +653,17 @@ export function makeEventDiagnosticSamples(eventHistory, config = {}) {
     label: hazardTime !== null
       && entry.time <= hazardTime
       && hazardTime - entry.time <= cfg.eventWarningHorizon,
-    score: entry.tidalMagnitude,
+    score: entry[scoreKey],
     hazardTime,
   }));
 }
 
-export function evaluateTidalWarningThreshold(eventHistory, threshold, config = {}) {
+export function evaluateWarningThreshold(eventHistory, threshold, config = {}, scoreKey = "tidalMagnitude") {
   const cfg = normalizeConfig(config);
-  const samples = makeEventDiagnosticSamples(eventHistory, cfg);
+  const samples = makeEventDiagnosticSamples(eventHistory, cfg, scoreKey);
   const firstHazard = eventHistory.find((entry) => entry.events.escape || entry.events.closeApproach);
   const hazardTime = firstHazard?.time ?? null;
-  const firstWarning = eventHistory.find((entry) => entry.tidalMagnitude > threshold);
+  const firstWarning = eventHistory.find((entry) => entry[scoreKey] > threshold);
   const warningTime = firstWarning?.time ?? null;
   const warningLeadTime = hazardTime !== null && warningTime !== null && warningTime <= hazardTime
     ? hazardTime - warningTime
@@ -604,27 +697,82 @@ export function evaluateTidalWarningThreshold(eventHistory, threshold, config = 
     eventWarningHorizon: cfg.eventWarningHorizon,
     eventSampleCount: samples.length,
     positiveEventSampleCount: truePositive + falseNegative,
-    tidalWarningCount: truePositive + falsePositive,
-    tidalWarningTruePositive: truePositive,
-    tidalWarningFalsePositive: falsePositive,
-    tidalWarningTrueNegative: trueNegative,
-    tidalWarningFalseNegative: falseNegative,
-    tidalWarningPrecision: precision === null ? null : roundNumber(precision, 6),
-    tidalWarningRecall: recall === null ? null : roundNumber(recall, 6),
-    tidalWarningF1: f1 === null ? null : roundNumber(f1, 6),
-    tidalWarningFalseAlarmRate: falseAlarmRate === null ? null : roundNumber(falseAlarmRate, 6),
+    warningCount: truePositive + falsePositive,
+    warningTruePositive: truePositive,
+    warningFalsePositive: falsePositive,
+    warningTrueNegative: trueNegative,
+    warningFalseNegative: falseNegative,
+    warningPrecision: precision === null ? null : roundNumber(precision, 6),
+    warningRecall: recall === null ? null : roundNumber(recall, 6),
+    warningF1: f1 === null ? null : roundNumber(f1, 6),
+    warningFalseAlarmRate: falseAlarmRate === null ? null : roundNumber(falseAlarmRate, 6),
+  };
+}
+
+export function evaluateTidalWarningThreshold(eventHistory, threshold, config = {}) {
+  const metrics = evaluateWarningThreshold(eventHistory, threshold, config, "tidalMagnitude");
+  return {
+    firstHazardTime: metrics.firstHazardTime,
+    firstTidalWarningTime: metrics.firstTidalWarningTime,
+    tidalWarningLeadTime: metrics.tidalWarningLeadTime,
+    tidalWarningThreshold: metrics.tidalWarningThreshold,
+    eventWarningHorizon: metrics.eventWarningHorizon,
+    eventSampleCount: metrics.eventSampleCount,
+    positiveEventSampleCount: metrics.positiveEventSampleCount,
+    tidalWarningCount: metrics.warningCount,
+    tidalWarningTruePositive: metrics.warningTruePositive,
+    tidalWarningFalsePositive: metrics.warningFalsePositive,
+    tidalWarningTrueNegative: metrics.warningTrueNegative,
+    tidalWarningFalseNegative: metrics.warningFalseNegative,
+    tidalWarningPrecision: metrics.warningPrecision,
+    tidalWarningRecall: metrics.warningRecall,
+    tidalWarningF1: metrics.warningF1,
+    tidalWarningFalseAlarmRate: metrics.warningFalseAlarmRate,
+  };
+}
+
+export function evaluateLocalAccelerationWarningThreshold(eventHistory, threshold, config = {}) {
+  const metrics = evaluateWarningThreshold(eventHistory, threshold, config, "localAccelerationMagnitude");
+  return {
+    firstHazardTime: metrics.firstHazardTime,
+    firstLocalAccelerationWarningTime: metrics.firstTidalWarningTime,
+    localAccelerationWarningLeadTime: metrics.tidalWarningLeadTime,
+    localAccelerationWarningThreshold: threshold,
+    eventWarningHorizon: metrics.eventWarningHorizon,
+    eventSampleCount: metrics.eventSampleCount,
+    positiveEventSampleCount: metrics.positiveEventSampleCount,
+    localAccelerationWarningCount: metrics.warningCount,
+    localAccelerationWarningTruePositive: metrics.warningTruePositive,
+    localAccelerationWarningFalsePositive: metrics.warningFalsePositive,
+    localAccelerationWarningTrueNegative: metrics.warningTrueNegative,
+    localAccelerationWarningFalseNegative: metrics.warningFalseNegative,
+    localAccelerationWarningPrecision: metrics.warningPrecision,
+    localAccelerationWarningRecall: metrics.warningRecall,
+    localAccelerationWarningF1: metrics.warningF1,
+    localAccelerationWarningFalseAlarmRate: metrics.warningFalseAlarmRate,
   };
 }
 
 export function summarizeEventDiagnostics(eventHistory, config = {}) {
   const cfg = normalizeConfig(config);
   const samples = makeEventDiagnosticSamples(eventHistory, cfg);
+  const localAccelerationSamples = makeEventDiagnosticSamples(eventHistory, cfg, "localAccelerationMagnitude");
   const thresholdMetrics = evaluateTidalWarningThreshold(eventHistory, cfg.tidalSpikeThreshold, cfg);
   const auroc = computeAuroc(samples);
+  const localAccelerationMetrics = evaluateLocalAccelerationWarningThreshold(
+    eventHistory,
+    cfg.localAccelerationWarningThreshold,
+    cfg,
+  );
+  const localAccelerationAuroc = computeAuroc(localAccelerationSamples);
 
   return {
     ...thresholdMetrics,
     tidalMagnitudeAuroc: auroc === null ? null : roundNumber(auroc, 6),
+    ...localAccelerationMetrics,
+    localAccelerationMagnitudeAuroc: localAccelerationAuroc === null
+      ? null
+      : roundNumber(localAccelerationAuroc, 6),
   };
 }
 
@@ -635,6 +783,8 @@ export function runTrial(config = {}) {
   let state = initializeState(cfg);
   const records = [];
   const eventHistory = [];
+  const sensorAudit = [];
+  const sensorStates = new Map();
   let totalDeltaV = 0;
 
   for (let step = 0; step <= steps; step += 1) {
@@ -643,8 +793,51 @@ export function runTrial(config = {}) {
     const signatures = computeSignatures(state, cfg);
     const tidal = computeTidalTensor(state, cfg);
     const events = classifyEvents(state, signatures, tidal, thrust, cfg);
+    const [localAx, localAy] = computeAcceleration(2, state.slice(0, 6), cfg);
+    const localAccelerationMagnitude = Math.sqrt(localAx * localAx + localAy * localAy);
     const thrustMagnitude = Math.sqrt(thrust[0] * thrust[0] + thrust[1] * thrust[1]);
-    eventHistory.push({ time, events, tidalMagnitude: tidal.magnitude });
+    eventHistory.push({
+      time,
+      events,
+      tidalMagnitude: tidal.magnitude,
+      localAccelerationMagnitude,
+    });
+
+    if (
+      cfg.sensorAuditVariants.length > 0
+      && (step % cfg.sensorAuditEvery === 0 || events.invalid || events.escape || events.closeApproach || step === steps)
+    ) {
+      for (const variant of cfg.sensorAuditVariants) {
+        if (!sensorStates.has(variant)) sensorStates.set(variant, {});
+        const estimate = computeSensorTidalTensor(state, cfg, variant, sensorStates.get(variant));
+        const magnitudeAbsError = Math.abs(estimate.magnitude - tidal.magnitude);
+        sensorAudit.push({
+          step,
+          time: roundNumber(time, 6),
+          sensorVariant: variant,
+          sensorTier: estimate.sensorTier,
+          delayWarmup: estimate.delayWarmup,
+          noiseStd: estimate.noiseStd,
+          delaySteps: estimate.delaySteps,
+          probeDelta: estimate.probeDelta,
+          idealMagnitude: roundNumber(tidal.magnitude),
+          estimatedMagnitude: roundNumber(estimate.magnitude),
+          magnitudeAbsError: roundNumber(magnitudeAbsError),
+          magnitudeRelError: tidal.magnitude > 1e-9 ? roundNumber(magnitudeAbsError / tidal.magnitude) : null,
+          componentRmse: roundNumber(Math.sqrt((
+            (estimate.T_xx - tidal.T_xx) ** 2
+            + (estimate.T_xy - tidal.T_xy) ** 2
+            + (estimate.T_yx - tidal.T_yx) ** 2
+            + (estimate.T_yy - tidal.T_yy) ** 2
+          ) / 4)),
+          localAccelerationMagnitude: roundNumber(localAccelerationMagnitude),
+          terminalOutcomeSoFar: events.invalid ? "invalid"
+            : events.closeApproach ? "close_approach"
+              : events.escape ? "escape"
+                : "running",
+        });
+      }
+    }
 
     if (step % cfg.logEvery === 0 || step === steps || events.invalid || events.escape || events.closeApproach) {
       records.push({
@@ -666,6 +859,7 @@ export function runTrial(config = {}) {
           T_yx: roundNumber(tidal.T_yx),
           T_yy: roundNumber(tidal.T_yy),
         },
+        localAccelerationMagnitude: roundNumber(localAccelerationMagnitude),
         events: {
           ...events,
           minPrimaryDistance: roundNumber(events.minPrimaryDistance),
@@ -683,6 +877,7 @@ export function runTrial(config = {}) {
     config: cfg,
     records,
     eventHistory,
+    sensorAudit,
     summary: {
       ...summarizeOutcome(eventHistory),
       ...summarizeEventDiagnostics(eventHistory, cfg),

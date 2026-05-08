@@ -202,12 +202,13 @@ hazard as escape or close approach, a warning as a tidal spike, and a positive
 sample as one that falls within the configured one-second warning horizon before
 the hazard. The output reports first hazard time, first warning time, lead time,
 sample confusion counts, precision, recall, F1, false-alarm rate, and AUROC for
-tidal magnitude. The harness also writes `threshold-sweep.csv`,
-`threshold-summary.csv`, and `calibration.csv` for threshold tradeoff and binned
-risk inspection. These metrics are calibration data only: small-slate and
-label-degenerate regimes can produce blank AUROC or false-alarm values,
-calibration bins may be non-monotone, and the tidal warning score still needs
-comparison against naive local-acceleration scores.
+tidal magnitude and local gravitational acceleration magnitude. The latter is
+the naive local warning baseline. The harness also writes
+`threshold-sweep.csv`, `threshold-summary.csv`, and `calibration.csv` with a
+`scoreType` column for threshold tradeoff and binned risk inspection. These
+metrics are calibration data only: small-slate and label-degenerate regimes can
+produce blank AUROC or false-alarm values, and calibration bins may be
+non-monotone.
 
 ## Sensor Model Audit
 
@@ -272,9 +273,9 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   baseline comparison. Current primary metrics are terminal outcome, simulated
   time, total delta-v, minimum primary distance, controller saturation count,
   and target-band loss count.
-- **Phase 7, event metrics**: Expand the current tidal-warning threshold sweeps
-  and calibration curves with naive local-acceleration warning comparisons and
-  reliability/error summaries.
+- **Phase 7, event metrics**: Expand the current tidal/local-acceleration
+  warning threshold sweeps and calibration curves with reliability/error
+  summaries and larger seed slates.
 - **Phase 8, sensor-model validation**: Separate simulated local probes from
   micro-maneuver estimates, accelerometer-array estimates, and noisy learned
   local field surrogates.
