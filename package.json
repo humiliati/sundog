@@ -9,6 +9,7 @@
     "postbuild": "node scripts/copy-site-docs.mjs && node scripts/check-site-dist.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "threebody:phase5": "node scripts/threebody-harness.mjs",
+    "threebody:phase6": "node scripts/threebody-harness.mjs --phase phase6 --out results/threebody/phase6-baselines --modes off,naive,scan,seek,track,seek_noisy,track_noisy,seek_shuffled,track_shuffled,oracle --seeds 3",
     "deploy": "npm run build && node scripts/deploy-pages.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",

@@ -12,6 +12,8 @@ export const DEFAULT_THREEBODY_CONFIG = Object.freeze({
   closeApproachRadius: 0.08,
   escapeRadius: 4,
   tidalSpikeThreshold: 50,
+  tidalNoiseStd: 0.15,
+  tidalShufflePeriod: 25,
   logEvery: 10,
 });
 
@@ -34,6 +36,21 @@ export function roundNumber(value, digits = 8) {
 
 export function roundArray(values, digits = 8) {
   return values.map((value) => roundNumber(value, digits));
+}
+
+function normalSample(rng) {
+  const u1 = Math.max(rng(), 1e-9);
+  const u2 = rng();
+  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+}
+
+function modeHash(mode = "off") {
+  let hash = 2166136261;
+  for (let i = 0; i < mode.length; i += 1) {
+    hash ^= mode.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
 }
 
 export function normalizeConfig(config = {}) {
@@ -275,9 +292,140 @@ export function computeTidalGradient(state, config = {}) {
   };
 }
 
+function limitVector(x, y, maxMagnitude) {
+  const magnitude = Math.sqrt(x * x + y * y);
+  if (magnitude <= 0.001) return [0, 0];
+  if (magnitude <= maxMagnitude) return [x, y];
+  return [maxMagnitude * x / magnitude, maxMagnitude * y / magnitude];
+}
+
+function controllerRng(controllerState, config) {
+  if (!controllerState.rng) {
+    controllerState.rng = makeRng(((config.seed ?? 0) * 1009 + modeHash(config.controllerMode)) >>> 0);
+  }
+  return controllerState.rng;
+}
+
+function computeNaiveLocalThrust(state, config) {
+  const positions = state.slice(0, 6);
+  const velocities = state.slice(6, 12);
+  const [ax, ay] = computeAcceleration(2, positions, config);
+  const accelMagnitude = Math.sqrt(ax * ax + ay * ay);
+  if (accelMagnitude <= 0.001) return [0, 0];
+
+  const vx3 = velocities[4];
+  const vy3 = velocities[5];
+  const awayFromAccelerationX = -ax / accelMagnitude;
+  const awayFromAccelerationY = -ay / accelMagnitude;
+  const dampingX = -0.15 * vx3;
+  const dampingY = -0.15 * vy3;
+
+  return limitVector(
+    config.thrustLimit * awayFromAccelerationX + dampingX,
+    config.thrustLimit * awayFromAccelerationY + dampingY,
+    config.thrustLimit,
+  );
+}
+
+function perturbTidalGradient(gradient, controllerState, config) {
+  const rng = controllerRng(controllerState, config);
+  const noiseScale = config.tidalNoiseStd;
+  return {
+    ...gradient,
+    tidal: {
+      ...gradient.tidal,
+      magnitude: Math.max(0, gradient.tidal.magnitude * (1 + noiseScale * normalSample(rng))),
+    },
+    gradX: gradient.gradX * (1 + noiseScale * normalSample(rng)),
+    gradY: gradient.gradY * (1 + noiseScale * normalSample(rng)),
+  };
+}
+
+function shuffledTidalGradient(controllerState, config) {
+  const rng = controllerRng(controllerState, config);
+  const period = Math.max(1, config.tidalShufflePeriod);
+  const step = controllerState.step ?? 0;
+  if (!controllerState.shuffledGradient || step % period === 0) {
+    const angle = rng() * 2 * Math.PI;
+    controllerState.shuffledGradient = {
+      gradX: Math.cos(angle),
+      gradY: Math.sin(angle),
+    };
+  }
+  return controllerState.shuffledGradient;
+}
+
+function computeOracleThrust(state, config) {
+  const candidateDirections = [
+    [0, 0],
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+    [Math.SQRT1_2, Math.SQRT1_2],
+    [Math.SQRT1_2, -Math.SQRT1_2],
+    [-Math.SQRT1_2, Math.SQRT1_2],
+    [-Math.SQRT1_2, -Math.SQRT1_2],
+  ];
+  const candidates = candidateDirections.map(([x, y]) => [
+    x * config.thrustLimit,
+    y * config.thrustLimit,
+  ]);
+
+  const scoreState = (simState, thrustCost) => {
+    const positions = simState.slice(0, 6);
+    const velocities = simState.slice(6, 12);
+    const x3 = positions[4];
+    const y3 = positions[5];
+    const vx3 = velocities[4];
+    const vy3 = velocities[5];
+    const radius = Math.sqrt(x3 * x3 + y3 * y3);
+    const speed = Math.sqrt(vx3 * vx3 + vy3 * vy3);
+    let minPrimaryDistance = Infinity;
+    for (let i = 0; i < 2; i += 1) {
+      const dx = x3 - positions[i * 2];
+      const dy = y3 - positions[i * 2 + 1];
+      minPrimaryDistance = Math.min(minPrimaryDistance, Math.sqrt(dx * dx + dy * dy));
+    }
+    const tidal = computeTidalTensor(simState, config);
+    const targetError = Math.abs(tidal.magnitude - config.targetTidal);
+    const closePenalty = minPrimaryDistance < config.closeApproachRadius
+      ? 1_000
+      : 1 / Math.max(minPrimaryDistance, 0.04) ** 2;
+    const escapePenalty = radius > config.escapeRadius ? 1_000 : Math.max(0, radius - 1.8) ** 2;
+    return (
+      8 * closePenalty
+      + 3 * escapePenalty
+      + 0.12 * speed * speed
+      + 0.002 * targetError
+      + 0.05 * thrustCost
+    );
+  };
+
+  let bestThrust = [0, 0];
+  let bestScore = Infinity;
+  for (const thrust of candidates) {
+    let simState = state;
+    let score = 0;
+    const horizonSteps = 16;
+    for (let step = 0; step < horizonSteps; step += 1) {
+      simState = integrateStep(simState, config.dt, config, thrust);
+      const thrustCost = Math.sqrt(thrust[0] * thrust[0] + thrust[1] * thrust[1]);
+      score += scoreState(simState, thrustCost) * (1 + step / horizonSteps);
+    }
+    if (score < bestScore) {
+      bestScore = score;
+      bestThrust = thrust;
+    }
+  }
+
+  return bestThrust;
+}
+
 export function computeControlThrust(state, controllerState = {}, config = {}) {
   const cfg = normalizeConfig(config);
   const mode = cfg.controllerMode;
+  controllerState.step = (controllerState.step ?? 0) + 1;
   if (mode === "off") return [0, 0];
 
   let thrustX = 0;
@@ -289,11 +437,33 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
     controllerState.scanPhase = (controllerState.scanPhase ?? 0) + cfg.dt * scanFreq * 2 * Math.PI;
     thrustX = scanAmplitude * Math.cos(controllerState.scanPhase);
     thrustY = scanAmplitude * Math.sin(controllerState.scanPhase * 1.3);
-  } else if (mode === "seek" || mode === "track") {
-    const { tidal, gradX, gradY } = computeTidalGradient(state, cfg);
+  } else if (mode === "naive") {
+    [thrustX, thrustY] = computeNaiveLocalThrust(state, cfg);
+  } else if (mode === "oracle") {
+    [thrustX, thrustY] = computeOracleThrust(state, cfg);
+  } else if (
+    mode === "seek"
+    || mode === "track"
+    || mode === "seek_noisy"
+    || mode === "track_noisy"
+    || mode === "seek_shuffled"
+    || mode === "track_shuffled"
+  ) {
+    let gradient = computeTidalGradient(state, cfg);
+    if (mode.endsWith("_noisy")) {
+      gradient = perturbTidalGradient(gradient, controllerState, cfg);
+    } else if (mode.endsWith("_shuffled")) {
+      const shuffled = shuffledTidalGradient(controllerState, cfg);
+      gradient = {
+        ...gradient,
+        gradX: shuffled.gradX,
+        gradY: shuffled.gradY,
+      };
+    }
+    const { tidal, gradX, gradY } = gradient;
     const gradMag = Math.sqrt(gradX * gradX + gradY * gradY);
     if (gradMag > 0.001) {
-      if (mode === "seek") {
+      if (mode.startsWith("seek")) {
         thrustX = -cfg.thrustLimit * gradX / gradMag;
         thrustY = -cfg.thrustLimit * gradY / gradMag;
       } else {
