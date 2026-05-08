@@ -796,3 +796,285 @@ body[data-theme="desk"],
 - EyesOnly hybrid layout spec: `C:\Users\hughe\Dev\EyesOnly\docs\HYBRID-LAYOUT-SPEC.md`
 - Inspiration: flapsandseals.com (booking/partners pages)
 - BoxForge primitives: Dungeon Gleaner `docs/BOXFORGE_README.md`
+
+---
+
+## Interactive Components Roadmap
+
+Date: 2026-05-08
+Status: Planning phase for interactive UI element styling
+
+### Overview
+
+While the paper-inspired theme provides a strong foundation for static content
+(cards, containers, typography), the Sundog site includes several interactive
+components that require thoughtful styling to maintain cohesion with the paper
+aesthetic while ensuring usability and scientific credibility.
+
+### Current Interactive Elements Inventory
+
+Based on analysis of `index.html`, `threebody.html`, and other pages:
+
+#### 1. Canvas Rendering Surfaces
+
+**Current usage:**
+- `#parhelion-canvas` in `index.html` — optical phenomenon visualization
+- `#threebody-canvas` in `threebody.html` — real-time physics simulation
+- Future: BoxForge-generated experiment visualizations
+
+**Characteristics:**
+- Full-screen or hero-section backgrounds
+- Real-time interactive rendering
+- Scientific data visualization
+- Currently use dark gradient backgrounds
+
+**Styling considerations:**
+- Canvas contents are slated for BoxForge upgrades (separate deliverable)
+- Frame/border treatment needs definition
+- Background context (desk, paper, or standalone)
+- Overlay controls and labels positioning
+
+#### 2. Buttons and CTAs
+
+**Current usage:**
+- Play/Pause controls (`#btn-play-pause`)
+- Reset system button (`#btn-reset`)
+- CTA buttons in hero sections (`.cta-buttons`)
+- Navigation interactions
+
+**Characteristics:**
+- Primary actions (start/stop, reset)
+- Secondary navigation (links, tabs)
+- State changes (active, disabled, hover)
+
+**Styling considerations:**
+- Should buttons feel like physical controls?
+- Paper-themed vs. monitor/screen-themed
+- Accessibility (focus states, contrast)
+
+#### 3. Form Controls
+
+**Current form elements:**
+- Range sliders (mass ratio, time speed, thrust limit, target tidal, initial conditions)
+- Checkboxes (sensor mode, display toggles, trail visibility)
+- Dropdown/select menus (controller mode selector)
+- Text inputs (currently "aloof" per user feedback)
+
+**Characteristics:**
+- Real-time parameter adjustment
+- Toggle states for visualization options
+- Numeric and categorical inputs
+
+**Styling considerations:**
+- Tactile feedback for sliders
+- Checkbox presentation (paper clips? stamps? checkmarks?)
+- Dropdown styling consistency with theme
+- Input field treatment (forms on paper? digital displays?)
+
+#### 4. Experimental/Special UI
+
+**Inspiration from flapsandseals.com:**
+- CRT monitor framing for digital content
+- Porthole-style buttons revealing starfield backgrounds
+- Hybrid analog/digital aesthetic
+
+**Potential applications:**
+- Canvas screens could be "monitors" on a paper desk
+- Buttons as physical switches, dials, or portholes
+- Dropdowns as file folder tabs or paper accordion menus
+
+### Styling Philosophy Options
+
+We have several non-exclusive approaches to explore:
+
+#### Option A: Pure Paper Metaphor
+
+Extend paper-inspired theme to all interactive elements:
+- **Buttons**: Raised paper rectangles with fold/crease effects, pressed state
+- **Sliders**: Paper strips sliding along ruled guides, or ribbon bookmarks
+- **Checkboxes**: Handwritten checkmarks or rubber stamp effects
+- **Dropdowns**: Accordion-folded paper or tabbed index cards
+- **Canvas frames**: Clipboards, picture frames, or paper cutouts
+
+**Pros**: Maximum thematic coherence, distinctive identity
+**Cons**: May feel overly whimsical for scientific content, usability questions
+
+#### Option B: Hybrid Analog/Digital (flapsandseals.com approach)
+
+Mix paper surfaces with retro-tech UI elements:
+- **Buttons**: CRT-style porthole buttons, toggle switches, or analog dials
+- **Sliders**: Vintage radio tuning knobs or oscilloscope controls
+- **Canvas frames**: Monitor bezels, oscilloscope screens, or radar displays
+- **Paper elements**: Static content, notes, documentation
+- **Tech elements**: Interactive controls, live data, simulations
+
+**Pros**: Justifies digital interactions, nostalgic tech aesthetic, clear separation
+**Cons**: More complex to implement, requires careful balance
+
+#### Option C: Minimal Professional
+
+Maintain clean, modern interface with subtle paper touches:
+- **Buttons**: Standard modern buttons with paper textures or shadows
+- **Forms**: Clean inputs with optional notebook-line backgrounds
+- **Canvas**: Simple frames or borderless integration
+- **Paper accent**: Limited to card backgrounds and decorative elements
+
+**Pros**: Safest for scientific credibility, broad accessibility
+**Cons**: Less distinctive, may not fully leverage paper theme potential
+
+#### Option D: Context-Adaptive
+
+Different UI styles for different content contexts:
+- **Documentation/static content**: Full paper theme
+- **Interactive experiments**: Retro-tech/monitor theme
+- **Navigation/chrome**: Professional minimal theme
+- **Annotations/notes**: Hand-drawn/sticky note theme
+
+**Pros**: Best of all worlds, semantic clarity, flexible
+**Cons**: Most complex to design and maintain, requires clear guidelines
+
+### Roadmap Phases
+
+#### Phase 1: Design Exploration (No Implementation Yet)
+
+**Goal**: Explore styling directions without committing to specific designs
+
+**Tasks**:
+1. **Canvas Frame Treatment**
+   - Experiment with monitor bezel styles (CRT, oscilloscope, radar)
+   - Explore clipboard/picture frame alternatives
+   - Consider borderless integration with desk background
+   - Define BoxForge canvas content upgrade handoff point
+
+2. **Button Style Experiments**
+   - Mock up porthole/reveal-style buttons (flapsandseals.com inspiration)
+   - Test raised paper button concepts
+   - Explore toggle switch and dial alternatives
+   - Prototype primary vs. secondary button treatments
+
+3. **Form Control Concepts**
+   - Slider styling directions (ribbon, tuning knob, paper strip)
+   - Checkbox alternatives (checkmark, stamp, clip, punch hole)
+   - Dropdown/select menu approaches (folder tabs, accordion, standard)
+   - Text input field treatments (ruled lines, typewriter, minimal)
+
+4. **Widget Patterns**
+   - Control panel grouping styles
+   - Legend/key presentation
+   - Real-time data display formats
+   - Status indicator patterns
+
+**Deliverables**:
+- Design sketches or wireframes (not CSS implementation)
+- Pros/cons analysis for each approach
+- Accessibility and usability notes
+- Recommendation for styling philosophy (Options A-D)
+
+#### Phase 2: Prototype & Test (Future)
+
+**Tasks**:
+1. Implement selected button and form styles in isolated demo
+2. Create interactive canvas frame prototypes
+3. User testing for usability and accessibility
+4. Performance testing (especially for canvas interactions)
+5. Cross-browser compatibility checks
+
+#### Phase 3: Integration (Future)
+
+**Tasks**:
+1. Add new CSS component classes to `sundog-theme.css`
+2. Update existing pages (`index.html`, `threebody.html`)
+3. Document new component usage guidelines
+4. Create component library or style guide
+
+#### Phase 4: BoxForge Canvas Content (Separate Deliverable)
+
+**Scope**: Canvas *content* rendering upgrades (separate from frame styling)
+
+**Considerations**:
+- BoxForge will handle internal visualization improvements
+- Frame/border styling from Phases 1-3 should accommodate BoxForge output
+- Coordinate handoff: frame styling vs. content rendering
+
+### Current Interactive UI Inventory
+
+#### Sundog Index Page (`index.html`)
+
+**Canvas elements:**
+- `#parhelion-canvas` — Hero section optical visualization
+
+**Buttons:**
+- CTA buttons (`.cta-buttons`) — Currently unstyled, inherits theme
+
+**Interactive needs:**
+- Hero CTA styling
+- Smooth scroll navigation triggers
+
+#### Three-Body Experiment Page (`threebody.html`)
+
+**Canvas elements:**
+- `#threebody-canvas` — Real-time physics simulation
+
+**Form controls:**
+- Play/Pause button (`#btn-play-pause`)
+- Reset button (`#btn-reset`)
+- Mass ratio slider (`#mass-ratio`)
+- Time speed slider (`#time-speed`)
+- Sensor mode checkbox (`#sensor-mode`)
+- Controller mode dropdown (`#controller-mode`)
+- Thrust limit slider (`#thrust-limit`)
+- Target tidal slider (`#target-tidal`)
+- Display toggle checkboxes (thrust, virial, inertia, energy, tidal, trails)
+- Initial condition sliders (x, y, vx, vy)
+
+**Interactive needs:**
+- Control panel container styling (manila folder? tech panel?)
+- Button primary/secondary hierarchy
+- Slider track and thumb styling
+- Checkbox visual treatment
+- Dropdown menu styling
+- Real-time value displays
+
+### Design Questions to Resolve
+
+Before implementation, we need to decide:
+
+1. **Canvas framing philosophy**:
+   - Are experiment canvases "screens/monitors" or "paper cutouts/frames"?
+   - Should different canvas types use different frames?
+
+2. **Button aesthetic**:
+   - Paper-style raised buttons, or retro-tech switches/portholes?
+   - How do disabled/active states manifest?
+
+3. **Form control coherence**:
+   - Should all form elements use the same metaphor (all paper OR all tech)?
+   - Or can sliders be tech while checkboxes are paper?
+
+4. **Typography for interactives**:
+   - Which font family for button labels? (Currently use body font)
+   - Do form labels use handwritten font or stay professional?
+
+5. **Color and contrast**:
+   - Can pastel sticky-note colors work for active button states?
+   - What background works best for form control contrast?
+
+6. **Animation and feedback**:
+   - Should buttons have paper-crumple effects or tech-glow effects?
+   - How do we indicate hover/focus states accessibly?
+
+### Next Steps
+
+1. **User feedback** on styling philosophy direction (Options A-D)
+2. **Design mockups** for key interactive components (no code yet)
+3. **Accessibility review** of proposed interactive patterns
+4. **Technical feasibility** assessment for complex effects
+5. **Coordination with BoxForge** team on canvas content upgrade timeline
+
+### References for Interactive Styling
+
+- flapsandseals.com: CRT monitor frames, porthole buttons, starfield reveals
+- EyesOnly booking page: Interactive form styling examples
+- Sundog existing controls: `threebody.html` lines 190-220 (control styles)
+- Material Design: Accessibility standards for form controls
+- Paper UI inspirations: Origami buttons, folded tabs, paper sliders
