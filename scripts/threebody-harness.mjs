@@ -24,6 +24,7 @@ const MODE_DEFINITIONS = Object.freeze({
   track_shuffled: "Tidal-signal ablation: TRACK with deterministic shuffled tidal-gradient direction.",
   seek_sensor_accel: "Phase 8 sensor-tier controller: SEEK using noisy accelerometer-array tidal estimates.",
   track_sensor_accel: "Phase 8 sensor-tier controller: TRACK using noisy accelerometer-array tidal estimates.",
+  track_sensor_accel_guarded: "Phase 8/9 sensor-tier controller: TRACK accelerometer estimates only inside a local acceleration/radius guard.",
   seek_sensor_delayed: "Phase 8 sensor-tier controller: SEEK using delayed local-probe tidal estimates.",
   track_sensor_delayed: "Phase 8 sensor-tier controller: TRACK using delayed local-probe tidal estimates.",
   seek_sensor_micro: "Phase 8 sensor-tier controller: SEEK using noisy delayed micro-maneuver tidal estimates.",

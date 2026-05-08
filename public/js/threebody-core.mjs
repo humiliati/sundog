@@ -21,6 +21,9 @@ export const DEFAULT_THREEBODY_CONFIG = Object.freeze({
   sensorNoiseStd: 0.03,
   sensorDelaySteps: 5,
   microManeuverContaminationStd: 0.08,
+  trackGuardMinRadius: 1.15,
+  trackGuardMaxLocalAcceleration: 2.5,
+  trackGuardMaxTidalMagnitude: 35,
   logEvery: 10,
 });
 
@@ -388,9 +391,24 @@ export function computeTidalGradient(state, config = {}) {
 
 function controllerSensorVariant(mode) {
   if (mode.endsWith("_sensor_accel")) return "accelerometer_array_noisy";
+  if (mode === "track_sensor_accel_guarded") return "accelerometer_array_noisy";
   if (mode.endsWith("_sensor_delayed")) return "delayed_local_probe";
   if (mode.endsWith("_sensor_micro")) return "micro_maneuver_noisy";
   return null;
+}
+
+function shouldRunGuardedTrack(state, tidal, config) {
+  const positions = state.slice(0, 6);
+  const x3 = positions[4];
+  const y3 = positions[5];
+  const radius = Math.sqrt(x3 * x3 + y3 * y3);
+  const [ax, ay] = computeAcceleration(2, positions, config);
+  const localAccelerationMagnitude = Math.sqrt(ax * ax + ay * ay);
+  return (
+    radius >= config.trackGuardMinRadius
+    && localAccelerationMagnitude <= config.trackGuardMaxLocalAcceleration
+    && tidal.magnitude <= config.trackGuardMaxTidalMagnitude
+  );
 }
 
 function computeSensorTidalGradient(state, config, variant, controllerState) {
@@ -586,6 +604,7 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
     || mode === "track_shuffled"
     || mode === "seek_sensor_accel"
     || mode === "track_sensor_accel"
+    || mode === "track_sensor_accel_guarded"
     || mode === "seek_sensor_delayed"
     || mode === "track_sensor_delayed"
     || mode === "seek_sensor_micro"
@@ -606,6 +625,9 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
       };
     }
     const { tidal, gradX, gradY } = gradient;
+    if (mode === "track_sensor_accel_guarded" && !shouldRunGuardedTrack(state, tidal, cfg)) {
+      return [0, 0];
+    }
     const gradMag = Math.sqrt(gradX * gradX + gradY * gradY);
     if (gradMag > 0.001) {
       if (mode.startsWith("seek")) {

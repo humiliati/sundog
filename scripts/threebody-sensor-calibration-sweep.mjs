@@ -12,7 +12,7 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const SENSOR_TIER_DEFINITIONS = Object.freeze({
   accelerometer_array_noisy: {
     label: "accelerometer_array_noisy",
-    modes: ["seek_sensor_accel", "track_sensor_accel"],
+    modes: ["seek_sensor_accel", "track_sensor_accel", "track_sensor_accel_guarded"],
     variants: ["accelerometer_array_noisy"],
     sweep: "noise",
   },
