@@ -349,8 +349,31 @@ section h2,
 .origin-card:hover,
 .proof-item:hover,
 .research-highlight:hover {
+  transform: translateY(-4px);
   border-color: rgba(215, 169, 40, 0.58);
   box-shadow: var(--sd-shadow);
+}
+
+.app-card,
+.benefit-card,
+.origin-card,
+.proof-item,
+.research-highlight,
+.comparison-container {
+  transition:
+    transform var(--sd-phase-duration) ease,
+    border-color var(--sd-phase-duration) ease,
+    box-shadow var(--sd-phase-duration) ease;
+}
+
+.benefit-card,
+.proof-item,
+.research-highlight {
+  padding: 1.75rem;
+}
+
+.app-card-content {
+  padding: 1.5rem;
 }
 
 .app-card-img {
@@ -383,8 +406,21 @@ section h2,
 
 .cta-section,
 footer {
+  color: var(--text-light);
+  padding: 3rem 2rem;
+  text-align: center;
   background:
     linear-gradient(180deg, var(--sd-ink) 0%, var(--sd-ink-strong) 100%);
+}
+
+footer a {
+  color: var(--accent-gold);
+  text-decoration: none;
+  transition: color var(--sd-phase-duration) ease;
+}
+
+footer a:hover {
+  text-decoration: underline;
 }
 
 .proof-placeholder {
@@ -538,6 +574,33 @@ footer {
 .proof-item h4,
 .research-highlight h4 {
   color: var(--sd-ink-strong);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.app-card h3 {
+  color: var(--sd-ink-strong);
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.app-card p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.app-card a {
+  color: var(--sd-ink-strong);
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color var(--sd-phase-duration) ease;
+}
+
+.app-card a:hover {
+  color: var(--accent-gold);
 }
 
 .app-card {

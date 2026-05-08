@@ -91,38 +91,11 @@
             line-height: 1.8;
         }
 
-        .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .btn-primary {
-            background: var(--accent-gold);
-            color: var(--primary-dark);
-        }
-
+        /* Page-local: .cta-buttons / .btn / .btn-primary / .btn-secondary base rules
+           live in sundog-theme.css. Hover states retained here while the canonical
+           gradient + ::before shimmer treatment in shared takes over. */
         .btn-primary:hover {
-            background: #FFD54F;
-            transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(244, 196, 48, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-light);
-            border-color: var(--text-light);
         }
 
         .btn-secondary:hover {
@@ -150,135 +123,19 @@
             margin-bottom: 1.5rem;
         }
 
-        /* What It Is Section */
-        .what-section {
-            background: var(--bg-light);
-        }
-
-        .what-section .content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* Why It Matters Section */
-        .why-section {
-            background: #F8F9FA;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .benefit-card {
-            padding: 2rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .benefit-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        .benefit-card h3 {
-            color: var(--primary-dark);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        /* Applications Section */
-        .applications-section {
-            background: var(--bg-light);
-        }
-
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .app-card {
-            background: white;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .app-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            border-color: var(--accent-gold);
-        }
+        /* Page-local: section / card / grid styling lives in sundog-theme.css.
+           Only retained: page-specific .app-card-img dimensions, .comparison-grid,
+           and the .comparison-side list styling, which are not in shared. */
 
         .app-card-img {
             width: 100%;
             height: 200px;
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-mid) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .app-card-content {
-            padding: 1.5rem;
-        }
-
-        .app-card h3 {
-            color: var(--primary-dark);
-            margin-bottom: 0.5rem;
-            font-size: 1.5rem;
-        }
-
-        .app-card .tier {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: var(--primary-mid);
-            color: white;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
-        }
-
-        .app-card p {
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .app-card a {
-            color: var(--primary-dark);
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .app-card a:hover {
-            color: var(--accent-gold);
-        }
-
-        /* Comparison Section */
-        .comparison-section {
-            background: #F8F9FA;
         }
 
         .comparison-container {
             max-width: 900px;
             margin: 3rem auto;
-            background: white;
-            border-radius: 8px;
             padding: 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .comparison-grid {
@@ -418,21 +275,8 @@
         }
 
         /* Footer */
-        footer {
-            background: var(--text-dark);
-            color: var(--text-light);
-            padding: 3rem 2rem;
-            text-align: center;
-        }
+        /* Page-local: footer styling lives in sundog-theme.css */
 
-        footer a {
-            color: var(--accent-gold);
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
 
         /* Responsive */
         @media (max-width: 768px) {
