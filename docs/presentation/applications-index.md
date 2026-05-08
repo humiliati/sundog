@@ -73,38 +73,41 @@ A controller aligns a mirrored end-effector without direct target coordinates, u
 **Repository:** [humiliati/EyesOnly](https://github.com/humiliati/EyesOnly)
 
 **Summary:**
-Procedural roguelike agents act from compressed perception using stop-conditioned action batches. The runner compresses game state, selects a policy axis (progression, survival, resource), batches actions until volatility returns, without authorial omniscience.
+The headless Gone Rogue runner drives the real JavaScript game engine through `GoneRogue.headless` and Playwright. It compresses floor, biome, HP, alert, inventory, gate, and combat state; selects a policy axis; and executes stop-conditioned action batches. The apparatus is seedable and policy-pluggable, but the matched-seed study has not run.
 
 **What It Demonstrates:**
-- Sundog-style turn envelopes operate against real game engines
-- Compressed perception enables coherent behavior
-- Agents acting from partial information feel more alive
-- The pattern scales beyond lab tasks
+- Sundog-style turn envelopes operate against a real product engine
+- The runner is an instrumented apparatus, not yet a policy-comparison result
+- The UI-bound playtest agent is sibling UX automation, not Sundog evidence
+- LAGM is forward-looking design lineage, not shipping code
 
 **Key Concepts:**
 - Intentionally incomplete symmetry
 - Turn envelope / stop conditions
-- Compressed state payload
+- Typed compressed state payload
 - Policy selection (progression, survival, resource)
+- Tier-per-surface discipline: runner, sibling automation, forward-looking design
 
 **Assets Available:**
 - Runner implementation (`runners/adapters/gone_rogue.py`)
 - Policy examples (`runners/policies/gone_rogue_greedy.py`)
 - Integration tests
 - Headless API documentation
+- LAGM design document (Conceptual Lineage only)
 
 **Assets Needed:**
 - Application detail page
 - Demo video showing agent behavior
-- Comparison: compressed vs omniscient agent
-- Matched-seed study with metrics (future)
-- Before/after behavior graphs
+- Matched-seed multi-policy study
+- Compressed-perception ablation
+- Volatility-threshold sweep
+- Behavior clips from identical seeds
 
 **What's Needed for Research Tier:**
-- Define success metrics (floor reached, survival rate, resources)
-- Compare against baselines: flat greedy, random, oracle
-- Run matched seeds
-- Report information trade-offs
+- Define success metrics (floor reached, survival rate, resources, volatility, steps)
+- Compare greedy, random legal, and target-aware/debug-state policies
+- Run matched seeds and publish JSONL bundles
+- Report information trade-offs and volatility-threshold sensitivity
 
 **Links:**
 - [Application Map](../APPLICATIONS.md#eyesonly--gone-rogue)
@@ -215,7 +218,7 @@ This table provides a unified view of how the pattern manifests:
 | Application | Domain | Indirect Signal | Transformation | Actionable Output | Evidence Tier |
 |-------------|--------|----------------|----------------|-------------------|---------------|
 | Photometric Alignment | Optical control | Detector intensity, proprioception | Scan, seek, extremum tracking | Mirror alignment without target | Research Result |
-| EyesOnly / Gone Rogue | Procedural agents | Compressed game state | Turn envelope, stop conditions | Coherent action batches | Instrumented Prototype |
+| EyesOnly / Gone Rogue | Procedural agents | Floor/biome/HP/alert/inventory/gate/combat state | Perception compression, axis selection, stop-conditioned batches | Seedable JSONL runs for matched-seed studies | Instrumented Prototype |
 | Dungeon Gleaner | Procedural NPC behavior | Unmet-verb gradient over satisfier nodes | Need decay, inverse-distance scoring, linger gates | Emergent idle orbits without scripted plans | Product Expression |
 | Money Bags | Softbody physics | Spring graph, contact, deformation | Graph metrics, telemetry | Interpretable rig state | Instrumented Prototype |
 

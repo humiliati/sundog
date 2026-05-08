@@ -47,16 +47,33 @@ Repository: [humiliati/EyesOnly](https://github.com/humiliati/EyesOnly)
 Local sibling path on the maintainer machine:
 `C:\Users\hughe\Dev\EyesOnly`
 
+Detailed scaffold:
+[`docs/applications/EYES_ONLY_DETAILED.md`](applications/EYES_ONLY_DETAILED.md)
+
 ### Sundog Expression
 
-EyesOnly applies Sundog as procedural control under partial observation.
-Gone Rogue is a procedural roguelike embedded in the larger spy-game platform.
-The Sundog runner in this repo interacts with the real JavaScript engine through
-Playwright and the `GoneRogue.headless` API.
+The load-bearing Sundog application in EyesOnly is the headless Gone Rogue
+turn-envelope runner. Gone Rogue is a procedural roguelike embedded in the
+larger spy-game platform. The Sundog runner in this repo interacts with the
+real JavaScript engine through Playwright and the `GoneRogue.headless` API.
+
+### Three Surfaces
+
+EyesOnly / Gone Rogue contains three Sundog-adjacent surfaces at different
+evidence tiers. The card-level tier reflects the strongest one; the other two
+are named explicitly so they do not borrow credibility from the runner.
+
+| Surface | Where | Tier | What it is |
+| --- | --- | --- | --- |
+| Headless turn-envelope runner | `<sundog>/runners/` and `<EyesOnly>/public/js/gone-rogue.js` (`GoneRogue.headless`) | Instrumented prototype | A Sundog `PERCEIVE / PLAN / EXECUTE_BATCH` runner driving the real Gone Rogue JavaScript engine through Playwright. |
+| UI-bound playtest agent | `<EyesOnly>/public/js/playtest-agent.js` | Product expression: automation neighbor, not Sundog evidence | A regression bot for UX edge cases under human UI constraints. Useful automation, but not an indirect-signal-to-action policy. |
+| Live Agentic Game Moderation (LAGM) | `<EyesOnly>/docs/MANIPULATION_LAYER_AGENT_MODERATION.md` | Conceptual lineage / forward-looking application design | A design for an above-game agent that reads compressed player-competence telemetry and emits next-floor intent. Not built. |
 
 The central pattern is intentionally incomplete symmetry:
 
-- the runner compresses the full game state into a smaller perception payload;
+- the runner compresses the full game state into a smaller perception payload
+  such as floor, biome, HP ratio, alert level, visible enemies, combat state,
+  inventory, and visible gates;
 - the policy chooses an axis such as progression, survival, or resource;
 - the turn envelope batches actions until a stop condition indicates the world
   has become volatile again;
@@ -68,59 +85,120 @@ inspection, but adaptive action from compressed environmental feedback.
 
 ### Inspectable Surfaces
 
-In this repo:
+Sundog-side runner:
 
-- `docs/runners.md`
-- `runners/adapters/gone_rogue.py`
-- `runners/policies/gone_rogue_greedy.py`
-- `tests/runners/test_gone_rogue.py`
+- `docs/runners.md`: formal turn-envelope architecture, CLI flags, and policy
+  contract.
+- `runners/adapters/gone_rogue.py`: Playwright adapter, perception compression,
+  and turn-envelope execution.
+- `runners/gone_rogue_headless.py`: headless batch CLI.
+- `runners/gone_rogue_ui.py`: visible-browser CLI for inspection and captures.
+- `runners/policies/gone_rogue_greedy.py`: built-in greedy policy with axis
+  selection and volatility handling.
+- `runners/adapters/gone_rogue_harness.html`: self-contained browser harness.
+- `tests/runners/test_gone_rogue.py`: unit and integration tests against the
+  JavaScript API.
 
-In EyesOnly:
+EyesOnly-side runner target:
 
 - `public/js/gone-rogue.js`: exposes `GoneRogue.headless`.
 - `public/js/agent-api-system.js`: headless action API.
 - `public/js/agent-integration.js`: agent testing bridge with UI modes.
 - `public/js/agent-command-system.js`: AGENT command surface.
-- `public/js/playtest-agent.js`: human-UI-bound playtest agent.
 - `public/js/kernel-manager.js`: external agent integration layer.
+
+EyesOnly-side automation neighbor:
+
+- `public/js/playtest-agent.js`: UI-bound regression bot for UX edge cases such
+  as touch targets, z-index, clipping, and animation loss. It ships alongside
+  the runner, but it is not the load-bearing Sundog policy surface.
+
+Forward-looking design:
+
+- `docs/MANIPULATION_LAYER_AGENT_MODERATION.md`: Live Agentic Game Moderation
+  design: Player Competence Model, Live Agentic Moderator, Floor Synthesis
+  Engine, and Human-in-the-Loop Console. This is inspectable design lineage,
+  not shipping code.
 
 ### What It Demonstrates
 
-EyesOnly demonstrates that Sundog-style action envelopes can operate against a
-real product engine rather than a toy simulator. The agent bridge can run
-through the actual game API, and the human-UI-bound playtest agent provides a
-separate constraint: an agent can be forced to respect visible UI affordances
-instead of bypassing the rendering pipeline.
+EyesOnly demonstrates three bounded things:
 
-This is important because it moves the framework from "controller in a lab
-task" toward "agent in a live procedural system."
+- The Sundog turn envelope can drive a real product engine through a stable
+  headless API. `GoneRogue.headless` is an EyesOnly engine surface; the Sundog
+  Python adapter calls it through Playwright; `PERCEIVE / PLAN / EXECUTE_BATCH`
+  runs end-to-end with a greedy policy. The apparatus exists and runs.
+- The runner architecture is policy-pluggable and seedable. New policies can
+  implement the policy contract, and `GoneRogue.setSeed(seed)` supports
+  deterministic matched-seed studies once the policy set is filled out.
+- A UI-bound automation surface exists alongside the runner, but its scope is
+  UX regression. That is valuable product automation. It should not be counted
+  as evidence that a Sundog policy operates under visible UI constraints.
 
 ### What To Measure Next
 
-To turn this from product expression into a controlled result:
+To turn this from apparatus into a controlled product study:
 
-- define success metrics: floor reached, survival rate, resources collected,
-  run volatility, cards wasted, combat losses, or completion time;
-- compare the Sundog turn-envelope runner against a flat greedy policy, random
-  legal actions, and a target-aware/debug-state policy;
-- run matched seeds across all policies;
-- report where compressed perception helps and where it loses information;
-- separate headless-agent performance from human-UI-bound playtest-agent
-  performance.
+- Matched-seed multi-policy study: define success metrics such as floor reached,
+  survival rate, resources collected, run volatility, cards wasted, combat
+  losses, completion time, and total steps. Compare the existing greedy policy
+  against `random_legal` and a target-aware/debug-state upper-bound policy on
+  identical seeds.
+- Compressed-perception ablation: run the same policy with full perception and
+  reduced perception payloads, then report where compression helps and where it
+  loses information.
+- Volatility-threshold sweep: vary the stop-condition threshold and measure
+  survival rate, steps per floor, and batch length.
+- Behavior clips: use the visible runner to capture identical seeds under
+  different policies for the applications gallery.
+- LAGM feeder data: store matched-seed JSONL bundles in a shape that could later
+  feed the above-game moderator's competence model.
+
+### Forward-Looking Application Design
+
+The current Sundog evidence in EyesOnly is the under-game runner. A separate,
+currently unbuilt above-game application is designed in EyesOnly as Live Agentic
+Game Moderation (LAGM).
+
+LAGM's Sundog shape, on paper, applies the indirect-signal-to-action pattern
+above the game:
+
+- indirect signal: per-floor player telemetry such as completion time, damage
+  taken, ability usage, puzzle solve time, backtracking, secret discovery,
+  exploit attempts, and hoarding behavior;
+- transformation: a competence model compresses telemetry into competence,
+  confidence, frustration, and per-system mastery indices;
+- output: the moderator emits next-floor intent for a floor synthesis engine.
+
+This is conceptual lineage and forward-looking application design. It is not
+shipping code, and it should not be presented as current evidence.
 
 ### Claim Boundary
 
-Safe claim:
+Safe claims:
 
-> EyesOnly shows Sundog-derived turn envelopes operating against a real
-> procedural roguelike through compressed perception and stop-conditioned
-> action batches.
+> The under-game headless turn-envelope runner drives the real Gone Rogue
+> JavaScript engine through a Playwright bridge against the `GoneRogue.headless`
+> API. `PERCEIVE` compresses game state into a typed payload; `PLAN` selects an
+> axis and stop-conditioned action batch; `EXECUTE_BATCH` applies actions until a
+> stop condition fires. The apparatus is policy-pluggable and seedable.
+>
+> The UI-bound playtest agent ships alongside the runner, but it is scoped to UX
+> regression. It is sibling automation, not a Sundog policy expression.
+>
+> LAGM is a design doc for a future above-game Sundog application. It is not
+> built.
 
 Avoid:
 
 > EyesOnly proves the theorem for procedural games.
+>
+> The playtest agent demonstrates Sundog under tighter UI constraints.
+>
+> EyesOnly performs Sundog-driven level manipulation.
 
-It does not yet, because the repo needs a study with metrics and baselines.
+The runner is apparatus. The matched-seed study and policy comparison have not
+run yet; the playtest agent is UX automation; LAGM is forward-looking design.
 
 ## Dungeon Gleaner / DCgamejam2026
 
@@ -589,7 +667,7 @@ designed to interpret have not yet run.
 | Application | Domain | Indirect signal | Transformation | Actionable output |
 | --- | --- | --- | --- | --- |
 | Sundog core | Photometric control | Detector intensity and proprioception | Scan, seek, extremum tracking | Mirror alignment without target position |
-| EyesOnly / Gone Rogue | Procedural agent play | Compressed and volatile game state | Turn envelope and stop conditions | Coherent action batches |
+| EyesOnly / Gone Rogue | Procedural agent play | Floor, biome, HP, alert, inventory, gate, and combat state from `GoneRogue.headless.getState` | Perception compression plus axis-selected stop-conditioned batches through Playwright | Seedable, policy-pluggable JSONL runs ready for matched-seed comparison studies and future LAGM feeder data |
 | Dungeon Gleaner | Procedural NPC behavior | Unmet-verb gradient over satisfier nodes | Need decay, inverse-distance scoring, linger gates, and noise | Emergent NPC idle orbits without scripted plans |
 | Money Bags | Softbody terrain physics | Spring graph, contact, deformation, torque, centroid motion | Graph metrics and playtest telemetry; pre-registered falsification apparatus around the rotation-permissiveness bias axis | Interpretable rig state, recovery analysis, and a falsifiable hypothesis with verdict template committed before captures |
 
@@ -599,7 +677,9 @@ For public communication, the applications can be summarized this way:
 
 > Since the initial theorem release, Sundog has moved from a single
 > mirror-alignment experiment into working systems. EyesOnly applies the idea
-> to procedural agent play under occluded state. Dungeon Gleaner applies it to
+> to a headless turn-envelope runner against a real procedural roguelike engine,
+> while keeping sibling UX automation and unbuilt LAGM design in separate
+> evidence tiers. Dungeon Gleaner applies it to
 > verb-field NPC behavior, where unmet needs diffuse across satisfier nodes to
 > produce idle orbits without scripted planners. Money Bags applies it to
 > softbody rigs, where graph telemetry makes torsion, torque,
@@ -622,13 +702,15 @@ For academic communication, add the boundary:
 2. Read `docs/RESEARCHER_GUIDE.md`.
 3. Inspect `docs/PAPER_v1_draft.md` and `results/analysis/analysis_summary.json`.
 4. Read `docs/runners.md` for the EyesOnly bridge.
-5. Inspect EyesOnly's headless and UI-bound agent surfaces.
+5. Inspect EyesOnly's headless runner, UI automation neighbor, and LAGM design
+   surface as separate evidence tiers.
 6. Inspect Dungeon Gleaner's verb-field NPC docs and runtime modules.
 7. Inspect Money Bags' playtest bundles and graph/rig telemetry.
 
 ## Next Documentation Tasks
 
-- Add an EyesOnly runner result table with matched-seed policy comparisons.
+- Add an EyesOnly matched-seed multi-policy study, compressed-perception
+  ablation, volatility sweep, and behavior clips.
 - Add Dungeon Gleaner orbit telemetry for verb, need, node, and dominant-pull
   traces.
 - Add a Dungeon Gleaner GOAP-substitution comparison and tuning-sensitivity

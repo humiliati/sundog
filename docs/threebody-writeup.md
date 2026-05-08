@@ -223,6 +223,15 @@ accelerometer-array, delayed local-probe, and noisy micro-maneuver tidal
 estimates. The first smoke slate suggests the accelerometer-array tier is much
 closer to ideal behavior than delayed or contaminated micro-maneuver control,
 but this remains calibration work.
+`npm run threebody:phase8:calibrate` now runs the next calibration sweep: it
+varies accelerometer-array noise, delayed-probe latency, and micro-maneuver
+noise/latency/contamination, then writes paired passive-baseline comparisons,
+aggregate survival rows, and sensor-error summaries under
+`results/threebody/phase8-calibration-sweep/`. The first default sweep emitted
+1,044 trials. Its useful result is not a win claim; it is an operating-envelope
+map. Latency hurts delayed and micro-maneuver tiers quickly, accelerometer-array
+error grows with noise, and any apparent survival gain under noisier settings
+needs a larger seed slate before interpretation.
 
 ## Sensor Model Audit
 
@@ -292,8 +301,9 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   summaries and larger seed slates.
 - **Phase 8, sensor-model validation**: Separate simulated local probes from
   micro-maneuver estimates, accelerometer-array estimates, and noisy learned
-  local field surrogates. Current next step is to sweep noise/delay for the
-  degraded sensor-tier controller modes.
+  local field surrogates. Current next step is to inspect the noise/delay
+  calibration sweep and promote only the degradation envelope that survives
+  matched passive baselines to a larger seed slate.
 - **Phase 9, operating envelope map**: Sweep initial conditions, mass ratio,
   thrust authority, target tidal magnitude, sensor noise, delay, and timestep to
   map success, failure, and ambiguity regions.
