@@ -15,6 +15,8 @@
     "threebody:phase8:calibrate": "node scripts/threebody-sensor-calibration-sweep.mjs",
     "threebody:phase8:analyze": "node scripts/threebody-analyze-sensor-calibration.mjs",
     "threebody:phase8:focus": "node scripts/threebody-sensor-calibration-sweep.mjs --phase phase8-focus --out results/threebody/phase8-focused-accelerometer --sensor-tiers accelerometer_array_noisy --sensor-noise-sweep 0,0.01,0.03,0.06,0.12 --seeds 12 --sensor-audit-every 40",
+    "threebody:phase9": "node scripts/threebody-operating-envelope.mjs",
+    "threebody:phase9:refine": "node scripts/threebody-operating-envelope.mjs --phase phase9-refined --out results/threebody/phase9-refined-near-escape --regimes near_escape --radius-scales 0.925,0.95,0.975,1,1.025,1.05,1.075 --velocity-scales 0.85,0.9,0.95,1,1.05,1.1,1.15 --thrust-limits 0.4,0.5 --sensor-noise-sweep 0,0.01 --track-guard-max-local-acceleration-sweep 2.5 --seeds 6",
     "deploy": "npm run build && node scripts/deploy-pages.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
