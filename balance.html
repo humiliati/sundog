@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog Balance Workbench: shadow-derived cart-pole balancing under partial observation">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <title>Sundog Balance Workbench</title>
+    <style>
+        :root {
+            --primary-dark: #1A3A52;
+            --primary-mid: #7DA2B8;
+            --accent-gold: #F4C430;
+            --ink: #20303A;
+            --paper: #FFFFFF;
+            --muted: #6E7F89;
+            --text-light: #F5F5F5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--ink);
+            background: #F6F8F8;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background: rgba(26, 58, 82, 0.96);
+            border-bottom: 1px solid rgba(244, 196, 48, 0.22);
+            backdrop-filter: blur(12px);
+        }
+
+        .site-nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .site-brand {
+            color: var(--text-light);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: 0.92rem;
+        }
+
+        .site-links {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .site-links a {
+            color: rgba(245, 245, 245, 0.82);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+        }
+
+        .site-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        .workbench {
+            min-height: calc(100vh - 58px);
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            background: #0D2030;
+        }
+
+        .stage {
+            position: relative;
+            min-height: calc(100vh - 58px);
+            overflow: hidden;
+        }
+
+        #balance-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .stage-copy {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 2;
+            width: min(560px, calc(100% - 4rem));
+            color: var(--text-light);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            color: var(--accent-gold);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            line-height: 1.02;
+            letter-spacing: 0;
+            margin-bottom: 0.8rem;
+        }
+
+        .stage-copy p {
+            max-width: 46rem;
+            color: rgba(245, 245, 245, 0.86);
+            font-size: 1.04rem;
+        }
+
+        .status-strip {
+            position: absolute;
+            left: 2rem;
+            right: 2rem;
+            bottom: 1.5rem;
+            z-index: 3;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-light);
+            background: rgba(8, 20, 30, 0.72);
+            border: 1px solid rgba(244, 196, 48, 0.22);
+            border-radius: 8px;
+            padding: 0.9rem 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        #balance-status {
+            color: var(--accent-gold);
+            font-family: "Courier New", monospace;
+            font-size: 0.92rem;
+            overflow-wrap: anywhere;
+        }
+
+        #phase-display {
+            min-width: 6.6rem;
+            text-align: center;
+            border: 1px solid rgba(244, 196, 48, 0.35);
+            border-radius: 999px;
+            padding: 0.35rem 0.7rem;
+            color: var(--accent-gold);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        #balance-metrics {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            color: rgba(245, 245, 245, 0.78);
+            font-family: "Courier New", monospace;
+            font-size: 0.84rem;
+        }
+
+        .controls {
+            position: relative;
+            z-index: 5;
+            min-height: calc(100vh - 58px);
+            padding: 1.2rem;
+            color: var(--text-light);
+            background: rgba(26, 58, 82, 0.98);
+            border-left: 1px solid rgba(244, 196, 48, 0.22);
+            overflow-y: auto;
+        }
+
+        .controls h2,
+        .controls h3 {
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .controls h2 {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .controls h3 {
+            font-size: 0.78rem;
+            margin: 1.3rem 0 0.65rem;
+        }
+
+        .control-row {
+            margin-bottom: 0.85rem;
+        }
+
+        label {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            color: rgba(245, 245, 245, 0.86);
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        select,
+        input[type="range"],
+        button {
+            width: 100%;
+        }
+
+        select {
+            padding: 0.55rem;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(244, 196, 48, 0.3);
+            border-radius: 4px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.45rem;
+        }
+
+        button {
+            min-height: 2.55rem;
+            padding: 0.62rem;
+            border: 1px solid rgba(244, 196, 48, 0.35);
+            border-radius: 4px;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.08);
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        button:hover,
+        button.active {
+            color: var(--primary-dark);
+            background: var(--accent-gold);
+        }
+
+        .control-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .note {
+            margin-top: 1rem;
+            padding: 0.85rem;
+            color: rgba(245, 245, 245, 0.76);
+            background: rgba(0, 0, 0, 0.18);
+            border-left: 3px solid var(--accent-gold);
+            border-radius: 0 4px 4px 0;
+            font-size: 0.84rem;
+        }
+
+        .body-copy {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .body-copy h2 {
+            color: var(--primary-dark);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .body-copy p {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .claim-box {
+            margin-top: 2rem;
+            padding: 1.2rem;
+            border: 1px solid rgba(26, 58, 82, 0.18);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        footer {
+            padding: 3rem 2rem;
+            color: var(--text-light);
+            background: #2D2D2D;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--accent-gold);
+        }
+
+        @media (max-width: 900px) {
+            .site-nav {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 0.85rem 1.4rem;
+            }
+
+            .site-links {
+                justify-content: flex-start;
+            }
+
+            .workbench {
+                grid-template-columns: 1fr;
+            }
+
+            .stage {
+                min-height: 78vh;
+            }
+
+            .controls {
+                min-height: 0;
+                border-left: none;
+                border-top: 1px solid rgba(244, 196, 48, 0.22);
+            }
+
+            .stage-copy {
+                top: 1.2rem;
+                left: 1.2rem;
+                width: calc(100% - 2.4rem);
+            }
+
+            .stage-copy p {
+                font-size: 0.96rem;
+            }
+
+            .status-strip {
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                grid-template-columns: 1fr;
+            }
+
+            #phase-display {
+                justify-self: start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="index.html">Home</a>
+                <a href="origin.html">Origin</a>
+                <a href="applications-gallery.html">Applications Gallery</a>
+                <a href="threebody.html">Three-Body Experiment</a>
+                <a href="docs/README.md">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="workbench" aria-label="Sundog Balance interactive workbench">
+            <div class="stage">
+                <canvas id="balance-canvas"></canvas>
+                <div class="stage-copy">
+                    <div class="eyebrow">Forward-Looking Workbench</div>
+                    <h1>Sundog Balance</h1>
+                    <p>
+                        A cart-pole balance toy where the hidden body angle is denied.
+                        This first slice exposes the shadow projection, naive shadow
+                        control, and a privileged oracle for inspection.
+                    </p>
+                </div>
+                <div class="status-strip" aria-live="polite">
+                    <div id="balance-status">Loading</div>
+                    <div id="phase-display">PASSIVE</div>
+                    <div id="balance-metrics"></div>
+                </div>
+            </div>
+
+            <aside class="controls" aria-label="Balance controls">
+                <h2>Workbench Controls</h2>
+                <div class="control-actions">
+                    <button id="btn-play-pause" type="button">Pause</button>
+                    <button id="btn-reset" type="button">Reset</button>
+                </div>
+                <div class="control-row" style="margin-top: 0.5rem;">
+                    <button id="btn-disturb" type="button">Apply Disturbance</button>
+                </div>
+
+                <h3>Controller</h3>
+                <div class="button-grid" role="group" aria-label="Controller mode">
+                    <button type="button" data-mode="passive">Passive</button>
+                    <button type="button" data-mode="naive_shadow">Naive</button>
+                    <button type="button" data-mode="oracle">Oracle</button>
+                </div>
+
+                <h3>Scenario</h3>
+                <div class="control-row">
+                    <label for="preset-select">Preset <span data-value-for="preset-select">easy</span></label>
+                    <select id="preset-select"></select>
+                </div>
+
+                <div class="control-row">
+                    <label for="light-elevation">Light elevation <span data-value-for="light-elevation">28</span></label>
+                    <input id="light-elevation" type="range" min="6" max="86" step="1" value="28">
+                </div>
+
+                <div class="control-row">
+                    <label for="force-limit">Force limit <span data-value-for="force-limit">12</span></label>
+                    <input id="force-limit" type="range" min="4" max="20" step="1" value="12">
+                </div>
+
+                <h3>Shadow Sensor</h3>
+                <div class="control-row">
+                    <label for="sensor-noise">Noise <span data-value-for="sensor-noise">0</span></label>
+                    <input id="sensor-noise" type="range" min="0" max="0.08" step="0.005" value="0">
+                </div>
+
+                <div class="control-row">
+                    <label for="sensor-delay">Delay steps <span data-value-for="sensor-delay">0</span></label>
+                    <input id="sensor-delay" type="range" min="0" max="30" step="1" value="0">
+                </div>
+
+                <div class="control-row">
+                    <label for="show-diagnostics">
+                        Show privileged upright diagnostic
+                        <input id="show-diagnostics" type="checkbox" checked style="width: auto;">
+                    </label>
+                </div>
+
+                <div class="note">
+                    This page is not yet promoted as application evidence. It is the
+                    Phase 1-4 scaffold: deterministic dynamics, shadow sensor, and
+                    baseline lanes. The Sundog controller remains gated by the
+                    diagnostic and controller-floor checks in the roadmap.
+                </div>
+            </aside>
+        </section>
+
+        <section class="body-copy">
+            <h2>What This Slice Tests</h2>
+            <p>
+                The hidden target is the pole angle from upright. The exposed signal is
+                the cast shadow: endpoint, length, residual from the upright-shadow
+                target, and recent motion. The naive lane uses the shadow residual
+                directly; the oracle lane uses privileged true angle feedback.
+            </p>
+            <p>
+                The immediate question is diagnostic, not promotional: does the shadow
+                projection move coherently enough with force and pole state to justify
+                a proper SCAN/SEEK/TRACK controller? If yes, the next pass can add the
+                Sundog shadow controller and a headless harness. If no, the workbench
+                should re-scope before it earns a gallery row.
+            </p>
+            <div class="claim-box">
+                <strong>Current tier:</strong> Forward-Looking Application Design.
+                This workbench should not be linked from the public nav or gallery
+                until the roadmap's runnable-artifact gates are met.
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>The Sundog Project - <a href="docs/SUNDOG_V_BALANCE.md">Balance Roadmap</a></p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">
+            <a href="index.html">Home</a> |
+            <a href="threebody.html">Three-Body Experiment</a> |
+            <a href="docs/THIRD_PARTY_REUSE.md">Third-Party Reuse Ledger</a>
+        </p>
+    </footer>
+
+    <script type="module" src="/js/balance-browser.mjs"></script>
+</body>
+</html>
