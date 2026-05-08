@@ -129,23 +129,6 @@ Repository: [humiliati/DCgamejam2026](https://github.com/humiliati/DCgamejam2026
 Local sibling path on the maintainer machine:
 `C:\Users\hughe\Dev\Dungeon Gleaner Main`
 
-### Correction Note
-
-Prior versions of this document framed Dungeon Gleaner around two systems:
-glass/window reflection approximations and pressure-washing behavior. That was
-a misread of where the Sundog pattern actually appears in the project.
-
-The glass/window path is a face-aware billboard and glint system. The pressure
-washer is a stateful gameplay tool with hose pressure, kink, and spray state.
-Both are useful gameplay engineering, but neither currently demonstrates the
-Sundog indirect-signal-to-action pattern. The earlier one-twelfth-cost light
-claim should not be repeated unless a measurement harness is built and the
-claim is restated as ordinary rendering performance rather than theorem
-evidence.
-
-The corrected Sundog expression in Dungeon Gleaner is the verb-field NPC
-system.
-
 ### Sundog Expression
 
 Dungeon Gleaner applies Sundog to NPC idle behavior in a raycast dungeon
@@ -234,8 +217,7 @@ Avoid:
 > simulation.
 
 The substitution claim is qualitative until the comparison and telemetry work
-above exists. Also avoid repeating the prior glass/window one-twelfth-cost or
-pressure-washing framing as Sundog evidence.
+above exists.
 
 ## Money Bags
 
@@ -267,6 +249,23 @@ Here the indirect signal is not light. It is deformation:
 The Sundog move is to treat frame-by-frame physics data as an analyzable graph
 signature rather than raw motion noise.
 
+The Money Bags adaptation lifts the abstraction layer from this repository
+rather than transpiling Python to GDScript. Specifically: BloomTracker's
+positional spread shape became the per-tick shape-deviation field; the
+torque-stability variance shape became torsion stability; the
+TorqueShadowAgent phase-machine pattern became the POP_EVENT extractor; the
+alignment theorem's `radial × (1 - torsion/TORSION_REF) × symmetry`
+formulation became the alignment scalar. Each adaptation is banner-marked in
+the collector source for traceability.
+
+Money Bags' distinctive shape among Sundog applications is that its strongest
+work to date is **structural**: a pre-registered falsification apparatus
+authored before measurement runs. Vocabulary, slate composition, prediction
+direction, verdict template, and disposition rule are committed before the
+experiment dispatches. The project's value to the Sundog research program is
+currently in showing what it looks like to make the see-saw musing
+falsifiable, not in confirming or refuting it.
+
 ### Inspectable Surfaces
 
 Core rig:
@@ -275,86 +274,315 @@ Core rig:
   bundle format.
 - `alpha/Alpha_PlayerController.gd`: N-body spring-rig controller.
 - `alpha/Alpha_PlayerTuning.gd`: exported tuning surface for topology,
-  springs, FrameForce shape restoration, gravity, contact torque, and related
-  knobs.
+  springs, FrameForce shape restoration, gravity, contact torque, rotation
+  knobs, and related fields.
 - `alpha/Alpha_RigNodeBody.gd`: per-node contact tangent torque behavior.
 - `alpha/aREADME.md`: Alpha lane overview and controller responsibilities.
 
 Instrumentation:
 
 - `echo/Echo_Harness.tscn`: development harness.
+- `echo/Echo_RigMetricsCollector.gd`: the Sundog-adapted collector. Per-tick
+  alignment / torsion / shape-deviation / energy-partitioning / contact /
+  bias readouts. Banner-marked imports from the Sundog abstraction layer.
+- `echo/Echo_RigMetricsCollector.md`: calibration sidecar documenting
+  scoring constants, thresholds, and the Stage 1 unit-weight calibration
+  discipline.
+- `echo/Echo_RigHealthMonitor.gd`: catastrophe watchdog (NaN / escape /
+  overstretch). Sibling to the metrics collector — health watches for
+  catastrophe; metrics watches for coherence.
 - `echo/Echo_PerNodeStateInspector.gd`: per-node state inspection.
 - `echo/Echo_NodeCountWidget.gd`: topology controls.
 - `echo/Echo_JostleScenario.gd`: repeatable disturbance definitions.
 - `echo/Echo_JostlePlayer.gd`: scripted impulse playback.
 - `playtest/<capture>/metrics.json`: alignment, torsion, speed, deformation,
-  symmetry, and recovery metrics.
-- `playtest/<capture>/metrics.csv`: full-resolution telemetry.
+  symmetry, recovery, and shape-coherence-bias metrics.
+- `playtest/<capture>/metrics.csv`: full-resolution per-tick telemetry.
+- `playtest/CROSS_PROFILE_AGGREGATE_<datetime>.md`: auto-emitted comparison
+  table across same-session bundles, with the bias readout per profile.
+
+Design and discipline:
+
+- `docs/design/Sundog_toolset_PROPOSAL.md`: the contractor proposal that
+  adapted Sundog's abstraction layer into Money Bags' instrumentation
+  pattern. Includes the asset-mapping table from `<sundog>/utils`,
+  `<sundog>/agents`, and the alignment theorem text.
+- `docs/design/Shape_Coherence_Architecture.md`: the ratified vocabulary
+  doc. Names FFSR as rotation-locking, adjacent springs as
+  rotation-permissive, and the see-saw bias axis as the rotation-permissiveness
+  knob in disguise. Sign convention and stage gating committed.
+- `docs/design/Shape_Coherence_Stage_1_Rubric.md`: the falsification
+  apparatus. Slate composition (4 fixtures × 4 profiles × 3 captures),
+  predicted signatures, verdict template, four-mode kill-switch taxonomy,
+  bias-band threshold extraction methodology, and the canonical five-factor
+  rotation-suppressor reference.
+- `docs/design/Shape_Coherence_Pass_1_5_Candidates.md`: pre-Stage-1 tooling
+  candidates filed against actual exploratory data; later ratified into the
+  collector Pass 1.5(α/β/γ/δ/ε) ship sequence.
+- `docs/CANONICAL_RIG_EXPERIMENT_2026-04-26.md`: Alpha's parallel
+  canonical-rig experiment, sibling to the falsification rubric. The two
+  experiments are orthogonal (different slates, different verdict
+  semantics); the rubric's GATE 4 reads Stage 1's bias-band output.
+- `docs/handoffs/Echo_HANDOFF.md`: addendum-appended audit trail of the
+  c.Echo work shipping into Echo's lane file.
 
 Terrain:
 
 - `foxtrot/fREADME.md`: terrain fixture descriptions.
-- `foxtrot/Foxtrot_*.tscn`: calibration ramps, Rube-Goldberg fixtures, and
-  jostle/trip-hazard scenes.
+- `foxtrot/Foxtrot_*.tscn`: calibration ramps, Rube-Goldberg fixtures,
+  trip-hazard scenes, and SlopeFunnel variants.
 
-### Current Metric Vocabulary
+### Metric Glossary
 
-Money Bags already records the kind of quantities that make a future study
-plausible:
+The collector publishes the following per-tick and per-window quantities.
+Each is operationally defined; the formulas are sourced from
+`echo/Echo_RigMetricsCollector.gd`.
 
-| Metric family | Example fields |
-| --- | --- |
-| Alignment | `alignment_mean`, `alignment_max`, `alignment_sample_count` |
-| Torsion | `torsion_index` in playtest markdown summaries |
-| Shape | `peak_deformation.radius_stddev`, FrameForce settings |
-| Motion | `centroid_travel_in_buffer_px`, `max_centroid_speed_in_buffer` |
-| Recovery | `time_to_settle_ms`, pop recovered/timed-out counts |
-| Graph/topology | `rig_n`, complete graph spring count, node count controls |
-| Energy split | radial, tangential, and centroid components |
-| Symmetry | `symmetry_score.mean`, `symmetry_score.max`, `symmetry_score.at_settle` |
+**Alignment family.**
 
-This is closer to an instrumented prototype than a pure product expression.
+- `alignment_score` — per-tick scalar. Computed as
+  `radial_frac × (1 - clamp(torsion_index / torsion_ref, 0, 1)) × symmetry_factor`.
+  Returns NaN when `grand_total_ke < idle_epsilon` (the idle sentinel
+  introduced for noise-grade settled rigs).
+- `alignment_mean` / `alignment_min` / `alignment_max` — per-window
+  aggregates. NaN-safe: idle samples skipped. The max field is the Stage 1
+  Prediction 2 data source (peak alignment in the rolling buffer surfaces the
+  recovery dynamic that window-mean dilutes).
+
+**Torsion family.**
+
+- `torsion_index` — fraction of internal kinetic energy in tangential
+  motion. Per-tick scalar, range [0, 1]. Tangential energy is rotational
+  energy in a deformable rig — perpendicular-to-radial component of
+  velocity-relative-to-centroid summed across nodes.
+- `torsion_mean` / `torsion_max` — per-window aggregates with timestamp.
+
+**Shape-deviation family.**
+
+- `radius_stddev` — standard deviation of per-node radii from centroid
+  per-tick. Captures shape distortion magnitude.
+- `peak_deformation.radius_stddev` — max radius_stddev in window with
+  timestamp.
+- `radius_stddev_mean` / `radius_stddev_max` — per-window aggregates.
+
+**Energy-partitioning family.**
+
+- `radial_frac` / `tangential_frac` / `translational_frac` — fractions of
+  total kinetic energy in each component. Per-tick they sum to 1.0 when the
+  rig has motion. Window-means computed over active-energy ticks only.
+- `energy_split_at_peak` / `energy_split_at_settle` — `(c, r, t)` triplets
+  sampled at named-phase ticks (peak velocity moment for `_at_peak`,
+  post-impact-settle marker for `_at_settle`). The `_at_settle.t` field is
+  the rotation-rate canonical signal for the Stage 1 verdict template.
+
+**Contact-topology family.**
+
+- `grounded_count` / `grounded_clusters` / `support_offset` — per-tick
+  contact aggregates. Adjacency clusters computed via DFS on the spring
+  subgraph induced by grounded nodes.
+
+**Shape-coherence-bias family.**
+
+- `shape_coherence_bias_actual` — `(k_ffsr × ffsr_unit_weight) /
+  (k_ffsr × ffsr_unit_weight + k_spring × spring_unit_weight)`, normalized
+  to [-1, +1]. Sign convention: positive = toward FFSR (centripetal,
+  rotation-locking, marble direction); negative = toward adjacent
+  (rotation-permissive, rolling direction).
+- `k_ffsr_raw` / `k_spring_raw` — raw stiffness values published alongside
+  bias for unit-weight observability.
+
+**Symmetry family.**
+
+- `symmetry_factor` — per-tick `1 - clamp(radius_stddev / avg_radius)`.
+  Captures uniformity of node-radius distribution around centroid.
+- `symmetry_score.mean` / `.max` / `.at_settle` — per-window aggregates,
+  with the `at_settle` reading at the post-impact-settle phase.
+
+**Motion + recovery + topology + diagnostic.**
+
+- `centroid_travel_in_buffer_px` — total centroid translation in window.
+- `max_centroid_speed_in_buffer` / `_at_session` — peak speed reached.
+- `time_to_settle_ms` — milliseconds from velocity peak to sustained
+  centroid speed below 5 px/s for 30 ticks. The post-impact-settle marker
+  used for recovery-time reads.
+- `pop_completed` / `pop_recovered` / `pop_timed_out` — POP_EVENT lifecycle
+  counts. Each event is a structured record in the bundle's `[pop_events]`
+  block.
+- `rig_n` — node count. Spring count is `N(N-1)/2` for the complete-graph
+  topology.
+- `compute_ms_last` / `hot_disabled` — collector cost-budget diagnostics.
+
+The same field names appear in the per-bundle `metrics.json` digest, the
+per-tick `metrics.csv` rows, and the cross-profile aggregate table. Naming
+is stable across surfaces; field semantics are stable across MB releases
+that share the collector source.
 
 ### What It Demonstrates
 
-Money Bags demonstrates a concrete path from raw physics to structured
-interpretability. A softbody rig can be observed through graph-aware telemetry:
-which nodes touch terrain, how deformation splits between radial/tangential
-components, whether the rig recovers after impulse, and whether alignment
-improves or collapses under tuning changes.
+Money Bags demonstrates three things, each evidence-bounded:
 
-That makes it the clearest bridge from `H(x)` to non-optical systems.
-Shadow is replaced by shape projection; torque is replaced or supplemented by
-contact tangent torque and spring deformation.
+**1. Sundog's abstraction layer transposes from optics to softbody graph
+telemetry.** BloomTracker's positional-spread shape became per-tick
+shape-deviation. The torque-stability variance shape became torsion stability.
+The alignment-theorem formula became the alignment scalar. Banner-marked
+adaptations in collector source allow line-by-line traceability from the
+theorem text to the running code. Shadow is replaced by shape projection;
+torque is replaced or supplemented by contact tangent torque and spring
+deformation; the indirect-signal pattern persists across the optics-to-
+softbody substitution.
+
+**2. A pre-registered falsification apparatus can be built before
+measurement runs.** The Money Bags work has produced a ratified vocabulary
+doc (sign-convention and stage gating committed), a four-fixture × four-
+profile slate with predicted per-profile signatures, a verdict template with
+explicit disposition rules, a four-mode kill-switch taxonomy distinguishing
+fixture-mode / architecture-mode / bias-mode / suppressor-stack-incomplete
+failures, and a bias-band threshold extraction methodology that feeds into
+the parallel canonical-rig experiment's GATE 4. The structure exists; the
+captures it interprets do not yet. The ordering is intentional.
+
+**3. External audit catches architectural blind spots that internal teams
+compose around.** A freelancer audit late in the project surfaced a
+hardcoded `body.lock_rotation = true` constraint that the contractor, the
+lane engineer, and Command had all missed. The team had been compensating
+around the suppressor without naming it. The finding extended the project's
+suppressor model from FFSR-only to a five-factor canonical reference and
+reframed the falsification rubric's verdict-authoring rule. The lesson is
+codified in the project's memory and process discipline: audit existing
+controller hardcodes before chartering new knobs.
+
+What Money Bags is **not** demonstrating: that the see-saw musing
+empirically holds, that the bias-axis vocabulary is validated by experiment,
+or that alignment readings correlate with subjective feel. Those readings
+require structured Stage 1 captures the project hasn't run yet.
 
 ### What To Measure Next
 
-To turn Money Bags into a controlled Sundog study:
+The earlier version of this section listed: define alignment formally,
+freeze terrain fixtures, run matched disturbance scripts, define failure
+regimes. Most of those items are now closed by the apparatus described
+above. What remains is the Stage 1 capture run itself, gated on a
+short list of architecture-side and tooling-side prerequisites.
 
-- define an alignment score formally in terms of graph state, centroid,
-  terrain normals, and recovery behavior;
-- freeze a set of terrain fixtures;
-- run matched disturbance scripts across tuning profiles;
-- compare graph-enriched interpretation against raw center-of-mass telemetry;
-- report whether graph metrics predict recovery, controllability, or player
-  readability better than raw physics traces;
-- define failure regimes: excessive torsion, low symmetry, unrecoverable pop,
-  drift, or draped/passive settling.
+**Stage 1 capture prerequisites in flight:**
+
+- Capture-crash fix for the high-gain rotation-permissive primitive
+  (the `_v_tumble_unlocked` profile at gain=1.0 currently surfaces a
+  positive-feedback runaway through the synchronous capture path; the
+  diagnostic harness has shipped, mitigation pending data).
+- Architecture-knob exposure: the project's hardcoded `body.lock_rotation`
+  is now exposed as `node_lock_rotation` per the freelancer audit; the
+  rotation-aware FFSR knob (`frame_force_rotation_aware`) is shipped; full
+  capture validation pending.
+- The verification profile (`_v_tumble_*`) authored by the contractor
+  partner side, demonstrating non-zero tumble on the trip-hazard fixture
+  with both architecture knobs enabled.
+
+**Stage 1 reads that become available once captures land:**
+
+- Apply the Stage 1 verdict template across the 4-fixture × 4-profile
+  slate; produce CONFIRM / REFUTE / AMBIGUOUS verdict on the see-saw
+  musing.
+- If CONFIRM: extract the bias-band thresholds (`Z_lo, Z_hi`) per the
+  rubric's bias-band methodology; route the result into the parallel
+  canonical-rig experiment's GATE 4.
+- Validate or refine the unit-weight calibration (`ffsr_unit_weight = 1.0,
+  spring_unit_weight = 0.5` per Path A): pre-flight reads of the anchor
+  profile should land at `-0.85 ± 0.03`. Pre-Stage-1 captures already match
+  this prediction across 4 anchor reads; structured captures should
+  reproduce.
+
+**Independent of Stage 1 (gameplay-design surface):**
+
+- Validate the gameplay-primitive corollary discovered during the
+  apparatus build: each suppressor-lift × rotation-aware-knob-gain
+  combination produces a distinct gameplay primitive (Tumble at gain=0.5
+  locked, Pressure-release jump at gain=1.0 locked, Centrifugal spill at
+  gain=1.0 unlocked). Filed as forward-looking design surface for any
+  Stage 2 work.
+
+**Cross-program comparison the captures will support:**
+
+- Graph-enriched interpretation versus raw center-of-mass telemetry on
+  the same captures: does the graph layer predict recovery behavior or
+  player-readable feel better than the centroid trace alone? Apparatus
+  is in place to read both side by side.
+
+### Pre-Stage-1 Findings
+
+The apparatus build produced three findings before any structured capture
+run, each documented in the Money Bags repo and ratified by Command. They
+are reported here because they are the kind of detail a skeptical
+researcher would want before granting that the Stage 1 captures, when they
+land, will be measuring something real.
+
+**Path A unit-weight calibration finding.** The bias readout's two
+unit-weight constants (`ffsr_unit_weight` and `spring_unit_weight`) ship at
+defaults derived from a Stage 1 finding rather than a Stage 0 assumption.
+The `_v_bias_zero` profile authored at `(k_ffsr = 18, k_spring = 36)`
+measured at `-0.33` rather than `0.00` under the initial `1.0 / 1.0`
+defaults — non-symmetric across the slate. The corrected weights
+(`spring_unit_weight = 0.5`) place `_v_bias_zero` at exactly `0.00` and
+the anchor profile at `-0.846` across all post-correction reads. The
+calibration also exposes that adjacent stiffness contributes
+approximately twice per unit relative to FFSR in the bias-axis arithmetic,
+which is itself useful structural information for any future Stage 2
+meta-knob design.
+
+**Bounded inflation versus socket failure discriminator.** The collector
+publishes `radius_stddev_mean` and `radius_stddev_max` per window. Bounded
+skin-readable inflation (rig sits in a slightly-deformed equilibrium)
+produces `radius_stddev_mean ≈ radius_stddev_max`; socket failure (rig
+oscillates through a limit cycle of FFSR-vs-adjacent contention) produces
+`radius_stddev_max` significantly above `radius_stddev_mean`. The
+distinction is a clean data-side discriminator between two interpretations
+that could otherwise be confused at the same nominal deformation
+magnitude. Useful for any rig-experiment dispatch that needs to admit a
+non-zero idle-shape signature without conflating bounded inflation with
+broken sockets.
+
+**Freelancer audit precedent.** The project's third significant
+architectural finding came from an external freelancer's CCC audit pass,
+not from internal review. The freelancer surfaced a single-line hardcoded
+`body.lock_rotation = true` constraint at the rig controller that the
+contractor partner, the lane engineer, and Command had each missed while
+designing and ratifying three new rotation-aware tuning knobs. The team
+had been compensating around the suppressor without naming it. The
+finding extended the suppressor model from FFSR-only to a five-factor
+canonical reference, reframed the falsification rubric's verdict-authoring
+rule with a `suppressor-stack-incomplete` mode, and produced a durable
+process lesson now codified in the project's memory: *audit existing
+controller hardcodes before chartering new knobs — they may already exist
+as toggle-switches awaiting exposure.* The lesson is itself reportable
+content for the Sundog research program: internal teams develop blind
+spots around constraints they have been compensating around, and periodic
+external audits surface those blind spots more reliably than longer
+internal review cycles.
 
 ### Claim Boundary
 
 Safe claim:
 
-> Money Bags extends Sundog from optical alignment into graph interpretation of
-> softbody motion, with playtest telemetry already capturing alignment,
-> torsion, deformation, symmetry, and recovery signals.
+> Money Bags built a pre-registered falsification apparatus for the Sundog
+> see-saw musing applied to softbody rigs. The apparatus includes a
+> ratified vocabulary doc with sign-convention and stage-gating, a
+> four-fixture by four-profile by three-capture-per-cell falsification
+> slate, a pre-registered verdict template with explicit disposition rule,
+> a four-mode kill-switch taxonomy distinguishing fixture-mode /
+> architecture-mode / bias-mode / suppressor-stack-incomplete failures, and
+> a five-factor rotation-suppressor canonical reference produced via
+> external audit. Per-bundle telemetry already captures alignment, torsion,
+> deformation, symmetry, recovery, and shape-coherence-bias signals.
 
 Avoid:
 
-> Money Bags proves softbody alignment is solved.
+> Money Bags proves Sundog applies to softbody rigs.
 
-It is a promising instrumented prototype. It still needs formal metrics and
-matched experimental runs.
+The Stage 1 verdict is currently UNTESTABLE: structured captures pending
+architecture-side knob exposure and capture-crash fix. The project's
+strongest evidence to date is the apparatus itself and the pre-Stage-1
+findings produced during the build. The captures the apparatus is
+designed to interpret have not yet run.
 
 ## Cross-Application Comparison
 
@@ -363,7 +591,7 @@ matched experimental runs.
 | Sundog core | Photometric control | Detector intensity and proprioception | Scan, seek, extremum tracking | Mirror alignment without target position |
 | EyesOnly / Gone Rogue | Procedural agent play | Compressed and volatile game state | Turn envelope and stop conditions | Coherent action batches |
 | Dungeon Gleaner | Procedural NPC behavior | Unmet-verb gradient over satisfier nodes | Need decay, inverse-distance scoring, linger gates, and noise | Emergent NPC idle orbits without scripted plans |
-| Money Bags | Softbody terrain physics | Spring graph, contact, deformation, torque, centroid motion | Graph metrics and playtest telemetry | Interpretable rig state and recovery analysis |
+| Money Bags | Softbody terrain physics | Spring graph, contact, deformation, torque, centroid motion | Graph metrics and playtest telemetry; pre-registered falsification apparatus around the rotation-permissiveness bias axis | Interpretable rig state, recovery analysis, and a falsifiable hypothesis with verdict template committed before captures |
 
 ## Broadcast-Aligned Summary
 
@@ -373,9 +601,14 @@ For public communication, the applications can be summarized this way:
 > mirror-alignment experiment into working systems. EyesOnly applies the idea
 > to procedural agent play under occluded state. Dungeon Gleaner applies it to
 > verb-field NPC behavior, where unmet needs diffuse across satisfier nodes to
-> produce idle orbits without scripted planners. Money Bags applies it to softbody rigs, where
-> graph telemetry makes torsion, torque, center-of-gravity behavior, and
-> recovery legible frame by frame.
+> produce idle orbits without scripted planners. Money Bags applies it to
+> softbody rigs, where graph telemetry makes torsion, torque,
+> center-of-gravity behavior, and recovery legible frame by frame — and where
+> the project's strongest current contribution is a pre-registered
+> falsification apparatus authored before measurement runs, including a
+> ratified vocabulary, a four-fixture slate, a verdict template, and a
+> five-factor rotation-suppressor canonical reference produced through
+> external audit.
 
 For academic communication, add the boundary:
 

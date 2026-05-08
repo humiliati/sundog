@@ -509,7 +509,7 @@
                 This browser-based visualization demonstrates the restricted three-body problem in real time. Two massive bodies (gold and blue) orbit their common center of mass, while a third test particle (white) moves in their gravitational field.
             </p>
             <p>
-                The full state is 18-dimensional: three position vectors, three velocity vectors. But many practical questions about three-body dynamics don't require tracking the full state at every instant. They require detecting signatures of dynamically important events: near-collisions, ejections, resonance capture, stability transitions.
+                The general spatial three-body state is 18-dimensional: three position vectors, three velocity vectors. This browser prototype uses a planar 12D visualization, but the question is the same: many practical questions about three-body dynamics don't require tracking the full state at every instant. They require detecting signatures of dynamically important events: near-collisions, ejections, resonance capture, stability transitions.
             </p>
 
             <div class="claim-boundary">
@@ -518,10 +518,10 @@
                     Sundog does not solve the three-body problem. It asks whether the shadow of that chaos is enough to steer by. This experiment visualizes indirect observables that compress the 18D state into lower-dimensional diagnostics.
                 </p>
                 <p>
-                    <strong>Phase 2 Status:</strong> The sensor-limited view demonstrates locally measurable proxies. The test particle (body 3) can measure its own acceleration and estimate the tidal tensor from acceleration gradients, without privileged access to the full system state or the positions of the two primaries.
+                    <strong>Phase 2 Status:</strong> The sensor-limited view separates privileged diagnostics from local proxy signals. In the browser, tidal gradients are computed as simulated local probe samples; this models what an accelerometer array or small maneuver experiment would estimate, but it is not yet a hardware-valid sensor demonstration.
                 </p>
                 <p>
-                    <strong>Phase 3 Status:</strong> The controller implements Scan/Seek/Track modes. SCAN perturbs the test particle to estimate signature response. SEEK applies thrust toward regions of lower tidal stress. TRACK maintains a target tidal magnitude using gradient descent. All control decisions use only sensor-available signals (Phase 2 proxies).
+                    <strong>Phase 3 Status:</strong> The controller implements prototype Scan/Seek/Track modes. SCAN perturbs the test particle, SEEK follows a local tidal-gradient proxy toward lower stress, and TRACK attempts to maintain a target tidal magnitude. Benchmark comparisons and failure-boundary maps are still pending.
                 </p>
             </div>
 
@@ -563,7 +563,7 @@
                 <h3>Pairwise Energies</h3>
                 <div class="formula">Eᵢⱼ = ½μᵢⱼv²ᵢⱼ - Gmᵢmⱼ/rᵢⱼ</div>
                 <p>
-                    For each of the three pairs, compute the two-body energy in their center-of-mass frame. In a stable hierarchical triple, one pair's energy is deeply negative (inner binary) and one is weakly negative (outer orbit). When these approach each other, the hierarchy is breaking.
+                    Planned diagnostic: for each of the three pairs, compute the two-body energy in their center-of-mass frame. In a stable hierarchical triple, one pair's energy is deeply negative (inner binary) and one is weakly negative (outer orbit). When these approach each other, the hierarchy is breaking.
                 </p>
             </div>
 
@@ -571,7 +571,7 @@
                 <h3>Tidal Tensor (Phase 2)</h3>
                 <div class="formula">Tᵢⱼ = ∂²Φ/∂xᵢ∂xⱼ ≈ Δaᵢ/Δxⱼ</div>
                 <p>
-                    <strong>Local proxy signal:</strong> The test particle estimates the gravitational field gradient by comparing its acceleration with that of nearby virtual probe points. This sensor-available measurement captures the tidal field strength without knowing the positions or masses of the primaries. High tidal magnitude indicates proximity to massive bodies or strong field gradients.
+                    <strong>Local proxy signal:</strong> The test particle estimates the gravitational field gradient by comparing its acceleration with nearby probe samples. In this prototype those samples are simulated; in a physical sensor model they would require an accelerometer array, small probe maneuvers, or a learned local field approximation. High tidal magnitude indicates proximity to massive bodies or strong field gradients.
                 </p>
             </div>
         </div>
@@ -606,7 +606,7 @@
             let G = 1.0; // gravitational constant
 
             // System state: [x1, y1, x2, y2, x3, y3, vx1, vy1, vx2, vy2, vx3, vy3]
-            let masses = [1.0, 1.0, 0.01]; // m1, m2, m3 (test particle)
+            let masses = [1.0, 1.0, 0.01]; // m1, m2, m3 (test particle inertia)
             let state = [];
             let trails = [[], [], []]; // position history for each body
             const maxTrailLength = 200;
@@ -645,7 +645,8 @@
                 const initVX = parseFloat(document.getElementById('init-vx').value);
                 const initVY = parseFloat(document.getElementById('init-vy').value);
 
-                // Circular restricted three-body: two primaries orbit COM
+                // Circular restricted three-body-like setup: two primaries orbit COM,
+                // while the low-mass test particle does not perturb the primaries.
                 const m1 = masses[0];
                 const m2 = masses[1];
                 const totalMass = m1 + m2;
@@ -681,6 +682,8 @@
                 for (let j = 0; j < 3; j++) {
                     if (i === j) continue;
 
+                    if (i < 2 && j === 2) continue; // restricted problem: test particle is gravitationally passive
+
                     const xj = positions[j * 2];
                     const yj = positions[j * 2 + 1];
                     const dx = xj - xi;
@@ -695,10 +698,10 @@
                     ay += force * dy;
                 }
 
-                // Phase 3: Add thrust to test particle (body 2, index 2)
+                // Phase 3: Add commanded acceleration to test particle (body 2, index 2)
                 if (includeThrust && i === 2) {
-                    ax += currentThrust[0] / masses[2];
-                    ay += currentThrust[1] / masses[2];
+                    ax += currentThrust[0];
+                    ay += currentThrust[1];
                 }
 
                 return [ax, ay];
@@ -842,8 +845,8 @@
 
                 // Tidal tensor components (field gradient)
                 const T_xx = (a_xp_x - a_x) / delta;
-                const T_xy = (a_xp_y - a_x) / delta;
-                const T_yx = (a_yp_x - a_y) / delta;
+                const T_yx = (a_xp_y - a_y) / delta;
+                const T_xy = (a_yp_x - a_x) / delta;
                 const T_yy = (a_yp_y - a_y) / delta;
 
                 // Frobenius norm as a scalar tidal strength indicator
@@ -966,9 +969,10 @@
                     const grad_mag = Math.sqrt(grad_x * grad_x + grad_y * grad_y);
 
                     if (grad_mag > 0.001) {
-                        // Apply thrust proportional to error, in direction of gradient
+                        // Apply thrust proportional to error; if stress is too high,
+                        // descend the gradient, otherwise climb toward the target.
                         const thrust_magnitude = Math.min(Math.abs(kp * error), thrustLimit);
-                        const direction = error > 0 ? 1 : -1; // if too high, go up gradient; if too low, go down
+                        const direction = error > 0 ? -1 : 1;
                         thrust_x = direction * thrust_magnitude * grad_x / grad_mag;
                         thrust_y = direction * thrust_magnitude * grad_y / grad_mag;
                     }
@@ -1136,6 +1140,7 @@
             document.getElementById('mass-ratio').addEventListener('input', function() {
                 masses[1] = parseFloat(this.value);
                 document.getElementById('mass-ratio-value').textContent = this.value;
+                initializeSystem();
             });
 
             document.getElementById('time-speed').addEventListener('input', function() {
