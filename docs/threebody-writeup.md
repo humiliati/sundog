@@ -317,7 +317,13 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   local hazard-score gates.
 - **Phase 9, operating envelope map**: Sweep initial conditions, mass ratio,
   thrust authority, target tidal magnitude, sensor noise, delay, and timestep to
-  map success, failure, and ambiguity regions.
+  map success, failure, and ambiguity regions. `npm run threebody:phase9` now
+  runs the first map for guarded accelerometer TRACK. The initial smoke map
+  emitted 1,944 trials and writes `envelope-map.csv`, `aggregate-envelope.csv`,
+  `best-by-cell.csv`, and `candidate-envelope.csv` under
+  `results/threebody/phase9-operating-envelope/`. The first positive pocket is
+  near-escape; stable cells are mostly neutral because passive already survives,
+  and chaotic cells are mostly neutral or risky.
 - **Phase 10, claim ratchet**: Strengthen public language only when baseline
   metrics and failure maps justify it.
 - **Spatial extension**: Extend from planar to full 3D three-body problem.

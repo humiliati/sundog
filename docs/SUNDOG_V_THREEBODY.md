@@ -325,6 +325,12 @@ computed from full state is described as sensor-only.
 
 Goal: replace anecdotal failure boundaries with a map.
 
+Current command:
+
+```bash
+npm run threebody:phase9
+```
+
 Sweep axes:
 
 - initial position and velocity of the test particle;
@@ -337,11 +343,35 @@ Sweep axes:
 
 Outputs:
 
+- `results/threebody/phase9-operating-envelope/manifest.json`;
+- `paired.csv`: per-trial controller rows paired against matched passive
+  baselines;
+- `envelope-map.csv`: one row per regime, initial-condition scale, thrust,
+  sensor-noise, and guard setting;
+- `aggregate-envelope.csv`: same map aggregated across regimes;
+- `best-by-cell.csv`: best setting per regime/radius/velocity cell;
+- `candidate-envelope.csv`: positive survival-delta candidates that pass the
+  current worsened-rate filter;
 - success/failure heatmaps;
 - escape and close-approach regions;
 - controller saturation regions;
 - cases where tidal proxies are misleading;
 - representative trajectories for wins, losses, and ambiguous regimes.
+
+First Phase 9 smoke map:
+
+- Default run emitted 1,944 trials over stable, near-escape, and chaotic
+  regimes, three radius scales, three velocity scales, two thrust limits, three
+  accelerometer-noise levels, and two guard-acceleration thresholds.
+- Outcome counts: 972 bounded, 879 close approach, 93 escape.
+- Positive candidate rows: 29 of 324 `envelope-map.csv` rows after tightening
+  the candidate definition to require positive survival delta.
+- Best-cell summary: 4 promising cells, 21 neutral cells, and 2 risky cells.
+- Interpretation: the current positive pocket is near-escape, especially around
+  nominal/slightly-larger radius scales and low-to-moderate velocity scaling.
+  Stable cells are mostly neutral because passive already survives; chaotic
+  cells are mostly neutral or risky. This is the right shape for an operating
+  envelope, but it is not yet a public performance claim.
 
 Exit criterion: the public page can show where the method works, where it
 fails, and where the result is inconclusive.
@@ -639,10 +669,34 @@ Current status against Phase 8 exit criterion:
   also produce better terminal survival on the tiny slate by changing thrust
   behavior, so these rows should be treated as operating-envelope clues, not as
   evidence that noise helps.
-- Next Phase 8/9 work: move from raw sensor calibration into an operating
-  envelope map. The current hypothesis is guarded accelerometer TRACK under
-  low-noise sensing. The next useful question is whether that guard remains
-  positive across a wider initial-condition map and whether the guard thresholds
-  can be calibrated from local hazard scores rather than tuned constants.
+**Phase 9**: Started. The first operating-envelope runner maps guarded
+accelerometer TRACK across initial-condition, thrust, sensor-noise, and guard
+settings:
+
+```bash
+npm run threebody:phase9
+```
+
+Current Phase 9 implementation:
+
+- Dedicated script: `scripts/threebody-operating-envelope.mjs`.
+- Default output: `results/threebody/phase9-operating-envelope/` (ignored by
+  git).
+- Default smoke map: 1,944 trials across stable, near-escape, and chaotic
+  regimes; three radius scales; three velocity scales; two thrust limits; three
+  accelerometer-noise levels; and two guard-acceleration thresholds.
+- Outputs:
+  - `paired.csv`
+  - `envelope-map.csv`
+  - `aggregate-envelope.csv`
+  - `best-by-cell.csv`
+  - `candidate-envelope.csv`
+- First result: 29 positive candidate rows out of 324 envelope rows. The
+  best-cell table marks 4 cells promising, 21 neutral, and 2 risky. The positive
+  pocket is near-escape; stable cells are mostly neutral and chaotic cells are
+  mostly neutral or risky.
+- Next Phase 9 work: make the map less grid-coarse, add mass-ratio and timestep
+  axes, and replace the current tuned guard constants with thresholds derived
+  from local hazard scores.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)
