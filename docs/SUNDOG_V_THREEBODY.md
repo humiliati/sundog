@@ -332,6 +332,7 @@ npm run threebody:phase9
 npm run threebody:phase9:refine
 npm run threebody:phase9:lock
 npm run threebody:phase9:axes
+npm run threebody:phase9:hazard
 ```
 
 Sweep axes:
@@ -445,6 +446,28 @@ Mass-ratio and timestep probe:
   sensitive to the small timestep band tested. The lower mass-ratio maps often
   show larger mean survival deltas because passive escapes more often there.
   This does not yet prove robustness outside the locked pocket.
+
+Hazard-derived guard gates:
+
+- `npm run threebody:phase9:hazard` replaces the hand-tuned guard constants in
+  the same mass-ratio/timestep slice with thresholds derived from passive
+  hazard-score samples. For each case/regime, the passive trials provide
+  non-hazard samples; the controller then uses the configured quantile
+  (`--track-guard-quantile 0.75`) for local acceleration and tidal magnitude
+  guard thresholds, plus the complementary radius quantile for the radius gate.
+- Default hazard-gate run emitted 1,296 trials under
+  `results/threebody/phase9-hazard-gates/`.
+- Positive candidate rows: 81 of 81 `envelope-map.csv` rows.
+- Outcome effects: 522 helped, 36 time-helped, 90 tied, and no hurt/time-hurt
+  rows in the scoped run.
+- Failure mechanisms: no harmful rows were labeled in the hazard-gate run.
+- Delta-v check: average controller delta-v fell from about `2.90` in the
+  constant-gate mass/timestep probe to about `1.74` in the hazard-gate probe.
+- Interpretation: inside the locked high-velocity near-escape pocket, passive
+  hazard-score gates improve the controller story: they preserve the pocket,
+  remove the harmful rows seen with hand-tuned constants, and reduce control
+  effort. This is still scoped to the favorable pocket and should next be tested
+  against the full refined near-escape grid.
 
 Exit criterion: the public page can show where the method works, where it
 fails, and where the result is inconclusive.
@@ -791,8 +814,13 @@ Current Phase 9 implementation:
   `0.01`, `0.3`, and `1` across timesteps `0.008`, `0.01`, and `0.012`, with
   72 candidate rows out of 81. This supports the pocket as broader than the
   equal-mass/default-timestep geometry, within the scoped slice.
-- Next Phase 9 work: replace the current tuned guard constants with thresholds
-  derived from local hazard scores, then expand the mass-ratio/timestep probe
-  outside the favorable pocket.
+- Hazard-gate result: `npm run threebody:phase9:hazard` replaces the hand-tuned
+  guard constants in the mass-ratio/timestep slice with passive quantile-derived
+  hazard-score gates. The scoped run keeps 81 candidate rows out of 81, records
+  no harmful trial rows, and lowers average delta-v relative to the constant
+  gate probe.
+- Next Phase 9 work: run hazard-derived gates across the full refined
+  near-escape grid, then expand the mass-ratio/timestep probe outside the
+  favorable pocket.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)
