@@ -232,6 +232,15 @@ aggregate survival rows, and sensor-error summaries under
 map. Latency hurts delayed and micro-maneuver tiers quickly, accelerometer-array
 error grows with noise, and any apparent survival gain under noisier settings
 needs a larger seed slate before interpretation.
+`npm run threebody:phase8:analyze` reduces those rows into
+`envelope.csv`, `regime-envelope.csv`, and `candidate-envelope.csv`.
+`npm run threebody:phase8:focus` reruns the accelerometer tier with 12 seeds.
+That focused run now emits 960 trials across SEEK, TRACK, and guarded TRACK.
+The 3-seed hint for ungated `track_sensor_accel` at noise `0.03` did not
+survive the larger slate. The guarded accelerometer TRACK variant did: at noise
+`0` and `0.01`, it improves aggregate survival against the matched passive
+baseline under the strict candidate filter. This is the current Phase 9
+hypothesis, not a validated sensor-only result.
 
 ## Sensor Model Audit
 
@@ -301,9 +310,11 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   summaries and larger seed slates.
 - **Phase 8, sensor-model validation**: Separate simulated local probes from
   micro-maneuver estimates, accelerometer-array estimates, and noisy learned
-  local field surrogates. Current next step is to inspect the noise/delay
-  calibration sweep and promote only the degradation envelope that survives
-  matched passive baselines to a larger seed slate.
+  local field surrogates. The current calibration sweep and focused
+  accelerometer rerun do not justify a sensor-only superiority claim. The next
+  step is an operating-envelope map for guarded low-noise accelerometer TRACK
+  and a threshold calibration pass that replaces tuned guard constants with
+  local hazard-score gates.
 - **Phase 9, operating envelope map**: Sweep initial conditions, mass ratio,
   thrust authority, target tidal magnitude, sensor noise, delay, and timestep to
   map success, failure, and ambiguity regions.

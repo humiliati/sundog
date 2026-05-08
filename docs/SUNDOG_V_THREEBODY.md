@@ -569,6 +569,7 @@ Current Phase 8 implementation:
     maneuver-contamination noise.
 - Sensor-tier controller modes:
   - `seek_sensor_accel`, `track_sensor_accel`
+  - `track_sensor_accel_guarded`
   - `seek_sensor_delayed`, `track_sensor_delayed`
   - `seek_sensor_micro`, `track_sensor_micro`
 - Harness options:
@@ -579,12 +580,17 @@ Current Phase 8 implementation:
   - `--micro-maneuver-contamination-std`
 - Calibration sweep:
   - `npm run threebody:phase8:calibrate`
+  - `npm run threebody:phase8:analyze`
+  - `npm run threebody:phase8:focus`
   - Dedicated script: `scripts/threebody-sensor-calibration-sweep.mjs`.
+  - Analyzer script: `scripts/threebody-analyze-sensor-calibration.mjs`.
   - Sweeps accelerometer-array noise, delayed-probe latency, and
     micro-maneuver noise/latency/contamination with matched passive baselines
     for each regime and seed.
   - Default output: `results/threebody/phase8-calibration-sweep/` (ignored by
     git).
+  - Focused accelerometer output:
+    `results/threebody/phase8-focused-accelerometer/` (ignored by git).
 - Additional Phase 8 outputs:
   - `sensor-model-samples.csv`: per-trial/per-time sensor estimate rows.
   - `sensor-model-summary.csv`: aggregate tensor magnitude and component errors
@@ -596,6 +602,12 @@ Current Phase 8 implementation:
     and warning-score aggregates by sensor tier and degradation setting.
   - `sensor-error-summary.csv`: sensor-estimate magnitude/component error by
     tier, degradation setting, regime, and controller mode.
+  - `envelope.csv`: analyzer output ranking controller/degradation settings by
+    survival delta, worsened rate, and sensor error.
+  - `regime-envelope.csv`: analyzer output preserving the per-regime failure
+    boundary.
+  - `candidate-envelope.csv`: analyzer output for settings that meet the
+    current strict candidate filter.
 - Default smoke output: `results/threebody/phase8-sensor-model/` (ignored by
   git).
 
@@ -605,9 +617,17 @@ Current status against Phase 8 exit criterion:
 - Reference separation: present. The exact virtual probe is explicitly labeled
   as a simulator-field reference, not as a hardware-valid sensor claim.
 - Default calibration sweep: present. The first run emitted 1,044 matched
-  calibration trials. It writes paired passive-baseline comparisons, aggregate
-  survival rows, and sensor-error rows for accelerometer noise, delayed-probe
-  latency, and micro-maneuver degradation.
+  calibration trials; after adding guarded accelerometer TRACK, the default run
+  emits 1,104 matched calibration trials. It writes paired passive-baseline
+  comparisons, aggregate survival rows, and sensor-error rows for accelerometer
+  noise, delayed-probe latency, and micro-maneuver degradation.
+- Focused accelerometer check: present. The follow-up 12-seed accelerometer run
+  emitted 960 trials with SEEK, TRACK, and guarded TRACK. The initial 3-seed
+  candidate for ungated `track_sensor_accel` at noise `0.03` did not survive
+  the larger slate. The guarded accelerometer TRACK variant is now the only
+  focused candidate: noise `0` and `0.01` improve aggregate survival versus the
+  matched passive baseline while keeping worsened rate under the strict filter.
+  This is a Phase 9 hypothesis, not a validated claim.
 - Interpretation: calibration only. The initial smoke run shows noisy
   accelerometer-array estimates preserve the reference tensor far better than
   delayed or contaminated micro-maneuver proxies in fast-changing regimes. When
@@ -619,9 +639,10 @@ Current status against Phase 8 exit criterion:
   also produce better terminal survival on the tiny slate by changing thrust
   behavior, so these rows should be treated as operating-envelope clues, not as
   evidence that noise helps.
-- Next Phase 8 work: inspect the new calibration sweep rows, identify the
-  degradation envelope where sensor-tier controllers still survive matched
-  passive baselines, then rerun the most promising settings with a larger seed
-  slate before claiming sensor-only control.
+- Next Phase 8/9 work: move from raw sensor calibration into an operating
+  envelope map. The current hypothesis is guarded accelerometer TRACK under
+  low-noise sensing. The next useful question is whether that guard remains
+  positive across a wider initial-condition map and whether the guard thresholds
+  can be calibrated from local hazard scores rather than tuned constants.
 
 **Interactive demonstration**: [threebody.html](../threebody.html)
