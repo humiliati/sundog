@@ -348,6 +348,13 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   `results/threebody/phase9-mass-timestep/` and kept 72 candidate rows out of
   81, suggesting the pocket is not merely an equal-mass/default-timestep
   artifact inside the tested slice.
+  `npm run threebody:phase9:hazard` replaces the hand-tuned guard constants in
+  that same slice with passive quantile-derived hazard-score gates. The scoped
+  hazard run emitted 1,296 trials under
+  `results/threebody/phase9-hazard-gates/`, kept 81 candidate rows out of 81,
+  produced no harmful trial rows, and reduced average controller delta-v versus
+  the constant-gate axes probe. The next check is to run those derived gates
+  across the full refined near-escape grid.
 - **Phase 10, claim ratchet**: Strengthen public language only when baseline
   metrics and failure maps justify it.
 - **Spatial extension**: Extend from planar to full 3D three-body problem.

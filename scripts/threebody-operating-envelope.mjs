@@ -38,6 +38,8 @@ function parseArgs(argv) {
     velocityScales: [0.9, 1, 1.1],
     thrustLimits: [0.4, 0.6],
     sensorNoiseSweep: [0, 0.01, 0.03],
+    trackGuardMode: "constant",
+    trackGuardQuantile: 0.75,
     trackGuardMinRadiusSweep: [1.15],
     trackGuardMaxLocalAccelerationSweep: [2.5, 3.5],
     trackGuardMaxTidalMagnitudeSweep: [35],
@@ -72,6 +74,8 @@ function parseArgs(argv) {
     else if (flag === "--velocity-scales") args.velocityScales = parseNumberList(value);
     else if (flag === "--thrust-limits") args.thrustLimits = parseNumberList(value);
     else if (flag === "--sensor-noise-sweep") args.sensorNoiseSweep = parseNumberList(value);
+    else if (flag === "--track-guard-mode") args.trackGuardMode = value;
+    else if (flag === "--track-guard-quantile") args.trackGuardQuantile = Number.parseFloat(value);
     else if (flag === "--track-guard-min-radius-sweep") args.trackGuardMinRadiusSweep = parseNumberList(value);
     else if (flag === "--track-guard-max-local-acceleration-sweep") args.trackGuardMaxLocalAccelerationSweep = parseNumberList(value);
     else if (flag === "--track-guard-max-tidal-magnitude-sweep") args.trackGuardMaxTidalMagnitudeSweep = parseNumberList(value);
@@ -105,6 +109,12 @@ function parseArgs(argv) {
   if (args.timesteps.some((value) => value <= 0)) throw new Error("--timesteps values must be positive");
   if (!args.modes.includes("off")) {
     throw new Error("--modes must include off for matched passive baselines");
+  }
+  if (!["constant", "hazard_quantile"].includes(args.trackGuardMode)) {
+    throw new Error("--track-guard-mode must be constant or hazard_quantile");
+  }
+  if (!Number.isFinite(args.trackGuardQuantile) || args.trackGuardQuantile < 0 || args.trackGuardQuantile > 1) {
+    throw new Error("--track-guard-quantile must be between 0 and 1");
   }
 
   args.radiusScales = [...new Set(args.radiusScales)].sort((a, b) => a - b);
@@ -148,6 +158,17 @@ function roundMetric(value, digits = 6) {
   if (!Number.isFinite(value)) return null;
   const scale = 10 ** digits;
   return Math.round(value * scale) / scale;
+}
+
+function quantile(values, q) {
+  const sorted = values.filter(Number.isFinite).sort((a, b) => a - b);
+  if (sorted.length === 0) return null;
+  const index = (sorted.length - 1) * q;
+  const lower = Math.floor(index);
+  const upper = Math.ceil(index);
+  if (lower === upper) return sorted[lower];
+  const weight = index - lower;
+  return sorted[lower] * (1 - weight) + sorted[upper] * weight;
 }
 
 function compareOutcome(outcome, baselineOutcome) {
@@ -231,6 +252,43 @@ function scaleInitialParticle(particle, radiusScale, velocityScale) {
   };
 }
 
+function calibrationKey(envelopeCase, regime) {
+  return [
+    caseId(envelopeCase),
+    regime,
+  ].join("\t");
+}
+
+function nonHazardPassiveSamples(passiveTrials) {
+  return passiveTrials.flatMap((trial) => {
+    const firstHazard = trial.eventHistory.find((entry) => entry.events.escape || entry.events.closeApproach);
+    const hazardTime = firstHazard?.time ?? null;
+    return trial.eventHistory.filter((entry) => hazardTime === null || entry.time < hazardTime);
+  });
+}
+
+function deriveGuardThresholds(passiveTrials, args) {
+  const samples = nonHazardPassiveSamples(passiveTrials);
+  const tidalThreshold = quantile(samples.map((sample) => sample.tidalMagnitude), args.trackGuardQuantile);
+  const localAccelerationThreshold = quantile(
+    samples.map((sample) => sample.localAccelerationMagnitude),
+    args.trackGuardQuantile,
+  );
+  const radiusThreshold = quantile(
+    samples.map((sample) => sample.events.testParticleRadius),
+    1 - args.trackGuardQuantile,
+  );
+
+  return {
+    trackGuardMode: args.trackGuardMode,
+    trackGuardQuantile: args.trackGuardQuantile,
+    trackGuardMinRadius: radiusThreshold ?? 0,
+    trackGuardMaxLocalAcceleration: localAccelerationThreshold ?? Infinity,
+    trackGuardMaxTidalMagnitude: tidalThreshold ?? Infinity,
+    guardCalibrationSampleCount: samples.length,
+  };
+}
+
 function envelopeCases(args) {
   const cases = [];
   for (const massRatio of args.massRatios) {
@@ -285,8 +343,13 @@ function trialId(envelopeCase, regime, mode, seed) {
   return `${caseId(envelopeCase)}__${regime}__${mode}__seed_${String(seed).padStart(3, "0")}`;
 }
 
-function makeTrialConfig(args, envelopeCase, seed, regime, mode) {
+function makeTrialConfig(args, envelopeCase, seed, regime, mode, guardThresholds = null) {
   const baseParticle = seededInitialParticle(seed, regime);
+  const thresholds = guardThresholds ?? {
+    trackGuardMinRadius: envelopeCase.trackGuardMinRadius,
+    trackGuardMaxLocalAcceleration: envelopeCase.trackGuardMaxLocalAcceleration,
+    trackGuardMaxTidalMagnitude: envelopeCase.trackGuardMaxTidalMagnitude,
+  };
   return normalizeConfig({
     seed,
     regime,
@@ -305,9 +368,9 @@ function makeTrialConfig(args, envelopeCase, seed, regime, mode) {
     sensorNoiseStd: envelopeCase.sensorNoiseStd,
     sensorDelaySteps: envelopeCase.sensorDelaySteps,
     microManeuverContaminationStd: envelopeCase.microManeuverContaminationStd,
-    trackGuardMinRadius: envelopeCase.trackGuardMinRadius,
-    trackGuardMaxLocalAcceleration: envelopeCase.trackGuardMaxLocalAcceleration,
-    trackGuardMaxTidalMagnitude: envelopeCase.trackGuardMaxTidalMagnitude,
+    trackGuardMinRadius: thresholds.trackGuardMinRadius,
+    trackGuardMaxLocalAcceleration: thresholds.trackGuardMaxLocalAcceleration,
+    trackGuardMaxTidalMagnitude: thresholds.trackGuardMaxTidalMagnitude,
     initialParticle: scaleInitialParticle(baseParticle, envelopeCase.radiusScale, envelopeCase.velocityScale),
   });
 }
@@ -331,9 +394,12 @@ function makePairedRows(trials) {
       velocityScale: trial.velocityScale,
       thrustLimit: trial.thrustLimit,
       sensorNoiseStd: trial.sensorNoiseStd,
+      trackGuardMode: trial.trackGuardMode,
+      trackGuardQuantile: trial.trackGuardQuantile,
       trackGuardMinRadius: trial.trackGuardMinRadius,
       trackGuardMaxLocalAcceleration: trial.trackGuardMaxLocalAcceleration,
       trackGuardMaxTidalMagnitude: trial.trackGuardMaxTidalMagnitude,
+      guardCalibrationSampleCount: trial.guardCalibrationSampleCount,
       terminalOutcome: trial.summary.terminalOutcome,
       passiveOutcome: passive?.summary.terminalOutcome,
       outcomeDeltaVsPassive: passive ? compareOutcome(trial.summary.terminalOutcome, passive.summary.terminalOutcome) : null,
@@ -389,6 +455,9 @@ function makeTrialOutcomeRows(pairedRows) {
     guard_min_radius: row.trackGuardMinRadius,
     guard_max_local_acceleration: row.trackGuardMaxLocalAcceleration,
     guard_max_tidal_magnitude: row.trackGuardMaxTidalMagnitude,
+    guard_mode: row.trackGuardMode,
+    guard_quantile: row.trackGuardQuantile,
+    guard_calibration_sample_count: row.guardCalibrationSampleCount,
     controller_mode: row.controllerMode,
     terminal_outcome: row.terminalOutcome,
     passive_terminal_outcome: row.passiveOutcome,
@@ -445,6 +514,8 @@ function summarizeRows(rows, args, includeRegime = true) {
       row.velocityScale,
       row.thrustLimit,
       row.sensorNoiseStd,
+      row.trackGuardMode,
+      row.trackGuardQuantile,
       row.trackGuardMinRadius,
       row.trackGuardMaxLocalAcceleration,
       row.trackGuardMaxTidalMagnitude,
@@ -489,9 +560,11 @@ function summarizeRows(rows, args, includeRegime = true) {
       velocityScale: Number.parseFloat(values[offset + 4]),
       thrustLimit: Number.parseFloat(values[offset + 5]),
       sensorNoiseStd: Number.parseFloat(values[offset + 6]),
-      trackGuardMinRadius: Number.parseFloat(values[offset + 7]),
-      trackGuardMaxLocalAcceleration: Number.parseFloat(values[offset + 8]),
-      trackGuardMaxTidalMagnitude: Number.parseFloat(values[offset + 9]),
+      trackGuardMode: values[offset + 7],
+      trackGuardQuantile: Number.parseFloat(values[offset + 8]),
+      trackGuardMinRadius: Number.parseFloat(values[offset + 9]),
+      trackGuardMaxLocalAcceleration: Number.parseFloat(values[offset + 10]),
+      trackGuardMaxTidalMagnitude: Number.parseFloat(values[offset + 11]),
       n: group.length,
       bounded,
       passiveBounded,
@@ -513,6 +586,7 @@ function summarizeRows(rows, args, includeRegime = true) {
       meanSaturationDeltaVsPassive: roundMetric(mean(group.map((row) => row.saturationDeltaVsPassive))),
       meanSensorMagnitudeRelError: roundMetric(mean(group.map((row) => row.meanSensorMagnitudeRelError))),
       meanSensorMagnitudeAbsError: roundMetric(mean(group.map((row) => row.meanSensorMagnitudeAbsError))),
+      meanGuardCalibrationSampleCount: roundMetric(mean(group.map((row) => row.guardCalibrationSampleCount))),
       meanTidalMagnitudeAuroc: roundMetric(mean(group.map((row) => row.tidalMagnitudeAuroc))),
       meanLocalAccelerationMagnitudeAuroc: roundMetric(mean(group.map((row) => row.localAccelerationMagnitudeAuroc))),
       dominantFailureMechanism: mostCommon(harmfulRows.map((row) => row.failureMechanism)),
@@ -561,6 +635,8 @@ function makeBestByCellRows(envelopeRows) {
       bestThrustLimit: best.thrustLimit,
       bestSensorNoiseStd: best.sensorNoiseStd,
       bestTrackGuardMaxLocalAcceleration: best.trackGuardMaxLocalAcceleration,
+      bestTrackGuardMode: best.trackGuardMode,
+      bestTrackGuardQuantile: best.trackGuardQuantile,
       bestSurvivalRate: best.survivalRate,
       bestPassiveSurvivalRate: best.passiveSurvivalRate,
       bestSurvivalDeltaVsPassive: best.survivalDeltaVsPassive,
@@ -619,6 +695,7 @@ async function main() {
 
   const cases = envelopeCases(args);
   const trials = [];
+  const passiveCalibration = new Map();
   const manifest = {
     schema: `sundog.threebody.${args.phase}.v1`,
     startedAt: new Date().toISOString(),
@@ -630,10 +707,18 @@ async function main() {
 
   for (const envelopeCase of cases) {
     for (const regime of args.regimes) {
-      for (const mode of args.modes) {
+      for (const mode of ["off", ...args.modes.filter((candidate) => candidate !== "off")]) {
+        const thresholdKey = calibrationKey(envelopeCase, regime);
+        let guardThresholds = null;
+        if (mode !== "off" && args.trackGuardMode === "hazard_quantile") {
+          guardThresholds = passiveCalibration.get(thresholdKey);
+          if (!guardThresholds) {
+            throw new Error(`Missing passive guard calibration for ${thresholdKey}`);
+          }
+        }
         for (let offset = 0; offset < args.seeds; offset += 1) {
           const seed = args.seedStart + offset;
-          const config = makeTrialConfig(args, envelopeCase, seed, regime, mode);
+          const config = makeTrialConfig(args, envelopeCase, seed, regime, mode, guardThresholds);
           const id = trialId(envelopeCase, regime, mode, seed);
           const trial = runTrial(config);
           const relativePath = `trials/${id}.jsonl`;
@@ -644,18 +729,31 @@ async function main() {
           const row = {
             caseId: caseId(envelopeCase),
             ...envelopeCase,
+            trackGuardMode: mode === "off" ? "passive" : args.trackGuardMode,
+            trackGuardQuantile: mode === "off" ? null : guardThresholds?.trackGuardQuantile ?? null,
+            trackGuardMinRadius: config.trackGuardMinRadius,
+            trackGuardMaxLocalAcceleration: config.trackGuardMaxLocalAcceleration,
+            trackGuardMaxTidalMagnitude: config.trackGuardMaxTidalMagnitude,
+            guardCalibrationSampleCount: mode === "off" ? null : guardThresholds?.guardCalibrationSampleCount ?? null,
             seed,
             regime,
             controllerMode: mode,
             log: relativePath,
             summary: trial.summary,
             sensorAudit: trial.sensorAudit,
+            eventHistory: trial.eventHistory,
           };
           trials.push(row);
           manifest.trials.push({
             id,
             caseId: row.caseId,
             ...envelopeCase,
+            trackGuardMode: row.trackGuardMode,
+            trackGuardQuantile: row.trackGuardQuantile,
+            trackGuardMinRadius: row.trackGuardMinRadius,
+            trackGuardMaxLocalAcceleration: row.trackGuardMaxLocalAcceleration,
+            trackGuardMaxTidalMagnitude: row.trackGuardMaxTidalMagnitude,
+            guardCalibrationSampleCount: row.guardCalibrationSampleCount,
             seed,
             regime,
             controllerMode: mode,
@@ -664,6 +762,14 @@ async function main() {
             summary: trial.summary,
             sensorAuditSampleCount: trial.sensorAudit.length,
           });
+        }
+        if (mode === "off" && args.trackGuardMode === "hazard_quantile") {
+          const passiveRows = trials.filter((trial) => (
+            trial.controllerMode === "off"
+            && trial.caseId === caseId(envelopeCase)
+            && trial.regime === regime
+          ));
+          passiveCalibration.set(thresholdKey, deriveGuardThresholds(passiveRows, args));
         }
       }
     }
