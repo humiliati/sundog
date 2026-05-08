@@ -424,6 +424,8 @@ Deliverables:
   observability, and terminal outcome.
 - Browser replay URLs and `npm run balance:phase7:replay` support so a workbench
   configuration can round-trip through the headless runner.
+- Replay verification with `npm run balance:phase7:verify`, checking emitted
+  replay links against their recorded terminal outcome and survival time.
 - NPM scripts mirroring the three-body pattern, for example:
 
 ```bash
@@ -436,8 +438,10 @@ Exit criterion: a browser seed can be replayed exactly in the harness.
 
 +++[forward-plan-A]+++ *Phase 7 continuation landed: the workbench now exposes
 seeded replay URLs, the harness accepts `--replay-url`, and local harness runs
-write `replay-index.json` entries with browser URLs plus replay commands. This
-is still replay infrastructure, not a verdict artifact.* +++[/forward-plan-A]+++
+write `replay-index.json` entries with browser URLs plus replay commands. The
+next Phase 7 hardening pass added replay verification, writing
+`replay-verification.csv` and failing the command on outcome/time drift. This is
+still replay infrastructure, not a verdict artifact.* +++[/forward-plan-A]+++
 
 ### Phase 8 - Recovery And Event Metrics
 

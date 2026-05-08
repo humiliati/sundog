@@ -193,8 +193,104 @@ hero graph markup, application cards, or generated BoxForge exports.
    `.era-list`, `.source-card`, `.trail-list`, `.story-panel`,
    `.button` standalone) — those are not duplicates of shared, they're
    genuinely page-local content shapes.
-4. Create one canonical hero graph component:
-   optical halo plus theorem graph plus BoxForge phase animation discipline.
+4. Create one canonical hero graph component (split into 4a/4b/4c —
+   see below — because BoxForge applies cleanly to one canvas and not
+   uniformly to all three).
+
+   **4a — Index hero (the "sundog eye"; ambitious, multi-pass).**
+
+   Vision driven by an actual halo-display photograph (a triple-sun
+   parhelion event with circumzenithal and tangent arcs). The natural
+   phenomenon reads as an eye: the primary sun is the pupil; the 22°
+   halo plus the stacked secondary halos form the iris layers; the
+   prismatic peripheral arcs at the top of frame are the eyelids.
+   Each peripheral-arc tip implies a virtual sun radiating its own
+   halo system — three suns total (primary + two peripheral), three
+   halos each, nine intersecting rings.
+
+   Composition rule: find the golden-ratio placement of the three suns
+   and their halos so the nine-ring intersection pattern lands at
+   maximum visual impact. This is iterative — take the passes
+   necessary; the static composition is doing real work, not just
+   serving as a backdrop for animation.
+
+   Color palette: misty translucent rainbow with meaningful overlaps.
+   The rainbow is *physical* (ice-crystal dispersion, not decoration),
+   so saturated translucent color is warranted. Stacked alpha
+   gradients let overlapping halos read as additive light — the
+   intersections should be richer, not muddier.
+
+   Tooling split:
+   - **Sun(s)**: BoxForge rainbow-orb primitive (one for the primary,
+     two scaled-down for the peripheral virtual suns). Verify the
+     rainbow-orb template in the BoxForge library can support our
+     three-sun palette before committing.
+   - **Halos**: not BoxForge — composed of stacked CSS
+     `radial-gradient` rings with prismatic edge tinting (red-inside,
+     blue-outside, matching the actual ice-crystal physics) plus
+     optional SVG `feGaussianBlur` + `feColorMatrix` filters for
+     dispersive softness.
+   - **Arcs (eyelids / iris layers)**: SVG paths with stroke gradients,
+     positioned per the golden-ratio composition.
+
+   Animation phase model (BoxForge discipline: idle / hover / active /
+   handoff·settle):
+   - **Phases 1–3 (active "expressing the math")**: a sequenced reveal
+     of the parhelion geometry — the math/physics narration. Halos
+     fade in, arcs draw, virtual suns emerge from the peripheral arc
+     tips, the nine-ring intersection resolves.
+   - **Phase 4 (idle window)**: the golden composition holds. This is
+     where the static design earns its keep. Subtle scintillation
+     (slow opacity drift on the rainbow layers) keeps it alive
+     without motion noise. Embellishment work happens here — color
+     refinement, layer ordering, edge dispersion tuning — *before*
+     phase 5 begins muddying the geometry with 3D animation.
+   - **Phase 5+ (3D handoff)**: BoxForge phase animation drives the
+     orbs into dimensional motion. The halos hold their planar
+     atmospheric character (no 3D treatment — they're sky, not
+     boxes); the orbs gain depth and rotation.
+
+   **4b — Threebody canvas (formal, deferred 3D).**
+
+   Keep the 2D physics renderer. Upgrade only the *frame* and the
+   *palette*: explore a CRT bezel, oscilloscope screen, or paper
+   cutout treatment for the canvas border; align line weights and
+   trail colors with the index hero's halo language (cool with
+   prismatic accents) where it doesn't compromise scientific
+   legibility. WebGL / three.js / actual 3D rendering is a separate
+   decision, deferred indefinitely — 2D is the canonical view for
+   planar three-body dynamics and the cost-to-payoff doesn't pencil
+   out for aesthetic-only 3D.
+
+   **4c — Balance canvas (exuberant; Paper Mario / 2.5D indie game).**
+
+   Deliberate aesthetic departure from the scientific-minimal rest of
+   the site — balance is the workbench, it gets to have its own
+   personality.
+
+   - **Background**: layered parallax. Sky / mid-ground / foreground
+     planes with subtle scroll offsets. Could lean into the paper
+     tokens we already have (`--sd-paper-warm`, `--sd-paper-ruled`)
+     for textured cardstock layers — physical-feeling depth without
+     real 3D.
+   - **Cart**: pixel-art sprite, rendered at integer scale with
+     `image-rendering: pixelated` for crispness. Polished palette —
+     not retro-trash, indie-game-quality.
+   - **Pole**: pixel-art with a soft drop shadow on the
+     ground/wall plane.
+   - **Floor / wall**: paper-like textured planes; the
+     "shadow-derived cart-pole balancing under partial observation"
+     framing in the page description gives a natural hook for the
+     wall to be where the cart's projection lives.
+   - **Feedback**: small motion lines, sparkles, or anticipation
+     squash on cart movement. Mobile/indie polish — feel
+     before fidelity.
+   - **Palette**: warmer and more saturated than the Sundog cool-blue
+     identity. This page can run hot.
+
+   This is the only canvas where we go full visual-design rather
+   than scientific-illustration mode.
+
 5. Decide whether BoxForge exports live as hand-curated CSS snippets or as
    generated files from `.boxforge.json` templates.
 6. When the canonical topography/typography direction lands, map it onto the
