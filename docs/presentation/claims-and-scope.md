@@ -33,6 +33,7 @@ These claims are defensible with current evidence:
   stop-conditioned action batches, and a seedable Playwright bridge.
 - Dungeon Gleaner demonstrates verb-field NPC behavior: unmet needs diffuse across satisfier nodes to produce lightweight idle orbits without scripted planners.
 - Money Bags demonstrates graph-based interpretation of softbody motion, making torsion, deformation, symmetry, and recovery metrics legible.
+- The three-body workbench demonstrates a bounded operating-envelope result: in the tested planar restricted setup, guarded accelerometer-proxy TRACK control improves survival over passive and naive local baselines inside a high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain known harm boundaries.
 
 ### Research Status
 - We are continuing to formalize the math and collect examples.
@@ -60,6 +61,8 @@ These claims are defensible with current evidence:
 - ❌ "Dungeon Gleaner proves verb-field diffusion outperforms GOAP for town simulation." (needs telemetry and a comparison harness)
 - ❌ "Dungeon Gleaner proves a one-twelfth-cost light or physics theorem." (old framing; do not repeat as Sundog evidence)
 - ❌ "Money Bags proves softbody alignment is solved." (needs controlled experiments)
+- ❌ "Sundog solves the three-body problem." (Phase 11 is a bounded control-workbench result, not a global dynamics solution)
+- ❌ "The three-body controller predicts chaos." (the result concerns survival improvement in a tested operating pocket)
 - ❌ "Our applications demonstrate universal applicability."
 
 ### Premature Certainty
@@ -126,6 +129,18 @@ Orbit telemetry, GOAP-substitution comparison, tuning-sensitivity sweeps, and ar
 **What's needed:**
 Formal alignment score definition, frozen terrain fixtures, matched disturbance scripts, comparison against raw telemetry.
 
+### Three-Body Dynamics Workbench
+**Safe:**
+"In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines in a robust high-velocity near-escape pocket. The result is not global: lower velocity and equal-mass boundary cells still expose controller harms."
+
+**Avoid:**
+"Sundog solves the three-body problem."
+
+Also avoid presenting the privileged heuristic oracle as an optimal controller. It is a comparison reference, not a ground-truth optimum.
+
+**What's needed:**
+Public Phase 11 charts, an explicit failure-boundary view, longer-horizon stress tests, and a physical-sensor validation plan before making broader control claims.
+
 ## Audience-Specific Guidelines
 
 ### When Writing for Researchers
@@ -167,7 +182,7 @@ Formal alignment score definition, frozen terrain fixtures, matched disturbance 
 
 Or:
 
-"The broad theorem is a research program. The controlled result currently defended in the Sundog repo is narrower: photometric mirror alignment without target-position access in a MuJoCo experiment. EyesOnly, Dungeon Gleaner, and Money Bags are application expressions that motivate the next round of controlled studies."
+"The broad theorem is a research program. The controlled result currently defended in the Sundog repo is narrower: photometric mirror alignment without target-position access in a MuJoCo experiment. The three-body workbench is a bounded operating-envelope study; EyesOnly, Dungeon Gleaner, and Money Bags are application expressions that motivate the next round of controlled studies."
 
 ## Red Flags
 
