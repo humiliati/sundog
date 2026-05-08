@@ -51,11 +51,15 @@ First executable scaffold started. The Sundog tree now includes:
 - `public/js/balance-core.mjs`: deterministic cart-pole dynamics, shadow
   projection, sensor delay/noise scaffolding, and baseline controller modes;
 - `public/js/balance-browser.mjs`: canvas renderer, controls, telemetry strip,
-  and Lounas-derived robotics balance motif.
+  and Lounas-derived robotics balance motif;
+- `scripts/balance-harness.mjs`: a Phase 7 smoke runner sharing the same
+  dynamics, shadow sensor, and controller modules as the browser page.
 
-No Balance simulation harness, no Balance results directory, no Phase 8 metric
-tables, and no Phase 10 operating-envelope verdict ships in the Sundog tree
-today. The current artifact is a Phase 1-4 scaffold, not evidence.
+No committed Balance results directory, no Phase 8 metric tables, and no Phase
+10 operating-envelope verdict ships in the Sundog tree today. Local Phase 7
+smoke outputs are written under ignored `results/balance/` paths and are
+calibration artifacts, not public evidence. The current artifact is a Phase
+1-7 scaffold, not evidence.
 
 This section is here so the broadcast surfaces (gallery card, APPLICATIONS.md,
 claims-and-scope.md) do not get a row until the runnable-artifact gates below
