@@ -129,9 +129,15 @@ First executable scaffold landed 2026-05-08. The Sundog tree now includes:
 Known calibration debt (2026-05-08 visual review):
 
 - `--parhelic-curvature = 0.66` is locked.
-- `--cza-bell` Gaussian blur at `stdDeviation="3.2"` is **too aggressive** —
-  intended bell-curve overlap on the eyelid reads as smudge rather than a
-  peaked Gaussian. Phase 2 calibration target.
+- `--cza-bloom` slider was demoted to a baked constant (`stdDeviation = 0.3`,
+  edge-soften only) on 2026-05-08 after A/B testing confirmed Gaussian blur
+  on each arc independently does not produce the eyelid bell curve at any
+  value — the two arcs do not meet within Gaussian-σ of each other at the
+  apex, so their tails never sum to a peaked bell. The bell shape is now
+  produced geometrically by a paint-fill band between the two arcs
+  (`#cza-bell-fill`). A future `--cza-secondary-offset` knob is the right
+  lever for tuning bell width if/when a slider is wanted again; tracked as
+  a Phase 9/10 composition-fiction question, not a Phase 2 calibration item.
 - The compass-rose 45° rotation is in place but may overlap visually with
   pillar + parhelic, reducing the X reading. Phase 2 tune candidate.
 - Sun-altitude slider is wired to a CSS variable but is not yet bound to
@@ -323,9 +329,14 @@ Calibration items (live list):
 - [x] `--parhelic-curvature = 0.66` (calibrated 2026-05-08).
 - [x] `--cza-bloom` promoted to slider (2026-05-08); default lowered from
   the over-aggressive `3.2` to `1.4` pending overlay calibration.
-- [ ] `--cza-bloom` overlay calibration — find the value where the two
-  CZA arcs' Gaussian tails sum into a visible bell-curve at intersection
-  without smudging the arc identity. Slider range `0 .. 3.2`.
+- [x] `--cza-bloom` demoted to baked constant `stdDeviation = 0.3`
+  (2026-05-08, ass-dyno value). Mechanism mismatch confirmed: Gaussian
+  blur on each arc independently does not sum to a bell curve at the
+  eyelid apex regardless of σ. Replaced with `#cza-bell-fill` paint band
+  between the two arcs. Slider count drops 17 → 16. The eyelid-bell goal
+  is reclassified from a Phase 2 calibration item to a Phase 9/10
+  composition-fiction question whose right lever is `--cza-secondary-offset`
+  (geometric overlap), not blur.
 - [ ] Compass-rose rotation angle — currently 45° from original diagonal;
   test 30°, 22.5°, and back-out-of-rotate to find the pose where the X
   reads as distinct from pillar + parhelic.

@@ -6,7 +6,7 @@
     "spec": "docs/SUNDOG_GENERATOR_SPEC.md",
     "calibration": {
       "parhelicCurvature": "locked 2026-05-08 against source-photo overlay at 0.66",
-      "czaBloom": "default 1.4 pending overlay calibration; range 0..3.2"
+      "czaBloom": "demoted 2026-05-08 — no longer a parameter; baked at filter stdDeviation=0.3 in the renderer. The eyelid bell shape is produced by the cza-bell-fill paint region between the two arcs, not by Gaussian summation."
     }
   },
 
@@ -21,7 +21,6 @@
 
   "czaIntensity": 0.95,
   "czaCurvature": 0.85,
-  "czaBloom": 1.4,
 
   "parhelicCircleIntensity": 0.45,
   "parhelicCurvature": 0.66,
