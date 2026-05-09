@@ -274,6 +274,20 @@
             filter: url(#soft-blur);
         }
 
+        .layer-pillar .pillar-lens {
+            fill: url(#pillar-gradient);
+            opacity: calc(0.95 * var(--sun-pillar-intensity));
+            filter: url(#soft-blur);
+        }
+
+        #parhelion-svg[data-geometry-model="legacy"] .pillar-lens {
+            display: none;
+        }
+
+        #parhelion-svg[data-geometry-model="halo_scaffold"] #pillar-line {
+            display: none;
+        }
+
         .layer-parhelia .dagger {
             opacity: var(--parhelia-intensity);
         }
@@ -443,6 +457,7 @@
 
                 <!-- Sun pillar: vertical column through the sun -->
                 <g class="layer-pillar">
+                    <path class="pillar-lens" id="pillar-lens" d=""/>
                     <line id="pillar-line"
                           x1="500" y1="500"
                           x2="500" y2="500"/>
@@ -520,6 +535,15 @@
         <aside class="controls" aria-label="Parhelion controls">
             <h2>Optical Parameters</h2>
             <p class="lead">Each slider exposes one term of the parhelion description. Defaults render the canonical "sundog eye" still pose.</p>
+
+            <div class="control-group">
+                <label>Geometry Model<span class="value" id="geometry-model-value"></span></label>
+                <select id="geometry-model" style="width: 100%; padding: 0.35rem 0.4rem; background: rgba(255,255,255,0.06); color: var(--text-light); border: 1px solid rgba(244, 196, 48, 0.30); border-radius: 4px;">
+                    <option value="legacy">Legacy (feature-tuned)</option>
+                    <option value="halo_scaffold">Halo Scaffold (ellipse-derived)</option>
+                </select>
+                <p class="lead" style="margin-top: 0.35rem;">Legacy updates visible features directly. Halo Scaffold derives daggers and the pillar from halo/ellipse interactions so co-located structure emerges from fewer primitives.</p>
+            </div>
 
             <h3>Sun &amp; Pillar</h3>
 
@@ -639,160 +663,6 @@
         </aside>
     </main>
 
-    <script>
-        // --- Slider plumbing --------------------------------------------------
-
-        const sliders = document.querySelectorAll('input[type="range"][data-param]');
-        const root = document.documentElement;
-
-        function setParam(name, value) {
-            root.style.setProperty(`--${name}`, value);
-            const display = document.getElementById(`${name}-value`);
-            if (display) {
-                const num = parseFloat(value);
-                display.textContent = Number.isInteger(num) ? num.toString() : num.toFixed(2);
-            }
-            applyDerivedGeometry();
-        }
-
-        sliders.forEach(slider => {
-            slider.addEventListener('input', () => setParam(slider.dataset.param, slider.value));
-        });
-
-        // --- Derived geometry: positions that depend on parameters ----------
-
-        // Symmetric quadratic Bezier sampler for the parhelic arc.
-        // Endpoints (0, A) → control (500, B) → (1000, A); midpoint (sun) at y=500.
-        // Curvature c ∈ [0, 1]: A = 500 - 200c (canvas-edge above sun),
-        //                      B = 500 + 200c (control below), so midpoint stays at sun.
-        // Daggers grin upward; at c=0 the curve collapses to a flat horizontal.
-        function parhelicY(x, curvature) {
-            const A = 500 - 200 * curvature;
-            const B = 500 + 200 * curvature;
-            // For symmetric x0=0, x1=500, x2=1000, x(t) = 1000t. So t = x/1000.
-            const t = x / 1000;
-            const omt = 1 - t;
-            return omt * omt * A + 2 * t * omt * B + t * t * A;
-        }
-
-        function applyDerivedGeometry() {
-            const altitudeDeg = parseFloat(getComputedStyle(root).getPropertyValue('--sun-altitude'));
-            const pillarLen = parseFloat(getComputedStyle(root).getPropertyValue('--sun-pillar-length'));
-            const daggerLen = parseFloat(getComputedStyle(root).getPropertyValue('--parhelia-dagger-length'));
-            const compassLen = parseFloat(getComputedStyle(root).getPropertyValue('--compass-ray-length'));
-            const czaCurve = parseFloat(getComputedStyle(root).getPropertyValue('--cza-curvature'));
-            const overlapBias = parseFloat(getComputedStyle(root).getPropertyValue('--ring-overlap-bias'));
-            const parhelicCurvature = parseFloat(getComputedStyle(root).getPropertyValue('--parhelic-curvature'));
-            // (cza-bloom JS removed 2026-05-08; filter baked at stdDeviation="0.3".)
-
-            // Sun pillar: extend from sun (cy=500) up by pillar-length × 360 svg units, down by half.
-            const pillar = document.getElementById('pillar-line');
-            const pillarUp = 360 * pillarLen;
-            const pillarDown = 90 * pillarLen;
-            pillar.setAttribute('y1', 500 - pillarUp);
-            pillar.setAttribute('y2', 500 + pillarDown);
-
-            // Parhelic arc path: rebuilt from curvature.
-            const parhelicEndY = 500 - 200 * parhelicCurvature;
-            const parhelicCtrlY = 500 + 200 * parhelicCurvature;
-            const parhelic = document.getElementById('parhelic-path');
-            parhelic.setAttribute(
-                'd',
-                `M 0 ${parhelicEndY.toFixed(2)} Q 500 ${parhelicCtrlY.toFixed(2)} 1000 ${parhelicEndY.toFixed(2)}`
-            );
-
-            // Compass-rose ray length scales BOTH ray endpoints AND the sun core.
-            // Cache the original ray endpoints once; keep them as the unit-length basis.
-            const sunGroup = document.getElementById('layer-sun');
-            sunGroup.querySelectorAll('.ray').forEach(line => {
-                if (!line.dataset.basisX2) {
-                    line.dataset.basisX1 = line.getAttribute('x1');
-                    line.dataset.basisY1 = line.getAttribute('y1');
-                    line.dataset.basisX2 = line.getAttribute('x2');
-                    line.dataset.basisY2 = line.getAttribute('y2');
-                }
-                const x1 = parseFloat(line.dataset.basisX1);
-                const y1 = parseFloat(line.dataset.basisY1);
-                const x2 = parseFloat(line.dataset.basisX2);
-                const y2 = parseFloat(line.dataset.basisY2);
-                line.setAttribute('x2', x1 + (x2 - x1) * compassLen);
-                line.setAttribute('y2', y1 + (y2 - y1) * compassLen);
-            });
-            // Sun core radius scales with compass-ray-length (slight square-root softening
-            // so the core doesn't dwarf the rays at high values).
-            const sunCore = document.getElementById('sun-core');
-            sunCore.setAttribute('r', (9 * Math.sqrt(compassLen)).toFixed(2));
-
-            // Parhelion daggers ride the parhelic arc.
-            // Hilt anchor x: 280 (left) and 720 (right); their y is sampled from the curve.
-            const parheliaGroup = document.querySelector('.layer-parhelia');
-            const daggers = parheliaGroup.querySelectorAll('.dagger');
-            const leftHiltX = 280, rightHiltX = 720;
-            const leftHiltY = parhelicY(leftHiltX, parhelicCurvature);
-            const rightHiltY = parhelicY(rightHiltX, parhelicCurvature);
-            // Left dagger: streak runs from (hilt - 60·len) to (hilt + 40·len), all on the arc.
-            const leftStreak = daggers[0].querySelector('.dagger-streak');
-            const leftCore = daggers[0].querySelector('.dagger-core');
-            const lx1 = leftHiltX - 60 * daggerLen;
-            const lx2 = leftHiltX + 40 * daggerLen;
-            leftStreak.setAttribute('x1', lx1);
-            leftStreak.setAttribute('y1', parhelicY(lx1, parhelicCurvature));
-            leftStreak.setAttribute('x2', lx2);
-            leftStreak.setAttribute('y2', parhelicY(lx2, parhelicCurvature));
-            leftCore.setAttribute('cx', leftHiltX);
-            leftCore.setAttribute('cy', leftHiltY);
-            // Right dagger: mirror.
-            const rightStreak = daggers[1].querySelector('.dagger-streak');
-            const rightCore = daggers[1].querySelector('.dagger-core');
-            const rx1 = rightHiltX + 60 * daggerLen;
-            const rx2 = rightHiltX - 40 * daggerLen;
-            rightStreak.setAttribute('x1', rx1);
-            rightStreak.setAttribute('y1', parhelicY(rx1, parhelicCurvature));
-            rightStreak.setAttribute('x2', rx2);
-            rightStreak.setAttribute('y2', parhelicY(rx2, parhelicCurvature));
-            rightCore.setAttribute('cx', rightHiltX);
-            rightCore.setAttribute('cy', rightHiltY);
-
-            // CZA curvature: control the Q-curve apex height
-            const czaPrimary = document.getElementById('cza-primary');
-            const apexY = 240 - 160 * (czaCurve - 0.85);
-            czaPrimary.setAttribute('d', `M 200 240 Q 500 ${apexY} 800 240`);
-
-            // Ring overlap bias: shifts the secondary halos closer to (1.0) or
-            // further from (0.0) the primary, controlling the 9-ring intersection.
-            const secondaries = document.querySelectorAll('#layer-secondary-halos circle');
-            const offset = (overlapBias - 0.5) * 160;
-            const lx = 320 + offset, rx = 680 - offset;
-            const cy = 320 + offset * 0.5;
-            secondaries[0].setAttribute('cx', lx); secondaries[0].setAttribute('cy', cy);
-            secondaries[1].setAttribute('cx', rx); secondaries[1].setAttribute('cy', cy);
-
-            // Sun altitude: planned for v2 — would shift pillar y-anchor and parhelion x-spacing
-            // (parhelion azimuthal offset from sun grows with altitude per atmospheric optics).
-            // For static-first, altitude is a placeholder; geometry is fixed at canonical pose.
-            void altitudeDeg;
-        }
-
-        // Initial layout
-        applyDerivedGeometry();
-
-        // --- Reset / snapshot ------------------------------------------------
-
-        document.getElementById('btn-reset').addEventListener('click', () => {
-            sliders.forEach(slider => {
-                slider.value = slider.defaultValue;
-                slider.dispatchEvent(new Event('input'));
-            });
-        });
-
-        document.getElementById('btn-snapshot').addEventListener('click', () => {
-            const params = {};
-            sliders.forEach(s => params[s.dataset.param] = parseFloat(s.value));
-            console.log('Sundog params snapshot:', JSON.stringify(params, null, 2));
-            try {
-                navigator.clipboard.writeText(JSON.stringify(params, null, 2));
-            } catch (e) { /* ignore */ }
-        });
-    </script>
+    <script type="module" src="/js/parhelion-workbench.mjs"></script>
 </body>
 </html>
