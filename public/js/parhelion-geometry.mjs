@@ -367,65 +367,71 @@ function applyGeometryHaloScaffold(svg, rootStyle) {
   // skip recomputing it on every slider event.
 }
 
-// --- halo_governed: the issue-faithful construction --------------------------
+// --- halo_governed (v2, mockup-faithful) -------------------------------------
 //
-// One governing halo (a CIRCLE — not a free ellipse) sits above the sun, with
-// the sun at its bottommost point. That halo:
+// Daggers are FIXED at the parhelic-circle position on the 22° halo — i.e.
+// (500-220, 500) and (500+220, 500). They are the anchor of the central
+// scaffold, not a derived intersection.
 //
-//   1. paints the parhelic arc (its visible lower-arc),
-//   2. fixes the daggers as its intersection with the 22° halo,
-//   3. anchors the pillar via two further halos centered AT the daggers,
-//      whose vesica is the lens-shaped pillar at the sun.
+// Two virtual halos centered AT the daggers (radius = 220 + small slack) are
+// the "two large halos" of the issue's proposal: catalysts/spawn of the
+// daggers, never rendered. Their vesica IS the pillar.
 //
-// This means: one knob (governing-halo radius, repurposed from
-// --parhelic-curvature) determines the parhelic arc AND the dagger positions
-// AND the pillar geometry. Everything that was hand-tuned in the legacy and
-// halo_scaffold models becomes a derived consequence here.
+// The parhelic arc is the unique circle through (left dagger, sun-apex,
+// right dagger). At zero curvature it degenerates to a horizontal line. At
+// positive curvature `--parhelic-curvature`, the apex sits `h` above the sun
+// where h scales linearly with curvature, and the arc is the upper portion
+// of the resulting circle.
 
 const HALO_22_RADIUS_FOR_GOVERNED = HALO_22_RADIUS;
 
-function governingHaloFromCurvature(curvature) {
-  // Map curvature 0..1 to a circle radius. Bounded below by HALO_22+30 so the
-  // governing circle never collapses into the 22° halo (which would degenerate
-  // the dagger intersection), bounded above to keep numbers finite.
-  const cClamped = clamp(curvature, 0, 1);
-  const R = HALO_22_RADIUS_FOR_GOVERNED + 30 + 800 * (1 - cClamped);
-  return { cx: SUN.x, cy: SUN.y - R, r: R };
-}
-
-function daggerPointsFromGoverningHalo(governing) {
-  // Closed-form: two equal-radius circles concentric on x=500, the governing
-  // halo center at y = SUN.y - R, the 22° halo at SUN. Intersection y is
-  // y - SUN.y = -HALO_22^2 / (2R); x = SUN.x ± sqrt(HALO_22^2 - (...)^2).
-  const R = governing.r;
-  const dy = -(HALO_22_RADIUS_FOR_GOVERNED * HALO_22_RADIUS_FOR_GOVERNED) / (2 * R);
-  const inside = HALO_22_RADIUS_FOR_GOVERNED * HALO_22_RADIUS_FOR_GOVERNED - dy * dy;
-  if (inside <= 0) return null;
-  const dx = Math.sqrt(inside);
+function daggerPointsHorizontal() {
   return {
-    left: { x: SUN.x - dx, y: SUN.y + dy },
-    right: { x: SUN.x + dx, y: SUN.y + dy },
+    left: { x: SUN.x - HALO_22_RADIUS_FOR_GOVERNED, y: SUN.y },
+    right: { x: SUN.x + HALO_22_RADIUS_FOR_GOVERNED, y: SUN.y },
   };
 }
 
-function applyParhelicGoverning(svg, governing) {
+function applyParhelicCircleThroughDaggersAndSun(svg, parhelicCurvature) {
   const parhelic = svg.querySelector("#parhelic-path");
   if (!parhelic) return;
-  // Lower arc of the governing circle, clipped to the visible viewbox 0..1000.
-  // Sample as a polyline rather than using SVG's native A-arc so the path
-  // composes cleanly with the existing stroke styling and shares the legacy
-  // path id/class.
-  const xMin = Math.max(governing.cx - governing.r, 0);
-  const xMax = Math.min(governing.cx + governing.r, 1000);
+
+  // Map curvature ∈ [0, 1] to apex-above-sun height h ∈ [0, 200]. h=0 is the
+  // degenerate horizontal-line case — we draw it as a simple line so the
+  // circle math doesn't divide by zero.
+  const c = clamp(parhelicCurvature, 0, 1);
+  const h = 200 * c;
+
+  if (h < 0.5) {
+    parhelic.setAttribute(
+      "d",
+      `M ${(SUN.x - HALO_22_RADIUS_FOR_GOVERNED).toFixed(2)} ${SUN.y.toFixed(2)} ` +
+        `L ${(SUN.x + HALO_22_RADIUS_FOR_GOVERNED).toFixed(2)} ${SUN.y.toFixed(2)}`
+    );
+    return;
+  }
+
+  // Unique circle through (SUN.x-220, SUN.y), (SUN.x, SUN.y-h), (SUN.x+220, SUN.y).
+  // By symmetry the center sits on x=SUN.x. Solving for the y of the center:
+  //   center_y = SUN.y + (220^2 - h^2) / (2h)
+  const r22sq = HALO_22_RADIUS_FOR_GOVERNED * HALO_22_RADIUS_FOR_GOVERNED;
+  const cy = SUN.y + (r22sq - h * h) / (2 * h);
+  const r = Math.hypot(HALO_22_RADIUS_FOR_GOVERNED, SUN.y - cy);
+
+  // Render the visible upper arc — clip to viewbox x ∈ [0, 1000].
+  const xMin = Math.max(SUN.x - r, 0);
+  const xMax = Math.min(SUN.x + r, 1000);
   const dx = xMax - xMin;
   if (dx <= 1e-6) return;
   const steps = 140;
   const parts = [];
   for (let i = 0; i <= steps; i += 1) {
     const x = xMin + (dx * i) / steps;
-    const u = (x - governing.cx) / governing.r;
+    const u = (x - SUN.x) / r;
     const inside = 1 - u * u;
-    const y = governing.cy + governing.r * Math.sqrt(Math.max(0, inside));
+    // Upper arc: y = cy - r·√(1-u²). For h>0 in our parameterisation cy>SUN.y,
+    // and the upper arc passes through both daggers and the apex above the sun.
+    const y = cy - r * Math.sqrt(Math.max(0, inside));
     parts.push(`${i === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`);
   }
   parhelic.setAttribute("d", parts.join(" "));
@@ -525,11 +531,10 @@ function applyGeometryHaloGoverned(svg, rootStyle) {
   const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
   const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
 
-  const governing = governingHaloFromCurvature(parhelicCurvature);
-  const daggerPoints = daggerPointsFromGoverningHalo(governing);
+  // Daggers are the anchor — fixed on the parhelic circle, no derivation.
+  const daggerPoints = daggerPointsHorizontal();
 
-  // Single primitive (governing halo) drives THREE features:
-  applyParhelicGoverning(svg, governing);
+  applyParhelicCircleThroughDaggersAndSun(svg, parhelicCurvature);
   applyDaggersFromGoverningHalo(svg, daggerLen, daggerPoints);
   applyPillarFromTwoHalos(svg, daggerPoints, pillarLen);
 

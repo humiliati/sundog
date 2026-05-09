@@ -13,6 +13,8 @@
     "balance:phase7:verify": "node scripts/balance-verify-replays.mjs",
     "balance:phase8": "node scripts/balance-phase8-metrics.mjs --phase phase8-recovery --out results/balance/phase8-recovery --presets easy,recoverable,near_fall,noisy_shadow,delayed_shadow --modes passive,naive_cart,naive_shadow,sundog_shadow,oracle --light-elevations 28 --seeds 12 --disturbance-at 0.25 --disturbance-duration 0.15 --disturbance-force 4.5",
     "balance:phase9": "node scripts/balance-phase9-boundary.mjs --phase phase9-boundary --out results/balance/phase9-boundary --presets recoverable,near_fall --modes passive,naive_shadow,sundog_shadow,oracle --seeds 8",
+    "balance:phase10": "node scripts/balance-phase10-envelope.mjs --phase phase10-envelope --out results/balance/phase10-envelope --presets recoverable,near_fall --modes passive,naive_shadow,sundog_shadow,oracle --seeds 100",
+    "balance:phase10:smoke": "node scripts/balance-phase10-envelope.mjs --phase phase10-smoke --out results/balance/phase10-smoke --presets recoverable,near_fall --modes passive,naive_shadow,sundog_shadow,oracle --seeds 8 --bootstrap-iterations 200",
     "threebody:phase5": "node scripts/threebody-harness.mjs",
     "threebody:phase6": "node scripts/threebody-harness.mjs --phase phase6 --out results/threebody/phase6-baselines --modes off,naive,scan,seek,track,seek_noisy,track_noisy,seek_shuffled,track_shuffled,oracle --seeds 3",
     "threebody:phase7": "node scripts/threebody-harness.mjs --phase phase7 --out results/threebody/phase7-event-metrics --modes off,naive,scan,seek,track,seek_noisy,track_noisy,seek_shuffled,track_shuffled,oracle --seeds 3",
