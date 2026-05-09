@@ -29,9 +29,10 @@ via a "tune the math" link.
 
 ## Related Documents
 
-This roadmap is one of three workbench roadmaps and depends on a fourth
-document for the broader visual frame. Authority is split deliberately so
-no document trampolines another's decisions.
+This roadmap is the workbench's path-to-promotion plan. It is the
+human-tunable face of a broader **Sundog Generator** whose programmatic
+face and proof methodology are split into companion docs. Authority is
+distributed so no document trampolines another's decisions.
 
 - [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) — the site-wide
   visual frame. Owns: theme tokens (`--sd-*`), shared-stylesheet layer
@@ -41,12 +42,26 @@ no document trampolines another's decisions.
   that document defers the detailed roadmap here.** Any new theme token
   this workbench needs goes via `sundog-theme.css` and that document, not
   page-local CSS.
+- [`SUNDOG_GENERATOR_SPEC.md`](SUNDOG_GENERATOR_SPEC.md) — the
+  programmatic generator architecture (Prompt → Parser → Pose JSON →
+  Geometry Solver → SVG → optional AI). Defines the three modes (render
+  from math / compare to sky / make beautiful) and the external tool
+  schema. **The workbench is Mode 1's user-facing surface; that doc is
+  the canonical statement of what the generator is and isn't.** It also
+  owns the public-framing language we use when describing the project
+  outside this repo.
+- [`SUNDOG_OVERLAY_PROTOCOL.md`](SUNDOG_OVERLAY_PROTOCOL.md) — the
+  photo-overlay test methodology (Mode 2 procedure). Phase 2 calibration
+  items below cite the overlay protocol as their gating procedure.
 - [`SUNDOG_V_THREEBODY.md`](SUNDOG_V_THREEBODY.md) and
   [`SUNDOG_V_BALANCE.md`](SUNDOG_V_BALANCE.md) — sibling application
   workbench roadmaps. Different shape (control task with operating
   envelope and pre-registered verdict), same Sundog pattern of *hidden /
   indirect / transformation / output*. The Pre-Committed Cross-Application
   Comparison Row near the bottom of this document is the parallel.
+- `public/poses/*.json` — the named-pose library. `canonical.json`
+  snapshots the locked default; future poses (`low-altitude`, `cza-heavy`,
+  `nine-halo-eye`) ship as Phase 8 lands.
 - BoxForge tools library: `C:\Users\hughe\Dev\Dungeon Gleaner Main\tools`,
   agent-accessible. `boxforge.html` and `orb-component.html` are reference
   primitives for the Phase 6 selective 3D handoff. The animation phase
@@ -298,7 +313,10 @@ landed 2026-05-08.**
 ### Phase 2 - Calibration Pass (Static)
 
 Goal: lock visual defaults against the reference photograph corpus using
-the translucent-overlay calibration technique.
+the translucent-overlay calibration technique. The procedure is canonical
+in [`SUNDOG_OVERLAY_PROTOCOL.md`](SUNDOG_OVERLAY_PROTOCOL.md); this phase
+runs that protocol manually for each open calibration item until each
+threshold passes against `troels-nielsen-dr.jpg`.
 
 Calibration items (live list):
 
@@ -430,21 +448,30 @@ already on it) in one click.
 ### Phase 8 - Reproducible Pose Export
 
 Goal: the workbench's `Snapshot params` button currently writes JSON to
-console + clipboard. Promote that to a deterministic export pipeline:
-identical JSON pose loaded back into the workbench produces a
-pixel-equivalent render.
+console + clipboard. Promote that to a deterministic export pipeline
+matching the schema in
+[`SUNDOG_GENERATOR_SPEC.md`](SUNDOG_GENERATOR_SPEC.md): identical pose
+JSON loaded back into the workbench produces a byte-equivalent SVG.
 
 Deliverables:
 
-- `Load params` button accepting JSON (paste or file picker).
+- `Load params` button accepting JSON (paste or file picker), reading
+  the canonical schema from the Generator Spec.
 - Pose pinning script that, given a JSON file, renders the workbench at
   that pose and exports a PNG/SVG snapshot for archival.
-- A small library of named poses (`canonical.json`,
-  `nine-halo-eye.json`, `low-altitude.json`) checked in under
-  `public/poses/` or similar.
+- Named-pose library expansion under `public/poses/`:
+  - [x] `canonical.json` — snapshot of the current locked defaults
+    (landed alongside the Generator Spec).
+  - [ ] `low-altitude.json` — sun near the horizon, parhelia close to
+    halo; CZA visible.
+  - [ ] `cza-heavy.json` — sun altitude well below 32°, CZA at maximum
+    intensity, halo and parhelia subdued.
+  - [ ] `nine-halo-eye.json` — full composition fiction with
+    `--secondary-suns-strength = 0.7` and tuned overlap bias.
+  - [ ] `forty-six-halo.json` — 46° halo dominant, 22° subdued.
 
 Gate: round-trip a snapshot → load → render → snapshot and confirm
-byte-equal JSON.
+byte-equal JSON across two browser sessions.
 
 ## Post-Verdict / Conditional Roadmap
 
