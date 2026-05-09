@@ -540,9 +540,23 @@ Goal: lock the earned claim.
 
 Deliverables:
 
-- Grid map over light elevation, delay, noise, force limit, and disturbance.
-- Candidate-envelope CSV where Sundog improves over passive and naive baselines
-  while staying below force/saturation thresholds.
+- Grid map over light elevation, delay, noise, dropped-frame rate, rail
+  length, force limit, and disturbance.
+- Phase 10 grid axis values match the Phase 9 sweep values exactly. Cells are
+  joinable after normalizing the Phase 9 column names to `(light_elev_deg,
+  delay_ms, noise_sigma, dropout_rate, rail_limit, force_limit,
+  disturbance_mag)` keys; verdict checks do not interpolate across mismatched
+  bins.
+- Candidate-envelope CSV (`envelope.csv`) where Sundog improves over passive
+  and naive baselines while staying below force/saturation thresholds.
+- Locked `envelope.csv` schema: `cell_id`, `light_elev_deg`, `delay_ms`,
+  `noise_sigma`, `dropout_rate`, `rail_limit`, `force_limit`,
+  `disturbance_mag`, `cell_class`, `survival_sundog_mean`,
+  `survival_naive_mean`, `survival_oracle_mean`,
+  `recovery_time_after_impulse`, `sundog_naive_paired_margin_mean`,
+  `sundog_naive_survival_ratio`, `sundog_beats_naive_1p5x`, `seed_count`,
+  `paired_margin_bootstrap_low`, `paired_margin_bootstrap_high`, and
+  `replay_url`.
 - Best-cell and worst-cell replay links for the browser.
 - Failure-mechanism labels such as `shadow_unobservable`, `delay_destabilized`,
   `force_saturated`, `rail_limited`, and `controller_overcorrected`.
@@ -560,12 +574,28 @@ the workbench can promote tiers or broadcast. This is the same Money-Bags-style
 discipline that ratifies Stage 1 verdicts before captures, restated for the
 Balance workbench. Verdict is data-driven; disposition is locked.
 
+**Cell classes and P1 denominator.**
+
+`cell_class` is assigned before the Phase 10 slate verdict:
+`diagnostic_positive` for Phase 9 boundary-classifier cells where the central
+shadow-derived-control claim is alive, `failure_regime` for overhead,
+high-delay, force/rail-limited, or otherwise intentionally unsafe cells, and
+`borderline` for cells whose Phase 9 label is unstable across seeds or adjacent
+axis bins. The P1 denominator is `diagnostic_positive` cells only. It is not
+all grid cells, and it is not cells where any controller survives.
+
 **Pre-registered predictions.**
 
-*P1 — central effect.* Inside the diagnostic-positive envelope from Phase 9,
-the Sundog shadow controller's mean survival time exceeds naive shadow-centering
-by at least 1.5× on at least 30% of operating-envelope cells, on a matched-seed
-slate of ≥ 100 seeds. Failure here REFUTES the workbench's central claim.
+*P1 - central effect.* Inside the Phase 9 `diagnostic_positive` cells, each
+cell computes the Sundog-minus-naive survival margin from seed-paired trial
+pairs. A cell counts as a yes-cell only if Sundog beats naive shadow-centering
+by at least 1.5x on the matched-seed slate of at least 100 seeds. P1 holds
+only if the aggregate yes-cell fraction over the `diagnostic_positive`
+denominator has a bootstrap lower bound greater than 0.30. Failure
+here REFUTES the workbench's central claim. `verdict.md` reports
+`diagnostic_positive_cell_count`, `yes_cell_count`, `yes_cell_fraction`,
+`yes_fraction_bootstrap_low`, and `yes_fraction_bootstrap_high` so the
+aggregate read is mechanical.
 
 *P2 — failure boundary realness.* On overhead-light cells (light elevation
 ≥ 80°) and on high-delay cells (sensor delay ≥ 200 ms), Sundog should not
@@ -589,8 +619,9 @@ before any verdict.
 After the Phase 10 candidate-envelope CSV and Phase 8 metric tables land,
 the writeup asserts *one* of three verdicts:
 
-*CONFIRM.* P1 holds with seed-paired bootstrap CI excluding zero. P2 holds.
-P3 holds. P4 holds. The workbench promotes to Operating-Envelope Study tier.
+*CONFIRM.* P1 holds under the `diagnostic_positive` denominator and aggregate
+yes-cell bootstrap rule above. P2 holds. P3 holds. P4 holds. The workbench
+promotes to Operating-Envelope Study tier.
 The gallery card upgrades the indirect-signal/transformation/output triplet
 from forward-looking language to past-tense achieved language. The
 applications-gallery row, the APPLICATIONS.md row, and the
@@ -598,14 +629,20 @@ claims-and-scope.md row all land in the same pass.
 
 *REFUTE.* P1 fails — Sundog does not beat naive shadow-centering by the
 pre-registered margin. The workbench stays at Planned Workbench tier with
-a negative-finding banner: "Sundog Balance is the application that
-attempted shadow-derived control of an inverted pendulum and did not
-beat naive shadow-centering on the tested slate." The negative finding
-is itself reportable — it is the same kind of evidence Money Bags would
+a negative-finding banner: "Sundog Balance attempted shadow-derived
+stabilisation of an inverted pendulum and did not beat naive shadow-centering
+on the tested slate; the workbench remains as a Planned Workbench." The
+negative finding is itself reportable — it is the same kind of evidence Money
+Bags would
 have produced if Stage 1 captures had returned an architecture-mode
 kill-switch read. The Avoid list in this doc is amended to include
 "Sundog Balance demonstrates shadow-based stabilisation," and the
 broadcast surfaces report the negative finding rather than omitting it.
+
+Pre-staged REFUTE hook language: "The hidden body was controlled through its
+shadow only where the lighting geometry allowed it; on this slate, that was
+not enough to beat naive shadow-centering. The failure boundary is the
+finding."
 
 *AMBIGUOUS.* P3 or P4 fails. Slate is invalidated. Sensor-model audit
 (P3 failure path) or oracle audit (P4 failure path) lands before re-run.
