@@ -19,6 +19,9 @@ const seedInput = document.getElementById("seed-input");
 const playPauseButton = document.getElementById("btn-play-pause");
 const resetButton = document.getElementById("btn-reset");
 const disturbButton = document.getElementById("btn-disturb");
+const recoverySummary = document.getElementById("recovery-summary");
+const recoveryCurve = document.getElementById("recovery-curve");
+const recoveryStats = document.getElementById("recovery-stats");
 const lightElevationInput = document.getElementById("light-elevation");
 const noiseInput = document.getElementById("sensor-noise");
 const delayInput = document.getElementById("sensor-delay");
@@ -33,6 +36,13 @@ const phaseDisplay = document.getElementById("phase-display");
 
 const history = [];
 const maxHistory = 260;
+const recoveryThresholds = Object.freeze({
+  theta: 0.09,
+  thetaDot: 0.35,
+  holdSeconds: 0.25,
+  impulseTicks: 18,
+  impulseForce: 4.5,
+});
 let isPlaying = true;
 let currentMode = "passive";
 let state = null;
@@ -44,6 +54,7 @@ let disturbanceTicks = 0;
 let lastFrameTime = performance.now();
 let initialStateOverride = null;
 let durationOverride = null;
+let recoveryTracker = createRecoveryTracker();
 
 for (const [key, preset] of Object.entries(BALANCE_PRESETS)) {
   const option = document.createElement("option");
@@ -113,6 +124,31 @@ function currentConfig(overrides = {}) {
   });
 }
 
+function createRecoveryTracker() {
+  return {
+    hasImpulse: false,
+    active: false,
+    startedAt: null,
+    endedAt: null,
+    force: 0,
+    peakAbsTheta: 0,
+    peakTime: null,
+    recoveredAt: null,
+    recoveryHold: 0,
+    terminal: null,
+    curve: [],
+  };
+}
+
+function beginRecoveryTrace() {
+  recoveryTracker = createRecoveryTracker();
+  recoveryTracker.hasImpulse = true;
+  recoveryTracker.active = true;
+  recoveryTracker.startedAt = state.t;
+  recoveryTracker.force = -Math.sign(state.theta || 1) * recoveryThresholds.impulseForce;
+  disturbanceTicks = recoveryThresholds.impulseTicks;
+}
+
 function resetSimulation() {
   const cfg = currentConfig();
   state = initializeBalanceState(cfg);
@@ -121,6 +157,7 @@ function resetSimulation() {
   currentSensor = sampleShadowSensor(state, runtime, cfg);
   currentControl = { force: 0, rawForce: 0, saturated: false, phase: "PASSIVE", reason: "reset" };
   disturbanceTicks = 0;
+  recoveryTracker = createRecoveryTracker();
   history.length = 0;
   isPlaying = true;
   playPauseButton.textContent = "Pause";
@@ -172,6 +209,10 @@ function roundedParam(value, digits = 9) {
   return String(Number.isFinite(value) ? Number.parseFloat(value.toFixed(digits)) : value);
 }
 
+function formatMetric(value, digits = 2, suffix = "") {
+  return Number.isFinite(value) ? `${value.toFixed(digits)}${suffix}` : "n/a";
+}
+
 function buildReplayUrl() {
   const cfg = currentConfig();
   const initial = getReplayInitialState();
@@ -215,6 +256,123 @@ async function copyReplayUrl() {
     textarea.remove();
   }
   replayToken.textContent = url;
+}
+
+function updateRecoveryTracker({ disturbanceActive, disturbanceForce, cfg }) {
+  if (!recoveryTracker.hasImpulse) return;
+
+  const absTheta = Math.abs(state.theta);
+  if (disturbanceActive && !recoveryTracker.active) {
+    recoveryTracker.active = true;
+  }
+  if (!disturbanceActive && recoveryTracker.active) {
+    recoveryTracker.active = false;
+    recoveryTracker.endedAt = state.t;
+  }
+  if (recoveryTracker.endedAt !== null && !recoveryTracker.terminal) {
+    const relativeTime = state.t - recoveryTracker.endedAt;
+    if (absTheta > recoveryTracker.peakAbsTheta) {
+      recoveryTracker.peakAbsTheta = absTheta;
+      recoveryTracker.peakTime = relativeTime;
+    }
+
+    recoveryTracker.curve.push({
+      relativeTime,
+      theta: state.theta,
+      shadowResidual: currentSensor.residual,
+      force: currentControl.force,
+      confidence: currentSensor.confidence,
+      disturbanceForce,
+    });
+    if (recoveryTracker.curve.length > 220) recoveryTracker.curve.shift();
+
+    const recoveredNow = (
+      absTheta <= recoveryThresholds.theta
+      && Math.abs(state.thetaDot) <= recoveryThresholds.thetaDot
+    );
+    if (recoveredNow && recoveryTracker.recoveredAt === null) {
+      recoveryTracker.recoveryHold += 1;
+      const neededHold = Math.max(1, Math.ceil(recoveryThresholds.holdSeconds / cfg.dt));
+      if (recoveryTracker.recoveryHold >= neededHold) {
+        const firstHeld = recoveryTracker.curve[Math.max(0, recoveryTracker.curve.length - neededHold)];
+        recoveryTracker.recoveredAt = firstHeld?.relativeTime ?? relativeTime;
+      }
+    } else if (!recoveredNow && recoveryTracker.recoveredAt === null) {
+      recoveryTracker.recoveryHold = 0;
+    }
+  }
+
+  if (state.fallen) recoveryTracker.terminal = "fallen";
+  else if (state.railHit) recoveryTracker.terminal = "rail hit";
+  else if (state.t >= cfg.duration) recoveryTracker.terminal = "timeout";
+}
+
+function renderRecoveryCurve() {
+  if (!recoveryCurve) return;
+  const width = 240;
+  const height = 74;
+  const pad = 8;
+  const usableW = width - pad * 2;
+  const usableH = height - pad * 2;
+  const samples = recoveryTracker.curve;
+  const thresholdY = height - pad - clamp(recoveryThresholds.theta / 0.65, 0, 1) * usableH;
+
+  if (!samples.length) {
+    recoveryCurve.innerHTML = `
+      <line x1="${pad}" y1="${height - pad}" x2="${width - pad}" y2="${height - pad}" stroke="rgba(245,245,245,0.18)" />
+      <line x1="${pad}" y1="${thresholdY}" x2="${width - pad}" y2="${thresholdY}" stroke="rgba(244,196,48,0.28)" stroke-dasharray="4 4" />
+    `;
+    return;
+  }
+
+  const maxT = Math.max(1.6, ...samples.map((sample) => sample.relativeTime));
+  const points = samples.map((sample) => {
+    const x = pad + clamp(sample.relativeTime / maxT, 0, 1) * usableW;
+    const y = height - pad - clamp(Math.abs(sample.theta) / 0.65, 0, 1) * usableH;
+    return `${roundForSvg(x)},${roundForSvg(y)}`;
+  });
+  const forcePoints = samples.map((sample) => {
+    const x = pad + clamp(sample.relativeTime / maxT, 0, 1) * usableW;
+    const y = height - pad - clamp((sample.force / currentConfig().forceLimit + 1) / 2, 0, 1) * usableH;
+    return `${roundForSvg(x)},${roundForSvg(y)}`;
+  });
+
+  recoveryCurve.innerHTML = `
+    <line x1="${pad}" y1="${height - pad}" x2="${width - pad}" y2="${height - pad}" stroke="rgba(245,245,245,0.18)" />
+    <line x1="${pad}" y1="${thresholdY}" x2="${width - pad}" y2="${thresholdY}" stroke="rgba(244,196,48,0.36)" stroke-dasharray="4 4" />
+    <polyline points="${forcePoints.join(" ")}" fill="none" stroke="rgba(255,139,106,0.38)" stroke-width="1.4" />
+    <polyline points="${points.join(" ")}" fill="none" stroke="#F4C430" stroke-width="2.2" />
+  `;
+}
+
+function roundForSvg(value) {
+  return Number.isFinite(value) ? Number.parseFloat(value.toFixed(2)) : 0;
+}
+
+function updateRecoveryPanel() {
+  if (!recoverySummary || !recoveryStats) return;
+  const tracker = recoveryTracker;
+  let summary = "Apply a disturbance to start a recovery trace.";
+  if (tracker.hasImpulse) {
+    if (tracker.terminal === "fallen" || tracker.terminal === "rail hit") {
+      summary = `${tracker.terminal.toUpperCase()} after impulse; this run delayed but did not recover.`;
+    } else if (tracker.recoveredAt !== null) {
+      summary = `RECOVERED ${formatMetric(tracker.recoveredAt, 2, "s")} after impulse.`;
+    } else if (tracker.endedAt === null) {
+      summary = "IMPULSE active; recovery clock starts when the push ends.";
+    } else {
+      summary = "RECOVERING; curve tracks hidden angle after the impulse.";
+    }
+  }
+
+  recoverySummary.textContent = summary;
+  recoveryStats.innerHTML = `
+    <span><strong>Peak theta</strong>${formatMetric(tracker.peakAbsTheta, 3)} rad</span>
+    <span><strong>Peak time</strong>${formatMetric(tracker.peakTime, 2, "s")}</span>
+    <span><strong>Recovery</strong>${formatMetric(tracker.recoveredAt, 2, "s")}</span>
+    <span><strong>Samples</strong>${tracker.curve.length}</span>
+  `;
+  renderRecoveryCurve();
 }
 
 function resizeCanvas() {
@@ -464,6 +622,7 @@ function updateMetrics() {
     <span>confidence ${sample.shadowConfidence.toFixed(2)}</span>
     <span>force ${sample.force.toFixed(2)}</span>
   `;
+  updateRecoveryPanel();
 }
 
 function updateModeButtons() {
@@ -476,9 +635,11 @@ function stepSimulation() {
   const cfg = currentConfig();
   currentSensor = sampleShadowSensor(state, runtime, cfg);
   currentControl = computeBalanceControl(state, currentSensor, controllerState, cfg);
-  const disturbance = disturbanceTicks > 0 ? -Math.sign(state.theta || 1) * 4.5 : 0;
+  const disturbance = disturbanceTicks > 0 ? -Math.sign(state.theta || 1) * recoveryThresholds.impulseForce : 0;
+  const disturbanceActive = disturbanceTicks > 0;
   if (disturbanceTicks > 0) disturbanceTicks -= 1;
   state = integrateBalanceStep(state, currentControl.force + disturbance, cfg);
+  updateRecoveryTracker({ disturbanceActive, disturbanceForce: disturbance, cfg });
 
   history.push({
     theta: state.theta,
@@ -523,7 +684,7 @@ playPauseButton.addEventListener("click", () => {
 
 resetButton.addEventListener("click", resetSimulation);
 disturbButton.addEventListener("click", () => {
-  disturbanceTicks = 18;
+  beginRecoveryTrace();
 });
 
 for (const input of [lightElevationInput, noiseInput, delayInput, forceInput]) {
@@ -568,6 +729,7 @@ window.__sundogBalanceReplay = () => ({
   config: currentConfig(),
   initialState: getReplayInitialState(),
   sample: serializeBalanceSample(state, currentSensor, currentControl, currentConfig()),
+  recovery: recoveryTracker,
 });
 
 const replaySettings = readReplaySettings();

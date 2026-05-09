@@ -47,7 +47,8 @@ triplet do not drift between the roadmap and the eventual writeup. When Phase
 
 First executable scaffold started. The Sundog tree now includes:
 
-- `balance.html`: an unpromoted browser workbench tab;
+- `balance.html`: an unpromoted browser workbench tab with a live Phase 8
+  recovery curve and impulse/recovery status panel;
 - `public/js/balance-core.mjs`: deterministic cart-pole dynamics, shadow
   projection, sensor delay/noise scaffolding, and baseline controller modes;
 - `public/js/balance-browser.mjs`: canvas renderer, controls, telemetry strip,
@@ -138,6 +139,15 @@ Target composition:
 - side-by-side comparison mode: direct oracle, Sundog shadow controller, and
   naive baseline on the same seed.
 
+Cross-document visual target: the evidence workbench stays a readable
+cart-pole simulation first. The future expressive skin is governed by
+[`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) section 4c: the
+"toyful" Paper Mario / 2.5D indie-game balance canvas. That visual pass may add
+layered parallax paper planes, pixel-art cart and pole sprites, soft shadows,
+motion lines, sparkles, squash/anticipation, and a warmer palette. It must not
+change dynamics, sensor math, controller code, metrics, replay URLs, verdict
+gates, or the ability to switch back to raw diagnostic rendering.
+
 The referenced `Gontary101/lounas-portfolio` repo is an approved design and
 implementation reference for this workbench. Per the project-owner note from the
 LinkedIn agreement, Sundog may borrow heavily from Lounas for the Balance visual
@@ -204,6 +214,7 @@ Avoid:
 - "This proves embodied alignment."
 - "The shadow controller beats the oracle."
 - "A gif is evidence."
+- "The toyful sprite skin is evidence."
 
 +++[forward-plan-C]+++
 
@@ -234,6 +245,10 @@ drift):
   performance is a falsification *surface*, not a falsification *gate*.
   The Phase 10 verdict template, not the human leaderboard, decides
   CONFIRM / REFUTE / AMBIGUOUS.
+- "The toyful sprite skin proves the theorem is intuitive." The Phase 12.5
+  skin is a comprehension layer and promotion surface. It can make the
+  recovery/failure story easier to read, but it cannot substitute for the
+  Phase 8 tables, Phase 10 verdict, or replayable raw diagnostic view.
 
 +++[/forward-plan-C]+++
 
@@ -472,8 +487,11 @@ successful balance from merely delaying a fall.
 +++[forward-plan-A]+++ *Phase 8 first pass landed: `npm run balance:phase8`
 writes local ignored `trial-metrics.csv`, `event-log.csv`,
 `metric-summary.csv`, `warning-thresholds.csv`, `matched-comparison.csv`,
-`recovery-curves.csv`, and `samples.jsonl`. These are event/recovery metric
-tables for diagnosis, not Phase 10 operating-envelope evidence.* +++[/forward-plan-A]+++
+`recovery-curves.csv`, and `samples.jsonl`. The browser workbench now also shows
+a live recovery curve after the standard disturbance, including peak hidden
+angle, peak time, recovery time, and terminal failure status. These are
+event/recovery diagnostics, not Phase 10 operating-envelope evidence.*
++++[/forward-plan-A]+++
 
 ### Phase 9 - Sensor Degradation And Observability Boundary
 
@@ -609,6 +627,11 @@ Deliverables:
   `results/balance/envelope_<datetime>/envelope.csv`, the Phase 8 matched-seed
   metric tables, and the Phase 10 best-cell / worst-cell replay links. The
   gif's caption must link to one of those, not stand alone. ***[/must-fix #4]***
+- Cross-reference
+  [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) section 4c before
+  recording the clip. If Phase 12.5 has landed, the promo clip should use the
+  toyful sprite skin while linking to raw replay evidence. If the skin has not
+  landed, the clip remains diagnostic and the caption says so plainly.
 - Final index pass: place that motion clip after the hero on `index.html`,
   with a concise caption and a link to `balance.html`. ***[must-fix #4]*** The
   caption must include a phrase that points at the failure boundary, not just
@@ -633,8 +656,10 @@ it does not move the verdict gate.
 If Phase 10 returns REFUTE or AMBIGUOUS, this section is reshaped or
 scrapped before the broadcast pass. Specifically: Phase 12 (UI feature) can
 ship regardless of verdict because it does not extend any research claim.
-Phase 13 and Phase 14 are gated on CONFIRM and do not run on a REFUTE
-verdict — they would extend a claim the Phase 10 data has refuted.
+Phase 12.5 (visual skin) can also ship regardless of verdict as long as it
+preserves the negative-finding and raw-diagnostic paths. Phase 13 and Phase 14
+are gated on CONFIRM and do not run on a REFUTE verdict — they would extend a
+claim the Phase 10 data has refuted.
 
 This section is here so the *shape* of the broader-claim attack is
 pre-registered with the same discipline as the Phase 10 verdict template,
@@ -664,6 +689,11 @@ Deliverables:
   impulse, hidden-angle integral comparison. The hidden-angle ghost
   appears on both runs only when "show privileged diagnostics" is enabled,
   matching Phase 6's privileged-audit discipline.
+- Toyful interaction affordances, shared with Phase 12.5: the human and
+  Sundog lanes use the same animated state vocabulary (idle, push-left,
+  push-right, recover, fall). The sprites may make input and recovery timing
+  legible, but neither lane gets visual treatment that implies hidden
+  controller advantage.
 - Optional: local-storage leaderboard scoped to seed + lighting preset.
   No remote leaderboard — keeps the workbench inspectable without a
   backend dependency.
@@ -678,6 +708,42 @@ about a controller deficiency. This is itself reportable. The
 human-survival-margin distribution is filed as a Phase 8 metric category
 (see *Avoid list updates* below for the misread that needs guarding
 against — beating humans is not evidence of correctness).
+
+### Phase 12.5 - Toyful Animated Sprite Skin
+
+Goal: implement the section-4c visual promise from
+[`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) without changing the
+research surface. This is the last-layer polish pass that makes the workbench
+feel like a living toy while keeping the theoremic read intact: hidden body,
+visible shadow, recoverable envelope, clean failure boundary.
+
+**Gating:** can land after Phase 11 or alongside Phase 12. Does not require
+CONFIRM verdict because it is a visualization layer, not a research claim.
+On REFUTE, the same skin may still ship if the negative-finding banner,
+failure boundary, and raw diagnostic replay toggle remain first-class.
+
+Deliverables:
+
+- Sprite atlas or CSS/Canvas sprite templates for cart, pole, floor shadow,
+  wall projection, impulse marker, recovery sparkle, and failure pose.
+- State machine shared across diagnostic, human-vs-agent, and promo contexts:
+  idle, push-left, push-right, wobble, recover, stabilize, fall.
+- Layered paper/parallax background inspired by the approved Lounas reuse
+  direction, documented in [`THIRD_PARTY_REUSE.md`](THIRD_PARTY_REUSE.md)
+  when concrete borrowed motifs land.
+- `prefers-reduced-motion` fallback and a raw diagnostic skin toggle. Reduced
+  motion preserves state changes through color, pose, and line weight rather
+  than continuous animation.
+- Replay parity check: the same Phase 8 replay URL renders in diagnostic and
+  toyful skins with identical metrics, controller state, survival time, and
+  verdict-relevant telemetry.
+- Promo export recipe: best-cell recovery and worst-cell failure clips are
+  captured from replay URLs, not hand-driven sessions, so the gif/video remains
+  tied to audited runs.
+
+Exit criterion: a first-time visitor can identify push, wobble, recovery, and
+fall states from the animation alone, then toggle raw diagnostics and see the
+same run with the same metrics.
 
 ### Phase 13 - Robotics-Implementable Controller
 

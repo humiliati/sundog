@@ -18,6 +18,7 @@
             --halo-46-intensity: 0.30;
             --cza-intensity: 0.95;
             --cza-curvature: 0.85;
+            --cza-bloom: 1.4;               /* feGaussianBlur stdDeviation for CZA arcs; 0 = sharp linear, ~3 = smudge */
             --sun-pillar-intensity: 0.80;
             --sun-pillar-length: 0.65;
             --parhelic-circle-intensity: 0.45;
@@ -228,14 +229,19 @@
         .layer-cza path {
             fill: none;
             stroke: url(#prismatic-gradient);
-            stroke-width: 6;
+            stroke-width: 8;
             opacity: var(--cza-intensity);
             vector-effect: non-scaling-stroke;
-            filter: url(#soft-blur);
+            /* Heavier Gaussian gives the stroke a soft cross-section; where two CZA
+               arcs overlap, the soft tails sum into a peaked bell — the actual physics
+               of ice-crystal orientation distribution. */
+            filter: url(#cza-bell);
+            /* Screen blend: brightness adds where arcs cross, doesn't subtract. */
+            mix-blend-mode: screen;
         }
 
         .layer-cza .cza-secondary {
-            stroke-width: 4;
+            stroke-width: 6;
             opacity: calc(0.75 * var(--cza-intensity));
         }
 
@@ -392,9 +398,18 @@
                         </feMerge>
                     </filter>
 
-                    <!-- Soft blur for arcs, pillar, dagger -->
+                    <!-- Soft blur for pillar, dagger streaks, etc. -->
                     <filter id="soft-blur" x="-50%" y="-50%" width="200%" height="200%">
                         <feGaussianBlur stdDeviation="0.6"/>
+                    </filter>
+
+                    <!-- CZA bell-blur: Gaussian on the prismatic arcs so their soft tails
+                         sum to a peaked bell where two arcs overlap (matches the crystal-
+                         orientation-distribution physics). The stdDeviation is updated by
+                         applyDerivedGeometry() from --cza-bloom; default 1.4 is the
+                         starting calibration after the 3.2 over-blur visual review. -->
+                    <filter id="cza-bell" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur id="cza-bell-blur" stdDeviation="1.4"/>
                     </filter>
                 </defs>
 
@@ -459,11 +474,12 @@
                     </g>
                 </g>
 
-                <!-- Compass-rose sun: X-only diagonals plus a bright core.
-                     The cardinal directions are already covered by the sun pillar (vertical)
-                     and parhelic arc (horizontal-ish) — the X is the sun's identity.
-                     Both ray length and core radius scale with --compass-ray-length. -->
-                <g class="layer-sun" id="layer-sun">
+                <!-- Compass-rose sun: 4 rays (rotated 45° via the group transform)
+                     plus a bright core. The transform rotates rays to cardinal angles so
+                     they read as N/S/E/W instead of NE/SE/SW/NW; the core, being a
+                     circle, is rotation-invariant. Ray length and core radius scale
+                     with --compass-ray-length. -->
+                <g class="layer-sun" id="layer-sun" transform="rotate(45 500 500)">
                     <line class="ray ray-diagonal" x1="500" y1="500" x2="540" y2="460"/>
                     <line class="ray ray-diagonal" x1="500" y1="500" x2="540" y2="540"/>
                     <line class="ray ray-diagonal" x1="500" y1="500" x2="460" y2="540"/>
@@ -529,6 +545,11 @@
             <div class="control-group">
                 <label>CZA Curvature<span class="value" id="cza-curvature-value">0.85</span></label>
                 <input type="range" id="cza-curvature" data-param="cza-curvature" min="0.4" max="1.4" step="0.01" value="0.85">
+            </div>
+
+            <div class="control-group">
+                <label>CZA Bloom (bell-blur)<span class="value" id="cza-bloom-value">1.40</span></label>
+                <input type="range" id="cza-bloom" data-param="cza-bloom" min="0" max="3.2" step="0.05" value="1.4">
             </div>
 
             <div class="control-group">
@@ -642,6 +663,12 @@
             const czaCurve = parseFloat(getComputedStyle(root).getPropertyValue('--cza-curvature'));
             const overlapBias = parseFloat(getComputedStyle(root).getPropertyValue('--ring-overlap-bias'));
             const parhelicCurvature = parseFloat(getComputedStyle(root).getPropertyValue('--parhelic-curvature'));
+            const czaBloom = parseFloat(getComputedStyle(root).getPropertyValue('--cza-bloom'));
+
+            // CZA bell-blur: stdDeviation is a presentation attribute, not styleable via CSS,
+            // so we update it directly. 0 = sharp linear arcs; ~3 = full smudge.
+            const czaBlur = document.getElementById('cza-bell-blur');
+            czaBlur.setAttribute('stdDeviation', czaBloom.toFixed(2));
 
             // Sun pillar: extend from sun (cy=500) up by pillar-length × 360 svg units, down by half.
             const pillar = document.getElementById('pillar-line');
