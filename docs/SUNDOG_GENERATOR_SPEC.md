@@ -73,7 +73,6 @@ parameter JSON is the only surface that can be persisted and replayed.
   "halo46Intensity": 0.25,
   "czaIntensity": 0.65,
   "czaCurvature": 0.85,
-  "czaBloom": 1.4,
   "parhelicCircleIntensity": 0.55,
   "parhelicCurvature": 0.66,
   "parheliaIntensity": 0.9,
@@ -185,7 +184,6 @@ renderSundog({
   halo22Intensity?: number,       // 0..1
   halo46Intensity?: number,       // 0..1
   czaIntensity?: number,          // 0..1
-  czaBloom?: number,              // 0..3.2
   parheliaIntensity?: number,     // 0..1
   sunPillarIntensity?: number,    // 0..1
   parhelicCurvature?: number,     // 0..1

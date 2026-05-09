@@ -18,7 +18,10 @@
             --halo-46-intensity: 0.30;
             --cza-intensity: 0.95;
             --cza-curvature: 0.85;
-            --cza-bloom: 1.4;               /* feGaussianBlur stdDeviation for CZA arcs; 0 = sharp linear, ~3 = smudge */
+            /* --cza-bloom removed 2026-05-08: blur on each arc independently never produced
+               the bell-curve eyelid; baked stdDeviation="0.3" below. The bell shape now comes
+               from a paint-fill region between the two arcs (see #cza-bell-fill). A future
+               --cza-secondary-offset knob will be the right lever for tuning bell width. */
             --sun-pillar-intensity: 0.80;
             --sun-pillar-length: 0.65;
             --parhelic-circle-intensity: 0.45;
@@ -232,10 +235,8 @@
             stroke-width: 8;
             opacity: var(--cza-intensity);
             vector-effect: non-scaling-stroke;
-            /* Heavier Gaussian gives the stroke a soft cross-section; where two CZA
-               arcs overlap, the soft tails sum into a peaked bell — the actual physics
-               of ice-crystal orientation distribution. */
-            filter: url(#cza-bell);
+            /* Light edge-soften so arcs don't read as hard plotter lines. */
+            filter: url(#cza-edge-soften);
             /* Screen blend: brightness adds where arcs cross, doesn't subtract. */
             mix-blend-mode: screen;
         }
@@ -243,6 +244,17 @@
         .layer-cza .cza-secondary {
             stroke-width: 6;
             opacity: calc(0.75 * var(--cza-intensity));
+        }
+
+        /* Bell-fill: paint-bucket between primary and secondary CZA arcs to produce the
+           eyelid bell shape directly via geometry instead of relying on Gaussian-tail
+           summation across blurred strokes (which never converged). Lower-alpha prismatic
+           fill, screen-blended like the arcs. */
+        .layer-cza .cza-bell-fill {
+            fill: url(#prismatic-gradient);
+            stroke: none;
+            opacity: calc(0.32 * var(--cza-intensity));
+            mix-blend-mode: screen;
         }
 
         .layer-parhelic path {
@@ -403,13 +415,15 @@
                         <feGaussianBlur stdDeviation="0.6"/>
                     </filter>
 
-                    <!-- CZA bell-blur: Gaussian on the prismatic arcs so their soft tails
-                         sum to a peaked bell where two arcs overlap (matches the crystal-
-                         orientation-distribution physics). The stdDeviation is updated by
-                         applyDerivedGeometry() from --cza-bloom; default 1.4 is the
-                         starting calibration after the 3.2 over-blur visual review. -->
-                    <filter id="cza-bell" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur id="cza-bell-blur" stdDeviation="1.4"/>
+                    <!-- CZA edge-soften: light Gaussian on the prismatic arcs so they don't read
+                         as plotter-hard pencil lines. The stdDeviation is BAKED at 0.3 (was a slider,
+                         demoted 2026-05-08): blurring the arcs in isolation never produced the
+                         bell-curve eyelid the design memo described — the two arcs don't actually
+                         meet at the apex within Gaussian-σ, so blur tails never sum to a peaked bell.
+                         The bell shape is now produced geometrically by #cza-bell-fill (paint fill
+                         between the two arcs). Future --cza-secondary-offset will tune bell width. -->
+                    <filter id="cza-edge-soften" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="0.3"/>
                     </filter>
                 </defs>
 
@@ -448,6 +462,12 @@
 
                 <!-- Circumzenithal arc (CZA): the eyelid -->
                 <g class="layer-cza">
+                    <!-- Bell-fill: paint-bucket region between the two arcs to produce the
+                         eyelid bell shape geometrically (walks primary L→R then secondary R→L,
+                         closing the band). Behind the arc strokes so the strokes still read as
+                         distinct edges. -->
+                    <path class="cza-bell-fill"
+                          d="M 200 240 Q 500 80 800 240 L 740 300 Q 500 200 260 300 Z"/>
                     <!-- Primary CZA: inverted smile across upper third -->
                     <path id="cza-primary"
                           d="M 200 240 Q 500 80 800 240"/>
@@ -547,10 +567,10 @@
                 <input type="range" id="cza-curvature" data-param="cza-curvature" min="0.4" max="1.4" step="0.01" value="0.85">
             </div>
 
-            <div class="control-group">
-                <label>CZA Bloom (bell-blur)<span class="value" id="cza-bloom-value">1.40</span></label>
-                <input type="range" id="cza-bloom" data-param="cza-bloom" min="0" max="3.2" step="0.05" value="1.4">
-            </div>
+            <!-- CZA Bloom slider removed 2026-05-08: tuning Gaussian blur on each arc never
+                 produced the eyelid bell curve regardless of stdDeviation. Filter baked at 0.3
+                 for edge-soften only; the bell shape now comes from the paint-fill region
+                 between the two arcs. -->
 
             <div class="control-group">
                 <label>Parhelic Arc Intensity<span class="value" id="parhelic-circle-intensity-value">0.45</span></label>
@@ -663,12 +683,7 @@
             const czaCurve = parseFloat(getComputedStyle(root).getPropertyValue('--cza-curvature'));
             const overlapBias = parseFloat(getComputedStyle(root).getPropertyValue('--ring-overlap-bias'));
             const parhelicCurvature = parseFloat(getComputedStyle(root).getPropertyValue('--parhelic-curvature'));
-            const czaBloom = parseFloat(getComputedStyle(root).getPropertyValue('--cza-bloom'));
-
-            // CZA bell-blur: stdDeviation is a presentation attribute, not styleable via CSS,
-            // so we update it directly. 0 = sharp linear arcs; ~3 = full smudge.
-            const czaBlur = document.getElementById('cza-bell-blur');
-            czaBlur.setAttribute('stdDeviation', czaBloom.toFixed(2));
+            // (cza-bloom JS removed 2026-05-08; filter baked at stdDeviation="0.3".)
 
             // Sun pillar: extend from sun (cy=500) up by pillar-length × 360 svg units, down by half.
             const pillar = document.getElementById('pillar-line');
