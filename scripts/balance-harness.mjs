@@ -48,8 +48,10 @@ export function parseArgs(argv) {
     duration: 10,
     dt: 1 / 120,
     forceLimit: 12,
+    railLimit: null,
     sensorNoiseStd: null,
     sensorDelaySteps: null,
+    sensorDropoutRate: null,
     logEvery: 30,
     jitterScale: 1,
     disturbanceSchedule: [],
@@ -82,8 +84,10 @@ export function parseArgs(argv) {
     else if (flag === "--duration") args.duration = Number.parseFloat(value);
     else if (flag === "--dt") args.dt = Number.parseFloat(value);
     else if (flag === "--force-limit") args.forceLimit = Number.parseFloat(value);
+    else if (flag === "--rail-limit" || flag === "--rail") args.railLimit = Number.parseFloat(value);
     else if (flag === "--sensor-noise-std" || flag === "--noise") args.sensorNoiseStd = Number.parseFloat(value);
     else if (flag === "--sensor-delay-steps" || flag === "--delay") args.sensorDelaySteps = Number.parseInt(value, 10);
+    else if (flag === "--sensor-dropout-rate" || flag === "--dropout") args.sensorDropoutRate = Number.parseFloat(value);
     else if (flag === "--log-every") args.logEvery = Number.parseInt(value, 10);
     else if (flag === "--jitter-scale") args.jitterScale = Number.parseFloat(value);
     else if (flag === "--disturbance-schedule") args.disturbanceSchedule = parseDisturbanceSchedule(value);
@@ -111,8 +115,14 @@ export function parseArgs(argv) {
   if (args.sensorNoiseStd !== null && (!Number.isFinite(args.sensorNoiseStd) || args.sensorNoiseStd < 0)) {
     throw new Error("--sensor-noise-std must be non-negative");
   }
+  if (args.railLimit !== null && (!Number.isFinite(args.railLimit) || args.railLimit <= 0)) {
+    throw new Error("--rail-limit must be positive");
+  }
   if (args.sensorDelaySteps !== null && (!Number.isInteger(args.sensorDelaySteps) || args.sensorDelaySteps < 0)) {
     throw new Error("--sensor-delay-steps must be a non-negative integer");
+  }
+  if (args.sensorDropoutRate !== null && (!Number.isFinite(args.sensorDropoutRate) || args.sensorDropoutRate < 0)) {
+    throw new Error("--sensor-dropout-rate must be non-negative");
   }
   if (!Number.isInteger(args.logEvery) || args.logEvery < 1) {
     throw new Error("--log-every must be a positive integer");
@@ -155,8 +165,10 @@ function applyReplayUrl(args, value) {
   const seed = optionalInteger(params, ["seed"]);
   const lightElevationDeg = optionalNumber(params, ["light", "elevation", "lightElevation"]);
   const forceLimit = optionalNumber(params, ["force", "forceLimit"]);
+  const railLimit = optionalNumber(params, ["rail", "railLimit"]);
   const sensorNoiseStd = optionalNumber(params, ["noise", "sensorNoise", "sensorNoiseStd"]);
   const sensorDelaySteps = optionalInteger(params, ["delay", "sensorDelay", "sensorDelaySteps"]);
+  const sensorDropoutRate = optionalNumber(params, ["dropout", "sensorDropout", "sensorDropoutRate"]);
   const duration = optionalNumber(params, ["duration"]);
   const initialState = ["x", "xDot", "theta", "thetaDot"].every((key) => params.has(key))
     ? {
@@ -176,8 +188,10 @@ function applyReplayUrl(args, value) {
   }
   if (lightElevationDeg !== null) args.lightElevations = [lightElevationDeg];
   if (forceLimit !== null) args.forceLimit = forceLimit;
+  if (railLimit !== null) args.railLimit = railLimit;
   if (sensorNoiseStd !== null) args.sensorNoiseStd = sensorNoiseStd;
   if (sensorDelaySteps !== null) args.sensorDelaySteps = sensorDelaySteps;
+  if (sensorDropoutRate !== null) args.sensorDropoutRate = sensorDropoutRate;
   if (duration !== null) args.duration = duration;
   if (initialState && Object.values(initialState).every(Number.isFinite)) {
     args.replayInitialState = initialState;
@@ -264,8 +278,10 @@ function makeBrowserReplayUrl({ preset, mode, seed, lightElevationDeg, cfg, init
   params.set("seed", String(seed));
   params.set("light", roundedParam(lightElevationDeg, 3));
   params.set("force", roundedParam(cfg.forceLimit, 3));
+  params.set("rail", roundedParam(cfg.railLimit, 3));
   params.set("noise", roundedParam(cfg.sensorNoiseStd, 6));
   params.set("delay", String(Math.round(cfg.sensorDelaySteps)));
+  params.set("dropout", roundedParam(cfg.sensorDropoutRate, 6));
   params.set("duration", roundedParam(cfg.duration, 3));
   params.set("x", roundedParam(initialState.x));
   params.set("xDot", roundedParam(initialState.xDot));
@@ -288,9 +304,11 @@ export function runTrial(args, { preset, mode, seed, lightElevationDeg }) {
     duration: args.duration,
     dt: args.dt,
     forceLimit: args.forceLimit,
+    ...(args.railLimit !== null ? { railLimit: args.railLimit } : {}),
     lightElevationDeg,
     ...(args.sensorNoiseStd !== null ? { sensorNoiseStd: args.sensorNoiseStd } : {}),
     ...(args.sensorDelaySteps !== null ? { sensorDelaySteps: args.sensorDelaySteps } : {}),
+    ...(args.sensorDropoutRate !== null ? { sensorDropoutRate: args.sensorDropoutRate } : {}),
   });
   let state = initializeBalanceState(cfg);
   const runtime = createBalanceRuntime(cfg);
@@ -356,8 +374,10 @@ export function runTrial(args, { preset, mode, seed, lightElevationDeg }) {
     duration: cfg.duration,
     dt: cfg.dt,
     forceLimit: cfg.forceLimit,
+    railLimit: cfg.railLimit,
     sensorNoiseStd: cfg.sensorNoiseStd,
     sensorDelaySteps: cfg.sensorDelaySteps,
+    sensorDropoutRate: cfg.sensorDropoutRate,
     disturbanceScheduleJson: JSON.stringify(args.disturbanceSchedule),
     simulatedTime: roundNumber(simulatedTime),
     normalizedSurvival: roundNumber(simulatedTime / cfg.duration),
@@ -559,8 +579,10 @@ async function main() {
     duration: args.duration,
     dt: args.dt,
     forceLimit: args.forceLimit,
+    railLimit: args.railLimit,
     sensorNoiseStd: args.sensorNoiseStd,
     sensorDelaySteps: args.sensorDelaySteps,
+    sensorDropoutRate: args.sensorDropoutRate,
     disturbanceSchedule: args.disturbanceSchedule,
     jitterScale: args.jitterScale,
     trialCount: results.length,
@@ -586,8 +608,10 @@ async function main() {
     "duration",
     "dt",
     "forceLimit",
+    "railLimit",
     "sensorNoiseStd",
     "sensorDelaySteps",
+    "sensorDropoutRate",
     "disturbanceScheduleJson",
     "simulatedTime",
     "normalizedSurvival",

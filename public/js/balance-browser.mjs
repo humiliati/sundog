@@ -1,5 +1,6 @@
 import {
   BALANCE_PRESETS,
+  assessBalanceBoundary,
   clamp,
   computeBalanceControl,
   computeShadowGeometry,
@@ -22,6 +23,10 @@ const disturbButton = document.getElementById("btn-disturb");
 const recoverySummary = document.getElementById("recovery-summary");
 const recoveryCurve = document.getElementById("recovery-curve");
 const recoveryStats = document.getElementById("recovery-stats");
+const boundaryPanel = document.getElementById("boundary-panel");
+const boundaryStatus = document.getElementById("boundary-status");
+const boundarySummary = document.getElementById("boundary-summary");
+const boundaryList = document.getElementById("boundary-list");
 const lightElevationInput = document.getElementById("light-elevation");
 const noiseInput = document.getElementById("sensor-noise");
 const delayInput = document.getElementById("sensor-delay");
@@ -54,6 +59,9 @@ let disturbanceTicks = 0;
 let lastFrameTime = performance.now();
 let initialStateOverride = null;
 let durationOverride = null;
+let railLimitOverride = null;
+let sensorDropoutOverride = null;
+let disturbanceForceOverride = null;
 let recoveryTracker = createRecoveryTracker();
 
 for (const [key, preset] of Object.entries(BALANCE_PRESETS)) {
@@ -102,8 +110,11 @@ function readReplaySettings() {
     seed,
     lightElevationDeg: queryNumber(params, ["light", "elevation", "lightElevation"], null),
     forceLimit: queryNumber(params, ["force", "forceLimit"], null),
+    railLimit: queryNumber(params, ["rail", "railLimit"], null),
     sensorNoiseStd: queryNumber(params, ["noise", "sensorNoise", "sensorNoiseStd"], null),
     sensorDelaySteps: queryNumber(params, ["delay", "sensorDelay", "sensorDelaySteps"], null),
+    sensorDropoutRate: queryNumber(params, ["dropout", "sensorDropout", "sensorDropoutRate"], null),
+    disturbanceForce: queryNumber(params, ["disturbanceForce", "impulseForce"], null),
     duration: queryNumber(params, ["duration"], null),
     initialState: initialState && Object.values(initialState).every(Number.isFinite) ? initialState : null,
   };
@@ -119,6 +130,8 @@ function currentConfig(overrides = {}) {
     forceLimit: Number.parseFloat(forceInput.value),
     seed: Math.max(0, integerNumber(seedInput.value, 20260508)),
     ...(durationOverride ? { duration: durationOverride } : {}),
+    ...(Number.isFinite(railLimitOverride) ? { railLimit: railLimitOverride } : {}),
+    ...(Number.isFinite(sensorDropoutOverride) ? { sensorDropoutRate: sensorDropoutOverride } : {}),
     ...(initialStateOverride ? { initialState: initialStateOverride } : {}),
     ...overrides,
   });
@@ -140,12 +153,18 @@ function createRecoveryTracker() {
   };
 }
 
+function currentImpulseForce() {
+  return Number.isFinite(disturbanceForceOverride)
+    ? disturbanceForceOverride
+    : recoveryThresholds.impulseForce;
+}
+
 function beginRecoveryTrace() {
   recoveryTracker = createRecoveryTracker();
   recoveryTracker.hasImpulse = true;
   recoveryTracker.active = true;
   recoveryTracker.startedAt = state.t;
-  recoveryTracker.force = -Math.sign(state.theta || 1) * recoveryThresholds.impulseForce;
+  recoveryTracker.force = -Math.sign(state.theta || 1) * currentImpulseForce();
   disturbanceTicks = recoveryThresholds.impulseTicks;
 }
 
@@ -191,8 +210,11 @@ function applyReplaySettings(settings) {
   if (Number.isFinite(settings.seed)) seedInput.value = String(Math.max(0, Math.round(settings.seed)));
   if (Number.isFinite(settings.lightElevationDeg)) lightElevationInput.value = String(settings.lightElevationDeg);
   if (Number.isFinite(settings.forceLimit)) forceInput.value = String(settings.forceLimit);
+  if (Number.isFinite(settings.railLimit) && settings.railLimit > 0) railLimitOverride = settings.railLimit;
   if (Number.isFinite(settings.sensorNoiseStd)) noiseInput.value = String(settings.sensorNoiseStd);
   if (Number.isFinite(settings.sensorDelaySteps)) delayInput.value = String(Math.round(settings.sensorDelaySteps));
+  if (Number.isFinite(settings.sensorDropoutRate) && settings.sensorDropoutRate >= 0) sensorDropoutOverride = settings.sensorDropoutRate;
+  if (Number.isFinite(settings.disturbanceForce) && settings.disturbanceForce >= 0) disturbanceForceOverride = settings.disturbanceForce;
   if (Number.isFinite(settings.duration) && settings.duration > 0) durationOverride = settings.duration;
   if (settings.initialState) initialStateOverride = settings.initialState;
   for (const input of [presetSelect, seedInput, lightElevationInput, noiseInput, delayInput, forceInput]) {
@@ -222,9 +244,12 @@ function buildReplayUrl() {
   params.set("seed", String(cfg.seed));
   params.set("light", roundedParam(cfg.lightElevationDeg, 3));
   params.set("force", roundedParam(cfg.forceLimit, 3));
+  params.set("rail", roundedParam(cfg.railLimit, 3));
   params.set("noise", roundedParam(cfg.sensorNoiseStd, 6));
   params.set("delay", String(Math.round(cfg.sensorDelaySteps)));
+  params.set("dropout", roundedParam(cfg.sensorDropoutRate, 6));
   params.set("duration", roundedParam(cfg.duration, 3));
+  params.set("disturbanceForce", roundedParam(currentImpulseForce(), 3));
   params.set("x", roundedParam(initial.x));
   params.set("xDot", roundedParam(initial.xDot));
   params.set("theta", roundedParam(initial.theta));
@@ -373,6 +398,25 @@ function updateRecoveryPanel() {
     <span><strong>Samples</strong>${tracker.curve.length}</span>
   `;
   renderRecoveryCurve();
+}
+
+function updateBoundaryPanel() {
+  if (!boundaryPanel || !boundaryStatus || !boundarySummary || !boundaryList) return;
+  const assessment = assessBalanceBoundary(currentConfig(), currentSensor, currentControl, state);
+  boundaryPanel.dataset.status = assessment.status;
+  boundaryStatus.textContent = assessment.label;
+  boundarySummary.textContent = assessment.summary;
+
+  const mechanisms = assessment.mechanisms.slice(0, 4);
+  if (!mechanisms.length) {
+    boundaryList.innerHTML = "<li>No active light, delay, noise, force, or rail warning.</li>";
+    return;
+  }
+
+  boundaryList.innerHTML = mechanisms.map((mechanism) => {
+    const value = mechanism.value === null || mechanism.value === undefined ? "" : ` <span>${mechanism.value}</span>`;
+    return `<li data-severity="${mechanism.severity}"><strong>${mechanism.code}</strong>${value}<em>${mechanism.message}</em></li>`;
+  }).join("");
 }
 
 function resizeCanvas() {
@@ -623,6 +667,7 @@ function updateMetrics() {
     <span>force ${sample.force.toFixed(2)}</span>
   `;
   updateRecoveryPanel();
+  updateBoundaryPanel();
 }
 
 function updateModeButtons() {
@@ -635,7 +680,7 @@ function stepSimulation() {
   const cfg = currentConfig();
   currentSensor = sampleShadowSensor(state, runtime, cfg);
   currentControl = computeBalanceControl(state, currentSensor, controllerState, cfg);
-  const disturbance = disturbanceTicks > 0 ? -Math.sign(state.theta || 1) * recoveryThresholds.impulseForce : 0;
+  const disturbance = disturbanceTicks > 0 ? -Math.sign(state.theta || 1) * currentImpulseForce() : 0;
   const disturbanceActive = disturbanceTicks > 0;
   if (disturbanceTicks > 0) disturbanceTicks -= 1;
   state = integrateBalanceStep(state, currentControl.force + disturbance, cfg);
@@ -730,6 +775,7 @@ window.__sundogBalanceReplay = () => ({
   initialState: getReplayInitialState(),
   sample: serializeBalanceSample(state, currentSensor, currentControl, currentConfig()),
   recovery: recoveryTracker,
+  boundary: assessBalanceBoundary(currentConfig(), currentSensor, currentControl, state),
 });
 
 const replaySettings = readReplaySettings();
