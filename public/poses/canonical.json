@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "name": "canonical",
+    "description": "The default Sundog Workbench pose. Single primary sun, 22° halo, two outward parhelia daggers riding the gentle parhelic-arc grin, CZA eyelid above, sun pillar through the centre. Calibration anchor for SUNDOG_OVERLAY_PROTOCOL.md against troels-nielsen-dr.jpg.",
+    "schemaVersion": "1.0",
+    "spec": "docs/SUNDOG_GENERATOR_SPEC.md",
+    "calibration": {
+      "parhelicCurvature": "locked 2026-05-08 against source-photo overlay at 0.66",
+      "czaBloom": "default 1.4 pending overlay calibration; range 0..3.2"
+    }
+  },
+
+  "phenomenon": "parhelion_display",
+  "compositionMode": "canonical",
+  "skyPalette": "polar_twilight",
+
+  "sunAltitudeDeg": 18,
+
+  "halo22Intensity": 0.95,
+  "halo46Intensity": 0.30,
+
+  "czaIntensity": 0.95,
+  "czaCurvature": 0.85,
+  "czaBloom": 1.4,
+
+  "parhelicCircleIntensity": 0.45,
+  "parhelicCurvature": 0.66,
+
+  "parheliaIntensity": 1.0,
+  "parheliaDaggerLength": 1.0,
+
+  "sunPillarIntensity": 0.80,
+  "sunPillarLength": 0.65,
+
+  "compassRayLength": 1.0,
+
+  "dispersionWidth": 0.70,
+  "rainbowSaturation": 0.85,
+
+  "secondarySunsStrength": 0.0,
+  "ringOverlapBias": 0.5,
+
+  "idleScintillationAmplitude": 0.0
+}

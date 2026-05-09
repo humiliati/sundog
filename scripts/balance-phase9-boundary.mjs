@@ -309,6 +309,7 @@ function runBoundaryTrial(args, { boundaryCase, preset, mode, seed }) {
     sensorNoiseStd: boundaryCase.sensorNoiseStd,
     sensorDelaySteps: boundaryCase.sensorDelaySteps,
     sensorDropoutRate: boundaryCase.sensorDropoutRate,
+    disturbanceForce: boundaryCase.disturbanceForce,
   });
   const id = trialId({ boundaryCase, preset, mode, seed });
   const disturbanceEnd = args.disturbanceAt + args.disturbanceDuration;

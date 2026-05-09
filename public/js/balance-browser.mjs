@@ -10,7 +10,7 @@ import {
   normalizeBalanceConfig,
   sampleShadowSensor,
   serializeBalanceSample,
-} from "./balance-core.mjs";
+} from "./balance-core.mjs?v=20260508i";
 
 const canvas = document.getElementById("balance-canvas");
 const ctx = canvas.getContext("2d");
@@ -30,7 +30,10 @@ const boundaryList = document.getElementById("boundary-list");
 const lightElevationInput = document.getElementById("light-elevation");
 const noiseInput = document.getElementById("sensor-noise");
 const delayInput = document.getElementById("sensor-delay");
+const dropoutInput = document.getElementById("sensor-dropout");
 const forceInput = document.getElementById("force-limit");
+const railInput = document.getElementById("rail-limit");
+const disturbanceForceInput = document.getElementById("disturbance-force");
 const diagnosticsCheckbox = document.getElementById("show-diagnostics");
 const copyReplayButton = document.getElementById("btn-copy-replay");
 const refreshReplayButton = document.getElementById("btn-refresh-replay");
@@ -59,9 +62,6 @@ let disturbanceTicks = 0;
 let lastFrameTime = performance.now();
 let initialStateOverride = null;
 let durationOverride = null;
-let railLimitOverride = null;
-let sensorDropoutOverride = null;
-let disturbanceForceOverride = null;
 let recoveryTracker = createRecoveryTracker();
 
 for (const [key, preset] of Object.entries(BALANCE_PRESETS)) {
@@ -127,11 +127,12 @@ function currentConfig(overrides = {}) {
     lightElevationDeg: Number.parseFloat(lightElevationInput.value),
     sensorNoiseStd: Number.parseFloat(noiseInput.value),
     sensorDelaySteps: Number.parseInt(delayInput.value, 10),
+    sensorDropoutRate: Number.parseFloat(dropoutInput.value),
     forceLimit: Number.parseFloat(forceInput.value),
+    railLimit: Number.parseFloat(railInput.value),
+    disturbanceForce: currentImpulseForce(),
     seed: Math.max(0, integerNumber(seedInput.value, 20260508)),
     ...(durationOverride ? { duration: durationOverride } : {}),
-    ...(Number.isFinite(railLimitOverride) ? { railLimit: railLimitOverride } : {}),
-    ...(Number.isFinite(sensorDropoutOverride) ? { sensorDropoutRate: sensorDropoutOverride } : {}),
     ...(initialStateOverride ? { initialState: initialStateOverride } : {}),
     ...overrides,
   });
@@ -154,9 +155,8 @@ function createRecoveryTracker() {
 }
 
 function currentImpulseForce() {
-  return Number.isFinite(disturbanceForceOverride)
-    ? disturbanceForceOverride
-    : recoveryThresholds.impulseForce;
+  const parsed = Number.parseFloat(disturbanceForceInput.value);
+  return Number.isFinite(parsed) ? parsed : recoveryThresholds.impulseForce;
 }
 
 function beginRecoveryTrace() {
@@ -199,7 +199,17 @@ function applyPresetControlDefaults() {
   delayInput.value = Object.hasOwn(presetConfig, "sensorDelaySteps")
     ? presetConfig.sensorDelaySteps
     : presetDefaults.sensorDelaySteps;
-  for (const input of [presetSelect, seedInput, lightElevationInput, noiseInput, delayInput, forceInput]) {
+  for (const input of [
+    presetSelect,
+    seedInput,
+    lightElevationInput,
+    noiseInput,
+    delayInput,
+    dropoutInput,
+    forceInput,
+    railInput,
+    disturbanceForceInput,
+  ]) {
     syncControlValue(input);
   }
 }
@@ -210,14 +220,24 @@ function applyReplaySettings(settings) {
   if (Number.isFinite(settings.seed)) seedInput.value = String(Math.max(0, Math.round(settings.seed)));
   if (Number.isFinite(settings.lightElevationDeg)) lightElevationInput.value = String(settings.lightElevationDeg);
   if (Number.isFinite(settings.forceLimit)) forceInput.value = String(settings.forceLimit);
-  if (Number.isFinite(settings.railLimit) && settings.railLimit > 0) railLimitOverride = settings.railLimit;
+  if (Number.isFinite(settings.railLimit) && settings.railLimit > 0) railInput.value = String(settings.railLimit);
   if (Number.isFinite(settings.sensorNoiseStd)) noiseInput.value = String(settings.sensorNoiseStd);
   if (Number.isFinite(settings.sensorDelaySteps)) delayInput.value = String(Math.round(settings.sensorDelaySteps));
-  if (Number.isFinite(settings.sensorDropoutRate) && settings.sensorDropoutRate >= 0) sensorDropoutOverride = settings.sensorDropoutRate;
-  if (Number.isFinite(settings.disturbanceForce) && settings.disturbanceForce >= 0) disturbanceForceOverride = settings.disturbanceForce;
+  if (Number.isFinite(settings.sensorDropoutRate) && settings.sensorDropoutRate >= 0) dropoutInput.value = String(settings.sensorDropoutRate);
+  if (Number.isFinite(settings.disturbanceForce) && settings.disturbanceForce >= 0) disturbanceForceInput.value = String(settings.disturbanceForce);
   if (Number.isFinite(settings.duration) && settings.duration > 0) durationOverride = settings.duration;
   if (settings.initialState) initialStateOverride = settings.initialState;
-  for (const input of [presetSelect, seedInput, lightElevationInput, noiseInput, delayInput, forceInput]) {
+  for (const input of [
+    presetSelect,
+    seedInput,
+    lightElevationInput,
+    noiseInput,
+    delayInput,
+    dropoutInput,
+    forceInput,
+    railInput,
+    disturbanceForceInput,
+  ]) {
     syncControlValue(input);
   }
 }
@@ -402,14 +422,25 @@ function updateRecoveryPanel() {
 
 function updateBoundaryPanel() {
   if (!boundaryPanel || !boundaryStatus || !boundarySummary || !boundaryList) return;
-  const assessment = assessBalanceBoundary(currentConfig(), currentSensor, currentControl, state);
+  const cfg = currentConfig();
+  const assessment = assessBalanceBoundary(cfg, currentSensor, currentControl, state);
   boundaryPanel.dataset.status = assessment.status;
+  boundaryPanel.dataset.mechanismCount = String(assessment.mechanisms.length);
+  boundaryPanel.dataset.cell = [
+    `light=${roundedParam(cfg.lightElevationDeg, 3)}`,
+    `delay=${Math.round(cfg.sensorDelaySteps)}`,
+    `noise=${roundedParam(cfg.sensorNoiseStd, 4)}`,
+    `dropout=${roundedParam(cfg.sensorDropoutRate, 4)}`,
+    `force=${roundedParam(cfg.forceLimit, 3)}`,
+    `rail=${roundedParam(cfg.railLimit, 3)}`,
+    `disturbance=${roundedParam(cfg.disturbanceForce, 3)}`,
+  ].join(";");
   boundaryStatus.textContent = assessment.label;
   boundarySummary.textContent = assessment.summary;
 
   const mechanisms = assessment.mechanisms.slice(0, 4);
   if (!mechanisms.length) {
-    boundaryList.innerHTML = "<li>No active light, delay, noise, force, or rail warning.</li>";
+    boundaryList.innerHTML = "<li>No active light, delay, noise, dropout, force, rail, or disturbance warning.</li>";
     return;
   }
 
@@ -732,7 +763,15 @@ disturbButton.addEventListener("click", () => {
   beginRecoveryTrace();
 });
 
-for (const input of [lightElevationInput, noiseInput, delayInput, forceInput]) {
+for (const input of [
+  lightElevationInput,
+  noiseInput,
+  delayInput,
+  dropoutInput,
+  forceInput,
+  railInput,
+  disturbanceForceInput,
+]) {
   input.addEventListener("input", () => {
     syncControlValue(input);
     updateReplayToken();

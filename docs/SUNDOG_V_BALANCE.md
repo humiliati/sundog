@@ -528,8 +528,10 @@ writes ignored `manifest.json`, `boundary-panel.json`, `trial-outcomes.csv`,
 `boundary-summary.csv`, `matched-comparison.csv`, and `unsafe-cells.csv` under
 `results/balance/phase9-boundary/`. The browser workbench now shows a live
 Use Boundary panel driven by the shared boundary classifier in
-`public/js/balance-core.mjs`. This is a degradation diagnostic and
-where-not-to-use surface, not the Phase 10 operating-envelope verdict.*
+`public/js/balance-core.mjs`, with controls for every Phase 9 sweep axis:
+light elevation, delay, noise, dropped frames, rail length, force limit, and
+disturbance magnitude. This is a degradation diagnostic and where-not-to-use
+surface, not the Phase 10 operating-envelope verdict.*
 +++[/forward-plan-A]+++
 
 ### Phase 10 - Operating Envelope Map

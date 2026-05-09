@@ -434,6 +434,24 @@ export function assessBalanceBoundary(config = {}, sensor = null, control = null
     );
   }
 
+  if (Number.isFinite(cfg.disturbanceForce)) {
+    if (cfg.disturbanceForce >= 8) {
+      addMechanism(
+        "unsafe",
+        "disturbance_too_large",
+        "Disturbance magnitude exceeds the first-pass recovery envelope.",
+        roundNumber(cfg.disturbanceForce, 3),
+      );
+    } else if (cfg.disturbanceForce >= 6.5) {
+      addMechanism(
+        "caution",
+        "disturbance_margin",
+        "Disturbance magnitude is high enough to make recovery boundary-dominated.",
+        roundNumber(cfg.disturbanceForce, 3),
+      );
+    }
+  }
+
   if (cfg.railLimit <= 1.2) {
     addMechanism(
       "unsafe",

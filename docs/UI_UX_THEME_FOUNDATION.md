@@ -224,6 +224,23 @@ hero graph markup, application cards, or generated BoxForge exports.
    bell-blur tuning open), and the path-to-promotion phases that end
    with the workbench feeding `index.html`.
 
+   **Programmatic face of the same hero:** see
+   [`SUNDOG_GENERATOR_SPEC.md`](SUNDOG_GENERATOR_SPEC.md). The hero is
+   no longer just a workbench — it is the human-tunable face of a
+   broader Sundog Generator (Prompt → Parser → Pose JSON → Geometry
+   Solver → SVG → optional AI) with three modes: render from math,
+   compare to sky, make beautiful. Appendant GPT-app tool schema
+   (`renderSundog`) lives there. The Generator Spec also owns the
+   project's external public framing ("deterministic browser-native
+   parhelion renderer, AI optional"), which any hero copy authored in
+   this document should keep consistent with.
+
+   **Proof methodology:** see
+   [`SUNDOG_OVERLAY_PROTOCOL.md`](SUNDOG_OVERLAY_PROTOCOL.md). The
+   overlay procedure is the calibration gate referenced from
+   `SUNDOG_V_GEOMETRY.md` Phase 2 and from Generator Mode 2; this
+   document does not need to re-encode those thresholds.
+
    This Step 4a entry retains coordination authority over cross-cutting
    choices that touch other sections of the site:
    - alignment with **4b** (threebody-canvas framing) and **4c**
