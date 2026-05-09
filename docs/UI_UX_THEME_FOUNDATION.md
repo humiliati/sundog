@@ -199,84 +199,42 @@ hero graph markup, application cards, or generated BoxForge exports.
 
    **4a — Index hero (the "sundog eye"; math-driven workbench).**
 
-   Vision driven by two halo-display photographs (triple-sun parhelion
-   events with circumzenithal arcs). The natural phenomenon reads as
-   an eye: the primary sun is the pupil; the 22° halo plus stacked
-   secondary halos form the iris layers; the prismatic peripheral
-   arcs at the top of frame are the eyelids. Each peripheral arc tip
-   implies a virtual sun radiating its own halo system — three suns
-   total (primary + two peripheral), three halos per system, nine
-   intersecting rings ("the 9-halo eye").
+   Vision driven by halo-display photographs of triple-sun parhelion
+   events with circumzenithal arcs. The natural phenomenon reads as an
+   eye: the primary sun (a **compass rose / diamond**, formed by sun
+   pillar × parhelic-circle crossing — not a fire orb) is the pupil;
+   the 22° halo plus stacked secondary halos form the iris layers; the
+   prismatic peripheral arcs at the top of frame are the eyelids. Each
+   peripheral arc tip implies a virtual sun radiating its own halo
+   system — three suns total, nine intersecting halos ("the 9-halo
+   eye"). Two parhelia flank the central sun as **outward-facing
+   daggers** along the parhelic arc, carrying the physical dispersion
+   (red-inside, blue-outside).
 
-   Geometry refinements (from the second reference photo):
-   - The central sun is a **compass rose / diamond**, formed by the
-     sun pillar (vertical) × parhelic circle (horizontal) crossing.
-     **Not** a fire orb — the cross of crisp rays *is* the identity.
-   - The two parhelia flanking the central sun are **outward-facing
-     daggers** along the parhelic circle, with the physical
-     dispersion (red-inside, blue/white-tail-outside).
-   - The 22° halo is a **clean line**, not a glow.
-   - The eyelid is the **upper circumzenithal arc** — sharp prismatic
-     curve at frame top.
+   Sundog (the project) is the first mathematical description of the
+   parhelion phenomenon. The hero is therefore not a painting but a
+   parametric optical render — a workbench visualisation that doubles
+   as a brand statement. The math draws the eye.
 
-   Math-driven framing: Sundog (the project) is the first mathematical
-   description of the parhelion phenomenon, and the hero is a
-   deliberate exercise of that description. The hero is therefore not
-   a painting but a parametric optical render — a workbench
-   visualisation that doubles as a brand statement.
+   **Detailed roadmap, parameter taxonomy, and calibration debt:** see
+   [`SUNDOG_V_GEOMETRY.md`](SUNDOG_V_GEOMETRY.md). That document owns
+   the slider tier table (math-derived / free / composition fiction),
+   the animation phase model (idle / active / selective 3D handoff),
+   the calibration items (parhelic-curvature locked at 0.66; CZA
+   bell-blur tuning open), and the path-to-promotion phases that end
+   with the workbench feeding `index.html`.
 
-   Workbench architecture (mirrors `threebody.html`):
-   - **Stage**: SVG canvas rendering the composition from current
-     parameter values, with a CSS radial/gradient atmosphere layer
-     overlaid for soft dispersion.
-   - **Right-rail control panel**: sliders/toggles for the parametric
-     model. Sections grouped by the optical taxonomy (sun & pillar /
-     halos / arcs / parhelia / dispersion / composition / palette).
-   - **Page lives at**: `sundog-workbench.html` (proposed name);
-     promoted to `index.html` hero once the static composition is
-     locked.
-
-   Initial parameter set:
-   - `--sun-altitude` (deg) → drives CZA visibility (≤32°), parhelion
-     azimuthal offset from sun
-   - `--halo-22-intensity`, `--halo-46-intensity`
-   - `--cza-intensity`, `--cza-curvature`
-   - `--sun-pillar-intensity`, `--sun-pillar-length`
-   - `--parhelic-circle-intensity`
-   - `--parhelia-intensity`, `--parhelia-dagger-length`
-   - `--dispersion-width` (prismatic edge softness)
-   - `--secondary-suns-strength` (peripheral-arc → virtual-sun bias)
-   - `--ring-overlap-bias` (golden-ratio knob for the 9-ring layout)
-   - `--compass-ray-length`
-   - `--rainbow-saturation`, `--sky-tint`
-   - `--idle-scintillation-amplitude` (phase-4 idle drift; off when 0)
-
-   Tooling split (refined):
-   - **Sun (compass-rose)**: SVG paths — line cross + bright core.
-     Not BoxForge.
-   - **Halos**: SVG circles with `stroke-dasharray` for crisp rings +
-     CSS radial-gradient overlays for prismatic falloff.
-   - **Arcs (CZA, parhelic, tangent)**: SVG paths with stroke
-     gradients.
-   - **Parhelia daggers**: SVG paths with prismatic stroke gradient
-     (red-inside, blue-outside) — the actual ice-crystal physics.
-   - **Atmosphere / dispersion**: CSS radial-gradient overlays plus
-     SVG `feGaussianBlur` for soft edges.
-   - **BoxForge orb-component is parked** — useful for later 3D
-     primitives but the central sun is no longer a sphere. Tools
-     remain agent-accessible at
-     `C:\Users\hughe\Dev\Dungeon Gleaner Main\tools`.
-
-   Animation phase model (still planned; only after static is locked):
-   - **Phases 1–3 (active reveal)**: sequenced parhelion reveal.
-     Halos fade in, arcs draw, virtual suns emerge from peripheral
-     arc tips, nine-ring intersection resolves.
-   - **Phase 4 (idle window)**: golden static pose holds, subtle
-     scintillation only. Embellishment work happens here, before
-     phase 5 muddies the geometry with 3D motion.
-   - **Phase 5+ (3D handoff, selective)**: only elements that benefit
-     from depth get BoxForge phase animation — likely compass-rose
-     ray rotation only. Halos stay planar (they're sky, not boxes).
+   This Step 4a entry retains coordination authority over cross-cutting
+   choices that touch other sections of the site:
+   - alignment with **4b** (threebody-canvas framing) and **4c**
+     (balance-canvas exuberance) so the three pages read as one voice;
+   - shared-stylesheet token reservation (`--sd-*`) — any new theme
+     tokens the workbench needs go via `sundog-theme.css` per Migration
+     Step 6, not the workbench's page-local CSS;
+   - BoxForge primitive selection — the `Dev\Dungeon Gleaner Main\tools`
+     library is the source for any Phase 6 selective 3D motion in the
+     geometry workbench, but the BoxForge orb is parked (the central
+     sun is a compass rose, not a sphere).
 
    **4b — Threebody canvas (formal, deferred 3D).**
 
@@ -318,6 +276,18 @@ hero graph markup, application cards, or generated BoxForge exports.
 
    This is the only canvas where we go full visual-design rather
    than scientific-illustration mode.
+
+   Cross-reference / owner split: `docs/SUNDOG_V_BALANCE.md` owns the
+   evidence gates and future roadmap phases that decide when this skin is
+   allowed to enter promotion. This section owns the "toyful" target:
+   layered, tactile, animated sprites that make recovery and failure
+   readable at a glance. The visual pass must preserve replay determinism,
+   raw diagnostic mode, and Phase 8/10 metric parity.
+
+   Roadmap hook: fold this into `docs/SUNDOG_V_BALANCE.md` Phase 11
+   (promo clip and caption), Phase 12 (human-vs-agent affordances), and
+   Phase 12.5 (dedicated sprite skin). Do not pull it into Phase 9 or
+   Phase 10 evidence work.
 
 5. Decide whether BoxForge exports live as hand-curated CSS snippets or as
    generated files from `.boxforge.json` templates.
