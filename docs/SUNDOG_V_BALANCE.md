@@ -48,21 +48,26 @@ triplet do not drift between the roadmap and the eventual writeup. When Phase
 First executable scaffold started. The Sundog tree now includes:
 
 - `balance.html`: an unpromoted browser workbench tab with a live Phase 8
-  recovery curve and impulse/recovery status panel;
+  recovery curve, impulse/recovery status panel, and Phase 9 use-boundary
+  warning panel;
 - `public/js/balance-core.mjs`: deterministic cart-pole dynamics, shadow
-  projection, sensor delay/noise scaffolding, and baseline controller modes;
+  projection, sensor delay/noise/dropout scaffolding, shared boundary
+  classifier, and baseline controller modes;
 - `public/js/balance-browser.mjs`: canvas renderer, controls, telemetry strip,
   and Lounas-derived robotics balance motif;
 - `scripts/balance-harness.mjs`: a Phase 7 smoke/replay runner sharing the
   same dynamics, shadow sensor, and controller modules as the browser page;
 - `scripts/balance-phase8-metrics.mjs`: a Phase 8 recovery/event metrics runner
   for local metric tables, recovery curves, and fall-warning threshold sweeps.
+- `scripts/balance-phase9-boundary.mjs`: a Phase 9 degradation sweep over light,
+  delay, noise, dropped frames, rail length, force limit, and disturbance
+  magnitude, writing local boundary summaries and unsafe-cell tables.
 
 No committed Balance results directory and no Phase 10 operating-envelope
 verdict ships in the Sundog tree today. Local Phase 7 smoke/replay outputs and
-Phase 8 metric outputs are written under ignored `results/balance/` paths and
-are calibration artifacts, not public evidence. The current artifact is a Phase
-1-8 scaffold, not evidence.
+Phase 8 metric outputs and Phase 9 boundary outputs are written under ignored
+`results/balance/` paths and are calibration artifacts, not public evidence.
+The current artifact is a Phase 1-9 scaffold, not evidence.
 
 This section is here so the broadcast surfaces (gallery card, APPLICATIONS.md,
 claims-and-scope.md) do not get a row until the runnable-artifact gates below
@@ -517,6 +522,15 @@ Expected boundary:
 
 Exit criterion: the workbench has a visible "where Sundog should not be used"
 panel.
+
++++[forward-plan-A]+++ *Phase 9 first pass landed: `npm run balance:phase9`
+writes ignored `manifest.json`, `boundary-panel.json`, `trial-outcomes.csv`,
+`boundary-summary.csv`, `matched-comparison.csv`, and `unsafe-cells.csv` under
+`results/balance/phase9-boundary/`. The browser workbench now shows a live
+Use Boundary panel driven by the shared boundary classifier in
+`public/js/balance-core.mjs`. This is a degradation diagnostic and
+where-not-to-use surface, not the Phase 10 operating-envelope verdict.*
++++[/forward-plan-A]+++
 
 ### Phase 10 - Operating Envelope Map
 

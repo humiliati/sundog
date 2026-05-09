@@ -338,6 +338,181 @@ export function computeBalanceControl(state, sensor, controllerState = {}, confi
   };
 }
 
+export function assessBalanceBoundary(config = {}, sensor = null, control = null, state = null) {
+  const cfg = normalizeBalanceConfig(config);
+  const mechanisms = [];
+  const delayMs = cfg.sensorDelaySteps * cfg.dt * 1000;
+
+  const addMechanism = (severity, code, message, value = null) => {
+    mechanisms.push({ severity, code, message, value });
+  };
+
+  if (cfg.lightElevationDeg >= 80) {
+    addMechanism(
+      "unsafe",
+      "shadow_unobservable",
+      "Overhead light collapses shadow length and angle information.",
+      `${roundNumber(cfg.lightElevationDeg, 2)} deg`,
+    );
+  } else if (cfg.lightElevationDeg >= 70) {
+    addMechanism(
+      "caution",
+      "short_shadow",
+      "High light elevation shortens the shadow; treat recovery as provisional.",
+      `${roundNumber(cfg.lightElevationDeg, 2)} deg`,
+    );
+  } else if (cfg.lightElevationDeg <= 8) {
+    addMechanism(
+      "caution",
+      "long_shadow_scaling",
+      "Very low light makes a long shadow that amplifies scale and rail effects.",
+      `${roundNumber(cfg.lightElevationDeg, 2)} deg`,
+    );
+  }
+
+  if (delayMs >= 200) {
+    addMechanism(
+      "unsafe",
+      "delay_destabilized",
+      "Sensor delay is in the pre-registered failure regime.",
+      `${roundNumber(delayMs, 1)} ms`,
+    );
+  } else if (delayMs >= 100) {
+    addMechanism(
+      "caution",
+      "delay_margin",
+      "Delay is high enough to hurt recovery before steady balance.",
+      `${roundNumber(delayMs, 1)} ms`,
+    );
+  }
+
+  if (cfg.sensorNoiseStd >= 0.055) {
+    addMechanism(
+      "unsafe",
+      "sensor_noise_floor",
+      "Pixel jitter can dominate the shadow residual.",
+      roundNumber(cfg.sensorNoiseStd, 4),
+    );
+  } else if (cfg.sensorNoiseStd >= 0.03) {
+    addMechanism(
+      "caution",
+      "sensor_noise_margin",
+      "Noise is high enough that warning timing may jitter.",
+      roundNumber(cfg.sensorNoiseStd, 4),
+    );
+  }
+
+  if (cfg.sensorDropoutRate >= 0.2) {
+    addMechanism(
+      "unsafe",
+      "dropped_frames",
+      "Dropped sensor frames are high enough to break residual history.",
+      roundNumber(cfg.sensorDropoutRate, 4),
+    );
+  } else if (cfg.sensorDropoutRate >= 0.08) {
+    addMechanism(
+      "caution",
+      "dropout_margin",
+      "Dropped frames may erase short recovery cues.",
+      roundNumber(cfg.sensorDropoutRate, 4),
+    );
+  }
+
+  if (cfg.forceLimit <= 5) {
+    addMechanism(
+      "unsafe",
+      "force_saturated",
+      "Actuator authority is too low for the standard recovery impulse.",
+      roundNumber(cfg.forceLimit, 3),
+    );
+  } else if (cfg.forceLimit <= 8) {
+    addMechanism(
+      "caution",
+      "force_margin",
+      "Force limit is near the recovery margin.",
+      roundNumber(cfg.forceLimit, 3),
+    );
+  }
+
+  if (cfg.railLimit <= 1.2) {
+    addMechanism(
+      "unsafe",
+      "rail_limited",
+      "Rail travel is too short for a clean recovery audit.",
+      roundNumber(cfg.railLimit, 3),
+    );
+  } else if (cfg.railLimit <= 1.8) {
+    addMechanism(
+      "caution",
+      "rail_margin",
+      "Rail travel may become the limiting mechanism.",
+      roundNumber(cfg.railLimit, 3),
+    );
+  }
+
+  if (sensor) {
+    if (!sensor.valid) {
+      addMechanism("unsafe", "dropped_frame_now", "Current sensor sample is dropped.", "invalid");
+    } else if (sensor.confidence < 0.18) {
+      addMechanism(
+        "unsafe",
+        "shadow_unobservable_now",
+        "Current shadow confidence is below the usable band.",
+        roundNumber(sensor.confidence, 3),
+      );
+    } else if (sensor.confidence < 0.35) {
+      addMechanism(
+        "caution",
+        "low_shadow_confidence",
+        "Current shadow confidence is in the reacquire band.",
+        roundNumber(sensor.confidence, 3),
+      );
+    }
+  }
+
+  if (control?.saturated) {
+    addMechanism("caution", "saturation_now", "Controller is currently saturating force.", "saturated");
+  }
+
+  if (state && Math.abs(state.x) >= cfg.railLimit * 0.9) {
+    addMechanism(
+      "unsafe",
+      "rail_edge_now",
+      "Cart is at the rail boundary.",
+      roundNumber(state.x, 3),
+    );
+  } else if (state && Math.abs(state.x) >= cfg.railLimit * 0.75) {
+    addMechanism(
+      "caution",
+      "rail_margin_now",
+      "Cart is close enough to the rail to constrain recovery.",
+      roundNumber(state.x, 3),
+    );
+  }
+
+  const hasUnsafe = mechanisms.some((mechanism) => mechanism.severity === "unsafe");
+  const hasCaution = mechanisms.some((mechanism) => mechanism.severity === "caution");
+  const status = hasUnsafe ? "do_not_use" : hasCaution ? "watch_boundary" : "likely_readable";
+  const label = status === "do_not_use"
+    ? "DO NOT USE"
+    : status === "watch_boundary"
+      ? "WATCH BOUNDARY"
+      : "LIKELY READABLE";
+  const summary = status === "do_not_use"
+    ? "This cell is inside a known or live failure regime; use it to show the boundary, not success."
+    : status === "watch_boundary"
+      ? "This cell is near a Phase 9 boundary; recovery should be checked against matched seeds."
+      : "No Phase 9 boundary warning is active for the current controls.";
+
+  return {
+    status,
+    label,
+    summary,
+    delayMs: roundNumber(delayMs, 3),
+    mechanisms,
+  };
+}
+
 export function serializeBalanceSample(state, sensor, control, config = {}) {
   const cfg = normalizeBalanceConfig(config);
   return {
