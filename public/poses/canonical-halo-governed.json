@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "name": "canonical-halo-governed",
+    "description": "Canonical Sundog Workbench pose using the Halo Governed geometry model. One governing halo (a circle whose bottom point is the sun) drives the parhelic arc, the daggers (as its intersection with the 22° halo), and the pillar (as the vesica of two halos centered at the daggers). Single-knob scaffold; comparison artifact for issue #15.",
+    "schemaVersion": "1.0",
+    "spec": "docs/SUNDOG_GENERATOR_SPEC.md",
+    "model": "halo_governed",
+    "notes": "Cannot yet be loaded back into the workbench — Phase 8 work. Held here as the recommended starting pose for overlay calibration of the halo_governed model."
+  },
+
+  "geometryModel": "halo_governed",
+
+  "sunAltitudeDeg": 18,
+
+  "halo22Intensity": 0.95,
+  "halo46Intensity": 0.30,
+
+  "czaIntensity": 0.95,
+  "czaCurvature": 0.85,
+
+  "parhelicCircleIntensity": 0.55,
+  "parhelicCurvature": 0.66,
+
+  "parheliaIntensity": 1.0,
+  "parheliaDaggerLength": 1.0,
+
+  "sunPillarIntensity": 0.80,
+  "sunPillarLength": 0.55,
+
+  "compassRayLength": 1.0,
+
+  "dispersionWidth": 0.70,
+  "rainbowSaturation": 0.85,
+
+  "secondarySunsStrength": 0.0,
+  "ringOverlapBias": 0.5,
+
+  "idleScintillationAmplitude": 0.0
+}
