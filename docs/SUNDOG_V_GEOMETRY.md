@@ -265,6 +265,43 @@ as `geometryModel`. Reference poses for both alternative tracks live as
 the `Load params` button, those poses are documentation artifacts only —
 they cannot yet be loaded back into the workbench from the UI.
 
+### Halo Governed v2 calibration vs Troels Nielsen DR (2026-05-09)
+
+A first overlay calibration was run on the canonical Troels Nielsen DR
+reference. Anchor: the 22° halo (sun at pixel `(400, 356)` in the 800×450
+photo, observed halo radius `145 px`, so `1 workbench unit = 0.659 photo px`).
+Overlay PNG: [`v2_overlay_troels_nielsen.png`](v2_overlay_troels_nielsen.png).
+Numerical residuals:
+
+| feature | v2 prediction | observed | residual |
+| --- | --- | --- | --- |
+| 22° halo radius | 145 px (anchor) | 145 px | 0 (anchor) |
+| 46° halo radius | 290 px | 285 px | 1.8% over |
+| left dagger x | 255 | 243 | 12 px (parhelion **outside** the 22° halo) |
+| right dagger x | 545 | 560 | 15 px (same) |
+| CZA apex | (400, 79) | (402, 65) | (2, 14) px |
+| parhelic arc apex (at default `--parhelic-curvature = 0.66`) | (400, 269) | photo's parhelic circle is essentially horizontal through the parhelia | curvature default too high for this photo |
+
+Two calibration findings worth fixing before the workbench can claim a
+photo-faithful pose:
+
+1. **Daggers are 8% too close to the sun.** The photo has parhelia at
+   distance `≈ R_22 / cos(h)` from the sun, where `h` is the sun's altitude.
+   Solving from the observed offset gives an implied sun altitude of `≈ 25°`.
+   v2 currently fixes daggers at exactly the 22° halo radius (the
+   sun-on-horizon limit). The fix is the Phase 3 binding from
+   `--sun-altitude` to dagger placement: `dagger_x = SUN.x ± R_22 / cos(h)`.
+2. **Default parhelic-arc curvature is too high.** At sun altitudes where
+   parhelia are well-formed, the parhelic circle reads as nearly horizontal
+   through the parhelia in the photograph — there is no significant upward
+   arc above the sun in this Troels Nielsen scene. The default
+   `--parhelic-curvature = 0.66` should drop closer to 0 for this pose.
+
+What v2 *did* get right: 22° halo (by anchor), 46° halo (1.8%), CZA apex
+horizontally (2 px), pillar position (centered on sun). Those four are
+load-bearing; the two findings above are correctable knob defaults plus a
+Phase 3 sun-altitude binding, not a structural failure of the construction.
+
 ### Recommendation
 
 No model should become the default until Phase 2 overlay calibration has

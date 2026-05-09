@@ -549,14 +549,19 @@ Deliverables:
   bins.
 - Candidate-envelope CSV (`envelope.csv`) where Sundog improves over passive
   and naive baselines while staying below force/saturation thresholds.
-- Locked `envelope.csv` schema: `cell_id`, `light_elev_deg`, `delay_ms`,
+- Locked `envelope.csv` schema, in order: `cell_id`, `case_id`, `axis`,
+  `axis_value`, `preset`, `light_elev_deg`, `delay_ms`, `delay_steps`,
   `noise_sigma`, `dropout_rate`, `rail_limit`, `force_limit`,
-  `disturbance_mag`, `cell_class`, `survival_sundog_mean`,
-  `survival_naive_mean`, `survival_oracle_mean`,
-  `recovery_time_after_impulse`, `sundog_naive_paired_margin_mean`,
-  `sundog_naive_survival_ratio`, `sundog_beats_naive_1p5x`, `seed_count`,
-  `paired_margin_bootstrap_low`, `paired_margin_bootstrap_high`, and
-  `replay_url`.
+  `disturbance_mag`, `cell_class`, `static_boundary_mechanisms`,
+  `survival_passive_mean`, `survival_sundog_mean`, `survival_naive_mean`,
+  `survival_oracle_mean`, `rms_theta_sundog_mean`, `rms_theta_naive_mean`,
+  `rms_theta_oracle_mean`, `recovery_time_after_impulse`,
+  `sundog_naive_paired_margin_mean`, `sundog_naive_survival_ratio`,
+  `sundog_beats_naive_1p5x`, `oracle_sundog_paired_margin_mean`,
+  `seed_count`, `paired_margin_bootstrap_low`,
+  `paired_margin_bootstrap_high`, `sundog_saturation_rate_mean`,
+  `sundog_force_budget_mean`, `replay_url`, `naive_replay_url`, and
+  `oracle_replay_url`.
 - Best-cell and worst-cell replay links for the browser.
 - Failure-mechanism labels such as `shadow_unobservable`, `delay_destabilized`,
   `force_saturated`, `rail_limited`, and `controller_overcorrected`.
@@ -649,10 +654,23 @@ finding."
 No tier promotion until a clean CONFIRM or REFUTE.
 
 **Disposition is locked.** The verdict is filed in the same directory as the
-data: `results/balance/envelope_<datetime>/verdict.md`. The choice of verdict
-is from the predictions, not author-discretionary. REFUTE means the
-broadcast says REFUTE; the workbench does not get a "yes but" footnote
-that softens the read.
+data: the default runner writes `results/balance/phase10-envelope/verdict.md`
+and timestamped reruns may use `results/balance/envelope_<datetime>/verdict.md`.
+The choice of verdict is from the predictions, not author-discretionary. REFUTE
+means the broadcast says REFUTE; the workbench does not get a "yes but"
+footnote that softens the read.
+
++++[phase10-status]+++ *Phase 10 runner landed: `npm run balance:phase10`
+writes ignored `manifest.json`, `trial-outcomes.csv`,
+`matched-comparison.csv`, `envelope.csv`, `cell-class-map.csv`,
+`best-worst-cells.csv`, `verdict.json`, and `verdict.md` under
+`results/balance/phase10-envelope/`. The first 100-seed slate emitted 27,200
+trials over 68 operating-envelope cells and returned AMBIGUOUS: P1 held
+(`28/28` diagnostic-positive yes-cells; lower bootstrap CI `1`), P2 found two
+failure-regime violations that trigger baseline audit, P3 held, and P4 failed
+the survival-ceiling check (`16/68` cells) while the auxiliary RMS audit shows
+oracle lower than Sundog on most cells. This is not a promotion result; the
+next natural work is oracle/baseline audit before rerun.* +++[/phase10-status]+++
 
 ***[/must-fix #1]***
 
