@@ -157,11 +157,11 @@ Promotion to **Calibrated Static Pose** tier requires Phase 0–2 gates below
 landing. Promotion to **Animated Hero** tier requires Phase 0–5 gates.
 Promotion to **Live Hero** (replace `index.html`) requires Phase 0–7 gates.
 
-## Parallel Geometry Models (Legacy vs Halo Scaffold)
+## Parallel Geometry Models (Legacy vs Halo Scaffold vs Halo Governed)
 
 We are explicitly avoiding sunk-cost lock-in on a feature-tuned geometry
-solver. The workbench therefore supports two geometry models that can be run
-in parallel long enough to compare under overlay.
+solver. The workbench therefore supports three geometry models that can be
+run in parallel long enough to compare under overlay.
 
 ### Legacy model *(feature-tuned)*
 
@@ -176,52 +176,112 @@ This model is fast to iterate on, but it bakes in the exact failure mode
 described in the issue: emergent structure gets treated as independent,
 manually tuned landmarks.
 
-### Halo Scaffold model *(ellipse/halo-derived)*
+### Halo Scaffold model *(free-ellipse-derived)*
 
-This alternative model treats a small number of larger halo/arc primitives as
-first-class geometry, then derives secondary features from their
-intersections and contact regions.
+The first attempt at the issue's proposal. Treats a free ellipse — not a true
+halo — as a governing primitive, then derives secondary features from
+intersections.
 
-- Governing arc scaffold: an **ellipse** whose bottom point is the sun (so
-  the tangent at the sun is horizontal). The visible parhelic arc is drawn
-  as a sampled segment of that ellipse rather than as a free Bezier.
-- Parhelia daggers: **derived as the intersection points** between the 22°
-  halo circle and the governing ellipse. Dagger streak direction is aligned
-  to the ellipse tangent at the intersection point (outward-facing by
-  construction).
-- Compass-rose north/south behavior: the pillar is rendered as a **lens
-  overlap** between two lightly intersecting circles (a Venn-diagram-like
-  contact region) rather than as a single straight line.
+- Governing scaffold: a **free ellipse** whose bottom point is the sun (so
+  the tangent at the sun is horizontal). Drawn as a sampled lower arc.
+- Parhelia daggers: derived as the intersection points between the 22°
+  halo circle and that ellipse. Dagger streak direction is aligned to the
+  ellipse tangent at the intersection point.
+- Compass-rose north/south behavior: rendered as a vesica between two
+  equal-radius circles centered horizontally to either side of the sun.
+  Their radii are tied to `--sun-pillar-length`, not to any halo.
 
-This gives the model a more coherent “one scaffold → many features” shape:
-the daggers and the parhelic arc become consequences of the same ellipse,
-and the pillar reads as a contact region of larger halos rather than as a
-standalone stroke.
+This is partway to the issue's intent — daggers do come out of an
+intersection — but the ellipse axes (`rx`, `ry`) and the pillar circle radii
+are still hand-fit constants, not halo angular radii or sun-altitude
+derivations. See *Outstanding gaps* below.
+
+### Halo Governed model *(single-circle scaffold; issue-faithful)*
+
+A more committed reading of the issue: insist that the governing primitive
+be a **circle** (a halo) rather than a free ellipse, and tie the pillar
+geometry to the same halo system that determines the daggers.
+
+- Governing halo: a **circle** whose bottom point is the sun (one radius
+  parameter, currently mapped from `--parhelic-curvature`). The parhelic
+  arc is its visible lower-arc.
+- Parhelia daggers: closed-form intersection of the governing halo and the
+  22° halo. Single-step computation — no iterative root-finding.
+- Dagger streak direction: tangent to the 22° halo at the dagger point
+  (perpendicular to the radial line from the sun). The daggers lie *on*
+  the 22° halo, so this is the physically motivated tangent.
+- Compass-rose north/south behavior: vesica of two halos **centered at the
+  daggers**, each with radius = (sun-to-dagger distance) + small slack
+  controlled by `--sun-pillar-length`. The pillar geometry is therefore a
+  consequence of the governing halo via the daggers — it has no independent
+  pillar-radius constant.
+
+One knob (`--parhelic-curvature`) determines the parhelic arc, both dagger
+positions, and the pillar shape. Everything else is shared (CZA, secondary
+halos, compass rays, palette).
+
+This model lives in the workbench at the same code path as the others; it
+is intentionally *not* the default while it is unevaluated against the
+photo corpus.
+
+### Outstanding gaps from issue #15
+
+The issue raised several specific points. Recording the state of each so
+the next reviewer doesn't have to rediscover them:
+
+- **`~160°` halo/arc family** (issue's headline proposal): not directly
+  modeled. The Halo Governed model's governing halo serves the same
+  structural role (a single primitive that explains arc + daggers) but is
+  parameterised by pixel radius, not by an angular value tied to
+  atmospheric optics. Naming it "160°" in the workbench would be
+  speculative without overlay calibration.
+- **Ellipses-instead-of-circles for the 22°/46° halos**: not attempted in
+  any of the three models. The 22° and 46° halos remain `<circle>` in the
+  SVG.
+- **Compass-rose center as a halo intersection**: only partially attempted.
+  The Halo Governed pillar uses two real halos (centered at the daggers)
+  but the compass-rose ray group itself is still a hand-placed `<g>` of
+  four `<line>`s plus a core circle. The rays are not yet derived from
+  halo tangencies.
+- **Overlay fit evidence**: not produced for any of the three models. Phase
+  2 calibration has not yet been run on Halo Scaffold or Halo Governed.
+  The acceptance-criteria bullet "evidence that it better explains the
+  observed relationships between major features" remains open.
+- **Halo Scaffold `rx`/`ry` blends**: still placeholder hand-fit constants.
+  The "fewer ad hoc placements" framing is not yet earned for that model.
 
 ### How to run in parallel
 
 In `sundog-workbench.html`, use the **Geometry Model** selector:
 
 - `Legacy (feature-tuned)` — baseline behavior.
-- `Halo Scaffold (ellipse-derived)` — derived construction.
+- `Halo Scaffold (ellipse-derived)` — first-attempt scaffold.
+- `Halo Governed (single-circle scaffold)` — issue-faithful construction.
 
 The selection persists in `localStorage` and is included in `Snapshot params`
-as `geometryModel`. A reference pose for the scaffold track is stored as
-`public/poses/canonical-halo-scaffold.json`.
+as `geometryModel`. Reference poses for both alternative tracks live as
+`public/poses/canonical-halo-scaffold.json` and
+`public/poses/canonical-halo-governed.json`. Note that until Phase 8 lands
+the `Load params` button, those poses are documentation artifacts only —
+they cannot yet be loaded back into the workbench from the UI.
 
 ### Recommendation
 
-Keep both models available through Phase 2 calibration and run the overlay
-protocol against the canonical photo corpus for both.
+No model should become the default until Phase 2 overlay calibration has
+been run on the canonical photo corpus for at least Legacy vs Halo Governed,
+with the snapshot of each pose archived for review. Specifically:
 
-- If Halo Scaffold reaches comparable overlay fit *with fewer independently
-  tuned placements*, it should become the default and the Legacy model should
-  be retained temporarily as a regression baseline.
-- If Halo Scaffold cannot reach fit without reintroducing many ad hoc knobs,
-  treat it as a failed abstraction and continue iterating the scaffold
-  approach in a separate branch of primitives (e.g., rotated ellipses or a
-  true angular-sky projection) rather than patching it back into feature
-  tuning.
+- The two-vs-three-model decision rests on overlay fit, not on the elegance
+  of the construction in prose. Halo Governed reads cleaner on paper, but
+  prose elegance is not evidence.
+- Halo Scaffold should not be promoted in its current state — its `rx`/`ry`
+  blends and pillar circle radii are placeholder constants that have to be
+  resolved before any "fewer ad hoc placements" claim can survive review.
+- If Halo Governed reaches comparable or better overlay fit and the open
+  gaps above are closed (or explicitly accepted), it is the candidate
+  default. Until then it sits beside the other two as a comparison track.
+- Whichever model ships, the loser(s) should be retained as a regression
+  baseline through at least the Phase 7 hero promotion.
 
 ## Why This Workbench
 

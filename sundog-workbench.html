@@ -284,7 +284,8 @@
             display: none;
         }
 
-        #parhelion-svg[data-geometry-model="halo_scaffold"] #pillar-line {
+        #parhelion-svg[data-geometry-model="halo_scaffold"] #pillar-line,
+        #parhelion-svg[data-geometry-model="halo_governed"] #pillar-line {
             display: none;
         }
 
@@ -541,8 +542,9 @@
                 <select id="geometry-model" style="width: 100%; padding: 0.35rem 0.4rem; background: rgba(255,255,255,0.06); color: var(--text-light); border: 1px solid rgba(244, 196, 48, 0.30); border-radius: 4px;">
                     <option value="legacy">Legacy (feature-tuned)</option>
                     <option value="halo_scaffold">Halo Scaffold (ellipse-derived)</option>
+                    <option value="halo_governed">Halo Governed (single-circle scaffold)</option>
                 </select>
-                <p class="lead" style="margin-top: 0.35rem;">Legacy updates visible features directly. Halo Scaffold derives daggers and the pillar from halo/ellipse interactions so co-located structure emerges from fewer primitives.</p>
+                <p class="lead" style="margin-top: 0.35rem;">Legacy updates visible features directly. Halo Scaffold uses a free ellipse with hand-fit axes to derive daggers. Halo Governed uses a single circle (the governing halo) to derive the parhelic arc, daggers (intersection with the 22° halo), and the pillar (vesica of two halos centered at the daggers) — the construction proposed in issue #15.</p>
             </div>
 
             <h3>Sun &amp; Pillar</h3>

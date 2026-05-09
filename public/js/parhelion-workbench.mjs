@@ -6,9 +6,11 @@ const svg = document.getElementById("parhelion-svg");
 
 const MODEL_STORAGE_KEY = "sundog.geometryModel";
 
+const VALID_MODELS = new Set(["legacy", "halo_scaffold", "halo_governed"]);
+
 function getModel() {
   const saved = window.localStorage.getItem(MODEL_STORAGE_KEY);
-  return saved === "halo_scaffold" ? "halo_scaffold" : "legacy";
+  return VALID_MODELS.has(saved) ? saved : "legacy";
 }
 
 function setModel(model) {

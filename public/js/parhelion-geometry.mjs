@@ -52,7 +52,11 @@ function refineRootBisection(thetaA, thetaB, fA, fB, fTheta, maxIter = 28) {
   return 0.5 * (a + b);
 }
 
-function circleEllipseIntersectionsAxisAligned(circle, ellipse, steps = 960) {
+// 120 steps × ≤4 real roots is comfortable; halving the workhorse step count from
+// the original 960 cuts per-slider work ~8× without changing root quality, since
+// bisection refines each crossing to 1e-6 anyway. Important for Phase 4 idle
+// scintillation where this fires every animation frame.
+function circleEllipseIntersectionsAxisAligned(circle, ellipse, steps = 120) {
   const intersections = [];
   const twoPi = Math.PI * 2;
 
@@ -260,6 +264,13 @@ function applyParhelicHaloScaffold(svg, altitudeDeg, parhelicCurvature) {
   // Parhelic scaffold: an ellipse whose bottom point is the sun (tangent horizontal).
   // The ellipse is intentionally "halo-first": it governs both the arc AND (via
   // intersection with the 22° halo) the parhelia locations.
+  //
+  // KNOWN GAP: the rx/ry blends below are placeholder hand-fit constants chosen to
+  // approximate the legacy dagger placement at default sliders, NOT yet derived from
+  // sun-altitude or any halo angular radius. The doc's "fewer ad hoc placements"
+  // claim is not yet earned for this model. Replacing these with a true halo
+  // (single-radius circle) is what the `halo_governed` model attempts. See
+  // SUNDOG_V_GEOMETRY.md → "Outstanding gaps from issue #15".
   const ry = 210 + 240 * curvature + 60 * altNorm;
   const rx = 560 + 90 * (1 - altNorm) + 160 * (1 - curvature);
   const ellipse = {
@@ -352,15 +363,189 @@ function applyGeometryHaloScaffold(svg, rootStyle) {
   applyCza(svg, czaCurve);
   applySecondaryHalos(svg, overlapBias);
 
-  // Keep the legacy pillar line updated (it is hidden in halo mode via CSS).
-  applyPillarLegacy(svg, pillarLen);
+  // The legacy pillar-line is hidden via CSS in this mode, so we deliberately
+  // skip recomputing it on every slider event.
+}
+
+// --- halo_governed: the issue-faithful construction --------------------------
+//
+// One governing halo (a CIRCLE — not a free ellipse) sits above the sun, with
+// the sun at its bottommost point. That halo:
+//
+//   1. paints the parhelic arc (its visible lower-arc),
+//   2. fixes the daggers as its intersection with the 22° halo,
+//   3. anchors the pillar via two further halos centered AT the daggers,
+//      whose vesica is the lens-shaped pillar at the sun.
+//
+// This means: one knob (governing-halo radius, repurposed from
+// --parhelic-curvature) determines the parhelic arc AND the dagger positions
+// AND the pillar geometry. Everything that was hand-tuned in the legacy and
+// halo_scaffold models becomes a derived consequence here.
+
+const HALO_22_RADIUS_FOR_GOVERNED = HALO_22_RADIUS;
+
+function governingHaloFromCurvature(curvature) {
+  // Map curvature 0..1 to a circle radius. Bounded below by HALO_22+30 so the
+  // governing circle never collapses into the 22° halo (which would degenerate
+  // the dagger intersection), bounded above to keep numbers finite.
+  const cClamped = clamp(curvature, 0, 1);
+  const R = HALO_22_RADIUS_FOR_GOVERNED + 30 + 800 * (1 - cClamped);
+  return { cx: SUN.x, cy: SUN.y - R, r: R };
+}
+
+function daggerPointsFromGoverningHalo(governing) {
+  // Closed-form: two equal-radius circles concentric on x=500, the governing
+  // halo center at y = SUN.y - R, the 22° halo at SUN. Intersection y is
+  // y - SUN.y = -HALO_22^2 / (2R); x = SUN.x ± sqrt(HALO_22^2 - (...)^2).
+  const R = governing.r;
+  const dy = -(HALO_22_RADIUS_FOR_GOVERNED * HALO_22_RADIUS_FOR_GOVERNED) / (2 * R);
+  const inside = HALO_22_RADIUS_FOR_GOVERNED * HALO_22_RADIUS_FOR_GOVERNED - dy * dy;
+  if (inside <= 0) return null;
+  const dx = Math.sqrt(inside);
+  return {
+    left: { x: SUN.x - dx, y: SUN.y + dy },
+    right: { x: SUN.x + dx, y: SUN.y + dy },
+  };
+}
+
+function applyParhelicGoverning(svg, governing) {
+  const parhelic = svg.querySelector("#parhelic-path");
+  if (!parhelic) return;
+  // Lower arc of the governing circle, clipped to the visible viewbox 0..1000.
+  // Sample as a polyline rather than using SVG's native A-arc so the path
+  // composes cleanly with the existing stroke styling and shares the legacy
+  // path id/class.
+  const xMin = Math.max(governing.cx - governing.r, 0);
+  const xMax = Math.min(governing.cx + governing.r, 1000);
+  const dx = xMax - xMin;
+  if (dx <= 1e-6) return;
+  const steps = 140;
+  const parts = [];
+  for (let i = 0; i <= steps; i += 1) {
+    const x = xMin + (dx * i) / steps;
+    const u = (x - governing.cx) / governing.r;
+    const inside = 1 - u * u;
+    const y = governing.cy + governing.r * Math.sqrt(Math.max(0, inside));
+    parts.push(`${i === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`);
+  }
+  parhelic.setAttribute("d", parts.join(" "));
+}
+
+function applyDaggersFromGoverningHalo(svg, daggerLen, daggerPoints) {
+  const group = svg.querySelector(".layer-parhelia");
+  if (!group || !daggerPoints) return;
+  const daggers = group.querySelectorAll(".dagger");
+  if (daggers.length < 2) return;
+
+  const applyOne = (dagger, point) => {
+    const streak = dagger.querySelector(".dagger-streak");
+    const core = dagger.querySelector(".dagger-core");
+    if (!streak || !core) return;
+
+    // Streak direction = tangent to the 22° halo at the dagger point (i.e.,
+    // perpendicular to the radial line from sun to dagger). This is the
+    // physically motivated choice: dagger streaks lie ALONG the halo, not
+    // along the parhelic arc tangent.
+    const radial = normalize2(point.x - SUN.x, point.y - SUN.y);
+    let tangent = { x: -radial.y, y: radial.x };
+    // Orient outward (away from sun on the streak's outer end).
+    if (tangent.x * radial.x + tangent.y * radial.y < 0) {
+      tangent = { x: -tangent.x, y: -tangent.y };
+    }
+
+    const outward = 80 * daggerLen;
+    const inward = 55 * daggerLen;
+    const out = { x: point.x + tangent.x * outward, y: point.y + tangent.y * outward };
+    const inn = { x: point.x - tangent.x * inward, y: point.y - tangent.y * inward };
+
+    streak.setAttribute("x1", out.x.toFixed(2));
+    streak.setAttribute("y1", out.y.toFixed(2));
+    streak.setAttribute("x2", inn.x.toFixed(2));
+    streak.setAttribute("y2", inn.y.toFixed(2));
+
+    core.setAttribute("cx", point.x.toFixed(2));
+    core.setAttribute("cy", point.y.toFixed(2));
+  };
+
+  applyOne(daggers[0], daggerPoints.left);
+  applyOne(daggers[1], daggerPoints.right);
+}
+
+function applyPillarFromTwoHalos(svg, daggerPoints, pillarLen) {
+  const lens = svg.querySelector("#pillar-lens");
+  if (!lens || !daggerPoints) return;
+
+  // Two halos of radius (sun-to-dagger distance) + slack, centered AT the
+  // daggers. They overlap in a tall thin vesica at the sun. This ties the
+  // pillar's geometry to the governing halo via the daggers — no independent
+  // pillar-radius constant.
+  const dxSD = daggerPoints.left.x - SUN.x;
+  const dySD = daggerPoints.left.y - SUN.y;
+  const sunToDagger = Math.hypot(dxSD, dySD);
+  const slack = 5 + 30 * clamp(pillarLen, 0, 1);
+  const r = sunToDagger + slack;
+
+  // Lens tips: along the perpendicular bisector of the two dagger centers,
+  // passing through the sun (since the two daggers are mirror-symmetric across
+  // x=SUN.x at the same y). Centers' midpoint y = daggers' y = SUN.y + dy_d
+  // where dy_d is small and negative (daggers above sun). Perpendicular
+  // bisector is the vertical line x = SUN.x. Tips at (SUN.x, midY ± h) where
+  // h = sqrt(r² - dx_d²), dx_d = horizontal distance from midpoint to a
+  // dagger center.
+  const midY = daggerPoints.left.y;
+  const halfChord = Math.abs(dxSD); // horizontal half-distance between dagger centers
+  const inside = r * r - halfChord * halfChord;
+  if (inside <= 0) {
+    lens.setAttribute("d", "");
+    return;
+  }
+  const h = Math.sqrt(inside);
+  const yTop = midY - h;
+  const yBottom = midY + h;
+
+  // Two-arc lens path. First arc (sweep=1) bulges right — the boundary that
+  // belongs to the LEFT halo (centered at the left dagger). Second arc
+  // (sweep=0) bulges left — boundary of the RIGHT halo.
+  lens.setAttribute(
+    "d",
+    [
+      `M ${SUN.x.toFixed(2)} ${yTop.toFixed(2)}`,
+      `A ${r.toFixed(2)} ${r.toFixed(2)} 0 0 1 ${SUN.x.toFixed(2)} ${yBottom.toFixed(2)}`,
+      `A ${r.toFixed(2)} ${r.toFixed(2)} 0 0 0 ${SUN.x.toFixed(2)} ${yTop.toFixed(2)}`,
+      "Z",
+    ].join(" ")
+  );
+}
+
+function applyGeometryHaloGoverned(svg, rootStyle) {
+  const pillarLen = readCssNumber(rootStyle, "--sun-pillar-length", 0.65);
+  const daggerLen = readCssNumber(rootStyle, "--parhelia-dagger-length", 1);
+  const compassLen = readCssNumber(rootStyle, "--compass-ray-length", 1);
+  const czaCurve = readCssNumber(rootStyle, "--cza-curvature", 0.85);
+  const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
+  const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
+
+  const governing = governingHaloFromCurvature(parhelicCurvature);
+  const daggerPoints = daggerPointsFromGoverningHalo(governing);
+
+  // Single primitive (governing halo) drives THREE features:
+  applyParhelicGoverning(svg, governing);
+  applyDaggersFromGoverningHalo(svg, daggerLen, daggerPoints);
+  applyPillarFromTwoHalos(svg, daggerPoints, pillarLen);
+
+  // Shared behaviors.
+  applyCompassRays(svg, compassLen);
+  applyCza(svg, czaCurve);
+  applySecondaryHalos(svg, overlapBias);
 }
 
 export function applyParhelionGeometry({ svg, rootStyle, model }) {
   if (!svg || !rootStyle) return;
   svg.dataset.geometryModel = model;
 
-  if (model === "halo_scaffold") {
+  if (model === "halo_governed") {
+    applyGeometryHaloGoverned(svg, rootStyle);
+  } else if (model === "halo_scaffold") {
     applyGeometryHaloScaffold(svg, rootStyle);
   } else {
     applyGeometryLegacy(svg, rootStyle);
