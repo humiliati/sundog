@@ -157,6 +157,72 @@ Promotion to **Calibrated Static Pose** tier requires Phase 0–2 gates below
 landing. Promotion to **Animated Hero** tier requires Phase 0–5 gates.
 Promotion to **Live Hero** (replace `index.html`) requires Phase 0–7 gates.
 
+## Parallel Geometry Models (Legacy vs Halo Scaffold)
+
+We are explicitly avoiding sunk-cost lock-in on a feature-tuned geometry
+solver. The workbench therefore supports two geometry models that can be run
+in parallel long enough to compare under overlay.
+
+### Legacy model *(feature-tuned)*
+
+This is the current baseline implementation: a small set of visible features
+are directly controlled and placed, with a few derived relationships.
+
+- Parhelic arc: symmetric quadratic Bezier driven by `--parhelic-curvature`.
+- Parhelia daggers: positioned by sampling that Bezier at fixed `x` anchors.
+- Sun pillar: a straight vertical line with a gradient stroke.
+
+This model is fast to iterate on, but it bakes in the exact failure mode
+described in the issue: emergent structure gets treated as independent,
+manually tuned landmarks.
+
+### Halo Scaffold model *(ellipse/halo-derived)*
+
+This alternative model treats a small number of larger halo/arc primitives as
+first-class geometry, then derives secondary features from their
+intersections and contact regions.
+
+- Governing arc scaffold: an **ellipse** whose bottom point is the sun (so
+  the tangent at the sun is horizontal). The visible parhelic arc is drawn
+  as a sampled segment of that ellipse rather than as a free Bezier.
+- Parhelia daggers: **derived as the intersection points** between the 22°
+  halo circle and the governing ellipse. Dagger streak direction is aligned
+  to the ellipse tangent at the intersection point (outward-facing by
+  construction).
+- Compass-rose north/south behavior: the pillar is rendered as a **lens
+  overlap** between two lightly intersecting circles (a Venn-diagram-like
+  contact region) rather than as a single straight line.
+
+This gives the model a more coherent “one scaffold → many features” shape:
+the daggers and the parhelic arc become consequences of the same ellipse,
+and the pillar reads as a contact region of larger halos rather than as a
+standalone stroke.
+
+### How to run in parallel
+
+In `sundog-workbench.html`, use the **Geometry Model** selector:
+
+- `Legacy (feature-tuned)` — baseline behavior.
+- `Halo Scaffold (ellipse-derived)` — derived construction.
+
+The selection persists in `localStorage` and is included in `Snapshot params`
+as `geometryModel`. A reference pose for the scaffold track is stored as
+`public/poses/canonical-halo-scaffold.json`.
+
+### Recommendation
+
+Keep both models available through Phase 2 calibration and run the overlay
+protocol against the canonical photo corpus for both.
+
+- If Halo Scaffold reaches comparable overlay fit *with fewer independently
+  tuned placements*, it should become the default and the Legacy model should
+  be retained temporarily as a regression baseline.
+- If Halo Scaffold cannot reach fit without reintroducing many ad hoc knobs,
+  treat it as a failed abstraction and continue iterating the scaffold
+  approach in a separate branch of primitives (e.g., rotated ellipses or a
+  true angular-sky projection) rather than patching it back into feature
+  tuning.
+
 ## Why This Workbench
 
 The hero of `sundog.cc` carries two loads at once: it is the brand mark, and

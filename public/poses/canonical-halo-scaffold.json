@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "name": "canonical-halo-scaffold",
+    "description": "Canonical Sundog Workbench pose using the Halo Scaffold geometry model (ellipse-derived parhelic scaffold + halo-contact pillar lens). Intended for side-by-side comparison against the legacy feature-tuned geometry.",
+    "schemaVersion": "1.0",
+    "spec": "docs/SUNDOG_GENERATOR_SPEC.md",
+    "model": "halo_scaffold"
+  },
+
+  "geometryModel": "halo_scaffold",
+
+  "sunAltitudeDeg": 18,
+
+  "halo22Intensity": 0.95,
+  "halo46Intensity": 0.30,
+
+  "czaIntensity": 0.95,
+  "czaCurvature": 0.85,
+
+  "parhelicCircleIntensity": 0.45,
+  "parhelicCurvature": 0.66,
+
+  "parheliaIntensity": 1.0,
+  "parheliaDaggerLength": 1.0,
+
+  "sunPillarIntensity": 0.80,
+  "sunPillarLength": 0.65,
+
+  "compassRayLength": 1.0,
+
+  "dispersionWidth": 0.70,
+  "rainbowSaturation": 0.85,
+
+  "secondarySunsStrength": 0.0,
+  "ringOverlapBias": 0.5,
+
+  "idleScintillationAmplitude": 0.0
+}
+
