@@ -669,7 +669,7 @@ trials over 68 operating-envelope cells and returned AMBIGUOUS: P1 held
 (`28/28` diagnostic-positive yes-cells; lower bootstrap CI `1`), P2 found two
 failure-regime violations that trigger baseline audit, P3 held, and P4 failed
 the survival-ceiling check (`16/68` cells) while the auxiliary RMS audit shows
-oracle lower than Sundog on most cells. This is not a promotion result; the
+oracle lower than Sundog on `68/68` cells. This is not a promotion result; the
 next natural work is oracle/baseline audit before rerun.* +++[/phase10-status]+++
 
 ***[/must-fix #1]***
