@@ -523,6 +523,207 @@ function applyPillarFromTwoHalos(svg, daggerPoints, pillarLen) {
   );
 }
 
+// --- halo_atlas: multi-primitive layered model -------------------------------
+//
+// Each visible halo / arc is a first-class circle (or upper-arc-of-circle).
+// Daggers and pillar are derived from intersections / vesicas. Sun altitude
+// finally binds: parhelion offset = R_22 / cos(altitude). Calibration against
+// the Troels Nielsen photograph showed the parhelia sit at ~24° from the sun
+// (not 22° on the halo edge), implying sun altitude ≈ 25° — this is the
+// Phase 3 binding the doc has had on its roadmap.
+//
+// Primitives in this mode:
+//   - 22° halo (sun-centered, existing SVG circle)
+//   - 46° halo (sun-centered, existing SVG circle)
+//   - CZA as full upper-arc of a real circle (replaces the buggy applyCza
+//     for this mode; primary + secondary arcs share a (cx, cy) family,
+//     bell-fill is the band between them)
+//   - Supralateral arc (NEW): upper arc of a circle tangent to the 46° halo
+//     at its top, curving up
+//   - Daggers: at (SUN.x ± R_22/cos(h), SUN.y)
+//   - Pillar: vesica of two halos centered at the (now altitude-derived)
+//     daggers
+//   - Parhelic arc: unique circle through dagger-sun-dagger
+
+function daggerPointsFromSunAltitude(altitudeDeg) {
+  const hRad = (clamp(altitudeDeg, 0, 80) * Math.PI) / 180;
+  const offset = HALO_22_RADIUS / Math.cos(hRad);
+  return {
+    left: { x: SUN.x - offset, y: SUN.y },
+    right: { x: SUN.x + offset, y: SUN.y },
+  };
+}
+
+function applyParhelicCircleGeneralized(svg, daggerPoints, parhelicCurvature) {
+  // Same construction as v2 but parameterised by the half-chord between
+  // daggers, which now depends on sun altitude rather than being fixed at R_22.
+  const parhelic = svg.querySelector("#parhelic-path");
+  if (!parhelic) return;
+
+  const c = clamp(parhelicCurvature, 0, 1);
+  const h = 200 * c;
+  const halfChord = daggerPoints.right.x - SUN.x;
+
+  if (h < 0.5) {
+    parhelic.setAttribute(
+      "d",
+      "M " + daggerPoints.left.x.toFixed(2) + " " + SUN.y.toFixed(2) + " L " +
+        daggerPoints.right.x.toFixed(2) + " " + SUN.y.toFixed(2)
+    );
+    return;
+  }
+
+  const cy = SUN.y + (halfChord * halfChord - h * h) / (2 * h);
+  const r = Math.hypot(halfChord, SUN.y - cy);
+
+  const xMin = Math.max(SUN.x - r, 0);
+  const xMax = Math.min(SUN.x + r, 1000);
+  const dx = xMax - xMin;
+  if (dx <= 1e-6) return;
+  const steps = 140;
+  const parts = [];
+  for (let i = 0; i <= steps; i += 1) {
+    const x = xMin + (dx * i) / steps;
+    const u = (x - SUN.x) / r;
+    const inside = 1 - u * u;
+    const y = cy - r * Math.sqrt(Math.max(0, inside));
+    parts.push((i === 0 ? "M " : "L ") + x.toFixed(2) + " " + y.toFixed(2));
+  }
+  parhelic.setAttribute("d", parts.join(" "));
+}
+
+function upperArcPath(cx, cy, r, xClipMin, xClipMax, yClipMax) {
+  const xMin = Math.max(cx - r, xClipMin);
+  const xMax = Math.min(cx + r, xClipMax);
+  const dx = xMax - xMin;
+  if (dx <= 1e-6) return "";
+  const steps = 160;
+  const parts = [];
+  let started = false;
+  for (let i = 0; i <= steps; i += 1) {
+    const x = xMin + (dx * i) / steps;
+    const u = (x - cx) / r;
+    const inside = 1 - u * u;
+    if (inside < 0) continue;
+    const y = cy - r * Math.sqrt(inside);
+    if (y > yClipMax) continue;
+    parts.push((started ? "L " : "M ") + x.toFixed(2) + " " + y.toFixed(2));
+    started = true;
+  }
+  return parts.join(" ");
+}
+
+function czaApexFromCurvature(czaCurve) {
+  return 200 - 140 * clamp(czaCurve, 0.4, 1.4);
+}
+
+function czaCircleFromApex(apexY, endpointY, halfWidth) {
+  const num = halfWidth * halfWidth + endpointY * endpointY - apexY * apexY;
+  const den = 2 * (endpointY - apexY);
+  if (Math.abs(den) < 1e-6) return null;
+  const cy = num / den;
+  const r = Math.abs(apexY - cy);
+  return { cx: SUN.x, cy: cy, r: r };
+}
+
+function applyCzaFullRing(svg, czaCurve) {
+  const primary = svg.querySelector("#cza-primary");
+  const secondary = svg.querySelector(".cza-secondary");
+  const bellFill = svg.querySelector(".cza-bell-fill");
+  if (!primary) return;
+
+  const primaryApexY = czaApexFromCurvature(czaCurve);
+  const primaryCircle = czaCircleFromApex(primaryApexY, 240, 300);
+  if (primaryCircle) {
+    const d = upperArcPath(primaryCircle.cx, primaryCircle.cy, primaryCircle.r, 0, 1000, 240);
+    if (d) primary.setAttribute("d", d);
+  }
+
+  const secondaryApexY = primaryApexY + 120;
+  const secondaryCircle = czaCircleFromApex(secondaryApexY, 300, 240);
+  if (secondary && secondaryCircle) {
+    const d = upperArcPath(secondaryCircle.cx, secondaryCircle.cy, secondaryCircle.r, 0, 1000, 300);
+    if (d) secondary.setAttribute("d", d);
+  }
+
+  if (bellFill && primaryCircle && secondaryCircle) {
+    const primForward = upperArcPath(primaryCircle.cx, primaryCircle.cy, primaryCircle.r, 200, 800, 240);
+    const xMinS = Math.max(secondaryCircle.cx - secondaryCircle.r, 260);
+    const xMaxS = Math.min(secondaryCircle.cx + secondaryCircle.r, 740);
+    const stepsS = 120;
+    const dxS = xMaxS - xMinS;
+    let secReversed = "";
+    if (dxS > 1e-6) {
+      const pts = [];
+      for (let i = 0; i <= stepsS; i += 1) {
+        const x = xMaxS - (dxS * i) / stepsS;
+        const u = (x - secondaryCircle.cx) / secondaryCircle.r;
+        const inside = 1 - u * u;
+        if (inside < 0) continue;
+        const y = secondaryCircle.cy - secondaryCircle.r * Math.sqrt(inside);
+        pts.push("L " + x.toFixed(2) + " " + y.toFixed(2));
+      }
+      secReversed = pts.join(" ");
+    }
+    if (primForward && secReversed) {
+      bellFill.setAttribute("d", primForward + " " + secReversed + " Z");
+    }
+  }
+}
+
+function applySupralateralArc(svg, intensity) {
+  const supra = svg.querySelector("#supralateral-path");
+  if (!supra) return;
+  if (intensity <= 0.001) {
+    supra.setAttribute("d", "");
+    return;
+  }
+  const tangentY = SUN.y - 440;
+  const R_supra = 400;
+  const cx = SUN.x;
+  const cy = tangentY - R_supra;
+  const xMin = Math.max(cx - R_supra, 0);
+  const xMax = Math.min(cx + R_supra, 1000);
+  const dx = xMax - xMin;
+  if (dx <= 1e-6) return;
+  const steps = 160;
+  const parts = [];
+  let started = false;
+  for (let i = 0; i <= steps; i += 1) {
+    const x = xMin + (dx * i) / steps;
+    const u = (x - cx) / R_supra;
+    const inside = 1 - u * u;
+    if (inside < 0) continue;
+    const y = cy + R_supra * Math.sqrt(inside);
+    if (y < 0 || y > tangentY + 5) continue;
+    parts.push((started ? "L " : "M ") + x.toFixed(2) + " " + y.toFixed(2));
+    started = true;
+  }
+  supra.setAttribute("d", parts.join(" "));
+}
+
+function applyGeometryHaloAtlas(svg, rootStyle) {
+  const sunAltitude = readCssNumber(rootStyle, "--sun-altitude", 18);
+  const pillarLen = readCssNumber(rootStyle, "--sun-pillar-length", 0.65);
+  const daggerLen = readCssNumber(rootStyle, "--parhelia-dagger-length", 1);
+  const compassLen = readCssNumber(rootStyle, "--compass-ray-length", 1);
+  const czaCurve = readCssNumber(rootStyle, "--cza-curvature", 0.85);
+  const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
+  const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
+  const supralateralIntensity = readCssNumber(rootStyle, "--supralateral-intensity", 0);
+
+  const daggerPoints = daggerPointsFromSunAltitude(sunAltitude);
+
+  applyParhelicCircleGeneralized(svg, daggerPoints, parhelicCurvature);
+  applyDaggersFromGoverningHalo(svg, daggerLen, daggerPoints);
+  applyPillarFromTwoHalos(svg, daggerPoints, pillarLen);
+  applyCzaFullRing(svg, czaCurve);
+  applySupralateralArc(svg, supralateralIntensity);
+
+  applyCompassRays(svg, compassLen);
+  applySecondaryHalos(svg, overlapBias);
+}
+
 function applyGeometryHaloGoverned(svg, rootStyle) {
   const pillarLen = readCssNumber(rootStyle, "--sun-pillar-length", 0.65);
   const daggerLen = readCssNumber(rootStyle, "--parhelia-dagger-length", 1);
@@ -531,14 +732,12 @@ function applyGeometryHaloGoverned(svg, rootStyle) {
   const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
   const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
 
-  // Daggers are the anchor — fixed on the parhelic circle, no derivation.
   const daggerPoints = daggerPointsHorizontal();
 
   applyParhelicCircleThroughDaggersAndSun(svg, parhelicCurvature);
   applyDaggersFromGoverningHalo(svg, daggerLen, daggerPoints);
   applyPillarFromTwoHalos(svg, daggerPoints, pillarLen);
 
-  // Shared behaviors.
   applyCompassRays(svg, compassLen);
   applyCza(svg, czaCurve);
   applySecondaryHalos(svg, overlapBias);
@@ -548,7 +747,9 @@ export function applyParhelionGeometry({ svg, rootStyle, model }) {
   if (!svg || !rootStyle) return;
   svg.dataset.geometryModel = model;
 
-  if (model === "halo_governed") {
+  if (model === "halo_atlas") {
+    applyGeometryHaloAtlas(svg, rootStyle);
+  } else if (model === "halo_governed") {
     applyGeometryHaloGoverned(svg, rootStyle);
   } else if (model === "halo_scaffold") {
     applyGeometryHaloScaffold(svg, rootStyle);
@@ -556,4 +757,3 @@ export function applyParhelionGeometry({ svg, rootStyle, model }) {
     applyGeometryLegacy(svg, rootStyle);
   }
 }
-
