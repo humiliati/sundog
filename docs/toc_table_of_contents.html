@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Table of contents for the Sundog documentation repository.">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <title>Sundog – Documentation Index</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            background:
+                radial-gradient(circle at 15% 15%, rgba(244, 196, 48, 0.10), transparent 24rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 26rem);
+        }
+
+        .page-hero {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 7rem 2rem 4rem;
+        }
+
+        .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            max-width: 880px;
+            color: var(--primary-dark);
+            font-size: clamp(2rem, 6vw, 4rem);
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+        }
+
+        .lede {
+            max-width: 780px;
+            color: #40505C;
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .content {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .toc-section {
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1.75rem;
+        }
+
+        .toc-section h2 {
+            color: var(--primary-dark);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 2px solid var(--line);
+        }
+
+        .toc-section ul {
+            list-style: none;
+        }
+
+        .toc-section li {
+            margin-bottom: 0.65rem;
+        }
+
+        .toc-section a {
+            color: var(--primary-mid);
+            text-decoration: none;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            display: block;
+        }
+
+        .toc-section a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .toc-section .doc-note {
+            color: #6B7B88;
+            font-size: 0.8rem;
+            margin-top: 0.2rem;
+        }
+
+        .reading-order {
+            margin-top: 2rem;
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1.75rem;
+        }
+
+        .reading-order h2 {
+            color: var(--primary-dark);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 2px solid var(--line);
+        }
+
+        .reading-order ol {
+            padding-left: 1.25rem;
+        }
+
+        .reading-order li {
+            color: #40505C;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .reading-order a {
+            color: var(--primary-mid);
+            text-decoration: none;
+        }
+
+        .reading-order a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 760px) {
+            .page-hero {
+                padding: 5rem 1.5rem 3rem;
+            }
+
+            .content {
+                padding: 0 1.5rem 4rem;
+            }
+
+            .toc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../css/sundog-theme.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="../index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="../origin.html">Origin</a>
+                <a href="../applications-gallery.html">Applications Gallery</a>
+                <a href="../threebody.html">Three-Body Experiment</a>
+                <a href="../balance.html">Balance Workbench</a>
+                <a href="README.md" aria-current="page">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <p class="eyebrow">Documentation</p>
+            <h1>Sundog Document Index</h1>
+            <p class="lede">
+                All research, roadmap, and reference documents organized by topic.
+                Start with the <a href="README.md">documentation README</a> or the
+                <a href="RESEARCHER_GUIDE.md">researcher guide</a> for a guided entry path.
+            </p>
+        </section>
+
+        <section class="content">
+
+            <div class="reading-order">
+                <h2>Recommended Reading Order</h2>
+                <ol>
+                    <li>Repository root: <a href="../README.md">README.md</a></li>
+                    <li><a href="RESEARCHER_GUIDE.md">Researcher Guide</a> — shortest path for reviewers and collaborators</li>
+                    <li><a href="SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> — what is testable, what remains future work</li>
+                    <li><a href="PAPER_v1_draft.md">Paper Draft v1</a> and recorded results in the repository</li>
+                    <li><a href="APPLICATIONS.md">Application Map</a> — how workbenches relate to the theorem</li>
+                </ol>
+            </div>
+
+            <div class="toc-grid" style="margin-top: 1.5rem;">
+
+                <div class="toc-section">
+                    <h2>Core Research</h2>
+                    <ul>
+                        <li>
+                            <a href="RESEARCHER_GUIDE.md">Researcher Guide</a>
+                            <p class="doc-note">Shortest path for reviewers and collaborators</p>
+                        </li>
+                        <li>
+                            <a href="SCIENTIFIC_CRITERIA.md">Scientific Criteria</a>
+                            <p class="doc-note">Testable claims, partial support, and future work</p>
+                        </li>
+                        <li>
+                            <a href="PAPER_v1_draft.md">Paper Draft v1</a>
+                            <p class="doc-note">Current academic paper draft</p>
+                        </li>
+                        <li>
+                            <a href="PAPER_OUTLINE_v0.md">Paper Outline v0</a>
+                            <p class="doc-note">Venue framing, reviewer risks, and stress-test interpretation</p>
+                        </li>
+                        <li>
+                            <a href="PHASE2_BLOCKS_DESIGN.md">Phase 2 Blocks Design</a>
+                            <p class="doc-note">Occlusion and block-based follow-up experiment design</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="toc-section">
+                    <h2>Workbench Roadmaps</h2>
+                    <ul>
+                        <li>
+                            <a href="APPLICATIONS.md">Application Map</a>
+                            <p class="doc-note">How operating-envelope workbenches and products relate to the theorem</p>
+                        </li>
+                        <li>
+                            <a href="SUNDOG_V_BALANCE.md">Sundog Balance</a>
+                            <p class="doc-note">Cart-pole hidden-angle workbench; reads shadow, not pole</p>
+                        </li>
+                        <li>
+                            <a href="SUNDOG_V_THREEBODY.md">Sundog Three-Body</a>
+                            <p class="doc-note">Denied full state; indirect instability signatures</p>
+                        </li>
+                        <li>
+                            <a href="SUNDOG_V_GEOMETRY.md">Sundog Geometry</a>
+                            <p class="doc-note">Parametric parhelion render workbench</p>
+                        </li>
+                        <li>
+                            <a href="SUNDOG_V_GIMMICKS.md">Sundog Gimmicks Ledger</a>
+                            <p class="doc-note">Candidate game-native workbenches under evaluation; not yet promoted</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="toc-section">
+                    <h2>Three-Body Experiment</h2>
+                    <ul>
+                        <li>
+                            <a href="threebody-writeup.md">Three-Body Writeup</a>
+                            <p class="doc-note">Public-facing experiment writeup with sensor model audit</p>
+                        </li>
+                        <li>
+                            <a href="THREEBODY_PHASE11_SUMMARY.md">Phase 11 Summary</a>
+                            <p class="doc-note">Guard-quantile and outside-pocket results summary</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="toc-section">
+                    <h2>Product and Application Docs</h2>
+                    <ul>
+                        <li>
+                            <a href="STANDALONE_APP_ROADMAP.md">Standalone App Roadmap</a>
+                            <p class="doc-note">Plan for no/low-dependency .html, .exe, and .apk observer app</p>
+                        </li>
+                        <li>
+                            <a href="DUNGEON_GLEANER_WRITEUP_ROADMAP.md">Dungeon Gleaner Roadmap</a>
+                            <p class="doc-note">Writeup roadmap for the Dungeon Gleaner application</p>
+                        </li>
+                        <li>
+                            <a href="EYES_ONLY_WRITEUP_ROADMAP.md">Eyes Only Roadmap</a>
+                            <p class="doc-note">Writeup roadmap for the Eyes Only runner</p>
+                        </li>
+                        <li>
+                            <a href="MONEY_BAGS_WRITEUP_ROADMAP.md">Money Bags Roadmap</a>
+                            <p class="doc-note">Writeup roadmap for the Money Bags application</p>
+                        </li>
+                        <li>
+                            <a href="runners.md">Runners</a>
+                            <p class="doc-note">Gone Rogue / EyesOnly runner integration</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="toc-section">
+                    <h2>Technical Specs</h2>
+                    <ul>
+                        <li>
+                            <a href="SUNDOG_GENERATOR_SPEC.md">Sundog Generator Spec</a>
+                            <p class="doc-note">Programmatic generator architecture: Prompt → Geometry → SVG</p>
+                        </li>
+                        <li>
+                            <a href="SUNDOG_OVERLAY_PROTOCOL.md">Sundog Overlay Protocol</a>
+                            <p class="doc-note">Overlay protocol specification</p>
+                        </li>
+                        <li>
+                            <a href="UI_UX_THEME_FOUNDATION.md">UI/UX Theme Foundation</a>
+                            <p class="doc-note">Site-wide visual frame: theme tokens, stylesheet layers, component roadmap</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="toc-section">
+                    <h2>Presentation and Promotion</h2>
+                    <ul>
+                        <li>
+                            <a href="PROMO_HIGHLIGHTS.md">Promo Highlights</a>
+                            <p class="doc-note">Hooks, headlines, provocative statements, future-facing language</p>
+                        </li>
+                        <li>
+                            <a href="presentation/claims-and-scope.md">Claims and Scope</a>
+                            <p class="doc-note">What to say, what not to say; safe public claims</p>
+                        </li>
+                        <li>
+                            <a href="presentation/message-house.md">Message House</a>
+                            <p class="doc-note">Core messaging: three-layer structure</p>
+                        </li>
+                        <li>
+                            <a href="presentation/landing-page-outline.md">Landing Page Outline</a>
+                            <p class="doc-note">Web structure: section-by-section plan</p>
+                        </li>
+                        <li>
+                            <a href="presentation/youtube-plan.md">YouTube Plan</a>
+                            <p class="doc-note">Video strategy: content pillars and first five videos</p>
+                        </li>
+                        <li>
+                            <a href="presentation/asset-tracker.md">Asset Tracker</a>
+                            <p class="doc-note">Project management: promotional asset status</p>
+                        </li>
+                        <li>
+                            <a href="presentation/logo-brief.md">Logo Brief</a>
+                            <p class="doc-note">Visual identity guidance</p>
+                        </li>
+                        <li>
+                            <a href="presentation/applications-index.md">Applications Index</a>
+                            <p class="doc-note">Gallery structure for the proof layer</p>
+                        </li>
+                        <li>
+                            <a href="presentation/wikipedia-outreach.md">Wikipedia Outreach</a>
+                            <p class="doc-note">Wikipedia engagement notes</p>
+                        </li>
+                        <li>
+                            <a href="presentation/README.md">Presentation README</a>
+                            <p class="doc-note">Orientation for the promotional materials folder</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="toc-section">
+                    <h2>Site and Infrastructure</h2>
+                    <ul>
+                        <li>
+                            <a href="WEBSITE_DEVELOPMENT.md">Website Development</a>
+                            <p class="doc-note">How to edit HTML pages, link docs, build dist/, and deploy</p>
+                        </li>
+                        <li>
+                            <a href="ICON_ASSETS.md">Icon Assets</a>
+                            <p class="doc-note">Favicon, app icon, manifest, and HTML tags for sundog.cc</p>
+                        </li>
+                        <li>
+                            <a href="THIRD_PARTY_REUSE.md">Third-Party Reuse</a>
+                            <p class="doc-note">Permissions and attribution for borrowed design, code, and assets</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="toc-section">
+                    <h2>Documentation Index</h2>
+                    <ul>
+                        <li>
+                            <a href="README.md">Docs README</a>
+                            <p class="doc-note">Research-facing landing layer and reading order</p>
+                        </li>
+                        <li>
+                            <a href="toc_table_of_contents.html" aria-current="page">Table of Contents</a>
+                            <p class="doc-note">This page</p>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            <a href="https://github.com/humiliati/sundog">GitHub</a>
+            &mdash;
+            <a href="../index.html">Sundog Home</a>
+        </p>
+    </footer>
+</body>
+</html>

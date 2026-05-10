@@ -17,7 +17,7 @@ async function copyPublicDocs(sourceDir, targetDir) {
 
     if (entry.isDirectory()) {
       await copyPublicDocs(source, target);
-    } else if (entry.isFile() && (entry.name.endsWith(".md") || entry.name === "Public-notes.tex")) {
+    } else if (entry.isFile() && (entry.name.endsWith(".md") || entry.name.endsWith(".html") || entry.name === "Public-notes.tex")) {
       await cp(source, target);
     }
   }
