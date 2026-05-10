@@ -9,14 +9,14 @@ code, experiments, prior theorem materials, and application bridges.
   collaborators.
 - [Scientific criteria](SCIENTIFIC_CRITERIA.md): what is testable, what is
   only partially supported, and what remains future work.
-- [Application map](APPLICATIONS.md): how EyesOnly, Dungeon Gleaner, and Money
-  Bags relate to the theorem.
+- [Application map](APPLICATIONS.md): how the operating-envelope workbenches
+  and product systems relate to the theorem.
 - [Promo highlights](PROMO_HIGHLIGHTS.md): hooks, headlines, provocative
   statements, and future-facing language.
 - [Standalone app roadmap](STANDALONE_APP_ROADMAP.md): plan for a no/low
   dependency `.html`, `.exe`, and eventual `.apk` observer app.
-- [Sundog Balance roadmap](SUNDOG_V_BALANCE.md): planned cart-pole workbench
-  for balancing from a shadow-derived signal.
+- [Sundog Balance roadmap](SUNDOG_V_BALANCE.md): confirmed cart-pole
+  operating-envelope workbench for balancing from a shadow-derived signal.
 - [Third-party reuse ledger](THIRD_PARTY_REUSE.md): permissions and attribution
   notes for borrowed design, code, and asset references.
 - [Paper draft](PAPER_v1_draft.md): current academic paper draft.

@@ -34,9 +34,9 @@ boundaries.
   for editing the public site and deploying it through Cloudflare Pages.
 - [Scientific criteria](docs/SCIENTIFIC_CRITERIA.md): what has been made
   testable, what has not, and what would strengthen the paper.
-- [Applications map](docs/APPLICATIONS.md): how the three-body workbench,
-  EyesOnly, Dungeon Gleaner, and Money Bags express Sundog-derived alignment
-  ideas in test surfaces and product systems.
+- [Applications map](docs/APPLICATIONS.md): how the three-body and Balance
+  workbenches, EyesOnly, Dungeon Gleaner, and Money Bags express
+  Sundog-derived alignment ideas in test surfaces and product systems.
 - [Promo highlights](docs/PROMO_HIGHLIGHTS.md): hooks, headlines, and
   future-facing language for public communication.
 - [Standalone app roadmap](docs/STANDALONE_APP_ROADMAP.md): plan for a

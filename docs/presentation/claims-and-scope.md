@@ -34,6 +34,7 @@ These claims are defensible with current evidence:
 - Dungeon Gleaner demonstrates verb-field NPC behavior: unmet needs diffuse across satisfier nodes to produce lightweight idle orbits without scripted planners.
 - Money Bags demonstrates graph-based interpretation of softbody motion, making torsion, deformation, symmetry, and recovery metrics legible.
 - The three-body workbench demonstrates a bounded operating-envelope result: in the tested planar restricted setup, guarded accelerometer-proxy TRACK control improves survival over passive and naive local baselines inside a high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain known harm boundaries.
+- The Balance workbench demonstrates a bounded operating-envelope result: in the tested browser cart-pole setup, a shadow-derived controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries.
 
 ### Research Status
 - We are continuing to formalize the math and collect examples.
@@ -63,6 +64,8 @@ These claims are defensible with current evidence:
 - ❌ "Money Bags proves softbody alignment is solved." (needs controlled experiments)
 - ❌ "Sundog solves the three-body problem." (Phase 11 is a bounded control-workbench result, not a global dynamics solution)
 - ❌ "The three-body controller predicts chaos." (the result concerns survival improvement in a tested operating pocket)
+- ❌ "Sundog Balance proves shadow-based robotics control." (Phase 10 is a browser operating-envelope study, not hardware validation)
+- ❌ "Sundog Balance works under overhead light." (the overhead-light cells are all-fail degradation margins, not usable control)
 - ❌ "Our applications demonstrate universal applicability."
 
 ### Premature Certainty
@@ -141,6 +144,18 @@ Also avoid presenting the privileged heuristic oracle as an optimal controller. 
 **What's needed:**
 Public Phase 11 charts, an explicit failure-boundary view, longer-horizon stress tests, and a physical-sensor validation plan before making broader control claims.
 
+### Sundog Balance Workbench
+**Safe:**
+"In the tested browser cart-pole setup, the Sundog shadow controller beats naive shadow-centering inside the diagnostic-positive operating envelope. Phase 10 confirmed the claim with 28/28 diagnostic-positive yes-cells, zero hard failure-boundary violations, and a repaired oracle ceiling that reads survival on uncapped cells and hidden-angle RMS on capped cells."
+
+**Avoid:**
+"Sundog Balance proves shadow-based stabilisation works for robotics."
+
+Also avoid presenting P2b overhead-light all-fail survival margins as usable overhead-light control. They are degradation behavior: both controllers fail, with Sundog merely lasting longer under confidence gating.
+
+**What's needed:**
+Public Phase 11 figures, a best-cell/worst-cell replay pair, the toyful visual skin or a clearly diagnostic promo clip, human-vs-agent competition mode, and later physical-sensor validation before robotics claims.
+
 ## Audience-Specific Guidelines
 
 ### When Writing for Researchers
@@ -182,7 +197,7 @@ Public Phase 11 charts, an explicit failure-boundary view, longer-horizon stress
 
 Or:
 
-"The broad theorem is a research program. The controlled result currently defended in the Sundog repo is narrower: photometric mirror alignment without target-position access in a MuJoCo experiment. The three-body workbench is a bounded operating-envelope study; EyesOnly, Dungeon Gleaner, and Money Bags are application expressions that motivate the next round of controlled studies."
+"The broad theorem is a research program. The controlled result currently defended in the Sundog repo is narrower: photometric mirror alignment without target-position access in a MuJoCo experiment. The three-body and Balance workbenches are bounded operating-envelope studies; EyesOnly, Dungeon Gleaner, and Money Bags are application expressions that motivate the next round of controlled studies."
 
 ## Red Flags
 
