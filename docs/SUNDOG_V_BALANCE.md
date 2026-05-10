@@ -4,7 +4,7 @@ Working hook:
 
 > It balances the body by reading the shadow.
 
-Sundog Balance is the proposed last pre-promotion application workbench. It is
+Sundog Balance is the final pre-promotion application workbench. It is
 not another optics extension and not another large physics claim. It is a
 classic control task made visually obvious: a cart-pole / inverted-pendulum
 system must keep a pole upright while the Sundog controller is denied the pole
@@ -16,7 +16,7 @@ The public question is small enough to defend:
 > Can an agent maintain upright balance from an indirect projection when the
 > true alignment variable is hidden?
 
-The workbench should live beside the three-body tab as `balance.html`: a public,
+The workbench lives beside the three-body tab as `balance.html`: a public,
 interactive surface with browser simulation, baselines, telemetry panels,
 failure-boundary presets, and a matching writeup. The final promotional pass can
 capture a short `.gif` of the arm/pole recovering from a disturbance and place
@@ -24,7 +24,7 @@ it after the hero on `index.html`.
 
 *[nice-to-have #12]*
 
-## Sundog Expression *(pre-staged for the eventual APPLICATIONS.md row)*
+## Sundog Expression *(canonical for the APPLICATIONS.md row)*
 
 - **Hidden target:** upright pole angle (`theta`).
 - **Indirect signal:** cast-shadow centroid, length, and velocity on the floor
@@ -36,8 +36,8 @@ it after the hero on `index.html`.
 
 This block is here so the cross-application comparison row in
 `APPLICATIONS.md` and the gallery card's indirect-signal/transformation/output
-triplet do not drift between the roadmap and the eventual writeup. When Phase
-11 lands, both surfaces should quote this block verbatim.
+triplet do not drift between the roadmap and the public writeup. Phase 11 keeps
+the broadcast surfaces aligned to this claim shape.
 
 *[/nice-to-have #12]*
 
@@ -45,9 +45,10 @@ triplet do not drift between the roadmap and the eventual writeup. When Phase
 
 ## Current State
 
-First executable scaffold started. The Sundog tree now includes:
+The executable workbench and verdict harness have landed. The Sundog tree now
+includes:
 
-- `balance.html`: an unpromoted browser workbench tab with a live Phase 8
+- `balance.html`: the public browser workbench tab with a live Phase 8
   recovery curve, impulse/recovery status panel, and Phase 9 use-boundary
   warning panel;
 - `public/js/balance-core.mjs`: deterministic cart-pole dynamics, shadow
@@ -62,24 +63,26 @@ First executable scaffold started. The Sundog tree now includes:
 - `scripts/balance-phase9-boundary.mjs`: a Phase 9 degradation sweep over light,
   delay, noise, dropped frames, rail length, force limit, and disturbance
   magnitude, writing local boundary summaries and unsafe-cell tables.
+- `scripts/balance-phase10-envelope.mjs`: the Phase 10 operating-envelope slate
+  and repaired verdict runner, writing local envelope, comparison, best/worst
+  cell, and verdict artifacts.
 
-No committed Balance results directory and no Phase 10 operating-envelope
-verdict ships in the Sundog tree today. Local Phase 7 smoke/replay outputs and
-Phase 8 metric outputs and Phase 9 boundary outputs are written under ignored
-`results/balance/` paths and are calibration artifacts, not public evidence.
-The current artifact is a Phase 1-9 scaffold, not evidence.
+No committed Balance results directory is expected: Phase 7-10 outputs are
+written under ignored `results/balance/` paths so the public site does not ship
+bulk slate data. The broadcastable result is the repaired Phase 10 CONFIRM
+summary documented below and reproducible with `npm run balance:phase10`.
 
-This section is here so the broadcast surfaces (gallery card, APPLICATIONS.md,
-claims-and-scope.md) do not get a row until the runnable-artifact gates below
-are met. Until then, Balance sits at **Forward-Looking Application Design /
-Conceptual Lineage** tier in the application family — sibling to LAGM in the
-EyesOnly section, not sibling to the EyesOnly headless runner.
+This section records the promotion gates that keep the broadcast surfaces
+(gallery card, APPLICATIONS.md, claims-and-scope.md) tied to runnable artifacts
+and a fixed verdict. After the repaired Phase 10 CONFIRM rerun, Balance sits at
+**Operating-Envelope Study** tier in the application family.
 
 Promotion to **Planned Workbench** tier requires Phase 0–4 deliverables
 landing +++[forward-plan-A]+++ *(achieved 2026-05-08; phases 5–6 also landed,
-Phase 7 smoke in flight)* +++[/forward-plan-A]+++. Promotion to
+Phase 7 smoke completed)* +++[/forward-plan-A]+++. Promotion to
 **Operating-Envelope Study** tier requires the Pre-Registered Verdict Template
-below to return a CONFIRM verdict.
+below to return a CONFIRM verdict +++[phase10-rerun-status]+++ *(achieved by
+the repaired Phase 10 rerun)* +++[/phase10-rerun-status]+++.
 
 +++[forward-plan-A]+++
 
@@ -740,17 +743,17 @@ Goal: make Sundog Balance promotion-ready without overclaiming.
 Deliverables:
 
 - Final `balance.html` tab linked from nav beside `threebody.html`.
+  +++[phase11-status]+++ *(landed)* +++[/phase11-status]+++
 - Short writeup titled around "Balancing By The Shadow."
-- Applications gallery card with evidence tier set to "Planned Workbench" until
-  Phase 7-10 artifacts exist, then ~~"Operating-Envelope Study" if the metrics
-  earn it.~~ ***[must-fix #2]*** "Operating-Envelope Study" if and only if the
-  Pre-Registered Verdict Template above returns a CONFIRM verdict. REFUTE
-  keeps the card at "Planned Workbench" with a negative-finding banner.
-  AMBIGUOUS holds the card unchanged until a re-run produces CONFIRM or
-  REFUTE. ***[/must-fix #2]***
-- `docs/APPLICATIONS.md` row only after the workbench has runnable artifacts
-  ***[must-fix #2]*** *and* a CONFIRM verdict; on REFUTE, the row lands
-  carrying the negative finding rather than being omitted ***[/must-fix #2]***.
+  +++[phase11-status]+++ *(landed as bounded Balance page and application-map
+  copy)* +++[/phase11-status]+++
+- Applications gallery card with evidence tier set to "Operating-Envelope
+  Study" after the repaired Phase 10 CONFIRM verdict.
+  +++[phase11-status]+++ *(landed)* +++[/phase11-status]+++
+- `docs/APPLICATIONS.md` row carrying the Balance bounded claim after runnable
+  artifacts and a CONFIRM verdict. On REFUTE, this row would have carried the
+  negative finding rather than being omitted.
+  +++[phase11-status]+++ *(landed after CONFIRM)* +++[/phase11-status]+++
 - A short `.gif` or lightweight video of the arm/pole recovering from a
   disturbance. ***[must-fix #4]*** **The gif is decoration, not evidence.**
   The evidence is the operating-envelope CSV at
@@ -788,18 +791,17 @@ both recovery and the failure boundary.* +++[/phase11-status]+++
 
 ## Post-Verdict / Conditional Roadmap
 
-The phases below are pre-registered against the assumption that Phase 10
-returns a CONFIRM verdict. They are *not* pre-emptive of that verdict. The
-Phase 7 smoke result is encouraging signal that informs forward planning;
-it does not move the verdict gate.
+The phases below were pre-registered against the assumption that Phase 10 would
+return a CONFIRM verdict. The repaired Phase 10 rerun has now returned CONFIRM,
+so this section becomes the active post-verdict roadmap rather than a
+pre-verdict branch.
 
-If Phase 10 returns REFUTE or AMBIGUOUS, this section is reshaped or
-scrapped before the broadcast pass. Specifically: Phase 12 (UI feature) can
+Had Phase 10 returned REFUTE or AMBIGUOUS, this section would have been reshaped
+or scrapped before the broadcast pass. Specifically: Phase 12 (UI feature) could
 ship regardless of verdict because it does not extend any research claim.
-Phase 12.5 (visual skin) can also ship regardless of verdict as long as it
-preserves the negative-finding and raw-diagnostic paths. Phase 13 and Phase 14
-are gated on CONFIRM and do not run on a REFUTE verdict — they would extend a
-claim the Phase 10 data has refuted.
+Phase 12.5 (visual skin) could also ship regardless of verdict as long as it
+preserved the negative-finding and raw-diagnostic paths. Phase 13 and Phase 14
+were gated on CONFIRM and are now eligible to run.
 
 This section is here so the *shape* of the broader-claim attack is
 pre-registered with the same discipline as the Phase 10 verdict template,
@@ -1023,26 +1025,25 @@ What it would not prove:
 
 ## Pre-Committed Cross-Application Comparison Row
 
-When Phase 11 lands and Balance enters
-`docs/APPLICATIONS.md § Cross-Application Comparison`, the row should read:
+Phase 11 has landed and Balance now appears in
+`docs/APPLICATIONS.md` under the cross-application comparison. The row should
+continue to read:
 
 | Application | Domain | Indirect signal | Transformation | Actionable output |
 | --- | --- | --- | --- | --- |
 | Sundog Balance | Embodied control | Cast-shadow centroid, length, and velocity on the floor plane under controlled light geometry | SCAN/SEEK/TRACK shadow-residual control with cart-proprioceptive history, action-history coupling, and observability gating | Bounded cart force command maintaining upright pole inside a mapped lighting and delay envelope, failing cleanly outside it |
 
-Pre-staging the row here means the writeup pass cannot drift the language
-between the roadmap and the broadcast. CONFIRM verdict promotes the row from
-"Forward-Looking Application Design" to a live row in the table; REFUTE
-verdict keeps the row out of the table and lands the negative finding in a
-sibling row of the Cross-Application Comparison's "Refuted Applications"
-column (currently absent — Balance under REFUTE would be the first occupant
-and would establish the pattern for the rest of the program).
+Keeping the row here means later writeup passes cannot drift the language
+between the roadmap and the broadcast. The repaired Phase 10 CONFIRM verdict
+promoted the row from forward-looking design to a live row in the table; a
+future contradictory rerun would require an explicit negative-finding update
+rather than quiet omission.
 
 *[/nice-to-have #10]*
 
-## Suggested First Build Slice
+## Initial Build Slice
 
-The first implementation pass should be deliberately small:
+The first implementation pass was deliberately small:
 
 1. Implement deterministic cart-pole dynamics in a shared JS module.
 2. Build `balance.html` with one canvas and three controller buttons.
