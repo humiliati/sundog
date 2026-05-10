@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog Pressure Mines Workbench: clearing a minefield when mines are hidden and tiles offer only noisy pressure fields">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <title>Sundog Pressure Mines Workbench</title>
+    <style>
+        /* Page-local tokens: workbench-specific ink/paper (other tokens come from sundog-theme.css). */
+        :root {
+            --ink: #20303A;
+            --paper: #FFFFFF;
+        }
+
+        /* Page-local: header/nav/brand/links chrome lives in sundog-theme.css */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--ink);
+            overflow-x: hidden;
+        }
+
+        .workbench {
+            min-height: calc(100vh - 58px);
+            height: calc(100vh - 58px);
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            background: #0D2030;
+        }
+
+        .stage {
+            position: relative;
+            min-height: calc(100vh - 58px);
+            height: 100%;
+            max-height: calc(100vh - 58px);
+            overflow: hidden;
+        }
+
+        #mines-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .stage-copy {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            z-index: 2;
+            width: min(560px, calc(100% - 4rem));
+            color: var(--text-light);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            color: var(--accent-gold);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stage-copy .eyebrow {
+            font-size: 0.7rem;
+            margin-bottom: 0.2rem;
+        }
+
+        h1 {
+            font-size: clamp(1.4rem, 2.8vw, 2rem);
+            line-height: 1.02;
+            letter-spacing: 0;
+            margin-bottom: 0.25rem;
+        }
+
+        .stage-copy p {
+            max-width: 46rem;
+            color: rgba(245, 245, 245, 0.86);
+            font-size: 0.84rem;
+        }
+
+        .status-strip {
+            position: absolute;
+            left: 2rem;
+            right: 2rem;
+            bottom: 1.5rem;
+            z-index: 3;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-light);
+            background: rgba(8, 20, 30, 0.72);
+            border: 1px solid rgba(244, 196, 48, 0.22);
+            border-radius: 8px;
+            padding: 0.9rem 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        #mines-status {
+            color: var(--accent-gold);
+            font-family: var(--sd-font-data);
+            font-size: 0.92rem;
+            overflow-wrap: anywhere;
+        }
+
+        #phase-display {
+            min-width: 6.6rem;
+            text-align: center;
+            border: 1px solid rgba(244, 196, 48, 0.35);
+            border-radius: 999px;
+            padding: 0.35rem 0.7rem;
+            color: var(--accent-gold);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        #mines-metrics {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            color: rgba(245, 245, 245, 0.78);
+            font-family: var(--sd-font-data);
+            font-size: 0.84rem;
+        }
+
+        .controls select {
+            color: #f0f5f8;
+            background-color: rgba(8, 20, 30, 0.82);
+            border-color: rgba(244, 196, 48, 0.45);
+        }
+
+        .controls select option {
+            color: #f0f5f8;
+            background-color: #122334;
+        }
+
+        .controls {
+            position: relative;
+            z-index: 5;
+            min-height: calc(100vh - 58px);
+            height: 100%;
+            max-height: calc(100vh - 58px);
+            padding: 0.7rem 0.85rem;
+            color: var(--text-light);
+            background: rgba(26, 58, 82, 0.98);
+            border-left: 1px solid rgba(244, 196, 48, 0.22);
+            overflow-y: auto;
+        }
+
+        .controls h2,
+        .controls h3 {
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .controls h2 {
+            font-size: 1rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .controls h3 {
+            font-size: 0.78rem;
+            margin: 0.8rem 0 0.4rem;
+        }
+
+        .control-row {
+            margin-bottom: 0.5rem;
+        }
+
+        label {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            color: rgba(245, 245, 245, 0.86);
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.22rem;
+        }
+
+        select,
+        input[type="number"],
+        input[type="range"],
+        button {
+            width: 100%;
+        }
+
+        select,
+        input[type="number"] {
+            padding: 0.42rem 0.5rem;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(244, 196, 48, 0.3);
+            border-radius: 4px;
+        }
+
+        input[type="number"] {
+            font-family: var(--sd-font-data);
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.32rem;
+        }
+
+        button {
+            min-height: 2.1rem;
+            padding: 0.4rem;
+            border: 1px solid rgba(244, 196, 48, 0.35);
+            border-radius: 4px;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.08);
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        button:hover,
+        button.active {
+            color: var(--primary-dark);
+            background: var(--accent-gold);
+        }
+
+        .control-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.32rem;
+        }
+
+        .note {
+            margin-top: 0.55rem;
+            padding: 0.55rem;
+            color: rgba(245, 245, 245, 0.76);
+            background: rgba(0, 0, 0, 0.18);
+            border-left: 3px solid var(--accent-gold);
+            border-radius: 0 4px 4px 0;
+            font-size: 0.76rem;
+            line-height: 1.35;
+        }
+
+        .body-copy {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .body-copy h2 {
+            color: var(--primary-dark);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .body-copy p {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .claim-box {
+            margin-top: 2rem;
+            padding: 1.2rem;
+            border: 1px solid rgba(26, 58, 82, 0.18);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        /* Page-local: footer styling lives in sundog-theme.css */
+
+        @media (max-width: 900px) {
+            .workbench {
+                height: auto;
+                grid-template-columns: 1fr;
+            }
+
+            .stage {
+                min-height: 78vh;
+                height: 78vh;
+                max-height: none;
+            }
+
+            .controls {
+                min-height: 0;
+                height: auto;
+                max-height: none;
+                border-left: none;
+                border-top: 1px solid rgba(244, 196, 48, 0.22);
+            }
+
+            .stage-copy {
+                top: 1.2rem;
+                left: 1.2rem;
+                width: calc(100% - 2.4rem);
+            }
+
+            .stage-copy p {
+                font-size: 0.96rem;
+            }
+
+            .status-strip {
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                grid-template-columns: 1fr;
+            }
+
+            #phase-display {
+                justify-self: start;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="index.html">Home</a>
+                <a href="origin.html">Origin</a>
+                <a href="applications-gallery.html">Applications Gallery</a>
+                <a href="threebody.html">Three-Body Experiment</a>
+                <a href="balance.html">Balance Workbench</a>
+                <a href="mines.html" aria-current="page">Pressure Mines</a>
+                <a href="docs/README.md">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="workbench" aria-label="Sundog Pressure Mines interactive workbench">
+            <div class="stage">
+                <canvas id="mines-canvas"></canvas>
+                <div class="stage-copy">
+                    <div class="eyebrow">Planned Workbench</div>
+                    <h1>Sundog Pressure Mines</h1>
+                    <p>
+                        A minefield workbench where mine locations are hidden.
+                        Phase 0 establishes claim boundaries and task definition.
+                        The pressure field is indirect; the mines stay buried.
+                    </p>
+                </div>
+                <div class="status-strip" aria-live="polite">
+                    <div id="mines-status">Phase 0: Roadmap Complete</div>
+                    <div id="phase-display">PLANNED</div>
+                    <div id="mines-metrics"></div>
+                </div>
+            </div>
+
+            <aside class="controls" aria-label="Mines controls">
+                <h2>Workbench Controls</h2>
+                <div class="note">
+                    <strong>Phase 0 Status</strong><br>
+                    This workbench is currently in the roadmap phase. Phase 1-6
+                    implementation is required before the interactive minefield and
+                    pressure sensor become available.
+                </div>
+
+                <h3>Roadmap</h3>
+                <div class="control-row">
+                    <p style="font-size: 0.82rem; line-height: 1.4; color: rgba(245, 245, 245, 0.82);">
+                        See <a href="docs/sundog_v_minesweeper.md"
+                           style="color: var(--accent-gold); text-decoration: underline;">
+                           docs/sundog_v_minesweeper.md
+                        </a> for the full implementation roadmap.
+                    </p>
+                </div>
+
+                <h3>Planned Features</h3>
+                <div class="control-row">
+                    <ul style="font-size: 0.82rem; line-height: 1.5; color: rgba(245, 245, 245, 0.78); list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;">
+                            <strong style="color: var(--accent-gold);">Phase 1:</strong>
+                            Board core with seeded mine placement
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <strong style="color: var(--accent-gold);">Phase 2:</strong>
+                            Pressure sensor model and field rendering
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <strong style="color: var(--accent-gold);">Phase 3-5:</strong>
+                            Diagnostics, baselines, and Sundog controller
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <strong style="color: var(--accent-gold);">Phase 6:</strong>
+                            Real-time browser workbench
+                        </li>
+                    </ul>
+                </div>
+
+                <h3>Claim Boundary</h3>
+                <div class="note">
+                    The workbench will NOT claim to solve Minesweeper or to reveal
+                    the hidden board in general. It will ask whether a lossy pressure
+                    field preserves enough structure for bounded reveal/flag decisions
+                    inside a mapped operating envelope.
+                </div>
+            </aside>
+        </section>
+
+        <section class="body-copy">
+            <h2>Reading the Minefield</h2>
+            <p>
+                The mine is hidden. The field still bends around it.
+            </p>
+            <p>
+                Sundog Pressure Mines asks whether an agent can clear a minefield when
+                mine locations are hidden and nearby tiles offer only a noisy, lossy
+                pressure field instead of exact adjacency counts.
+            </p>
+            <p>
+                This is not about building a better puzzle solver. It is about showing
+                a legible environment where hidden danger leaves enough indirect
+                structure for bounded action—inside a mapped observability envelope.
+            </p>
+
+            <div class="claim-box">
+                <strong style="color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.08em;">Narrow Claim</strong>
+                <p style="margin-top: 0.5rem; margin-bottom: 0;">
+                    In some minefield regimes, a lossy pressure field preserves enough
+                    control-relevant structure for bounded reveal/flag decisions to
+                    outperform naive local heuristics, while explicit noise, delay, and
+                    ambiguity boundaries mark where that structure stops being usable.
+                </p>
+            </div>
+
+            <h2 style="margin-top: 3rem;">Why This Workbench</h2>
+            <p>
+                Balance asks whether the body can be controlled through its cast shadow.
+                Three-body asks whether useful action can be taken from compressed
+                signatures around instability. Pressure Mines asks the same family
+                question in a game that nearly everyone already understands:
+            </p>
+            <ol style="margin-left: 2rem; margin-bottom: 1rem; font-size: 1.05rem; line-height: 1.8;">
+                <li>The danger is hidden</li>
+                <li>Nearby tiles carry traces</li>
+                <li>Those traces are partial, noisy, and sometimes misleading</li>
+                <li>The player must still act</li>
+            </ol>
+            <p>
+                This makes Pressure Mines a strong first game-native Sundog surface
+                because the core theoremic move is legible without any physics
+                background. The viewer does not need to accept orbital mechanics,
+                optics, or robotics conventions. The board itself says what the
+                experiment is about.
+            </p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <nav class="footer-links">
+            <a href="docs/README.md">Docs</a>
+            <a href="applications-gallery.html">Applications Gallery</a>
+            <a href="https://github.com/humiliati/sundog">GitHub Repository</a>
+        </nav>
+        <p class="footer-note">
+            Sundog Pressure Mines Workbench is part of the Sundog research program.
+            Current evidence tier: Planned Workbench (Phase 0).
+        </p>
+    </footer>
+
+    <script type="module">
+        // Phase 0 stub: no interactive implementation yet
+        const canvas = document.getElementById('mines-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            drawPlaceholder();
+        }
+
+        function drawPlaceholder() {
+            ctx.fillStyle = '#0D2030';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = 'rgba(244, 196, 48, 0.15)';
+            ctx.strokeStyle = 'rgba(244, 196, 48, 0.3)';
+            ctx.lineWidth = 2;
+
+            const gridSize = 8;
+            const tileSize = Math.min(canvas.width, canvas.height) / (gridSize + 2);
+            const offsetX = (canvas.width - gridSize * tileSize) / 2;
+            const offsetY = (canvas.height - gridSize * tileSize) / 2;
+
+            // Draw placeholder grid
+            for (let row = 0; row < gridSize; row++) {
+                for (let col = 0; col < gridSize; col++) {
+                    const x = offsetX + col * tileSize;
+                    const y = offsetY + row * tileSize;
+                    ctx.fillRect(x, y, tileSize - 1, tileSize - 1);
+                    ctx.strokeRect(x, y, tileSize - 1, tileSize - 1);
+                }
+            }
+
+            // Draw placeholder text
+            ctx.fillStyle = 'rgba(244, 196, 48, 0.6)';
+            ctx.font = '24px monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Phase 0: Implementation Pending', canvas.width / 2, canvas.height / 2);
+
+            ctx.font = '14px monospace';
+            ctx.fillStyle = 'rgba(245, 245, 245, 0.5)';
+            ctx.fillText('See roadmap for planned features', canvas.width / 2, canvas.height / 2 + 40);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+    </script>
+</body>
+</html>
