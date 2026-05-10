@@ -5,6 +5,8 @@ code, experiments, prior theorem materials, and application bridges.
 
 ## Primary Entry Points
 
+- [Table of contents](toc_table_of_contents.html): browsable HTML index of all
+  documents in this folder.
 - [Researcher guide](RESEARCHER_GUIDE.md): shortest path for reviewers and
   collaborators.
 - [Scientific criteria](SCIENTIFIC_CRITERIA.md): what is testable, what is
@@ -17,6 +19,8 @@ code, experiments, prior theorem materials, and application bridges.
   dependency `.html`, `.exe`, and eventual `.apk` observer app.
 - [Sundog Balance roadmap](SUNDOG_V_BALANCE.md): confirmed cart-pole
   operating-envelope workbench for balancing from a shadow-derived signal.
+- [Sundog Gimmicks Ledger](SUNDOG_V_GIMMICKS.md): candidate game-native
+  workbenches under evaluation before promotion to full roadmap documents.
 - [Third-party reuse ledger](THIRD_PARTY_REUSE.md): permissions and attribution
   notes for borrowed design, code, and asset references.
 - [Paper draft](PAPER_v1_draft.md): current academic paper draft.
