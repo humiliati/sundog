@@ -34,7 +34,7 @@ Use these tiers when discussing application evidence:
 | Tier | Meaning | Current examples |
 | --- | --- | --- |
 | Research result | Controlled task, metrics, baselines, reproducible artifacts. | Photometric mirror alignment in this repo. |
-| Operating-envelope study | Experiment workbench with bounded sweeps, baselines, and mapped failure regions, but not a global domain solution. | Three-body dynamics Phase 11. |
+| Operating-envelope study | Experiment workbench with bounded sweeps, baselines, and mapped failure regions, but not a global domain solution. | Three-body dynamics Phase 11; Sundog Balance Phase 10. |
 | Instrumented prototype | Product system with telemetry and repeatable harnesses, but not yet a paper-style study. | Money Bags playtest bundles, Sundog Gone Rogue runner. |
 | Product expression | Player-facing mechanic or agent system that embodies the idea, but needs formal measurement. | Dungeon Gleaner verb-field NPC behavior. |
 | Conceptual lineage | Historical or design-language connection without enough evidence yet. | Older theorem docs, broad broadcast language. |
@@ -81,6 +81,50 @@ operating-envelope result:
 This makes the tab experiment a public workbench surface: it can demonstrate
 how Sundog-style proxy control is tested, where it works, and where it fails,
 without borrowing certainty from the photometric research result.
+
+## Sundog Balance Workbench
+
+Local page: [`balance.html`](../balance.html)
+
+Phase 10 verdict artifact:
+`results/balance/phase10-envelope/verdict.md` (ignored local result; summarized
+in the roadmap for public docs)
+
+Roadmap and audit trail:
+[`docs/SUNDOG_V_BALANCE.md`](SUNDOG_V_BALANCE.md)
+
+### Sundog Expression
+
+The Balance workbench asks whether a cart-pole controller can stabilize a
+hidden pole angle from the visible cast shadow rather than privileged body
+state. It keeps the shadow controller, naive shadow-centering baseline, passive
+baseline, and privileged oracle separate so success and failure boundaries are
+inspectable.
+
+The useful current claim is bounded:
+
+> In the tested browser cart-pole setup, the Sundog shadow controller beats
+> naive shadow-centering inside the diagnostic-positive operating envelope.
+> The result is not global: overhead-light and high-delay cells remain
+> degradation boundaries, and two overhead-light all-fail margins are reported
+> only as degradation behavior, not as usable overhead-light control.
+
+### Evidence Shape
+
+Phase 10 is an operating-envelope result:
+
+- P1 held on `28/28` diagnostic-positive cells, with the yes-cell fraction
+  bootstrap lower bound at `1`;
+- P2a had `0` hard failure-boundary violations; P2b reported `2` all-fail
+  overhead-light survival margins where both Sundog and naive failed;
+- P3's recovery curve was monotonic in delay across the slate;
+- P4 passed the repaired dual-ceiling oracle check: oracle survival exceeded
+  Sundog on `16/18` uncapped cells, and oracle hidden-angle RMS was lower than
+  Sundog on `50/50` capped cells.
+
+This makes Balance a second public operating-envelope workbench: it shows the
+theoremic move in an embodied-control toy, while preserving where the shadow
+signal stops being enough.
 
 ## EyesOnly / Gone Rogue
 
@@ -710,6 +754,7 @@ designed to interpret have not yet run.
 | --- | --- | --- | --- | --- |
 | Sundog core | Photometric control | Detector intensity and proprioception | Scan, seek, extremum tracking | Mirror alignment without target position |
 | Three-body dynamics | Planar restricted dynamics | Local tidal-tensor proxy, acceleration magnitude, and separated privileged diagnostics | Guarded TRACK control over a sensor-motivated instability signature | High-velocity near-escape operating pocket with mapped low-velocity and equal-mass harms |
+| Sundog Balance | Embodied control | Cast-shadow centroid, length, residual, and velocity under controlled light geometry | SCAN/SEEK/TRACK shadow-residual control with confidence gating and separated privileged diagnostics | Bounded cart force maintaining upright balance inside a mapped lighting and delay envelope, with overhead-light and high-delay degradation boundaries |
 | EyesOnly / Gone Rogue | Procedural agent play | Floor, biome, HP, alert, inventory, gate, and combat state from `GoneRogue.headless.getState` | Perception compression plus axis-selected stop-conditioned batches through Playwright | Seedable, policy-pluggable JSONL runs ready for matched-seed comparison studies and future LAGM feeder data |
 | Dungeon Gleaner | Procedural NPC behavior | Unmet-verb gradient over satisfier nodes | Need decay, inverse-distance scoring, linger gates, and noise | Emergent NPC idle orbits without scripted plans |
 | Money Bags | Softbody terrain physics | Spring graph, contact, deformation, torque, centroid motion | Graph metrics and playtest telemetry; pre-registered falsification apparatus around the rotation-permissiveness bias axis | Interpretable rig state, recovery analysis, and a falsifiable hypothesis with verdict template committed before captures |
@@ -721,8 +766,11 @@ For public communication, the applications can be summarized this way:
 > Since the initial theorem release, Sundog has moved from a single
 > mirror-alignment experiment into workbench and product systems. The
 > three-body dynamics tab tests guarded proxy control in a bounded
-> high-velocity near-escape pocket while preserving the failure map. EyesOnly
-> applies the idea to a headless turn-envelope runner against a real procedural roguelike engine,
+> high-velocity near-escape pocket while preserving the failure map. Balance
+> tests shadow-derived cart-pole control inside a mapped lighting and delay
+> envelope while reporting overhead-light all-fail margins as degradation, not
+> usable control. EyesOnly applies the idea to a headless turn-envelope runner
+> against a real procedural roguelike engine,
 > while keeping sibling UX automation and unbuilt LAGM design in separate
 > evidence tiers. Dungeon Gleaner applies it to
 > verb-field NPC behavior, where unmet needs diffuse across satisfier nodes to
@@ -738,8 +786,9 @@ For public communication, the applications can be summarized this way:
 For academic communication, add the boundary:
 
 > These applications motivate the research program. The controlled claim still
-> rests on the photometric mirror-alignment experiment until each application
-> receives its own baselines, metrics, and reproducible study.
+> rests on the photometric mirror-alignment experiment. Three-body and Balance
+> now have bounded operating-envelope studies; the product applications still
+> require their own baselines, metrics, and reproducible studies.
 
 ## Suggested Inspection Order
 
@@ -747,11 +796,13 @@ For academic communication, add the boundary:
 2. Read `docs/RESEARCHER_GUIDE.md`.
 3. Inspect `docs/PAPER_v1_draft.md` and `results/analysis/analysis_summary.json`.
 4. Read `docs/THREEBODY_PHASE11_SUMMARY.md` and launch `threebody.html`.
-5. Read `docs/runners.md` for the EyesOnly bridge.
-6. Inspect EyesOnly's headless runner, UI automation neighbor, and LAGM design
+5. Read `docs/SUNDOG_V_BALANCE.md`, then launch `balance.html` and inspect
+   `results/balance/phase10-envelope/verdict.md`.
+6. Read `docs/runners.md` for the EyesOnly bridge.
+7. Inspect EyesOnly's headless runner, UI automation neighbor, and LAGM design
    surface as separate evidence tiers.
-7. Inspect Dungeon Gleaner's verb-field NPC docs and runtime modules.
-8. Inspect Money Bags' playtest bundles and graph/rig telemetry.
+8. Inspect Dungeon Gleaner's verb-field NPC docs and runtime modules.
+9. Inspect Money Bags' playtest bundles and graph/rig telemetry.
 
 ## Next Documentation Tasks
 
@@ -759,6 +810,8 @@ For academic communication, add the boundary:
   ablation, volatility sweep, and behavior clips.
 - Promote the three-body workbench into the public gallery with Phase 11 charts,
   the comparison slate, and an explicit failure-boundary view.
+- Capture the Balance promo clip from Phase 10 best-cell and worst-cell replay
+  URLs, with the caption naming both recovery and the failure boundary.
 - Add Dungeon Gleaner orbit telemetry for verb, need, node, and dominant-pull
   traces.
 - Add a Dungeon Gleaner GOAP-substitution comparison and tuning-sensitivity

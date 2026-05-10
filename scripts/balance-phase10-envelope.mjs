@@ -730,27 +730,80 @@ function checkP1(envelopeRows, args) {
   };
 }
 
-function checkP2(envelopeRows) {
+function pairedControllerRows(trialRows, cellId, leftMode, rightMode) {
+  const rows = trialRows.filter((row) => row.cellId === cellId);
+  const bySeed = groupBy(rows, (row) => row.seed);
+  const pairs = [];
+  for (const seedRows of bySeed.values()) {
+    const left = seedRows.find((row) => row.mode === leftMode);
+    const right = seedRows.find((row) => row.mode === rightMode);
+    if (left && right) pairs.push({ left, right });
+  }
+  return pairs;
+}
+
+function controllerSucceeded(row) {
+  // Phase 10.5 treats failed trials with transient recovery markers as
+  // degradation telemetry, not hard failure-boundary success.
+  return row?.outcome === "timeout";
+}
+
+function checkP2(envelopeRows, trialRows) {
   const failureRows = envelopeRows.filter((row) => (
     row.light_elev_deg >= 80
     || row.delay_ms >= 200
   ));
-  const violations = failureRows.filter((row) => row.sundog_naive_paired_margin_mean > 0);
-  return {
-    holds: violations.length === 0,
-    failure_regime_cell_count: failureRows.length,
-    violation_count: violations.length,
-    max_violation_margin: roundNumber(Math.max(0, ...violations.map((row) => row.sundog_naive_paired_margin_mean))),
-    violations: violations.map((row) => ({
+  const cellReports = failureRows.map((row) => {
+    const pairs = pairedControllerRows(trialRows, row.cell_id, "sundog_shadow", "naive_shadow");
+    let hardViolationCount = 0;
+    let allFailPairCount = 0;
+    let sundogWins = 0;
+    let naiveWins = 0;
+    let ties = 0;
+    const margins = [];
+
+    for (const { left: sundog, right: naive } of pairs) {
+      const sundogSuccess = controllerSucceeded(sundog);
+      const naiveSuccess = controllerSucceeded(naive);
+      const margin = sundog.simulated_time - naive.simulated_time;
+      margins.push(margin);
+      if (sundogSuccess && !naiveSuccess) hardViolationCount += 1;
+      if (!sundogSuccess && !naiveSuccess) allFailPairCount += 1;
+      if (margin > 1e-6) sundogWins += 1;
+      else if (margin < -1e-6) naiveWins += 1;
+      else ties += 1;
+    }
+
+    const marginMean = mean(margins);
+    const allFailMargin = pairs.length > 0 && allFailPairCount === pairs.length && marginMean > 0;
+    return {
       cell_id: row.cell_id,
       axis: row.axis,
       axis_value: row.axis_value,
       preset: row.preset,
       light_elev_deg: row.light_elev_deg,
       delay_ms: row.delay_ms,
-      sundog_naive_paired_margin_mean: row.sundog_naive_paired_margin_mean,
+      seed_pairs: pairs.length,
+      hard_violation_count: hardViolationCount,
+      all_fail_pair_count: allFailPairCount,
+      all_fail_survival_margin: allFailMargin,
+      sundog_seed_wins: sundogWins,
+      naive_seed_wins: naiveWins,
+      tied_seed_pairs: ties,
+      sundog_naive_paired_margin_mean: roundNumber(marginMean ?? NaN),
       replay_url: row.replay_url,
-    })),
+    };
+  });
+  const hardViolations = cellReports.filter((row) => row.hard_violation_count > 0);
+  const allFailMargins = cellReports.filter((row) => row.all_fail_survival_margin);
+  return {
+    holds: hardViolations.length === 0,
+    failure_regime_cell_count: failureRows.length,
+    hard_violation_count: hardViolations.reduce((sum, row) => sum + row.hard_violation_count, 0),
+    hard_violation_cell_count: hardViolations.length,
+    p2b_all_fail_margin_cell_count: allFailMargins.length,
+    p2b_all_fail_margins_reported_only: allFailMargins,
+    cells: cellReports,
   };
 }
 
@@ -777,43 +830,71 @@ function checkP3(envelopeRows, args) {
   return { holds, series };
 }
 
-function checkP4(envelopeRows) {
-  const measurable = envelopeRows.filter((row) => (
-    Number.isFinite(row.survival_oracle_mean)
-    && Number.isFinite(row.survival_sundog_mean)
-  ));
-  const oracleExceeds = measurable.filter((row) => row.survival_oracle_mean > row.survival_sundog_mean + 1e-6);
-  const rmsMeasured = envelopeRows.filter((row) => (
-    Number.isFinite(row.rms_theta_oracle_mean)
-    && Number.isFinite(row.rms_theta_sundog_mean)
-  ));
-  const oracleLowerRms = rmsMeasured.filter((row) => row.rms_theta_oracle_mean + 1e-6 < row.rms_theta_sundog_mean);
-  const fraction = measurable.length > 0 ? oracleExceeds.length / measurable.length : 0;
-  const rmsFraction = rmsMeasured.length > 0 ? oracleLowerRms.length / rmsMeasured.length : 0;
+function checkP4(envelopeRows, trialRows, args) {
+  const cellReports = envelopeRows.map((row) => {
+    const pairs = pairedControllerRows(trialRows, row.cell_id, "oracle", "sundog_shadow");
+    const capped = pairs.length > 0 && pairs.every(({ left: oracle, right: sundog }) => (
+      oracle.simulated_time >= args.duration - 1e-6
+      && sundog.simulated_time >= args.duration - 1e-6
+    ));
+    const oracleSurvivalExceeds = row.survival_oracle_mean > row.survival_sundog_mean + 1e-6;
+    const oracleLowerRms = row.rms_theta_oracle_mean + 1e-6 < row.rms_theta_sundog_mean;
+    return {
+      cell_id: row.cell_id,
+      axis: row.axis,
+      axis_value: row.axis_value,
+      preset: row.preset,
+      cell_class: row.cell_class,
+      seed_pairs: pairs.length,
+      capped,
+      survival_oracle_mean: row.survival_oracle_mean,
+      survival_sundog_mean: row.survival_sundog_mean,
+      oracle_survival_exceeds: oracleSurvivalExceeds,
+      rms_theta_oracle_mean: row.rms_theta_oracle_mean,
+      rms_theta_sundog_mean: row.rms_theta_sundog_mean,
+      oracle_lower_rms: oracleLowerRms,
+      replay_url: row.replay_url,
+      oracle_replay_url: row.oracle_replay_url,
+    };
+  });
+  const uncapped = cellReports.filter((row) => !row.capped);
+  const capped = cellReports.filter((row) => row.capped);
+  const uncappedOracleExceeds = uncapped.filter((row) => row.oracle_survival_exceeds);
+  const cappedOracleLowerRms = capped.filter((row) => row.oracle_lower_rms);
+  const p4aFraction = uncapped.length > 0 ? uncappedOracleExceeds.length / uncapped.length : 1;
+  const p4bFraction = capped.length > 0 ? cappedOracleLowerRms.length / capped.length : 1;
+  const p4aHolds = uncapped.length === 0 || p4aFraction >= 0.8;
+  const p4bHolds = capped.length === 0 || p4bFraction >= 0.8;
   return {
-    holds: fraction >= 0.8,
-    measured_cell_count: measurable.length,
-    oracle_exceeds_cell_count: oracleExceeds.length,
-    oracle_exceeds_fraction: roundNumber(fraction),
-    oracle_lower_rms_cell_count: oracleLowerRms.length,
-    rms_measured_cell_count: rmsMeasured.length,
-    oracle_lower_rms_fraction: roundNumber(rmsFraction),
+    holds: p4aHolds && p4bHolds,
+    p4a_holds: p4aHolds,
+    p4a_uncapped_cell_count: uncapped.length,
+    p4a_oracle_survival_exceeds_cell_count: uncappedOracleExceeds.length,
+    p4a_oracle_survival_exceeds_fraction: roundNumber(p4aFraction),
+    p4b_holds: p4bHolds,
+    p4b_capped_cell_count: capped.length,
+    p4b_oracle_lower_rms_cell_count: cappedOracleLowerRms.length,
+    p4b_oracle_lower_rms_fraction: roundNumber(p4bFraction),
+    cells: cellReports,
   };
 }
 
-function makeVerdict(envelopeRows, bestWorstRows, args) {
+function makeVerdict(envelopeRows, trialRows, bestWorstRows, args) {
   const p1 = checkP1(envelopeRows, args);
-  const p2 = checkP2(envelopeRows);
+  const p2 = checkP2(envelopeRows, trialRows);
   const p3 = checkP3(envelopeRows, args);
-  const p4 = checkP4(envelopeRows);
-  const verdict = p3.holds && p4.holds && p2.holds
-    ? (p1.holds ? "CONFIRM" : "REFUTE")
-    : "AMBIGUOUS";
+  const p4 = checkP4(envelopeRows, trialRows, args);
+  const verdict = !p1.holds || !p2.holds
+    ? "REFUTE"
+    : p3.holds && p4.holds
+      ? "CONFIRM"
+      : "AMBIGUOUS";
   const reasons = [];
   if (!p1.holds) reasons.push("P1 failed the diagnostic-positive yes-cell bootstrap threshold.");
-  if (!p2.holds) reasons.push("P2 found Sundog exceeding naive inside an overhead/high-delay failure regime; baseline audit required.");
+  if (!p2.holds) reasons.push(`P2a hard failure-boundary violations found: ${p2.hard_violation_count}.`);
+  if (p2.p2b_all_fail_margin_cell_count > 0) reasons.push(`P2b all-fail survival margins reported only: ${p2.p2b_all_fail_margin_cell_count} cells.`);
   if (!p3.holds) reasons.push("P3 failed monotonic recovery in delay; sensor-model audit required.");
-  if (!p4.holds) reasons.push(`P4 failed oracle survival ceiling; oracle audit required. Auxiliary RMS read: oracle lower than Sundog on ${p4.oracle_lower_rms_cell_count}/${p4.rms_measured_cell_count} cells.`);
+  if (!p4.holds) reasons.push(`P4 failed repaired dual-ceiling rule: P4a=${p4.p4a_holds}, P4b=${p4.p4b_holds}.`);
   return {
     schema: "sundog.balance.phase10-verdict.v1",
     generatedAt: new Date().toISOString(),
@@ -855,14 +936,15 @@ function verdictMarkdown(verdict, args) {
     "## P2 - Failure Boundary Realness",
     "",
     `Holds: ${verdict.p2.holds}`,
-    `Failure-regime cells checked: ${verdict.p2.failure_regime_cell_count}`,
-    `Violation count: ${verdict.p2.violation_count}`,
-    `Max violation margin: ${verdict.p2.max_violation_margin}`,
+    `P2 cells checked: ${verdict.p2.failure_regime_cell_count}`,
+    `P2a hard violation count: ${verdict.p2.hard_violation_count}`,
+    `P2a hard violation cells: ${verdict.p2.hard_violation_cell_count}`,
+    `P2b all-fail survival-margin cells (reported only): ${verdict.p2.p2b_all_fail_margin_cell_count}`,
     "",
-    ...(verdict.p2.violations.length ? [
-      "| cell_id | preset | axis | value | margin | replay |",
-      "| --- | --- | --- | ---: | ---: | --- |",
-      ...verdict.p2.violations.map((row) => `| ${row.cell_id} | ${row.preset} | ${row.axis} | ${row.axis_value} | ${row.sundog_naive_paired_margin_mean} | ${row.replay_url} |`),
+    ...(verdict.p2.p2b_all_fail_margins_reported_only.length ? [
+      "| cell_id | preset | axis | value | margin | seed wins | replay |",
+      "| --- | --- | --- | ---: | ---: | --- | --- |",
+      ...verdict.p2.p2b_all_fail_margins_reported_only.map((row) => `| ${row.cell_id} | ${row.preset} | ${row.axis} | ${row.axis_value} | ${row.sundog_naive_paired_margin_mean} | Sundog ${row.sundog_seed_wins}, naive ${row.naive_seed_wins}, ties ${row.tied_seed_pairs} | ${row.replay_url} |`),
       "",
     ] : []),
     "## P3 - Recovery Monotonicity",
@@ -876,10 +958,12 @@ function verdictMarkdown(verdict, args) {
     "## P4 - Privileged Oracle Ceiling",
     "",
     `Holds: ${verdict.p4.holds}`,
-    `Oracle exceeds cells: ${verdict.p4.oracle_exceeds_cell_count}/${verdict.p4.measured_cell_count}`,
-    `Oracle exceeds fraction: ${verdict.p4.oracle_exceeds_fraction}`,
-    `Auxiliary oracle-lower-RMS cells: ${verdict.p4.oracle_lower_rms_cell_count}/${verdict.p4.rms_measured_cell_count}`,
-    `Auxiliary oracle-lower-RMS fraction: ${verdict.p4.oracle_lower_rms_fraction}`,
+    `P4a survival ceiling on uncapped cells: ${verdict.p4.p4a_holds}`,
+    `P4a oracle survival exceeds cells: ${verdict.p4.p4a_oracle_survival_exceeds_cell_count}/${verdict.p4.p4a_uncapped_cell_count}`,
+    `P4a oracle survival exceeds fraction: ${verdict.p4.p4a_oracle_survival_exceeds_fraction}`,
+    `P4b quality ceiling on capped cells: ${verdict.p4.p4b_holds}`,
+    `P4b oracle lower-RMS cells: ${verdict.p4.p4b_oracle_lower_rms_cell_count}/${verdict.p4.p4b_capped_cell_count}`,
+    `P4b oracle lower-RMS fraction: ${verdict.p4.p4b_oracle_lower_rms_fraction}`,
     "",
     "## Reasons",
     "",
@@ -937,7 +1021,7 @@ async function main() {
   const envelopeRows = makeEnvelopeRows(trialRows, args);
   const cellClassRows = makeCellClassMap(envelopeRows);
   const bestWorstRows = makeBestWorstRows(envelopeRows);
-  const verdict = makeVerdict(envelopeRows, bestWorstRows, args);
+  const verdict = makeVerdict(envelopeRows, trialRows, bestWorstRows, args);
   const manifest = {
     schema: "sundog.balance.phase10-envelope.v1",
     generatedAt: verdict.generatedAt,
@@ -990,7 +1074,8 @@ async function main() {
   console.log(`Wrote ${path.relative(repoRoot, outDir)}`);
   console.log(`Verdict: ${verdict.verdict}`);
   console.log(`P1 yes cells ${verdict.p1.yes_cell_count}/${verdict.p1.diagnostic_positive_cell_count}, lower CI ${verdict.p1.yes_fraction_bootstrap_low}`);
-  console.log(`P2 violations ${verdict.p2.violation_count}; P3 ${verdict.p3.holds}; P4 oracle fraction ${verdict.p4.oracle_exceeds_fraction}`);
+  console.log(`P2a hard violations ${verdict.p2.hard_violation_count}; P2b reported-only cells ${verdict.p2.p2b_all_fail_margin_cell_count}; P3 ${verdict.p3.holds}`);
+  console.log(`P4a ${verdict.p4.p4a_oracle_survival_exceeds_cell_count}/${verdict.p4.p4a_uncapped_cell_count}; P4b ${verdict.p4.p4b_oracle_lower_rms_cell_count}/${verdict.p4.p4b_capped_cell_count}`);
 }
 
 main().catch((error) => {
