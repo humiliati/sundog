@@ -265,6 +265,41 @@ as `geometryModel`. Reference poses for both alternative tracks live as
 the `Load params` button, those poses are documentation artifacts only —
 they cannot yet be loaded back into the workbench from the UI.
 
+### Halo Atlas calibration vs Troels Nielsen DR (2026-05-10)
+
+`halo_atlas` extends the Halo Governed v2 reading with three changes the
+photo overlay said were needed:
+
+1. **Sun-altitude binding** — daggers at `(SUN.x ± R_22 / cos(h), SUN.y)`.
+   At the canonical pose `--sun-altitude = 25°` (the value implied by the
+   photo's parhelion offset), daggers move to offset 240, matching the
+   measured photographed parhelia within 0–3 photo px.
+2. **CZA as a true full-ring upper arc** — replaces the broken
+   Bezier-with-buggy-default `applyCza` for atlas mode. The default
+   `--cza-curvature = 0.85` now produces apex y = 81 (canonical), not the
+   collapsed flat line at y = 240. Bell-fill is the band between primary
+   and secondary upper arcs, both as real circles.
+3. **Supralateral arc** — new primitive, tangent to the 46° halo at its
+   top, curving up. Optional via `--supralateral-intensity` (default 0).
+
+Numerical residuals at the canonical atlas pose (sun-altitude 25°,
+parhelic-curvature 0.05, cza-curvature 0.85, supralateral-intensity 0.40):
+
+| feature | atlas prediction | observed | residual |
+| --- | --- | --- | --- |
+| 22° halo radius | 145 (anchor) | 145 | 0 |
+| 46° halo radius | 290 | 285 | 1.8% |
+| left dagger x | 240 | 243 | 3 px (was 12 px in v2) |
+| right dagger x | 560 | 560 | 0 px (was 15 px in v2) |
+| CZA primary apex | (400, 80) | (402, 65) | (2, 15) px |
+| parhelic arc | near-horizontal through daggers and sun | photo's parhelic feature is near-horizontal | ✓ |
+| supralateral arc | upper-canvas arc tangent to 46° halo top | photo has visible bright structure in this region | qualitative ✓ |
+
+Overlay PNG: [`atlas_overlay_troels_nielsen.png`](atlas_overlay_troels_nielsen.png).
+The daggers and parhelic arc residuals close out the two correctable
+defects v2 left open. CZA y-residual remains ~15 px — fixable by tying
+`--cza-curvature` default to sun altitude instead of holding it at 0.85.
+
 ### Halo Governed v2 calibration vs Troels Nielsen DR (2026-05-09)
 
 A first overlay calibration was run on the canonical Troels Nielsen DR

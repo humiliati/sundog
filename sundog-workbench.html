@@ -34,6 +34,7 @@
             --compass-ray-length: 1.0;
             --rainbow-saturation: 0.85;
             --idle-scintillation-amplitude: 0;
+            --supralateral-intensity: 0;
         }
 
         * {
@@ -285,8 +286,21 @@
         }
 
         #parhelion-svg[data-geometry-model="halo_scaffold"] #pillar-line,
-        #parhelion-svg[data-geometry-model="halo_governed"] #pillar-line {
+        #parhelion-svg[data-geometry-model="halo_governed"] #pillar-line,
+        #parhelion-svg[data-geometry-model="halo_atlas"] #pillar-line {
             display: none;
+        }
+
+        /* Supralateral arc: only renders in halo_atlas mode (other modes leave
+           --supralateral-intensity at 0, so the path is empty / invisible). */
+        .layer-supralateral path {
+            fill: none;
+            stroke: url(#prismatic-gradient);
+            stroke-width: 5;
+            opacity: var(--supralateral-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#cza-edge-soften);
+            mix-blend-mode: screen;
         }
 
         .layer-parhelia .dagger {
@@ -476,6 +490,12 @@
                     <circle class="halo-secondary" cx="680" cy="320" r="160"/>
                 </g>
 
+                <!-- Supralateral arc: rendered only in halo_atlas mode.
+                     Tangent to the 46° halo at its top, curving up. -->
+                <g class="layer-supralateral">
+                    <path id="supralateral-path" d=""/>
+                </g>
+
                 <!-- Circumzenithal arc (CZA): the eyelid -->
                 <g class="layer-cza">
                     <!-- Bell-fill: paint-bucket region between the two arcs to produce the
@@ -543,8 +563,9 @@
                     <option value="legacy">Legacy (feature-tuned)</option>
                     <option value="halo_scaffold">Halo Scaffold (ellipse-derived)</option>
                     <option value="halo_governed">Halo Governed (single-circle scaffold)</option>
+                    <option value="halo_atlas">Halo Atlas (multi-primitive layered)</option>
                 </select>
-                <p class="lead" style="margin-top: 0.35rem;">Legacy updates visible features directly. Halo Scaffold uses a free ellipse with hand-fit axes to derive daggers. Halo Governed uses a single circle (the governing halo) to derive the parhelic arc, daggers (intersection with the 22° halo), and the pillar (vesica of two halos centered at the daggers) — the construction proposed in issue #15.</p>
+                <p class="lead" style="margin-top: 0.35rem;">Legacy updates visible features directly. Halo Scaffold uses a free ellipse. Halo Governed uses a single circle through dagger-sun-dagger. Halo Atlas treats every visible arc as the upper portion of its own real circle — sun-altitude binds to dagger placement (parhelion = R₂₂/cos(h)), CZA is a true full ring, and a supralateral arc joins the atlas. Calibrated against the Troels Nielsen DR photograph.</p>
             </div>
 
             <h3>Sun &amp; Pillar</h3>
@@ -601,6 +622,11 @@
             <div class="control-group">
                 <label>Parhelic Arc Intensity<span class="value" id="parhelic-circle-intensity-value">0.45</span></label>
                 <input type="range" id="parhelic-circle-intensity" data-param="parhelic-circle-intensity" min="0" max="1" step="0.01" value="0.45">
+            </div>
+
+            <div class="control-group">
+                <label>Supralateral Arc<span class="value" id="supralateral-intensity-value">0.00</span></label>
+                <input type="range" id="supralateral-intensity" data-param="supralateral-intensity" min="0" max="1" step="0.01" value="0">
             </div>
 
             <div class="control-group">

@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "name": "canonical-halo-atlas",
+    "description": "Canonical Sundog Workbench pose using the Halo Atlas geometry model. Each visible halo / arc is the upper portion of its own real circle. Parhelion offset binds to sun altitude (parhelion = R_22/cos h). CZA is a true full ring. Supralateral arc is a separate primitive tangent to the 46° halo top. Calibrated against Troels Nielsen DR — sun altitude 25° matches the photo's measured parhelion offset.",
+    "schemaVersion": "1.0",
+    "spec": "docs/SUNDOG_GENERATOR_SPEC.md",
+    "model": "halo_atlas",
+    "calibration": {
+      "reference": "troelsnielsensolarphenonomena.jpg",
+      "anchor_22_halo_radius_px": 145,
+      "anchor_sun_px": [400, 356],
+      "implied_sun_altitude_deg": 25,
+      "overlay_evidence": "docs/v2_overlay_troels_nielsen.png"
+    }
+  },
+
+  "geometryModel": "halo_atlas",
+
+  "sunAltitudeDeg": 25,
+
+  "halo22Intensity": 0.95,
+  "halo46Intensity": 0.45,
+
+  "czaIntensity": 0.95,
+  "czaCurvature": 0.85,
+
+  "parhelicCircleIntensity": 0.55,
+  "parhelicCurvature": 0.05,
+
+  "parheliaIntensity": 1.0,
+  "parheliaDaggerLength": 1.0,
+
+  "sunPillarIntensity": 0.80,
+  "sunPillarLength": 0.55,
+
+  "compassRayLength": 1.0,
+
+  "dispersionWidth": 0.70,
+  "rainbowSaturation": 0.85,
+
+  "secondarySunsStrength": 0.0,
+  "ringOverlapBias": 0.5,
+
+  "supralateralIntensity": 0.40,
+
+  "idleScintillationAmplitude": 0.0
+}
