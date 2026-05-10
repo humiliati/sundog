@@ -126,6 +126,64 @@ This makes Balance a second public operating-envelope workbench: it shows the
 theoremic move in an embodied-control toy, while preserving where the shadow
 signal stops being enough.
 
+## Sundog Pressure Mines Workbench
+
+Local page: [`mines.html`](../mines.html) (planned)
+
+Roadmap: [`docs/sundog_v_minesweeper.md`](sundog_v_minesweeper.md)
+
+### Sundog Expression
+
+The Pressure Mines workbench asks whether an agent can clear a minefield when
+mine locations are hidden and nearby tiles offer only a noisy, lossy pressure
+field instead of exact adjacency counts. It keeps the pressure-field sensor,
+naive local-pressure heuristic, passive baseline, and privileged oracle
+separate so success and failure boundaries are inspectable.
+
+The target claim is narrow:
+
+> In some minefield regimes, a lossy pressure field preserves enough
+> control-relevant structure for bounded reveal/flag decisions to outperform
+> naive local heuristics, while explicit noise, delay, and ambiguity boundaries
+> mark where that structure stops being usable.
+
+### Evidence Shape
+
+**Evidence tier:** Planned Workbench (Phase 0)
+
+This workbench is currently in the roadmap phase. Promotion to **Instrumented
+Prototype** requires Phase 1-6 deliverables: board core, pressure sensor model,
+browser page, telemetry, controller modes, and baseline set.
+
+Promotion to **Operating-Envelope Study** requires Phase 7-10 artifacts: a
+reproducible harness, event metrics, sensor degradation sweeps, and a confirmed
+improvement pocket over passive and naive baselines with mapped failure
+boundaries.
+
+### Sundog Signal Separation
+
+- **Hidden target:** local mine occupancy and downstream board risk.
+- **Indirect signal:** noisy pressure values, local field gradients, and bounded
+  scan returns rather than exact adjacency counts.
+- **Transformation:** SCAN/SEEK/TRACK hazard-reading with confidence gating,
+  memory over prior reveals, and conservative fallback when observability
+  drops.
+- **Actionable output:** bounded reveal / flag / scan / abstain decisions that
+  improve survival and board progress over naive local heuristics inside a
+  mapped observability envelope, failing cleanly outside it.
+
+### Claim Boundary
+
+The workbench should avoid broader formulations. It does not claim that:
+
+- "Sundog solves Minesweeper."
+- "The pressure field reveals the hidden board in general."
+- "Indirect inference beats logical deduction."
+- "This is better game AI."
+
+The claim is about bounded usefulness inside a named operating envelope, not
+global mine inference.
+
 ## EyesOnly / Gone Rogue
 
 Repository: [humiliati/EyesOnly](https://github.com/humiliati/EyesOnly)

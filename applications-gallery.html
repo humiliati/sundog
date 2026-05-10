@@ -170,6 +170,7 @@
                 <a href="applications-gallery.html" aria-current="page">Applications Gallery</a>
                 <a href="threebody.html">Three-Body Experiment</a>
                 <a href="balance.html">Balance Workbench</a>
+                <a href="mines.html">Pressure Mines</a>
                 <a href="docs/README.md">Docs</a>
                 <a href="https://github.com/humiliati/sundog">GitHub</a>
             </div>
@@ -231,6 +232,22 @@
                         <a href="balance.html">Launch Workbench</a>
                         <a href="docs/SUNDOG_V_BALANCE.md">Balance Roadmap</a>
                         <a href="docs/APPLICATIONS.md#sundog-balance-workbench">Application Notes</a>
+                    </div>
+                </article>
+
+                <article class="app-card" id="pressure-mines">
+                    <span class="tier">Planned Workbench</span>
+                    <h2>Sundog Pressure Mines</h2>
+                    <div class="signal-list">
+                        <p><strong>Indirect signal:</strong> noisy pressure values, local field gradients, and bounded scan returns rather than exact mine adjacency counts.</p>
+                        <p><strong>Transformation:</strong> SCAN/SEEK/TRACK hazard-reading with confidence gating, memory over prior reveals, and conservative fallback when observability drops.</p>
+                        <p><strong>Output:</strong> bounded reveal / flag / scan / abstain decisions that improve survival and board progress over naive local heuristics inside a mapped observability envelope, failing cleanly outside it.</p>
+                    </div>
+                    <p class="stub-note">Status: Phase 0 roadmap complete. Phase 1-6 implementation required before interactive minefield and pressure sensor become available. The workbench will ask whether a lossy pressure field preserves enough structure for bounded action inside a named operating envelope.</p>
+                    <div class="app-links">
+                        <a href="mines.html">View Workbench</a>
+                        <a href="docs/sundog_v_minesweeper.md">Roadmap</a>
+                        <a href="docs/APPLICATIONS.md#sundog-pressure-mines-workbench">Application Notes</a>
                     </div>
                 </article>
 

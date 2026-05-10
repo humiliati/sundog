@@ -1220,3 +1220,230 @@ Before implementation, we need to decide:
 - Sundog existing controls: `threebody.html` lines 190-220 (control styles)
 - Material Design: Accessibility standards for form controls
 - Paper UI inspirations: Origami buttons, folded tabs, paper sliders
+
+## Sundog Mines Workbench Animation Roadmap
+
+This section outlines the animation and visual polish plan for the Pressure
+Mines workbench (`mines.html`), following the phased implementation structure
+from the main roadmap in `docs/sundog_v_minesweeper.md`.
+
+### Animation Goals
+
+The Mines workbench should feel like a **laboratory field board**, not a toy
+puzzle clone. The visual language must make the distinction between direct
+knowledge and field-reading unmistakable:
+
+- The board is hidden (mines are not visible)
+- The field is visible (pressure distortions are rendered)
+- The field must look like a projection, not like disguised number labels
+
+### Core Animation Phases
+
+#### Phase 6 Animation: Real-Time Web Projection (Initial Polish)
+
+This phase runs parallel to Phase 6 core implementation and establishes the
+base visual language.
+
+**Deliverables:**
+
+1. **Tile State Transitions**
+   - Concealed → Revealing (scan pulse animation)
+   - Revealing → Revealed (pressure field fade-in)
+   - Safe tile → Flagged (flag placement animation)
+   - Flagged → Unflagged (flag removal)
+   - Tile hover states (pressure value preview)
+
+2. **Pressure Field Rendering**
+   - Gradient-based pressure visualization (not discrete numbers)
+   - Heatmap or contour-style rendering showing field distortion
+   - Animated pressure wave propagation on reveal
+   - Confidence/variance overlay (shimmer or blur for uncertain regions)
+
+3. **Scan Pulse Effects**
+   - Radial pulse animation originating from scanned tile
+   - Information-gathering visual (ripple, sonar-ping style)
+   - Feedback showing scan result (safe corridor vs. hazard proximity)
+
+4. **Action Feedback**
+   - Recent action highlights (last 3-5 tiles glow briefly)
+   - Controller decision breadcrumbs
+   - Safe reveal success animation (subtle positive feedback)
+   - Mine trigger animation (clear failure state)
+
+5. **Telemetry Panel Animation**
+   - Live-updating confidence trace (line chart animation)
+   - Frontier size indicator (animated bar/number)
+   - Survival probability meter (smooth transitions)
+   - False-flag counter (increment animation)
+
+**Visual Style Constraints:**
+
+- Match existing Sundog workbench aesthetic (Balance/Three-body)
+- Dark workbench background (#0D2030 or similar)
+- Gold/amber accents for interactive elements
+- Monospace font for data displays
+- Smooth, measured transitions (not flashy game animations)
+
+#### Post-Phase 6: Polish and Juice Pass
+
+After core functionality lands, a dedicated polish pass adds secondary
+animations and refinements.
+
+**Additional Animations:**
+
+1. **Board Load Animation**
+   - Tiles fade in sequentially (scan-line effect)
+   - Pressure field gradually resolves
+   - Board seed/preset announcement
+
+2. **Controller State Changes**
+   - Mode transition animations (Passive → Sundog, etc.)
+   - Strategy shift indicators (SCAN → SEEK → TRACK)
+   - Confidence gate activation/deactivation
+
+3. **Failure Boundary Warnings**
+   - Visual warning when approaching observability cliff
+   - Pressure field degradation animation (signal loss)
+   - Controller fallback indicators
+
+4. **Comparison Mode UI**
+   - Side-by-side board sync animations
+   - Matched action replay highlights
+   - Performance differential visualization
+
+5. **Replay and Seed Controls**
+   - Replay speed indicator
+   - Step-through scrubbing feedback
+   - Seed string copy confirmation
+
+**Performance Considerations:**
+
+- Throttle animations during high-speed replay
+- Respect reduced-motion accessibility settings
+- Optimize canvas redraws (only changed regions)
+- Consider requestAnimationFrame budgets
+
+#### Phase 8+ Animation: Metrics Visualization
+
+When event metrics and recovery analysis land, add supporting visualizations.
+
+**Deliverables:**
+
+1. **Event Timeline**
+   - Horizontal timeline showing safe reveals, risky reveals, flags, scans
+   - Color-coded event markers
+   - Scrubbing/seeking through timeline
+
+2. **Confidence Trace Chart**
+   - Real-time line chart of controller confidence
+   - Threshold markers for confidence gates
+   - Historical confidence decay visualization
+
+3. **Frontier Collapse Indicator**
+   - Visual warning before forced-risk regions
+   - Frontier quality score meter
+   - Lead-time countdown
+
+4. **Comparative Replay Animation**
+   - Dual-pane synchronized replay
+   - Outcome divergence highlighting
+   - Victory/failure path comparison
+
+#### Phase 9+ Animation: Boundary Visualization
+
+When degradation sweeps and boundary mapping are complete, add failure-mode
+animations.
+
+**Deliverables:**
+
+1. **Sensor Degradation Effects**
+   - Increasing noise visualization (field static/grain)
+   - Delay lag animation (ghosting, trailing indicators)
+   - Dropout animation (tiles losing signal)
+
+2. **Operating Envelope Map UI**
+   - Interactive 2D parameter grid
+   - Cell color-coding (positive/negative/boundary)
+   - Hover expansion showing cell details
+   - Navigation to best/worst-case replay URLs
+
+3. **Failure-Mechanism Labels**
+   - Animated failure annotations
+   - Diagnostic overlay showing why controller failed
+   - Field ambiguity visualization (overlapping pressure plateaus)
+
+### Implementation Strategy
+
+**DO:**
+- Use CSS transitions for simple state changes (opacity, color, scale)
+- Use canvas animation for complex field effects (pressure gradients, pulses)
+- Implement animation timing that matches workbench pace (deliberate, not frenetic)
+- Add accessibility controls (reduced motion, animation speed)
+
+**DON'T:**
+- Add gratuitous particle effects or game-style explosions
+- Use animations that obscure telemetry or occlude controls
+- Implement animations that block interaction (no forced waits)
+- Prioritize animation over functional clarity
+
+### Accessibility Requirements
+
+All animations must respect:
+- `prefers-reduced-motion` media query (disable decorative animations)
+- WCAG contrast requirements (animated elements remain legible)
+- Keyboard navigation (animations don't interfere with focus)
+- Screen reader compatibility (animations are non-essential)
+
+### Technical Notes
+
+**Animation Libraries:**
+- Prefer vanilla CSS/Canvas over heavy animation libraries
+- Consider GSAP only if complex timeline choreography is needed
+- Match Balance/Three-body implementation patterns for consistency
+
+**Performance Budget:**
+- Target 60fps on reference hardware
+- Degrade gracefully on low-end devices
+- Profile canvas redraws during development
+- Use layer promotion sparingly (will-change, transform3d)
+
+### Timeline Integration with Main Roadmap
+
+| Main Phase | Animation Work | Priority |
+|------------|----------------|----------|
+| Phase 0-1 | None (core logic only) | N/A |
+| Phase 2 | Prototype pressure field rendering | Medium |
+| Phase 6 | Full animation suite (base visual language) | High |
+| Phase 7-8 | Metrics visualization | Medium |
+| Phase 9-10 | Boundary visualization | Low-Medium |
+| Phase 11 | Final polish pass | High |
+
+### Reference Implementations
+
+Existing workbenches with animation patterns to follow:
+
+- **balance.html**: Shadow projection rendering, recovery curve animation, status panel updates
+- **threebody.html**: Orbital trajectory rendering, signature display, instability warnings
+- **public/js/balance-browser.mjs**: Canvas animation loop structure
+- **public/js/threebody-browser.mjs**: Real-time physics rendering
+
+### Open Questions for Animation Design
+
+1. Should pressure field use heatmap (red-yellow), topographic (contour lines),
+   or vector field (arrows/gradients) style?
+2. How to visually distinguish noisy/uncertain pressure from confident readings?
+3. Should mine trigger animations be dramatic (emphasize failure) or understated
+   (maintain lab aesthetic)?
+4. What level of animation juiciness matches the scientific tone without feeling
+   sterile?
+
+### Success Criteria
+
+The animation roadmap succeeds when:
+
+1. A first-time viewer can distinguish hidden state from indirect signal within
+   10 seconds of page load
+2. The pressure field looks like a projection/distortion, not a number reskin
+3. Controller actions and boundary failures are legible in replay
+4. Animations enhance understanding without distracting from telemetry
+5. The workbench feels cohesive with Balance and Three-body aesthetics
