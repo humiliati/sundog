@@ -122,6 +122,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--eval-seed-start", type=int, default=10_000)
     parser.add_argument("--eval-seeds", type=int, default=64)
     parser.add_argument("--success-floor", type=float, default=0.75)
+    parser.add_argument("--false-basin-beta", type=float, default=None)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--progress", action="store_true")
     return parser.parse_args()
@@ -148,6 +149,13 @@ def reward_from_channels(channels: dict[str, float], *, reward_mode: str, mixed_
     if reward_mode == "mixed_phase3":
         return (1 - mixed_lambda) * signature + mixed_lambda * phase3
     raise ValueError(f"unknown reward_mode: {reward_mode}")
+
+
+def training_env_config(args: argparse.Namespace) -> dict[str, Any]:
+    config: dict[str, Any] = {"horizon": 200}
+    if args.false_basin_beta is not None:
+        config["falseBasinBeta"] = args.false_basin_beta
+    return config
 
 
 def slug_for(variant: str, tier: str, seed: int, run_label: str = "") -> str:
@@ -233,6 +241,7 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
 
     history: list[dict[str, Any]] = []
     global_step = 0
+    env_config = training_env_config(args)
 
     show_progress = args.progress or sys.stderr.isatty()
     with BridgeClient() as client:
@@ -243,7 +252,7 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
                 "count": args.batch_envs,
                 "seed_start": args.seed_start,
                 "sensor_tier": args.sensor_tier,
-                "env_config": {"horizon": 200},
+                "env_config": env_config,
             }
         )
         raw_obs = np.asarray(made["obs"], dtype=np.float32)
@@ -403,6 +412,7 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
         "reward": {
             "mode": variant_config["reward_mode"],
             "lambda": variant_config["lambda"],
+            "env_config": env_config,
         },
     }
     torch.save(checkpoint, checkpoint_path)
@@ -419,6 +429,7 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
             "env_steps": global_step,
             "reward_mode": variant_config["reward_mode"],
             "lambda": variant_config["lambda"],
+            "env_config": env_config,
         },
     )
     write_policy_json(policy_json_path, policy_payload)
@@ -447,6 +458,7 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
         seed_start=args.eval_seed_start,
         seeds=args.eval_seeds,
         horizon=200,
+        env_config=env_config,
     )
     write_rows(
         eval_rows_path,

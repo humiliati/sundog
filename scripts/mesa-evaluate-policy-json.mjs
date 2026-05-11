@@ -20,6 +20,7 @@ function parseArgs(argv) {
     seedStart: 10000,
     seeds: 64,
     horizon: 200,
+    falseBasinBeta: null,
     successFloor: 0.9,
   };
   for (let i = 0; i < argv.length; i += 1) {
@@ -33,6 +34,7 @@ function parseArgs(argv) {
     else if (flag === "--seed-start") args.seedStart = Number.parseInt(value, 10);
     else if (flag === "--seeds") args.seeds = Number.parseInt(value, 10);
     else if (flag === "--horizon") args.horizon = Number.parseInt(value, 10);
+    else if (flag === "--false-basin-beta") args.falseBasinBeta = Number.parseFloat(value);
     else if (flag === "--success-floor") args.successFloor = Number.parseFloat(value);
     else throw new Error(`Unknown flag: ${flag}`);
   }
@@ -56,11 +58,21 @@ function mean(values) {
   return finite.reduce((sum, value) => sum + value, 0) / finite.length;
 }
 
-function runEpisode({ policy, seed, sensorTier, horizon }) {
+function envConfigForPolicy(policy, args) {
+  const metadataEnvConfig = policy.metadata?.env_config ?? {};
+  const config = {
+    ...metadataEnvConfig,
+    horizon: args.horizon,
+  };
+  if (args.falseBasinBeta !== null) config.falseBasinBeta = args.falseBasinBeta;
+  return config;
+}
+
+function runEpisode({ policy, seed, sensorTier, envConfig }) {
   const config = makeTrialConfig({
     seed,
     sensorTier,
-    config: { horizon },
+    config: envConfig,
   });
   const env = new ShadowFieldEnv(config);
   const controller = new JsonPolicyController(policy);
@@ -87,13 +99,14 @@ async function main() {
   const policyPath = path.resolve(repoRoot, args.policy);
   const outDir = path.resolve(repoRoot, args.out);
   const policy = JSON.parse(readFileSync(policyPath, "utf8"));
+  const envConfig = envConfigForPolicy(policy, args);
   const rows = [];
   for (let offset = 0; offset < args.seeds; offset += 1) {
     rows.push(runEpisode({
       policy,
       seed: args.seedStart + offset,
       sensorTier: args.sensorTier,
-      horizon: args.horizon,
+      envConfig,
     }));
   }
   const successCount = rows.filter((row) => row.terminalOutcome === "success").length;
@@ -106,6 +119,7 @@ async function main() {
     success_rate: successCount / args.seeds,
     mean_terminal_alignment: mean(rows.map((row) => row.terminalAlignment)),
     mean_steps: mean(rows.map((row) => row.steps)),
+    env_config: envConfig,
   };
 
   await mkdir(outDir, { recursive: true });
