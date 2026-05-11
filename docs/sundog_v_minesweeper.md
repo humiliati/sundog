@@ -226,7 +226,7 @@ Deliverables:
   example: each mine contributes a decaying kernel over nearby tiles, summed
   into a scalar pressure surface, then perturbed by configurable noise,
   quantization, dropout, and delay.
-- Candidate kernel families:
+- Candidate sensor outputs (consumed by controllers, not kernel families):
   - tile pressure;
   - local finite-difference gradient;
   - confidence / observability score;
@@ -238,6 +238,90 @@ Deliverables:
   Pre-commit the minimum kernel-width, noise floor, and dropout rate below
   which the workbench refuses to claim its result — that point is the trivial
   degenerate case the workbench must not promote evidence from.
+
+### Pinned Pressure Field Definition
+
+This block is the doc-canonical Phase 2 specification. The implementation in
+`public/js/mines-sensor.mjs` must match this; if the implementation diverges,
+this section is updated *and* the prior text is preserved as an addendum so
+the pre-registration record remains auditable.
+
+**Primary kernel: isotropic Gaussian.** For tile `t` at integer coordinates
+`(x_t, y_t)` and a mine `m` at `(x_m, y_m)`, the per-mine contribution is
+
+```text
+K(t, m) = exp(-d(t, m)^2 / (2 * sigma^2))
+```
+
+where `d` is Euclidean distance in tile units. The true scalar pressure
+surface is
+
+```text
+p_true(t) = sum over mines m of K(t, m)
+```
+
+Pressure is computed over the full board. The controller does not get to see
+`p_true`; it sees `p_obs`, defined below.
+
+**Observation pipeline (applied in order):**
+
+1. Additive Gaussian noise: `p_obs(t) = p_true(t) + epsilon(t)`,
+   `epsilon ~ N(0, sigma_noise^2)`.
+2. Per-tile Bernoulli dropout at rate `delta`: dropped tiles emit no value
+   and read confidence `0`. Non-dropped tiles read confidence `1` (smoothable
+   into a local trust score downstream).
+3. Optional quantization to `N` levels (default disabled).
+4. Optional delay of `k` turns (default `0`; the observed field at turn `T` is
+   the noisy field computed on the state at turn `T - k`).
+
+**Derived sensor outputs:**
+
+- *tile pressure:* `p_obs(t)`.
+- *local finite-difference gradient:*
+  `grad_p(t) = ((p_obs(t + e_x) - p_obs(t - e_x)) / 2,
+                 (p_obs(t + e_y) - p_obs(t - e_y)) / 2)`,
+  with edge tiles using one-sided differences.
+- *confidence / observability:* per-tile `c(t)` in `{0, 1}` after dropout,
+  optionally rolled into a smoothed local trust score.
+- *bounded scan pulse:* a single targeted probe at tile `t` returning a
+  reading drawn from `N(p_true(t), sigma_scan^2)` with
+  `sigma_scan << sigma_noise`. Each scan debits the scan budget. The scan
+  budget is a comparison-statistic deduction (see Phase 4 budget-tax rule).
+
+**Default operating point pinned to this doc:**
+
+```text
+sigma          = 1.0
+sigma_noise    = 0.10
+delta          = 0.10
+quantization   = disabled
+delay          = 0
+sigma_scan     = 0.02
+```
+
+**Irreducibility floor — below which Pressure Mines does not publish:**
+
+```text
+sigma_min       = 0.7
+sigma_noise_min = 0.05   (on the unit-normalized pressure scale)
+delta_min       = 0.05
+```
+
+Rationale: at `sigma >= 0.7` the kernel necessarily spreads across the
+8-neighborhood of every mine (a distance-1 tile gets contribution
+`exp(-1 / (2 * 0.49)) ≈ 0.36`, a distance-sqrt(2) tile gets ≈ 0.13, a
+distance-2 tile gets ≈ 0.018), so one observed tile pressure is a weighted
+sum over a non-trivial spatial support and cannot be inverted to a single
+integer adjacency count. At `sigma_noise >= 0.05` the noise envelope is
+wide enough that distinct multi-mine geometries with the same scalar pressure
+sit inside overlapping observation distributions. At `delta >= 0.05` at
+least one tile in twenty is unreadable each turn, so reconstructing a fully-
+consistent local count requires inference, not lookup.
+
+Below *any* of these three thresholds, the workbench treats the result as a
+degenerate exact-count restatement, not a Sundog claim. Sub-floor cells may
+still appear in the harness for sanity checks, but they cannot be cited as
+evidence in the public artifact.
 
 Exit criterion: the board can show when the field is informative and when it
 collapses into ambiguity, and the kernel/noise floor below which Sundog Mines
