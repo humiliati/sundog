@@ -479,13 +479,16 @@ function draw() {
 
   const margin = 18;
   const titleReserve = rect.width >= 760 ? 184 : 220;
+  const stackedPanels = rect.width < 640 && app.lanes.length > 1;
   const gap = app.lanes.length > 1 ? 12 : 0;
-  const panelW = (rect.width - margin * 2 - gap) / app.lanes.length;
-  const panelH = rect.height - titleReserve - margin;
+  const availableW = rect.width - margin * 2;
+  const availableH = rect.height - titleReserve - margin;
+  const panelW = stackedPanels ? availableW : (availableW - gap) / app.lanes.length;
+  const panelH = stackedPanels ? (availableH - gap) / app.lanes.length : availableH;
   app.lanes.forEach((lane, index) => {
     const box = {
-      x: margin + index * (panelW + gap),
-      y: titleReserve,
+      x: stackedPanels ? margin : margin + index * (panelW + gap),
+      y: stackedPanels ? titleReserve + index * (panelH + gap) : titleReserve,
       w: panelW,
       h: panelH,
     };

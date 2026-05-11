@@ -379,19 +379,22 @@ Landed in the current cleanup pass:
    `public/css/sundog-theme.css`.
 3. Link `paper-theme-demo.html` from the Docs technical-spec section so the
    implemented paper primitives are discoverable.
+4. Add the shared controls vocabulary across Three-Body, Balance, and Mines:
+   control panels, control groups/rows, action grids, toggle rows, status
+   strips, status chips, metrics, boundary panels, notes, and replay tokens.
+5. Fix narrow-viewport overflow in the workbench hero/stage areas, and stack
+   Mines comparison lanes vertically on phone-width canvas layouts.
 
 Good next bites:
 
 1. Normalize footer link sets by page role: broad pages can keep About/Docs,
    while experiment pages can keep deeper writeup links.
-2. Give Three-Body, Balance, and Mines a shared controls vocabulary for
-   buttons, sliders, selects, checkboxes, status chips, and disabled states.
-3. Promote `.sd-paper-card` only onto static explanation/resource cards first;
+2. Promote `.sd-paper-card` only onto static explanation/resource cards first;
    avoid moving live controls into the paper metaphor until screenshots prove
    the result stays legible.
-4. Add a short nav policy note to `docs/WEBSITE_DEVELOPMENT.md`: brand is Home,
+3. Add a short nav policy note to `docs/WEBSITE_DEVELOPMENT.md`: brand is Home,
    About is identity, Origin is contextual/deep provenance.
-5. Run a recurring mobile screenshot pass after nav changes, especially at
+4. Run a recurring mobile screenshot pass after nav changes, especially at
    390px and 520px widths.
 
 ---
@@ -1031,7 +1034,7 @@ body[data-theme="desk"],
 ## Interactive Components Roadmap
 
 Date: 2026-05-08
-Status: partially implemented; context-adaptive direction selected by current site
+Status: shared controls pass landed; remaining work is selective refinement
 
 ### Overview
 
@@ -1044,6 +1047,10 @@ aesthetic while ensuring usability and scientific credibility.
 Navigation and public copy stay professionally minimal, static explanation cards
 can borrow the paper system, and live workbenches should keep a restrained
 instrument-panel treatment until a dedicated controls pass lands.
+
+Shared controls pass, 2026-05-11: Three-Body, Balance, and Mines now share
+explicit `sd-control-*`, `sd-status-*`, `sd-boundary-*`, `sd-note`, and
+`sd-replay-token` classes while preserving page-local IDs and JS hooks.
 
 ### Current Interactive Elements Inventory
 
@@ -1316,15 +1323,12 @@ Before implementation, we need to decide:
 
 ### Next Steps
 
-1. Define shared control classes for experiment/workbench UI:
-   `.sd-control-panel`, `.sd-control-group`, `.sd-control-button`,
-   `.sd-control-input`, `.sd-control-select`, `.sd-toggle-row`, and
-   `.sd-status-chip`.
-2. Apply those classes first to Three-Body, then Balance, then Mines, preserving
-   page-local behavioral IDs.
-3. Add shared focus/disabled styles before adding decorative treatments.
-4. Screenshot-test desktop and 390px mobile after each page migration.
-5. Keep BoxForge as canvas-content work, not a blocker for control-frame polish.
+1. Audit remaining page-local control CSS and delete rules that are now exact
+   duplicates of the shared `sd-*` vocabulary.
+2. Add one or two shared status-chip variants if future evidence pages need
+   warning/success/error states outside boundary panels.
+3. Screenshot-test desktop and 390px mobile after each workbench change.
+4. Keep BoxForge as canvas-content work, not a blocker for control-frame polish.
 
 ### References for Interactive Styling
 

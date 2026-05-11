@@ -301,6 +301,37 @@
                 font-size: 2rem;
             }
         }
+
+        @media (max-width: 520px) {
+            .hero {
+                width: min(390px, 100%);
+                max-width: 390px;
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            .hero-content,
+            .hero .value-prop,
+            .hero .tagline {
+                width: min(340px, calc(100vw - 2rem));
+                max-width: min(340px, calc(100vw - 2rem));
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            .signature-display {
+                left: 1rem;
+                width: min(340px, calc(100vw - 2rem));
+                max-width: min(340px, calc(100vw - 2rem));
+                transform: none;
+            }
+
+            .controls-panel {
+                max-width: 360px;
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
     </style>
     <link rel="stylesheet" href="/css/sundog-theme.css">
 </head>
