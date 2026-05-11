@@ -549,6 +549,25 @@ matched-seed evidence before promotion past Planned Workbench. Until then the
 page copy uses provisional language and the evidence-tier badge stays at the
 lowest applicable tier.
 
+Phase 6 browser status:
+
+- `mines.html` now runs the shared Phase 1-5 modules directly in the browser:
+  `public/js/mines-core.mjs`, `public/js/mines-sensor.mjs`, and
+  `public/js/mines-controllers.mjs`. The page no longer has a placeholder
+  renderer or a separate toy simulation.
+- `public/js/mines-browser.mjs` creates matched-seed lanes, opens the center
+  tile, asks the selected controller for actions, applies reveal/flag/scan
+  transitions, and records public scan readings in the same shape used by the
+  headless harness.
+- The first viewport includes live canvas rendering, seed/preset/sensor
+  controls, mode selection, pause/step/reset, matched side-by-side comparison,
+  and opt-in privileged diagnostics. The default view compares `sundog_lean`
+  against `naive_pressure` on the noisy easy-sparse pocket; the controls can
+  switch immediately to the doc-default and dense failure cells.
+- Telemetry reports safe reveals, flags, false flags, scan spend, frontier
+  size, and mean frontier confidence. False-flag and hidden-mine diagnostics
+  are audit surfaces; they are not controller-visible inputs.
+
 ### Phase 7 - Reproducible Harness
 
 Goal: move from visual toy to repeatable evidence.
