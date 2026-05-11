@@ -162,10 +162,12 @@ function terminalClass(terminal) {
 }
 
 function scoreTrial({ preset, mode, cell, seed, args }) {
+  const modeDefinition = MINES_CONTROLLER_MODES[mode];
   const board = initializeBoardState({
     preset,
     seed,
     turnCap: args.turnCap,
+    ...(modeDefinition.boardOverride ?? {}),
   });
   applyMinesAction(board, centerAction(board));
   const openingSafeCount = board.revealedSafeCount;
@@ -186,6 +188,13 @@ function scoreTrial({ preset, mode, cell, seed, args }) {
       options: { threshold: args.pressureThreshold },
     });
     const result = applyMinesAction(board, action);
+    if (result.applied && action.type === ACTION.SCAN) {
+      const scan = sensorRuntime.scan(board, action.x, action.y);
+      const lastEntry = board.actionLedger[board.actionLedger.length - 1];
+      if (lastEntry?.type === ACTION.SCAN && lastEntry.index === scan.index) {
+        lastEntry.scanReading = scan.reading;
+      }
+    }
     if (!result.applied) {
       illegalActionCount += 1;
       const fallback = chooseMinesAction({
@@ -364,8 +373,15 @@ function markdownReport({ args, budgetRows, summaryRows, comparisonSummaryRows }
   const implemented = budgetRows.filter((row) => row.status === "implemented");
   const pending = budgetRows.filter((row) => row.status !== "implemented");
   const docDefaultRows = summaryRows.filter((row) => row.sensorCell === "doc_default");
+  const isPhase5 = args.phase.includes("phase5");
+  const title = isPhase5
+    ? "Sundog Pressure Mines Phase 5 Controller Prototype"
+    : "Sundog Pressure Mines Phase 4 Baseline Set";
+  const scope = isPhase5
+    ? "This is a Phase 5 prototype controller run. It can compare against Phase 4 baselines, but it is not an operating-envelope verdict."
+    : "This is a Phase 4 baseline calibration run. It reports matched-seed baseline/oracle rows; Phase 5 runs carry the controller verdicts.";
   return [
-    "# Sundog Pressure Mines Phase 4 Baseline Set",
+    `# ${title}`,
     "",
     `Phase: \`${args.phase}\``,
     `Seeds per cell: \`${args.seeds}\``,
@@ -378,11 +394,15 @@ function markdownReport({ args, budgetRows, summaryRows, comparisonSummaryRows }
     "| --- | --- | --- | --- |",
     ...implemented.map((row) => `| ${row.mode} | ${row.informationBudget} | ${row.usesPrivileged} | ${row.usesScan} |`),
     "",
-    "## Pending Phase 5 Lanes",
+    pending.length > 0 ? "## Pending Phase 5 Lanes" : "## Pending Lanes",
     "",
-    "| mode | planned budget |",
-    "| --- | --- |",
-    ...pending.map((row) => `| ${row.mode} | ${row.informationBudget} |`),
+    ...(pending.length > 0
+      ? [
+          "| mode | planned budget |",
+          "| --- | --- |",
+          ...pending.map((row) => `| ${row.mode} | ${row.informationBudget} |`),
+        ]
+      : ["No pending lanes in this run."]),
     "",
     "## Doc-Default Summary",
     "",
@@ -398,7 +418,7 @@ function markdownReport({ args, budgetRows, summaryRows, comparisonSummaryRows }
     "",
     "## Scope",
     "",
-    "This is a Phase 4 fairness scaffold. It does not claim a Sundog win; the Sundog controller and its ablations remain pending until Phase 5.",
+    scope,
     "",
   ].join("\n");
 }
@@ -421,6 +441,7 @@ function runSelfChecks({ args, budgetRows, trialRows }) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  const isPhase5 = args.phase.includes("phase5");
   const selectedCells = SENSOR_CELLS.filter((cell) => args.cells.includes(cell.name));
   const trialRows = [];
 
@@ -454,21 +475,22 @@ async function main() {
   await writeFile(path.join(outDir, "matched-comparisons.csv"), rowsToCsv(comparisonRows));
   await writeFile(path.join(outDir, "matched-comparison-summary.csv"), rowsToCsv(comparisonSummaryRows));
   await writeFile(path.join(outDir, "summary.json"), JSON.stringify({
-    schema: "sundog.mines.phase4-baselines.v1",
+    schema: isPhase5 ? "sundog.mines.phase5-controller.v1" : "sundog.mines.phase4-baselines.v1",
     args,
     sensorCells: selectedCells,
     modeBudgets: budgetRows,
     summaryRows,
     comparisonSummaryRows,
   }, null, 2));
-  await writeFile(path.join(outDir, "phase4-baselines.md"), markdownReport({
+  const reportFilename = isPhase5 ? "phase5-controller.md" : "phase4-baselines.md";
+  await writeFile(path.join(outDir, reportFilename), markdownReport({
     args,
     budgetRows,
     summaryRows,
     comparisonSummaryRows,
   }));
 
-  console.log(`Mines Phase 4 baselines wrote ${path.relative(repoRoot, outDir)}`);
+  console.log(`Mines ${isPhase5 ? "Phase 5 controller" : "Phase 4 baselines"} wrote ${path.relative(repoRoot, outDir)}`);
   console.log(`Trial rows: ${trialRows.length}; comparison rows: ${comparisonRows.length}`);
 }
 

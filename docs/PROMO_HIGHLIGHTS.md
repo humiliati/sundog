@@ -279,6 +279,107 @@ These are intentionally bold. They are not yet proven.
   and AI.
 - The most powerful design move may be choosing what not to simulate.
 
+## The Gravity Claim
+
+This is the most outlandish public framing in the program. It is intentionally
+hard to falsify cheaply, and it points at a horizon experiment that would cost
+real resources to run. Use the language here only in venues that can also
+carry the boundary text below. The full staging ledger is
+[`docs/SUNDOG_V_GRAVITY.md`](SUNDOG_V_GRAVITY.md).
+
+### The claim, named tightly
+
+> Sundog is gravity for agents under partial observability: a geometry-derived
+> background field that deflects policy without ever being a target.
+
+Sister formulations:
+
+> Reinforcement learning gave agents a reward to optimize. Sundog gives them a
+> field to fall through. The first invites Goodhart. The second has no metric
+> to corrupt.
+
+> An agent that reads tidal gradients cannot reward-hack gravity. The mass is
+> where the mass is.
+
+> Optimization made the agent face the target. Sundog makes the target part of
+> the geometry the agent moves in.
+
+### The Goodhart sidestep
+
+Reward optimization places the objective inside the agent — a learned value
+function, a critic, a numerical target the agent can corrupt. Signature
+control places the objective inside the environment's geometry. The tidal
+tensor at a point is a function of the masses, not the agent's policy. You
+cannot gradient-hack a tidal field. You can only move through it.
+
+This is the original unhinged intuition of the Sundog program, restated as a
+structural argument about threat models rather than a slogan. It is not a
+proof of adversarial robustness. It is a falsifiable claim that
+signature-driven control and reward-driven control should behave differently
+under hostile conditions, with the experiments to test that difference
+deliberately listed and deliberately expensive.
+
+### The three-body wedge
+
+The three-body workbench is the audience-conceptualizable entry point because
+the gravity is literal. A controller reads the tidal tensor of a real
+gravitational potential and maintains regime in a near-escape pocket without
+being told where the masses are. The audience does not need to grant a
+metaphor — they watch a controller fall through real gravity from indirect
+state, and they understand on first contact what is meant by "the field is
+the objective."
+
+The three-body controller is the wedge that lets every other Sundog
+application — shadow geometry, pressure fields, wake structure, scent
+gradients — be read as "gravity for agents in that domain."
+
+### The horizon experiments
+
+Three candidate experiments are staged in `SUNDOG_V_GRAVITY.md`:
+
+- **Spacecraft trajectory under unmodeled perturbation.** A signature
+  controller using only local accelerometry holds an orbit family in a
+  high-fidelity simulator (and eventually on a cubesat-class deployment)
+  against adversarial jamming, ephemeris spoofing, or unmodeled
+  solar-radiation events. Matched against a privileged-ephemeris baseline.
+  First-priority because it inherits the most three-body discipline.
+- **Adversarial signature benchmark.** Two agent families — signature-tracking
+  and reward-optimizing — face a named red team across a shared partially-
+  observed environment. Primary metric: rate of catastrophic policy failure
+  under matched adversary budgets. The cleanest attack on the "your signature
+  is just a reward in costume" objection.
+- **Side-channel defense (stretch).** A signature-driven monitor reads syscall
+  residue, timing geometry, or flow autocorrelation rather than labeled attack
+  samples. Active red team. The most outlandish framing because the industry
+  is already shipping reward-trained classifiers that are observably being
+  Goodharted in production.
+
+### Stir lines that stack into this frame
+
+These already live elsewhere in this document; the gravity framing turns them
+from loose provocations into a coherent stack:
+
+- Direct perception is overrated.
+- Full state is a luxury, not a requirement.
+- The disturbance is the data.
+- Occlusion is not failure. It is an interface.
+- Alignment is not always a coordinate. Sometimes it is a resonance.
+- The future of game AI is not omniscient agents. It is agents that know how
+  little they know.
+- We are building systems that can infer from the wake they leave behind.
+
+### Boundary language for the gravity frame
+
+Always pair the gravity claim, in any public venue that may reach researchers,
+with text like:
+
+> The gravity claim is the program's speculative public frame. The controlled
+> evidence is narrower: photometric mirror alignment without target-position
+> access in a MuJoCo experiment, and a bounded near-escape operating pocket in
+> the planar restricted three-body workbench. The experiments that would
+> ratchet the gravity claim into earned language are staged in
+> `docs/SUNDOG_V_GRAVITY.md` and have not been run.
+
 ## Headlines
 
 - The Shadow Can Be A Sensor
@@ -296,6 +397,10 @@ These are intentionally bold. They are not yet proven.
 - Steering By The Shadow Of Chaos
 - 18 Dimensions. Three Signals.
 - The Three-Body Problem Has A Shadow Too
+- Gravity For Agents
+- You Cannot Reward-Hack A Tidal Tensor
+- The Field Is The Objective
+- A Threat Model Without A Target
 
 ## Taglines
 

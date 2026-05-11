@@ -54,6 +54,10 @@ These claims are defensible with current evidence:
 - ❌ "We have proven the general theorem."
 - ❌ "This works in all domains."
 - ❌ "Sundog eliminates the need for direct state access."
+- ❌ "Sundog sidesteps Goodhart's law." (load-bearing argument, no experiment yet)
+- ❌ "Sundog is gravity for agent optimization." (speculative public frame; see Gravity Frame section)
+- ❌ "Signature controllers cannot be reward-hacked." (untested adversarial claim)
+- ❌ "Sundog is robust under hostile environments." (no adversarial benchmark has run)
 
 ### Overpromising on Applications
 - ❌ "EyesOnly proves the theorem for procedural games." (needs formal study)
@@ -88,6 +92,9 @@ Replace risky language with measured alternatives:
 | "definitely" | experimentally validated in our applications, early but compelling |
 | "all systems" | certain systems, systems with partial observability |
 | "eliminates need for" | reduces reliance on, can operate with less |
+| "Sundog solves alignment" | "the gravity frame is the program's speculative public framing; see [`SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md)" |
+| "Sundog sidesteps Goodhart" | "a structural argument that signature-driven control inhabits a different threat model than reward optimization; the adversarial experiments that would test it are listed and have not been run" |
+| "agent optimization in hostile environments" | "signature-driven control in partially-observed and potentially adversarial settings; current evidence is bounded operating-envelope work in three-body and photometric experiments" |
 
 ## Claim Boundaries by Application
 
@@ -198,6 +205,65 @@ Public Phase 11 figures, a best-cell/worst-cell replay pair, the toyful visual s
 Or:
 
 "The broad theorem is a research program. The controlled result currently defended in the Sundog repo is narrower: photometric mirror alignment without target-position access in a MuJoCo experiment. The three-body and Balance workbenches are bounded operating-envelope studies; EyesOnly, Dungeon Gleaner, and Money Bags are application expressions that motivate the next round of controlled studies."
+
+## The Gravity Frame
+
+The Sundog program's most outlandish public framing — that signature-driven
+control is structurally different from reward-driven control under partial
+observability, and therefore sidesteps Goodhart's law in a way reward
+optimization cannot — is **the gravity frame**. It is named, staged, and
+deliberately separated from the safe and risky claims above because it
+behaves differently than either.
+
+It is not a safe claim. There is no controlled experiment that ratchets it
+into earned language yet. The closest anchors are the photometric mirror-
+alignment result and the three-body operating-envelope result, and both fall
+short of the adversarial test the frame would need.
+
+It is also not a risky claim in the ordinary sense. The argument behind it is
+structural: a metric `R(s, a)` is participated in by the agent, while a
+signature `S(x)` is a function of environmental state alone. That distinction
+is mathematically clean and is exactly the kind of claim that can be tested
+expensively rather than dismissed cheaply.
+
+### When the gravity frame may be used
+
+- Manifesto sections, broadcast hooks, pitch decks, and conference openings
+  may use the gravity language *if* they also carry the boundary text and
+  link to [`SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md) and
+  [`PROMO_HIGHLIGHTS.md`](../PROMO_HIGHLIGHTS.md) §The Gravity Claim.
+- The three-body workbench is the audience-conceptualizable wedge for the
+  frame. Public communication should lead with the three-body controller
+  watching real gravity from indirect state, then expand the metaphor to
+  other partially-observed environments.
+- The frame should always be accompanied by a named horizon experiment so a
+  reviewer can see the falsification path. Naming the experiment is part of
+  the discipline; the gravity claim without a named horizon experiment is a
+  slogan.
+
+### When the gravity frame may not be used
+
+- Paper abstracts, peer-reviewed venues, and grant deliverables — these
+  require Layer B language and currently-defensible Layer C evidence. The
+  gravity frame is Layer A and must stay there until an experiment from
+  `SUNDOG_V_GRAVITY.md` runs.
+- Any context where the boundary text and the link to the gravity ledger
+  cannot accompany the claim.
+- Any context where "Sundog solves alignment" is the reading the audience is
+  primed to take. The gravity frame is structurally different from solving
+  alignment, and that difference must survive the misread.
+
+### Required boundary text
+
+When the gravity frame appears in public material, this language (or a close
+paraphrase) must appear visibly in the same artifact:
+
+> The gravity claim is the program's speculative public frame. The controlled
+> evidence is narrower: photometric mirror alignment without target-position
+> access in a MuJoCo experiment, and a bounded near-escape operating pocket
+> in the planar restricted three-body workbench. The experiments that would
+> ratchet the gravity claim into earned language are staged in
+> [`docs/SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md) and have not been run.
 
 ## Red Flags
 

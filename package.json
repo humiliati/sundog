@@ -10,6 +10,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "mines:phase3": "node scripts/mines-phase3-diagnostics.mjs --phase phase3-diagnostic --out results/mines/phase3-diagnostic --seeds 24",
     "mines:phase4": "node scripts/mines-phase4-baselines.mjs --phase phase4-baselines --out results/mines/phase4-baselines --seeds 16 --turn-cap 160",
+    "mines:phase5": "node scripts/mines-phase4-baselines.mjs --phase phase5-controller --out results/mines/phase5-controller --seeds 16 --turn-cap 160 --modes random_reveal,naive_pressure,threshold_flagger,naive_pressure_shuffled,naive_pressure_delayed,sundog_controller,sundog_no_gradient,sundog_no_scan,sundog_no_action_history,sundog_no_confidence_gate,oracle_safe",
     "balance:phase7": "node scripts/balance-harness.mjs --phase phase7-smoke --out results/balance/phase7-smoke --presets easy,recoverable,near_fall,noisy_shadow,delayed_shadow --modes passive,naive_cart,naive_shadow,sundog_shadow,oracle --light-elevations 28 --seeds 12",
     "balance:phase7:replay": "node scripts/balance-harness.mjs --phase phase7-replay --out results/balance/phase7-replay --replay-url",
     "balance:phase7:verify": "node scripts/balance-verify-replays.mjs",
