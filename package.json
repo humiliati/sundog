@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "Sundog Research Lab website and research repository - an independent applied research program sponsored by Stellar Aqua LLC",
+  "author": "Stellar Aqua LLC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/humiliati/sundog"
+  },
+  "homepage": "https://sundog.cc",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
