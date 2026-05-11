@@ -690,7 +690,10 @@ controller, Oracle ceiling, seeded harness, replay verification, and default
 Phase 2 has an implementation spec:
 [`mesa/PHASE2_SPEC.md`](mesa/PHASE2_SPEC.md). It locks Python training against
 the JS environment bridge, PPO as the matched RL algorithm, BC-first ordering,
-and Small/Medium-before-Large execution.
+and Small/Medium-before-Large execution. The first Phase 2 smoke slice is in:
+`npm run mesa:phase2:bridge-smoke` verifies Python-to-JS reset/step/batch
+behavior, including batch auto-reset, restart determinism, and a lightweight
+throughput check.
 
 **Appendix A:** Drafted in this document as the intellectual target. The
 formal note is not yet a ratified theorem; the open questions section is

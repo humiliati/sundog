@@ -284,6 +284,57 @@
             line-height: 1.35;
         }
 
+        .boundary-panel {
+            margin-top: 0.75rem;
+            padding: 0.65rem;
+            border: 1px solid rgba(244, 196, 48, 0.28);
+            border-left: 3px solid var(--accent-gold);
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .boundary-panel[data-status="do_not_use"] {
+            border-color: rgba(216, 79, 63, 0.7);
+            border-left-color: #d84f3f;
+            background: rgba(91, 22, 22, 0.28);
+        }
+
+        .boundary-panel[data-status="watch_boundary"] {
+            border-color: rgba(244, 196, 48, 0.52);
+            background: rgba(244, 196, 48, 0.08);
+        }
+
+        .boundary-kicker {
+            color: rgba(245, 245, 245, 0.72);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        #mines-boundary-status {
+            margin-top: 0.12rem;
+            color: var(--accent-gold);
+            font-size: 0.92rem;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+        }
+
+        #mines-boundary-summary {
+            margin-top: 0.28rem;
+            color: rgba(245, 245, 245, 0.82);
+            font-size: 0.76rem;
+            line-height: 1.35;
+        }
+
+        #mines-boundary-list {
+            margin: 0.35rem 0 0 1rem;
+            color: rgba(245, 245, 245, 0.72);
+            font-family: var(--sd-font-data);
+            font-size: 0.7rem;
+            line-height: 1.35;
+        }
+
         .body-copy {
             max-width: 960px;
             margin: 0 auto;
@@ -378,7 +429,7 @@
             <div class="stage">
                 <canvas id="mines-canvas"></canvas>
                 <div class="stage-copy">
-                    <div class="eyebrow">Phase 6 · Planned Workbench tier</div>
+                    <div class="eyebrow">Phase 9 - Boundary workbench tier</div>
                     <h1>Sundog Pressure Mines</h1>
                     <p>
                         Matched-seed controller runs over a hidden minefield.
@@ -441,11 +492,20 @@
                     <span>Diagnostics overlay</span>
                 </label>
 
+                <div id="mines-boundary-panel" class="boundary-panel" data-status="likely_readable">
+                    <div class="boundary-kicker">Use Boundary</div>
+                    <div id="mines-boundary-status">LIKELY READABLE</div>
+                    <p id="mines-boundary-summary">No Phase 9 boundary warning is active for the current controls.</p>
+                    <ul id="mines-boundary-list">
+                        <li>No active density, blur, delay, dropout, scan-budget, or live-confidence warning.</li>
+                    </ul>
+                </div>
+
                 <div class="note">
                     <strong>Current default</strong><br>
-                    `sundog_lean` versus `naive_pressure` on the noisy easy-sparse
-                    pocket. Switch to doc default or dense fields to see the failure
-                    map.
+                    `sundog_lean` versus `naive_pressure` on doc-default
+                    easy-sparse. Switch to blur/noise cliff or dense fields to
+                    see the current boundary map.
                 </div>
                 <div class="metric-hint">
                     false = privileged audit count; diagnostics overlay exposes hidden

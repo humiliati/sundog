@@ -694,6 +694,31 @@ Expected boundary:
 Exit criterion: the workbench has a visible "where Sundog should not be used"
 panel.
 
+Phase 9 first-pass status:
+
+- `npm run mines:phase9` now runs `scripts/mines-phase9-boundary.mjs`, a
+  first-pass degradation sweep over preset, mine density, clustering, pressure
+  noise, sensor delay, scan dropout, kernel blur, board size, and scan budget.
+- The run writes ignored local artifacts under
+  `results/mines/phase9-boundary/`: `manifest.json`,
+  `boundary-panel.json`, `cell-manifest.csv`, `trial-outcomes.csv`,
+  `boundary-summary.csv`, `matched-comparison.csv`,
+  `matched-comparison-summary.csv`, `unsafe-cells.csv`, `summary.json`, and
+  `phase9-boundary.md`.
+- The browser workbench now has a live **Use Boundary** panel driven by
+  `public/js/mines-boundary.mjs`, so the page and the headless sweep share
+  labels for `field_uninformative`, `frontier_ambiguity`, `delay_misread`,
+  `overflagged`, `probe_budget_exhausted`, and
+  `controller_overcommitted`.
+- Current local smoke run: 34 boundary cells x 7 modes x 8 seeds = 1,904
+  trials. It marks 77 of 102 Sundog-variant groups as unsafe/boundary material.
+  The sharpest cells are high clustering, high blur, high dropout, and long
+  delay. `sundog_lean` also shows false-flag costs in several otherwise
+  non-terminal comparisons.
+- This is deliberately not the Phase 10 operating-envelope verdict. The axis
+  spokes expose failure mechanisms and odd pockets; Phase 10 still needs the
+  locked grid map before any public "inside this envelope" claim can graduate.
+
 ### Phase 10 - Operating Envelope Map
 
 Goal: lock the earned claim.

@@ -86,6 +86,7 @@ training/mesa/
   train_bc.py                  # BC loop
   train_ppo.py                 # PPO loop or SB3 integration wrapper
   evaluate_policy.py           # deterministic nominal evaluator
+  smoke_bridge.py              # stdlib bridge protocol smoke test
 ```
 
 Bridge commands:
@@ -117,6 +118,18 @@ named reward channels but does not decide which family may read which channel.
 
 Bridge performance rule: all PPO training uses `step_batch`; one-episode
 `step` exists only for debugging and tests.
+
+Bridge smoke command:
+
+```bash
+npm run mesa:phase2:bridge-smoke
+```
+
+This command exercises `ping`, `make`, `reset`, `step`, `make_batch`,
+`reset_batch`, `step_batch`, batch auto-reset, restart determinism, and `close`
+through Python's standard library before any learning dependencies enter the
+stack. It also runs a lightweight throughput check with a 10k env-steps/sec
+floor.
 
 Auto-reset contract: when `step_batch` returns `done[i] = true` for some env
 in the batch, the bridge automatically resets that env before the next
@@ -372,7 +385,17 @@ Phase 2 is complete when:
 - the manifest is sufficient to replay training/evaluation seeds;
 - Large is either run successfully or explicitly deferred with a reason.
 
-## 13. Versioning
+## 13. Implementation Status
+
+**Bridge smoke:** implemented. `scripts/mesa-env-bridge.mjs` exposes the JSONL
+protocol and `training/mesa/smoke_bridge.py` verifies reset/step/batch/auto-
+reset behavior, restart determinism, and throughput from Python with no
+external dependencies. Latest local smoke: auto-reset pass, restart
+determinism pass, throughput about 25k-28k env-steps/sec.
+
+**BC / PPO:** not started.
+
+## 14. Versioning
 
 This document is version `v1`.
 

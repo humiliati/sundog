@@ -13,6 +13,7 @@ import {
   chooseMinesAction,
   frontierIndices,
 } from "./mines-controllers.mjs";
+import { assessMinesBoundary } from "./mines-boundary.mjs";
 
 const canvas = document.getElementById("mines-canvas");
 const ctx = canvas.getContext("2d");
@@ -32,6 +33,10 @@ const stepButton = document.getElementById("mines-step");
 const resetButton = document.getElementById("mines-reset");
 const nextSeedButton = document.getElementById("mines-next-seed");
 const copyReplayButton = document.getElementById("mines-copy-replay");
+const boundaryPanel = document.getElementById("mines-boundary-panel");
+const boundaryStatus = document.getElementById("mines-boundary-status");
+const boundarySummary = document.getElementById("mines-boundary-summary");
+const boundaryList = document.getElementById("mines-boundary-list");
 
 const SENSOR_CELLS = Object.freeze({
   doc_default: Object.freeze({
@@ -273,6 +278,34 @@ function updateChrome() {
       `<span>${stats.frontier} frontier</span>`,
       `<span>${confidence} conf</span>`,
     ].join("");
+  }).join("");
+  updateBoundaryPanel(primary);
+}
+
+function updateBoundaryPanel(primary) {
+  if (!boundaryPanel || !boundaryStatus || !boundarySummary || !boundaryList) return;
+  const stats = laneStats(primary);
+  const assessment = assessMinesBoundary({
+    boardConfig: primary.board.config,
+    sensorConfig: sensorConfigFor(primary.mode, seedValue()),
+    mode: primary.mode,
+    live: {
+      frontierSize: stats.frontier,
+      meanFrontierConfidence: stats.meanConfidence,
+      falseFlagCount: primary.board.falseFlagCount,
+      terminal: primary.board.terminal,
+    },
+  });
+  boundaryPanel.dataset.status = assessment.status;
+  boundaryStatus.textContent = assessment.label;
+  boundarySummary.textContent = assessment.summary;
+  if (assessment.mechanisms.length === 0) {
+    boundaryList.innerHTML = "<li>No active density, blur, delay, dropout, scan-budget, or live-confidence warning.</li>";
+    return;
+  }
+  boundaryList.innerHTML = assessment.mechanisms.slice(0, 5).map((mechanism) => {
+    const value = mechanism.value === null || mechanism.value === undefined ? "" : ` (${mechanism.value})`;
+    return `<li>${mechanism.code}${value}</li>`;
   }).join("");
 }
 
