@@ -19,6 +19,9 @@ code, experiments, prior theorem materials, and application bridges.
   and product systems relate to the theorem.
 - [Promo highlights](PROMO_HIGHLIGHTS.md): hooks, headlines, provocative
   statements, and future-facing language.
+- [Brand positioning](BRAND_POSITIONING.md): public lab posture after the
+  Mythos stress test, including the About-page spine and what-not-to-claim
+  boundaries.
 - [Standalone app roadmap](STANDALONE_APP_ROADMAP.md): plan for a no/low
   dependency `.html`, `.exe`, and eventual `.apk` observer app.
 - [Sundog Balance roadmap](SUNDOG_V_BALANCE.md): confirmed cart-pole
@@ -29,6 +32,10 @@ code, experiments, prior theorem materials, and application bridges.
   workbenches under evaluation before promotion to full roadmap documents.
 - [Third-party reuse ledger](THIRD_PARTY_REUSE.md): permissions and attribution
   notes for borrowed design, code, and asset references.
+- [Brand and IP roadmap](BRAND_ROADMAP.md): legal hygiene, registration, and
+  future entity formation plan.
+- [Legal standing](LEGAL_STANDING.md): summary of the legal standing pass and
+  current ownership structure.
 - [Paper draft](PAPER_v1_draft.md): current academic paper draft.
 - [Paper outline](PAPER_OUTLINE_v0.md): venue framing, reviewer risks, and
   stress-test interpretation.

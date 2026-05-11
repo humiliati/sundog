@@ -6,6 +6,10 @@
 
 This roadmap formalizes the brand, copyright, and entity-formation plan for Sundog Research Lab. It progresses from immediate legal hygiene (Phase 0) through formal registration (Phase 1) to eventual entity independence (Phase 2).
 
+For public voice, Mythos stress-test lessons, and the About-page brand spine,
+see [`BRAND_POSITIONING.md`](BRAND_POSITIONING.md). This document remains the
+legal/IP execution roadmap.
+
 ## Current State: Foundation Complete
 
 **Status:** ✅ Complete (May 2026)
@@ -13,8 +17,9 @@ This roadmap formalizes the brand, copyright, and entity-formation plan for Sund
 The repository now has:
 - ✅ COPYRIGHT.md inventory of all copyrightable works (8 buckets)
 - ✅ LICENSE file (MIT with Stellar Aqua LLC copyright holder)
-- ✅ Footer copyright notices across all HTML pages
-- ✅ About page establishing Sundog Research Lab as independent research program sponsored by Stellar Aqua LLC
+- ✅ Footer copyright notices across public HTML pages
+- ✅ About page establishing Sundog Research Lab's public research posture and current Stellar Aqua LLC sponsorship structure
+- ✅ Brand positioning note separating the Mythos stress-test lesson from the legal/IP roadmap
 - ✅ Updated navigation with About page as primary identity page
 - ✅ Copyright headers on README.md and major documentation files
 - ✅ Package.json metadata (author, license, description)

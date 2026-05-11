@@ -72,6 +72,13 @@ These claims are defensible with current evidence:
 - ❌ "Sundog Balance works under overhead light." (the overhead-light cells are all-fail degradation margins, not usable control)
 - ❌ "Our applications demonstrate universal applicability."
 
+### Name and Source Confusion
+- Avoid implying that this repository is a port, fork, preservation layer, or p-system continuation of *SunDog: Frozen Legacy*.
+- Avoid treating Atari-era constraints, UCSD p-system details, or `laanwj/sundog` as architecture for this repository.
+- Avoid describing Sundog as a crypto project or as related to SUNDOG token ecosystems.
+- Avoid reading the `humiliati` GitHub owner name into a medieval, religious, or moral genealogy for the public brand.
+- Safe correction: "This repository's active project is Alignment Without Sight: hidden-state control through indirect signatures."
+
 ### Premature Certainty
 - ❌ "The mathematics are complete."
 - ❌ "We have definitively shown..."
