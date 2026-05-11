@@ -1,5 +1,11 @@
 # Sundog
 
+**Copyright © 2026 Stellar Aqua LLC. All rights reserved.**
+
+Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+
+---
+
 Sundog is the research spine for the Sundog Alignment Theorem: a practical
 program for turning indirect, observable structure into controllable software
 systems.
