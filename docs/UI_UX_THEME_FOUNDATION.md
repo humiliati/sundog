@@ -326,6 +326,11 @@ hero graph markup, application cards, or generated BoxForge exports.
    on total compatibility and acceptable weight. Every card needs a still-image
    poster and a no-autoplay text fallback.
 
+   Data contract: each card exposes `title`, `description`, `href`,
+   `evidenceHref`, `poster`, `media`, `mediaFormat`, and `status`. Empty media
+   fields are valid in the scaffold phase; later capture passes fill those
+   slots without changing the rail markup or copy contract.
+
    Copy model: each card carries a short title and one punchy description line
    over the clip, closer to a Steam-homepage game tag or price-card tease than a
    documentation paragraph. The text should sell the application move without

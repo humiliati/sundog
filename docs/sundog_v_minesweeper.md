@@ -178,8 +178,8 @@ Deliverables:
 - Declare what the Sundog controller cannot read: exact mine occupancy and exact
   adjacency counts.
 - Define the evidence tier: planned workbench, not yet a research result.
-- Define page shape: `mines.html`, linked later from the gallery and nav if it
-  earns the slot.
+- Define page shape: `mines.html`, linked from the gallery and nav as a
+  Planned Workbench until implementation earns a higher tier.
 
 Exit criterion: the workbench has one sentence that can be attacked and one
 task definition that can be reproduced.
