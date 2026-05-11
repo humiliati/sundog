@@ -79,7 +79,45 @@ function parseReplayURL(value) {
   if (!Number.isInteger(seed) || seed < 0) {
     throw new Error(`--replay-url seed must be a non-negative integer, got ${seedRaw}`);
   }
-  return { preset, seed, mode, sensor, compare: compare || null };
+  // Phase 10 override grammar — opt-in params layered on top of preset/sensor
+  // defaults so Phase 10 cells (which override mineCount/sigma/etc beyond
+  // any named preset/sensor) become reproducible. Missing params mean
+  // "inherit the named-cell default."
+  const intOrNull = (key) => {
+    const raw = params.get(key);
+    if (raw === null) return null;
+    const n = Number.parseInt(raw, 10);
+    if (!Number.isInteger(n)) throw new Error(`--replay-url ${key} must be an integer, got ${raw}`);
+    return n;
+  };
+  const floatOrNull = (key) => {
+    const raw = params.get(key);
+    if (raw === null) return null;
+    const n = Number.parseFloat(raw);
+    if (!Number.isFinite(n)) throw new Error(`--replay-url ${key} must be numeric, got ${raw}`);
+    return n;
+  };
+  const boardOverride = {};
+  const mc = intOrNull("mine_count"); if (mc !== null) boardOverride.mineCount = mc;
+  const w = intOrNull("width"); if (w !== null) boardOverride.width = w;
+  const h = intOrNull("height"); if (h !== null) boardOverride.height = h;
+  const sb = intOrNull("scan_budget"); if (sb !== null) boardOverride.scanBudget = sb;
+  const cs = floatOrNull("cluster_strength");
+  if (cs !== null) boardOverride.generator = { clusterStrength: cs };
+  const sensorOverride = {};
+  const sg = floatOrNull("sigma"); if (sg !== null) sensorOverride.sigma = sg;
+  const sn = floatOrNull("sigma_noise"); if (sn !== null) sensorOverride.sigmaNoise = sn;
+  const dr = floatOrNull("dropout"); if (dr !== null) sensorOverride.dropoutRate = dr;
+  const dl = intOrNull("delay"); if (dl !== null) sensorOverride.delaySteps = dl;
+  return {
+    preset,
+    seed,
+    mode,
+    sensor,
+    compare: compare || null,
+    boardOverride: Object.keys(boardOverride).length > 0 ? boardOverride : null,
+    sensorOverride: Object.keys(sensorOverride).length > 0 ? sensorOverride : null,
+  };
 }
 
 function applyReplayURL(args, replay) {
@@ -211,11 +249,12 @@ function centerAction(boardState) {
   };
 }
 
-function mergedSensorConfig(cell, mode, seed) {
+function mergedSensorConfig(cell, mode, seed, replayOverride = {}) {
   const definition = MINES_CONTROLLER_MODES[mode];
   return normalizeSensorConfig({
     ...cell.sensor,
     ...(definition.sensorOverride ?? {}),
+    ...replayOverride,
     sensorSeed: seed + 7919 + stringHash(mode),
   });
 }
@@ -399,16 +438,22 @@ function makeOpeningTraceRow({ trialId, phase, preset, sensorCell, mode, seed, b
 
 function scoreTrial({ preset, mode, cell, seed, args }) {
   const modeDefinition = MINES_CONTROLLER_MODES[mode];
+  // Replay URL overrides layer on top of preset/sensor/mode defaults so
+  // Phase 10 cells (which override mineCount/sigma/etc beyond any named
+  // preset/sensor) are reproducible from --replay-url alone.
+  const replayBoardOverride = args.replayURL?.boardOverride ?? {};
+  const replaySensorOverride = args.replayURL?.sensorOverride ?? {};
   const board = initializeBoardState({
     preset,
     seed,
     turnCap: args.turnCap,
     ...(modeDefinition.boardOverride ?? {}),
+    ...replayBoardOverride,
   });
   applyMinesAction(board, centerAction(board));
   const openingSafeCount = board.revealedSafeCount;
   const trialId = trialIdOf({ phase: args.phase, preset, sensorCell: cell.name, mode, seed });
-  const sensorConfig = mergedSensorConfig(cell, mode, seed);
+  const sensorConfig = mergedSensorConfig(cell, mode, seed, replaySensorOverride);
   const sensorRuntime = createSensorRuntime(sensorConfig);
   const rng = makeRng(seed ^ stringHash(mode) ^ stringHash(cell.name));
   const traceRows = [];
@@ -558,7 +603,7 @@ function summarizeTrials(rows) {
         usesPrivileged: first.usesPrivileged,
         survivalRate: roundMetric(mean(group.map((row) => row.survived ? 1 : 0))),
         fullClearRate: roundMetric(mean(group.map((row) => row.fullClear ? 1 : 0))),
-        meanRawSafeTiles: roundMetric(mean(group.map((row) => row.rawSafeTiles))),
+                meanRawSafeTiles: roundMetric(mean(group.map((row) => row.rawSafeTiles))),
         meanSafeTilesAfterOpening: roundMetric(mean(group.map((row) => row.safeTilesAfterOpening))),
         meanBudgetAdjustedSafeTiles: roundMetric(mean(group.map((row) => row.budgetAdjustedSafeTiles))),
         meanFalseFlagCount: roundMetric(mean(group.map((row) => row.falseFlagCount))),
@@ -867,4 +912,24 @@ if (path.resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
     console.error(error);
     process.exitCode = 1;
   });
+}
+    summaryRows,
+    comparisonSummaryRows,
+  }));
+
+  const phaseLabel = args.replayURL ? "replay" : args.phase;
+  console.log(`Mines ${phaseLabel} wrote ${path.relative(repoRoot, outDir)}`);
+  console.log(`Trial rows: ${trialRows.length}; comparison rows: ${comparisonRows.length}`);
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
+error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
+}
+});
 }

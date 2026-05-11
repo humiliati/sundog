@@ -816,6 +816,25 @@ labels do not contradict each other in a way that suggests measurement error.
 Phase 10 verdict status: pending. The grid has not been run as of this doc
 revision.
 
+**Prerequisites settled before grid run:**
+
+- Boundary vocabulary frozen in `public/js/mines-boundary.mjs`, now split into
+  `assessStaticBoundary` (config-only; consumed by Phase 10 envelope verdict)
+  and `assessLiveBoundary` (per-seed overlay; consumed by the browser panel
+  only). The compat wrapper `assessMinesBoundary` preserves the original API.
+- Replay URL grammar extended in the harness (`scripts/mines-phase4-baselines.mjs`)
+  to accept opt-in overrides for `mine_count`, `width`, `height`, `scan_budget`,
+  `cluster_strength`, `sigma`, `sigma_noise`, `dropout`, `delay`. Every Phase 10
+  cell is reproducible via `--replay-url` even when its config falls outside
+  any named preset/sensor pair. Browser-side hydration is deferred to Phase
+  11 promotion polish; for now, Phase 10 best/worst URLs are pasted into the
+  address bar manually.
+- Phase 9 boundary classifier thresholds verified coherent with Phase 9 sweep
+  values: density (0.18/0.24), clustering (0.45/0.75), blur/noise/dropout
+  multi-knob (σ≥3 OR noise≥1 OR dropout≥0.35 caution; σ≥6 OR noise≥5 OR
+  dropout≥0.7 unsafe), delay (1/3), board size ≥256 tiles, scan budget ≤1/0.
+  Phase 10 inherits these without redefinition.
+
 ### Phase 11 - Public Artifact And Promotion Pass
 
 Goal: make Pressure Mines promotion-ready without overclaiming.
