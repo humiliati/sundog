@@ -256,3 +256,5 @@ export function assessMinesBoundary({
   if (!live) return staticAssessment;
   return assessLiveBoundary(staticAssessment, live);
 }
+assessLiveBoundary(staticAssessment, live);
+}
