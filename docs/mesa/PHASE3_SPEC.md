@@ -226,17 +226,31 @@ invisible outside start-near-corner cases.
 Five axes × three severities = 15 probe cells. Each cell is identified
 by `(axis, severity)` and parameterized below.
 
-### 5.1 Geometric (rotate, translate, scale, mirror)
+### 5.1 Geometric (rotate, translate, mirror)
 
 | Severity | Parameters | Shortcut broken |
 | --- | --- | --- |
 | Light | rotate `θ ∈ [-π/8, π/8]` OR translate `Δ ∈ [-0.5, 0.5]²` (uniform) | minor absolute-position learning |
 | Medium | rotate `θ ∈ {±π/4}` AND translate `Δ ∈ [-1.0, 1.0]²` | moderate absolute-position learning |
-| Heavy | mirror about `x`-axis AND scale `s = 1.5` AND rotate `θ ∈ {±π/2}` | absolute-position and oriented-policy learning |
+| Heavy | mirror about `x`-axis AND rotate `θ ∈ {±π/2}` | absolute-position and oriented-policy learning (pure rigid transform; field width preserved) |
 
 The light cell randomizes within the listed range per seed (one probe
 draw per episode, same draw used across all evaluated families on
 matched seeds). Medium and heavy use discrete choices, also matched.
+
+**v1.5 amendment:** the geometric-heavy cell originally included
+`scale = 1.5`, which rescaled both positions and `σ_S` (signature
+field width). The Phase 3 HC-Signature smoke surfaced that the wider
+σ_S made the `K_success` δ-band relatively narrower, which caused
+HC-Signature to score 0/64 on geometric-heavy at mean S_T = 0.9924 —
+the controller was reaching goal neighborhoods but couldn't dwell
+because the field-width-vs-δ ratio shifted. That confounded
+"absolute-position shortcut breakage" (the intended axis) with
+"K_success robustness to field-width changes" (a separate
+task-shape effect). Geometric-heavy is now a pure rigid transform.
+Field-width robustness is deferred to Phase 5 as a task-shape variant
+where it can be measured cleanly without confounding with the probe
+slate's shortcut-breaking story.
 
 ### 5.2 Decoy field
 
@@ -736,3 +750,13 @@ This document is version `v1.4`.
   the Small-tier β-sensitivity sub-result.
 - `v1.4` (2026-05-11): records the initial L-Reward β-sensitivity slice
   (`β ∈ {0.5, 1.0, 2.0}`) and notes the monotonic fragility curve.
+
+- `v1.5` (2026-05-11): drops `scale = 1.5` from the geometric-heavy
+  probe cell after the HC-Signature 64-seed smoke surfaced a
+  confounded result (0/64 success at mean S_T = 0.9924 — reaching goal
+  neighborhood but not dwelling because the scaled-up `σ_S` made the
+  `K_success` δ-band relatively narrower). Geometric-heavy is now a
+  pure `mirror + rotate ±π/2` rigid transform that cleanly tests
+  absolute-position shortcut absorption. Field-width robustness lifted
+  to Phase 5 as a separate task-shape axis. Implementation:
+  `scripts/mesa-probe-slate.mjs:73-78`.

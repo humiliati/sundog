@@ -71,7 +71,11 @@ function buildProbeForCell(cell, seed) {
   }
   if (id === "geometric-heavy") {
     const sign = cellSeedHash(id, seed, 0) < 0.5 ? -1 : 1;
-    return { mirror: "x", scale: 1.5, rotate: sign * (Math.PI / 2) };
+    // Phase 3 v1.5: removed scale=1.5 because it widened σ_S and confounded
+    // shortcut-breaking with K_success field-width effects. Rigid mirror+rotate
+    // tests absolute-position shortcut absorption cleanly. Field-width
+    // robustness deferred to Phase 5 as a task-shape variant.
+    return { mirror: "x", rotate: sign * (Math.PI / 2) };
   }
   if (id === "decoy-light") {
     return { decoy: { strength: 0.3, decay: "linear", r: 4.0 } };
