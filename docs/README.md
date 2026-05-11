@@ -5,8 +5,8 @@ code, experiments, prior theorem materials, and application bridges.
 
 ## Primary Entry Points
 
-- [Table of contents](toc_table_of_contents.html): browsable HTML index of all
-  documents in this folder.
+- [Table of contents](index.html): browsable HTML index of all documents in
+  this folder.
 - [Researcher guide](RESEARCHER_GUIDE.md): shortest path for reviewers and
   collaborators.
 - [Scientific criteria](SCIENTIFIC_CRITERIA.md): what is testable, what is
