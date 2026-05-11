@@ -12,6 +12,7 @@ dist/
 build/
 results/threebody/
 results/balance/
+results/mines/
 
 # Test artifacts
 *.jsonl
