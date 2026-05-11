@@ -478,13 +478,14 @@ function draw() {
   ctx.fillRect(0, 0, rect.width, rect.height);
 
   const margin = 18;
+  const titleReserve = rect.width >= 760 ? 184 : 220;
   const gap = app.lanes.length > 1 ? 12 : 0;
   const panelW = (rect.width - margin * 2 - gap) / app.lanes.length;
-  const panelH = rect.height - margin * 2;
+  const panelH = rect.height - titleReserve - margin;
   app.lanes.forEach((lane, index) => {
     const box = {
       x: margin + index * (panelW + gap),
-      y: margin,
+      y: titleReserve,
       w: panelW,
       h: panelH,
     };

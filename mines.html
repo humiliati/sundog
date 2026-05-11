@@ -418,13 +418,18 @@
         @media (max-width: 900px) {
             .workbench {
                 height: auto;
+                width: 100%;
+                max-width: 100vw;
                 grid-template-columns: 1fr;
+                overflow-x: hidden;
             }
 
             .stage {
                 min-height: 78vh;
                 height: 78vh;
                 max-height: none;
+                width: 100%;
+                max-width: 100vw;
             }
 
             .controls {
@@ -438,7 +443,13 @@
             .stage-copy {
                 top: 1.2rem;
                 left: 1.2rem;
-                width: calc(100% - 2.4rem);
+                width: min(560px, calc(100vw - 2.4rem));
+            }
+
+            .stage-copy h1,
+            .stage-copy p {
+                max-width: 100%;
+                overflow-wrap: break-word;
             }
 
             .stage-copy p {
@@ -449,6 +460,8 @@
                 left: 1rem;
                 right: 1rem;
                 bottom: 1rem;
+                width: calc(100vw - 2rem);
+                max-width: calc(100vw - 2rem);
                 grid-template-columns: 1fr;
             }
 
@@ -493,82 +506,82 @@
                         minefield clearance.
                     </p>
                 </div>
-                <div class="status-strip" aria-live="polite">
-                    <div id="mines-status">Initializing workbench</div>
-                    <div id="phase-display">LIVE</div>
-                    <div id="mines-metrics"></div>
+                <div class="status-strip sd-status-strip" aria-live="polite">
+                    <div id="mines-status" class="sd-status-text">Initializing workbench</div>
+                    <div id="phase-display" class="sd-status-chip">LIVE</div>
+                    <div id="mines-metrics" class="sd-metrics"></div>
                 </div>
             </div>
 
-            <aside class="controls" aria-label="Mines controls">
+            <aside class="controls sd-control-panel" aria-label="Mines controls">
                 <h2>Workbench Controls</h2>
-                <div class="control-actions">
+                <div class="control-actions sd-control-actions">
                     <button id="mines-run" type="button">Pause</button>
                     <button id="mines-step" type="button">Step</button>
                     <button id="mines-reset" type="button">Reset</button>
                     <button id="mines-next-seed" type="button">Next Seed</button>
                 </div>
-                <div class="control-actions" style="margin-top: 0.32rem;">
-                    <button id="mines-copy-replay" type="button" style="grid-column: 1 / -1;" title="Copy a URL that reproduces this exact configuration in the harness and in any other browser session.">Copy replay URL</button>
+                <div class="control-actions sd-control-actions">
+                    <button id="mines-copy-replay" type="button" class="sd-span-all" title="Copy a URL that reproduces this exact configuration in the harness and in any other browser session.">Copy replay URL</button>
                 </div>
-                <div class="control-actions" style="margin-top: 0.32rem;">
+                <div class="control-actions sd-control-actions">
                     <button id="mines-load-worst" type="button">Failure region</button>
                     <button id="mines-load-best" type="button">Confirmed pocket</button>
                 </div>
 
                 <h3>Modes</h3>
-                <div class="control-row">
+                <div class="control-row sd-control-row">
                     <label for="mines-mode">Primary</label>
                     <select id="mines-mode"></select>
                 </div>
-                <div class="control-row">
+                <div class="control-row sd-control-row">
                     <label for="mines-compare-mode">Compare</label>
                     <select id="mines-compare-mode"></select>
                 </div>
-                <label class="toggle-row" for="mines-compare">
+                <label class="toggle-row sd-toggle-row" for="mines-compare">
                     <input id="mines-compare" type="checkbox" checked>
                     <span>Matched seed comparison</span>
                 </label>
 
                 <h3>Board</h3>
-                <div class="control-row">
+                <div class="control-row sd-control-row">
                     <label for="mines-preset">Preset</label>
                     <select id="mines-preset"></select>
                 </div>
-                <div class="control-row">
+                <div class="control-row sd-control-row">
                     <label for="mines-seed">Seed</label>
                     <input id="mines-seed" type="number" min="0" step="1" value="1000">
                 </div>
-                <div class="control-row">
+                <div class="control-row sd-control-row">
                     <label for="mines-sensor">Sensor</label>
                     <select id="mines-sensor"></select>
                 </div>
-                <div class="control-row">
+                <div class="control-row sd-control-row">
                     <label for="mines-speed">Speed</label>
                     <input id="mines-speed" type="range" min="120" max="1200" step="40" value="520">
                 </div>
-                <label class="toggle-row" for="mines-audit">
+                <label class="toggle-row sd-toggle-row" for="mines-audit">
                     <input id="mines-audit" type="checkbox">
                     <span>Diagnostics overlay</span>
                 </label>
 
-                <div id="mines-boundary-panel" class="boundary-panel" data-status="likely_readable">
+                <div id="mines-boundary-panel" class="boundary-panel sd-boundary-panel" data-status="likely_readable">
                     <div class="boundary-kicker">Use Boundary</div>
-                    <div id="mines-boundary-status">LIKELY READABLE</div>
+                    <div id="mines-boundary-status" class="sd-boundary-status">LIKELY READABLE</div>
                     <p id="mines-boundary-summary">No Phase 9 boundary warning is active for the current controls.</p>
                     <ul id="mines-boundary-list">
                         <li>No active density, blur, delay, dropout, scan-budget, or live-confidence warning.</li>
                     </ul>
                 </div>
 
-                <div class="note">
+                <div class="note sd-note">
                     <strong>Phase 10 lock</strong><br>
                     Default view follows the negative-region rule:
                     <code>sundog_lean</code> versus <code>naive_pressure</code>,
                     density 0.22, noise 1.0, dropout 0.35. Load the confirmed
                     pocket to inspect the positive cell.
                 </div>
-                <div class="metric-hint">
+                <div class="metric-hint sd-control-help">
                     false = privileged audit count; diagnostics overlay exposes hidden
                     mines only when this page toggle is enabled. Threshold flagger
                     survival is reported in the writeup, not hidden.
