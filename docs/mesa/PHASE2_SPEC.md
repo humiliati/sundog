@@ -323,7 +323,7 @@ Stable-baselines3 PPO is acceptable for the first pass if the bridge wrapper
 is Gymnasium-compatible. A clean local PPO implementation is acceptable only
 if SB3 cannot handle the bridge cleanly.
 
-PPO gate (revised v1.2):
+PPO gate (revised):
 
 The original Small-tier gate required all three RL families to reach
 ≥ 75% success on 64 held-out seeds within the 1M-step canonical budget.
@@ -332,6 +332,11 @@ L-Mixed 14/64 at 999,424 steps) showed that gate is unrealistic at
 matched budget, and that the gap between families is the *measurement*,
 not a failure mode. The diagnostic over-cap run (L-Reward at 1.31M:
 63/64) confirmed the architecture and pipeline are sound.
+
+The L-Signature reward routing has been checked end-to-end: the PPO trainer
+uses `rewardChannels.signature` as `r_t = S(x_t)` at every step. The
+L-Signature struggle is therefore the real gradient-information problem under
+Gaussian-decay signature shaping, not a routing bug.
 
 Revised gate:
 
@@ -533,6 +538,8 @@ the JS bridge with an actor-critic wrapper, running observation normalization,
 GAE, clipped policy loss, checkpoint export, JSON policy export, and held-out
 evaluation. `step_batch(auto_reset_done=true)` is used so batched rollouts
 receive reset observations immediately while preserving terminal rewards.
+For L-Signature, PPO reads `rewardChannels.signature` directly, so
+`r_t = S(x_t)` end-to-end.
 
 Canonical Small runs use 122 updates = 999,424 env steps:
 
@@ -542,17 +549,26 @@ Canonical Small runs use 122 updates = 999,424 env steps:
 | `reward_ppo_dense:canonical_1m` | L-Reward | 44/64 (68.8%) | 0.9896 | near miss; below 75% gate |
 | `mixed_ppo_lambda_0_5:canonical_1m` | L-Mixed | 14/64 (21.9%) | 0.9658 | high-alignment dwell failure |
 
-An over-cap diagnostic run for L-Reward at 160 updates = 1,310,720 env steps
-solves the nominal task: `reward_ppo_dense:overcap_1_31m` reaches 63/64
-successes (98.4%), mean terminal alignment 0.9983, and mean steps 92.7. The
-exported `.policy.json` replays directly in JS with the same result via
-`npm run mesa:phase2:ppo-small-reward-overcap-js`.
+Over-cap diagnostic runs:
+
+| Variant | Updates | Env steps | Success | Mean terminal alignment | Multiplier status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `signature_ppo_dense:overcap_1_31m` | 160 | 1,310,720 | 6/64 (9.4%) | 0.8132 | not solved |
+| `signature_ppo_dense:overcap_1_97m` | 240 | 1,966,080 | 0/64 (0.0%) | 0.6382 | censored lower bound `> 1.97x` |
+| `reward_ppo_dense:overcap_1_31m` | 160 | 1,310,720 | 63/64 (98.4%) | 0.9983 | solved at `1.31x` |
+| `mixed_ppo_lambda_0_5:overcap_1_31m` | 160 | 1,310,720 | 6/64 (9.4%) | 0.9649 | not solved |
+| `mixed_ppo_lambda_0_5:overcap_1_97m` | 240 | 1,966,080 | 6/64 (9.4%) | 0.9716 | censored lower bound `> 1.97x` |
+
+The exported L-Reward over-cap `.policy.json` replays directly in JS with the
+same solved result via `npm run mesa:phase2:ppo-small-reward-overcap-js`.
 
 Interpretation: PPO infrastructure is working, but the canonical 1M Small gate
 is not yet satisfied by all three families. The first failure mode is
 "high-signature approach without K-success dwell," especially for Reward and
-Mixed. Before Medium, Phase 2 should either tune canonical PPO within the 1M
-budget or explicitly move dwell-sensitive reward shaping into the Phase 5
+Mixed. Reward clears the dwell criterion just beyond the canonical budget;
+Signature and Mixed do not clear it by 1.97x under the current PPO setup.
+Before Medium, Phase 2 should either tune canonical PPO within the 1M budget
+or explicitly move dwell-sensitive reward shaping into the Phase 5
 selection-pressure axis.
 
 ## 14. L-Reward Implementation Note and Phase 3 Spec-Gaming-Surface Call
@@ -600,7 +616,7 @@ training signals.
 
 ## 15. Versioning
 
-This document is version `v1.5`.
+This document is version `v1.7`.
 
 - `v1` (2026-05-10): locks Python trainer with JS env bridge, PPO as the
   matched RL algorithm, BC-first ordering, checkpoint/export format, and
@@ -608,12 +624,6 @@ This document is version `v1.5`.
 - `v1.1` (2026-05-10): inline addendum — auto-reset contract and error
   contract added to §4; bit-exact JSON export requirement added to §9;
   policy-export replay-verification bullet added to §12 exit criterion.
-- `v1.2` (2026-05-10): post-Small-PPO amendment — PPO gate in §7 reframed
-  from "≥75% success at 1M budget" to "stable learning curve + over-cap
-  multiplier"; §12 exit criterion replaces the canonical-budget success
-  requirement with per-family canonical-budget reporting plus over-cap
-  multipliers as the Sundog-cost finding; new §14 documents the L-Reward
-  state-only finding and routes spec-gaming-surface design to Phase 3.
 - `v1.2` (2026-05-10): adds the HC behavior-cloning dataset API, cheap loader
   sanity checks, manifest `bc_dataset` block, and local dataset smoke status.
 - `v1.3` (2026-05-10): fixes BC trace alignment around pre-action
@@ -624,3 +634,12 @@ This document is version `v1.5`.
   policy replay.
 - `v1.5` (2026-05-11): adds local PPO training, canonical Small PPO results,
   immediate-reset batch rollout mode, and the over-cap L-Reward diagnostic.
+- `v1.6` (2026-05-11): reframes the PPO gate from ">=75% success at 1M
+  budget" to "stable learning curve + over-cap multiplier"; updates the exit
+  criterion around canonical-budget reporting and Sundog-cost multipliers;
+  documents that L-Signature uses `r_t = S(x_t)` end-to-end; and adds the
+  L-Reward state-only implementation note plus Phase 3 spec-gaming-surface
+  routing call.
+- `v1.7` (2026-05-11): records L-Signature and L-Mixed over-cap measurements
+  at 1.31M and 1.97M env steps, leaving their `>=95%` multipliers censored as
+  `> 1.97x` under the current PPO setup.

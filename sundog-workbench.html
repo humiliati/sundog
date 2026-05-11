@@ -35,6 +35,7 @@
             --rainbow-saturation: 0.85;
             --idle-scintillation-amplitude: 0;
             --supralateral-intensity: 0;
+            --upper-tangent-intensity: 0;
         }
 
         * {
@@ -303,6 +304,19 @@
             mix-blend-mode: screen;
         }
 
+        /* Upper tangent arc: the "eyelid above the 22° halo." Distinct from the
+           CZA (which is tangent to the 46° halo top). Only renders in atlas
+           mode; other modes hold --upper-tangent-intensity at 0. */
+        .layer-upper-tangent path {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.85);
+            stroke-width: 2;
+            opacity: var(--upper-tangent-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+            mix-blend-mode: screen;
+        }
+
         .layer-parhelia .dagger {
             opacity: var(--parhelia-intensity);
         }
@@ -496,6 +510,12 @@
                     <path id="supralateral-path" d=""/>
                 </g>
 
+                <!-- Upper tangent arc: tangent to the 22° halo at its top —
+                     the eyelid-above-22-halo feature. Atlas mode only. -->
+                <g class="layer-upper-tangent">
+                    <path id="upper-tangent-path" d=""/>
+                </g>
+
                 <!-- Circumzenithal arc (CZA): the eyelid -->
                 <g class="layer-cza">
                     <!-- Bell-fill: paint-bucket region between the two arcs to produce the
@@ -627,6 +647,11 @@
             <div class="control-group">
                 <label>Supralateral Arc<span class="value" id="supralateral-intensity-value">0.00</span></label>
                 <input type="range" id="supralateral-intensity" data-param="supralateral-intensity" min="0" max="1" step="0.01" value="0">
+            </div>
+
+            <div class="control-group">
+                <label>Upper Tangent (eyelid)<span class="value" id="upper-tangent-intensity-value">0.00</span></label>
+                <input type="range" id="upper-tangent-intensity" data-param="upper-tangent-intensity" min="0" max="1" step="0.01" value="0">
             </div>
 
             <div class="control-group">

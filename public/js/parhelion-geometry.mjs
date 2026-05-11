@@ -396,13 +396,14 @@ function applyParhelicCircleThroughDaggersAndSun(svg, parhelicCurvature) {
   const parhelic = svg.querySelector("#parhelic-path");
   if (!parhelic) return;
 
-  // Map curvature ∈ [0, 1] to apex-above-sun height h ∈ [0, 200]. h=0 is the
-  // degenerate horizontal-line case — we draw it as a simple line so the
-  // circle math doesn't divide by zero.
+  // Map curvature ∈ [0, 1] to apex-BELOW-sun depth d ∈ [0, 200]. The parhelic
+  // circle in the Troels Nielsen photograph smiles (apex below sun), so this
+  // function draws the LOWER arc of a circle whose center sits ABOVE the
+  // daggers — apex dips below the sun-line.
   const c = clamp(parhelicCurvature, 0, 1);
-  const h = 200 * c;
+  const d = 200 * c;
 
-  if (h < 0.5) {
+  if (d < 0.5) {
     parhelic.setAttribute(
       "d",
       `M ${(SUN.x - HALO_22_RADIUS_FOR_GOVERNED).toFixed(2)} ${SUN.y.toFixed(2)} ` +
@@ -411,14 +412,14 @@ function applyParhelicCircleThroughDaggersAndSun(svg, parhelicCurvature) {
     return;
   }
 
-  // Unique circle through (SUN.x-220, SUN.y), (SUN.x, SUN.y-h), (SUN.x+220, SUN.y).
-  // By symmetry the center sits on x=SUN.x. Solving for the y of the center:
-  //   center_y = SUN.y + (220^2 - h^2) / (2h)
-  const r22sq = HALO_22_RADIUS_FOR_GOVERNED * HALO_22_RADIUS_FOR_GOVERNED;
-  const cy = SUN.y + (r22sq - h * h) / (2 * h);
-  const r = Math.hypot(HALO_22_RADIUS_FOR_GOVERNED, SUN.y - cy);
+  // Unique circle through (SUN.x ± 220, SUN.y) and (SUN.x, SUN.y + d).
+  // Center on x = SUN.x. Let u = SUN.y - cy (positive: center above daggers).
+  //   halfChord² + u² = (u + d)²  →  u = (halfChord² - d²) / (2d)
+  const halfChord = HALO_22_RADIUS_FOR_GOVERNED;
+  const u_ = (halfChord * halfChord - d * d) / (2 * d);
+  const cy = SUN.y - u_;
+  const r = Math.hypot(halfChord, u_);
 
-  // Render the visible upper arc — clip to viewbox x ∈ [0, 1000].
   const xMin = Math.max(SUN.x - r, 0);
   const xMax = Math.min(SUN.x + r, 1000);
   const dx = xMax - xMin;
@@ -427,11 +428,10 @@ function applyParhelicCircleThroughDaggersAndSun(svg, parhelicCurvature) {
   const parts = [];
   for (let i = 0; i <= steps; i += 1) {
     const x = xMin + (dx * i) / steps;
-    const u = (x - SUN.x) / r;
-    const inside = 1 - u * u;
-    // Upper arc: y = cy - r·√(1-u²). For h>0 in our parameterisation cy>SUN.y,
-    // and the upper arc passes through both daggers and the apex above the sun.
-    const y = cy - r * Math.sqrt(Math.max(0, inside));
+    const uu = (x - SUN.x) / r;
+    const inside = 1 - uu * uu;
+    // LOWER arc: y = cy + r·√(1-u²). Apex at (SUN.x, cy + r) = (SUN.x, SUN.y + d).
+    const y = cy + r * Math.sqrt(Math.max(0, inside));
     parts.push(`${i === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`);
   }
   parhelic.setAttribute("d", parts.join(" "));
@@ -555,16 +555,17 @@ function daggerPointsFromSunAltitude(altitudeDeg) {
 }
 
 function applyParhelicCircleGeneralized(svg, daggerPoints, parhelicCurvature) {
-  // Same construction as v2 but parameterised by the half-chord between
-  // daggers, which now depends on sun altitude rather than being fixed at R_22.
+  // Draws the LOWER arc of a circle whose center sits above the daggers, so
+  // the apex dips BELOW the sun (smile shape — what the Troels Nielsen photo
+  // shows). Half-chord between daggers depends on sun altitude.
   const parhelic = svg.querySelector("#parhelic-path");
   if (!parhelic) return;
 
   const c = clamp(parhelicCurvature, 0, 1);
-  const h = 200 * c;
+  const d = 200 * c;
   const halfChord = daggerPoints.right.x - SUN.x;
 
-  if (h < 0.5) {
+  if (d < 0.5) {
     parhelic.setAttribute(
       "d",
       "M " + daggerPoints.left.x.toFixed(2) + " " + SUN.y.toFixed(2) + " L " +
@@ -573,8 +574,9 @@ function applyParhelicCircleGeneralized(svg, daggerPoints, parhelicCurvature) {
     return;
   }
 
-  const cy = SUN.y + (halfChord * halfChord - h * h) / (2 * h);
-  const r = Math.hypot(halfChord, SUN.y - cy);
+  const u_ = (halfChord * halfChord - d * d) / (2 * d);
+  const cy = SUN.y - u_;
+  const r = Math.hypot(halfChord, u_);
 
   const xMin = Math.max(SUN.x - r, 0);
   const xMax = Math.min(SUN.x + r, 1000);
@@ -584,9 +586,9 @@ function applyParhelicCircleGeneralized(svg, daggerPoints, parhelicCurvature) {
   const parts = [];
   for (let i = 0; i <= steps; i += 1) {
     const x = xMin + (dx * i) / steps;
-    const u = (x - SUN.x) / r;
-    const inside = 1 - u * u;
-    const y = cy - r * Math.sqrt(Math.max(0, inside));
+    const uu = (x - SUN.x) / r;
+    const inside = 1 - uu * uu;
+    const y = cy + r * Math.sqrt(Math.max(0, inside));
     parts.push((i === 0 ? "M " : "L ") + x.toFixed(2) + " " + y.toFixed(2));
   }
   parhelic.setAttribute("d", parts.join(" "));
@@ -613,8 +615,17 @@ function upperArcPath(cx, cy, r, xClipMin, xClipMax, yClipMax) {
   return parts.join(" ");
 }
 
+// Atmospheric optics constraint: the CZA is TANGENT TO THE 46° HALO at its
+// top. So the CZA apex y is anchored at (SUN.y - R_46), and --cza-curvature
+// offsets from that anchor (default 0.85 → exactly tangent; lower values
+// drop the apex toward the endpoint, higher values push it above-canvas).
+// Calibration vs Troels Nielsen DR: anchored apex y=60 → photo y=66, vs
+// observed (402, 65) — 1 px residual (was 15 px with the unanchored formula).
 function czaApexFromCurvature(czaCurve) {
-  return 200 - 140 * clamp(czaCurve, 0.4, 1.4);
+  const HALO_46_RADIUS = 440; // current workbench R_46
+  const anchoredApexY = SUN.y - HALO_46_RADIUS; // = 60
+  const offset = (0.85 - clamp(czaCurve, 0.4, 1.4)) * 200;
+  return anchoredApexY + offset;
 }
 
 function czaCircleFromApex(apexY, endpointY, halfWidth) {
@@ -702,6 +713,42 @@ function applySupralateralArc(svg, intensity) {
   supra.setAttribute("d", parts.join(" "));
 }
 
+function applyUpperTangentArc(svg, intensity) {
+  // Tangent to the 22° halo at its TOP point (SUN.x, SUN.y - 220). Curves UP
+  // from there — the "eyelid above the 22° halo" feature distinct from the
+  // CZA. Geometrically: circle whose center sits R_uta directly ABOVE the
+  // tangent point; visible portion is the LOWER arc of that circle, which
+  // bottoms out at the tangent and rises on either side.
+  const arc = svg.querySelector("#upper-tangent-path");
+  if (!arc) return;
+  if (intensity <= 0.001) {
+    arc.setAttribute("d", "");
+    return;
+  }
+  const tangentY = SUN.y - HALO_22_RADIUS; // 280
+  const R_uta = 200;
+  const cx = SUN.x;
+  const cy = tangentY - R_uta;
+  const xMin = Math.max(cx - R_uta, 0);
+  const xMax = Math.min(cx + R_uta, 1000);
+  const dx = xMax - xMin;
+  if (dx <= 1e-6) return;
+  const steps = 160;
+  const parts = [];
+  let started = false;
+  for (let i = 0; i <= steps; i += 1) {
+    const x = xMin + (dx * i) / steps;
+    const u = (x - cx) / R_uta;
+    const inside = 1 - u * u;
+    if (inside < 0) continue;
+    const y = cy + R_uta * Math.sqrt(inside);
+    if (y < 0 || y > tangentY + 5) continue;
+    parts.push((started ? "L " : "M ") + x.toFixed(2) + " " + y.toFixed(2));
+    started = true;
+  }
+  arc.setAttribute("d", parts.join(" "));
+}
+
 function applyGeometryHaloAtlas(svg, rootStyle) {
   const sunAltitude = readCssNumber(rootStyle, "--sun-altitude", 18);
   const pillarLen = readCssNumber(rootStyle, "--sun-pillar-length", 0.65);
@@ -711,6 +758,7 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
   const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
   const supralateralIntensity = readCssNumber(rootStyle, "--supralateral-intensity", 0);
+  const upperTangentIntensity = readCssNumber(rootStyle, "--upper-tangent-intensity", 0);
 
   const daggerPoints = daggerPointsFromSunAltitude(sunAltitude);
 
@@ -719,6 +767,7 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   applyPillarFromTwoHalos(svg, daggerPoints, pillarLen);
   applyCzaFullRing(svg, czaCurve);
   applySupralateralArc(svg, supralateralIntensity);
+  applyUpperTangentArc(svg, upperTangentIntensity);
 
   applyCompassRays(svg, compassLen);
   applySecondaryHalos(svg, overlapBias);
