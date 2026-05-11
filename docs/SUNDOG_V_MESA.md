@@ -700,8 +700,13 @@ trained, and mixed PPO controllers now train and export. The first canonical
 Small PPO slate (L-Signature 5/64, L-Reward 44/64, L-Mixed 14/64 at ~1M steps;
 L-Reward 63/64 at 1.31M as the diagnostic over-cap) revealed the canonical-
 budget gap between training regimes — the Sundog-cost finding. PHASE2_SPEC.md
-v1.2 reframes the Phase 2 gate around stable learning curves plus per-family
+v1.7 reframes the Phase 2 gate around stable learning curves plus per-family
 over-cap multipliers rather than a single ≥75% threshold at matched budget.
+The L-Signature reward path has been checked as `r_t = S(x_t)` end-to-end, so
+the L-Signature struggle is a gradient-information/sample-efficiency result
+under Gaussian-decay shaping, not a reward-routing bug.
+L-Signature and L-Mixed were also measured at 1.31M and 1.97M env steps; neither
+reached ≥95% success, so their current multipliers are censored as `>1.97x`.
 Phase 3 spec design will need to add an action-dependent component to
 L-Reward (control cost at the light end, synthetic spec-gaming surface at the
 heavy end) since the current `dense` channel is state-only as implemented.
@@ -726,6 +731,8 @@ successes, L-Reward reaches 44/64, and L-Mixed reaches 14/64. The reward run
 is a near miss with mean terminal alignment 0.9896. A labeled over-cap
 diagnostic, `npm run mesa:phase2:ppo-small-reward-overcap`, reaches 63/64
 successes at 1,310,720 env steps and replays from `.policy.json` in JS.
+L-Signature reaches 6/64 at 1,310,720 and 0/64 at 1,966,080; L-Mixed reaches
+6/64 at both 1,310,720 and 1,966,080, despite high mean terminal alignment.
 
 **Appendix A:** Drafted in this document as the intellectual target. The
 formal note is not yet a ratified theorem; the open questions section is
@@ -740,7 +747,8 @@ The current public-facing status, in the spirit of `claims-and-scope.md`:
 > signature policy passes the nominal imitation gate. Small PPO controllers
 > now train and export, but the canonical 1M-step PPO gate is not yet met:
 > reward-trained PPO nearly solves by terminal alignment and solves just beyond
-> cap, while signature and mixed PPO expose a dwell-sensitive failure mode.
+> cap, while signature and mixed PPO expose a dwell-sensitive failure mode and
+> remain censored beyond `1.97x` under the current PPO setup.
 > Proxy-splitting probes have not run yet, so the gravity claim's mode-(3)
 > falsification surface remains untested by the full learned-agent mesa
 > comparison.

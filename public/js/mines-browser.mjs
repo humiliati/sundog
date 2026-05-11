@@ -512,8 +512,6 @@ function populateControls() {
     option.textContent = cell.label;
     sensorSelect.append(option);
   }
-  // Initial control values are overwritten by replay params below. Keep these
-  // as mundane fallbacks for stale or stripped URLs.
   sensorSelect.value = "doc_default";
 
   for (const mode of MODE_ORDER) {
@@ -529,36 +527,40 @@ function populateControls() {
   compareModeSelect.value = "naive_pressure";
 }
 
-// Replay URL contract — kept in lockstep with scripts/mines-phase4-baselines.mjs.
-//   Required params: preset, seed, mode, sensor
-//   Optional params: compare (a second mode for matched-seed side-by-side)
 function buildReplayURL() {
-  const params = new URLSearchParams({
-    preset: presetSelect.value,
-    seed: String(seedValue()),
-    mode: modeSelect.value,
-    sensor: sensorSelect.value,
-  });
+  const url = new URL(window.location.href);
+  url.search = "";
+  url.searchParams.set("preset", presetSelect.value);
+  url.searchParams.set("seed", String(seedValue()));
+  url.searchParams.set("mode", modeSelect.value);
+  url.searchParams.set("sensor", sensorSelect.value);
   if (compareToggle.checked && compareModeSelect.value) {
-    params.set("compare", compareModeSelect.value);
+    url.searchParams.set("compare", compareModeSelect.value);
   }
-  appendReplayOverrides(params);
-  const base = `${window.location.origin}${window.location.pathname}`;
-  return `${base}?${params.toString()}`;
-}
-
-function appendReplayOverrides(params) {
-  if (Number.isInteger(app.boardOverride.mineCount)) params.set("mine_count", String(app.boardOverride.mineCount));
-  if (Number.isInteger(app.boardOverride.width)) params.set("width", String(app.boardOverride.width));
-  if (Number.isInteger(app.boardOverride.height)) params.set("height", String(app.boardOverride.height));
-  if (Number.isInteger(app.boardOverride.scanBudget)) params.set("scan_budget", String(app.boardOverride.scanBudget));
-  if (Number.isFinite(app.boardOverride.generator?.clusterStrength)) {
-    params.set("cluster_strength", String(app.boardOverride.generator.clusterStrength));
+  // Re-emit any board/sensor overrides currently in app state so the URL
+  // is a complete round-trip of the rendered configuration. The UI itself
+  // does not expose controls for these knobs (they enter only via URL).
+  const boardKeyMap = { mineCount: "mine_count", scanBudget: "scan_budget" };
+  for (const [key, value] of Object.entries(app.boardOverride)) {
+    if (key === "generator") {
+      if (value?.clusterStrength != null) {
+        url.searchParams.set("cluster_strength", String(value.clusterStrength));
+      }
+    } else {
+      const urlKey = boardKeyMap[key] ?? key;
+      url.searchParams.set(urlKey, String(value));
+    }
   }
-  if (Number.isFinite(app.sensorOverride.sigma)) params.set("sigma", String(app.sensorOverride.sigma));
-  if (Number.isFinite(app.sensorOverride.sigmaNoise)) params.set("sigma_noise", String(app.sensorOverride.sigmaNoise));
-  if (Number.isFinite(app.sensorOverride.dropoutRate)) params.set("dropout", String(app.sensorOverride.dropoutRate));
-  if (Number.isInteger(app.sensorOverride.delaySteps)) params.set("delay", String(app.sensorOverride.delaySteps));
+  const sensorKeyMap = {
+    sigmaNoise: "sigma_noise",
+    dropoutRate: "dropout",
+    delaySteps: "delay",
+  };
+  for (const [key, value] of Object.entries(app.sensorOverride)) {
+    const urlKey = sensorKeyMap[key] ?? key;
+    url.searchParams.set(urlKey, String(value));
+  }
+  return url.toString();
 }
 
 async function copyReplayURL() {
@@ -568,41 +570,42 @@ async function copyReplayURL() {
     copyReplayButton.textContent = "Copied";
     setTimeout(() => { copyReplayButton.textContent = "Copy replay URL"; }, 1400);
   } catch {
-    // Clipboard API may be unavailable (file:// origin or denied perms).
-    // Fall back to selecting the URL in a prompt so the user can copy manually.
     window.prompt("Copy this replay URL:", url);
   }
 }
 
-// Hydrate controls from any replay params present on the initial URL. Runs
-// once before the first resetWorkbench(). Silently ignores params that don't
-// correspond to known options so a stale or malformed URL degrades gracefully.
-function hydrateFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.size === 0) return false;
-  const preset = params.get("preset");
-  const seed = params.get("seed");
-  const mode = params.get("mode");
-  const sensor = params.get("sensor");
-  const compare = params.get("compare");
+function paramsFromCell(cellParams) {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(cellParams)) {
+    params.set(key, String(value));
+  }
+  return params;
+}
+
+function hydrateControlsFromParams(params) {
   let applied = false;
+  const preset = params.get("preset");
   if (preset && MINES_PRESETS[preset]) {
     presetSelect.value = preset;
     applied = true;
   }
-  const seedInt = Number.parseInt(seed ?? "", 10);
+  const seedRaw = params.get("seed");
+  const seedInt = Number.parseInt(seedRaw ?? "", 10);
   if (Number.isInteger(seedInt) && seedInt >= 0) {
     seedInput.value = String(seedInt);
     applied = true;
   }
+  const mode = params.get("mode");
   if (mode && MINES_CONTROLLER_MODES[mode]) {
     modeSelect.value = mode;
     applied = true;
   }
+  const sensor = params.get("sensor");
   if (sensor && SENSOR_CELLS[sensor]) {
     sensorSelect.value = sensor;
     applied = true;
   }
+  const compare = params.get("compare");
   if (compare && MINES_CONTROLLER_MODES[compare]) {
     compareModeSelect.value = compare;
     compareToggle.checked = true;
@@ -619,12 +622,30 @@ function hydrateFromURL() {
   return applied;
 }
 
-function applyReplayParams(replayParams, { replace = false } = {}) {
-  const params = new URLSearchParams(replayParams);
-  const target = `${window.location.pathname}?${params.toString()}`;
-  if (replace) window.history.replaceState(null, "", target);
-  else window.location.assign(target);
+function hydrateFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  if (Array.from(params).length === 0) return false;
+  return hydrateControlsFromParams(params);
 }
+
+function applyDefaultCellParams(cellParams) {
+  const params = paramsFromCell(cellParams);
+  hydrateControlsFromParams(params);
+  const url = new URL(window.location.href);
+  url.search = params.toString();
+  window.history.replaceState(null, "", url.toString());
+}
+
+function loadCellParams(cellParams) {
+  const url = new URL(window.location.href);
+  url.search = paramsFromCell(cellParams).toString();
+  // Assigning to location.href triggers a navigation; the new page load
+  // calls hydrateFromURL during its boot sequence.
+  window.location.assign(url.toString());
+}
+
+function loadBestCell() { loadCellParams(BEST_CELL_PARAMS); }
+function loadWorstCell() { loadCellParams(WORST_CELL_PARAMS); }
 
 function bindControls() {
   runButton.addEventListener("click", () => {
@@ -642,20 +663,24 @@ function bindControls() {
     resetWorkbench();
   });
   copyReplayButton.addEventListener("click", () => { copyReplayURL(); });
-  loadBestButton?.addEventListener("click", () => {
-    applyReplayParams(BEST_CELL_PARAMS);
-  });
-  loadWorstButton?.addEventListener("click", () => {
-    applyReplayParams(WORST_CELL_PARAMS);
-  });
-  bodyLoadBestButton?.addEventListener("click", () => {
-    applyReplayParams(BEST_CELL_PARAMS);
-  });
-  bodyLoadWorstButton?.addEventListener("click", () => {
-    applyReplayParams(WORST_CELL_PARAMS);
-  });
+  // Phase 11 best/worst-cell shortcuts in the right rail and body copy.
+  loadBestButton?.addEventListener("click", loadBestCell);
+  loadWorstButton?.addEventListener("click", loadWorstCell);
+  bodyLoadBestButton?.addEventListener("click", loadBestCell);
+  bodyLoadWorstButton?.addEventListener("click", loadWorstCell);
+  // Preset and sensor changes invalidate URL-hydrated overrides because the
+  // overrides were specific to the cell that was hydrated. Other inputs
+  // (mode/compare/seed/audit) preserve overrides so the user can sweep
+  // controllers across the same cell.
+  const presetOrSensorInputs = new Set([presetSelect, sensorSelect]);
   for (const input of [modeSelect, compareModeSelect, presetSelect, sensorSelect, seedInput, compareToggle, auditToggle]) {
-    input.addEventListener("change", resetWorkbench);
+    input.addEventListener("change", () => {
+      if (presetOrSensorInputs.has(input)) {
+        app.boardOverride = {};
+        app.sensorOverride = {};
+      }
+      resetWorkbench();
+    });
   }
   speedInput.addEventListener("input", () => {
     app.speedMs = Number.parseInt(speedInput.value, 10) || 520;
@@ -673,13 +698,12 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 
+// Boot. populateControls fills the dropdowns; hydrateFromURL runs after so
+// any ?preset/seed/mode/sensor/compare query params replace the defaults
+// before the first reset renders.
 populateControls();
-// Replay URL params override the page's defaults if present. Runs after
-// populateControls so the option lists exist, before bindControls/reset so
-// the hydrated values are what the first render sees.
-if (!hydrateFromURL()) {
-  applyReplayParams(BEST_CELL_PARAMS, { replace: true });
-  hydrateFromURL();
+if (!hydrateFromURL() && window.location.search === "") {
+  applyDefaultCellParams(BEST_CELL_PARAMS);
 }
 bindControls();
 resetWorkbench();

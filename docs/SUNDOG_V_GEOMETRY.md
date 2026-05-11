@@ -265,6 +265,38 @@ as `geometryModel`. Reference poses for both alternative tracks live as
 the `Load params` button, those poses are documentation artifacts only —
 they cannot yet be loaded back into the workbench from the UI.
 
+### Halo Atlas v2 fixes (2026-05-11)
+
+After overlay inspection three corrections landed:
+
+1. **Parhelic arc direction flipped from frown to smile.** Was drawing the
+   upper arc of a circle whose center sat below the daggers — apex above
+   the sun. The Troels Nielsen photograph's parhelic feature smiles (apex
+   below sun). Now draws the lower arc of a circle whose center sits
+   above the daggers. Applies to both `halo_governed` and `halo_atlas`.
+2. **CZA anchored to 46° halo top.** Real atmospheric optics: the CZA is
+   tangent to the 46° halo at its top. Apex now sits at `(sun.x, sun.y −
+   R_46)` by construction; `--cza-curvature` offsets from that anchor.
+   Calibration residual against the Troels Nielsen photo: was (2, 15) px,
+   now **(2, 1) px**. Default 0.85 produces the canonical tangent pose.
+3. **Upper tangent arc** is a new atlas primitive. Tangent to the **22°**
+   halo at its top — the "eyelid above the 22° halo" feature distinct
+   from the CZA. Slider `--upper-tangent-intensity` (default 0). Without
+   this primitive, the only "eyelid"-shaped feature in the atlas was the
+   CZA, which sits much higher (tangent to 46° halo) and therefore can't
+   serve double duty.
+
+R_46 note: Gemini suggested using the pure 46°/22° angular ratio,
+`R_46 = R_22 × 46/22 = 460` workbench units (→ 303 photo px). Calibration
+against the Troels Nielsen photo measures `R_46 = 285 photo px = 432
+workbench units`. The atmospheric-optics literature reports the same ~5%
+gap (refraction in the 46° prism path is more sensitive to crystal
+orientation than the 22° path). The workbench's `R_46 = 440` gives a
+1.8% photo-fit residual; switching to 460 would *worsen* the fit to 6.3%.
+Holding `R_46 = 440`.
+
+Overlay PNG: [`atlas_v2_overlay_troels_nielsen.png`](atlas_v2_overlay_troels_nielsen.png).
+
 ### Halo Atlas calibration vs Troels Nielsen DR (2026-05-10)
 
 `halo_atlas` extends the Halo Governed v2 reading with three changes the

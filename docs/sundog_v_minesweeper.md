@@ -549,6 +549,15 @@ matched-seed evidence before promotion past Planned Workbench. Until then the
 page copy uses provisional language and the evidence-tier badge stays at the
 lowest applicable tier.
 
+*Status addendum (post Phase 10 / Phase 11):* this rule has now fired. The
+Phase 10 CONFIRM produced a single matched-seed candidate cell with a
+bootstrap CI excluding zero and a paired published failure cell, satisfying
+the pre-registration. The Phase 11 page polish promoted the tier badge from
+"Planned Workbench" to "Operating-Envelope Study" and replaced the "Open
+Question" claim box with the "Confirmed pocket / Failure region" framing.
+The provisional-copy clause above is preserved as the historical
+pre-registration record and is no longer load-bearing.
+
 Phase 6 browser status:
 
 - `mines.html` now runs the shared Phase 1-5 modules directly in the browser:
@@ -878,6 +887,41 @@ Deliverables:
 
 Exit criterion: a first-time visitor can see the board, understand the theoremic
 move in under a minute, and also see that the field is not always enough.
+
+Phase 11 status:
+
+- Tier badge on `mines.html` promoted from "Planned Workbench" to
+  "Operating-Envelope Study" in the stage eyebrow and the footer note. The
+  promotion is grounded in the Phase 10 CONFIRM, not in visual impression.
+- The "Open Question" claim box on the body copy replaced with a
+  "Confirmed pocket / Failure region" pair that names the specific cell
+  (`density 0.16 / pressure noise 2.0 / dropout 0.2`), the
+  budget-adjusted matched-seed delta (`+7.21875` for `sundog_minimal`,
+  `+6.3125` for `sundog_lean`), the 95% bootstrap CI bounds, and the
+  matched failure cell. Negative region ships at equal prominence per the
+  pre-registration rule.
+- One-click best/worst replay shortcuts added in two places: the right
+  rail (`mines-load-best`, `mines-load-worst`) and the body copy
+  (`mines-body-load-best`, `mines-body-load-worst`). Both call into a
+  `loadCellParams` helper that assembles a URL from frozen
+  `BEST_CELL_PARAMS` / `WORST_CELL_PARAMS` objects baked into
+  `public/js/mines-browser.mjs` from the Phase 10 verdict's `bestCell` and
+  `worstCell` entries.
+- Browser-side replay URL plumbing landed for real this pass:
+  `buildReplayURL`, `copyReplayURL`, `hydrateFromURL`, and
+  `loadCellParams` all wired. The page hydrates URL params on boot,
+  including the opt-in board/sensor overrides (`mine_count`, `width`,
+  `height`, `scan_budget`, `cluster_strength`, `sigma`, `sigma_noise`,
+  `dropout`, `delay`). Round-trip determinism matches the harness's
+  `--replay-url` contract.
+- `docs/APPLICATIONS.md` row updated to Operating-Envelope Study tier and
+  cites the Phase 10 verdict cell. The applications gallery card and landing
+  page card now point at the runnable Mines workbench with the promoted tier.
+- Deferred to a later pass (not blocking Phase 11 exit): retiring the
+  `sundog_no_*` ablation modes from the live UI mode dropdown (they remain
+  in the harness for diagnostic use); adding a row to
+  `docs/presentation/applications-index.md`; producing a short public replay
+  capture of the confirmed pocket and paired failure region.
 
 ## Pre-Registered Comparison Shape
 
