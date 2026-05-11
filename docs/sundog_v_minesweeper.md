@@ -410,7 +410,8 @@ Phase 4 scaffold status after the Phase 5 merge:
   and `oracle_safe`.
 - Implemented Phase 5 lanes: `sundog_controller`, `sundog_no_gradient`,
   `sundog_no_scan`, `sundog_no_action_history`, and
-  `sundog_no_confidence_gate`.
+  `sundog_no_confidence_gate`, plus the lean recompositions `sundog_lean`
+  and `sundog_minimal`.
 - Budget-adjusted safe tiles are currently `rawSafeTiles - scanCount`; this
   is equal to raw safe tiles for no-scan lanes and applies a direct scan tax
   to Sundog lanes that spend bounded probes.
@@ -471,6 +472,55 @@ Phase 5 prototype status:
   no-gradient and no-scan variants expose when added channels are helping
   versus overfitting, while the threshold flagger shows survival can be bought
   with many false flags and must not be mistaken for clean field inference.
+
+Phase 5 lean reroll gate, pre-registered before running the new variant:
+
+- `sundog_lean` is a recomposition of existing channels: naive pressure
+  ordering, confidence gating, conservative threshold flagging, and
+  flag-neighbor risk penalty. It disables gradient, scan policy, scan bonuses,
+  and corridor/action-history bonuses. `sundog_minimal` is the same composition
+  without the flag action policy, included only to isolate whether threshold
+  flagging helps or hurts.
+- Primary acceptance: on the fresh 64-seed reroll, `sundog_lean` must have
+  budget-adjusted delta >= 0 versus `naive_pressure` on at least four of the
+  six publishable cells (`doc_default` and `blur_noise_cliff` crossed with
+  clustered, dense, and easy-sparse), with no cell worse than -1.0 tiles.
+- Secondary check: `sundog_lean` must beat the full `sundog_controller` by at
+  least +3 budget-adjusted tiles on `blur_noise_cliff` clustered and at least
+  +5 on `blur_noise_cliff` easy-sparse. If it misses this check, the ablation
+  stack is not reproducing the failure diagnosis.
+- Failure interpretation: if `sundog_lean` misses the primary gate, Phase 5's
+  lesson remains structural: hand-authored channel composition does not yet
+  survive reroll on this preset family. Move to Phase 6 with the public page
+  exposing side-by-side `sundog_lean` versus `naive_pressure`, so the loss is
+  visible instead of hidden.
+
+Phase 5 lean reroll outcome:
+
+- Structural smoke test: on a no-noise `easy_sparse` board with seed 42,
+  `sundog_lean` matched `naive_pressure` reveal choices until the conservative
+  threshold flagger fired on turn 2. This confirms the lean composition is not
+  leaking gradient, scan, or action-history bonuses before its flag policy
+  engages.
+- Primary gate failed. On the fresh 64-seed reroll, `sundog_lean` cleared
+  budget-adjusted delta >= 0 against `naive_pressure` in only one of six
+  publishable cells: `blur_noise_cliff` easy-sparse (+2.78125). It missed
+  `doc_default` clustered (-2.390625), `doc_default` dense (-0.171875),
+  `doc_default` easy-sparse (-1.9375), `blur_noise_cliff` clustered
+  (-4.5625), and `blur_noise_cliff` dense (-0.25).
+- Secondary check was mixed. `sundog_lean` beat full `sundog_controller` by
+  +6.875 budget-adjusted tiles on `blur_noise_cliff` easy-sparse, clearing the
+  +5 check, but beat it by only +1.328125 on `blur_noise_cliff` clustered,
+  missing the +3 check.
+- `sundog_minimal` was useful but did not rescue the claim. It beat
+  `sundog_lean` on noisy easy-sparse (+3.34375 versus +2.78125) and avoided
+  lean's false flags, but still failed the primary gate with only one positive
+  cell and multiple cells below -1.0.
+- Resulting claim: the lean surgery validated one diagnosis, that scan,
+  gradient, and action-history bonuses hurt the noisy easy-sparse pocket, but
+  it did not produce a robust controller. Phase 5 should remain framed as a
+  falsifiable workbench and failure map until a later controller redesign
+  survives the reroll gate.
 
 ### Phase 6 - Real-Time Web Projection
 

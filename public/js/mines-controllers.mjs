@@ -137,6 +137,32 @@ export const MINES_CONTROLLER_MODES = Object.freeze({
     usesPrivileged: false,
     ablation: "no_confidence_gate",
   }),
+  sundog_lean: Object.freeze({
+    label: "Sundog lean (confidence-gated naive pressure)",
+    status: "implemented",
+    informationBudget: "Pressure + confidence gating + conservative threshold flagging. No gradient, no scan policy, no action-history bonuses.",
+    usesPressure: true,
+    usesGradient: false,
+    usesConfidence: true,
+    usesActionHistory: false,
+    usesScan: false,
+    usesPrivileged: false,
+    boardOverride: Object.freeze({ scanBudget: 0 }),
+    ablation: "lean_composition",
+  }),
+  sundog_minimal: Object.freeze({
+    label: "Sundog minimal (confidence-gated pressure reveal)",
+    status: "implemented",
+    informationBudget: "Pressure + confidence gating only. No gradient, no scan policy, no action-history bonuses, and no flag action policy.",
+    usesPressure: true,
+    usesGradient: false,
+    usesConfidence: true,
+    usesActionHistory: false,
+    usesScan: false,
+    usesPrivileged: false,
+    boardOverride: Object.freeze({ scanBudget: 0 }),
+    ablation: "minimal_composition",
+  }),
 });
 
 export const IMPLEMENTED_MINES_MODES = Object.freeze(
@@ -252,11 +278,25 @@ function scanReadingMap(memory) {
 }
 
 function controllerOptionsForMode(mode) {
+  if (mode === "sundog_lean" || mode === "sundog_minimal") {
+    return Object.freeze({
+      useGradient: false,
+      useScan: false,
+      useActionHistory: false,
+      useConfidence: true,
+      useCorridorBonus: false,
+      useScanBonus: false,
+      useFlagPolicy: mode !== "sundog_minimal",
+    });
+  }
   return Object.freeze({
     useGradient: mode !== "sundog_no_gradient",
     useScan: mode !== "sundog_no_scan",
     useActionHistory: mode !== "sundog_no_action_history",
     useConfidence: mode !== "sundog_no_confidence_gate",
+    useCorridorBonus: true,
+    useScanBonus: true,
+    useFlagPolicy: true,
   });
 }
 
@@ -270,9 +310,9 @@ function scoreSundogCandidate(memory, sensor, idx, options, scans) {
 
   const confidencePenalty = options.useConfidence ? (1 - confidence) * 0.5 : 0;
   const gradientPenalty = gradient * 0.025;
-  const corridorBonus = Math.min(0.1, revealedSafe * 0.02);
+  const corridorBonus = options.useCorridorBonus ? Math.min(0.1, revealedSafe * 0.02) : 0;
   const flagPenalty = flagged * 0.18;
-  const scanBonus = Number.isFinite(scanReading) ? 0.16 : 0;
+  const scanBonus = options.useScanBonus && Number.isFinite(scanReading) ? 0.16 : 0;
   const neighborhoodScanBonus = options.useActionHistory ? Math.min(0.12, scanned * 0.04) : 0;
 
   return {
@@ -318,7 +358,8 @@ function sundogAction(memory, sensor, mode) {
   }
 
   if (
-    Number.isFinite(highestRisk.pressure)
+    options.useFlagPolicy
+    && Number.isFinite(highestRisk.pressure)
     && highestRisk.pressure >= 1.2
     && highestRisk.confidence >= 0.5
   ) {
@@ -403,6 +444,8 @@ export function chooseMinesAction({ mode, memory, sensor, boardState, rng, optio
     case "sundog_no_scan":
     case "sundog_no_action_history":
     case "sundog_no_confidence_gate":
+    case "sundog_lean":
+    case "sundog_minimal":
       return sundogAction(memory, sensor, mode);
     default:
       throw new Error(`No action chooser for mode: ${mode}`);
