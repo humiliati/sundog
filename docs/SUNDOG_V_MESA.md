@@ -719,28 +719,18 @@ Phase 3 spec design will need to add an action-dependent component to
 L-Reward (control cost at the light end, synthetic spec-gaming surface at the
 heavy end) since the current `dense` channel is state-only as implemented.
 
-**Phase 3:** Spec landed at [`mesa/PHASE3_SPEC.md`](mesa/PHASE3_SPEC.md)
-(`v1.4`, 2026-05-11). The L-Reward canonical training signal is locked as
-`dense - α·||a||² + β·false_basin(s)` with the false-basin fixed at
-`x_false = (-2.5, -2.5)` and not transformed by probes — the synthetic
-spec-gaming surface the gravity claim predicts L-Signature should be
-robust against. `npm run mesa:phase3:basin-calibration` gates basin
-visibility before retraining; the original `(-3.0, -3.0), σ = 1.0,
-β = 0.15` basin failed that gate. Probe slate (5 axes × 3 severities =
-15 cells), matched-seed evaluation protocol, and probe-resistance gap
-metric are pinned, but v1.3 makes the canonical-budget spec-gaming cost a
-first-class Phase 3 result. Implementation steps 1-3 have landed:
-`mesa-core.mjs` exposes the canonical Phase 3 reward channel, `npm run
-mesa:phase3:reward-smoke` verifies the formula plus the fixed `x_false`
-invariant under probes, the calibration gate passes on the canonical
-defaults, and Small canonical retrains are complete: L-Reward drops from
-Phase 2's 44/64 clean baseline to 2/64 with mean `S_T = 0.4236`, while
-L-Mixed lands at 8/64 with mean `S_T = 0.9386`. Probe slate work now
-separates the clean signal-shape test (L-Signature vs L-Reward-Clean) from
-mixed-policy failure-mode mapping and canonical L-Reward collapse
-confirmation. A Small β-sensitivity pass over `{0.5, 1.0, 2.0}` is pinned
-before Medium; the L-Reward slice is complete and monotonic so far:
-`12/64` at `β = 0.5`, `7/64` at `β = 1.0`, `2/64` at canonical `β = 2.0`.
+**Phase 3:** Small-tier canonical probe slate **complete**. See
+[`mesa/PHASE3_RESULTS.md`](mesa/PHASE3_RESULTS.md) v1 for the full result note.
+Spec at [`mesa/PHASE3_SPEC.md`](mesa/PHASE3_SPEC.md) v1.6. The L-Reward
+canonical training signal `dense − α·||a||² + β·false_basin(s)` with calibrated
+`β = 2.0` at `x_false = (-2.5, -2.5)` destroyed matched reward-trained PPO at
+canonical budget (44/64 → 2/64) while the signature-anchored mixed signal
+preserved goal-region behavior (mean S_T = 0.94 at 8/64 success). The basin-
+effect gap between L-Reward-Clean and L-Reward canonical is 65.6 pp at nominal
+and exceeds 45 pp on 9 of 13 probe cells. L-Mixed shows zero basin captures
+across every cell (sensor-noise-heavy excepted as coincidental). Probe-slate
+harness at `scripts/mesa-probe-slate.mjs`. β-sensitivity sub-result complete
+({0.5, 1.0, 2.0} monotonic). Medium tier not started.
 
 **Phases 4-8:** Not started.
 
@@ -756,48 +746,3 @@ extraction, loader sanity checks, and the train/val split for behavior cloning.
 imitation policy; the latest run reached 63/64 held-out successes (98.4%) with
 mean terminal alignment 0.9969. `npm run mesa:phase2:bc-js-eval-small` replays
 the exported `.policy.json` directly in the JS environment and matches the
-checkpoint evaluation. `npm run mesa:phase2:ppo-small` runs the canonical
-Small PPO triplet at 999,424 env steps per family: L-Signature reaches 5/64
-successes, L-Reward reaches 44/64, and L-Mixed reaches 14/64. The reward run
-is a near miss with mean terminal alignment 0.9896. A labeled over-cap
-diagnostic, `npm run mesa:phase2:ppo-small-reward-overcap`, reaches 63/64
-successes at 1,310,720 env steps and replays from `.policy.json` in JS.
-L-Signature reaches 6/64 at 1,310,720 and 0/64 at 1,966,080; L-Mixed reaches
-6/64 at both 1,310,720 and 1,966,080, despite high mean terminal alignment.
-
-**Appendix A:** Drafted in this document as the intellectual target. The
-formal note is not yet a ratified theorem; the open questions section is
-load-bearing.
-
-The current public-facing status, in the spirit of `claims-and-scope.md`:
-
-> Sundog vs. Mesa-Optimization has completed its Phase 1 reference-task
-> baseline: a hand-coded signature controller tracks the shadow-field
-> signature across privileged, local-probe, delayed, and noisy sensor tiers.
-> Phase 2 infrastructure has begun, and the first Small-tier behavior-cloned
-> signature policy passes the nominal imitation gate. Small PPO controllers
-> now train and export, but the canonical 1M-step PPO gate is not yet met:
-> reward-trained PPO nearly solves by terminal alignment and solves just beyond
-> cap, while signature and mixed PPO expose a dwell-sensitive failure mode and
-> remain censored beyond `1.97x` under the current PPO setup.
-> Proxy-splitting probes have not run yet, so the gravity claim's mode-(3)
-> falsification surface remains untested by the full learned-agent mesa
-> comparison.
-
-## Recommendation
-
-Proceed to Phase 2 using HC-Signature rollouts as the behavior-cloning source
-and Oracle as the privileged ceiling. Treat Phases 2–4 as the minimum viable
-mesa front. Phase 5 (selection-pressure curriculum) is the highest-marginal-
-value phase and should be designed before Phase 2 even though it runs later,
-because the matched-capacity learned controllers in Phase 2 must be trained
-under selection-pressure variants that Phase 5 will sweep.
-
-Run the Formal Separability Theorem appendix in parallel with Phase 0. A
-ratified or near-ratified theorem before Phase 3 lets the probe slate be
-designed against the theorem's named counterexamples rather than ad hoc.
-
-If at any phase the L-Signature family begins to track L-Reward
-indistinguishably under proxy splits, do not silence the result. The honest
-move is to map the boundary and ratchet the public claim down. The gravity
-frame's value is in its discipline, not in its size.
