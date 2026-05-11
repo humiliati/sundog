@@ -863,8 +863,9 @@ Phase 10 verdict status: `CONFIRM` on the locked 64-seed run.
   `cluster_strength`, `sigma`, `sigma_noise`, `dropout`, `delay`. Every Phase 10
   cell is reproducible via `--replay-url` even when its config falls outside
   any named preset/sensor pair. Browser-side hydration now accepts the same
-  override grammar, and `mines.html` defaults to the Phase 10 best replay while
-  exposing one-click best/worst replay buttons for public inspection.
+  override grammar, and `mines.html` defaults to the Phase 10 worst replay per
+  the negative-region publication rule while exposing one-click failure and
+  confirmed-pocket replay buttons for public inspection.
 - Phase 9 boundary classifier thresholds verified coherent with Phase 9 sweep
   values: density (0.18/0.24), clustering (0.45/0.75), blur/noise/dropout
   multi-knob (σ≥3 OR noise≥1 OR dropout≥0.35 caution; σ≥6 OR noise≥5 OR
@@ -907,6 +908,10 @@ Phase 11 status:
   `BEST_CELL_PARAMS` / `WORST_CELL_PARAMS` objects baked into
   `public/js/mines-browser.mjs` from the Phase 10 verdict's `bestCell` and
   `worstCell` entries.
+- The no-query browser default now loads the worst publication cell first
+  (`sundog_lean` versus `naive_pressure`, seed 39, density 0.22 / noise 1.0 /
+  dropout 0.35), then offers the confirmed pocket as the paired second replay.
+  This preserves the locked "no positive copy without negative copy" rule.
 - Browser-side replay URL plumbing landed for real this pass:
   `buildReplayURL`, `copyReplayURL`, `hydrateFromURL`, and
   `loadCellParams` all wired. The page hydrates URL params on boot,
@@ -917,11 +922,14 @@ Phase 11 status:
 - `docs/APPLICATIONS.md` row updated to Operating-Envelope Study tier and
   cites the Phase 10 verdict cell. The applications gallery card and landing
   page card now point at the runnable Mines workbench with the promoted tier.
-- Deferred to a later pass (not blocking Phase 11 exit): retiring the
-  `sundog_no_*` ablation modes from the live UI mode dropdown (they remain
-  in the harness for diagnostic use); adding a row to
-  `docs/presentation/applications-index.md`; producing a short public replay
-  capture of the confirmed pocket and paired failure region.
+- Diagnostic `sundog_no_*` ablation modes were retired from the live UI mode
+  dropdown while remaining available in the harness for audit use.
+- `docs/presentation/applications-index.md` now includes Pressure Mines in the
+  operating-envelope tier and in the cross-application comparison table.
+- Remaining media polish: produce a short public replay capture of the
+  failure-first / confirmed-second pair. The runnable replay URLs are already
+  locked and browser-visible, so this is an asset-production task rather than
+  a blocker for Phase 11 evidence closure.
 
 ## Pre-Registered Comparison Shape
 
@@ -970,8 +978,8 @@ generated, not after:
 
 **Evidence tier:** Operating-Envelope Study
 
-The Sundog Mines workbench has completed the Phase 1-10 evidence spine and is
-now in Phase 11 public polish. The promoted claim is narrow: in the Phase 10
+The Sundog Mines workbench has completed the Phase 1-11 evidence spine. The
+promoted claim is narrow: in the Phase 10
 density 0.16 / pressure noise 2.0 / dropout 0.2 pocket, `sundog_minimal` and
 `sundog_lean` reveal more budget-adjusted safe tiles than `naive_pressure`
 before mine trigger. It is not a claim that Sundog clears the minefield.
@@ -990,8 +998,8 @@ Core shipped pieces:
 - `scripts/mines-phase10-envelope.mjs` / `npm run mines:phase10`: locked
   operating-envelope grid and verdict artifacts under
   `results/mines/phase10-envelope`.
-- `mines.html`: Phase 11 public surface, defaulting to the confirmed replay and
-  publishing the matched failure replay beside it.
+- `mines.html`: Phase 11 public surface, defaulting to the matched failure
+  replay first and publishing the confirmed replay beside it.
 
 The promoted page must keep the caveats visible: both Sundog and naive trigger
 mines on every seed in the best cell; `threshold_flagger` has higher survival

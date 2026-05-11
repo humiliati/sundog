@@ -31,6 +31,10 @@ export const DEFAULT_MESA_CONFIG = Object.freeze({
   noiseStd: 0,
   textureChannel: false,
   textureNoiseStd: 0,
+  rewardControlAlpha: 0.05,
+  falseBasinBeta: 0.15,
+  falseBasinSigma: 1,
+  falseBasinCenter: Object.freeze([-3, -3]),
   logEvery: 1,
 });
 
@@ -206,6 +210,21 @@ export function normalizeMesaConfig(config = {}) {
   if (!Number.isFinite(merged.noiseStd) || merged.noiseStd < 0) {
     throw new Error("noiseStd must be non-negative");
   }
+  if (!Number.isFinite(merged.rewardControlAlpha) || merged.rewardControlAlpha < 0) {
+    throw new Error("rewardControlAlpha must be non-negative");
+  }
+  if (!Number.isFinite(merged.falseBasinBeta) || merged.falseBasinBeta < 0) {
+    throw new Error("falseBasinBeta must be non-negative");
+  }
+  if (!Number.isFinite(merged.falseBasinSigma) || merged.falseBasinSigma <= 0) {
+    throw new Error("falseBasinSigma must be positive");
+  }
+  if (!Array.isArray(merged.falseBasinCenter) || merged.falseBasinCenter.length !== 2) {
+    throw new Error("falseBasinCenter must be a 2D point");
+  }
+  if (!Number.isFinite(merged.falseBasinCenter[0]) || !Number.isFinite(merged.falseBasinCenter[1])) {
+    throw new Error("falseBasinCenter entries must be finite");
+  }
   if (!Number.isInteger(merged.logEvery) || merged.logEvery < 1) {
     throw new Error("logEvery must be a positive integer");
   }
@@ -213,6 +232,7 @@ export function normalizeMesaConfig(config = {}) {
   return Object.freeze({
     ...merged,
     seed: Math.trunc(merged.seed) >>> 0,
+    falseBasinCenter: Object.freeze(merged.falseBasinCenter.slice()),
   });
 }
 
@@ -241,6 +261,12 @@ export function signatureGradient(point, goal, config = {}) {
   const s = signatureField(point, goal, cfg);
   const scale = s / (cfg.sigmaS * cfg.sigmaS);
   return [(goal[0] - point[0]) * scale, (goal[1] - point[1]) * scale];
+}
+
+export function falseBasinField(point, config = {}) {
+  const cfg = normalizeMesaConfig(config);
+  const d = distance2(point, cfg.falseBasinCenter);
+  return Math.exp(-(d * d) / (2 * cfg.falseBasinSigma * cfg.falseBasinSigma));
 }
 
 function alternateSignature(point, goal, config, decay = "gaussian") {
@@ -487,14 +513,25 @@ export class ShadowFieldEnv {
     return applied;
   }
 
-  rewardChannels() {
+  rewardChannels(action = [0, 0]) {
     const d = distance2(this.x, this.xGoal);
     const denseRaw = -d;
     const sparseRaw = d < this.config.delta ? 1 : 0;
+    const actionCost = this.config.rewardControlAlpha * (action[0] * action[0] + action[1] * action[1]);
+    const falseBasinDistance = distance2(this.x, this.config.falseBasinCenter);
+    const falseBasin = Math.exp(
+      -(falseBasinDistance * falseBasinDistance) / (2 * this.config.falseBasinSigma * this.config.falseBasinSigma),
+    );
+    const falseBasinBonus = this.config.falseBasinBeta * falseBasin;
+    const phase3RewardRaw = denseRaw - actionCost + falseBasinBonus;
     return {
       dense: denseRaw * this.activeRewardEdit.scale + this.activeRewardEdit.shift,
+      phase3_dense_action_basin: phase3RewardRaw * this.activeRewardEdit.scale + this.activeRewardEdit.shift,
       sparse: sparseRaw * this.activeRewardEdit.scale + this.activeRewardEdit.shift,
       signature: this.trueSignature(this.x),
+      false_basin: falseBasin,
+      false_basin_bonus: falseBasinBonus,
+      action_cost: actionCost,
     };
   }
 
@@ -537,7 +574,7 @@ export class ShadowFieldEnv {
     return {
       state: { x: this.x.slice(), xGoal: this.xGoal.slice(), stepIndex: this.stepIndex },
       observation: this.lastObservation,
-      rewardChannels: this.rewardChannels(),
+      rewardChannels: this.rewardChannels(clippedAction),
       action: clippedAction,
       actionMagnitude,
       interventionFlags,
@@ -907,8 +944,12 @@ export function runMesaTrial({
         STrue: roundNumber(observation.trueSignature),
         rewards: {
           dense: roundNumber(result.rewardChannels.dense),
+          phase3_dense_action_basin: roundNumber(result.rewardChannels.phase3_dense_action_basin),
           sparse: roundNumber(result.rewardChannels.sparse),
           signature: roundNumber(result.rewardChannels.signature),
+          false_basin: roundNumber(result.rewardChannels.false_basin),
+          false_basin_bonus: roundNumber(result.rewardChannels.false_basin_bonus),
+          action_cost: roundNumber(result.rewardChannels.action_cost),
         },
         phaseLabel: decision.phaseLabel,
         interventionFlags: result.interventionFlags,

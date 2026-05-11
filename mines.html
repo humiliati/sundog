@@ -489,8 +489,8 @@
                     <div class="eyebrow">Operating-Envelope Study</div>
                     <h1>Sundog Pressure Mines</h1>
                     <p>
-                        A narrow confirmed pocket, paired with a mapped failure
-                        region. The result is progress before failure, not
+                        A mapped failure region, paired with a narrow confirmed
+                        pocket. The result is progress before failure, not
                         minefield clearance.
                     </p>
                 </div>
@@ -513,8 +513,8 @@
                     <button id="mines-copy-replay" type="button" style="grid-column: 1 / -1;" title="Copy a URL that reproduces this exact configuration in the harness and in any other browser session.">Copy replay URL</button>
                 </div>
                 <div class="control-actions" style="margin-top: 0.32rem;">
-                    <button id="mines-load-best" type="button">Confirmed pocket</button>
                     <button id="mines-load-worst" type="button">Failure region</button>
+                    <button id="mines-load-best" type="button">Confirmed pocket</button>
                 </div>
 
                 <h3>Modes</h3>
@@ -564,9 +564,10 @@
 
                 <div class="note">
                     <strong>Phase 10 lock</strong><br>
-                    Default view: <code>sundog_minimal</code> versus <code>naive_pressure</code>,
-                    density 0.16, noise 2.0, dropout 0.2. Both controllers
-                    still hit mines; Sundog reveals more safe tiles first.
+                    Default view follows the negative-region rule:
+                    <code>sundog_lean</code> versus <code>naive_pressure</code>,
+                    density 0.22, noise 1.0, dropout 0.35. Load the confirmed
+                    pocket to inspect the positive cell.
                 </div>
                 <div class="metric-hint">
                     false = privileged audit count; diagnostics overlay exposes hidden
@@ -593,7 +594,7 @@
             </p>
 
             <div class="claim-box">
-                <strong style="color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.08em;">Confirmed Pocket / Mapped Failure</strong>
+                <strong style="color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.08em;">Mapped Failure / Confirmed Pocket</strong>
                 <p style="margin-top: 0.5rem; margin-bottom: 0.75rem;">
                     Phase 10 confirms a narrow operating pocket where confidence-gated
                     pressure control reveals more safe tiles than naive pressure ordering
@@ -601,6 +602,15 @@
                     field clearance.
                 </p>
                 <div class="result-pair">
+                    <div class="result-panel failure">
+                        <h3>Mapped failure</h3>
+                        <p>
+                            Density 0.22, pressure noise 1.0, dropout 0.35:
+                            <code>sundog_lean</code> lost -4.71875 budget-adjusted safe
+                            tiles versus <code>naive_pressure</code>, CI [-8.375781,
+                            -1.496484].
+                        </p>
+                    </div>
                     <div class="result-panel confirmed">
                         <h3>Confirmed pocket</h3>
                         <p>
@@ -609,15 +619,6 @@
                             budget-adjusted safe tiles, 95% CI [3.375, 11.078516].
                             <code>sundog_lean</code> also cleared the gate at +6.3125,
                             CI [1.921094, 11.25].
-                        </p>
-                    </div>
-                    <div class="result-panel failure">
-                        <h3>Mapped failure</h3>
-                        <p>
-                            Density 0.22, pressure noise 1.0, dropout 0.35:
-                            <code>sundog_lean</code> lost -4.71875 budget-adjusted safe
-                            tiles versus <code>naive_pressure</code>, CI [-8.375781,
-                            -1.496484].
                         </p>
                     </div>
                 </div>
@@ -634,8 +635,8 @@
                     and narrow, not a blanket pressure-field readability claim.
                 </p>
                 <div class="result-actions" aria-label="Phase 10 replay shortcuts">
-                    <button id="mines-body-load-best" type="button">Load confirmed pocket</button>
                     <button id="mines-body-load-worst" type="button">Load failure region</button>
+                    <button id="mines-body-load-best" type="button">Load confirmed pocket</button>
                 </div>
             </div>
 

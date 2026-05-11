@@ -83,10 +83,6 @@ const MODE_ORDER = Object.freeze([
   "threshold_flagger",
   "sundog_minimal",
   "sundog_controller",
-  "sundog_no_gradient",
-  "sundog_no_scan",
-  "sundog_no_action_history",
-  "sundog_no_confidence_gate",
   "random_reveal",
   "naive_pressure_shuffled",
   "naive_pressure_delayed",
@@ -703,7 +699,7 @@ function frame(now) {
 // before the first reset renders.
 populateControls();
 if (!hydrateFromURL() && window.location.search === "") {
-  applyDefaultCellParams(BEST_CELL_PARAMS);
+  applyDefaultCellParams(WORST_CELL_PARAMS);
 }
 bindControls();
 resetWorkbench();

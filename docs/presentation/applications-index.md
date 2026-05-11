@@ -105,7 +105,46 @@ The three-body tab tests whether guarded proxy control can improve survival from
 
 ---
 
-### 3. EyesOnly / Gone Rogue
+### 3. Sundog Pressure Mines Workbench
+
+**Tier:** Operating-Envelope Study
+
+**Repository:** [humiliati/sundog](https://github.com/humiliati/sundog)
+
+**Summary:**
+The Pressure Mines workbench tests whether a controller can make safer progress from a noisy, lossy pressure field when mine locations and exact adjacency counts are hidden. Phase 10 confirms one narrow noisy/dropout pocket and publishes it beside a matched failure region where naive pressure wins.
+
+**What It Demonstrates:**
+- Indirect pressure can preserve enough structure for bounded reveal decisions in a named pocket
+- The promoted outcome is budget-adjusted safe-tile progress before mine trigger, not field clearance
+- The public artifact is failure-first: the mapped negative region is the default replay, with the confirmed pocket one click away
+- `threshold_flagger` remains a visible comparator because it buys survival with false flags rather than carrying the promoted claim
+
+**Key Metrics:**
+- Locked Phase 10 run: 46 envelope cells, 7 modes, 64 matched seeds, 20,608 trials
+- Candidate rows: 2; failure-regime rows: 34; contradiction rows: 0
+- Confirmed pocket: density 0.16 / pressure noise 2.0 / dropout 0.2; `sundog_minimal` +7.21875 budget-adjusted safe tiles versus `naive_pressure`, 95% CI [3.375, 11.078516]
+- Paired failure: density 0.22 / pressure noise 1.0 / dropout 0.35; `sundog_lean` -4.71875 versus `naive_pressure`, 95% CI [-8.375781, -1.496484]
+
+**Assets Available:**
+- Interactive workbench (`mines.html`)
+- Roadmap and audit trail
+- Phase 10 verdict artifacts under `results/mines/phase10-envelope`
+- Browser replay URLs for the failure and confirmed cells
+
+**Assets Needed:**
+- Short public replay capture of the failure-first / confirmed-second pair
+- Compact chart or thumbnail for the envelope map
+- Later controller-redesign phase if a broader controller claim is desired
+
+**Links:**
+- [Workbench](../../mines.html)
+- [Roadmap](../sundog_v_minesweeper.md)
+- [Application Map](../APPLICATIONS.md#sundog-pressure-mines-workbench)
+
+---
+
+### 4. EyesOnly / Gone Rogue
 
 **Tier:** Instrumented Prototype
 
@@ -155,7 +194,7 @@ The headless Gone Rogue runner drives the real JavaScript game engine through `G
 
 ---
 
-### 4. Dungeon Gleaner / DCgamejam2026
+### 5. Dungeon Gleaner / DCgamejam2026
 
 **Tier:** Product Expression
 
@@ -199,7 +238,7 @@ Verb-field NPC behavior in a raycast dungeon crawler. Unmet needs diffuse across
 
 ---
 
-### 5. Money Bags
+### 6. Money Bags
 
 **Tier:** Instrumented Prototype
 
@@ -258,6 +297,7 @@ This table provides a unified view of how the pattern manifests:
 |-------------|--------|----------------|----------------|-------------------|---------------|
 | Photometric Alignment | Optical control | Detector intensity, proprioception | Scan, seek, extremum tracking | Mirror alignment without target | Research Result |
 | Three-Body Dynamics | Planar restricted dynamics | Local tidal-tensor proxy, acceleration magnitude, separated privileged diagnostics | Guarded TRACK control over sensor-motivated instability signature | High-velocity near-escape pocket with mapped failure boundaries | Operating-Envelope Study |
+| Pressure Mines | Hidden minefield workbench | Noisy pressure field, local gradients, bounded scan returns | Confidence-gated pressure ordering with conservative comparator lanes | Safe-tile progress in a named pocket, paired with a mapped failure region | Operating-Envelope Study |
 | EyesOnly / Gone Rogue | Procedural agents | Floor/biome/HP/alert/inventory/gate/combat state | Perception compression, axis selection, stop-conditioned batches | Seedable JSONL runs for matched-seed studies | Instrumented Prototype |
 | Dungeon Gleaner | Procedural NPC behavior | Unmet-verb gradient over satisfier nodes | Need decay, inverse-distance scoring, linger gates | Emergent idle orbits without scripted plans | Product Expression |
 | Money Bags | Softbody physics | Spring graph, contact, deformation | Graph metrics, telemetry | Interpretable rig state | Instrumented Prototype |

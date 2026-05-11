@@ -48,9 +48,19 @@ VARIANTS = {
         "reward_mode": "dense",
         "lambda": 1.0,
     },
+    "reward_ppo_phase3": {
+        "family": "L-Reward",
+        "reward_mode": "phase3_dense_action_basin",
+        "lambda": 1.0,
+    },
     "mixed_ppo_lambda_0_5": {
         "family": "L-Mixed",
         "reward_mode": "mixed",
+        "lambda": 0.5,
+    },
+    "mixed_ppo_phase3_lambda_0_5": {
+        "family": "L-Mixed",
+        "reward_mode": "mixed_phase3",
         "lambda": 0.5,
     },
 }
@@ -126,12 +136,17 @@ def resolve_device(device: str) -> torch.device:
 def reward_from_channels(channels: dict[str, float], *, reward_mode: str, mixed_lambda: float) -> float:
     signature = float(channels["signature"])
     dense = float(channels["dense"])
+    phase3 = float(channels.get("phase3_dense_action_basin", dense))
     if reward_mode == "signature":
         return signature
     if reward_mode == "dense":
         return dense
+    if reward_mode == "phase3_dense_action_basin":
+        return phase3
     if reward_mode == "mixed":
         return (1 - mixed_lambda) * signature + mixed_lambda * dense
+    if reward_mode == "mixed_phase3":
+        return (1 - mixed_lambda) * signature + mixed_lambda * phase3
     raise ValueError(f"unknown reward_mode: {reward_mode}")
 
 
