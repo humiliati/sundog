@@ -868,8 +868,10 @@ For academic communication, add the boundary:
   ablation, volatility sweep, and behavior clips.
 - Promote the three-body workbench into the public gallery with Phase 11 charts,
   the comparison slate, and an explicit failure-boundary view.
-- Capture the Balance promo clip from Phase 10 best-cell and worst-cell replay
-  URLs, with the caption naming both recovery and the failure boundary.
+- Specify the Balance-first post-hero motion rail: cheap looping media for each
+  application, swipe/arrow navigation, and a Balance opening card tied to Phase
+  10 best-cell/worst-cell replay URLs with both recovery and failure boundary
+  named.
 - Add Dungeon Gleaner orbit telemetry for verb, need, node, and dominant-pull
   traces.
 - Add a Dungeon Gleaner GOAP-substitution comparison and tuning-sensitivity
