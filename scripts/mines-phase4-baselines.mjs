@@ -913,23 +913,3 @@ if (path.resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
     process.exitCode = 1;
   });
 }
-    summaryRows,
-    comparisonSummaryRows,
-  }));
-
-  const phaseLabel = args.replayURL ? "replay" : args.phase;
-  console.log(`Mines ${phaseLabel} wrote ${path.relative(repoRoot, outDir)}`);
-  console.log(`Trial rows: ${trialRows.length}; comparison rows: ${comparisonRows.length}`);
-}
-
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
-error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
-}
-});
-}

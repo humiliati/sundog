@@ -813,8 +813,34 @@ budget-adjusted lead survives net of scan-budget tax (already encoded in the
 primary statistic), (d) the static boundary mechanisms and empirical verdict
 labels do not contradict each other in a way that suggests measurement error.
 
-Phase 10 verdict status: pending. The grid has not been run as of this doc
-revision.
+Phase 10 verdict status: `NO_ENVELOPE` on the locked 64-seed run.
+
+- `npm run mines:phase10` now runs
+  `scripts/mines-phase10-envelope.mjs` and writes ignored local verdict
+  artifacts under `results/mines/phase10-envelope/`: `manifest.json`,
+  `summary.json`, `verdict.json`, `verdict.md`, `cell-manifest.csv`,
+  `trial-outcomes.csv`, `matched-comparison.csv`, `envelope.csv`,
+  `cell-class-map.csv`, and `best-worst-cells.csv`.
+- Locked run shape: 46 de-duplicated envelope cells x 7 modes x 64 seeds =
+  20,608 trials. The script emits 138 envelope rows: `sundog_lean`,
+  `sundog_minimal`, and lineage-only `sundog_controller` over each cell.
+- Result: zero candidate cells passed all pre-registered gates. The run found
+  31 `failure_regime` rows, so the negative boundary is mapped, but there is
+  no promoted positive operating envelope.
+- The 16-seed smoke (`npm run mines:phase10:smoke`) briefly showed 2 candidate
+  rows, but both disappeared in the 64-seed lock. In the full run, the largest
+  positive means still failed the bootstrap gate; every graded row had a
+  budget-delta-vs-naive 95% bootstrap lower bound at or below zero.
+- Best observed non-promoted means: `sundog_minimal` reached +2.734375
+  budget-adjusted safe tiles on density 0.22 / noise 0.5 / dropout 0.05, and
+  +2.703125 on density 0.16 / noise 0.5 / dropout 0.05, but neither excluded
+  zero under bootstrap.
+- Worst publication cell: `sundog_minimal` on density 0.16 / noise 0.5 /
+  dropout 0.35, with -4.546875 budget-adjusted safe tiles versus
+  `naive_pressure`. Mechanisms: `field_uninformative|controller_overcommitted`.
+- Disposition: keep Pressure Mines at Planned Workbench tier and publish the
+  mapped boundary rather than an envelope claim. Phase 11 should not promote
+  this workbench unless a new pre-registered redesign phase lands first.
 
 **Prerequisites settled before grid run:**
 
