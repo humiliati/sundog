@@ -18,9 +18,10 @@ The public question is small enough to defend:
 
 The workbench lives beside the three-body tab as `balance.html`: a public,
 interactive surface with browser simulation, baselines, telemetry panels,
-failure-boundary presets, and a matching writeup. The final promotional pass can
-capture a short `.gif` of the arm/pole recovering from a disturbance and place
-it after the hero on `index.html`.
+failure-boundary presets, and a matching writeup. The final promotional pass
+should reserve the post-hero slot on `index.html` for a Balance-first motion
+gallery rather than a one-off clip: cheap looping media from multiple
+applications, each with a punchy title and description overlay.
 
 *[nice-to-have #12]*
 
@@ -736,7 +737,7 @@ behavior, not usable overhead-light control.* +++[/phase10-rerun-status]+++
 
 ***[/must-fix #1]***
 
-### Phase 11 - Public Artifact, Gallery, And Promo GIF
+### Phase 11 - Public Artifact, Gallery, And Motion Rail
 
 Goal: make Sundog Balance promotion-ready without overclaiming.
 
@@ -754,28 +755,42 @@ Deliverables:
   artifacts and a CONFIRM verdict. On REFUTE, this row would have carried the
   negative finding rather than being omitted.
   +++[phase11-status]+++ *(landed after CONFIRM)* +++[/phase11-status]+++
-- A short `.gif` or lightweight video of the arm/pole recovering from a
-  disturbance. ***[must-fix #4]*** **The gif is decoration, not evidence.**
-  The evidence is the operating-envelope CSV at
+- A post-hero application motion rail on `index.html`, initially seeded with
+  Balance recovery/failure media and later expanded to short loops from every
+  public application. Use the cheapest acceptable format after size testing
+  (`.webm`, `.ogv`/`.ogg`, MP4, or `.gif` only if it wins on compatibility and
+  cost). ***[must-fix #4]*** **The media rail is decoration and orientation,
+  not evidence.** The evidence is the operating-envelope CSV at
   `results/balance/envelope_<datetime>/envelope.csv`, the Phase 8 matched-seed
   metric tables, and the Phase 10 best-cell / worst-cell replay links. The
-  gif's caption must link to one of those, not stand alone. ***[/must-fix #4]***
+  first Balance card's caption must link to one of those, not stand alone.
+  ***[/must-fix #4]***
+- Motion-rail interaction model: start on Balance, let the clip play once, then
+  ease/peek or scroll to the next application card in the manner of a Netflix
+  rail. Users can swipe, drag, use arrow buttons, or keyboard-step the rail.
+  Each application card gets a short title plus a description overlay that
+  reads like a punchy Steam-homepage tag over a game clip, not like a long
+  documentation paragraph.
 - Cross-reference
   [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) section 4c before
-  recording the clip. If Phase 12.5 has landed, the promo clip should use the
-  toyful sprite skin while linking to raw replay evidence. If the skin has not
-  landed, the clip remains diagnostic and the caption says so plainly.
-- Final index pass: place that motion clip after the hero on `index.html`,
-  with a concise caption and a link to `balance.html`. ***[must-fix #4]*** The
-  caption must include a phrase that points at the failure boundary, not just
-  the success — e.g., "balance recovered inside the lighting envelope; fails
-  cleanly outside it." A success-only caption violates the Avoid list. ***[/must-fix #4]***
+  recording the Balance media and section 4d before implementing the rail. If
+  Phase 12.5 has landed, the Balance card should use the toyful sprite skin
+  while linking to raw replay evidence. If the skin has not landed, the Balance
+  card remains diagnostic and the caption says so plainly.
+- Final index pass: place the motion rail after the hero on `index.html`, with
+  a concise Balance opening card and a link to `balance.html`. ***[must-fix #4]***
+  The Balance card caption must include a phrase that points at the failure
+  boundary, not just the success - e.g., "balance recovered inside the lighting
+  envelope; fails cleanly outside it." A success-only caption violates the Avoid
+  list. ***[/must-fix #4]***
 
-Exit criterion: a first-time visitor can watch the hero, see the balance clip,
-click into the workbench, and understand the theoremic move in under one
-minute: the hidden body is controlled through the visible shadow ***[must-fix #4]*** —
-*and* sees, in the same minute, that the shadow stops being enough at some
-boundary, with a one-click path to the operating-envelope map ***[/must-fix #4]***.
+Exit criterion: a first-time visitor can watch the hero, see the Balance-first
+motion rail, click into the workbench, and understand the theoremic move in
+under one minute: the hidden body is controlled through the visible shadow
+***[must-fix #4]*** - *and* sees, in the same minute, that the shadow stops
+being enough at some boundary, with a one-click path to the operating-envelope
+map ***[/must-fix #4]***. The same rail also makes room for later application
+clips without giving any one clip evidentiary weight.
 
 +++[phase11-status]+++ *First broadcast pass landed after Phase 10 CONFIRM:
 `balance.html` is linked from the public nav, its page copy now names the
@@ -783,9 +798,10 @@ Operating-Envelope Study tier and P2b degradation caveat, the applications
 gallery and landing-page application grid include a Balance card, and
 `docs/APPLICATIONS.md`, `docs/README.md`, `README.md`, and
 `docs/presentation/claims-and-scope.md` carry the bounded Balance claim. The
-remaining Phase 11 work is visual: capture the best-cell/worst-cell motion clip
-from replay URLs and place it after the index hero with a caption that names
-both recovery and the failure boundary.* +++[/phase11-status]+++
+remaining Phase 11 work is visual: design the Balance-first post-hero motion
+rail, capture best-cell/worst-cell Balance media from replay URLs, and leave
+slots for later application clips while keeping the caption tied to both
+recovery and the failure boundary.* +++[/phase11-status]+++
 
 +++[forward-plan-B]+++
 
@@ -880,8 +896,9 @@ Deliverables:
   toyful skins with identical metrics, controller state, survival time, and
   verdict-relevant telemetry.
 - Promo export recipe: best-cell recovery and worst-cell failure clips are
-  captured from replay URLs, not hand-driven sessions, so the gif/video remains
-  tied to audited runs.
+  captured from replay URLs, not hand-driven sessions, so the Balance media card
+  remains tied to audited runs even when it sits inside the broader application
+  motion rail.
 
 Exit criterion: a first-time visitor can identify push, wobble, recovery, and
 fall states from the animation alone, then toggle raw diagnostics and see the

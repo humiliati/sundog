@@ -193,9 +193,10 @@ hero graph markup, application cards, or generated BoxForge exports.
    `.era-list`, `.source-card`, `.trail-list`, `.story-panel`,
    `.button` standalone) — those are not duplicates of shared, they're
    genuinely page-local content shapes.
-4. Create one canonical hero graph component (split into 4a/4b/4c —
-   see below — because BoxForge applies cleanly to one canvas and not
-   uniformly to all three).
+4. Create one canonical hero graph component and coordinated motion surfaces
+   (split into 4a/4b/4c, with 4d reserved for the post-hero application rail -
+   see below - because BoxForge applies cleanly to one canvas and not uniformly
+   to all motion surfaces).
 
    **4a — Index hero (the "sundog eye"; math-driven workbench).**
 
@@ -302,9 +303,35 @@ hero graph markup, application cards, or generated BoxForge exports.
    raw diagnostic mode, and Phase 8/10 metric parity.
 
    Roadmap hook: fold this into `docs/SUNDOG_V_BALANCE.md` Phase 11
-   (promo clip and caption), Phase 12 (human-vs-agent affordances), and
-   Phase 12.5 (dedicated sprite skin). Do not pull it into Phase 9 or
-   Phase 10 evidence work.
+   (Balance-first motion rail opening card), Phase 12 (human-vs-agent
+   affordances), and Phase 12.5 (dedicated sprite skin). Do not pull it into
+   Phase 9 or Phase 10 evidence work.
+
+   **4d - Post-hero application motion rail (broadcast gallery).**
+
+   The index slot after the hero should become a cross-application motion
+   gallery rather than a single Balance promo clip. It starts on Sundog Balance
+   because Balance is the newest operating-envelope workbench, then makes room
+   for Three-Body, photometric alignment, EyesOnly, Dungeon Gleaner, Money Bags,
+   and later applications as short loops become available.
+
+   Interaction model: horizontal rail with swipe/drag, arrow buttons, keyboard
+   stepping, and a reduced-motion fallback. The Balance loop may play once, then
+   ease/peek or scroll to the next application card in the way a streaming-menu
+   rail advertises the next title. Auto-advance must pause on hover, focus, drag,
+   or `prefers-reduced-motion`.
+
+   Media model: decide format by byte cost and browser support after export
+   testing. Prefer tiny `.webm`/MP4/`.ogv` loops before `.gif` unless GIF wins
+   on total compatibility and acceptable weight. Every card needs a still-image
+   poster and a no-autoplay text fallback.
+
+   Copy model: each card carries a short title and one punchy description line
+   over the clip, closer to a Steam-homepage game tag or price-card tease than a
+   documentation paragraph. The text should sell the application move without
+   expanding the scientific claim. For Balance, the card must name both recovery
+   and failure boundary, and link onward to `balance.html` plus the relevant
+   evidence artifact.
 
 5. Decide whether BoxForge exports live as hand-curated CSS snippets or as
    generated files from `.boxforge.json` templates.
