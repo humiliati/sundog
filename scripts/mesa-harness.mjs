@@ -5,7 +5,9 @@ import { fileURLToPath } from "node:url";
 import {
   DEFAULT_HC_SIGNATURE_CONFIG,
   DEFAULT_MESA_CONFIG,
+  DEFAULT_ORACLE_CONFIG,
   SENSOR_TIERS,
+  defaultControllerConfig,
   defaultTierParams,
   roundNumber,
   runMesaTrial,
@@ -24,6 +26,7 @@ const DEFAULT_PHASE1_TIERS = Object.freeze([
 const CSV_COLUMNS = Object.freeze([
   "phase",
   "trialId",
+  "controllerFamily",
   "sensorTier",
   "seed",
   "configHash",
@@ -52,6 +55,7 @@ function parseArgs(argv) {
     seedStart: 0,
     seeds: 32,
     sensorTiers: [...DEFAULT_PHASE1_TIERS],
+    controllerFamilies: ["hc_signature", "oracle"],
     horizon: DEFAULT_MESA_CONFIG.horizon,
     logEvery: 1,
     delaySteps: undefined,
@@ -70,6 +74,7 @@ function parseArgs(argv) {
     else if (flag === "--seed-start") args.seedStart = Number.parseInt(value, 10);
     else if (flag === "--seeds") args.seeds = Number.parseInt(value, 10);
     else if (flag === "--sensor-tiers") args.sensorTiers = parseList(value);
+    else if (flag === "--controller-families") args.controllerFamilies = parseList(value);
     else if (flag === "--horizon") args.horizon = Number.parseInt(value, 10);
     else if (flag === "--log-every") args.logEvery = Number.parseInt(value, 10);
     else if (flag === "--delay-steps") args.delaySteps = Number.parseInt(value, 10);
@@ -81,6 +86,10 @@ function parseArgs(argv) {
   const validTiers = new Set(Object.values(SENSOR_TIERS));
   for (const tier of args.sensorTiers) {
     if (!validTiers.has(tier)) throw new Error(`Unknown sensor tier: ${tier}`);
+  }
+  const validFamilies = new Set(["hc_signature", "oracle"]);
+  for (const family of args.controllerFamilies) {
+    if (!validFamilies.has(family)) throw new Error(`Unknown controller family: ${family}`);
   }
   if (!Number.isInteger(args.seedStart) || args.seedStart < 0) {
     throw new Error("--seed-start must be a non-negative integer");
@@ -137,12 +146,15 @@ function mean(values) {
 function summarize(rows) {
   const groups = new Map();
   for (const row of rows) {
-    if (!groups.has(row.sensorTier)) groups.set(row.sensorTier, []);
-    groups.get(row.sensorTier).push(row);
+    const key = `${row.controllerFamily}\t${row.sensorTier}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
   }
-  return Array.from(groups.entries()).map(([sensorTier, group]) => {
+  return Array.from(groups.entries()).map(([key, group]) => {
+    const [controllerFamily, sensorTier] = key.split("\t");
     const successes = group.filter((row) => row.terminalOutcome === "success").length;
     return {
+      controllerFamily,
       sensorTier,
       n: group.length,
       successCount: successes,
@@ -154,6 +166,13 @@ function summarize(rows) {
       meanSaturationCount: mean(group.map((row) => row.saturationCount)),
     };
   });
+}
+
+function tiersForFamily(args, family) {
+  if (family === "oracle") {
+    return args.sensorTiers.filter((tier) => tier === SENSOR_TIERS.PRIVILEGED_FIELD);
+  }
+  return args.sensorTiers;
 }
 
 function tierOverrides(args, sensorTier) {
@@ -186,62 +205,68 @@ async function main() {
   const trialRows = [];
   const trialPaths = [];
 
-  for (const sensorTier of args.sensorTiers) {
-    for (let offset = 0; offset < args.seeds; offset += 1) {
-      const seed = args.seedStart + offset;
-      const overrides = tierOverrides(args, sensorTier);
-      const envConfig = {
-        horizon: args.horizon,
-        logEvery: args.logEvery,
-        delaySteps: overrides.delaySteps,
-        noiseStd: overrides.noiseStd,
-      };
-      const trialId = `hc_signature_${sensorTier}_seed_${String(seed).padStart(4, "0")}`;
-      const trial = runMesaTrial({
-        seed,
-        sensorTier,
-        envConfig,
-        controllerConfig: DEFAULT_HC_SIGNATURE_CONFIG,
-        trialId,
-        manifestPath: path.relative(repoRoot, manifestPath).replaceAll("\\", "/"),
-        logEvery: args.logEvery,
-      });
-      if (args.verifyReplay) {
-        const replay = runMesaTrial({
+  for (const controllerFamily of args.controllerFamilies) {
+    for (const sensorTier of tiersForFamily(args, controllerFamily)) {
+      for (let offset = 0; offset < args.seeds; offset += 1) {
+        const seed = args.seedStart + offset;
+        const overrides = tierOverrides(args, sensorTier);
+        const envConfig = {
+          horizon: args.horizon,
+          logEvery: args.logEvery,
+          delaySteps: overrides.delaySteps,
+          noiseStd: overrides.noiseStd,
+        };
+        const trialId = `${controllerFamily}_${sensorTier}_seed_${String(seed).padStart(4, "0")}`;
+        const controllerConfig = defaultControllerConfig(controllerFamily);
+        const trial = runMesaTrial({
           seed,
           sensorTier,
+          controllerFamily,
           envConfig,
-          controllerConfig: DEFAULT_HC_SIGNATURE_CONFIG,
+          controllerConfig,
           trialId,
           manifestPath: path.relative(repoRoot, manifestPath).replaceAll("\\", "/"),
           logEvery: args.logEvery,
         });
-        verifyReplay(trial, replay);
-      }
+        if (args.verifyReplay) {
+          const replay = runMesaTrial({
+            seed,
+            sensorTier,
+            controllerFamily,
+            envConfig,
+            controllerConfig,
+            trialId,
+            manifestPath: path.relative(repoRoot, manifestPath).replaceAll("\\", "/"),
+            logEvery: args.logEvery,
+          });
+          verifyReplay(trial, replay);
+        }
 
-      const trialPath = path.join(trialsDir, trialFileName(trial));
-      await writeFile(trialPath, serializeJsonl(trial.entries), "utf8");
-      const relativeTrialPath = path.relative(repoRoot, trialPath).replaceAll("\\", "/");
-      trialPaths.push(relativeTrialPath);
-      trialRows.push({
-        phase: args.phase,
-        trialId: trial.trialId,
-        sensorTier,
-        seed,
-        configHash: trial.configHash,
-        terminalOutcome: trial.summary.terminalOutcome,
-        steps: trial.summary.steps,
-        regimeRetention: trial.summary.regimeRetention,
-        terminalAlignment: trial.summary.terminalAlignment,
-        terminalDistance: trial.summary.terminalDistance,
-        pathEfficiency: trial.summary.pathEfficiency,
-        timeToSuccess: trial.summary.timeToSuccess,
-        saturationCount: trial.summary.saturationCount,
-        clippedCount: trial.summary.clippedCount,
-        pathLength: trial.summary.pathLength,
-        totalActionMagnitude: trial.summary.totalActionMagnitude,
-        trialPath: relativeTrialPath,
-      });
+        const trialPath = path.join(trialsDir, trialFileName(trial));
+        await writeFile(trialPath, serializeJsonl(trial.entries), "utf8");
+        const relativeTrialPath = path.relative(repoRoot, trialPath).replaceAll("\\", "/");
+        trialPaths.push(relativeTrialPath);
+        trialRows.push({
+          phase: args.phase,
+          trialId: trial.trialId,
+          controllerFamily,
+          sensorTier,
+          seed,
+          configHash: trial.configHash,
+          terminalOutcome: trial.summary.terminalOutcome,
+          steps: trial.summary.steps,
+          regimeRetention: trial.summary.regimeRetention,
+          terminalAlignment: trial.summary.terminalAlignment,
+          terminalDistance: trial.summary.terminalDistance,
+          pathEfficiency: trial.summary.pathEfficiency,
+          timeToSuccess: trial.summary.timeToSuccess,
+          saturationCount: trial.summary.saturationCount,
+          clippedCount: trial.summary.clippedCount,
+          pathLength: trial.summary.pathLength,
+          totalActionMagnitude: trial.summary.totalActionMagnitude,
+          trialPath: relativeTrialPath,
+        });
+      }
     }
   }
 
@@ -250,6 +275,7 @@ async function main() {
   await writeFile(
     path.join(outDir, "summary.csv"),
     toCsv(summaryRows, [
+      "controllerFamily",
       "sensorTier",
       "n",
       "successCount",
@@ -283,8 +309,11 @@ async function main() {
     sensor_tiers: args.sensorTiers,
     tier_params: Object.fromEntries(args.sensorTiers.map((tier) => [tier, tierOverrides(args, tier)])),
     controller: {
-      family: DEFAULT_HC_SIGNATURE_CONFIG.family,
-      config: DEFAULT_HC_SIGNATURE_CONFIG,
+      families: args.controllerFamilies,
+      configs: {
+        hc_signature: DEFAULT_HC_SIGNATURE_CONFIG,
+        oracle: DEFAULT_ORACLE_CONFIG,
+      },
     },
     capacity_tier: null,
     selection_pressure: null,
@@ -298,13 +327,13 @@ async function main() {
       summary: path.relative(repoRoot, path.join(outDir, "summary.csv")).replaceAll("\\", "/"),
     },
     replay_verified: args.verifyReplay,
-    summary: Object.fromEntries(summaryRows.map((row) => [row.sensorTier, row])),
+    summary: Object.fromEntries(summaryRows.map((row) => [`${row.controllerFamily}/${row.sensorTier}`, row])),
   };
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 
   for (const row of summaryRows) {
     console.log(
-      `${row.sensorTier}: ${row.successCount}/${row.n} success, mean S_T=${roundNumber(row.meanTerminalAlignment, 4)}, mean steps=${roundNumber(row.meanSteps, 2)}`,
+      `${row.controllerFamily}/${row.sensorTier}: ${row.successCount}/${row.n} success, mean S_T=${roundNumber(row.meanTerminalAlignment, 4)}, mean steps=${roundNumber(row.meanSteps, 2)}`,
     );
   }
   console.log(`Wrote ${path.relative(repoRoot, outDir).replaceAll("\\", "/")}`);
@@ -314,4 +343,3 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
-

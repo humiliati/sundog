@@ -1,0 +1,356 @@
+# Mesa Phase 2 - Matched-Capacity Learned Controllers
+
+This document is the implementation-grade companion for Phase 2 of
+[`../SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md). Phase 1 proved the reference
+shadow-field task and non-learned baselines. Phase 2 introduces learned
+policies without changing the environment semantics.
+
+Where this spec and the roadmap disagree, the roadmap wins and this spec is
+corrected. Where both are silent, this spec is authoritative for Phase 2.
+
+## 1. Decision Lock
+
+Phase 2 starts with three pinned calls:
+
+- **Language:** Python for learning, JavaScript for the canonical environment.
+  The JS environment remains the single source of truth. Python talks to it
+  through a persistent Node bridge.
+- **RL algorithm:** PPO for all RL-trained families. REINFORCE is not part of
+  the initial matrix; it can be added later as an algorithm-axis ablation.
+- **Ordering:** behavior cloning from HC-Signature first, PPO second. If
+  Small-tier BC cannot imitate HC-Signature, PPO is paused until architecture
+  or observation handling is fixed.
+
+Large is deferred until Small and Medium are stable. XL remains out of scope.
+
+## 2. Scope
+
+Phase 2 owns:
+
+- learned policy architecture for L-Signature, L-Reward, and L-Mixed;
+- behavior-cloning data extraction from Phase 1 HC-Signature rollouts;
+- supervised BC training at Small, Medium, and then Large when justified;
+- PPO training at Small, then Medium, then Large when justified;
+- checkpoint, policy-export, manifest, and evaluation conventions;
+- nominal-condition evaluation against HC-Signature and Oracle.
+
+Phase 2 does **not** own:
+
+- Phase 3 proxy-splitting probes;
+- Phase 4 causal interventions;
+- Phase 5 selection-pressure sweeps beyond the pinned initial variants needed
+  to shape Phase 2 training runs;
+- Phase 6 representation probes;
+- tidal-toy or any second-domain port.
+
+## 3. Architecture
+
+The canonical observation for learned local-probe policies is:
+
+```text
+o = (x, S(x + epsilon e1), S(x - epsilon e1), S(x + epsilon e2), S(x - epsilon e2))
+```
+
+Action is a 2D velocity command clipped to `a_max`.
+
+Initial capacity ladder:
+
+| Tier | Architecture | Hidden size | Depth | Target size | Budget cap |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Small | MLP | 64 | 2 hidden layers | ~5K params | 1M env steps |
+| Medium | MLP | 256 | 4 hidden layers | ~250K params | 10M env steps |
+| Large | MLP or small transformer | 1024 MLP / 256 transformer | 5 MLP / 4 transformer | ~5M params | 100M env steps |
+
+Use `tanh` activations and a `tanh` action head scaled by `a_max`.
+
+Large is not run until Small and Medium have passed BC and PPO sanity gates.
+If Large MLP PPO is unstable, switch Large to the small transformer and log the
+choice in the manifest.
+
+## 4. JS Environment Bridge
+
+Do not duplicate `mesa-core.mjs` in Python. The bridge is a persistent Node
+process that imports `public/js/mesa-core.mjs` and exposes batch commands over
+newline-delimited JSON.
+
+Planned files:
+
+```text
+scripts/
+  mesa-env-bridge.mjs          # persistent Node worker over stdio
+
+training/mesa/
+  js_bridge_env.py             # Gymnasium-style Python wrapper
+  policy.py                    # PyTorch policies and JSON export helpers
+  train_phase2.py              # CLI coordinator
+  train_bc.py                  # BC loop
+  train_ppo.py                 # PPO loop or SB3 integration wrapper
+  evaluate_policy.py           # deterministic nominal evaluator
+```
+
+Bridge commands:
+
+```json
+{ "cmd": "make", "env_id": "env-0", "seed": 0, "sensor_tier": "local-probe-field", "env_config": {} }
+{ "cmd": "reset", "env_id": "env-0" }
+{ "cmd": "step", "env_id": "env-0", "action": [0.1, -0.2] }
+{ "cmd": "make_batch", "batch_id": "batch-0", "count": 64, "seed_start": 0, "sensor_tier": "local-probe-field", "env_config": {} }
+{ "cmd": "reset_batch", "batch_id": "batch-0" }
+{ "cmd": "step_batch", "batch_id": "batch-0", "actions": [[0, 0], [0.1, 0.2]] }
+{ "cmd": "close" }
+```
+
+Response shape:
+
+```json
+{
+  "ok": true,
+  "obs": [[...]],
+  "reward_channels": [{ "signature": 0.8, "dense": -0.7, "sparse": 0 }],
+  "done": [false],
+  "info": [{ "seed": 0, "terminal_outcome": null }]
+}
+```
+
+The Python wrapper chooses the training signal. The JS bridge returns all
+named reward channels but does not decide which family may read which channel.
+
+Bridge performance rule: all PPO training uses `step_batch`; one-episode
+`step` exists only for debugging and tests.
+
+## 5. Training Families
+
+### L-Signature
+
+Reads only `rewardChannels.signature` for PPO variants. For BC variants,
+trains on HC-Signature `(obs, action)` pairs collected from local-probe runs.
+
+Pinned initial variants:
+
+- `signature_bc_from_hc`
+- `signature_ppo_dense`: PPO on integrated `S(x_t)`
+- `signature_ppo_threshold`: PPO on thresholded signature objective, held for
+  the Phase 5 curriculum unless Phase 2 needs it for debugging
+
+### L-Reward
+
+Same observation, action space, policy class, parameter count, optimizer, and
+seed conventions as L-Signature. Reads only reward channels.
+
+Pinned initial variants:
+
+- `reward_ppo_dense`: PPO on `rewardChannels.dense`
+- `reward_ppo_sparse`: held for the Phase 5 curriculum unless Phase 2 needs it
+  for debugging
+
+### L-Mixed
+
+Same policy class again. Reads signature and dense reward, combining:
+
+```text
+(1 - lambda) * signature + lambda * dense
+```
+
+Pinned lambda values:
+
+```text
+0.1, 0.3, 0.5, 0.7, 0.9
+```
+
+Phase 2 starts with `lambda = 0.5` at Small only. Full lambda schedule belongs
+to Phase 5 unless the Small nominal run exposes an early collapse.
+
+## 6. BC-First Gate
+
+BC is the first executable Phase 2 slice.
+
+Data source:
+
+- HC-Signature local-probe rollouts from `npm run mesa:phase1`;
+- use only non-terminal step records with `obs` and `a`;
+- default dataset: 32 seeds from `results/mesa/phase1-hc-baseline/trials`;
+- expand to 256 seeds before Medium if Small is noisy.
+
+BC objective:
+
+```text
+MSE(policy(obs), action_hc)
+```
+
+BC success gate:
+
+| Tier | Gate |
+| --- | --- |
+| Small | ≥ 90% of HC-Signature local-probe success rate on nominal evaluation |
+| Medium | ≥ 95% of HC-Signature local-probe success rate on nominal evaluation |
+| Large | deferred until Medium passes |
+
+If Small BC fails, do not proceed to PPO. First inspect observation
+normalization, action scaling, architecture size, and dataset coverage.
+
+## 7. PPO Gate
+
+Use PPO for all RL-trained families.
+
+Starting hyperparameters:
+
+| Hyperparameter | Small | Medium | Large |
+| --- | ---: | ---: | ---: |
+| Learning rate | 3e-4 | 1e-4 | 3e-5 |
+| Batch envs | 64 | 128 | 256 |
+| Rollout length | 128 | 256 | 512 |
+| Minibatch size | 256 | 1024 | 4096 |
+| Epochs per update | 4 | 4 | 2 |
+| Discount gamma | 0.99 | 0.99 | 0.99 |
+| GAE lambda | 0.95 | 0.95 | 0.95 |
+| Clip range | 0.2 | 0.2 | 0.1 |
+| Entropy coefficient | 0.01 | 0.005 | 0.002 |
+
+Stable-baselines3 PPO is acceptable for the first pass if the bridge wrapper
+is Gymnasium-compatible. A clean local PPO implementation is acceptable only
+if SB3 cannot handle the bridge cleanly.
+
+PPO success gate:
+
+| Family | Small gate |
+| --- | --- |
+| L-Signature | solves nominal local-probe task within 1M steps |
+| L-Reward | solves nominal local-probe task within 1M steps |
+| L-Mixed (`lambda=0.5`) | solves nominal local-probe task within 1M steps |
+
+Nominal "solves" means success rate ≥ 75% over 64 held-out seeds.
+
+## 8. Evaluation Protocol
+
+Every checkpoint is evaluated on the same held-out slate:
+
+- sensor tier: `local-probe-field` by default;
+- seed range: training seeds excluded;
+- held-out count: 64 for Small, 128 for Medium, 256 for Large;
+- deterministic action mean, no exploration noise;
+- same metrics as Phase 1: success rate, terminal alignment, terminal
+  distance, regime retention, path efficiency, steps, saturation count.
+
+Report all learned policies against:
+
+- HC-Signature local-probe baseline;
+- Oracle privileged ceiling;
+- random-action sanity baseline if needed for debugging.
+
+The first Phase 2 report should include a normalized gap:
+
+```text
+(score_policy - score_random) / (score_oracle - score_random)
+```
+
+Use terminal alignment as the default score for the normalized gap.
+
+## 9. Checkpoint and Export Format
+
+Training checkpoints:
+
+```text
+results/mesa/phase2-matched-capacity/checkpoints/
+  <family>_<variant>_<tier>_seed_<seed>.pt
+```
+
+Browser/harness export:
+
+```text
+results/mesa/phase2-matched-capacity/policies/
+  <family>_<variant>_<tier>_seed_<seed>.policy.json
+```
+
+JSON policy schema:
+
+```json
+{
+  "format": "mesa-policy-json-v1",
+  "family": "L-Signature",
+  "variant": "signature_bc_from_hc",
+  "tier": "Small",
+  "obs_dim": 6,
+  "act_dim": 2,
+  "activation": "tanh",
+  "action_scale": 1.0,
+  "layers": [
+    { "weight": [[...]], "bias": [...] }
+  ],
+  "normalization": {
+    "obs_mean": [...],
+    "obs_std": [...]
+  }
+}
+```
+
+ONNX export is optional for Large or transformer policies. JSON export is
+required for Small and Medium MLPs so `mesa-core.mjs`, the harness, and the
+future browser artifact can run inference without Python.
+
+## 10. Outputs
+
+Default output root:
+
+```text
+results/mesa/phase2-matched-capacity/
+```
+
+Required files:
+
+```text
+manifest.json
+training-runs.csv
+evaluation-outcomes.csv
+capacity-summary.csv
+checkpoints/
+policies/
+logs/
+```
+
+Manifest additions beyond Phase 1:
+
+- Python version;
+- Node version;
+- package versions for torch, gymnasium, stable-baselines3 if used;
+- bridge protocol version;
+- policy architecture hash;
+- dataset source for BC;
+- training signal name;
+- training seed and evaluation seed range;
+- checkpoint paths and exported policy paths.
+
+## 11. Execution Order
+
+Implement and run in this order:
+
+1. `mesa-env-bridge.mjs` plus Python smoke test for reset/step/step_batch.
+2. BC dataset loader from Phase 1 JSONL.
+3. Small-tier BC from HC-Signature.
+4. JS inference for exported Small BC policy.
+5. Small-tier PPO for L-Signature, L-Reward, and L-Mixed (`lambda=0.5`).
+6. Medium-tier BC.
+7. Medium-tier PPO for the same three families.
+8. Decide whether Large is ready.
+
+Do not start Large until Small and Medium have clean nominal runs and exported
+policies replay in JS.
+
+## 12. Exit Criterion
+
+Phase 2 is complete when:
+
+- Small and Medium BC policies imitate HC-Signature above their gates;
+- Small and Medium PPO policies exist for L-Signature, L-Reward, and L-Mixed;
+- all learned families solve the nominal local-probe task within budget;
+- checkpoints and JSON policy exports are written;
+- evaluation results compare learned policies against HC-Signature and Oracle;
+- the manifest is sufficient to replay training/evaluation seeds;
+- Large is either run successfully or explicitly deferred with a reason.
+
+## 13. Versioning
+
+This document is version `v1`.
+
+- `v1` (2026-05-10): locks Python trainer with JS env bridge, PPO as the
+  matched RL algorithm, BC-first ordering, checkpoint/export format, and
+  Small/Medium-before-Large execution.

@@ -90,8 +90,9 @@ Avoid:
 
 ## Controller-Family Architecture
 
-The experiment compares four controller families on the same task and the
-same matched slates. Every family inherits the three-body sensor-tier
+The experiment compares four learned/control families on the same task and the
+same matched slates, plus a privileged-only Oracle ceiling. Every non-Oracle
+family inherits the three-body sensor-tier
 discipline: each receives the signature through an explicitly labeled sensor
 tier (privileged-field, local-probe-field, delayed-field, noisy-field) so the
 signature stays a function of environmental state and not of policy.
@@ -101,7 +102,12 @@ The families:
 - **HC-Signature.** Hand-coded SCAN/SEEK/TRACK over a local-gradient estimate
   built from the four signature probe samples. No learning. The structural
   baseline. Cannot mesa-optimize because there is no inner optimization loop.
-  Serves as a ceiling for "follows the external field exactly."
+  Ignores privileged gradient information even when present, so its privileged
+  row is a consistency/degradation comparison rather than a true ceiling.
+- **Oracle.** Privileged-only analytic-gradient controller. Reads closed-form
+  `∇S(x)` from `privileged-field` and serves as the upper-bound reference for
+  later normalization. Not used as an imitation source unless a later ablation
+  explicitly asks for oracle imitation.
 - **L-Signature.** Learned policy `pi_theta(a | o)` where `o = (x, S_local_1,
   ..., S_local_4)` and `a` is a 2D velocity command. Trained either by
   behavior cloning from HC-Signature trajectories or by policy gradient on a
@@ -118,10 +124,11 @@ The families:
   `lambda in {0.1, 0.3, 0.5, 0.7, 0.9}`. Diagnostic — surfaces the gradient
   between the signature and reward regimes.
 
-All four are run on the same probe and intervention slates with matched
-parameter counts, sample budgets, Adam optimizer settings fixed per tier, and
-seeds. Differences in behavior are attributable to training regime, not
-architecture.
+HC-Signature, L-Signature, L-Reward, and L-Mixed are run on the same probe and
+intervention slates with matched parameter counts, sample budgets, Adam
+optimizer settings fixed per tier, and seeds. Differences in learned behavior
+are attributable to training regime, not architecture. Oracle is reported as a
+separate privileged ceiling row.
 
 ## Phase 0 Decision Lock
 
@@ -219,15 +226,16 @@ Deliverables:
 - The canonical environment family: shadow-field navigation, with separable
   `S(x)`, matched `R(s, a)`, controllable geometry, explicit probe
   affordances, and tidal-toy reserved as the second-environment port.
-- Architecture pinning for HC-Signature, L-Signature, L-Reward, L-Mixed.
+- Architecture pinning for HC-Signature, Oracle, L-Signature, L-Reward,
+  L-Mixed.
 - Initial capacity ladder definition (Small / Medium / Large by parameter
   count, with budget caps; XL deferred).
 - Initial selection-pressure curriculum definition (dense signature, threshold
   signature, imitation-from-HC, dense reward, sparse reward, mixed lambda,
   signature-first, reward-first, reward-shape adversary).
 
-Exit criterion: the four controller families are pinned, the environment
-family is pinned, and the claim boundary is written.
+Exit criterion: the four learned/comparison families, Oracle ceiling, the
+environment family, and the claim boundary are pinned.
 
 Implementation-grade detail (environment math, HC-Signature pseudocode,
 L-family architecture by tier, probe and intervention affordances,
@@ -272,12 +280,14 @@ Deliverables:
   local-probe-field, delayed-field, noisy-field.
 - HC-Signature implementation (SCAN/SEEK/TRACK) demonstrated to maintain
   regime on the matched task at each sensor tier.
+- Oracle analytic-gradient implementation demonstrated on `privileged-field`
+  as the ceiling row.
 - A reproducibility harness with seeded trials, manifest format, and per-trial
   JSONL logs in the three-body harness style.
 
-Exit criterion: HC-Signature works on the canonical task at the privileged
-tier and degrades cleanly across the lower tiers. The harness can replay
-trials byte-for-byte.
+Exit criterion: HC-Signature works on the canonical task and degrades cleanly
+across lower tiers; Oracle provides the privileged ceiling; the harness can
+replay trials byte-for-byte.
 
 ### Phase 2 - Matched-Capacity Learned Controllers
 
@@ -295,7 +305,8 @@ Deliverables:
 - Nominal-condition performance verification: each learned family at each
   capacity tier should solve the matched task within a defensible budget.
 - A first capacity report comparing terminal performance and sample efficiency
-  across families and tiers under no probe.
+  across families and tiers under no probe, normalized where useful against
+  the Oracle ceiling.
 
 Exit criterion: matched-capacity controllers exist for all four families and
 all three tiers. Nominal task performance is comparable across families at
@@ -670,11 +681,16 @@ spec landed at [`mesa/PHASE0_SPEC.md`](mesa/PHASE0_SPEC.md) (`v1`,
 2026-05-10), unlocking Phase 1.
 
 **Phase 1:** Implemented. The shadow-field core, sensor tiers, HC-Signature
-controller, seeded harness, replay verification, and default `npm run
-mesa:phase1` command are in place. Result note:
+controller, Oracle ceiling, seeded harness, replay verification, and default
+`npm run mesa:phase1` command are in place. Result note:
 [`mesa/PHASE1_HC_BASELINE.md`](mesa/PHASE1_HC_BASELINE.md).
 
 **Phases 2–8:** Not started.
+
+Phase 2 has an implementation spec:
+[`mesa/PHASE2_SPEC.md`](mesa/PHASE2_SPEC.md). It locks Python training against
+the JS environment bridge, PPO as the matched RL algorithm, BC-first ordering,
+and Small/Medium-before-Large execution.
 
 **Appendix A:** Drafted in this document as the intellectual target. The
 formal note is not yet a ratified theorem; the open questions section is
@@ -691,12 +707,12 @@ The current public-facing status, in the spirit of `claims-and-scope.md`:
 
 ## Recommendation
 
-Proceed to Phase 2 only after using the Phase 1 harness as the behavior-cloning
-source and structural ceiling. Treat Phases 2–4 as the minimum viable mesa
-front. Phase 5 (selection-pressure curriculum) is the highest-marginal-value
-phase and should be designed before Phase 2 even though it runs later, because
-the matched-capacity learned controllers in Phase 2 must be trained under
-selection-pressure variants that Phase 5 will sweep.
+Proceed to Phase 2 using HC-Signature rollouts as the behavior-cloning source
+and Oracle as the privileged ceiling. Treat Phases 2–4 as the minimum viable
+mesa front. Phase 5 (selection-pressure curriculum) is the highest-marginal-
+value phase and should be designed before Phase 2 even though it runs later,
+because the matched-capacity learned controllers in Phase 2 must be trained
+under selection-pressure variants that Phase 5 will sweep.
 
 Run the Formal Separability Theorem appendix in parallel with Phase 0. A
 ratified or near-ratified theorem before Phase 3 lets the probe slate be
