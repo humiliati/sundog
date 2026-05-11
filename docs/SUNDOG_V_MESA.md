@@ -685,15 +685,19 @@ controller, Oracle ceiling, seeded harness, replay verification, and default
 `npm run mesa:phase1` command are in place. Result note:
 [`mesa/PHASE1_HC_BASELINE.md`](mesa/PHASE1_HC_BASELINE.md).
 
-**Phases 2–8:** Not started.
+**Phase 2:** Started. The bridge smoke and BC dataset smoke slices are in
+place; learned controllers have not been trained yet.
+
+**Phases 3-8:** Not started.
 
 Phase 2 has an implementation spec:
 [`mesa/PHASE2_SPEC.md`](mesa/PHASE2_SPEC.md). It locks Python training against
 the JS environment bridge, PPO as the matched RL algorithm, BC-first ordering,
-and Small/Medium-before-Large execution. The first Phase 2 smoke slice is in:
+and Small/Medium-before-Large execution. The first Phase 2 smoke slices are in:
 `npm run mesa:phase2:bridge-smoke` verifies Python-to-JS reset/step/batch
 behavior, including batch auto-reset, restart determinism, and a lightweight
-throughput check.
+throughput check. `npm run mesa:phase2:bc-dataset-smoke` verifies HC rollout
+extraction, loader sanity checks, and the train/val split for behavior cloning.
 
 **Appendix A:** Drafted in this document as the intellectual target. The
 formal note is not yet a ratified theorem; the open questions section is
@@ -704,6 +708,7 @@ The current public-facing status, in the spirit of `claims-and-scope.md`:
 > Sundog vs. Mesa-Optimization has completed its Phase 1 reference-task
 > baseline: a hand-coded signature controller tracks the shadow-field
 > signature across privileged, local-probe, delayed, and noisy sensor tiers.
+> Phase 2 infrastructure has begun with bridge and BC dataset smoke checks.
 > Learned controllers have not been trained yet, so the gravity claim's
 > mode-(3) falsification surface remains untested by learned-agent mesa
 > experiments.
