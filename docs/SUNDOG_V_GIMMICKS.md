@@ -234,7 +234,7 @@ flags, scans, or retreats under confidence gating.
 ### Current recommendation
 
 Current best first promotion candidate. See planned full roadmap document:
-`SUNDOG_V_MINES.md`.
+`sundog_v_minesweeper.md`.
 
 ---
 
@@ -639,7 +639,7 @@ it satisfies all of the following:
 
 Proceed in this order:
 
-1. `SUNDOG_V_MINES.md`
+1. `sundog_v_minesweeper.md`
 2. `SUNDOG_V_FLEET.md`
 3. `SUNDOG_V_CARDS.md`
 4. `SUNDOG_V_PLINKO.md` or `SUNDOG_V_FLIPPER.md`

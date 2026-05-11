@@ -188,6 +188,318 @@
             margin-bottom: 0.5rem;
         }
 
+        .motion-rail-section {
+            position: relative;
+            overflow: hidden;
+            padding: 3rem 0 3.5rem;
+            color: var(--text-light);
+            background: #102334;
+            border-top: 1px solid rgba(244, 196, 48, 0.18);
+            border-bottom: 1px solid rgba(244, 196, 48, 0.16);
+        }
+
+        .motion-rail-shell {
+            width: min(1180px, calc(100% - 2rem));
+            margin: 0 auto;
+        }
+
+        .motion-rail-header {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: end;
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .motion-rail-header .eyebrow {
+            color: var(--accent-gold);
+            font-family: var(--sd-font-data);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.35rem;
+        }
+
+        .motion-rail-header h2 {
+            color: var(--text-light);
+            font-size: clamp(1.8rem, 3vw, 2.75rem);
+            line-height: 1;
+            margin: 0;
+        }
+
+        .motion-rail-header p {
+            max-width: 45rem;
+            color: rgba(245, 245, 245, 0.74);
+            margin: 0.65rem 0 0;
+            font-size: 0.98rem;
+        }
+
+        .motion-rail-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .motion-rail-button {
+            width: 2.45rem;
+            min-height: 2.45rem;
+            border: 1px solid rgba(244, 196, 48, 0.38);
+            border-radius: 999px;
+            color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.07);
+            font-size: 1.35rem;
+            font-weight: 800;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .motion-rail-button:hover,
+        .motion-rail-button:focus-visible {
+            color: var(--primary-dark);
+            background: var(--accent-gold);
+            outline: none;
+        }
+
+        .motion-rail-track {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(280px, 36%);
+            gap: 1rem;
+            overflow-x: auto;
+            overscroll-behavior-inline: contain;
+            scroll-snap-type: inline mandatory;
+            scroll-padding-inline: 0.25rem;
+            padding: 0.25rem 0 0.8rem;
+            scrollbar-color: rgba(244, 196, 48, 0.55) rgba(255, 255, 255, 0.08);
+        }
+
+        .motion-card {
+            min-height: 23rem;
+            overflow: hidden;
+            border: 1px solid rgba(244, 196, 48, 0.2);
+            border-radius: 8px;
+            background: rgba(6, 16, 25, 0.86);
+            scroll-snap-align: start;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .motion-card:hover,
+        .motion-card:focus-within {
+            border-color: rgba(244, 196, 48, 0.52);
+            transform: translateY(-2px);
+        }
+
+        .motion-card-link {
+            display: grid;
+            grid-template-rows: minmax(12rem, 1fr) auto;
+            height: 100%;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .motion-card-visual {
+            position: relative;
+            min-height: 12.5rem;
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, rgba(125, 162, 184, 0.2), transparent 48%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 45%),
+                #132c3f;
+        }
+
+        .motion-card-visual::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(90deg, rgba(244, 196, 48, 0.12) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(245, 245, 245, 0.05) 1px, transparent 1px);
+            background-size: 42px 42px;
+            opacity: 0.42;
+        }
+
+        .motion-card-copy {
+            position: relative;
+            min-height: 10rem;
+            padding: 1rem;
+            background: rgba(8, 20, 30, 0.95);
+            border-top: 1px solid rgba(244, 196, 48, 0.18);
+        }
+
+        .motion-card-status {
+            display: inline-flex;
+            align-items: center;
+            min-height: 1.55rem;
+            padding: 0.22rem 0.55rem;
+            border: 1px solid rgba(244, 196, 48, 0.32);
+            border-radius: 999px;
+            color: var(--accent-gold);
+            font-family: var(--sd-font-data);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .motion-card h3 {
+            color: var(--text-light);
+            font-size: 1.35rem;
+            line-height: 1.05;
+            margin: 0.75rem 0 0.45rem;
+        }
+
+        .motion-card p {
+            color: rgba(245, 245, 245, 0.78);
+            font-size: 0.9rem;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        .motion-card-cta {
+            display: inline-block;
+            color: var(--accent-gold);
+            font-family: var(--sd-font-data);
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-top: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .motion-visual-balance .rail-line,
+        .motion-visual-balance .rail-cart,
+        .motion-visual-balance .rail-pole,
+        .motion-visual-balance .rail-shadow {
+            position: absolute;
+            z-index: 1;
+        }
+
+        .motion-visual-balance .rail-line {
+            left: 12%;
+            right: 12%;
+            bottom: 25%;
+            height: 3px;
+            background: rgba(245, 245, 245, 0.78);
+        }
+
+        .motion-visual-balance .rail-cart {
+            left: 43%;
+            bottom: 25%;
+            width: 4.7rem;
+            height: 2.15rem;
+            border: 2px solid var(--accent-gold);
+            border-radius: 8px;
+            background: rgba(245, 245, 245, 0.9);
+            transform: translateY(50%);
+        }
+
+        .motion-visual-balance .rail-pole {
+            left: calc(43% + 2.2rem);
+            bottom: 30%;
+            width: 0.45rem;
+            height: 6.4rem;
+            border-radius: 999px;
+            background: var(--accent-gold);
+            transform: rotate(8deg);
+            transform-origin: bottom center;
+        }
+
+        .motion-visual-balance .rail-shadow {
+            left: 35%;
+            bottom: 18%;
+            width: 9rem;
+            height: 0.45rem;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.32);
+            transform: skewX(-24deg);
+        }
+
+        .motion-orbit {
+            position: absolute;
+            inset: 18%;
+            z-index: 1;
+            border: 1px solid rgba(244, 196, 48, 0.38);
+            border-radius: 18px;
+            transform: rotate(-14deg);
+        }
+
+        .motion-orbit::before,
+        .motion-orbit::after {
+            content: "";
+            position: absolute;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 2px;
+            background: var(--accent-gold);
+            box-shadow: 0 0 18px rgba(244, 196, 48, 0.38);
+            transform: rotate(45deg);
+        }
+
+        .motion-orbit::before {
+            left: 8%;
+            top: 45%;
+        }
+
+        .motion-orbit::after {
+            right: 10%;
+            top: 18%;
+        }
+
+        .motion-beam,
+        .motion-field,
+        .motion-gridmark {
+            position: absolute;
+            z-index: 1;
+        }
+
+        .motion-beam {
+            left: 12%;
+            right: 12%;
+            top: 52%;
+            height: 3px;
+            background: var(--accent-gold);
+            transform: rotate(-11deg);
+            box-shadow: 0 0 18px rgba(244, 196, 48, 0.34);
+        }
+
+        .motion-field {
+            inset: 20% 16%;
+            border: 1px solid rgba(142, 208, 166, 0.48);
+            background-image:
+                linear-gradient(90deg, rgba(142, 208, 166, 0.18) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(244, 196, 48, 0.14) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .motion-field::before,
+        .motion-field::after {
+            content: "";
+            position: absolute;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 2px;
+            transform: rotate(45deg);
+        }
+
+        .motion-field::before {
+            left: 24%;
+            top: 34%;
+            background: rgba(142, 208, 166, 0.82);
+        }
+
+        .motion-field::after {
+            right: 22%;
+            bottom: 28%;
+            background: rgba(244, 196, 48, 0.82);
+        }
+
+        .motion-gridmark {
+            inset: 18%;
+            background:
+                linear-gradient(90deg, transparent 47%, rgba(244, 196, 48, 0.55) 48% 52%, transparent 53%),
+                linear-gradient(0deg, transparent 47%, rgba(142, 208, 166, 0.48) 48% 52%, transparent 53%);
+            border: 1px solid rgba(245, 245, 245, 0.16);
+        }
+
         /* Footer */
         /* Page-local: footer styling lives in sundog-theme.css */
 
@@ -220,6 +532,19 @@
 
             .proof-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .motion-rail-section {
+                padding: 2.5rem 0 3rem;
+            }
+
+            .motion-rail-header {
+                grid-template-columns: 1fr;
+                align-items: start;
+            }
+
+            .motion-rail-track {
+                grid-auto-columns: minmax(265px, 84%);
             }
         }
         .equation-anchor-link {
@@ -354,6 +679,197 @@
             </div>
         </div>
         <div class="equation-display" id="equation-display"></div>
+    </section>
+
+    <section class="motion-rail-section" id="application-motion-rail" data-motion-rail aria-labelledby="motion-rail-title">
+        <div class="motion-rail-shell">
+            <div class="motion-rail-header">
+                <div>
+                    <p class="eyebrow">Application Rail</p>
+                    <h2 id="motion-rail-title">Signals Becoming Work</h2>
+                    <p>
+                        Short field notes from confirmed studies, public prototypes, and planned workbenches.
+                    </p>
+                </div>
+                <div class="motion-rail-actions" aria-label="Application rail controls">
+                    <button class="motion-rail-button" type="button" data-rail-prev aria-label="Previous application">&lsaquo;</button>
+                    <button class="motion-rail-button" type="button" data-rail-next aria-label="Next application">&rsaquo;</button>
+                </div>
+            </div>
+
+            <div class="motion-rail-track" tabindex="0" aria-label="Application previews">
+                <article
+                    class="motion-card"
+                    data-title="Sundog Balance"
+                    data-description="Shadow balance, mapped to the edge."
+                    data-href="balance.html"
+                    data-evidence-href="docs/SUNDOG_V_BALANCE.md"
+                    data-poster=""
+                    data-media=""
+                    data-media-format=""
+                    data-status="Operating envelope"
+                >
+                    <a class="motion-card-link" href="balance.html">
+                        <div class="motion-card-visual motion-visual-balance" aria-hidden="true">
+                            <span class="rail-shadow"></span>
+                            <span class="rail-line"></span>
+                            <span class="rail-cart"></span>
+                            <span class="rail-pole"></span>
+                        </div>
+                        <div class="motion-card-copy">
+                            <span class="motion-card-status">Operating envelope</span>
+                            <h3>Sundog Balance</h3>
+                            <p>Recovers inside the lighting envelope; fails cleanly at the shadow boundary.</p>
+                            <span class="motion-card-cta">Open workbench -&gt;</span>
+                        </div>
+                    </a>
+                </article>
+
+                <article
+                    class="motion-card"
+                    data-title="Three-Body Dynamics"
+                    data-description="Local acceleration, guarded escape."
+                    data-href="threebody.html"
+                    data-evidence-href="docs/SUNDOG_V_THREEBODY.md"
+                    data-poster=""
+                    data-media=""
+                    data-media-format=""
+                    data-status="Operating envelope"
+                >
+                    <a class="motion-card-link" href="threebody.html">
+                        <div class="motion-card-visual motion-visual-threebody" aria-hidden="true">
+                            <span class="motion-orbit"></span>
+                        </div>
+                        <div class="motion-card-copy">
+                            <span class="motion-card-status">Operating envelope</span>
+                            <h3>Three-Body Dynamics</h3>
+                            <p>Guarded local signals survive the near-escape pocket, not the whole cosmos.</p>
+                            <span class="motion-card-cta">Open workbench -&gt;</span>
+                        </div>
+                    </a>
+                </article>
+
+                <article
+                    class="motion-card"
+                    data-title="Photometric Alignment"
+                    data-description="Target hidden. Beam still finds home."
+                    data-href="applications-gallery.html#photometric-alignment"
+                    data-evidence-href="docs/APPLICATIONS.md#photometric-mirror-alignment"
+                    data-poster=""
+                    data-media=""
+                    data-media-format=""
+                    data-status="Research result"
+                >
+                    <a class="motion-card-link" href="applications-gallery.html#photometric-alignment">
+                        <div class="motion-card-visual motion-visual-photometric" aria-hidden="true">
+                            <span class="motion-beam"></span>
+                        </div>
+                        <div class="motion-card-copy">
+                            <span class="motion-card-status">Research result</span>
+                            <h3>Photometric Alignment</h3>
+                            <p>No target coordinates; just detector response, motion, and a closed loop.</p>
+                            <span class="motion-card-cta">Read result -&gt;</span>
+                        </div>
+                    </a>
+                </article>
+
+                <article
+                    class="motion-card"
+                    data-title="Pressure Mines"
+                    data-description="Pressure maps become decisions."
+                    data-href="mines.html"
+                    data-evidence-href="docs/sundog_v_minesweeper.md"
+                    data-poster=""
+                    data-media=""
+                    data-media-format=""
+                    data-status="Planned workbench"
+                >
+                    <a class="motion-card-link" href="mines.html">
+                        <div class="motion-card-visual motion-visual-mines" aria-hidden="true">
+                            <span class="motion-gridmark"></span>
+                        </div>
+                        <div class="motion-card-copy">
+                            <span class="motion-card-status">Planned workbench</span>
+                            <h3>Pressure Mines</h3>
+                            <p>A hidden board roadmap for pressure, risk, and the cost of a confident click.</p>
+                            <span class="motion-card-cta">View roadmap -&gt;</span>
+                        </div>
+                    </a>
+                </article>
+
+                <article
+                    class="motion-card"
+                    data-title="EyesOnly"
+                    data-description="Compressed sight, deliberate action."
+                    data-href="applications-gallery.html#eyesonly-gone-rogue"
+                    data-evidence-href="docs/APPLICATIONS.md#eyesonly--gone-rogue"
+                    data-poster=""
+                    data-media=""
+                    data-media-format=""
+                    data-status="Instrumented prototype"
+                >
+                    <a class="motion-card-link" href="applications-gallery.html#eyesonly-gone-rogue">
+                        <div class="motion-card-visual motion-visual-eyesonly" aria-hidden="true">
+                            <span class="motion-field"></span>
+                        </div>
+                        <div class="motion-card-copy">
+                            <span class="motion-card-status">Instrumented prototype</span>
+                            <h3>EyesOnly</h3>
+                            <p>Roguelike agents acting from compressed perception instead of full sight.</p>
+                            <span class="motion-card-cta">View case -&gt;</span>
+                        </div>
+                    </a>
+                </article>
+
+                <article
+                    class="motion-card"
+                    data-title="Dungeon Gleaner"
+                    data-description="Need, verb, node, pull."
+                    data-href="applications-gallery.html#dungeon-gleaner"
+                    data-evidence-href="docs/APPLICATIONS.md#dungeon-gleaner"
+                    data-poster=""
+                    data-media=""
+                    data-media-format=""
+                    data-status="Product expression"
+                >
+                    <a class="motion-card-link" href="applications-gallery.html#dungeon-gleaner">
+                        <div class="motion-card-visual motion-visual-gleaner" aria-hidden="true">
+                            <span class="motion-field"></span>
+                        </div>
+                        <div class="motion-card-copy">
+                            <span class="motion-card-status">Product expression</span>
+                            <h3>Dungeon Gleaner</h3>
+                            <p>NPC motion pulled by verbs and needs, not just shortest-path errands.</p>
+                            <span class="motion-card-cta">View case -&gt;</span>
+                        </div>
+                    </a>
+                </article>
+
+                <article
+                    class="motion-card"
+                    data-title="Money Bags"
+                    data-description="Softbody motion, audited by traces."
+                    data-href="applications-gallery.html#money-bags"
+                    data-evidence-href="docs/APPLICATIONS.md#money-bags"
+                    data-poster=""
+                    data-media=""
+                    data-media-format=""
+                    data-status="Product expression"
+                >
+                    <a class="motion-card-link" href="applications-gallery.html#money-bags">
+                        <div class="motion-card-visual motion-visual-money" aria-hidden="true">
+                            <span class="motion-gridmark"></span>
+                        </div>
+                        <div class="motion-card-copy">
+                            <span class="motion-card-status">Product expression</span>
+                            <h3>Money Bags</h3>
+                            <p>Softbody terrain reads through graph signatures, recovery, and strain.</p>
+                            <span class="motion-card-cta">View case -&gt;</span>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </div>
     </section>
 
     <!-- Sundog Alignment Theorem Proof Section -->
@@ -743,6 +1259,38 @@
             Media assets served from Cloudflare Workers
         </p>
     </footer>
+
+    <script>
+        (function() {
+            const rail = document.querySelector('[data-motion-rail]');
+            if (!rail) {
+                return;
+            }
+
+            const track = rail.querySelector('.motion-rail-track');
+            const previous = rail.querySelector('[data-rail-prev]');
+            const next = rail.querySelector('[data-rail-next]');
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            function scrollByCard(direction) {
+                const firstCard = track.querySelector('.motion-card');
+                if (!firstCard) {
+                    return;
+                }
+
+                const styles = window.getComputedStyle(track);
+                const gap = Number.parseFloat(styles.columnGap || styles.gap || '0') || 0;
+                const distance = firstCard.getBoundingClientRect().width + gap;
+                track.scrollBy({
+                    left: direction * distance,
+                    behavior: reducedMotion ? 'auto' : 'smooth'
+                });
+            }
+
+            previous.addEventListener('click', () => scrollByCard(-1));
+            next.addEventListener('click', () => scrollByCard(1));
+        })();
+    </script>
 
     <script>
         // Parhelion Animation - Mathematical sundog arc drawing

@@ -771,6 +771,12 @@ Deliverables:
   Each application card gets a short title plus a description overlay that
   reads like a punchy Steam-homepage tag over a game clip, not like a long
   documentation paragraph.
+- Locked Phase 11.1 card contract: each rail item carries `title`,
+  `description`, `href`, `evidenceHref`, `poster`, `media`, `mediaFormat`, and
+  `status`. The current index implementation may leave `poster`, `media`, and
+  `mediaFormat` empty while rendering CSS/poster placeholders, but it must keep
+  those slots present so later `.webm`/MP4/`.ogv`/`.gif` exports do not require
+  a markup rewrite.
 - Cross-reference
   [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) section 4c before
   recording the Balance media and section 4d before implementing the rail. If
@@ -802,6 +808,15 @@ remaining Phase 11 work is visual: design the Balance-first post-hero motion
 rail, capture best-cell/worst-cell Balance media from replay URLs, and leave
 slots for later application clips while keeping the caption tied to both
 recovery and the failure boundary.* +++[/phase11-status]+++
+
++++[phase11.1-status]+++ *Motion rail scaffold landed: `index.html` now has a
+post-hero application rail seeded with Balance, Three-Body, Photometric
+Alignment, Pressure Mines, EyesOnly, Dungeon Gleaner, and Money Bags. Each card
+carries the locked `title` / `description` / `href` / `evidenceHref` / `poster`
+/ `media` / `mediaFormat` / `status` contract, with empty media fields allowed
+until capture/export work begins. The rail is static CSS/poster art for now,
+with arrow, swipe, scroll, and keyboard focus affordances; no gif/video assets
+were added in this slice.* +++[/phase11.1-status]+++
 
 +++[forward-plan-B]+++
 
