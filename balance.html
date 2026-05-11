@@ -95,56 +95,6 @@
             right: 2rem;
             bottom: 1.5rem;
             z-index: 3;
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            align-items: center;
-            gap: 1rem;
-            color: var(--text-light);
-            background: rgba(8, 20, 30, 0.72);
-            border: 1px solid rgba(244, 196, 48, 0.22);
-            border-radius: 8px;
-            padding: 0.9rem 1rem;
-            backdrop-filter: blur(10px);
-        }
-
-        #balance-status {
-            color: var(--accent-gold);
-            font-family: var(--sd-font-data);
-            font-size: 0.92rem;
-            overflow-wrap: anywhere;
-        }
-
-        #phase-display {
-            min-width: 6.6rem;
-            text-align: center;
-            border: 1px solid rgba(244, 196, 48, 0.35);
-            border-radius: 999px;
-            padding: 0.35rem 0.7rem;
-            color: var(--accent-gold);
-            font-size: 0.82rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-        }
-
-        #balance-metrics {
-            grid-column: 1 / -1;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            color: rgba(245, 245, 245, 0.78);
-            font-family: var(--sd-font-data);
-            font-size: 0.84rem;
-        }
-
-        .controls select {
-            color: #f0f5f8;
-            background-color: rgba(8, 20, 30, 0.82);
-            border-color: rgba(244, 196, 48, 0.45);
-        }
-
-        .controls select option {
-            color: #f0f5f8;
-            background-color: #122334;
         }
 
         .controls {
@@ -153,111 +103,7 @@
             min-height: calc(100vh - 58px);
             height: 100%;
             max-height: calc(100vh - 58px);
-            padding: 0.7rem 0.85rem;
-            color: var(--text-light);
-            background: rgba(26, 58, 82, 0.98);
             border-left: 1px solid rgba(244, 196, 48, 0.22);
-            overflow-y: auto;
-        }
-
-        .controls h2,
-        .controls h3 {
-            color: var(--accent-gold);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .controls h2 {
-            font-size: 1rem;
-            margin-bottom: 0.45rem;
-        }
-
-        .controls h3 {
-            font-size: 0.78rem;
-            margin: 0.8rem 0 0.4rem;
-        }
-
-        .control-row {
-            margin-bottom: 0.5rem;
-        }
-
-        label {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            color: rgba(245, 245, 245, 0.86);
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 0.22rem;
-        }
-
-        select,
-        input[type="number"],
-        input[type="range"],
-        button {
-            width: 100%;
-        }
-
-        select,
-        input[type="number"] {
-            padding: 0.42rem 0.5rem;
-            color: var(--text-light);
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(244, 196, 48, 0.3);
-            border-radius: 4px;
-        }
-
-        input[type="number"] {
-            font-family: var(--sd-font-data);
-        }
-
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.32rem;
-        }
-
-        button {
-            min-height: 2.1rem;
-            padding: 0.4rem;
-            border: 1px solid rgba(244, 196, 48, 0.35);
-            border-radius: 4px;
-            color: var(--text-light);
-            background: rgba(255, 255, 255, 0.08);
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        button:hover,
-        button.active {
-            color: var(--primary-dark);
-            background: var(--accent-gold);
-        }
-
-        .control-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.32rem;
-        }
-
-        .replay-token {
-            min-height: 2rem;
-            padding: 0.4rem;
-            color: rgba(245, 245, 245, 0.78);
-            background: rgba(0, 0, 0, 0.18);
-            border: 1px solid rgba(244, 196, 48, 0.22);
-            border-radius: 4px;
-            font-family: var(--sd-font-data);
-            font-size: 0.66rem;
-            overflow-wrap: anywhere;
-        }
-
-        .recovery-panel {
-            padding: 0.5rem;
-            color: rgba(245, 245, 245, 0.82);
-            background: rgba(0, 0, 0, 0.18);
-            border: 1px solid rgba(244, 196, 48, 0.22);
-            border-radius: 4px;
         }
 
         .recovery-summary {
@@ -297,37 +143,6 @@
             font-family: var(--sd-font-body);
             font-size: 0.68rem;
             text-transform: uppercase;
-        }
-
-        .boundary-panel {
-            padding: 0.5rem;
-            color: rgba(245, 245, 245, 0.82);
-            background: rgba(0, 0, 0, 0.18);
-            border: 1px solid rgba(244, 196, 48, 0.22);
-            border-radius: 4px;
-        }
-
-        .boundary-status {
-            display: inline-flex;
-            align-items: center;
-            min-height: 1.9rem;
-            padding: 0.25rem 0.55rem;
-            border-radius: 999px;
-            color: var(--primary-dark);
-            background: #8ED0A6;
-            font-family: var(--sd-font-data);
-            font-size: 0.74rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-        }
-
-        .boundary-panel[data-status="watch_boundary"] .boundary-status {
-            background: var(--accent-gold);
-        }
-
-        .boundary-panel[data-status="do_not_use"] .boundary-status {
-            color: #2A1010;
-            background: #ff8b6a;
         }
 
         .boundary-summary {
@@ -381,17 +196,6 @@
             color: rgba(245, 245, 245, 0.68);
             font-style: normal;
             line-height: 1.32;
-        }
-
-        .note {
-            margin-top: 0.55rem;
-            padding: 0.55rem;
-            color: rgba(245, 245, 245, 0.76);
-            background: rgba(0, 0, 0, 0.18);
-            border-left: 3px solid var(--accent-gold);
-            border-radius: 0 4px 4px 0;
-            font-size: 0.76rem;
-            line-height: 1.35;
         }
 
         .body-copy {
