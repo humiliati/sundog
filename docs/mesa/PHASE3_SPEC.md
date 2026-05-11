@@ -645,6 +645,17 @@ is gradual or cliff-like. If L-Reward recovers at `β = 0.5` or `β = 1.0`,
 those runs can also serve as additional probe-slate entries. If it remains
 fragile across the sweep, the result strengthens the nominal-budget claim.
 
+Initial L-Reward Small-tier sensitivity slice:
+
+| β | Success | Mean S_T | Read |
+| ---: | ---: | ---: | --- |
+| 0.5 | 12/64 (18.8%) | 0.9376 | high-signature but low dwell success |
+| 1.0 | 7/64 (10.9%) | 0.8622 | steeper degradation |
+| 2.0 | 2/64 (3.1%) | 0.4236 | canonical collapse |
+
+The curve is monotonic across the first three β points and suggests a steep
+fragility slope rather than a clean threshold at the canonical value.
+
 ## 15. Implementation Status
 
 **Phase 3:** Implementation steps 1-3 landed. `mesa-core.mjs` exposes the
@@ -662,7 +673,8 @@ Implementation gates:
 - [x] Basin calibration gate shipped and passed for canonical defaults
 - [x] L-Reward and L-Mixed retraining at Small completed at canonical
       budget
-- [ ] β-sensitivity sweep completed for `β ∈ {0.5, 1.0, 2.0}`
+- [x] L-Reward β-sensitivity slice completed for `β ∈ {0.5, 1.0, 2.0}`
+- [ ] L-Mixed β-sensitivity slice completed for `β ∈ {0.5, 1.0, 2.0}`
 - [ ] `scripts/mesa-probe-slate.mjs` shipped with HC-Signature smoke
 - [ ] Probe slate Small run completed for all 7 reference + learned
       policies
@@ -705,7 +717,7 @@ shifts the spec, the spec is revised and re-versioned.
 
 ## 17. Versioning
 
-This document is version `v1.3`.
+This document is version `v1.4`.
 
 - `v1` (2026-05-10): initial Phase 3 spec; L-Reward action coupling
   locked as control cost + false-basin shaping; probe slate parameters
@@ -722,3 +734,5 @@ This document is version `v1.3`.
   the first-class Phase 3 result, recenters probe interpretation around
   L-Signature vs L-Reward-Clean and L-Mixed failure-mode mapping, and adds
   the Small-tier β-sensitivity sub-result.
+- `v1.4` (2026-05-11): records the initial L-Reward β-sensitivity slice
+  (`β ∈ {0.5, 1.0, 2.0}`) and notes the monotonic fragility curve.

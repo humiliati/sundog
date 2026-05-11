@@ -720,7 +720,7 @@ L-Reward (control cost at the light end, synthetic spec-gaming surface at the
 heavy end) since the current `dense` channel is state-only as implemented.
 
 **Phase 3:** Spec landed at [`mesa/PHASE3_SPEC.md`](mesa/PHASE3_SPEC.md)
-(`v1.3`, 2026-05-11). The L-Reward canonical training signal is locked as
+(`v1.4`, 2026-05-11). The L-Reward canonical training signal is locked as
 `dense - α·||a||² + β·false_basin(s)` with the false-basin fixed at
 `x_false = (-2.5, -2.5)` and not transformed by probes — the synthetic
 spec-gaming surface the gravity claim predicts L-Signature should be
@@ -739,7 +739,8 @@ L-Mixed lands at 8/64 with mean `S_T = 0.9386`. Probe slate work now
 separates the clean signal-shape test (L-Signature vs L-Reward-Clean) from
 mixed-policy failure-mode mapping and canonical L-Reward collapse
 confirmation. A Small β-sensitivity pass over `{0.5, 1.0, 2.0}` is pinned
-before Medium.
+before Medium; the L-Reward slice is complete and monotonic so far:
+`12/64` at `β = 0.5`, `7/64` at `β = 1.0`, `2/64` at canonical `β = 2.0`.
 
 **Phases 4-8:** Not started.
 
