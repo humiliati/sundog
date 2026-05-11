@@ -35,8 +35,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed-start", type=int, default=10_000)
     parser.add_argument("--seeds", type=int, default=64)
     parser.add_argument("--horizon", type=int, default=200)
+    parser.add_argument("--false-basin-beta", type=float, default=None)
     parser.add_argument("--success-floor", type=float, default=0.90)
     return parser.parse_args()
+
+
+def eval_env_config(*, horizon: int, false_basin_beta: float | None = None) -> dict[str, Any]:
+    config: dict[str, Any] = {"horizon": horizon}
+    if false_basin_beta is not None:
+        config["falseBasinBeta"] = false_basin_beta
+    return config
 
 
 def _action(policy, obs: list[float], obs_mean: np.ndarray, obs_std: np.ndarray) -> list[float]:
@@ -53,10 +61,12 @@ def evaluate_checkpoint(
     seed_start: int,
     seeds: int,
     horizon: int,
+    env_config: dict[str, Any] | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     checkpoint = load_checkpoint(checkpoint_path)
     policy, obs_mean, obs_std = policy_from_checkpoint(checkpoint)
     rows: list[dict[str, Any]] = []
+    config = {"horizon": horizon, **(env_config or {})}
 
     with BridgeClient() as client:
         for offset in range(seeds):
@@ -68,7 +78,7 @@ def evaluate_checkpoint(
                     "env_id": env_id,
                     "seed": seed,
                     "sensor_tier": sensor_tier,
-                    "env_config": {"horizon": horizon},
+                    "env_config": config,
                 }
             )
             obs = made["obs"]
@@ -114,6 +124,7 @@ def evaluate_checkpoint(
         "success_rate": len(successes) / seeds,
         "mean_terminal_alignment": mean(alignments) if alignments else None,
         "mean_steps": mean(steps) if steps else None,
+        "env_config": config,
     }
     return rows, summary
 
@@ -141,6 +152,7 @@ def main() -> int:
         seed_start=args.seed_start,
         seeds=args.seeds,
         horizon=args.horizon,
+        env_config=eval_env_config(horizon=args.horizon, false_basin_beta=args.false_basin_beta),
     )
     write_outputs(args.out.resolve(), rows, summary)
     mean_alignment = summary["mean_terminal_alignment"]
