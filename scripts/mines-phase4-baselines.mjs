@@ -45,6 +45,52 @@ function parseList(value) {
   return value.split(",").map((item) => item.trim()).filter(Boolean);
 }
 
+// Replay URL contract — kept in lockstep with mines-browser.mjs.
+//   Required params: preset, seed, mode, sensor
+//   Optional params: compare (a second mode run on the same matched seed)
+// Accepts either a full URL (https://sundog.cc/mines.html?...) or a bare
+// query string ("?preset=easy_sparse&seed=42&mode=sundog_lean&sensor=doc_default").
+function parseReplayURL(value) {
+  if (!value || typeof value !== "string") {
+    throw new Error("--replay-url requires a non-empty string value");
+  }
+  let params;
+  try {
+    const trimmed = value.trim();
+    const url = trimmed.startsWith("http")
+      ? new URL(trimmed)
+      : new URL(trimmed.startsWith("?") ? trimmed : `?${trimmed}`, "https://sundog.cc/mines.html");
+    params = url.searchParams;
+  } catch (err) {
+    throw new Error(`--replay-url could not be parsed: ${err.message}`);
+  }
+  const preset = params.get("preset");
+  const seedRaw = params.get("seed");
+  const mode = params.get("mode");
+  const sensor = params.get("sensor");
+  const compare = params.get("compare");
+  if (!preset || !seedRaw || !mode || !sensor) {
+    throw new Error(
+      "--replay-url must include preset, seed, mode, and sensor query params",
+    );
+  }
+  const seed = Number.parseInt(seedRaw, 10);
+  if (!Number.isInteger(seed) || seed < 0) {
+    throw new Error(`--replay-url seed must be a non-negative integer, got ${seedRaw}`);
+  }
+  return { preset, seed, mode, sensor, compare: compare || null };
+}
+
+function applyReplayURL(args, replay) {
+  args.presets = [replay.preset];
+  args.modes = replay.compare ? [replay.mode, replay.compare] : [replay.mode];
+  args.cells = [replay.sensor];
+  args.seedStart = replay.seed;
+  args.seeds = 1;
+  args.replayURL = replay;
+  return args;
+}
+
 function parseArgs(argv) {
   const args = {
     phase: "phase4-baselines",
@@ -56,6 +102,7 @@ function parseArgs(argv) {
     cells: SENSOR_CELLS.map((cell) => cell.name),
     turnCap: 160,
     pressureThreshold: 1.2,
+    replayURL: null,
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -73,7 +120,16 @@ function parseArgs(argv) {
     else if (flag === "--cells") args.cells = parseList(value);
     else if (flag === "--turn-cap") args.turnCap = Number.parseInt(value, 10);
     else if (flag === "--pressure-threshold") args.pressureThreshold = Number.parseFloat(value);
+    else if (flag === "--replay-url") applyReplayURL(args, parseReplayURL(value));
     else throw new Error(`Unknown flag: ${flag}`);
+  }
+
+  // Replay-URL invocations land in a per-replay output folder by default so
+  // they don't stomp full-batch results. Caller can override with --out.
+  if (args.replayURL && args.out === "results/mines/phase4-baselines") {
+    const slug = `${args.replayURL.preset}_seed${args.replayURL.seed}_${args.replayURL.mode}_${args.replayURL.sensor}`;
+    args.out = `results/mines/replay/${slug}`;
+    args.phase = `replay-${slug}`;
   }
 
   if (!Number.isInteger(args.seedStart) || args.seedStart < 0) {
@@ -435,7 +491,7 @@ function runSelfChecks({ args, budgetRows, trialRows }) {
   }
   const expected = args.presets.length * args.cells.length * args.modes.length * args.seeds;
   if (trialRows.length !== expected) {
-    throw new Error(`Expected ${expected} trial rows, got ${trialRows.length}`);
+            throw new Error(`Expected ${expected} trial rows, got ${trialRows.length}`);
   }
 }
 
