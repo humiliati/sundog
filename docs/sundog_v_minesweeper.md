@@ -353,6 +353,19 @@ informativeness threshold is AUROC ≥ 0.65 on at least one named envelope cell
 degenerate case from Phase 2. The named envelope cell is fixed in the doc
 before logs land.
 
+Named Phase 3 envelope cell before first logs land:
+
+```text
+preset        = easy_sparse
+sensor_cell   = doc_default
+sigma         = 1.0
+sigma_noise   = 0.10
+dropout       = 0.10
+delay         = 0
+threshold     = mean mine-occupancy AUROC >= 0.65
+script        = npm run mines:phase3
+```
+
 Exit criterion: at least one field signature remains informative under the
 pre-committed AUROC threshold inside a named operating envelope, and the
 envelope cells where AUROC collapses to chance are recorded alongside the
@@ -596,8 +609,20 @@ generated, not after:
 
 **Evidence tier:** Planned Workbench
 
-The Sundog Mines workbench is currently in Phase 0. This roadmap document and
-initial stub implementation establish the claim boundary and task definition.
+The Sundog Mines workbench now has Phase 1 board core, Phase 2 pressure sensor
+primitives, and a Phase 3 diagnostic benchmark scaffold in the repo:
+
+- `public/js/mines-core.mjs`: deterministic board generation and action loop.
+- `public/js/mines-sensor.mjs`: pressure field, gradient, scan pulse, floor
+  enforcement, and privileged audit helpers.
+- `scripts/mines-phase3-diagnostics.mjs` / `npm run mines:phase3`: local,
+  ignored diagnostic outputs under `results/mines/phase3-diagnostic`.
+
+The first Phase 3 smoke run found the pre-committed `easy_sparse/doc_default`
+cell diagnostic-positive on mine-occupancy AUROC, and the
+`blur_noise_cliff` cell family collapsed to chance. This is a field
+informativeness result only. It does not run a controller and does not promote
+the public evidence tier.
 
 Promotion to **Instrumented Prototype** requires Phase 1-6 deliverables landing
 in the public tree, with the Phase 6 page copy held to provisional framing

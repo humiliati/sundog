@@ -72,8 +72,12 @@ export const KERNEL_FAMILIES = Object.freeze({
 
 // ----- config + validation -----
 
-export function normalizeSensorConfig(config = {}) {
-  const merged = { ...DEFAULT_SENSOR_CONFIG, ...config };
+export function normalizeSensorConfig(config = {}, options = {}) {
+  const {
+    allowSubFloor: configAllowSubFloor = false,
+    ...sensorConfig
+  } = config;
+  const merged = { ...DEFAULT_SENSOR_CONFIG, ...sensorConfig };
   if (!KERNEL_FAMILIES[merged.kernel]) {
     throw new Error(`unknown kernel family: ${merged.kernel}`);
   }
@@ -98,6 +102,9 @@ export function normalizeSensorConfig(config = {}) {
   if (!(merged.kernelTruncationSigmas > 0)) {
     throw new Error(`kernelTruncationSigmas must be > 0, got ${merged.kernelTruncationSigmas}`);
   }
+  assertAboveFloor(merged, {
+    allowSubFloor: options.allowSubFloor === true || configAllowSubFloor === true,
+  });
   // Tag before freezing so the hot-path check skips re-normalization.
   Object.defineProperty(merged, "__normalized__", { value: true, enumerable: false });
   return Object.freeze(merged);
@@ -399,30 +406,34 @@ export function computeCorrelation(xs, ys) {
 
 // Stateful sensor runtime. Owns its own RNG and a history ring buffer for
 // delay. Each `step(boardState)` returns the (possibly delayed) observed
-// field, gradient, and confidence at the current turn. The delay buffer is
-// keyed off calls, not board turns — callers should call exactly once per
-// turn for delay to mean what the doc says.
+// field, gradient, and confidence at the current turn. The delay buffer stores
+// the full post-noise observation so the runtime matches the doc pipeline:
+// noise/dropout/quantization first, then delay. The buffer is keyed off calls,
+// not board turns; callers should call exactly once per turn for delay to mean
+// what the doc says.
 export function createSensorRuntime(rawSensorConfig = {}) {
-  const config = normalizeSensorConfig(rawSensorConfig);
+  const config = rawSensorConfig.__normalized__
+    ? rawSensorConfig
+    : normalizeSensorConfig(rawSensorConfig);
   const rng = makeRng(config.sensorSeed);
-  const history = []; // ring of pre-noise true-pressure snapshots
+  const history = [];
   return {
     config,
     step(boardState) {
       const truePressure = computeTruePressure(boardState, config);
-      // Push and trim. delaySteps = 0 means return current; delaySteps = k
-      // means return the snapshot from k calls ago, or the current snapshot
-      // if the buffer hasn't filled yet (warm-up).
-      history.push(truePressure);
+      const { observed, confidence } = sampleObservedPressure(truePressure, config, rng);
+      history.push({ truePressure, observed, confidence });
+      // delaySteps = 0 means return current; delaySteps = k means return the
+      // post-noise observation from k calls ago, or the oldest available
+      // snapshot if the buffer has not filled yet (warm-up).
       const target = history.length - 1 - config.delaySteps;
       const lagged = target >= 0 ? history[target] : history[0];
       if (history.length > config.delaySteps + 1) history.shift();
-      const { observed, confidence } = sampleObservedPressure(lagged, config, rng);
-      const { gx, gy } = computePressureGradient(observed, boardState.config.width, boardState.config.height);
+      const { gx, gy } = computePressureGradient(lagged.observed, boardState.config.width, boardState.config.height);
       return {
-        truePressure: lagged, // privileged — harness logs may include it
-        observed,
-        confidence,
+        truePressure: lagged.truePressure, // privileged; harness logs may include it
+        observed: lagged.observed,
+        confidence: lagged.confidence,
         gradientX: gx,
         gradientY: gy,
       };
@@ -432,4 +443,3 @@ export function createSensorRuntime(rawSensorConfig = {}) {
     },
   };
 }
-

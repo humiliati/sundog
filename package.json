@@ -8,6 +8,7 @@
     "build": "vite build",
     "postbuild": "node scripts/copy-site-docs.mjs && node scripts/check-site-dist.mjs",
     "preview": "vite preview --host 127.0.0.1",
+    "mines:phase3": "node scripts/mines-phase3-diagnostics.mjs --phase phase3-diagnostic --out results/mines/phase3-diagnostic --seeds 24",
     "balance:phase7": "node scripts/balance-harness.mjs --phase phase7-smoke --out results/balance/phase7-smoke --presets easy,recoverable,near_fall,noisy_shadow,delayed_shadow --modes passive,naive_cart,naive_shadow,sundog_shadow,oracle --light-elevations 28 --seeds 12",
     "balance:phase7:replay": "node scripts/balance-harness.mjs --phase phase7-replay --out results/balance/phase7-replay --replay-url",
     "balance:phase7:verify": "node scripts/balance-verify-replays.mjs",
