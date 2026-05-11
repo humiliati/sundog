@@ -384,6 +384,9 @@ Landed in the current cleanup pass:
    strips, status chips, metrics, boundary panels, notes, and replay tokens.
 5. Fix narrow-viewport overflow in the workbench hero/stage areas, and stack
    Mines comparison lanes vertically on phone-width canvas layouts.
+6. Delete duplicate page-local control CSS now covered by the shared
+   `sd-*` vocabulary, keeping only workbench layout shells and genuinely
+   page-specific panels local.
 
 Good next bites:
 
@@ -1051,6 +1054,10 @@ instrument-panel treatment until a dedicated controls pass lands.
 Shared controls pass, 2026-05-11: Three-Body, Balance, and Mines now share
 explicit `sd-control-*`, `sd-status-*`, `sd-boundary-*`, `sd-note`, and
 `sd-replay-token` classes while preserving page-local IDs and JS hooks.
+The follow-up duplicate-control cleanup also landed: common panel, form,
+button, status-strip, boundary, note, and replay-token styling now lives in the
+shared sheet, while page-local CSS retains layout positioning and unique
+workbench content treatments.
 
 ### Current Interactive Elements Inventory
 
@@ -1323,12 +1330,10 @@ Before implementation, we need to decide:
 
 ### Next Steps
 
-1. Audit remaining page-local control CSS and delete rules that are now exact
-   duplicates of the shared `sd-*` vocabulary.
-2. Add one or two shared status-chip variants if future evidence pages need
+1. Add one or two shared status-chip variants if future evidence pages need
    warning/success/error states outside boundary panels.
-3. Screenshot-test desktop and 390px mobile after each workbench change.
-4. Keep BoxForge as canvas-content work, not a blocker for control-frame polish.
+2. Screenshot-test desktop and 390px mobile after each workbench change.
+3. Keep BoxForge as canvas-content work, not a blocker for control-frame polish.
 
 ### References for Interactive Styling
 

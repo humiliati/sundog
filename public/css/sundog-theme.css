@@ -411,10 +411,14 @@ footer a:hover {
 /* --- Shared controls (used by experiment pages: threebody, balance, mines) */
 
 .sd-control-panel {
+  padding: 0.85rem;
+  overflow-y: auto;
+  color: var(--text-light);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 14rem),
     rgba(11, 23, 32, 0.94);
-  border-color: rgba(244, 196, 48, 0.36) !important;
+  border: 1px solid rgba(244, 196, 48, 0.36);
+  border-radius: var(--sd-radius-md);
   box-shadow: 0 18px 36px rgba(11, 23, 32, 0.24);
   scrollbar-color: rgba(244, 196, 48, 0.5) rgba(8, 20, 30, 0.42);
 }
@@ -447,7 +451,10 @@ footer a:hover {
 }
 
 .sd-control-label,
-.sd-control-panel label:not(.sd-toggle-row):not(.toggle-row):not(.toggle-checkbox) {
+.sd-control-row > label:not(.sd-toggle-row):not(.toggle-row):not(.toggle-checkbox),
+.sd-control-group > label:not(.sd-toggle-row):not(.toggle-row):not(.toggle-checkbox),
+.sd-control-panel .control-row > label:not(.sd-toggle-row):not(.toggle-row):not(.toggle-checkbox),
+.sd-control-panel .control-group > label:not(.sd-toggle-row):not(.toggle-row):not(.toggle-checkbox) {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -569,6 +576,7 @@ footer a:hover {
 
 .sd-control-panel input[type="range"] {
   width: 100%;
+  margin-bottom: 0.25rem;
   accent-color: var(--sd-amber);
 }
 
@@ -602,6 +610,11 @@ footer a:hover {
 }
 
 .sd-status-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
   color: var(--text-light);
   background: rgba(8, 20, 30, 0.72);
   border: 1px solid rgba(244, 196, 48, 0.22);
@@ -621,6 +634,7 @@ footer a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 6.6rem;
   min-height: 1.9rem;
   padding: 0.25rem 0.6rem;
   border: 1px solid rgba(244, 196, 48, 0.36);
@@ -634,6 +648,7 @@ footer a:hover {
 }
 
 .sd-metrics {
+  grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
@@ -645,10 +660,16 @@ footer a:hover {
 .sd-info-panel,
 .sd-boundary-panel,
 .sd-recovery-panel {
+  padding: 0.58rem;
   color: rgba(245, 245, 245, 0.82);
   background: rgba(0, 0, 0, 0.18);
   border: 1px solid rgba(244, 196, 48, 0.24);
   border-radius: var(--sd-radius-sm);
+}
+
+.sd-boundary-panel {
+  margin-top: 0.75rem;
+  border-left: 3px solid var(--accent-gold);
 }
 
 .sd-boundary-panel[data-status="watch_boundary"] {
