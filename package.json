@@ -16,6 +16,7 @@
     "mines:phase7:batch": "node scripts/mines-phase4-baselines.mjs --phase phase7-smoke --out results/mines/phase7-smoke --seeds 8 --turn-cap 160 --trace-jsonl --modes random_reveal,naive_pressure,threshold_flagger,sundog_lean,sundog_minimal,sundog_controller,oracle_safe",
     "mines:phase7:replay": "node scripts/mines-phase4-baselines.mjs --phase phase7-replay --out results/mines/phase7-replay --trace-jsonl --replay-url",
     "mines:phase7:verify": "node scripts/mines-verify-replays.mjs",
+    "mines:phase8": "npm run mines:phase7 && node scripts/mines-phase8-metrics.mjs --phase phase8-events --in results/mines/phase7-smoke --out results/mines/phase8-events",
     "mesa:phase1": "node scripts/mesa-harness.mjs --phase phase1-hc-baseline --out results/mesa/phase1-hc-baseline --seeds 32",
     "balance:phase7": "node scripts/balance-harness.mjs --phase phase7-smoke --out results/balance/phase7-smoke --presets easy,recoverable,near_fall,noisy_shadow,delayed_shadow --modes passive,naive_cart,naive_shadow,sundog_shadow,oracle --light-elevations 28 --seeds 12",
     "balance:phase7:replay": "node scripts/balance-harness.mjs --phase phase7-replay --out results/balance/phase7-replay --replay-url",
