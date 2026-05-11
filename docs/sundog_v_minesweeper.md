@@ -444,23 +444,33 @@ Phase 5 prototype status:
   Sundog controller. It combines observed pressure, confidence/dropout gating,
   gradient magnitude, revealed-neighbor history, scan history, and conservative
   pressure-threshold flagging without reading true occupancy or exact counts.
-- `npm run mines:phase5` runs the controller and ablations on matched seeds
-  against the Phase 4 baselines, writing ignored local artifacts under
+- `npm run mines:phase5` runs the controller and ablations on the initial
+  matched 16-seed slate, writing ignored local artifacts under
   `results/mines/phase5-controller`, including `phase5-controller.md`,
   `summary-rows.csv`, and `matched-comparison-summary.csv`.
-- Current 16-seed result: the named `sundog_controller` improves
+- `npm run mines:phase5:reroll` repeats the same lane set on a fresh 64-seed
+  slate beginning at seed 1000, writing ignored local artifacts under
+  `results/mines/phase5-controller-reroll64`.
+- Initial 16-seed result: the named `sundog_controller` improves
   budget-adjusted safe tiles versus `naive_pressure` in publishable
-  `doc_default` clustered boards (+3.000) and dense boards (+1.875). In the
-  noisy/dropout cliff it improves dense (+3.3125) and easy-sparse (+2.1875),
-  but still loses clustered (-6.6875). It also remains slightly behind
-  `naive_pressure` on `doc_default` easy-sparse (-0.8125).
-- Scan-tax check: the positive `doc_default` controller deltas above use zero
-  mean scans, so they are not scan-spend artifacts. Noisy/dropout positive
-  deltas retain a positive budget-adjusted lead after subtracting scans.
-- Interpretation: Phase 5 is a prototype and a falsifiable workbench lane, not
-  an operating-envelope verdict. The ablations already show useful pressure:
-  gradient can help in the noisy/dropout cells, while the no-scan ablation is
-  cleaner than the full controller on `doc_default` dense boards.
+  `doc_default` clustered boards (+3.000) and dense boards (+1.875), and in
+  noisy/dropout dense (+3.3125) and easy-sparse (+2.1875). It loses
+  noisy/dropout clustered (-6.6875) and `doc_default` easy-sparse (-0.8125).
+- Fresh 64-seed reroll: the named controller's 16-seed gains do not hold. It
+  loses to `naive_pressure` on all three publishable `doc_default` boards:
+  clustered (-2.0625), dense (-6.03125), and easy-sparse (-0.890625). It is
+  effectively flat only on noisy/dropout dense (+0.015625 after scan tax), and
+  loses noisy/dropout clustered (-5.890625) and easy-sparse (-4.09375).
+- Scan-tax check: the reroll weakness is not caused by scan spending. The
+  `doc_default` reroll rows use zero mean scans, so the controller is losing
+  from policy choices: conservative false flags plus pressure/gradient/history
+  tie-breaking that perturbs the naive pressure ordering.
+- Interpretation: Phase 5 is a useful falsifiable workbench lane, but the
+  current hand-authored controller is not robust enough to support an
+  operating-envelope claim. The ablations remain useful diagnostics: the
+  no-gradient and no-scan variants expose when added channels are helping
+  versus overfitting, while the threshold flagger shows survival can be bought
+  with many false flags and must not be mistaken for clean field inference.
 
 ### Phase 6 - Real-Time Web Projection
 
