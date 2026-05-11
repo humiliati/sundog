@@ -32,9 +32,9 @@ export const DEFAULT_MESA_CONFIG = Object.freeze({
   textureChannel: false,
   textureNoiseStd: 0,
   rewardControlAlpha: 0.05,
-  falseBasinBeta: 0.15,
-  falseBasinSigma: 1,
-  falseBasinCenter: Object.freeze([-3, -3]),
+  falseBasinBeta: 2,
+  falseBasinSigma: 1.5,
+  falseBasinCenter: Object.freeze([-2.5, -2.5]),
   logEvery: 1,
 });
 
