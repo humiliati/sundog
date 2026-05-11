@@ -89,6 +89,10 @@
             font-size: 0.84rem;
         }
 
+        .stage-copy {
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.44);
+        }
+
         .status-strip {
             position: absolute;
             left: 2rem;
@@ -181,6 +185,23 @@
             margin-bottom: 0.5rem;
         }
 
+        .toggle-row {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            align-items: center;
+            gap: 0.55rem;
+            margin-bottom: 0.5rem;
+            color: rgba(245, 245, 245, 0.86);
+            font-size: 0.84rem;
+            font-weight: 700;
+        }
+
+        .toggle-row input {
+            width: 1.05rem;
+            height: 1.05rem;
+            accent-color: var(--accent-gold);
+        }
+
         label {
             display: flex;
             justify-content: space-between;
@@ -193,9 +214,13 @@
 
         select,
         input[type="number"],
-        input[type="range"],
         button {
             width: 100%;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-gold);
         }
 
         select,
@@ -248,6 +273,14 @@
             border-left: 3px solid var(--accent-gold);
             border-radius: 0 4px 4px 0;
             font-size: 0.76rem;
+            line-height: 1.35;
+        }
+
+        .metric-hint {
+            margin-top: 0.55rem;
+            color: rgba(245, 245, 245, 0.68);
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
             line-height: 1.35;
         }
 
@@ -345,68 +378,75 @@
             <div class="stage">
                 <canvas id="mines-canvas"></canvas>
                 <div class="stage-copy">
-                    <div class="eyebrow">Planned Workbench</div>
+                    <div class="eyebrow">Phase 6 Workbench</div>
                     <h1>Sundog Pressure Mines</h1>
                     <p>
-                        A minefield workbench where mine locations are hidden.
-                        Phase 0 establishes claim boundaries and task definition.
-                        The pressure field is indirect; the mines stay buried.
+                        Matched-seed controller runs over a hidden minefield.
+                        The visible pressure field is noisy and lossy; diagnostics
+                        are opt-in.
                     </p>
                 </div>
                 <div class="status-strip" aria-live="polite">
-                    <div id="mines-status">Phase 0: Roadmap Complete</div>
-                    <div id="phase-display">PLANNED</div>
+                    <div id="mines-status">Initializing workbench</div>
+                    <div id="phase-display">LIVE</div>
                     <div id="mines-metrics"></div>
                 </div>
             </div>
 
             <aside class="controls" aria-label="Mines controls">
                 <h2>Workbench Controls</h2>
-                <div class="note">
-                    <strong>Phase 0 Status</strong><br>
-                    This workbench is currently in the roadmap phase. Phase 1-6
-                    implementation is required before the interactive minefield and
-                    pressure sensor become available.
+                <div class="control-actions">
+                    <button id="mines-run" type="button">Pause</button>
+                    <button id="mines-step" type="button">Step</button>
+                    <button id="mines-reset" type="button">Reset</button>
+                    <button id="mines-next-seed" type="button">Next Seed</button>
                 </div>
 
-                <h3>Roadmap</h3>
+                <h3>Modes</h3>
                 <div class="control-row">
-                    <p style="font-size: 0.82rem; line-height: 1.4; color: rgba(245, 245, 245, 0.82);">
-                        See <a href="docs/sundog_v_minesweeper.md"
-                           style="color: var(--accent-gold); text-decoration: underline;">
-                           docs/sundog_v_minesweeper.md
-                        </a> for the full implementation roadmap.
-                    </p>
+                    <label for="mines-mode">Primary</label>
+                    <select id="mines-mode"></select>
                 </div>
-
-                <h3>Planned Features</h3>
                 <div class="control-row">
-                    <ul style="font-size: 0.82rem; line-height: 1.5; color: rgba(245, 245, 245, 0.78); list-style: none; padding: 0;">
-                        <li style="margin-bottom: 0.5rem;">
-                            <strong style="color: var(--accent-gold);">Phase 1:</strong>
-                            Board core with seeded mine placement
-                        </li>
-                        <li style="margin-bottom: 0.5rem;">
-                            <strong style="color: var(--accent-gold);">Phase 2:</strong>
-                            Pressure sensor model and field rendering
-                        </li>
-                        <li style="margin-bottom: 0.5rem;">
-                            <strong style="color: var(--accent-gold);">Phase 3-5:</strong>
-                            Diagnostics, baselines, and Sundog controller
-                        </li>
-                        <li style="margin-bottom: 0.5rem;">
-                            <strong style="color: var(--accent-gold);">Phase 6:</strong>
-                            Real-time browser workbench
-                        </li>
-                    </ul>
+                    <label for="mines-compare-mode">Compare</label>
+                    <select id="mines-compare-mode"></select>
                 </div>
+                <label class="toggle-row" for="mines-compare">
+                    <input id="mines-compare" type="checkbox" checked>
+                    <span>Matched seed comparison</span>
+                </label>
 
-                <h3>Claim Boundary</h3>
+                <h3>Board</h3>
+                <div class="control-row">
+                    <label for="mines-preset">Preset</label>
+                    <select id="mines-preset"></select>
+                </div>
+                <div class="control-row">
+                    <label for="mines-seed">Seed</label>
+                    <input id="mines-seed" type="number" min="0" step="1" value="1000">
+                </div>
+                <div class="control-row">
+                    <label for="mines-sensor">Sensor</label>
+                    <select id="mines-sensor"></select>
+                </div>
+                <div class="control-row">
+                    <label for="mines-speed">Speed</label>
+                    <input id="mines-speed" type="range" min="120" max="1200" step="40" value="520">
+                </div>
+                <label class="toggle-row" for="mines-audit">
+                    <input id="mines-audit" type="checkbox">
+                    <span>Diagnostics overlay</span>
+                </label>
+
                 <div class="note">
-                    The workbench will NOT claim to solve Minesweeper or to reveal
-                    the hidden board in general. It will ask whether a lossy pressure
-                    field preserves enough structure for bounded reveal/flag decisions
-                    inside a mapped operating envelope.
+                    <strong>Current default</strong><br>
+                    `sundog_lean` versus `naive_pressure` on the noisy easy-sparse
+                    pocket. Switch to doc default or dense fields to see the failure
+                    map.
+                </div>
+                <div class="metric-hint">
+                    false = privileged audit count; diagnostics overlay exposes hidden
+                    mines only when this page toggle is enabled.
                 </div>
             </aside>
         </section>
@@ -468,58 +508,10 @@
         </nav>
         <p class="footer-note">
             Sundog Pressure Mines Workbench is part of the Sundog research program.
-            Current evidence tier: Planned Workbench (Phase 0).
+            Current evidence tier: Phase 6 browser projection with Phase 5 caveats.
         </p>
     </footer>
 
-    <script type="module">
-        // Phase 0 stub: no interactive implementation yet
-        const canvas = document.getElementById('mines-canvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-            drawPlaceholder();
-        }
-
-        function drawPlaceholder() {
-            ctx.fillStyle = '#0D2030';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = 'rgba(244, 196, 48, 0.15)';
-            ctx.strokeStyle = 'rgba(244, 196, 48, 0.3)';
-            ctx.lineWidth = 2;
-
-            const gridSize = 8;
-            const tileSize = Math.min(canvas.width, canvas.height) / (gridSize + 2);
-            const offsetX = (canvas.width - gridSize * tileSize) / 2;
-            const offsetY = (canvas.height - gridSize * tileSize) / 2;
-
-            // Draw placeholder grid
-            for (let row = 0; row < gridSize; row++) {
-                for (let col = 0; col < gridSize; col++) {
-                    const x = offsetX + col * tileSize;
-                    const y = offsetY + row * tileSize;
-                    ctx.fillRect(x, y, tileSize - 1, tileSize - 1);
-                    ctx.strokeRect(x, y, tileSize - 1, tileSize - 1);
-                }
-            }
-
-            // Draw placeholder text
-            ctx.fillStyle = 'rgba(244, 196, 48, 0.6)';
-            ctx.font = '24px monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('Phase 0: Implementation Pending', canvas.width / 2, canvas.height / 2);
-
-            ctx.font = '14px monospace';
-            ctx.fillStyle = 'rgba(245, 245, 245, 0.5)';
-            ctx.fillText('See roadmap for planned features', canvas.width / 2, canvas.height / 2 + 40);
-        }
-
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-    </script>
+    <script type="module" src="/js/mines-browser.mjs?v=20260510a"></script>
 </body>
 </html>
