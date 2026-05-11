@@ -1,5 +1,9 @@
 # Sundog Documentation
 
+**Copyright © 2026 Stellar Aqua LLC. All rights reserved.**
+
+---
+
 This folder is organized as a research-facing landing layer over the Sundog
 code, experiments, prior theorem materials, and application bridges.
 
