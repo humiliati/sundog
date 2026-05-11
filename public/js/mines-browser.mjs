@@ -31,6 +31,7 @@ const runButton = document.getElementById("mines-run");
 const stepButton = document.getElementById("mines-step");
 const resetButton = document.getElementById("mines-reset");
 const nextSeedButton = document.getElementById("mines-next-seed");
+const copyReplayButton = document.getElementById("mines-copy-replay");
 
 const SENSOR_CELLS = Object.freeze({
   doc_default: Object.freeze({
@@ -426,6 +427,75 @@ function populateControls() {
   compareModeSelect.value = "naive_pressure";
 }
 
+// Replay URL contract — kept in lockstep with scripts/mines-phase4-baselines.mjs.
+//   Required params: preset, seed, mode, sensor
+//   Optional params: compare (a second mode for matched-seed side-by-side)
+function buildReplayURL() {
+  const params = new URLSearchParams({
+    preset: presetSelect.value,
+    seed: String(seedValue()),
+    mode: modeSelect.value,
+    sensor: sensorSelect.value,
+  });
+  if (compareToggle.checked && compareModeSelect.value) {
+    params.set("compare", compareModeSelect.value);
+  }
+  const base = `${window.location.origin}${window.location.pathname}`;
+  return `${base}?${params.toString()}`;
+}
+
+async function copyReplayURL() {
+  const url = buildReplayURL();
+  try {
+    await navigator.clipboard.writeText(url);
+    copyReplayButton.textContent = "Copied";
+    setTimeout(() => { copyReplayButton.textContent = "Copy replay URL"; }, 1400);
+  } catch {
+    // Clipboard API may be unavailable (file:// origin or denied perms).
+    // Fall back to selecting the URL in a prompt so the user can copy manually.
+    window.prompt("Copy this replay URL:", url);
+  }
+}
+
+// Hydrate controls from any replay params present on the initial URL. Runs
+// once before the first resetWorkbench(). Silently ignores params that don't
+// correspond to known options so a stale or malformed URL degrades gracefully.
+function hydrateFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.size === 0) return false;
+  const preset = params.get("preset");
+  const seed = params.get("seed");
+  const mode = params.get("mode");
+  const sensor = params.get("sensor");
+  const compare = params.get("compare");
+  let applied = false;
+  if (preset && MINES_PRESETS[preset]) {
+    presetSelect.value = preset;
+    applied = true;
+  }
+  const seedInt = Number.parseInt(seed ?? "", 10);
+  if (Number.isInteger(seedInt) && seedInt >= 0) {
+    seedInput.value = String(seedInt);
+    applied = true;
+  }
+  if (mode && MINES_CONTROLLER_MODES[mode]) {
+    modeSelect.value = mode;
+    applied = true;
+  }
+  if (sensor && SENSOR_CELLS[sensor]) {
+    sensorSelect.value = sensor;
+    applied = true;
+  }
+  if (compare && MINES_CONTROLLER_MODES[compare]) {
+    compareModeSelect.value = compare;
+    compareToggle.checked = true;
+    applied = true;
+  } else if (params.has("compare") && !compare) {
+    compareToggle.checked = false;
+  }
+  return applied;
+}
+
 function bindControls() {
   runButton.addEventListener("click", () => {
     app.running = !app.running;
@@ -441,6 +511,7 @@ function bindControls() {
     seedInput.stepUp();
     resetWorkbench();
   });
+  copyReplayButton.addEventListener("click", () => { copyReplayURL(); });
   for (const input of [modeSelect, compareModeSelect, presetSelect, sensorSelect, seedInput, compareToggle, auditToggle]) {
     input.addEventListener("change", resetWorkbench);
   }
@@ -461,6 +532,10 @@ function frame(now) {
 }
 
 populateControls();
+// Replay URL params override the page's defaults if present. Runs after
+// populateControls so the option lists exist, before bindControls/reset so
+// the hydrated values are what the first render sees.
+hydrateFromURL();
 bindControls();
 resetWorkbench();
 resizeCanvas();
