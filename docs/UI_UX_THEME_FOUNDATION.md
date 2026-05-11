@@ -1,7 +1,7 @@
 # Sundog UI/UX Theme Foundation
 
 Date: 2026-05-07
-Status: starter foundation for the coming visual overhaul
+Status: living roadmap; refreshed 2026-05-11 after the About/nav and shared-theme passes
 
 ## Purpose
 
@@ -80,7 +80,10 @@ Relevant sources:
 
 - `docs/presentation/logo-brief.md`
 - `docs/presentation/landing-page-outline.md`
-- Current `index.html`, `origin.html`, and `applications-gallery.html`
+- Current `index.html`, `about.html`, `origin.html`,
+  `applications-gallery.html`, `threebody.html`, `balance.html`,
+  `mines.html`, `sundog-workbench.html`, `docs/index.html`, and
+  `paper-theme-demo.html`
 
 Takeaways:
 
@@ -157,6 +160,10 @@ hero graph markup, application cards, or generated BoxForge exports.
 
 ## Next Migration Steps
 
+Refresh note, 2026-05-11: this section is now a mix of historical roadmap and
+current backlog. Treat items marked "Landed" as implementation notes, not open
+asks.
+
 1. Move repeated header/footer CSS out of each HTML file into
    `public/css/sundog-theme.css`.
    **Landed 2026-05-08:** Header chrome (`.site-header`, `.site-nav`,
@@ -167,6 +174,11 @@ hero graph markup, application cards, or generated BoxForge exports.
    inline chrome blocks deleted; balance retains a trimmed `:root` for
    workbench-specific `--ink`/`--paper` tokens. threebody picked up the
    shared sheet link in this pass too — previously stranded.
+   **Refreshed 2026-05-11:** production chrome now also covers About, Docs,
+   Mines, Workbench, and the paper demo. Primary nav treats the brand mark as
+   the Home link, omits Origin from top-level chrome, and uses About as the
+   identity doorway. Footer copyright styling moved into shared
+   `.footer-copyright`.
 2. Split the shared stylesheet into layers when it grows:
    `tokens`, `base`, `components`, `pages`, `experiments`.
    **Landed 2026-05-08:** `public/css/sundog-theme.css` reorganized into the
@@ -357,12 +369,42 @@ hero graph markup, application cards, or generated BoxForge exports.
 - Keep EyesOnly and Dungeon Gleaner as portfolio/application references, not as
   claims that broaden the core scientific result.
 
+## Easy Actionables as of 2026-05-11
+
+Landed in the current cleanup pass:
+
+1. Remove redundant `Home` from experiment/workbench primary nav where the
+   `Sundog` brand link already returns home.
+2. Move repeated `.footer-copyright` inline styles into
+   `public/css/sundog-theme.css`.
+3. Link `paper-theme-demo.html` from the Docs technical-spec section so the
+   implemented paper primitives are discoverable.
+
+Good next bites:
+
+1. Normalize footer link sets by page role: broad pages can keep About/Docs,
+   while experiment pages can keep deeper writeup links.
+2. Give Three-Body, Balance, and Mines a shared controls vocabulary for
+   buttons, sliders, selects, checkboxes, status chips, and disabled states.
+3. Promote `.sd-paper-card` only onto static explanation/resource cards first;
+   avoid moving live controls into the paper metaphor until screenshots prove
+   the result stays legible.
+4. Add a short nav policy note to `docs/WEBSITE_DEVELOPMENT.md`: brand is Home,
+   About is identity, Origin is contextual/deep provenance.
+5. Run a recurring mobile screenshot pass after nav changes, especially at
+   390px and 520px widths.
+
 ---
 
 ## Paper-Inspired Theme Extension
 
 Date: 2026-05-08
-Status: expansion of typography overhaul to include physical paper metaphors
+Status: implemented foundation; selective production adoption pending
+
+2026-05-11 refresh: the paper tokens and component classes exist in
+`public/css/sundog-theme.css`, and `paper-theme-demo.html` is the live reference
+page. Do not treat Phase 1, Phase 2, or the demo-page task below as still open;
+the remaining work is selective promotion onto production pages.
 
 ### Inspiration Sources
 
@@ -642,6 +684,16 @@ section > h2 {
 ```
 
 ### Theme Integration Strategy
+
+Implementation status:
+
+- Phase 1 tokens: landed in `public/css/sundog-theme.css`.
+- Phase 2 component classes: landed for `.sd-paper-card`, `.sd-sticky-note`,
+  `.sd-tape-overlay`, `.sd-desk-bg`, and `.sd-manila-container`.
+- Demo/reference page: landed as `paper-theme-demo.html` and linked from Docs.
+- Phase 3 production mapping: partial. Some existing cards already receive
+  ruled-paper treatment through shared selectors, but the explicit `.sd-*`
+  classes remain mostly demo/reference primitives.
 
 #### Phase 1: Extend CSS Custom Properties
 
@@ -955,13 +1007,16 @@ body[data-theme="desk"],
 
 ### Next Steps for Implementation
 
-1. Add new CSS custom properties to `public/css/sundog-theme.css`
-2. Implement component classes (`.sd-paper-card`, `.sd-sticky-note`, etc.)
-3. Create a demo page or section showcasing each effect
-4. Apply selectively to existing components in `index.html`
-5. Test across browsers and devices
-6. Document usage guidelines for future page development
-7. Consider creating a visual component library or style guide page
+1. Promote paper primitives selectively to static explanation/resource cards,
+   starting with one page at a time.
+2. Keep `paper-theme-demo.html` as the visual reference instead of duplicating
+   large snippets in production pages.
+3. Move remaining repeated inline footer/chrome styles into shared classes when
+   they are exact duplicates.
+4. Keep handwritten fonts deferred unless the brand deliberately moves toward a
+   more informal annotation layer.
+5. Test promoted components across desktop and mobile screenshots before
+   deploying.
 
 ### References
 
@@ -976,7 +1031,7 @@ body[data-theme="desk"],
 ## Interactive Components Roadmap
 
 Date: 2026-05-08
-Status: Planning phase for interactive UI element styling
+Status: partially implemented; context-adaptive direction selected by current site
 
 ### Overview
 
@@ -984,6 +1039,11 @@ While the paper-inspired theme provides a strong foundation for static content
 (cards, containers, typography), the Sundog site includes several interactive
 components that require thoughtful styling to maintain cohesion with the paper
 aesthetic while ensuring usability and scientific credibility.
+
+2026-05-11 refresh: the effective direction is Option D with Option C restraint.
+Navigation and public copy stay professionally minimal, static explanation cards
+can borrow the paper system, and live workbenches should keep a restrained
+instrument-panel treatment until a dedicated controls pass lands.
 
 ### Current Interactive Elements Inventory
 
@@ -1178,10 +1238,11 @@ Different UI styles for different content contexts:
 - `#parhelion-canvas` — Hero section optical visualization
 
 **Buttons:**
-- CTA buttons (`.cta-buttons`) — Currently unstyled, inherits theme
+- CTA buttons (`.cta-buttons`) — Styled through the shared theme; remaining work
+  is content priority and density, not base styling
 
 **Interactive needs:**
-- Hero CTA styling
+- Hero CTA hierarchy and label prioritization
 - Smooth scroll navigation triggers
 
 #### Three-Body Experiment Page (`threebody.html`)
@@ -1208,6 +1269,22 @@ Different UI styles for different content contexts:
 - Checkbox visual treatment
 - Dropdown menu styling
 - Real-time value displays
+
+#### Balance and Mines Workbenches (`balance.html`, `mines.html`)
+
+**Canvas / board elements:**
+- Balance uses a canvas-style physics workbench and diagnostics panels.
+- Mines uses a board/projection surface plus telemetry and comparison controls.
+
+**Form controls:**
+- Buttons, selects, range sliders, checkboxes, seed inputs, replay/copy actions,
+  and mode selectors now repeat across both pages.
+
+**Interactive needs:**
+- Shared class names for repeated control groups.
+- Unified focus, hover, active, and disabled states.
+- Mobile density review for stacked controls.
+- Reduced-motion behavior for replay and board/projection animations.
 
 ### Design Questions to Resolve
 
@@ -1239,11 +1316,15 @@ Before implementation, we need to decide:
 
 ### Next Steps
 
-1. **User feedback** on styling philosophy direction (Options A-D)
-2. **Design mockups** for key interactive components (no code yet)
-3. **Accessibility review** of proposed interactive patterns
-4. **Technical feasibility** assessment for complex effects
-5. **Coordination with BoxForge** team on canvas content upgrade timeline
+1. Define shared control classes for experiment/workbench UI:
+   `.sd-control-panel`, `.sd-control-group`, `.sd-control-button`,
+   `.sd-control-input`, `.sd-control-select`, `.sd-toggle-row`, and
+   `.sd-status-chip`.
+2. Apply those classes first to Three-Body, then Balance, then Mines, preserving
+   page-local behavioral IDs.
+3. Add shared focus/disabled styles before adding decorative treatments.
+4. Screenshot-test desktop and 390px mobile after each page migration.
+5. Keep BoxForge as canvas-content work, not a blocker for control-frame polish.
 
 ### References for Interactive Styling
 
