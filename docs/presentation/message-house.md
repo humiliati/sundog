@@ -83,13 +83,13 @@ Never use Layer A language without pointing to Layer B framing and Layer C evide
 
 ### The One-Sentence Version
 
-The Sundog Project is a framework for indirect measurement and agent reasoning under partial observability, with working applications in procedural systems, simulation analysis, and game AI.
+Sundog Research Lab studies useful partial information: systems that act when direct sight is unavailable by transforming indirect traces into control, then measuring where that stops working.
 
 ### The Short Version (2-3 paragraphs)
 
-The Sundog Project began as a mathematical intuition about alignment and indirect signals. Over the past year, we have applied that framework in software and found it useful in real systems — especially where behavior must be inferred from incomplete or occluded information.
+The Sundog Project began as a practical alignment problem and became a research program about indirect signals. Over the past year, we have applied that framework in software and found it useful in real systems where behavior must be inferred from incomplete or occluded information.
 
-The core experiment demonstrates photometric mirror alignment without direct target access, reaching terminal accuracy comparable to oracle baselines in a controlled MuJoCo setting. Beyond the lab task, the same framework informs procedural agent design in EyesOnly, verb-field NPC behavior in Dungeon Gleaner, and softbody interpretation in Money Bags.
+The core experiment demonstrates photometric mirror alignment without direct target access, reaching terminal accuracy comparable to oracle baselines in a controlled MuJoCo setting. Beyond the lab task, the same pattern informs procedural agent design in EyesOnly, verb-field NPC behavior in Dungeon Gleaner, softbody interpretation in Money Bags, and operating-envelope workbenches such as three-body, Balance, and Pressure Mines.
 
 We are continuing to formalize the mathematics, strengthen the experimental evidence, and explore new application domains.
 
@@ -109,7 +109,7 @@ We are not claiming a completed universal theory. We are presenting an evolving 
 
 The defensible scientific claim is narrow: photometric mirror alignment without target-position access in a controlled MuJoCo experiment. The broader applications demonstrate that similar patterns can inform practical software systems, but each domain requires its own formal study.
 
-This is a research program, not a finished product.
+This is a research program, not a finished product. It is not a port of *SunDog: Frozen Legacy*, not a crypto project, and not a claim that indirect signals always beat direct state.
 
 ## Message Hierarchy by Audience
 

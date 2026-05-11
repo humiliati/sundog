@@ -29,7 +29,7 @@ MIT License with:
 
 ### 3. Website Footer Updates
 
-**Files:** `index.html`, `origin.html`, `applications-gallery.html`, `threebody.html`, `balance.html`
+**Files:** public root HTML pages and the browsable docs index.
 
 All public-facing HTML pages now include the recommended copyright notice:
 
@@ -42,12 +42,12 @@ research program sponsored by Stellar Aqua LLC.
 
 **File:** `about.html`
 
-A new About page was created with the Sundog Research Lab framing that:
-- Positions Sundog as an independent research program sponsored by Stellar Aqua LLC
+The About page carries the Sundog Research Lab framing that:
+- Positions Sundog as an independent applied research lab for systems that act without full sight
 - Explains the field origin and practical sponsor relationship
 - Details research posture and evidence tiers
-- Clarifies what Sundog does NOT claim
-- Includes information about Stellar Aqua LLC as sponsor
+- Clarifies what Sundog does NOT claim, including SunDog: Frozen Legacy, crypto, and universal-proof confusion
+- Includes information about Stellar Aqua LLC as current sponsor and copyright holder
 
 ### 5. Navigation Updates
 

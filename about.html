@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="About Sundog Research Lab: an independent applied research program sponsored by Stellar Aqua LLC.">
+    <meta name="description" content="About Sundog Research Lab: software for useful partial information, hidden-state control, and indirect signals.">
     <meta name="theme-color" content="#1A3A52">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
-    <title>About - Sundog Research Lab</title>
+    <title>About Sundog Research Lab</title>
     <style>
         * {
             box-sizing: border-box;
@@ -18,20 +18,24 @@
         }
 
         main {
+            overflow-x: hidden;
             background:
-                radial-gradient(circle at 15% 15%, rgba(244, 196, 48, 0.12), transparent 24rem),
-                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 26rem);
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 18rem, #F3F8F7 100%);
         }
 
-        .page-hero {
-            max-width: 1120px;
+        .about-hero {
+            width: min(1120px, calc(100vw - 3rem));
             margin: 0 auto;
-            padding: 7rem 2rem 4rem;
+            padding: clamp(5rem, 9vw, 8rem) 0 clamp(3rem, 6vw, 5rem);
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.46fr);
+            gap: clamp(2rem, 5vw, 4rem);
+            align-items: end;
         }
 
         .eyebrow {
             color: var(--primary-mid);
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 800;
             letter-spacing: 0.14em;
             text-transform: uppercase;
@@ -39,114 +43,232 @@
         }
 
         h1 {
-            max-width: 880px;
+            max-width: 800px;
             color: var(--primary-dark);
-            font-size: clamp(2.5rem, 7vw, 5.25rem);
+            font-size: clamp(2.6rem, 6.8vw, 5.5rem);
             line-height: 0.98;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.4rem;
         }
 
         .lede {
             max-width: 780px;
             color: #40505C;
-            font-size: 1.25rem;
-            line-height: 1.8;
+            font-size: clamp(1.1rem, 2vw, 1.28rem);
+            line-height: 1.78;
+        }
+
+        .signal-stack {
+            border-left: 3px solid var(--accent-gold);
+            background: rgba(255, 255, 255, 0.72);
+            padding: 1.25rem 0 1.25rem 1.25rem;
+        }
+
+        .signal-stack h2 {
+            color: var(--primary-dark);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .signal-row {
+            display: grid;
+            grid-template-columns: 6.8rem minmax(0, 1fr);
+            gap: 0.9rem;
+            padding: 0.8rem 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .signal-row:first-of-type {
+            border-top: 0;
+        }
+
+        .signal-row strong {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.76rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .signal-row span {
+            color: #40505C;
+            font-size: 0.95rem;
+            line-height: 1.55;
         }
 
         .content {
-            max-width: 1120px;
+            width: min(1120px, calc(100vw - 3rem));
             margin: 0 auto;
-            padding: 0 2rem 6rem;
+            padding: 0 0 clamp(4rem, 8vw, 7rem);
         }
 
-        .content-section {
-            background: #FFFFFF;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-        }
-
-        h2 {
-            color: var(--primary-dark);
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        h3 {
-            color: var(--primary-dark);
-            font-size: 1.3rem;
-            margin-top: 2rem;
-            margin-bottom: 0.75rem;
-        }
-
-        p {
-            margin-bottom: 1.2rem;
-            line-height: 1.7;
-        }
-
-        ul {
-            margin: 1rem 0 1.5rem 1.5rem;
-            line-height: 1.8;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-        }
-
-        .callout {
-            background: #F4F8FA;
-            border-left: 4px solid var(--primary-mid);
-            border-radius: 0 8px 8px 0;
-            padding: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .link-grid {
+        .about-section {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            grid-template-columns: minmax(12rem, 0.38fr) minmax(0, 1fr);
+            gap: clamp(1.5rem, 4vw, 3.5rem);
+            padding: clamp(2.5rem, 6vw, 4.25rem) 0;
+            border-top: 1px solid var(--line);
         }
 
-        .link-card {
-            background: #F8FBFC;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.3s ease;
-        }
-
-        .link-card:hover {
-            border-color: var(--accent-gold);
-            transform: translateY(-2px);
-        }
-
-        .link-card h4 {
+        .about-section h2 {
             color: var(--primary-dark);
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+            font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+            line-height: 1.08;
+            margin-bottom: 0.75rem;
+            text-align: left;
         }
 
-        .link-card p {
+        .section-note {
             color: #64727b;
-            font-size: 0.95rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .section-body p {
+            color: #33434E;
+            font-size: 1.06rem;
+            line-height: 1.76;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-body p:last-child {
             margin-bottom: 0;
         }
 
-        @media (max-width: 760px) {
-            .page-hero {
-                padding: 5rem 1.5rem 3rem;
+        .thesis-line {
+            margin: 1.75rem 0;
+            padding: 1.15rem 1.25rem;
+            border-left: 4px solid var(--accent-gold);
+            color: var(--primary-dark);
+            background: rgba(244, 196, 48, 0.10);
+            font-family: var(--sd-font-display);
+            font-size: clamp(1.2rem, 2vw, 1.45rem);
+            line-height: 1.45;
+        }
+
+        .pattern-list,
+        .plain-list {
+            margin: 1.2rem 0 0;
+            padding-left: 1.2rem;
+            color: #33434E;
+            line-height: 1.75;
+        }
+
+        .pattern-list li,
+        .plain-list li {
+            margin-bottom: 0.65rem;
+        }
+
+        .surface-grid,
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        .surface-item {
+            padding-top: 1rem;
+            border-top: 3px solid rgba(20, 43, 58, 0.18);
+        }
+
+        .surface-item h3 {
+            color: var(--primary-dark);
+            font-size: 1.05rem;
+            margin-bottom: 0.55rem;
+        }
+
+        .surface-item p {
+            color: #4C5D68;
+            font-size: 0.98rem;
+            line-height: 1.65;
+            margin-bottom: 0;
+        }
+
+        .resource-card {
+            display: block;
+            min-height: 100%;
+            padding: 1.25rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.72);
+            color: inherit;
+            text-decoration: none;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .resource-card:hover,
+        .resource-card:focus-visible {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .resource-card h3 {
+            color: var(--primary-dark);
+            font-size: 1.05rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .resource-card p {
+            color: #64727b;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            margin-bottom: 0;
+        }
+
+        .legal-note {
+            margin-top: 0.5rem;
+            padding: 1.35rem 1.5rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #F8FBFC;
+        }
+
+        .legal-note h2 {
+            color: var(--primary-dark);
+            font-size: 1.25rem;
+            margin-bottom: 0.65rem;
+        }
+
+        .legal-note p {
+            color: #4C5D68;
+            font-size: 0.96rem;
+            line-height: 1.7;
+            margin-bottom: 0.8rem;
+        }
+
+        .legal-note p:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 860px) {
+            .about-hero,
+            .about-section {
+                grid-template-columns: 1fr;
             }
 
+            .about-hero {
+                align-items: start;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .about-hero,
             .content {
-                padding: 0 1.5rem 4rem;
+                width: min(1120px, calc(100vw - 2rem));
             }
 
-            .content-section {
-                padding: 1.5rem;
+            h1 {
+                font-size: clamp(2.15rem, 10.5vw, 3rem);
+            }
+
+            .signal-row {
+                grid-template-columns: 1fr;
+                gap: 0.3rem;
             }
         }
     </style>
@@ -162,6 +284,7 @@
                 <a href="applications-gallery.html">Applications Gallery</a>
                 <a href="threebody.html">Three-Body Experiment</a>
                 <a href="balance.html">Balance Workbench</a>
+                <a href="mines.html">Pressure Mines</a>
                 <a href="docs/">Docs</a>
                 <a href="https://github.com/humiliati/sundog">GitHub</a>
             </div>
@@ -169,158 +292,228 @@
     </header>
 
     <main>
-        <section class="page-hero">
-            <p class="eyebrow">About</p>
-            <h1>Sundog Research Lab</h1>
-            <p class="lede">
-                An independent applied research program sponsored by Stellar Aqua LLC, studying systems that act from indirect signals: shadows, local fields, deformation, torque, pressure, compressed game state, and other traces that preserve control-relevant structure.
-            </p>
+        <section class="about-hero">
+            <div>
+                <p class="eyebrow">About Sundog Research Lab</p>
+                <h1>Software for useful partial information.</h1>
+                <p class="lede">
+                    Sundog Research Lab is an independent applied research project and experimental software lab studying how systems act when they cannot see the full truth.
+                </p>
+            </div>
+            <aside class="signal-stack" aria-label="Sundog pattern summary">
+                <h2>The working pattern</h2>
+                <div class="signal-row">
+                    <strong>Hidden</strong>
+                    <span>The decisive state is unavailable, occluded, delayed, or intentionally withheld.</span>
+                </div>
+                <div class="signal-row">
+                    <strong>Trace</strong>
+                    <span>The world leaks structure through light, force, pressure, deformation, fields, or behavior.</span>
+                </div>
+                <div class="signal-row">
+                    <strong>Action</strong>
+                    <span>The system transforms that trace into control, then measures where the coupling fails.</span>
+                </div>
+            </aside>
         </section>
 
         <section class="content">
-            <article class="content-section">
-                <h2>Independent Research, Practical Sponsor</h2>
-                <p>
-                    Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC, a controls and environmental-systems company whose field work produced the original alignment problem.
-                </p>
-                <p>
-                    The project began when a practical alignment constraint—how to confirm a physical target through loss and return of signal when direct inspection was unavailable—turned into a mathematical question. That field procedure, developed during suspended HVAC installation work, became the foundation for a broader research program about indirect measurement and control.
-                </p>
-                <p>
-                    The sponsor is practical. The research posture is explicit. We separate controlled results from prototypes, product expressions, and future-facing claims.
-                </p>
-            </article>
-
-            <article class="content-section">
-                <h2>Research Posture</h2>
-                <p>
-                    Sundog operates as an independent research program with experimental software lab as a secondary identity. Our work spans:
-                </p>
-                <ul>
-                    <li><strong>Controlled experiments</strong> with reproducible results, matched baselines, and explicit failure boundaries</li>
-                    <li><strong>Operating-envelope studies</strong> that map where indirect signals work and where they fail</li>
-                    <li><strong>Instrumented prototypes</strong> demonstrating practical utility in real systems</li>
-                    <li><strong>Product expressions</strong> showing how the alignment framework applies to games, simulation, and software</li>
-                </ul>
-                <p>
-                    We maintain disciplined evidence tiers because the credibility of research—from any origin—depends on separating what is proven from what is promising.
-                </p>
-            </article>
-
-            <article class="content-section">
-                <h2>Evidence Tiers</h2>
-                <p>
-                    The Sundog project distinguishes different levels of evidence:
-                </p>
-
-                <h3>Research Result</h3>
-                <p>
-                    <strong>Photometric Mirror Alignment:</strong> A controller aligns a mirrored end-effector without target coordinates, using only sparse photometric feedback. Terminal accuracy is statistically indistinguishable from a target-aware oracle baseline in controlled MuJoCo experiments (U=526, p=0.264). The cost is convergence time, not accuracy. Known failure boundary: tight joint limits.
-                </p>
-
-                <h3>Operating-Envelope Study</h3>
-                <p>
-                    <strong>Three-Body Dynamics:</strong> A guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines inside a tested high-velocity near-escape pocket. Low-velocity and equal-mass cells remain explicit failure boundaries.
-                </p>
-                <p>
-                    <strong>Sundog Balance:</strong> A shadow-derived cart-pole controller maintains balance inside a mapped lighting and delay envelope. Overhead-light and high-delay configurations remain explicit degradation boundaries.
-                </p>
-                <p>
-                    <strong>Pressure Mines:</strong> A noisy pressure field enables more safe progress before failure inside a narrow mapped pocket. Does not claim to solve Minesweeper or reveal the hidden board in general.
-                </p>
-
-                <h3>Instrumented Prototype</h3>
-                <p>
-                    <strong>EyesOnly / Gone Rogue:</strong> Procedural roguelike agents act from compressed perception using stop-conditioned action batches.
-                </p>
-                <p>
-                    <strong>Money Bags:</strong> Softbody terrain system with graph-based telemetry making torsion, deformation, symmetry, and recovery legible as interpretable signals.
-                </p>
-
-                <h3>Product Expression</h3>
-                <p>
-                    <strong>Dungeon Gleaner:</strong> NPC motion pulled by verbs and needs, not shortest-path planners. Personality expressed through per-archetype weighting on a shared verb vocabulary.
-                </p>
-            </article>
-
-            <article class="content-section">
-                <h2>Field Origin</h2>
-                <p>
-                    The theorem's practical origin matters. Sundog didn't emerge from a university lab or pure software research. It came from a jobsite constraint during environmental controls installation work.
-                </p>
-                <p>
-                    The discovery happened while aligning acoustic ceiling anchors for suspended HVAC equipment above a quantum computing environment. A plumb laser, a fastener head, and an occluded line of sight produced a geometric procedure that later became the model for the photometric alignment experiment.
-                </p>
-                <p>
-                    That field origin is an advantage: Sundog's framing as a practical alignment problem from suspended environmental-control work grounds the research in real constraints, not ivory-tower abstractions.
-                </p>
-                <p>
-                    <a href="origin.html">Read the full origin story →</a>
-                </p>
-            </article>
-
-            <article class="content-section">
-                <h2>What We Do Not Claim</h2>
-                <p>
-                    Intellectual honesty requires being explicit about limitations:
-                </p>
-                <ul>
-                    <li>We do not claim Sundog solves the three-body problem. We ask whether the shadow of that chaos is enough to steer by in bounded regimes.</li>
-                    <li>We do not claim Sundog solves Minesweeper. We show that lossy pressure fields preserve enough structure for bounded decisions inside a named operating envelope.</li>
-                    <li>We do not claim universal alignment. We demonstrate specific tasks where indirect signals enable control.</li>
-                    <li>We do not hide failure modes. Operating envelopes include explicit degradation and failure boundaries.</li>
-                </ul>
-                <p>
-                    The defensible scientific claim today is narrow: photometric mirror alignment without target-position access in controlled MuJoCo experiments. The broader applications demonstrate practical utility and motivate future empirical work.
-                </p>
-            </article>
-
-            <article class="content-section">
-                <h2>Explore Further</h2>
-                <div class="link-grid">
-                    <a href="origin.html" class="link-card">
-                        <h4>Field Origin</h4>
-                        <p>The physical discovery story and early publication trail</p>
-                    </a>
-                    <a href="applications-gallery.html" class="link-card">
-                        <h4>Applications Gallery</h4>
-                        <p>Working systems across evidence tiers</p>
-                    </a>
-                    <a href="docs/RESEARCHER_GUIDE.md" class="link-card">
-                        <h4>Researcher Guide</h4>
-                        <p>Shortest path for reviewers and collaborators</p>
-                    </a>
-                    <a href="docs/SCIENTIFIC_CRITERIA.md" class="link-card">
-                        <h4>Scientific Criteria</h4>
-                        <p>What is testable and what remains future work</p>
-                    </a>
-                    <a href="docs/presentation/claims-and-scope.md" class="link-card">
-                        <h4>Claims Policy</h4>
-                        <p>Keeping public copy anchored to proven results</p>
-                    </a>
-                    <a href="https://github.com/humiliati/sundog" class="link-card">
-                        <h4>GitHub Repository</h4>
-                        <p>Open code, experiments, and documentation</p>
-                    </a>
+            <article class="about-section">
+                <div>
+                    <h2>What We Are</h2>
+                    <p class="section-note">A lab for systems that act without full sight</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        Most software asks for more state: more sensors, more labels, more simulation fidelity, more privileged access. Sundog asks a narrower question. When direct inspection is blocked, expensive, delayed, or unrealistic, does the world still leak enough structure to act?
+                    </p>
+                    <p>
+                        We build small, inspectable systems where the decisive state is hidden, the world still leaks structure, and action can be taken from the trace. Then we measure where that stops working.
+                    </p>
+                    <div class="thesis-line">
+                        Intelligence under partial observability is not only a limitation problem. It is a design medium.
+                    </div>
                 </div>
             </article>
 
-            <div class="callout">
-                <h3>About Stellar Aqua LLC</h3>
+            <article class="about-section">
+                <div>
+                    <h2>Why Indirect Signals Matter</h2>
+                    <p class="section-note">The signal around the signal</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        Full state is often a fantasy. Real systems are occluded, noisy, delayed, expensive to instrument, or deliberately hidden. A useful system may not get to inspect the target, and sometimes it should not be given privileged state just to make the demo easy.
+                    </p>
+                    <p>
+                        The target may be hidden, but the world responds. Light shifts. Torque changes. A field bends. A rig deforms. A player hesitates. A procedural system exposes just enough state to act without authorial omniscience.
+                    </p>
+                    <p>
+                        We call that surrounding structure the halo: the signal around the signal. The lab's work is to make the halo inspectable.
+                    </p>
+                </div>
+            </article>
+
+            <article class="about-section">
+                <div>
+                    <h2>The Origin Story</h2>
+                    <p class="section-note">A field procedure before a theorem</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        Sundog began as a field alignment problem, not as an abstract theorem. The original procedure came from aligning acoustic ceiling anchors for suspended HVAC equipment above a quantum-computing environment.
+                    </p>
+                    <p>
+                        A plumb laser, a fastener head, and an occluded line of sight forced a practical question: could alignment be confirmed through the loss and return of a signal, rather than by direct inspection of the seated fastener?
+                    </p>
+                    <p>
+                        That origin keeps the lab grounded. Sundog is about work done under constraints: blocked sightlines, imperfect communication, physical tolerances, and the need to know when a procedure has actually landed.
+                    </p>
+                    <p>
+                        <a href="origin.html">Read the full origin story &rarr;</a>
+                    </p>
+                </div>
+            </article>
+
+            <article class="about-section">
+                <div>
+                    <h2>What We Build</h2>
+                    <p class="section-note">Surfaces, not universal proofs</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        Sundog workbenches and product systems follow a recurring pattern:
+                    </p>
+                    <ol class="pattern-list">
+                        <li>The decisive state is hidden.</li>
+                        <li>The world leaks structure through an indirect signal.</li>
+                        <li>That signal is compressed into a control-relevant form.</li>
+                        <li>The system acts from the transformed signal.</li>
+                        <li>The operating envelope and failure boundary are measured.</li>
+                    </ol>
+                    <div class="surface-grid">
+                        <div class="surface-item">
+                            <h3>Research Result</h3>
+                            <p>Photometric mirror alignment without target-position access in a controlled MuJoCo experiment.</p>
+                        </div>
+                        <div class="surface-item">
+                            <h3>Operating-Envelope Studies</h3>
+                            <p>Three-body, Balance, and Pressure Mines workbenches that map where indirect control helps and where it breaks.</p>
+                        </div>
+                        <div class="surface-item">
+                            <h3>Instrumented Prototypes</h3>
+                            <p>EyesOnly / Gone Rogue and Money Bags surfaces that make compressed perception and softbody telemetry inspectable.</p>
+                        </div>
+                        <div class="surface-item">
+                            <h3>Product Expressions</h3>
+                            <p>Dungeon Gleaner and related game systems showing how the pattern can shape practical software behavior.</p>
+                        </div>
+                    </div>
+                    <p>
+                        The important language is surfaces, not proofs. Each system shows where the idea can be made practical, but not every system carries the same evidence weight.
+                    </p>
+                </div>
+            </article>
+
+            <article class="about-section">
+                <div>
+                    <h2>Our Research Posture</h2>
+                    <p class="section-note">Inspection before enlargement</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        The current scientific claim is deliberately narrow: in a controlled MuJoCo mirror-alignment experiment, a controller with no Cartesian target access aligns from sparse photometric feedback and reaches terminal accuracy comparable to a target-aware analytic baseline.
+                    </p>
+                    <p>
+                        The broader program is staged. Applications motivate new controlled studies. Controlled studies earn stronger language. Failures are part of the result.
+                    </p>
+                    <p>
+                        We publish the repository, docs, workbenches, stress tests, and claim boundaries because the idea is only useful if it can survive inspection. We invite replication, formalization, application-specific benchmarks, hardware validation, and critical review.
+                    </p>
+                    <p>
+                        Humility, for Sundog, is methodological. We do not assume full sight. We do not promote a broad theorem before the evidence earns it. We do not hide the boundary where the signal stops working.
+                    </p>
+                </div>
+            </article>
+
+            <article class="about-section">
+                <div>
+                    <h2>What Sundog Is Not</h2>
+                    <p class="section-note">Boundaries that protect the work</p>
+                </div>
+                <div class="section-body">
+                    <ul class="plain-list">
+                        <li>Sundog is not a port, fork, or p-system continuation of <em>SunDog: Frozen Legacy</em>. The Atari game and its preservation ecosystem are separate historical projects.</li>
+                        <li>Sundog is not a crypto project.</li>
+                        <li>Sundog is not a claim that indirect signals always beat direct state.</li>
+                        <li>Sundog is not a claim that agents should be denied information for aesthetic reasons.</li>
+                        <li>Sundog is not "better game AI" or deeper search. Game-facing workbenches matter only when they express hidden state, indirect signal, transformation, action, and failure boundary.</li>
+                        <li>Sundog is not a universal alignment proof. The broad theorem is a research program. The controlled evidence remains narrower.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="about-section">
+                <div>
+                    <h2>Why Sundog</h2>
+                    <p class="section-note">Not the sun, the displaced light</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        A sundog is not the sun. It is a displaced bright spot produced by geometry.
+                    </p>
+                    <p>
+                        That is the point. The useful signal is not always the source itself. Sometimes the system cannot inspect the target directly, but the surrounding geometry still reveals something actionable.
+                    </p>
+                    <p>
+                        The name is not nostalgia and not mysticism. It is a reminder that indirect light can still be information.
+                    </p>
+                </div>
+            </article>
+
+            <article class="about-section">
+                <div>
+                    <h2>Explore Further</h2>
+                    <p class="section-note">Inspection path</p>
+                </div>
+                <div class="section-body">
+                    <div class="resource-grid">
+                        <a href="origin.html" class="resource-card">
+                            <h3>Origin</h3>
+                            <p>The physical discovery story and early publication trail.</p>
+                        </a>
+                        <a href="applications-gallery.html" class="resource-card">
+                            <h3>Applications</h3>
+                            <p>Working systems across research, workbench, prototype, and product tiers.</p>
+                        </a>
+                        <a href="docs/RESEARCHER_GUIDE.md" class="resource-card">
+                            <h3>Researcher Guide</h3>
+                            <p>The shortest path for reviewers and collaborators.</p>
+                        </a>
+                        <a href="docs/presentation/claims-and-scope.md" class="resource-card">
+                            <h3>Claims Policy</h3>
+                            <p>Safe claims, risky claims, evidence tiers, and boundary language.</p>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <aside class="legal-note">
+                <h2>Current Legal Structure</h2>
                 <p>
-                    Stellar Aqua LLC is a controls and environmental-systems company. Its field work in suspended HVAC installation and environmental control systems produced the practical alignment problem that became the Sundog Alignment Theorem.
+                    Sundog Research Lab is currently a public-facing independent applied research program sponsored by Stellar Aqua LLC, the controls and environmental-systems company whose field work produced the original alignment problem.
                 </p>
                 <p>
-                    Stellar Aqua sponsors Sundog Research Lab and retains copyright ownership of the research materials, software, and documentation under current structure. Future entity formation may transfer relevant IP while preserving historical attribution to Stellar Aqua as original sponsor.
+                    Under the current structure, Stellar Aqua LLC retains copyright ownership of the research materials, software, and documentation. Future entity formation may transfer relevant IP while preserving historical attribution to Stellar Aqua as original sponsor.
                 </p>
-            </div>
+            </aside>
         </section>
     </main>
 
     <footer>
         <p>Sundog Research Lab - <a href="index.html">Home</a> | <a href="origin.html">Origin</a> | <a href="applications-gallery.html">Applications Gallery</a></p>
         <p class="footer-copyright" style="margin-top: 1rem; font-size: 0.9rem; color: #64727b;">
-            © 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
         </p>
     </footer>
 </body>
