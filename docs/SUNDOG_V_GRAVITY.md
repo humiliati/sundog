@@ -8,12 +8,12 @@ Working hook:
 Sundog Gravity is the staging ledger for the most outlandish public claim in
 the program — that signature-driven control sidesteps Goodhart's law because
 the agent is moving through a field rather than optimizing a metric — and for
-the high-cost horizon experiments that could falsify it.
+the high-cost horizon proof targets that could falsify it.
 
 This document is not a roadmap. It is a holding pattern for ambition. Each
-candidate experiment listed below would, if run, either ratchet the gravity
-claim into earned language or push it back to the "unsupported universal" pile
-in `presentation/claims-and-scope.md`. None of them have run yet.
+candidate listed below would, if completed, either ratchet the gravity claim
+into earned language or push it back to the "unsupported universal" pile in
+`presentation/claims-and-scope.md`. None of them have run yet.
 
 The closest existing anchors are the photometric mirror-alignment experiment in
 this repo and the three-body workbench operating-envelope result. Both
@@ -32,8 +32,8 @@ conditions. It claims that:
    adversarial settings;
 2. that argument is currently defended by analogy and by the bounded three-body
    operating-envelope result, not by adversarial benchmarks;
-3. the experiments that would test the argument are expensive enough that they
-   need to live in a ledger before they live in a roadmap.
+3. the proof targets that would test the argument are expensive enough that
+   they need to live in a ledger before they live in a roadmap.
 
 If a candidate below is promoted into a full roadmap document like
 `SUNDOG_V_BALANCE.md` or the three-body roadmap, it leaves this ledger.
@@ -97,9 +97,9 @@ The mechanism, named carefully:
   is expensive or impossible.
 
 This is not a proof of adversarial robustness. It is a structural argument for
-why the threat model differs. The experiments below are designed to test
-whether that structural difference produces a measurable behavioral
-difference.
+why the threat model differs. The candidates below are designed to test whether
+that structural difference produces a measurable behavioral difference or a
+cleaner formal boundary.
 
 ## The Three-Body Wedge
 
@@ -117,7 +117,7 @@ in every other partially-observed environment we name."
 
 The wedge is also methodological. The three-body sensor-tier discipline —
 privileged versus accelerometer-proxy versus delayed versus
-micro-maneuver — is the template for how each candidate experiment in this
+micro-maneuver — is the template for how each empirical candidate in this
 ledger must separate the signature from the simulator state. Without that
 separation, a "signature" quietly becomes a "reward" wearing a costume, and
 the Goodhart sidestep collapses.
@@ -143,19 +143,18 @@ without running an experiment. The defense is geometric: a signature is
 acceptable under this ledger only if its value at a point can be written as a
 function of environmental state alone, with no dependence on agent policy.
 
-Each candidate experiment below must name which of (1), (2), or (3) it is
-attacking.
+Each candidate below must name which of (1), (2), or (3) it is attacking.
 
 ## Evaluation Criteria
 
-A horizon experiment earns a place in this ledger if it satisfies most of the
+A horizon proof target earns a place in this ledger if it satisfies most of the
 following:
 
-- **Real-cost target:** the experiment is expensive enough that the gravity
-  claim cannot be dismissed as cheap. A speculative claim that costs a weekend
-  to test is a slogan, not a target.
-- **Falsifiable in finite time:** the experiment can produce a result that
-  ratchets the claim either up or down inside a defensible horizon.
+- **Real-cost target:** the experiment or proof is expensive enough that the
+  gravity claim cannot be dismissed as cheap. A speculative claim that costs a
+  weekend to test is a slogan, not a target.
+- **Falsifiable in finite time:** the target can produce a result that ratchets
+  the claim either up or down inside a defensible horizon.
 - **Adversarial surface:** there is a named red team or named perturbation
   schedule, not just a passive baseline.
 - **Sensor-tier discipline:** the signature is a function of environmental
@@ -168,21 +167,184 @@ following:
 
 ## Shortlist Recommendation
 
-Current first-pass order of merit, by closeness-to-existing-discipline and by
-the cost of getting from current Sundog work to a defensible adversarial
-result:
+Current first-pass order of merit, by proof value first and implementation
+nearness second:
 
-1. **Spacecraft Trajectory Under Unmodeled Perturbation** — inherits the most
-   three-body tooling; cleanest attack on falsification mode (1).
-2. **Adversarial Signature Benchmark** — cheapest expensive experiment;
-   cleanest attack on falsification mode (2).
-3. **Side-Channel Defense (stretch)** — highest stir, longest horizon; would
-   put the gravity claim inside a domain that visibly suffers from Goodhart in
-   production.
+1. **Formal Separability Theorem** - first priority because it attacks the
+   hinge of the gravity claim: when is a signature structurally different from
+   a reward?
+2. **Mesa-Optimization Trap** - first-priority red-team experiment because it
+   attacks the most dangerous scale failure: a signature agent learning an
+   internal reward anyway.
+3. **Spacecraft Trajectory Under Unmodeled Perturbation** - inherits the most
+   three-body tooling; cleanest physical attack on falsification mode (1).
+4. **Manipulation-Cost Ladder** - turns the Goodhart sidestep into a measured
+   cost curve across reward, observation, sensor, and geometry attacks.
+5. **Adversarial Signature Benchmark** - cheapest expensive experiment;
+   cleanest empirical attack on falsification mode (2).
+6. **Cross-Domain Invariance Battery** - strongest defense against the
+   "one-off gimmick" read; proves the controller grammar travels.
+7. **Causal Intervention Test** - clearest red-team proof of where control
+   authority lives.
+8. **Fluid / Wake Navigation** - strongest new physical signature candidate
+   after spacecraft.
+9. **Embodied Robotics Under Denied State** - high-investment public proof that
+   field-reading is not just simulation.
+10. **Conservation-Law Domain** - engineering-heavy but philosophically clean:
+    signatures protected by physics.
+11. **Side-Channel Defense (stretch)** - highest stir, longest horizon; would
+    put the gravity claim inside a domain that visibly suffers from Goodhart in
+    production.
 
 ---
 
-## Candidate 1 - Spacecraft Trajectory Under Unmodeled Perturbation
+## Candidate 1 - Formal Separability Theorem
+
+Working hook:
+
+> Goodhart needs a handle. Sundog proves where the handle is missing.
+
+### Why it is strong
+
+This is the theoremic heart of the gravity claim. The empirical candidates can
+show that signature-driven control behaves differently on particular slates,
+but the formal separability theorem would name the structural condition under
+which a signature is not merely a reward in costume.
+
+The target is a conditional result, not a universal safety proof. A useful
+version would define environment state `x`, action `a`, transition dynamics,
+reward proxy `R(x, a)` or `R(o, a)`, signature map `S(x)`, and adversary
+interventions over the reward channel, observation channel, signature sensor,
+and environment geometry. The theorem would then bound the ways an agent or
+adversary can change `S` without paying the cost of changing `x`.
+
+That directly attacks falsification mode (2): if the signature can be
+decompiled into an agent-selectable scalar objective, the gravity claim loses
+its central distinction.
+
+### Why it is weaker
+
+A theorem can become too narrow to matter or too broad to be true. The danger
+is publishing a proof of a sanitized toy condition and letting readers infer a
+general immunity claim. The theorem has to carry its counterexamples with it:
+controllable sensors, policy-dependent signatures, low-cost environmental
+rewrites, and learned internal proxies must all be named as exits from the
+guarantee.
+
+### Sundog variant
+
+Build a formal note and small executable witness suite:
+
+- Define a class of environments where `S: X -> Sigma` is independent of the
+  agent policy except through the real transition dynamics over `X`.
+- Define matched reward proxies whose values can depend on agent action,
+  policy, learned evaluator state, or measurement channel state.
+- Define adversary budgets over reward editing, observation editing, signature
+  sensor corruption, and environment-geometry manipulation.
+- Prove a separation bound: within the stated class, reward corruption can be
+  cheap while signature corruption requires either sensor compromise or
+  environmental work.
+- Ship counterexamples next to the theorem, so the boundary is visible rather
+  than hidden in the assumptions.
+
+### Sundog expression
+
+- **Hidden target:** designer-intended environmental regime.
+- **Indirect signal:** a signature map `S(x)` with no direct policy or action
+  argument.
+- **Transformation:** policy over signature-derived structure, not over a
+  learned scalar reward target.
+- **Actionable output:** theorem conditions, counterexamples, and executable
+  toy witnesses.
+- **Failure boundary:** the signature depends on policy, the sensor is cheap to
+  corrupt, or the environment geometry can be cheaply rearranged.
+
+### Falsification target
+
+Mode (2): signature-is-reward-in-costume. A null result is "no meaningful
+separation can be stated without assuming away the real Goodhart problem." A
+positive result is a conditional theorem plus counterexamples that cleanly
+separates signature manipulation from reward manipulation.
+
+### Current recommendation
+
+First-priority intellectual target. This does not replace experiments; it tells
+the experiments what they are trying to earn.
+
+---
+
+## Candidate 2 - Mesa-Optimization Trap
+
+Working hook:
+
+> If Sundog secretly grows a reward inside itself, catch it doing so.
+
+### Why it is strong
+
+The current gravity claim already names mesa-optimization as a falsification
+surface, but the first candidate list did not give it a direct experiment.
+This candidate does. It asks whether a signature-driven agent, trained or
+selected hard enough, eventually learns an internal proxy objective and inherits
+the same Goodhart failure modes as reward-trained control.
+
+That makes it the serious red-team companion to the formal theorem. If the
+theorem says the external field is not a reward, the mesa trap asks whether the
+agent reconstructs a reward internally anyway.
+
+### Why it is weaker
+
+This is methodologically hard. A failed attempt to find a mesa-objective is not
+evidence that one cannot emerge. Interpretability tools may be too weak to
+distinguish "tracks the signature robustly" from "tracks a learned shortcut
+that happened not to break yet." The result must be framed as stress evidence,
+not a proof of absence.
+
+### Sundog variant
+
+Construct a family of signature-control tasks and scale the learning pressure:
+
+- **Small agents:** hand-coded or shallow signature trackers with little room
+  for internal proxy formation.
+- **Medium agents:** learned policies trained only on signature observations
+  and success/failure selection.
+- **Large agents:** higher-capacity policies trained across richer worlds,
+  larger seed sets, and longer horizons.
+- **Probe slate:** distribution shifts where common shortcuts decouple from
+  the true external signature.
+- **Intervention slate:** causal edits to suspected internal proxies while
+  holding the external signature fixed.
+- **Baseline:** matched reward-trained agents with comparable capacity and
+  sample budget.
+
+### Sundog expression
+
+- **Hidden target:** true external regime represented by the environment's
+  signature.
+- **Indirect signal:** `S(x)` observed through the same sensor-tier discipline
+  as the non-learned Sundog controller.
+- **Transformation:** learned signature tracking under increasing capacity and
+  selection pressure.
+- **Actionable output:** action policy, representation probes, causal
+  interventions, and failure-mode comparison against reward agents.
+- **Failure boundary:** the learned policy follows an internal proxy when that
+  proxy splits from the real signature.
+
+### Falsification target
+
+Mode (3): mesa-optimization re-emerges. A null result is "large
+signature-trained agents fail under proxy-splitting shifts in the same way
+reward-trained agents do." A positive result is not immunity; it is a measured
+capacity range where signature tracking remains tied to the external field
+more strongly than matched reward training.
+
+### Current recommendation
+
+First-priority red-team experiment. It should be staged early because it keeps
+the gravity claim honest before the public language hardens.
+
+---
+
+## Candidate 3 - Spacecraft Trajectory Under Unmodeled Perturbation
 
 Working hook:
 
@@ -247,13 +409,77 @@ for the signature controller, with named conditions.
 
 ### Current recommendation
 
-First-priority horizon experiment because it inherits the most existing
-discipline and tooling. The closest path from current Sundog work to a
-defensible adversarial result.
+First-priority physical horizon experiment after the formal and mesa tracks.
+It inherits the most existing discipline and tooling, and remains the closest
+path from current Sundog work to a defensible adversarial result.
 
 ---
 
-## Candidate 2 - Adversarial Signature Benchmark
+## Candidate 4 - Manipulation-Cost Ladder
+
+Working hook:
+
+> If you can fake the score cheaply but cannot fake the field cheaply, the
+> difference is measurable.
+
+### Why it is strong
+
+The Goodhart sidestep is fundamentally a claim about attack cost. A reward can
+be exploitable because the agent or adversary has a cheap handle on the proxy.
+A genuine environmental signature should require a more expensive intervention:
+move the masses, reshape the shadow source, alter the pressure field, or
+corrupt the sensor.
+
+This candidate turns that structural argument into a curve. Rather than asking
+whether Sundog "wins" one benchmark, it asks how much adversarial budget is
+needed to break each control family across reward, observation, sensor, and
+geometry interventions.
+
+### Why it is weaker
+
+The ladder is only as strong as its budget accounting. If the experiment
+assigns arbitrary costs to attacks, reviewers will read the result as a tuned
+benchmark. The adversary model has to be simple enough to audit and physical
+enough that the costs mean something.
+
+### Sundog variant
+
+Build a matched environment family with four intervention channels:
+
+- **Reward edit:** alter the scalar score or learned evaluator.
+- **Observation edit:** alter what the agent sees without changing the world.
+- **Signature-sensor edit:** corrupt the measured signature while leaving
+  geometry fixed.
+- **Geometry edit:** change the underlying environmental state that generates
+  the signature.
+
+Sweep adversary budgets on each channel and measure the budget at which each
+controller suffers catastrophic regime loss.
+
+### Sundog expression
+
+- **Hidden target:** intended environmental regime.
+- **Indirect signal:** geometry-derived `S(x)`.
+- **Transformation:** signature tracking with guard bands and abstention.
+- **Actionable output:** failure-threshold curves by attack channel.
+- **Failure boundary:** signature corruption becomes as cheap as reward
+  corruption, or geometry manipulation becomes cheap inside the chosen domain.
+
+### Falsification target
+
+Modes (1) and (2): field-manipulation cost and reward-in-costume collapse. If
+signature-driven and reward-driven controllers fail at the same adversary cost
+across the ladder, the gravity claim has not earned its core distinction.
+
+### Current recommendation
+
+High-priority empirical bridge between the formal theorem and the benchmark
+suite. This could be merged with Candidate 5 if implementation pressure favors
+one shared harness.
+
+---
+
+## Candidate 5 - Adversarial Signature Benchmark
 
 Working hook:
 
@@ -313,13 +539,310 @@ budgets, the Goodhart sidestep is not earning its keep.
 
 ### Current recommendation
 
-Second-priority horizon experiment, but cheaper to start than Candidate 1. A
-first-pass version could plausibly run inside existing repo tooling once the
-environment is designed.
+Still the cheapest expensive experiment. A first-pass version could plausibly
+run inside existing repo tooling once the environment is designed, especially
+if it shares infrastructure with the manipulation-cost ladder.
 
 ---
 
-## Candidate 3 - Side-Channel Defense *(stretch)*
+## Candidate 6 - Cross-Domain Invariance Battery
+
+Working hook:
+
+> The same controller shape survives when the world changes clothes.
+
+### Why it is strong
+
+This is the best defense against the criticism that Sundog is a collection of
+clever one-offs. The proof is not that one controller solves everything. The
+proof is that the same grammar keeps recurring: hidden target, environmental
+signature, transformation, bounded action, explicit failure surface.
+
+The battery would connect the photometric mirror result, three-body workbench,
+Pressure Mines, Shadow Fleet, fluid/wake navigation, and at least one
+engineering domain under a shared reporting template.
+
+### Why it is weaker
+
+This is more broadcast proof than theoremic proof. A hostile reviewer can
+still say that each domain was hand-shaped to fit the pattern. The battery
+therefore needs strict admission rules and at least one negative case where the
+signature fails.
+
+### Sundog variant
+
+Run a small slate of domain workbenches under a common schema:
+
+- hidden target;
+- indirect signature;
+- transformation;
+- action;
+- sensor tier;
+- matched baseline;
+- observability sweep;
+- failure boundary.
+
+The result is a cross-domain table of operating envelopes rather than one
+large benchmark score.
+
+### Sundog expression
+
+- **Hidden target:** domain-specific latent state.
+- **Indirect signal:** domain-specific trace, field, gradient, wake, or
+  distortion.
+- **Transformation:** shared SCAN/SEEK/TRACK/REACQUIRE grammar where
+  applicable.
+- **Actionable output:** domain action plus standardized operating-envelope
+  report.
+- **Failure boundary:** one or more domains fail the signature test or collapse
+  into ordinary metric optimization.
+
+### Falsification target
+
+Mode (2): signature-is-reward-in-costume, plus the broader "one-off gimmick"
+critique. A null result is "the grammar does not travel without bespoke
+machinery." A positive result is a set of bounded, non-identical domains where
+the same structure remains useful.
+
+### Current recommendation
+
+Medium-priority broadcast proof. Best pursued after at least one more physical
+or adversarial candidate has a real result.
+
+---
+
+## Candidate 7 - Causal Intervention Test
+
+Working hook:
+
+> A reward can be made to lie. A field must be moved.
+
+### Why it is strong
+
+This candidate turns the gravity claim into causal surgery. Instead of only
+observing failures, it intervenes on reward values, observation channels,
+signature sensors, and environment geometry, then asks which interventions
+actually steer the controller.
+
+The output would be unusually legible: a causal graph of where control
+authority lives for reward-trained agents versus signature-driven agents.
+
+### Why it is weaker
+
+The experiment can become artificial if the interventions are too clean. Real
+attackers do not arrive as labeled causal operators. The intervention slate
+must therefore be paired with a real adversary or perturbation schedule.
+
+### Sundog variant
+
+Use the same environment as Candidate 4 or Candidate 5, but add explicit causal
+edits:
+
+- hold the world fixed and edit reward;
+- hold the world fixed and edit observations;
+- hold the signature fixed and edit unrelated state;
+- hold observations fixed and move the true geometry;
+- corrupt only the signature sensor.
+
+Measure which edits change policy, regime retention, and failure mode.
+
+### Sundog expression
+
+- **Hidden target:** true environmental regime.
+- **Indirect signal:** causal child of environment geometry.
+- **Transformation:** controller response to the signature rather than to
+  reward-channel edits.
+- **Actionable output:** intervention-response matrix and causal graph.
+- **Failure boundary:** the signature controller follows edited proxies even
+  when the external signature is unchanged.
+
+### Falsification target
+
+Modes (1), (2), and (3), depending on which intervention succeeds. The cleanest
+failure is a cheap reward-like edit that steers the signature controller without
+moving the field or corrupting the sensor.
+
+### Current recommendation
+
+High-value companion to the manipulation-cost ladder. It is less a standalone
+workbench than a proof instrument that can be attached to the benchmark slate.
+
+---
+
+## Candidate 8 - Fluid / Wake Navigation
+
+Working hook:
+
+> The obstacle is hidden. The flow remembers it.
+
+### Why it is strong
+
+Fluid wakes are real environmental signatures. A hidden object, source, sink,
+or current can be invisible while still shaping local velocity, pressure,
+vorticity, or dye traces. This makes the candidate a natural physical cousin
+to Shadow Fleet and a more defensible engineering domain than a purely game
+native wake metaphor.
+
+The public image is strong: the agent does not see the obstacle, but the water
+or air carries the shape of its absence.
+
+### Why it is weaker
+
+Fluid simulation can become expensive and fragile. If the harness is too
+simple, reviewers may call it a toy; if it is too realistic, the work may turn
+into a computational fluid dynamics project instead of a Sundog proof.
+
+### Sundog variant
+
+Construct a 2D or 3D flow field with hidden obstacles or sources. The agent
+receives local flow measurements, pressure samples, or tracer histories and
+must navigate, station-keep, or choose safe passages without privileged access
+to obstacle geometry.
+
+### Sundog expression
+
+- **Hidden target:** obstacle/source geometry and safe flow regime.
+- **Indirect signal:** wake, pressure, vorticity, dye trace, or velocity
+  gradient.
+- **Transformation:** SCAN/SEEK/TRACK over flow-derived signatures.
+- **Actionable output:** steering, station-keeping, abort, or probe.
+- **Failure boundary:** turbulence, diffusion, sensor delay, or overlapping
+  wakes erase the useful signature.
+
+### Falsification target
+
+Mode (1): field-manipulation cost. If cheap perturbations or fake wakes steer
+the controller more easily than matched reward or map-based baselines, the
+gravity analogy weakens.
+
+### Current recommendation
+
+Strong second-wave physical candidate. It has better public feel than many
+benchmarks and better scientific footing than most game metaphors.
+
+---
+
+## Candidate 9 - Embodied Robotics Under Denied State
+
+Working hook:
+
+> The robot does not know the object. It reads what the object does to the
+> world.
+
+### Why it is strong
+
+This is the highest public-legibility move outside spacecraft. A robot
+grasping, balancing, pouring, or navigating from tactile slip, vibration,
+acoustic echo, shadow, airflow, pressure, or deformation makes the gravity
+claim concrete without asking the audience to accept a metaphor first.
+
+It also attacks the assumption that Sundog is only a simulation idea. Physical
+worlds naturally generate signatures that are hard to fake without doing real
+work.
+
+### Why it is weaker
+
+Hardware turns every clean claim into a maintenance project. Sensor
+calibration, repeatability, cost, and safety could dominate the research. A
+robotics result also risks being read as "better tactile control" unless the
+signature/reward comparison is designed from the beginning.
+
+### Sundog variant
+
+Choose one narrow task:
+
+- grasp unknown objects from tactile slip fields;
+- navigate low-light or smoke-like occlusion from acoustic/airflow returns;
+- balance contact from pressure gradients;
+- pour or transfer material from sound and weight-shift signatures.
+
+Run a signature controller against a vision/classifier or reward-trained
+baseline under occlusion, distribution shift, and sensor perturbation.
+
+### Sundog expression
+
+- **Hidden target:** object state, contact regime, or navigable geometry.
+- **Indirect signal:** slip, vibration, sound, pressure, deformation, shadow,
+  or airflow.
+- **Transformation:** signature tracking with confidence gating and abort
+  states.
+- **Actionable output:** grasp, move, tilt, slow, retry, or abstain.
+- **Failure boundary:** sensor noise, contact ambiguity, material variation, or
+  cheap spoofing collapses the signature.
+
+### Falsification target
+
+Modes (1) and (2): if the physical signature can be cheaply spoofed or if the
+signature controller reduces to a tuned task reward, the grand claim does not
+gain support.
+
+### Current recommendation
+
+High-investment public proof, not first-wave. Best after a simulator and
+theoremic foundation have already made the comparison precise.
+
+---
+
+## Candidate 10 - Conservation-Law Domain
+
+Working hook:
+
+> The signature is protected by physics.
+
+### Why it is strong
+
+Conservation laws give the gravity claim its most defensible non-gravity
+analogue. Mass, momentum, charge, energy, flow continuity, and structural modes
+constrain what signatures can be faked cheaply. A controller reading those
+signatures is not merely reading a learned proxy; it is reading something the
+world must pay to change.
+
+Possible domains include thermal diffusion, leak detection from pressure decay,
+electrical grid phase/frequency stability, structural health from vibration
+modes, and flow continuity around hidden obstructions.
+
+### Why it is weaker
+
+The candidate can become too diffuse. "Use physics" is not an experiment. It
+needs one carefully selected domain with a measurable adversary budget and a
+baseline that makes Goodhart pressure visible.
+
+### Sundog variant
+
+Select one conservation-governed system and build a matched task:
+
+- **Thermal:** hidden heat source tracked from diffusion signatures.
+- **Pressure:** hidden leak or blockage inferred from pressure decay.
+- **Grid:** unstable operating regime detected from phase/frequency signatures.
+- **Structure:** damage inferred from modal vibration shifts.
+
+Compare signature-driven control or detection against a metric-trained or
+label-trained baseline under spoofing and perturbation.
+
+### Sundog expression
+
+- **Hidden target:** physical regime governed by a conservation constraint.
+- **Indirect signal:** conserved-flow residue, diffusion trace, phase drift, or
+  modal distortion.
+- **Transformation:** regime tracking over physically constrained signatures.
+- **Actionable output:** control, flag, throttle, isolate, or abstain.
+- **Failure boundary:** adversary can fake the conserved signature at lower
+  cost than expected, or the signature is not unique enough to guide action.
+
+### Falsification target
+
+Mode (1): field-manipulation cost. A positive result shows that physics
+increases the cost of spoofing the signature relative to manipulating a metric
+or label channel.
+
+### Current recommendation
+
+Long-horizon engineering candidate. Keep it in the ledger as a principled
+family, but promote only after one concrete system is chosen.
+
+---
+
+## Candidate 11 - Side-Channel Defense *(stretch)*
 
 Working hook:
 
@@ -381,14 +904,16 @@ of the gravity claim into a domain where reviewers care.
 A candidate leaves this ledger and earns a `SUNDOG_V_*.md` roadmap document
 only when:
 
-- the experiment design names a specific falsification mode from §Falsification
-  Surface;
+- the proof or experiment design names a specific falsification mode from
+  §Falsification Surface;
 - the signature is structurally separated from privileged state in the
   three-body sensor-tier style;
-- a matched reward-trained or metric-driven baseline is committed to;
-- a named adversary or perturbation schedule is committed to;
+- for empirical candidates, a matched reward-trained or metric-driven baseline
+  is committed to;
+- for empirical candidates, a named adversary or perturbation schedule is
+  committed to;
 - the boundary language in `presentation/claims-and-scope.md` is updated to
-  reflect what the experiment, if completed, would ratchet.
+  reflect what the candidate, if completed, would ratchet.
 
 Until those are in place, the gravity claim remains the program's most
 outlandish published frame and the most carefully boundaried one. Public
@@ -406,5 +931,5 @@ For public communication, the gravity-family framing summarizes this way:
 > for why this matters: a controller that tracks a property of the
 > environment's geometry, rather than optimizing a designer-specified metric,
 > inhabits a different threat model than reward-trained control. The
-> experiments that would test this difference are listed in this ledger and
-> are deliberately expensive. None has been run.
+> proof targets that would test this difference are listed in this ledger and
+> are deliberately expensive. None has been completed.
