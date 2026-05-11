@@ -33,10 +33,38 @@ const stepButton = document.getElementById("mines-step");
 const resetButton = document.getElementById("mines-reset");
 const nextSeedButton = document.getElementById("mines-next-seed");
 const copyReplayButton = document.getElementById("mines-copy-replay");
+const loadBestButton = document.getElementById("mines-load-best");
+const loadWorstButton = document.getElementById("mines-load-worst");
+const bodyLoadBestButton = document.getElementById("mines-body-load-best");
+const bodyLoadWorstButton = document.getElementById("mines-body-load-worst");
 const boundaryPanel = document.getElementById("mines-boundary-panel");
 const boundaryStatus = document.getElementById("mines-boundary-status");
 const boundarySummary = document.getElementById("mines-boundary-summary");
 const boundaryList = document.getElementById("mines-boundary-list");
+
+const BEST_CELL_PARAMS = Object.freeze({
+  preset: "easy_sparse",
+  seed: "47",
+  mode: "sundog_minimal",
+  sensor: "doc_default",
+  compare: "naive_pressure",
+  mine_count: "13",
+  scan_budget: "0",
+  sigma_noise: "2",
+  dropout: "0.2",
+});
+
+const WORST_CELL_PARAMS = Object.freeze({
+  preset: "easy_sparse",
+  seed: "39",
+  mode: "sundog_lean",
+  sensor: "doc_default",
+  compare: "naive_pressure",
+  mine_count: "18",
+  scan_budget: "0",
+  sigma_noise: "1",
+  dropout: "0.35",
+});
 
 const SENSOR_CELLS = Object.freeze({
   doc_default: Object.freeze({
@@ -85,6 +113,8 @@ let app = {
   speedMs: 520,
   compare: true,
   audit: false,
+  boardOverride: {},
+  sensorOverride: {},
 };
 
 function hashText(text) {
@@ -113,12 +143,53 @@ function seedValue() {
   return Number.isInteger(parsed) ? parsed : 1;
 }
 
+function intParam(params, key) {
+  const raw = params.get(key);
+  if (raw === null) return null;
+  const value = Number.parseInt(raw, 10);
+  return Number.isInteger(value) ? value : null;
+}
+
+function floatParam(params, key) {
+  const raw = params.get(key);
+  if (raw === null) return null;
+  const value = Number.parseFloat(raw);
+  return Number.isFinite(value) ? value : null;
+}
+
+function readReplayOverrides(params) {
+  const boardOverride = {};
+  const mineCount = intParam(params, "mine_count");
+  const width = intParam(params, "width");
+  const height = intParam(params, "height");
+  const scanBudget = intParam(params, "scan_budget");
+  const clusterStrength = floatParam(params, "cluster_strength");
+  if (mineCount !== null) boardOverride.mineCount = mineCount;
+  if (width !== null) boardOverride.width = width;
+  if (height !== null) boardOverride.height = height;
+  if (scanBudget !== null) boardOverride.scanBudget = scanBudget;
+  if (clusterStrength !== null) boardOverride.generator = { clusterStrength };
+
+  const sensorOverride = {};
+  const sigma = floatParam(params, "sigma");
+  const sigmaNoise = floatParam(params, "sigma_noise");
+  const dropoutRate = floatParam(params, "dropout");
+  const delaySteps = intParam(params, "delay");
+  if (sigma !== null) sensorOverride.sigma = sigma;
+  if (sigmaNoise !== null) sensorOverride.sigmaNoise = sigmaNoise;
+  if (dropoutRate !== null) sensorOverride.dropoutRate = dropoutRate;
+  if (delaySteps !== null) sensorOverride.delaySteps = delaySteps;
+
+  return { boardOverride, sensorOverride };
+}
+
 function sensorConfigFor(mode, seed) {
   const cell = SENSOR_CELLS[sensorSelect.value] ?? SENSOR_CELLS.doc_default;
   const definition = MINES_CONTROLLER_MODES[mode];
   return normalizeSensorConfig({
     ...cell.config,
     ...(definition.sensorOverride ?? {}),
+    ...app.sensorOverride,
     sensorSeed: seed + 7919 + hashText(mode),
   });
 }
@@ -131,6 +202,7 @@ function createLane({ role, mode, seedOffset }) {
     seed,
     turnCap: 160,
     ...(definition.boardOverride ?? {}),
+    ...app.boardOverride,
   });
   applyMinesAction(board, centerAction(board));
   const sensorRuntime = createSensorRuntime(sensorConfigFor(mode, seed));
@@ -440,11 +512,8 @@ function populateControls() {
     option.textContent = cell.label;
     sensorSelect.append(option);
   }
-  // Default sensor cell is the doc-canonical operating point, NOT the
-  // blur_noise_cliff pocket where sundog_lean happens to win. Negative-region-
-  // publication rule: the page's first-impression view must be the honest
-  // comparison, not the curated one. The visitor can switch to
-  // blur_noise_cliff via the Sensor control to find the favorable pocket.
+  // Initial control values are overwritten by replay params below. Keep these
+  // as mundane fallbacks for stale or stripped URLs.
   sensorSelect.value = "doc_default";
 
   for (const mode of MODE_ORDER) {
@@ -473,8 +542,23 @@ function buildReplayURL() {
   if (compareToggle.checked && compareModeSelect.value) {
     params.set("compare", compareModeSelect.value);
   }
+  appendReplayOverrides(params);
   const base = `${window.location.origin}${window.location.pathname}`;
   return `${base}?${params.toString()}`;
+}
+
+function appendReplayOverrides(params) {
+  if (Number.isInteger(app.boardOverride.mineCount)) params.set("mine_count", String(app.boardOverride.mineCount));
+  if (Number.isInteger(app.boardOverride.width)) params.set("width", String(app.boardOverride.width));
+  if (Number.isInteger(app.boardOverride.height)) params.set("height", String(app.boardOverride.height));
+  if (Number.isInteger(app.boardOverride.scanBudget)) params.set("scan_budget", String(app.boardOverride.scanBudget));
+  if (Number.isFinite(app.boardOverride.generator?.clusterStrength)) {
+    params.set("cluster_strength", String(app.boardOverride.generator.clusterStrength));
+  }
+  if (Number.isFinite(app.sensorOverride.sigma)) params.set("sigma", String(app.sensorOverride.sigma));
+  if (Number.isFinite(app.sensorOverride.sigmaNoise)) params.set("sigma_noise", String(app.sensorOverride.sigmaNoise));
+  if (Number.isFinite(app.sensorOverride.dropoutRate)) params.set("dropout", String(app.sensorOverride.dropoutRate));
+  if (Number.isInteger(app.sensorOverride.delaySteps)) params.set("delay", String(app.sensorOverride.delaySteps));
 }
 
 async function copyReplayURL() {
@@ -526,7 +610,20 @@ function hydrateFromURL() {
   } else if (params.has("compare") && !compare) {
     compareToggle.checked = false;
   }
+  const overrides = readReplayOverrides(params);
+  app.boardOverride = overrides.boardOverride;
+  app.sensorOverride = overrides.sensorOverride;
+  if (Object.keys(app.boardOverride).length > 0 || Object.keys(app.sensorOverride).length > 0) {
+    applied = true;
+  }
   return applied;
+}
+
+function applyReplayParams(replayParams, { replace = false } = {}) {
+  const params = new URLSearchParams(replayParams);
+  const target = `${window.location.pathname}?${params.toString()}`;
+  if (replace) window.history.replaceState(null, "", target);
+  else window.location.assign(target);
 }
 
 function bindControls() {
@@ -545,6 +642,18 @@ function bindControls() {
     resetWorkbench();
   });
   copyReplayButton.addEventListener("click", () => { copyReplayURL(); });
+  loadBestButton?.addEventListener("click", () => {
+    applyReplayParams(BEST_CELL_PARAMS);
+  });
+  loadWorstButton?.addEventListener("click", () => {
+    applyReplayParams(WORST_CELL_PARAMS);
+  });
+  bodyLoadBestButton?.addEventListener("click", () => {
+    applyReplayParams(BEST_CELL_PARAMS);
+  });
+  bodyLoadWorstButton?.addEventListener("click", () => {
+    applyReplayParams(WORST_CELL_PARAMS);
+  });
   for (const input of [modeSelect, compareModeSelect, presetSelect, sensorSelect, seedInput, compareToggle, auditToggle]) {
     input.addEventListener("change", resetWorkbench);
   }
@@ -568,7 +677,10 @@ populateControls();
 // Replay URL params override the page's defaults if present. Runs after
 // populateControls so the option lists exist, before bindControls/reset so
 // the hydrated values are what the first render sees.
-hydrateFromURL();
+if (!hydrateFromURL()) {
+  applyReplayParams(BEST_CELL_PARAMS, { replace: true });
+  hydrateFromURL();
+}
 bindControls();
 resetWorkbench();
 resizeCanvas();

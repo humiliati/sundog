@@ -139,7 +139,7 @@ noise.
 
 Safe hook:
 
-> Sundog Pressure Mines asks whether an agent can clear a minefield when the
+> Sundog Pressure Mines asks whether an agent can make safer progress when the
 > mines themselves stay hidden and nearby tiles offer only a fuzzy pressure
 > signal instead of exact counts.
 
@@ -853,9 +853,9 @@ Phase 10 verdict status: `CONFIRM` on the locked 64-seed run.
   to accept opt-in overrides for `mine_count`, `width`, `height`, `scan_budget`,
   `cluster_strength`, `sigma`, `sigma_noise`, `dropout`, `delay`. Every Phase 10
   cell is reproducible via `--replay-url` even when its config falls outside
-  any named preset/sensor pair. Browser-side hydration is deferred to Phase
-  11 promotion polish; for now, Phase 10 best/worst URLs are pasted into the
-  address bar manually.
+  any named preset/sensor pair. Browser-side hydration now accepts the same
+  override grammar, and `mines.html` defaults to the Phase 10 best replay while
+  exposing one-click best/worst replay buttons for public inspection.
 - Phase 9 boundary classifier thresholds verified coherent with Phase 9 sweep
   values: density (0.18/0.24), clustering (0.45/0.75), blur/noise/dropout
   multi-knob (σ≥3 OR noise≥1 OR dropout≥0.35 caution; σ≥6 OR noise≥5 OR
@@ -924,11 +924,15 @@ generated, not after:
 
 ## Current State
 
-**Evidence tier:** Planned Workbench
+**Evidence tier:** Operating-Envelope Study
 
-The Sundog Mines workbench now has Phase 1 board core, Phase 2 pressure sensor
-primitives, a Phase 3 diagnostic benchmark scaffold, and a Phase 4 baseline
-fairness scaffold in the repo:
+The Sundog Mines workbench has completed the Phase 1-10 evidence spine and is
+now in Phase 11 public polish. The promoted claim is narrow: in the Phase 10
+density 0.16 / pressure noise 2.0 / dropout 0.2 pocket, `sundog_minimal` and
+`sundog_lean` reveal more budget-adjusted safe tiles than `naive_pressure`
+before mine trigger. It is not a claim that Sundog clears the minefield.
+
+Core shipped pieces:
 
 - `public/js/mines-core.mjs`: deterministic board generation and action loop.
 - `public/js/mines-sensor.mjs`: pressure field, gradient, scan pulse, floor
@@ -939,23 +943,17 @@ fairness scaffold in the repo:
   information budgets.
 - `scripts/mines-phase4-baselines.mjs` / `npm run mines:phase4`: local,
   ignored matched-seed baseline outputs under `results/mines/phase4-baselines`.
+- `scripts/mines-phase10-envelope.mjs` / `npm run mines:phase10`: locked
+  operating-envelope grid and verdict artifacts under
+  `results/mines/phase10-envelope`.
+- `mines.html`: Phase 11 public surface, defaulting to the confirmed replay and
+  publishing the matched failure replay beside it.
 
-The first Phase 3 smoke run found the pre-committed `easy_sparse/doc_default`
-cell diagnostic-positive on mine-occupancy AUROC, and the
-`blur_noise_cliff` cell family collapsed to chance. This is a field
-informativeness result only. It does not run a controller and does not promote
-the public evidence tier.
-
-Promotion to **Instrumented Prototype** requires Phase 1-6 deliverables landing
-in the public tree, with the Phase 6 page copy held to provisional framing
-until matched-seed evidence replaces it.
-
-Promotion to **Operating-Envelope Study** requires Phase 7-10 artifacts, a
-confirmed improvement pocket over passive and naive baselines on the
-pre-registered primary outcome statistic (raw *and* budget-adjusted), and a
-published failure region of equal documentation weight to the positive pocket.
-Promotion is blocked if the budget-adjusted lead disappears, even if the raw
-lead survives.
+The promoted page must keep the caveats visible: both Sundog and naive trigger
+mines on every seed in the best cell; `threshold_flagger` has higher survival
+there at the cost of false flags; the candidate cell is `watch_boundary`, not a
+clean readability region; and neither `sundog_lean` nor `sundog_minimal` retires
+the other.
 
 ## Recommendation
 

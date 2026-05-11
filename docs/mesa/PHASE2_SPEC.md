@@ -144,6 +144,13 @@ matches the SB3 `VecEnv` convention; PPO bootstrapping relies on it.
 Phase 5 may introduce a manual-reset mode for curriculum control; until
 then, auto-reset is the only contract.
 
+PPO uses the opt-in `step_batch` flag `auto_reset_done = true`. Under that
+mode, an env that terminates is reset in the same response: `done[i]` remains
+`true`, reward channels remain the terminal reward, `obs[i]` is the reset
+observation for the next rollout step, and `info[i].terminal_observation`
+preserves the terminal observation. The default bridge contract above is
+unchanged for smoke tests and non-PPO callers.
+
 Error contract: if `step_batch` encounters a NaN action, an env in an
 invalid state, or a bridge-internal exception, the response is
 `{ "ok": false, "error": "...", "env_id": ..., "action": [...] }` and the
@@ -495,11 +502,36 @@ replays the exported Small BC `.policy.json` directly in JS and matches the
 Python bridge evaluation: 63/64 successes, mean terminal alignment 0.9969,
 mean steps 114.3.
 
-**PPO:** not started.
+**Small PPO:** implemented. `training/mesa/train_ppo.py` runs local PPO over
+the JS bridge with an actor-critic wrapper, running observation normalization,
+GAE, clipped policy loss, checkpoint export, JSON policy export, and held-out
+evaluation. `step_batch(auto_reset_done=true)` is used so batched rollouts
+receive reset observations immediately while preserving terminal rewards.
+
+Canonical Small runs use 122 updates = 999,424 env steps:
+
+| Variant | Family | Success | Mean terminal alignment | Status |
+| --- | --- | ---: | ---: | --- |
+| `signature_ppo_dense:canonical_1m` | L-Signature | 5/64 (7.8%) | 0.6723 | fails gate |
+| `reward_ppo_dense:canonical_1m` | L-Reward | 44/64 (68.8%) | 0.9896 | near miss; below 75% gate |
+| `mixed_ppo_lambda_0_5:canonical_1m` | L-Mixed | 14/64 (21.9%) | 0.9658 | high-alignment dwell failure |
+
+An over-cap diagnostic run for L-Reward at 160 updates = 1,310,720 env steps
+solves the nominal task: `reward_ppo_dense:overcap_1_31m` reaches 63/64
+successes (98.4%), mean terminal alignment 0.9983, and mean steps 92.7. The
+exported `.policy.json` replays directly in JS with the same result via
+`npm run mesa:phase2:ppo-small-reward-overcap-js`.
+
+Interpretation: PPO infrastructure is working, but the canonical 1M Small gate
+is not yet satisfied by all three families. The first failure mode is
+"high-signature approach without K-success dwell," especially for Reward and
+Mixed. Before Medium, Phase 2 should either tune canonical PPO within the 1M
+budget or explicitly move dwell-sensitive reward shaping into the Phase 5
+selection-pressure axis.
 
 ## 14. Versioning
 
-This document is version `v1.4`.
+This document is version `v1.5`.
 
 - `v1` (2026-05-10): locks Python trainer with JS env bridge, PPO as the
   matched RL algorithm, BC-first ordering, checkpoint/export format, and
@@ -515,3 +547,5 @@ This document is version `v1.4`.
 - `v1.4` (2026-05-10): adds JS execution of exported `mesa-policy-json-v1`
   policies and records parity between PyTorch checkpoint evaluation and JSON
   policy replay.
+- `v1.5` (2026-05-11): adds local PPO training, canonical Small PPO results,
+  immediate-reset batch rollout mode, and the over-cap L-Reward diagnostic.

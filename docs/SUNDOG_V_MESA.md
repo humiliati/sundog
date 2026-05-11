@@ -687,7 +687,8 @@ controller, Oracle ceiling, seeded harness, replay verification, and default
 
 **Phase 2:** Started. The bridge smoke, BC dataset smoke, and first Small-tier
 behavior-cloned L-Signature controller are in place. Reward-trained and mixed
-controllers have not been trained yet.
+PPO controllers now train and export, but the canonical 1M-step Small PPO gate
+is not yet passed by all families.
 
 **Phases 3-8:** Not started.
 
@@ -703,7 +704,12 @@ extraction, loader sanity checks, and the train/val split for behavior cloning.
 imitation policy; the latest run reached 63/64 held-out successes (98.4%) with
 mean terminal alignment 0.9969. `npm run mesa:phase2:bc-js-eval-small` replays
 the exported `.policy.json` directly in the JS environment and matches the
-checkpoint evaluation.
+checkpoint evaluation. `npm run mesa:phase2:ppo-small` runs the canonical
+Small PPO triplet at 999,424 env steps per family: L-Signature reaches 5/64
+successes, L-Reward reaches 44/64, and L-Mixed reaches 14/64. The reward run
+is a near miss with mean terminal alignment 0.9896. A labeled over-cap
+diagnostic, `npm run mesa:phase2:ppo-small-reward-overcap`, reaches 63/64
+successes at 1,310,720 env steps and replays from `.policy.json` in JS.
 
 **Appendix A:** Drafted in this document as the intellectual target. The
 formal note is not yet a ratified theorem; the open questions section is
@@ -715,10 +721,13 @@ The current public-facing status, in the spirit of `claims-and-scope.md`:
 > baseline: a hand-coded signature controller tracks the shadow-field
 > signature across privileged, local-probe, delayed, and noisy sensor tiers.
 > Phase 2 infrastructure has begun, and the first Small-tier behavior-cloned
-> signature policy passes the nominal imitation gate. Reward-trained baselines,
-> mixed controllers, and proxy-splitting probes have not run yet, so the
-> gravity claim's mode-(3) falsification surface remains untested by the full
-> learned-agent mesa comparison.
+> signature policy passes the nominal imitation gate. Small PPO controllers
+> now train and export, but the canonical 1M-step PPO gate is not yet met:
+> reward-trained PPO nearly solves by terminal alignment and solves just beyond
+> cap, while signature and mixed PPO expose a dwell-sensitive failure mode.
+> Proxy-splitting probes have not run yet, so the gravity claim's mode-(3)
+> falsification surface remains untested by the full learned-agent mesa
+> comparison.
 
 ## Recommendation
 

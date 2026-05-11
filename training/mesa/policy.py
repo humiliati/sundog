@@ -53,6 +53,54 @@ class MesaMlpPolicy(nn.Module):
         return torch.tanh(self.net(obs)) * self.config.action_scale
 
 
+class MesaValueNet(nn.Module):
+    def __init__(self, config: PolicyConfig) -> None:
+        super().__init__()
+        if config.activation != "tanh":
+            raise ValueError(f"unsupported activation: {config.activation}")
+        layers: list[nn.Module] = []
+        in_dim = config.obs_dim
+        for _ in range(config.depth):
+            layers.append(nn.Linear(in_dim, config.hidden_size))
+            layers.append(nn.Tanh())
+            in_dim = config.hidden_size
+        layers.append(nn.Linear(in_dim, 1))
+        self.net = nn.Sequential(*layers)
+
+    def forward(self, obs: torch.Tensor) -> torch.Tensor:
+        return self.net(obs).squeeze(-1)
+
+
+class MesaActorCritic(nn.Module):
+    def __init__(self, config: PolicyConfig, *, log_std_init: float = -0.5) -> None:
+        super().__init__()
+        self.actor = MesaMlpPolicy(config)
+        self.critic = MesaValueNet(config)
+        self.log_std = nn.Parameter(torch.full((config.act_dim,), float(log_std_init)))
+        self.config = config
+
+    def distribution(self, obs: torch.Tensor) -> torch.distributions.Normal:
+        mean = self.actor(obs)
+        std = torch.exp(self.log_std).expand_as(mean)
+        return torch.distributions.Normal(mean, std)
+
+    def act(self, obs: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        dist = self.distribution(obs)
+        raw_action = dist.sample()
+        log_prob = dist.log_prob(raw_action).sum(dim=-1)
+        entropy = dist.entropy().sum(dim=-1)
+        value = self.critic(obs)
+        env_action = torch.clamp(raw_action, -self.config.action_scale, self.config.action_scale)
+        return env_action, raw_action, log_prob, value, entropy
+
+    def evaluate_actions(self, obs: torch.Tensor, raw_actions: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        dist = self.distribution(obs)
+        log_prob = dist.log_prob(raw_actions).sum(dim=-1)
+        entropy = dist.entropy().sum(dim=-1)
+        value = self.critic(obs)
+        return log_prob, entropy, value
+
+
 def policy_config_for_tier(tier: str, *, action_scale: float = 1.0) -> PolicyConfig:
     key = tier.lower()
     if key not in CAPACITY_CONFIGS:
@@ -141,4 +189,3 @@ def policy_from_checkpoint(checkpoint: dict[str, Any]) -> tuple[MesaMlpPolicy, n
     obs_std = np.asarray(checkpoint["obs_std"], dtype=np.float32)
     obs_std = np.where(obs_std < 1e-8, 1.0, obs_std)
     return policy, obs_mean, obs_std
-
