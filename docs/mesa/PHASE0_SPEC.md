@@ -12,14 +12,15 @@ is silent, this spec is authoritative.
 
 ## 1. Purpose and Scope
 
-Phase 0's stated exit criterion ("the four controller families are pinned,
-the environment family is pinned, and the claim boundary is written") is met
-inside the roadmap. This spec adds the remaining surface needed before Phase
-1 implementation can start:
+Phase 0's stated exit criterion ("the four learned comparison families are
+pinned, the environment family is pinned, and the claim boundary is written")
+is met inside the roadmap. This spec adds the remaining surface needed before
+Phase 1 implementation can start:
 
 - shadow-field environment, formalized to the level a fresh implementer can
   build against;
 - HC-Signature controller, pinned to a state machine and parameter table;
+- Oracle controller, pinned as a privileged-only analytic-gradient ceiling;
 - L-family architecture starting hyperparameters at each capacity tier;
 - probe and intervention affordances exposed as env-level API hooks so the
   environment ships Phase-3- and Phase-4-ready;
@@ -38,16 +39,20 @@ Mirrors the three-body convention (`public/js/threebody-core.mjs`,
 
 ```
 public/js/
-  mesa-core.mjs         — shared env, signature field, sensor tiers, HC-Signature
+  mesa-core.mjs         — shared env, signature field, sensor tiers, HC-Signature, Oracle
   mesa-browser.mjs      — browser visualization wrapper (Phase 4+)
 
 scripts/
   mesa-harness.mjs                   — generic batch harness (Phase 1)
-  mesa-train.mjs                     — training entry points (Phase 2)
+  mesa-env-bridge.mjs                — persistent JS env bridge for Python trainer (Phase 2)
   mesa-probe-slate.mjs               — Phase 3
   mesa-intervention-battery.mjs      — Phase 4
   mesa-selection-pressure.mjs        — Phase 5
   mesa-operating-envelope.mjs        — Phase 7
+
+training/mesa/
+  train_phase2.py                    — Python training coordinator (Phase 2)
+  js_bridge_env.py                   — Gymnasium-style wrapper over mesa-env-bridge
 
 results/mesa/
   phase1-hc-baseline/
@@ -61,10 +66,11 @@ results/mesa/
 mesa.html                — Phase 8 public artifact
 ```
 
-All env, signature, sensor-tier, and HC-Signature logic lives in
+All env, signature, sensor-tier, HC-Signature, and Oracle logic lives in
 `mesa-core.mjs` so the browser visualization and the batch harness share a
-single source of truth. Learning code lives separately (Python or JS,
-decided at Phase 2 kickoff).
+single source of truth. Phase 2 learning code lives in Python and talks to the
+JS environment through a persistent bridge; the environment is not duplicated
+in Python.
 
 ## 3. Environment: Shadow-Field Navigation
 
@@ -247,9 +253,25 @@ Computed per trial, written to `trial-outcomes.csv`:
 | `saturation_count` | timesteps where `||a_t|| ≥ 0.99 · a_max` |
 | `terminal_outcome` | `success` / `timeout` / `oob_clipped` |
 
-## 4. HC-Signature Controller
+## 4. Reference Controllers
 
-### 4.1 State Machine
+Phase 1 has two non-learned reference controllers:
+
+- **HC-Signature:** fixed SCAN/SEEK/TRACK controller that always reads the
+  same local-probe signature structure. It deliberately ignores privileged
+  information when present, so the privileged row exists only for consistency
+  and sensor-tier degradation comparison.
+- **Oracle:** privileged-only analytic-gradient controller. It consumes
+  closed-form `∇S(x)` from `privileged-field` and serves as the ceiling row
+  for later normalization.
+
+HC-Signature remains the structural baseline for behavior cloning. Oracle is
+not an imitation source unless a later spec explicitly adds an oracle-imitation
+ablation.
+
+### 4.1 HC-Signature Controller
+
+#### 4.1.1 State Machine
 
 Four states: `SCAN`, `SEEK`, `TRACK`, `REACQUIRE`. `REACQUIRE` re-enters
 `SCAN` after a clean reset.
@@ -260,7 +282,7 @@ SCAN ────► SEEK ────► TRACK
   └────── REACQUIRE ◄──┘
 ```
 
-### 4.2 Pseudocode
+#### 4.1.2 Pseudocode
 
 ```
 state         = SCAN
@@ -325,7 +347,7 @@ each step:
     best_x = null
 ```
 
-### 4.3 Parameter Table — Starting Values
+#### 4.1.3 Parameter Table — Starting Values
 
 | Parameter | Value | Notes |
 | --- | --- | --- |
@@ -348,14 +370,43 @@ each step:
 These are starting values. Phase 1 tunes them against the privileged-field
 ceiling and reports the locked values in the Phase 1 summary.
 
-### 4.4 Per-Tier Behavior Expectations
+### 4.2 Oracle Controller
 
-| Sensor tier | HC-Signature expected behavior |
-| --- | --- |
-| `privileged-field` | Reaches `S(x_T) > 0.95` in ≥ 90% of seeded trials. Ceiling reference. |
-| `local-probe-field` | Reaches `S(x_T) > 0.9` in ≥ 75% of trials. Canonical target. |
-| `delayed-field` (d=3) | Degrades to ≥ 60% success. Phase-margin trade visible. |
-| `noisy-field` (σ_obs=0.1) | Degrades to ≥ 60% success. Filter trade visible. |
+Oracle exists only on `privileged-field`. It reads the closed-form analytic
+gradient `∇S(x)` and commands maximum-speed ascent until the agent reaches the
+near-goal dwell pocket.
+
+Pseudocode:
+
+```
+each step:
+  g = ∇S(x)
+  if S(x) >= S_oracle_stop:
+    a = (0, 0)
+  else:
+    a = a_max · g / max(||g||, ε_safe)
+```
+
+Pinned starting values:
+
+| Parameter | Value | Notes |
+| --- | --- | --- |
+| `S_oracle_stop` | 0.999 | parks well inside the `δ = 0.2` success radius |
+| `ε_safe` | 1e-12 | numerical floor on `||g||` |
+
+Oracle is not a learned controller and does not use local probe samples. It is
+the analytic ceiling, mirroring the privileged heuristic role in the
+three-body workbench.
+
+### 4.3 Per-Tier Behavior Expectations
+
+| Controller | Sensor tier | Expected behavior |
+| --- | --- | --- |
+| Oracle | `privileged-field` | Reaches `S(x_T) > 0.99` in ≥ 95% of seeded trials. Analytic ceiling. |
+| HC-Signature | `privileged-field` | Reaches `S(x_T) > 0.95` in ≥ 90% of seeded trials. HC ignores privilege; consistency row only. |
+| HC-Signature | `local-probe-field` | Reaches `S(x_T) > 0.9` in ≥ 75% of trials. Canonical target. |
+| HC-Signature | `delayed-field` (d=3) | Degrades to ≥ 60% success. Phase-margin trade visible. |
+| HC-Signature | `noisy-field` (σ_obs=0.1) | Degrades to ≥ 60% success. Filter trade visible. |
 
 If Phase 1 cannot achieve these baselines after tuning, the env, the
 controller, or both are wrong and the spec is revised before Phase 2.
@@ -480,7 +531,7 @@ flag derived from the diagnostic above.
 Mirrors three-body conventions:
 
 ```bash
-npm run mesa:phase1          # HC-Signature on canonical task, all sensor tiers
+npm run mesa:phase1          # HC-Signature on all sensor tiers plus Oracle ceiling
 npm run mesa:phase2          # matched-capacity L-family training
 npm run mesa:phase3          # probe slate sweep
 npm run mesa:phase4          # intervention battery
@@ -530,8 +581,8 @@ recorded in `manifest.json`.
   "sensor_tier": "local-probe-field",
   "tier_params": { "epsilon": 0.1, "delay": 0, "noise_std": 0.0 },
   "controller": {
-    "family": "HC-Signature",
-    "config": { /* parameter table */ }
+    "families": ["hc_signature", "oracle"],
+    "configs": { /* parameter tables */ }
   },
   "capacity_tier": "small | medium | large",
   "selection_pressure": "signature-dense | signature-threshold | imitation-from-hc | dense-reward | sparse-reward | mixed-lambda-0.5 | curriculum-signature-first | curriculum-reward-first | reward-shape-adversary",
@@ -572,20 +623,21 @@ seeds are reproducible without bookkeeping a giant seed table.
 ## 9. Phase 1 Readiness Checklist
 
 This spec unlocks Phase 1 if the following are in place. Phase 1's exit
-criterion ("HC-Signature works on the canonical task at the privileged tier
-and degrades cleanly across the lower tiers; the harness can replay trials
-byte-for-byte") then becomes the test.
+criterion ("HC-Signature works on the canonical task and degrades cleanly
+across lower tiers; Oracle provides the privileged ceiling; the harness can
+replay trials byte-for-byte") then becomes the test.
 
-- [x] `mesa-core.mjs` implements `Env`, `signatureField`, four sensor tiers,
-      and HC-Signature
+- [x] `mesa-core.mjs` implements `Env`, `signatureField`, sensor tiers,
+      HC-Signature, and Oracle
 - [x] Env exposes `applyProbe(...)` and `scheduleIntervention(...)` even if
       Phase 3 / 4 sweeps don't run yet — the *hooks* must exist
 - [x] `scripts/mesa-harness.mjs` writes `manifest.json` and per-trial JSONL
 - [x] `npm run mesa:phase1` runs HC-Signature across the four sensor tiers
-      on a default seed slate (e.g., 32 seeds) and emits `trial-outcomes.csv`
+      plus Oracle on `privileged-field` on a default seed slate (e.g., 32
+      seeds) and emits `trial-outcomes.csv`
 - [x] Byte-for-byte replay verified by a second run on the same seed slate
-- [x] HC-Signature meets the per-tier behavior expectations in §4.4 after
-      first-round tuning
+- [x] HC-Signature and Oracle meet the per-tier behavior expectations in §4.3
+      after first-round tuning
 
 ## 10. Out of Scope for Phase 0
 
@@ -628,10 +680,13 @@ shift the spec, the spec is revised and re-versioned.
 
 ## 12. Versioning and Updates
 
-This document is the Phase 0 spec at version `v1`. Material changes —
+This document is the Phase 0 spec at version `v2`. Material changes —
 environment math, controller architecture, sensor-tier definitions, reward
 channels, probe or intervention affordances — bump the version and are
 logged here:
 
+- `v2` (2026-05-10): added the privileged-only Oracle controller as a fifth
+  reference family and clarified that HC-Signature ignores privileged
+  information.
 - `v1` (2026-05-10): initial Phase 0 spec promoted from roadmap Decision
   Lock.

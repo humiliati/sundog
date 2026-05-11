@@ -54,6 +54,12 @@ export const DEFAULT_HC_SIGNATURE_CONFIG = Object.freeze({
   gradientLpfAlpha: 0.05,
 });
 
+export const DEFAULT_ORACLE_CONFIG = Object.freeze({
+  family: "Oracle",
+  sStop: 0.999,
+  seekGain: 1,
+});
+
 export function makeRng(seed) {
   let t = seed >>> 0;
   return function rng() {
@@ -687,6 +693,57 @@ export class HcSignatureController {
   }
 }
 
+export class OracleGradientController {
+  constructor(config = {}) {
+    this.config = Object.freeze({
+      ...DEFAULT_ORACLE_CONFIG,
+      ...config,
+    });
+  }
+
+  reset() {
+    return this;
+  }
+
+  act(observation, envConfig = DEFAULT_MESA_CONFIG) {
+    if (observation.sensorTier !== SENSOR_TIERS.PRIVILEGED_FIELD) {
+      throw new Error("OracleGradientController requires privileged-field observations");
+    }
+    const cfg = normalizeMesaConfig(envConfig);
+    const gradient = observation.trueGradient.slice();
+    const gNorm = norm2(gradient);
+    const action =
+      observation.trueSignature >= this.config.sStop || gNorm <= 1e-12
+        ? [0, 0]
+        : clipVecMagnitude(mul2(gradient, (this.config.seekGain * cfg.actionMax) / gNorm), cfg.actionMax);
+    return {
+      action,
+      phaseLabel: "ORACLE",
+      diagnostic: {
+        sLocal: observation.trueSignature,
+        gradient,
+        gradientNorm: gNorm,
+      },
+    };
+  }
+}
+
+export function makeMesaController(family = "hc_signature", config = {}) {
+  if (family === "hc_signature" || family === "HC-Signature") {
+    return new HcSignatureController(config);
+  }
+  if (family === "oracle" || family === "Oracle") {
+    return new OracleGradientController(config);
+  }
+  throw new Error(`Unknown mesa controller family: ${family}`);
+}
+
+export function defaultControllerConfig(family = "hc_signature") {
+  if (family === "hc_signature" || family === "HC-Signature") return DEFAULT_HC_SIGNATURE_CONFIG;
+  if (family === "oracle" || family === "Oracle") return DEFAULT_ORACLE_CONFIG;
+  throw new Error(`Unknown mesa controller family: ${family}`);
+}
+
 export function defaultTierParams(sensorTier, overrides = {}) {
   const params = {
     sensorTier,
@@ -722,6 +779,7 @@ export function makeTrialConfig({ seed = 1, sensorTier = SENSOR_TIERS.LOCAL_PROB
 export function runMesaTrial({
   seed = 1,
   sensorTier = SENSOR_TIERS.LOCAL_PROBE_FIELD,
+  controllerFamily = "hc_signature",
   envConfig = {},
   controllerConfig = {},
   trialId = null,
@@ -741,18 +799,23 @@ export function runMesaTrial({
   const env = new ShadowFieldEnv(config);
   if (probe) env.applyProbe(probe);
   for (const intervention of interventions) env.scheduleIntervention(intervention);
-  const controller = new HcSignatureController(controllerConfig);
+  const mergedControllerConfig = {
+    ...defaultControllerConfig(controllerFamily),
+    ...controllerConfig,
+  };
+  const controller = makeMesaController(controllerFamily, mergedControllerConfig);
 
   const hashPayload = JSON.stringify({
     seed,
     sensorTier,
+    controllerFamily,
     envConfig: config,
-    controllerConfig: controller.config,
+    controllerConfig: mergedControllerConfig,
     probe: probe ?? {},
     interventions,
   });
   const configHash = hashString(hashPayload).toString(16).padStart(8, "0");
-  const id = trialId ?? `hc_signature_${sensorTier}_seed_${String(seed).padStart(4, "0")}`;
+  const id = trialId ?? `${controllerFamily}_${sensorTier}_seed_${String(seed).padStart(4, "0")}`;
   const entries = [
     {
       type: "header",
@@ -760,6 +823,7 @@ export function runMesaTrial({
       trialId: id,
       configHash,
       sensorTier,
+      controllerFamily,
       x0: roundArray(env.x0),
       xGoal: roundArray(env.xGoal),
       manifestPath,
@@ -802,9 +866,10 @@ export function runMesaTrial({
     trialId: id,
     seed,
     sensorTier,
+    controllerFamily,
     configHash,
     envConfig: config,
-    controllerConfig: controller.config,
+    controllerConfig: mergedControllerConfig,
     entries,
     summary: metrics,
   };

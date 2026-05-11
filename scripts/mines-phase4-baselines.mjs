@@ -13,6 +13,7 @@ import {
   IMPLEMENTED_MINES_MODES,
   MINES_CONTROLLER_MODES,
   chooseMinesAction,
+  frontierIndices,
 } from "../public/js/mines-controllers.mjs";
 import { createSensorRuntime, normalizeSensorConfig } from "../public/js/mines-sensor.mjs";
 
@@ -91,7 +92,7 @@ function applyReplayURL(args, replay) {
   return args;
 }
 
-function parseArgs(argv) {
+export function parseArgs(argv) {
   const args = {
     phase: "phase4-baselines",
     out: "results/mines/phase4-baselines",
@@ -103,12 +104,22 @@ function parseArgs(argv) {
     turnCap: 160,
     pressureThreshold: 1.2,
     replayURL: null,
+    traceJsonl: false,
   };
 
   for (let i = 0; i < argv.length; i += 1) {
     const flag = argv[i];
-    const value = argv[i + 1];
     if (!flag.startsWith("--")) continue;
+
+    if (flag === "--trace-jsonl") {
+      args.traceJsonl = true;
+      continue;
+    }
+
+    const value = argv[i + 1];
+    if (value === undefined || value.startsWith("--")) {
+      throw new Error(`${flag} requires a value`);
+    }
     i += 1;
 
     if (flag === "--phase") args.phase = value;
@@ -217,6 +228,175 @@ function terminalClass(terminal) {
   return terminal ?? "none";
 }
 
+function hashHex(text) {
+  return stringHash(text).toString(16).padStart(8, "0");
+}
+
+function trialIdOf({ phase, preset, sensorCell, mode, seed }) {
+  return `${phase}:${preset}:${sensorCell}:${mode}:seed${seed}`;
+}
+
+function makeBrowserReplayURL({ preset, seed, mode, sensorCell }) {
+  const params = new URLSearchParams({
+    preset,
+    seed: String(seed),
+    mode,
+    sensor: sensorCell,
+  });
+  return `https://sundog.cc/mines.html?${params.toString()}`;
+}
+
+function makeHarnessReplayCommand(replayURL) {
+  return `npm run mines:phase7:replay -- "${replayURL}"`;
+}
+
+function normalizedActionTrace(ledger) {
+  return ledger.map((entry) => ({
+    turn: entry.turn,
+    type: entry.type,
+    x: Number.isInteger(entry.x) ? entry.x : null,
+    y: Number.isInteger(entry.y) ? entry.y : null,
+    outcome: entry.outcome ?? "",
+    scansRemainingAfter: Number.isInteger(entry.scansRemainingAfter) ? entry.scansRemainingAfter : null,
+    scanReading: Number.isFinite(entry.scanReading) ? roundMetric(entry.scanReading, 12) : null,
+  }));
+}
+
+function meanOrNull(values) {
+  const finite = values.filter((value) => Number.isFinite(value));
+  if (finite.length === 0) return null;
+  return finite.reduce((acc, value) => acc + value, 0) / finite.length;
+}
+
+function traceStats(memory, sensor) {
+  const frontier = frontierIndices(memory);
+  return {
+    frontierSize: frontier.length,
+    meanFrontierConfidence: roundMetric(meanOrNull(frontier.map((idx) => sensor?.confidence?.[idx]))),
+  };
+}
+
+function actionIndex(action, width) {
+  if (!Number.isInteger(action?.x) || !Number.isInteger(action?.y)) return null;
+  return action.y * width + action.x;
+}
+
+function actionSensorFields(action, sensor, width) {
+  const idx = actionIndex(action, width);
+  if (idx === null) {
+    return {
+      actionIndex: null,
+      actionPressure: null,
+      actionConfidence: null,
+      actionGradientMagnitude: null,
+    };
+  }
+  const gx = sensor?.gradientX?.[idx];
+  const gy = sensor?.gradientY?.[idx];
+  return {
+    actionIndex: idx,
+    actionPressure: Number.isFinite(sensor?.observed?.[idx]) ? roundMetric(sensor.observed[idx]) : null,
+    actionConfidence: Number.isFinite(sensor?.confidence?.[idx]) ? roundMetric(sensor.confidence[idx]) : null,
+    actionGradientMagnitude: Number.isFinite(gx) && Number.isFinite(gy) ? roundMetric(Math.hypot(gx, gy)) : null,
+  };
+}
+
+function countLedger(board, type) {
+  return board.actionLedger.filter((entry) => entry.type === type).length;
+}
+
+function makeTraceRow({
+  trialId,
+  phase,
+  preset,
+  sensorCell,
+  mode,
+  seed,
+  controllerTurn,
+  memory,
+  sensor,
+  attemptedAction,
+  appliedAction,
+  actionApplied,
+  illegalFallback,
+  board,
+  openingSafeCount,
+  illegalActionCount,
+}) {
+  const stats = traceStats(memory, sensor);
+  const sensorFields = actionSensorFields(attemptedAction, sensor, board.config.width);
+  const appliedIndex = actionIndex(appliedAction, board.config.width);
+  const lastEntry = board.actionLedger[board.actionLedger.length - 1] ?? {};
+  return {
+    phase,
+    trialId,
+    preset,
+    sensorCell,
+    mode,
+    seed,
+    turnAfter: board.turn,
+    controllerTurn,
+    attemptedActionType: attemptedAction?.type ?? "",
+    attemptedX: Number.isInteger(attemptedAction?.x) ? attemptedAction.x : null,
+    attemptedY: Number.isInteger(attemptedAction?.y) ? attemptedAction.y : null,
+    appliedActionType: appliedAction?.type ?? "",
+    appliedX: Number.isInteger(appliedAction?.x) ? appliedAction.x : null,
+    appliedY: Number.isInteger(appliedAction?.y) ? appliedAction.y : null,
+    appliedIndex,
+    actionApplied,
+    illegalFallback,
+    illegalActionCount,
+    terminalAfter: terminalClass(board.terminal),
+    rawSafeTiles: board.revealedSafeCount,
+    safeTilesAfterOpening: Math.max(0, board.revealedSafeCount - openingSafeCount),
+    falseFlagCount: board.falseFlagCount,
+    flagCount: countLedger(board, ACTION.FLAG),
+    scanCount: countLedger(board, ACTION.SCAN),
+    scansRemaining: board.scansRemaining,
+    scanReading: Number.isFinite(lastEntry.scanReading) ? roundMetric(lastEntry.scanReading, 12) : null,
+    ...stats,
+    ...sensorFields,
+  };
+}
+
+function makeOpeningTraceRow({ trialId, phase, preset, sensorCell, mode, seed, board, openingSafeCount }) {
+  const opening = board.actionLedger[0] ?? {};
+  return {
+    phase,
+    trialId,
+    preset,
+    sensorCell,
+    mode,
+    seed,
+    turnAfter: board.turn,
+    controllerTurn: 0,
+    attemptedActionType: opening.type ?? ACTION.REVEAL,
+    attemptedX: Number.isInteger(opening.x) ? opening.x : null,
+    attemptedY: Number.isInteger(opening.y) ? opening.y : null,
+    appliedActionType: opening.type ?? ACTION.REVEAL,
+    appliedX: Number.isInteger(opening.x) ? opening.x : null,
+    appliedY: Number.isInteger(opening.y) ? opening.y : null,
+    appliedIndex: Number.isInteger(opening.index) ? opening.index : null,
+    actionApplied: true,
+    illegalFallback: false,
+    illegalActionCount: 0,
+    terminalAfter: terminalClass(board.terminal),
+    rawSafeTiles: board.revealedSafeCount,
+    safeTilesAfterOpening: Math.max(0, board.revealedSafeCount - openingSafeCount),
+    falseFlagCount: board.falseFlagCount,
+    flagCount: 0,
+    scanCount: 0,
+    scansRemaining: board.scansRemaining,
+    scanReading: null,
+    frontierSize: null,
+    meanFrontierConfidence: null,
+    actionIndex: Number.isInteger(opening.index) ? opening.index : null,
+    actionPressure: null,
+    actionConfidence: null,
+    actionGradientMagnitude: null,
+  };
+}
+
 function scoreTrial({ preset, mode, cell, seed, args }) {
   const modeDefinition = MINES_CONTROLLER_MODES[mode];
   const board = initializeBoardState({
@@ -227,9 +407,23 @@ function scoreTrial({ preset, mode, cell, seed, args }) {
   });
   applyMinesAction(board, centerAction(board));
   const openingSafeCount = board.revealedSafeCount;
+  const trialId = trialIdOf({ phase: args.phase, preset, sensorCell: cell.name, mode, seed });
   const sensorConfig = mergedSensorConfig(cell, mode, seed);
   const sensorRuntime = createSensorRuntime(sensorConfig);
   const rng = makeRng(seed ^ stringHash(mode) ^ stringHash(cell.name));
+  const traceRows = [];
+  if (args.traceJsonl) {
+    traceRows.push(makeOpeningTraceRow({
+      trialId,
+      phase: args.phase,
+      preset,
+      sensorCell: cell.name,
+      mode,
+      seed,
+      board,
+      openingSafeCount,
+    }));
+  }
 
   let illegalActionCount = 0;
   while (board.terminal === null) {
@@ -243,7 +437,10 @@ function scoreTrial({ preset, mode, cell, seed, args }) {
       rng,
       options: { threshold: args.pressureThreshold },
     });
-    const result = applyMinesAction(board, action);
+    const attemptedAction = action;
+    let appliedAction = action;
+    let result = applyMinesAction(board, action);
+    let illegalFallback = false;
     if (result.applied && action.type === ACTION.SCAN) {
       const scan = sensorRuntime.scan(board, action.x, action.y);
       const lastEntry = board.actionLedger[board.actionLedger.length - 1];
@@ -260,7 +457,29 @@ function scoreTrial({ preset, mode, cell, seed, args }) {
         boardState: board,
         rng,
       });
-      applyMinesAction(board, fallback);
+      appliedAction = fallback;
+      illegalFallback = true;
+      result = applyMinesAction(board, fallback);
+    }
+    if (args.traceJsonl) {
+      traceRows.push(makeTraceRow({
+        trialId,
+        phase: args.phase,
+        preset,
+        sensorCell: cell.name,
+        mode,
+        seed,
+        controllerTurn: Math.max(0, board.turn - 1),
+        memory,
+        sensor,
+        attemptedAction,
+        appliedAction,
+        actionApplied: result.applied,
+        illegalFallback,
+        board,
+        openingSafeCount,
+        illegalActionCount,
+      }));
     }
   }
 
@@ -269,12 +488,19 @@ function scoreTrial({ preset, mode, cell, seed, args }) {
   const scanCount = board.actionLedger.filter((entry) => entry.type === ACTION.SCAN).length;
   const budgetAdjustedSafeTiles = board.revealedSafeCount - scanCount;
   const safeTilesAfterOpening = Math.max(0, board.revealedSafeCount - openingSafeCount);
-  return {
+  const actionTrace = normalizedActionTrace(board.actionLedger);
+  const actionTraceHash = hashHex(JSON.stringify(actionTrace));
+  const browserReplayUrl = makeBrowserReplayURL({ preset, seed, mode, sensorCell: cell.name });
+  const row = {
     phase: args.phase,
+    trialId,
     preset,
     sensorCell: cell.name,
     mode,
     seed,
+    browserReplayUrl,
+    harnessReplayCommand: makeHarnessReplayCommand(browserReplayUrl),
+    actionTraceHash,
     publishableSensorCell: cell.publishable,
     modeStatus: MINES_CONTROLLER_MODES[mode].status,
     usesPrivileged: MINES_CONTROLLER_MODES[mode].usesPrivileged,
@@ -282,6 +508,7 @@ function scoreTrial({ preset, mode, cell, seed, args }) {
     height: board.config.height,
     mineCount: board.config.mineCount,
     mineDensity: roundMetric(board.config.mineCount / (board.config.width * board.config.height)),
+    scanBudget: board.config.scanBudget,
     turnCap: args.turnCap,
     terminal: terminalClass(board.terminal),
     survived: board.terminal !== "mine_triggered",
@@ -302,7 +529,9 @@ function scoreTrial({ preset, mode, cell, seed, args }) {
     sigmaNoise: sensorConfig.sigmaNoise,
     dropoutRate: sensorConfig.dropoutRate,
     delaySteps: sensorConfig.delaySteps,
+    kernelFamily: sensorConfig.kernel,
   };
+  return { row, traceRows, actionTrace };
 }
 
 function groupBy(rows, keyFn) {
@@ -425,17 +654,27 @@ function rowsToCsv(rows) {
   ].join("\n") + "\n";
 }
 
+function rowsToJsonl(rows) {
+  if (rows.length === 0) return "";
+  return `${rows.map((row) => JSON.stringify(row)).join("\n")}\n`;
+}
+
 function markdownReport({ args, budgetRows, summaryRows, comparisonSummaryRows }) {
   const implemented = budgetRows.filter((row) => row.status === "implemented");
   const pending = budgetRows.filter((row) => row.status !== "implemented");
   const docDefaultRows = summaryRows.filter((row) => row.sensorCell === "doc_default");
   const isPhase5 = args.phase.includes("phase5");
-  const title = isPhase5
-    ? "Sundog Pressure Mines Phase 5 Controller Prototype"
-    : "Sundog Pressure Mines Phase 4 Baseline Set";
-  const scope = isPhase5
-    ? "This is a Phase 5 prototype controller run. It can compare against Phase 4 baselines, but it is not an operating-envelope verdict."
-    : "This is a Phase 4 baseline calibration run. It reports matched-seed baseline/oracle rows; Phase 5 runs carry the controller verdicts.";
+  const isPhase7 = args.phase.includes("phase7") || args.replayURL || args.traceJsonl;
+  const title = isPhase7
+    ? "Sundog Pressure Mines Phase 7 Reproducibility Harness"
+    : isPhase5
+      ? "Sundog Pressure Mines Phase 5 Controller Prototype"
+      : "Sundog Pressure Mines Phase 4 Baseline Set";
+  const scope = isPhase7
+    ? "This is a Phase 7 reproducibility scaffold. It records replay URLs and stable action-trace hashes; it is not an operating-envelope verdict."
+    : isPhase5
+      ? "This is a Phase 5 prototype controller run. It can compare against Phase 4 baselines, but it is not an operating-envelope verdict."
+      : "This is a Phase 4 baseline calibration run. It reports matched-seed baseline/oracle rows; Phase 5 runs carry the controller verdicts.";
   return [
     `# ${title}`,
     "",
@@ -491,27 +730,67 @@ function runSelfChecks({ args, budgetRows, trialRows }) {
   }
   const expected = args.presets.length * args.cells.length * args.modes.length * args.seeds;
   if (trialRows.length !== expected) {
-            throw new Error(`Expected ${expected} trial rows, got ${trialRows.length}`);
+    throw new Error(`Expected ${expected} trial rows, got ${trialRows.length}`);
   }
 }
 
-async function main() {
-  const args = parseArgs(process.argv.slice(2));
-  const isPhase5 = args.phase.includes("phase5");
+function schemaForArgs(args) {
+  if (args.phase.includes("phase7") || args.replayURL || args.traceJsonl) {
+    return "sundog.mines.phase7-harness.v1";
+  }
+  if (args.phase.includes("phase5")) return "sundog.mines.phase5-controller.v1";
+  return "sundog.mines.phase4-baselines.v1";
+}
+
+function reportFilenameForArgs(args) {
+  if (args.phase.includes("phase7") || args.replayURL || args.traceJsonl) return "phase7-harness.md";
+  return args.phase.includes("phase5") ? "phase5-controller.md" : "phase4-baselines.md";
+}
+
+function runLabelForArgs(args) {
+  if (args.phase.includes("phase7") || args.replayURL || args.traceJsonl) return "Phase 7 harness";
+  if (args.phase.includes("phase5")) return "Phase 5 controller";
+  return "Phase 4 baselines";
+}
+
+function makeReplayIndexRows(trialRows) {
+  return trialRows.map((row) => ({
+    trialId: row.trialId,
+    phase: row.phase,
+    preset: row.preset,
+    sensorCell: row.sensorCell,
+    mode: row.mode,
+    seed: row.seed,
+    terminal: row.terminal,
+    turns: row.turns,
+    rawSafeTiles: row.rawSafeTiles,
+    safeTilesAfterOpening: row.safeTilesAfterOpening,
+    budgetAdjustedSafeTiles: row.budgetAdjustedSafeTiles,
+    falseFlagCount: row.falseFlagCount,
+    actionTraceHash: row.actionTraceHash,
+    browserReplayUrl: row.browserReplayUrl,
+    harnessReplayCommand: row.harnessReplayCommand,
+  }));
+}
+
+export function runSuite(args) {
   const selectedCells = SENSOR_CELLS.filter((cell) => args.cells.includes(cell.name));
   const trialRows = [];
+  const traceRows = [];
 
   for (const preset of args.presets) {
     for (const cell of selectedCells) {
       for (const mode of args.modes) {
         for (let i = 0; i < args.seeds; i += 1) {
-          trialRows.push(scoreTrial({
+          const trial = scoreTrial({
             preset,
             mode,
             cell,
             seed: args.seedStart + i,
             args,
-          }));
+          });
+          trialRows.push(trial.row);
+          traceRows.push(...trial.traceRows);
         }
       }
     }
@@ -522,6 +801,33 @@ async function main() {
   const summaryRows = summarizeTrials(trialRows);
   const comparisonRows = makeComparisonRows(trialRows);
   const comparisonSummaryRows = summarizeComparisons(comparisonRows);
+  const replayIndexRows = makeReplayIndexRows(trialRows);
+
+  return {
+    selectedCells,
+    budgetRows,
+    trialRows,
+    traceRows,
+    summaryRows,
+    comparisonRows,
+    comparisonSummaryRows,
+    replayIndexRows,
+  };
+}
+
+async function main() {
+  const args = parseArgs(process.argv.slice(2));
+  const schema = schemaForArgs(args);
+  const {
+    selectedCells,
+    budgetRows,
+    trialRows,
+    traceRows,
+    summaryRows,
+    comparisonRows,
+    comparisonSummaryRows,
+    replayIndexRows,
+  } = runSuite(args);
 
   const outDir = path.resolve(repoRoot, args.out);
   await mkdir(outDir, { recursive: true });
@@ -530,15 +836,21 @@ async function main() {
   await writeFile(path.join(outDir, "summary-rows.csv"), rowsToCsv(summaryRows));
   await writeFile(path.join(outDir, "matched-comparisons.csv"), rowsToCsv(comparisonRows));
   await writeFile(path.join(outDir, "matched-comparison-summary.csv"), rowsToCsv(comparisonSummaryRows));
+  await writeFile(path.join(outDir, "replay-index.json"), `${JSON.stringify(replayIndexRows, null, 2)}\n`);
+  if (args.traceJsonl) {
+    await writeFile(path.join(outDir, "step-traces.jsonl"), rowsToJsonl(traceRows));
+  }
   await writeFile(path.join(outDir, "summary.json"), JSON.stringify({
-    schema: isPhase5 ? "sundog.mines.phase5-controller.v1" : "sundog.mines.phase4-baselines.v1",
+    schema,
     args,
     sensorCells: selectedCells,
     modeBudgets: budgetRows,
     summaryRows,
     comparisonSummaryRows,
+    replayIndexRows,
+    traceRows: args.traceJsonl ? traceRows.length : 0,
   }, null, 2));
-  const reportFilename = isPhase5 ? "phase5-controller.md" : "phase4-baselines.md";
+  const reportFilename = reportFilenameForArgs(args);
   await writeFile(path.join(outDir, reportFilename), markdownReport({
     args,
     budgetRows,
@@ -546,11 +858,13 @@ async function main() {
     comparisonSummaryRows,
   }));
 
-  console.log(`Mines ${isPhase5 ? "Phase 5 controller" : "Phase 4 baselines"} wrote ${path.relative(repoRoot, outDir)}`);
-  console.log(`Trial rows: ${trialRows.length}; comparison rows: ${comparisonRows.length}`);
+  console.log(`Mines ${runLabelForArgs(args)} wrote ${path.relative(repoRoot, outDir)}`);
+  console.log(`Trial rows: ${trialRows.length}; comparison rows: ${comparisonRows.length}; trace rows: ${traceRows.length}`);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (path.resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

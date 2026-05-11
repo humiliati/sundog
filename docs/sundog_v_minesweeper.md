@@ -591,6 +591,30 @@ npm run mines:phase9
 
 Exit criterion: a browser seed can be replayed exactly in the harness.
 
+Phase 7 harness status:
+
+- `scripts/mines-phase4-baselines.mjs` now exports `parseArgs` and `runSuite`
+  so replay verification can reuse the exact harness path instead of spawning
+  a parallel implementation.
+- `trial-rows.csv` now includes replay-oriented manifest columns:
+  `trialId`, `browserReplayUrl`, `harnessReplayCommand`, `actionTraceHash`,
+  `scanBudget`, and `kernelFamily`, alongside the existing board, sensor, and
+  terminal metrics.
+- `--trace-jsonl` writes `step-traces.jsonl` with one public per-action row
+  for Phase 8 event metrics. Rows include attempted/applied action, fallback
+  status, frontier size, mean frontier confidence, action-tile pressure,
+  action-tile confidence, scan readings, safe-tile counts, false flags, scan
+  count, and terminal state.
+- Every batch writes `replay-index.json`, a compact fixture list of browser
+  replay URLs plus stable action-trace hashes.
+- `scripts/mines-verify-replays.mjs` reads the replay index, reruns each
+  replay URL through the harness, and fails if the terminal, turn count, or
+  action-trace hash changes.
+- `npm run mines:phase7` runs the canonical smoke batch and verification:
+  `npm run mines:phase7:batch && npm run mines:phase7:verify`. The current
+  local run produced 336 trials, 5,765 step-trace rows, and 336/336 replay
+  verifications passing.
+
 ### Phase 8 - Recovery And Event Metrics
 
 Goal: make the claim about useful decision-making, not just flashy clearing.
