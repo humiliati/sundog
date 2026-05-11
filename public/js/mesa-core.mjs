@@ -425,10 +425,11 @@ export class ShadowFieldEnv {
   sensorSamples() {
     const tier = this.config.sensorTier;
     const raw = this.localProbeSamples();
-    const delay =
-      tier === SENSOR_TIERS.DELAYED_FIELD || tier === SENSOR_TIERS.DELAYED_NOISY_FIELD
-        ? this.config.delaySteps
-        : 0;
+    // Read delay unconditionally so probe overrides take effect on any tier
+    // (sensorDelay probe applies on local-probe-field, not only on
+    // DELAYED_FIELD/DELAYED_NOISY_FIELD). Tier defaults set delaySteps=0 for
+    // tiers that don't intrinsically delay, so this is a no-op without a probe.
+    const delay = Math.max(0, Number.isInteger(this.config.delaySteps) ? this.config.delaySteps : 0);
     this.sampleHistory.push(raw);
     const delayedIndex = Math.max(0, this.sampleHistory.length - 1 - delay);
     let samples = this.sampleHistory[delayedIndex].slice();
