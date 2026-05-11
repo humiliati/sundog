@@ -118,6 +118,23 @@ named reward channels but does not decide which family may read which channel.
 Bridge performance rule: all PPO training uses `step_batch`; one-episode
 `step` exists only for debugging and tests.
 
+Auto-reset contract: when `step_batch` returns `done[i] = true` for some env
+in the batch, the bridge automatically resets that env before the next
+`step_batch` call. The first observation of the new episode appears in the
+next response's `obs[i]`, and `info[i].auto_reset = true` marks the
+transition. The reward returned for the step that ended the episode is the
+terminal reward of the old episode, not a value from the new one. This
+matches the SB3 `VecEnv` convention; PPO bootstrapping relies on it.
+Phase 5 may introduce a manual-reset mode for curriculum control; until
+then, auto-reset is the only contract.
+
+Error contract: if `step_batch` encounters a NaN action, an env in an
+invalid state, or a bridge-internal exception, the response is
+`{ "ok": false, "error": "...", "env_id": ..., "action": [...] }` and the
+Python trainer must surface the error as a training failure rather than
+silently retry. NaN actions during PPO are the canonical symptom of a
+divergent run and should fail loudly.
+
 ## 5. Training Families
 
 ### L-Signature
@@ -287,6 +304,11 @@ ONNX export is optional for Large or transformer policies. JSON export is
 required for Small and Medium MLPs so `mesa-core.mjs`, the harness, and the
 future browser artifact can run inference without Python.
 
+The JSON policy must be bit-exact across export cycles: loading a checkpoint
+and re-exporting it must produce a byte-identical `.policy.json` file. This
+is the prerequisite for the Phase 2 replay-verification exit criterion
+(§12) and is the Phase 2 analogue of Phase 1's byte-for-byte env replay.
+
 ## 10. Outputs
 
 Default output root:
@@ -343,6 +365,9 @@ Phase 2 is complete when:
 - Small and Medium PPO policies exist for L-Signature, L-Reward, and L-Mixed;
 - all learned families solve the nominal local-probe task within budget;
 - checkpoints and JSON policy exports are written;
+- exported `.policy.json` files round-trip through two reload-and-re-export
+  cycles producing byte-identical files and identical evaluation results on
+  a matched seed slate (Phase 1 byte-for-byte replay analogue);
 - evaluation results compare learned policies against HC-Signature and Oracle;
 - the manifest is sufficient to replay training/evaluation seeds;
 - Large is either run successfully or explicitly deferred with a reason.
@@ -354,3 +379,6 @@ This document is version `v1`.
 - `v1` (2026-05-10): locks Python trainer with JS env bridge, PPO as the
   matched RL algorithm, BC-first ordering, checkpoint/export format, and
   Small/Medium-before-Large execution.
+- `v1.1` (2026-05-10): inline addendum — auto-reset contract and error
+  contract added to §4; bit-exact JSON export requirement added to §9;
+  policy-export replay-verification bullet added to §12 exit criterion.
