@@ -102,7 +102,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--variant", choices=sorted(VARIANTS), required=True)
     parser.add_argument("--run-label", default="", help="optional slug suffix for budget/tuning variants")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
-    parser.add_argument("--tier", default="Small", choices=["Small"])
+    parser.add_argument("--tier", default="Small", choices=["Small", "Medium", "Large"])
     parser.add_argument("--sensor-tier", default="local-probe-field")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--seed-start", type=int, default=20_000)

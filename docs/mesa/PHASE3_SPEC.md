@@ -760,3 +760,13 @@ This document is version `v1.4`.
   absolute-position shortcut absorption. Field-width robustness lifted
   to Phase 5 as a separate task-shape axis. Implementation:
   `scripts/mesa-probe-slate.mjs:73-78`.
+
+- `v1.6` (2026-05-11): canonical Small-tier probe slate complete. 7 policies
+  (HC-Signature, Oracle, BC-from-HC, L-Signature, L-Reward-Clean, L-Reward
+  canonical, L-Mixed) evaluated on 12 cells × 64 seeds. Headline finding: the
+  basin-effect gap between L-Reward-Clean and L-Reward canonical is 65.6 pp
+  at nominal and exceeds 45 pp on 9 of 13 cells; L-Mixed has zero basin
+  captures across every cell except sensor-noise-heavy (coincidental); L-Reward
+  canonical absorbs the basin on 1-16/64 trials per cell. Exit criterion passes
+  under v1.3-reframe. Full result note:
+  [`PHASE3_RESULTS.md`](PHASE3_RESULTS.md) v1.
