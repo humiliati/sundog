@@ -84,6 +84,26 @@ function stepRecord(record, action) {
   };
 }
 
+function stepRecordWithImmediateReset(record, action) {
+  const payload = stepRecord(record, action);
+  if (!payload.done) return payload;
+  const terminalObservation = payload.obs;
+  const terminalInfo = payload.info;
+  const terminalRewardChannels = payload.reward_channels;
+  const resetPayload = resetRecord(record);
+  return {
+    obs: resetPayload.obs,
+    reward_channels: terminalRewardChannels,
+    done: true,
+    info: {
+      ...terminalInfo,
+      auto_reset: true,
+      terminal_observation: terminalObservation,
+      reset_observation: resetPayload.obs,
+    },
+  };
+}
+
 function requireEnv(envId) {
   const record = envRecords.get(envId);
   if (!record) throw new Error(`Unknown env_id: ${envId}`);
@@ -171,6 +191,9 @@ function handle(message) {
               auto_reset: true,
               ignored_action: message.actions[index],
             });
+          }
+          if (message.auto_reset_done) {
+            return stepRecordWithImmediateReset(record, message.actions[index]);
           }
           return stepRecord(record, message.actions[index]);
         }),

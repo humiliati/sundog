@@ -890,10 +890,33 @@ function makeVerdict(envelopeRows, trialRows, bestWorstRows, args) {
     && contradictionRows.length === 0;
   const byMode = groupBy(candidateRows, (row) => row.mode);
   const verdict = promotion ? "CONFIRM" : "NO_ENVELOPE";
+  const dominance = candidateDominance(envelopeRows);
   const reasons = [];
   if (candidateRows.length === 0) reasons.push("No candidate cell passed all pre-registered gates.");
   if (failureRows.length === 0) reasons.push("No paired failure-regime cell was available for publication.");
   if (contradictionRows.length > 0) reasons.push(`${contradictionRows.length} candidate rows carried contradictory empirical/static labels.`);
+  if (promotion) {
+    const bestCell = bestWorstRows.find((row) => row.selection === "best_cell") ?? null;
+    const worstCell = bestWorstRows.find((row) => row.selection === "worst_cell") ?? null;
+    reasons.push(`${candidateRows.length} candidate rows passed all pre-registered gates, with ${failureRows.length} paired failure-regime rows available for negative-region publication.`);
+    if (bestCell) {
+      const sameCellCandidates = candidateRows
+        .filter((row) => row.cell_id === bestCell.cell_id)
+        .sort((a, b) => b.budget_delta_vs_naive_mean - a.budget_delta_vs_naive_mean)
+        .map((row) => `${row.mode} delta ${row.budget_delta_vs_naive_mean} CI [${row.budget_delta_vs_naive_ci_low}, ${row.budget_delta_vs_naive_ci_high}]`)
+        .join("; ");
+      reasons.push(`Confirmed pocket: density ${bestCell.mine_density}, pressure noise ${bestCell.sigma_noise}, dropout ${bestCell.dropout_rate}; ${sameCellCandidates}.`);
+      reasons.push(`Caveat: in the best cell, target and naive mine-trigger rates are ${bestCell.target_mine_trigger_rate} and ${bestCell.naive_mine_trigger_rate}; the confirmed outcome is safe-tile progress before mine trigger, not field clearance.`);
+      reasons.push(`Comparator caveat: threshold_flagger survival is ${bestCell.threshold_survival_rate} in the best cell, so the promoted comparator claim remains against naive_pressure rather than survival dominance over threshold_flagger.`);
+      if (bestCell.static_boundary_status === "watch_boundary") {
+        reasons.push(`Boundary caveat: the confirmed cell is watch_boundary with static mechanisms ${bestCell.static_boundary_mechanisms}; the pocket is provisional and sits near the field-informativeness caution edge.`);
+      }
+    }
+    if (worstCell) {
+      reasons.push(`Mapped failure: ${worstCell.mode} at density ${worstCell.mine_density}, pressure noise ${worstCell.sigma_noise}, dropout ${worstCell.dropout_rate} lost ${worstCell.budget_delta_vs_naive_mean} budget-adjusted safe tiles versus naive_pressure, CI [${worstCell.budget_delta_vs_naive_ci_low}, ${worstCell.budget_delta_vs_naive_ci_high}], mechanisms ${worstCell.mechanism_codes}.`);
+    }
+    reasons.push(`Variant caveat: lean_dominates_all=${dominance.lean_dominates_all} and minimal_retirement_recommended=${dominance.minimal_retirement_recommended}; keep both sundog_lean and sundog_minimal visible until a later controller redesign retires one.`);
+  }
   return {
     schema: "sundog.mines.phase10-verdict.v1",
     generatedAt: new Date().toISOString(),
@@ -919,7 +942,7 @@ function makeVerdict(envelopeRows, trialRows, bestWorstRows, args) {
     candidates_by_mode: Object.fromEntries(CANDIDATE_MODES.map((mode) => [mode, (byMode.get(mode) ?? []).length])),
     contradiction_count: contradictionRows.length,
     contradiction_rows: contradictionRows.slice(0, 12),
-    dominance: candidateDominance(envelopeRows),
+    dominance,
     bestCell: bestWorstRows.find((row) => row.selection === "best_cell") ?? null,
     worstCell: bestWorstRows.find((row) => row.selection === "worst_cell") ?? null,
     reasons,

@@ -34,7 +34,7 @@ Use these tiers when discussing application evidence:
 | Tier | Meaning | Current examples |
 | --- | --- | --- |
 | Research result | Controlled task, metrics, baselines, reproducible artifacts. | Photometric mirror alignment in this repo. |
-| Operating-envelope study | Experiment workbench with bounded sweeps, baselines, and mapped failure regions, but not a global domain solution. | Three-body dynamics Phase 11; Sundog Balance Phase 10. |
+| Operating-envelope study | Experiment workbench with bounded sweeps, baselines, and mapped failure regions, but not a global domain solution. | Three-body dynamics Phase 11; Sundog Balance Phase 10; Pressure Mines Phase 11. |
 | Instrumented prototype | Product system with telemetry and repeatable harnesses, but not yet a paper-style study. | Money Bags playtest bundles, Sundog Gone Rogue runner. |
 | Product expression | Player-facing mechanic or agent system that embodies the idea, but needs formal measurement. | Dungeon Gleaner verb-field NPC behavior. |
 | Conceptual lineage | Historical or design-language connection without enough evidence yet. | Older theorem docs, broad broadcast language. |
@@ -128,19 +128,19 @@ signal stops being enough.
 
 ## Sundog Pressure Mines Workbench
 
-Local page: [`mines.html`](../mines.html) (planned)
+Local page: [`mines.html`](../mines.html)
 
 Roadmap: [`docs/sundog_v_minesweeper.md`](sundog_v_minesweeper.md)
 
 ### Sundog Expression
 
-The Pressure Mines workbench asks whether an agent can clear a minefield when
+The Pressure Mines workbench asks whether an agent can make safer progress when
 mine locations are hidden and nearby tiles offer only a noisy, lossy pressure
 field instead of exact adjacency counts. It keeps the pressure-field sensor,
 naive local-pressure heuristic, passive baseline, and privileged oracle
 separate so success and failure boundaries are inspectable.
 
-The target claim is narrow:
+The promoted claim is narrow:
 
 > In some minefield regimes, a lossy pressure field preserves enough
 > control-relevant structure for bounded reveal/flag decisions to outperform
@@ -149,28 +149,31 @@ The target claim is narrow:
 
 ### Evidence Shape
 
-**Evidence tier:** Planned Workbench (Phase 0)
+**Evidence tier:** Operating-Envelope Study
 
-This workbench is currently in the roadmap phase. Promotion to **Instrumented
-Prototype** requires Phase 1-6 deliverables: board core, pressure sensor model,
-browser page, telemetry, controller modes, and baseline set.
+Phase 10 confirms one narrow publishable pocket: density 0.16 / pressure noise
+2.0 / dropout 0.2. In that cell, `sundog_minimal` beat `naive_pressure` by
++7.21875 budget-adjusted safe tiles with 95% bootstrap CI [3.375, 11.078516],
+and `sundog_lean` also passed at +6.3125 with CI [1.921094, 11.25].
 
-Promotion to **Operating-Envelope Study** requires Phase 7-10 artifacts: a
-reproducible harness, event metrics, sensor degradation sweeps, and a confirmed
-improvement pocket over passive and naive baselines with mapped failure
-boundaries.
+The publication pair is intentionally two-sided: `sundog_lean` loses -4.71875
+budget-adjusted safe tiles versus `naive_pressure` at density 0.22 / pressure
+noise 1.0 / dropout 0.35, CI [-8.375781, -1.496484]. In the best cell, both
+Sundog and naive still trigger mines on every seed; the confirmed result is
+safe-tile progress before failure, not field clearance.
 
 ### Sundog Signal Separation
 
 - **Hidden target:** local mine occupancy and downstream board risk.
 - **Indirect signal:** noisy pressure values, local field gradients, and bounded
   scan returns rather than exact adjacency counts.
-- **Transformation:** SCAN/SEEK/TRACK hazard-reading with confidence gating,
-  memory over prior reveals, and conservative fallback when observability
-  drops.
-- **Actionable output:** bounded reveal / flag / scan / abstain decisions that
-  improve survival and board progress over naive local heuristics inside a
-  mapped observability envelope, failing cleanly outside it.
+- **Transformation:** confidence-gated pressure ordering with conservative
+  threshold flagging. The original scan, gradient, and action-history channels
+  remain visible as lineage, but Phase 5-10 evidence marks them as harmful in
+  this controller family.
+- **Actionable output:** bounded reveal / flag decisions that improve
+  budget-adjusted safe-tile progress over naive pressure in the named pocket,
+  failing cleanly outside it.
 
 ### Claim Boundary
 

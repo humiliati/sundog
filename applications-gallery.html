@@ -236,14 +236,14 @@
                 </article>
 
                 <article class="app-card" id="pressure-mines">
-                    <span class="tier">Planned Workbench</span>
+                    <span class="tier">Operating-Envelope Study</span>
                     <h2>Sundog Pressure Mines</h2>
                     <div class="signal-list">
                         <p><strong>Indirect signal:</strong> noisy pressure values, local field gradients, and bounded scan returns rather than exact mine adjacency counts.</p>
-                        <p><strong>Transformation:</strong> SCAN/SEEK/TRACK hazard-reading with confidence gating, memory over prior reveals, and conservative fallback when observability drops.</p>
-                        <p><strong>Output:</strong> bounded reveal / flag / scan / abstain decisions that improve survival and board progress over naive local heuristics inside a mapped observability envelope, failing cleanly outside it.</p>
+                        <p><strong>Transformation:</strong> confidence-gated pressure ordering and conservative threshold flagging, with scan, gradient, and action-history channels kept visible as harmful lineage.</p>
+                        <p><strong>Output:</strong> more budget-adjusted safe tiles before mine trigger in a named noisy/dropout pocket, published beside a matched failure region where naive pressure wins.</p>
                     </div>
-                    <p class="stub-note">Status: Phase 0 roadmap complete. Phase 1-6 implementation required before interactive minefield and pressure sensor become available. The workbench will ask whether a lossy pressure field preserves enough structure for bounded action inside a named operating envelope.</p>
+                    <p class="stub-note">Status: Phase 10 CONFIRM, Phase 11 public polish. The promoted claim is narrow: density 0.16, pressure noise 2.0, dropout 0.2 improves safe-tile progress before mine trigger; it is not a field-clearance claim.</p>
                     <div class="app-links">
                         <a href="mines.html">View Workbench</a>
                         <a href="docs/sundog_v_minesweeper.md">Roadmap</a>
