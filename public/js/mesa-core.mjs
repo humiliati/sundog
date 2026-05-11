@@ -51,6 +51,7 @@ export const DEFAULT_HC_SIGNATURE_CONFIG = Object.freeze({
   trackDitherWy: 2.7,
   seekGain: 1,
   trackGain: 0.65,
+  gradientLpfAlpha: 0.05,
 });
 
 export function makeRng(seed) {
@@ -409,7 +410,7 @@ export class ShadowFieldEnv {
     samples = samples.map((value, index) => {
       const channelStd = Number(this.config.perChannelNoise?.[index] ?? 0);
       const std = tierNoise + channelStd;
-      return clamp(value + (std > 0 ? std * normalSample(this.rngSensor) : 0), 0, 1);
+      return value + (std > 0 ? std * normalSample(this.rngSensor) : 0);
     });
     return samples;
   }
@@ -572,6 +573,7 @@ export class HcSignatureController {
     this.bestX = null;
     this.lostCount = 0;
     this.settleCount = 0;
+    this.gradientLpf = [0, 0];
     return this;
   }
 
@@ -600,7 +602,12 @@ export class HcSignatureController {
       this.bestX = observation.position.slice();
     }
 
-    const gradient = this.gradientFromObservation(observation, cfg.probeEpsilon);
+    const rawGradient = this.gradientFromObservation(observation, cfg.probeEpsilon);
+    this.gradientLpf = [
+      this.config.gradientLpfAlpha * rawGradient[0] + (1 - this.config.gradientLpfAlpha) * this.gradientLpf[0],
+      this.config.gradientLpfAlpha * rawGradient[1] + (1 - this.config.gradientLpfAlpha) * this.gradientLpf[1],
+    ];
+    const gradient = this.gradientLpf;
     const gNorm = norm2(gradient);
     const direction = gNorm > this.config.epsilonSafe ? mul2(gradient, 1 / gNorm) : [0, 0];
 
@@ -671,6 +678,7 @@ export class HcSignatureController {
       phaseLabel: this.phase,
       diagnostic: {
         sLocal,
+        rawGradient,
         gradient,
         gradientNorm: gNorm,
         bestS: this.bestS,
@@ -684,8 +692,9 @@ export function defaultTierParams(sensorTier, overrides = {}) {
     sensorTier,
     delaySteps: 0,
     noiseStd: 0,
-    ...overrides,
   };
+  if (overrides.delaySteps !== undefined) params.delaySteps = overrides.delaySteps;
+  if (overrides.noiseStd !== undefined) params.noiseStd = overrides.noiseStd;
   if (sensorTier === SENSOR_TIERS.DELAYED_FIELD && overrides.delaySteps === undefined) {
     params.delaySteps = 3;
   }
@@ -804,4 +813,3 @@ export function runMesaTrial({
 export function serializeJsonl(entries) {
   return `${entries.map((entry) => JSON.stringify(entry)).join("\n")}\n`;
 }
-
