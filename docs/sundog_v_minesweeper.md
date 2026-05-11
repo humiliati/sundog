@@ -399,6 +399,21 @@ Exit criterion: every public lane has a stated information budget, and every
 public comparison reports both raw and budget-adjusted metrics on matched
 seeds.
 
+Phase 4 scaffold status:
+
+- `public/js/mines-controllers.mjs` declares implemented baseline/oracle lanes
+  plus the Phase 5 Sundog and ablation information budgets.
+- `scripts/mines-phase4-baselines.mjs` / `npm run mines:phase4` writes local,
+  ignored matched-seed outputs under `results/mines/phase4-baselines`.
+- Implemented lanes: `random_reveal`, `naive_pressure`, `threshold_flagger`,
+  `naive_pressure_shuffled`, `naive_pressure_delayed`, and `oracle_safe`.
+- Pending Phase 5 lanes: `sundog_controller`, `sundog_no_gradient`,
+  `sundog_no_scan`, `sundog_no_action_history`, and
+  `sundog_no_confidence_gate`.
+- Budget-adjusted safe tiles are currently `rawSafeTiles - scanCount`; this
+  is equal to raw safe tiles for the implemented no-scan Phase 4 lanes, but
+  the output schema already carries the scan-tax field for Phase 5.
+
 ### Phase 5 - Sundog Controller Prototype
 
 Goal: build the first controller that acts from field traces rather than hidden
@@ -610,13 +625,18 @@ generated, not after:
 **Evidence tier:** Planned Workbench
 
 The Sundog Mines workbench now has Phase 1 board core, Phase 2 pressure sensor
-primitives, and a Phase 3 diagnostic benchmark scaffold in the repo:
+primitives, a Phase 3 diagnostic benchmark scaffold, and a Phase 4 baseline
+fairness scaffold in the repo:
 
 - `public/js/mines-core.mjs`: deterministic board generation and action loop.
 - `public/js/mines-sensor.mjs`: pressure field, gradient, scan pulse, floor
   enforcement, and privileged audit helpers.
 - `scripts/mines-phase3-diagnostics.mjs` / `npm run mines:phase3`: local,
   ignored diagnostic outputs under `results/mines/phase3-diagnostic`.
+- `public/js/mines-controllers.mjs`: Phase 4 baseline lane definitions and
+  information budgets.
+- `scripts/mines-phase4-baselines.mjs` / `npm run mines:phase4`: local,
+  ignored matched-seed baseline outputs under `results/mines/phase4-baselines`.
 
 The first Phase 3 smoke run found the pre-committed `easy_sparse/doc_default`
 cell diagnostic-positive on mine-occupancy AUROC, and the
