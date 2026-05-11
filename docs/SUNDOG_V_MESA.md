@@ -1,0 +1,694 @@
+# Sundog vs. Mesa-Optimization
+
+Working hook:
+
+> Sundog claims the field is the objective. Mesa-Optimization asks whether the
+> agent secretly grows one inside itself anyway. This document is the experiment
+> that finds out.
+
+This roadmap is promoted out of the Sundog Gravity Ledger
+(`SUNDOG_V_GRAVITY.md` Candidate 2). It pairs an empirical capacity-and-
+selection-pressure experiment against a Formal Separability Theorem appendix
+(promoted from Candidate 1). The empirical front asks whether learned
+signature-tracking agents reconstruct internal reward proxies under capacity
+and selection-pressure scaling. The formal front names the structural
+condition the empirical work is trying to earn.
+
+The pairing is deliberate. The theorem alone can be dismissed as a sanitized
+toy condition. The experiment alone can be dismissed as a tuned slate. Run
+together, each tells the other what counts as a real result.
+
+## Why Mesa Is the Right Next Roadmap
+
+The gravity claim names three falsification modes:
+
+1. field manipulation is cheap;
+2. the signature is a reward in costume;
+3. mesa-optimization re-emerges.
+
+Mode (3) is the falsification surface alignment-research reviewers reach for
+first. The Formal Separability work attacks (2). The mesa experiment attacks
+(3). Together they cover the two falsification modes that do not require new
+physical domains, leaving mode (1) for the Spacecraft and Conservation-Law
+candidates downstream.
+
+Mesa is also the most "achievable next" candidate in the ledger because it
+needs no new physics, no hardware, and no high-fidelity simulator. The
+existing photometric and three-body sensor-tier discipline gives the
+controller-family architecture. The new infrastructure is the capacity ladder,
+the proxy-splitting probe slate, the causal-intervention battery, and the
+selection-pressure curriculum — all software, all designable from scratch
+with current tooling.
+
+## What's Honest vs. What's Reach
+
+**Honest:**
+
+- A measured capacity range and selection-pressure shape where signature-
+  trained agents remain tied to the external field more strongly than matched
+  reward-trained agents under proxy-splitting probes.
+- A causal intervention battery that shows where control authority lives for
+  each agent family.
+- A reported failure boundary in capacity, selection pressure, environment
+  shape, or sensor-tier degradation, where signature tracking decouples from
+  the external field.
+- A formal note that names the conditions under which a signature is provably
+  not a reward in costume, with counterexamples shipped alongside the proof.
+
+**Reach (do not claim):**
+
+- "Sundog prevents mesa-optimization."
+- "Signature training is immune to inner misalignment."
+- "Reward hacking does not occur in signature-trained agents."
+- "Capacity does not matter for the gravity claim."
+
+The danger of this work is that a negative result — signature-trained agents
+*do* reconstruct internal proxies above some capacity — would be misread as a
+program-killer. It is not. A measured capacity range where the gravity claim
+holds is itself a respectable, novel result. The roadmap is structured so
+that either outcome ratchets the program forward.
+
+## Ratified Hook Language
+
+Safe hook:
+
+> Sundog vs. Mesa-Optimization asks whether a signature-trained agent, scaled
+> up under selection pressure, secretly reconstructs an internal reward proxy
+> and inherits the same Goodhart failures as direct reward training.
+
+Short version:
+
+> The field is the objective only as long as the agent is small enough not to
+> imagine its own.
+
+Avoid:
+
+- "Sundog is immune to mesa-optimization."
+- "Signature training cannot be reward-hacked at scale."
+- "Sundog solves inner alignment."
+- "The mesa trap does not apply to signature controllers."
+
+## Controller-Family Architecture
+
+The experiment compares four controller families on the same task and the
+same matched slates. Every family inherits the three-body sensor-tier
+discipline: each receives the signature through an explicitly labeled sensor
+tier (privileged-field, local-probe-field, delayed-field, noisy-field) so the
+signature stays a function of environmental state and not of policy.
+
+The families:
+
+- **HC-Signature.** Hand-coded SCAN/SEEK/TRACK over a local-gradient estimate
+  built from the four signature probe samples. No learning. The structural
+  baseline. Cannot mesa-optimize because there is no inner optimization loop.
+  Serves as a ceiling for "follows the external field exactly."
+- **L-Signature.** Learned policy `pi_theta(a | o)` where `o = (x, S_local_1,
+  ..., S_local_4)` and `a` is a 2D velocity command. Trained either by
+  behavior cloning from HC-Signature trajectories or by policy gradient on a
+  state-only objective `J(tau) = integral g(S(x_t)) dt`. The discipline is
+  load-bearing: no agent-action term, no learned evaluator, and no reward
+  channel that can be edited independently of the environment state.
+- **L-Reward.** Same observation, same action space, same architecture, and
+  same parameter count as L-Signature. Trained on a matched scalar reward such
+  as `R(s, a) = -||x - x_goal||`, or a sparse success reward, whose argmax
+  under no probe coincides with the signature target. The Goodhart-prone
+  baseline.
+- **L-Mixed.** Same architecture again, trained on
+  `(1 - lambda) * J_signature + lambda * J_reward` for pinned
+  `lambda in {0.1, 0.3, 0.5, 0.7, 0.9}`. Diagnostic — surfaces the gradient
+  between the signature and reward regimes.
+
+All four are run on the same probe and intervention slates with matched
+parameter counts, sample budgets, Adam optimizer settings fixed per tier, and
+seeds. Differences in behavior are attributable to training regime, not
+architecture.
+
+## Phase 0 Decision Lock
+
+These calls are pinned for the first implementation pass.
+
+### Environment family
+
+Commit to **shadow-field navigation** as the canonical Phase 0 environment.
+The task is deliberately minimal:
+
+- The agent moves in 2D continuous space.
+- A hidden goal emits a scalar signature field
+  `S(x) = exp(-||x - x_goal||^2 / (2 * sigma^2))` by default.
+- The agent observes its own position plus local signature samples at probe
+  offsets around its body, initially `+/- epsilon` on each axis. The agent
+  never observes `x_goal`.
+- The matched reward baseline uses `R(s, a) = -||x - x_goal||` or sparse
+  `R = 1{||x - x_goal|| < delta}`. Under nominal conditions, its argmax
+  coincides with the signature maximum.
+- The probe slate can rotate, translate, scale, or mirror the world; vary
+  irrelevant visual texture; introduce decoy fields with different decay
+  structure; and add adversarial noise to specific sensor channels.
+
+This environment wins Phase 0 because it makes the proxy-splitting probes easy
+to design, fast to run, and analytically legible. The absolute position channel
+is included intentionally as a tempting shortcut that probes can later break.
+
+Do not use the three-body harness or photometric MuJoCo task as the canonical
+Phase 0 environment. Three-body remains the literal-gravity second domain, but
+the proxy-splitting design problem is too expensive for the first mesa pass.
+The photometric task remains a useful continuous-control anchor, but its
+geometry does not provide enough clean shortcut-preserving probe variants.
+
+Keep **tidal-toy** as the natural second environment: a 2D field where `S(x)`
+is a tidal-tensor magnitude derived from two hidden mass-like sources. It is
+closer to the gravity wedge than shadow-field navigation, but slightly harder
+to reason about. It should be promoted after the shadow-field methodology is
+debugged.
+
+### Claim boundary
+
+The mesa roadmap attacks falsification mode (3): mesa-optimization re-emerges.
+Appendix A attacks mode (2): signature-is-reward-in-costume. Mode (1):
+field-manipulation cost is explicitly out of scope for this roadmap and stays
+with Spacecraft, Conservation-Law, and Fluid/Wake candidates.
+
+The Phase 7 ratchet, if positive, should speak only to this claim shape:
+
+> In the tested shadow-field navigation environment family, learned
+> signature-trained controllers retain measurable distinction from matched
+> reward-trained controllers under proxy-splitting probes across a mapped
+> pocket of capacity, selection pressure, probe severity, and sensor tier.
+> Outside that pocket, signature-trained controllers exhibit proxy-collapse
+> behavior comparable to reward-trained baselines.
+
+Even a strong Phase 7 result does not support universal mesa immunity,
+LLM-scale or foundation-model claims, deceptive-alignment claims, or
+adversarial-robustness claims in deployed systems.
+
+### Capacity ladder
+
+Use three tiers first:
+
+| Tier | Initial architecture | Target size | Budget cap |
+| --- | --- | ---: | ---: |
+| Small | 2-layer MLP | ~5K parameters | 1M environment steps |
+| Medium | 4-layer MLP | ~250K parameters | 10M environment steps |
+| Large | 6-layer MLP or small transformer | ~5M parameters | 100M environment steps |
+
+Defer an XL tier. A ~50M-parameter tier should be added only after the Large
+tier results land and the probe/intervention methodology is stable.
+
+### Literature note depth
+
+File Phase 0 with a structured literature spine, not a full paragraph-by-
+paragraph literature review. The immediate need is to anchor terms and probe
+design, not to turn the roadmap into a survey. Expand to paragraph summaries
+only when Appendix A or the Phase 3 probe slate needs a specific citation.
+
+## Roadmap
+
+### Phase 0 - Scope and Literature Pass
+
+Goal: pin the exact claim, the environment family, and the matched
+controller-family definitions before writing experiments.
+
+Deliverables:
+
+- A one-page claim boundary specifying which falsification mode the mesa
+  experiment attacks and which it does not.
+- A structured literature spine covering mesa-optimization, goal
+  misgeneralization, reward hacking, reward misspecification, goal
+  representations, asymmetric information in RL, constrained/shielded RL, and
+  interpretability tools for learned proxy representations.
+- The canonical environment family: shadow-field navigation, with separable
+  `S(x)`, matched `R(s, a)`, controllable geometry, explicit probe
+  affordances, and tidal-toy reserved as the second-environment port.
+- Architecture pinning for HC-Signature, L-Signature, L-Reward, L-Mixed.
+- Initial capacity ladder definition (Small / Medium / Large by parameter
+  count, with budget caps; XL deferred).
+- Initial selection-pressure curriculum definition (dense signature, threshold
+  signature, imitation-from-HC, dense reward, sparse reward, mixed lambda,
+  signature-first, reward-first, reward-shape adversary).
+
+Exit criterion: the four controller families are pinned, the environment
+family is pinned, and the claim boundary is written.
+
+Phase 0 literature spine:
+
+- Hubinger et al., *Risks from Learned Optimization in Advanced Machine
+  Learning Systems* (2019): mesa-optimization terminology, inner/outer
+  alignment distinction.
+- Langosco et al., *Goal Misgeneralization in Deep Reinforcement Learning*
+  (2022), and Shah et al., *Goal Misgeneralization* (2022): empirical
+  distribution-shift framing for capability/objective decoupling.
+- Krakovna et al.'s specification-gaming examples and Skalse et al.,
+  *Defining and Characterizing Reward Hacking* (2022): reward-hacking
+  taxonomy and Formal Separability Appendix A citations.
+- Pan, Bhatia, and Steinhardt, *The Effects of Reward Misspecification* (2022):
+  capacity and phase-transition framing for reward hacking.
+- Olsson/Olah interpretability work and Bricken et al. on sparse autoencoders:
+  Phase 6 representation-probe candidates.
+- Tian, Chen, and related work on goal representations and linear probes in RL
+  agents: candidate tools for detecting proxy-objective features.
+- Privileged-information and asymmetric-actor-critic literature, including
+  Pinto and Andrychowicz lines of work: adjacent because training signals can
+  contain information unavailable at evaluation time.
+- García and Fernández's constrained/shielded RL survey: useful contrast for
+  "Sundog vs. constrained RL" boundary language.
+
+### Phase 1 - Reference Task and Hand-Coded Sundog Controller
+
+Goal: build the canonical signature-control task and verify HC-Signature
+works on it before any learning enters the picture.
+
+Deliverables:
+
+- Shadow-field navigation implementation with explicit `S(x)` accessor and
+  matched `R(s, a)` accessor, separable in source code so it is impossible to
+  accidentally couple them.
+- Sensor-tier wrappers mirroring the three-body workbench: privileged-field,
+  local-probe-field, delayed-field, noisy-field.
+- HC-Signature implementation (SCAN/SEEK/TRACK) demonstrated to maintain
+  regime on the matched task at each sensor tier.
+- A reproducibility harness with seeded trials, manifest format, and per-trial
+  JSONL logs in the three-body harness style.
+
+Exit criterion: HC-Signature works on the canonical task at the privileged
+tier and degrades cleanly across the lower tiers. The harness can replay
+trials byte-for-byte.
+
+### Phase 2 - Matched-Capacity Learned Controllers
+
+Goal: train L-Signature, L-Reward, and L-Mixed at the Small / Medium / Large
+capacity tiers and confirm they all solve the matched task under nominal
+conditions.
+
+Deliverables:
+
+- Matched training pipelines for the three learned families, with identical
+  optimizer, batch, sample-budget, and seed conventions.
+- Capacity ladder: Small (~5K parameters, 1M steps), Medium (~250K
+  parameters, 10M steps), and Large (~5M parameters, 100M steps), scaled
+  consistently across families. XL is deliberately deferred.
+- Nominal-condition performance verification: each learned family at each
+  capacity tier should solve the matched task within a defensible budget.
+- A first capacity report comparing terminal performance and sample efficiency
+  across families and tiers under no probe.
+
+Exit criterion: matched-capacity controllers exist for all four families and
+all three tiers. Nominal task performance is comparable across families at
+each tier.
+
+### Phase 3 - Proxy-Splitting Probe Slate
+
+Goal: design and run the distribution-shift probe slate that decouples common
+shortcuts from the true external signature, and measure which controller
+families remain tied to the field.
+
+Probe design principles:
+
+- Each probe preserves `S(x)` at the target argmax while breaking at least
+  one shortcut a learned policy might have absorbed (positional, visual,
+  textural, temporal).
+- Probes are graded by severity: small probes that preserve the gross
+  signature geometry, larger probes that distort surface features more
+  aggressively.
+- Each probe is matched: identical seeds across families.
+
+Deliverables:
+
+- A probe slate spanning at least five distinct shortcut axes:
+  rotation/translation/scale/mirror transforms, irrelevant texture changes,
+  decoy fields with mismatched decay structure, channel-specific sensor noise,
+  and positional shortcut breaks.
+- Per-family, per-tier, per-capacity performance under each probe.
+- A primary report: rate of regime loss under proxy-splitting probes, broken
+  out by family and capacity.
+- An aggregate report: capacity at which L-Signature begins to behave
+  indistinguishably from L-Reward under proxy splits, if at all.
+
+Exit criterion: at least one probe meaningfully distinguishes L-Signature
+behavior from L-Reward behavior at some capacity tier, or the slate is
+strengthened until it does. A negative result here is still informative if
+the probe slate is strong.
+
+### Phase 4 - Causal Intervention Battery
+
+Goal: replace the Causal Intervention Test from `SUNDOG_V_GRAVITY.md`
+Candidate 7 with a battery that runs inside the mesa harness, identifying
+where control authority lives in each controller family.
+
+Intervention channels:
+
+- **Reward edit:** alter the scalar reward without changing the world.
+- **Observation edit:** alter what the agent sees without changing the world.
+- **Signature-sensor edit:** corrupt the measured signature while leaving
+  geometry fixed.
+- **Geometry edit:** change the underlying environmental state that generates
+  the signature, holding the privileged signature value constant where
+  possible.
+- **Internal-proxy edit:** when interpretability allows, edit the candidate
+  internal proxy representation directly (Phase 6).
+
+Deliverables:
+
+- An intervention-response matrix for each controller family: which edits
+  change policy, regime retention, and failure mode.
+- A causal-authority graph: where control authority lives for HC-Signature,
+  L-Signature at each capacity, and L-Reward.
+- A diagnostic for internal-proxy emergence: an L-Signature policy that
+  follows a reward-channel or observation-channel edit *more* than the
+  external signature signal is showing internal-proxy capture.
+
+Exit criterion: every controller family has an intervention-response matrix.
+The diagnostic for internal-proxy emergence is defined and applied.
+
+### Phase 5 - Selection-Pressure Curriculum
+
+Goal: separate capacity from selection-pressure shape and measure mesa
+emergence across selection regimes at fixed capacity.
+
+The earlier candidate framing scaled capacity. This phase fixes capacity and
+varies the *shape* of selection pressure, because mesa emergence is widely
+suspected to depend on training-signal structure more than parameter count.
+
+Pinned selection-pressure variants:
+
+- **Signature-only, dense:** L-Signature trained on `g(S(x_T))` with linear
+  `g`.
+- **Signature-only, threshold:** L-Signature trained on a hard threshold over
+  `S`, testing whether sparse signature pressure induces different proxy
+  behavior than dense shaping.
+- **Imitation-from-HC:** L-Signature trained purely by behavior cloning from
+  HC-Signature trajectories.
+- **Dense reward:** L-Reward canonical with continuous distance shaping.
+- **Sparse reward:** L-Reward with success/failure only.
+- **Curriculum, signature-first:** train as L-Signature, then fine-tune on
+  `R`.
+- **Curriculum, reward-first:** train as L-Reward, then fine-tune on the
+  signature objective. Diagnostic for whether reward pretraining poisons
+  later signature training.
+- **Mixed lambda schedule:** L-Mixed at
+  `lambda in {0.1, 0.3, 0.5, 0.7, 0.9}`.
+- **Reward-shape adversary:** periodically inject small perturbations into the
+  reward shaping function during training (shift, scale, rotate) to test
+  whether the learned policy is robust in the signature flavor or fragile in
+  the proxy-collapse flavor.
+
+Hindsight relabeling is held out for now. It is a fourth axis, and the initial
+matrix is already large enough to debug without it.
+
+Deliverables:
+
+- A selection-pressure × capacity matrix with one entry per cell summarizing
+  proxy-splitting probe performance and intervention-response shape.
+- A failure-mode taxonomy: at which selection-pressure shapes does
+  L-Signature behave like L-Reward, and which sustain the gravity claim?
+- A first claim ratchet candidate: a named (capacity, selection-pressure)
+  pocket where L-Signature retains the gravity claim's distinction, mirroring
+  the three-body Phase 9 operating pocket structure.
+
+Exit criterion: the selection-pressure × capacity matrix is filled with
+quantitative results. At least one pocket is identified where L-Signature is
+measurably distinct from L-Reward under proxy splits and interventions.
+
+### Phase 6 - Interpretability / Representation Probes
+
+Goal: probe internal representations of learned controllers for evidence of
+proxy-objective formation, and cross-reference with the Phase 4 causal
+results.
+
+Probe families:
+
+- **Linear probes** on hidden activations for reward-correlated scalars.
+- **Activation patching** between L-Reward and L-Signature on matched inputs.
+- **Sparse autoencoder features** (if scale permits) for goal-like directions.
+- **Behavioral probes:** synthetic inputs designed to disambiguate "tracking
+  the external field" from "tracking a learned shortcut."
+
+Honest framing rules:
+
+- A failed search for a mesa-objective is not evidence one cannot emerge.
+- Probes may be too weak to distinguish "tracks the signature robustly" from
+  "tracks a learned shortcut that happened not to break yet."
+- The result must be framed as stress evidence, not a proof of absence.
+
+Deliverables:
+
+- A per-capacity, per-selection-pressure representation report.
+- Cross-reference with Phase 4 intervention-response matrix: do the probes
+  agree with the causal interventions?
+- A list of caveats and known interpretability blind spots for the chosen
+  architecture and capacity ladder.
+
+Exit criterion: representation probes are run on at least the medium and
+large capacity tiers across the L-Signature and L-Reward families. The
+representation report explicitly names what it cannot say.
+
+### Phase 7 - Operating Envelope and Failure Map
+
+Goal: replace anecdotal "Sundog held up at small scale" framing with a
+mapped operating envelope, in the spirit of the three-body Phase 9 sweep.
+
+Sweep axes:
+
+- capacity tier;
+- selection-pressure shape;
+- probe-slate severity;
+- sensor tier;
+- intervention channel.
+
+Outputs (mirroring the three-body Phase 9 file convention):
+
+- `results/mesa/operating-envelope/manifest.json`
+- `trial-outcomes.csv`
+- `envelope-map.csv`
+- `aggregate-envelope.csv`
+- `best-by-cell.csv`
+- `cell-class-map.csv`
+- `cell-delta-map.csv`
+- `candidate-envelope.csv`
+- success/failure heatmaps;
+- representative replays for "L-Signature distinct from L-Reward,"
+  "L-Signature collapsed to L-Reward," and "ambiguous" cells.
+
+Exit criterion: the operating-envelope map can show where the gravity claim
+holds under selection pressure and where it does not, with the same evidence
+discipline as the three-body Phase 9 result.
+
+### Phase 8 - Writeup, Claim Ratchet, and Public Artifact
+
+Goal: turn the result into a defensible Sundog hook, update the boundary
+language across the program, and ship a public artifact.
+
+Immediate work:
+
+- Update `docs/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa
+  result, replacing speculative language with the strongest claim actually
+  earned by Phase 7.
+- Update `docs/presentation/claims-and-scope.md` §The Gravity Frame and
+  §Unsupported Universal Claims to reflect the new evidence.
+- Update `docs/SUNDOG_V_GRAVITY.md` Candidate 2 (Mesa) and Candidate 1
+  (Formal Separability) status, with the appendix theorem either ratified or
+  flagged as in progress.
+- Build an interactive browser visualization at `mesa.html` showing the
+  controller-family ladder, probe slate, intervention battery, and a
+  representative best-cell vs worst-cell replay.
+
+Claim ratchet candidates by phase result:
+
+> *If Phase 7 holds:* In the tested environment family, learned signature-
+> trained controllers remain measurably tied to the external field across the
+> mapped capacity and selection-pressure pocket, while matched reward-trained
+> controllers exhibit characteristic proxy-collapse failures under the same
+> probes. The result is not global: capacity and selection-pressure cells
+> outside the mapped pocket remain known harm boundaries.
+>
+> *If Phase 7 partially holds:* In the tested environment family, learned
+> signature-trained controllers retain the gravity-claim distinction inside a
+> bounded (capacity, selection-pressure) pocket. The boundary is mapped, and
+> the gravity frame is updated to reflect that bound.
+>
+> *If Phase 7 falsifies:* In the tested environment family, learned
+> signature-trained controllers exhibit proxy-collapse failures
+> indistinguishable from matched reward-trained controllers above a measured
+> capacity threshold. The gravity frame is downgraded accordingly. The Formal
+> Separability appendix becomes the program's primary defense of mode (3),
+> and Spacecraft / Conservation-Law candidates absorb more of the public-
+> facing burden.
+
+Do not claim, in any of the three outcomes:
+
+- "Sundog is immune to mesa-optimization."
+- "Reward hacking does not occur in signature-trained agents."
+- "Inner alignment is solved."
+
+Exit criterion: the writeup, page copy, and program-wide boundary language
+all use the strongest claim actually earned by the completed phase, and no
+stronger one.
+
+---
+
+## Appendix A — Formal Separability Theorem
+
+Promoted from `SUNDOG_V_GRAVITY.md` Candidate 1. This appendix is the
+intellectual target the empirical roadmap is trying to earn. It is included
+here so the theorem and the experiment live in the same artifact and
+constrain each other.
+
+### Motivation
+
+The gravity claim depends on a structural distinction: a signature `S(x)` is
+a function of environmental state alone, while a reward `R(s, a)` or `R(o, a)`
+is a function the agent participates in. The empirical mesa experiment can
+show that learned signature-trained controllers behave differently under
+proxy splits, but it cannot, by itself, prove the distinction is real. A
+hostile reviewer can always argue "your signature is just a reward in
+costume" without running an experiment.
+
+The Formal Separability Theorem names the conditions under which the
+distinction is mathematically nontrivial, and ships counterexamples that
+mark the boundary.
+
+### Setup
+
+Let:
+
+- `X` be environment state.
+- `A` be agent action.
+- `P(x' | x, a)` be transition dynamics.
+- `S: X -> Σ` be a signature map, defined as a function of `X` alone.
+- `R: X × A -> ℝ` or `R: O × A -> ℝ` be a reward function, where `O` is the
+  agent's observation channel.
+- An adversary with bounded budget on each of the following channels:
+  - reward editing (alter `R` values directly);
+  - observation editing (alter `O` without changing `X`);
+  - signature-sensor corruption (alter measured `S` without changing `X`);
+  - geometry editing (alter `X` itself).
+
+### Theorem (conditional separation)
+
+In environments where `S` is policy-independent except through the real
+transition dynamics over `X`, the adversary's cost to steer a signature-
+tracking controller by a fixed regime amount is bounded below by the cost
+of either:
+
+1. corrupting the signature sensor, or
+2. performing geometric work on `X`.
+
+The same adversary can steer a reward-optimizing controller by the same
+regime amount through reward editing or observation editing alone, at cost
+strictly less than (1) and (2) for at least one nontrivial adversary class.
+
+This is a conditional theorem, not a universal one. The conditions are:
+
+- `S` must be policy-independent in the stated sense;
+- the adversary class must include cheap reward or observation channels and
+  expensive sensor or geometry channels;
+- the regime change must be definable in `Σ`-space.
+
+### Counterexamples to ship
+
+The theorem boundary is visible only if its counterexamples are explicit.
+Required counterexamples:
+
+- **Policy-dependent signature.** A "signature" that takes the agent's
+  action history as input is not a signature under this theorem. Includes
+  most learned representations of state-action histories.
+- **Cheap sensor.** A signature observed through a sensor the adversary can
+  spoof at low cost collapses to the reward case. Includes most software
+  sensors without physical grounding.
+- **Cheap geometry.** An environment where rearranging `X` is on the
+  adversary's cheap action surface (e.g., text generation, recommender
+  feeds) collapses the separation.
+- **Decompilable signature.** A signature that can be written as a
+  closed-form function of a scalar agent-corruptible quantity is the reward
+  in costume. Sharp examples should be constructed and included.
+
+### Open Questions
+
+- Does the theorem extend to learned signatures fit from data? Probably not
+  without additional structure on the fitting procedure.
+- Does the cost asymmetry survive composition? When multiple adversaries
+  combine cheap-channel attacks, does the bound degrade gracefully?
+- What is the relationship between this theorem and existing inner-alignment
+  formalisms (deceptive alignment, gradient hacking)? Cross-citations are
+  required before publication.
+
+### Bridge to the Empirical Mesa Experiment
+
+The empirical experiment in this roadmap is the operational test of the
+theorem's conditions in learned-agent settings:
+
+- Phase 1's HC-Signature controller is the closest practical realization of
+  a "tracks `S(x)` only" policy.
+- Phase 2–5 ask whether learned `L-Signature` policies inherit that property
+  or break it under capacity and selection pressure.
+- Phase 4's causal intervention battery is the empirical analogue of the
+  adversary cost ladder defined in the theorem.
+- Phase 6's interpretability probes are the empirical search for the
+  "decompilable signature" counterexample emerging inside the agent.
+
+The theorem and the experiment ratchet together. A ratified theorem with no
+experimental support is a sanitized toy. An experimental pocket with no
+theorem is a tuned slate. Run together, they define the strongest version of
+the gravity claim the program can defend with current methods.
+
+---
+
+## Downstream Dependencies
+
+This roadmap absorbs Candidate 1 (Formal Separability Theorem) as Appendix A
+and Candidate 7 (Causal Intervention Test) as Phase 4. The Sundog Gravity
+Ledger should mark these as promoted out.
+
+Downstream candidates depend on infrastructure built here:
+
+- **Candidate 4 - Manipulation-Cost Ladder.** Inherits Phase 3's probe slate,
+  Phase 4's intervention battery, and Phase 7's sweep harness. The ladder
+  experiment becomes a sweep extension once mesa Phase 7 ships.
+- **Candidate 5 - Adversarial Signature Benchmark.** Inherits the entire
+  controller-family architecture and the operating-envelope harness. Becomes
+  primarily an environment-design problem once mesa infrastructure is built.
+- **Candidate 6 - Cross-Domain Invariance Battery.** Uses the mesa controller
+  families and probe slates as one of its domain entries.
+- **Candidate 10 - Conservation-Law Domain.** Uses the controller-family
+  architecture and harness once a specific physical domain is chosen.
+
+The gravity ledger should be updated to mark each of these candidates as
+"depends on infrastructure from `SUNDOG_V_MESA.md` Phases 1–4 and 7," with
+their Current Recommendation language adjusted to reflect the sequencing.
+
+## Implementation Status
+
+**Phase 0:** Decision lock drafted in this document. The environment-family
+pick, claim boundary, architecture pinning, capacity ladder, selection-pressure
+curriculum, and literature spine are now specified. Implementation and the
+full literature note have not started.
+
+**Phases 1–8:** Not started.
+
+**Appendix A:** Drafted in this document as the intellectual target. The
+formal note is not yet a ratified theorem; the open questions section is
+load-bearing.
+
+The current public-facing status, in the spirit of `claims-and-scope.md`:
+
+> Sundog vs. Mesa-Optimization is a proposed roadmap with no implemented
+> phases. The gravity claim's mode-(3) falsification surface is therefore
+> defended currently by structural argument and by the bounded three-body
+> operating-envelope result, not by adversarial mesa experiments. The
+> roadmap above defines what those experiments will look like when staged.
+
+## Recommendation
+
+Proceed with Phase 0 implementation immediately and treat Phases 1–4 as the
+minimum viable mesa front. Phase 5 (selection-pressure curriculum) is the
+highest-marginal-value phase and should be designed before Phase 2 even though
+it runs later, because the matched-capacity learned controllers in Phase 2 must
+be trained under selection-pressure variants that Phase 5 will sweep.
+
+Run the Formal Separability Theorem appendix in parallel with Phase 0. A
+ratified or near-ratified theorem before Phase 3 lets the probe slate be
+designed against the theorem's named counterexamples rather than ad hoc.
+
+If at any phase the L-Signature family begins to track L-Reward
+indistinguishably under proxy splits, do not silence the result. The honest
+move is to map the boundary and ratchet the public claim down. The gravity
+frame's value is in its discipline, not in its size.

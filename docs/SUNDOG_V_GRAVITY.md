@@ -21,6 +21,32 @@ demonstrate the structural shape — indirect signal, transformed signature,
 bounded control — without making the gravity claim. This ledger is where the
 claim is staged for later, expensive defense.
 
+### Promotions
+
+The following candidates have been promoted out of this ledger into roadmap
+documents. Their entries below are retained for archival reference and for
+their detailed Sundog-expression blocks, but they are no longer first-priority
+targets here:
+
+- **Candidate 1 - Formal Separability Theorem** → promoted as Appendix A of
+  [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md).
+- **Candidate 2 - Mesa-Optimization Trap** → promoted as the empirical front
+  of [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md).
+- **Candidate 7 - Causal Intervention Test** → promoted as Phase 4 of
+  [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md).
+
+The following candidates depend on infrastructure built by
+`SUNDOG_V_MESA.md` and are sequenced accordingly:
+
+- **Candidate 4 - Manipulation-Cost Ladder** — inherits Phase 3 probe slate,
+  Phase 4 intervention battery, Phase 7 sweep harness.
+- **Candidate 5 - Adversarial Signature Benchmark** — inherits controller-
+  family architecture and operating-envelope harness.
+- **Candidate 6 - Cross-Domain Invariance Battery** — uses mesa controller
+  families and probe slates as one domain entry.
+- **Candidate 10 - Conservation-Law Domain** — uses the controller-family
+  architecture and harness once a specific physical domain is chosen.
+
 ## Claim Boundary
 
 This document does **not** claim that Sundog has demonstrated reward-hacking
@@ -167,34 +193,36 @@ following:
 
 ## Shortlist Recommendation
 
-Current first-pass order of merit, by proof value first and implementation
-nearness second:
+Current order of merit, with promotion status marked. The mesa front
+(Candidates 1, 2, 7) is now staged in [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md);
+downstream candidates depend on infrastructure built there.
 
-1. **Formal Separability Theorem** - first priority because it attacks the
-   hinge of the gravity claim: when is a signature structurally different from
-   a reward?
-2. **Mesa-Optimization Trap** - first-priority red-team experiment because it
-   attacks the most dangerous scale failure: a signature agent learning an
-   internal reward anyway.
-3. **Spacecraft Trajectory Under Unmodeled Perturbation** - inherits the most
-   three-body tooling; cleanest physical attack on falsification mode (1).
-4. **Manipulation-Cost Ladder** - turns the Goodhart sidestep into a measured
-   cost curve across reward, observation, sensor, and geometry attacks.
-5. **Adversarial Signature Benchmark** - cheapest expensive experiment;
-   cleanest empirical attack on falsification mode (2).
-6. **Cross-Domain Invariance Battery** - strongest defense against the
-   "one-off gimmick" read; proves the controller grammar travels.
-7. **Causal Intervention Test** - clearest red-team proof of where control
-   authority lives.
-8. **Fluid / Wake Navigation** - strongest new physical signature candidate
-   after spacecraft.
-9. **Embodied Robotics Under Denied State** - high-investment public proof that
-   field-reading is not just simulation.
-10. **Conservation-Law Domain** - engineering-heavy but philosophically clean:
-    signatures protected by physics.
-11. **Side-Channel Defense (stretch)** - highest stir, longest horizon; would
-    put the gravity claim inside a domain that visibly suffers from Goodhart in
-    production.
+1. **Formal Separability Theorem** — *Promoted to SUNDOG_V_MESA.md Appendix A.*
+   Attacks the hinge of the gravity claim: when is a signature structurally
+   different from a reward?
+2. **Mesa-Optimization Trap** — *Promoted to SUNDOG_V_MESA.md empirical front.*
+   First-priority red-team experiment; attacks falsification mode (3).
+3. **Spacecraft Trajectory Under Unmodeled Perturbation** — first-priority
+   *physical* horizon experiment. Inherits three-body tooling; cleanest attack
+   on falsification mode (1). Does not depend on the mesa roadmap.
+4. **Manipulation-Cost Ladder** — *Depends on SUNDOG_V_MESA.md Phases 3–4, 7.*
+   Becomes a sweep extension once mesa Phase 7 ships.
+5. **Adversarial Signature Benchmark** — *Depends on SUNDOG_V_MESA.md
+   architecture and harness.* Primarily an environment-design problem once
+   mesa infrastructure is built.
+6. **Cross-Domain Invariance Battery** — *Depends on SUNDOG_V_MESA.md as one
+   domain entry.* Best pursued after at least one physical or adversarial
+   candidate has a real result.
+7. **Causal Intervention Test** — *Promoted to SUNDOG_V_MESA.md Phase 4.*
+8. **Fluid / Wake Navigation** — strongest new physical signature candidate
+   after spacecraft. Independent of the mesa roadmap.
+9. **Embodied Robotics Under Denied State** — high-investment public proof
+   that field-reading is not just simulation. Independent of the mesa roadmap.
+10. **Conservation-Law Domain** — *Soft dependency on SUNDOG_V_MESA.md
+    controller-family architecture.* Engineering-heavy; promote only after
+    one concrete physical domain is chosen.
+11. **Side-Channel Defense (stretch)** — highest stir, longest horizon.
+    Independent of the mesa roadmap.
 
 ---
 
@@ -268,8 +296,10 @@ separates signature manipulation from reward manipulation.
 
 ### Current recommendation
 
-First-priority intellectual target. This does not replace experiments; it tells
-the experiments what they are trying to earn.
+*Promoted to [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) Appendix A.* First-priority
+intellectual target. This does not replace experiments; it tells the
+experiments what they are trying to earn. The roadmap appendix is the active
+working location; this entry is retained for archival reference.
 
 ---
 
@@ -339,8 +369,10 @@ more strongly than matched reward training.
 
 ### Current recommendation
 
-First-priority red-team experiment. It should be staged early because it keeps
-the gravity claim honest before the public language hardens.
+*Promoted to [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) as the empirical front
+(Phases 0–8).* First-priority red-team experiment; staged early so the gravity
+claim is stress-tested before public language hardens. The roadmap is the
+active working location; this entry is retained for archival reference.
 
 ---
 
@@ -473,9 +505,11 @@ across the ladder, the gravity claim has not earned its core distinction.
 
 ### Current recommendation
 
-High-priority empirical bridge between the formal theorem and the benchmark
-suite. This could be merged with Candidate 5 if implementation pressure favors
-one shared harness.
+*Depends on infrastructure from [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md)
+Phases 3–4, 7.* High-priority empirical bridge between the formal theorem and
+the benchmark suite. Once mesa Phase 7 ships, this becomes a sweep extension
+of the existing harness rather than a standalone build. Could still be merged
+with Candidate 5 if implementation pressure favors one shared harness.
 
 ---
 
@@ -539,9 +573,11 @@ budgets, the Goodhart sidestep is not earning its keep.
 
 ### Current recommendation
 
-Still the cheapest expensive experiment. A first-pass version could plausibly
-run inside existing repo tooling once the environment is designed, especially
-if it shares infrastructure with the manipulation-cost ladder.
+*Depends on [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) controller-family
+architecture and operating-envelope harness.* Still the cheapest expensive
+experiment in absolute terms; primarily an environment-design problem once
+mesa infrastructure is built. Shares infrastructure with the manipulation-cost
+ladder and benefits from being scheduled alongside it.
 
 ---
 
@@ -606,8 +642,10 @@ the same structure remains useful.
 
 ### Current recommendation
 
-Medium-priority broadcast proof. Best pursued after at least one more physical
-or adversarial candidate has a real result.
+*Uses [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) mesa controller families and
+probe slates as one domain entry.* Medium-priority broadcast proof. Best
+pursued after at least one more physical or adversarial candidate has a real
+result, so the battery has more than one nontrivial domain to compose.
 
 ---
 
@@ -664,8 +702,10 @@ moving the field or corrupting the sensor.
 
 ### Current recommendation
 
-High-value companion to the manipulation-cost ladder. It is less a standalone
-workbench than a proof instrument that can be attached to the benchmark slate.
+*Promoted to [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) Phase 4 as the Causal
+Intervention Battery.* High-value proof instrument; less a standalone
+workbench than a battery attached to the mesa harness. The roadmap is the
+active working location; this entry is retained for archival reference.
 
 ---
 
@@ -837,8 +877,12 @@ or label channel.
 
 ### Current recommendation
 
+*Soft dependency on [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) controller-family
+architecture and harness, once one concrete physical domain is chosen.*
 Long-horizon engineering candidate. Keep it in the ledger as a principled
-family, but promote only after one concrete system is chosen.
+family; the domain pick (thermal, pressure, grid, structural) is the gating
+decision before any roadmap promotion. Reusing mesa infrastructure is the
+cheapest implementation path once a domain is selected.
 
 ---
 
