@@ -685,8 +685,9 @@ controller, Oracle ceiling, seeded harness, replay verification, and default
 `npm run mesa:phase1` command are in place. Result note:
 [`mesa/PHASE1_HC_BASELINE.md`](mesa/PHASE1_HC_BASELINE.md).
 
-**Phase 2:** Started. The bridge smoke and BC dataset smoke slices are in
-place; learned controllers have not been trained yet.
+**Phase 2:** Started. The bridge smoke, BC dataset smoke, and first Small-tier
+behavior-cloned L-Signature controller are in place. Reward-trained and mixed
+controllers have not been trained yet.
 
 **Phases 3-8:** Not started.
 
@@ -698,6 +699,11 @@ and Small/Medium-before-Large execution. The first Phase 2 smoke slices are in:
 behavior, including batch auto-reset, restart determinism, and a lightweight
 throughput check. `npm run mesa:phase2:bc-dataset-smoke` verifies HC rollout
 extraction, loader sanity checks, and the train/val split for behavior cloning.
+`npm run mesa:phase2:bc-small` trains and evaluates the first learned
+imitation policy; the latest run reached 63/64 held-out successes (98.4%) with
+mean terminal alignment 0.9969. `npm run mesa:phase2:bc-js-eval-small` replays
+the exported `.policy.json` directly in the JS environment and matches the
+checkpoint evaluation.
 
 **Appendix A:** Drafted in this document as the intellectual target. The
 formal note is not yet a ratified theorem; the open questions section is
@@ -708,10 +714,11 @@ The current public-facing status, in the spirit of `claims-and-scope.md`:
 > Sundog vs. Mesa-Optimization has completed its Phase 1 reference-task
 > baseline: a hand-coded signature controller tracks the shadow-field
 > signature across privileged, local-probe, delayed, and noisy sensor tiers.
-> Phase 2 infrastructure has begun with bridge and BC dataset smoke checks.
-> Learned controllers have not been trained yet, so the gravity claim's
-> mode-(3) falsification surface remains untested by learned-agent mesa
-> experiments.
+> Phase 2 infrastructure has begun, and the first Small-tier behavior-cloned
+> signature policy passes the nominal imitation gate. Reward-trained baselines,
+> mixed controllers, and proxy-splitting probes have not run yet, so the
+> gravity claim's mode-(3) falsification surface remains untested by the full
+> learned-agent mesa comparison.
 
 ## Recommendation
 

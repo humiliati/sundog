@@ -243,10 +243,10 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
             "tier": args.tier,
             "seed": args.seed,
             "sensor_tier": args.sensor_tier,
-            "parameter_count": training["parameter_count"],
+            "parameter_count": checkpoint["training"]["parameter_count"],
             "epochs": args.epochs,
-            "best_epoch": training["best_epoch"],
-            "best_val_loss": training["best_val_loss"],
+            "best_epoch": checkpoint["training"]["best_epoch"],
+            "best_val_loss": checkpoint["training"]["best_val_loss"],
             "checkpoint_path": run_summary["checkpoint_path"],
             "policy_json_path": run_summary["policy_json_path"],
         })

@@ -78,6 +78,7 @@ Planned files:
 ```text
 scripts/
   mesa-env-bridge.mjs          # persistent Node worker over stdio
+  mesa-evaluate-policy-json.mjs # exported policy evaluator in canonical JS env
 
 training/mesa/
   hc_bc_dataset.py             # HC-Signature behavior-cloning dataset loader
@@ -199,7 +200,9 @@ BC is the first executable Phase 2 slice.
 Data source:
 
 - HC-Signature local-probe rollouts from `npm run mesa:phase1`;
-- use only non-terminal step records with `obs` and `a`;
+- use only non-terminal step records with the pre-action `obsBefore` and `a`
+  fields; `obs` remains a fallback for older traces but is post-action in
+  current Phase 1 JSONL and must not be treated as the preferred BC input;
 - default dataset: 32 seeds from `results/mesa/phase1-hc-baseline/trials`;
 - expand to 256 seeds before Medium if Small is noisy.
 
@@ -467,19 +470,36 @@ external dependencies. Latest local smoke: auto-reset pass, restart
 determinism pass, throughput 40,242 env-steps/sec.
 
 **BC dataset smoke:** implemented. `training/mesa/hc_bc_dataset.py` reads
-Phase 1 `trial_paths`, extracts HC-Signature local-probe `(obs, action)` pairs,
-validates shape/action-clip/finite/variance/count invariants, exposes the
-PyTorch-native `HCBcDataset` API, and emits the manifest `bc_dataset` block.
+Phase 1 `trial_paths`, extracts HC-Signature local-probe `(obsBefore, action)`
+pairs, validates shape/action-clip/finite/variance/count invariants, exposes
+the PyTorch-native `HCBcDataset` API, and emits the manifest `bc_dataset`
+block.
 `training/mesa/smoke_bc_dataset.py` runs the stdlib artifact check before
 learning dependencies are installed. Latest local smoke: 2589 train pairs, 263
 val pairs, 89.1 average trajectory length, 100.0% successful trajectories
 included.
 
-**BC training / PPO:** not started.
+**Small BC:** implemented. `training/mesa/policy.py` defines the Small MLP
+policy and deterministic JSON export; `training/mesa/train_bc.py` trains
+`signature_bc_from_hc`; `training/mesa/evaluate_policy.py` runs closed-loop
+evaluation through the JS bridge. Latest local run:
+`npm run mesa:phase2:bc-small` trained a 4738-parameter Small policy with
+best validation MSE `0.01554356`, wrote checkpoint and `.policy.json`, and
+evaluated at 63/64 held-out successes (98.4%) with mean terminal alignment
+0.9969 and mean steps 114.3. This passes the Small BC gate.
+
+**JSON policy replay:** implemented. `JsonPolicyController` in
+`public/js/mesa-core.mjs` can execute exported `mesa-policy-json-v1` MLPs
+inside the canonical JS environment. `npm run mesa:phase2:bc-js-eval-small`
+replays the exported Small BC `.policy.json` directly in JS and matches the
+Python bridge evaluation: 63/64 successes, mean terminal alignment 0.9969,
+mean steps 114.3.
+
+**PPO:** not started.
 
 ## 14. Versioning
 
-This document is version `v1.2`.
+This document is version `v1.4`.
 
 - `v1` (2026-05-10): locks Python trainer with JS env bridge, PPO as the
   matched RL algorithm, BC-first ordering, checkpoint/export format, and
@@ -489,3 +509,9 @@ This document is version `v1.2`.
   policy-export replay-verification bullet added to §12 exit criterion.
 - `v1.2` (2026-05-10): adds the HC behavior-cloning dataset API, cheap loader
   sanity checks, manifest `bc_dataset` block, and local dataset smoke status.
+- `v1.3` (2026-05-10): fixes BC trace alignment around pre-action
+  `obsBefore`, adds policy/train/evaluate utilities, and records the first
+  passing Small BC run.
+- `v1.4` (2026-05-10): adds JS execution of exported `mesa-policy-json-v1`
+  policies and records parity between PyTorch checkpoint evaluation and JSON
+  policy replay.

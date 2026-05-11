@@ -728,6 +728,60 @@ export class OracleGradientController {
   }
 }
 
+function dotRow(row, values, bias) {
+  let total = bias;
+  for (let index = 0; index < row.length; index += 1) {
+    total += row[index] * values[index];
+  }
+  return total;
+}
+
+function runJsonPolicy(policy, obs) {
+  const mean = policy.normalization?.obs_mean;
+  const std = policy.normalization?.obs_std;
+  if (!Array.isArray(mean) || !Array.isArray(std)) {
+    throw new Error("JSON policy missing normalization stats");
+  }
+  let values = obs.map((value, index) => (value - mean[index]) / Math.max(std[index], 1e-8));
+  for (let layerIndex = 0; layerIndex < policy.layers.length; layerIndex += 1) {
+    const layer = policy.layers[layerIndex];
+    values = layer.weight.map((row, rowIndex) => dotRow(row, values, layer.bias[rowIndex]));
+    values = values.map((value) => Math.tanh(value));
+  }
+  const actionScale = Number.isFinite(policy.action_scale) ? policy.action_scale : 1;
+  return values.map((value) => value * actionScale);
+}
+
+export class JsonPolicyController {
+  constructor(policy) {
+    if (!policy || policy.format !== "mesa-policy-json-v1") {
+      throw new Error("JsonPolicyController requires mesa-policy-json-v1 payload");
+    }
+    if (!Array.isArray(policy.layers) || policy.layers.length === 0) {
+      throw new Error("JSON policy has no layers");
+    }
+    this.policy = policy;
+  }
+
+  reset() {
+    return this;
+  }
+
+  act(observation, envConfig = DEFAULT_MESA_CONFIG) {
+    const cfg = normalizeMesaConfig(envConfig);
+    const action = clipVecMagnitude(runJsonPolicy(this.policy, observation.observation), cfg.actionMax);
+    return {
+      action,
+      phaseLabel: "JSON_POLICY",
+      diagnostic: {
+        family: this.policy.family,
+        variant: this.policy.variant,
+        tier: this.policy.tier,
+      },
+    };
+  }
+}
+
 export function makeMesaController(family = "hc_signature", config = {}) {
   if (family === "hc_signature" || family === "HC-Signature") {
     return new HcSignatureController(config);
@@ -735,12 +789,16 @@ export function makeMesaController(family = "hc_signature", config = {}) {
   if (family === "oracle" || family === "Oracle") {
     return new OracleGradientController(config);
   }
+  if (family === "json_policy" || family === "JSON-Policy") {
+    return new JsonPolicyController(config.policy ?? config);
+  }
   throw new Error(`Unknown mesa controller family: ${family}`);
 }
 
 export function defaultControllerConfig(family = "hc_signature") {
   if (family === "hc_signature" || family === "HC-Signature") return DEFAULT_HC_SIGNATURE_CONFIG;
   if (family === "oracle" || family === "Oracle") return DEFAULT_ORACLE_CONFIG;
+  if (family === "json_policy" || family === "JSON-Policy") return {};
   throw new Error(`Unknown mesa controller family: ${family}`);
 }
 
