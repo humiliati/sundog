@@ -80,6 +80,7 @@ scripts/
   mesa-env-bridge.mjs          # persistent Node worker over stdio
 
 training/mesa/
+  hc_bc_dataset.py             # HC-Signature behavior-cloning dataset loader
   js_bridge_env.py             # Gymnasium-style Python wrapper
   policy.py                    # PyTorch policies and JSON export helpers
   train_phase2.py              # CLI coordinator
@@ -87,6 +88,7 @@ training/mesa/
   train_ppo.py                 # PPO loop or SB3 integration wrapper
   evaluate_policy.py           # deterministic nominal evaluator
   smoke_bridge.py              # stdlib bridge protocol smoke test
+  smoke_bc_dataset.py          # stdlib HC dataset artifact smoke test
 ```
 
 Bridge commands:
@@ -200,6 +202,77 @@ Data source:
 - use only non-terminal step records with `obs` and `a`;
 - default dataset: 32 seeds from `results/mesa/phase1-hc-baseline/trials`;
 - expand to 256 seeds before Medium if Small is noisy.
+
+Dataset API:
+
+```python
+class HCBcDataset(torch.utils.data.Dataset):
+    """Supervised dataset for behavior cloning from HC-Signature rollouts."""
+
+    def __init__(
+        self,
+        manifest_path: Path,
+        split: Literal["train", "val"] = "train",
+        sensor_tier: str = "local-probe-field",
+        successful_only: bool = False,
+        normalize: bool = True,
+        seed_base: int = 0,
+        cache_dir: Path | None = None,
+    ) -> None: ...
+
+    def __len__(self) -> int: ...
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]: ...
+
+    @property
+    def obs_mean(self) -> np.ndarray: ...
+    @property
+    def obs_std(self) -> np.ndarray: ...
+    @property
+    def trajectory_count(self) -> int: ...
+```
+
+Dataset smoke command:
+
+```bash
+npm run mesa:phase2:bc-dataset-smoke
+```
+
+Cheap checks run on load/build:
+
+- `obs.shape == (N, 6)` for `local-probe-field`;
+- `action.shape == (N, 2)`;
+- `||action||_inf <= a_max + 1e-6`;
+- no NaN/Inf in obs or action;
+- per-channel obs variance is positive;
+- trajectory count equals `len(manifest.bc_seeds) - excluded_due_to_filter`.
+
+The loader prints one line on build:
+
+```text
+bc_dataset: N_train_pairs train pairs, N_val_pairs val pairs, T_avg avg trajectory length, success_rate% successful trajectories included.
+```
+
+Phase 2 manifests gain a `bc_dataset` block:
+
+```json
+{
+  "bc_dataset": {
+    "source_manifest": "results/mesa/phase1-hc-baseline/manifest.json",
+    "sensor_tier": "local-probe-field",
+    "bc_seeds": [0, 1],
+    "train_seeds": [0],
+    "val_seeds": [1],
+    "successful_only": false,
+    "excluded_due_to_filter": [],
+    "n_train_pairs": 0,
+    "n_val_pairs": 0,
+    "obs_mean": [],
+    "obs_std": [],
+    "cache_path": "results/mesa/phase1-hc-baseline/cache/bc-dataset-local-probe-<hash>.npz",
+    "config_hash": "..."
+  }
+}
+```
 
 BC objective:
 
@@ -391,13 +464,22 @@ Phase 2 is complete when:
 protocol and `training/mesa/smoke_bridge.py` verifies reset/step/batch/auto-
 reset behavior, restart determinism, and throughput from Python with no
 external dependencies. Latest local smoke: auto-reset pass, restart
-determinism pass, throughput about 25k-28k env-steps/sec.
+determinism pass, throughput 40,242 env-steps/sec.
 
-**BC / PPO:** not started.
+**BC dataset smoke:** implemented. `training/mesa/hc_bc_dataset.py` reads
+Phase 1 `trial_paths`, extracts HC-Signature local-probe `(obs, action)` pairs,
+validates shape/action-clip/finite/variance/count invariants, exposes the
+PyTorch-native `HCBcDataset` API, and emits the manifest `bc_dataset` block.
+`training/mesa/smoke_bc_dataset.py` runs the stdlib artifact check before
+learning dependencies are installed. Latest local smoke: 2589 train pairs, 263
+val pairs, 89.1 average trajectory length, 100.0% successful trajectories
+included.
+
+**BC training / PPO:** not started.
 
 ## 14. Versioning
 
-This document is version `v1`.
+This document is version `v1.2`.
 
 - `v1` (2026-05-10): locks Python trainer with JS env bridge, PPO as the
   matched RL algorithm, BC-first ordering, checkpoint/export format, and
@@ -405,3 +487,5 @@ This document is version `v1`.
 - `v1.1` (2026-05-10): inline addendum — auto-reset contract and error
   contract added to §4; bit-exact JSON export requirement added to §9;
   policy-export replay-verification bullet added to §12 exit criterion.
+- `v1.2` (2026-05-10): adds the HC behavior-cloning dataset API, cheap loader
+  sanity checks, manifest `bc_dataset` block, and local dataset smoke status.

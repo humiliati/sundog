@@ -2,6 +2,12 @@ import { normalizeMinesConfig } from "./mines-core.mjs";
 import { normalizeSensorConfig } from "./mines-sensor.mjs";
 import { MINES_CONTROLLER_MODES } from "./mines-controllers.mjs";
 
+// Boundary vocabulary canonical to both the headless harness and the browser
+// workbench. The split into `static` and `live` matters for Phase 10: the
+// operating-envelope verdict per cell consumes ONLY the static label
+// (config-derived knobs). Live frontier signals belong to per-seed in-game
+// warnings, not to the envelope verdict.
+
 function roundMetric(value, digits = 6) {
   if (value === null || value === undefined || Number.isNaN(value)) return null;
   if (!Number.isFinite(value)) return value;
@@ -29,11 +35,20 @@ function boundarySummary(status) {
   return "No Phase 9 boundary warning is active for the current controls.";
 }
 
-export function assessMinesBoundary({
+function statusFromMechanisms(mechanisms) {
+  const hasUnsafe = mechanisms.some((mechanism) => mechanism.severity === "unsafe");
+  const hasCaution = mechanisms.some((mechanism) => mechanism.severity === "caution");
+  return hasUnsafe ? "do_not_use" : hasCaution ? "watch_boundary" : "likely_readable";
+}
+
+// Static boundary assessment. Phase 10 uses this exclusively for per-cell
+// envelope labels — no live game-state signals leak in. The contract is:
+// given the board + sensor + mode config, what is the pre-registered Phase 9
+// label for this cell?
+export function assessStaticBoundary({
   boardConfig = {},
   sensorConfig = {},
   mode = "sundog_lean",
-  live = null,
 } = {}) {
   const board = normalizeMinesConfig(boardConfig);
   const sensor = sensorConfig.__normalized__
@@ -138,63 +153,7 @@ export function assessMinesBoundary({
     );
   }
 
-  if (live) {
-    if (Number.isFinite(live.meanFrontierConfidence)) {
-      if (live.meanFrontierConfidence < 0.18) {
-        add(
-          "unsafe",
-          "field_uninformative",
-          "The current frontier has lost pressure confidence.",
-          roundMetric(live.meanFrontierConfidence, 3),
-        );
-      } else if (live.meanFrontierConfidence < 0.35) {
-        add(
-          "caution",
-          "field_uninformative",
-          "The current frontier is in the low-confidence band.",
-          roundMetric(live.meanFrontierConfidence, 3),
-        );
-      }
-    }
-    if (Number.isFinite(live.frontierSize) && live.frontierSize <= 1 && live.terminal === null) {
-      add(
-        "caution",
-        "frontier_ambiguity",
-        "The current frontier has collapsed to a single forced choice.",
-        live.frontierSize,
-      );
-    }
-    if (Number.isFinite(live.falseFlagCount)) {
-      if (live.falseFlagCount >= 2) {
-        add(
-          "unsafe",
-          "overflagged",
-          "False flags are accumulating in this seed.",
-          live.falseFlagCount,
-        );
-      } else if (live.falseFlagCount >= 1) {
-        add(
-          "caution",
-          "overflagged",
-          "A false flag has already appeared in this seed.",
-          live.falseFlagCount,
-        );
-      }
-    }
-    if (live.terminal === "mine_triggered") {
-      add(
-        "unsafe",
-        "controller_overcommitted",
-        "This seed ended by revealing a mine.",
-        live.terminal,
-      );
-    }
-  }
-
-  const hasUnsafe = mechanisms.some((mechanism) => mechanism.severity === "unsafe");
-  const hasCaution = mechanisms.some((mechanism) => mechanism.severity === "caution");
-  const status = hasUnsafe ? "do_not_use" : hasCaution ? "watch_boundary" : "likely_readable";
-
+  const status = statusFromMechanisms(mechanisms);
   return {
     status,
     label: mechanismLabel(status),
@@ -202,5 +161,98 @@ export function assessMinesBoundary({
     mineDensity: roundMetric(density, 6),
     clusterStrength: roundMetric(clusterStrength, 6),
     mechanisms,
+    // Pre-computed code list for CSV emission and verdict labelling.
+    mechanismCodes: mechanisms.map((mechanism) => mechanism.code),
   };
+}
+
+// Live boundary assessment. Overlays per-seed signals on top of the static
+// label. The browser panel calls both and merges; the headless Phase 10
+// envelope harness MUST NOT call this — its verdict is static-only.
+export function assessLiveBoundary(staticAssessment, live = {}) {
+  // Defensive copy so we never mutate the static input.
+  const baseMechanisms = staticAssessment?.mechanisms
+    ? [...staticAssessment.mechanisms]
+    : [];
+  const mechanisms = baseMechanisms;
+  const add = (severity, code, message, value = null) => {
+    mechanisms.push({ severity, code, message, value });
+  };
+
+  if (Number.isFinite(live.meanFrontierConfidence)) {
+    if (live.meanFrontierConfidence < 0.18) {
+      add(
+        "unsafe",
+        "field_uninformative",
+        "The current frontier has lost pressure confidence.",
+        roundMetric(live.meanFrontierConfidence, 3),
+      );
+    } else if (live.meanFrontierConfidence < 0.35) {
+      add(
+        "caution",
+        "field_uninformative",
+        "The current frontier is in the low-confidence band.",
+        roundMetric(live.meanFrontierConfidence, 3),
+      );
+    }
+  }
+  if (Number.isFinite(live.frontierSize) && live.frontierSize <= 1 && live.terminal === null) {
+    add(
+      "caution",
+      "frontier_ambiguity",
+      "The current frontier has collapsed to a single forced choice.",
+      live.frontierSize,
+    );
+  }
+  if (Number.isFinite(live.falseFlagCount)) {
+    if (live.falseFlagCount >= 2) {
+      add(
+        "unsafe",
+        "overflagged",
+        "False flags are accumulating in this seed.",
+        live.falseFlagCount,
+      );
+    } else if (live.falseFlagCount >= 1) {
+      add(
+        "caution",
+        "overflagged",
+        "A false flag has already appeared in this seed.",
+        live.falseFlagCount,
+      );
+    }
+  }
+  if (live.terminal === "mine_triggered") {
+    add(
+      "unsafe",
+      "controller_overcommitted",
+      "This seed ended by revealing a mine.",
+      live.terminal,
+    );
+  }
+
+  const status = statusFromMechanisms(mechanisms);
+  return {
+    status,
+    label: mechanismLabel(status),
+    summary: boundarySummary(status),
+    mineDensity: staticAssessment?.mineDensity ?? null,
+    clusterStrength: staticAssessment?.clusterStrength ?? null,
+    mechanisms,
+    mechanismCodes: mechanisms.map((mechanism) => mechanism.code),
+    staticStatus: staticAssessment?.status ?? null,
+  };
+}
+
+// Compatibility wrapper preserving the original API shape. Phase 9 harness,
+// the browser panel, and any other caller pre-dating the split keep working.
+// New code (Phase 10) should call assessStaticBoundary directly.
+export function assessMinesBoundary({
+  boardConfig = {},
+  sensorConfig = {},
+  mode = "sundog_lean",
+  live = null,
+} = {}) {
+  const staticAssessment = assessStaticBoundary({ boardConfig, sensorConfig, mode });
+  if (!live) return staticAssessment;
+  return assessLiveBoundary(staticAssessment, live);
 }

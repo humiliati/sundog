@@ -741,6 +741,81 @@ Deliverables:
 Exit criterion: the public copy can say "inside this envelope" and point to a
 map rather than hand-waving.
 
+#### Phase 10 Pre-Registration (locked before grid run)
+
+This block must land before any Phase 10 grid data is generated. The commits
+below are not negotiable post-hoc — if a real reason emerges to change any of
+them, the doc updates with an addendum block preserving the original
+pre-registration text so the audit record stays intact.
+
+**Candidates.** `sundog_lean` and `sundog_minimal` are evaluated as parallel
+candidates against identical gates. If their envelopes differ, both ship with
+their own positive and negative cells. If `sundog_lean` dominates
+`sundog_minimal` on every published cell, the minimal lane is retired.
+`sundog_controller` remains in the matrix as a lineage row but is not graded
+against Phase 10 candidate gates — its failed status was settled in Phase 5.
+
+**Baselines for matched-seed deltas.** `naive_pressure` (the primary
+comparator) and `random_reveal` (the floor). `threshold_flagger` and
+`oracle_safe` remain in the matrix for context but do not gate candidacy.
+
+**Grid shape.** A 3D primary factorial plus 1D spokes.
+
+- Primary 3D factorial: `mine_density` × `pressure_noise` × `dropout_rate`
+  - `mine_density`: 0.10, 0.16, 0.22 (drop 0.28 — inside the `do_not_use` regime)
+  - `pressure_noise`: 0.1, 0.5, 1.0, 2.0 (drop 5/10 — inside the `do_not_use` regime)
+  - `dropout_rate`: 0.05, 0.20, 0.35 (drop 0.65/0.85 — inside the `do_not_use` regime)
+  - = 36 primary cells
+- 1D spokes (all other axes at doc-default settings):
+  - `sensor_delay`: 0, 1, 2 (drop 4 — inside the `do_not_use` regime) = 3 cells
+  - `clustering_strength`: 0, 0.35, 0.65 (drop 0.9) = 3 cells (skip 0 if it
+    duplicates the primary grid origin)
+  - `kernel_blur`: 1.0, 2.0, 3.0 (drop 5/8) = 3 cells
+  - `scan_budget`: 0, 1, 3, 6 = 4 cells
+  - = ~13 spoke cells (de-duped)
+- Total cells in published verdict: ~49
+- Seeds per cell: 64 primary acceptance, 16 for the `phase10:smoke` variant
+
+**Candidate-cell gates (all must hold for a positive verdict).**
+
+A cell is `candidate=true` for a given Sundog variant if all of the following
+hold on the 64-seed matched-pair sample:
+
+1. Budget-adjusted matched-seed mean delta vs `naive_pressure` ≥ **+1.0** safe
+   tiles.
+2. Budget-adjusted matched-seed mean delta vs `random_reveal` ≥ **0**.
+3. The cell is *not* in the `do_not_use` static boundary regime per
+   `assessStaticBoundary`.
+4. Mean false-flag count delta vs `naive_pressure` ≤ **+1.0**.
+5. Mean mine-trigger rate delta vs `naive_pressure` ≤ **+0.10** (Sundog cannot
+   buy safe tiles by triggering more mines than naive does).
+6. 95% bootstrap CI on the budget-adjusted matched-seed delta vs
+   `naive_pressure` excludes zero. The bootstrap is 1,000 resamples over the
+   matched-pair list.
+
+A cell is `failure_regime=true` if the budget-adjusted matched-seed mean delta
+vs `naive_pressure` ≤ **−1.0** safe tiles. Mechanism labels are pulled from
+the static boundary mechanisms and merged with the empirical observation
+(e.g., a `do_not_use` cell that also shows controller harm relative to naive
+gets both labels in `mechanism_codes`).
+
+**Worst-cell publication rule.** Every published positive cell ships
+alongside at least one matched-seed `failure_regime` cell of equal
+documentation weight. The Phase 11 public artifact's default replay link
+shows the worst cell first, the best cell second. If Phase 10 produces zero
+candidate cells, that is itself a valid verdict — the doc and the public page
+say so directly and the workbench stays at Planned Workbench tier.
+
+**Promotion to Operating-Envelope Study tier requires** all of: (a) at least
+one cell with `candidate=true` for at least one Sundog variant, (b) at least
+one paired `failure_regime` cell published with the candidate, (c) the
+budget-adjusted lead survives net of scan-budget tax (already encoded in the
+primary statistic), (d) the static boundary mechanisms and empirical verdict
+labels do not contradict each other in a way that suggests measurement error.
+
+Phase 10 verdict status: pending. The grid has not been run as of this doc
+revision.
+
 ### Phase 11 - Public Artifact And Promotion Pass
 
 Goal: make Pressure Mines promotion-ready without overclaiming.
