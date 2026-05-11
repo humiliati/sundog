@@ -474,6 +474,23 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @media (max-width: 520px) {
+            .workbench,
+            .stage,
+            .controls {
+                width: min(390px, 100%);
+                max-width: 390px;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .stage-copy,
+            .status-strip {
+                width: min(340px, calc(100vw - 2rem));
+                max-width: min(340px, calc(100vw - 2rem));
+            }
+        }
     </style>
     <link rel="stylesheet" href="/css/sundog-theme.css">
 </head>
