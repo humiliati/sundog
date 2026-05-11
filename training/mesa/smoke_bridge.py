@@ -90,7 +90,8 @@ def smoke_single_env(client: BridgeClient) -> None:
         raise AssertionError(f"expected local-probe obs dim 6, got {len(made['obs'])}")
     if made["done"] is not False:
         raise AssertionError("new env should not be done")
-    if set(made["reward_channels"]) != {"dense", "sparse", "signature"}:
+    required_reward_channels = {"dense", "sparse", "signature"}
+    if not required_reward_channels.issubset(set(made["reward_channels"])):
         raise AssertionError(f"unexpected reward channels: {made['reward_channels']}")
 
     initial_obs = made["obs"]

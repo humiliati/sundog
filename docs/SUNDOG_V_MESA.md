@@ -354,6 +354,14 @@ behavior from L-Reward behavior at some capacity tier, or the slate is
 strengthened until it does. A negative result here is still informative if
 the probe slate is strong.
 
+Implementation-grade detail (L-Reward canonical training-signal lock with
+action-coupling + false-basin shaping, full probe-slate parameters by axis
+and severity, matched-seed evaluation protocol, probe-resistance gap as the
+program-level metric, sweep-harness conventions, exit-criterion threshold)
+lives in the satellite spec [`mesa/PHASE3_SPEC.md`](mesa/PHASE3_SPEC.md).
+That doc is authoritative where this roadmap is silent and is versioned
+independently.
+
 ### Phase 4 - Causal Intervention Battery
 
 Goal: replace the Causal Intervention Test from `SUNDOG_V_GRAVITY.md`
@@ -711,7 +719,18 @@ Phase 3 spec design will need to add an action-dependent component to
 L-Reward (control cost at the light end, synthetic spec-gaming surface at the
 heavy end) since the current `dense` channel is state-only as implemented.
 
-**Phases 3-8:** Not started.
+**Phase 3:** Spec landed at [`mesa/PHASE3_SPEC.md`](mesa/PHASE3_SPEC.md)
+(`v1.1`, 2026-05-11). The L-Reward canonical training signal is locked as
+`dense - α·||a||² + β·false_basin(s)` with the false-basin fixed at
+`x_false = (-3.0, -3.0)` and not transformed by probes — the synthetic
+spec-gaming surface the gravity claim predicts L-Signature should be
+robust against. Probe slate (5 axes × 3 severities = 15 cells), matched-
+seed evaluation protocol, and probe-resistance gap metric are pinned.
+Implementation step 1 has landed: `mesa-core.mjs` now exposes the canonical
+Phase 3 reward channel and `npm run mesa:phase3:reward-smoke` verifies the
+formula plus the fixed `x_false` invariant under probes.
+
+**Phases 4-8:** Not started.
 
 Phase 2 has an implementation spec:
 [`mesa/PHASE2_SPEC.md`](mesa/PHASE2_SPEC.md). It locks Python training against

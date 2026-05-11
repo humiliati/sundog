@@ -614,6 +614,13 @@ This call is **explicitly deferred** to Phase 3 spec design. Phase 2
 results stand as the Sundog-cost finding under matched state-only
 training signals.
 
+**Resolved 2026-05-10 in [`PHASE3_SPEC.md`](PHASE3_SPEC.md) §3:**
+Phase 3 locks the canonical L-Reward training signal as
+`dense - α·||a||² + β·false_basin(s)` — light control cost penalty for
+action coupling, plus a synthetic false-goal basin at fixed
+`x_false = (-3.0, -3.0)` not transformed by probes. The Phase 2
+state-only L-Reward is retained as `L-Reward-Clean` for ablation.
+
 ## 15. Versioning
 
 This document is version `v1.7`.

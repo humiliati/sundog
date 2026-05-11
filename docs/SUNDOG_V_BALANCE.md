@@ -23,8 +23,6 @@ should reserve the post-hero slot on `index.html` for a Balance-first motion
 gallery rather than a one-off clip: cheap looping media from multiple
 applications, each with a punchy title and description overlay.
 
-*[nice-to-have #12]*
-
 ## Sundog Expression *(canonical for the APPLICATIONS.md row)*
 
 - **Hidden target:** upright pole angle (`theta`).
@@ -39,10 +37,6 @@ This block is here so the cross-application comparison row in
 `APPLICATIONS.md` and the gallery card's indirect-signal/transformation/output
 triplet do not drift between the roadmap and the public writeup. Phase 11 keeps
 the broadcast surfaces aligned to this claim shape.
-
-*[/nice-to-have #12]*
-
-***[must-fix #3]***
 
 ## Current State
 
@@ -76,16 +70,17 @@ summary documented below and reproducible with `npm run balance:phase10`.
 This section records the promotion gates that keep the broadcast surfaces
 (gallery card, APPLICATIONS.md, claims-and-scope.md) tied to runnable artifacts
 and a fixed verdict. After the repaired Phase 10 CONFIRM rerun, Balance sits at
-**Operating-Envelope Study** tier in the application family.
+**Operating-Envelope Study** tier in the application family. The Phase 11
+broadcast pass (nav link, application-map copy, applications-gallery card,
+APPLICATIONS.md row, claims-and-scope row) and the Phase 11.1 motion-rail
+scaffold on `index.html` have both landed; motion-rail media capture is the
+remaining Phase 11 work.
 
-Promotion to **Planned Workbench** tier requires Phase 0–4 deliverables
-landing +++[forward-plan-A]+++ *(achieved 2026-05-08; phases 5–6 also landed,
-Phase 7 smoke completed)* +++[/forward-plan-A]+++. Promotion to
-**Operating-Envelope Study** tier requires the Pre-Registered Verdict Template
-below to return a CONFIRM verdict +++[phase10-rerun-status]+++ *(achieved by
-the repaired Phase 10 rerun)* +++[/phase10-rerun-status]+++.
-
-+++[forward-plan-A]+++
+Promotion to **Planned Workbench** tier required Phase 0–4 deliverables
+landing — achieved 2026-05-08, with phases 5–6 and the Phase 7 smoke also
+completed in the same pass. Promotion to **Operating-Envelope Study** tier
+required the Pre-Registered Verdict Template below to return a CONFIRM
+verdict — achieved by the repaired Phase 10 rerun.
 
 ### Phase 7 Smoke Read (2026-05-08)
 
@@ -112,10 +107,6 @@ would still CONFIRM. The verdict gate does not move forward to Phase 7.
 The smoke result is here to inform the Phase 12–14 forward planning below
 under the assumption that Phase 10 returns CONFIRM, not to short-circuit
 Phase 10's reads.
-
-+++[/forward-plan-A]+++
-
-***[/must-fix #3]***
 
 ## Why This Workbench
 
@@ -225,8 +216,6 @@ Avoid:
 - "A gif is evidence."
 - "The toyful sprite skin is evidence."
 
-+++[forward-plan-C]+++
-
 **Forward-planning Avoid additions** (gated to land alongside Phases 12–14
 when those phases ship; pre-registered here so the broadcast pass cannot
 drift):
@@ -258,8 +247,6 @@ drift):
   skin is a comprehension layer and promotion surface. It can make the
   recovery/failure story easier to read, but it cannot substitute for the
   Phase 8 tables, Phase 10 verdict, or replayable raw diagnostic view.
-
-+++[/forward-plan-C]+++
 
 ## Roadmap
 
@@ -305,15 +292,14 @@ Goal: turn the hidden pole state into a lower-dimensional indirect signal.
 Deliverables:
 
 - Light geometry controls: azimuth, elevation, source distance, softness.
-  **[should-add #6]** *Pin the projection model in the doc before the
-  implementer writes it: directional light source treated as point-at-infinity
-  for the default case (parallel rays); shadow endpoint computed by ray
-  intersection from each pole endpoint along the light direction with the
-  floor plane `z = 0`; soft shadow approximated as a penumbra width
-  proportional to (source softness × pole height / source distance). The
-  default sweep uses the directional model; the perspective-light model is
-  Phase 9 sweep variant only.*
-- Cast-shadow projection from pole endpoints to floor plane. **[should-add #6]**
+  *Projection model, pinned before implementation: directional light source
+  treated as point-at-infinity for the default case (parallel rays); shadow
+  endpoint computed by ray intersection from each pole endpoint along the
+  light direction with the floor plane `z = 0`; soft shadow approximated as
+  a penumbra width proportional to (source softness × pole height / source
+  distance). The default sweep uses the directional model; the
+  perspective-light model is Phase 9 sweep variant only.*
+- Cast-shadow projection from pole endpoints to floor plane.
   *For pole base at `(x_b, 0)` and pole tip at `(x_t, h_t)` with light
   direction unit vector `(l_x, l_z)` (z-up, l_z < 0 means the light points
   downward), the floor-plane shadow tip is at `x_b + (x_t − x_b) − h_t · (l_x / l_z)`.
@@ -374,9 +360,9 @@ Exit criterion: every public comparison lane has a stated information budget.
 Goal: build the first controller that acts from the shadow rather than true
 angle.
 
-**[should-add #7]** *Ground the SCAN/SEEK/TRACK pattern in canonical text
-before implementing. The pattern is borrowed from the photometric mirror
-experiment; cite `<sundog>/notebooks/sundog alignment theorem.txt` and
+*Ground the SCAN/SEEK/TRACK pattern in canonical text before implementing.
+The pattern is borrowed from the photometric mirror experiment; cite
+`<sundog>/notebooks/sundog alignment theorem.txt` and
 `<sundog>/docs/PAPER_v1_draft.md` so the implementer matches the algorithmic
 shape that already exists in the program rather than re-deriving it.*
 
@@ -396,22 +382,22 @@ acceptable because the goal is to test the observability channel, not to claim
 learning.
 
 Exit criterion: the controller keeps the pole alive longer than passive and
-naive baselines on a small seeded slate inside the diagnostic-positive envelope.
-**[should-add #5]** *Pin the minimum required behaviour: the controller
-maintains `|theta| < 0.3 rad` for ≥ 10 simulated seconds inside the Phase 3
-diagnostic-positive envelope on at least 80% of the seeded slate. Below that
-floor, the controller is not yet functional and Phase 6 web shell work is
-gated behind further controller iteration. Above that floor, Phase 5 is
-considered complete and Phase 6 unblocks.*
+naive baselines on a small seeded slate inside the diagnostic-positive
+envelope. Minimum required behaviour: the controller maintains
+`|theta| < 0.3 rad` for ≥ 10 simulated seconds inside the Phase 3
+diagnostic-positive envelope on at least 80% of the seeded slate. Below
+that floor, the controller is not yet functional and Phase 6 web shell
+work is gated behind further controller iteration. Above that floor,
+Phase 5 is considered complete and Phase 6 unblocks.
 
 ### Phase 6 - Real-Time Web Projection
 
 Goal: create the public browser workbench shell early.
 
-**[should-add #8]** *Pre-condition before any borrowed asset lands: confirm the
-Lounas credit clause in `<sundog>/docs/THIRD_PARTY_REUSE.md` is current and
-matches the LinkedIn agreement scope. Borrowing visual assets without that
-ledger updated is the kind of audit-trail gap the program has committed to
+*Pre-condition before any borrowed asset lands: confirm the Lounas credit
+clause in `<sundog>/docs/THIRD_PARTY_REUSE.md` is current and matches the
+LinkedIn agreement scope. Borrowing visual assets without that ledger
+updated is the kind of audit-trail gap the program has committed to
 avoiding. Update the ledger first, borrow second.*
 
 Deliverables:
@@ -427,14 +413,12 @@ Deliverables:
 - Seed controls and presets for lighting / disturbance / rail constraint.
 
 Exit criterion: the page demonstrates the qualitative phenomenon even before
-large batch studies are complete. ~~if Three.js is added, keep the cart-pole
-foreground readable and verify desktop/mobile screenshots before promotion~~
-**[should-add #9]** *Hard exit: desktop **and** mobile screenshot acceptance
-pass before the page links from any nav surface. The workbench will be linked
-from `index.html` and visited on phones; mobile readability is not optional
-and not gated on Three.js. The acceptance pass lives in
-`results/balance/screenshots_<datetime>/` with one desktop and one mobile
-capture per controller mode.*
+large batch studies are complete. Hard exit: desktop **and** mobile
+screenshot acceptance pass before the page links from any nav surface. The
+workbench will be linked from `index.html` and visited on phones; mobile
+readability is not optional and not gated on Three.js. The acceptance pass
+lives in `results/balance/screenshots_<datetime>/` with one desktop and one
+mobile capture per controller mode.
 
 ### Phase 7 - Reproducible Harness
 
@@ -462,12 +446,12 @@ npm run balance:phase9
 
 Exit criterion: a browser seed can be replayed exactly in the harness.
 
-+++[forward-plan-A]+++ *Phase 7 continuation landed: the workbench now exposes
-seeded replay URLs, the harness accepts `--replay-url`, and local harness runs
-write `replay-index.json` entries with browser URLs plus replay commands. The
-next Phase 7 hardening pass added replay verification, writing
-`replay-verification.csv` and failing the command on outcome/time drift. This is
-still replay infrastructure, not a verdict artifact.* +++[/forward-plan-A]+++
+*Status — Phase 7 continuation landed:* the workbench now exposes seeded
+replay URLs, the harness accepts `--replay-url`, and local harness runs
+write `replay-index.json` entries with browser URLs plus replay commands.
+The next Phase 7 hardening pass added replay verification, writing
+`replay-verification.csv` and failing the command on outcome/time drift.
+This is still replay infrastructure, not a verdict artifact.
 
 ### Phase 8 - Recovery And Event Metrics
 
@@ -493,14 +477,13 @@ Deliverables:
 Exit criterion: the page can show a recovery curve, and the docs can distinguish
 successful balance from merely delaying a fall.
 
-+++[forward-plan-A]+++ *Phase 8 first pass landed: `npm run balance:phase8`
-writes local ignored `trial-metrics.csv`, `event-log.csv`,
-`metric-summary.csv`, `warning-thresholds.csv`, `matched-comparison.csv`,
-`recovery-curves.csv`, and `samples.jsonl`. The browser workbench now also shows
-a live recovery curve after the standard disturbance, including peak hidden
-angle, peak time, recovery time, and terminal failure status. These are
-event/recovery diagnostics, not Phase 10 operating-envelope evidence.*
-+++[/forward-plan-A]+++
+*Status — Phase 8 first pass landed:* `npm run balance:phase8` writes
+local ignored `trial-metrics.csv`, `event-log.csv`, `metric-summary.csv`,
+`warning-thresholds.csv`, `matched-comparison.csv`, `recovery-curves.csv`,
+and `samples.jsonl`. The browser workbench now also shows a live recovery
+curve after the standard disturbance, including peak hidden angle, peak
+time, recovery time, and terminal failure status. These are event/recovery
+diagnostics, not Phase 10 operating-envelope evidence.
 
 ### Phase 9 - Sensor Degradation And Observability Boundary
 
@@ -527,16 +510,15 @@ Expected boundary:
 Exit criterion: the workbench has a visible "where Sundog should not be used"
 panel.
 
-+++[forward-plan-A]+++ *Phase 9 first pass landed: `npm run balance:phase9`
-writes ignored `manifest.json`, `boundary-panel.json`, `trial-outcomes.csv`,
-`boundary-summary.csv`, `matched-comparison.csv`, and `unsafe-cells.csv` under
-`results/balance/phase9-boundary/`. The browser workbench now shows a live
-Use Boundary panel driven by the shared boundary classifier in
+*Status — Phase 9 first pass landed:* `npm run balance:phase9` writes
+ignored `manifest.json`, `boundary-panel.json`, `trial-outcomes.csv`,
+`boundary-summary.csv`, `matched-comparison.csv`, and `unsafe-cells.csv`
+under `results/balance/phase9-boundary/`. The browser workbench now shows
+a live Use Boundary panel driven by the shared boundary classifier in
 `public/js/balance-core.mjs`, with controls for every Phase 9 sweep axis:
-light elevation, delay, noise, dropped frames, rail length, force limit, and
-disturbance magnitude. This is a degradation diagnostic and where-not-to-use
-surface, not the Phase 10 operating-envelope verdict.*
-+++[/forward-plan-A]+++
+light elevation, delay, noise, dropped frames, rail length, force limit,
+and disturbance magnitude. This is a degradation diagnostic and
+where-not-to-use surface, not the Phase 10 operating-envelope verdict.
 
 ### Phase 10 - Operating Envelope Map
 
@@ -572,8 +554,6 @@ Deliverables:
 
 Exit criterion: the public copy can say "inside this envelope" and point to the
 map rather than hand-waving.
-
-***[must-fix #1]***
 
 ### Pre-Registered Verdict Template
 
@@ -675,30 +655,33 @@ The choice of verdict is from the predictions, not author-discretionary. REFUTE
 means the broadcast says REFUTE; the workbench does not get a "yes but"
 footnote that softens the read.
 
-+++[phase10-status]+++ *Phase 10 runner landed: `npm run balance:phase10`
-writes ignored `manifest.json`, `trial-outcomes.csv`,
-`matched-comparison.csv`, `envelope.csv`, `cell-class-map.csv`,
-`best-worst-cells.csv`, `verdict.json`, and `verdict.md` under
-`results/balance/phase10-envelope/`. The first 100-seed slate emitted 27,200
-trials over 68 operating-envelope cells and returned AMBIGUOUS: P1 held
-(`28/28` diagnostic-positive yes-cells; lower bootstrap CI `1`), P2 found two
-failure-regime violations that trigger baseline audit, P3 held, and P4 failed
-the survival-ceiling check (`16/68` cells) while the auxiliary RMS audit shows
-oracle lower than Sundog on `68/68` cells. This is not a promotion result; the
-next natural work is oracle/baseline audit before rerun.* +++[/phase10-status]+++
+**Status timeline — Phase 10 verdict path.** Preserved inline because the
+disposition discipline (initial AMBIGUOUS read, audit, pre-registered repairs,
+repaired-rerun CONFIRM) is itself load-bearing for the workbench's claim.
 
-+++[phase10-audit-status]+++ *Phase 10.5 audit landed: `npm run
-balance:phase10:audit` reads `results/balance/phase10-envelope/` and writes
-ignored `manifest.json`, `oracle-ceiling-audit.csv`, `p2-failure-audit.csv`,
-and `audit.md` under `results/balance/phase10-audit/`. Finding: P4 failed
-because survival is capped at the fixed `8s` duration. Oracle lower-RMS held on
-`68/68` cells, and `50/68` cells had both oracle and Sundog at the duration cap,
-so the survival-only ceiling masks oracle quality rather than exposing an
-oracle sign bug. P2's two overhead-light violations are soft all-fail margins:
-Sundog and naive both fail in every seed pair, with Sundog merely lasting longer
-under confidence gating. High-delay failure cells hold the intended boundary
-shape. The Phase 10 verdict remains AMBIGUOUS; no promotion or REFUTE rewrite
-is allowed from this audit alone.* +++[/phase10-audit-status]+++
+*1. Initial Phase 10 run — AMBIGUOUS.* `npm run balance:phase10` writes
+ignored `manifest.json`, `trial-outcomes.csv`, `matched-comparison.csv`,
+`envelope.csv`, `cell-class-map.csv`, `best-worst-cells.csv`, `verdict.json`,
+and `verdict.md` under `results/balance/phase10-envelope/`. The first 100-seed
+slate emitted 27,200 trials over 68 operating-envelope cells and returned
+AMBIGUOUS: P1 held (`28/28` diagnostic-positive yes-cells; lower bootstrap CI
+`1`), P2 found two failure-regime violations that triggered baseline audit, P3
+held, and P4 failed the survival-ceiling check (`16/68` cells) while the
+auxiliary RMS audit showed oracle lower than Sundog on `68/68` cells. Not a
+promotion result; next natural work was oracle/baseline audit before rerun.
+
+*2. Phase 10.5 audit landed.* `npm run balance:phase10:audit` reads
+`results/balance/phase10-envelope/` and writes ignored `manifest.json`,
+`oracle-ceiling-audit.csv`, `p2-failure-audit.csv`, and `audit.md` under
+`results/balance/phase10-audit/`. Finding: P4 failed because survival was
+capped at the fixed `8s` duration. Oracle lower-RMS held on `68/68` cells, and
+`50/68` cells had both oracle and Sundog at the duration cap, so the
+survival-only ceiling masked oracle quality rather than exposing an oracle
+sign bug. P2's two overhead-light violations were soft all-fail margins:
+Sundog and naive both fail in every seed pair, with Sundog merely lasting
+longer under confidence gating. High-delay failure cells held the intended
+boundary shape. Phase 10 verdict remained AMBIGUOUS; no promotion or REFUTE
+rewrite was allowed from the audit alone.
 
 **Phase 10 rerun repair list.** Before rerunning the verdict slate, pre-register
 two metric repairs. First, split P2 into hard success violations (Sundog
@@ -711,21 +694,20 @@ duration cap, oracle must have lower hidden-angle RMS or hidden-angle integral
 on at least 80% of capped cells. Alternatively, lengthen or stress the slate
 until oracle and Sundog survival separate without a secondary quality metric.
 
-+++[phase10-audit-response]+++ *The repaired P2 and P4 criteria above are
-formally pre-registered in
+*3. Audit response and pre-registered repairs.* The repaired P2 and P4
+criteria above are formally pre-registered in
 [`results/balance/phase10-audit/audit-response.md`](../results/balance/phase10-audit/audit-response.md),
 the sister document to `audit.md`. The response document locks the
-dual-ceiling P4 rule (chooses capped-cell quality check over duration
+dual-ceiling P4 rule (capped-cell quality check chosen over duration
 extension), splits P2 into gated P2a hard violations and reported-only P2b
-all-fail margins, names what the rerun must NOT change (no baseline
-re-tune, no oracle re-tune, no P1 denominator drift, no third repair
-authored after the audit), and pre-registers the implied rerun verdict
-of CONFIRM given the deterministic slate. The roadmap-side Pre-Registered
-Verdict Template above now mirrors the repaired criteria, so the canonical
-pre-registration lives here rather than only in the sibling.* +++[/phase10-audit-response]+++
+all-fail margins, names what the rerun must NOT change (no baseline re-tune,
+no oracle re-tune, no P1 denominator drift, no third repair authored after
+the audit), and pre-registers the implied rerun verdict of CONFIRM given the
+deterministic slate. The roadmap-side Pre-Registered Verdict Template above
+mirrors the repaired criteria, so the canonical pre-registration lives here
+rather than only in the sibling.
 
-+++[phase10-rerun-status]+++ *Repaired Phase 10 rerun landed:
-`npm run balance:phase10` regenerated
+*4. Repaired Phase 10 rerun — CONFIRM.* `npm run balance:phase10` regenerated
 `results/balance/phase10-envelope/verdict.md` under the repaired criteria and
 returned CONFIRM. Mechanical read: P1 `28/28` diagnostic-positive yes-cells
 with bootstrap lower CI `1`; P2a hard violations `0`; P2b all-fail
@@ -733,9 +715,7 @@ survival-margin cells `2` reported only; P3 monotonic recovery holds; P4a
 oracle-survival ceiling holds on uncapped cells (`16/18`, `0.888889`); P4b
 oracle lower-RMS ceiling holds on capped cells (`50/50`, `1`). This is the
 Phase 10 broadcast input; P2b overhead-light margins ship only as degradation
-behavior, not usable overhead-light control.* +++[/phase10-rerun-status]+++
-
-***[/must-fix #1]***
+behavior, not usable overhead-light control.
 
 ### Phase 11 - Public Artifact, Gallery, And Motion Rail
 
@@ -743,28 +723,23 @@ Goal: make Sundog Balance promotion-ready without overclaiming.
 
 Deliverables:
 
-- Final `balance.html` tab linked from nav beside `threebody.html`.
-  +++[phase11-status]+++ *(landed)* +++[/phase11-status]+++
-- Short writeup titled around "Balancing By The Shadow."
-  +++[phase11-status]+++ *(landed as bounded Balance page and application-map
-  copy)* +++[/phase11-status]+++
+- Final `balance.html` tab linked from nav beside `threebody.html`. *(landed)*
+- Short writeup titled around "Balancing By The Shadow." *(landed as bounded
+  Balance page and application-map copy)*
 - Applications gallery card with evidence tier set to "Operating-Envelope
-  Study" after the repaired Phase 10 CONFIRM verdict.
-  +++[phase11-status]+++ *(landed)* +++[/phase11-status]+++
+  Study" after the repaired Phase 10 CONFIRM verdict. *(landed)*
 - `docs/APPLICATIONS.md` row carrying the Balance bounded claim after runnable
   artifacts and a CONFIRM verdict. On REFUTE, this row would have carried the
-  negative finding rather than being omitted.
-  +++[phase11-status]+++ *(landed after CONFIRM)* +++[/phase11-status]+++
+  negative finding rather than being omitted. *(landed after CONFIRM)*
 - A post-hero application motion rail on `index.html`, initially seeded with
   Balance recovery/failure media and later expanded to short loops from every
   public application. Use the cheapest acceptable format after size testing
   (`.webm`, `.ogv`/`.ogg`, MP4, or `.gif` only if it wins on compatibility and
-  cost). ***[must-fix #4]*** **The media rail is decoration and orientation,
-  not evidence.** The evidence is the operating-envelope CSV at
+  cost). **The media rail is decoration and orientation, not evidence.** The
+  evidence is the operating-envelope CSV at
   `results/balance/envelope_<datetime>/envelope.csv`, the Phase 8 matched-seed
   metric tables, and the Phase 10 best-cell / worst-cell replay links. The
   first Balance card's caption must link to one of those, not stand alone.
-  ***[/must-fix #4]***
 - Motion-rail interaction model: start on Balance, let the clip play once, then
   ease/peek or scroll to the next application card in the manner of a Netflix
   rail. Users can swipe, drag, use arrow buttons, or keyboard-step the rail.
@@ -784,21 +759,20 @@ Deliverables:
   while linking to raw replay evidence. If the skin has not landed, the Balance
   card remains diagnostic and the caption says so plainly.
 - Final index pass: place the motion rail after the hero on `index.html`, with
-  a concise Balance opening card and a link to `balance.html`. ***[must-fix #4]***
-  The Balance card caption must include a phrase that points at the failure
-  boundary, not just the success - e.g., "balance recovered inside the lighting
-  envelope; fails cleanly outside it." A success-only caption violates the Avoid
-  list. ***[/must-fix #4]***
+  a concise Balance opening card and a link to `balance.html`. The Balance card
+  caption must include a phrase that points at the failure boundary, not just
+  the success — e.g., "balance recovered inside the lighting envelope; fails
+  cleanly outside it." A success-only caption violates the Avoid list.
 
 Exit criterion: a first-time visitor can watch the hero, see the Balance-first
 motion rail, click into the workbench, and understand the theoremic move in
-under one minute: the hidden body is controlled through the visible shadow
-***[must-fix #4]*** - *and* sees, in the same minute, that the shadow stops
-being enough at some boundary, with a one-click path to the operating-envelope
-map ***[/must-fix #4]***. The same rail also makes room for later application
-clips without giving any one clip evidentiary weight.
+under one minute: the hidden body is controlled through the visible shadow —
+*and* sees, in the same minute, that the shadow stops being enough at some
+boundary, with a one-click path to the operating-envelope map. The same rail
+also makes room for later application clips without giving any one clip
+evidentiary weight.
 
-+++[phase11-status]+++ *First broadcast pass landed after Phase 10 CONFIRM:
+*Status — Phase 11 first broadcast pass landed (after Phase 10 CONFIRM):*
 `balance.html` is linked from the public nav, its page copy now names the
 Operating-Envelope Study tier and P2b degradation caveat, the applications
 gallery and landing-page application grid include a Balance card, and
@@ -807,37 +781,32 @@ gallery and landing-page application grid include a Balance card, and
 remaining Phase 11 work is visual: design the Balance-first post-hero motion
 rail, capture best-cell/worst-cell Balance media from replay URLs, and leave
 slots for later application clips while keeping the caption tied to both
-recovery and the failure boundary.* +++[/phase11-status]+++
+recovery and the failure boundary.
 
-+++[phase11.1-status]+++ *Motion rail scaffold landed: `index.html` now has a
+*Status — Phase 11.1 motion-rail scaffold landed:* `index.html` now has a
 post-hero application rail seeded with Balance, Three-Body, Photometric
-Alignment, Pressure Mines, EyesOnly, Dungeon Gleaner, and Money Bags. Each card
-carries the locked `title` / `description` / `href` / `evidenceHref` / `poster`
-/ `media` / `mediaFormat` / `status` contract, with empty media fields allowed
-until capture/export work begins. The rail is static CSS/poster art for now,
-with arrow, swipe, scroll, and keyboard focus affordances; no gif/video assets
-were added in this slice.* +++[/phase11.1-status]+++
+Alignment, Pressure Mines, EyesOnly, Dungeon Gleaner, and Money Bags. Each
+card carries the locked `title` / `description` / `href` / `evidenceHref` /
+`poster` / `media` / `mediaFormat` / `status` contract, with empty media
+fields allowed until capture/export work begins. The rail is static
+CSS/poster art for now, with arrow, swipe, scroll, and keyboard focus
+affordances; no gif/video assets were added in this slice.
 
-+++[forward-plan-B]+++
-
-## Post-Verdict / Conditional Roadmap
+## Post-Verdict Roadmap
 
 The phases below were pre-registered against the assumption that Phase 10 would
-return a CONFIRM verdict. The repaired Phase 10 rerun has now returned CONFIRM,
-so this section becomes the active post-verdict roadmap rather than a
-pre-verdict branch.
+return a CONFIRM verdict, and the repaired Phase 10 rerun has now returned
+CONFIRM, so this section is the active post-verdict roadmap.
 
-Had Phase 10 returned REFUTE or AMBIGUOUS, this section would have been reshaped
-or scrapped before the broadcast pass. Specifically: Phase 12 (UI feature) could
-ship regardless of verdict because it does not extend any research claim.
-Phase 12.5 (visual skin) could also ship regardless of verdict as long as it
-preserved the negative-finding and raw-diagnostic paths. Phase 13 and Phase 14
-were gated on CONFIRM and are now eligible to run.
+The pre-registration is preserved: had Phase 10 returned REFUTE or AMBIGUOUS,
+Phase 12 (UI feature) could still have shipped because it does not extend any
+research claim, Phase 12.5 (visual skin) could also have shipped as long as it
+preserved the negative-finding and raw-diagnostic paths, and Phase 13 and
+Phase 14 were gated on CONFIRM and are now eligible to run.
 
-This section is here so the *shape* of the broader-claim attack is
-pre-registered with the same discipline as the Phase 10 verdict template,
-rather than being authored after a CONFIRM verdict has changed what counts
-as a load-bearing claim.
+The *shape* of the broader-claim attack is pre-registered here with the same
+discipline as the Phase 10 verdict template, rather than being authored after
+a CONFIRM verdict has changed what counts as a load-bearing claim.
 
 ### Phase 12 - Human-vs-Agent Competition Mode
 
@@ -1027,8 +996,6 @@ sibling-plant rows as evidence under that meta-row. The Pre-Committed
 Cross-Application Comparison Row below is updated at that point to
 distinguish the per-plant rows from the pattern meta-row.
 
-+++[/forward-plan-B]+++
-
 ## Claim Boundary
 
 Safe claim after implementation and positive envelope results:
@@ -1053,8 +1020,6 @@ What it would not prove:
 - universal embodied alignment;
 - superiority over a privileged controller.
 
-*[nice-to-have #10]*
-
 ## Pre-Committed Cross-Application Comparison Row
 
 Phase 11 has landed and Balance now appears in
@@ -1071,8 +1036,6 @@ promoted the row from forward-looking design to a live row in the table; a
 future contradictory rerun would require an explicit negative-finding update
 rather than quiet omission.
 
-*[/nice-to-have #10]*
-
 ## Initial Build Slice
 
 The first implementation pass was deliberately small:
@@ -1087,8 +1050,6 @@ The first implementation pass was deliberately small:
 That slice is enough to decide whether the workbench has the clean, almost
 annoyingly obvious hook we want before promotions.
 
-*[nice-to-have #11]*
-
 **Exit criterion for the first slice:** the shadow-projection diagnostic
 overlay shows non-trivial coupling between cart force and shadow residual on
 at least one lighting preset (low-elevation directional light is the
@@ -1096,5 +1057,3 @@ candidate). Below this floor — shadow residual is uncorrelated with cart
 force across all presets — do not commit to the SCAN/SEEK/TRACK structure;
 re-scope the workbench against an alternative indirect signal (e.g.,
 shadow-edge contrast over time) before any Phase 5 controller work.
-
-*[/nice-to-have #11]*
