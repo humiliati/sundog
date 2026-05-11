@@ -229,6 +229,12 @@ Deliverables:
 Exit criterion: the four controller families are pinned, the environment
 family is pinned, and the claim boundary is written.
 
+Implementation-grade detail (environment math, HC-Signature pseudocode,
+L-family architecture by tier, probe and intervention affordances,
+reproducibility harness conventions, Phase 1 readiness checklist) lives in
+the satellite spec [`mesa/PHASE0_SPEC.md`](mesa/PHASE0_SPEC.md). That doc is
+authoritative where this roadmap is silent and is versioned independently.
+
 Phase 0 literature spine:
 
 - Hubinger et al., *Risks from Learned Optimization in Advanced Machine
@@ -659,8 +665,9 @@ their Current Recommendation language adjusted to reflect the sequencing.
 
 **Phase 0:** Decision lock drafted in this document. The environment-family
 pick, claim boundary, architecture pinning, capacity ladder, selection-pressure
-curriculum, and literature spine are now specified. Implementation and the
-full literature note have not started.
+curriculum, and literature spine are now specified. Implementation-grade
+spec landed at [`mesa/PHASE0_SPEC.md`](mesa/PHASE0_SPEC.md) (`v1`,
+2026-05-10), unlocking Phase 1. Phase 1 code has not started.
 
 **Phases 1–8:** Not started.
 

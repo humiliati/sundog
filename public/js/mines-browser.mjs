@@ -406,7 +406,12 @@ function populateControls() {
     option.textContent = cell.label;
     sensorSelect.append(option);
   }
-  sensorSelect.value = "blur_noise_cliff";
+  // Default sensor cell is the doc-canonical operating point, NOT the
+  // blur_noise_cliff pocket where sundog_lean happens to win. Negative-region-
+  // publication rule: the page's first-impression view must be the honest
+  // comparison, not the curated one. The visitor can switch to
+  // blur_noise_cliff via the Sensor control to find the favorable pocket.
+  sensorSelect.value = "doc_default";
 
   for (const mode of MODE_ORDER) {
     if (!MINES_CONTROLLER_MODES[mode]) continue;
