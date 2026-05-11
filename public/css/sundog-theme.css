@@ -187,12 +187,10 @@ body {
 
   .site-links {
     width: 100%;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: flex-start;
     gap: 0.65rem 0.9rem;
-    overflow-x: auto;
-    padding-bottom: 0.2rem;
-    scrollbar-width: thin;
+    overflow-x: visible;
   }
 
   .site-links a {
@@ -1119,6 +1117,14 @@ body[data-theme="desk"],
 
 /* Phone */
 @media (max-width: 520px) {
+  .site-nav {
+    width: min(360px, calc(100vw - 2rem));
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   .cta-buttons {
     grid-template-columns: 1fr;
     width: min(100%, 24rem);
