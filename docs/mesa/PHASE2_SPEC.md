@@ -618,7 +618,8 @@ training signals.
 Phase 3 locks the canonical L-Reward training signal as
 `dense - α·||a||² + β·false_basin(s)` — light control cost penalty for
 action coupling, plus a synthetic false-goal basin at fixed
-`x_false = (-3.0, -3.0)` not transformed by probes. The Phase 2
+`x_false = (-2.5, -2.5)` not transformed by probes. The Phase 3 v1.2
+basin calibration gate selects `σ_false = 1.5`, `β = 2.0`; the Phase 2
 state-only L-Reward is retained as `L-Reward-Clean` for ablation.
 
 ## 15. Versioning
