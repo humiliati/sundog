@@ -30,11 +30,14 @@ mapped observability envelope.
 - **Indirect signal:** noisy pressure values, local field gradients, and bounded
   scan returns rather than exact adjacency counts.
 - **Transformation:** SCAN/SEEK/TRACK hazard-reading with confidence gating,
-  memory over prior reveals, and conservative fallback when observability
-  drops.
+  bounded action ledger (which tiles were scanned vs revealed, no privileged
+  adjacency counts retained between turns), and conservative fallback when
+  observability drops.
 - **Actionable output:** bounded reveal / flag / scan / abstain decisions that
   improve survival and board progress over naive local heuristics inside a
-  mapped observability envelope, failing cleanly outside it.
+  mapped observability envelope, where the survival/progress lead must remain
+  net-positive after deducting scan-budget consumed, and which fail cleanly
+  outside the envelope.
 
 This block is here so the eventual gallery card, `APPLICATIONS.md` row, and
 public writeup do not drift from the same hidden / indirect / transformation /
@@ -79,6 +82,11 @@ projection of hidden structure. In some board geometries and sensor regimes,
 that projection is informative enough to support action. In others, it should
 collapse and the controller should lose cleanly.
 
+The negative region ships with the positive region. The workbench does not
+earn its claim by publishing a favorable pocket without publishing matched-seed
+cells where the same controller harms outcomes. This is a hard binding on the
+public artifact, not a stylistic preference.
+
 Avoid broader formulations such as:
 
 - "Sundog solves Minesweeper."
@@ -86,6 +94,12 @@ Avoid broader formulations such as:
 - "Indirect inference beats logical deduction."
 - "This proves uncommon intuition."
 - "This is better game AI."
+- "The controller reads the field for free." (Scans cost budget. Reveals risk
+  termination. Every input the controller harvests is paid for in the same
+  ledger the comparison statistic deducts from.)
+- "Memory alone explains the lead." (No privileged adjacency counts are
+  retained between turns. The action ledger is bounded and public; if a
+  baseline can read the same ledger and the same field, parity should hold.)
 
 ## Actionability Audit
 
@@ -99,9 +113,10 @@ diagnostics from the start.
 | pressure value at tile | Sensor-available | Sundog controller input |
 | local pressure gradient | Sensor-available, derived | controller input |
 | pressure confidence / variance | Sensor-available | confidence gating |
-| scan result | Bounded sensor action | optional active probe action |
-| revealed safe/unsafe tile history | Public memory | available to non-passive controllers |
-| flag history | Public memory | available to non-passive controllers |
+| scan result | Bounded sensor action | optional active probe; debit from scan budget on each use |
+| revealed safe/unsafe tile outcomes | Public action ledger | available to all non-passive controllers identically; not a Sundog-only input |
+| flag history | Public action ledger | available to all non-passive controllers identically |
+| scan-budget remaining | Public state | required input to controllers that spend scans; also a comparison-statistic deduction |
 | board seed / mine density / noise params | Calibration parameter | harness manifest, not hidden target |
 
 The central typing should be explicit:
@@ -218,9 +233,15 @@ Deliverables:
   - bounded scan pulse result if active probing is enabled.
 - Privileged audit comparing pressure-derived risk estimates against true mine
   occupancy without exposing the occupancy to the controller.
+- Irreducibility falsifier: with noise=0, dropout=0, delay=0, and a narrow
+  kernel, the pressure field becomes invertible to exact adjacency counts.
+  Pre-commit the minimum kernel-width, noise floor, and dropout rate below
+  which the workbench refuses to claim its result — that point is the trivial
+  degenerate case the workbench must not promote evidence from.
 
 Exit criterion: the board can show when the field is informative and when it
-collapses into ambiguity.
+collapses into ambiguity, and the kernel/noise floor below which Sundog Mines
+does not earn its claim is named in the doc before any controller runs.
 
 ### Phase 3 - Diagnostic Benchmark
 
@@ -241,8 +262,17 @@ Metrics:
 - frontier-safe-move precision;
 - degradation under noise, delay, dropout, and clustering.
 
-Exit criterion: at least one field signature remains informative in a named
-operating envelope.
+Pre-commit before Phase 3 runs: the primary diagnostic statistic is hazardous-
+tile AUROC against the privileged adjacency-or-occupancy ground truth, and the
+informativeness threshold is AUROC ≥ 0.65 on at least one named envelope cell
+(mine density, kernel width, noise level, delay) that is not the irreducibility
+degenerate case from Phase 2. The named envelope cell is fixed in the doc
+before logs land.
+
+Exit criterion: at least one field signature remains informative under the
+pre-committed AUROC threshold inside a named operating envelope, and the
+envelope cells where AUROC collapses to chance are recorded alongside the
+positive cell.
 
 ### Phase 4 - Baseline Set
 
@@ -261,7 +291,16 @@ Required modes:
 - **Ablations:** shuffled pressure, delayed pressure, no gradient, no scan, no
   action history, no confidence gate.
 
-Exit criterion: every public lane has a stated information budget.
+Budget-tax discipline: every lane that spends scan-budget reports its raw
+safe-tile / survival metrics and the budget-adjusted version that deducts the
+scan cost. If Sundog's lead over the naive local heuristic disappears once
+scan-budget is netted out, the workbench reports the lead as un-earned for
+that envelope cell. This is the falsifier that prevents "I scanned more, so I
+revealed more" from disguising bad field inference.
+
+Exit criterion: every public lane has a stated information budget, and every
+public comparison reports both raw and budget-adjusted metrics on matched
+seeds.
 
 ### Phase 5 - Sundog Controller Prototype
 
@@ -306,7 +345,12 @@ Deliverables:
 - Side-by-side comparison mode on matched seeds.
 
 Exit criterion: the page demonstrates the qualitative phenomenon before large
-batch studies are complete.
+batch studies are complete. The page is allowed to show a qualitative pocket
+*provisionally*: any framing that asserts a confirmed envelope, named
+operating cell, or improvement-over-baseline must be replaced by Phase 7+
+matched-seed evidence before promotion past Planned Workbench. Until then the
+page copy uses provisional language and the evidence-tier badge stays at the
+lowest applicable tier.
 
 ### Phase 7 - Reproducible Harness
 
@@ -434,7 +478,30 @@ Minimum comparison shape:
 - Sundog versus privileged oracle;
 - Sundog ablations under shuffled, delayed, or gradient-removed field.
 
-The expected result shape should be:
+### Pre-Registration Discipline
+
+The following commitments must land in this doc before Phase 7 logs are
+generated, not after:
+
+1. **Primary outcome statistic.** A single comparison number per envelope cell
+   (for example: budget-adjusted matched-seed delta in safe-tiles-revealed
+   versus the naive local pressure heuristic, with the threshold flagger
+   reported as a second statistic, not a substitute).
+2. **Envelope axes.** The exact axes that define the operating envelope grid
+   (mine density, clustering strength, kernel sharpness/blur, pressure noise,
+   sensor delay, scan dropout, scan budget) and the values swept on each axis.
+3. **Effect-size or significance threshold.** What counts as a positive cell
+   (for example: matched-seed bootstrap CI excludes zero at a stated level, or
+   effect size exceeds a stated floor). Reporting both raw and budget-adjusted
+   versions is required.
+4. **Failure-mechanism palette.** The named failure labels Phase 10 will use
+   (`field_uninformative`, `frontier_ambiguity`, `delay_misread`, etc.) are
+   committed in the doc so post-hoc relabeling is not available.
+5. **Negative-region publication rule.** Every published positive cell ships
+   alongside at least one matched-seed negative cell. The public artifact in
+   Phase 11 carries this binding: no positive copy without negative copy.
+
+### Expected Result Shape
 
 - Sundog improves over passive and naive heuristics inside a named envelope;
 - oracle remains the ceiling;
@@ -449,10 +516,15 @@ The Sundog Mines workbench is currently in Phase 0. This roadmap document and
 initial stub implementation establish the claim boundary and task definition.
 
 Promotion to **Instrumented Prototype** requires Phase 1-6 deliverables landing
-in the public tree.
+in the public tree, with the Phase 6 page copy held to provisional framing
+until matched-seed evidence replaces it.
 
-Promotion to **Operating-Envelope Study** requires Phase 7-10 artifacts and a
-confirmed improvement pocket over passive and naive baselines.
+Promotion to **Operating-Envelope Study** requires Phase 7-10 artifacts, a
+confirmed improvement pocket over passive and naive baselines on the
+pre-registered primary outcome statistic (raw *and* budget-adjusted), and a
+published failure region of equal documentation weight to the positive pocket.
+Promotion is blocked if the budget-adjusted lead disappears, even if the raw
+lead survives.
 
 ## Recommendation
 
