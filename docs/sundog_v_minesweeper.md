@@ -399,20 +399,21 @@ Exit criterion: every public lane has a stated information budget, and every
 public comparison reports both raw and budget-adjusted metrics on matched
 seeds.
 
-Phase 4 scaffold status:
+Phase 4 scaffold status after the Phase 5 merge:
 
 - `public/js/mines-controllers.mjs` declares implemented baseline/oracle lanes
   plus the Phase 5 Sundog and ablation information budgets.
 - `scripts/mines-phase4-baselines.mjs` / `npm run mines:phase4` writes local,
   ignored matched-seed outputs under `results/mines/phase4-baselines`.
-- Implemented lanes: `random_reveal`, `naive_pressure`, `threshold_flagger`,
-  `naive_pressure_shuffled`, `naive_pressure_delayed`, and `oracle_safe`.
-- Pending Phase 5 lanes: `sundog_controller`, `sundog_no_gradient`,
+- Implemented baseline/oracle lanes: `random_reveal`, `naive_pressure`,
+  `threshold_flagger`, `naive_pressure_shuffled`, `naive_pressure_delayed`,
+  and `oracle_safe`.
+- Implemented Phase 5 lanes: `sundog_controller`, `sundog_no_gradient`,
   `sundog_no_scan`, `sundog_no_action_history`, and
   `sundog_no_confidence_gate`.
 - Budget-adjusted safe tiles are currently `rawSafeTiles - scanCount`; this
-  is equal to raw safe tiles for the implemented no-scan Phase 4 lanes, but
-  the output schema already carries the scan-tax field for Phase 5.
+  is equal to raw safe tiles for no-scan lanes and applies a direct scan tax
+  to Sundog lanes that spend bounded probes.
 
 ### Phase 5 - Sundog Controller Prototype
 
@@ -436,6 +437,30 @@ not about training a general puzzle agent.
 Exit criterion: the controller survives longer, clears more safe tiles, or
 improves expected return versus passive and naive local baselines on a small
 seeded slate inside the diagnostic-positive envelope.
+
+Phase 5 prototype status:
+
+- `public/js/mines-controllers.mjs` now contains the first hand-authored
+  Sundog controller. It combines observed pressure, confidence/dropout gating,
+  gradient magnitude, revealed-neighbor history, scan history, and conservative
+  pressure-threshold flagging without reading true occupancy or exact counts.
+- `npm run mines:phase5` runs the controller and ablations on matched seeds
+  against the Phase 4 baselines, writing ignored local artifacts under
+  `results/mines/phase5-controller`, including `phase5-controller.md`,
+  `summary-rows.csv`, and `matched-comparison-summary.csv`.
+- Current 16-seed result: the named `sundog_controller` improves
+  budget-adjusted safe tiles versus `naive_pressure` in publishable
+  `doc_default` clustered boards (+3.000) and dense boards (+1.875). In the
+  noisy/dropout cliff it improves dense (+3.3125) and easy-sparse (+2.1875),
+  but still loses clustered (-6.6875). It also remains slightly behind
+  `naive_pressure` on `doc_default` easy-sparse (-0.8125).
+- Scan-tax check: the positive `doc_default` controller deltas above use zero
+  mean scans, so they are not scan-spend artifacts. Noisy/dropout positive
+  deltas retain a positive budget-adjusted lead after subtracting scans.
+- Interpretation: Phase 5 is a prototype and a falsifiable workbench lane, not
+  an operating-envelope verdict. The ablations already show useful pressure:
+  gradient can help in the noisy/dropout cells, while the no-scan ablation is
+  cleaner than the full controller on `doc_default` dense boards.
 
 ### Phase 6 - Real-Time Web Projection
 
