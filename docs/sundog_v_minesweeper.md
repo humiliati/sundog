@@ -640,6 +640,34 @@ Deliverables:
 Exit criterion: the page and docs distinguish useful field-reading from lucky
 tile clicking.
 
+Phase 8 event-metrics status:
+
+- `scripts/mines-phase8-metrics.mjs` consumes a replayable Phase 7 output
+  directory, defaulting to `results/mines/phase7-smoke`, and writes ignored
+  local Phase 8 artifacts under `results/mines/phase8-events`.
+- `npm run mines:phase8` runs the Phase 7 smoke batch plus replay verification,
+  then analyzes `step-traces.jsonl` into event metrics.
+- Event labels currently emitted: `safe_reveal`, `risky_reveal`,
+  `mine_trigger`, `false_flag`, `scan_success`, `frontier_collapse`,
+  `confidence_loss`, and `recovery`.
+- The `risky_reveal` label is a public-sensor warning label, not privileged
+  mine knowledge. By default it fires for reveal actions under pressure
+  warning >= 1.2, action confidence < 0.5, frontier confidence < 0.5, or
+  gradient warning >= 0.5. The `mine_trigger` label is the hazardous reveal
+  audit event.
+- Outputs include `event-rows.csv`, `trial-event-summary.csv`,
+  `mode-event-summary.csv`, `matched-event-comparisons.csv`,
+  `matched-event-comparison-summary.csv`, `warning-threshold-sweeps.csv`,
+  `summary.json`, and `phase8-events.md`.
+- The current local Phase 8 run reads 336 Phase 7 trials and 5,765 replayable
+  trace rows, emits 7,306 event labels, and preserves `sourcePhase` so the
+  Phase 8 tables remain tied to the Phase 7 trace batch that produced them.
+- The first Phase 8 summary already separates the shape that Phase 5 blurred:
+  `sundog_lean` gains safe tiles over `naive_pressure` in the noisy
+  easy-sparse pocket while adding risky-reveal pressure, and it still shows
+  doc-default false-flag costs. This is instrumentation, not a promoted
+  envelope claim.
+
 ### Phase 9 - Sensor Degradation And Observability Boundary
 
 Goal: turn the failure boundary into first-class content.
