@@ -576,15 +576,15 @@ criterion ("HC-Signature works on the canonical task at the privileged tier
 and degrades cleanly across the lower tiers; the harness can replay trials
 byte-for-byte") then becomes the test.
 
-- [ ] `mesa-core.mjs` implements `Env`, `signatureField`, four sensor tiers,
+- [x] `mesa-core.mjs` implements `Env`, `signatureField`, four sensor tiers,
       and HC-Signature
-- [ ] Env exposes `applyProbe(...)` and `scheduleIntervention(...)` even if
+- [x] Env exposes `applyProbe(...)` and `scheduleIntervention(...)` even if
       Phase 3 / 4 sweeps don't run yet — the *hooks* must exist
-- [ ] `scripts/mesa-harness.mjs` writes `manifest.json` and per-trial JSONL
-- [ ] `npm run mesa:phase1` runs HC-Signature across the four sensor tiers
+- [x] `scripts/mesa-harness.mjs` writes `manifest.json` and per-trial JSONL
+- [x] `npm run mesa:phase1` runs HC-Signature across the four sensor tiers
       on a default seed slate (e.g., 32 seeds) and emits `trial-outcomes.csv`
-- [ ] Byte-for-byte replay verified by a second run on the same seed slate
-- [ ] HC-Signature meets the per-tier behavior expectations in §4.4 after
+- [x] Byte-for-byte replay verified by a second run on the same seed slate
+- [x] HC-Signature meets the per-tier behavior expectations in §4.4 after
       first-round tuning
 
 ## 10. Out of Scope for Phase 0

@@ -667,9 +667,14 @@ their Current Recommendation language adjusted to reflect the sequencing.
 pick, claim boundary, architecture pinning, capacity ladder, selection-pressure
 curriculum, and literature spine are now specified. Implementation-grade
 spec landed at [`mesa/PHASE0_SPEC.md`](mesa/PHASE0_SPEC.md) (`v1`,
-2026-05-10), unlocking Phase 1. Phase 1 code has not started.
+2026-05-10), unlocking Phase 1.
 
-**Phases 1–8:** Not started.
+**Phase 1:** Implemented. The shadow-field core, sensor tiers, HC-Signature
+controller, seeded harness, replay verification, and default `npm run
+mesa:phase1` command are in place. Result note:
+[`mesa/PHASE1_HC_BASELINE.md`](mesa/PHASE1_HC_BASELINE.md).
+
+**Phases 2–8:** Not started.
 
 **Appendix A:** Drafted in this document as the intellectual target. The
 formal note is not yet a ratified theorem; the open questions section is
@@ -677,19 +682,21 @@ load-bearing.
 
 The current public-facing status, in the spirit of `claims-and-scope.md`:
 
-> Sundog vs. Mesa-Optimization is a proposed roadmap with no implemented
-> phases. The gravity claim's mode-(3) falsification surface is therefore
-> defended currently by structural argument and by the bounded three-body
-> operating-envelope result, not by adversarial mesa experiments. The
-> roadmap above defines what those experiments will look like when staged.
+> Sundog vs. Mesa-Optimization has completed its Phase 1 reference-task
+> baseline: a hand-coded signature controller tracks the shadow-field
+> signature across privileged, local-probe, delayed, and noisy sensor tiers.
+> Learned controllers have not been trained yet, so the gravity claim's
+> mode-(3) falsification surface remains untested by learned-agent mesa
+> experiments.
 
 ## Recommendation
 
-Proceed with Phase 0 implementation immediately and treat Phases 1–4 as the
-minimum viable mesa front. Phase 5 (selection-pressure curriculum) is the
-highest-marginal-value phase and should be designed before Phase 2 even though
-it runs later, because the matched-capacity learned controllers in Phase 2 must
-be trained under selection-pressure variants that Phase 5 will sweep.
+Proceed to Phase 2 only after using the Phase 1 harness as the behavior-cloning
+source and structural ceiling. Treat Phases 2–4 as the minimum viable mesa
+front. Phase 5 (selection-pressure curriculum) is the highest-marginal-value
+phase and should be designed before Phase 2 even though it runs later, because
+the matched-capacity learned controllers in Phase 2 must be trained under
+selection-pressure variants that Phase 5 will sweep.
 
 Run the Formal Separability Theorem appendix in parallel with Phase 0. A
 ratified or near-ratified theorem before Phase 3 lets the probe slate be
