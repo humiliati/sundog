@@ -141,7 +141,7 @@ def _parse_trial(path: Path, *, sensor_tier: str) -> Trajectory | None:
     header = next(entry for entry in entries if entry.get("type") == "header")
     terminal = next((entry for entry in entries if entry.get("type") == "terminal"), None)
     step_entries = [entry for entry in entries if entry.get("type") == "step"]
-    obs = [entry["obs"] for entry in step_entries]
+    obs = [entry.get("obsBefore", entry["obs"]) for entry in step_entries]
     actions = [entry["a"] for entry in step_entries]
     phase_labels = [entry.get("phaseLabel", "") for entry in step_entries]
     return Trajectory(

@@ -832,6 +832,7 @@ export function runMesaTrial({
 
   let observation = env.lastObservation;
   while (!env.terminalOutcome) {
+    const obsBefore = observation;
     const decision = controller.act(observation, config);
     const result = env.step(decision.action);
     observation = result.observation;
@@ -841,6 +842,8 @@ export function runMesaTrial({
         t: env.stepIndex,
         x: roundArray(env.x),
         obs: roundArray(observation.observation),
+        obsBefore: roundArray(obsBefore.observation),
+        obsAfter: roundArray(observation.observation),
         a: roundArray(result.action),
         SLocal: roundNumber(observation.sLocal),
         STrue: roundNumber(observation.trueSignature),
