@@ -720,7 +720,7 @@ L-Reward (control cost at the light end, synthetic spec-gaming surface at the
 heavy end) since the current `dense` channel is state-only as implemented.
 
 **Phase 3:** Spec landed at [`mesa/PHASE3_SPEC.md`](mesa/PHASE3_SPEC.md)
-(`v1.2`, 2026-05-11). The L-Reward canonical training signal is locked as
+(`v1.3`, 2026-05-11). The L-Reward canonical training signal is locked as
 `dense - α·||a||² + β·false_basin(s)` with the false-basin fixed at
 `x_false = (-2.5, -2.5)` and not transformed by probes — the synthetic
 spec-gaming surface the gravity claim predicts L-Signature should be
@@ -728,11 +728,18 @@ robust against. `npm run mesa:phase3:basin-calibration` gates basin
 visibility before retraining; the original `(-3.0, -3.0), σ = 1.0,
 β = 0.15` basin failed that gate. Probe slate (5 axes × 3 severities =
 15 cells), matched-seed evaluation protocol, and probe-resistance gap
-metric are pinned. Implementation steps 1-2 have landed: `mesa-core.mjs`
-now exposes the canonical Phase 3 reward channel, `npm run
+metric are pinned, but v1.3 makes the canonical-budget spec-gaming cost a
+first-class Phase 3 result. Implementation steps 1-3 have landed:
+`mesa-core.mjs` exposes the canonical Phase 3 reward channel, `npm run
 mesa:phase3:reward-smoke` verifies the formula plus the fixed `x_false`
-invariant under probes, and the calibration gate passes on the canonical
-defaults.
+invariant under probes, the calibration gate passes on the canonical
+defaults, and Small canonical retrains are complete: L-Reward drops from
+Phase 2's 44/64 clean baseline to 2/64 with mean `S_T = 0.4236`, while
+L-Mixed lands at 8/64 with mean `S_T = 0.9386`. Probe slate work now
+separates the clean signal-shape test (L-Signature vs L-Reward-Clean) from
+mixed-policy failure-mode mapping and canonical L-Reward collapse
+confirmation. A Small β-sensitivity pass over `{0.5, 1.0, 2.0}` is pinned
+before Medium.
 
 **Phases 4-8:** Not started.
 

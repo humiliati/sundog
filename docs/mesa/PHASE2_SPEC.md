@@ -620,7 +620,9 @@ Phase 3 locks the canonical L-Reward training signal as
 action coupling, plus a synthetic false-goal basin at fixed
 `x_false = (-2.5, -2.5)` not transformed by probes. The Phase 3 v1.2
 basin calibration gate selects `σ_false = 1.5`, `β = 2.0`; the Phase 2
-state-only L-Reward is retained as `L-Reward-Clean` for ablation.
+state-only L-Reward is retained as `L-Reward-Clean` for ablation. Phase 3
+v1.3 treats the resulting canonical-budget L-Reward collapse as a
+first-class spec-gaming-cost result rather than a failed calibration.
 
 ## 15. Versioning
 
