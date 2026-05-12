@@ -15,6 +15,9 @@ Optional (atlas pose; default = canonical-halo-atlas):
     --parhelion-offset PX       Observed parhelion offset from sun in photo px;
                                 if given, sun-altitude is inverse-inferred
                                 from h = arccos(R_22_obs / offset).
+    --parhelic-y-offset-r22 K   Vertical belt offset as a fraction of R22.
+                                Negative moves the parhelic circle / daggers
+                                upward in image coordinates (default: -0.05).
     --parhelic-curvature C      (default: 0.05)
     --cza-curvature C           (default: 0.85)
     --supralateral S            (default: 0.40)
@@ -28,6 +31,7 @@ Optional (atlas pose; default = canonical-halo-atlas):
 Observed-feature overrides (green markers; optional):
     --parhelion-left X          Observed left parhelion x (photo px)
     --parhelion-right X         Observed right parhelion x (photo px)
+    --parhelion-y Y             Observed parhelion/parhelic-belt y (photo px)
     --cza-apex X,Y              Observed CZA apex (photo px)
 
 The script does NOT need the workbench running — it re-implements the atlas
@@ -69,6 +73,7 @@ def main():
     ap.add_argument("--r22", required=True, type=float)
     ap.add_argument("--sun-altitude", type=float, default=None)
     ap.add_argument("--parhelion-offset", type=float, default=None)
+    ap.add_argument("--parhelic-y-offset-r22", type=float, default=-0.05)
     ap.add_argument("--parhelic-curvature", type=float, default=0.05)
     ap.add_argument("--cza-curvature", type=float, default=0.85)
     ap.add_argument("--supralateral", type=float, default=0.40)
@@ -80,6 +85,7 @@ def main():
     ap.add_argument("--out", type=str, default=None)
     ap.add_argument("--parhelion-left", type=float, default=None)
     ap.add_argument("--parhelion-right", type=float, default=None)
+    ap.add_argument("--parhelion-y", type=float, default=None)
     ap.add_argument("--cza-apex", type=str, default=None)
     args = ap.parse_args()
 
@@ -102,6 +108,8 @@ def main():
     h_rad = math.radians(h_deg)
 
     scale = r22_obs / WB_R22
+    belt_offset_w = args.parhelic_y_offset_r22 * WB_R22
+    belt_y_w = WB_SUN[1] + belt_offset_w
 
     def w2p(x, y):
         return (sx + (x - WB_SUN[0]) * scale, sy + (y - WB_SUN[1]) * scale)
@@ -154,7 +162,7 @@ def main():
     offset_w = WB_R22 / math.cos(h_rad)
     dagger_p = []
     for sign in (-1, +1):
-        px, py = w2p(WB_SUN[0] + sign * offset_w, WB_SUN[1])
+        px, py = w2p(WB_SUN[0] + sign * offset_w, belt_y_w)
         dagger_p.append((px, py))
         draw.line([px - 7, py, px + 7, py], fill=(255, 255, 80, 255), width=2)
         draw.line([px, py - 9, px, py + 9], fill=(255, 255, 80, 255), width=2)
@@ -167,7 +175,7 @@ def main():
         draw.line([dagger_p[0], dagger_p[1]], fill=(255, 150, 50, 220), width=2)
     else:
         u_ = (halfChord ** 2 - d_apex ** 2) / (2 * d_apex)
-        cy_w = WB_SUN[1] - u_
+        cy_w = belt_y_w - u_
         r_w = math.hypot(halfChord, u_)
         for i in range(161):
             uu = -1 + 2 * i / 160
@@ -312,9 +320,9 @@ def main():
         draw.line([x - 10, y + 2, x + 10, y + 2], fill=(0, 255, 0, 255), width=2)
 
     if args.parhelion_left is not None:
-        green_cross(args.parhelion_left, sy)
+        green_cross(args.parhelion_left, args.parhelion_y if args.parhelion_y is not None else dagger_p[0][1])
     if args.parhelion_right is not None:
-        green_cross(args.parhelion_right, sy)
+        green_cross(args.parhelion_right, args.parhelion_y if args.parhelion_y is not None else dagger_p[1][1])
     if args.cza_apex is not None:
         cx, cy_obs = parse_pair(args.cza_apex, "cza-apex")
         draw.line([cx - 10, cy_obs, cx + 10, cy_obs], fill=(0, 255, 0, 255), width=2)
@@ -351,6 +359,7 @@ def main():
     print(f"  scale:               1 workbench unit = {scale:.4f} photo px")
     print(f"  R_46 predicted:      {r46_p:.1f} px")
     print(f"  sun altitude:        {h_deg:.2f}°" + ("  (inverse-inferred from --parhelion-offset)" if args.parhelion_offset is not None and args.sun_altitude is None else ""))
+    print(f"  parhelic y offset:   {args.parhelic_y_offset_r22:+.3f} R_22 = {belt_offset_w * scale:+.1f} px")
     print(f"  dagger offset:       {offset_w * scale:.1f} px (= R_22 / cos h)")
     print(f"  dagger positions:    ({dagger_p[0][0]:.1f}, {dagger_p[0][1]:.1f}) and ({dagger_p[1][0]:.1f}, {dagger_p[1][1]:.1f})")
 
@@ -362,6 +371,8 @@ def main():
         print(f"\nResiduals (predicted - observed):")
         print(f"  left dagger:   {lr[0]:+.1f} px")
         print(f"  right dagger:  {lr[1]:+.1f} px")
+        if args.parhelion_y is not None:
+            print(f"  dagger belt y: {dagger_p[0][1] - args.parhelion_y:+.1f} px")
     if args.cza_apex is not None:
         cx, cy_obs = parse_pair(args.cza_apex, "cza-apex")
         print(f"  CZA apex:      ({cza_apex_p[0] - cx:+.1f}, {cza_apex_p[1] - cy_obs:+.1f}) px")

@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Animated Sundog character mark</title>
+  <desc id="desc">A halo-based Sundog mark with idle shimmer, parhelion glints, and a reduced-motion fallback.</desc>
+
+  <defs>
+    <style>
+      .sun-body {
+        animation: sun-breathe 4.8s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+      .parhelic-belt {
+        stroke-dasharray: 44 22;
+        animation: belt-shimmer 5.4s linear infinite;
+      }
+      .parhelion-left {
+        animation: glint-left 3.8s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+      .parhelion-right {
+        animation: glint-right 3.8s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+      .upper-eyelid {
+        animation: eyelid-wink 8s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+      @keyframes sun-breathe {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.88; transform: scale(1.035); }
+      }
+      @keyframes belt-shimmer {
+        from { stroke-dashoffset: 0; opacity: 0.54; }
+        50% { opacity: 0.82; }
+        to { stroke-dashoffset: -264; opacity: 0.54; }
+      }
+      @keyframes glint-left {
+        0%, 100% { opacity: 0.74; transform: translateX(0); }
+        48% { opacity: 1; transform: translateX(-8px); }
+      }
+      @keyframes glint-right {
+        0%, 100% { opacity: 0.74; transform: translateX(0); }
+        48% { opacity: 1; transform: translateX(8px); }
+      }
+      @keyframes eyelid-wink {
+        0%, 76%, 100% { opacity: 0.92; transform: translateY(0) scaleY(1); }
+        82% { opacity: 0.62; transform: translateY(14px) scaleY(0.68); }
+        88% { opacity: 0.92; transform: translateY(0) scaleY(1); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * { animation: none !important; }
+        .parhelic-belt { stroke-dasharray: none; }
+      }
+    </style>
+    <radialGradient id="sky" cx="50%" cy="42%" r="72%">
+      <stop offset="0%" stop-color="#2c5f7f"/>
+      <stop offset="58%" stop-color="#1a3a52"/>
+      <stop offset="100%" stop-color="#102436"/>
+    </radialGradient>
+    <radialGradient id="sun" cx="42%" cy="34%" r="68%">
+      <stop offset="0%" stop-color="#fff4b2"/>
+      <stop offset="42%" stop-color="#f4c430"/>
+      <stop offset="100%" stop-color="#b97812"/>
+    </radialGradient>
+    <linearGradient id="parhelion-left-gradient" x1="0%" x2="100%">
+      <stop offset="0%" stop-color="#79bde8"/>
+      <stop offset="52%" stop-color="#f4c430"/>
+      <stop offset="100%" stop-color="#ff7a45"/>
+    </linearGradient>
+    <linearGradient id="parhelion-right-gradient" x1="0%" x2="100%">
+      <stop offset="0%" stop-color="#ff7a45"/>
+      <stop offset="48%" stop-color="#f4c430"/>
+      <stop offset="100%" stop-color="#79bde8"/>
+    </linearGradient>
+    <filter id="soft-glow" x="-45%" y="-45%" width="190%" height="190%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.96  0 1 0 0 0.77  0 0 1 0 0.19  0 0 0 0.68 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect data-layer="field.background" width="1024" height="1024" rx="220" fill="url(#sky)"/>
+  <g data-layer="field.halo-46">
+    <circle cx="512" cy="512" r="346" fill="none" stroke="#7da2b8" stroke-width="26" opacity="0.46"/>
+  </g>
+  <g data-layer="core.halo-22">
+    <circle cx="512" cy="512" r="258" fill="none" stroke="#f4c430" stroke-width="18" opacity="0.66"/>
+  </g>
+  <g data-layer="core.parhelic-belt">
+    <path class="parhelic-belt" d="M 166 499.1 C 340 481.1 684 481.1 858 499.1" fill="none" stroke="#f4c430" stroke-width="25" stroke-linecap="round" opacity="0.7"/>
+  </g>
+  <g data-layer="core.upper-tangent">
+    <path class="upper-eyelid" d="M 276 392 C 356 292 668 292 748 392" fill="none" stroke="#fff4b2" stroke-width="28" stroke-linecap="round" opacity="0.82"/>
+  </g>
+  <g data-layer="optional.circumzenithal-arc">
+    <path d="M 328 276 C 420 232 604 232 696 276" fill="none" stroke="#7da2b8" stroke-width="18" stroke-linecap="round" opacity="0.44"/>
+  </g>
+  <g data-layer="core.sun" class="sun-body">
+    <circle cx="512" cy="512" r="132" fill="#f4c430" opacity="0.15"/>
+    <circle cx="512" cy="512" r="112" fill="url(#sun)" filter="url(#soft-glow)"/>
+    <circle cx="512" cy="512" r="42" fill="#fff4b2" opacity="0.86"/>
+  </g>
+  <g data-layer="core.parhelia">
+    <path class="parhelion-left" d="M 150.7 499.1 L 240.7 456.1 L 330.7 499.1 L 240.7 542.1 Z" fill="url(#parhelion-left-gradient)" opacity="0.94"/>
+    <path class="parhelion-right" d="M 693.3 499.1 L 783.3 456.1 L 873.3 499.1 L 783.3 542.1 Z" fill="url(#parhelion-right-gradient)" opacity="0.94"/>
+  </g>
+</svg>

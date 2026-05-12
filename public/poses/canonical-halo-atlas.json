@@ -26,6 +26,7 @@
 
   "parhelicCircleIntensity": 0.55,
   "parhelicCurvature": 0.05,
+  "parhelicYOffsetR22": -0.05,
 
   "parheliaIntensity": 1.0,
   "parheliaDaggerLength": 1.0,

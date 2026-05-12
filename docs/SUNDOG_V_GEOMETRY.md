@@ -425,6 +425,14 @@ Two lessons came out of running the pass:
    prediction for the missing-side parhelion is recorded for if/when more
    photos at high sun altitude become available.
 
+2026-05-12 belt-height correction: across the overlay set, the parhelic
+circle and dagger markers consistently sat low by about **5% of R22** even
+when the 22° halo itself was well registered. `--parhelic-y-offset-r22`
+now defaults to `-0.05`, raising the parhelic belt and both daggers together
+while leaving the halo anchors, CZA, and tangent-arc vocabulary untouched.
+The x-residual table above is unchanged; the correction is a shared vertical
+registration fix for the belt layer.
+
 ### Theorem Anchor: What the Atlas Demonstrates
 
 The atlas is the cleanest natural example we have of the Sundog
@@ -636,6 +644,7 @@ The workbench must separate parameter tiers from day one.
 | `--sun-pillar-length` | Free | Visual knob; pillar extent above and below sun |
 | `--parhelic-circle-intensity` | Free | Visual knob; opacity of the parhelic arc |
 | `--parhelic-curvature` | Math-derived (planned) | Locked at 0.66 by overlay calibration; Phase 3 will derive from sun altitude |
+| `--parhelic-y-offset-r22` | Calibration-derived | Moves the parhelic belt and daggers together as a fraction of R22; default `-0.05` corrects the common belt-low overlay residual |
 | `--parhelia-intensity` | Free | Visual knob; opacity of the dagger group |
 | `--parhelia-dagger-length` | Free | Visual knob; horizontal extent of the dagger streaks |
 | `--dispersion-width` | Free | Visual knob; atmosphere overlay intensity |
@@ -757,6 +766,11 @@ Calibration items (live list):
 - [ ] Decision: promote 9-halo-eye composition (`--secondary-suns-strength`)
   default — `0.0` (off) for the canonical pose, or a small non-zero
   default if the fiction is part of the locked hero.
+- [x] `--parhelic-y-offset-r22 = -0.05` added 2026-05-12. Multi-photo
+  review showed the parhelic belt / dagger markers were landing about 5%
+  of R22 too low while the 22° halo anchor was correct. This correction
+  moves only the parhelic circle and daggers; halo, CZA, and tangent
+  anchors remain unchanged.
 
 Gate: snapshot the locked param JSON to `docs/SUNDOG_GEOMETRY_POSE.json`
 or similar; future regressions are reviewable against that file.
@@ -946,9 +960,13 @@ Reference images:
 Deliverables:
 
 - Overlay outputs for p2, p7, and p13 with optional vocabulary layers
-  toggled and separately colored.
+  toggled and separately colored. First-pass artifacts live at
+  `docs/calibration/overlays/p2.rich-vocabulary.overlay.png`,
+  `docs/calibration/overlays/p7.rich-vocabulary.overlay.png`, and
+  `docs/calibration/overlays/p13.rich-vocabulary.overlay.png`.
 - Per-photo notes that classify each optional primitive as `visible`,
-  `candidate`, `not visible`, or `not applicable`.
+  `candidate`, `not visible`, or `not applicable`; first-pass notes live in
+  `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`.
 - Updated defaults or pose presets only if the same morphology appears
   consistently across at least two of the three images.
 - A short "do not promote" list naming any arc that looked plausible in one
@@ -982,7 +1000,21 @@ Deliverables:
   so logo expressiveness is borrowed from calibrated sky morphology rather
   than invented decoration.
 
-Gate: a designer can regenerate the current icon set and produce one
+2026-05-12 first-pass artifacts:
+
+- [x] `scripts/generate-sundog-logo-toolkit.mjs` plus `npm run
+  logo:toolkit` export static SVG, transparent SVG, SVG/CSS animation,
+  layer manifest JSON, favicon PNG proofs, app-icon PNG proofs, and a
+  transparent PNG proof.
+- [x] `docs/LOGO_ANIMATION_TOOLKIT.md` now gives the design team a compact
+  character sheet, protected geometry, optional vocabulary boundary,
+  motion states, and small-size rules.
+- [x] `docs/ICON_ASSETS.md` lists the Phase 11 prototype assets and links
+  the generator to the richer p2/p7/p13 overlay notes.
+- [ ] Production favicon/app-icon replacement remains a later design-review
+  step; the current site icon wiring is unchanged.
+
+Gate: a designer can regenerate the Phase 11 prototype icon set and produce one
 animated Sundog mark without reading the entire geometry roadmap, while the
 assets still trace back to Halo Atlas primitives.
 

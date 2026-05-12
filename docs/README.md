@@ -56,6 +56,8 @@ code, experiments, prior theorem materials, and application bridges.
   follow-up experiment design.
 - [Icon assets](ICON_ASSETS.md): favicon, app icon, manifest, and HTML tags for
   `sundog.cc`.
+- [Logo animation toolkit](LOGO_ANIMATION_TOOLKIT.md): Phase 11 characterized
+  Sundog mark assets, protected layers, and motion rules.
 - [Website development](WEBSITE_DEVELOPMENT.md): how to edit root HTML pages,
   link docs, build `dist/`, and deploy through Cloudflare Pages.
 - [Chat claim map](../chat/claim_map.json): Phase 0 claim classes, source
