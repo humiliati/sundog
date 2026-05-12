@@ -17,6 +17,7 @@ results/mesa/
 
 # Test artifacts
 *.jsonl
+!chat/prompts/*.jsonl
 screenshots/
 
 # Editor
