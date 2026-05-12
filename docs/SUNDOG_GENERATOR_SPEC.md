@@ -311,7 +311,8 @@ The Sundog Generator does NOT claim:
 - AI authorship of the phenomenon. The parameter JSON and the geometry
   solver own the phenomenon's structure. AI is opt-in beautification of
   an already-correct vector skeleton.
-- All halo phenomena. The solver covers the parhelion + CZA + parhelic
-  + sun-pillar subset. Other halo phenomena (Parry arcs, infralateral
-  arcs, sub-suns) are out of scope without a deliberate Phase-10
-  expansion.
+- All halo phenomena. The solver's calibrated core remains the parhelion
+  + CZA + parhelic + sun-pillar subset. Halo Atlas also exposes optional
+  vocabulary overlays for upper/lower tangent, suncave Parry, Parry
+  supralateral, and infralateral arcs, but those are annotation primitives,
+  not a claim of meteorological simulation.

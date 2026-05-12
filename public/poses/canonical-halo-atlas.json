@@ -42,6 +42,11 @@
   "ringOverlapBias": 0.5,
 
   "supralateralIntensity": 0.40,
+  "upperTangentIntensity": 0.0,
+  "lowerTangentIntensity": 0.0,
+  "suncaveParryIntensity": 0.0,
+  "parrySupralateralIntensity": 0.0,
+  "infralateralIntensity": 0.0,
 
   "idleScintillationAmplitude": 0.0
 }

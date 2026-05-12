@@ -37,6 +37,9 @@
             --supralateral-intensity: 0;
             --upper-tangent-intensity: 0;
             --lower-tangent-intensity: 0;
+            --suncave-parry-intensity: 0;
+            --parry-supralateral-intensity: 0;
+            --infralateral-intensity: 0;
         }
 
         * {
@@ -305,6 +308,17 @@
             mix-blend-mode: screen;
         }
 
+        /* Parry supralateral shoulders: paired upper-lateral annotation arcs. */
+        .layer-parry-supralateral path {
+            fill: none;
+            stroke: rgba(255, 210, 255, 0.88);
+            stroke-width: 3;
+            opacity: var(--parry-supralateral-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+            mix-blend-mode: screen;
+        }
+
         /* Upper tangent arc: the "eyelid above the 22° halo." Distinct from the
            CZA (which is tangent to the 46° halo top). Only renders in atlas
            mode; other modes hold --upper-tangent-intensity at 0. */
@@ -313,6 +327,17 @@
             stroke: rgba(255, 255, 255, 0.85);
             stroke-width: 2;
             opacity: var(--upper-tangent-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+            mix-blend-mode: screen;
+        }
+
+        /* Suncave Parry arc: Parry-orientation cap with sunward shoulders. */
+        .layer-suncave-parry path {
+            fill: none;
+            stroke: rgba(255, 245, 210, 0.92);
+            stroke-width: 2;
+            opacity: var(--suncave-parry-intensity);
             vector-effect: non-scaling-stroke;
             filter: url(#soft-blur);
             mix-blend-mode: screen;
@@ -327,6 +352,17 @@
             opacity: var(--lower-tangent-intensity);
             vector-effect: non-scaling-stroke;
             filter: url(#soft-blur);
+            mix-blend-mode: screen;
+        }
+
+        /* Infralateral arcs: lower-lateral peripheral annotation arcs. */
+        .layer-infralateral path {
+            fill: none;
+            stroke: url(#prismatic-gradient);
+            stroke-width: 4;
+            opacity: var(--infralateral-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#cza-edge-soften);
             mix-blend-mode: screen;
         }
 
@@ -525,16 +561,31 @@
                     <path id="supralateral-path" d=""/>
                 </g>
 
+                <!-- Parry supralateral shoulders: upper-lateral Parry-family arcs. -->
+                <g class="layer-parry-supralateral">
+                    <path id="parry-supralateral-path" d=""/>
+                </g>
+
                 <!-- Upper tangent arc: tangent to the 22° halo at its top —
                      the eyelid-above-22-halo feature. Atlas mode only. -->
                 <g class="layer-upper-tangent">
                     <path id="upper-tangent-path" d=""/>
                 </g>
 
+                <!-- Suncave Parry arc: Parry-orientation cap with sunward shoulders. -->
+                <g class="layer-suncave-parry">
+                    <path id="suncave-parry-path" d=""/>
+                </g>
+
                 <!-- Lower tangent arc: mirror of upper tangent at the 22°
                      halo bottom. Atlas mode only. -->
                 <g class="layer-lower-tangent">
                     <path id="lower-tangent-path" d=""/>
+                </g>
+
+                <!-- Infralateral arcs: lower-lateral peripheral arcs. -->
+                <g class="layer-infralateral">
+                    <path id="infralateral-path" d=""/>
                 </g>
 
                 <!-- Circumzenithal arc (CZA): the eyelid -->
@@ -671,13 +722,28 @@
             </div>
 
             <div class="control-group">
+                <label>Parry Supralateral<span class="value" id="parry-supralateral-intensity-value">0.00</span></label>
+                <input type="range" id="parry-supralateral-intensity" data-param="parry-supralateral-intensity" min="0" max="1" step="0.01" value="0">
+            </div>
+
+            <div class="control-group">
                 <label>Upper Tangent (eyelid)<span class="value" id="upper-tangent-intensity-value">0.00</span></label>
                 <input type="range" id="upper-tangent-intensity" data-param="upper-tangent-intensity" min="0" max="1" step="0.01" value="0">
             </div>
 
             <div class="control-group">
+                <label>Suncave Parry<span class="value" id="suncave-parry-intensity-value">0.00</span></label>
+                <input type="range" id="suncave-parry-intensity" data-param="suncave-parry-intensity" min="0" max="1" step="0.01" value="0">
+            </div>
+
+            <div class="control-group">
                 <label>Lower Tangent (under-halo)<span class="value" id="lower-tangent-intensity-value">0.00</span></label>
                 <input type="range" id="lower-tangent-intensity" data-param="lower-tangent-intensity" min="0" max="1" step="0.01" value="0">
+            </div>
+
+            <div class="control-group">
+                <label>Infralateral Arcs<span class="value" id="infralateral-intensity-value">0.00</span></label>
+                <input type="range" id="infralateral-intensity" data-param="infralateral-intensity" min="0" max="1" step="0.01" value="0">
             </div>
 
             <div class="control-group">
@@ -737,6 +803,7 @@
                 <strong>Halo</strong> at 22° is the iris.
                 <strong>CZA</strong> is the upper eyelid.
                 <strong>Parhelia</strong> are outward-facing daggers.
+                <strong>Parry / lateral arcs</strong> are optional atlas vocabulary layers.
                 <strong>Secondary Suns</strong> activates the 9-halo eye fiction.
             </p>
         </aside>

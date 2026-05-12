@@ -770,29 +770,31 @@ fixed-attractor control. Aggregate reports live under
 `results/mesa/phase4-intervention-battery/reports/` and rebuild with
 `npm run mesa:phase4:aggregate`.
 
-**Phase 5:** Small + Medium slates **complete**. See
-[`mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md) v2 for the full result
-note including the Medium-Tier Amendment (§8). Spec at
-[`mesa/PHASE5_SPEC.md`](mesa/PHASE5_SPEC.md) v1.2. **Headline Medium
-finding: L-Signature with terminal-only shape reaches 64/64 success at
-Medium tier — matching the Oracle and HC-Signature ceiling, exceeding
-L-Reward-Clean Medium's 49/64 by 23 percentage points, and overturning
-the Phase 2-3 Sundog-cost framing.** State-only signature training at
-correct shape is *better than* dense reward training at scale, not a
-"trade adversarial-robustness for sample efficiency" deal. The
-integrated-signature canonical from Phase 2 is **deprecated**;
-terminal-only is the new canonical for future Phase 5+ work. The Medium
-λ protection curve is **non-monotone** (`old_basin_pref` 0.823 → 0.889
-→ 0.613 → 5.560 across λ ∈ {0.3, 0.5, 0.7, 1.0}), surfacing a window
-between λ=0.5 and λ=1.0 where basin attraction *drops* before saturating
-— a finding the monotone Small curve at λ ≈ 0.660 breach did not
-predict. Three Phase 5 v3 candidates ranked at PHASE5_RESULTS.md §8.8:
-λ ∈ {0.8, 0.9} Medium for non-monotone curve characterization,
-reward-pretrain → terminal-signature-fine-tune for the C1 follow-up,
-and the missing Small L-Sig-Terminal probe/intervention slate runs.
-Pre-registered prediction outcomes: A1 confirmed, A2 confirmed,
-A1-M confirmed marginally, A2-M falsified in unexpected direction
-(λ=0.7 less basin-attracted than λ=0.5), B1 falsified in
-program-significant direction, B-M confirmed and exceeded, C1 partially
-confirmed.
+**Phase 5:** Small + Medium slates **complete through v3**. See
+[`mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md) v3 for the full result
+note and [`mesa/PHASE5_SPEC.md`](mesa/PHASE5_SPEC.md) v1.4 for the staged
+cliff-localization follow-up. **Headline Medium finding: L-Signature with
+terminal-only shape reaches 64/64 success at Medium tier**, matching the
+Oracle and HC-Signature ceiling, exceeding L-Reward-Clean Medium's 49/64 by
+23 percentage points, and overturning the Phase 2-3 Sundog-cost framing.
+State-only signature training at correct shape is *better than* dense reward
+training at scale, not a "trade adversarial robustness for sample efficiency"
+deal. The integrated-signature canonical from Phase 2 is **deprecated**;
+terminal-only is the new canonical for future Phase 5+ work.
+
+Phase 5 v3 sharpened the mixed-signal picture. Medium L-Mixed remains
+protected through `lambda=0.9`: `old_basin_pref` falls from 0.613 at
+`lambda=0.7` to 0.485 at `lambda=0.8` and 0.383 at `lambda=0.9`, while
+nominal success rises to 32/64 and 36/64. Pure L-Reward-M at `lambda=1.0`
+still collapses (`old_basin_pref=5.560`, 0/64 success), so the failure now
+looks like an abrupt cliff between "mostly reward with a signature anchor"
+and "pure reward," not a smooth monotone degradation. The current aggregate
+breach interpolation is `lambda ~= 0.912`, but Phase 5 v4 is staged to
+measure the actual cliff with Medium `lambda in {0.95, 0.97, 0.99}`.
+
+The reward-pretrain -> terminal-signature fine-tune follow-up falsified the
+strict Goodhart-fix-by-fine-tuning prediction under the default optimizer-
+continuation setup: 0/64 success, mean `S_T=0.363`, and
+`old_basin_pref=3.691`. Terminal signature works from scratch, but did not
+rescue this reward-pretrained fixed-attractor policy.
 **Phases 6-8:** Not started.

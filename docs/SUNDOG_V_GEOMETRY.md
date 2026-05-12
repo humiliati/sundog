@@ -302,18 +302,19 @@ the same terminology when comparing photographs that contain them.
 | **Supralateral Arc** | tangent to the 46° halo at its top, curving *away* from the sun above the tangent | ✓ |
 | **Upper Tangent Arc** | tangent to the 22° halo at its top, curving up — column-oriented crystal family | ✓ |
 | **Lower Tangent Arc** | tangent to the 22° halo at its *bottom*, curving down — mirror of upper tangent | ✓ |
-| **Suncave Parry Arc** | tangent to the 22° halo at its top, concave-toward-sun — Parry-orientation crystal family; visually nested *inside* the broader Upper Tangent envelope | deferred (Parry-family) |
-| **Parry Supralateral Arc** | Parry-orientation variant of the supralateral arc | deferred (Parry-family) |
+| **Suncave Parry Arc** | Parry-orientation arc above the 22° halo; the shoulders bend back toward the sun, so it reads as a sun-facing cap rather than the upward-opening Upper Tangent envelope | ✓ optional atlas primitive |
+| **Parry Supralateral Arc** | Parry-orientation variant of the supralateral family; in the atlas it is represented as paired upper-lateral shoulders outside the 46° halo | ✓ optional atlas primitive |
+| **Infralateral Arcs** | paired lower-lateral arcs outside the 46° halo and below the parhelic circle; most visible as peripheral side arcs in rich displays | ✓ optional atlas primitive |
 | **Sun pillar** | not a halo arc, but rendered in atlas as the vesica of two virtual halos centered at the parhelia | ✓ (atlas pillar lens) |
 
 Two practical notes:
 
-1. The "Parry-family" deferrals (Suncave Parry, Parry Supralateral) are
-   ice-crystal-orientation-mode variants of arcs we already render. They
-   sit visually adjacent to or nested inside the atlas's Upper Tangent and
-   Supralateral primitives. Adding them is a one-primitive-per-mode
-   exercise that we hold until calibration evidence on a Parry-rich photo
-   asks for the distinction.
+1. The "Parry-family" and "infralateral" primitives are deliberately
+   labelled as vocabulary overlays, not full ray-traced halo physics. They
+   let the workbench and overlay script speak the names used by rich halo
+   displays while keeping the core parhelion/CZA calibration math separate.
+   Use them as candidate labels unless the photograph gives a clean enough
+   geometry to support a firmer identification.
 2. The Parhelic Circle is named a *circle*, not an arc, throughout this
    doc and the workbench UI (renamed 2026-05-12). The atlas already
    renders the full-circle geometry; the noun was a leftover from the
@@ -339,6 +340,34 @@ After overlay inspection three corrections landed:
    this primitive, the only "eyelid"-shaped feature in the atlas was the
    CZA, which sits much higher (tangent to 46° halo) and therefore can't
    serve double duty.
+
+### Image 1 vocabulary pass (2026-05-12)
+
+`docs/calibration/1.Photometeor-jeff-mod_marked_red.jpg` is useful as a
+vocabulary map more than as a residual-calibration target. It is a rich,
+historical/multi-sun display image, so the right move is to name the
+families it shows without pretending that its painted arc positions should
+drive the same pixel-error gate as the photographic p0/p2/p4/p5/p7/p8/p9
+cohort.
+
+Image 1 adds three labels the prior atlas vocabulary did not carry:
+
+- **Suncave Parry Arc**: a Parry-orientation arc above the 22° halo whose
+  shoulders bend sunward. In the workbench this is separate from the Upper
+  Tangent Arc, which opens upward from the 22° halo top.
+- **Parry Supralateral Arc**: a Parry-family companion to the supralateral
+  structure, best represented in the atlas as paired upper-lateral
+  shoulders rather than the central CZA-like cap.
+- **Infralateral Arcs**: paired peripheral arcs below the parhelic circle,
+  outside the 46° halo, visually useful for the lower-left/lower-right edge
+  arcs in rich displays.
+
+Implementation status: optional atlas sliders and overlay flags now exist
+for `suncave-parry`, `parry-supralateral`, and `infralateral`. They default
+to zero intensity, because the canonical calibrated sundog remains the
+parhelion + 22° halo + 46° halo + parhelic circle + CZA/upper-tangent
+subset. Turn these on for vocabulary overlays or rich-display annotation,
+not for the core inverse sun-altitude residual table.
 
 R_46 note: Gemini suggested using the pure 46°/22° angular ratio,
 `R_46 = R_22 × 46/22 = 460` workbench units (→ 303 photo px). Calibration
@@ -897,11 +926,11 @@ The Geometry workbench does NOT claim:
 - That the parhelion is "discovered" by the workbench. The phenomenon has
   been observed and described for centuries; Sundog's contribution is the
   description style and the workbench-as-proof presentation.
-- That the workbench renders all halo phenomena. It renders the parhelion +
-  CZA + parhelic-arc subset chosen for the hero composition. Other halo
-  phenomena (Parry arcs, infralateral arcs, sub-suns, light pillars
-  specific to plate-crystal alignments) are out of scope unless added in
-  Phase 10.
+- That the workbench renders all halo phenomena. Its calibrated core is the
+  parhelion + CZA + parhelic-arc subset chosen for the hero composition.
+  Optional Parry-family and infralateral layers are annotation primitives
+  for rich-display vocabulary; sub-suns and full crystal-orientation
+  simulation remain out of scope unless added deliberately later.
 
 ## Pre-Committed Cross-Application Comparison Row
 

@@ -53,6 +53,10 @@ optical content is unambiguous and well-cited. Initial corpus:
 - **`triple-cza-stack.jpg`** — multi-arc event with stacked CZAs and
   visible parhelic curve. Source pending citation in
   `THIRD_PARTY_REUSE.md`.
+- **`docs/calibration/1.Photometeor-jeff-mod_marked_red.jpg`** —
+  vocabulary reference for rich-display labels: suncave Parry, Parry
+  supralateral, upper tangent, and infralateral arcs. Treat as an
+  annotation source, not a pixel-residual calibration target.
 
 Each reference photograph should ship with a small JSON sidecar:
 
@@ -68,7 +72,9 @@ Each reference photograph should ship with a small JSON sidecar:
   },
   "expectedFeatures": [
     "parhelion-left", "parhelion-right",
-    "halo-22", "sun-pillar", "cza-primary"
+    "halo-22", "sun-pillar", "cza-primary",
+    "upper-tangent", "suncave-parry",
+    "parry-supralateral", "infralateral"
   ]
 }
 ```
