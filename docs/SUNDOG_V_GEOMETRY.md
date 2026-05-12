@@ -71,23 +71,36 @@ distributed so no document trampolines another's decisions.
 
 ## Sundog Expression *(pre-staged for the eventual APPLICATIONS.md row)*
 
-Geometry does not map onto the indirect-signal pattern the way Balance and
-Three-Body do — there is no hidden state and no controller. The Expression
-block is therefore reframed as a description-and-rendering pair, kept in the
-same row format so cross-application comparison stays legible:
+The Halo Atlas geometry model (landed 2026-05-11) brought Geometry into the
+canonical Sundog grammar. The earlier framing — that "geometry does not map
+onto the indirect-signal pattern the way Balance and Three-Body do" — was
+true of the legacy feature-tuned construction; it is no longer true of the
+atlas. The atlas treats every visible arc as the upper portion of a
+complete circle anchored by environmental state, which is the
+field-and-signature pattern in its most universally legible setting.
 
-- **Hidden description:** the angular geometry of a parhelion display —
-  primary sun position, halo angles (22°, 46°), CZA visibility cutoff,
-  parhelion azimuthal offset as a function of sun altitude, parhelic-circle
-  curvature, ice-crystal dispersion width.
-- **Indirect signal:** the visible halo display on the sky as a 2D
-  projection.
-- **Transformation:** parametric optical render — ice-crystal physics →
-  angular geometry → SVG primitives + CSS gradient atmosphere → screen
-  pixels.
-- **Actionable output:** an interactive workbench that draws the recognisable
-  phenomenon from the slider state, with `Snapshot params` exporting a
-  reproducible JSON pose.
+- **Hidden state:** sun altitude `h`, ice-crystal orientation distribution,
+  atmospheric optical depth. None of these is directly visible to an
+  observer or to a photograph.
+- **Field:** the set of full implied circles — 22° halo, 46° halo, parhelic
+  circle, CZA full ring, supralateral arc, upper tangent arc. Each is a
+  primitive `(cx, cy, r)` derived deterministically from the hidden state.
+  No primitive depends on observer position or rendering choice; the field
+  is a property of atmosphere and geometry alone.
+- **Signature:** the visible upper arcs the atlas renders — the part of
+  each implied circle that lies above the horizon (or inside the camera
+  frame). Discrete features — daggers, X-marks, the eyelid touch point —
+  fall out as intersections and tangencies of the field circles.
+- **Transformation:** `clip(full_circle, visible_region)` per primitive,
+  plus closed-form intersection/tangency formulas for the discrete
+  features. The pipeline is one-way: hidden state → field → signature.
+- **Actionable output:** *inverse inference.* The same atlas math, run
+  backwards, recovers sun altitude from the photographed parhelion offset
+  (`h = arccos(R_22 / offset)`). The 2026-05-09 calibration of v2 against
+  the Troels Nielsen DR photograph recovered `h ≈ 25°` from visible
+  geometry alone, with no metadata. The workbench can therefore be used
+  for *measurement* of unobserved environmental variables, not only for
+  rendering of given ones.
 
 This block is here so the cross-application row in `APPLICATIONS.md` and the
 gallery card's identity triplet do not drift between the roadmap and the
@@ -296,6 +309,45 @@ orientation than the 22° path). The workbench's `R_46 = 440` gives a
 Holding `R_46 = 440`.
 
 Overlay PNG: [`atlas_v2_overlay_troels_nielsen.png`](atlas_v2_overlay_troels_nielsen.png).
+
+### Theorem Anchor: What the Atlas Demonstrates
+
+The atlas is the cleanest natural example we have of the Sundog
+field-not-reward distinction set out in `SUNDOG_V_GRAVITY.md`. The
+demonstration runs in two directions:
+
+**Forward (field → signature).** Move the `--sun-altitude` slider. The
+daggers slide outward along the parhelic circle at exactly `R_22 / cos(h)`;
+the CZA shifts with the 46° halo top; the upper tangent arc rides the 22°
+halo top. No visible feature can be moved independently of the environmental
+state that generates it. This is the Goodhart sidestep made literal: there is
+no scalar quantity an observer can corrupt without altering the atmosphere
+the sky belongs to. The signatures are deflected by the field; the field is
+a property of `h`, ice-crystal orientation, and optical depth, not of any
+viewer's policy.
+
+**Inverse (signature → state).** Run the calibration script against a
+photograph: measure the sun pixel position, the 22° halo apparent radius,
+and the parhelion offset. The atlas math inverts to recover `h` directly:
+
+  `h = arccos(R_22_obs / parhelion_offset_obs)`
+
+This is the workbench acting as a *measurement instrument* for unobserved
+state, parallel to how a photometric controller infers an aim direction it
+cannot see directly. The 2026-05-09 Troels Nielsen calibration recovered
+`h ≈ 25°` from visible geometry alone, with no EXIF or astronomical metadata
+needed.
+
+The atlas is therefore not merely the brand mark for the project. It is the
+audience-conceptualizable entry point for the gravity claim in the same role
+the three-body workbench plays in `SUNDOG_V_GRAVITY.md` §The Three-Body
+Wedge — the wedge is rhetorical (lead with a literal field-and-signature
+phenomenon, then say "this is what we mean by 'gravity for agents' in every
+other partially-observed environment we name"), and the wedge is
+methodological (the same hidden/field/signature/inference grammar applies).
+
+This subsection is the load-bearing claim the Phase 7 hero promotion has to
+carry. Public framing should anchor here.
 
 ### Halo Atlas calibration vs Troels Nielsen DR (2026-05-10)
 

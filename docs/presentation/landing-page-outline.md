@@ -46,15 +46,16 @@ The landing page must:
 
 **Content (2-3 paragraphs):**
 
-Most systems do not reveal their truth directly. You infer them from signatures — shadows, feedback, distortions, response curves.
+The clearest example is one you already know. The visible arcs of a sundog — the bright rings and daggers around the sun — are not the thing. They are the upper slices of complete geometric circles anchored to where the sun is and what the ice crystals are doing. You can't see the sun's altitude as a number; you read it from the geometry. You can't see the ice crystals at all; you read them from which arcs appear. The sky is doing indirect measurement at planetary scale, and the math is exact: the daggers always sit at `R / cos(h)` from the sun, where R is the 22° halo radius and h is the sun's altitude. Move the sun; the daggers move. Nobody can move the daggers any other way.
 
-The Sundog Project is a framework for turning those indirect signals into actionable software control. Where conventional approaches demand complete world state, Sundog asks whether the partial signal — the shadow, the torque, the occlusion — already contains enough structure to act.
+The Sundog Project is a framework for turning the same pattern — indirect signals from environmental geometry — into actionable software control. Where conventional approaches demand complete world state, Sundog asks whether the partial signal already contains enough structure to act.
 
-In the core experiment, a controller aligns a reflected beam without target coordinates, using only sparse photometric feedback. In product systems, the same pattern informs procedural agents acting under occluded state, verb-field NPC behavior, and softbody motion made interpretable through graph signatures.
+In the core controlled experiment, a controller aligns a reflected beam without target coordinates, using only sparse photometric feedback. In product systems, the same pattern informs procedural agents acting under occluded state, verb-field NPC behavior, softbody motion made interpretable through graph signatures, and a parametric atmospheric-optics workbench that renders the parhelion display from its physical parameters and can run backwards to recover the sun's altitude from a photograph alone.
 
 **Visual:**
-- Diagram: direct perception vs indirect signal
-- Animated comparison showing target-aware vs photometric control
+- The parametric parhelion render (the geometry workbench hero), with the sun-altitude slider visible and the daggers tracking it
+- Diagram: full implied circles vs visible upper-arc signatures
+- Animated comparison showing target-aware vs photometric control (the formal experiment, kept as a secondary anchor)
 
 ---
 

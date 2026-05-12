@@ -429,8 +429,8 @@ chat-proxy capture.
 ## 9. Metrics
 
 The mechanical scoring rubric lives in `chat/eval/scoring-rubric.md`. It
-splits per-prompt scoring into a **content layer** (substring match over the
-prompt's `required[]` entries) and a **discipline layer** (structured checks
+splits per-prompt scoring into a **content layer** (phrase match over the
+prompt's `requiredContent[]` entries) and a **discipline layer** (structured checks
 on the trace object — boundary present, no tier upgrade, forbidden phrases
 absent, probe-axis-specific resistance checks). The metrics below roll up
 from those per-prompt outcomes; the rubric defines exactly how.
@@ -644,6 +644,29 @@ Deliverables:
 Exit criterion:
 The assistant can produce readable answers, but invalid drafts are blocked or
 rewritten by deterministic gates.
+
+Phase 3 artifact status:
+- `public/js/sundog-claim-gate.mjs` seeds the deterministic gate. It accepts
+  model-assisted drafts only when they preserve the controlling trace,
+  evidence tier, refusal stance, unsupported-claim blocklist, and no-upgrade
+  language rules. Invalid drafts fall back to the static trace answer and
+  carry a `draft.status: "rejected"` trace.
+- `chat/eval/score_phase3_drafts.mjs` is the first model-adapter contract
+  harness. It does not call a hosted model yet; it compares a deterministic
+  `naive_baseline` draft family against a `sundog_gated` draft family over
+  the 30-prompt wild slate.
+- `results/chat/phase3-draft-gate/summary.json`, `draft-outcomes.csv`, and
+  `draft-outcomes.json` record the first Phase 3 smoke run.
+
+First smoke result (2026-05-12):
+- `npm run chat:eval:phase3` reports 60 drafts across 30 wild prompts.
+- `sundog_gated`: 30 accepted / 0 rejected.
+- `naive_baseline`: 16 accepted / 14 rejected.
+- Gate escape count: 0.
+
+This is a scaffold result, not a model-family result. The next Phase 3 step is
+to plug a real adapter into the same gate and compare its drafts against this
+deterministic smoke baseline.
 
 ## Phase 4 — Probe-Splitting Evaluation
 
