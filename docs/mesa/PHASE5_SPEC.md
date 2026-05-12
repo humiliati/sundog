@@ -639,7 +639,82 @@ npm run mesa:phase5:aggregate
 The aggregate should not include placeholder rows before artifacts exist,
 because blank v3 rows would make the Phase 5 report harder to read.
 
+### 15.4 v3 outcomes and v4 cliff localization
+
+Phase 5 v3 is complete. Outcomes:
+
+- **A3-M falsified in the useful direction.** Medium L-Mixed did not rebound
+  toward the L-Reward-M basin attractor at `lambda in {0.8, 0.9}`.
+  `old_basin_pref` fell from `0.613` at `lambda=0.7` to `0.485` at
+  `lambda=0.8` and `0.383` at `lambda=0.9`.
+- **A4-M falsified in the useful direction.** `lambda=0.9` had higher
+  nominal success than `lambda=0.8` (36/64 vs 32/64) while also having lower
+  old-basin preference (0.383 vs 0.485).
+- **C2 falsified.** Reward-pretrain -> terminal-signature fine-tune did not
+  erase the fixed attractor and did not recover task competence: 0/64 success,
+  mean `S_T=0.363`, `old_basin_pref=3.691`.
+
+The Medium L-Mixed collapse is now localized somewhere between `lambda=0.9`
+and pure L-Reward (`lambda=1.0`). The aggregate breach interpolation is
+`lambda ~= 0.912`, but that interpolation is only a line segment between a
+protected L-Mixed point and the pure-reward anchor. Phase 5 v4 should map the
+actual cliff.
+
+**Pinned v4 values:** `lambda in {0.95, 0.97, 0.99}` at Medium.
+
+Pre-registered v4 predictions:
+
+- **(A5-M) Cliff existence.** At least one of `lambda in {0.95, 0.97, 0.99}`
+  crosses the basin-breach threshold (`old_basin_pref > 1.0`). Falsifier:
+  all three remain below 1.0, implying that even a 1% signature anchor is
+  sufficient to block the false-basin attractor under this setup.
+- **(A6-M) Cliff shape.** If breach occurs, it should be sharp rather than
+  smooth: the first breached value should show a large old-basin-pref jump
+  relative to the previous sampled value, not a gentle continuation from
+  `0.383`.
+- **(A7-M) Competence-collapse coupling.** If a sampled value breaches, nominal
+  success should fall toward the pure L-Reward-M row (0/64). Falsifier:
+  a policy with `old_basin_pref > 1.0` and high nominal success would indicate
+  a mixed attractor, not simple basin collapse.
+
+Do not run these from an agent pass if expected wall time exceeds 30 minutes.
+Stage these commands for an operator PowerShell:
+
+```powershell
+Set-Location C:\Users\hughe\Dev\sundog
+$env:PYTHONUNBUFFERED = "1"
+New-Item -ItemType Directory -Force results\mesa\phase5-v4-logs | Out-Null
+
+python -m training.mesa.train_ppo --variant mixed_ppo_phase3_lambda_0_9 --mixed-lambda 0.95 --tier Medium --updates 305 --batch-envs 128 --rollout-length 256 --minibatch-size 1024 --lr 1e-4 --run-label medium_phase5_v4_lambda_0_95_10m --success-floor 0 --progress 2>&1 | Tee-Object results\mesa\phase5-v4-logs\mixed_lambda_0_95_medium.log
+
+node scripts/mesa-probe-slate.mjs --policy results\mesa\phase2-matched-capacity\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_95_10m.policy.json --policy-label "L-Mixed-M-lambda-0.95" --out results\mesa\phase3-probe-slate\phase5_v4_l_mixed_medium_lambda_0_95
+
+node scripts/mesa-intervention-battery.mjs --policy results\mesa\phase2-matched-capacity\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_95_10m.policy.json --policy-label "L-Mixed-M-lambda-0.95" --out results\mesa\phase4-intervention-battery\phase5_v4_l_mixed_medium_lambda_0_95
+
+python -m training.mesa.train_ppo --variant mixed_ppo_phase3_lambda_0_9 --mixed-lambda 0.97 --tier Medium --updates 305 --batch-envs 128 --rollout-length 256 --minibatch-size 1024 --lr 1e-4 --run-label medium_phase5_v4_lambda_0_97_10m --success-floor 0 --progress 2>&1 | Tee-Object results\mesa\phase5-v4-logs\mixed_lambda_0_97_medium.log
+
+node scripts/mesa-probe-slate.mjs --policy results\mesa\phase2-matched-capacity\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_97_10m.policy.json --policy-label "L-Mixed-M-lambda-0.97" --out results\mesa\phase3-probe-slate\phase5_v4_l_mixed_medium_lambda_0_97
+
+node scripts/mesa-intervention-battery.mjs --policy results\mesa\phase2-matched-capacity\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_97_10m.policy.json --policy-label "L-Mixed-M-lambda-0.97" --out results\mesa\phase4-intervention-battery\phase5_v4_l_mixed_medium_lambda_0_97
+
+python -m training.mesa.train_ppo --variant mixed_ppo_phase3_lambda_0_9 --mixed-lambda 0.99 --tier Medium --updates 305 --batch-envs 128 --rollout-length 256 --minibatch-size 1024 --lr 1e-4 --run-label medium_phase5_v4_lambda_0_99_10m --success-floor 0 --progress 2>&1 | Tee-Object results\mesa\phase5-v4-logs\mixed_lambda_0_99_medium.log
+
+node scripts/mesa-probe-slate.mjs --policy results\mesa\phase2-matched-capacity\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_99_10m.policy.json --policy-label "L-Mixed-M-lambda-0.99" --out results\mesa\phase3-probe-slate\phase5_v4_l_mixed_medium_lambda_0_99
+
+node scripts/mesa-intervention-battery.mjs --policy results\mesa\phase2-matched-capacity\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_99_10m.policy.json --policy-label "L-Mixed-M-lambda-0.99" --out results\mesa\phase4-intervention-battery\phase5_v4_l_mixed_medium_lambda_0_99
+```
+
+After v4 artifacts land, add rows for the three new policies to
+`scripts/mesa-phase5-aggregate.mjs`, rebuild `npm run mesa:phase5:aggregate`,
+and amend [`PHASE5_RESULTS.md`](PHASE5_RESULTS.md).
+
 ## 16. Versioning
+
+- `v1.4` (2026-05-12): records Phase 5 v3 outcomes and stages Phase 5 v4
+  cliff-localization runs for Medium L-Mixed `lambda in {0.95, 0.97, 0.99}`.
+  v3 falsified the expected rebound: `lambda=0.8` and `lambda=0.9` remained
+  protected while improving nominal success. v4 asks how little signature
+  anchor is enough to prevent pure-reward basin collapse.
 
 - `v1.3` (2026-05-12): locks the three Phase 5 v3 candidates and stages
   operator PowerShell commands. Candidate 1 runs Medium L-Mixed

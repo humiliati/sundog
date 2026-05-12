@@ -19,6 +19,10 @@ Optional (atlas pose; default = canonical-halo-atlas):
     --cza-curvature C           (default: 0.85)
     --supralateral S            (default: 0.40)
     --upper-tangent U           (default: 0.0)
+    --lower-tangent L           (default: 0.0)
+    --suncave-parry P           (default: 0.0)
+    --parry-supralateral P      (default: 0.0)
+    --infralateral I            (default: 0.0)
     --out PATH                  Output PNG (default: <photo>_overlay.png)
 
 Observed-feature overrides (green markers; optional):
@@ -69,6 +73,10 @@ def main():
     ap.add_argument("--cza-curvature", type=float, default=0.85)
     ap.add_argument("--supralateral", type=float, default=0.40)
     ap.add_argument("--upper-tangent", type=float, default=0.0)
+    ap.add_argument("--lower-tangent", type=float, default=0.0)
+    ap.add_argument("--suncave-parry", type=float, default=0.0)
+    ap.add_argument("--parry-supralateral", type=float, default=0.0)
+    ap.add_argument("--infralateral", type=float, default=0.0)
     ap.add_argument("--out", type=str, default=None)
     ap.add_argument("--parhelion-left", type=float, default=None)
     ap.add_argument("--parhelion-right", type=float, default=None)
@@ -97,6 +105,39 @@ def main():
 
     def w2p(x, y):
         return (sx + (x - WB_SUN[0]) * scale, sy + (y - WB_SUN[1]) * scale)
+
+    def draw_wb_points(points, color, width=2):
+        prev = None
+        for x_w, y_w in points:
+            xp, yp = w2p(x_w, y_w)
+            if prev:
+                draw.line([prev, (xp, yp)], fill=color, width=width)
+            prev = (xp, yp)
+
+    def circle_branch_points(cx, cy, r, x_min, x_max, y_min, y_max, branch="upper", steps=160):
+        points = []
+        for i in range(steps + 1):
+            x_w = x_min + (x_max - x_min) * i / steps
+            u = (x_w - cx) / r
+            inside = 1 - u * u
+            if inside < 0:
+                continue
+            root = r * math.sqrt(inside)
+            y_w = cy + root if branch == "lower" else cy - root
+            if y_w < y_min or y_w > y_max:
+                continue
+            points.append((x_w, y_w))
+        return points
+
+    def polar_arc_points(radius, start_deg, end_deg, y_min, y_max, steps=80):
+        points = []
+        for i in range(steps + 1):
+            theta = math.radians(start_deg + (end_deg - start_deg) * i / steps)
+            x_w = WB_SUN[0] + radius * math.cos(theta)
+            y_w = WB_SUN[1] + radius * math.sin(theta)
+            if 0 <= x_w <= 1000 and y_min <= y_w <= y_max:
+                points.append((x_w, y_w))
+        return points
 
     photo = Image.open(photo_path).convert("RGB").copy()
     draw = ImageDraw.Draw(photo, "RGBA")
@@ -215,6 +256,56 @@ def main():
                 draw.line([prev, (xp, yp)], fill=(255, 255, 255, 255), width=2)
             prev = (xp, yp)
 
+    # Lower tangent arc -- mirror of upper tangent at the 22° halo bottom
+    if args.lower_tangent > 0.001:
+        tangentY = WB_SUN[1] + WB_R22
+        R_lta = 200
+        cy_lta = tangentY + R_lta
+        points = circle_branch_points(
+            WB_SUN[0],
+            cy_lta,
+            R_lta,
+            WB_SUN[0] - R_lta,
+            WB_SUN[0] + R_lta,
+            tangentY - 5,
+            800,
+            "upper",
+        )
+        draw_wb_points(points, (255, 255, 255, 220), width=2)
+
+    # Suncave Parry arc -- Parry-orientation cap whose shoulders bow sunward
+    if args.suncave_parry > 0.001:
+        apexY = WB_SUN[1] - WB_R22 - 36
+        endpointY = WB_SUN[1] - WB_R22 + 24
+        halfWidth = 210
+        cy_parry, r_parry = circle_thru_apex(apexY, endpointY, halfWidth)
+        points = circle_branch_points(
+            WB_SUN[0],
+            cy_parry,
+            r_parry,
+            WB_SUN[0] - halfWidth,
+            WB_SUN[0] + halfWidth,
+            0,
+            endpointY + 8,
+            "upper",
+            steps=120,
+        )
+        draw_wb_points(points, (255, 245, 210, 230), width=2)
+
+    # Parry supralateral shoulders -- rare upper-lateral Parry-family accents
+    if args.parry_supralateral > 0.001:
+        left = polar_arc_points(500, 206, 248, 0, WB_SUN[1] - 10)
+        right = polar_arc_points(500, 292, 334, 0, WB_SUN[1] - 10)
+        draw_wb_points(left, (255, 210, 255, 220), width=2)
+        draw_wb_points(right, (255, 210, 255, 220), width=2)
+
+    # Infralateral arcs -- paired lower-lateral arcs outside the 46° halo
+    if args.infralateral > 0.001:
+        left = polar_arc_points(500, 142, 160, WB_SUN[1] + 5, 800)
+        right = polar_arc_points(500, 20, 38, WB_SUN[1] + 5, 800)
+        draw_wb_points(left, (120, 255, 220, 220), width=3)
+        draw_wb_points(right, (120, 255, 220, 220), width=3)
+
     # Observed-feature markers (green crosses)
     def green_cross(x, y):
         draw.line([x - 10, y - 2, x + 10, y - 2], fill=(0, 255, 0, 255), width=2)
@@ -239,6 +330,9 @@ def main():
         ((170, 80, 255, 255), "CZA tangent-46° top"),
         ((255, 200, 255, 255), "supralateral"),
         ((255, 255, 255, 255), "upper tangent"),
+        ((255, 245, 210, 255), "suncave Parry"),
+        ((255, 210, 255, 255), "Parry supralateral"),
+        ((120, 255, 220, 255), "infralateral arcs"),
         ((0, 255, 0, 255), "observed"),
     ]
     for color, label in items:

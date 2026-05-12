@@ -540,6 +540,9 @@ function applyPillarFromTwoHalos(svg, daggerPoints, pillarLen) {
 //     bell-fill is the band between them)
 //   - Supralateral arc (NEW): upper arc of a circle tangent to the 46° halo
 //     at its top, curving up
+//   - Parry-family / lateral vocabulary primitives: optional overlays for the
+//     suncave Parry arc, Parry supralateral shoulders, and infralateral arcs
+//     called out by the rich calibration references
 //   - Daggers: at (SUN.x ± R_22/cos(h), SUN.y)
 //   - Pillar: vesica of two halos centered at the (now altitude-derived)
 //     daggers
@@ -609,6 +612,42 @@ function upperArcPath(cx, cy, r, xClipMin, xClipMax, yClipMax) {
     if (inside < 0) continue;
     const y = cy - r * Math.sqrt(inside);
     if (y > yClipMax) continue;
+    parts.push((started ? "L " : "M ") + x.toFixed(2) + " " + y.toFixed(2));
+    started = true;
+  }
+  return parts.join(" ");
+}
+
+function circleBranchPath(cx, cy, r, xClipMin, xClipMax, yClipMin, yClipMax, branch = "upper", steps = 160) {
+  const xMin = Math.max(cx - r, xClipMin);
+  const xMax = Math.min(cx + r, xClipMax);
+  const dx = xMax - xMin;
+  if (dx <= 1e-6) return "";
+  const parts = [];
+  let started = false;
+  for (let i = 0; i <= steps; i += 1) {
+    const x = xMin + (dx * i) / steps;
+    const u = (x - cx) / r;
+    const inside = 1 - u * u;
+    if (inside < 0) continue;
+    const root = r * Math.sqrt(inside);
+    const y = branch === "lower" ? cy + root : cy - root;
+    if (y < yClipMin || y > yClipMax) continue;
+    parts.push((started ? "L " : "M ") + x.toFixed(2) + " " + y.toFixed(2));
+    started = true;
+  }
+  return parts.join(" ");
+}
+
+function polarArcPath(cx, cy, r, startDeg, endDeg, yClipMin, yClipMax, steps = 80) {
+  const parts = [];
+  let started = false;
+  for (let i = 0; i <= steps; i += 1) {
+    const t = i / steps;
+    const theta = ((startDeg + (endDeg - startDeg) * t) * Math.PI) / 180;
+    const x = cx + r * Math.cos(theta);
+    const y = cy + r * Math.sin(theta);
+    if (x < 0 || x > 1000 || y < yClipMin || y > yClipMax) continue;
     parts.push((started ? "L " : "M ") + x.toFixed(2) + " " + y.toFixed(2));
     started = true;
   }
@@ -789,6 +828,67 @@ function applyUpperTangentArc(svg, intensity) {
   arc.setAttribute("d", parts.join(" "));
 }
 
+function applySuncaveParryArc(svg, intensity) {
+  // Parry-orientation companion above the upper tangent arc. "Suncave" means
+  // the arc's ends bend back toward the sun; in screen coordinates that is a
+  // shallow cap whose center sits above the 22° halo top and whose shoulders
+  // fall toward the sun. This is an atlas primitive, not a HaloSim raytrace.
+  const arc = svg.querySelector("#suncave-parry-path");
+  if (!arc) return;
+  if (intensity <= 0.001) {
+    arc.setAttribute("d", "");
+    return;
+  }
+  const apexY = SUN.y - HALO_22_RADIUS - 36;
+  const endpointY = SUN.y - HALO_22_RADIUS + 24;
+  const halfWidth = 210;
+  const circle = czaCircleFromApex(apexY, endpointY, halfWidth);
+  if (!circle) return;
+  const d = circleBranchPath(
+    circle.cx,
+    circle.cy,
+    circle.r,
+    SUN.x - halfWidth,
+    SUN.x + halfWidth,
+    0,
+    endpointY + 8,
+    "upper",
+    120
+  );
+  arc.setAttribute("d", d);
+}
+
+function applyParrySupralateralArcs(svg, intensity) {
+  // Rare Parry-oriented shoulders riding the upper-lateral supralateral
+  // family. Drawn as two short peripheral segments just outside the 46° halo.
+  const arc = svg.querySelector("#parry-supralateral-path");
+  if (!arc) return;
+  if (intensity <= 0.001) {
+    arc.setAttribute("d", "");
+    return;
+  }
+  const r = 500;
+  const left = polarArcPath(SUN.x, SUN.y, r, 206, 248, 0, SUN.y - 10);
+  const right = polarArcPath(SUN.x, SUN.y, r, 292, 334, 0, SUN.y - 10);
+  arc.setAttribute("d", [left, right].filter(Boolean).join(" "));
+}
+
+function applyInfralateralArcs(svg, intensity) {
+  // Lower lateral tangent arcs: paired peripheral arcs outside the 46° halo
+  // and below the parhelic circle. At low/mid sun elevations they read as
+  // left/right side arcs rather than a full circle.
+  const arc = svg.querySelector("#infralateral-path");
+  if (!arc) return;
+  if (intensity <= 0.001) {
+    arc.setAttribute("d", "");
+    return;
+  }
+  const r = 500;
+  const left = polarArcPath(SUN.x, SUN.y, r, 142, 160, SUN.y + 5, 800);
+  const right = polarArcPath(SUN.x, SUN.y, r, 20, 38, SUN.y + 5, 800);
+  arc.setAttribute("d", [left, right].filter(Boolean).join(" "));
+}
+
 function applyGeometryHaloAtlas(svg, rootStyle) {
   const sunAltitude = readCssNumber(rootStyle, "--sun-altitude", 18);
   const pillarLen = readCssNumber(rootStyle, "--sun-pillar-length", 0.65);
@@ -800,6 +900,9 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   const supralateralIntensity = readCssNumber(rootStyle, "--supralateral-intensity", 0);
   const upperTangentIntensity = readCssNumber(rootStyle, "--upper-tangent-intensity", 0);
   const lowerTangentIntensity = readCssNumber(rootStyle, "--lower-tangent-intensity", 0);
+  const suncaveParryIntensity = readCssNumber(rootStyle, "--suncave-parry-intensity", 0);
+  const parrySupralateralIntensity = readCssNumber(rootStyle, "--parry-supralateral-intensity", 0);
+  const infralateralIntensity = readCssNumber(rootStyle, "--infralateral-intensity", 0);
 
   const daggerPoints = daggerPointsFromSunAltitude(sunAltitude);
 
@@ -810,6 +913,9 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   applySupralateralArc(svg, supralateralIntensity);
   applyUpperTangentArc(svg, upperTangentIntensity);
   applyLowerTangentArc(svg, lowerTangentIntensity);
+  applySuncaveParryArc(svg, suncaveParryIntensity);
+  applyParrySupralateralArcs(svg, parrySupralateralIntensity);
+  applyInfralateralArcs(svg, infralateralIntensity);
 
   applyCompassRays(svg, compassLen);
   applySecondaryHalos(svg, overlapBias);
