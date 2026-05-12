@@ -351,6 +351,45 @@ Holding `R_46 = 440`.
 
 Overlay PNG: [`atlas_v2_overlay_troels_nielsen.png`](atlas_v2_overlay_troels_nielsen.png).
 
+### Multi-Photo Calibration Pass (2026-05-12)
+
+Seven photographs from `docs/calibration/` were calibrated against the
+atlas. The seven photos span sun altitudes from ~1° (parhelia at the 22°
+halo edge) to ~60° (parhelia well outside the halo), giving the
+inverse-inference claim a real range to ride on rather than a single
+anecdote. Overlays live in `docs/calibration/overlays/`.
+
+| photo | sun (px) | R₂₂ (px) | parhelion offset | implied `h` | residuals (L, R) | fit |
+|---|---|---|---|---|---|---|
+| p0 Troels Nielsen DR | (400, 356) | 145 | 160 | 25.0° | (-3, 0) | ✓ |
+| p2 Polar | (567, 496) | 182 | 192 | 18.6° | (-1, -1) | ✓ |
+| p4 Sunrise sundogs | (511, 413) | 240 | 240 | ~1° | (0, +1) | ✓ low-sun edge case |
+| p5 Winter rich | (2083, 2333) | 483 | 521 | 22.0° | (-1, 0) | ✓ |
+| p7 Tropical | (1033, 946) | 200 | 393 (L only) | 59.4° | (0 L only) | partial — right parhelion not clearly visible |
+| p8 Winter polar | (516, 583) | 287 | 317 | 25.1° | (0, -1) | ✓ after sun-position correction |
+| p9 Jasper AB | (673, 226) | 290 | 315 | 23.0° | (-5, +5) | ✓ |
+
+Median absolute residual (dagger placement, both sides, across cleanly-measured
+photos): **1 px**. Maximum residual: 5 px on p9. The atlas tracks parhelion
+positions across the full sun-altitude range with no per-photo tuning beyond
+the three anchor measurements (sun position, R₂₂, parhelion offset).
+
+Two lessons came out of running the pass:
+
+1. **Auto sun-detection picks the brightest pixel, which is not always the
+   sun.** In winter ice-fog photos (p8) a parhelion can outshine the actual
+   sun. Sanity-check: real parhelia should be approximately symmetric in
+   *x-offset* from the sun; if a "sun + parhelion + parhelion" triple is
+   asymmetric, the auto-detected sun is probably one of the parhelia and the
+   true sun is at the symmetric midpoint between the two outer bright spots.
+   This is exactly the correction that fixed p8.
+2. **Tropical/high-sun photos can show only one prominent parhelion.** p7
+   has a clear left parhelion at offset 393 and a much fainter right side.
+   The atlas still calibrates against the visible parhelion alone (the
+   formula `h = arccos(R₂₂ / offset)` only needs one), and the symmetric
+   prediction for the missing-side parhelion is recorded for if/when more
+   photos at high sun altitude become available.
+
 ### Theorem Anchor: What the Atlas Demonstrates
 
 The atlas is the cleanest natural example we have of the Sundog
@@ -375,9 +414,13 @@ and the parhelion offset. The atlas math inverts to recover `h` directly:
 
 This is the workbench acting as a *measurement instrument* for unobserved
 state, parallel to how a photometric controller infers an aim direction it
-cannot see directly. The 2026-05-09 Troels Nielsen calibration recovered
-`h ≈ 25°` from visible geometry alone, with no EXIF or astronomical metadata
-needed.
+cannot see directly. The 2026-05-12 multi-photo calibration pass exercised
+the inverse over seven photographs spanning sun altitudes from ~1° (low-sun
+sunrise sundogs with parhelia at the halo edge) through ~25° (the classic
+Troels Nielsen pose) up to ~59° (tropical near-zenith). Median absolute
+dagger residual across the cohort: **1 photo px**. No EXIF, astronomical
+metadata, or per-photo tuning was used — only the three anchor measurements
+per photograph (sun, R₂₂, parhelion offset).
 
 The atlas is therefore not merely the brand mark for the project. It is the
 audience-conceptualizable entry point for the gravity claim in the same role

@@ -96,6 +96,28 @@ const POLICIES = Object.freeze([
   },
   {
     axis: "A",
+    policy_id: "mixed_lambda_0_8_medium_v3",
+    family: "L-Mixed",
+    label: "L-Mixed-M lambda=0.8 v3",
+    tier: "Medium",
+    lambda: 0.8,
+    training_slug: "mixed_ppo_phase3_lambda_0_8_medium_seed_0_medium_phase5_v3_lambda_0_8_10m",
+    phase3_dir: "phase5_v3_l_mixed_medium_lambda_0_8",
+    phase4_dir: "phase5_v3_l_mixed_medium_lambda_0_8",
+  },
+  {
+    axis: "A",
+    policy_id: "mixed_lambda_0_9_medium_v3",
+    family: "L-Mixed",
+    label: "L-Mixed-M lambda=0.9 v3",
+    tier: "Medium",
+    lambda: 0.9,
+    training_slug: "mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v3_lambda_0_9_10m",
+    phase3_dir: "phase5_v3_l_mixed_medium_lambda_0_9",
+    phase4_dir: "phase5_v3_l_mixed_medium_lambda_0_9",
+  },
+  {
+    axis: "A",
     policy_id: "reward_lambda_1_0_medium_anchor",
     family: "L-Reward",
     label: "L-Reward-M lambda=1.0 anchor",
@@ -181,6 +203,17 @@ const POLICIES = Object.freeze([
     pretrain_slug: "reward_ppo_phase3_small_seed_0_phase5_reward_pre_500k",
     phase3_dir: "phase5_curriculum_reward_then_sig_small",
     phase4_dir: "phase5_curriculum_reward_then_sig_small",
+  },
+  {
+    axis: "C",
+    policy_id: "curriculum_reward_then_terminal_sig_v3",
+    family: "L-Curriculum",
+    label: "Curriculum reward-then-terminal-sig v3",
+    curriculum_order: "reward_then_terminal_signature",
+    training_slug: "curriculum_reward_then_terminal_sig_small_seed_0_phase5_v3_reward_pre_terminal_sig_ft_500k",
+    pretrain_slug: "reward_ppo_phase3_small_seed_0_phase5_reward_pre_500k",
+    phase3_dir: "phase5_v3_curriculum_reward_then_terminal_sig_small",
+    phase4_dir: "phase5_v3_curriculum_reward_then_terminal_sig_small",
   },
 ]);
 
@@ -399,7 +432,7 @@ async function main() {
       tier,
       ...interpolateBreach(tierRows, 1.0),
     })),
-    note: "Medium interpolation includes the L-Reward lambda=1.0 anchor; L-Mixed Medium rows remain below threshold through lambda=0.7.",
+    note: "Medium interpolation includes the L-Reward lambda=1.0 anchor; L-Mixed Medium rows remain below threshold through lambda=0.9.",
   }, null, 2)}\n`, "utf8");
   await writeFile(path.join(outputRoot, "reports", "sundog-cost-by-shape.csv"), toCsv(axisB.map((row) => ({
     tier: row.tier,

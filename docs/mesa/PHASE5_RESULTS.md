@@ -1,18 +1,20 @@
-# Mesa Phase 5 - Selection-Pressure Result Note (v2)
+# Mesa Phase 5 - Selection-Pressure Result Note (v3)
 
 This document records the Phase 5 Small-tier selection-pressure result and
-the Medium-tier follow-up. It is the companion result note for
+the Medium-tier follow-ups. It is the companion result note for
 [`PHASE5_SPEC.md`](PHASE5_SPEC.md).
 
 Status: Small-tier training slate **complete** for Phase 5 v1 axes A-C, and
 Medium follow-up **complete** for `lambda in {0.3, 0.5, 0.7}` plus
-L-Signature-M-Terminal. Phase 3 probe-slate evaluation and Phase 4
+L-Signature-M-Terminal. Phase 5 v3 follow-up is also **complete** for
+Medium `lambda in {0.8, 0.9}` and reward-pretrain ->
+terminal-signature-fine-tune. Phase 3 probe-slate evaluation and Phase 4
 intervention-battery evaluation are complete for the new Phase 5 policies.
 The aggregate reports have been rebuilt for the combined Small+Medium slate.
 
 ## 1. Summary
 
-Phase 5 gives the program three useful updates:
+Phase 5 gives the program four useful updates:
 
 1. The L-Mixed protection curve has a real breach threshold. Old-basin
    preference remains below 1.0 through `lambda = 0.5`, then crosses at
@@ -26,6 +28,11 @@ Phase 5 gives the program three useful updates:
    `-0.585`, not `> 1.0`. But it also does not recover task success
    (`0/64`), so clean-signal fine-tuning appears to erase the fixed basin
    without reliably rebuilding useful control.
+4. Medium L-Mixed has a protected high-reward window. v3 shows `lambda=0.8`
+   and `lambda=0.9` both remain below the basin-breach threshold while
+   reaching 32/64 and 36/64 success respectively. The Medium breach estimate
+   shifts to `lambda ~= 0.912`, and the collapse now looks abrupt between
+   `lambda=0.9` and pure reward.
 
 The cleanest Phase 5 headline is now: the signature anchor protects mixed
 training up to a measurable lambda threshold, and objective *shape* matters
@@ -60,6 +67,14 @@ Medium follow-up intervention-battery outputs live under:
 and:
 
 `results/mesa/phase4-intervention-battery/l_signature_medium_terminal`
+
+Phase 5 v3 follow-up outputs live under:
+
+`results/mesa/phase3-probe-slate/phase5_v3_*`
+
+and:
+
+`results/mesa/phase4-intervention-battery/phase5_v3_*`
 
 Phase 5 aggregate reports live under:
 
@@ -361,13 +376,75 @@ Three Phase 5 v3 candidates ranked by program-significance:
    probe-slate and intervention-battery artifacts, and the aggregate includes
    them. Keep this as a paper-trail check rather than a new run.
 
-(1) is the highest-priority because it characterizes the non-monotone
-finding cleanly. (2) is the highest-value if it confirms. (3) is now
+(1) and (2) are now complete in the v3 amendment below. (3) remains
 paper-trail verification.
 
-## 9. Versioning
+## 9. Phase 5 v3 Amendment
 
-This document is version `v2`.
+Phase 5 v3 added two Medium mixed runs (`lambda=0.8`, `lambda=0.9`) and one
+reward-pretrain -> terminal-signature-fine-tune curriculum run. All three
+were evaluated with the Phase 3 probe slate and Phase 4 intervention battery.
+The aggregate now covers 19 policies.
+
+### 9.1 Medium lambda refinement
+
+| Lambda | Success | Mean S_T | Mean probed success | Probe basin captures | Old-basin pref |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 0.3 | 0/64 | 0.928 | 0.010 | 39 | 0.823 |
+| 0.5 | 0/64 | 0.936 | 0.012 | 60 | 0.889 |
+| 0.7 | 9/64 | 0.981 | 0.104 | 38 | 0.613 |
+| 0.8 | 32/64 | 0.979 | 0.339 | 36 | 0.485 |
+| 0.9 | 36/64 | 0.973 | 0.371 | 35 | 0.383 |
+| 1.0 (L-Reward-M) | 0/64 | 0.267 | 0.005 | 576 | 5.560 |
+
+This falsifies the v3 rebound prediction. Instead of rising toward the
+L-Reward-M basin attractor, `old_basin_pref` keeps falling from `lambda=0.7`
+through `lambda=0.9`. The best Medium mixed policy in this slate is
+`lambda=0.9`: 36/64 nominal success, mean `S_T = 0.973`, and
+`old_basin_pref = 0.383`.
+
+The Medium breach estimate is now `lambda ~= 0.912`, interpolated between
+`lambda=0.9` and the L-Reward-M anchor. Since all sampled L-Mixed Medium rows
+through `lambda=0.9` remain protected, the collapse is no longer a smooth
+monotone curve. It is an abrupt discontinuity between "mostly reward with a
+signature anchor" and "pure reward."
+
+### 9.2 v3 prediction outcomes
+
+| Prediction | Outcome |
+| --- | --- |
+| (A3-M) `old_basin_pref(lambda=0.8/0.9)` rises above `lambda=0.7` and moves toward L-Reward-M | Falsified. `lambda=0.8` = 0.485 and `lambda=0.9` = 0.383, both below `lambda=0.7` = 0.613. |
+| (A4-M) `lambda=0.8` has higher success than `lambda=0.9`; `lambda=0.9` has stronger basin attraction | Falsified. `lambda=0.9` has higher success (36/64 vs 32/64) and lower old-basin preference (0.383 vs 0.485). |
+| (C2) Reward-pretrain -> terminal-signature fine-tune erases basin attraction and recovers competence | Falsified. Final success is 0/64 and `old_basin_pref = 3.691`. |
+
+The A3/A4 falsifications are program-significant in the good way: they expand
+the protected mixed-signal region. The C2 falsification is program-significant
+in the hard way: terminal signature is strong from scratch, but it does not
+rescue this reward-pretrained fixed-attractor policy under the default
+continuation setup with optimizer state carried forward.
+
+### 9.3 Curriculum v3 read
+
+| Curriculum | Pretrain success | Final success | Mean S_T | Probe basin captures | Old-basin pref |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| reward -> integrated signature | 0/64 | 0/64 | 0.648 | 3 | -0.585 |
+| reward -> terminal signature | 0/64 | 0/64 | 0.363 | 131 | 3.691 |
+
+Terminal-signature fine-tuning from the basin-corrupted reward checkpoint
+does not merely fail to recover task competence; it also fails to erase the
+basin attractor. The policy remains close to the training-time false basin
+under the basin-position diagnostic and shows weak response to signature and
+geometry edits (`action_response_L2 ~= 0.11` for both).
+
+The clean next curriculum fork, if pursued, is not another identical 500K
+continuation. It should change one variable: reset Adam state, extend
+terminal-signature fine-tuning, or start from the fully trained L-Reward-M
+checkpoint and test whether the fixed attractor is easier or harder to erase
+after canonical-budget saturation.
+
+## 10. Versioning
+
+This document is version `v3`.
 
 - `v1` (2026-05-11): records Small-tier Phase 5 training, probe-slate, and
   intervention-battery results for axes A-C.
@@ -383,3 +460,12 @@ This document is version `v2`.
   unexpected direction (λ=0.7 less basin-attracted than λ=0.5),
   (B-M) confirmed and exceeded. Three Phase 5 v3 candidates ranked at
   §8.8.
+
+- `v3` (2026-05-12): Phase 5 v3 follow-up. Adds Medium L-Mixed
+  `lambda=0.8` and `lambda=0.9`, both of which remain protected
+  (`old_basin_pref` 0.485 and 0.383) while improving nominal success to
+  32/64 and 36/64. Medium breach estimate moves to `lambda ~= 0.912`,
+  interpolated against the pure L-Reward anchor. Also records
+  reward-pretrain -> terminal-signature fine-tune: 0/64 success and
+  `old_basin_pref = 3.691`, falsifying the strict Goodhart-fix-by-fine-tune
+  prediction under the default optimizer-continuation setup.
