@@ -26,21 +26,37 @@ export const DEFAULT_FAQS = [
   "Is this project a SunDog: Frozen Legacy port?"
 ];
 
-const CLAIM_MAP_URL = "/chat/claim_map.json";
+const CLAIM_MAP_URLS = [
+  "/data/sundog-claim-map.json",
+  "/chat/claim_map.json"
+];
 
 let claimMapPromise;
 
 export async function loadClaimMap() {
   if (!claimMapPromise) {
-    claimMapPromise = fetch(CLAIM_MAP_URL, { cache: "no-store" }).then((response) => {
-      if (!response.ok) {
-        throw new Error(`Unable to load ${CLAIM_MAP_URL}: ${response.status}`);
-      }
-      return response.json();
-    });
+    claimMapPromise = loadFirstJson(CLAIM_MAP_URLS);
   }
 
   return claimMapPromise;
+}
+
+async function loadFirstJson(urls) {
+  const failures = [];
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, { cache: "no-store" });
+      if (!response.ok) {
+        failures.push(`${url}: ${response.status}`);
+        continue;
+      }
+      return response.json();
+    } catch (error) {
+      failures.push(`${url}: ${error.message}`);
+    }
+  }
+
+  throw new Error(`Unable to load claim map (${failures.join("; ")})`);
 }
 
 export function routePrompt(claimMap, prompt) {

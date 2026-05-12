@@ -13,6 +13,9 @@
   "homepage": "https://sundog.cc",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "prebuild": "node scripts/build-chat-index.mjs",
+    "chat:index": "node scripts/build-chat-index.mjs",
+    "chat:eval:static": "npm run chat:index && node chat/eval/score_static_router.mjs",
     "build": "vite build",
     "postbuild": "node scripts/copy-site-docs.mjs && node scripts/check-site-dist.mjs",
     "preview": "vite preview --host 127.0.0.1",

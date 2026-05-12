@@ -64,6 +64,8 @@ code, experiments, prior theorem materials, and application bridges.
 - [Chat prompt gold slate](../chat/prompts/gold-normal.jsonl): Phase 0 prompt
   slate split across normal, boundary-sensitive, and adversarial JSONL files
   under `../chat/prompts/`.
+- [Chat browser search index](../public/data/sundog-chat-index.json): Phase 2
+  generated static retrieval index for the no-LLM claim inspector.
 
 ## Reading Order
 

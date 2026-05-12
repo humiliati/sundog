@@ -83,8 +83,10 @@ npm run build
 ```
 
 This creates `dist/`, copies public docs, and checks local links in built HTML
-files. If a new page is linked from `index.html` but not present in `dist/`, the
-build fails.
+files. The build runs `scripts/build-chat-index.mjs` first, so Ask Sundog's
+public claim map, retrieval index, evidence tiers, and boundary rules are
+regenerated from `chat/claim_map.json`. If a new page is linked from
+`index.html` but not present in `dist`, the build fails.
 
 Preview the production artifact locally:
 
