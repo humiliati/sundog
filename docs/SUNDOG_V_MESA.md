@@ -770,20 +770,26 @@ fixed-attractor control. Aggregate reports live under
 `results/mesa/phase4-intervention-battery/reports/` and rebuild with
 `npm run mesa:phase4:aggregate`.
 
-**Phase 5:** Spec landed at [`mesa/PHASE5_SPEC.md`](mesa/PHASE5_SPEC.md) v1.
-Trainer support for the v1 slate is in place: `--mixed-lambda`,
-`--signature-shape`, `--load-checkpoint`, and `--reset-optimizer`; four
-Small dry-run checks passed under `results/mesa/phase5-smoke/`. The Small
-training slate has started landing: L-Mixed Î» runs for {0.1, 0.3, 0.7, 0.9},
-terminal/threshold signature-shape runs, 500K+500K curriculum runs, and
-Phase 3 probe slates plus Phase 4 intervention batteries for the new
-policies are complete. See [`mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md)
-v1. Early reads: Î» breach appears between 0.5 and 0.7
-(`old_basin_pref`: -0.458, -0.066, -0.394, 1.346, 2.611 for Î» =
-0.1, 0.3, 0.5, 0.7, 0.9), terminal-only signature strongly beats the
-integrated Small baseline (37/64 vs 5/64), and reward-firstâ†’signature
-fine-tune does **not** retain basin attraction (`old_basin_pref = -0.585`).
-Phase 5 aggregate reports live under `results/mesa/phase5-selection-pressure/`
-and rebuild with `npm run mesa:phase5:aggregate`. Medium follow-up is pending.
-
+**Phase 5:** Small slate **complete**. See
+[`mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md). Spec at
+[`mesa/PHASE5_SPEC.md`](mesa/PHASE5_SPEC.md) v1.1. Headline findings:
+λ-breach threshold confirmed at λ ≈ 0.660 (interpolated; signature anchor
+fully blocks basin absorption up to ~2:1 reward:signature mix at Small,
+inside the predicted (0.5, 0.7] interval and toward the upper end);
+terminal-only L-Signature crushes integrated 37/64 vs 5/64 (re-canonicalizing
+terminal as the recommended signature shape and shrinking the Sundog-cost
+gap from 61 pp to 11 pp at Small); reward → signature curriculum erases
+basin attraction (`old_basin_pref = -0.585`) but does not recover task
+competence (0/64 success), motivating a Phase 5 v2 reward-pretrain →
+**terminal-signature**-fine-tune candidate to disambiguate signal-shape
+from structural recovery limits. Signature → reward curriculum confirms
+the symmetric prediction — clean signature pretraining offers no
+protection against later basin-corrupted reward fine-tuning
+(`old_basin_pref = 2.613`, 62 probe basin captures). Pre-registered
+prediction outcomes: A1 confirmed, A2 confirmed, B1 falsified in
+program-significant direction (motivates re-canonicalization), C1
+partially confirmed (basin erased, task not recovered). Phase 5 aggregate
+reports live under `results/mesa/phase5-selection-pressure/` and rebuild
+with `npm run mesa:phase5:aggregate`. Medium follow-up staged:
+λ ∈ {0.3, 0.7} plus terminal-only L-Signature at Medium (3 PPO runs).
 **Phases 6-8:** Not started.
