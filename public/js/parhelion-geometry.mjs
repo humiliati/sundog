@@ -127,9 +127,14 @@ function ellipseArcPathAxisAligned(ellipse, xMin, xMax, steps = 140) {
   return parts.join(" ");
 }
 
-function applyCompassRays(svg, compassLen) {
+function applyCompassRays(svg, compassLen, compassRotationDeg = 22.5) {
   const sunGroup = svg.querySelector("#layer-sun");
   if (!sunGroup) return;
+
+  sunGroup.setAttribute(
+    "transform",
+    `rotate(${compassRotationDeg.toFixed(2)} ${SUN.x} ${SUN.y})`,
+  );
 
   sunGroup.querySelectorAll(".ray").forEach((line) => {
     if (!line.dataset.basisX2) {
@@ -289,13 +294,14 @@ function applyGeometryLegacy(svg, rootStyle) {
   const pillarLen = readCssNumber(rootStyle, "--sun-pillar-length", 0.65);
   const daggerLen = readCssNumber(rootStyle, "--parhelia-dagger-length", 1);
   const compassLen = readCssNumber(rootStyle, "--compass-ray-length", 1);
+  const compassRotationDeg = readCssNumber(rootStyle, "--compass-rotation-deg", 22.5);
   const czaCurve = readCssNumber(rootStyle, "--cza-curvature", 0.85);
   const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
   const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
 
   applyPillarLegacy(svg, pillarLen);
   applyParhelicLegacy(svg, parhelicCurvature);
-  applyCompassRays(svg, compassLen);
+  applyCompassRays(svg, compassLen, compassRotationDeg);
   applyCza(svg, czaCurve);
   applySecondaryHalos(svg, overlapBias);
 
@@ -345,6 +351,7 @@ function applyGeometryHaloScaffold(svg, rootStyle) {
   const pillarLen = readCssNumber(rootStyle, "--sun-pillar-length", 0.65);
   const daggerLen = readCssNumber(rootStyle, "--parhelia-dagger-length", 1);
   const compassLen = readCssNumber(rootStyle, "--compass-ray-length", 1);
+  const compassRotationDeg = readCssNumber(rootStyle, "--compass-rotation-deg", 22.5);
   const czaCurve = readCssNumber(rootStyle, "--cza-curvature", 0.85);
   const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
   const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
@@ -359,7 +366,7 @@ function applyGeometryHaloScaffold(svg, rootStyle) {
   applyPillarLens(svg, pillarLen);
 
   // Shared behaviors.
-  applyCompassRays(svg, compassLen);
+  applyCompassRays(svg, compassLen, compassRotationDeg);
   applyCza(svg, czaCurve);
   applySecondaryHalos(svg, overlapBias);
 
@@ -896,9 +903,10 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   const pillarLen = readCssNumber(rootStyle, "--sun-pillar-length", 0.65);
   const daggerLen = readCssNumber(rootStyle, "--parhelia-dagger-length", 1);
   const compassLen = readCssNumber(rootStyle, "--compass-ray-length", 1);
+  const compassRotationDeg = readCssNumber(rootStyle, "--compass-rotation-deg", 22.5);
   const czaCurve = readCssNumber(rootStyle, "--cza-curvature", 0.85);
   const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
-  const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
+  const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.05);
   const parhelicYOffsetR22 = readCssNumber(rootStyle, "--parhelic-y-offset-r22", -0.05);
   const supralateralIntensity = readCssNumber(rootStyle, "--supralateral-intensity", 0);
   const upperTangentIntensity = readCssNumber(rootStyle, "--upper-tangent-intensity", 0);
@@ -920,7 +928,7 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   applyParrySupralateralArcs(svg, parrySupralateralIntensity);
   applyInfralateralArcs(svg, infralateralIntensity);
 
-  applyCompassRays(svg, compassLen);
+  applyCompassRays(svg, compassLen, compassRotationDeg);
   applySecondaryHalos(svg, overlapBias);
 }
 
@@ -928,6 +936,7 @@ function applyGeometryHaloGoverned(svg, rootStyle) {
   const pillarLen = readCssNumber(rootStyle, "--sun-pillar-length", 0.65);
   const daggerLen = readCssNumber(rootStyle, "--parhelia-dagger-length", 1);
   const compassLen = readCssNumber(rootStyle, "--compass-ray-length", 1);
+  const compassRotationDeg = readCssNumber(rootStyle, "--compass-rotation-deg", 22.5);
   const czaCurve = readCssNumber(rootStyle, "--cza-curvature", 0.85);
   const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
   const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
@@ -938,7 +947,7 @@ function applyGeometryHaloGoverned(svg, rootStyle) {
   applyDaggersFromGoverningHalo(svg, daggerLen, daggerPoints);
   applyPillarFromTwoHalos(svg, daggerPoints, pillarLen);
 
-  applyCompassRays(svg, compassLen);
+  applyCompassRays(svg, compassLen, compassRotationDeg);
   applyCza(svg, czaCurve);
   applySecondaryHalos(svg, overlapBias);
 }

@@ -1,43 +1,60 @@
 {
   "_meta": {
     "name": "canonical",
-    "description": "The default Sundog Workbench pose. Single primary sun, 22° halo, two outward parhelia daggers riding the gentle parhelic-arc grin, CZA eyelid above, sun pillar through the centre. Calibration anchor for SUNDOG_OVERLAY_PROTOCOL.md against troels-nielsen-dr.jpg.",
-    "schemaVersion": "1.0",
+    "description": "Phase 2 locked Sundog Workbench pose using the Halo Atlas geometry model. The pose is calibrated against the Troels Nielsen DR reference and the 2026-05-12 multi-photo overlay pass.",
+    "schemaVersion": "1.1",
     "spec": "docs/SUNDOG_GENERATOR_SPEC.md",
+    "model": "halo_atlas",
     "calibration": {
-      "parhelicCurvature": "locked 2026-05-08 against source-photo overlay at 0.66",
-      "czaBloom": "demoted 2026-05-08 — no longer a parameter; baked at filter stdDeviation=0.3 in the renderer. The eyelid bell shape is produced by the cza-bell-fill paint region between the two arcs, not by Gaussian summation."
+      "reference": "docs/calibration/0.troelsnielsendr.png",
+      "anchor22HaloRadiusPx": 145,
+      "anchorSunPx": [400, 356],
+      "impliedSunAltitudeDeg": 25,
+      "parhelicCurvature": "locked at 0.05 for the near-horizontal Troels Nielsen parhelic circle",
+      "parhelicYOffsetR22": "locked at -0.05 after multi-photo belt-height review",
+      "overlayEvidence": "docs/calibration/overlays/p0.overlay.png",
+      "locked": "2026-05-12"
     }
   },
 
   "phenomenon": "parhelion_display",
   "compositionMode": "canonical",
+  "geometryModel": "halo_atlas",
   "skyPalette": "polar_twilight",
 
-  "sunAltitudeDeg": 18,
+  "sunAltitudeDeg": 25,
 
   "halo22Intensity": 0.95,
-  "halo46Intensity": 0.30,
+  "halo46Intensity": 0.45,
 
   "czaIntensity": 0.95,
   "czaCurvature": 0.85,
 
-  "parhelicCircleIntensity": 0.45,
-  "parhelicCurvature": 0.66,
+  "parhelicCircleIntensity": 0.55,
+  "parhelicCurvature": 0.05,
+  "parhelicYOffsetR22": -0.05,
 
   "parheliaIntensity": 1.0,
   "parheliaDaggerLength": 1.0,
 
   "sunPillarIntensity": 0.80,
-  "sunPillarLength": 0.65,
+  "sunPillarLength": 0.55,
 
-  "compassRayLength": 1.0,
+  "compassRayLength": 0.85,
+  "compassRotationDeg": 22.5,
 
   "dispersionWidth": 0.70,
   "rainbowSaturation": 0.85,
 
   "secondarySunsStrength": 0.0,
   "ringOverlapBias": 0.5,
+
+  "supralateralIntensity": 0.40,
+  "upperTangentIntensity": 0.0,
+  "lowerTangentIntensity": 0.0,
+  "suncaveParryIntensity": 0.0,
+  "parrySupralateralIntensity": 0.0,
+  "infralateralIntensity": 0.0,
 
   "idleScintillationAmplitude": 0.0
 }

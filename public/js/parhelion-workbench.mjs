@@ -10,7 +10,7 @@ const VALID_MODELS = new Set(["legacy", "halo_scaffold", "halo_governed", "halo_
 
 function getModel() {
   const saved = window.localStorage.getItem(MODEL_STORAGE_KEY);
-  return VALID_MODELS.has(saved) ? saved : "legacy";
+  return VALID_MODELS.has(saved) ? saved : "halo_atlas";
 }
 
 function setModel(model) {
@@ -20,12 +20,16 @@ function setModel(model) {
 
 function setParam(name, value) {
   root.style.setProperty(`--${name}`, value);
+  updateParamDisplay(name, value);
+  apply();
+}
+
+function updateParamDisplay(name, value) {
   const display = document.getElementById(`${name}-value`);
   if (display) {
     const num = Number.parseFloat(value);
     display.textContent = Number.isInteger(num) ? num.toString() : num.toFixed(2);
   }
-  apply();
 }
 
 function apply() {
@@ -36,6 +40,7 @@ function apply() {
 
 const sliders = document.querySelectorAll('input[type="range"][data-param]');
 sliders.forEach((slider) => {
+  updateParamDisplay(slider.dataset.param, slider.value);
   slider.addEventListener("input", () => setParam(slider.dataset.param, slider.value));
 });
 

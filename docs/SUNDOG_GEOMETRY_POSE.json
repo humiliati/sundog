@@ -1,21 +1,23 @@
 {
   "_meta": {
-    "name": "canonical-halo-atlas",
-    "description": "Canonical Sundog Workbench pose using the Halo Atlas geometry model. Each visible halo / arc is the upper portion of its own real circle. Parhelion offset binds to sun altitude (parhelion = R_22/cos h). CZA is a true full ring. Supralateral arc is a separate primitive tangent to the 46° halo top. Calibrated against Troels Nielsen DR — sun altitude 25° matches the photo's measured parhelion offset.",
-    "schemaVersion": "1.0",
+    "name": "phase2-locked-canonical",
+    "description": "Canonical Sundog Geometry pose locked by Phase 2 static calibration. This mirrors public/poses/canonical.json for roadmap review.",
+    "schemaVersion": "1.1",
     "spec": "docs/SUNDOG_GENERATOR_SPEC.md",
     "model": "halo_atlas",
+    "sourcePose": "public/poses/canonical.json",
     "calibration": {
-      "reference": "troelsnielsensolarphenonomena.jpg",
-      "anchor_22_halo_radius_px": 145,
-      "anchor_sun_px": [400, 356],
-      "implied_sun_altitude_deg": 25,
-      "overlay_evidence": "docs/calibration/overlays/p0.overlay.png",
-      "phase2_default_lock": "2026-05-12"
+      "reference": "docs/calibration/0.troelsnielsendr.png",
+      "overlayEvidence": "docs/calibration/overlays/p0.overlay.png",
+      "multiPhotoNotes": "docs/SUNDOG_V_GEOMETRY.md#multi-photo-calibration-pass-2026-05-12",
+      "locked": "2026-05-12"
     }
   },
 
+  "phenomenon": "parhelion_display",
+  "compositionMode": "canonical",
   "geometryModel": "halo_atlas",
+  "skyPalette": "polar_twilight",
 
   "sunAltitudeDeg": 25,
 
