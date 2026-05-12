@@ -1,4 +1,4 @@
-# Mesa Phase 5 - Selection-Pressure Result Note (v3)
+# Mesa Phase 5 - Selection-Pressure Result Note (v4)
 
 This document records the Phase 5 Small-tier selection-pressure result and
 the Medium-tier follow-ups. It is the companion result note for
@@ -8,9 +8,11 @@ Status: Small-tier training slate **complete** for Phase 5 v1 axes A-C, and
 Medium follow-up **complete** for `lambda in {0.3, 0.5, 0.7}` plus
 L-Signature-M-Terminal. Phase 5 v3 follow-up is also **complete** for
 Medium `lambda in {0.8, 0.9}` and reward-pretrain ->
-terminal-signature-fine-tune. Phase 3 probe-slate evaluation and Phase 4
-intervention-battery evaluation are complete for the new Phase 5 policies.
-The aggregate reports have been rebuilt for the combined Small+Medium slate.
+terminal-signature-fine-tune. Phase 5 v4 cliff-localization is **complete**
+for Medium `lambda in {0.95, 0.97, 0.99}`. Phase 3 probe-slate evaluation
+and Phase 4 intervention-battery evaluation are complete for the new Phase 5
+policies. The aggregate reports have been rebuilt for the combined
+Small+Medium slate.
 
 ## 1. Summary
 
@@ -28,11 +30,10 @@ Phase 5 gives the program four useful updates:
    `-0.585`, not `> 1.0`. But it also does not recover task success
    (`0/64`), so clean-signal fine-tuning appears to erase the fixed basin
    without reliably rebuilding useful control.
-4. Medium L-Mixed has a protected high-reward window. v3 shows `lambda=0.8`
-   and `lambda=0.9` both remain below the basin-breach threshold while
-   reaching 32/64 and 36/64 success respectively. The Medium breach estimate
-   shifts to `lambda ~= 0.912`, and the collapse now looks abrupt between
-   `lambda=0.9` and pure reward.
+4. Medium L-Mixed has a protected high-reward window and a sharp cliff. v4
+   shows `lambda=0.95` remains protected and reaches 43/64 success, while
+   `lambda=0.97` and `lambda=0.99` collapse into fixed-attractor behavior.
+   The Medium breach estimate is now `lambda ~= 0.953`.
 
 The cleanest Phase 5 headline is now: the signature anchor protects mixed
 training up to a measurable lambda threshold, and objective *shape* matters
@@ -75,6 +76,14 @@ Phase 5 v3 follow-up outputs live under:
 and:
 
 `results/mesa/phase4-intervention-battery/phase5_v3_*`
+
+Phase 5 v4 cliff-localization outputs live under:
+
+`results/mesa/phase3-probe-slate/phase5_v4_*`
+
+and:
+
+`results/mesa/phase4-intervention-battery/phase5_v4_*`
 
 Phase 5 aggregate reports live under:
 
@@ -442,9 +451,52 @@ terminal-signature fine-tuning, or start from the fully trained L-Reward-M
 checkpoint and test whether the fixed attractor is easier or harder to erase
 after canonical-budget saturation.
 
-## 10. Versioning
+## 10. Phase 5 v4 Amendment
 
-This document is version `v3`.
+Phase 5 v4 localized the Medium mixed-signal cliff with
+`lambda in {0.95, 0.97, 0.99}`. All three runs landed checkpoints, policy
+JSONs, probe slates, intervention batteries, and aggregate rows. The
+aggregate now covers 22 policies.
+
+### 10.1 Cliff-localization table
+
+| Lambda | Success | Mean S_T | Mean probed success | Probe basin captures | Old-basin pref |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 0.90 | 36/64 | 0.973 | 0.371 | 35 | 0.383 |
+| 0.95 | 43/64 | 0.982 | 0.424 | 29 | 0.330 |
+| 0.97 | 2/64 | 0.276 | 0.020 | 596 | 5.510 |
+| 0.99 | 3/64 | 0.303 | 0.026 | 465 | 5.159 |
+| 1.00 (L-Reward-M) | 0/64 | 0.267 | 0.005 | 576 | 5.560 |
+
+The cliff is localized to `(0.95, 0.97]`. `lambda=0.95` is the best Medium
+mixed policy so far by nominal success (43/64) and remains protected
+(`old_basin_pref=0.330`). `lambda=0.97` collapses almost completely:
+2/64 success, mean `S_T=0.276`, and `old_basin_pref=5.510`, essentially
+matching the pure L-Reward fixed-attractor signature.
+
+The updated linear interpolation puts the Medium breach at
+`lambda ~= 0.952588`, but the interpolation is mostly a reporting
+convenience. Behaviorally, the result is a discontinuity: a 5% signature
+anchor protects, while a 3% signature anchor does not.
+
+### 10.2 v4 prediction outcomes
+
+| Prediction | Outcome |
+| --- | --- |
+| (A5-M) At least one of `lambda in {0.95, 0.97, 0.99}` breaches | Confirmed. `lambda=0.97` and `lambda=0.99` both breach heavily. |
+| (A6-M) Breach is sharp rather than smooth | Confirmed. `old_basin_pref` jumps from 0.330 at `lambda=0.95` to 5.510 at `lambda=0.97`. |
+| (A7-M) Breach couples to competence collapse | Confirmed. Success falls from 43/64 at `lambda=0.95` to 2/64 and 3/64 at `lambda=0.97/0.99`. |
+
+This is the cleanest Phase 5 selection-pressure boundary so far. In this
+Medium setup, the signature anchor is not linearly protective; it behaves
+like a threshold. The sharp operational statement is:
+
+> A 5% terminal/integrated signature anchor in mixed training prevents the
+> false-basin fixed attractor, while a 3% anchor does not.
+
+## 11. Versioning
+
+This document is version `v4`.
 
 - `v1` (2026-05-11): records Small-tier Phase 5 training, probe-slate, and
   intervention-battery results for axes A-C.
@@ -469,3 +521,10 @@ This document is version `v3`.
   reward-pretrain -> terminal-signature fine-tune: 0/64 success and
   `old_basin_pref = 3.691`, falsifying the strict Goodhart-fix-by-fine-tune
   prediction under the default optimizer-continuation setup.
+
+- `v4` (2026-05-12): Phase 5 v4 cliff localization. Adds Medium L-Mixed
+  `lambda=0.95`, `lambda=0.97`, and `lambda=0.99`. Localizes the cliff to
+  `(0.95, 0.97]`: `lambda=0.95` remains protected and reaches 43/64 success,
+  while `lambda=0.97` and `lambda=0.99` collapse to fixed-attractor behavior
+  (`old_basin_pref` 5.510 and 5.159). Updated Medium breach interpolation:
+  `lambda ~= 0.952588`.

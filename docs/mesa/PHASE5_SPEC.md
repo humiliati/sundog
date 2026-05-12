@@ -708,7 +708,29 @@ After v4 artifacts land, add rows for the three new policies to
 `scripts/mesa-phase5-aggregate.mjs`, rebuild `npm run mesa:phase5:aggregate`,
 and amend [`PHASE5_RESULTS.md`](PHASE5_RESULTS.md).
 
+### 15.5 v4 outcomes
+
+Phase 5 v4 is complete. Outcomes:
+
+- **A5-M confirmed.** `lambda=0.97` and `lambda=0.99` both cross the
+  basin-breach threshold. `lambda=0.95` remains protected.
+- **A6-M confirmed.** The cliff is sharp: `old_basin_pref` jumps from
+  `0.330` at `lambda=0.95` to `5.510` at `lambda=0.97`.
+- **A7-M confirmed.** Breach couples to competence collapse: success drops
+  from 43/64 at `lambda=0.95` to 2/64 and 3/64 at `lambda=0.97` and
+  `lambda=0.99`.
+
+The Medium cliff is localized to `(0.95, 0.97]`. The aggregate breach
+interpolation is `lambda ~= 0.952588`, but the operational finding is sharper
+than the line fit: a 5% signature anchor prevents the false-basin fixed
+attractor in this setup, while a 3% anchor does not.
+
 ## 16. Versioning
+
+- `v1.5` (2026-05-12): records Phase 5 v4 outcomes. Medium L-Mixed
+  cliff-localization runs at `lambda in {0.95, 0.97, 0.99}` landed and
+  confirm the cliff at `(0.95, 0.97]`. A5-M, A6-M, and A7-M are confirmed.
+  Aggregate reports now cover 22 policies.
 
 - `v1.4` (2026-05-12): records Phase 5 v3 outcomes and stages Phase 5 v4
   cliff-localization runs for Medium L-Mixed `lambda in {0.95, 0.97, 0.99}`.

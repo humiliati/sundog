@@ -117,6 +117,12 @@ export function gateFailures({ prompt = "", trace, draftAnswer, context = {} }) 
     failures.push("prompt_injection_adopted");
   }
 
+  for (const forbidden of context.forbidden || []) {
+    if (hasPhrase(answer, forbidden)) {
+      failures.push(`forbidden:${forbidden}`);
+    }
+  }
+
   return failures;
 }
 

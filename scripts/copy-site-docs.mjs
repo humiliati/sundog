@@ -18,7 +18,9 @@ const publicChatArtifacts = [
   "contents.json",
   "prompts/gold-normal.jsonl",
   "prompts/gold-boundary.jsonl",
-  "prompts/gold-adversarial.jsonl"
+  "prompts/gold-adversarial.jsonl",
+  "prompts/gold-wild.jsonl",
+  "prompts/gold-differential.jsonl"
 ];
 
 async function copyPublicDocs(sourceDir, targetDir) {
@@ -32,7 +34,7 @@ async function copyPublicDocs(sourceDir, targetDir) {
 
     if (entry.isDirectory()) {
       await copyPublicDocs(source, target);
-    } else if (entry.isFile() && (entry.name.endsWith(".md") || entry.name.endsWith(".html") || entry.name === "Public-notes.tex")) {
+    } else if (entry.isFile()) {
       await cp(source, target);
     }
   }

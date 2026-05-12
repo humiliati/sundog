@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sundog Workbench: parametric parhelion render — exercise the math, tune the eye">
+    <meta name="description" content="Sundog Workbench: parametric parhelion render — advanced tuning surface with the full 25-slider rail. The public-facing explainer lives at /sundog.html.">
     <meta name="theme-color" content="#0b1720">
+    <!-- The public-facing canonical page is sundog.html. The workbench survives
+         here as the advanced tuning surface (all 25 sliders visible at once,
+         no explainer chrome). Tell search engines sundog.html is primary. -->
+    <link rel="canonical" href="https://sundog.cc/sundog.html">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>Sundog Workbench — Parhelion Eye</title>
+    <title>Sundog Workbench (advanced tuning lab) — Parhelion Eye</title>
     <style>
         /* Workbench-specific layout (chrome and tokens come from sundog-theme.css) */
 
@@ -482,6 +486,12 @@
         </nav>
     </header>
 
+    <div role="note" style="background: rgba(244, 196, 48, 0.12); border-bottom: 1px solid rgba(244, 196, 48, 0.32); padding: 0.55rem 1.2rem; font-size: 0.84rem; color: rgba(245, 245, 245, 0.85);">
+        <strong style="color: var(--accent-gold);">Advanced tuning lab.</strong>
+        This is the workbench with the full 25-slider rail and no explainer chrome. The public-facing
+        Sundog page with the educational walkthrough lives at <a href="sundog.html" style="color: var(--accent-gold);">/sundog.html</a>.
+    </div>
+
     <main class="workbench" aria-label="Parhelion workbench">
         <section class="stage" aria-label="Parhelion stage">
             <svg id="parhelion-svg" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Parametric sundog rendering">
@@ -840,14 +850,15 @@
 
             <h3 style="margin-top: 1.4rem;">Notes</h3>
             <p class="lead">
-                <strong>Sun</strong> is a compass rose, not an orb — pillar &times; parhelic cross.
-                <strong>Halo</strong> at 22° is the iris.
-                <strong>CZA</strong> is the upper eyelid (tangent to 46° halo top).
-                <strong>Upper / Lower Tangent</strong> are eyelid features tangent to the 22° halo.
+                <strong>Sun</strong> is a compass rose, not an orb &mdash; pillar &times; parhelic cross.
+                <strong>Halo</strong> at 22&deg; is the iris.
+                <strong>CZA</strong> is the upper eyelid (tangent to 46&deg; halo top).
+                <strong>Upper / Lower Tangent</strong> are eyelid features tangent to the 22&deg; halo.
                 <strong>Suncave Parry / Parry Supralateral</strong> are Parry-orientation companions.
                 <strong>Infralateral</strong> mirrors the supralateral below the sun.
-                <strong>Sun Altitude</strong> drives the parhelion offset by `R₂₂ / cos(h)`.
+                <strong>Sun Altitude</strong> drives the parhelion offset by R&#8322;&#8322; / cos(h).
                 <strong>Secondary Suns</strong> activates the 9-halo-eye fiction.
+                <a href="sundog.html" style="color: var(--accent-gold); display: block; margin-top: 0.6rem;">&larr; back to /sundog.html (public explainer)</a>
             </p>
         </aside>
     </main>

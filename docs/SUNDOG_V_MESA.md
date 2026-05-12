@@ -770,10 +770,10 @@ fixed-attractor control. Aggregate reports live under
 `results/mesa/phase4-intervention-battery/reports/` and rebuild with
 `npm run mesa:phase4:aggregate`.
 
-**Phase 5:** Small + Medium slates **complete through v3**. See
-[`mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md) v3 for the full result
-note and [`mesa/PHASE5_SPEC.md`](mesa/PHASE5_SPEC.md) v1.4 for the staged
-cliff-localization follow-up. **Headline Medium finding: L-Signature with
+**Phase 5:** Small + Medium slates **complete through v4**. See
+[`mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md) v4 for the full result
+note and [`mesa/PHASE5_SPEC.md`](mesa/PHASE5_SPEC.md) v1.5 for the
+cliff-localization outcome. **Headline Medium finding: L-Signature with
 terminal-only shape reaches 64/64 success at Medium tier**, matching the
 Oracle and HC-Signature ceiling, exceeding L-Reward-Clean Medium's 49/64 by
 23 percentage points, and overturning the Phase 2-3 Sundog-cost framing.
@@ -782,15 +782,15 @@ training at scale, not a "trade adversarial robustness for sample efficiency"
 deal. The integrated-signature canonical from Phase 2 is **deprecated**;
 terminal-only is the new canonical for future Phase 5+ work.
 
-Phase 5 v3 sharpened the mixed-signal picture. Medium L-Mixed remains
-protected through `lambda=0.9`: `old_basin_pref` falls from 0.613 at
-`lambda=0.7` to 0.485 at `lambda=0.8` and 0.383 at `lambda=0.9`, while
-nominal success rises to 32/64 and 36/64. Pure L-Reward-M at `lambda=1.0`
-still collapses (`old_basin_pref=5.560`, 0/64 success), so the failure now
-looks like an abrupt cliff between "mostly reward with a signature anchor"
-and "pure reward," not a smooth monotone degradation. The current aggregate
-breach interpolation is `lambda ~= 0.912`, but Phase 5 v4 is staged to
-measure the actual cliff with Medium `lambda in {0.95, 0.97, 0.99}`.
+Phase 5 v4 localizes the mixed-signal cliff. Medium L-Mixed remains protected
+through `lambda=0.95`: `old_basin_pref=0.330`, 43/64 success, mean
+`S_T=0.982`. At `lambda=0.97` and `lambda=0.99`, it collapses into
+fixed-attractor behavior (`old_basin_pref=5.510` and `5.159`, success 2/64
+and 3/64). Pure L-Reward-M at `lambda=1.0` remains the collapsed anchor
+(`old_basin_pref=5.560`, 0/64 success). The cliff is localized to
+`(0.95, 0.97]`; the aggregate interpolation is `lambda ~= 0.952588`.
+Operationally: in this Medium setup, a 5% signature anchor prevents the
+false-basin attractor, while a 3% anchor does not.
 
 The reward-pretrain -> terminal-signature fine-tune follow-up falsified the
 strict Goodhart-fix-by-fine-tuning prediction under the default optimizer-

@@ -1,0 +1,135 @@
+{
+  "totalDrafts": 64,
+  "promptCount": 16,
+  "slate": "differential",
+  "byFamily": {
+    "naive_baseline": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "gateHits": 16,
+      "addedValue": 0
+    },
+    "naive_rag": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "gateHits": 16,
+      "addedValue": 0
+    },
+    "prompted_boundary": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "gateHits": 16,
+      "addedValue": 0
+    },
+    "sundog_gated": {
+      "total": 16,
+      "accepted": 16,
+      "rejected": 0,
+      "gateHits": 16,
+      "addedValue": 0
+    }
+  },
+  "byCategory": {
+    "cross_tier_confusion": {
+      "total": 16,
+      "accepted": 4,
+      "rejected": 12,
+      "gateHits": 16,
+      "addedValue": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 16,
+      "accepted": 4,
+      "rejected": 12,
+      "gateHits": 16,
+      "addedValue": 0
+    },
+    "substantive_content_drift": {
+      "total": 16,
+      "accepted": 4,
+      "rejected": 12,
+      "gateHits": 16,
+      "addedValue": 0
+    },
+    "multi_tier_prompt": {
+      "total": 16,
+      "accepted": 4,
+      "rejected": 12,
+      "gateHits": 16,
+      "addedValue": 0
+    }
+  },
+  "divergence": {
+    "byFamily": {
+      "naive_baseline": {
+        "identical": 0,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 16
+      },
+      "naive_rag": {
+        "identical": 0,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 16
+      },
+      "prompted_boundary": {
+        "identical": 0,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 16
+      },
+      "sundog_gated": {
+        "identical": 16,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 0
+      }
+    },
+    "byCategory": {
+      "cross_tier_confusion": {
+        "identical": 4,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 12
+      },
+      "boundary_array_fidelity": {
+        "identical": 4,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 12
+      },
+      "substantive_content_drift": {
+        "identical": 4,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 12
+      },
+      "multi_tier_prompt": {
+        "identical": 4,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 12
+      }
+    }
+  },
+  "addedValue": {
+    "naive_baseline": 0,
+    "naive_rag": 0,
+    "prompted_boundary": 0,
+    "sundog_gated": 0
+  },
+  "addedValueRate": {
+    "naive_baseline": 0,
+    "naive_rag": 0,
+    "prompted_boundary": 0,
+    "sundog_gated": 0
+  },
+  "gateHitRate": 1,
+  "gateEscapes": 0,
+  "rejectedUnsafeNaive": 16,
+  "acceptedGatedDrafts": 16
+}

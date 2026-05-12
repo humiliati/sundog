@@ -18,6 +18,8 @@
     "chat:eval:static": "npm run chat:index && node chat/eval/score_static_router.mjs",
     "chat:eval:wild": "node chat/eval/score_wild_probe.mjs",
     "chat:eval:phase3": "npm run chat:index && node chat/eval/score_phase3_drafts.mjs",
+    "chat:eval:phase3:adversarial": "npm run chat:index && node chat/eval/score_phase3_drafts.mjs --slate adversarial",
+    "chat:eval:phase3:differential": "npm run chat:index && node chat/eval/score_phase3_drafts.mjs --slate differential",
     "build": "vite build",
     "postbuild": "node scripts/copy-site-docs.mjs && node scripts/check-site-dist.mjs",
     "logo:toolkit": "node scripts/generate-sundog-logo-toolkit.mjs",

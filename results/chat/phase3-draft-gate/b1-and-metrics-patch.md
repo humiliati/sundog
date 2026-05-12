@@ -362,3 +362,71 @@ moves become well-defined:
   the experiment's main result.
 
 Both are mechanical once B1 and the metrics land.
+
+## Followup ratification — B2 and adversarial slate
+
+Accepted 2026-05-12:
+
+- Added `prompted_boundary` as the B2 family. It preserves the static trace
+  boundary and is intentionally conservative: accepted drafts are expected, but
+  value-add is not expected in this deterministic scaffold.
+- Added `--slate adversarial` support to `score_phase3_drafts.mjs` and the npm
+  wrapper `chat:eval:phase3:adversarial`.
+- Tightened the gate with prompt-specific `forbidden[]` phrase checks, so the
+  adversarial slate can assert exact overclaim frames that must not reach the
+  user.
+- Calibrated B0/B1 on the adversarial slate to behave like boundary-naive
+  prompt followers: they comply with the forbidden framing, and the gate must
+  catch them.
+
+Verified with `npm run chat:eval:phase3`:
+
+| Family | Accepted | Rejected | AddedValue |
+|---|---:|---:|---:|
+| `naive_baseline` | 16 | 14 | 0 |
+| `naive_rag` | 14 | 16 | 14 |
+| `prompted_boundary` | 30 | 0 | 0 |
+| `sundog_gated` | 30 | 0 | 9 |
+
+Gate hit rate: `1`. Gate escape count: `0`.
+
+Verified with `npm run chat:eval:phase3:adversarial`:
+
+| Family | Accepted | Rejected | AddedValue |
+|---|---:|---:|---:|
+| `naive_baseline` | 0 | 33 | 0 |
+| `naive_rag` | 0 | 33 | 0 |
+| `prompted_boundary` | 33 | 0 | 0 |
+| `sundog_gated` | 33 | 0 | 0 |
+
+Gate hit rate: `1`. Gate escape count: `0`.
+
+## Differential probe ratification
+
+Accepted 2026-05-12:
+
+- Added `chat/prompts/gold-differential.jsonl`, a 16-prompt slate targeting
+  the four places where trace-conditioned S1 should differ from generic
+  prompt-only B2: cross-tier confusion, route-specific boundary-array
+  fidelity, substantive content drift, and multi-tier prompts.
+- Added `--slate differential` support to `score_phase3_drafts.mjs` and the
+  npm wrapper `chat:eval:phase3:differential`.
+- Added per-prompt `expectedRejectedFamilies`, used here to make B2's generic
+  prompt-only drafts expected rejections while S1's trace-conditioned drafts
+  remain expected accepts.
+
+Verified with `npm run chat:eval:phase3:differential`:
+
+| Family | Accepted | Rejected | AddedValue |
+|---|---:|---:|---:|
+| `naive_baseline` | 0 | 16 | 0 |
+| `naive_rag` | 0 | 16 | 0 |
+| `prompted_boundary` | 0 | 16 | 0 |
+| `sundog_gated` | 16 | 0 | 0 |
+
+Gate hit rate: `1`. Gate escape count: `0`.
+
+Interpretation: B2 remains viable on broad visitor and loud adversarial
+pressure, but the differential slate gives the first scaffold evidence for the
+S1 claim: trace-conditioned gating is measurably different when the task
+requires exact route-specific tier and boundary data.
