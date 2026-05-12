@@ -459,6 +459,13 @@ Exit criterion: the selection-pressure × capacity matrix is filled with
 quantitative results. At least one pocket is identified where L-Signature is
 measurably distinct from L-Reward under proxy splits and interventions.
 
+Implementation-grade spec at [`mesa/PHASE5_SPEC.md`](mesa/PHASE5_SPEC.md) v1
+(2026-05-12). Three axes pinned: L-Mixed λ ∈ {0.1, 0.3, 0.5, 0.7, 0.9} at
+Small + Medium follow-up; L-Signature objective shape {terminal,
+integrated, threshold} at Small; curriculum order {sig-then-reward,
+reward-then-sig} at Small with 50%+50% phase split. Headline metric:
+protection curve (`old_basin_pref` vs λ) and breach threshold.
+
 ### Phase 6 - Interpretability / Representation Probes
 
 Goal: probe internal representations of learned controllers for evidence of
@@ -748,31 +755,4 @@ immune at any scale, 50/50 mixed admits proportional leakage that grows with
 capacity, pure reward is corrupted at Small and dramatically more corrupted
 at Medium — is the program's strongest gravity-claim formulation to date.
 Basin-effect gap widens from 65.6 pp (Small) to 76.6 pp (Medium). Probe-slate
-harness at `scripts/mesa-probe-slate.mjs`. β-sensitivity sub-result complete
-({0.5, 1.0, 2.0} monotonic). Large tier not started.
-**Phase 4:** Small + Medium causal intervention batteries **complete**. See
-[`mesa/PHASE4_RESULTS.md`](mesa/PHASE4_RESULTS.md) v1. Spec at
-[`mesa/PHASE4_SPEC.md`](mesa/PHASE4_SPEC.md) v1. Headline finding:
-canonical L-Reward has zero direct response to live `x_false` movement but
-continues toward the training-time basin, with old-basin preference growing
-from `3.413` at Small to `5.560` at Medium. Its Medium signature-sensor and
-geometry action responses are only `0.060` and `0.069`, while L-Reward-Clean
-responds at `0.572` and `0.772`; this is the causal receipt for
-fixed-attractor control. Aggregate reports live under
-`results/mesa/phase4-intervention-battery/reports/` and rebuild with
-`npm run mesa:phase4:aggregate`.
-
-**Phases 5-8:** Not started.
-
-Phase 2 has an implementation spec:
-[`mesa/PHASE2_SPEC.md`](mesa/PHASE2_SPEC.md). It locks Python training against
-the JS environment bridge, PPO as the matched RL algorithm, BC-first ordering,
-and Small/Medium-before-Large execution. The first Phase 2 smoke slices are in:
-`npm run mesa:phase2:bridge-smoke` verifies Python-to-JS reset/step/batch
-behavior, including batch auto-reset, restart determinism, and a lightweight
-throughput check. `npm run mesa:phase2:bc-dataset-smoke` verifies HC rollout
-extraction, loader sanity checks, and the train/val split for behavior cloning.
-`npm run mesa:phase2:bc-small` trains and evaluates the first learned
-imitation policy; the latest run reached 63/64 held-out successes (98.4%) with
-mean terminal alignment 0.9969. `npm run mesa:phase2:bc-js-eval-small` replays
-the exported `.policy.json` directly in the JS environment and matches the
+harness at `sc

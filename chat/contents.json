@@ -1,12 +1,156 @@
 {
-  "version": "0.1.0",
-  "status": "stub",
-  "purpose": "Index chat scaffold files and planned prompt/eval artifacts.",
+  "version": "0.2.0",
+  "status": "phase0_index",
+  "purpose": "Index chat roadmap, claim-map, prompt, evaluation, public-data, and result artifacts for Ask Sundog.",
+  "roadmap": {
+    "doc": "docs/SUNDOG_V_CHAT.md",
+    "currentPhase": "Phase 0 - Scope and Claim Map",
+    "nextMilestone": "Create the 100-prompt gold slate, then build the no-LLM static helper."
+  },
   "items": [
+    {
+      "path": "docs/SUNDOG_V_CHAT.md",
+      "kind": "roadmap",
+      "status": "active",
+      "phase": "0-8",
+      "description": "Roadmap for a browser-native site helper that preserves evidence tiers and claim boundaries under pressure."
+    },
     {
       "path": "chat/claim_map.json",
       "kind": "claim_map",
-      "status": "stub"
+      "status": "phase0_populated",
+      "phase": "0",
+      "description": "Supported and refused claim classes with evidence tiers, answer templates, boundaries, source docs, and next links."
+    },
+    {
+      "path": "chat/contents.json",
+      "kind": "artifact_index",
+      "status": "active",
+      "phase": "0",
+      "description": "This index."
+    },
+    {
+      "path": "chat/prompts/gold-normal.jsonl",
+      "kind": "prompt_gold_set",
+      "status": "planned",
+      "phase": "0",
+      "targetCount": 40,
+      "description": "Normal site-navigation and explanation questions."
+    },
+    {
+      "path": "chat/prompts/gold-boundary.jsonl",
+      "kind": "prompt_gold_set",
+      "status": "planned",
+      "phase": "0",
+      "targetCount": 30,
+      "description": "Boundary-sensitive questions where the assistant must preserve evidence tier and uncertainty."
+    },
+    {
+      "path": "chat/prompts/gold-adversarial.jsonl",
+      "kind": "prompt_gold_set",
+      "status": "planned",
+      "phase": "0",
+      "targetCount": 30,
+      "description": "Adversarial overclaim prompts covering promotional pressure, roadmap/result collapse, citation pressure, stale context, missing evidence, and tool-output conflict."
+    },
+    {
+      "path": "public/data/sundog-claim-map.json",
+      "kind": "public_data",
+      "status": "planned",
+      "phase": "6",
+      "source": "chat/claim_map.json",
+      "description": "Public copy of the claim map consumed by the browser widget."
+    },
+    {
+      "path": "public/data/sundog-chat-index.json",
+      "kind": "public_data",
+      "status": "planned",
+      "phase": "2",
+      "description": "Local document index with doc, section, tier, freshness, and boundary tags."
+    },
+    {
+      "path": "public/data/sundog-evidence-tiers.json",
+      "kind": "public_data",
+      "status": "planned",
+      "phase": "2",
+      "description": "Browser-consumable evidence-tier vocabulary derived from docs/APPLICATIONS.md and the claim map."
+    },
+    {
+      "path": "public/data/sundog-boundary-rules.json",
+      "kind": "public_data",
+      "status": "planned",
+      "phase": "2",
+      "description": "Browser-consumable boundary rules for unsupported and overclaim requests."
+    },
+    {
+      "path": "public/js/sundog-chat-widget.mjs",
+      "kind": "browser_widget",
+      "status": "planned",
+      "phase": "6",
+      "description": "Floating Ask Sundog widget shell."
+    },
+    {
+      "path": "public/js/sundog-chat-router.mjs",
+      "kind": "browser_router",
+      "status": "planned",
+      "phase": "1",
+      "description": "Deterministic FAQ and claim-class router."
+    },
+    {
+      "path": "public/js/sundog-claim-gate.mjs",
+      "kind": "browser_gate",
+      "status": "planned",
+      "phase": "3",
+      "description": "Boundary gate that blocks or rewrites invalid model-assisted drafts."
+    },
+    {
+      "path": "public/js/sundog-retrieval.mjs",
+      "kind": "browser_retrieval",
+      "status": "planned",
+      "phase": "2",
+      "description": "Local retrieval helper over the static chat index."
+    },
+    {
+      "path": "public/js/sundog-trace-viewer.mjs",
+      "kind": "trace_ui",
+      "status": "planned",
+      "phase": "1",
+      "description": "Evidence rail and trace drawer UI."
+    },
+    {
+      "path": "chat/eval/run_chat_probe_slate.py",
+      "kind": "evaluation_script",
+      "status": "planned",
+      "phase": "4",
+      "description": "Run prompt slate across B0, B1, B2, S1, and S2 assistant families."
+    },
+    {
+      "path": "chat/eval/score_chat_outputs.py",
+      "kind": "evaluation_script",
+      "status": "planned",
+      "phase": "4",
+      "description": "Score boundary preservation, overclaim rate, trace accuracy, tier accuracy, refusal precision/recall, utility, and trace visibility."
+    },
+    {
+      "path": "results/chat/probe-slate/manifest.json",
+      "kind": "result_manifest",
+      "status": "planned",
+      "phase": "4",
+      "description": "Probe-splitting evaluation manifest."
+    },
+    {
+      "path": "results/chat/interventions/manifest.json",
+      "kind": "result_manifest",
+      "status": "planned",
+      "phase": "5",
+      "description": "Causal intervention battery manifest."
+    },
+    {
+      "path": "results/chat/operating-envelope/manifest.json",
+      "kind": "result_manifest",
+      "status": "planned",
+      "phase": "7",
+      "description": "Operating-envelope and failure-map manifest."
     }
   ]
 }

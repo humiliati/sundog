@@ -55,10 +55,12 @@ code, experiments, prior theorem materials, and application bridges.
   `sundog.cc`.
 - [Website development](WEBSITE_DEVELOPMENT.md): how to edit root HTML pages,
   link docs, build `dist/`, and deploy through Cloudflare Pages.
-- [Chat claim map stub](../chat/claim_map.json): minimal claim-map scaffold for
-  the `/chat` roadmap artifacts.
-- [Chat contents stub](../chat/contents.json): minimal scaffold index for
-  planned chat prompts and evaluation outputs.
+- [Chat claim map](../chat/claim_map.json): Phase 0 claim classes, source
+  boundaries, evidence tiers, answer templates, and refusal rules for the
+  `/chat` roadmap artifacts.
+- [Chat contents index](../chat/contents.json): roadmap artifact index for
+  planned prompts, public data, widget modules, evaluation scripts, and result
+  manifests.
 
 ## Reading Order
 

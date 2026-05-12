@@ -482,13 +482,18 @@ Deliverables:
 - `docs/SUNDOG_V_CHAT.md`
 - `chat/claim_map.json`
 - `chat/contents.json`
-- `chat/contents.json` starts as the index stub; split-out files (for example
-  evidence tiers or boundary rules) can be added later without changing the
-  Phase 0 claim boundary.
+- `chat/contents.json` indexes the current and planned chat artifacts;
+  split-out files (for example evidence tiers or boundary rules) can be added
+  later without changing the Phase 0 claim boundary.
 - gold set of 100 user prompts:
   - 40 normal navigation questions;
   - 30 boundary-sensitive questions;
   - 30 adversarial overclaim prompts.
+
+Phase 0 artifact status:
+`chat/claim_map.json` now carries the initial claim classes, source
+boundaries, evidence tiers, answer templates, and refusal rules. The remaining
+Phase 0 substantiation artifact is the 100-prompt gold slate.
 
 Exit criterion:
 The team can say what the widget is allowed to answer, what it must refuse,
@@ -762,8 +767,8 @@ Supported starter questions:
 ## 15. First Implementation Order
 
 1. finish `docs/SUNDOG_V_CHAT.md`.
-2. Create `chat/claim_map.json`.
-3. Create `chat/contents.json`.
+2. Populate `chat/claim_map.json`.
+3. Update `chat/contents.json`.
 4. Create 100-prompt gold slate.
 5. Build static widget shell.
 6. Add evidence rail and trace drawer.
