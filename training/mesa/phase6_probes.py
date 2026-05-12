@@ -26,6 +26,8 @@ from training.mesa.policy import load_checkpoint, policy_from_checkpoint
 
 
 FALSE_BASIN = np.asarray([-2.5, -2.5], dtype=np.float32)
+LIVE_BASIN = np.asarray([2.5, 2.5], dtype=np.float32)
+INTERVENTION_STEP = 50
 CHECKPOINT_DIR = REPO_ROOT / "results" / "mesa" / "phase2-matched-capacity" / "checkpoints"
 PHASE6_OUT = REPO_ROOT / "results" / "mesa" / "phase6-probes"
 
@@ -48,6 +50,7 @@ class Collection:
     positions: np.ndarray
     goals: np.ndarray
     false_centers: np.ndarray
+    basin_pref_targets: np.ndarray
     layers: dict[str, np.ndarray]
 
 
@@ -76,7 +79,13 @@ SMOKE_POLICIES = (
 )
 
 
-FEATURES = ("dist_to_x_goal", "dist_to_x_false", "vec_to_x_goal", "vec_to_x_false")
+FEATURES = (
+    "basin_pref_intervened",
+    "dist_to_x_goal",
+    "dist_to_x_false",
+    "vec_to_x_goal",
+    "vec_to_x_false",
+)
 
 
 def ensure_checkpoint(path: Path) -> None:
@@ -125,16 +134,32 @@ def oracle_action(info: dict[str, Any]) -> np.ndarray:
     return gradient / norm
 
 
+def basin_position_intervention() -> dict[str, Any]:
+    return {
+        "step": INTERVENTION_STEP,
+        "channel": "basin-position",
+        "edit": {"xFalseNew": LIVE_BASIN.tolist()},
+    }
+
+
+def old_basin_pref(position: np.ndarray) -> float:
+    old_dist = float(np.linalg.norm(position - FALSE_BASIN))
+    new_dist = float(np.linalg.norm(position - LIVE_BASIN))
+    return new_dist - old_dist
+
+
 def append_sample(
     *,
     seeds: list[int],
     positions: list[np.ndarray],
     goals: list[np.ndarray],
     false_centers: list[np.ndarray],
+    basin_pref_targets: list[float],
     layer_values: dict[str, list[np.ndarray]],
     seed: int,
     obs: np.ndarray,
     info: dict[str, Any],
+    basin_pref_target: float,
     activations: dict[str, np.ndarray] | None = None,
     activation_index: int = 0,
 ) -> None:
@@ -145,6 +170,7 @@ def append_sample(
     positions.append(position)
     goals.append(goal)
     false_centers.append(false_center)
+    basin_pref_targets.append(float(basin_pref_target))
 
     # Raw-observation rows are useful floors: they show which probe targets are
     # already linearly available before any hidden representation is learned.
@@ -165,17 +191,124 @@ def append_sample(
         layer_values.setdefault("oracle.privileged_ceiling", []).append(privileged.astype(np.float32))
 
 
+def run_intervened_targets_learned(
+    spec: PolicySpec,
+    policy: torch.nn.Module,
+    obs_mean: np.ndarray,
+    obs_std: np.ndarray,
+    *,
+    seed_start: int,
+    seeds: int,
+    horizon: int,
+) -> dict[int, float]:
+    targets: dict[int, float] = {}
+    terminal_positions: dict[int, np.ndarray] = {}
+    with BridgeClient() as client:
+        made = client.request(
+            {
+                "cmd": "make_batch",
+                "batch_id": f"phase6-target-{spec.policy_id}",
+                "count": seeds,
+                "seed_start": seed_start,
+                "sensor_tier": spec.sensor_tier,
+                "env_config": {"horizon": horizon},
+                "interventions": [basin_position_intervention()],
+            }
+        )
+        obs_batch = np.asarray(made["obs"], dtype=np.float32)
+        info_batch = made["info"]
+        active = np.ones(seeds, dtype=bool)
+        for _step in range(horizon + 1):
+            actions = learned_actions(policy, obs_batch, obs_mean, obs_std)
+            response = client.request(
+                {
+                    "cmd": "step_batch",
+                    "batch_id": f"phase6-target-{spec.policy_id}",
+                    "actions": actions.tolist(),
+                }
+            )
+            obs_batch = np.asarray(response["obs"], dtype=np.float32)
+            info_batch = response["info"]
+            done = np.asarray(response["done"], dtype=bool)
+            for index in np.flatnonzero(active & done):
+                terminal_positions[seed_start + int(index)] = np.asarray(info_batch[int(index)]["position"], dtype=np.float32)
+            active &= ~done
+            if not np.any(active):
+                break
+        for index in np.flatnonzero(active):
+            terminal_positions[seed_start + int(index)] = np.asarray(info_batch[int(index)]["position"], dtype=np.float32)
+        client.request({"cmd": "close"})
+    for seed, position in terminal_positions.items():
+        targets[seed] = old_basin_pref(position)
+    return targets
+
+
+def run_intervened_targets_oracle(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: int) -> dict[int, float]:
+    targets: dict[int, float] = {}
+    terminal_positions: dict[int, np.ndarray] = {}
+    with BridgeClient() as client:
+        made = client.request(
+            {
+                "cmd": "make_batch",
+                "batch_id": f"phase6-target-{spec.policy_id}",
+                "count": seeds,
+                "seed_start": seed_start,
+                "sensor_tier": spec.sensor_tier,
+                "env_config": {"horizon": horizon},
+                "interventions": [basin_position_intervention()],
+            }
+        )
+        obs_batch = np.asarray(made["obs"], dtype=np.float32)
+        info_batch = made["info"]
+        active = np.ones(seeds, dtype=bool)
+        for _step in range(horizon + 1):
+            actions = []
+            for index, info in enumerate(info_batch):
+                actions.append(oracle_action(info).tolist() if active[index] else [0.0, 0.0])
+            response = client.request(
+                {
+                    "cmd": "step_batch",
+                    "batch_id": f"phase6-target-{spec.policy_id}",
+                    "actions": actions,
+                }
+            )
+            obs_batch = np.asarray(response["obs"], dtype=np.float32)
+            info_batch = response["info"]
+            done = np.asarray(response["done"], dtype=bool)
+            for index in np.flatnonzero(active & done):
+                terminal_positions[seed_start + int(index)] = np.asarray(info_batch[int(index)]["position"], dtype=np.float32)
+            active &= ~done
+            if not np.any(active):
+                break
+        for index in np.flatnonzero(active):
+            terminal_positions[seed_start + int(index)] = np.asarray(info_batch[int(index)]["position"], dtype=np.float32)
+        client.request({"cmd": "close"})
+    for seed, position in terminal_positions.items():
+        targets[seed] = old_basin_pref(position)
+    return targets
+
+
 def collect_learned(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: int) -> Collection:
     assert spec.checkpoint is not None
     ensure_checkpoint(spec.checkpoint)
     policy, obs_mean, obs_std = policy_from_checkpoint(load_checkpoint(spec.checkpoint))
     policy.eval()
+    targets = run_intervened_targets_learned(
+        spec,
+        policy,
+        obs_mean,
+        obs_std,
+        seed_start=seed_start,
+        seeds=seeds,
+        horizon=horizon,
+    )
     activations, handles = register_tanh_hooks(policy)
 
     seed_values: list[int] = []
     positions: list[np.ndarray] = []
     goals: list[np.ndarray] = []
     false_centers: list[np.ndarray] = []
+    basin_pref_targets: list[float] = []
     layer_values: dict[str, list[np.ndarray]] = {}
 
     try:
@@ -201,10 +334,12 @@ def collect_learned(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: i
                         positions=positions,
                         goals=goals,
                         false_centers=false_centers,
+                        basin_pref_targets=basin_pref_targets,
                         layer_values=layer_values,
                         seed=seed_start + int(index),
                         obs=obs_batch[index],
                         info=info_batch[index],
+                        basin_pref_target=targets[seed_start + int(index)],
                         activations=activations,
                         activation_index=int(index),
                     )
@@ -226,14 +361,16 @@ def collect_learned(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: i
         for handle in handles:
             handle.remove()
 
-    return make_collection(spec, seed_values, positions, goals, false_centers, layer_values)
+    return make_collection(spec, seed_values, positions, goals, false_centers, basin_pref_targets, layer_values)
 
 
 def collect_oracle(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: int) -> Collection:
+    targets = run_intervened_targets_oracle(spec, seed_start=seed_start, seeds=seeds, horizon=horizon)
     seed_values: list[int] = []
     positions: list[np.ndarray] = []
     goals: list[np.ndarray] = []
     false_centers: list[np.ndarray] = []
+    basin_pref_targets: list[float] = []
     layer_values: dict[str, list[np.ndarray]] = {}
 
     with BridgeClient() as client:
@@ -260,10 +397,12 @@ def collect_oracle(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: in
                     positions=positions,
                     goals=goals,
                     false_centers=false_centers,
+                    basin_pref_targets=basin_pref_targets,
                     layer_values=layer_values,
                     seed=seed_start + int(index),
                     obs=obs_batch[index],
                     info=info_batch[index],
+                    basin_pref_target=targets[seed_start + int(index)],
                     activations=None,
                 )
             response = client.request(
@@ -281,7 +420,7 @@ def collect_oracle(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: in
                 break
         client.request({"cmd": "close"})
 
-    return make_collection(spec, seed_values, positions, goals, false_centers, layer_values)
+    return make_collection(spec, seed_values, positions, goals, false_centers, basin_pref_targets, layer_values)
 
 
 def make_collection(
@@ -290,6 +429,7 @@ def make_collection(
     positions: list[np.ndarray],
     goals: list[np.ndarray],
     false_centers: list[np.ndarray],
+    basin_pref_targets: list[float],
     layer_values: dict[str, list[np.ndarray]],
 ) -> Collection:
     return Collection(
@@ -300,11 +440,14 @@ def make_collection(
         positions=np.stack(positions).astype(np.float32),
         goals=np.stack(goals).astype(np.float32),
         false_centers=np.stack(false_centers).astype(np.float32),
+        basin_pref_targets=np.asarray(basin_pref_targets, dtype=np.float32),
         layers={name: np.stack(values).astype(np.float32) for name, values in layer_values.items()},
     )
 
 
 def feature_target(collection: Collection, feature: str) -> np.ndarray:
+    if feature == "basin_pref_intervened":
+        return collection.basin_pref_targets
     if feature == "dist_to_x_goal":
         return np.linalg.norm(collection.goals - collection.positions, axis=1)
     if feature == "dist_to_x_false":
@@ -366,6 +509,14 @@ def fit_probe_rows(collection: Collection) -> list[dict[str, Any]]:
                     "n_test_episodes": int(len(np.unique(collection.seeds[test_idx]))),
                 }
             )
+    input_baselines = {
+        row["feature"]: row["r2_test"]
+        for row in rows
+        if row["layer"] == "input.obs"
+    }
+    for row in rows:
+        baseline = input_baselines.get(row["feature"])
+        row["delta_r2_vs_input"] = "" if baseline is None else float(row["r2_test"] - baseline)
     return rows
 
 
@@ -392,13 +543,33 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     labels = sorted({row["policy_label"] for row in rows})
     for label in labels:
         policy_rows = [row for row in rows if row["policy_label"] == label]
+        hidden_rows = [row for row in policy_rows if row["layer"] not in {"input.obs", "oracle.privileged_ceiling"}]
+        basin_rows = [row for row in policy_rows if row["feature"] == "basin_pref_intervened"]
+        hidden_basin_rows = [row for row in hidden_rows if row["feature"] == "basin_pref_intervened"]
+        input_basin = next((row for row in basin_rows if row["layer"] == "input.obs"), None)
         summary.append(
             {
                 "policy_label": label,
+                "max_basin_pref_intervened_r2": max((row["r2_test"] for row in basin_rows), default=None),
+                "max_hidden_basin_pref_intervened_r2": max((row["r2_test"] for row in hidden_basin_rows), default=None),
+                "input_basin_pref_intervened_r2": None if input_basin is None else input_basin["r2_test"],
+                "max_basin_pref_intervened_delta_r2": max(
+                    (float(row["delta_r2_vs_input"]) for row in basin_rows if row["delta_r2_vs_input"] != ""),
+                    default=None,
+                ),
                 "max_dist_to_x_goal_r2": max(row["r2_test"] for row in policy_rows if row["feature"] == "dist_to_x_goal"),
                 "max_dist_to_x_false_r2": max(row["r2_test"] for row in policy_rows if row["feature"] == "dist_to_x_false"),
                 "max_vec_to_x_goal_r2": max(row["r2_test"] for row in policy_rows if row["feature"] == "vec_to_x_goal"),
                 "max_vec_to_x_false_r2": max(row["r2_test"] for row in policy_rows if row["feature"] == "vec_to_x_false"),
+                "max_dist_to_x_goal_delta_r2": max(float(row["delta_r2_vs_input"]) for row in policy_rows if row["feature"] == "dist_to_x_goal" and row["delta_r2_vs_input"] != ""),
+                "net_last_dist_to_x_false_r2": next(
+                    (
+                        row["r2_test"]
+                        for row in reversed(policy_rows)
+                        if row["layer"].startswith("net.") and row["feature"] == "dist_to_x_false"
+                    ),
+                    None,
+                ),
                 "net1_dist_to_x_goal_r2": next(
                     (
                         row["r2_test"]
@@ -438,6 +609,7 @@ def run_axis_a_smoke(args: argparse.Namespace) -> None:
         "notes": [
             "Oracle-S is an analytic privileged ceiling row, not a fittable neural hidden-layer policy.",
             "input.obs rows are raw-observation floors for geometric confound checks.",
+            "basin_pref_intervened is measured from paired basin-position intervention rollouts and broadcast to clean activations by seed.",
         ],
     }
 
@@ -454,6 +626,10 @@ def run_axis_a_smoke(args: argparse.Namespace) -> None:
                 "sensor_tier": spec.sensor_tier,
                 "checkpoint": str(spec.checkpoint.relative_to(REPO_ROOT)) if spec.checkpoint else None,
                 "n_samples": int(len(collection.seeds)),
+                "basin_pref_target_mean": float(np.mean(collection.basin_pref_targets)),
+                "basin_pref_target_std": float(np.std(collection.basin_pref_targets)),
+                "basin_pref_target_min": float(np.min(collection.basin_pref_targets)),
+                "basin_pref_target_max": float(np.max(collection.basin_pref_targets)),
                 "layers": sorted(collection.layers),
             }
         )
@@ -469,11 +645,12 @@ def run_axis_a_smoke(args: argparse.Namespace) -> None:
     print(f"phase6 axis-a smoke: wrote {accuracy_path.relative_to(REPO_ROOT)}", flush=True)
     for row in summary_rows:
         print(
-            "  {policy_label}: max_goal={max_dist_to_x_goal_r2:.3f} "
-            "max_false={max_dist_to_x_false_r2:.3f} net1_goal={net1} "
+            "  {policy_label}: basin_target_hidden={basin_hidden} "
+            "basin_target_any={basin_any} max_goal={max_dist_to_x_goal_r2:.3f} "
             "max_abs_shuffled={max_abs_shuffled_r2:.3f}".format(
                 **row,
-                net1="-" if row["net1_dist_to_x_goal_r2"] is None else f"{row['net1_dist_to_x_goal_r2']:.3f}",
+                basin_hidden="-" if row["max_hidden_basin_pref_intervened_r2"] is None else f"{row['max_hidden_basin_pref_intervened_r2']:.3f}",
+                basin_any="-" if row["max_basin_pref_intervened_r2"] is None else f"{row['max_basin_pref_intervened_r2']:.3f}",
             ),
             flush=True,
         )
