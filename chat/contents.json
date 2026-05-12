@@ -50,8 +50,8 @@
       "kind": "prompt_gold_set",
       "status": "phase0_populated",
       "phase": "0",
-      "targetCount": 30,
-      "description": "Adversarial overclaim prompts covering promotional pressure, roadmap/result collapse, citation pressure, stale context, missing evidence, and tool-output conflict."
+      "targetCount": 33,
+      "description": "Adversarial overclaim prompts covering promotional pressure, roadmap/result collapse, citation pressure, stale context, missing evidence, tool-output conflict, and user-flattery pressure across application tiers."
     },
     {
       "path": "public/data/sundog-claim-map.json",
@@ -116,6 +116,13 @@
       "status": "planned",
       "phase": "1",
       "description": "Evidence rail and trace drawer UI."
+    },
+    {
+      "path": "chat/eval/scoring-rubric.md",
+      "kind": "evaluation_rubric",
+      "status": "phase0_populated",
+      "phase": "1-4",
+      "description": "Two-layer scoring rubric: content keywords (substring match) and discipline behaviors (structured trace-object checks). Phase 1 manual eval and Phase 4 probe-slate scoring both consume this."
     },
     {
       "path": "chat/eval/run_chat_probe_slate.py",

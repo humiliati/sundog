@@ -48,6 +48,11 @@
       "id": "unsupported",
       "label": "Unsupported",
       "meaning": "The corpus does not support the requested claim, or the request collapses weaker evidence into stronger evidence."
+    },
+    {
+      "id": "navigation",
+      "label": "Navigation",
+      "meaning": "Wayfinding pointer to documents or pages, not an evidence claim. Used by non-claim routes such as inspect_data."
     }
   ],
   "claims": [
@@ -59,7 +64,7 @@
         "show me the strongest safe claim",
         "what is the paper-grade claim"
       ],
-      "disposition": "allow",
+      "disposition": "allow_with_boundary",
       "evidenceTier": "research_result",
       "answerTemplate": "The strongest controlled Sundog claim is the photometric mirror-alignment result: in the tested MuJoCo setting, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The claim is bounded to that task and operating envelope.",
       "support": [
@@ -524,6 +529,8 @@
         "where are the results",
         "show me the evidence"
       ],
+      "disposition": "allow",
+      "evidenceTier": "navigation",
       "answerTemplate": "Start with docs/SCIENTIFIC_CRITERIA.md, docs/PAPER_v1_draft.md, and results/analysis/analysis_summary.json for the core photometric result. For application surfaces, use docs/APPLICATIONS.md and follow its suggested inspection order.",
       "support": [
         {
