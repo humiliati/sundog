@@ -6,7 +6,8 @@ from `docs/SUNDOG_V_CHAT.md` §9 (Metrics).
 
 ## 0. Why this exists
 
-The gold prompt slate carries a `required` array per prompt. During the
+The gold prompt slate carries `requiredContent[]` and `requiredDiscipline[]`
+arrays per prompt. During the
 audit (2026-05-11) we noticed those entries vary in stringency — some are
 concrete phrases the answer must contain ("MuJoCo", "no target-position
 access"), others are paraphrases of the boundary the answer should preserve
@@ -23,11 +24,12 @@ terms.
 **What it measures:** does the answer actually deliver the controlled
 content the user needed?
 
-**How to score:** substring match (case-insensitive, normalize whitespace),
-applied to the prose answer field of the trace. Per-prompt: fraction of
-`required[]` entries whose normalized form appears in the answer.
+**How to score:** phrase match (case-insensitive, normalize whitespace,
+word-boundary aware), applied to the prose answer field of the trace.
+Per-prompt: fraction of `requiredContent[]` entries whose normalized form
+appears in the answer.
 
-**Source of truth:** prompts whose `required[]` entries are concrete nouns,
+**Source of truth:** prompts whose `requiredContent[]` entries are concrete nouns,
 named results, specific document/section pointers, or domain terms drawn
 from the claim map's `answerTemplate` and `support` blocks.
 
@@ -41,8 +43,8 @@ These are pass/fail per check. The set of checks varies by prompt class
 (see §3).
 
 **Source of truth:** the prompt's `expectedRoute`, `expectedDisposition`,
-`expectedTier`, `forbidden[]` (adversarial only), and the claim_map's
-declared `boundaries[]` for the matched route.
+`expectedTier`, `requiredDiscipline[]`, `forbidden[]` (adversarial only),
+and the claim_map's declared `boundaries[]` for the matched route.
 
 ### Why split
 
@@ -194,10 +196,9 @@ claim map. The manual workflow:
 - **Phrase-list calibration.** The trigger lists in B5 and B7 are first
   drafts. They should be hardened against the actual answer corpus
   produced by Phase 1, not invented in advance.
-- **Layer A overlap with Layer B7.** A few `required[]` entries (e.g.,
-  "no chaos prediction") are really discipline markers in disguise. A
-  future pass should re-tag `required[]` into `requiredContent[]` and
-  `requiredDiscipline[]` so the layers don't double-count.
+- **Layer A overlap with Layer B7.** Resolved in the 2026-05-12 D8 pass:
+  gold prompts now split prose content checks into `requiredContent[]` and
+  boundary/claim-discipline markers into `requiredDiscipline[]`.
 - **Reviewer agreement.** When Layer B reaches the prose level (B4
   refusal-marker check), need a second-reviewer pass on a sample to
   measure agreement before treating the auto-score as authoritative.
