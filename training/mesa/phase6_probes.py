@@ -109,6 +109,13 @@ def learned_action(policy: torch.nn.Module, obs: np.ndarray, obs_mean: np.ndarra
     return action.astype(np.float32)
 
 
+def learned_actions(policy: torch.nn.Module, obs: np.ndarray, obs_mean: np.ndarray, obs_std: np.ndarray) -> np.ndarray:
+    norm_obs = (obs - obs_mean) / obs_std
+    with torch.no_grad():
+        action = policy(torch.tensor(norm_obs, dtype=torch.float32)).cpu().numpy()
+    return action.astype(np.float32)
+
+
 def oracle_action(info: dict[str, Any]) -> np.ndarray:
     signature = float(info["true_signature"])
     gradient = np.asarray(info["true_gradient"], dtype=np.float32)
@@ -129,6 +136,7 @@ def append_sample(
     obs: np.ndarray,
     info: dict[str, Any],
     activations: dict[str, np.ndarray] | None = None,
+    activation_index: int = 0,
 ) -> None:
     position = np.asarray(info.get("position", obs[:2]), dtype=np.float32)
     goal = np.asarray(info["x_goal"], dtype=np.float32)
@@ -143,7 +151,7 @@ def append_sample(
     layer_values.setdefault("input.obs", []).append(obs.astype(np.float32).copy())
     if activations:
         for layer, value in activations.items():
-            layer_values.setdefault(layer, []).append(value[0].astype(np.float32).copy())
+            layer_values.setdefault(layer, []).append(value[activation_index].astype(np.float32).copy())
 
     # Oracle is analytic, not neural. This ceiling row verifies the scoring
     # pipeline using privileged diagnostic state without pretending there is a
@@ -172,39 +180,48 @@ def collect_learned(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: i
 
     try:
         with BridgeClient() as client:
-            for offset in range(seeds):
-                seed = seed_start + offset
-                env_id = f"phase6-{spec.policy_id}-{seed}"
-                made = client.request(
-                    {
-                        "cmd": "make",
-                        "env_id": env_id,
-                        "seed": seed,
-                        "sensor_tier": spec.sensor_tier,
-                        "env_config": {"horizon": horizon},
-                    }
-                )
-                obs = np.asarray(made["obs"], dtype=np.float32)
-                info = made["info"]
-                for _step in range(horizon + 1):
-                    action = learned_action(policy, obs, obs_mean, obs_std)
+            made = client.request(
+                {
+                    "cmd": "make_batch",
+                    "batch_id": f"phase6-{spec.policy_id}",
+                    "count": seeds,
+                    "seed_start": seed_start,
+                    "sensor_tier": spec.sensor_tier,
+                    "env_config": {"horizon": horizon},
+                }
+            )
+            obs_batch = np.asarray(made["obs"], dtype=np.float32)
+            info_batch = made["info"]
+            active = np.ones(seeds, dtype=bool)
+            for _step in range(horizon + 1):
+                actions = learned_actions(policy, obs_batch, obs_mean, obs_std)
+                for index in np.flatnonzero(active):
                     append_sample(
                         seeds=seed_values,
                         positions=positions,
                         goals=goals,
                         false_centers=false_centers,
                         layer_values=layer_values,
-                        seed=seed,
-                        obs=obs,
-                        info=info,
+                        seed=seed_start + int(index),
+                        obs=obs_batch[index],
+                        info=info_batch[index],
                         activations=activations,
+                        activation_index=int(index),
                     )
-                    response = client.request({"cmd": "step", "env_id": env_id, "action": action.tolist()})
-                    obs = np.asarray(response["obs"], dtype=np.float32)
-                    info = response["info"]
-                    if response["done"]:
-                        break
-                client.request({"cmd": "close"})
+                response = client.request(
+                    {
+                        "cmd": "step_batch",
+                        "batch_id": f"phase6-{spec.policy_id}",
+                        "actions": actions.tolist(),
+                    }
+                )
+                obs_batch = np.asarray(response["obs"], dtype=np.float32)
+                info_batch = response["info"]
+                done = np.asarray(response["done"], dtype=bool)
+                active &= ~done
+                if not np.any(active):
+                    break
+            client.request({"cmd": "close"})
     finally:
         for handle in handles:
             handle.remove()
@@ -220,39 +237,49 @@ def collect_oracle(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: in
     layer_values: dict[str, list[np.ndarray]] = {}
 
     with BridgeClient() as client:
-        for offset in range(seeds):
-            seed = seed_start + offset
-            env_id = f"phase6-{spec.policy_id}-{seed}"
-            made = client.request(
-                {
-                    "cmd": "make",
-                    "env_id": env_id,
-                    "seed": seed,
-                    "sensor_tier": spec.sensor_tier,
-                    "env_config": {"horizon": horizon},
-                }
-            )
-            obs = np.asarray(made["obs"], dtype=np.float32)
-            info = made["info"]
-            for _step in range(horizon + 1):
-                action = oracle_action(info)
+        made = client.request(
+            {
+                "cmd": "make_batch",
+                "batch_id": f"phase6-{spec.policy_id}",
+                "count": seeds,
+                "seed_start": seed_start,
+                "sensor_tier": spec.sensor_tier,
+                "env_config": {"horizon": horizon},
+            }
+        )
+        obs_batch = np.asarray(made["obs"], dtype=np.float32)
+        info_batch = made["info"]
+        active = np.ones(seeds, dtype=bool)
+        for _step in range(horizon + 1):
+            actions = []
+            for index, info in enumerate(info_batch):
+                actions.append(oracle_action(info).tolist() if active[index] else [0.0, 0.0])
+            for index in np.flatnonzero(active):
                 append_sample(
                     seeds=seed_values,
                     positions=positions,
                     goals=goals,
                     false_centers=false_centers,
                     layer_values=layer_values,
-                    seed=seed,
-                    obs=obs,
-                    info=info,
+                    seed=seed_start + int(index),
+                    obs=obs_batch[index],
+                    info=info_batch[index],
                     activations=None,
                 )
-                response = client.request({"cmd": "step", "env_id": env_id, "action": action.tolist()})
-                obs = np.asarray(response["obs"], dtype=np.float32)
-                info = response["info"]
-                if response["done"]:
-                    break
-            client.request({"cmd": "close"})
+            response = client.request(
+                {
+                    "cmd": "step_batch",
+                    "batch_id": f"phase6-{spec.policy_id}",
+                    "actions": actions,
+                }
+            )
+            obs_batch = np.asarray(response["obs"], dtype=np.float32)
+            info_batch = response["info"]
+            done = np.asarray(response["done"], dtype=bool)
+            active &= ~done
+            if not np.any(active):
+                break
+        client.request({"cmd": "close"})
 
     return make_collection(spec, seed_values, positions, goals, false_centers, layer_values)
 

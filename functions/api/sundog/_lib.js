@@ -142,13 +142,13 @@ export async function checkRateLimit(env, ip, limit) {
   const ipHash = (await sha256Hex(ip || "unknown")).slice(0, 16);
   const hour = Math.floor(Date.now() / 3_600_000); // hour bucket
   const key = `rl:${ipHash}:${hour}`;
-  const raw = await env.SUNDOG_KV.get(key);
+  const raw = await env.sundog_rate_limit.get(key);
   const used = raw ? Number.parseInt(raw, 10) : 0;
   if (used >= limit) {
     return { allowed: false, remaining: 0, resetSeconds: 3600 - (Math.floor(Date.now() / 1000) % 3600), key };
   }
   // KV TTL = remainder of the hour, plus 60s grace
   const ttl = 3600 - (Math.floor(Date.now() / 1000) % 3600) + 60;
-  await env.SUNDOG_KV.put(key, String(used + 1), { expirationTtl: ttl });
+  await env.sundog_rate_limit.put(key, String(used + 1), { expirationTtl: ttl });
   return { allowed: true, remaining: limit - (used + 1), resetSeconds: ttl, key };
 }

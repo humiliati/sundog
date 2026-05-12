@@ -35,8 +35,8 @@ export async function onRequestPost(ctx) {
   const origin = request.headers.get("origin") || "*";
 
   try {
-    if (!env.SUNDOG_UPLOADS) throw httpError(503, "r2_not_bound", "R2 bucket not configured.");
-    if (!env.SUNDOG_KV)      throw httpError(503, "kv_not_bound", "KV namespace not configured.");
+    if (!env.sundog_uploads) throw httpError(503, "r2_not_bound", "R2 bucket not configured.");
+    if (!env.sundog_rate_limit)      throw httpError(503, "kv_not_bound", "KV namespace not configured.");
 
     const maxImgBytes = Number(env.MAX_IMAGE_BYTES || 10_485_760);
     const rateLimit = Number(env.RATE_LIMIT_PER_IP_PER_HOUR || 5);
@@ -114,14 +114,14 @@ export async function onRequestPost(ctx) {
     // ---- write to R2 -----------------------------------------------------
     const imageExt = image.mime === "image/png" ? "png" : image.mime === "image/webp" ? "webp" : "jpg";
     const imageKey = `${baseKey}.${imageExt}`;
-    await env.SUNDOG_UPLOADS.put(imageKey, imageBytes, {
+    await env.sundog_uploads.put(imageKey, imageBytes, {
       httpMetadata: { contentType: image.mime },
       customMetadata: { submissionId, policyVersion },
     });
-    await env.SUNDOG_UPLOADS.put(`${baseKey}.pose.json`, JSON.stringify(pose, null, 2), {
+    await env.sundog_uploads.put(`${baseKey}.pose.json`, JSON.stringify(pose, null, 2), {
       httpMetadata: { contentType: "application/json" },
     });
-    await env.SUNDOG_UPLOADS.put(`${baseKey}.meta.json`, JSON.stringify(meta, null, 2), {
+    await env.sundog_uploads.put(`${baseKey}.meta.json`, JSON.stringify(meta, null, 2), {
       httpMetadata: { contentType: "application/json" },
     });
 
@@ -129,7 +129,7 @@ export async function onRequestPost(ctx) {
     // Store the metadata's R2 key under a `del:` prefix, keyed by the
     // SHA-256(token), so the deletion handler can find this submission
     // without scanning all metadata.
-    await env.SUNDOG_KV.put(`del:${deletionTokenHash}`, baseKey, {
+    await env.sundog_rate_limit.put(`del:${deletionTokenHash}`, baseKey, {
       expirationTtl: 60 * 60 * 24 * 400, // 400 days — long enough that legit users can delete
       metadata: { submission_id: submissionId },
     });

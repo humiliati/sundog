@@ -19,13 +19,13 @@ import {
 export const onRequestOptions = ({ request }) => handleOptions(request);
 
 async function handleDelete(env, token, origin) {
-  if (!env.SUNDOG_UPLOADS) return withCors(errorResponse(503, "r2_not_bound", "R2 not configured."), origin);
-  if (!env.SUNDOG_KV)      return withCors(errorResponse(503, "kv_not_bound", "KV not configured."), origin);
+  if (!env.sundog_uploads) return withCors(errorResponse(503, "r2_not_bound", "R2 not configured."), origin);
+  if (!env.sundog_rate_limit)      return withCors(errorResponse(503, "kv_not_bound", "KV not configured."), origin);
   if (typeof token !== "string" || token.length < 16) {
     return withCors(errorResponse(400, "invalid_token", "Token missing or too short."), origin);
   }
   const tokenHash = await sha256Hex(token);
-  const baseKey = await env.SUNDOG_KV.get(`del:${tokenHash}`);
+  const baseKey = await env.sundog_rate_limit.get(`del:${tokenHash}`);
   if (!baseKey) {
     return withCors(jsonResponse({ status: "not_found" }, { status: 404 }), origin);
   }
@@ -34,7 +34,7 @@ async function handleDelete(env, token, origin) {
   const candidates = [`${baseKey}.jpg`, `${baseKey}.png`, `${baseKey}.webp`,
                       `${baseKey}.pose.json`, `${baseKey}.meta.json`];
   const results = await Promise.all(candidates.map(async (k) => {
-    try { await env.SUNDOG_UPLOADS.delete(k); return { key: k, ok: true }; }
+    try { await env.sundog_uploads.delete(k); return { key: k, ok: true }; }
     catch (e) { return { key: k, ok: false, error: String(e) }; }
   }));
 
@@ -42,11 +42,11 @@ async function handleDelete(env, token, origin) {
   // (best-effort; if meta is already gone, we still return success).
   let submissionId = null;
   try {
-    const metaObj = await env.SUNDOG_UPLOADS.get(`${baseKey}.meta.json`);
+    const metaObj = await env.sundog_uploads.get(`${baseKey}.meta.json`);
     if (metaObj) submissionId = JSON.parse(await metaObj.text()).submission_id;
   } catch { /* ignore */ }
 
-  await env.SUNDOG_KV.delete(`del:${tokenHash}`);
+  await env.sundog_rate_limit.delete(`del:${tokenHash}`);
 
   return withCors(jsonResponse({
     status: "deleted",
