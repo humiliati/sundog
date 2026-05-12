@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sundog · Phase 3 Math Binding Tests</title>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        body {
+            min-height: 100vh;
+            padding: 2rem;
+            color: var(--text-light);
+            background:
+                radial-gradient(circle at 50% 30%, #1a3850 0%, #0b1720 65%, #050a10 100%);
+        }
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-family: var(--sd-font-display);
+            font-size: clamp(1.6rem, 3vw, 2.6rem);
+            margin-bottom: 0.3rem;
+        }
+        .eyebrow {
+            color: var(--accent-gold);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+        p.lead {
+            color: rgba(245, 245, 245, 0.78);
+            margin-bottom: 1.4rem;
+            line-height: 1.5;
+        }
+        .summary {
+            display: inline-block;
+            font-family: var(--sd-font-data);
+            font-size: 0.95rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            margin-bottom: 1.2rem;
+        }
+        .summary.pass {
+            background: rgba(80, 220, 130, 0.16);
+            border: 1px solid rgba(80, 220, 130, 0.55);
+            color: #80f0a8;
+        }
+        .summary.fail {
+            background: rgba(255, 100, 100, 0.16);
+            border: 1px solid rgba(255, 100, 100, 0.55);
+            color: #ff8585;
+        }
+        section {
+            margin-bottom: 1.6rem;
+        }
+        section h2 {
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.5rem;
+        }
+        section .meta {
+            color: rgba(245, 245, 245, 0.6);
+            font-size: 0.84rem;
+            margin-bottom: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--sd-font-data);
+            font-size: 0.86rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 0.32rem 0.6rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        th {
+            color: rgba(245, 245, 245, 0.7);
+            font-weight: 600;
+        }
+        .ok  { color: #80f0a8; }
+        .bad { color: #ff8585; }
+        .num { text-align: right; font-variant-numeric: tabular-nums; }
+        footer {
+            margin-top: 2rem;
+            font-size: 0.82rem;
+            color: rgba(245, 245, 245, 0.5);
+        }
+        footer a {
+            color: var(--accent-gold);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="eyebrow">Sundog · Atlas math binding</div>
+        <h1>Phase 3 Test Harness</h1>
+        <p class="lead">
+            Assertion-style tests of the <code>phase3</code> namespace exported from
+            <code>public/js/parhelion-geometry.mjs</code>. The tests pin the
+            altitude-bound formulas — parhelion offset, CZA visibility cutoff,
+            altitude-derived parhelic curvature — to reference altitudes from the
+            multi-photo calibration pass. Failing rows surface as red and mean the
+            altitude bindings have drifted from what the calibration evidence
+            recorded.
+        </p>
+
+        <div id="summary" class="summary">running…</div>
+
+        <section id="dagger-offset">
+            <h2>parhelion / dagger offset</h2>
+            <div class="meta"><code>phase3.daggerOffset(h) = R₂₂ / cos(h)</code>. Validated across 0°–60°; the formula is the load-bearing claim of the inverse-inference theorem anchor.</div>
+            <table id="dagger-table"><thead>
+                <tr><th>h (°)</th><th class="num">expected (px)</th><th class="num">actual (px)</th><th class="num">|Δ|</th><th>verdict</th></tr>
+            </thead><tbody></tbody></table>
+        </section>
+
+        <section id="cza-visible">
+            <h2>CZA visibility</h2>
+            <div class="meta"><code>phase3.czaVisible(h) = (h ≤ 32°)</code>. Atmospheric-optics rule: the circumzenithal arc exits the visible hemisphere when the sun rises above ~32°.</div>
+            <table id="cza-table"><thead>
+                <tr><th>h (°)</th><th>expected</th><th>actual</th><th>verdict</th></tr>
+            </thead><tbody></tbody></table>
+        </section>
+
+        <section id="parhelic-curvature">
+            <h2>parhelic curvature (altitude-derived)</h2>
+            <div class="meta"><code>phase3.parhelicCurvature(h) = clamp(0.03 + 0.55·(h/60)², 0, 1)</code>. Empirical fit from the calibration pose; checked at key altitudes.</div>
+            <table id="curvature-table"><thead>
+                <tr><th>h (°)</th><th class="num">expected</th><th class="num">actual</th><th class="num">|Δ|</th><th>verdict</th></tr>
+            </thead><tbody></tbody></table>
+        </section>
+
+        <section id="invariants">
+            <h2>structural invariants</h2>
+            <div class="meta">Whole-model relationships that must hold regardless of altitude — checked for one-off regressions.</div>
+            <table id="inv-table"><thead>
+                <tr><th>invariant</th><th>verdict</th></tr>
+            </thead><tbody></tbody></table>
+        </section>
+
+        <footer>
+            See <a href="/docs/SUNDOG_V_GEOMETRY.md">SUNDOG_V_GEOMETRY.md</a> §
+            "Phase 2 → Phase 3 Transition" for the binding spec.
+            <a href="/sundog-workbench.html">Open the workbench.</a>
+        </footer>
+    </main>
+
+    <script type="module">
+        import { phase3 } from "/js/parhelion-geometry.mjs";
+
+        const EPS = 1e-6;
+        const PX_EPS = 0.05;     // ≤ 0.05 px regarded as exact for offset tests
+        const CURVE_EPS = 1e-4;
+        let passes = 0, fails = 0;
+
+        function row(table, cells, ok) {
+            const tr = document.createElement("tr");
+            for (const c of cells) {
+                const td = document.createElement("td");
+                if (typeof c === "object" && c !== null && "html" in c) {
+                    td.innerHTML = c.html;
+                    if (c.cls) td.className = c.cls;
+                } else {
+                    td.textContent = c;
+                }
+                tr.appendChild(td);
+            }
+            const verdictCell = document.createElement("td");
+            verdictCell.textContent = ok ? "PASS" : "FAIL";
+            verdictCell.className = ok ? "ok" : "bad";
+            tr.appendChild(verdictCell);
+            table.querySelector("tbody").appendChild(tr);
+            if (ok) passes += 1; else fails += 1;
+        }
+
+        // 1) Dagger offset across altitude
+        const daggerTable = document.getElementById("dagger-table");
+        for (const h of [0, 12, 18, 25, 32, 45, 60]) {
+            const expected = phase3.HALO_22_RADIUS / Math.cos((h * Math.PI) / 180);
+            const actual = phase3.daggerOffset(h);
+            const delta = Math.abs(expected - actual);
+            row(daggerTable,
+                [h, expected.toFixed(3), actual.toFixed(3), delta.toFixed(6)],
+                delta <= PX_EPS);
+        }
+
+        // 2) CZA visibility cutoff
+        const czaTable = document.getElementById("cza-table");
+        const czaCases = [
+            [0, true], [18, true], [25, true], [30, true], [31, true],
+            [32, true], [33, false], [40, false], [50, false], [60, false],
+        ];
+        for (const [h, expected] of czaCases) {
+            const actual = phase3.czaVisible(h);
+            row(czaTable, [h, String(expected), String(actual)], actual === expected);
+        }
+
+        // 3) Parhelic curvature (altitude-derived)
+        function expectedCurvature(h) {
+            const u = Math.max(0, Math.min(80, h)) / 60;
+            const c = 0.03 + 0.55 * u * u;
+            return Math.max(0, Math.min(1, c));
+        }
+        const curveTable = document.getElementById("curvature-table");
+        for (const h of [0, 6, 12, 18, 25, 32, 45, 60, 80]) {
+            const expected = expectedCurvature(h);
+            const actual = phase3.parhelicCurvature(h);
+            const delta = Math.abs(expected - actual);
+            row(curveTable,
+                [h, expected.toFixed(4), actual.toFixed(4), delta.toExponential(2)],
+                delta <= CURVE_EPS);
+        }
+
+        // 4) Structural invariants
+        const invTable = document.getElementById("inv-table");
+        // 4a: at h=0 the parhelia sit ON the 22° halo edge
+        const h0 = phase3.daggerOffset(0);
+        row(invTable, ["daggerOffset(0) === R₂₂"],
+            Math.abs(h0 - phase3.HALO_22_RADIUS) < PX_EPS);
+        // 4b: at h=60° the parhelion offset is exactly 2·R₂₂
+        const h60 = phase3.daggerOffset(60);
+        row(invTable, ["daggerOffset(60°) === 2·R₂₂"],
+            Math.abs(h60 - 2 * phase3.HALO_22_RADIUS) < PX_EPS);
+        // 4c: R_46 / R_22 = 2 (workbench convention; physics 46/22 ≈ 2.09; see doc)
+        row(invTable, ["R₄₆ / R₂₂ === 2 (workbench convention)"],
+            Math.abs(phase3.HALO_46_RADIUS / phase3.HALO_22_RADIUS - 2) < 1e-9);
+        // 4d: czaVisible monotonic at boundary (true at 32, false at 33)
+        row(invTable, ["czaVisible monotonic boundary at h=32°"],
+            phase3.czaVisible(32) === true && phase3.czaVisible(33) === false);
+        // 4e: parhelicCurvature monotonically nondecreasing in altitude
+        let mono = true;
+        let prev = phase3.parhelicCurvature(0);
+        for (let h = 1; h <= 80; h += 1) {
+            const c = phase3.parhelicCurvature(h);
+            if (c + 1e-9 < prev) { mono = false; break; }
+            prev = c;
+        }
+        row(invTable, ["parhelicCurvature(h) monotonic in h"], mono);
+        // 4f: parhelicCurvature stays in [0, 1] across full range
+        let bounded = true;
+        for (let h = 0; h <= 80; h += 1) {
+            const c = phase3.parhelicCurvature(h);
+            if (c < -EPS || c > 1 + EPS) { bounded = false; break; }
+        }
+        row(invTable, ["parhelicCurvature(h) ∈ [0, 1]"], bounded);
+
+        // Summary
+        const total = passes + fails;
+        const sum = document.getElementById("summary");
+        if (fails === 0) {
+            sum.className = "summary pass";
+            sum.textContent = `${passes} / ${total} assertions pass — Phase 3 bindings hold.`;
+        } else {
+            sum.className = "summary fail";
+            sum.textContent = `${passes} / ${total} pass · ${fails} FAIL — bindings have drifted, see red rows above.`;
+        }
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-import { applyParhelionGeometry } from "./parhelion-geometry.mjs";
+import { applyParhelionGeometry, phase3 } from "./parhelion-geometry.mjs";
 
 const root = document.documentElement;
 const rootStyle = () => getComputedStyle(root);
@@ -52,6 +52,35 @@ if (modelSelect) {
   modelSelect.addEventListener("change", () => setModel(modelSelect.value));
 }
 
+// --- Phase 3: derive parhelic curvature from altitude --------------------
+
+const deriveToggle = document.getElementById("parhelic-curvature-derive");
+const curvatureSlider = document.getElementById("parhelic-curvature");
+
+function refreshDeriveState() {
+  if (!deriveToggle || !curvatureSlider) return;
+  const on = deriveToggle.checked;
+  root.style.setProperty("--parhelic-curvature-derive", on ? "1" : "0");
+  curvatureSlider.disabled = on;
+  curvatureSlider.parentElement?.classList.toggle("is-derived", on);
+  if (on) {
+    const sunAlt = Number.parseFloat(rootStyle().getPropertyValue("--sun-altitude")) || 25;
+    const derived = phase3.parhelicCurvature(sunAlt);
+    curvatureSlider.value = derived.toFixed(2);
+    updateParamDisplay("parhelic-curvature", curvatureSlider.value);
+  }
+  apply();
+}
+
+if (deriveToggle) {
+  deriveToggle.addEventListener("change", refreshDeriveState);
+  const sunAltSlider = document.getElementById("sun-altitude");
+  sunAltSlider?.addEventListener("input", () => {
+    if (deriveToggle.checked) refreshDeriveState();
+  });
+  refreshDeriveState();
+}
+
 // --- Reset / snapshot -----------------------------------------------------
 
 const reset = document.getElementById("btn-reset");
@@ -60,6 +89,10 @@ reset?.addEventListener("click", () => {
     slider.value = slider.defaultValue;
     slider.dispatchEvent(new Event("input"));
   });
+  if (deriveToggle) {
+    deriveToggle.checked = false;
+    refreshDeriveState();
+  }
 });
 
 const snapshot = document.getElementById("btn-snapshot");
@@ -68,6 +101,7 @@ snapshot?.addEventListener("click", () => {
   sliders.forEach((slider) => {
     params[slider.dataset.param] = Number.parseFloat(slider.value);
   });
+  if (deriveToggle) params.parhelicCurvatureDerive = deriveToggle.checked;
   console.log("Sundog params snapshot:", JSON.stringify(params, null, 2));
   try {
     navigator.clipboard.writeText(JSON.stringify(params, null, 2));
@@ -78,4 +112,3 @@ snapshot?.addEventListener("click", () => {
 
 // Initial layout
 apply();
-

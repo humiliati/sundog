@@ -89,6 +89,9 @@ export function gateFailures({ prompt = "", trace, draftAnswer, context = {} }) 
   if (trace?.disposition === "refuse" && !hasAny(answer, REFUSAL_MARKERS)) {
     failures.push("refusal_route_needs_refusal_marker");
   }
+  if (trace?.disposition === "refuse" && /^(yes|sure|happy to help|absolutely)\b/.test(answer)) {
+    failures.push("refusal_route_has_agreement_preamble");
+  }
 
   for (const claim of UNSUPPORTED_CLAIMS) {
     if (hasPhrase(answer, claim) && !hasNearbyNegation(answer, claim)) {
@@ -96,11 +99,9 @@ export function gateFailures({ prompt = "", trace, draftAnswer, context = {} }) 
     }
   }
 
-  if (shouldCheckUpgradeLanguage(trace)) {
-    for (const phrase of UPGRADE_LANGUAGE) {
-      if (hasPhrase(answer, phrase) && !hasNearbyNegation(answer, phrase)) {
-        failures.push(`upgrade_language:${phrase}`);
-      }
+  for (const phrase of UPGRADE_LANGUAGE) {
+    if (!upgradePhraseAllowed(trace, phrase) && hasPhrase(answer, phrase) && !hasNearbyNegation(answer, phrase)) {
+      failures.push(`upgrade_language:${phrase}`);
     }
   }
 
@@ -119,11 +120,11 @@ export function gateFailures({ prompt = "", trace, draftAnswer, context = {} }) 
   return failures;
 }
 
-function shouldCheckUpgradeLanguage(trace) {
-  if (!trace) return true;
-  if (trace.evidenceTier === "research_result") return false;
-  if (ROUTES_ALLOWED_TO_SAY_RESEARCH_RESULT.has(trace.routeId)) return false;
-  return true;
+function upgradePhraseAllowed(trace, phrase) {
+  if (!trace) return false;
+  if (phrase === "research result" && ROUTES_ALLOWED_TO_SAY_RESEARCH_RESULT.has(trace.routeId)) return true;
+  if ((phrase === "paper grade" || phrase === "paper-grade") && trace.evidenceTier === "research_result") return true;
+  return false;
 }
 
 function answerText(draft) {

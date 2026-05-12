@@ -176,6 +176,30 @@
             accent-color: var(--sd-amber);
         }
 
+        .control-group .derive-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.25rem;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: rgba(245, 245, 245, 0.62);
+            cursor: pointer;
+        }
+
+        .control-group.is-derived .value {
+            opacity: 0.55;
+        }
+
+        .control-group input[type="range"]:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .control-group .derive-toggle input[type="checkbox"] {
+            accent-color: var(--sd-amber);
+        }
+
         .control-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -753,8 +777,14 @@
             </div>
 
             <div class="control-group">
-                <label>Parhelic Circle Curvature<span class="value" id="parhelic-curvature-value">0.05</span></label>
+                <label>
+                    Parhelic Circle Curvature<span class="value" id="parhelic-curvature-value">0.05</span>
+                </label>
                 <input type="range" id="parhelic-curvature" data-param="parhelic-curvature" min="0" max="1" step="0.01" value="0.05">
+                <label class="derive-toggle">
+                    <input type="checkbox" id="parhelic-curvature-derive">
+                    <span>derive from sun altitude (Phase 3 binding)</span>
+                </label>
             </div>
 
             <div class="control-group">
@@ -810,24 +840,18 @@
 
             <h3 style="margin-top: 1.4rem;">Notes</h3>
             <p class="lead">
-                <strong>Sun</strong> is a compass rose, not an orb — pillar × parhelic cross.
+                <strong>Sun</strong> is a compass rose, not an orb — pillar &times; parhelic cross.
                 <strong>Halo</strong> at 22° is the iris.
-                <strong>CZA</strong> is the upper eyelid.
-                <strong>Parhelia</strong> are outward-facing daggers.
-                <strong>Parry / lateral arcs</strong> are optional atlas vocabulary layers.
-                <strong>Secondary Suns</strong> activates the 9-halo eye fiction.
+                <strong>CZA</strong> is the upper eyelid (tangent to 46° halo top).
+                <strong>Upper / Lower Tangent</strong> are eyelid features tangent to the 22° halo.
+                <strong>Suncave Parry / Parry Supralateral</strong> are Parry-orientation companions.
+                <strong>Infralateral</strong> mirrors the supralateral below the sun.
+                <strong>Sun Altitude</strong> drives the parhelion offset by `R₂₂ / cos(h)`.
+                <strong>Secondary Suns</strong> activates the 9-halo-eye fiction.
             </p>
         </aside>
     </main>
 
-    <footer>
-        <p>Sundog - <a href="index.html">Home</a> | <a href="about.html">About</a> | <a href="applications-gallery.html">Applications</a></p>
-        <p class="footer-copyright">
-            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
-        </p>
-    </footer>
-
     <script type="module" src="/js/parhelion-workbench.mjs"></script>
-    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
 </body>
 </html>
