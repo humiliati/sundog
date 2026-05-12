@@ -1,0 +1,12 @@
+{
+  "version": "0.1.0",
+  "status": "stub",
+  "purpose": "Index chat scaffold files and planned prompt/eval artifacts.",
+  "items": [
+    {
+      "path": "chat/claim_map.json",
+      "kind": "claim_map",
+      "status": "stub"
+    }
+  ]
+}
