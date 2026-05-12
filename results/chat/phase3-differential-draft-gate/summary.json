@@ -26,40 +26,40 @@
     },
     "sundog_gated": {
       "total": 16,
-      "accepted": 16,
-      "rejected": 0,
-      "gateHits": 16,
-      "addedValue": 0
+      "accepted": 12,
+      "rejected": 4,
+      "gateHits": 12,
+      "addedValue": 12
     }
   },
   "byCategory": {
     "cross_tier_confusion": {
       "total": 16,
-      "accepted": 4,
-      "rejected": 12,
-      "gateHits": 16,
-      "addedValue": 0
+      "accepted": 3,
+      "rejected": 13,
+      "gateHits": 15,
+      "addedValue": 3
     },
     "boundary_array_fidelity": {
       "total": 16,
-      "accepted": 4,
-      "rejected": 12,
-      "gateHits": 16,
-      "addedValue": 0
+      "accepted": 1,
+      "rejected": 15,
+      "gateHits": 13,
+      "addedValue": 1
     },
     "substantive_content_drift": {
       "total": 16,
       "accepted": 4,
       "rejected": 12,
       "gateHits": 16,
-      "addedValue": 0
+      "addedValue": 4
     },
     "multi_tier_prompt": {
       "total": 16,
       "accepted": 4,
       "rejected": 12,
       "gateHits": 16,
-      "addedValue": 0
+      "addedValue": 4
     }
   },
   "divergence": {
@@ -83,34 +83,34 @@
         "rejected": 16
       },
       "sundog_gated": {
-        "identical": 16,
-        "extends": 0,
+        "identical": 0,
+        "extends": 12,
         "rewrites": 0,
-        "rejected": 0
+        "rejected": 4
       }
     },
     "byCategory": {
       "cross_tier_confusion": {
-        "identical": 4,
-        "extends": 0,
+        "identical": 0,
+        "extends": 3,
         "rewrites": 0,
-        "rejected": 12
+        "rejected": 13
       },
       "boundary_array_fidelity": {
-        "identical": 4,
-        "extends": 0,
+        "identical": 0,
+        "extends": 1,
         "rewrites": 0,
-        "rejected": 12
+        "rejected": 15
       },
       "substantive_content_drift": {
-        "identical": 4,
-        "extends": 0,
+        "identical": 0,
+        "extends": 4,
         "rewrites": 0,
         "rejected": 12
       },
       "multi_tier_prompt": {
-        "identical": 4,
-        "extends": 0,
+        "identical": 0,
+        "extends": 4,
         "rewrites": 0,
         "rejected": 12
       }
@@ -120,16 +120,16 @@
     "naive_baseline": 0,
     "naive_rag": 0,
     "prompted_boundary": 0,
-    "sundog_gated": 0
+    "sundog_gated": 12
   },
   "addedValueRate": {
     "naive_baseline": 0,
     "naive_rag": 0,
     "prompted_boundary": 0,
-    "sundog_gated": 0
+    "sundog_gated": 0.75
   },
-  "gateHitRate": 1,
+  "gateHitRate": 0.938,
   "gateEscapes": 0,
   "rejectedUnsafeNaive": 16,
-  "acceptedGatedDrafts": 16
+  "acceptedGatedDrafts": 12
 }

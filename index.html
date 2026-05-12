@@ -34,33 +34,6 @@
             overflow: hidden;
         }
 
-        #parhelion-canvas {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-        }
-
-        .equation-display {
-            position: absolute;
-            bottom: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: var(--sd-font-data);
-            font-size: 1.2rem;
-            color: var(--accent-gold);
-            text-align: center;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            z-index: 2;
-            max-width: 90%;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .equation-display.visible {
-            opacity: 1;
-        }
 
         .hero-content {
             position: relative;
@@ -648,7 +621,31 @@
                 grid-template-columns: 1fr;
             }
         }
-</style>
+
+        /* Phase 7: static atlas snapshot in the hero */
+        .hero { position: relative; overflow: hidden; }
+        .hero-atlas {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0.78;
+            mask-image: radial-gradient(ellipse at center, black 50%, transparent 85%);
+        }
+        .hero-atlas svg { width: min(820px, 92%); height: auto; }
+        .hero-content { position: relative; z-index: 2; }
+        .hero-content .eyebrow {
+            color: var(--accent-gold);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+        }
+
+    </style>
     <link rel="stylesheet" href="/css/sundog-theme.css">
 </head>
 <body>
@@ -669,29 +666,69 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <canvas id="parhelion-canvas"></canvas>
+        <div class="hero-atlas" aria-hidden="true">
+            <svg viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Static snapshot of the calibrated Halo Atlas pose">
+                <defs>
+                    <linearGradient id="hero-prism" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%"  stop-color="#ff6b6b" stop-opacity="0.78"/>
+                        <stop offset="22%" stop-color="#ffa552" stop-opacity="0.78"/>
+                        <stop offset="42%" stop-color="#fff080" stop-opacity="0.78"/>
+                        <stop offset="62%" stop-color="#9bf0a8" stop-opacity="0.78"/>
+                        <stop offset="82%" stop-color="#7cc6ff" stop-opacity="0.78"/>
+                        <stop offset="100%" stop-color="#a8a0ff" stop-opacity="0.78"/>
+                    </linearGradient>
+                    <radialGradient id="hero-dagger-core" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%"  stop-color="#fffbe8"/>
+                        <stop offset="50%" stop-color="#ffd06b" stop-opacity="0.7"/>
+                        <stop offset="100%" stop-color="#ff5a5a" stop-opacity="0"/>
+                    </radialGradient>
+                    <filter id="hero-glow" x="-100%" y="-100%" width="300%" height="300%">
+                        <feGaussianBlur stdDeviation="2"/>
+                    </filter>
+                </defs>
+                <!-- 46° halo -->
+                <circle cx="500" cy="500" r="440" fill="none" stroke="rgba(255,255,255,0.32)" stroke-width="1.2"/>
+                <!-- 22° halo -->
+                <circle cx="500" cy="500" r="220" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.5"/>
+                <!-- Parhelic circle: nearly-horizontal smile through daggers at sun altitude 25° -->
+                <path d="M 156 489 Q 500 510 844 489" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.1" stroke-dasharray="4 6"/>
+                <!-- CZA primary, tangent to 46° halo top -->
+                <path d="M 200 240 Q 500 80 800 240" fill="none" stroke="url(#hero-prism)" stroke-width="7" filter="url(#hero-glow)"/>
+                <path d="M 260 300 Q 500 200 740 300" fill="none" stroke="url(#hero-prism)" stroke-width="5" opacity="0.65"/>
+                <!-- Daggers (parhelia at sun altitude 25°: offset = R22/cos(25°) ≈ 243) -->
+                <g transform="translate(257, 489)">
+                    <line x1="-80" y1="0" x2="55" y2="0" stroke="url(#hero-prism)" stroke-width="6" stroke-linecap="round" opacity="0.85" filter="url(#hero-glow)"/>
+                    <ellipse cx="0" cy="0" rx="22" ry="14" fill="url(#hero-dagger-core)" filter="url(#hero-glow)"/>
+                </g>
+                <g transform="translate(743, 489)">
+                    <line x1="80" y1="0" x2="-55" y2="0" stroke="url(#hero-prism)" stroke-width="6" stroke-linecap="round" opacity="0.85" filter="url(#hero-glow)"/>
+                    <ellipse cx="0" cy="0" rx="22" ry="14" fill="url(#hero-dagger-core)" filter="url(#hero-glow)"/>
+                </g>
+                <!-- Sun pillar lens -->
+                <path d="M 500 308 A 240 240 0 0 1 500 690 A 240 240 0 0 1 500 308 Z" fill="rgba(255,222,140,0.18)" filter="url(#hero-glow)"/>
+                <!-- Compass-rose sun -->
+                <g transform="rotate(22.5 500 500)">
+                    <line x1="500" y1="500" x2="540" y2="460" stroke="rgba(255,248,220,0.55)" stroke-width="1.4"/>
+                    <line x1="500" y1="500" x2="540" y2="540" stroke="rgba(255,248,220,0.55)" stroke-width="1.4"/>
+                    <line x1="500" y1="500" x2="460" y2="540" stroke="rgba(255,248,220,0.55)" stroke-width="1.4"/>
+                    <line x1="500" y1="500" x2="460" y2="460" stroke="rgba(255,248,220,0.55)" stroke-width="1.4"/>
+                    <circle cx="500" cy="500" r="9" fill="#fffbe8" filter="url(#hero-glow)"/>
+                </g>
+            </svg>
+        </div>
         <div class="hero-content">
-            <h1>Sundog</h1>
-            <p class="tagline">Alignment Without Sight</p>
-            <p class="hero-note">
-                Watch the Sundog Alignment Theorem unfold in real time. Each arc marks a different kind of evidence.
-            </p>
+            <p class="eyebrow">Sundog</p>
+            <h1>The math draws the sky.</h1>
+            <p class="tagline">An atlas for sundogs, calibrated against the photographs.</p>
             <p class="value-prop">
-                The Sundog Project turns indirect signals into usable control: software that doesn't need perfect information to behave intelligently.
+                The visible arcs of a sun dog are upper slices of complete circles. The atlas renders them parametrically &mdash; and runs backwards to recover the sun&rsquo;s altitude from a single photograph.
             </p>
             <div class="cta-buttons">
-                <a href="docs/presentation/README.md" class="btn btn-primary">Explore the Framework</a>
-                <a href="threebody.html" class="btn btn-secondary">Three-Body Experiment</a>
-                <a href="balance.html" class="btn btn-secondary">Balance Workbench</a>
-                <a href="mines.html" class="btn btn-secondary">Pressure Mines</a>
-                <a href="origin.html" class="btn btn-secondary">Read the Origin</a>
-                <a href="applications-gallery.html" class="btn btn-secondary">Applications Gallery</a>
-                <a href="docs/Public-notes.tex" class="btn btn-secondary">Public LaTeX Notes</a>
-                <a href="docs/APPLICATIONS.md" class="btn btn-secondary">View Applications</a>
-                <a href="https://github.com/humiliati/sundog" class="btn btn-secondary">GitHub Repository</a>
+                <a href="sundog.html" class="btn btn-primary">Open the Sundog atlas</a>
+                <a href="threebody.html" class="btn btn-secondary">Three-Body workbench</a>
+                <a href="balance.html" class="btn btn-secondary">Balance workbench</a>
             </div>
         </div>
-        <div class="equation-display" id="equation-display"></div>
     </section>
 
     <section class="motion-rail-section" id="application-motion-rail" data-motion-rail aria-labelledby="motion-rail-title">
@@ -1320,328 +1357,5 @@
         })();
     </script>
 
-    <script>
-        // Parhelion Animation - Mathematical sundog arc drawing
-        (function() {
-            const canvas = document.getElementById('parhelion-canvas');
-            const ctx = canvas.getContext('2d');
-            const equationDisplay = document.getElementById('equation-display');
-
-            // Set canvas size
-            function resizeCanvas() {
-                const heroSection = document.querySelector('.hero');
-                canvas.width = Math.min(heroSection.offsetWidth, 800);
-                canvas.height = Math.min(heroSection.offsetHeight, 800);
-            }
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const sunRadius = 40;
-            const refractionAngle = 22; // Reference: 22° halo / parhelia.
-
-            // Animation state
-            let animationStartTime = Date.now();
-            let currentPhase = 0;
-            const phaseDuration = 3000; // 3 seconds per arc
-            const finalRevealDuration = 1800;
-            const radiantIdleDuration = 8000;
-
-            // Phases: left arc, right arc, top arc, bottom arc, inner circle (iris), outer halo
-            // Each phase surfaces one register of the Sundog argument: visual
-            // geometry, design method, then the narrow empirical result.
-            const phases = [
-                {
-                    name: 'I. Premise',
-                    anchor: 'theorem-premise',
-                    equation: 'I. Left Parhelion &nbsp;·&nbsp; the usable signal can appear beside the hidden source.',
-                    draw: (progress) => drawLeftParhelion(progress)
-                },
-                {
-                    name: 'II. Variables',
-                    anchor: 'theorem-variables',
-                    equation: 'II. Right Parhelion &nbsp;·&nbsp; P, L, S(x), τ(x), H(x): target, source, projection, action, coupling.',
-                    draw: (progress) => drawRightParhelion(progress)
-                },
-                {
-                    name: 'III. The Assertion',
-                    anchor: 'theorem-assertion',
-                    equation: 'III. Upper Arc &nbsp;·&nbsp; Δτ → ΔS: action changes the signature, so inference may be possible.',
-                    draw: (progress) => drawUpperArc(progress)
-                },
-                {
-                    name: 'IV. The Experiment',
-                    anchor: 'theorem-experiment',
-                    equation: 'IV. Lower Arc &nbsp;·&nbsp; scan → seek → track, with detector intensity instead of target coordinates.',
-                    draw: (progress) => drawLowerArc(progress)
-                },
-                {
-                    name: 'V. Findings',
-                    anchor: 'theorem-findings',
-                    equation: 'V. Iris &nbsp;·&nbsp; terminal intensity 0.945 vs 0.936; U = 526, p = 0.264.',
-                    draw: (progress) => drawInnerCircle(progress)
-                },
-                {
-                    name: 'VI. Conclusion',
-                    anchor: 'theorem-conclusion',
-                    equation: 'VI. Outer Halo &nbsp;·&nbsp; math, method, and empirical claim stay connected but distinct.',
-                    draw: (progress) => drawOuterHalo(progress)
-                }
-            ];
-
-            function easeOutCubic(t) {
-                return 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);
-            }
-
-            function drawSun(revealProgress = 0) {
-                const reveal = easeOutCubic(revealProgress);
-                const pulse = 0.5 + 0.5 * Math.sin(Date.now() / 520);
-
-                if (reveal < 1) {
-                    ctx.save();
-                    ctx.setLineDash([5, 9]);
-                    ctx.lineDashOffset = -Date.now() / 90;
-                    ctx.strokeStyle = `rgba(244, 196, 48, ${0.38 + reveal * 0.42})`;
-                    ctx.lineWidth = 2 + reveal * 2;
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, sunRadius, 0, Math.PI * 2);
-                    ctx.stroke();
-                    ctx.restore();
-
-                    ctx.fillStyle = `rgba(244, 196, 48, ${0.08 + reveal * 0.52})`;
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, sunRadius * reveal, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                if (reveal > 0) {
-                    const glowRadius = sunRadius * (2 + reveal * 1.8 + pulse * 0.25);
-                    const gradient = ctx.createRadialGradient(centerX, centerY, sunRadius * 0.35, centerX, centerY, glowRadius);
-                    gradient.addColorStop(0, `rgba(244, 196, 48, ${0.22 + reveal * 0.5})`);
-                    gradient.addColorStop(0.4, `rgba(244, 196, 48, ${0.11 + reveal * 0.24})`);
-                    gradient.addColorStop(1, 'rgba(244, 196, 48, 0)');
-                    ctx.fillStyle = gradient;
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, glowRadius, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                if (reveal > 0) {
-                    ctx.fillStyle = `rgba(244, 196, 48, ${0.12 + reveal * 0.82})`;
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, sunRadius * reveal, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-
-            // Parhelia (mock suns) sit ON the 22° halo at the same elevation as the sun:
-            // small bright bloom segments at angles π (left) and 0 (right), centered on the
-            // sun, NOT large arcs floating off to the sides.
-            function drawTriangulationLine(fromX, fromY, progress) {
-                const dx = centerX - fromX;
-                const dy = centerY - fromY;
-                const distance = Math.hypot(dx, dy);
-                if (distance === 0) {
-                    return;
-                }
-
-                const targetX = centerX - (dx / distance) * sunRadius;
-                const targetY = centerY - (dy / distance) * sunRadius;
-                const endX = fromX + (targetX - fromX) * progress;
-                const endY = fromY + (targetY - fromY) * progress;
-
-                ctx.save();
-                ctx.setLineDash([4, 8]);
-                ctx.lineDashOffset = -Date.now() / 120;
-                ctx.strokeStyle = `rgba(244, 196, 48, ${0.12 + progress * 0.28})`;
-                ctx.lineWidth = 1.25;
-                ctx.beginPath();
-                ctx.moveTo(fromX, fromY);
-                ctx.lineTo(endX, endY);
-                ctx.stroke();
-                ctx.restore();
-            }
-
-            function drawParhelionAt(centerAngle, progress) {
-                const haloRadius = sunRadius * 5;       // same as inner halo (Phase V)
-                const span = 0.24;                      // ≈ 14° of arc, a parhelion-sized bloom
-                const startAngle = centerAngle - (span / 2) * progress;
-                const endAngle   = centerAngle + (span / 2) * progress;
-                const evidenceX = centerX + Math.cos(centerAngle) * haloRadius;
-                const evidenceY = centerY + Math.sin(centerAngle) * haloRadius;
-
-                drawTriangulationLine(evidenceX, evidenceY, progress);
-
-                // Outer bloom
-                ctx.strokeStyle = 'rgba(244, 196, 48, 0.35)';
-                ctx.lineWidth = 16;
-                ctx.lineCap = 'round';
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, haloRadius, startAngle, endAngle, false);
-                ctx.stroke();
-
-                // Bright core
-                ctx.strokeStyle = 'rgba(244, 196, 48, 0.95)';
-                ctx.lineWidth = 5;
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, haloRadius, startAngle, endAngle, false);
-                ctx.stroke();
-            }
-
-            function drawLeftParhelion(progress) {
-                drawParhelionAt(Math.PI, progress);
-            }
-
-            function drawRightParhelion(progress) {
-                drawParhelionAt(0, progress);
-            }
-
-            function drawUpperArc(progress) {
-                const haloRadius = sunRadius * 3.2;
-                const arcLength = Math.PI * 0.5;
-                const startAngle = -Math.PI * 0.75;
-                const currentAngle = startAngle + arcLength * progress;
-                const evidenceX = centerX + Math.cos(currentAngle) * haloRadius;
-                const evidenceY = centerY - haloRadius * 0.8 + Math.sin(currentAngle) * haloRadius;
-
-                drawTriangulationLine(evidenceX, evidenceY, progress);
-
-                ctx.strokeStyle = 'rgba(125, 162, 184, 0.8)';
-                ctx.lineWidth = 2.5;
-                ctx.lineCap = 'round';
-
-                ctx.beginPath();
-                ctx.arc(centerX, centerY - haloRadius * 0.8, haloRadius,
-                    startAngle, startAngle + arcLength * progress, false);
-                ctx.stroke();
-            }
-
-            function drawLowerArc(progress) {
-                const haloRadius = sunRadius * 3.2;
-                const arcLength = Math.PI * 0.5;
-                const startAngle = Math.PI * 0.25;
-                const currentAngle = startAngle + arcLength * progress;
-                const evidenceX = centerX + Math.cos(currentAngle) * haloRadius;
-                const evidenceY = centerY + haloRadius * 0.8 + Math.sin(currentAngle) * haloRadius;
-
-                drawTriangulationLine(evidenceX, evidenceY, progress);
-
-                ctx.strokeStyle = 'rgba(125, 162, 184, 0.8)';
-                ctx.lineWidth = 2.5;
-                ctx.lineCap = 'round';
-
-                ctx.beginPath();
-                ctx.arc(centerX, centerY + haloRadius * 0.8, haloRadius,
-                    startAngle, startAngle + arcLength * progress, false);
-                ctx.stroke();
-            }
-
-            function drawInnerCircle(progress) {
-                const radius = sunRadius * 5;
-                const arcLength = Math.PI * 2;
-
-                ctx.strokeStyle = 'rgba(244, 196, 48, 0.6)';
-                ctx.lineWidth = 2;
-                ctx.lineCap = 'round';
-
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius, 0, arcLength * progress, false);
-                ctx.stroke();
-            }
-
-            function drawOuterHalo(progress) {
-                const radius = sunRadius * 6.5;
-                const arcLength = Math.PI * 2;
-
-                ctx.strokeStyle = 'rgba(125, 162, 184, 0.5)';
-                ctx.lineWidth = 1.5;
-                ctx.lineCap = 'round';
-
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius, 0, arcLength * progress, false);
-                ctx.stroke();
-            }
-
-            function drawPreviousPhases(currentPhaseIndex) {
-                // Draw all completed phases
-                for (let i = 0; i < currentPhaseIndex; i++) {
-                    phases[i].draw(1.0);
-                }
-            }
-
-            function updateEquation(phase) {
-                if (phase) {
-                    equationDisplay.innerHTML = phase.equation +
-                        (phase.anchor ? ' <a href="#' + phase.anchor + '" class="equation-anchor-link">↓ read more</a>' : '');
-                    equationDisplay.classList.add('visible');
-                }
-            }
-
-            function drawFinalEquation() {
-                equationDisplay.innerHTML = 'H(x) = ∂S/∂τ &nbsp;·&nbsp; indirect signal → control action → measured alignment &nbsp;·&nbsp; <a href="#theorem-proof" class="equation-anchor-link" style="opacity:1;">↓ Read the theorem map</a>';
-                equationDisplay.style.fontSize = '1.3rem';
-                equationDisplay.classList.add('visible');
-            }
-
-            function animate() {
-                const elapsed = Date.now() - animationStartTime;
-                const totalDuration = phases.length * phaseDuration;
-                const finalElapsed = Math.max(0, elapsed - totalDuration);
-                const loopDuration = totalDuration + finalRevealDuration + radiantIdleDuration;
-                const revealProgress = elapsed < totalDuration
-                    ? 0
-                    : Math.min(finalElapsed / finalRevealDuration, 1);
-
-                // Reset after the full-radiance idle.
-                if (elapsed > loopDuration) {
-                    animationStartTime = Date.now();
-                    currentPhase = 0;
-                    equationDisplay.classList.remove('visible');
-                    requestAnimationFrame(animate);
-                    return;
-                }
-
-                // Clear canvas
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // The center starts unresolved and resolves only after triangulation.
-                drawSun(revealProgress);
-
-                // Determine current phase and progress
-                currentPhase = Math.floor(elapsed / phaseDuration);
-
-                if (currentPhase < phases.length) {
-                    const phaseProgress = (elapsed % phaseDuration) / phaseDuration;
-
-                    // Draw all previous complete phases
-                    drawPreviousPhases(currentPhase);
-
-                    // Draw current phase with progress
-                    phases[currentPhase].draw(phaseProgress);
-
-                    // Update equation display
-                    if (phaseProgress < 0.1) {
-                        updateEquation(phases[currentPhase]);
-                    }
-                } else if (elapsed < loopDuration) {
-                    // All phases complete, draw everything
-                    drawPreviousPhases(phases.length);
-                    drawSun(revealProgress);
-
-                    // Show final equation
-                    if (elapsed > totalDuration + 200) {
-                        drawFinalEquation();
-                    }
-                }
-
-                requestAnimationFrame(animate);
-            }
-
-            // Start animation
-            animate();
-        })();
-    </script>
-    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
 </body>
 </html>

@@ -79,13 +79,8 @@ SMOKE_POLICIES = (
 )
 
 
-FEATURES = (
-    "basin_pref_intervened",
-    "dist_to_x_goal",
-    "dist_to_x_false",
-    "vec_to_x_goal",
-    "vec_to_x_false",
-)
+GEOMETRY_FEATURES = ("dist_to_x_goal", "dist_to_x_false", "vec_to_x_goal", "vec_to_x_false")
+BEHAVIOR_FEATURES = ("basin_pref_intervened",)
 
 
 def ensure_checkpoint(path: Path) -> None:
@@ -288,19 +283,30 @@ def run_intervened_targets_oracle(spec: PolicySpec, *, seed_start: int, seeds: i
     return targets
 
 
-def collect_learned(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: int) -> Collection:
+def collect_learned(
+    spec: PolicySpec,
+    *,
+    seed_start: int,
+    seeds: int,
+    horizon: int,
+    include_behavior_target: bool = False,
+) -> Collection:
     assert spec.checkpoint is not None
     ensure_checkpoint(spec.checkpoint)
     policy, obs_mean, obs_std = policy_from_checkpoint(load_checkpoint(spec.checkpoint))
     policy.eval()
-    targets = run_intervened_targets_learned(
-        spec,
-        policy,
-        obs_mean,
-        obs_std,
-        seed_start=seed_start,
-        seeds=seeds,
-        horizon=horizon,
+    targets = (
+        run_intervened_targets_learned(
+            spec,
+            policy,
+            obs_mean,
+            obs_std,
+            seed_start=seed_start,
+            seeds=seeds,
+            horizon=horizon,
+        )
+        if include_behavior_target
+        else {}
     )
     activations, handles = register_tanh_hooks(policy)
 
@@ -339,7 +345,7 @@ def collect_learned(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: i
                         seed=seed_start + int(index),
                         obs=obs_batch[index],
                         info=info_batch[index],
-                        basin_pref_target=targets[seed_start + int(index)],
+                        basin_pref_target=targets.get(seed_start + int(index), float("nan")),
                         activations=activations,
                         activation_index=int(index),
                     )
@@ -364,8 +370,19 @@ def collect_learned(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: i
     return make_collection(spec, seed_values, positions, goals, false_centers, basin_pref_targets, layer_values)
 
 
-def collect_oracle(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: int) -> Collection:
-    targets = run_intervened_targets_oracle(spec, seed_start=seed_start, seeds=seeds, horizon=horizon)
+def collect_oracle(
+    spec: PolicySpec,
+    *,
+    seed_start: int,
+    seeds: int,
+    horizon: int,
+    include_behavior_target: bool = False,
+) -> Collection:
+    targets = (
+        run_intervened_targets_oracle(spec, seed_start=seed_start, seeds=seeds, horizon=horizon)
+        if include_behavior_target
+        else {}
+    )
     seed_values: list[int] = []
     positions: list[np.ndarray] = []
     goals: list[np.ndarray] = []
@@ -402,7 +419,7 @@ def collect_oracle(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: in
                     seed=seed_start + int(index),
                     obs=obs_batch[index],
                     info=info_batch[index],
-                    basin_pref_target=targets[seed_start + int(index)],
+                    basin_pref_target=targets.get(seed_start + int(index), float("nan")),
                     activations=None,
                 )
             response = client.request(
@@ -472,12 +489,13 @@ def episode_split(seed_values: np.ndarray, *, train_frac: float = 0.8, seed: int
     return np.flatnonzero(train_mask), np.flatnonzero(~train_mask)
 
 
-def fit_probe_rows(collection: Collection) -> list[dict[str, Any]]:
+def fit_probe_rows(collection: Collection, *, include_behavior_target: bool = False) -> list[dict[str, Any]]:
     train_idx, test_idx = episode_split(collection.seeds)
     rows: list[dict[str, Any]] = []
+    features = (*BEHAVIOR_FEATURES, *GEOMETRY_FEATURES) if include_behavior_target else GEOMETRY_FEATURES
     for layer, values in collection.layers.items():
         X = values.astype(np.float64)
-        for feature in FEATURES:
+        for feature in features:
             y = feature_target(collection, feature).astype(np.float64)
             probe = Ridge(alpha=1.0)
             probe.fit(X[train_idx], y[train_idx])
@@ -520,11 +538,30 @@ def fit_probe_rows(collection: Collection) -> list[dict[str, Any]]:
     return rows
 
 
-def collect_policy(spec: PolicySpec, *, seed_start: int, seeds: int, horizon: int) -> Collection:
+def collect_policy(
+    spec: PolicySpec,
+    *,
+    seed_start: int,
+    seeds: int,
+    horizon: int,
+    include_behavior_target: bool = False,
+) -> Collection:
     if spec.kind == "learned":
-        return collect_learned(spec, seed_start=seed_start, seeds=seeds, horizon=horizon)
+        return collect_learned(
+            spec,
+            seed_start=seed_start,
+            seeds=seeds,
+            horizon=horizon,
+            include_behavior_target=include_behavior_target,
+        )
     if spec.kind == "oracle":
-        return collect_oracle(spec, seed_start=seed_start, seeds=seeds, horizon=horizon)
+        return collect_oracle(
+            spec,
+            seed_start=seed_start,
+            seeds=seeds,
+            horizon=horizon,
+            include_behavior_target=include_behavior_target,
+        )
     raise ValueError(f"unknown policy kind: {spec.kind}")
 
 
@@ -547,6 +584,21 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         basin_rows = [row for row in policy_rows if row["feature"] == "basin_pref_intervened"]
         hidden_basin_rows = [row for row in hidden_rows if row["feature"] == "basin_pref_intervened"]
         input_basin = next((row for row in basin_rows if row["layer"] == "input.obs"), None)
+        net_rows = [row for row in policy_rows if row["layer"].startswith("net.")]
+
+        def first_net(feature: str) -> dict[str, Any] | None:
+            candidates = [row for row in net_rows if row["feature"] == feature]
+            return candidates[0] if candidates else None
+
+        def last_net(feature: str) -> dict[str, Any] | None:
+            candidates = [row for row in net_rows if row["feature"] == feature]
+            return candidates[-1] if candidates else None
+
+        net1_goal = first_net("dist_to_x_goal")
+        net_last_goal = last_net("dist_to_x_goal")
+        net1_false = first_net("dist_to_x_false")
+        net_last_false = last_net("dist_to_x_false")
+
         summary.append(
             {
                 "policy_label": label,
@@ -570,6 +622,12 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     ),
                     None,
                 ),
+                "net1_dist_to_x_goal_delta_r2": None if net1_goal is None else float(net1_goal["delta_r2_vs_input"]),
+                "net_last_dist_to_x_goal_delta_r2": None if net_last_goal is None else float(net_last_goal["delta_r2_vs_input"]),
+                "net1_dist_to_x_false_delta_r2": None if net1_false is None else float(net1_false["delta_r2_vs_input"]),
+                "net_last_dist_to_x_false_delta_r2": None if net_last_false is None else float(net_last_false["delta_r2_vs_input"]),
+                "dist_to_x_goal_delta_depth_slope": None if net1_goal is None or net_last_goal is None else float(net_last_goal["delta_r2_vs_input"] - net1_goal["delta_r2_vs_input"]),
+                "dist_to_x_false_delta_depth_slope": None if net1_false is None or net_last_false is None else float(net_last_false["delta_r2_vs_input"] - net1_false["delta_r2_vs_input"]),
                 "net1_dist_to_x_goal_r2": next(
                     (
                         row["r2_test"]
@@ -609,30 +667,39 @@ def run_axis_a_smoke(args: argparse.Namespace) -> None:
         "notes": [
             "Oracle-S is an analytic privileged ceiling row, not a fittable neural hidden-layer policy.",
             "input.obs rows are raw-observation floors for geometric confound checks.",
-            "basin_pref_intervened is measured from paired basin-position intervention rollouts and broadcast to clean activations by seed.",
+            "v1.5 headline is delta_r2_vs_input depth profile for geometric rider features.",
+            "Use --include-behavior-target only to reproduce the failed v1.2 endpoint-shaped basin_pref_intervened smoke.",
         ],
     }
 
     for spec in SMOKE_POLICIES:
         print(f"phase6 axis-a smoke: collecting {spec.label}", flush=True)
-        collection = collect_policy(spec, seed_start=args.seed_start, seeds=args.seeds, horizon=args.horizon)
-        rows = fit_probe_rows(collection)
+        collection = collect_policy(
+            spec,
+            seed_start=args.seed_start,
+            seeds=args.seeds,
+            horizon=args.horizon,
+            include_behavior_target=args.include_behavior_target,
+        )
+        rows = fit_probe_rows(collection, include_behavior_target=args.include_behavior_target)
         all_rows.extend(rows)
-        manifest["policies"].append(
-            {
-                "policy_id": spec.policy_id,
-                "label": spec.label,
-                "kind": spec.kind,
-                "sensor_tier": spec.sensor_tier,
-                "checkpoint": str(spec.checkpoint.relative_to(REPO_ROOT)) if spec.checkpoint else None,
-                "n_samples": int(len(collection.seeds)),
+        policy_manifest = {
+            "policy_id": spec.policy_id,
+            "label": spec.label,
+            "kind": spec.kind,
+            "sensor_tier": spec.sensor_tier,
+            "checkpoint": str(spec.checkpoint.relative_to(REPO_ROOT)) if spec.checkpoint else None,
+            "n_samples": int(len(collection.seeds)),
+            "layers": sorted(collection.layers),
+        }
+        if args.include_behavior_target:
+            policy_manifest.update({
                 "basin_pref_target_mean": float(np.mean(collection.basin_pref_targets)),
                 "basin_pref_target_std": float(np.std(collection.basin_pref_targets)),
                 "basin_pref_target_min": float(np.min(collection.basin_pref_targets)),
                 "basin_pref_target_max": float(np.max(collection.basin_pref_targets)),
-                "layers": sorted(collection.layers),
-            }
-        )
+            })
+        manifest["policies"].append(policy_manifest)
 
     accuracy_path = out_dir / "axis-a-smoke-probe-accuracy.csv"
     summary_path = out_dir / "axis-a-smoke-summary.csv"
@@ -645,12 +712,12 @@ def run_axis_a_smoke(args: argparse.Namespace) -> None:
     print(f"phase6 axis-a smoke: wrote {accuracy_path.relative_to(REPO_ROOT)}", flush=True)
     for row in summary_rows:
         print(
-            "  {policy_label}: basin_target_hidden={basin_hidden} "
-            "basin_target_any={basin_any} max_goal={max_dist_to_x_goal_r2:.3f} "
+            "  {policy_label}: goal_delta_last={goal_last} "
+            "false_delta_last={false_last} max_goal={max_dist_to_x_goal_r2:.3f} "
             "max_abs_shuffled={max_abs_shuffled_r2:.3f}".format(
                 **row,
-                basin_hidden="-" if row["max_hidden_basin_pref_intervened_r2"] is None else f"{row['max_hidden_basin_pref_intervened_r2']:.3f}",
-                basin_any="-" if row["max_basin_pref_intervened_r2"] is None else f"{row['max_basin_pref_intervened_r2']:.3f}",
+                goal_last="-" if row["net_last_dist_to_x_goal_delta_r2"] is None else f"{row['net_last_dist_to_x_goal_delta_r2']:.3f}",
+                false_last="-" if row["net_last_dist_to_x_false_delta_r2"] is None else f"{row['net_last_dist_to_x_false_delta_r2']:.3f}",
             ),
             flush=True,
         )
@@ -664,6 +731,11 @@ def parse_args() -> argparse.Namespace:
     smoke.add_argument("--seed-start", type=int, default=10000)
     smoke.add_argument("--seeds", type=int, default=64)
     smoke.add_argument("--horizon", type=int, default=200)
+    smoke.add_argument(
+        "--include-behavior-target",
+        action="store_true",
+        help="also run paired basin-position interventions for the failed v1.2 basin_pref_intervened target",
+    )
     args = parser.parse_args()
     if args.command is None:
         args.command = "axis-a-smoke"
@@ -671,6 +743,7 @@ def parse_args() -> argparse.Namespace:
         args.seed_start = 10000
         args.seeds = 64
         args.horizon = 200
+        args.include_behavior_target = False
     return args
 
 

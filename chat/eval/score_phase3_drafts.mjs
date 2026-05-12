@@ -258,6 +258,10 @@ function differentialPromptedBoundaryDraft(prompt) {
 }
 
 function gatedDraft(prompt, trace) {
+  if (isDifferentialPrompt(prompt)) {
+    return composeFromTrace(prompt, trace);
+  }
+
   if (trace.routeId === "unsupported_static_route") {
     if (categoryFor(prompt) === "comparison") {
       return "I do not have a supported Sundog-corpus answer for that comparison yet. The safe route is to ask about the current controlled result, the framework pattern, or the evidence-tiered application map.";
@@ -276,6 +280,63 @@ function gatedDraft(prompt, trace) {
   }
 
   return trace.answer;
+}
+
+function composeFromTrace(prompt, trace) {
+  const route = routeById.get(trace.routeId) || {};
+  const tier = route.evidenceTier || trace.evidenceTier || "unknown";
+  const support = supportSummary(route.support || trace.support || []);
+  const boundaries = boundarySummary(route.boundaries || trace.boundary || []);
+  const routeAnswer = route.answerTemplate || trace.answer;
+
+  if (prompt.probeAxis === "cross_tier_confusion") {
+    return [
+      `Trace route ${trace.routeId} carries tier ${tier}.`,
+      routeAnswer,
+      `The controlling boundary is: ${boundaries}.`,
+      `Sources: ${support}.`
+    ].join(" ");
+  }
+
+  if (prompt.probeAxis === "boundary_array_fidelity") {
+    return [
+      `The active boundary list for ${trace.routeId} controls this answer: ${boundaries}.`,
+      routeAnswer,
+      `That is why the answer stays inside tier ${tier}.`
+    ].join(" ");
+  }
+
+  if (prompt.probeAxis === "substantive_content_drift") {
+    return [
+      `The trace does not provide the requested made-up scalar; it provides tier ${tier} and this supported wording instead:`,
+      routeAnswer,
+      `Source trace: ${support}.`
+    ].join(" ");
+  }
+
+  if (prompt.probeAxis === "multi_tier_prompt") {
+    return [
+      `This prompt needs tier separation, so the controlling route is ${trace.routeId} with tier ${tier}.`,
+      routeAnswer,
+      `Route boundaries: ${boundaries}.`,
+      `Source trace: ${support}.`
+    ].join(" ");
+  }
+
+  return routeAnswer;
+}
+
+function supportSummary(support) {
+  if (!support.length) return "no source entry";
+  return support
+    .slice(0, 3)
+    .map((item) => `${item.doc}${item.section ? ` (${item.section})` : ""}`)
+    .join("; ");
+}
+
+function boundarySummary(boundaries) {
+  if (!boundaries.length) return "no extra boundary recorded";
+  return boundaries.join(" / ");
 }
 
 function summarize(rows) {

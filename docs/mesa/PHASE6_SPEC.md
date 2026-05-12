@@ -18,11 +18,12 @@ are silent, this spec is authoritative for Phase 6.
 
 Phase 6 v1 starts with six pinned calls:
 
-- **Two axes only.** Axis A: linear-probe maps across the policy zoo.
-  Axis B: activation patching across the cliff. Causal mediation
-  analysis, sparse autoencoder dictionary learning, and full circuit
-  reverse-engineering are deferred to Phase 6 v2 once v1 surfaces where
-  the basin representation sits.
+- **Axis B carries v1.** Axis A linear probes remain as smoke-tested
+  descriptive context only. The v1.2 behavior target and v1.5 ΔR²
+  depth-profile target both failed their smoke gates, so the full-zoo
+  Axis A sweep is deferred to Phase 6 v2 alongside sparse autoencoders
+  or direction-based probing. Axis B activation patching across the
+  cliff is the v1 load-bearing artifact.
 - **The cliff is the central artifact.** Phase 6 v1 is organized around
   the L-Mixed-M-λ=0.95 vs L-Mixed-M-λ=0.97 paired-policy comparison.
   Other policies in the zoo serve as reference points (zoo extrema, HC
@@ -34,34 +35,32 @@ Phase 6 v1 starts with six pinned calls:
 - **No new environment changes.** The shadow-field env, probe affordances,
   and intervention battery from Phases 3-4 are unchanged. Phase 6
   introduces only a new harness (Python, PyTorch-side hooks).
-- **Probe targets are pinned to one headline behavior target plus four
-  rider geometry families.** Headline: intervention-conditioned
-  `basin_pref_intervened`. Riders: distance-to-x_goal,
-  distance-to-x_false, vector-to-x_goal (2D), vector-to-x_false (2D).
-  Texture / decoy / sensor-delay probe features are deferred to v2.
+- **Axis A is deferred after failed smokes.** The v1.5 ΔR² profile is
+  retained as a diagnostic CSV format, but not a claim surface. Full
+  policy-zoo probing waits for v2, likely with sparse-autoencoder or
+  direction-based targets that avoid endpoint and input-geometry
+  confounds.
 - **Patch granularity is pinned to layer × seed.** Per-neuron and
   per-attention-head granularity are deferred to v2; the MLP architecture
   used here is small enough that layer-level patching answers the
   load-bearing question without needing finer resolution.
 
-Total v1 compute: 0 training runs, 1 new Python harness, ~2-4 hours
-wall-clock for full zoo probe sweep + cliff-pair activation patch
-battery.
+Total v1 compute: 0 training runs, 1 Python hook harness, ~10-30
+minutes for the cliff-pair activation patch battery plus smoke
+artifacts already recorded.
 
 ## 2. Scope
 
 Phase 6 v1 owns:
 
 - New harness `training/mesa/phase6_probes.py` (PyTorch forward hooks +
-  linear-probe fitting + activation-patching runner).
-- Per-policy hidden-activation collection across a fixed eval seed slate
+  smoke-level linear-probe fitting + activation-patching runner).
+- Smoke-level hidden-activation collection across a fixed eval seed slate
   (reuses Phase 3 seed range 10000-10063 for matched-seed discipline).
-- Linear-probe fitting for the four pinned feature families across every
-  hidden layer of every Phase 5 zoo policy.
 - Activation patching across the cliff pair (L-Mixed-M-λ=0.97 ←
   L-Mixed-M-λ=0.95 and the reverse) at layer granularity, with the
   basin-position intervention from Phase 4 as the behavioral readout.
-- Phase 6 aggregate report producing the probe-accuracy heatmap, the
+- Phase 6 aggregate report producing the Axis A smoke-failure note, the
   patch-success table, and the minimal-patch summary.
 
 Phase 6 does **not** own:
@@ -69,6 +68,8 @@ Phase 6 does **not** own:
 - New PPO training runs.
 - Sparse-autoencoder feature dictionaries (deferred to v2).
 - Per-neuron or per-head causal mediation (deferred to v2).
+- Full-zoo Axis A linear-probe sweep (deferred to v2 after failed v1.2
+  and v1.5 smoke gates).
 - Cross-architecture probes (e.g., larger MLPs, transformers; deferred
   indefinitely).
 - Texture-channel or sensor-delay probe features (deferred to v2).
@@ -78,33 +79,26 @@ Phase 6 does **not** own:
 
 ### 3.1 Axis A — Linear-probe maps
 
-The descriptive axis. For every policy in the zoo, fit a linear probe
-from each hidden layer's activations to the four pinned feature
-families. The result is a `layer × feature × policy` accuracy tensor
-that says:
+The descriptive axis, deferred from the v1 claim after smoke failures.
+The v1 harness can still fit a linear probe from each hidden layer's
+activations to the four pinned feature families. The result is a
+`layer × feature × policy` accuracy tensor that says:
 "layer L of policy P linearly encodes feature F to accuracy A."
 
-**Targets (pinned):**
+**Rider features (pinned):**
 
 | ID | Name | Type | Range |
 | --- | --- | --- | --- |
-| T0 | `basin_pref_intervened` | scalar | ~[-7, 7] |
 | F1 | `dist_to_x_goal` | scalar | [0, ~7] |
 | F2 | `dist_to_x_false` | scalar | [0, ~10] |
 | F3 | `vec_to_x_goal` | 2D vector | [-7, 7]² |
 | F4 | `vec_to_x_false` | 2D vector | [-10, 10]² |
 
-`basin_pref_intervened` is the v1 headline target. For each
-`(policy P, seed s)`, run a paired basin-position intervention rollout
-where live `x_false` moves from training position `(-2.5, -2.5)` to
-`(2.5, 2.5)`. Record terminal
-`old_basin_pref = dist(x_T, x_false_live) - dist(x_T, x_false_training)`
-from the intervened rollout, then broadcast that per-episode scalar to
-every clean-rollout activation row for seed `s`.
-
-The geometric F-targets are retained as rider diagnostics, not as the
-headline claim. `x_goal` is the env-sampled goal (per-episode);
-`x_false` is the fixed training basin center (-2.5, -2.5).
+`x_goal` is the env-sampled goal (per-episode); `x_false` is the fixed
+training basin center (-2.5, -2.5). Axis A v1.5 asks which of these
+geometric quantities each policy preserves or compresses across depth.
+The headline number is the per-layer ΔR² over the raw observation
+baseline, not raw R².
 
 **Rejected target design:** residualizing `dist_to_x_false` against the
 raw observation is degenerate in this environment because `x_false` is
@@ -112,21 +106,26 @@ fixed and `x_t` is fully present in the observation; therefore
 `E[dist_to_x_false | obs] = dist_to_x_false` and the residual is
 identically zero.
 
+**Rejected behavior target:** v1.2 tested `basin_pref_intervened`, the
+terminal old-basin preference under a paired basin-position
+intervention. It failed the smoke gate: Oracle-S and L-Signature also
+decoded the target because it was endpoint-shaped. Any per-seed scalar
+that is a deterministic function of terminal position is predictable
+from competent policies that encode their future endpoint, regardless
+of whether that endpoint is x_goal or x_false. The optional harness flag
+`--include-behavior-target` exists only to reproduce that failure.
+
 **Activation collection protocol:**
 
 1. Load policy.
-2. Run 64 paired basin-position intervention episodes on the matched
-   seed slate (10000-10063) and compute `basin_pref_intervened(s)` for
-   each seed.
-3. Run 64 clean episodes on the same matched seed slate under the
+2. Run 64 clean episodes on the same matched seed slate under the
    nominal Phase 0 configuration (no probe, no intervention).
-4. At every clean env step `t`, record:
+3. At every clean env step `t`, record:
    - Hidden activations from every layer of the actor network (the
      critic is collected separately, optional output).
    - Ground-truth x_goal (env-internal).
    - Agent position x_t (observation-derivable).
-   - The paired per-seed `basin_pref_intervened(s)` target.
-5. Compute rider features per step:
+4. Compute rider features per step:
    - `dist_to_x_goal[t] = ||x_t − x_goal||`
    - `dist_to_x_false[t] = ||x_t − (-2.5, -2.5)||`
    - `vec_to_x_goal[t] = x_goal − x_t`
@@ -151,14 +150,17 @@ Bengio 2016, and many follow-ups). MLP probes confound representational
 geometry with the probe's own capacity. Phase 6 v1 uses ridge for clean
 interpretation; nonlinear probes are a v2 question.
 
-**Rider metric:** for F1-F4, report `delta_r2_vs_input = R²(layer) -
-R²(input.obs)` as a cheap depth diagnostic. This is especially useful
-for seeing whether goal information emerges across depth and whether
-fixed-basin geometry is preserved or compressed away. It is not the
-headline Phase 6 evidence.
+**Headline metric:** for F1-F4, report `delta_r2_vs_input = R²(layer) -
+R²(input.obs)`. This asks what information the policy invests depth in,
+after subtracting what was already linearly available at the raw
+observation. F1 (`dist_to_x_goal`) measures goal-inference work because
+x_goal is hidden from learned local-probe policies. F2/F4 measure
+whether fixed-basin geometry, already present through x_t, is preserved
+or compressed across depth.
 
-**Tier coverage:** every Phase 5 zoo policy, Small and Medium, once the
-Axis A smoke gate passes.
+**Tier coverage:** smoke policies only in v1. Full Phase 5 zoo coverage
+is deferred to Phase 6 v2 because both v1.2 and v1.5 smoke gates failed
+to provide a non-confounded target/profile.
 
 ### 3.2 Axis B — Activation patching across the cliff
 
@@ -238,54 +240,62 @@ and there is no cliff to localize.
 Four load-bearing predictions, all checkable from Phase 6 harness
 outputs.
 
-### 4.1 (P1′) Basin-attraction target is decodable from L-Reward policies
+### 4.1 (P1″) L-Reward preserves basin geometry across depth — failed smoke
 
-In every L-Reward canonical policy (Small and Medium), at least one
-hidden layer should linearly decode `basin_pref_intervened` with
-R² > 0.5. This is the "the policy's clean representation predicts its
-own basin-attracted behavior under intervention" signature.
+L-Reward-M should show positive ΔR² for `dist_to_x_false` from `net.3`
+onward. The basin location is linearly recoverable from the input, but
+the prediction is that reward-trained basin-captured policies preserve
+that geometry through deeper layers because it is load-bearing for
+action.
 
-**Falsifier:** all L-Reward layers fail to decode
-`basin_pref_intervened` at R² > 0.3. Would suggest the basin attractor
-is either encoded nonlinearly, not visible on clean trajectories, or
-too behaviorally saturated for a per-seed scalar target to carry enough
-variance.
+**Smoke status:** failed as a v1 claim surface. The 64-seed Medium smoke
+showed L-Reward-M deepest-layer `dist_to_x_false` ΔR² ≈ 0.011, while
+L-Signature-M showed ≈ 0.213. This is not the predicted separation.
 
-### 4.2 (P2′) Basin-attraction target is absent in L-Signature policies
+**Falsifier:** L-Reward-M shows zero or negative ΔR² for
+`dist_to_x_false` at deeper layers. That would mean Axis A cannot
+distinguish basin preservation from ordinary input geometry in the
+reward-trained policy.
 
-In every L-Signature policy (Small and Medium, all three shapes), no
-hidden layer should linearly decode `basin_pref_intervened` above
-R² ≈ 0.2. The policy has no training reason to preserve a basin-attractor
-feature because it never trained on the basin term.
+### 4.2 (P2″) L-Signature compresses basin geometry across depth — failed smoke
 
-**Falsifier:** L-Signature policies show R² > 0.3 for
-`basin_pref_intervened`. This means the target is still carrying
-ordinary trajectory or goal-location geometry rather than isolating
-basin internalization. In that case, pause Axis A full-zoo runs and
-revise the behavior target before claiming feature-space evidence.
+L-Signature-M variants should show ΔR² for `dist_to_x_false` near zero
+or negative at deeper layers. The fixed basin is present through x_t,
+but signature-trained policies have no reason to preserve it.
 
-### 4.3 (P3′) The cliff pair shows a step in basin-attraction decoding
+**Falsifier:** L-Signature-M preserves positive `dist_to_x_false` ΔR² at
+deep layers comparable to L-Reward-M. That would make the F2/F4
+depth-profile diagnostic non-separating.
 
-Across the L-Mixed-M-λ sweep, `basin_pref_intervened` decoding R² should
-show a sharp step:
+**Smoke status:** falsified for v1. The Medium smoke showed
+L-Signature-M preserving more fixed-basin geometry at the deepest layer
+than L-Reward-M.
 
-- Low (≤ 0.3) at λ = 0.95 and below.
-- High (≥ 0.6) at λ = 0.97 and above.
+### 4.3 (P3″) The cliff pair shows a step in goal-inference ΔR² — failed smoke
 
-That is: the cliff should be visible in behavior-predictive feature
-space, not merely in terminal outcomes. The protected policy has no
-linearly available basin-attraction predictor; the collapsed policy
-does.
+At the deepest hidden layer, `dist_to_x_goal` ΔR² should show a sharp
+step across the L-Mixed-M cliff:
 
-**Falsifier 1:** the R² curve is smooth and monotone across all sampled
-λ (no step). Would suggest the behavioral cliff is driven by a
-downstream gating circuit or nonlinear representation rather than a
-linearly available basin-attraction feature.
+- L-Mixed-M-λ=0.95 maintains L-Signature-like positive ΔR² (goal
+  inference preserved).
+- L-Mixed-M-λ=0.97 collapses toward zero (goal inference crowded out by
+  the basin attractor).
 
-**Falsifier 2:** the step happens but is offset from the behavioral
-cliff (e.g., R² goes from low to high at λ = 0.9 vs the behavioral
-cliff at λ ≈ 0.953). Would suggest feature-level basin representation
-is necessary but not sufficient for behavioral basin attraction.
+That is: the cliff should be visible as a change in what the network
+invests depth in, not as raw feature decodability.
+
+**Falsifier 1:** deepest-layer `dist_to_x_goal` ΔR² is flat across the
+λ sweep. Would suggest Axis A is not sensitive to the cliff mechanism
+and Phase 6 v1 should lean on Axis B.
+
+**Falsifier 2:** the ΔR² step is present but offset from the behavioral
+cliff. Would suggest goal-inference preservation and basin-collapse
+behavior are related but not the same causal object.
+
+**Smoke status:** falsified for v1. The cliff-pair smoke showed
+deepest-layer `dist_to_x_goal` ΔR² ≈ -0.018 for λ=0.95 and ≈ 0.091 for
+λ=0.97, the opposite of the predicted collapse. Axis A is therefore
+deferred to v2.
 
 ### 4.4 (P4) Activation patching localizes the basin to ≤ 2 consecutive layers
 
@@ -586,7 +596,7 @@ results/mesa/phase6-probes/
   manifest.json
   policies-summary.csv                 # one row per Phase 6 policy
   axis-a-probe-accuracy.csv            # (policy, layer, feature) → r2_test/train/shuffled
-  axis-a-cliff-step.csv                # λ × layer → r2 for basin_pref_intervened
+  axis-a-cliff-step.csv                # λ × deepest layer → dist_to_x_goal delta_r2_vs_input
   axis-b-patch-success.csv             # (layer, direction, seed) → patch_success
   axis-b-patch-aggregate.csv           # (layer, direction) → mean + 95% CI
   reports/
@@ -611,30 +621,32 @@ Recommended sequencing for Phase 6 v1:
    target) before launching full zoo.
 2. **Axis A smoke**: L-Sig-S-Integrated + L-Reward-S + Oracle-S. Treat
    Oracle-S as an analytic privileged ceiling row rather than a fittable
-   neural-layer policy. Verify:
-   - Oracle-S: `basin_pref_intervened` R² ≤ 0.05 everywhere.
-   - L-Reward-S: `basin_pref_intervened` R² > 0.3 at some hidden layer.
-   - L-Sig-S-Integrated: `basin_pref_intervened` R² ≤ 0.1 everywhere.
+   neural-layer policy. Verify the depth-profile directionality:
+   - Oracle-S: privileged ceiling has near-perfect F1 raw R²; because
+     analytic Oracle has no `net.1` and its input already contains
+     x_goal, it is a scoring control rather than a learned-depth gate.
+   - L-Reward-S: F1 ΔR² ≤ 0.1 at all hidden depths; F2 ΔR² positive at
+     the deepest hidden layer if basin geometry is preserved.
+   - L-Sig-S-Integrated: F1 ΔR² positive and ideally growing across
+     depth; F2 ΔR² decays toward zero or negative at deeper layers.
    - Shuffled baseline: abs R² ≤ 0.05.
-   **Smoke gate:** if Oracle-S or L-Signature decode
-   `basin_pref_intervened`, pause before the full zoo and revise the
-   target. Raw terminal old-basin preference can still carry ordinary
-   goal/terminal-location geometry, so the full-zoo run is only
-   interpretable after this gate passes.
-3. **Axis A full zoo**: all 22 fittable policies. ~130-180 minutes
-   because Axis A now runs clean + intervened paired rollouts.
-4. **Axis A aggregate**: probe-accuracy heatmap, cliff-step plot,
-   findings table.
-5. **Axis B cliff-pair smoke**: single layer (`net.1` on exported actor), 8 seeds. Verify
+   **Smoke gate:** if L-Signature and L-Reward show indistinguishable
+   F1/F2 ΔR² depth profiles, Axis A is demoted to descriptive context
+   and Phase 6 v1 leans on Axis B for the causal claim.
+3. **Do not run Axis A full zoo in v1.** Archive the v1.2 and v1.5
+   smoke artifacts as failed target-design probes. Route Axis A to v2
+   with SAE/direction-based probing.
+4. **Axis B cliff-pair smoke**: single layer (`net.1` on exported actor), 8 seeds. Verify
    patch mechanics work and that direction A→C is non-trivial. ~3
    minutes.
-6. **Axis B full battery**: all layers × full seed slate, both
+5. **Axis B full battery**: all layers × full seed slate, both
    directions. ~10 minutes.
-7. **Axis B aggregate**: patch-success table, minimal-patch summary.
-8. **Phase 6 result note** (`docs/mesa/PHASE6_RESULTS.md`) is written
-   with the cliff-step plot + minimal-patch summary as the headline.
+6. **Axis B aggregate**: patch-success table, minimal-patch summary.
+7. **Phase 6 result note** (`docs/mesa/PHASE6_RESULTS.md`) is written
+   with Axis A smoke failure + Axis B minimal-patch summary as the
+   headline.
 
-Total wall-clock: ~2-4 hours v1, mostly Axis A activation collection.
+Total wall-clock: ~10-30 minutes for remaining v1 work.
 
 ## 10. Exit Criterion
 
@@ -642,13 +654,10 @@ Phase 6 v1 complete when:
 
 - `phase6_probes.py` lands, smoke-tests cleanly on the 3-policy probe
   set, and produces the expected CSV columns.
-- Axis A probe-accuracy CSV covers all 22 fittable policies × every
-  hidden layer × `basin_pref_intervened` plus all 4 rider feature
-  families / 6 geometry target dimensions, after the smoke gate passes.
+- Axis A smoke artifacts are archived and explicitly marked as
+  non-greenlighting for full-zoo Axis A.
 - Axis B patch-success CSV covers the cliff pair × every layer × full
   seed slate × both directions.
-- The cliff-step plot (λ → R² for `basin_pref_intervened`) is generated and
-  inspected for the predicted P3 step.
 - The minimal-patch summary is generated and inspected for the
   predicted P4 single-layer-or-pair claim.
 - At least one of the four pre-registered predictions in §4 is
@@ -679,12 +688,12 @@ Phase 6 v1 complete when:
 Phase 7 (operating envelope) consumes Phase 6's interpretability
 artifacts in two ways:
 
-- **Feature presence as a deployment-time check.** If the linear-probe
-  finding is robust ("intervention-conditioned basin preference
-  decodability above R² = 0.5 ⇒ basin internalized"), it becomes a cheap
-  monitoring signal for Phase 7's
-  deployment-envelope study: run the probe on a candidate policy before
-  it's deployed, refuse if the feature is present.
+- **Feature investment as a deployment-time check.** If the ΔR²
+  depth-profile finding is robust ("deep layers preserve basin geometry
+  while goal-inference ΔR² collapses ⇒ basin internalized"), it becomes
+  a cheap monitoring signal for Phase 7's deployment-envelope study:
+  run the probe on a candidate policy before deployment and flag the
+  risky profile.
 - **Minimal-patch locus as a hardening target.** If Phase 6 v1 identifies
   a single-layer minimal patch, Phase 7 v2 can attempt targeted
   fine-tuning interventions (freeze the patch layer, train only above
@@ -697,6 +706,15 @@ deployment-relevant monitoring.
 
 ## 13. Versioning
 
+- **v1.6 Axis B promotion (2026-05-12)** — records the v1.5 ΔR² smoke
+  failure (Small, Medium, and cliff-pair checks), defers full-zoo Axis A
+  to v2, and makes Axis B activation patching the Phase 6 v1
+  load-bearing artifact.
+- **v1.5 depth-profile pivot (2026-05-12)** — demotes the failed
+  endpoint-shaped `basin_pref_intervened` target, promotes ΔR² over
+  `input.obs` as the Axis A headline, rewrites P1-P3 around feature
+  preservation/compression across depth, and restores Axis A to
+  clean-rollout collection only.
 - **v1.2 target correction (2026-05-12)** — replaces raw x_false
   decodability with the intervention-conditioned
   `basin_pref_intervened` headline target, keeps geometric probes as
