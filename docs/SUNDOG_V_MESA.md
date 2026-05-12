@@ -755,4 +755,34 @@ immune at any scale, 50/50 mixed admits proportional leakage that grows with
 capacity, pure reward is corrupted at Small and dramatically more corrupted
 at Medium — is the program's strongest gravity-claim formulation to date.
 Basin-effect gap widens from 65.6 pp (Small) to 76.6 pp (Medium). Probe-slate
-harness at `sc
+harness at `scripts/mesa-probe-slate.mjs`. Î²-sensitivity sub-result complete
+({0.5, 1.0, 2.0} monotonic). Large tier not started.
+
+**Phase 4:** Small + Medium causal intervention batteries **complete**. See
+[`mesa/PHASE4_RESULTS.md`](mesa/PHASE4_RESULTS.md) v1. Spec at
+[`mesa/PHASE4_SPEC.md`](mesa/PHASE4_SPEC.md) v1. Headline finding:
+canonical L-Reward has zero direct response to live `x_false` movement but
+continues toward the training-time basin, with old-basin preference growing
+from `3.413` at Small to `5.560` at Medium. Its Medium signature-sensor and
+geometry action responses are only `0.060` and `0.069`, while L-Reward-Clean
+responds at `0.572` and `0.772`; this is the causal receipt for
+fixed-attractor control. Aggregate reports live under
+`results/mesa/phase4-intervention-battery/reports/` and rebuild with
+`npm run mesa:phase4:aggregate`.
+
+**Phase 5:** Spec landed at [`mesa/PHASE5_SPEC.md`](mesa/PHASE5_SPEC.md) v1.
+Trainer support for the v1 slate is in place: `--mixed-lambda`,
+`--signature-shape`, `--load-checkpoint`, and `--reset-optimizer`; four
+Small dry-run checks passed under `results/mesa/phase5-smoke/`. The Small
+training slate has started landing: L-Mixed Î» runs for {0.1, 0.3, 0.7, 0.9},
+terminal/threshold signature-shape runs, 500K+500K curriculum runs, and
+Phase 4 intervention batteries for the new policies are complete. Early
+intervention reads: Î» breach appears between 0.5 and 0.7
+(`old_basin_pref`: -0.458, -0.066, -0.394, 1.346, 2.611 for Î» =
+0.1, 0.3, 0.5, 0.7, 0.9), terminal-only signature strongly beats the
+integrated Small baseline (37/64 vs 5/64), and reward-firstâ†’signature
+fine-tune does **not** retain basin attraction (`old_basin_pref = -0.585`).
+Phase 3 probe-slate evaluation and Phase 5 aggregate reports are still
+pending.
+
+**Phases 6-8:** Not started.
