@@ -1,0 +1,110 @@
+{
+  "generatedBy": "scripts/generate-sundog-logo-toolkit.mjs",
+  "roadmapPhase": "SUNDOG_V_GEOMETRY.md Phase 11",
+  "calibrationBasis": {
+    "phase10Images": [
+      "p2",
+      "p7",
+      "p13"
+    ],
+    "notes": "docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md",
+    "parhelicYOffsetR22": -0.05
+  },
+  "geometry": {
+    "viewBox": 1024,
+    "sun": {
+      "x": 512,
+      "y": 512,
+      "radius": 112,
+      "coreRadius": 42
+    },
+    "halo22Radius": 258,
+    "halo46Radius": 346,
+    "sunAltitudeDeg": 18,
+    "parhelicBeltY": 499.1,
+    "parhelionOffset": 271.3,
+    "leftParhelionX": 240.7,
+    "rightParhelionX": 783.3,
+    "paths": {
+      "parhelicBelt": "M 166 499.1 C 340 481.1 684 481.1 858 499.1",
+      "upperTangent": "M 276 392 C 356 292 668 292 748 392",
+      "cza": "M 328 276 C 420 232 604 232 696 276"
+    }
+  },
+  "protectedLayers": [
+    {
+      "id": "core.sun",
+      "rule": "Keep the sun centered inside the 22 deg halo. Scale as a group only."
+    },
+    {
+      "id": "core.halo-22",
+      "rule": "This is the iris. Do not decenter it from the sun."
+    },
+    {
+      "id": "core.parhelia",
+      "rule": "Glints sit on the parhelic belt at the sun-altitude-derived parhelion offset."
+    },
+    {
+      "id": "core.parhelic-belt",
+      "rule": "Belt uses the corrected -0.05 R22 vertical offset from Phase 10."
+    },
+    {
+      "id": "core.upper-tangent",
+      "rule": "Treat as the eyelid gesture. It can blink/reveal but should not detach from the halo system."
+    }
+  ],
+  "optionalLayers": [
+    {
+      "id": "optional.circumzenithal-arc",
+      "use": "Large or animated marks only."
+    },
+    {
+      "id": "optional.suncave-parry",
+      "use": "Annotation and education only until stronger multi-photo support."
+    },
+    {
+      "id": "optional.parry-supralateral",
+      "use": "Annotation only; not a default logo feature."
+    },
+    {
+      "id": "optional.infralateral",
+      "use": "Rich-display variant only; omit from small marks."
+    }
+  ],
+  "colorTokens": {
+    "skyInner": "#2c5f7f",
+    "skyMid": "#1a3a52",
+    "skyOuter": "#102436",
+    "ice": "#7da2b8",
+    "gold": "#f4c430",
+    "goldDeep": "#b97812",
+    "sunWhite": "#fff4b2",
+    "redInside": "#ff7a45",
+    "blueOutside": "#79bde8",
+    "ink": "#102436"
+  },
+  "motionStates": {
+    "idle": "Slow sun breathing plus belt shimmer.",
+    "activeReveal": "Draw the parhelic belt, then light the parhelia.",
+    "hover": "Increase parhelion opacity and slide glints outward by 6-10 px.",
+    "labelCallout": "Pulse one layer at a time using data-layer ids.",
+    "reducedMotion": "Use the static SVG; no opacity cycling or translation."
+  },
+  "smallSizeRules": {
+    "16-32px": "Sun, 22 deg halo, and parhelia only.",
+    "48-180px": "Add 46 deg halo and a simplified upper tangent.",
+    "192px+": "Full default mark, including parhelic belt and optional CZA if contrast survives."
+  },
+  "outputs": [
+    "public/icons/sundog-character-mark.svg",
+    "public/icons/sundog-character-mark.transparent.svg",
+    "public/icons/sundog-character-mark.animated.svg",
+    "public/icons/sundog-character-mark.layers.json",
+    "public/icons/sundog-character-favicon-16.png",
+    "public/icons/sundog-character-favicon-32.png",
+    "public/icons/sundog-character-favicon-48.png",
+    "public/icons/sundog-character-icon-192.png",
+    "public/icons/sundog-character-icon-512.png",
+    "public/icons/sundog-character-transparent-512.png"
+  ]
+}

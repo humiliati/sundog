@@ -543,17 +543,18 @@ function applyPillarFromTwoHalos(svg, daggerPoints, pillarLen) {
 //   - Parry-family / lateral vocabulary primitives: optional overlays for the
 //     suncave Parry arc, Parry supralateral shoulders, and infralateral arcs
 //     called out by the rich calibration references
-//   - Daggers: at (SUN.x ± R_22/cos(h), SUN.y)
+//   - Daggers: at (SUN.x ± R_22/cos(h), SUN.y + beltOffset)
 //   - Pillar: vesica of two halos centered at the (now altitude-derived)
 //     daggers
 //   - Parhelic arc: unique circle through dagger-sun-dagger
 
-function daggerPointsFromSunAltitude(altitudeDeg) {
+function daggerPointsFromSunAltitude(altitudeDeg, parhelicYOffsetR22 = 0) {
   const hRad = (clamp(altitudeDeg, 0, 80) * Math.PI) / 180;
   const offset = HALO_22_RADIUS / Math.cos(hRad);
+  const y = SUN.y + HALO_22_RADIUS * parhelicYOffsetR22;
   return {
-    left: { x: SUN.x - offset, y: SUN.y },
-    right: { x: SUN.x + offset, y: SUN.y },
+    left: { x: SUN.x - offset, y },
+    right: { x: SUN.x + offset, y },
   };
 }
 
@@ -567,18 +568,19 @@ function applyParhelicCircleGeneralized(svg, daggerPoints, parhelicCurvature) {
   const c = clamp(parhelicCurvature, 0, 1);
   const d = 200 * c;
   const halfChord = daggerPoints.right.x - SUN.x;
+  const beltY = daggerPoints.left.y;
 
   if (d < 0.5) {
     parhelic.setAttribute(
       "d",
-      "M " + daggerPoints.left.x.toFixed(2) + " " + SUN.y.toFixed(2) + " L " +
-        daggerPoints.right.x.toFixed(2) + " " + SUN.y.toFixed(2)
+      "M " + daggerPoints.left.x.toFixed(2) + " " + beltY.toFixed(2) + " L " +
+        daggerPoints.right.x.toFixed(2) + " " + beltY.toFixed(2)
     );
     return;
   }
 
   const u_ = (halfChord * halfChord - d * d) / (2 * d);
-  const cy = SUN.y - u_;
+  const cy = beltY - u_;
   const r = Math.hypot(halfChord, u_);
 
   const xMin = Math.max(SUN.x - r, 0);
@@ -897,6 +899,7 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   const czaCurve = readCssNumber(rootStyle, "--cza-curvature", 0.85);
   const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
   const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
+  const parhelicYOffsetR22 = readCssNumber(rootStyle, "--parhelic-y-offset-r22", -0.05);
   const supralateralIntensity = readCssNumber(rootStyle, "--supralateral-intensity", 0);
   const upperTangentIntensity = readCssNumber(rootStyle, "--upper-tangent-intensity", 0);
   const lowerTangentIntensity = readCssNumber(rootStyle, "--lower-tangent-intensity", 0);
@@ -904,7 +907,7 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   const parrySupralateralIntensity = readCssNumber(rootStyle, "--parry-supralateral-intensity", 0);
   const infralateralIntensity = readCssNumber(rootStyle, "--infralateral-intensity", 0);
 
-  const daggerPoints = daggerPointsFromSunAltitude(sunAltitude);
+  const daggerPoints = daggerPointsFromSunAltitude(sunAltitude, parhelicYOffsetR22);
 
   applyParhelicCircleGeneralized(svg, daggerPoints, parhelicCurvature);
   applyDaggersFromGoverningHalo(svg, daggerLen, daggerPoints);

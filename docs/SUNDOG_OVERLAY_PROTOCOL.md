@@ -143,6 +143,13 @@ table:
 mode) or extracted automatically (auto mode, future) by detecting the
 brightest non-sun points along the parhelic-arc band.
 
+The overlay script also exposes `--parhelic-y-offset-r22`, defaulting to
+`-0.05`, for the shared case where the photographed parhelic belt sits a
+few percent of R22 above the measured sun center while the 22° halo
+registration remains correct. This offset moves the parhelic curve and
+both dagger markers together; it must not be used to repair halo-radius or
+CZA alignment errors.
+
 ### Step 7 — Resolve
 
 The protocol returns one of three verdicts:

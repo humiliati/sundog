@@ -26,6 +26,7 @@
             --sun-pillar-length: 0.65;
             --parhelic-circle-intensity: 0.45;
             --parhelic-curvature: 0.66;     /* 0 = horizontal line; 1 = strong grin. 0.66 calibrated against source-photo overlay. */
+            --parhelic-y-offset-r22: -0.05; /* parhelic belt / parhelia vertical registration as fraction of R22 */
             --parhelia-intensity: 1.0;
             --parhelia-dagger-length: 1.0;
             --dispersion-width: 0.7;
@@ -749,6 +750,11 @@
             <div class="control-group">
                 <label>Parhelic Circle Curvature<span class="value" id="parhelic-curvature-value">0.66</span></label>
                 <input type="range" id="parhelic-curvature" data-param="parhelic-curvature" min="0" max="1" step="0.01" value="0.66">
+            </div>
+
+            <div class="control-group">
+                <label>Parhelic Belt Offset<span class="value" id="parhelic-y-offset-r22-value">-0.05</span></label>
+                <input type="range" id="parhelic-y-offset-r22" data-param="parhelic-y-offset-r22" min="-0.12" max="0.08" step="0.01" value="-0.05">
             </div>
 
             <h3>Parhelia (daggers)</h3>
