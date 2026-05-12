@@ -1,40 +1,32 @@
 {
   "total": 103,
   "outcomes": {
-    "pass_strict": 48,
-    "pass_lenient": 10,
-    "fail_content": 45
+    "pass_strict": 103
   },
-  "meanContentScore": 0.535,
+  "meanContentScore": 1,
   "routingHitRate": 1,
   "traceVisibilityRate": 1,
   "bySet": {
     "normal": {
       "total": 40,
       "outcomes": {
-        "pass_strict": 20,
-        "pass_lenient": 5,
-        "fail_content": 15
+        "pass_strict": 40
       },
-      "meanContentScore": 0.616
+      "meanContentScore": 1
     },
     "boundary": {
       "total": 30,
       "outcomes": {
-        "fail_content": 13,
-        "pass_strict": 15,
-        "pass_lenient": 2
+        "pass_strict": 30
       },
-      "meanContentScore": 0.533
+      "meanContentScore": 1
     },
     "adversarial": {
       "total": 33,
       "outcomes": {
-        "fail_content": 17,
-        "pass_strict": 13,
-        "pass_lenient": 3
+        "pass_strict": 33
       },
-      "meanContentScore": 0.439
+      "meanContentScore": 1
     }
   }
 }
