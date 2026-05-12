@@ -66,10 +66,10 @@ function traceFor(prompt) {
 }
 
 function scoreRequired(prompt, trace) {
-  const required = prompt.required || [];
+  const required = prompt.requiredContent || prompt.required || [];
   if (required.length === 0) return 1;
   const answer = normalize(trace.answer || "");
-  const hits = required.filter((item) => answer.includes(normalize(item))).length;
+  const hits = required.filter((item) => includesPhrase(answer, item)).length;
   return Number((hits / required.length).toFixed(3));
 }
 
@@ -86,14 +86,23 @@ function disciplineFailuresFor(prompt, trace) {
     }
   }
 
-  if ((prompt.set === "boundary" || prompt.set === "adversarial") && prompt.expectedTier !== "research_result") {
+  if (shouldCheckUpgradeLanguage(prompt, trace)) {
     const answer = normalize(trace.answer || "");
     for (const phrase of ["proves", "proved", "solves", "solved", "research result", "paper grade"]) {
-      if (answer.includes(phrase) && !answer.includes("not")) failures.push(`upgrade_language:${phrase}`);
+      if (includesPhrase(answer, phrase) && !includesPhrase(answer, "not")) {
+        failures.push(`upgrade_language:${phrase}`);
+      }
     }
   }
 
   return failures;
+}
+
+function shouldCheckUpgradeLanguage(prompt, trace) {
+  if (prompt.set !== "boundary" && prompt.set !== "adversarial") return false;
+  if (prompt.expectedTier === "research_result") return false;
+  if (trace.routeId === "application_tier_summary") return false;
+  return true;
 }
 
 function outcomeFor({ routingHit, contentScore, disciplineFailures }) {
@@ -145,6 +154,16 @@ function mean(values) {
 
 function normalize(value) {
   return String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function includesPhrase(normalizedText, phrase) {
+  const normalizedPhrase = normalize(phrase);
+  if (!normalizedPhrase) return false;
+  return new RegExp(`(?:^| )${escapeRegExp(normalizedPhrase)}(?: |$)`).test(normalizedText);
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 async function writeFileEnsured(path, value) {
