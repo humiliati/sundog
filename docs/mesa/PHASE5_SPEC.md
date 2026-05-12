@@ -568,3 +568,22 @@ spec is revised and re-versioned.
   signature pretrain offers no protection against later basin-corrupted
   reward fine-tuning (`old_basin_pref = 2.613`, 62 probe basin captures).
   Full result note: [`PHASE5_RESULTS.md`](PHASE5_RESULTS.md).
+
+- `v1.2` (2026-05-12): Medium slate complete. Three new Medium runs
+  (L-Mixed λ=0.3, L-Mixed λ=0.7, L-Signature Terminal Medium) plus the
+  existing λ=0.5 Medium anchor. **Headline:** L-Signature Medium
+  Terminal reaches 64/64 success at mean S_T = 0.9986 — Oracle ceiling
+  performance, exceeding L-Reward-Clean Medium (49/64) by 23 pp. The
+  Sundog-cost framing from Phase 2-3 is overturned: state-only
+  signature training at correct shape is **better than** dense reward
+  training at Medium scale. Integrated-signature canonical is
+  deprecated; terminal-only is the new canonical. Medium λ protection
+  curve is non-monotone (`old_basin_pref` 0.823 → 0.889 → 0.613 → 5.560
+  across λ ∈ {0.3, 0.5, 0.7, 1.0}). Pre-registered Medium prediction
+  outcomes: (A1-M) confirmed marginally, (A2-M) falsified in unexpected
+  direction (λ=0.7 less basin-attracted than λ=0.5; success higher than
+  λ=0.5), (B-M) confirmed and exceeded (64/64 vs predicted ≥45/64).
+  Phase 5 v3 candidates: λ ∈ {0.8, 0.9} Medium curve characterization,
+  reward-pretrain → terminal-signature-fine-tune curriculum (C1
+  follow-up), and Small L-Sig-Terminal evaluation slate completion.
+  Full result note: [`PHASE5_RESULTS.md`](PHASE5_RESULTS.md) v2 §8.
