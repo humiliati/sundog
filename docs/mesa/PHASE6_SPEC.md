@@ -119,8 +119,7 @@ For each `(layer, feature)` cell:
 2. Stack target feature → `y ∈ R^N` (scalar) or `Y ∈ R^(N × 2)` (vec).
 3. Train/test split: 80/20 stratified by episode (not by step — keeps
    train and test from sharing episode trajectories).
-4. Fit ridge regression with the closed-form solver in the harness
-   (`alpha=1.0`; no external sklearn dependency).
+4. Fit ridge regression with `sklearn.linear_model.Ridge(alpha=1.0)`.
 5. Score: R² on the held-out test set.
 6. Sanity baseline: shuffled-target R² should be near zero. If shuffled
    R² > 0.05, the split is leaking and the probe needs re-cutting.
@@ -147,7 +146,7 @@ distance metric: new_basin_dist − old_basin_dist; positive = still
 attracted to old training basin = internalized attractor).
 
 The protected policy has `old_basin_pref < 1.0` under this intervention;
-the collapsed policy has `old_basin_pref > 1.0`. Phase 6 v4 will report
+the collapsed policy has `old_basin_pref > 1.0`. Phase 5 v4 will report
 exact values; Phase 6 v1 uses these as readout extremes.
 
 **Patch protocol:**
@@ -194,8 +193,9 @@ that single + pair coverage suffices.
 final `Linear` and outer `torch.tanh(...) * action_scale` squash. There
 is no actor mean-head/log-std split; `log_std` only exists on the PPO
 training wrapper and is not part of deterministic exported inference.
-The v1 patchable points are the post-Tanh hidden activations
-(`actor.net.1`, `actor.net.3`, ...). The final linear/output squash is
+The v1 patchable points are the post-Tanh hidden activations (`net.1`,
+`net.3`, ... on the exported actor; `actor.net.1`, `actor.net.3`, ...
+if using the PPO wrapper). The final linear/output squash is
 excluded from the canonical v1 layer sweep unless the smoke test shows
 the basin locus is entirely downstream of the last hidden activation.
 The harness should introspect named modules rather than hard-code
@@ -408,6 +408,8 @@ A new Python harness. Sketch of structure:
 import argparse, json, pathlib
 import torch
 import numpy as np
+from sklearn.linear_model import Ridge
+from sklearn.metrics import r2_score
 
 from training.mesa.js_bridge_env import BridgeClient, REPO_ROOT
 from training.mesa.policy import load_checkpoint, policy_from_checkpoint
@@ -464,29 +466,13 @@ def collect_activations(policy_path, tier, seed_lo=10000, seed_hi=10064):
                 step += 1
     return records
 
-def fit_ridge_closed_form(X, y, alpha=1.0):
-    """Return closed-form ridge weights with an unregularized bias column."""
-    X1 = np.concatenate([X, np.ones((len(X), 1), dtype=X.dtype)], axis=1)
-    reg = alpha * np.eye(X1.shape[1], dtype=X.dtype)
-    reg[-1, -1] = 0.0
-    return np.linalg.solve(X1.T @ X1 + reg, X1.T @ y)
-
-def predict_ridge(X, coef):
-    X1 = np.concatenate([X, np.ones((len(X), 1), dtype=X.dtype)], axis=1)
-    return X1 @ coef
-
-def r2_score_np(y, y_hat):
-    denom = np.sum((y - y.mean(axis=0)) ** 2)
-    if denom <= 1e-12:
-        return 0.0
-    return float(1.0 - np.sum((y - y_hat) ** 2) / denom)
-
-def fit_shuffled_closed_form(X, y, train_idx, test_idx, alpha=1.0, seed=0):
+def fit_shuffled_ridge(X, y, train_idx, test_idx, alpha=1.0, seed=0):
     rng = np.random.default_rng(seed)
     y_shuf = y.copy()
     rng.shuffle(y_shuf, axis=0)
-    coef = fit_ridge_closed_form(X[train_idx], y_shuf[train_idx], alpha=alpha)
-    return r2_score_np(y_shuf[test_idx], predict_ridge(X[test_idx], coef))
+    probe = Ridge(alpha=alpha)
+    probe.fit(X[train_idx], y_shuf[train_idx])
+    return r2_score(y_shuf[test_idx], probe.predict(X[test_idx]))
 
 def fit_probes(records, layer_names, feature_names):
     """Fit ridge probe for every (layer, feature) cell."""
@@ -497,13 +483,14 @@ def fit_probes(records, layer_names, feature_names):
             y = compute_feature(records, feature)
             # episode-stratified 80/20 split
             train_idx, test_idx = episode_split(records, frac=0.8)
-            coef = fit_ridge_closed_form(X[train_idx], y[train_idx], alpha=1.0)
+            probe = Ridge(alpha=1.0)
+            probe.fit(X[train_idx], y[train_idx])
             results.append({
                 "layer": layer,
                 "feature": feature,
-                "r2_test": r2_score_np(y[test_idx], predict_ridge(X[test_idx], coef)),
-                "r2_train": r2_score_np(y[train_idx], predict_ridge(X[train_idx], coef)),
-                "r2_shuffled": fit_shuffled_closed_form(X, y, train_idx, test_idx),
+                "r2_test": r2_score(y[test_idx], probe.predict(X[test_idx])),
+                "r2_train": r2_score(y[train_idx], probe.predict(X[train_idx])),
+                "r2_shuffled": fit_shuffled_ridge(X, y, train_idx, test_idx),
                 "n_samples": len(records),
             })
     return results
@@ -576,7 +563,7 @@ results/mesa/phase6-probes/
   axis-b-patch-success.csv             # (layer, direction, seed) → patch_success
   axis-b-patch-aggregate.csv           # (layer, direction) → mean + 95% CI
   reports/
-    minimal-patch-summary.json         # { "single_layer": "actor.net.1", "patch_success": 0.83 }
+    minimal-patch-summary.json         # { "single_layer": "net.1", "patch_success": 0.83 }
     probe-accuracy-heatmap.png         # optional; v1 may stay CSV-only
     cliff-step-plot.png                # optional; v1 may stay CSV-only
 ```
@@ -603,7 +590,7 @@ Recommended sequencing for Phase 6 v1:
 3. **Axis A full zoo**: all 22 fittable policies. ~70-90 minutes.
 4. **Axis A aggregate**: probe-accuracy heatmap, cliff-step plot,
    findings table.
-5. **Axis B cliff-pair smoke**: single layer (`actor.net.1`), 8 seeds. Verify
+5. **Axis B cliff-pair smoke**: single layer (`net.1` on exported actor), 8 seeds. Verify
    patch mechanics work and that direction A→C is non-trivial. ~3
    minutes.
 6. **Axis B full battery**: all layers × full seed slate, both
@@ -674,8 +661,8 @@ deployment-relevant monitoring.
 ## 13. Versioning
 
 - **v1.1 sanity check (2026-05-12)** — aligned v1 with the actual
-  Phase 5 artifacts and trainer code: Tanh MLP actor hooks, closed-form
-  ridge with no sklearn dependency, JS bridge diagnostic labels, Phase 5
+  Phase 5 artifacts and trainer code: Tanh MLP actor hooks,
+  sklearn-backed ridge probes, JS bridge diagnostic labels, Phase 5
   aggregate CSV as the fittable-zoo source of truth, and checkpoint
   hashes in the manifest.
 - **v1 (2026-05-12)** — initial pin. Two axes (linear probes,
