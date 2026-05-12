@@ -582,11 +582,19 @@ Recommended sequencing for Phase 6 v1:
    registration, env loader, and ridge fitter. Smoke-test on a single
    policy (HC-Sig-S excluded; use L-Sig-S-Integrated as the smoke
    target) before launching full zoo.
-2. **Axis A smoke**: L-Sig-M-Terminal + L-Mixed-M-λ0.95 +
-   L-Mixed-M-λ0.97 (3 learned checkpoints). Verify the
-   shuffled-baseline R² is near 0, that `dist_to_x_goal` is decodable
-   from at least one competent controller, and that the cliff pair can
-   be loaded from the same manifest path shape. ~10 minutes wall-clock.
+2. **Axis A smoke**: L-Sig-S-Integrated + L-Reward-S + Oracle-S. Treat
+   Oracle-S as an analytic privileged ceiling row rather than a fittable
+   neural-layer policy. Verify the shuffled-baseline R² is near 0,
+   Oracle-S has high privileged-ceiling `dist_to_x_goal` R², L-Reward-S
+   has non-trivial `dist_to_x_false` R², and the learned policies expose
+   the expected input-adjacent `net.1` geometry floor. ~10 minutes
+   wall-clock.
+   **Smoke gate:** if L-Signature and L-Reward show near-identical
+   `x_false` R² from `input.obs` / `net.1`, pause before the full zoo and
+   revise Axis A toward residualized or intervention-conditioned basin
+   features. A fixed `x_false` is linearly recoverable from position, so
+   raw `vec_to_x_false` and high raw `dist_to_x_false` can be geometric
+   floors rather than basin-internalization evidence.
 3. **Axis A full zoo**: all 22 fittable policies. ~70-90 minutes.
 4. **Axis A aggregate**: probe-accuracy heatmap, cliff-step plot,
    findings table.

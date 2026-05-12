@@ -11,8 +11,8 @@ import { jsonResponse, errorResponse, withCors, handleOptions } from "./_lib.js"
 export const onRequestOptions = ({ request }) => handleOptions(request);
 
 export async function onRequestGet({ env }) {
-  const r2Ready = !!env.SUNDOG_UPLOADS;
-  const kvReady = !!env.SUNDOG_KV;
+  const r2Ready = !!env.sundog_uploads;
+  const kvReady = !!env.sundog_rate_limit;
   const policyVersion = env.POLICY_VERSION || "unknown";
   return withCors(
     jsonResponse({
