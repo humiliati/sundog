@@ -54,6 +54,21 @@
       "description": "Adversarial overclaim prompts covering promotional pressure, roadmap/result collapse, citation pressure, stale context, missing evidence, tool-output conflict, and user-flattery pressure across application tiers."
     },
     {
+      "path": "chat/prompts/gold-wild.jsonl",
+      "kind": "prompt_wild_set",
+      "status": "phase2_populated",
+      "phase": "2",
+      "targetCount": 30,
+      "description": "Out-of-distribution probe set: visitor-style prompts not derived from the claim map. Categories: plain_visitor, practical_ops, comparison, off_topic, prompt_injection, multi_intent, typo_noise, opinion_subjective, meta_widget, ambiguous_route. Used to map the static helper's actual ceiling, not to score against a gold."
+    },
+    {
+      "path": "chat/eval/score_wild_probe.mjs",
+      "kind": "evaluation_script",
+      "status": "phase2_populated",
+      "phase": "2",
+      "description": "Run the wild prompt slate through the static+retrieval pipeline and report where each prompt lands. No pass/fail; surfaces routeId / disposition / retrieval behavior by category."
+    },
+    {
       "path": "public/data/sundog-claim-map.json",
       "kind": "public_data",
       "status": "phase2_seeded",

@@ -174,12 +174,12 @@ function renderExchange(question, trace) {
 function renderTierRail(trace) {
   const rail = document.createElement("div");
   rail.className = "sd-chat-tier-rail";
-  rail.append(chip(trace.evidenceTier || "unknown"));
-  if (trace.boundary?.length) rail.append(chip("Boundary Active"));
+  rail.append(chip(trace.evidenceTier || "unknown", "tier"));
+  if (trace.boundary?.length) rail.append(chip("Boundary Active", "state"));
   if (trace.disposition === "refuse") {
-    rail.append(chip("Refused"));
+    rail.append(chip("Refused", "state"));
   } else if (trace.disposition === "retrieval_only") {
-    rail.append(chip("Retrieval Only"));
+    rail.append(chip("Retrieval Only", "state"));
   }
   return rail;
 }
@@ -246,9 +246,9 @@ function addDefinition(list, term, value) {
   list.append(dt, dd);
 }
 
-function chip(value) {
+function chip(value, kind = "tier") {
   const span = document.createElement("span");
-  span.className = "sd-chat-chip";
+  span.className = `sd-chat-chip sd-chat-chip--${kind}`;
   span.textContent = String(value || "unknown").replaceAll("_", " ");
   return span;
 }
