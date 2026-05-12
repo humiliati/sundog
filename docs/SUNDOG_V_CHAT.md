@@ -90,15 +90,18 @@ The public widget has three visible layers:
    - links to docs, demos, and workbench pages.
 
 2. Evidence rail
-   - chips such as:
+   - tier chips (one per answer), drawn from `chat/claim_map.json`
+     `evidenceTiers`:
      - Research Result
      - Operating-Envelope Study
      - Instrumented Prototype
      - Product Expression
      - Conceptual Lineage
-     - Boundary Active
+     - Roadmap
      - Unsupported
-     - Speculative
+   - state flags (UI states, not tiers): `Boundary Active` when the answer
+     carries a populated `boundaries` block, and `Refused` when disposition is
+     `refuse`. These compose with the tier chip rather than replacing it.
    - this inherits the evidence-tier discipline from `APPLICATIONS.md`.
 
 3. Trace drawer
@@ -251,11 +254,15 @@ instrumented_prototype
 product_expression
 conceptual_lineage
 roadmap
-speculative
-deprecated_or_retracted
-unknown
+unsupported
 
-The applications doc already defines the evidence tiers and says academic writing should keep them separate. The chat widget’s main job is to preserve that separation when users ask collapsed questions.
+The canonical tier vocabulary lives in `chat/claim_map.json` under
+`evidenceTiers`. The applications doc defines what each tier means in research
+terms and says academic writing should keep them separate. The chat widget’s
+main job is to preserve that separation when users ask collapsed questions.
+
+`navigation` is reserved for wayfinding (non-claim) routes such as
+`inspect_data`; it is not an evidence tier.
 
 ## 7. Probe Slate
 
@@ -512,6 +519,12 @@ Deliverables:
 - evidence chips;
 - links to docs and demos;
 - trace drawer with static support.
+
+Phase 1 artifact status:
+`public/js/sundog-chat-widget.mjs` and `public/js/sundog-chat-router.mjs`
+seed the static site helper across the root HTML pages. The first pass uses
+`/chat/claim_map.json` directly and renders top-25 FAQ chips, static answers,
+evidence-tier chips, next links, and trace details.
 
 Exit criterion:
 A visitor can ask basic questions about the theorem, mesa roadmap,
