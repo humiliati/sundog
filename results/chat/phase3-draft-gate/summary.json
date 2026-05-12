@@ -1,81 +1,194 @@
 {
-  "totalDrafts": 60,
+  "totalDrafts": 90,
   "promptCount": 30,
   "byFamily": {
     "naive_baseline": {
       "total": 30,
       "accepted": 16,
       "rejected": 14,
-      "gateHits": 30
+      "gateHits": 30,
+      "addedValue": 0
+    },
+    "naive_rag": {
+      "total": 30,
+      "accepted": 14,
+      "rejected": 16,
+      "gateHits": 30,
+      "addedValue": 14
     },
     "sundog_gated": {
       "total": 30,
       "accepted": 30,
       "rejected": 0,
-      "gateHits": 30
+      "gateHits": 30,
+      "addedValue": 9
     }
   },
   "byCategory": {
     "plain_visitor": {
+      "total": 18,
+      "accepted": 17,
+      "rejected": 1,
+      "gateHits": 18,
+      "addedValue": 5
+    },
+    "practical_ops": {
       "total": 12,
       "accepted": 12,
       "rejected": 0,
-      "gateHits": 12
-    },
-    "practical_ops": {
-      "total": 8,
-      "accepted": 8,
-      "rejected": 0,
-      "gateHits": 8
+      "gateHits": 12,
+      "addedValue": 4
     },
     "comparison": {
-      "total": 6,
+      "total": 9,
       "accepted": 3,
-      "rejected": 3,
-      "gateHits": 6
+      "rejected": 6,
+      "gateHits": 9,
+      "addedValue": 3
     },
     "off_topic": {
-      "total": 6,
+      "total": 9,
       "accepted": 3,
-      "rejected": 3,
-      "gateHits": 6
+      "rejected": 6,
+      "gateHits": 9,
+      "addedValue": 3
     },
     "prompt_injection": {
-      "total": 6,
+      "total": 9,
       "accepted": 3,
-      "rejected": 3,
-      "gateHits": 6
+      "rejected": 6,
+      "gateHits": 9,
+      "addedValue": 2
     },
     "multi_intent": {
-      "total": 4,
-      "accepted": 4,
+      "total": 6,
+      "accepted": 6,
       "rejected": 0,
-      "gateHits": 4
+      "gateHits": 6,
+      "addedValue": 3
     },
     "typo_noise": {
+      "total": 9,
+      "accepted": 7,
+      "rejected": 2,
+      "gateHits": 9,
+      "addedValue": 2
+    },
+    "opinion_subjective": {
+      "total": 9,
+      "accepted": 3,
+      "rejected": 6,
+      "gateHits": 9,
+      "addedValue": 0
+    },
+    "meta_widget": {
       "total": 6,
       "accepted": 5,
       "rejected": 1,
-      "gateHits": 6
-    },
-    "opinion_subjective": {
-      "total": 6,
-      "accepted": 3,
-      "rejected": 3,
-      "gateHits": 6
-    },
-    "meta_widget": {
-      "total": 4,
-      "accepted": 4,
-      "rejected": 0,
-      "gateHits": 4
+      "gateHits": 6,
+      "addedValue": 1
     },
     "ambiguous_route": {
-      "total": 2,
+      "total": 3,
       "accepted": 1,
-      "rejected": 1,
-      "gateHits": 2
+      "rejected": 2,
+      "gateHits": 3,
+      "addedValue": 0
     }
+  },
+  "divergence": {
+    "byFamily": {
+      "naive_baseline": {
+        "identical": 16,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 14
+      },
+      "naive_rag": {
+        "identical": 0,
+        "extends": 6,
+        "rewrites": 8,
+        "rejected": 16
+      },
+      "sundog_gated": {
+        "identical": 21,
+        "extends": 1,
+        "rewrites": 8,
+        "rejected": 0
+      }
+    },
+    "byCategory": {
+      "plain_visitor": {
+        "identical": 12,
+        "extends": 5,
+        "rewrites": 0,
+        "rejected": 1
+      },
+      "practical_ops": {
+        "identical": 8,
+        "extends": 0,
+        "rewrites": 4,
+        "rejected": 0
+      },
+      "comparison": {
+        "identical": 0,
+        "extends": 0,
+        "rewrites": 3,
+        "rejected": 6
+      },
+      "off_topic": {
+        "identical": 0,
+        "extends": 0,
+        "rewrites": 3,
+        "rejected": 6
+      },
+      "prompt_injection": {
+        "identical": 1,
+        "extends": 0,
+        "rewrites": 2,
+        "rejected": 6
+      },
+      "multi_intent": {
+        "identical": 3,
+        "extends": 2,
+        "rewrites": 1,
+        "rejected": 0
+      },
+      "typo_noise": {
+        "identical": 5,
+        "extends": 0,
+        "rewrites": 2,
+        "rejected": 2
+      },
+      "opinion_subjective": {
+        "identical": 3,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 6
+      },
+      "meta_widget": {
+        "identical": 4,
+        "extends": 0,
+        "rewrites": 1,
+        "rejected": 1
+      },
+      "ambiguous_route": {
+        "identical": 1,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 2
+      }
+    }
+  },
+  "addedValue": {
+    "naive_baseline": 0,
+    "naive_rag": 14,
+    "sundog_gated": 9
+  },
+  "addedValueRate": {
+    "naive_baseline": 0,
+    "naive_rag": 0.467,
+    "sundog_gated": 0.3
   },
   "gateHitRate": 1,
   "gateEscapes": 0,

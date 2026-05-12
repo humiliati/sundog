@@ -838,64 +838,101 @@ function applyUpperTangentArc(svg, intensity) {
 }
 
 function applySuncaveParryArc(svg, intensity) {
-  // Parry-orientation companion above the upper tangent arc. "Suncave" means
-  // the arc's ends bend back toward the sun; in screen coordinates that is a
-  // shallow cap whose center sits above the 22° halo top and whose shoulders
-  // fall toward the sun. This is an atlas primitive, not a HaloSim raytrace.
+  // Parry-orientation companion above the upper tangent arc. Suncave means
+  // the arc's ends bend back toward the sun: a shallow cap whose center sits
+  // above the 22° halo top, shoulders falling toward the sun. Atlas
+  // primitive, not a HaloSim raytrace.
   const arc = svg.querySelector("#suncave-parry-path");
   if (!arc) return;
-  if (intensity <= 0.001) {
-    arc.setAttribute("d", "");
-    return;
-  }
+  if (intensity <= 0.001) { arc.setAttribute("d", ""); return; }
   const apexY = SUN.y - HALO_22_RADIUS - 36;
   const endpointY = SUN.y - HALO_22_RADIUS + 24;
   const halfWidth = 210;
   const circle = czaCircleFromApex(apexY, endpointY, halfWidth);
   if (!circle) return;
   const d = circleBranchPath(
-    circle.cx,
-    circle.cy,
-    circle.r,
-    SUN.x - halfWidth,
-    SUN.x + halfWidth,
-    0,
-    endpointY + 8,
-    "upper",
-    120
+    circle.cx, circle.cy, circle.r,
+    SUN.x - halfWidth, SUN.x + halfWidth,
+    -50, endpointY + 5,
+    "upper"
   );
-  arc.setAttribute("d", d);
+  if (d) arc.setAttribute("d", d);
 }
 
-function applyParrySupralateralArcs(svg, intensity) {
-  // Rare Parry-oriented shoulders riding the upper-lateral supralateral
-  // family. Drawn as two short peripheral segments just outside the 46° halo.
+function applyParrySupralateralArc(svg, intensity) {
+  // Parry-orientation shoulders flanking the supralateral arc. Modeled as two
+  // mirror-image short arcs that ride along the 46° halo top, tilted inward
+  // toward the sun side. Single primitive emits both shoulders as one path.
   const arc = svg.querySelector("#parry-supralateral-path");
   if (!arc) return;
-  if (intensity <= 0.001) {
-    arc.setAttribute("d", "");
-    return;
+  if (intensity <= 0.001) { arc.setAttribute("d", ""); return; }
+  // Each shoulder is the upper arc of a circle centered slightly off the sun
+  // axis, tangent to the 46° halo from inside near its top-shoulder region.
+  const shoulderOffsetX = 240;       // horizontal offset from sun axis
+  const tangentY = SUN.y - 440 + 18; // just below the 46° halo top
+  const R_psl = 260;
+  const segments = [];
+  for (const sign of [-1, +1]) {
+    const cx = SUN.x + sign * shoulderOffsetX;
+    const cy = tangentY - R_psl;
+    const seg = circleBranchPath(
+      cx, cy, R_psl,
+      cx - 180, cx + 180,
+      0, tangentY + 30,
+      "lower"
+    );
+    if (seg) segments.push(seg);
   }
-  const r = 500;
-  const left = polarArcPath(SUN.x, SUN.y, r, 206, 248, 0, SUN.y - 10);
-  const right = polarArcPath(SUN.x, SUN.y, r, 292, 334, 0, SUN.y - 10);
-  arc.setAttribute("d", [left, right].filter(Boolean).join(" "));
+  arc.setAttribute("d", segments.join(" "));
 }
 
-function applyInfralateralArcs(svg, intensity) {
-  // Lower lateral tangent arcs: paired peripheral arcs outside the 46° halo
-  // and below the parhelic circle. At low/mid sun elevations they read as
-  // left/right side arcs rather than a full circle.
+function applyInfralateralArc(svg, intensity) {
+  // Infralateral arcs: mirror-image siblings of the supralateral arc, riding
+  // below the 46° halo's bottom-shoulder region. Visible in low-altitude
+  // sundog photos where the lower sky is unobstructed.
   const arc = svg.querySelector("#infralateral-path");
   if (!arc) return;
-  if (intensity <= 0.001) {
-    arc.setAttribute("d", "");
-    return;
+  if (intensity <= 0.001) { arc.setAttribute("d", ""); return; }
+  const tangentY = SUN.y + 440;
+  const R_infra = 400;
+  const cx = SUN.x;
+  const cy = tangentY + R_infra;
+  const xMin = Math.max(cx - R_infra, 0);
+  const xMax = Math.min(cx + R_infra, 1000);
+  const dx = xMax - xMin;
+  if (dx <= 1e-6) return;
+  const steps = 160;
+  const parts = [];
+  let started = false;
+  for (let i = 0; i <= steps; i += 1) {
+    const x = xMin + (dx * i) / steps;
+    const u = (x - cx) / R_infra;
+    const inside = 1 - u * u;
+    if (inside < 0) continue;
+    const y = cy - R_infra * Math.sqrt(inside);
+    if (y < tangentY - 5 || y > 800) continue;
+    parts.push((started ? "L " : "M ") + x.toFixed(2) + " " + y.toFixed(2));
+    started = true;
   }
-  const r = 500;
-  const left = polarArcPath(SUN.x, SUN.y, r, 142, 160, SUN.y + 5, 800);
-  const right = polarArcPath(SUN.x, SUN.y, r, 20, 38, SUN.y + 5, 800);
-  arc.setAttribute("d", [left, right].filter(Boolean).join(" "));
+  arc.setAttribute("d", parts.join(" "));
+}
+
+// Phase 3 binding helpers --------------------------------------------------
+// These are the math-derived defaults the doc's Phase 3 roadmap calls for.
+
+function czaVisibleAtAltitude(altitudeDeg) {
+  // The CZA is visible only when the sun is BELOW ~32° altitude. Above that
+  // the circumzenithal-arc circle moves outside the visible hemisphere.
+  return altitudeDeg <= 32;
+}
+
+function parhelicCurvatureFromAltitude(altitudeDeg) {
+  // Empirical-fit smile curvature: at the horizon the parhelic circle
+  // projects roughly flat; as altitude rises the projected curvature grows.
+  // 0..1 across altitude 0..60° with mild quadratic shape. Honors the
+  // explicit slider when not derived.
+  const h = clamp(altitudeDeg, 0, 80) / 60;
+  return clamp(0.03 + 0.55 * h * h, 0, 1);
 }
 
 function applyGeometryHaloAtlas(svg, rootStyle) {
@@ -908,25 +945,46 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
   const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.05);
   const parhelicYOffsetR22 = readCssNumber(rootStyle, "--parhelic-y-offset-r22", -0.05);
+  // Phase 3 math-binding override: when --parhelic-curvature-derive > 0.5
+  // (e.g. set by a "derive from altitude" toggle), ignore the slider and
+  // compute curvature from sun altitude. Default off so the slider holds.
+  const deriveCurvature = readCssNumber(rootStyle, "--parhelic-curvature-derive", 0) > 0.5;
   const supralateralIntensity = readCssNumber(rootStyle, "--supralateral-intensity", 0);
   const upperTangentIntensity = readCssNumber(rootStyle, "--upper-tangent-intensity", 0);
   const lowerTangentIntensity = readCssNumber(rootStyle, "--lower-tangent-intensity", 0);
   const suncaveParryIntensity = readCssNumber(rootStyle, "--suncave-parry-intensity", 0);
   const parrySupralateralIntensity = readCssNumber(rootStyle, "--parry-supralateral-intensity", 0);
   const infralateralIntensity = readCssNumber(rootStyle, "--infralateral-intensity", 0);
+  const czaForcedIntensity = readCssNumber(rootStyle, "--cza-intensity", 0.95);
 
   const daggerPoints = daggerPointsFromSunAltitude(sunAltitude, parhelicYOffsetR22);
 
-  applyParhelicCircleGeneralized(svg, daggerPoints, parhelicCurvature);
+  const effectiveCurvature = deriveCurvature
+    ? parhelicCurvatureFromAltitude(sunAltitude)
+    : parhelicCurvature;
+
+  applyParhelicCircleGeneralized(svg, daggerPoints, effectiveCurvature);
   applyDaggersFromGoverningHalo(svg, daggerLen, daggerPoints);
   applyPillarFromTwoHalos(svg, daggerPoints, pillarLen);
-  applyCzaFullRing(svg, czaCurve);
+
+  // Phase 3 binding: hide CZA above ~32° altitude regardless of slider.
+  if (czaVisibleAtAltitude(sunAltitude) && czaForcedIntensity > 0.001) {
+    applyCzaFullRing(svg, czaCurve);
+  } else {
+    const p = svg.querySelector("#cza-primary");
+    const s = svg.querySelector(".cza-secondary");
+    const b = svg.querySelector(".cza-bell-fill");
+    if (p) p.setAttribute("d", "");
+    if (s) s.setAttribute("d", "");
+    if (b) b.setAttribute("d", "");
+  }
+
   applySupralateralArc(svg, supralateralIntensity);
   applyUpperTangentArc(svg, upperTangentIntensity);
   applyLowerTangentArc(svg, lowerTangentIntensity);
   applySuncaveParryArc(svg, suncaveParryIntensity);
-  applyParrySupralateralArcs(svg, parrySupralateralIntensity);
-  applyInfralateralArcs(svg, infralateralIntensity);
+  applyParrySupralateralArc(svg, parrySupralateralIntensity);
+  applyInfralateralArc(svg, infralateralIntensity);
 
   applyCompassRays(svg, compassLen, compassRotationDeg);
   applySecondaryHalos(svg, overlapBias);
@@ -940,22 +998,29 @@ function applyGeometryHaloGoverned(svg, rootStyle) {
   const czaCurve = readCssNumber(rootStyle, "--cza-curvature", 0.85);
   const overlapBias = readCssNumber(rootStyle, "--ring-overlap-bias", 0.5);
   const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
-
   const daggerPoints = daggerPointsHorizontal();
-
   applyParhelicCircleThroughDaggersAndSun(svg, parhelicCurvature);
   applyDaggersFromGoverningHalo(svg, daggerLen, daggerPoints);
   applyPillarFromTwoHalos(svg, daggerPoints, pillarLen);
-
   applyCompassRays(svg, compassLen, compassRotationDeg);
   applyCza(svg, czaCurve);
   applySecondaryHalos(svg, overlapBias);
 }
 
+// Exported for unit/test usage in Phase 3 test harness.
+export const phase3 = {
+  daggerOffset(altitudeDeg) {
+    return HALO_22_RADIUS / Math.cos((clamp(altitudeDeg, 0, 80) * Math.PI) / 180);
+  },
+  czaVisible: czaVisibleAtAltitude,
+  parhelicCurvature: parhelicCurvatureFromAltitude,
+  HALO_22_RADIUS,
+  HALO_46_RADIUS: 440,
+};
+
 export function applyParhelionGeometry({ svg, rootStyle, model }) {
   if (!svg || !rootStyle) return;
   svg.dataset.geometryModel = model;
-
   if (model === "halo_atlas") {
     applyGeometryHaloAtlas(svg, rootStyle);
   } else if (model === "halo_governed") {

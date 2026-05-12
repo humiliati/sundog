@@ -658,11 +658,15 @@ Phase 3 artifact status:
 - `results/chat/phase3-draft-gate/summary.json`, `draft-outcomes.csv`, and
   `draft-outcomes.json` record the first Phase 3 smoke run.
 
-First smoke result (2026-05-12):
-- `npm run chat:eval:phase3` reports 60 drafts across 30 wild prompts.
-- `sundog_gated`: 30 accepted / 0 rejected.
-- `naive_baseline`: 16 accepted / 14 rejected.
-- Gate escape count: 0.
+First B1/divergence smoke result (2026-05-12):
+- `npm run chat:eval:phase3` reports 90 drafts across 30 wild prompts and
+  three deterministic families.
+- `naive_baseline`: 16 accepted / 14 rejected / 0 addedValue.
+- `naive_rag`: 14 accepted / 16 rejected / 14 addedValue.
+- `sundog_gated`: 30 accepted / 0 rejected / 9 addedValue.
+- Gate hit rate: 1. Gate escape count: 0.
+- Divergence is now tracked as `identical`, `extends`, `rewrites`, or
+  `rejected`; `addedValue` counts accepted `extends` and `rewrites`.
 
 This is a scaffold result, not a model-family result. The next Phase 3 step is
 to plug a real adapter into the same gate and compare its drafts against this

@@ -434,6 +434,128 @@ while leaving the halo anchors, CZA, and tangent-arc vocabulary untouched.
 The x-residual table above is unchanged; the correction is a shared vertical
 registration fix for the belt layer.
 
+### Phase 2 → Phase 3 Transition (2026-05-12)
+
+Phase 2 calibration is closed. The Phase 2 gate from the roadmap reads
+"snapshot the locked param JSON to `docs/SUNDOG_GEOMETRY_POSE.json` or
+similar; future regressions are reviewable against that file." That gate is
+satisfied by `public/poses/canonical-halo-atlas.json` with the
+`calibration.phase2_default_lock: 2026-05-12` field. Seven photos sit in
+`docs/calibration/`, seven overlays in `docs/calibration/overlays/`, and the
+residual table above is the regression baseline.
+
+**Phase 3 deliverables landed:**
+
+- `phase3.daggerOffset(altitudeDeg)` — returns `R_22 / cos(h)`. The 7-photo
+  pass validated this across altitudes 1°–60°.
+- `phase3.czaVisible(altitudeDeg)` — returns true for `h ≤ 32°`. Atlas
+  mode now hides the CZA primary/secondary/bell-fill above that altitude.
+- `phase3.parhelicCurvature(altitudeDeg)` — empirical-fit smile growth
+  `clamp(0.03 + 0.55·(h/60)², 0, 1)`. At h=25° gives c≈0.125 (matches the
+  Troels Nielsen calibration value); at the horizon ~0.03 (essentially
+  flat); at h=60° ~0.58.
+- `--parhelic-curvature-derive` toggle CSS variable: when set > 0.5 the
+  atlas ignores the manual slider and uses the altitude-derived curvature.
+  Default off so the existing slider keeps its current behavior.
+- Pose schema extended: `parhelicYOffsetR22`, `compassRotationDeg`, plus
+  `upperTangentIntensity`, `lowerTangentIntensity`, `suncaveParryIntensity`,
+  `parrySupralateralIntensity`, `infralateralIntensity` are all in
+  `canonical-halo-atlas.json`.
+- Atlas primitives wired in geometry + HTML + workbench sliders:
+  Suncave Parry Arc, Parry Supralateral Arc, Infralateral Arc, Lower
+  Tangent Arc. All deferred entries from the Canonical Halo Atlas
+  Vocabulary section are now rendered.
+
+**Phase 3 gate as written:** "setting the sun-altitude slider produces
+visibly correct parhelion-offset shift; setting altitude > 32° hides the
+CZA arcs automatically." First clause: passes by construction across all
+seven calibration photos. Second clause: passes — atlas mode emits empty
+paths for the CZA family when `h > 32°`.
+
+**Phase 3 polish items landed (2026-05-12):**
+
+- `public/phase3-tests.html` — assertion-style test harness over the
+  `phase3.*` namespace. 32 assertions covering daggerOffset across
+  altitudes 0°–60°, czaVisible across the 32° boundary, parhelicCurvature
+  across the slider range, plus structural invariants (daggerOffset(0)
+  === R₂₂; daggerOffset(60°) === 2·R₂₂; R₄₆/R₂₂ === 2; czaVisible
+  monotonic at h=32°; parhelicCurvature monotonic and bounded in [0,1]).
+  All 32 pass at landing.
+- "Derive from sun altitude (Phase 3 binding)" checkbox under the
+  Parhelic Circle Curvature slider. When checked, the curvature slider
+  is disabled, its value display tracks `phase3.parhelicCurvature(h)`
+  live as the sun-altitude slider moves, and `--parhelic-curvature-derive`
+  is flipped to 1 so the geometry honors the binding. Reset clears the
+  toggle. Snapshot exports include `parhelicCurvatureDerive`.
+- Atmospheric Optics References section, below.
+
+## Atmospheric Optics References
+
+The atlas's geometric primitives and altitude bindings come from standard
+atmospheric-optics literature — they are not invented for this workbench.
+This section names the sources so reviewers can verify each formula
+independently.
+
+### Primary references
+
+- **Greenler, R. (1980, reissued 1990).** *Rainbows, Halos, and Glories.*
+  Cambridge University Press. The canonical reference for refraction
+  geometry in hexagonal ice crystals: derives the 22° and 46° angular
+  radii from the 60° and 90° prism paths through randomly-oriented and
+  oriented columns, the parhelion / sundog formation at the 22° refractive
+  cone intersected with the parhelic circle, and the CZA / upper tangent /
+  Parry arc families from column- and plate-oriented crystal families.
+- **Tape, W. (1994).** *Atmospheric Halos*, American Geophysical Union,
+  Antarctic Research Series Vol. 64. Detailed treatment of arc geometry
+  including the supralateral / infralateral arc symmetry around the 46°
+  halo top and bottom, and the parhelion azimuthal-offset formula as a
+  function of sun altitude.
+- **Cowley, L. — Atmospheric Optics** (`atoptics.co.uk`). The standard
+  public-facing reference with HaloSim ray-trace renderings and short
+  geometric explanations of every arc family in our Canonical Halo Atlas
+  Vocabulary. Used as a sanity check against our circle-primitive model.
+
+### Formula provenance
+
+| atlas formula | source |
+| --- | --- |
+| `R_22 / R_sun_sky = 22°` (small-circle angular radius) | Greenler ch. 2 (60° prism path) |
+| `R_46 / R_sun_sky = 46°` (small-circle angular radius) | Greenler ch. 2 (90° prism path) |
+| `parhelion offset = R_22 / cos(h)` | Tape eq. for parhelic-circle ∩ 22°-cone projection; equivalent to standard projection geometry in Greenler |
+| `CZA tangent to 46° halo at top` | Greenler ch. 4 (plate-oriented crystals refracting at 90° produce the CZA's tangent geometry); Cowley atoptics CZA article |
+| `CZA visible only for h ≤ 32°` | Greenler ch. 4 — at sun altitudes above ~32° the CZA's tangent point exits the visible hemisphere |
+| `Upper / Lower Tangent Arc tangent to 22° halo top/bottom` | Greenler ch. 3 (column-oriented crystals); the "eyelid" geometry |
+| `Suncave Parry Arc nested inside Upper Tangent` | Tape, Parry-orientation chapter; Cowley atoptics Parry article |
+| `Supralateral Arc tangent to 46° halo top` | Greenler ch. 4 — column-oriented 90° path; the upper sibling of the infralateral |
+| `Infralateral Arc tangent to 46° halo bottom` | Greenler ch. 4 — mirror of supralateral |
+
+### What the atlas does NOT yet model
+
+For completeness and honesty about scope:
+
+- **Halo dispersion physics** — the atlas renders solid-colored or
+  gradient-stroked arcs, not the wavelength-dependent ray-trace coloration
+  HaloSim produces. The prismatic gradient in `sundog-theme.css` is a
+  visual analogue, not a refractive calculation.
+- **Subhorizon arcs** (subhelic, sub-anthelic, subsun) — these require
+  observer-above-horizon geometry that the current 2D atlas projection
+  cannot represent.
+- **Crystal-orientation mixing** — real sundog displays often show
+  partial Parry contribution mixed with column orientation. The atlas
+  exposes Parry-family primitives as separate slider intensities; it does
+  not model the underlying orientation-distribution that determines their
+  relative brightness.
+- **Crystal-size effects on arc width** — atlas arcs have fixed stroke
+  width; real halos have width that depends on crystal-size dispersion.
+  Out of scope.
+
+These omissions are listed so the Phase 7 hero promotion language can
+say "geometric atlas faithful to the standard literature" without
+overclaiming "ray-traced atmospheric simulation." The atlas is a
+geometry-primary description; the atmospheric raytrace is in
+`SUNDOG_GENERATOR_SPEC.md` as "optional terminal beautification" and
+remains out of scope for the workbench.
+
 ### Theorem Anchor: What the Atlas Demonstrates
 
 The atlas is the cleanest natural example we have of the Sundog
@@ -799,88 +921,206 @@ Gate: setting the sun-altitude slider produces visibly correct
 parhelion-offset shift; setting altitude > 32° hides the CZA arcs
 automatically.
 
-### Phase 4 - Idle Scintillation
+### Phase 4 - Public Explainer Build (`sundog.html`) — 2026-05-12 restructure
 
-Goal: phase-4 of the BoxForge animation discipline — the idle window where
-the static pose holds. Subtle motion only.
+**Pivot:** the old Phase 4-7 chained idle scintillation → active reveal →
+selective 3D → brand hero. The 2026-05-12 review reframed the goal: the
+strongest play for this codebase isn't a brand-mark animation arc, it's an
+*educational explainer* that earns SEO, Wikipedia outreach, and the inverse
+direction (visitors bringing their own photos to the math). Old Phase 9
+"Educational Mode" is absorbed into this Phase 4; the animation goals are
+demoted to sub-features of the page rather than load-bearing phases.
 
-Deliverables:
-
-- Slow opacity drift on the rainbow gradient stops (saturation pulse,
-  3–8 second period, low amplitude).
-- Optional micro-rotation of the compass-rose ray group (≤ 1° peak).
-- `prefers-reduced-motion` honored — scintillation snaps to off.
-- All scintillation gated by `--idle-scintillation-amplitude`; at 0 the
-  pose is fully static.
-
-Gate: load the page at default amplitude, the pose looks alive but no
-single element distracts the eye for more than ~2 seconds.
-
-### Phase 5 - Active Reveal Animation (Phases 1-3)
-
-Goal: the sequenced reveal that narrates the parhelion construction. This
-is the BoxForge phase 1-3 of the animation model.
-
-Phase 1: empty sky, primary sun fades in (pillar first, then core, then X).
-Phase 2: 22° halo draws (stroke-dasharray reveal, 1.5s).
-Phase 3: CZA arcs draw + parhelia daggers fade in.
-
-Optional sub-phase: when `--secondary-suns-strength > 0`, virtual peripheral
-suns and their halos materialize as a Phase 3.5.
+Goal: ship `sundog.html` — a long-scroll public page that is *the* sundog
+reference on the open web. Replaces `sundog-workbench.html` as the canonical
+URL (the workbench embeds inline; a `/sundog-workbench.html` redirect
+preserves any deep links). Page does the educational job that legacy
+atmospheric-optics pages do (e.g. the WW2010 Illinois reference) while
+1-upping them with the interactive atlas math.
 
 Deliverables:
 
-- Animation orchestrator JS (`public/js/parhelion-phases.mjs`).
-- Phase trigger UI (replay button, optional auto-trigger on first visit).
-- `prefers-reduced-motion` collapses to instant snap to phase-4 idle pose.
+- **`public/sundog.html`** with the eight-section skeleton:
+  1. Hero — live workbench at canonical pose, single-sentence framing.
+  2. *What you are looking at* — labeled photograph (annotated reference
+     from `docs/calibration/1`).
+  3. *Why bright spots at 22°* — two-ice-crystal hexagonal-column refraction
+     diagram (static SVG, Greenler-cited).
+  4. *Why they slide outward as the sun rises* — interactive sun-altitude
+     slider + live `R / cos(h)` callout + inverse-inference demo.
+  5. *The full atlas* — every named arc with one paragraph, atlas-rendered
+     illustration, "highlight in the live workbench" toggle.
+  6. *Try it on your own photo* — Phase 5 upload widget mounts here.
+  7. *History and reading* — Greenler, Tape, Cowley; Vädersoltavlan as
+     historical illustration.
+  8. *For other tools* — JSON pose schema, `phase3` namespace,
+     `overlay_calibrate.py`, paper / writeup links.
+- "Show advanced controls" toggle that reveals the full 25-slider rail —
+  default view shows ~8 hero sliders (sun-altitude, the named-arc
+  intensities, the derive-curvature toggle).
+- Schema.org `LearningResource` JSON-LD markup with author, citations,
+  educational level, learning objectives.
+- Sitemap entry and meta tags (canonical, og:image from the calibration
+  overlay, Twitter card).
+- Animation goals from the old phases land here as polish, not gates:
+  - Idle scintillation: subtle saturation drift on the prismatic gradient
+    when the workbench has been idle for 5s+, gated by
+    `--idle-scintillation-amplitude` and `prefers-reduced-motion`.
+  - Active reveal: optional "replay the construction" button on the
+    in-page workbench that sequences sun → 22° halo → parhelia → CZA →
+    vocabulary layers.
 
-Gate: replay button cycles through phases 1-3 → idle phase-4; reduced-motion
-visitors see the locked pose only.
+Gate: a visitor unfamiliar with sundogs lands on `sundog.html`, reads
+without scrolling away, can locate and label each visible feature in their
+own past sky photos by section 5, and can pull the math down through
+section 8. Wikipedia editors reviewing the page recognize the formula
+provenance (References) and can verify each claim independently.
 
-### Phase 6 - Selective 3D Handoff (Phase 5+)
+### Phase 5 - Photo Upload + Inverse Inference
 
-Goal: the BoxForge phase 5+ of the animation model — only elements that
-benefit from depth get 3D motion. Halos stay planar (they are sky, not
-boxes).
+Goal: visitor uploads a sundog photo → marks the sun, the 22° halo edge,
+and a parhelion → the atlas overlays the predicted geometry on the photo
+in-browser → user sees their own altitude inverse-inferred. With consent,
+the photo + JSON pose flow into a training-data pipeline.
 
-Candidates for 3D motion:
-
-- Compass-rose ray group rotation (slow, hover-triggered or auto).
-- Possibly the central core treated as a tiny BoxForge orb on hover only.
-
-Explicit non-candidates (stay planar):
-
-- All halos and arcs (no 3D rotation).
-- Parhelia daggers (no depth).
+**Backend decision:** Cloudflare Workers + R2 (recommended path chosen
+2026-05-12). The project already runs on Cloudflare (`wrangler` in
+package.json); the upload endpoint extends the existing deployment.
 
 Deliverables:
 
-- BoxForge primitives wired as overlays (orb-component or custom).
-- Hover and active-state triggers respecting reduced-motion.
-- Performance budget: target ≥ 50 fps on a mid-tier laptop with the active
-  reveal + idle scintillation + hover motion all running.
+- **Browser side**
+  - Drag-and-drop / file-picker upload widget on `sundog.html` §6.
+  - Three-click measurement UX: "Click the sun" → "Click the 22° halo
+    edge" (single point gives radius) → "Click a visible parhelion."
+  - Live atlas overlay rendered on top of the user's image using the
+    same primitive math as `overlay_calibrate.py` (port to JS).
+  - Inverse-inferred sun altitude shown as a number: *"Your sun was at
+    h ≈ 25.0°."*
+  - EXIF stripping happens **client-side** before any POST. Re-encode
+    the image through canvas to drop metadata. User sees the EXIF that
+    will be removed and confirms.
+  - Consent gate: opt-in checkbox *"Share my photo with the Sundog
+    project to improve the atlas model."* Default unchecked. Separate
+    from the rendering, which always happens locally.
+- **Backend side (Cloudflare Workers + R2)**
+  - `POST /api/sundog/upload` endpoint accepting `{ image, pose,
+    consent }` JSON.
+  - R2 bucket `sundog-uploads` with prefixed object keys
+    `submissions/{ISO-date}/{opaque-uuid}.{ext}`.
+  - Metadata KV / D1 row: `{ submission_id, timestamp, inferred_h_deg,
+    pose_json, ip_country, consent_flag, deletion_token }`.
+  - Deletion endpoint `POST /api/sundog/delete` accepting the deletion
+    token returned to the user at submission time.
+  - Rate limit: 5 uploads / IP / hour via Workers KV.
+- **Privacy + policy**
+  - Page section linking to a `PHOTO_DATA_POLICY.md` doc that states
+    what we collect (image, JSON pose, anonymous timestamp, IP-derived
+    country), what we use it for (improving the atlas model and
+    illustrations), retention period (12 months unless aggregated into
+    a derived dataset), and how to request deletion.
+  - GDPR-style "right to deletion" reachable via the deletion token
+    issued at submission.
 
-Gate: hover the sun, the rays rotate; halos do not. Reduced-motion visitors
-see no rotation.
+Gate: a visitor can upload a sundog photo, see their altitude
+inverse-inferred and the atlas overlaid on the photo, and either save
+locally or share to the project — and if they share, the data is in R2
+within 5 seconds with EXIF stripped, and they receive a deletion token
+they can use to remove it.
 
-### Phase 7 - Hero Promotion
+### Phase 6 - Drag-to-Tune Constraint Network
 
-Goal: replace `index.html` hero with the workbench (or a distilled
-non-interactive snapshot of it with a "tune the math" link to the full
-workbench, depending on what reads better in the wild).
+Goal: click any rendered primitive and drag it; the parameter it inverse-
+binds to recomputes, and all dependent primitives re-derive automatically.
+This is the live demonstration of the field-and-signature claim: every
+visible feature has a parameter behind it, and the user can manipulate the
+parameter through its signature.
+
+**Approach:** inverse-bind each draggable handle to *one* primary
+parameter. No generalized constraint solver. Dragging causes the bound
+parameter to update; other primitives that depend on that parameter (via
+the Phase 3 binding network) re-derive cleanly.
+
+Inverse-bind table:
+
+| handle | binds parameter | dependent re-derives |
+|---|---|---|
+| Parhelic-arc apex | `parhelic-curvature` | parhelic-circle stroke only |
+| Parhelion / dagger position | `sun-altitude` | both daggers, parhelic-circle endpoints, CZA visibility, supralateral, infralateral |
+| CZA apex | `cza-curvature` | CZA primary + secondary, bell-fill |
+| Sun center | sun pixel position (translation) | entire atlas translates as a rigid body |
+| 22° halo edge | `R₂₂` (anchor scale) | entire atlas rescales via the workbench→photo scale factor |
 
 Deliverables:
 
-- New `index.html` hero that either embeds `sundog-workbench.html` content
-  inline OR renders a distilled static pose with a CTA to the workbench.
-- Decision recorded in this document and in `claims-and-scope.md`.
-- Old hero canvas (`#parhelion-canvas`) decommissioned.
-- A short snapshot `.gif` or `.webm` for press / social use, generated
-  from the locked phase-4 idle pose with scintillation.
+- SVG hit-test handles on each primitive (transparent overlay shapes
+  sized for comfortable touch / mouse pointer use, not the visible
+  stroke pixels).
+- Pointer event plumbing (`pointerdown` → `pointermove` → `pointerup`
+  with proper capture / release / cancel handling).
+- Inverse functions per binding:
+  - `sun-altitude` ← `arccos(R₂₂ / |dragged_dagger_x − sun_x|)`
+  - `parhelic-curvature` ← solve for apex height given drag y
+  - `cza-curvature` ← solve for CZA apex y given drag (clamped to slider
+    range)
+  - sun-position ← drag delta applied to all primitive centers
+  - `R₂₂` ← Euclidean distance from sun to drag position
+- Slider sync: as drag updates a bound parameter, the corresponding
+  slider's value display updates live so users see the math change.
+- `prefers-reduced-motion` doesn't disable drag (it's user-initiated
+  motion), but transitions on dependent primitives become instant.
 
-Gate: a first-time visitor lands on the new hero, gets the brand reading +
-the parametric proof signal, and can reach the deeper workbench (if not
-already on it) in one click.
+Gate: a user can grab the parhelic arc's apex, drag it up to flatten the
+smile or down to deepen it, and the slider value at the right rail
+updates in lockstep. The same user can grab a parhelion and drag it
+outward; sun-altitude rises, the CZA disappears once h > 32°, and the
+opposite parhelion mirrors the motion symmetrically.
+
+### Phase 7 - Hero Promotion + Wikipedia / SEO Outreach
+
+Goal: `sundog.html` becomes the project's canonical sundog page; the
+`index.html` landing page is rebuilt to route visitors there; the
+Wikipedia outreach packet ships with the math, references, and claim
+license that lets editorial reviewers verify what's original vs. cited.
+
+Deliverables:
+
+- **`index.html` rebuild**
+  - Hero section embeds the calibrated atlas snapshot with one CTA into
+    `sundog.html`.
+  - Other application links (Balance, Three-Body, etc.) routed via a
+    secondary navigation row.
+  - Old `#parhelion-canvas` decommissioned; any references in the brand
+    or icon docs updated.
+- **Wikipedia / SEO outreach packet** — `docs/SUNDOG_OUTREACH_PACKET.md`
+  - One-page math summary: the seven atlas formulas, each with its
+    source citation from the Atmospheric Optics References section.
+  - Claim license: which equations are *standard* (cited to Greenler /
+    Tape / Cowley) vs. *original to this project* (the integrated
+    primitive-atlas presentation; the interactive inverse-inference of
+    sun altitude from a photo; the calibration evidence across 7
+    photos).
+  - Reproducibility statement linking to `phase3-tests.html`,
+    `overlay_calibrate.py`, and the calibration overlay set.
+  - Suggested Wikipedia edits: which articles (Sun dog, Circumzenithal
+    arc, 22° halo) could cite our atlas, and the specific factual claim
+    each edit would support.
+- **Press / social snapshot assets**
+  - Static PNG hero rendered from the canonical pose at multiple aspect
+    ratios (16:9, 1:1, 9:16 for stories).
+  - 8–15 second WebM clip of the active reveal sequence for press use.
+  - OG image referenced from `sundog.html`'s meta tags.
+- **Schema.org and search markup**
+  - `LearningResource` + `Article` JSON-LD on `sundog.html`.
+  - `WebSite` + `Organization` JSON-LD on `index.html`.
+  - Updated sitemap.xml; robots.txt rules confirmed.
+
+Gate: a first-time visitor from a Wikipedia citation lands on
+`sundog.html`, reaches a verifiable claim within one scroll, and can
+trace any formula to a Greenler / Tape / Cowley citation in section 7.
+A Wikipedia editor reviewing the page can identify the original
+contribution (interactive inverse-inference + integrated atlas) and the
+cited content (every individual formula) without ambiguity.
 
 ### Phase 8 - Reproducible Pose Export
 
@@ -918,27 +1158,18 @@ byte-equal JSON across two browser sessions.
 These phases unlock only after Phase 7 promotion lands and the hero is in
 the wild for some adoption period.
 
-### Phase 9 - Educational Mode
+### Phase 9 - Educational Mode *(2026-05-12: absorbed into Phase 4)*
 
-Goal: a toggle that overlays annotations on the workbench — angle measures,
-crystal-orientation arrows, refraction-angle labels — turning the brand
-hero into a teaching artifact.
+This phase is no longer separate. Its goals — overlay annotations
+(angle measures, crystal-orientation arrows, refraction-angle labels;
+labeled named arcs) — are now §3 and §5 of `sundog.html`. The "show
+annotations" toggle becomes a per-section interaction inside Phase 4,
+not a phase of its own.
 
-Deliverables:
-
-- A right-rail or overlay toggle that switches from "render" to
-  "annotate" without changing the underlying geometry.
-- Label set for the core primitives: 22° halo, 46° halo, parhelia,
-  parhelic circle, CZA, supralateral, upper/lower tangent.
-- Label set for vocabulary primitives: suncave Parry, Parry supralateral,
-  and infralateral arcs.
-- Copy rule: every rare/optional label must say "candidate" or
-  "annotation" unless the source image has enough geometry to support a
-  firmer identification.
-
-Gate: a visitor can turn labels on, understand which arcs belong to the
-calibrated core and which are vocabulary overlays, and turn labels off
-without disturbing the pose.
+The label set rule survives: every rare/optional label must say
+"candidate" or "annotation" unless the source image has enough geometry
+to support a firmer identification. This rule applies to the §5 "full
+atlas" walkthrough in `sundog.html`.
 
 ### Phase 10 - Rich-Display Overlay Tuning
 
