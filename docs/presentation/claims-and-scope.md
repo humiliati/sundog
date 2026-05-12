@@ -35,11 +35,12 @@ These claims are defensible with current evidence:
 - Money Bags demonstrates graph-based interpretation of softbody motion, making torsion, deformation, symmetry, and recovery metrics legible.
 - The three-body workbench demonstrates a bounded operating-envelope result: in the tested planar restricted setup, guarded accelerometer-proxy TRACK control improves survival over passive and naive local baselines inside a high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain known harm boundaries.
 - The Balance workbench demonstrates a bounded operating-envelope result: in the tested browser cart-pole setup, a shadow-derived controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries.
+- The Pressure Mines workbench demonstrates a bounded operating-envelope result: in the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger, while a paired density 0.22 / pressure-noise 1.0 / dropout 0.35 region is published as a failure case.
 
 ### Research Status
 - We are continuing to formalize the math and collect examples.
 - The theorem is broad, but the current paper claim is narrow enough to attack.
-- The defensible result is the photometric alignment experiment; the broader theorem remains a research program supported by application prototypes.
+- The paper-grade defensible result is the photometric alignment experiment; the broader theorem remains a research program now supported by bounded operating-envelope studies and application prototypes.
 
 ## Risky Claims
 
@@ -70,6 +71,8 @@ These claims are defensible with current evidence:
 - ❌ "The three-body controller predicts chaos." (the result concerns survival improvement in a tested operating pocket)
 - ❌ "Sundog Balance proves shadow-based robotics control." (Phase 10 is a browser operating-envelope study, not hardware validation)
 - ❌ "Sundog Balance works under overhead light." (the overhead-light cells are all-fail degradation margins, not usable control)
+- ❌ "Sundog solves Minesweeper." (Pressure Mines reports safer progress before failure in one named pocket, not board solution or logical deduction)
+- ❌ "Pressure Mines clears the field." (both Sundog and naive still trigger mines on every seed in the confirmed pocket)
 - ❌ "Our applications demonstrate universal applicability."
 
 ### Name and Source Confusion
@@ -101,7 +104,7 @@ Replace risky language with measured alternatives:
 | "eliminates need for" | reduces reliance on, can operate with less |
 | "Sundog solves alignment" | "the gravity frame is the program's speculative public framing; see [`SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md)" |
 | "Sundog sidesteps Goodhart" | "a structural argument that signature-driven control inhabits a different threat model than reward optimization; the adversarial experiments that would test it are listed and have not been run" |
-| "agent optimization in hostile environments" | "signature-driven control in partially-observed and potentially adversarial settings; current evidence is bounded operating-envelope work in three-body and photometric experiments" |
+| "agent optimization in hostile environments" | "signature-driven control in partially-observed and potentially adversarial settings; current evidence is bounded operating-envelope work in three-body, Balance, Pressure Mines, and photometric experiments" |
 
 ## Claim Boundaries by Application
 
@@ -170,6 +173,21 @@ Also avoid presenting P2b overhead-light all-fail survival margins as usable ove
 **What's needed:**
 Public Phase 11 figures, a best-cell/worst-cell replay pair, the toyful visual skin or a clearly diagnostic promo clip, human-vs-agent competition mode, and later physical-sensor validation before robotics claims.
 
+### Sundog Pressure Mines Workbench
+**Safe:**
+"In the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger. The public artifact pairs that confirmed pocket with a failure region where naive pressure wins."
+
+**Avoid:**
+"Sundog solves Minesweeper."
+
+Also avoid implying field clearance. In the confirmed pocket, both Sundog and
+naive still trigger mines on every seed; the measured result is safer progress
+before failure under the pre-registered budget-adjusted metric.
+
+**What's needed:**
+Compact public charts, replay captures for the failure-first / confirmed-second
+pair, and a later controller redesign before claiming a broader Mines result.
+
 ## Audience-Specific Guidelines
 
 ### When Writing for Researchers
@@ -211,7 +229,7 @@ Public Phase 11 figures, a best-cell/worst-cell replay pair, the toyful visual s
 
 Or:
 
-"The broad theorem is a research program. The controlled result currently defended in the Sundog repo is narrower: photometric mirror alignment without target-position access in a MuJoCo experiment. The three-body and Balance workbenches are bounded operating-envelope studies; EyesOnly, Dungeon Gleaner, and Money Bags are application expressions that motivate the next round of controlled studies."
+"The broad theorem is a research program. The paper-grade result currently defended in the Sundog repo is narrower: photometric mirror alignment without target-position access in a MuJoCo experiment. The Three-Body, Balance, and Pressure Mines workbenches are bounded operating-envelope studies; EyesOnly, Dungeon Gleaner, and Money Bags are application expressions that motivate the next round of controlled studies."
 
 ## The Gravity Frame
 
@@ -267,9 +285,9 @@ paraphrase) must appear visibly in the same artifact:
 
 > The gravity claim is the program's speculative public frame. The controlled
 > evidence is narrower: photometric mirror alignment without target-position
-> access in a MuJoCo experiment, and a bounded near-escape operating pocket
-> in the planar restricted three-body workbench. The experiments that would
-> ratchet the gravity claim into earned language are staged in
+> access in a MuJoCo experiment, plus bounded operating-envelope studies in
+> Three-Body, Balance, and Pressure Mines. The experiments that would ratchet
+> the gravity claim into earned language are staged in
 > [`docs/SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md) and have not been run.
 
 ## Red Flags

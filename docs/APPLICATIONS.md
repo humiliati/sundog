@@ -91,7 +91,7 @@ Phase 10 verdict artifact:
 in the roadmap for public docs)
 
 Roadmap and audit trail:
-[`docs/SUNDOG_V_BALANCE.md`](SUNDOG_V_BALANCE.md)
+[`docs/sundog_v_balance.md`](sundog_v_balance.md)
 
 ### Sundog Expression
 
@@ -857,7 +857,7 @@ For academic communication, add the boundary:
 2. Read `docs/RESEARCHER_GUIDE.md`.
 3. Inspect `docs/PAPER_v1_draft.md` and `results/analysis/analysis_summary.json`.
 4. Read `docs/THREEBODY_PHASE11_SUMMARY.md` and launch `threebody.html`.
-5. Read `docs/SUNDOG_V_BALANCE.md`, then launch `balance.html` and inspect
+5. Read `docs/sundog_v_balance.md`, then launch `balance.html` and inspect
    `results/balance/phase10-envelope/verdict.md`.
 6. Read `docs/runners.md` for the EyesOnly bridge.
 7. Inspect EyesOnly's headless runner, UI automation neighbor, and LAGM design

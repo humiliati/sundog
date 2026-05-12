@@ -24,7 +24,11 @@ code, experiments, prior theorem materials, and application bridges.
   boundaries.
 - [Standalone app roadmap](STANDALONE_APP_ROADMAP.md): plan for a no/low
   dependency `.html`, `.exe`, and eventual `.apk` observer app.
-- [Sundog Balance roadmap](SUNDOG_V_BALANCE.md): confirmed cart-pole
+- [Three-Body roadmap](SUNDOG_V_THREEBODY.md): Phase 11 operating-envelope
+  workbench for guarded local control in a near-escape dynamical pocket.
+- [Three-Body Phase 11 summary](THREEBODY_PHASE11_SUMMARY.md): compact result
+  readout for guard quantiles, outside-pocket expansion, and comparison slate.
+- [Sundog Balance roadmap](sundog_v_balance.md): confirmed cart-pole
   operating-envelope workbench for balancing from a shadow-derived signal.
 - [Sundog Pressure Mines roadmap](sundog_v_minesweeper.md): Phase 11
   operating-envelope workbench for hidden mines and noisy pressure fields.
