@@ -1,4 +1,5 @@
 import { applyParhelionGeometry, phase3 } from "./parhelion-geometry.mjs";
+import { enableParhelionDrag } from "./phase6-drag.mjs";
 
 const root = document.documentElement;
 const rootStyle = () => getComputedStyle(root);
@@ -109,6 +110,10 @@ snapshot?.addEventListener("click", () => {
     // ignore
   }
 });
+
+// --- Phase 6 (light): parhelion drag → sun-altitude --------------------
+const sunAltSlider = document.getElementById("sun-altitude");
+if (svg && sunAltSlider) enableParhelionDrag(svg, sunAltSlider);
 
 // Initial layout
 apply();
