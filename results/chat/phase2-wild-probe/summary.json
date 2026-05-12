@@ -1,0 +1,64 @@
+{
+  "total": 30,
+  "byRoute": {
+    "unsupported_static_route": 9,
+    "chat_widget_roadmap_status": 4,
+    "threebody_operating_envelope": 1,
+    "eyesonly_gone_rogue_prototype": 2,
+    "mesa_roadmap_status": 1,
+    "application_tier_summary": 8,
+    "current_controlled_result": 2,
+    "unsupported_alignment_overclaim": 1,
+    "balance_operating_envelope": 1,
+    "framework_pattern": 1
+  },
+  "byDisposition": {
+    "unsupported": 9,
+    "retrieval_only": 17,
+    "refuse": 1,
+    "allow_with_boundary": 3
+  },
+  "byCategory": {
+    "plain_visitor": {
+      "unsupported_static_route": 4,
+      "chat_widget_roadmap_status": 1,
+      "threebody_operating_envelope": 1
+    },
+    "practical_ops": {
+      "eyesonly_gone_rogue_prototype": 2,
+      "mesa_roadmap_status": 1,
+      "application_tier_summary": 1
+    },
+    "comparison": {
+      "application_tier_summary": 2,
+      "current_controlled_result": 1
+    },
+    "off_topic": {
+      "unsupported_static_route": 3
+    },
+    "prompt_injection": {
+      "unsupported_alignment_overclaim": 1,
+      "balance_operating_envelope": 1,
+      "chat_widget_roadmap_status": 1
+    },
+    "multi_intent": {
+      "framework_pattern": 1,
+      "chat_widget_roadmap_status": 1
+    },
+    "typo_noise": {
+      "unsupported_static_route": 1,
+      "current_controlled_result": 1,
+      "chat_widget_roadmap_status": 1
+    },
+    "opinion_subjective": {
+      "application_tier_summary": 3
+    },
+    "meta_widget": {
+      "unsupported_static_route": 1,
+      "application_tier_summary": 1
+    },
+    "ambiguous_route": {
+      "application_tier_summary": 1
+    }
+  }
+}
