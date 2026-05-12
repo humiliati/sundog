@@ -691,6 +691,24 @@ def mean_finite(values: list[float]) -> float:
     return float("nan") if not finite else float(np.mean(finite))
 
 
+def median_finite(values: list[float]) -> float:
+    finite = [value for value in values if math.isfinite(value)]
+    return float("nan") if not finite else float(np.median(finite))
+
+
+def ratio_of_means(values_a: list[float], values_b: list[float], values_patched: list[float], *, direction: str) -> float:
+    mean_a = mean_finite(values_a)
+    mean_b = mean_finite(values_b)
+    mean_patched = mean_finite(values_patched)
+    if direction == "protected_to_collapsed":
+        denom = mean_b - mean_a
+        return float("nan") if abs(denom) < 1e-9 else float((mean_b - mean_patched) / denom)
+    if direction == "collapsed_to_protected":
+        denom = mean_a - mean_b
+        return float("nan") if abs(denom) < 1e-9 else float((mean_a - mean_patched) / denom)
+    raise ValueError(direction)
+
+
 def run_axis_b_patch(args: argparse.Namespace) -> None:
     out_dir = Path(args.out)
     if not out_dir.is_absolute():
@@ -804,14 +822,29 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
     for layer in layers:
         for condition in conditions:
             condition_rows = [row for row in rows if row["condition"] == condition and row["layer"] == layer]
+            protected_values = [float(row["protected_old_basin_pref"]) for row in condition_rows]
+            collapsed_values = [float(row["collapsed_old_basin_pref"]) for row in condition_rows]
+            patched_pc_values = [float(row["patched_protected_to_collapsed_old_basin_pref"]) for row in condition_rows]
+            patched_cp_values = [float(row["patched_collapsed_to_protected_old_basin_pref"]) for row in condition_rows]
+            success_pc_values = [float(row["patch_success_protected_to_collapsed"]) for row in condition_rows]
+            success_cp_values = [float(row["patch_success_collapsed_to_protected"]) for row in condition_rows]
             aggregate_rows.append(
                 {
                     "condition": condition,
                     "layer": layer,
                     "direction": "protected_to_collapsed",
-                    "mean_patch_success": mean_finite([float(row["patch_success_protected_to_collapsed"]) for row in condition_rows]),
+                    "mean_patch_success": mean_finite(success_pc_values),
+                    "median_patch_success": median_finite(success_pc_values),
+                    "patch_success_ratio_of_means": ratio_of_means(
+                        protected_values,
+                        collapsed_values,
+                        patched_pc_values,
+                        direction="protected_to_collapsed",
+                    ),
                     "mean_baseline_gap": mean_finite([float(row["baseline_gap_collapsed_minus_protected"]) for row in condition_rows]),
-                    "mean_patched_old_basin_pref": mean_finite([float(row["patched_protected_to_collapsed_old_basin_pref"]) for row in condition_rows]),
+                    "mean_protected_old_basin_pref": mean_finite(protected_values),
+                    "mean_collapsed_old_basin_pref": mean_finite(collapsed_values),
+                    "mean_patched_old_basin_pref": mean_finite(patched_pc_values),
                     "n": len(condition_rows),
                 }
             )
@@ -820,9 +853,18 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
                     "condition": condition,
                     "layer": layer,
                     "direction": "collapsed_to_protected",
-                    "mean_patch_success": mean_finite([float(row["patch_success_collapsed_to_protected"]) for row in condition_rows]),
+                    "mean_patch_success": mean_finite(success_cp_values),
+                    "median_patch_success": median_finite(success_cp_values),
+                    "patch_success_ratio_of_means": ratio_of_means(
+                        protected_values,
+                        collapsed_values,
+                        patched_cp_values,
+                        direction="collapsed_to_protected",
+                    ),
                     "mean_baseline_gap": mean_finite([float(row["baseline_gap_collapsed_minus_protected"]) for row in condition_rows]),
-                    "mean_patched_old_basin_pref": mean_finite([float(row["patched_collapsed_to_protected_old_basin_pref"]) for row in condition_rows]),
+                    "mean_protected_old_basin_pref": mean_finite(protected_values),
+                    "mean_collapsed_old_basin_pref": mean_finite(collapsed_values),
+                    "mean_patched_old_basin_pref": mean_finite(patched_cp_values),
                     "n": len(condition_rows),
                 }
             )
@@ -856,7 +898,9 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
     for row in aggregate_rows:
         print(
             f"  {row['condition']} {row['direction']}: "
-            f"patch_success={row['mean_patch_success']:.3f} "
+            f"patch_success_mean={row['mean_patch_success']:.3f} "
+            f"median={row['median_patch_success']:.3f} "
+            f"ratio_of_means={row['patch_success_ratio_of_means']:.3f} "
             f"baseline_gap={row['mean_baseline_gap']:.3f}",
             flush=True,
         )
