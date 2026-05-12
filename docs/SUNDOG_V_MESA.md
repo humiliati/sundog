@@ -402,6 +402,14 @@ at inference, reward and basin-position edits are interpreted as live-signal
 invariance tests; the basin-capture receipt is continued attraction to the
 old/internalized basin after the live basin moves.
 
+Result note: [`mesa/PHASE4_RESULTS.md`](mesa/PHASE4_RESULTS.md) records the
+Small and Medium causal intervention batteries. The load-bearing finding is
+that canonical L-Reward has zero action response to live basin movement while
+ending `3.413` (Small) and `5.560` (Medium) units preferentially closer to
+the training-time basin than the moved basin. Its signature-sensor and
+geometry responses collapse at Medium (`0.060` and `0.069`), supporting the
+fixed-attractor reading.
+
 ### Phase 5 - Selection-Pressure Curriculum
 
 Goal: separate capacity from selection-pressure shape and measure mesa
@@ -742,7 +750,19 @@ at Medium — is the program's strongest gravity-claim formulation to date.
 Basin-effect gap widens from 65.6 pp (Small) to 76.6 pp (Medium). Probe-slate
 harness at `scripts/mesa-probe-slate.mjs`. β-sensitivity sub-result complete
 ({0.5, 1.0, 2.0} monotonic). Large tier not started.
-**Phases 4-8:** Not started.
+**Phase 4:** Small + Medium causal intervention batteries **complete**. See
+[`mesa/PHASE4_RESULTS.md`](mesa/PHASE4_RESULTS.md) v1. Spec at
+[`mesa/PHASE4_SPEC.md`](mesa/PHASE4_SPEC.md) v1. Headline finding:
+canonical L-Reward has zero direct response to live `x_false` movement but
+continues toward the training-time basin, with old-basin preference growing
+from `3.413` at Small to `5.560` at Medium. Its Medium signature-sensor and
+geometry action responses are only `0.060` and `0.069`, while L-Reward-Clean
+responds at `0.572` and `0.772`; this is the causal receipt for
+fixed-attractor control. Aggregate reports live under
+`results/mesa/phase4-intervention-battery/reports/` and rebuild with
+`npm run mesa:phase4:aggregate`.
+
+**Phases 5-8:** Not started.
 
 Phase 2 has an implementation spec:
 [`mesa/PHASE2_SPEC.md`](mesa/PHASE2_SPEC.md). It locks Python training against
