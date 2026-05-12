@@ -411,6 +411,14 @@
         }
         .layer-sun .ray-diagonal { stroke: rgba(255, 248, 220, 0.55); stroke-width: 1.4; }
 
+        /* Phase 6: parhelion drag handles. Hidden outside halo_atlas mode
+           (only model whose sun-altitude binding makes the drag meaningful). */
+        .layer-phase6-handles { display: none; }
+        #parhelion-svg[data-geometry-model="halo_atlas"] .layer-phase6-handles { display: inline; }
+        .phase6-handle { transition: stroke 120ms ease; }
+        .phase6-handle:hover { stroke: rgba(255, 224, 110, 0.55); stroke-width: 1.5; }
+        .phase6-handle.is-dragging { stroke: rgba(255, 224, 110, 0.85); stroke-width: 2; }
+
         .atmosphere {
             position: absolute; inset: 0; pointer-events: none;
             mix-blend-mode: screen;
