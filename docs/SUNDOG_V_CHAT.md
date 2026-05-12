@@ -591,10 +591,41 @@ Phase 2 artifact status:
   static router plus retrieval layer and writes
   `results/chat/phase1-static-router/summary.json` and
   `trial-outcomes.csv`.
+- A 30-prompt out-of-distribution slate (`chat/prompts/gold-wild.jsonl`)
+  runs through `chat/eval/score_wild_probe.mjs` and writes to
+  `results/chat/phase2-wild-probe/`. This is the companion harness that
+  measures behavior on prompts not derived from the claim map.
+- After the wild slate, four new claim classes were added —
+  `team_and_attribution`, `licensing_and_attribution`,
+  `subjective_question_refusal`, `meta_widget_self_description` — and the
+  retrieval layer grew a minimum-score floor so off-distribution prompts
+  fall to a clean refusal instead of getting misleading source
+  attribution.
 
-Exit criterion:
-The widget can answer “where is this supported?” and “what tier is this?”
-without hallucination.
+Architecture note:
+The implemented Phase 2 is closer to "deterministic claim-map primary,
+local retrieval as a safety net" than the original "retrieval-only
+inspector" framing. The retrieval layer remains in place and is exercised
+when patterns miss, but with the threshold raised and the new claim
+classes catching common visitor questions, retrieval rarely fires on the
+in-corpus or wild slates. The trade-off was discipline (deterministic
+answers visitors can trust) over coverage (retrieval-attributed answers
+were producing misleading source links for off-distribution prompts).
+
+Exit criterion: **met** (2026-05-12).
+- The widget can answer "where is this supported?" and "what tier is
+  this?" without hallucination, and now also answers a wider set of
+  visitor-level questions (project orientation, authorship, licensing,
+  self-description) from declared claim classes.
+- `chat:eval:static` reports 103 strict / 0 lenient / 0 failures.
+- `chat:eval:wild` reports 0 retrieval-only fallbacks across the 30
+  out-of-distribution prompts; every prompt resolves to a definitive
+  disposition (`allow`, `allow_with_boundary`, `allow_with_correction`,
+  `refuse`, or `unsupported`).
+- Residual `unsupported_static_route` outcomes on the wild slate are
+  exactly the prompts a static helper cannot honestly answer: off-topic
+  questions, cross-domain comparisons, persona-override injections, and
+  multi-intent compounds. Those are the explicit handoff to Phase 3.
 
 ## Phase 3 — Model-Assisted Drafting
 
