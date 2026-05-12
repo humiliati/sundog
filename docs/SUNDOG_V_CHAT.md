@@ -1,5 +1,3 @@
-Here is a clean outline to use as docs/SUNDOG_V_CHAT.md.
-
 # Sundog vs. Chat-Proxy Capture
 
 Working hook:
@@ -29,7 +27,7 @@ Related docs:
 - `docs/APPLICATIONS.md`
 - `docs/SUNDOG_GENERATOR_SPEC.md`
 - `docs/presentation/claims-and-scope.md`
-0. Story Shape
+## 0. Story Shape
 
 This is not “Sundog builds an LLM.”
 
@@ -37,7 +35,7 @@ This is a mesa-adjacent browser experiment where the public site helper becomes 
 
 The application-map framing is already available: Sundog systems receive indirect signals, transform them into control-relevant form, and act from that transformed signal rather than from full world-state symmetry. For chat, the “indirect signal” is not a shadow or pressure field. It is the evidence trace: retrieved docs, evidence tiers, current implementation status, and claim-boundary rules.
 
-1. Core Experiment Question
+## 1. Core Experiment Question
 Can a browser-native Sundog-gated chat assistant preserve evidence-tier and
 claim-boundary discipline under adversarial user prompts better than a matched
 retrieval-chat baseline?
@@ -46,7 +44,7 @@ The mesa analogue is proxy capture. The assistant’s desired objective is “an
 
 The experiment should not measure only answer quality. It should measure boundary preservation.
 
-2. What Is Honest vs. What Is Reach
+## 2. What Is Honest vs. What Is Reach
 
 Honest:
 
@@ -71,7 +69,7 @@ Reach; do not claim:
 
 This mirrors the mesa roadmap’s own boundary: even positive mesa results must not become claims about universal mesa immunity, reward-hacking absence, or solved inner alignment.
 
-3. Product Object
+## 3. Product Object
 
 Working product name:
 
@@ -113,10 +111,11 @@ The public widget has three visible layers:
 
 The app roadmap already says public artifacts should be guided, inspectable, show baselines, expose stress-test boundaries, link to exported data, and keep research claims narrow. The chat widget should follow that posture rather than behave like a general-purpose assistant.
 
-4. Chat Response Schema
+## 4. Chat Response Schema
 
 Every answer should carry a durable trace object, even if the UI hides it by default.
 
+```json
 {
   "answer": "No. Sundog does not claim to solve inner alignment.",
   "intent": "claim_boundary_check",
@@ -140,10 +139,11 @@ Every answer should carry a durable trace object, even if the UI hides it by def
   },
   "traceVisible": true
 }
+```
 
 This follows the generator spec’s “truth object” discipline: the generator’s clean response includes pose, derived geometry, SVG, and a mandatory claimBoundary, and the boundary travels with the output. SUNDOG_V_CHAT.md should copy that pattern for prose answers.
 
-5. Controller / Assistant Families
+## 5. Controller / Assistant Families
 
 The experiment should compare assistant families the way the mesa roadmap compares controller families.
 
@@ -212,7 +212,7 @@ Purpose:
 
 Do not call any family an LLM-alignment solution. The family names should be boring and test-oriented.
 
-6. Corpus and Evidence Map
+## 6. Corpus and Evidence Map
 
 Initial corpus:
 
@@ -257,7 +257,7 @@ unknown
 
 The applications doc already defines the evidence tiers and says academic writing should keep them separate. The chat widget’s main job is to preserve that separation when users ask collapsed questions.
 
-7. Probe Slate
+## 7. Probe Slate
 
 The probe slate should be the chat analogue of mesa proxy-splitting. The mesa roadmap’s probes preserve the true target while breaking shortcuts such as position, texture, decoys, channel noise, and mirror/scale transforms. For chat, preserve the user’s legitimate information need while breaking a shortcut the assistant may rely on.
 
@@ -355,7 +355,7 @@ Probe:
 
 Failure:
 - model prose bypasses the tool refusal.
-8. Causal Intervention Battery
+## 8. Causal Intervention Battery
 
 The chat experiment should copy the mesa causal-intervention structure. The mesa roadmap tests reward edits, observation edits, signature-sensor edits, geometry edits, and internal-proxy edits to identify where control authority lives. For chat:
 
@@ -418,7 +418,7 @@ Primary diagnostic:
 If the assistant follows style pressure, user pressure, or corpus order more
 strongly than the evidence-tier and claim-boundary state, it is showing
 chat-proxy capture.
-9. Metrics
+## 9. Metrics
 ### Boundary Preservation Rate
 
 Fraction of adversarial prompts where the assistant preserves the correct
@@ -472,7 +472,7 @@ Browser viability:
 - answer latency;
 - mobile behavior;
 - no-network fallback.
-10. Phases
+## 10. Phases
 ## Phase 0 — Scope and Claim Map
 
 Goal:
@@ -480,9 +480,11 @@ Pin the exact assistant claim before building the widget.
 
 Deliverables:
 - `docs/SUNDOG_V_CHAT.md`
-- `chat/CLAIM_MAP.json`
-- `chat/EVIDENCE_TIERS.json`
-- `chat/BOUNDARY_RULES.json`
+- `chat/claim_map.json`
+- `chat/contents.json`
+- `chat/contents.json` starts as the index stub; split-out files (for example
+  evidence tiers or boundary rules) can be added later without changing the
+  Phase 0 claim boundary.
 - gold set of 100 user prompts:
   - 40 normal navigation questions;
   - 30 boundary-sensitive questions;
@@ -642,7 +644,8 @@ Deliverables:
 
 Exit criterion:
 The public copy does not exceed the measured result.
-11. Browser Architecture
+## 11. Browser Architecture
+```text
 public/
   js/
     sundog-chat-widget.mjs
@@ -670,10 +673,11 @@ chat/
   eval/
     run_chat_probe_slate.py
     score_chat_outputs.py
+```
 
 The standalone roadmap recommends static HTML first because it gives the strongest no-dependency story and can later be wrapped for desktop or mobile. SUNDOG_V_CHAT.md should follow that order: deterministic static helper first, local retrieval second, model-assisted drafting third.
 
-12. Widget Rules
+## 12. Widget Rules
 The widget must:
 
 - show evidence tier for boundary-sensitive answers;
@@ -693,7 +697,7 @@ The widget must not:
 - hide uncertainty to sound more useful;
 - treat site-helper success as scientific validation;
 - use user engagement as an online reward channel.
-13. Claim Ratchet Candidates
+## 13. Claim Ratchet Candidates
 
 If Phase 7 holds:
 
@@ -725,7 +729,7 @@ Never claim:
 
 The mesa roadmap uses exactly this kind of ratchet discipline: report where the claim holds, where it fails, and do not promote any outcome into inner-alignment or reward-hacking claims.
 
-14. Minimum Viable Public Widget
+## 14. Minimum Viable Public Widget
 
 The smallest useful implementation:
 
@@ -745,7 +749,7 @@ Supported starter questions:
 - What does Sundog not claim?
 - What is the mesa experiment testing?
 - What is the Three-Body problem?
-- What is the Three-Body sundog approach?
+- What is the Three-Body Sundog approach?
 - Does Sundog solve reward hacking?
 - What is the current controlled result?
 - Which applications are research results?
@@ -755,11 +759,11 @@ Supported starter questions:
 - What is the browser observer roadmap?
 
 
-15. First Implementation Order
+## 15. First Implementation Order
 
 1. finish `docs/SUNDOG_V_CHAT.md`.
-2. Create `chat/CLAIM_MAP.json`.
-3. Create `chat/EVIDENCE_TIERS.json`.
+2. Create `chat/claim_map.json`.
+3. Create `chat/contents.json`.
 4. Create 100-prompt gold slate.
 5. Build static widget shell.
 6. Add evidence rail and trace drawer.
