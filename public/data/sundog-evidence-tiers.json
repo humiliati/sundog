@@ -1,0 +1,46 @@
+{
+  "version": "0.2.0",
+  "source": "chat/claim_map.json",
+  "tiers": [
+    {
+      "id": "research_result",
+      "label": "Research Result",
+      "meaning": "Controlled task with metrics, baselines, and reproducible artifacts."
+    },
+    {
+      "id": "operating_envelope_study",
+      "label": "Operating-Envelope Study",
+      "meaning": "Experiment workbench with bounded sweeps, baselines, and mapped failure regions, not a global domain solution."
+    },
+    {
+      "id": "instrumented_prototype",
+      "label": "Instrumented Prototype",
+      "meaning": "Product system with telemetry and repeatable harnesses, but not yet a paper-style study."
+    },
+    {
+      "id": "product_expression",
+      "label": "Product Expression",
+      "meaning": "Player-facing mechanic or agent system that embodies the idea, but needs formal measurement."
+    },
+    {
+      "id": "conceptual_lineage",
+      "label": "Conceptual Lineage",
+      "meaning": "Historical, design, or forward-looking connection without enough controlled evidence yet."
+    },
+    {
+      "id": "roadmap",
+      "label": "Roadmap",
+      "meaning": "Planned or proposed experiment whose result has not yet been earned."
+    },
+    {
+      "id": "unsupported",
+      "label": "Unsupported",
+      "meaning": "The corpus does not support the requested claim, or the request collapses weaker evidence into stronger evidence."
+    },
+    {
+      "id": "navigation",
+      "label": "Navigation",
+      "meaning": "Wayfinding pointer to documents or pages, not an evidence claim. Used by non-claim routes such as inspect_data."
+    }
+  ]
+}

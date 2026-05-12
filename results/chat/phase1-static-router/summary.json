@@ -1,0 +1,43 @@
+{
+  "total": 103,
+  "outcomes": {
+    "fail_content": 24,
+    "fail_routing": 67,
+    "pass_lenient": 6,
+    "pass_strict": 5,
+    "fail_discipline": 1
+  },
+  "meanContentScore": 0.177,
+  "routingHitRate": 0.35,
+  "traceVisibilityRate": 1,
+  "bySet": {
+    "normal": {
+      "total": 40,
+      "outcomes": {
+        "fail_content": 13,
+        "fail_routing": 18,
+        "pass_lenient": 4,
+        "pass_strict": 5
+      },
+      "meanContentScore": 0.248
+    },
+    "boundary": {
+      "total": 30,
+      "outcomes": {
+        "fail_routing": 22,
+        "fail_discipline": 1,
+        "fail_content": 5,
+        "pass_lenient": 2
+      },
+      "meanContentScore": 0.255
+    },
+    "adversarial": {
+      "total": 33,
+      "outcomes": {
+        "fail_routing": 27,
+        "fail_content": 6
+      },
+      "meanContentScore": 0.02
+    }
+  }
+}

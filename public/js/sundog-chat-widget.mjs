@@ -1,4 +1,5 @@
 import { DEFAULT_FAQS, buildTraceAnswer, loadClaimMap } from "./sundog-chat-router.mjs";
+import { attachRetrievedMatches, buildRetrievalTrace, loadChatIndex } from "./sundog-retrieval.mjs";
 
 const ROOT_ID = "sd-chat-widget-root";
 
@@ -47,6 +48,7 @@ async function initAskSundog() {
   const faqs = root.querySelector(".sd-chat-faqs");
 
   let claimMap = null;
+  let chatIndex = null;
 
   renderFaqs(faqs, async (question) => {
     openPanel();
@@ -87,7 +89,27 @@ async function initAskSundog() {
   async function traceFor(question) {
     try {
       claimMap ||= await loadClaimMap();
-      return buildTraceAnswer(claimMap, question);
+      const staticTrace = buildTraceAnswer(claimMap, question);
+
+      try {
+        chatIndex ||= await loadChatIndex();
+        if (staticTrace.routeId === "unsupported_static_route") {
+          return buildRetrievalTrace(chatIndex, question) || staticTrace;
+        }
+        return attachRetrievedMatches(chatIndex, question, staticTrace);
+      } catch (retrievalError) {
+        if (staticTrace.routeId !== "unsupported_static_route") {
+          return {
+            ...staticTrace,
+            boundary: [
+              ...(staticTrace.boundary || []),
+              `Local retrieval index unavailable; answered from claim map only (${retrievalError.message}).`
+            ]
+          };
+        }
+      }
+
+      return staticTrace;
     } catch (error) {
       return {
         answer: "The local claim map could not be loaded, so the widget is staying quiet instead of guessing.",
@@ -152,7 +174,13 @@ function renderExchange(question, trace) {
 function renderTierRail(trace) {
   const rail = document.createElement("div");
   rail.className = "sd-chat-tier-rail";
-  rail.append(chip(trace.evidenceTier || "unknown"), chip(trace.disposition || "allow"), chip(trace.routeId || "static_route"));
+  rail.append(chip(trace.evidenceTier || "unknown"));
+  if (trace.boundary?.length) rail.append(chip("Boundary Active"));
+  if (trace.disposition === "refuse") {
+    rail.append(chip("Refused"));
+  } else if (trace.disposition === "retrieval_only") {
+    rail.append(chip("Retrieval Only"));
+  }
   return rail;
 }
 
@@ -187,6 +215,10 @@ function renderTrace(trace) {
 
   if (trace.boundary?.length) {
     details.append(traceList("Boundary", trace.boundary));
+  }
+
+  if (trace.retrieved?.length) {
+    details.append(traceList("Retrieved", trace.retrieved.map((match) => `${match.doc} - ${match.section} [${match.tier}; score ${match.score}]`)));
   }
 
   return details;

@@ -1,0 +1,202 @@
+{
+  "version": "0.2.0",
+  "source": "chat/claim_map.json",
+  "rules": [
+    {
+      "routeId": "current_controlled_result",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "research_result",
+      "boundaries": [
+        "Do not present the broader theorem as proven.",
+        "Do not claim universal alignment, universal indirect-control success, or hardware validation.",
+        "Name the cost as slower acquisition rather than terminal-accuracy loss inside the tested setting."
+      ],
+      "supportDocs": [
+        "docs/SCIENTIFIC_CRITERIA.md",
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "framework_pattern",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "roadmap",
+      "boundaries": [
+        "Keep the framework separate from the paper-grade photometric result.",
+        "Use 'research program' or 'framework' for broad language.",
+        "Avoid 'new law of nature', 'general theorem proven', or 'works in all domains'."
+      ],
+      "supportDocs": [
+        "docs/APPLICATIONS.md",
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "application_tier_summary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "roadmap",
+      "boundaries": [
+        "Do not let product expressions borrow credibility from controlled results.",
+        "Do not say the applications prove the theorem.",
+        "Do not collapse operating-envelope studies into global domain solutions."
+      ],
+      "supportDocs": [
+        "docs/APPLICATIONS.md",
+        "docs/SCIENTIFIC_CRITERIA.md"
+      ]
+    },
+    {
+      "routeId": "threebody_operating_envelope",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "operating_envelope_study",
+      "boundaries": [
+        "Do not claim Sundog solves the three-body problem.",
+        "Do not claim chaos prediction.",
+        "Do not present the privileged heuristic oracle as an optimal controller."
+      ],
+      "supportDocs": [
+        "docs/APPLICATIONS.md",
+        "docs/THREEBODY_PHASE11_SUMMARY.md",
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "balance_operating_envelope",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "operating_envelope_study",
+      "boundaries": [
+        "Do not claim robotics validation.",
+        "Do not describe overhead-light cells as usable overhead-light control.",
+        "Report all-fail margins as degradation behavior."
+      ],
+      "supportDocs": [
+        "docs/APPLICATIONS.md",
+        "docs/sundog_v_balance.md",
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "pressure_mines_operating_envelope",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "operating_envelope_study",
+      "boundaries": [
+        "Do not claim Sundog solves Minesweeper.",
+        "Do not imply field clearance.",
+        "Name the metric as safer progress before failure, not board solution."
+      ],
+      "supportDocs": [
+        "docs/APPLICATIONS.md",
+        "docs/sundog_v_minesweeper.md",
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "eyesonly_gone_rogue_prototype",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "instrumented_prototype",
+      "boundaries": [
+        "Do not claim EyesOnly proves the theorem for procedural games.",
+        "Do not treat the UI-bound playtest agent as Sundog evidence.",
+        "Treat Live Agentic Game Moderation as conceptual lineage until code ships."
+      ],
+      "supportDocs": [
+        "docs/APPLICATIONS.md",
+        "docs/runners.md",
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "dungeon_gleaner_product_expression",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "product_expression",
+      "boundaries": [
+        "Do not claim Dungeon Gleaner proves verb-field diffusion beats GOAP.",
+        "Do not repeat the old glass/window one-twelfth-cost framing as Sundog evidence.",
+        "Name missing telemetry, GOAP comparison, and sensitivity sweeps when asked what would strengthen it."
+      ],
+      "supportDocs": [
+        "docs/APPLICATIONS.md",
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "money_bags_instrumented_prototype",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "instrumented_prototype",
+      "boundaries": [
+        "Do not claim Money Bags proves softbody alignment is solved.",
+        "Do not present the see-saw musing as empirically confirmed.",
+        "Report the Stage 1 verdict as pending until captures land."
+      ],
+      "supportDocs": [
+        "docs/APPLICATIONS.md",
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "mesa_roadmap_status",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "roadmap",
+      "boundaries": [
+        "Do not claim Sundog prevents mesa-optimization.",
+        "Do not claim signature training is immune to inner misalignment.",
+        "Do not claim reward hacking does not occur in signature-trained agents."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_MESA.md",
+        "docs/SUNDOG_V_MESA.md"
+      ]
+    },
+    {
+      "routeId": "chat_widget_roadmap_status",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "roadmap",
+      "boundaries": [
+        "Do not claim Sundog Chat solves chatbot alignment.",
+        "Do not claim robustness to prompt injection.",
+        "Do not use site-helper success as scientific validation of the Sundog theorem."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_CHAT.md",
+        "docs/SUNDOG_V_CHAT.md"
+      ]
+    },
+    {
+      "routeId": "unsupported_alignment_overclaim",
+      "disposition": "refuse",
+      "evidenceTier": "unsupported",
+      "boundaries": [
+        "Refuse the stronger claim directly.",
+        "Offer the strongest nearby supported claim instead.",
+        "Do not soften into 'in a sense, yes'."
+      ],
+      "supportDocs": [
+        "docs/presentation/claims-and-scope.md",
+        "docs/SUNDOG_V_MESA.md",
+        "docs/SUNDOG_V_CHAT.md"
+      ]
+    },
+    {
+      "routeId": "name_and_source_confusion",
+      "disposition": "allow_with_correction",
+      "evidenceTier": "unsupported",
+      "boundaries": [
+        "Correct source confusion plainly.",
+        "Do not import claims from unrelated SunDog/SUNDOG projects.",
+        "Do not use unrelated history as public-brand substantiation."
+      ],
+      "supportDocs": [
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "inspect_data",
+      "disposition": "allow",
+      "evidenceTier": "navigation",
+      "boundaries": [],
+      "supportDocs": [
+        "docs/README.md",
+        "docs/APPLICATIONS.md"
+      ]
+    }
+  ]
+}

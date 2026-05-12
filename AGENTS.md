@@ -29,11 +29,12 @@ npm run cf:tokens
 npm run cf:domain
 ```
 
-`npm run dev` serves the source site locally. `npm run build` creates `dist/`
-from the root `index.html`, then copies `README.md`, `docs/**`, and the public
-chat substantiation artifacts into `dist` so public internal documentation
-links do not break. The build also checks that local links from
-`dist/index.html` resolve inside `dist`.
+`npm run dev` serves the source site locally. `npm run build` regenerates Ask
+Sundog's public data from `chat/claim_map.json`, creates `dist/` from the root
+`index.html`, then copies `README.md`, `docs/**`, and the public chat
+substantiation artifacts into `dist` so public internal documentation links do
+not break. The build also checks that local links from `dist/index.html`
+resolve inside `dist`.
 
 `npm run deploy` rebuilds first, then runs:
 
