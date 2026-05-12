@@ -55,8 +55,9 @@ optical content is unambiguous and well-cited. Initial corpus:
   `THIRD_PARTY_REUSE.md`.
 - **`docs/calibration/1.Photometeor-jeff-mod_marked_red.jpg`** —
   vocabulary reference for rich-display labels: suncave Parry, Parry
-  supralateral, upper tangent, and infralateral arcs. Treat as an
-  annotation source, not a pixel-residual calibration target.
+  supralateral, upper tangent, and infralateral arcs. This is the annotated
+  companion to `docs/calibration/2.Photometeor-jeff_mod_red.jpg`; treat
+  image 1 as the label key and image 2 as the cleaner overlay-tuning target.
 
 Each reference photograph should ship with a small JSON sidecar:
 

@@ -42,3 +42,23 @@ These tags are wired into `index.html`:
 The PNG and ICO files were generated from the same geometry as
 `public/icons/sundog-icon.svg` using a small standard-library Python renderer,
 because the repo does not require ImageMagick or Pillow.
+
+## Planned Characterized Logo Toolkit
+
+`SUNDOG_V_GEOMETRY.md` Phase 11 will turn this asset inventory into a
+graphic-design handoff kit after the richer overlay tuning pass against
+calibration images 2, 7, and 13.
+
+The toolkit should give designers a small bounded surface:
+
+- source SVG anatomy tied to Halo Atlas primitives;
+- protected geometry rules for the sun, 22° halo, parhelia, and eyelid arcs;
+- optional vocabulary layers for suncave Parry, Parry supralateral, and
+  infralateral arcs;
+- static export targets for favicon, app icon, social/avatar, and transparent
+  logo marks;
+- animation states for idle shimmer, active reveal, hover shimmer, and
+  reduced-motion fallback.
+
+The design rule is: characterize the Sundog mark from calibrated sky
+morphology first, decorative invention second.

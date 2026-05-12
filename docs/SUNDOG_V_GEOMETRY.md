@@ -53,6 +53,9 @@ distributed so no document trampolines another's decisions.
 - [`SUNDOG_OVERLAY_PROTOCOL.md`](SUNDOG_OVERLAY_PROTOCOL.md) — the
   photo-overlay test methodology (Mode 2 procedure). Phase 2 calibration
   items below cite the overlay protocol as their gating procedure.
+- [`ICON_ASSETS.md`](ICON_ASSETS.md) — the current favicon/app-icon
+  source list and regeneration notes. Phase 11 below expands that into a
+  design-team toolkit for a characterized Sundog logo and animation set.
 - [`SUNDOG_V_THREEBODY.md`](SUNDOG_V_THREEBODY.md) and
   [`SUNDOG_V_BALANCE.md`](SUNDOG_V_BALANCE.md) — sibling application
   workbench roadmaps. Different shape (control task with operating
@@ -61,7 +64,8 @@ distributed so no document trampolines another's decisions.
   Comparison Row near the bottom of this document is the parallel.
 - `public/poses/*.json` — the named-pose library. `canonical.json`
   snapshots the locked default; future poses (`low-altitude`, `cza-heavy`,
-  `nine-halo-eye`) ship as Phase 8 lands.
+  `nine-halo-eye`, `rich-display-vocabulary`) ship as Phase 8 and Phase
+  10 land.
 - BoxForge tools library: `C:\Users\hughe\Dev\Dungeon Gleaner Main\tools`,
   agent-accessible. `boxforge.html` and `orb-component.html` are reference
   primitives for the Phase 6 selective 3D handoff. The animation phase
@@ -150,7 +154,7 @@ Known calibration debt (2026-05-08 visual review):
   produced geometrically by a paint-fill band between the two arcs
   (`#cza-bell-fill`). A future `--cza-secondary-offset` knob is the right
   lever for tuning bell width if/when a slider is wanted again; tracked as
-  a Phase 9/10 composition-fiction question, not a Phase 2 calibration item.
+  a Phase 9/12 composition-fiction question, not a Phase 2 calibration item.
 - The compass-rose 45° rotation is in place but may overlap visually with
   pillar + parhelic, reducing the X reading. Phase 2 tune candidate.
 - Sun-altitude slider is wired to a CSS variable but is not yet bound to
@@ -344,11 +348,13 @@ After overlay inspection three corrections landed:
 ### Image 1 vocabulary pass (2026-05-12)
 
 `docs/calibration/1.Photometeor-jeff-mod_marked_red.jpg` is useful as a
-vocabulary map more than as a residual-calibration target. It is a rich,
-historical/multi-sun display image, so the right move is to name the
-families it shows without pretending that its painted arc positions should
-drive the same pixel-error gate as the photographic p0/p2/p4/p5/p7/p8/p9
-cohort.
+vocabulary map more than as a residual-calibration target. It is the
+annotated version of the clean modern halo photograph at
+`docs/calibration/2.Photometeor-jeff_mod_red.jpg`: image 1 names the arc
+families; image 2 is the better candidate for numeric overlay tuning.
+The right move is to use image 1 as the label key without pretending that
+its hand-drawn guide curves should drive the same pixel-error gate as the
+photographic p0/p2/p4/p5/p7/p8/p9 cohort.
 
 Image 1 adds three labels the prior atlas vocabulary did not carry:
 
@@ -638,6 +644,12 @@ The workbench must separate parameter tiers from day one.
 | `--compass-ray-length` | Free | Visual knob; ray length and core radius scale together |
 | `--rainbow-saturation` | Free | Visual knob; reserved for Phase 2 prismatic gradient tuning |
 | `--idle-scintillation-amplitude` | Animation | Phase-4 idle drift amplitude; off when 0 |
+| `--supralateral-intensity` | Annotation / vocabulary | Optional Halo Atlas layer for rich-display labeling; outside the calibrated core |
+| `--upper-tangent-intensity` | Annotation / vocabulary | Optional 22°-halo tangent layer for distinguishing upper tangent from CZA |
+| `--lower-tangent-intensity` | Annotation / vocabulary | Optional mirror tangent layer below the 22° halo |
+| `--suncave-parry-intensity` | Annotation / vocabulary | Optional Parry-family cap from the image-1 vocabulary pass |
+| `--parry-supralateral-intensity` | Annotation / vocabulary | Optional paired Parry supralateral shoulders for rich-display overlays |
+| `--infralateral-intensity` | Annotation / vocabulary | Optional lower-lateral peripheral arcs for rich-display overlays |
 
 The central typing should be explicit:
 
@@ -646,13 +658,15 @@ M       = parhelion description (the math)
 P_t     = parameter state at time t (slider values)
 G(P_t)  = derived geometry (positions, curvatures, intensities)
 R(G)    = rendered SVG composition
+A(G)    = optional annotation/vocabulary layers over the rendered geometry
 ```
 
 Phase 3 binds `M`-derived params (sun-altitude → CZA visibility, parhelion
 offset, parhelic curvature) so the workbench cannot render a
 physically-impossible pose by accident. Free params remain free knobs; the
-fiction params (composition family) are deliberately outside `M` and visibly
-labelled in the Composition section of the right rail.
+fiction params (composition family) and annotation params (rich-display
+vocabulary) are deliberately outside `M` and visibly labelled in the right
+rail.
 
 The claim is not that the workbench discovers new optics. The claim is that
 the parhelion description is concrete enough to render parametrically, and
@@ -680,9 +694,10 @@ Long brand-leaning version:
 ### Phase 0 - Parameter Taxonomy and Description Lock
 
 Goal: pin down which sliders are free visual knobs, which are math-derived
-from the parhelion description, and which are composition fiction outside
-the description. Document the binding equations for the math-derived set so
-Phase 3 has unambiguous targets.
+from the parhelion description, which are composition fiction outside the
+description, and which are annotation/vocabulary layers. Document the
+binding equations for the math-derived set so Phase 3 has unambiguous
+targets.
 
 Deliverables:
 
@@ -692,9 +707,9 @@ Deliverables:
   will eventually exercise (sun-altitude → parhelion offset, CZA visibility
   window, parhelic-circle curvature derivation).
 
-Gate: the Actionability Audit table identifies every slider's tier and the
-math-binding TODOs are enumerated. **Status: in progress with this
-document.**
+Gate: the Actionability Audit table identifies every slider's tier,
+including the annotation/vocabulary tier, and the math-binding TODOs are
+enumerated. **Status: in progress with this document.**
 
 ### Phase 1 - Static Composition Scaffold
 
@@ -729,7 +744,7 @@ Calibration items (live list):
   blur on each arc independently does not sum to a bell curve at the
   eyelid apex regardless of σ. Replaced with `#cza-bell-fill` paint band
   between the two arcs. Slider count drops 17 → 16. The eyelid-bell goal
-  is reclassified from a Phase 2 calibration item to a Phase 9/10
+  is reclassified from a Phase 2 calibration item to a Phase 9/12
   composition-fiction question whose right lever is `--cza-secondary-offset`
   (geometric overlap), not blur.
 - [ ] Compass-rose rotation angle — currently 45° from original diagonal;
@@ -875,6 +890,9 @@ Deliverables:
   - [ ] `nine-halo-eye.json` — full composition fiction with
     `--secondary-suns-strength = 0.7` and tuned overlap bias.
   - [ ] `forty-six-halo.json` — 46° halo dominant, 22° subdued.
+  - [ ] `rich-display-vocabulary.json` — Halo Atlas annotation pose with
+    upper/lower tangent, suncave Parry, Parry supralateral, and
+    infralateral layers exposed for teaching and design review.
 
 Gate: round-trip a snapshot → load → render → snapshot and confirm
 byte-equal JSON across two browser sessions.
@@ -890,13 +908,91 @@ Goal: a toggle that overlays annotations on the workbench — angle measures,
 crystal-orientation arrows, refraction-angle labels — turning the brand
 hero into a teaching artifact.
 
-### Phase 10 - Atmospheric Variations
+Deliverables:
+
+- A right-rail or overlay toggle that switches from "render" to
+  "annotate" without changing the underlying geometry.
+- Label set for the core primitives: 22° halo, 46° halo, parhelia,
+  parhelic circle, CZA, supralateral, upper/lower tangent.
+- Label set for vocabulary primitives: suncave Parry, Parry supralateral,
+  and infralateral arcs.
+- Copy rule: every rare/optional label must say "candidate" or
+  "annotation" unless the source image has enough geometry to support a
+  firmer identification.
+
+Gate: a visitor can turn labels on, understand which arcs belong to the
+calibrated core and which are vocabulary overlays, and turn labels off
+without disturbing the pose.
+
+### Phase 10 - Rich-Display Overlay Tuning
+
+Goal: tune the optional vocabulary primitives against the richer calibration
+photos before they influence logo or animation language. This pass is not a
+replacement for the Phase 2 static calibration gate; it is a morphology
+pass for rare/side arcs and rich-display vocabulary.
+
+Reference images:
+
+- `docs/calibration/2.Photometeor-jeff_mod_red.jpg` — clean modern halo
+  display with CZA, upper tangent, parhelic circle, sundogs, and lower
+  peripheral structure. Pair with the annotated image 1 label key when
+  deciding which optional vocabulary layers are present.
+- `docs/calibration/7.625544777_10241089047341957_4435817776770420050_n.jpg`
+  — high-sun / one-sided parhelion case from the multi-photo calibration
+  pass; useful for stress-testing asymmetry and partial visibility.
+- `docs/calibration/13.480859565_17934474635991868_323320248088719839_n.jpg`
+  — square social-photo reference for logo/social-crop tuning.
+
+Deliverables:
+
+- Overlay outputs for p2, p7, and p13 with optional vocabulary layers
+  toggled and separately colored.
+- Per-photo notes that classify each optional primitive as `visible`,
+  `candidate`, `not visible`, or `not applicable`.
+- Updated defaults or pose presets only if the same morphology appears
+  consistently across at least two of the three images.
+- A short "do not promote" list naming any arc that looked plausible in one
+  image but failed the richer pass.
+
+Gate: the optional vocabulary layers are stable enough to give to a design
+team as shape language, without letting them rewrite the calibrated core.
+
+### Phase 11 - Characterized Logo & Animation Toolkit
+
+Goal: after Phase 10 overlay tuning, update the logo documentation and hand
+the graphic design team a small, bounded toolset for a characterized Sundog
+logo/animation family. "Characterized" means the logo can act like a living
+mark — idle, blink/reveal, shimmer, label-callout — while preserving the
+calibrated parhelion grammar.
+
+Deliverables:
+
+- `docs/ICON_ASSETS.md` expanded into a design brief: source SVG anatomy,
+  allowed simplifications, protected geometry, color tokens, small-size
+  rules, and animation states.
+- A design-team toolset folder or script set that can export at least:
+  static SVG, favicon/app-icon PNGs, a transparent logo PNG, and a short
+  web animation source (`webm`/`gif`/CSS/SVG animation, final format TBD).
+- A canonical "character sheet" for the logo: core sun, 22° iris,
+  parhelia glints, CZA/upper eyelid, optional vocabulary arcs, and which
+  layers may be omitted at tiny sizes.
+- Motion rules mapped to the workbench phases: idle scintillation, active
+  reveal, hover shimmer, and reduced-motion fallback.
+- Design handoff examples based on the Phase 10 p2/p7/p13 overlay findings,
+  so logo expressiveness is borrowed from calibrated sky morphology rather
+  than invented decoration.
+
+Gate: a designer can regenerate the current icon set and produce one
+animated Sundog mark without reading the entire geometry roadmap, while the
+assets still trace back to Halo Atlas primitives.
+
+### Phase 12 - Atmospheric Variations
 
 Goal: alternative sky palettes (dawn, dusk, twilight, polar) with calibrated
 photograph references for each. Optional `--sky-tint` becomes a real palette
 slider rather than a single-axis warm/cool knob.
 
-### Phase 11 - Linked Description Mode
+### Phase 13 - Linked Description Mode
 
 Goal: clicking any slider opens a small popover with the equation it
 represents, the source citation, and a tiny worked example. Couples the
@@ -915,8 +1011,9 @@ The Geometry workbench claims:
   atmospheric optics produces a 9-halo eye on demand.
 - Interactive proof that the parhelion description is concrete: every
   slider corresponds to either a math-derived geometric quantity, a free
-  visual knob clearly labelled as such, or a composition-fiction knob
-  clearly labelled as such.
+  visual knob clearly labelled as such, a composition-fiction knob clearly
+  labelled as such, or an annotation/vocabulary layer clearly labelled as
+  outside the calibrated core.
 
 The Geometry workbench does NOT claim:
 
