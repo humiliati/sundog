@@ -237,8 +237,9 @@ Applications:
 - docs/STANDALONE_APP_ROADMAP.md
 - docs/SUNDOG_GENERATOR_SPEC.md
 - docs/SUNDOG_V_THREEBODY.md
-- docs/SUNDOG_V_BALANCE.md
+- docs/sundog_v_balance.md
 - docs/sundog_v_minesweeper.md
+- docs/THREEBODY_PHASE11_SUMMARY.md
 - docs/runners.md
 
 Presentation / boundary:
@@ -426,6 +427,14 @@ If the assistant follows style pressure, user pressure, or corpus order more
 strongly than the evidence-tier and claim-boundary state, it is showing
 chat-proxy capture.
 ## 9. Metrics
+
+The mechanical scoring rubric lives in `chat/eval/scoring-rubric.md`. It
+splits per-prompt scoring into a **content layer** (substring match over the
+prompt's `required[]` entries) and a **discipline layer** (structured checks
+on the trace object — boundary present, no tier upgrade, forbidden phrases
+absent, probe-axis-specific resistance checks). The metrics below roll up
+from those per-prompt outcomes; the rubric defines exactly how.
+
 ### Boundary Preservation Rate
 
 Fraction of adversarial prompts where the assistant preserves the correct
@@ -492,16 +501,19 @@ Deliverables:
 - `chat/contents.json` indexes the current and planned chat artifacts;
   split-out files (for example evidence tiers or boundary rules) can be added
   later without changing the Phase 0 claim boundary.
-- gold set of 100 user prompts:
+- gold set of ≥100 user prompts:
   - 40 normal navigation questions;
   - 30 boundary-sensitive questions;
-  - 30 adversarial overclaim prompts.
+  - 30+ adversarial overclaim prompts (33 at last audit; grows when a probe
+    axis needs more coverage).
 
 Phase 0 artifact status:
 `chat/claim_map.json` now carries the initial claim classes, source
 boundaries, evidence tiers, answer templates, and refusal rules. The prompt
 gold slate now exists under `chat/prompts/` with 40 normal prompts,
-30 boundary-sensitive prompts, and 30 adversarial prompts.
+30 boundary-sensitive prompts, and 33 adversarial prompts (the 2026-05-11
+audit added 3 `user_flattery_pressure` prompts on Balance, Three-Body, and
+EyesOnly framings).
 
 Exit criterion:
 The team can say what the widget is allowed to answer, what it must refuse,
@@ -521,10 +533,22 @@ Deliverables:
 - trace drawer with static support.
 
 Phase 1 artifact status:
-`public/js/sundog-chat-widget.mjs` and `public/js/sundog-chat-router.mjs`
-seed the static site helper across the root HTML pages. The first pass uses
-`/chat/claim_map.json` directly and renders top-25 FAQ chips, static answers,
-evidence-tier chips, next links, and trace details.
+- `public/js/sundog-chat-widget.mjs` — floating launcher, panel, FAQ chip
+  list, exchange renderer, evidence rail, and trace drawer (`<details>` block
+  with confidence, intent, sources, and boundary list).
+- `public/js/sundog-chat-router.mjs` — `DEFAULT_FAQS` (25 starter prompts),
+  `loadClaimMap()` (fetches `/chat/claim_map.json`), `routePrompt()`
+  (exact-then-partial pattern match), `buildTraceAnswer()` (returns a trace
+  object that mirrors the §4 schema).
+- `public/css/sundog-theme.css` — `.sd-chat-*` styles are present.
+- Not yet wired into the site: no HTML page imports
+  `public/js/sundog-chat-widget.mjs`, so visitors cannot interact with the
+  widget yet. The Phase 1 exit criterion is not met until the script tag is
+  added to the relevant pages.
+- Known reconciliation: the evidence rail currently emits a triple of
+  `{evidenceTier, disposition, routeId}` chips. The §3 spec is a single tier
+  chip plus composable state flags (`Boundary Active`, `Refused`). Aligning
+  the chip set is a Phase 1 close-out task.
 
 Exit criterion:
 A visitor can ask basic questions about the theorem, mesa roadmap,
