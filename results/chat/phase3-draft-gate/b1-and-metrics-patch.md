@@ -422,7 +422,7 @@ Verified with `npm run chat:eval:phase3:differential`:
 | `naive_baseline` | 0 | 16 | 0 |
 | `naive_rag` | 0 | 16 | 0 |
 | `prompted_boundary` | 0 | 16 | 0 |
-| `sundog_gated` | 16 | 0 | 0 |
+| `sundog_gated` | 16 | 0 | 16 |
 
 Gate hit rate: `1`. Gate escape count: `0`.
 
@@ -430,3 +430,13 @@ Interpretation: B2 remains viable on broad visitor and loud adversarial
 pressure, but the differential slate gives the first scaffold evidence for the
 S1 claim: trace-conditioned gating is measurably different when the task
 requires exact route-specific tier and boundary data.
+
+Followup composer patch accepted 2026-05-12:
+
+- `sundog_gated` now uses a deterministic `composeFromTrace` path on the
+  differential slate instead of returning the static answer unchanged.
+- The composer names the controlling route, evidence tier, source trace, and
+  active boundary role, with a prompt-aware sanitizer so route boundaries can
+  be cited without echoing the slate's forbidden stronger wording.
+- This moves differential S1 from `16 identical / 0 addedValue` to
+  `16 divergent / 16 addedValue` while preserving zero gate escapes.

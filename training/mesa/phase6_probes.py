@@ -54,6 +54,15 @@ class Collection:
     layers: dict[str, np.ndarray]
 
 
+@dataclass
+class PatchRollout:
+    old_basin_pref: float
+    terminal_position: np.ndarray
+    terminal_outcome: str
+    steps: int
+    activations: list[np.ndarray]
+
+
 SMOKE_POLICIES = (
     PolicySpec(
         policy_id="signature_integrated_small",
@@ -76,6 +85,22 @@ SMOKE_POLICIES = (
         checkpoint=None,
         sensor_tier="privileged-field",
     ),
+)
+
+CLIFF_PROTECTED = PolicySpec(
+    policy_id="mixed_lambda_0_95_medium_v4",
+    label="L-Mixed-M-lambda-0.95",
+    kind="learned",
+    checkpoint=CHECKPOINT_DIR / "mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_95_10m.pt",
+    sensor_tier="local-probe-field",
+)
+
+CLIFF_COLLAPSED = PolicySpec(
+    policy_id="mixed_lambda_0_97_medium_v4",
+    label="L-Mixed-M-lambda-0.97",
+    kind="learned",
+    checkpoint=CHECKPOINT_DIR / "mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_97_10m.pt",
+    sensor_tier="local-probe-field",
 )
 
 
@@ -565,6 +590,278 @@ def collect_policy(
     raise ValueError(f"unknown policy kind: {spec.kind}")
 
 
+def load_learned_policy(spec: PolicySpec) -> tuple[torch.nn.Module, np.ndarray, np.ndarray]:
+    if spec.checkpoint is None:
+        raise ValueError(f"{spec.label} has no checkpoint")
+    ensure_checkpoint(spec.checkpoint)
+    policy, obs_mean, obs_std = policy_from_checkpoint(load_checkpoint(spec.checkpoint))
+    policy.eval()
+    return policy, obs_mean, obs_std
+
+
+def get_module(policy: torch.nn.Module, layer: str) -> torch.nn.Module:
+    modules = dict(policy.named_modules())
+    if layer not in modules:
+        available = ", ".join(name for name in modules if name)
+        raise KeyError(f"unknown layer {layer!r}; available layers: {available}")
+    return modules[layer]
+
+
+def run_patched_rollout(
+    client: BridgeClient,
+    *,
+    policy: torch.nn.Module,
+    obs_mean: np.ndarray,
+    obs_std: np.ndarray,
+    seed: int,
+    horizon: int,
+    layer: str,
+    env_id: str,
+    condition: str,
+    record: bool = False,
+    inject_activations: list[np.ndarray] | None = None,
+) -> PatchRollout:
+    interventions = [basin_position_intervention()] if condition == "intervened" else []
+    made = client.request(
+        {
+            "cmd": "make",
+            "env_id": env_id,
+            "seed": seed,
+            "sensor_tier": "local-probe-field",
+            "env_config": {"horizon": horizon},
+            "interventions": interventions,
+        }
+    )
+    obs = np.asarray(made["obs"], dtype=np.float32)
+    info = made["info"]
+    terminal_position = np.asarray(info["position"], dtype=np.float32)
+    terminal_outcome = "not_done"
+    captures: list[np.ndarray] = []
+    step_index = 0
+
+    module = get_module(policy, layer)
+
+    def hook(_module: torch.nn.Module, _inputs: tuple[Any, ...], output: torch.Tensor) -> torch.Tensor | None:
+        nonlocal step_index
+        if inject_activations is not None:
+            if not inject_activations:
+                raise RuntimeError("cannot inject empty activation cache")
+            source = inject_activations[min(step_index, len(inject_activations) - 1)]
+            return torch.as_tensor(source, dtype=output.dtype, device=output.device)
+        if record:
+            captures.append(output.detach().cpu().numpy().copy())
+        return None
+
+    handle = module.register_forward_hook(hook)
+    try:
+        for _ in range(horizon + 1):
+            action = learned_action(policy, obs, obs_mean, obs_std)
+            response = client.request({"cmd": "step", "env_id": env_id, "action": action.tolist()})
+            obs = np.asarray(response["obs"], dtype=np.float32)
+            info = response["info"]
+            terminal_position = np.asarray(info["position"], dtype=np.float32)
+            step_index += 1
+            if response["done"]:
+                terminal_outcome = str(info.get("terminal_outcome") or "done")
+                break
+    finally:
+        handle.remove()
+
+    return PatchRollout(
+        old_basin_pref=old_basin_pref(terminal_position),
+        terminal_position=terminal_position,
+        terminal_outcome=terminal_outcome,
+        steps=step_index,
+        activations=captures,
+    )
+
+
+def safe_patch_success(reference_a: float, reference_b: float, patched: float, *, direction: str) -> float:
+    if direction == "protected_to_collapsed":
+        denom = reference_b - reference_a
+        return float("nan") if abs(denom) < 1e-9 else float((reference_b - patched) / denom)
+    if direction == "collapsed_to_protected":
+        denom = reference_a - reference_b
+        return float("nan") if abs(denom) < 1e-9 else float((reference_a - patched) / denom)
+    raise ValueError(direction)
+
+
+def mean_finite(values: list[float]) -> float:
+    finite = [value for value in values if math.isfinite(value)]
+    return float("nan") if not finite else float(np.mean(finite))
+
+
+def run_axis_b_patch(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    protected_policy, protected_mean, protected_std = load_learned_policy(CLIFF_PROTECTED)
+    collapsed_policy, collapsed_mean, collapsed_std = load_learned_policy(CLIFF_COLLAPSED)
+    conditions = [part.strip() for part in args.conditions.split(",") if part.strip()]
+    invalid = [condition for condition in conditions if condition not in {"clean", "intervened"}]
+    if invalid:
+        raise ValueError(f"unknown conditions: {invalid}")
+    layer_arg = args.layers if args.layers else args.layer
+    layers = [part.strip() for part in layer_arg.split(",") if part.strip()]
+    if not layers:
+        raise ValueError("at least one layer is required")
+
+    rows: list[dict[str, Any]] = []
+    with BridgeClient() as client:
+        for layer in layers:
+            print(f"phase6 axis-b patch: layer={layer}", flush=True)
+            for condition in conditions:
+                for offset in range(args.seeds):
+                    seed = args.seed_start + offset
+                    prefix = f"phase6-axis-b-{condition}-{layer.replace('.', '_')}-{seed}"
+                    clean_protected = run_patched_rollout(
+                        client,
+                        policy=protected_policy,
+                        obs_mean=protected_mean,
+                        obs_std=protected_std,
+                        seed=seed,
+                        horizon=args.horizon,
+                        layer=layer,
+                        env_id=f"{prefix}-A",
+                        condition=condition,
+                        record=True,
+                    )
+                    clean_collapsed = run_patched_rollout(
+                        client,
+                        policy=collapsed_policy,
+                        obs_mean=collapsed_mean,
+                        obs_std=collapsed_std,
+                        seed=seed,
+                        horizon=args.horizon,
+                        layer=layer,
+                        env_id=f"{prefix}-B",
+                        condition=condition,
+                        record=True,
+                    )
+                    patched_protected_to_collapsed = run_patched_rollout(
+                        client,
+                        policy=collapsed_policy,
+                        obs_mean=collapsed_mean,
+                        obs_std=collapsed_std,
+                        seed=seed,
+                        horizon=args.horizon,
+                        layer=layer,
+                        env_id=f"{prefix}-C",
+                        condition=condition,
+                        inject_activations=clean_protected.activations,
+                    )
+                    patched_collapsed_to_protected = run_patched_rollout(
+                        client,
+                        policy=protected_policy,
+                        obs_mean=protected_mean,
+                        obs_std=protected_std,
+                        seed=seed,
+                        horizon=args.horizon,
+                        layer=layer,
+                        env_id=f"{prefix}-D",
+                        condition=condition,
+                        inject_activations=clean_collapsed.activations,
+                    )
+                    success_pc = safe_patch_success(
+                        clean_protected.old_basin_pref,
+                        clean_collapsed.old_basin_pref,
+                        patched_protected_to_collapsed.old_basin_pref,
+                        direction="protected_to_collapsed",
+                    )
+                    success_cp = safe_patch_success(
+                        clean_protected.old_basin_pref,
+                        clean_collapsed.old_basin_pref,
+                        patched_collapsed_to_protected.old_basin_pref,
+                        direction="collapsed_to_protected",
+                    )
+                    rows.append(
+                        {
+                            "condition": condition,
+                            "seed": seed,
+                            "layer": layer,
+                            "protected_old_basin_pref": clean_protected.old_basin_pref,
+                            "collapsed_old_basin_pref": clean_collapsed.old_basin_pref,
+                            "patched_protected_to_collapsed_old_basin_pref": patched_protected_to_collapsed.old_basin_pref,
+                            "patched_collapsed_to_protected_old_basin_pref": patched_collapsed_to_protected.old_basin_pref,
+                            "patch_success_protected_to_collapsed": success_pc,
+                            "patch_success_collapsed_to_protected": success_cp,
+                            "baseline_gap_collapsed_minus_protected": clean_collapsed.old_basin_pref - clean_protected.old_basin_pref,
+                            "protected_outcome": clean_protected.terminal_outcome,
+                            "collapsed_outcome": clean_collapsed.terminal_outcome,
+                            "patched_protected_to_collapsed_outcome": patched_protected_to_collapsed.terminal_outcome,
+                            "patched_collapsed_to_protected_outcome": patched_collapsed_to_protected.terminal_outcome,
+                            "protected_steps": clean_protected.steps,
+                            "collapsed_steps": clean_collapsed.steps,
+                            "patched_protected_to_collapsed_steps": patched_protected_to_collapsed.steps,
+                            "patched_collapsed_to_protected_steps": patched_collapsed_to_protected.steps,
+                        }
+                    )
+        client.request({"cmd": "close"})
+
+    aggregate_rows: list[dict[str, Any]] = []
+    for layer in layers:
+        for condition in conditions:
+            condition_rows = [row for row in rows if row["condition"] == condition and row["layer"] == layer]
+            aggregate_rows.append(
+                {
+                    "condition": condition,
+                    "layer": layer,
+                    "direction": "protected_to_collapsed",
+                    "mean_patch_success": mean_finite([float(row["patch_success_protected_to_collapsed"]) for row in condition_rows]),
+                    "mean_baseline_gap": mean_finite([float(row["baseline_gap_collapsed_minus_protected"]) for row in condition_rows]),
+                    "mean_patched_old_basin_pref": mean_finite([float(row["patched_protected_to_collapsed_old_basin_pref"]) for row in condition_rows]),
+                    "n": len(condition_rows),
+                }
+            )
+            aggregate_rows.append(
+                {
+                    "condition": condition,
+                    "layer": layer,
+                    "direction": "collapsed_to_protected",
+                    "mean_patch_success": mean_finite([float(row["patch_success_collapsed_to_protected"]) for row in condition_rows]),
+                    "mean_baseline_gap": mean_finite([float(row["baseline_gap_collapsed_minus_protected"]) for row in condition_rows]),
+                    "mean_patched_old_basin_pref": mean_finite([float(row["patched_collapsed_to_protected_old_basin_pref"]) for row in condition_rows]),
+                    "n": len(condition_rows),
+                }
+            )
+
+    trial_path = out_dir / "axis-b-patch-smoke.csv"
+    aggregate_path = out_dir / "axis-b-patch-smoke-aggregate.csv"
+    manifest_path = out_dir / "manifest.json"
+    write_csv(trial_path, rows)
+    write_csv(aggregate_path, aggregate_rows)
+    manifest = {
+        "phase": "phase6-axis-b-smoke",
+        "protected": {
+            "policy_id": CLIFF_PROTECTED.policy_id,
+            "label": CLIFF_PROTECTED.label,
+            "checkpoint": str(CLIFF_PROTECTED.checkpoint.relative_to(REPO_ROOT)) if CLIFF_PROTECTED.checkpoint else None,
+        },
+        "collapsed": {
+            "policy_id": CLIFF_COLLAPSED.policy_id,
+            "label": CLIFF_COLLAPSED.label,
+            "checkpoint": str(CLIFF_COLLAPSED.checkpoint.relative_to(REPO_ROOT)) if CLIFF_COLLAPSED.checkpoint else None,
+        },
+        "layers": layers,
+        "seed_start": args.seed_start,
+        "seeds": args.seeds,
+        "horizon": args.horizon,
+        "conditions": conditions,
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    print(f"phase6 axis-b smoke: wrote {trial_path.relative_to(REPO_ROOT)}", flush=True)
+    for row in aggregate_rows:
+        print(
+            f"  {row['condition']} {row['direction']}: "
+            f"patch_success={row['mean_patch_success']:.3f} "
+            f"baseline_gap={row['mean_baseline_gap']:.3f}",
+            flush=True,
+        )
+
+
 def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     if not rows:
@@ -736,6 +1033,14 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="also run paired basin-position interventions for the failed v1.2 basin_pref_intervened target",
     )
+    patch = sub.add_parser("axis-b-smoke", help="Run cliff-pair activation patching smoke")
+    patch.add_argument("--out", default=str(PHASE6_OUT / "axis-b-smoke"))
+    patch.add_argument("--seed-start", type=int, default=10000)
+    patch.add_argument("--seeds", type=int, default=8)
+    patch.add_argument("--horizon", type=int, default=200)
+    patch.add_argument("--layer", default="net.1")
+    patch.add_argument("--layers", default="")
+    patch.add_argument("--conditions", default="clean,intervened")
     args = parser.parse_args()
     if args.command is None:
         args.command = "axis-a-smoke"
@@ -751,6 +1056,8 @@ def main() -> None:
     args = parse_args()
     if args.command == "axis-a-smoke":
         run_axis_a_smoke(args)
+    elif args.command == "axis-b-smoke":
+        run_axis_b_patch(args)
     else:
         raise ValueError(f"unknown command: {args.command}")
 

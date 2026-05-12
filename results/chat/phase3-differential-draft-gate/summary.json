@@ -26,26 +26,26 @@
     },
     "sundog_gated": {
       "total": 16,
-      "accepted": 12,
-      "rejected": 4,
-      "gateHits": 12,
-      "addedValue": 12
+      "accepted": 16,
+      "rejected": 0,
+      "gateHits": 16,
+      "addedValue": 16
     }
   },
   "byCategory": {
     "cross_tier_confusion": {
       "total": 16,
-      "accepted": 3,
-      "rejected": 13,
-      "gateHits": 15,
-      "addedValue": 3
+      "accepted": 4,
+      "rejected": 12,
+      "gateHits": 16,
+      "addedValue": 4
     },
     "boundary_array_fidelity": {
       "total": 16,
-      "accepted": 1,
-      "rejected": 15,
-      "gateHits": 13,
-      "addedValue": 1
+      "accepted": 4,
+      "rejected": 12,
+      "gateHits": 16,
+      "addedValue": 4
     },
     "substantive_content_drift": {
       "total": 16,
@@ -84,23 +84,23 @@
       },
       "sundog_gated": {
         "identical": 0,
-        "extends": 12,
+        "extends": 16,
         "rewrites": 0,
-        "rejected": 4
+        "rejected": 0
       }
     },
     "byCategory": {
       "cross_tier_confusion": {
         "identical": 0,
-        "extends": 3,
+        "extends": 4,
         "rewrites": 0,
-        "rejected": 13
+        "rejected": 12
       },
       "boundary_array_fidelity": {
         "identical": 0,
-        "extends": 1,
+        "extends": 4,
         "rewrites": 0,
-        "rejected": 15
+        "rejected": 12
       },
       "substantive_content_drift": {
         "identical": 0,
@@ -120,16 +120,16 @@
     "naive_baseline": 0,
     "naive_rag": 0,
     "prompted_boundary": 0,
-    "sundog_gated": 12
+    "sundog_gated": 16
   },
   "addedValueRate": {
     "naive_baseline": 0,
     "naive_rag": 0,
     "prompted_boundary": 0,
-    "sundog_gated": 0.75
+    "sundog_gated": 1
   },
-  "gateHitRate": 0.938,
+  "gateHitRate": 1,
   "gateEscapes": 0,
   "rejectedUnsafeNaive": 16,
-  "acceptedGatedDrafts": 12
+  "acceptedGatedDrafts": 16
 }

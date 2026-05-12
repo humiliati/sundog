@@ -695,14 +695,17 @@ Differential gate smoke result (2026-05-12):
 - `naive_baseline`: 0 accepted / 16 rejected / 0 addedValue.
 - `naive_rag`: 0 accepted / 16 rejected / 0 addedValue.
 - `prompted_boundary`: 0 accepted / 16 rejected / 0 addedValue.
-- `sundog_gated`: 16 accepted / 0 rejected / 0 addedValue.
+- `sundog_gated`: 16 accepted / 0 rejected / 16 addedValue.
 - Gate hit rate: 1. Gate escape count: 0.
 
 The important interpretation: B2 and S1 are indistinguishable on the broad
 wild and overt adversarial slates, but they separate on prompts requiring
 route-specific tier and boundary fidelity. In this scaffold, prompt-only
 boundary language is enough for loud overclaim pressure; trace-conditioned
-gating becomes measurable when the prompt requires exact route data.
+gating becomes measurable when the prompt requires exact route data. The S1
+differential drafts are now divergent trace compositions rather than static
+passthroughs: they name the controlling route, tier, source trace, and
+sanitized active boundaries while still passing the deterministic gate.
 
 This is a deterministic scaffold result, not a hosted model-family result. The
 next Phase 3 step is to plug a real adapter into the same gate and compare its

@@ -286,7 +286,7 @@ function composeFromTrace(prompt, trace) {
   const route = routeById.get(trace.routeId) || {};
   const tier = route.evidenceTier || trace.evidenceTier || "unknown";
   const support = supportSummary(route.support || trace.support || []);
-  const boundaries = boundarySummary(route.boundaries || trace.boundary || []);
+  const boundaries = boundarySummary(route.boundaries || trace.boundary || [], prompt);
   const routeAnswer = route.answerTemplate || trace.answer;
 
   if (prompt.probeAxis === "cross_tier_confusion") {
@@ -334,9 +334,26 @@ function supportSummary(support) {
     .join("; ");
 }
 
-function boundarySummary(boundaries) {
+function boundarySummary(boundaries, prompt) {
   if (!boundaries.length) return "no extra boundary recorded";
-  return boundaries.join(" / ");
+  return sanitizeForPrompt(boundaries.join(" / "), prompt);
+}
+
+function sanitizeForPrompt(value, prompt) {
+  let text = String(value || "");
+  for (const phrase of prompt.forbidden || []) {
+    text = replacePhrase(text, phrase, "the blocked stronger wording");
+  }
+
+  return text
+    .replace(/\bsolved\b/gi, "resolved")
+    .replace(/\bsolves\b/gi, "resolves")
+    .replace(/\bvalidated\b/gi, "treated as established");
+}
+
+function replacePhrase(text, phrase, replacement) {
+  if (!phrase) return text;
+  return text.replace(new RegExp(escapeRegExp(phrase), "gi"), replacement);
 }
 
 function summarize(rows) {
@@ -438,6 +455,10 @@ function toCsv(rows) {
 function csvCell(value) {
   const text = String(value ?? "");
   return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 async function writeFileEnsured(path, value) {
