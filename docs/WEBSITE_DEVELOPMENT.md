@@ -52,8 +52,8 @@ about.html
 ## Link To Docs
 
 Markdown files under `docs/` are copied into the public `dist/` artifact during
-build. The public chat roadmap substantiation files `chat/claim_map.json` and
-`chat/contents.json` are copied too. Link to them with repo-relative paths:
+build. The public chat roadmap substantiation files under `chat/` are copied
+too. Link to them with repo-relative paths:
 
 ```html
 <a href="docs/RESEARCHER_GUIDE.md">Researcher Guide</a>

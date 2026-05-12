@@ -135,7 +135,17 @@ flag and the `is_terminal_step` runtime context. No JS change.
 | `integrated` | `signature_ppo_dense_small` | reuse Phase 2 canonical |
 | `threshold` | `signature_ppo_threshold_small` | new |
 
-**Tier coverage:** Small only for v1. Medium deferred.
+**Tier coverage:** Small only for v1. Medium deferred (lifted to Phase 5
+v1.1 — see versioning).
+
+**Post-v1 correction (2026-05-12):** Phase 5 Small slate falsified prediction
+B1 in the program-significant direction. Terminal-only signature reached 37/64
+success at Small vs integrated's 5/64, demonstrating that the Phase 2-3
+"Sundog-cost gap" was a signal-shape artifact, not a structural property of
+state-only training. Terminal-only is now the recommended canonical L-Signature
+shape for future Phase 5+ work. Integrated is retained as the historical
+canonical for backward compatibility with Phase 2-4 result notes; new work
+should adopt terminal-only and re-canonicalize when convenient.
 
 ### 3.3 Axis C — Curriculum order
 
@@ -534,3 +544,27 @@ spec is revised and re-versioned.
   pre-registered. Three trainer additions (mixed-lambda flag,
   signature-shape flag, load-checkpoint flag) scoped; no JS-side
   changes.
+
+- `v1.1` (2026-05-12): post-Small-slate amendment. Pre-registered prediction
+  outcomes recorded:
+  - (A1) λ-monotonicity **confirmed**. Protection curve well-behaved across
+    λ ∈ {0.1, 0.3, 0.5, 0.7, 0.9}.
+  - (A2) Breach threshold **confirmed** at λ ≈ 0.660 (interpolated), inside
+    the predicted (0.5, 0.7] interval and toward the upper end. Signature
+    anchor fully prevents basin absorption up to ~2:1 reward:signature mix
+    at Small tier.
+  - (B1) **Falsified in program-significant direction.** Terminal-only
+    signature reaches 37/64 success at Small vs integrated's 5/64 — 7.4×
+    the success rate. Reframes the Sundog-cost gap from 61 pp to 11 pp at
+    Small, and re-canonicalizes terminal-only as the recommended L-Signature
+    shape (§3.2 correction note).
+  - (C1) **Partial confirmation.** Reward → signature curriculum erases
+    basin attraction (`old_basin_pref = -0.585`) but does not recover
+    task competence (0/64 success). Phase 5 v2 will test
+    reward-pretrain → **terminal-signature**-fine-tune to disambiguate
+    whether the recovery failure was a signal-shape artifact (likely,
+    given B1) or a structural property of post-Goodhart fine-tuning.
+  Signature → reward curriculum confirms symmetric prediction: clean
+  signature pretrain offers no protection against later basin-corrupted
+  reward fine-tuning (`old_basin_pref = 2.613`, 62 probe basin captures).
+  Full result note: [`PHASE5_RESULTS.md`](PHASE5_RESULTS.md).

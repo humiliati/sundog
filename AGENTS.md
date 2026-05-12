@@ -31,7 +31,7 @@ npm run cf:domain
 
 `npm run dev` serves the source site locally. `npm run build` creates `dist/`
 from the root `index.html`, then copies `README.md`, `docs/**`, and the public
-chat substantiation JSON files into `dist` so public internal documentation
+chat substantiation artifacts into `dist` so public internal documentation
 links do not break. The build also checks that local links from
 `dist/index.html` resolve inside `dist`.
 

@@ -1,5 +1,5 @@
 import { cp, mkdir, readdir, rm } from "node:fs/promises";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 
 const root = process.cwd();
 const dist = join(root, "dist");
@@ -9,7 +9,10 @@ const sourceChat = join(root, "chat");
 const targetChat = join(dist, "chat");
 const publicChatArtifacts = [
   "claim_map.json",
-  "contents.json"
+  "contents.json",
+  "prompts/gold-normal.jsonl",
+  "prompts/gold-boundary.jsonl",
+  "prompts/gold-adversarial.jsonl"
 ];
 
 async function copyPublicDocs(sourceDir, targetDir) {
@@ -37,5 +40,7 @@ await rm(targetChat, { recursive: true, force: true });
 await mkdir(targetChat, { recursive: true });
 
 for (const artifact of publicChatArtifacts) {
-  await cp(join(sourceChat, artifact), join(targetChat, artifact));
+  const target = join(targetChat, artifact);
+  await mkdir(dirname(target), { recursive: true });
+  await cp(join(sourceChat, artifact), target);
 }
