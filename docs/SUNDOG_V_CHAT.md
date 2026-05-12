@@ -482,6 +482,9 @@ Deliverables:
 - `docs/SUNDOG_V_CHAT.md`
 - `chat/claim_map.json`
 - `chat/contents.json`
+- `chat/contents.json` starts as the index stub; split-out files (for example
+  evidence tiers or boundary rules) can be added later without changing the
+  Phase 0 claim boundary.
 - gold set of 100 user prompts:
   - 40 normal navigation questions;
   - 30 boundary-sensitive questions;
