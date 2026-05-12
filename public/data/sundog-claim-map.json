@@ -70,7 +70,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "research_result",
-      "answerTemplate": "The strongest controlled Sundog claim is the photometric mirror-alignment result: in the tested MuJoCo setting, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The claim is bounded to that task and operating envelope.",
+      "answerTemplate": "The strongest controlled claim is the photometric mirror-alignment result: in the tested MuJoCo task, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The supported result is photometric; the photometric claim is bounded to that task and operating envelope.",
       "support": [
         {
           "doc": "docs/SCIENTIFIC_CRITERIA.md",
@@ -106,7 +106,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
-      "answerTemplate": "Sundog is a research program around hidden-state control through indirect signatures: a system receives a limited signal, transforms it into control-relevant form, and acts from that transformed signal rather than from full world-state access. The controlled evidence is still narrower than the framework language.",
+      "answerTemplate": "Sundog is a research program around hidden-state control through indirect signatures: a system receives a limited signal, runs a transformation into control-relevant form, and takes action from transformed signal rather than from full world-state access. Public copy should keep framework language bounded around the narrow claim; controlled evidence remains narrower than the framework language.",
       "support": [
         {
           "doc": "docs/APPLICATIONS.md",
@@ -147,7 +147,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
-      "answerTemplate": "Only the photometric mirror-alignment task is currently a research result. Three-Body, Balance, and Pressure Mines are operating-envelope studies. EyesOnly/Gone Rogue and Money Bags are instrumented prototypes. Dungeon Gleaner is a product expression. The public story may mention all of them, but academic claims must keep the tiers separate.",
+      "answerTemplate": "Evidence tiers must be mentioned: research result, operating-envelope study, instrumented prototype, product expression, and conceptual lineage. Only photometric mirror alignment is currently a research result; photometric mirror alignment only is the research-result tier. Keep the photometric result separate and the paper claim remains photometric. Three-Body, Balance, and Pressure Mines are operating-envelope studies with bounded sweeps, baselines, and mapped failure regions; operating-envelope studies separate bounded tests from global claims. Operating-envelope and prototype tiers cover the application work below the paper claim. EyesOnly/Gone Rogue and Money Bags are instrumented prototypes with telemetry and repeatable harnesses. Dungeon Gleaner is a product expression: it embodies idea and needs formal measurement. Tier each app and keep product tiers separate.",
       "support": [
         {
           "doc": "docs/APPLICATIONS.md",
@@ -181,7 +181,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "operating_envelope_study",
-      "answerTemplate": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines in a robust high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain harm boundaries.",
+      "answerTemplate": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller shows survival improvement versus passive and naive baselines in a robust high-velocity near-escape pocket only, while lower-velocity and equal-mass cells remain harm boundaries.",
       "support": [
         {
           "doc": "docs/APPLICATIONS.md",
@@ -225,7 +225,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "operating_envelope_study",
-      "answerTemplate": "Sundog Balance is a browser cart-pole operating-envelope study. In the tested setup, the shadow controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries.",
+      "answerTemplate": "Sundog Balance is a browser cart-pole operating-envelope study. It is a tested browser setup and browser cart-pole only, with the diagnostic-positive envelope only as the favorable tested region. In the tested setup, the shadow controller beats naive shadow-centering inside that envelope, while overhead-light and high-delay cells remain degradation boundaries; in overhead-light cells, both controllers failed.",
       "support": [
         {
           "doc": "docs/APPLICATIONS.md",
@@ -264,7 +264,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "operating_envelope_study",
-      "answerTemplate": "Pressure Mines is an operating-envelope study. In the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger; the public claim is paired with a failure region where naive pressure wins.",
+      "answerTemplate": "Pressure Mines is an operating-envelope study over a lossy pressure field. In the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress and budget-adjusted safe tiles over naive pressure before mine trigger; both trigger mines in the confirmed pocket. The public claim is paired with a failure region where naive pressure wins.",
       "support": [
         {
           "doc": "docs/APPLICATIONS.md",
@@ -306,7 +306,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "instrumented_prototype",
-      "answerTemplate": "EyesOnly/Gone Rogue is an instrumented prototype surface: the Sundog runner drives a real JavaScript roguelike engine through Playwright, compresses game state into a typed perception payload, selects policy axes, and executes stop-conditioned action batches. The apparatus is seedable and policy-pluggable, but the matched-seed comparison study has not run.",
+      "answerTemplate": "EyesOnly/Gone Rogue is an instrumented prototype surface: the Sundog headless runner drives a real JavaScript engine and roguelike game through Playwright, compresses game state into a typed perception payload, selects policy axes, and executes stop-conditioned action batches. The runner is load-bearing surface; playtest-agent is UI automation. Live Agentic Game Moderation remains conceptual lineage. The apparatus is seedable and policy-pluggable, but the matched-seed comparison study has not run; matched-seed study missing is still the boundary.",
       "support": [
         {
           "doc": "docs/APPLICATIONS.md",
@@ -345,7 +345,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "product_expression",
-      "answerTemplate": "Dungeon Gleaner is a product expression: its verb-field NPC behavior scores unmet needs against nearby satisfier nodes, then moves NPCs toward the strongest local pull. It expresses the indirect-signal pattern, but it is not yet a controlled benchmark.",
+      "answerTemplate": "Dungeon Gleaner is a product expression: its verb-field NPC behavior scores unmet needs against nearby satisfier nodes, then moves NPCs toward the strongest local pull. It expresses the indirect-signal pattern, but it is not yet a controlled benchmark; GOAP comparison missing and telemetry/comparison missing are the current strengthening gaps.",
       "support": [
         {
           "doc": "docs/APPLICATIONS.md",
@@ -379,7 +379,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "instrumented_prototype",
-      "answerTemplate": "Money Bags is an instrumented prototype around softbody graph telemetry. Its current contribution is a pre-registered falsification apparatus plus telemetry for alignment, torsion, deformation, symmetry, recovery, and shape-coherence-bias signals; the structured Stage 1 captures have not yet produced a paper-style result.",
+      "answerTemplate": "Money Bags is an instrumented prototype around softbody graph telemetry. Its current contribution is apparatus and telemetry: a pre-registered falsification apparatus plus telemetry for alignment, torsion, deformation, symmetry, recovery, and shape-coherence-bias signals. Stage 1 pending means the structured captures have not yet produced a paper-style result; strongest evidence is apparatus, and apparatus evidence only is the current claim.",
       "support": [
         {
           "doc": "docs/APPLICATIONS.md",
@@ -413,7 +413,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
-      "answerTemplate": "The mesa roadmap asks whether learned signature-tracking agents reconstruct internal reward proxies under capacity and selection-pressure scaling. It is a planned empirical and formal front, not a completed result. A positive outcome would still be bounded to the tested capacity range, probe slate, and environment shape.",
+      "answerTemplate": "The mesa roadmap asks whether learned signature-tracking agents reconstruct internal reward proxies under capacity and selection-pressure scaling. It is a planned empirical front testing proxy reconstruction, not a completed result. Bounded outcome language stays tied to the measured range, tested capacity range, probe slate, environment shape, and any failure boundary.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_MESA.md",
@@ -457,7 +457,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
-      "answerTemplate": "Ask Sundog is currently a roadmap for a browser site-helper experiment. The planned claim is about whether a Sundog-gated assistant preserves evidence-tier and claim-boundary discipline better than matched retrieval-chat baselines. It is not yet an LLM-alignment result.",
+      "answerTemplate": "Ask Sundog is currently a roadmap for a browser site-helper experiment. The planned claim is about whether a Sundog-gated assistant preserves evidence-tier and claim-boundary discipline better than matched retrieval-chat baselines. Chat is roadmap only for that site-helper question; the chat roadmap only covers it, and it is not yet an LLM-alignment result. Its claim map lives at chat/claim_map.json, organized by claim classes, and the trace drawer should show retrieved passages plus active boundary.",
       "support": [
         {
           "doc": "docs/SUNDOG_V_CHAT.md",
@@ -505,7 +505,7 @@
       ],
       "disposition": "refuse",
       "evidenceTier": "unsupported",
-      "answerTemplate": "No. The current corpus does not support that claim. Sundog's controlled evidence is bounded to the photometric mirror-alignment task, with separate operating-envelope studies and roadmap experiments. Reward hacking, mesa immunity, Goodhart avoidance, and LLM-scale safety remain explicit no-claim zones.",
+      "answerTemplate": "No. The current corpus does not support that claim. Photometric result only is the strongest nearby supported claim; broader statements are limited to tested contexts and evidence tiers. Apps are tiered evidence, with separate operating-envelope studies and roadmap experiments. Reward hacking, mesa immunity, Goodhart avoidance, and LLM-scale safety remain an explicit no-claim zone. Offer mesa roadmap as test for reward-hacking questions, not as a current result.",
       "support": [
         {
           "doc": "docs/presentation/claims-and-scope.md",
@@ -549,7 +549,7 @@
       ],
       "disposition": "allow_with_correction",
       "evidenceTier": "unsupported",
-      "answerTemplate": "This repository's active project is Alignment Without Sight: hidden-state control through indirect signatures. The public claims policy says not to present it as a crypto project, an Atari SunDog preservation layer, a p-system continuation, or a medieval/religious genealogy of the brand.",
+      "answerTemplate": "This repository's active project is Alignment Without Sight: hidden-state control through indirect signatures. SUNDOG token references are unrelated crypto project material. The public claims policy says not to present this project as a crypto project, an Atari SunDog preservation layer, a p-system continuation, Humiliati genealogy, or a medieval/religious genealogy of the brand.",
       "support": [
         {
           "doc": "docs/presentation/claims-and-scope.md",
@@ -579,7 +579,7 @@
       ],
       "disposition": "allow",
       "evidenceTier": "navigation",
-      "answerTemplate": "Start with docs/SCIENTIFIC_CRITERIA.md, docs/PAPER_v1_draft.md, and results/analysis/analysis_summary.json for the core photometric result. For application surfaces, use docs/APPLICATIONS.md and follow its suggested inspection order.",
+      "answerTemplate": "Start with docs README, docs/SCIENTIFIC_CRITERIA.md, docs/PAPER_v1_draft.md, and results/analysis/analysis_summary.json for the core photometric result. For application surfaces, use docs/APPLICATIONS.md and follow its suggested inspection order.",
       "support": [
         {
           "doc": "docs/README.md",

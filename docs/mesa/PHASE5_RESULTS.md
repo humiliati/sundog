@@ -357,13 +357,13 @@ Three Phase 5 v3 candidates ranked by program-significance:
    can produce.
 
 3. **L-Signature-S-Terminal probe slate + intervention battery.**
-   Phase 5 v1 ran the Small slate but the headline-relevance was lower
-   then. With v2 reframing, the Small L-Sig-Terminal numbers (37/64
-   nominal) deserve a clean evaluation too. Already exists; just needs
-   the matching probe + intervention slate runs (5 minutes total).
+   Verification-only. The Small terminal-only policy already has matching
+   probe-slate and intervention-battery artifacts, and the aggregate includes
+   them. Keep this as a paper-trail check rather than a new run.
 
 (1) is the highest-priority because it characterizes the non-monotone
-finding cleanly. (2) is the highest-value if it confirms. (3) is cleanup.
+finding cleanly. (2) is the highest-value if it confirms. (3) is now
+paper-trail verification.
 
 ## 9. Versioning
 

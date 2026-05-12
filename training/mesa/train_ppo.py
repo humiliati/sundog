@@ -98,6 +98,12 @@ VARIANTS = {
         "lambda": 0.7,
         "signature_shape": "integrated",
     },
+    "mixed_ppo_phase3_lambda_0_8": {
+        "family": "L-Mixed",
+        "reward_mode": "mixed_phase3",
+        "lambda": 0.8,
+        "signature_shape": "integrated",
+    },
     "mixed_ppo_phase3_lambda_0_9": {
         "family": "L-Mixed",
         "reward_mode": "mixed_phase3",
@@ -115,6 +121,12 @@ VARIANTS = {
         "reward_mode": "signature",
         "lambda": 0.0,
         "signature_shape": "integrated",
+    },
+    "curriculum_reward_then_terminal_sig": {
+        "family": "L-Curriculum",
+        "reward_mode": "signature",
+        "lambda": 0.0,
+        "signature_shape": "terminal",
     },
 }
 

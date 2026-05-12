@@ -535,7 +535,121 @@ spec is revised and re-versioned.
 - `training/mesa/train_ppo.py` — gets §7.1, §7.2, §7.3 additions.
 - `training/mesa/policy.py` — unchanged.
 
-## 15. Versioning
+## 15. Phase 5 v3 Candidate Lock (v1.3)
+
+Phase 5 v3 owns three follow-up candidates from
+[`PHASE5_RESULTS.md`](PHASE5_RESULTS.md) v2 section 8.8. The ranking is:
+
+1. **Medium L-Mixed lambda refinement:** train and evaluate
+   `lambda in {0.8, 0.9}` at Medium.
+2. **Reward-pretrain to terminal-signature fine-tune curriculum:** reuse the
+   existing 500K reward pretrain checkpoint, then fine-tune on terminal-only
+   signature for 500K steps.
+3. **Small L-Signature-Terminal evaluation-slate cleanup:** verify the
+   existing Small terminal-only probe slate and intervention battery artifacts.
+
+Candidate 1 is the highest-priority mapping run. It tests whether the Medium
+non-monotone window closes smoothly between `lambda=0.7` and the L-Reward
+anchor at `lambda=1.0`, or whether a second feature appears in the protection
+curve. Candidate 2 is the highest-value intervention on the Goodhart
+fine-tuning question. Candidate 3 is now a verification-only paper-trail item:
+the Small L-Signature-Terminal probe slate and intervention battery already
+exist at:
+
+```
+results/mesa/phase3-probe-slate/phase5_l_signature_terminal_small/
+results/mesa/phase4-intervention-battery/phase5_l_signature_terminal_small/
+```
+
+### 15.1 Pre-registered v3 predictions
+
+- **(A3-M) Medium lambda rebound.** `old_basin_pref(lambda=0.8)` and
+  `old_basin_pref(lambda=0.9)` should rise above the `lambda=0.7` value
+  (`0.613`) and move toward the L-Reward-M anchor (`5.560`). Falsifier:
+  either value remains below `1.0`, which would mean the protected window is
+  wider than the v2 curve suggested.
+- **(A4-M) Success/reward tradeoff.** Medium `lambda=0.8` should have higher
+  nominal success than `lambda=0.9`; `lambda=0.9` should have stronger basin
+  attraction. Falsifier: `lambda=0.9` improves success without increasing
+  basin preference.
+- **(C2) Terminal-signature recovery.** Reward-pretrain to terminal-signature
+  fine-tune should erase basin attraction (`old_basin_pref < 0.5`) and recover
+  useful task competence (`success >= 20/64`). Falsifier: basin erasure without
+  task recovery repeats the integrated-signature curriculum failure.
+
+### 15.2 Staged PowerShell commands
+
+Do not run Candidate 1 from an agent pass if the expected wall time exceeds
+30 minutes. Stage these commands for an operator PowerShell instead.
+
+```powershell
+Set-Location C:\Users\hughe\Dev\sundog
+$env:PYTHONUNBUFFERED = "1"
+New-Item -ItemType Directory -Force results\mesa\phase5-v3-logs | Out-Null
+```
+
+Candidate 1A, Medium `lambda=0.8`:
+
+```powershell
+python -m training.mesa.train_ppo --variant mixed_ppo_phase3_lambda_0_8 --tier Medium --updates 305 --batch-envs 128 --rollout-length 256 --minibatch-size 1024 --lr 1e-4 --run-label medium_phase5_v3_lambda_0_8_10m --success-floor 0 --progress 2>&1 | Tee-Object results\mesa\phase5-v3-logs\mixed_lambda_0_8_medium.log
+
+node scripts/mesa-probe-slate.mjs --policy results\mesa\phase2-matched-capacity\policies\mixed_ppo_phase3_lambda_0_8_medium_seed_0_medium_phase5_v3_lambda_0_8_10m.policy.json --policy-label "L-Mixed-M-lambda-0.8" --out results\mesa\phase3-probe-slate\phase5_v3_l_mixed_medium_lambda_0_8
+
+node scripts/mesa-intervention-battery.mjs --policy results\mesa\phase2-matched-capacity\policies\mixed_ppo_phase3_lambda_0_8_medium_seed_0_medium_phase5_v3_lambda_0_8_10m.policy.json --policy-label "L-Mixed-M-lambda-0.8" --out results\mesa\phase4-intervention-battery\phase5_v3_l_mixed_medium_lambda_0_8
+```
+
+Candidate 1B, Medium `lambda=0.9`:
+
+```powershell
+python -m training.mesa.train_ppo --variant mixed_ppo_phase3_lambda_0_9 --tier Medium --updates 305 --batch-envs 128 --rollout-length 256 --minibatch-size 1024 --lr 1e-4 --run-label medium_phase5_v3_lambda_0_9_10m --success-floor 0 --progress 2>&1 | Tee-Object results\mesa\phase5-v3-logs\mixed_lambda_0_9_medium.log
+
+node scripts/mesa-probe-slate.mjs --policy results\mesa\phase2-matched-capacity\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v3_lambda_0_9_10m.policy.json --policy-label "L-Mixed-M-lambda-0.9" --out results\mesa\phase3-probe-slate\phase5_v3_l_mixed_medium_lambda_0_9
+
+node scripts/mesa-intervention-battery.mjs --policy results\mesa\phase2-matched-capacity\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v3_lambda_0_9_10m.policy.json --policy-label "L-Mixed-M-lambda-0.9" --out results\mesa\phase4-intervention-battery\phase5_v3_l_mixed_medium_lambda_0_9
+```
+
+Candidate 2, reward-pretrain to terminal-signature fine-tune. This reuses the
+existing reward pretrain checkpoint:
+
+```powershell
+python -m training.mesa.train_ppo --variant curriculum_reward_then_terminal_sig --tier Small --updates 61 --batch-envs 64 --rollout-length 128 --minibatch-size 256 --lr 3e-4 --run-label phase5_v3_reward_pre_terminal_sig_ft_500k --load-checkpoint results\mesa\phase2-matched-capacity\checkpoints\reward_ppo_phase3_small_seed_0_phase5_reward_pre_500k.pt --success-floor 0 --progress 2>&1 | Tee-Object results\mesa\phase5-v3-logs\curriculum_reward_then_terminal_sig_small.log
+
+node scripts/mesa-probe-slate.mjs --policy results\mesa\phase2-matched-capacity\policies\curriculum_reward_then_terminal_sig_small_seed_0_phase5_v3_reward_pre_terminal_sig_ft_500k.policy.json --policy-label "Curriculum-Reward-Then-Terminal-Sig" --out results\mesa\phase3-probe-slate\phase5_v3_curriculum_reward_then_terminal_sig_small
+
+node scripts/mesa-intervention-battery.mjs --policy results\mesa\phase2-matched-capacity\policies\curriculum_reward_then_terminal_sig_small_seed_0_phase5_v3_reward_pre_terminal_sig_ft_500k.policy.json --policy-label "Curriculum-Reward-Then-Terminal-Sig" --out results\mesa\phase4-intervention-battery\phase5_v3_curriculum_reward_then_terminal_sig_small
+```
+
+Candidate 3 verification:
+
+```powershell
+Get-ChildItem results\mesa\phase3-probe-slate\phase5_l_signature_terminal_small -Filter *_probe-degradation.csv
+Get-ChildItem results\mesa\phase4-intervention-battery\phase5_l_signature_terminal_small -Filter *_intervention-response.csv
+npm run mesa:phase5:aggregate
+```
+
+### 15.3 Aggregate update after v3 runs
+
+After Candidate 1 or Candidate 2 artifacts land, add their policy rows to
+`scripts/mesa-phase5-aggregate.mjs` and rebuild with:
+
+```powershell
+npm run mesa:phase5:aggregate
+```
+
+The aggregate should not include placeholder rows before artifacts exist,
+because blank v3 rows would make the Phase 5 report harder to read.
+
+## 16. Versioning
+
+- `v1.3` (2026-05-12): locks the three Phase 5 v3 candidates and stages
+  operator PowerShell commands. Candidate 1 runs Medium L-Mixed
+  `lambda in {0.8, 0.9}` to map the non-monotone protection curve. Candidate
+  2 reuses the existing 500K reward pretrain checkpoint and fine-tunes with
+  terminal-only signature for 500K steps. Candidate 3 is reclassified as
+  verification-only because the Small L-Signature-Terminal probe/intervention
+  artifacts already exist. Adds trainer aliases for
+  `mixed_ppo_phase3_lambda_0_8` and
+  `curriculum_reward_then_terminal_sig`.
 
 - `v1` (2026-05-12): initial Phase 5 spec. Pinned three axes (λ sweep,
   signature shape, curriculum order), 10 Small training runs + 3
