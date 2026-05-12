@@ -541,16 +541,25 @@ Phase 1 artifact status:
   `/chat/claim_map.json` as fallback), `routePrompt()` (exact-then-partial
   pattern match), `buildTraceAnswer()` (returns a trace object that mirrors
   the §4 schema).
-- `public/css/sundog-theme.css` — `.sd-chat-*` styles are present.
+- `public/css/sundog-theme.css` — `.sd-chat-*` styles are present, with
+  `.sd-chat-chip--tier` (filled) and `.sd-chat-chip--state` (dashed outline)
+  variants so the rail visibly separates the tier chip from state flags.
 - Wired into the site: all root HTML pages import
-  `public/js/sundog-chat-widget.mjs`.
+  `public/js/sundog-chat-widget.mjs`, including `docs/index.html`.
 - Evidence rail reconciliation: the visible chips are now tier plus composable
   state flags (`Boundary Active`, `Refused`, `Retrieval Only`) rather than a
   raw route triple.
 
-Exit criterion:
-A visitor can ask basic questions about the theorem, mesa roadmap,
-applications, and site navigation without model generation.
+Exit criterion: **met** (2026-05-12).
+- A visitor can ask basic questions about the theorem, mesa roadmap,
+  applications, and site navigation without model generation.
+- `npm run chat:eval:static` reports 103 strict / 0 lenient / 0 failures
+  with `routingHitRate: 1`, `traceVisibilityRate: 1`, and
+  `meanContentScore: 1` against the in-corpus gold slate.
+- Caveat carried forward to Phase 4: the 100% score reflects in-distribution
+  prompts authored against the claim map. Out-of-distribution behavior is
+  measured by a separate "wild" probe set (Phase 2 work) and is the actual
+  ceiling of the static helper.
 
 ## Phase 2 — Retrieval-Only Claim Inspector
 

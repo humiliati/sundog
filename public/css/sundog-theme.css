@@ -358,6 +358,13 @@ body {
   white-space: normal;
 }
 
+.sd-chat-chip--state {
+  background: transparent;
+  border-style: dashed;
+  border-color: rgba(20, 43, 58, 0.28);
+  color: rgba(20, 43, 58, 0.7);
+}
+
 .sd-chat-next {
   display: inline-flex;
   margin-top: 0.7rem;
