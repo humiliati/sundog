@@ -535,25 +535,21 @@ export function mountPhotoUpload(rootEl) {
         r22_px: Number(r22.toFixed(2)),
         parhelion_offset_px: Number(offset.toFixed(2)),
       },
-      inferred: {
-        sun_altitude_deg: Number(hDeg.toFixed(2)),
-      },
+      inferred: { sun_altitude_deg: Number(hDeg.toFixed(2)) },
       atlas: {
         geometryModel: "halo_atlas",
         sunAltitudeDeg: Number(hDeg.toFixed(2)),
         halo22AnchorPx: Number(r22.toFixed(2)),
       },
       layers: {
-        cza: layerCza.checked,
-        supralateral: layerSupra.checked,
-        infralateral: layerInfra.checked,
-        upperTangent: layerTangent.checked,
+        cza: layerCza.checked, supralateral: layerSupra.checked,
+        infralateral: layerInfra.checked, upperTangent: layerTangent.checked,
       },
     };
     const text = JSON.stringify(pose, null, 2);
     try {
       await navigator.clipboard.writeText(text);
-      copyPoseBtn.textContent = "Copied ✓";
+      copyPoseBtn.textContent = "Copied \u2713";
       setTimeout(() => { copyPoseBtn.textContent = "Copy JSON pose"; }, 1600);
     } catch {
       console.log("Sundog pose JSON:", text);
@@ -574,7 +570,7 @@ export function mountPhotoUpload(rootEl) {
   const shareSubmit  = rootEl.querySelector("#upload-share-submit");
   const shareStatus  = rootEl.querySelector("#upload-share-status");
 
-  let backendHealth = null;   // null = unknown / unchecked, true = ready, false = offline
+  let backendHealth = null;
   let policyVersion = null;
 
   async function probeBackend() {
@@ -587,11 +583,11 @@ export function mountPhotoUpload(rootEl) {
       shareConsent.disabled = !backendHealth;
       shareNote.textContent = backendHealth
         ? `(policy version ${policyVersion})`
-        : "(offline — server bindings not configured)";
+        : "(offline \u2014 server bindings not configured)";
     } catch (err) {
       backendHealth = false;
       shareConsent.disabled = true;
-      shareNote.textContent = "(offline — try again later)";
+      shareNote.textContent = "(offline \u2014 try again later)";
     }
   }
 
@@ -603,14 +599,12 @@ export function mountPhotoUpload(rootEl) {
   shareSubmit.addEventListener("click", async () => {
     if (!shareConsent.checked || !backendHealth) return;
     shareSubmit.disabled = true;
-    shareStatus.textContent = "Uploading…";
+    shareStatus.textContent = "Uploading\u2026";
 
     try {
       const blob = state._cleanBlob;
       if (!blob) throw new Error("no cleaned image blob");
       const buf = await blob.arrayBuffer();
-      // Convert to base64 — works on any reasonable image size; we cap upload
-      // at 10 MB server-side, the cleaned blob will normally be 200-800 KB.
       const bytes = new Uint8Array(buf);
       let binary = "";
       for (let i = 0; i < bytes.length; i += 1) binary += String.fromCharCode(bytes[i]);
@@ -621,11 +615,7 @@ export function mountPhotoUpload(rootEl) {
       const hDeg = computeAltitude();
 
       const payload = {
-        image: {
-          data: b64,
-          mime: blob.type || "image/jpeg",
-          byte_length: bytes.length,
-        },
+        image: { data: b64, mime: blob.type || "image/jpeg", byte_length: bytes.length },
         pose: {
           schemaVersion: "1.0",
           source: "photo-upload",
@@ -648,11 +638,7 @@ export function mountPhotoUpload(rootEl) {
           agreed_at: new Date().toISOString(),
           agreed_to_policy_version: policyVersion,
         },
-        client: {
-          ua: navigator.userAgent,
-          page: location.pathname,
-          exif_stripped: true,
-        },
+        client: { ua: navigator.userAgent, page: location.pathname, exif_stripped: true },
       };
 
       const res = await fetch("/api/sundog/upload", {
@@ -663,7 +649,6 @@ export function mountPhotoUpload(rootEl) {
       const j = await res.json();
       if (!res.ok) throw new Error(j?.error?.message || `status ${res.status}`);
 
-      // Persist deletion URL to localStorage so the user can find it later.
       try {
         const prev = JSON.parse(localStorage.getItem("sundog.submissions") || "[]");
         prev.push({
@@ -673,12 +658,11 @@ export function mountPhotoUpload(rootEl) {
           inferred_h_deg: j.inferred_h_deg,
         });
         localStorage.setItem("sundog.submissions", JSON.stringify(prev));
-      } catch { /* localStorage may be disabled — fine */ }
+      } catch { /* localStorage may be disabled */ }
 
-      shareStatus.innerHTML = `Submitted. Submission <code>${j.submission_id.slice(0, 8)}…</code> &middot; ` +
+      shareStatus.innerHTML = `Submitted. Submission <code>${j.submission_id.slice(0, 8)}\u2026</code> &middot; ` +
         `<a href="${j.deletion_url}" target="_blank" rel="noopener">save this deletion URL</a>`;
-      shareSubmit.textContent = "Submitted ✓";
-      // Don't re-enable: prevent double-submission of the same image.
+      shareSubmit.textContent = "Submitted \u2713";
     } catch (err) {
       console.error("upload failed:", err);
       shareStatus.textContent = "Upload failed: " + (err?.message || "unknown");
