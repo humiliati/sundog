@@ -343,6 +343,11 @@ asks.
    fields are valid in the scaffold phase; later capture passes fill those
    slots without changing the rail markup or copy contract.
 
+   Phase 11.2 note: the Balance opening card's `poster` slot is filled by
+   `public/media/balance-phase10-rail-poster.jpg`, a best/worst Phase 10 replay
+   composite. Its `media` slot remains empty until a loop format is worth the
+   byte cost.
+
    Copy model: each card carries a short title and one punchy description line
    over the clip, closer to a Steam-homepage game tag or price-card tease than a
    documentation paragraph. The text should sell the application move without

@@ -506,6 +506,8 @@ export class ShadowFieldEnv {
         };
       } else if (channel === "geometry" && Array.isArray(edit.xGoalNew)) {
         this.xGoal = clipPointToArena(edit.xGoalNew, this.config.arenaHalfWidth);
+      } else if ((channel === "basin-position" || channel === "basin-position-edit") && Array.isArray(edit.xFalseNew)) {
+        this.config.falseBasinCenter = Object.freeze(clipPointToArena(edit.xFalseNew, this.config.arenaHalfWidth));
       }
       intervention.applied = true;
       applied.push(channel);

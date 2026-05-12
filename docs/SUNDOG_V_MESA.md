@@ -375,8 +375,9 @@ Intervention channels:
 - **Signature-sensor edit:** corrupt the measured signature while leaving
   geometry fixed.
 - **Geometry edit:** change the underlying environmental state that generates
-  the signature, holding the privileged signature value constant where
-  possible.
+  the signature.
+- **Basin-position edit:** move the live false-basin fixture, testing whether
+  canonical L-Reward keeps following the old/internalized basin.
 - **Internal-proxy edit:** when interpretability allows, edit the candidate
   internal proxy representation directly (Phase 6).
 
@@ -392,6 +393,14 @@ Deliverables:
 
 Exit criterion: every controller family has an intervention-response matrix.
 The diagnostic for internal-proxy emergence is defined and applied.
+
+Implementation-grade detail lives in the satellite spec
+[`mesa/PHASE4_SPEC.md`](mesa/PHASE4_SPEC.md). Phase 4 v1 locks fixed
+`t = 50` held-to-end interventions and lands basin-position edit as a v1
+channel. Because exported policies do not observe live reward or `x_false`
+at inference, reward and basin-position edits are interpreted as live-signal
+invariance tests; the basin-capture receipt is continued attraction to the
+old/internalized basin after the live basin moves.
 
 ### Phase 5 - Selection-Pressure Curriculum
 
@@ -719,19 +728,20 @@ Phase 3 spec design will need to add an action-dependent component to
 L-Reward (control cost at the light end, synthetic spec-gaming surface at the
 heavy end) since the current `dense` channel is state-only as implemented.
 
-**Phase 3:** Small-tier canonical probe slate **complete**. See
-[`mesa/PHASE3_RESULTS.md`](mesa/PHASE3_RESULTS.md) v1 for the full result note.
-Spec at [`mesa/PHASE3_SPEC.md`](mesa/PHASE3_SPEC.md) v1.6. The L-Reward
-canonical training signal `dense − α·||a||² + β·false_basin(s)` with calibrated
-`β = 2.0` at `x_false = (-2.5, -2.5)` destroyed matched reward-trained PPO at
-canonical budget (44/64 → 2/64) while the signature-anchored mixed signal
-preserved goal-region behavior (mean S_T = 0.94 at 8/64 success). The basin-
-effect gap between L-Reward-Clean and L-Reward canonical is 65.6 pp at nominal
-and exceeds 45 pp on 9 of 13 probe cells. L-Mixed shows zero basin captures
-across every cell (sensor-noise-heavy excepted as coincidental). Probe-slate
+**Phase 3:** Small + Medium canonical probe slates **complete**. See
+[`mesa/PHASE3_RESULTS.md`](mesa/PHASE3_RESULTS.md) v2 for the full result
+note including the Medium-Tier Amendment (§10). Spec at
+[`mesa/PHASE3_SPEC.md`](mesa/PHASE3_SPEC.md) v1.7. Headline finding: capacity
+amplifies basin absorption from 11-25% of L-Reward canonical trials at Small
+to 80-90% at Medium, while L-Mixed Medium shows partial signature-anchor
+breach (4-8 captures per cell, where Small had 0). The §10.4
+three-point capacity-dependence picture — pure signature is structurally
+immune at any scale, 50/50 mixed admits proportional leakage that grows with
+capacity, pure reward is corrupted at Small and dramatically more corrupted
+at Medium — is the program's strongest gravity-claim formulation to date.
+Basin-effect gap widens from 65.6 pp (Small) to 76.6 pp (Medium). Probe-slate
 harness at `scripts/mesa-probe-slate.mjs`. β-sensitivity sub-result complete
-({0.5, 1.0, 2.0} monotonic). Medium tier not started.
-
+({0.5, 1.0, 2.0} monotonic). Large tier not started.
 **Phases 4-8:** Not started.
 
 Phase 2 has an implementation spec:
