@@ -42,26 +42,79 @@ VARIANTS = {
         "family": "L-Signature",
         "reward_mode": "signature",
         "lambda": 0.0,
+        "signature_shape": "integrated",
+    },
+    "signature_ppo_terminal": {
+        "family": "L-Signature",
+        "reward_mode": "signature",
+        "lambda": 0.0,
+        "signature_shape": "terminal",
+    },
+    "signature_ppo_threshold": {
+        "family": "L-Signature",
+        "reward_mode": "signature",
+        "lambda": 0.0,
+        "signature_shape": "threshold",
     },
     "reward_ppo_dense": {
         "family": "L-Reward",
         "reward_mode": "dense",
         "lambda": 1.0,
+        "signature_shape": "integrated",
     },
     "reward_ppo_phase3": {
         "family": "L-Reward",
         "reward_mode": "phase3_dense_action_basin",
         "lambda": 1.0,
+        "signature_shape": "integrated",
     },
     "mixed_ppo_lambda_0_5": {
         "family": "L-Mixed",
         "reward_mode": "mixed",
         "lambda": 0.5,
+        "signature_shape": "integrated",
+    },
+    "mixed_ppo_phase3_lambda_0_1": {
+        "family": "L-Mixed",
+        "reward_mode": "mixed_phase3",
+        "lambda": 0.1,
+        "signature_shape": "integrated",
+    },
+    "mixed_ppo_phase3_lambda_0_3": {
+        "family": "L-Mixed",
+        "reward_mode": "mixed_phase3",
+        "lambda": 0.3,
+        "signature_shape": "integrated",
     },
     "mixed_ppo_phase3_lambda_0_5": {
         "family": "L-Mixed",
         "reward_mode": "mixed_phase3",
         "lambda": 0.5,
+        "signature_shape": "integrated",
+    },
+    "mixed_ppo_phase3_lambda_0_7": {
+        "family": "L-Mixed",
+        "reward_mode": "mixed_phase3",
+        "lambda": 0.7,
+        "signature_shape": "integrated",
+    },
+    "mixed_ppo_phase3_lambda_0_9": {
+        "family": "L-Mixed",
+        "reward_mode": "mixed_phase3",
+        "lambda": 0.9,
+        "signature_shape": "integrated",
+    },
+    "curriculum_sig_then_reward": {
+        "family": "L-Curriculum",
+        "reward_mode": "phase3_dense_action_basin",
+        "lambda": 1.0,
+        "signature_shape": "integrated",
+    },
+    "curriculum_reward_then_sig": {
+        "family": "L-Curriculum",
+        "reward_mode": "signature",
+        "lambda": 0.0,
+        "signature_shape": "integrated",
     },
 }
 
@@ -123,6 +176,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--eval-seeds", type=int, default=64)
     parser.add_argument("--success-floor", type=float, default=0.75)
     parser.add_argument("--false-basin-beta", type=float, default=None)
+    parser.add_argument("--mixed-lambda", type=float, default=None, help="override lambda for mixed variants")
+    parser.add_argument(
+        "--signature-shape",
+        choices=["terminal", "integrated", "threshold"],
+        default=None,
+        help="override signature objective shape; default comes from variant config",
+    )
+    parser.add_argument("--signature-threshold", type=float, default=0.5)
+    parser.add_argument("--load-checkpoint", type=Path, default=None)
+    parser.add_argument("--reset-optimizer", action="store_true")
     parser.add_argument("--device", default="auto")
     parser.add_argument("--progress", action="store_true")
     return parser.parse_args()
@@ -134,8 +197,38 @@ def resolve_device(device: str) -> torch.device:
     return torch.device(device)
 
 
-def reward_from_channels(channels: dict[str, float], *, reward_mode: str, mixed_lambda: float) -> float:
+def signature_reward(
+    channels: dict[str, float],
+    *,
+    signature_shape: str,
+    is_terminal_step: bool,
+    signature_threshold: float,
+) -> float:
     signature = float(channels["signature"])
+    if signature_shape == "terminal":
+        return signature if is_terminal_step else 0.0
+    if signature_shape == "integrated":
+        return signature
+    if signature_shape == "threshold":
+        return 1.0 if signature > signature_threshold else 0.0
+    raise ValueError(f"unknown signature_shape: {signature_shape}")
+
+
+def reward_from_channels(
+    channels: dict[str, float],
+    *,
+    reward_mode: str,
+    mixed_lambda: float,
+    signature_shape: str,
+    is_terminal_step: bool,
+    signature_threshold: float,
+) -> float:
+    signature = signature_reward(
+        channels,
+        signature_shape=signature_shape,
+        is_terminal_step=is_terminal_step,
+        signature_threshold=signature_threshold,
+    )
     dense = float(channels["dense"])
     phase3 = float(channels.get("phase3_dense_action_basin", dense))
     if reward_mode == "signature":
@@ -162,9 +255,78 @@ def status(message: str) -> None:
     print(f"mesa ppo status: {message}", flush=True)
 
 
+def resolved_variant_config(args: argparse.Namespace) -> dict[str, Any]:
+    variant_config = dict(VARIANTS[args.variant])
+    reward_mode = str(variant_config["reward_mode"])
+    if args.mixed_lambda is not None:
+        if not 0.0 < args.mixed_lambda < 1.0:
+            raise ValueError("--mixed-lambda must satisfy 0 < lambda < 1")
+        if reward_mode in {"mixed", "mixed_phase3"}:
+            variant_config["lambda"] = float(args.mixed_lambda)
+    if args.signature_shape is not None:
+        variant_config["signature_shape"] = args.signature_shape
+    return variant_config
+
+
 def slug_for(variant: str, tier: str, seed: int, run_label: str = "") -> str:
     suffix = f"_{run_label}" if run_label else ""
     return f"{variant}_{tier.lower()}_seed_{seed}{suffix}"
+
+
+def relative_path(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(REPO_ROOT)).replace("\\", "/")
+    except ValueError:
+        return str(path.resolve()).replace("\\", "/")
+
+
+def load_pretrain_checkpoint(
+    *,
+    path: Path,
+    model: MesaActorCritic,
+    optimizer: torch.optim.Optimizer,
+    obs_rms: RunningMeanStd,
+    config: Any,
+    device: torch.device,
+    reset_optimizer: bool,
+) -> dict[str, Any]:
+    checkpoint_path = path.resolve()
+    checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
+    checkpoint_config = checkpoint.get("policy_config")
+    if checkpoint_config != asdict(config):
+        raise ValueError(
+            f"loaded checkpoint architecture mismatch: {checkpoint_config!r} != {asdict(config)!r}"
+        )
+    model.actor.load_state_dict(checkpoint["model_state_dict"])
+    model.critic.load_state_dict(checkpoint["critic_state_dict"])
+    model.log_std.data.copy_(torch.as_tensor(checkpoint["log_std"], dtype=torch.float32, device=device))
+
+    obs_rms.mean = np.asarray(checkpoint["obs_mean"], dtype=np.float64)
+    obs_std = np.asarray(checkpoint["obs_std"], dtype=np.float64)
+    obs_rms.var = np.maximum(obs_std * obs_std, 1e-8)
+    obs_rms.count = float(checkpoint.get("obs_rms_count", checkpoint.get("training", {}).get("env_steps", 1e-4)))
+    obs_rms.count = max(obs_rms.count, 1e-4)
+
+    optimizer_state_loaded = False
+    if not reset_optimizer and "optimizer_state_dict" in checkpoint:
+        optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+        for state in optimizer.state.values():
+            for key, value in state.items():
+                if torch.is_tensor(value):
+                    state[key] = value.to(device)
+        optimizer_state_loaded = True
+
+    return {
+        "path": relative_path(checkpoint_path),
+        "family": checkpoint.get("family"),
+        "variant": checkpoint.get("variant"),
+        "tier": checkpoint.get("tier"),
+        "seed": checkpoint.get("seed"),
+        "run_label": checkpoint.get("run_label"),
+        "env_steps": checkpoint.get("training", {}).get("env_steps"),
+        "optimizer_state_loaded": optimizer_state_loaded,
+        "reset_optimizer": bool(reset_optimizer),
+    }
 
 
 def explained_variance(y_pred: torch.Tensor, y_true: torch.Tensor) -> float:
@@ -196,6 +358,10 @@ def append_training_run(out_dir: Path, row: dict[str, Any]) -> None:
         "env_steps",
         "checkpoint_path",
         "policy_json_path",
+        "mixed_lambda",
+        "signature_shape",
+        "load_checkpoint_path",
+        "reset_optimizer",
         "success_rate",
         "mean_terminal_alignment",
     ]
@@ -219,11 +385,27 @@ def append_training_run(out_dir: Path, row: dict[str, Any]) -> None:
 def run_training(args: argparse.Namespace) -> dict[str, Any]:
     seed_everything(args.seed)
     device = resolve_device(args.device)
-    variant_config = VARIANTS[args.variant]
+    variant_config = resolved_variant_config(args)
     config = policy_config_for_tier(args.tier, action_scale=1.0)
     model = MesaActorCritic(config, log_std_init=args.log_std_init).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     obs_rms = RunningMeanStd((config.obs_dim,))
+    pretrain_metadata = None
+    if args.load_checkpoint is not None:
+        pretrain_metadata = load_pretrain_checkpoint(
+            path=args.load_checkpoint,
+            model=model,
+            optimizer=optimizer,
+            obs_rms=obs_rms,
+            config=config,
+            device=device,
+            reset_optimizer=args.reset_optimizer,
+        )
+        status(
+            "loaded_checkpoint "
+            f"path={pretrain_metadata['path']} "
+            f"optimizer_state_loaded={pretrain_metadata['optimizer_state_loaded']}"
+        )
 
     out_dir = args.out.resolve()
     slug = slug_for(args.variant, args.tier, args.seed, args.run_label)
@@ -250,7 +432,9 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
     show_progress = args.progress or sys.stderr.isatty()
     status(
         f"start variant={args.variant} tier={args.tier} updates={args.updates} "
-        f"batch_envs={args.batch_envs} rollout_length={args.rollout_length} run_label={args.run_label or '-'}"
+        f"batch_envs={args.batch_envs} rollout_length={args.rollout_length} "
+        f"lambda={variant_config['lambda']} signature_shape={variant_config['signature_shape']} "
+        f"run_label={args.run_label or '-'}"
     )
     with BridgeClient() as client:
         made = client.request(
@@ -294,8 +478,11 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
                         channels,
                         reward_mode=variant_config["reward_mode"],
                         mixed_lambda=float(variant_config["lambda"]),
+                        signature_shape=str(variant_config["signature_shape"]),
+                        is_terminal_step=bool(done),
+                        signature_threshold=args.signature_threshold,
                     )
-                    for channels in response["reward_channels"]
+                    for channels, done in zip(response["reward_channels"], response["done"], strict=True)
                 ]
                 obs_buf[step] = obs_tensor
                 action_buf[step] = raw_action
@@ -402,8 +589,10 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
         "model_state_dict": model.actor.state_dict(),
         "critic_state_dict": model.critic.state_dict(),
         "log_std": model.log_std.detach().cpu().numpy().tolist(),
+        "optimizer_state_dict": optimizer.state_dict(),
         "obs_mean": obs_rms.mean.astype(np.float32).tolist(),
         "obs_std": obs_rms.std.astype(np.float32).tolist(),
+        "obs_rms_count": obs_rms.count,
         "training": {
             "updates": args.updates,
             "batch_envs": args.batch_envs,
@@ -420,10 +609,13 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
             "parameter_count": count_parameters(model.actor),
             "actor_critic_parameter_count": count_parameters(model),
             "device": str(device),
+            "load_checkpoint": pretrain_metadata,
         },
         "reward": {
             "mode": variant_config["reward_mode"],
             "lambda": variant_config["lambda"],
+            "signature_shape": variant_config["signature_shape"],
+            "signature_threshold": args.signature_threshold,
             "env_config": env_config,
         },
     }
@@ -442,7 +634,10 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
             "env_steps": global_step,
             "reward_mode": variant_config["reward_mode"],
             "lambda": variant_config["lambda"],
+            "signature_shape": variant_config["signature_shape"],
+            "signature_threshold": args.signature_threshold,
             "env_config": env_config,
+            "load_checkpoint": pretrain_metadata,
         },
     )
     status(f"writing_policy_json path={policy_json_path.relative_to(REPO_ROOT)}")
@@ -508,6 +703,7 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
         "evaluation_summary_path": str(eval_summary_path.relative_to(REPO_ROOT)).replace("\\", "/"),
         "training": checkpoint["training"],
         "reward": checkpoint["reward"],
+        "load_checkpoint": pretrain_metadata,
         "evaluation": eval_summary,
         "python_version": platform.python_version(),
         "torch_version": torch.__version__,
@@ -526,6 +722,10 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
         "env_steps": global_step,
         "checkpoint_path": run_manifest["checkpoint_path"],
         "policy_json_path": run_manifest["policy_json_path"],
+        "mixed_lambda": variant_config["lambda"],
+        "signature_shape": variant_config["signature_shape"],
+        "load_checkpoint_path": pretrain_metadata["path"] if pretrain_metadata else "",
+        "reset_optimizer": str(bool(args.reset_optimizer)),
         "success_rate": eval_summary["success_rate"],
         "mean_terminal_alignment": eval_summary["mean_terminal_alignment"],
     })
