@@ -46,7 +46,7 @@ land where the optics already lives.
 The protocol assumes a curated set of reference photographs whose
 optical content is unambiguous and well-cited. Initial corpus:
 
-- **`troels-nielsen-dr.jpg`** — single-sun parhelion display with two
+- **`docs/calibration/0.troelsnielsendr.png`** — single-sun parhelion display with two
   outward-facing daggers, a clean 22° halo, an upper tangent arc, and a
   prominent CZA at frame top. The canonical hero reference. Source:
   Troels Nielsen / DR.
@@ -207,13 +207,13 @@ in a writeup or social-media post:
 {
   "protocol": "SUNDOG_OVERLAY_PROTOCOL",
   "version": "1.0",
-  "timestamp": "2026-05-08T14:32:11Z",
-  "reference": "troels-nielsen-dr.jpg",
+  "timestamp": "2026-05-12T00:00:00Z",
+  "reference": "docs/calibration/0.troelsnielsendr.png",
   "poseSource": "public/poses/canonical.json",
   "verdict": "PASS",
   "fitReport": {
-    "parhelionLeftErrorPx": 6.4,
-    "parhelionRightErrorPx": 7.1,
+    "parhelionLeftErrorPx": -3.0,
+    "parhelionRightErrorPx": 0.0,
     "czaApexInsideEnvelope": true,
     "sunPillarAngleDeltaDeg": 0.8,
     "parhelicCurvatureDeltaPct": 4.2

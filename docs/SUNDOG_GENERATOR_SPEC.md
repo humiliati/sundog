@@ -68,22 +68,31 @@ parameter JSON is the only surface that can be persisted and replayed.
 ```json
 {
   "phenomenon": "parhelion_display",
-  "sunAltitudeDeg": 18,
-  "halo22Intensity": 0.85,
-  "halo46Intensity": 0.25,
-  "czaIntensity": 0.65,
+  "geometryModel": "halo_atlas",
+  "sunAltitudeDeg": 25,
+  "halo22Intensity": 0.95,
+  "halo46Intensity": 0.45,
+  "czaIntensity": 0.95,
   "czaCurvature": 0.85,
   "parhelicCircleIntensity": 0.55,
-  "parhelicCurvature": 0.66,
-  "parheliaIntensity": 0.9,
+  "parhelicCurvature": 0.05,
+  "parhelicYOffsetR22": -0.05,
+  "parheliaIntensity": 1.0,
   "parheliaDaggerLength": 1.0,
   "sunPillarIntensity": 0.80,
-  "sunPillarLength": 0.65,
-  "compassRayLength": 1.0,
-  "dispersionWidth": 0.35,
+  "sunPillarLength": 0.55,
+  "compassRayLength": 0.85,
+  "compassRotationDeg": 22.5,
+  "dispersionWidth": 0.70,
   "rainbowSaturation": 0.85,
   "secondarySunsStrength": 0.0,
   "ringOverlapBias": 0.5,
+  "supralateralIntensity": 0.40,
+  "upperTangentIntensity": 0.0,
+  "lowerTangentIntensity": 0.0,
+  "suncaveParryIntensity": 0.0,
+  "parrySupralateralIntensity": 0.0,
+  "infralateralIntensity": 0.0,
   "idleScintillationAmplitude": 0.0,
   "skyPalette": "polar_twilight",
   "compositionMode": "canonical"
@@ -93,7 +102,8 @@ parameter JSON is the only surface that can be persisted and replayed.
 Field tiers (inherited from
 [`SUNDOG_V_GEOMETRY.md`](SUNDOG_V_GEOMETRY.md) Actionability Audit):
 
-- **math-derived**: `sunAltitudeDeg` (planned), `parhelicCurvature` (planned)
+- **math-derived**: `sunAltitudeDeg` (Halo Atlas binds parhelion offset now),
+  `parhelicCurvature` (Phase 3 formalization planned)
 - **free visual**: most intensity / length / width / saturation knobs
 - **composition fiction**: `secondarySunsStrength`, `ringOverlapBias`
 - **palette enum**: `skyPalette` ∈ {`polar_twilight`, `winter_blue`,
@@ -180,6 +190,7 @@ renderSundog({
   prompt?: string,
 
   // Direct parameter overrides (any subset of the pose JSON).
+  geometryModel?: "legacy" | "halo_scaffold" | "halo_governed" | "halo_atlas",
   sunAltitudeDeg?: number,        // 0..60
   halo22Intensity?: number,       // 0..1
   halo46Intensity?: number,       // 0..1
@@ -187,6 +198,8 @@ renderSundog({
   parheliaIntensity?: number,     // 0..1
   sunPillarIntensity?: number,    // 0..1
   parhelicCurvature?: number,     // 0..1
+  parhelicYOffsetR22?: number,    // fraction of R22
+  compassRotationDeg?: number,    // 0..45
   dispersionWidth?: number,       // 0..1
   skyPalette?: SkyPalette,
   compositionMode?: CompositionMode,
@@ -208,7 +221,7 @@ SVG, and the claim boundary:
   "derivedGeometry": {
     "parhelionOffsetDeg": 22.8,
     "czaVisible": true,
-    "parhelicCurvature": 0.66
+    "parhelicCurvature": 0.05
   },
   "svg": "<svg>...</svg>",
   "claimBoundary": "Stylized parametric render, not a meteorological simulation."

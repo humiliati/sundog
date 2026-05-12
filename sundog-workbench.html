@@ -13,9 +13,9 @@
 
         :root {
             /* Optical parameters — sliders write to these */
-            --sun-altitude: 18;             /* degrees above horizon */
+            --sun-altitude: 25;             /* degrees above horizon */
             --halo-22-intensity: 0.95;
-            --halo-46-intensity: 0.30;
+            --halo-46-intensity: 0.45;
             --cza-intensity: 0.95;
             --cza-curvature: 0.85;
             /* --cza-bloom removed 2026-05-08: blur on each arc independently never produced
@@ -23,19 +23,20 @@
                from a paint-fill region between the two arcs (see #cza-bell-fill). A future
                --cza-secondary-offset knob will be the right lever for tuning bell width. */
             --sun-pillar-intensity: 0.80;
-            --sun-pillar-length: 0.65;
-            --parhelic-circle-intensity: 0.45;
-            --parhelic-curvature: 0.66;     /* 0 = horizontal line; 1 = strong grin. 0.66 calibrated against source-photo overlay. */
+            --sun-pillar-length: 0.55;
+            --parhelic-circle-intensity: 0.55;
+            --parhelic-curvature: 0.05;     /* 0 = horizontal line; 1 = strong grin. 0.05 matches the Troels Nielsen atlas pose. */
             --parhelic-y-offset-r22: -0.05; /* parhelic belt / parhelia vertical registration as fraction of R22 */
             --parhelia-intensity: 1.0;
             --parhelia-dagger-length: 1.0;
             --dispersion-width: 0.7;
             --secondary-suns-strength: 0.0;
             --ring-overlap-bias: 0.5;
-            --compass-ray-length: 1.0;
+            --compass-ray-length: 0.85;
+            --compass-rotation-deg: 22.5;
             --rainbow-saturation: 0.85;
             --idle-scintillation-amplitude: 0;
-            --supralateral-intensity: 0;
+            --supralateral-intensity: 0.40;
             --upper-tangent-intensity: 0;
             --lower-tangent-intensity: 0;
             --suncave-parry-intensity: 0;
@@ -623,12 +624,11 @@
                     </g>
                 </g>
 
-                <!-- Compass-rose sun: 4 rays (rotated 45° via the group transform)
-                     plus a bright core. The transform rotates rays to cardinal angles so
-                     they read as N/S/E/W instead of NE/SE/SW/NW; the core, being a
-                     circle, is rotation-invariant. Ray length and core radius scale
-                     with --compass-ray-length. -->
-                <g class="layer-sun" id="layer-sun" transform="rotate(45 500 500)">
+                <!-- Compass-rose sun: 4 rays (rotated by --compass-rotation-deg)
+                     plus a bright core. Ray length, core radius, and rotation
+                     are Phase 2 visual calibration knobs so the X can stay
+                     distinct from the pillar and parhelic belt. -->
+                <g class="layer-sun" id="layer-sun" transform="rotate(22.5 500 500)">
                     <line class="ray ray-diagonal" x1="500" y1="500" x2="540" y2="460"/>
                     <line class="ray ray-diagonal" x1="500" y1="500" x2="540" y2="540"/>
                     <line class="ray ray-diagonal" x1="500" y1="500" x2="460" y2="540"/>
@@ -664,8 +664,8 @@
             <h3>Sun &amp; Pillar</h3>
 
             <div class="control-group">
-                <label>Sun Altitude (°)<span class="value" id="sun-altitude-value">18</span></label>
-                <input type="range" id="sun-altitude" data-param="sun-altitude" min="0" max="60" step="1" value="18">
+                <label>Sun Altitude (°)<span class="value" id="sun-altitude-value">25</span></label>
+                <input type="range" id="sun-altitude" data-param="sun-altitude" min="0" max="60" step="1" value="25">
             </div>
 
             <div class="control-group">
@@ -674,13 +674,18 @@
             </div>
 
             <div class="control-group">
-                <label>Sun Pillar Length<span class="value" id="sun-pillar-length-value">0.65</span></label>
-                <input type="range" id="sun-pillar-length" data-param="sun-pillar-length" min="0" max="1" step="0.01" value="0.65">
+                <label>Sun Pillar Length<span class="value" id="sun-pillar-length-value">0.55</span></label>
+                <input type="range" id="sun-pillar-length" data-param="sun-pillar-length" min="0" max="1" step="0.01" value="0.55">
             </div>
 
             <div class="control-group">
-                <label>Compass Ray Length<span class="value" id="compass-ray-length-value">1.00</span></label>
-                <input type="range" id="compass-ray-length" data-param="compass-ray-length" min="0.4" max="2" step="0.05" value="1.0">
+                <label>Compass Ray Length<span class="value" id="compass-ray-length-value">0.85</span></label>
+                <input type="range" id="compass-ray-length" data-param="compass-ray-length" min="0.4" max="2" step="0.05" value="0.85">
+            </div>
+
+            <div class="control-group">
+                <label>Compass Rotation (&deg;)<span class="value" id="compass-rotation-deg-value">22.50</span></label>
+                <input type="range" id="compass-rotation-deg" data-param="compass-rotation-deg" min="0" max="45" step="2.5" value="22.5">
             </div>
 
             <h3>Halos</h3>
@@ -691,8 +696,8 @@
             </div>
 
             <div class="control-group">
-                <label>46° Halo<span class="value" id="halo-46-intensity-value">0.30</span></label>
-                <input type="range" id="halo-46-intensity" data-param="halo-46-intensity" min="0" max="1" step="0.01" value="0.30">
+                <label>46° Halo<span class="value" id="halo-46-intensity-value">0.45</span></label>
+                <input type="range" id="halo-46-intensity" data-param="halo-46-intensity" min="0" max="1" step="0.01" value="0.45">
             </div>
 
             <h3>Arcs</h3>
@@ -713,13 +718,13 @@
                  between the two arcs. -->
 
             <div class="control-group">
-                <label>Parhelic Circle Intensity<span class="value" id="parhelic-circle-intensity-value">0.45</span></label>
-                <input type="range" id="parhelic-circle-intensity" data-param="parhelic-circle-intensity" min="0" max="1" step="0.01" value="0.45">
+                <label>Parhelic Circle Intensity<span class="value" id="parhelic-circle-intensity-value">0.55</span></label>
+                <input type="range" id="parhelic-circle-intensity" data-param="parhelic-circle-intensity" min="0" max="1" step="0.01" value="0.55">
             </div>
 
             <div class="control-group">
-                <label>Supralateral Arc<span class="value" id="supralateral-intensity-value">0.00</span></label>
-                <input type="range" id="supralateral-intensity" data-param="supralateral-intensity" min="0" max="1" step="0.01" value="0">
+                <label>Supralateral Arc<span class="value" id="supralateral-intensity-value">0.40</span></label>
+                <input type="range" id="supralateral-intensity" data-param="supralateral-intensity" min="0" max="1" step="0.01" value="0.40">
             </div>
 
             <div class="control-group">
@@ -748,8 +753,8 @@
             </div>
 
             <div class="control-group">
-                <label>Parhelic Circle Curvature<span class="value" id="parhelic-curvature-value">0.66</span></label>
-                <input type="range" id="parhelic-curvature" data-param="parhelic-curvature" min="0" max="1" step="0.01" value="0.66">
+                <label>Parhelic Circle Curvature<span class="value" id="parhelic-curvature-value">0.05</span></label>
+                <input type="range" id="parhelic-curvature" data-param="parhelic-curvature" min="0" max="1" step="0.01" value="0.05">
             </div>
 
             <div class="control-group">

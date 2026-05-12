@@ -120,18 +120,18 @@ First executable scaffold landed 2026-05-08. The Sundog tree now includes:
 - `sundog-workbench.html`: a single-page workbench at the root of the public
   site (not yet promoted to `index.html` hero). Stage on the left, control
   rail on the right, mirrors the `threebody.html` idiom.
-- 16 parameter sliders organised by optical taxonomy: Sun & Pillar, Halos,
+- Parameter sliders organised by optical taxonomy: Sun & Pillar, Halos,
   Arcs, Parhelia (daggers), Composition (the 9-halo-eye fiction), Palette &
   Atmosphere.
 - SVG geometry primitives:
-  - Compass-rose sun (4 rays, rotated 45° from diagonal so they read as
-    cardinal directions; bright core scales with `--compass-ray-length` via
-    sqrt-softening).
+  - Compass-rose sun (4 rays in the calibrated
+    `--compass-rotation-deg = 22.5` pose; bright core scales with
+    `--compass-ray-length` via sqrt-softening).
   - Sun pillar (vertical gradient stroke through the sun core).
   - Parhelic arc (quadratic Bezier path, curvature controlled by
     `--parhelic-curvature`; daggers ride the arc rather than a horizontal
-    line — calibrated 2026-05-08 against source-photo overlay at
-    `c = 0.66`).
+    line; Halo Atlas canonical default is `c = 0.05` for the near-horizontal
+    Troels Nielsen parhelic circle).
   - 22° halo, 46° halo, two secondary halos for the virtual-sun fiction.
   - Two CZA arcs (primary + secondary) with prismatic gradient stroke and
     Gaussian-blurred edge to approximate ice-crystal orientation
@@ -145,7 +145,7 @@ First executable scaffold landed 2026-05-08. The Sundog tree now includes:
 
 Known calibration debt (2026-05-08 visual review):
 
-- `--parhelic-curvature = 0.66` is locked.
+- `--parhelic-curvature = 0.05` is locked for the Halo Atlas canonical pose.
 - `--cza-bloom` slider was demoted to a baked constant (`stdDeviation = 0.3`,
   edge-soften only) on 2026-05-08 after A/B testing confirmed Gaussian blur
   on each arc independently does not produce the eyelid bell curve at any
@@ -155,11 +155,12 @@ Known calibration debt (2026-05-08 visual review):
   (`#cza-bell-fill`). A future `--cza-secondary-offset` knob is the right
   lever for tuning bell width if/when a slider is wanted again; tracked as
   a Phase 9/12 composition-fiction question, not a Phase 2 calibration item.
-- The compass-rose 45° rotation is in place but may overlap visually with
-  pillar + parhelic, reducing the X reading. Phase 2 tune candidate.
-- Sun-altitude slider is wired to a CSS variable but is not yet bound to
-  derived geometry — parhelion azimuthal offset and CZA visibility cutoff
-  are still hard-coded. Phase 3 work.
+- The compass-rose rotation is exposed as `--compass-rotation-deg`; Phase 2
+  locks the canonical pose at `22.5` after rejecting the old 45° cardinal
+  alignment as too overlapped with the pillar + parhelic belt.
+- Halo Atlas already binds `--sun-altitude` to parhelion offset. Phase 3
+  still needs to make the binding formal across the generator API and add
+  the automatic CZA visibility cutoff.
 
 No animation has been wired. Idle scintillation amplitude is exposed as a
 slider, but only the 22° halo opacity oscillates on it.
@@ -550,21 +551,16 @@ Phase 3 sun-altitude binding, not a structural failure of the construction.
 
 ### Recommendation
 
-No model should become the default until Phase 2 overlay calibration has
-been run on the canonical photo corpus for at least Legacy vs Halo Governed,
-with the snapshot of each pose archived for review. Specifically:
+The Halo Atlas model is now the Phase 2 canonical default. The multi-photo
+calibration pass closed the parhelion-offset residuals that Legacy and Halo
+Governed left open, and the locked pose is archived in
+`docs/SUNDOG_GEOMETRY_POSE.json` plus `public/poses/canonical.json`.
 
-- The two-vs-three-model decision rests on overlay fit, not on the elegance
-  of the construction in prose. Halo Governed reads cleaner on paper, but
-  prose elegance is not evidence.
-- Halo Scaffold should not be promoted in its current state — its `rx`/`ry`
-  blends and pillar circle radii are placeholder constants that have to be
-  resolved before any "fewer ad hoc placements" claim can survive review.
-- If Halo Governed reaches comparable or better overlay fit and the open
-  gaps above are closed (or explicitly accepted), it is the candidate
-  default. Until then it sits beside the other two as a comparison track.
-- Whichever model ships, the loser(s) should be retained as a regression
-  baseline through at least the Phase 7 hero promotion.
+Legacy, Halo Scaffold, and Halo Governed remain useful regression and
+comparison tracks through at least the Phase 7 hero promotion. Halo Scaffold
+still should not be promoted in its current state: its `rx`/`ry` blends and
+pillar circle radii are placeholder constants that have to be resolved before
+any "fewer ad hoc placements" claim can survive review.
 
 ## Why This Workbench
 
@@ -635,7 +631,7 @@ The workbench must separate parameter tiers from day one.
 
 | Slider | Tier | Use |
 | --- | --- | --- |
-| `--sun-altitude` | Math-derived (planned) | Drives parhelion azimuthal offset and CZA visibility cutoff in Phase 3 |
+| `--sun-altitude` | Math-derived | Drives Halo Atlas parhelion offset now; Phase 3 formalizes the generator binding and CZA visibility cutoff |
 | `--halo-22-intensity` | Free | Visual knob; opacity of the 22° halo ring |
 | `--halo-46-intensity` | Free | Visual knob; opacity of the 46° halo ring |
 | `--cza-intensity` | Free | Visual knob; opacity of both CZA arcs |
@@ -643,7 +639,7 @@ The workbench must separate parameter tiers from day one.
 | `--sun-pillar-intensity` | Free | Visual knob; opacity of the vertical pillar |
 | `--sun-pillar-length` | Free | Visual knob; pillar extent above and below sun |
 | `--parhelic-circle-intensity` | Free | Visual knob; opacity of the parhelic arc |
-| `--parhelic-curvature` | Math-derived (planned) | Locked at 0.66 by overlay calibration; Phase 3 will derive from sun altitude |
+| `--parhelic-curvature` | Math-derived (planned) | Locked at 0.05 for the Halo Atlas canonical pose; Phase 3 will derive from sun altitude |
 | `--parhelic-y-offset-r22` | Calibration-derived | Moves the parhelic belt and daggers together as a fraction of R22; default `-0.05` corrects the common belt-low overlay residual |
 | `--parhelia-intensity` | Free | Visual knob; opacity of the dagger group |
 | `--parhelia-dagger-length` | Free | Visual knob; horizontal extent of the dagger streaks |
@@ -651,6 +647,7 @@ The workbench must separate parameter tiers from day one.
 | `--secondary-suns-strength` | Composition fiction | Controls the 9-halo-eye effect (not standard atmospheric optics) |
 | `--ring-overlap-bias` | Composition fiction | Golden-ratio knob for the 9-ring intersection |
 | `--compass-ray-length` | Free | Visual knob; ray length and core radius scale together |
+| `--compass-rotation-deg` | Free | Phase 2 visual knob; locked at 22.5 so the compass X stays distinct from the pillar/parhelic cross |
 | `--rainbow-saturation` | Free | Visual knob; reserved for Phase 2 prismatic gradient tuning |
 | `--idle-scintillation-amplitude` | Animation | Phase-4 idle drift amplitude; off when 0 |
 | `--supralateral-intensity` | Annotation / vocabulary | Optional Halo Atlas layer for rich-display labeling; outside the calibrated core |
@@ -745,27 +742,30 @@ threshold passes against `troels-nielsen-dr.jpg`.
 
 Calibration items (live list):
 
-- [x] `--parhelic-curvature = 0.66` (calibrated 2026-05-08).
+- [x] `--parhelic-curvature = 0.05` for Halo Atlas canonical
+  (locked against the near-horizontal Troels Nielsen parhelic circle).
 - [x] `--cza-bloom` promoted to slider (2026-05-08); default lowered from
   the over-aggressive `3.2` to `1.4` pending overlay calibration.
 - [x] `--cza-bloom` demoted to baked constant `stdDeviation = 0.3`
   (2026-05-08, ass-dyno value). Mechanism mismatch confirmed: Gaussian
   blur on each arc independently does not sum to a bell curve at the
   eyelid apex regardless of σ. Replaced with `#cza-bell-fill` paint band
-  between the two arcs. Slider count drops 17 → 16. The eyelid-bell goal
+  between the two arcs. The eyelid-bell goal
   is reclassified from a Phase 2 calibration item to a Phase 9/12
   composition-fiction question whose right lever is `--cza-secondary-offset`
   (geometric overlap), not blur.
-- [ ] Compass-rose rotation angle — currently 45° from original diagonal;
-  test 30°, 22.5°, and back-out-of-rotate to find the pose where the X
-  reads as distinct from pillar + parhelic.
-- [ ] Default values for `--halo-22-intensity`, `--halo-46-intensity`,
-  `--cza-intensity`, `--parhelia-intensity` against the source photo.
-- [ ] Default for `--dispersion-width` (atmosphere bloom level).
-- [ ] Default for `--compass-ray-length` (X visibility vs core dominance).
-- [ ] Decision: promote 9-halo-eye composition (`--secondary-suns-strength`)
-  default — `0.0` (off) for the canonical pose, or a small non-zero
-  default if the fiction is part of the locked hero.
+- [x] Compass-rose rotation angle locked at `--compass-rotation-deg = 22.5`.
+  The old 45° cardinal alignment made the rays collapse into pillar +
+  parhelic; 22.5 keeps the X visible without fully backing out to the
+  original diagonals.
+- [x] Default values locked against the source photo: `--halo-22-intensity
+  = 0.95`, `--halo-46-intensity = 0.45`, `--cza-intensity = 0.95`,
+  `--parhelia-intensity = 1.0`.
+- [x] Default for `--dispersion-width = 0.70` (atmosphere bloom level).
+- [x] Default for `--compass-ray-length = 0.85` (X visibility vs core
+  dominance).
+- [x] Decision: keep 9-halo-eye composition (`--secondary-suns-strength`)
+  default at `0.0` for the canonical pose; the fiction stays opt-in.
 - [x] `--parhelic-y-offset-r22 = -0.05` added 2026-05-12. Multi-photo
   review showed the parhelic belt / dagger markers were landing about 5%
   of R22 too low while the 22° halo anchor was correct. This correction
@@ -773,7 +773,9 @@ Calibration items (live list):
   anchors remain unchanged.
 
 Gate: snapshot the locked param JSON to `docs/SUNDOG_GEOMETRY_POSE.json`
-or similar; future regressions are reviewable against that file.
+or similar; future regressions are reviewable against that file. **Status:
+landed 2026-05-12 as `docs/SUNDOG_GEOMETRY_POSE.json` and
+`public/poses/canonical.json`.**
 
 ### Phase 3 - Math Binding
 
