@@ -122,6 +122,7 @@
       "questionPatterns": [
         "which applications are research results",
         "what evidence tier is this",
+        "what evidence tiers does sundog use",
         "what is an operating-envelope study",
         "which demos prove sundog"
       ],
@@ -192,6 +193,7 @@
       "id": "balance_operating_envelope",
       "questionPatterns": [
         "what is sundog balance",
+        "what is the sundog balance workbench",
         "does the shadow controller work",
         "does balance prove robotics control",
         "balance evidence"
@@ -407,6 +409,8 @@
         "what is ask sundog",
         "what is sundog chat",
         "does sundog chat prove llm alignment",
+        "is sundog chat an llm alignment result",
+        "is ask sundog an llm alignment result",
         "is the chat widget robust to prompt injection"
       ],
       "disposition": "allow_with_boundary",
@@ -438,10 +442,18 @@
       "id": "unsupported_alignment_overclaim",
       "questionPatterns": [
         "sundog solved alignment",
+        "does sundog solve alignment",
+        "does sundog solve inner alignment",
+        "what does sundog not claim",
+        "does sundog prevent reward hacking",
         "sundog prevents reward hacking",
         "sundog is mesa safe",
         "sundog proves llm safety",
-        "sundog sidesteps goodhart"
+        "sundog sidesteps goodhart",
+        "does sundog sidestep goodhart",
+        "signature controllers cannot be reward hacked",
+        "robust under hostile environments",
+        "llm safety result"
       ],
       "disposition": "refuse",
       "evidenceTier": "unsupported",
@@ -478,6 +490,8 @@
       "questionPatterns": [
         "is sundog a crypto project",
         "is this sundog frozen legacy",
+        "sundog frozen legacy port",
+        "sundog frozen legacy",
         "is sundog a p-system port",
         "what is humiliati"
       ],

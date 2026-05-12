@@ -85,16 +85,16 @@
     {
       "path": "public/js/sundog-chat-widget.mjs",
       "kind": "browser_widget",
-      "status": "planned",
-      "phase": "6",
-      "description": "Floating Ask Sundog widget shell."
+      "status": "phase1_seeded",
+      "phase": "1",
+      "description": "Floating Ask Sundog widget shell with FAQ chips, static answers, evidence rail, and trace details."
     },
     {
       "path": "public/js/sundog-chat-router.mjs",
       "kind": "browser_router",
-      "status": "planned",
+      "status": "phase1_seeded",
       "phase": "1",
-      "description": "Deterministic FAQ and claim-class router."
+      "description": "Deterministic FAQ and claim-class router over chat/claim_map.json."
     },
     {
       "path": "public/js/sundog-claim-gate.mjs",
