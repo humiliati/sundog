@@ -776,13 +776,14 @@ Trainer support for the v1 slate is in place: `--mixed-lambda`,
 Small dry-run checks passed under `results/mesa/phase5-smoke/`. The Small
 training slate has started landing: L-Mixed Î» runs for {0.1, 0.3, 0.7, 0.9},
 terminal/threshold signature-shape runs, 500K+500K curriculum runs, and
-Phase 4 intervention batteries for the new policies are complete. Early
-intervention reads: Î» breach appears between 0.5 and 0.7
+Phase 3 probe slates plus Phase 4 intervention batteries for the new
+policies are complete. See [`mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md)
+v1. Early reads: Î» breach appears between 0.5 and 0.7
 (`old_basin_pref`: -0.458, -0.066, -0.394, 1.346, 2.611 for Î» =
 0.1, 0.3, 0.5, 0.7, 0.9), terminal-only signature strongly beats the
 integrated Small baseline (37/64 vs 5/64), and reward-firstâ†’signature
 fine-tune does **not** retain basin attraction (`old_basin_pref = -0.585`).
-Phase 3 probe-slate evaluation and Phase 5 aggregate reports are still
-pending.
+Phase 5 aggregate reports live under `results/mesa/phase5-selection-pressure/`
+and rebuild with `npm run mesa:phase5:aggregate`. Medium follow-up is pending.
 
 **Phases 6-8:** Not started.
