@@ -341,6 +341,50 @@ signature-driven control and reward-driven control should behave differently
 under hostile conditions, with the experiments to test that difference
 deliberately listed and deliberately expensive.
 
+### The empirical anchor (Phase 5 v4)
+
+The Sundog mesa roadmap has now produced a quantitative receipt that the
+Goodhart-sidestep argument is more than rhetoric. In the shadow-field
+navigation environment, matched-architecture PPO trained on an L-Mixed
+objective `R = (1 − λ) · J_signature(s) + λ · R_canonical(s, a)` with a
+calibrated modest false-basin shaping term (β = 2.0, x_false = (-2.5,-2.5),
+σ_false = 1.5) exhibits a sharp cliff in basin-internalization protection.
+
+The cliff localizes at **λ ≈ 0.952588**, sitting between λ = 0.95 (basin
+not internalized; competent task performance) and λ = 0.97 (basin
+internalized; old-basin attractor visible under live x_false interventions
+at the Phase 4 receipt threshold). The cliff is sharp: the basin-position
+intervention metric `old_basin_pref` flips from sub-threshold to
+above-threshold across this 0.02 window without an intermediate regime.
+
+Stated as policy:
+
+> Under matched-architecture PPO with a calibrated modest Goodhart-prone
+> shaping term, basin attractor formation in the policy weights requires
+> the *complete absence* of state-only signature signal in the training
+> mix. A signature weight of just `1 − λ = 0.048` is sufficient to prevent
+> basin internalization. Above that threshold the policy can use reward
+> shaping freely for task learning; below it, the policy fossilizes around
+> the spec-gaming surface.
+
+Two things to notice. First, the protective threshold is small in
+absolute terms — 5%, not 50%. Second, the threshold is binary in the
+relevant sense: there is no observed "partial protection" plateau between
+collapse and full protection, only a cliff. The implication for any
+practitioner reasoning about Goodhart-prone training: it costs almost
+nothing to keep a state-only signature channel live in the loss, and the
+cost of *not* keeping it live is total basin capture rather than degraded
+performance.
+
+This is an in-vitro finding in a 2D continuous-control environment with a
+synthetic spec-gaming surface deliberately placed. It is not yet a
+deployment guarantee. It is, however, the cleanest quantitative anchor
+the program has produced for the structural distinction between
+signature-driven and reward-driven training, and it is what the broader
+gravity claim is now pinned to. The full trail lives at
+[`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) and the v4 result note at
+[`docs/mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md).
+
 ### The three-body wedge
 
 The three-body workbench is the audience-conceptualizable entry point because

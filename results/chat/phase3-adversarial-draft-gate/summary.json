@@ -1,0 +1,252 @@
+{
+  "totalDrafts": 132,
+  "promptCount": 33,
+  "slate": "adversarial",
+  "byFamily": {
+    "naive_baseline": {
+      "total": 33,
+      "accepted": 0,
+      "rejected": 33,
+      "gateHits": 33,
+      "addedValue": 0
+    },
+    "naive_rag": {
+      "total": 33,
+      "accepted": 0,
+      "rejected": 33,
+      "gateHits": 33,
+      "addedValue": 0
+    },
+    "prompted_boundary": {
+      "total": 33,
+      "accepted": 33,
+      "rejected": 0,
+      "gateHits": 33,
+      "addedValue": 0
+    },
+    "sundog_gated": {
+      "total": 33,
+      "accepted": 33,
+      "rejected": 0,
+      "gateHits": 33,
+      "addedValue": 0
+    }
+  },
+  "byCategory": {
+    "promotional_vs_research_split": {
+      "total": 12,
+      "accepted": 6,
+      "rejected": 6,
+      "gateHits": 12,
+      "addedValue": 0
+    },
+    "roadmap_vs_result_split": {
+      "total": 16,
+      "accepted": 8,
+      "rejected": 8,
+      "gateHits": 16,
+      "addedValue": 0
+    },
+    "application_tier_split": {
+      "total": 20,
+      "accepted": 10,
+      "rejected": 10,
+      "gateHits": 20,
+      "addedValue": 0
+    },
+    "citation_pressure": {
+      "total": 8,
+      "accepted": 4,
+      "rejected": 4,
+      "gateHits": 8,
+      "addedValue": 0
+    },
+    "user_flattery_pressure": {
+      "total": 16,
+      "accepted": 8,
+      "rejected": 8,
+      "gateHits": 16,
+      "addedValue": 0
+    },
+    "stale_decoy_document": {
+      "total": 16,
+      "accepted": 8,
+      "rejected": 8,
+      "gateHits": 16,
+      "addedValue": 0
+    },
+    "missing_evidence": {
+      "total": 12,
+      "accepted": 6,
+      "rejected": 6,
+      "gateHits": 12,
+      "addedValue": 0
+    },
+    "tool_output_conflict": {
+      "total": 8,
+      "accepted": 4,
+      "rejected": 4,
+      "gateHits": 8,
+      "addedValue": 0
+    },
+    "user_pressure_edit": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "gateHits": 4,
+      "addedValue": 0
+    },
+    "style_prompt_edit": {
+      "total": 8,
+      "accepted": 4,
+      "rejected": 4,
+      "gateHits": 8,
+      "addedValue": 0
+    },
+    "evidence_tier_edit": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "gateHits": 4,
+      "addedValue": 0
+    },
+    "boundary_edit": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "gateHits": 4,
+      "addedValue": 0
+    },
+    "corpus_order_edit": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "gateHits": 4,
+      "addedValue": 0
+    }
+  },
+  "divergence": {
+    "byFamily": {
+      "naive_baseline": {
+        "identical": 0,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 33
+      },
+      "naive_rag": {
+        "identical": 0,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 33
+      },
+      "prompted_boundary": {
+        "identical": 33,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 0
+      },
+      "sundog_gated": {
+        "identical": 33,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 0
+      }
+    },
+    "byCategory": {
+      "promotional_vs_research_split": {
+        "identical": 6,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 6
+      },
+      "roadmap_vs_result_split": {
+        "identical": 8,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 8
+      },
+      "application_tier_split": {
+        "identical": 10,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 10
+      },
+      "citation_pressure": {
+        "identical": 4,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 4
+      },
+      "user_flattery_pressure": {
+        "identical": 8,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 8
+      },
+      "stale_decoy_document": {
+        "identical": 8,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 8
+      },
+      "missing_evidence": {
+        "identical": 6,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 6
+      },
+      "tool_output_conflict": {
+        "identical": 4,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 4
+      },
+      "user_pressure_edit": {
+        "identical": 2,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 2
+      },
+      "style_prompt_edit": {
+        "identical": 4,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 4
+      },
+      "evidence_tier_edit": {
+        "identical": 2,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 2
+      },
+      "boundary_edit": {
+        "identical": 2,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 2
+      },
+      "corpus_order_edit": {
+        "identical": 2,
+        "extends": 0,
+        "rewrites": 0,
+        "rejected": 2
+      }
+    }
+  },
+  "addedValue": {
+    "naive_baseline": 0,
+    "naive_rag": 0,
+    "prompted_boundary": 0,
+    "sundog_gated": 0
+  },
+  "addedValueRate": {
+    "naive_baseline": 0,
+    "naive_rag": 0,
+    "prompted_boundary": 0,
+    "sundog_gated": 0
+  },
+  "gateHitRate": 1,
+  "gateEscapes": 0,
+  "rejectedUnsafeNaive": 33,
+  "acceptedGatedDrafts": 33
+}

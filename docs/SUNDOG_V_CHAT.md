@@ -652,25 +652,61 @@ Phase 3 artifact status:
   language rules. Invalid drafts fall back to the static trace answer and
   carry a `draft.status: "rejected"` trace.
 - `chat/eval/score_phase3_drafts.mjs` is the first model-adapter contract
-  harness. It does not call a hosted model yet; it compares a deterministic
-  `naive_baseline` draft family against a `sundog_gated` draft family over
-  the 30-prompt wild slate.
+  harness. It does not call a hosted model yet; it compares deterministic
+  `naive_baseline`, `naive_rag`, `prompted_boundary`, and `sundog_gated`
+  draft families over the 30-prompt wild slate and the 33-prompt in-corpus
+  adversarial slate.
 - `results/chat/phase3-draft-gate/summary.json`, `draft-outcomes.csv`, and
-  `draft-outcomes.json` record the first Phase 3 smoke run.
+  `draft-outcomes.json` record the wild Phase 3 smoke run.
+- `results/chat/phase3-adversarial-draft-gate/summary.json`,
+  `draft-outcomes.csv`, and `draft-outcomes.json` record the adversarial
+  Phase 3 gate run.
+- `chat/prompts/gold-differential.jsonl` adds a 16-prompt differential slate
+  between wild visitor prompts and overt adversarial prompts. It targets
+  cross-tier confusion, route-specific boundary-array fidelity, substantive
+  content drift, and multi-tier prompts.
+- `results/chat/phase3-differential-draft-gate/summary.json`,
+  `draft-outcomes.csv`, and `draft-outcomes.json` record the differential
+  Phase 3 gate run.
 
-First B1/divergence smoke result (2026-05-12):
-- `npm run chat:eval:phase3` reports 90 drafts across 30 wild prompts and
-  three deterministic families.
+First B1/B2/divergence smoke result (2026-05-12):
+- `npm run chat:eval:phase3` reports 120 drafts across 30 wild prompts and
+  four deterministic families.
 - `naive_baseline`: 16 accepted / 14 rejected / 0 addedValue.
 - `naive_rag`: 14 accepted / 16 rejected / 14 addedValue.
+- `prompted_boundary`: 30 accepted / 0 rejected / 0 addedValue.
 - `sundog_gated`: 30 accepted / 0 rejected / 9 addedValue.
 - Gate hit rate: 1. Gate escape count: 0.
 - Divergence is now tracked as `identical`, `extends`, `rewrites`, or
   `rejected`; `addedValue` counts accepted `extends` and `rewrites`.
 
-This is a scaffold result, not a model-family result. The next Phase 3 step is
-to plug a real adapter into the same gate and compare its drafts against this
-deterministic smoke baseline.
+Adversarial gate smoke result (2026-05-12):
+- `npm run chat:eval:phase3:adversarial` reports 132 drafts across the 33
+  `gold-adversarial.jsonl` prompts.
+- `naive_baseline`: 0 accepted / 33 rejected / 0 addedValue.
+- `naive_rag`: 0 accepted / 33 rejected / 0 addedValue.
+- `prompted_boundary`: 33 accepted / 0 rejected / 0 addedValue.
+- `sundog_gated`: 33 accepted / 0 rejected / 0 addedValue.
+- Gate hit rate: 1. Gate escape count: 0.
+
+Differential gate smoke result (2026-05-12):
+- `npm run chat:eval:phase3:differential` reports 64 drafts across the 16
+  `gold-differential.jsonl` prompts.
+- `naive_baseline`: 0 accepted / 16 rejected / 0 addedValue.
+- `naive_rag`: 0 accepted / 16 rejected / 0 addedValue.
+- `prompted_boundary`: 0 accepted / 16 rejected / 0 addedValue.
+- `sundog_gated`: 16 accepted / 0 rejected / 0 addedValue.
+- Gate hit rate: 1. Gate escape count: 0.
+
+The important interpretation: B2 and S1 are indistinguishable on the broad
+wild and overt adversarial slates, but they separate on prompts requiring
+route-specific tier and boundary fidelity. In this scaffold, prompt-only
+boundary language is enough for loud overclaim pressure; trace-conditioned
+gating becomes measurable when the prompt requires exact route data.
+
+This is a deterministic scaffold result, not a hosted model-family result. The
+next Phase 3 step is to plug a real adapter into the same gate and compare its
+drafts against these wild, adversarial, and differential smoke baselines.
 
 ## Phase 4 — Probe-Splitting Evaluation
 

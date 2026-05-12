@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sundog · The geometry of a sun dog, drawn from physics</title>
+    <meta name="description" content="A sun dog (parhelion) is geometry doing optics. Sundog is an interactive atlas that renders the full halo display from the parhelion description, calibrated to photographs, with the math visible at every step.">
+    <meta name="theme-color" content="#0b1720">
+    <link rel="canonical" href="https://sundog.cc/sundog.html">
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Sundog — the geometry of a sun dog">
+    <meta property="og:description" content="An interactive atlas of every named arc in a sundog display, calibrated to photographs, with the math visible at every step.">
+    <meta property="og:image" content="https://sundog.cc/docs/calibration/overlays/p0.overlay.png">
+    <meta property="og:url" content="https://sundog.cc/sundog.html">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- Schema.org LearningResource markup so search + Wikipedia editorial pick up the citations. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LearningResource",
+      "name": "Sundog: the geometry of a sun dog",
+      "description": "Interactive atmospheric-optics explainer with parametric halo atlas, photograph calibration evidence, and inverse-inference of sun altitude from sundog photographs.",
+      "inLanguage": "en",
+      "url": "https://sundog.cc/sundog.html",
+      "learningResourceType": ["Interactive Resource", "Article"],
+      "educationalLevel": "general",
+      "teaches": [
+        "atmospheric optics",
+        "ice-crystal refraction",
+        "parhelion geometry",
+        "circumzenithal arc",
+        "halo display vocabulary"
+      ],
+      "citation": [
+        "Greenler, R. (1980). Rainbows, Halos, and Glories. Cambridge University Press.",
+        "Tape, W. (1994). Atmospheric Halos. American Geophysical Union, Antarctic Research Series Vol. 64.",
+        "Cowley, L. Atmospheric Optics. atoptics.co.uk"
+      ],
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Sundog",
+        "url": "https://sundog.cc/"
+      }
+    }
+    </script>
+
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        :root {
+            /* Optical parameters — sliders write to these */
+            --sun-altitude: 25;
+            --halo-22-intensity: 0.95;
+            --halo-46-intensity: 0.45;
+            --cza-intensity: 0.95;
+            --cza-curvature: 0.85;
+            --sun-pillar-intensity: 0.80;
+            --sun-pillar-length: 0.55;
+            --parhelic-circle-intensity: 0.55;
+            --parhelic-curvature: 0.05;
+            --parhelic-y-offset-r22: -0.05;
+            --parhelia-intensity: 1.0;
+            --parhelia-dagger-length: 1.0;
+            --dispersion-width: 0.7;
+            --secondary-suns-strength: 0.0;
+            --ring-overlap-bias: 0.5;
+            --compass-ray-length: 0.85;
+            --compass-rotation-deg: 22.5;
+            --rainbow-saturation: 0.85;
+            --idle-scintillation-amplitude: 0;
+            --supralateral-intensity: 0.40;
+            --upper-tangent-intensity: 0;
+            --lower-tangent-intensity: 0;
+            --suncave-parry-intensity: 0;
+            --parry-supralateral-intensity: 0;
+            --infralateral-intensity: 0;
+            --parhelic-curvature-derive: 0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text-light);
+            background: #0b1720;
+        }
+
+        /* ---------- page-wide structural ------------------------------------ */
+
+        .page-section {
+            padding: 4rem 1.5rem;
+        }
+
+        .page-section > .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .page-section h2 {
+            font-family: var(--sd-font-display);
+            font-size: clamp(1.6rem, 3vw, 2.3rem);
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.01em;
+        }
+        .page-section .eyebrow {
+            color: var(--accent-gold);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .page-section .lead {
+            color: rgba(245, 245, 245, 0.82);
+            font-size: 1.02rem;
+            line-height: 1.65;
+            max-width: 720px;
+            margin-bottom: 1.4rem;
+        }
+        .page-section p {
+            color: rgba(245, 245, 245, 0.74);
+            line-height: 1.65;
+            margin-bottom: 1rem;
+            max-width: 720px;
+        }
+        .page-section a {
+            color: var(--accent-gold);
+        }
+
+        /* ---------- hero / workbench ---------------------------------------- */
+
+        .hero {
+            position: relative;
+            min-height: calc(100vh - 58px);
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            background: radial-gradient(circle at 50% 70%, #1a3850 0%, #0b1720 65%, #050a10 100%);
+        }
+        .stage {
+            position: relative;
+            min-height: calc(100vh - 58px);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #parhelion-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .stage-copy {
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            z-index: 5;
+            width: min(560px, calc(100% - 4rem));
+            pointer-events: none;
+        }
+        .stage-copy .eyebrow {
+            color: var(--accent-gold);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .stage-copy h1 {
+            font-family: var(--sd-font-display);
+            font-size: clamp(2rem, 4.5vw, 3.4rem);
+            line-height: 1.04;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.6rem;
+        }
+        .stage-copy p {
+            color: rgba(245, 245, 245, 0.78);
+            font-size: 0.98rem;
+            max-width: 38rem;
+            margin-bottom: 0.9rem;
+        }
+        .stage-cta {
+            display: flex;
+            gap: 0.6rem;
+            pointer-events: auto;
+        }
+        .stage-cta a {
+            display: inline-block;
+            padding: 0.5rem 0.85rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(244, 196, 48, 0.36);
+            border-radius: 4px;
+            transition: background 160ms ease, border-color 160ms ease;
+        }
+        .stage-cta a:hover {
+            background: rgba(244, 196, 48, 0.16);
+            border-color: rgba(244, 196, 48, 0.6);
+        }
+        .stage-cta a.is-primary {
+            background: rgba(244, 196, 48, 0.18);
+            border-color: rgba(244, 196, 48, 0.7);
+        }
+
+        /* ---------- workbench right-rail (hero scope only) ------------------ */
+
+        .controls {
+            position: relative;
+            z-index: 10;
+            min-height: calc(100vh - 58px);
+            padding: 1.2rem;
+            background: rgba(11, 23, 32, 0.96);
+            border-left: 1px solid rgba(244, 196, 48, 0.22);
+            overflow-y: auto;
+            backdrop-filter: blur(8px);
+        }
+        .controls h2 {
+            font-size: 1rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.4rem;
+        }
+        .controls h3 {
+            font-size: 0.74rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 1.4rem 0 0.55rem;
+            opacity: 0.92;
+        }
+        .controls .lead {
+            font-size: 0.82rem;
+            color: rgba(245, 245, 245, 0.7);
+            line-height: 1.5;
+            margin-bottom: 0.6rem;
+        }
+        .control-group {
+            margin-bottom: 0.7rem;
+        }
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            color: rgba(245, 245, 245, 0.86);
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        .control-group .value {
+            color: var(--accent-gold);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+        .control-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--sd-amber);
+        }
+        .control-group input[type="range"]:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .control-group.is-derived .value { opacity: 0.55; }
+        .control-group .derive-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.25rem;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: rgba(245, 245, 245, 0.62);
+            cursor: pointer;
+        }
+        .control-group .derive-toggle input[type="checkbox"] {
+            accent-color: var(--sd-amber);
+        }
+
+        .control-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        .control-actions button {
+            min-height: 2.2rem;
+            padding: 0.35rem 0.5rem;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(244, 196, 48, 0.30);
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 160ms ease, border-color 160ms ease;
+        }
+        .control-actions button:hover {
+            background: rgba(244, 196, 48, 0.16);
+            border-color: rgba(244, 196, 48, 0.6);
+        }
+
+        /* Minimal/advanced toggle: hide the "advanced" sliders by default, show
+           with .controls.is-advanced. */
+        .controls.is-advanced-hidden .control-advanced {
+            display: none;
+        }
+        .controls.is-advanced-hidden .h3-advanced { display: none; }
+        .advanced-toggle {
+            display: block;
+            width: 100%;
+            margin-top: 0.6rem;
+            padding: 0.5rem;
+            background: transparent;
+            border: 1px dashed rgba(244, 196, 48, 0.30);
+            border-radius: 4px;
+            color: rgba(245, 245, 245, 0.7);
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: border-color 160ms ease, color 160ms ease;
+        }
+        .advanced-toggle:hover {
+            color: var(--accent-gold);
+            border-color: rgba(244, 196, 48, 0.6);
+        }
+
+        /* ---------- shared SVG presentation hooks --------------------------- */
+
+        .layer-halos circle { fill: none; stroke: rgba(255, 255, 255, 0.95); vector-effect: non-scaling-stroke; }
+        .halo-22 { stroke-width: 1.5; opacity: var(--halo-22-intensity); }
+        .halo-46 { stroke-width: 1.2; opacity: var(--halo-46-intensity); }
+        .halo-secondary { stroke-width: 1.1; opacity: calc(0.9 * var(--secondary-suns-strength)); }
+        .layer-cza path {
+            fill: none; stroke: url(#prismatic-gradient); stroke-width: 8;
+            opacity: var(--cza-intensity); vector-effect: non-scaling-stroke;
+            filter: url(#cza-edge-soften); mix-blend-mode: screen;
+        }
+        .layer-cza .cza-secondary { stroke-width: 6; opacity: calc(0.75 * var(--cza-intensity)); }
+        .layer-cza .cza-bell-fill {
+            fill: url(#prismatic-gradient); stroke: none;
+            opacity: calc(0.32 * var(--cza-intensity)); mix-blend-mode: screen;
+        }
+        .layer-parhelic path {
+            fill: none; stroke: rgba(255, 255, 255, 0.6); stroke-width: 1.2;
+            stroke-dasharray: 4 6; opacity: var(--parhelic-circle-intensity);
+            vector-effect: non-scaling-stroke;
+        }
+        .layer-pillar line {
+            stroke: url(#pillar-gradient); stroke-width: 6;
+            opacity: var(--sun-pillar-intensity); vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+        }
+        .layer-pillar .pillar-lens {
+            fill: url(#pillar-gradient);
+            opacity: calc(0.95 * var(--sun-pillar-intensity));
+            filter: url(#soft-blur);
+        }
+        #parhelion-svg[data-geometry-model="legacy"] .pillar-lens { display: none; }
+        #parhelion-svg[data-geometry-model="halo_scaffold"] #pillar-line,
+        #parhelion-svg[data-geometry-model="halo_governed"] #pillar-line,
+        #parhelion-svg[data-geometry-model="halo_atlas"] #pillar-line { display: none; }
+
+        .layer-supralateral path {
+            fill: none; stroke: url(#prismatic-gradient); stroke-width: 5;
+            opacity: var(--supralateral-intensity); vector-effect: non-scaling-stroke;
+            filter: url(#cza-edge-soften); mix-blend-mode: screen;
+        }
+        .layer-parry-supralateral path {
+            fill: none; stroke: url(#prismatic-gradient); stroke-width: 4;
+            opacity: var(--parry-supralateral-intensity); vector-effect: non-scaling-stroke;
+            filter: url(#cza-edge-soften); mix-blend-mode: screen;
+        }
+        .layer-upper-tangent path {
+            fill: none; stroke: rgba(255, 255, 255, 0.85); stroke-width: 2;
+            opacity: var(--upper-tangent-intensity); vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur); mix-blend-mode: screen;
+        }
+        .layer-lower-tangent path {
+            fill: none; stroke: rgba(255, 255, 255, 0.85); stroke-width: 2;
+            opacity: var(--lower-tangent-intensity); vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur); mix-blend-mode: screen;
+        }
+        .layer-suncave-parry path {
+            fill: none; stroke: rgba(255, 230, 180, 0.78); stroke-width: 2;
+            opacity: var(--suncave-parry-intensity); vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur); mix-blend-mode: screen;
+        }
+        .layer-infralateral path {
+            fill: none; stroke: url(#prismatic-gradient); stroke-width: 4;
+            opacity: var(--infralateral-intensity); vector-effect: non-scaling-stroke;
+            filter: url(#cza-edge-soften); mix-blend-mode: screen;
+        }
+        .layer-parhelia .dagger { opacity: var(--parhelia-intensity); }
+        .layer-parhelia .dagger-core { fill: url(#dagger-core-gradient); filter: url(#soft-blur); }
+        .layer-parhelia .dagger-streak {
+            stroke: url(#dagger-streak-gradient); stroke-width: 6;
+            stroke-linecap: round; opacity: 0.85; filter: url(#soft-blur);
+        }
+        .layer-sun .sun-core { fill: #fffbe8; filter: url(#sun-glow); }
+        .layer-sun .ray {
+            stroke: rgba(255, 248, 220, 0.92); stroke-width: 2.2;
+            stroke-linecap: round; vector-effect: non-scaling-stroke;
+            filter: url(#sun-glow);
+        }
+        .layer-sun .ray-diagonal { stroke: rgba(255, 248, 220, 0.55); stroke-width: 1.4; }
+
+        .atmosphere {
+            position: absolute; inset: 0; pointer-events: none;
+            mix-blend-mode: screen;
+            background:
+                radial-gradient(circle at 50% 70%, rgba(244, 196, 48, calc(0.04 * var(--dispersion-width))), transparent 18rem),
+                radial-gradient(circle at 50% 36%, rgba(140, 200, 255, calc(0.05 * var(--dispersion-width))), transparent 22rem);
+            opacity: var(--dispersion-width);
+        }
+
+        @keyframes scintillate {
+            0%, 100% { opacity: var(--halo-22-intensity); }
+            50%      { opacity: calc(var(--halo-22-intensity) * (1 - 0.18 * var(--idle-scintillation-amplitude))); }
+        }
+        .halo-22 { animation: scintillate 7s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+            .halo-22 { animation: none; }
+        }
+
+        /* ---------- section-2 labeled photograph --------------------------- */
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+            gap: 2.4rem;
+            align-items: start;
+            margin-top: 1.5rem;
+        }
+        .photo-grid figure {
+            margin: 0;
+            background: rgba(15, 30, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 0.6rem;
+        }
+        .photo-grid img {
+            display: block;
+            width: 100%;
+            border-radius: 4px;
+        }
+        .photo-grid figcaption {
+            color: rgba(245, 245, 245, 0.6);
+            font-size: 0.78rem;
+            margin-top: 0.5rem;
+        }
+        .photo-key {
+            font-size: 0.93rem;
+            line-height: 1.6;
+            color: rgba(245, 245, 245, 0.78);
+        }
+        .photo-key dt {
+            color: var(--accent-gold);
+            font-weight: 800;
+            font-size: 0.82rem;
+            margin-top: 0.7rem;
+        }
+        .photo-key dt:first-child { margin-top: 0; }
+        .photo-key dd {
+            margin: 0 0 0.1rem 0;
+            color: rgba(245, 245, 245, 0.74);
+        }
+
+        /* ---------- section-3 ice-crystal diagram --------------------------- */
+
+        .crystal-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+            gap: 2rem;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        .crystal-svg {
+            background: rgba(15, 30, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        .crystal-svg svg { width: 100%; height: auto; display: block; }
+
+        /* ---------- section-4 mini live demo -------------------------------- */
+
+        .demo-card {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+            gap: 1.5rem;
+            background: rgba(15, 30, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .demo-readout {
+            font-family: var(--sd-font-data);
+            font-size: 0.86rem;
+            line-height: 1.5;
+            color: rgba(245, 245, 245, 0.85);
+        }
+        .demo-readout .big {
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .demo-card label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: rgba(245, 245, 245, 0.86);
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+        .demo-card input[type="range"] {
+            width: 100%;
+            accent-color: var(--sd-amber);
+        }
+
+        /* ---------- section-5 atlas walkthrough table ----------------------- */
+
+        .atlas-walkthrough {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .atlas-card {
+            background: rgba(15, 30, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        .atlas-card h3 {
+            font-size: 0.95rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.35rem;
+        }
+        .atlas-card p {
+            font-size: 0.87rem;
+            color: rgba(245, 245, 245, 0.74);
+            line-height: 1.5;
+            margin: 0;
+        }
+        .atlas-card .construct {
+            font-family: var(--sd-font-data);
+            font-size: 0.75rem;
+            color: rgba(245, 245, 245, 0.55);
+            margin-top: 0.5rem;
+            display: block;
+        }
+
+        /* ---------- section-6 upload (placeholder) -------------------------- */
+
+        /* ---------- §6 photo-upload widget --------------------------------- */
+        .upload-widget {
+            margin-top: 1.5rem;
+            background: rgba(15, 30, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+        .upload-widget h3 {
+            font-size: 1rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .upload-widget p {
+            color: rgba(245, 245, 245, 0.74);
+            font-size: 0.95rem;
+            margin-bottom: 0.7rem;
+        }
+        .upload-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.7rem 1.2rem;
+            background: rgba(244, 196, 48, 0.18);
+            border: 1px solid rgba(244, 196, 48, 0.6);
+            border-radius: 5px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            cursor: pointer;
+            transition: background 160ms ease, border-color 160ms ease;
+        }
+        .upload-button:hover {
+            background: rgba(244, 196, 48, 0.30);
+        }
+        .upload-hint {
+            font-size: 0.78rem;
+            color: rgba(245, 245, 245, 0.55);
+            margin-top: 0.7rem;
+        }
+        .upload-stage {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+            gap: 1.5rem;
+            align-items: start;
+        }
+        .upload-canvas-wrap {
+            position: relative;
+            background: #050a10;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        #upload-canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            cursor: crosshair;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .upload-instructions {
+            position: absolute;
+            top: 0.7rem;
+            left: 0.7rem;
+            right: 0.7rem;
+            padding: 0.5rem 0.8rem;
+            background: rgba(11, 23, 32, 0.86);
+            border: 1px solid rgba(244, 196, 48, 0.36);
+            border-radius: 4px;
+            font-size: 0.86rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            backdrop-filter: blur(6px);
+            text-align: center;
+        }
+        .upload-readout {
+            font-size: 0.88rem;
+            color: rgba(245, 245, 245, 0.78);
+        }
+        .upload-readout h3 {
+            font-size: 0.74rem;
+            margin: 0.4rem 0 0.5rem;
+        }
+        .upload-readout dl {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.2rem 0.7rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.84rem;
+            margin-bottom: 0.8rem;
+        }
+        .upload-readout dt { color: rgba(245, 245, 245, 0.6); }
+        .upload-readout dd { color: rgba(245, 245, 245, 0.92); margin: 0; }
+        .upload-altitude {
+            font-family: var(--sd-font-data);
+            font-size: 1.05rem;
+            padding: 0.6rem 0.8rem;
+            background: rgba(244, 196, 48, 0.10);
+            border: 1px solid rgba(244, 196, 48, 0.35);
+            border-radius: 4px;
+            margin-bottom: 0.8rem;
+        }
+        .upload-altitude strong {
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+        }
+        .upload-layer-toggles {
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            border-radius: 4px;
+            padding: 0.5rem 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+        .upload-layer-toggles legend {
+            padding: 0 0.4rem;
+            font-size: 0.74rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .upload-layer-toggles label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+            color: rgba(245, 245, 245, 0.74);
+            margin: 0.2rem 0;
+            cursor: pointer;
+        }
+        .upload-layer-toggles input[type="checkbox"] {
+            accent-color: var(--sd-amber);
+        }
+        .upload-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        .upload-actions button {
+            flex: 1 1 auto;
+            min-height: 2.2rem;
+            padding: 0.35rem 0.6rem;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(244, 196, 48, 0.30);
+            border-radius: 4px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 160ms ease, border-color 160ms ease;
+        }
+        .upload-actions button:hover {
+            background: rgba(244, 196, 48, 0.16);
+            border-color: rgba(244, 196, 48, 0.6);
+        }
+        .upload-share {
+            font-size: 0.78rem;
+            color: rgba(245, 245, 245, 0.6);
+            padding: 0.6rem 0.7rem;
+            border: 1px dashed rgba(244, 196, 48, 0.30);
+            border-radius: 4px;
+        }
+        .upload-share-toggle {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            cursor: not-allowed; /* disabled until Phase 5B backend lands */
+        }
+        .upload-share-toggle em {
+            color: rgba(244, 196, 48, 0.75);
+            font-style: normal;
+            font-weight: 700;
+            font-size: 0.74rem;
+            display: block;
+            margin-top: 0.2rem;
+        }
+        @media (max-width: 760px) {
+            .upload-stage { grid-template-columns: 1fr; }
+        }
+
+        /* ---------- section-7 history ---------------------------------------- */
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+            gap: 2rem;
+            align-items: start;
+            margin-top: 1.5rem;
+        }
+        .history-grid img {
+            display: block;
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .reading-list {
+            margin: 0.8rem 0 0;
+            padding-left: 1.1rem;
+        }
+        .reading-list li {
+            color: rgba(245, 245, 245, 0.78);
+            margin-bottom: 0.45rem;
+            line-height: 1.55;
+        }
+
+        /* ---------- section-8 for other tools ------------------------------- */
+
+        .tools-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .tool-card {
+            background: rgba(15, 30, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        .tool-card h3 {
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.35rem;
+        }
+        .tool-card p {
+            font-size: 0.85rem;
+            margin: 0;
+            color: rgba(245, 245, 245, 0.74);
+            line-height: 1.5;
+        }
+        .tool-card code {
+            font-family: var(--sd-font-data);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.05rem 0.3rem;
+            border-radius: 3px;
+            color: rgba(245, 245, 245, 0.92);
+            font-size: 0.78rem;
+        }
+
+        /* ---------- responsive ---------------------------------------------- */
+
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; }
+            .stage { min-height: 60vh; }
+            .controls {
+                min-height: auto;
+                border-left: none;
+                border-top: 1px solid rgba(244, 196, 48, 0.22);
+            }
+            .stage-copy { left: 1.25rem; right: 1.25rem; width: auto; }
+            .photo-grid, .crystal-grid, .demo-card, .history-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="about.html">About</a>
+                <a href="applications-gallery.html">Applications</a>
+                <a href="threebody.html">Three-Body</a>
+                <a href="balance.html">Balance</a>
+                <a href="mines.html">Mines</a>
+                <a href="sundog.html" aria-current="page">Sundog</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ============================================================
+         §1  HERO — live workbench at canonical pose
+         ============================================================ -->
+    <main>
+    <section class="hero" id="hero" aria-label="Interactive sundog workbench">
+        <div class="stage" aria-label="Parhelion stage">
+            <svg id="parhelion-svg" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Parametric sundog rendering">
+                <defs>
+                    <linearGradient id="prismatic-gradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%"  stop-color="#ff6b6b" stop-opacity="0.85"/>
+                        <stop offset="22%" stop-color="#ffa552" stop-opacity="0.85"/>
+                        <stop offset="42%" stop-color="#fff080" stop-opacity="0.85"/>
+                        <stop offset="62%" stop-color="#9bf0a8" stop-opacity="0.85"/>
+                        <stop offset="82%" stop-color="#7cc6ff" stop-opacity="0.85"/>
+                        <stop offset="100%" stop-color="#a8a0ff" stop-opacity="0.85"/>
+                    </linearGradient>
+                    <linearGradient id="pillar-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%"   stop-color="rgba(255,196,80,0)"/>
+                        <stop offset="35%"  stop-color="rgba(255,222,140,0.7)"/>
+                        <stop offset="50%"  stop-color="rgba(255,250,232,0.95)"/>
+                        <stop offset="65%"  stop-color="rgba(255,222,140,0.7)"/>
+                        <stop offset="100%" stop-color="rgba(255,196,80,0)"/>
+                    </linearGradient>
+                    <radialGradient id="dagger-core-gradient" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%"  stop-color="#fffbe8"/>
+                        <stop offset="35%" stop-color="#ffd06b" stop-opacity="0.95"/>
+                        <stop offset="70%" stop-color="#ff8a55" stop-opacity="0.5"/>
+                        <stop offset="100%" stop-color="#ff5a5a" stop-opacity="0"/>
+                    </radialGradient>
+                    <linearGradient id="dagger-streak-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%"  stop-color="#ff6a4a" stop-opacity="0.95"/>
+                        <stop offset="30%" stop-color="#ffd06b" stop-opacity="0.85"/>
+                        <stop offset="70%" stop-color="#cce6ff" stop-opacity="0.55"/>
+                        <stop offset="100%" stop-color="#7ca4ff" stop-opacity="0"/>
+                    </linearGradient>
+                    <filter id="sun-glow" x="-100%" y="-100%" width="300%" height="300%">
+                        <feGaussianBlur stdDeviation="1.4" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <filter id="soft-blur" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="0.6"/>
+                    </filter>
+                    <filter id="cza-edge-soften" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="0.3"/>
+                    </filter>
+                </defs>
+
+                <g class="layer-halos"><circle class="halo-46" cx="500" cy="500" r="440"/></g>
+                <g class="layer-parhelic"><path id="parhelic-path" d="M 0 500 Q 500 500 1000 500"/></g>
+                <g class="layer-pillar">
+                    <path class="pillar-lens" id="pillar-lens" d=""/>
+                    <line id="pillar-line" x1="500" y1="500" x2="500" y2="500"/>
+                </g>
+                <g class="layer-halos"><circle class="halo-22" cx="500" cy="500" r="220"/></g>
+                <g class="layer-halos" id="layer-secondary-halos">
+                    <circle class="halo-secondary" cx="320" cy="320" r="160"/>
+                    <circle class="halo-secondary" cx="680" cy="320" r="160"/>
+                </g>
+                <g class="layer-supralateral"><path id="supralateral-path" d=""/></g>
+                <g class="layer-parry-supralateral"><path id="parry-supralateral-path" d=""/></g>
+                <g class="layer-upper-tangent"><path id="upper-tangent-path" d=""/></g>
+                <g class="layer-suncave-parry"><path id="suncave-parry-path" d=""/></g>
+                <g class="layer-lower-tangent"><path id="lower-tangent-path" d=""/></g>
+                <g class="layer-infralateral"><path id="infralateral-path" d=""/></g>
+                <g class="layer-cza">
+                    <path class="cza-bell-fill" d="M 200 240 Q 500 80 800 240 L 740 300 Q 500 200 260 300 Z"/>
+                    <path id="cza-primary" d="M 200 240 Q 500 80 800 240"/>
+                    <path class="cza-secondary" d="M 260 300 Q 500 200 740 300"/>
+                </g>
+                <g class="layer-parhelia">
+                    <g class="dagger">
+                        <line class="dagger-streak" x1="220" y1="500" x2="320" y2="500"/>
+                        <ellipse class="dagger-core" cx="280" cy="500" rx="22" ry="14"/>
+                    </g>
+                    <g class="dagger">
+                        <line class="dagger-streak" x1="780" y1="500" x2="680" y2="500"/>
+                        <ellipse class="dagger-core" cx="720" cy="500" rx="22" ry="14"/>
+                    </g>
+                </g>
+                <g class="layer-sun" id="layer-sun" transform="rotate(22.5 500 500)">
+                    <line class="ray ray-diagonal" x1="500" y1="500" x2="540" y2="460"/>
+                    <line class="ray ray-diagonal" x1="500" y1="500" x2="540" y2="540"/>
+                    <line class="ray ray-diagonal" x1="500" y1="500" x2="460" y2="540"/>
+                    <line class="ray ray-diagonal" x1="500" y1="500" x2="460" y2="460"/>
+                    <circle class="sun-core" id="sun-core" cx="500" cy="500" r="9"/>
+                </g>
+            </svg>
+
+            <div class="atmosphere" aria-hidden="true"></div>
+
+            <div class="stage-copy">
+                <div class="eyebrow">Sundog · Atmospheric Optics</div>
+                <h1>A sun dog is geometry doing optics.</h1>
+                <p>Every visible arc you see in a sundog photograph is the upper slice of a complete circle in the sky. Move the sliders, watch the math draw the eye. Or scroll on for the explainer.</p>
+                <div class="stage-cta">
+                    <a href="#why-22" class="is-primary">Why 22°?</a>
+                    <a href="#try-your-photo">Try your photo</a>
+                    <a href="#full-atlas">Full atlas</a>
+                </div>
+            </div>
+        </div>
+
+        <aside class="controls is-advanced-hidden" id="hero-controls" aria-label="Atlas parameters">
+            <h2>Atlas Parameters</h2>
+            <p class="lead">Default view is the canonical pose calibrated against the Troels Nielsen DR photograph. Toggle <em>advanced</em> for the full rail.</p>
+
+            <h3>Sun &amp; Altitude</h3>
+            <div class="control-group">
+                <label>Sun Altitude (°)<span class="value" id="sun-altitude-value">25</span></label>
+                <input type="range" id="sun-altitude" data-param="sun-altitude" min="0" max="60" step="1" value="25">
+            </div>
+
+            <h3>Halos</h3>
+            <div class="control-group">
+                <label>22° Halo<span class="value" id="halo-22-intensity-value">0.95</span></label>
+                <input type="range" id="halo-22-intensity" data-param="halo-22-intensity" min="0" max="1" step="0.01" value="0.95">
+            </div>
+            <div class="control-group">
+                <label>46° Halo<span class="value" id="halo-46-intensity-value">0.45</span></label>
+                <input type="range" id="halo-46-intensity" data-param="halo-46-intensity" min="0" max="1" step="0.01" value="0.45">
+            </div>
+
+            <h3>Arcs</h3>
+            <div class="control-group">
+                <label>CZA / Eyelid<span class="value" id="cza-intensity-value">0.95</span></label>
+                <input type="range" id="cza-intensity" data-param="cza-intensity" min="0" max="1" step="0.01" value="0.95">
+            </div>
+            <div class="control-group">
+                <label>Parhelic Circle Intensity<span class="value" id="parhelic-circle-intensity-value">0.55</span></label>
+                <input type="range" id="parhelic-circle-intensity" data-param="parhelic-circle-intensity" min="0" max="1" step="0.01" value="0.55">
+            </div>
+            <div class="control-group">
+                <label>Parhelic Circle Curvature<span class="value" id="parhelic-curvature-value">0.05</span></label>
+                <input type="range" id="parhelic-curvature" data-param="parhelic-curvature" min="0" max="1" step="0.01" value="0.05">
+                <label class="derive-toggle">
+                    <input type="checkbox" id="parhelic-curvature-derive">
+                    <span>derive from sun altitude (Phase 3 binding)</span>
+                </label>
+            </div>
+
+            <h3>Parhelia</h3>
+            <div class="control-group">
+                <label>Parhelia Intensity<span class="value" id="parhelia-intensity-value">1.00</span></label>
+                <input type="range" id="parhelia-intensity" data-param="parhelia-intensity" min="0" max="1" step="0.01" value="1.0">
+            </div>
+
+            <button type="button" class="advanced-toggle" id="btn-advanced-toggle">
+                Show advanced controls (25 sliders)
+            </button>
+
+            <!-- ADVANCED: hidden by default ----------------------------------- -->
+
+            <h3 class="h3-advanced">Sun pillar</h3>
+            <div class="control-group control-advanced">
+                <label>Pillar Intensity<span class="value" id="sun-pillar-intensity-value">0.80</span></label>
+                <input type="range" id="sun-pillar-intensity" data-param="sun-pillar-intensity" min="0" max="1" step="0.01" value="0.80">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Pillar Length<span class="value" id="sun-pillar-length-value">0.55</span></label>
+                <input type="range" id="sun-pillar-length" data-param="sun-pillar-length" min="0" max="1" step="0.01" value="0.55">
+            </div>
+
+            <h3 class="h3-advanced">Compass rose</h3>
+            <div class="control-group control-advanced">
+                <label>Compass Ray Length<span class="value" id="compass-ray-length-value">0.85</span></label>
+                <input type="range" id="compass-ray-length" data-param="compass-ray-length" min="0.4" max="2" step="0.05" value="0.85">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Compass Rotation (°)<span class="value" id="compass-rotation-deg-value">22.50</span></label>
+                <input type="range" id="compass-rotation-deg" data-param="compass-rotation-deg" min="0" max="45" step="2.5" value="22.5">
+            </div>
+
+            <h3 class="h3-advanced">CZA shape</h3>
+            <div class="control-group control-advanced">
+                <label>CZA Curvature<span class="value" id="cza-curvature-value">0.85</span></label>
+                <input type="range" id="cza-curvature" data-param="cza-curvature" min="0.4" max="1.4" step="0.01" value="0.85">
+            </div>
+
+            <h3 class="h3-advanced">Parhelic belt</h3>
+            <div class="control-group control-advanced">
+                <label>Parhelic Belt Offset<span class="value" id="parhelic-y-offset-r22-value">-0.05</span></label>
+                <input type="range" id="parhelic-y-offset-r22" data-param="parhelic-y-offset-r22" min="-0.12" max="0.08" step="0.01" value="-0.05">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Dagger Length<span class="value" id="parhelia-dagger-length-value">1.00</span></label>
+                <input type="range" id="parhelia-dagger-length" data-param="parhelia-dagger-length" min="0.4" max="1.8" step="0.05" value="1.0">
+            </div>
+
+            <h3 class="h3-advanced">Vocabulary arcs</h3>
+            <div class="control-group control-advanced">
+                <label>Supralateral Arc<span class="value" id="supralateral-intensity-value">0.40</span></label>
+                <input type="range" id="supralateral-intensity" data-param="supralateral-intensity" min="0" max="1" step="0.01" value="0.40">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Parry Supralateral<span class="value" id="parry-supralateral-intensity-value">0.00</span></label>
+                <input type="range" id="parry-supralateral-intensity" data-param="parry-supralateral-intensity" min="0" max="1" step="0.01" value="0">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Upper Tangent (eyelid)<span class="value" id="upper-tangent-intensity-value">0.00</span></label>
+                <input type="range" id="upper-tangent-intensity" data-param="upper-tangent-intensity" min="0" max="1" step="0.01" value="0">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Suncave Parry<span class="value" id="suncave-parry-intensity-value">0.00</span></label>
+                <input type="range" id="suncave-parry-intensity" data-param="suncave-parry-intensity" min="0" max="1" step="0.01" value="0">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Lower Tangent (under-halo)<span class="value" id="lower-tangent-intensity-value">0.00</span></label>
+                <input type="range" id="lower-tangent-intensity" data-param="lower-tangent-intensity" min="0" max="1" step="0.01" value="0">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Infralateral Arcs<span class="value" id="infralateral-intensity-value">0.00</span></label>
+                <input type="range" id="infralateral-intensity" data-param="infralateral-intensity" min="0" max="1" step="0.01" value="0">
+            </div>
+
+            <h3 class="h3-advanced">Composition fiction</h3>
+            <div class="control-group control-advanced">
+                <label>Secondary Suns<span class="value" id="secondary-suns-strength-value">0.00</span></label>
+                <input type="range" id="secondary-suns-strength" data-param="secondary-suns-strength" min="0" max="1" step="0.01" value="0.0">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Ring Overlap Bias<span class="value" id="ring-overlap-bias-value">0.50</span></label>
+                <input type="range" id="ring-overlap-bias" data-param="ring-overlap-bias" min="0" max="1" step="0.01" value="0.5">
+            </div>
+
+            <h3 class="h3-advanced">Palette &amp; atmosphere</h3>
+            <div class="control-group control-advanced">
+                <label>Dispersion Width<span class="value" id="dispersion-width-value">0.70</span></label>
+                <input type="range" id="dispersion-width" data-param="dispersion-width" min="0" max="1" step="0.01" value="0.70">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Rainbow Saturation<span class="value" id="rainbow-saturation-value">0.85</span></label>
+                <input type="range" id="rainbow-saturation" data-param="rainbow-saturation" min="0" max="1" step="0.01" value="0.85">
+            </div>
+            <div class="control-group control-advanced">
+                <label>Idle Scintillation<span class="value" id="idle-scintillation-amplitude-value">0.00</span></label>
+                <input type="range" id="idle-scintillation-amplitude" data-param="idle-scintillation-amplitude" min="0" max="1" step="0.01" value="0.0">
+            </div>
+
+            <div class="control-actions">
+                <button id="btn-reset" type="button">Reset</button>
+                <button id="btn-snapshot" type="button">Snapshot params</button>
+            </div>
+        </aside>
+    </section>
+
+    <!-- ============================================================
+         §2  What you are looking at — labeled photograph
+         ============================================================ -->
+    <section class="page-section" id="what-it-is">
+        <div class="container">
+            <div class="eyebrow">§2 · What you're looking at</div>
+            <h2>Every bright feature has a name.</h2>
+            <p class="lead">
+                When you photograph a sundog you don't see one phenomenon; you see a stack of them. The bright spots at the sun's left and right are the <em>parhelia</em>. The white ring around the sun is the <em>22° halo</em>. The colorful arc near the top of the sky is the <em>circumzenithal arc</em>. The vertical light shaft is the <em>sun pillar</em>. Each is its own geometric primitive — its own complete circle in the sky — and the sundog is what happens when several show up at once.
+            </p>
+
+            <div class="photo-grid">
+                <figure>
+                    <img src="/docs/calibration/1.Photometeor-jeff-mod_marked_red.jpg" alt="Annotated reference photograph showing nine named arcs of a rich sundog display" loading="lazy">
+                    <figcaption>Annotated reference photograph (Photometeor / Jeff). Every label below points at a real circle in the sky — the visible arc you see is the part of that circle that happens to be above the horizon when you're looking up.</figcaption>
+                </figure>
+
+                <dl class="photo-key">
+                    <dt>22° halo</dt>
+                    <dd>Tight ring around the sun. Most commonly seen alone.</dd>
+                    <dt>46° halo</dt>
+                    <dd>Larger faint ring, roughly twice the 22° halo's radius.</dd>
+                    <dt>Sundog / parhelion</dt>
+                    <dd>Bright spot on the parhelic circle at the sun's altitude, just outside the 22° halo.</dd>
+                    <dt>Parhelic circle</dt>
+                    <dd>Horizontal great circle through the sun. Looks roughly horizontal in a photo.</dd>
+                    <dt>Circumzenithal arc (CZA)</dt>
+                    <dd>Colorful "smile" near the zenith, tangent to the 46° halo at its top.</dd>
+                    <dt>Supralateral arc</dt>
+                    <dd>Less common arc tangent to the 46° halo, just outside the CZA.</dd>
+                    <dt>Upper tangent arc</dt>
+                    <dd>"Eyelid" tangent to the 22° halo's top, from column-oriented crystals.</dd>
+                    <dt>Suncave Parry arc</dt>
+                    <dd>Parry-orientation cousin of the upper tangent, nested inside it.</dd>
+                    <dt>Lower tangent arc</dt>
+                    <dd>Mirror of upper tangent at the 22° halo's bottom edge.</dd>
+                </dl>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         §3  Why bright spots appear at 22°
+         ============================================================ -->
+    <section class="page-section" id="why-22" style="background: rgba(255, 255, 255, 0.02);">
+        <div class="container">
+            <div class="eyebrow">§3 · The physics</div>
+            <h2>Why do the bright spots sit at 22° from the sun?</h2>
+            <p class="lead">
+                Sundogs form when sunlight refracts through hexagonal ice crystals — tiny six-sided columns or plates falling through high cirrus clouds. A light ray entering one face of a hexagonal column and exiting an adjacent face traverses a 60° prism. The minimum-deviation angle of that prism for visible light in ice is — by refraction-index calculation — almost exactly <strong>22°</strong>. So most refracted light bunches up at 22° from the source. To an observer, that's a bright spot 22° away from the sun.
+            </p>
+
+            <div class="crystal-grid">
+                <div class="crystal-svg">
+                    <svg viewBox="0 0 520 360" xmlns="http://www.w3.org/2000/svg" aria-label="Schematic of a hexagonal ice-crystal column refracting sunlight through 22 degrees">
+                        <defs>
+                            <linearGradient id="crystal-face" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#a8d4ff" stop-opacity="0.45"/>
+                                <stop offset="100%" stop-color="#446a8e" stop-opacity="0.55"/>
+                            </linearGradient>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                <path d="M0,0 L10,5 L0,10 z" fill="#ffd06b"/>
+                            </marker>
+                            <marker id="arrow-faint" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                <path d="M0,0 L10,5 L0,10 z" fill="#a8d4ff"/>
+                            </marker>
+                        </defs>
+
+                        <!-- Hexagonal crystal silhouette (column viewed end-on for the 60° prism geometry) -->
+                        <g transform="translate(260,180)">
+                            <polygon points="0,-80 69,-40 69,40 0,80 -69,40 -69,-40"
+                                     fill="url(#crystal-face)" stroke="#aac8e6" stroke-width="1.5"/>
+                            <text x="0" y="100" text-anchor="middle" fill="rgba(245,245,245,0.6)" font-size="11">hexagonal ice crystal (end view)</text>
+                        </g>
+
+                        <!-- Incident sun ray from upper-left -->
+                        <line x1="40" y1="80" x2="190" y2="160" stroke="#ffd06b" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="50" y="74" fill="#ffd06b" font-size="11">incident sun ray</text>
+
+                        <!-- Refracted ray inside crystal (faint) -->
+                        <line x1="206" y1="166" x2="320" y2="200" stroke="#a8d4ff" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.7"/>
+
+                        <!-- Exit ray, deflected by 22° -->
+                        <line x1="334" y1="206" x2="500" y2="280" stroke="#ffd06b" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="380" y="320" fill="#ffd06b" font-size="11">deflected ~22° → toward observer</text>
+
+                        <!-- Continuation showing original direction (faint) for the 22° angle annotation -->
+                        <line x1="334" y1="206" x2="510" y2="234" stroke="#a8d4ff" stroke-width="1" stroke-dasharray="2 4" opacity="0.5" marker-end="url(#arrow-faint)"/>
+                        <text x="450" y="225" fill="rgba(168,212,255,0.7)" font-size="10">undeflected direction</text>
+
+                        <!-- 22° arc marker -->
+                        <path d="M 470,260 A 40 40 0 0 0 482,232" stroke="#ffd06b" stroke-width="1.5" fill="none"/>
+                        <text x="485" y="252" fill="#ffd06b" font-size="11" font-weight="700">22°</text>
+
+                        <!-- 60° prism angle marker inside crystal -->
+                        <path d="M 218,168 A 18 18 0 0 1 226,192" stroke="rgba(255,255,255,0.55)" stroke-width="1" fill="none"/>
+                        <text x="232" y="185" fill="rgba(245,245,245,0.6)" font-size="10">60°</text>
+                        <text x="245" y="198" fill="rgba(245,245,245,0.55)" font-size="10">prism path</text>
+                    </svg>
+                </div>
+
+                <div>
+                    <p>
+                        The two crystal families that matter for the most common arcs:
+                    </p>
+                    <p>
+                        <strong style="color: var(--accent-gold);">Plate-oriented hexagonal crystals</strong> — flat hexagonal disks falling with their flat face horizontal. Light entering a side face and exiting the bottom face passes through a 90° prism, producing the <em>46° halo</em> and the <em>circumzenithal arc</em>.
+                    </p>
+                    <p>
+                        <strong style="color: var(--accent-gold);">Column-oriented hexagonal crystals</strong> — hexagonal columns with their long axis horizontal. Light entering one side face and exiting the adjacent side face passes through a 60° prism, producing the <em>22° halo</em>, the <em>parhelia</em>, and the <em>upper tangent arc</em>.
+                    </p>
+                    <p style="font-size: 0.86rem; color: rgba(245,245,245,0.62);">
+                        Sources: Greenler, <em>Rainbows, Halos, and Glories</em> (1980), Ch. 2–4. Tape, <em>Atmospheric Halos</em> (1994). Cowley, <a href="https://atoptics.co.uk/halo/circ1.htm" rel="external">atoptics.co.uk</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         §4  Why they slide outward when the sun rises
+         ============================================================ -->
+    <section class="page-section" id="sun-altitude-binding">
+        <div class="container">
+            <div class="eyebrow">§4 · Sun altitude</div>
+            <h2>When the sun rises, the parhelia slide outward.</h2>
+            <p class="lead">
+                The 22° angle is measured along the <em>shortest path</em> on the celestial sphere — the great-circle distance from the sun. But the parhelion sits on the <em>parhelic circle</em>, which is horizontal through the sun. Those two are the same thing only when the sun is on the horizon. When the sun rises, the parhelic-circle azimuthal offset has to grow to keep the actual angle from the sun at 22°. The exact relationship is
+            </p>
+            <p style="text-align: center; font-family: var(--sd-font-data); font-size: 1.15rem; color: var(--accent-gold);">
+                parhelion offset = R₂₂ / cos(h)
+            </p>
+            <p>
+                where R₂₂ is the apparent 22° halo radius and h is the sun's altitude. This is one of those rare cases where you can read the sun's altitude directly from a photograph, with no metadata and no instruments — just measure where the parhelion sits, divide.
+            </p>
+
+            <div class="demo-card" aria-label="Sun altitude binding live demo">
+                <div>
+                    <label for="demo-altitude">Sun altitude (°)</label>
+                    <input type="range" id="demo-altitude" min="0" max="60" step="1" value="25">
+                    <p style="font-size: 0.85rem; color: rgba(245, 245, 245, 0.6); margin-top: 0.4rem;">
+                        Drag the slider. The atlas above re-derives every dependent primitive. At h = 32° the CZA disappears (it has exited the visible hemisphere); the parhelia drift outward across the entire range.
+                    </p>
+                </div>
+                <div class="demo-readout">
+                    <span class="big" id="demo-altitude-readout">h = 25°</span>
+                    parhelion offset = R₂₂ / cos(h) =<br>
+                    <span id="demo-offset-readout">R₂₂ × 1.103</span><br>
+                    <span id="demo-cza-readout" style="color: rgba(245, 245, 245, 0.7);">CZA visible: yes</span>
+                </div>
+            </div>
+
+            <p>
+                This is also how a sundog photograph can become a measuring instrument. The 7-photo calibration pass shipped with this project (see <a href="docs/SUNDOG_V_GEOMETRY.md#multi-photo-calibration-pass-2026-05-12">§Multi-Photo Calibration Pass</a>) recovers the sun's altitude from each photograph with no EXIF or astronomical metadata, within roughly 1 pixel of residual.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         §5  The full atlas
+         ============================================================ -->
+    <section class="page-section" id="full-atlas" style="background: rgba(255, 255, 255, 0.02);">
+        <div class="container">
+            <div class="eyebrow">§5 · The full atlas</div>
+            <h2>Every visible arc, mapped to a circle.</h2>
+            <p class="lead">
+                Atmospheric optics has spent two centuries naming the arcs in a halo display. The atlas embedded above renders each as the upper portion of its own complete circle, anchored to environmental state. Below is one paragraph per primitive — what it is, where it sits, and how the atlas constructs it.
+            </p>
+
+            <div class="atlas-walkthrough">
+                <div class="atlas-card"><h3>22° halo</h3><p>The bright ring around the sun. The most common halo phenomenon. Refraction through 60° prism in column-oriented hexagonal ice crystals.</p><span class="construct">circle (sun, R₂₂)</span></div>
+                <div class="atlas-card"><h3>46° halo</h3><p>Larger faint ring, roughly twice the 22° halo's radius. Refraction through 90° prism in plate-oriented crystals.</p><span class="construct">circle (sun, 2·R₂₂)</span></div>
+                <div class="atlas-card"><h3>Sundog / parhelion</h3><p>Bright spot on the parhelic circle just outside the 22° halo. Offset grows with sun altitude as R₂₂/cos(h).</p><span class="construct">point on parhelic ∩ 22°-cone</span></div>
+                <div class="atlas-card"><h3>Parhelic circle</h3><p>Horizontal great circle through the sun, carrying the parhelia. The atlas draws the unique circle through both parhelia and the sun.</p><span class="construct">circle through (sun, L-parhelion, R-parhelion)</span></div>
+                <div class="atlas-card"><h3>Circumzenithal arc (CZA)</h3><p>"Smile" near the zenith, colored like an inverted rainbow. Always tangent to the 46° halo at its top.</p><span class="construct">circle tangent to 46° halo at its top point</span></div>
+                <div class="atlas-card"><h3>Supralateral arc</h3><p>Tangent to the 46° halo just outside the CZA, curving away from the sun. Less common than the CZA.</p><span class="construct">circle tangent to 46° halo, sun-side</span></div>
+                <div class="atlas-card"><h3>Upper tangent arc</h3><p>"Eyelid" above the 22° halo's top. Forms in column-oriented crystals. Visually nests near the suncave Parry arc.</p><span class="construct">circle tangent to 22° halo at top</span></div>
+                <div class="atlas-card"><h3>Suncave Parry arc</h3><p>Parry-orientation companion above the upper tangent. Shoulders bend back toward the sun ("suncave" = concave-toward-sun).</p><span class="construct">tighter circle tangent to 22° halo at top</span></div>
+                <div class="atlas-card"><h3>Lower tangent arc</h3><p>Mirror of the upper tangent at the 22° halo's bottom. Only visible when the sun is high enough that the bottom of the halo isn't below the horizon.</p><span class="construct">circle tangent to 22° halo at bottom</span></div>
+                <div class="atlas-card"><h3>Parry supralateral arc</h3><p>Parry-orientation flanking shoulders near the supralateral. Optional vocabulary in the atlas.</p><span class="construct">mirror-image arcs along the 46° halo top</span></div>
+                <div class="atlas-card"><h3>Infralateral arcs</h3><p>Lower-half mirror of the supralateral. Tangent to the 46° halo's bottom region.</p><span class="construct">circle tangent to 46° halo bottom</span></div>
+                <div class="atlas-card"><h3>Sun pillar</h3><p>Vertical light column above and below the sun, from horizontally-floating ice plates. Rendered in the atlas as the vesica between two virtual halos centered at the parhelia.</p><span class="construct">vesica (left-parhelion-halo, right-parhelion-halo)</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         §6  Try it on your own photo (Phase 5 placeholder)
+         ============================================================ -->
+    <section class="page-section" id="try-your-photo">
+        <div class="container">
+            <div class="eyebrow">§6 · Bring your own sky</div>
+            <h2>Run the atlas on your own sundog photograph.</h2>
+            <p class="lead">
+                Upload a sundog photo, mark the sun and the 22° halo edge, and the atlas will overlay every visible arc — and tell you the sun's altitude when the photograph was taken.
+            </p>
+
+            <div id="photo-upload-mount"></div>
+            <p style="margin-top: 1rem; font-size: 0.85rem; color: rgba(245, 245, 245, 0.55);">
+                The widget runs <strong>entirely in your browser</strong>. EXIF metadata is stripped before any future opt-in sharing.
+                For the backend pipeline and privacy policy, see <a href="docs/PHASE5_BACKEND_PLAN.md">PHASE5_BACKEND_PLAN.md</a> · <a href="docs/PHOTO_DATA_POLICY.md">PHOTO_DATA_POLICY.md</a>.
+                Command-line equivalent: <a href="https://github.com/humiliati/sundog/blob/main/scripts/overlay_calibrate.py"><code style="font-family: var(--sd-font-data);">scripts/overlay_calibrate.py</code></a>.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         §7  History and reading
+         ============================================================ -->
+    <section class="page-section" id="history" style="background: rgba(255, 255, 255, 0.02);">
+        <div class="container">
+            <div class="eyebrow">§7 · History &amp; reading</div>
+            <h2>People have been measuring sundogs since 1535.</h2>
+
+            <div class="history-grid">
+                <div>
+                    <img src="/docs/calibration/x.Vädersoltavlan_cropped.jfif" alt="The Vädersoltavlan, a 1535 painting depicting a complex halo display over Stockholm" loading="lazy">
+                    <p style="font-size: 0.78rem; color: rgba(245, 245, 245, 0.56); margin-top: 0.4rem;">
+                        <em>Vädersoltavlan</em> (Sun Dog Painting) — Stockholm, 1535. One of the earliest detailed depictions of a complex halo display.
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        The phenomenon has been observed for centuries, but rigorous geometric description waited for the 19th and 20th-century atmospheric-optics literature. The atlas math on this page is standard refraction geometry; what's specific to this project is the integrated primitive-atlas presentation and the inverse-inference workflow.
+                    </p>
+                    <p style="font-weight: 700; color: rgba(245, 245, 245, 0.86); margin-bottom: 0.3rem;">Further reading:</p>
+                    <ul class="reading-list">
+                        <li>Greenler, R. <em>Rainbows, Halos, and Glories</em>. Cambridge University Press (1980, reissued 1990). The canonical reference for refraction geometry in hexagonal ice crystals.</li>
+                        <li>Tape, W. <em>Atmospheric Halos</em>. American Geophysical Union, Antarctic Research Series Vol. 64 (1994). Detailed arc geometry including supralateral/infralateral symmetry and altitude bindings.</li>
+                        <li>Cowley, L. <a href="https://atoptics.co.uk/" rel="external">Atmospheric Optics (atoptics.co.uk)</a>. The standard public reference site with HaloSim ray-trace renderings.</li>
+                        <li><em>Sun dog</em> on <a href="https://en.wikipedia.org/wiki/Sun_dog" rel="external">Wikipedia</a>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         §8  For other tools
+         ============================================================ -->
+    <section class="page-section" id="for-tools">
+        <div class="container">
+            <div class="eyebrow">§8 · For other tools</div>
+            <h2>Reproducible math, citable references.</h2>
+            <p class="lead">
+                The atlas is built so other tools, papers, and Wikipedia entries can cite the math reproducibly. Every formula has a source; the canonical pose is a JSON file; the calibration evidence is a runnable script.
+            </p>
+
+            <div class="tools-list">
+                <div class="tool-card">
+                    <h3>JSON pose schema</h3>
+                    <p>The atlas's parameter state serializes to JSON; round-trips to byte-identical SVG. Used for archiving calibration poses.</p>
+                    <p style="margin-top: 0.6rem;"><a href="/poses/canonical-halo-atlas.json"><code>canonical-halo-atlas.json</code></a></p>
+                </div>
+                <div class="tool-card">
+                    <h3>Phase 3 math binding</h3>
+                    <p>Exported <code>phase3</code> namespace with <code>daggerOffset(h)</code>, <code>czaVisible(h)</code>, <code>parhelicCurvature(h)</code>. 32 assertions in the browser-side test harness.</p>
+                    <p style="margin-top: 0.6rem;"><a href="/phase3-tests.html">phase3-tests.html</a></p>
+                </div>
+                <div class="tool-card">
+                    <h3>Overlay calibration runner</h3>
+                    <p>Python script that runs the atlas math on a photograph and emits a residuals report. Used for the 7-photo calibration pass.</p>
+                    <p style="margin-top: 0.6rem;"><a href="https://github.com/humiliati/sundog/blob/main/scripts/overlay_calibrate.py"><code>scripts/overlay_calibrate.py</code></a></p>
+                </div>
+                <div class="tool-card">
+                    <h3>Roadmap &amp; references</h3>
+                    <p>The geometry roadmap, Phase 2-3 closeouts, the atmospheric-optics reference table, and the calibration evidence.</p>
+                    <p style="margin-top: 0.6rem;"><a href="/docs/SUNDOG_V_GEOMETRY.md">SUNDOG_V_GEOMETRY.md</a></p>
+                </div>
+                <div class="tool-card">
+                    <h3>Atlas geometry source</h3>
+                    <p>The ES-module that implements every primitive's geometric construction. Importable for other tools.</p>
+                    <p style="margin-top: 0.6rem;"><a href="/js/parhelion-geometry.mjs"><code>parhelion-geometry.mjs</code></a></p>
+                </div>
+                <div class="tool-card">
+                    <h3>Calibration overlays</h3>
+                    <p>Seven photographs with atlas predictions overlaid; the regression baseline for any geometry change.</p>
+                    <p style="margin-top: 0.6rem;"><a href="/docs/calibration/overlays/p0.overlay.png">View overlays</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <footer class="site-footer" style="padding: 2rem 1.5rem; color: rgba(245, 245, 245, 0.55); font-size: 0.84rem; border-top: 1px solid rgba(255, 255, 255, 0.06); text-align: center;">
+        <p>Sundog is an independent applied-research project. The atlas math is standard atmospheric optics; the interactive presentation and inverse-inference workflow are this project's contribution. <a href="/docs/presentation/claims-and-scope.md">Claims &amp; scope</a> &middot; <a href="https://github.com/humiliati/sundog">Source on GitHub</a></p>
+    </footer>
+
+    <script type="module" src="/js/parhelion-workbench.mjs"></script>
+    <script type="module">
+        import { mountPhotoUpload } from "/js/photo-upload.mjs";
+        const mount = document.getElementById("photo-upload-mount");
+        if (mount) mountPhotoUpload(mount);
+    </script>
+    <script>
+        const controls = document.getElementById("hero-controls");
+        const advBtn = document.getElementById("btn-advanced-toggle");
+        if (advBtn && controls) {
+            advBtn.addEventListener("click", () => {
+                controls.classList.toggle("is-advanced-hidden");
+                const showing = !controls.classList.contains("is-advanced-hidden");
+                advBtn.textContent = showing
+                    ? "Hide advanced controls"
+                    : "Show advanced controls (25 sliders)";
+            });
+        }
+        const demoAlt = document.getElementById("demo-altitude");
+        const demoAltOut = document.getElementById("demo-altitude-readout");
+        const demoOff = document.getElementById("demo-offset-readout");
+        const demoCza = document.getElementById("demo-cza-readout");
+        const realAlt = document.getElementById("sun-altitude");
+        function updateDemoReadout() {
+            const h = Number.parseFloat(demoAlt.value);
+            const sec = 1 / Math.cos((h * Math.PI) / 180);
+            demoAltOut.textContent = `h = ${h.toFixed(0)}°`;
+            demoOff.textContent = `R₂₂ × ${sec.toFixed(3)}`;
+            demoCza.textContent = h <= 32 ? "CZA visible: yes" : "CZA visible: no (h > 32°)";
+        }
+        if (demoAlt && realAlt) {
+            demoAlt.addEventListener("input", () => {
+                realAlt.value = demoAlt.value;
+                realAlt.dispatchEvent(new Event("input"));
+                updateDemoReadout();
+            });
+            realAlt.addEventListener("input", () => {
+                if (Number.parseFloat(realAlt.value) !== Number.parseFloat(demoAlt.value)) {
+                    demoAlt.value = realAlt.value;
+                    updateDemoReadout();
+                }
+            });
+            updateDemoReadout();
+        }
+        document.querySelectorAll("a[href^='#']").forEach((a) => {
+            a.addEventListener("click", (e) => {
+                const id = a.getAttribute("href").slice(1);
+                const target = document.getElementById(id);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

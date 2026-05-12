@@ -1,0 +1,20 @@
+name = "sundog"
+compatibility_date = "2024-09-25"
+pages_build_output_dir = "dist"
+
+# --- Resource bindings for /api/sundog/* Phase 5B endpoints ----------------
+
+[[r2_buckets]]
+binding      = "SUNDOG_UPLOADS"
+bucket_name  = "sundog-uploads"
+
+[[kv_namespaces]]
+binding      = "SUNDOG_KV"
+# Created via `wrangler kv namespace create sundog-rate-limit` and pasted here.
+id           = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[vars]
+POLICY_VERSION             = "2026-05-12"
+MAX_IMAGE_BYTES            = "10485760"   # 10 MB
+RATE_LIMIT_PER_IP_PER_HOUR = "5"
+PUBLIC_ORIGIN              = "https://sundog.cc"
