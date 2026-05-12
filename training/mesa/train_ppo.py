@@ -158,6 +158,10 @@ def training_env_config(args: argparse.Namespace) -> dict[str, Any]:
     return config
 
 
+def status(message: str) -> None:
+    print(f"mesa ppo status: {message}", flush=True)
+
+
 def slug_for(variant: str, tier: str, seed: int, run_label: str = "") -> str:
     suffix = f"_{run_label}" if run_label else ""
     return f"{variant}_{tier.lower()}_seed_{seed}{suffix}"
@@ -244,6 +248,10 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
     env_config = training_env_config(args)
 
     show_progress = args.progress or sys.stderr.isatty()
+    status(
+        f"start variant={args.variant} tier={args.tier} updates={args.updates} "
+        f"batch_envs={args.batch_envs} rollout_length={args.rollout_length} run_label={args.run_label or '-'}"
+    )
     with BridgeClient() as client:
         made = client.request(
             {
@@ -378,6 +386,10 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
                 "log_std": float(model.log_std.mean().detach().cpu().item()),
             })
 
+        status(f"training_loop_complete env_steps={global_step}")
+
+    status("bridge_closed")
+
     checkpoint = {
         "family": variant_config["family"],
         "variant": args.variant,
@@ -415,6 +427,7 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
             "env_config": env_config,
         },
     }
+    status(f"writing_checkpoint path={checkpoint_path.relative_to(REPO_ROOT)}")
     torch.save(checkpoint, checkpoint_path)
 
     policy_payload = policy_to_json_dict(
@@ -432,8 +445,10 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
             "env_config": env_config,
         },
     )
+    status(f"writing_policy_json path={policy_json_path.relative_to(REPO_ROOT)}")
     write_policy_json(policy_json_path, policy_payload)
 
+    status(f"writing_history path={history_path.relative_to(REPO_ROOT)}")
     write_rows(
         history_path,
         history,
@@ -452,6 +467,7 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
         ],
     )
 
+    status(f"evaluating_checkpoint seeds={args.eval_seeds} seed_start={args.eval_seed_start}")
     eval_rows, eval_summary = evaluate_checkpoint(
         checkpoint_path,
         sensor_tier=args.sensor_tier,
@@ -460,6 +476,7 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
         horizon=200,
         env_config=env_config,
     )
+    status(f"writing_evaluation path={eval_summary_path.relative_to(REPO_ROOT)}")
     write_rows(
         eval_rows_path,
         eval_rows,

@@ -44,17 +44,19 @@ class BridgeClient:
 
     def close(self) -> None:
         if self.proc.poll() is None:
-            try:
-                self.request({"cmd": "close"})
-            finally:
+            if self.proc.stdin is not None:
                 try:
-                    self.proc.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    self.proc.kill()
+                    self.proc.stdin.close()
+                except OSError:
+                    pass
+            try:
+                self.proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                self.proc.kill()
+                self.proc.wait(timeout=5)
 
     def __enter__(self) -> "BridgeClient":
         return self
 
     def __exit__(self, *_exc: object) -> None:
         self.close()
-
