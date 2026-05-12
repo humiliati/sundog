@@ -61,6 +61,9 @@ code, experiments, prior theorem materials, and application bridges.
 - [Chat contents index](../chat/contents.json): roadmap artifact index for
   planned prompts, public data, widget modules, evaluation scripts, and result
   manifests.
+- [Chat prompt gold slate](../chat/prompts/gold-normal.jsonl): Phase 0 prompt
+  slate split across normal, boundary-sensitive, and adversarial JSONL files
+  under `../chat/prompts/`.
 
 ## Reading Order
 

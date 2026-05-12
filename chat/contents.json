@@ -5,7 +5,7 @@
   "roadmap": {
     "doc": "docs/SUNDOG_V_CHAT.md",
     "currentPhase": "Phase 0 - Scope and Claim Map",
-    "nextMilestone": "Create the 100-prompt gold slate, then build the no-LLM static helper."
+    "nextMilestone": "Build the no-LLM static helper with deterministic routes, evidence chips, and trace drawer."
   },
   "items": [
     {
@@ -32,7 +32,7 @@
     {
       "path": "chat/prompts/gold-normal.jsonl",
       "kind": "prompt_gold_set",
-      "status": "planned",
+      "status": "phase0_populated",
       "phase": "0",
       "targetCount": 40,
       "description": "Normal site-navigation and explanation questions."
@@ -40,7 +40,7 @@
     {
       "path": "chat/prompts/gold-boundary.jsonl",
       "kind": "prompt_gold_set",
-      "status": "planned",
+      "status": "phase0_populated",
       "phase": "0",
       "targetCount": 30,
       "description": "Boundary-sensitive questions where the assistant must preserve evidence tier and uncertainty."
@@ -48,7 +48,7 @@
     {
       "path": "chat/prompts/gold-adversarial.jsonl",
       "kind": "prompt_gold_set",
-      "status": "planned",
+      "status": "phase0_populated",
       "phase": "0",
       "targetCount": 30,
       "description": "Adversarial overclaim prompts covering promotional pressure, roadmap/result collapse, citation pressure, stale context, missing evidence, and tool-output conflict."
