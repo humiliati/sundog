@@ -61,6 +61,52 @@ const POLICIES = Object.freeze([
     phase4_dir: "phase5_l_mixed_lambda_0_9_small",
   },
   {
+    axis: "A",
+    policy_id: "mixed_lambda_0_3_medium",
+    family: "L-Mixed",
+    label: "L-Mixed-M lambda=0.3",
+    tier: "Medium",
+    lambda: 0.3,
+    training_slug: "mixed_ppo_phase3_lambda_0_3_medium_seed_0_medium_phase5_lambda_0_3_10m",
+    phase3_dir: "l_mixed_medium_lambda_0_3",
+    phase4_dir: "l_mixed_medium_lambda_0_3",
+  },
+  {
+    axis: "A",
+    policy_id: "mixed_lambda_0_5_medium",
+    family: "L-Mixed",
+    label: "L-Mixed-M lambda=0.5",
+    tier: "Medium",
+    lambda: 0.5,
+    training_slug: "mixed_ppo_phase3_lambda_0_5_medium_seed_0_medium_phase3_canonical_10m",
+    phase3_dir: "l_mixed_phase3_medium_canonical_10m",
+    phase4_dir: "l_mixed_phase3_medium_10m",
+    reused_from: "Phase 3 Medium canonical",
+  },
+  {
+    axis: "A",
+    policy_id: "mixed_lambda_0_7_medium",
+    family: "L-Mixed",
+    label: "L-Mixed-M lambda=0.7",
+    tier: "Medium",
+    lambda: 0.7,
+    training_slug: "mixed_ppo_phase3_lambda_0_7_medium_seed_0_medium_phase5_lambda_0_7_10m",
+    phase3_dir: "l_mixed_medium_lambda_0_7",
+    phase4_dir: "l_mixed_medium_lambda_0_7",
+  },
+  {
+    axis: "A",
+    policy_id: "reward_lambda_1_0_medium_anchor",
+    family: "L-Reward",
+    label: "L-Reward-M lambda=1.0 anchor",
+    tier: "Medium",
+    lambda: 1.0,
+    training_slug: "reward_ppo_phase3_medium_seed_0_medium_phase3_canonical_10m",
+    phase3_dir: "l_reward_phase3_medium_canonical_10m",
+    phase4_dir: "l_reward_phase3_medium_10m",
+    reused_from: "Phase 3 Medium canonical L-Reward anchor",
+  },
+  {
     axis: "B",
     policy_id: "signature_terminal",
     family: "L-Signature",
@@ -90,6 +136,29 @@ const POLICIES = Object.freeze([
     training_slug: "signature_ppo_threshold_small_seed_0_phase5",
     phase3_dir: "phase5_l_signature_threshold_small",
     phase4_dir: "phase5_l_signature_threshold_small",
+  },
+  {
+    axis: "B",
+    policy_id: "signature_terminal_medium",
+    family: "L-Signature",
+    label: "L-Signature-M terminal",
+    tier: "Medium",
+    signature_shape: "terminal",
+    training_slug: "signature_ppo_terminal_medium_seed_0_medium_phase5_terminal_10m",
+    phase3_dir: "l_signature_medium_terminal",
+    phase4_dir: "l_signature_medium_terminal",
+  },
+  {
+    axis: "B",
+    policy_id: "signature_integrated_medium",
+    family: "L-Signature",
+    label: "L-Signature-M integrated",
+    tier: "Medium",
+    signature_shape: "integrated",
+    training_slug: "signature_ppo_dense_medium_seed_0_medium_canonical_10m",
+    phase3_dir: "l_signature_medium_canonical_10m",
+    phase4_dir: "l_signature_medium_10m",
+    reused_from: "Phase 2/3 Medium canonical integrated signature",
   },
   {
     axis: "C",
@@ -174,6 +243,12 @@ function round(value, digits = 6) {
   return n === null ? "" : Number(n.toFixed(digits));
 }
 
+function tierRank(tier) {
+  if (tier === "Small") return 0;
+  if (tier === "Medium") return 1;
+  return 99;
+}
+
 async function readJsonIfExists(file) {
   try {
     return JSON.parse(await readFile(file, "utf8"));
@@ -222,7 +297,7 @@ async function policyRow(policy) {
     policy_id: policy.policy_id,
     family: policy.family,
     policyLabel: policy.label,
-    tier: "Small",
+    tier: policy.tier ?? "Small",
     lambda: policy.lambda ?? "",
     signature_shape: policy.signature_shape ?? "",
     curriculum_order: policy.curriculum_order ?? "",
@@ -272,11 +347,21 @@ function interpolateBreach(lambdaRows, threshold = 1.0) {
   return { threshold, lower_lambda: "", lower_old_basin_pref: "", upper_lambda: "", upper_old_basin_pref: "", interpolated_lambda: "" };
 }
 
+function groupRowsBy(rows, keyFn) {
+  const grouped = new Map();
+  for (const row of rows) {
+    const key = keyFn(row);
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(row);
+  }
+  return grouped;
+}
+
 async function main() {
   await mkdir(path.join(outputRoot, "reports"), { recursive: true });
   const rows = await Promise.all(POLICIES.map(policyRow));
-  const axisA = rows.filter((row) => row.axis === "A").sort((a, b) => num(a.lambda) - num(b.lambda));
-  const axisB = rows.filter((row) => row.axis === "B");
+  const axisA = rows.filter((row) => row.axis === "A").sort((a, b) => tierRank(a.tier) - tierRank(b.tier) || num(a.lambda) - num(b.lambda));
+  const axisB = rows.filter((row) => row.axis === "B").sort((a, b) => tierRank(a.tier) - tierRank(b.tier) || String(a.signature_shape).localeCompare(String(b.signature_shape)));
   const axisC = rows.filter((row) => row.axis === "C");
 
   const columns = [
@@ -297,26 +382,35 @@ async function main() {
   await writeFile(path.join(outputRoot, "axis-c-curriculum.csv"), toCsv(axisC, columns), "utf8");
 
   await writeFile(path.join(outputRoot, "reports", "protection-curve.csv"), toCsv(axisA.map((row) => ({
+    tier: row.tier,
     lambda: row.lambda,
+    policyLabel: row.policyLabel,
     old_basin_pref: row.old_basin_pref,
     success_rate: row.success_rate,
     mean_terminal_alignment: row.mean_terminal_alignment,
     mean_probed_success_rate: row.mean_probed_success_rate,
     total_probe_false_basin_captures: row.total_probe_false_basin_captures,
-  })), ["lambda", "old_basin_pref", "success_rate", "mean_terminal_alignment", "mean_probed_success_rate", "total_probe_false_basin_captures"]), "utf8");
+  })), ["tier", "lambda", "policyLabel", "old_basin_pref", "success_rate", "mean_terminal_alignment", "mean_probed_success_rate", "total_probe_false_basin_captures"]), "utf8");
+  const axisAByTier = groupRowsBy(axisA, (row) => row.tier);
   await writeFile(path.join(outputRoot, "reports", "breach-threshold.json"), `${JSON.stringify({
-    tier: "Small",
     metric: "old_basin_pref",
-    ...interpolateBreach(axisA, 1.0),
+    threshold: 1.0,
+    by_tier: [...axisAByTier.entries()].map(([tier, tierRows]) => ({
+      tier,
+      ...interpolateBreach(tierRows, 1.0),
+    })),
+    note: "Medium interpolation includes the L-Reward lambda=1.0 anchor; L-Mixed Medium rows remain below threshold through lambda=0.7.",
   }, null, 2)}\n`, "utf8");
   await writeFile(path.join(outputRoot, "reports", "sundog-cost-by-shape.csv"), toCsv(axisB.map((row) => ({
+    tier: row.tier,
     signature_shape: row.signature_shape,
+    policyLabel: row.policyLabel,
     success_rate: row.success_rate,
     success_count: row.success_count,
     mean_terminal_alignment: row.mean_terminal_alignment,
     old_basin_pref: row.old_basin_pref,
     total_probe_false_basin_captures: row.total_probe_false_basin_captures,
-  })), ["signature_shape", "success_rate", "success_count", "mean_terminal_alignment", "old_basin_pref", "total_probe_false_basin_captures"]), "utf8");
+  })), ["tier", "signature_shape", "policyLabel", "success_rate", "success_count", "mean_terminal_alignment", "old_basin_pref", "total_probe_false_basin_captures"]), "utf8");
   await writeFile(path.join(outputRoot, "reports", "curriculum-persistence.csv"), toCsv(axisC.map((row) => ({
     curriculum_order: row.curriculum_order,
     pretrain_success_rate: row.pretrain_success_rate,
@@ -330,7 +424,7 @@ async function main() {
   const manifest = {
     phase: "phase5-selection-pressure",
     created_at: new Date().toISOString(),
-    tier: "Small",
+    tier: "Small+Medium",
     policy_count: rows.length,
     axes: {
       A: "L-Mixed lambda sweep",
