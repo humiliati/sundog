@@ -713,6 +713,46 @@ function applySupralateralArc(svg, intensity) {
   supra.setAttribute("d", parts.join(" "));
 }
 
+function applyLowerTangentArc(svg, intensity) {
+  // Mirror of applyUpperTangentArc. Tangent to the 22° halo at its BOTTOM
+  // point (SUN.x, SUN.y + 220) — curves DOWN from there on either side.
+  // Geometric mirror: circle whose center sits R_lta directly BELOW the
+  // tangent point; visible portion is the UPPER arc of that circle, which
+  // tops out at the tangent and falls on either side. Atmospheric-optics
+  // counterpart to the upper tangent arc that the vocabulary references in
+  // docs/calibration/1 explicitly name.
+  const arc = svg.querySelector("#lower-tangent-path");
+  if (!arc) return;
+  if (intensity <= 0.001) {
+    arc.setAttribute("d", "");
+    return;
+  }
+  const tangentY = SUN.y + HALO_22_RADIUS; // 720
+  const R_lta = 200;
+  const cx = SUN.x;
+  const cy = tangentY + R_lta;
+  const xMin = Math.max(cx - R_lta, 0);
+  const xMax = Math.min(cx + R_lta, 1000);
+  const dx = xMax - xMin;
+  if (dx <= 1e-6) return;
+  const steps = 160;
+  const parts = [];
+  let started = false;
+  for (let i = 0; i <= steps; i += 1) {
+    const x = xMin + (dx * i) / steps;
+    const u = (x - cx) / R_lta;
+    const inside = 1 - u * u;
+    if (inside < 0) continue;
+    // Upper arc of circle: y = cy - r*sqrt(1-u²) — peaks at the tangent
+    // point (y = tangentY) when u=0, drops on either side as |u| grows.
+    const y = cy - R_lta * Math.sqrt(inside);
+    if (y < tangentY - 5 || y > 800) continue;
+    parts.push((started ? "L " : "M ") + x.toFixed(2) + " " + y.toFixed(2));
+    started = true;
+  }
+  arc.setAttribute("d", parts.join(" "));
+}
+
 function applyUpperTangentArc(svg, intensity) {
   // Tangent to the 22° halo at its TOP point (SUN.x, SUN.y - 220). Curves UP
   // from there — the "eyelid above the 22° halo" feature distinct from the
@@ -759,6 +799,7 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   const parhelicCurvature = readCssNumber(rootStyle, "--parhelic-curvature", 0.66);
   const supralateralIntensity = readCssNumber(rootStyle, "--supralateral-intensity", 0);
   const upperTangentIntensity = readCssNumber(rootStyle, "--upper-tangent-intensity", 0);
+  const lowerTangentIntensity = readCssNumber(rootStyle, "--lower-tangent-intensity", 0);
 
   const daggerPoints = daggerPointsFromSunAltitude(sunAltitude);
 
@@ -768,6 +809,7 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   applyCzaFullRing(svg, czaCurve);
   applySupralateralArc(svg, supralateralIntensity);
   applyUpperTangentArc(svg, upperTangentIntensity);
+  applyLowerTangentArc(svg, lowerTangentIntensity);
 
   applyCompassRays(svg, compassLen);
   applySecondaryHalos(svg, overlapBias);
