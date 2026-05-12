@@ -36,6 +36,7 @@
             --idle-scintillation-amplitude: 0;
             --supralateral-intensity: 0;
             --upper-tangent-intensity: 0;
+            --lower-tangent-intensity: 0;
         }
 
         * {
@@ -317,6 +318,18 @@
             mix-blend-mode: screen;
         }
 
+        /* Lower tangent arc: mirror of upper tangent, tangent to the 22° halo
+           at its bottom. Atlas mode only. */
+        .layer-lower-tangent path {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.85);
+            stroke-width: 2;
+            opacity: var(--lower-tangent-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+            mix-blend-mode: screen;
+        }
+
         .layer-parhelia .dagger {
             opacity: var(--parhelia-intensity);
         }
@@ -518,6 +531,12 @@
                     <path id="upper-tangent-path" d=""/>
                 </g>
 
+                <!-- Lower tangent arc: mirror of upper tangent at the 22°
+                     halo bottom. Atlas mode only. -->
+                <g class="layer-lower-tangent">
+                    <path id="lower-tangent-path" d=""/>
+                </g>
+
                 <!-- Circumzenithal arc (CZA): the eyelid -->
                 <g class="layer-cza">
                     <!-- Bell-fill: paint-bucket region between the two arcs to produce the
@@ -642,7 +661,7 @@
                  between the two arcs. -->
 
             <div class="control-group">
-                <label>Parhelic Arc Intensity<span class="value" id="parhelic-circle-intensity-value">0.45</span></label>
+                <label>Parhelic Circle Intensity<span class="value" id="parhelic-circle-intensity-value">0.45</span></label>
                 <input type="range" id="parhelic-circle-intensity" data-param="parhelic-circle-intensity" min="0" max="1" step="0.01" value="0.45">
             </div>
 
@@ -657,7 +676,12 @@
             </div>
 
             <div class="control-group">
-                <label>Parhelic Arc Curvature (grin)<span class="value" id="parhelic-curvature-value">0.66</span></label>
+                <label>Lower Tangent (under-halo)<span class="value" id="lower-tangent-intensity-value">0.00</span></label>
+                <input type="range" id="lower-tangent-intensity" data-param="lower-tangent-intensity" min="0" max="1" step="0.01" value="0">
+            </div>
+
+            <div class="control-group">
+                <label>Parhelic Circle Curvature<span class="value" id="parhelic-curvature-value">0.66</span></label>
                 <input type="range" id="parhelic-curvature" data-param="parhelic-curvature" min="0" max="1" step="0.01" value="0.66">
             </div>
 

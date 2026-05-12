@@ -278,6 +278,47 @@ as `geometryModel`. Reference poses for both alternative tracks live as
 the `Load params` button, those poses are documentation artifacts only —
 they cannot yet be loaded back into the workbench from the UI.
 
+### Canonical Halo Atlas Vocabulary
+
+Atmospheric optics has its own naming convention for halo-display features.
+The atlas adopts those names where they apply, so external readers and our
+calibration overlays speak the same language. The two annotated reference
+photographs in `docs/calibration/1.Photometeor-jeff-mod_marked_red.jpg` and
+`docs/calibration/3.DSC_1029m.jpg` were the source of this list.
+
+Every feature below is a geometric primitive — a circle or an upper-arc
+clip of a circle — anchored to environmental state (sun altitude, ice-
+crystal orientation type). The atlas mode renders the ones marked **✓**;
+**deferred** entries are named here so future calibration passes can adopt
+the same terminology when comparing photographs that contain them.
+
+| canonical name | construction | atlas |
+| --- | --- | --- |
+| **22° halo** | concentric on sun, R = 220 (workbench units) | ✓ |
+| **46° halo** | concentric on sun, R = 440 (workbench units, 1.8% photo-fit residual; see R_46 note) | ✓ |
+| **Sundog / Parhelion** (left / right) | tangencies on the 22° halo at the parhelic-circle altitude; offset from sun = `R_22 / cos(h)` | ✓ (rendered as the "daggers") |
+| **Parhelic Circle** | horizontal great circle through the sun on the celestial sphere; visible portion drawn as the unique circle through the parhelia and the sun, smile direction | ✓ |
+| **Circumzenithal Arc (CZA)** | tangent to the 46° halo at its top; small upper arc of a much larger full ring | ✓ |
+| **Supralateral Arc** | tangent to the 46° halo at its top, curving *away* from the sun above the tangent | ✓ |
+| **Upper Tangent Arc** | tangent to the 22° halo at its top, curving up — column-oriented crystal family | ✓ |
+| **Lower Tangent Arc** | tangent to the 22° halo at its *bottom*, curving down — mirror of upper tangent | ✓ |
+| **Suncave Parry Arc** | tangent to the 22° halo at its top, concave-toward-sun — Parry-orientation crystal family; visually nested *inside* the broader Upper Tangent envelope | deferred (Parry-family) |
+| **Parry Supralateral Arc** | Parry-orientation variant of the supralateral arc | deferred (Parry-family) |
+| **Sun pillar** | not a halo arc, but rendered in atlas as the vesica of two virtual halos centered at the parhelia | ✓ (atlas pillar lens) |
+
+Two practical notes:
+
+1. The "Parry-family" deferrals (Suncave Parry, Parry Supralateral) are
+   ice-crystal-orientation-mode variants of arcs we already render. They
+   sit visually adjacent to or nested inside the atlas's Upper Tangent and
+   Supralateral primitives. Adding them is a one-primitive-per-mode
+   exercise that we hold until calibration evidence on a Parry-rich photo
+   asks for the distinction.
+2. The Parhelic Circle is named a *circle*, not an arc, throughout this
+   doc and the workbench UI (renamed 2026-05-12). The atlas already
+   renders the full-circle geometry; the noun was a leftover from the
+   legacy Bezier-feature implementation.
+
 ### Halo Atlas v2 fixes (2026-05-11)
 
 After overlay inspection three corrections landed:
