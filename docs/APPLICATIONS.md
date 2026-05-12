@@ -871,9 +871,9 @@ For academic communication, add the boundary:
   ablation, volatility sweep, and behavior clips.
 - Promote the three-body workbench into the public gallery with Phase 11 charts,
   the comparison slate, and an explicit failure-boundary view.
-- Fill the Balance-first post-hero motion rail's empty `poster`/`media` slots
-  with cheap exported loops, starting from Phase 10 best-cell/worst-cell replay
-  URLs and keeping both recovery and failure boundary named.
+- Replace the Balance-first rail's Phase 10 best/worst poster with a cheap
+  exported loop when `.webm`/MP4/`.ogv` size testing justifies it; keep the
+  poster fallback and keep both recovery and failure boundary named.
 - Add Dungeon Gleaner orbit telemetry for verb, need, node, and dominant-pull
   traces.
 - Add a Dungeon Gleaner GOAP-substitution comparison and tuning-sensitivity

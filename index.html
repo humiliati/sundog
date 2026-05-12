@@ -318,6 +318,19 @@
             opacity: 0.42;
         }
 
+        .motion-card-visual.has-poster::before {
+            opacity: 0.12;
+        }
+
+        .motion-card-poster {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .motion-card-copy {
             position: relative;
             min-height: 10rem;
@@ -704,17 +717,14 @@
                     data-description="Shadow balance, mapped to the edge."
                     data-href="balance.html"
                     data-evidence-href="docs/SUNDOG_V_BALANCE.md"
-                    data-poster=""
+                    data-poster="/media/balance-phase10-rail-poster.jpg"
                     data-media=""
                     data-media-format=""
                     data-status="Operating envelope"
                 >
                     <a class="motion-card-link" href="balance.html">
-                        <div class="motion-card-visual motion-visual-balance" aria-hidden="true">
-                            <span class="rail-shadow"></span>
-                            <span class="rail-line"></span>
-                            <span class="rail-cart"></span>
-                            <span class="rail-pole"></span>
+                        <div class="motion-card-visual motion-visual-balance has-poster" aria-hidden="true">
+                            <img class="motion-card-poster" src="/media/balance-phase10-rail-poster.jpg" alt="" loading="lazy">
                         </div>
                         <div class="motion-card-copy">
                             <span class="motion-card-status">Operating envelope</span>

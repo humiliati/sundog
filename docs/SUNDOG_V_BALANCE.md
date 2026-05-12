@@ -73,8 +73,10 @@ and a fixed verdict. After the repaired Phase 10 CONFIRM rerun, Balance sits at
 **Operating-Envelope Study** tier in the application family. The Phase 11
 broadcast pass (nav link, application-map copy, applications-gallery card,
 APPLICATIONS.md row, claims-and-scope row) and the Phase 11.1 motion-rail
-scaffold on `index.html` have both landed; motion-rail media capture is the
-remaining Phase 11 work.
+scaffold on `index.html` have both landed. Phase 11.2 filled the Balance rail
+poster with a compressed best/worst Phase 10 replay composite at
+`public/media/balance-phase10-rail-poster.jpg`; animated loop export remains a
+later polish task, not a Phase 11 blocker.
 
 Promotion to **Planned Workbench** tier required Phase 0–4 deliverables
 landing — achieved 2026-05-08, with phases 5–6 and the Phase 7 smoke also
@@ -778,10 +780,9 @@ Operating-Envelope Study tier and P2b degradation caveat, the applications
 gallery and landing-page application grid include a Balance card, and
 `docs/APPLICATIONS.md`, `docs/README.md`, `README.md`, and
 `docs/presentation/claims-and-scope.md` carry the bounded Balance claim. The
-remaining Phase 11 work is visual: design the Balance-first post-hero motion
-rail, capture best-cell/worst-cell Balance media from replay URLs, and leave
-slots for later application clips while keeping the caption tied to both
-recovery and the failure boundary.
+Phase 11 visual work then moved to the Balance-first post-hero motion rail,
+with slots for later application clips while keeping the Balance caption tied
+to both recovery and the failure boundary.
 
 *Status — Phase 11.1 motion-rail scaffold landed:* `index.html` now has a
 post-hero application rail seeded with Balance, Three-Body, Photometric
@@ -791,6 +792,13 @@ card carries the locked `title` / `description` / `href` / `evidenceHref` /
 fields allowed until capture/export work begins. The rail is static
 CSS/poster art for now, with arrow, swipe, scroll, and keyboard focus
 affordances; no gif/video assets were added in this slice.
+
+*Status - Phase 11.2 poster capture landed:* the Balance opening card now uses
+`public/media/balance-phase10-rail-poster.jpg`, a 77 KB composite captured from
+the repaired Phase 10 best-cell and worst-cell replay URLs. The poster is
+orientation media, not evidence; the evidentiary link remains the Phase 10
+verdict and replay artifacts. `data-media` remains empty for a later loop export
+without changing the rail contract.
 
 ## Post-Verdict Roadmap
 

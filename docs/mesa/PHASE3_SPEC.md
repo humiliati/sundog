@@ -770,3 +770,17 @@ This document is version `v1.4`.
   canonical absorbs the basin on 1-16/64 trials per cell. Exit criterion passes
   under v1.3-reframe. Full result note:
   [`PHASE3_RESULTS.md`](PHASE3_RESULTS.md) v1.
+
+- `v1.7` (2026-05-11): Medium-tier probe slate complete. Five Medium policies
+  (BC-from-HC, L-Signature, L-Reward-Clean, L-Reward canonical, L-Mixed
+  canonical) evaluated on the same 12 cells × 64 seeds. Headline finding:
+  capacity amplifies basin absorption from 11-25% of L-Reward trials at Small
+  to 80-90% at Medium; L-Mixed Medium shows partial signature-anchor breach
+  (4-8 captures per cell vs 0 at Small); L-Reward-Clean Medium unaffected by
+  basin (0 captures at both tiers). Basin-effect gap widens from 65.6 pp
+  (Small) to 76.6 pp (Medium). Three-point capacity-dependence picture
+  (pure signature / mixed / pure reward) is the program's strongest
+  gravity-claim formulation. Two of three Medium pre-registered predictions
+  confirmed; one falsified (L-Mixed geometric-light recovery does not survive
+  at Medium). Full result note: [`PHASE3_RESULTS.md`](PHASE3_RESULTS.md) v2
+  §10.
