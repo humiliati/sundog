@@ -1369,59 +1369,6 @@
     </footer>
 
     <script type="module" src="/js/parhelion-workbench.mjs"></script>
-    <script type="module">
-        import { mountPhotoUpload } from "/js/photo-upload.mjs";
-        const mount = document.getElementById("photo-upload-mount");
-        if (mount) mountPhotoUpload(mount);
-    </script>
-    <script>
-        const controls = document.getElementById("hero-controls");
-        const advBtn = document.getElementById("btn-advanced-toggle");
-        if (advBtn && controls) {
-            advBtn.addEventListener("click", () => {
-                controls.classList.toggle("is-advanced-hidden");
-                const showing = !controls.classList.contains("is-advanced-hidden");
-                advBtn.textContent = showing
-                    ? "Hide advanced controls"
-                    : "Show advanced controls (25 sliders)";
-            });
-        }
-        const demoAlt = document.getElementById("demo-altitude");
-        const demoAltOut = document.getElementById("demo-altitude-readout");
-        const demoOff = document.getElementById("demo-offset-readout");
-        const demoCza = document.getElementById("demo-cza-readout");
-        const realAlt = document.getElementById("sun-altitude");
-        function updateDemoReadout() {
-            const h = Number.parseFloat(demoAlt.value);
-            const sec = 1 / Math.cos((h * Math.PI) / 180);
-            demoAltOut.textContent = `h = ${h.toFixed(0)}°`;
-            demoOff.textContent = `R₂₂ × ${sec.toFixed(3)}`;
-            demoCza.textContent = h <= 32 ? "CZA visible: yes" : "CZA visible: no (h > 32°)";
-        }
-        if (demoAlt && realAlt) {
-            demoAlt.addEventListener("input", () => {
-                realAlt.value = demoAlt.value;
-                realAlt.dispatchEvent(new Event("input"));
-                updateDemoReadout();
-            });
-            realAlt.addEventListener("input", () => {
-                if (Number.parseFloat(realAlt.value) !== Number.parseFloat(demoAlt.value)) {
-                    demoAlt.value = realAlt.value;
-                    updateDemoReadout();
-                }
-            });
-            updateDemoReadout();
-        }
-        document.querySelectorAll("a[href^='#']").forEach((a) => {
-            a.addEventListener("click", (e) => {
-                const id = a.getAttribute("href").slice(1);
-                const target = document.getElementById(id);
-                if (target) {
-                    e.preventDefault();
-                    target.scrollIntoView({ behavior: "smooth", block: "start" });
-                }
-            });
-        });
-    </script>
+    <script type="module" src="/js/sundog-page-init.mjs"></script>
 </body>
 </html>
