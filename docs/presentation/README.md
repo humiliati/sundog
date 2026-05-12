@@ -4,7 +4,9 @@ This section assembles the public-facing materials for the Sundog Project: messa
 
 The goal of this folder is to translate a year of applied work into a clear public presentation that is legible to developers, researchers, and curious observers without losing the original ambition of the project.
 
-The Sundog Project began as a mathematical insight and has since been explored through software applications in game AI, procedural systems, rendering-adjacent techniques, and simulation analysis.
+The Sundog Project began as a mathematical insight and has since been explored
+through controlled research, bounded operating-envelope workbenches, game AI,
+procedural systems, rendering-adjacent techniques, and simulation analysis.
 
 This folder tracks how we explain, visualize, and demonstrate that work.
 
@@ -75,7 +77,9 @@ Goal: Make the project legible
 Deliverables: Project one-liner, summaries, claims-and-scope page, folder structure, landing page outline, logo brief, asset tracker
 
 ### Phase 2 — Evidence
-Goal: Show it works in applications
+Goal: show the evidence ladder: one paper-grade photometric result, bounded
+operating-envelope studies in Three-Body / Balance / Pressure Mines, and lower
+tier application expressions that motivate the next controlled studies.
 Deliverables: Application pages, benchmark pages, comparison pages, graphs package, screenshots, short demo videos
 
 ### Phase 3 — Identity
