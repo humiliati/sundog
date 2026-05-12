@@ -223,6 +223,28 @@ Why it matters:
 - shows the workbench as a living demonstration that claims discipline and
   honest failure maps are part of the result, not footnotes.
 
+### Pushable Occluder (falsification slate)
+
+Highlight:
+
+> Pushable Occluder is the program's first deliberate falsification surface:
+> a pushable block that occludes the beam until moved. A flat photometric
+> controller is predicted to fail because the indirect signal does not
+> expose the preparatory push as a usable gradient. The verdict surface is
+> `BOUNDARY FOUND`, not `BUSTED` — the theorem stands; the method's honest
+> upper limit is reached.
+
+Why it matters:
+
+- demonstrates the program is willing to publish a measured negative
+  result, not only positive demos;
+- clarifies the theorem boundary: indirect signal is not enough when the
+  useful gradient appears only after a preparatory action;
+- gives the highlights rail its first stamp-interrupting card and earns
+  the rail's broader MythBusters rhythm;
+- roadmap lives at [`PUSHABLE_OCCLUDER_ROADMAP.md`](PUSHABLE_OCCLUDER_ROADMAP.md);
+  rail integration in [`HIGHLIGHTS_RAIL_ROADMAP.md`](HIGHLIGHTS_RAIL_ROADMAP.md).
+
 ## Future Bets
 
 These are forward-looking statements. They are useful for pitch language, but

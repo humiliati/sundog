@@ -1,3 +1,11 @@
+> Productised in two follow-up roadmaps as of 2026-05-12:
+>
+> - [`HIGHLIGHTS_RAIL_ROADMAP.md`](HIGHLIGHTS_RAIL_ROADMAP.md) — the
+>   slide-rail rebuild around the stamp vocabulary proposed below.
+> - [`PUSHABLE_OCCLUDER_ROADMAP.md`](PUSHABLE_OCCLUDER_ROADMAP.md) —
+>   the falsification application that earns the rail's first
+>   `BOUNDARY FOUND` card.
+
 The best failure candidate is Pushable Occluder / Occlusion Path.
 
 It is not a joke failure. It directly attacks the core Sundog claim at its most important next boundary: can a controller merely read an indirect signal, or can it also reshape the world to make the signal readable? The Phase-2 block design already names this as the next stress point: a static occluding block can create a local maximum the photometric controller may lock onto, and the pushable-block version requires a two-stage strategy where the agent first moves the block, then aligns the mirror. The design note explicitly says the 4D extremum-seeking agent might struggle and may need a hierarchical controller.

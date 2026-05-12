@@ -321,6 +321,16 @@ asks.
 
    **4d - Post-hero application motion rail (broadcast gallery).**
 
+   Verdict-stamp pass for the rail lives in
+   [`HIGHLIGHTS_RAIL_ROADMAP.md`](HIGHLIGHTS_RAIL_ROADMAP.md). That doc
+   owns the six-value stamp vocabulary
+   (`CONFIRMED`/`OPERATING ENVELOPE`/`PLAUSIBLE`/`BOUNDARY FOUND`/
+   `STALLED`/`UNTESTED`), the rubber-stamp paper ink-bleed treatment, the
+   stamp-arrives-after-clip-last-beat choreography, and the rebuilt card
+   data contract. This section retains structural authority over the rail's
+   role in the index page; the rail roadmap retains authority over what
+   each card defends.
+
    The index slot after the hero should become a cross-application motion
    gallery rather than a single Balance promo clip. It starts on Sundog Balance
    because Balance is the newest operating-envelope workbench, then makes room
