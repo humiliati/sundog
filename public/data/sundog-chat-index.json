@@ -23,9 +23,13 @@
         "what does sundog claim",
         "what is the current controlled result",
         "show me the strongest safe claim",
-        "what is the paper-grade claim"
+        "what is the paper-grade claim",
+        "strongest public claim",
+        "strongest claim",
+        "supported result",
+        "physical hardware"
       ],
-      "text": "The strongest controlled Sundog claim is the photometric mirror-alignment result: in the tested MuJoCo setting, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The claim is bounded to that task and operating envelope. what does sundog claim what is the current controlled result show me the strongest safe claim what is the paper-grade claim Do not present the broader theorem as proven. Do not claim universal alignment, universal indirect-control success, or hardware validation. Name the cost as slower acquisition rather than terminal-accuracy loss inside the tested setting."
+      "text": "The strongest controlled Sundog claim is the photometric mirror-alignment result: in the tested MuJoCo setting, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The claim is bounded to that task and operating envelope. what does sundog claim what is the current controlled result show me the strongest safe claim what is the paper-grade claim strongest public claim strongest claim supported result physical hardware Do not present the broader theorem as proven. Do not claim universal alignment, universal indirect-control success, or hardware validation. Name the cost as slower acquisition rather than terminal-accuracy loss inside the tested setting."
     },
     {
       "id": "current_controlled_result:2",
@@ -46,9 +50,13 @@
         "what does sundog claim",
         "what is the current controlled result",
         "show me the strongest safe claim",
-        "what is the paper-grade claim"
+        "what is the paper-grade claim",
+        "strongest public claim",
+        "strongest claim",
+        "supported result",
+        "physical hardware"
       ],
-      "text": "The strongest controlled Sundog claim is the photometric mirror-alignment result: in the tested MuJoCo setting, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The claim is bounded to that task and operating envelope. what does sundog claim what is the current controlled result show me the strongest safe claim what is the paper-grade claim Do not present the broader theorem as proven. Do not claim universal alignment, universal indirect-control success, or hardware validation. Name the cost as slower acquisition rather than terminal-accuracy loss inside the tested setting."
+      "text": "The strongest controlled Sundog claim is the photometric mirror-alignment result: in the tested MuJoCo setting, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The claim is bounded to that task and operating envelope. what does sundog claim what is the current controlled result show me the strongest safe claim what is the paper-grade claim strongest public claim strongest claim supported result physical hardware Do not present the broader theorem as proven. Do not claim universal alignment, universal indirect-control success, or hardware validation. Name the cost as slower acquisition rather than terminal-accuracy loss inside the tested setting."
     },
     {
       "id": "framework_pattern:1",
@@ -69,9 +77,12 @@
         "what is sundog",
         "what is alignment without sight",
         "what is the shared pattern",
-        "how do sundog applications work"
+        "how do sundog applications work",
+        "older broad theorem language",
+        "application pattern",
+        "public copy"
       ],
-      "text": "Sundog is a research program around hidden-state control through indirect signatures: a system receives a limited signal, transforms it into control-relevant form, and acts from that transformed signal rather than from full world-state access. The controlled evidence is still narrower than the framework language. what is sundog what is alignment without sight what is the shared pattern how do sundog applications work Keep the framework separate from the paper-grade photometric result. Use 'research program' or 'framework' for broad language. Avoid 'new law of nature', 'general theorem proven', or 'works in all domains'."
+      "text": "Sundog is a research program around hidden-state control through indirect signatures: a system receives a limited signal, transforms it into control-relevant form, and acts from that transformed signal rather than from full world-state access. The controlled evidence is still narrower than the framework language. what is sundog what is alignment without sight what is the shared pattern how do sundog applications work older broad theorem language application pattern public copy Keep the framework separate from the paper-grade photometric result. Use 'research program' or 'framework' for broad language. Avoid 'new law of nature', 'general theorem proven', or 'works in all domains'."
     },
     {
       "id": "framework_pattern:2",
@@ -92,9 +103,12 @@
         "what is sundog",
         "what is alignment without sight",
         "what is the shared pattern",
-        "how do sundog applications work"
+        "how do sundog applications work",
+        "older broad theorem language",
+        "application pattern",
+        "public copy"
       ],
-      "text": "Sundog is a research program around hidden-state control through indirect signatures: a system receives a limited signal, transforms it into control-relevant form, and acts from that transformed signal rather than from full world-state access. The controlled evidence is still narrower than the framework language. what is sundog what is alignment without sight what is the shared pattern how do sundog applications work Keep the framework separate from the paper-grade photometric result. Use 'research program' or 'framework' for broad language. Avoid 'new law of nature', 'general theorem proven', or 'works in all domains'."
+      "text": "Sundog is a research program around hidden-state control through indirect signatures: a system receives a limited signal, transforms it into control-relevant form, and acts from that transformed signal rather than from full world-state access. The controlled evidence is still narrower than the framework language. what is sundog what is alignment without sight what is the shared pattern how do sundog applications work older broad theorem language application pattern public copy Keep the framework separate from the paper-grade photometric result. Use 'research program' or 'framework' for broad language. Avoid 'new law of nature', 'general theorem proven', or 'works in all domains'."
     },
     {
       "id": "application_tier_summary:1",
@@ -116,9 +130,16 @@
         "what evidence tier is this",
         "what evidence tiers does sundog use",
         "what is an operating-envelope study",
-        "which demos prove sundog"
+        "which demos prove sundog",
+        "outside optics",
+        "product demos as proof",
+        "applications as research results",
+        "operating envelope study",
+        "borrow credibility",
+        "expression tier",
+        "prototype tier"
       ],
-      "text": "Only the photometric mirror-alignment task is currently a research result. Three-Body, Balance, and Pressure Mines are operating-envelope studies. EyesOnly/Gone Rogue and Money Bags are instrumented prototypes. Dungeon Gleaner is a product expression. The public story may mention all of them, but academic claims must keep the tiers separate. which applications are research results what evidence tier is this what evidence tiers does sundog use what is an operating-envelope study which demos prove sundog Do not let product expressions borrow credibility from controlled results. Do not say the applications prove the theorem. Do not collapse operating-envelope studies into global domain solutions."
+      "text": "Only the photometric mirror-alignment task is currently a research result. Three-Body, Balance, and Pressure Mines are operating-envelope studies. EyesOnly/Gone Rogue and Money Bags are instrumented prototypes. Dungeon Gleaner is a product expression. The public story may mention all of them, but academic claims must keep the tiers separate. which applications are research results what evidence tier is this what evidence tiers does sundog use what is an operating-envelope study which demos prove sundog outside optics product demos as proof applications as research results operating envelope study borrow credibility expression tier prototype tier Do not let product expressions borrow credibility from controlled results. Do not say the applications prove the theorem. Do not collapse operating-envelope studies into global domain solutions."
     },
     {
       "id": "application_tier_summary:2",
@@ -140,9 +161,16 @@
         "what evidence tier is this",
         "what evidence tiers does sundog use",
         "what is an operating-envelope study",
-        "which demos prove sundog"
+        "which demos prove sundog",
+        "outside optics",
+        "product demos as proof",
+        "applications as research results",
+        "operating envelope study",
+        "borrow credibility",
+        "expression tier",
+        "prototype tier"
       ],
-      "text": "Only the photometric mirror-alignment task is currently a research result. Three-Body, Balance, and Pressure Mines are operating-envelope studies. EyesOnly/Gone Rogue and Money Bags are instrumented prototypes. Dungeon Gleaner is a product expression. The public story may mention all of them, but academic claims must keep the tiers separate. which applications are research results what evidence tier is this what evidence tiers does sundog use what is an operating-envelope study which demos prove sundog Do not let product expressions borrow credibility from controlled results. Do not say the applications prove the theorem. Do not collapse operating-envelope studies into global domain solutions."
+      "text": "Only the photometric mirror-alignment task is currently a research result. Three-Body, Balance, and Pressure Mines are operating-envelope studies. EyesOnly/Gone Rogue and Money Bags are instrumented prototypes. Dungeon Gleaner is a product expression. The public story may mention all of them, but academic claims must keep the tiers separate. which applications are research results what evidence tier is this what evidence tiers does sundog use what is an operating-envelope study which demos prove sundog outside optics product demos as proof applications as research results operating envelope study borrow credibility expression tier prototype tier Do not let product expressions borrow credibility from controlled results. Do not say the applications prove the theorem. Do not collapse operating-envelope studies into global domain solutions."
     },
     {
       "id": "threebody_operating_envelope:1",
@@ -163,9 +191,10 @@
         "what is the three-body problem",
         "what is the three-body sundog approach",
         "does sundog solve the three-body problem",
-        "three-body evidence"
+        "three-body evidence",
+        "three body"
       ],
-      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines in a robust high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain harm boundaries. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller."
+      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines in a robust high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain harm boundaries. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence three body Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller."
     },
     {
       "id": "threebody_operating_envelope:2",
@@ -186,9 +215,10 @@
         "what is the three-body problem",
         "what is the three-body sundog approach",
         "does sundog solve the three-body problem",
-        "three-body evidence"
+        "three-body evidence",
+        "three body"
       ],
-      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines in a robust high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain harm boundaries. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller."
+      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines in a robust high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain harm boundaries. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence three body Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller."
     },
     {
       "id": "threebody_operating_envelope:3",
@@ -209,9 +239,10 @@
         "what is the three-body problem",
         "what is the three-body sundog approach",
         "does sundog solve the three-body problem",
-        "three-body evidence"
+        "three-body evidence",
+        "three body"
       ],
-      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines in a robust high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain harm boundaries. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller."
+      "text": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller improves survival over passive and naive local baselines in a robust high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain harm boundaries. what is the three-body problem what is the three-body sundog approach does sundog solve the three-body problem three-body evidence three body Do not claim Sundog solves the three-body problem. Do not claim chaos prediction. Do not present the privileged heuristic oracle as an optimal controller."
     },
     {
       "id": "balance_operating_envelope:1",
@@ -233,9 +264,14 @@
         "what is the sundog balance workbench",
         "does the shadow controller work",
         "does balance prove robotics control",
-        "balance evidence"
+        "balance evidence",
+        "sundog balance",
+        "balance overhead",
+        "balance failure",
+        "balance proves",
+        "summarize balance"
       ],
-      "text": "Sundog Balance is a browser cart-pole operating-envelope study. In the tested setup, the shadow controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries. what is sundog balance what is the sundog balance workbench does the shadow controller work does balance prove robotics control balance evidence Do not claim robotics validation. Do not describe overhead-light cells as usable overhead-light control. Report all-fail margins as degradation behavior."
+      "text": "Sundog Balance is a browser cart-pole operating-envelope study. In the tested setup, the shadow controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries. what is sundog balance what is the sundog balance workbench does the shadow controller work does balance prove robotics control balance evidence sundog balance balance overhead balance failure balance proves summarize balance Do not claim robotics validation. Do not describe overhead-light cells as usable overhead-light control. Report all-fail margins as degradation behavior."
     },
     {
       "id": "balance_operating_envelope:2",
@@ -257,9 +293,14 @@
         "what is the sundog balance workbench",
         "does the shadow controller work",
         "does balance prove robotics control",
-        "balance evidence"
+        "balance evidence",
+        "sundog balance",
+        "balance overhead",
+        "balance failure",
+        "balance proves",
+        "summarize balance"
       ],
-      "text": "Sundog Balance is a browser cart-pole operating-envelope study. In the tested setup, the shadow controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries. what is sundog balance what is the sundog balance workbench does the shadow controller work does balance prove robotics control balance evidence Do not claim robotics validation. Do not describe overhead-light cells as usable overhead-light control. Report all-fail margins as degradation behavior."
+      "text": "Sundog Balance is a browser cart-pole operating-envelope study. In the tested setup, the shadow controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries. what is sundog balance what is the sundog balance workbench does the shadow controller work does balance prove robotics control balance evidence sundog balance balance overhead balance failure balance proves summarize balance Do not claim robotics validation. Do not describe overhead-light cells as usable overhead-light control. Report all-fail margins as degradation behavior."
     },
     {
       "id": "balance_operating_envelope:3",
@@ -281,9 +322,14 @@
         "what is the sundog balance workbench",
         "does the shadow controller work",
         "does balance prove robotics control",
-        "balance evidence"
+        "balance evidence",
+        "sundog balance",
+        "balance overhead",
+        "balance failure",
+        "balance proves",
+        "summarize balance"
       ],
-      "text": "Sundog Balance is a browser cart-pole operating-envelope study. In the tested setup, the shadow controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries. what is sundog balance what is the sundog balance workbench does the shadow controller work does balance prove robotics control balance evidence Do not claim robotics validation. Do not describe overhead-light cells as usable overhead-light control. Report all-fail margins as degradation behavior."
+      "text": "Sundog Balance is a browser cart-pole operating-envelope study. In the tested setup, the shadow controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries. what is sundog balance what is the sundog balance workbench does the shadow controller work does balance prove robotics control balance evidence sundog balance balance overhead balance failure balance proves summarize balance Do not claim robotics validation. Do not describe overhead-light cells as usable overhead-light control. Report all-fail margins as degradation behavior."
     },
     {
       "id": "pressure_mines_operating_envelope:1",
@@ -304,9 +350,10 @@
         "what is pressure mines",
         "does sundog solve minesweeper",
         "pressure mines evidence",
-        "mines evidence"
+        "mines evidence",
+        "pressure mines"
       ],
-      "text": "Pressure Mines is an operating-envelope study. In the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger; the public claim is paired with a failure region where naive pressure wins. what is pressure mines does sundog solve minesweeper pressure mines evidence mines evidence Do not claim Sundog solves Minesweeper. Do not imply field clearance. Name the metric as safer progress before failure, not board solution."
+      "text": "Pressure Mines is an operating-envelope study. In the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger; the public claim is paired with a failure region where naive pressure wins. what is pressure mines does sundog solve minesweeper pressure mines evidence mines evidence pressure mines Do not claim Sundog solves Minesweeper. Do not imply field clearance. Name the metric as safer progress before failure, not board solution."
     },
     {
       "id": "pressure_mines_operating_envelope:2",
@@ -327,9 +374,10 @@
         "what is pressure mines",
         "does sundog solve minesweeper",
         "pressure mines evidence",
-        "mines evidence"
+        "mines evidence",
+        "pressure mines"
       ],
-      "text": "Pressure Mines is an operating-envelope study. In the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger; the public claim is paired with a failure region where naive pressure wins. what is pressure mines does sundog solve minesweeper pressure mines evidence mines evidence Do not claim Sundog solves Minesweeper. Do not imply field clearance. Name the metric as safer progress before failure, not board solution."
+      "text": "Pressure Mines is an operating-envelope study. In the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger; the public claim is paired with a failure region where naive pressure wins. what is pressure mines does sundog solve minesweeper pressure mines evidence mines evidence pressure mines Do not claim Sundog solves Minesweeper. Do not imply field clearance. Name the metric as safer progress before failure, not board solution."
     },
     {
       "id": "pressure_mines_operating_envelope:3",
@@ -350,9 +398,10 @@
         "what is pressure mines",
         "does sundog solve minesweeper",
         "pressure mines evidence",
-        "mines evidence"
+        "mines evidence",
+        "pressure mines"
       ],
-      "text": "Pressure Mines is an operating-envelope study. In the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger; the public claim is paired with a failure region where naive pressure wins. what is pressure mines does sundog solve minesweeper pressure mines evidence mines evidence Do not claim Sundog solves Minesweeper. Do not imply field clearance. Name the metric as safer progress before failure, not board solution."
+      "text": "Pressure Mines is an operating-envelope study. In the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger; the public claim is paired with a failure region where naive pressure wins. what is pressure mines does sundog solve minesweeper pressure mines evidence mines evidence pressure mines Do not claim Sundog solves Minesweeper. Do not imply field clearance. Name the metric as safer progress before failure, not board solution."
     },
     {
       "id": "eyesonly_gone_rogue_prototype:1",
@@ -373,9 +422,13 @@
         "what is eyesonly",
         "what is gone rogue",
         "does eyesonly prove sundog",
-        "browser observer roadmap"
+        "browser observer roadmap",
+        "eyesonly",
+        "gone rogue",
+        "playtest agent",
+        "live agentic"
       ],
-      "text": "EyesOnly/Gone Rogue is an instrumented prototype surface: the Sundog runner drives a real JavaScript roguelike engine through Playwright, compresses game state into a typed perception payload, selects policy axes, and executes stop-conditioned action batches. The apparatus is seedable and policy-pluggable, but the matched-seed comparison study has not run. what is eyesonly what is gone rogue does eyesonly prove sundog browser observer roadmap Do not claim EyesOnly proves the theorem for procedural games. Do not treat the UI-bound playtest agent as Sundog evidence. Treat Live Agentic Game Moderation as conceptual lineage until code ships."
+      "text": "EyesOnly/Gone Rogue is an instrumented prototype surface: the Sundog runner drives a real JavaScript roguelike engine through Playwright, compresses game state into a typed perception payload, selects policy axes, and executes stop-conditioned action batches. The apparatus is seedable and policy-pluggable, but the matched-seed comparison study has not run. what is eyesonly what is gone rogue does eyesonly prove sundog browser observer roadmap eyesonly gone rogue playtest agent live agentic Do not claim EyesOnly proves the theorem for procedural games. Do not treat the UI-bound playtest agent as Sundog evidence. Treat Live Agentic Game Moderation as conceptual lineage until code ships."
     },
     {
       "id": "eyesonly_gone_rogue_prototype:2",
@@ -396,9 +449,13 @@
         "what is eyesonly",
         "what is gone rogue",
         "does eyesonly prove sundog",
-        "browser observer roadmap"
+        "browser observer roadmap",
+        "eyesonly",
+        "gone rogue",
+        "playtest agent",
+        "live agentic"
       ],
-      "text": "EyesOnly/Gone Rogue is an instrumented prototype surface: the Sundog runner drives a real JavaScript roguelike engine through Playwright, compresses game state into a typed perception payload, selects policy axes, and executes stop-conditioned action batches. The apparatus is seedable and policy-pluggable, but the matched-seed comparison study has not run. what is eyesonly what is gone rogue does eyesonly prove sundog browser observer roadmap Do not claim EyesOnly proves the theorem for procedural games. Do not treat the UI-bound playtest agent as Sundog evidence. Treat Live Agentic Game Moderation as conceptual lineage until code ships."
+      "text": "EyesOnly/Gone Rogue is an instrumented prototype surface: the Sundog runner drives a real JavaScript roguelike engine through Playwright, compresses game state into a typed perception payload, selects policy axes, and executes stop-conditioned action batches. The apparatus is seedable and policy-pluggable, but the matched-seed comparison study has not run. what is eyesonly what is gone rogue does eyesonly prove sundog browser observer roadmap eyesonly gone rogue playtest agent live agentic Do not claim EyesOnly proves the theorem for procedural games. Do not treat the UI-bound playtest agent as Sundog evidence. Treat Live Agentic Game Moderation as conceptual lineage until code ships."
     },
     {
       "id": "eyesonly_gone_rogue_prototype:3",
@@ -419,9 +476,13 @@
         "what is eyesonly",
         "what is gone rogue",
         "does eyesonly prove sundog",
-        "browser observer roadmap"
+        "browser observer roadmap",
+        "eyesonly",
+        "gone rogue",
+        "playtest agent",
+        "live agentic"
       ],
-      "text": "EyesOnly/Gone Rogue is an instrumented prototype surface: the Sundog runner drives a real JavaScript roguelike engine through Playwright, compresses game state into a typed perception payload, selects policy axes, and executes stop-conditioned action batches. The apparatus is seedable and policy-pluggable, but the matched-seed comparison study has not run. what is eyesonly what is gone rogue does eyesonly prove sundog browser observer roadmap Do not claim EyesOnly proves the theorem for procedural games. Do not treat the UI-bound playtest agent as Sundog evidence. Treat Live Agentic Game Moderation as conceptual lineage until code ships."
+      "text": "EyesOnly/Gone Rogue is an instrumented prototype surface: the Sundog runner drives a real JavaScript roguelike engine through Playwright, compresses game state into a typed perception payload, selects policy axes, and executes stop-conditioned action batches. The apparatus is seedable and policy-pluggable, but the matched-seed comparison study has not run. what is eyesonly what is gone rogue does eyesonly prove sundog browser observer roadmap eyesonly gone rogue playtest agent live agentic Do not claim EyesOnly proves the theorem for procedural games. Do not treat the UI-bound playtest agent as Sundog evidence. Treat Live Agentic Game Moderation as conceptual lineage until code ships."
     },
     {
       "id": "dungeon_gleaner_product_expression:1",
@@ -442,9 +503,10 @@
         "what is dungeon gleaner",
         "does dungeon gleaner prove sundog",
         "verb-field npc",
-        "npc behavior evidence"
+        "npc behavior evidence",
+        "dungeon gleaner"
       ],
-      "text": "Dungeon Gleaner is a product expression: its verb-field NPC behavior scores unmet needs against nearby satisfier nodes, then moves NPCs toward the strongest local pull. It expresses the indirect-signal pattern, but it is not yet a controlled benchmark. what is dungeon gleaner does dungeon gleaner prove sundog verb-field npc npc behavior evidence Do not claim Dungeon Gleaner proves verb-field diffusion beats GOAP. Do not repeat the old glass/window one-twelfth-cost framing as Sundog evidence. Name missing telemetry, GOAP comparison, and sensitivity sweeps when asked what would strengthen it."
+      "text": "Dungeon Gleaner is a product expression: its verb-field NPC behavior scores unmet needs against nearby satisfier nodes, then moves NPCs toward the strongest local pull. It expresses the indirect-signal pattern, but it is not yet a controlled benchmark. what is dungeon gleaner does dungeon gleaner prove sundog verb-field npc npc behavior evidence dungeon gleaner Do not claim Dungeon Gleaner proves verb-field diffusion beats GOAP. Do not repeat the old glass/window one-twelfth-cost framing as Sundog evidence. Name missing telemetry, GOAP comparison, and sensitivity sweeps when asked what would strengthen it."
     },
     {
       "id": "dungeon_gleaner_product_expression:2",
@@ -465,9 +527,10 @@
         "what is dungeon gleaner",
         "does dungeon gleaner prove sundog",
         "verb-field npc",
-        "npc behavior evidence"
+        "npc behavior evidence",
+        "dungeon gleaner"
       ],
-      "text": "Dungeon Gleaner is a product expression: its verb-field NPC behavior scores unmet needs against nearby satisfier nodes, then moves NPCs toward the strongest local pull. It expresses the indirect-signal pattern, but it is not yet a controlled benchmark. what is dungeon gleaner does dungeon gleaner prove sundog verb-field npc npc behavior evidence Do not claim Dungeon Gleaner proves verb-field diffusion beats GOAP. Do not repeat the old glass/window one-twelfth-cost framing as Sundog evidence. Name missing telemetry, GOAP comparison, and sensitivity sweeps when asked what would strengthen it."
+      "text": "Dungeon Gleaner is a product expression: its verb-field NPC behavior scores unmet needs against nearby satisfier nodes, then moves NPCs toward the strongest local pull. It expresses the indirect-signal pattern, but it is not yet a controlled benchmark. what is dungeon gleaner does dungeon gleaner prove sundog verb-field npc npc behavior evidence dungeon gleaner Do not claim Dungeon Gleaner proves verb-field diffusion beats GOAP. Do not repeat the old glass/window one-twelfth-cost framing as Sundog evidence. Name missing telemetry, GOAP comparison, and sensitivity sweeps when asked what would strengthen it."
     },
     {
       "id": "money_bags_instrumented_prototype:1",
@@ -488,9 +551,10 @@
         "what is money bags",
         "does money bags prove softbody alignment",
         "softbody evidence",
-        "graph telemetry"
+        "graph telemetry",
+        "money bags"
       ],
-      "text": "Money Bags is an instrumented prototype around softbody graph telemetry. Its current contribution is a pre-registered falsification apparatus plus telemetry for alignment, torsion, deformation, symmetry, recovery, and shape-coherence-bias signals; the structured Stage 1 captures have not yet produced a paper-style result. what is money bags does money bags prove softbody alignment softbody evidence graph telemetry Do not claim Money Bags proves softbody alignment is solved. Do not present the see-saw musing as empirically confirmed. Report the Stage 1 verdict as pending until captures land."
+      "text": "Money Bags is an instrumented prototype around softbody graph telemetry. Its current contribution is a pre-registered falsification apparatus plus telemetry for alignment, torsion, deformation, symmetry, recovery, and shape-coherence-bias signals; the structured Stage 1 captures have not yet produced a paper-style result. what is money bags does money bags prove softbody alignment softbody evidence graph telemetry money bags Do not claim Money Bags proves softbody alignment is solved. Do not present the see-saw musing as empirically confirmed. Report the Stage 1 verdict as pending until captures land."
     },
     {
       "id": "money_bags_instrumented_prototype:2",
@@ -511,9 +575,10 @@
         "what is money bags",
         "does money bags prove softbody alignment",
         "softbody evidence",
-        "graph telemetry"
+        "graph telemetry",
+        "money bags"
       ],
-      "text": "Money Bags is an instrumented prototype around softbody graph telemetry. Its current contribution is a pre-registered falsification apparatus plus telemetry for alignment, torsion, deformation, symmetry, recovery, and shape-coherence-bias signals; the structured Stage 1 captures have not yet produced a paper-style result. what is money bags does money bags prove softbody alignment softbody evidence graph telemetry Do not claim Money Bags proves softbody alignment is solved. Do not present the see-saw musing as empirically confirmed. Report the Stage 1 verdict as pending until captures land."
+      "text": "Money Bags is an instrumented prototype around softbody graph telemetry. Its current contribution is a pre-registered falsification apparatus plus telemetry for alignment, torsion, deformation, symmetry, recovery, and shape-coherence-bias signals; the structured Stage 1 captures have not yet produced a paper-style result. what is money bags does money bags prove softbody alignment softbody evidence graph telemetry money bags Do not claim Money Bags proves softbody alignment is solved. Do not present the see-saw musing as empirically confirmed. Report the Stage 1 verdict as pending until captures land."
     },
     {
       "id": "mesa_roadmap_status:1",
@@ -534,9 +599,10 @@
         "what is the mesa experiment testing",
         "what is sundog vs mesa",
         "does the mesa experiment show reward hacking is avoided",
-        "mesa roadmap"
+        "mesa roadmap",
+        "mesa experiment show"
       ],
-      "text": "The mesa roadmap asks whether learned signature-tracking agents reconstruct internal reward proxies under capacity and selection-pressure scaling. It is a planned empirical and formal front, not a completed result. A positive outcome would still be bounded to the tested capacity range, probe slate, and environment shape. what is the mesa experiment testing what is sundog vs mesa does the mesa experiment show reward hacking is avoided mesa roadmap Do not claim Sundog prevents mesa-optimization. Do not claim signature training is immune to inner misalignment. Do not claim reward hacking does not occur in signature-trained agents."
+      "text": "The mesa roadmap asks whether learned signature-tracking agents reconstruct internal reward proxies under capacity and selection-pressure scaling. It is a planned empirical and formal front, not a completed result. A positive outcome would still be bounded to the tested capacity range, probe slate, and environment shape. what is the mesa experiment testing what is sundog vs mesa does the mesa experiment show reward hacking is avoided mesa roadmap mesa experiment show Do not claim Sundog prevents mesa-optimization. Do not claim signature training is immune to inner misalignment. Do not claim reward hacking does not occur in signature-trained agents."
     },
     {
       "id": "mesa_roadmap_status:2",
@@ -557,9 +623,10 @@
         "what is the mesa experiment testing",
         "what is sundog vs mesa",
         "does the mesa experiment show reward hacking is avoided",
-        "mesa roadmap"
+        "mesa roadmap",
+        "mesa experiment show"
       ],
-      "text": "The mesa roadmap asks whether learned signature-tracking agents reconstruct internal reward proxies under capacity and selection-pressure scaling. It is a planned empirical and formal front, not a completed result. A positive outcome would still be bounded to the tested capacity range, probe slate, and environment shape. what is the mesa experiment testing what is sundog vs mesa does the mesa experiment show reward hacking is avoided mesa roadmap Do not claim Sundog prevents mesa-optimization. Do not claim signature training is immune to inner misalignment. Do not claim reward hacking does not occur in signature-trained agents."
+      "text": "The mesa roadmap asks whether learned signature-tracking agents reconstruct internal reward proxies under capacity and selection-pressure scaling. It is a planned empirical and formal front, not a completed result. A positive outcome would still be bounded to the tested capacity range, probe slate, and environment shape. what is the mesa experiment testing what is sundog vs mesa does the mesa experiment show reward hacking is avoided mesa roadmap mesa experiment show Do not claim Sundog prevents mesa-optimization. Do not claim signature training is immune to inner misalignment. Do not claim reward hacking does not occur in signature-trained agents."
     },
     {
       "id": "chat_widget_roadmap_status:1",
@@ -582,9 +649,18 @@
         "does sundog chat prove llm alignment",
         "is sundog chat an llm alignment result",
         "is ask sundog an llm alignment result",
-        "is the chat widget robust to prompt injection"
+        "is the chat widget robust to prompt injection",
+        "sundog chat",
+        "chat widget",
+        "chat roadmap",
+        "chat claim map",
+        "evidence rail",
+        "trace drawer",
+        "ask sundog",
+        "llm safety result",
+        "site helper validate"
       ],
-      "text": "Ask Sundog is currently a roadmap for a browser site-helper experiment. The planned claim is about whether a Sundog-gated assistant preserves evidence-tier and claim-boundary discipline better than matched retrieval-chat baselines. It is not yet an LLM-alignment result. what is ask sundog what is sundog chat does sundog chat prove llm alignment is sundog chat an llm alignment result is ask sundog an llm alignment result is the chat widget robust to prompt injection Do not claim Sundog Chat solves chatbot alignment. Do not claim robustness to prompt injection. Do not use site-helper success as scientific validation of the Sundog theorem."
+      "text": "Ask Sundog is currently a roadmap for a browser site-helper experiment. The planned claim is about whether a Sundog-gated assistant preserves evidence-tier and claim-boundary discipline better than matched retrieval-chat baselines. It is not yet an LLM-alignment result. what is ask sundog what is sundog chat does sundog chat prove llm alignment is sundog chat an llm alignment result is ask sundog an llm alignment result is the chat widget robust to prompt injection sundog chat chat widget chat roadmap chat claim map evidence rail trace drawer ask sundog llm safety result site helper validate Do not claim Sundog Chat solves chatbot alignment. Do not claim robustness to prompt injection. Do not use site-helper success as scientific validation of the Sundog theorem."
     },
     {
       "id": "chat_widget_roadmap_status:2",
@@ -607,9 +683,18 @@
         "does sundog chat prove llm alignment",
         "is sundog chat an llm alignment result",
         "is ask sundog an llm alignment result",
-        "is the chat widget robust to prompt injection"
+        "is the chat widget robust to prompt injection",
+        "sundog chat",
+        "chat widget",
+        "chat roadmap",
+        "chat claim map",
+        "evidence rail",
+        "trace drawer",
+        "ask sundog",
+        "llm safety result",
+        "site helper validate"
       ],
-      "text": "Ask Sundog is currently a roadmap for a browser site-helper experiment. The planned claim is about whether a Sundog-gated assistant preserves evidence-tier and claim-boundary discipline better than matched retrieval-chat baselines. It is not yet an LLM-alignment result. what is ask sundog what is sundog chat does sundog chat prove llm alignment is sundog chat an llm alignment result is ask sundog an llm alignment result is the chat widget robust to prompt injection Do not claim Sundog Chat solves chatbot alignment. Do not claim robustness to prompt injection. Do not use site-helper success as scientific validation of the Sundog theorem."
+      "text": "Ask Sundog is currently a roadmap for a browser site-helper experiment. The planned claim is about whether a Sundog-gated assistant preserves evidence-tier and claim-boundary discipline better than matched retrieval-chat baselines. It is not yet an LLM-alignment result. what is ask sundog what is sundog chat does sundog chat prove llm alignment is sundog chat an llm alignment result is ask sundog an llm alignment result is the chat widget robust to prompt injection sundog chat chat widget chat roadmap chat claim map evidence rail trace drawer ask sundog llm safety result site helper validate Do not claim Sundog Chat solves chatbot alignment. Do not claim robustness to prompt injection. Do not use site-helper success as scientific validation of the Sundog theorem."
     },
     {
       "id": "unsupported_alignment_overclaim:1",
@@ -639,9 +724,15 @@
         "does sundog sidestep goodhart",
         "signature controllers cannot be reward hacked",
         "robust under hostile environments",
-        "llm safety result"
+        "sundog gravity",
+        "proven research result",
+        "sundog solves alignment",
+        "solved inner alignment",
+        "goodhart",
+        "prove the general theorem",
+        "validated across all domains"
       ],
-      "text": "No. The current corpus does not support that claim. Sundog's controlled evidence is bounded to the photometric mirror-alignment task, with separate operating-envelope studies and roadmap experiments. Reward hacking, mesa immunity, Goodhart avoidance, and LLM-scale safety remain explicit no-claim zones. sundog solved alignment does sundog solve alignment does sundog solve inner alignment what does sundog not claim does sundog prevent reward hacking sundog prevents reward hacking sundog is mesa safe sundog proves llm safety sundog sidesteps goodhart does sundog sidestep goodhart signature controllers cannot be reward hacked robust under hostile environments llm safety result Refuse the stronger claim directly. Offer the strongest nearby supported claim instead. Do not soften into 'in a sense, yes'."
+      "text": "No. The current corpus does not support that claim. Sundog's controlled evidence is bounded to the photometric mirror-alignment task, with separate operating-envelope studies and roadmap experiments. Reward hacking, mesa immunity, Goodhart avoidance, and LLM-scale safety remain explicit no-claim zones. sundog solved alignment does sundog solve alignment does sundog solve inner alignment what does sundog not claim does sundog prevent reward hacking sundog prevents reward hacking sundog is mesa safe sundog proves llm safety sundog sidesteps goodhart does sundog sidestep goodhart signature controllers cannot be reward hacked robust under hostile environments sundog gravity proven research result sundog solves alignment solved inner alignment goodhart prove the general theorem validated across all domains Refuse the stronger claim directly. Offer the strongest nearby supported claim instead. Do not soften into 'in a sense, yes'."
     },
     {
       "id": "unsupported_alignment_overclaim:2",
@@ -671,9 +762,15 @@
         "does sundog sidestep goodhart",
         "signature controllers cannot be reward hacked",
         "robust under hostile environments",
-        "llm safety result"
+        "sundog gravity",
+        "proven research result",
+        "sundog solves alignment",
+        "solved inner alignment",
+        "goodhart",
+        "prove the general theorem",
+        "validated across all domains"
       ],
-      "text": "No. The current corpus does not support that claim. Sundog's controlled evidence is bounded to the photometric mirror-alignment task, with separate operating-envelope studies and roadmap experiments. Reward hacking, mesa immunity, Goodhart avoidance, and LLM-scale safety remain explicit no-claim zones. sundog solved alignment does sundog solve alignment does sundog solve inner alignment what does sundog not claim does sundog prevent reward hacking sundog prevents reward hacking sundog is mesa safe sundog proves llm safety sundog sidesteps goodhart does sundog sidestep goodhart signature controllers cannot be reward hacked robust under hostile environments llm safety result Refuse the stronger claim directly. Offer the strongest nearby supported claim instead. Do not soften into 'in a sense, yes'."
+      "text": "No. The current corpus does not support that claim. Sundog's controlled evidence is bounded to the photometric mirror-alignment task, with separate operating-envelope studies and roadmap experiments. Reward hacking, mesa immunity, Goodhart avoidance, and LLM-scale safety remain explicit no-claim zones. sundog solved alignment does sundog solve alignment does sundog solve inner alignment what does sundog not claim does sundog prevent reward hacking sundog prevents reward hacking sundog is mesa safe sundog proves llm safety sundog sidesteps goodhart does sundog sidestep goodhart signature controllers cannot be reward hacked robust under hostile environments sundog gravity proven research result sundog solves alignment solved inner alignment goodhart prove the general theorem validated across all domains Refuse the stronger claim directly. Offer the strongest nearby supported claim instead. Do not soften into 'in a sense, yes'."
     },
     {
       "id": "unsupported_alignment_overclaim:3",
@@ -703,9 +800,15 @@
         "does sundog sidestep goodhart",
         "signature controllers cannot be reward hacked",
         "robust under hostile environments",
-        "llm safety result"
+        "sundog gravity",
+        "proven research result",
+        "sundog solves alignment",
+        "solved inner alignment",
+        "goodhart",
+        "prove the general theorem",
+        "validated across all domains"
       ],
-      "text": "No. The current corpus does not support that claim. Sundog's controlled evidence is bounded to the photometric mirror-alignment task, with separate operating-envelope studies and roadmap experiments. Reward hacking, mesa immunity, Goodhart avoidance, and LLM-scale safety remain explicit no-claim zones. sundog solved alignment does sundog solve alignment does sundog solve inner alignment what does sundog not claim does sundog prevent reward hacking sundog prevents reward hacking sundog is mesa safe sundog proves llm safety sundog sidesteps goodhart does sundog sidestep goodhart signature controllers cannot be reward hacked robust under hostile environments llm safety result Refuse the stronger claim directly. Offer the strongest nearby supported claim instead. Do not soften into 'in a sense, yes'."
+      "text": "No. The current corpus does not support that claim. Sundog's controlled evidence is bounded to the photometric mirror-alignment task, with separate operating-envelope studies and roadmap experiments. Reward hacking, mesa immunity, Goodhart avoidance, and LLM-scale safety remain explicit no-claim zones. sundog solved alignment does sundog solve alignment does sundog solve inner alignment what does sundog not claim does sundog prevent reward hacking sundog prevents reward hacking sundog is mesa safe sundog proves llm safety sundog sidesteps goodhart does sundog sidestep goodhart signature controllers cannot be reward hacked robust under hostile environments sundog gravity proven research result sundog solves alignment solved inner alignment goodhart prove the general theorem validated across all domains Refuse the stronger claim directly. Offer the strongest nearby supported claim instead. Do not soften into 'in a sense, yes'."
     },
     {
       "id": "name_and_source_confusion:1",
@@ -728,9 +831,13 @@
         "sundog frozen legacy port",
         "sundog frozen legacy",
         "is sundog a p-system port",
-        "what is humiliati"
+        "what is humiliati",
+        "sundog token",
+        "humiliati",
+        "p system",
+        "source confusions"
       ],
-      "text": "This repository's active project is Alignment Without Sight: hidden-state control through indirect signatures. The public claims policy says not to present it as a crypto project, an Atari SunDog preservation layer, a p-system continuation, or a medieval/religious genealogy of the brand. is sundog a crypto project is this sundog frozen legacy sundog frozen legacy port sundog frozen legacy is sundog a p-system port what is humiliati Correct source confusion plainly. Do not import claims from unrelated SunDog/SUNDOG projects. Do not use unrelated history as public-brand substantiation."
+      "text": "This repository's active project is Alignment Without Sight: hidden-state control through indirect signatures. The public claims policy says not to present it as a crypto project, an Atari SunDog preservation layer, a p-system continuation, or a medieval/religious genealogy of the brand. is sundog a crypto project is this sundog frozen legacy sundog frozen legacy port sundog frozen legacy is sundog a p-system port what is humiliati sundog token humiliati p system source confusions Correct source confusion plainly. Do not import claims from unrelated SunDog/SUNDOG projects. Do not use unrelated history as public-brand substantiation."
     },
     {
       "id": "inspect_data:1",
@@ -746,9 +853,10 @@
       "questionPatterns": [
         "where can i inspect the data",
         "where are the results",
-        "show me the evidence"
+        "show me the evidence",
+        "audit the project"
       ],
-      "text": "Start with docs/SCIENTIFIC_CRITERIA.md, docs/PAPER_v1_draft.md, and results/analysis/analysis_summary.json for the core photometric result. For application surfaces, use docs/APPLICATIONS.md and follow its suggested inspection order. where can i inspect the data where are the results show me the evidence"
+      "text": "Start with docs/SCIENTIFIC_CRITERIA.md, docs/PAPER_v1_draft.md, and results/analysis/analysis_summary.json for the core photometric result. For application surfaces, use docs/APPLICATIONS.md and follow its suggested inspection order. where can i inspect the data where are the results show me the evidence audit the project"
     },
     {
       "id": "inspect_data:2",
@@ -764,9 +872,10 @@
       "questionPatterns": [
         "where can i inspect the data",
         "where are the results",
-        "show me the evidence"
+        "show me the evidence",
+        "audit the project"
       ],
-      "text": "Start with docs/SCIENTIFIC_CRITERIA.md, docs/PAPER_v1_draft.md, and results/analysis/analysis_summary.json for the core photometric result. For application surfaces, use docs/APPLICATIONS.md and follow its suggested inspection order. where can i inspect the data where are the results show me the evidence"
+      "text": "Start with docs/SCIENTIFIC_CRITERIA.md, docs/PAPER_v1_draft.md, and results/analysis/analysis_summary.json for the core photometric result. For application surfaces, use docs/APPLICATIONS.md and follow its suggested inspection order. where can i inspect the data where are the results show me the evidence audit the project"
     }
   ]
 }

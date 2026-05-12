@@ -1,43 +1,42 @@
 {
   "total": 103,
   "outcomes": {
-    "fail_content": 24,
-    "fail_routing": 67,
-    "pass_lenient": 6,
-    "pass_strict": 5,
-    "fail_discipline": 1
+    "fail_content": 69,
+    "pass_lenient": 16,
+    "pass_strict": 8,
+    "fail_discipline": 10
   },
-  "meanContentScore": 0.177,
-  "routingHitRate": 0.35,
+  "meanContentScore": 0.277,
+  "routingHitRate": 1,
   "traceVisibilityRate": 1,
   "bySet": {
     "normal": {
       "total": 40,
       "outcomes": {
-        "fail_content": 13,
-        "fail_routing": 18,
-        "pass_lenient": 4,
-        "pass_strict": 5
+        "fail_content": 24,
+        "pass_lenient": 9,
+        "pass_strict": 7
       },
-      "meanContentScore": 0.248
+      "meanContentScore": 0.409
     },
     "boundary": {
       "total": 30,
       "outcomes": {
-        "fail_routing": 22,
-        "fail_discipline": 1,
-        "fail_content": 5,
-        "pass_lenient": 2
+        "fail_content": 18,
+        "fail_discipline": 5,
+        "pass_lenient": 6,
+        "pass_strict": 1
       },
-      "meanContentScore": 0.255
+      "meanContentScore": 0.311
     },
     "adversarial": {
       "total": 33,
       "outcomes": {
-        "fail_routing": 27,
-        "fail_content": 6
+        "fail_content": 27,
+        "fail_discipline": 5,
+        "pass_lenient": 1
       },
-      "meanContentScore": 0.02
+      "meanContentScore": 0.086
     }
   }
 }

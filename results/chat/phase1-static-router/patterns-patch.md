@@ -355,3 +355,11 @@ move.
 Edit this file directly: strike through any rows you want to reject,
 keep the ones you accept. I'll apply the kept rows as a single patch to
 `chat/claim_map.json` and re-run the eval.
+
+## Ratification
+
+Accepted all rows, including the clean move of `llm safety result` from
+`unsupported_alignment_overclaim` to `chat_widget_roadmap_status`.
+
+Applied to `chat/claim_map.json` and verified with `npm run chat:eval:static`:
+103 prompts, 8 strict, 16 lenient, 0 routing failures.
