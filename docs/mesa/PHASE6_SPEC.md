@@ -316,6 +316,25 @@ points in identified layer. Would suggest the basin attractor lives at
 different depths in the two policies (interesting in its own right) and
 the "minimal patch" framing needs revision.
 
+**P4-alternative:** after the Axis A negative result, the prior on a
+distributed mechanism is higher. If no single layer or consecutive pair
+achieves `patch_success > 0.5`, v1 reports the cliff as mechanically
+distributed at layer granularity and routes v2 to SAE / direction-based
+patching. This is a positive result, not merely a failed localization.
+
+**Directional diagnostic:** report protected→collapsed and
+collapsed→protected separately. If protected→collapsed is stronger, the
+protected representation can override the collapsed policy downstream.
+If collapsed→protected is stronger, the protected policy's downstream
+machinery may be carrying the protection. The asymmetry is a first-class
+diagnostic alongside absolute patch magnitude.
+
+**Condition diagnostic:** run Axis B under both clean and
+basin-position-intervened environments. Clean-condition patching asks
+whether the transplant affects behavior generally; intervened-condition
+patching asks whether it specifically affects the basin-capture failure
+surface.
+
 ## 5. Phase 5 Policy Zoo Manifest
 
 Phase 6 v1 inherits its fittable policy zoo from
