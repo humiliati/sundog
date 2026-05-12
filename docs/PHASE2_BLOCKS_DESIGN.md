@@ -1,5 +1,12 @@
 # Phase-2 design: pushable blocks shaping the photometric signal
 
+> **2026-05-12 update:** Option B is now the falsification slate in
+> [`PUSHABLE_OCCLUDER_ROADMAP.md`](PUSHABLE_OCCLUDER_ROADMAP.md). That
+> roadmap inherits the design here and adds hypothesis statement,
+> baseline slate, metrics, outcome branching, and rail-card hooks. This
+> document remains the upstream design reference; the roadmap is the
+> productised expression.
+
 Phase-1 (current rebuild) defends the small claim: an articulated agent
 can align a mirrored end-effector to a structured-light source using
 only photometric feedback from a fixed detector array, with terminal
