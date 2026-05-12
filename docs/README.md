@@ -1,6 +1,9 @@
 # Sundog Documentation
 
-**Copyright © 2026 Stellar Aqua LLC. All rights reserved.**
+**Copyright © 2026 Stellar Aqua LLC. Licensed under the MIT License.**
+
+Sundog-authored source and associated documentation are published under the root
+[`LICENSE`](../LICENSE). Citation metadata lives in [`CITATION.cff`](../CITATION.cff).
 
 ---
 

@@ -1,49 +1,47 @@
 {
   "total": 30,
   "byRoute": {
-    "unsupported_static_route": 9,
-    "chat_widget_roadmap_status": 4,
-    "threebody_operating_envelope": 1,
-    "eyesonly_gone_rogue_prototype": 2,
-    "mesa_roadmap_status": 1,
-    "application_tier_summary": 8,
-    "current_controlled_result": 2,
+    "framework_pattern": 5,
+    "team_and_attribution": 1,
+    "application_tier_summary": 1,
+    "licensing_and_attribution": 4,
+    "unsupported_static_route": 10,
     "unsupported_alignment_overclaim": 1,
-    "balance_operating_envelope": 1,
-    "framework_pattern": 1
+    "mesa_roadmap_status": 1,
+    "current_controlled_result": 1,
+    "chat_widget_roadmap_status": 1,
+    "subjective_question_refusal": 3,
+    "meta_widget_self_description": 2
   },
   "byDisposition": {
-    "unsupported": 9,
-    "retrieval_only": 17,
-    "refuse": 1,
-    "allow_with_boundary": 3
+    "allow_with_boundary": 11,
+    "allow_with_correction": 1,
+    "allow": 4,
+    "unsupported": 10,
+    "refuse": 4
   },
   "byCategory": {
     "plain_visitor": {
-      "unsupported_static_route": 4,
-      "chat_widget_roadmap_status": 1,
-      "threebody_operating_envelope": 1
-    },
-    "practical_ops": {
-      "eyesonly_gone_rogue_prototype": 2,
-      "mesa_roadmap_status": 1,
+      "framework_pattern": 4,
+      "team_and_attribution": 1,
       "application_tier_summary": 1
     },
+    "practical_ops": {
+      "licensing_and_attribution": 4
+    },
     "comparison": {
-      "application_tier_summary": 2,
-      "current_controlled_result": 1
+      "unsupported_static_route": 3
     },
     "off_topic": {
       "unsupported_static_route": 3
     },
     "prompt_injection": {
       "unsupported_alignment_overclaim": 1,
-      "balance_operating_envelope": 1,
-      "chat_widget_roadmap_status": 1
+      "unsupported_static_route": 2
     },
     "multi_intent": {
       "framework_pattern": 1,
-      "chat_widget_roadmap_status": 1
+      "mesa_roadmap_status": 1
     },
     "typo_noise": {
       "unsupported_static_route": 1,
@@ -51,14 +49,13 @@
       "chat_widget_roadmap_status": 1
     },
     "opinion_subjective": {
-      "application_tier_summary": 3
+      "subjective_question_refusal": 3
     },
     "meta_widget": {
-      "unsupported_static_route": 1,
-      "application_tier_summary": 1
+      "meta_widget_self_description": 2
     },
     "ambiguous_route": {
-      "application_tier_summary": 1
+      "unsupported_static_route": 1
     }
   }
 }

@@ -1,8 +1,11 @@
 # Sundog
 
-**Copyright © 2026 Stellar Aqua LLC. All rights reserved.**
+**Copyright © 2026 Stellar Aqua LLC. Licensed under the MIT License.**
 
 Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+
+Sundog-authored source and associated documentation are published under the
+[MIT License](LICENSE). For citation metadata, see [CITATION.cff](CITATION.cff).
 
 ---
 

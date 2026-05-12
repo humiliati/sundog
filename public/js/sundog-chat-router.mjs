@@ -21,6 +21,8 @@ export const DEFAULT_FAQS = [
   "Does Sundog solve inner alignment?",
   "What is Ask Sundog?",
   "Is Sundog Chat an LLM-alignment result?",
+  "Is the code open source?",
+  "How do I cite Sundog?",
   "Where can I inspect the data?",
   "Is Sundog a crypto project?",
   "Is this project a SunDog: Frozen Legacy port?"

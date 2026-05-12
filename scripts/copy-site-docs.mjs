@@ -7,6 +7,12 @@ const sourceDocs = join(root, "docs");
 const targetDocs = join(dist, "docs");
 const sourceChat = join(root, "chat");
 const targetChat = join(dist, "chat");
+const rootPublicArtifacts = [
+  "README.md",
+  "LICENSE",
+  "COPYRIGHT.md",
+  "CITATION.cff"
+];
 const publicChatArtifacts = [
   "claim_map.json",
   "contents.json",
@@ -33,7 +39,9 @@ async function copyPublicDocs(sourceDir, targetDir) {
 }
 
 await mkdir(dist, { recursive: true });
-await cp(join(root, "README.md"), join(dist, "README.md"));
+for (const artifact of rootPublicArtifacts) {
+  await cp(join(root, artifact), join(dist, artifact));
+}
 await rm(targetDocs, { recursive: true, force: true });
 await copyPublicDocs(sourceDocs, targetDocs);
 await rm(targetChat, { recursive: true, force: true });

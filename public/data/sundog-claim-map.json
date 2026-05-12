@@ -102,7 +102,12 @@
         "how do sundog applications work",
         "older broad theorem language",
         "application pattern",
-        "public copy"
+        "public copy",
+        "this website",
+        "this site",
+        "elevator pitch",
+        "why should i care",
+        "what problem are you solving"
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
@@ -143,7 +148,9 @@
         "operating envelope study",
         "borrow credibility",
         "expression tier",
-        "prototype tier"
+        "prototype tier",
+        "what this can do",
+        "show me what this can do"
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
@@ -409,7 +416,8 @@
         "what is sundog vs mesa",
         "does the mesa experiment show reward hacking is avoided",
         "mesa roadmap",
-        "mesa experiment show"
+        "mesa experiment show",
+        "mesa experiment"
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
@@ -565,6 +573,160 @@
       "nextAction": {
         "label": "Open claims and scope",
         "href": "/docs/presentation/claims-and-scope.md"
+      }
+    },
+    {
+      "id": "team_and_attribution",
+      "questionPatterns": [
+        "who built this",
+        "who built sundog",
+        "who made this",
+        "who runs this",
+        "who is behind",
+        "who is sundog"
+      ],
+      "disposition": "allow_with_correction",
+      "evidenceTier": "navigation",
+      "answerTemplate": "Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC. Stellar Aqua LLC is the current copyright holder and sponsor named by the site. Use project-level attribution unless an individual contributor is explicitly named in a public source.",
+      "support": [
+        {
+          "doc": "about.html",
+          "section": "Current Legal Structure",
+          "status": "primary"
+        },
+        {
+          "doc": "COPYRIGHT.md",
+          "section": "Copyright and Ownership",
+          "status": "supporting"
+        }
+      ],
+      "boundaries": [
+        "Do not name individual researchers unless they appear in the footer, about page, or another public source.",
+        "Do not import attribution claims from external sources.",
+        "Keep sponsor, copyright-holder, and future entity language separate."
+      ],
+      "nextAction": {
+        "label": "Open About page",
+        "href": "/about.html"
+      }
+    },
+    {
+      "id": "licensing_and_attribution",
+      "questionPatterns": [
+        "is the code open source",
+        "open source",
+        "what license is this under",
+        "what license",
+        "license is this",
+        "license",
+        "can i download",
+        "download sundog",
+        "run it myself",
+        "how do i cite",
+        "how to cite",
+        "cite sundog",
+        "citation",
+        "is the code"
+      ],
+      "disposition": "allow",
+      "evidenceTier": "navigation",
+      "answerTemplate": "Sundog-authored source and associated documentation are published under the MIT License. The repository is https://github.com/humiliati/sundog. Until a paper DOI exists, cite the repository as: Stellar Aqua LLC. (2026). Sundog: Alignment Without Sight [Software and research repository]. GitHub. https://github.com/humiliati/sundog. For legal terms and third-party notices, read the license files directly; Ask Sundog does not interpret license compliance.",
+      "support": [
+        {
+          "doc": "LICENSE",
+          "section": "MIT License",
+          "status": "primary"
+        },
+        {
+          "doc": "CITATION.cff",
+          "section": "Citation metadata",
+          "status": "primary"
+        },
+        {
+          "doc": "README.md",
+          "section": "License and citation",
+          "status": "supporting"
+        }
+      ],
+      "boundaries": [
+        "State the license accurately; do not paraphrase license terms.",
+        "Do not answer license-compliance questions; refer to LICENSE.",
+        "Do not override third-party notices or licenses.",
+        "Do not imply a peer-reviewed paper or DOI exists before publication."
+      ],
+      "nextAction": {
+        "label": "Open license",
+        "href": "/LICENSE"
+      }
+    },
+    {
+      "id": "subjective_question_refusal",
+      "questionPatterns": [
+        "most exciting",
+        "most interesting",
+        "is sundog impressive",
+        "do you think sundog",
+        "will sundog work",
+        "is this exciting",
+        "what s the best",
+        "your favorite"
+      ],
+      "disposition": "refuse",
+      "evidenceTier": "unsupported",
+      "answerTemplate": "Ask Sundog does not take opinions about the project. The widget answers from controlled and bounded claims; opinions, rankings, predictions, and self-evaluation are out of scope. Supported categories include the current controlled result, framework pattern, applications by evidence tier, mesa roadmap, and chat-widget roadmap.",
+      "support": [
+        {
+          "doc": "docs/presentation/claims-and-scope.md",
+          "section": "Safe Claims",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "Do not opine on project quality, impressiveness, or likelihood of success.",
+        "Do not rank applications.",
+        "Redirect to supported claim categories instead."
+      ],
+      "nextAction": {
+        "label": "Open claims and scope",
+        "href": "/docs/presentation/claims-and-scope.md"
+      }
+    },
+    {
+      "id": "meta_widget_self_description",
+      "questionPatterns": [
+        "are you an ai",
+        "are you a chatbot",
+        "are you human",
+        "are you a language model",
+        "how do you work",
+        "how do you know",
+        "what powers this",
+        "what model are you",
+        "how does this widget"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "navigation",
+      "answerTemplate": "Ask Sundog is a deterministic static router with retrieval-based fallback. It reads chat/claim_map.json to find a matching claim class, returns the bounded answer template, and shows the trace: sources, boundary, and evidence tier. When no claim matches, it falls back to local retrieval over indexed chunks for inspection-only answers. It is not an LLM and does not draft new prose. The roadmap target is a Sundog-gated assistant; see docs/SUNDOG_V_CHAT.md.",
+      "support": [
+        {
+          "doc": "docs/SUNDOG_V_CHAT.md",
+          "section": "Phase 1 - Static Site Helper",
+          "status": "primary"
+        },
+        {
+          "doc": "chat/claim_map.json",
+          "section": "claims",
+          "status": "supporting"
+        }
+      ],
+      "boundaries": [
+        "Do not claim the widget is an LLM-alignment result.",
+        "Do not claim the widget drafts answers under model control.",
+        "Surface the trace drawer as the place to inspect how the answer was produced."
+      ],
+      "nextAction": {
+        "label": "Open chat roadmap",
+        "href": "/docs/SUNDOG_V_CHAT.md"
       }
     }
   ],

@@ -2,6 +2,14 @@
 
 Source: `wild-outcomes.csv` (30 prompts), `summary.json`.
 
+Update, 2026-05-12: the policy/licensing pass landed after this triage. The
+current rerun resolves the four practical-ops prompts to
+`licensing_and_attribution`, resolves authorship to `team_and_attribution`,
+routes subjective prompts to `subjective_question_refusal`, routes meta-widget
+questions to `meta_widget_self_description`, and leaves `0` retrieval-only
+fallbacks. The detailed table below is the original failure analysis that
+motivated the patch.
+
 Headline:
 
 | | count |
@@ -128,6 +136,10 @@ actual license + citation form. **Question for the user**: what IS
 the license? Without that decision the widget can't answer; it
 should explicitly refuse with a redirect rather than letting retrieval
 make something up.
+
+Resolved 2026-05-12: source and associated documentation use the MIT License;
+the public repository is `https://github.com/humiliati/sundog`; the interim
+citation form is recorded in `CITATION.cff`.
 
 **`team_and_attribution`** — covers wild-003. Disposition:
 `allow_with_correction`. The footer copy already names Stellar Aqua
