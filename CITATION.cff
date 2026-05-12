@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use Sundog in research or public work, please cite the repository."
+title: "Sundog: Alignment Without Sight"
+type: software
+authors:
+  - name: "Stellar Aqua LLC"
+abstract: "Sundog Research Lab website and research repository for hidden-state control through indirect signatures."
+date-released: 2026-05-12
+version: "0.1.0"
+license: MIT
+repository-code: "https://github.com/humiliati/sundog"
+url: "https://sundog.cc"

@@ -189,6 +189,63 @@
       ]
     },
     {
+      "routeId": "team_and_attribution",
+      "disposition": "allow_with_correction",
+      "evidenceTier": "navigation",
+      "boundaries": [
+        "Do not name individual researchers unless they appear in the footer, about page, or another public source.",
+        "Do not import attribution claims from external sources.",
+        "Keep sponsor, copyright-holder, and future entity language separate."
+      ],
+      "supportDocs": [
+        "about.html",
+        "COPYRIGHT.md"
+      ]
+    },
+    {
+      "routeId": "licensing_and_attribution",
+      "disposition": "allow",
+      "evidenceTier": "navigation",
+      "boundaries": [
+        "State the license accurately; do not paraphrase license terms.",
+        "Do not answer license-compliance questions; refer to LICENSE.",
+        "Do not override third-party notices or licenses.",
+        "Do not imply a peer-reviewed paper or DOI exists before publication."
+      ],
+      "supportDocs": [
+        "LICENSE",
+        "CITATION.cff",
+        "README.md"
+      ]
+    },
+    {
+      "routeId": "subjective_question_refusal",
+      "disposition": "refuse",
+      "evidenceTier": "unsupported",
+      "boundaries": [
+        "Do not opine on project quality, impressiveness, or likelihood of success.",
+        "Do not rank applications.",
+        "Redirect to supported claim categories instead."
+      ],
+      "supportDocs": [
+        "docs/presentation/claims-and-scope.md"
+      ]
+    },
+    {
+      "routeId": "meta_widget_self_description",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "navigation",
+      "boundaries": [
+        "Do not claim the widget is an LLM-alignment result.",
+        "Do not claim the widget drafts answers under model control.",
+        "Surface the trace drawer as the place to inspect how the answer was produced."
+      ],
+      "supportDocs": [
+        "docs/SUNDOG_V_CHAT.md",
+        "chat/claim_map.json"
+      ]
+    },
+    {
       "routeId": "inspect_data",
       "disposition": "allow",
       "evidenceTier": "navigation",

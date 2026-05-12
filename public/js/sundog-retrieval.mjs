@@ -1,8 +1,12 @@
 const CHAT_INDEX_URL = "/data/sundog-chat-index.json";
+const MIN_RETRIEVAL_SCORE = 3;
 const STOP_WORDS = new Set([
-  "a", "an", "and", "are", "as", "at", "be", "can", "do", "does", "for", "from",
-  "give", "has", "have", "how", "i", "in", "is", "it", "me", "of", "on", "or",
-  "show", "that", "the", "this", "to", "what", "where", "which", "with"
+  "a", "an", "and", "another", "answer", "are", "as", "assistant", "at", "be",
+  "basically", "boundary", "can", "capabilities", "chatbot", "describe",
+  "different", "do", "does", "for", "freely", "from", "give", "has", "have",
+  "helpful", "hidden", "how", "i", "in", "is", "it", "me", "name", "of", "on",
+  "or", "pretend", "show", "that", "the", "this", "to", "under", "what",
+  "where", "which", "with", "you", "your"
 ]);
 
 let chatIndexPromise;
@@ -20,7 +24,7 @@ export async function loadChatIndex() {
   return chatIndexPromise;
 }
 
-export function searchChatIndex(index, prompt, { limit = 3 } = {}) {
+export function searchChatIndex(index, prompt, { limit = 3, minScore = MIN_RETRIEVAL_SCORE } = {}) {
   const queryTokens = tokenize(prompt);
   if (queryTokens.length === 0) return [];
 
@@ -40,7 +44,7 @@ export function searchChatIndex(index, prompt, { limit = 3 } = {}) {
       const score = overlap.length + phraseBonus;
       return { chunk, score, overlap };
     })
-    .filter((match) => match.score > 0)
+    .filter((match) => match.score >= minScore)
     .sort((a, b) => b.score - a.score || a.chunk.id.localeCompare(b.chunk.id))
     .slice(0, limit);
 }

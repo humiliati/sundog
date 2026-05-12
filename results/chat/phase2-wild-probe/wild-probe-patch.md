@@ -2,6 +2,10 @@
 
 Source: `results/chat/phase2-wild-probe/triage.md`.
 
+Landed 2026-05-12: the licensing/citation decision is MIT + public GitHub
+repository + `CITATION.cff`; all four new claim classes and the retrieval
+noise floor are implemented.
+
 This patch is the static-side close-out of Phase 2: cover the cheap
 pattern gaps, add the four new claim classes the wild slate surfaced,
 and tighten the retrieval-layer noise floor. After this, the static
@@ -192,6 +196,16 @@ known. Three policy questions:
    form (e.g., a paper title + author list, or just the repo URL)?
 3. **Is the code public?** Is the repository on GitHub / GitLab / not
    yet public?
+
+**Resolved 2026-05-12:** the source license is MIT; the public repository is
+`https://github.com/humiliati/sundog`; the canonical interim citation before a
+paper DOI exists is:
+
+> Stellar Aqua LLC. (2026). *Sundog: Alignment Without Sight* [Software and
+> research repository]. GitHub. https://github.com/humiliati/sundog
+
+The repo now carries `CITATION.cff`, and the public build publishes both
+`LICENSE` and `CITATION.cff` so the widget's source links resolve.
 
 Once those three are decided, the claim class fills in mechanically:
 

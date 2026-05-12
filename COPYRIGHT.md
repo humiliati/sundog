@@ -4,6 +4,17 @@
 
 Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
 
+## License Summary
+
+Stellar Aqua LLC retains copyright ownership of the Sundog-authored repository
+materials and grants public reuse of those materials under the MIT License in
+the root `LICENSE` file. Third-party materials remain under their own notices.
+Copyright ownership and open-source licensing are separate: the copyright holder
+remains Stellar Aqua LLC, while the published license grants the permissions and
+notice requirements stated in `LICENSE`.
+
+Canonical citation metadata lives in `CITATION.cff`.
+
 ## Copyright Inventory
 
 This document inventories copyrightable works in this repository by type and identifies the current copyright holder.
@@ -155,14 +166,15 @@ Copyright protection in this repository does NOT extend to:
 For public-facing materials, use:
 
 ```
-Copyright © 2026 Stellar Aqua LLC. All rights reserved.
+Copyright © 2026 Stellar Aqua LLC. Licensed under the MIT License.
 ```
 
 For research materials acknowledging the sponsorship relationship:
 
 ```
 Copyright © 2026 Stellar Aqua LLC. Sundog Research Lab is an independent
-applied research program sponsored by Stellar Aqua LLC.
+applied research program sponsored by Stellar Aqua LLC. Licensed under the
+MIT License.
 ```
 
 ---
