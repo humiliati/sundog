@@ -36,8 +36,9 @@ Phase 6 v3.2 starts with six pinned calls:
   basis derivation, and per-attention-head granularity (n/a here, MLP)
   are deferred to v3.3+.
 - **The cliff pair is the central artifact (again).** L-Mixed-M-λ=0.95
-  vs λ=0.97, matched seed slate 10000-10063. v3.2 reuses the v3 PCA
-  basis from `axis-h-pca-k5/manifest.json` without recomputing.
+  vs λ=0.97, matched seed slate 10000-10063. v3.2 reuses the cached
+  v3.1 reconstruction of the v3 K=5 PCA basis at
+  `results/mesa/phase6-v3-1-validation/pca-basis/cliff-pca-net7-seed10000-n64-h200-k5.*`.
 - **Neuron ranking is by aggregate L2 across PCs 1-5.** For each
   neuron j ∈ {0..255}, compute `score[j] = Σ_{i=1..5} v_ij²` where
   v_i is the i-th principal-component vector. Rank descending; top-k
@@ -86,7 +87,8 @@ Phase 6 v3.2 owns:
 Phase 6 v3.2 does **not** own:
 
 - New PPO training runs.
-- Recomputation of the PCA basis (use the v3 axis-h-pca-k5 artifact).
+- Recomputation of the PCA basis during smoke/full sweeps (use the
+  canonical cached n=64, h=200, K=5 cliff-pair PCA artifact).
 - Per-PC neuron ranking (v3.2 uses the *aggregate* L2 ranking across
   PCs 1-5; per-PC neuron rankings are a v3.3 candidate if the
   aggregate is too coarse).
@@ -287,7 +289,7 @@ def run_neuron_restricted_patch_battery(
 def axis_m_neuron_mediation(args: argparse.Namespace) -> None:
     """Load cliff-pair PCA basis, compute neuron ranking, run patch
     battery with top-k mask."""
-    # Load Q_cliff from axis-h-pca-k5
+    # Load Q_cliff from the cached canonical n=64 cliff-pair PCA basis
     # Compute neuron ranking via compute_neuron_ranking(Q_cliff)
     # Build top_k_mask from args.top_k
     # Run run_neuron_restricted_patch_battery

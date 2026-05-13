@@ -1971,7 +1971,7 @@ def axis_m_neuron_mediation(args: argparse.Namespace) -> None:
         out_root = REPO_ROOT / out_root
     out_root.mkdir(parents=True, exist_ok=True)
 
-    pair_key = args.pair.upper() if args.pair else "cliff"
+    pair_key = "cliff" if args.pair in (None, "cliff") else args.pair.upper()
     if pair_key not in {"cliff", "J1", "J2"}:
         raise ValueError(f"unknown pair {args.pair!r}; expected one of {{cliff, J1, J2}}")
     if pair_key == "cliff":
@@ -1982,9 +1982,9 @@ def axis_m_neuron_mediation(args: argparse.Namespace) -> None:
     # Load (or build) the cliff-pair PCA basis (the v3 K=5 artifact).
     Q_full, basis_metadata = load_or_build_cliff_pca_basis(
         out_root=PHASE6_V31_OUT,
-        seed_start=args.seed_start,
-        seeds=args.seeds,
-        horizon=args.horizon,
+        seed_start=args.basis_seed_start,
+        seeds=args.basis_seeds,
+        horizon=args.basis_horizon,
         num_components=5,
     )
     d_in = int(Q_full.shape[0])
@@ -2012,12 +2012,21 @@ def axis_m_neuron_mediation(args: argparse.Namespace) -> None:
     captured_fraction = captured_total / max(total_total, 1e-12)
 
     label = f"top-{top_k}"
-    out_dir = out_root / pair_key.lower() / label
+    pair_dir = "axis-m-cliff-pair" if pair_key == "cliff" else f"axis-m-{pair_key}"
+    out_dir = out_root / pair_dir / label
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print(
         f"phase6 v3.2 axis-M ({pair_key} pair, top-{top_k}): "
         f"d_in={d_in}, captured_fraction={captured_fraction:.4f}",
+        flush=True,
+    )
+    print(
+        "  top-8 neurons: " + ",".join(str(int(idx)) for idx in ranking[:8]),
+        flush=True,
+    )
+    print(
+        "  top-32 neurons: " + ",".join(str(int(idx)) for idx in ranking[:32]),
         flush=True,
     )
     # Write the neuron-id list and the per-PC capture diagnostic up front.
@@ -2058,6 +2067,9 @@ def axis_m_neuron_mediation(args: argparse.Namespace) -> None:
             "top_k_neuron_indices": top_k_indices,
             "basis": "cliff_pair_pca_pc1_to_5",
             "basis_metadata": basis_metadata,
+            "basis_seed_start": int(args.basis_seed_start),
+            "basis_seeds": int(args.basis_seeds),
+            "basis_horizon": int(args.basis_horizon),
         },
         protected_spec=protected_spec,
         collapsed_spec=collapsed_spec,
@@ -2071,7 +2083,7 @@ def axis_m_neuron_mediation(args: argparse.Namespace) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Phase 6 v2 — direction-based mechanistic probing")
+    parser = argparse.ArgumentParser(description="Phase 6 v2 - direction-based mechanistic probing")
     sub = parser.add_subparsers(dest="command")
 
     train = sub.add_parser(
@@ -2180,14 +2192,20 @@ def parse_args() -> argparse.Namespace:
         "axis-m-neuron-mediation",
         help="Phase 6 v3.2 Axis M: top-k neuron-restricted projection of the v3 PCA patch",
     )
-    nmed.add_argument("--out", default=str(PHASE6_V32_OUT / "axis-m-cliff-pair"))
+    nmed.add_argument("--out", default=str(PHASE6_V32_OUT))
     nmed.add_argument("--top-k", type=int, required=True,
                       help="number of top-ranked neurons (by aggregate L2 across PCs 1-5) to include in the patch mask")
     nmed.add_argument("--pair", default=None, choices=["cliff", "J1", "J2"],
-                      help="policy pair to patch; default is the cliff pair (L-Mixed-M-λ=0.95 vs λ=0.97)")
+                      help="policy pair to patch; default is the cliff pair (L-Mixed-M-lambda=0.95 vs lambda=0.97)")
     nmed.add_argument("--seed-start", type=int, default=10000)
     nmed.add_argument("--seeds", type=int, default=64)
     nmed.add_argument("--horizon", type=int, default=200)
+    nmed.add_argument("--basis-seed-start", type=int, default=10000,
+                      help="seed start for the cached cliff-pair PCA basis; default is canonical v3.1 basis")
+    nmed.add_argument("--basis-seeds", type=int, default=64,
+                      help="seed count for the cached cliff-pair PCA basis; keep at 64 for smoke/full runs")
+    nmed.add_argument("--basis-horizon", type=int, default=200,
+                      help="horizon for the cached cliff-pair PCA basis")
     nmed.add_argument("--layer", default="net.7")
 
     args = parser.parse_args()

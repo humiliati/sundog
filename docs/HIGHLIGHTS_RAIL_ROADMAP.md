@@ -137,10 +137,19 @@ next. Target proportions at desktop widths:
 
 The peeked neighbours are **dimmed and de-saturated** (e.g.
 `filter: brightness(0.55) saturate(0.6); opacity: 0.7;`) so the eye
-does not split attention. They are not interactive while peeked —
-clicking a peeked card slides it to centre rather than navigating to
-its destination. Once centred, the card lights back up and the clip
-starts.
+does not split attention. They are interactive while peeked: clicking a
+peeked card **navigates directly to that card's `data-href`** (decided
+2026-05-12). The rationale is that a peek is a real preview; clicking
+it implies the user wants the destination, not a slide-over.
+
+Always-overlaid skip arrows sit on the rail itself (not in the
+header), absolutely positioned over the left and right edges of the
+track. They support click ("skip") and on touch surfaces are paired
+with swipe gestures. Clicking the next/previous arrow **immediately
+lands the current card's stamp before scrolling away**. That rule is
+load-bearing: verdicts are never skipped, even when the user is
+power-browsing past a card. A skipped clip drops its remaining beat,
+but the stamp still arrives.
 
 Mobile (≤ 520px viewport):
 
@@ -188,7 +197,7 @@ The current grid-based track stays but the column sizing changes:
   filter: brightness(0.55) saturate(0.6);
   opacity: 0.7;
   transform: scale(0.94);
-  pointer-events: none;          /* peek state: click slides, no navigation */
+  /* peek stays interactive: click navigates to its data-href */
 }
 
 .motion-card[data-rail-active] {
@@ -619,13 +628,12 @@ should land cleanly.
    stamp-on-enter / stamp-on-hover dichotomy goes away in the
    center-focus layout because only one card is ever in the centre at
    a time.
-5. **Peeked-card click behaviour.** Current plan: clicking a peeked
-   card slides it to centre (does not navigate). Alternative: click on
-   a peek navigates immediately to the peeked card's `data-href`. The
-   slide-to-centre reading is friendlier for browsing but may frustrate
-   users who clearly clicked the peeked thumbnail because they wanted
-   *that* card's destination. Decide after the Phase 1 layout lands
-   and screenshots/click-test reads come back.
+5. ~~**Peeked-card click behaviour.**~~ Resolved 2026-05-12: clicking a
+   peeked card **navigates** to that card's `data-href`. A peek is a
+   real preview; the user clicked it because they wanted the
+   destination. The always-overlaid skip arrows (see "Layout") provide
+   the slide-to-centre affordance for users who want to browse rather
+   than commit.
 6. **End-of-sequence behaviour.** Current plan: settle on the last
    card with a "Replay sequence" affordance. Alternative: loop back to
    the first card after a longer pause. The settle plan is preferred

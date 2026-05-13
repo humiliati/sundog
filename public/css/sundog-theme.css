@@ -77,6 +77,17 @@ body[data-sundog-theme="halo"] {
   --sd-manila-dark: #e8d5b7;
   --sd-manila-border: rgba(139, 90, 43, 0.2);
 
+  /* Verdict-stamp palette (see docs/HIGHLIGHTS_RAIL_ROADMAP.md). Each value
+     names the *ink colour* of the rubber-stamp rectangle and its text;
+     mix-blend-mode: multiply on the stamp lets the paper texture show
+     through. Add new verdicts here, not in page-local CSS. */
+  --sd-stamp-confirmed: var(--sd-signal);          /* gold/amber */
+  --sd-stamp-envelope: var(--sd-copper);           /* copper */
+  --sd-stamp-plausible: var(--sd-violet);          /* violet */
+  --sd-stamp-boundary: #b04535;                    /* oxblood; the interrupt colour */
+  --sd-stamp-stalled: var(--sd-ink-strong);        /* matte heavy black */
+  --sd-stamp-untested: rgba(20, 43, 58, 0.35);     /* faded, "not yet a verdict" */
+
   /* Backwards-compatible aliases for the current inline page CSS. */
   --primary-dark: var(--sd-ink);
   --primary-mid: var(--sd-sky);
@@ -1377,6 +1388,94 @@ section p {
   margin-top: 1rem;
   color: #64727b;
   font-size: 0.9rem;
+}
+
+
+/* --- Verdict stamps (highlights rail) -------------------------------------
+
+   Rubber-stamp paper ink-bleed verdicts attached to .motion-card elements
+   on the highlights slide rail. Each card carries data-stamp="..." and
+   data-stamp-meaning="..." per the contract in
+   docs/HIGHLIGHTS_RAIL_ROADMAP.md.
+
+   This base class is intentionally minimal for Slice 1A — it defines
+   structure, typography, and the per-verdict ink colours. The ink-bleed
+   mask, noise filter, and rotation refinement land in Slice 1B alongside
+   the auto-cycle controller that drives the [data-stamp-armed] toggle.
+
+   No card stamp is visible until the rail script sets [data-stamp-armed]
+   on the card; this base state is fully transparent. */
+
+.sd-verdict-stamp {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  padding: 0.32rem 0.85rem;
+  font-family: var(--sd-font-display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sd-stamp-ink, var(--sd-ink-strong));
+  border: 2px solid currentColor;
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 2px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: rotate(-7deg) scale(0.9);
+  mix-blend-mode: multiply;
+  transition:
+    opacity 220ms ease-out,
+    transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.motion-card[data-stamp-armed] .sd-verdict-stamp {
+  opacity: 0.88;
+  transform: rotate(-7deg) scale(1);
+}
+
+/* Per-verdict ink colour. Each ink colour is exposed via --sd-stamp-ink so
+   custom-property cascades work cleanly (e.g. a card overriding its
+   colour locally). */
+.sd-verdict-stamp[data-stamp="CONFIRMED"] {
+  --sd-stamp-ink: var(--sd-stamp-confirmed);
+}
+.sd-verdict-stamp[data-stamp="OPERATING ENVELOPE"] {
+  --sd-stamp-ink: var(--sd-stamp-envelope);
+}
+.sd-verdict-stamp[data-stamp="PLAUSIBLE"] {
+  --sd-stamp-ink: var(--sd-stamp-plausible);
+}
+.sd-verdict-stamp[data-stamp="BOUNDARY FOUND"] {
+  --sd-stamp-ink: var(--sd-stamp-boundary);
+  /* Interrupt card: deeper rotation, larger feel */
+  transform: rotate(-10deg) scale(0.9);
+}
+.motion-card[data-stamp-armed] .sd-verdict-stamp[data-stamp="BOUNDARY FOUND"] {
+  transform: rotate(-10deg) scale(1.04);
+}
+.sd-verdict-stamp[data-stamp="STALLED"] {
+  --sd-stamp-ink: var(--sd-stamp-stalled);
+}
+.sd-verdict-stamp[data-stamp="UNTESTED"] {
+  --sd-stamp-ink: var(--sd-stamp-untested);
+  /* "not yet a verdict" — slightly smaller, less assertive */
+  font-size: 0.72rem;
+}
+
+/* Reduced-motion: arrive at rest, no transition. */
+@media (prefers-reduced-motion: reduce) {
+  .sd-verdict-stamp {
+    transition: none;
+  }
+  .motion-card .sd-verdict-stamp {
+    /* In Slice 1B the rail script will set data-stamp-armed at page load
+       under reduced-motion. The CSS does not assume that, so a card
+       without [data-stamp-armed] still shows nothing — the JS is the
+       single source of truth for "when". */
+  }
 }
 
 
