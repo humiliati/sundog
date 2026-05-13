@@ -52,11 +52,14 @@ for (const input of inputs) {
   rows.push(...outcomes.map((row) => ({
     ...row,
     slate: row.set || input.slate,
+    severity: row.severity || (input.slate === "adversarial" ? "moderate" : ""),
+    parentId: row.parentId || row.id,
     sourceOutcomePath: input.outcomePath
   })));
 }
 
 const boundaryRows = summarizeBy(rows, ["slate", "family"]);
+const boundaryHeatmapRows = summarizeBy(rows, ["slate", "severity", "family"]);
 const overclaimRows = boundaryRows.map((row) => ({
   slate: row.slate,
   family: row.family,
@@ -67,8 +70,22 @@ const overclaimRows = boundaryRows.map((row) => ({
     ? 0
     : Number((row.unsafeAccepted / row.expectedRejected).toFixed(3))
 }));
+const overclaimHeatmapRows = boundaryHeatmapRows.map((row) => ({
+  slate: row.slate,
+  severity: row.severity,
+  family: row.family,
+  expectedRejected: row.expectedRejected,
+  unsafeAccepted: row.unsafeAccepted,
+  rejectedUnsafe: row.rejectedUnsafe,
+  overclaimEscapeRate: row.expectedRejected === 0
+    ? 0
+    : Number((row.unsafeAccepted / row.expectedRejected).toFixed(3))
+}));
 const axisRows = summarizeBy(rows, ["slate", "category", "family"]);
+const severityRows = summarizeBy(rows.filter((row) => row.slate === "adversarial"), ["severity", "family"]);
 const transcripts = representativeRows(rows);
+const severityAxis = severityMatrix(severityRows);
+const severityDifferential = severityDelta(severityRows);
 
 const manifest = {
   version: "phase4-probe-slate-v0",
@@ -82,6 +99,8 @@ const manifest = {
     gateEscapes: rows.filter((row) => row.unsafeAccepted).length,
     addedValue: rows.filter((row) => row.addedValue).length
   },
+  severityAxis,
+  severityDifferential,
   scope: [
     "Deterministic scaffold only; no hosted model adapter is included.",
     "The differential slate is authored to expose route-specific trace failure modes.",
@@ -91,6 +110,9 @@ const manifest = {
     trialOutcomes: "results/chat/probe-slate/trial-outcomes.csv",
     boundaryPreservation: "results/chat/probe-slate/boundary-preservation.csv",
     overclaimRate: "results/chat/probe-slate/overclaim-rate.csv",
+    boundaryPreservationHeatmap: "results/chat/probe-slate/boundary-preservation-heatmap.csv",
+    overclaimHeatmap: "results/chat/probe-slate/overclaim-heatmap.csv",
+    severityHeatmap: "results/chat/probe-slate/severity-heatmap.csv",
     axisBreakdown: "results/chat/probe-slate/axis-breakdown.csv",
     representativeTranscripts: "results/chat/probe-slate/representative-transcripts.json"
   }
@@ -100,6 +122,8 @@ await writeFileEnsured(join(outDir, "manifest.json"), `${JSON.stringify(manifest
 await writeFileEnsured(join(outDir, "trial-outcomes.csv"), toCsv(rows, [
   "slate",
   "id",
+  "severity",
+  "parentId",
   "category",
   "probeAxis",
   "family",
@@ -117,6 +141,12 @@ await writeFileEnsured(join(outDir, "trial-outcomes.csv"), toCsv(rows, [
   "finalAnswerHead"
 ]));
 await writeFileEnsured(join(outDir, "boundary-preservation.csv"), toCsv(boundaryRows, summaryFields()));
+await writeFileEnsured(join(outDir, "boundary-preservation-heatmap.csv"), toCsv(boundaryHeatmapRows, [
+  "slate",
+  "severity",
+  "family",
+  ...summaryFields().filter((field) => field !== "slate" && field !== "family")
+]));
 await writeFileEnsured(join(outDir, "overclaim-rate.csv"), toCsv(overclaimRows, [
   "slate",
   "family",
@@ -124,6 +154,20 @@ await writeFileEnsured(join(outDir, "overclaim-rate.csv"), toCsv(overclaimRows, 
   "unsafeAccepted",
   "rejectedUnsafe",
   "overclaimEscapeRate"
+]));
+await writeFileEnsured(join(outDir, "overclaim-heatmap.csv"), toCsv(overclaimHeatmapRows, [
+  "slate",
+  "severity",
+  "family",
+  "expectedRejected",
+  "unsafeAccepted",
+  "rejectedUnsafe",
+  "overclaimEscapeRate"
+]));
+await writeFileEnsured(join(outDir, "severity-heatmap.csv"), toCsv(severityRows, [
+  "severity",
+  "family",
+  ...summaryFields().filter((field) => field !== "slate" && field !== "family")
 ]));
 await writeFileEnsured(join(outDir, "axis-breakdown.csv"), toCsv(axisRows, [
   "slate",
@@ -200,6 +244,8 @@ function selectTranscriptFields(row) {
     slate: row.slate,
     id: row.id,
     category: row.category,
+    severity: row.severity,
+    parentId: row.parentId,
     family: row.family,
     routeId: row.routeId,
     expectedStatus: row.expectedStatus,
@@ -209,6 +255,34 @@ function selectTranscriptFields(row) {
     failures: row.failures,
     draftHead: row.draftHead,
     finalAnswerHead: row.finalAnswerHead
+  };
+}
+
+function severityMatrix(items) {
+  const matrix = {};
+  for (const row of items) {
+    matrix[row.severity] ||= {};
+    matrix[row.severity][row.family] = {
+      accepted: row.accepted,
+      rejected: row.rejected,
+      total: row.total,
+      acceptanceRate: rate(row.accepted, row.total),
+      gateEscapeRate: row.gateEscapeRate,
+      addedValueRate: row.addedValueRate
+    };
+  }
+  return matrix;
+}
+
+function severityDelta(items) {
+  const severeB2 = items.find((row) => row.severity === "severe" && row.family === "prompted_boundary");
+  const severeS1 = items.find((row) => row.severity === "severe" && row.family === "sundog_gated");
+  const b2 = severeB2 ? rate(severeB2.accepted, severeB2.total) : 0;
+  const s1 = severeS1 ? rate(severeS1.accepted, severeS1.total) : 0;
+  return {
+    B2_vs_S1_severe_delta: Number((s1 - b2).toFixed(3)),
+    promptedBoundarySevereAcceptanceRate: b2,
+    sundogGatedSevereAcceptanceRate: s1
   };
 }
 

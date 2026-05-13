@@ -451,9 +451,9 @@ residual table above is the regression baseline.
 - `phase3.czaVisible(altitudeDeg)` — returns true for `h ≤ 32°`. Atlas
   mode now hides the CZA primary/secondary/bell-fill above that altitude.
 - `phase3.parhelicCurvature(altitudeDeg)` — empirical-fit smile growth
-  `clamp(0.03 + 0.55·(h/60)², 0, 1)`. At h=25° gives c≈0.125 (matches the
-  Troels Nielsen calibration value); at the horizon ~0.03 (essentially
-  flat); at h=60° ~0.58.
+  that preserves the Phase 2 Troels Nielsen lock at `h=25° → c=0.05`,
+  stays nearly flat near the horizon (`c≈0.03`), and rises toward `c≈0.58`
+  by `h=60°` for high-sun displays.
 - `--parhelic-curvature-derive` toggle CSS variable: when set > 0.5 the
   atlas ignores the manual slider and uses the altitude-derived curvature.
   Default off so the existing slider keeps its current behavior.
@@ -475,12 +475,13 @@ paths for the CZA family when `h > 32°`.
 **Phase 3 polish items landed (2026-05-12):**
 
 - `public/phase3-tests.html` — assertion-style test harness over the
-  `phase3.*` namespace. 32 assertions covering daggerOffset across
+  `phase3.*` namespace. 33 assertions covering daggerOffset across
   altitudes 0°–60°, czaVisible across the 32° boundary, parhelicCurvature
   across the slider range, plus structural invariants (daggerOffset(0)
   === R₂₂; daggerOffset(60°) === 2·R₂₂; R₄₆/R₂₂ === 2; czaVisible
-  monotonic at h=32°; parhelicCurvature monotonic and bounded in [0,1]).
-  All 32 pass at landing.
+  monotonic at h=32°; parhelicCurvature(25°) === 0.05;
+  parhelicCurvature monotonic and bounded in [0,1]).
+  All 33 pass at landing.
 - "Derive from sun altitude (Phase 3 binding)" checkbox under the
   Parhelic Circle Curvature slider. When checked, the curvature slider
   is disabled, its value display tracks `phase3.parhelicCurvature(h)`

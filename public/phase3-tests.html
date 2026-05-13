@@ -132,7 +132,7 @@
 
         <section id="parhelic-curvature">
             <h2>parhelic curvature (altitude-derived)</h2>
-            <div class="meta"><code>phase3.parhelicCurvature(h) = clamp(0.03 + 0.55·(h/60)², 0, 1)</code>. Empirical fit from the calibration pose; checked at key altitudes.</div>
+            <div class="meta"><code>phase3.parhelicCurvature(h)</code> preserves the 25° Phase 2 calibration at c=0.05, then grows for high-sun displays; checked at key altitudes.</div>
             <table id="curvature-table"><thead>
                 <tr><th>h (°)</th><th class="num">expected</th><th class="num">actual</th><th class="num">|Δ|</th><th>verdict</th></tr>
             </thead><tbody></tbody></table>
@@ -205,9 +205,13 @@
 
         // 3) Parhelic curvature (altitude-derived)
         function expectedCurvature(h) {
-            const u = Math.max(0, Math.min(80, h)) / 60;
-            const c = 0.03 + 0.55 * u * u;
-            return Math.max(0, Math.min(1, c));
+            const altitude = Math.max(0, Math.min(80, h));
+            if (altitude <= 25) {
+                const t = altitude / 25;
+                return Math.max(0, Math.min(1, 0.03 + 0.02 * t * t));
+            }
+            const t = (altitude - 25) / 35;
+            return Math.max(0, Math.min(1, 0.05 + 0.53 * t * t));
         }
         const curveTable = document.getElementById("curvature-table");
         for (const h of [0, 6, 12, 18, 25, 32, 45, 60, 80]) {
@@ -235,7 +239,10 @@
         // 4d: czaVisible monotonic at boundary (true at 32, false at 33)
         row(invTable, ["czaVisible monotonic boundary at h=32°"],
             phase3.czaVisible(32) === true && phase3.czaVisible(33) === false);
-        // 4e: parhelicCurvature monotonically nondecreasing in altitude
+        // 4e: derived curvature preserves the locked 25° Phase 2 pose
+        row(invTable, ["parhelicCurvature(25°) === 0.05"],
+            Math.abs(phase3.parhelicCurvature(25) - 0.05) < CURVE_EPS);
+        // 4f: parhelicCurvature monotonically nondecreasing in altitude
         let mono = true;
         let prev = phase3.parhelicCurvature(0);
         for (let h = 1; h <= 80; h += 1) {
@@ -244,7 +251,7 @@
             prev = c;
         }
         row(invTable, ["parhelicCurvature(h) monotonic in h"], mono);
-        // 4f: parhelicCurvature stays in [0, 1] across full range
+        // 4g: parhelicCurvature stays in [0, 1] across full range
         let bounded = true;
         for (let h = 0; h <= 80; h += 1) {
             const c = phase3.parhelicCurvature(h);

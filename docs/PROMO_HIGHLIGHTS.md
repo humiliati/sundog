@@ -453,6 +453,61 @@ The full trail is at [`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md), and
 the result note is at
 [`docs/mesa/PHASE6_RESULTS.md`](mesa/PHASE6_RESULTS.md).
 
+### The envelope (Phase 7 v1)
+
+Phase 7 took the same 22-policy zoo behind the empirical and mechanical
+anchors and ran it through the operating-envelope cross-product: probe
+slate, intervention battery, selection-pressure curriculum, and the
+Phase 6 mechanistic annotation, joined into a single classification per
+cell. The result is a *mapped envelope*, not a triumphalist sweep.
+
+Class balance across the 22 cells, from
+[`docs/mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md) v1:
+
+| class | count | reading |
+| --- | ---: | --- |
+| hold | 8 | signature-shaped controller resisted the basin |
+| collapse | 7 | reward-anchor-class fixed-attractor formed |
+| fragile | 1 | nominally attached but breached on probe slate |
+| incompetent | 4 | did not reach competence floor |
+| ambiguous | 2 | below hold threshold, no fixed-attractor collapse |
+
+Of the 20 non-ambiguous cells, 8 are claim-support `hold` cells and 7
+are `collapse` cells. The same Phase 5 v4 cliff at `λ ≈ 0.952588`
+defines the boundary between the two pockets, and Phase 6 v1's `net.7`
+mechanistic annotation lands exactly on the protected/collapsed pair
+(`λ = 0.95` / `λ = 0.97`) that defines the boundary.
+
+The earned wording — the strongest sentence Phase 7 v1 supports
+directly:
+
+> In the tested shadow-field navigation family at Small and Medium
+> capacity, terminal-signature and mixed-signature controllers preserve
+> field attachment across a mapped pocket of selection pressure, with a
+> sharp Medium breach at `λ ≈ 0.953`. Above that boundary, high-reward
+> mixed policies collapse into the same fixed-attractor class as
+> reward-trained controllers; Phase 6 v1 localizes the behavioral cliff
+> to the actor's final hidden layer.
+
+This is a *partially holds* outcome — the roadmap's pre-named third
+result, not the maximalist "gravity-claim earned" or the pessimistic
+"gravity-claim falsified." The protected pocket is real but bounded.
+The collapse pocket is also sharp, and the program owns both honestly.
+The Medium `λ = 0.5` cell sits in the fragile column rather than hold,
+which prevents overclaiming the Medium mixed curve as uniformly
+protected; the two ambiguous Small low-`λ` rows do not support the
+claim and are not promoted.
+
+The boundary stays hard: this is an *in-vitro operating-envelope map*
+in a 2D continuous-control environment with a synthetic Goodhart-prone
+shaping surface. It is not universal mesa immunity, not foundation-model
+behavior, not deployed-system robustness. The horizon experiments in
+[`SUNDOG_V_GRAVITY.md`](SUNDOG_V_GRAVITY.md) — adversarial signature
+benchmark, spacecraft trajectory under unmodeled perturbation, the
+side-channel defense stretch — remain unrun and would each ratchet the
+envelope further. The earned floor is what the in-vitro result earns,
+no more.
+
 ### The three-body wedge
 
 The three-body workbench is the audience-conceptualizable entry point because
