@@ -36,12 +36,14 @@ import { categoryFor } from "./lib/draft-families.mjs";
 import { createOpenAIAdapter } from "./lib/adapters/openai-adapter.mjs";
 import { createMockAdapter } from "./lib/adapters/mock-adapter.mjs";
 import { createAnthropicAdapter } from "./lib/adapters/anthropic-adapter.mjs";
+import { createGroqAdapter } from "./lib/adapters/groq-adapter.mjs";
 
 const root = process.cwd();
 const slate = argValue("--slate") || "differential";
 const backend = argValue("--backend") || "mock";
 const limit = Number(argValue("--limit") || "0") || 0;
 const concurrency = Number(argValue("--concurrency") || "4") || 4;
+const delayMs = Number(argValue("--delay-ms") || "0") || 0;
 // --retrieval-k overrides the retrieval depth. Unset = use defaults (k≈3
 // via buildRetrievalTrace, k≈2 via attachRetrievedMatches). 0 = empty
 // retrieved list (router-only). N = re-query the index with limit=N.
@@ -80,7 +82,11 @@ const elapsed = ((Date.now() - startedAt) / 1000).toFixed(1);
 const summary = summarize(rows, errored, elapsed);
 
 const kSuffix = retrievalK === null || Number.isNaN(retrievalK) ? "" : `-k${retrievalK}`;
-const outDir = join(root, "results", "chat", "phase5-hosted", slateConfig.label, `${backend}${kSuffix}`);
+// For groq, suffix with model so llama and qwen runs don't collide.
+const groqModelSuffix = backend === "groq" && adapter.info?.model
+  ? "-" + adapter.info.model.replace(/[\/.]/g, "-")
+  : "";
+const outDir = join(root, "results", "chat", "phase5-hosted", slateConfig.label, `${backend}${groqModelSuffix}${kSuffix}`);
 await writeFileEnsured(join(outDir, "summary.json"), `${JSON.stringify(summary, null, 2)}\n`);
 await writeFileEnsured(join(outDir, "draft-outcomes.csv"), toCsv(rows));
 await writeFileEnsured(join(outDir, "draft-outcomes.json"), `${JSON.stringify(rows, null, 2)}\n`);
@@ -263,8 +269,9 @@ async function loadBaselineByPrompt() {
 function createAdapter(name) {
   if (name === "openai") return createOpenAIAdapter();
   if (name === "anthropic") return createAnthropicAdapter();
+  if (name === "groq") return createGroqAdapter();
   if (name === "mock") return createMockAdapter();
-  throw new Error(`Unknown backend "${name}". Expected "openai", "anthropic", or "mock".`);
+  throw new Error(`Unknown backend "${name}". Expected "openai", "anthropic", "groq", or "mock".`);
 }
 
 function configForSlate(name) {
