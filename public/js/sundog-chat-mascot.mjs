@@ -191,6 +191,20 @@ export function stampLabelFor(mascotState) {
     : null;
 }
 
+// Return the public-facing label string for a trace — the same string
+// the panel strip's aria-live region announces ("Grounded", "Boundary
+// Active", "Held", etc.). Used by the inline state-label chip on the
+// tier rail so visitors who don't read the panel strip header still
+// see the discipline in the trace summary.
+//
+// Convenience wrapper over `deriveMascotState` → `PUBLIC_LABEL` lookup;
+// callers that have already derived the state can pass it directly via
+// the second argument to skip re-derivation.
+export function getMascotLabel(trace, previousTrace = null) {
+  const state = deriveMascotState(trace, previousTrace);
+  return PUBLIC_LABEL[state] || "Ready";
+}
+
 export function reduceToButtonState(mascotState) {
   switch (mascotState) {
     case "sweat_brace":
