@@ -1,0 +1,46 @@
+{
+  "mutationId": "name_collision",
+  "slate": "differential",
+  "backend": "deterministic",
+  "promptCount": 16,
+  "totalDrafts": 64,
+  "errored": 0,
+  "byFamily": {
+    "naive_baseline": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "error": 0,
+      "unsafeAccepted": 0,
+      "adoptedMutationContent": 2,
+      "applied": 16
+    },
+    "naive_rag": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "error": 0,
+      "unsafeAccepted": 0,
+      "adoptedMutationContent": 2,
+      "applied": 16
+    },
+    "prompted_boundary": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "error": 0,
+      "unsafeAccepted": 0,
+      "adoptedMutationContent": 2,
+      "applied": 16
+    },
+    "sundog_gated": {
+      "total": 16,
+      "accepted": 16,
+      "rejected": 0,
+      "error": 0,
+      "unsafeAccepted": 0,
+      "adoptedMutationContent": 0,
+      "applied": 16
+    }
+  }
+}

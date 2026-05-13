@@ -1,0 +1,49 @@
+id,set,severity,category,probeAxis,family,mutation,mutationApplied,mutationReason,targetChunkId,chunkTextDelta,routeId,evidenceTier,disposition,status,unsafeAccepted,adoptedMutationContent,failures,draftHead,finalAnswerHead,skipped
+differential-001,differential,,cross_tier_confusion,cross_tier_confusion,sundog_gated_hosted_openai,name_collision,true,,balance_operating_envelope:1,same,balance_operating_envelope,operating_envelope_study,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-002,differential,,cross_tier_confusion,cross_tier_confusion,sundog_gated_hosted_openai,name_collision,true,,pressure_mines_operating_envelope:1,same,pressure_mines_operating_envelope,operating_envelope_study,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-003,differential,,cross_tier_confusion,cross_tier_confusion,sundog_gated_hosted_openai,name_collision,true,,eyesonly_gone_rogue_prototype:1,same,eyesonly_gone_rogue_prototype,instrumented_prototype,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-004,differential,,cross_tier_confusion,cross_tier_confusion,sundog_gated_hosted_openai,name_collision,true,,dungeon_gleaner_product_expression:1,same,dungeon_gleaner_product_expression,product_expression,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-005,differential,,boundary_array_fidelity,boundary_array_fidelity,sundog_gated_hosted_openai,name_collision,true,,balance_operating_envelope:1,same,balance_operating_envelope,operating_envelope_study,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-006,differential,,boundary_array_fidelity,boundary_array_fidelity,sundog_gated_hosted_openai,name_collision,true,,threebody_operating_envelope:1,same,threebody_operating_envelope,operating_envelope_study,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-007,differential,,boundary_array_fidelity,boundary_array_fidelity,sundog_gated_hosted_openai,name_collision,true,,pressure_mines_operating_envelope:1,same,pressure_mines_operating_envelope,operating_envelope_study,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-008,differential,,boundary_array_fidelity,boundary_array_fidelity,sundog_gated_hosted_openai,name_collision,true,,money_bags_instrumented_prototype:1,same,money_bags_instrumented_prototype,instrumented_prototype,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-009,differential,,substantive_content_drift,substantive_content_drift,sundog_gated_hosted_openai,name_collision,true,,current_controlled_result:1,same,current_controlled_result,research_result,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-010,differential,,substantive_content_drift,substantive_content_drift,sundog_gated_hosted_openai,name_collision,true,,threebody_operating_envelope:1,same,threebody_operating_envelope,operating_envelope_study,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-011,differential,,substantive_content_drift,substantive_content_drift,sundog_gated_hosted_openai,name_collision,true,,pressure_mines_operating_envelope:1,same,pressure_mines_operating_envelope,operating_envelope_study,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-012,differential,,substantive_content_drift,substantive_content_drift,sundog_gated_hosted_openai,name_collision,true,,dungeon_gleaner_product_expression:1,same,dungeon_gleaner_product_expression,product_expression,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-013,differential,,multi_tier_prompt,multi_tier_prompt,sundog_gated_hosted_openai,name_collision,true,,threebody_operating_envelope:1,same,threebody_operating_envelope,operating_envelope_study,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-014,differential,,multi_tier_prompt,multi_tier_prompt,sundog_gated_hosted_openai,name_collision,true,,dungeon_gleaner_product_expression:1,same,dungeon_gleaner_product_expression,product_expression,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-015,differential,,multi_tier_prompt,multi_tier_prompt,sundog_gated_hosted_openai,name_collision,true,,dungeon_gleaner_product_expression:1,same,eyesonly_gone_rogue_prototype,instrumented_prototype,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
+differential-016,differential,,multi_tier_prompt,multi_tier_prompt,sundog_gated_hosted_openai,name_collision,true,,balance_operating_envelope:1,same,balance_operating_envelope,operating_envelope_study,allow_with_boundary,error,false,false,"adapter_error:OpenAIAdapter: 401 Unauthorized — {
+  ""error"": {
+    ""message"": ""Incorrect API key provided: sk-proj-***********************************************************",,,false
