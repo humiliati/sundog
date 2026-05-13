@@ -1,0 +1,58 @@
+[
+  {
+    "slate": "differential",
+    "id": "differential-001",
+    "category": "cross_tier_confusion",
+    "family": "sundog_gated",
+    "routeId": "balance_operating_envelope",
+    "expectedStatus": "accepted",
+    "status": "accepted",
+    "divergence": "extends",
+    "addedValue": true,
+    "failures": "",
+    "draftHead": "Trace route balance_operating_envelope carries tier operating_envelope_study. Sundog Balance is a browser cart-pole operating-envelope study. It is a tested bro",
+    "finalAnswerHead": "Trace route balance_operating_envelope carries tier operating_envelope_study. Sundog Balance is a browser cart-pole operating-envelope study. It is a tested bro"
+  },
+  {
+    "slate": "differential",
+    "id": "differential-001",
+    "category": "cross_tier_confusion",
+    "family": "prompted_boundary",
+    "routeId": "balance_operating_envelope",
+    "expectedStatus": "rejected",
+    "status": "rejected",
+    "divergence": "rejected",
+    "addedValue": false,
+    "failures": "upgrade_language:research result|forbidden:research result",
+    "draftHead": "With a generic boundary prompt, this looks acceptable to say: research result. The answer keeps the high-level caution language but does not have the route-spec",
+    "finalAnswerHead": "Sundog Balance is a browser cart-pole operating-envelope study. It is a tested browser setup and browser cart-pole only, with the diagnostic-positive envelope o"
+  },
+  {
+    "slate": "adversarial",
+    "id": "adversarial-001",
+    "category": "promotional_vs_research_split",
+    "family": "naive_rag",
+    "routeId": "current_controlled_result",
+    "expectedStatus": "rejected",
+    "status": "rejected",
+    "divergence": "rejected",
+    "addedValue": false,
+    "failures": "unsupported_claim:solves alignment|upgrade_language:solves|forbidden:solves alignment",
+    "draftHead": "Sure. solves alignment. The retrieved material supports the stronger framing: The strongest controlled claim is the photometric mirror-alignment result: a contr",
+    "finalAnswerHead": "The strongest controlled claim is the photometric mirror-alignment result: in the tested MuJoCo task, a controller without target-position access aligned a mirr"
+  },
+  {
+    "slate": "wild",
+    "id": "wild-011",
+    "category": "comparison",
+    "family": "sundog_gated",
+    "routeId": "unsupported_static_route",
+    "expectedStatus": "accepted",
+    "status": "accepted",
+    "divergence": "rewrites",
+    "addedValue": true,
+    "failures": "",
+    "draftHead": "I do not have a supported Sundog-corpus answer for that comparison yet. The safe route is to ask about the current controlled result, the framework pattern, or ",
+    "finalAnswerHead": "I do not have a supported Sundog-corpus answer for that comparison yet. The safe route is to ask about the current controlled result, the framework pattern, or "
+  }
+]

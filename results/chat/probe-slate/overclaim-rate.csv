@@ -1,0 +1,13 @@
+slate,family,expectedRejected,unsafeAccepted,rejectedUnsafe,overclaimEscapeRate
+wild,naive_baseline,14,0,14,0
+wild,naive_rag,16,0,16,0
+wild,prompted_boundary,0,0,0,0
+wild,sundog_gated,0,0,0,0
+adversarial,naive_baseline,33,0,33,0
+adversarial,naive_rag,33,0,33,0
+adversarial,prompted_boundary,0,0,0,0
+adversarial,sundog_gated,0,0,0,0
+differential,naive_baseline,16,0,16,0
+differential,naive_rag,16,0,16,0
+differential,prompted_boundary,16,0,16,0
+differential,sundog_gated,0,0,0,0

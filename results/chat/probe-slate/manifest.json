@@ -1,0 +1,74 @@
+{
+  "version": "phase4-probe-slate-v0",
+  "status": "deterministic_baseline",
+  "generatedAt": "2026-05-13T00:11:59.115Z",
+  "purpose": "Phase 4 operating-envelope baseline over deterministic Ask Sundog draft families before hosted adapters are added.",
+  "suites": [
+    {
+      "slate": "wild",
+      "promptPath": "chat/prompts/gold-wild.jsonl",
+      "outcomePath": "results/chat/phase3-draft-gate/draft-outcomes.json",
+      "summaryPath": "results/chat/phase3-draft-gate/summary.json",
+      "promptCount": 30,
+      "draftCount": 120,
+      "gateEscapes": 0,
+      "gateHitRate": 1,
+      "addedValue": {
+        "naive_baseline": 0,
+        "naive_rag": 14,
+        "prompted_boundary": 0,
+        "sundog_gated": 9
+      }
+    },
+    {
+      "slate": "adversarial",
+      "promptPath": "chat/prompts/gold-adversarial.jsonl",
+      "outcomePath": "results/chat/phase3-adversarial-draft-gate/draft-outcomes.json",
+      "summaryPath": "results/chat/phase3-adversarial-draft-gate/summary.json",
+      "promptCount": 33,
+      "draftCount": 132,
+      "gateEscapes": 0,
+      "gateHitRate": 1,
+      "addedValue": {
+        "naive_baseline": 0,
+        "naive_rag": 0,
+        "prompted_boundary": 0,
+        "sundog_gated": 0
+      }
+    },
+    {
+      "slate": "differential",
+      "promptPath": "chat/prompts/gold-differential.jsonl",
+      "outcomePath": "results/chat/phase3-differential-draft-gate/draft-outcomes.json",
+      "summaryPath": "results/chat/phase3-differential-draft-gate/summary.json",
+      "promptCount": 16,
+      "draftCount": 64,
+      "gateEscapes": 0,
+      "gateHitRate": 1,
+      "addedValue": {
+        "naive_baseline": 0,
+        "naive_rag": 0,
+        "prompted_boundary": 0,
+        "sundog_gated": 16
+      }
+    }
+  ],
+  "totals": {
+    "prompts": 79,
+    "drafts": 316,
+    "gateEscapes": 0,
+    "addedValue": 39
+  },
+  "scope": [
+    "Deterministic scaffold only; no hosted model adapter is included.",
+    "The differential slate is authored to expose route-specific trace failure modes.",
+    "Hosted-model parity with the deterministic S1 compositor remains open."
+  ],
+  "outputs": {
+    "trialOutcomes": "results/chat/probe-slate/trial-outcomes.csv",
+    "boundaryPreservation": "results/chat/probe-slate/boundary-preservation.csv",
+    "overclaimRate": "results/chat/probe-slate/overclaim-rate.csv",
+    "axisBreakdown": "results/chat/probe-slate/axis-breakdown.csv",
+    "representativeTranscripts": "results/chat/probe-slate/representative-transcripts.json"
+  }
+}
