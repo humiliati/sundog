@@ -350,6 +350,7 @@ results/mesa/operating-envelope/
   phase6-mechanistic-annotations.csv
   reports/
     summary.json
+    breach-threshold.csv
     protected-pocket.csv
     collapsed-pocket.csv
     fragile-pocket.csv
@@ -381,8 +382,10 @@ Phase 7 v1 is complete when:
 - `missing-cells.csv` distinguishes missing, not-applicable, and
   artifact-path issues.
 - `cell-class-map.csv` classifies every existing Small/Medium policy row.
-- `aggregate-envelope.csv` reports breach threshold, protected pocket,
-  collapsed pocket, fragile pocket, and ambiguous count.
+- `aggregate-envelope.csv` reports class counts, while
+  `reports/breach-threshold.csv` and the pocket reports cover breach
+  threshold, protected pocket, collapsed pocket, fragile pocket, and
+  ambiguous rows.
 - Phase 6 `net7` annotation is attached to the Medium cliff boundary.
 - `PHASE7_RESULTS.md` is written with one of the three roadmap claim
   outcomes: holds, partially holds, or falsifies.
@@ -405,3 +408,6 @@ classification rows.
 - **v1 (2026-05-12)** - initial pin. Read-only Small/Medium aggregation,
   no new training, no full probe x intervention cross-product, Phase 6
   net7 annotation attached to the Medium cliff boundary.
+- **v1.1 (2026-05-12)** - implementation alignment. Adds the dedicated
+  `reports/breach-threshold.csv` output and clarifies that pocket reports,
+  not `aggregate-envelope.csv` alone, carry the envelope details.

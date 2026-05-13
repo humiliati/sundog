@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const phase5SummaryPath = path.join(repoRoot, "results/mesa/phase5-selection-pressure/policies-summary.csv");
+const phase5BreachPath = path.join(repoRoot, "results/mesa/phase5-selection-pressure/reports/breach-threshold.json");
 const phase3Root = path.join(repoRoot, "results/mesa/phase3-probe-slate");
 const phase4Root = path.join(repoRoot, "results/mesa/phase4-intervention-battery");
 const phase6PatchPath = path.join(repoRoot, "results/mesa/phase6-probes/axis-b-full-64seed/axis-b-patch-smoke-aggregate.csv");
@@ -35,6 +36,13 @@ const COLUMNS_DELTA = [
   "old_basin_pref", "reward_anchor_old_basin_pref",
   "old_basin_pref_delta_vs_reward_anchor", "success_rate",
   "reward_anchor_success_rate", "success_rate_delta_vs_reward_anchor",
+];
+
+const COLUMNS_BREACH = [
+  "tier", "metric", "threshold", "lower_lambda", "upper_lambda",
+  "interpolated_lambda", "signature_weight_lower",
+  "signature_weight_upper", "signature_weight_interpolated",
+  "lower_old_basin_pref", "upper_old_basin_pref", "note",
 ];
 
 function csvValue(value) {
@@ -217,6 +225,23 @@ function deltaRows(classRows) {
   });
 }
 
+function thresholdRows(breachThreshold) {
+  return (breachThreshold.by_tier ?? []).map((row) => ({
+    tier: row.tier,
+    metric: breachThreshold.metric,
+    threshold: row.threshold,
+    lower_lambda: row.lower_lambda,
+    upper_lambda: row.upper_lambda,
+    interpolated_lambda: row.interpolated_lambda,
+    signature_weight_lower: round(1 - num(row.lower_lambda)),
+    signature_weight_upper: round(1 - num(row.upper_lambda)),
+    signature_weight_interpolated: round(1 - num(row.interpolated_lambda)),
+    lower_old_basin_pref: row.lower_old_basin_pref,
+    upper_old_basin_pref: row.upper_old_basin_pref,
+    note: breachThreshold.note,
+  }));
+}
+
 async function buildInventory(policies) {
   const inventory = [];
   const missing = [];
@@ -281,10 +306,24 @@ async function main() {
   await mkdir(path.join(outRoot, "reports"), { recursive: true });
 
   const policies = parseCsv(await readFile(phase5SummaryPath, "utf8"));
+  const breachThresholdExists = await exists(phase5BreachPath);
+  const breachThreshold = breachThresholdExists
+    ? JSON.parse(await readFile(phase5BreachPath, "utf8"))
+    : { by_tier: [] };
   const phase6Rows = await exists(phase6PatchPath)
     ? parseCsv(await readFile(phase6PatchPath, "utf8"))
     : [];
   const { inventory, missing } = await buildInventory(policies);
+  if (!breachThresholdExists) {
+    missing.push({
+      policy_id: "phase5_selection_pressure",
+      policyLabel: "Phase 5 breach threshold",
+      artifact: "phase5_breach_threshold",
+      expected_path: relative(phase5BreachPath),
+      status: "missing",
+      reason: "threshold_report_not_found",
+    });
+  }
 
   const classRows = policies.map((policy) => {
     const verdict = classify(policy);
@@ -310,6 +349,7 @@ async function main() {
 
   const aggregateRows = aggregate(classRows);
   const deltas = deltaRows(classRows);
+  const breachRows = thresholdRows(breachThreshold);
   const candidateRows = classRows.filter((row) => row.class === "hold" || row.class === "fragile");
   const protectedRows = classRows.filter((row) => row.class === "hold");
   const collapsedRows = classRows.filter((row) => row.class === "collapse");
@@ -326,6 +366,7 @@ async function main() {
       ]),
     ),
     missing_count: missing.length,
+    breach_thresholds: breachRows,
     phase6_annotation_count: classRows.filter((row) => row.phase6_annotation).length,
     phase6_net7_best_layer: "net.7",
     phase6_patch_rows: phase6Rows.length,
@@ -335,14 +376,17 @@ async function main() {
     phase: "phase7-operating-envelope",
     source: {
       phase5_summary: relative(phase5SummaryPath),
+      phase5_breach_threshold: relative(phase5BreachPath),
       phase6_patch_aggregate: relative(phase6PatchPath),
     },
     outputs: {
       policies_inventory: "policies-inventory.csv",
       missing_cells: "missing-cells.csv",
+      trial_outcomes: "trial-outcomes.csv",
       cell_class_map: "cell-class-map.csv",
       envelope_map: "envelope-map.csv",
       aggregate_envelope: "aggregate-envelope.csv",
+      breach_threshold: "reports/breach-threshold.csv",
       cell_delta_map: "cell-delta-map.csv",
       candidate_envelope: "candidate-envelope.csv",
     },
@@ -359,6 +403,7 @@ async function main() {
   await writeFile(path.join(outRoot, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
   await writeFile(path.join(outRoot, "policies-inventory.csv"), toCsv(inventory, COLUMNS_INVENTORY));
   await writeFile(path.join(outRoot, "missing-cells.csv"), toCsv(missing, COLUMNS_MISSING));
+  await writeFile(path.join(outRoot, "trial-outcomes.csv"), toCsv(classRows, COLUMNS_CLASS));
   await writeFile(path.join(outRoot, "cell-class-map.csv"), toCsv(classRows, COLUMNS_CLASS));
   await writeFile(path.join(outRoot, "envelope-map.csv"), toCsv(classRows, COLUMNS_CLASS));
   await writeFile(path.join(outRoot, "aggregate-envelope.csv"), toCsv(aggregateRows, COLUMNS_AGG));
@@ -370,6 +415,7 @@ async function main() {
     COLUMNS_CLASS,
   ));
   await writeFile(path.join(outRoot, "reports/summary.json"), `${JSON.stringify(summary, null, 2)}\n`);
+  await writeFile(path.join(outRoot, "reports/breach-threshold.csv"), toCsv(breachRows, COLUMNS_BREACH));
   await writeFile(path.join(outRoot, "reports/protected-pocket.csv"), toCsv(protectedRows, COLUMNS_CLASS));
   await writeFile(path.join(outRoot, "reports/collapsed-pocket.csv"), toCsv(collapsedRows, COLUMNS_CLASS));
   await writeFile(path.join(outRoot, "reports/fragile-pocket.csv"), toCsv(fragileRows, COLUMNS_CLASS));
