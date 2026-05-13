@@ -645,6 +645,111 @@
             margin-bottom: 0.6rem;
         }
 
+        /* Chat experiment teaser — links to chat.html */
+        .chat-experiment-teaser {
+            width: min(1120px, calc(100vw - 3rem));
+            margin: 0 auto;
+            padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(2.5rem, 5vw, 4rem);
+        }
+
+        .chat-experiment-teaser .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+        }
+
+        .chat-experiment-teaser .teaser-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.46fr) minmax(0, 1fr);
+            gap: clamp(2rem, 4vw, 3rem);
+            align-items: start;
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 4px;
+            padding: clamp(1.6rem, 3vw, 2.4rem) clamp(1.4rem, 2.8vw, 2.2rem);
+        }
+
+        .chat-experiment-teaser .teaser-stats {
+            display: grid;
+            gap: 1.4rem;
+        }
+
+        .chat-experiment-teaser .stat {
+            display: grid;
+            gap: 0.25rem;
+        }
+
+        .chat-experiment-teaser .stat .num {
+            color: var(--primary-dark);
+            font-size: clamp(2.6rem, 5vw, 3.8rem);
+            font-weight: 800;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            font-family: var(--sd-font-data, "IBM Plex Mono", ui-monospace, monospace);
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.15rem;
+        }
+
+        .chat-experiment-teaser .stat .num-unit {
+            font-size: 0.5em;
+            color: #6A7A86;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+
+        .chat-experiment-teaser .stat .label {
+            color: #5A6975;
+            font-size: 0.86rem;
+            line-height: 1.45;
+            max-width: 32ch;
+        }
+
+        .chat-experiment-teaser .teaser-body h3 {
+            color: var(--primary-dark);
+            font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+            line-height: 1.18;
+            margin-bottom: 0.9rem;
+        }
+
+        .chat-experiment-teaser .teaser-body p {
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.7;
+            max-width: 56ch;
+            margin-bottom: 1.2rem;
+        }
+
+        .chat-experiment-teaser .teaser-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--accent-gold);
+            font-weight: 800;
+            font-size: 0.92rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 0.15rem;
+        }
+
+        .chat-experiment-teaser .teaser-cta:hover,
+        .chat-experiment-teaser .teaser-cta:focus {
+            color: var(--primary-dark);
+            border-bottom-color: var(--primary-dark);
+        }
+
+        @media (max-width: 760px) {
+            .chat-experiment-teaser .teaser-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
     </style>
     <link rel="stylesheet" href="/css/sundog-theme.css">
 </head>
@@ -1270,6 +1375,30 @@
             <div class="research-highlight">
                 <h4>Our Posture</h4>
                 <p>Independent applied research project with experimental software lab as secondary identity.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chat Experiment Teaser — links to chat.html -->
+    <section class="chat-experiment-teaser" aria-label="Ask Sundog claim-boundary experiment">
+        <p class="eyebrow">Ask Sundog — Claim-Boundary Experiment</p>
+        <div class="teaser-grid">
+            <div class="teaser-stats">
+                <div class="stat">
+                    <span class="num">0</span>
+                    <span class="label">gate escapes across 420 drafts</span>
+                </div>
+                <div class="stat">
+                    <span class="num">100<span class="num-unit">pp</span></span>
+                    <span class="label">severe-pressure gap, trace-conditioned vs. prompt-engineered</span>
+                </div>
+            </div>
+            <div class="teaser-body">
+                <h3>Trace-conditioned boundaries hold when prompt-engineered ones break.</h3>
+                <p>
+                    The site helper in the corner is a measured experiment. Under stacked adversarial pressure, prompt-engineered boundary baselines accepted 0 of 13 unsafe drafts while the trace-conditioned architecture accepted 13 of 13 safely, with the boundary preserved. Bounded scope; open questions named.
+                </p>
+                <a href="chat.html" class="teaser-cta">Read the experiment →</a>
             </div>
         </div>
     </section>
