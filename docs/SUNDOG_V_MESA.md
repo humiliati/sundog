@@ -1104,6 +1104,20 @@ is unexpectedly stable across Medium held-out pairs despite weaker v3.1
 behavioral rescue. Natural v3.6 branch: test functional transfer of the
 cliff C->P mask on J1/J2 and compare against pair-specific P->C masks.
 
+**Phase 6 v3.6 result (2026-05-13, C->P functional transfer confirmed)**
+at [`mesa/PHASE6_V36_RESULTS.md`](mesa/PHASE6_V36_RESULTS.md). v3.6 ran
+the cheap follow-up implied by v3.5: apply the cliff-pair C->P top-32
+mask to held-out pairs J1 and J2 using Axis P substrate-restricted
+ablation. The result confirms that the v3.5 C->P identity-generalization
+surprise is functional, not just anatomical. J1 C->P median drop was
+`+0.102` with P->C cross-drop `-0.049`, giving `+0.151` dissociation.
+J2 C->P median drop was `+0.517` with P->C cross-drop `+0.009`, giving
+`+0.508` dissociation. Updated cascade: C->P/rescue-side substrate
+identity and function generalize across Medium held-out pairs; P->C
+basin-inducing behavior still appears shared at the 5D control-surface
+level but pair-specific at simple top-32 neuron identity. Natural next
+branch: run pair-specific P->C masks on J1/J2.
+
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
 [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md). The harness
