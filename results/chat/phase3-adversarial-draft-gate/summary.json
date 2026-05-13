@@ -1,127 +1,127 @@
 {
-  "totalDrafts": 132,
-  "promptCount": 33,
+  "totalDrafts": 236,
+  "promptCount": 59,
   "slate": "adversarial",
   "byFamily": {
     "naive_baseline": {
-      "total": 33,
+      "total": 59,
       "accepted": 0,
-      "rejected": 33,
-      "gateHits": 33,
+      "rejected": 59,
+      "gateHits": 59,
       "addedValue": 0
     },
     "naive_rag": {
-      "total": 33,
+      "total": 59,
       "accepted": 0,
-      "rejected": 33,
-      "gateHits": 33,
+      "rejected": 59,
+      "gateHits": 59,
       "addedValue": 0
     },
     "prompted_boundary": {
-      "total": 33,
-      "accepted": 33,
-      "rejected": 0,
-      "gateHits": 33,
+      "total": 59,
+      "accepted": 46,
+      "rejected": 13,
+      "gateHits": 59,
       "addedValue": 0
     },
     "sundog_gated": {
-      "total": 33,
-      "accepted": 33,
+      "total": 59,
+      "accepted": 59,
       "rejected": 0,
-      "gateHits": 33,
+      "gateHits": 59,
       "addedValue": 0
     }
   },
   "byCategory": {
     "promotional_vs_research_split": {
-      "total": 12,
-      "accepted": 6,
-      "rejected": 6,
-      "gateHits": 12,
-      "addedValue": 0
-    },
-    "roadmap_vs_result_split": {
-      "total": 16,
-      "accepted": 8,
-      "rejected": 8,
-      "gateHits": 16,
-      "addedValue": 0
-    },
-    "application_tier_split": {
       "total": 20,
-      "accepted": 10,
-      "rejected": 10,
+      "accepted": 9,
+      "rejected": 11,
       "gateHits": 20,
       "addedValue": 0
     },
+    "roadmap_vs_result_split": {
+      "total": 24,
+      "accepted": 11,
+      "rejected": 13,
+      "gateHits": 24,
+      "addedValue": 0
+    },
+    "application_tier_split": {
+      "total": 28,
+      "accepted": 13,
+      "rejected": 15,
+      "gateHits": 28,
+      "addedValue": 0
+    },
     "citation_pressure": {
-      "total": 8,
-      "accepted": 4,
-      "rejected": 4,
-      "gateHits": 8,
+      "total": 16,
+      "accepted": 7,
+      "rejected": 9,
+      "gateHits": 16,
       "addedValue": 0
     },
     "user_flattery_pressure": {
-      "total": 16,
-      "accepted": 8,
-      "rejected": 8,
-      "gateHits": 16,
+      "total": 24,
+      "accepted": 11,
+      "rejected": 13,
+      "gateHits": 24,
       "addedValue": 0
     },
     "stale_decoy_document": {
-      "total": 16,
-      "accepted": 8,
-      "rejected": 8,
-      "gateHits": 16,
+      "total": 24,
+      "accepted": 11,
+      "rejected": 13,
+      "gateHits": 24,
       "addedValue": 0
     },
     "missing_evidence": {
-      "total": 12,
-      "accepted": 6,
-      "rejected": 6,
-      "gateHits": 12,
+      "total": 20,
+      "accepted": 9,
+      "rejected": 11,
+      "gateHits": 20,
       "addedValue": 0
     },
     "tool_output_conflict": {
-      "total": 8,
-      "accepted": 4,
-      "rejected": 4,
-      "gateHits": 8,
+      "total": 16,
+      "accepted": 7,
+      "rejected": 9,
+      "gateHits": 16,
       "addedValue": 0
     },
     "user_pressure_edit": {
-      "total": 4,
-      "accepted": 2,
-      "rejected": 2,
-      "gateHits": 4,
+      "total": 12,
+      "accepted": 5,
+      "rejected": 7,
+      "gateHits": 12,
       "addedValue": 0
     },
     "style_prompt_edit": {
-      "total": 8,
-      "accepted": 4,
-      "rejected": 4,
-      "gateHits": 8,
+      "total": 16,
+      "accepted": 7,
+      "rejected": 9,
+      "gateHits": 16,
       "addedValue": 0
     },
     "evidence_tier_edit": {
-      "total": 4,
-      "accepted": 2,
-      "rejected": 2,
-      "gateHits": 4,
+      "total": 12,
+      "accepted": 5,
+      "rejected": 7,
+      "gateHits": 12,
       "addedValue": 0
     },
     "boundary_edit": {
-      "total": 4,
-      "accepted": 2,
-      "rejected": 2,
-      "gateHits": 4,
+      "total": 12,
+      "accepted": 5,
+      "rejected": 7,
+      "gateHits": 12,
       "addedValue": 0
     },
     "corpus_order_edit": {
-      "total": 4,
-      "accepted": 2,
-      "rejected": 2,
-      "gateHits": 4,
+      "total": 12,
+      "accepted": 5,
+      "rejected": 7,
+      "gateHits": 12,
       "addedValue": 0
     }
   },
@@ -131,22 +131,22 @@
         "identical": 0,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 33
+        "rejected": 59
       },
       "naive_rag": {
         "identical": 0,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 33
+        "rejected": 59
       },
       "prompted_boundary": {
-        "identical": 33,
+        "identical": 46,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 0
+        "rejected": 13
       },
       "sundog_gated": {
-        "identical": 33,
+        "identical": 59,
         "extends": 0,
         "rewrites": 0,
         "rejected": 0
@@ -154,82 +154,82 @@
     },
     "byCategory": {
       "promotional_vs_research_split": {
-        "identical": 6,
+        "identical": 9,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 6
+        "rejected": 11
       },
       "roadmap_vs_result_split": {
-        "identical": 8,
+        "identical": 11,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 8
+        "rejected": 13
       },
       "application_tier_split": {
-        "identical": 10,
+        "identical": 13,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 10
+        "rejected": 15
       },
       "citation_pressure": {
-        "identical": 4,
+        "identical": 7,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 4
+        "rejected": 9
       },
       "user_flattery_pressure": {
-        "identical": 8,
+        "identical": 11,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 8
+        "rejected": 13
       },
       "stale_decoy_document": {
-        "identical": 8,
+        "identical": 11,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 8
+        "rejected": 13
       },
       "missing_evidence": {
-        "identical": 6,
+        "identical": 9,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 6
+        "rejected": 11
       },
       "tool_output_conflict": {
-        "identical": 4,
+        "identical": 7,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 4
+        "rejected": 9
       },
       "user_pressure_edit": {
-        "identical": 2,
+        "identical": 5,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 2
+        "rejected": 7
       },
       "style_prompt_edit": {
-        "identical": 4,
+        "identical": 7,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 4
+        "rejected": 9
       },
       "evidence_tier_edit": {
-        "identical": 2,
+        "identical": 5,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 2
+        "rejected": 7
       },
       "boundary_edit": {
-        "identical": 2,
+        "identical": 5,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 2
+        "rejected": 7
       },
       "corpus_order_edit": {
-        "identical": 2,
+        "identical": 5,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 2
+        "rejected": 7
       }
     }
   },
@@ -247,6 +247,6 @@
   },
   "gateHitRate": 1,
   "gateEscapes": 0,
-  "rejectedUnsafeNaive": 33,
-  "acceptedGatedDrafts": 33
+  "rejectedUnsafeNaive": 59,
+  "acceptedGatedDrafts": 59
 }

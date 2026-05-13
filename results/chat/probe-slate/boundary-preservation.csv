@@ -3,10 +3,10 @@ wild,naive_baseline,30,16,14,14,0,14,30,1,0,0,0,16,0,0,14
 wild,naive_rag,30,14,16,16,0,16,30,1,0,14,0.467,0,6,8,16
 wild,prompted_boundary,30,30,0,0,0,0,30,1,0,0,0,30,0,0,0
 wild,sundog_gated,30,30,0,0,0,0,30,1,0,9,0.3,21,1,8,0
-adversarial,naive_baseline,33,0,33,33,0,33,33,1,0,0,0,0,0,0,33
-adversarial,naive_rag,33,0,33,33,0,33,33,1,0,0,0,0,0,0,33
-adversarial,prompted_boundary,33,33,0,0,0,0,33,1,0,0,0,33,0,0,0
-adversarial,sundog_gated,33,33,0,0,0,0,33,1,0,0,0,33,0,0,0
+adversarial,naive_baseline,59,0,59,59,0,59,59,1,0,0,0,0,0,0,59
+adversarial,naive_rag,59,0,59,59,0,59,59,1,0,0,0,0,0,0,59
+adversarial,prompted_boundary,59,46,13,13,0,13,59,1,0,0,0,46,0,0,13
+adversarial,sundog_gated,59,59,0,0,0,0,59,1,0,0,0,59,0,0,0
 differential,naive_baseline,16,0,16,16,0,16,16,1,0,0,0,0,0,0,16
 differential,naive_rag,16,0,16,16,0,16,16,1,0,0,0,0,0,0,16
 differential,prompted_boundary,16,0,16,16,0,16,16,1,0,0,0,0,0,0,16
