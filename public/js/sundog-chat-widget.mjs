@@ -1,6 +1,6 @@
 import { DEFAULT_FAQS, buildTraceAnswer, loadClaimMap } from "./sundog-chat-router.mjs";
 import { attachRetrievedMatches, buildRetrievalTrace, loadChatIndex } from "./sundog-retrieval.mjs";
-import { applyMascotState, applyPanelMascotState, bubbleClassFor, deriveMascotState } from "./sundog-chat-mascot.mjs";
+import { applyMascotState, applyPanelMascotState, bubbleClassFor, deriveMascotState, stampLabelFor } from "./sundog-chat-mascot.mjs";
 
 const ROOT_ID = "sd-chat-widget-root";
 const MASCOT_CSS_HREF = "/css/sundog-chat-mascot.css";
@@ -205,6 +205,23 @@ function renderExchange(question, trace, mascotState = null) {
   if (mascotState) assistantMessage.dataset.mascotState = mascotState;
   assistantMessage.append(renderTierRail(trace), paragraph(trace.answer), renderNextAction(trace), renderTrace(trace));
   assistantMessage.dataset.trace = JSON.stringify(trace);
+
+  // Stamp overlay — third reinforcing visual channel. Rendered after
+  // the content so it sits visually on top via absolute positioning.
+  // user-select: none and pointer-events: none are enforced in CSS so
+  // the stamp doesn't interfere with copy-paste of the answer text.
+  // aria-hidden because the public label on the panel strip and the
+  // tier-rail chips already carry the same information for AT users.
+  const stampLabel = stampLabelFor(mascotState);
+  if (stampLabel) {
+    const stamp = document.createElement("span");
+    stamp.className = "sd-chat-stamp";
+    stamp.textContent = stampLabel;
+    stamp.setAttribute("aria-hidden", "true");
+    stamp.dataset.stampState = mascotState;
+    assistantMessage.append(stamp);
+    assistantMessage.classList.add("sd-chat-bubble--has-stamp");
+  }
 
   fragment.append(userMessage, assistantMessage);
   return fragment;

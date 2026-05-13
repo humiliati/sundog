@@ -20,10 +20,12 @@ import {
   deriveMascotState,
   reduceToButtonState,
   bubbleClassFor,
+  stampLabelFor,
   __MASCOT_STATES,
   __BUTTON_STATES,
   __PUBLIC_LABELS,
-  __BUBBLE_BY_STATE
+  __BUBBLE_BY_STATE,
+  __STAMP_LABEL
 } from "../../public/js/sundog-chat-mascot.mjs";
 
 const passes = [];
@@ -235,6 +237,82 @@ for (const fullState of __MASCOT_STATES) {
     });
   } else {
     passes.push({ name: `bubble-map · ${fullState} key present`, value: __BUBBLE_BY_STATE[fullState] });
+  }
+}
+
+// ---------------------------------------------------------------------
+// Stamp overlays — third reinforcing visual channel.
+// States that exhibit a notable discipline event get a stamp label;
+// quiet states (idle, sniff_prompt, paw_claim_map, sniff variants,
+// magnifier_pages, book_to_bubble, compass_route, out_of_scope,
+// sweat_brace) return null.
+// ---------------------------------------------------------------------
+
+const STAMP_EXPECTATIONS = {
+  halo_shield:           "BOUNDARY ACTIVE",
+  paw_stop_unsupported:  "REFUSED",
+  held_refusal:          "HELD",
+  claim_gate_trim:       "TRIMMED TO TRACE",
+  thought_cloud:         "SPECULATIVE",
+  split_book_clock:      "STALE",
+  poster_vs_research:    "PROMO ≠ EVIDENCE",
+  erase_and_stamp:       "CORRECTED",
+  dropped_trace_failure: "FAILURE MAP",
+  // No-stamp states:
+  idle:           null,
+  sniff_prompt:   null,
+  paw_claim_map:  null,
+  book_to_bubble: null,
+  magnifier_pages: null,
+  sweat_brace:    null,
+  out_of_scope:   null,
+  compass_route:  null
+};
+
+for (const fullState of __MASCOT_STATES) {
+  const stamp = stampLabelFor(fullState);
+  if (Object.prototype.hasOwnProperty.call(STAMP_EXPECTATIONS, fullState)) {
+    assert(`stamp · ${fullState}`, stamp, STAMP_EXPECTATIONS[fullState]);
+  }
+}
+
+// Defensive paths.
+assert("stamp · null state → null", stampLabelFor(null), null);
+assert("stamp · undefined → null", stampLabelFor(undefined), null);
+assert("stamp · unknown state → null", stampLabelFor("not_a_real_state"), null);
+assert("stamp · non-string → null", stampLabelFor(42), null);
+
+// Stamp labels in the map must be non-empty uppercase strings.
+for (const [state, label] of Object.entries(__STAMP_LABEL)) {
+  if (typeof label !== "string" || !label.length) {
+    failures.push({
+      name: `__STAMP_LABEL[${state}] non-empty string`,
+      expected: "non-empty string",
+      actual: label
+    });
+  } else if (label !== label.toUpperCase()) {
+    failures.push({
+      name: `__STAMP_LABEL[${state}] uppercase`,
+      expected: label.toUpperCase(),
+      actual: label
+    });
+  } else {
+    passes.push({ name: `stamp-map · ${state} uppercase non-empty`, value: label });
+  }
+}
+
+// Quiet states must NOT appear in the stamp map — the absence is the signal.
+const QUIET_STATES = ["idle", "sniff_prompt", "paw_claim_map", "book_to_bubble",
+  "magnifier_pages", "sweat_brace", "out_of_scope", "compass_route"];
+for (const state of QUIET_STATES) {
+  if (Object.prototype.hasOwnProperty.call(__STAMP_LABEL, state)) {
+    failures.push({
+      name: `__STAMP_LABEL[${state}] absent (quiet state)`,
+      expected: "key not present",
+      actual: __STAMP_LABEL[state]
+    });
+  } else {
+    passes.push({ name: `stamp-map · ${state} absent (quiet)`, value: "ok" });
   }
 }
 

@@ -42,18 +42,25 @@ In scope:
 
 - The verdict-stamp vocabulary (six values) and the rule for when each
   applies.
+- **Layout rebuild from horizontal-scroll-of-equals to center-focus
+  carousel**: one card centered, a glimpse of the next and previous on
+  either side, ~1.5 cards in view at any time.
+- **Auto-cycle on stamp landing**: when the centered card finishes its
+  clip and its stamp lands, the rail advances to the next card after a
+  short hold. The stamp itself is the advance cue.
 - Visual treatment: rubber-stamp paper ink-bleed aesthetic that composes
   with the paper-theme primitives already landed in
   `public/css/sundog-theme.css`.
 - Stamp timing: the stamp arrives **after** the clip's last beat, not at
-  page load. The transition itself is the experimental verdict.
+  page load. The transition itself is the experimental verdict and is
+  also the cue to advance.
 - The card data contract (`data-*` attributes already present on
   `.motion-card` plus the new fields needed to drive stamp timing and
   meaning).
 - Per-card content plan for the seven current cards plus the new
   Pushable Occluder interrupt.
 - Accessibility, reduced-motion, and screen-reader behaviour for the
-  stamp animation.
+  stamp animation and the auto-cycle.
 - Build phases that incrementally migrate the live rail without breaking
   it.
 
@@ -108,6 +115,151 @@ written evidence in the owning roadmap.
 3. **`UNTESTED` is fine. It is honest.** Cards may live at `UNTESTED`
    indefinitely. They must not borrow visuals or copy that implies
    measured results.
+
+## Layout: Center-Focus Carousel
+
+The current rail (`index.html` line 236, `.motion-rail-track`) is a
+horizontal scroll of equal-weight cards at `minmax(280px, 36%)`. On
+desktop that puts roughly three cards in view simultaneously, with no
+visual distinction between the "current" card and its neighbours. That
+layout reads as a tour. We do not want a tour. We want a verdict
+sequence.
+
+The new layout puts **one card at the centre, slightly larger, fully
+legible, with its clip playing**; partial slivers of the previous and
+next cards peek in from either edge as quiet promises of what comes
+next. Target proportions at desktop widths:
+
+- Centre card: ~58-64% of the rail track width.
+- Each peek (left and right): ~14-18% of the rail track width.
+- Gutters between cards: 1rem.
+- Cards in view at once: ~1.5 (centre + two ~0.25 slivers).
+
+The peeked neighbours are **dimmed and de-saturated** (e.g.
+`filter: brightness(0.55) saturate(0.6); opacity: 0.7;`) so the eye
+does not split attention. They are not interactive while peeked —
+clicking a peeked card slides it to centre rather than navigating to
+its destination. Once centred, the card lights back up and the clip
+starts.
+
+Mobile (≤ 520px viewport):
+
+- Centre card: ~80-85% of the track.
+- One peek visible (the next card), ~12-15%.
+- The previous card is off-screen entirely on narrow widths; an
+  accessible "previous" affordance remains via the existing
+  `data-rail-prev` button. This is a deliberate asymmetry — at phone
+  width the forward sequence is the read; reverse is the exception.
+
+### Implementation sketch
+
+The current grid-based track stays but the column sizing changes:
+
+```css
+.motion-rail-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(56%, 60%);
+  gap: 1rem;
+  padding-inline: 18%;          /* reserves the peek strips on both sides */
+  scroll-snap-type: inline mandatory;
+  scroll-snap-stop: always;
+  scroll-padding-inline: 18%;
+  overflow-x: hidden;            /* auto-cycle drives the scroll; hide native scrollbar */
+}
+
+@media (max-width: 520px) {
+  .motion-rail-track {
+    grid-auto-columns: minmax(82%, 84%);
+    padding-inline: 8% 16%;       /* asymmetric: bigger peek on the next-card side */
+    scroll-padding-inline: 8% 16%;
+  }
+}
+
+.motion-card {
+  scroll-snap-align: center;
+  transition:
+    filter 320ms ease,
+    opacity 320ms ease,
+    transform 320ms ease;
+}
+
+.motion-card:not([data-rail-active]) {
+  filter: brightness(0.55) saturate(0.6);
+  opacity: 0.7;
+  transform: scale(0.94);
+  pointer-events: none;          /* peek state: click slides, no navigation */
+}
+
+.motion-card[data-rail-active] {
+  filter: none;
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+```
+
+The rail-behaviour script tracks the active index. Advancing
+`scrollLeft` (or programmatic `card.scrollIntoView({behavior: "smooth",
+inline: "center"})`) is the canonical way to centre a card; the script
+toggles `data-rail-active` to match.
+
+## Auto-Cycle Sequence
+
+The rail cycles automatically. The trigger is **stamp landing**, not a
+timer. Each card runs its own life-cycle and hands off when its verdict
+is on paper:
+
+1. Card centres. `data-rail-active` is set. The previous card releases
+   its active flag and begins fading back to peek state.
+2. Poster fades to media if `data-media` is set; otherwise stays.
+3. Media plays once. For static-poster cards, an implied beat of 1.6s
+   passes.
+4. `data-stamp-armed` is set; the stamp transitions in over ~320ms.
+5. **Hold pause.** The card holds in armed-and-active state for a
+   per-card dwell (default 1800ms). The dwell is long enough for a
+   reader to register the verdict before the rail moves on.
+6. Advance: the next card centres. `data-rail-active` is moved.
+
+The hold pause is per-card and is configured by a new
+`data-dwell-ms` attribute on the card. Defaults:
+
+| Card | Default dwell |
+| --- | --- |
+| Standard cards | 1800ms |
+| `BOUNDARY FOUND` interrupt | 3600ms |
+| `STALLED` (when one exists) | 3000ms |
+| `CONFIRMED` | 2200ms (slightly longer so the win is felt) |
+
+The failure interrupt's longer dwell is the rhythm move: the audience
+should sit with the failure, not roll past it.
+
+### Pause and resume rules
+
+- **Hover** anywhere on the centre card pauses the dwell timer.
+  Resuming hover-out resumes the dwell from where it left off.
+- **Keyboard focus** on the centre card pauses dwell. Tab-away resumes.
+- **Manual next/prev** (the existing `data-rail-prev` /
+  `data-rail-next` buttons, or arrow keys, or swipe) pauses auto-cycle
+  for the rest of the page session. The rail becomes user-driven once
+  the user has expressed an intent to drive. There is no resume; the
+  user is in control until reload.
+- **`prefers-reduced-motion: reduce`** disables auto-cycle entirely.
+  All stamps render at page load. The rail becomes a static set of
+  cards the user navigates manually.
+- **Drag/swipe** on touch devices pauses auto-cycle (same as a manual
+  next).
+- **Tab to a non-rail element** on the page does not pause; the rail
+  keeps cycling in the background.
+
+### Once around, then settle
+
+After the last card in the sequence (Money Bags, position 8) finishes
+its dwell, the rail does **not** loop back to position 1 automatically.
+It settles on the last card and surfaces a small "Replay sequence"
+affordance near the rail controls. This is deliberate: looping forever
+turns the rail back into a tour. Ending on a card the user can sit
+with respects that the sequence has a thesis.
 
 ## Visual Treatment
 
@@ -178,38 +330,35 @@ filter; this avoids requiring per-stamp PNG assets. The same noise mask
 covers both the rectangle and the text so the ink-bleed reads as one
 contact event.
 
-## Stamp Timing
+## Stamp Timing Within a Card
 
-The stamp must arrive **after** the card's clip plays its last beat.
-This is the core experimental-verdict feel. Cards with no animated
-content still get an arrival animation, but it fires at end-of-poster
-fade rather than at page load.
+Within a single card's life cycle (the choreography above lays out how
+the rail advances *between* cards; this section is what happens *during*
+one centred card):
 
-Choreography per card:
-
-1. Card enters the viewport (IntersectionObserver, `rootMargin: -10%`).
+1. Card becomes the active centre card (`data-rail-active` set).
 2. Poster fades to media if `data-media` is present; otherwise stays.
 3. Media plays once. For static posters, an implied "beat" of 1.6s
-   passes.
+   passes. Cards may override the beat length with `data-clip-ms`.
 4. `data-stamp-armed` attribute is set on the `.motion-card` element.
 5. The stamp transitions in over ~320ms, accompanied by a 60ms inner-edge
    tick (the "die contact") and a 180ms ink-bloom fade on the rectangle
    border.
-6. The card remains in the armed state for the rest of the page session.
+6. The card enters its **dwell** state (see "Pause and resume rules").
+7. Dwell elapses (default 1800ms, per-card override via `data-dwell-ms`).
+8. The rail advances. The card retains `data-stamp-armed` so that when
+   the user manually returns to it, the stamp is **already arrived** —
+   no re-animation. The rail does not feel slot-machine-like on repeat
+   views.
 
-For the rail's auto-advance loop:
-
-- When a card returns to the front of the rail after the user has cycled
-  past it, the stamp is **already arrived** (no re-animation). This
-  prevents the rail from feeling slot-machine-like on repeat views.
-- Reduced-motion users see the stamp arrive at page load with no
-  animation; the verdict is still legible.
+Reduced-motion users see the stamp at rest at page load; steps 4 and 5
+fire instantly with no transition.
 
 ### The Pushable Occluder interrupt
 
 The boundary card is choreographed differently from the rest of the
 rail. It is the only card whose visual content depicts the failure
-itself:
+itself, and the only card whose dwell is doubled:
 
 1. Beam visible, mirror searching, block in path.
 2. Detector ring never peaks. The signal dithers around a local
@@ -219,10 +368,15 @@ itself:
    default), with a 40ms shake on the card itself synchronous with the
    stamp contact. The shake amplitude is bounded (~2px) and is disabled
    under `prefers-reduced-motion`.
+5. **Long dwell** (`data-dwell-ms="3600"`): the card holds for roughly
+   twice the standard dwell before the rail advances. The reader must
+   have time to register that this card is different in kind from its
+   neighbours.
 
 The interrupt is the only place we spend animation budget on the stamp
-contact event itself. Every other card lets the stamp arrive without
-shaking the surface.
+contact event itself, and the only place we double the dwell. Every
+other card lets the stamp arrive and the rail move on at the standard
+pace.
 
 ## Card Data Contract
 
@@ -243,6 +397,8 @@ three fields and tightens one:
 | `data-stamp` | **new** | One of the six verdicts, all caps. Required. Drives the stamp colour, ink, and copy. |
 | `data-stamp-meaning` | **new** | One-line verdict gloss (the "Theorem meaning:" line from `debunked.md`). Surfaces as the stamp's `aria-description` for screen readers. |
 | `data-stamp-source` | **new** | Repo path to the roadmap that owns the verdict. For `CONFIRMED` and `OPERATING ENVELOPE` cards this is the experiment's main doc. For `BOUNDARY FOUND` and `STALLED` cards this is the falsification roadmap. |
+| `data-clip-ms` | **new, optional** | Length of the card's clip in milliseconds. For cards with `data-media`, the script reads media duration directly and this attribute is ignored. For static-poster cards, this overrides the default 1600ms "implied beat" before the stamp arms. |
+| `data-dwell-ms` | **new, optional** | Length of the post-stamp hold before the rail auto-advances. Defaults per verdict (1800 standard / 2200 CONFIRMED / 3000 STALLED / 3600 BOUNDARY FOUND); a card may override its own. |
 
 `data-status` is retained during the migration so the existing JS in
 `public/js/motion-rail.mjs` (or wherever the rail behaviour lives;
@@ -289,6 +445,8 @@ The rail card's full data contract:
   data-stamp="BOUNDARY FOUND"
   data-stamp-meaning="Indirect signal is not enough when the useful gradient appears only after a preparatory action."
   data-stamp-source="docs/PUSHABLE_OCCLUDER_ROADMAP.md"
+  data-clip-ms="6800"
+  data-dwell-ms="3600"
 >
   <!-- card body identical to the other cards; verdict stamp is rendered by
        the rail JS based on data-stamp -->
@@ -323,36 +481,79 @@ must respect both readings:
 
 ## Build Phases
 
-### Phase 1 — Inventory and seam (target: 1 sitting)
+### Phase 1 — Layout rebuild + stamp seam (target: 2 sittings)
+
+This phase changes the rail's visual model from
+horizontal-scroll-of-equals to center-focus carousel, *without*
+introducing stamps. Splitting layout from stamp landing keeps each
+change reviewable.
 
 1. Locate the rail behaviour script (likely `public/js/motion-rail.mjs`;
    verify by `grep -R "motion-card" public/js`). Document its current
    responsibility: card cycling, auto-advance, reduced-motion
    handling, media swap.
-2. Add a no-op `applyVerdictStamps()` step at end-of-init that walks
+2. Update `.motion-rail-track` and `.motion-card` CSS in
+   `index.html` (or migrated into `public/css/sundog-theme.css` if
+   that promotion is also queued) to the center-focus sizing from
+   "Layout: Center-Focus Carousel" above.
+3. Add `data-rail-active` toggling to the rail script. The active card
+   is the one whose centre is closest to the track centre on intersect
+   (or, in the auto-cycle path, the one the script just programmatically
+   scrolled to). Peeked cards get `filter` + `opacity` + scale-down.
+4. Add the auto-cycle controller (timer + IntersectionObserver),
+   *driven by a placeholder "card-ready" event* — for Phase 1 the
+   event fires after a fixed 3.4s per card so the layout can be
+   demoed without the stamp wiring landing yet.
+5. Implement pause-on-hover / pause-on-focus / pause-on-manual-nav /
+   reduced-motion-disable from "Pause and resume rules" above.
+6. Land the "Replay sequence" affordance for the end-of-sequence
+   settle state.
+7. Land the stamp tokens (`--sd-stamp-*`) and the `.sd-verdict-stamp`
+   base class in `public/css/sundog-theme.css` under the `components`
+   layer marker. Stamps are not yet rendered.
+8. Add a no-op `applyVerdictStamps()` step at end-of-init that walks
    `.motion-card[data-stamp]` and adds a stub `<span
    class="sd-verdict-stamp" data-pending>`. No styling, no animation.
-3. Land the stamp tokens (`--sd-stamp-*`) and the `.sd-verdict-stamp`
-   base class in `public/css/sundog-theme.css` under the `components`
-   layer marker.
 
-Acceptance: rail still renders identically. Inspecting the DOM shows
-pending stamp spans on each card.
+Acceptance:
 
-### Phase 2 — Visual landing (target: 1 sitting)
+- Centre card is the visually dominant card; peeked neighbours read as
+  promises, not as alternatives.
+- Auto-cycle advances every 3.4s in this phase. Hover, focus, manual
+  nav, and reduced-motion all behave per the rules above.
+- The sequence settles on the last card; the "Replay sequence"
+  affordance restores the first card to centre when clicked.
+- Mobile narrow viewport (390px and 520px screenshots) confirms the
+  asymmetric peek and single-card-on-screen layout reads correctly.
+- DOM inspection shows pending stamp spans on each card; no stamp
+  visuals on screen.
+
+### Phase 2 — Stamp landing + auto-cycle handoff (target: 1 sitting)
+
+This phase replaces the Phase 1 placeholder "fixed 3.4s timer" with
+the real cue-from-stamp choreography.
 
 1. Switch every existing card from `data-status="..."` to `data-stamp`
    per the mapping table. Keep `data-status` populated for one release
    as a safety net.
 2. Light up the rubber-stamp aesthetic. Per-verdict colours, ink-bleed
    mask, rotation, position.
-3. Wire up the IntersectionObserver-driven `data-stamp-armed` toggle
-   and the timing choreography. Per-card `data-stamp-delay` override is
-   optional and unused at this phase.
+3. Replace the fixed-timer auto-cycle from Phase 1 with the
+   stamp-driven sequence: media played → stamp armed → dwell → advance.
+   `data-clip-ms` and `data-dwell-ms` overrides are honoured.
+4. Verdict default dwell table (1800 / 2200 / 3000 / 3600) is encoded
+   in the rail script so cards without explicit overrides still get
+   the right pacing per verdict.
 
-Acceptance: every existing card has a verdict stamp that arrives after
-poster/clip last beat. Cards on screen at page load animate their
-stamps in. Reduced-motion users see the stamp at rest.
+Acceptance:
+
+- Every existing card has a verdict stamp that arrives after the clip's
+  last beat. The stamp landing is the cue to advance.
+- The dwell defaults produce a perceptibly different rhythm for
+  `CONFIRMED` (slightly longer) and the future `BOUNDARY FOUND` card
+  (much longer) than for `OPERATING ENVELOPE` / `PLAUSIBLE`.
+- Reduced-motion users see all stamps at page load and the rail does
+  not auto-cycle.
 
 ### Phase 3 — Pushable Occluder interrupt (blocked by Pushable Occluder roadmap Phase 1)
 
@@ -412,10 +613,25 @@ should land cleanly.
    than the sprint cadence. Candidates: "Verdicts In Progress",
    "Stamps", "What We Are Willing To Defend Today". Final wording
    lands in Phase 3.
-4. **Stamp on hover vs stamp on enter.** Current plan stamps on
-   intersection entry. Alternative: hold the stamp until the user
-   focuses or hovers the card, then arrive. This is more interactive
-   but loses the auto-rhythm. Park unless usability testing demands it.
+4. ~~**Stamp on hover vs stamp on enter.**~~ Resolved 2026-05-12: stamp
+   lands when the centred card's clip ends; hover and focus *pause*
+   the post-stamp dwell rather than gating the stamp itself. The
+   stamp-on-enter / stamp-on-hover dichotomy goes away in the
+   center-focus layout because only one card is ever in the centre at
+   a time.
+5. **Peeked-card click behaviour.** Current plan: clicking a peeked
+   card slides it to centre (does not navigate). Alternative: click on
+   a peek navigates immediately to the peeked card's `data-href`. The
+   slide-to-centre reading is friendlier for browsing but may frustrate
+   users who clearly clicked the peeked thumbnail because they wanted
+   *that* card's destination. Decide after the Phase 1 layout lands
+   and screenshots/click-test reads come back.
+6. **End-of-sequence behaviour.** Current plan: settle on the last
+   card with a "Replay sequence" affordance. Alternative: loop back to
+   the first card after a longer pause. The settle plan is preferred
+   because looping forever turns the rail back into a tour, but if
+   visitor data shows people scrolling past the rail before the
+   sequence completes, the loop becomes a real option.
 
 ## References
 

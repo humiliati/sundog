@@ -993,6 +993,24 @@ basin-inducing circuit is available and transfers across Medium controller
 families. Below the threshold, basin resistance is preserved by machinery
 that the cliff-pair basis does not symmetrically transplant.
 
+**Phase 6 v3.2 spec (2026-05-12, unstarted)** at
+[`mesa/PHASE6_V32_SPEC.md`](mesa/PHASE6_V32_SPEC.md). One axis pinned —
+Axis M (top-k neuron-restricted projection of the v3 PCA patch). Tests
+whether the entangled 5D basin-inducing subspace can be delivered
+through a moderately concentrated subset of `net.7` neurons, with
+k ∈ {8, 16, 32, 64, 256} sweep on the cliff pair plus optional J1/J2
+follow-up using the cliff-pair-derived neuron mask. Three
+pre-registered predictions Z1-Z3. Smoke gate: top-32 with 8 seeds
+must clear P→C patch_success ≥ 0.37 (40% of v3 K=5 baseline) to
+proceed; below that, top-k mediation is declared infeasible and v3.3
+routes to non-linear attribution methods. Ratchet sentence to earn:
+*the entangled 5D basin-inducing subspace is mediated by a moderately
+concentrated subset of final-hidden neurons, while basin-resisting
+mediation is either more distributed or more policy-specific.* v3.2
+is compute-light: ~45-90 minutes wall-clock, 0 new PPO runs, ~80 LOC
+of harness extensions wired into `phase6_v2_sae.py` as the
+`axis-m-neuron-mediation` subcommand (already landed; awaits run).
+
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
 [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md). The harness
