@@ -141,25 +141,67 @@ The Phase 10 gate is **partially open**: visibility-based promotions are
 final; inversion-route promotions beyond parhelion-offset are gated on
 Task #52 anchor capture.
 
-## Design Consequence
+## Task #52 Anchor-Capture Scope
 
-For the Phase 11 characterized logo toolkit, the safe shape language is:
+Task #52 now serves two gates, not one. The original purpose was opening the
+CZA-apex / tangent-arc-curvature inversion-route slots in the Phase 10 table.
+After landing the Phase 10 verdict, p13's parhelion-offset residual on its
+right side touched the 8 px route cutoff exactly, which puts the
+parhelion-offset route on anchor-probation under the rule introduced with
+this verdict. So Task #52 also has to confirm or clear the p13 measurement
+before any downstream work treats it as clean evidence.
 
-- core sun;
-- 22 deg halo / iris;
-- left and right parhelion glints;
-- parhelic-circle sweep;
-- upper tangent / eyelid arc;
-- optional CZA for large or animated marks.
+Execution order is fixed; do not interleave:
 
-Hold these back as annotation-only layers unless a later pass finds stronger
-support across multiple clean references:
+1. **Re-anchor p13 parhelion offset first.** Replace the rough hand-anchor
+   with a properly measured (sun_px, R22_px, parhelion_left_px,
+   parhelion_right_px) tuple. This is the cleanup pass for the
+   anchor-probation flag. Update the Anchor Summary table and the Per-
+   Inversion-Route Residual Table in the same commit. Do not touch CZA or
+   tangent anchors until this completes.
+2. **CZA apex anchors on p2 and p13.** Capture observed CZA apex (x, y)
+   in photo px. Add a `CZA apex (px)` column to the Anchor Summary table.
+   Compute the CZA-apex → h inversion residual (predicted apex from atlas
+   geometry at the inferred h, vs. observed). Fill the p2 and p13 cells in
+   the Per-Inversion-Route table. p7 stays not applicable (h = 59.4° is
+   above the CZA cutoff).
+3. **Tangent-arc curvature anchors on p2 and p13.** Sample at least three
+   points along each visible tangent arc; fit a local curvature estimate;
+   compare to the atlas-predicted curvature at the inferred h. Curvature is
+   non-monotone in h, so the residual must be reported with the local
+   slope of `dκ/dh` at the photo's altitude, not just the difference.
+   Fill the p2, p7 (where visible), and p13 cells.
+4. **Supralateral inversion stays failed unless a new visible-supralateral
+   reference enters the calibration set.** Coverage rule is what blocks it,
+   not residual magnitude. Adding a single additional photo with a clearly
+   visible supralateral arc restarts the coverage clock and reopens the
+   route; no other action on p2/p7/p13 changes the verdict.
 
-- Parry supralateral;
-- suncave Parry;
-- lower tangent;
-- infralateral arcs.
+Practical first move: open
+`docs/calibration/13.480859565_17934474635991868_323320248088719839_n.jpg`
+in an annotation tool and re-measure the four parhelion-offset anchors
+before touching CZA or tangent samples. `scripts/overlay_calibrate.py`
+currently accepts the relevant p13 anchor inputs via CLI flags
+(`--sun`, `--r22`, `--parhelion-left`, `--parhelion-right`,
+`--parhelion-y`, and `--parhelion-offset`) and already supports
+`--cza-apex X,Y`. For step 3 it still needs either tangent-sample flags
+such as `--tangent-samples X1,Y1;X2,Y2;X3,Y3` or a JSON-anchor mode that
+can carry p13 parhelion anchors, CZA apex, and tangent samples together.
 
-The logo can borrow the *idea* of rich halo vocabulary, but the default mark
-should remain readable at small sizes and trace back to stable atlas
-primitives.
+### Escalation rule (added with the 2026-05-13 verdict)
+
+If step 1 returns a p13 parhelion-offset residual at `>= 12 px` or
+`>= 0.06 * R22`, the route still does not formally fail the two-photo
+gate — only one photo is over threshold. But it loses the "rough hand
+anchor" excuse that currently keeps the probation status soft.
+
+Consequence: the parhelion-offset route stays in calibrated core for atlas
+rendering, but it cannot serve as clean evidence in the perception roadmap
+(`SUNDOG_V_PERCEPTION.md`) predicted-then-observed receipt, or in any
+public-claim language that depends on Phase 10 evidence, until either
+a) a third measurement clears it on a fresh photo, or
+b) the p13 photo itself is replaced with one whose anchors are clean.
+
+This is the same shape as mesa's "the negative is the deliverable" rule
+applied locally: an unresolved probation flag is its own gate, separate
+from the route's promotion status.
