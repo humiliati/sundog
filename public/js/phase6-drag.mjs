@@ -1,113 +1,312 @@
 /**
- * phase6-drag.mjs — light Phase 6.
+ * phase6-drag.mjs - drag-to-tune inverse bindings.
  *
- * Adds one drag handle per parhelion. Dragging a dagger updates
- * `--sun-altitude` via the existing slider machinery, so the whole atlas
- * re-derives through the same path a slider input would.
- *
- * Inverse-bind math (mirrors PHASE6_DRAG_CONSTRAINTS.md):
- *   h = arccos( R_22 / |drag_x − sun_x| )
- *
- * Clamps: parhelion-inside-halo → h=0;  offset ≥ 2·R₂₂ → h=60 (slider max).
- *
- * Only meaningful in halo_atlas mode (the only model where sun-altitude
- * drives dagger placement). CSS hides the handle layer outside that mode.
+ * Phase 6 keeps the binding model deliberately small: each drag handle writes
+ * one existing slider parameter, then the normal workbench apply path redraws
+ * every dependent primitive.
  */
 
 import { phase3 } from "./parhelion-geometry.mjs";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
-const SUN_W = { x: 500, y: 500 };       // workbench-space sun
-const HALO_22_W = phase3.HALO_22_RADIUS; // = 220
+const SUN_W = { x: 500, y: 500 };
+const HALO_22_W = phase3.HALO_22_RADIUS;
+const PARHELIC_CURVE_PIXELS = 200;
 
-export function enableParhelionDrag(svg, sunAltitudeSlider) {
-  if (!svg || !sunAltitudeSlider) return;
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
 
-  // ---- inject hit-test handle layer once -------------------------------
+function numberFromSlider(slider, fallback) {
+  const value = Number.parseFloat(slider?.value);
+  return Number.isFinite(value) ? value : fallback;
+}
+
+function numberFromCss(name, fallback) {
+  const value = Number.parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue(`--${name}`)
+  );
+  return Number.isFinite(value) ? value : fallback;
+}
+
+function sliderDecimals(slider) {
+  const samples = [slider?.step, slider?.min, slider?.max].filter(Boolean);
+  return samples.reduce((max, sample) => {
+    if (sample === "any") return max;
+    const [, decimals = ""] = String(sample).split(".");
+    return Math.max(max, decimals.length);
+  }, 0);
+}
+
+function setSliderValue(slider, rawValue) {
+  if (!slider) return;
+  const min = Number.parseFloat(slider.min);
+  const max = Number.parseFloat(slider.max);
+  const step = Number.parseFloat(slider.step);
+  const low = Number.isFinite(min) ? min : -Infinity;
+  const high = Number.isFinite(max) ? max : Infinity;
+  let value = clamp(rawValue, low, high);
+
+  if (Number.isFinite(step) && step > 0) {
+    const origin = Number.isFinite(min) ? min : 0;
+    value = origin + Math.round((value - origin) / step) * step;
+    value = clamp(value, low, high);
+  }
+
+  const decimals = sliderDecimals(slider);
+  slider.value = decimals > 0 ? value.toFixed(decimals) : String(Math.round(value));
+  slider.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function svgPoint(svg, ev) {
+  const point = svg.createSVGPoint();
+  point.x = ev.clientX;
+  point.y = ev.clientY;
+  const ctm = svg.getScreenCTM();
+  return ctm ? point.matrixTransform(ctm.inverse()) : null;
+}
+
+function parhelicYOffset(controls) {
+  return numberFromSlider(
+    controls.parhelicYOffsetSlider,
+    numberFromCss("parhelic-y-offset-r22", -0.05)
+  );
+}
+
+function parhelicBeltY(controls) {
+  return SUN_W.y + HALO_22_W * parhelicYOffset(controls);
+}
+
+function parhelicCurvature(controls) {
+  return numberFromSlider(
+    controls.parhelicCurvatureSlider,
+    numberFromCss("parhelic-curvature", 0.05)
+  );
+}
+
+function createCircleHandle(layer, { className, radius, label, binding, cursor }) {
+  const handle = document.createElementNS(SVG_NS, "circle");
+  const title = document.createElementNS(SVG_NS, "title");
+  title.textContent = label;
+  handle.appendChild(title);
+  handle.setAttribute("class", `phase6-handle ${className}`);
+  handle.setAttribute("r", String(radius));
+  handle.setAttribute("pointer-events", "all");
+  handle.setAttribute("aria-label", label);
+  handle.setAttribute("data-phase6-binding", binding);
+  handle.setAttribute("role", "slider");
+  handle.setAttribute("tabindex", "-1");
+  handle.style.cursor = cursor;
+  layer.appendChild(handle);
+  return handle;
+}
+
+function beginDrag(svg, handle, binding, ev) {
+  if (svg.dataset.geometryModel !== "halo_atlas") return false;
+  if (typeof handle.setPointerCapture === "function" && ev.pointerId !== undefined) {
+    handle.setPointerCapture(ev.pointerId);
+  }
+  handle.classList.add("is-dragging");
+  svg.dataset.phase6Drag = binding;
+  ev.preventDefault();
+  return true;
+}
+
+function endDrag(svg, handle, ev) {
+  if (typeof handle.releasePointerCapture === "function" && ev.pointerId !== undefined) {
+    try {
+      handle.releasePointerCapture(ev.pointerId);
+    } catch {
+      // The pointer may already be released if the browser cancelled capture.
+    }
+  }
+  handle.classList.remove("is-dragging");
+  delete svg.dataset.phase6Drag;
+}
+
+function disableDerivedCurvature(controls) {
+  const toggle = controls.deriveToggle;
+  if (!toggle?.checked) return;
+  toggle.checked = false;
+  toggle.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+export function enablePhase6Drag(svg, controls = {}) {
+  if (!svg) return;
+  const {
+    sunAltitudeSlider,
+    parhelicCurvatureSlider,
+    parhelicYOffsetSlider,
+    deriveToggle,
+  } = controls;
+
   let layer = svg.querySelector(".layer-phase6-handles");
   if (!layer) {
     layer = document.createElementNS(SVG_NS, "g");
     layer.setAttribute("class", "layer-phase6-handles");
-    // Append last so handles sit above all other primitives in z-order.
     svg.appendChild(layer);
   }
+  layer.replaceChildren();
 
-  const handles = [
-    { side: "left",  sign: -1, el: null },
-    { side: "right", sign: +1, el: null },
-  ];
-  for (const h of handles) {
-    h.el = document.createElementNS(SVG_NS, "circle");
-    h.el.setAttribute("class", `phase6-handle phase6-handle-${h.side}`);
-    h.el.setAttribute("r", "28");
-    h.el.setAttribute("fill", "transparent");
-    h.el.setAttribute("stroke", "transparent");
-    h.el.setAttribute("pointer-events", "all");
-    h.el.style.cursor = "ew-resize";
-    h.el.setAttribute("aria-label", `Drag ${h.side} parhelion to set sun altitude`);
-    h.el.setAttribute("role", "slider");
-    h.el.setAttribute("tabindex", "-1");
-    layer.appendChild(h.el);
-  }
+  const altitudeHandles = sunAltitudeSlider
+    ? [
+        {
+          side: "left",
+          sign: -1,
+          el: createCircleHandle(layer, {
+            className: "phase6-handle-left",
+            radius: 28,
+            label: "Drag left parhelion to set sun altitude",
+            binding: "sun-altitude",
+            cursor: "ew-resize",
+          }),
+        },
+        {
+          side: "right",
+          sign: 1,
+          el: createCircleHandle(layer, {
+            className: "phase6-handle-right",
+            radius: 28,
+            label: "Drag right parhelion to set sun altitude",
+            binding: "sun-altitude",
+            cursor: "ew-resize",
+          }),
+        },
+      ]
+    : [];
 
-  // ---- keep handles glued to the rendered daggers ----------------------
+  const apexHandle = parhelicCurvatureSlider
+    ? createCircleHandle(layer, {
+        className: "phase6-handle-parhelic-apex",
+        radius: 24,
+        label: "Drag parhelic arc apex to set curvature",
+        binding: "parhelic-curvature",
+        cursor: "ns-resize",
+      })
+    : null;
+
   function syncHandles() {
-    const sunAlt = Number.parseFloat(sunAltitudeSlider.value) || 0;
-    const offset = phase3.daggerOffset(sunAlt);
-    for (const h of handles) {
-      h.el.setAttribute("cx", String(SUN_W.x + h.sign * offset));
-      h.el.setAttribute("cy", String(SUN_W.y));
+    const beltY = parhelicBeltY({ parhelicYOffsetSlider });
+
+    if (sunAltitudeSlider) {
+      const sunAlt = numberFromSlider(sunAltitudeSlider, 25);
+      const offset = phase3.daggerOffset(sunAlt);
+      for (const handle of altitudeHandles) {
+        handle.el.setAttribute("cx", String(SUN_W.x + handle.sign * offset));
+        handle.el.setAttribute("cy", String(beltY));
+        handle.el.setAttribute("aria-valuemin", sunAltitudeSlider.min || "0");
+        handle.el.setAttribute("aria-valuemax", sunAltitudeSlider.max || "60");
+        handle.el.setAttribute("aria-valuenow", sunAltitudeSlider.value);
+      }
+    }
+
+    if (apexHandle) {
+      const curvature = parhelicCurvature({ parhelicCurvatureSlider });
+      const apexY = beltY + PARHELIC_CURVE_PIXELS * curvature;
+      apexHandle.setAttribute("cx", String(SUN_W.x));
+      apexHandle.setAttribute("cy", String(apexY));
+      apexHandle.setAttribute("aria-valuemin", parhelicCurvatureSlider.min || "0");
+      apexHandle.setAttribute("aria-valuemax", parhelicCurvatureSlider.max || "1");
+      apexHandle.setAttribute("aria-valuenow", parhelicCurvatureSlider.value);
     }
   }
+
   syncHandles();
-  sunAltitudeSlider.addEventListener("input", syncHandles);
+  sunAltitudeSlider?.addEventListener("input", syncHandles);
+  parhelicCurvatureSlider?.addEventListener("input", syncHandles);
+  parhelicYOffsetSlider?.addEventListener("input", syncHandles);
+  deriveToggle?.addEventListener("change", syncHandles);
 
-  // ---- pointer drag handlers ------------------------------------------
-  for (const h of handles) {
-    let dragging = false;
-    h.el.addEventListener("pointerdown", (ev) => {
-      // Only drag in halo_atlas mode — the only model where the binding is
-      // meaningful. In other models the handles are CSS-hidden anyway, but
-      // belt-and-suspenders here.
-      if (svg.dataset.geometryModel !== "halo_atlas") return;
-      dragging = true;
-      h.el.setPointerCapture(ev.pointerId);
-      svg.dataset.phase6Drag = h.side;
-      h.el.classList.add("is-dragging");
-      ev.preventDefault();
-    });
-    h.el.addEventListener("pointermove", (ev) => {
-      if (!dragging) return;
-      // Convert clientX/Y → SVG-local coords so the math runs in workbench units.
-      const pt = svg.createSVGPoint();
-      pt.x = ev.clientX;
-      pt.y = ev.clientY;
-      const ctm = svg.getScreenCTM();
-      if (!ctm) return;
-      const local = pt.matrixTransform(ctm.inverse());
+  for (const handle of altitudeHandles) {
+    let dragKind = null;
+    const applyAltitudeDrag = (ev) => {
+      const local = svgPoint(svg, ev);
+      if (!local) return;
       const dx = Math.abs(local.x - SUN_W.x);
-
-      let newH;
+      let altitude;
       if (dx <= HALO_22_W) {
-        newH = 0;                                  // sun on the horizon
+        altitude = 0;
       } else if (dx >= 2 * HALO_22_W) {
-        newH = 60;                                 // slider max
+        altitude = 60;
       } else {
-        newH = (Math.acos(HALO_22_W / dx) * 180) / Math.PI;
-        newH = Math.max(0, Math.min(60, newH));
+        altitude = (Math.acos(HALO_22_W / dx) * 180) / Math.PI;
       }
-      // The slider's step is integer, so round to match its native increments.
-      sunAltitudeSlider.value = String(Math.round(newH));
-      sunAltitudeSlider.dispatchEvent(new Event("input"));
-    });
-    const end = (ev) => {
-      if (!dragging) return;
-      dragging = false;
-      try { h.el.releasePointerCapture(ev.pointerId); } catch { /* no-op */ }
-      delete svg.dataset.phase6Drag;
-      h.el.classList.remove("is-dragging");
+      setSliderValue(sunAltitudeSlider, altitude);
+      ev.preventDefault();
     };
-    h.el.addEventListener("pointerup", end);
-    h.el.addEventListener("pointercancel", end);
+    handle.el.addEventListener("pointerdown", (ev) => {
+      dragKind = beginDrag(svg, handle.el, `sun-altitude:${handle.side}`, ev) ? "pointer" : null;
+    });
+    handle.el.addEventListener("pointermove", (ev) => {
+      if (dragKind !== "pointer") return;
+      applyAltitudeDrag(ev);
+    });
+    handle.el.addEventListener("mousedown", (ev) => {
+      if (ev.button !== 0 || dragKind) return;
+      dragKind = beginDrag(svg, handle.el, `sun-altitude:${handle.side}`, ev) ? "mouse" : null;
+    });
+    document.addEventListener("mousemove", (ev) => {
+      if (dragKind !== "mouse") return;
+      applyAltitudeDrag(ev);
+    });
+    const endPointer = (ev) => {
+      if (dragKind !== "pointer") return;
+      dragKind = null;
+      endDrag(svg, handle.el, ev);
+    };
+    const endMouse = (ev) => {
+      if (dragKind !== "mouse") return;
+      dragKind = null;
+      endDrag(svg, handle.el, ev);
+    };
+    handle.el.addEventListener("pointerup", endPointer);
+    handle.el.addEventListener("pointercancel", endPointer);
+    document.addEventListener("mouseup", endMouse);
   }
+
+  if (apexHandle) {
+    let dragKind = null;
+    const applyCurvatureDrag = (ev) => {
+      const local = svgPoint(svg, ev);
+      if (!local) return;
+      const beltY = parhelicBeltY({ parhelicYOffsetSlider });
+      const curvature = (local.y - beltY) / PARHELIC_CURVE_PIXELS;
+      setSliderValue(parhelicCurvatureSlider, curvature);
+      ev.preventDefault();
+    };
+    apexHandle.addEventListener("pointerdown", (ev) => {
+      disableDerivedCurvature({ deriveToggle });
+      dragKind = beginDrag(svg, apexHandle, "parhelic-curvature", ev) ? "pointer" : null;
+    });
+    apexHandle.addEventListener("pointermove", (ev) => {
+      if (dragKind !== "pointer") return;
+      applyCurvatureDrag(ev);
+    });
+    apexHandle.addEventListener("mousedown", (ev) => {
+      if (ev.button !== 0 || dragKind) return;
+      disableDerivedCurvature({ deriveToggle });
+      dragKind = beginDrag(svg, apexHandle, "parhelic-curvature", ev) ? "mouse" : null;
+    });
+    document.addEventListener("mousemove", (ev) => {
+      if (dragKind !== "mouse") return;
+      applyCurvatureDrag(ev);
+    });
+    const endPointer = (ev) => {
+      if (dragKind !== "pointer") return;
+      dragKind = null;
+      endDrag(svg, apexHandle, ev);
+    };
+    const endMouse = (ev) => {
+      if (dragKind !== "mouse") return;
+      dragKind = null;
+      endDrag(svg, apexHandle, ev);
+    };
+    apexHandle.addEventListener("pointerup", endPointer);
+    apexHandle.addEventListener("pointercancel", endPointer);
+    document.addEventListener("mouseup", endMouse);
+  }
+}
+
+export function enableParhelionDrag(svg, sunAltitudeSlider) {
+  enablePhase6Drag(svg, { sunAltitudeSlider });
 }

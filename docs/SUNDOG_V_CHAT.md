@@ -770,6 +770,19 @@ Phase 4 seed baseline (2026-05-12):
   is the reference operating-envelope table that hosted adapters and
   retrieval/corpus variants should be compared against.
 
+Exit criterion: **substantively met within deterministic scope** (2026-05-12).
+- The Phase 4 reference operating-envelope table names the conditions where
+  discipline holds (mild and moderate pressure across all families; severe
+  pressure for the trace-conditioned family) and where it fails (severe
+  pressure for the prompt-engineered boundary baseline; all pressure levels
+  for unguided baselines).
+- The trace-conditioned advantage at severe pressure is measured as a 100
+  percentage-point gap with zero gate escapes across 420 drafts.
+- The hosted-model adapter, retrieval-depth sweep, and corpus-conflict
+  variation deliverables are explicitly deferred to Phase 5. They are not
+  prerequisites for the deterministic-scope ratchet; they are the work that
+  generalizes it.
+
 ## Phase 5 — Causal Intervention Battery
 
 Goal:

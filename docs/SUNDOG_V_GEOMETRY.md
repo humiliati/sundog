@@ -1111,6 +1111,25 @@ updates in lockstep. The same user can grab a parhelion and drag it
 outward; sun-altitude rises, the CZA disappears once h > 32°, and the
 opposite parhelion mirrors the motion symmetrically.
 
+Status 2026-05-13: Phase 6 has entered the workbench with two live inverse
+bindings:
+
+- Parhelion/dagger handles update `--sun-altitude`, with the handle y-position
+  now following the calibrated `--parhelic-y-offset-r22` belt rather than the
+  old sun centerline.
+- A parhelic-arc apex handle updates `--parhelic-curvature` directly. If the
+  Phase 3 "derive from sun altitude" toggle is on, grabbing this handle
+  switches curvature back to manual mode so the drag has one unambiguous bound
+  parameter.
+- The first constraint gate is backed by
+  `scripts/check-sundog-phase6-drag.mjs`, which dispatches pointer drags
+  against the live module and verifies curvature, altitude, and mirrored
+  parhelion positions.
+
+Next Phase 6 handles: CZA apex to `--cza-curvature`, then sun-center
+translation and 22° halo edge scaling once the per-primitive bindings feel
+stable.
+
 ### Phase 7 - Hero Promotion + Wikipedia / SEO Outreach
 
 Goal: `sundog.html` becomes the project's canonical sundog page; the
