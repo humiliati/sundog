@@ -367,7 +367,7 @@ Phase 6 opened the box, and what's inside has a shape worth naming.
 The behavioral cliff has a causal locus in the actor's final hidden
 activation (`net.7`), and the circuit at that locus is **a small
 handful of generators, irreducibly entangled, only legible as a
-whole**. Seven rounds of mechanistic probing landed on the same shape
+whole**. Eight rounds of mechanistic probing landed on the same shape
 from different directions:
 
 - **v1.** Layer-level activation patching localizes the cliff causally
@@ -401,8 +401,12 @@ from different directions:
   0.255 / 0.067) even though P→C behavior transfers; C→P critical
   neurons are unexpectedly stable across held-out pairs (Jaccard
   0.422 / 0.684) even though C→P behavior doesn't transfer.
-  Subspace-level behavioral transfer and neuron-identity transfer
-  are decoupled in opposite directions for the two patches.
+- **v3.6.** Functional mask-transfer test using the cliff-pair
+  C→P top-32 mask in Axis P on J1/J2 confirms the v3.5 substrate
+  identity is operationally meaningful: J1 dissociation +0.151, J2
+  +0.508. The C→P substrate is shared at both ranking-identity and
+  functional levels across the controller family. (P→C exploratory
+  mask-transfer from v3.5 was weak/ambiguous; the asymmetry holds.)
 
 What's left after those five rounds is a structural claim, not a
 score-table artifact:
@@ -432,27 +436,51 @@ unearned. The basin-resisting substrate is also **more
 anatomically tight** within the cliff pair than the basin-inducing
 one (C→P dissociation 0.662 is ~4× the P→C dissociation 0.174).
 
-*The cross-policy generalization story complicates symmetrically.*
+*The cross-policy generalization story has three layers, not two.*
 v3.5 ran zero-ablation on two held-out pairs (J1 = L-Sig-Terminal-M
 vs L-Reward-M, J2 = L-Mixed-M-λ=0.9 vs λ=0.99) and computed Jaccard
-between cliff-pair critical sets and held-out critical sets. The
-result is an **inversion** of the obvious prediction: basin-inducing
-P→C neuron-substrate identity does *not* generalize (J1 Jaccard
-0.255, J2 0.067 — at chance) even though P→C *behavior* transfers
-strongly under the cliff-pair basis (v3.1 P→C ≥ 0.94 on both
-held-out pairs); basin-resisting C→P neuron-substrate identity
-generalizes strongly (J1 Jaccard 0.422, J2 0.684) even though C→P
-*behavior* transfers weakly (v3.1 J1 C→P = 0.16, J2 = 0.63).
-**Subspace-level behavioral transfer and neuron-identity transfer
-are decoupled in opposite directions for the two patches.** The
-cliff-pair 5D basis is a *family-wide direction in activation space*
-that different policies implement with different neurons (P→C: same
-direction, different neurons); the cliff-pair C→P critical neurons
-are a *family-wide neuron substrate* that fires differently per
-policy (C→P: same neurons, different operations). The basin-
-attractor circuit at net.7 implements its two directions through
-orthogonal generalization mechanisms — a structural fact that the
-"shared vs policy-specific" framing was too crude to capture.
+between cliff-pair critical sets and held-out critical sets;
+v3.6 followed up by running the cliff-pair C→P top-32 mask through
+v3.4 Axis P on those same held-out pairs to test functional
+transfer. Together they distinguish **three layers** of cross-policy
+generalization that earlier framings collapsed into one:
+
+1. **Subspace-level behavioral transfer:** the cliff-pair 5D PCA
+   basis as a control surface. v3.1 found this transfers strongly
+   on P→C (J1/J2 ≥ 0.94) and weakly on C→P (J1 = 0.16, J2 = 0.63).
+2. **Neuron-identity substrate transfer:** Jaccard between cliff-
+   pair top-32 critical neurons and held-out top-32 critical
+   neurons. v3.5 found P→C identity does *not* generalize (Jaccard
+   0.255 / 0.067 — at chance) while C→P identity generalizes
+   strongly (Jaccard 0.422 / 0.684).
+3. **Functional mask transfer:** ablating the cliff-pair top-32
+   critical set during patching on held-out pairs. v3.5's
+   exploratory P→C mask transfer was ambiguous (J1 dissociation
+   +0.113, J2 +0.096 with noisy cross-drop). v3.6's cliff-pair C→P
+   mask transferred cleanly to both J1 (+0.151 dissociation) and J2
+   (+0.508 dissociation).
+
+The clean updated reading:
+
+> **Basin induction is shared at the 5D subspace/control-surface
+> level but pair-specific at top-32 neuron identity.** Different
+> policies implement the family-wide basin-inducing direction
+> through different neuron supports; the same low-dim vector
+> projects from different anatomies.
+>
+> **Basin resistance is shared at both levels across Medium
+> policies.** The same neurons are critical for C→P patching across
+> the controller family, and ablating those neurons disrupts C→P
+> behavior in every tested policy. The reason v3.1's behavioral
+> C→P transfer was weak is *not* that the substrate is policy-
+> specific — it is that the cliff-pair-derived substitution
+> activation pattern isn't the precise operational target each
+> policy needs at that shared substrate.
+
+The basin-attractor circuit at net.7 thus carries one shared neuron
+substrate (C→P) and one shared activation-space direction (P→C)
+through the same 5D subspace, with the two halves generalizing
+through different mechanisms.
 
 *The L2-overlap retroactively explains v3.2.* v3.4 also bootstrapped
 the v3.3-critical / v3.2-L2-rank overlap: the C→P critical set
@@ -470,7 +498,7 @@ logged fields. The learned feed-forward policies do not observe live
 `x_false` at inference; the cliff policy is computing, not perceiving,
 its basin. The behavioral receipt from Phase 4 is now mechanistic.
 
-**Six methodological lessons stack out of the seven rounds.** Each
+**Six methodological lessons stack out of the eight rounds.** Each
 was earned by a method that failed to surface mechanism on its own
 or that overturned an obvious prior, and each is a documented reason
 the obvious-reach toolkit doesn't work here:

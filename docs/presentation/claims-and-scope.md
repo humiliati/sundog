@@ -312,8 +312,8 @@ piecemeal, because the parts qualify each other:
   toy family up to the measured boundary.
 - **Mechanistic anchor:** the basin attractor at the actor's final hidden
   activation (`net.7`) is **a small handful of generators, irreducibly
-  entangled, only legible as a whole**. Seven rounds of mechanistic probing
-  (Phase 6 v1 -> v3.5) converged on this shape: (v1) layer patching
+  entangled, only legible as a whole**. Eight rounds of mechanistic probing
+  (Phase 6 v1 -> v3.6) converged on this shape: (v1) layer patching
   localizes the cliff to `net.7`. (v3) PCA on per-step matched-seed
   diffs compresses the relevant subspace to 5 principal components
   capturing 97.4% of variance and reproducing v1 full-layer patch effect
@@ -333,19 +333,24 @@ piecemeal, because the parts qualify each other:
   and overlaps the v3.2 L2-rank top-32 substantially (Jaccard 0.333),
   while the basin-inducing substrate does not (Jaccard 0.049) -- which
   retroactively explains why v3.2's L2-rank-based top-k restriction
-  failed harder on the basin-inducing direction. (v3.5) Cross-policy
-  ablation rankings on J1/J2 inverted the obvious substrate-identity-
-  generalization prediction: basin-inducing P->C critical neurons do
-  *not* generalize (Jaccard 0.255/0.067) even though P->C *behavior*
-  transfers strongly, while basin-resisting C->P critical neurons *do*
-  generalize (Jaccard 0.422/0.684) even though C->P behavior transfers
-  weakly. **Subspace-level behavioral transfer and neuron-identity
-  transfer are decoupled in opposite directions for the two patches:**
-  P->C is "same direction, different neurons" (a family-wide vector in
-  activation space implemented by policy-specific neurons); C->P is
-  "same neurons, different operations" (a family-wide neuron substrate
-  configured policy-specifically). Six methodological lessons stack
-  out of the seven rounds: (1) feature-availability rankings are not
+  failed harder on the basin-inducing direction. (v3.5+v3.6)
+  Cross-policy ablation rankings on J1/J2 (v3.5) plus the cliff-pair
+  C->P mask functional-transfer follow-up (v3.6) distinguish three
+  layers of cross-policy generalization that earlier framings
+  collapsed: (i) subspace-level behavioral transfer, (ii) neuron-
+  identity substrate transfer, (iii) functional mask transfer. The
+  picture: **basin induction is shared at the 5D subspace/control-
+  surface level but pair-specific at top-32 neuron identity** (P->C
+  Jaccard 0.255/0.067 — different policies implement the family-wide
+  direction through different neuron supports); **basin resistance is
+  shared at both levels across Medium policies** (C->P Jaccard
+  0.422/0.684 *and* cliff-mask functional dissociation +0.151/+0.508
+  on J1/J2 — the same neurons are operationally necessary for C->P
+  across the family). The reason v3.1's behavioral C->P transfer was
+  weak is not that the substrate is policy-specific; it is that the
+  cliff-pair-derived substitution activation pattern isn't the precise
+  operational target each policy needs at that shared substrate.
+  Six methodological lessons stack out of the eight rounds: (1) feature-availability rankings are not
   mechanism rankings (SAE at |corr|=0.89 -> 0% patch); (2) variance is
   not mechanism (PC1: 38.8% variance, 0% patch); (3) linear additive
   top-k subspace restriction destroys mechanism even with the correct
