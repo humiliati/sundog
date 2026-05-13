@@ -167,11 +167,41 @@ export function applyMascotState(element, trace, options = {}) {
   if (options.updateLabel !== false) {
     element.setAttribute("data-mascot-state", fullState);
     element.setAttribute("data-mascot-label", label);
+    const baseTitle = options.baseTitle || "Ask Sundog";
+    const composedLabel = fullState === "idle" ? baseTitle : `${baseTitle} — ${label}`;
     if (element.title !== undefined) {
-      const baseTitle = options.baseTitle || "Ask Sundog";
-      element.title = fullState === "idle" ? baseTitle : `${baseTitle} — ${label}`;
+      element.title = composedLabel;
+    }
+    // Mirror to aria-label so non-hover screen readers catch the state.
+    if (typeof element.setAttribute === "function") {
+      element.setAttribute("aria-label", composedLabel);
     }
   }
+
+  return { fullState, buttonState, label };
+}
+
+// Apply the derived mascot state to the chat panel — used for the Tier-2
+// panel strip that shows the current trace state above the conversation
+// log. Sets the same per-state classes on the panel root (so CSS tokens
+// cascade to the strip face) and updates the strip label text so the
+// strip's aria-live region announces the change.
+export function applyPanelMascotState(panelElement, trace, options = {}) {
+  if (!panelElement || typeof panelElement.classList !== "object") return null;
+
+  const fullState = deriveMascotState(trace, options.previousTrace || null);
+  const buttonState = reduceToButtonState(fullState);
+  const label = PUBLIC_LABEL[fullState] || "Ready";
+
+  scrubStateClasses(panelElement);
+  panelElement.classList.add(`sd-chat-mascot--${dasher(fullState)}`);
+  panelElement.classList.add(`sd-chat-mascot--btn-${dasher(buttonState)}`);
+
+  const labelEl = panelElement.querySelector(".sd-chat-mascot-strip__label");
+  if (labelEl) labelEl.textContent = label;
+
+  const stripEl = panelElement.querySelector(".sd-chat-mascot-strip");
+  if (stripEl) stripEl.setAttribute("data-mascot-state", fullState);
 
   return { fullState, buttonState, label };
 }

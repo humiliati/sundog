@@ -90,16 +90,20 @@
  * a later pass. For now, the static ring color is enough signal. */
 
 /* ------------------------------------------------------------------ */
-/* Tier 2 — panel mascot strip (scaffolding only; not rendered yet)   */
+/* Tier 2 — panel mascot strip                                         */
 /* ------------------------------------------------------------------ */
 
-/* When the chat panel opens, a top strip can show the hound at a station.
- * Tier-2 SVG art is not on disk yet; the slot below reserves the space and
- * applies state-aware tinting. Hidden by default; widget will show it once
- * Tier-2 sprites are linked in. */
+/* A top strip above the conversation that shows the current trace state.
+ * The face circle inherits its ring tokens from the panel-level button-
+ * state class applied via applyPanelMascotState; the label updates via
+ * the strip's aria-live region so screen readers announce state changes.
+ *
+ * Tier-2 SVG art will later replace the placeholder circle; the class
+ * hooks here are forward-compatible with that art.
+ */
 
 .sd-chat-mascot-strip {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 0.6rem;
   padding: 0.5rem 0.8rem;
@@ -107,19 +111,18 @@
   background: rgba(241, 234, 220, 0.4);
 }
 
-/* When Tier-2 lands, the widget will toggle this class on the panel root
- * to make the strip visible. */
-.sd-chat-panel.has-mascot-strip .sd-chat-mascot-strip {
-  display: flex;
-}
-
 .sd-chat-mascot-strip__face {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: var(--sd-mascot-ring-fill, #f1eadc);
+  background: var(--sd-mascot-ring-fill, transparent);
   border: 2px solid var(--sd-mascot-ring-edge, rgba(218, 162, 76, 0.45));
+  box-shadow: var(--sd-mascot-ring-glow, none);
   flex-shrink: 0;
+  transition:
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
 }
 
 .sd-chat-mascot-strip__label {
@@ -128,6 +131,13 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--sd-ink-soft, #5A6975);
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-chat-mascot-strip__face {
+    transition: none;
+  }
 }
 
 /* ------------------------------------------------------------------ */
