@@ -265,10 +265,19 @@ should sit with the failure, not roll past it.
 
 After the last card in the sequence (Money Bags, position 8) finishes
 its dwell, the rail does **not** loop back to position 1 automatically.
-It settles on the last card and surfaces a small "Replay sequence"
-affordance near the rail controls. This is deliberate: looping forever
-turns the rail back into a tour. Ending on a card the user can sit
-with respects that the sequence has a thesis.
+It settles on the last card. This is deliberate: looping forever turns
+the rail back into a tour. Ending on a card the user can sit with
+respects that the sequence has a thesis.
+
+The replay action is a **persistent third arrow button** in
+`.motion-rail-actions` (decided 2026-05-12). It is visible throughout
+the sequence, not only at the end-state. The persistent button reads as
+a first-class action: at any moment a user may say "I want to see that
+again from the top" and reach for it. Visual hierarchy: smaller than
+prev/next, paired with the next arrow on the right edge of the track,
+glyph is a refresh/loop character (↻). Clicking it clears all timers,
+removes `data-stamp-armed` from every card, scrolls to card 1, and
+restarts the auto-cycle.
 
 ## Visual Treatment
 
@@ -634,12 +643,11 @@ should land cleanly.
    destination. The always-overlaid skip arrows (see "Layout") provide
    the slide-to-centre affordance for users who want to browse rather
    than commit.
-6. **End-of-sequence behaviour.** Current plan: settle on the last
-   card with a "Replay sequence" affordance. Alternative: loop back to
-   the first card after a longer pause. The settle plan is preferred
-   because looping forever turns the rail back into a tour, but if
-   visitor data shows people scrolling past the rail before the
-   sequence completes, the loop becomes a real option.
+6. ~~**End-of-sequence behaviour.**~~ Resolved 2026-05-12: settle on
+   the last card; restart action is the persistent replay arrow (above)
+   visible throughout the sequence. The loop-forever alternative is
+   off the table — it would turn the rail back into a tour and would
+   compete with the persistent replay action.
 
 ## References
 
