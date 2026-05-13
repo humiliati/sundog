@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "name": "p27",
+    "photo": "27.Zzhau2Uiospj37zhwHEr4D-1200-80.jpg.webp",
+    "anchored": "2026-05-13",
+    "method": "Task #55 visual CZA-apex check; R22 from low-sun 22-degree halo support, CZA apex from visual lower-edge compromise after flat-parabola fit proved unstable",
+    "status": "provisional CZA-apex measurement; use for route-failure evidence, not promotion",
+    "note": "The CZA band is clear, but the flat apex makes the fitted math apex sensitive. The visual lower edge puts the apex below the atlas prediction, opposite p2."
+  },
+  "sun": [596, 559],
+  "r22": 219,
+  "sun_altitude": 0.5,
+  "parhelion": {
+    "left_x": 377,
+    "right_x": 815,
+    "y": 548,
+    "visibility": "low-sun dagger estimate from R22 support; not an independent parhelion-core pick"
+  },
+  "cza_apex": [599, 142],
+  "cza_apex_residual": {
+    "predicted": [596, 121],
+    "observed": [599, 142],
+    "x_px_observed_minus_predicted": 3,
+    "y_px_observed_minus_predicted": 21,
+    "normalized_y_by_r22": 0.096,
+    "direction": "apex below prediction; opposite p2",
+    "threshold_status": "exceeds 8 px / 0.04*R22 route threshold"
+  }
+}

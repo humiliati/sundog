@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "name": "p20",
+    "photo": "20.gettyimages-157530019-2048x2048.jpg",
+    "anchored": "2026-05-13",
+    "method": "Task #55 fallback CZA diagnostic; visual R22 hypotheses 430/455/500 all put CZA apex above frame",
+    "status": "CZA not applicable / cropped; do not use as CZA-apex residual",
+    "note": "The upper glow aligns with the 22-degree halo / upper-tangent region. Watermark and flare contamination make this a lower-confidence parhelia/belt reference."
+  },
+  "sun": [1011, 827],
+  "r22": 455,
+  "sun_altitude": 5,
+  "parhelion": {
+    "left_x": 554,
+    "right_x": 1468,
+    "y": 804,
+    "visibility": "provisional low-sun estimate; right side is contaminated by watermark/flare"
+  },
+  "cza": {
+    "visibility": "not_applicable_cropped",
+    "predicted_apex": [1011, -83],
+    "note": "With R22 ~= 455, R46 ~= 910, so predicted CZA apex y = 827 - 910 = -83."
+  }
+}

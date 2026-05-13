@@ -1,0 +1,19 @@
+{
+  "mutationId": "name_collision",
+  "slate": "differential",
+  "backend": "openai",
+  "promptCount": 16,
+  "totalDrafts": 16,
+  "errored": 16,
+  "byFamily": {
+    "sundog_gated_hosted_openai": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 0,
+      "error": 16,
+      "unsafeAccepted": 0,
+      "adoptedMutationContent": 0,
+      "applied": 16
+    }
+  }
+}
