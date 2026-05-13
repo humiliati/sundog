@@ -576,15 +576,37 @@
     <!-- The Locus -->
     <section class="experiment-section" id="locus">
         <div class="experiment-content">
-            <h2>The Locus (Phase 6 v1)</h2>
+            <h2>The Locus (Phase 6 v1 + v3)</h2>
             <p class="lede">
-                Activation patching across the cliff pair (L-Mixed-M-λ=0.95 ↔ L-Mixed-M-λ=0.97) localizes the basin attractor causally to a single hidden layer. Of the four hidden layers in the actor MLP, only <code>net.7</code> — the final hidden activation, immediately upstream of the action head — clears the pre-registered 0.8 patch-success threshold under robust statistics, in both directions.
+                Activation patching across the cliff pair (L-Mixed-M-λ=0.95 ↔ L-Mixed-M-λ=0.97) localizes the basin attractor causally first to a single hidden layer (Phase 6 v1: only <code>net.7</code>, the actor's final hidden activation, clears the 0.8 patch-success threshold) and then to a <strong>5-dimensional subspace within that layer</strong> (Phase 6 v3: top-5 PCA components of the matched-seed per-step activation diff matrix recover v1's full-layer patch_success to within 0.03 in both directions). That is a <strong>51× compression</strong> of the mechanistic anchor — from 256 dims down to 5.
             </p>
 
             <div class="chart-card">
-                <h3>patch_success by layer × direction</h3>
+                <h3>The fingerprint — variance vs mechanism across K</h3>
                 <p class="chart-caption">
-                    For each layer × direction × seed, the harness ran four forward passes (clean protected, clean collapsed, patched in each direction) and normalized the post-patch <code>old_basin_pref</code> against the baseline gap. <strong>Mean</strong> values are reported alongside <strong>median</strong> and <strong>ratio-of-means</strong> — robust stats are essential because the per-seed normalization has heavy-tail behavior (note net.1's huge mean, low median: heavy-tail artifact, not localization).
+                    K-sweep over the top PCA components of the per-step matched-seed cliff-pair activation diff. The <strong>gold</strong> curve is variance captured by the top-K components; the <strong>navy</strong> and <strong>steel</strong> curves are patch_success in the two patch directions. The decoupling at K=1 is the load-bearing methodological lesson: PC1 alone carries 38.8% of variance but contributes ~0% of patch effect — it is the policy-offset direction, variance-heavy and mechanism-empty. The mechanism lives in PCs 2-5, which together with PC1 saturate the v1 layer-patch baseline at K=5.
+                </p>
+                <svg id="ksweep-chart" class="chart" viewBox="0 0 720 360" aria-label="Variance and patch_success vs K"></svg>
+                <div class="chart-legend">
+                    <span class="legend-item"><span class="swatch" style="background:#F4C430"></span> variance captured (top-K PCA)</span>
+                    <span class="legend-item"><span class="swatch" style="background:#1A3A52"></span> patch_success: protected → collapsed</span>
+                    <span class="legend-item"><span class="swatch" style="background:#5D8AA8"></span> patch_success: collapsed → protected</span>
+                    <span class="legend-item"><span class="swatch" style="background:transparent; border:1.5px dashed #C0392B"></span> P4 threshold (0.8)</span>
+                </div>
+            </div>
+
+            <p class="lede" style="margin-top: 1.5rem;">
+                The mechanistic statement that earns this surface: <em>the basin attractor at net.7 is a 5-dimensional subspace, decomposable into a 1-dimensional policy-offset component (PC1, variance-heavy and mechanism-empty) and a 4-dimensional mechanism component (PCs 2-5). Patching just those 5 directions of net.7 is sufficient to flip the cliff policy from collapsed to protected behavior (and back) without disturbing the other 251 dimensions of activation.</em>
+            </p>
+
+            <p class="lede" style="margin-top: 1rem;">
+                Phase 6 v2 attempted to sharpen the locus further to a single direction via sparse-autoencoder features. The SAE found a feature strongly correlated with basin-attraction behavior (|corr| = 0.89 against the per-episode outcome), but direction-patching using only that feature's decoder column produced <strong>zero patch effect</strong>. The SAE picked a policy-identifier feature, not a mechanism feature — feature-availability rankings on a joint two-policy dataset are dominated by between-policy mean differences rather than the structural-mechanism subspace. PCA on per-step matched-seed activation diffs is the basis that actually carries the mechanism; this is itself a publishable methodological lesson.
+            </p>
+
+            <div class="chart-card" style="margin-top: 2rem;">
+                <h3>Phase 6 v1: patch_success by layer × direction</h3>
+                <p class="chart-caption">
+                    The original v1 finding, retained as a secondary panel. Layer-level patching across <code>net.1 → net.3 → net.5 → net.7</code> shows that only the final hidden layer clears the P4 threshold in both directions. <code>net.1</code>'s huge mean (~2.6) is a heavy-tail artifact of per-seed normalization when the baseline gap is small — median 0.06 and ratio-of-means 0.22 demote it. Robust stats are essential.
                 </p>
                 <svg id="patch-chart" class="chart" viewBox="0 0 760 400" aria-label="Patch success by layer"></svg>
                 <div class="chart-legend">
@@ -596,7 +618,7 @@
             </div>
 
             <p class="lede" style="margin-top: 1.5rem;">
-                Two findings stack with this localization. First, the symmetric strength of both patch directions (protected → collapsed ≈ 0.89; collapsed → protected ≈ 0.85 by median) means the policy heads downstream of <code>net.7</code> are functionally equivalent across the cliff pair — what differs is what gets written to <code>net.7</code>, not what is done with it. Second, the clean and basin-position-intervened patch batteries were bit-identical for all logged fields (<code>max_delta = 0</code>): the feed-forward policies do not observe live <code>x_false</code> at inference. The cliff policy is computing, not perceiving, its basin. This is the mechanistic completion of Phase 4's "the attractor lives in the weights" finding.
+                One more finding stacks with the localization: the clean-rollout and basin-position-intervened patch batteries were bit-identical for all logged fields (<code>max_delta = 0</code>). The learned feed-forward policies do not observe live <code>x_false</code> at inference; the intervention changes environment state but not policy input. The cliff policy is computing, not perceiving, its basin. This is the mechanistic completion of Phase 4's "the attractor lives in the weights" finding.
             </p>
         </div>
     </section>
@@ -623,6 +645,7 @@
                 <a href="docs/SUNDOG_V_MESA.md"><strong>SUNDOG_V_MESA.md</strong><span>The roadmap; runs through Phase 7 v1</span></a>
                 <a href="docs/mesa/PHASE5_RESULTS.md"><strong>Phase 5 Results (v4)</strong><span>The behavioral cliff: λ ≈ 0.953</span></a>
                 <a href="docs/mesa/PHASE6_RESULTS.md"><strong>Phase 6 Results (v1)</strong><span>The mechanistic locus: net.7</span></a>
+                <a href="docs/mesa/PHASE6_V2_RESULTS.md"><strong>Phase 6 Results (v2+v3)</strong><span>The 5-dim subspace and SAE-basis falsification</span></a>
                 <a href="docs/mesa/PHASE7_RESULTS.md"><strong>Phase 7 Results (v1)</strong><span>The operating envelope: 22 policies classified</span></a>
                 <a href="docs/PROMO_HIGHLIGHTS.md"><strong>PROMO_HIGHLIGHTS.md</strong><span>§The Gravity Claim with the three anchors</span></a>
                 <a href="docs/presentation/claims-and-scope.md"><strong>Claims and Scope</strong><span>§The Gravity Frame → Earned envelope language</span></a>
@@ -710,6 +733,19 @@
             { layer: 'net.5', dir: 'C→P', mean:  0.417, median:  0.647, ratio:  0.625 },
             { layer: 'net.7', dir: 'P→C', mean:  0.894, median:  0.944, ratio:  0.899 },
             { layer: 'net.7', dir: 'C→P', mean:  0.934, median:  0.860, ratio:  0.854 },
+        ];
+
+        // The Phase 6 v3 K-sweep: top-K PCA components of the per-step
+        // matched-seed cliff-pair activation diff matrix.
+        // variance: fraction of total per-step diff variance captured by top K PCs.
+        // pc_median / cp_median: patch_success median across 64 seeds.
+        const KSWEEP = [
+            { k: 1,  variance: 0.3884, pc_median:  0.006, cp_median:  0.008 },
+            { k: 3,  variance: 0.8787, pc_median:  0.881, cp_median:  0.509 },
+            { k: 5,  variance: 0.9737, pc_median:  0.922, cp_median:  0.830 },
+            { k: 10, variance: 0.9955, pc_median:  0.960, cp_median:  0.851 },
+            { k: 32, variance: 0.9998, pc_median:  0.950, cp_median:  0.861 },
+            { k: 64, variance: 1.0000, pc_median:  0.946, cp_median:  0.859 },
         ];
 
         // ============================================================
@@ -870,6 +906,94 @@
         // Patch-success bar chart (grouped bars)
         // ============================================================
 
+        // ============================================================
+        // K-sweep chart (variance + patch_success vs K)
+        // ============================================================
+
+        const KSWEEP_W = 720, KSWEEP_H = 360;
+        const KSWEEP_PAD = { top: 30, right: 30, bottom: 60, left: 60 };
+
+        function renderKsweep() {
+            const svg = document.getElementById('ksweep-chart');
+            if (!svg) return;
+            const W = KSWEEP_W - KSWEEP_PAD.left - KSWEEP_PAD.right;
+            const H = KSWEEP_H - KSWEEP_PAD.top - KSWEEP_PAD.bottom;
+
+            // Ordinal x-axis: 6 evenly spaced K positions
+            const n = KSWEEP.length;
+            const xFor = i => KSWEEP_PAD.left + (W * (i + 0.5)) / n;
+            const yFor = v => KSWEEP_PAD.top + H - v * H;
+
+            let out = '';
+
+            // y-axis (0 to 1.0)
+            out += `<g class="axis">`;
+            out += `<line x1="${KSWEEP_PAD.left}" y1="${KSWEEP_PAD.top}" x2="${KSWEEP_PAD.left}" y2="${KSWEEP_PAD.top + H}"/>`;
+            for (let v = 0; v <= 1.0001; v += 0.2) {
+                const y = yFor(v);
+                out += `<line x1="${KSWEEP_PAD.left - 4}" y1="${y}" x2="${KSWEEP_PAD.left}" y2="${y}"/>`;
+                out += `<text x="${KSWEEP_PAD.left - 8}" y="${y + 4}" text-anchor="end">${v.toFixed(1)}</text>`;
+                if (v > 0 && v < 1.0001) {
+                    out += `<line class="grid" x1="${KSWEEP_PAD.left}" y1="${y}" x2="${KSWEEP_PAD.left + W}" y2="${y}"/>`;
+                }
+            }
+            out += `</g>`;
+
+            // x-axis (ordinal K positions)
+            out += `<g class="axis">`;
+            out += `<line x1="${KSWEEP_PAD.left}" y1="${KSWEEP_PAD.top + H}" x2="${KSWEEP_PAD.left + W}" y2="${KSWEEP_PAD.top + H}"/>`;
+            for (let i = 0; i < n; i++) {
+                const x = xFor(i);
+                out += `<line x1="${x}" y1="${KSWEEP_PAD.top + H}" x2="${x}" y2="${KSWEEP_PAD.top + H + 4}"/>`;
+                out += `<text x="${x}" y="${KSWEEP_PAD.top + H + 18}" text-anchor="middle">K=${KSWEEP[i].k}</text>`;
+            }
+            out += `</g>`;
+
+            // P4 threshold dashed line
+            const yT = yFor(0.8);
+            out += `<line class="threshold" x1="${KSWEEP_PAD.left}" y1="${yT}" x2="${KSWEEP_PAD.left + W}" y2="${yT}"/>`;
+            out += `<text class="threshold-label" x="${KSWEEP_PAD.left + W - 4}" y="${yT - 4}" text-anchor="end">P4 threshold (0.8)</text>`;
+
+            // Three curves: variance, P→C, C→P
+            const seriesSpec = [
+                { key: 'variance',  color: '#F4C430', label: 'variance' },
+                { key: 'pc_median', color: '#1A3A52', label: 'P→C' },
+                { key: 'cp_median', color: '#5D8AA8', label: 'C→P' },
+            ];
+            for (const series of seriesSpec) {
+                const points = KSWEEP.map((d, i) => `${xFor(i)},${yFor(d[series.key])}`);
+                out += `<polyline points="${points.join(' ')}" stroke="${series.color}" stroke-width="2.5" fill="none"/>`;
+                for (let i = 0; i < n; i++) {
+                    out += `<circle cx="${xFor(i)}" cy="${yFor(KSWEEP[i][series.key])}" r="4" fill="${series.color}"/>`;
+                }
+            }
+
+            // Callout at K=1 — the variance-vs-mechanism decoupling punchline
+            const k1x = xFor(0);
+            const k1varY = yFor(0.3884);
+            const k1mechY = yFor(0.006);
+            // Annotation bracket between the two K=1 points
+            out += `<line x1="${k1x + 14}" y1="${k1varY}" x2="${k1x + 14}" y2="${k1mechY}" stroke="#C0392B" stroke-width="1.2"/>`;
+            out += `<line x1="${k1x + 10}" y1="${k1varY}" x2="${k1x + 18}" y2="${k1varY}" stroke="#C0392B" stroke-width="1.2"/>`;
+            out += `<line x1="${k1x + 10}" y1="${k1mechY}" x2="${k1x + 18}" y2="${k1mechY}" stroke="#C0392B" stroke-width="1.2"/>`;
+            out += `<text x="${k1x + 24}" y="${(k1varY + k1mechY) / 2 - 8}" font-size="11" font-family="var(--sd-font-data)" fill="#C0392B">variance ≠ mechanism:</text>`;
+            out += `<text x="${k1x + 24}" y="${(k1varY + k1mechY) / 2 + 6}" font-size="11" font-family="var(--sd-font-data)" fill="#C0392B">PC1 = 38.8% var, 0% mech</text>`;
+
+            // Callout at K=5 — saturation point
+            const k5x = xFor(2);
+            const k5pcY = yFor(0.922);
+            out += `<circle cx="${k5x}" cy="${k5pcY}" r="10" fill="none" stroke="#2E8B57" stroke-width="2"/>`;
+            out += `<text x="${k5x}" y="${k5pcY - 18}" text-anchor="middle" font-size="11" font-family="var(--sd-font-data)" fill="#2E8B57" font-weight="700">v1 baseline reached</text>`;
+            out += `<text x="${k5x}" y="${k5pcY - 6}" text-anchor="middle" font-size="11" font-family="var(--sd-font-data)" fill="#2E8B57">at K=5</text>`;
+
+            // Axis labels
+            out += `<text class="label" x="${KSWEEP_PAD.left + W / 2}" y="${KSWEEP_H - 22}" text-anchor="middle">K (number of top PCA components of per-step matched-seed cliff-pair diff)</text>`;
+            out += `<text class="label" transform="translate(18 ${KSWEEP_PAD.top + H / 2}) rotate(-90)" text-anchor="middle">variance / patch_success</text>`;
+
+            svg.innerHTML = out;
+        }
+
+
         const PATCH_W = 760, PATCH_H = 400;
         const PATCH_PAD = { top: 30, right: 30, bottom: 80, left: 60 };
 
@@ -973,6 +1097,7 @@
         function init() {
             renderPolicyGrid();
             renderCliff('Medium');
+            renderKsweep();
             renderPatch();
 
             const buttons = document.querySelectorAll('.chart-toggle button[data-tier]');
@@ -990,5 +1115,6 @@
             init();
         }
     </script>
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
 </body>
 </html>

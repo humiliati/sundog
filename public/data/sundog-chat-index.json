@@ -25,11 +25,14 @@
         "show me the strongest safe claim",
         "what is the paper-grade claim",
         "strongest public claim",
+        "strongest current sundog result",
+        "strongest current result",
+        "current sundog result",
         "strongest claim",
         "supported result",
         "physical hardware"
       ],
-      "text": "The strongest controlled claim is the photometric mirror-alignment result: in the tested MuJoCo task, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The supported result is photometric; the photometric claim is bounded to that task and operating envelope. what does sundog claim what is the current controlled result show me the strongest safe claim what is the paper-grade claim strongest public claim strongest claim supported result physical hardware Do not present the broader theorem as proven. Do not claim universal alignment, universal indirect-control success, or hardware validation. Name the cost as slower acquisition rather than terminal-accuracy loss inside the tested setting."
+      "text": "The strongest controlled claim is the photometric mirror-alignment result: in the tested MuJoCo task, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The supported result is photometric; the photometric claim is bounded to that task and operating envelope. what does sundog claim what is the current controlled result show me the strongest safe claim what is the paper-grade claim strongest public claim strongest current sundog result strongest current result current sundog result strongest claim supported result physical hardware Do not present the broader theorem as proven. Do not claim universal alignment, universal indirect-control success, or hardware validation. Name the cost as slower acquisition rather than terminal-accuracy loss inside the tested setting."
     },
     {
       "id": "current_controlled_result:2",
@@ -52,11 +55,14 @@
         "show me the strongest safe claim",
         "what is the paper-grade claim",
         "strongest public claim",
+        "strongest current sundog result",
+        "strongest current result",
+        "current sundog result",
         "strongest claim",
         "supported result",
         "physical hardware"
       ],
-      "text": "The strongest controlled claim is the photometric mirror-alignment result: in the tested MuJoCo task, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The supported result is photometric; the photometric claim is bounded to that task and operating envelope. what does sundog claim what is the current controlled result show me the strongest safe claim what is the paper-grade claim strongest public claim strongest claim supported result physical hardware Do not present the broader theorem as proven. Do not claim universal alignment, universal indirect-control success, or hardware validation. Name the cost as slower acquisition rather than terminal-accuracy loss inside the tested setting."
+      "text": "The strongest controlled claim is the photometric mirror-alignment result: in the tested MuJoCo task, a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and proprioception, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline. The supported result is photometric; the photometric claim is bounded to that task and operating envelope. what does sundog claim what is the current controlled result show me the strongest safe claim what is the paper-grade claim strongest public claim strongest current sundog result strongest current result current sundog result strongest claim supported result physical hardware Do not present the broader theorem as proven. Do not claim universal alignment, universal indirect-control success, or hardware validation. Name the cost as slower acquisition rather than terminal-accuracy loss inside the tested setting."
     },
     {
       "id": "framework_pattern:1",
