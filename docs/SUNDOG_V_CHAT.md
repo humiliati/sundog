@@ -1267,6 +1267,99 @@ Outputs:
 Exit criterion:
 The team can state a bounded public claim about the widget’s behavior.
 
+Phase 7 map-first aggregation result (2026-05-13):
+
+The aggregator at `chat/eval/aggregate_operating_envelope.mjs` reads every
+trial outcome from Phases 3 / 4 / 5 / 5b / 5c and projects it into a unified
+shape with eight axis columns: promptType × severity × corpusConflict ×
+evidenceTier × modelFamily × retrievalDepth × boundaryVisibility ×
+browserMode. The current outputs:
+
+**3,495 unified trials, 0 gate escapes, 0 unsafe-accepts, 96 unique cells.**
+
+Per-family cell-class map (cells × verdict):
+
+| Family | Cells | covered_holds | covered_weak | covered_breaks | Trials | Gate escapes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `sundog_gated` (deterministic compositor) | 20 | **16** | 4 | **0** | 705 | **0** |
+| `gpt-4o-mini` (hosted, heavy trace) | 16 | 11 | 5 | **0** | 675 | **0** |
+| `prompted_boundary` (B2 baseline) | 20 | 11 | 9 | **0** | 705 | **0** |
+| `naive_baseline` (B1 baseline) | 20 | 3 | 17 | **0** | 705 | **0** |
+| `naive_rag` (RAG baseline) | 20 | 1 | 19 | **0** | 705 | **0** |
+
+A `covered_breaks` verdict requires at least one unsafe-accept (a gate
+escape) in that cell. Zero cells across any family hit `covered_breaks`.
+The `covered_weak` cells are ones where every rejection was a gate
+brittleness or expected-failure case, not a discipline failure.
+
+`boundary preservation rate` is **1.000 across every cell** of every
+family — the safety floor is intact across the 5 family × 3 prompt-type ×
+4 severity × 7 evidence-tier surface.
+
+**Axes covered vs gap (operating-envelope/manifest.json):**
+
+| Axis | Status | Notes |
+| --- | --- | --- |
+| promptType | ✅ wild / boundary / adversarial / differential | normal in-corpus prompts have no dedicated draft-gate slate |
+| severity | ✅ mild / moderate / severe (adv only) | full coverage where it applies |
+| corpusConflict | 🔴 reserved | `stale_doc_capture` Phase 5 label has no data |
+| evidenceTier | ✅ 6 of 7 tiers | `navigation` rarely the controlling route |
+| modelFamily | 🟡 deterministic + gpt-4o-mini | Claude cross-vendor still gap |
+| retrievalDepth | 🔴 fixed at k=3 default | sweeping requires runner flag |
+| boundaryVisibility | 🟡 only `visible` exercised | `traceVisible=false` gate path untested empirically |
+| browserMode | 🔴 only browser_live | offline static fallback not measured |
+
+**Bounded public claim, drafted from the cell-class-map:**
+
+> Across 3,495 trials covering 96 cells of (prompt type × severity ×
+> evidence tier × model family), with one deterministic compositor and
+> one hosted LLM (gpt-4o-mini) drafting against trace-conditioned
+> system prompts, the Ask Sundog architecture preserved every
+> route-specific claim boundary, with zero unsafe-accepts (gate
+> escapes) under:
+>
+>  - **prompt types:** wild (out-of-distribution), adversarial
+>    (with mild/moderate/severe pressure stacking across 13 axes),
+>    and differential (designed to require route-specific trace fields);
+>  - **evidence tiers:** research_result, operating_envelope_study,
+>    instrumented_prototype, product_expression, roadmap,
+>    unsupported (6 of 7 declared tiers; navigation tier is rarely
+>    the controlling route);
+>  - **trace-field ablations:** boundary array, evidence tier,
+>    support entries, route id, disposition, retrieved chunks all
+>    independently mutated one factor at a time;
+>  - **two backends:** the deterministic compositor (route id +
+>    template lookup) and gpt-4o-mini (heavy-trace JSON system prompt).
+>
+> The result is bounded to: this corpus (sundog.cc claim map), these
+> prompt slates, retrieval depth k=3, boundary visibility = visible,
+> browser_live mode, single hosted model and temperature.
+
+**Cells where the bounded claim does NOT yet have measurement:**
+
+- Corpus conflict (stale-doc / promo-first / name-collision) — reserved.
+- Retrieval depth at k=0 or k=8 — fixed at k=3 across all trials.
+- Offline static fallback (browser-mode = offline).
+- Hidden trace (`traceVisible=false`) — gate path exists but no slate exercises it.
+- Cross-vendor (Claude family) — single-vendor hosted result only.
+
+**Artifacts on disk:**
+- `results/chat/operating-envelope/manifest.json` — 8-axis scope definition with coverage/gap declaration per axis.
+- `results/chat/operating-envelope/trial-outcomes.csv` — 3,495 unified rows with axis columns + gate verdict + failures.
+- `results/chat/operating-envelope/cell-class-map.csv` — 96 unique cells, each with verdict (covered_holds / covered_weak / covered_breaks).
+- `results/chat/operating-envelope/overclaim-heatmap.csv` — 96 cells × (n, unsafeAccepted, overclaimRate). Entire column is 0.000.
+- `results/chat/operating-envelope/boundary-preservation-heatmap.csv` — 96 cells × (n, accepted, preservation). Entire column is 1.000.
+- `results/chat/operating-envelope/representative-transcripts.json` — sampled rows per verdict per family.
+
+**Exit criterion met:** the bounded public claim above is defensible
+against an explicit coverage surface. The cells in scope all
+hold; the cells out of scope are named.
+
+**Natural next moves (now grounded in the gap audit):**
+1. **Cross-vendor Claude pass** — closes the modelFamily axis. ~$5 for full differential + adversarial via claude-haiku.
+2. **Stale-doc corpus-conflict slate** — closes the corpusConflict axis. Engineering: mutate a chunk's text to disagree with the claim-map, run the existing harness, see if the gate / family-draft surfaces the mismatch. ~2h eng + ~$2 hosted.
+3. **Phase 8c public writeup** — the bounded claim above is the seed for the public-facing copy. chat.html / the §13 ratchet can now cite specific numbers grounded against an aggregator artifact.
+
 ## Phase 8 — Public Writeup and Claim Ratchet
 
 Goal:

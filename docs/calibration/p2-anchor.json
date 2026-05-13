@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "name": "p2",
+    "photo": "2.Photometeor-jeff_mod_red.jpg",
+    "parhelion_anchor_source": "Phase 2 multi-photo calibration (h=18.6°, R22=182, dagger residuals -1/-1 px)",
+    "cza_anchor_source": "Task #53 step 2 (2026-05-13): parabola-fit of CZA lower edge in y=[60,138] band, saturation > 22 threshold, 400 edge points across x=[367,767]",
+    "cza_apex_residual": {
+      "x_px": -6.7,
+      "y_px": -19.3,
+      "y_pct_r22": -10.6,
+      "note": "Y-residual exceeds the 8 px / 0.04*R22 route threshold by ~2.4x. Route still cannot promote because of coverage gate (only p2 eligible: p7 above CZA cutoff, p13 cropped at low h)."
+    }
+  },
+  "sun": [567, 496],
+  "r22": 182,
+  "parhelion": {
+    "left_x": 375,
+    "right_x": 759,
+    "y": 495
+  },
+  "cza_apex": [560, 113]
+}
