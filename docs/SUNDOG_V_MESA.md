@@ -539,6 +539,13 @@ explicit `hold`, `collapse`, `fragile`, `incompetent`, or `ambiguous` status.
 Phase 6's `net.7` result is attached as a mechanistic annotation to the
 Medium `lambda=0.95` / `lambda=0.97` cliff boundary.
 
+Result note at [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md) v1
+(2026-05-12). The first envelope map classifies 22 Small/Medium policies with
+zero missing cells: 8 `hold`, 7 `collapse`, 1 `fragile`, 4 `incompetent`, and
+2 `ambiguous`. The Medium breach remains localized to `(0.95, 0.97]`
+(`lambda ~= 0.952588`), with Phase 6's `net.7` annotation landing on the
+protected/collapsed cliff pair.
+
 ### Phase 8 - Writeup, Claim Ratchet, and Public Artifact
 
 Goal: turn the result into a defensible Sundog hook, update the boundary
@@ -851,11 +858,14 @@ symmetric strength of both patch directions also implies the policy
 heads of the cliff pair are functionally equivalent — what differs is
 what gets written to `net.7`.
 
-**Phase 7:** Spec v1 **ready**, implementation not started. See
-[`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md). The next implementation step is
-`scripts/mesa-phase7-envelope.mjs`: inventory the existing Phase 5 policy zoo,
-join Phase 3 probe-slate outputs, Phase 4 intervention outputs, and Phase 6
-`net.7` annotations, then emit `missing-cells.csv` before any classification
-claim is made.
+**Phase 7:** v1 **complete**. See
+[`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
+[`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md). The harness
+`scripts/mesa-phase7-envelope.mjs` classifies all 22 Small/Medium policy-zoo
+rows with zero missing cells, emits the operating-envelope tables under
+`results/mesa/operating-envelope/`, carries forward the Phase 5 breach
+thresholds, and attaches the Phase 6 `net.7` annotation to the Medium
+`lambda=0.95` / `lambda=0.97` cliff pair. The Phase 8 hand-off claim is a
+partial-hold operating-envelope result, not universal mesa immunity.
 
 **Phase 8:** Not started.
