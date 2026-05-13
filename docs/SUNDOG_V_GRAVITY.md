@@ -49,6 +49,19 @@ targets here:
   canonical L-Reward, with signature-sensor and geometry action responses
   near zero — the fixed-attractor receipt that anchored Phase 5 and Phase
   6 downstream.*
+- **Candidate 12 - Predictive Atmospheric Instrumentation** → promoted as
+  [`SUNDOG_V_PERCEPTION.md`](SUNDOG_V_PERCEPTION.md). *Status (2026-05-13):
+  Phase 0 commitment artifact filed; apparatus tier locked at
+  smartphone-only (rotatable linear polarizer + tripod + pre-rendered
+  atlas overlay). Three candidate predictions ranked by apparatus cost:
+  sub-visible parhelic circle continuation (Phase 1–4, actionable);
+  intersection enhancement (Phase 5, reach, narrowband apparatus);
+  color-order inversion at arc tangencies (Phase 6, explicit reach,
+  spectrometer apparatus). The roadmap is the geometry-side analogue of
+  mesa Phase 6 — atlas-as-instrument rather than atlas-as-renderer —
+  attacking the two-substrate convergence by adding a predictive
+  in-the-wild receipt to the existing in-vitro and observational ones.
+  No observation run executed yet.*
 
 The following candidates depend on infrastructure built by
 `SUNDOG_V_MESA.md` and are sequenced accordingly:
@@ -137,6 +150,20 @@ appendix. Promotion trigger: if Geometry Phase 10/11 produce quantitative
 per-inversion-route residuals that make the two-substrate convergence a
 standalone public proof surface, split this subsection into an appendix and
 link it from the claim ledger.
+
+**Predictive-receipt extension *(staged 2026-05-13)*.** A third receipt
+is staged in [`SUNDOG_V_PERCEPTION.md`](SUNDOG_V_PERCEPTION.md): the
+atlas-as-instrument move. The atlas already inverts photographs to
+recover sun altitude with median 1 photo-px residual (observational
+receipt). The perception roadmap predicts features below the human
+contrast threshold and integrates instrumentation signal along the
+predicted geometry to confirm or falsify them. A Phase 4 positive there
+would add an *in-the-wild predictive* receipt next to the existing
+*in-vitro* (mesa) and *in-the-wild observational* (atlas overlays)
+ones. A Phase 4 null with clean smoke gate is a publishable negative
+that does not retract the existing two-substrate convergence. No
+observation has been run; this entry is a forward pointer, not an
+earned claim.
 
 ## The Goodhart Sidestep
 
@@ -266,6 +293,12 @@ downstream candidates depend on infrastructure built there.
     one concrete physical domain is chosen.
 11. **Side-Channel Defense (stretch)** — highest stir, longest horizon.
     Independent of the mesa roadmap.
+12. **Predictive Atmospheric Instrumentation** — *Promoted to
+    [`SUNDOG_V_PERCEPTION.md`](SUNDOG_V_PERCEPTION.md).* Attacks the
+    two-substrate convergence by adding a predictive in-the-wild
+    receipt: the atlas names a feature below the human contrast
+    threshold, instrumentation confirms or falsifies it where the math
+    said it would be. Geometry-side analogue of mesa Phase 6.
 
 ---
 

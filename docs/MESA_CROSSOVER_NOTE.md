@@ -161,8 +161,32 @@ trap surfacing in geometry.
 
 ---
 
+## Follow-on, 2026-05-13: perception roadmap promoted
+
+The "structural transition" thread in this note — mesa's Phase 5→6 move
+from describing the cliff behaviorally to localizing it causally — has
+now seeded a structurally matched roadmap on the geometry side:
+[`SUNDOG_V_PERCEPTION.md`](SUNDOG_V_PERCEPTION.md). That doc reframes
+the atlas's "what it does NOT yet model" list as a prediction surface
+and instruments three candidate predictions ranked by apparatus cost:
+
+1. Sub-visible parhelic circle continuation (smartphone + polarizer; Phase 1–4).
+2. Intersection enhancement at predicted circle crossings (narrowband + long-exposure; Phase 5, reach).
+3. Color-order inversion at arc tangencies (spectrometer; Phase 6, explicit reach).
+
+Phase 0 is locked at the smartphone-only apparatus tier with the
+predicted-curve software and pre-registration template inherited from
+mesa Phase 6 discipline. Phase 7 is the earned-language ratchet that
+would add a third receipt — *in-the-wild predictive* — alongside the
+existing in-vitro (mesa) and in-the-wild observational (atlas
+overlays) ones, on a Phase 4 positive verdict only.
+
+The five transferable findings above remain authoritative for Phase
+10/11 of geometry; perception is a separate roadmap, not a successor.
+
 ## Reference
 
 - `docs/SUNDOG_V_MESA.md` — the mesa roadmap, v3.1/v3.2 results
 - `docs/SUNDOG_V_GRAVITY.md` — gravity claim staging ledger
 - `docs/SUNDOG_V_GEOMETRY.md` Phase 10/11 — overlay tuning + logo toolkit
+- `docs/SUNDOG_V_PERCEPTION.md` — atlas-as-instrument roadmap (filed 2026-05-13)
