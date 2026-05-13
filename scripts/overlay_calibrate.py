@@ -4,10 +4,13 @@ photograph and emit a residuals report.
 
 Usage:
     python scripts/overlay_calibrate.py <photo> --sun X,Y --r22 PX [options]
+    python scripts/overlay_calibrate.py <photo> --anchors anchors.json [options]
 
 Required:
     --sun X,Y      Sun pixel center (e.g. --sun 400,356)
     --r22 PX       Observed 22° halo radius in photo pixels (e.g. --r22 145)
+    OR
+    --anchors PATH JSON anchor bundle. CLI flags override matching JSON fields.
 
 Optional (atlas pose; default = canonical-halo-atlas):
     --sun-altitude DEG          (default: derived from --parhelion-offset if
@@ -33,6 +36,10 @@ Observed-feature overrides (green markers; optional):
     --parhelion-right X         Observed right parhelion x (photo px)
     --parhelion-y Y             Observed parhelion/parhelic-belt y (photo px)
     --cza-apex X,Y              Observed CZA apex (photo px)
+    --tangent-samples SPEC      Observed tangent-arc samples as
+                                "X1,Y1;X2,Y2;X3,Y3[;...]"
+    --tangent-kind upper|lower  Which tangent primitive samples refer to
+                                (default: upper)
 
 The script does NOT need the workbench running — it re-implements the atlas
 math from the geometry module, transforms to photo coords via the 22°-halo
@@ -40,6 +47,7 @@ anchor, and overlays.
 """
 
 import argparse
+import json
 import math
 import os
 import sys
@@ -66,11 +74,153 @@ def parse_pair(s, name):
         sys.exit(f"ERROR: --{name} expects two comma-separated numbers (got {s!r})")
 
 
+def parse_samples(s, name):
+    samples = []
+    try:
+        for chunk in s.split(";"):
+            chunk = chunk.strip()
+            if not chunk:
+                continue
+            samples.append(parse_pair(chunk, name))
+    except Exception:
+        sys.exit(f"ERROR: --{name} expects semicolon-separated X,Y pairs (got {s!r})")
+    if len(samples) < 3:
+        sys.exit(f"ERROR: --{name} needs at least three X,Y samples")
+    return samples
+
+
+def load_anchor_json(path):
+    try:
+        with open(path, "r", encoding="utf-8-sig") as f:
+            data = json.load(f)
+    except Exception as exc:
+        sys.exit(f"ERROR: could not read --anchors {path!r}: {exc}")
+    if not isinstance(data, dict):
+        sys.exit("ERROR: --anchors JSON must be an object")
+    return data.get("anchors", data)
+
+
+def first_value(data, *keys):
+    for key in keys:
+        cur = data
+        ok = True
+        for part in key.split("."):
+            if isinstance(cur, dict) and part in cur:
+                cur = cur[part]
+            else:
+                ok = False
+                break
+        if ok and cur is not None:
+            return cur
+    return None
+
+
+def pair_from_anchor(data, *keys):
+    value = first_value(data, *keys)
+    if value is None:
+        return None
+    if isinstance(value, str):
+        return parse_pair(value, keys[0])
+    if isinstance(value, (list, tuple)) and len(value) == 2:
+        return float(value[0]), float(value[1])
+    if isinstance(value, dict):
+        x = first_value(value, "x", "px.x", "0")
+        y = first_value(value, "y", "px.y", "1")
+        if x is not None and y is not None:
+            return float(x), float(y)
+    sys.exit(f"ERROR: anchor field {keys[0]!r} must be X,Y or [X,Y]")
+
+
+def samples_from_anchor(data, *keys):
+    value = first_value(data, *keys)
+    if value is None:
+        return None
+    if isinstance(value, str):
+        return parse_samples(value, keys[0])
+    if isinstance(value, list):
+        samples = []
+        for item in value:
+            if isinstance(item, str):
+                samples.append(parse_pair(item, keys[0]))
+            elif isinstance(item, (list, tuple)) and len(item) == 2:
+                samples.append((float(item[0]), float(item[1])))
+            elif isinstance(item, dict) and "x" in item and "y" in item:
+                samples.append((float(item["x"]), float(item["y"])))
+            else:
+                sys.exit(f"ERROR: tangent sample {item!r} must be X,Y, [X,Y], or {{x,y}}")
+        if len(samples) < 3:
+            sys.exit("ERROR: tangent_samples needs at least three samples")
+        return samples
+    sys.exit(f"ERROR: anchor field {keys[0]!r} must be sample list or string")
+
+
+def number_from_anchor(data, *keys):
+    value = first_value(data, *keys)
+    return None if value is None else float(value)
+
+
+def circle_fit(points):
+    # Least-squares circle fit: x^2 + y^2 + A*x + B*y + C = 0.
+    sums = {
+        "x": 0.0, "y": 0.0, "xx": 0.0, "yy": 0.0, "xy": 0.0,
+        "xxx": 0.0, "yyy": 0.0, "xxy": 0.0, "xyy": 0.0,
+    }
+    n = len(points)
+    for x, y in points:
+        xx = x * x
+        yy = y * y
+        sums["x"] += x
+        sums["y"] += y
+        sums["xx"] += xx
+        sums["yy"] += yy
+        sums["xy"] += x * y
+        sums["xxx"] += xx * x
+        sums["yyy"] += yy * y
+        sums["xxy"] += xx * y
+        sums["xyy"] += x * yy
+
+    matrix = [
+        [sums["xx"], sums["xy"], sums["x"], -(sums["xxx"] + sums["xyy"])],
+        [sums["xy"], sums["yy"], sums["y"], -(sums["xxy"] + sums["yyy"])],
+        [sums["x"], sums["y"], float(n), -(sums["xx"] + sums["yy"])],
+    ]
+
+    for col in range(3):
+        pivot = max(range(col, 3), key=lambda row: abs(matrix[row][col]))
+        if abs(matrix[pivot][col]) < 1e-9:
+            sys.exit("ERROR: tangent samples are degenerate; cannot fit a circle")
+        matrix[col], matrix[pivot] = matrix[pivot], matrix[col]
+        div = matrix[col][col]
+        matrix[col] = [v / div for v in matrix[col]]
+        for row in range(3):
+            if row == col:
+                continue
+            factor = matrix[row][col]
+            matrix[row] = [matrix[row][i] - factor * matrix[col][i] for i in range(4)]
+
+    a, b, c = matrix[0][3], matrix[1][3], matrix[2][3]
+    cx = -a / 2
+    cy = -b / 2
+    r_sq = cx * cx + cy * cy - c
+    if r_sq <= 0:
+        sys.exit("ERROR: tangent samples produced invalid fitted radius")
+    r = math.sqrt(r_sq)
+    residuals = [math.hypot(x - cx, y - cy) - r for x, y in points]
+    rms = math.sqrt(sum(v * v for v in residuals) / len(residuals))
+    return cx, cy, r, rms
+
+
+def draw_sample_cross(draw, x, y, color):
+    draw.line([x - 7, y, x + 7, y], fill=color, width=2)
+    draw.line([x, y - 7, x, y + 7], fill=color, width=2)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("photo", type=str)
-    ap.add_argument("--sun", required=True, type=str)
-    ap.add_argument("--r22", required=True, type=float)
+    ap.add_argument("--anchors", type=str, default=None)
+    ap.add_argument("--sun", type=str, default=None)
+    ap.add_argument("--r22", type=float, default=None)
     ap.add_argument("--sun-altitude", type=float, default=None)
     ap.add_argument("--parhelion-offset", type=float, default=None)
     ap.add_argument("--parhelic-y-offset-r22", type=float, default=-0.05)
@@ -87,14 +237,51 @@ def main():
     ap.add_argument("--parhelion-right", type=float, default=None)
     ap.add_argument("--parhelion-y", type=float, default=None)
     ap.add_argument("--cza-apex", type=str, default=None)
+    ap.add_argument("--tangent-samples", type=str, default=None)
+    ap.add_argument("--tangent-kind", choices=("upper", "lower"), default=None)
     args = ap.parse_args()
 
     photo_path = Path(args.photo)
     if not photo_path.is_file():
         sys.exit(f"ERROR: photo not found: {photo_path}")
 
-    sx, sy = parse_pair(args.sun, "sun")
-    r22_obs = args.r22
+    anchors = load_anchor_json(args.anchors) if args.anchors else {}
+
+    sun_anchor = parse_pair(args.sun, "sun") if args.sun else pair_from_anchor(
+        anchors, "sun", "sun_px", "sun.pixel", "sun_pixel"
+    )
+    if sun_anchor is None:
+        sys.exit("ERROR: --sun X,Y is required unless --anchors supplies sun/sun_px")
+    sx, sy = sun_anchor
+
+    r22_obs = args.r22 if args.r22 is not None else number_from_anchor(
+        anchors, "r22", "r22_px", "halo_22_radius_px", "anchor_22_halo_radius_px"
+    )
+    if r22_obs is None:
+        sys.exit("ERROR: --r22 PX is required unless --anchors supplies r22/r22_px")
+
+    if args.sun_altitude is None:
+        args.sun_altitude = number_from_anchor(anchors, "sun_altitude", "sun_altitude_deg")
+    if args.parhelion_offset is None:
+        args.parhelion_offset = number_from_anchor(anchors, "parhelion_offset", "parhelion.offset_px")
+    if args.parhelion_left is None:
+        args.parhelion_left = number_from_anchor(anchors, "parhelion_left", "parhelion.left_x", "parhelion.left_px")
+    if args.parhelion_right is None:
+        args.parhelion_right = number_from_anchor(anchors, "parhelion_right", "parhelion.right_x", "parhelion.right_px")
+    if args.parhelion_y is None:
+        args.parhelion_y = number_from_anchor(anchors, "parhelion_y", "parhelion.y", "parhelic_belt_y")
+    if args.parhelion_offset is None and args.parhelion_left is not None and args.parhelion_right is not None:
+        args.parhelion_offset = ((sx - args.parhelion_left) + (args.parhelion_right - sx)) / 2
+    if args.cza_apex is None:
+        cza_anchor = pair_from_anchor(anchors, "cza_apex", "cza.apex", "cza_apex_px")
+        if cza_anchor is not None:
+            args.cza_apex = f"{cza_anchor[0]},{cza_anchor[1]}"
+    tangent_samples = parse_samples(args.tangent_samples, "tangent-samples") if args.tangent_samples else samples_from_anchor(
+        anchors, "tangent_samples", "upper_tangent.samples", "lower_tangent.samples", "tangent.samples"
+    )
+    tangent_kind = args.tangent_kind or first_value(anchors, "tangent_kind", "tangent.kind", "upper_tangent.kind") or "upper"
+    if tangent_kind not in ("upper", "lower"):
+        sys.exit("ERROR: tangent_kind must be 'upper' or 'lower'")
 
     # Inverse-infer sun altitude from parhelion offset if available.
     if args.sun_altitude is not None:
@@ -327,6 +514,14 @@ def main():
         cx, cy_obs = parse_pair(args.cza_apex, "cza-apex")
         draw.line([cx - 10, cy_obs, cx + 10, cy_obs], fill=(0, 255, 0, 255), width=2)
         draw.line([cx, cy_obs - 10, cx, cy_obs + 10], fill=(0, 255, 0, 255), width=2)
+    tangent_fit = None
+    if tangent_samples:
+        for x, y_obs in tangent_samples:
+            draw_sample_cross(draw, x, y_obs, (80, 255, 180, 255))
+        tangent_fit = circle_fit(tangent_samples)
+        cx_fit, cy_fit, r_fit, _rms = tangent_fit
+        draw.ellipse([cx_fit - r_fit, cy_fit - r_fit, cx_fit + r_fit, cy_fit + r_fit],
+                     outline=(80, 255, 180, 180), width=1)
 
     # Legend
     y = 8
@@ -342,6 +537,7 @@ def main():
         ((255, 210, 255, 255), "Parry supralateral"),
         ((120, 255, 220, 255), "infralateral arcs"),
         ((0, 255, 0, 255), "observed"),
+        ((80, 255, 180, 255), f"{tangent_kind} tangent samples"),
     ]
     for color, label in items:
         draw.line([6, y + 6, 30, y + 6], fill=color, width=3)
@@ -376,6 +572,19 @@ def main():
     if args.cza_apex is not None:
         cx, cy_obs = parse_pair(args.cza_apex, "cza-apex")
         print(f"  CZA apex:      ({cza_apex_p[0] - cx:+.1f}, {cza_apex_p[1] - cy_obs:+.1f}) px")
+    if tangent_fit is not None:
+        cx_fit, cy_fit, r_fit, rms_fit = tangent_fit
+        predicted_center_w = (WB_SUN[0], WB_SUN[1] - WB_R22 - 200) if tangent_kind == "upper" else (WB_SUN[0], WB_SUN[1] + WB_R22 + 200)
+        pred_cx, pred_cy = w2p(*predicted_center_w)
+        pred_r = 200 * scale
+        obs_k = 1 / r_fit
+        pred_k = 1 / pred_r
+        print(f"  {tangent_kind} tangent fit:")
+        print(f"    observed center: ({cx_fit:.1f}, {cy_fit:.1f}), r={r_fit:.1f}px, RMS={rms_fit:.2f}px")
+        print(f"    predicted center:({pred_cx:.1f}, {pred_cy:.1f}), r={pred_r:.1f}px")
+        print(f"    center residual: ({pred_cx - cx_fit:+.1f}, {pred_cy - cy_fit:+.1f}) px")
+        print(f"    radius residual: {pred_r - r_fit:+.1f} px")
+        print(f"    curvature residual: {pred_k - obs_k:+.6f} 1/px")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,43 @@
+{
+  "interventionId": "route_swapped",
+  "slate": "differential",
+  "promptCount": 16,
+  "totalDrafts": 64,
+  "byFamily": {
+    "naive_baseline": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "flipped": 0,
+      "unsafeAccepted": 0,
+      "applied": 16
+    },
+    "naive_rag": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "flipped": 0,
+      "unsafeAccepted": 0,
+      "applied": 16
+    },
+    "prompted_boundary": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "flipped": 0,
+      "unsafeAccepted": 0,
+      "applied": 16
+    },
+    "sundog_gated": {
+      "total": 16,
+      "accepted": 15,
+      "rejected": 1,
+      "flipped": 1,
+      "unsafeAccepted": 0,
+      "applied": 16
+    }
+  },
+  "interventionAppliedCount": 16,
+  "totalFlipped": 1,
+  "totalUnsafeAccepted": 0
+}

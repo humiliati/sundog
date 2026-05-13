@@ -367,8 +367,8 @@ Phase 6 opened the box, and what's inside has a shape worth naming.
 The behavioral cliff has a causal locus in the actor's final hidden
 activation (`net.7`), and the circuit at that locus is **a small
 handful of generators, irreducibly entangled, only legible as a
-whole**. Five rounds of mechanistic probing landed on the same shape
-from five directions:
+whole**. Six rounds of mechanistic probing landed on the same shape
+from different directions:
 
 - **v1.** Layer-level activation patching localizes the cliff causally
   to `net.7` (the actor's final hidden layer); earlier layers do not.
@@ -387,6 +387,14 @@ from five directions:
 - **v3.3.** Per-neuron zero-ablation finds **no single critical
   neuron** (max ablation cost ≤ 0.10 in either direction). The
   mechanism is genuinely distributed at the single-neuron level.
+- **v3.4.** **Set-level** substrate-restricted ablation of v3.3's
+  P→C and C→P top-32 critical sets dissociates patch_success
+  functionally: each direction's substrate preferentially disrupts
+  its own direction and slightly *improves* the other (functional
+  opposition, not null). Bootstrap confirms the cross-direction
+  ranking overlap is statistically stable at 0.049 (95% CI [0.016,
+  0.085]). Single neurons are weak, but *direction-specific neuron
+  substrates* are functionally separable.
 
 What's left after those five rounds is a structural claim, not a
 score-table artifact:
@@ -399,17 +407,37 @@ score-table artifact:
 
 **Two complementary structural findings stack with the headline.**
 
-*Anatomical separation.* v3.3's zero-ablation ranking and v3.1's
-generalization probe converge on the same fact from different
-directions: the **basin-inducing circuit** (protected → collapsed
-patch) and the **basin-resisting circuit** (collapsed → protected
-patch) occupy nearly-disjoint neuron substrates at `net.7`. Top-32
-ablation-rank sets share Jaccard ≈ 0.05 between the two directions —
-essentially disjoint. The directional asymmetry first seen as
-patch_success behavior (v3.1) and again as cross-family generalization
-(v3.1 J1/J2) is now also visible as **anatomy**: becoming-protected
-and becoming-collapsed are different circuits using different neurons
-within the same 5D subspace.
+*Anatomical separation and functional opposition.* v3.4's substrate-
+restricted ablation (Axis P) confirms that the basin-inducing and
+basin-resisting sub-circuits at `net.7` are not just non-overlapping
+but **functionally opposed**: ablating the P→C critical top-32
+neurons drops P→C patch_success by 0.077 *and improves* C→P by
+0.097 — a dissociation of 0.174. Ablating the C→P critical top-32
+neurons drops C→P by 0.579 *and improves* P→C by 0.083 — a
+dissociation of 0.662. Each substrate preferentially disrupts its
+own patch direction; the cross-direction effect is *negative*, not
+null. v3.4's Jaccard bootstrap (Axis Q) confirms the v3.3 P→C/C→P
+top-32 overlap is statistically stable at 0.049 (95% CI [0.016,
+0.085]) — robust near-disjointness, though the CI still brackets
+chance-level (0.067) so the stronger "anti-correlated" reading is
+unearned. The basin-resisting substrate is also **more
+anatomically tight** than the basin-inducing one (C→P dissociation
+0.662 is ~4× the P→C dissociation 0.174), which dovetails with
+v3.1's cross-policy asymmetry: **basin-inducing machinery is shared
+across the controller family but distributed within any one policy;
+basin-resisting machinery is policy-specific but anatomically tight
+within each policy.** Two findings — within-policy dissociation and
+cross-policy generalization — point at one structural fact.
+
+*The L2-overlap retroactively explains v3.2.* v3.4 also bootstrapped
+the v3.3-critical / v3.2-L2-rank overlap: the C→P critical set
+substantially overlaps the L2-rank top-32 (Jaccard 0.333, 95% CI
+[0.280, 0.391]) while the P→C critical set does not (Jaccard 0.049,
+CI [0.032, 0.123]). The basin-resisting circuit lives at *high-L2*
+neurons; the basin-inducing circuit does *not*. v3.2's L2-rank-based
+top-k restriction was always going to fail more on the basin-inducing
+direction specifically — a structural reason the v3.2 negative result
+took the asymmetric shape it did.
 
 *The attractor lives in the weights, not in perception.* Clean and
 basin-position-intervened patch batteries are bit-identical for all
@@ -417,9 +445,10 @@ logged fields. The learned feed-forward policies do not observe live
 `x_false` at inference; the cliff policy is computing, not perceiving,
 its basin. The behavioral receipt from Phase 4 is now mechanistic.
 
-**Four methodological lessons stack out of the five rounds.** Each
-was earned by a method that failed to surface mechanism, and each is
-a documented reason the obvious-reach toolkit doesn't work here:
+**Five methodological lessons stack out of the six rounds.** Each
+was earned by a method that failed to surface mechanism on its own,
+and each is a documented reason the obvious-reach toolkit doesn't
+work here:
 
 1. **Feature-availability rankings are not mechanism rankings.** A
    sparse-autoencoder feature with |correlation| = 0.89 against the
@@ -434,15 +463,25 @@ a documented reason the obvious-reach toolkit doesn't work here:
    the right basis is not partial mechanism.
 4. **Single-neuron ablation does not surface a critical subset.** No
    neuron has ablation cost above 0.10 in either direction (v3.3).
-   The mechanism is genuinely distributed at the single-neuron level,
-   with the additional structure that the two directions use disjoint
-   neuron sets.
+   The mechanism is genuinely distributed at the single-neuron level.
+5. **But set-level substrate-restricted ablation does surface
+   structure.** v3.4 found that the direction-specific top-32
+   ablation-rank sets dissociate patch_success functionally — even
+   though each single neuron in those sets is weak (v3.3), the set
+   as a whole carries direction-specific mechanism. The combination
+   is the practical methodological recipe: *single-neuron methods
+   undersell distributed-but-direction-specific circuits; set-level
+   set-to-zero ablation on a principled basis-derived ranking
+   surfaces them.*
 
-Together: **for field-shaped circuits, non-linear holistic methods
-are mandatory**; linear analysis (probes, SAE features, top-k subspace
-restriction, top-k neuron restriction, single-neuron ablation) all
-fall short. This is itself a publishable finding about the methodology
-of mechanistic interpretability under field-shaped objectives.
+Together: **for field-shaped circuits, non-linear holistic and
+set-level methods are mandatory**; linear analysis methods (probes,
+SAE features, top-k subspace restriction, top-k neuron restriction,
+single-neuron ablation) all fall short individually, but set-level
+ablation along basis-derived rankings recovers structure that the
+linear methods missed. This is itself a publishable finding about
+the methodology of mechanistic interpretability under field-shaped
+objectives.
 
 **The same shape, observed in two substrates.** The mesa-trap
 program's headline shape — *small handful of generators, irreducibly

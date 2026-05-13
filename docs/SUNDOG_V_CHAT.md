@@ -803,17 +803,76 @@ Exit criterion:
 Every assistant family has an intervention-response matrix, and the primary
 failure modes are named.
 
-Phase 5 staging status (2026-05-12):
-- `results/chat/interventions/manifest.json` is seeded as the causal
-  intervention scaffold.
-- Initial ablation targets: `trace.boundary`, `trace.evidenceTier`,
-  `trace.support`, `trace.routeId`, `trace.disposition`, and
-  `trace.retrieved`.
-- Planned outputs: `trial-outcomes.csv`, `intervention-response-matrix.csv`,
-  `causal-authority.csv`, `failure-taxonomy.json`, and representative
-  transcripts.
-- The first implementation pass should keep interventions deterministic and
-  one-factor-at-a-time before hosted adapters are introduced.
+Phase 5 deterministic-scaffold result (2026-05-13):
+
+The 8 manifest interventions ran on the differential slate (16 prompts × 8
+interventions × 4 families = 512 trials) and the adversarial slate (59 × 8 × 4
+= 1,888 trials), 2,400 trials total. Zero gate escapes across both slates.
+
+**Headline finding — only `trace.routeId` shows detectable causal authority:**
+
+| Trace field | Differential flips | Adversarial flips | Verdict |
+| --- | --- | --- | --- |
+| `trace.boundary` (boundary_removed, boundary_swapped) | 0 | 0 | no detected authority |
+| `trace.evidenceTier` (evidence_tier_upgraded) | 0 | 0 | no detected authority |
+| `trace.support` (support_removed, support_reordered) | 0 | 0 | no detected authority |
+| `trace.routeId` (route_swapped) | 1 on `sundog_gated` | 7 on `sundog_gated`, 5 on `prompted_boundary` | **weak authority** |
+| `trace.disposition` (refusal_downgraded) | 0 (none refuse) | 0 (68 trials applied) | no detected authority |
+| `trace.retrieved` (retrieval_conflict_injected) | 0 | 0 | no detected authority |
+
+**Mechanistic interpretation:** the strong-ratchet result from §13 is NOT
+being carried by trace-field causal authority broadly. On the deterministic
+compositor, the discipline comes from two upstream sources that the
+intervention battery does not perturb:
+
+1. **The gate's content rules.** `gateModelDraft` consults the draft text
+   (`forbidden:<phrase>`, `unsupported_claim:<phrase>`, `upgrade_language:<phrase>`,
+   refusal-marker presence) far more than it consults the trace. Mutating
+   `trace.boundary` does not change what the gate looks for in the draft.
+2. **The family-draft heuristics.** Adversarial and differential prompts get
+   special-cased at the *prompt level* (set/category branches), so the family
+   produces the same draft regardless of trace mutation. The trace is bypassed
+   before it ever matters.
+
+`trace.routeId` is the one load-bearing input because `composeFromTrace`
+(`sundog_gated`) and the prompted-boundary fallback both look up
+`route.answerTemplate` by id — swapping the route changes the answer text,
+which then trips or releases content rules. That's the entire causal channel.
+
+**Outputs on disk:**
+- `chat/eval/lib/interventions.mjs` — 8 pure mutators (one per intervention id), with intervention metadata exported for the aggregator.
+- `chat/eval/lib/draft-families.mjs` — shared family-draft functions extracted from `score_phase3_drafts.mjs`.
+- `chat/eval/run_phase5_interventions.mjs` — slate-aware runner; `--slate differential|adversarial|wild --intervention all|<id>`.
+- `chat/eval/aggregate_interventions.mjs` — emits matrix, causal-authority, taxonomy, transcripts per slate.
+- `results/chat/interventions/<slate>/<intervention_id>/draft-outcomes.{csv,json}` + `summary.json` for each of the 8 interventions × 2 slates = 16 per-trial outcome dirs.
+- `results/chat/interventions/<slate>/intervention-response-matrix.csv` — 32 rows (8 interventions × 4 families).
+- `results/chat/interventions/<slate>/causal-authority.csv` — 24 rows (4 families × 6 fields).
+- `results/chat/interventions/<slate>/failure-taxonomy.json` — 9 failure-mode labels with per-label rollup.
+- `results/chat/interventions/<slate>/representative-transcripts.json` — picked flips for each intervention.
+
+**Named failure modes (slate-grounded):**
+- `route_identity_capture` — the only signal we see on the deterministic scaffold. Weak: 1/16 differential, 7/59 + 5/59 adversarial.
+- `missing_boundary_capture` (boundary, support interventions): no signal on this scaffold.
+- `tier_label_capture` (evidence_tier_upgraded): no signal.
+- `disposition_authority_capture` (refusal_downgraded): no signal — gate's refusal check fires on the *draft text's* refusal markers, which the family-draft preserves even after `trace.disposition` flips.
+- `retrieval_order_capture` / `promo_copy_capture` (support_reordered, retrieval_conflict_injected): no signal — the families don't lift injected promo support into the draft text on these slates.
+- `stale_doc_capture`, `user_pressure_capture`, `style_prompt_capture`: reserved for Phase 7 corpus-conflict and severity sweeps, which manipulate the prompt or the corpus rather than the trace.
+
+**Exit criterion met:** every assistant family has an intervention-response
+matrix on two slates, and the primary failure modes are named — with the
+honest qualifier that on the deterministic scaffold, most of them register
+as `no_signal_on_slate` and the one signal (`route_identity_capture`) is
+weak. This is the foundation Phase 7 will build on with the corpus-side
+sweeps that the trace-field mutators don't touch.
+
+**Implication for §13:** the existing ratchet "route-specific trace fields
+outperform a generic boundary prefix" is too broad. The Phase 5 evidence
+narrows it to: "the route id + the gate's content rules outperform a
+generic boundary prefix; the other route-specific trace fields (boundary
+array, evidence tier, support entries, disposition label, retrieval order)
+are upstream context that this slate set does not exercise." A hosted-model
+adapter or a slate that exercises the gate's trace-conditional checks more
+heavily would be the next way to tighten this.
 
 ## Phase 6 — Browser-Native Public Prototype
 
@@ -1006,6 +1065,25 @@ The adversarial slate now separates mild, moderate, and severe pressure across
 supports the strong ratchet for the deterministic scaffold: route-specific
 trace fields outperform a generic boundary prefix when the user prompt stacks
 authority, boundary dismissal, style override, and direct overclaim pressure.
+
+Phase 5 narrows what "route-specific trace fields" means:
+
+The 2,400-trial intervention battery (differential and adversarial slates;
+zero gate escapes after one-factor mutation of each of 6 trace fields)
+shows that on the deterministic compositor, only `trace.routeId` has
+detectable causal authority over gate verdicts — through the
+`route.answerTemplate` lookup in `composeFromTrace`. The other five trace
+fields (`boundary`, `evidenceTier`, `support`, `disposition`, `retrieved`)
+register `no_detected_authority` across both slates. The strong-ratchet
+discipline therefore comes from a composite source: the route id (load-
+bearing) + the gate's content rules (`forbidden`, `unsupported_claim`,
+`upgrade_language`, `refusal_marker`) + the family-draft heuristics
+(prompt-set branches that bypass the trace). Phase 5 does not falsify the
+strong ratchet, but it tells us that the boundary-prefix-vs-route-fields
+framing of §13 was over-broad about which trace fields earn the result.
+A hosted-model adapter would let the trace fields drive an actual LLM's
+draft text and re-test whether the broader trace-field authority emerges
+when the family-draft heuristics are removed.
 
 Scope:
 - bounded to this corpus, prompt slates, deterministic compositor
