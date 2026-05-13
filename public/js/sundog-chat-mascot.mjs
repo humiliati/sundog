@@ -22,6 +22,8 @@ const FULL_STATES = Object.freeze([
   "magnifier_pages",
   "halo_shield",
   "paw_stop_unsupported",
+  "out_of_scope",
+  "held_refusal",
   "sweat_brace",
   "thought_cloud",
   "claim_gate_trim",
@@ -49,6 +51,8 @@ const PUBLIC_LABEL = Object.freeze({
   magnifier_pages: "Retrieval Only",
   halo_shield: "Boundary Active",
   paw_stop_unsupported: "Unsupported",
+  out_of_scope: "Out of Scope",
+  held_refusal: "Boundary Held",
   sweat_brace: "Pressure Detected",
   thought_cloud: "Speculative",
   claim_gate_trim: "Trimmed",
@@ -66,7 +70,7 @@ const NON_CLAIM_ROUTES = new Set([
   "inspect_data"
 ]);
 
-export function deriveMascotState(trace) {
+export function deriveMascotState(trace, previousTrace = null) {
   if (!trace || typeof trace !== "object") return "idle";
 
   // Phase 4/5 fields — only populated when the eval harness or
@@ -83,7 +87,24 @@ export function deriveMascotState(trace) {
 
   // Production trace fields — all populated by the current static router,
   // retrieval layer, and claim gate.
-  if (trace.disposition === "refuse") return "paw_stop_unsupported";
+
+  // Refusals split: "held" if the previous trace was also a refusal (the
+  // boundary fired twice in a row, consistent with the same rule), "out
+  // of scope" if the prompt didn't even route to a claim, plain
+  // "unsupported" otherwise.
+  if (trace.disposition === "refuse") {
+    if (previousTrace && previousTrace.disposition === "refuse") {
+      return "held_refusal";
+    }
+    return "paw_stop_unsupported";
+  }
+
+  // "Out of scope" — the router fell to its catch-all because the prompt
+  // is not about the corpus at all. Distinct from `paw_stop_unsupported`
+  // (which is "we have a position on this question and it's a no") and
+  // from `thought_cloud` (which is "the answer wandered into speculation").
+  if (trace.routeId === "unsupported_static_route") return "out_of_scope";
+
   if (trace.evidenceTier === "unsupported") return "thought_cloud";
   if (trace.disposition === "retrieval_only") return "magnifier_pages";
   if (trace.boundary?.length) return "halo_shield";
@@ -104,10 +125,12 @@ export function reduceToButtonState(mascotState) {
     case "claim_gate_trim":
     case "poster_vs_research":
     case "erase_and_stamp":
+    case "out_of_scope":
       return "cloud_halo";
 
     case "halo_shield":
     case "paw_stop_unsupported":
+    case "held_refusal":
       return "shield_halo";
 
     case "book_to_bubble":
@@ -131,7 +154,7 @@ export function reduceToButtonState(mascotState) {
 export function applyMascotState(element, trace, options = {}) {
   if (!element || typeof element.classList !== "object") return null;
 
-  const fullState = deriveMascotState(trace);
+  const fullState = deriveMascotState(trace, options.previousTrace || null);
   const buttonState = reduceToButtonState(fullState);
 
   scrubStateClasses(element);

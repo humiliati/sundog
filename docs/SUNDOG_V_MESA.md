@@ -938,7 +938,8 @@ battery on the cliff pair.
 
 **Phase 6 v2 + v3 result (2026-05-12) — sharpens the mechanistic
 anchor.** See [`mesa/PHASE6_V2_RESULTS.md`](mesa/PHASE6_V2_RESULTS.md)
-v2 for the full result note. Three findings stack:
+v2 for the full result note. Historical v2/v3 framing follows; v3.1
+supersedes the PC1/PCs-2-5 decomposition below:
 
 1. **The basin attractor at `net.7` is a 5-dimensional subspace.**
    Top-5 principal components of the matched-seed per-step cliff-pair
@@ -987,6 +988,25 @@ anchor from cliff-pair-specific to controller-family-wide. v3.1 is
 compute-light: ~60-90 minutes wall-clock, 0 new PPO runs, ~170 LOC of
 harness extensions to `phase6_v2_sae.py`.
 
+**Phase 6 v3.1 result (2026-05-12) — revised mechanistic statement.** See
+[`mesa/PHASE6_V31_RESULTS.md`](mesa/PHASE6_V31_RESULTS.md). Axis I falsified
+the "PC1 is mechanism-empty" claim: PC1 alone remains behavior-weak
+(`0.006 / 0.008`), but PCs 2-5 alone are also only partial (`0.291 /
+0.121`). PCs 1-5 together recover the full patch effect (`0.922 /
+0.830`). The basin-attractor circuit is therefore an **entangled
+5-dimensional subspace**, not a clean 1D policy-offset plus 4D mechanism
+split.
+
+Axis J partially confirmed cross-policy generalization in the asymmetric
+direction that matters most for basin capture. The cliff-pair PCA basis
+patches protected-to-collapsed at cliff-pair quality on held-out Medium
+pairs: J1 signature-terminal-M -> reward-M median `0.941`, J2 mixed-0.9-M
+-> mixed-0.99-M median `1.001`. The reverse direction is weaker (J1
+`0.162`, J2 `0.631`), so the revised read is: **basin-inducing subspace
+generalizes across the Medium-tier controller family; basin-resisting
+machinery is more policy-specific.** Axis L confirms the directional
+asymmetry statistically: K=3 median-gap 95% CI `[0.251, 0.550]`.
+
 Phase 6 also confirmed the fixed-attractor interpretation from Phase 4
 mechanically. The clean-rollout and basin-position-intervened patch
 batteries were exactly identical for all logged fields (`max_delta=0`),
@@ -1004,6 +1024,11 @@ circuit forms at `net.7`; above it, the circuit does not form.** The
 symmetric strength of both patch directions also implies the policy
 heads of the cliff pair are functionally equivalent — what differs is
 what gets written to `net.7`.
+
+v3.1 revises the last sentence: the patch effect is not best described as
+a symmetric reusable rescue/collapse switch. The shared part is the
+basin-inducing direction; the basin-resisting direction is weaker on
+held-out pairs and appears more policy-specific.
 
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
