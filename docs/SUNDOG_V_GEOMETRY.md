@@ -1298,10 +1298,26 @@ Deliverables:
 - Per-photo notes that classify each optional primitive as `visible`,
   `candidate`, `not visible`, or `not applicable`; first-pass notes live in
   `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`.
+- A per-inversion-route residual table in
+  `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`, measured separately for
+  parhelion offset, CZA apex, tangent-arc curvature, and supralateral
+  position where each route is visible/applicable. This is a Phase 10
+  deliverable, not a separate standalone note.
+- Pre-registered quantitative `do not promote` thresholds, written into
+  `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md` before the next overlay
+  run. This is a Phase 10 blocker: if the thresholds are not written first,
+  the overlay run can be exploratory only and cannot promote primitives.
 - Updated defaults or pose presets only if the same morphology appears
   consistently across at least two of the three images.
 - A short "do not promote" list naming any arc that looked plausible in one
-  image but failed the richer pass.
+  image but failed the richer pass. A candidate primitive is not promoted
+  into the default/logo vocabulary if its normalized feature residual is
+  `>= 0.06 * R22` (or `>= 12 px` at the current anchor scale) on at least two
+  eligible calibration photos, if it has only one eligible supporting photo,
+  or if its inversion-route residual is `>= 0.04 * R22` (or `>= 8 px`) on at
+  least two eligible photos. Photos where a feature is genuinely hidden,
+  cropped, or outside its sun-altitude validity window are excluded from the
+  denominator and recorded as `not applicable`.
 
 Gate: the optional vocabulary layers are stable enough to give to a design
 team as shape language, without letting them rewrite the calibrated core.

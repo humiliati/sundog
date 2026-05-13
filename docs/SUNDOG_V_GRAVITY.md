@@ -132,6 +132,12 @@ methods. See [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) for the
 full transfer, including the methodological lessons for Phase 10/11
 overlay tuning.
 
+For now this stays inside the Gravity Claim rather than becoming a separate
+appendix. Promotion trigger: if Geometry Phase 10/11 produce quantitative
+per-inversion-route residuals that make the two-substrate convergence a
+standalone public proof surface, split this subsection into an appendix and
+link it from the claim ledger.
+
 ## The Goodhart Sidestep
 
 The original unhinged intuition of the Sundog program — preserved in early
