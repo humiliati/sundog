@@ -609,9 +609,12 @@
     <!-- The Locus -->
     <section class="experiment-section" id="locus">
         <div class="experiment-content">
-            <h2>The Locus (Phase 6 v1 + v3.1)</h2>
+            <h2>The Locus (Phase 6 v1 → v3.3)</h2>
             <p class="lede">
-                Activation patching across the cliff pair (L-Mixed-M-lambda=0.95 vs lambda=0.97) localizes the basin attractor causally first to a single hidden layer (Phase 6 v1: only <code>net.7</code>, the actor's final hidden activation, clears the 0.8 patch-success threshold) and then to an <strong>entangled 5-dimensional subspace within that layer</strong>. Phase 6 v3.1 revises the tempting decomposition: PC1 alone is weak, PCs 2-5 alone are partial, and all five together are needed for the full patch effect.
+                Activation patching across the cliff pair (L-Mixed-M-lambda=0.95 vs lambda=0.97) finds the basin-attractor circuit at <code>net.7</code>, the actor's final hidden activation. Five rounds of mechanistic probing (v1 → v3.3) converge on the same shape from different directions: <strong>a small handful of generators, irreducibly entangled, only legible as a whole.</strong>
+            </p>
+            <p class="lede">
+                <strong>v1</strong> localizes the cliff causally to <code>net.7</code> — earlier layers do not clear the threshold. <strong>v3</strong> compresses the relevant subspace to 5 PCA components capturing 97.4% of variance and reproducing v1's full-layer patch effect (a 51× compression from 256 dims to 5). <strong>v3.1</strong> shows those 5 components are jointly necessary; no proper subset reproduces the patch. <strong>v3.2</strong> shows linear additive top-k neuron restriction by L2 destroys the mechanism — top-32 neurons capture 33.6% of basis L2 but deliver 0% of patch effect. <strong>v3.3</strong> finds no single critical neuron, and the basin-inducing and basin-resisting sub-circuits occupy <strong>nearly-disjoint neuron substrates</strong> at <code>net.7</code> (Jaccard ≈ 0.05 between directions on top-32 ablation-rank sets) — the directional asymmetry has an anatomical signature.
             </p>
 
             <div class="chart-card">
@@ -650,11 +653,15 @@
             </div>
 
             <p class="lede" style="margin-top: 1.5rem;">
-                The mechanistic statement that earns this surface: <em>the basin attractor at net.7 is an entangled 5-dimensional subspace. No tested proper sub-subspace reproduces the cliff. The basin-inducing side generalizes across held-out Medium policies; the basin-resisting side is weaker under transfer and appears policy-specific.</em>
+                The mechanistic statement that earns this surface: <em>the basin-attractor circuit at net.7 is a small handful of generators, irreducibly entangled, only legible as a whole. The basin-inducing and basin-resisting sub-circuits are anatomically separable (nearly-disjoint neuron substrates). The basin-inducing direction generalizes across held-out Medium policies; the basin-resisting direction is weaker under transfer and appears policy-specific.</em>
             </p>
 
             <p class="lede" style="margin-top: 1rem;">
-                Phase 6 v2 attempted to sharpen the locus further to a single direction via sparse-autoencoder features. The SAE found a feature strongly correlated with basin-attraction behavior (|corr| = 0.89 against the per-episode outcome), but direction-patching using only that feature's decoder column produced <strong>zero patch effect</strong>. The SAE picked a policy-identifier feature, not a mechanism feature — feature-availability rankings on a joint two-policy dataset are dominated by between-policy mean differences rather than the structural-mechanism subspace. PCA on per-step matched-seed activation diffs is the basis that actually carries the mechanism; this is itself a publishable methodological lesson.
+                Four methodological lessons stack out of the five rounds — each is a documented reason the obvious linear-interpretability toolkit doesn't work for field-shaped circuits: <strong>(1)</strong> feature-availability rankings are not mechanism rankings (SAE at |corr|=0.89 produced zero patch effect — picked a policy-identifier feature, not a mechanism feature); <strong>(2)</strong> variance is not mechanism (PC1 alone carries 38.8% of variance but contributes 0% of patch effect); <strong>(3)</strong> linear additive top-k subspace restriction destroys mechanism even with the correct basis (v3.2); <strong>(4)</strong> single-neuron ablation does not surface a critical subset (v3.3). For field-shaped circuits, non-linear holistic methods are mandatory.
+            </p>
+
+            <p class="lede" style="margin-top: 1rem;">
+                <strong>The same shape, observed in two substrates.</strong> The Sundog geometry program's parhelion atlas independently committed to "small set of complete implied circles, read holistically" — structurally the same object the mesa-trap circuit takes at net.7. Two independent methods from opposite ends of the program — controllers in-vitro, sky photography in-the-wild — converged on the same shape. The crossover is documented in <a href="docs/MESA_CROSSOVER_NOTE.md">MESA_CROSSOVER_NOTE.md</a>.
             </p>
 
             <div class="chart-card" style="margin-top: 2rem;">
@@ -700,6 +707,9 @@
                 <a href="docs/mesa/PHASE5_RESULTS.md"><strong>Phase 5 Results (v4)</strong><span>The behavioral cliff: λ ≈ 0.953</span></a>
                 <a href="docs/mesa/PHASE6_RESULTS.md"><strong>Phase 6 Results (v1)</strong><span>The mechanistic locus: net.7</span></a>
                 <a href="docs/mesa/PHASE6_V2_RESULTS.md"><strong>Phase 6 Results (v2+v3)</strong><span>The 5-dim subspace and SAE-basis falsification</span></a>
+                <a href="docs/mesa/PHASE6_V32_RESULTS.md"><strong>Phase 6 v3.2 Results</strong><span>Negative: linear top-k neuron mediation fails</span></a>
+                <a href="docs/mesa/PHASE6_V33_RESULTS.md"><strong>Phase 6 v3.3 Results</strong><span>Disjoint neuron substrates across basin direction</span></a>
+                <a href="docs/MESA_CROSSOVER_NOTE.md"><strong>Mesa ↔ Geometry Crossover</strong><span>Same shape in two substrates: mesa + parhelion atlas</span></a>
                 <a href="docs/mesa/PHASE6_V31_RESULTS.md"><strong>Phase 6 Results (v3.1)</strong><span>Entangled 5D subspace and directional transfer</span></a>
                 <a href="docs/mesa/PHASE7_RESULTS.md"><strong>Phase 7 Results (v1)</strong><span>The operating envelope: 22 policies classified</span></a>
                 <a href="docs/PROMO_HIGHLIGHTS.md"><strong>PROMO_HIGHLIGHTS.md</strong><span>§The Gravity Claim with the three anchors</span></a>

@@ -310,18 +310,37 @@ piecemeal, because the parts qualify each other:
   with signature weight `1 − λ ≈ 0.047412`. Roughly five percent signature
   anchor is sufficient and necessary to prevent basin internalization in this
   toy family up to the measured boundary.
-- **Mechanistic anchor:** activation patching across the cliff pair localizes
-  the basin attractor to an **entangled 5-dimensional subspace of the actor's
-  final hidden activation (`net.7`)**. Layer-level patching at `net.7` clears
-  the pre-registered threshold in both directions (Phase 6 v1); patches at
-  `net.1`, `net.3`, `net.5` do not. Phase 6 v3 shows that the top 5 PCA
-  components capture 97.4% of variance and reproduce v1 full-layer
-  patch_success to within 0.03 in both directions, a 51x compression from
-  256 dims to 5. Phase 6 v3.1 falsifies the clean PC1/PCs-2-5 split:
-  PC1 alone is behavior-weak, PCs 2-5 alone are partial, and PCs 1-5 together
-  carry the full circuit. The basin-inducing direction generalizes across
-  held-out Medium policy pairs; basin-resistance is weaker under transfer and
-  appears more policy-specific.
+- **Mechanistic anchor:** the basin attractor at the actor's final hidden
+  activation (`net.7`) is **a small handful of generators, irreducibly
+  entangled, only legible as a whole**. Five rounds of mechanistic probing
+  (Phase 6 v1 -> v3.3) converged on this shape: (v1) layer patching
+  localizes the cliff to `net.7`; earlier layers do not clear the
+  threshold. (v3) PCA on per-step matched-seed diffs compresses the
+  relevant subspace to 5 principal components capturing 97.4% of variance
+  and reproducing v1 full-layer patch effect (51x compression). (v3.1)
+  those 5 components are jointly necessary; no proper subset reproduces
+  the patch -- entangled, not factorable. (v3.2) linear additive top-k
+  neuron restriction destroys the mechanism even with the correct basis
+  -- top-32 neurons by L2 capture 33.6% of basis L2 and deliver 0%
+  patch effect. (v3.3) no single critical neuron -- max per-neuron
+  zero-ablation cost <= 0.10 in either direction. Additionally, the
+  basin-inducing (P->C) and basin-resisting (C->P) sub-circuits occupy
+  nearly-disjoint neuron substrates at `net.7` (top-32 ablation-rank
+  Jaccard ~ 0.05 between directions), so the directional asymmetry
+  established behaviorally in v3.1 has an anatomical signature. Four
+  methodological lessons stack out of the five rounds, each a documented
+  reason the obvious linear-interpretability toolkit doesn't work for
+  field-shaped circuits: (1) feature-availability rankings are not
+  mechanism rankings (SAE at |corr|=0.89 produced zero patch effect);
+  (2) variance is not mechanism (PC1: 38.8% variance, 0% patch effect);
+  (3) linear additive top-k subspace restriction destroys mechanism
+  even with the correct basis; (4) single-neuron ablation does not
+  surface a critical subset. The same shape appears in a second program
+  substrate -- the Sundog geometry program's parhelion atlas
+  independently arrived at "small set of complete implied circles, read
+  holistically" -- reinforcing the field-not-reward framing across
+  in-vitro and in-the-wild receipts. See
+  [`docs/MESA_CROSSOVER_NOTE.md`](../MESA_CROSSOVER_NOTE.md).
 
 What is **still not earned**:
 

@@ -361,75 +361,117 @@ Two things to notice. First, the protective threshold is small in absolute
 terms — 5%, not 50%. Second, the threshold is binary in the measured window:
 there is no broad middle regime between collapse and protection.
 
-### The mechanical anchor (Phase 6 v1 + v3 + v3.1)
+### The mechanical anchor (Phase 6 v1 → v3.3)
 
-Phase 6 opened the box. The behavioral cliff is not just a score-table
-artifact; it has a causal locus in the actor's final hidden activation.
-Layer-level patching finds `net.7`, PCA compresses the relevant activation
-space from 256 dimensions to 5, and v3.1 shows those 5 dimensions are
-entangled rather than cleanly decomposable.
+Phase 6 opened the box, and what's inside has a shape worth naming.
+The behavioral cliff has a causal locus in the actor's final hidden
+activation (`net.7`), and the circuit at that locus is **a small
+handful of generators, irreducibly entangled, only legible as a
+whole**. Five rounds of mechanistic probing landed on the same shape
+from five directions:
 
-Stated as policy:
+- **v1.** Layer-level activation patching localizes the cliff causally
+  to `net.7` (the actor's final hidden layer); earlier layers do not.
+- **v3 (axis-H).** PCA on per-step matched-seed activation diffs at
+  `net.7` compresses the relevant subspace to **5 principal
+  components, capturing 97.4% of the diff variance and reproducing
+  v1's full-layer patch effect.** The "huge dimension" claim shrinks
+  to a small handful.
+- **v3.1.** Those 5 components are **entangled** — neither PC1 alone
+  nor PCs 2-5 alone reproduce the patch; all five are jointly
+  necessary. There is no offset/mechanism factorization.
+- **v3.2.** Top-32 neurons by aggregate L2 in the basis (12.5% of
+  `net.7`, 33.6% of L2) deliver **0% of patch effect**. Linear
+  additive top-k restriction destroys the mechanism even when the
+  basis is correct.
+- **v3.3.** Per-neuron zero-ablation finds **no single critical
+  neuron** (max ablation cost ≤ 0.10 in either direction). The
+  mechanism is genuinely distributed at the single-neuron level.
 
-> Below the Phase 5 v4 threshold (signature weight `1 - lambda >= 0.048`),
-> the training process preserves basin resistance. Above the threshold, the
-> shared basin-inducing circuit appears in an entangled 5-dimensional
-> subspace of the actor's final hidden activation. The Goodhart-sidestep
-> argument now has a behavioral anchor (5% threshold), a mechanistic locus
-> (the final hidden activation), an entangled 5D basin-inducing subspace,
-> and a methodological lesson: variance is not mechanism, and even features
-> highly correlated with basin behavior need not span the basin-circuit
-> subspace.
+What's left after those five rounds is a structural claim, not a
+score-table artifact:
 
-v3.1 adds the asymmetry: the cliff-pair basis transfers cleanly into the
-basin on held-out Medium pairs, while rescue out of the basin is weaker and
-appears policy-specific.
+> The basin-attractor circuit at the actor's final hidden activation
+> is a 5-dimensional entangled subspace, read holistically or not at
+> all. The behavioral cliff at `1 − λ ≈ 0.048` is the threshold at
+> which that circuit appears in the policy weights; below the
+> threshold, the training process does not assemble it.
 
-Three complementary findings came out of Phase 6 v1 + v3 + v3.1 worth
-landing on:
+**Two complementary structural findings stack with the headline.**
 
-- **Linear-probe feature availability did not dissociate the cliff
-  pair.** Both endpoint-shaped behavior targets and depth-of-investment
-  ΔR² profiles failed their smoke gates: Oracle, L-Signature, and
-  L-Reward could not be cleanly separated, and at the Medium cliff pair
-  the ΔR² for goal-distance actually pointed the wrong direction
-  (collapsed had *more* deep-layer goal information than protected).
-  Linear probes saw what was *available* in the representation;
-  activation patching saw which available feature was *used*. The
-  separation matters because reviewers will reach for linear probes
-  first, and the program now has a documented reason why that reach is
-  insufficient.
-- **The basin attractor does not respond to live basin state.** The
-  clean-rollout and basin-position-intervened patch batteries were
-  bit-identical for all logged fields. The learned feed-forward policies
-  do not observe live `x_false` or live reward at inference; the
-  intervention changes environment state but not policy input. This is
-  the mechanistic version of Phase 4's behavioral observation that the
-  attractor "lives in the weights" — the cliff policy is computing,
-  not perceiving, its basin.
-- **Sparse-autoencoder features were the wrong basis for this circuit.**
-  Phase 6 v2 trained a top-k SAE on the joint cliff-pair `net.7`
-  activations and found a feature with |correlation| = 0.89 against the
-  per-episode basin-attraction outcome — a textbook strong probe
-  result. But direction-patching using only that feature's decoder
-  column produced *zero* behavioral effect. The SAE picked a
-  policy-identifier feature, not a mechanism feature; correlation
-  rankings on a joint two-policy dataset are dominated by between-policy
-  mean differences. PCA on per-step matched-seed activation diffs is
-  the basis that actually carries the mechanism. This is a
-  publishable methodological lesson in its own right.
+*Anatomical separation.* v3.3's zero-ablation ranking and v3.1's
+generalization probe converge on the same fact from different
+directions: the **basin-inducing circuit** (protected → collapsed
+patch) and the **basin-resisting circuit** (collapsed → protected
+patch) occupy nearly-disjoint neuron substrates at `net.7`. Top-32
+ablation-rank sets share Jaccard ≈ 0.05 between the two directions —
+essentially disjoint. The directional asymmetry first seen as
+patch_success behavior (v3.1) and again as cross-family generalization
+(v3.1 J1/J2) is now also visible as **anatomy**: becoming-protected
+and becoming-collapsed are different circuits using different neurons
+within the same 5D subspace.
 
-This is in-vitro evidence in a 2D continuous-control environment with a
-synthetic Goodhart-prone shaping surface. It is not a deployment
+*The attractor lives in the weights, not in perception.* Clean and
+basin-position-intervened patch batteries are bit-identical for all
+logged fields. The learned feed-forward policies do not observe live
+`x_false` at inference; the cliff policy is computing, not perceiving,
+its basin. The behavioral receipt from Phase 4 is now mechanistic.
+
+**Four methodological lessons stack out of the five rounds.** Each
+was earned by a method that failed to surface mechanism, and each is
+a documented reason the obvious-reach toolkit doesn't work here:
+
+1. **Feature-availability rankings are not mechanism rankings.** A
+   sparse-autoencoder feature with |correlation| = 0.89 against the
+   per-episode basin outcome produced zero patch effect (v2). The SAE
+   picked a policy-identifier feature, not a mechanism feature.
+2. **Variance is not mechanism.** PC1 carries 38.8% of the diff
+   variance and 0% of the patch effect. The most visually obvious
+   component is not the load-bearing one (v3 K=1 vs K=5).
+3. **Linear additive top-k restriction destroys mechanism, even with
+   the right basis.** Capturing 33.6% of basis L2 in the top-32
+   neurons delivers 0% of patch effect (v3.2). Partial delivery of
+   the right basis is not partial mechanism.
+4. **Single-neuron ablation does not surface a critical subset.** No
+   neuron has ablation cost above 0.10 in either direction (v3.3).
+   The mechanism is genuinely distributed at the single-neuron level,
+   with the additional structure that the two directions use disjoint
+   neuron sets.
+
+Together: **for field-shaped circuits, non-linear holistic methods
+are mandatory**; linear analysis (probes, SAE features, top-k subspace
+restriction, top-k neuron restriction, single-neuron ablation) all
+fall short. This is itself a publishable finding about the methodology
+of mechanistic interpretability under field-shaped objectives.
+
+**The same shape, observed in two substrates.** The mesa-trap
+program's headline shape — *small handful of generators, irreducibly
+entangled, only legible as a whole* — is structurally the same object
+the Sundog geometry program independently committed to in its
+parhelion atlas. The atlas stopped treating arcs as independent
+features and started treating them as visible portions of a small set
+of complete implied circles, governed by a small shared parameter set
+and read holistically. Two independent methods from opposite ends of
+the program — controllers in-vitro, sky photography in-the-wild —
+converged on the same shape. The crossover is documented in
+[`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md); the gravity claim
+now has both an in-vitro receipt and an in-the-wild receipt for the
+field-not-reward framing.
+
+This is in-vitro evidence in a 2D continuous-control environment with
+a synthetic Goodhart-prone shaping surface. It is not a deployment
 guarantee. It is, however, the cleanest mechanistic anchor the program
 has produced: the behavioral cliff has a representational explanation,
-the explanation lives in an entangled 5-dimensional subspace of a
-specific layer, and the basin-inducing side of that subspace is
-transplantable across held-out Medium policy pairs. The full trail is at
-[`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md); v1 result note at
-[`docs/mesa/PHASE6_RESULTS.md`](mesa/PHASE6_RESULTS.md), v2+v3 result
-note at [`docs/mesa/PHASE6_V2_RESULTS.md`](mesa/PHASE6_V2_RESULTS.md), and
-v3.1 correction at [`docs/mesa/PHASE6_V31_RESULTS.md`](mesa/PHASE6_V31_RESULTS.md).
+the explanation is shaped like a small handful of generators read
+holistically, the basin-inducing and basin-resisting sub-circuits are
+anatomically separable, and the methodology of reaching that
+explanation is itself documented as a published lesson stack. The full
+trail is at [`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md); result notes
+at [`PHASE6_RESULTS.md`](mesa/PHASE6_RESULTS.md) (v1),
+[`PHASE6_V2_RESULTS.md`](mesa/PHASE6_V2_RESULTS.md) (v2+v3),
+[`PHASE6_V31_RESULTS.md`](mesa/PHASE6_V31_RESULTS.md),
+[`PHASE6_V32_RESULTS.md`](mesa/PHASE6_V32_RESULTS.md),
+[`PHASE6_V33_RESULTS.md`](mesa/PHASE6_V33_RESULTS.md).
 
 ### The envelope (Phase 7 v1)
 
