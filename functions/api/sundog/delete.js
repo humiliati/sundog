@@ -30,14 +30,6 @@ async function handleDelete(env, token, origin) {
     return withCors(jsonResponse({ status: "not_found" }, { status: 404 }), origin);
   }
 
-  // Try every plausible extension; only the one that exists will succeed.
-  const candidates = [`${baseKey}.jpg`, `${baseKey}.png`, `${baseKey}.webp`,
-                      `${baseKey}.pose.json`, `${baseKey}.meta.json`];
-  const results = await Promise.all(candidates.map(async (k) => {
-    try { await env.sundog_uploads.delete(k); return { key: k, ok: true }; }
-    catch (e) { return { key: k, ok: false, error: String(e) }; }
-  }));
-
   // Read meta before deleting the index so we can return the submission_id
   // (best-effort; if meta is already gone, we still return success).
   let submissionId = null;
@@ -45,6 +37,14 @@ async function handleDelete(env, token, origin) {
     const metaObj = await env.sundog_uploads.get(`${baseKey}.meta.json`);
     if (metaObj) submissionId = JSON.parse(await metaObj.text()).submission_id;
   } catch { /* ignore */ }
+
+  // Try every plausible extension; only the one that exists will succeed.
+  const candidates = [`${baseKey}.jpg`, `${baseKey}.png`, `${baseKey}.webp`,
+                      `${baseKey}.pose.json`, `${baseKey}.meta.json`];
+  const results = await Promise.all(candidates.map(async (k) => {
+    try { await env.sundog_uploads.delete(k); return { key: k, ok: true }; }
+    catch (e) { return { key: k, ok: false, error: String(e) }; }
+  }));
 
   await env.sundog_rate_limit.delete(`del:${tokenHash}`);
 

@@ -28,6 +28,11 @@
       "description": "Interactive atmospheric-optics explainer with parametric halo atlas, photograph calibration evidence, and inverse-inference of sun altitude from sundog photographs.",
       "inLanguage": "en",
       "url": "https://sundog.cc/sundog.html",
+      "author": {
+        "@type": "Organization",
+        "name": "Stellar Aqua LLC",
+        "url": "https://sundog.cc/"
+      },
       "learningResourceType": ["Interactive Resource", "Article"],
       "educationalLevel": "general",
       "teaches": [
@@ -735,7 +740,7 @@
             display: flex;
             align-items: flex-start;
             gap: 0.5rem;
-            cursor: not-allowed; /* disabled until Phase 5B backend lands */
+            cursor: not-allowed; /* disabled until the Phase 5 backend health check passes */
         }
         .upload-share-toggle em {
             color: rgba(244, 196, 48, 0.75);
@@ -1274,7 +1279,7 @@
     </section>
 
     <!-- ============================================================
-         §6  Try it on your own photo (Phase 5 placeholder)
+         §6  Try it on your own photo (Phase 5 upload + inverse inference)
          ============================================================ -->
     <section class="page-section" id="try-your-photo">
         <div class="container">
@@ -1286,7 +1291,7 @@
 
             <div id="photo-upload-mount"></div>
             <p style="margin-top: 1rem; font-size: 0.85rem; color: rgba(245, 245, 245, 0.55);">
-                The widget runs <strong>entirely in your browser</strong>. EXIF metadata is stripped before any future opt-in sharing.
+                The atlas render runs <strong>entirely in your browser</strong>. EXIF metadata is stripped before any opt-in sharing.
                 For the backend pipeline and privacy policy, see <a href="docs/PHASE5_BACKEND_PLAN.md">PHASE5_BACKEND_PLAN.md</a> · <a href="docs/PHOTO_DATA_POLICY.md">PHOTO_DATA_POLICY.md</a>.
                 Command-line equivalent: <a href="https://github.com/humiliati/sundog/blob/main/scripts/overlay_calibrate.py"><code style="font-family: var(--sd-font-data);">scripts/overlay_calibrate.py</code></a>.
             </p>
@@ -1343,7 +1348,7 @@
                 </div>
                 <div class="tool-card">
                     <h3>Phase 3 math binding</h3>
-                    <p>Exported <code>phase3</code> namespace with <code>daggerOffset(h)</code>, <code>czaVisible(h)</code>, <code>parhelicCurvature(h)</code>. 32 assertions in the browser-side test harness.</p>
+                    <p>Exported <code>phase3</code> namespace with <code>daggerOffset(h)</code>, <code>czaVisible(h)</code>, <code>parhelicCurvature(h)</code>. 33 assertions in the browser-side test harness.</p>
                     <p style="margin-top: 0.6rem;"><a href="/phase3-tests.html">phase3-tests.html</a></p>
                 </div>
                 <div class="tool-card">

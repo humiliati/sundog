@@ -43,16 +43,6 @@ export async function onRequestPost(ctx) {
     const policyVersion = env.POLICY_VERSION || "unknown";
     const publicOrigin = env.PUBLIC_ORIGIN || "https://sundog.cc";
 
-    // ---- rate-limit first; cheap & avoids decoding bodies from abusers ---
-    const ip = request.headers.get("cf-connecting-ip") || "0.0.0.0";
-    const rl = await checkRateLimit(env, ip, rateLimit);
-    if (!rl.allowed) {
-      return withCors(jsonResponse(
-        { error: { code: "rate_limited", message: `Limit ${rateLimit} uploads/hour. Try again in ~${rl.resetSeconds}s.` } },
-        { status: 429, headers: { "retry-after": String(rl.resetSeconds) } },
-      ), origin);
-    }
-
     // ---- body parse + validation ----------------------------------------
     const body = await readJsonBody(request, 24 * 1024 * 1024);
     const { image, pose, consent, client } = body || {};
@@ -68,6 +58,16 @@ export async function onRequestPost(ctx) {
     const imageBytes = decodeImageBase64(image.data);
     if (imageBytes.byteLength > maxImgBytes) {
       throw httpError(413, "image_too_large", `Image exceeds ${maxImgBytes} bytes after decode.`);
+    }
+
+    // ---- rate-limit validated submissions before storage writes ----------
+    const ip = request.headers.get("cf-connecting-ip") || "0.0.0.0";
+    const rl = await checkRateLimit(env, ip, rateLimit);
+    if (!rl.allowed) {
+      return withCors(jsonResponse(
+        { error: { code: "rate_limited", message: `Limit ${rateLimit} uploads/hour. Try again in ~${rl.resetSeconds}s.` } },
+        { status: 429, headers: { "retry-after": String(rl.resetSeconds) } },
+      ), origin);
     }
 
     // ---- generate identifiers --------------------------------------------

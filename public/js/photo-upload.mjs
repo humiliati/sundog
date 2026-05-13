@@ -1,17 +1,19 @@
 /**
- * photo-upload.mjs — Phase 5A frontend.
+ * photo-upload.mjs — Phase 5 photo upload + inverse inference.
  *
  * Three-click measurement UX over a user-uploaded sundog photograph. Reads the
  * sun pixel, the 22° halo edge, and a parhelion. Inverse-infers sun altitude
  * via `arccos(R₂₂ / parhelion_offset)`, then renders the full atlas onto a
- * canvas overlaid on the photo. Strips EXIF before any future POST by going
+ * canvas overlaid on the photo. Strips EXIF before any opt-in POST by going
  * through canvas.toBlob.
  *
  * Atlas math: reuses `phase3` from parhelion-geometry.mjs for the altitude
  * binding; the drawing primitives are local to this module so we can target a
  * canvas instead of the SVG primitives the workbench uses.
  *
- * No network I/O — Phase 5B will wire the consent checkbox to POST.
+ * The atlas render stays local. If the Cloudflare backend health check passes
+ * and the visitor opts in, the cleaned image and JSON pose are submitted for
+ * atlas-model training.
  */
 
 import { phase3 } from "./parhelion-geometry.mjs";
