@@ -172,13 +172,14 @@
         }
 
         .motion-rail-shell {
+            position: relative;          /* anchors the overlaid skip arrows */
             width: min(1180px, calc(100% - 2rem));
             margin: 0 auto;
         }
 
         .motion-rail-header {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-columns: minmax(0, 1fr);
             align-items: end;
             gap: 1.25rem;
             margin-bottom: 1.25rem;
@@ -208,22 +209,36 @@
             font-size: 0.98rem;
         }
 
+        /* Always-overlaid skip arrows over the rail track. Position is
+           absolute relative to .motion-rail-shell. */
         .motion-rail-actions {
+            position: absolute;
+            inset-block: 0;
+            inset-inline: 0;
             display: flex;
-            gap: 0.5rem;
+            justify-content: space-between;
+            align-items: center;
+            padding-inline: 0.25rem;
+            pointer-events: none;        /* let the track receive scrolls; buttons opt back in */
+            z-index: 3;
+            /* Push arrows below the rail header (~1.25rem margin + header height ≈ 4.5rem) */
+            margin-top: 4.5rem;
         }
 
         .motion-rail-button {
-            width: 2.45rem;
-            min-height: 2.45rem;
-            border: 1px solid rgba(244, 196, 48, 0.38);
+            width: 2.75rem;
+            min-height: 2.75rem;
+            border: 1px solid rgba(244, 196, 48, 0.45);
             border-radius: 999px;
             color: var(--accent-gold);
-            background: rgba(255, 255, 255, 0.07);
-            font-size: 1.35rem;
+            background: rgba(6, 16, 25, 0.78);
+            backdrop-filter: blur(6px);
+            font-size: 1.55rem;
             font-weight: 800;
             line-height: 1;
             cursor: pointer;
+            pointer-events: auto;       /* re-enable inside the pointer-events:none container */
+            transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
         }
 
         .motion-rail-button:hover,
@@ -231,35 +246,66 @@
             color: var(--primary-dark);
             background: var(--accent-gold);
             outline: none;
+            transform: scale(1.06);
         }
 
+        /* Center-focus carousel: one card centred, ~1.5 cards in view total.
+           Track padding-inline reserves the peek strips on both sides. */
         .motion-rail-track {
             display: grid;
             grid-auto-flow: column;
-            grid-auto-columns: minmax(280px, 36%);
+            grid-auto-columns: minmax(58%, 60%);
             gap: 1rem;
+            padding: 0.25rem 18% 0.8rem;
             overflow-x: auto;
             overscroll-behavior-inline: contain;
             scroll-snap-type: inline mandatory;
-            scroll-padding-inline: 0.25rem;
-            padding: 0.25rem 0 0.8rem;
-            scrollbar-color: rgba(244, 196, 48, 0.55) rgba(255, 255, 255, 0.08);
+            scroll-snap-stop: always;
+            scroll-padding-inline: 18%;
+            scrollbar-width: none;        /* native scrollbar hidden; auto-cycle drives scroll */
+        }
+
+        .motion-rail-track::-webkit-scrollbar {
+            display: none;
         }
 
         .motion-card {
+            position: relative;            /* anchors the .sd-verdict-stamp */
             min-height: 23rem;
             overflow: hidden;
             border: 1px solid rgba(244, 196, 48, 0.2);
             border-radius: 8px;
             background: rgba(6, 16, 25, 0.86);
-            scroll-snap-align: start;
-            transition: border-color 0.2s ease, transform 0.2s ease;
+            scroll-snap-align: center;
+            transition:
+                border-color 0.2s ease,
+                transform 320ms ease,
+                filter 320ms ease,
+                opacity 320ms ease;
+            /* Default state: peeked (dim + scaled-down). The rail JS toggles
+               [data-rail-active] on the centred card to light it back up. */
+            filter: brightness(0.58) saturate(0.62);
+            opacity: 0.72;
+            transform: scale(0.94);
+        }
+
+        .motion-card[data-rail-active] {
+            filter: none;
+            opacity: 1;
+            transform: scale(1);
+            border-color: rgba(244, 196, 48, 0.42);
         }
 
         .motion-card:hover,
         .motion-card:focus-within {
             border-color: rgba(244, 196, 48, 0.52);
-            transform: translateY(-2px);
+        }
+
+        /* Peeked cards keep their hover styling subdued so they don't compete
+           with the centred card visually. */
+        .motion-card:not([data-rail-active]):hover {
+            opacity: 0.86;
+            filter: brightness(0.72) saturate(0.72);
         }
 
         .motion-card-link {
@@ -529,8 +575,25 @@
                 align-items: start;
             }
 
+            /* Mobile: centre card dominates; only the next-card peek is
+               visible. Asymmetric padding-inline makes the forward sequence
+               the natural read. */
             .motion-rail-track {
-                grid-auto-columns: minmax(265px, 84%);
+                grid-auto-columns: minmax(80%, 84%);
+                padding-inline: 8% 16%;
+                scroll-padding-inline: 8% 16%;
+            }
+
+            .motion-rail-actions {
+                /* Pull arrows inboard slightly so they don't get cropped on
+                   small viewports. */
+                padding-inline: 0.5rem;
+            }
+
+            .motion-rail-button {
+                width: 2.4rem;
+                min-height: 2.4rem;
+                font-size: 1.35rem;
             }
         }
         .equation-anchor-link {
@@ -840,17 +903,16 @@
     <section class="motion-rail-section" id="application-motion-rail" data-motion-rail aria-labelledby="motion-rail-title">
         <div class="motion-rail-shell">
             <div class="motion-rail-header">
-                <div>
-                    <p class="eyebrow">Application Rail</p>
-                    <h2 id="motion-rail-title">Signals Becoming Work</h2>
-                    <p>
-                        Short field notes from confirmed studies, public prototypes, and planned workbenches.
-                    </p>
-                </div>
-                <div class="motion-rail-actions" aria-label="Application rail controls">
-                    <button class="motion-rail-button" type="button" data-rail-prev aria-label="Previous application">&lsaquo;</button>
-                    <button class="motion-rail-button" type="button" data-rail-next aria-label="Next application">&rsaquo;</button>
-                </div>
+                <p class="eyebrow">Application Rail</p>
+                <h2 id="motion-rail-title">Signals Becoming Work</h2>
+                <p>
+                    Short field notes from confirmed studies, public prototypes, and planned workbenches.
+                </p>
+            </div>
+
+            <div class="motion-rail-actions" aria-label="Application rail controls">
+                <button class="motion-rail-button" type="button" data-rail-prev aria-label="Previous application">&lsaquo;</button>
+                <button class="motion-rail-button" type="button" data-rail-next aria-label="Next application">&rsaquo;</button>
             </div>
 
             <div class="motion-rail-track" tabindex="0" aria-label="Application previews">
@@ -864,6 +926,9 @@
                     data-media=""
                     data-media-format=""
                     data-status="Operating envelope"
+                    data-stamp="OPERATING ENVELOPE"
+                    data-stamp-meaning="Recovers inside the lighting envelope; fails cleanly at the shadow boundary."
+                    data-stamp-source="docs/sundog_v_balance.md"
                 >
                     <a class="motion-card-link" href="balance.html">
                         <div class="motion-card-visual motion-visual-balance has-poster" aria-hidden="true">
@@ -888,6 +953,9 @@
                     data-media=""
                     data-media-format=""
                     data-status="Operating envelope"
+                    data-stamp="OPERATING ENVELOPE"
+                    data-stamp-meaning="Local tidal signals support survival in a near-escape pocket, not the whole regime."
+                    data-stamp-source="docs/SUNDOG_V_THREEBODY.md"
                 >
                     <a class="motion-card-link" href="threebody.html">
                         <div class="motion-card-visual motion-visual-threebody" aria-hidden="true">
@@ -912,6 +980,9 @@
                     data-media=""
                     data-media-format=""
                     data-status="Research result"
+                    data-stamp="CONFIRMED"
+                    data-stamp-meaning="Beam alignment without target coordinates, matched against an analytic baseline in the tested MuJoCo setting."
+                    data-stamp-source="docs/APPLICATIONS.md"
                 >
                     <a class="motion-card-link" href="applications-gallery.html#photometric-alignment">
                         <div class="motion-card-visual motion-visual-photometric" aria-hidden="true">
@@ -926,6 +997,44 @@
                     </a>
                 </article>
 
+                <!-- Pushable Occluder (BOUNDARY FOUND interrupt) — rail position 4.
+                     Held back until PUSHABLE_OCCLUDER_ROADMAP.md Phase 2 ships
+                     evidence (the matched-seed flat-controller failure clip and the
+                     metric table). Per HIGHLIGHTS_RAIL_ROADMAP.md, this card does
+                     NOT ship at UNTESTED — the interrupt rhythm only earns its
+                     weight when the failure is real.
+
+                <article
+                    class="motion-card"
+                    data-title="Pushable Occluder"
+                    data-description="The beam was visible. The path was not."
+                    data-href="applications-gallery.html#pushable-occluder"
+                    data-evidence-href="docs/PUSHABLE_OCCLUDER_ROADMAP.md"
+                    data-poster="/media/pushable-occluder-poster.jpg"
+                    data-media=""
+                    data-media-format=""
+                    data-status="Boundary found"
+                    data-stamp="BOUNDARY FOUND"
+                    data-stamp-meaning="Indirect signal is not enough when the useful gradient appears only after a preparatory action."
+                    data-stamp-source="docs/PUSHABLE_OCCLUDER_ROADMAP.md"
+                    data-clip-ms="6800"
+                    data-dwell-ms="3600"
+                >
+                    <a class="motion-card-link" href="applications-gallery.html#pushable-occluder">
+                        <div class="motion-card-visual motion-visual-occluder has-poster" aria-hidden="true">
+                            <img class="motion-card-poster" src="/media/pushable-occluder-poster.jpg" alt="" loading="lazy">
+                        </div>
+                        <div class="motion-card-copy">
+                            <span class="motion-card-status">Boundary found</span>
+                            <h3>Pushable Occluder</h3>
+                            <p>Controller dithers around a dim signal; the path is occluded until the block moves.</p>
+                            <span class="motion-card-cta">Inspect the failure boundary -&gt;</span>
+                        </div>
+                    </a>
+                </article>
+
+                -->
+
                 <article
                     class="motion-card"
                     data-title="Pressure Mines"
@@ -936,6 +1045,9 @@
                     data-media=""
                     data-media-format=""
                     data-status="Operating-Envelope Study"
+                    data-stamp="OPERATING ENVELOPE"
+                    data-stamp-meaning="A noisy pressure field buys more safe progress before failure inside a narrow mapped pocket."
+                    data-stamp-source="docs/sundog_v_minesweeper.md"
                 >
                     <a class="motion-card-link" href="mines.html">
                         <div class="motion-card-visual motion-visual-mines" aria-hidden="true">
@@ -960,6 +1072,9 @@
                     data-media=""
                     data-media-format=""
                     data-status="Instrumented prototype"
+                    data-stamp="PLAUSIBLE"
+                    data-stamp-meaning="Compressed-state agent traces collected; matched baselines and a failure region not yet earned."
+                    data-stamp-source="docs/APPLICATIONS.md"
                 >
                     <a class="motion-card-link" href="applications-gallery.html#eyesonly-gone-rogue">
                         <div class="motion-card-visual motion-visual-eyesonly" aria-hidden="true">
@@ -984,6 +1099,9 @@
                     data-media=""
                     data-media-format=""
                     data-status="Product expression"
+                    data-stamp="PLAUSIBLE"
+                    data-stamp-meaning="Verb-field NPC motion shipping in the product; formal measurement of the alignment claim still pending."
+                    data-stamp-source="docs/APPLICATIONS.md"
                 >
                     <a class="motion-card-link" href="applications-gallery.html#dungeon-gleaner">
                         <div class="motion-card-visual motion-visual-gleaner" aria-hidden="true">
@@ -1008,6 +1126,9 @@
                     data-media=""
                     data-media-format=""
                     data-status="Product expression"
+                    data-stamp="PLAUSIBLE"
+                    data-stamp-meaning="Softbody graph telemetry shipping in playtest bundles; matched-baseline study not yet earned."
+                    data-stamp-source="docs/APPLICATIONS.md"
                 >
                     <a class="motion-card-link" href="applications-gallery.html#money-bags">
                         <div class="motion-card-visual motion-visual-money" aria-hidden="true">
@@ -1455,37 +1576,7 @@
         </p>
     </footer>
 
-    <script>
-        (function() {
-            const rail = document.querySelector('[data-motion-rail]');
-            if (!rail) {
-                return;
-            }
-
-            const track = rail.querySelector('.motion-rail-track');
-            const previous = rail.querySelector('[data-rail-prev]');
-            const next = rail.querySelector('[data-rail-next]');
-            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            function scrollByCard(direction) {
-                const firstCard = track.querySelector('.motion-card');
-                if (!firstCard) {
-                    return;
-                }
-
-                const styles = window.getComputedStyle(track);
-                const gap = Number.parseFloat(styles.columnGap || styles.gap || '0') || 0;
-                const distance = firstCard.getBoundingClientRect().width + gap;
-                track.scrollBy({
-                    left: direction * distance,
-                    behavior: reducedMotion ? 'auto' : 'smooth'
-                });
-            }
-
-            previous.addEventListener('click', () => scrollByCard(-1));
-            next.addEventListener('click', () => scrollByCard(1));
-        })();
-    </script>
+    <script type="module" src="/js/motion-rail.mjs"></script>
 
     <script type="module" src="/js/sundog-chat-widget.mjs"></script>
 </body>

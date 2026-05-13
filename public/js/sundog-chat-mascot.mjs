@@ -265,7 +265,6 @@ export function applyMascotState(element, trace, options = {}) {
 // strip's aria-live region announces the change.
 export function applyPanelMascotState(panelElement, trace, options = {}) {
   if (!panelElement || typeof panelElement.classList !== "object") return null;
-
   const fullState = deriveMascotState(trace, options.previousTrace || null);
   const buttonState = reduceToButtonState(fullState);
   const label = PUBLIC_LABEL[fullState] || "Ready";
