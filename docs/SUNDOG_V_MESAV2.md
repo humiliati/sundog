@@ -1,6 +1,6 @@
 # Sundog vs. Mesa-Optimization — v2 Traceability & Separability Spine
 
-> _Filed 2026-05-13 as a ratification target. Sister doc to
+> _Filed 2026-05-13 as a ratified future-integration spine. Sister doc to
 > [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md), not a replacement. v1 keeps its
 > empirical phase ledger and Phase 8 v1 public artifact; v2 adds the
 > traceability spine that converts v1's earned envelope into a defensible
@@ -50,6 +50,38 @@ v2 is the spine. It does not rewrite v1.
 v1 phase numbering is preserved. v2 phases are named with primes (`1'`,
 `7'`, `8'`) when they retrofit, and with fractional indices (`0.5`,
 `0.6`, `6.5`) when they are net-new.
+
+## Ratification decision, 2026-05-13
+
+Status: **ratified as a sister/spine doc for future integration or fork**.
+It is not a successor to v1 and does not modify the authority of the v1
+phase ledger, Phase 8 v1 `mesa.html`, or the currently running Phase 6
+v3.8 work.
+
+Ratification locks these calls:
+
+1. **Counterexample namespace:** Phase 6.5 counterexample scripts live
+   in a sibling `scripts/mesa-counterexample-*` namespace so they cannot
+   be confused with v1 canonical runs.
+2. **Phase 7' scope:** relabel only the existing v1 22-cell envelope.
+   Large-tier extension is not a blocker; if it happens later, it gets
+   labels after the v1 map is already ratified.
+3. **Phase 0.6 home:** the Bayes-net / NN / Sundog comparison lives
+   here as the canonical v2 prose. It may be mirrored into
+   `claims-and-scope.md` during Phase 8' or presentation cleanup, but
+   this doc owns the source language.
+4. **Formal Separability Appendix:** keep the theorem prose in
+   `SUNDOG_V_MESA.md` for v1 continuity. v2 owns the runnable
+   counterexample slate and cross-links back to the appendix when
+   Phase 6.5 lands.
+
+Cheap-first sequencing is ratified:
+
+1. Phase 0.5 and Phase 0.6 writing.
+2. Phase 7' relabeling on existing envelope artifacts.
+3. Phase 1' signature-provenance audit retrofit.
+4. Phase 6.5 counterexample slate.
+5. Phase 8' claim-ratchet writeup.
 
 ## What v2 is honest about, and what it isn't
 
@@ -360,19 +392,17 @@ the above, in any order, by any contributor.
 - A v2-versioned writeup target for Phase 8 that ratchets the public
   claim language with the spine in place.
 
-## Open questions for ratification
+## Ratification resolutions
 
-1. Should Phase 6.5's counterexample environments be added to the
-   existing `scripts/mesa-*` family, or live in a sibling
-   `scripts/mesa-counterexample-*` family so they cannot be confused
-   with v1 canonical runs?
-2. Does Phase 7' relabel only the v1 22-cell map, or does it block on a
-   v2 Large-tier extension?
-3. Does the Bayes-net / NN / Sundog comparison (Phase 0.6) belong here,
-   or as an appendix to `claims-and-scope.md`?
-4. Should the Formal Separability appendix (currently inside
-   `SUNDOG_V_MESA.md`) be promoted into this doc, or stay in v1 and
-   gain a cross-link to the v2 counterexample slate?
+1. Phase 6.5 counterexample environments live in the sibling
+   `scripts/mesa-counterexample-*` family.
+2. Phase 7' relabels the v1 22-cell map first and does not block on a
+   v2 Large-tier extension.
+3. Phase 0.6 belongs here as source prose. `claims-and-scope.md` can
+   mirror it later if Phase 8' needs a public-facing excerpt.
+4. Formal Separability theorem prose stays in `SUNDOG_V_MESA.md` for v1
+   continuity. v2 owns the runnable counterexample slate and links back
+   to the theorem.
 
 ## References
 
