@@ -1408,31 +1408,44 @@ section p {
 
 .sd-verdict-stamp {
   position: absolute;
-  bottom: 1.25rem;
-  right: 1.25rem;
-  padding: 0.32rem 0.85rem;
+  bottom: 1.1rem;
+  right: 1.1rem;
+  padding: 0.34rem 0.85rem;
   font-family: var(--sd-font-display);
   font-weight: 700;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
+  font-size: 0.86rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--sd-stamp-ink, var(--sd-ink-strong));
-  border: 2px solid currentColor;
+  background: transparent;
+  border: 2.5px solid currentColor;
   outline: 1px solid currentColor;
-  outline-offset: 2px;
+  outline-offset: 3px;
   border-radius: 2px;
   white-space: nowrap;
   pointer-events: none;
+  z-index: 4;
   opacity: 0;
-  transform: rotate(-7deg) scale(0.9);
+  transform: rotate(-7deg) scale(0.85);
   mix-blend-mode: multiply;
+  filter: url(#sd-stamp-bleed);
   transition:
-    opacity 220ms ease-out,
-    transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity 260ms ease-out,
+    transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* The motion-card sits on a dark navy background; multiply with a dark
+   surface goes invisible, so cards with dark visuals need lightened ink.
+   We invert the blend mode under .motion-card specifically. */
+.motion-card .sd-verdict-stamp {
+  mix-blend-mode: screen;
+  /* Match the existing rail aesthetic (dark navy + gold accents): the
+     stamp glows on top of the dark card surface rather than bleeding
+     into paper. */
 }
 
 .motion-card[data-stamp-armed] .sd-verdict-stamp {
-  opacity: 0.88;
+  opacity: 0.96;
   transform: rotate(-7deg) scale(1);
 }
 
@@ -1450,31 +1463,49 @@ section p {
 }
 .sd-verdict-stamp[data-stamp="BOUNDARY FOUND"] {
   --sd-stamp-ink: var(--sd-stamp-boundary);
-  /* Interrupt card: deeper rotation, larger feel */
-  transform: rotate(-10deg) scale(0.9);
+  /* Interrupt card: deeper rotation, slightly larger landed scale */
+  transform: rotate(-10deg) scale(0.85);
+  border-width: 3px;
 }
 .motion-card[data-stamp-armed] .sd-verdict-stamp[data-stamp="BOUNDARY FOUND"] {
-  transform: rotate(-10deg) scale(1.04);
+  transform: rotate(-10deg) scale(1.06);
 }
 .sd-verdict-stamp[data-stamp="STALLED"] {
   --sd-stamp-ink: var(--sd-stamp-stalled);
 }
 .sd-verdict-stamp[data-stamp="UNTESTED"] {
   --sd-stamp-ink: var(--sd-stamp-untested);
-  /* "not yet a verdict" — slightly smaller, less assertive */
-  font-size: 0.72rem;
+  /* "not yet a verdict" — slightly smaller, less assertive, no ink-bleed */
+  font-size: 0.74rem;
+  filter: none;
+  border-width: 1.5px;
 }
 
-/* Reduced-motion: arrive at rest, no transition. */
+/* Card shake on BOUNDARY FOUND stamp contact. Only fires when the card
+   first arms; the .motion-card[data-stamp-armed-just-fired] flag is set
+   by the JS for ~80ms after arming, then cleared. */
+.motion-card[data-stamp-armed-just-fired][data-stamp="BOUNDARY FOUND"] {
+  animation: sd-stamp-shake 80ms ease-out;
+}
+
+@keyframes sd-stamp-shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-1px); }
+  100% { transform: translateX(0); }
+}
+
+/* Reduced-motion: arrive at rest, no transitions, no shake. The rail
+   script sets data-stamp-armed on every card at page load under
+   reduced-motion so the verdicts are still legible. */
 @media (prefers-reduced-motion: reduce) {
   .sd-verdict-stamp {
     transition: none;
+    filter: none;
   }
-  .motion-card .sd-verdict-stamp {
-    /* In Slice 1B the rail script will set data-stamp-armed at page load
-       under reduced-motion. The CSS does not assume that, so a card
-       without [data-stamp-armed] still shows nothing — the JS is the
-       single source of truth for "when". */
+  .motion-card[data-stamp-armed-just-fired] {
+    animation: none;
   }
 }
 

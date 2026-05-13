@@ -210,7 +210,8 @@
         }
 
         /* Always-overlaid skip arrows over the rail track. Position is
-           absolute relative to .motion-rail-shell. */
+           absolute relative to .motion-rail-shell. Prev sits on the left
+           edge; next + replay form a tight pair on the right edge. */
         .motion-rail-actions {
             position: absolute;
             inset-block: 0;
@@ -223,6 +224,13 @@
             z-index: 3;
             /* Push arrows below the rail header (~1.25rem margin + header height ≈ 4.5rem) */
             margin-top: 4.5rem;
+        }
+
+        .motion-rail-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            pointer-events: none;        /* same passthrough; child buttons opt back in */
         }
 
         .motion-rail-button {
@@ -238,7 +246,7 @@
             line-height: 1;
             cursor: pointer;
             pointer-events: auto;       /* re-enable inside the pointer-events:none container */
-            transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+            transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
         }
 
         .motion-rail-button:hover,
@@ -247,6 +255,31 @@
             background: var(--accent-gold);
             outline: none;
             transform: scale(1.06);
+        }
+
+        /* Replay arrow: smaller, more subtle than prev/next. Persistent
+           meta-action — reads as "restart from card 1" without competing
+           visually with the primary nav. */
+        .motion-rail-button.motion-rail-replay {
+            width: 2.1rem;
+            min-height: 2.1rem;
+            font-size: 1.1rem;
+            opacity: 0.62;
+            border-color: rgba(244, 196, 48, 0.3);
+        }
+
+        .motion-rail-button.motion-rail-replay:hover,
+        .motion-rail-button.motion-rail-replay:focus-visible {
+            opacity: 1;
+        }
+
+        /* While the auto-cycle is running and the user hasn't taken over,
+           the replay button is dimmed; once the sequence settles (or the
+           user has taken manual control), it brightens to invite use. */
+        .motion-rail-section[data-rail-state="settled"] .motion-rail-button.motion-rail-replay,
+        .motion-rail-section[data-rail-state="user"] .motion-rail-button.motion-rail-replay {
+            opacity: 0.92;
+            border-color: rgba(244, 196, 48, 0.55);
         }
 
         /* Center-focus carousel: one card centred, ~1.5 cards in view total.
@@ -900,6 +933,17 @@
         </div>
     </section>
 
+    <!-- SVG defs for the verdict-stamp ink-bleed filter. Hidden from
+         layout; referenced by .sd-verdict-stamp via filter: url(#sd-stamp-bleed). -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <filter id="sd-stamp-bleed" x="-10%" y="-10%" width="120%" height="120%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+        </defs>
+    </svg>
+
     <section class="motion-rail-section" id="application-motion-rail" data-motion-rail aria-labelledby="motion-rail-title">
         <div class="motion-rail-shell">
             <div class="motion-rail-header">
@@ -912,7 +956,10 @@
 
             <div class="motion-rail-actions" aria-label="Application rail controls">
                 <button class="motion-rail-button" type="button" data-rail-prev aria-label="Previous application">&lsaquo;</button>
-                <button class="motion-rail-button" type="button" data-rail-next aria-label="Next application">&rsaquo;</button>
+                <div class="motion-rail-actions-right">
+                    <button class="motion-rail-button motion-rail-replay" type="button" data-rail-replay aria-label="Replay sequence from first card">&#x21bb;</button>
+                    <button class="motion-rail-button" type="button" data-rail-next aria-label="Next application">&rsaquo;</button>
+                </div>
             </div>
 
             <div class="motion-rail-track" tabindex="0" aria-label="Application previews">
