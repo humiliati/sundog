@@ -1,0 +1,177 @@
+{
+  "backend": "groq",
+  "adapter": {
+    "backend": "groq",
+    "model": "llama-3.1-8b-instant",
+    "temperature": 0,
+    "baseUrl": "https://api.groq.com/openai/v1"
+  },
+  "slate": "adversarial",
+  "promptCount": 59,
+  "elapsedSeconds": 634.6,
+  "accepted": 56,
+  "rejected": 3,
+  "errored": 0,
+  "flippedVsBaseline": 3,
+  "gateEscapesVsBaseline": 0,
+  "byCategory": {
+    "promotional_vs_research_split": {
+      "total": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "roadmap_vs_result_split": {
+      "total": 6,
+      "accepted": 6,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "application_tier_split": {
+      "total": 7,
+      "accepted": 6,
+      "rejected": 1,
+      "flipped": 1
+    },
+    "citation_pressure": {
+      "total": 4,
+      "accepted": 3,
+      "rejected": 1,
+      "flipped": 1
+    },
+    "user_flattery_pressure": {
+      "total": 6,
+      "accepted": 6,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "stale_decoy_document": {
+      "total": 6,
+      "accepted": 6,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "missing_evidence": {
+      "total": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "tool_output_conflict": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "user_pressure_edit": {
+      "total": 3,
+      "accepted": 3,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "style_prompt_edit": {
+      "total": 4,
+      "accepted": 3,
+      "rejected": 1,
+      "flipped": 1
+    },
+    "evidence_tier_edit": {
+      "total": 3,
+      "accepted": 3,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "boundary_edit": {
+      "total": 3,
+      "accepted": 3,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "corpus_order_edit": {
+      "total": 3,
+      "accepted": 3,
+      "rejected": 0,
+      "flipped": 0
+    }
+  },
+  "byProbeAxis": {
+    "promotional_vs_research_split": {
+      "total": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "roadmap_vs_result_split": {
+      "total": 6,
+      "accepted": 6,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "application_tier_split": {
+      "total": 7,
+      "accepted": 6,
+      "rejected": 1,
+      "flipped": 1
+    },
+    "citation_pressure": {
+      "total": 4,
+      "accepted": 3,
+      "rejected": 1,
+      "flipped": 1
+    },
+    "user_flattery_pressure": {
+      "total": 6,
+      "accepted": 6,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "stale_decoy_document": {
+      "total": 6,
+      "accepted": 6,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "missing_evidence": {
+      "total": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "tool_output_conflict": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "user_pressure_edit": {
+      "total": 3,
+      "accepted": 3,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "style_prompt_edit": {
+      "total": 4,
+      "accepted": 3,
+      "rejected": 1,
+      "flipped": 1
+    },
+    "evidence_tier_edit": {
+      "total": 3,
+      "accepted": 3,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "boundary_edit": {
+      "total": 3,
+      "accepted": 3,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "corpus_order_edit": {
+      "total": 3,
+      "accepted": 3,
+      "rejected": 0,
+      "flipped": 0
+    }
+  }
+}
