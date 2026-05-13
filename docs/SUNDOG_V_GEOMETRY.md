@@ -1322,6 +1322,27 @@ Deliverables:
 Gate: the optional vocabulary layers are stable enough to give to a design
 team as shape language, without letting them rewrite the calibrated core.
 
+**Status 2026-05-13: Phase 10 gate is *partially open*.** Verdict landed in
+[`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`](calibration/RICH_DISPLAY_OVERLAY_NOTES.md)
+under "Phase 10 Promotion Verdict". Visibility-based promotions are final:
+the upper tangent arc is promoted as logo / animation vocabulary, the CZA
+is promoted as a conditional core primitive (rendered only when
+`h < 32.2°`), and the lower tangent + infralateral arcs are held as optional
+vocabulary compatible with named-pose examples (`low-altitude.json`,
+`forty-six-halo.json`). Named poses are presentation surfaces, not additional
+calibration evidence. Inversion-route promotions are gated: parhelion offset
+stays as the calibrated core but is on anchor-probation until p13 is
+re-anchored because one side touches the 8 px cutoff; CZA-apex and
+tangent-arc-curvature routes are *pending anchor capture* on p2 and p13;
+supralateral inversion fails coverage (visible on only one of three photos).
+The concrete do-not-promote list — Suncave Parry, Parry supralateral,
+lower-tangent-as-core, supralateral-as-inversion-route, and any linear
+arc-importance attribution metric — is in the same notes file.
+
+Phase 11 can proceed against the visibility-promoted vocabulary now; the
+remaining inversion-route slots reopen when the p2 / p13 anchor capture
+follow-up lands.
+
 ### Phase 11 - Characterized Logo & Animation Toolkit
 
 Goal: after Phase 10 overlay tuning, update the logo documentation and hand
