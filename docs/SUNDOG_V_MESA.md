@@ -929,12 +929,49 @@ is routed to the action head. The cliff lives in routing, not in
 availability. Full-zoo Axis A is deferred to Phase 6 v2 alongside
 sparse-autoencoder dictionaries or direction-based probes that can
 target net.7 specifically. Phase 6 v2 spec at
-[`mesa/PHASE6_V2_SPEC.md`](mesa/PHASE6_V2_SPEC.md) (2026-05-12,
-unstarted) pins two axes: SAE feature dictionary at net.7 across the
-cliff pair (Axis D), and direction-based patching using the SAE
-feature most correlated with basin attraction (Axis E). v2 is
-compute-light: no new PPO training, ~30-60 minutes for SAE training
-+ direction-patch battery on the cliff pair.
+[`mesa/PHASE6_V2_SPEC.md`](mesa/PHASE6_V2_SPEC.md) (2026-05-12) pins
+two axes: SAE feature dictionary at net.7 across the cliff pair
+(Axis D), and direction-based patching using the SAE feature most
+correlated with basin attraction (Axis E). v2 is compute-light: no
+new PPO training, ~30-60 minutes for SAE training + direction-patch
+battery on the cliff pair.
+
+**Phase 6 v2 + v3 result (2026-05-12) — sharpens the mechanistic
+anchor.** See [`mesa/PHASE6_V2_RESULTS.md`](mesa/PHASE6_V2_RESULTS.md)
+v2 for the full result note. Three findings stack:
+
+1. **The basin attractor at `net.7` is a 5-dimensional subspace.**
+   Top-5 principal components of the matched-seed per-step cliff-pair
+   activation diff matrix capture 97.4% of variance and reproduce
+   Phase 6 v1's full-layer patch_success to within 0.03 in both
+   directions. K-sweep across `K ∈ {1, 3, 5, 10, 32, 64}` saturates at
+   K=5; K=10/32/64 add no measurable patch_success past K=5. This is
+   a **51× compression** of the mechanistic anchor (256 dims → 5 dims).
+2. **Variance and mechanism are decoupled.** PC1 alone carries 38.8%
+   of activation-diff variance but contributes ~0% of patch_success
+   (median ≈ 0.006 in both directions). PC1 is the policy-offset
+   direction — it separates "which policy am I" but not "what
+   mechanism does this policy implement." The basin-attractor circuit
+   lives in PCs 2-5 (58.5% of variance, ~100% of patch effect). The
+   load-bearing mechanistic statement is now: *the cliff is a 5-dim
+   subspace decomposable into a 1-dim variance-heavy policy-offset
+   component (PC1) and a 4-dim mechanism component (PCs 2-5).*
+3. **Sparse-autoencoder features are the wrong basis for this
+   circuit.** Axis E direction-patching using the top SAE feature
+   (|corr|=0.89 with `basin_pref_intervened`, V2 confirmed) produced
+   ~0% patch_success — V3+V4 falsified. Even orthogonalized top-10
+   SAE features (Axis F) lag PCA basis at the same K. SAE feature
+   rankings on a joint two-policy dataset are dominated by
+   policy-identifier features; *they are the wrong basis for causal
+   mechanism* even when correlations are extreme. Future Phase 6+
+   interpretability work should default to PCA on per-step
+   matched-seed diffs.
+
+Directional asymmetry surfaced as a flagged-but-not-pinned secondary
+observation: at K=3 (87.9% variance) the P→C direction reaches
+patch_success 0.881 but C→P stalls at 0.509 — "becoming protected"
+appears mechanically more constrained than "becoming collapsed."
+Worth verifying with seed-bootstrap analysis in v3.1.
 
 Phase 6 also confirmed the fixed-attractor interpretation from Phase 4
 mechanically. The clean-rollout and basin-position-intervened patch

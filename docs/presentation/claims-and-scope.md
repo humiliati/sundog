@@ -310,9 +310,21 @@ piecemeal, because the parts qualify each other:
   anchor is sufficient and necessary to prevent basin internalization in this
   toy family up to the measured boundary.
 - **Mechanistic anchor:** activation patching across the cliff pair localizes
-  the basin attractor to the actor's final hidden activation (`net.7`).
-  Patches at `net.1`, `net.3`, `net.5` do not clear the pre-registered
-  threshold under robust statistics.
+  the basin attractor to a **5-dimensional subspace of the actor's final
+  hidden activation (`net.7`)**. Layer-level patching at `net.7` clears the
+  pre-registered threshold in both directions (Phase 6 v1); patches at
+  `net.1`, `net.3`, `net.5` do not. Phase 6 v3 sharpens this further: PCA
+  on per-step matched-seed activation diffs across the cliff pair shows
+  that the top 5 principal components capture 97.4% of variance and
+  reproduce v1's full-layer patch_success to within 0.03 in both
+  directions — a 51× compression from 256 dims to 5. PC1 (38.8% variance)
+  is the policy-offset direction and contributes ~0% patch effect; the
+  load-bearing mechanism is the 4-dimensional residual (PCs 2-5).
+  Sparse-autoencoder features ranked by correlation with the basin
+  outcome are the *wrong* basis for this circuit: the top SAE feature
+  with |corr|=0.89 produced zero patch effect, because SAE rankings on
+  a joint two-policy dataset return policy-identifier features rather
+  than mechanism features.
 
 What is **still not earned**:
 

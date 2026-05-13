@@ -385,11 +385,11 @@ gravity claim is now pinned to. The full trail lives at
 [`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) and the v4 result note at
 [`docs/mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md).
 
-### The mechanical anchor (Phase 6 v1)
+### The mechanical anchor (Phase 6 v1 + v3)
 
 Phase 6 opened the box. The Phase 5 v4 behavioral cliff at λ ≈ 0.953 is
-not a distributed property of the representation — it is a **single-layer
-gating decision at the actor's final hidden activation.**
+not a distributed property of the representation — it is a **5-dimensional
+subspace of the actor's final hidden activation layer.**
 
 The receipt comes from activation patching across the cliff pair
 (L-Mixed-M at λ = 0.95 vs λ = 0.97) in the shadow-field navigation
@@ -413,16 +413,41 @@ strength of both patch directions implies that the policy heads of the
 two cliff policies are functionally equivalent — what differs is what
 gets written to `net.7`.
 
+Phase 6 v3 followed up with PCA on per-step matched-seed activation
+differences across the cliff pair, sharpening the locus from "single
+layer" to a specific 5-dimensional subspace of that layer:
+
+> The basin attractor at `net.7` is a 5-dimensional subspace,
+> decomposable into a 1-dimensional policy-offset component (PC1,
+> 38.8% of activation-diff variance, 0% of patch effect) and a
+> 4-dimensional mechanism component (PCs 2-5, 58.5% of variance,
+> ~100% of patch effect).
+
+The K-sweep saturates cleanly at K=5: top-5 PCA components recover
+v1's full-layer patch_success to within 0.03 in both directions, and
+K=10 / K=32 / K=64 add no measurable patch_success past K=5. The
+mechanistic anchor is therefore a **51× compression** of the layer
+itself (256 dims → 5 dims), with a further variance-vs-mechanism
+decomposition revealing that one of those 5 dimensions carries
+~zero of the actual mechanism — the policy-offset direction is
+variance-heavy and mechanism-empty. The real circuit is the
+4-dimensional residual.
+
 Stated as policy:
 
 > Below the Phase 5 v4 threshold (signature weight `1 − λ ≥ 0.048`), the
-> training process *does not form* a basin-gating circuit at the actor's
-> final hidden activation. Above the threshold, the circuit *forms* at
-> that layer and is causally responsible for the policy's fixed-attractor
-> behavior. The Goodhart-sidestep argument now has both a behavioral
-> anchor (5% threshold) and a mechanistic locus (final-hidden gating).
+> training process *does not form* a basin-gating circuit in the actor's
+> final hidden activation. Above the threshold, the circuit *forms* in
+> a specific 4-dimensional subspace of that layer and is causally
+> responsible for the policy's fixed-attractor behavior. The
+> Goodhart-sidestep argument now has a behavioral anchor (5% threshold),
+> a mechanistic locus (a 4-dimensional gating subspace at the actor's
+> final hidden activation), and a methodological lesson (variance ≠
+> mechanism — even features highly correlated with basin behavior need
+> not span the basin-circuit subspace).
 
-Two complementary findings came out of Phase 6 v1 worth landing on:
+Three complementary findings came out of Phase 6 v1 + v3 worth
+landing on:
 
 - **Linear-probe feature availability did not dissociate the cliff
   pair.** Both endpoint-shaped behavior targets and depth-of-investment
@@ -443,15 +468,30 @@ Two complementary findings came out of Phase 6 v1 worth landing on:
   the mechanistic version of Phase 4's behavioral observation that the
   attractor "lives in the weights" — the cliff policy is computing,
   not perceiving, its basin.
+- **Sparse-autoencoder features were the wrong basis for this circuit.**
+  Phase 6 v2 trained a top-k SAE on the joint cliff-pair `net.7`
+  activations and found a feature with |correlation| = 0.89 against the
+  per-episode basin-attraction outcome — a textbook strong probe
+  result. But direction-patching using only that feature's decoder
+  column produced *zero* behavioral effect. The SAE picked a
+  policy-identifier feature, not a mechanism feature; correlation
+  rankings on a joint two-policy dataset are dominated by between-policy
+  mean differences. PCA on per-step matched-seed activation diffs is
+  the basis that actually carries the mechanism. This is a
+  publishable methodological lesson in its own right.
 
 This is in-vitro evidence in a 2D continuous-control environment with a
 synthetic Goodhart-prone shaping surface. It is not a deployment
 guarantee. It is, however, the cleanest mechanistic anchor the program
 has produced: the behavioral cliff has a representational explanation,
-and the explanation lives at a specific, namable, transplantable layer.
-The full trail is at [`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md), and
-the result note is at
-[`docs/mesa/PHASE6_RESULTS.md`](mesa/PHASE6_RESULTS.md).
+the explanation lives in a specific 4-dimensional subspace of a
+specific layer, and the subspace is transplantable — patching the
+correct 5 directions of `net.7` is sufficient to flip the policy from
+collapsed to protected behavior (and back) without disturbing the
+other 251 dimensions of activation. The full trail is at
+[`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md); v1 result note at
+[`docs/mesa/PHASE6_RESULTS.md`](mesa/PHASE6_RESULTS.md), v2+v3 result
+note at [`docs/mesa/PHASE6_V2_RESULTS.md`](mesa/PHASE6_V2_RESULTS.md).
 
 ### The envelope (Phase 7 v1)
 
