@@ -62,6 +62,13 @@ distributed so no document trampolines another's decisions.
   envelope and pre-registered verdict), same Sundog pattern of *hidden /
   indirect / transformation / output*. The Pre-Committed Cross-Application
   Comparison Row near the bottom of this document is the parallel.
+- [`SUNDOG_V_PERCEPTION.md`](SUNDOG_V_PERCEPTION.md) — the
+  atlas-as-instrument roadmap. Sits beyond Phase 7 hero promotion;
+  reframes the §What the atlas does NOT yet model list as a prediction
+  surface and instruments three candidate predictions (sub-visible
+  parhelic continuation, intersection enhancement, color-order
+  inversion at tangencies) ranked by apparatus cost. Inherits mesa
+  Phase 6 pre-registration discipline.
 - `public/poses/*.json` — the named-pose library. `canonical.json`
   snapshots the locked default; future poses (`low-altitude`, `cza-heavy`,
   `nine-halo-eye`, `rich-display-vocabulary`) ship as Phase 8 and Phase
@@ -556,6 +563,20 @@ overclaiming "ray-traced atmospheric simulation." The atlas is a
 geometry-primary description; the atmospheric raytrace is in
 `SUNDOG_GENERATOR_SPEC.md` as "optional terminal beautification" and
 remains out of scope for the workbench.
+
+> **Apology surface, prediction surface.** Beyond Phase 7, this list is
+> the staging surface for [`SUNDOG_V_PERCEPTION.md`](SUNDOG_V_PERCEPTION.md):
+> the atlas-as-instrument roadmap argues each item is a falsifiable
+> prediction the 7-formula field makes when extended along its own
+> generators. Halo dispersion physics ↔ Prediction 1 (sub-visible
+> parhelic continuation polarization curve) and Prediction 3
+> (color-order inversion at tangencies); the multi-circle joint
+> structure ↔ Prediction 2 (intersection enhancement), which is novel
+> against this list. Subhorizon arcs, crystal-orientation mixing, and
+> crystal-size effects on arc width remain on the apology side of the
+> ledger with no committed perception phase. The perception roadmap
+> inherits the pre-registration / smoke-gate discipline from mesa
+> Phase 6 wholesale.
 
 ### Theorem Anchor: What the Atlas Demonstrates
 
