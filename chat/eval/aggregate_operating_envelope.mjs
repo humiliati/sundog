@@ -33,9 +33,12 @@ const SOURCES = [
   { tag: "det.wild",        path: "results/chat/phase3-draft-gate/draft-outcomes.json",                          slate: "wild",         intervention: "none" },
   { tag: "det.adv",         path: "results/chat/phase3-adversarial-draft-gate/draft-outcomes.json",              slate: "adversarial",  intervention: "none" },
   { tag: "det.diff",        path: "results/chat/phase3-differential-draft-gate/draft-outcomes.json",             slate: "differential", intervention: "none" },
-  // Hosted Phase 5b baselines.
-  { tag: "host.diff",       path: "results/chat/phase5-hosted/differential/openai/draft-outcomes-rescored.json",  slate: "differential", intervention: "none", forceFamily: "sundog_gated_hosted" },
-  { tag: "host.adv",        path: "results/chat/phase5-hosted/adversarial/openai/draft-outcomes-rescored.json",   slate: "adversarial",  intervention: "none", forceFamily: "sundog_gated_hosted" }
+  // Hosted Phase 5b baselines (OpenAI).
+  { tag: "openai.diff",     path: "results/chat/phase5-hosted/differential/openai/draft-outcomes-rescored.json",     slate: "differential", intervention: "none", forceFamily: "sundog_gated_hosted_openai" },
+  { tag: "openai.adv",      path: "results/chat/phase5-hosted/adversarial/openai/draft-outcomes-rescored.json",      slate: "adversarial",  intervention: "none", forceFamily: "sundog_gated_hosted_openai" },
+  // Hosted Phase 8d baselines (Anthropic Claude).
+  { tag: "anthropic.diff",  path: "results/chat/phase5-hosted/differential/anthropic/draft-outcomes-rescored.json",  slate: "differential", intervention: "none", forceFamily: "sundog_gated_hosted_anthropic" },
+  { tag: "anthropic.adv",   path: "results/chat/phase5-hosted/adversarial/anthropic/draft-outcomes-rescored.json",   slate: "adversarial",  intervention: "none", forceFamily: "sundog_gated_hosted_anthropic" }
 ];
 
 // Per-intervention dirs to enumerate dynamically.
@@ -241,8 +244,11 @@ async function ingestSource(src) {
 }
 
 function normalizeFamily(family) {
+  if (family === "sundog_gated_hosted_openai") return "gpt-4o-mini";
+  if (family === "sundog_gated_hosted_anthropic") return "claude-haiku-4-5";
   if (family === "sundog_gated_hosted") return "gpt-4o-mini";
   if (family === "openai") return "gpt-4o-mini";
+  if (family === "anthropic") return "claude-haiku-4-5";
   if (family === "naive_baseline" || family === "naive_rag" || family === "prompted_boundary" || family === "sundog_gated") return family;
   return family || "deterministic_compositor";
 }

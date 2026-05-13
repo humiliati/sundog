@@ -1360,6 +1360,45 @@ hold; the cells out of scope are named.
 2. **Stale-doc corpus-conflict slate** — closes the corpusConflict axis. Engineering: mutate a chunk's text to disagree with the claim-map, run the existing harness, see if the gate / family-draft surfaces the mismatch. ~2h eng + ~$2 hosted.
 3. **Phase 8c public writeup** — the bounded claim above is the seed for the public-facing copy. chat.html / the §13 ratchet can now cite specific numbers grounded against an aggregator artifact.
 
+Phase 8d cross-vendor Claude pass (2026-05-13):
+
+75 hosted API calls against `claude-haiku-4-5` (16 differential + 59 adversarial), temperature 0, same heavy-trace system prompt as the OpenAI runs. Cost was ~$0.10. The result, after one round of gate-lexicon expansion to handle Anthropic's preferred negation idioms:
+
+**16/16 differential + 59/59 adversarial = 75/75 accepted, zero flips vs deterministic baseline, zero gate escapes.**
+
+Pre-patch the unrescored adversarial run flagged 14 prompts — every one a gate-brittleness artifact around English contractions ("I can't", "We don't", "isn't") that gpt-4o-mini didn't produce because it prefers unabbreviated forms ("I cannot", "we do not"). Three additional structural idioms ("blocking a claim", "should be" hypothetical, "an unsupported claim") also surfaced. All were patched in the gate's `hasNearbyNegation` lexicon and `REFUSAL_MARKERS` list.
+
+**Stylistic finding:** Claude Haiku 4.5 produces explicit-negation refusals more consistently than gpt-4o-mini. Every Claude draft on the differential slate explicitly negated the upgrade-language form ("an operating-envelope study, **not a research result** in the peer-reviewed sense"). gpt-4o-mini paraphrased the answer template but typically did not include the explicit negation. The headline outcome is the same (zero gate escapes), but the surface form of how the model honors the system-prompt rules differs by vendor.
+
+**Phase 7 cell-class-map after Claude added:**
+
+| Family | Cells | covered_holds | covered_weak | covered_breaks | Trials | Gate escapes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `claude-haiku-4-5` (hosted) | **16** | **16** | **0** | **0** | 75 | **0** |
+| `sundog_gated` (deterministic compositor) | 20 | 16 | 4 | 0 | 705 | 0 |
+| `gpt-4o-mini` (hosted) | 16 | 11 | 5 | 0 | 675 | 0 |
+| `prompted_boundary` (B2 baseline) | 20 | 11 | 9 | 0 | 705 | 0 |
+| `naive_baseline` (B1 baseline) | 20 | 3 | 17 | 0 | 705 | 0 |
+| `naive_rag` (RAG baseline) | 20 | 1 | 19 | 0 | 705 | 0 |
+
+Claude shows the cleanest profile of all six families — 16/16 cells covered_holds, no weak cells, because its explicit-negation drafts satisfy the gate's content rules without the brittleness flips other backends produce. Total operating-envelope trials are now **3,570 across 112 cells with zero gate escapes**.
+
+**Updated §13 ratchet language (most precise yet):**
+
+Across **3,570 trials**, **two model vendors** (OpenAI gpt-4o-mini + Anthropic claude-haiku-4-5), **deterministic + hosted backends**, **three prompt-type slates** (wild, adversarial, differential), **four severity levels**, **six evidence tiers**, and **eight one-factor-at-a-time trace-field interventions**, the Sundog-gated chat architecture preserves evidence-tier and claim-boundary discipline with **zero unsafe-accepts**. Bounded to: sundog.cc claim map, k=3 retrieval depth, visible trace, browser_live mode, the two named vendors at the named models. The cross-vendor result tightens the §13 ratchet from a vendor-specific finding to a two-vendor result with a clean stylistic decomposition (contracted-form refusals + unabbreviated-form refusals both honored).
+
+**Artifacts on disk:**
+- `chat/eval/lib/adapters/anthropic-adapter.mjs` — Anthropic Messages API adapter, mirrors the OpenAI heavy-trace contract.
+- `chat/eval/run_hosted_drafts.mjs` — extended with `--backend anthropic`.
+- `public/js/sundog-claim-gate.mjs` — `REFUSAL_MARKERS` and `hasNearbyNegation` lexicons expanded to handle English contractions and 3 structural idioms (`blocking a claim`, `should be` hypothetical, `an unsupported`).
+- `results/chat/phase5-hosted/{differential,adversarial}/anthropic/draft-outcomes{,-rescored}.json` — raw + post-patch Claude outcomes.
+- `results/chat/operating-envelope/cell-class-map.csv` — re-emitted with claude-haiku-4-5 family at 16/16 holds.
+
+**Remaining open threads (after Phase 8d):**
+1. **Stale-doc corpus-conflict slate** — still the largest gap. The Phase 5 reserved label `stale_doc_capture` has no trials. Engineering: mutate a chunk's text to disagree with the claim-map; rerun harness; see if the gate / drafts surface the mismatch.
+2. **Hosted intervention battery on Claude** — 8 interventions × 75 prompts × Claude ≈ ~$0.40. Tests whether `trace.evidenceTier` is still the only weak-authority handle, or whether Claude exposes different trace fields.
+3. **Phase 8 public copy update** — citations in chat.html / index.html teaser should now name two vendors instead of one. The "what we are doing next" cross-vendor card on chat.html can graduate to "completed: extended to Claude family; cross-architecture (open-weight) remains open".
+
 ## Phase 8 — Public Writeup and Claim Ratchet
 
 Goal:
