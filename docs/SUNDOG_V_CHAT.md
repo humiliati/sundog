@@ -740,6 +740,20 @@ The result names the prompt/model/retrieval conditions where discipline holds,
 where it fails, and whether hosted trace-conditioned drafting matches the
 deterministic S1 reference result.
 
+Phase 4 seed baseline (2026-05-12):
+- `chat/eval/score_phase4_probe_slate.mjs` aggregates the wild,
+  adversarial, and differential Phase 3 outputs into the Phase 4 reporting
+  shape.
+- `npm run chat:eval:phase4` writes
+  `results/chat/probe-slate/manifest.json`, `trial-outcomes.csv`,
+  `boundary-preservation.csv`, `overclaim-rate.csv`,
+  `axis-breakdown.csv`, and `representative-transcripts.json`.
+- Deterministic baseline: 79 prompts, 316 drafts, 0 gate escapes, and 39
+  addedValue drafts.
+- Scope remains deterministic: no hosted model adapter is included yet. This
+  is the reference operating-envelope table that hosted adapters and
+  retrieval/corpus variants should be compared against.
+
 ## Phase 5 — Causal Intervention Battery
 
 Goal:

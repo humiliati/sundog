@@ -530,6 +530,15 @@ Exit criterion: the operating-envelope map can show where the gravity claim
 holds under selection pressure and where it does not, with the same evidence
 discipline as the three-body Phase 9 result.
 
+Implementation-grade spec at [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) v1
+(2026-05-12). v1 is a read-only Small/Medium aggregation pass over existing
+Phase 3/4/5/6 artifacts: no new training, no Large tier, and no full
+probe-by-intervention cross-product. The envelope unit is a classified
+`(policy, tier, selection-pressure, evidence-plane, condition)` cell with
+explicit `hold`, `collapse`, `fragile`, `incompetent`, or `ambiguous` status.
+Phase 6's `net.7` result is attached as a mechanistic annotation to the
+Medium `lambda=0.95` / `lambda=0.97` cliff boundary.
+
 ### Phase 8 - Writeup, Claim Ratchet, and Public Artifact
 
 Goal: turn the result into a defensible Sundog hook, update the boundary
@@ -842,4 +851,11 @@ symmetric strength of both patch directions also implies the policy
 heads of the cliff pair are functionally equivalent — what differs is
 what gets written to `net.7`.
 
-**Phases 7-8:** Not started.
+**Phase 7:** Spec v1 **ready**, implementation not started. See
+[`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md). The next implementation step is
+`scripts/mesa-phase7-envelope.mjs`: inventory the existing Phase 5 policy zoo,
+join Phase 3 probe-slate outputs, Phase 4 intervention outputs, and Phase 6
+`net.7` annotations, then emit `missing-cells.csv` before any classification
+claim is made.
+
+**Phase 8:** Not started.
