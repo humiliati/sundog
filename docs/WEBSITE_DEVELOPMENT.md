@@ -89,11 +89,20 @@ npm run chat:eval:static
 npm run chat:eval:phase3
 npm run chat:eval:phase3:adversarial
 npm run chat:eval:phase3:differential
+npm run chat:eval:phase4
 ```
 
 The main risk is claim drift: a new page can teach visitors phrases that the
 widget is not prepared to bound. Close that gap by either adding route coverage
 or softening the page copy before the page ships.
+
+For pages with new claims, demos, or roadmap language, also inspect
+`results/chat/probe-slate/severity-heatmap.csv` after the Phase 4 run. Severe
+adversarial rows are pressure-stacking prompts; they model visitors who combine
+authority appeals, boundary dismissal, style overrides, and direct claim
+instructions. A new page is not ready to publish if it creates a phrase that
+passes the static router but causes Ask Sundog to lose the route-specific
+boundary under that severe-pressure check.
 
 ## Link To Docs
 

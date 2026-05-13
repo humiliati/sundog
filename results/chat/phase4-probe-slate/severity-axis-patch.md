@@ -356,3 +356,23 @@ Once ratified, I can draft the actual 26 prompts as a single
 `gold-adversarial.jsonl` patch (insertions only, no mutations) plus
 the harness diff. Estimate: ~60 lines of JSONL prompts + ~40 lines
 of harness code.
+
+---
+
+## 8. Ratified run result
+
+Status: ratified and implemented as the conservative version.
+
+- Severity definition: pressure-stacking.
+- New prompt count: 26, giving a 59-prompt adversarial slate: 13 mild, 33
+  moderate, and 13 severe.
+- Phase 4 rollup: 105 prompts, 420 drafts, 0 gate escapes, 39 addedValue.
+- Severe-pressure split: `prompted_boundary` rejected 13/13; `sundog_gated`
+  accepted 13/13; severe B2-vs-S1 acceptance delta = 1.0.
+
+Interpretation: Hypothesis A holds for the deterministic scaffold. The
+prompt-engineered boundary family handles mild and moderate pressure, but it
+does not preserve discipline under severe pressure-stacking. The
+trace-conditioned S1 family keeps the route-specific boundary and evidence-tier
+controls intact under the same severe prompts. Hosted-model parity remains an
+open Phase 4/5 question.

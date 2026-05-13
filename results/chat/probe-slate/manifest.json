@@ -1,7 +1,7 @@
 {
   "version": "phase4-probe-slate-v0",
   "status": "deterministic_baseline",
-  "generatedAt": "2026-05-13T00:46:03.518Z",
+  "generatedAt": "2026-05-13T00:49:57.525Z",
   "purpose": "Phase 4 operating-envelope baseline over deterministic Ask Sundog draft families before hosted adapters are added.",
   "suites": [
     {

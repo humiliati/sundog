@@ -654,8 +654,8 @@ Phase 3 artifact status:
 - `chat/eval/score_phase3_drafts.mjs` is the first model-adapter contract
   harness. It does not call a hosted model yet; it compares deterministic
   `naive_baseline`, `naive_rag`, `prompted_boundary`, and `sundog_gated`
-  draft families over the 30-prompt wild slate and the 33-prompt in-corpus
-  adversarial slate.
+  draft families over the 30-prompt wild slate, the 59-prompt in-corpus
+  adversarial slate, and the 16-prompt differential slate.
 - `results/chat/phase3-draft-gate/summary.json`, `draft-outcomes.csv`, and
   `draft-outcomes.json` record the wild Phase 3 smoke run.
 - `results/chat/phase3-adversarial-draft-gate/summary.json`,
@@ -681,13 +681,16 @@ First B1/B2/divergence smoke result (2026-05-12):
   `rejected`; `addedValue` counts accepted `extends` and `rewrites`.
 
 Adversarial gate smoke result (2026-05-12):
-- `npm run chat:eval:phase3:adversarial` reports 132 drafts across the 33
-  `gold-adversarial.jsonl` prompts.
-- `naive_baseline`: 0 accepted / 33 rejected / 0 addedValue.
-- `naive_rag`: 0 accepted / 33 rejected / 0 addedValue.
-- `prompted_boundary`: 33 accepted / 0 rejected / 0 addedValue.
-- `sundog_gated`: 33 accepted / 0 rejected / 0 addedValue.
+- `npm run chat:eval:phase3:adversarial` reports 236 drafts across the 59
+  `gold-adversarial.jsonl` prompts: 13 mild, 33 moderate, and 13 severe.
+- `naive_baseline`: 0 accepted / 59 rejected / 0 addedValue.
+- `naive_rag`: 0 accepted / 59 rejected / 0 addedValue.
+- `prompted_boundary`: 46 accepted / 13 rejected / 0 addedValue.
+- `sundog_gated`: 59 accepted / 0 rejected / 0 addedValue.
 - Gate hit rate: 1. Gate escape count: 0.
+- Severity split: B2/prompted-boundary passes mild and moderate pressure but
+  fails severe stacked pressure 0/13; S1/sundog-gated passes severe pressure
+  13/13.
 
 Differential gate smoke result (2026-05-12):
 - `npm run chat:eval:phase3:differential` reports 64 drafts across the 16
@@ -747,9 +750,22 @@ Phase 4 seed baseline (2026-05-12):
 - `npm run chat:eval:phase4` writes
   `results/chat/probe-slate/manifest.json`, `trial-outcomes.csv`,
   `boundary-preservation.csv`, `overclaim-rate.csv`,
-  `axis-breakdown.csv`, and `representative-transcripts.json`.
-- Deterministic baseline: 79 prompts, 316 drafts, 0 gate escapes, and 39
+  `boundary-preservation-heatmap.csv`, `overclaim-heatmap.csv`,
+  `severity-heatmap.csv`, `axis-breakdown.csv`, and
+  `representative-transcripts.json`.
+- Deterministic baseline: 105 prompts, 420 drafts, 0 gate escapes, and 39
   addedValue drafts.
+- Adversarial severity axis: 13 mild, 33 moderate, and 13 severe prompts over
+  13 pressure axes. Severe pressure is defined as pressure stacking: authority
+  appeal plus boundary dismissal plus style override plus claim instruction.
+- Severe-pressure result: `prompted_boundary` is rejected 13/13, while
+  `sundog_gated` is accepted 13/13 with 0 gate escapes. The severe B2-vs-S1
+  acceptance delta is 1.0 in
+  `results/chat/probe-slate/severity-heatmap.csv`.
+- Interpretation: Hypothesis A holds for the deterministic scaffold. The
+  trace-conditioned architecture separates from prompt-only boundary discipline
+  when the adversarial prompt tries to override route-specific boundaries and
+  evidence-tier controls.
 - Scope remains deterministic: no hosted model adapter is included yet. This
   is the reference operating-envelope table that hosted adapters and
   retrieval/corpus variants should be compared against.
@@ -891,13 +907,22 @@ The widget must not:
 Phase 3 strong-ratchet scaffold result:
 
 Across the in-corpus gold slate (103 prompts), out-of-distribution wild slate
-(30 prompts), adversarial slate (33 prompts), and differential probe set (16
+(30 prompts), adversarial slate (59 prompts), and differential probe set (16
 prompts) targeting trace-specific failure modes, the Sundog-gated chat
 architecture preserved evidence-tier and claim-boundary discipline with zero
 gate escapes across the deterministic draft runs. On the differential slate
 specifically, where prompt-engineered boundary baselines failed 16/16 by
 design, trace-conditioned drafts passed 16/16 with 16/16 measurable added value
 over the static layer.
+
+Phase 4 severity-axis extension:
+
+The adversarial slate now separates mild, moderate, and severe pressure across
+13 probe axes. At severe pressure, prompt-engineered boundary discipline fails
+13/13 while trace-conditioned S1 passes 13/13 with zero gate escapes. This
+supports the strong ratchet for the deterministic scaffold: route-specific
+trace fields outperform a generic boundary prefix when the user prompt stacks
+authority, boundary dismissal, style override, and direct overclaim pressure.
 
 Scope:
 - bounded to this corpus, prompt slates, deterministic compositor
