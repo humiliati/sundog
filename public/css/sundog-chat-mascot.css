@@ -1,0 +1,145 @@
+/* Halo Hound mascot — CSS scaffolding.
+ *
+ * Tier-1 (the floating widget button) is where this file does work today.
+ * Until the SVG art lands, each button state gets a small colored ring on
+ * the launch button — visible enough to confirm the state machine is firing,
+ * quiet enough not to compete with the page content.
+ *
+ * Tier-2 and Tier-3 visuals (panel micro-scenes, sidecar lab) will extend
+ * this file once SVG art is in place. The class hooks below are forward-
+ * compatible with that art via the same state vocabulary.
+ *
+ * Spec: results/chat/phase8-public-writeup/halo-hound-mascot-spec.md
+ */
+
+/* ------------------------------------------------------------------ */
+/* Tier 1 — widget launch button state ring                          */
+/* ------------------------------------------------------------------ */
+
+.sd-chat-launch {
+  /* Keep room for the trace-state ring without changing existing layout. */
+  position: relative;
+}
+
+/* The ring is a pseudo-element so existing button content stays intact. */
+.sd-chat-launch::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sd-mascot-ring-fill, transparent);
+  border: 2px solid var(--sd-mascot-ring-edge, transparent);
+  box-shadow: var(--sd-mascot-ring-glow, none);
+  transition:
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+  pointer-events: none;
+}
+
+/* Per-state ring tokens. Visual differentiation is intentional but quiet;
+ * the ring is the placeholder until SVG art replaces it. */
+
+.sd-chat-mascot--btn-neutral-halo {
+  --sd-mascot-ring-fill: transparent;
+  --sd-mascot-ring-edge: rgba(218, 162, 76, 0.45);
+  --sd-mascot-ring-glow: none;
+}
+
+.sd-chat-mascot--btn-book-halo {
+  --sd-mascot-ring-fill: rgba(218, 162, 76, 0.85);
+  --sd-mascot-ring-edge: rgba(154, 113, 50, 0.95);
+  --sd-mascot-ring-glow: 0 0 0 2px rgba(218, 162, 76, 0.18);
+}
+
+.sd-chat-mascot--btn-shield-halo {
+  --sd-mascot-ring-fill: rgba(26, 58, 82, 0.85);
+  --sd-mascot-ring-edge: rgba(218, 162, 76, 0.95);
+  --sd-mascot-ring-glow: 0 0 0 2px rgba(26, 58, 82, 0.18);
+}
+
+.sd-chat-mascot--btn-sweat-halo {
+  --sd-mascot-ring-fill: rgba(177, 70, 50, 0.85);
+  --sd-mascot-ring-edge: rgba(132, 50, 36, 0.95);
+  --sd-mascot-ring-glow: 0 0 0 3px rgba(177, 70, 50, 0.18);
+}
+
+.sd-chat-mascot--btn-cloud-halo {
+  --sd-mascot-ring-fill: rgba(122, 110, 130, 0.55);
+  --sd-mascot-ring-edge: rgba(80, 70, 90, 0.85);
+  --sd-mascot-ring-glow: none;
+}
+
+/* Idle pulse — only on neutral state, very subtle. Halo collar breath. */
+@keyframes sd-mascot-idle-pulse {
+  0%,
+  100% { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(1.12); opacity: 0.82; }
+}
+
+.sd-chat-mascot--idle.sd-chat-launch::after {
+  animation: sd-mascot-idle-pulse 4.8s ease-in-out infinite;
+}
+
+/* Sweat state — a brief shudder when pressure is detected. Plays once on
+ * class application via a separate keyframe-less wiggle handled by JS in
+ * a later pass. For now, the static ring color is enough signal. */
+
+/* ------------------------------------------------------------------ */
+/* Tier 2 — panel mascot strip (scaffolding only; not rendered yet)   */
+/* ------------------------------------------------------------------ */
+
+/* When the chat panel opens, a top strip can show the hound at a station.
+ * Tier-2 SVG art is not on disk yet; the slot below reserves the space and
+ * applies state-aware tinting. Hidden by default; widget will show it once
+ * Tier-2 sprites are linked in. */
+
+.sd-chat-mascot-strip {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--sd-line, rgba(20, 43, 58, 0.12));
+  background: rgba(241, 234, 220, 0.4);
+}
+
+/* When Tier-2 lands, the widget will toggle this class on the panel root
+ * to make the strip visible. */
+.sd-chat-panel.has-mascot-strip .sd-chat-mascot-strip {
+  display: flex;
+}
+
+.sd-chat-mascot-strip__face {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--sd-mascot-ring-fill, #f1eadc);
+  border: 2px solid var(--sd-mascot-ring-edge, rgba(218, 162, 76, 0.45));
+  flex-shrink: 0;
+}
+
+.sd-chat-mascot-strip__label {
+  font-family: var(--sd-font-data, "IBM Plex Mono", ui-monospace, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sd-ink-soft, #5A6975);
+}
+
+/* ------------------------------------------------------------------ */
+/* Accessibility                                                       */
+/* ------------------------------------------------------------------ */
+
+/* Respect reduced motion — turn off the idle pulse. */
+@media (prefers-reduced-motion: reduce) {
+  .sd-chat-mascot--idle.sd-chat-launch::after {
+    animation: none;
+  }
+  .sd-chat-launch::after {
+    transition: none;
+  }
+}

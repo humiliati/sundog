@@ -402,6 +402,19 @@ has now produced an in-vitro bounded operating-envelope receipt:
   across the cliff pair (L-Mixed-M-`λ=0.95` vs L-Mixed-M-`λ=0.97`)
   clears the pre-registered patch-success threshold (`>0.8` in both
   directions) only at `net.7`, the actor's final hidden activation.
+- **Mechanistic locus sharpened (Phase 6 v2 + v3, 2026-05-12).** PCA
+  on per-step matched-seed activation diffs at `net.7` localizes the
+  basin attractor to a **5-dimensional subspace** capturing 97.4% of
+  the activation-diff variance. K-sweep across `K ∈ {1, 3, 5, 10, 32,
+  64}` saturates at K=5; top-5 PCA components reproduce v1's full-layer
+  patch_success to within 0.03 in both directions. **51× compression**
+  of the mechanistic anchor (256 → 5 dims). PC1 alone is variance-
+  heavy (38.8%) but mechanism-empty (~0% patch effect) — the
+  policy-offset direction; the load-bearing mechanism is the 4-dim
+  residual (PCs 2-5). Sparse-autoencoder features ranked by correlation
+  with the basin outcome are the *wrong* basis for this circuit (the
+  top SAE feature with |corr|=0.89 produced zero patch effect); future
+  Phase 6+ work should default to PCA on per-step matched-seed diffs.
 - **Outcome maps to "partially holds"** in the roadmap's pre-named
   three-way ladder. The protected pocket is real but bounded; the
   collapse pocket is also sharp. Both are honest evidence about the

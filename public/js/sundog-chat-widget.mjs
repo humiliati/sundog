@@ -1,10 +1,24 @@
 import { DEFAULT_FAQS, buildTraceAnswer, loadClaimMap } from "./sundog-chat-router.mjs";
 import { attachRetrievedMatches, buildRetrievalTrace, loadChatIndex } from "./sundog-retrieval.mjs";
+import { applyMascotState } from "./sundog-chat-mascot.mjs";
 
 const ROOT_ID = "sd-chat-widget-root";
+const MASCOT_CSS_HREF = "/css/sundog-chat-mascot.css";
 
 if (!document.getElementById(ROOT_ID)) {
+  ensureMascotStylesheet();
   initAskSundog();
+}
+
+// Ensure the mascot stylesheet loads without requiring every host HTML page
+// to add a <link>. Idempotent — checks the document for an existing tag.
+function ensureMascotStylesheet() {
+  const existing = document.querySelector(`link[rel="stylesheet"][href="${MASCOT_CSS_HREF}"]`);
+  if (existing) return;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = MASCOT_CSS_HREF;
+  document.head.appendChild(link);
 }
 
 async function initAskSundog() {
@@ -47,6 +61,9 @@ async function initAskSundog() {
   const answerStack = root.querySelector(".sd-chat-answer-stack");
   const faqs = root.querySelector(".sd-chat-faqs");
 
+  // Idle mascot state on mount. Trace-driven updates fire in answerQuestion.
+  applyMascotState(launch, null);
+
   let claimMap = null;
   let chatIndex = null;
 
@@ -84,6 +101,7 @@ async function initAskSundog() {
     const trace = await traceFor(question);
     answerStack.replaceChildren(renderExchange(question, trace));
     answerStack.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    applyMascotState(launch, trace);
   }
 
   async function traceFor(question) {
