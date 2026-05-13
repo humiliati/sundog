@@ -1,0 +1,20 @@
+{
+  "_meta": {
+    "name": "p13",
+    "photo": "13.480859565_17934474635991868_323320248088719839_n.jpg",
+    "anchored": "2026-05-13",
+    "method": "warm-index column-sum + saturated-core centroid; visual confirmation against crosshair crops",
+    "supersedes": {
+      "previous_anchor": "sun=(557, 372), R22=210, parhelion_offset=220, inferred_h=17.3°",
+      "discovered_via": "Task #52 step 1 anchor-capture pass",
+      "why_old_failed": "Hand-mark biased sun_x by +14 px (flares pulled centroid right) and assumed symmetric offsets of 220 px; actual offsets are 212-213 px, sun is at x=543, and inferred h is ~7° not 17°."
+    }
+  },
+  "sun": [543, 372],
+  "r22": 211,
+  "parhelion": {
+    "left_x": 330,
+    "right_x": 755,
+    "y": 351
+  }
+}

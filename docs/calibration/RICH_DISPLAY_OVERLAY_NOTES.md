@@ -19,12 +19,15 @@ Image 1 is the label key; images 2, 7, and 13 are the first tuning set.
 | --- | ---: | ---: | ---: | ---: | --- |
 | p2 | `(567, 496)` | 182 | 192 | 18.6° | Reuses the clean multi-photo calibration anchor; dagger residuals are -1 px / -1 px. |
 | p7 | `(1033, 946)` | 200 | 393 | 59.4° | Reuses the high-sun anchor; CZA should be treated as not applicable at this altitude even when the vocabulary overlay draws it. |
-| p13 | `(557, 372)` | 210 | 220 | 17.3° | Rough hand anchor for social-crop morphology; dagger residuals are +6 px / +8 px against rough parhelion marks. |
+| p13 | `(543, 372)` | 211 | 213 / 212 | 6.83° | **Re-anchored 2026-05-13 (Task #52 step 1).** Supersedes rough hand-anchor: sun_x corrected −14 px, offsets refined from assumed-symmetric 220 to measured 213/212, h drops from 17.3° to ~6.8°. p13 is a low-altitude photo, not mid-altitude. Anchor file: `p13-anchor.json`. |
 
 All generated overlays now apply `--parhelic-y-offset-r22 = -0.05`, raising
 the parhelic belt and dagger markers by 5% of the observed 22° halo radius.
-This fixes a shared vertical belt residual without changing the 22°/46° halo
-registration.
+This fixes the shared vertical belt bias without changing the 22°/46° halo
+registration. Track that belt-height residual separately from the
+parhelion-offset inversion route: p13's committed anchor clears the x-offset
+route, but its JSON `parhelion.y = 351` still leaves a +10.4 px belt-y
+residual against the current `-0.05 * R22` overlay rule.
 
 ## Phase 10 Measurement Pre-Registration
 
@@ -67,8 +70,8 @@ fit makes every route good.
 
 | route | p2 residual (L / R) | p7 residual (L / R) | p13 residual (L / R) | promotion status | note |
 | --- | ---: | ---: | ---: | --- | --- |
-| Parhelion offset → sun altitude | −1 / −1 px (0.5% R₂₂) | 0 / n/a px | +6 / +8 px (3.8% R₂₂) | **promoted** (calibrated core; anchor-probation) | Threshold gate passes: only p13 hits ≥ 8 px, and a single failure is below the ≥2 photos rule. Because it touches the cutoff, the route stays on anchor-probation until p13 re-anchoring in Task #52. |
-| CZA apex → sun altitude / visibility | _measurement pending_ | not applicable (h = 59.4° > 32.2° cutoff) | _measurement pending_ | pending — needs anchor capture | Valid only below the CZA cutoff. Anchor work in Task #52. |
+| Parhelion offset → sun altitude | −1 / −1 px (0.5% R₂₂) | 0 / n/a px | 0 / 0 px (new anchor; x-offset only) | **promoted** (calibrated core; **probation cleared 2026-05-13**) | Task #52 step 1 verdict: probation was anchor-driven, not route-driven. Re-anchoring p13 drops x-offset residual from +6/+8 px to ~0/0 px on the new (sun=543,372; R₂₂=211; offsets=213/212) anchor. Route stays in calibrated core; verdict reads as 'bad anchor, route OK'. p13 belt-y residual is tracked separately. |
+| CZA apex → sun altitude / visibility | _measurement pending_ | not applicable (h = 59.4° > 32.2° cutoff) | not applicable (cropped; predicted apex y = −50) | **fails coverage gate on current set** | Step 1 re-anchoring moves p13 to h = 6.83°, making the CZA apex fall above the square crop. With p7 above the CZA cutoff, only p2 remains eligible; p2 anchor capture can be recorded, but this route cannot promote without an added CZA-visible photo. |
 | Tangent-arc curvature → sun altitude | _measurement pending_ | _measurement pending_ (broad tangent visible at high sun) | _measurement pending_ | pending — needs anchor capture | Curvature is non-monotone in h; do not collapse into total overlay fit. Anchor work in Task #52. |
 | Supralateral position → sun altitude | _measurement pending_ | not applicable (cropped) | not applicable (not visible) | **fails coverage gate** | Pre-registered rule: fewer than two eligible photos. Stays as optional vocabulary, but does not promote as a calibrated inversion route on this set. |
 
@@ -76,7 +79,7 @@ fit makes every route good.
 
 | primitive | p2 | p7 | p13 | promote? |
 | --- | --- | --- | --- | --- |
-| CZA | visible | not applicable / high sun | cropped or not visible | Conditional core: render only inside the CZA sun-altitude validity window; inversion route remains pending. |
+| CZA | visible | not applicable / high sun | cropped or not visible | Conditional core: render only inside the CZA sun-altitude validity window; inversion route fails coverage on the current p2/p7/p13 set. |
 | Supralateral arc | visible | candidate only | not visible / cropped | Keep as optional vocabulary; p2 carries the strongest evidence. |
 | Upper tangent arc | visible | visible / broad | candidate | Promote as stable logo/animation shape language. |
 | Lower tangent arc | visible near lower 22° contact | not clear | not clear | Annotation only until another clean low-sun source supports it. |
@@ -93,11 +96,11 @@ back; reason recorded), or **pending** (cannot be promoted until measured).
 
 | candidate | verdict | reason |
 | --- | --- | --- |
-| Parhelion offset to h inversion route | **promoted** (calibrated core; anchor-probation) | Threshold gate: only p13 reaches the 8 px cutoff, and the rule requires >= 2 photos failing. Because p13 touches the cutoff and uses a rough hand-anchor, the route remains on anchor-probation until re-anchoring in Task #52. |
+| Parhelion offset to h inversion route | **promoted** (calibrated core; probation cleared 2026-05-13) | Task #52 step 1: re-anchored p13 from (557, 372) / R22=210 / offset=220 to (543, 372) / R22=211 / offsets=213/212. New residual is ~0/0 px. The probation finding is recorded as 'bad anchor, route OK' -- the route was never the problem; the rough hand-anchor was. |
 | 22 deg halo, parhelia (L/R), parhelic-circle | **promoted** (calibrated core) | Already in core via Phase 2. No regression observed in Phase 10 inspection. |
 | Upper tangent arc | **promoted as logo / animation vocabulary** | Visible across p2 and p7; candidate on p13. Two-of-three eligible visibility. Curvature-as-inversion-route remains pending measurement, but visibility is sufficient for shape-language use. |
-| CZA primitive (rendered) | **promoted as conditional core** | Render only when `h < 32.2 deg` (atmospheric cutoff). Visible on p2 at h = 18.6 deg; correctly not applicable on p7. p13 cropped/not visible but not contradictory. Inversion route stays pending. |
-| CZA apex to h inversion route | **pending** | No anchor capture yet on p2 / p13. Cannot be promoted to inversion alternative without numbers; cannot be ruled out either. Task #52 captures the anchor. |
+| CZA primitive (rendered) | **promoted as conditional core** | Render only when `h < 32.2 deg` (atmospheric cutoff). Visible on p2 at h = 18.6 deg; correctly not applicable on p7. p13 is low-altitude but square-cropped above the predicted apex, so the primitive remains core while the inversion route fails coverage. |
+| CZA apex to h inversion route | **fails coverage gate on current set** | Task #52 step 1 moves p13 to h = 6.83°, where the predicted apex is y = -50 and therefore outside the image plane. p7 is not applicable above the CZA cutoff, leaving only p2 as an eligible anchor. A p2 measurement is still useful as a single-photo receipt, but the route cannot promote without a new CZA-visible calibration photo. |
 | Tangent-arc curvature to h inversion route | **pending** | Same as CZA apex: visible but unmeasured. Curvature is non-monotone in h, so promotion requires sampling at multiple sun altitudes -- Task #52 is the first p2 + p13 pass. |
 | Supralateral position to h inversion route | **fails coverage gate** | Visible only on p2 of the Phase 10 set. Pre-registered rule blocks promotion at < 2 eligible photos. Supralateral primitive itself stays in optional vocabulary; the *inversion route* does not promote on this evidence. |
 | Lower tangent arc | **promoted as low-sun annotation only** | Visible at p2's lower 22 deg contact; not clear on p7 or p13. One photo of evidence -- fails the two-photo bar for core promotion. Held as low-sun-display annotation; compatible with `low-altitude.json` named-pose examples, but the pose is not additional evidence. |
@@ -159,12 +162,14 @@ Execution order is fixed; do not interleave:
    anchor-probation flag. Update the Anchor Summary table and the Per-
    Inversion-Route Residual Table in the same commit. Do not touch CZA or
    tangent anchors until this completes.
-2. **CZA apex anchors on p2 and p13.** Capture observed CZA apex (x, y)
-   in photo px. Add a `CZA apex (px)` column to the Anchor Summary table.
-   Compute the CZA-apex → h inversion residual (predicted apex from atlas
-   geometry at the inferred h, vs. observed). Fill the p2 and p13 cells in
-   the Per-Inversion-Route table. p7 stays not applicable (h = 59.4° is
-   above the CZA cutoff).
+2. **CZA apex anchor check (Task #53).** Capture the observed CZA apex
+   on p2 in photo px. For p13, first record the crop verdict: at h = 6.83°,
+   predicted CZA apex y = -50, above the image plane, so p13 is expected to
+   be not applicable rather than pending. Add a `CZA apex (px)` column to
+   the Anchor Summary table, fill p2 with the measured residual, and mark
+   p7 / p13 not applicable. On the current three-photo set this forces the
+   CZA-apex inversion route into coverage-gate failure; reopening it needs
+   an added CZA-visible calibration photo.
 3. **Tangent-arc curvature anchors on p2 and p13.** Sample at least three
    points along each visible tangent arc; fit a local curvature estimate;
    compare to the atlas-predicted curvature at the inferred h. Curvature is
@@ -190,22 +195,70 @@ now supports both paths needed for Task #52:
   "X1,Y1;X2,Y2;X3,Y3"`, and `--tangent-kind upper|lower`.
 
 Use `docs/calibration/task52-anchor.example.json` as the JSON-anchor shape
-when carrying p13 parhelion anchors, CZA apex, and tangent samples together.
+when carrying p13 parhelion anchors, CZA apex crop verdicts, and tangent
+samples together.
 
 ### Escalation rule (added with the 2026-05-13 verdict)
 
 If step 1 returns a p13 parhelion-offset residual at `>= 12 px` or
 `>= 0.06 * R22`, the route still does not formally fail the two-photo
-gate — only one photo is over threshold. But it loses the "rough hand
-anchor" excuse that currently keeps the probation status soft.
+gate because only one photo is implicated. It does, however, escalate from
+soft probation to a hard anchor audit: do not use p13 for CZA, tangent, or
+supralateral residuals until the sun, R22, and parhelion anchors are
+re-measured and the inferred altitude is recomputed.
 
-Consequence: the parhelion-offset route stays in calibrated core for atlas
-rendering, but it cannot serve as clean evidence in the perception roadmap
-(`SUNDOG_V_PERCEPTION.md`) predicted-then-observed receipt, or in any
-public-claim language that depends on Phase 10 evidence, until either
-a) a third measurement clears it on a fresh photo, or
-b) the p13 photo itself is replaced with one whose anchors are clean.
+## Task #52 Step 1 Verdict *(2026-05-13)*
 
-This is the same shape as mesa's "the negative is the deliverable" rule
-applied locally: an unresolved probation flag is its own gate, separate
-from the route's promotion status.
+Step 1 (re-anchor p13 parhelion offset) is **complete**. Headline:
+
+**p13 was a low-altitude photo all along.** The rough hand-anchor's
+inferred h = 17.3° was wrong by ~10°; the corrected anchor places p13 at
+h ≈ 6.8°, closer to the `low-altitude.json` named pose (h = 5°) than to
+the mid-altitude regime.
+
+What changed on re-anchoring:
+- `sun_x`: 557 -> 543 (delta -14 px; flares biased the original click right)
+- `R22`: 210 -> 211 (delta +1 px; essentially unchanged)
+- parhelion offsets: assumed-symmetric 220 -> measured 213 (left) and 212 (right); L-R asymmetry -1 px
+- inferred h: 17.3 deg -> 6.83 deg (delta -10.5 deg)
+
+Internal consistency check that locked the verdict: the halo's left
+extreme at sun_y is at x = 543 - 211 = 332, and the left parhelion peak
+sits at x = 330. The 2 px gap matches the prediction R22/cos(h) - R22 =
+211/0.9929 - 211 = +1.5 px (parhelion sits just outside the halo's
+horizontal extreme at low h). The whole anchor is internally consistent
+to within 1-2 px.
+
+Separate belt-height check: running `overlay_calibrate.py` against
+`p13-anchor.json` predicts the dagger belt at y = 361.4, while the committed
+JSON anchor records `parhelion.y = 351`. That leaves a +10.4 px vertical
+residual for the parhelic-belt overlay rule. Do not fold that residual into
+the parhelion-offset route verdict; it is a distinct y-axis tuning item for
+the parhelic circle / dagger belt.
+
+Probation status: **cleared**, recorded as *bad anchor, route OK*. The
+parhelion-offset route was never the problem; the rough hand-anchor was.
+The escalation rule (anchor-probation when a single eligible photo
+touches a cutoff) fired correctly and surfaced a real bug; the bug just
+wasn't in the route.
+
+Downstream consequences of p13 being h ~ 7 deg:
+- The `nine-halo-eye.json` / mid-altitude poses are no longer a relevant
+  morphology comparison for p13. The `low-altitude.json` pose is the
+  match.
+- For step 2 / Task #53 (CZA apex anchors), the predicted CZA apex y is now
+  sun_y - R46 = 372 - 422 = -50 (above the image plane) at h = 6.8 deg.
+  Translation: the CZA, if visible in p13, would sit very high in the
+  frame. The photo is square-cropped and the upper edge is at y = 25,
+  so any CZA in p13 would be cropped. CZA apex route should be marked
+  "not applicable (cropped at low h)" for p13, leaving only p2 as the
+  eligible photo and forcing the route into a coverage-gate failure on the
+  current calibration set. Adding a fourth photo with visible CZA is the
+  cheapest way to reopen the route.
+- Tangent-arc curvature on p13 also needs re-evaluation at the new h;
+  the upper tangent's predicted radius and position both shift.
+
+Anchor file committed at `docs/calibration/p13-anchor.json`.
+
+Step 1 closes; step 2 / Task #53 is next as a p2 CZA measurement plus p13
+crop-verdict receipt, not as a two-photo CZA route promotion run.
