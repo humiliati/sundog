@@ -1118,6 +1118,23 @@ basin-inducing behavior still appears shared at the 5D control-surface
 level but pair-specific at simple top-32 neuron identity. Natural next
 branch: run pair-specific P->C masks on J1/J2.
 
+**Phase 6 v3.7 spec (2026-05-13, unstarted)** at
+[`mesa/PHASE6_V37_SPEC.md`](mesa/PHASE6_V37_SPEC.md). The closing
+test for the three-layer cross-policy table. One axis: Axis S
+(pair-specific own-mask functional ablation). For each held-out pair
+(J1, J2) and direction (P->C, C->P), use that pair's own v3.5-derived
+top-32 critical-neuron set in v3.4 Axis P. Four conditions total. Two
+load-bearing predictions plus two sanity-checks: **DD1/DD2** — J1's
+own P->C mask dissociates J1's P->C patch by >= 0.10 (and same for
+J2). If confirmed, basin induction has anatomically-grounded substrate
+within each policy even though the substrate identity is
+pair-specific. **DD3/DD4 (sanity)** — own C->P masks dissociate at
+or above the v3.6 cliff-mask transfer baseline (J1 >= 0.151,
+J2 >= 0.508). If sanity fails, deflates the v3.6 finding. No new
+harness code (reuses v3.4 `axis-p-substrate-ablation` with
+`--neuron-mask-source` pointing at v3.5 outputs). Compute: ~10 min,
+0 new PPO runs.
+
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
 [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md). The harness

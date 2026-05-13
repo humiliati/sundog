@@ -145,6 +145,19 @@ methods. See [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) for the
 full transfer, including the methodological lessons for Phase 10/11
 overlay tuning.
 
+**Forward/inverse asymmetry receipt *(added 2026-05-13).* Geometry Phase 10
+now has a concrete mesa-style residual split inside the in-the-wild substrate:
+on p2, the parhelion-offset route recovers sun altitude to ~1 px, while the
+CZA-apex route misses by 19.3 px in y even though the apex measurement is a
+clean parabola fit over ~400 edge points. The likely causes -- lens projection,
+low-altitude refraction, and atlas simplification -- all point in the same
+direction: the atlas can make a sharp forward prediction without making every
+inverse route equally recoverable. That is not a failure of the convergence
+claim; it is the geometry-side version of the Mesa lesson that the generator
+is a coupled field, not a set of independently separable linear handles. The
+CZA-apex inversion route still fails coverage on the current calibration set,
+so this paragraph is a methodological receipt rather than a promoted route.
+
 For now this stays inside the Gravity Claim rather than becoming a separate
 appendix. Promotion trigger: if Geometry Phase 10/11 produce quantitative
 per-inversion-route residuals that make the two-substrate convergence a

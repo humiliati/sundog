@@ -1366,16 +1366,18 @@ lower-tangent-as-core, supralateral-as-inversion-route, and any linear
 arc-importance attribution metric — is in the same notes file.
 
 Phase 11 can proceed against the visibility-promoted vocabulary now; the
-remaining inversion-route slots reopen only when the relevant coverage exists:
-Task #53 can still record a p2 CZA apex receipt, but CZA-route promotion needs
-an added CZA-visible calibration photo; tangent curvature can continue through
-p2 / p7 / p13 sampling. Phase 11 can start in parallel on the already promoted
-visibility vocabulary. Task #52/53 also feeds the downstream perception roadmap
-(`SUNDOG_V_PERCEPTION.md`) because independent CZA/tangent inversion routes
-would strengthen the later predicted-then-observed receipt. The next
-operational step is to run the p2 CZA measurement as a single-photo receipt,
-record p13 as cropped/not applicable, and scope a calibration-set expansion
-before treating CZA apex as a promotable inversion route.
+remaining inversion-route slots reopen only when the relevant coverage exists.
+Task #53 has recorded the p2 CZA-apex receipt: parhelion-offset inversion is
+~1 px on the same photo, while CZA-apex y residual is 19.3 px, so the result is
+a forward/inverse asymmetry receipt rather than a promoted route. CZA-route
+promotion needs an added CZA-visible calibration photo; tangent curvature can
+continue through p2 / p7 / p13 sampling. Phase 11 can start in parallel on the
+already promoted visibility vocabulary. Task #52/53 also feeds the downstream
+perception roadmap (`SUNDOG_V_PERCEPTION.md`) because independent CZA/tangent
+inversion routes would strengthen the later predicted-then-observed receipt.
+The next operational step is Task #54: tangent-arc curvature sampling, with
+CZA expansion scoped separately before treating CZA apex as a promotable
+inversion route.
 
 ### Phase 11 - Characterized Logo & Animation Toolkit
 

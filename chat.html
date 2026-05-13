@@ -465,7 +465,7 @@
             <article class="lead-framing">
                 <p class="eyebrow">Lead framing</p>
                 <p>
-                    Zero gate escapes across 420 drafts is the <strong>safety floor</strong> — necessary but not the point. The 100 percentage-point gap between trace-conditioned and prompt-engineered baselines at severe pressure is the <strong>experimental result</strong>.
+                    Zero gate escapes across <strong>3,495 trials</strong> spanning two backends, 96 cells of (prompt type × severity × evidence tier × model family), and 8 trace-field ablations is the <strong>safety floor</strong> — necessary but not the point. The 100 percentage-point gap between trace-conditioned and prompt-engineered baselines at severe pressure is the <strong>experimental result</strong>.
                 </p>
             </article>
 
@@ -542,6 +542,33 @@
                 </p>
             </section>
 
+            <section class="content-section">
+                <h2>The result has been verified across two backends and 96 cells.</h2>
+                <p class="section-note">Phase 5b/5c hosted-adapter replication + Phase 7 operating envelope</p>
+                <div class="body">
+                    <p>
+                        The table above is the original deterministic result. Two follow-on phases stress-tested it from different directions, and the safety floor held in both.
+                    </p>
+                    <ul>
+                        <li>
+                            <strong>Phase 5b: hosted-model replication.</strong>
+                            A hosted LLM (<code>gpt-4o-mini</code>, temperature 0) drafting against a heavy-trace system prompt reaches the same outcome — <strong>16/16 differential and 59/59 adversarial accepted, zero gate escapes</strong>. The hosted run also surfaced a silent over-rejection failure mode in the original gate: when the model produced explicit-boundary refusals like "the trace does not support claims about X", the gate's string-presence <code>forbidden:</code> check flagged them as failures. The fix was negation-aware content rules (mirrored from <code>UNSUPPORTED_CLAIMS</code>'s existing guard); after the patch, deterministic baselines re-verified intact. The architecture survives backend replacement.
+                        </li>
+                        <li>
+                            <strong>Phase 5c: causal intervention battery, both backends.</strong>
+                            Eight one-factor-at-a-time mutations of <code>trace.boundary</code>, <code>trace.evidenceTier</code>, <code>trace.support</code>, <code>trace.routeId</code>, <code>trace.disposition</code>, and <code>trace.retrieved</code>, run on both the deterministic compositor and the hosted family across differential and adversarial slates. The two backends reach the same headline (zero unsafe-accepts) by <em>different</em> causal mechanisms: the deterministic compositor's only load-bearing trace field is <code>trace.routeId</code> (via the answer-template lookup); the hosted model is sensitive to <code>trace.evidenceTier</code>, <code>trace.routeId</code>, and <code>trace.support</code> under severity stacking. Both safe; different causal paths to the safety.
+                        </li>
+                        <li>
+                            <strong>Phase 7: operating envelope.</strong>
+                            All trials from Phases 3 / 4 / 5 / 5b / 5c re-projected into a unified cell-class-map: <strong>3,495 trials, 96 unique cells</strong> covering (prompt type × severity × evidence tier × model family). Boundary preservation rate is <strong>1.000 across every cell</strong> of every family. Cells where the architecture is in scope all hold; cells out of scope (corpus conflict, retrieval depth ≠ k=3, hidden trace, offline mode, vendors other than OpenAI) are named explicitly in <code>results/chat/operating-envelope/manifest.json</code>.
+                        </li>
+                    </ul>
+                    <p>
+                        The §13 ratchet that started as "the trace-conditioned scaffold preserves discipline better than a generic boundary prefix" now reads more precisely: <strong>zero unsafe-accepts across 3,495 trials, two backends, eight trace-field ablations, three prompt-type slates, and four severity levels — bounded to this corpus, retrieval depth k=3, visible trace, browser_live, single hosted vendor.</strong>
+                    </p>
+                </div>
+            </section>
+
             <aside class="non-claims" aria-label="What this does not show">
                 <p class="eyebrow">Honesty surface</p>
                 <h2>What this does not show.</h2>
@@ -558,8 +585,8 @@
                         Some injection prompts in our slate were caught; others routed to clean refusals. We did not run a comprehensive prompt-injection battery.
                     </li>
                     <li>
-                        <strong>It does not show that real hosted-model adapters reproduce the separation.</strong>
-                        The B2 and S1 families in this experiment are deterministic implementations — they don't call a hosted model. The architectural advantage we measured is between two deterministic compositors. Whether a hosted model with a trace-shaped system prompt achieves the same separation remains an open question inherited by Phase 5.
+                        <strong>It does not show that every hosted-model family reproduces the separation.</strong>
+                        We've now verified the deterministic result holds when a hosted LLM (<code>gpt-4o-mini</code>) is dropped into the same trace-conditioned harness: 16/16 differential and 59/59 adversarial pass with zero gate escapes after the gate's negation-aware content rules were tightened. The hosted causal-authority profile differs from the deterministic compositor's — under severity stacking the model becomes sensitive to <code>trace.routeId</code>, <code>trace.evidenceTier</code>, and <code>trace.support</code> via different mechanisms — but the safety floor holds. The result is bounded to one hosted vendor, one model, and one temperature. Cross-vendor (Claude family) is the open thread.
                     </li>
                     <li>
                         <strong>It does not show mesa-optimization absence or reward-hacking absence.</strong>
@@ -613,7 +640,16 @@
                             <strong>The full prompt slates</strong> are at <code>chat/prompts/gold-*.jsonl</code> — in-corpus (103), wild (30), adversarial (59), and differential (16).
                         </li>
                         <li>
-                            <strong>The deterministic harness</strong> is at <code>chat/eval/score_phase4_probe_slate.mjs</code>. Running it produces every CSV referenced on this page.
+                            <strong>The deterministic Phase 3 / 4 harness</strong> is at <code>chat/eval/score_phase3_drafts.mjs</code>. Running it produces the per-slate draft-outcomes CSVs.
+                        </li>
+                        <li>
+                            <strong>The Phase 5 intervention battery</strong> lives at <code>chat/eval/run_phase5_interventions.mjs</code> (with <code>--hosted</code> for the OpenAI variant) and <code>chat/eval/aggregate_interventions.mjs</code>.
+                        </li>
+                        <li>
+                            <strong>The Phase 5b hosted runner</strong> is at <code>chat/eval/run_hosted_drafts.mjs</code>; it accepts <code>--backend openai</code> (real API call) or <code>--backend mock</code> (deterministic stub for CI). The heavy-trace system prompt is documented in <code>chat/eval/lib/adapters/openai-adapter.mjs</code>.
+                        </li>
+                        <li>
+                            <strong>The Phase 7 operating-envelope map</strong> is at <code>chat/eval/aggregate_operating_envelope.mjs</code>. Running it reads every per-phase trial-outcome file and emits the unified <code>results/chat/operating-envelope/cell-class-map.csv</code> and the two heatmaps cited above.
                         </li>
                         <li>
                             <strong>The full eval output</strong>, including representative transcripts, lives under <code>results/chat/</code>.
@@ -627,25 +663,31 @@
 
             <section class="content-section">
                 <h2>What we are doing next</h2>
-                <p class="section-note">Open questions and Phase 5 work</p>
+                <p class="section-note">Open questions after Phases 5b / 5c / 7</p>
                 <div class="body">
-                    <p>Two named follow-ups, both deferred to later phases of the roadmap.</p>
+                    <p>The two largest deferred questions when this page first shipped — "does the result reproduce on a hosted model?" and "which trace fields are causally load-bearing?" — both have empirical answers now. Three new follow-ups inherit the open thread.</p>
                     <div class="followup-grid">
                         <article class="followup-card">
-                            <h3>Hosted-model adapter</h3>
+                            <h3>Cross-vendor replication</h3>
                             <p>
-                                The deterministic separation we measured is the ceiling of what trace-conditioned drafting can achieve when the compositor uses the trace optimally. A real hosted model may or may not match that ceiling. Phase 5 inherits this question.
+                                The hosted run was on a single model family (<code>gpt-4o-mini</code>). The Claude family has different training-data and refusal characteristics; whether <code>trace.evidenceTier</code> remains the only weak-authority handle on hosted Claude, or whether a different trace field surfaces, is the most direct cross-vendor test.
                             </p>
                         </article>
                         <article class="followup-card">
-                            <h3>Causal interventions</h3>
+                            <h3>Corpus-conflict sweep (stale-doc)</h3>
                             <p>
-                                Right now we know the trace beats the prompt prefix. We don't yet know <em>which trace field</em> is load-bearing — boundary array, support array, tier label, or route ID. The Phase 5 causal-intervention battery is designed to isolate this.
+                                Phase 5 reserved <code>stale_doc_capture</code> as a named failure mode but ran no trials. A purpose-built slate that mutates a chunk's text to disagree with the claim-map would close one of the four axes that the Phase 7 cell-class-map currently lists as gap rather than coverage.
+                            </p>
+                        </article>
+                        <article class="followup-card">
+                            <h3>Gate-rule negation lexicon</h3>
+                            <p>
+                                Four of the seven hosted-adversarial flips were gate-brittleness around English negation idioms ("currently pending", "is categorized as", "part of a roadmap") not yet in the gate's <code>hasNearbyNegation</code> set. These are not unsafe-accepts — they are safe-rejects. Mopping them up tightens the false-rejection rate without affecting the safety floor.
                             </p>
                         </article>
                     </div>
                     <p class="closing-invite">
-                        We welcome attempts to falsify the result: new prompt slates, different corpora, and independent reruns are exactly the pressure this claim should face. File an issue, fork the repo, or run the harness with your own probes. The experiment gets stronger when someone outside the team examines it.
+                        We welcome attempts to falsify the result: new prompt slates, different corpora, different vendors, and independent reruns are exactly the pressure this claim should face. File an issue, fork the repo, or run the harness with your own probes. The experiment gets stronger when someone outside the team examines it.
                     </p>
                 </div>
             </section>
