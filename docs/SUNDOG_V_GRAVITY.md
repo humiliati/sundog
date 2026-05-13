@@ -465,29 +465,39 @@ has now produced an in-vitro bounded operating-envelope receipt:
   across the cliff pair (L-Mixed-M-`λ=0.95` vs L-Mixed-M-`λ=0.97`)
   clears the pre-registered patch-success threshold (`>0.8` in both
   directions) only at `net.7`, the actor's final hidden activation.
-- **Mechanistic locus shape (Phase 6 v2 -> v3.3, 2026-05-12).** The
+- **Mechanistic locus shape (Phase 6 v2 -> v3.4, 2026-05-13).** The
   basin-attractor circuit at the actor's final hidden activation
   (`net.7`) is **a small handful of generators, irreducibly entangled,
-  only legible as a whole** -- five rounds of mechanistic probing
-  converged on the same shape: (v3) PCA compresses the relevant
-  subspace to 5 components capturing 97.4% of variance and reproducing
-  v1 full-layer patch effect (51x compression). (v3.1) those 5
-  components are jointly necessary; no proper subset reproduces the
-  patch. (v3.2) linear additive top-k neuron restriction by L2
-  destroys the mechanism even with the correct basis (top-32 captures
-  33.6% of L2, delivers 0% of patch effect). (v3.3) no single critical
-  neuron (max ablation cost <= 0.10), and the basin-inducing and
-  basin-resisting sub-circuits occupy **nearly-disjoint neuron
-  substrates** at `net.7` (Jaccard ~ 0.05 between directions on
-  top-32 ablation-rank sets) -- directional asymmetry has an
-  anatomical signature. Four stacked methodological lessons documented
-  along the way: feature-availability rankings are not mechanism
-  rankings; variance is not mechanism; linear additive top-k
-  restriction destroys mechanism even with the correct basis; single-
-  neuron ablation does not surface a critical subset. The basin-
-  inducing direction generalizes strongly across held-out Medium pairs
-  (v3.1 J1/J2 P->C >= 0.94); basin-resistance is weaker under transfer
-  and appears policy-specific.
+  only legible as a whole** -- six rounds of mechanistic probing
+  converged on the same shape: (v3) PCA compresses to 5 components
+  capturing 97.4% of variance and reproducing v1 full-layer patch
+  effect (51x compression). (v3.1) those 5 components are jointly
+  necessary; no proper subset reproduces the patch. (v3.2) linear
+  additive top-k neuron restriction by L2 destroys the mechanism
+  (top-32 captures 33.6% of L2, delivers 0% of patch effect). (v3.3)
+  no single critical neuron (max ablation cost <= 0.10), and the
+  basin-inducing and basin-resisting top-32 ablation-rank sets are
+  nearly-disjoint (Jaccard ~ 0.05). (v3.4) **set-level substrate-
+  restricted ablation of those top-32 sets dissociates patch_success
+  functionally** -- each direction's substrate preferentially
+  disrupts its own direction (P->C drop 0.077, C->P drop 0.579) and
+  slightly *improves* the other (functional opposition); bootstrap
+  95% CI on cross-direction ranking overlap is [0.016, 0.085], robust
+  near-disjointness. The basin-resisting substrate is also ~4x more
+  anatomically tight (dissociation 0.662 vs 0.174) and overlaps the
+  v3.2 L2-rank top-32 substantially (Jaccard 0.333) while
+  basin-inducing does not (0.049). Within-policy functional
+  dissociation (v3.4) and cross-policy generalization asymmetry (v3.1)
+  point at one structural fact: **basin-inducing machinery is shared
+  across the Medium controller family but distributed within any one
+  policy; basin-resisting machinery is policy-specific but
+  anatomically tight within each policy.** Five stacked methodological
+  lessons documented along the way: feature-availability rankings are
+  not mechanism rankings; variance is not mechanism; linear additive
+  top-k restriction destroys mechanism even with the correct basis;
+  single-neuron ablation does not surface a critical subset; *but*
+  set-level ablation along basis-derived rankings does surface
+  direction-specific structure that the single-neuron methods missed.
 - **Same shape, second substrate.** The Sundog geometry program's
   parhelion atlas independently committed to "small set of complete
   implied circles, read holistically" -- structurally the same object

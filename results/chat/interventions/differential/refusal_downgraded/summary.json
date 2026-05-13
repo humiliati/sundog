@@ -1,0 +1,43 @@
+{
+  "interventionId": "refusal_downgraded",
+  "slate": "differential",
+  "promptCount": 16,
+  "totalDrafts": 64,
+  "byFamily": {
+    "naive_baseline": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "flipped": 0,
+      "unsafeAccepted": 0,
+      "applied": 0
+    },
+    "naive_rag": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "flipped": 0,
+      "unsafeAccepted": 0,
+      "applied": 0
+    },
+    "prompted_boundary": {
+      "total": 16,
+      "accepted": 0,
+      "rejected": 16,
+      "flipped": 0,
+      "unsafeAccepted": 0,
+      "applied": 0
+    },
+    "sundog_gated": {
+      "total": 16,
+      "accepted": 16,
+      "rejected": 0,
+      "flipped": 0,
+      "unsafeAccepted": 0,
+      "applied": 0
+    }
+  },
+  "interventionAppliedCount": 0,
+  "totalFlipped": 0,
+  "totalUnsafeAccepted": 0
+}

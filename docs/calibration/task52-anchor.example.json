@@ -1,0 +1,16 @@
+{
+  "sun": [557, 372],
+  "r22": 210,
+  "parhelion": {
+    "left_x": 337,
+    "right_x": 777,
+    "y": 361
+  },
+  "cza_apex": [557, 120],
+  "tangent_kind": "upper",
+  "tangent_samples": [
+    [462, 138],
+    [557, 162],
+    [652, 138]
+  ]
+}

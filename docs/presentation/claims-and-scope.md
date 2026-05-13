@@ -312,30 +312,41 @@ piecemeal, because the parts qualify each other:
   toy family up to the measured boundary.
 - **Mechanistic anchor:** the basin attractor at the actor's final hidden
   activation (`net.7`) is **a small handful of generators, irreducibly
-  entangled, only legible as a whole**. Five rounds of mechanistic probing
-  (Phase 6 v1 -> v3.3) converged on this shape: (v1) layer patching
-  localizes the cliff to `net.7`; earlier layers do not clear the
-  threshold. (v3) PCA on per-step matched-seed diffs compresses the
-  relevant subspace to 5 principal components capturing 97.4% of variance
-  and reproducing v1 full-layer patch effect (51x compression). (v3.1)
-  those 5 components are jointly necessary; no proper subset reproduces
-  the patch -- entangled, not factorable. (v3.2) linear additive top-k
-  neuron restriction destroys the mechanism even with the correct basis
-  -- top-32 neurons by L2 capture 33.6% of basis L2 and deliver 0%
-  patch effect. (v3.3) no single critical neuron -- max per-neuron
-  zero-ablation cost <= 0.10 in either direction. Additionally, the
-  basin-inducing (P->C) and basin-resisting (C->P) sub-circuits occupy
-  nearly-disjoint neuron substrates at `net.7` (top-32 ablation-rank
-  Jaccard ~ 0.05 between directions), so the directional asymmetry
-  established behaviorally in v3.1 has an anatomical signature. Four
-  methodological lessons stack out of the five rounds, each a documented
-  reason the obvious linear-interpretability toolkit doesn't work for
-  field-shaped circuits: (1) feature-availability rankings are not
-  mechanism rankings (SAE at |corr|=0.89 produced zero patch effect);
-  (2) variance is not mechanism (PC1: 38.8% variance, 0% patch effect);
-  (3) linear additive top-k subspace restriction destroys mechanism
-  even with the correct basis; (4) single-neuron ablation does not
-  surface a critical subset. The same shape appears in a second program
+  entangled, only legible as a whole**. Six rounds of mechanistic probing
+  (Phase 6 v1 -> v3.4) converged on this shape: (v1) layer patching
+  localizes the cliff to `net.7`. (v3) PCA on per-step matched-seed
+  diffs compresses the relevant subspace to 5 principal components
+  capturing 97.4% of variance and reproducing v1 full-layer patch effect
+  (51x compression). (v3.1) those 5 components are jointly necessary; no
+  proper subset reproduces the patch -- entangled, not factorable.
+  (v3.2) linear additive top-k neuron restriction by L2 destroys the
+  mechanism (top-32 captures 33.6% of L2, delivers 0% of patch effect).
+  (v3.3) no single critical neuron (max ablation cost <= 0.10 in either
+  direction). (v3.4) but **set-level** substrate-restricted ablation of
+  v3.3's P->C and C->P top-32 critical sets dissociates patch_success
+  functionally and statistically: each direction's substrate
+  preferentially disrupts its own direction (P->C drop 0.077, C->P drop
+  0.579) and slightly *improves* the other (functional opposition, not
+  null); bootstrap 95% CI on the cross-direction ranking overlap is
+  [0.016, 0.085] -- robust near-disjointness. The basin-resisting
+  substrate is also more anatomically tight (4x dissociation magnitude)
+  and overlaps the v3.2 L2-rank top-32 substantially (Jaccard 0.333),
+  while the basin-inducing substrate does not (Jaccard 0.049) -- which
+  retroactively explains why v3.2's L2-rank-based top-k restriction
+  failed harder on the basin-inducing direction. Within-policy
+  functional dissociation (v3.4) and cross-policy generalization
+  asymmetry (v3.1) point at one structural fact: *basin-inducing
+  machinery is shared across the controller family but distributed
+  within any one policy; basin-resisting machinery is policy-specific
+  but anatomically tight.* Five methodological lessons stack out of the
+  six rounds: (1) feature-availability rankings are not mechanism
+  rankings (SAE at |corr|=0.89 -> 0% patch); (2) variance is not
+  mechanism (PC1: 38.8% variance, 0% patch); (3) linear additive top-k
+  subspace restriction destroys mechanism even with the correct basis;
+  (4) single-neuron ablation does not surface a critical subset; (5)
+  but set-level ablation along basis-derived rankings does -- single
+  neurons are weak, while direction-specific substrates are
+  functionally separable. The same shape appears in a second program
   substrate -- the Sundog geometry program's parhelion atlas
   independently arrived at "small set of complete implied circles, read
   holistically" -- reinforcing the field-not-reward framing across

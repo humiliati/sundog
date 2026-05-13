@@ -181,12 +181,16 @@ Practical first move: open
 `docs/calibration/13.480859565_17934474635991868_323320248088719839_n.jpg`
 in an annotation tool and re-measure the four parhelion-offset anchors
 before touching CZA or tangent samples. `scripts/overlay_calibrate.py`
-currently accepts the relevant p13 anchor inputs via CLI flags
-(`--sun`, `--r22`, `--parhelion-left`, `--parhelion-right`,
-`--parhelion-y`, and `--parhelion-offset`) and already supports
-`--cza-apex X,Y`. For step 3 it still needs either tangent-sample flags
-such as `--tangent-samples X1,Y1;X2,Y2;X3,Y3` or a JSON-anchor mode that
-can carry p13 parhelion anchors, CZA apex, and tangent samples together.
+now supports both paths needed for Task #52:
+
+- existing CLI anchors: `--sun`, `--r22`, `--parhelion-left`,
+  `--parhelion-right`, `--parhelion-y`, `--parhelion-offset`, and
+  `--cza-apex X,Y`;
+- new Task #52 anchors: `--anchors PATH`, `--tangent-samples
+  "X1,Y1;X2,Y2;X3,Y3"`, and `--tangent-kind upper|lower`.
+
+Use `docs/calibration/task52-anchor.example.json` as the JSON-anchor shape
+when carrying p13 parhelion anchors, CZA apex, and tangent samples together.
 
 ### Escalation rule (added with the 2026-05-13 verdict)
 
