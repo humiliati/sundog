@@ -24,6 +24,8 @@ function extractJsonLd(html) {
 
 const html = await readFile(join(root, "sundog.html"), "utf8");
 const upload = await readFile(join(root, "public/js/photo-upload.mjs"), "utf8");
+const workbench = await readFile(join(root, "public/js/parhelion-workbench.mjs"), "utf8");
+const phase6Drag = await readFile(join(root, "public/js/phase6-drag.mjs"), "utf8");
 const sitemap = await readFile(join(root, "public/sitemap.xml"), "utf8");
 const robots = await readFile(join(root, "public/robots.txt"), "utf8");
 
@@ -46,6 +48,7 @@ ok(html.includes('name="twitter:card"'), "missing Twitter card");
 ok(html.includes('id="photo-upload-mount"'), "missing Phase 5 upload mount");
 ok(html.includes("Show advanced controls"), "missing advanced-controls reveal");
 ok(html.includes("33 assertions"), "Phase 3 assertion count is stale");
+ok(html.includes("phase6-handle-parhelic-apex"), "missing Phase 6 parhelic apex handle styling");
 
 const jsonLd = extractJsonLd(html);
 const learningResource = jsonLd.find((item) => item["@type"] === "LearningResource");
@@ -69,6 +72,9 @@ ok(upload.includes('fetch("/api/sundog/health"'), "photo upload missing health p
 ok(upload.includes('fetch("/api/sundog/upload"'), "photo upload missing upload POST");
 ok(upload.includes("canvas.toBlob"), "photo upload missing canvas EXIF-strip path");
 ok(upload.includes("sundog.submissions"), "photo upload missing deletion-url localStorage retention");
+ok(workbench.includes("enablePhase6Drag"), "workbench missing Phase 6 drag wiring");
+ok(phase6Drag.includes("data-phase6-binding") && phase6Drag.includes('binding: "parhelic-curvature"'), "Phase 6 drag missing parhelic curvature binding");
+ok(phase6Drag.includes("phase3.daggerOffset"), "Phase 6 drag missing sun-altitude dagger binding");
 ok(sitemap.includes("https://sundog.cc/sundog.html"), "sitemap missing sundog.html");
 ok(robots.includes("Sitemap: https://sundog.cc/sitemap.xml"), "robots.txt missing sitemap pointer");
 

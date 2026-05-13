@@ -1,5 +1,5 @@
 import { applyParhelionGeometry, phase3 } from "./parhelion-geometry.mjs";
-import { enableParhelionDrag } from "./phase6-drag.mjs";
+import { enablePhase6Drag } from "./phase6-drag.mjs";
 
 const root = document.documentElement;
 const rootStyle = () => getComputedStyle(root);
@@ -111,9 +111,17 @@ snapshot?.addEventListener("click", () => {
   }
 });
 
-// --- Phase 6 (light): parhelion drag → sun-altitude --------------------
+// --- Phase 6: drag rendered primitives back into bound parameters ---------
 const sunAltSlider = document.getElementById("sun-altitude");
-if (svg && sunAltSlider) enableParhelionDrag(svg, sunAltSlider);
+const parhelicYOffsetSlider = document.getElementById("parhelic-y-offset-r22");
+if (svg) {
+  enablePhase6Drag(svg, {
+    sunAltitudeSlider: sunAltSlider,
+    parhelicCurvatureSlider: curvatureSlider,
+    parhelicYOffsetSlider: parhelicYOffsetSlider,
+    deriveToggle: deriveToggle,
+  });
+}
 
 // Initial layout
 apply();
