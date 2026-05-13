@@ -35,6 +35,7 @@ import torch.nn as nn
 
 from training.mesa.js_bridge_env import BridgeClient, REPO_ROOT
 from training.mesa.phase6_probes import (
+    CHECKPOINT_DIR,
     CLIFF_COLLAPSED,
     CLIFF_PROTECTED,
     PolicySpec,
@@ -53,6 +54,68 @@ from training.mesa.phase6_probes import (
 
 
 PHASE6_V2_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v2-direction"
+PHASE6_V31_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-1-validation"
+
+
+V31_POLICY_SPECS: dict[str, PolicySpec] = {
+    "signature_terminal_medium": PolicySpec(
+        policy_id="signature_terminal_medium",
+        label="L-Sig-Terminal-M",
+        kind="learned",
+        checkpoint=CHECKPOINT_DIR / "signature_ppo_terminal_medium_seed_0_medium_phase5_terminal_10m.pt",
+        sensor_tier="local-probe-field",
+    ),
+    "reward_lambda_1_0_medium_anchor": PolicySpec(
+        policy_id="reward_lambda_1_0_medium_anchor",
+        label="L-Reward-M lambda=1.0 anchor",
+        kind="learned",
+        checkpoint=CHECKPOINT_DIR / "reward_ppo_phase3_medium_seed_0_medium_phase3_canonical_10m.pt",
+        sensor_tier="local-probe-field",
+    ),
+    "mixed_lambda_0_9_medium_v3": PolicySpec(
+        policy_id="mixed_lambda_0_9_medium_v3",
+        label="L-Mixed-M lambda=0.9 v3",
+        kind="learned",
+        checkpoint=CHECKPOINT_DIR / "mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v3_lambda_0_9_10m.pt",
+        sensor_tier="local-probe-field",
+    ),
+    "mixed_lambda_0_99_medium_v4": PolicySpec(
+        policy_id="mixed_lambda_0_99_medium_v4",
+        label="L-Mixed-M lambda=0.99 v4",
+        kind="learned",
+        checkpoint=CHECKPOINT_DIR / "mixed_ppo_phase3_lambda_0_9_medium_seed_0_medium_phase5_v4_lambda_0_99_10m.pt",
+        sensor_tier="local-probe-field",
+    ),
+    "signature_terminal": PolicySpec(
+        policy_id="signature_terminal",
+        label="L-Sig-Terminal-S",
+        kind="learned",
+        checkpoint=CHECKPOINT_DIR / "signature_ppo_terminal_small_seed_0_phase5.pt",
+        sensor_tier="local-probe-field",
+    ),
+    "curriculum_reward_then_terminal_sig_v3": PolicySpec(
+        policy_id="curriculum_reward_then_terminal_sig_v3",
+        label="Curriculum reward-then-terminal-sig v3",
+        kind="learned",
+        checkpoint=CHECKPOINT_DIR / "curriculum_reward_then_terminal_sig_small_seed_0_phase5_v3_reward_pre_terminal_sig_ft_500k.pt",
+        sensor_tier="local-probe-field",
+    ),
+}
+
+V31_GENERALIZATION_PAIRS: dict[str, tuple[PolicySpec, PolicySpec]] = {
+    "J1": (
+        V31_POLICY_SPECS["signature_terminal_medium"],
+        V31_POLICY_SPECS["reward_lambda_1_0_medium_anchor"],
+    ),
+    "J2": (
+        V31_POLICY_SPECS["mixed_lambda_0_9_medium_v3"],
+        V31_POLICY_SPECS["mixed_lambda_0_99_medium_v4"],
+    ),
+    "J3": (
+        V31_POLICY_SPECS["signature_terminal"],
+        V31_POLICY_SPECS["curriculum_reward_then_terminal_sig_v3"],
+    ),
+}
 
 
 # ============================================================
@@ -867,7 +930,7 @@ def axis_e_direction_patch(args: argparse.Namespace) -> None:
             f"  {cmp['direction']}: "
             f"v1_median={cmp['v1_layer_patch_median']:.3f} -> "
             f"v2_median={cmp['v2_direction_patch_median']:.3f} "
-            f"(Δ={cmp['v2_minus_v1_median']:+.3f})",
+            f"(delta={cmp['v2_minus_v1_median']:+.3f})",
             flush=True,
         )
 
@@ -901,6 +964,160 @@ def build_orthonormal_subspace(directions: np.ndarray) -> tuple[np.ndarray, int]
         raise RuntimeError("input directions matrix is degenerate")
     Q_eff = Q[:, :rank].astype(np.float32)
     return Q_eff, int(rank)
+
+
+def read_csv_rows(path: Path) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8", newline="") as f:
+        return list(csv.DictReader(f))
+
+
+def activation_dim(policy: torch.nn.Module, obs_mean: np.ndarray, layer: str) -> int:
+    captured: list[np.ndarray] = []
+    module = get_module(policy, layer)
+
+    def hook(_module: nn.Module, _inputs: tuple[Any, ...], output: torch.Tensor) -> None:
+        captured.append(output.detach().cpu().numpy().copy())
+
+    handle = module.register_forward_hook(hook)
+    try:
+        obs = torch.tensor(obs_mean[None, :], dtype=torch.float32)
+        with torch.no_grad():
+            _ = policy(obs)
+    finally:
+        handle.remove()
+    if not captured:
+        raise RuntimeError(f"layer {layer!r} did not emit an activation")
+    return int(captured[0].shape[-1])
+
+
+def validate_subspace_compatible(
+    *,
+    Q_np: np.ndarray,
+    layer: str,
+    protected_policy: torch.nn.Module,
+    protected_mean: np.ndarray,
+    protected_spec: PolicySpec,
+    collapsed_policy: torch.nn.Module,
+    collapsed_mean: np.ndarray,
+    collapsed_spec: PolicySpec,
+) -> None:
+    q_dim = int(Q_np.shape[0])
+    protected_dim = activation_dim(protected_policy, protected_mean, layer)
+    collapsed_dim = activation_dim(collapsed_policy, collapsed_mean, layer)
+    if protected_dim != q_dim or collapsed_dim != q_dim:
+        raise ValueError(
+            "subspace dimension mismatch: "
+            f"Q has dim {q_dim}, {protected_spec.policy_id} {layer} has dim {protected_dim}, "
+            f"{collapsed_spec.policy_id} {layer} has dim {collapsed_dim}. "
+            "This usually means a Medium cliff-pair basis is being applied to a Small-tier policy."
+        )
+
+
+def compute_cliff_pca_basis(
+    *,
+    seed_start: int,
+    seeds: int,
+    horizon: int,
+    num_components: int,
+) -> tuple[np.ndarray, dict[str, Any], list[dict[str, Any]]]:
+    print("phase6 v3.1: collecting matched-seed cliff-pair net.7 activations for PCA basis", flush=True)
+    protected_acts = collect_cliff_activations(
+        CLIFF_PROTECTED,
+        seed_start=seed_start,
+        seeds=seeds,
+        horizon=horizon,
+    )
+    collapsed_acts = collect_cliff_activations(
+        CLIFF_COLLAPSED,
+        seed_start=seed_start,
+        seeds=seeds,
+        horizon=horizon,
+    )
+
+    diffs: list[np.ndarray] = []
+    protected_by_seed: dict[int, list[np.ndarray]] = {}
+    collapsed_by_seed: dict[int, list[np.ndarray]] = {}
+    for seed, h in zip(protected_acts.seeds.tolist(), protected_acts.net7):
+        protected_by_seed.setdefault(int(seed), []).append(h)
+    for seed, h in zip(collapsed_acts.seeds.tolist(), collapsed_acts.net7):
+        collapsed_by_seed.setdefault(int(seed), []).append(h)
+    for seed in protected_by_seed.keys() & collapsed_by_seed.keys():
+        prot_arr = np.stack(protected_by_seed[seed])
+        coll_arr = np.stack(collapsed_by_seed[seed])
+        n = min(prot_arr.shape[0], coll_arr.shape[0])
+        if n:
+            diffs.append(coll_arr[:n] - prot_arr[:n])
+    diff_matrix = np.concatenate(diffs, axis=0).astype(np.float32)
+    diff_centered = diff_matrix - diff_matrix.mean(axis=0, keepdims=True)
+    _U, S, Vt = np.linalg.svd(diff_centered, full_matrices=False)
+    k_use = min(int(num_components), Vt.shape[0])
+    Q_np = Vt[:k_use, :].T.astype(np.float32)
+    Q_np, k_eff = build_orthonormal_subspace(Q_np)
+
+    total_var = float((S ** 2).sum())
+    captured = float((S[:k_use] ** 2).sum()) / max(total_var, 1e-12)
+    var_rows = []
+    cumulative_var = 0.0
+    for i, s in enumerate(S):
+        cumulative_var += float(s) ** 2
+        var_rows.append({
+            "rank": i + 1,
+            "singular_value": float(s),
+            "variance": float(s) ** 2,
+            "cumulative_variance_fraction": cumulative_var / max(total_var, 1e-12),
+        })
+    metadata = {
+        "source": "recomputed_from_axis_h_matched_activation_collection",
+        "seed_start": int(seed_start),
+        "seeds": int(seeds),
+        "horizon": int(horizon),
+        "layer": "net.7",
+        "num_components_requested": int(num_components),
+        "k_used": int(k_use),
+        "k_eff": int(k_eff),
+        "diff_matrix_shape": list(diff_matrix.shape),
+        "total_variance": total_var,
+        "variance_captured_top_K": captured,
+    }
+    return Q_np, metadata, var_rows[:min(64, len(var_rows))]
+
+
+def load_or_build_cliff_pca_basis(
+    *,
+    out_root: Path,
+    seed_start: int,
+    seeds: int,
+    horizon: int,
+    num_components: int = 5,
+) -> tuple[np.ndarray, dict[str, Any]]:
+    basis_dir = out_root / "pca-basis"
+    basis_dir.mkdir(parents=True, exist_ok=True)
+    stem = f"cliff-pca-net7-seed{seed_start}-n{seeds}-h{horizon}-k{num_components}"
+    basis_path = basis_dir / f"{stem}.npz"
+    manifest_path = basis_dir / f"{stem}.manifest.json"
+    variance_path = basis_dir / f"{stem}.variance.csv"
+    if basis_path.exists() and manifest_path.exists():
+        data = np.load(basis_path)
+        Q_np = data["Q"].astype(np.float32)
+        metadata = json.loads(manifest_path.read_text(encoding="utf-8"))
+        print(f"phase6 v3.1: loaded cached PCA basis from {basis_path.relative_to(REPO_ROOT)}", flush=True)
+        return Q_np, metadata
+
+    Q_np, metadata, var_rows = compute_cliff_pca_basis(
+        seed_start=seed_start,
+        seeds=seeds,
+        horizon=horizon,
+        num_components=num_components,
+    )
+    np.savez_compressed(basis_path, Q=Q_np)
+    manifest_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_csv(variance_path, var_rows)
+    print(
+        f"phase6 v3.1: cached PCA basis at {basis_path.relative_to(REPO_ROOT)} "
+        f"(K_eff={metadata['k_eff']}, variance={metadata['variance_captured_top_K']:.3%})",
+        flush=True,
+    )
+    return Q_np, metadata
 
 
 def run_subspace_recording_rollout(
@@ -1052,20 +1269,32 @@ def run_subspace_patch_battery(
     layer: str,
     out_dir: Path,
     manifest_extra: dict[str, Any],
+    protected_spec: PolicySpec = CLIFF_PROTECTED,
+    collapsed_spec: PolicySpec = CLIFF_COLLAPSED,
 ) -> None:
     """Run the 4-forward direction-patch battery using subspace Q across the
     matched seed slate. Writes per-seed CSV, aggregate CSV, and v1-comparison
     CSV under out_dir."""
     Q = torch.tensor(Q_np, dtype=torch.float32)
     K_eff = int(Q_np.shape[1])
-    protected_policy, protected_mean, protected_std = load_learned_policy(CLIFF_PROTECTED)
-    collapsed_policy, collapsed_mean, collapsed_std = load_learned_policy(CLIFF_COLLAPSED)
+    protected_policy, protected_mean, protected_std = load_learned_policy(protected_spec)
+    collapsed_policy, collapsed_mean, collapsed_std = load_learned_policy(collapsed_spec)
+    validate_subspace_compatible(
+        Q_np=Q_np,
+        layer=layer,
+        protected_policy=protected_policy,
+        protected_mean=protected_mean,
+        protected_spec=protected_spec,
+        collapsed_policy=collapsed_policy,
+        collapsed_mean=collapsed_mean,
+        collapsed_spec=collapsed_spec,
+    )
 
     rows: list[dict[str, Any]] = []
     with BridgeClient() as client:
         for offset in range(seeds):
             seed = seed_start + offset
-            prefix = f"phase6-v2-{label}-{seed}"
+            prefix = f"phase6-subspace-{label}-{seed}"
 
             cache_A = run_subspace_recording_rollout(
                 client,
@@ -1210,6 +1439,10 @@ def run_subspace_patch_battery(
         "seed_start": int(seed_start),
         "seeds": int(seeds),
         "horizon": int(horizon),
+        "protected_policy_id": protected_spec.policy_id,
+        "protected_label": protected_spec.label,
+        "collapsed_policy_id": collapsed_spec.policy_id,
+        "collapsed_label": collapsed_spec.label,
         "v1_comparison_baseline": V1_LAYER_PATCH_BASELINES,
         **manifest_extra,
     }
@@ -1232,7 +1465,7 @@ def run_subspace_patch_battery(
             f"  {cmp['direction']}: "
             f"v1_median={cmp['v1_layer_patch_median']:.3f} -> "
             f"v3_median={cmp['v3_subspace_patch_median']:+.3f} "
-            f"(Δ={cmp['v3_minus_v1_median']:+.3f})",
+            f"(delta={cmp['v3_minus_v1_median']:+.3f})",
             flush=True,
         )
 
@@ -1437,6 +1670,259 @@ def axis_h_pca_patch(args: argparse.Namespace) -> None:
 
 
 # ============================================================
+# v3.1 validation axes (I, J, K, L)
+# ============================================================
+
+
+def axis_i_pc_mech(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    Q_full, basis_metadata = load_or_build_cliff_pca_basis(
+        out_root=PHASE6_V31_OUT,
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        num_components=5,
+    )
+    if Q_full.shape[1] < 5:
+        raise RuntimeError(f"expected at least 5 PCA columns, got {Q_full.shape[1]}")
+    Q_pc2_to_5, k_eff = build_orthonormal_subspace(Q_full[:, 1:5])
+    print(f"phase6 v3.1 axis-I: PC2-5 basis K_eff={k_eff}", flush=True)
+
+    run_subspace_patch_battery(
+        Q_np=Q_pc2_to_5,
+        label="pc-mech",
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        layer=args.layer,
+        out_dir=out_dir,
+        manifest_extra={
+            "axis": "I",
+            "basis": "cliff_pair_pca_pc2_to_5",
+            "basis_metadata": basis_metadata,
+        },
+    )
+
+    baseline_path = PHASE6_V2_OUT / "axis-h-pca-k5" / "axis-h-pca-patch-aggregate.csv"
+    current_path = out_dir / "pc-mech-patch-aggregate.csv"
+    baseline_rows = {row["direction"]: row for row in read_csv_rows(baseline_path)}
+    current_rows = read_csv_rows(current_path)
+    comparison = []
+    for row in current_rows:
+        direction = row["direction"]
+        baseline = baseline_rows[direction]
+        comparison.append({
+            "direction": direction,
+            "baseline_k5_mean": float(baseline["mean_patch_success"]),
+            "pc2_to_5_mean": float(row["mean_patch_success"]),
+            "mean_delta": float(row["mean_patch_success"]) - float(baseline["mean_patch_success"]),
+            "baseline_k5_median": float(baseline["median_patch_success"]),
+            "pc2_to_5_median": float(row["median_patch_success"]),
+            "median_delta": float(row["median_patch_success"]) - float(baseline["median_patch_success"]),
+            "baseline_k5_ratio": float(baseline["patch_success_ratio_of_means"]),
+            "pc2_to_5_ratio": float(row["patch_success_ratio_of_means"]),
+            "ratio_delta": float(row["patch_success_ratio_of_means"]) - float(baseline["patch_success_ratio_of_means"]),
+        })
+    write_csv(out_dir / "v3-vs-v3-1-comparison.csv", comparison)
+
+
+def axis_j_generalization(args: argparse.Namespace) -> None:
+    pair_key = args.pair.upper()
+    if pair_key not in V31_GENERALIZATION_PAIRS:
+        raise ValueError(f"unknown pair {args.pair!r}; expected one of {sorted(V31_GENERALIZATION_PAIRS)}")
+    if pair_key == "J3":
+        raise ValueError(
+            "J3 is dimension-blocked in Phase 6 v3.1: the Medium cliff-pair PCA basis is 256D, "
+            "while the Small-tier J3 policies expose a 64D final hidden activation. "
+            "Run J3 only after adding a Small-tier basis or cross-tier adapter in v3.2."
+        )
+    protected_spec, collapsed_spec = V31_GENERALIZATION_PAIRS[pair_key]
+
+    out_root = Path(args.out)
+    if not out_root.is_absolute():
+        out_root = REPO_ROOT / out_root
+    out_root.mkdir(parents=True, exist_ok=True)
+    out_dir = out_root / pair_key.lower()
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    Q_full, basis_metadata = load_or_build_cliff_pca_basis(
+        out_root=PHASE6_V31_OUT,
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        num_components=5,
+    )
+    print(
+        f"phase6 v3.1 axis-J {pair_key}: {protected_spec.policy_id} -> {collapsed_spec.policy_id}",
+        flush=True,
+    )
+    run_subspace_patch_battery(
+        Q_np=Q_full,
+        label=pair_key.lower(),
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        layer=args.layer,
+        out_dir=out_dir,
+        manifest_extra={
+            "axis": "J",
+            "pair": pair_key,
+            "basis": "cliff_pair_pca_pc1_to_5",
+            "basis_metadata": basis_metadata,
+        },
+        protected_spec=protected_spec,
+        collapsed_spec=collapsed_spec,
+    )
+
+    summary_rows = []
+    for pair in sorted(p.name for p in out_root.iterdir() if p.is_dir() and (p / f"{p.name}-patch-aggregate.csv").exists()):
+        for row in read_csv_rows(out_root / pair / f"{pair}-patch-aggregate.csv"):
+            summary_rows.append({
+                "pair": pair.upper(),
+                "direction": row["direction"],
+                "k_eff": row["k_eff"],
+                "layer": row["layer"],
+                "mean_patch_success": row["mean_patch_success"],
+                "median_patch_success": row["median_patch_success"],
+                "patch_success_ratio_of_means": row["patch_success_ratio_of_means"],
+                "mean_protected_old_basin_pref": row["mean_protected_old_basin_pref"],
+                "mean_collapsed_old_basin_pref": row["mean_collapsed_old_basin_pref"],
+                "mean_patched_old_basin_pref": row["mean_patched_old_basin_pref"],
+                "n": row["n"],
+            })
+    write_csv(out_root / "generalization-summary.csv", summary_rows)
+
+
+def axis_k_decompose(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    Q_full, basis_metadata = load_or_build_cliff_pca_basis(
+        out_root=PHASE6_V31_OUT,
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        num_components=5,
+    )
+
+    sparsity_rows = []
+    top8_rows = []
+    top32_sets: dict[int, set[int]] = {}
+    for pc_index in range(Q_full.shape[1]):
+        v = Q_full[:, pc_index].astype(np.float64)
+        energy = v ** 2
+        total_energy = float(energy.sum())
+        order = np.argsort(-np.abs(v))
+        top8 = order[:8]
+        top16 = order[:16]
+        top32 = order[:32]
+        top32_sets[pc_index + 1] = set(int(i) for i in top32.tolist())
+        sparsity_rows.append({
+            "pc": pc_index + 1,
+            "l2_concentration_top8": float(energy[top8].sum() / max(total_energy, 1e-12)),
+            "l2_concentration_top16": float(energy[top16].sum() / max(total_energy, 1e-12)),
+            "l2_concentration_top32": float(energy[top32].sum() / max(total_energy, 1e-12)),
+            "participation_ratio": float((total_energy ** 2) / max(float((energy ** 2).sum()), 1e-12)),
+            "max_abs_weight": float(np.max(np.abs(v))),
+            "basis_metadata_variance_captured_top_K": basis_metadata.get("variance_captured_top_K", ""),
+        })
+        top8_rows.append({
+            "pc": pc_index + 1,
+            "top8_neuron_indices": ";".join(str(int(i)) for i in top8.tolist()),
+            "top8_abs_weights": ";".join(f"{abs(float(v[i])):.8g}" for i in top8.tolist()),
+        })
+
+    overlap_rows = []
+    pcs = sorted(top32_sets)
+    for i, pc_a in enumerate(pcs):
+        for pc_b in pcs[i + 1:]:
+            a = top32_sets[pc_a]
+            b = top32_sets[pc_b]
+            overlap_rows.append({
+                "pc_a": pc_a,
+                "pc_b": pc_b,
+                "top32_jaccard": len(a & b) / max(len(a | b), 1),
+                "top32_overlap_count": len(a & b),
+            })
+
+    write_csv(out_dir / "pc-sparsity-table.csv", sparsity_rows)
+    write_csv(out_dir / "pc-top8-neurons.csv", top8_rows)
+    write_csv(out_dir / "pc-overlap-jaccard.csv", overlap_rows)
+    (out_dir / "manifest.json").write_text(
+        json.dumps({"axis": "K", "basis_metadata": basis_metadata}, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    print(f"phase6 v3.1 axis-K: wrote results to {out_dir.relative_to(REPO_ROOT)}", flush=True)
+
+
+def bootstrap_gap_for_k(*, k: int, resamples: int, seed: int, out_dir: Path) -> dict[str, Any]:
+    source = PHASE6_V2_OUT / f"axis-h-pca-k{k}" / "axis-h-pca-patch.csv"
+    rows = read_csv_rows(source)
+    paired = []
+    for row in rows:
+        pc = float(row["patch_success_protected_to_collapsed"])
+        cp = float(row["patch_success_collapsed_to_protected"])
+        if math.isfinite(pc) and math.isfinite(cp):
+            paired.append((pc, cp))
+    if not paired:
+        raise RuntimeError(f"no finite paired patch-success rows in {source}")
+    arr = np.asarray(paired, dtype=np.float64)
+    observed_gap = float(np.median(arr[:, 0]) - np.median(arr[:, 1]))
+    rng = np.random.default_rng(seed + k * 1009)
+    boot_rows = []
+    gaps = np.empty(resamples, dtype=np.float64)
+    for i in range(resamples):
+        idx = rng.integers(0, arr.shape[0], size=arr.shape[0])
+        sample = arr[idx]
+        gap = float(np.median(sample[:, 0]) - np.median(sample[:, 1]))
+        gaps[i] = gap
+        boot_rows.append({"resample": i, "median_gap": gap})
+    write_csv(out_dir / f"bootstrap-gap-k{k}.csv", boot_rows)
+    return {
+        "k": k,
+        "source": str(source.relative_to(REPO_ROOT)),
+        "n": int(arr.shape[0]),
+        "observed_median_protected_to_collapsed": float(np.median(arr[:, 0])),
+        "observed_median_collapsed_to_protected": float(np.median(arr[:, 1])),
+        "observed_median_gap": observed_gap,
+        "bootstrap_median_gap_mean": float(gaps.mean()),
+        "bootstrap_median_gap_lo_95": float(np.percentile(gaps, 2.5)),
+        "bootstrap_median_gap_hi_95": float(np.percentile(gaps, 97.5)),
+        "resamples": int(resamples),
+    }
+
+
+def axis_l_bootstrap(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    ks = [int(k) for k in args.k]
+    summaries = [
+        bootstrap_gap_for_k(k=k, resamples=args.resamples, seed=args.bootstrap_seed, out_dir=out_dir)
+        for k in ks
+    ]
+    (out_dir / "bootstrap-summary.json").write_text(
+        json.dumps({"axis": "L", "summaries": summaries}, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    print(f"phase6 v3.1 axis-L: wrote bootstrap summary to {out_dir.relative_to(REPO_ROOT)}", flush=True)
+    for summary in summaries:
+        print(
+            f"  K={summary['k']}: observed_gap={summary['observed_median_gap']:+.3f}, "
+            f"95% CI [{summary['bootstrap_median_gap_lo_95']:+.3f}, {summary['bootstrap_median_gap_hi_95']:+.3f}]",
+            flush=True,
+        )
+
+
+# ============================================================
 # CLI
 # ============================================================
 
@@ -1508,6 +1994,45 @@ def parse_args() -> argparse.Namespace:
     pca.add_argument("--horizon", type=int, default=200)
     pca.add_argument("--layer", default="net.7")
 
+    pci = sub.add_parser(
+        "axis-i-pc-mech",
+        help="Phase 6 v3.1 Axis I: patch using PCA PCs 2-5 only, skipping PC1",
+    )
+    pci.add_argument("--out", default=str(PHASE6_V31_OUT / "axis-i-pc-mech"))
+    pci.add_argument("--seed-start", type=int, default=10000)
+    pci.add_argument("--seeds", type=int, default=64)
+    pci.add_argument("--horizon", type=int, default=200)
+    pci.add_argument("--layer", default="net.7")
+
+    gen = sub.add_parser(
+        "axis-j-generalization",
+        help="Phase 6 v3.1 Axis J: apply cliff-pair PCA basis to held-out policy pairs",
+    )
+    gen.add_argument("--out", default=str(PHASE6_V31_OUT / "axis-j-generalization"))
+    gen.add_argument("--pair", choices=sorted(V31_GENERALIZATION_PAIRS), required=True)
+    gen.add_argument("--seed-start", type=int, default=10000)
+    gen.add_argument("--seeds", type=int, default=64)
+    gen.add_argument("--horizon", type=int, default=200)
+    gen.add_argument("--layer", default="net.7")
+
+    decomp = sub.add_parser(
+        "axis-k-decompose",
+        help="Phase 6 v3.1 Axis K: decompose cliff-pair PCA directions by neuron concentration",
+    )
+    decomp.add_argument("--out", default=str(PHASE6_V31_OUT / "axis-k-decompose"))
+    decomp.add_argument("--seed-start", type=int, default=10000)
+    decomp.add_argument("--seeds", type=int, default=64)
+    decomp.add_argument("--horizon", type=int, default=200)
+
+    boot = sub.add_parser(
+        "axis-l-bootstrap",
+        help="Phase 6 v3.1 Axis L: bootstrap the directional-asymmetry median gap",
+    )
+    boot.add_argument("--out", default=str(PHASE6_V31_OUT / "axis-l-bootstrap"))
+    boot.add_argument("--k", type=int, nargs="+", default=[3, 5], choices=[3, 5])
+    boot.add_argument("--resamples", type=int, default=1000)
+    boot.add_argument("--bootstrap-seed", type=int, default=0)
+
     args = parser.parse_args()
     if args.command is None:
         parser.print_help()
@@ -1527,6 +2052,14 @@ def main() -> None:
         axis_g_mean_diff_patch(args)
     elif args.command == "axis-h-pca":
         axis_h_pca_patch(args)
+    elif args.command == "axis-i-pc-mech":
+        axis_i_pc_mech(args)
+    elif args.command == "axis-j-generalization":
+        axis_j_generalization(args)
+    elif args.command == "axis-k-decompose":
+        axis_k_decompose(args)
+    elif args.command == "axis-l-bootstrap":
+        axis_l_bootstrap(args)
     else:
         raise ValueError(f"unknown command: {args.command}")
 
