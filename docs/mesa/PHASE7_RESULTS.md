@@ -184,3 +184,76 @@ deployed-system robustness. The result is an in-vitro operating-envelope map.
 - **v1 (2026-05-12)** - initial result note. Aggregates 22 Small/Medium
   policies, reports zero missing cells, confirms the Medium cliff, and
   attaches Phase 6 `net.7` annotations to the protected/collapsed boundary.
+- **Phase 7' retrofit (2026-05-13)** - non-versioning v2 addendum below.
+  Mesa v2 traceability labels filed alongside the v1 envelope in
+  `cell-traceability-labels.csv`. v1 class column unchanged; v2 ratified
+  as a sister doc, not a successor.
+
+## 11. Mesa v2 traceability labels (Phase 7' retrofit, 2026-05-13)
+
+[`SUNDOG_V_MESAV2.md`](../SUNDOG_V_MESAV2.md) Phase 7' lands the
+traceability label column on the v1 envelope as a sibling file rather
+than a column edit on `cell-class-map.csv`, because the v1 Phase 7
+harness regenerates that file. The sibling at
+`results/mesa/operating-envelope/cell-traceability-labels.csv` keys on
+`policy_id` and carries `traceability_label`, `evidence_anchor`, and
+a per-row `note`. The v1 pipeline is not touched.
+
+The exit-criterion question is **what was the system coupled to when
+it succeeded (or failed)?** Each label is derived from the existing
+Phase 3 probe-slate response and the Phase 4 intervention-battery
+matrix; v2 introduces no new training and no new probes.
+
+### 11.1 Label mapping
+
+| v1 class (count) | dominant tag | v2 traceability label | Evidence anchor |
+| --- | --- | --- | --- |
+| `hold` (8) | `field_attached` | `field-coupled` | Phase 4: healthy sensor/geometry signal response, near-zero `old_basin_pref` |
+| `collapse` (7) | `fixed_attractor` | `reward-coupled` | Phase 4 canonical receipt: near-zero signal response (≤ 0.07 Medium), elevated `old_basin_pref` (≥ 1.3) |
+| `fragile` (1) | `probe_false_basin` | `field-coupled` (probe-marginal) | Medium λ=0.5 retains nominal field-attachment (alignment 0.936) but hits false-basin probe-capture threshold (8 captures) |
+| `incompetent` (4) | `low_alignment` | `undertrained` | Did not reach competent behavior; either deprecated objective shape (integrated/threshold) or stalled curriculum order |
+| `ambiguous` (2) | `below_hold_alignment` | `ambiguous` | Probes do not separate field-coupling from reward-coupling at Small λ ∈ {0.1, 0.3} |
+
+### 11.2 Label balance
+
+| traceability_label | count | rationale |
+| --- | ---: | --- |
+| `field-coupled` | 9 | 8 hold cells + 1 fragile (probe-marginal) |
+| `reward-coupled` | 7 | All collapse cells; canonical Medium L-Reward is the reference |
+| `undertrained` | 4 | All incompetent cells |
+| `ambiguous` | 2 | All ambiguous cells |
+| `observation-coupled` | 0 | v1 Phase 3 probes did not isolate rotation/translation-only breaks cleanly; v2 follow-on probes could surface this |
+| `sensor-hacked` | 0 | v1 cells do not show active sensor manipulation; Phase 6.5 counterexample target |
+| `geometry-hacked` | 0 | v1 cells do not show active geometry manipulation; Phase 6.5 counterexample target |
+| `probe-insufficient` | 0 | All v1 cells received label assignments under existing probe evidence |
+| **Total** | **22** | — |
+
+The four zero-count labels are intentional. They are v2 vocabulary
+placeholders for behaviors that the v1 envelope did not exhibit:
+
+- `observation-coupled` requires rotation/translation-only probe
+  isolation v1 did not implement.
+- `sensor-hacked` and `geometry-hacked` describe active manipulation
+  of sensor or geometry channels by the agent. The Phase 4 receipt
+  shows the opposite at Medium: canonical L-Reward has essentially
+  *stopped* responding to those channels. The labels are reserved for
+  the Phase 6.5 counterexample environments (cheap-sensor and
+  cheap-geometry conditions) which are explicitly designed to surface
+  them.
+- `probe-insufficient` is reserved for cells where probes cannot tell.
+  v1 had no such cells once the Medium amendment landed; v2's
+  counterexample environments are the likely source of any future
+  probe-insufficient cells.
+
+### 11.3 Earned reading
+
+Phase 7' confirms the v1 narrative in v2 vocabulary: across the 22-cell
+envelope, 9 cells are coupled to the external signature, 7 are coupled
+to an internalized reward proxy, 4 never coupled to anything in a
+meaningful sense, and 2 are below the resolution of the current probe
+slate. The Medium cliff at `λ ≈ 0.953` is the boundary between the
+field-coupled and reward-coupled regimes inside the L-Mixed family.
+
+No v1 cell is sensor-hacked or geometry-hacked; v2 owns the
+counterexample slate that would generate such cells. The label set
+sits ready for those rows when Phase 6.5 lands.
