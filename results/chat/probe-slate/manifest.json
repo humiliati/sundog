@@ -1,7 +1,7 @@
 {
   "version": "phase4-probe-slate-v0",
   "status": "deterministic_baseline",
-  "generatedAt": "2026-05-13T00:11:59.115Z",
+  "generatedAt": "2026-05-13T00:46:03.518Z",
   "purpose": "Phase 4 operating-envelope baseline over deterministic Ask Sundog draft families before hosted adapters are added.",
   "suites": [
     {
@@ -25,8 +25,8 @@
       "promptPath": "chat/prompts/gold-adversarial.jsonl",
       "outcomePath": "results/chat/phase3-adversarial-draft-gate/draft-outcomes.json",
       "summaryPath": "results/chat/phase3-adversarial-draft-gate/summary.json",
-      "promptCount": 33,
-      "draftCount": 132,
+      "promptCount": 59,
+      "draftCount": 236,
       "gateEscapes": 0,
       "gateHitRate": 1,
       "addedValue": {
@@ -54,10 +54,119 @@
     }
   ],
   "totals": {
-    "prompts": 79,
-    "drafts": 316,
+    "prompts": 105,
+    "drafts": 420,
     "gateEscapes": 0,
     "addedValue": 39
+  },
+  "severityAxis": {
+    "mild": {
+      "naive_baseline": {
+        "accepted": 0,
+        "rejected": 13,
+        "total": 13,
+        "acceptanceRate": 0,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      },
+      "naive_rag": {
+        "accepted": 0,
+        "rejected": 13,
+        "total": 13,
+        "acceptanceRate": 0,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      },
+      "prompted_boundary": {
+        "accepted": 13,
+        "rejected": 0,
+        "total": 13,
+        "acceptanceRate": 1,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      },
+      "sundog_gated": {
+        "accepted": 13,
+        "rejected": 0,
+        "total": 13,
+        "acceptanceRate": 1,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      }
+    },
+    "severe": {
+      "naive_baseline": {
+        "accepted": 0,
+        "rejected": 13,
+        "total": 13,
+        "acceptanceRate": 0,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      },
+      "naive_rag": {
+        "accepted": 0,
+        "rejected": 13,
+        "total": 13,
+        "acceptanceRate": 0,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      },
+      "prompted_boundary": {
+        "accepted": 0,
+        "rejected": 13,
+        "total": 13,
+        "acceptanceRate": 0,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      },
+      "sundog_gated": {
+        "accepted": 13,
+        "rejected": 0,
+        "total": 13,
+        "acceptanceRate": 1,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      }
+    },
+    "moderate": {
+      "naive_baseline": {
+        "accepted": 0,
+        "rejected": 33,
+        "total": 33,
+        "acceptanceRate": 0,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      },
+      "naive_rag": {
+        "accepted": 0,
+        "rejected": 33,
+        "total": 33,
+        "acceptanceRate": 0,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      },
+      "prompted_boundary": {
+        "accepted": 33,
+        "rejected": 0,
+        "total": 33,
+        "acceptanceRate": 1,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      },
+      "sundog_gated": {
+        "accepted": 33,
+        "rejected": 0,
+        "total": 33,
+        "acceptanceRate": 1,
+        "gateEscapeRate": 0,
+        "addedValueRate": 0
+      }
+    }
+  },
+  "severityDifferential": {
+    "B2_vs_S1_severe_delta": 1,
+    "promptedBoundarySevereAcceptanceRate": 0,
+    "sundogGatedSevereAcceptanceRate": 1
   },
   "scope": [
     "Deterministic scaffold only; no hosted model adapter is included.",
@@ -68,6 +177,9 @@
     "trialOutcomes": "results/chat/probe-slate/trial-outcomes.csv",
     "boundaryPreservation": "results/chat/probe-slate/boundary-preservation.csv",
     "overclaimRate": "results/chat/probe-slate/overclaim-rate.csv",
+    "boundaryPreservationHeatmap": "results/chat/probe-slate/boundary-preservation-heatmap.csv",
+    "overclaimHeatmap": "results/chat/probe-slate/overclaim-heatmap.csv",
+    "severityHeatmap": "results/chat/probe-slate/severity-heatmap.csv",
     "axisBreakdown": "results/chat/probe-slate/axis-breakdown.csv",
     "representativeTranscripts": "results/chat/probe-slate/representative-transcripts.json"
   }

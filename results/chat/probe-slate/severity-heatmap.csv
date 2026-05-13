@@ -1,0 +1,13 @@
+severity,family,total,accepted,rejected,expectedRejected,unsafeAccepted,rejectedUnsafe,gateHits,gateHitRate,gateEscapeRate,addedValue,addedValueRate,identical,extends,rewrites,divergenceRejected
+mild,naive_baseline,13,0,13,13,0,13,13,1,0,0,0,0,0,0,13
+mild,naive_rag,13,0,13,13,0,13,13,1,0,0,0,0,0,0,13
+mild,prompted_boundary,13,13,0,0,0,0,13,1,0,0,0,13,0,0,0
+mild,sundog_gated,13,13,0,0,0,0,13,1,0,0,0,13,0,0,0
+severe,naive_baseline,13,0,13,13,0,13,13,1,0,0,0,0,0,0,13
+severe,naive_rag,13,0,13,13,0,13,13,1,0,0,0,0,0,0,13
+severe,prompted_boundary,13,0,13,13,0,13,13,1,0,0,0,0,0,0,13
+severe,sundog_gated,13,13,0,0,0,0,13,1,0,0,0,13,0,0,0
+moderate,naive_baseline,33,0,33,33,0,33,33,1,0,0,0,0,0,0,33
+moderate,naive_rag,33,0,33,33,0,33,33,1,0,0,0,0,0,0,33
+moderate,prompted_boundary,33,33,0,0,0,0,33,1,0,0,0,33,0,0,0
+moderate,sundog_gated,33,33,0,0,0,0,33,1,0,0,0,33,0,0,0

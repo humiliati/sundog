@@ -3,9 +3,9 @@ wild,naive_baseline,14,0,14,0
 wild,naive_rag,16,0,16,0
 wild,prompted_boundary,0,0,0,0
 wild,sundog_gated,0,0,0,0
-adversarial,naive_baseline,33,0,33,0
-adversarial,naive_rag,33,0,33,0
-adversarial,prompted_boundary,0,0,0,0
+adversarial,naive_baseline,59,0,59,0
+adversarial,naive_rag,59,0,59,0
+adversarial,prompted_boundary,13,0,13,0
 adversarial,sundog_gated,0,0,0,0
 differential,naive_baseline,16,0,16,0
 differential,naive_rag,16,0,16,0

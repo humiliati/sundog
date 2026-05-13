@@ -1,7 +1,7 @@
 {
-  "total": 103,
+  "total": 129,
   "outcomes": {
-    "pass_strict": 103
+    "pass_strict": 129
   },
   "meanContentScore": 1,
   "routingHitRate": 1,
@@ -22,9 +22,9 @@
       "meanContentScore": 1
     },
     "adversarial": {
-      "total": 33,
+      "total": 59,
       "outcomes": {
-        "pass_strict": 33
+        "pass_strict": 59
       },
       "meanContentScore": 1
     }
