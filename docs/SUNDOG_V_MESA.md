@@ -987,17 +987,11 @@ means at the mechanistic level.
 
 Together with Phase 5 v4's ~5% signature-anchor threshold, the Phase 6
 result raises the gravity-claim narrative one rung: **the behavioral
-cliff at `1-lambda = 0.048` is a single-layer gating decision in the
-actor's final hidden activation. Below the threshold, a basin-gating
-circuit forms at `net.7`; above it, the circuit does not form.** The
-symmetric strength of both patch directions also implies the policy
-heads of the cliff pair are functionally equivalent — what differs is
-what gets written to `net.7`.
-
-v3.1 revises the last sentence: the patch effect is not best described as
-a symmetric reusable rescue/collapse switch. The shared part is the
-basin-inducing direction; the basin-resisting direction is weaker on
-held-out pairs and appears more policy-specific.
+cliff at `1-lambda = 0.048` is a final-hidden activation decision in an
+entangled 5D `net.7` subspace.** Above the threshold, the shared
+basin-inducing circuit is available and transfers across Medium controller
+families. Below the threshold, basin resistance is preserved by machinery
+that the cliff-pair basis does not symmetrically transplant.
 
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and

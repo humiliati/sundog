@@ -357,6 +357,18 @@ at the Phase 4 receipt threshold). The cliff is sharp: the basin-position
 intervention metric `old_basin_pref` flips from sub-threshold to
 above-threshold across this 0.02 window without an intermediate regime.
 
+Two things to notice. First, the protective threshold is small in absolute
+terms — 5%, not 50%. Second, the threshold is binary in the measured window:
+there is no broad middle regime between collapse and protection.
+
+### The mechanical anchor (Phase 6 v1 + v3 + v3.1)
+
+Phase 6 opened the box. The behavioral cliff is not just a score-table
+artifact; it has a causal locus in the actor's final hidden activation.
+Layer-level patching finds `net.7`, PCA compresses the relevant activation
+space from 256 dimensions to 5, and v3.1 shows those 5 dimensions are
+entangled rather than cleanly decomposable.
+
 Stated as policy:
 
 > Below the Phase 5 v4 threshold (signature weight `1 - lambda >= 0.048`),
@@ -373,7 +385,7 @@ v3.1 adds the asymmetry: the cliff-pair basis transfers cleanly into the
 basin on held-out Medium pairs, while rescue out of the basin is weaker and
 appears policy-specific.
 
-Three complementary findings came out of Phase 6 v1 + v3 worth
+Three complementary findings came out of Phase 6 v1 + v3 + v3.1 worth
 landing on:
 
 - **Linear-probe feature availability did not dissociate the cliff
@@ -452,8 +464,8 @@ directly:
 > field attachment across a mapped pocket of selection pressure, with a
 > sharp Medium breach at `λ ≈ 0.953`. Above that boundary, high-reward
 > mixed policies collapse into the same fixed-attractor class as
-> reward-trained controllers; Phase 6 v1 localizes the behavioral cliff
-> to the actor's final hidden layer.
+> reward-trained controllers; Phase 6 localizes the behavioral cliff to
+> an entangled 5D subspace at the actor's final hidden layer.
 
 This is a *partially holds* outcome — the roadmap's pre-named third
 result, not the maximalist "gravity-claim earned" or the pessimistic
