@@ -33,6 +33,21 @@ const REFUSAL_MARKERS = [
   "does not",
   "do not",
   "cannot",
+  // English contractions — after normalize() strips apostrophes,
+  // these are how "can't", "won't", "isn't", "doesn't", etc. appear.
+  "can t",
+  "won t",
+  "isn t",
+  "doesn t",
+  "don t",
+  "didn t",
+  "wasn t",
+  "weren t",
+  "haven t",
+  "hasn t",
+  "wouldn t",
+  "couldn t",
+  "shouldn t",
   "unsupported",
   "out of scope",
   "i do not have"
@@ -166,15 +181,14 @@ function hasNearbyNegation(normalizedText, phrase) {
   const normalizedPhrase = normalize(phrase);
   const index = normalizedText.indexOf(normalizedPhrase);
   if (index < 0) return false;
-  // Windows widened to catch English boundary-acknowledgement idioms at
-  // sentence distance: "The corpus does not support the claim that X
-  // cannot be reward-hacked" — the negation is ~60 chars upstream of the
-  // forbidden phrase. We scan 96 chars before and 48 chars after.
   const before = normalizedText.slice(Math.max(0, index - 96), index);
   const afterStart = index + normalizedPhrase.length;
   const after = normalizedText.slice(afterStart, afterStart + 48);
-  const negBefore = /\b(no|not|never|cannot|does not|do not|did not|unsupported|without|rather than|instead of|absent|absence of|lack of|no specific|no specified)\b/;
-  const negAfter = /\b(is (still |not )?pending|is not|are not|has not|have not|is unsupported|is out of scope|cannot be (claimed|supported|asserted|stated|verified|established)|are not (claimed|supported)|is not supported|is currently unsupported)\b/;
+  // Negation lexicon — covers unabbreviated forms ("cannot", "is not") and
+  // post-normalize() contraction forms ("can t" from "can't"). Different
+  // model families prefer different styles; the lexicon must handle both.
+  const negBefore = /\b(no|not|never|cannot|can t|won t|isn t|aren t|doesn t|don t|didn t|wasn t|weren t|haven t|hasn t|wouldn t|couldn t|shouldn t|does not|do not|did not|unsupported|an unsupported|without|rather than|instead of|absent|absence of|lack of|no specific|no specified|blocking a claim|blocked a claim|if the tier should be|should be|hypothetically)\b/;
+  const negAfter = /\b(is (still |not )?pending|is not|isn t|are not|aren t|has not|hasn t|have not|haven t|is unsupported|is out of scope|cannot be (claimed|supported|asserted|stated|verified|established)|can t be (claimed|supported|asserted|stated|verified|established)|are not (claimed|supported)|is not supported|isn t supported|is currently unsupported)\b/;
   return negBefore.test(before) || negAfter.test(after);
 }
 
