@@ -941,7 +941,7 @@ atmospheric-optics pages do (e.g. the WW2010 Illinois reference) while
 
 Deliverables:
 
-- **`public/sundog.html`** with the eight-section skeleton:
+- **`sundog.html`** with the eight-section skeleton:
   1. Hero — live workbench at canonical pose, single-sentence framing.
   2. *What you are looking at* — labeled photograph (annotated reference
      from `docs/calibration/1`).
@@ -976,6 +976,13 @@ without scrolling away, can locate and label each visible feature in their
 own past sky photos by section 5, and can pull the math down through
 section 8. Wikipedia editors reviewing the page recognize the formula
 provenance (References) and can verify each claim independently.
+
+Status (2026-05-12): Phase 4 is now checkable in-repo. `sundog.html` carries
+the eight sections, canonical/meta tags, LearningResource JSON-LD with author
+and citations, the Phase 3 harness reference, and the §6 upload mount. The
+root crawl artifacts live in `public/sitemap.xml` and `public/robots.txt`.
+`npm run sundog:check` verifies the public page contract and the Phase 5
+endpoint files before a build.
 
 ### Phase 5 - Photo Upload + Inverse Inference
 
@@ -1028,6 +1035,16 @@ inverse-inferred and the atlas overlaid on the photo, and either save
 locally or share to the project — and if they share, the data is in R2
 within 5 seconds with EXIF stripped, and they receive a deletion token
 they can use to remove it.
+
+Status (2026-05-12): Phase 5A and the Phase 5B endpoint scaffold are in
+place. `public/js/photo-upload.mjs` provides the three-click in-browser
+inverse inference, EXIF-stripped canvas re-encode, overlay download, JSON pose
+copy, backend health probe, opt-in upload, and local deletion-url retention.
+`functions/api/sundog/` now contains `health`, `policy`, `upload`, `delete`,
+and shared Worker helpers wired for the R2 bucket and KV namespace named in
+`wrangler.toml`. Remaining gate check is an end-to-end Cloudflare Pages run:
+upload a real photo, inspect R2, delete with the returned token, and confirm
+the R2 objects and KV deletion index are gone.
 
 ### Phase 6 - Drag-to-Tune Constraint Network
 

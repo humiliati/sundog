@@ -1,13 +1,14 @@
 # Phase 5 Backend Plan — Photo Upload + Inverse Inference
 
-Planning doc for the Cloudflare Workers + R2 backend that turns user-submitted
+Implementation note for the Cloudflare Workers + R2 backend that turns user-submitted
 sundog photos into atlas-overlaid renders and (with consent) training-data
 captures. Companion to the Phase 5 entry in
 [`SUNDOG_V_GEOMETRY.md`](SUNDOG_V_GEOMETRY.md).
 
-This doc is **plan-only** — no infrastructure shipped yet. The intent is to
-have the architecture, schema, consent UX, and privacy policy nailed down
-before we provision R2 buckets or expose endpoints.
+Status (2026-05-12): the browser widget and Pages Functions scaffold are in
+the repository. The remaining Phase 5 gate is deployment verification against
+the live Cloudflare Pages bindings: upload, inspect R2, delete, then inspect R2
+and KV again.
 
 ## Why Cloudflare Workers + R2
 
@@ -190,13 +191,13 @@ Phase 5 frontend must:
    limit; just confirm the EXIF/canvas helper code stays in the browser
    bundle, not the Worker.
 
-## Implementation order when Phase 5 starts
+## Implementation status
 
-1. Worker scaffold + health endpoint (sanity check the deployment).
-2. R2 bucket + minimal upload happy path (no rate limit, no metadata).
-3. Metadata writer + deletion endpoint.
-4. Rate limiter via KV.
-5. Policy doc + JSON endpoint.
-6. Frontend integration — three-click measurement UX + client-side
-   EXIF strip + consent gate.
-7. End-to-end test: upload → R2 inspect → delete → R2 inspect again.
+1. Worker scaffold + health endpoint: in repo.
+2. R2 bucket binding + upload path: in repo, bound through `wrangler.toml`.
+3. Metadata writer + deletion endpoint: in repo.
+4. Rate limiter via KV: in repo.
+5. Policy doc + JSON endpoint: in repo.
+6. Frontend integration: in repo with three-click measurement, client-side
+   EXIF strip, consent gate, upload, and deletion-url retention.
+7. End-to-end Cloudflare check: still required before marking Phase 5 closed.

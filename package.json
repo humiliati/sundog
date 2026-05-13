@@ -23,6 +23,7 @@
     "chat:eval:phase4": "node chat/eval/score_phase4_probe_slate.mjs",
     "build": "vite build",
     "postbuild": "node scripts/copy-site-docs.mjs && node scripts/check-site-dist.mjs",
+    "sundog:check": "node scripts/check-sundog-page.mjs",
     "logo:toolkit": "node scripts/generate-sundog-logo-toolkit.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "mines:phase3": "node scripts/mines-phase3-diagnostics.mjs --phase phase3-diagnostic --out results/mines/phase3-diagnostic --seeds 24",
