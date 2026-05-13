@@ -465,7 +465,7 @@
             <article class="lead-framing">
                 <p class="eyebrow">Lead framing</p>
                 <p>
-                    Zero gate escapes across <strong>3,570 trials</strong> spanning three backends (deterministic compositor + <code>gpt-4o-mini</code> + <code>claude-haiku-4-5</code>), 112 cells of (prompt type × severity × evidence tier × model family), and 8 trace-field ablations is the <strong>safety floor</strong> — necessary but not the point. The 100 percentage-point gap between trace-conditioned and prompt-engineered baselines at severe pressure is the <strong>experimental result</strong>.
+                    Zero gate escapes across <strong>4,578 trials</strong> spanning three backends (deterministic compositor + <code>gpt-4o-mini</code> + <code>claude-haiku-4-5</code>), 112 cells of (prompt type × severity × evidence tier × model family), 8 trace-field ablations, and 3 corpus-conflict mutations is the <strong>safety floor</strong> — necessary but not the point. The 100 percentage-point gap between trace-conditioned and prompt-engineered baselines at severe pressure is the <strong>experimental result</strong>.
                 </p>
             </article>
 
@@ -680,7 +680,7 @@
                         <article class="followup-card">
                             <h3>Corpus-conflict sweep (stale-doc)</h3>
                             <p>
-                                Phase 5 reserved <code>stale_doc_capture</code> as a named failure mode but ran no trials. A purpose-built slate that mutates a chunk's text to disagree with the claim-map would close one of the four axes that the Phase 7 cell-class-map currently lists as gap rather than coverage.
+                                <strong>Phase 9 closed this axis.</strong> Three corpus mutations — stale-doc overclaim text, full promotional replacement, and route-id collision — ran across 1,008 trials covering deterministic + Claude on differential + adversarial slates. Zero unsafe-accepts. The gate's route-conditioned <code>upgradePhraseAllowed</code> check distinguishes authorized claims from injected overclaim text even when the corpus is contaminated. <em>Claim authorization comes from trace metadata, not retrieved content</em>.
                             </p>
                         </article>
                         <article class="followup-card">

@@ -82,7 +82,7 @@ fit makes every route good.
 
 | primitive | p2 | p7 | p13 | promote? |
 | --- | --- | --- | --- | --- |
-| CZA | visible | not applicable / high sun | cropped or not visible | Conditional core: render only inside the CZA sun-altitude validity window; inversion route fails coverage on the current p2/p7/p13 set. |
+| CZA | visible | not applicable / high sun | cropped or not visible | Conditional core: render only inside the CZA sun-altitude validity window; CZA-apex inversion route fails residual gate on the expanded p2/p27 set. |
 | Supralateral arc | visible | candidate only | not visible / cropped | Keep as optional vocabulary; p2 carries the strongest evidence. |
 | Upper tangent arc | visible | visible / broad | candidate | Promote as stable logo/animation shape language. |
 | Lower tangent arc | visible near lower 22° contact | not clear | not clear | Annotation only until another clean low-sun source supports it. |
@@ -102,7 +102,7 @@ back; reason recorded), or **pending** (cannot be promoted until measured).
 | Parhelion offset to h inversion route | **promoted** (calibrated core; probation cleared 2026-05-13) | Task #52 step 1: re-anchored p13 from (557, 372) / R22=210 / offset=220 to (543, 372) / R22=211 / offsets=213/212. New residual is ~0/0 px. The probation finding is recorded as 'bad anchor, route OK' -- the route was never the problem; the rough hand-anchor was. |
 | 22 deg halo, parhelia (L/R), parhelic-circle | **promoted** (calibrated core) | Already in core via Phase 2. No regression observed in Phase 10 inspection. |
 | Upper tangent arc | **promoted as logo / animation vocabulary** | Visible across p2 and p7; candidate on p13. Two-of-three eligible visibility. Curvature-as-inversion-route remains pending measurement, but visibility is sufficient for shape-language use. |
-| CZA primitive (rendered) | **promoted as conditional core** | Render only when `h < 32.2 deg` (atmospheric cutoff). Visible on p2 at h = 18.6 deg; correctly not applicable on p7. p13 is low-altitude but square-cropped above the predicted apex, so the primitive remains core while the inversion route fails coverage. |
+| CZA primitive (rendered) | **promoted as conditional core** | Render only when `h < 32.2 deg` (atmospheric cutoff). Visible on p2 at h = 18.6 deg and p27 at h ~= 0.5 deg; correctly not applicable on p7. p13 / p19 / p20 are low-altitude but cropped above the predicted apex. The primitive remains core while the CZA-apex inversion route fails residual gate. |
 | CZA apex to h inversion route | **fails residual gate on expanded set** | Task #55 added p27 as a second eligible CZA photo. p2 residual is y = -19.3 px; p27 residual is y = +21 px. Both exceed the 8 px route threshold, but the direction does not replicate. Verdict: do not promote; this is a clean negative for a simple CZA-apex inverse. |
 | Tangent-arc curvature to h inversion route | **pending** | Same as CZA apex: visible but unmeasured. Curvature is non-monotone in h, so promotion requires sampling at multiple sun altitudes -- Task #52 is the first p2 + p13 pass. |
 | Supralateral position to h inversion route | **fails coverage gate** | Visible only on p2 of the Phase 10 set. Pre-registered rule blocks promotion at < 2 eligible photos. Supralateral primitive itself stays in optional vocabulary; the *inversion route* does not promote on this evidence. |
@@ -165,14 +165,15 @@ Execution order is fixed; do not interleave:
    anchor-probation flag. Update the Anchor Summary table and the Per-
    Inversion-Route Residual Table in the same commit. Do not touch CZA or
    tangent anchors until this completes.
-2. **CZA apex anchor check (Task #53).** Capture the observed CZA apex
+2. **CZA apex anchor check (Task #53, superseded by Task #55 expansion).** Capture the observed CZA apex
    on p2 in photo px. For p13, first record the crop verdict: at h = 6.83°,
    predicted CZA apex y = -50, above the image plane, so p13 is expected to
    be not applicable rather than pending. Add a `CZA apex (px)` column to
    the Anchor Summary table, fill p2 with the measured residual, and mark
    p7 / p13 not applicable. On the current three-photo set this forces the
-   CZA-apex inversion route into coverage-gate failure; reopening it needs
-   an added CZA-visible calibration photo.
+   CZA-apex inversion route into coverage-gate failure. Task #55 then added
+   p27 as a second eligible CZA photo and converted the verdict to residual
+   failure: p2 and p27 both exceed threshold, with opposite signs.
 3. **Tangent-arc curvature anchors on p2 and p13.** Sample at least three
    points along each visible tangent arc; fit a local curvature estimate;
    compare to the atlas-predicted curvature at the inferred h. Curvature is
@@ -232,4 +233,63 @@ sits at x = 330. The 2 px gap matches the prediction R22/cos(h) - R22 =
 horizontal extreme at low h). The whole anchor is internally consistent
 to within 1-2 px.
 
-Separate belt
+Separate belt-height check: running `overlay_calibrate.py` against
+`p13-anchor.json` predicts the dagger belt at y = 361.4, while the committed
+JSON anchor records `parhelion.y = 351`. That leaves a +10.4 px vertical
+residual for the parhelic-belt overlay rule. Do not fold that residual into
+the parhelion-offset route verdict; it is a distinct y-axis tuning item for
+the parhelic circle / dagger belt.
+
+Probation status: **cleared**, recorded as *bad anchor, route OK*. The
+parhelion-offset route was never the problem; the rough hand-anchor was.
+The escalation rule (anchor-probation when a single eligible photo
+touches a cutoff) fired correctly and surfaced a real bug; the bug just
+wasn't in the route.
+
+Downstream consequences of p13 being h ~ 7 deg:
+- The `nine-halo-eye.json` / mid-altitude poses are no longer a relevant
+  morphology comparison for p13. The `low-altitude.json` pose is the
+  match.
+- For step 2 / Task #53 (CZA apex anchors), the predicted CZA apex y is now
+  sun_y - R46 = 372 - 422 = -50 (above the image plane) at h = 6.8 deg.
+  Translation: the CZA, if visible in p13, would sit very high in the
+  frame. The photo is square-cropped and the upper edge is at y = 25,
+  so any CZA in p13 would be cropped.
+- Tangent-arc curvature on p13 also needs re-evaluation at the new h;
+  the upper tangent's predicted radius and position both shift.
+
+Anchor file committed at `docs/calibration/p13-anchor.json`.
+
+Step 1 closes. Historical next step was Task #53 as a p2 CZA measurement plus
+p13 crop-verdict receipt; Task #55 below supersedes the CZA route verdict with
+the p27 / p20 expansion pass.
+
+## Task #55 CZA Expansion Verdict *(2026-05-13)*
+
+Task #55 resolves the CZA-apex expansion question that followed the p2-only
+receipt. It is a **clean negative**, not the systematic replication we were
+hoping for.
+
+Measured / checked photos:
+
+- **p2:** observed CZA apex `(560,113)`, predicted `(567,132)`;
+  y residual = **-19.3 px** under the observed-minus-predicted convention.
+  The apex sits above prediction.
+- **p27:** observed CZA apex `(599,142)`, predicted `(596,121)`;
+  y residual = **+21 px**. The apex sits below prediction. The flat CZA apex
+  makes a pure parabola-fit apex unstable, so the committed anchor uses a
+  visual lower-edge compromise.
+- **p19:** demoted from CZA coverage. Its upper chromatic arc aligns with an
+  R22 ~= 270 px halo / upper-tangent region; predicted CZA apex y ~= -110.
+- **p20:** fallback checked and rejected for CZA coverage. Plausible R22
+  anchors put predicted CZA apex y ~= -83.
+
+Verdict: CZA-apex inversion now fails the residual gate on the expanded set.
+The p2 and p27 residuals both exceed the 8 px / 0.04 * R22 route threshold,
+but they have opposite signs. Therefore p2 was not evidence of a stable
+direction-and-magnitude atlas bias. The corrected interpretation is weaker
+and cleaner: parhelion-offset is reliable at ~0-1 px, while CZA-apex is
+photo-specific enough that it must not be promoted as a simple inverse route.
+
+Roadmap consequence: Task #54 tangent-arc curvature can resume. The CZA route
+stays parked unless a new clean CZA-visible photo enters the calibration set.

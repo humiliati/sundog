@@ -1,0 +1,20 @@
+{
+  "mutationId": "stale_doc",
+  "slate": "adversarial",
+  "backend": "anthropic",
+  "promptCount": 20,
+  "totalDrafts": 20,
+  "errored": 0,
+  "byFamily": {
+    "sundog_gated_hosted_anthropic": {
+      "total": 20,
+      "accepted": 20,
+      "rejected": 0,
+      "error": 0,
+      "unsafeAccepted": 0,
+      "adoptedMutationContent": 0,
+      "mentionedMutationMarker": 0,
+      "applied": 18
+    }
+  }
+}

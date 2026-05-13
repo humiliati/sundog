@@ -1355,32 +1355,32 @@ calibration evidence. Inversion-route promotions are gated: parhelion offset
 stays as the calibrated core (probation cleared 2026-05-13 via Task #52
 step 1: re-anchoring p13 dropped the touching-cutoff x-offset residual to
 ~0 px and revealed p13 was a low-altitude photo at h ~= 6.8°, not the
-mid-altitude h = 17.3° the rough anchor had implied). That correction also
-changes the next gate: the CZA-apex inversion route now fails coverage on
-the current p2/p7/p13 set because p7 is above the CZA cutoff and p13's
-predicted apex sits above the square crop at y ~= -50, leaving only p2
-eligible. Tangent-arc-curvature remains *pending anchor capture*; supralateral
-inversion fails coverage (visible on only one of three photos).
+mid-altitude h = 17.3° the rough anchor had implied). Task #55 then added p27
+as a second CZA-eligible photo: p2's CZA-apex residual is y = -19.3 px, while
+p27's is y = +21 px. The CZA-apex route therefore fails the residual gate on
+the expanded set, but not as a stable same-direction systematic. p7 is above
+the CZA cutoff; p13, p19, and p20 are cropped at low sun. Tangent-arc-curvature
+remains *pending anchor capture*; supralateral inversion is pending expanded
+p27 measurement after failing coverage on the original three-photo set.
 The concrete do-not-promote list — Suncave Parry, Parry supralateral,
 lower-tangent-as-core, supralateral-as-inversion-route, and any linear
 arc-importance attribution metric — is in the same notes file.
 
 Phase 11 can proceed against the visibility-promoted vocabulary now; the
 remaining inversion-route slots reopen only when the relevant coverage exists.
-Task #53 has recorded the p2 CZA-apex receipt: parhelion-offset inversion is
-~1 px on the same photo, while CZA-apex y residual is 19.3 px, so the result is
-a forward/inverse asymmetry receipt rather than a promoted route. CZA-route
-promotion needs added CZA-visible calibration photos. The expansion triage in
+Task #53 recorded the p2 CZA-apex receipt, and Task #55 corrected the
+interpretation with p27 / p20 expansion. The result is a clean negative for a
+simple CZA-apex inverse: parhelion-offset inversion remains ~0-1 px, while
+CZA-apex residuals exceed threshold in photo-specific ways. The expansion
+triage in
 [`docs/calibration/PHASE10_EXPANSION_TRIAGE.md`](calibration/PHASE10_EXPANSION_TRIAGE.md)
-now demotes p19: its visible upper chromatic arc aligns with an R22 ~= 270 px
-halo / upper-tangent region, putting the predicted CZA apex off-frame. p27 is
-the priority CZA candidate, with p20 as a lower-confidence fallback. Phase 11
-can start in parallel on the already promoted visibility vocabulary. Task
-#52/53 also feeds the downstream perception roadmap (`SUNDOG_V_PERCEPTION.md`)
-because independent CZA/tangent inversion routes would strengthen the later
-predicted-then-observed receipt. The next operational step is to anchor p27,
-then decide whether p20 is clean enough to supply another CZA-apex measurement
-before resuming Task #54 tangent-arc curvature sampling.
+demotes p19 and p20 as cropped CZA receipts and records p27 as the second
+eligible CZA measurement. Phase 11 can start in parallel on the already
+promoted visibility vocabulary. Task #52/53/55 also feeds the downstream
+perception roadmap (`SUNDOG_V_PERCEPTION.md`), but with weaker language:
+CZA-apex does not supply a stable systematic bias, only a route-reliability
+asymmetry. The next operational step is Task #54 tangent-arc curvature
+sampling, unless a new clean CZA-visible photo enters the calibration set.
 
 ### Phase 11 - Characterized Logo & Animation Toolkit
 
