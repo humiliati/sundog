@@ -1346,47 +1346,71 @@ Deliverables:
 Gate: the optional vocabulary layers are stable enough to give to a design
 team as shape language, without letting them rewrite the calibrated core.
 
-**Status 2026-05-13: Phase 10 gate is *partially open*.** Verdict landed in
+**Status 2026-05-13: Phase 10 gate is *closed*; single-handle verdict
+landed.** All anchor-capture work (Tasks #52, #53, #54, #55) shipped; the
+detailed verdict and per-route reasoning live in
 [`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`](calibration/RICH_DISPLAY_OVERLAY_NOTES.md)
-under "Phase 10 Promotion Verdict". Visibility-based promotions are final:
-the upper tangent arc is promoted as logo / animation vocabulary, the CZA
-is promoted as a conditional core primitive (rendered only when
-`h < 32.2°`), and the lower tangent + infralateral arcs are held as optional
+under "Phase 10 Promotion Verdict" and the new "Single-handle closeout"
+subsection.
+
+**Headline:** of the four candidate `signature → h` inversion routes,
+**one is promoted into calibrated core**, and **the other three fail at
+three distinct layers of the measurement stack**:
+
+| route | gate outcome | failure layer |
+| --- | --- | --- |
+| Parhelion offset → h | **promoted** (calibrated core; probation cleared 2026-05-13) | none — passes residual gate at ~0 px |
+| CZA apex → h | fails | **residual gate** (p2: y = -19.3 px; p27: y = +21 px; both exceed `0.04 * R22`, opposite signs) |
+| Supralateral → h | fails | **coverage gate** (only p2 eligible on the committed set; p27 is a candidate but unmeasured) |
+| Tangent-arc curvature → h | fails | **detection gate** (Task #54: column-peak protocol fails on all four eligible photos with three distinct degeneracy modes) |
+
+Each non-parhelion route fails for a structurally different reason: CZA
+generates residuals and they exceed threshold with non-replicating signs;
+supralateral cannot supply a second eligible residual on the current set;
+tangent-arc curvature is detection-degenerate across the entire altitude
+range under column-peak detection. The taxonomy matters: a residual-gate
+failure is not the same kind of negative as a detection-gate failure.
+
+Visibility-based promotions remain final from the earlier 2026-05-13
+pass: the upper tangent arc is promoted as logo / animation vocabulary;
+the CZA primitive is promoted as conditional core (rendered only when
+`h < 32.2°`); lower tangent + infralateral arcs are held as optional
 vocabulary compatible with named-pose examples (`low-altitude.json`,
-`forty-six-halo.json`). Named poses are presentation surfaces, not additional
-calibration evidence. Inversion-route promotions are gated: parhelion offset
-stays as the calibrated core (probation cleared 2026-05-13 via Task #52
-step 1: re-anchoring p13 dropped the touching-cutoff x-offset residual to
-~0 px and revealed p13 was a low-altitude photo at h ~= 6.8°, not the
-mid-altitude h = 17.3° the rough anchor had implied). Task #55 then added p27
-as a second CZA-eligible photo: p2's CZA-apex residual is y = -19.3 px, while
-p27's is y = +21 px. The CZA-apex route therefore fails the residual gate on
-the expanded set, but not as a stable same-direction systematic. p7 is above
-the CZA cutoff; p13, p19, and p20 are cropped at low sun. Tangent-arc-curvature
-remains *pending anchor capture*; supralateral inversion is pending expanded
-p27 measurement after failing coverage on the original three-photo set.
+`forty-six-halo.json`). Named poses are presentation surfaces, not
+additional calibration evidence.
+
 The concrete do-not-promote list — Suncave Parry, Parry supralateral,
-lower-tangent-as-core, supralateral-as-inversion-route, and any linear
+supralateral-as-inversion-route, tangent-curvature-under-column-peak,
+CZA-apex-inversion-route, lower-tangent-as-core, and any linear
 arc-importance attribution metric — is in the same notes file.
 
-Phase 11 can proceed against the visibility-promoted vocabulary now; the
-remaining inversion-route slots reopen only when the relevant coverage exists.
-Task #53 recorded the p2 CZA-apex receipt, and Task #55 corrected the
-interpretation with p27 / p20 expansion. The result is a clean negative for a
-simple CZA-apex inverse: parhelion-offset inversion remains ~0-1 px, while
-CZA-apex residuals exceed threshold in photo-specific ways. The expansion
-triage in
+The Phase 10 closeout reads cleanly against the gravity-claim language:
+the atlas is **rich in forward generation** (`h → all primitives`) but
+supports **one image-recoverable inverse handle** (parhelion offset),
+not a redundant four. That is the same forward-rich / inverse-narrow
+asymmetric field-shape pattern the mesa side observed in-vitro — now
+observed in-the-wild at numerical resolution.
+
+Phase 11 proceeds against the visibility-promoted vocabulary now. Three
+open questions are filed but not blocking:
+
+1. **Lens-optics test.** Would a controlled-optics calibration set
+   resolve CZA-apex's photo-specific direction inconsistency into a
+   stable systematic? Mesa #4-style falsification surface.
+2. **Tangent-curvature tooling.** Does a gradient-based edge-tracking or
+   template-matching detector recover the route on existing photos?
+   This is a tooling question, not a physics one — the arc is real and
+   visible; column-peak is the wrong instrument.
+3. **Parhelic-belt-y replication.** Does p13's +10.4 px belt-y residual
+   replicate across multiple low-h photos, or is it photo-specific?
+
+The expansion triage in
 [`docs/calibration/PHASE10_EXPANSION_TRIAGE.md`](calibration/PHASE10_EXPANSION_TRIAGE.md)
-demotes p19 and p20 as cropped CZA receipts and records p27 as the second
-eligible CZA measurement. Phase 11 can start in parallel on the already
-promoted visibility vocabulary. Task #52/53/55 also feeds the downstream
-perception roadmap (`SUNDOG_V_PERCEPTION.md`), but with weaker language:
-CZA-apex does not supply a stable systematic bias, only a route-reliability
-asymmetry. The next operational step is Task #54 tangent-arc curvature
-sampling, unless a new clean CZA-visible photo enters the calibration set.
-Task #54 inherits the v3.8 metric discipline: report tangent visual salience,
-route-local curvature residual, full-overlay interaction, and any conflict
-with parhelion/CZA/supralateral routes as separate fields.
+records the p19/p20 cropped-CZA demotions and the p27 promotion to
+second eligible CZA measurement. The Phase 10 closeout also feeds the
+downstream perception roadmap (`SUNDOG_V_PERCEPTION.md`) with
+appropriately weakened language: CZA-apex does not supply a stable
+systematic bias, only a route-reliability asymmetry.
 
 ### Phase 11 - Characterized Logo & Animation Toolkit
 

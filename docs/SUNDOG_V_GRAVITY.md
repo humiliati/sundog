@@ -148,25 +148,43 @@ methods. See [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) for the
 full transfer, including the methodological lessons for Phase 10/11
 overlay tuning.
 
-**Forward/inverse asymmetry receipt *(corrected 2026-05-13).* Geometry Phase
-10 now has a concrete mesa-style residual split inside the in-the-wild
-substrate, but the strong version did not replicate. On p2, the
-parhelion-offset route recovers sun altitude to ~1 px while the CZA-apex route
-misses by 19.3 px in y. Task #55 then added p27, whose CZA is visually clear
-but whose apex residual is opposite in sign: about +21 px y. p19 and p20 both
-resolve as cropped / not CZA-eligible under their plausible R22 anchors. The
-result is not a stable direction-and-magnitude atlas bias. It is a clean
-negative for promoting CZA-apex as a simple inverse route, and a weaker but
-still useful geometry-side Mesa #3 receipt: some inverse handles are reliable
-(parhelion offset), while others are photo-specific and fail to factor cleanly
-from the same atlas generator. This paragraph is methodological discipline,
-not a new public proof surface.
+**Forward/inverse asymmetry receipt *(sharpened 2026-05-13 after Phase 10
+closeout).* The atlas is rich in forward generation and supports one
+image-recoverable inverse handle.** Four candidate inversion routes were
+tested across the calibration set; **one survived; the other three failed
+at three structurally different layers of the measurement stack.**
 
-For now this stays inside the Gravity Claim rather than becoming a separate
-appendix. Promotion trigger: if Geometry Phase 10/11 produce quantitative
-per-inversion-route residuals that make the two-substrate convergence a
-standalone public proof surface, split this subsection into an appendix and
-link it from the claim ledger.
+| route | gate outcome | failure layer |
+| --- | --- | --- |
+| Parhelion offset → h | promoted (calibrated core) | none — passes residual gate at ~0 px |
+| CZA apex → h | fails | residual gate (p2 y = -19.3 px; p27 y = +21 px; opposite signs) |
+| Supralateral → h | fails | coverage gate (only p2 eligible on the committed set; p27 candidate, unmeasured) |
+| Tangent-arc curvature → h | fails | detection gate (column-peak fails on all four eligible photos, three distinct degeneracy modes) |
+
+The atlas is **forward-rich** — `h → all primitives` runs cleanly through
+parhelion offset, halo radii, CZA visibility window, tangent positions,
+supralateral position — and **inverse-narrow** — only the parhelion-offset
+route survives image-recoverable inversion at numerical resolution on the
+calibration set. That is the same forward-rich / inverse-narrow asymmetric
+field-shape pattern the mesa-side cliff exhibits in-vitro, now observed
+in-the-wild at numerical resolution. **Do not frame the atlas as
+"multiple independent inverse routes converging."** The receipt is sharper
+and more falsifiable than that: one route works, three others fail at
+three different layers, and the failure-layer taxonomy itself is a
+methodological deliverable.
+
+For now this stays inside the Gravity Claim rather than becoming a
+separate appendix. The two-substrate convergence claim survives
+(same field-shape pattern, two substrates, independent methods); what
+this paragraph retires is any "redundant routes" reading. Promotion
+trigger: if downstream work produces additional inverse-route receipts
+under controlled-optics or alternate-detection protocols, split this
+subsection into an appendix and link it from the claim ledger. The three
+open Phase 10 questions (lens-optics test, tangent-curvature tooling,
+parhelic-belt-y replication; see
+[`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) Geometry Phase 10
+closeout section) name the next experiments that could move this from
+single-handle to multi-handle if they confirm.
 
 **Predictive-receipt extension *(staged 2026-05-13)*.** A third receipt
 is staged in [`SUNDOG_V_PERCEPTION.md`](SUNDOG_V_PERCEPTION.md): the
