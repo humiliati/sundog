@@ -55,6 +55,7 @@ from training.mesa.phase6_probes import (
 
 PHASE6_V2_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v2-direction"
 PHASE6_V31_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-1-validation"
+PHASE6_V32_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-2-neuron-mediation"
 
 
 V31_POLICY_SPECS: dict[str, PolicySpec] = {
@@ -1199,10 +1200,16 @@ def run_subspace_injected_rollout(
     env_id: str,
     Q: torch.Tensor,
     target_coords: list[np.ndarray],
+    neuron_mask: torch.Tensor | None = None,
 ) -> DirectionRolloutCache:
     """Run policy under live x_false intervention, substituting only the
     projection of `layer`'s output onto the subspace `Q` with `target_coords`
     at each step. The orthogonal complement (255+ dims of net.7) is preserved.
+
+    If `neuron_mask` is provided (a {0, 1} mask over `d_in`), the subspace
+    delta is multiplied by the mask before being added to `h`. This restricts
+    the patch to the masked neurons — used by Phase 6 v3.2 Axis M to test
+    top-k neuron mediation of the v3 PCA subspace.
     """
     if not target_coords:
         raise RuntimeError("cannot inject empty target_coords cache")
@@ -1231,6 +1238,8 @@ def run_subspace_injected_rollout(
         h = output.squeeze(0)
         current_c = Q.T @ h  # (K_eff,)
         delta = Q @ (target_c - current_c)  # (d_in,)
+        if neuron_mask is not None:
+            delta = delta * neuron_mask
         h_new = h + delta
         realized_coords.append((Q.T @ h_new).detach().cpu().numpy().copy())
         return h_new.unsqueeze(0)
@@ -1271,12 +1280,24 @@ def run_subspace_patch_battery(
     manifest_extra: dict[str, Any],
     protected_spec: PolicySpec = CLIFF_PROTECTED,
     collapsed_spec: PolicySpec = CLIFF_COLLAPSED,
+    neuron_mask_np: np.ndarray | None = None,
 ) -> None:
     """Run the 4-forward direction-patch battery using subspace Q across the
     matched seed slate. Writes per-seed CSV, aggregate CSV, and v1-comparison
-    CSV under out_dir."""
+    CSV under out_dir.
+
+    If `neuron_mask_np` is provided (a {0, 1} mask over `d_in`), the subspace
+    delta is restricted to the masked neurons before being applied. Phase 6
+    v3.2 Axis M uses this to test top-k neuron mediation of the v3 PCA
+    subspace.
+    """
     Q = torch.tensor(Q_np, dtype=torch.float32)
     K_eff = int(Q_np.shape[1])
+    neuron_mask = (
+        torch.tensor(neuron_mask_np.astype(np.float32))
+        if neuron_mask_np is not None
+        else None
+    )
     protected_policy, protected_mean, protected_std = load_learned_policy(protected_spec)
     collapsed_policy, collapsed_mean, collapsed_std = load_learned_policy(collapsed_spec)
     validate_subspace_compatible(
@@ -1329,6 +1350,7 @@ def run_subspace_patch_battery(
                 env_id=f"{prefix}-C",
                 Q=Q,
                 target_coords=cache_A.projections,  # type: ignore[arg-type]
+                neuron_mask=neuron_mask,
             )
             cache_D = run_subspace_injected_rollout(
                 client,
@@ -1341,6 +1363,7 @@ def run_subspace_patch_battery(
                 env_id=f"{prefix}-D",
                 Q=Q,
                 target_coords=cache_B.projections,  # type: ignore[arg-type]
+                neuron_mask=neuron_mask,
             )
 
             success_pc = safe_patch_success(
@@ -1923,6 +1946,126 @@ def axis_l_bootstrap(args: argparse.Namespace) -> None:
 
 
 # ============================================================
+# v3.2 Axis M — Top-k neuron mediation
+# ============================================================
+
+
+def compute_neuron_ranking(Q_cliff: np.ndarray) -> np.ndarray:
+    """Rank neurons at the patched layer by aggregate L2 contribution across
+    the columns of `Q_cliff` (the v3 PCA basis). Returns neuron indices sorted
+    descending by `score[j] = Σ_i v_ij²`. The top-k entries are the neurons
+    most heavily involved across the basin-attractor subspace.
+    """
+    if Q_cliff.ndim != 2:
+        raise ValueError(f"expected (d_in, K) basis; got {Q_cliff.shape}")
+    scores = (Q_cliff ** 2).sum(axis=1)  # (d_in,)
+    return np.argsort(-scores)
+
+
+def axis_m_neuron_mediation(args: argparse.Namespace) -> None:
+    """Phase 6 v3.2 Axis M: restrict the v3 K=5 PCA patch delta to top-k
+    neurons at net.7, parameterized by --top-k. Optional --pair routes the
+    same neuron mask to the v3.1 J1/J2 held-out pairs."""
+    out_root = Path(args.out)
+    if not out_root.is_absolute():
+        out_root = REPO_ROOT / out_root
+    out_root.mkdir(parents=True, exist_ok=True)
+
+    pair_key = args.pair.upper() if args.pair else "cliff"
+    if pair_key not in {"cliff", "J1", "J2"}:
+        raise ValueError(f"unknown pair {args.pair!r}; expected one of {{cliff, J1, J2}}")
+    if pair_key == "cliff":
+        protected_spec, collapsed_spec = CLIFF_PROTECTED, CLIFF_COLLAPSED
+    else:
+        protected_spec, collapsed_spec = V31_GENERALIZATION_PAIRS[pair_key]
+
+    # Load (or build) the cliff-pair PCA basis (the v3 K=5 artifact).
+    Q_full, basis_metadata = load_or_build_cliff_pca_basis(
+        out_root=PHASE6_V31_OUT,
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        num_components=5,
+    )
+    d_in = int(Q_full.shape[0])
+    top_k = int(args.top_k)
+    if top_k <= 0 or top_k > d_in:
+        raise ValueError(f"--top-k must be in [1, {d_in}], got {top_k}")
+
+    # Rank neurons by aggregate L2 across PCs 1-5; build mask.
+    ranking = compute_neuron_ranking(Q_full)
+    top_k_indices = ranking[:top_k].tolist()
+    neuron_mask_np = np.zeros(d_in, dtype=np.float32)
+    neuron_mask_np[ranking[:top_k]] = 1.0
+
+    # Per-PC contribution captured by the mask, as a diagnostic.
+    captured_l2_per_pc = []
+    total_l2_per_pc = []
+    for i in range(Q_full.shape[1]):
+        v = Q_full[:, i]
+        total = float((v ** 2).sum())
+        captured = float((v[ranking[:top_k]] ** 2).sum())
+        captured_l2_per_pc.append(captured)
+        total_l2_per_pc.append(total)
+    captured_total = float(sum(captured_l2_per_pc))
+    total_total = float(sum(total_l2_per_pc))
+    captured_fraction = captured_total / max(total_total, 1e-12)
+
+    label = f"top-{top_k}"
+    out_dir = out_root / pair_key.lower() / label
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    print(
+        f"phase6 v3.2 axis-M ({pair_key} pair, top-{top_k}): "
+        f"d_in={d_in}, captured_fraction={captured_fraction:.4f}",
+        flush=True,
+    )
+    # Write the neuron-id list and the per-PC capture diagnostic up front.
+    neuron_rows = [
+        {
+            "rank": rank + 1,
+            "neuron_idx": int(idx),
+            "aggregate_l2_score": float((Q_full[int(idx), :] ** 2).sum()),
+        }
+        for rank, idx in enumerate(ranking[:top_k])
+    ]
+    write_csv(out_dir / f"neuron-ids-top-{top_k}.csv", neuron_rows)
+    pc_capture_rows = [
+        {
+            "pc_index": i + 1,
+            "captured_l2": captured_l2_per_pc[i],
+            "total_l2": total_l2_per_pc[i],
+            "capture_fraction": captured_l2_per_pc[i] / max(total_l2_per_pc[i], 1e-12),
+        }
+        for i in range(Q_full.shape[1])
+    ]
+    write_csv(out_dir / "pc-l2-capture.csv", pc_capture_rows)
+
+    run_subspace_patch_battery(
+        Q_np=Q_full,
+        label=label,
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        layer=args.layer,
+        out_dir=out_dir,
+        manifest_extra={
+            "axis": "M",
+            "pair": pair_key,
+            "top_k": top_k,
+            "d_in": d_in,
+            "captured_l2_fraction": captured_fraction,
+            "top_k_neuron_indices": top_k_indices,
+            "basis": "cliff_pair_pca_pc1_to_5",
+            "basis_metadata": basis_metadata,
+        },
+        protected_spec=protected_spec,
+        collapsed_spec=collapsed_spec,
+        neuron_mask_np=neuron_mask_np,
+    )
+
+
+# ============================================================
 # CLI
 # ============================================================
 
@@ -2033,6 +2176,20 @@ def parse_args() -> argparse.Namespace:
     boot.add_argument("--resamples", type=int, default=1000)
     boot.add_argument("--bootstrap-seed", type=int, default=0)
 
+    nmed = sub.add_parser(
+        "axis-m-neuron-mediation",
+        help="Phase 6 v3.2 Axis M: top-k neuron-restricted projection of the v3 PCA patch",
+    )
+    nmed.add_argument("--out", default=str(PHASE6_V32_OUT / "axis-m-cliff-pair"))
+    nmed.add_argument("--top-k", type=int, required=True,
+                      help="number of top-ranked neurons (by aggregate L2 across PCs 1-5) to include in the patch mask")
+    nmed.add_argument("--pair", default=None, choices=["cliff", "J1", "J2"],
+                      help="policy pair to patch; default is the cliff pair (L-Mixed-M-λ=0.95 vs λ=0.97)")
+    nmed.add_argument("--seed-start", type=int, default=10000)
+    nmed.add_argument("--seeds", type=int, default=64)
+    nmed.add_argument("--horizon", type=int, default=200)
+    nmed.add_argument("--layer", default="net.7")
+
     args = parser.parse_args()
     if args.command is None:
         parser.print_help()
@@ -2060,6 +2217,8 @@ def main() -> None:
         axis_k_decompose(args)
     elif args.command == "axis-l-bootstrap":
         axis_l_bootstrap(args)
+    elif args.command == "axis-m-neuron-mediation":
+        axis_m_neuron_mediation(args)
     else:
         raise ValueError(f"unknown command: {args.command}")
 

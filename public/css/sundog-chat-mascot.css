@@ -263,6 +263,90 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Stamp overlay — third reinforcing visual channel                  */
+/* ------------------------------------------------------------------ */
+/*
+ * A stamp is a short, rotated, semi-transparent label rendered on the
+ * bubble that names the discipline the trace exhibited — BOUNDARY
+ * ACTIVE, REFUSED, HELD, TRIMMED TO TRACE, SPECULATIVE, etc. Three
+ * constraints from the spec:
+ *
+ *  1. The stamp must NOT interfere with copy/paste of the answer text
+ *     (`user-select: none` + `pointer-events: none`).
+ *  2. The stamp must read as a visual seal, not as prose — rotated,
+ *     oversized letter-spacing, semi-transparent tinted color.
+ *  3. The stamp must not overlap the trace-drawer disclosure triangle;
+ *     it lives in the top-right corner of the bubble where the bubble
+ *     padding gives it room.
+ *
+ * Stamps only attach to bubbles that already carry a `--has-stamp`
+ * marker class so the layout reserves space and existing message
+ * styles cascade unchanged when no stamp is present.
+ */
+
+.sd-chat-bubble--has-stamp {
+  padding-top: 1.4rem;
+}
+
+.sd-chat-stamp {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  transform: rotate(-4deg);
+  transform-origin: top right;
+  font-family: var(--sd-font-data, "IBM Plex Mono", ui-monospace, monospace);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  color: rgba(177, 70, 50, 0.78);
+  background: rgba(241, 234, 220, 0.55);
+  opacity: 0.85;
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* Per-state stamp colors — palette matches the bubble it overlays so
+ * the stamp reads as part of the same signal. Tokens are CSS custom-
+ * property overrides on the `color` channel only (border inherits via
+ * `currentColor`); background stays the neutral cream so the stamp is
+ * legible on every bubble variant. */
+
+.sd-chat-stamp[data-stamp-state="halo_shield"],
+.sd-chat-stamp[data-stamp-state="paw_stop_unsupported"],
+.sd-chat-stamp[data-stamp-state="held_refusal"] {
+  color: rgba(26, 58, 82, 0.82);
+}
+
+.sd-chat-stamp[data-stamp-state="thought_cloud"] {
+  color: rgba(80, 70, 90, 0.78);
+}
+
+.sd-chat-stamp[data-stamp-state="claim_gate_trim"],
+.sd-chat-stamp[data-stamp-state="erase_and_stamp"] {
+  color: rgba(154, 113, 50, 0.85);
+}
+
+.sd-chat-stamp[data-stamp-state="poster_vs_research"],
+.sd-chat-stamp[data-stamp-state="split_book_clock"],
+.sd-chat-stamp[data-stamp-state="dropped_trace_failure"] {
+  color: rgba(177, 70, 50, 0.82);
+}
+
+/* HELD stamp variant — slightly smaller, reads as continuation rather
+ * than escalation when the boundary fires twice in a row. */
+.sd-chat-stamp[data-stamp-state="held_refusal"] {
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  opacity: 0.78;
+}
+
+/* ------------------------------------------------------------------ */
 /* Accessibility                                                       */
 /* ------------------------------------------------------------------ */
 

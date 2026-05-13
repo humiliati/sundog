@@ -160,6 +160,37 @@ export function bubbleClassFor(mascotState) {
     : null;
 }
 
+// Stamp overlays — the third reinforcing channel after the mascot face
+// and the bubble morphology. A stamp is a short, rotated, semi-trans-
+// parent label rendered on top of the bubble that names the discipline
+// the trace exhibited: BOUNDARY ACTIVE, REFUSED, HELD, TRIMMED, etc.
+//
+// Quiet states (idle, sniff_prompt, paw_claim_map, compass_route,
+// magnifier_pages, book_to_bubble, out_of_scope) get no stamp — the
+// bubble itself carries the signal cleanly.
+//
+// `sweat_brace` deliberately gets no stamp: the pressure-detected state
+// is meant to read as ongoing tension, not a verdict; a stamp would
+// over-commit to a posture the system hasn't yet resolved.
+const STAMP_LABEL = Object.freeze({
+  halo_shield:           "BOUNDARY ACTIVE",
+  paw_stop_unsupported:  "REFUSED",
+  held_refusal:          "HELD",
+  claim_gate_trim:       "TRIMMED TO TRACE",
+  thought_cloud:         "SPECULATIVE",
+  split_book_clock:      "STALE",
+  poster_vs_research:    "PROMO ≠ EVIDENCE",
+  erase_and_stamp:       "CORRECTED",
+  dropped_trace_failure: "FAILURE MAP"
+});
+
+export function stampLabelFor(mascotState) {
+  if (!mascotState || typeof mascotState !== "string") return null;
+  return Object.prototype.hasOwnProperty.call(STAMP_LABEL, mascotState)
+    ? STAMP_LABEL[mascotState]
+    : null;
+}
+
 export function reduceToButtonState(mascotState) {
   switch (mascotState) {
     case "sweat_brace":
@@ -270,3 +301,4 @@ export const __MASCOT_STATES = FULL_STATES;
 export const __BUTTON_STATES = BUTTON_STATES;
 export const __PUBLIC_LABELS = PUBLIC_LABEL;
 export const __BUBBLE_BY_STATE = BUBBLE_BY_STATE;
+export const __STAMP_LABEL = STAMP_LABEL;
