@@ -1135,6 +1135,28 @@ C->P/basin resistance is shared at neuron identity and function across
 Medium held-out pairs, with a J2 caveat that the transferred cliff mask
 beats the own mask.
 
+**Phase 6 v3.8 result (2026-05-13, per-PC decomposition + signed effects)**
+at [`mesa/PHASE6_V38_SPEC.md`](mesa/PHASE6_V38_SPEC.md) and
+[`mesa/PHASE6_V38_RESULTS.md`](mesa/PHASE6_V38_RESULTS.md). Axis T
+decomposed the cliff-pair 5D subspace PC-by-PC; Axis U re-analyzed signed
+neuron effects across the cliff pair plus J1/J2. EE1 is mixed, not clean:
+P->C is more component-partitioned than C->P (`0.322` vs `0.430` mean
+off-diagonal top-32 Jaccard), but not below the pre-registered confirm
+line. EE2 falsifies the stale "PC1 is mechanism-empty" phrasing: PC1 has
+the highest single-PC P->C max mean ablation cost (`0.0148`), though all
+single-PC costs remain floor-level and v3.1's irreducible K=5 result is
+unchanged. EE3 confirms directional opposition at the 0.01 threshold
+(`31` opposition-class neurons) and is mixed under the non-gating 0.02
+sensitivity check (`14`). EE4 confirms that C->P signed structure is more
+stable across held-out pairs than P->C under both thresholds. Updated
+synthesis: basin induction is shared at the 5D control-surface level,
+more partitioned across PCs, pair-specific at neuron identity, and
+functional within each pair; basin resistance is shared across PCs and
+across Medium held-out-pair neuron identity/function. The geometry
+crossover inherits the same rule in a cleaner form: do not collapse
+variance, single-route sensitivity, and full multi-component mechanism
+into one "importance" score.
+
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
 [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md). The harness

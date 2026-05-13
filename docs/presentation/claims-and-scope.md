@@ -312,8 +312,8 @@ piecemeal, because the parts qualify each other:
   toy family up to the measured boundary.
 - **Mechanistic anchor:** the basin attractor at the actor's final hidden
   activation (`net.7`) is **a small handful of generators, irreducibly
-  entangled, only legible as a whole**. Nine rounds of mechanistic probing
-  (Phase 6 v1 -> v3.7) converged on this shape: (v1) layer patching
+  entangled, only legible as a whole**. Ten rounds of mechanistic probing
+  (Phase 6 v1 -> v3.8) converged on this shape: (v1) layer patching
   localizes the cliff to `net.7`. (v3) PCA on per-step matched-seed
   diffs compresses the relevant subspace to 5 principal components
   capturing 97.4% of variance and reproducing v1 full-layer patch effect
@@ -339,24 +339,28 @@ piecemeal, because the parts qualify each other:
   layers of cross-policy generalization that earlier framings
   collapsed: (i) subspace-level behavioral transfer, (ii) neuron-
   identity substrate transfer, (iii) functional mask transfer. The
-  picture, closed by v3.7's own-mask functional ablation:
+  picture, extended by v3.8's per-PC and signed-effect maps:
   **basin induction is family-wide at the 5D subspace/control-surface
-  level and anatomically grounded within each policy, but the
+  level, more partitioned across PCs, and anatomically grounded within each policy, but the
   anatomical substrate identity is pair-specific** (P->C Jaccard
   0.255/0.067 across pairs, AND each pair's own P->C mask
-  functionally dissociates within that pair: J1 +0.128, J2 +0.253);
+  functionally dissociates within that pair: J1 +0.128, J2 +0.253;
+  v3.8 P->C per-PC mean off-diagonal Jaccard 0.322);
   **basin resistance is shared at both substrate identity and
-  function across Medium policies** (C->P Jaccard 0.422/0.684 +
+  function across Medium policies and more shared across PCs** (C->P Jaccard 0.422/0.684 +
   v3.6 cliff-mask functional dissociation +0.151/+0.508 + v3.7
-  own-mask dissociation +0.208/+0.392 — same neurons operationally
+  own-mask dissociation +0.208/+0.392; v3.8 C->P per-PC mean
+  off-diagonal Jaccard 0.430 — same neurons operationally
   necessary for C->P across the family). The reason v3.1's behavioral
   C->P transfer was weak is not that the substrate is policy-specific;
   it is that the cliff-pair-derived substitution activation pattern
   isn't the precise operational target each policy needs at that
-  shared substrate. Six methodological lessons stack out of the nine
+  shared substrate. Six methodological lessons stack out of the ten
   rounds: (1) feature-availability rankings are not
-  mechanism rankings (SAE at |corr|=0.89 -> 0% patch); (2) variance is
-  not mechanism (PC1: 38.8% variance, 0% patch); (3) linear additive
+  mechanism rankings (SAE at |corr|=0.89 -> 0% patch); (2) variance and
+  local sensitivity are not full mechanism (PC1: 38.8% variance, largest
+  single-PC P->C max mean ablation cost in v3.8, still no solo K=5 patch);
+  (3) linear additive
   top-k subspace restriction destroys mechanism even with the correct
   basis; (4) single-neuron ablation does not surface a critical
   subset; (5) set-level ablation along basis-derived rankings does

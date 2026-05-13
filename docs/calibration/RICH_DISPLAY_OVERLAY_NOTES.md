@@ -64,6 +64,15 @@ touching a cutoff does not fail a route or primitive under the pre-registered
 `>= 2 photos` rule, but it does put that item on anchor-probation until the
 next anchor-capture pass confirms or clears the residual.
 
+Mesa v3.8 crossover addendum: Phase 11 metric review must keep three
+quantities separate: visual/variance salience, route-local residual or
+sensitivity, and full-overlay fit. The mesa PC1 result is the warning case:
+a component can be variance-heavy and locally sensitive without reproducing
+the full multi-component mechanism. For geometry, this means no "arc X
+contributes N% of fit" score, no aggregation that hides route-specific
+conflicts, and no promotion when a primitive improves one route while
+worsening another unless the scope is explicitly narrowed.
+
 ## Per-Inversion-Route Residual Table
 
 This table is the Phase 10 response to the mesa finding that forward and

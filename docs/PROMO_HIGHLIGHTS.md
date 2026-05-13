@@ -361,13 +361,13 @@ Two things to notice. First, the protective threshold is small in absolute
 terms — 5%, not 50%. Second, the threshold is binary in the measured window:
 there is no broad middle regime between collapse and protection.
 
-### The mechanical anchor (Phase 6 v1 → v3.3)
+### The mechanical anchor (Phase 6 v1 → v3.8)
 
 Phase 6 opened the box, and what's inside has a shape worth naming.
 The behavioral cliff has a causal locus in the actor's final hidden
 activation (`net.7`), and the circuit at that locus is **a small
 handful of generators, irreducibly entangled, only legible as a
-whole**. Nine rounds of mechanistic probing landed on the same shape
+whole**. Ten rounds of mechanistic probing landed on the same shape
 from different directions:
 
 - **v1.** Layer-level activation patching localizes the cliff causally
@@ -417,6 +417,14 @@ from different directions:
   underperforms the cliff-pair-derived mask transferred to J2
   (+0.508), suggesting the cliff pair carries a *cleaner* C→P
   ranking signal than within-policy ablation does.
+- **v3.8.** Per-PC decomposition and signed-effect analysis close the
+  crossover-friendly version of the result. P→C is more
+  component-partitioned than C→P (`0.322` vs `0.430` mean off-diagonal
+  PC top-32 Jaccard), while C→P signed structure transfers more
+  strongly across held-out pairs under both thresholds. The stale
+  "PC1 is offset only" line is retired: PC1 has the largest single-PC
+  P→C max mean ablation cost (`0.0148`), but that cost is floor-level
+  and PC1 still cannot reproduce the K=5 patch alone.
 
 What's left after those five rounds is a structural claim, not a
 score-table artifact:
@@ -470,7 +478,7 @@ generalization that earlier framings collapsed into one:
    mask transferred cleanly to both J1 (+0.151 dissociation) and J2
    (+0.508 dissociation).
 
-The clean updated reading, after the v3.7 closeout:
+The clean updated reading, after the v3.8 closeout:
 
 > **Basin induction is family-wide at the 5D subspace/control-surface
 > level and anatomically grounded within each policy, but the
@@ -499,6 +507,13 @@ substrate (C→P) and one shared activation-space direction (P→C)
 through the same 5D subspace, with the two halves generalizing
 through different mechanisms.
 
+v3.8 adds the internal anatomy: P→C is more partitioned across the
+five PCs and pair-specific at neuron identity, while C→P is more
+shared across PCs and across Medium held-out pairs. That is the part
+that crosses cleanly into the geometry program: do not collapse
+variance, local sensitivity, and full multi-component mechanism into
+one "importance" score.
+
 *The L2-overlap retroactively explains v3.2.* v3.4 also bootstrapped
 the v3.3-critical / v3.2-L2-rank overlap: the C→P critical set
 substantially overlaps the L2-rank top-32 (Jaccard 0.333, 95% CI
@@ -515,7 +530,7 @@ logged fields. The learned feed-forward policies do not observe live
 `x_false` at inference; the cliff policy is computing, not perceiving,
 its basin. The behavioral receipt from Phase 4 is now mechanistic.
 
-**Six methodological lessons stack out of the nine rounds.** Each
+**Six methodological lessons stack out of the ten rounds.** Each
 was earned by a method that failed to surface mechanism on its own
 or that overturned an obvious prior, and each is a documented reason
 the obvious-reach toolkit doesn't work here:
@@ -524,9 +539,12 @@ the obvious-reach toolkit doesn't work here:
    sparse-autoencoder feature with |correlation| = 0.89 against the
    per-episode basin outcome produced zero patch effect (v2). The SAE
    picked a policy-identifier feature, not a mechanism feature.
-2. **Variance is not mechanism.** PC1 carries 38.8% of the diff
-   variance and 0% of the patch effect. The most visually obvious
-   component is not the load-bearing one (v3 K=1 vs K=5).
+2. **Variance is not mechanism, and local sensitivity is not full
+   mechanism.** PC1 carries 38.8% of the diff variance, fails to
+   reproduce the patch alone, and nevertheless has the largest
+   single-PC P→C max mean ablation cost in v3.8. Variance rank, local
+   ablation sensitivity, and full multi-component patch effect are
+   separate observables.
 3. **Linear additive top-k restriction destroys mechanism, even with
    the right basis.** Capturing 33.6% of basis L2 in the top-32
    neurons delivers 0% of patch effect (v3.2). Partial delivery of
@@ -588,7 +606,8 @@ at [`PHASE6_RESULTS.md`](mesa/PHASE6_RESULTS.md) (v1),
 [`PHASE6_V2_RESULTS.md`](mesa/PHASE6_V2_RESULTS.md) (v2+v3),
 [`PHASE6_V31_RESULTS.md`](mesa/PHASE6_V31_RESULTS.md),
 [`PHASE6_V32_RESULTS.md`](mesa/PHASE6_V32_RESULTS.md),
-[`PHASE6_V33_RESULTS.md`](mesa/PHASE6_V33_RESULTS.md).
+[`PHASE6_V33_RESULTS.md`](mesa/PHASE6_V33_RESULTS.md),
+[`PHASE6_V38_RESULTS.md`](mesa/PHASE6_V38_RESULTS.md).
 
 ### The envelope (Phase 7 v1)
 
