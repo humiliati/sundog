@@ -289,6 +289,17 @@ function configForSlate(name) {
       baselinePath: join("results", "chat", "phase3-draft-gate", "draft-outcomes.json")
     };
   }
+  if (name === "falsification") {
+    return {
+      label: "falsification",
+      promptPath: join("chat", "prompts", "gold-falsification.jsonl"),
+      // No deterministic Phase 3 baseline for this slate — the falsification
+      // slate is hand-authored and runs hosted-only. The runner tolerates a
+      // missing baseline file (loadBaselineByPrompt logs a warning and
+      // returns an empty map).
+      baselinePath: join("results", "chat", "phase11-falsification", "deterministic-baseline-PLACEHOLDER.json")
+    };
+  }
   throw new Error(`Unknown slate "${name}".`);
 }
 
