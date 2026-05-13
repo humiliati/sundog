@@ -509,8 +509,16 @@ function configForSlate(name) {
     };
   }
 
+  if (name === "falsification") {
+    return {
+      label: "falsification",
+      promptPath: join("chat", "prompts", "gold-falsification.jsonl"),
+      outDir: join("results", "chat", "phase11-falsification-deterministic")
+    };
+  }
+
   if (name !== "wild") {
-    throw new Error(`Unknown Phase 3 slate "${name}". Expected "wild", "adversarial", or "differential".`);
+    throw new Error(`Unknown Phase 3 slate "${name}". Expected "wild", "adversarial", "differential", or "falsification".`);
   }
 
   return {
