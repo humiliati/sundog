@@ -49,6 +49,7 @@ ok(html.includes('id="photo-upload-mount"'), "missing Phase 5 upload mount");
 ok(html.includes("Show advanced controls"), "missing advanced-controls reveal");
 ok(html.includes("33 assertions"), "Phase 3 assertion count is stale");
 ok(html.includes("phase6-handle-parhelic-apex"), "missing Phase 6 parhelic apex handle styling");
+ok(html.includes("phase6-handle-cza-apex"), "missing Phase 6 CZA apex handle styling");
 
 const jsonLd = extractJsonLd(html);
 const learningResource = jsonLd.find((item) => item["@type"] === "LearningResource");
@@ -74,6 +75,7 @@ ok(upload.includes("canvas.toBlob"), "photo upload missing canvas EXIF-strip pat
 ok(upload.includes("sundog.submissions"), "photo upload missing deletion-url localStorage retention");
 ok(workbench.includes("enablePhase6Drag"), "workbench missing Phase 6 drag wiring");
 ok(phase6Drag.includes("data-phase6-binding") && phase6Drag.includes('binding: "parhelic-curvature"'), "Phase 6 drag missing parhelic curvature binding");
+ok(phase6Drag.includes('binding: "cza-curvature"'), "Phase 6 drag missing CZA curvature binding");
 ok(phase6Drag.includes("phase3.daggerOffset"), "Phase 6 drag missing sun-altitude dagger binding");
 ok(sitemap.includes("https://sundog.cc/sundog.html"), "sitemap missing sundog.html");
 ok(robots.includes("Sitemap: https://sundog.cc/sitemap.xml"), "robots.txt missing sitemap pointer");

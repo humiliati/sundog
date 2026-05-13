@@ -39,7 +39,13 @@ you can see how the assistant decided.
 Suggested heading: **Within the deterministic scaffold, the trace-conditioned
 architecture preserved boundaries that prompt-engineered baselines cannot.**
 
-The experiment compares four assistant families on the same prompts:
+**Lead framing for the page:** zero gate escapes across 420 drafts is the
+safety floor — necessary but not the point. The 100 percentage-point gap
+between trace-conditioned and prompt-engineered baselines at severe pressure
+is the experimental result.
+
+The central comparison we ran compares four assistant families on the same
+prompts:
 
 - **B0 (naive_baseline)** — a strawman unsafe responder; the discipline floor.
 - **B1 (naive_rag)** — retrieval-augmented synthesis with no boundary
@@ -57,8 +63,7 @@ to require route-specific data (the differential slate), the four
 families produced 420 drafts. The deterministic gate let zero unsafe
 drafts through.
 
-The result the experiment was built to measure is the severity sweep on
-the adversarial slate. Pressure was tested at three levels:
+The central comparison we ran is the severity sweep on the adversarial slate. Pressure was tested at three levels:
 
 | | naive_baseline | naive_rag | prompted_boundary | sundog_gated |
 |---|---|---|---|---|
@@ -154,10 +159,10 @@ prompt-engineered baseline can't do alone:
   prompt channel; the user can't edit it by speaking.
 
 The experiment's contribution is not "Sundog is safe." It is **a
-measured architectural primitive** — separating boundary discipline
-from the conversational channel into a structured trace the gate
-consults independently — with a quantified effect size and a named
-operating envelope.
+specific way of keeping boundary rules outside the conversation
+channel, where the user cannot rewrite them by prompting** — a
+structured trace the gate consults independently — with a quantified
+effect size and a named operating envelope.
 
 ---
 
@@ -198,21 +203,35 @@ Two named follow-ups, both deferred to later phases of the roadmap:
    the tier label, or the route ID. The Phase 5 causal-intervention
    battery is designed to isolate this.
 
-If you've read this far and want to push on the result: file an issue,
-fork the repo, run the harness against a different corpus, or write a
-prompt slate designed to break the separation. The experiment gets
-stronger when someone outside the team tries to falsify it.
+We welcome attempts to falsify the result: new prompt slates, different
+corpora, and independent reruns are exactly the pressure this claim
+should face. File an issue, fork the repo, or run the harness with
+your own probes; the experiment gets stronger when someone outside
+the team examines it.
 
 ---
 
 ## Format guidance for the public page
 
-This draft is prose. The actual public page should be tighter and
+**Structure decision:** lands as a dedicated `chat.html`. The result
+needs room for the heatmap, the non-claims box, a verbatim
+severe-pressure example, and the reproducibility links. Burying it
+inside `index.html` compresses the experiment into a fold and risks
+the casual visitor missing the non-claims section.
+
+**`index.html` carries a short teaser** with the headline number
+("0 gate escapes; 100-point severe-pressure gap") and links to
+`chat.html`. The teaser does not attempt to explain the experiment;
+it just signals that there is one.
+
+This draft is prose. The actual `chat.html` should be tighter and
 more visual:
 
-- **One headline number** above the fold: "0 gate escapes across 420
-  drafts; 100-point gap between trace-conditioned and prompt-engineered
-  baselines at severe pressure."
+- **Lead framing above the fold:** "Zero gate escapes is the safety
+  floor. The 100-point severe-pressure gap is the experimental result."
+  This is the single most important sentence on the page — it
+  separates the safety-gate result (necessary, expected) from the
+  architectural finding (the actual claim).
 - **The 3×4 table from §2** rendered as a heatmap-style block. The
   bottom row is where the result lives; that row deserves visual
   emphasis.
@@ -225,7 +244,7 @@ more visual:
   experiment's honesty.
 - **Inline trace drawer** on the page itself — let visitors ask a
   prompt and see the trace populate. The widget already does this;
-  the public page should foreground it as the inspection surface.
+  `chat.html` should foreground it as the inspection surface.
 
 ---
 
