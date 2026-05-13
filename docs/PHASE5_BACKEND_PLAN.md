@@ -5,10 +5,12 @@ sundog photos into atlas-overlaid renders and (with consent) training-data
 captures. Companion to the Phase 5 entry in
 [`SUNDOG_V_GEOMETRY.md`](SUNDOG_V_GEOMETRY.md).
 
-Status (2026-05-12): the browser widget and Pages Functions scaffold are in
-the repository. The remaining Phase 5 gate is deployment verification against
-the live Cloudflare Pages bindings: upload, inspect R2, delete, then inspect R2
-and KV again.
+Status (2026-05-12 local / 2026-05-13 UTC): the browser widget and Pages
+Functions scaffold are in the repository, and the live Cloudflare Pages gate
+has passed on `https://60c76dae.sundog-9kv.pages.dev`. The gate uploaded the
+p0 calibration photo, confirmed three R2 objects plus the KV deletion index,
+deleted with the returned token, then confirmed zero R2 objects and a `404`
+for the KV deletion index.
 
 ## Why Cloudflare Workers + R2
 
@@ -200,4 +202,7 @@ Phase 5 frontend must:
 5. Policy doc + JSON endpoint: in repo.
 6. Frontend integration: in repo with three-click measurement, client-side
    EXIF strip, consent gate, upload, and deletion-url retention.
-7. End-to-end Cloudflare check: still required before marking Phase 5 closed.
+7. End-to-end Cloudflare check: passed on the 2026-05-13 UTC preview
+   deployment. Use R2 object listing for deletion verification; repeated image
+   body reads through the Cloudflare R2 objects API can be stale from API
+   cache after deletion.
