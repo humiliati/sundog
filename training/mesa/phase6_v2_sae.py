@@ -873,6 +873,570 @@ def axis_e_direction_patch(args: argparse.Namespace) -> None:
 
 
 # ============================================================
+# v3 subspace patching (Axes F, G, H)
+# ============================================================
+
+
+V1_LAYER_PATCH_BASELINES = {
+    # From PHASE6_RESULTS.md §4 net.7 row
+    "protected_to_collapsed": {"mean": 0.894, "median": 0.944, "ratio": 0.899},
+    "collapsed_to_protected": {"mean": 0.934, "median": 0.860, "ratio": 0.854},
+}
+
+
+def build_orthonormal_subspace(directions: np.ndarray) -> tuple[np.ndarray, int]:
+    """Given a (d_in, K) matrix whose columns are direction vectors, return an
+    orthonormal basis Q (d_in, K_eff) spanning the same subspace, where
+    K_eff <= K if the input was rank-deficient. Uses QR decomposition.
+
+    Returns (Q, K_eff). Q columns are orthonormal; Q @ Q.T projects onto the
+    subspace.
+    """
+    if directions.ndim != 2:
+        raise ValueError(f"expected (d_in, K) matrix; got shape {directions.shape}")
+    Q, R = np.linalg.qr(directions)
+    diag = np.abs(np.diag(R))
+    rank = int((diag > 1e-8 * diag.max() if diag.size else False).sum() if diag.size else 0)
+    if rank == 0:
+        raise RuntimeError("input directions matrix is degenerate")
+    Q_eff = Q[:, :rank].astype(np.float32)
+    return Q_eff, int(rank)
+
+
+def run_subspace_recording_rollout(
+    client: BridgeClient,
+    *,
+    policy: torch.nn.Module,
+    obs_mean: np.ndarray,
+    obs_std: np.ndarray,
+    seed: int,
+    horizon: int,
+    layer: str,
+    env_id: str,
+    Q: torch.Tensor,
+) -> DirectionRolloutCache:
+    """Run policy under live x_false intervention, recording the K-dim coordinate
+    of `layer`'s output in the orthonormal subspace `Q` per step. No
+    modification."""
+    made = client.request(
+        {
+            "cmd": "make",
+            "env_id": env_id,
+            "seed": seed,
+            "sensor_tier": "local-probe-field",
+            "env_config": {"horizon": horizon},
+            "interventions": [basin_position_intervention()],
+        }
+    )
+    obs = np.asarray(made["obs"], dtype=np.float32)
+    info = made["info"]
+    terminal_position = np.asarray(info["position"], dtype=np.float32)
+    terminal_outcome = "not_done"
+    coords: list[np.ndarray] = []
+    step_index = 0
+
+    module = get_module(policy, layer)
+
+    def hook(_module: nn.Module, _inputs: tuple[Any, ...], output: torch.Tensor) -> None:
+        # output shape: (1, d_in)
+        h = output.squeeze(0)
+        c = (Q.T @ h).detach().cpu().numpy().copy()  # (K_eff,)
+        coords.append(c)
+
+    handle = module.register_forward_hook(hook)
+    try:
+        for _ in range(horizon + 1):
+            action = learned_action(policy, obs, obs_mean, obs_std)
+            response = client.request({"cmd": "step", "env_id": env_id, "action": action.tolist()})
+            obs = np.asarray(response["obs"], dtype=np.float32)
+            info = response["info"]
+            terminal_position = np.asarray(info["position"], dtype=np.float32)
+            step_index += 1
+            if response["done"]:
+                terminal_outcome = str(info.get("terminal_outcome") or "done")
+                break
+    finally:
+        handle.remove()
+
+    return DirectionRolloutCache(
+        old_basin_pref=old_basin_pref(terminal_position),
+        terminal_position=terminal_position,
+        terminal_outcome=terminal_outcome,
+        steps=step_index,
+        # Store coords as a list of per-step K_eff vectors (each np.ndarray).
+        # We reuse the `projections` field of DirectionRolloutCache; the type
+        # here is list[np.ndarray] rather than list[float].
+        projections=coords,  # type: ignore[arg-type]
+    )
+
+
+def run_subspace_injected_rollout(
+    client: BridgeClient,
+    *,
+    policy: torch.nn.Module,
+    obs_mean: np.ndarray,
+    obs_std: np.ndarray,
+    seed: int,
+    horizon: int,
+    layer: str,
+    env_id: str,
+    Q: torch.Tensor,
+    target_coords: list[np.ndarray],
+) -> DirectionRolloutCache:
+    """Run policy under live x_false intervention, substituting only the
+    projection of `layer`'s output onto the subspace `Q` with `target_coords`
+    at each step. The orthogonal complement (255+ dims of net.7) is preserved.
+    """
+    if not target_coords:
+        raise RuntimeError("cannot inject empty target_coords cache")
+    made = client.request(
+        {
+            "cmd": "make",
+            "env_id": env_id,
+            "seed": seed,
+            "sensor_tier": "local-probe-field",
+            "env_config": {"horizon": horizon},
+            "interventions": [basin_position_intervention()],
+        }
+    )
+    obs = np.asarray(made["obs"], dtype=np.float32)
+    info = made["info"]
+    terminal_position = np.asarray(info["position"], dtype=np.float32)
+    terminal_outcome = "not_done"
+    realized_coords: list[np.ndarray] = []
+    step_index = 0
+
+    module = get_module(policy, layer)
+
+    def hook(_module: nn.Module, _inputs: tuple[Any, ...], output: torch.Tensor) -> torch.Tensor:
+        idx = min(step_index, len(target_coords) - 1)
+        target_c = torch.tensor(target_coords[idx], dtype=output.dtype, device=output.device)
+        h = output.squeeze(0)
+        current_c = Q.T @ h  # (K_eff,)
+        delta = Q @ (target_c - current_c)  # (d_in,)
+        h_new = h + delta
+        realized_coords.append((Q.T @ h_new).detach().cpu().numpy().copy())
+        return h_new.unsqueeze(0)
+
+    handle = module.register_forward_hook(hook)
+    try:
+        for _ in range(horizon + 1):
+            action = learned_action(policy, obs, obs_mean, obs_std)
+            response = client.request({"cmd": "step", "env_id": env_id, "action": action.tolist()})
+            obs = np.asarray(response["obs"], dtype=np.float32)
+            info = response["info"]
+            terminal_position = np.asarray(info["position"], dtype=np.float32)
+            step_index += 1
+            if response["done"]:
+                terminal_outcome = str(info.get("terminal_outcome") or "done")
+                break
+    finally:
+        handle.remove()
+
+    return DirectionRolloutCache(
+        old_basin_pref=old_basin_pref(terminal_position),
+        terminal_position=terminal_position,
+        terminal_outcome=terminal_outcome,
+        steps=step_index,
+        projections=realized_coords,  # type: ignore[arg-type]
+    )
+
+
+def run_subspace_patch_battery(
+    *,
+    Q_np: np.ndarray,
+    label: str,
+    seed_start: int,
+    seeds: int,
+    horizon: int,
+    layer: str,
+    out_dir: Path,
+    manifest_extra: dict[str, Any],
+) -> None:
+    """Run the 4-forward direction-patch battery using subspace Q across the
+    matched seed slate. Writes per-seed CSV, aggregate CSV, and v1-comparison
+    CSV under out_dir."""
+    Q = torch.tensor(Q_np, dtype=torch.float32)
+    K_eff = int(Q_np.shape[1])
+    protected_policy, protected_mean, protected_std = load_learned_policy(CLIFF_PROTECTED)
+    collapsed_policy, collapsed_mean, collapsed_std = load_learned_policy(CLIFF_COLLAPSED)
+
+    rows: list[dict[str, Any]] = []
+    with BridgeClient() as client:
+        for offset in range(seeds):
+            seed = seed_start + offset
+            prefix = f"phase6-v2-{label}-{seed}"
+
+            cache_A = run_subspace_recording_rollout(
+                client,
+                policy=protected_policy,
+                obs_mean=protected_mean,
+                obs_std=protected_std,
+                seed=seed,
+                horizon=horizon,
+                layer=layer,
+                env_id=f"{prefix}-A",
+                Q=Q,
+            )
+            cache_B = run_subspace_recording_rollout(
+                client,
+                policy=collapsed_policy,
+                obs_mean=collapsed_mean,
+                obs_std=collapsed_std,
+                seed=seed,
+                horizon=horizon,
+                layer=layer,
+                env_id=f"{prefix}-B",
+                Q=Q,
+            )
+            cache_C = run_subspace_injected_rollout(
+                client,
+                policy=collapsed_policy,
+                obs_mean=collapsed_mean,
+                obs_std=collapsed_std,
+                seed=seed,
+                horizon=horizon,
+                layer=layer,
+                env_id=f"{prefix}-C",
+                Q=Q,
+                target_coords=cache_A.projections,  # type: ignore[arg-type]
+            )
+            cache_D = run_subspace_injected_rollout(
+                client,
+                policy=protected_policy,
+                obs_mean=protected_mean,
+                obs_std=protected_std,
+                seed=seed,
+                horizon=horizon,
+                layer=layer,
+                env_id=f"{prefix}-D",
+                Q=Q,
+                target_coords=cache_B.projections,  # type: ignore[arg-type]
+            )
+
+            success_pc = safe_patch_success(
+                cache_A.old_basin_pref,
+                cache_B.old_basin_pref,
+                cache_C.old_basin_pref,
+                direction="protected_to_collapsed",
+            )
+            success_cp = safe_patch_success(
+                cache_A.old_basin_pref,
+                cache_B.old_basin_pref,
+                cache_D.old_basin_pref,
+                direction="collapsed_to_protected",
+            )
+            rows.append(
+                {
+                    "seed": seed,
+                    "k_eff": K_eff,
+                    "layer": layer,
+                    "protected_old_basin_pref": cache_A.old_basin_pref,
+                    "collapsed_old_basin_pref": cache_B.old_basin_pref,
+                    "patched_protected_to_collapsed_old_basin_pref": cache_C.old_basin_pref,
+                    "patched_collapsed_to_protected_old_basin_pref": cache_D.old_basin_pref,
+                    "patch_success_protected_to_collapsed": success_pc,
+                    "patch_success_collapsed_to_protected": success_cp,
+                    "baseline_gap_collapsed_minus_protected": cache_B.old_basin_pref - cache_A.old_basin_pref,
+                }
+            )
+        client.request({"cmd": "close"})
+
+    # Aggregate
+    protected_values = [float(r["protected_old_basin_pref"]) for r in rows]
+    collapsed_values = [float(r["collapsed_old_basin_pref"]) for r in rows]
+    patched_pc = [float(r["patched_protected_to_collapsed_old_basin_pref"]) for r in rows]
+    patched_cp = [float(r["patched_collapsed_to_protected_old_basin_pref"]) for r in rows]
+    success_pc_values = [float(r["patch_success_protected_to_collapsed"]) for r in rows]
+    success_cp_values = [float(r["patch_success_collapsed_to_protected"]) for r in rows]
+
+    aggregate_rows = [
+        {
+            "direction": "protected_to_collapsed",
+            "k_eff": K_eff,
+            "layer": layer,
+            "mean_patch_success": mean_finite(success_pc_values),
+            "median_patch_success": median_finite(success_pc_values),
+            "patch_success_ratio_of_means": ratio_of_means(
+                protected_values, collapsed_values, patched_pc,
+                direction="protected_to_collapsed",
+            ),
+            "mean_protected_old_basin_pref": mean_finite(protected_values),
+            "mean_collapsed_old_basin_pref": mean_finite(collapsed_values),
+            "mean_patched_old_basin_pref": mean_finite(patched_pc),
+            "n": len(rows),
+        },
+        {
+            "direction": "collapsed_to_protected",
+            "k_eff": K_eff,
+            "layer": layer,
+            "mean_patch_success": mean_finite(success_cp_values),
+            "median_patch_success": median_finite(success_cp_values),
+            "patch_success_ratio_of_means": ratio_of_means(
+                protected_values, collapsed_values, patched_cp,
+                direction="collapsed_to_protected",
+            ),
+            "mean_protected_old_basin_pref": mean_finite(protected_values),
+            "mean_collapsed_old_basin_pref": mean_finite(collapsed_values),
+            "mean_patched_old_basin_pref": mean_finite(patched_cp),
+            "n": len(rows),
+        },
+    ]
+    write_csv(out_dir / f"{label}-patch.csv", rows)
+    write_csv(out_dir / f"{label}-patch-aggregate.csv", aggregate_rows)
+
+    # v1 comparison
+    comparison_rows = []
+    for agg in aggregate_rows:
+        baseline = V1_LAYER_PATCH_BASELINES[agg["direction"]]
+        comparison_rows.append({
+            "direction": agg["direction"],
+            "k_eff": K_eff,
+            "v1_layer_patch_mean": baseline["mean"],
+            "v3_subspace_patch_mean": agg["mean_patch_success"],
+            "v1_layer_patch_median": baseline["median"],
+            "v3_subspace_patch_median": agg["median_patch_success"],
+            "v1_layer_patch_ratio": baseline["ratio"],
+            "v3_subspace_patch_ratio": agg["patch_success_ratio_of_means"],
+            "v3_minus_v1_mean": agg["mean_patch_success"] - baseline["mean"],
+            "v3_minus_v1_median": agg["median_patch_success"] - baseline["median"],
+        })
+    write_csv(out_dir / "v1-vs-v3-comparison.csv", comparison_rows)
+
+    manifest = {
+        "phase": f"phase6-v3-{label}",
+        "k_eff": K_eff,
+        "layer": layer,
+        "seed_start": int(seed_start),
+        "seeds": int(seeds),
+        "horizon": int(horizon),
+        "v1_comparison_baseline": V1_LAYER_PATCH_BASELINES,
+        **manifest_extra,
+    }
+    (out_dir / "manifest.json").write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+    print(f"phase6 v3 {label}: K_eff={K_eff}; wrote results to {out_dir.relative_to(REPO_ROOT)}", flush=True)
+    for agg in aggregate_rows:
+        print(
+            f"  {agg['direction']}: "
+            f"mean={agg['mean_patch_success']:+.3f} "
+            f"median={agg['median_patch_success']:+.3f} "
+            f"ratio={agg['patch_success_ratio_of_means']:+.3f}",
+            flush=True,
+        )
+    print(f"phase6 v3 {label}: v1 vs v3 comparison:", flush=True)
+    for cmp in comparison_rows:
+        print(
+            f"  {cmp['direction']}: "
+            f"v1_median={cmp['v1_layer_patch_median']:.3f} -> "
+            f"v3_median={cmp['v3_subspace_patch_median']:+.3f} "
+            f"(Δ={cmp['v3_minus_v1_median']:+.3f})",
+            flush=True,
+        )
+
+
+# --- Axis F: multi-feature SAE subspace patching ---
+
+def axis_f_multifeature_patch(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # Load SAE
+    sae_dir = Path(args.sae_dir)
+    if not sae_dir.is_absolute():
+        sae_dir = REPO_ROOT / sae_dir
+    config = json.loads((sae_dir / "sae-config.json").read_text(encoding="utf-8"))
+    sae = TopKSAE(
+        d_in=int(config["d_in"]),
+        n_features=int(config["n_features"]),
+        k=int(config["k"]),
+    )
+    sae.load_state_dict(torch.load(sae_dir / "sae-weights.pt", weights_only=True))
+    sae.eval()
+
+    # Load correlations and pick top-K
+    corr_rows = list(csv.DictReader((sae_dir / "axis-d-feature-correlations.csv").open(encoding="utf-8")))
+    corr_rows.sort(key=lambda r: -abs(float(r["correlation"])))
+    K = int(args.num_features)
+    top_feature_indices = [int(r["feature_idx"]) for r in corr_rows[:K]]
+
+    # Stack decoder columns and QR-orthogonalize
+    directions = sae.decoder.weight.data[:, top_feature_indices].numpy().astype(np.float32)
+    Q_np, K_eff = build_orthonormal_subspace(directions)
+    print(
+        f"phase6 v3 axis-F: top {K} SAE features -> K_eff={K_eff} after orthogonalization "
+        f"(top correlations: {[round(float(r['correlation']), 3) for r in corr_rows[:min(K, 5)]]})",
+        flush=True,
+    )
+
+    manifest_extra = {
+        "top_feature_indices": top_feature_indices,
+        "top_feature_correlations": [float(corr_rows[i]["correlation"]) for i in range(min(K, len(corr_rows)))],
+        "K_requested": K,
+        "sae_dir": str(sae_dir.relative_to(REPO_ROOT)),
+    }
+    run_subspace_patch_battery(
+        Q_np=Q_np,
+        label="axis-f-multifeature",
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        layer=args.layer,
+        out_dir=out_dir,
+        manifest_extra=manifest_extra,
+    )
+
+
+# --- Axis G: empirical between-policy mean-difference direction ---
+
+def axis_g_mean_diff_patch(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    print("phase6 v3 axis-G: collecting cliff-pair net.7 activations for mean-diff direction", flush=True)
+    protected_acts = collect_cliff_activations(
+        CLIFF_PROTECTED,
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+    )
+    collapsed_acts = collect_cliff_activations(
+        CLIFF_COLLAPSED,
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+    )
+    mean_protected = protected_acts.net7.mean(axis=0)
+    mean_collapsed = collapsed_acts.net7.mean(axis=0)
+    delta = mean_collapsed - mean_protected  # (d_in,)
+    norm = float(np.linalg.norm(delta))
+    if norm < 1e-9:
+        raise RuntimeError("between-policy mean-diff direction has near-zero norm")
+    Q_np = (delta / norm).astype(np.float32).reshape(-1, 1)  # (d_in, 1)
+
+    print(
+        f"phase6 v3 axis-G: ||mean_collapsed - mean_protected|| = {norm:.4f} "
+        f"(d_in={Q_np.shape[0]}, K=1)",
+        flush=True,
+    )
+
+    manifest_extra = {
+        "delta_norm": norm,
+        "mean_protected_norm": float(np.linalg.norm(mean_protected)),
+        "mean_collapsed_norm": float(np.linalg.norm(mean_collapsed)),
+    }
+    run_subspace_patch_battery(
+        Q_np=Q_np,
+        label="axis-g-mean-diff",
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        layer=args.layer,
+        out_dir=out_dir,
+        manifest_extra=manifest_extra,
+    )
+
+
+# --- Axis H: PCA on per-step diffs ---
+
+def axis_h_pca_patch(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    print("phase6 v3 axis-H: collecting matched-seed cliff-pair net.7 activations", flush=True)
+    protected_acts = collect_cliff_activations(
+        CLIFF_PROTECTED,
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+    )
+    collapsed_acts = collect_cliff_activations(
+        CLIFF_COLLAPSED,
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+    )
+
+    # Per-step diff aligned by (seed, step_index_within_seed). Both policies
+    # ran on the same matched-seed slate; trajectories diverge by step but the
+    # step indices align. Group by seed and pair up by min(len, len).
+    diffs: list[np.ndarray] = []
+    protected_by_seed: dict[int, list[np.ndarray]] = {}
+    collapsed_by_seed: dict[int, list[np.ndarray]] = {}
+    for seed, h in zip(protected_acts.seeds.tolist(), protected_acts.net7):
+        protected_by_seed.setdefault(int(seed), []).append(h)
+    for seed, h in zip(collapsed_acts.seeds.tolist(), collapsed_acts.net7):
+        collapsed_by_seed.setdefault(int(seed), []).append(h)
+    for seed in protected_by_seed.keys() & collapsed_by_seed.keys():
+        prot_arr = np.stack(protected_by_seed[seed])
+        coll_arr = np.stack(collapsed_by_seed[seed])
+        n = min(prot_arr.shape[0], coll_arr.shape[0])
+        if n == 0:
+            continue
+        diffs.append(coll_arr[:n] - prot_arr[:n])
+    diff_matrix = np.concatenate(diffs, axis=0).astype(np.float32)  # (N_steps, d_in)
+
+    # PCA via SVD on centered per-step diffs
+    diff_centered = diff_matrix - diff_matrix.mean(axis=0, keepdims=True)
+    # full_matrices=False so we get (N, min(N, d_in)) singular vectors
+    U, S, Vt = np.linalg.svd(diff_centered, full_matrices=False)
+    # Vt rows are principal directions in d_in space
+    K = int(args.num_components)
+    K_use = min(K, Vt.shape[0])
+    Q_np = Vt[:K_use, :].T.astype(np.float32)  # (d_in, K_use)
+    Q_np, K_eff = build_orthonormal_subspace(Q_np)
+
+    # Variance-captured diagnostics
+    total_var = float((S ** 2).sum())
+    captured = float((S[:K_use] ** 2).sum()) / max(total_var, 1e-12)
+    print(
+        f"phase6 v3 axis-H: per-step diff matrix shape={diff_matrix.shape}; "
+        f"using top-{K_use} PCA components capturing {captured:.3%} of total variance "
+        f"(K_eff={K_eff})",
+        flush=True,
+    )
+
+    # Write the variance-explained curve as a small CSV
+    var_rows = []
+    cumulative_var = 0.0
+    for i, s in enumerate(S):
+        cumulative_var += float(s) ** 2
+        var_rows.append({
+            "rank": i + 1,
+            "singular_value": float(s),
+            "variance": float(s) ** 2,
+            "cumulative_variance_fraction": cumulative_var / max(total_var, 1e-12),
+        })
+    write_csv(out_dir / "axis-h-pca-variance.csv", var_rows[:min(64, len(var_rows))])
+
+    manifest_extra = {
+        "diff_matrix_shape": list(diff_matrix.shape),
+        "K_requested": K,
+        "K_used": K_use,
+        "variance_captured_top_K": captured,
+        "total_variance": total_var,
+    }
+    run_subspace_patch_battery(
+        Q_np=Q_np,
+        label="axis-h-pca",
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        layer=args.layer,
+        out_dir=out_dir,
+        manifest_extra=manifest_extra,
+    )
+
+
+# ============================================================
 # CLI
 # ============================================================
 
@@ -909,6 +1473,41 @@ def parse_args() -> argparse.Namespace:
     patch.add_argument("--horizon", type=int, default=200)
     patch.add_argument("--layer", default="net.7")
 
+    multif = sub.add_parser(
+        "axis-f-multifeature",
+        help="Subspace patching using top-K basin-correlated SAE features (orthogonalized)",
+    )
+    multif.add_argument("--out", default=str(PHASE6_V2_OUT / "axis-f-multifeature"))
+    multif.add_argument("--sae-dir", default=str(PHASE6_V2_OUT / "axis-d-sae"))
+    multif.add_argument("--num-features", type=int, default=10,
+                        help="number of top-correlated SAE features to span")
+    multif.add_argument("--seed-start", type=int, default=10000)
+    multif.add_argument("--seeds", type=int, default=64)
+    multif.add_argument("--horizon", type=int, default=200)
+    multif.add_argument("--layer", default="net.7")
+
+    meandiff = sub.add_parser(
+        "axis-g-mean-diff",
+        help="K=1 direction patch along empirical between-policy mean-diff at net.7",
+    )
+    meandiff.add_argument("--out", default=str(PHASE6_V2_OUT / "axis-g-mean-diff"))
+    meandiff.add_argument("--seed-start", type=int, default=10000)
+    meandiff.add_argument("--seeds", type=int, default=64)
+    meandiff.add_argument("--horizon", type=int, default=200)
+    meandiff.add_argument("--layer", default="net.7")
+
+    pca = sub.add_parser(
+        "axis-h-pca",
+        help="Subspace patching using top-K principal directions of per-step cliff-pair diffs",
+    )
+    pca.add_argument("--out", default=str(PHASE6_V2_OUT / "axis-h-pca"))
+    pca.add_argument("--num-components", type=int, default=10,
+                     help="number of top PCA components of the per-step diff matrix to span")
+    pca.add_argument("--seed-start", type=int, default=10000)
+    pca.add_argument("--seeds", type=int, default=64)
+    pca.add_argument("--horizon", type=int, default=200)
+    pca.add_argument("--layer", default="net.7")
+
     args = parser.parse_args()
     if args.command is None:
         parser.print_help()
@@ -922,6 +1521,12 @@ def main() -> None:
         axis_d_train_sae(args)
     elif args.command == "axis-e-patch":
         axis_e_direction_patch(args)
+    elif args.command == "axis-f-multifeature":
+        axis_f_multifeature_patch(args)
+    elif args.command == "axis-g-mean-diff":
+        axis_g_mean_diff_patch(args)
+    elif args.command == "axis-h-pca":
+        axis_h_pca_patch(args)
     else:
         raise ValueError(f"unknown command: {args.command}")
 
