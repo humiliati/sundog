@@ -310,28 +310,17 @@ piecemeal, because the parts qualify each other:
   anchor is sufficient and necessary to prevent basin internalization in this
   toy family up to the measured boundary.
 - **Mechanistic anchor:** activation patching across the cliff pair localizes
-  the basin attractor to a **5-dimensional subspace of the actor's final
-  hidden activation (`net.7`)**. Layer-level patching at `net.7` clears the
-  pre-registered threshold in both directions (Phase 6 v1); patches at
-  `net.1`, `net.3`, `net.5` do not. Phase 6 v3 sharpens this further: PCA
-  on per-step matched-seed activation diffs across the cliff pair shows
-  that the top 5 principal components capture 97.4% of variance and
-  reproduce v1's full-layer patch_success to within 0.03 in both
-  directions — a 51× compression from 256 dims to 5. PC1 (38.8% variance)
-  is the policy-offset direction and contributes ~0% patch effect; the
-  load-bearing mechanism is the 4-dimensional residual (PCs 2-5).
-  Sparse-autoencoder features ranked by correlation with the basin
-  outcome are the *wrong* basis for this circuit: the top SAE feature
-  with |corr|=0.89 produced zero patch effect, because SAE rankings on
-  a joint two-policy dataset return policy-identifier features rather
-  than mechanism features.
-
-  Phase 6 v3.1 revises the decomposition: the 5D `net.7` locus is
-  entangled, not a clean PC1 offset plus PCs-2-5 mechanism. PC1 alone is
-  behavior-weak, PCs 2-5 alone are partial, and PCs 1-5 together carry the
-  full circuit. The basin-inducing direction generalizes across held-out
-  Medium policy pairs; basin-resistance is weaker under transfer and appears
-  more policy-specific.
+  the basin attractor to an **entangled 5-dimensional subspace of the actor's
+  final hidden activation (`net.7`)**. Layer-level patching at `net.7` clears
+  the pre-registered threshold in both directions (Phase 6 v1); patches at
+  `net.1`, `net.3`, `net.5` do not. Phase 6 v3 shows that the top 5 PCA
+  components capture 97.4% of variance and reproduce v1 full-layer
+  patch_success to within 0.03 in both directions, a 51x compression from
+  256 dims to 5. Phase 6 v3.1 falsifies the clean PC1/PCs-2-5 split:
+  PC1 alone is behavior-weak, PCs 2-5 alone are partial, and PCs 1-5 together
+  carry the full circuit. The basin-inducing direction generalizes across
+  held-out Medium policy pairs; basin-resistance is weaker under transfer and
+  appears more policy-specific.
 
 What is **still not earned**:
 
