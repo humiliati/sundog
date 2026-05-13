@@ -39,9 +39,10 @@ targets here:
   capacity. 22-policy zoo classifies as 8 hold / 7 collapse / 1 fragile /
   4 incompetent / 2 ambiguous. Medium breach at `λ ≈ 0.952588`, signature
   weight `1 − λ ≈ 0.047412`. Phase 6 v1 localizes the cliff causally to
-  the actor's final hidden activation (`net.7`), and Phase 6 v3.1 refines
-  that locus to an entangled 5D basin-inducing subspace rather than a clean
-  PC1-offset / PCs-2-5 mechanism split. Outcome maps to the
+  the actor's final hidden activation (`net.7`); v3.1 refines that locus to
+  an entangled 5D basin-inducing subspace rather than a clean PC1-offset /
+  PCs-2-5 mechanism split; v3.8 adds that P->C is more PC-partitioned while
+  C->P is more PC-shared and family-wide. Outcome maps to the
   roadmap's pre-named "partially holds" verdict.*
 - **Candidate 7 - Causal Intervention Test** → promoted as Phase 4 of
   [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md). *Status (2026-05-12): Phase 4
@@ -128,9 +129,11 @@ field the way an agent staring at a metric can corrupt the metric.
 The field-shape has now been observed in two unrelated substrates:
 
 - **In-vitro receipt** — the mesa-optimization lane (`SUNDOG_V_MESA.md`,
-  v3.1/v3.2) found that the basin-attractor mechanism lives in an
+  v3.1-v3.8) found that the basin-attractor mechanism lives in an
   entangled 5D subspace at `net.7` that resists every linear and SAE
-  factorization attempted. It is read holistically or not at all.
+  factorization attempted. v3.8 sharpens the rule: variance rank,
+  single-component sensitivity, and full multi-component mechanism must
+  be tracked separately. It is read holistically or not at all.
 - **In-the-wild receipt** — the geometry lane's halo atlas
   (`SUNDOG_V_GEOMETRY.md`) committed to treating every visible arc as
   the upper portion of one of a small set of implied complete circles,
@@ -479,10 +482,10 @@ has now produced an in-vitro bounded operating-envelope receipt:
   across the cliff pair (L-Mixed-M-`λ=0.95` vs L-Mixed-M-`λ=0.97`)
   clears the pre-registered patch-success threshold (`>0.8` in both
   directions) only at `net.7`, the actor's final hidden activation.
-- **Mechanistic locus shape (Phase 6 v2 -> v3.7, 2026-05-13).** The
+- **Mechanistic locus shape (Phase 6 v2 -> v3.8, 2026-05-13).** The
   basin-attractor circuit at the actor's final hidden activation
   (`net.7`) is **a small handful of generators, irreducibly entangled,
-  only legible as a whole** -- nine rounds of mechanistic probing
+  only legible as a whole** -- ten rounds of mechanistic probing
   converged on the same shape: (v3) PCA compresses to 5 components
   capturing 97.4% of variance and reproducing v1 full-layer patch
   effect (51x compression). (v3.1) those 5 components are jointly
@@ -506,16 +509,19 @@ has now produced an in-vitro bounded operating-envelope receipt:
   generalization that earlier framings collapsed: (i) subspace-level
   behavioral transfer, (ii) neuron-identity substrate transfer, (iii)
   functional mask transfer, plus the v3.7 own-mask sanity-check at
-  layer (iv). The picture: **basin induction is family-wide at the 5D
-  subspace/control-surface level and anatomically grounded within each
+  layer (iv). v3.8 adds a per-PC and signed-effect map. The picture:
+  **basin induction is family-wide at the 5D
+  subspace/control-surface level, more partitioned across PCs, and anatomically grounded within each
   policy, but the anatomical substrate identity is pair-specific**
   (P->C Jaccard 0.255/0.067 across cliff-pair vs J1/J2 AND each
   pair's own P->C mask functionally dissociates within that pair:
-  J1 +0.128, J2 +0.253 in v3.7 DD1/DD2 -- the substrate is real,
+  J1 +0.128, J2 +0.253 in v3.7 DD1/DD2; v3.8 P->C per-PC mean
+  off-diagonal Jaccard 0.322 -- the substrate is real,
   just pair-specific); **basin resistance is shared at both substrate
-  identity and function across Medium policies** (C->P Jaccard
+  identity and function across Medium policies and more shared across PCs** (C->P Jaccard
   0.422/0.684 + v3.6 cliff-mask functional dissociation
-  +0.151/+0.508 + v3.7 own-mask DD3/DD4 +0.208/+0.392 -- same
+  +0.151/+0.508 + v3.7 own-mask DD3/DD4 +0.208/+0.392; v3.8 C->P
+  per-PC mean off-diagonal Jaccard 0.430 -- same
   neurons operationally necessary for C->P across the family). The reason
   v3.1's behavioral C->P transfer was weak is not that the substrate
   is policy-specific; it is that the cliff-pair-derived substitution
@@ -526,7 +532,7 @@ has now produced an in-vitro bounded operating-envelope receipt:
   different mechanisms. Six stacked methodological lessons documented
   along the way:
   feature-availability rankings are not mechanism rankings; variance
-  is not mechanism; linear additive top-k restriction destroys
+  and local sensitivity are not full mechanism; linear additive top-k restriction destroys
   mechanism even with the correct basis; single-neuron ablation does
   not surface a critical subset; set-level ablation along
   basis-derived rankings *does* surface direction-specific structure;

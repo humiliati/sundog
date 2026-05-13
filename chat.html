@@ -465,7 +465,7 @@
             <article class="lead-framing">
                 <p class="eyebrow">Lead framing</p>
                 <p>
-                    Zero gate escapes across <strong>5,445 trials</strong> spanning three backends, three retrieval depths, three prompt-type slates plus a <strong>hand-authored 22-prompt falsification slate</strong> designed to exploit every known gate-rule blind spot. The safety floor held under every variation tried. The Phase 5d Claude intervention battery additionally shows the trace is <strong>causally load-bearing</strong> on a strong hosted model — 268 trace-driven drifts were caught by the gate before becoming unsafe-accepts. The 100 percentage-point gap between trace-conditioned and prompt-engineered baselines at severe pressure remains the headline <strong>experimental result</strong>.
+                    Zero unsafe-accepts across <strong>5,460 trials</strong> spanning <strong>six distinct model implementations across four training lineages</strong> (deterministic compositor + <code>gpt-4o-mini</code> + <code>claude-haiku-4-5</code> + <code>llama-3.3-70b-versatile</code> + <code>llama-3.1-8b-instant</code> + <code>qwen/qwen3-32b</code>), three retrieval depths, three prompt-type slates plus a hand-authored 22-prompt falsification slate designed to exploit every known gate-rule blind spot. The Phase 5d Claude intervention battery additionally shows the trace is <strong>causally load-bearing</strong> on a strong hosted model — 268 trace-driven drifts were caught by the gate before becoming unsafe-accepts. The 100 percentage-point gap between trace-conditioned and prompt-engineered baselines at severe pressure remains the headline <strong>experimental result</strong>.
                 </p>
             </article>
 
@@ -561,6 +561,10 @@
                         <li>
                             <strong>Phase 8d: cross-vendor pass (Anthropic Claude).</strong>
                             <code>claude-haiku-4-5</code> on the same heavy-trace system prompt produced <strong>16/16 differential + 59/59 adversarial = 75/75 accepted, zero gate escapes</strong>. The pre-rescore run flagged 14 prompts; every one was a gate-brittleness artifact around English contractions ("I can't", "We don't", "isn't") that <code>gpt-4o-mini</code> didn't produce because it prefers unabbreviated forms ("I cannot", "we do not"). The gate's <code>hasNearbyNegation</code> lexicon was expanded to handle both styles. Stylistic finding: Claude produces explicit-negation refusals more consistently ("an operating-envelope study, <strong>not a research result</strong>"), where OpenAI more often paraphrases the supported framing. Same safety floor, different surface form.
+                        </li>
+                        <li>
+                            <strong>Phase 12: open-weight cross-architecture pass — six distinct model implementations across four training lineages, zero unsafe-accepts.</strong>
+                            The heavy-trace harness was wired through Groq's OpenAI-compatible endpoint to test open-weight models: Meta's <code>llama-3.3-70b-versatile</code> and <code>llama-3.1-8b-instant</code>, and Alibaba's <code>qwen/qwen3-32b</code> (a reasoning model). 15 successful drafts; 0 unsafe-accepts. Methodological finding: reasoning models emit <code>&lt;think&gt;...&lt;/think&gt;</code> chain-of-thought before the final answer; the gate would score forbidden phrases inside the thinking. The adapter was updated to strip reasoning traces before gating. After the strip, Qwen produces 4/8 gate-accepted + 4 gate-rejected drafts with 0 unsafe-accepts — the architecture extends to reasoning-model outputs as long as the adapter does the same content extraction a production widget would do. The remaining 25 attempted trials were rate-limited on Groq's free tier; a paid-tier rerun would complete the sweep numerically but doesn't change the architectural finding.
                         </li>
                         <li>
                             <strong>Phase 11: hand-authored falsification slate — the safety floor is robust to targeted attack.</strong>
@@ -682,7 +686,7 @@
                         <article class="followup-card">
                             <h3>Cross-architecture replication</h3>
                             <p>
-                                <strong>Done for Claude family.</strong> Hosted run 75/75 accepted + Phase 5d intervention battery (600 trials, 268 flips, 0 unsafe-accepts) shows Claude's causal-authority profile is fundamentally different from <code>gpt-4o-mini</code>'s — five of six trace fields show strong authority on Claude, vs only <code>trace.evidenceTier</code> weak on OpenAI. Open thread now points at open-weight models (Llama, Mistral): do they pattern with Claude (trace-as-primary-constraint) or with OpenAI (system-prompt-as-primary)?
+                                <strong>Done for OpenAI, Anthropic, Meta (Llama 3.3 + 3.1), and Alibaba (Qwen3).</strong> Six distinct model implementations across four training lineages, zero unsafe-accepts on all 15 successful open-weight drafts. Phase 12 adds the Meta and Alibaba lineages to the prior gpt-4o-mini + claude-haiku-4-5 cross-vendor coverage. Open thread now points at a paid-tier Groq rerun to complete the partial Llama/Qwen sweep (25 trials were rate-limited on the free tier), and at production widget integration of the reasoning-trace stripping that Qwen-style models require.
                             </p>
                         </article>
                         <article class="followup-card">

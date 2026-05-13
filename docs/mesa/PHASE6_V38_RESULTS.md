@@ -15,18 +15,19 @@ Axis U and a per-PC harness wrapper for Axis T.
 
 The four pre-registered predictions split into one falsified, one
 mixed, and two confirmed - but the surprising result is that **both
-axes converge on the same directional partition along independent
+axes converge on the same directional asymmetry along independent
 measures**. Per-component anatomy (Axis T) and cross-pair sign overlap
-(Axis U) agree: P->C basin induction recruits component-specific
-machinery for pair-specific identity, while C->P basin resistance
-recruits component-shared machinery for family-wide identity.
+(Axis U) agree: P->C basin induction is more component-partitioned
+and pair-specific, while C->P basin resistance is more component-shared
+and family-wide.
 
 1. **EE1 mixed.** Per-PC neuron substrates are not cleanly partitioned.
    - P->C mean off-diag PC top-32 Jaccard: `0.322`.
    - C->P mean off-diag PC top-32 Jaccard: `0.430`.
    - Confirm threshold `<= 0.20`; falsifier `>= 0.40` in both
-     directions. P->C clears falsifier but not confirm; C->P clears
-     falsifier marginally.
+     directions. P->C lands between the thresholds; C->P individually
+     crosses the falsifier line, but the full EE1 falsifier required
+     both directions to cross it.
 2. **EE2 falsified.** PC1 is not mechanism-light at the per-neuron
    level. PC1 has the highest P->C max mean ablation cost (`0.0148`),
    ahead of PC2 (`0.0113`), PC4 (`0.0059`), PC5 (`0.0060`), and PC3
@@ -49,9 +50,9 @@ recruits component-shared machinery for family-wide identity.
 
 The v3.8 synthesis:
 
-> Basin induction (P->C) recruits component-specific neuron substrates
-> and pair-specific neuron identity. Basin resistance (C->P) recruits
-> component-shared neuron substrates and family-shared neuron
+> Basin induction (P->C) recruits more component-partitioned neuron
+> substrates and pair-specific neuron identity. Basin resistance (C->P)
+> recruits more component-shared neuron substrates and family-shared neuron
 > identity. The directional asymmetry that v3.5-v3.7 saw at the
 > identity layer is now visible at the per-component anatomy layer
 > too, on the same cliff pair, with consistent direction. EE1's mixed
@@ -82,7 +83,7 @@ Key files:
 - `axis-t-per-pc/reports/pc-top32-jaccard.csv`
 - `axis-t-per-pc/reports/pc-partition-metrics.csv`
 - `axis-t-per-pc/reports/pc-partition-summary.json`
-- `axis-t-per-pc/logs/axis_t_per_pc.log`
+- `logs/axis_t_per_pc.log`
 
 ## 3. Commands
 
@@ -259,7 +260,7 @@ respective top-32 substrates are organized across the five PCs.
 Updated v3.8 synthesis:
 
 - **P->C / basin induction:** shared at the 5D control-surface level,
-  partitioned across PCs (with a PC4/PC5 sub-share), pair-specific
+  more partitioned across PCs (with a PC4/PC5 sub-share), pair-specific
   at neuron identity, functionally real within each pair.
 - **C->P / basin resistance:** shared at the control-surface level,
   shared across PCs at neuron substrate, family-wide at neuron
@@ -306,14 +307,14 @@ identity-level fact. v3.8 turns it into a four-way convergent result:
 | cross-pair signed identity (v3.8 Axis U) | weak transfer | strong transfer |
 
 The "do not promote" geometry analogy can now be expressed at two
-levels: routes whose residual structure is per-component-specific
+levels: routes whose residual structure is more component-partitioned
 (P->C analogue) versus routes whose residual structure is shared
 across components and primitives (C->P analogue).
 
 **Geometry inheritance:** the geometry `do not promote` list should
 record not just per-primitive failures, but per-component partition
 patterns - whether a residual route's signature is component-shared
-across primitives or component-specific.
+across primitives or component-partitioned.
 
 ### 7.3 Finding #5 - No linear attribution
 
@@ -367,7 +368,8 @@ Two candidate v3.9 directions, gated by what we want to invest:
 
 Either branch needs no new PPO training.
 
-The v3.8 cascade (SUNDOG_V_MESA.md status block, MESA_CROSSOVER_NOTE.md
-"what lands where" rows, PROMO_HIGHLIGHTS.md mechanical anchor
-extension, mesa.html §The Locus, project memory) is the more pressing
-next move and lands first.
+The v3.8 cascade has landed in `SUNDOG_V_MESA.md`,
+`MESA_CROSSOVER_NOTE.md`, `RICH_DISPLAY_OVERLAY_NOTES.md`,
+`SUNDOG_V_GRAVITY.md`, `claims-and-scope.md`, `PROMO_HIGHLIGHTS.md`,
+and `mesa.html`. Project memory can mirror the same summary line if the
+next session needs the v3.8 result preloaded.

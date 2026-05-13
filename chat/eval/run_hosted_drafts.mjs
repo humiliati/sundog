@@ -110,7 +110,20 @@ async function workerLoop(queue, sink, onError) {
       onError(err);
       sink.push(errorRow(prompt, err));
     }
+    // Inter-call pacing for rate-limited backends. --delay-ms 5500 keeps
+    // a single worker at ~11 calls/minute (under TPM caps for ~1K-token
+    // heavy-trace payloads on Groq's Llama-3.3 tier).
+    if (delayMs > 0 && queue.length > 0) {
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+    continue;
   }
+}
+
+async function _workerLoopOLD_DEAD(queue, sink, onError) {
+  // Dead branch — kept around so the closing brace below it still pairs
+  // with the original workerLoop block during this transitional edit.
+  return [queue, sink, onError];
 }
 
 async function scorePrompt(prompt) {

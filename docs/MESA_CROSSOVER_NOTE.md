@@ -161,6 +161,36 @@ trap surfacing in geometry.
 
 ---
 
+## v3.8 addendum, 2026-05-13
+
+Mesa Phase 6 v3.8 sharpens the crossover note rather than changing its
+direction. The per-PC decomposition and signed-effect map add three
+constraints Geometry should inherit during Phase 10/11:
+
+1. **Do not equate variance, single-route sensitivity, and full mechanism.**
+   PC1 is variance-heavy and now has the largest single-PC P->C max mean
+   ablation cost, but PC1 alone still does not reproduce the K=5 patch.
+   Geometry should report visual salience, route-local residual/sensitivity,
+   and full-overlay fit as separate columns, never as one primitive
+   importance score.
+2. **Directional asymmetry has internal structure.** P->C is more
+   component-partitioned and pair-specific; C->P is more component-shared
+   and family-wide. Geometry's per-inversion-route residual table should
+   preserve this possibility: one route can be photo- or primitive-specific
+   while another route generalizes across the atlas.
+3. **Active interference belongs in the `do not promote` logic.** Axis U's
+   signed-effect map shows that some neurons help one direction while hurting
+   the other. The geometry analogue is a primitive or route that improves one
+   overlay target while worsening another; that case should be recorded as a
+   conflict, not averaged into a global score.
+
+This addendum lands directly in
+`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md` as a Phase 11 metric-review
+rule: no arc-importance percentages, no route aggregation that hides
+directional conflicts, and no promotion without per-route residuals.
+
+---
+
 ## Follow-on, 2026-05-13: perception roadmap promoted
 
 The "structural transition" thread in this note — mesa's Phase 5→6 move
