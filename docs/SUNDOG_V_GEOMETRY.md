@@ -1370,14 +1370,15 @@ remaining inversion-route slots reopen only when the relevant coverage exists.
 Task #53 has recorded the p2 CZA-apex receipt: parhelion-offset inversion is
 ~1 px on the same photo, while CZA-apex y residual is 19.3 px, so the result is
 a forward/inverse asymmetry receipt rather than a promoted route. CZA-route
-promotion needs an added CZA-visible calibration photo; tangent curvature can
-continue through p2 / p7 / p13 sampling. Phase 11 can start in parallel on the
-already promoted visibility vocabulary. Task #52/53 also feeds the downstream
-perception roadmap (`SUNDOG_V_PERCEPTION.md`) because independent CZA/tangent
-inversion routes would strengthen the later predicted-then-observed receipt.
-The next operational step is Task #54: tangent-arc curvature sampling, with
-CZA expansion scoped separately before treating CZA apex as a promotable
-inversion route.
+promotion needs added CZA-visible calibration photos. The expansion triage in
+[`docs/calibration/PHASE10_EXPANSION_TRIAGE.md`](calibration/PHASE10_EXPANSION_TRIAGE.md)
+names p19 and p27 as priority CZA candidates, with p20 as a fallback. Phase 11
+can start in parallel on the already promoted visibility vocabulary. Task
+#52/53 also feeds the downstream perception roadmap (`SUNDOG_V_PERCEPTION.md`)
+because independent CZA/tangent inversion routes would strengthen the later
+predicted-then-observed receipt. The next operational step is to anchor p19 and
+p27 for CZA-apex coverage before resuming Task #54 tangent-arc curvature
+sampling.
 
 ### Phase 11 - Characterized Logo & Animation Toolkit
 
