@@ -35,6 +35,7 @@ import { gateModelDraft } from "../../public/js/sundog-claim-gate.mjs";
 import { categoryFor } from "./lib/draft-families.mjs";
 import { createOpenAIAdapter } from "./lib/adapters/openai-adapter.mjs";
 import { createMockAdapter } from "./lib/adapters/mock-adapter.mjs";
+import { createAnthropicAdapter } from "./lib/adapters/anthropic-adapter.mjs";
 
 const root = process.cwd();
 const slate = argValue("--slate") || "differential";
@@ -241,8 +242,9 @@ async function loadBaselineByPrompt() {
 
 function createAdapter(name) {
   if (name === "openai") return createOpenAIAdapter();
+  if (name === "anthropic") return createAnthropicAdapter();
   if (name === "mock") return createMockAdapter();
-  throw new Error(`Unknown backend "${name}". Expected "openai" or "mock".`);
+  throw new Error(`Unknown backend "${name}". Expected "openai", "anthropic", or "mock".`);
 }
 
 function configForSlate(name) {
