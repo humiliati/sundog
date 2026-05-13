@@ -1352,8 +1352,10 @@ is promoted as a conditional core primitive (rendered only when
 vocabulary compatible with named-pose examples (`low-altitude.json`,
 `forty-six-halo.json`). Named poses are presentation surfaces, not additional
 calibration evidence. Inversion-route promotions are gated: parhelion offset
-stays as the calibrated core but is on anchor-probation until p13 is
-re-anchored because one side touches the 8 px cutoff; CZA-apex and
+stays as the calibrated core (probation cleared 2026-05-13 via Task #52
+step 1: re-anchoring p13 dropped the touching-cutoff residual to ~0 px
+and revealed p13 was a low-altitude photo at h ~= 6.8°, not the
+mid-altitude h = 17.3° the rough anchor had implied); CZA-apex and
 tangent-arc-curvature routes are *pending anchor capture* on p2 and p13;
 supralateral inversion fails coverage (visible on only one of three photos).
 The concrete do-not-promote list — Suncave Parry, Parry supralateral,
@@ -1392,108 +1394,4 @@ Deliverables:
 - Motion rules mapped to the workbench phases: idle scintillation, active
   reveal, hover shimmer, and reduced-motion fallback.
 - Design handoff examples based on the Phase 10 p2/p7/p13 overlay findings,
-  so logo expressiveness is borrowed from calibrated sky morphology rather
-  than invented decoration.
-
-2026-05-12 first-pass artifacts:
-
-- [x] `scripts/generate-sundog-logo-toolkit.mjs` plus `npm run
-  logo:toolkit` export static SVG, transparent SVG, SVG/CSS animation,
-  layer manifest JSON, favicon PNG proofs, app-icon PNG proofs, and a
-  transparent PNG proof.
-- [x] `docs/LOGO_ANIMATION_TOOLKIT.md` now gives the design team a compact
-  character sheet, protected geometry, optional vocabulary boundary,
-  motion states, and small-size rules.
-- [x] `docs/ICON_ASSETS.md` lists the Phase 11 prototype assets and links
-  the generator to the richer p2/p7/p13 overlay notes.
-- [ ] Production favicon/app-icon replacement remains a later design-review
-  step; the current site icon wiring is unchanged.
-
-Gate: a designer can regenerate the Phase 11 prototype icon set and produce one
-animated Sundog mark without reading the entire geometry roadmap, while the
-assets still trace back to Halo Atlas primitives.
-
-### Phase 12 - Atmospheric Variations
-
-Goal: alternative sky palettes (dawn, dusk, twilight, polar) with calibrated
-photograph references for each. Optional `--sky-tint` becomes a real palette
-slider rather than a single-axis warm/cool knob.
-
-### Phase 13 - Linked Description Mode
-
-Goal: clicking any slider opens a small popover with the equation it
-represents, the source citation, and a tiny worked example. Couples the
-workbench tightly to the eventual parhelion-description paper.
-
-## Claim Boundary
-
-The Geometry workbench claims:
-
-- A parametric rendering of known parhelion physics that is faithful enough
-  to overlay against reference photographs and read as the same
-  phenomenon.
-- The "sundog eye" composition (pupil = sun, iris = halos, eyelids = CZA
-  arcs, optional 9-halo virtual-sun extension) is an aesthetic
-  identification, deliberately stylised, with no claim that real
-  atmospheric optics produces a 9-halo eye on demand.
-- Interactive proof that the parhelion description is concrete: every
-  slider corresponds to either a math-derived geometric quantity, a free
-  visual knob clearly labelled as such, a composition-fiction knob clearly
-  labelled as such, or an annotation/vocabulary layer clearly labelled as
-  outside the calibrated core.
-
-The Geometry workbench does NOT claim:
-
-- Novel atmospheric optics findings. The physics is well-known; the
-  contribution is the parametric-rendering format and the
-  composition-as-brand framing.
-- That the parhelion is "discovered" by the workbench. The phenomenon has
-  been observed and described for centuries; Sundog's contribution is the
-  description style and the workbench-as-proof presentation.
-- That the workbench renders all halo phenomena. Its calibrated core is the
-  parhelion + CZA + parhelic-arc subset chosen for the hero composition.
-  Optional Parry-family and infralateral layers are annotation primitives
-  for rich-display vocabulary; sub-suns and full crystal-orientation
-  simulation remain out of scope unless added deliberately later.
-
-## Pre-Committed Cross-Application Comparison Row
-
-For the eventual `APPLICATIONS.md` table:
-
-| Application | Hidden | Indirect | Transformation | Output |
-| --- | --- | --- | --- | --- |
-| Geometry | parhelion description | sky display | parametric optical render | interactive workbench + reproducible pose |
-| Three-Body | true 18D state | virial / pairwise / inertia signatures | SCAN/SEEK/TRACK | bounded controller for selected regimes |
-| Balance | upright pole angle | shadow projection on floor | shadow-residual control | bounded cart force command |
-
-Geometry occupies a different cell shape than the other two — it is a
-description-and-render pair rather than a hidden-state-and-controller pair —
-and the table headers should accommodate that. The "Hidden" column for
-Geometry reads as the description-being-exercised rather than a withheld
-truth.
-
-## Suggested First Build Slice
-
-The first implementation pass (largely already complete) was deliberately
-small:
-
-1. SVG stage with the canonical pose hard-coded.
-2. Slider rail with all 16 parameters wired to CSS custom properties.
-3. Derived-geometry JS for the parhelic-arc Bezier and dagger positioning.
-4. Snapshot and reset controls.
-
-That slice is enough to decide whether the workbench-as-hero idiom carries
-the brand load. The locked-pose snapshot from Phase 2 calibration becomes
-the canonical reference for everything downstream.
-
-*[nice-to-have #15]*
-
-**Exit criterion for the first slice:** the canonical pose, loaded from a
-snapshot JSON, reads as the photographed phenomenon when overlaid at 50%
-opacity against the Troels Nielsen DR reference photograph (vertical pillar
-matches; 22° halo radius matches; parhelia positions match within ±10
-SVG units; CZA apex within the eyelid envelope). Below this floor — the
-overlay reads as a different phenomenon — re-scope before any Phase 4
-animation work.
-
-*[/nice-to-have #15]*
+  so l

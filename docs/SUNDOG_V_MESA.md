@@ -1073,25 +1073,37 @@ Individual neurons remain weak and simple L2 top-k sufficiency still
 fails, but ablation-ranked P->C and C->P top-32 substrates are
 functionally and statistically separable.
 
-**Phase 6 v3.5 spec (2026-05-13, unstarted)** at
-[`mesa/PHASE6_V35_SPEC.md`](mesa/PHASE6_V35_SPEC.md). Path B from the
-v3.3 routing fork. One axis: Axis R (cross-policy substrate
-generalization via Jaccard between cliff-pair critical sets and J1/J2
-critical sets). Three pre-registered predictions CC1-CC3 plus optional
-gated CC4. **CC1:** cliff-pair P->C top-32 ∩ held-pair P->C top-32
-Jaccard >= 0.30 — the basin-inducing substrate is controller-family-
-wide. **CC2:** cliff-pair C->P ∩ held C->P Jaccard <= 0.15 — the
-basin-resisting substrate is policy-specific (consistent with v3.1 +
-v3.4 asymmetries). **CC3:** off-diagonal Jaccards near chance-level
-(sanity-check). **CC4 (gated):** if CC1 confirms, re-run v3.4 Axis P
-with the cliff-pair P->C mask on J1/J2; predict dissociation >= 0.10
-— the substrate transfers functionally, not just in ranking identity.
-Smoke gate: J1 P->C max ablation cost >= 0.03 at 4 seeds. Compute:
-~150-170 min, 0 new PPO runs, ~80 LOC harness extension (one new
-analysis subcommand `axis-r-substrate-generalization`). Strongest
-ratchet sentence to earn: *the cliff-pair-identified basin-inducing
-neurons are the controller-family-wide basin-inducing infrastructure
-at Medium tier; the basin-resisting neurons are per-policy*.
+**Phase 6 v3.5 result (2026-05-13, substrate generalization inverted)**
+at [`mesa/PHASE6_V35_SPEC.md`](mesa/PHASE6_V35_SPEC.md) and
+[`mesa/PHASE6_V35_RESULTS.md`](mesa/PHASE6_V35_RESULTS.md). Axis R
+tested cross-policy substrate generalization by comparing the cliff-pair
+top-32 P->C/C->P neuron sets against held-out Medium pairs J1
+(L-Sig-Terminal-M vs L-Reward-M) and J2 (L-Mixed-M-lambda=0.9 vs
+lambda=0.99). The J1 P->C smoke gate passed (`+0.099`, threshold
+`0.03`), so the full J1/J2 batteries ran.
+
+The result reverses the v3.5 prior. **CC1 mixed:** P->C substrate
+identity did not cleanly generalize. J1 P->C vs cliff P->C Jaccard was
+near but below confirmation (`0.255`, CI `[0.032, 0.422]`); J2 was
+chance-like (`0.067`, CI `[0.016, 0.208]`). **CC2 falsified strongly:**
+C->P substrate identity generalized instead of staying policy-specific.
+J1 C->P vs cliff C->P Jaccard was `0.422` (CI `[0.255, 0.641]`); J2
+was `0.684` (CI `[0.422, 0.829]`). **CC3 mixed:** three off-diagonal
+medians stayed near chance, but J2 P->C vs cliff C->P was elevated at
+`0.185`. CC4 was not formally gated, but the exploratory cliff-P->C-mask
+Axis P runs landed: J1 weakly dissociated (`+0.113`), while J2 was
+ambiguous (`+0.096`, with same-direction drop slightly negative).
+
+The mechanistic anchor is now more qualified: *the Phase 5 cliff remains
+a final-hidden 5D activation-space control surface, and within the cliff
+pair the P->C/C->P substrates are functionally separable; but
+cross-policy behavior transfer does not reduce to stable top-32 neuron
+identity in the originally predicted direction*. P->C transfer appears
+subspace-level or pair-specific at neuron identity; C->P neuron identity
+is unexpectedly stable across Medium held-out pairs despite weaker v3.1
+behavioral rescue. Natural v3.6 branch: test functional transfer of the
+cliff C->P mask on J1/J2 and compare against pair-specific P->C masks.
+
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
 [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md). The harness
