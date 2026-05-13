@@ -478,10 +478,10 @@ has now produced an in-vitro bounded operating-envelope receipt:
   across the cliff pair (L-Mixed-M-`λ=0.95` vs L-Mixed-M-`λ=0.97`)
   clears the pre-registered patch-success threshold (`>0.8` in both
   directions) only at `net.7`, the actor's final hidden activation.
-- **Mechanistic locus shape (Phase 6 v2 -> v3.6, 2026-05-13).** The
+- **Mechanistic locus shape (Phase 6 v2 -> v3.7, 2026-05-13).** The
   basin-attractor circuit at the actor's final hidden activation
   (`net.7`) is **a small handful of generators, irreducibly entangled,
-  only legible as a whole** -- eight rounds of mechanistic probing
+  only legible as a whole** -- nine rounds of mechanistic probing
   converged on the same shape: (v3) PCA compresses to 5 components
   capturing 97.4% of variance and reproducing v1 full-layer patch
   effect (51x compression). (v3.1) those 5 components are jointly
@@ -504,14 +504,18 @@ has now produced an in-vitro bounded operating-envelope receipt:
   transfer follow-up (v3.6) distinguish three layers of cross-policy
   generalization that earlier framings collapsed: (i) subspace-level
   behavioral transfer, (ii) neuron-identity substrate transfer, (iii)
-  functional mask transfer. The picture: **basin induction is shared
-  at the 5D subspace/control-surface level but pair-specific at top-32
-  neuron identity** (P->C Jaccard 0.255/0.067 -- different policies
-  implement the family-wide direction through different neuron
-  supports); **basin resistance is shared at both levels across Medium
-  policies** (C->P Jaccard 0.422/0.684 *and* cliff-mask functional
-  dissociation +0.151/+0.508 on J1/J2 -- the same neurons are
-  operationally necessary for C->P across the family). The reason
+  functional mask transfer, plus the v3.7 own-mask sanity-check at
+  layer (iv). The picture: **basin induction is family-wide at the 5D
+  subspace/control-surface level and anatomically grounded within each
+  policy, but the anatomical substrate identity is pair-specific**
+  (P->C Jaccard 0.255/0.067 across cliff-pair vs J1/J2 AND each
+  pair's own P->C mask functionally dissociates within that pair:
+  J1 +0.128, J2 +0.253 in v3.7 DD1/DD2 -- the substrate is real,
+  just pair-specific); **basin resistance is shared at both substrate
+  identity and function across Medium policies** (C->P Jaccard
+  0.422/0.684 + v3.6 cliff-mask functional dissociation
+  +0.151/+0.508 + v3.7 own-mask DD3/DD4 +0.208/+0.392 -- same
+  neurons operationally necessary for C->P across the family). The reason
   v3.1's behavioral C->P transfer was weak is not that the substrate
   is policy-specific; it is that the cliff-pair-derived substitution
   activation pattern isn't the precise operational target each policy

@@ -11,7 +11,7 @@ Short version:
 > The site helper is not tested by whether it sounds smart. It is tested by
 > whether it refuses to turn weak evidence into strong claims.
 
-Status: roadmap pass.
+Status: Phases 0–8d landed (2026-05-13). The strong-ratchet §13 result now has three independent causal substantiations (deterministic compositor + `gpt-4o-mini` + `claude-haiku-4-5`) and the operating-envelope cell-class-map shows zero gate escapes across 3,570 trials × 112 cells. Open threads: stale-doc corpus-conflict slate, hosted intervention battery on Claude, open-weight model pass.
 
 Audience:
 - Sundog research maintainers.

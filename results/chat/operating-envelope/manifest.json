@@ -33,11 +33,11 @@
       "notes": "Every claim route carries one of these tiers. Navigation tier is rarely the controlling route on Phase 3/4 slates."
     },
     "modelFamily": {
-      "values": ["deterministic_compositor", "gpt-4o-mini", "claude-haiku", "claude-sonnet"],
+      "values": ["deterministic_compositor", "gpt-4o-mini", "claude-haiku-4-5", "claude-sonnet", "llama", "mistral"],
       "source": "draft-row family + adapter info",
-      "covered": ["deterministic_compositor", "gpt-4o-mini"],
-      "gap": ["claude-haiku", "claude-sonnet"],
-      "notes": "Cross-vendor pass with Claude is the documented Phase 5c→7 next move."
+      "covered": ["deterministic_compositor", "gpt-4o-mini", "claude-haiku-4-5"],
+      "gap": ["claude-sonnet", "llama", "mistral"],
+      "notes": "Phase 8d cross-vendor extended the modelFamily axis to include Anthropic. Open-weight (Llama, Mistral) and other hosted vendors remain the cross-architecture thread."
     },
     "retrievalDepth": {
       "values": ["k=0_router_only", "k=3_default", "k=8_wide"],
@@ -72,6 +72,8 @@
     "hosted": [
       "results/chat/phase5-hosted/differential/openai/draft-outcomes-rescored.json",
       "results/chat/phase5-hosted/adversarial/openai/draft-outcomes-rescored.json",
+      "results/chat/phase5-hosted/differential/anthropic/draft-outcomes-rescored.json",
+      "results/chat/phase5-hosted/adversarial/anthropic/draft-outcomes-rescored.json",
       "results/chat/interventions/differential-hosted/<intervention_id>/draft-outcomes.json",
       "results/chat/interventions/adversarial-hosted/<intervention_id>/draft-outcomes.json"
     ]

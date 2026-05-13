@@ -367,7 +367,7 @@ Phase 6 opened the box, and what's inside has a shape worth naming.
 The behavioral cliff has a causal locus in the actor's final hidden
 activation (`net.7`), and the circuit at that locus is **a small
 handful of generators, irreducibly entangled, only legible as a
-whole**. Eight rounds of mechanistic probing landed on the same shape
+whole**. Nine rounds of mechanistic probing landed on the same shape
 from different directions:
 
 - **v1.** Layer-level activation patching localizes the cliff causally
@@ -407,6 +407,16 @@ from different directions:
   +0.508. The C→P substrate is shared at both ranking-identity and
   functional levels across the controller family. (P→C exploratory
   mask-transfer from v3.5 was weak/ambiguous; the asymmetry holds.)
+- **v3.7.** Pair-specific own-mask functional ablation closes the
+  three-layer cross-policy table. J1's own P→C mask dissociates
+  J1's P→C patch by +0.128; J2's own P→C mask dissociates J2's
+  P→C by +0.253. So **basin induction is anatomically real within
+  each policy** — the v3.5 P→C ranking is not noise, it just doesn't
+  transfer across pairs. C→P own-mask sanity-checks also confirm
+  (J1 +0.208, J2 +0.392), though J2's own C→P mask interestingly
+  underperforms the cliff-pair-derived mask transferred to J2
+  (+0.508), suggesting the cliff pair carries a *cleaner* C→P
+  ranking signal than within-policy ablation does.
 
 What's left after those five rounds is a structural claim, not a
 score-table artifact:
@@ -460,22 +470,29 @@ generalization that earlier framings collapsed into one:
    mask transferred cleanly to both J1 (+0.151 dissociation) and J2
    (+0.508 dissociation).
 
-The clean updated reading:
+The clean updated reading, after the v3.7 closeout:
 
-> **Basin induction is shared at the 5D subspace/control-surface
-> level but pair-specific at top-32 neuron identity.** Different
-> policies implement the family-wide basin-inducing direction
-> through different neuron supports; the same low-dim vector
-> projects from different anatomies.
+> **Basin induction is family-wide at the 5D subspace/control-surface
+> level and anatomically grounded within each policy, but the
+> anatomical substrate identity is pair-specific.** Different policies
+> route the same direction through different neurons (v3.5 Jaccard
+> 0.255/0.067 across cliff-pair vs J1/J2); each pair's own P→C
+> top-32 mask is functionally real within that pair (v3.7 DD1/DD2:
+> J1 +0.128, J2 +0.253). The cliff-pair P→C mask doesn't transfer
+> functionally to held-out pairs (v3.5 weak/ambiguous) precisely
+> because the anatomy is pair-specific even though the geometric
+> direction is shared.
 >
-> **Basin resistance is shared at both levels across Medium
-> policies.** The same neurons are critical for C→P patching across
-> the controller family, and ablating those neurons disrupts C→P
-> behavior in every tested policy. The reason v3.1's behavioral
-> C→P transfer was weak is *not* that the substrate is policy-
-> specific — it is that the cliff-pair-derived substitution
-> activation pattern isn't the precise operational target each
-> policy needs at that shared substrate.
+> **Basin resistance is shared at both substrate identity and
+> function across Medium policies.** The same neurons are critical
+> for C→P patching across the controller family (v3.5 Jaccard
+> 0.422/0.684), and the cliff-pair C→P mask functionally dissociates
+> basin-resistance in every held-out pair (v3.6 +0.151/+0.508); the
+> own-pair C→P masks also work (v3.7 DD3 +0.208, DD4 +0.392). The
+> reason v3.1's behavioral C→P transfer was weak is *not* that the
+> substrate is policy-specific — it is that the cliff-pair-derived
+> substitution activation pattern isn't the precise operational
+> target each policy needs at the shared substrate.
 
 The basin-attractor circuit at net.7 thus carries one shared neuron
 substrate (C→P) and one shared activation-space direction (P→C)
@@ -498,7 +515,7 @@ logged fields. The learned feed-forward policies do not observe live
 `x_false` at inference; the cliff policy is computing, not perceiving,
 its basin. The behavioral receipt from Phase 4 is now mechanistic.
 
-**Six methodological lessons stack out of the eight rounds.** Each
+**Six methodological lessons stack out of the nine rounds.** Each
 was earned by a method that failed to surface mechanism on its own
 or that overturned an obvious prior, and each is a documented reason
 the obvious-reach toolkit doesn't work here:
