@@ -30,11 +30,13 @@ import { gateModelDraft } from "../../public/js/sundog-claim-gate.mjs";
 import { FAMILY_DRAFTERS, FAMILY_NAMES, categoryFor } from "./lib/draft-families.mjs";
 import { applyIntervention, INTERVENTION_IDS } from "./lib/interventions.mjs";
 import { createOpenAIAdapter } from "./lib/adapters/openai-adapter.mjs";
+import { createAnthropicAdapter } from "./lib/adapters/anthropic-adapter.mjs";
 
 const root = process.cwd();
 const slate = argValue("--slate") || "differential";
 const intervention = argValue("--intervention") || "all";
 const hostedMode = argv().includes("--hosted");
+const hostedBackend = argValue("--backend") || "openai"; // when --hosted, defaults to openai
 const hostedConcurrency = Number(argValue("--concurrency") || "4") || 4;
 
 const slateConfig = configForSlate(slate);
@@ -60,14 +62,18 @@ const rng = makeSeededRng(0xc0ffee);
 const interventionCtx = { claimMap, chunkById, routeById, allRoutes, rng };
 
 const allSummaries = {};
-const outSlateLabel = hostedMode ? `${slateConfig.label}-hosted` : slateConfig.label;
-const hostedAdapter = hostedMode ? createOpenAIAdapter() : null;
+const outSlateLabel = hostedMode
+  ? `${slateConfig.label}-hosted${hostedBackend === "openai" ? "" : "-" + hostedBackend}`
+  : slateConfig.label;
+const hostedAdapter = hostedMode
+  ? (hostedBackend === "anthropic" ? createAnthropicAdapter() : createOpenAIAdapter())
+  : null;
 
 // Load the hosted unmutated-baseline rows (rescored against patched gate).
 // Used to compare each post-intervention hosted result against the
 // reference no-intervention hosted outcome. Empty map in deterministic mode.
 async function loadHostedBaselineMap() {
-  const hostedPath = join(root, "results", "chat", "phase5-hosted", slateConfig.label, "openai", "draft-outcomes-rescored.json");
+  const hostedPath = join(root, "results", "chat", "phase5-hosted", slateConfig.label, hostedBackend, "draft-outcomes-rescored.json");
   try {
     const rows = JSON.parse(await readFile(hostedPath, "utf8"));
     return new Map(rows.map((r) => [r.id, r]));

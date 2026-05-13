@@ -30,7 +30,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { buildTraceAnswer } from "../../public/js/sundog-chat-router.mjs";
-import { attachRetrievedMatches, buildRetrievalTrace } from "../../public/js/sundog-retrieval.mjs";
+import { attachRetrievedMatches, buildRetrievalTrace, searchChatIndex } from "../../public/js/sundog-retrieval.mjs";
 import { gateModelDraft } from "../../public/js/sundog-claim-gate.mjs";
 import { categoryFor } from "./lib/draft-families.mjs";
 import { createOpenAIAdapter } from "./lib/adapters/openai-adapter.mjs";
@@ -42,6 +42,11 @@ const slate = argValue("--slate") || "differential";
 const backend = argValue("--backend") || "mock";
 const limit = Number(argValue("--limit") || "0") || 0;
 const concurrency = Number(argValue("--concurrency") || "4") || 4;
+// --retrieval-k overrides the retrieval depth. Unset = use defaults (k≈3
+// via buildRetrievalTrace, k≈2 via attachRetrievedMatches). 0 = empty
+// retrieved list (router-only). N = re-query the index with limit=N.
+const retrievalKArg = argValue("--retrieval-k");
+const retrievalK = retrievalKArg === "" ? null : Number(retrievalKArg);
 
 const slateConfig = configForSlate(slate);
 const adapter = createAdapter(backend);
@@ -74,7 +79,8 @@ await Promise.all(workers);
 const elapsed = ((Date.now() - startedAt) / 1000).toFixed(1);
 const summary = summarize(rows, errored, elapsed);
 
-const outDir = join(root, "results", "chat", "phase5-hosted", slateConfig.label, backend);
+const kSuffix = retrievalK === null || Number.isNaN(retrievalK) ? "" : `-k${retrievalK}`;
+const outDir = join(root, "results", "chat", "phase5-hosted", slateConfig.label, `${backend}${kSuffix}`);
 await writeFileEnsured(join(outDir, "summary.json"), `${JSON.stringify(summary, null, 2)}\n`);
 await writeFileEnsured(join(outDir, "draft-outcomes.csv"), toCsv(rows));
 await writeFileEnsured(join(outDir, "draft-outcomes.json"), `${JSON.stringify(rows, null, 2)}\n`);
@@ -186,10 +192,24 @@ function errorRow(prompt, err) {
 
 function traceFor(promptText) {
   const staticTrace = buildTraceAnswer(claimMap, promptText);
+  let trace;
   if (staticTrace.routeId === "unsupported_static_route") {
-    return buildRetrievalTrace(chatIndex, promptText) || staticTrace;
+    trace = buildRetrievalTrace(chatIndex, promptText) || staticTrace;
+  } else {
+    trace = attachRetrievedMatches(chatIndex, promptText, staticTrace);
   }
-  return attachRetrievedMatches(chatIndex, promptText, staticTrace);
+  return applyRetrievalDepthOverride(trace, promptText);
+}
+
+function applyRetrievalDepthOverride(trace, promptText) {
+  if (retrievalK === null || Number.isNaN(retrievalK)) return trace;
+  if (retrievalK === 0) {
+    // Router-only: drop all retrieved matches.
+    return { ...trace, retrieved: [] };
+  }
+  // Re-query the index at the requested depth.
+  const matches = searchChatIndex(chatIndex, promptText, { limit: retrievalK });
+  return { ...trace, retrieved: matches };
 }
 
 function summarize(rows, errored, elapsed) {

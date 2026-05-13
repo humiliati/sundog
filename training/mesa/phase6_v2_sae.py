@@ -59,6 +59,7 @@ PHASE6_V32_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-2-neuron-mediation"
 PHASE6_V33_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-3-ablation"
 PHASE6_V34_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-4"
 PHASE6_V35_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-5"
+PHASE6_V38_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-8"
 
 
 V31_POLICY_SPECS: dict[str, PolicySpec] = {
@@ -3198,6 +3199,420 @@ def axis_r_substrate_generalization(args: argparse.Namespace) -> None:
 
 
 # ============================================================
+# v3.8 Axis U -- signed direction-of-effect map
+# ============================================================
+
+
+def parse_labeled_path(raw: str) -> tuple[str, Path]:
+    if "=" not in raw:
+        raise ValueError(f"expected LABEL=PATH table argument, got {raw!r}")
+    label, path_str = raw.split("=", 1)
+    label = label.strip()
+    if not label:
+        raise ValueError(f"empty label in table argument {raw!r}")
+    path = Path(path_str.strip())
+    if not path.is_absolute():
+        path = REPO_ROOT / path
+    return label, path
+
+
+def signed_effect_label(value: float, threshold: float) -> str:
+    if value >= threshold:
+        return "hurts_patch"
+    if value <= -threshold:
+        return "helps_patch"
+    return "neutral"
+
+
+def signed_effect_summary_class(p_sign: str, c_sign: str) -> str:
+    if p_sign == "hurts_patch" and c_sign == "helps_patch":
+        return "P_hurts_C_helps"
+    if c_sign == "hurts_patch" and p_sign == "helps_patch":
+        return "C_hurts_P_helps"
+    if p_sign == "hurts_patch" and c_sign == "hurts_patch":
+        return "both_hurt"
+    if p_sign == "helps_patch" and c_sign == "helps_patch":
+        return "both_help"
+    return "directional_neutral"
+
+
+def axis_u_signed_effects(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+    threshold = float(args.threshold)
+
+    tables = [parse_labeled_path(raw) for raw in args.tables]
+    signed_rows: list[dict[str, Any]] = []
+    sign_sets: dict[tuple[str, str, str], set[int]] = {}
+    by_pair_neuron: dict[tuple[str, int], dict[str, str]] = {}
+
+    for pair_label, table_path in tables:
+        table = load_axis_n_costs(table_path)
+        for direction in ("protected_to_collapsed", "collapsed_to_protected"):
+            if direction not in table["directions"]:
+                raise ValueError(f"{table_path} is missing direction {direction!r}")
+            dir_short = direction_short(direction)
+            for neuron_idx in table["neurons"]:
+                values = [
+                    table["costs"][(direction, int(seed), int(neuron_idx))]
+                    for seed in table["seeds"]
+                    if (direction, int(seed), int(neuron_idx)) in table["costs"]
+                ]
+                mean_cost = mean_finite(values)
+                median_cost = median_finite(values)
+                sign = signed_effect_label(mean_cost, threshold)
+                signed_rows.append({
+                    "pair": pair_label,
+                    "direction": dir_short,
+                    "neuron_idx": int(neuron_idx),
+                    "mean_ablation_cost": mean_cost,
+                    "median_ablation_cost": median_cost,
+                    "sign": sign,
+                    "threshold": threshold,
+                    "n": len(values),
+                    "source_table": relative_path_string(table_path),
+                })
+                sign_sets.setdefault((pair_label, dir_short, sign), set()).add(int(neuron_idx))
+                by_pair_neuron.setdefault((pair_label, int(neuron_idx)), {})[dir_short] = sign
+
+    write_csv(out_dir / "signed-neuron-effects.csv", signed_rows)
+
+    opposition_rows: list[dict[str, Any]] = []
+    for pair_label, _table_path in tables:
+        class_to_neurons: dict[str, list[int]] = {
+            "P_hurts_C_helps": [],
+            "C_hurts_P_helps": [],
+            "both_hurt": [],
+            "both_help": [],
+            "directional_neutral": [],
+        }
+        pair_neurons = sorted(neuron for (pair, neuron) in by_pair_neuron if pair == pair_label)
+        for neuron_idx in pair_neurons:
+            signs = by_pair_neuron[(pair_label, neuron_idx)]
+            p_sign = signs.get("P_to_C", "neutral")
+            c_sign = signs.get("C_to_P", "neutral")
+            cls = signed_effect_summary_class(p_sign, c_sign)
+            class_to_neurons[cls].append(neuron_idx)
+        row: dict[str, Any] = {"pair": pair_label, "threshold": threshold, "neuron_count": len(pair_neurons)}
+        for cls, neurons in class_to_neurons.items():
+            row[f"{cls}_count"] = len(neurons)
+            row[f"{cls}_neurons"] = ";".join(str(neuron) for neuron in neurons)
+        opposition_rows.append(row)
+    write_csv(out_dir / "directional-opposition-summary.csv", opposition_rows)
+
+    pair_labels = [label for label, _path in tables]
+    if "cliff" not in pair_labels:
+        raise ValueError("Axis U requires one table labeled cliff=... for pair-overlap baselines")
+    overlap_rows: list[dict[str, Any]] = []
+    for pair_label in pair_labels:
+        if pair_label == "cliff":
+            continue
+        for direction in ("P_to_C", "C_to_P"):
+            for sign in ("hurts_patch", "helps_patch", "neutral"):
+                cliff_set = sign_sets.get(("cliff", direction, sign), set())
+                pair_set = sign_sets.get((pair_label, direction, sign), set())
+                overlap_rows.append({
+                    "pair": pair_label,
+                    "direction": direction,
+                    "sign": sign,
+                    "cliff_count": len(cliff_set),
+                    "pair_count": len(pair_set),
+                    "intersection_count": len(cliff_set & pair_set),
+                    "union_count": len(cliff_set | pair_set),
+                    "jaccard": jaccard(cliff_set, pair_set),
+                    "intersection_neurons": ";".join(str(neuron) for neuron in sorted(cliff_set & pair_set)),
+                })
+    write_csv(out_dir / "pair-sign-overlap.csv", overlap_rows)
+
+    cliff_opp = next(row for row in opposition_rows if row["pair"] == "cliff")
+    cliff_opposition_counts = [
+        int(cliff_opp["P_hurts_C_helps_count"]),
+        int(cliff_opp["C_hurts_P_helps_count"]),
+    ]
+    ee3_max = max(cliff_opposition_counts)
+    if ee3_max >= 16:
+        ee3_status = "confirmed"
+    elif ee3_max < 8:
+        ee3_status = "falsified"
+    else:
+        ee3_status = "mixed"
+
+    heldout_pairs = [label for label in pair_labels if label != "cliff"]
+    p_overlap = {
+        row["pair"]: float(row["jaccard"])
+        for row in overlap_rows
+        if row["direction"] == "P_to_C" and row["sign"] == "hurts_patch"
+    }
+    c_overlap = {
+        row["pair"]: float(row["jaccard"])
+        for row in overlap_rows
+        if row["direction"] == "C_to_P" and row["sign"] == "hurts_patch"
+    }
+    c_exceeds_p = [
+        c_overlap.get(pair_label, float("nan")) > p_overlap.get(pair_label, float("nan"))
+        for pair_label in heldout_pairs
+    ]
+    p_ge_c = [
+        p_overlap.get(pair_label, float("nan")) >= c_overlap.get(pair_label, float("nan"))
+        for pair_label in heldout_pairs
+    ]
+    if heldout_pairs and all(c_exceeds_p):
+        ee4_status = "confirmed"
+    elif heldout_pairs and all(p_ge_c):
+        ee4_status = "falsified"
+    else:
+        ee4_status = "mixed"
+
+    predictions = {
+        "ee3_directional_opposition_nontrivial": {
+            "status": ee3_status,
+            "cliff_P_hurts_C_helps_count": int(cliff_opp["P_hurts_C_helps_count"]),
+            "cliff_C_hurts_P_helps_count": int(cliff_opp["C_hurts_P_helps_count"]),
+            "confirm_threshold": 16,
+            "falsifier_threshold": 8,
+        },
+        "ee4_c_to_p_signed_structure_more_stable": {
+            "status": ee4_status,
+            "p_to_c_hurts_patch_jaccard_by_pair": p_overlap,
+            "c_to_p_hurts_patch_jaccard_by_pair": c_overlap,
+            "rule": "confirmed iff C_to_P hurts_patch Jaccard exceeds P_to_C hurts_patch Jaccard for every held-out pair",
+        },
+    }
+
+    summary = {
+        "axis": "U",
+        "threshold": threshold,
+        "tables": [{"label": label, "path": relative_path_string(path)} for label, path in tables],
+        "predictions": predictions,
+        "opposition_rows": opposition_rows,
+    }
+    (out_dir / "summary.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    print(f"phase6 v3.8 axis-U: wrote results to {out_dir.relative_to(REPO_ROOT)}", flush=True)
+    print(
+        "  EE3 directional opposition: "
+        f"{ee3_status} "
+        f"(P_hurts_C_helps={cliff_opp['P_hurts_C_helps_count']}, "
+        f"C_hurts_P_helps={cliff_opp['C_hurts_P_helps_count']})",
+        flush=True,
+    )
+    print(f"  EE4 C_to_P sign stability: {ee4_status}", flush=True)
+    for pair_label in heldout_pairs:
+        print(
+            f"    {pair_label}: P_to_C hurts J={p_overlap.get(pair_label, float('nan')):.3f}, "
+            f"C_to_P hurts J={c_overlap.get(pair_label, float('nan')):.3f}",
+            flush=True,
+        )
+
+
+# ============================================================
+# v3.8 Axis T -- per-PC zero-ablation decomposition
+# ============================================================
+
+
+def aggregate_axis_t_per_pc(
+    *,
+    out_dir: Path,
+    pc_numbers: list[int],
+    directions: list[str],
+    sign_threshold: float,
+) -> dict[str, Any]:
+    reports_dir = out_dir / "reports"
+    reports_dir.mkdir(parents=True, exist_ok=True)
+
+    matrix_rows: list[dict[str, Any]] = []
+    top_sets: dict[tuple[str, int], set[int]] = {}
+    max_costs: dict[tuple[str, int], float] = {}
+
+    for pc_number in pc_numbers:
+        pc_dir = out_dir / f"pc{pc_number}"
+        aggregate_path = pc_dir / "ablation-aggregate.csv"
+        if not aggregate_path.exists():
+            raise FileNotFoundError(f"missing Axis T aggregate for PC{pc_number}: {aggregate_path}")
+        rows = read_csv_rows(aggregate_path)
+        for direction in directions:
+            dir_rows = [row for row in rows if row["direction"] == direction]
+            if not dir_rows:
+                continue
+            dir_rows.sort(key=lambda row: float(row["mean_ablation_cost"]), reverse=True)
+            top_sets[(direction, pc_number)] = {int(row["neuron_idx"]) for row in dir_rows[:32]}
+            max_costs[(direction, pc_number)] = max(float(row["mean_ablation_cost"]) for row in dir_rows)
+            for row in dir_rows:
+                mean_cost = float(row["mean_ablation_cost"])
+                matrix_rows.append({
+                    "pc": pc_number,
+                    "direction": direction_short(direction),
+                    "neuron_idx": int(row["neuron_idx"]),
+                    "mean_ablation_cost": mean_cost,
+                    "median_ablation_cost": float(row["median_ablation_cost"]),
+                    "q25_ablation_cost": float(row["q25_ablation_cost"]),
+                    "q75_ablation_cost": float(row["q75_ablation_cost"]),
+                    "sign": signed_effect_label(mean_cost, sign_threshold),
+                    "sign_threshold": sign_threshold,
+                    "n": int(row["n"]),
+                })
+    write_csv(reports_dir / "pc-neuron-ablation-matrix.csv", matrix_rows)
+
+    jaccard_rows: list[dict[str, Any]] = []
+    partition_rows: list[dict[str, Any]] = []
+    for direction in directions:
+        available_pcs = [pc for pc in pc_numbers if (direction, pc) in top_sets]
+        offdiag_values: list[float] = []
+        for idx, pc_a in enumerate(available_pcs):
+            for pc_b in available_pcs[idx + 1:]:
+                value = jaccard(top_sets[(direction, pc_a)], top_sets[(direction, pc_b)])
+                offdiag_values.append(value)
+                jaccard_rows.append({
+                    "direction": direction_short(direction),
+                    "pc_a": pc_a,
+                    "pc_b": pc_b,
+                    "jaccard_top32": value,
+                    "intersection_count": len(top_sets[(direction, pc_a)] & top_sets[(direction, pc_b)]),
+                    "union_count": len(top_sets[(direction, pc_a)] | top_sets[(direction, pc_b)]),
+                })
+        neuron_counts: dict[int, int] = {}
+        for pc in available_pcs:
+            for neuron_idx in top_sets[(direction, pc)]:
+                neuron_counts[neuron_idx] = neuron_counts.get(neuron_idx, 0) + 1
+        shared_core = sorted(neuron for neuron, count in neuron_counts.items() if count >= 3)
+        partition_rows.append({
+            "direction": direction_short(direction),
+            "mean_offdiag_jaccard": mean_finite(offdiag_values),
+            "max_offdiag_jaccard": max(offdiag_values) if offdiag_values else float("nan"),
+            "min_offdiag_jaccard": min(offdiag_values) if offdiag_values else float("nan"),
+            "unique_top32_neuron_count": len(neuron_counts),
+            "shared_core_count": len(shared_core),
+            "shared_core_neurons": ";".join(str(neuron) for neuron in shared_core),
+            "available_pcs": ";".join(str(pc) for pc in available_pcs),
+        })
+    write_csv(reports_dir / "pc-top32-jaccard.csv", jaccard_rows)
+    write_csv(reports_dir / "pc-partition-metrics.csv", partition_rows)
+
+    mean_offdiag_by_direction = {
+        row["direction"]: float(row["mean_offdiag_jaccard"])
+        for row in partition_rows
+    }
+    if mean_offdiag_by_direction and any(value <= 0.20 for value in mean_offdiag_by_direction.values()):
+        ee1_status = "confirmed"
+    elif mean_offdiag_by_direction and all(value >= 0.40 for value in mean_offdiag_by_direction.values()):
+        ee1_status = "falsified"
+    else:
+        ee1_status = "mixed"
+
+    p_to_c_max_by_pc = {
+        pc: max_costs[("protected_to_collapsed", pc)]
+        for pc in pc_numbers
+        if ("protected_to_collapsed", pc) in max_costs
+    }
+    if 1 not in p_to_c_max_by_pc:
+        ee2_status = "not_evaluable"
+        pc1_lower_than_count = None
+    else:
+        pc1_max = p_to_c_max_by_pc[1]
+        pc1_lower_than_count = sum(
+            1 for pc, value in p_to_c_max_by_pc.items()
+            if pc != 1 and pc1_max < value
+        )
+        if pc1_lower_than_count >= 3:
+            ee2_status = "confirmed"
+        elif pc1_max >= max(p_to_c_max_by_pc.values()):
+            ee2_status = "falsified"
+        else:
+            ee2_status = "mixed"
+
+    summary = {
+        "axis": "T",
+        "pc_numbers": pc_numbers,
+        "directions": [direction_short(direction) for direction in directions],
+        "sign_threshold": sign_threshold,
+        "partition_rows": partition_rows,
+        "max_mean_ablation_cost_by_direction_pc": {
+            f"{direction_short(direction)}_PC{pc}": value
+            for (direction, pc), value in max_costs.items()
+        },
+        "predictions": {
+            "ee1_pc_neuron_substrates_partially_partitioned": {
+                "status": ee1_status,
+                "mean_offdiag_jaccard_by_direction": mean_offdiag_by_direction,
+                "confirm_threshold": 0.20,
+                "falsifier_threshold": 0.40,
+            },
+            "ee2_pc1_variance_heavy_mechanism_light": {
+                "status": ee2_status,
+                "p_to_c_max_mean_ablation_cost_by_pc": p_to_c_max_by_pc,
+                "pc1_lower_than_pcs_2_to_5_count": pc1_lower_than_count,
+                "confirm_count_threshold": 3,
+            },
+        },
+    }
+    (reports_dir / "pc-partition-summary.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return summary
+
+
+def axis_t_per_pc_zero_ablation(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    pc_numbers = sorted({int(pc) for pc in args.pcs})
+    invalid = [pc for pc in pc_numbers if pc < 1 or pc > 5]
+    if invalid:
+        raise ValueError(f"--pcs values must be in 1..5; got {invalid}")
+    directions = direction_keys(args.direction)
+
+    Q_full, basis_metadata = load_or_build_cliff_pca_basis(
+        out_root=PHASE6_V31_OUT,
+        seed_start=args.basis_seed_start,
+        seeds=args.basis_seeds,
+        horizon=args.basis_horizon,
+        num_components=5,
+    )
+    if Q_full.shape[1] < 5:
+        raise RuntimeError(f"expected cached cliff PCA basis with at least 5 components; got {Q_full.shape}")
+
+    for pc_number in pc_numbers:
+        print(f"phase6 v3.8 axis-T: PC{pc_number} ({pc_numbers.index(pc_number) + 1}/{len(pc_numbers)})", flush=True)
+        Q_pc = Q_full[:, pc_number - 1:pc_number]
+        run_zero_ablation_battery(
+            Q_np=Q_pc,
+            seed_start=args.seed_start,
+            seeds=args.seeds,
+            horizon=args.horizon,
+            layer=args.layer,
+            out_dir=out_dir / f"pc{pc_number}",
+            direction=args.direction,
+            manifest_extra={
+                "axis": "T",
+                "pc": pc_number,
+                "basis": "cliff_pair_pca_single_pc",
+                "basis_metadata": basis_metadata,
+                "basis_seed_start": int(args.basis_seed_start),
+                "basis_seeds": int(args.basis_seeds),
+                "basis_horizon": int(args.basis_horizon),
+            },
+        )
+
+    summary = aggregate_axis_t_per_pc(
+        out_dir=out_dir,
+        pc_numbers=pc_numbers,
+        directions=directions,
+        sign_threshold=float(args.sign_threshold),
+    )
+    print(f"phase6 v3.8 axis-T: wrote reports to {(out_dir / 'reports').relative_to(REPO_ROOT)}", flush=True)
+    for prediction, row in summary["predictions"].items():
+        print(f"  {prediction}: {row['status']}", flush=True)
+
+
+# ============================================================
 # CLI
 # ============================================================
 
@@ -3398,6 +3813,33 @@ def parse_args() -> argparse.Namespace:
     rgen.add_argument("--resamples", type=int, default=1000)
     rgen.add_argument("--bootstrap-seed", type=int, default=0)
 
+    usign = sub.add_parser(
+        "axis-u-signed-effects",
+        help="Phase 6 v3.8 Axis U: signed direction-of-effect map from existing zero-ablation tables",
+    )
+    usign.add_argument("--out", default=str(PHASE6_V38_OUT / "axis-u-signed-effects"))
+    usign.add_argument("--tables", nargs="+", required=True,
+                       help="labeled ablation tables in LABEL=path form, including cliff=...")
+    usign.add_argument("--threshold", type=float, default=0.01)
+
+    tpc = sub.add_parser(
+        "axis-t-per-pc-zero-ablation",
+        help="Phase 6 v3.8 Axis T: per-PC zero-ablation decomposition of the cliff-pair PCA basis",
+    )
+    tpc.add_argument("--out", default=str(PHASE6_V38_OUT / "axis-t-per-pc"))
+    tpc.add_argument("--direction", default="both", choices=["P_to_C", "C_to_P", "both"])
+    tpc.add_argument("--pcs", type=int, nargs="+", default=[1, 2, 3, 4, 5],
+                     help="1-indexed PCA components to run; default is 1 2 3 4 5")
+    tpc.add_argument("--seed-start", type=int, default=10000)
+    tpc.add_argument("--seeds", type=int, default=8)
+    tpc.add_argument("--horizon", type=int, default=200)
+    tpc.add_argument("--basis-seed-start", type=int, default=10000)
+    tpc.add_argument("--basis-seeds", type=int, default=64)
+    tpc.add_argument("--basis-horizon", type=int, default=200)
+    tpc.add_argument("--layer", default="net.7")
+    tpc.add_argument("--sign-threshold", type=float, default=0.01,
+                     help="threshold used only for the report sign column")
+
     args = parser.parse_args()
     if args.command is None:
         parser.print_help()
@@ -3435,6 +3877,10 @@ def main() -> None:
         axis_q_jaccard_bootstrap(args)
     elif args.command == "axis-r-substrate-generalization":
         axis_r_substrate_generalization(args)
+    elif args.command == "axis-u-signed-effects":
+        axis_u_signed_effects(args)
+    elif args.command == "axis-t-per-pc-zero-ablation":
+        axis_t_per_pc_zero_ablation(args)
     else:
         raise ValueError(f"unknown command: {args.command}")
 

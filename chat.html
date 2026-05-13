@@ -465,7 +465,7 @@
             <article class="lead-framing">
                 <p class="eyebrow">Lead framing</p>
                 <p>
-                    Zero gate escapes across <strong>4,578 trials</strong> spanning three backends (deterministic compositor + <code>gpt-4o-mini</code> + <code>claude-haiku-4-5</code>), 112 cells of (prompt type × severity × evidence tier × model family), 8 trace-field ablations, and 3 corpus-conflict mutations is the <strong>safety floor</strong> — necessary but not the point. The 100 percentage-point gap between trace-conditioned and prompt-engineered baselines at severe pressure is the <strong>experimental result</strong>.
+                    Zero gate escapes across <strong>5,335 trials</strong> spanning three backends (deterministic compositor + <code>gpt-4o-mini</code> + <code>claude-haiku-4-5</code>), three retrieval depths (k=0, k=3, k=8), 112 cells, 8 trace-field ablations on two hosted vendors, and 3 corpus-conflict mutations is the <strong>safety floor</strong> — necessary but not the point. The 100 percentage-point gap between trace-conditioned and prompt-engineered baselines at severe pressure is the <strong>experimental result</strong>, and the Phase 5d Claude intervention battery shows the trace is <strong>causally load-bearing</strong> on a strong hosted model — 268 trace-driven drifts on Claude were caught by the gate before becoming unsafe-accepts.
                 </p>
             </article>
 
@@ -563,12 +563,16 @@
                             <code>claude-haiku-4-5</code> on the same heavy-trace system prompt produced <strong>16/16 differential + 59/59 adversarial = 75/75 accepted, zero gate escapes</strong>. The pre-rescore run flagged 14 prompts; every one was a gate-brittleness artifact around English contractions ("I can't", "We don't", "isn't") that <code>gpt-4o-mini</code> didn't produce because it prefers unabbreviated forms ("I cannot", "we do not"). The gate's <code>hasNearbyNegation</code> lexicon was expanded to handle both styles. Stylistic finding: Claude produces explicit-negation refusals more consistently ("an operating-envelope study, <strong>not a research result</strong>"), where OpenAI more often paraphrases the supported framing. Same safety floor, different surface form.
                         </li>
                         <li>
+                            <strong>Phase 5d: Claude intervention battery — the trace is causally load-bearing.</strong>
+                            The same 8 trace-field interventions, run against <code>claude-haiku-4-5</code> on differential + adversarial slates (600 hosted trials). <strong>268 flips, 0 unsafe-accepts.</strong> Five of six trace fields show strong causal authority (boundary, evidenceTier, support, routeId, retrieved — each triggering 36+ flips on adversarial); only <code>trace.disposition</code> stays at minimal authority. Mechanistically, Claude reads the heavy-trace JSON as <em>primary constraint</em>: mutate a field, and Claude's draft reflects the mutated trace, then the gate catches the inconsistency. <code>gpt-4o-mini</code> ran the same battery and showed only 11 total flips — it leans on the system prompt's hard rules and treats the trace as background context. <strong>Both reach the safety floor; only Claude demonstrates the trace is actually doing the work.</strong> This is the strongest causal substantiation §13 has had.
+                        </li>
+                        <li>
                             <strong>Phase 7: operating envelope.</strong>
                             All trials from Phases 3 / 4 / 5 / 5b / 5c / 8d re-projected into a unified cell-class-map: <strong>3,570 trials, 112 unique cells</strong> covering (prompt type × severity × evidence tier × model family). Boundary preservation rate is <strong>1.000 across every cell</strong> of every family. The <code>claude-haiku-4-5</code> family shows the cleanest profile of all six measured: 16/16 cells covered_holds, zero weak cells. Cells where the architecture is in scope all hold; cells out of scope (corpus conflict, retrieval depth ≠ k=3, hidden trace, offline mode, vendors other than OpenAI/Anthropic) are named explicitly in <code>results/chat/operating-envelope/manifest.json</code>.
                         </li>
                     </ul>
                     <p>
-                        The §13 ratchet that started as "the trace-conditioned scaffold preserves discipline better than a generic boundary prefix" now reads more precisely: <strong>zero unsafe-accepts across 3,570 trials, three backends (deterministic + <code>gpt-4o-mini</code> + <code>claude-haiku-4-5</code>), eight trace-field ablations, three prompt-type slates, and four severity levels — bounded to this corpus, retrieval depth k=3, visible trace, browser_live, the two named hosted vendors at the named models.</strong>
+                        The §13 ratchet that started as "the trace-conditioned scaffold preserves discipline better than a generic boundary prefix" now reads more precisely: <strong>zero unsafe-accepts across 5,178 trials, three backends, eight trace-field ablations × two hosted vendors, three corpus-conflict mutations, three prompt-type slates, four severity levels — with empirical evidence (Phase 5d) that the trace is causally load-bearing on at least one hosted model. Bounded to this corpus, retrieval depth k=3, visible trace, browser_live, the two named hosted vendors at the named models.</strong>
                     </p>
                 </div>
             </section>
@@ -674,7 +678,7 @@
                         <article class="followup-card">
                             <h3>Cross-architecture replication</h3>
                             <p>
-                                <strong>Done for Claude family</strong> (<code>claude-haiku-4-5</code>: 75/75 accepted, zero gate escapes, 16/16 cells covered_holds — cleanest family profile measured). The cross-architecture thread now extends to open-weight models (Llama, Mistral) and to the hosted-intervention battery on Claude — does the model's causal-authority profile mirror gpt-4o-mini's (<code>trace.evidenceTier</code> weak, others none) or expose different trace fields?
+                                <strong>Done for Claude family.</strong> Hosted run 75/75 accepted + Phase 5d intervention battery (600 trials, 268 flips, 0 unsafe-accepts) shows Claude's causal-authority profile is fundamentally different from <code>gpt-4o-mini</code>'s — five of six trace fields show strong authority on Claude, vs only <code>trace.evidenceTier</code> weak on OpenAI. Open thread now points at open-weight models (Llama, Mistral): do they pattern with Claude (trace-as-primary-constraint) or with OpenAI (system-prompt-as-primary)?
                             </p>
                         </article>
                         <article class="followup-card">

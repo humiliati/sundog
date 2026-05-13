@@ -201,8 +201,10 @@ Then compute opposition classes per pair:
 
 The threshold `0.01` is deliberately small but nonzero: enough to avoid
 floating noise while preserving weak directional effects. v3.8 may
-report sensitivity at `0.02` as a robustness appendix if signs look
-borderline.
+report sensitivity at `0.02` as a robustness appendix. EE3/EE4
+classification is keyed to the preregistered `0.01` threshold; the
+`0.02` pass is non-gating and exists to distinguish strong signed
+structure from threshold-fragile signed structure.
 
 ### 5.1 Outputs
 
@@ -213,6 +215,8 @@ results/mesa/phase6-v3-8/
     directional-opposition-summary.csv
     pair-sign-overlap.csv
     summary.json
+  axis-u-signed-effects-threshold-0-02/   # non-gating sensitivity
+    ...
 ```
 
 ## 6. What This Contributes to MESA_CROSSOVER_NOTE.md
@@ -346,7 +350,8 @@ Implementation shape:
 Recommended sequence:
 
 1. Implement `axis-u-signed-effects` first (~30 LOC).
-2. Run Axis U on existing CSVs (~5 min including inspection).
+2. Run Axis U on existing CSVs plus `0.02` sensitivity (~5 min including
+   inspection).
 3. Implement `axis-t-per-pc-zero-ablation` (~80 LOC).
 4. Run Axis T on cliff pair, 5 PCs x both directions x 8 seeds
    (~50 min).
@@ -412,4 +417,3 @@ If EE3/EE4 falsify:
   offline rider: signed direction-of-effect analysis (Axis U). Crossover
   section made mandatory so the mesa result feeds Geometry Phase 10/11
   structurally rather than incidentally.
-

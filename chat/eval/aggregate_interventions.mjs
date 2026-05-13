@@ -35,7 +35,7 @@ import { FAMILY_NAMES as DETERMINISTIC_FAMILY_NAMES } from "./lib/draft-families
 // hosted slates (1 family). Hosted directories are at `<slate>-hosted/`
 // and contain only `sundog_gated_hosted` rows.
 const isHostedSlate = (process.argv.includes("--slate") &&
-  /-hosted$/.test(process.argv[process.argv.indexOf("--slate") + 1] || ""));
+  /-hosted(-[a-z0-9-]+)?$/.test(process.argv[process.argv.indexOf("--slate") + 1] || ""));
 const FAMILY_NAMES = isHostedSlate ? ["sundog_gated_hosted"] : DETERMINISTIC_FAMILY_NAMES;
 
 const root = process.cwd();
