@@ -31,12 +31,13 @@ methodological lesson, and one secondary observation:
    both directions. That is a **51× compression** of the mechanistic
    anchor (256 → 5 dims). K-sweep saturates at K=5; K=10/32/64 add no
    measurable patch_success past K=5 (noise-floor refinement).
-2. **Variance and mechanism are decoupled.** The first PCA component
-   carries 38.8% of the diff variance but contributes 0% of patch
-   success. PC1 is essentially the empirical between-policy mean-offset
-   direction; it separates "which policy am I" but not "what mechanism
-   does this policy implement." The basin-attractor circuit lives in
-   **PCs 2-5** (58.5% of variance, ~100% of patch effect).
+2. **Variance and mechanism are decoupled, but not cleanly separable.**
+   The first PCA component carries 38.8% of the diff variance but
+   contributes almost no patch success alone. Phase 6 v3.1 later showed
+   that PCs 2-5 alone are also only partial. The basin-attractor circuit
+   is therefore best read as an **entangled 5-dimensional subspace**:
+   PC1 alone is behavior-weak, PCs 2-5 alone are partial, and all five
+   directions together are required for the full patch effect.
 3. **Sparse-autoencoder features are the wrong basis for this circuit.**
    The top SAE feature was strongly correlated with `basin_pref_intervened`
    (|corr| = 0.89, V2 confirmed), but direction-patching using that
@@ -166,7 +167,7 @@ own learned basis. The mean-diff K=1 captures partial P→C effect
 (~44%) but barely any C→P effect — the constant-offset component of
 the cliff is variance-heavy but not enough mechanism for full patch
 effect. This dovetails with the axis-H K=1 finding (PC1 alone is
-mechanism-empty).
+behavior-weak).
 
 ## 7. Axis H — PCA on per-step matched-seed diffs (headline)
 
@@ -198,28 +199,21 @@ subspace within that layer."
 
 ### 7.2 Variance-vs-mechanism decoupling
 
-v3.1 correction: the decomposition below is superseded. PC1 alone is
-behavior-weak, but not mechanism-empty; PCs 2-5 alone are partial
-(`0.291 / 0.121` median patch_success), and PCs 1-5 together reproduce
-the full effect (`0.922 / 0.830`). The revised read is an entangled 5D
-subspace, not a clean 1D offset plus 4D mechanism split.
+v3.1 correction: the original decomposition is superseded. PC1 alone is
+behavior-weak, PCs 2-5 alone are partial (`0.291 / 0.121` median
+patch_success), and PCs 1-5 together reproduce the full effect (`0.922 /
+0.830`). The revised read is an entangled 5D subspace, not a clean 1D
+offset plus 4D mechanism split.
 
 PC1 (alone) captures 38.8% of variance but contributes ~0% of patch
-success. PC1 is the policy-offset direction (effectively Δ_mean from
-axis-G, just expressed in PCA coordinates). It separates the two
-policies' activations but does not flip behavior under patch.
+success. It is variance-heavy and behavior-weak, but v3.1 showed it is
+not disposable: PCs 2-5 alone produce only partial patch success.
 
-PCs 2-5 contribute the remaining 58.5% of variance and **all** of the
-mechanism. Patching these 4 directions alone (without PC1) would
-likely recover ~v1 baseline; this was not run in v2 but is a v3.1
-candidate diagnostic.
+The cleanest corrected statement of the cliff geometry is:
 
-The cleanest statement of the cliff geometry is:
-
-> The basin attractor at net.7 is a 5-dimensional subspace,
-> decomposable into a 1-dimensional policy-offset component (PC1,
-> 38.8% variance, 0% mechanism) and a 4-dimensional mechanism
-> component (PCs 2-5, 58.5% variance, ~100% mechanism).
+> The basin attractor at net.7 is an entangled 5-dimensional subspace.
+> PC1 alone is weak, PCs 2-5 alone are partial, and no tested proper
+> sub-subspace reproduces the full patch effect.
 
 ### 7.3 Directional asymmetry
 
@@ -255,9 +249,11 @@ Phase 6 v2 + v3 ratchet the gravity-claim mechanistic anchor:
   principal components of the matched-seed per-step diff matrix. K=5
   recovers v1 patch_success to within 0.03 in both directions; K=10/32/
   64 saturate at the v1 baseline.
-- **v3 variance-vs-mechanism lesson (new):** the first principal
-  component is variance-heavy but mechanism-empty — it carries 38.8%
-  of variance and 0% of patch_success. Mechanism lives in PCs 2-5.
+- **v3.1 variance-vs-mechanism correction (new):** the first principal
+  component is variance-heavy and behavior-weak, but not disposable.
+  PCs 2-5 alone are partial; PCs 1-5 together reproduce the full patch
+  effect. Mechanism and variance are decoupled, but the circuit is
+  entangled across the five-dimensional PCA subspace.
 - **Methodological note:** SAE features ranked by per-episode-target
   correlation on a joint two-policy dataset are dominated by
   policy-identifier features and *are the wrong basis for causal
@@ -270,11 +266,13 @@ Phase 6 v2 + v3 ratchet the gravity-claim mechanistic anchor:
 
 Phase 6 v2 + v3 has cascading effects on three program surfaces:
 
-- **The gravity claim's mechanistic anchor sharpens.** Where Phase 6
-  v1 supported "the cliff is at a specific layer," v2+v3 support "the
-  cliff is a 5-dim subspace at that layer, of which 4 dims carry the
-  mechanism." This is the next-level mechanistic statement and should
-  cascade into PROMO_HIGHLIGHTS, claims-and-scope, and SUNDOG_V_MESA.
+- **The gravity claim's mechanistic anchor sharpens and revises.** Where
+  Phase 6 v1 supported "the cliff is at a specific layer," v2+v3+v3.1
+  support "the cliff is an entangled 5-dimensional subspace at that
+  layer." The basin-inducing side generalizes across Medium controller
+  families; the basin-resisting side is weaker under transfer and appears
+  policy-specific. This corrected statement should cascade into
+  PROMO_HIGHLIGHTS, claims-and-scope, and SUNDOG_V_MESA.
 - **The `mesa.html` "fingerprint" surface is now buildable.** v3 gives
   a clear visual story: variance-explained curve plus patch_success(K)
   curve, both as functions of K, plotted together. The decoupling
@@ -287,28 +285,22 @@ Phase 6 v2 + v3 has cascading effects on three program surfaces:
   target that varies *within* that policy) replace the joint-SAE
   approach used in v2.
 
-## 10. Open Edges
+## 10. v3.1 Resolution Notes
 
-Several questions are surfaced by v2+v3 but deferred to v3.1 or later:
+Several questions surfaced by v2+v3 were answered by v3.1:
 
-- **What is the geometric structure of PCs 2-5?** Are they sparse over
-  net.7 neurons (a few specific neurons drive each PC) or distributed?
-  Per-neuron decomposition of PC2-PC5 directions is a v3.1 candidate.
-- **Does the 5-dim subspace generalize to other Phase 5 zoo cells?**
-  If the same PCA basis (computed from the cliff pair) patches well on
-  L-Reward-M (also collapsed) vs L-Sig-Terminal-M (also held), the
-  basin-attractor subspace is *not* specific to the cliff pair —
-  it's the basin-attraction structure of the whole controller family.
-  This is a v3.2 generalization test.
-- **What does PC2-PC5 patching alone produce?** Skipping PC1 (the
-  policy-offset) and patching only PCs 2-5 should recover ~v1
-  baseline. v3.1 candidate diagnostic; would tighten the variance-vs-
-  mechanism story.
-- **Does the directional asymmetry (P→C captured by 3 PCs, C→P
-  needing 5) survive seed-bootstrap analysis?** v3.1 candidate.
-
-These are inexpensive (no new training; same patch battery) and could
-ship in a v3.1 result note.
+- **PCs 2-5 alone are not the mechanism.** The PC2-5-only patch produces
+  partial success (`0.291 / 0.121`), so the old "PC1 offset plus PCs 2-5
+  mechanism" story is falsified.
+- **The 5-dimensional basis generalizes asymmetrically.** Protected-to-
+  collapsed transfer lands at cliff-pair quality on both held-out Medium
+  pairs; collapsed-to-protected transfer weakens, especially on the
+  signature-vs-reward pair.
+- **Directional asymmetry is statistical.** The K=3 bootstrap gap excludes
+  zero with 95% CI `[0.251, 0.550]`.
+- **The neuron-level target is tractable.** Top-32 neuron concentration for
+  PCs 2-5 sits in the moderate band, making v3.2 per-neuron mediation a
+  realistic next step.
 
 ## 11. Versioning
 

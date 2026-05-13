@@ -1,6 +1,6 @@
 import { DEFAULT_FAQS, buildTraceAnswer, loadClaimMap } from "./sundog-chat-router.mjs";
 import { attachRetrievedMatches, buildRetrievalTrace, loadChatIndex } from "./sundog-retrieval.mjs";
-import { applyMascotState } from "./sundog-chat-mascot.mjs";
+import { applyMascotState, applyPanelMascotState } from "./sundog-chat-mascot.mjs";
 
 const ROOT_ID = "sd-chat-widget-root";
 const MASCOT_CSS_HREF = "/css/sundog-chat-mascot.css";
@@ -33,10 +33,14 @@ async function initAskSundog() {
       <header class="sd-chat-header">
         <div>
           <div class="sd-chat-title">Ask Sundog</div>
-          <div class="sd-chat-subtitle">Boundary active</div>
+          <div class="sd-chat-subtitle">Trace-conditioned site helper</div>
         </div>
         <button class="sd-chat-close" type="button" aria-label="Close Ask Sundog">x</button>
       </header>
+      <div class="sd-chat-mascot-strip" role="status" aria-live="polite" aria-atomic="true">
+        <span class="sd-chat-mascot-strip__face" aria-hidden="true"></span>
+        <span class="sd-chat-mascot-strip__label">Ready</span>
+      </div>
       <div class="sd-chat-body" role="log" aria-live="polite">
         <div class="sd-chat-message sd-chat-message-assistant">
           <p>Ready.</p>
@@ -63,6 +67,7 @@ async function initAskSundog() {
 
   // Idle mascot state on mount. Trace-driven updates fire in answerQuestion.
   applyMascotState(launch, null);
+  applyPanelMascotState(panel, null);
 
   // Conversation history surface — drives the `held_refusal` state when
   // the gate fires twice in a row on related routes.
@@ -106,6 +111,7 @@ async function initAskSundog() {
     answerStack.replaceChildren(renderExchange(question, trace));
     answerStack.scrollIntoView({ block: "nearest", behavior: "smooth" });
     applyMascotState(launch, trace, { previousTrace: lastTrace });
+    applyPanelMascotState(panel, trace, { previousTrace: lastTrace });
     lastTrace = trace;
   }
 
