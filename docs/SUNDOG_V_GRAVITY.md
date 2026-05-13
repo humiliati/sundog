@@ -29,11 +29,24 @@ their detailed Sundog-expression blocks, but they are no longer first-priority
 targets here:
 
 - **Candidate 1 - Formal Separability Theorem** → promoted as Appendix A of
-  [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md).
+  [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md). *Status (2026-05-12): Appendix
+  formal work in progress; the empirical mesa front has now produced an
+  in-vitro bounded receipt for the conditional separability the theorem
+  would name.*
 - **Candidate 2 - Mesa-Optimization Trap** → promoted as the empirical front
-  of [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md).
+  of [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md). *Status (2026-05-12): Phases
+  0-7 complete; in-vitro operating envelope mapped at Small and Medium
+  capacity. 22-policy zoo classifies as 8 hold / 7 collapse / 1 fragile /
+  4 incompetent / 2 ambiguous. Medium breach at `λ ≈ 0.952588`, signature
+  weight `1 − λ ≈ 0.047412`. Phase 6 v1 localizes the cliff causally to
+  the actor's final hidden activation (`net.7`). Outcome maps to the
+  roadmap's pre-named "partially holds" verdict.*
 - **Candidate 7 - Causal Intervention Test** → promoted as Phase 4 of
-  [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md).
+  [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md). *Status (2026-05-12): Phase 4
+  complete; old-basin preference grows `3.413 → 5.560` Small → Medium for
+  canonical L-Reward, with signature-sensor and geometry action responses
+  near zero — the fixed-attractor receipt that anchored Phase 5 and Phase
+  6 downstream.*
 
 The following candidates depend on infrastructure built by
 `SUNDOG_V_MESA.md` and are sequenced accordingly:
@@ -373,6 +386,33 @@ more strongly than matched reward training.
 (Phases 0–8).* First-priority red-team experiment; staged early so the gravity
 claim is stress-tested before public language hardens. The roadmap is the
 active working location; this entry is retained for archival reference.
+
+**Status update (2026-05-12) — Phases 0-7 complete.** The mesa-trap front
+has now produced an in-vitro bounded operating-envelope receipt:
+
+- **22-policy zoo classified at Small and Medium capacity** through the
+  Phase 7 envelope harness (`scripts/mesa-phase7-envelope.mjs`). Class
+  balance: 8 `hold`, 7 `collapse`, 1 `fragile`, 4 `incompetent`,
+  2 `ambiguous`, 0 missing cells.
+- **Medium breach threshold localized to `(0.95, 0.97]`** with
+  interpolated `λ ≈ 0.952588`. Signature weight `1 − λ ≈ 0.047412`
+  (~5%) is sufficient and necessary to prevent basin internalization
+  in this toy family up to the measured boundary.
+- **Mechanistic locus identified.** Phase 6 v1 activation patching
+  across the cliff pair (L-Mixed-M-`λ=0.95` vs L-Mixed-M-`λ=0.97`)
+  clears the pre-registered patch-success threshold (`>0.8` in both
+  directions) only at `net.7`, the actor's final hidden activation.
+- **Outcome maps to "partially holds"** in the roadmap's pre-named
+  three-way ladder. The protected pocket is real but bounded; the
+  collapse pocket is also sharp. Both are honest evidence about the
+  controller family.
+- **Hard scope:** in-vitro, 2D continuous-control, synthetic
+  Goodhart-prone shaping surface. Not universal mesa immunity. Not
+  foundation-model behavior. Not deployed-system robustness. The
+  in-vitro receipt does ratchet a bounded form of the gravity frame
+  into earned language; see
+  [`docs/presentation/claims-and-scope.md`](presentation/claims-and-scope.md)
+  §The Gravity Frame → Earned envelope language.
 
 ---
 

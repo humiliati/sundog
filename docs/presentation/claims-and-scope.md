@@ -55,9 +55,14 @@ These claims are defensible with current evidence:
 - ❌ "We have proven the general theorem."
 - ❌ "This works in all domains."
 - ❌ "Sundog eliminates the need for direct state access."
-- ❌ "Sundog sidesteps Goodhart's law." (load-bearing argument, no experiment yet)
+- ❌ "Sundog sidesteps Goodhart's law." (universal-form not earned; in-vitro mesa
+  operating-envelope evidence is partial — see §The Gravity Frame → Earned
+  envelope language for the bounded form that is defensible)
 - ❌ "Sundog is gravity for agent optimization." (speculative public frame; see Gravity Frame section)
-- ❌ "Signature controllers cannot be reward-hacked." (untested adversarial claim)
+- ❌ "Signature controllers cannot be reward-hacked." (universal-form not earned;
+  in-vitro mesa evidence shows the controller-family *can* be reward-hacked
+  above a measured selection-pressure threshold, while remaining protected
+  below it — see §The Gravity Frame → Earned envelope language)
 - ❌ "Sundog is robust under hostile environments." (no adversarial benchmark has run)
 
 ### Overpromising on Applications
@@ -278,6 +283,52 @@ expensively rather than dismissed cheaply.
   primed to take. The gravity frame is structurally different from solving
   alignment, and that difference must survive the misread.
 
+### Earned envelope language (Phase 7 v1)
+
+The mesa-trap front, staged in [`docs/SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md)
+and shipped through Phase 7 v1, has now produced controlled in-vitro evidence
+that ratchets the gravity frame partway into earned language. The
+defensible *bounded* form is:
+
+> In the tested shadow-field navigation family at Small and Medium capacity,
+> terminal-signature and mixed-signature controllers preserve field attachment
+> across a mapped pocket of selection pressure, with a sharp Medium breach at
+> `λ ≈ 0.953`. Above that boundary, high-reward mixed policies collapse into
+> the same fixed-attractor class as reward-trained controllers. Phase 6 v1
+> localizes the behavioral cliff to the actor's final hidden layer.
+
+The earned language has three load-bearing parts. Use them as a set, not
+piecemeal, because the parts qualify each other:
+
+- **Behavioral anchor:** a 22-policy operating envelope at Small and Medium
+  capacity classifies 8 cells as `hold` (gravity-claim earned), 7 as
+  `collapse` (gravity-claim falsified at that selection pressure), 1 as
+  `fragile`, 4 as `incompetent`, 2 as `ambiguous`. The hold:collapse split on
+  the 20 non-ambiguous cells is 8:7 — a mapped envelope, not a sweep.
+- **Quantitative anchor:** the Medium breach threshold sits at `λ ≈ 0.952588`
+  with signature weight `1 − λ ≈ 0.047412`. Roughly five percent signature
+  anchor is sufficient and necessary to prevent basin internalization in this
+  toy family up to the measured boundary.
+- **Mechanistic anchor:** activation patching across the cliff pair localizes
+  the basin attractor to the actor's final hidden activation (`net.7`).
+  Patches at `net.1`, `net.3`, `net.5` do not clear the pre-registered
+  threshold under robust statistics.
+
+What is **still not earned**:
+
+- Universal mesa immunity.
+- Foundation-model behavior.
+- Deployed-system robustness.
+- Adversarial robustness under named red-team budgets.
+- Large-tier capacity behavior (only Small and Medium tested).
+- Cross-architecture behavior (only the matched MLP family tested).
+- Any claim that signature controllers cannot be reward-hacked. They can —
+  the program now has the receipt for *where* they can.
+
+When the partially-earned gravity language is used in public material,
+the bounded form above must appear in the same artifact, and the
+unearned items must remain off the page.
+
 ### Required boundary text
 
 When the gravity frame appears in public material, this language (or a close
@@ -286,8 +337,11 @@ paraphrase) must appear visibly in the same artifact:
 > The gravity claim is the program's speculative public frame. The controlled
 > evidence is narrower: photometric mirror alignment without target-position
 > access in a MuJoCo experiment, plus bounded operating-envelope studies in
-> Three-Body, Balance, and Pressure Mines. The experiments that would ratchet
-> the gravity claim into earned language are staged in
+> Three-Body, Balance, Pressure Mines, and the Mesa-Trap empirical front
+> (Phases 0-7 of [`docs/SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md), which
+> ratchets a bounded in-vitro form of the gravity frame; see §The Gravity
+> Frame → Earned envelope language). The remaining experiments that would
+> ratchet the gravity claim further into earned language are staged in
 > [`docs/SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md) and have not been run.
 
 ## Red Flags

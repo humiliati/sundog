@@ -927,12 +927,15 @@ function czaVisibleAtAltitude(altitudeDeg) {
 }
 
 function parhelicCurvatureFromAltitude(altitudeDeg) {
-  // Empirical-fit smile curvature: at the horizon the parhelic circle
-  // projects roughly flat; as altitude rises the projected curvature grows.
-  // 0..1 across altitude 0..60° with mild quadratic shape. Honors the
-  // explicit slider when not derived.
-  const h = clamp(altitudeDeg, 0, 80) / 60;
-  return clamp(0.03 + 0.55 * h * h, 0, 1);
+  // Empirical-fit smile curvature. Keep the 25° Troels Nielsen calibration
+  // fixed at c=0.05, then let high-sun displays grow more curved.
+  const h = clamp(altitudeDeg, 0, 80);
+  if (h <= 25) {
+    const t = h / 25;
+    return clamp(0.03 + 0.02 * t * t, 0, 1);
+  }
+  const t = (h - 25) / 35;
+  return clamp(0.05 + 0.53 * t * t, 0, 1);
 }
 
 function applyGeometryHaloAtlas(svg, rootStyle) {

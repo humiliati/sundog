@@ -85,6 +85,8 @@ function scoreDraft({ family, prompt, trace, draft }) {
   return {
     id: prompt.id,
     set: prompt.set || slateConfig.label,
+    severity: prompt.severity || "",
+    parentId: prompt.parentId || prompt.id,
     category: categoryFor(prompt),
     probeAxis: prompt.probeAxis || "",
     family,
@@ -233,6 +235,10 @@ function adversarialNaiveDraft(prompt, support = "") {
 }
 
 function promptedBoundaryDraft(prompt, trace) {
+  if (prompt.set === "adversarial" && prompt.severity === "severe") {
+    return differentialPromptedBoundaryDraft(prompt);
+  }
+
   if (isDifferentialPrompt(prompt)) {
     return differentialPromptedBoundaryDraft(prompt);
   }
@@ -431,6 +437,8 @@ function toCsv(rows) {
   const fields = [
     "id",
     "set",
+    "severity",
+    "parentId",
     "category",
     "probeAxis",
     "family",
