@@ -1046,6 +1046,23 @@ and shared Worker helpers wired for the R2 bucket and KV namespace named in
 upload a real photo, inspect R2, delete with the returned token, and confirm
 the R2 objects and KV deletion index are gone.
 
+Live gate receipt (2026-05-12 local / 2026-05-13 UTC): passed on deployment
+`https://60c76dae.sundog-9kv.pages.dev` using calibration p0
+(`docs/calibration/0.troelsnielsendr.png`) and the documented
+`sun=(400,356), R22=145, parhelion_offset=160` pose. Health reported
+R2+KV bindings live and policy `2026-05-12`; upload returned `201` with
+`inferred_h_deg=25.01`; R2 listed exactly three objects before deletion
+(`*.png`, `*.pose.json`, `*.meta.json`); the KV deletion index pointed at the
+same base key; deletion returned `200` with the same submission id; R2 listing
+for the base key returned zero objects after deletion; KV lookup returned
+`404`.
+
+Verification note: do not verify image deletion by first fetching the image
+body through the Cloudflare R2 objects API and then fetching the same URL
+again. Image body reads can be served back from Cloudflare's API cache after
+deletion. Use the object-list endpoint and/or a fresh metadata lookup for the
+gate receipt.
+
 ### Phase 6 - Drag-to-Tune Constraint Network
 
 Goal: click any rendered primitive and drag it; the parameter it inverse-

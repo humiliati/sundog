@@ -565,6 +565,96 @@ Immediate work:
   controller-family ladder, probe slate, intervention battery, and a
   representative best-cell vs worst-cell replay.
 
+### Phase 8 v1 — Public Artifact Shipped (2026-05-12)
+
+Status: the four immediate-work items above all landed. The earned-envelope
+form of the gravity claim is now consistently expressed across the
+program's public-facing surfaces.
+
+**Upstream doc cascade complete.**
+
+- `docs/PROMO_HIGHLIGHTS.md` §The Gravity Claim now stacks three earned
+  sub-sections after the named-claim and Goodhart-sidestep rhetoric:
+  *The empirical anchor (Phase 5 v4)* with the `λ ≈ 0.952588` cliff and
+  the `1 − λ = 0.048` policy quotable, *The mechanical anchor
+  (Phase 6 v1)* with the `net.7` patch-success receipt, and *The
+  envelope (Phase 7 v1)* with the class-balance table and the §9
+  hand-off sentence as block-quote. The section reads left-to-right as
+  rhetorical → behavioral → mechanistic → operating-envelope, with
+  boundary language closing.
+- `docs/presentation/claims-and-scope.md` §Unsupported Universal Claims
+  revised the *sidesteps Goodhart* and *cannot be reward-hacked* bullets
+  to point at the new earned form; §The Gravity Frame gained an
+  *Earned envelope language (Phase 7 v1)* sub-section listing the three
+  load-bearing anchors and an explicit *what is still not earned* list
+  (universal mesa immunity, foundation-model behavior, deployed-system
+  robustness, adversarial robustness, large tier, cross-architecture);
+  the required boundary text now includes the mesa-trap front in the
+  controlled-evidence list.
+- `docs/SUNDOG_V_GRAVITY.md` promotion summary and Candidate 2
+  §Current recommendation both carry 2026-05-12 status updates with
+  class balance, breach threshold, mechanistic locus, and "partially
+  holds" outcome mapping. Candidate 1 (Formal Separability) is flagged
+  as in-progress with the in-vitro bounded empirical receipt now
+  anchoring the theorem-track work.
+
+**Public artifact: `mesa.html`.** Landed at repo root alongside
+`threebody.html` / `balance.html` / `mines.html`. Single-file, no
+external runtime deps beyond `/css/sundog-theme.css`. Five sections:
+
+1. **Hero** — title, tagline, value-prop, and the PHASE7_RESULTS §9
+   hand-off sentence as the canonical earned claim. Background carries
+   a faint SVG silhouette of the Medium λ-protection curve with the
+   cliff at `λ ≈ 0.953` drawn behind the title.
+2. **§The Envelope (Phase 7 v1)** — class-balance stat cards (8/7/1/4/2)
+   plus a grouped policy chip grid. Each chip carries a hover-tooltip
+   with slug/tier/class/success/mean_align/old_basin_pref/note. Data
+   inline at write time; reconciled against
+   `results/mesa/operating-envelope/policies-inventory.csv` so all 22
+   slugs match the canonical `policy_id` column.
+3. **§The Cliff (Phase 5 v4)** — interactive λ → old_basin_pref line
+   chart with Medium/Small tier toggle. Cliff band highlighted between
+   `λ=0.95` and `λ=0.97`; breach threshold drawn at `obp = 1.0`; Phase 6
+   `net.7` patch points marked with gold rings on the protected and
+   collapsed sides.
+4. **§The Locus (Phase 6 v1)** — grouped bar chart of patch_success by
+   layer × direction × stat. P4 threshold at 0.8 drawn as horizontal
+   dashed line. `net.7` column highlighted; net.1 heavy-tail caveat
+   walked through in the chart caption (median 0.061, ratio-of-means
+   0.219 demote the headline mean of 2.659).
+5. **§What This Doesn't Say** — claim-boundary block with explicit
+   non-claims, plus a 7-link doc grid back to the full trail.
+
+**Cross-page nav sweep complete.** Mesa link added to all 10 sibling
+pages: `index.html`, `about.html`, `applications-gallery.html`,
+`threebody.html`, `balance.html`, `mines.html`, `origin.html`,
+`sundog.html`, `sundog-workbench.html`, `docs/index.html` (with `../`
+prefix). `mesa.html`'s own nav carries `aria-current="page"`.
+
+**v1 deferred — becomes v2 work.**
+
+- *Best-cell vs worst-cell replay.* Phase 8 brief mentioned a
+  representative replay; v1 ships sections 1-5 above without per-step
+  trajectory visualization. v2 options: (B) static side-by-side
+  terminal-position scatter from Phase 4 intervention CSVs, or
+  (C) live in-browser replay running `public/js/mesa-core.mjs` against
+  the L-Mixed-M-λ=0.95 and λ=0.97 policy.json files. C is closest to
+  the brief; ~half-day of work.
+- *Phase 6 v2 Axis A redux at net.7.* The v1 Axis A negative result
+  raised the prior on direction-based or sparse-autoencoder probing.
+  `mesa.html` v2 would gain a §The fingerprint sub-section once SAE
+  features at net.7 are extracted.
+- *Phase 7 v2 operating-envelope cross-product.* v1 is a read-only
+  Small/Medium aggregation pass over existing Phase 3-6 artifacts. v2
+  would run the full probe-by-intervention cross-product and add Large
+  tier, which would expand the policy chip grid and add a third tier
+  toggle to the cliff chart.
+
+**Exit criterion for Phase 8 v1:** all four upstream-doc cascade items
+landed, `mesa.html` reachable from every sibling page with data
+reconciled against the inventory CSV, and no public-facing surface
+asserts a stronger claim than the earned envelope form.
+
 Claim ratchet candidates by phase result:
 
 > *If Phase 7 holds:* In the tested environment family, learned signature-
@@ -838,7 +928,13 @@ the representation *contains*; they do not show which contained feature
 is routed to the action head. The cliff lives in routing, not in
 availability. Full-zoo Axis A is deferred to Phase 6 v2 alongside
 sparse-autoencoder dictionaries or direction-based probes that can
-target net.7 specifically.
+target net.7 specifically. Phase 6 v2 spec at
+[`mesa/PHASE6_V2_SPEC.md`](mesa/PHASE6_V2_SPEC.md) (2026-05-12,
+unstarted) pins two axes: SAE feature dictionary at net.7 across the
+cliff pair (Axis D), and direction-based patching using the SAE
+feature most correlated with basin attraction (Axis E). v2 is
+compute-light: no new PPO training, ~30-60 minutes for SAE training
++ direction-patch battery on the cliff pair.
 
 Phase 6 also confirmed the fixed-attractor interpretation from Phase 4
 mechanically. The clean-rollout and basin-position-intervened patch

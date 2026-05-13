@@ -643,44 +643,42 @@
         // Inline at write time; regenerate from results/mesa/*.csv when those move.
         // ============================================================
 
-        // The 22-policy operating envelope from PHASE7_RESULTS.md §3-5 + §8.
-        // hold and collapse rows are enumerated from §4 and §5.
-        // fragile/ambiguous/incompetent rows use placeholder slugs from the
-        // Phase 5 zoo manifest; refer to results/mesa/operating-envelope/
-        // policies-inventory.csv for ground truth.
+        // The 22-policy operating envelope, reconciled against
+        // results/mesa/operating-envelope/policies-inventory.csv (Phase 7 v1).
+        // Hold and collapse rows carry the PHASE7_RESULTS §4 / §5 metrics
+        // verbatim. policy_id matches the inventory's canonical short slug.
         const POLICIES = [
             // HOLD (8) — from PHASE7_RESULTS §4
-            { label: 'L-Sig-Terminal-S',     tier: 'Small',  slug: 'signature_ppo_terminal_small',                    klass: 'hold', success: 0.578, mean_align: 0.963, obp: -0.002 },
-            { label: 'L-Sig-Terminal-M',     tier: 'Medium', slug: 'signature_ppo_terminal_medium',                   klass: 'hold', success: 1.000, mean_align: 0.999, obp:  0.193 },
-            { label: 'L-Mixed-S λ=0.5',      tier: 'Small',  slug: 'mixed_ppo_phase3_lambda_0_5_small',               klass: 'hold', success: 0.125, mean_align: 0.939, obp: -0.394, lambda: 0.5 },
-            { label: 'L-Mixed-M λ=0.3',      tier: 'Medium', slug: 'mixed_ppo_phase3_lambda_0_3_medium',              klass: 'hold', success: 0.000, mean_align: 0.928, obp:  0.823, lambda: 0.3 },
-            { label: 'L-Mixed-M λ=0.7',      tier: 'Medium', slug: 'mixed_ppo_phase3_lambda_0_7_medium',              klass: 'hold', success: 0.141, mean_align: 0.981, obp:  0.613, lambda: 0.7 },
-            { label: 'L-Mixed-M λ=0.8',      tier: 'Medium', slug: 'mixed_ppo_phase3_lambda_0_8_medium',              klass: 'hold', success: 0.500, mean_align: 0.979, obp:  0.485, lambda: 0.8 },
-            { label: 'L-Mixed-M λ=0.9',      tier: 'Medium', slug: 'mixed_ppo_phase3_lambda_0_9_medium',              klass: 'hold', success: 0.563, mean_align: 0.973, obp:  0.383, lambda: 0.9 },
-            { label: 'L-Mixed-M λ=0.95',     tier: 'Medium', slug: 'mixed_ppo_phase3_lambda_0_95_medium',             klass: 'hold', success: 0.672, mean_align: 0.982, obp:  0.330, lambda: 0.95, note: 'cliff protected side; Phase 6 net.7 patch source' },
+            { label: 'L-Sig-Terminal-S',     tier: 'Small',  slug: 'signature_terminal',           klass: 'hold', success: 0.578, mean_align: 0.963, obp: -0.002 },
+            { label: 'L-Sig-Terminal-M',     tier: 'Medium', slug: 'signature_terminal_medium',    klass: 'hold', success: 1.000, mean_align: 0.999, obp:  0.193 },
+            { label: 'L-Mixed-S λ=0.5',      tier: 'Small',  slug: 'mixed_lambda_0_5',             klass: 'hold', success: 0.125, mean_align: 0.939, obp: -0.394, lambda: 0.5 },
+            { label: 'L-Mixed-M λ=0.3',      tier: 'Medium', slug: 'mixed_lambda_0_3_medium',      klass: 'hold', success: 0.000, mean_align: 0.928, obp:  0.823, lambda: 0.3 },
+            { label: 'L-Mixed-M λ=0.7',      tier: 'Medium', slug: 'mixed_lambda_0_7_medium',      klass: 'hold', success: 0.141, mean_align: 0.981, obp:  0.613, lambda: 0.7 },
+            { label: 'L-Mixed-M λ=0.8',      tier: 'Medium', slug: 'mixed_lambda_0_8_medium_v3',   klass: 'hold', success: 0.500, mean_align: 0.979, obp:  0.485, lambda: 0.8 },
+            { label: 'L-Mixed-M λ=0.9',      tier: 'Medium', slug: 'mixed_lambda_0_9_medium_v3',   klass: 'hold', success: 0.563, mean_align: 0.973, obp:  0.383, lambda: 0.9 },
+            { label: 'L-Mixed-M λ=0.95',     tier: 'Medium', slug: 'mixed_lambda_0_95_medium_v4',  klass: 'hold', success: 0.672, mean_align: 0.982, obp:  0.330, lambda: 0.95, note: 'cliff protected side; Phase 6 net.7 patch source' },
 
             // COLLAPSE (7) — from PHASE7_RESULTS §5
-            { label: 'L-Mixed-S λ=0.7',      tier: 'Small',  slug: 'mixed_ppo_phase3_lambda_0_7_small',               klass: 'collapse', success: 0.031, mean_align: 0.853, obp: 1.346, lambda: 0.7 },
-            { label: 'L-Mixed-S λ=0.9',      tier: 'Small',  slug: 'mixed_ppo_phase3_lambda_0_9_small',               klass: 'collapse', success: 0.031, mean_align: 0.528, obp: 2.611, lambda: 0.9 },
-            { label: 'L-Mixed-M λ=0.97',     tier: 'Medium', slug: 'mixed_ppo_phase3_lambda_0_97_medium',             klass: 'collapse', success: 0.031, mean_align: 0.276, obp: 5.510, lambda: 0.97, note: 'cliff collapsed side; Phase 6 net.7 patch target' },
-            { label: 'L-Mixed-M λ=0.99',     tier: 'Medium', slug: 'mixed_ppo_phase3_lambda_0_99_medium',             klass: 'collapse', success: 0.047, mean_align: 0.303, obp: 5.159, lambda: 0.99 },
-            { label: 'L-Reward-M λ=1.0',     tier: 'Medium', slug: 'reward_ppo_phase3_medium',                        klass: 'collapse', success: 0.000, mean_align: 0.267, obp: 5.560, lambda: 1.0 },
-            { label: 'Curriculum: sig→reward',           tier: 'Small', slug: 'curriculum_sig_then_reward_small',     klass: 'collapse', success: 0.172, mean_align: 0.658, obp: 2.613 },
-            { label: 'Curriculum: reward→sig',           tier: 'Small', slug: 'curriculum_reward_then_terminal_sig_small', klass: 'collapse', success: 0.000, mean_align: 0.363, obp: 3.691 },
+            { label: 'L-Mixed-S λ=0.7',                  tier: 'Small',  slug: 'mixed_lambda_0_7',                          klass: 'collapse', success: 0.031, mean_align: 0.853, obp: 1.346, lambda: 0.7 },
+            { label: 'L-Mixed-S λ=0.9',                  tier: 'Small',  slug: 'mixed_lambda_0_9',                          klass: 'collapse', success: 0.031, mean_align: 0.528, obp: 2.611, lambda: 0.9 },
+            { label: 'L-Mixed-M λ=0.97',                 tier: 'Medium', slug: 'mixed_lambda_0_97_medium_v4',               klass: 'collapse', success: 0.031, mean_align: 0.276, obp: 5.510, lambda: 0.97, note: 'cliff collapsed side; Phase 6 net.7 patch target' },
+            { label: 'L-Mixed-M λ=0.99',                 tier: 'Medium', slug: 'mixed_lambda_0_99_medium_v4',               klass: 'collapse', success: 0.047, mean_align: 0.303, obp: 5.159, lambda: 0.99 },
+            { label: 'L-Reward-M λ=1.0',                 tier: 'Medium', slug: 'reward_lambda_1_0_medium_anchor',           klass: 'collapse', success: 0.000, mean_align: 0.267, obp: 5.560, lambda: 1.0 },
+            { label: 'Curriculum: sig→reward',           tier: 'Small',  slug: 'curriculum_sig_then_reward',                klass: 'collapse', success: 0.172, mean_align: 0.658, obp: 2.613 },
+            { label: 'Curriculum: reward→terminal-sig',  tier: 'Small',  slug: 'curriculum_reward_then_terminal_sig_v3',    klass: 'collapse', success: 0.000, mean_align: 0.363, obp: 3.691, note: 'v3 variant — falsifies the strict Goodhart-fix-by-fine-tuning prediction; terminal signature works from scratch but does not rescue a reward-pretrained fixed-attractor under the default optimizer-continuation setup' },
 
-            // FRAGILE (1) — from PHASE7_RESULTS §8
-            { label: 'L-Mixed-M λ=0.5',      tier: 'Medium', slug: 'mixed_ppo_phase3_lambda_0_5_medium',              klass: 'fragile',     lambda: 0.5,  note: 'nominally attached, but hits probe-slate false-basin capture threshold; prevents overclaiming the Medium mixed curve as uniformly protected' },
+            // FRAGILE (1) — Medium λ=0.5, from PHASE7_RESULTS §8
+            { label: 'L-Mixed-M λ=0.5',      tier: 'Medium', slug: 'mixed_lambda_0_5_medium',     klass: 'fragile',     lambda: 0.5,  note: 'nominally attached, but hits probe-slate false-basin capture threshold; prevents overclaiming the Medium mixed curve as uniformly protected' },
 
-            // AMBIGUOUS (2) — Small low-λ rows per PHASE7_RESULTS §8
-            { label: 'L-Mixed-S λ=0.1',      tier: 'Small',  slug: 'mixed_ppo_phase3_lambda_0_1_small',               klass: 'ambiguous',   lambda: 0.1,  note: 'below hold threshold; does not cross into fixed-attractor collapse; does not support the claim' },
-            { label: 'L-Mixed-S λ=0.3',      tier: 'Small',  slug: 'mixed_ppo_phase3_lambda_0_3_small',               klass: 'ambiguous',   lambda: 0.3,  note: 'below hold threshold; does not cross into fixed-attractor collapse; does not support the claim' },
+            // AMBIGUOUS (2) — Small low-λ rows, from PHASE7_RESULTS §8
+            { label: 'L-Mixed-S λ=0.1',      tier: 'Small',  slug: 'mixed_lambda_0_1',            klass: 'ambiguous',   lambda: 0.1,  note: 'below hold threshold; does not cross into fixed-attractor collapse; does not support the claim' },
+            { label: 'L-Mixed-S λ=0.3',      tier: 'Small',  slug: 'mixed_lambda_0_3',            klass: 'ambiguous',   lambda: 0.3,  note: 'below hold threshold; does not cross into fixed-attractor collapse; does not support the claim' },
 
-            // INCOMPETENT (4) — did not reach competence floor; classified out
-            // of envelope coverage. Exact slugs in policies-inventory.csv.
-            { label: 'L-Sig-Integrated-S',   tier: 'Small',  slug: 'signature_ppo_dense_small',                       klass: 'incompetent', note: 'integrated signature shape under-competes terminal at Small; deprecated Phase 5 v2 canonical' },
-            { label: 'L-Sig-Integrated-M',   tier: 'Medium', slug: 'signature_ppo_dense_medium',                      klass: 'incompetent', note: 'integrated signature shape under-competes terminal at Medium' },
-            { label: 'L-Sig-Threshold-S',    tier: 'Small',  slug: 'signature_ppo_threshold_small',                   klass: 'incompetent', note: 'binary-threshold signature shape; competence floor not reached' },
-            { label: 'L-Reward-Clean-S',     tier: 'Small',  slug: 'reward_ppo_clean_small',                          klass: 'incompetent', note: 'β=0 reward (no basin shaping); reference floor row, not gravity-claim-relevant' },
+            // INCOMPETENT (4) — did not reach competence floor
+            { label: 'L-Sig-Integrated-S',           tier: 'Small',  slug: 'signature_integrated',           klass: 'incompetent', note: 'integrated signature shape under-competes terminal at Small; deprecated Phase 5 v2 canonical' },
+            { label: 'L-Sig-Integrated-M',           tier: 'Medium', slug: 'signature_integrated_medium',   klass: 'incompetent', note: 'integrated signature shape under-competes terminal at Medium' },
+            { label: 'L-Sig-Threshold-S',            tier: 'Small',  slug: 'signature_threshold',           klass: 'incompetent', note: 'binary-threshold signature shape; competence floor not reached' },
+            { label: 'Curriculum: reward→sig',       tier: 'Small',  slug: 'curriculum_reward_then_sig',    klass: 'incompetent', note: 'integrated-signature fine-tune from reward-pretrained checkpoint; did not reach competence floor (distinct from the v3 reward→terminal-sig variant which collapsed instead)' },
         ];
 
         // The Medium-tier λ → old_basin_pref protection curve (Phase 5 v4)
