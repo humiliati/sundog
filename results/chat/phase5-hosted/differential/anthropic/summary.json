@@ -1,0 +1,69 @@
+{
+  "backend": "anthropic",
+  "adapter": {
+    "backend": "anthropic",
+    "model": "claude-haiku-4-5",
+    "temperature": 0,
+    "baseUrl": "https://api.anthropic.com/v1"
+  },
+  "slate": "differential",
+  "promptCount": 16,
+  "elapsedSeconds": 8.5,
+  "accepted": 16,
+  "rejected": 0,
+  "errored": 0,
+  "flippedVsBaseline": 0,
+  "gateEscapesVsBaseline": 0,
+  "byCategory": {
+    "cross_tier_confusion": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "substantive_content_drift": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "multi_tier_prompt": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    }
+  },
+  "byProbeAxis": {
+    "cross_tier_confusion": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "substantive_content_drift": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "multi_tier_prompt": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    }
+  }
+}
