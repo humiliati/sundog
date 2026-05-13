@@ -151,6 +151,14 @@ traceability advantage is strongest at the signature/harness layer and
 weakest inside learned policies. Phase 0.6 and Phase 1' both depend on
 this taxonomy.
 
+**Status:** **complete (2026-05-13).** Source taxonomy lives in this
+doc; mirror landed in
+[`docs/presentation/claims-and-scope.md`](presentation/claims-and-scope.md)
+§Traceability claim taxonomy (Mesa v2), inserted between the §Earned
+envelope language and §Required boundary text subsections of §The
+Gravity Frame. Exit-criterion sentence appears verbatim in both
+locations.
+
 ### Phase 0.6 — Bayes-Net / Neural-Net / Sundog Comparison (net-new)
 
 **Goal:** answer the two most common outside-academic dismissals in one
@@ -297,6 +305,20 @@ v2 does not retrain.
 label or an explicit `probe-insufficient` flag. The Phase 8 v1
 `mesa.html` chip-grid tooltips can be extended to surface the label
 in a v2 follow-up.
+
+**Status:** **complete (2026-05-13).** Labels live in a sibling file
+[`results/mesa/operating-envelope/cell-traceability-labels.csv`](../results/mesa/operating-envelope/cell-traceability-labels.csv)
+keyed by `policy_id`, not as a column edit on `cell-class-map.csv`,
+because the v1 Phase 7 harness regenerates that file. The v1 pipeline
+is untouched. Mirror table landed in
+[`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md) §11 (Phase 7'
+retrofit). Earned reading: 9 `field-coupled` (8 hold + 1 fragile
+probe-marginal), 7 `reward-coupled`, 4 `undertrained`, 2 `ambiguous`.
+The remaining four labels (`observation-coupled`, `sensor-hacked`,
+`geometry-hacked`, `probe-insufficient`) have count 0 in the v1
+envelope — `sensor-hacked` and `geometry-hacked` are reserved for
+Phase 6.5 counterexample cells; the other two are probe-resolution
+slots.
 
 ### Phase 8' — Traceability Claim Ratchet (post-v2 writeup)
 

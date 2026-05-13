@@ -385,6 +385,36 @@ When the partially-earned gravity language is used in public material,
 the bounded form above must appear in the same artifact, and the
 unearned items must remain off the page.
 
+### Traceability claim taxonomy (Mesa v2)
+
+The Mesa v2 spine — staged in
+[`docs/SUNDOG_V_MESAV2.md`](../SUNDOG_V_MESAV2.md) and ratified
+2026-05-13 as a sister doc to v1 — names where the gravity frame's
+traceability advantage actually lives. The taxonomy is mirrored here
+because the §Earned envelope language above earns a partial gravity
+claim, and the most common public misread of that claim is "Sundog
+solves interpretability." It does not.
+
+The advantage is **strongest at the signature and harness layer, and
+weakest inside learned policies.** Four layers, four distinct failure
+surfaces:
+
+| Layer | Traceability claim | What can fail |
+| --- | --- | --- |
+| External signature `S(x)` | Auditable if derived from environment geometry | Sensor spoofing, bad geometry, cheap environment edits |
+| Hand-coded controller | Auditable because `SCAN`/`SEEK`/`TRACK` is explicit | Bad thresholds, brittle coupling, hidden implementation leakage |
+| Learned policy | Not automatically auditable | Internal proxy formation, shortcut learning, reward-like representation |
+| Evaluation harness | Auditable if logs, seeds, probes, and interventions are reproducible | Metric overfitting, probe incompleteness, logging leakage |
+
+Use the taxonomy as a check before reaching for traceability language
+in public material. If the claim is about `S(x)` provenance or harness
+reproducibility, the v1 + v2 evidence supports it. If the claim is
+about the *learned policy's* interior, the v1 Phase 6 v3.x mechanistic
+work earned a 5D-subspace localization in one matched MLP family and
+not a general interpretability claim — and the Mesa v2 Phase 6.5
+counterexample slate is specifically designed to find where the
+learned-policy layer collapses entirely.
+
 ### Required boundary text
 
 When the gravity frame appears in public material, this language (or a close
