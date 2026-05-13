@@ -110,6 +110,28 @@ The Sundog claim, in its most ambitious form, is that this structural
 difference matters. That an agent moving through a field cannot reward-hack the
 field the way an agent staring at a metric can corrupt the metric.
 
+### Two-substrate convergence *(added 2026-05-13)*
+
+The field-shape has now been observed in two unrelated substrates:
+
+- **In-vitro receipt** — the mesa-optimization lane (`SUNDOG_V_MESA.md`,
+  v3.1/v3.2) found that the basin-attractor mechanism lives in an
+  entangled 5D subspace at `net.7` that resists every linear and SAE
+  factorization attempted. It is read holistically or not at all.
+- **In-the-wild receipt** — the geometry lane's halo atlas
+  (`SUNDOG_V_GEOMETRY.md`) committed to treating every visible arc as
+  the upper portion of one of a small set of implied complete circles,
+  governed by sun altitude. Calibrated to 0-3 px residual against the
+  Troels Nielsen photograph and 7 additional reference images.
+
+Both projects converged, from opposite ends, on the same shape:
+small handful of generators, irreducibly entangled, only legible as a
+whole. The gravity-frame public claim now has both an in-vitro bounded
+mechanism and an in-the-wild reproducible artifact, by independent
+methods. See [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) for the
+full transfer, including the methodological lessons for Phase 10/11
+overlay tuning.
+
 ## The Goodhart Sidestep
 
 The original unhinged intuition of the Sundog program — preserved in early
@@ -404,17 +426,37 @@ has now produced an in-vitro bounded operating-envelope receipt:
   across the cliff pair (L-Mixed-M-`λ=0.95` vs L-Mixed-M-`λ=0.97`)
   clears the pre-registered patch-success threshold (`>0.8` in both
   directions) only at `net.7`, the actor's final hidden activation.
-- **Mechanistic locus sharpened and revised (Phase 6 v2 + v3 + v3.1, 2026-05-12).** PCA
-  on per-step matched-seed activation diffs at `net.7` localizes the
-  basin attractor to an **entangled 5-dimensional subspace** capturing
-  97.4% of activation-diff variance. Top-5 PCA components reproduce
-  v1 full-layer patch_success to within 0.03 in both directions: a
-  51x compression of the mechanistic anchor (256 -> 5 dims). v3.1
-  falsifies the old PC1-offset / PCs-2-5-mechanism split: PC1 alone is
-  behavior-weak, PCs 2-5 alone are partial, and PCs 1-5 together carry
-  the full circuit. The basis generalizes strongly in the protected-to-
-  collapsed direction across held-out Medium pairs; reverse rescue is
-  weaker and appears policy-specific.
+- **Mechanistic locus shape (Phase 6 v2 -> v3.3, 2026-05-12).** The
+  basin-attractor circuit at the actor's final hidden activation
+  (`net.7`) is **a small handful of generators, irreducibly entangled,
+  only legible as a whole** -- five rounds of mechanistic probing
+  converged on the same shape: (v3) PCA compresses the relevant
+  subspace to 5 components capturing 97.4% of variance and reproducing
+  v1 full-layer patch effect (51x compression). (v3.1) those 5
+  components are jointly necessary; no proper subset reproduces the
+  patch. (v3.2) linear additive top-k neuron restriction by L2
+  destroys the mechanism even with the correct basis (top-32 captures
+  33.6% of L2, delivers 0% of patch effect). (v3.3) no single critical
+  neuron (max ablation cost <= 0.10), and the basin-inducing and
+  basin-resisting sub-circuits occupy **nearly-disjoint neuron
+  substrates** at `net.7` (Jaccard ~ 0.05 between directions on
+  top-32 ablation-rank sets) -- directional asymmetry has an
+  anatomical signature. Four stacked methodological lessons documented
+  along the way: feature-availability rankings are not mechanism
+  rankings; variance is not mechanism; linear additive top-k
+  restriction destroys mechanism even with the correct basis; single-
+  neuron ablation does not surface a critical subset. The basin-
+  inducing direction generalizes strongly across held-out Medium pairs
+  (v3.1 J1/J2 P->C >= 0.94); basin-resistance is weaker under transfer
+  and appears policy-specific.
+- **Same shape, second substrate.** The Sundog geometry program's
+  parhelion atlas independently committed to "small set of complete
+  implied circles, read holistically" -- structurally the same object
+  arrived at from the opposite end. The gravity-frame public claim
+  now has both an in-vitro receipt (mesa) and an in-the-wild receipt
+  (parhelion overlays) for the field-not-reward framing. See
+  [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) for the explicit
+  bridge.
 - **Outcome maps to "partially holds"** in the roadmap's pre-named
   three-way ladder. The protected pocket is real but bounded; the
   collapse pocket is also sharp. Both are honest evidence about the

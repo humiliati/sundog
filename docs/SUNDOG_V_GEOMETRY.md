@@ -1265,6 +1265,17 @@ photos before they influence logo or animation language. This pass is not a
 replacement for the Phase 2 static calibration gate; it is a morphology
 pass for rare/side arcs and rich-display vocabulary.
 
+> **Read [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) before kickoff.**
+> Mesa's v3.1/v3.2 results land four load-bearing constraints on this phase:
+> (1) track residuals *per-primitive*, not by total fit (variance ≠
+> mechanism); (2) measure each inversion route separately — parhelion
+> offset, CZA apex, tangent-arc curvature, supralateral position —
+> because forward and inverse are not symmetric; (3) pre-register
+> quantitative `do not promote` thresholds before overlays run, and treat
+> a clean negative as a deliverable; (4) reject any linear arc-importance
+> attribution scheme as a Phase 11 metric — partial delivery of the right
+> basis is mesa's documented failure mode for field-shaped objects.
+
 Reference images:
 
 - `docs/calibration/2.Photometeor-jeff_mod_red.jpg` — clean modern halo
