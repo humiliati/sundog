@@ -1021,26 +1021,29 @@ records that within that subspace, the circuit is also entangled
 across neurons — not decomposable to a few specific ones — which
 adds nuance but does not retract or weaken any earned claim.
 
-**Phase 6 v3.3 spec (2026-05-12, unstarted)** at
-[`mesa/PHASE6_V33_SPEC.md`](mesa/PHASE6_V33_SPEC.md). One axis pinned:
-Axis N (per-neuron zero-ablation attribution at `net.7` during the v3
-K=5 patch). Tests *necessity* (whose ablation breaks the patch),
-where v3.2 tested *sufficiency* (whose presence delivers it) and
-failed. Four pre-registered predictions AA1-AA4: AA1 (at least one
-neuron has ablation_cost ≥ 0.3), AA2 (Jaccard with v3.2 L2-rank ≤
-0.4 — the ranking disagrees), AA3 (Jaccard between P→C and C→P
-critical sets ≤ 0.4 — the directional asymmetry has a neuron-level
-signature), AA4 (optional gated re-run: critical-neuron mask delivers
-median patch_success ≥ 0.3 where L2-rank mask delivered ~0%). Smoke
-gate: top-1 ablation_cost ≥ 0.05 with 4 seeds in P→C only (~10 min);
-below that, single-neuron ablation is uninformative and v3.4 routes
-to pair-wise ablation or integrated gradients. Full battery: 8 seeds
-× 256 neurons × 2 directions, ~60-90 min wall-clock, 0 new PPO runs,
-~50 LOC harness extension. Ratchet sentence to earn: *the entangled
-5D basin-attractor subspace is mediated by an identifiable critical-
-neuron subset whose membership differs across basin-inducing and
-basin-resisting directions* — strongest possible v3.3 outcome.
+**Phase 6 v3.3 result (2026-05-12, single-neuron ablation negative)**
+at [`mesa/PHASE6_V33_SPEC.md`](mesa/PHASE6_V33_SPEC.md) and
+[`mesa/PHASE6_V33_RESULTS.md`](mesa/PHASE6_V33_RESULTS.md). Axis N
+tested *necessity* by zeroing one `net.7` neuron at a time after the
+v3 K=5 patch was applied. The 4-seed P->C smoke gate passed weakly
+(max mean ablation cost `0.057` at neuron `242`), but the full
+8-seed both-direction battery falsified AA1: max mean ablation cost
+was only `0.040` P->C (neuron `194`) and `0.096` C->P (neuron `100`),
+below the `0.1` falsifier line and far below the `0.3` substantial
+effect target. The optional critical-neuron Axis M rerun was therefore
+not gated.
 
+The useful side facts: ablation-rank and v3.2 L2-rank disagree
+strongly (`Jaccard=0.049` for P->C top-32; `0.362` for C->P), and
+P->C vs C->P ablation top-32 sets barely overlap (`Jaccard=0.049`).
+So the v3.1 directional asymmetry has a neuron-ranking signature, but
+no individual neuron is load-bearing enough to mediate the patch.
+Together v3.2+v3.3 say the 5D basin-attractor subspace is not
+decomposed by simple top-k sufficiency or single-neuron necessity.
+The mechanistic anchor remains: *an entangled 5D activation-space
+operation at the actor's final hidden layer, implemented through a
+distributed neuron substrate*. v3.4 should route to pair-wise /
+multi-neuron ablation, set-to-mean ablation, or integrated gradients.
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
 [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md). The harness
