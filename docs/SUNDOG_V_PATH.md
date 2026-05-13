@@ -2,9 +2,24 @@
 
 Working title: **Sundog Occluded Path**
 
-Date: 2026-05-12
-Status: falsification-slate scoping doc. No code yet. No claim yet.
-Verdict target: **BOUNDARY FOUND** on the highlights rail.
+Working hook:
+
+> The shadow is enough for alignment, until the world has to be
+> rearranged before the shadow becomes useful.
+
+Sundog Occluded Path is the program's first deliberately-named
+falsification slate on the photometric controller's *visible* failure
+register. It is paired with `SUNDOG_V_MESA.md`, which attacks the
+*deep* register (proxy collapse under capacity and selection pressure).
+Path is the visible failure; Mesa is the deep failure. The two
+roadmaps are companions, not substitutes.
+
+The public question is small enough to defend:
+
+> Can a flat scan/seek/track photometric controller discover the
+> two-stage plan "push the block, then align" from the indirect
+> photometric signal alone — or does the indirect signal stop being
+> enough at the point where the world has to be rearranged?
 
 Owner cross-references:
 
@@ -16,18 +31,72 @@ Owner cross-references:
   Option A is retained as a control, Option C is out of scope.
 - [`HIGHLIGHTS_RAIL_ROADMAP.md`](HIGHLIGHTS_RAIL_ROADMAP.md) — the
   consumer of this work. The rail's first `BOUNDARY FOUND` card is
-  blocked on Phase 1 of this roadmap.
+  blocked on Phase 2 of this roadmap.
 - [`PAPER_OUTLINE_v0.md`](PAPER_OUTLINE_v0.md) and
   [`SCIENTIFIC_CRITERIA.md`](SCIENTIFIC_CRITERIA.md) — the bar this
   experiment is held to. This is a falsification result; it must be
-  reported the same way a positive result would be.
+  reported with the same discipline as a positive result.
 - [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) — sibling falsification slate
-  on a deeper register (mesa proxy collapse). Pushable Occluder is the
-  *visible* failure; Mesa is the *deep* failure. They are companions,
-  not substitutes.
+  on the deep register. The two are intentionally adjacent: Path is the
+  visible failure, Mesa is the structural one.
 - [`STANDALONE_APP_ROADMAP.md`](STANDALONE_APP_ROADMAP.md) — the public
-  app this experiment eventually feeds into, as an interactive
-  "Boundary Replay" mode alongside Guided Story and Experiment Replay.
+  app that eventually hosts the Boundary Replay mode (see Post-Verdict
+  Roadmap below).
+- [`prereg/path-hypothesis.md`](prereg/path-hypothesis.md) — the Phase 0
+  pre-registration artifact. Append-only after its frozen body; the
+  body locks the H1/H2/H3 statements, the expected failure mode, and
+  the non-confound enforcement pointers before any code lands.
+
+## Sundog Expression *(canonical for the APPLICATIONS.md row)*
+
+- **Hidden target:** photometric optimum at detector 0 in a scene where
+  an occluder lies on the beam-to-detector line of sight.
+- **Indirect signal:** the 8 detector intensities, mirror joint state,
+  and push-effector proprioception. The block's geometry is not in the
+  observation channel.
+- **Transformation:** scan/seek/track over the photometric signal in a
+  4D action space (`theta_x`, `theta_y`, `push_dx`, `push_dy`),
+  matching the Phase-1 controller architecture with no per-action
+  prior on pushing.
+- **Actionable output:** terminal mirror alignment when the photometric
+  signal exposes the preparatory action; a clean, attributable failure
+  mode (low push utilisation, dithering at a scattering-induced local
+  maximum) when it does not.
+
+This block is here so the cross-application comparison row in
+`APPLICATIONS.md` and any gallery card's
+indirect-signal/transformation/output triplet do not drift between the
+roadmap and the public writeup. The Phase 4 broadcast surfaces must
+stay aligned to this claim shape, whether the verdict is
+`BOUNDARY FOUND` or `CONFIRMED`.
+
+## Current State
+
+The roadmap is in **falsification-slate scoping**: no code, no
+controlled claim, no rail card. Pre-registration discipline is
+landing first; implementation follows.
+
+- The Phase 0 pre-registration artifact has landed at
+  [`prereg/path-hypothesis.md`](prereg/path-hypothesis.md). Its body is
+  frozen at 2026-05-13 (PT); future edits are amendments below the
+  rule.
+- The upstream experimental design is committed in
+  `PHASE2_BLOCKS_DESIGN.md`. Option B is the build target.
+- The Phase-1 photometric mirror-alignment scene exists and remains
+  the substrate this roadmap extends. The relevant pre-existing files
+  are inventoried in the prereg note's §Honest Non-Confounds —
+  Enforcement Pointers table.
+- No occluder_block code, oracle controller, or harness exists yet.
+  Phase 1 builds them.
+
+Tier note: this roadmap is not a workbench. The deliverable is a
+**falsification result** — a measured failure boundary reported with
+the same discipline as a controlled positive result. The Evidence Tier
+under which it lands (a new `Falsification result` row vs. a footnoted
+cell vs. the `n/a — falsification slate` convention already committed
+in `HIGHLIGHTS_RAIL_ROADMAP.md`) is an open question carried into
+Phase 4. The prereg note records that no commitment was made at Phase
+0 land time.
 
 ## Why This Experiment
 
@@ -66,9 +135,39 @@ The deliverable of this roadmap is a falsification artefact: a measured
 failure mode reported with the same discipline as the positive
 photometric result.
 
+## Ratified Hook Language
+
+Safe hook:
+
+> Sundog Occluded Path asks whether a flat photometric controller can
+> discover the two-stage plan "push the block, then align" from the
+> indirect photometric signal alone, when the block must be moved
+> before the beam reaches the detector.
+
+Short version:
+
+> The shadow is enough, until the world has to be rearranged first.
+
+Avoid:
+
+- "Sundog cannot do planning." (the program does not claim it can; the
+  boundary is *the* finding, not the symptom of a broken claim)
+- "The photometric controller fails because Sundog is a toy." (the
+  controller succeeds on the Phase-1 task; the boundary is structural,
+  not capacity-limited)
+- "Pushable Occluder proves Sundog needs hierarchical control." (Phase
+  3 is optional and discussion-only; the headline is the failure
+  boundary, not the hierarchical baseline's behavior)
+- "A failed flat controller is evidence the field is wrong." (the
+  field is unchanged by this result; only the operating envelope of
+  the photometric controller is.)
+- "A gif of the failure is evidence." (the rail card's clip is
+  illustration; the evidence is the Phase 2 metric tables and verdict
+  artifact.)
+
 ## Hypothesis
 
-Stated tightly enough to attack:
+Stated tightly enough to attack (frozen verbatim in the prereg note):
 
 > **H1.** A flat scan/seek/track photometric controller — the same
 > architecture that succeeds on the Phase-1 mirror-alignment task and
@@ -89,9 +188,10 @@ Companion hypotheses, both required for the result to be honest:
   expressivity in a vacuum.
 
 If H1 fails (the flat controller solves the task) the verdict is not
-`BOUNDARY FOUND`. It is `CONFIRMED` for a stronger claim than we
-currently make, and the rail card is rewritten accordingly. This roadmap
-is structured so either outcome ratchets the program forward.
+`BOUNDARY FOUND`. It is `CONFIRMED` for a stronger claim than the
+program currently makes, and the rail card is rewritten accordingly.
+This roadmap is structured so either outcome ratchets the program
+forward — see the Pre-Registered Verdict Template below.
 
 ## Experimental Setup
 
@@ -135,6 +235,24 @@ This builds on `PHASE2_BLOCKS_DESIGN.md` Option B with minimal additions.
 - Match Phase-1 episode length. If the flat controller cannot solve in
   that budget, that is part of the result.
 
+### Signal/Tier Table
+
+| Signal | Tier | Use |
+| --- | --- | --- |
+| `block_xy` (true position) | Privileged | oracle baseline only; never visible to flat/hierarchical/random |
+| beam cone geometry | Privileged | oracle baseline only |
+| 8 detector intensities | Sensor-available | all controllers; the photometric signal |
+| `theta_x`, `theta_y` mirror joint state | Proprioceptive | all controllers |
+| push-effector state | Proprioceptive | all controllers |
+| terminal photometric error | Metric | post-hoc only; not in control loop |
+| push utilisation | Metric / diagnostic | post-hoc only; flat-controller failure signature |
+| failure-mode classifier label | Metric / diagnostic | post-hoc manual labelling on a sample |
+
+The table is here so the same audit discipline as Phase-1 (privileged
+inputs labelled, sensor-available inputs labelled, metrics held out of
+the control loop) is enforceable file-by-file. The prereg note's
+non-confound table names which source file enforces each row.
+
 ### Baselines
 
 Four controllers, all matched on observations and action space:
@@ -149,7 +267,7 @@ Four controllers, all matched on observations and action space:
 3. **Hierarchical photometric (stretch)** — same architecture as the
    flat photometric controller but with a learned or scripted high-
    level "push then align" mode switch driven by a coarse photometric
-   feature (e.g., detector-ring entropy). Included only if Phase 2
+   feature (e.g., detector-ring entropy). Included only if Phase 3
    below has time; its presence is for the discussion section, not the
    headline.
 4. **Random** — uniform random action. Sanity floor.
@@ -169,7 +287,8 @@ Four controllers, all matched on observations and action space:
 
 ### Honest non-confounds
 
-The experiment is honest only if these are controlled:
+The experiment is honest only if these are controlled. Each is mapped
+to an enforcement site in the prereg note's table; the summary here is:
 
 - **Beam cone geometry is not adversarial.** The block must be
   pushable out of the cone in fewer push steps than the controller has
@@ -188,12 +307,12 @@ The experiment is honest only if these are controlled:
   per-seed across all four controllers.
 
 If any non-confound is violated, the result is unreportable until it
-is fixed.
+is fixed. The fix lands as a prereg amendment.
 
 ## Expected Failure Mode
 
-The advance prediction (recorded here so a future-us cannot
-retro-fit it):
+The advance prediction (recorded in the prereg note so a future-us
+cannot retro-fit it):
 
 - Flat photometric controller: **fails**. Push utilisation low or zero.
   Terminal photometric error high. Time-to-acquisition undefined for
@@ -206,26 +325,10 @@ retro-fit it):
 - Random: fails noisily.
 
 If the flat photometric controller succeeds on a non-trivial fraction
-of seeds, **the prediction is wrong** and the verdict changes. See
-"Outcome Branching" below.
+of seeds, **the prediction is wrong** and the verdict changes. See the
+Pre-Registered Verdict Template below.
 
-## Outcome Branching
-
-The roadmap commits to acting on every outcome, not just the one we
-expect:
-
-| Observed outcome | Rail stamp | Action |
-| --- | --- | --- |
-| Flat fails on majority of seeds; oracle succeeds; failure-mode classifier dominated by "never pushed". | `BOUNDARY FOUND` | Ship the card. Cite this roadmap as `data-stamp-source`. |
-| Flat fails but failure mode is "pushed but did not re-acquire alignment" — i.e., the agent stumbles into pushing and still cannot finish. | `BOUNDARY FOUND` with a sharper gloss: "Preparatory action discovered; alignment still not reached." Card content is rewritten; the boundary is real but located differently. |
-| Flat succeeds on a meaningful fraction of seeds. | `CONFIRMED` for a *stronger* claim than the program currently makes. New roadmap to attack this surprise; the rail card is rewritten. The hypothesis statement above is wrong; the failure boundary is somewhere else. |
-| Oracle fails. | Halt. The setup has a confound (beam cone unreachable, push dynamics too slow, etc.). Fix the setup and re-run. Do not ship any card until the oracle succeeds. |
-| Random performs comparably to flat. | The flat controller is broken. Re-tune the probe schedule. Do not ship until random is below flat. |
-
-The verdict is *not* "we predicted the failure correctly". The verdict
-is whichever cell of the table the data lands in.
-
-## Phases
+## Roadmap
 
 ### Phase 0 — Confounds checked (target: 1 sitting)
 
@@ -239,8 +342,14 @@ Pure thinking before any code:
    notebook *before* implementation. Time-stamp it.
 
 Acceptance: a short pre-registration note (one page) committed to
-`docs/_prereg/pushable_occluder_2026-05-12.md`. The note is appended
-to, never edited, after this point.
+[`prereg/path-hypothesis.md`](prereg/path-hypothesis.md). The note is
+append-only after its frozen body — any later edits land as
+amendments below the rule, with a timestamp and a written
+justification.
+
+*Status — Phase 0 acceptance landed (2026-05-13).* The prereg note's
+frozen body locks H1/H2/H3, the expected failure mode, and the
+non-confound enforcement pointers. Phase 1 is unblocked.
 
 ### Phase 1 — Build the scene + oracle (target: 2 sittings)
 
@@ -256,12 +365,18 @@ Acceptance:
 
 - Oracle terminal photometric error matches Phase 1 within tolerance on
   ≥ 90% of seeds.
-- A 6-12 second silent clip is captured of one representative oracle
+- A 6–12 second silent clip is captured of one representative oracle
   run for the still poster: beam visible, block visible, push, clear,
   align, detector ring peaks. This is **not** the rail card clip;
   this is the witness that the task is solvable. The clip is filed
   under `public/media/pushable-occluder-oracle.{mp4,webm}` and the
   still under `public/media/pushable-occluder-poster.jpg`.
+- The push-effector-is-not-photometric unit test passes: with mirror
+  and block frozen, sweeping the pusher across its workspace produces
+  detector readings constant to within the sensor noise floor.
+- The two open decisions deferred from prereg §Open Decisions
+  (push-effector embodiment; block dynamics parameters) land as
+  prereg amendments before Phase 2 begins.
 
 ### Phase 2 — Run the flat photometric controller (target: 2 sittings)
 
@@ -271,17 +386,17 @@ Acceptance:
 2. Run flat + random + oracle on N≥128 matched seeds.
 3. Compute the four metrics. Classify failure modes manually on the
    first 32 failed flat-controller episodes.
-4. **Branch on outcome** per the Outcome Branching table.
+4. **Land a verdict** per the Pre-Registered Verdict Template below.
 
 Acceptance: an experiment-result note committed under
 `docs/_results/pushable_occluder_2026-05-12.md` with:
 
-- The hypothesis statement.
+- The hypothesis statement (carried from the prereg note).
 - The data file references.
 - The four metric tables.
 - The failure-mode classifier counts.
 - A verdict (`BOUNDARY FOUND` / `CONFIRMED` / halt).
-- A 6-12 second silent clip of one representative *flat-controller*
+- A 6–12 second silent clip of one representative *flat-controller*
   failure for the rail card: beam visible, mirror dithering, block in
   path, detector ring never peaks, controller gives up. Filed under
   `public/media/pushable-occluder-failure.{mp4,webm}` and used for the
@@ -302,19 +417,133 @@ discussion paragraph; it does not change the rail card.
 2. Add a `applications-gallery.html#pushable-occluder` anchor section
    with the failure clip, the metric table, and a link back to this
    roadmap and to `PHASE2_BLOCKS_DESIGN.md`.
-3. Add a one-paragraph mention in `APPLICATIONS.md` under a new "Falsification
-   slate" sub-heading. The Evidence Tier is **not** "Research result";
-   it is a new informal tier "Falsification result" or it sits outside
-   the table with a footnote. Decide at land-time.
+3. Add a one-paragraph mention in `APPLICATIONS.md` under a new
+   "Falsification slate" sub-heading. Resolve the Evidence-Tier naming
+   open question here (a new `Falsification result` row vs. a
+   footnoted cell vs. `HIGHLIGHTS_RAIL_ROADMAP`'s already-committed
+   `n/a — falsification slate`). The land-time decision is recorded as
+   a prereg amendment.
 4. Cross-link from `PROMO_HIGHLIGHTS.md` §"Product Highlights" with a
    short block that names the failure honestly and links to this
    roadmap.
 
 Acceptance: the rail's first `BOUNDARY FOUND` card ships. Three
 non-author readers can describe the failure correctly after one
-viewing.
+viewing. The Cross-Application Comparison Row below lands in
+`APPLICATIONS.md` in the same pass.
 
-### Phase 5 — Companion experiment hook (deferred)
+## Pre-Registered Verdict Template
+
+Phase 2 produces matched-seed metric tables and a failure-mode
+classifier. The verdict template below pre-commits to *what those
+artifacts have to say* before the rail card can ship or the gallery
+can broadcast. This is the same Money-Bags-style discipline that
+ratifies Stage 1 verdicts before captures, and the same shape Balance
+Phase 10 uses for its CONFIRM/REFUTE/AMBIGUOUS gates. Verdict is
+data-driven; disposition is locked.
+
+**Cell classes and P1 denominator.**
+
+Trials are classified before the Phase 2 verdict pass:
+
+- *Diagnostic-positive* seeds: oracle succeeds; block is reachable
+  within episode budget; non-confounds 1–4 verified for that seed.
+- *Failure-regime* seeds: oracle fails (used only for setup audit, see
+  P0 below).
+- *Borderline* seeds: oracle succeeds but margin is within sensor
+  noise; flagged for review.
+
+The P1 denominator is the *diagnostic-positive* seeds only.
+
+**Pre-registered predictions.**
+
+*P0 — apparatus check.* Oracle reaches the Phase-1 terminal
+photometric error tolerance on ≥ 90% of N=64 Phase-1 seeds. P0 is the
+smoke-gate equivalent — below this threshold the apparatus is
+insufficient, not the prediction falsified. Failure here halts;
+disposition is "fix the setup and re-run" (push step budget, beam cone
+reachability, block dynamics parameters).
+
+*P1 — central effect.* Inside diagnostic-positive seeds, the flat
+photometric controller fails to reach the Phase-1 terminal-error
+tolerance on a strict majority (≥ 50%) of seeds, with push utilisation
+in the bottom quartile (i.e., "never pushed" dominates the
+failure-mode classifier). P1 holds iff both the failure-rate condition
+and the push-utilisation condition land. P1 holding is the
+`BOUNDARY FOUND` precondition.
+
+*P2 — failure-mode shape.* Of the failed flat-controller seeds, the
+failure-mode classifier returns "never pushed" or "pushed away from
+clearance" on ≥ 80% of the first-32 manually-labelled sample. P2
+distinguishes the canonical `BOUNDARY FOUND` reading (flat controller
+never finds the preparatory action) from the sharper-gloss reading
+("preparatory action discovered; alignment still not reached"). Both
+P2 satisfactions ship a `BOUNDARY FOUND` card; only the card copy
+changes.
+
+*P3 — random floor.* The random controller's terminal photometric
+error distribution is strictly worse than the flat controller's on
+matched seeds. P3 failure indicates a broken flat controller (probe
+schedule pessimised, action-scale mismatch); the slate is invalidated
+and the controller is re-tuned. Disposition is halt + re-tune.
+
+*P4 — continuity with prior limit.* The failure-mode signature of the
+flat controller (low push utilisation; dithering at a scattering
+local-maximum) is qualitatively comparable to the joint-limit failure
+mode reported in the Phase-1 paper. P4 is reported as a discussion
+finding, not a gate — it is the H3 attestation. Non-comparability is
+noted but does not move the verdict.
+
+**Verdict template.**
+
+After the Phase 2 result note lands, the writeup asserts *one* of three
+verdicts:
+
+*BOUNDARY FOUND.* P0 holds. P1 holds. P3 holds. P2's
+"never pushed / pushed away from clearance" majority is the headline
+gloss; a "pushed but did not re-acquire alignment" majority ships the
+sharper gloss. P4 is reported as discussion. The rail card ships; the
+applications-gallery card lands; the `APPLICATIONS.md` row enters
+under whichever Evidence Tier convention Phase 4 ratifies. The
+Cross-Application Comparison Row enters in the same pass.
+
+*CONFIRMED (stronger claim).* P0 holds. P1 *fails* — the flat
+photometric controller succeeds on a non-trivial fraction of seeds.
+The hypothesis statement above is wrong; the failure boundary is
+somewhere else. A new roadmap attacks the surprise. The rail card is
+rewritten to report the stronger Sundog claim; the prereg note's H1
+prediction is appended-amended to record what the data showed and why
+the prediction was wrong. The Sundog program is in a better epistemic
+position than expected — the deliverable becomes the controlled-claim
+strengthening, not the boundary card.
+
+*AMBIGUOUS / halt.* P0 fails (oracle cannot solve the task on enough
+seeds — setup confound), or P3 fails (flat controller and random
+controller are indistinguishable — broken controller), or a non-confound
+audit (push-effector-is-not-photometric; matched seeds) fails at audit
+time. The slate is invalidated. No rail card, no gallery entry, no
+APPLICATIONS.md row until a fix lands and Phase 2 re-runs. Disposition
+is locked: ambiguous results do not ship under a softening footnote.
+
+**Disposition is locked.** The verdict is filed in the same directory
+as the data: `docs/_results/pushable_occluder_<datetime>.md`. The
+choice of verdict is from the predictions, not author-discretionary. A
+`CONFIRMED` verdict means the broadcast reports a stronger Sundog
+claim — it does not become an asterisked `BOUNDARY FOUND`. A halt
+means the broadcast says nothing until the apparatus is fixed; the
+rail does not get a "we ran the experiment and it was unclear"
+placeholder card.
+
+## Post-Verdict Roadmap
+
+The phases below were pre-registered against the assumption that
+Phase 2 returns a `BOUNDARY FOUND` verdict and Phase 4 lands the rail
+card. They are gated on Phase 2 + Phase 4, but the *shape* of the
+post-verdict work is committed here with the same discipline as the
+verdict template — not authored after a verdict has changed what
+counts as load-bearing.
+
+### Phase 5 — Companion experiment hook (deferred, depends on `SUNDOG_V_MESA.md`)
 
 The deeper falsification slate is `SUNDOG_V_MESA.md` — proxy collapse
 under capacity and selection pressure. Pushable Occluder and Mesa are
@@ -327,16 +556,23 @@ companions:
   proxy.
 
 A combined "Falsification" view on the rail or in the apps gallery is
-the right place to host both once Mesa has Phase-1 results. This is
-out of scope for the current roadmap but should be considered when
-naming the apps gallery section.
+the right place to host both once Mesa has Phase-1 results. The
+applications-gallery section anchor (`#pushable-occluder` plus a new
+`#mesa-proxy-collapse`) is named at Phase 4 land time so Mesa's
+section can attach cleanly without a markup rewrite.
 
-## Standalone App Integration (later)
+**Gating:** requires Phase 4 land (rail card shipped) and `SUNDOG_V_MESA.md`
+Phase 1 land (HC-Signature canonical task verified). On `CONFIRMED`
+instead of `BOUNDARY FOUND`, Phase 5 still ships — the
+"combined Falsification view" becomes a "combined operating-envelope
+strengthening view", with section copy rewritten accordingly.
+
+### Phase 6 — Standalone App Integration (deferred, depends on `STANDALONE_APP_ROADMAP.md`)
 
 `STANDALONE_APP_ROADMAP.md` describes a guided in-browser experience
-with Guided Story, Experiment Replay, and stress-test modes. Once Phase
-4 lands, the Pushable Occluder experiment becomes a **Boundary Replay**
-mode in that app:
+with Guided Story, Experiment Replay, and stress-test modes. Once
+Phase 4 lands, the Pushable Occluder experiment becomes a **Boundary
+Replay** mode in that app:
 
 - Replay the matched-seed flat-controller failure alongside the oracle
   success.
@@ -348,6 +584,22 @@ mode in that app:
 This is the strongest version of the Boundary Replay because the user
 can switch between the flat controller and the oracle on the same seed
 and *see* the difference is not random.
+
+**Gating:** requires Phase 4 land and `STANDALONE_APP_ROADMAP.md`
+guided-mode scaffolding. On `CONFIRMED`, the Boundary Replay becomes a
+"two-stage discovery replay" — same UI, different annotation: the
+controller is shown *finding* the preparatory action rather than
+failing to.
+
+### Phase 7 — Multi-block stretch (deferred, design-only)
+
+A two-block variant where the agent must sequence two preparatory
+actions is a natural extension of the boundary. Out of scope until
+Phase 4 lands and the program has rail-card budget to broadcast a
+second falsification slate. The design surface is named here so it
+does not get reinvented later. Open question carried: does the
+boundary deepen monotonically with required preparatory actions, or
+does it bifurcate (one-block fails cleanly, two-block fails noisily)?
 
 ## Scientific Honesty Notes
 
@@ -363,26 +615,104 @@ and *see* the difference is not random.
 - Do not retroactively widen the claim that this result attacks. If
   Phase 2 hands us `CONFIRMED` instead of `BOUNDARY FOUND`, the
   hypothesis statement above is what changes — not the bar.
+- The notes-block of the prior draft flagged three program-wide
+  consistency issues (smoke-gate vocab uniformity, prereg amendment
+  mechanism, Evidence-Tier naming). The first two are resolved in the
+  prereg note. The third is carried as an open question into Phase 4.
 
-## Open Questions
+## Claim Boundary
 
-1. **Push effector embodiment.** The cheapest realisation is a second
-   joint chain with its own mirror-free tip. The cleaner realisation is
-   a shared kinematic chain where the pusher and the mirror are end-
-   effectors on the same arm. Defer the decision to Phase 1; capture
-   it in the pre-registration note.
-2. **Block dynamics realism.** First-order overdamped dynamics are
-   chosen for clean failure attribution. If the result is sensitive to
-   block inertia or friction, a second study with richer dynamics
-   becomes a downstream task.
-3. **Multi-block stretch.** A two-block variant where the agent must
-   sequence two preparatory actions is a natural extension. Out of
-   scope for the current roadmap; mentioned here so it doesn't get
-   reinvented later.
-4. **Naming.** "Pushable Occluder" is the descriptive name. "Sundog
-   Occluded Path" is the working public name. The rail card uses
-   "Pushable Occluder" (it survives the
-   one-glance test better). Reconsider at Phase 4.
+Safe claim after Phase 2 returns `BOUNDARY FOUND`:
+
+> In the tested MuJoCo photometric setup, a flat scan/seek/track
+> photometric controller failed to discover the two-stage plan
+> ("push the block out of the beam cone, then align") on the
+> diagnostic-positive seed slate, while an oracle controller with
+> access to block geometry solved the task. The failure mode is
+> dominated by `never pushed`: the indirect photometric signal does
+> not expose the preparatory action as a usable gradient in this
+> setting.
+
+Safe claim after Phase 2 returns `CONFIRMED`:
+
+> In the tested MuJoCo photometric setup, a flat scan/seek/track
+> photometric controller discovered the two-stage plan from the
+> indirect photometric signal alone, on a non-trivial fraction of
+> diagnostic-positive seeds. The boundary predicted in the prereg
+> note is rejected; the Sundog program's controlled claim is
+> strengthened to include preparatory-action discovery in this
+> setting, and a follow-up roadmap is opened to locate the actual
+> failure boundary.
+
+What this would strengthen:
+
+- the theorem's framing of the indirect signal as a function of
+  environmental state;
+- the public intuition that flat extremum-seeking has a structural
+  limit where the world must be rearranged before the signal is
+  useful;
+- the application portfolio's evidence balance between positive
+  workbenches (Three-Body, Balance, Mines) and falsification slates
+  (Path, Mesa).
+
+What it would not prove:
+
+- general planning limits of any photometric controller (the result
+  is in the tested MuJoCo setting);
+- structural limits of hierarchical or learned controllers (Phase 3 is
+  optional discussion only);
+- limits of the broader Sundog signature program (this attacks the
+  visible-shape register; Mesa attacks the deep register);
+- that a `CONFIRMED` flat-controller success means the controller
+  generalises to multi-block scenarios — Phase 7 stretch carries that
+  open question.
+
+## Pre-Committed Cross-Application Comparison Row
+
+When Phase 4 lands, the row below enters `APPLICATIONS.md` under the
+cross-application comparison. If the Phase 4 Evidence-Tier convention
+decision is `Falsification result`, the row enters under that
+sub-heading; otherwise it enters under a footnoted cell per
+`HIGHLIGHTS_RAIL_ROADMAP.md`'s already-committed
+`n/a — falsification slate` precedent.
+
+| Application | Domain | Indirect signal | Transformation | Actionable output |
+| --- | --- | --- | --- | --- |
+| Sundog Occluded Path | Photometric control under required preparatory action | 8 detector intensities, mirror joint state, push-effector proprioception in the presence of a beam-blocking occluder | Flat scan/seek/track in a 4D action space (mirror + push) with no per-action prior on pushing | Falsification result: a measured failure mode where the indirect photometric signal does not expose the preparatory action as a usable gradient, with `never pushed` dominating the failure-mode classifier |
+
+On `CONFIRMED`, the row's "Actionable output" cell becomes:
+
+> Controlled result: the flat controller discovered the preparatory
+> action from the indirect photometric signal alone on a non-trivial
+> fraction of diagnostic-positive seeds, strengthening the Phase-1
+> photometric-alignment claim to include two-stage plan discovery in
+> the tested setting.
+
+Keeping the row here means later writeup passes cannot drift the
+language between the roadmap and the broadcast.
+
+## Initial Build Slice
+
+The first implementation pass is deliberately small:
+
+1. Land the prereg note (frozen body + amendment footer). *(landed
+   2026-05-13)*
+2. Add `occluder_block` to the Phase-1 scene with Option B dynamics.
+3. Extend the action space to 4D and update random + oracle.
+4. Build the oracle's scripted two-stage plan and run on N=64 seeds.
+5. Verify the push-effector-is-not-photometric unit test passes.
+
+That slice is enough to decide whether the apparatus is sound before
+the flat controller's probe schedule is re-tuned. Below the
+oracle-reachability floor (≥ 90% of N=64 Phase-1 seeds), the setup is
+unsafe to broadcast against — fix the apparatus and re-run before
+spending budget on Phase 2.
+
+**Exit criterion for the first slice:** P0 holds (oracle reaches
+Phase-1 terminal-error tolerance on ≥ 90% of N=64 seeds). Below this
+floor — oracle does not solve the matched-Phase-1 setup with block
+geometry available — the slate is unreportable until the
+non-confound enforcement pointers in the prereg note are re-audited.
 
 ## References
 
@@ -398,27 +728,10 @@ and *see* the difference is not random.
   pass.
 - `APPLICATIONS.md` Evidence Tiers — the canonical bookkeeping; this
   result will land outside the existing tiers and may motivate a new
-  "Falsification result" row.
+  `Falsification result` row.
 - `PAPER_OUTLINE_v0.md` / `SCIENTIFIC_CRITERIA.md` — the evidence bar.
 - `STANDALONE_APP_ROADMAP.md` — the public app that eventually hosts
   the Boundary Replay mode.
-
-
-notes: Three things stand out as worth flagging before Phase 0 commits:
-
-"Smoke gate" is missing from PATH. Both MESA Phase 3 and PERCEPTION Phase 0/2 standardize "smoke gate" as the quantitative threshold below which the apparatus is judged insufficient rather than the prediction falsified. PATH's "Outcome Branching" table covers the same semantics in the halt rows ("Oracle fails → Halt", "Random performs comparably to flat → re-tune") but doesn't use the word. Two options: (a) add a one-liner in Phase 0 mapping the two halt rows to smoke-gate semantics, or (b) leave it; the table is sufficient. Lean (a) — it keeps program-wide vocab uniform for ~10 words of cost.
-Pre-registration mechanism: append-only file vs. amendment blocks. PATH says "appended to, never edited." PERCEPTION uses "any later edit must be filed as a separate amendment block with a written justification." MESA Phase 0 is silent on the mechanism. Both styles work; PATH's choice is fine. Note worth carrying: the prereg file's footer should explicitly say "amendments below this line, with timestamp + justification" so future-us doesn't accidentally re-write the body.
-"Falsification result" Evidence Tier. PATH §Phase 4 says: "The Evidence Tier is not 'Research result'; it is a new informal tier 'Falsification result' or it sits outside the table with a footnote. Decide at land-time." HIGHLIGHTS_RAIL §Stamp Vocabulary already commits "n/a — falsification slate" as the canonical tier-table cell. Mild inconsistency — PATH treats the naming as an open question; HIGHLIGHTS_RAIL has effectively decided. Worth resolving at Phase 4, but Phase 0's prereg note should mention the pending decision so the rail card and APPLICATIONS.md don't drift.
-
-Naming-collision risk (low): "probe schedule" in PATH (the 4D probe-frequency tuning for the flat photometric controller) is the same word as MESA's "probe slate" (proxy-splitting distribution-shift probes). Different objects, same root word, no cross-doc confusion in practice because each doc carries its own context — but worth keeping the words "schedule" and "slate" disjoint.
-Phase 0 readiness
-Phase 0 acceptance is a one-page prereg note committed to docs/_prereg/pushable_occluder_2026-05-12.md. The directory doesn't exist yet — Phase 0 creates the _prereg/ convention (Phase 2 will create _results/). Phase 0's three required steps map to:
-Step 1: Re-read PHASE2_BLOCKS_DESIGN.md Option B. Done — Option B is block_xy += alpha * (push_dx, push_dy) clipped to workspace bound, 4D action vector (theta_x, theta_y, push_dx, push_dy), attenuation as in Option A, ~150 lines, agents need probe-frequency re-tune for the extra two action dimensions.
-Step 2: Enumerate the four honest non-confounds against the Phase-1 scene with file/commit pointers. I have the file inventory ready — the relevant Phase-1 implementation files are env_v2.py (scene/state), optics.py (beam, floor_hit, compute_detector_intensities), agents/photometric.py (flat scan/seek/track controller), agents/baselines.py + agents/doa.py + agents/doa2.py + agents/tsa.py (baselines), experiments/run_baseline_comparison.py and experiments/stress_tests.py (sweep harness). Concretely:
-
-Non-confound 1 (beam cone geometry not adversarial) → constraint enforced in the Phase-1 scene file that adds occluder_block (likely env_v2.py).
-Non-confound 2 (push effector not photometric) → enforced in optics.py (the pusher must not appear in compute_detector_intensities ray paths or reflectance terms).
-Non-confound 3 (probe schedule comparable) → enforced in agents/photometric.py re-tuning + documented in the tuning notebook.
-Non-confound 4 (matched seeds) → enforced in experiments/run_baseline_comparison.py seed-handling code (already exists for current baseline comparison; needs verification that the same seed seeds block init).
-
-Step 3: Write the expected-failure-mode paragraph, time-stamped, into the experiment notebook before implementation. PATH already has the paragraph drafted in §"Expected Failure Mode" — Phase 0's job is to lift it into the prereg note verbatim with a timestamp.
+- [`prereg/path-hypothesis.md`](prereg/path-hypothesis.md) — the
+  Phase 0 pre-registration artifact. Frozen body + append-only
+  amendments.

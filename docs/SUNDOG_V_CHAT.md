@@ -1375,6 +1375,23 @@ Deliverables:
 
 Exit criterion:
 The public copy does not exceed the measured result.
+
+Phase 8c public writeup update (2026-05-13):
+
+The public-facing artifacts were updated to reflect Phases 5b / 5c / 7
+without exceeding the measured result:
+
+- **`chat.html` lede framing** — "Zero gate escapes across 420 drafts" → "Zero gate escapes across 3,495 trials spanning two backends, 96 cells, and 8 trace-field ablations". The 100pp severity gap from §13 is preserved as the headline experimental result.
+- **`chat.html` new section "The result has been verified across two backends and 96 cells"** — three-bullet rollup of Phase 5b (hosted replication), Phase 5c (causal interventions), and Phase 7 (operating envelope). Closes by restating the ratchet in the new precise form.
+- **`chat.html` "What this does not show" callout** — claim #3 ("It does not show that real hosted-model adapters reproduce the separation") retired and replaced with the narrower, accurate version: "It does not show that *every* hosted-model family reproduces the separation. We've verified <code>gpt-4o-mini</code>; cross-vendor is the open thread."
+- **`chat.html` "What we are doing next" cards** — the two deferred follow-ups from the original page (hosted-model adapter, causal interventions) are now done. Replaced with three new open threads: cross-vendor replication, corpus-conflict (stale-doc) sweep, and gate-rule negation lexicon mop-up.
+- **`chat.html` "How to inspect the result"** — runner pointers updated to reference `run_hosted_drafts.mjs`, `run_phase5_interventions.mjs --hosted`, and `aggregate_operating_envelope.mjs` as the canonical scripts that produce the cited numbers.
+- **`index.html` teaser stat block** — "0 gate escapes across 420 drafts" → "0 gate escapes across 3,495 trials, two backends, 96 cells". Teaser prose adds a sentence on the hosted-LLM replication and 8-intervention causal battery.
+
+HTML parses cleanly on both files. The public copy now matches what the measured result actually supports, with the Phase 7 bounded-claim language ("bounded to this corpus, retrieval depth k=3, visible trace, browser_live, single hosted vendor") visible at both the chat.html level and the index teaser level.
+
+**Exit criterion: met.** The public copy is now exactly as strong as the measured result and no stronger. The four bounded-out axes from Phase 7 (corpus conflict, retrieval depth ≠ k=3, hidden trace, offline mode, vendors other than OpenAI) are named in both the chat.html bounded claim and the "What we are doing next" follow-up cards.
+
 ## 11. Browser Architecture
 ```text
 public/
