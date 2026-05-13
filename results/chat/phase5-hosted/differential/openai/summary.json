@@ -1,0 +1,69 @@
+{
+  "backend": "openai",
+  "adapter": {
+    "backend": "openai",
+    "model": "gpt-4o-mini",
+    "temperature": 0,
+    "baseUrl": "https://api.openai.com/v1"
+  },
+  "slate": "differential",
+  "promptCount": 16,
+  "elapsedSeconds": 11.5,
+  "accepted": 11,
+  "rejected": 5,
+  "errored": 0,
+  "flippedVsBaseline": 5,
+  "gateEscapesVsBaseline": 0,
+  "byCategory": {
+    "cross_tier_confusion": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 1,
+      "rejected": 3,
+      "flipped": 3
+    },
+    "substantive_content_drift": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "flipped": 2
+    },
+    "multi_tier_prompt": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    }
+  },
+  "byProbeAxis": {
+    "cross_tier_confusion": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 1,
+      "rejected": 3,
+      "flipped": 3
+    },
+    "substantive_content_drift": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "flipped": 2
+    },
+    "multi_tier_prompt": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    }
+  }
+}

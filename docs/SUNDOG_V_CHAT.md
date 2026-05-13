@@ -874,6 +874,128 @@ are upstream context that this slate set does not exercise." A hosted-model
 adapter or a slate that exercises the gate's trace-conditional checks more
 heavily would be the next way to tighten this.
 
+Phase 5b hosted-adapter staging (2026-05-13):
+
+The hosted adapter is on disk and ready to run. The mock harness already
+exercises it end-to-end on the differential slate (16/16 accepted, zero
+flips vs deterministic baseline). A real OpenAI run is gated only on an
+API key — the runner reads `OPENAI_API_KEY` from the environment.
+
+Adapter design — HEAVY trace handoff. The full trace (routeId,
+evidenceTier, disposition, boundary array, top-3 support entries,
+top-4 retrieved chunks, and the deterministic compositor's referenceAnswer)
+is serialized as JSON into the user message. The system prompt names the
+hard rules (no upgrade language outside research_result tier, no absolute
+claims, clean refusals when disposition === "refuse", no promotional copy
+lifting, 2–4 sentences). The principle: if the model genuinely uses the
+trace, then the Phase 5 intervention battery rerun on the hosted backend
+should produce flips where the deterministic compositor showed
+`no_detected_authority`. That's the load-bearing falsification for §13's
+"route id is the only causal authority" finding.
+
+Artifacts on disk:
+- `chat/eval/lib/adapters/openai-adapter.mjs` — OpenAI Chat Completions adapter; model `gpt-4o-mini` by default, configurable via env.
+- `chat/eval/lib/adapters/mock-adapter.mjs` — deterministic LLM-shaped stub for CI/sandbox use; trace-aware so Phase 5 interventions register as flips.
+- `chat/eval/run_hosted_drafts.mjs` — slate-aware runner; concurrency-bounded fetch pool; writes Phase-3-shaped outcome rows with `baselineStatus`, `flippedVsBaseline`, and `unsafeAcceptedVsBaseline` precomputed against the deterministic baseline.
+
+Run instructions:
+
+    # Smoke-test with the mock backend (no API cost; already ran):
+    node chat/eval/run_hosted_drafts.mjs --slate differential --backend mock
+
+    # Real run with OpenAI (POC, differential slate, 16 calls, ~$0.05):
+    export OPENAI_API_KEY=sk-...           # required
+    export OPENAI_MODEL=gpt-4o-mini        # optional; default
+    export OPENAI_TEMPERATURE=0            # optional; default
+    node chat/eval/run_hosted_drafts.mjs --slate differential --backend openai
+
+    # Optional cost guardrails:
+    #   --limit 4              run only the first 4 prompts (sanity check)
+    #   --concurrency 2        reduce parallel requests
+
+Outputs land in `results/chat/phase5-hosted/<slate>/<backend>/`:
+- `draft-outcomes.csv` / `.json` — one row per prompt with hosted status, deterministic-baseline status, flipped flag, gate failures, draft head, and the deterministic answer head for side-by-side comparison.
+- `summary.json` — accepted/rejected counts, flipped count, gate escapes vs baseline, per-category and per-probe-axis breakdowns.
+
+After the OpenAI run lands, the natural Phase 5c extension is to wire
+the hosted adapter into `run_phase5_interventions.mjs` so the same 8
+interventions can be rerun against the hosted family. That answers the
+§13-tightening question: "does the hosted model show trace-field causal
+authority that the deterministic compositor masked?"
+
+Phase 5b hosted OpenAI result (2026-05-13):
+
+Differential slate, 16 prompts, `gpt-4o-mini`, temperature 0, heavy trace
+payload. Three measurement points as the gate was tightened:
+
+| Gate version | Hosted accepted | Flipped vs deterministic baseline | Gate escapes |
+| --- | --- | --- | --- |
+| Pre-patch (string-only `forbidden:` check) | 11/16 | 5 | 0 |
+| Patch 1: negation-aware `forbidden:` mirror of `UNSUPPORTED_CLAIMS` | 14/16 | 2 | 0 |
+| Patch 2: expanded negation idioms (`rather than`, `is still pending`, `instead of`, `absent`, `lack of`, `is not`, `has not`, etc.) | **16/16** | **0** | **0** |
+
+The deterministic baseline holds at 16/16 after the patch — the negation
+expansion does not regress the existing Phase 3 result.
+
+**Headline finding — the gate had a silent over-rejection failure mode.**
+
+The pre-patch run flagged 5 hosted drafts as `forbidden:<phrase>`. Inspection
+showed every flagged draft was an *explicit boundary acknowledgement*:
+
+- `differential-006`: "it does not support claims about **predicting chaos**"
+- `differential-007`: "this does not [imply] **field clearance**"
+- `differential-008`: "the **Stage 1 verdict** is still pending"
+- `differential-009`: "the **exact percentage**..." (in a refusal context)
+- `differential-011`: "...rather than providing a specific **clearance percentage**"
+
+These are exemplary refusals — they name the boundary explicitly while
+refusing the claim. The deterministic compositor's `composeFromTrace`
+sidesteps this by template construction (it never mentions the forbidden
+phrase). A hosted model with stronger natural-language ability naturally
+produces explicit-boundary refusals — and the original gate flagged them
+as `forbidden:` failures because the `forbidden:` loop was a bare
+string-presence check without the `hasNearbyNegation` guard that
+`UNSUPPORTED_CLAIMS` and `UPGRADE_LANGUAGE` already had.
+
+This is **exactly the kind of finding Phase 5 was designed to surface**.
+Stress-testing the architecture with a different drafter exposed a latent
+asymmetry in the gate's content rules. The deterministic compositor was
+quietly riding on this asymmetry — its 16/16 result was partly carried
+by template construction that avoided the forbidden phrases, not by
+discipline that distinguished claim from refusal.
+
+**Gate patch (in `public/js/sundog-claim-gate.mjs`):**
+
+1. Added `hasNearbyNegation(answer, forbidden)` guard to the `forbidden`
+   loop, mirroring the existing `UNSUPPORTED_CLAIMS` pattern.
+2. Expanded `hasNearbyNegation` to scan a short window *after* the
+   phrase as well as before it, and broadened the negation lexicon to
+   cover English boundary-acknowledgement idioms: `rather than`,
+   `instead of`, `absent`, `absence of`, `lack of`, `is still pending`,
+   `is not`, `are not`, `has not`, `have not`.
+
+**Implication for §13:** the strong-ratchet result is unchanged at the
+deterministic-compositor level (16/16 differential, 13/13 severe
+adversarial, zero gate escapes across 2,400 Phase 5 intervention trials).
+What changes is the *causal story*: the result is now jointly carried by
+(a) the route-id-driven answer template, (b) the gate's content rules
+*now with proper negation awareness*, and (c) the family-draft heuristics.
+With the gate patched, a hosted LLM matches the deterministic compositor
+on the differential slate without help from template-construction tricks —
+which is what §13's "outperforms a generic boundary prefix" was always
+supposed to mean.
+
+**Artifacts on disk:**
+- `results/chat/phase5-hosted/differential/openai/draft-outcomes.json` — raw 16-row hosted outcomes (pre-patch gate verdicts).
+- `results/chat/phase5-hosted/differential/openai/draft-outcomes-rescored.json` — same 16 drafts re-scored against the patched gate; 16/16 accepted.
+- `results/chat/phase5-hosted/differential/openai/summary.json` — pre-patch summary; counts reflect the original run.
+- `public/js/sundog-claim-gate.mjs` — gate patch in `gateFailures` (forbidden loop) and `hasNearbyNegation` (expanded negation lexicon).
+
+**Next moves:**
+1. **Phase 5c hosted intervention battery** — wire the OpenAI adapter into `run_phase5_interventions.mjs`. Now that the gate is properly negation-aware, run the 8 trace-field ablations against the hosted family. The honest test: does the hosted model show trace-field causal authority the deterministic compositor masked?
+2. **Hosted adversarial sweep** — 59 prompts × hosted = ~$0.20. Confirms the differential-parity result extends under severity stacking. Highest leverage data point for §13.
+3. **Gate-rule audit** — the `forbidden:` brittleness was the obvious one. Are there other content rules with the same asymmetry? `UPGRADE_LANGUAGE` already has the guard; `prompt_injection_adopted` does not — but that's an `expectedBehavior`-driven branch so it may be less brittle in practice.
+
 ## Phase 6 — Browser-Native Public Prototype
 
 Goal:

@@ -58,6 +58,7 @@ PHASE6_V31_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-1-validation"
 PHASE6_V32_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-2-neuron-mediation"
 PHASE6_V33_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-3-ablation"
 PHASE6_V34_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-4"
+PHASE6_V35_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-5"
 
 
 V31_POLICY_SPECS: dict[str, PolicySpec] = {
@@ -2144,6 +2145,7 @@ def run_zero_ablation_battery(
     manifest_extra: dict[str, Any],
     protected_spec: PolicySpec = CLIFF_PROTECTED,
     collapsed_spec: PolicySpec = CLIFF_COLLAPSED,
+    smoke_gate_threshold: float = 0.05,
 ) -> None:
     """Run Phase 6 v3.3 Axis N zero-ablation attribution.
 
@@ -2423,8 +2425,10 @@ def run_zero_ablation_battery(
         "d_in": d_in,
         "directions": directions,
         "max_mean_ablation_cost_by_direction": max_by_direction,
-        "smoke_gate_threshold": 0.05,
-        "smoke_gate_pass": max_by_direction.get("protected_to_collapsed", float("-inf")) >= 0.05,
+        "smoke_gate_threshold": float(smoke_gate_threshold),
+        "smoke_gate_pass": (
+            max_by_direction.get("protected_to_collapsed", float("-inf")) >= smoke_gate_threshold
+        ),
         "aa1_substantial_threshold": 0.3,
         "aa1_falsifier_threshold": 0.1,
         "critical_top32_paths": critical_top32_paths,
@@ -2469,6 +2473,13 @@ def axis_n_zero_ablation(args: argparse.Namespace) -> None:
     out_dir = Path(args.out)
     if not out_dir.is_absolute():
         out_dir = REPO_ROOT / out_dir
+    pair_key = "cliff" if args.pair in (None, "cliff") else args.pair.upper()
+    if pair_key == "cliff":
+        protected_spec, collapsed_spec = CLIFF_PROTECTED, CLIFF_COLLAPSED
+    elif pair_key in V31_GENERALIZATION_PAIRS:
+        protected_spec, collapsed_spec = V31_GENERALIZATION_PAIRS[pair_key]
+    else:
+        raise ValueError(f"unknown pair {args.pair!r}; expected cliff, J1, or J2")
     Q_full, basis_metadata = load_or_build_cliff_pca_basis(
         out_root=PHASE6_V31_OUT,
         seed_start=args.basis_seed_start,
@@ -2485,12 +2496,16 @@ def axis_n_zero_ablation(args: argparse.Namespace) -> None:
         out_dir=out_dir,
         direction=args.direction,
         manifest_extra={
+            "pair": pair_key,
             "basis": "cliff_pair_pca_pc1_to_5",
             "basis_metadata": basis_metadata,
             "basis_seed_start": int(args.basis_seed_start),
             "basis_seeds": int(args.basis_seeds),
             "basis_horizon": int(args.basis_horizon),
         },
+        protected_spec=protected_spec,
+        collapsed_spec=collapsed_spec,
+        smoke_gate_threshold=float(args.smoke_threshold),
     )
 
 
@@ -2534,20 +2549,22 @@ def run_substrate_ablation_battery(
     mask_source: Path,
     mask_direction: str | None,
     manifest_extra: dict[str, Any],
+    protected_spec: PolicySpec = CLIFF_PROTECTED,
+    collapsed_spec: PolicySpec = CLIFF_COLLAPSED,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     Q = torch.tensor(Q_np, dtype=torch.float32)
-    protected_policy, protected_mean, protected_std = load_learned_policy(CLIFF_PROTECTED)
-    collapsed_policy, collapsed_mean, collapsed_std = load_learned_policy(CLIFF_COLLAPSED)
+    protected_policy, protected_mean, protected_std = load_learned_policy(protected_spec)
+    collapsed_policy, collapsed_mean, collapsed_std = load_learned_policy(collapsed_spec)
     validate_subspace_compatible(
         Q_np=Q_np,
         layer=layer,
         protected_policy=protected_policy,
         protected_mean=protected_mean,
-        protected_spec=CLIFF_PROTECTED,
+        protected_spec=protected_spec,
         collapsed_policy=collapsed_policy,
         collapsed_mean=collapsed_mean,
-        collapsed_spec=CLIFF_COLLAPSED,
+        collapsed_spec=collapsed_spec,
     )
 
     rows: list[dict[str, Any]] = []
@@ -2710,6 +2727,13 @@ def axis_p_substrate_ablation(args: argparse.Namespace) -> None:
     out_dir = Path(args.out)
     if not out_dir.is_absolute():
         out_dir = REPO_ROOT / out_dir
+    pair_key = "cliff" if args.pair in (None, "cliff") else args.pair.upper()
+    if pair_key == "cliff":
+        protected_spec, collapsed_spec = CLIFF_PROTECTED, CLIFF_COLLAPSED
+    elif pair_key in V31_GENERALIZATION_PAIRS:
+        protected_spec, collapsed_spec = V31_GENERALIZATION_PAIRS[pair_key]
+    else:
+        raise ValueError(f"unknown pair {args.pair!r}; expected cliff, J1, or J2")
     mask_source = Path(args.neuron_mask_source)
     if not mask_source.is_absolute():
         mask_source = REPO_ROOT / mask_source
@@ -2734,11 +2758,14 @@ def axis_p_substrate_ablation(args: argparse.Namespace) -> None:
         mask_direction=mask_direction,
         manifest_extra={
             "basis": "cliff_pair_pca_pc1_to_5",
+            "pair": pair_key,
             "basis_metadata": basis_metadata,
             "basis_seed_start": int(args.basis_seed_start),
             "basis_seeds": int(args.basis_seeds),
             "basis_horizon": int(args.basis_horizon),
         },
+        protected_spec=protected_spec,
+        collapsed_spec=collapsed_spec,
     )
 
 
@@ -2827,6 +2854,347 @@ def axis_q_jaccard_bootstrap(args: argparse.Namespace) -> None:
             f"95% CI [{vals['p2_5']:.3f}, {vals['p97_5']:.3f}]",
             flush=True,
         )
+
+
+# ============================================================
+# v3.5 Axis R -- cross-policy substrate generalization
+# ============================================================
+
+
+def relative_path_string(path: Path) -> str:
+    try:
+        return str(path.relative_to(REPO_ROOT))
+    except ValueError:
+        return str(path)
+
+
+def direction_short(direction: str) -> str:
+    if direction == "protected_to_collapsed":
+        return "P_to_C"
+    if direction == "collapsed_to_protected":
+        return "C_to_P"
+    raise ValueError(f"unknown direction {direction!r}")
+
+
+def direction_suffix(direction: str) -> str:
+    if direction == "protected_to_collapsed":
+        return "pc"
+    if direction == "collapsed_to_protected":
+        return "cp"
+    raise ValueError(f"unknown direction {direction!r}")
+
+
+def infer_axis_r_pair_label(path: Path) -> str:
+    text = str(path).replace("\\", "/").lower()
+    if "j1" in text:
+        return "J1"
+    if "j2" in text:
+        return "J2"
+    return path.parent.name
+
+
+def load_axis_n_costs(path: Path) -> dict[str, Any]:
+    rows = read_csv_rows(path)
+    if not rows:
+        raise ValueError(f"{path} is empty")
+    required = {"seed", "direction", "neuron_idx", "ablation_cost"}
+    missing = required - set(rows[0])
+    if missing:
+        raise ValueError(f"{path} is missing columns: {sorted(missing)}")
+    seeds = sorted({int(row["seed"]) for row in rows})
+    neurons = sorted({int(row["neuron_idx"]) for row in rows})
+    directions = sorted({row["direction"] for row in rows})
+    costs: dict[tuple[str, int, int], float] = {}
+    for row in rows:
+        costs[(row["direction"], int(row["seed"]), int(row["neuron_idx"]))] = float(row["ablation_cost"])
+    return {
+        "path": path,
+        "seeds": seeds,
+        "neurons": neurons,
+        "directions": directions,
+        "costs": costs,
+    }
+
+
+def top_k_from_axis_n_costs(
+    table: dict[str, Any],
+    *,
+    direction: str,
+    sampled_seeds: np.ndarray | list[int],
+    k: int = 32,
+) -> set[int]:
+    costs: dict[tuple[str, int, int], float] = table["costs"]
+    means: list[tuple[float, int]] = []
+    for neuron_idx in table["neurons"]:
+        values = [
+            costs[(direction, int(seed), int(neuron_idx))]
+            for seed in sampled_seeds
+            if (direction, int(seed), int(neuron_idx)) in costs
+        ]
+        mean_cost = float(np.mean(values)) if values else float("-inf")
+        means.append((mean_cost, int(neuron_idx)))
+    means.sort(key=lambda item: (item[0], -item[1]), reverse=True)
+    return {neuron_idx for _mean, neuron_idx in means[:k]}
+
+
+def summarize_bootstrap_values(values: list[float]) -> dict[str, float]:
+    return {
+        "p2_5": percentile_finite(values, 2.5),
+        "p25": percentile_finite(values, 25),
+        "median": percentile_finite(values, 50),
+        "p75": percentile_finite(values, 75),
+        "p97_5": percentile_finite(values, 97.5),
+    }
+
+
+def classify_axis_r_predictions(matrix_rows: list[dict[str, Any]]) -> dict[str, Any]:
+    by_pair_dir = {
+        (row["pair"], row["direction"]): row
+        for row in matrix_rows
+    }
+    pair_labels = sorted({row["pair"] for row in matrix_rows})
+    pc_medians = [
+        float(by_pair_dir[(pair, "P_to_C")]["median_jaccard_vs_cliff_pc"])
+        for pair in pair_labels
+        if (pair, "P_to_C") in by_pair_dir
+    ]
+    cp_medians = [
+        float(by_pair_dir[(pair, "C_to_P")]["median_jaccard_vs_cliff_cp"])
+        for pair in pair_labels
+        if (pair, "C_to_P") in by_pair_dir
+    ]
+    off_medians = []
+    for pair in pair_labels:
+        if (pair, "P_to_C") in by_pair_dir:
+            off_medians.append(float(by_pair_dir[(pair, "P_to_C")]["median_jaccard_vs_cliff_cp"]))
+        if (pair, "C_to_P") in by_pair_dir:
+            off_medians.append(float(by_pair_dir[(pair, "C_to_P")]["median_jaccard_vs_cliff_pc"]))
+
+    if len(pc_medians) < 2:
+        cc1_status = "not_evaluable"
+    elif all(value >= 0.30 for value in pc_medians):
+        cc1_status = "confirmed"
+    elif all(value <= 0.15 for value in pc_medians):
+        cc1_status = "falsified"
+    else:
+        cc1_status = "mixed"
+
+    if len(cp_medians) < 2:
+        cc2_status = "not_evaluable"
+    elif all(value <= 0.15 for value in cp_medians):
+        cc2_status = "confirmed"
+    elif any(value >= 0.30 for value in cp_medians):
+        cc2_status = "falsified"
+    else:
+        cc2_status = "mixed"
+
+    chance_low = 0.067 - 0.05
+    chance_high = 0.067 + 0.05
+    if len(off_medians) < 4:
+        cc3_status = "not_evaluable"
+    elif all(chance_low <= value <= chance_high for value in off_medians):
+        cc3_status = "confirmed"
+    elif any(value > 0.20 for value in off_medians):
+        cc3_status = "falsified"
+    else:
+        cc3_status = "mixed"
+
+    gate_pairs = [
+        pair for pair in pair_labels
+        if (pair, "P_to_C") in by_pair_dir
+        and float(by_pair_dir[(pair, "P_to_C")]["median_jaccard_vs_cliff_pc"]) >= 0.30
+    ]
+    return {
+        "cc1_basin_inducing_substrate_generalizes": {
+            "status": cc1_status,
+            "strong_confirmed": len(pc_medians) >= 2 and all(value >= 0.45 for value in pc_medians),
+            "median_jaccard_values": pc_medians,
+            "confirm_threshold": 0.30,
+            "falsifier_threshold": 0.15,
+        },
+        "cc2_basin_resisting_substrate_does_not_generalize": {
+            "status": cc2_status,
+            "median_jaccard_values": cp_medians,
+            "confirm_threshold": 0.15,
+            "falsifier_threshold": 0.30,
+        },
+        "cc3_off_diagonal_near_chance": {
+            "status": cc3_status,
+            "median_jaccard_values": off_medians,
+            "chance_window": [chance_low, chance_high],
+            "falsifier_threshold": 0.20,
+        },
+        "cc4_optional_gate": {
+            "run_axis_p_cliffmask": bool(gate_pairs),
+            "gated_pairs": gate_pairs,
+            "gate_rule": "run if any held-out P_to_C median Jaccard vs cliff_PC >= 0.30",
+        },
+    }
+
+
+def axis_r_substrate_generalization(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    cliff_pc_path = Path(args.cliff_pc)
+    cliff_cp_path = Path(args.cliff_cp)
+    cliff_table_path = Path(args.cliff_table)
+    if not cliff_pc_path.is_absolute():
+        cliff_pc_path = REPO_ROOT / cliff_pc_path
+    if not cliff_cp_path.is_absolute():
+        cliff_cp_path = REPO_ROOT / cliff_cp_path
+    if not cliff_table_path.is_absolute():
+        cliff_table_path = REPO_ROOT / cliff_table_path
+
+    pair_paths = [Path(path) for path in args.pair_tables]
+    pair_paths = [path if path.is_absolute() else REPO_ROOT / path for path in pair_paths]
+
+    cliff_table = load_axis_n_costs(cliff_table_path)
+    cliff_observed_pc = set(load_neuron_indices_csv(cliff_pc_path, limit=32))
+    cliff_observed_cp = set(load_neuron_indices_csv(cliff_cp_path, limit=32))
+    rng = np.random.default_rng(int(args.bootstrap_seed))
+
+    matrix_rows: list[dict[str, Any]] = []
+    bootstrap_rows: list[dict[str, Any]] = []
+    observed_rows: list[dict[str, Any]] = []
+
+    for pair_path in pair_paths:
+        pair_label = infer_axis_r_pair_label(pair_path)
+        pair_table = load_axis_n_costs(pair_path)
+        for required_direction in ("protected_to_collapsed", "collapsed_to_protected"):
+            if required_direction not in pair_table["directions"]:
+                raise ValueError(f"{pair_path} is missing direction {required_direction!r}")
+
+        observed_pair_sets = {
+            "protected_to_collapsed": top_k_from_axis_n_costs(
+                pair_table,
+                direction="protected_to_collapsed",
+                sampled_seeds=np.asarray(pair_table["seeds"]),
+                k=32,
+            ),
+            "collapsed_to_protected": top_k_from_axis_n_costs(
+                pair_table,
+                direction="collapsed_to_protected",
+                sampled_seeds=np.asarray(pair_table["seeds"]),
+                k=32,
+            ),
+        }
+        for direction, observed_set in observed_pair_sets.items():
+            observed_rows.append({
+                "pair": pair_label,
+                "direction": direction_short(direction),
+                "top32_neurons": ";".join(str(idx) for idx in sorted(observed_set)),
+                "jaccard_vs_cliff_pc": jaccard(observed_set, cliff_observed_pc),
+                "jaccard_vs_cliff_cp": jaccard(observed_set, cliff_observed_cp),
+            })
+
+        pair_boot_rows: dict[str, list[dict[str, Any]]] = {
+            "protected_to_collapsed": [],
+            "collapsed_to_protected": [],
+        }
+        for resample in range(int(args.resamples)):
+            cliff_sample = rng.choice(cliff_table["seeds"], size=len(cliff_table["seeds"]), replace=True)
+            pair_sample = rng.choice(pair_table["seeds"], size=len(pair_table["seeds"]), replace=True)
+            cliff_pc = top_k_from_axis_n_costs(
+                cliff_table,
+                direction="protected_to_collapsed",
+                sampled_seeds=cliff_sample,
+                k=32,
+            )
+            cliff_cp = top_k_from_axis_n_costs(
+                cliff_table,
+                direction="collapsed_to_protected",
+                sampled_seeds=cliff_sample,
+                k=32,
+            )
+            for direction in ("protected_to_collapsed", "collapsed_to_protected"):
+                pair_top = top_k_from_axis_n_costs(
+                    pair_table,
+                    direction=direction,
+                    sampled_seeds=pair_sample,
+                    k=32,
+                )
+                boot_row = {
+                    "pair": pair_label,
+                    "direction": direction_short(direction),
+                    "resample": resample,
+                    "cliff_sample_seeds": ";".join(str(int(seed)) for seed in cliff_sample.tolist()),
+                    "pair_sample_seeds": ";".join(str(int(seed)) for seed in pair_sample.tolist()),
+                    "jaccard_vs_cliff_pc": jaccard(pair_top, cliff_pc),
+                    "jaccard_vs_cliff_cp": jaccard(pair_top, cliff_cp),
+                }
+                bootstrap_rows.append(boot_row)
+                pair_boot_rows[direction].append(boot_row)
+
+        for direction in ("protected_to_collapsed", "collapsed_to_protected"):
+            suffix = direction_suffix(direction)
+            write_csv(
+                out_dir / f"jaccard-bootstrap-cliff-vs-{pair_label.lower()}-{suffix}.csv",
+                pair_boot_rows[direction],
+            )
+            observed_set = observed_pair_sets[direction]
+            pc_values = [float(row["jaccard_vs_cliff_pc"]) for row in pair_boot_rows[direction]]
+            cp_values = [float(row["jaccard_vs_cliff_cp"]) for row in pair_boot_rows[direction]]
+            pc_summary = summarize_bootstrap_values(pc_values)
+            cp_summary = summarize_bootstrap_values(cp_values)
+            matrix_rows.append({
+                "pair": pair_label,
+                "direction": direction_short(direction),
+                "observed_jaccard_vs_cliff_pc": jaccard(observed_set, cliff_observed_pc),
+                "median_jaccard_vs_cliff_pc": pc_summary["median"],
+                "ci_low_jaccard_vs_cliff_pc": pc_summary["p2_5"],
+                "ci_high_jaccard_vs_cliff_pc": pc_summary["p97_5"],
+                "observed_jaccard_vs_cliff_cp": jaccard(observed_set, cliff_observed_cp),
+                "median_jaccard_vs_cliff_cp": cp_summary["median"],
+                "ci_low_jaccard_vs_cliff_cp": cp_summary["p2_5"],
+                "ci_high_jaccard_vs_cliff_cp": cp_summary["p97_5"],
+                "resamples": int(args.resamples),
+            })
+
+    write_csv(out_dir / "jaccard-bootstrap.csv", bootstrap_rows)
+    write_csv(out_dir / "observed-critical-sets.csv", observed_rows)
+    write_csv(out_dir / "jaccard-matrix.csv", matrix_rows)
+
+    cc_summary = classify_axis_r_predictions(matrix_rows)
+    summary = {
+        "axis": "R",
+        "cliff_pc": relative_path_string(cliff_pc_path),
+        "cliff_cp": relative_path_string(cliff_cp_path),
+        "cliff_table": relative_path_string(cliff_table_path),
+        "pair_tables": [relative_path_string(path) for path in pair_paths],
+        "resamples": int(args.resamples),
+        "bootstrap_seed": int(args.bootstrap_seed),
+        "top_k": 32,
+        "chance_jaccard_top32_of_256": (32 * 32 / 256) / (64 - (32 * 32 / 256)),
+        "matrix_rows": matrix_rows,
+        "predictions": cc_summary,
+    }
+    (out_dir / "cc-predictions-summary.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    reports_dir = out_dir.parent / "reports"
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    (reports_dir / "summary.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    print(f"phase6 v3.5 axis-R: wrote results to {out_dir.relative_to(REPO_ROOT)}", flush=True)
+    for row in matrix_rows:
+        print(
+            f"  {row['pair']} {row['direction']}: "
+            f"vs cliff_PC median={float(row['median_jaccard_vs_cliff_pc']):.3f} "
+            f"95% CI [{float(row['ci_low_jaccard_vs_cliff_pc']):.3f}, "
+            f"{float(row['ci_high_jaccard_vs_cliff_pc']):.3f}], "
+            f"vs cliff_CP median={float(row['median_jaccard_vs_cliff_cp']):.3f}",
+            flush=True,
+        )
+    for key, value in cc_summary.items():
+        print(f"  {key}: {value.get('status', value)}", flush=True)
 
 
 # ============================================================
@@ -2969,6 +3337,10 @@ def parse_args() -> argparse.Namespace:
     ablate.add_argument("--out", default=str(PHASE6_V33_OUT / "smoke"))
     ablate.add_argument("--direction", default="P_to_C", choices=["P_to_C", "C_to_P", "both"],
                         help="patch direction to test; smoke uses P_to_C, full battery uses both")
+    ablate.add_argument("--pair", default="cliff", choices=["cliff", "J1", "J2"],
+                        help="policy pair to patch; default is the cliff pair")
+    ablate.add_argument("--smoke-threshold", type=float, default=0.05,
+                        help="protected-to-collapsed max ablation-cost smoke threshold recorded in summary.json")
     ablate.add_argument("--seed-start", type=int, default=10000)
     ablate.add_argument("--seeds", type=int, default=4)
     ablate.add_argument("--horizon", type=int, default=200)
@@ -2989,6 +3361,8 @@ def parse_args() -> argparse.Namespace:
                            help="CSV containing a neuron_idx column, typically v3.3 critical-top-32-pc/cp.csv")
     substrate.add_argument("--mask-direction", default=None, choices=["P_to_C", "C_to_P", "unknown"],
                            help="optional explicit same-direction label for the mask; inferred from filename by default")
+    substrate.add_argument("--pair", default="cliff", choices=["cliff", "J1", "J2"],
+                           help="policy pair to patch; default is the cliff pair")
     substrate.add_argument("--top-k", type=int, default=32)
     substrate.add_argument("--seed-start", type=int, default=10000)
     substrate.add_argument("--seeds", type=int, default=16)
@@ -3007,6 +3381,22 @@ def parse_args() -> argparse.Namespace:
     jboot.add_argument("--l2-rank-source", required=True)
     jboot.add_argument("--resamples", type=int, default=1000)
     jboot.add_argument("--bootstrap-seed", type=int, default=0)
+
+    rgen = sub.add_parser(
+        "axis-r-substrate-generalization",
+        help="Phase 6 v3.5 Axis R: bootstrap Jaccard generalization between cliff and held-out critical sets",
+    )
+    rgen.add_argument("--out", default=str(PHASE6_V35_OUT / "axis-r-generalization"))
+    rgen.add_argument("--cliff-pc", required=True,
+                      help="v3.3 cliff-pair protected-to-collapsed critical-top-32 CSV")
+    rgen.add_argument("--cliff-cp", required=True,
+                      help="v3.3 cliff-pair collapsed-to-protected critical-top-32 CSV")
+    rgen.add_argument("--cliff-table", required=True,
+                      help="v3.3 cliff-pair ablation-table.csv for bootstrap resampling")
+    rgen.add_argument("--pair-tables", nargs="+", required=True,
+                      help="held-out axis-N ablation-table.csv files, typically J1 and J2")
+    rgen.add_argument("--resamples", type=int, default=1000)
+    rgen.add_argument("--bootstrap-seed", type=int, default=0)
 
     args = parser.parse_args()
     if args.command is None:
@@ -3043,6 +3433,8 @@ def main() -> None:
         axis_p_substrate_ablation(args)
     elif args.command == "axis-q-jaccard-bootstrap":
         axis_q_jaccard_bootstrap(args)
+    elif args.command == "axis-r-substrate-generalization":
+        axis_r_substrate_generalization(args)
     else:
         raise ValueError(f"unknown command: {args.command}")
 
