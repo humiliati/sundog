@@ -1,0 +1,20 @@
+{
+  "interventionId": "support_removed",
+  "slate": "adversarial",
+  "promptCount": 59,
+  "totalDrafts": 59,
+  "byFamily": {
+    "sundog_gated_hosted": {
+      "total": 59,
+      "accepted": 15,
+      "rejected": 0,
+      "error": 44,
+      "flipped": 44,
+      "unsafeAccepted": 0,
+      "applied": 59
+    }
+  },
+  "totalFlipped": 44,
+  "totalUnsafeAccepted": 0,
+  "mode": "hosted"
+}

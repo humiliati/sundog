@@ -42,9 +42,9 @@
     "retrievalDepth": {
       "values": ["k=0_router_only", "k=3_default", "k=8_wide"],
       "source": "trace.retrieved.length",
-      "covered": ["k=3_default"],
-      "gap": ["k=0_router_only", "k=8_wide"],
-      "notes": "Retrieval depth is fixed by sundog-retrieval.mjs defaults. Sweeping requires runner flag (deferred)."
+      "covered": ["k=0_router_only", "k=3_default", "k=8_wide"],
+      "gap": [],
+      "notes": "Phase 10 closed this axis. `--retrieval-k` flag added to run_hosted_drafts.mjs. Claude-haiku-4-5 swept at k=0, k=3, k=8 on both differential (16 prompts each) and adversarial (25-prompt limit for k=0/k=8, full 59 at k=3). 157 trials, 0 unsafe-accepts at all three depths."
     },
     "boundaryVisibility": {
       "values": ["visible", "hidden_trace_invisible"],

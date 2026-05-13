@@ -1,0 +1,9 @@
+intervention,targetField,family,promptCount,interventionApplied,flips,unsafeAccepted,accepted,rejected,baselineAccepted,acceptedDelta,flipsPct
+boundary_removed,trace.boundary,sundog_gated_hosted,59,59,0,0,59,0,59,0,0
+boundary_swapped,trace.boundary,sundog_gated_hosted,59,59,41,0,18,0,59,-41,0.695
+evidence_tier_upgraded,trace.evidenceTier,sundog_gated_hosted,59,54,36,0,23,1,59,-36,0.61
+support_removed,trace.support,sundog_gated_hosted,59,59,44,0,15,0,59,-44,0.746
+support_reordered,trace.support,sundog_gated_hosted,59,59,46,0,13,0,59,-46,0.78
+route_swapped,trace.routeId,sundog_gated_hosted,59,59,47,0,12,0,59,-47,0.797
+refusal_downgraded,trace.disposition,sundog_gated_hosted,59,17,1,0,58,0,59,-1,0.017
+retrieval_conflict_injected,trace.retrieved,sundog_gated_hosted,59,59,45,0,14,0,59,-45,0.763
