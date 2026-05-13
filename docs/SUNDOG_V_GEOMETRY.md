@@ -1353,24 +1353,29 @@ vocabulary compatible with named-pose examples (`low-altitude.json`,
 `forty-six-halo.json`). Named poses are presentation surfaces, not additional
 calibration evidence. Inversion-route promotions are gated: parhelion offset
 stays as the calibrated core (probation cleared 2026-05-13 via Task #52
-step 1: re-anchoring p13 dropped the touching-cutoff residual to ~0 px
-and revealed p13 was a low-altitude photo at h ~= 6.8°, not the
-mid-altitude h = 17.3° the rough anchor had implied); CZA-apex and
-tangent-arc-curvature routes are *pending anchor capture* on p2 and p13;
-supralateral inversion fails coverage (visible on only one of three photos).
+step 1: re-anchoring p13 dropped the touching-cutoff x-offset residual to
+~0 px and revealed p13 was a low-altitude photo at h ~= 6.8°, not the
+mid-altitude h = 17.3° the rough anchor had implied). That correction also
+changes the next gate: the CZA-apex inversion route now fails coverage on
+the current p2/p7/p13 set because p7 is above the CZA cutoff and p13's
+predicted apex sits above the square crop at y ~= -50, leaving only p2
+eligible. Tangent-arc-curvature remains *pending anchor capture*; supralateral
+inversion fails coverage (visible on only one of three photos).
 The concrete do-not-promote list — Suncave Parry, Parry supralateral,
 lower-tangent-as-core, supralateral-as-inversion-route, and any linear
 arc-importance attribution metric — is in the same notes file.
 
 Phase 11 can proceed against the visibility-promoted vocabulary now; the
-remaining inversion-route slots reopen when the p2 / p13 anchor capture
-follow-up lands. Next move: scope and run Task #52 first for measurement
-discipline, while Phase 11 can start in parallel on the already promoted
-visibility vocabulary. Task #52 also feeds the downstream perception roadmap
+remaining inversion-route slots reopen only when the relevant coverage exists:
+Task #53 can still record a p2 CZA apex receipt, but CZA-route promotion needs
+an added CZA-visible calibration photo; tangent curvature can continue through
+p2 / p7 / p13 sampling. Phase 11 can start in parallel on the already promoted
+visibility vocabulary. Task #52/53 also feeds the downstream perception roadmap
 (`SUNDOG_V_PERCEPTION.md`) because independent CZA/tangent inversion routes
-would strengthen the later predicted-then-observed receipt. The first
-operational step is p13 parhelion re-anchoring; CZA and tangent anchors stay
-blocked until that measurement clears or escalates the p13 probation flag.
+would strengthen the later predicted-then-observed receipt. The next
+operational step is to run the p2 CZA measurement as a single-photo receipt,
+record p13 as cropped/not applicable, and scope a calibration-set expansion
+before treating CZA apex as a promotable inversion route.
 
 ### Phase 11 - Characterized Logo & Animation Toolkit
 
@@ -1394,4 +1399,9 @@ Deliverables:
 - Motion rules mapped to the workbench phases: idle scintillation, active
   reveal, hover shimmer, and reduced-motion fallback.
 - Design handoff examples based on the Phase 10 p2/p7/p13 overlay findings,
-  so l
+  so logo variants inherit only the visibility-promoted vocabulary and keep
+  failed / coverage-blocked primitives out of default marks.
+
+Gate: the design team can reproduce the characterized Sundog mark from a
+small documented toolset, and the exported assets preserve the calibrated
+22° halo / parhelion / conditional-CZA grammar at both icon and motion sizes.

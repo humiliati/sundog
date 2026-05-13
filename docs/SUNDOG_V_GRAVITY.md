@@ -465,10 +465,10 @@ has now produced an in-vitro bounded operating-envelope receipt:
   across the cliff pair (L-Mixed-M-`λ=0.95` vs L-Mixed-M-`λ=0.97`)
   clears the pre-registered patch-success threshold (`>0.8` in both
   directions) only at `net.7`, the actor's final hidden activation.
-- **Mechanistic locus shape (Phase 6 v2 -> v3.4, 2026-05-13).** The
+- **Mechanistic locus shape (Phase 6 v2 -> v3.5, 2026-05-13).** The
   basin-attractor circuit at the actor's final hidden activation
   (`net.7`) is **a small handful of generators, irreducibly entangled,
-  only legible as a whole** -- six rounds of mechanistic probing
+  only legible as a whole** -- seven rounds of mechanistic probing
   converged on the same shape: (v3) PCA compresses to 5 components
   capturing 97.4% of variance and reproducing v1 full-layer patch
   effect (51x compression). (v3.1) those 5 components are jointly
@@ -486,18 +486,29 @@ has now produced an in-vitro bounded operating-envelope receipt:
   near-disjointness. The basin-resisting substrate is also ~4x more
   anatomically tight (dissociation 0.662 vs 0.174) and overlaps the
   v3.2 L2-rank top-32 substantially (Jaccard 0.333) while
-  basin-inducing does not (0.049). Within-policy functional
-  dissociation (v3.4) and cross-policy generalization asymmetry (v3.1)
-  point at one structural fact: **basin-inducing machinery is shared
-  across the Medium controller family but distributed within any one
-  policy; basin-resisting machinery is policy-specific but
-  anatomically tight within each policy.** Five stacked methodological
-  lessons documented along the way: feature-availability rankings are
-  not mechanism rankings; variance is not mechanism; linear additive
-  top-k restriction destroys mechanism even with the correct basis;
-  single-neuron ablation does not surface a critical subset; *but*
-  set-level ablation along basis-derived rankings does surface
-  direction-specific structure that the single-neuron methods missed.
+  basin-inducing does not (0.049). (v3.5) Cross-policy ablation
+  rankings on J1/J2 then inverted the obvious substrate-identity-
+  generalization prediction: basin-inducing P->C critical neurons do
+  *not* generalize (Jaccard 0.255/0.067) even though P->C behavior
+  transfers strongly under the cliff-pair basis, while basin-resisting
+  C->P critical neurons *do* generalize (Jaccard 0.422/0.684) even
+  though C->P behavior transfers weakly. **Subspace-level behavioral
+  transfer and neuron-identity transfer are decoupled in opposite
+  directions for the two patches:** P->C is "same direction, different
+  neurons" -- a family-wide vector in activation space implemented by
+  policy-specific neurons; C->P is "same neurons, different
+  operations" -- a family-wide neuron substrate configured
+  policy-specifically. The 5D net.7 subspace contains two orthogonal
+  generalization mechanisms in one structure. Six stacked
+  methodological lessons documented along the way:
+  feature-availability rankings are not mechanism rankings; variance
+  is not mechanism; linear additive top-k restriction destroys
+  mechanism even with the correct basis; single-neuron ablation does
+  not surface a critical subset; set-level ablation along
+  basis-derived rankings *does* surface direction-specific structure;
+  behavioral transferability under a basis and neuron-identity
+  stability are independent properties of a circuit, and reasoning
+  that conflates them will misread the structure.
 - **Same shape, second substrate.** The Sundog geometry program's
   parhelion atlas independently committed to "small set of complete
   implied circles, read holistically" -- structurally the same object
