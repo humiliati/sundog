@@ -54,24 +54,29 @@ Pre-registered `do not promote` thresholds:
 inside its sun-altitude validity window. Hidden, cropped, or high-sun invalid
 features are recorded as `not applicable`, not as failures.
 
+Probation rule, added with the 2026-05-13 verdict: a single eligible photo
+touching a cutoff does not fail a route or primitive under the pre-registered
+`>= 2 photos` rule, but it does put that item on anchor-probation until the
+next anchor-capture pass confirms or clears the residual.
+
 ## Per-Inversion-Route Residual Table
 
 This table is the Phase 10 response to the mesa finding that forward and
 inverse directions are not symmetric. Do not infer that a good parhelion-offset
 fit makes every route good.
 
-| route | p2 residual | p7 residual | p13 residual | promotion status | note |
+| route | p2 residual (L / R) | p7 residual (L / R) | p13 residual (L / R) | promotion status | note |
 | --- | ---: | ---: | ---: | --- | --- |
-| Parhelion offset → sun altitude | TODO | TODO | TODO | pending | Existing preferred route; measure left/right separately when both parhelia are visible. |
-| CZA apex → sun altitude / visibility | TODO | not applicable | TODO | pending | Valid only below the CZA cutoff; p7 high-sun case should remain not applicable. |
-| Tangent-arc curvature → sun altitude | TODO | TODO | TODO | pending | Watch for non-monotone curvature; do not collapse into total overlay fit. |
-| Supralateral position → sun altitude | TODO | TODO | TODO | pending | Measure only where supralateral is visible/candidate, not where cropped. |
+| Parhelion offset → sun altitude | −1 / −1 px (0.5% R₂₂) | 0 / n/a px | +6 / +8 px (3.8% R₂₂) | **promoted** (calibrated core; anchor-probation) | Threshold gate passes: only p13 hits ≥ 8 px, and a single failure is below the ≥2 photos rule. Because it touches the cutoff, the route stays on anchor-probation until p13 re-anchoring in Task #52. |
+| CZA apex → sun altitude / visibility | _measurement pending_ | not applicable (h = 59.4° > 32.2° cutoff) | _measurement pending_ | pending — needs anchor capture | Valid only below the CZA cutoff. Anchor work in Task #52. |
+| Tangent-arc curvature → sun altitude | _measurement pending_ | _measurement pending_ (broad tangent visible at high sun) | _measurement pending_ | pending — needs anchor capture | Curvature is non-monotone in h; do not collapse into total overlay fit. Anchor work in Task #52. |
+| Supralateral position → sun altitude | _measurement pending_ | not applicable (cropped) | not applicable (not visible) | **fails coverage gate** | Pre-registered rule: fewer than two eligible photos. Stays as optional vocabulary, but does not promote as a calibrated inversion route on this set. |
 
 ## Vocabulary Classification
 
 | primitive | p2 | p7 | p13 | promote? |
 | --- | --- | --- | --- | --- |
-| CZA | visible | not applicable / high sun | cropped or not visible | Core label yes, but hide by sun-altitude rule when applicable. |
+| CZA | visible | not applicable / high sun | cropped or not visible | Conditional core: render only inside the CZA sun-altitude validity window; inversion route remains pending. |
 | Supralateral arc | visible | candidate only | not visible / cropped | Keep as optional vocabulary; p2 carries the strongest evidence. |
 | Upper tangent arc | visible | visible / broad | candidate | Promote as stable logo/animation shape language. |
 | Lower tangent arc | visible near lower 22° contact | not clear | not clear | Annotation only until another clean low-sun source supports it. |
@@ -79,12 +84,69 @@ fit makes every route good.
 | Parry supralateral arc | candidate in image 1 | not visible | not visible | Do not promote beyond optional annotation. |
 | Infralateral arcs | visible on p2 periphery | not visible / cropped | not visible / cropped | Good vocabulary label; not a core logo layer unless the design brief wants a rich-display variant. |
 
+## Phase 10 Promotion Verdict *(landed 2026-05-13)*
+
+Verdicts apply the pre-registered thresholds above. Status is one of:
+**promoted** (moves into calibrated core / logo defaults), **promoted as
+optional vocabulary** (annotation layer, not core), **fails gate** (held
+back; reason recorded), or **pending** (cannot be promoted until measured).
+
+| candidate | verdict | reason |
+| --- | --- | --- |
+| Parhelion offset to h inversion route | **promoted** (calibrated core; anchor-probation) | Threshold gate: only p13 reaches the 8 px cutoff, and the rule requires >= 2 photos failing. Because p13 touches the cutoff and uses a rough hand-anchor, the route remains on anchor-probation until re-anchoring in Task #52. |
+| 22 deg halo, parhelia (L/R), parhelic-circle | **promoted** (calibrated core) | Already in core via Phase 2. No regression observed in Phase 10 inspection. |
+| Upper tangent arc | **promoted as logo / animation vocabulary** | Visible across p2 and p7; candidate on p13. Two-of-three eligible visibility. Curvature-as-inversion-route remains pending measurement, but visibility is sufficient for shape-language use. |
+| CZA primitive (rendered) | **promoted as conditional core** | Render only when `h < 32.2 deg` (atmospheric cutoff). Visible on p2 at h = 18.6 deg; correctly not applicable on p7. p13 cropped/not visible but not contradictory. Inversion route stays pending. |
+| CZA apex to h inversion route | **pending** | No anchor capture yet on p2 / p13. Cannot be promoted to inversion alternative without numbers; cannot be ruled out either. Task #52 captures the anchor. |
+| Tangent-arc curvature to h inversion route | **pending** | Same as CZA apex: visible but unmeasured. Curvature is non-monotone in h, so promotion requires sampling at multiple sun altitudes -- Task #52 is the first p2 + p13 pass. |
+| Supralateral position to h inversion route | **fails coverage gate** | Visible only on p2 of the Phase 10 set. Pre-registered rule blocks promotion at < 2 eligible photos. Supralateral primitive itself stays in optional vocabulary; the *inversion route* does not promote on this evidence. |
+| Lower tangent arc | **promoted as low-sun annotation only** | Visible at p2's lower 22 deg contact; not clear on p7 or p13. One photo of evidence -- fails the two-photo bar for core promotion. Held as low-sun-display annotation; compatible with `low-altitude.json` named-pose examples, but the pose is not additional evidence. |
+| Suncave Parry arc | **fails gate** (weak evidence) | Weak/candidate on all three Phase 10 photos. Below the visibility bar for inversion measurement; insufficient for shape-language promotion. Stays in atlas vocabulary as an educational label only. |
+| Parry supralateral arc | **fails gate** (weak evidence + coverage) | Candidate on image 1 key only; not visible on p7 or p13. Promotion blocked on coverage. Vocabulary-label-only status confirmed. |
+| Infralateral arcs | **promoted as optional vocabulary** (not core) | Visible on p2 periphery; not clear on p7 / p13. Single-photo evidence on the Phase 10 set, but image 1 key labels it. Held as a rich-display vocabulary option; compatible with `forty-six-halo.json` named-pose examples, but the pose is not additional evidence. |
+| Any linear arc-importance score (e.g. "arc X = 23% of fit") | **fails gate** (per Mesa crossover rule 5) | Linear additive attribution of fit is mesa's documented failure mode for field-shaped objects. Reject any Phase 11 metric that produces this. |
+
+### Coverage and threshold summary
+
+Pre-registered gate (from the Phase 10 Measurement Pre-Registration section):
+
+- **Visibility coverage**: a primitive or route needs >= 2 eligible photos
+  (visible, uncropped, in sun-altitude validity window) to be a candidate.
+- **Primitive residual**: >= 0.06 * R22 **or** >= 12 px on >= 2 eligible
+  photos -> do not promote.
+- **Inversion-route residual**: >= 0.04 * R22 **or** >= 8 px on >= 2
+  eligible photos -> do not promote.
+- **Attribution form**: any linear "arc X contributes N%" metric -> reject
+  outright.
+
+### Do-not-promote list
+
+Concrete output of the Phase 10 gate, in the form the roadmap asks for:
+
+1. **Suncave Parry as logo / animation shape language.** Weak evidence
+   across the entire Phase 10 set. Stays in atlas vocabulary as an
+   educational label.
+2. **Parry supralateral as anything beyond an optional annotation.**
+   Coverage fails -- candidate on image 1 only.
+3. **Supralateral inversion route on this evidence.** Coverage fails
+   (single-photo visibility). The primitive itself stays in optional
+   vocabulary; the *route* does not promote.
+4. **Lower tangent as core logo geometry.** Single-photo evidence; usable
+   only as labeled low-sun annotation or in named-pose examples, not in core
+   marks.
+5. **Any linear arc-importance attribution metric** at Phase 11 review.
+   Per Mesa crossover rule 5.
+
+The Phase 10 gate is **partially open**: visibility-based promotions are
+final; inversion-route promotions beyond parhelion-offset are gated on
+Task #52 anchor capture.
+
 ## Design Consequence
 
 For the Phase 11 characterized logo toolkit, the safe shape language is:
 
 - core sun;
-- 22° halo / iris;
+- 22 deg halo / iris;
 - left and right parhelion glints;
 - parhelic-circle sweep;
 - upper tangent / eyelid arc;
