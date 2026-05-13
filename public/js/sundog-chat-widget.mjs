@@ -64,6 +64,10 @@ async function initAskSundog() {
   // Idle mascot state on mount. Trace-driven updates fire in answerQuestion.
   applyMascotState(launch, null);
 
+  // Conversation history surface — drives the `held_refusal` state when
+  // the gate fires twice in a row on related routes.
+  let lastTrace = null;
+
   let claimMap = null;
   let chatIndex = null;
 
@@ -101,7 +105,8 @@ async function initAskSundog() {
     const trace = await traceFor(question);
     answerStack.replaceChildren(renderExchange(question, trace));
     answerStack.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    applyMascotState(launch, trace);
+    applyMascotState(launch, trace, { previousTrace: lastTrace });
+    lastTrace = trace;
   }
 
   async function traceFor(question) {

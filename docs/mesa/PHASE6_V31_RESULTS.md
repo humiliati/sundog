@@ -15,7 +15,9 @@ Phase 6 v3.1 gives four updates:
 
 1. **Y1 falsified.** PC1 is not mechanism-empty. Removing PC1 and patching
    only PCs 2-5 drops median patch success from the K=5 baseline
-   `0.922 / 0.830` to `0.291 / 0.121`.
+   `0.922 / 0.830` to `0.291 / 0.121`. Combined with the v3 K=1 result
+   (`0.006 / 0.008`), this says the circuit is entangled: PC1 alone is
+   near-zero, PCs 2-5 alone are partial, and all five together are full.
 2. **Y2 partially confirmed.** The cliff-pair basis generalizes strongly in
    the basin-inducing direction. J1 protected-to-collapsed median is `0.941`;
    J2 protected-to-collapsed median is `1.001`. Reverse transfer is weaker,
@@ -26,10 +28,11 @@ Phase 6 v3.1 gives four updates:
 4. **Y4 confirmed.** Directional asymmetry is statistically reliable. K=3
    bootstrap median-gap CI is `[0.251, 0.550]`, excluding zero with margin.
 
-The mechanistic read sharpens: the 5D basis is not just a cliff-pair artifact,
-but its most reliable transfer is "write basin attractor into a protected
+The mechanistic read changes: the old "PC1 = offset, PCs 2-5 = mechanism"
+framing is retired. The basin attractor is an entangled 5D subspace. Its most
+reliable family-wide operation is "write basin attractor into a protected
 policy," not "rescue a collapsed policy." PC1 carries real causal mechanism,
-not merely policy offset.
+but only jointly with PCs 2-5.
 
 ## 2. Artifacts
 
@@ -64,6 +67,17 @@ collection and caches it under the v3.1 output directory.
 Y1 falsified. PC1 is causally load-bearing. The prior "variance-heavy but
 mechanism-empty" interpretation should be retired.
 
+The revised K-stack is:
+
+| subspace | protected to collapsed | collapsed to protected | read |
+| --- | ---: | ---: | --- |
+| PC1 alone | 0.006 | 0.008 | variance-heavy but behavior-weak |
+| PCs 2-5 alone | 0.291 | 0.121 | partial mechanism |
+| PCs 1-5 | 0.922 | 0.830 | full circuit |
+
+No proper sub-subspace tested so far reproduces the cliff. The useful claim is
+entanglement, not clean decomposition.
+
 ## 4. Axis J - Generalization
 
 | pair | direction | median patch success | ratio of means |
@@ -77,6 +91,10 @@ Y2 partially confirmed. The basis generalizes strongly in the
 protected-to-collapsed direction across both runnable held-out pairs. It does
 not strongly rescue collapsed policies, especially across the J1
 signature-vs-reward family boundary.
+
+This is the cross-family version of the K=3 directional asymmetry: becoming
+basin-attracted appears to use shared directions, while becoming
+basin-resistant depends more on policy-specific machinery.
 
 J3 is not counted. It is a dimension-blocked cross-tier target, not a failed
 generalization result.
@@ -109,10 +127,11 @@ but positive asymmetry.
 v3.1 moves the claim from "a 5D subspace exists in the cliff pair" to a more
 specific statement:
 
-> The Medium basin-attractor mechanism is carried by a moderately concentrated
-> 5D `net.7` subspace that generalizes in the basin-inducing direction across
-> held-out Medium pairs. PC1 is causally necessary, and reverse rescue is
-> weaker than collapse induction.
+> The Medium basin-attractor mechanism is carried by an entangled,
+> moderately concentrated 5D `net.7` subspace. No tested proper
+> sub-subspace reproduces the full patch effect. The basin-inducing
+> direction generalizes across held-out Medium pairs; the basin-resisting
+> direction is weaker and more policy-specific.
 
 This supports the fixed-attractor / final-hidden-gating story, but narrows the
 strongest version: the subspace is not a symmetric universal rescue basis.

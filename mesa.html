@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sundog Mesa-Optimization Trap: an in-vitro operating envelope for signature-driven control under Goodhart-prone selection pressure, with a sharp cliff at λ≈0.953 and a mechanistic locus at the actor's final hidden layer.">
+    <meta name="description" content="Sundog Mesa-Optimization Trap: an in-vitro operating envelope for signature-driven control under Goodhart-prone selection pressure, with a sharp cliff at λ≈0.953 and an entangled 5D mechanistic locus at the actor's final hidden layer.">
     <meta name="theme-color" content="#1A3A52">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -372,6 +372,39 @@
             border-radius: 3px;
         }
 
+        .transfer-grid {
+            display: grid;
+            grid-template-columns: minmax(170px, 1.4fr) repeat(2, minmax(120px, 1fr));
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .transfer-grid div {
+            background: white;
+            padding: 0.75rem;
+            font-size: 0.92rem;
+        }
+
+        .transfer-grid .head {
+            background: var(--cream);
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .transfer-grid .strong {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .transfer-grid .weak {
+            color: var(--red);
+            font-weight: 700;
+        }
+
         /* Boundary */
         .claim-boundary {
             background: #F8F9FA;
@@ -508,7 +541,7 @@
                 The Sundog program's most outlandish public framing — that signature-driven control is structurally different from reward-driven control under partial observability — has now been stress-tested with a controlled experiment. The result is partial, mapped, and earned in a bounded form.
             </p>
             <blockquote class="earned-claim">
-                In the tested shadow-field navigation family at Small and Medium capacity, terminal-signature and mixed-signature controllers preserve field attachment across a mapped pocket of selection pressure, with a sharp Medium breach at λ ≈ 0.953. Above that boundary, high-reward mixed policies collapse into the same fixed-attractor class as reward-trained controllers; Phase 6 v1 localizes the behavioral cliff to the actor's final hidden layer.
+                In the tested shadow-field navigation family at Small and Medium capacity, terminal-signature and mixed-signature controllers preserve field attachment across a mapped pocket of selection pressure, with a sharp Medium breach at λ ≈ 0.953. Above that boundary, high-reward mixed policies collapse into the same fixed-attractor class as reward-trained controllers; Phase 6 localizes the behavioral cliff to an entangled 5D subspace at the actor's final hidden layer.
             </blockquote>
         </div>
     </section>
@@ -576,15 +609,15 @@
     <!-- The Locus -->
     <section class="experiment-section" id="locus">
         <div class="experiment-content">
-            <h2>The Locus (Phase 6 v1 + v3)</h2>
+            <h2>The Locus (Phase 6 v1 + v3.1)</h2>
             <p class="lede">
-                Activation patching across the cliff pair (L-Mixed-M-λ=0.95 ↔ L-Mixed-M-λ=0.97) localizes the basin attractor causally first to a single hidden layer (Phase 6 v1: only <code>net.7</code>, the actor's final hidden activation, clears the 0.8 patch-success threshold) and then to a <strong>5-dimensional subspace within that layer</strong> (Phase 6 v3: top-5 PCA components of the matched-seed per-step activation diff matrix recover v1's full-layer patch_success to within 0.03 in both directions). That is a <strong>51× compression</strong> of the mechanistic anchor — from 256 dims down to 5.
+                Activation patching across the cliff pair (L-Mixed-M-lambda=0.95 vs lambda=0.97) localizes the basin attractor causally first to a single hidden layer (Phase 6 v1: only <code>net.7</code>, the actor's final hidden activation, clears the 0.8 patch-success threshold) and then to an <strong>entangled 5-dimensional subspace within that layer</strong>. Phase 6 v3.1 revises the tempting decomposition: PC1 alone is weak, PCs 2-5 alone are partial, and all five together are needed for the full patch effect.
             </p>
 
             <div class="chart-card">
                 <h3>The fingerprint — variance vs mechanism across K</h3>
                 <p class="chart-caption">
-                    K-sweep over the top PCA components of the per-step matched-seed cliff-pair activation diff. The <strong>gold</strong> curve is variance captured by the top-K components; the <strong>navy</strong> and <strong>steel</strong> curves are patch_success in the two patch directions. The decoupling at K=1 is the load-bearing methodological lesson: PC1 alone carries 38.8% of variance but contributes ~0% of patch effect — it is the policy-offset direction, variance-heavy and mechanism-empty. The mechanism lives in PCs 2-5, which together with PC1 saturate the v1 layer-patch baseline at K=5.
+                    K-sweep over the top PCA components of the per-step matched-seed cliff-pair activation diff. The <strong>gold</strong> curve is variance captured by the top-K components; the <strong>navy</strong> and <strong>steel</strong> curves are patch_success in the two patch directions. The decoupling at K=1 still matters: PC1 alone carries 38.8% of variance but contributes ~0% patch effect. Phase 6 v3.1 adds the missing control: PCs 2-5 alone are only partial, so the full circuit is entangled across all five dimensions.
                 </p>
                 <svg id="ksweep-chart" class="chart" viewBox="0 0 720 360" aria-label="Variance and patch_success vs K"></svg>
                 <div class="chart-legend">
@@ -595,8 +628,29 @@
                 </div>
             </div>
 
+            <div class="chart-card" style="margin-top: 2rem;">
+                <h3>Phase 6 v3.1: generalization is directional</h3>
+                <p class="chart-caption">
+                    The cliff-pair 5D basis transfers cleanly when patching protected policies into basin-attracted behavior. The reverse rescue direction is weaker on held-out pairs, especially across the signature-vs-reward boundary.
+                </p>
+                <div class="transfer-grid" aria-label="Phase 6 v3.1 generalization patch success">
+                    <div class="head">pair</div>
+                    <div class="head">protected -> collapsed</div>
+                    <div class="head">collapsed -> protected</div>
+                    <div>cliff pair anchor</div>
+                    <div class="strong">0.922</div>
+                    <div class="strong">0.830</div>
+                    <div>J1: signature-M vs reward-M</div>
+                    <div class="strong">0.941</div>
+                    <div class="weak">0.162</div>
+                    <div>J2: mixed 0.9 vs mixed 0.99</div>
+                    <div class="strong">1.001</div>
+                    <div>0.631</div>
+                </div>
+            </div>
+
             <p class="lede" style="margin-top: 1.5rem;">
-                The mechanistic statement that earns this surface: <em>the basin attractor at net.7 is a 5-dimensional subspace, decomposable into a 1-dimensional policy-offset component (PC1, variance-heavy and mechanism-empty) and a 4-dimensional mechanism component (PCs 2-5). Patching just those 5 directions of net.7 is sufficient to flip the cliff policy from collapsed to protected behavior (and back) without disturbing the other 251 dimensions of activation.</em>
+                The mechanistic statement that earns this surface: <em>the basin attractor at net.7 is an entangled 5-dimensional subspace. No tested proper sub-subspace reproduces the cliff. The basin-inducing side generalizes across held-out Medium policies; the basin-resisting side is weaker under transfer and appears policy-specific.</em>
             </p>
 
             <p class="lede" style="margin-top: 1rem;">
@@ -646,6 +700,7 @@
                 <a href="docs/mesa/PHASE5_RESULTS.md"><strong>Phase 5 Results (v4)</strong><span>The behavioral cliff: λ ≈ 0.953</span></a>
                 <a href="docs/mesa/PHASE6_RESULTS.md"><strong>Phase 6 Results (v1)</strong><span>The mechanistic locus: net.7</span></a>
                 <a href="docs/mesa/PHASE6_V2_RESULTS.md"><strong>Phase 6 Results (v2+v3)</strong><span>The 5-dim subspace and SAE-basis falsification</span></a>
+                <a href="docs/mesa/PHASE6_V31_RESULTS.md"><strong>Phase 6 Results (v3.1)</strong><span>Entangled 5D subspace and directional transfer</span></a>
                 <a href="docs/mesa/PHASE7_RESULTS.md"><strong>Phase 7 Results (v1)</strong><span>The operating envelope: 22 policies classified</span></a>
                 <a href="docs/PROMO_HIGHLIGHTS.md"><strong>PROMO_HIGHLIGHTS.md</strong><span>§The Gravity Claim with the three anchors</span></a>
                 <a href="docs/presentation/claims-and-scope.md"><strong>Claims and Scope</strong><span>§The Gravity Frame → Earned envelope language</span></a>
@@ -977,7 +1032,7 @@
             out += `<line x1="${k1x + 10}" y1="${k1varY}" x2="${k1x + 18}" y2="${k1varY}" stroke="#C0392B" stroke-width="1.2"/>`;
             out += `<line x1="${k1x + 10}" y1="${k1mechY}" x2="${k1x + 18}" y2="${k1mechY}" stroke="#C0392B" stroke-width="1.2"/>`;
             out += `<text x="${k1x + 24}" y="${(k1varY + k1mechY) / 2 - 8}" font-size="11" font-family="var(--sd-font-data)" fill="#C0392B">variance ≠ mechanism:</text>`;
-            out += `<text x="${k1x + 24}" y="${(k1varY + k1mechY) / 2 + 6}" font-size="11" font-family="var(--sd-font-data)" fill="#C0392B">PC1 = 38.8% var, 0% mech</text>`;
+            out += `<text x="${k1x + 24}" y="${(k1varY + k1mechY) / 2 + 6}" font-size="11" font-family="var(--sd-font-data)" fill="#C0392B">PC1 = 38.8% var, weak alone</text>`;
 
             // Callout at K=5 — saturation point
             const k5x = xFor(2);

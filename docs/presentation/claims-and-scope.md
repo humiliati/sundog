@@ -326,6 +326,13 @@ piecemeal, because the parts qualify each other:
   a joint two-policy dataset return policy-identifier features rather
   than mechanism features.
 
+  Phase 6 v3.1 revises the decomposition: the 5D `net.7` locus is
+  entangled, not a clean PC1 offset plus PCs-2-5 mechanism. PC1 alone is
+  behavior-weak, PCs 2-5 alone are partial, and PCs 1-5 together carry the
+  full circuit. The basin-inducing direction generalizes across held-out
+  Medium policy pairs; basin-resistance is weaker under transfer and appears
+  more policy-specific.
+
 What is **still not earned**:
 
 - Universal mesa immunity.

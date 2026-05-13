@@ -359,92 +359,19 @@ above-threshold across this 0.02 window without an intermediate regime.
 
 Stated as policy:
 
-> Under matched-architecture PPO with a calibrated modest Goodhart-prone
-> shaping term, basin attractor formation in the policy weights requires
-> the *complete absence* of state-only signature signal in the training
-> mix. A signature weight of just `1 − λ = 0.048` is sufficient to prevent
-> basin internalization. Above that threshold the policy can use reward
-> shaping freely for task learning; below it, the policy fossilizes around
-> the spec-gaming surface.
+> Below the Phase 5 v4 threshold (signature weight `1 - lambda >= 0.048`),
+> the training process preserves basin resistance. Above the threshold, the
+> shared basin-inducing circuit appears in an entangled 5-dimensional
+> subspace of the actor's final hidden activation. The Goodhart-sidestep
+> argument now has a behavioral anchor (5% threshold), a mechanistic locus
+> (the final hidden activation), an entangled 5D basin-inducing subspace,
+> and a methodological lesson: variance is not mechanism, and even features
+> highly correlated with basin behavior need not span the basin-circuit
+> subspace.
 
-Two things to notice. First, the protective threshold is small in
-absolute terms — 5%, not 50%. Second, the threshold is binary in the
-relevant sense: there is no observed "partial protection" plateau between
-collapse and full protection, only a cliff. The implication for any
-practitioner reasoning about Goodhart-prone training: it costs almost
-nothing to keep a state-only signature channel live in the loss, and the
-cost of *not* keeping it live is total basin capture rather than degraded
-performance.
-
-This is an in-vitro finding in a 2D continuous-control environment with a
-synthetic spec-gaming surface deliberately placed. It is not yet a
-deployment guarantee. It is, however, the cleanest quantitative anchor
-the program has produced for the structural distinction between
-signature-driven and reward-driven training, and it is what the broader
-gravity claim is now pinned to. The full trail lives at
-[`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) and the v4 result note at
-[`docs/mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md).
-
-### The mechanical anchor (Phase 6 v1 + v3)
-
-Phase 6 opened the box. The Phase 5 v4 behavioral cliff at λ ≈ 0.953 is
-not a distributed property of the representation — it is a **5-dimensional
-subspace of the actor's final hidden activation layer.**
-
-The receipt comes from activation patching across the cliff pair
-(L-Mixed-M at λ = 0.95 vs λ = 0.97) in the shadow-field navigation
-environment. For each of the actor MLP's hidden layers, Phase 6 ran four
-forward passes per seed: the protected policy alone, the collapsed
-policy alone, and both reverse-patched conditions (inject one policy's
-hidden activations at layer L into the other's downstream computation).
-The pre-registered patch-success threshold was 0.8 in both directions.
-
-Only the **final hidden activation** layer (`net.7` in the Medium-tier
-4-hidden-layer architecture) cleared the threshold robustly:
-
-> protected → collapsed: mean / median / ratio-of-means = 0.894 / 0.944 / 0.899
-> collapsed → protected: 0.934 / 0.860 / 0.854
-
-Patches at the input-adjacent layer (`net.1`) and the middle layers
-(`net.3`, `net.5`) did not clear the threshold under robust statistics.
-The basin attractor is not built up across depth; it is the activation
-pattern at the layer immediately before the action head. The symmetric
-strength of both patch directions implies that the policy heads of the
-two cliff policies are functionally equivalent — what differs is what
-gets written to `net.7`.
-
-Phase 6 v3 followed up with PCA on per-step matched-seed activation
-differences across the cliff pair, sharpening the locus from "single
-layer" to a specific 5-dimensional subspace of that layer:
-
-> The basin attractor at `net.7` is a 5-dimensional subspace,
-> decomposable into a 1-dimensional policy-offset component (PC1,
-> 38.8% of activation-diff variance, 0% of patch effect) and a
-> 4-dimensional mechanism component (PCs 2-5, 58.5% of variance,
-> ~100% of patch effect).
-
-The K-sweep saturates cleanly at K=5: top-5 PCA components recover
-v1's full-layer patch_success to within 0.03 in both directions, and
-K=10 / K=32 / K=64 add no measurable patch_success past K=5. The
-mechanistic anchor is therefore a **51× compression** of the layer
-itself (256 dims → 5 dims), with a further variance-vs-mechanism
-decomposition revealing that one of those 5 dimensions carries
-~zero of the actual mechanism — the policy-offset direction is
-variance-heavy and mechanism-empty. The real circuit is the
-4-dimensional residual.
-
-Stated as policy:
-
-> Below the Phase 5 v4 threshold (signature weight `1 − λ ≥ 0.048`), the
-> training process *does not form* a basin-gating circuit in the actor's
-> final hidden activation. Above the threshold, the circuit *forms* in
-> a specific 4-dimensional subspace of that layer and is causally
-> responsible for the policy's fixed-attractor behavior. The
-> Goodhart-sidestep argument now has a behavioral anchor (5% threshold),
-> a mechanistic locus (a 4-dimensional gating subspace at the actor's
-> final hidden activation), and a methodological lesson (variance ≠
-> mechanism — even features highly correlated with basin behavior need
-> not span the basin-circuit subspace).
+v3.1 adds the asymmetry: the cliff-pair basis transfers cleanly into the
+basin on held-out Medium pairs, while rescue out of the basin is weaker and
+appears policy-specific.
 
 Three complementary findings came out of Phase 6 v1 + v3 worth
 landing on:
@@ -484,14 +411,13 @@ This is in-vitro evidence in a 2D continuous-control environment with a
 synthetic Goodhart-prone shaping surface. It is not a deployment
 guarantee. It is, however, the cleanest mechanistic anchor the program
 has produced: the behavioral cliff has a representational explanation,
-the explanation lives in a specific 4-dimensional subspace of a
-specific layer, and the subspace is transplantable — patching the
-correct 5 directions of `net.7` is sufficient to flip the policy from
-collapsed to protected behavior (and back) without disturbing the
-other 251 dimensions of activation. The full trail is at
+the explanation lives in an entangled 5-dimensional subspace of a
+specific layer, and the basin-inducing side of that subspace is
+transplantable across held-out Medium policy pairs. The full trail is at
 [`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md); v1 result note at
 [`docs/mesa/PHASE6_RESULTS.md`](mesa/PHASE6_RESULTS.md), v2+v3 result
-note at [`docs/mesa/PHASE6_V2_RESULTS.md`](mesa/PHASE6_V2_RESULTS.md).
+note at [`docs/mesa/PHASE6_V2_RESULTS.md`](mesa/PHASE6_V2_RESULTS.md), and
+v3.1 correction at [`docs/mesa/PHASE6_V31_RESULTS.md`](mesa/PHASE6_V31_RESULTS.md).
 
 ### The envelope (Phase 7 v1)
 

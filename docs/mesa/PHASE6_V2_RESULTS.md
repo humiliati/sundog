@@ -11,6 +11,14 @@ patching), and Axes F-H (v3 follow-ups: multi-feature, mean-diff, PCA
 of per-step diffs) are all **complete** on the L-Mixed-M-λ=0.95 /
 λ=0.97 cliff pair.
 
+Correction note (2026-05-12): Phase 6 v3.1 falsified this note's
+"PC1 is mechanism-empty / PCs 2-5 carry the mechanism" interpretation.
+The retained result is that the cliff-pair mechanism is 5-dimensional at
+`net.7`; the revised interpretation is that the circuit is **entangled**
+across PCs 1-5. PC1 alone is behavior-weak, PCs 2-5 alone are partial,
+and all five together are required for the full patch effect. See
+[`PHASE6_V31_RESULTS.md`](PHASE6_V31_RESULTS.md).
+
 ## 1. Summary
 
 Phase 6 v2 gives the program one headline finding, one tightly-bound
@@ -38,11 +46,11 @@ methodological lesson, and one secondary observation:
    ranked by per-episode correlation; the actual mechanism lives in a
    different basis of activation space.
 
-The cleanest v2 headline is therefore: **the cliff at `net.7` is a
-5-dimensional subspace of per-step matched-policy activation
-differences, 1 of those dimensions is a variance-heavy mechanism-empty
-policy-offset, and the load-bearing mechanism lives in the remaining 4
-dimensions.**
+The cleanest v2/v3 headline, after v3.1 correction, is therefore: **the
+cliff at `net.7` is a 5-dimensional subspace of per-step matched-policy
+activation differences. The attempted decomposition into a 1D offset and
+4D mechanism was falsified by PC2-5-only patching; the circuit is
+entangled across all five dimensions.**
 
 ## 2. Artifacts
 
@@ -189,6 +197,12 @@ mechanistic anchor sharpens from "single layer (256 dims)" to "5-dim
 subspace within that layer."
 
 ### 7.2 Variance-vs-mechanism decoupling
+
+v3.1 correction: the decomposition below is superseded. PC1 alone is
+behavior-weak, but not mechanism-empty; PCs 2-5 alone are partial
+(`0.291 / 0.121` median patch_success), and PCs 1-5 together reproduce
+the full effect (`0.922 / 0.830`). The revised read is an entangled 5D
+subspace, not a clean 1D offset plus 4D mechanism split.
 
 PC1 (alone) captures 38.8% of variance but contributes ~0% of patch
 success. PC1 is the policy-offset direction (effectively Δ_mean from

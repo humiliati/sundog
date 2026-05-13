@@ -39,7 +39,9 @@ targets here:
   capacity. 22-policy zoo classifies as 8 hold / 7 collapse / 1 fragile /
   4 incompetent / 2 ambiguous. Medium breach at `λ ≈ 0.952588`, signature
   weight `1 − λ ≈ 0.047412`. Phase 6 v1 localizes the cliff causally to
-  the actor's final hidden activation (`net.7`). Outcome maps to the
+  the actor's final hidden activation (`net.7`), and Phase 6 v3.1 refines
+  that locus to an entangled 5D basin-inducing subspace rather than a clean
+  PC1-offset / PCs-2-5 mechanism split. Outcome maps to the
   roadmap's pre-named "partially holds" verdict.*
 - **Candidate 7 - Causal Intervention Test** → promoted as Phase 4 of
   [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md). *Status (2026-05-12): Phase 4
@@ -415,6 +417,12 @@ has now produced an in-vitro bounded operating-envelope receipt:
   with the basin outcome are the *wrong* basis for this circuit (the
   top SAE feature with |corr|=0.89 produced zero patch effect); future
   Phase 6+ work should default to PCA on per-step matched-seed diffs.
+- **Mechanistic locus revised (Phase 6 v3.1, 2026-05-12).** The old
+  "PC1 is offset / PCs 2-5 are mechanism" decomposition is falsified.
+  PC1 alone is behavior-weak, PCs 2-5 alone are partial, and PCs 1-5
+  together carry the full circuit. The basis generalizes strongly in the
+  protected-to-collapsed direction across held-out Medium pairs; reverse
+  rescue is weaker and appears policy-specific.
 - **Outcome maps to "partially holds"** in the roadmap's pre-named
   three-way ladder. The protected pocket is real but bounded; the
   collapse pocket is also sharp. Both are honest evidence about the
