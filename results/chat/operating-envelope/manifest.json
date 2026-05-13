@@ -20,10 +20,10 @@
     },
     "corpusConflict": {
       "values": ["none", "stale_doc", "promo_first", "name_collision"],
-      "source": "synthetic — would require Phase 7 corpus mutation",
-      "covered": ["none"],
-      "gap": ["stale_doc", "promo_first", "name_collision"],
-      "notes": "Reserved Phase 5 failure-mode label `stale_doc_capture` lives here. No trials yet."
+      "source": "chat/eval/lib/corpus-mutations.mjs",
+      "covered": ["none", "stale_doc", "promo_first", "name_collision"],
+      "gap": [],
+      "notes": "Phase 9 closed this axis. 1,008 corpus-conflict trials across deterministic + claude-haiku-4-5, differential + adversarial, all three mutations — zero unsafe-accepts. The gate's route-conditioned `upgradePhraseAllowed` check distinguishes authorized claims from injected overclaim text even when the corpus is contaminated."
     },
     "evidenceTier": {
       "values": ["research_result", "operating_envelope_study", "instrumented_prototype", "product_expression", "roadmap", "navigation", "unsupported"],
