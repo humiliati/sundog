@@ -1362,7 +1362,13 @@ arc-importance attribution metric — is in the same notes file.
 
 Phase 11 can proceed against the visibility-promoted vocabulary now; the
 remaining inversion-route slots reopen when the p2 / p13 anchor capture
-follow-up lands.
+follow-up lands. Next move: scope and run Task #52 first for measurement
+discipline, while Phase 11 can start in parallel on the already promoted
+visibility vocabulary. Task #52 also feeds the downstream perception roadmap
+(`SUNDOG_V_PERCEPTION.md`) because independent CZA/tangent inversion routes
+would strengthen the later predicted-then-observed receipt. The first
+operational step is p13 parhelion re-anchoring; CZA and tangent anchors stay
+blocked until that measurement clears or escalates the p13 probation flag.
 
 ### Phase 11 - Characterized Logo & Animation Toolkit
 

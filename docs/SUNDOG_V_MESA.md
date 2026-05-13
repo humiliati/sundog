@@ -1044,6 +1044,35 @@ The mechanistic anchor remains: *an entangled 5D activation-space
 operation at the actor's final hidden layer, implemented through a
 distributed neuron substrate*. v3.4 should route to pair-wise /
 multi-neuron ablation, set-to-mean ablation, or integrated gradients.
+
+**Phase 6 v3.4 result (2026-05-13, substrate split confirmed)** at
+[`mesa/PHASE6_V34_SPEC.md`](mesa/PHASE6_V34_SPEC.md) and
+[`mesa/PHASE6_V34_RESULTS.md`](mesa/PHASE6_V34_RESULTS.md). Axis P
+tested whether the v3.3 P->C and C->P top-32 substrates are
+functional, not just anatomical. Axis Q bootstrapped the Jaccard
+overlap of the two rankings. The original 16-seed smoke gate compared
+against the 64-seed v3 medians and failed literally (`0.779/0.719` vs
+`0.922/0.830`), but the original v3 first-16 slice was also low
+(`0.804/0.712`), so this was recorded as a seed-slice calibration
+caveat rather than harness drift.
+
+BB1 confirmed: substrate-restricted ablation dissociates functionally.
+The P->C-critical top-32 mask drops P->C more than C->P by `+0.174`;
+the C->P-critical top-32 mask drops C->P more than P->C by `+0.662`.
+The cross-direction drops are negative (`-0.097` and `-0.083`), meaning
+ablating the opposite substrate slightly improves the patch rather than
+merely leaving it alone. BB2 confirmed: P->C vs C->P top-32 Jaccard
+bootstrap median `0.049`, 95% CI `[0.016, 0.085]`. BB3 confirmed for
+P->C-vs-L2, CI `[0.032, 0.123]`; C->P-vs-L2 is higher (`[0.280,
+0.391]`) and should be treated as a directional asymmetry, not a
+falsifier.
+
+The mechanistic anchor ratchets again: *the entangled 5D operation at
+`net.7` is implemented through direction-specific neuron substrates.*
+Individual neurons remain weak and simple L2 top-k sufficiency still
+fails, but ablation-ranked P->C and C->P top-32 substrates are
+functionally and statistically separable. v3.5 should route to Path B:
+cross-policy substrate generalization on J1/J2.
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
 [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md). The harness

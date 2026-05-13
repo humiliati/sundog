@@ -57,6 +57,7 @@ PHASE6_V2_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v2-direction"
 PHASE6_V31_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-1-validation"
 PHASE6_V32_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-2-neuron-mediation"
 PHASE6_V33_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-3-ablation"
+PHASE6_V34_OUT = REPO_ROOT / "results" / "mesa" / "phase6-v3-4"
 
 
 V31_POLICY_SPECS: dict[str, PolicySpec] = {
@@ -1203,6 +1204,7 @@ def run_subspace_injected_rollout(
     target_coords: list[np.ndarray],
     neuron_mask: torch.Tensor | None = None,
     zero_ablate_neuron: int | None = None,
+    zero_ablate_neuron_set: list[int] | None = None,
 ) -> DirectionRolloutCache:
     """Run policy under live x_false intervention, substituting only the
     projection of `layer`'s output onto the subspace `Q` with `target_coords`
@@ -1215,6 +1217,8 @@ def run_subspace_injected_rollout(
     """
     if not target_coords:
         raise RuntimeError("cannot inject empty target_coords cache")
+    if zero_ablate_neuron is not None and zero_ablate_neuron_set is not None:
+        raise ValueError("zero_ablate_neuron and zero_ablate_neuron_set are mutually exclusive")
     made = client.request(
         {
             "cmd": "make",
@@ -1246,6 +1250,9 @@ def run_subspace_injected_rollout(
         if zero_ablate_neuron is not None:
             h_new = h_new.clone()
             h_new[int(zero_ablate_neuron)] = 0.0
+        if zero_ablate_neuron_set is not None:
+            h_new = h_new.clone()
+            h_new[torch.tensor(zero_ablate_neuron_set, dtype=torch.long, device=h_new.device)] = 0.0
         realized_coords.append((Q.T @ h_new).detach().cpu().numpy().copy())
         return h_new.unsqueeze(0)
 
@@ -2488,6 +2495,341 @@ def axis_n_zero_ablation(args: argparse.Namespace) -> None:
 
 
 # ============================================================
+# v3.4 Axis P/Q — substrate ablation and Jaccard bootstrap
+# ============================================================
+
+
+def load_neuron_indices_csv(path: Path, *, limit: int | None = None) -> list[int]:
+    rows = read_csv_rows(path)
+    if not rows or "neuron_idx" not in rows[0]:
+        raise ValueError(f"{path} must contain a neuron_idx column")
+    indices = [int(row["neuron_idx"]) for row in rows]
+    return indices[:limit] if limit is not None else indices
+
+
+def infer_mask_direction(path: Path, explicit: str | None = None) -> str | None:
+    if explicit:
+        return {
+            "P_to_C": "protected_to_collapsed",
+            "C_to_P": "collapsed_to_protected",
+            "unknown": None,
+        }[explicit]
+    name = path.name.lower()
+    if "pc" in name:
+        return "protected_to_collapsed"
+    if "cp" in name:
+        return "collapsed_to_protected"
+    return None
+
+
+def run_substrate_ablation_battery(
+    *,
+    Q_np: np.ndarray,
+    neuron_indices: list[int],
+    seed_start: int,
+    seeds: int,
+    horizon: int,
+    layer: str,
+    out_dir: Path,
+    mask_source: Path,
+    mask_direction: str | None,
+    manifest_extra: dict[str, Any],
+) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    Q = torch.tensor(Q_np, dtype=torch.float32)
+    protected_policy, protected_mean, protected_std = load_learned_policy(CLIFF_PROTECTED)
+    collapsed_policy, collapsed_mean, collapsed_std = load_learned_policy(CLIFF_COLLAPSED)
+    validate_subspace_compatible(
+        Q_np=Q_np,
+        layer=layer,
+        protected_policy=protected_policy,
+        protected_mean=protected_mean,
+        protected_spec=CLIFF_PROTECTED,
+        collapsed_policy=collapsed_policy,
+        collapsed_mean=collapsed_mean,
+        collapsed_spec=CLIFF_COLLAPSED,
+    )
+
+    rows: list[dict[str, Any]] = []
+    with BridgeClient() as client:
+        for offset in range(seeds):
+            seed = seed_start + offset
+            prefix = f"phase6-substrate-ablation-{seed}"
+            print(f"phase6 v3.4 axis-P: seed {seed} ({offset + 1}/{seeds})", flush=True)
+
+            cache_A = run_subspace_recording_rollout(
+                client,
+                policy=protected_policy,
+                obs_mean=protected_mean,
+                obs_std=protected_std,
+                seed=seed,
+                horizon=horizon,
+                layer=layer,
+                env_id=f"{prefix}-A",
+                Q=Q,
+            )
+            cache_B = run_subspace_recording_rollout(
+                client,
+                policy=collapsed_policy,
+                obs_mean=collapsed_mean,
+                obs_std=collapsed_std,
+                seed=seed,
+                horizon=horizon,
+                layer=layer,
+                env_id=f"{prefix}-B",
+                Q=Q,
+            )
+
+            for direction in ("protected_to_collapsed", "collapsed_to_protected"):
+                if direction == "protected_to_collapsed":
+                    policy = collapsed_policy
+                    obs_mean = collapsed_mean
+                    obs_std = collapsed_std
+                    target_coords = cache_A.projections
+                else:
+                    policy = protected_policy
+                    obs_mean = protected_mean
+                    obs_std = protected_std
+                    target_coords = cache_B.projections
+
+                baseline = run_subspace_injected_rollout(
+                    client,
+                    policy=policy,
+                    obs_mean=obs_mean,
+                    obs_std=obs_std,
+                    seed=seed,
+                    horizon=horizon,
+                    layer=layer,
+                    env_id=f"{prefix}-{direction}-baseline",
+                    Q=Q,
+                    target_coords=target_coords,  # type: ignore[arg-type]
+                )
+                ablated = run_subspace_injected_rollout(
+                    client,
+                    policy=policy,
+                    obs_mean=obs_mean,
+                    obs_std=obs_std,
+                    seed=seed,
+                    horizon=horizon,
+                    layer=layer,
+                    env_id=f"{prefix}-{direction}-ablated",
+                    Q=Q,
+                    target_coords=target_coords,  # type: ignore[arg-type]
+                    zero_ablate_neuron_set=neuron_indices,
+                )
+                baseline_ps = safe_patch_success(
+                    cache_A.old_basin_pref,
+                    cache_B.old_basin_pref,
+                    baseline.old_basin_pref,
+                    direction=direction,
+                )
+                ablated_ps = safe_patch_success(
+                    cache_A.old_basin_pref,
+                    cache_B.old_basin_pref,
+                    ablated.old_basin_pref,
+                    direction=direction,
+                )
+                rows.append({
+                    "seed": seed,
+                    "mask_source": str(mask_source.relative_to(REPO_ROOT)) if mask_source.is_relative_to(REPO_ROOT) else str(mask_source),
+                    "mask_direction": mask_direction or "unknown",
+                    "direction": direction,
+                    "baseline_patch_success": baseline_ps,
+                    "ablated_patch_success": ablated_ps,
+                    "ablation_drop": baseline_ps - ablated_ps,
+                    "protected_old_basin_pref": cache_A.old_basin_pref,
+                    "collapsed_old_basin_pref": cache_B.old_basin_pref,
+                    "baseline_old_basin_pref": baseline.old_basin_pref,
+                    "ablated_old_basin_pref": ablated.old_basin_pref,
+                    "mask_size": len(neuron_indices),
+                    "mask_neuron_indices": ";".join(str(idx) for idx in neuron_indices),
+                })
+        client.request({"cmd": "close"})
+
+    write_csv(out_dir / "substrate-ablation.csv", rows)
+    aggregate_rows: list[dict[str, Any]] = []
+    for direction in ("protected_to_collapsed", "collapsed_to_protected"):
+        dir_rows = [row for row in rows if row["direction"] == direction]
+        baseline_values = [float(row["baseline_patch_success"]) for row in dir_rows]
+        ablated_values = [float(row["ablated_patch_success"]) for row in dir_rows]
+        drop_values = [float(row["ablation_drop"]) for row in dir_rows]
+        aggregate_rows.append({
+            "mask_direction": mask_direction or "unknown",
+            "direction": direction,
+            "mean_baseline_patch_success": mean_finite(baseline_values),
+            "median_baseline_patch_success": median_finite(baseline_values),
+            "mean_ablated_patch_success": mean_finite(ablated_values),
+            "median_ablated_patch_success": median_finite(ablated_values),
+            "mean_ablation_drop": mean_finite(drop_values),
+            "median_ablation_drop": median_finite(drop_values),
+            "q25_ablation_drop": percentile_finite(drop_values, 25),
+            "q75_ablation_drop": percentile_finite(drop_values, 75),
+            "n": len(dir_rows),
+        })
+    write_csv(out_dir / "substrate-ablation-aggregate.csv", aggregate_rows)
+
+    same_drop = None
+    cross_drop = None
+    if mask_direction:
+        same = next(row for row in aggregate_rows if row["direction"] == mask_direction)
+        cross = next(row for row in aggregate_rows if row["direction"] != mask_direction)
+        same_drop = float(same["median_ablation_drop"])
+        cross_drop = float(cross["median_ablation_drop"])
+    summary = {
+        "axis": "P",
+        "mask_source": str(mask_source.relative_to(REPO_ROOT)) if mask_source.is_relative_to(REPO_ROOT) else str(mask_source),
+        "mask_direction": mask_direction,
+        "mask_size": len(neuron_indices),
+        "mask_neuron_indices": neuron_indices,
+        "seed_start": int(seed_start),
+        "seeds": int(seeds),
+        "horizon": int(horizon),
+        "layer": layer,
+        "same_direction_median_drop": same_drop,
+        "cross_direction_median_drop": cross_drop,
+        "dissociation_median": None if same_drop is None or cross_drop is None else same_drop - cross_drop,
+        "manifest_extra": manifest_extra,
+    }
+    (out_dir / "dissociation-summary.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    print(f"phase6 v3.4 axis-P: wrote results to {out_dir.relative_to(REPO_ROOT)}", flush=True)
+    for row in aggregate_rows:
+        print(
+            f"  {row['direction']}: median_baseline={row['median_baseline_patch_success']:+.3f} "
+            f"median_ablated={row['median_ablated_patch_success']:+.3f} "
+            f"median_drop={row['median_ablation_drop']:+.3f}",
+            flush=True,
+        )
+    if summary["dissociation_median"] is not None:
+        print(f"  dissociation_median={summary['dissociation_median']:+.3f}", flush=True)
+
+
+def axis_p_substrate_ablation(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    mask_source = Path(args.neuron_mask_source)
+    if not mask_source.is_absolute():
+        mask_source = REPO_ROOT / mask_source
+    neuron_indices = load_neuron_indices_csv(mask_source, limit=args.top_k)
+    mask_direction = infer_mask_direction(mask_source, args.mask_direction)
+    Q_full, basis_metadata = load_or_build_cliff_pca_basis(
+        out_root=PHASE6_V31_OUT,
+        seed_start=args.basis_seed_start,
+        seeds=args.basis_seeds,
+        horizon=args.basis_horizon,
+        num_components=5,
+    )
+    run_substrate_ablation_battery(
+        Q_np=Q_full,
+        neuron_indices=neuron_indices,
+        seed_start=args.seed_start,
+        seeds=args.seeds,
+        horizon=args.horizon,
+        layer=args.layer,
+        out_dir=out_dir,
+        mask_source=mask_source,
+        mask_direction=mask_direction,
+        manifest_extra={
+            "basis": "cliff_pair_pca_pc1_to_5",
+            "basis_metadata": basis_metadata,
+            "basis_seed_start": int(args.basis_seed_start),
+            "basis_seeds": int(args.basis_seeds),
+            "basis_horizon": int(args.basis_horizon),
+        },
+    )
+
+
+def axis_q_jaccard_bootstrap(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out)
+    if not out_dir.is_absolute():
+        out_dir = REPO_ROOT / out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+    table_path = Path(args.ablation_table)
+    if not table_path.is_absolute():
+        table_path = REPO_ROOT / table_path
+    l2_path = Path(args.l2_rank_source)
+    if not l2_path.is_absolute():
+        l2_path = REPO_ROOT / l2_path
+
+    rows = read_csv_rows(table_path)
+    l2_top32 = set(load_neuron_indices_csv(l2_path, limit=32))
+    seeds = sorted({int(row["seed"]) for row in rows})
+    directions = ["protected_to_collapsed", "collapsed_to_protected"]
+    costs: dict[tuple[str, int, int], float] = {}
+    neurons = sorted({int(row["neuron_idx"]) for row in rows})
+    for row in rows:
+        costs[(row["direction"], int(row["seed"]), int(row["neuron_idx"]))] = float(row["ablation_cost"])
+
+    def top32_for(direction: str, sample: np.ndarray) -> set[int]:
+        means = []
+        for neuron_idx in neurons:
+            values = [costs[(direction, int(seed), neuron_idx)] for seed in sample]
+            means.append((float(np.mean(values)), neuron_idx))
+        means.sort(reverse=True)
+        return {neuron_idx for _mean, neuron_idx in means[:32]}
+
+    rng = np.random.default_rng(int(args.bootstrap_seed))
+    boot_rows: list[dict[str, Any]] = []
+    for r in range(int(args.resamples)):
+        sample = rng.choice(seeds, size=len(seeds), replace=True)
+        pc = top32_for("protected_to_collapsed", sample)
+        cp = top32_for("collapsed_to_protected", sample)
+        boot_rows.append({
+            "resample": r,
+            "sample_seeds": ";".join(str(int(seed)) for seed in sample.tolist()),
+            "jaccard_pc_vs_cp": jaccard(pc, cp),
+            "jaccard_pc_vs_l2": jaccard(pc, l2_top32),
+            "jaccard_cp_vs_l2": jaccard(cp, l2_top32),
+        })
+    write_csv(out_dir / "bootstrap-jaccard.csv", boot_rows)
+
+    def summarize_key(key: str) -> dict[str, float]:
+        values = [float(row[key]) for row in boot_rows]
+        return {
+            "p2_5": percentile_finite(values, 2.5),
+            "p25": percentile_finite(values, 25),
+            "median": percentile_finite(values, 50),
+            "p75": percentile_finite(values, 75),
+            "p97_5": percentile_finite(values, 97.5),
+        }
+
+    observed_pc = top32_for("protected_to_collapsed", np.asarray(seeds))
+    observed_cp = top32_for("collapsed_to_protected", np.asarray(seeds))
+    summary = {
+        "axis": "Q",
+        "ablation_table": str(table_path.relative_to(REPO_ROOT)) if table_path.is_relative_to(REPO_ROOT) else str(table_path),
+        "l2_rank_source": str(l2_path.relative_to(REPO_ROOT)) if l2_path.is_relative_to(REPO_ROOT) else str(l2_path),
+        "resamples": int(args.resamples),
+        "bootstrap_seed": int(args.bootstrap_seed),
+        "seed_count": len(seeds),
+        "observed": {
+            "jaccard_pc_vs_cp": jaccard(observed_pc, observed_cp),
+            "jaccard_pc_vs_l2": jaccard(observed_pc, l2_top32),
+            "jaccard_cp_vs_l2": jaccard(observed_cp, l2_top32),
+        },
+        "ci": {
+            "jaccard_pc_vs_cp": summarize_key("jaccard_pc_vs_cp"),
+            "jaccard_pc_vs_l2": summarize_key("jaccard_pc_vs_l2"),
+            "jaccard_cp_vs_l2": summarize_key("jaccard_cp_vs_l2"),
+        },
+    }
+    (out_dir / "bootstrap-summary.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    print(f"phase6 v3.4 axis-Q: wrote results to {out_dir.relative_to(REPO_ROOT)}", flush=True)
+    for key, vals in summary["ci"].items():
+        print(
+            f"  {key}: median={vals['median']:.3f} "
+            f"95% CI [{vals['p2_5']:.3f}, {vals['p97_5']:.3f}]",
+            flush=True,
+        )
+
+
+# ============================================================
 # CLI
 # ============================================================
 
@@ -2638,6 +2980,34 @@ def parse_args() -> argparse.Namespace:
                         help="horizon for the cached cliff-pair PCA basis")
     ablate.add_argument("--layer", default="net.7")
 
+    substrate = sub.add_parser(
+        "axis-p-substrate-ablation",
+        help="Phase 6 v3.4 Axis P: set-level ablation of v3.3 critical-neuron substrates",
+    )
+    substrate.add_argument("--out", default=str(PHASE6_V34_OUT / "axis-p-substrate-ablation"))
+    substrate.add_argument("--neuron-mask-source", required=True,
+                           help="CSV containing a neuron_idx column, typically v3.3 critical-top-32-pc/cp.csv")
+    substrate.add_argument("--mask-direction", default=None, choices=["P_to_C", "C_to_P", "unknown"],
+                           help="optional explicit same-direction label for the mask; inferred from filename by default")
+    substrate.add_argument("--top-k", type=int, default=32)
+    substrate.add_argument("--seed-start", type=int, default=10000)
+    substrate.add_argument("--seeds", type=int, default=16)
+    substrate.add_argument("--horizon", type=int, default=200)
+    substrate.add_argument("--basis-seed-start", type=int, default=10000)
+    substrate.add_argument("--basis-seeds", type=int, default=64)
+    substrate.add_argument("--basis-horizon", type=int, default=200)
+    substrate.add_argument("--layer", default="net.7")
+
+    jboot = sub.add_parser(
+        "axis-q-jaccard-bootstrap",
+        help="Phase 6 v3.4 Axis Q: bootstrap Jaccard overlap of v3.3 ablation rankings",
+    )
+    jboot.add_argument("--out", default=str(PHASE6_V34_OUT / "axis-q-bootstrap"))
+    jboot.add_argument("--ablation-table", required=True)
+    jboot.add_argument("--l2-rank-source", required=True)
+    jboot.add_argument("--resamples", type=int, default=1000)
+    jboot.add_argument("--bootstrap-seed", type=int, default=0)
+
     args = parser.parse_args()
     if args.command is None:
         parser.print_help()
@@ -2669,6 +3039,10 @@ def main() -> None:
         axis_m_neuron_mediation(args)
     elif args.command == "axis-n-zero-ablation":
         axis_n_zero_ablation(args)
+    elif args.command == "axis-p-substrate-ablation":
+        axis_p_substrate_ablation(args)
+    elif args.command == "axis-q-jaccard-bootstrap":
+        axis_q_jaccard_bootstrap(args)
     else:
         raise ValueError(f"unknown command: {args.command}")
 
