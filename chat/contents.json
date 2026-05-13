@@ -4,16 +4,16 @@
   "purpose": "Index chat roadmap, claim-map, prompt, evaluation, public-data, and result artifacts for Ask Sundog.",
   "roadmap": {
     "doc": "docs/SUNDOG_V_CHAT.md",
-    "currentPhase": "Phase 3 - Model-Assisted Drafting",
-    "nextMilestone": "Plug a real model adapter into the Phase 3 draft gate and compare it against the deterministic wild/adversarial/differential smoke baselines."
+    "currentPhase": "Phase 4 - Probe-Splitting Evaluation",
+    "nextMilestone": "Map the Ask Sundog operating envelope across hosted-model adapters, model-family swaps, retrieval-depth changes, corpus conflicts, and trace/gate variants."
   },
   "items": [
     {
       "path": "docs/SUNDOG_V_CHAT.md",
       "kind": "roadmap",
-      "status": "active",
+      "status": "phase3_exit_met",
       "phase": "0-8",
-      "description": "Roadmap for a browser-native site helper that preserves evidence tiers and claim boundaries under pressure."
+      "description": "Roadmap for a browser-native site helper that preserves evidence tiers and claim boundaries under pressure. Phase 3 is exit-met; Phase 4 operating-envelope mapping is the active frontier."
     },
     {
       "path": "chat/claim_map.json",

@@ -385,6 +385,74 @@ gravity claim is now pinned to. The full trail lives at
 [`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) and the v4 result note at
 [`docs/mesa/PHASE5_RESULTS.md`](mesa/PHASE5_RESULTS.md).
 
+### The mechanical anchor (Phase 6 v1)
+
+Phase 6 opened the box. The Phase 5 v4 behavioral cliff at λ ≈ 0.953 is
+not a distributed property of the representation — it is a **single-layer
+gating decision at the actor's final hidden activation.**
+
+The receipt comes from activation patching across the cliff pair
+(L-Mixed-M at λ = 0.95 vs λ = 0.97) in the shadow-field navigation
+environment. For each of the actor MLP's hidden layers, Phase 6 ran four
+forward passes per seed: the protected policy alone, the collapsed
+policy alone, and both reverse-patched conditions (inject one policy's
+hidden activations at layer L into the other's downstream computation).
+The pre-registered patch-success threshold was 0.8 in both directions.
+
+Only the **final hidden activation** layer (`net.7` in the Medium-tier
+4-hidden-layer architecture) cleared the threshold robustly:
+
+> protected → collapsed: mean / median / ratio-of-means = 0.894 / 0.944 / 0.899
+> collapsed → protected: 0.934 / 0.860 / 0.854
+
+Patches at the input-adjacent layer (`net.1`) and the middle layers
+(`net.3`, `net.5`) did not clear the threshold under robust statistics.
+The basin attractor is not built up across depth; it is the activation
+pattern at the layer immediately before the action head. The symmetric
+strength of both patch directions implies that the policy heads of the
+two cliff policies are functionally equivalent — what differs is what
+gets written to `net.7`.
+
+Stated as policy:
+
+> Below the Phase 5 v4 threshold (signature weight `1 − λ ≥ 0.048`), the
+> training process *does not form* a basin-gating circuit at the actor's
+> final hidden activation. Above the threshold, the circuit *forms* at
+> that layer and is causally responsible for the policy's fixed-attractor
+> behavior. The Goodhart-sidestep argument now has both a behavioral
+> anchor (5% threshold) and a mechanistic locus (final-hidden gating).
+
+Two complementary findings came out of Phase 6 v1 worth landing on:
+
+- **Linear-probe feature availability did not dissociate the cliff
+  pair.** Both endpoint-shaped behavior targets and depth-of-investment
+  ΔR² profiles failed their smoke gates: Oracle, L-Signature, and
+  L-Reward could not be cleanly separated, and at the Medium cliff pair
+  the ΔR² for goal-distance actually pointed the wrong direction
+  (collapsed had *more* deep-layer goal information than protected).
+  Linear probes saw what was *available* in the representation;
+  activation patching saw which available feature was *used*. The
+  separation matters because reviewers will reach for linear probes
+  first, and the program now has a documented reason why that reach is
+  insufficient.
+- **The basin attractor does not respond to live basin state.** The
+  clean-rollout and basin-position-intervened patch batteries were
+  bit-identical for all logged fields. The learned feed-forward policies
+  do not observe live `x_false` or live reward at inference; the
+  intervention changes environment state but not policy input. This is
+  the mechanistic version of Phase 4's behavioral observation that the
+  attractor "lives in the weights" — the cliff policy is computing,
+  not perceiving, its basin.
+
+This is in-vitro evidence in a 2D continuous-control environment with a
+synthetic Goodhart-prone shaping surface. It is not a deployment
+guarantee. It is, however, the cleanest mechanistic anchor the program
+has produced: the behavioral cliff has a representational explanation,
+and the explanation lives at a specific, namable, transplantable layer.
+The full trail is at [`docs/SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md), and
+the result note is at
+[`docs/mesa/PHASE6_RESULTS.md`](mesa/PHASE6_RESULTS.md).
+
 ### The three-body wedge
 
 The three-body workbench is the audience-conceptualizable entry point because

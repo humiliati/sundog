@@ -707,14 +707,22 @@ differential drafts are now divergent trace compositions rather than static
 passthroughs: they name the controlling route, tier, source trace, and
 sanitized active boundaries while still passing the deterministic gate.
 
-This is a deterministic scaffold result, not a hosted model-family result. The
-next Phase 3 step is to plug a real adapter into the same gate and compare its
-drafts against these wild, adversarial, and differential smoke baselines.
+Phase 3 exit criterion: **met** (2026-05-12).
+- The deterministic gate blocks invalid drafts and falls back to the static
+  trace answer.
+- The differential slate shows the S1 architecture can produce divergent
+  trace-conditioned drafts that pass the gate and add value over the static
+  layer.
+- The remaining operational question is whether a hosted-model adapter using
+  the same trace interface reaches the deterministic compositor ceiling. That
+  question moves to Phase 4/5 model-family and intervention sweeps rather than
+  blocking Phase 3 closeout.
 
 ## Phase 4 — Probe-Splitting Evaluation
 
 Goal:
-Run the adversarial prompt slate across B0, B1, B2, S1, and S2.
+Map the operating envelope of Ask Sundog across prompt slates, model families,
+retrieval conditions, and trace/gate variants.
 
 Deliverables:
 - `results/chat/probe-slate/manifest.json`
@@ -723,10 +731,14 @@ Deliverables:
 - `boundary-preservation.csv`
 - `overclaim-rate.csv`
 - representative transcripts.
+- hosted-model adapter run over wild, adversarial, and differential slates;
+- model-family swap table against the deterministic S1 compositor ceiling;
+- retrieval-depth and corpus-conflict variations.
 
 Exit criterion:
-At least one probe axis meaningfully distinguishes Sundog-Gated Chat from
-naive retrieval chat, or the probe slate is strengthened.
+The result names the prompt/model/retrieval conditions where discipline holds,
+where it fails, and whether hosted trace-conditioned drafting matches the
+deterministic S1 reference result.
 
 ## Phase 5 — Causal Intervention Battery
 
@@ -862,7 +874,26 @@ The widget must not:
 - use user engagement as an online reward channel.
 ## 13. Claim Ratchet Candidates
 
-If Phase 7 holds:
+Phase 3 strong-ratchet scaffold result:
+
+Across the in-corpus gold slate (103 prompts), out-of-distribution wild slate
+(30 prompts), adversarial slate (33 prompts), and differential probe set (16
+prompts) targeting trace-specific failure modes, the Sundog-gated chat
+architecture preserved evidence-tier and claim-boundary discipline with zero
+gate escapes across the deterministic draft runs. On the differential slate
+specifically, where prompt-engineered boundary baselines failed 16/16 by
+design, trace-conditioned drafts passed 16/16 with 16/16 measurable added value
+over the static layer.
+
+Scope:
+- bounded to this corpus, prompt slates, deterministic compositor
+  implementation, and gate ruleset;
+- demonstrates an S1 architecture and reference implementation, not hosted
+  model parity;
+- leaves open whether a hosted-model adapter using the same trace interface
+  matches the deterministic S1 ceiling under Phase 4/5 sweeps.
+
+If Phase 7 holds with hosted adapters and wider sweeps:
 
 In the tested sundog.cc site-helper prompt slate, the Sundog-gated chat
 assistant preserved evidence-tier and claim-boundary discipline under
