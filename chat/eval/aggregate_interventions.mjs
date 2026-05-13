@@ -29,7 +29,14 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { INTERVENTION_PRIMARY_FAILURE, INTERVENTION_IDS, FAILURE_TAXONOMY_LABELS } from "./lib/interventions.mjs";
-import { FAMILY_NAMES } from "./lib/draft-families.mjs";
+import { FAMILY_NAMES as DETERMINISTIC_FAMILY_NAMES } from "./lib/draft-families.mjs";
+
+// The aggregator works on either deterministic slates (4 families) or
+// hosted slates (1 family). Hosted directories are at `<slate>-hosted/`
+// and contain only `sundog_gated_hosted` rows.
+const isHostedSlate = (process.argv.includes("--slate") &&
+  /-hosted$/.test(process.argv[process.argv.indexOf("--slate") + 1] || ""));
+const FAMILY_NAMES = isHostedSlate ? ["sundog_gated_hosted"] : DETERMINISTIC_FAMILY_NAMES;
 
 const root = process.cwd();
 const slate = argValue("--slate") || "differential";

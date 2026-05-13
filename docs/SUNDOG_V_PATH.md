@@ -402,3 +402,23 @@ and *see* the difference is not random.
 - `PAPER_OUTLINE_v0.md` / `SCIENTIFIC_CRITERIA.md` — the evidence bar.
 - `STANDALONE_APP_ROADMAP.md` — the public app that eventually hosts
   the Boundary Replay mode.
+
+
+notes: Three things stand out as worth flagging before Phase 0 commits:
+
+"Smoke gate" is missing from PATH. Both MESA Phase 3 and PERCEPTION Phase 0/2 standardize "smoke gate" as the quantitative threshold below which the apparatus is judged insufficient rather than the prediction falsified. PATH's "Outcome Branching" table covers the same semantics in the halt rows ("Oracle fails → Halt", "Random performs comparably to flat → re-tune") but doesn't use the word. Two options: (a) add a one-liner in Phase 0 mapping the two halt rows to smoke-gate semantics, or (b) leave it; the table is sufficient. Lean (a) — it keeps program-wide vocab uniform for ~10 words of cost.
+Pre-registration mechanism: append-only file vs. amendment blocks. PATH says "appended to, never edited." PERCEPTION uses "any later edit must be filed as a separate amendment block with a written justification." MESA Phase 0 is silent on the mechanism. Both styles work; PATH's choice is fine. Note worth carrying: the prereg file's footer should explicitly say "amendments below this line, with timestamp + justification" so future-us doesn't accidentally re-write the body.
+"Falsification result" Evidence Tier. PATH §Phase 4 says: "The Evidence Tier is not 'Research result'; it is a new informal tier 'Falsification result' or it sits outside the table with a footnote. Decide at land-time." HIGHLIGHTS_RAIL §Stamp Vocabulary already commits "n/a — falsification slate" as the canonical tier-table cell. Mild inconsistency — PATH treats the naming as an open question; HIGHLIGHTS_RAIL has effectively decided. Worth resolving at Phase 4, but Phase 0's prereg note should mention the pending decision so the rail card and APPLICATIONS.md don't drift.
+
+Naming-collision risk (low): "probe schedule" in PATH (the 4D probe-frequency tuning for the flat photometric controller) is the same word as MESA's "probe slate" (proxy-splitting distribution-shift probes). Different objects, same root word, no cross-doc confusion in practice because each doc carries its own context — but worth keeping the words "schedule" and "slate" disjoint.
+Phase 0 readiness
+Phase 0 acceptance is a one-page prereg note committed to docs/_prereg/pushable_occluder_2026-05-12.md. The directory doesn't exist yet — Phase 0 creates the _prereg/ convention (Phase 2 will create _results/). Phase 0's three required steps map to:
+Step 1: Re-read PHASE2_BLOCKS_DESIGN.md Option B. Done — Option B is block_xy += alpha * (push_dx, push_dy) clipped to workspace bound, 4D action vector (theta_x, theta_y, push_dx, push_dy), attenuation as in Option A, ~150 lines, agents need probe-frequency re-tune for the extra two action dimensions.
+Step 2: Enumerate the four honest non-confounds against the Phase-1 scene with file/commit pointers. I have the file inventory ready — the relevant Phase-1 implementation files are env_v2.py (scene/state), optics.py (beam, floor_hit, compute_detector_intensities), agents/photometric.py (flat scan/seek/track controller), agents/baselines.py + agents/doa.py + agents/doa2.py + agents/tsa.py (baselines), experiments/run_baseline_comparison.py and experiments/stress_tests.py (sweep harness). Concretely:
+
+Non-confound 1 (beam cone geometry not adversarial) → constraint enforced in the Phase-1 scene file that adds occluder_block (likely env_v2.py).
+Non-confound 2 (push effector not photometric) → enforced in optics.py (the pusher must not appear in compute_detector_intensities ray paths or reflectance terms).
+Non-confound 3 (probe schedule comparable) → enforced in agents/photometric.py re-tuning + documented in the tuning notebook.
+Non-confound 4 (matched seeds) → enforced in experiments/run_baseline_comparison.py seed-handling code (already exists for current baseline comparison; needs verification that the same seed seeds block init).
+
+Step 3: Write the expected-failure-mode paragraph, time-stamped, into the experiment notebook before implementation. PATH already has the paragraph drafted in §"Expected Failure Mode" — Phase 0's job is to lift it into the prereg note verbatim with a timestamp.

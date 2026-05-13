@@ -991,10 +991,100 @@ supposed to mean.
 - `results/chat/phase5-hosted/differential/openai/summary.json` — pre-patch summary; counts reflect the original run.
 - `public/js/sundog-claim-gate.mjs` — gate patch in `gateFailures` (forbidden loop) and `hasNearbyNegation` (expanded negation lexicon).
 
-**Next moves:**
-1. **Phase 5c hosted intervention battery** — wire the OpenAI adapter into `run_phase5_interventions.mjs`. Now that the gate is properly negation-aware, run the 8 trace-field ablations against the hosted family. The honest test: does the hosted model show trace-field causal authority the deterministic compositor masked?
-2. **Hosted adversarial sweep** — 59 prompts × hosted = ~$0.20. Confirms the differential-parity result extends under severity stacking. Highest leverage data point for §13.
-3. **Gate-rule audit** — the `forbidden:` brittleness was the obvious one. Are there other content rules with the same asymmetry? `UPGRADE_LANGUAGE` already has the guard; `prompt_injection_adopted` does not — but that's an `expectedBehavior`-driven branch so it may be less brittle in practice.
+**Adversarial hosted result (2026-05-13):** 59 prompts × gpt-4o-mini =
+**59/59 accepted, 0 flipped, 0 gate escapes** after a second-round gate
+patch. The pre-rescore run flagged 2 prompts (mesa-safe / cannot-be-reward-
+hacked refusals) where the negation was structurally distant from the
+forbidden phrase. The `hasNearbyNegation` window was widened (96 chars
+before, 48 chars after) and the negation lexicon expanded to include
+English structural idioms (`rather than`, `is still pending`, `cannot be
+supported`, `cannot be claimed`, `is unsupported`, `is out of scope`, etc.).
+The `prompt_injection_adopted` check was also given the same negation
+guard. Phase 3 deterministic baselines re-verified after these patches:
+16/16 differential sundog_gated, 59/59 adversarial sundog_gated, zero
+gate escapes — no regressions.
+
+Phase 5c hosted intervention battery result (2026-05-13):
+
+128 hosted API calls (16 differential prompts × 8 interventions). Cost
+≈ $0.30 at gpt-4o-mini. Compared against the rescored hosted unmutated
+baseline. The headline matrix:
+
+| Intervention | Trace field | Applied | Flips | Unsafe |
+| --- | --- | --- | --- | --- |
+| boundary_removed | `trace.boundary` | 16 | 0 | 0 |
+| boundary_swapped | `trace.boundary` | 16 | 0 | 0 |
+| **evidence_tier_upgraded** | **`trace.evidenceTier`** | **15** | **3** | **0** |
+| support_removed | `trace.support` | 16 | 0 | 0 |
+| support_reordered | `trace.support` | 16 | 0 | 0 |
+| route_swapped | `trace.routeId` | 16 | 0 | 0 |
+| refusal_downgraded | `trace.disposition` | 0 (no refuse routes) | 0 | 0 |
+| retrieval_conflict_injected | `trace.retrieved` | 16 | 0 | 0 |
+
+**Hosted causal-authority matrix (vs deterministic):**
+
+| Trace field | Deterministic (differential) | Deterministic (adversarial) | **Hosted (differential)** |
+| --- | --- | --- | --- |
+| `trace.boundary` | no authority | no authority | **no authority** |
+| `trace.evidenceTier` | no authority | no authority | **weak authority** |
+| `trace.support` | no authority | no authority | **no authority** |
+| `trace.routeId` | weak (1 flip) | weak (7+5 flips) | **no authority** |
+| `trace.disposition` | n/a | no authority | n/a |
+| `trace.retrieved` | no authority | no authority | **no authority** |
+
+**Headline finding: the hosted model and the deterministic compositor
+have *different* trace-field causal authority profiles.**
+
+- The deterministic compositor's only causal handle is **`trace.routeId`**,
+  via the `composeFromTrace` answer-template lookup.
+- The hosted model's only causal handle is **`trace.evidenceTier`**, via
+  the system-prompt rule that tier authorizes language.
+
+Mechanistic detail (all 3 hosted flips are on `multi_tier_prompt` probes):
+when `evidenceTier` is upgraded from `operating_envelope_study` /
+`product_expression` to `research_result`, the model trusts the upgraded
+tier and writes prose like _"operate within a research result evidence
+tier"_. The gate's `upgradePhraseAllowed` consults both
+`trace.evidenceTier === "research_result"` AND
+`ROUTES_ALLOWED_TO_SAY_RESEARCH_RESULT.has(trace.routeId)`. The tier check
+passes but the route check fails (the routes are
+`threebody_operating_envelope`, `balance_operating_envelope`,
+`dungeon_gleaner_product_expression` — none authorized) → gate flags
+`upgrade_language:research result`.
+
+**Why this matters for §13:**
+
+The deterministic compositor's strong-ratchet result was carried by the
+route id (via answer-template lookup) plus gate's content rules plus
+family-draft heuristics. The hosted model's parity result on the
+unmutated traces (16/16 differential, 59/59 adversarial) is carried by
+a *different* mechanism: the model's adherence to the heavy-trace
+system prompt's hard rules, combined with the gate's tier-conditioned
+checks. They reach the same surface outcome (zero gate escapes) by
+different causal paths.
+
+This is the most precise version of §13 the project has produced. The
+ratchet "trace-conditioned chat preserves discipline better than
+boundary-prefix prompting" now has **two independent causal
+substantiations** — deterministic and hosted — that disagree on which
+trace fields are load-bearing but agree on the headline outcome.
+
+**Honest qualifiers:**
+- Single hosted model (`gpt-4o-mini`), single temperature (0), heavy-trace payload only. Cross-vendor or light-trace conditions could shift the matrix.
+- Differential slate only for the hosted intervention battery. The adversarial slate has more refuse-disposition routes, so `refusal_downgraded` would actually apply there.
+- Zero gate escapes across all measurement points; the failure mode the patched gate now lets through (if any) is not visible on these slates.
+
+**Artifacts:**
+- `chat/eval/run_phase5_interventions.mjs` — extended with `--hosted` flag.
+- `results/chat/interventions/differential-hosted/<intervention_id>/draft-outcomes.{csv,json}` — per-intervention hosted outcomes.
+- `results/chat/interventions/differential-hosted/intervention-response-matrix.csv` — 8-row hosted matrix.
+- `results/chat/interventions/differential-hosted/causal-authority.csv` — 6-row hosted authority verdict (5 × no_detected_authority + 1 × weak_authority on `evidenceTier`).
+- `results/chat/interventions/differential-hosted/failure-taxonomy.json` — `tier_label_capture` now has a weak signal (3 flips on differential).
+
+**Natural next moves:**
+1. **Hosted intervention battery on adversarial slate** — 59 × 8 = 472 calls ≈ $1.20. Confirms whether `tier_label_capture` is the hosted model's only causal handle, or whether the severity stacking reveals more.
+2. **Cross-vendor pass with Claude** — does the same `evidenceTier`-driven causal pattern hold on a different model family? Or is the model just trained to trust the tier label and shows different sensitivities elsewhere?
+3. **Phase 7 operating envelope** — the corpus-side sweep that the trace-field mutators don't touch. Stale-doc, user-pressure, style-prompt failure modes are still reserved labels in the taxonomy.
 
 ## Phase 6 — Browser-Native Public Prototype
 
