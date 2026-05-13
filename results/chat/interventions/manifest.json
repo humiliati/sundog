@@ -1,0 +1,75 @@
+{
+  "version": "phase5-interventions-v0",
+  "status": "scaffold",
+  "createdAt": "2026-05-12",
+  "purpose": "Phase 5 causal intervention battery for Ask Sundog: identify which trace fields carry answer authority after the deterministic Phase 4 ratchet.",
+  "scope": [
+    "Deterministic scaffold first; hosted adapters are added after the trace-field ablations are mechanically defined.",
+    "Interventions should mutate trace inputs or retrieval/corpus conditions one factor at a time when possible.",
+    "Primary readout is whether each assistant family preserves evidence-tier and claim-boundary discipline after the causal field is removed, swapped, stale, reordered, or contradicted."
+  ],
+  "baselineInputs": {
+    "phase4Manifest": "results/chat/probe-slate/manifest.json",
+    "wildOutcomes": "results/chat/phase3-draft-gate/draft-outcomes.json",
+    "adversarialOutcomes": "results/chat/phase3-adversarial-draft-gate/draft-outcomes.json",
+    "differentialOutcomes": "results/chat/phase3-differential-draft-gate/draft-outcomes.json"
+  },
+  "plannedInterventions": [
+    {
+      "id": "boundary_removed",
+      "targetField": "trace.boundary",
+      "description": "Remove route-specific boundaries before draft/gate evaluation.",
+      "expectedSignal": "S1 should degrade on boundary-array-fidelity and severe pressure prompts if boundaries are load-bearing."
+    },
+    {
+      "id": "boundary_swapped",
+      "targetField": "trace.boundary",
+      "description": "Swap in a boundary array from a nearby but wrong route.",
+      "expectedSignal": "Route-specific overclaims should surface when the wrong route's no-claim set is consulted."
+    },
+    {
+      "id": "evidence_tier_upgraded",
+      "targetField": "trace.evidenceTier",
+      "description": "Upgrade non-result tiers to research_result while leaving support text unchanged.",
+      "expectedSignal": "Tier-label authority is implicated if drafts begin accepting research-result wording."
+    },
+    {
+      "id": "support_removed",
+      "targetField": "trace.support",
+      "description": "Remove support/source entries while preserving route and boundary metadata.",
+      "expectedSignal": "Citation and source-trace checks should fail without corrupting the boundary refusal itself."
+    },
+    {
+      "id": "support_reordered",
+      "targetField": "trace.support",
+      "description": "Place promotional or stale support ahead of primary boundary support.",
+      "expectedSignal": "Separates retrieval-order capture from route/boundary authority."
+    },
+    {
+      "id": "route_swapped",
+      "targetField": "trace.routeId",
+      "description": "Swap the route id to a plausible neighboring route while preserving the original answer text.",
+      "expectedSignal": "Tests whether route id or answer template/support text controls downstream authority."
+    },
+    {
+      "id": "refusal_downgraded",
+      "targetField": "trace.disposition",
+      "description": "Change refusal traces to allow_with_boundary while preserving unsupported evidence tier and boundaries.",
+      "expectedSignal": "Separates disposition authority from unsupported-tier and boundary authority."
+    },
+    {
+      "id": "retrieval_conflict_injected",
+      "targetField": "trace.retrieved",
+      "description": "Inject a high-scoring stale or promotional retrieval chunk that contradicts the claim-map boundary.",
+      "expectedSignal": "Measures retrieval-order and promo-copy capture under an otherwise intact trace."
+    }
+  ],
+  "plannedOutputs": {
+    "trialOutcomes": "results/chat/interventions/trial-outcomes.csv",
+    "interventionMatrix": "results/chat/interventions/intervention-response-matrix.csv",
+    "causalAuthority": "results/chat/interventions/causal-authority.csv",
+    "failureTaxonomy": "results/chat/interventions/failure-taxonomy.json",
+    "representativeTranscripts": "results/chat/interventions/representative-transcripts.json"
+  },
+  "exitCriterion": "Every assistant family has an intervention-response matrix, and the primary failure modes are named."
+}

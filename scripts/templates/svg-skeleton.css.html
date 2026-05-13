@@ -1,0 +1,462 @@
+    <style>
+        /* Workbench-specific layout (chrome and tokens come from sundog-theme.css) */
+
+        :root {
+            /* Optical parameters — sliders write to these */
+            --sun-altitude: 25;             /* degrees above horizon */
+            --halo-22-intensity: 0.95;
+            --halo-46-intensity: 0.45;
+            --cza-intensity: 0.95;
+            --cza-curvature: 0.85;
+            /* --cza-bloom removed 2026-05-08: blur on each arc independently never produced
+               the bell-curve eyelid; baked stdDeviation="0.3" below. The bell shape now comes
+               from a paint-fill region between the two arcs (see #cza-bell-fill). A future
+               --cza-secondary-offset knob will be the right lever for tuning bell width. */
+            --sun-pillar-intensity: 0.80;
+            --sun-pillar-length: 0.55;
+            --parhelic-circle-intensity: 0.55;
+            --parhelic-curvature: 0.05;     /* 0 = horizontal line; 1 = strong grin. 0.05 matches the Troels Nielsen atlas pose. */
+            --parhelic-y-offset-r22: -0.05; /* parhelic belt / parhelia vertical registration as fraction of R22 */
+            --parhelia-intensity: 1.0;
+            --parhelia-dagger-length: 1.0;
+            --dispersion-width: 0.7;
+            --secondary-suns-strength: 0.0;
+            --ring-overlap-bias: 0.5;
+            --compass-ray-length: 0.85;
+            --compass-rotation-deg: 22.5;
+            --rainbow-saturation: 0.85;
+            --idle-scintillation-amplitude: 0;
+            --supralateral-intensity: 0.40;
+            --upper-tangent-intensity: 0;
+            --lower-tangent-intensity: 0;
+            --suncave-parry-intensity: 0;
+            --parry-supralateral-intensity: 0;
+            --infralateral-intensity: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .workbench {
+            min-height: calc(100vh - 58px);
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            background:
+                radial-gradient(circle at 50% 70%, #1a3850 0%, #0b1720 65%, #050a10 100%);
+        }
+
+        .stage {
+            position: relative;
+            min-height: calc(100vh - 58px);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #parhelion-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .stage-copy {
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            z-index: 5;
+            width: min(560px, calc(100% - 4rem));
+            color: var(--text-light);
+            pointer-events: none;
+        }
+
+        .stage-copy .eyebrow {
+            color: var(--accent-gold);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stage-copy h1 {
+            font-family: var(--sd-font-display);
+            font-size: clamp(2rem, 4.5vw, 3.4rem);
+            line-height: 1.04;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.6rem;
+        }
+
+        .stage-copy p {
+            color: rgba(245, 245, 245, 0.78);
+            font-size: 0.98rem;
+            max-width: 38rem;
+        }
+
+        /* --- Controls ----------------------------------------------------- */
+
+        .controls {
+            position: relative;
+            z-index: 10;
+            min-height: calc(100vh - 58px);
+            padding: 1.2rem;
+            color: var(--text-light);
+            background: rgba(11, 23, 32, 0.96);
+            border-left: 1px solid rgba(244, 196, 48, 0.22);
+            overflow-y: auto;
+            backdrop-filter: blur(8px);
+        }
+
+        .controls h2,
+        .controls h3 {
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .controls h2 {
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .controls h3 {
+            font-size: 0.74rem;
+            margin: 1.4rem 0 0.55rem;
+            opacity: 0.92;
+        }
+
+        .controls .lead {
+            font-size: 0.82rem;
+            color: rgba(245, 245, 245, 0.7);
+            line-height: 1.5;
+            margin-bottom: 0.6rem;
+        }
+
+        .control-group {
+            margin-bottom: 0.7rem;
+        }
+
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            color: rgba(245, 245, 245, 0.86);
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .control-group .value {
+            color: var(--accent-gold);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--sd-amber);
+        }
+
+        .control-group .derive-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.25rem;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: rgba(245, 245, 245, 0.62);
+            cursor: pointer;
+        }
+
+        .control-group.is-derived .value {
+            opacity: 0.55;
+        }
+
+        .control-group input[type="range"]:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .control-group .derive-toggle input[type="checkbox"] {
+            accent-color: var(--sd-amber);
+        }
+
+        .control-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .control-actions button {
+            min-height: 2.2rem;
+            padding: 0.35rem 0.5rem;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(244, 196, 48, 0.30);
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 160ms ease, border-color 160ms ease;
+        }
+
+        .control-actions button:hover {
+            background: rgba(244, 196, 48, 0.16);
+            border-color: rgba(244, 196, 48, 0.6);
+        }
+
+        /* --- Atmospheric overlay (CSS, sits over SVG) --------------------- */
+
+        .atmosphere {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            background:
+                radial-gradient(circle at 50% 70%, rgba(244, 196, 48, calc(0.04 * var(--dispersion-width))), transparent 18rem),
+                radial-gradient(circle at 50% 36%, rgba(140, 200, 255, calc(0.05 * var(--dispersion-width))), transparent 22rem);
+            opacity: var(--dispersion-width);
+        }
+
+        /* --- SVG presentation hooks ------------------------------------- */
+
+        .layer-halos circle {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.95);
+            vector-effect: non-scaling-stroke;
+        }
+
+        .halo-22 {
+            stroke-width: 1.5;
+            opacity: var(--halo-22-intensity);
+        }
+
+        .halo-46 {
+            stroke-width: 1.2;
+            opacity: var(--halo-46-intensity);
+        }
+
+        .halo-secondary {
+            stroke-width: 1.1;
+            opacity: calc(0.9 * var(--secondary-suns-strength));
+        }
+
+        .layer-cza path {
+            fill: none;
+            stroke: url(#prismatic-gradient);
+            stroke-width: 8;
+            opacity: var(--cza-intensity);
+            vector-effect: non-scaling-stroke;
+            /* Light edge-soften so arcs don't read as hard plotter lines. */
+            filter: url(#cza-edge-soften);
+            /* Screen blend: brightness adds where arcs cross, doesn't subtract. */
+            mix-blend-mode: screen;
+        }
+
+        .layer-cza .cza-secondary {
+            stroke-width: 6;
+            opacity: calc(0.75 * var(--cza-intensity));
+        }
+
+        /* Bell-fill: paint-bucket between primary and secondary CZA arcs to produce the
+           eyelid bell shape directly via geometry instead of relying on Gaussian-tail
+           summation across blurred strokes (which never converged). Lower-alpha prismatic
+           fill, screen-blended like the arcs. */
+        .layer-cza .cza-bell-fill {
+            fill: url(#prismatic-gradient);
+            stroke: none;
+            opacity: calc(0.32 * var(--cza-intensity));
+            mix-blend-mode: screen;
+        }
+
+        .layer-parhelic path {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.6);
+            stroke-width: 1.2;
+            stroke-dasharray: 4 6;
+            opacity: var(--parhelic-circle-intensity);
+            vector-effect: non-scaling-stroke;
+        }
+
+        .layer-pillar line {
+            stroke: url(#pillar-gradient);
+            stroke-width: 6;
+            opacity: var(--sun-pillar-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+        }
+
+        .layer-pillar .pillar-lens {
+            fill: url(#pillar-gradient);
+            opacity: calc(0.95 * var(--sun-pillar-intensity));
+            filter: url(#soft-blur);
+        }
+
+        #parhelion-svg[data-geometry-model="legacy"] .pillar-lens {
+            display: none;
+        }
+
+        #parhelion-svg[data-geometry-model="halo_scaffold"] #pillar-line,
+        #parhelion-svg[data-geometry-model="halo_governed"] #pillar-line,
+        #parhelion-svg[data-geometry-model="halo_atlas"] #pillar-line {
+            display: none;
+        }
+
+        /* Supralateral arc: only renders in halo_atlas mode (other modes leave
+           --supralateral-intensity at 0, so the path is empty / invisible). */
+        .layer-supralateral path {
+            fill: none;
+            stroke: url(#prismatic-gradient);
+            stroke-width: 5;
+            opacity: var(--supralateral-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#cza-edge-soften);
+            mix-blend-mode: screen;
+        }
+
+        /* Parry supralateral shoulders: paired upper-lateral annotation arcs. */
+        .layer-parry-supralateral path {
+            fill: none;
+            stroke: rgba(255, 210, 255, 0.88);
+            stroke-width: 3;
+            opacity: var(--parry-supralateral-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+            mix-blend-mode: screen;
+        }
+
+        /* Upper tangent arc: the "eyelid above the 22° halo." Distinct from the
+           CZA (which is tangent to the 46° halo top). Only renders in atlas
+           mode; other modes hold --upper-tangent-intensity at 0. */
+        .layer-upper-tangent path {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.85);
+            stroke-width: 2;
+            opacity: var(--upper-tangent-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+            mix-blend-mode: screen;
+        }
+
+        /* Suncave Parry arc: Parry-orientation cap with sunward shoulders. */
+        .layer-suncave-parry path {
+            fill: none;
+            stroke: rgba(255, 245, 210, 0.92);
+            stroke-width: 2;
+            opacity: var(--suncave-parry-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+            mix-blend-mode: screen;
+        }
+
+        /* Lower tangent arc: mirror of upper tangent, tangent to the 22° halo
+           at its bottom. Atlas mode only. */
+        .layer-lower-tangent path {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.85);
+            stroke-width: 2;
+            opacity: var(--lower-tangent-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#soft-blur);
+            mix-blend-mode: screen;
+        }
+
+        /* Infralateral arcs: lower-lateral peripheral annotation arcs. */
+        .layer-infralateral path {
+            fill: none;
+            stroke: url(#prismatic-gradient);
+            stroke-width: 4;
+            opacity: var(--infralateral-intensity);
+            vector-effect: non-scaling-stroke;
+            filter: url(#cza-edge-soften);
+            mix-blend-mode: screen;
+        }
+
+        .layer-parhelia .dagger {
+            opacity: var(--parhelia-intensity);
+        }
+
+        .layer-parhelia .dagger-core {
+            fill: url(#dagger-core-gradient);
+            filter: url(#soft-blur);
+        }
+
+        .layer-parhelia .dagger-streak {
+            stroke: url(#dagger-streak-gradient);
+            stroke-width: 6;
+            stroke-linecap: round;
+            opacity: 0.85;
+            filter: url(#soft-blur);
+        }
+
+        .layer-sun .sun-core {
+            fill: #fffbe8;
+            filter: url(#sun-glow);
+        }
+
+        .layer-sun .ray {
+            stroke: rgba(255, 248, 220, 0.92);
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            vector-effect: non-scaling-stroke;
+            filter: url(#sun-glow);
+        }
+
+        .layer-sun .ray-diagonal {
+            stroke: rgba(255, 248, 220, 0.55);
+            stroke-width: 1.4;
+        }
+
+        /* Phase 6: parhelion drag handles. Hidden outside halo_atlas mode. */
+        .layer-phase6-handles { display: none; }
+        #parhelion-svg[data-geometry-model="halo_atlas"] .layer-phase6-handles { display: inline; }
+        .phase6-handle { transition: stroke 120ms ease; }
+        .phase6-handle:hover { stroke: rgba(255, 224, 110, 0.55); stroke-width: 1.5; }
+        .phase6-handle.is-dragging { stroke: rgba(255, 224, 110, 0.85); stroke-width: 2; }
+
+        /* --- Idle scintillation (off when amplitude == 0) --------------- */
+
+        @keyframes scintillate {
+            0%, 100% { opacity: var(--halo-22-intensity); }
+            50%      { opacity: calc(var(--halo-22-intensity) * (1 - 0.18 * var(--idle-scintillation-amplitude))); }
+        }
+
+        .halo-22 {
+            animation: scintillate 7s ease-in-out infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .halo-22 { animation: none; }
+        }
+
+        /* --- Responsive --------------------------------------------------- */
+
+        @media (max-width: 900px) {
+            .workbench {
+                grid-template-columns: 1fr;
+            }
+            .stage {
+                min-height: 70vh;
+            }
+            .controls {
+                min-height: auto;
+                border-left: none;
+                border-top: 1px solid rgba(244, 196, 48, 0.22);
+            }
+            .stage-copy {
+                left: 1.25rem;
+                right: 1.25rem;
+                width: auto;
+            }
+        }
+    </style>

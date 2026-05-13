@@ -91,7 +91,9 @@
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
     "cf:pages": "node scripts/cloudflare-pages-project.mjs",
     "cf:tokens": "node scripts/create-cloudflare-scoped-tokens.mjs",
-    "cf:domain": "node scripts/ensure-pages-domain.mjs"
+    "cf:domain": "node scripts/ensure-pages-domain.mjs",
+    "poses:pin": "node scripts/render-pose.mjs --all",
+    "poses:pin:one": "node scripts/render-pose.mjs"
   },
   "devDependencies": {
     "vite": "^8.0.10",

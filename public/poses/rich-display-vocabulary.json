@@ -1,0 +1,48 @@
+{
+  "_meta": {
+    "name": "rich-display-vocabulary",
+    "description": "Pedagogical pose — every named primitive in the atlas vocabulary is rendered at non-zero intensity simultaneously. Designed for vocabulary/labeling work: each arc named in 'Canonical Halo Atlas Vocabulary' is visible, none drowned out. Not a physical-display realism target — a glossary in geometry form. Pair with on-hover labels in the workbench to teach the named-arc inventory.",
+    "schemaVersion": "1.0",
+    "model": "halo_atlas",
+    "displayVocabulary": ["22° halo", "46° halo", "parhelic circle", "parhelia", "CZA", "supralateral arc", "upper tangent arc", "lower tangent arc", "Suncave Parry", "Parry supralateral", "infralateral arc", "sun pillar"],
+    "sourceHorizon": "Sundog Workbench teaching pose"
+  },
+
+  "geometryModel": "halo_atlas",
+
+  "sunAltitudeDeg": 25,
+
+  "halo22Intensity": 0.70,
+  "halo46Intensity": 0.55,
+
+  "czaIntensity": 0.65,
+  "czaCurvature": 0.85,
+
+  "parhelicCircleIntensity": 0.55,
+  "parhelicCurvature": 0.05,
+  "parhelicYOffsetR22": -0.05,
+
+  "parheliaIntensity": 0.85,
+  "parheliaDaggerLength": 0.80,
+
+  "sunPillarIntensity": 0.55,
+  "sunPillarLength": 0.50,
+
+  "compassRayLength": 0.50,
+  "compassRotationDeg": 22.5,
+
+  "dispersionWidth": 0.75,
+  "rainbowSaturation": 0.85,
+
+  "secondarySunsStrength": 0.0,
+  "ringOverlapBias": 0.5,
+
+  "supralateralIntensity": 0.65,
+  "upperTangentIntensity": 0.55,
+  "lowerTangentIntensity": 0.45,
+  "suncaveParryIntensity": 0.45,
+  "parrySupralateralIntensity": 0.40,
+  "infralateralIntensity": 0.40,
+
+  "idleScintillationAmplitude": 0.05
+}

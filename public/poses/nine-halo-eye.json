@@ -1,0 +1,48 @@
+{
+  "_meta": {
+    "name": "nine-halo-eye",
+    "description": "The triple-sun parhelion 'eye' composition. Three suns aligned along the parhelic circle (real sun + L/R parhelia at ±22°) with all nine intersecting halos active: 22° halo + 46° halo + parhelic circle + CZA + supralateral + upper tangent + lower tangent + Suncave Parry + Parry supralateral. Rich-display saturation. Used as the hero composition for the landing page.",
+    "schemaVersion": "1.0",
+    "model": "halo_atlas",
+    "displayVocabulary": ["all nine"],
+    "sourceHorizon": "Sundog hero composition (project memory: project_sundog_4a_vision.md)"
+  },
+
+  "geometryModel": "halo_atlas",
+
+  "sunAltitudeDeg": 25,
+
+  "halo22Intensity": 1.0,
+  "halo46Intensity": 0.80,
+
+  "czaIntensity": 0.85,
+  "czaCurvature": 0.85,
+
+  "parhelicCircleIntensity": 0.80,
+  "parhelicCurvature": 0.05,
+  "parhelicYOffsetR22": -0.05,
+
+  "parheliaIntensity": 1.0,
+  "parheliaDaggerLength": 1.0,
+
+  "sunPillarIntensity": 0.60,
+  "sunPillarLength": 0.55,
+
+  "compassRayLength": 0.95,
+  "compassRotationDeg": 22.5,
+
+  "dispersionWidth": 0.85,
+  "rainbowSaturation": 0.95,
+
+  "secondarySunsStrength": 0.90,
+  "ringOverlapBias": 0.6,
+
+  "supralateralIntensity": 0.75,
+  "upperTangentIntensity": 0.65,
+  "lowerTangentIntensity": 0.50,
+  "suncaveParryIntensity": 0.55,
+  "parrySupralateralIntensity": 0.45,
+  "infralateralIntensity": 0.40,
+
+  "idleScintillationAmplitude": 0.10
+}

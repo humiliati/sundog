@@ -1,0 +1,48 @@
+{
+  "_meta": {
+    "name": "low-altitude",
+    "description": "Sun near the horizon (h ≈ 5°). Parhelia ride far out from the sun because parhelion offset = R_22 / cos(h) → offset diverges as h → 90°. Long sun pillar; CZA absent (CZA visibility cuts out above h ≈ 32°, here it's the opposite end — sun is too low for CZA refraction physics to bend down). Lower tangent arc lights up. Compass rays splay near-horizontal.",
+    "schemaVersion": "1.0",
+    "model": "halo_atlas",
+    "displayVocabulary": ["22° halo", "parhelia", "parhelic circle", "sun pillar", "lower tangent arc"],
+    "sourceHorizon": "Greenler Figure 5.7 (low-sun halo display, h = 5°)"
+  },
+
+  "geometryModel": "halo_atlas",
+
+  "sunAltitudeDeg": 5,
+
+  "halo22Intensity": 0.95,
+  "halo46Intensity": 0.20,
+
+  "czaIntensity": 0.0,
+  "czaCurvature": 0.85,
+
+  "parhelicCircleIntensity": 0.45,
+  "parhelicCurvature": 0.02,
+  "parhelicYOffsetR22": -0.02,
+
+  "parheliaIntensity": 1.0,
+  "parheliaDaggerLength": 1.3,
+
+  "sunPillarIntensity": 1.0,
+  "sunPillarLength": 0.95,
+
+  "compassRayLength": 0.85,
+  "compassRotationDeg": 22.5,
+
+  "dispersionWidth": 0.70,
+  "rainbowSaturation": 0.90,
+
+  "secondarySunsStrength": 0.0,
+  "ringOverlapBias": 0.5,
+
+  "supralateralIntensity": 0.0,
+  "upperTangentIntensity": 0.0,
+  "lowerTangentIntensity": 0.65,
+  "suncaveParryIntensity": 0.0,
+  "parrySupralateralIntensity": 0.0,
+  "infralateralIntensity": 0.0,
+
+  "idleScintillationAmplitude": 0.0
+}

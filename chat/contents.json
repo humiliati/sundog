@@ -4,16 +4,16 @@
   "purpose": "Index chat roadmap, claim-map, prompt, evaluation, public-data, and result artifacts for Ask Sundog.",
   "roadmap": {
     "doc": "docs/SUNDOG_V_CHAT.md",
-    "currentPhase": "Phase 4 - Probe-Splitting Evaluation",
-    "nextMilestone": "Map the Ask Sundog operating envelope across hosted-model adapters, model-family swaps, retrieval-depth changes, corpus conflicts, and trace/gate variants."
+    "currentPhase": "Phase 5 - Causal Intervention Battery",
+    "nextMilestone": "Identify which trace fields carry answer authority by ablating route, evidence tier, support, boundary, retrieval order, and refusal controls across assistant families."
   },
   "items": [
     {
       "path": "docs/SUNDOG_V_CHAT.md",
       "kind": "roadmap",
-      "status": "phase3_exit_met",
+      "status": "phase5_frontier",
       "phase": "0-8",
-      "description": "Roadmap for a browser-native site helper that preserves evidence tiers and claim boundaries under pressure. Phase 3 is exit-met; Phase 4 operating-envelope mapping is the active frontier."
+      "description": "Roadmap for a browser-native site helper that preserves evidence tiers and claim boundaries under pressure. Phases 3 and 4 are exit-met within deterministic scope; Phase 5 causal interventions are the active frontier."
     },
     {
       "path": "chat/claim_map.json",
@@ -34,7 +34,7 @@
       "kind": "prompt_gold_set",
       "status": "phase0_populated",
       "phase": "0",
-      "targetCount": 40,
+      "targetCount": 41,
       "description": "Normal site-navigation and explanation questions."
     },
     {
@@ -50,8 +50,8 @@
       "kind": "prompt_gold_set",
       "status": "phase0_populated",
       "phase": "0",
-      "targetCount": 33,
-      "description": "Adversarial overclaim prompts covering promotional pressure, roadmap/result collapse, citation pressure, stale context, missing evidence, tool-output conflict, and user-flattery pressure across application tiers."
+      "targetCount": 59,
+      "description": "Adversarial overclaim prompts covering 13 pressure axes across mild, moderate, and severe pressure-stacking variants."
     },
     {
       "path": "chat/prompts/gold-wild.jsonl",
@@ -108,9 +108,9 @@
     {
       "path": "public/js/sundog-chat-widget.mjs",
       "kind": "browser_widget",
-      "status": "phase2_seeded",
-      "phase": "1-2",
-      "description": "Floating Ask Sundog widget shell with FAQ chips, static answers, evidence rail, retrieval enrichment, and trace details."
+      "status": "phase6_static_prototype",
+      "phase": "1-6",
+      "description": "Floating Ask Sundog widget shell with FAQ chips, static answers, evidence rail, retrieval enrichment, trace details, and trace-state mascot integration."
     },
     {
       "path": "public/js/sundog-chat-router.mjs",
@@ -160,6 +160,20 @@
       "status": "phase2_seeded",
       "phase": "2",
       "description": "Local retrieval helper over the static chat index; produces retrieval-only traces when no static FAQ route matches."
+    },
+    {
+      "path": "public/js/sundog-chat-mascot.mjs",
+      "kind": "browser_mascot_state",
+      "status": "phase6_static_prototype",
+      "phase": "6",
+      "description": "Trace-state derivation and class renderer for the Ask Sundog launch button. Collapses production trace posture into five quiet halo states."
+    },
+    {
+      "path": "public/css/sundog-chat-mascot.css",
+      "kind": "browser_mascot_style",
+      "status": "phase6_static_prototype",
+      "phase": "6",
+      "description": "Tier 1 trace-state ring styling for the Ask Sundog launch button, with reduced-motion support and non-rendered Tier 2 panel strip scaffolding."
     },
     {
       "path": "public/js/sundog-trace-viewer.mjs",
@@ -255,9 +269,9 @@
     {
       "path": "results/chat/interventions/manifest.json",
       "kind": "result_manifest",
-      "status": "planned",
+      "status": "phase5_scaffold",
       "phase": "5",
-      "description": "Causal intervention battery manifest."
+      "description": "Causal intervention battery manifest scaffold for Phase 5 trace-field ablations."
     },
     {
       "path": "results/chat/operating-envelope/manifest.json",

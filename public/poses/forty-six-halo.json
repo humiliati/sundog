@@ -1,0 +1,48 @@
+{
+  "_meta": {
+    "name": "forty-six-halo",
+    "description": "Rare 46° halo emphasis. The 46° halo is much weaker than the 22° in real displays (radii ratio 46/22 ≈ 2.09 but ice-crystal optics favor the 22° refraction), so a visible 46° halo is the marker of an unusually rich display. This pose dims the 22° and parhelia to put visual weight on the 46° ring plus its supralateral tangent.",
+    "schemaVersion": "1.0",
+    "model": "halo_atlas",
+    "displayVocabulary": ["46° halo", "supralateral arc", "infralateral arc", "22° halo (faint)"],
+    "sourceHorizon": "Cowley Atmospheric Optics — 46° halo case study"
+  },
+
+  "geometryModel": "halo_atlas",
+
+  "sunAltitudeDeg": 30,
+
+  "halo22Intensity": 0.40,
+  "halo46Intensity": 1.0,
+
+  "czaIntensity": 0.55,
+  "czaCurvature": 0.85,
+
+  "parhelicCircleIntensity": 0.15,
+  "parhelicCurvature": 0.07,
+  "parhelicYOffsetR22": -0.05,
+
+  "parheliaIntensity": 0.30,
+  "parheliaDaggerLength": 0.50,
+
+  "sunPillarIntensity": 0.0,
+  "sunPillarLength": 0.30,
+
+  "compassRayLength": 0.20,
+  "compassRotationDeg": 22.5,
+
+  "dispersionWidth": 0.85,
+  "rainbowSaturation": 0.95,
+
+  "secondarySunsStrength": 0.0,
+  "ringOverlapBias": 0.4,
+
+  "supralateralIntensity": 0.85,
+  "upperTangentIntensity": 0.0,
+  "lowerTangentIntensity": 0.0,
+  "suncaveParryIntensity": 0.0,
+  "parrySupralateralIntensity": 0.0,
+  "infralateralIntensity": 0.65,
+
+  "idleScintillationAmplitude": 0.0
+}

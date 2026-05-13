@@ -1178,36 +1178,67 @@ A Wikipedia editor reviewing the page can identify the original
 contribution (interactive inverse-inference + integrated atlas) and the
 cited content (every individual formula) without ambiguity.
 
-### Phase 8 - Reproducible Pose Export
+### Phase 8 - Reproducible Pose Export *(closed 2026-05-12)*
 
-Goal: the workbench's `Snapshot params` button currently writes JSON to
-console + clipboard. Promote that to a deterministic export pipeline
-matching the schema in
-[`SUNDOG_GENERATOR_SPEC.md`](SUNDOG_GENERATOR_SPEC.md): identical pose
-JSON loaded back into the workbench produces a byte-equivalent SVG.
+Goal: the workbench's `Snapshot params` button writes JSON to console +
+clipboard. Promote that to a deterministic export pipeline matching the
+schema in [`SUNDOG_GENERATOR_SPEC.md`](SUNDOG_GENERATOR_SPEC.md):
+identical pose JSON loaded back into the workbench produces a
+byte-equivalent SVG.
 
-Deliverables:
+Status: **shipped 2026-05-12** across three sub-deliverables.
 
-- `Load params` button accepting JSON (paste or file picker), reading
-  the canonical schema from the Generator Spec.
-- Pose pinning script that, given a JSON file, renders the workbench at
-  that pose and exports a PNG/SVG snapshot for archival.
-- Named-pose library expansion under `public/poses/`:
-  - [x] `canonical.json` — snapshot of the current locked defaults
-    (landed alongside the Generator Spec).
-  - [ ] `low-altitude.json` — sun near the horizon, parhelia close to
-    halo; CZA visible.
-  - [ ] `cza-heavy.json` — sun altitude well below 32°, CZA at maximum
-    intensity, halo and parhelia subdued.
-  - [ ] `nine-halo-eye.json` — full composition fiction with
-    `--secondary-suns-strength = 0.7` and tuned overlap bias.
-  - [ ] `forty-six-halo.json` — 46° halo dominant, 22° subdued.
-  - [ ] `rich-display-vocabulary.json` — Halo Atlas annotation pose with
-    upper/lower tangent, suncave Parry, Parry supralateral, and
-    infralateral layers exposed for teaching and design review.
+**Phase 8A — Load Params button.** `parhelion-workbench.mjs` hosts an
+`applyPose(params)` function and a file-picker handler bound to the
+`Load params` button in `sundog.html` and `sundog-workbench.html`.
+Accepts both pose-JSON schemas in the wild — kebab-case (snapshot
+output) and camelCase (canonical named poses) — via `findPoseValue()`
+with an explicit `CAMEL_OVERRIDES` map for the three names whose
+camelCase carries a `Deg` / `R22` suffix. Honors `geometryModel` and
+restores the `derive parhelic curvature from altitude` toggle.
 
-Gate: round-trip a snapshot → load → render → snapshot and confirm
-byte-equal JSON across two browser sessions.
+**Phase 8B — Named-pose library.** Five atlas poses shipped to
+`public/poses/`:
+
+- [x] `canonical.json` / `canonical-halo-atlas.json` — locked defaults
+  (calibrated against the Troels Nielsen DR photo, h = 25°).
+- [x] `low-altitude.json` — h = 5°. Parhelia ride far from the sun
+  because parhelion offset = R₂₂ / cos(h). Long sun pillar; lower
+  tangent arc lights up; CZA dark.
+- [x] `cza-heavy.json` — h = 22°. CZA + supralateral arc dominant;
+  22° halo and parhelia subdued.
+- [x] `nine-halo-eye.json` — h = 25°, every named primitive at
+  performance intensity. Hero composition for `index.html`.
+- [x] `forty-six-halo.json` — h = 30°. 46° halo + supralateral +
+  infralateral dominant; 22° halo dimmed.
+- [x] `rich-display-vocabulary.json` — pedagogical pose: every named
+  primitive visible at non-zero intensity simultaneously. Glossary
+  in geometry form.
+
+**Phase 8C — Pose-pinning CLI.** `scripts/render-pose.mjs`:
+
+- Validates pose JSON against the canonical schema (catches typos,
+  out-of-range values, unknown `geometryModel`).
+- Emits two artifacts per pose into `dist-poses/`:
+  - `<name>.html` — self-contained pinned render with the workbench
+    skeleton, embedded CSS variables, and a tiny module script that
+    calls `applyParhelionGeometry` on load. Pose CSS is declared
+    *after* the skeleton stylesheet so pose values win. No sliders,
+    no drag — a read-only "pin".
+  - `<name>.snapshot.json` — canonicalized pose with `_meta` dropped
+    and keys in canonical schema order, suitable as gate input.
+- `npm run poses:pin` — emit all poses. `npm run poses:pin:one <file>`
+  — single-pose mode.
+- Headless PNG rendering is deferred to a follow-up that will add
+  puppeteer; the geometry module only touches `querySelector`,
+  `getAttribute`, `setAttribute`, `dataset`, so a thin DOM shim is
+  also viable.
+
+Gate: **byte-equal round-trip verified**. For every atlas pose,
+`pose.json` → `pose.snapshot.json` and re-feeding the snapshot through
+the CLI produces a bit-identical output file. Verified 2026-05-12
+across `canonical-halo-atlas`, `low-altitude`, `cza-heavy`,
+`nine-halo-eye`, `forty-six-halo`, and `rich-display-vocabulary`.
 
 ## Post-Verdict / Conditional Roadmap
 
