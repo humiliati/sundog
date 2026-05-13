@@ -26,3 +26,6 @@ screenshots/
 *.swp
 __pycache__/
 *.py[cod]
+
+# Phase 8C pose-pinning CLI output
+dist-poses/

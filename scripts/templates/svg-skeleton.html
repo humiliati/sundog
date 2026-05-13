@@ -1,0 +1,176 @@
+<svg id="parhelion-svg" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Parametric sundog rendering">
+    <defs>
+        <!-- Prismatic gradient: ice-crystal dispersion, red-inside / blue-outside -->
+        <linearGradient id="prismatic-gradient" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%"  stop-color="#ff6b6b" stop-opacity="0.85"/>
+            <stop offset="22%" stop-color="#ffa552" stop-opacity="0.85"/>
+            <stop offset="42%" stop-color="#fff080" stop-opacity="0.85"/>
+            <stop offset="62%" stop-color="#9bf0a8" stop-opacity="0.85"/>
+            <stop offset="82%" stop-color="#7cc6ff" stop-opacity="0.85"/>
+            <stop offset="100%" stop-color="#a8a0ff" stop-opacity="0.85"/>
+        </linearGradient>
+
+        <!-- Sun pillar: white-hot core fading to amber at extremities -->
+        <linearGradient id="pillar-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%"   stop-color="rgba(255,196,80,0)"/>
+            <stop offset="35%"  stop-color="rgba(255,222,140,0.7)"/>
+            <stop offset="50%"  stop-color="rgba(255,250,232,0.95)"/>
+            <stop offset="65%"  stop-color="rgba(255,222,140,0.7)"/>
+            <stop offset="100%" stop-color="rgba(255,196,80,0)"/>
+        </linearGradient>
+
+        <!-- Parhelion dagger core: hot center, prismatic shoulders -->
+        <radialGradient id="dagger-core-gradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="#fffbe8"/>
+            <stop offset="35%" stop-color="#ffd06b" stop-opacity="0.95"/>
+            <stop offset="70%" stop-color="#ff8a55" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#ff5a5a" stop-opacity="0"/>
+        </radialGradient>
+
+        <!-- Parhelion streak: red-inside, fading blue-outside -->
+        <linearGradient id="dagger-streak-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"  stop-color="#ff6a4a" stop-opacity="0.95"/>
+            <stop offset="30%" stop-color="#ffd06b" stop-opacity="0.85"/>
+            <stop offset="70%" stop-color="#cce6ff" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#7ca4ff" stop-opacity="0"/>
+        </linearGradient>
+
+        <!-- Sun glow: subtle bloom around the compass-rose core -->
+        <filter id="sun-glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="1.4" result="blur"/>
+            <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <!-- Soft blur for pillar, dagger streaks, etc. -->
+        <filter id="soft-blur" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="0.6"/>
+        </filter>
+
+        <!-- CZA edge-soften: light Gaussian on the prismatic arcs so they don't read
+             as plotter-hard pencil lines. The stdDeviation is BAKED at 0.3 (was a slider,
+             demoted 2026-05-08): blurring the arcs in isolation never produced the
+             bell-curve eyelid the design memo described — the two arcs don't actually
+             meet at the apex within Gaussian-σ, so blur tails never sum to a peaked bell.
+             The bell shape is now produced geometrically by #cza-bell-fill (paint fill
+             between the two arcs). Future --cza-secondary-offset will tune bell width. -->
+        <filter id="cza-edge-soften" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="0.3"/>
+        </filter>
+    </defs>
+
+    <!-- Order: back to front -->
+
+    <!-- 46° halo (faint outer ring; mostly off-canvas at standard scale) -->
+    <g class="layer-halos">
+        <circle class="halo-46" cx="500" cy="500" r="440"/>
+    </g>
+
+    <!-- Parhelic arc: curved band that passes through the sun and carries the daggers.
+         Path is rebuilt by JS from --parhelic-curvature; defaults to gentle grin. -->
+    <g class="layer-parhelic">
+        <path id="parhelic-path"
+              d="M 0 500 Q 500 500 1000 500"/>
+    </g>
+
+    <!-- Sun pillar: vertical column through the sun -->
+    <g class="layer-pillar">
+        <path class="pillar-lens" id="pillar-lens" d=""/>
+        <line id="pillar-line"
+              x1="500" y1="500"
+              x2="500" y2="500"/>
+    </g>
+
+    <!-- 22° halo: the iris ring -->
+    <g class="layer-halos">
+        <circle class="halo-22" cx="500" cy="500" r="220"/>
+    </g>
+
+    <!-- Secondary halos from peripheral virtual suns
+         (positioned upper-left and upper-right; intensity tied to --secondary-suns-strength) -->
+    <g class="layer-halos" id="layer-secondary-halos">
+        <circle class="halo-secondary" cx="320" cy="320" r="160"/>
+        <circle class="halo-secondary" cx="680" cy="320" r="160"/>
+    </g>
+
+    <!-- Supralateral arc: rendered only in halo_atlas mode.
+         Tangent to the 46° halo at its top, curving up. -->
+    <g class="layer-supralateral">
+        <path id="supralateral-path" d=""/>
+    </g>
+
+    <!-- Parry supralateral shoulders: upper-lateral Parry-family arcs. -->
+    <g class="layer-parry-supralateral">
+        <path id="parry-supralateral-path" d=""/>
+    </g>
+
+    <!-- Upper tangent arc: tangent to the 22° halo at its top —
+         the eyelid-above-22-halo feature. Atlas mode only. -->
+    <g class="layer-upper-tangent">
+        <path id="upper-tangent-path" d=""/>
+    </g>
+
+    <!-- Suncave Parry arc: Parry-orientation cap with sunward shoulders. -->
+    <g class="layer-suncave-parry">
+        <path id="suncave-parry-path" d=""/>
+    </g>
+
+    <!-- Lower tangent arc: mirror of upper tangent at the 22°
+         halo bottom. Atlas mode only. -->
+    <g class="layer-lower-tangent">
+        <path id="lower-tangent-path" d=""/>
+    </g>
+
+    <!-- Infralateral arcs: lower-lateral peripheral arcs. -->
+    <g class="layer-infralateral">
+        <path id="infralateral-path" d=""/>
+    </g>
+
+    <!-- Circumzenithal arc (CZA): the eyelid -->
+    <g class="layer-cza">
+        <!-- Bell-fill: paint-bucket region between the two arcs to produce the
+             eyelid bell shape geometrically (walks primary L→R then secondary R→L,
+             closing the band). Behind the arc strokes so the strokes still read as
+             distinct edges. -->
+        <path class="cza-bell-fill"
+              d="M 200 240 Q 500 80 800 240 L 740 300 Q 500 200 260 300 Z"/>
+        <!-- Primary CZA: inverted smile across upper third -->
+        <path id="cza-primary"
+              d="M 200 240 Q 500 80 800 240"/>
+        <!-- Secondary upper arc (Parry / supralateral suggestion) -->
+        <path class="cza-secondary"
+              d="M 260 300 Q 500 200 740 300"/>
+    </g>
+
+    <!-- Parhelia: the daggers flanking the sun on the parhelic circle -->
+    <g class="layer-parhelia">
+        <!-- Left dagger -->
+        <g class="dagger">
+            <line class="dagger-streak"
+                  x1="220" y1="500" x2="320" y2="500"/>
+            <ellipse class="dagger-core"
+                     cx="280" cy="500" rx="22" ry="14"/>
+        </g>
+        <!-- Right dagger -->
+        <g class="dagger">
+            <line class="dagger-streak"
+                  x1="780" y1="500" x2="680" y2="500"/>
+            <ellipse class="dagger-core"
+                     cx="720" cy="500" rx="22" ry="14"/>
+        </g>
+    </g>
+
+    <!-- Compass-rose sun: 4 rays (rotated by --compass-rotation-deg)
+         plus a bright core. Ray length, core radius, and rotation
+         are Phase 2 visual calibration knobs so the X can stay
+         distinct from the pillar and parhelic belt. -->
+    <g class="layer-sun" id="layer-sun" transform="rotate(22.5 500 500)">
+        <line class="ray ray-diagonal" x1="500" y1="500" x2="540" y2="460"/>
+        <line class="ray ray-diagonal" x1="500" y1="500" x2="540" y2="540"/>
+        <line class="ray ray-diagonal" x1="500" y1="500" x2="460" y2="540"/>
+        <line class="ray ray-diagonal" x1="500" y1="500" x2="460" y2="460"/>
+        <circle class="sun-core" id="sun-core" cx="500" cy="500" r="9"/>
+    </g>
+</svg>

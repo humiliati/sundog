@@ -1,0 +1,48 @@
+{
+  "_meta": {
+    "name": "cza-heavy",
+    "description": "Mid-altitude display (h ≈ 22°) where the circumzenithal arc is at peak intensity. The CZA only forms when 0° < h < 32.2° because the geometry depends on the sun's elevation matching the prism's 'frowning' refraction band. Pair with a faint 22° halo and weak parhelia to keep visual emphasis on the CZA rainbow tangent to the 46° halo top. Supralateral arc visible adjacent to the CZA.",
+    "schemaVersion": "1.0",
+    "model": "halo_atlas",
+    "displayVocabulary": ["CZA", "46° halo", "supralateral arc", "22° halo"],
+    "sourceHorizon": "Tape & Moilanen Figure 8.4 (CZA-dominant display)"
+  },
+
+  "geometryModel": "halo_atlas",
+
+  "sunAltitudeDeg": 22,
+
+  "halo22Intensity": 0.50,
+  "halo46Intensity": 0.55,
+
+  "czaIntensity": 1.0,
+  "czaCurvature": 1.0,
+
+  "parhelicCircleIntensity": 0.20,
+  "parhelicCurvature": 0.05,
+  "parhelicYOffsetR22": -0.05,
+
+  "parheliaIntensity": 0.45,
+  "parheliaDaggerLength": 0.50,
+
+  "sunPillarIntensity": 0.20,
+  "sunPillarLength": 0.30,
+
+  "compassRayLength": 0.30,
+  "compassRotationDeg": 22.5,
+
+  "dispersionWidth": 0.95,
+  "rainbowSaturation": 1.0,
+
+  "secondarySunsStrength": 0.0,
+  "ringOverlapBias": 0.7,
+
+  "supralateralIntensity": 0.80,
+  "upperTangentIntensity": 0.30,
+  "lowerTangentIntensity": 0.0,
+  "suncaveParryIntensity": 0.0,
+  "parrySupralateralIntensity": 0.0,
+  "infralateralIntensity": 0.0,
+
+  "idleScintillationAmplitude": 0.0
+}

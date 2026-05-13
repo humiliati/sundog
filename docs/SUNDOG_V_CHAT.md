@@ -803,6 +803,18 @@ Exit criterion:
 Every assistant family has an intervention-response matrix, and the primary
 failure modes are named.
 
+Phase 5 staging status (2026-05-12):
+- `results/chat/interventions/manifest.json` is seeded as the causal
+  intervention scaffold.
+- Initial ablation targets: `trace.boundary`, `trace.evidenceTier`,
+  `trace.support`, `trace.routeId`, `trace.disposition`, and
+  `trace.retrieved`.
+- Planned outputs: `trial-outcomes.csv`, `intervention-response-matrix.csv`,
+  `causal-authority.csv`, `failure-taxonomy.json`, and representative
+  transcripts.
+- The first implementation pass should keep interventions deterministic and
+  one-factor-at-a-time before hosted adapters are introduced.
+
 ## Phase 6 — Browser-Native Public Prototype
 
 Goal:
@@ -859,19 +871,25 @@ Phase 6 artifact status (2026-05-12):
   remaining 8 require new trace fields or eval-harness as trace source),
   speech-bubble morphology table, and `deriveMascotState(trace)` /
   `reduceToButtonState(state)` function sketches.
-- Mascot module and SVG art are **not yet on disk**; that is the next
-  Phase 6 deliverable to land. Until it does, the widget renders without
-  state-conditional facial expression; this is functionally correct but
-  visually quiet.
+- `public/js/sundog-chat-mascot.mjs` and
+  `public/css/sundog-chat-mascot.css` are on disk as the Tier 1 state-ring
+  implementation. The launch button now reflects trace posture with the five
+  collapsed halo states (`neutral`, `book`, `shield`, `sweat`, `cloud`) while
+  respecting reduced-motion settings.
+- SVG mascot art and Tier 2 panel micro-scenes are deferred. The state machine
+  has landed; richer animation should stay subordinate to trace legibility.
 
-Exit criterion: **partially met** (2026-05-12).
+Exit criterion: **met for controlled static prototype; richer mascot art
+deferred** (2026-05-12).
 - The widget works on the site, gives useful answers, visibly carries its
   evidence boundary via the chip rail and trace drawer, and the public
   result page (`chat.html`) is shipped with the teaser pointing to it.
-- The mascot trace-state surface is specified but not yet rendered; this
-  is the remaining Phase 6 deliverable. Once the Tier 1 SVG and state
-  machine land, every page on sundog.cc gains a trace-aware visual cue
-  in the widget corner without competing for visitor attention.
+- Every root public HTML page includes the widget script. The Tier 1 mascot
+  state ring gives every page a trace-aware visual cue in the widget corner
+  without competing for visitor attention.
+- Remaining Phase 6 visual work is explicitly non-blocking: SVG sprites,
+  panel micro-scenes, and `chat-animation.html` should only land if they make
+  the evidence posture clearer rather than more theatrical.
 
 ## Phase 7 — Operating Envelope and Failure Map
 

@@ -111,6 +111,83 @@ snapshot?.addEventListener("click", () => {
   }
 });
 
+// --- Phase 8A: Load Params (file picker) -> hydrate sliders ---------------
+// Accepts both pose-JSON schemas in the wild:
+//   - kebab-case (snapshot output): { "sun-altitude": 25, ... }
+//   - camelCase (canonical named poses): { "sunAltitudeDeg": 25, ... }
+
+const CAMEL_OVERRIDES = {
+  "sun-altitude": "sunAltitudeDeg",
+  "parhelic-y-offset-r22": "parhelicYOffsetR22",
+  "compass-rotation-deg": "compassRotationDeg",
+};
+
+function kebabToCamel(s) {
+  return s.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
+}
+
+function findPoseValue(params, kebab) {
+  if (Object.prototype.hasOwnProperty.call(params, kebab)) return params[kebab];
+  const override = CAMEL_OVERRIDES[kebab];
+  if (override && Object.prototype.hasOwnProperty.call(params, override)) return params[override];
+  const camel = kebabToCamel(kebab);
+  if (Object.prototype.hasOwnProperty.call(params, camel)) return params[camel];
+  return undefined;
+}
+
+function applyPose(params) {
+  if (!params || typeof params !== "object") return { hydrated: 0, skipped: 0, errors: ["not an object"] };
+  let hydrated = 0;
+  let skipped = 0;
+  const errors = [];
+
+  if (typeof params.geometryModel === "string" && VALID_MODELS.has(params.geometryModel)) {
+    if (modelSelect) modelSelect.value = params.geometryModel;
+    setModel(params.geometryModel);
+  } else if (params.geometryModel) {
+    errors.push(`unknown geometryModel: ${params.geometryModel}`);
+  }
+
+  sliders.forEach((slider) => {
+    const v = findPoseValue(params, slider.dataset.param);
+    if (v === undefined || v === null) { skipped += 1; return; }
+    const num = Number(v);
+    if (!Number.isFinite(num)) { skipped += 1; errors.push(`${slider.dataset.param}: non-numeric ${JSON.stringify(v)}`); return; }
+    slider.value = String(num);
+    slider.dispatchEvent(new Event("input", { bubbles: true }));
+    hydrated += 1;
+  });
+
+  if (deriveToggle && typeof params.parhelicCurvatureDerive === "boolean") {
+    deriveToggle.checked = params.parhelicCurvatureDerive;
+    refreshDeriveState();
+  }
+
+  return { hydrated, skipped, errors };
+}
+
+const loadBtn = document.getElementById("btn-load");
+const loadFile = document.getElementById("btn-load-file");
+loadBtn?.addEventListener("click", () => loadFile?.click());
+loadFile?.addEventListener("change", async (ev) => {
+  const file = ev.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const params = JSON.parse(text);
+    const result = applyPose(params);
+    console.log(`Sundog Load Params: hydrated ${result.hydrated} sliders, skipped ${result.skipped}, errors ${result.errors.length}`, result);
+    if (result.errors.length) {
+      console.warn("Load Params errors:", result.errors);
+    }
+  } catch (err) {
+    console.error("Load Params failed:", err);
+    alert(`Could not load that pose JSON: ${err.message || err}`);
+  } finally {
+    loadFile.value = "";
+  }
+});
+
 // --- Phase 6: drag rendered primitives back into bound parameters ---------
 const sunAltSlider = document.getElementById("sun-altitude");
 const parhelicYOffsetSlider = document.getElementById("parhelic-y-offset-r22");
@@ -127,5 +204,4 @@ if (svg) {
   });
 }
 
-// Initial layout
 apply();
