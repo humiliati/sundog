@@ -1071,8 +1071,27 @@ The mechanistic anchor ratchets again: *the entangled 5D operation at
 `net.7` is implemented through direction-specific neuron substrates.*
 Individual neurons remain weak and simple L2 top-k sufficiency still
 fails, but ablation-ranked P->C and C->P top-32 substrates are
-functionally and statistically separable. v3.5 should route to Path B:
-cross-policy substrate generalization on J1/J2.
+functionally and statistically separable.
+
+**Phase 6 v3.5 spec (2026-05-13, unstarted)** at
+[`mesa/PHASE6_V35_SPEC.md`](mesa/PHASE6_V35_SPEC.md). Path B from the
+v3.3 routing fork. One axis: Axis R (cross-policy substrate
+generalization via Jaccard between cliff-pair critical sets and J1/J2
+critical sets). Three pre-registered predictions CC1-CC3 plus optional
+gated CC4. **CC1:** cliff-pair P->C top-32 ∩ held-pair P->C top-32
+Jaccard >= 0.30 — the basin-inducing substrate is controller-family-
+wide. **CC2:** cliff-pair C->P ∩ held C->P Jaccard <= 0.15 — the
+basin-resisting substrate is policy-specific (consistent with v3.1 +
+v3.4 asymmetries). **CC3:** off-diagonal Jaccards near chance-level
+(sanity-check). **CC4 (gated):** if CC1 confirms, re-run v3.4 Axis P
+with the cliff-pair P->C mask on J1/J2; predict dissociation >= 0.10
+— the substrate transfers functionally, not just in ranking identity.
+Smoke gate: J1 P->C max ablation cost >= 0.03 at 4 seeds. Compute:
+~150-170 min, 0 new PPO runs, ~80 LOC harness extension (one new
+analysis subcommand `axis-r-substrate-generalization`). Strongest
+ratchet sentence to earn: *the cliff-pair-identified basin-inducing
+neurons are the controller-family-wide basin-inducing infrastructure
+at Medium tier; the basin-resisting neurons are per-policy*.
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
 [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md). The harness

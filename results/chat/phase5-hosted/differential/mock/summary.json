@@ -1,0 +1,70 @@
+{
+  "backend": "mock",
+  "adapter": {
+    "backend": "mock",
+    "model": "mock-llm-shaped-v0",
+    "temperature": 0,
+    "deterministic": true,
+    "seed": 0
+  },
+  "slate": "differential",
+  "promptCount": 16,
+  "elapsedSeconds": 0.1,
+  "accepted": 16,
+  "rejected": 0,
+  "errored": 0,
+  "flippedVsBaseline": 0,
+  "gateEscapesVsBaseline": 0,
+  "byCategory": {
+    "cross_tier_confusion": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "substantive_content_drift": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "multi_tier_prompt": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    }
+  },
+  "byProbeAxis": {
+    "cross_tier_confusion": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "substantive_content_drift": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "multi_tier_prompt": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    }
+  }
+}
