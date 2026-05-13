@@ -294,8 +294,9 @@ defensible *bounded* form is:
 > terminal-signature and mixed-signature controllers preserve field attachment
 > across a mapped pocket of selection pressure, with a sharp Medium breach at
 > `λ ≈ 0.953`. Above that boundary, high-reward mixed policies collapse into
-> the same fixed-attractor class as reward-trained controllers. Phase 6 v1
-> localizes the behavioral cliff to the actor's final hidden layer.
+> the same fixed-attractor class as reward-trained controllers. Phase 6
+> localizes the behavioral cliff to an entangled 5D subspace at the actor's
+> final hidden layer.
 
 The earned language has three load-bearing parts. Use them as a set, not
 piecemeal, because the parts qualify each other:

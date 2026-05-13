@@ -173,7 +173,8 @@ Phase 8 can safely use this sentence shape:
 > across a mapped pocket of selection pressure, with a sharp Medium breach at
 > `lambda ~= 0.953`. Above that boundary, high-reward mixed policies collapse
 > into the same fixed-attractor class as reward-trained controllers; Phase 6
-> localizes the behavioral cliff to the actor's final hidden layer.
+> localizes the behavioral cliff to an entangled 5D subspace at the actor's
+> final hidden layer.
 
 Do not promote this to universal mesa immunity, foundation-model behavior, or
 deployed-system robustness. The result is an in-vitro operating-envelope map.
