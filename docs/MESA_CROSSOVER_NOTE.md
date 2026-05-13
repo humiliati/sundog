@@ -191,6 +191,94 @@ directional conflicts, and no promotion without per-route residuals.
 
 ---
 
+## Geometry Phase 10 closeout, 2026-05-13
+
+Phase 10 anchor-capture work (Tasks #52, #53, #54, #55) closed
+2026-05-13. The closeout sharpens Finding #3 (Directional asymmetry is
+structural) more than this note originally hypothesized, and surfaces a
+new methodological vocabulary worth carrying back to mesa.
+
+### Finding #3 outcome was sharper than hypothesized
+
+The original Finding #3 framing predicted that CZA-apex, tangent-arc
+curvature, and supralateral position would carry "different residual
+profiles" than parhelion offset. The geometry-side outcome is stronger:
+**only one route is promoted; the other three fail at three structurally
+different layers of the measurement stack.**
+
+| route | gate outcome | failure layer |
+| --- | --- | --- |
+| Parhelion offset → h | promoted (calibrated core) | none — passes residual gate at ~0 px |
+| CZA apex → h | fails | residual gate (p2 y = -19.3 px, p27 y = +21 px, opposite signs, both exceed `0.04 * R22`) |
+| Supralateral → h | fails | coverage gate (only p2 eligible on the committed set; p27 is a candidate but unmeasured) |
+| Tangent-arc curvature → h | fails | detection gate (column-peak fails on all four eligible photos with three distinct degeneracy modes) |
+
+Note the careful taxonomy. CZA-apex reaches residual comparison and the
+residuals fail to replicate direction. Supralateral cannot supply a
+second eligible residual on the current set. Tangent-arc curvature is
+detection-degenerate — the arc is atmospherically real and visible in
+all four photos, but its brightness/chromatic spine does not dominate
+any per-column signal under the column-peak protocol.
+
+The atlas has rich forward generation (`h → all primitives`) and one
+image-recoverable inverse handle (parhelion offset), not a redundant
+four. That is the forward-rich / inverse-narrow asymmetric field-shape
+pattern mesa observed in-vitro, now observed in-the-wild at numerical
+resolution.
+
+### Three-gate taxonomy is transferable back to mesa
+
+The residual / coverage / detection three-gate vocabulary is new
+methodological surface that didn't exist before the Phase 10 closeout.
+It is portable back to the mesa side:
+
+- **Residual gate analog (mesa):** ablation cost / dissociation
+  thresholds, the v3.x family of "does the patch effect transfer at
+  level X" tests.
+- **Coverage gate analog (mesa):** held-out pair availability and
+  dimension matching — the Phase 6 v3.1 J3 Small-tier failure (256D
+  basis applied to a 64D layer) is a coverage-gate failure in
+  retrospect.
+- **Detection gate analog (mesa):** "are we measuring the right
+  quantity at all?" The Phase 6 v2 SAE-feature failure (|corr| = 0.89
+  yet ~0% patch effect) and the v3.2 top-k L2-rank failure (correct
+  basis, wrong ranking method, ~0% patch effect) are detection-gate
+  failures in retrospect. We were measuring feature availability and
+  L2 rank instead of feature use and ablation rank.
+
+The methodological rule worth carrying: **before claiming a substrate
+is wrong, classify the failure by detection, coverage, and residual
+gate.** Many cycles' worth of mesa "the substrate is wrong" candidates
+were really detection-gate calls in disguise. The same discipline
+applies in reverse: a geometry route that "doesn't work" can mean three
+substantively different things.
+
+### Open questions filed, none blocking Phase 11
+
+Three open questions from the closeout are filed but do not gate
+Phase 11:
+
+1. Lens-optics test for CZA-apex (Mesa #4-style falsification surface).
+2. Tangent-curvature tooling — gradient-based or template-matching
+   detector to reopen the route under a different measurement protocol.
+3. Parhelic-belt-y replication — does p13's +10.4 px residual replicate
+   across multiple low-h photos or is it photo-specific?
+
+Each is a separable next-experiment surface with a pre-registrable
+outcome shape.
+
+### Public framing constraint
+
+The Phase 10 closeout retires any "atlas has multiple independent
+inverse routes converging" reading of the two-substrate convergence
+claim. The convergence survives: same field-shape pattern observed in
+two substrates, by independent methods. What gets retired is the
+implication of inverse-route redundancy. The atlas is forward-rich and
+inverse-narrow; the mesa cliff is the same pattern in the controller
+substrate. That is the sharpened public framing.
+
+---
+
 ## Follow-on, 2026-05-13: perception roadmap promoted
 
 The "structural transition" thread in this note — mesa's Phase 5→6 move

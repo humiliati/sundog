@@ -593,6 +593,28 @@ converged on the same shape. The crossover is documented in
 now has both an in-vitro receipt and an in-the-wild receipt for the
 field-not-reward framing.
 
+**Atlas-side single-handle receipt *(Phase 10 closeout 2026-05-13)*.**
+The crossover earned an additional atlas-side mechanistic anchor at
+numerical resolution: the atlas is **rich in forward generation** and
+supports **one image-recoverable inverse handle**. Four candidate
+`signature → h` inversion routes were tested across the calibration
+set; only parhelion-offset survived. The other three failed at three
+structurally different layers of the measurement stack: CZA-apex at the
+residual gate (p2 and p27 both exceed `0.04 * R22` with opposite signs),
+supralateral at the coverage gate (only p2 eligible on the committed
+set), and tangent-arc curvature at the detection gate (column-peak
+fails on all four eligible photos with three distinct degeneracy
+modes). This is an atlas-side / single-handle receipt, not a new
+universal proof surface: the shape we observed is the same forward-rich
+/ inverse-narrow asymmetry the mesa side exhibits in-vitro, now at
+in-the-wild numerical resolution. The closeout also retires a soft
+overclaim that was at risk of slipping into public language: **do not
+frame the atlas as "multiple independent inverse routes converging."**
+One handle works; three others fail at three different layers. The
+failure-layer taxonomy itself (residual / coverage / detection) is the
+methodological deliverable that travels back to mesa as a
+classification rule.
+
 This is in-vitro evidence in a 2D continuous-control environment with
 a synthetic Goodhart-prone shaping surface. It is not a deployment
 guarantee. It is, however, the cleanest mechanistic anchor the program
