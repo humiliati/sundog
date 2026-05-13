@@ -12,6 +12,9 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 const SUN_W = { x: 500, y: 500 };
 const HALO_22_W = phase3.HALO_22_RADIUS;
 const PARHELIC_CURVE_PIXELS = 200;
+const CZA_APEX_ANCHOR_Y = SUN_W.y - phase3.HALO_46_RADIUS;
+const CZA_CURVE_ANCHOR = 0.85;
+const CZA_CURVE_PIXELS = 200;
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
@@ -84,6 +87,21 @@ function parhelicCurvature(controls) {
   );
 }
 
+function czaCurvature(controls) {
+  return numberFromSlider(
+    controls.czaCurvatureSlider,
+    numberFromCss("cza-curvature", CZA_CURVE_ANCHOR)
+  );
+}
+
+function czaApexY(controls) {
+  return CZA_APEX_ANCHOR_Y + (CZA_CURVE_ANCHOR - czaCurvature(controls)) * CZA_CURVE_PIXELS;
+}
+
+function czaIntensity(controls) {
+  return numberFromSlider(controls.czaIntensitySlider, numberFromCss("cza-intensity", 0.95));
+}
+
 function createCircleHandle(layer, { className, radius, label, binding, cursor }) {
   const handle = document.createElementNS(SVG_NS, "circle");
   const title = document.createElementNS(SVG_NS, "title");
@@ -131,12 +149,49 @@ function disableDerivedCurvature(controls) {
   toggle.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
+function attachDrag(svg, handle, binding, applyDrag, options = {}) {
+  let dragKind = null;
+  const start = (kind, ev) => {
+    if (kind === "mouse" && ev.button !== 0) return;
+    if (dragKind) return;
+    options.beforeStart?.();
+    dragKind = beginDrag(svg, handle, binding, ev) ? kind : null;
+  };
+
+  handle.addEventListener("pointerdown", (ev) => start("pointer", ev));
+  handle.addEventListener("pointermove", (ev) => {
+    if (dragKind !== "pointer") return;
+    applyDrag(ev);
+  });
+  handle.addEventListener("mousedown", (ev) => start("mouse", ev));
+  document.addEventListener("mousemove", (ev) => {
+    if (dragKind !== "mouse") return;
+    applyDrag(ev);
+  });
+
+  const endPointer = (ev) => {
+    if (dragKind !== "pointer") return;
+    dragKind = null;
+    endDrag(svg, handle, ev);
+  };
+  const endMouse = (ev) => {
+    if (dragKind !== "mouse") return;
+    dragKind = null;
+    endDrag(svg, handle, ev);
+  };
+  handle.addEventListener("pointerup", endPointer);
+  handle.addEventListener("pointercancel", endPointer);
+  document.addEventListener("mouseup", endMouse);
+}
+
 export function enablePhase6Drag(svg, controls = {}) {
   if (!svg) return;
   const {
     sunAltitudeSlider,
     parhelicCurvatureSlider,
     parhelicYOffsetSlider,
+    czaCurvatureSlider,
+    czaIntensitySlider,
     deriveToggle,
   } = controls;
 
@@ -185,11 +240,21 @@ export function enablePhase6Drag(svg, controls = {}) {
       })
     : null;
 
+  const czaApexHandle = czaCurvatureSlider
+    ? createCircleHandle(layer, {
+        className: "phase6-handle-cza-apex",
+        radius: 22,
+        label: "Drag CZA apex to set curvature",
+        binding: "cza-curvature",
+        cursor: "ns-resize",
+      })
+    : null;
+
   function syncHandles() {
     const beltY = parhelicBeltY({ parhelicYOffsetSlider });
+    const sunAlt = numberFromSlider(sunAltitudeSlider, numberFromCss("sun-altitude", 25));
 
     if (sunAltitudeSlider) {
-      const sunAlt = numberFromSlider(sunAltitudeSlider, 25);
       const offset = phase3.daggerOffset(sunAlt);
       for (const handle of altitudeHandles) {
         handle.el.setAttribute("cx", String(SUN_W.x + handle.sign * offset));
@@ -209,17 +274,30 @@ export function enablePhase6Drag(svg, controls = {}) {
       apexHandle.setAttribute("aria-valuemax", parhelicCurvatureSlider.max || "1");
       apexHandle.setAttribute("aria-valuenow", parhelicCurvatureSlider.value);
     }
+
+    if (czaApexHandle) {
+      const visible = phase3.czaVisible(sunAlt) && czaIntensity({ czaIntensitySlider }) > 0.001;
+      czaApexHandle.style.display = visible ? "" : "none";
+      const apexY = czaApexY({ czaCurvatureSlider });
+      czaApexHandle.setAttribute("cx", String(SUN_W.x));
+      czaApexHandle.setAttribute("cy", String(apexY));
+      czaApexHandle.setAttribute("aria-valuemin", czaCurvatureSlider.min || "0.4");
+      czaApexHandle.setAttribute("aria-valuemax", czaCurvatureSlider.max || "1.4");
+      czaApexHandle.setAttribute("aria-valuenow", czaCurvatureSlider.value);
+      czaApexHandle.setAttribute("aria-hidden", visible ? "false" : "true");
+    }
   }
 
   syncHandles();
   sunAltitudeSlider?.addEventListener("input", syncHandles);
   parhelicCurvatureSlider?.addEventListener("input", syncHandles);
   parhelicYOffsetSlider?.addEventListener("input", syncHandles);
+  czaCurvatureSlider?.addEventListener("input", syncHandles);
+  czaIntensitySlider?.addEventListener("input", syncHandles);
   deriveToggle?.addEventListener("change", syncHandles);
 
   for (const handle of altitudeHandles) {
-    let dragKind = null;
-    const applyAltitudeDrag = (ev) => {
+    attachDrag(svg, handle.el, `sun-altitude:${handle.side}`, (ev) => {
       const local = svgPoint(svg, ev);
       if (!local) return;
       const dx = Math.abs(local.x - SUN_W.x);
@@ -233,77 +311,30 @@ export function enablePhase6Drag(svg, controls = {}) {
       }
       setSliderValue(sunAltitudeSlider, altitude);
       ev.preventDefault();
-    };
-    handle.el.addEventListener("pointerdown", (ev) => {
-      dragKind = beginDrag(svg, handle.el, `sun-altitude:${handle.side}`, ev) ? "pointer" : null;
     });
-    handle.el.addEventListener("pointermove", (ev) => {
-      if (dragKind !== "pointer") return;
-      applyAltitudeDrag(ev);
-    });
-    handle.el.addEventListener("mousedown", (ev) => {
-      if (ev.button !== 0 || dragKind) return;
-      dragKind = beginDrag(svg, handle.el, `sun-altitude:${handle.side}`, ev) ? "mouse" : null;
-    });
-    document.addEventListener("mousemove", (ev) => {
-      if (dragKind !== "mouse") return;
-      applyAltitudeDrag(ev);
-    });
-    const endPointer = (ev) => {
-      if (dragKind !== "pointer") return;
-      dragKind = null;
-      endDrag(svg, handle.el, ev);
-    };
-    const endMouse = (ev) => {
-      if (dragKind !== "mouse") return;
-      dragKind = null;
-      endDrag(svg, handle.el, ev);
-    };
-    handle.el.addEventListener("pointerup", endPointer);
-    handle.el.addEventListener("pointercancel", endPointer);
-    document.addEventListener("mouseup", endMouse);
   }
 
   if (apexHandle) {
-    let dragKind = null;
-    const applyCurvatureDrag = (ev) => {
+    attachDrag(svg, apexHandle, "parhelic-curvature", (ev) => {
       const local = svgPoint(svg, ev);
       if (!local) return;
       const beltY = parhelicBeltY({ parhelicYOffsetSlider });
       const curvature = (local.y - beltY) / PARHELIC_CURVE_PIXELS;
       setSliderValue(parhelicCurvatureSlider, curvature);
       ev.preventDefault();
-    };
-    apexHandle.addEventListener("pointerdown", (ev) => {
-      disableDerivedCurvature({ deriveToggle });
-      dragKind = beginDrag(svg, apexHandle, "parhelic-curvature", ev) ? "pointer" : null;
+    }, {
+      beforeStart: () => disableDerivedCurvature({ deriveToggle }),
     });
-    apexHandle.addEventListener("pointermove", (ev) => {
-      if (dragKind !== "pointer") return;
-      applyCurvatureDrag(ev);
+  }
+
+  if (czaApexHandle) {
+    attachDrag(svg, czaApexHandle, "cza-curvature", (ev) => {
+      const local = svgPoint(svg, ev);
+      if (!local) return;
+      const curvature = CZA_CURVE_ANCHOR - (local.y - CZA_APEX_ANCHOR_Y) / CZA_CURVE_PIXELS;
+      setSliderValue(czaCurvatureSlider, curvature);
+      ev.preventDefault();
     });
-    apexHandle.addEventListener("mousedown", (ev) => {
-      if (ev.button !== 0 || dragKind) return;
-      disableDerivedCurvature({ deriveToggle });
-      dragKind = beginDrag(svg, apexHandle, "parhelic-curvature", ev) ? "mouse" : null;
-    });
-    document.addEventListener("mousemove", (ev) => {
-      if (dragKind !== "mouse") return;
-      applyCurvatureDrag(ev);
-    });
-    const endPointer = (ev) => {
-      if (dragKind !== "pointer") return;
-      dragKind = null;
-      endDrag(svg, apexHandle, ev);
-    };
-    const endMouse = (ev) => {
-      if (dragKind !== "mouse") return;
-      dragKind = null;
-      endDrag(svg, apexHandle, ev);
-    };
-    apexHandle.addEventListener("pointerup", endPointer);
-    apexHandle.addEventListener("pointercancel", endPointer);
-    document.addEventListener("mouseup", endMouse);
   }
 }
 

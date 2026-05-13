@@ -145,6 +145,9 @@ function nearly(actual, expected, label) {
 const css = new Map([
   ["--parhelic-curvature", "0.05"],
   ["--parhelic-y-offset-r22", "-0.05"],
+  ["--cza-curvature", "0.85"],
+  ["--cza-intensity", "0.95"],
+  ["--sun-altitude", "25"],
 ]);
 
 const fakeDocument = new FakeElement("document");
@@ -162,20 +165,33 @@ const svg = new FakeSvg();
 const sunAltitudeSlider = slider({ id: "sun-altitude", value: "25", min: "0", max: "60", step: "1" });
 const parhelicCurvatureSlider = slider({ id: "parhelic-curvature", value: "0.05", min: "0", max: "1", step: "0.01" });
 const parhelicYOffsetSlider = slider({ id: "parhelic-y-offset-r22", value: "-0.05", min: "-0.12", max: "0.08", step: "0.01" });
+const czaCurvatureSlider = slider({ id: "cza-curvature", value: "0.85", min: "0.4", max: "1.4", step: "0.01" });
+const czaIntensitySlider = slider({ id: "cza-intensity", value: "0.95", min: "0", max: "1", step: "0.01" });
 const deriveToggle = new FakeElement("input");
 deriveToggle.checked = false;
 
+sunAltitudeSlider.addEventListener("input", () => {
+  css.set("--sun-altitude", sunAltitudeSlider.value);
+});
 parhelicCurvatureSlider.addEventListener("input", () => {
   css.set("--parhelic-curvature", parhelicCurvatureSlider.value);
 });
 parhelicYOffsetSlider.addEventListener("input", () => {
   css.set("--parhelic-y-offset-r22", parhelicYOffsetSlider.value);
 });
+czaCurvatureSlider.addEventListener("input", () => {
+  css.set("--cza-curvature", czaCurvatureSlider.value);
+});
+czaIntensitySlider.addEventListener("input", () => {
+  css.set("--cza-intensity", czaIntensitySlider.value);
+});
 
 enablePhase6Drag(svg, {
   sunAltitudeSlider,
   parhelicCurvatureSlider,
   parhelicYOffsetSlider,
+  czaCurvatureSlider,
+  czaIntensitySlider,
   deriveToggle,
 });
 
@@ -193,6 +209,19 @@ assert.equal(parhelicCurvatureSlider.value, "0.50");
 assert.equal(apex.getAttribute("aria-valuenow"), "0.50");
 assert.equal(apex.getAttribute("cy"), "589");
 
+const czaApex = svg.querySelector(".phase6-handle-cza-apex");
+assert.ok(czaApex, "missing CZA apex handle");
+assert.equal(czaApex.getAttribute("cy"), "60");
+assert.equal(czaApex.style.display, "");
+
+czaApex.dispatchEvent(pointer("pointerdown", 500, 60));
+czaApex.dispatchEvent(pointer("pointermove", 500, 130));
+czaApex.dispatchEvent(pointer("pointerup", 500, 130));
+
+assert.equal(czaCurvatureSlider.value, "0.50");
+assert.equal(czaApex.getAttribute("aria-valuenow"), "0.50");
+assert.equal(czaApex.getAttribute("cy"), "130");
+
 const left = svg.querySelector(".phase6-handle-left");
 const right = svg.querySelector(".phase6-handle-right");
 assert.ok(left, "missing left parhelion handle");
@@ -207,5 +236,7 @@ nearly(Number.parseFloat(right.getAttribute("cx")), 811.13, "right parhelion han
 nearly(Number.parseFloat(left.getAttribute("cx")), 188.87, "left parhelion handle x");
 assert.equal(right.getAttribute("cy"), "489");
 assert.equal(left.getAttribute("cy"), "489");
+assert.equal(czaApex.style.display, "none", "CZA handle should hide when sun altitude exceeds 32 degrees");
+assert.equal(czaApex.getAttribute("aria-hidden"), "true");
 
 console.log("Phase 6 drag constraint check passed");

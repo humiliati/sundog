@@ -114,11 +114,15 @@ snapshot?.addEventListener("click", () => {
 // --- Phase 6: drag rendered primitives back into bound parameters ---------
 const sunAltSlider = document.getElementById("sun-altitude");
 const parhelicYOffsetSlider = document.getElementById("parhelic-y-offset-r22");
+const czaCurvatureSlider = document.getElementById("cza-curvature");
+const czaIntensitySlider = document.getElementById("cza-intensity");
 if (svg) {
   enablePhase6Drag(svg, {
     sunAltitudeSlider: sunAltSlider,
     parhelicCurvatureSlider: curvatureSlider,
     parhelicYOffsetSlider: parhelicYOffsetSlider,
+    czaCurvatureSlider: czaCurvatureSlider,
+    czaIntensitySlider: czaIntensitySlider,
     deriveToggle: deriveToggle,
   });
 }
