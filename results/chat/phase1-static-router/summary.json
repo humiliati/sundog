@@ -1,16 +1,16 @@
 {
-  "total": 129,
+  "total": 130,
   "outcomes": {
-    "pass_strict": 129
+    "pass_strict": 130
   },
   "meanContentScore": 1,
   "routingHitRate": 1,
   "traceVisibilityRate": 1,
   "bySet": {
     "normal": {
-      "total": 40,
+      "total": 41,
       "outcomes": {
-        "pass_strict": 40
+        "pass_strict": 41
       },
       "meanContentScore": 1
     },
