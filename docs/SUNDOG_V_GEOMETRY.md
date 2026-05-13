@@ -1147,19 +1147,20 @@ Deliverables:
     secondary navigation row.
   - Old `#parhelion-canvas` decommissioned; any references in the brand
     or icon docs updated.
-- **Wikipedia / SEO outreach packet** — `docs/SUNDOG_OUTREACH_PACKET.md`
-  - One-page math summary: the seven atlas formulas, each with its
-    source citation from the Atmospheric Optics References section.
-  - Claim license: which equations are *standard* (cited to Greenler /
-    Tape / Cowley) vs. *original to this project* (the integrated
-    primitive-atlas presentation; the interactive inverse-inference of
-    sun altitude from a photo; the calibration evidence across 7
-    photos).
-  - Reproducibility statement linking to `phase3-tests.html`,
-    `overlay_calibrate.py`, and the calibration overlay set.
-  - Suggested Wikipedia edits: which articles (Sun dog, Circumzenithal
-    arc, 22° halo) could cite our atlas, and the specific factual claim
-    each edit would support.
+- **Wikipedia / SEO outreach packet** — [`docs/SUNDOG_OUTREACH_PACKET.md`](SUNDOG_OUTREACH_PACKET.md) ✓ landed 2026-05-12.
+  - One-page math summary: the seven atlas formulas with
+    Greenler / Tape / Cowley citations.
+  - Claim license: every formula is cited; original contributions are
+    named (integrated primitive-atlas presentation, interactive
+    inverse-inference of sun altitude from a photograph, calibration
+    evidence across 7 photos, drag-to-tune constraint network,
+    canonical JSON pose schema).
+  - Reproducibility statement: three paths (live page, phase3 tests,
+    `overlay_calibrate.py` CLI on the 7-photo cohort).
+  - Suggested Wikipedia edits per article (Sun dog, CZA, 22° halo, 46°
+    halo, Vädersoltavlan, Halo top-level), each tied to a specific
+    factual claim already in the article. All suggestions are
+    external-link adds — no original-research citation requests.
 - **Press / social snapshot assets**
   - Static PNG hero rendered from the canonical pose at multiple aspect
     ratios (16:9, 1:1, 9:16 for stories).

@@ -295,7 +295,6 @@ export function applyPanelMascotState(panelElement, trace, options = {}) {
 
   return { fullState, buttonState, label };
 }
-
 function scrubStateClasses(element) {
   // Remove any pre-existing mascot--* classes before applying new ones.
   const toRemove = [];
