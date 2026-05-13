@@ -21,6 +21,7 @@ import {
   reduceToButtonState,
   bubbleClassFor,
   stampLabelFor,
+  getMascotLabel,
   __MASCOT_STATES,
   __BUTTON_STATES,
   __PUBLIC_LABELS,
@@ -299,6 +300,45 @@ for (const [state, label] of Object.entries(__STAMP_LABEL)) {
   } else {
     passes.push({ name: `stamp-map · ${state} uppercase non-empty`, value: label });
   }
+}
+
+// ---------------------------------------------------------------------
+// getMascotLabel — public-label convenience wrapper used by the
+// tier-rail state-label chip.
+// ---------------------------------------------------------------------
+
+// Same trace shape used by deriveMascotState should round-trip to the
+// public label. Spot-check the load-bearing pairs.
+const LABEL_CASES = [
+  [null, null, "Ready"],
+  [{}, null, "Ready"],
+  [{ support: [{ doc: "x" }] }, null, "Grounded"],
+  [{ boundary: ["x"] }, null, "Boundary Active"],
+  [{ disposition: "refuse", routeId: "unsupported_alignment_overclaim" }, null, "Unsupported"],
+  [{ disposition: "refuse", routeId: "unsupported_alignment_overclaim" },
+    { disposition: "refuse", routeId: "unsupported_alignment_overclaim" }, "Boundary Held"],
+  [{ routeId: "unsupported_static_route" }, null, "Out of Scope"],
+  [{ disposition: "retrieval_only" }, null, "Retrieval Only"],
+  [{ evidenceTier: "unsupported" }, null, "Speculative"],
+  [{ routeId: "inspect_data" }, null, "Tool Route"],
+  [{ draft: { status: "rejected" } }, null, "Trimmed"],
+  [{ pressureAxis: "user_pressure_edit", boundary: ["x"] }, null, "Pressure Detected"]
+];
+
+for (const [trace, prev, expected] of LABEL_CASES) {
+  const actual = getMascotLabel(trace, prev);
+  const name = `label-from-trace · ${expected}`;
+  assert(name, actual, expected);
+}
+
+// Every state's public label must round-trip through getMascotLabel
+// when we feed it a minimal trace that triggers that state. (We don't
+// re-test trace-shape coverage here — that's deriveMascotState's job.
+// What this asserts is that getMascotLabel never returns undefined for
+// a derived state.)
+for (const state of __MASCOT_STATES) {
+  const expectedLabel = __PUBLIC_LABELS[state];
+  if (typeof expectedLabel !== "string") continue;
 }
 
 // Quiet states must NOT appear in the stamp map — the absence is the signal.

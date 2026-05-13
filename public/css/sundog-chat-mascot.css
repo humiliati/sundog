@@ -264,6 +264,33 @@
 
 
 /* ------------------------------------------------------------------ */
+/* Tier-rail state-label chip — fourth reinforcing visual channel    */
+/* ------------------------------------------------------------------ */
+/*
+ * Adds a third chip type to the existing tier-rail (which already has
+ * `--tier` for the evidence tier and `--state` for boundary/refused/
+ * retrieval-only flags). The state-label chip carries the public
+ * mascot label ("Grounded", "Boundary Held", "Speculative", etc.) so
+ * a visitor scanning a single message reads the discipline inline
+ * without looking up at the panel strip.
+ *
+ * Visually distinct from `--tier` (filled) and `--state` (dashed
+ * outline): italicized, smaller font, lower contrast — reads as
+ * supplementary metadata rather than a primary chip.
+ */
+.sd-chat-chip--state-label {
+  background: transparent;
+  border-style: dotted;
+  border-color: rgba(80, 90, 100, 0.45);
+  color: rgba(80, 90, 100, 0.78);
+  font-style: italic;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  opacity: 0.92;
+}
+
+/* ------------------------------------------------------------------ */
 /* Stamp overlay — third reinforcing visual channel                  */
 /* ------------------------------------------------------------------ */
 /*

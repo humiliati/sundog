@@ -993,23 +993,53 @@ basin-inducing circuit is available and transfers across Medium controller
 families. Below the threshold, basin resistance is preserved by machinery
 that the cliff-pair basis does not symmetrically transplant.
 
-**Phase 6 v3.2 spec (2026-05-12, unstarted)** at
-[`mesa/PHASE6_V32_SPEC.md`](mesa/PHASE6_V32_SPEC.md). One axis pinned —
-Axis M (top-k neuron-restricted projection of the v3 PCA patch). Tests
-whether the entangled 5D basin-inducing subspace can be delivered
-through a moderately concentrated subset of `net.7` neurons, with
-k ∈ {8, 16, 32, 64, 256} sweep on the cliff pair plus optional J1/J2
-follow-up using the cliff-pair-derived neuron mask. Three
-pre-registered predictions Z1-Z3. Smoke gate: top-32 with 8 seeds
-must clear P→C patch_success ≥ 0.37 (40% of v3 K=5 baseline) to
-proceed; below that, top-k mediation is declared infeasible and v3.3
-routes to non-linear attribution methods. Ratchet sentence to earn:
-*the entangled 5D basin-inducing subspace is mediated by a moderately
-concentrated subset of final-hidden neurons, while basin-resisting
-mediation is either more distributed or more policy-specific.* v3.2
-is compute-light: ~45-90 minutes wall-clock, 0 new PPO runs, ~80 LOC
-of harness extensions wired into `phase6_v2_sae.py` as the
-`axis-m-neuron-mediation` subcommand (already landed; awaits run).
+**Phase 6 v3.2 result (2026-05-12, smoke gate failed)** at
+[`mesa/PHASE6_V32_RESULTS.md`](mesa/PHASE6_V32_RESULTS.md). One axis
+(Axis M, top-k neuron-restricted projection of the v3 PCA patch) was
+spec'd and harness-wired but the smoke gate **failed cleanly**:
+top-32 with 8 seeds captured 33.6% of the aggregate L2 across PCs 1-5
+but delivered patch_success of −0.006 P→C and +0.001 C→P — essentially
+zero in both directions, well below the 0.37 P→C gate. **Z1
+falsified.** The full k-sweep was deliberately not run per
+spec §3.4. The mechanistic reading: the 5D basin-attractor subspace at
+`net.7` is **not linearly decomposable into top-k neuron
+contributions** — masking 87.5% of neurons to their unpatched values
+interferes with the partial patch even though those neurons hold only
+~66% of basis L2. The basin-circuit is implemented *holistically*
+across the neuron substrate; partial delivery of the subspace shift
+fails even when the basis is correct.
+
+The methodological lesson stacks on v2's SAE-wrong-basis finding: v2
+said *feature-availability rankings don't surface mechanism even at
+strong correlation*; v3.2 says *linear additive top-k neuron
+restriction within the correct basis still doesn't surface mechanism*.
+Together: for this circuit, **non-linear attribution is mandatory**.
+
+The gravity-claim mechanistic anchor is unchanged. The 5D entangled
+subspace at `net.7` remains the load-bearing localization. v3.2
+records that within that subspace, the circuit is also entangled
+across neurons — not decomposable to a few specific ones — which
+adds nuance but does not retract or weaken any earned claim.
+
+**Phase 6 v3.3 spec (2026-05-12, unstarted)** at
+[`mesa/PHASE6_V33_SPEC.md`](mesa/PHASE6_V33_SPEC.md). One axis pinned:
+Axis N (per-neuron zero-ablation attribution at `net.7` during the v3
+K=5 patch). Tests *necessity* (whose ablation breaks the patch),
+where v3.2 tested *sufficiency* (whose presence delivers it) and
+failed. Four pre-registered predictions AA1-AA4: AA1 (at least one
+neuron has ablation_cost ≥ 0.3), AA2 (Jaccard with v3.2 L2-rank ≤
+0.4 — the ranking disagrees), AA3 (Jaccard between P→C and C→P
+critical sets ≤ 0.4 — the directional asymmetry has a neuron-level
+signature), AA4 (optional gated re-run: critical-neuron mask delivers
+median patch_success ≥ 0.3 where L2-rank mask delivered ~0%). Smoke
+gate: top-1 ablation_cost ≥ 0.05 with 4 seeds in P→C only (~10 min);
+below that, single-neuron ablation is uninformative and v3.4 routes
+to pair-wise ablation or integrated gradients. Full battery: 8 seeds
+× 256 neurons × 2 directions, ~60-90 min wall-clock, 0 new PPO runs,
+~50 LOC harness extension. Ratchet sentence to earn: *the entangled
+5D basin-attractor subspace is mediated by an identifiable critical-
+neuron subset whose membership differs across basin-inducing and
+basin-resisting directions* — strongest possible v3.3 outcome.
 
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and

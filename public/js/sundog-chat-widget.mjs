@@ -1,6 +1,6 @@
 import { DEFAULT_FAQS, buildTraceAnswer, loadClaimMap } from "./sundog-chat-router.mjs";
 import { attachRetrievedMatches, buildRetrievalTrace, loadChatIndex } from "./sundog-retrieval.mjs";
-import { applyMascotState, applyPanelMascotState, bubbleClassFor, deriveMascotState, stampLabelFor } from "./sundog-chat-mascot.mjs";
+import { applyMascotState, applyPanelMascotState, bubbleClassFor, deriveMascotState, getMascotLabel, stampLabelFor, __PUBLIC_LABELS } from "./sundog-chat-mascot.mjs";
 
 const ROOT_ID = "sd-chat-widget-root";
 const MASCOT_CSS_HREF = "/css/sundog-chat-mascot.css";
@@ -203,7 +203,13 @@ function renderExchange(question, trace, mascotState = null) {
     assistantMessage.dataset.bubble = bubbleClass;
   }
   if (mascotState) assistantMessage.dataset.mascotState = mascotState;
-  assistantMessage.append(renderTierRail(trace), paragraph(trace.answer), renderNextAction(trace), renderTrace(trace));
+  // Resolve the public label from the already-derived mascot state so
+  // the tier rail's state-label chip shares the same source of truth
+  // as the stamp and the panel strip (and `held_refusal` keeps its
+  // "Boundary Held" label even though renderTierRail can't re-derive
+  // without conversation history).
+  const labelForRail = mascotState ? (__PUBLIC_LABELS[mascotState] || null) : null;
+  assistantMessage.append(renderTierRail(trace, labelForRail), paragraph(trace.answer), renderNextAction(trace), renderTrace(trace));
   assistantMessage.dataset.trace = JSON.stringify(trace);
 
   // Stamp overlay — third reinforcing visual channel. Rendered after
@@ -227,7 +233,7 @@ function renderExchange(question, trace, mascotState = null) {
   return fragment;
 }
 
-function renderTierRail(trace) {
+function renderTierRail(trace, mascotLabel = null) {
   const rail = document.createElement("div");
   rail.className = "sd-chat-tier-rail";
   rail.append(chip(trace.evidenceTier || "unknown", "tier"));
@@ -236,6 +242,15 @@ function renderTierRail(trace) {
     rail.append(chip("Refused", "state"));
   } else if (trace.disposition === "retrieval_only") {
     rail.append(chip("Retrieval Only", "state"));
+  }
+  // Public mascot-state label as a distinct chip type. Redundant with
+  // the panel strip header but inline with the trace summary, so a
+  // visitor scanning a single message can read the discipline without
+  // looking up at the strip. Skipped for "Ready" (idle) — the chip
+  // would just add noise on the welcome message.
+  const labelForChip = mascotLabel || getMascotLabel(trace);
+  if (labelForChip && labelForChip !== "Ready") {
+    rail.append(chip(labelForChip, "state-label"));
   }
   return rail;
 }
