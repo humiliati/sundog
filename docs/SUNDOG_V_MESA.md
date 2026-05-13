@@ -973,6 +973,20 @@ patch_success 0.881 but C→P stalls at 0.509 — "becoming protected"
 appears mechanically more constrained than "becoming collapsed."
 Worth verifying with seed-bootstrap analysis in v3.1.
 
+**Phase 6 v3.1 spec (2026-05-12, unstarted)** at
+[`mesa/PHASE6_V31_SPEC.md`](mesa/PHASE6_V31_SPEC.md). Four axes pinned
+to stress-test the v3 result: Axis I (PC2-5 alone patching — direct
+test that PC1 is mechanism-empty), Axis J (apply the cliff-pair PCA
+basis to three held-out zoo pairs to test whether the 5-dim subspace
+generalizes beyond the cliff pair), Axis K (PC2-5 neuron-sparsity
+decomposition — descriptive, routes v3.2 design), Axis L (seed-
+bootstrap 95% CI on the directional asymmetry). Headline test is Axis
+J — strong confirmation (all three pairs achieve patch_success ≥ 0.85
+in both directions) would ratchet the gravity claim's mechanistic
+anchor from cliff-pair-specific to controller-family-wide. v3.1 is
+compute-light: ~60-90 minutes wall-clock, 0 new PPO runs, ~170 LOC of
+harness extensions to `phase6_v2_sae.py`.
+
 Phase 6 also confirmed the fixed-attractor interpretation from Phase 4
 mechanically. The clean-rollout and basin-position-intervened patch
 batteries were exactly identical for all logged fields (`max_delta=0`),
