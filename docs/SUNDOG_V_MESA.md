@@ -936,76 +936,45 @@ correlated with basin attraction (Axis E). v2 is compute-light: no
 new PPO training, ~30-60 minutes for SAE training + direction-patch
 battery on the cliff pair.
 
-**Phase 6 v2 + v3 result (2026-05-12) — sharpens the mechanistic
-anchor.** See [`mesa/PHASE6_V2_RESULTS.md`](mesa/PHASE6_V2_RESULTS.md)
-v2 for the full result note. Historical v2/v3 framing follows; v3.1
-supersedes the PC1/PCs-2-5 decomposition below:
+**Phase 6 v2 + v3 + v3.1 result (2026-05-12) - sharpens and revises the mechanistic anchor.** See
+[`mesa/PHASE6_V2_RESULTS.md`](mesa/PHASE6_V2_RESULTS.md) and
+[`mesa/PHASE6_V31_RESULTS.md`](mesa/PHASE6_V31_RESULTS.md). Four
+findings stack:
 
-1. **The basin attractor at `net.7` is a 5-dimensional subspace.**
-   Top-5 principal components of the matched-seed per-step cliff-pair
-   activation diff matrix capture 97.4% of variance and reproduce
-   Phase 6 v1's full-layer patch_success to within 0.03 in both
-   directions. K-sweep across `K ∈ {1, 3, 5, 10, 32, 64}` saturates at
-   K=5; K=10/32/64 add no measurable patch_success past K=5. This is
-   a **51× compression** of the mechanistic anchor (256 dims → 5 dims).
-2. **Variance and mechanism are decoupled.** PC1 alone carries 38.8%
-   of activation-diff variance but contributes ~0% of patch_success
-   (median ≈ 0.006 in both directions). PC1 is the policy-offset
-   direction — it separates "which policy am I" but not "what
-   mechanism does this policy implement." The basin-attractor circuit
-   lives in PCs 2-5 (58.5% of variance, ~100% of patch effect). The
-   load-bearing mechanistic statement is now: *the cliff is a 5-dim
-   subspace decomposable into a 1-dim variance-heavy policy-offset
-   component (PC1) and a 4-dim mechanism component (PCs 2-5).*
-3. **Sparse-autoencoder features are the wrong basis for this
-   circuit.** Axis E direction-patching using the top SAE feature
-   (|corr|=0.89 with `basin_pref_intervened`, V2 confirmed) produced
-   ~0% patch_success — V3+V4 falsified. Even orthogonalized top-10
-   SAE features (Axis F) lag PCA basis at the same K. SAE feature
-   rankings on a joint two-policy dataset are dominated by
+1. **The basin attractor at `net.7` is an entangled 5-dimensional
+   subspace.** Top-5 principal components of the matched-seed per-step
+   cliff-pair activation diff matrix capture 97.4% of variance and
+   reproduce Phase 6 v1's full-layer patch_success to within 0.03 in
+   both directions. K-sweep across `K in {1, 3, 5, 10, 32, 64}`
+   saturates at K=5; K=10/32/64 add no meaningful patch_success past
+   K=5. This is a **51x compression** of the mechanistic anchor
+   (256 dims -> 5 dims).
+2. **The old PC1-offset / PCs-2-5-mechanism decomposition is falsified.**
+   PC1 alone carries 38.8% of activation-diff variance but contributes
+   near-zero patch_success (`0.006 / 0.008`). PCs 2-5 alone are partial,
+   not sufficient (`0.291 / 0.121`). PCs 1-5 together reproduce the full
+   patch effect (`0.922 / 0.830`). The load-bearing statement is now:
+   *the basin-attractor circuit is an entangled 5-dim subspace; no tested
+   proper sub-subspace reproduces the full patch effect.*
+3. **The basin-inducing subspace generalizes; basin-resistance is more
+   policy-specific.** The cliff-pair PCA basis patches protected-to-
+   collapsed at cliff-pair quality on held-out Medium pairs: J1
+   signature-terminal-M -> reward-M median `0.941`, and J2 mixed-0.9-M
+   -> mixed-0.99-M median `1.001`. Reverse rescue weakens: J1
+   collapsed-to-protected median `0.162`, J2 `0.631`.
+4. **Sparse-autoencoder features are the wrong basis for this circuit.**
+   Axis E direction-patching using the top SAE feature (|corr|=0.89 with
+   `basin_pref_intervened`, V2 confirmed) produced ~0% patch_success.
+   SAE feature rankings on a joint two-policy dataset are dominated by
    policy-identifier features; *they are the wrong basis for causal
-   mechanism* even when correlations are extreme. Future Phase 6+
-   interpretability work should default to PCA on per-step
-   matched-seed diffs.
+   mechanism* even when correlations are extreme.
 
-Directional asymmetry surfaced as a flagged-but-not-pinned secondary
-observation: at K=3 (87.9% variance) the P→C direction reaches
-patch_success 0.881 but C→P stalls at 0.509 — "becoming protected"
-appears mechanically more constrained than "becoming collapsed."
-Worth verifying with seed-bootstrap analysis in v3.1.
-
-**Phase 6 v3.1 spec (2026-05-12, unstarted)** at
-[`mesa/PHASE6_V31_SPEC.md`](mesa/PHASE6_V31_SPEC.md). Four axes pinned
-to stress-test the v3 result: Axis I (PC2-5 alone patching — direct
-test that PC1 is mechanism-empty), Axis J (apply the cliff-pair PCA
-basis to three held-out zoo pairs to test whether the 5-dim subspace
-generalizes beyond the cliff pair), Axis K (PC2-5 neuron-sparsity
-decomposition — descriptive, routes v3.2 design), Axis L (seed-
-bootstrap 95% CI on the directional asymmetry). Headline test is Axis
-J — strong confirmation (all three pairs achieve patch_success ≥ 0.85
-in both directions) would ratchet the gravity claim's mechanistic
-anchor from cliff-pair-specific to controller-family-wide. v3.1 is
-compute-light: ~60-90 minutes wall-clock, 0 new PPO runs, ~170 LOC of
-harness extensions to `phase6_v2_sae.py`.
-
-**Phase 6 v3.1 result (2026-05-12) — revised mechanistic statement.** See
-[`mesa/PHASE6_V31_RESULTS.md`](mesa/PHASE6_V31_RESULTS.md). Axis I falsified
-the "PC1 is mechanism-empty" claim: PC1 alone remains behavior-weak
-(`0.006 / 0.008`), but PCs 2-5 alone are also only partial (`0.291 /
-0.121`). PCs 1-5 together recover the full patch effect (`0.922 /
-0.830`). The basin-attractor circuit is therefore an **entangled
-5-dimensional subspace**, not a clean 1D policy-offset plus 4D mechanism
-split.
-
-Axis J partially confirmed cross-policy generalization in the asymmetric
-direction that matters most for basin capture. The cliff-pair PCA basis
-patches protected-to-collapsed at cliff-pair quality on held-out Medium
-pairs: J1 signature-terminal-M -> reward-M median `0.941`, J2 mixed-0.9-M
--> mixed-0.99-M median `1.001`. The reverse direction is weaker (J1
-`0.162`, J2 `0.631`), so the revised read is: **basin-inducing subspace
-generalizes across the Medium-tier controller family; basin-resisting
-machinery is more policy-specific.** Axis L confirms the directional
-asymmetry statistically: K=3 median-gap 95% CI `[0.251, 0.550]`.
+Directional asymmetry is now confirmed rather than merely flagged. At K=3
+the protected-to-collapsed direction reaches `0.881` while collapsed-to-
+protected stalls at `0.509`; v3.1 seed-bootstrap puts the median-gap 95% CI
+at `[0.251, 0.550]`. Becoming basin-attracted appears to use a shared
+controller-family subspace; becoming basin-resistant needs more
+policy-specific machinery.
 
 Phase 6 also confirmed the fixed-attractor interpretation from Phase 4
 mechanically. The clean-rollout and basin-position-intervened patch
