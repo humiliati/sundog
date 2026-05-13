@@ -1738,6 +1738,66 @@ Phase 12 result (2026-05-13) — **partial sweep with named limitations**:
 **Remaining open threads (1 → bounded):**
 1. **Paid-tier Groq rerun** to complete the partial Llama and Qwen sweeps. Would close the cross-architecture thread cleanly. Not blocking the public claim — the 15 successful open-weight drafts already substantiate the architectural finding; what's missing is the full numerical surface.
 
+### Phase 12b — Throttled-Sweep Driver (run-locally plan)
+
+Groq's paid-tier waitlist is broken at the moment, so we route around it by pacing the free-tier limits explicitly and running the sweep locally over hours. Free-tier limits per model (from https://console.groq.com/docs/rate-limits, 2026-05-13):
+
+| Model | RPM | RPD | TPM | TPD | Min spacing for ~1K-token call |
+| --- | ---: | ---: | ---: | ---: | --- |
+| llama-3.3-70b-versatile | 30 | 1,000 | 12,000 | 100,000 | **5.5s** |
+| llama-3.1-8b-instant | 30 | 14,400 | 6,000 | 500,000 | **10.5s** |
+| qwen/qwen3-32b | 60 | 1,000 | 6,000 | 500,000 | **11s** (more if reasoning long) |
+
+Daily caps to watch:
+- Llama-3.3 has TPD=100K, so ~100 calls/day budget. The differential + adversarial sweep is 75 calls, fits comfortably.
+- Llama-3.1 and Qwen have generous TPD; the per-minute cap is the binding constraint, not the per-day one.
+
+**Engineering pieces in place:**
+- `chat/eval/run_hosted_drafts.mjs` — `--delay-ms` flag wired through `workerLoop`: pauses N ms between each call within a worker, only after the call (not before the first), only when the queue still has work.
+- `chat/eval/lib/adapters/groq-adapter.mjs` — retry-with-backoff on 429 (5 attempts, `Retry-After`-aware, up to 30s backoff). The delay-ms throttle keeps us under the limit; the retry catches the cases where it isn't enough (long reasoning traces eating extra TPM).
+- `scripts/run-groq-sweep.ps1` — PowerShell driver that loops over (model × slate) combinations with the right per-model delay, logs each step to `results/chat/phase12-groq-driver-log.jsonl`, and supports `-SkipDone` for resume-after-kill.
+
+**Expected wall times (single worker, free tier, no retries):**
+
+| Sweep | Calls | Slowest model | Approx wall time |
+| --- | ---: | --- | ---: |
+| Llama-3.3 × differential | 16 | n/a | ~1.5 min |
+| Llama-3.3 × adversarial | 59 | n/a | ~5.5 min |
+| Llama-3.1 × differential | 16 | n/a | ~3 min |
+| Llama-3.1 × adversarial | 59 | n/a | ~10.5 min |
+| Qwen × differential | 16 | reasoning ~2× | ~6 min |
+| Qwen × adversarial | 59 | reasoning ~2× | ~22 min |
+| **All three models × diff + adv (default plan)** | **300** | — | **~50 min** |
+| Plus falsification (3 models × 22 prompts) | 66 | — | ~12 min |
+| Plus full intervention battery (3 models × 8 × 75) | 1,800 | — | ~5–6 hours |
+
+**Run command (from `C:\Users\hughe\Dev\sundog`):**
+
+```powershell
+# Default plan: 3 models × differential + adversarial, ~50 minutes
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1
+
+# Subset / resume
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1 -Models llama-3.3-70b-versatile
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1 -Slates differential -SkipDone
+
+# Include falsification slate
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1 -RunFalsification
+
+# Preview without executing
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1 -DryRun
+```
+
+Use `powershell.exe`, not `pwsh`, on the Windows 10 project machine unless PowerShell 7 has been installed explicitly. `-DryRun` prints the plan and exits without loading the Groq key or making hosted calls. Non-dry runs read the Groq key from `C:\Users\hughe\Dev\syek.corg.txt` and verify it before the first call. Each step's outcome lands in `results/chat/phase5-hosted/<slate>/groq-<model>/draft-outcomes.{csv,json}` and `summary.json`. The driver log at `results/chat/phase12-groq-driver-log.jsonl` records one line per step with timing + outcome counts so a multi-hour run is recoverable and inspectable mid-stream.
+
+**After the local sweep completes, what to do with the data:**
+1. The runner's `summary.json` already carries the per-step accept/reject/escape counts; the driver log mirrors this.
+2. Re-rescore each backend's outcomes against the current patched gate if needed (the rescore is fast; just point the existing rescoring scripts at the new paths).
+3. Re-run `chat/eval/aggregate_operating_envelope.mjs` to fold the open-weight family rows into the cell-class-map (requires extending the SOURCES list in the aggregator with the new groq-* paths).
+4. Update SUNDOG_V_CHAT.md §Phase 12 with the full sweep numbers, replacing the "partial" qualifier.
+
+This run-locally plan is a clean route around the broken paid-tier waitlist. The architecture's safety claim doesn't depend on completing it — the 15 successful drafts already demonstrate the finding — but the full sweep would tighten the cross-architecture cell-class-map.
+
 ## 11. Browser Architecture
 ```text
 public/

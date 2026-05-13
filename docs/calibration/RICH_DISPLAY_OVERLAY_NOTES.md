@@ -73,6 +73,21 @@ contributes N% of fit" score, no aggregation that hides route-specific
 conflicts, and no promotion when a primitive improves one route while
 worsening another unless the scope is explicitly narrowed.
 
+Task #54 / Phase 11 measurement schema, inherited from v3.8:
+
+| field | what it records | cannot be used as |
+| --- | --- | --- |
+| visual salience | how strong / obvious the arc is in the photograph | proof that the arc is load-bearing for inversion |
+| route-local residual | residual for the named inversion route at that photo's anchor | total overlay quality |
+| route-local sensitivity | whether small anchor / sample changes swing the route residual | primitive importance percentage |
+| full-overlay interaction | whether tuning this primitive improves or worsens other routes | an averaged global score |
+| partition/conflict flag | shared across photos/routes, photo-specific, or actively conflicting | a reason to hide the conflict in aggregation |
+
+Promotion decisions must name which field they rely on. A primitive that is
+visually salient but route-local unstable stays vocabulary; a route that
+improves one residual while worsening another is a conflict receipt, not a
+mean score to optimize away.
+
 ## Per-Inversion-Route Residual Table
 
 This table is the Phase 10 response to the mesa finding that forward and
