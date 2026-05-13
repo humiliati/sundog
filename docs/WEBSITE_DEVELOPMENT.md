@@ -49,6 +49,52 @@ demo.html
 about.html
 ```
 
+### Ask Sundog On New Pages
+
+Most public HTML pages should include the Ask Sundog widget before
+`</body>`:
+
+```html
+<script type="module" src="/js/sundog-chat-widget.mjs"></script>
+```
+
+Treat the widget as a claim-boundary surface, not just a convenience chat
+button. Ask Sundog answers from `chat/claim_map.json`, the generated public
+data under `public/data/`, and the local retrieval index built from the docs.
+It is allowed to answer only when it can preserve a trace: route, evidence
+tier, source support, active boundary, and next link.
+
+When adding a new public page:
+
+- If the page introduces a new result, demo, product, roadmap, or claim phrase,
+  update `chat/claim_map.json` or deliberately document why the widget should
+  route questions about it to an existing boundary.
+- Keep page copy aligned with the claim map. Do not let a page say "proves",
+  "validates", "solves", "research result", "robust", or similar upgraded
+  language unless the relevant claim-map route and source docs support it.
+- Make sure the page's public names and aliases are covered by the claim map
+  patterns if visitors are likely to ask Ask Sundog about them.
+- Do not create page-local chat behavior, model calls, engagement rewards, or
+  hidden telemetry. The public widget must remain trace-first and boundary
+  visible.
+- If the page is intentionally experimental or draft-only, either omit the
+  widget from that page or ensure Ask Sundog routes questions about it as
+  roadmap / prototype / unsupported rather than as a current result.
+
+After changing page copy that affects claims or widget routing, run the chat
+checks before publishing:
+
+```bash
+npm run chat:eval:static
+npm run chat:eval:phase3
+npm run chat:eval:phase3:adversarial
+npm run chat:eval:phase3:differential
+```
+
+The main risk is claim drift: a new page can teach visitors phrases that the
+widget is not prepared to bound. Close that gap by either adding route coverage
+or softening the page copy before the page ships.
+
 ## Link To Docs
 
 Markdown files under `docs/` are copied into the public `dist/` artifact during

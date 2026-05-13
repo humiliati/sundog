@@ -797,4 +797,49 @@ strict Goodhart-fix-by-fine-tuning prediction under the default optimizer-
 continuation setup: 0/64 success, mean `S_T=0.363`, and
 `old_basin_pref=3.691`. Terminal signature works from scratch, but did not
 rescue this reward-pretrained fixed-attractor policy.
-**Phases 6-8:** Not started.
+**Phase 6:** Interpretability v1 **complete**. See
+[`mesa/PHASE6_RESULTS.md`](mesa/PHASE6_RESULTS.md) v1 for the result note
+and [`mesa/PHASE6_SPEC.md`](mesa/PHASE6_SPEC.md) v1.6 for the lock that
+deferred Axis A to v2 after smoke failures. **Headline finding: the
+Phase 5 v4 cliff is causally localized to the actor's final hidden
+activation layer.** Patching `net.7` across the L-Mixed-M-`lambda=0.95`
+/ L-Mixed-M-`lambda=0.97` cliff pair clears the pre-registered P4
+threshold in both directions: protected→collapsed mean/median/ratio-of-
+means = 0.894 / 0.944 / 0.899; collapsed→protected = 0.934 / 0.860 /
+0.854. Layers `net.1`, `net.3`, `net.5` do not clear the threshold under
+robust statistics (`net.1` shows a large mean but median 0.061 and
+ratio-of-means 0.219 — heavy-tail artifact, not localization).
+
+Axis A linear-probe maps are a **clean negative result** at v1. Two
+target designs (endpoint-shaped behavior target; geometry ΔR² over input
+baseline) both failed their smoke gates: Oracle, L-Signature, and
+L-Reward could not be dissociated, and at the cliff pair the
+Medium-tier ΔR² profile actually pointed the wrong way (`lambda=0.97`
+showed *higher* deepest-layer goal ΔR² than `lambda=0.95`). The
+methodological lesson is itself a finding: **feature availability and
+feature use are decoupled in this regime**. Linear probes recover what
+the representation *contains*; they do not show which contained feature
+is routed to the action head. The cliff lives in routing, not in
+availability. Full-zoo Axis A is deferred to Phase 6 v2 alongside
+sparse-autoencoder dictionaries or direction-based probes that can
+target net.7 specifically.
+
+Phase 6 also confirmed the fixed-attractor interpretation from Phase 4
+mechanically. The clean-rollout and basin-position-intervened patch
+batteries were exactly identical for all logged fields (`max_delta=0`),
+because the learned feed-forward policies do not observe live `x_false`
+or live reward at inference. The intervention changes environment
+state, not policy input. The patch effect is therefore entirely
+policy-computation, which is what "the attractor lives in the weights"
+means at the mechanistic level.
+
+Together with Phase 5 v4's ~5% signature-anchor threshold, the Phase 6
+result raises the gravity-claim narrative one rung: **the behavioral
+cliff at `1-lambda = 0.048` is a single-layer gating decision in the
+actor's final hidden activation. Below the threshold, a basin-gating
+circuit forms at `net.7`; above it, the circuit does not form.** The
+symmetric strength of both patch directions also implies the policy
+heads of the cliff pair are functionally equivalent — what differs is
+what gets written to `net.7`.
+
+**Phases 7-8:** Not started.
