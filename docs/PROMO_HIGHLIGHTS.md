@@ -367,7 +367,7 @@ Phase 6 opened the box, and what's inside has a shape worth naming.
 The behavioral cliff has a causal locus in the actor's final hidden
 activation (`net.7`), and the circuit at that locus is **a small
 handful of generators, irreducibly entangled, only legible as a
-whole**. Six rounds of mechanistic probing landed on the same shape
+whole**. Seven rounds of mechanistic probing landed on the same shape
 from different directions:
 
 - **v1.** Layer-level activation patching localizes the cliff causally
@@ -395,6 +395,14 @@ from different directions:
   ranking overlap is statistically stable at 0.049 (95% CI [0.016,
   0.085]). Single neurons are weak, but *direction-specific neuron
   substrates* are functionally separable.
+- **v3.5.** Cross-policy ablation rankings on J1 + J2 inverted the
+  obvious-prediction substrate-identity-generalization story: P→C
+  critical neurons are heterogeneous across held-out pairs (Jaccard
+  0.255 / 0.067) even though P→C behavior transfers; C→P critical
+  neurons are unexpectedly stable across held-out pairs (Jaccard
+  0.422 / 0.684) even though C→P behavior doesn't transfer.
+  Subspace-level behavioral transfer and neuron-identity transfer
+  are decoupled in opposite directions for the two patches.
 
 What's left after those five rounds is a structural claim, not a
 score-table artifact:
@@ -421,13 +429,30 @@ top-32 overlap is statistically stable at 0.049 (95% CI [0.016,
 0.085]) — robust near-disjointness, though the CI still brackets
 chance-level (0.067) so the stronger "anti-correlated" reading is
 unearned. The basin-resisting substrate is also **more
-anatomically tight** than the basin-inducing one (C→P dissociation
-0.662 is ~4× the P→C dissociation 0.174), which dovetails with
-v3.1's cross-policy asymmetry: **basin-inducing machinery is shared
-across the controller family but distributed within any one policy;
-basin-resisting machinery is policy-specific but anatomically tight
-within each policy.** Two findings — within-policy dissociation and
-cross-policy generalization — point at one structural fact.
+anatomically tight** within the cliff pair than the basin-inducing
+one (C→P dissociation 0.662 is ~4× the P→C dissociation 0.174).
+
+*The cross-policy generalization story complicates symmetrically.*
+v3.5 ran zero-ablation on two held-out pairs (J1 = L-Sig-Terminal-M
+vs L-Reward-M, J2 = L-Mixed-M-λ=0.9 vs λ=0.99) and computed Jaccard
+between cliff-pair critical sets and held-out critical sets. The
+result is an **inversion** of the obvious prediction: basin-inducing
+P→C neuron-substrate identity does *not* generalize (J1 Jaccard
+0.255, J2 0.067 — at chance) even though P→C *behavior* transfers
+strongly under the cliff-pair basis (v3.1 P→C ≥ 0.94 on both
+held-out pairs); basin-resisting C→P neuron-substrate identity
+generalizes strongly (J1 Jaccard 0.422, J2 0.684) even though C→P
+*behavior* transfers weakly (v3.1 J1 C→P = 0.16, J2 = 0.63).
+**Subspace-level behavioral transfer and neuron-identity transfer
+are decoupled in opposite directions for the two patches.** The
+cliff-pair 5D basis is a *family-wide direction in activation space*
+that different policies implement with different neurons (P→C: same
+direction, different neurons); the cliff-pair C→P critical neurons
+are a *family-wide neuron substrate* that fires differently per
+policy (C→P: same neurons, different operations). The basin-
+attractor circuit at net.7 implements its two directions through
+orthogonal generalization mechanisms — a structural fact that the
+"shared vs policy-specific" framing was too crude to capture.
 
 *The L2-overlap retroactively explains v3.2.* v3.4 also bootstrapped
 the v3.3-critical / v3.2-L2-rank overlap: the C→P critical set
@@ -445,10 +470,10 @@ logged fields. The learned feed-forward policies do not observe live
 `x_false` at inference; the cliff policy is computing, not perceiving,
 its basin. The behavioral receipt from Phase 4 is now mechanistic.
 
-**Five methodological lessons stack out of the six rounds.** Each
-was earned by a method that failed to surface mechanism on its own,
-and each is a documented reason the obvious-reach toolkit doesn't
-work here:
+**Six methodological lessons stack out of the seven rounds.** Each
+was earned by a method that failed to surface mechanism on its own
+or that overturned an obvious prior, and each is a documented reason
+the obvious-reach toolkit doesn't work here:
 
 1. **Feature-availability rankings are not mechanism rankings.** A
    sparse-autoencoder feature with |correlation| = 0.89 against the
@@ -464,23 +489,31 @@ work here:
 4. **Single-neuron ablation does not surface a critical subset.** No
    neuron has ablation cost above 0.10 in either direction (v3.3).
    The mechanism is genuinely distributed at the single-neuron level.
-5. **But set-level substrate-restricted ablation does surface
-   structure.** v3.4 found that the direction-specific top-32
-   ablation-rank sets dissociate patch_success functionally — even
-   though each single neuron in those sets is weak (v3.3), the set
-   as a whole carries direction-specific mechanism. The combination
-   is the practical methodological recipe: *single-neuron methods
-   undersell distributed-but-direction-specific circuits; set-level
-   set-to-zero ablation on a principled basis-derived ranking
-   surfaces them.*
+5. **Set-level substrate-restricted ablation does surface structure
+   that single-neuron methods missed.** v3.4 found that the
+   direction-specific top-32 ablation-rank sets dissociate
+   patch_success functionally — even though each single neuron in
+   those sets is weak (v3.3), the set as a whole carries
+   direction-specific mechanism.
+6. **Subspace behavioral transfer and neuron-identity transfer can
+   point in opposite directions.** v3.5 found that basin-inducing
+   behavior transfers across the controller family while its
+   neuron-identity does not, and basin-resisting shows the opposite
+   pattern. *Behavioral transferability under a basis* and *neuron-
+   identity stability* are independent properties of a circuit, not
+   two views on the same property. Reasoning that conflates them
+   will misread the structure.
 
 Together: **for field-shaped circuits, non-linear holistic and
-set-level methods are mandatory**; linear analysis methods (probes,
-SAE features, top-k subspace restriction, top-k neuron restriction,
-single-neuron ablation) all fall short individually, but set-level
-ablation along basis-derived rankings recovers structure that the
-linear methods missed. This is itself a publishable finding about
-the methodology of mechanistic interpretability under field-shaped
+set-level methods are mandatory**, and *behavior* and *substrate-
+identity* must be tracked as separate observables. Linear analysis
+methods (probes, SAE features, top-k subspace restriction, top-k
+neuron restriction, single-neuron ablation) all fall short
+individually; set-level ablation along basis-derived rankings
+recovers structure but only at one layer at a time; cross-policy
+transfer reveals that the two layers can carry different family-
+wide patterns. This is itself a publishable finding about the
+methodology of mechanistic interpretability under field-shaped
 objectives.
 
 **The same shape, observed in two substrates.** The mesa-trap
