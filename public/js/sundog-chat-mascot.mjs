@@ -114,6 +114,52 @@ export function deriveMascotState(trace, previousTrace = null) {
   return "idle";
 }
 
+// Map a mascot state to an assistant-bubble morphology class. The bubble
+// is the second-strongest visual channel after the mascot ring/face — it
+// carries the epistemic class of the answer directly into the message
+// surface, so a reader skimming the log can tell "grounded" from
+// "speculative" from "shield-up" without parsing the trace.
+//
+// State → bubble (per spec §5):
+//   grounded         book_to_bubble, magnifier_pages, erase_and_stamp
+//   shield           halo_shield, paw_stop_unsupported, held_refusal,
+//                    sweat_brace, poster_vs_research, dropped_trace_failure
+//   out-of-scope     out_of_scope
+//   thought-cloud    thought_cloud
+//   compressed       claim_gate_trim
+//   split            split_book_clock
+//   squared          compass_route
+//   default (none)   idle, sniff_prompt, paw_claim_map
+//
+// Returned value is the CSS-class suffix (no `sd-chat-bubble--` prefix);
+// `null` means "no bubble variant — use the base assistant style".
+const BUBBLE_BY_STATE = Object.freeze({
+  book_to_bubble:         "grounded",
+  magnifier_pages:        "grounded",
+  erase_and_stamp:        "grounded",
+  halo_shield:            "shield",
+  paw_stop_unsupported:   "shield",
+  held_refusal:           "shield",
+  sweat_brace:            "shield",
+  poster_vs_research:     "shield",
+  dropped_trace_failure:  "shield",
+  out_of_scope:           "out-of-scope",
+  thought_cloud:          "thought-cloud",
+  claim_gate_trim:        "compressed",
+  split_book_clock:       "split",
+  compass_route:          "squared",
+  idle:                   null,
+  sniff_prompt:           null,
+  paw_claim_map:          null
+});
+
+export function bubbleClassFor(mascotState) {
+  if (!mascotState || typeof mascotState !== "string") return null;
+  return Object.prototype.hasOwnProperty.call(BUBBLE_BY_STATE, mascotState)
+    ? BUBBLE_BY_STATE[mascotState]
+    : null;
+}
+
 export function reduceToButtonState(mascotState) {
   switch (mascotState) {
     case "sweat_brace":
@@ -223,3 +269,4 @@ function dasher(stateName) {
 export const __MASCOT_STATES = FULL_STATES;
 export const __BUTTON_STATES = BUTTON_STATES;
 export const __PUBLIC_LABELS = PUBLIC_LABEL;
+export const __BUBBLE_BY_STATE = BUBBLE_BY_STATE;

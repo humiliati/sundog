@@ -19,9 +19,11 @@
 import {
   deriveMascotState,
   reduceToButtonState,
+  bubbleClassFor,
   __MASCOT_STATES,
   __BUTTON_STATES,
-  __PUBLIC_LABELS
+  __PUBLIC_LABELS,
+  __BUBBLE_BY_STATE
 } from "../../public/js/sundog-chat-mascot.mjs";
 
 const passes = [];
@@ -170,11 +172,76 @@ assert("reduce · idle → neutral_halo (default)", reduceToButtonState("idle"),
 assert("reduce · unknown state → neutral_halo (default fallback)", reduceToButtonState("not_a_real_state"), "neutral_halo");
 
 // ---------------------------------------------------------------------
+// Bubble morphology — second visual channel after the mascot face.
+// Every full state must map to either a known bubble class suffix or
+// `null` (no bubble variant — base assistant style).
+// ---------------------------------------------------------------------
+
+const KNOWN_BUBBLES = new Set([
+  "grounded", "shield", "out-of-scope", "thought-cloud",
+  "compressed", "split", "squared", null
+]);
+
+const BUBBLE_EXPECTATIONS = {
+  book_to_bubble:        "grounded",
+  magnifier_pages:       "grounded",
+  erase_and_stamp:       "grounded",
+  halo_shield:           "shield",
+  paw_stop_unsupported:  "shield",
+  held_refusal:          "shield",
+  sweat_brace:           "shield",
+  poster_vs_research:    "shield",
+  dropped_trace_failure: "shield",
+  out_of_scope:          "out-of-scope",
+  thought_cloud:         "thought-cloud",
+  claim_gate_trim:       "compressed",
+  split_book_clock:      "split",
+  compass_route:         "squared",
+  idle:                  null,
+  sniff_prompt:          null,
+  paw_claim_map:         null
+};
+
+for (const fullState of __MASCOT_STATES) {
+  const bubble = bubbleClassFor(fullState);
+  if (!KNOWN_BUBBLES.has(bubble)) {
+    failures.push({
+      name: `bubbleClassFor(${fullState}) returns a known bubble class`,
+      expected: `one of grounded|shield|out-of-scope|thought-cloud|compressed|split|squared|null`,
+      actual: bubble
+    });
+  } else {
+    passes.push({ name: `bubble · ${fullState} → ${bubble === null ? "(none)" : bubble}`, value: bubble });
+  }
+
+  if (Object.prototype.hasOwnProperty.call(BUBBLE_EXPECTATIONS, fullState)) {
+    assert(`bubble-mapping · ${fullState}`, bubble, BUBBLE_EXPECTATIONS[fullState]);
+  }
+}
+
+// Defensive paths.
+assert("bubble · null state → null", bubbleClassFor(null), null);
+assert("bubble · undefined → null", bubbleClassFor(undefined), null);
+assert("bubble · unknown state → null", bubbleClassFor("not_a_real_state"), null);
+assert("bubble · non-string → null", bubbleClassFor(42), null);
+
+// __BUBBLE_BY_STATE should cover every full state.
+for (const fullState of __MASCOT_STATES) {
+  if (!Object.prototype.hasOwnProperty.call(__BUBBLE_BY_STATE, fullState)) {
+    failures.push({
+      name: `__BUBBLE_BY_STATE[${fullState}] defined`,
+      expected: "key present",
+      actual: "missing"
+    });
+  } else {
+    passes.push({ name: `bubble-map · ${fullState} key present`, value: __BUBBLE_BY_STATE[fullState] });
+  }
+}
+
+// ---------------------------------------------------------------------
 // Pending states — out_of_scope and held_refusal (batch step 2).
-// These tests will pass once step 2 lands. Until then, they are
-// expected-to-fail. The harness reports them separately so step-1
-// landing remains green and step-2 landing is reflected as the
-// pending bucket transitioning to pass.
+// Step 2 has landed; these now pass and are kept as regression
+// guards. They use the second-arg (previousTrace) of deriveMascotState.
 // ---------------------------------------------------------------------
 
 const pendingCases = [
@@ -193,10 +260,6 @@ const pendingPasses = [];
 const pendingFailures = [];
 
 for (const [name, trace, prev, expectedFull, expectedBtn] of pendingCases) {
-  // After step 2, deriveMascotState will accept an optional second
-  // argument (previousTrace). The current single-arg call collapses
-  // gracefully; the test reports the actual result so the failure is
-  // legible.
   const actualFull = deriveMascotState(trace, prev);
   const actualBtn = reduceToButtonState(actualFull);
   const ok = actualFull === expectedFull && actualBtn === expectedBtn;
@@ -247,8 +310,4 @@ console.log();
 console.log(`Taxonomy: ${__MASCOT_STATES.length} full states, ${__BUTTON_STATES.length} button states.`);
 console.log(stepOneOk ? `Step-1 contract: GREEN.` : `Step-1 contract: RED — implemented tests failing above.`);
 
-// Exit non-zero only on implemented-test failures. Pending tests don't
-// fail the harness; they're tracked separately. When step 2 lands and
-// the pending bucket transitions to "now passing", the harness can be
-// updated to fold them into the implemented set.
 process.exit(stepOneOk ? 0 : 1);
