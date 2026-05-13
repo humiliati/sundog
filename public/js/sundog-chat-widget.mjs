@@ -1,6 +1,6 @@
 import { DEFAULT_FAQS, buildTraceAnswer, loadClaimMap } from "./sundog-chat-router.mjs";
 import { attachRetrievedMatches, buildRetrievalTrace, loadChatIndex } from "./sundog-retrieval.mjs";
-import { applyMascotState, applyPanelMascotState } from "./sundog-chat-mascot.mjs";
+import { applyMascotState, applyPanelMascotState, bubbleClassFor, deriveMascotState } from "./sundog-chat-mascot.mjs";
 
 const ROOT_ID = "sd-chat-widget-root";
 const MASCOT_CSS_HREF = "/css/sundog-chat-mascot.css";
@@ -108,7 +108,8 @@ async function initAskSundog() {
 
   async function answerQuestion(question) {
     const trace = await traceFor(question);
-    answerStack.replaceChildren(renderExchange(question, trace));
+    const mascotState = deriveMascotState(trace, lastTrace);
+    answerStack.replaceChildren(renderExchange(question, trace, mascotState));
     answerStack.scrollIntoView({ block: "nearest", behavior: "smooth" });
     applyMascotState(launch, trace, { previousTrace: lastTrace });
     applyPanelMascotState(panel, trace, { previousTrace: lastTrace });
@@ -185,7 +186,7 @@ function renderFaqs(container, onAsk) {
   }));
 }
 
-function renderExchange(question, trace) {
+function renderExchange(question, trace, mascotState = null) {
   const fragment = document.createDocumentFragment();
   const userMessage = document.createElement("div");
   userMessage.className = "sd-chat-message sd-chat-message-user";
@@ -193,6 +194,15 @@ function renderExchange(question, trace) {
 
   const assistantMessage = document.createElement("div");
   assistantMessage.className = "sd-chat-message sd-chat-message-assistant";
+  // Bubble morphology — second-strongest visual signal after the mascot
+  // face. The bubble class is the epistemic-class carrier; reduced-motion
+  // users still see it because the shape itself is information, not chrome.
+  const bubbleClass = bubbleClassFor(mascotState);
+  if (bubbleClass) {
+    assistantMessage.classList.add(`sd-chat-bubble--${bubbleClass}`);
+    assistantMessage.dataset.bubble = bubbleClass;
+  }
+  if (mascotState) assistantMessage.dataset.mascotState = mascotState;
   assistantMessage.append(renderTierRail(trace), paragraph(trace.answer), renderNextAction(trace), renderTrace(trace));
   assistantMessage.dataset.trace = JSON.stringify(trace);
 
