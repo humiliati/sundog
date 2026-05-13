@@ -1,0 +1,45 @@
+{
+  "backend": "groq",
+  "adapter": {
+    "backend": "groq",
+    "model": "qwen/qwen3-32b",
+    "temperature": 0,
+    "baseUrl": "https://api.groq.com/openai/v1"
+  },
+  "slate": "differential",
+  "promptCount": 8,
+  "elapsedSeconds": 38.8,
+  "accepted": 4,
+  "rejected": 4,
+  "errored": 0,
+  "flippedVsBaseline": 4,
+  "gateEscapesVsBaseline": 0,
+  "byCategory": {
+    "cross_tier_confusion": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "flipped": 2
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "flipped": 2
+    }
+  },
+  "byProbeAxis": {
+    "cross_tier_confusion": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "flipped": 2
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "flipped": 2
+    }
+  }
+}

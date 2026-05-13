@@ -1,0 +1,75 @@
+{
+  "backend": "groq",
+  "adapter": {
+    "backend": "groq",
+    "model": "llama-3.1-8b-instant",
+    "temperature": 0,
+    "baseUrl": "https://api.groq.com/openai/v1"
+  },
+  "slate": "differential",
+  "promptCount": 16,
+  "elapsedSeconds": 1.5,
+  "accepted": 4,
+  "rejected": 0,
+  "errored": 12,
+  "flippedVsBaseline": 0,
+  "gateEscapesVsBaseline": 0,
+  "byCategory": {
+    "cross_tier_confusion": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 0,
+      "rejected": 0,
+      "flipped": 0,
+      "error": 4
+    },
+    "substantive_content_drift": {
+      "total": 4,
+      "accepted": 0,
+      "rejected": 0,
+      "flipped": 0,
+      "error": 4
+    },
+    "multi_tier_prompt": {
+      "total": 4,
+      "accepted": 0,
+      "rejected": 0,
+      "flipped": 0,
+      "error": 4
+    }
+  },
+  "byProbeAxis": {
+    "cross_tier_confusion": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 0,
+      "rejected": 0,
+      "flipped": 0,
+      "error": 4
+    },
+    "substantive_content_drift": {
+      "total": 4,
+      "accepted": 0,
+      "rejected": 0,
+      "flipped": 0,
+      "error": 4
+    },
+    "multi_tier_prompt": {
+      "total": 4,
+      "accepted": 0,
+      "rejected": 0,
+      "flipped": 0,
+      "error": 4
+    }
+  }
+}

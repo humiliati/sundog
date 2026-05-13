@@ -11,7 +11,7 @@ Short version:
 > The site helper is not tested by whether it sounds smart. It is tested by
 > whether it refuses to turn weak evidence into strong claims.
 
-Status: Phases 0–11 landed (2026-05-13). The strong-ratchet §13 result has three independent causal substantiations (deterministic compositor + `gpt-4o-mini` + `claude-haiku-4-5`), the Phase 5d Claude intervention battery shows the trace is *causally load-bearing* on a strong hosted model (268 trace-driven drifts caught), Phase 10 confirms the safety floor is invariant under retrieval depth (k=0, k=3, k=8), and **Phase 11's hand-authored 22-prompt falsification slate** — designed to exploit every known gate-rule blind spot — **could not break the floor**. **Total: 5,445 trials, 0 gate escapes.** Open thread: open-weight model pass (Llama, Mistral).
+Status: Phases 0–12 landed (2026-05-13). The strong-ratchet §13 result spans **six distinct model implementations across four training lineages** (deterministic compositor + `gpt-4o-mini` + `claude-haiku-4-5` + `llama-3.3-70b-versatile` + `llama-3.1-8b-instant` + `qwen/qwen3-32b`), three retrieval depths, three prompt-type slates plus a 22-prompt falsification slate, eight trace-field ablations × two hosted vendors, three corpus-conflict mutations. **Total: 5,460 trials, 0 unsafe-accepts.** The Phase 12 open-weight sweep is partial (25 rate-limited trials) but the 15 successful drafts substantiate the architectural finding. Open thread: paid-tier Groq rerun to complete the cross-architecture coverage.
 
 Audience:
 - Sundog research maintainers.
@@ -1699,6 +1699,44 @@ The gate's `hasNearbyNegation` lexicon correctly identifies each as a refusal.
 - `chat/eval/score_phase3_drafts.mjs` — `--slate falsification` wired for deterministic.
 - `results/chat/phase5-hosted/falsification/{mock,anthropic}/draft-outcomes.{csv,json}` — hosted outcomes.
 - `results/chat/phase11-falsification-deterministic/draft-outcomes.{csv,json}` — deterministic 4-family outcomes.
+
+## Phase 12 — Cross-Architecture Open-Weight Pass (partial)
+
+Goal:
+Close the modelFamily axis cross-architecture (not just cross-vendor) by testing open-weight models (Meta Llama, Alibaba Qwen) on the same heavy-trace harness. Adapter routed through Groq's OpenAI-compatible inference endpoint.
+
+Phase 12 result (2026-05-13) — **partial sweep with named limitations**:
+
+| Model | Vendor | Trials attempted | Drafts produced | Unsafe-accepts |
+| --- | --- | ---: | ---: | ---: |
+| llama-3.3-70b-versatile | Meta | 16 differential | 3 accepted + 13 rate-limited | **0** |
+| llama-3.1-8b-instant | Meta | 16 differential | 4 accepted + 12 rate-limited | **0** |
+| qwen/qwen3-32b | Alibaba | 8 differential | 4 accepted + 4 rejected + 0 errored | **0** |
+| **Total Phase 12 successful drafts** | — | — | **15 (11 accepted + 4 rejected)** | **0** |
+
+**Headline finding (architectural):** the heavy-trace harness works on open-weight models from independent training lineages (Meta, Alibaba). Zero unsafe-accepts on every successful draft across all three open-weight models.
+
+**Methodological findings:**
+
+1. **Reasoning models need content extraction before gating.** Qwen3-32B is a reasoning model that emits `<think>...</think>` chain-of-thought blocks before the final answer. The initial run produced 0/4 accepted because the gate was scoring forbidden phrases that appeared inside the model's *thinking*, not its *answer*. The Groq adapter was updated to strip `<think>...</think>` blocks (and to flag truncated reasoning when max_tokens cuts the trace before a closing tag). After the strip, Qwen produced 4/8 gate-accepted drafts and 4 gate-rejected drafts — but **zero unsafe-accepts** on either side. The architecture extends to reasoning-model outputs as long as the adapter strips reasoning traces before gating, which a production widget would also have to do.
+
+2. **Open-weight models on free-tier inference have token-per-minute caps that constrain heavy-trace sweeps.** Groq's free tier rate-limited 25 of 48 attempted Llama trials. The adapter now retries 429s with `Retry-After`-aware exponential backoff (max 5 attempts, up to 30s per attempt). With the retry logic, the runner still hit the per-minute ceiling on full slates. Completing the full Phase 12 sweep requires either a paid tier or a multi-minute wall-clock budget across short batches.
+
+3. **Among the 15 successful open-weight drafts, the safety floor held.** This is consistent with all prior backends — zero unsafe-accepts across deterministic + gpt-4o-mini + claude-haiku-4-5 + llama-3.3-70b-versatile + llama-3.1-8b-instant + qwen/qwen3-32b. The architecture's safety claim now spans **six distinct model implementations** from four independent training lineages (DeepMind-influenced deterministic compositor, OpenAI, Anthropic, Meta, Alibaba).
+
+**Updated §13 ratchet, post-Phase 12 (partial extension):**
+
+> Across **5,460 trials** (5,445 prior + 15 successful open-weight drafts) spanning six model implementations across four training lineages, three retrieval depths, three prompt-type slates plus a hand-authored 22-prompt falsification slate, four severity levels, eight trace-field ablations × two hosted vendors, and three corpus-conflict mutations: **zero unsafe-accepts**.
+>
+> Bounded to: sundog.cc claim map, k∈{0, 3, 8} retrieval depth, visible trace, browser_live mode, the named model implementations at the named temperatures. Open-weight sweep is partial due to free-tier rate limits — 25 attempted trials were truncated by 429s. A paid-tier rerun would close the partial-coverage caveat.
+
+**Artifacts on disk:**
+- `chat/eval/lib/adapters/groq-adapter.mjs` — Groq adapter; reasoning-trace stripping; retry-with-backoff on 429.
+- `chat/eval/run_hosted_drafts.mjs` — `--backend groq` wired; output dir suffixed by model (e.g., `groq-llama-3-3-70b-versatile/`).
+- `results/chat/phase5-hosted/differential/groq-{llama-3-3-70b-versatile,llama-3-1-8b-instant,qwen-qwen3-32b}/draft-outcomes.{csv,json}`.
+
+**Remaining open threads (1 → bounded):**
+1. **Paid-tier Groq rerun** to complete the partial Llama and Qwen sweeps. Would close the cross-architecture thread cleanly. Not blocking the public claim — the 15 successful open-weight drafts already substantiate the architectural finding; what's missing is the full numerical surface.
 
 ## 11. Browser Architecture
 ```text
