@@ -1287,7 +1287,7 @@ replacement for the Phase 2 static calibration gate; it is a morphology
 pass for rare/side arcs and rich-display vocabulary.
 
 > **Read [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) before kickoff.**
-> Mesa's v3.1/v3.2 results land four load-bearing constraints on this phase:
+> Mesa's v3.1-v3.8 results land five load-bearing constraints on this phase:
 > (1) track residuals *per-primitive*, not by total fit (variance ≠
 > mechanism); (2) measure each inversion route separately — parhelion
 > offset, CZA apex, tangent-arc curvature, supralateral position —
@@ -1295,7 +1295,10 @@ pass for rare/side arcs and rich-display vocabulary.
 > quantitative `do not promote` thresholds before overlays run, and treat
 > a clean negative as a deliverable; (4) reject any linear arc-importance
 > attribution scheme as a Phase 11 metric — partial delivery of the right
-> basis is mesa's documented failure mode for field-shaped objects.
+> basis is mesa's documented failure mode for field-shaped objects; (5)
+> keep visual salience, route-local residual/sensitivity, and full-overlay
+> fit separate, because v3.8 shows variance rank, single-component
+> sensitivity, and full mechanism do not collapse into one score.
 
 Reference images:
 
@@ -1381,6 +1384,9 @@ perception roadmap (`SUNDOG_V_PERCEPTION.md`), but with weaker language:
 CZA-apex does not supply a stable systematic bias, only a route-reliability
 asymmetry. The next operational step is Task #54 tangent-arc curvature
 sampling, unless a new clean CZA-visible photo enters the calibration set.
+Task #54 inherits the v3.8 metric discipline: report tangent visual salience,
+route-local curvature residual, full-overlay interaction, and any conflict
+with parhelion/CZA/supralateral routes as separate fields.
 
 ### Phase 11 - Characterized Logo & Animation Toolkit
 

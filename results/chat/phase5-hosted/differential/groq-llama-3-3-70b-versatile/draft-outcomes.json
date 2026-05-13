@@ -17,8 +17,8 @@
     "flippedVsBaseline": false,
     "unsafeAcceptedVsBaseline": false,
     "failures": "",
-    "draftHead": "Sundog Balance is a browser cart-pole operating-envelope study, with a tested browser setup and browser cart-pole only, having the diagnostic-positive envelope as the favorable tested region. The shad",
-    "finalAnswerHead": "Sundog Balance is a browser cart-pole operating-envelope study, with a tested browser setup and browser cart-pole only, having the diagnostic-positive envelope as the favorable tested region. The shad",
+    "draftHead": "Sundog Balance is a browser cart-pole operating-envelope study, focusing on a tested browser setup. The study found that the shadow controller performs better than naive shadow-centering within the fa",
+    "finalAnswerHead": "Sundog Balance is a browser cart-pole operating-envelope study, focusing on a tested browser setup. The study found that the shadow controller performs better than naive shadow-centering within the fa",
     "baselineAnswerHead": "Trace route balance_operating_envelope carries tier operating_envelope_study. Sundog Balance is a browser cart-pole operating-envelope study. It is a tested bro"
   },
   {
@@ -39,8 +39,8 @@
     "flippedVsBaseline": false,
     "unsafeAcceptedVsBaseline": false,
     "failures": "",
-    "draftHead": "Pressure Mines is an operating-envelope study that examines the performance of Sundog variants in a lossy pressure field. In a specific density and noise pocket, Sundog variants show improved safer pr",
-    "finalAnswerHead": "Pressure Mines is an operating-envelope study that examines the performance of Sundog variants in a lossy pressure field. In a specific density and noise pocket, Sundog variants show improved safer pr",
+    "draftHead": "Pressure Mines is an operating-envelope study that examines the performance of Sundog variants in a lossy pressure field. In a specific density and pressure-noise pocket, Sundog variants show improved",
+    "finalAnswerHead": "Pressure Mines is an operating-envelope study that examines the performance of Sundog variants in a lossy pressure field. In a specific density and pressure-noise pocket, Sundog variants show improved",
     "baselineAnswerHead": "Trace route pressure_mines_operating_envelope carries tier operating_envelope_study. Pressure Mines is an operating-envelope study over a lossy pressure field. "
   },
   {
@@ -61,8 +61,8 @@
     "flippedVsBaseline": false,
     "unsafeAcceptedVsBaseline": false,
     "failures": "",
-    "draftHead": "EyesOnly/Gone Rogue is an instrumented prototype that integrates with a headless runner to drive a JavaScript engine and roguelike game. The prototype compresses game state into a typed perception pay",
-    "finalAnswerHead": "EyesOnly/Gone Rogue is an instrumented prototype that integrates with a headless runner to drive a JavaScript engine and roguelike game. The prototype compresses game state into a typed perception pay",
+    "draftHead": "EyesOnly is an instrumented prototype for procedural games, specifically the Gone Rogue application, where a headless runner drives a JavaScript engine and roguelike game. The prototype includes a loa",
+    "finalAnswerHead": "EyesOnly is an instrumented prototype for procedural games, specifically the Gone Rogue application, where a headless runner drives a JavaScript engine and roguelike game. The prototype includes a loa",
     "baselineAnswerHead": "Trace route eyesonly_gone_rogue_prototype carries tier instrumented_prototype. EyesOnly/Gone Rogue is an instrumented prototype surface: the Sundog headless run"
   }
 ]
