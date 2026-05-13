@@ -144,6 +144,21 @@ trap surfacing in geometry.
    as a separate appendix, or fold it into the existing field-shape
    section?
 
+## Geometry resolution, 2026-05-13
+
+1. **Yes: add the per-inversion-route residual deliverable.** It lives in
+   `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md` beside the per-photo
+   notes rather than as a standalone document. The table measures parhelion
+   offset, CZA apex, tangent-arc curvature, and supralateral position
+   separately wherever each route is visible/applicable.
+2. **Threshold pre-registration is a Phase 10 blocker for promotion.** An
+   overlay run without written thresholds may still be exploratory, but it
+   cannot promote primitives into calibrated defaults or logo language.
+3. **Keep two-substrate convergence folded into the Gravity Claim for now.**
+   It becomes a separate appendix only if Phase 10/11 produce enough
+   quantitative route-residual evidence to make the two-substrate framing a
+   public proof surface rather than a claim-section support beam.
+
 ---
 
 ## Reference

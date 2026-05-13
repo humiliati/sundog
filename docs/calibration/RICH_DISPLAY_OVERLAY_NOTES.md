@@ -26,6 +26,47 @@ the parhelic belt and dagger markers by 5% of the observed 22° halo radius.
 This fixes a shared vertical belt residual without changing the 22°/46° halo
 registration.
 
+## Phase 10 Measurement Pre-Registration
+
+Geometry resolution, 2026-05-13: Mesa's crossover note makes the residual
+table and negative thresholds load-bearing for the next Phase 10 run.
+
+- The `per-inversion-route` residual table lives in this file, alongside the
+  per-photo overlay notes. It is a Phase 10 deliverable, not a separate
+  document, because the route residuals need to sit next to the photo-level
+  visibility classifications that determine whether each route is applicable.
+- The quantitative `do not promote` thresholds are a Phase 10 blocker for
+  promotion. If the thresholds are not written before an overlay run, that run
+  is exploratory only and cannot move a primitive into default/logo language.
+- Thresholds are evaluated at the image anchor scale and normalized by each
+  photo's measured `R22`.
+
+Pre-registered `do not promote` thresholds:
+
+| candidate class | do not promote if... |
+| --- | --- |
+| Optional vocabulary primitive | feature residual is `>= 0.06 * R22` or `>= 12 px` on at least two eligible photos |
+| Inversion route | route residual is `>= 0.04 * R22` or `>= 8 px` on at least two eligible photos |
+| Coverage | fewer than two eligible photos show the primitive/route clearly enough to measure |
+| Attribution metric | metric reports a linear "arc X contributes N%" score instead of a route/primitive residual |
+
+`Eligible` means the feature is visible, uncropped enough to measure, and
+inside its sun-altitude validity window. Hidden, cropped, or high-sun invalid
+features are recorded as `not applicable`, not as failures.
+
+## Per-Inversion-Route Residual Table
+
+This table is the Phase 10 response to the mesa finding that forward and
+inverse directions are not symmetric. Do not infer that a good parhelion-offset
+fit makes every route good.
+
+| route | p2 residual | p7 residual | p13 residual | promotion status | note |
+| --- | ---: | ---: | ---: | --- | --- |
+| Parhelion offset → sun altitude | TODO | TODO | TODO | pending | Existing preferred route; measure left/right separately when both parhelia are visible. |
+| CZA apex → sun altitude / visibility | TODO | not applicable | TODO | pending | Valid only below the CZA cutoff; p7 high-sun case should remain not applicable. |
+| Tangent-arc curvature → sun altitude | TODO | TODO | TODO | pending | Watch for non-monotone curvature; do not collapse into total overlay fit. |
+| Supralateral position → sun altitude | TODO | TODO | TODO | pending | Measure only where supralateral is visible/candidate, not where cropped. |
+
 ## Vocabulary Classification
 
 | primitive | p2 | p7 | p13 | promote? |
