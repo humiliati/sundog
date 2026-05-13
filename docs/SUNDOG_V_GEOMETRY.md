@@ -1372,13 +1372,15 @@ Task #53 has recorded the p2 CZA-apex receipt: parhelion-offset inversion is
 a forward/inverse asymmetry receipt rather than a promoted route. CZA-route
 promotion needs added CZA-visible calibration photos. The expansion triage in
 [`docs/calibration/PHASE10_EXPANSION_TRIAGE.md`](calibration/PHASE10_EXPANSION_TRIAGE.md)
-names p19 and p27 as priority CZA candidates, with p20 as a fallback. Phase 11
+now demotes p19: its visible upper chromatic arc aligns with an R22 ~= 270 px
+halo / upper-tangent region, putting the predicted CZA apex off-frame. p27 is
+the priority CZA candidate, with p20 as a lower-confidence fallback. Phase 11
 can start in parallel on the already promoted visibility vocabulary. Task
 #52/53 also feeds the downstream perception roadmap (`SUNDOG_V_PERCEPTION.md`)
 because independent CZA/tangent inversion routes would strengthen the later
-predicted-then-observed receipt. The next operational step is to anchor p19 and
-p27 for CZA-apex coverage before resuming Task #54 tangent-arc curvature
-sampling.
+predicted-then-observed receipt. The next operational step is to anchor p27,
+then decide whether p20 is clean enough to supply another CZA-apex measurement
+before resuming Task #54 tangent-arc curvature sampling.
 
 ### Phase 11 - Characterized Logo & Animation Toolkit
 
