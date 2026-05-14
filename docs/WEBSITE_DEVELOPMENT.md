@@ -146,7 +146,12 @@ When you revise the pitch:
 The elevator pitch is the densest claim surface on the site &mdash; in
 four paragraphs it touches the halo system, mesa-optimization, the
 5D subspace at `net.7`, the field-not-reward thesis, and the
-substrate-coincidence argument. Treat any new phrase the way the rest
+substrate-coincidence argument. The pitch is logged as a coupled
+public-copy surface in `docs/SUNDOG_V_CHAT.md` &sect;16, which names the
+known integrity gaps as of the current pitch version, the failure
+modes the chat eval should watch for (self-quoting pressure,
+boundary-arbitrage pressure, retraction lag), and the per-phrase
+ratchet decision protocol. Treat any new phrase the way the rest
 of this document treats a new public page:
 
 - If a revision introduces or sharpens a claim phrase (for example a
