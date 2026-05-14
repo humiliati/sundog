@@ -51,6 +51,42 @@ if (-not (Test-Path $HostedScript)) {
     exit 1
 }
 
+$ExpectedPromptCountBySlate = @{}
+foreach ($slateName in $Slates) {
+    $promptPath = Join-Path $RepoRoot "chat/prompts/gold-$slateName.jsonl"
+    if (Test-Path $promptPath) {
+        $ExpectedPromptCountBySlate[$slateName] = @(Get-Content -Path $promptPath | Where-Object { $_.Trim().Length -gt 0 }).Count
+    }
+}
+
+function Get-SkipReason {
+    param([Parameter(Mandatory = $true)] $Step)
+
+    if (-not (Test-Path $Step.SummaryPath)) {
+        return $null
+    }
+
+    try {
+        $summary = Get-Content -Raw -Path $Step.SummaryPath | ConvertFrom-Json
+    } catch {
+        return $null
+    }
+
+    $expectedCount = $ExpectedPromptCountBySlate[$Step.Slate]
+    $actualCount = [int] $summary.promptCount
+    $errorCount = [int] $summary.errored
+
+    if ($expectedCount -and $actualCount -ne $expectedCount) {
+        return $null
+    }
+
+    if ($errorCount -ne 0) {
+        return $null
+    }
+
+    return "complete"
+}
+
 $LogPath = Join-Path $RepoRoot "results/chat/phase12-groq-driver-log.jsonl"
 $LogDir = Split-Path -Parent $LogPath
 if (-not (Test-Path $LogDir)) {
@@ -82,7 +118,8 @@ foreach ($model in $Models) {
 Write-Host ""
 Write-Host "Plan: $($plan.Count) model x slate combinations" -ForegroundColor Cyan
 foreach ($step in $plan) {
-    $skipMark = if ($SkipDone -and (Test-Path $step.SummaryPath)) { "[SKIP - exists]" } else { "" }
+    $skipReason = Get-SkipReason -Step $step
+    $skipMark = if ($SkipDone -and $skipReason) { "[SKIP - $skipReason]" } else { "" }
     Write-Host ("  {0,-28} {1,-14} delay={2,5}ms  {3}" -f $step.Model, $step.Slate, $step.DelayMs, $skipMark)
     if ($DryRun) {
         Write-Host ("    node chat/eval/run_hosted_drafts.mjs --slate {0} --backend groq --concurrency 1 --delay-ms {1}" -f $step.Slate, $step.DelayMs) -ForegroundColor DarkGray
@@ -114,8 +151,9 @@ $globalStart = Get-Date
 $stepIdx = 0
 foreach ($step in $plan) {
     $stepIdx++
-    if ($SkipDone -and (Test-Path $step.SummaryPath)) {
-        Write-Host ("[{0}/{1}] SKIP {2} x {3} - summary.json already present" -f $stepIdx, $plan.Count, $step.Model, $step.Slate) -ForegroundColor DarkYellow
+    $skipReason = Get-SkipReason -Step $step
+    if ($SkipDone -and $skipReason) {
+        Write-Host ("[{0}/{1}] SKIP {2} x {3} - {4}" -f $stepIdx, $plan.Count, $step.Model, $step.Slate, $skipReason) -ForegroundColor DarkYellow
         continue
     }
 
