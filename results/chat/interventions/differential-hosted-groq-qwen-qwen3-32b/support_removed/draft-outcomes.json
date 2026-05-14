@@ -23,8 +23,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Sundog Balance is an operating-envelope study focused on browser-based",
-    "finalAnswerHead": "Sundog Balance is an operating-envelope study focused on browser-based"
+    "draftHead": "Sundog Balance is an operating-envelope study focused on browser-based cart-pole systems. It evaluates controller performance within a defined diagnostic-positive envelope, where shadow controllers ou",
+    "finalAnswerHead": "Sundog Balance is an operating-envelope study focused on browser-based cart-pole systems. It evaluates controller performance within a defined diagnostic-positive envelope, where shadow controllers ou"
   },
   {
     "id": "differential-002",
@@ -50,8 +50,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Pressure Mines evaluates Sundog's performance in a lossy pressure field under specific conditions (density 0.16, pressure-noise 2.0, dropout 0.2). In this pocket, pressure-derived Sundog variants show",
-    "finalAnswerHead": "Pressure Mines evaluates Sundog's performance in a lossy pressure field under specific conditions (density 0.16, pressure-noise 2.0, dropout 0.2). In this pocket, pressure-derived Sundog variants show"
+    "draftHead": "Pressure Mines evaluates Sundog's operating envelope in a lossy pressure field, showing that specific configurations (density 0.16, pressure-noise 2.0, dropout 0.2) achieve safer progress before failu",
+    "finalAnswerHead": "Pressure Mines evaluates Sundog's operating envelope in a lossy pressure field, showing that specific configurations (density 0.16, pressure-noise 2.0, dropout 0.2) achieve safer progress before failu"
   },
   {
     "id": "differential-003",
@@ -77,8 +77,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "EyesOnly/Gone Rogue is an instrumented prototype for procedural games, using a Sundog headless runner to drive a JavaScript",
-    "finalAnswerHead": "EyesOnly/Gone Rogue is an instrumented prototype for procedural games, using a Sundog headless runner to drive a JavaScript"
+    "draftHead": "EyesOnly/Gone Rogue is an instrumented prototype for procedural games, featuring a Sundog headless runner that drives a JavaScript engine and roguelike game via Playwright, with state compression, pol",
+    "finalAnswerHead": "EyesOnly/Gone Rogue is an instrumented prototype for procedural games, featuring a Sundog headless runner that drives a JavaScript engine and roguelike game via Playwright, with state compression, pol"
   },
   {
     "id": "differential-004",
@@ -98,14 +98,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: draft was only reasoning trace (usage={\"queue_time\":0.022453323,\"prompt_tokens\":784,\"prompt_time\":0.045864511,\"completion_tokens\":320,\"completion_t",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Dungeon Gleaner is a product expression implementing verb-field NPC behavior, using indirect-signal patterns to guide actions toward local satisfier nodes. While it demonstrates a working application ",
+    "finalAnswerHead": "Dungeon Gleaner is a product expression implementing verb-field NPC behavior, using indirect-signal patterns to guide actions toward local satisfier nodes. While it demonstrates a working application "
   },
   {
     "id": "differential-005",
@@ -131,8 +131,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Sundog Balance’s operating-envelope study reports overhead-light cells as degradation boundaries where both controllers failed in the tested browser cart-pole setup. The study does not support claims ",
-    "finalAnswerHead": "Sundog Balance’s operating-envelope study reports overhead-light cells as degradation boundaries where both controllers failed in the tested browser cart-pole setup. The study does not support claims "
+    "draftHead": "Sundog Balance’s overhead-light cells are part of the operating envelope’s degradation boundaries. The tested setup shows both controllers failed in these cells, and the evidence tier does not support",
+    "finalAnswerHead": "Sundog Balance’s overhead-light cells are part of the operating envelope’s degradation boundaries. The tested setup shows both controllers failed in these cells, and the evidence tier does not support"
   },
   {
     "id": "differential-006",
@@ -152,14 +152,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "rejected",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "forbidden:predicting chaos",
-    "draftHead": "The Three-Body workbench studies controlled survival in high-velocity near-escape scenarios using a guarded accelerometer-proxy TRACK controller, showing improvement over passive baselines in specific",
-    "finalAnswerHead": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller shows survival improvement versus passive and na"
+    "failures": "",
+    "draftHead": "The Three-",
+    "finalAnswerHead": "The Three-"
   },
   {
     "id": "differential-007",
@@ -179,14 +179,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "rejected",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "forbidden:field clearance|forbidden:board solution",
-    "draftHead": "Pressure Mines evaluates safer progress in minefields using a pressure-derived approach, prioritizing safe-tile discovery before failure under specific density and noise conditions. In the documented ",
-    "finalAnswerHead": "Pressure Mines is an operating-envelope study over a lossy pressure field. In the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted"
+    "failures": "",
+    "draftHead": "Pressure Mines evaluates safer progress in minefields using a lossy pressure model. In the density 0.16 / pressure-noise 2.0 / dropout 0.2 configuration, pressure-derived variants show improved budget",
+    "finalAnswerHead": "Pressure Mines evaluates safer progress in minefields using a lossy pressure model. In the density 0.16 / pressure-noise 2.0 / dropout 0.2 configuration, pressure-derived variants show improved budget"
   },
   {
     "id": "differential-008",
@@ -212,8 +212,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Money Bags is an instrumented prototype focused on softbody graph telemetry, with current contributions limited",
-    "finalAnswerHead": "Money Bags is an instrumented prototype focused on softbody graph telemetry, with current contributions limited"
+    "draftHead": "Money Bags is an instrumented prototype focused on softbody graph telemetry, providing alignment, torsion, and deformation signals through its apparatus. The see-saw musing remains a hypothesis under ",
+    "finalAnswerHead": "Money Bags is an instrumented prototype focused on softbody graph telemetry, providing alignment, torsion, and deformation signals through its apparatus. The see-saw musing remains a hypothesis under "
   },
   {
     "id": "differential-009",
@@ -239,8 +239,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "The photometric Sundog result achieved terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo task. The exact percentage is not specified in the p",
-    "finalAnswerHead": "The photometric Sundog result achieved terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo task. The exact percentage is not specified in the p"
+    "draftHead": "The photometric Sundog result achieved terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo task, but the exact percentage figure is not specifi",
+    "finalAnswerHead": "The photometric Sundog result achieved terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo task, but the exact percentage figure is not specifi"
   },
   {
     "id": "differential-010",
@@ -266,8 +266,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "[reasoning trace truncated before final answer]",
-    "finalAnswerHead": "[reasoning trace truncated before final answer]"
+    "draftHead": "The Three-Body workbench study reports survival improvement in a high-velocity near-escape pocket using the TRACK controller, but specific numeric win rates are not quantified in the operating-envelop",
+    "finalAnswerHead": "The Three-Body workbench study reports survival improvement in a high-velocity near-escape pocket using the TRACK controller, but specific numeric win rates are not quantified in the operating-envelop"
   },
   {
     "id": "differential-011",
@@ -293,8 +293,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Pressure Mines evaluates Sundog's safer progress before failure in a lossy pressure field, comparing budget-adjusted safe-tile metrics against naive pressure baselines. The study reports improved safe",
-    "finalAnswerHead": "Pressure Mines evaluates Sundog's safer progress before failure in a lossy pressure field, comparing budget-adjusted safe-tile metrics against naive pressure baselines. The study reports improved safe"
+    "draftHead": "Pressure Mines evaluates Sundog's safer progress before failure in a pressure field. In the specified density/noise/dropout pocket, pressure-derived variants improve budget-adjusted safe-tile progress",
+    "finalAnswerHead": "Pressure Mines evaluates Sundog's safer progress before failure in a pressure field. In the specified density/noise/dropout pocket, pressure-derived variants improve budget-adjusted safe-tile progress"
   },
   {
     "id": "differential-012",
@@ -314,14 +314,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Dungeon Gleaner implements verb-field NPC behavior, using indirect-signal patterns to guide actions toward local satisfiers. However, it lacks a controlled benchmark against GOAP, and telemetry/compar",
+    "finalAnswerHead": "Dungeon Gleaner implements verb-field NPC behavior, using indirect-signal patterns to guide actions toward local satisfiers. However, it lacks a controlled benchmark against GOAP, and telemetry/compar"
   },
   {
     "id": "differential-013",
@@ -368,14 +368,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Dungeon Gleaner is categorized as a product expression, demonstrating verb-field NPC behavior through indirect-signal patterns in a playable form. Money Bags is not addressed in Sundog’s evidence tier",
+    "finalAnswerHead": "Dungeon Gleaner is categorized as a product expression, demonstrating verb-field NPC behavior through indirect-signal patterns in a playable form. Money Bags is not addressed in Sundog’s evidence tier"
   },
   {
     "id": "differential-015",
@@ -401,8 +401,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "EyesOnly/Gone Rogue demonstrates an instrumented prototype where Sundog’s headless runner executes a JavaScript roguelike, captures structured game state, and tests policy-driven action sequences. Dun",
-    "finalAnswerHead": "EyesOnly/Gone Rogue demonstrates an instrumented prototype where Sundog’s headless runner executes a JavaScript roguelike, captures structured game state, and tests policy-driven action sequences. Dun"
+    "draftHead": "[reasoning trace truncated before final answer]",
+    "finalAnswerHead": "[reasoning trace truncated before final answer]"
   },
   {
     "id": "differential-016",
@@ -422,13 +422,13 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "rejected",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "rejected",
     "flippedVsBaseline": true,
-    "unsafeAccepted": false,
+    "unsafeAccepted": true,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Sundog Balance is an operating-envelope study focused on browser-based cart",
+    "finalAnswerHead": "Sundog Balance is an operating-envelope study focused on browser-based cart"
   }
 ]

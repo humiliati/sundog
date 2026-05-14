@@ -400,6 +400,170 @@ overlays) ones, on a Phase 4 positive verdict only.
 The five transferable findings above remain authoritative for Phase
 10/11 of geometry; perception is a separate roadmap, not a successor.
 
+---
+
+## Phase 11 wave-2 addendum, 2026-05-14
+
+The Phase 11 outreach campaign ran a second independent persona
+dispatch (wave-2) after wave-1's 15 patches landed; full record at
+[`docs/calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md`](calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md)
+§8. Wave-2 surfaced 3 send-blocking + 14 recommended findings on top
+of wave-1; all 17 patches landed in four user-approved batches the
+same day. The *post-re-audit substantive update* above pre-dates
+wave-2; this addendum absorbs the wave-2 findings with cross-substrate
+methodological reach. None of them weaken the two-substrate framing.
+
+### Wave-2 W7 — chromatic-spread verification-gate miss
+
+Wave-1 §3a finding #8 patched `scripts/cza_formula.py` with a
+docstring claim that "the CZA disappearance altitude varies by ~0.1°
+across the visible chromatic spread, which is below this atlas's
+measurement precision." Wave-2 §8.4 re-derived from the script's own
+formula:
+
+| wavelength | n (ice) | h_disappear |
+| --- | --- | --- |
+| red (~670 nm) | 1.306 | 32.86° |
+| yellow (~589 nm) | 1.308 | 32.50° |
+| visible centroid | 1.31 | 32.19° |
+| violet (~404 nm) | 1.317 | 31.05° |
+
+Visible-band spread is **~1.8°**, not ~0.1°. Off by ~18×. The
+"below measurement precision" claim was also wrong: ~1.8° altitude
+uncertainty is well above the ~0.1° precision the photo-anchor JSONs
+work at.
+
+**Mesa methodological transfer.** This is a wave-1 verification-gate
+miss: the §5 standard ("persona claims about formulas must be backed
+by executable code or a specific cited literature line") should have
+caught the ~0.1° number during wave-1 consolidation, and didn't. The
+gate let a magnitude claim through because the magnitude wasn't
+re-derived from the underlying formula — only the qualitative
+direction was. Mesa's own verification gates across Phase 4 / 5 / 6
+should treat **persona-quoted numerical constants as hypotheses to
+re-derive, not facts to propagate**. Audit-survived wording is only
+as strong as the consolidator's worst miss; the principle generalizes
+back to the basin-capture, cliff, and patch-success numerical claims
+that anchor Phase 7's earned envelope language. The wave-2 fix lands
+both at `scripts/cza_formula.py` lines 46-57 and at packet §1 row 5.
+
+### Wave-2 W1 — p7 production-mechanism question
+
+Wave-2 Persona A flagged that the strict 3-photo parhelion-set
+includes p7 at h = 59.4°, where the column-plate parhelion production
+mechanism is at the edge of its plausible regime. Tape (1994) §3 and
+Greenler ch. 3 frame parhelia as low-to-moderate-`h` plate-refraction
+features; circumscribed-halo brightness on the parhelic circle
+competes at h ≈ 60°. The campaign's Pass C1 dropped p7 from
+*tangent-arc* eligibility on circumscribed-halo grounds without
+posing the symmetric question about *parhelion* eligibility. The
+question is now filed as tier-1 specialist dispatch material at
+handoff §2.8.
+
+**Mesa cross-substrate analog.** Mesa's Phase 4 basin-capture receipt
+shows canonical L-Reward has zero action-response to live `x_false`
+movement while ending preferentially at the training-time basin —
+that end-position is the load-bearing observable for the fixed-
+attractor reading. The geometry analog asks a sharpening question:
+**is the observable we measure actually produced by the mechanism we
+think it is, or by a different effect competing for the same
+observable?** Mesa's existing discipline (Phase 4 distinguishes
+action-response from end-position) already encodes this principle, but
+the geometry side now has a concrete worked example — same bright
+spot, two production mechanisms (plate parhelion vs circumscribed
+halo). Worth banking as a methodological reminder for Phase 8 v2
+replay design: when the replay shows continued attraction to the
+training-time basin, the replay shows the *effect*; whether the
+*mechanism* is internalized-basin or environment-feature is a separate
+question to keep posable.
+
+### Wave-2 W4 — canonical vs project-original inverse handle
+
+Wave-2 Persona A surfaced that the literature standard tangent-arc
+inverse handle is **opening angle / arc extent** (Tape 1994 §6;
+Cowley tangent-arcs page), not circle-fit curvature. The project's
+tested inverse `R_uta / R₂₂ → h` was project-original framing, not
+canonical literature framing. Handoff §2.3 (v) already hedged this
+as an open framing question, but the wave-1 verdict tables treated it
+as settled. Wave-2 pulled the hedge up into the verdict tables across
+handoff §1 and packet §0.
+
+**Refinement of original Finding #3 (Directional asymmetry).** The
+forward/inverse asymmetry now has a sub-distinction inside the inverse
+direction:
+
+| inverse route | handle type | outcome |
+| --- | --- | --- |
+| parhelion-offset → h via `R₂₂ / cos h` | canonical literature | **promoted** (3-photo strict eligibility) |
+| CZA-apex → h via Bravais `arcsin(√(n² − cos²h)) − h` | canonical literature | **fails coverage gate** (dataset, not handle) |
+| supralateral → h | canonical literature | **fails physics-discrimination** (route-physics limitation, not handle) |
+| tangent-arc → h via `R_uta / R₂₂` circle-fit curvature | **project-original framing**, not canonical | **fails in C5↔C6 substrate tension** |
+
+The pattern: where the project used the canonical handle, routes
+either promoted or failed for a substrate-physics reason; where the
+project used an original handle, the route failed in a way that could
+be a real route failure *or* a measurement-of-the-wrong-shape failure.
+
+**Mesa cross-substrate analog and detection-gate refinement.**
+Geometry's three-gate vocabulary (residual / coverage / detection)
+ported back to mesa, and Phase 6 v2's `|corr| = 0.89` with ~0% patch
+effect was the original detection-gate lesson: feature *availability*
+≠ feature *use*. Wave-2 W4 adds a deeper version: **the canonical
+literature inverse handle for a substrate may be a different geometric
+object entirely from the one being tested.** If mesa ever runs into a
+"negative on the substrate" result that survives detection-gate
+scrutiny, W4 says: re-check that the handle being tested is the
+canonical substrate-literature inverse, not a project-original framing
+dressed in canonical-looking notation. The `net.7` entangled 5D
+subspace is mesa's load-bearing basis; whether that 5D shape is the
+*canonical literature inverse* in the controller substrate (or
+project-original framing in canonical-looking notation) is a question
+mesa's existing infrastructure can't answer but the cross-substrate
+methodological surface now poses.
+
+### What does not change
+
+Mesa's Phase 8 v1 public artifact (`mesa.html`) requires no update for
+wave-2:
+
+- §The Envelope (Phase 7 v1) class-balance (8/7/1/4/2) stands.
+- §The Cliff at `λ ≈ 0.953` stands.
+- §The Locus `net.7` patch-success receipt stands.
+- §What This Doesn't Say claim-boundary block stands.
+
+The gravity-ledger promotion summary and Candidate 2 *Current
+recommendation* (in `SUNDOG_V_GRAVITY.md`) stand. The two-substrate
+field-shape framing is intact. The wave-2 patches are concentrated on
+the *geometry-side public surfaces* (packet, handoff, brief,
+workbench HTML) and on the *cross-substrate methodological surface*
+(this addendum + the resolution-of-chromatic-spread record in the
+synthetic memo §8.4), not on mesa's earned claim language.
+
+### Open items, none blocking mesa
+
+1. **Geometry W4 follow-up — Tape §6 opening-angle / arc-extent
+   tangent inverse as a candidate Pass C7.** Project-internal
+   investigation, doesn't depend on specialist reply. If positive, the
+   tangent route moves from "C5↔C6 substrate tension" to "passes
+   under the canonical-handle reformulation," which would add a third
+   promoted inverse route on the geometry side and a corresponding
+   refinement to the in-the-wild receipt for the gravity claim.
+2. **Specialist reply on handoff §2.8 (p7 mechanism question).**
+   External dependency. If specialist confirms mis-attribution, strict
+   3-photo wording cascades through handoff §1, packet §2 item 3,
+   reaudit memo §94, brief §5; the gravity-ledger forward/inverse
+   asymmetry receipt narrows from 3 photos to 2 (p2, p13). The
+   cross-substrate pattern survives in narrower form either way.
+3. **Outreach send sequence.** Tier-1 specialist handoff is ready;
+   tier-2 editorial cover note (brief §10b) is ready; tier-3
+   Wikipedia-adjacent is now structurally unblocked by wave-2
+   W2/W13/W15 once `dist/sundog.html` is rebuilt and deployed to
+   sundog.cc.
+
+None of these block mesa Phase 8 v2 work (best-cell / worst-cell
+replay, Phase 6 v2 Axis A redux at net.7, Phase 7 v2 cross-product +
+Large tier).
+
 ## Reference
 
 - `docs/SUNDOG_V_MESA.md` — the mesa roadmap, v3.1/v3.2 results
