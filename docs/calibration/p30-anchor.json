@@ -11,6 +11,8 @@
   },
   "sun": [701, 934],
   "r22": 650,
+  "r22_source": "ring-fit",
+  "r22_source_note": "Per existing _meta: 'The 22-degree halo is strong.' R22 is from a visible 22° halo ring fit, independent of the parhelion. Pass B1 classification 2026-05-13; lever sec(h)-1 = 1.90%, just below the 2% threshold — anchor-noise-bounded, clean residual is informational, not route-validating. Eligible with low-lever caveat.",
   "parhelion": {
     "left_x": 35,
     "right_x": 1360,

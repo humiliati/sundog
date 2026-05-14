@@ -293,6 +293,17 @@ more anchored photos.
 
 ### Finding B — Pass B1: Add lever, R22-source, and geometric-validity columns *(first technical gate)*
 
+**Status: landed 2026-05-13.** Per-photo eligibility sub-table now
+lives under "Per-Inversion-Route Residual Table" in
+[`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`](calibration/RICH_DISPLAY_OVERLAY_NOTES.md).
+All 8 anchor JSONs (`p2`, `p13`, `p20`, `p22`, `p25`, `p26`, `p27`,
+`p30`) carry `r22_source` + `r22_source_note`; `p26-anchor.json` adds
+a `geometric_validity` block with the right-side `invalid` flag.
+Eligibility split per the audit memo §2 items 4–7: **eligible** (p2,
+p7), **low-lever caveat / informational** (p13, p22, p30), **ineligible**
+(p20, p25, p26, p27). Pass B2 re-derives the parhelion verdict against
+this set.
+
 **Goal.** Make the parhelion-route eligibility honest at the *schema*
 level, so future runs cannot accidentally promote a row that fails the
 audit's two real eligibility tests, and so the geometric-impossibility

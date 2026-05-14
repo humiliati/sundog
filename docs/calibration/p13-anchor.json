@@ -12,6 +12,8 @@
   },
   "sun": [543, 372],
   "r22": 211,
+  "r22_source": "ring-fit",
+  "r22_source_note": "Inherited from Phase 2 multi-photo calibration (R22=210); refined to 211 in the 2026-05-13 re-anchor. The Phase 2 R22 came from a 22° halo ring fit, not from the parhelion. Pass B1 classification 2026-05-13; lever sec(h)-1 = 0.71%, anchor-noise-bounded — clean residual is informational, not route-validating. Audit memo §2 item 4 hedges: 'On those photos a 0 px residual is anchor-noise-bounded, not route-validated.'",
   "parhelion": {
     "left_x": 330,
     "right_x": 755,

@@ -4,6 +4,49 @@ Phase 10 of `docs/SUNDOG_V_GEOMETRY.md` uses these notes to keep the
 optional vocabulary layers separate from the calibrated parhelion core.
 Image 1 is the label key; images 2, 7, and 13 are the first tuning set.
 
+> **Post-audit state, 2026-05-13.** This file is in
+> mid-campaign rewrite per
+> [`../PHASE10_ATTACK_ROADMAP.md`](../PHASE10_ATTACK_ROADMAP.md).
+>
+> - **Pass B1 landed 2026-05-13** (first technical gate). The
+>   parhelion-route residual table now has a per-photo eligibility
+>   sub-table with `sec(h) − 1` (geometric lever), `R22-source`
+>   (`ring-fit` / `parhelion-derived` / `inferred-other`), and
+>   `geometric_validity` columns. Each anchor JSON
+>   (`docs/calibration/p*-anchor.json`) carries a top-level
+>   `r22_source` + `r22_source_note`; p26's anchor adds a
+>   `geometric_validity` block flagging the right-side
+>   impossibility (`R22 / right_offset = 1.003 > 1`,
+>   `arccos` undefined). Rationale: synthetic optical audit
+>   ([`PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
+>   §2 items 4–7 and §2 item 6.
+> - **Phase 10 Promotion Verdict and Single-handle closeout below
+>   are pre-audit.** They are *pending re-derivation* per the
+>   attack roadmap's Pass B2 (parhelion route), Pass A3 (CZA
+>   route), and Pass C3 (tangent-arc route). Read the closeout as
+>   the state of the verdict *before* the audit; the verdict
+>   language is hedge-required until the re-audit gate clears
+>   (attack roadmap §5).
+> - **CZA-route residual table entries below are formula-bug
+>   contaminated.** The atlas hardcodes CZA apex as `sun_y − R46`
+>   at `scripts/overlay_calibrate.py:381–384`, geometrically
+>   correct only at h ≈ 22°. Pass A1a (formula spec + literature
+>   regression test) and Pass A1b (atlas patch) are the next
+>   technical work; Pass A2 (p27 re-classification as supralateral /
+>   46° halo top, not CZA) and Pass A3 (CZA-route re-verdict)
+>   follow.
+> - **Tangent-arc detection-degenerate verdict below applies the
+>   wrong primitive at p7.** p7 (h = 59.4°) is in the
+>   circumscribed-halo regime per atoptics.co.uk and dewbow.co.uk,
+>   not the upper-tangent regime. Pass C1 drops p7 from
+>   tangent-arc eligibility; Pass C2 (optional) builds a
+>   wing-based / Lab b\* detector before the route is called dead.
+>
+> Do not export the closeout language below to public-framing
+> surfaces (gravity ledger, mesa crossover note, homepage elevator
+> pitch) without the post-audit hedges already landed there per
+> attack roadmap §6.
+
 ## Artifacts
 
 | image | overlay | role |
@@ -111,9 +154,65 @@ This table is the Phase 10 response to the mesa finding that forward and
 inverse directions are not symmetric. Do not infer that a good parhelion-offset
 fit makes every route good.
 
+> **Pass B1 update, 2026-05-13:** the parhelion-route row below is the
+> rolled-up summary; the per-photo eligibility breakdown — including
+> the new `sec(h) − 1` (geometric lever), `R22-source`, and
+> `geometric_validity` columns required by the audit memo §2 items 4–7
+> — lives in the **Parhelion-Route Per-Photo Eligibility** sub-table
+> immediately below this table. The summary row's "promoted" status
+> is *pending re-derivation in Pass B2* against the now-honest
+> eligibility set; do not read the rolled-up row as the audit-survived
+> verdict on its own.
+
 | route | p2 residual | p7 / p13 residual | expansion residuals | promotion status | note |
 | --- | ---: | ---: | ---: | --- | --- |
-| Parhelion offset → sun altitude | −1 / −1 px (0.5% R₂₂) | p7: 0 / n/a px; p13: 0 / 0 px (new anchor; x-offset only) | p20 / p27 are provisional low-sun supports, not promotion measurements | **promoted** (calibrated core; **probation cleared 2026-05-13**) | Task #52 step 1 verdict: probation was anchor-driven, not route-driven. Re-anchoring p13 drops x-offset residual from +6/+8 px to ~0/0 px on the new (sun=543,372; R₂₂=211; offsets=213/212) anchor. Route stays in calibrated core; verdict reads as 'bad anchor, route OK'. p13 belt-y residual is tracked separately. |
+| Parhelion offset → sun altitude | −1 / −1 px (0.5% R₂₂) | p7: 0 / n/a px; p13: 0 / 0 px (new anchor; x-offset only) | p20 / p27 are provisional low-sun supports, not promotion measurements | **promoted *(pending B2 re-derivation; see eligibility sub-table)*** | Task #52 step 1 verdict: probation was anchor-driven, not route-driven. Re-anchoring p13 drops x-offset residual from +6/+8 px to ~0/0 px on the new (sun=543,372; R₂₂=211; offsets=213/212) anchor. Route stays in calibrated core; verdict reads as 'bad anchor, route OK'. p13 belt-y residual is tracked separately. **Pass B1 caveat 2026-05-13:** the rolled-up "0 / 0 px on every eligible photo" reading does not survive the audit memo §2 items 4–7. The eligibility set this verdict was derived against included photos where R22 was parhelion-derived (p20, p25, p26 — tautological) or where the geometric lever was below 2 % of R22 (p13, p20, p22, p25, p26, p27, p30 — anchor-noise-bounded). See Parhelion-Route Per-Photo Eligibility below. Pass B2 re-derives this row against the eligible-only subset. |
+
+### Parhelion-Route Per-Photo Eligibility
+
+Pass B1 schema rollout, 2026-05-13. Reads
+[`r22_source`](#) and [`geometric_validity`](#) from each photo's
+anchor JSON; computes `sec(h) − 1` from the inferred altitude.
+*Eligible* means **R22-source = ring-fit AND geometric_validity = valid
+AND sec(h) − 1 ≥ 2 %**. The 2 % lever threshold comes from the audit
+memo §2 item 4 — below it, residuals are at or below typical anchor
+noise. Photos with ring-fit R22 but lever &lt; 2 % are *informationally*
+useful but cannot route-validate the parhelion verdict on their own.
+
+| photo | h (°) | sec(h) − 1 | R22-source | geom validity | parhelion residual | eligibility |
+| --- | ---: | ---: | --- | --- | ---: | --- |
+| p2  | 18.6 | **5.52 %** | ring-fit | valid | −1 / −1 px | **eligible** |
+| p7  | 59.4 | **96.5 %** | ring-fit (anchor table; no JSON) | valid | 0 / n/a px | **eligible** |
+| p13 | 6.83 | 0.71 % | ring-fit | valid | 0 / 0 px | low-lever caveat (anchor-noise-bounded; informational) |
+| p20 | ~5.0 | 0.38 % | parhelion-derived | valid | 0 / 0 px | **ineligible** (R22 from parhelion; tautological) |
+| p22 | ~5.7 | 0.50 % | ring-fit | valid | 0 / 0 px (presumed) | low-lever caveat (anchor-noise-bounded; informational) |
+| p25 | ~11.4 | 2.01 % | parhelion-derived | valid | 0 / 0 px (presumed) | **ineligible** (R22 from parhelion; tautological) |
+| p26 | ~9.0 | 1.25 % | parhelion-derived | **invalid (right)** | left: 0 px (presumed); right: undefined (`R22 / offset = 1.003 > 1`) | **ineligible** (R22 from parhelion AND right-side geometric impossibility per memo §2 item 6) |
+| p27 | ~0.5 | ≈ 0.00 % | ring-fit (parhelion-derived in opposite direction) | valid | 0 / 0 px (tautological) | **ineligible** (parhelion offsets stipulated as `offset := R22`; memo §2 item 5: "the 0 px residual is tautological") |
+| p30 | ~11.1 | 1.90 % | ring-fit | valid | 0 / 0 px (presumed) | low-lever caveat (anchor-noise-bounded; informational; just below 2 %) |
+
+**Pass B1 conclusion against the audit memo's three-photo finding:**
+the audit memo §2 item 4 + §4 item 1 says parhelion-offset passes "on
+three photos (p2, p7, p13) where the test has meaningful discrimination
+and an independently fittable 22° halo." This sub-table's *eligible*
+column matches that finding for p2 and p7, and lists p13 as
+*low-lever-caveat* rather than fully eligible because its lever is
+0.71 % &lt; 2 %. The audit memo's looser 3-photo set hinges on
+"unambiguous bilateral peaks AND independently fittable 22° halo"
+without a hard lever threshold; this sub-table is the stricter
+schema-level reading. **Pass B2 will rule on whether the parhelion
+verdict survives on the strict (2-photo) eligible set, the audit's
+permissive (3-photo) set, or somewhere in between with the low-lever
+photos contributing as informational evidence.** Either way, the
+"every eligible photo" framing is gone; the audit-survived
+language (memo §6) is "passes residual gate at ~0 px on photos where
+sun altitude provides a non-trivial geometric lever and an
+independent 22° halo ring is fittable."
+
+`r22_source` is now mirrored in each anchor JSON's top-level field of
+the same name plus a `r22_source_note` rationale. p26's anchor adds a
+`geometric_validity` block with per-side flags and the audit memo
+citation.
 | CZA apex → sun altitude / visibility | x: −6.7 px, **y: −19.3 px (−10.6% R₂₂)** | p7 not applicable (h = 59.4° > 32.2° cutoff); p13 cropped (predicted apex y = −50) | p27: x +3 px, **y +21 px (+9.6% R₂₂)**; p19 / p20 cropped | **fails residual gate on expanded set** | Task #55 corrects the earlier interpretation: p2 and p27 both exceed the 8 px / 0.04*R22 route threshold, but their signs are opposite. This is not a stable direction-and-magnitude atlas bias. It is a clean negative for CZA-apex inversion promotion and a weaker Mesa #3 receipt: parhelion-offset remains ~0-1 px while CZA-apex is photo-specific and unreliable. Anchors: `p2-anchor.json`, `p27-anchor.json`, `p20-anchor.json`. |
 | Tangent-arc curvature → sun altitude | **detection-degenerate** (fuses with halo top at h=18.6°) | p7 (h=59.4°): column-peak grabs halo outer edge not broad tangent; p13 (h=6.83°): chromatic-haze contamination, no clean smile to fit | p27 (h=0.5°): merges with CZA / sun bloom at horizon transition; p20 not measured | **fails detection across all 4 eligible photos** (v3.8 partition: detection-degenerate, not residual-bounded) | Task #54 first pass 2026-05-13 found the route fails column-peak detection on every photo in the calibration set, with a *different* failure mode at each altitude. Not a residual-gate failure — the residual was never measurable. The earlier 'altitude-regime validity window' framing was too generous; the route's degeneracy is photo-and-feature-specific across the entire altitude range. Promotion blocked until a different detection method (edge-based gradient tracking, template matching, or manual sampling) is built and verified. |
 | Supralateral position → sun altitude | _measurement pending_ | p7 cropped; p13 not visible | p27 candidate; p20 weak/cropped | pending expansion | p27 may reopen supralateral coverage, but no residual has been measured. Keep the previous fail verdict for the original p2/p7/p13 set; do not promote the expanded route without p27 anchors. |
