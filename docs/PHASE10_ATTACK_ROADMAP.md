@@ -137,6 +137,22 @@ authoritative.
 
 ### Finding A — Pass A1a: CZA formula spec + literature regression test
 
+**Status: landed 2026-05-13.** Module at `scripts/cza_formula.py`,
+regression test at `scripts/test_cza_formula.py`, result note in
+[`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`](calibration/RICH_DISPLAY_OVERLAY_NOTES.md)
+under "Pass A1a Spec Results". Verified results: at h = 22°
+literature gives 45.734° vs. legacy 44.000° (the WB_R46 = 440 vs.
+460 issue confirmed); at p2 (h = 18.6°) the literature residual is
+−1.3 px against the legacy −19.0 px (memo's qualitative direction
+**confirmed**); at p27 (h = 0.5°) the literature CZA apex is at
+y = −11.5 (above top of frame, **confirmed off-frame**) so the visible
+arc at y = 142 is not CZA. **A1b is CLEARED to proceed** with one
+correction: the audit memo's *stated* formula
+`90 − h − arcsin(√(n²−cos²h))` was a transcription error (gives 0.27°
+at h = 22°, not the memo's own claimed ~46°); the formula that
+matches the memo's own numerical predictions is
+`arcsin(√(n²−cos²h)) − h`. A1b uses the verified expression.
+
 **Goal.** Before changing the atlas, write down the literature CZA
 formula as an executable spec and verify it against the calibration
 photos. The audit memo's exact px collapse numbers ("~0.7 px on p2")
@@ -153,8 +169,13 @@ do about it?"
   `cza_apex_y_above_sun(h_deg, r22_px, n=1.31)` returning the predicted
   CZA apex y-offset above the sun in the same pixel scale as `r22_px`.
   Implement the literature formula
-  `cza_offset_deg = 90° − h − arcsin(√(n² − cos²h))`, scaled by
-  `r22_px / 22°`.
+  `cza_offset_deg = arcsin(√(n² − cos²h)) − h`, scaled by
+  `r22_px / 22°`. **Correction 2026-05-13:** the audit memo §2 item 2
+  states this formula as `90° − h − arcsin(√(n²−cos²h))`, but that
+  expression does *not* match the memo's own numerical predictions
+  (gives 0.27° at h = 22°, not ~46°). Pass A1a's verify-gate caught
+  the transcription error; A1a's result note documents the corrected
+  expression, and A1b above uses it.
 - New test file `scripts/test_cza_formula.py`: regression test against
   hand-anchored CZA y-positions on the eligible photos. Measure
   predicted-vs-observed for p2 (h = 18.6°) and p27 (h = 0.5°) at

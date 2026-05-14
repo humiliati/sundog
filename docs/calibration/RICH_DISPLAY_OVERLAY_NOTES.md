@@ -168,6 +168,81 @@ fit makes every route good.
 | --- | ---: | ---: | ---: | --- | --- |
 | Parhelion offset → sun altitude | −1 / −1 px (0.5% R₂₂) | p7: 0 / n/a px; p13: 0 / 0 px (new anchor; x-offset only) | p20 / p27 are provisional low-sun supports, not promotion measurements | **promoted *(pending B2 re-derivation; see eligibility sub-table)*** | Task #52 step 1 verdict: probation was anchor-driven, not route-driven. Re-anchoring p13 drops x-offset residual from +6/+8 px to ~0/0 px on the new (sun=543,372; R₂₂=211; offsets=213/212) anchor. Route stays in calibrated core; verdict reads as 'bad anchor, route OK'. p13 belt-y residual is tracked separately. **Pass B1 caveat 2026-05-13:** the rolled-up "0 / 0 px on every eligible photo" reading does not survive the audit memo §2 items 4–7. The eligibility set this verdict was derived against included photos where R22 was parhelion-derived (p20, p25, p26 — tautological) or where the geometric lever was below 2 % of R22 (p13, p20, p22, p25, p26, p27, p30 — anchor-noise-bounded). See Parhelion-Route Per-Photo Eligibility below. Pass B2 re-derives this row against the eligible-only subset. |
 
+### Pass A1a Spec Results — CZA Literature Formula vs. Legacy Hardcode
+
+Pass A1a deliverable from
+[`../PHASE10_ATTACK_ROADMAP.md`](../PHASE10_ATTACK_ROADMAP.md), landed
+2026-05-13. Module at `scripts/cza_formula.py`; regression test at
+`scripts/test_cza_formula.py`. Reproduce with `python3
+scripts/test_cza_formula.py` from the repo root.
+
+**Verified literature formula:**
+
+```
+CZA_above_sun_deg(h) = arcsin(sqrt(n^2 - cos^2 h)) - h     for h <= 32.196 deg
+                     = (CZA disappears)                     for h >  32.196 deg
+where n = 1.31 (refractive index of ice for the CZA wavelength).
+```
+
+**Memo formula correction.** The audit memo §2 item 2 *states* the
+formula as `90 - h - arcsin(sqrt(n^2 - cos^2 h))`, but that expression
+gives 0.27° at h = 22° (memo claims ~46°) and 31.69° at h = 0.5° (memo
+claims ~57°). The expression that matches the memo's *own numerical
+predictions* is `arcsin(sqrt(n^2 - cos^2 h)) - h`. Pass A1a's
+verify-gate caught the memo's stated formula was a transcription error
+before it leaked into the atlas patch (§7 of the attack roadmap rule).
+The qualitative finding (formula bug exists, p27 visible "CZA" is
+mis-identified) survives unchanged; only the *expression* used to land
+A1b is corrected. This is the second time in this campaign the verify
+gate has caught a load-bearing error in upstream prose (the first was
+the Persona 3 p22 over-statement caught by the synthetic memo's own
+verification gate).
+
+**Sanity check at h = 22° (the legacy operating point):**
+
+| quantity | value |
+| --- | --- |
+| literature CZA-above-sun (deg) | 45.734° |
+| legacy CZA-above-sun, from `WB_R46 / (WB_R22 / 22)` | 44.000° |
+| delta | +1.734° |
+
+The legacy `WB_R46 = 440` encodes 44° (because WB_R22 = 220 px at
+10 px/deg), not 46°. The audit memo §2 item 1 flags this as the
+second compounding bug (`WB_R46` in pixels is ~9.1 % too small). Even
+at h = 22° the literature formula and the legacy disagree by ~17 px
+in workbench coords; below h = 22° the gap widens fast.
+
+**Per-photo regression — observed apex y minus predicted apex y:**
+
+| photo | h (°) | r22 (px) | sun_y | observed apex y | literature predicted y | literature residual | legacy predicted y | legacy residual |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| p2  | 18.6 | 182 | 496 | 113 | 114.3 | **−1.3 px** | 132.0 | −19.0 px |
+| p27 | 0.5  | 219 | 559 | 142 | **−11.5** (off-frame) | +153.5 px (meaningless — visible feature is not CZA) | 121.0 | +21.0 px |
+
+**Qualitative-direction verdict:**
+
+- **p2:** literature residual (−1.3 px) is closer to zero than legacy
+  (−19.0 px) by 17.7 px. **CONFIRMED** the audit memo's prediction
+  ("residual collapses to <5 px"; memo also predicts "~0.7 px" but
+  flags it as illustrative). Memo §2 items 1–2 stand.
+- **p27:** literature CZA apex y = −11.5 sits above the top of the
+  frame (off-screen). The visible chromatic arc anchored at y = 142
+  is therefore not the CZA at all. **CONFIRMED** the audit memo's
+  prediction (memo §2 item 3: "the chromatic arc visible at y = 142
+  in p27 sits at ~42° above the sun and is the 46° halo top /
+  supralateral merger"). Pass A2 will re-anchor it.
+
+**A1b disposition:** **CLEARED to proceed** with the verified literature
+formula (`arcsin(sqrt(n^2 - cos^2 h)) - h`), not the memo's stated
+formula. A1b touches `scripts/overlay_calibrate.py:381–384` (replace
+`anchored = WB_SUN[1] - WB_R46` with a call into
+`cza_formula.cza_apex_y_above_sun_px(h, WB_R22)` subtracted from
+`WB_SUN[1]`) and `scripts/overlay_calibrate.py:66` (replace
+`WB_R46 = 440` with `WB_R46 = round(2.091 * WB_R22)` ≈ 460). Per the
+attack roadmap A1b touch block, the per-overlay `R46_px = r22_obs ×
+(46/22)` derivation alternative remains explicitly out-of-scope
+(would touch supralateral and other workbench-space consumers).
+
 ### Parhelion-Route Per-Photo Eligibility
 
 Pass B1 schema rollout, 2026-05-13. Reads
