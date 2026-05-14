@@ -158,7 +158,7 @@ the §5 verification gate (cross-checked against the controlling inputs, source
 docs, executable code where applicable, and WP:EL / WP:NOR discipline where
 applicable). Findings are grouped by send-blocking severity.
 
-### 3a. Send-blocking findings (must fix before any external send)
+### 3a. Send-blocking findings (must fix before any external send) — *all 8 applied 2026-05-14*
 
 | # | finding | surfaced by | verified against | required change |
 | ---: | --- | --- | --- | --- |
@@ -171,7 +171,7 @@ applicable). Findings are grouped by send-blocking severity.
 | 7 | **No "what you'll see when you click" workbench description.** Packet §3 Path A says how to use the live page but never describes its landing state, so an editor or WP reviewer who hasn't yet clicked can't predict what they'd encounter. | Persona B | Packet §3 Path A inspection | Add a single-paragraph workbench landing description to packet §0 or as a new sub-bullet at the top of §3 Path A: "When you load the page you see X, Y, Z" |
 | 8 | **`scripts/cza_formula.py` docstring conflates "sodium-D line" with "visible-band centroid."** Sodium-D = 589 nm (yellow); visible-band centroid ≈ 550 nm; ice n varies from 1.308 (yellow) to 1.317 (violet); the disappearance altitude varies by ~0.1° across the visible chromatic spread. A specialist would flag the two references in one sentence. | Persona A | Docstring inspection vs. standard ice-n wavelength dependence | Rewrite the n=1.31 commentary in the docstring to Persona A's suggested phrasing: "n = 1.31 is the visible-band centroid for ice; the CZA disappearance altitude varies by ~0.1° across the visible chromatic spread, which is below this atlas's measurement precision" |
 
-### 3b. Recommended improvements (not send-blocking; should land before tier-2 / tier-3 deployment)
+### 3b. Recommended improvements (not send-blocking; should land before tier-2 / tier-3 deployment) — *7 of 7 applied 2026-05-14 where actionable; #13 (provenance overcounting) partially addressed via §0 compression*
 
 | # | finding | surfaced by | required change |
 | ---: | --- | --- | --- |
@@ -235,19 +235,58 @@ Verification standards:
 
 ## 6. Recommended Execution Order After Dispatch
 
-1. Run Persona A/B/C passes against the controlling inputs.
-2. Consolidate verified findings into section 3 and dropped claims into
-   section 4.
-3. Patch the packet, handoff, brief, or cover-note artifacts only where
-   section 3 requires it.
-4. Re-run a final stale-phrase scan for the retired phrases in section 1.
-5. Only after this memo clears: assemble tier-specific cover artifacts and a
-   small named outreach list.
+1. ~~Run Persona A/B/C passes against the controlling inputs.~~ **DONE
+   2026-05-14.** Three independent persona drafts produced via
+   subagent dispatch; outputs preserved in agent return values.
+2. ~~Consolidate verified findings into section 3 and dropped claims
+   into section 4.~~ **DONE 2026-05-14.** All persona findings routed
+   through the §5 verification gate; 15 verified findings to §3 (8
+   send-blocking + 7 recommended); 6 deferred to §4 (out-of-scope or
+   future-state). Three cross-persona convergences recorded in §4a.
+3. ~~Patch the packet, handoff, brief, or cover-note artifacts only
+   where §3 requires it.~~ **DONE 2026-05-14.** All 8 send-blocking
+   patches and 7 recommended patches applied: cza_formula.py docstring
+   (#8); packet §0 vocabulary glossary + tier-placement compression +
+   ratchet→revised vocab + post-pass-taxonomy table softening (#5,
+   #10, #11, #12); packet §1 rows 2 + 3 (#1, #9); packet §3 Path A
+   workbench landing description (#7); packet §3 R₄₆ note compression
+   (#14); packet §4 wholesale rewrite — dropped 4 of 6 proposals,
+   rewrote Sun dog + CZA blurbs with literature-anchored hooks (#2, #3,
+   #4); brief §6 cross-substrate held-back wording softened (#15);
+   brief §10b editorial cover note added from Persona B's B4 draft
+   (#6); handoff §1 audit-survived sentence softened (#10). Finding
+   #13 (provenance overcounting) partially landed via §0 compression
+   in the packet; further compression deferred since editorial-tier
+   testing of the current state cleared.
+4. ~~Re-run a final stale-phrase scan for the retired phrases in
+   section 1.~~ **DONE 2026-05-14.** All public-surface stale phrases
+   ("plate-oriented hexagonal ice", "photograph calibration evidence",
+   "computed exactly as 32.196", "single calibrated parametric model",
+   "every eligible photo") are zero in the packet outside retract-
+   contexts. Two retract-context hits remain in packet §4 editorial-
+   caveats where dropped phrasings are quoted to explain the pruning
+   — correct usage. All §1 retired-phrase list hits are in
+   retract-language contexts (Brief §5 retired-phrases list; dispatch
+   memo §1 same; re-audit memo's explicit retirement).
+5. **Now ready:** assemble tier-specific outreach packet + small named
+   outreach list per tier. The four-doc + dispatch-memo Phase 11
+   surface is internally coherent at 2026-05-14.
 
 ## 7. Open Deployment Gates
 
-- Phase 11 synthetic-persona pass: **pending**.
-- Tier-specific cover artifacts: **pending**.
+- Phase 11 synthetic-persona pass: ~~**pending**~~ **CLEARED 2026-05-14.**
+- Tier-1 specialist cover artifact (handoff): ✅ landed 2026-05-14
+  (with §2.7 audit-survived sentence softened per finding #10).
+- Tier-2 editorial cover artifact (brief §10b): ✅ landed 2026-05-14
+  (using Persona B's B4 draft).
+- Tier-3 Wikipedia-adjacent artifacts (packet §4): ✅ pruned 2026-05-14
+  to Sun dog + CZA only, with literature-anchored link blurbs.
+- Workbench above-the-fold attribution audit: **pending** — Persona C
+  raised this as a §4 deferred finding; before tier-3 external-link
+  proposals are defensible, audit `sundog.cc/sundog.html` for Greenler /
+  Tape / Cowley attribution visibility above-the-fold.
 - Named outreach list per tier: **pending**.
-- Homepage elevator-pitch v1.2: **held pending explicit approval**.
-- `chat/claim_map.json` ratchet: **held pending explicit approval**.
+- Homepage elevator-pitch v1.2: **held pending explicit approval**
+  (per re-audit memo §107 item 3).
+- `chat/claim_map.json` ratchet: **held pending explicit approval**
+  (per re-audit memo §107 item 3).
