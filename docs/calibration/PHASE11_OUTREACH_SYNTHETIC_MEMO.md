@@ -48,13 +48,15 @@ may be discussed only if a specialist asks.
 | Parhelion offset -> h | promoted, post-hedged | strict 3-photo subset: p2, p7, p13; p13 carries a low-lever caveat |
 | CZA apex -> h | not promoted | coverage-gated; only p2 is in-window and measured after A1b/A2 |
 | Supralateral -> h | not promoted | structural-discrimination gated; h-spread below measurement noise |
-| Tangent-arc curvature -> h | unresolved | column-peak detector fails on p2/p13/p27; C2 detector unbuilt |
+| Tangent-arc curvature -> h | not promoted | coverage + detector/anchoring tension: C5 manual samples recover p2, but C6 matched-filter falsifies the natural extension on the same b* substrate; specialist re-anchoring is the verify gate |
 
 Retired phrases remain retired:
 
 - "passes residual gate on every eligible photo"
 - "three independent failure layers"
 - class-level tangent-route failure
+- C5 manual tangent recovery as a promoted route before specialist
+  re-anchoring or alternative-substrate confirmation
 - CZA residual-gate failure as the live issue
 - broad inverse recovery across the full rich-display slate
 
@@ -86,7 +88,7 @@ Output format:
 | primitive taxonomy | sound / caveat / pushback / out-of-area | _pending_ |
 | formula fidelity | sound / caveat / pushback / out-of-area | _pending_ |
 | parhelion claim boundary | sound / caveat / pushback / out-of-area | _pending_ |
-| tangent unresolved framing | sound / caveat / pushback / out-of-area | _pending_ |
+| tangent C5/C6 tension framing | sound / caveat / pushback / out-of-area | _pending_ |
 | external-send readiness | sound / caveat / pushback / out-of-area | _pending_ |
 
 ### Persona B - Science-Communications Editor

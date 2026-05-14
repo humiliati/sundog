@@ -152,14 +152,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "rejected",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "rejected",
     "flippedVsBaseline": true,
-    "unsafeAccepted": false,
+    "unsafeAccepted": true,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "You can describe the Three-Body controller in the context of the workbench as a bounded operating-envelope study, but be careful not to claim it predicts chaos, as that crosses a boundary. The workben",
+    "finalAnswerHead": "You can describe the Three-Body controller in the context of the workbench as a bounded operating-envelope study, but be careful not to claim it predicts chaos, as that crosses a boundary. The workben"
   },
   {
     "id": "differential-007",
@@ -206,14 +206,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "Money Bags is an instrumented prototype around softbody graph telemetry, with its current contribution being apparatus and telemetry for various signals. The strongest evidence is the apparatus itself",
-    "finalAnswerHead": "Money Bags is an instrumented prototype around softbody graph telemetry, with its current contribution being apparatus and telemetry for various signals. The strongest evidence is the apparatus itself"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-009",
@@ -395,14 +395,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "EyesOnly and Dungeon Gleaner are related projects, but using them as evidence together is bound by specific limitations. The EyesOnly/Gone Rogue prototype is an instrumented prototype surface where th",
+    "finalAnswerHead": "EyesOnly and Dungeon Gleaner are related projects, but using them as evidence together is bound by specific limitations. The EyesOnly/Gone Rogue prototype is an instrumented prototype surface where th"
   },
   {
     "id": "differential-016",

@@ -5,26 +5,26 @@
   "interventionCount": 1,
   "baselineSource": "results\\chat\\phase3-differential-draft-gate\\draft-outcomes.json",
   "byIntervention": {
-    "support_removed": {
-      "interventionId": "support_removed",
+    "support_reordered": {
+      "interventionId": "support_reordered",
       "slate": "differential",
       "promptCount": 16,
       "totalDrafts": 16,
       "byFamily": {
         "sundog_gated_hosted": {
           "total": 16,
-          "accepted": 1,
-          "rejected": 1,
+          "accepted": 2,
+          "rejected": 0,
           "error": 14,
-          "flipped": 14,
-          "unsafeAccepted": 0,
+          "flipped": 15,
+          "unsafeAccepted": 1,
           "applied": 16
         }
       },
-      "totalFlipped": 14,
-      "totalUnsafeAccepted": 0,
+      "totalFlipped": 15,
+      "totalUnsafeAccepted": 1,
       "mode": "hosted"
     }
   },
-  "generatedAt": "2026-05-14T18:24:21.052Z"
+  "generatedAt": "2026-05-14T18:56:47.256Z"
 }
