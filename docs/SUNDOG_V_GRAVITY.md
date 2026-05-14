@@ -149,10 +149,39 @@ full transfer, including the methodological lessons for Phase 10/11
 overlay tuning.
 
 **Forward/inverse asymmetry receipt *(sharpened 2026-05-13 after Phase 10
-closeout).* The atlas is rich in forward generation and supports one
-image-recoverable inverse handle.** Four candidate inversion routes were
-tested across the calibration set; **one survived; the other three failed
-at three structurally different layers of the measurement stack.**
+closeout; post-audit hedged 2026-05-13).* The atlas is rich in forward
+generation and supports one image-recoverable inverse handle.** Four
+candidate inversion routes were tested across the calibration set;
+**one survived; the other three failed at three structurally different
+layers of the measurement stack.**
+
+> **Post-audit hedge, 2026-05-13:** the synthetic optical audit
+> ([`docs/calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
+> hedges both halves of the receipt. **Forward-richness:** retract-required
+> for the parhelic-circle rule (FF1-falsified; the atlas continues to draw
+> `−0.05 · R22` but the rule does not hold across photos), retract-required
+> for the CZA position (the atlas mispredicts by 19+ px at h ≠ 22° because
+> of the hardcoded `sun_y − R46` formula at `scripts/overlay_calibrate.py:381–384`),
+> caveat-required for the 46° halo and infralateral arcs (drawn on every
+> overlay but visible only on p2). The forward-richness claim should hedge
+> to *"`h → primitive locus` (geometric); not every primitive is visible
+> at predicted locus on every photo."* **Inverse-narrowness (one image-recoverable
+> handle):** defensible on the three photos with both unambiguous bilateral
+> peaks and an independently fittable 22° halo (p2, p7, p13). Not defensible
+> on the language *"every eligible photo"* — on five low-h photos the
+> geometric lever `sec(h) − 1` is below 2 % of `R22`, and on three of those
+> (p20, p25, p26) the 22° halo arc is not visible so `R22` is not
+> independent of the parhelion. The hedged version — *"one image-recoverable
+> inverse handle on photos where sun altitude provides a non-trivial
+> geometric lever and an independent 22° halo ring is fittable"* — survives
+> the audit. **Three-failure framing:** the three failures are at three
+> structurally different layers, but two of the three have non-atlas
+> explanations (CZA = formula bug; supralateral = literature base-rate
+> near-certainty; tangent = protocol artifact under any literature-standard
+> wing-based or Lab b\* detector). The campaign to re-derive each verdict
+> is filed in [`docs/PHASE10_ATTACK_ROADMAP.md`](PHASE10_ATTACK_ROADMAP.md).
+> The two-substrate field-shape *pattern* survives; the *receipt language
+> below* is pending re-derivation.
 
 | route | gate outcome | failure layer |
 | --- | --- | --- |

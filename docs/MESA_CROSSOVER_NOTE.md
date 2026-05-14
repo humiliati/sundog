@@ -198,6 +198,24 @@ Phase 10 anchor-capture work (Tasks #52, #53, #54, #55) closed
 structural) more than this note originally hypothesized, and surfaces a
 new methodological vocabulary worth carrying back to mesa.
 
+> **Post-audit hedge, 2026-05-13:** the synthetic optical audit
+> ([`docs/calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
+> walked back the *"three independent failure layers"* framing in the
+> subsection below. The sharpened replacement language is **"three
+> structurally different failure layers, two of which have non-atlas
+> explanations"**: the CZA-route residual is contaminated by an atlas
+> formula bug at `scripts/overlay_calibrate.py:381–384` (CZA apex
+> hardcoded as `sun_y − R46`), the supralateral coverage gate is a
+> literature base-rate near-certainty rather than an accident of this
+> dataset, and the tangent-arc detection gate is at least partly a
+> protocol artifact under any literature-standard wing-based or Lab b\*
+> detector. The campaign to re-derive each verdict is filed in
+> [`docs/PHASE10_ATTACK_ROADMAP.md`](PHASE10_ATTACK_ROADMAP.md). The
+> two-substrate field-shape *pattern* survives the audit; the
+> *"three independent accidents"* implication is retracted. Treat the
+> subsection below as the pre-audit state of the closeout, pending
+> re-derivation per the attack roadmap.
+
 ### Finding #3 outcome was sharper than hypothesized
 
 The original Finding #3 framing predicted that CZA-apex, tangent-arc

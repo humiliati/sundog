@@ -1288,18 +1288,26 @@
            - Re-run the chat:eval suite per docs/WEBSITE_DEVELOPMENT.md →
              "Elevator Pitch (Living Section)" so any new claim phrases
              are bounded by Ask Sundog before publish.
+
+         v1.1, 2026-05-13: audit-driven hedge landed on the third
+         paragraph's substrate-coincidence claim per
+         docs/PHASE10_ATTACK_ROADMAP.md §6 step 4. The data-audit-hedge
+         attribute names the controlling roadmap; remove the attribute
+         and tighten the prose back when the roadmap's re-audit gate
+         clears.
     -->
     <section
         class="elevator-pitch-section"
         id="elevator-pitch"
         aria-labelledby="elevator-pitch-title"
-        data-version="v1"
+        data-version="v1.1"
         data-revised="2026-05-13"
+        data-audit-hedge="phase10-attack-roadmap"
     >
         <div class="elevator-pitch-shell">
             <p class="eyebrow">
                 Elevator Pitch
-                <span class="elevator-pitch-stamp">Living draft &middot; v1 &middot; 2026-05-13</span>
+                <span class="elevator-pitch-stamp">Living draft &middot; v1.1 &middot; 2026-05-13 &middot; audit-hedged</span>
             </p>
             <h2 id="elevator-pitch-title" class="elevator-pitch-headline">
                 Field-not-reward, in plain language.
@@ -1312,7 +1320,7 @@
                     A mesa neuron, by contrast, is a unit inside a trained reinforcement-learning agent&rsquo;s network &mdash; in our case, one of 256 in the final hidden layer of a controller trained to track an indirect environmental signal rather than a direct reward. When we ran capacity and selection-pressure experiments on these agents, we found that mesa-optimization &mdash; the failure mode in which a learned policy develops internal optimization targets that diverge from its training signal &mdash; localizes causally to an entangled 5-dimensional subspace at that layer. In the architecture and capacity regime we tested, that subspace is not recoverable by any single neuron, any handful of features, or any linear decomposition we ran.
                 </p>
                 <p>
-                    Here&rsquo;s why the coincidence matters. In both substrates we found the same structural object: a small-dimensional, holistically-read, asymmetric-under-inversion field whose visible signatures fall out as consequences of hidden state rather than as targets in their own right. The atmosphere produces the halo system from sun altitude and ice geometry; the trained network produces basin-attractor behavior from a 5D subspace at <code>net.7</code>. Finding that same shape on both sides of the substrate divide is the first empirical hint that &ldquo;field-not-reward&rdquo; &mdash; our claim that agents can be aligned by coupling to environmental structure rather than by optimizing a scalar objective &mdash; is describing a real category of object in the world, not a rhetorical move.
+                    Here&rsquo;s why the coincidence matters. In both substrates we found the same structural object: a small-dimensional, holistically-read, asymmetric-under-inversion field whose visible signatures fall out as consequences of hidden state rather than as targets in their own right. The atmosphere produces the halo system from sun altitude and ice geometry; the trained network produces basin-attractor behavior from a 5D subspace at <code>net.7</code>. Finding that same shape on both sides of the substrate divide is a candidate empirical hint &mdash; the geometry side of the crossover is currently under audit-driven re-derivation per the <a href="docs/PHASE10_ATTACK_ROADMAP.md">Phase 10 Attack Roadmap</a>, and the strength of the substrate-coincidence claim is on hold until that re-audit clears &mdash; that &ldquo;field-not-reward,&rdquo; our claim that agents can be aligned by coupling to environmental structure rather than by optimizing a scalar objective, is describing a real category of object in the world rather than a rhetorical move.
                 </p>
                 <p>
                     If the geometry holds up across enough independent substrates, the implication is large: the engineering surface for alignment looks more like coupling-to-environmental-structure than like optimizing-a-scalar, and the agent, robot, and game engineering that follow from that distinction are different, more economical, and more traceable.
