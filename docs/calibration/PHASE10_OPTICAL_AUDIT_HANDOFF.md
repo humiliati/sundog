@@ -60,9 +60,10 @@ The audit-survived public-framing sentence in
 > *Parhelion-offset → h passes the residual gate at ~0 px on three
 > photos (p2, p7, p13) with both unambiguous bilateral peaks and an
 > independently fittable 22° halo. The three other tested routes fail
-> at three structurally different failure modes: dataset / aspect-ratio
-> coverage (CZA), atmospheric-physics discrimination (supralateral), and
-> detection-protocol tooling (tangent under column-peak; tooling-conditional).*
+> for three different reasons: dataset / aspect-ratio coverage (CZA),
+> atmospheric-physics discrimination (supralateral), and
+> detection-protocol tooling (tangent under column-peak;
+> tooling-conditional).*
 
 We want pushback on this verdict from atmospheric-optics specialists.
 The audit is most useful if it ends in a counterexample we can act on.

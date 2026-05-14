@@ -43,12 +43,13 @@ uses the verified formula.
 
 import math
 
-# Refractive index of ice for the dominant CZA wavelength (sodium-D line).
-# Per atoptics.co.uk and Bravais's classical derivation, the CZA forms
-# from refraction through the top face and out the side face of a
-# horizontally-oriented hexagonal plate ice crystal; the dominant
-# refractive index for the visible-band centroid is 1.31. Slightly
-# wavelength-dependent in the third decimal; not load-bearing here.
+# Refractive index of ice. n = 1.31 is the visible-band centroid for
+# ice; the CZA disappearance altitude varies by ~0.1° across the visible
+# chromatic spread (ice n ~1.308 at 589 nm yellow, ~1.317 at violet),
+# which is below this atlas's measurement precision. The CZA itself
+# forms by refraction through the top face and out the side face of a
+# horizontally-oriented hexagonal plate ice crystal (Bravais's classical
+# derivation; atoptics.co.uk).
 ICE_REFRACTIVE_INDEX = 1.31
 
 # Sun altitude above which the CZA disappears geometrically. Solved from
