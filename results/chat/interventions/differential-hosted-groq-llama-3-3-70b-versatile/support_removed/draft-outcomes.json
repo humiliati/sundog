@@ -125,14 +125,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "rejected",
-    "status": "error",
+    "status": "rejected",
     "baselineStatus": "rejected",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "forbidden:overhead-light cells worked|forbidden:usable overhead-light control",
+    "draftHead": "Sundog Balance is a browser cart-pole operating-envelope study with a tested browser setup. The study found that in overhead-light cells, both controllers failed, indicating a degradation boundary. Yo",
+    "finalAnswerHead": "Sundog Balance is a browser cart-pole operating-envelope study. It is a tested browser setup and browser cart-pole only, with the diagnostic-positive envelope only as the favorable tested region. In t"
   },
   {
     "id": "differential-006",
@@ -179,14 +179,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "Pressure Mines improves safe-tile progress by finding safe tiles first, but it does not solve the board. The study focuses on safer progress before failure, achieving better budget-adjusted safe-tile ",
-    "finalAnswerHead": "Pressure Mines improves safe-tile progress by finding safe tiles first, but it does not solve the board. The study focuses on safer progress before failure, achieving better budget-adjusted safe-tile "
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-008",
@@ -341,14 +341,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "The Three-Body controller and Sundog Balance share an operating envelope study evidence tier. In this context, the Three-Body workbench is a bounded operating-envelope study, where the guarded acceler",
+    "finalAnswerHead": "The Three-Body controller and Sundog Balance share an operating envelope study evidence tier. In this context, the Three-Body workbench is a bounded operating-envelope study, where the guarded acceler"
   },
   {
     "id": "differential-014",
@@ -395,14 +395,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "EyesOnly and Dungeon Gleaner are related projects, with EyesOnly being an instrumented prototype that drives a JavaScript engine and roguelike game. The Sundog headless runner is a key component, but ",
-    "finalAnswerHead": "EyesOnly and Dungeon Gleaner are related projects, with EyesOnly being an instrumented prototype that drives a JavaScript engine and roguelike game. The Sundog headless runner is a key component, but "
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-016",
