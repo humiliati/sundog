@@ -40,8 +40,9 @@ glosses for readers who haven't read the audit memos:
 - **The audit** — a 2026-05-13/14 internal review of the project's
   geometry and calibration claims, with eight required correction
   passes (named **Pass A1a / A1b / A2 / A3** for CZA-route work, **Pass
-  B1 / B2** for parhelion-route eligibility work, **Pass C1** for
-  tangent-route work) and a re-audit gate that cleared the campaign.
+  B1 / B2** for parhelion-route eligibility work, **Pass C1** for the
+  initial tangent-route taxonomy fix, followed by detector passes **C2 /
+  C4 / C5 / C6**) and a re-audit gate that cleared the campaign.
 - **Inverse route / inverse handle** — a way to recover the sun's
   altitude `h` from a feature visible in a photograph (e.g.
   parhelion-offset → `h`).
@@ -65,14 +66,17 @@ glosses for readers who haven't read the audit memos:
 | Parhelion offset → h | **promoted (post-hedged)** | works on a strict 3-photo subset (p2, p7, p13) |
 | CZA apex → h | **fails coverage gate** | dataset / aspect-ratio (only one photo in the right altitude window) |
 | Supralateral → h | **fails structural-discrimination** | atmospheric physics (the available signal is below typical measurement noise) |
-| Tangent-arc curvature → h | **unresolved** | tooling (the standard literature detector hasn't been built yet) |
+| Tangent-arc curvature → h | **not promoted** | coverage + detector/anchoring tension: C5 manual samples recover p2, but C6 matched-filter falsifies the natural extension on the same b* substrate |
 
 The audit narrowed three things in particular: it reframed the CZA
 verdict from "the route is unreliable" to "we only have one in-window
 measurement so we can't yet test it"; it tightened the parhelion-route
 eligibility from "every photo in the calibration set" to "the strict
-three-photo subset above"; and it confirmed the tangent-route negative
-is tooling-conditional, not a class-level failure.
+three-photo subset above"; and it sharpened the tangent-route state:
+C5 manual sample selection partially recovers p2, C6 matched-filter
+does not reproduce that recovery on the same halo-subtracted b*
+substrate, and the route remains unpromoted pending specialist
+re-anchoring or an alternative-substrate detector.
 
 ### Deployment gate
 
@@ -230,12 +234,13 @@ The Sundog project's contribution is *not* a new equation. It is:
   visual-edge measurement noise even with perfect coverage. The route
   is structurally weak as an inverse handle on atmospheric-physics
   grounds, not on dataset grounds.
-- **A class-level tangent-arc-curvature negative.** The current
-  detection-gate finding (Pass C1) is protocol-conditional: column-peak
-  detection on the post-C1 sampled set (p2, p13, p27) fails with three
-  distinct degeneracy modes, but a wing-based or Lab b\* ridge
-  detector has not been built and tested. Filed as Unresolved Open
-  Question in the specialist handoff.
+- **A validated tangent-arc-curvature inverse handle, or a class-level
+  tangent negative.** The current finding is narrower and more
+  interesting: C5 manual sample selection partially recovers p2, but
+  C6 matched-filter on the same halo-subtracted b* substrate returns a
+  negative result. The route remains unpromoted because coverage fails
+  (1 / 3 photos) and the p2 recovery needs specialist re-anchoring or
+  an alternative-substrate detector before it can propagate.
 
 ---
 
@@ -478,16 +483,17 @@ revision wave. The campaign provenance chain is:
 3. **2026-05-13/14** — attack roadmap eight required passes landed
    (§6 hedges, B1 schema, A1a formula spec, A1b atlas patch, A2 p27
    re-classification, A3 CZA + supralateral re-verdict, C1 p7 dropped
-   from tangent eligibility, B2 parhelion re-verdict).
+   from tangent eligibility, B2 parhelion re-verdict, and follow-on
+   tangent detector passes C2 / C4 / C5 / C6).
 4. **2026-05-14** — re-audit gate cleared
    ([`calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md`](calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md));
    specialist handoff rewritten end-to-end;
    `MESA_CROSSOVER_NOTE`, `SUNDOG_V_GRAVITY`, `PROMO_HIGHLIGHTS`,
    and this packet revised to the post-pass failure-mode taxonomy.
 
-If the atlas math ever changes again (e.g. if Pass C2 ships a
-wing-based tangent detector that recovers the tangent route, or if new
-anchored photos in 5° < h < 32° supply a second in-window CZA
+If the atlas math ever changes again (e.g. if specialist re-anchoring
+confirms C5's p2 tangent recovery, if an alternative-substrate detector
+reconciles the C5↔C6 tension, or if new anchored photos in 5° < h < 32° supply a second in-window CZA
 residual), the corresponding rows in §1, §2, §3 Path C/D, and the
 audit-survived-taxonomy table in §0 need updating and the calibration
 evidence re-verified.

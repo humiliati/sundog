@@ -140,7 +140,7 @@ Calibration framing
 Is the surviving parhelion-route claim stated narrowly enough?
 
 Open-question handling
-Is tangent properly framed as an unresolved detector question rather than a settled negative?
+Is tangent properly framed as an unresolved detector / anchoring question, with C5↔C6 substrate tension, rather than a settled negative?
 
 Outreach discipline
 Does the packet distinguish clearly enough between textbook optics and project-specific implementation?
@@ -204,19 +204,21 @@ The project does not claim novel halo physics.
 The project’s formulas are drawn from standard atmospheric-optics sources.
 The parhelion inverse-use claim is bounded to the re-audited strict subset.
 CZA and supralateral are not currently promoted inverse handles.
-Tangent remains an unresolved detector question in the current state.
+Tangent remains an unresolved detector / anchoring question in the current state:
+C5 manually recovers p2, but C6 fails to reproduce that recovery with a
+matched filter on the same b* substrate.
 Earlier stronger framings were internally attacked and narrowed before outreach.
 12. Outreach-ready artifact list
 The following are the right supporting materials to send or link (updated 2026-05-14 to reflect what is already revised):
 
 `docs/SUNDOG_V_GEOMETRY.md` — Phase 10 closeout table re-derived from the post-pass / post-reaudit state.
 `docs/calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md` — load-bearing governing memo.
-`docs/PHASE10_ATTACK_ROADMAP.md` — eight required passes plus the optional C2; provenance for what was repaired and what remains an open question.
+`docs/PHASE10_ATTACK_ROADMAP.md` — required attack passes plus follow-on tangent detector passes through C6; provenance for what was repaired and what remains an open question.
 `docs/calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md` — **rewritten 2026-05-14 and cleared for external handoff**; serves the specialist tier of §8. Replaces the pre-reaudit stop-bannered version.
 `docs/MESA_CROSSOVER_NOTE.md` — ratcheted 2026-05-14; the cross-substrate framing the brief intentionally holds back from outreach but that specialists may surface in conversation.
 `docs/SUNDOG_V_GRAVITY.md` forward/inverse asymmetry receipt — ratcheted 2026-05-14; the load-bearing public-framing surface for the broader claim, also held back from Phase 11 outreach.
 `docs/PROMO_HIGHLIGHTS.md` Atlas-side single-handle receipt paragraph — ratcheted 2026-05-14 to use the post-pass failure-mode taxonomy.
-`docs/calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md` — **scaffolded 2026-05-14**; the dispatch memo for §15's deployment methodology. Persona A/B/C scaffolds, retired-phrase guardrails, verified-findings and dropped-claims bins, consolidator verification gate, and open deployment gates. Persona dispatch not yet executed.
+`docs/calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md` — **cleared 2026-05-14**; the dispatch memo for §15's deployment methodology. Persona A/B/C findings were routed through the consolidator gate, with verified outreach fixes applied and deployment gates tracked.
 `docs/SUNDOG_OUTREACH_PACKET.md` — **rewritten 2026-05-14**; now aligned with the post-reaudit route taxonomy and the three-tier outreach order.
 live explainer / workbench surface;
 calibration script (`scripts/overlay_calibrate.py`, `scripts/cza_formula.py`) and selected overlay examples.
