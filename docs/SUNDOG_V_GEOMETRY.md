@@ -1385,7 +1385,7 @@ three distinct layers of the measurement stack**:
 | Parhelion offset → h | **promoted** (calibrated core; probation cleared 2026-05-13) — *pending B2 re-derivation per attack roadmap; eligibility hedged to "ring-fit R22 with non-trivial geometric lever" subset per Pass B1* | none — passes residual gate at ~0 px on the eligible-subset photos *(see Pass B1 per-photo eligibility sub-table in `RICH_DISPLAY_OVERLAY_NOTES.md`)* |
 | CZA apex → h | **fails** *(reverdict Pass A3 2026-05-13)* | **coverage gate** *(was: residual gate)* — Pass A1b's literature formula (`scripts/cza_formula.py`) collapsed p2's residual from −19.3 px to **+1.3 px** (well below the 8 px threshold), and Pass A2 re-classified p27's chromatic arc as 46° halo top / supralateral merger (not CZA). The remaining eligibility set is p2 alone: p7 is past the h = 32.2° disappearance threshold, and every low-h photo (p13, p20, p22, p25, p26, p30) has the literature CZA apex predicted off-frame above the top of the photo. **One in-window photo with a sub-px residual; the route fails the pre-registered "fewer than two eligible photos" rule.** Reopening coverage requires new anchors in 5° < h < 32°. |
 | Supralateral → h | **fails** *(reverdict Pass A3 2026-05-13)* | **coverage gate + structural-discrimination rider** — Pass A2 added p27 to the candidate set (apex measured at 41.89° above sun); p2 is route-eligible but its supralateral apex is unmeasured. On a strict reading the coverage gate still binds (1 measured photo); on a permissive reading the two-photo threshold is at the edge. **Either reading is dominated by audit memo §2 item 12's structural finding:** supralateral angular distance from sun varies only ~0.5° across h = 0–22°, an order of magnitude less than parhelion-offset. The predicted h-spread between p2 and p27 is ~0.3° = ~2.5 px at p2's R22, **below the typical 5–10 px visual-edge measurement noise on a chromatic-broadened halo arc**. The route would not be a useful inverse handle even with perfect coverage. |
-| Tangent-arc curvature → h | **fails** *(unchanged in substance; p7 to be dropped from eligibility per Pass C1)* | **detection gate** (Task #54: column-peak protocol fails on all four eligible photos with three distinct degeneracy modes). Pass C1 drops p7 (h = 59.4°, circumscribed-halo regime per literature, not upper-tangent). Pass C2 (optional) tests a wing-based / Lab b\* detector to determine whether the negative is *tooling-conditional* or *class-level*. Until C2 runs, the detection-gate failure is recorded with a "column-peak protocol" rider, not as a generic primitive failure. |
+| Tangent-arc curvature → h | **fails under current detector** *(Pass C1 landed 2026-05-14)* | **detection gate under column-peak** on the post-C1 sampled set. Pass C1 drops p7 (h = 59.4°, circumscribed-halo regime per literature, not upper-tangent-route evidence), so the historical "all four eligible photos" count is retired. Column-peak detection still fails on p2 / p13 / p27. Pass C2 (optional) tests a wing-based / Lab b\* detector to determine whether the negative is *tooling-conditional* or *recovered*. Until C2 runs, do not state a generic class-level tangent failure. |
 
 Each non-parhelion route fails for a structurally different reason:
 **(Pass A3 update 2026-05-13)** CZA fails the coverage gate (only p2 is
@@ -1397,9 +1397,10 @@ Supralateral fails the coverage gate too, but with a structural-
 discrimination rider: even at the two-photo threshold the angular
 spread is ~0.3° (below the visual-edge measurement noise), so the
 route would not be a useful inverse handle even with perfect coverage.
-Tangent-arc curvature is detection-degenerate across the entire
-altitude range under column-peak detection, with a protocol-conditional
-caveat (Pass C2 tests whether a wing-based detector reopens the route).
+Tangent-arc curvature is detection-degenerate under column-peak detection
+on the post-C1 sampled set (p2 / p13 / p27), with p7 removed as
+circumscribed-halo regime. The caveat is protocol-conditional: Pass C2
+tests whether a wing-based detector reopens the route.
 The taxonomy still matters: a coverage-gate failure on physics grounds
 (CZA: route can't be in-frame at low h) is not the same kind of
 negative as a coverage-gate failure on discrimination grounds
