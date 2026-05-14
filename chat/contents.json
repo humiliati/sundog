@@ -4,16 +4,16 @@
   "purpose": "Index chat roadmap, claim-map, prompt, evaluation, public-data, and result artifacts for Ask Sundog.",
   "roadmap": {
     "doc": "docs/SUNDOG_V_CHAT.md",
-    "currentPhase": "Phase 5 - Causal Intervention Battery",
-    "nextMilestone": "Identify which trace fields carry answer authority by ablating route, evidence tier, support, boundary, retrieval order, and refusal controls across assistant families."
+    "currentPhase": "Post-Phase 12 - Open-Weight Intervention Battery",
+    "nextMilestone": "Run Phase 12c Groq-hosted trace-field interventions to compare open-weight causal-authority profiles against OpenAI and Claude."
   },
   "items": [
     {
       "path": "docs/SUNDOG_V_CHAT.md",
       "kind": "roadmap",
-      "status": "phase5_frontier",
-      "phase": "0-8",
-      "description": "Roadmap for a browser-native site helper that preserves evidence tiers and claim boundaries under pressure. Phases 3 and 4 are exit-met within deterministic scope; Phase 5 causal interventions are the active frontier."
+      "status": "phase12_complete_phase12c_running",
+      "phase": "0-12c",
+      "description": "Roadmap for a browser-native site helper that preserves evidence tiers and claim boundaries under pressure. Phases 0-12 are landed in full; Phase 12c open-weight interventions are the current non-blocking strengthening run."
     },
     {
       "path": "chat/claim_map.json",
@@ -272,6 +272,27 @@
       "status": "phase5_scaffold",
       "phase": "5",
       "description": "Causal intervention battery manifest scaffold for Phase 5 trace-field ablations."
+    },
+    {
+      "path": "scripts/run-groq-sweep.ps1",
+      "kind": "run_driver",
+      "status": "phase12_complete",
+      "phase": "12",
+      "description": "Windows PowerShell 5.1 driver for the completed Groq open-weight differential/adversarial sweep."
+    },
+    {
+      "path": "results/chat/phase12-groq-driver-log.jsonl",
+      "kind": "run_log",
+      "status": "phase12_complete",
+      "phase": "12",
+      "description": "Groq sweep driver log: 225 drafts across three open-weight models and two slates, 210 accepted, 15 gate-rejected, 0 errors, 0 unsafe-accepts."
+    },
+    {
+      "path": "scripts/run-groq-interventions.ps1",
+      "kind": "run_driver",
+      "status": "phase12c_running",
+      "phase": "12c",
+      "description": "Windows PowerShell 5.1 driver for the Groq-hosted open-weight intervention battery now running locally."
     },
     {
       "path": "results/chat/operating-envelope/manifest.json",

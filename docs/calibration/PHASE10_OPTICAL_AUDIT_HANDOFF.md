@@ -1,5 +1,46 @@
 # Phase 10 Optical Specialist Audit Handoff
 
+> ## ⛔ DO NOT SEND — SUPERSEDED BY SYNTHETIC AUDIT (2026-05-13)
+>
+> **Status:** This handoff document is **stale**. It still presents the
+> original Phase 10 single-handle verdict as send-ready, but a synthetic
+> three-persona optical audit
+> ([`PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
+> returned three load-bearing findings that materially weaken the verdict's
+> evidentiary chain:
+>
+> 1. **Atlas formula bug at `scripts/overlay_calibrate.py:381`** — CZA
+>    apex hardcoded as `sun_y − R46`, geometrically correct only at
+>    h ≈ 22°. The CZA-route "residual gate" failure listed in §1's table
+>    is partly an artifact of this bug, not a route failure. A real
+>    halo specialist will find this within fifteen minutes of opening
+>    the atlas; sending this handoff before the fix lands forfeits
+>    credibility on the rest of the audit ask.
+> 2. **Parhelion-offset circular dependency on six of nine anchored
+>    photos** — `sec(h) − 1` lever is below 2 % of `R22` on five low-h
+>    photos, and on three of those (p20, p25, p26) the 22° halo arc is
+>    not visible in the photograph at all so `R22` is parhelion-derived,
+>    not ring-fit. The "passes residual gate at ~0 px on every eligible
+>    photo" claim restates honestly as "passes on three photos (p2, p7,
+>    p13) where the test has meaningful discrimination."
+> 3. **Tangent-arc detection-gate misclassification at p7** — h = 59.4°
+>    is the circumscribed-halo regime per atoptics.co.uk and
+>    dewbow.co.uk; testing column-peak detection of an "upper tangent
+>    arc" at this h is a literature-level primitive misclassification.
+>
+> **Action:** the campaign to address these findings is filed in
+> [`../PHASE10_ATTACK_ROADMAP.md`](../PHASE10_ATTACK_ROADMAP.md). The
+> roadmap's re-audit gate (§5) lists which passes must land before any
+> handoff (this one or its successor) goes to a real specialist. This
+> document will be rewritten — verdict table, audit-ask language, and
+> §3 "what would change the verdict" all included — once the re-audit
+> clears.
+>
+> **Until then: do not send this document, in whole or in part, to an
+> external optical specialist.** The verdict table in §1 below, the
+> framing in §2, and the deliverable shape in §5 all reflect the
+> pre-audit state of the Phase 10 closeout and will mislead.
+
 > **Audit ask in one line:** before we bake the Phase 10 "single image-recoverable inverse handle" verdict into program-level public framing, we want an atmospheric-optics specialist to push on whether the verdict is structurally sound or an artifact of dataset / detection choices.
 
 ## 1. Why we're asking

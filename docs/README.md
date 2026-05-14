@@ -35,8 +35,9 @@ code, experiments, prior theorem materials, and application bridges.
   operating-envelope workbench for balancing from a shadow-derived signal.
 - [Sundog Pressure Mines roadmap](sundog_v_minesweeper.md): Phase 11
   operating-envelope workbench for hidden mines and noisy pressure fields.
-- [Sundog Chat roadmap](SUNDOG_V_CHAT.md): browser site-helper roadmap focused
-  on evidence-tier and claim-boundary preservation under prompt pressure.
+- [Sundog Chat roadmap](SUNDOG_V_CHAT.md): browser site-helper roadmap and
+  substantiation for evidence-tier and claim-boundary preservation under prompt
+  pressure, including the completed Phase 12 open-weight sweep.
 - [Sundog Gimmicks Ledger](SUNDOG_V_GIMMICKS.md): candidate game-native
   workbenches under evaluation before promotion to full roadmap documents.
 - [Third-party reuse ledger](THIRD_PARTY_REUSE.md): permissions and attribution
