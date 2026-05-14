@@ -87,9 +87,9 @@ Tangent-arc curvature -> sun altitude	unresolved open question	current detector 
 Strongest surviving bounded claim
 The strongest surviving inverse-use claim is:
 
-The parhelion-offset route remains promotable in bounded form on a strict three-photo subset: photos with unambiguous bilateral peaks, valid geometry, non-trivial discrimination, and an independently fittable 22° halo.
+The parhelion-offset route remains promotable in bounded form on a strict three-photo subset: photos with unambiguous bilateral peaks, valid geometry, an independently fittable 22° halo, and non-trivial discrimination (where the geometric lever `sec(h) − 1` is materially above the typical anchor noise floor).
 
-That subset is currently p2, p7, and p13 per the re-audit memo.
+That subset is currently p2, p7, and p13 per the re-audit memo, with one nuance worth flagging in specialist outreach: p2 (h = 18.6°, lever 5.52%) and p7 (h = 59.4°, lever 96.5%) carry the route on discrimination grounds; p13 (h = 6.83°, lever 0.71%) sits below the 2% lever threshold and contributes on the "unambiguous bilateral peaks + ring-fit halo" eligibility criterion per Pass B2's audit-survived wording, not on independent residual-gate discrimination. The Pass B1 per-photo eligibility sub-table in `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md` is the canonical source for the per-photo breakdown; specialist readers will see this and ought not be surprised by p13's caveat.
 
 Explicitly retired phrases
 The following pre-audit framings should remain retired in outreach unless quoted historically or retractively:
@@ -123,6 +123,9 @@ These should not be used as outreach headlines:
 a strong CZA inverse route claim;
 a strong tangent-route negative claim;
 an overextended “field-not-reward” empirical claim based on geometry alone.
+
+Held out of Phase 11 outreach (conservative-first, not retired)
+The audit-survived two-substrate field-shape pattern claim — i.e., the same forward-rich / inverse-narrow asymmetry observed in the mesa-side in-vitro work and the geometry-side atlas — does survive the re-audit. It is documented in `docs/MESA_CROSSOVER_NOTE.md` and `docs/SUNDOG_V_GRAVITY.md` after their 2026-05-14 ratchets. **Phase 11 outreach intentionally holds it back**: the brief targets a literature-fidelity / claim-discipline check, not a cross-substrate-pattern endorsement pass. A second outreach phase, after the Phase 11 packet survives specialist review, would be the natural place to introduce the substrate-pattern framing under specialist scrutiny. Phase 11 reviewers can be told the framing exists if they ask, but the outreach packet should not lead with it.
 7. What feedback we are asking for
 This outreach is not asking reviewers to endorse a grand theory. It is asking for bounded technical and editorial feedback on a specific artifact.
 
@@ -197,15 +200,19 @@ CZA and supralateral are not currently promoted inverse handles.
 Tangent remains an unresolved detector question in the current state.
 Earlier stronger framings were internally attacked and narrowed before outreach.
 12. Outreach-ready artifact list
-The following are the right supporting materials to send or link:
+The following are the right supporting materials to send or link (updated 2026-05-14 to reflect what is already revised):
 
-docs/SUNDOG_V_GEOMETRY.md
-docs/calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md
-docs/SUNDOG_OUTREACH_PACKET.md after revision to post-reaudit wording
-live explainer / workbench surface
-calibration script and selected overlay examples
-any revised specialist handoff replacing the stale pre-reaudit version
-Do not send stale pre-attack or pre-reaudit framing surfaces without explicit revision.
+`docs/SUNDOG_V_GEOMETRY.md` — Phase 10 closeout table re-derived from the post-pass / post-reaudit state.
+`docs/calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md` — load-bearing governing memo.
+`docs/PHASE10_ATTACK_ROADMAP.md` — eight required passes plus the optional C2; provenance for what was repaired and what remains an open question.
+`docs/calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md` — **rewritten 2026-05-14 and cleared for external handoff**; serves the specialist tier of §8. Replaces the pre-reaudit stop-bannered version.
+`docs/MESA_CROSSOVER_NOTE.md` — ratcheted 2026-05-14; the cross-substrate framing the brief intentionally holds back from outreach but that specialists may surface in conversation.
+`docs/SUNDOG_V_GRAVITY.md` forward/inverse asymmetry receipt — ratcheted 2026-05-14; the load-bearing public-framing surface for the broader claim, also held back from Phase 11 outreach.
+`docs/PROMO_HIGHLIGHTS.md` Atlas-side single-handle receipt paragraph — ratcheted 2026-05-14 to use the post-pass failure-mode taxonomy.
+`docs/SUNDOG_OUTREACH_PACKET.md` — **rewritten 2026-05-14**; now aligned with the post-reaudit route taxonomy and the three-tier outreach order.
+live explainer / workbench surface;
+calibration script (`scripts/overlay_calibrate.py`, `scripts/cza_formula.py`) and selected overlay examples.
+Do not send stale pre-attack or pre-reaudit framing surfaces without explicit revision. The §14 immediate-next-actions list below tracks what is and is not revised.
 
 13. Phase 11 objective
 Phase 11 outreach should achieve one thing:
@@ -219,8 +226,44 @@ the artifact reads as honest and inspectable,
 the surviving claim surface is clear,
 and future outreach can proceed from a stable, reviewable base.
 14. Immediate next actions
-Rewrite docs/SUNDOG_OUTREACH_PACKET.md to align with the post-reaudit taxonomy.
-Rewrite or replace the stale specialist handoff from the post-pass state.
-Prepare one short specialist email / DM template and one longer packet.
-Check docs/PROMO_HIGHLIGHTS.md and any other reusable public-copy surfaces for stale pre-audit wording before external use.
-Conservative framing is part of the deliverable. The outreach brief should make it easy for an external reviewer to see both the artifact’s value and the boundaries the project is intentionally keeping around its claims.
+Status reflects the 2026-05-14 specialist-handoff-rewrite + public-framing-ratchet wave.
+
+1. ~~Rewrite `docs/SUNDOG_OUTREACH_PACKET.md` to align with the post-reaudit taxonomy.~~ **Status: LANDED 2026-05-14.** Packet now carries the §0 tier-placement block, the post-pass route taxonomy, the strict three-photo parhelion wording, the CZA formula correction, and the Phase 11 provenance chain.
+2. ~~Rewrite or replace the stale specialist handoff from the post-pass state.~~ **Status: LANDED 2026-05-14.** `docs/calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md` rewritten end-to-end; previously stop-bannered, now ✅ Cleared for External Handoff. Provenance chain preserved in §1 of the handoff.
+3. **Prepare specialist outreach artifacts:** one short cover note (§10 of this brief has a draft) and one longer packet (built from the artifact list in §12). **Status: PARTIALLY DRAFTED;** cover note exists, longer packet needs assembly from the existing artifact list once `SUNDOG_OUTREACH_PACKET.md` is revised.
+4. ~~Check `docs/PROMO_HIGHLIGHTS.md` and any other reusable public-copy surfaces for stale pre-audit wording before external use.~~ **Status: LANDED 2026-05-14.** Atlas-side single-handle-receipt paragraph rewritten to the post-pass failure-mode taxonomy (dataset / physics / tooling); "all four eligible photos" and "three independent failure layers" framings retired. `docs/MESA_CROSSOVER_NOTE.md` and `docs/SUNDOG_V_GRAVITY.md` forward/inverse receipt also ratcheted in the same wave.
+5. **Choose deployment methodology** before any external outreach happens. See §15 below for the recommended approach. **Status: SCAFFOLDED 2026-05-14** in `docs/calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md`; persona execution pending.
+
+Conservative framing is part of the deliverable. The outreach brief should make it easy for an external reviewer to see both the artifact's value and the boundaries the project is intentionally keeping around its claims.
+
+15. Recommended deployment methodology
+This is the answer to "same specialist synthesis or a more refined, contextually aware method?" The recommendation: **same synthesis machinery, swapped personas + tiered output.** The Phase 10 attack campaign's three-persona protocol earned its keep three times (Persona 3's p22 over-statement caught by the consolidator; the audit memo's CZA-formula transcription error caught by Pass A1a's verify gate; the re-audit pass clearing against the consolidator's numerical re-runs). The synthesis machinery is well-tested. What needs to change for outreach is the *persona roles*: the Phase 10 personas were internal-audit personas (tangent / CZA + supralateral / parhelion + forward), each testing a specific claim against the literature. Phase 11 outreach is the inverse problem — testing whether the packet bounces off real external reviewers — so the personas should be **external-reviewer impersonators**, each carrying a different tier from §8.
+
+Recommended Phase 11 personas
+**Persona A — Atmospheric-optics specialist.** Reviewer-impersonator role: read the specialist-handoff packet (per §12) as if you were a halo specialist on a 30-minute time budget. Surface: (i) any "they tested the wrong primitive" calls; (ii) any "their formula is wrong" calls; (iii) any "this is well-known textbook material they're claiming as a contribution" calls; (iv) any literature-fidelity issues; (v) whether the audit-survived wording reads as honest. Output: a short bounce-test memo of the form §5 of the existing handoff requests (sound / sound-with-caveat / pushback / out-of-area).
+
+**Persona B — Science-communications editor.** Reviewer-impersonator role: read the brief, the explainer, and the workbench as if you were an editor at a science-communications outlet evaluating whether to link the artifact, on a 15-minute time budget. Surface: (i) is the claim license obvious (what's standard literature vs project-specific contribution); (ii) does the packet over- or under-claim originality; (iii) is the educational framing clear; (iv) what wording is too jargon-laden for non-specialist readers; (v) are the disclaimers in §11 sufficient. Output: an editorial revision pass on the public-facing copy.
+
+**Persona C — Wikipedia-adjacent editor / external-link reviewer.** Reviewer-impersonator role: read the brief and the live workbench as if you were considering whether the artifact qualifies as an external-link adjunct in halo-display articles. Wikipedia's WP:EL discipline is strict; this is the most conservative tier. Surface: (i) does the artifact pass the "is this useful and not a primary-source claim" test; (ii) is the literature attribution clear; (iii) does any wording risk being read as original research; (iv) where is the artifact's specific contribution distinct from textbook content; (v) what would have to change for an external-link proposal to be defensible.
+
+Consolidator verification gate
+The same verify-gate discipline that earned its keep in the Phase 10 campaign carries through to Phase 11. The consolidator re-checks each persona's output against:
+- the live artifact (the workbench renders + the calibration scripts run)
+- the load-bearing docs (re-audit memo + ratcheted gravity / crossover / promo-highlights surfaces)
+- the audit-survived wording
+
+If a persona surfaces a finding that doesn't survive the verify gate (e.g., a "their formula is wrong" call that actually misreads the post-A1b literature formula), the finding goes to a §3-style "dropped claims" bin rather than the load-bearing recommendations bin. The discipline that caught Persona 3's p22 over-statement and the memo's CZA transcription error stays mandatory.
+
+Output shape
+A Phase 11 consolidated memo of the same shape as `docs/calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`, except the §2 "verified findings that should change the outreach packet" bin contains *reviewer-bounce-test* findings (the packet over-claims X, the framing reads as Y, the cover note needs revision Z) rather than claim-audit findings (the formula is wrong, the route is mis-identified). The §3 "unverified / contradicted claims" bin keeps the same disqualification discipline.
+
+After the Phase 11 synthetic pass clears, the same recommended-execution-order discipline from Phase 10 §3.0 applies: hedge / ratchet the outreach packet, *then* deploy to real external reviewers, not the other way around. Real-reviewer outreach is the closing step after the synthetic pass + revision wave.
+
+Deployment milestone
+Phase 11 outreach is ready to deploy to real reviewers when:
+- the SUNDOG_OUTREACH_PACKET rewrite (§14 item 1) is landed;
+- a Phase 11 synthetic-persona pass on the packet has cleared its verify gate;
+- each of the three audience tiers (§8) has a tier-specific cover artifact (specialist cover note, editorial framing, Wikipedia-adjacent disclaimer pack);
+- a small named outreach list exists per tier (target reviewers identified, not yet contacted).
+
+Before any of those four conditions is met, the brief should be treated as internal prep, not as a "send" artifact.

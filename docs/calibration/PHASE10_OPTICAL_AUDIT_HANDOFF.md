@@ -365,7 +365,29 @@ Brutally short is fine; brutally honest is better.
   disagrees with a specific resolution, surface that as a §3 outcome,
   not as a §2 question.
 
-## 7. Contact for clarifications
+## 7. Audience-tier placement
+
+This handoff is the **specialist tier** of a three-tier outreach
+framework documented in
+[`PHASE11_OUTREACH_BRIEF.md`](PHASE11_OUTREACH_BRIEF.md). The other two
+tiers — technically-literate science-communications editors, and
+Wikipedia-adjacent / external-link reviewers — receive different
+artifacts pitched at different levels of literature/jargon density;
+this handoff is the version pitched at an atmospheric-optics specialist
+on a ~30-minute time budget. The brief's §15 deployment methodology
+covers how the three-tier outreach is meant to be synthesised before
+external deployment (same synthetic-persona protocol as the Phase 10
+attack campaign, with external-reviewer-impersonator personas instead
+of internal-audit personas).
+
+The brief intentionally holds the two-substrate field-shape pattern
+claim (documented in [`../MESA_CROSSOVER_NOTE.md`](../MESA_CROSSOVER_NOTE.md)
+and [`../SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md)) out of Phase 11
+outreach. If a specialist asks about the cross-substrate framing in
+follow-up, treat it as in-scope; do not lead with it in any deliverable
+built from this handoff.
+
+## 8. Contact for clarifications
 
 This document and the canonical docs in §4.2 are intended to be
 self-contained, but the program team is available for clarifying
