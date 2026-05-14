@@ -1781,6 +1781,14 @@ The driver excludes the daily-cap-blocked `llama-3.3-70b-versatile × adversaria
 
 Phase 12c run status (2026-05-13): in progress locally via `scripts/run-groq-interventions.ps1`. This is a discretionary strengthening pass, not a prerequisite for the public §13 claim.
 
+Phase 12c retry note (2026-05-14): the first full pass completed with provider-side 429s in 15 intervention cells. Use the errored-cell retry mode rather than replaying the whole battery:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -RerunErrored -DelayMultiplier 2
+```
+
+`-RerunErrored` skips cells whose final `summary.json` has `sundog_gated_hosted.error == 0` and reruns missing, unreadable, or errored summaries only. `-DelayMultiplier 2` doubles the model-specific pacing to reduce repeat Groq 429s.
+
 **Engineering pieces:**
 - `chat/eval/run_phase5_interventions.mjs` — extended with `--backend groq`. The hosted baseline path resolves to `phase5-hosted/<slate>/groq-<model>/draft-outcomes.json` (or `-rescored.json` if present), where `<model>` is the Groq model id with `/` and `.` replaced by `-`. Worker loop now wires `--delay-ms` into the hosted pacing.
 - `scripts/run-groq-interventions.ps1` — Windows PowerShell 5.1 driver. Per-(model × slate) loop: (a) verify the hosted baseline file is healthy (parses, row count matches expected); (b) regenerate it via `run_hosted_drafts.mjs` if corrupt or missing; (c) run all 8 interventions sequentially with per-model `--delay-ms` throttling. Logs to `results/chat/phase12c-groq-interventions-log.jsonl`. Resume-safe via `-SkipDone`.

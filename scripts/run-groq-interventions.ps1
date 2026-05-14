@@ -31,6 +31,7 @@
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -Models llama-3.1-8b-instant
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -Slates differential
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -SkipDone
+#   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -RerunErrored -DelayMultiplier 2
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -DryRun
 #
 # Log: results/chat/phase12c-groq-interventions-log.jsonl
@@ -43,7 +44,9 @@ param(
                                   "refusal_downgraded", "retrieval_conflict_injected"),
     [string]   $KeyFile = "C:\Users\hughe\Dev\syek.corg.txt",
     [string]   $RepoRoot = "C:\Users\hughe\Dev\sundog",
+    [double]   $DelayMultiplier = 1.0,
     [switch]   $SkipDone,
+    [switch]   $RerunErrored,
     [switch]   $DryRun
 )
 
@@ -95,6 +98,20 @@ function Test-BaselineHealthy {
     }
 }
 
+# Function: read the hosted family summary from an intervention output dir.
+function Get-HostedFamilySummary {
+    param(
+        [Parameter(Mandatory = $true)] [string] $SummaryPath
+    )
+    if (-not (Test-Path $SummaryPath)) { return $null }
+    try {
+        $summary = Get-Content -Raw -Path $SummaryPath | ConvertFrom-Json -ErrorAction Stop
+        return $summary.byFamily."sundog_gated_hosted"
+    } catch {
+        return $null
+    }
+}
+
 # Cache expected prompt counts per slate.
 $ExpectedPromptCountBySlate = @{}
 foreach ($slateName in $Slates) {
@@ -107,11 +124,13 @@ foreach ($slateName in $Slates) {
 # Build (model x slate) plan. Skip daily-cap-excluded combos.
 $plan = @()
 foreach ($model in $Models) {
-    $delayMs = $DelayMsByModel[$model]
+    $baseDelayMs = $DelayMsByModel[$model]
+    $delayMs = $baseDelayMs
     if (-not $delayMs) {
         Write-Warning "No delay tuned for model $model - using 11000ms default."
         $delayMs = 11000
     }
+    $delayMs = [int][Math]::Ceiling($delayMs * $DelayMultiplier)
     foreach ($slate in $Slates) {
         $excluded = $false
         foreach ($exc in $DailyCapExclusions) {
@@ -140,13 +159,29 @@ foreach ($model in $Models) {
 
 Write-Host ""
 Write-Host "Intervention plan: $($plan.Count) (model x slate) combinations x $($Interventions.Count) interventions" -ForegroundColor Cyan
+if ($RerunErrored) {
+    Write-Host "RerunErrored mode: only missing/unreadable summaries or summaries with sundog_gated_hosted.error > 0 will execute." -ForegroundColor Yellow
+}
+if ($DelayMultiplier -ne 1.0) {
+    Write-Host ("DelayMultiplier={0}; per-model delays have been scaled before execution." -f $DelayMultiplier) -ForegroundColor Yellow
+}
 foreach ($step in $plan) {
     $baselineOk = Test-BaselineHealthy -BaselinePath $step.BaselinePath -ExpectedRows $step.ExpectedRows
     $bMark = if ($baselineOk) { "[baseline ok]" } else { "[REGEN BASELINE]" }
     Write-Host ("  {0,-28} {1,-14} delay={2,5}ms  {3}" -f $step.Model, $step.Slate, $step.DelayMs, $bMark)
     if ($DryRun) {
         foreach ($intv in $Interventions) {
-            Write-Host ("    intervention: $intv") -ForegroundColor DarkGray
+            $outDir = Join-Path $RepoRoot ("results/chat/interventions/{0}-hosted-groq-{1}/{2}" -f $step.Slate, $step.ModelDirSuffix, $intv)
+            $summaryPath = Join-Path $outDir "summary.json"
+            $fam = Get-HostedFamilySummary -SummaryPath $summaryPath
+            if ($RerunErrored) {
+                $willRun = (-not $fam) -or ([int]$fam.error -gt 0)
+                $mark = if ($willRun) { "RUN" } else { "skip clean" }
+                $errCount = if ($fam) { [int]$fam.error } else { "missing" }
+                Write-Host ("    [{0}] intervention: {1} errors={2}" -f $mark, $intv, $errCount) -ForegroundColor DarkGray
+            } else {
+                Write-Host ("    intervention: $intv") -ForegroundColor DarkGray
+            }
         }
     }
 }
@@ -212,7 +247,12 @@ foreach ($step in $plan) {
         # results/chat/interventions/<slate>-hosted-groq-<model>/<intervention>/
         $outDir = Join-Path $RepoRoot ("results/chat/interventions/{0}-hosted-groq-{1}/{2}" -f $step.Slate, $step.ModelDirSuffix, $intv)
         $summaryPath = Join-Path $outDir "summary.json"
-        if ($SkipDone -and (Test-Path $summaryPath)) {
+        $existingFam = Get-HostedFamilySummary -SummaryPath $summaryPath
+        if ($RerunErrored -and $existingFam -and ([int]$existingFam.error -eq 0)) {
+            Write-Host ("[SKIP CLEAN] {0} x {1} x {2}" -f $step.Model, $step.Slate, $intv) -ForegroundColor DarkYellow
+            continue
+        }
+        if ($SkipDone -and -not $RerunErrored -and (Test-Path $summaryPath)) {
             Write-Host ("[SKIP] {0} x {1} x {2}" -f $step.Model, $step.Slate, $intv) -ForegroundColor DarkYellow
             continue
         }
