@@ -11,6 +11,13 @@
   },
   "sun": [464, 204],
   "r22": 323,
+  "r22_source": "parhelion-derived",
+  "r22_source_note": "p26 shows no continuous 22° halo arc — only parhelia. R22 was set from the parhelion offsets, so the parhelion-route residual is tautological on this photo. Audit memo §2 item 7 confirms. Pass B1 classification 2026-05-13; ineligible for parhelion-route promotion regardless of residual.",
+  "geometric_validity": {
+    "left": "valid",
+    "right": "invalid",
+    "right_invalid_reason": "right_offset = right_x - sun_x = 786 - 464 = 322 px is less than r22 = 323 px, so arccos(r22 / right_offset) = arccos(1.003) is undefined. Geometric impossibility — the right parhelion cannot lie inside the 22° halo and still be a parhelion. Audit memo §2 item 6: 'p26 right-side anchor encodes a geometric impossibility ... the residual table records this with no flag, demonstrating the table does not actively enforce the geometric constraint that defines the route.' Pass B1 fix 2026-05-13: flagged here at the schema level so the residual table can render `invalid` rather than silently coerce."
+  },
   "parhelion": {
     "left_x": 132,
     "right_x": 786,

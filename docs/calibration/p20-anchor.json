@@ -9,6 +9,8 @@
   },
   "sun": [1011, 827],
   "r22": 455,
+  "r22_source": "parhelion-derived",
+  "r22_source_note": "p20 shows no continuous 22° halo arc — only parhelia and a sun pillar. R22 was set from the parhelion offsets, so the parhelion-route residual is tautological on this photo. Audit memo §2 item 7 confirms. Pass B1 classification 2026-05-13; ineligible for parhelion-route promotion regardless of residual.",
   "sun_altitude": 5,
   "parhelion": {
     "left_x": 554,

@@ -9,7 +9,8 @@
   },
   "sun": [596, 559],
   "r22": 219,
-  "sun_altitude": 0.5,
+  "r22_source": "ring-fit",
+  "r22_source_note": "R22 came from low-sun 22° halo support (per existing _meta). However, the parhelion offsets (offset_L = offset_R = 219 = R22) are inferred FROM R22, not measured independently. Audit memo §2 item 5: 'The recorded offset_L = offset_R = R22 = 219 is what you get when you stipulate offset := R22; the 0 px residual is tautological.' So the parhelion-route residual is tautological in the OPPOSITE direction from p20/p25/p26: R22 is ring-supported but the parhelion is r22-derived. Pass B1 classification 2026-05-13; ineligible for parhelion-route promotion (tautology), regardless of residual. Lever sec(h)-1 ≈ 0.004% (essentially zero).",
   "parhelion": {
     "left_x": 377,
     "right_x": 815,

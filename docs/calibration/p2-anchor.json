@@ -13,6 +13,8 @@
   },
   "sun": [567, 496],
   "r22": 182,
+  "r22_source": "ring-fit",
+  "r22_source_note": "From Phase 2 multi-photo calibration. p2 is the clean modern halo display with a continuous, unambiguous 22° halo arc (image 1 label-key role). R22 is independent of the parhelion offsets. Pass B1 classification 2026-05-13; lever sec(h)-1 = 5.52% (eligible).",
   "parhelion": {
     "left_x": 375,
     "right_x": 759,

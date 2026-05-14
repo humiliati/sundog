@@ -11,6 +11,8 @@
   },
   "sun": [489, 186],
   "r22": 300,
+  "r22_source": "parhelion-derived",
+  "r22_source_note": "p25 shows no continuous 22° halo arc — only parhelia. R22 was set from the parhelion offsets, so the parhelion-route residual is tautological on this photo. Audit memo §2 item 7 confirms. Pass B1 classification 2026-05-13; ineligible for parhelion-route promotion regardless of residual.",
   "parhelion": {
     "left_x": 184,
     "right_x": 796,

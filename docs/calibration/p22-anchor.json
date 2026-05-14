@@ -11,6 +11,8 @@
   },
   "sun": [668, 453],
   "r22": 505,
+  "r22_source": "ring-fit",
+  "r22_source_note": "Per audit memo §3 first dropped item: 'p22 shows a clearly visible 22° halo arc connecting the parhelia (central region is sun-glare-washed but the upper arc is unambiguous). The R22 on p22 is plausibly fittable from the visible upper arc.' Pass B1 classification 2026-05-13; lever sec(h)-1 = 0.50%, anchor-noise-bounded — clean residual is informational, not route-validating. Eligible with low-lever caveat.",
   "parhelion": {
     "left_x": 160,
     "right_x": 1175,
