@@ -209,6 +209,7 @@ The following are the right supporting materials to send or link (updated 2026-0
 `docs/MESA_CROSSOVER_NOTE.md` — ratcheted 2026-05-14; the cross-substrate framing the brief intentionally holds back from outreach but that specialists may surface in conversation.
 `docs/SUNDOG_V_GRAVITY.md` forward/inverse asymmetry receipt — ratcheted 2026-05-14; the load-bearing public-framing surface for the broader claim, also held back from Phase 11 outreach.
 `docs/PROMO_HIGHLIGHTS.md` Atlas-side single-handle receipt paragraph — ratcheted 2026-05-14 to use the post-pass failure-mode taxonomy.
+`docs/calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md` — **scaffolded 2026-05-14**; the dispatch memo for §15's deployment methodology. Persona A/B/C scaffolds, retired-phrase guardrails, verified-findings and dropped-claims bins, consolidator verification gate, and open deployment gates. Persona dispatch not yet executed.
 `docs/SUNDOG_OUTREACH_PACKET.md` — **rewritten 2026-05-14**; now aligned with the post-reaudit route taxonomy and the three-tier outreach order.
 live explainer / workbench surface;
 calibration script (`scripts/overlay_calibrate.py`, `scripts/cza_formula.py`) and selected overlay examples.
@@ -232,11 +233,13 @@ Status reflects the 2026-05-14 specialist-handoff-rewrite + public-framing-ratch
 2. ~~Rewrite or replace the stale specialist handoff from the post-pass state.~~ **Status: LANDED 2026-05-14.** `docs/calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md` rewritten end-to-end; previously stop-bannered, now ✅ Cleared for External Handoff. Provenance chain preserved in §1 of the handoff.
 3. **Prepare specialist outreach artifacts:** one short cover note (§10 of this brief has a draft) and one longer packet (built from the artifact list in §12). **Status: PARTIALLY DRAFTED;** cover note exists, longer packet needs assembly from the existing artifact list once `SUNDOG_OUTREACH_PACKET.md` is revised.
 4. ~~Check `docs/PROMO_HIGHLIGHTS.md` and any other reusable public-copy surfaces for stale pre-audit wording before external use.~~ **Status: LANDED 2026-05-14.** Atlas-side single-handle-receipt paragraph rewritten to the post-pass failure-mode taxonomy (dataset / physics / tooling); "all four eligible photos" and "three independent failure layers" framings retired. `docs/MESA_CROSSOVER_NOTE.md` and `docs/SUNDOG_V_GRAVITY.md` forward/inverse receipt also ratcheted in the same wave.
-5. **Choose deployment methodology** before any external outreach happens. See §15 below for the recommended approach. **Status: SCAFFOLDED 2026-05-14** in `docs/calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md`; persona execution pending.
+5. ~~Choose deployment methodology before any external outreach happens.~~ **Status: SCAFFOLD LANDED 2026-05-14.** Methodology documented in §15 below; dispatch scaffold filed at [`PHASE11_OUTREACH_SYNTHETIC_MEMO.md`](PHASE11_OUTREACH_SYNTHETIC_MEMO.md). The dispatch memo itself is scaffolded but the persona passes have not yet executed. **Status: SCAFFOLDED 2026-05-14** in `docs/calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md`; persona execution pending.
 
 Conservative framing is part of the deliverable. The outreach brief should make it easy for an external reviewer to see both the artifact's value and the boundaries the project is intentionally keeping around its claims.
 
 15. Recommended deployment methodology
+*Dispatch scaffold landed 2026-05-14 at [`PHASE11_OUTREACH_SYNTHETIC_MEMO.md`](PHASE11_OUTREACH_SYNTHETIC_MEMO.md); refer there for the executable persona dispatch, verification gate, and execution order. The text below is the design rationale.*
+
 This is the answer to "same specialist synthesis or a more refined, contextually aware method?" The recommendation: **same synthesis machinery, swapped personas + tiered output.** The Phase 10 attack campaign's three-persona protocol earned its keep three times (Persona 3's p22 over-statement caught by the consolidator; the audit memo's CZA-formula transcription error caught by Pass A1a's verify gate; the re-audit pass clearing against the consolidator's numerical re-runs). The synthesis machinery is well-tested. What needs to change for outreach is the *persona roles*: the Phase 10 personas were internal-audit personas (tangent / CZA + supralateral / parhelion + forward), each testing a specific claim against the literature. Phase 11 outreach is the inverse problem — testing whether the packet bounces off real external reviewers — so the personas should be **external-reviewer impersonators**, each carrying a different tier from §8.
 
 Recommended Phase 11 personas
@@ -263,7 +266,4 @@ Deployment milestone
 Phase 11 outreach is ready to deploy to real reviewers when:
 - the SUNDOG_OUTREACH_PACKET rewrite (§14 item 1) is landed;
 - a Phase 11 synthetic-persona pass on the packet has cleared its verify gate;
-- each of the three audience tiers (§8) has a tier-specific cover artifact (specialist cover note, editorial framing, Wikipedia-adjacent disclaimer pack);
-- a small named outreach list exists per tier (target reviewers identified, not yet contacted).
-
-Before any of those four conditions is met, the brief should be treated as internal prep, not as a "send" artifact.
+- each of the three audience tiers (§8) has a tier-specific cover artifact (specialist cover note, editorial framing, Wikipedia-a
