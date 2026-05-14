@@ -31,6 +31,7 @@ import { FAMILY_DRAFTERS, FAMILY_NAMES, categoryFor } from "./lib/draft-families
 import { applyIntervention, INTERVENTION_IDS } from "./lib/interventions.mjs";
 import { createOpenAIAdapter } from "./lib/adapters/openai-adapter.mjs";
 import { createAnthropicAdapter } from "./lib/adapters/anthropic-adapter.mjs";
+import { createGroqAdapter } from "./lib/adapters/groq-adapter.mjs";
 
 const root = process.cwd();
 const slate = argValue("--slate") || "differential";
@@ -38,6 +39,7 @@ const intervention = argValue("--intervention") || "all";
 const hostedMode = argv().includes("--hosted");
 const hostedBackend = argValue("--backend") || "openai"; // when --hosted, defaults to openai
 const hostedConcurrency = Number(argValue("--concurrency") || "4") || 4;
+const delayMs = Number(argValue("--delay-ms") || "0") || 0;
 
 const slateConfig = configForSlate(slate);
 const interventions = intervention === "all" ? INTERVENTION_IDS : [intervention];
@@ -62,18 +64,41 @@ const rng = makeSeededRng(0xc0ffee);
 const interventionCtx = { claimMap, chunkById, routeById, allRoutes, rng };
 
 const allSummaries = {};
+// For groq, suffix the slate label and baseline path with the model so
+// llama-3.3 / llama-3.1 / qwen runs don't collide on disk.
+const groqModel = process.env.GROQ_MODEL || "";
+const groqModelSuffix = (hostedBackend === "groq" && groqModel)
+  ? "-" + groqModel.replace(/[\/.]/g, "-")
+  : "";
 const outSlateLabel = hostedMode
-  ? `${slateConfig.label}-hosted${hostedBackend === "openai" ? "" : "-" + hostedBackend}`
+  ? `${slateConfig.label}-hosted${hostedBackend === "openai" ? "" : "-" + hostedBackend + groqModelSuffix}`
   : slateConfig.label;
 const hostedAdapter = hostedMode
-  ? (hostedBackend === "anthropic" ? createAnthropicAdapter() : createOpenAIAdapter())
+  ? (hostedBackend === "anthropic" ? createAnthropicAdapter()
+     : hostedBackend === "groq" ? createGroqAdapter()
+     : createOpenAIAdapter())
   : null;
 
 // Load the hosted unmutated-baseline rows (rescored against patched gate).
 // Used to compare each post-intervention hosted result against the
 // reference no-intervention hosted outcome. Empty map in deterministic mode.
 async function loadHostedBaselineMap() {
-  const hostedPath = join(root, "results", "chat", "phase5-hosted", slateConfig.label, hostedBackend, "draft-outcomes-rescored.json");
+  // For groq, baselines live at phase5-hosted/<slate>/groq-<model>/
+  const hostedBaselineDir = hostedBackend === "groq"
+    ? `${hostedBackend}${groqModelSuffix}`
+    : hostedBackend;
+  // The baseline may be either draft-outcomes-rescored.json (preferred,
+  // post-patch) or just draft-outcomes.json. Try the rescored first.
+  for (const fname of ["draft-outcomes-rescored.json", "draft-outcomes.json"]) {
+    const hostedPath = join(root, "results", "chat", "phase5-hosted", slateConfig.label, hostedBaselineDir, fname);
+    try {
+      const rows = JSON.parse(await readFile(hostedPath, "utf8"));
+      return new Map(rows.map((r) => [r.id, r]));
+    } catch {
+      // try next
+    }
+  }
+  const hostedPath = join(root, "results", "chat", "phase5-hosted", slateConfig.label, hostedBaselineDir, "draft-outcomes-rescored.json");
   try {
     const rows = JSON.parse(await readFile(hostedPath, "utf8"));
     return new Map(rows.map((r) => [r.id, r]));
@@ -109,6 +134,13 @@ for (const interventionId of interventions) {
         const job = queue[cursor++];
         const row = await runHostedRow({ job, interventionId });
         rows.push(row);
+        // Inter-call pacing for rate-limited backends. With concurrency=1
+        // and --delay-ms 11000, this keeps a single worker under Groq's
+        // free-tier TPM caps. Skip the delay on the last job and on
+        // skipped (no-API-call) rows.
+        if (delayMs > 0 && cursor < queue.length && !row.skipped) {
+          await new Promise((r) => setTimeout(r, delayMs));
+        }
       }
     }
     await Promise.all(Array.from({ length: Math.min(hostedConcurrency, queue.length) }, worker));
