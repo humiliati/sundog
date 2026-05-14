@@ -18,6 +18,25 @@ The pairing is deliberate. The theorem alone can be dismissed as a sanitized
 toy condition. The experiment alone can be dismissed as a tuned slate. Run
 together, each tells the other what counts as a real result.
 
+> **Cross-substrate dependency, 2026-05-13:** the mesa↔geometry crossover
+> note ([`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md)) treated the
+> Geometry Phase 10 single-handle verdict as the in-the-wild numerical
+> companion to the in-vitro mesa v3.x finding. The synthetic optical audit
+> ([`docs/calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
+> returned three load-bearing findings that materially weaken the geometry
+> verdict's evidentiary chain. The campaign to address them is filed in
+> [`docs/PHASE10_ATTACK_ROADMAP.md`](PHASE10_ATTACK_ROADMAP.md). Until that
+> roadmap's re-audit gate clears, treat the geometry side of the crossover
+> as *hedged pending re-audit*: the field-shape pattern is still observed
+> in two substrates, but the "three independent failure layers" framing
+> and the "passes residual gate at every eligible photo" framing both
+> require the post-audit hedged language documented in the attack roadmap
+> §6 and the audit memo §6. This is a substantiation-chain dependency,
+> not a falsification: the mesa empirical front itself is unaffected, but
+> any "mesa↔geometry crossover at first-empirical-hint weight" framing
+> downstream of this roadmap (notably the homepage elevator pitch and
+> the gravity-ledger public-framing sentence) is also hedge-required.
+
 ## Why Mesa Is the Right Next Roadmap
 
 The gravity claim names three falsification modes:

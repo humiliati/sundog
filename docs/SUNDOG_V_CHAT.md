@@ -1748,9 +1748,63 @@ All originally-named open threads from earlier phases are now closed:
 - **Cross-architecture / open-weight (Phase 12 closed for Meta Llama at two sizes + Alibaba Qwen)**
 
 Discretionary follow-ups (not blocking §13):
-- Hosted intervention battery on Llama/Qwen (would extend Phase 5c/5d's causal-authority surface to open-weight models)
+- Hosted intervention battery on Llama/Qwen — Phase 12c staged, see below
 - Larger falsification slate (current 22 prompts could grow to 50–100 if a specific blind-spot family is hypothesized)
 - Production widget integration of the reasoning-trace stripping (Qwen-class output handling)
+
+### Phase 12c — Open-Weight Intervention Battery (staged, run-locally)
+
+Goal:
+Extend Phase 5c (OpenAI) and Phase 5d (Claude) causal-authority surfaces to the three open-weight models from Phase 12. Same 8 trace-field interventions × differential/adversarial slates × hosted family. Tests whether Meta and Alibaba models pattern with Claude (trace-as-primary-constraint) or with OpenAI (system-prompt-as-primary-constraint) — or expose a third profile entirely.
+
+**Scoped to fit free-tier daily caps:**
+
+| Model | TPD | Differential intervention (16×8=128 calls) | Adversarial intervention (59×8=472 calls) |
+| --- | ---: | --- | --- |
+| llama-3.3-70b-versatile | 100K | ⚠️ 1.28× cap, borderline | ❌ 4.7× cap, excluded |
+| llama-3.1-8b-instant | 500K | ✅ fits | ✅ fits |
+| qwen/qwen3-32b | 500K | ✅ fits | ✅ fits |
+
+The driver excludes the daily-cap-blocked `llama-3.3-70b-versatile × adversarial` combo silently. Total in-scope: 5 (model × slate) combos × 8 interventions = 40 intervention runs.
+
+**Engineering pieces:**
+- `chat/eval/run_phase5_interventions.mjs` — extended with `--backend groq`. The hosted baseline path resolves to `phase5-hosted/<slate>/groq-<model>/draft-outcomes.json` (or `-rescored.json` if present), where `<model>` is the Groq model id with `/` and `.` replaced by `-`. Worker loop now wires `--delay-ms` into the hosted pacing.
+- `scripts/run-groq-interventions.ps1` — Windows PowerShell 5.1 driver, 275 lines. Per-(model × slate) loop: (a) verify the hosted baseline file is healthy (parses, row count matches expected); (b) regenerate it via `run_hosted_drafts.mjs` if corrupt or missing (Phase 12 disk-drift left several baselines truncated); (c) run all 8 interventions sequentially with per-model `--delay-ms` throttling. Logs to `results/chat/phase12c-groq-interventions-log.jsonl`. Resume-safe via `-SkipDone`.
+
+**Expected wall times (single worker, free tier):**
+
+| Combo | Calls (incl. baseline regen) | Approx wall time |
+| --- | ---: | ---: |
+| llama-3.3-70b × differential | 16 (regen) + 128 | ~14 min |
+| llama-3.1-8b × differential | 16 + 128 | ~25 min |
+| llama-3.1-8b × adversarial | 59 + 472 | ~95 min |
+| qwen/qwen3-32b × differential | 16 + 128 | ~27 min |
+| qwen/qwen3-32b × adversarial | 59 + 472 | ~100 min |
+| **Total** | **~1,500 calls** | **~4h 20m** |
+
+Doable in a long afternoon. The driver's `-SkipDone` flag makes the run resumable across multiple sessions if needed.
+
+**Run command (from `C:\Users\hughe\Dev\sundog`):**
+
+```powershell
+# Preview the plan + show baseline health
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -DryRun
+
+# Full intervention sweep (~4 hours)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1
+
+# Subset / resume
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -Slates differential
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -Models llama-3.1-8b-instant -SkipDone
+```
+
+**Outputs:**
+- `results/chat/interventions/<slate>-hosted-groq-<model>/<intervention>/draft-outcomes.{csv,json}` + `summary.json` — per-intervention per-model outcomes, schema identical to Phase 5c/5d so the existing aggregator (`aggregate_interventions.mjs`) extends cleanly.
+- `results/chat/phase12c-groq-interventions-log.jsonl` — one line per intervention step with timing + outcome counts.
+
+**Expected result based on prior phases:** zero unsafe-accepts is the prior across all five model implementations that ran the intervention battery (deterministic + gpt-4o-mini + claude-haiku-4-5). The novel question Phase 12c answers is *which trace fields show causal authority on which open-weight models*: do they pattern with Claude (5 of 6 fields strong on adversarial) or with OpenAI (only `trace.evidenceTier` weak), or split? Either result extends §13's causal-substantiation surface from 3 to 5 model implementations.
+
+**Baseline regeneration note:** the Phase 12 sweep left three differential baseline JSON files truncated by disk-drift (`groq-llama-3-3-70b-versatile`, `groq-llama-3-1-8b-instant`, `groq-qwen-qwen3-32b` — all on the differential slate; adversarial baselines parsed clean). The driver detects this on dry-run as `[REGEN BASELINE]` and re-runs the corresponding baseline sweep automatically before starting interventions. No manual cleanup required.
 
 ### Phase 12b — Throttled-Sweep Driver (run-locally plan)
 
