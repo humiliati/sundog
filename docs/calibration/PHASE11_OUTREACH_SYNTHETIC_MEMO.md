@@ -1,7 +1,10 @@
 # Phase 11 Outreach Synthetic Dispatch Memo
 
 Filed: 2026-05-14  
-Status: **scaffolded; persona dispatch not yet executed**  
+Status: **wave-1 dispatched + consolidated + 15 patches applied 2026-05-14;
+wave-2 independent re-dispatch + consolidation 2026-05-14 (see §8); wave-2
+surfaces 3 send-blocking + 14 recommended findings, none of which have been
+auto-applied pending user review.**  
 Purpose: pre-deployment bounce test for the Phase 11 outreach surfaces after
 the Phase 10 attack campaign, re-audit, specialist handoff rewrite, public
 ratchet wave, and outreach-packet rewrite.
@@ -292,3 +295,367 @@ Verification standards:
   (per re-audit memo §107 item 3).
 - `chat/claim_map.json` ratchet: **held pending explicit approval**
   (per re-audit memo §107 item 3).
+- Workbench above-the-fold attribution audit: ~~**pending**~~
+  **AUDITED 2026-05-14 (wave-2 §8.4); GATE OPEN — verified blocker
+  for tier-3.** Two independent WebFetches (Persona B + Persona C
+  in wave-2 dispatch) confirm Greenler / Tape / Cowley appear only
+  in §7 "History & reading" below the fold of `sundog.cc/sundog.html`.
+  Wave-2 §8.6a finding W2 specifies the required credit-strip change.
+- Phase 11 synthetic-persona pass: ~~**CLEARED 2026-05-14**~~
+  → **wave-1 cleared 2026-05-14; wave-2 independent re-dispatch
+  2026-05-14 (§8) surfaces 3 send-blocking + 14 recommended findings.**
+  Wave-2 reading is more conservative than wave-1.
+
+## 8. Wave-2 Independent Re-Dispatch
+
+Filed: 2026-05-14 (same day as wave-1, separate run).
+Status: **wave-2 dispatch executed; consolidator verification gate applied; findings filed below.**
+
+This section records a fresh independent three-persona dispatch run
+after the wave-1 patches landed, at user request. Methodology: three
+parallel general-purpose subagents, one per persona, each prompted
+with the persona role + primary surfaces and instructed to skip
+§3-§7 of this memo so they could form independent verdicts. Personas
+B and C also performed WebFetch against the live workbench.
+
+Wave-2 purpose: do the wave-1 §3 patches actually resolve the bounces
+they were meant to resolve, and does an independent pass surface
+new bounces?
+
+### 8.1 Persona A wave-2 — Atmospheric-Optics Specialist
+
+| item | verdict | note |
+| --- | --- | --- |
+| primitive taxonomy | caveat | Persona A flagged row-7 supralateral/infralateral wording; consolidator hedge in §8.4 — not promoted as a verified finding pending further specialist review |
+| formula fidelity | pushback | "n = 1.31" with 32.196° precision survives in packet §1 row 5 without chromatic-dispersion hedge; 46/22 ratio cited as "2.091" with precision-to-3-figures unbacked by physics derivation |
+| parhelion claim boundary | sound with caveat | strict-3-photo wording is honest, but p7 at h = 59.4° is in the regime where column-plate parhelion mechanism is suspect — possible production-mechanism mis-attribution |
+| tangent C5/C6 tension framing | sound with caveat | "C5↔C6 substrate tension" framing reads correctly as route-open; caveat is that `R_uta/R₂₂` is not the canonical literature inverse handle for tangent arcs |
+| external-send readiness | pushback | wording overclaims survive: p7 parhelion claim, "non-obvious use" in packet §2 item 2, 2.091 precision, 32.196° precision, upper-tangent-curvature implied canonicalness |
+
+**Significant wave-2 findings from Persona A:**
+
+1. **A-N1.** p7 (h = 59.4°) parhelion claim may mis-attribute production
+   mechanism. At h ≈ 60° the column-plate parhelion mechanism is suspect —
+   Tape (1994) §3 and Greenler ch. 3 both treat parhelia as
+   low-to-moderate-h plate-refraction features; circumscribed-halo
+   brightness on the parhelic circle competes. Either p7 has been
+   mis-identified as a parhelion display, or — if plate-population
+   is real at h = 59.4° (unusual) — `R₂₂/cos h` is not the right
+   kinematic for that lobe.
+2. **A-N2.** Upper-tangent-arc curvature `R_uta/R₂₂` is not a canonical
+   literature inverse handle for h. Tape 1994 §6 + Cowley tangent-arcs
+   page treat tangent arcs as one continuous family with circumscribed
+   halo; the literature shape parameter is opening angle / azimuthal
+   extent, not circle-fit radius. Handoff §2.3 (v) hedges — downstream
+   verdict tables and packet text treat it as settled.
+3. **A-N3.** "2.091" ratio in packet §1 row 5b + §3 R₄₆ note is
+   presented with precision the underlying physics doesn't carry. The
+   integer-label ratio 46/22 ≈ 2.091 happens to coincide with the
+   minimum-deviation ratio (≈ 45.7/21.84 ≈ 2.092) but the packet doesn't
+   name which derivation is being cited; the three-figure precision
+   reads as literature-derived when it is integer-label division.
+4. **A-N4.** "Non-obvious use of the formula" wording in packet §2 item 2.
+   The inverse application of `parhelion_offset = R₂₂/cos(h)` is ≥ a
+   century old (Pernter & Exner; Greenler ch. 3; Cowley atoptics
+   parhelia page; Tape 1994 §3 has the exact great-circle treatment).
+   Calling it "non-obvious" frames standard atmospheric optics as
+   project contribution.
+5. **A-N5.** CZA disappearance "~32.196°" persists in packet §1 row 5
+   with no chromatic-dispersion hedge. Wave-1 §3a #8 patched the
+   cza_formula.py docstring; the dispersion note did not propagate
+   to the packet.
+6. **A-N6.** CZA "tangent to 46° halo at top" framing in §1 row 4 is
+   geometrically correct only in a narrow h-window. The §4 editorial
+   caveats subsection has the right hedge; pull it up into §1 row 4
+   so the framing is consistent.
+7. **A-N7.** Supralateral "~0.5° variation across h = 0-22°" claim in
+   handoff §2.2 is cited to internal audit memo §2 item 12 rather
+   than to primary literature (Tape 1994 §6.4 or the actual derivation
+   source).
+
+### 8.2 Persona B wave-2 — Science-Communications Editor
+
+| item | verdict | note |
+| --- | --- | --- |
+| claim license clarity | caveat | §2's standard-vs-original split is genuinely clean — but lives at line ~140 behind ~140 lines of audit-internal preamble |
+| educational framing | pushback | packet §0 is internal-ops framing handed to an editor; the actual educational lede had to be dug for |
+| jargon load | pushback | "Pass A1b/C2/C4/C5/C6," "audit-survived," "verify gate," "anchor-noise-bounded," "lever," "post-hedged," "matched-filter on halo-subtracted b* substrate" leak into editorial-tier surface. Glossary helps but signals the problem. |
+| cover-note readiness | caveat | §10b cover note broadly sendable but trailing sentence undermines |
+| public-copy revision needed | yes | (a) packet §0 non-audit-vocabulary opener; (b) §10b trailing-sentence cut; (c) workbench above-the-fold attribution gap |
+
+**Significant wave-2 findings from Persona B:**
+
+1. **B-N1.** Packet opens to wrong audience. First substantive paragraph
+   is meta-process ("This packet is the shared support artifact across
+   three outreach tiers"). Cold editor on a 15-minute clock wants the
+   artifact in sentence one.
+2. **B-N2.** §10b cover note trailing sentence undermines: "A specialist
+   audit pass already narrowed our claims; this is the editorial-tier
+   follow-up." Reveals tier-2 pipeline position; "already narrowed our
+   claims" prompts "what got walked back?" rather than "what should I
+   look at?".
+3. **B-N3.** Packet §1 row 4 CZA cell contains internal release-note
+   prose. "the Phase 10 attack campaign's Pass A1b replaced the
+   approximation with the literature formula" is release-note text
+   inside a math summary row; belongs in §6 Maintenance.
+4. **B-N4.** §4 Wikipedia content doesn't belong in editor-tier packet.
+   ~80 lines of WP external-link strategy with WP:ELNO discussion
+   makes the packet feel like a multi-pronged outreach campaign
+   rather than a halo explainer.
+5. **B-N5.** Workbench above-the-fold attribution gap (WebFetch
+   verified). `sundog.cc/sundog.html` H1 is "A sun dog is geometry
+   doing optics"; Greenler / Tape / Cowley appear only in §7
+   "History & reading," below the fold. Packet's own §4 Editorial
+   caveats names this as constraint (i) for tier-3 defensibility.
+   The constraint is named but not met. Cross-confirmed by Persona C.
+
+### 8.3 Persona C wave-2 — Wikipedia-Adjacent Reviewer
+
+| item | verdict | note |
+| --- | --- | --- |
+| external-link usefulness | caveat | interactive slider for R₂₂/cos(h) is genuinely unique vs atoptics — but buried under project-branded full-atlas landing state |
+| original-research risk | medium | §4 link blurbs are restrained; risk is in destination page H1 ("A sun dog is geometry doing optics") and §2 items 1-3 if quoted on a talk page |
+| literature attribution | pushback | Greenler / Tape / Cowley NOT above-the-fold on the live page; in §7 only. Single biggest blocker. |
+| tier-3 timing | sound | packet correctly defers tier-3 behind specialist + editorial review |
+| send readiness | no | above-the-fold literature attribution must land on destination page first (packet's own §4 caveat names this as precondition; gate is not closed) |
+
+**Significant wave-2 findings from Persona C:**
+
+1. **C-N1.** Above-the-fold attribution gap on live workbench (WebFetch
+   verified, independent of Persona B). Same finding as B-N5; two
+   independent WebFetches converge.
+2. **C-N2.** Per-article verdict on §4 surviving proposals.
+   **Sun dog:** link blurb itself defensible, but landing state is
+   project-branded full-atlas — would be reverted on WP:ELNO #19
+   (promotional) and WP:ELNO #11 (no named author) grounds.
+   **CZA:** oppose; single-threshold supplement is pedagogically
+   thin; deep-link `#sun-altitude-binding` fragile.
+3. **C-N3.** "Stellar Aqua LLC" corporate authorship is WP:SELFPUB
+   yellow flag. Citation template in §4 names "Stellar Aqua LLC,
+   2026"; a corporate-entity author with no named human attracts
+   scrutiny atoptics.co.uk doesn't face.
+4. **C-N4.** `phase3-tests.html` Quick-link is an OR-trap reachable
+   from packet. "Interactive math-binding tests" reads as
+   primary-research artifact; if a talk-page defender links it as
+   evidence the atlas "works," that's WP:OR.
+5. **C-N5.** §2 item 3 calibration evidence (strict 3-photo subset,
+   lever percentages) is WP:OR if quoted on talk page. Internally
+   a key audit-survived finding; quoted in WP defense, it becomes
+   unpublished primary research on photographs.
+6. **C-N6.** §3 reproducibility paths are WP:V-inversion if used as
+   link defense. "Trust our results because you can rerun them" is
+   the verifiability-not-truth inversion; WP reviewers want
+   third-party sources, not reproducible project code.
+7. **C-N7.** OR-risk delta principle. §4 link blurbs are defensible
+   *in isolation*; risk is in the packet behind them. Packet §4
+   Editorial caveats constraint (iii) is the right policy; extend
+   it explicitly to §2 items 2 and 3.
+
+### 8.4 Consolidator Verification Gate (wave-2)
+
+Each wave-2 persona claim re-checked against the §5 standards
+(formulas / executable code / exact wording / WP discipline naming).
+Verification notes:
+
+- **A-N1 (p7 parhelion mis-attribution).** Plausible specialist
+  concern grounded in Tape 1994 §3 + Greenler ch. 3 framing of
+  parhelia as low-to-moderate-h plate-refraction features. The
+  specific claim about p7 has not been verified against the actual
+  photograph (would require image inspection by a specialist). The
+  persona's concern is the type of question the tier-1 outreach is
+  meant to elicit. **Promoted as a tier-1 dispatch question rather
+  than a unilateral patch.**
+- **A-N3 (2.091 ratio precision).** Verified. The integer-label
+  ratio 46/22 = 2.0909... is the literal derivation; the underlying
+  minimum-deviation physics (22° halo inner edge ≈ 21.84°; 46° halo
+  inner edge ≈ 45.7°) gives a ratio that *happens* to be ≈ 2.092,
+  but presenting "2.091" to three figures without naming which
+  derivation is being used is the wording concern.
+- **A-N5 (CZA chromatic dispersion).** Verified against the formula:
+  at threshold `cos²h = n² − 1`. For n(yellow, 589 nm) ≈ 1.308:
+  h ≈ 32.49°. For n(violet) ≈ 1.317: h ≈ 31.04°. For n(red, ~670 nm)
+  ≈ 1.306: h ≈ 32.77°. **Visible-band spread is ~1.5–1.8°, not
+  ~0.1° as wave-1 §3a #8 docstring patch states.** Wave-1's
+  docstring numerical claim appears off by ~10×. Open numerical
+  reconciliation gate; see §8.4 hedge below.
+- **A-N4 (non-obvious use).** Verified. The inverse application of
+  `parhelion_offset = R₂₂/cos(h)` is ≥ a century old; calling it
+  "non-obvious" in a project-contribution claim is overclaim.
+- **B-N5 / C-N1 (workbench above-the-fold attribution gap).**
+  Verified via two independent WebFetches (Persona B and Persona C
+  both retrieved the page; both confirmed Greenler / Tape / Cowley
+  appear only in §7 "History & reading" below the interactive
+  atlas). Cross-references wave-1 §4 deferred finding #2 (filed
+  as a pre-tier-3 requirement). Wave-2 has now performed the
+  deferred audit. **Promotes the wave-1 deferred finding to
+  verified blocker for tier-3.**
+- **C-N3 (Stellar Aqua LLC corporate authorship).** Verified against
+  packet §4 citation template; corporate-entity author with no
+  named human is a WP:SELFPUB consideration.
+- **A-N (primitive-taxonomy / row-7 supralateral wording).**
+  **Not promoted.** Persona A's verdict-table note on row-7
+  supralateral/infralateral "column-orientation 90° path" wording
+  appears to be either a misreading or a subtle distinction; the
+  packet's current row-7 wording is consistent with Greenler ch. 4
+  standard usage. Re-checking with the specialist tier is
+  appropriate but the consolidator does not patch.
+- **Other findings.** Verified against quoted wordings + destination
+  surfaces; all surface real text in the named files at time of
+  dispatch.
+
+**Resolution — chromatic-spread magnitude.** Wave-1 §3a finding #8
+docstring patch quotes "~0.1° across the visible chromatic spread …
+below this atlas's measurement precision." Consolidator re-derivation
+from the script's own formula (lines 56-58: `h_disappear =
+arccos(√(n² − 1))`):
+
+| wavelength | n (ice) | h_disappear |
+| --- | --- | --- |
+| red (~670 nm) | 1.306 | 32.86° |
+| yellow (~589 nm, Na-D) | 1.308 | 32.50° |
+| visible centroid | 1.31 | 32.19° |
+| violet (~404 nm) | 1.317 | 31.05° |
+
+**Visible-band spread: ~1.8°.** Analytic check via implicit
+differentiation: `dh/dn = −n / [√(2−n²) · √(n²−1)]`; at n = 1.31
+this is ≈ −166°/unit-n, so for Δn = 0.011 (visible-band range),
+Δh ≈ 1.83°. Wave-1 §3a #8 magnitude claim is off by a factor of
+~18× and the "below this atlas's measurement precision" claim
+is also wrong: 1.8° is well above the ~0.1° altitude precision
+the photo-anchor JSONs work at. Practical consequence: the CZA
+disappearance is gradual between ~31° (violet edge drops out first)
+and ~33° (red edge drops out last), not a sharp 32.2° cutoff.
+
+This is a wave-1 verification-gate miss: the §5 standard "persona
+claims about formulas must be backed by executable code or a
+specific cited literature line" should have caught the ~0.1° number
+during wave-1 consolidation. Two corrections owed:
+1. `scripts/cza_formula.py` docstring (lines 46-52) needs the
+   ~0.1° / "below measurement precision" claim replaced with the
+   ~1.8° / "gradual disappearance between ~31° and ~33°" framing.
+2. Wave-2 W7 packet hedge wording in §8.6b below uses the corrected
+   ~1.8° magnitude rather than the wave-1 ~0.1° magnitude.
+
+### 8.5 Reconciliation Diff vs Wave-1
+
+**Wave-1 findings re-confirmed (patches hold; not re-attacked by wave-2):**
+
+| wave-1 # | finding | wave-2 status |
+| ---: | --- | --- |
+| 1 | 46° "plate-oriented" mislabeling | patch holds; wave-2 didn't re-surface |
+| 3 | "Photograph calibration evidence" link blurb | patch holds; §4 rewrite survives |
+| 4 | §4 proposals 3-6 fail WP:ELNO #1 | patch holds (pruned to 2); wave-2 §8.3 C-N2 finds even the 2 surviving on the edge |
+| 6 | No editorial-tier cover note | patch holds (§10b landed); wave-2 §8.2 B-N2 refines (trailing-sentence cut) |
+| 7 | No "what you'll see when you click" workbench description | patch holds; wave-2 didn't re-attack |
+| 3b #9 | R₂₂/cos(h) exact great-circle | patch holds; wave-2 A-N4 attacks a different aspect ("non-obvious use") |
+| 3b #10 | "three structurally different failure modes" | patch holds |
+| 3b #11 | "ratchet"/"ratcheted" buzzword | patch holds |
+| 3b #15 | brief §6 two-substrate held-back wording | patch holds |
+
+**Wave-1 findings wave-2 STRENGTHENS / WIDENS:**
+
+| wave-1 # | wave-2 extension |
+| ---: | --- |
+| 2 | wave-1 dropped 32.196° from external-link copy only; wave-2 A-N5 propagates the hedge to packet §1 row 5 with chromatic-dispersion footnote |
+| 5 | wave-1 added §0 glossary; wave-2 B-N1 + jargon-load pushback says glossary itself is a tell and packet §0 should open with the artifact |
+| 8 | wave-1 patched cza_formula.py docstring claiming ~0.1° spread; wave-2 consolidator re-derivation finds ~1.5–1.8° spread — docstring numerical claim may need second revision |
+| 4 deferred #2 | wave-1 filed workbench attribution audit as pre-tier-3 requirement; wave-2 §8.4 promotes to verified blocker |
+
+**Wave-1 findings wave-2 doesn't re-attack (residual status — patches stand):**
+
+3a #1, #3, #6, #7; 3b #12, #13, #14. (§3b #12 packet §0 tier-placement
+clutter softening is strengthened by wave-2 B-N1, but the wave-1
+patch itself stands.)
+
+### 8.6 Wave-2 New Findings (verified, not in wave-1)
+
+#### 8.6a Send-blocking
+
+| # | finding | surfaced by | required change |
+| ---: | --- | --- | --- |
+| W1 | **p7 (h = 59.4°) parhelion production-mechanism question.** Possible mis-attribution of circumscribed-halo brightness as parhelion in the strict 3-photo set. | Persona A | Add to the tier-1 specialist dispatch as an explicit question (handoff §2 or §7). Do NOT unilaterally drop p7 — that is the specialist's call. If specialist confirms mis-attribution, strict-subset rewrites cascade through handoff §1, packet §2 item 3, reaudit memo §94, brief §5. |
+| W2 | **Workbench above-the-fold attribution gap (WebFetch verified, two personas).** Greenler / Tape / Cowley only in §7 "History & reading" of `sundog.cc/sundog.html`. Packet §4 caveat names this as constraint (i) for tier-3 defensibility. | Persona B + C | Add a one-line credit strip immediately under the H1 on `sundog.cc/sundog.html`: e.g. "Geometry follows Greenler 1980 and Tape 1994; see History & reading for citations." Blocks tier-3 send until landed. |
+| W3 | **§10b cover note trailing sentence undermines editorial-tier framing.** | Persona B | Cut "A specialist audit pass already narrowed our claims; this is the editorial-tier follow-up." from brief §10b. End the note on "...we'd value your read on whether the page earns a link or a short write-up." |
+
+#### 8.6b Recommended (not send-blocking)
+
+| # | finding | surfaced by | required change |
+| ---: | --- | --- | --- |
+| W4 | **Upper-tangent-arc `R_uta/R₂₂` is not canonical literature inverse handle.** | Persona A | Pull handoff §2.3 (v)'s framing-question hedge into the verdict tables across handoff §1 and packet §0. Add a one-line note to packet §1 row 6 + §0 tangent row: "Note: the literature standard inverse for tangent arcs uses opening angle / arc extent (Tape 1994 §6), not circle-fit radius." |
+| W5 | **"2.091" ratio precision overclaim** in packet §1 row 5b + §3 R₄₆ note. | Persona A | Soften to: "matches the integer-label angular ratio 46/22 ≈ 2.09" OR cite a specific minimum-deviation derivation. Drop the three-figure precision. |
+| W6 | **"Non-obvious use of the formula" wording in packet §2 item 2.** | Persona A | Replace "is a non-obvious use of the formula" with "is applied as a measurement instrument; the inverse direction is treated in Tape 1994 §3 and on Cowley's atoptics parhelia page." |
+| W7 | **CZA "~32.196°" precision in packet §1 row 5 with no dispersion hedge.** Wave-1 §3a #8 magnitude claim is also off by ~18× (see §8.4 resolution). | Persona A + consolidator re-derivation | Replace "CZA disappears at h > ~32.196°" with "CZA disappears gradually between ~31° (violet edge) and ~33° (red edge) as the chromatic discriminant exceeds 1 at progressively longer wavelengths; visible-band centroid (n = 1.31) crosses at 32.19°." This is the dispersion-corrected wording; supersedes wave-1 §3a #8 docstring magnitude. The `scripts/cza_formula.py` docstring at lines 46-52 also needs the same correction. |
+| W8 | **CZA "tangent to 46° halo at top" framing in §1 row 4 lacks h-window scoping.** | Persona A | Pull the §4 editorial caveat ("any external-link copy that says 'the CZA is tangent to the 46° halo' should be hedged or scoped to the near-disappearance regime") up to §1 row 4 source-column. |
+| W9 | **Supralateral "~0.5° across h=0-22°" claim cited to internal audit memo.** | Persona A | Cite to primary literature (Tape 1994 §6.4 or the actual computation source) in handoff §2.2. |
+| W10 | **Packet §0 opens with meta-process; lift artifact framing to top.** | Persona B | Replace the four-question framing at packet lines 5-14 with a single artifact paragraph leading on what the Halo Atlas IS, not what the packet is for. Demote the four-question framing and the tier-placement block. |
+| W11 | **§1 row 4 CZA cell contains internal release-note prose.** | Persona B | Strip "the Phase 10 attack campaign's Pass A1b replaced the approximation with the literature formula" from the math row; move to §6 Maintenance. |
+| W12 | **§4 Wikipedia content doesn't belong in tier-2 (editor-facing) packet.** | Persona B | Option (a): document tier-2 cut at top of §4 ("editors at tier 2 may skip"); option (b): create tier-specific packet variants. Defer pending tier-deployment decision. |
+| W13 | **Per-article §4 verdict: Sun dog landing-state concern.** | Persona C | Add a deep-link anchor (e.g. `#parhelion-offset-demo`) to `sundog.cc/sundog.html` so the §4 Sun dog link blurb's URL points to the focused demonstration. Without this the Sun dog proposal is WP:ELNO #19 vulnerable even after the attribution fix. |
+| W14 | **Per-article §4 verdict: CZA supplement may be too thin.** | Persona C | Consider dropping CZA from §4 surviving proposals; the single-threshold supplement is pedagogically thinner than the parhelion slider. Defer pending workbench attribution fix + Sun dog proposal outcome. |
+| W15 | **"Stellar Aqua LLC" corporate authorship — WP:SELFPUB consideration.** | Persona C | Add named human contributor(s) to `sundog.cc/sundog.html` footer and to the §4 citation template. |
+| W16 | **`phase3-tests.html` Quick-link is an OR-trap reachable from packet.** | Persona C | Either remove `phase3-tests.html` from the packet "Quick links" entirely, or wrap it in an internal-use caveat. |
+| W17 | **§2 items 1-3 are WP:NOR/OR-risky if quoted on talk page.** | Persona C | Discipline reminder (no patch). The packet's §4 Editorial caveats constraint (iii) is the right policy; extend the constraint to §2 items 2 and 3 explicitly. |
+
+### 8.7 Cross-Persona Convergences (wave-2)
+
+1. **Workbench above-the-fold attribution gap (B-N5 + C-N1, both
+   WebFetch-verified):** independent confirmation from editor-tier
+   and WP-tier personas. Two WebFetch retrievals, same conclusion.
+   Highest-confidence finding of wave-2; promotes wave-1's deferred
+   audit to a verified send-blocker.
+
+2. **§2 items 1-3 are load-bearing internally but OR-risky on
+   talk pages** (Persona A flags item 2 "non-obvious use" as
+   overclaim; Persona C flags items 1-3 as WP:NOR/OR-risky in
+   talk-page quotation): specialist and WP reviewers converge from
+   different angles on the same wording instances. Internal claim
+   license is legitimate; external defense of the link must NOT
+   route through items 1-3.
+
+3. **Internal-vocabulary leakage to editorial-tier surfaces**
+   (Persona B explicit on jargon load; Persona A implicit via
+   "audit-survived sentence is long but honest"): wave-1 added a
+   §0 glossary as the patch. Wave-2 says the glossary itself is a
+   tell — the cleaner fix is to rewrite the editorial-tier surfaces
+   to not need the glossary.
+
+### 8.8 Updated Deployment-Gate Status (wave-2 reading)
+
+Wave-1 §7 marked the synthetic-persona pass CLEARED 2026-05-14 and
+concluded "the four-doc + dispatch-memo Phase 11 surface is internally
+coherent." Wave-2 is more conservative:
+
+- **Tier-1 (specialist outreach via handoff):** mostly ready. Wave-2
+  W1 (p7 parhelion question) and W4 (upper-tangent canonical-handle
+  question) are exactly the type of question the tier-1 dispatch
+  is meant to elicit, so they can ship as added questions in handoff
+  §2 / §7 rather than blocking the send. W5/W6/W8/W9 are wording
+  polish that the specialist can flag if they bounce; not strict
+  blockers.
+
+- **Tier-2 (editorial outreach via brief + packet):** borderline.
+  W3 (§10b trailing-sentence cut) is a 30-second fix and should
+  land before any tier-2 send. W10 (packet §0 opens with meta) and
+  W11 (§1 row 4 release-note prose) are higher-effort restructuring;
+  could ship with caveats or wait for a tier-2-specific packet
+  variant per W12.
+
+- **Tier-3 (Wikipedia-adjacent via packet §4):** **NOT ready.**
+  W2 (workbench above-the-fold attribution gap) is a packet-stated
+  precondition (§4 Editorial caveats constraint (i)) that is not
+  met. Wave-1 deferred this to a follow-up audit; wave-2 performed
+  the audit and confirms the gate is open. Tier-3 send-block
+  remains until the workbench credit strip lands. Beyond W2, even
+  with the credit strip the surviving §4 proposals face landing-state
+  (W13) and pedagogical-thinness (W14) concerns at the per-article
+  talk-page level.
+
+**Wave-2 conclusions vs wave-1.** Wave-2 is a more conservative
+reading than wave-1. Wave-1 concluded "now ready: assemble
+tier-specific outreach packet + small named outreach list per tier";
+wave-2 concludes tier-1 is ready (with added specialist questions),
+tier-2 is borderline pending §10b + structural fixes, and tier-3
+is blocked on the workbench attribution gate that wave-1 explicitly
+deferred. The independent re-dispatch protocol earned its keep:
+the workbench attribution audit was wave-1's largest deferral and
+wave-2 performed it.
