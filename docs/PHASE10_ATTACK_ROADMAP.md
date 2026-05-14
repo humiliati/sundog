@@ -207,6 +207,27 @@ do about it?"
 
 ### Finding A — Pass A1b: Atlas formula patch (gated on A1a)
 
+**Status: landed 2026-05-13.** Two surgical edits to
+`scripts/overlay_calibrate.py`: (1) line 66 changed `WB_R46 = 440` to
+`WB_R46 = round(2.091 * WB_R22)` (= 460), with maintainer comment
+pointing at this roadmap and the audit memo; (2) lines 381–384 the inner
+`cza_apex(c)` function now calls `cza_formula.cza_apex_y_above_sun_px(h_deg, WB_R22)`
+instead of `WB_SUN[1] - WB_R46`, with a fallback to the legacy anchor
+when the CZA disappears (h > ~32.2°). Import added at the top of the
+file (line 62–66). **Smoke results:** on p2 the CZA apex y-residual
+collapsed from −19.3 px (legacy) to +1.3 px (literature) — matches
+A1a's measured target within sign-convention. On p7 (h = 59.4°, beyond
+CZA disappearance) the script does not crash; CZA falls back to the
+corrected WB_R46 = 460 anchor and renders at the legacy position
+(visually classified as "not applicable" downstream per existing
+vocabulary rules). **Supralateral spot-check:** apex shifted from 44°
+above sun to 46° above sun (+2° = 4.55% relative; matches roadmap's
+"~4% outward from sun-above" expectation; no follow-up pass needed).
+46° halo radius now drawn correctly at 460 * scale instead of 440 *
+scale (~4.5% angularly larger, the right direction). Per-overlay
+`R46_px = r22_obs × (46/22)` derivation remains explicitly out-of-scope
+per roadmap; deferred as a follow-up Phase 10 backlog item.
+
 **Goal.** Replace the atlas's hardcoded CZA expression with the
 A1a-validated formula. Single touch on a workbench-space constant
 plus a single touch on the line-381 expression. Do *not* mix
