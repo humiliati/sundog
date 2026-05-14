@@ -59,11 +59,25 @@ except ImportError:
     print("ERROR: pip install Pillow --break-system-packages", file=sys.stderr)
     sys.exit(1)
 
+# Pass A1b (2026-05-13): use the literature CZA formula instead of the
+# WB_R46-anchored hardcode. See scripts/cza_formula.py and
+# docs/PHASE10_ATTACK_ROADMAP.md Pass A1a/A1b.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from cza_formula import cza_apex_y_above_sun_px
+
 
 # Workbench constants (must mirror parhelion-geometry.mjs)
 WB_SUN = (500, 500)
 WB_R22 = 220
-WB_R46 = 440  # holds at 440 — see SUNDOG_V_GEOMETRY.md "R_46 note"
+# Pass A1b (2026-05-13): WB_R46 corrected from the legacy 440 to
+# round(2.091 * WB_R22) = 460. The literature angular ratio is 46/22
+# ~ 2.091, not 2.0; the legacy 440 encoded 44 deg in workbench coords
+# (since 220 px = 22 deg), undersizing the 46 deg halo by ~4.5% angularly.
+# Affects the 46 deg halo radius (line ~344) and the supralateral apex
+# base (line ~412); the CZA inner function at line ~383 no longer reads
+# WB_R46 (it now uses the literature formula via cza_formula). See
+# docs/PHASE10_ATTACK_ROADMAP.md Pass A1b for the per-consumer rationale.
+WB_R46 = round(2.091 * WB_R22)
 
 
 def parse_pair(s, name):
@@ -378,9 +392,22 @@ def main():
                 draw.line([prev, (xp, yp)], fill=(255, 150, 50, 220), width=2)
             prev = (xp, yp)
 
-    # CZA — anchored to 46° halo top
+    # CZA — Pass A1b (2026-05-13): anchored at the literature CZA position
+    # `arcsin(sqrt(n^2 - cos^2 h)) - h`, scaled by WB_R22 / 22 deg. The legacy
+    # `anchored = WB_SUN[1] - WB_R46` was correct only at h ~ 22 deg; at other
+    # altitudes the literature formula gives a different position. See
+    # scripts/cza_formula.py and docs/PHASE10_ATTACK_ROADMAP.md Pass A1a/A1b.
+    # `h_deg` is closed over from the enclosing function (set at line ~287).
     def cza_apex(c):
-        anchored = WB_SUN[1] - WB_R46  # 60
+        cza_above_sun_w = cza_apex_y_above_sun_px(h_deg, WB_R22)
+        if cza_above_sun_w is None:
+            # CZA disappears geometrically at h > ~32.2 deg. Fall back to the
+            # legacy WB_R46 anchor so the curve renders at *some* position
+            # (callers / vocabulary classifications mark CZA as "not
+            # applicable" at high h, e.g. p7 in the anchor table).
+            anchored = WB_SUN[1] - WB_R46
+        else:
+            anchored = WB_SUN[1] - cza_above_sun_w
         return anchored + (0.85 - max(0.4, min(1.4, c))) * 200
 
     def circle_thru_apex(apexY, endpointY, halfW):

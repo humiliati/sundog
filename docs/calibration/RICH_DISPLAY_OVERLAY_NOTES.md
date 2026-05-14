@@ -243,6 +243,78 @@ attack roadmap A1b touch block, the per-overlay `R46_px = r22_obs ×
 (46/22)` derivation alternative remains explicitly out-of-scope
 (would touch supralateral and other workbench-space consumers).
 
+### Pass A1b Smoke Results — Atlas Formula Patch
+
+Pass A1b deliverable from
+[`../PHASE10_ATTACK_ROADMAP.md`](../PHASE10_ATTACK_ROADMAP.md), landed
+2026-05-13. Two surgical edits to `scripts/overlay_calibrate.py` (line
+66: `WB_R46` constant; lines 381–384: `cza_apex` inner function), plus
+the new `cza_formula` import.
+
+Reproduce the p2 smoke test from repo root with:
+
+```bash
+python3 scripts/overlay_calibrate.py docs/calibration/2.Photometeor-jeff_mod_red.jpg \
+    --anchors docs/calibration/p2-anchor.json \
+    --sun-altitude 18.6 --supralateral 0.40 --out /tmp/p2_overlay_a1b.png
+```
+
+**p2 smoke (h = 18.6°):**
+
+| quantity | value |
+| --- | --- |
+| sun pixel | (567, 496) |
+| R22 observed | 182 px |
+| **R46 predicted** | **380.5 px** *(was 364.0 px before A1b; WB_R46 went 440 → 460)* |
+| **CZA apex predicted** | **(567.0, 114.3)** *(was (560.0, 132.0) before A1b)* |
+| CZA apex observed | (560, 113) |
+| **CZA apex residual (predicted − observed)** | **(+7.0, +1.3) px** *(was (+0.0, −19.3) under the legacy comparison; sign-convention swap from A1a noted)* |
+| left/right dagger residual | −0.0 / +0.0 px (unchanged; parhelion route not touched by A1b) |
+
+The y-residual collapsed from −19.3 px (legacy, observed-minus-predicted
+convention from p2-anchor.json `cza_apex_residual.y_px`) to +1.3 px
+(literature, predicted-minus-observed convention from
+overlay_calibrate's residual report). The magnitudes match A1a's
+measured target ("literature residual = −1.3 px" under the
+observed-minus-predicted convention).
+
+**p7 smoke (h = 59.4°, beyond CZA disappearance):**
+
+The CZA disappears geometrically at h ≈ 32.2° (per
+`scripts/cza_formula.py`). The patched `cza_apex` falls back to the
+corrected `WB_R46 = 460` anchor when the literature formula returns
+`None`. Smoke run on p7 (sun = (1033, 946), R22 = 200, h = 59.4°)
+renders without crash; CZA apex predicted at (1033.0, 527.8)
+= sun_y − (WB_R46 × scale) = 946 − 460 × 0.9091 = 946 − 418.2.
+Downstream visibility classification still marks CZA as "not
+applicable" at this altitude; the fallback is only there to keep the
+curve renderable rather than crash the script.
+
+**Supralateral spot-check on p2 (roadmap exit criterion):**
+
+The supralateral apex base is `WB_SUN[1] - WB_R46` (line 412), so the
+WB_R46 = 440 → 460 change shifts it from 44° to 46° above sun
+(+2°, or +4.55% relative). In p2 photo coords (scale 0.8273) this is
+a 16.5 px upward shift of the supralateral apex. The roadmap exit
+criterion expected "~4% outward from sun-above; if much more, the
+workbench-space change has a knock-on effect that needs a follow-up
+pass." Observed 4.55% is within tolerance — **no follow-up pass
+needed.**
+
+**Knock-on: 46° halo radius.** The 46° halo is drawn at
+`WB_R46 * scale` (line 344). Before A1b: 440 * scale; after A1b:
+460 * scale. On p2 this is 380.5 px instead of 364.0 px — the 46° halo
+is now drawn ~4.5% angularly larger, which is the *correct* direction
+(literature R46 = 2.091 × R22, not 2 × R22).
+
+**Out of scope (deferred to Phase 10 backlog):** the per-overlay
+`R46_px = r22_obs × (46/22)` derivation alternative. That option would
+remove `WB_R46` from the workbench-space load-bearing path entirely
+and let each photo derive its own R46 from its measured R22, but it
+would require touching every workbench-to-photo consumer of `WB_R46`
+(46° halo, supralateral, and any future primitive that uses the
+constant). Filed; not blocking Pass A2/A3 or the re-audit gate.
+
 ### Parhelion-Route Per-Photo Eligibility
 
 Pass B1 schema rollout, 2026-05-13. Reads
