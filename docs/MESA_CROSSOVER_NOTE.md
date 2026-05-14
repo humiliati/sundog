@@ -198,51 +198,62 @@ Phase 10 anchor-capture work (Tasks #52, #53, #54, #55) closed
 structural) more than this note originally hypothesized, and surfaces a
 new methodological vocabulary worth carrying back to mesa.
 
-> **Post-audit hedge, 2026-05-13:** the synthetic optical audit
-> ([`docs/calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
-> walked back the *"three independent failure layers"* framing in the
-> subsection below. The sharpened replacement language is **"three
-> structurally different failure layers, two of which have non-atlas
-> explanations"**: the CZA-route residual is contaminated by an atlas
-> formula bug at `scripts/overlay_calibrate.py:381–384` (CZA apex
-> hardcoded as `sun_y − R46`), the supralateral coverage gate is a
-> literature base-rate near-certainty rather than an accident of this
-> dataset, and the tangent-arc detection gate is at least partly a
-> protocol artifact under any literature-standard wing-based or Lab b\*
-> detector. The campaign to re-derive each verdict is filed in
-> [`docs/PHASE10_ATTACK_ROADMAP.md`](PHASE10_ATTACK_ROADMAP.md). The
-> two-substrate field-shape *pattern* survives the audit; the
-> *"three independent accidents"* implication is retracted. Treat the
-> subsection below as the pre-audit state of the closeout, pending
-> re-derivation per the attack roadmap.
+> **Post-re-audit substantive update, 2026-05-14.** The closeout
+> below has been re-derived against the post-pass state of the
+> [Phase 10 attack campaign](PHASE10_ATTACK_ROADMAP.md) and verified
+> by the
+> [re-audit memo](calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md). The
+> pre-audit "three independent failure layers" phrasing is retired
+> from this file in favor of **three structurally different failure
+> modes**: dataset/aspect-ratio coverage (CZA), atmospheric-physics
+> discrimination (supralateral), and detection-protocol tooling
+> (tangent under column-peak; tooling-conditional pending C2). The
+> two-substrate field-shape *pattern* survives unchanged; the inverse
+> direction is narrower than the pre-audit framing implied, in
+> directions that vary by route. The cross-substrate transfer of the
+> three-gate vocabulary is preserved; only the geometry-side route
+> verdicts are updated.
 
-### Finding #3 outcome was sharper than hypothesized
+### Finding #3 outcome was sharper than hypothesized *(re-derived 2026-05-14)*
 
 The original Finding #3 framing predicted that CZA-apex, tangent-arc
 curvature, and supralateral position would carry "different residual
-profiles" than parhelion offset. The geometry-side outcome is stronger:
-**only one route is promoted; the other three fail at three structurally
-different layers of the measurement stack.**
+profiles" than parhelion offset. The post-pass + post-re-audit
+geometry-side outcome is **stronger than the pre-audit verdict, in a
+narrower direction**: parhelion-offset remains the only promoted
+inverse handle, restricted now to a 3-photo strict-eligibility set,
+and the other three routes fail along three structurally different
+*failure modes* rather than along three independent measurement-stack
+gates.
 
-| route | gate outcome | failure layer |
+| route | gate outcome | failure-mode kind |
 | --- | --- | --- |
-| Parhelion offset → h | promoted (calibrated core) | none — passes residual gate at ~0 px |
-| CZA apex → h | fails | residual gate (p2 y = -19.3 px, p27 y = +21 px, opposite signs, both exceed `0.04 * R22`) |
-| Supralateral → h | fails | coverage gate (only p2 eligible on the committed set; p27 is a candidate but unmeasured) |
-| Tangent-arc curvature → h | fails | detection gate (column-peak fails on all four eligible photos with three distinct degeneracy modes) |
+| Parhelion offset → h | **promoted (post-hedged)** | 3-photo strict eligibility: p2 (h = 18.6°), p7 (h = 59.4°), p13 (h = 6.83°). Unambiguous bilateral peaks, valid geometry, ring-fit R22, non-trivial discrimination (p2, p7) or low-lever-but-supported (p13). |
+| CZA apex → h | **fails coverage gate** | **dataset / aspect-ratio.** After Pass A1b fixed the atlas formula bug and Pass A2 re-classified p27's chromatic feature as 46° halo top / supralateral merger, p2 is the only in-window photo with an independent CZA residual (+1.3 px). Every other anchored photo is either past the h = 32.2° disappearance threshold or has the literature CZA apex predicted above the top of the frame. |
+| Supralateral → h | **fails structural-discrimination gate** | **atmospheric physics.** Even at the two-photo eligibility threshold (p2 eligible-unmeasured + p27 measured post-A2), the predicted h-spread is ~0.3° (~2.5 px at p2 R22), below the typical 5–10 px visual-edge measurement noise on a chromatic-broadened halo arc. The route would not be a useful inverse handle even with perfect coverage. |
+| Tangent-arc curvature → h | **detection gate under column-peak; class-level verdict pending C2** | **tooling protocol.** Pass C1 dropped p7 from upper-tangent eligibility (h = 59.4° is circumscribed-halo regime per atoptics.co.uk and dewbow.co.uk). Column-peak detection still fails on the post-C1 sampled set (p2, p13, p27) with three distinct degeneracy modes; the audit memo recommends a wing-based or Lab b\* ridge detector. Filed as Unresolved Open Question for the specialist; C2 was the optional pass that would have tested this. |
 
-Note the careful taxonomy. CZA-apex reaches residual comparison and the
-residuals fail to replicate direction. Supralateral cannot supply a
-second eligible residual on the current set. Tangent-arc curvature is
-detection-degenerate — the arc is atmospherically real and visible in
-all four photos, but its brightness/chromatic spine does not dominate
-any per-column signal under the column-peak protocol.
+The careful taxonomy still matters, but the *type* of failure has
+sharpened. The pre-audit reading "CZA-apex reaches residual
+comparison and the residuals fail to replicate direction" was partly
+formula-bug artifact; post-A1b the p2 residual is sub-px and p27's
+chromatic feature was a different primitive altogether. The supralateral
+"only-one-eligible-photo" reading was correct but understated the
+structural physics-discrimination limit. The tangent
+"detection-degenerate" reading was correct as scoped to the column-peak
+protocol but was missing the p7-circumscribed-halo regime call.
 
-The atlas has rich forward generation (`h → all primitives`) and one
-image-recoverable inverse handle (parhelion offset), not a redundant
-four. That is the forward-rich / inverse-narrow asymmetric field-shape
-pattern mesa observed in-vitro, now observed in-the-wild at numerical
-resolution.
+The atlas remains forward-rich for primitives the literature
+parameterizes from `h` alone (with hedges on the parhelic-circle
+rule and the 46° halo / infralateral visibility windows) and is
+inverse-narrow on the strict 3-photo parhelion-offset eligibility
+set. That is the same forward-rich / inverse-narrow asymmetric
+field-shape pattern mesa observed in-vitro, **now observed in-the-wild
+at numerical resolution with three different non-atlas reasons for the
+non-promoted routes' inverse-narrowness** (dataset coverage, atmospheric
+physics, detection tooling). None of the three failures implicates the
+atlas inversion math; the only route whose verdict was atlas-influenced
+was CZA, and Pass A1b corrected the underlying formula.
 
 ### Three-gate taxonomy is transferable back to mesa
 
@@ -271,29 +282,60 @@ were really detection-gate calls in disguise. The same discipline
 applies in reverse: a geometry route that "doesn't work" can mean three
 substantively different things.
 
-### Open questions filed, none blocking Phase 11
+### Open questions filed, none blocking Phase 11 *(updated 2026-05-14)*
 
-Three open questions from the closeout are filed but do not gate
-Phase 11:
+Post-pass + post-re-audit, the three open questions resolve as follows:
 
-1. Lens-optics test for CZA-apex (Mesa #4-style falsification surface).
-2. Tangent-curvature tooling — gradient-based or template-matching
-   detector to reopen the route under a different measurement protocol.
-3. Parhelic-belt-y replication — does p13's +10.4 px residual replicate
-   across multiple low-h photos or is it photo-specific?
+1. **CZA coverage expansion.** *(Reframed from the pre-audit
+   "lens-optics test for CZA-apex direction inconsistency", which
+   assumed the pre-audit residual-gate framing that Pass A1b
+   retracted.)* The post-A3 CZA verdict is coverage-gate-bound: only
+   p2 is in-window with an independent residual. Reopening coverage
+   requires new anchored photos in 5° < h < 32° where the literature
+   CZA stays on-frame. Mesa #4-style falsification surface, now with
+   a sharper question shape: *does the route hold up at a second
+   in-window anchor?*
+2. **Tangent-curvature tooling — wing-based / Lab b\* detector.** The
+   campaign's optional Pass C2 was the pass that would have built and
+   tested this; C2 was skipped per the recommended execution order.
+   The tangent-route detection-gate failure remains as a
+   *protocol-conditional* negative, filed as Unresolved Open Question
+   in the specialist handoff (memo §4.8).
+3. **Parhelic-belt-y replication.** Closed by Phase 10-FF
+   ([`docs/calibration/PHASE10_BELT_Y_RESULTS.md`](calibration/PHASE10_BELT_Y_RESULTS.md)):
+   p13's residual is photo-specific; the belt-y watch-list flag is
+   retired.
 
-Each is a separable next-experiment surface with a pre-registrable
-outcome shape.
+None gates Phase 11.
 
-### Public framing constraint
+### Public framing constraint *(re-derived 2026-05-14)*
 
 The Phase 10 closeout retires any "atlas has multiple independent
 inverse routes converging" reading of the two-substrate convergence
 claim. The convergence survives: same field-shape pattern observed in
 two substrates, by independent methods. What gets retired is the
-implication of inverse-route redundancy. The atlas is forward-rich and
-inverse-narrow; the mesa cliff is the same pattern in the controller
-substrate. That is the sharpened public framing.
+implication of inverse-route redundancy and any "three independent
+accidents" reading of the non-promoted routes.
+
+The post-audit framing:
+
+> The atlas is forward-rich for primitives the literature parameterizes
+> from `h` alone, and inverse-narrow on the strict 3-photo
+> parhelion-offset eligibility set (p2, p7, p13). The three other
+> tested routes fail at three structurally different failure modes:
+> dataset / aspect-ratio coverage (CZA), atmospheric-physics
+> discrimination (supralateral), and detection-protocol tooling
+> (tangent; tooling-conditional pending a wing-based or Lab b\*
+> detector). None of the three implicates the atlas inversion math.
+> The mesa cliff is the same forward-rich / inverse-narrow asymmetric
+> field-shape pattern in the controller substrate.
+
+That is the sharpened public framing. The matching ratchet on the
+gravity ledger is in
+[`SUNDOG_V_GRAVITY.md`](SUNDOG_V_GRAVITY.md) forward/inverse asymmetry
+receipt; the matching specialist handoff is
+[`docs/calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md`](calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md)
+(rewritten 2026-05-14; previously stop-bannered).
 
 ---
 
