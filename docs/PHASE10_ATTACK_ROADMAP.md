@@ -444,6 +444,29 @@ pass started.
 
 ### Finding B — Pass B2: Parhelion-route re-verdict on the eligible subset
 
+**Status: landed 2026-05-14.** Route survives promotion against the
+Pass B1 eligibility set, with materially weaker language per audit
+memo §4.1 / §6. **Audit-survived wording:** *passes residual gate at
+~0 px on three photos (p2 h = 18.6°, p7 h = 59.4°, p13 h = 6.83°) with
+both unambiguous bilateral peaks and an independently fittable 22°
+halo.* The pre-audit "every eligible photo" framing is retired across
+`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md` (rolled-up residual
+table row, Phase 10 Promotion Verdict, Single-handle closeout, plus a
+new "Pass B2 Results" subsection with the full per-photo verdict
+roll-up) and `docs/SUNDOG_V_GEOMETRY.md` Phase 10 closeout table. Of
+the three eligible photos: p2 and p7 have meaningful geometric lever
+(5.52 % and 96.5 %); p13's lever is 0.71 % but it contributes via
+"unambiguous bilateral peaks + ring-fit R22." Five other anchored
+photos (p20, p22, p25, p26, p27, p30) are informational only — low
+lever, parhelion-derived R22, or geometric impossibility (p26 right).
+Downstream public-framing surfaces already landed the matching hedges
+in §6 steps 2–4; B2's substantive content matches what those hedges
+anticipated. **B2 closes the technical-pass wave.** All required
+re-audit-gate passes (§6 hedges, B1, A1a, A1b, A2, A3, C1, B2) are
+now landed; C2 was skipped per the recommended execution order and
+the tangent-arc detector is filed as Unresolved Open Question for the
+specialist (memo §4.8).
+
 **Goal.** Re-derive the parhelion promotion verdict against the now-honest
 eligibility set. The audit predicts the verdict survives but with
 materially weaker language.

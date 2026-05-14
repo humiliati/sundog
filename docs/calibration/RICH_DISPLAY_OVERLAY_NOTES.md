@@ -166,7 +166,7 @@ fit makes every route good.
 
 | route | p2 residual | p7 / p13 residual | expansion residuals | promotion status | note |
 | --- | ---: | ---: | ---: | --- | --- |
-| Parhelion offset → sun altitude | −1 / −1 px (0.5% R₂₂) | p7: 0 / n/a px; p13: 0 / 0 px (new anchor; x-offset only) | p20 / p27 are provisional low-sun supports, not promotion measurements | **promoted *(pending B2 re-derivation; see eligibility sub-table)*** | Task #52 step 1 verdict: probation was anchor-driven, not route-driven. Re-anchoring p13 drops x-offset residual from +6/+8 px to ~0/0 px on the new (sun=543,372; R₂₂=211; offsets=213/212) anchor. Route stays in calibrated core; verdict reads as 'bad anchor, route OK'. p13 belt-y residual is tracked separately. **Pass B1 caveat 2026-05-13:** the rolled-up "0 / 0 px on every eligible photo" reading does not survive the audit memo §2 items 4–7. The eligibility set this verdict was derived against included photos where R22 was parhelion-derived (p20, p25, p26 — tautological) or where the geometric lever was below 2 % of R22 (p13, p20, p22, p25, p26, p27, p30 — anchor-noise-bounded). See Parhelion-Route Per-Photo Eligibility below. Pass B2 re-derives this row against the eligible-only subset. |
+| Parhelion offset → sun altitude | −1 / −1 px (0.5% R₂₂) | p7: 0 / n/a px; p13: 0 / 0 px (new anchor; x-offset only) | p20 / p27 are provisional low-sun supports, not promotion measurements | **promoted (post-audit hedged; Pass B2 2026-05-14)** | **Pass B2 verdict, 2026-05-14.** Route survives promotion against the post-B1 eligibility set, with materially weaker language per audit memo §4.1 / §6. **Audit-survived wording:** *passes residual gate at ~0 px on three photos (p2 h = 18.6°, p7 h = 59.4°, p13 h = 6.83°) with both unambiguous bilateral peaks and an independently fittable 22° halo.* On five additional low-h anchored photos the geometric lever `sec(h) − 1` is below 2 % of R22 (p13 0.71 %, p20 0.38 %, p22 0.50 %, p25 2.01 %, p26 1.25 %, p27 ≈ 0 %, p30 1.90 %) — clean residuals on those photos are anchor-noise-bounded, *not* route-validating. On three of those (p20, p25, p26) the 22° halo arc is not visible in the photograph; on those photos the residual measures offset-vs-R22 against an R22 that is not independent of the parhelion pick (tautological). p27 records `offset := R22` explicitly in its anchor file and is a self-consistency check, not a measurement. p26 right side encodes a literal geometric impossibility (`R22 / offset = 1.003 > 1`); flagged `invalid` in the Pass B1 schema. **The pre-audit "~0 px on every eligible photo" framing is retired.** The route stays in calibrated core; verdict reads as 'route holds on the strict eligible subset, anchor-noise-dominated below 2 % lever.' See Parhelion-Route Per-Photo Eligibility below for the full per-photo breakdown. |
 
 ### Pass A1a Spec Results — CZA Literature Formula vs. Legacy Hardcode
 
@@ -466,6 +466,70 @@ stays "detection gate failure under column-peak; protocol-conditional."
 The re-audit and the rewritten specialist handoff will explicitly mark
 tangent detector as Unresolved Open Question per memo §4.8.
 
+### Pass B2 Results — Parhelion-Route Re-Verdict
+
+Pass B2 deliverable from
+[`../PHASE10_ATTACK_ROADMAP.md`](../PHASE10_ATTACK_ROADMAP.md), landed
+2026-05-14. No code edits, no anchor edits — B2 is the verdict pass
+that closes Phase 10's technical work before the re-audit gate.
+
+**Verdict: route survives promotion, language tightens.**
+
+Audit memo §8 predicted this outcome: *"The single-handle verdict will
+likely survive a re-audit but with the hedged language from §4 and §6
+instead of the current closeout-level language."* B2 lands that exact
+trade.
+
+**Audit-survived wording (replaces "passes residual gate at ~0 px on
+every eligible photo"):**
+
+> *Parhelion-offset → h passes the residual gate at ~0 px on **three
+> photos (p2 h = 18.6°, p7 h = 59.4°, p13 h = 6.83°)** with both
+> unambiguous bilateral peaks and an independently fittable 22° halo.
+> On five additional low-h anchored photos the geometric lever
+> `sec(h) − 1` is below 2 % of R22, so clean residuals there are
+> anchor-noise-bounded and informational rather than route-validating.
+> On three of those (p20, p25, p26) the 22° halo arc is not visible
+> in the photograph, so R22 was parhelion-derived and the residual
+> measures `offset` against itself (tautological). p27 records
+> `offset := R22` explicitly in its anchor JSON and is a
+> self-consistency check, not a measurement. p26 right side encodes a
+> literal geometric impossibility (`R22 / offset = 1.003 > 1`,
+> `arccos` undefined) and is flagged `invalid` in the Pass B1 schema.*
+
+**Per-photo verdict roll-up (against the Pass B1 eligibility sub-table):**
+
+| photo | h (°) | lever (`sec(h)−1`) | R22-source | geom | parhelion residual | B2 reading |
+| --- | ---: | ---: | --- | --- | ---: | --- |
+| p2 | 18.6 | **5.52 %** | ring-fit | valid | −1 / −1 px | **eligible, route-validating** |
+| p7 | 59.4 | **96.5 %** | ring-fit | valid | 0 / n/a px | **eligible, route-validating** |
+| p13 | 6.83 | 0.71 % | ring-fit | valid | 0 / 0 px | **eligible** per audit memo §4.1 (unambiguous bilateral peaks + fittable halo); residual is below the noise floor, so informational not route-validating |
+| p22 | ~5.7 | 0.50 % | ring-fit | valid | 0 / 0 px | informational (low-lever, anchor-noise-bounded) |
+| p30 | ~11.1 | 1.90 % | ring-fit | valid | 0 / 0 px | informational (low-lever, just under 2 %) |
+| p20 | ~5.0 | 0.38 % | parhelion-derived | valid | 0 / 0 px | **ineligible** (R22 tautological) |
+| p25 | ~11.4 | 2.01 % | parhelion-derived | valid | 0 / 0 px | **ineligible** (R22 tautological) |
+| p26 | ~9.0 | 1.25 % | parhelion-derived | **invalid right** | left: 0; right: undefined | **ineligible** (R22 tautological + geometric impossibility right) |
+| p27 | ~0.5 | ≈ 0 % | ring-fit (parhelion-derived in opposite dir) | valid | 0 / 0 px | **ineligible** (parhelion offsets stipulated as `offset := R22`, tautological per memo §2 item 5) |
+
+**Three-photo eligibility set** matches the audit memo §4.1
+recommendation. Of those three: two (p2, p7) have meaningful geometric
+lever; one (p13) has very low lever (0.71 %) and contributes via
+"unambiguous bilateral peaks + ring-fit R22" rather than discrimination
+per se.
+
+**The pre-audit "every eligible photo" framing is retired** from this
+file and from the Phase 10 closeout in `SUNDOG_V_GEOMETRY.md`.
+Downstream public-framing surfaces (`SUNDOG_V_GRAVITY.md`,
+`MESA_CROSSOVER_NOTE.md`, the homepage `#elevator-pitch` v1.1 audit
+hedge) already landed walk-back hedges in attack roadmap §6 steps
+2–4; B2's substantive content matches what those hedges anticipated.
+
+**B2 closes the technical-pass wave.** Re-audit gate (§5) is now open:
+all required passes (§6 hedges, B1, A1a, A1b, A2, A3, C1, B2) are
+landed. C2 was the only optional pass and was skipped per the
+recommended execution order; the tangent-arc detector is filed as
+**Unresolved Open Question** for the specialist, per memo §4.8.
+
 ### Parhelion-Route Per-Photo Eligibility
 
 Pass B1 schema rollout, 2026-05-13. Reads
@@ -588,7 +652,7 @@ back; reason recorded), or **pending** (cannot be promoted until measured).
 
 | candidate | verdict | reason |
 | --- | --- | --- |
-| Parhelion offset to h inversion route | **promoted** (calibrated core; probation cleared 2026-05-13) | Task #52 step 1: re-anchored p13 from (557, 372) / R22=210 / offset=220 to (543, 372) / R22=211 / offsets=213/212. New residual is ~0/0 px. The probation finding is recorded as 'bad anchor, route OK' -- the route was never the problem; the rough hand-anchor was. |
+| Parhelion offset to h inversion route | **promoted (post-audit hedged; Pass B2 2026-05-14)** | **Pass B2 verdict 2026-05-14:** Route survives the post-B1 eligibility re-derivation, with the language hedged per audit memo §4.1 and §6. Audit-survived wording: *passes residual gate at ~0 px on three photos (p2, p7, p13) with both unambiguous bilateral peaks and an independently fittable 22° halo.* On five additional low-h anchored photos the geometric lever is below 2 % of R22; on three of those (p20, p25, p26) the 22° halo arc is not visible so R22 was parhelion-derived (tautological); p27 explicitly stipulates `offset := R22`; p26 right encodes a geometric impossibility (Pass B1 flagged `invalid`). The pre-audit "~0 px on every eligible photo" framing is retired. The route stays in calibrated core; verdict now reads as 'route holds on the strict eligible subset, anchor-noise-dominated below the 2 % lever.' Original Task #52 step 1 finding ('bad anchor, route OK' after re-anchoring p13 from (557, 372) / R22=210 / offset=220 to (543, 372) / R22=211 / offsets=213/212; x-offset residual dropped to ~0/0 px) survives unchanged. |
 | 22 deg halo, parhelia (L/R), parhelic-circle | **promoted** (calibrated core) | Already in core via Phase 2. No regression observed in Phase 10 inspection. |
 | Upper tangent arc | **promoted as logo / animation vocabulary** | Visible shape-language support remains; p7 is now treated as high-sun circumscribed-halo vocabulary rather than upper-tangent-route evidence. Curvature-as-inversion-route remains protocol-conditional pending C2. |
 | CZA primitive (rendered) | **promoted as conditional core** | Render only when `h < 32.2 deg` (atmospheric cutoff). Visible and measured on p2; p27's former CZA mark is reclassified as 46° halo top / supralateral merger. The primitive remains core while the CZA-apex inversion route fails coverage. |
@@ -653,7 +717,7 @@ remain blocked for distinct, now better-named reasons.**
 
 | route | gate outcome | failure layer |
 | --- | --- | --- |
-| Parhelion offset → h | **promoted** *(pending B2 re-derivation)* | Pass B1 hedges eligibility to photos with independent R22 and non-trivial lever; B2 restates the final verdict. |
+| Parhelion offset → h | **promoted (post-audit hedged; Pass B2 2026-05-14)** | Eligibility restricted to photos with ring-fit R22, valid geometry, and non-trivial lever; ~0 px residual on the three audit-survived eligible photos (p2, p7, p13). Low-lever / parhelion-derived / geometrically-invalid photos contribute as informational evidence only. |
 | CZA apex → h | fails | **coverage gate** after A1b/A2/A3: p2 residual is good (+1.3 px), but it is the only in-window measured CZA anchor. |
 | Supralateral → h | fails | **coverage + structural-discrimination gate** after A2/A3: p27 is measured and p2 is eligible, but h-sensitivity is below measurement noise. |
 | Tangent-arc curvature → h | fails / unresolved | **detection gate under column-peak** on p2 / p13 / p27 after C1 removes p7 as circumscribed-halo regime; C2 decides whether this is tooling-conditional or recovered. |
@@ -744,14 +808,4 @@ Historical execution order (now retired):
    parhelion_right_px) tuple; new residual ~0/0 px. Anchor Summary and
    Per-Inversion-Route Residual Table updated.
 2. **CZA apex anchor check (Task #53, expanded by Task #55).** Historical
-   result was p2 y = -19.3 px and p27 y = +21 px. Pass A1b/A2/A3
-   supersedes that reading: p2 is +1.3 px under the repaired formula,
-   p27 is not CZA, and the route fails coverage rather than residual.
-3. **Tangent-arc curvature anchors (Task #54).** Historical sample was
-   p2 / p7 / p13 / p27. Pass C1 supersedes the eligibility list: p7 is
-   circumscribed-halo regime and drops out. Column-peak still fails on
-   p2 / p13 / p27; route remains blocked pending C2.
-4. **Supralateral inversion.** Pass A2/A3 supersedes the old coverage-only
-   reading. p27 is now a measured candidate, p2 is eligible but
-   unmeasured, and the route fails on structural h-discrimination even
-   if coverage is read permissively.
+   result was p2 y = -19.3 px
