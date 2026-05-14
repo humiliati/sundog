@@ -453,8 +453,8 @@ the suggested citation template:
 ```
 * [https://sundog.cc/sundog.html The Sundog Halo Atlas — interactive
   parametric model of the parhelion display, calibrated against
-  photographs]. humiliati (Stellar Aqua LLC), 2026. Source code under
-  MIT license at https://github.com/humiliati/sundog.
+  photographs]. Jeffery Hughes Jr. (Stellar Aqua LLC), 2026. Source
+  code under MIT license at https://github.com/humiliati/sundog.
 ```
 
 ---

@@ -17,14 +17,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Sundog Balance is a browser cart-pole operating-envelope study, with a tested browser setup and browser cart-pole only, having the diagnostic-positive envelope as the favorable tested region. The shad",
+    "finalAnswerHead": "Sundog Balance is a browser cart-pole operating-envelope study, with a tested browser setup and browser cart-pole only, having the diagnostic-positive envelope as the favorable tested region. The shad"
   },
   {
     "id": "differential-002",
@@ -98,14 +98,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "Dungeon Gleaner is a product expression that demonstrates the indirect-signal pattern, where verb-field NPC behavior is directed toward nearby satisfier nodes. It is not a controlled benchmark result,",
-    "finalAnswerHead": "Dungeon Gleaner is a product expression that demonstrates the indirect-signal pattern, where verb-field NPC behavior is directed toward nearby satisfier nodes. It is not a controlled benchmark result,"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-005",
@@ -260,14 +260,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller shows survival improvement versus passive and na",
+    "finalAnswerHead": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller shows survival improvement versus passive and na"
   },
   {
     "id": "differential-011",
@@ -341,14 +341,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "The Three-Body controller and Sundog Balance share an operating envelope study evidence tier. The Three-Body workbench is a bounded operating-envelope study, where the guarded accelerometer-proxy TRAC",
-    "finalAnswerHead": "The Three-Body controller and Sundog Balance share an operating envelope study evidence tier. The Three-Body workbench is a bounded operating-envelope study, where the guarded accelerometer-proxy TRAC"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-014",

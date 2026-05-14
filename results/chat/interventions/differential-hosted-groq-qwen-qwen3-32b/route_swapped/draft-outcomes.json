@@ -23,8 +23,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Sundog Balance is an operating-envelope study focused on",
-    "finalAnswerHead": "Sundog Balance is an operating-envelope study focused on"
+    "draftHead": "Sundog Balance is an operating",
+    "finalAnswerHead": "Sundog Balance is an operating"
   },
   {
     "id": "differential-002",
@@ -44,14 +44,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Pressure Mines evaluates Sundog’s operating envelope in a lossy pressure field, showing budget-adjusted safer progress before failure compared to naive pressure in a density 0.16 / noise 2.0 / dropout",
+    "finalAnswerHead": "Pressure Mines evaluates Sundog’s operating envelope in a lossy pressure field, showing budget-adjusted safer progress before failure compared to naive pressure in a density 0.16 / noise 2.0 / dropout"
   },
   {
     "id": "differential-003",
@@ -71,14 +71,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: draft was only reasoning trace (usage={\"queue_time\":0.173247637,\"prompt_tokens\":926,\"prompt_time\":0.041905594,\"completion_tokens\":320,\"completion_t",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Eyes",
+    "finalAnswerHead": "Eyes"
   },
   {
     "id": "differential-004",
@@ -98,14 +98,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "[reasoning trace truncated before final answer]",
+    "finalAnswerHead": "[reasoning trace truncated before final answer]"
   },
   {
     "id": "differential-005",
@@ -125,14 +125,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "rejected",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "Sundog Balance’s overhead-light cells are documented as degradation boundaries in the tested browser cart-pole setup. While qualitative observations may describe their behavior, the operating-envelope",
-    "finalAnswerHead": "Sundog Balance’s overhead-light cells are documented as degradation boundaries in the tested browser cart-pole setup. While qualitative observations may describe their behavior, the operating-envelope"
+    "failures": "upgrade_language:validated",
+    "draftHead": "Sundog Balance’s overhead-light cells are part of the degradation boundaries in the tested browser cart-pole setup. While qualitative observations may note their behavior, the operating-envelope study",
+    "finalAnswerHead": "Sundog Balance is a browser cart-pole operating-envelope study. It is a tested browser setup and browser cart-pole only, with the diagnostic-positive envelope only as the favorable tested region. In t"
   },
   {
     "id": "differential-006",
@@ -152,14 +152,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "The Three-Body workbench is an operating-envelope study of the planar restricted three-body problem. The TRACK controller shows survival improvements in high-velocity near-escape scenarios compared to",
+    "finalAnswerHead": "The Three-Body workbench is an operating-envelope study of the planar restricted three-body problem. The TRACK controller shows survival improvements in high-velocity near-escape scenarios compared to"
   },
   {
     "id": "differential-007",
@@ -185,8 +185,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Pressure Mines evaluates Sundog's performance in a lossy pressure field, showing that pressure-derived variants improve budget-adjusted safe-tile progress and safer tiles before mine triggers in speci",
-    "finalAnswerHead": "Pressure Mines evaluates Sundog's performance in a lossy pressure field, showing that pressure-derived variants improve budget-adjusted safe-tile progress and safer tiles before mine triggers in speci"
+    "draftHead": "Pressure Mines evaluates Sundog's performance in a lossy pressure field, showing that in specific density/noise/dropout conditions, pressure-derived variants achieve safer progress before failure comp",
+    "finalAnswerHead": "Pressure Mines evaluates Sundog's performance in a lossy pressure field, showing that in specific density/noise/dropout conditions, pressure-derived variants achieve safer progress before failure comp"
   },
   {
     "id": "differential-008",
@@ -206,14 +206,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "[reasoning trace truncated before final answer]",
+    "finalAnswerHead": "[reasoning trace truncated before final answer]"
   },
   {
     "id": "differential-009",
@@ -239,8 +239,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "The photometric Sundog result achieved terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo task. The exact percentage is not specified in the p",
-    "finalAnswerHead": "The photometric Sundog result achieved terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo task. The exact percentage is not specified in the p"
+    "draftHead": "The photometric Sundog result achieved terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo task, but the exact percentage is not specified in t",
+    "finalAnswerHead": "The photometric Sundog result achieved terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo task, but the exact percentage is not specified in t"
   },
   {
     "id": "differential-010",
@@ -260,14 +260,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "[reasoning trace truncated before final answer]",
+    "finalAnswerHead": "[reasoning trace truncated before final answer]"
   },
   {
     "id": "differential-011",
@@ -293,8 +293,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Pressure Mines evaluates safer progress before failure in a lossy pressure field. In the density 0.16 / pressure-noise 2.0 / dropout",
-    "finalAnswerHead": "Pressure Mines evaluates safer progress before failure in a lossy pressure field. In the density 0.16 / pressure-noise 2.0 / dropout"
+    "draftHead": "The Pressure Mines study reports \"safer progress before failure\" metrics rather than clearance percentages. In the specified density 0.16 / pressure-noise 2.0 / dropout 0.",
+    "finalAnswerHead": "The Pressure Mines study reports \"safer progress before failure\" metrics rather than clearance percentages. In the specified density 0.16 / pressure-noise 2.0 / dropout 0."
   },
   {
     "id": "differential-012",
@@ -314,14 +314,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "[reasoning trace truncated before final answer]",
+    "finalAnswerHead": "[reasoning trace truncated before final answer]"
   },
   {
     "id": "differential-013",
@@ -368,14 +368,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Dungeon Gleaner operates at the product_expression tier, implementing verb-field NPC behavior that prioritizes indirect signals over hardcoded rules. However, it lacks controlled benchmarks, GOAP perf",
+    "finalAnswerHead": "Dungeon Gleaner operates at the product_expression tier, implementing verb-field NPC behavior that prioritizes indirect signals over hardcoded rules. However, it lacks controlled benchmarks, GOAP perf"
   },
   {
     "id": "differential-015",
@@ -422,13 +422,13 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "rejected",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "rejected",
     "flippedVsBaseline": true,
-    "unsafeAccepted": false,
+    "unsafeAccepted": true,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Sundog Balance is an operating-envelope study focused on browser",
+    "finalAnswerHead": "Sundog Balance is an operating-envelope study focused on browser"
   }
 ]
