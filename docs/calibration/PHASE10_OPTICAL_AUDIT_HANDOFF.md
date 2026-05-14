@@ -387,6 +387,14 @@ outreach. If a specialist asks about the cross-substrate framing in
 follow-up, treat it as in-scope; do not lead with it in any deliverable
 built from this handoff.
 
+This handoff is Persona A's primary input artifact in the Phase 11
+synthetic dispatch at
+[`PHASE11_OUTREACH_SYNTHETIC_MEMO.md`](PHASE11_OUTREACH_SYNTHETIC_MEMO.md)
+(scaffolded 2026-05-14). Specialist-bounce-test findings against this
+handoff are recorded in the dispatch memo's §3 verified-findings bin;
+external send happens only after the dispatch's verification gate
+clears.
+
 ## 8. Contact for clarifications
 
 This document and the canonical docs in §4.2 are intended to be

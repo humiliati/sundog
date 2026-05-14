@@ -48,6 +48,15 @@ document is the re-audit memo at
 The campaign provenance chain (synthetic audit → attack roadmap → eight
 required passes → re-audit gate) is in the handoff §1.
 
+**Deployment gate.** Before any external outreach happens, this packet
+plus the handoff and the brief are bounce-tested by the Phase 11
+synthetic-persona dispatch at
+[`calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md`](calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md)
+(scaffolded 2026-05-14; persona passes not yet executed). The dispatch
+serves the same verify-gate discipline that earned its keep three times
+in the Phase 10 attack campaign; only artifacts that survive the
+verified-findings bin should ratchet under external use.
+
 The audit-survived post-pass route taxonomy is:
 
 | route | status | failure-mode kind |

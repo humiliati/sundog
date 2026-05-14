@@ -25,6 +25,12 @@ Load-bearing status:
   audience order, deployment methodology, and outreach posture.
 - [`../SUNDOG_OUTREACH_PACKET.md`](../SUNDOG_OUTREACH_PACKET.md) - shared
   outreach packet for science-communications and Wikipedia-adjacent tiers.
+- [`../PHASE10_ATTACK_ROADMAP.md`](../PHASE10_ATTACK_ROADMAP.md) -
+  campaign-provenance source. Required for Persona A claim-verification:
+  any "did A1b actually fix the formula?" or "was C1 actually run?"
+  question routes here. The eight-pass status stamps + the §6 hedge
+  inventory are the canonical record of what was repaired and what
+  remains an open question.
 
 Held back from Phase 11 lead framing:
 
