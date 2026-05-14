@@ -277,6 +277,28 @@ Per-overlay R46_px derivation (deferred; see Touch above).
 
 ### Finding A — Pass A2: p27 primitive re-classification
 
+**Status: landed 2026-05-13.** `docs/calibration/p27-anchor.json`
+re-anchored: top-level `cza_apex` and `cza_apex_residual` fields moved
+under `_disputed.cza_apex_legacy_2026_05_13` (preserved verbatim with
+rationale, reversible). New top-level `supralateral_46halo_merger`
+block with apex `(599, 142)` = 41.89° above sun, candidate primitives
+list `[halo_46_top, supralateral_arc]` per the audit memo's hedge
+(observationally indistinguishable at h = 0.5° per literature merger).
+New top-level `supralateral_route_eligibility` block flags the photo
+for Pass A3 coverage-gate consideration. *Geometric verification:*
+literature CZA at h = 0.5° is at y = −11.5 (off-frame above top), 46°
+halo top and supralateral both predict y = 101.1 (~46° above sun),
+visible feature at y = 142 sits ~4° below either prediction (chromatic
+broadening / visual-edge bias, consistent with anchor's existing
+`flat apex` flag). *Cross-doc walk-back:*
+[`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`](calibration/RICH_DISPLAY_OVERLAY_NOTES.md)
+updated in four places — CZA row drops p27, supralateral row promotes
+p27 to measured-candidate, anchor summary row notes re-classification,
+v3.8 tangent receipt retracts "merges with CZA" framing per memo §4.4.
+Pass A3 inputs are now honest: CZA evidence is p2 alone (sub-px
+residual), supralateral eligibility is p2 + p27 (~46° both, weak
+discrimination per memo §2 item 12). **A3 cleared to proceed.**
+
 **Goal.** Re-label the p27 chromatic arc currently anchored as CZA
 apex. At h = 0.5° the literature CZA apex is ~57° above the sun and
 off-frame; the visible arc at y = 142 sits at ~42° above the sun and is
@@ -309,6 +331,34 @@ re-classified p27 changes the parhelion-route count (it does not —
 parhelion is unaffected by CZA primitive ID).
 
 ### Finding A — Pass A3: CZA-route re-verdict
+
+**Status: landed 2026-05-13.** Verdicts re-derived for both CZA and
+supralateral against the post-A1b atlas and post-A2 eligibility set.
+**CZA: fails coverage gate** *(was: residual gate)*. Only p2 is
+in-window with an independent CZA-apex measurement; on that photo the
+residual is +1.3 px under the literature formula (well below the
+8 px / 0.04*R22 threshold). Every other anchored photo is either
+out-of-window (p7, h > 32.2° disappearance) or off-frame (p13, p20,
+p22, p25, p26, p27, p30 — at low h the literature CZA sits ~50–58°
+above sun, above the top of these photos). Reopening coverage
+requires new anchors in 5° &lt; h &lt; 32°. **Supralateral: fails
+coverage gate + structural-discrimination rider.** p27 is now a
+measured candidate (Pass A2); p2 is route-eligible but apex unmeasured.
+The predicted h-spread between p2 and p27 is ~0.3° = ~2.5 px at p2's
+R22 (below the typical 5–10 px visual-edge measurement noise), so the
+route's h-sensitivity is below the noise floor *even with perfect
+coverage*. New photos cannot restore the route — atmospheric physics
+constrains the signal below the noise. **Cross-doc updates:** Phase 10
+closeout table in `docs/SUNDOG_V_GEOMETRY.md` rewritten for both rows;
+prose paragraph about "three structurally different reasons" updated
+to reflect the post-A3 failure-mode taxonomy (coverage-physics,
+coverage-discrimination, detection-tooling); Open Question #1
+reframed from "CZA-apex direction inconsistency" to "CZA coverage
+expansion" since the residual-direction question was dissolved by
+A1b/A2. **Pass C1 and Pass B2 cleared to proceed** (C1 drops p7
+from tangent eligibility; B2 re-derives parhelion verdict against
+the post-A3 + post-C1 table). **Pass C2 remains optional** per
+roadmap §5.
 
 **Goal.** Re-run the CZA residual gate against the fixed formula and
 re-classified p27. Decide whether the route is dead, alive, or pending

@@ -1,0 +1,20 @@
+{
+  "interventionId": "refusal_downgraded",
+  "slate": "adversarial",
+  "promptCount": 59,
+  "totalDrafts": 59,
+  "byFamily": {
+    "sundog_gated_hosted": {
+      "total": 59,
+      "accepted": 48,
+      "rejected": 2,
+      "error": 9,
+      "flipped": 11,
+      "unsafeAccepted": 2,
+      "applied": 17
+    }
+  },
+  "totalFlipped": 11,
+  "totalUnsafeAccepted": 2,
+  "mode": "hosted"
+}

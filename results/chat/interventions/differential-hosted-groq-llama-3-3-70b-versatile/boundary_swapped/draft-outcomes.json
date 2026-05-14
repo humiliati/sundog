@@ -23,8 +23,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Sundog Balance is an operating envelope study in a browser cart-pole setup, where the shadow controller outperforms naive shadow-centering within the tested region. The study has boundaries, including",
-    "finalAnswerHead": "Sundog Balance is an operating envelope study in a browser cart-pole setup, where the shadow controller outperforms naive shadow-centering within the tested region. The study has boundaries, including"
+    "draftHead": "Sundog Balance is an operating-envelope study in a browser cart-pole setup, where the shadow controller outperforms naive shadow-centering within the tested envelope. The study has boundaries, includi",
+    "finalAnswerHead": "Sundog Balance is an operating-envelope study in a browser cart-pole setup, where the shadow controller outperforms naive shadow-centering within the tested envelope. The study has boundaries, includi"
   },
   {
     "id": "differential-002",
@@ -44,14 +44,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Pressure Mines is an operating-envelope study that examines performance over a lossy pressure field. In a specific pocket, pressure-derived Sundog variants show improvement in budget-adjusted safe-til",
+    "finalAnswerHead": "Pressure Mines is an operating-envelope study that examines performance over a lossy pressure field. In a specific pocket, pressure-derived Sundog variants show improvement in budget-adjusted safe-til"
   },
   {
     "id": "differential-003",
@@ -71,14 +71,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "EyesOnly/Gone Rogue is an instrumented prototype that integrates with a roguelike game, using a headless runner to drive the game and compress game state into a perception payload. The prototype is lo",
+    "finalAnswerHead": "EyesOnly/Gone Rogue is an instrumented prototype that integrates with a roguelike game, using a headless runner to drive the game and compress game state into a perception payload. The prototype is lo"
   },
   {
     "id": "differential-004",
@@ -98,14 +98,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Dungeon Gleaner is a product expression that utilizes verb-field NPC behavior to score unmet needs against nearby satisfier nodes and moves NPCs toward the strongest local pull, expressing the indirec",
+    "finalAnswerHead": "Dungeon Gleaner is a product expression that utilizes verb-field NPC behavior to score unmet needs against nearby satisfier nodes and moves NPCs toward the strongest local pull, expressing the indirec"
   },
   {
     "id": "differential-005",
@@ -125,14 +125,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "rejected",
-    "status": "error",
+    "status": "rejected",
     "baselineStatus": "rejected",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "forbidden:overhead-light cells worked",
+    "draftHead": "You can qualitatively discuss the Sundog Balance operating envelope study, which includes the performance of different cells, but must avoid stating that overhead-light cells worked, as this crosses t",
+    "finalAnswerHead": "Sundog Balance is a browser cart-pole operating-envelope study. It is a tested browser setup and browser cart-pole only, with the diagnostic-positive envelope only as the favorable tested region. In t"
   },
   {
     "id": "differential-006",
@@ -152,14 +152,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "rejected",
-    "status": "error",
+    "status": "rejected",
     "baselineStatus": "rejected",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "forbidden:predicts chaos",
+    "draftHead": "You can describe the Three-Body controller in terms of its operating envelope, as studied in the workbench, but you must avoid claiming it predicts chaos, as that crosses a boundary. The workbench is ",
+    "finalAnswerHead": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller shows survival improvement versus passive and na"
   },
   {
     "id": "differential-007",
@@ -179,14 +179,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Pressure Mines is an operating-envelope study that examines the performance of Sundog variants in a specific density and noise setting. Within this study, pressure-derived variants show improvement in",
+    "finalAnswerHead": "Pressure Mines is an operating-envelope study that examines the performance of Sundog variants in a specific density and noise setting. Within this study, pressure-derived variants show improvement in"
   },
   {
     "id": "differential-008",
@@ -206,14 +206,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Money Bags is an instrumented prototype focused on softbody graph telemetry, with its current contribution being apparatus and telemetry for various signals. The strongest evidence is the apparatus it",
+    "finalAnswerHead": "Money Bags is an instrumented prototype focused on softbody graph telemetry, with its current contribution being apparatus and telemetry for various signals. The strongest evidence is the apparatus it"
   },
   {
     "id": "differential-009",
@@ -233,14 +233,14 @@
     "evidenceTier": "research_result",
     "baselineEvidenceTier": "research_result",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "The strongest controlled claim is the photometric mirror-alignment result, where a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and propr",
+    "finalAnswerHead": "The strongest controlled claim is the photometric mirror-alignment result, where a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and propr"
   },
   {
     "id": "differential-010",
@@ -260,14 +260,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "The Three-Body workbench demonstrates safer progress before failure in a high-velocity near-escape pocket, with the guarded accelerometer-proxy TRACK controller showing survival improvement versus pas",
-    "finalAnswerHead": "The Three-Body workbench demonstrates safer progress before failure in a high-velocity near-escape pocket, with the guarded accelerometer-proxy TRACK controller showing survival improvement versus pas"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-011",
@@ -314,14 +314,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Dungeon Gleaner achieved a score of 8 against GOAP, as noted in the APPLICATIONS documentation. This score reflects the product expression's ability to score unmet needs and move NPCs toward the stron",
+    "finalAnswerHead": "Dungeon Gleaner achieved a score of 8 against GOAP, as noted in the APPLICATIONS documentation. This score reflects the product expression's ability to score unmet needs and move NPCs toward the stron"
   },
   {
     "id": "differential-013",
