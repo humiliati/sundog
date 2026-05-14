@@ -44,14 +44,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "Pressure Mines is an operating-envelope study evaluating Sundog’s performance in lossy pressure fields. In the density 0.16 / pressure-no",
-    "finalAnswerHead": "Pressure Mines is an operating-envelope study evaluating Sundog’s performance in lossy pressure fields. In the density 0.16 / pressure-no"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-003",
@@ -77,8 +77,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "EyesOnly/Gone Rogue is an instrumented prototype for procedural games, implementing a Sundog headless runner that interfaces with a JavaScript roguelike via Playwright, enabling policy-driven action b",
-    "finalAnswerHead": "EyesOnly/Gone Rogue is an instrumented prototype for procedural games, implementing a Sundog headless runner that interfaces with a JavaScript roguelike via Playwright, enabling policy-driven action b"
+    "draftHead": "[reasoning trace truncated before final answer]",
+    "finalAnswerHead": "[reasoning trace truncated before final answer]"
   },
   {
     "id": "differential-004",
@@ -98,14 +98,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "Dungeon Gleaner is a product expression implementing the indirect-signal pattern, where NPC behavior is guided by local pull from satisfier nodes. While it demonstrates this approach in practice, it l",
-    "finalAnswerHead": "Dungeon Gleaner is a product expression implementing the indirect-signal pattern, where NPC behavior is guided by local pull from satisfier nodes. While it demonstrates this approach in practice, it l"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-005",
@@ -131,8 +131,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Sundog Balance’s overhead-light cells are part of the degradation boundaries in the tested browser cart-pole setup. While qualitative observations may be discussed, the study explicitly reports that i",
-    "finalAnswerHead": "Sundog Balance’s overhead-light cells are part of the degradation boundaries in the tested browser cart-pole setup. While qualitative observations may be discussed, the study explicitly reports that i"
+    "draftHead": "The Sundog Balance operating-envelope study reports overhead-light cells as degradation boundaries where both",
+    "finalAnswerHead": "The Sundog Balance operating-envelope study reports overhead-light cells as degradation boundaries where both"
   },
   {
     "id": "differential-006",
@@ -152,14 +152,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "The Three-Body Dynamics Workbench evaluates the",
-    "finalAnswerHead": "The Three-Body Dynamics Workbench evaluates the"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-007",
@@ -185,8 +185,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Pressure Mines evaluates a lossy pressure field in a defined operating envelope. In the density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants show improved budget-ad",
-    "finalAnswerHead": "Pressure Mines evaluates a lossy pressure field in a defined operating envelope. In the density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants show improved budget-ad"
+    "draftHead": "Pressure Mines evaluates Sundog's performance in a lossy pressure field under specific conditions (density 0.16, pressure-noise",
+    "finalAnswerHead": "Pressure Mines evaluates Sundog's performance in a lossy pressure field under specific conditions (density 0.16, pressure-noise"
   },
   {
     "id": "differential-008",
@@ -206,14 +206,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "Money Bags is an instrumented prototype focused on softbody graph telemetry, with current claims limited to its apparatus and telemetry framework. The see-saw musing remains unconfirmed empirically, a",
-    "finalAnswerHead": "Money Bags is an instrumented prototype focused on softbody graph telemetry, with current claims limited to its apparatus and telemetry framework. The see-saw musing remains unconfirmed empirically, a"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-009",
@@ -239,8 +239,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "[reasoning trace truncated before final answer]",
-    "finalAnswerHead": "[reasoning trace truncated before final answer]"
+    "draftHead": "The photometric Sundog result achieved terminal accuracy",
+    "finalAnswerHead": "The photometric Sundog result achieved terminal accuracy"
   },
   {
     "id": "differential-010",
@@ -260,14 +260,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "[reasoning trace truncated before final answer]",
-    "finalAnswerHead": "[reasoning trace truncated before final answer]"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-011",
@@ -293,8 +293,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "The Pressure Mines study reports improvements in budget-adjusted safe-tile progress and safer progress before failure metrics, but does not publish a specific \"clearance percentage\" as a",
-    "finalAnswerHead": "The Pressure Mines study reports improvements in budget-adjusted safe-tile progress and safer progress before failure metrics, but does not publish a specific \"clearance percentage\" as a"
+    "draftHead": "[reasoning trace truncated before final answer]",
+    "finalAnswerHead": "[reasoning trace truncated before final answer]"
   },
   {
     "id": "differential-012",
@@ -314,14 +314,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "[reasoning trace truncated before final answer]",
-    "finalAnswerHead": "[reasoning trace truncated before final answer]"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-013",
@@ -368,14 +368,14 @@
     "evidenceTier": "product_expression",
     "baselineEvidenceTier": "product_expression",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "Dungeon Gleaner operates at the product_expression tier, implementing verb-field NPC behavior as a production-ready application. Money Bags is not addressed in this trace’s scope, so comparing their e",
-    "finalAnswerHead": "Dungeon Gleaner operates at the product_expression tier, implementing verb-field NPC behavior as a production-ready application. Money Bags is not addressed in this trace’s scope, so comparing their e"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-015",
@@ -422,13 +422,13 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "rejected",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "rejected",
     "flippedVsBaseline": true,
-    "unsafeAccepted": true,
+    "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "[reasoning trace truncated before final answer]",
-    "finalAnswerHead": "[reasoning trace truncated before final answer]"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `qwen/qwen3-32b` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8` service",
+    "draftHead": "",
+    "finalAnswerHead": ""
   }
 ]
