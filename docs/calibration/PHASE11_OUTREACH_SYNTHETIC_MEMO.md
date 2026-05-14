@@ -571,30 +571,47 @@ patch itself stands.)
 
 #### 8.6a Send-blocking
 
-| # | finding | surfaced by | required change |
-| ---: | --- | --- | --- |
-| W1 | **p7 (h = 59.4°) parhelion production-mechanism question.** Possible mis-attribution of circumscribed-halo brightness as parhelion in the strict 3-photo set. | Persona A | Add to the tier-1 specialist dispatch as an explicit question (handoff §2 or §7). Do NOT unilaterally drop p7 — that is the specialist's call. If specialist confirms mis-attribution, strict-subset rewrites cascade through handoff §1, packet §2 item 3, reaudit memo §94, brief §5. |
-| W2 | **Workbench above-the-fold attribution gap (WebFetch verified, two personas).** Greenler / Tape / Cowley only in §7 "History & reading" of `sundog.cc/sundog.html`. Packet §4 caveat names this as constraint (i) for tier-3 defensibility. | Persona B + C | Add a one-line credit strip immediately under the H1 on `sundog.cc/sundog.html`: e.g. "Geometry follows Greenler 1980 and Tape 1994; see History & reading for citations." Blocks tier-3 send until landed. |
-| W3 | **§10b cover note trailing sentence undermines editorial-tier framing.** | Persona B | Cut "A specialist audit pass already narrowed our claims; this is the editorial-tier follow-up." from brief §10b. End the note on "...we'd value your read on whether the page earns a link or a short write-up." |
+Status legend: `pending — batch N` = queued for the named application
+batch (see §8.6 application-order note below the table). `applied
+2026-05-14 (batch N)` = patch landed. `deferred` = not in the planned
+application sequence per user-approved workflow.
+
+| # | finding | surfaced by | required change | status |
+| ---: | --- | --- | --- | --- |
+| W1 | **p7 (h = 59.4°) parhelion production-mechanism question.** Possible mis-attribution of circumscribed-halo brightness as parhelion in the strict 3-photo set. | Persona A | Add to the tier-1 specialist dispatch as an explicit question (handoff §2 or §7). Do NOT unilaterally drop p7 — that is the specialist's call. If specialist confirms mis-attribution, strict-subset rewrites cascade through handoff §1, packet §2 item 3, reaudit memo §94, brief §5. | **applied 2026-05-14 (batch 3)** |
+| W2 | **Workbench above-the-fold attribution gap (WebFetch verified, two personas).** Greenler / Tape / Cowley only in §7 "History & reading" of `sundog.cc/sundog.html`. Packet §4 caveat names this as constraint (i) for tier-3 defensibility. | Persona B + C | Add a one-line credit strip immediately under the H1 on `sundog.cc/sundog.html`: e.g. "Geometry follows Greenler 1980 and Tape 1994; see History & reading for citations." Blocks tier-3 send until landed. | **applied 2026-05-14 (batch 4)** |
+| W3 | **§10b cover note trailing sentence undermines editorial-tier framing.** | Persona B | Cut "A specialist audit pass already narrowed our claims; this is the editorial-tier follow-up." from brief §10b. End the note on "...we'd value your read on whether the page earns a link or a short write-up." | **applied 2026-05-14 (batch 1)** |
 
 #### 8.6b Recommended (not send-blocking)
 
-| # | finding | surfaced by | required change |
-| ---: | --- | --- | --- |
-| W4 | **Upper-tangent-arc `R_uta/R₂₂` is not canonical literature inverse handle.** | Persona A | Pull handoff §2.3 (v)'s framing-question hedge into the verdict tables across handoff §1 and packet §0. Add a one-line note to packet §1 row 6 + §0 tangent row: "Note: the literature standard inverse for tangent arcs uses opening angle / arc extent (Tape 1994 §6), not circle-fit radius." |
-| W5 | **"2.091" ratio precision overclaim** in packet §1 row 5b + §3 R₄₆ note. | Persona A | Soften to: "matches the integer-label angular ratio 46/22 ≈ 2.09" OR cite a specific minimum-deviation derivation. Drop the three-figure precision. |
-| W6 | **"Non-obvious use of the formula" wording in packet §2 item 2.** | Persona A | Replace "is a non-obvious use of the formula" with "is applied as a measurement instrument; the inverse direction is treated in Tape 1994 §3 and on Cowley's atoptics parhelia page." |
-| W7 | **CZA "~32.196°" precision in packet §1 row 5 with no dispersion hedge.** Wave-1 §3a #8 magnitude claim is also off by ~18× (see §8.4 resolution). | Persona A + consolidator re-derivation | Replace "CZA disappears at h > ~32.196°" with "CZA disappears gradually between ~31° (violet edge) and ~33° (red edge) as the chromatic discriminant exceeds 1 at progressively longer wavelengths; visible-band centroid (n = 1.31) crosses at 32.19°." This is the dispersion-corrected wording; supersedes wave-1 §3a #8 docstring magnitude. The `scripts/cza_formula.py` docstring at lines 46-52 also needs the same correction. |
-| W8 | **CZA "tangent to 46° halo at top" framing in §1 row 4 lacks h-window scoping.** | Persona A | Pull the §4 editorial caveat ("any external-link copy that says 'the CZA is tangent to the 46° halo' should be hedged or scoped to the near-disappearance regime") up to §1 row 4 source-column. |
-| W9 | **Supralateral "~0.5° across h=0-22°" claim cited to internal audit memo.** | Persona A | Cite to primary literature (Tape 1994 §6.4 or the actual computation source) in handoff §2.2. |
-| W10 | **Packet §0 opens with meta-process; lift artifact framing to top.** | Persona B | Replace the four-question framing at packet lines 5-14 with a single artifact paragraph leading on what the Halo Atlas IS, not what the packet is for. Demote the four-question framing and the tier-placement block. |
-| W11 | **§1 row 4 CZA cell contains internal release-note prose.** | Persona B | Strip "the Phase 10 attack campaign's Pass A1b replaced the approximation with the literature formula" from the math row; move to §6 Maintenance. |
-| W12 | **§4 Wikipedia content doesn't belong in tier-2 (editor-facing) packet.** | Persona B | Option (a): document tier-2 cut at top of §4 ("editors at tier 2 may skip"); option (b): create tier-specific packet variants. Defer pending tier-deployment decision. |
-| W13 | **Per-article §4 verdict: Sun dog landing-state concern.** | Persona C | Add a deep-link anchor (e.g. `#parhelion-offset-demo`) to `sundog.cc/sundog.html` so the §4 Sun dog link blurb's URL points to the focused demonstration. Without this the Sun dog proposal is WP:ELNO #19 vulnerable even after the attribution fix. |
-| W14 | **Per-article §4 verdict: CZA supplement may be too thin.** | Persona C | Consider dropping CZA from §4 surviving proposals; the single-threshold supplement is pedagogically thinner than the parhelion slider. Defer pending workbench attribution fix + Sun dog proposal outcome. |
-| W15 | **"Stellar Aqua LLC" corporate authorship — WP:SELFPUB consideration.** | Persona C | Add named human contributor(s) to `sundog.cc/sundog.html` footer and to the §4 citation template. |
-| W16 | **`phase3-tests.html` Quick-link is an OR-trap reachable from packet.** | Persona C | Either remove `phase3-tests.html` from the packet "Quick links" entirely, or wrap it in an internal-use caveat. |
-| W17 | **§2 items 1-3 are WP:NOR/OR-risky if quoted on talk page.** | Persona C | Discipline reminder (no patch). The packet's §4 Editorial caveats constraint (iii) is the right policy; extend the constraint to §2 items 2 and 3 explicitly. |
+| # | finding | surfaced by | required change | status |
+| ---: | --- | --- | --- | --- |
+| W4 | **Upper-tangent-arc `R_uta/R₂₂` is not canonical literature inverse handle.** | Persona A | Pull handoff §2.3 (v)'s framing-question hedge into the verdict tables across handoff §1 and packet §0. Add a one-line note to packet §1 row 6 + §0 tangent row: "Note: the literature standard inverse for tangent arcs uses opening angle / arc extent (Tape 1994 §6), not circle-fit radius." | **applied 2026-05-14 (batch 3)** |
+| W5 | **"2.091" ratio precision overclaim** in packet §1 row 5b + §3 R₄₆ note. | Persona A | Soften to: "matches the integer-label angular ratio 46/22 ≈ 2.09" OR cite a specific minimum-deviation derivation. Drop the three-figure precision. | **applied 2026-05-14 (batch 2)** |
+| W6 | **"Non-obvious use of the formula" wording in packet §2 item 2.** | Persona A | Replace "is a non-obvious use of the formula" with "is applied as a measurement instrument; the inverse direction is treated in Tape 1994 §3 and on Cowley's atoptics parhelia page." | **applied 2026-05-14 (batch 2)** |
+| W7 | **CZA "~32.196°" precision in packet §1 row 5 with no dispersion hedge.** Wave-1 §3a #8 magnitude claim is also off by ~18× (see §8.4 resolution). | Persona A + consolidator re-derivation | Replace "CZA disappears at h > ~32.196°" with "CZA disappears gradually between ~31° (violet edge) and ~33° (red edge) as the chromatic discriminant exceeds 1 at progressively longer wavelengths; visible-band centroid (n = 1.31) crosses at 32.19°." This is the dispersion-corrected wording; supersedes wave-1 §3a #8 docstring magnitude. The `scripts/cza_formula.py` docstring at lines 46-52 also needs the same correction. | docstring half **applied 2026-05-14 (batch 1)**; packet-hedge half **applied 2026-05-14 (batch 2)** |
+| W8 | **CZA "tangent to 46° halo at top" framing in §1 row 4 lacks h-window scoping.** | Persona A | Pull the §4 editorial caveat ("any external-link copy that says 'the CZA is tangent to the 46° halo' should be hedged or scoped to the near-disappearance regime") up to §1 row 4 source-column. | **applied 2026-05-14 (batch 2)** |
+| W9 | **Supralateral "~0.5° across h=0-22°" claim cited to internal audit memo.** | Persona A | Cite to primary literature (Tape 1994 §6.4 or the actual computation source) in handoff §2.2. | **applied 2026-05-14 (batch 2)** |
+| W10 | **Packet §0 opens with meta-process; lift artifact framing to top.** | Persona B | Replace the four-question framing at packet lines 5-14 with a single artifact paragraph leading on what the Halo Atlas IS, not what the packet is for. Demote the four-question framing and the tier-placement block. | **applied 2026-05-14 (batch 3)** |
+| W11 | **§1 row 4 CZA cell contains internal release-note prose.** | Persona B | Strip "the Phase 10 attack campaign's Pass A1b replaced the approximation with the literature formula" from the math row; move to §6 Maintenance. | **applied 2026-05-14 (batch 2)** |
+| W12 | **§4 Wikipedia content doesn't belong in tier-2 (editor-facing) packet.** | Persona B | Option (a): document tier-2 cut at top of §4 ("editors at tier 2 may skip"); option (b): create tier-specific packet variants. Defer pending tier-deployment decision. | deferred (per user-approved workflow; revisit after tier-2 deployment decision) |
+| W13 | **Per-article §4 verdict: Sun dog landing-state concern.** | Persona C | Add a deep-link anchor (e.g. `#parhelion-offset-demo`) to `sundog.cc/sundog.html` so the §4 Sun dog link blurb's URL points to the focused demonstration. Without this the Sun dog proposal is WP:ELNO #19 vulnerable even after the attribution fix. | **applied 2026-05-14 (batch 4)** |
+| W14 | **Per-article §4 verdict: CZA supplement may be too thin.** | Persona C | Consider dropping CZA from §4 surviving proposals; the single-threshold supplement is pedagogically thinner than the parhelion slider. Defer pending workbench attribution fix + Sun dog proposal outcome. | deferred (per user-approved workflow; revisit after W2 + W13 land) |
+| W15 | **"Stellar Aqua LLC" corporate authorship — WP:SELFPUB consideration.** | Persona C | Add named human contributor(s) to `sundog.cc/sundog.html` footer and to the §4 citation template. | **applied 2026-05-14 (batch 4)** (humiliati placeholder pending real-name attribution) |
+| W16 | **`phase3-tests.html` Quick-link is an OR-trap reachable from packet.** | Persona C | Either remove `phase3-tests.html` from the packet "Quick links" entirely, or wrap it in an internal-use caveat. | **applied 2026-05-14 (batch 2)** |
+| W17 | **§2 items 1-3 are WP:NOR/OR-risky if quoted on talk page.** | Persona C | Discipline reminder (no patch). The packet's §4 Editorial caveats constraint (iii) is the right policy; extend the constraint to §2 items 2 and 3 explicitly. | **applied 2026-05-14 (batch 2)** |
+
+**Batch application order (user-approved 2026-05-14):**
+
+- **Batch 1 — easy + send-blocking (applied 2026-05-14):** W3 cover-note trailing-sentence cut + brief §14 item 5 stale-status reconciliation + cza_formula.py docstring chromatic-spread correction.
+- **Batch 2 — wording polish (applied 2026-05-14):** W5, W6, W7 (packet hedge half), W8, W9, W11, W16, W17. All line-edit scope across packet + handoff.
+- **Batch 3 — structural (applied 2026-05-14):** W1 (add p7 specialist-tier question to handoff), W4 (tangent-handle hedge across verdict tables), W10 (packet §0 rewrite).
+- **Batch 4 — UI / external (applied 2026-05-14):** W2 (workbench credit strip), W13 (workbench deep-link anchor `#parhelion-offset-demo`), W15 (humiliati named contributor in schema.org JSON-LD + packet citation template). All touch `sundog.cc/sundog.html`; `dist/sundog.html` requires build re-run before sundog.cc reflects changes.
+- **Deferred:** W12 (§4 tier-2 cut — revisit after tier-2 deployment decision), W14 (drop CZA from §4 — revisit after W2 + W13 land).
+
+Each batch requires explicit user approval before application. Status
+column above is the canonical tracker; updates land here as patches
+are applied.
 
 ### 8.7 Cross-Persona Convergences (wave-2)
 

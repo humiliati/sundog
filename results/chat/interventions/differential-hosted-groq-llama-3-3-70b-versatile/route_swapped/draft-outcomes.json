@@ -17,14 +17,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "Sundog Balance is an operating-envelope study, specifically a browser cart-pole setup. The study found that the shadow controller outperforms naive shadow-centering within the tested envelope, but ove",
-    "finalAnswerHead": "Sundog Balance is an operating-envelope study, specifically a browser cart-pole setup. The study found that the shadow controller outperforms naive shadow-centering within the tested envelope, but ove"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-002",
@@ -206,14 +206,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Money Bags is an instrumented prototype around softbody graph telemetry, with its current contribution being apparatus and telemetry for various signals. The strongest evidence is the apparatus itself",
+    "finalAnswerHead": "Money Bags is an instrumented prototype around softbody graph telemetry, with its current contribution being apparatus and telemetry for various signals. The strongest evidence is the apparatus itself"
   },
   {
     "id": "differential-009",
@@ -260,14 +260,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "The Three-Body workbench is a bounded operating-envelope study where the guarded accelerometer-proxy TRACK controller shows survival improvement in a high-velocity near-escape pocket. The study does n",
-    "finalAnswerHead": "The Three-Body workbench is a bounded operating-envelope study where the guarded accelerometer-proxy TRACK controller shows survival improvement in a high-velocity near-escape pocket. The study does n"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-011",

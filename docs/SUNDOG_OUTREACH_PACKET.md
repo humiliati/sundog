@@ -1,41 +1,70 @@
 # Sundog Outreach Packet
 
-**Phase 7 deliverable, post-Phase-10-attack-campaign rewrite · 2026-05-14 · for Wikipedia editorial review, technically literate editors, and atmospheric-optics specialists.**
+**Phase 7 deliverable, post-Phase-10-attack-campaign rewrite · 2026-05-14 · for atmospheric-optics specialists, technically literate science-communications editors, and Wikipedia-adjacent reviewers.**
 
-This packet exists so a Wikipedia editor — or any reviewer who reaches the
-Sundog project through a citation — can answer four questions inside one
-scroll:
-
-1. What is the project's atlas, in geometric terms?
-2. Which equations are standard atmospheric optics, and which are
-   original to this project?
-3. Can the math be reproduced independently?
-4. Which Wikipedia articles could legitimately cite the artifact, and
-   for what specific factual claim?
-
-The packet does **not** introduce new geometric claims. Every formula
-referenced below predates this project; the project's contribution is
-*integration, calibration, and interactive presentation*, not a new
-theorem. The "claim license" section below makes that boundary explicit.
+The Halo Atlas is an interactive web page that renders a sundog display
+from its underlying geometry. Drag the sun across the sky and every
+named arc — the 22° halo, the parhelia, the circumzenithal arc, the
+tangent arcs — updates from one parametric model. The math is standard
+atmospheric optics from Greenler (1980) and Tape (1994); our contribution
+is the *integrated, manipulable surface* and a *calibration workflow
+against real photographs*. The packet does not introduce new geometric
+claims; the "claim license" in §2 makes the boundary explicit.
 
 ## 0. Where this packet fits
 
-This packet is the shared support artifact across three outreach tiers
-(specialist, technically-literate editor, Wikipedia-adjacent
-external-link reviewer). Detailed tier mechanics live in the outreach
-brief at
+This packet supports three review tiers (atmospheric-optics specialists,
+technically-literate editors, Wikipedia-adjacent external-link reviewers).
+Tier mechanics live in the outreach brief at
 [`calibration/PHASE11_OUTREACH_BRIEF.md`](calibration/PHASE11_OUTREACH_BRIEF.md);
 the specialist-tier handoff is at
 [`calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md`](calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md).
-The load-bearing governing memo for the project's current claim surface
-is the re-audit memo at
+The governing memo for the current claim surface is the re-audit memo at
 [`calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md`](calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md).
+
+A reviewer who reaches the project through a citation can use this
+packet to answer:
+
+1. What is the atlas, in geometric terms? (§1)
+2. Which equations are standard atmospheric optics, and which are
+   original to this project? (§2)
+3. Can the math be reproduced independently? (§3)
+4. Which Wikipedia articles could legitimately cite the artifact, and
+   for what specific factual claim? (§4)
+
+### Current claim surface (audit-survived)
+
+| route | status | failure-mode kind |
+| --- | --- | --- |
+| Parhelion offset → h | **promoted (post-hedged)** | works on a strict 3-photo subset (p2, p7, p13) |
+| CZA apex → h | **fails coverage gate** | dataset / aspect-ratio (only one photo in the right altitude window) |
+| Supralateral → h | **fails structural-discrimination** | atmospheric physics (the available signal is below typical measurement noise) |
+| Tangent-arc curvature → h | **not promoted** | coverage + detector/anchoring tension: C5 manual samples recover p2, but C6 matched-filter falsifies the natural extension on the same b* substrate. The literature-standard tangent-arc inverse uses opening angle / arc extent (Tape 1994 §6), not circle-fit curvature; "curvature → h" is the project's exploratory framing. |
+
+The audit narrowed three things in particular: it reframed the CZA
+verdict from "the route is unreliable" to "we only have one in-window
+measurement so we can't yet test it"; it tightened the parhelion-route
+eligibility from "every photo in the calibration set" to "the strict
+three-photo subset above"; and it sharpened the tangent-route state:
+C5 manual sample selection partially recovers p2, C6 matched-filter
+does not reproduce that recovery on the same halo-subtracted b*
+substrate, and the route remains unpromoted pending specialist
+re-anchoring or an alternative-substrate detector.
+
+### Deployment gate
+
+Before any external outreach, this packet, the handoff, and the brief
+are bounce-tested by the Phase 11 synthetic-persona dispatch at
+[`calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md`](calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md).
+Editors who want to spot-check the audit-survived numbers can run the
+regression test (Path D in §3) and the post-audit atlas calibration
+(Path C in §3); both reproduce the numbers in the re-audit memo's
+verification gate.
 
 ### Vocabulary note
 
-A recent internal audit narrowed the project's public framing; some of
-this document carries the audit's internal vocabulary. Plain-English
-glosses for readers who haven't read the audit memos:
+Some sections of this packet carry the audit's internal vocabulary.
+Plain-English glosses for readers who haven't read the audit memos:
 
 - **The audit** — a 2026-05-13/14 internal review of the project's
   geometry and calibration claims, with eight required correction
@@ -59,41 +88,12 @@ glosses for readers who haven't read the audit memos:
   public after the audit ran; replaces several earlier, looser
   framings.
 
-### Current claim surface (audit-survived)
-
-| route | status | failure-mode kind |
-| --- | --- | --- |
-| Parhelion offset → h | **promoted (post-hedged)** | works on a strict 3-photo subset (p2, p7, p13) |
-| CZA apex → h | **fails coverage gate** | dataset / aspect-ratio (only one photo in the right altitude window) |
-| Supralateral → h | **fails structural-discrimination** | atmospheric physics (the available signal is below typical measurement noise) |
-| Tangent-arc curvature → h | **not promoted** | coverage + detector/anchoring tension: C5 manual samples recover p2, but C6 matched-filter falsifies the natural extension on the same b* substrate |
-
-The audit narrowed three things in particular: it reframed the CZA
-verdict from "the route is unreliable" to "we only have one in-window
-measurement so we can't yet test it"; it tightened the parhelion-route
-eligibility from "every photo in the calibration set" to "the strict
-three-photo subset above"; and it sharpened the tangent-route state:
-C5 manual sample selection partially recovers p2, C6 matched-filter
-does not reproduce that recovery on the same halo-subtracted b*
-substrate, and the route remains unpromoted pending specialist
-re-anchoring or an alternative-substrate detector.
-
-### Deployment gate
-
-Before any external outreach, this packet, the handoff, and the brief
-are bounce-tested by the Phase 11 synthetic-persona dispatch at
-[`calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md`](calibration/PHASE11_OUTREACH_SYNTHETIC_MEMO.md).
-Editors who want to spot-check the audit-survived numbers can run the
-regression test (Path D in §3) and the post-audit atlas calibration
-(Path C in §3); both reproduce the numbers in the re-audit memo's
-verification gate.
-
 ---
 
 ## Quick links
 
 - Live atlas explainer: <https://sundog.cc/sundog.html>
-- Interactive math-binding tests: <https://sundog.cc/phase3-tests.html>
+- Interactive math-binding tests (developer-facing implementation validation; not a citation surface): <https://sundog.cc/phase3-tests.html>
 - Geometry source module: [`public/js/parhelion-geometry.mjs`](../public/js/parhelion-geometry.mjs)
 - Calibration script: [`scripts/overlay_calibrate.py`](../scripts/overlay_calibrate.py)
 - 7-photo calibration overlays: [`docs/calibration/overlays/`](calibration/overlays/)
@@ -114,10 +114,10 @@ do the work.
 | 1 | `R₂₂ / R_sun_sky = 22°` | Angular radius of the 22° halo, from refraction through a 60° prism in column-oriented hexagonal ice. | Greenler ch. 2 |
 | 2 | `R₄₆ / R_sun_sky = 46°` | Angular radius of the 46° halo, from the 90° face-pair (basal + prism) refraction in **randomly oriented** hexagonal ice columns (plate-orientation belongs to CZA / supralateral, not the 46° halo itself). | Greenler ch. 2 |
 | 3 | `parhelion_offset = R₂₂ / cos(h)` | Apparent screen-distance from the sun to a parhelion, as a function of sun altitude `h`. The standard small-angle screen-projection of the parhelion's azimuthal offset from the sun (Tape 1994 §3 gives the exact great-circle treatment for high-`h` cases). | Tape (1994); Greenler ch. 3 |
-| 4 | CZA apex above sun = `arcsin(√(n² − cos²h)) − h` (with `n = 1.31`), scaled by `R₂₂ / 22°`. | The circumzenithal arc's altitude above the sun, as a function of sun altitude `h`. The legacy atlas approximated this as `sun_y − R₄₆` (the 46° halo top), which is geometrically correct only at h ≈ 22°; the Phase 10 attack campaign's Pass A1b replaced the approximation with the literature formula (see `scripts/cza_formula.py` and §3 Path D for the regression test). | Cowley, atoptics CZA article; Bravais derivation in Greenler ch. 4 |
-| 5 | CZA disappears at h > ~32.196° | Above the disappearance threshold the discriminant `n² − cos²h` exceeds 1 and the CZA passes the zenith. | Greenler ch. 4; computed exactly in `scripts/cza_formula.py` |
-| 5b | `WB_R₄₆ = round(2.091 · WB_R₂₂)` in workbench coordinates | Pre-audit the workbench held R₄₆ / R₂₂ at 2.0 (encoding 44° in workbench-deg rather than 46°). Pass A1b corrected to 2.091 per the literature angular ratio. Affects 46° halo radius rendering and supralateral apex base. | Pass A1b in `PHASE10_ATTACK_ROADMAP.md` |
-| 6 | Upper / Lower Tangent Arc tangent to 22° halo top/bottom | "Eyelid" geometry from column-oriented crystals. | Greenler ch. 3 |
+| 4 | CZA apex above sun = `arcsin(√(n² − cos²h)) − h` (with `n = 1.31`), scaled by `R₂₂ / 22°`. | The circumzenithal arc's altitude above the sun, as a function of sun altitude `h`. The "CZA tangent to the 46° halo at its top point" framing is geometrically exact only near `h ≈ 22°`; at other altitudes the CZA position varies as the formula. See `scripts/cza_formula.py` and §3 Path D for the regression test. | Cowley, atoptics CZA article; Bravais derivation in Greenler ch. 4 |
+| 5 | CZA disappears gradually between ~31° (violet edge drops out first) and ~33° (red edge drops out last); visible-band centroid (n = 1.31) crosses at 32.2° | As `h` rises, the discriminant `n² − cos²h` exceeds 1 at progressively longer wavelengths, so the CZA fades from violet → blue → green → red across this ~2° altitude window rather than vanishing sharply. | Greenler ch. 4; ice n(λ) ranges ~1.306 (red) to ~1.317 (violet); see `scripts/cza_formula.py` for centroid computation |
+| 5b | `WB_R₄₆ = round(2.09 · WB_R₂₂)` in workbench coordinates | Pre-audit the workbench held R₄₆ / R₂₂ at 2.0 (encoding 44° in workbench-deg rather than 46°). Pass A1b corrected to ≈ 2.09 (the integer-label 46/22 angular ratio; the underlying minimum-deviation physics gives a comparable value but the packet quotes the integer-label derivation, not a four-figure literature constant). Affects 46° halo radius rendering and supralateral apex base. | Pass A1b in `PHASE10_ATTACK_ROADMAP.md` |
+| 6 | Upper / Lower Tangent Arc tangent to 22° halo top/bottom | "Eyelid" geometry from column-oriented crystals. Note: the literature-standard *inverse* handle for tangent arcs is opening angle / arc extent (Tape 1994 §6; Cowley tangent-arcs page), not circle-fit curvature. | Greenler ch. 3 |
 | 7 | Supralateral / Infralateral Arc tangent to 46° halo top/bottom | Column-orientation 90° path, mirror-paired around the 46° halo. | Greenler ch. 4 |
 
 In the atlas, every visible primitive is a one-line consequence of one of
@@ -174,10 +174,13 @@ The Sundog project's contribution is *not* a new equation. It is:
 2. **An interactive inverse-inference workflow.** Running the forward
    relation `parhelion_offset = R₂₂ / cos(h)` *backwards* — measuring
    the parhelion offset and the 22° halo radius in a photograph and
-   solving for `h` — is a non-obvious use of the formula. It turns the
-   workbench into a measurement instrument for an unobserved variable
-   (the sun's altitude when a photograph was taken), and the
-   `overlay_calibrate.py` runner does this automatically.
+   solving for `h` — is applied here as a measurement instrument; the
+   inverse direction is treated in the standard literature (Tape 1994
+   §3 gives the exact great-circle inversion; Cowley's atoptics
+   parhelia page covers the small-angle case). The project's
+   `overlay_calibrate.py` runner does this automatically, turning the
+   workbench into an in-situ measurement tool for an unobserved
+   variable (the sun's altitude when a photograph was taken).
 3. **Calibration evidence on a post-audited photo cohort.** The
    parhelion-offset route survives audit-driven hedging on a strict
    three-photo subset (p2 h = 18.6°, p7 h = 59.4°, p13 h = 6.83°) —
@@ -333,8 +336,8 @@ adjust sun altitude, and toggle individual features on and off.
 Pre-audit, the workbench had a known-wrong `WB_R₄₆` value (440 px)
 matched to a photo-mean ratio of 1.97; this was a confound, not a
 measurement, and was retired in the audit. The corrected value is
-`WB_R₄₆ = round(2.091 · WB_R₂₂) = 460`, matching the literature
-angular ratio 46/22 ≈ 2.091. The change affects three things: the 46°
+`WB_R₄₆ = round(2.09 · WB_R₂₂) = 460`, matching the integer-label
+angular ratio 46/22 ≈ 2.09. The change affects three things: the 46°
 halo is now drawn ~4.5% larger (correctly to literature); the
 supralateral apex base shifts outward by the same amount; and the
 legacy `sun_y − WB_R₄₆` approximation for the CZA apex is replaced
@@ -419,8 +422,13 @@ Greenler / Tape / Cowley must be visible above-the-fold on
 `sundog.cc/sundog.html` itself (a Wikipedia reviewer clicks the link,
 not this packet); (ii) link blurbs must name the literature source by
 surname, not the workbench's framing; (iii) the project-internal
-"we are not aware of an existing public resource…" line (§2) must not
-be quoted on any external-link-defending talk-page reply.
+"we are not aware of an existing public resource…" line (§2 item 1),
+the §2 item 2 inversion-workflow framing, and the §2 item 3
+strict-3-photo calibration-evidence framing must not be quoted on
+any external-link-defending talk-page reply — these are legitimate
+internal claim-license framings on the project's own surfaces but
+become WP:NOR / WP:OR risk if quoted in defense of an external-link
+addition.
 
 The proposal list was pruned to **two** (Sun dog, Circumzenithal arc)
 after the dispatch flagged that 22° halo / 46° halo / Vädersoltavlan /
@@ -445,8 +453,8 @@ the suggested citation template:
 ```
 * [https://sundog.cc/sundog.html The Sundog Halo Atlas — interactive
   parametric model of the parhelion display, calibrated against
-  photographs]. Stellar Aqua LLC, 2026. Source code under MIT license
-  at https://github.com/humiliati/sundog.
+  photographs]. humiliati (Stellar Aqua LLC), 2026. Source code under
+  MIT license at https://github.com/humiliati/sundog.
 ```
 
 ---
