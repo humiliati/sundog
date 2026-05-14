@@ -124,12 +124,14 @@ authoritative.
    the team wants to settle tangent before specialist handoff. If C2
    is skipped, the tangent detector is marked **Unresolved Open
    Question** in the handoff and the route verdict is not edited.
-7. **Pass B2.** **Next required pass.** Re-derive the parhelion verdict against the
+7. **Pass B2.** **Landed 2026-05-14.** Re-derive the parhelion verdict against the
    now-finalized eligibility set. Runs last of the technical passes
    so the verdict reads from the post-A3 / post-C3 table.
-8. **Re-audit gate (§5).** Re-run the synthetic three-persona
-   protocol against the post-pass state; consolidator verification
-   gate is mandatory.
+8. **Re-audit gate (§5).** **Landed 2026-05-14** in
+   [`docs/calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md`](calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md).
+   The technical-pass wave clears; the gate authorizes the specialist
+   handoff rewrite and public-framing ratchet, not reuse of the stale
+   pre-audit handoff.
 9. **Specialist handoff** (rewrites
    `PHASE10_OPTICAL_AUDIT_HANDOFF.md` with the post-audit verdict
    table) and **public-framing ratchet** (re-tightens the §6 hedges
@@ -674,6 +676,13 @@ verification gate is mandatory; treat any persona over-statement as
 disqualifying for that finding (see [§7](#7-meta-treat-the-verify-gate-as-load-bearing)
 on the verify gate).
 
+**Status 2026-05-14:** landed in
+[`docs/calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md`](calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md).
+No new load-bearing code, anchor, or route-math blocker was found. The
+technical-pass wave clears with the post-pass taxonomy: parhelion promoted
+on the strict 3-photo subset; CZA coverage-gated; supralateral
+physics-discrimination-gated; tangent detector unresolved under C2.
+
 **Specialist handoff entry criteria.** Re-audit completes with no new
 load-bearing findings, or with new findings that are bounded to known
 open questions in `PHASE10_OPTICAL_AUDIT_HANDOFF.md`. The handoff doc
@@ -698,7 +707,8 @@ six steps run before any §3 technical pass starts.
    "Post-audit hedge 2026-05-13" sub-block at the top of the closeout
    that names the audit memo, the three load-bearing findings, and
    the fact that the closeout language below is pending re-derivation
-   per this roadmap. **Status: landed 2026-05-13.**
+   per this roadmap. **Status: landed 2026-05-13; superseded
+   2026-05-14 by the post-pass state block and re-audit memo.**
 2. **`docs/MESA_CROSSOVER_NOTE.md` Phase 10 closeout subsection.** Add
    the same hedge stamp; walk back "three independent failure
    layers" to the audit-survived language ("three structurally

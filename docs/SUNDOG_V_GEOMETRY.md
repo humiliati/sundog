@@ -1353,28 +1353,18 @@ detailed verdict and per-route reasoning live in
 under "Phase 10 Promotion Verdict" and the new "Single-handle closeout"
 subsection.
 
-> **Post-audit hedge, 2026-05-13:** the synthetic optical audit
+> **Post-audit state, 2026-05-14:** the synthetic optical audit
 > ([`docs/calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
-> returned three load-bearing findings that the closeout language below
-> does not yet reflect: (1) the CZA route's residual-gate failure is
-> partly an atlas formula bug at `scripts/overlay_calibrate.py:381–384`
-> (CZA apex hardcoded as `sun_y − R46`, geometrically correct only at
-> h ≈ 22°); (2) the parhelion-offset *"passes residual gate at ~0 px on
-> every eligible photo"* claim restates honestly as *"passes on three
-> photos (p2, p7, p13) where the test has meaningful discrimination and
-> an independently fittable 22° halo"*; (3) the tangent-arc
-> detection-gate finding includes at least one photo (p7, h = 59.4°) in
-> the circumscribed-halo regime per atoptics.co.uk and dewbow.co.uk —
-> wrong primitive vs. wrong literature. The campaign to address these
-> findings (per-pass touches, entry/exit criteria, sequencing,
-> re-audit gate, public-framing hedge order) is filed in
-> [`docs/PHASE10_ATTACK_ROADMAP.md`](PHASE10_ATTACK_ROADMAP.md). The
-> closeout language below is *pending re-derivation* per that roadmap;
-> the single-handle verdict is *not falsified* but its evidentiary chain
-> is *substantially weaker than the closeout claims* until the re-audit
-> gate clears. Do not send the existing handoff
-> ([`docs/calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md`](calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md))
-> to a real specialist before the roadmap's required passes land.
+> produced three load-bearing findings, and the required technical
+> response passes have now landed: A1a/A1b repaired the CZA formula,
+> A2/A3 reclassified p27 and moved CZA to a coverage-gate failure, C1
+> removed p7 from upper-tangent eligibility, and B1/B2 retired the
+> "every eligible photo" parhelion framing in favor of the strict
+> p2/p7/p13 subset. The re-audit gate is recorded in
+> [`docs/calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md`](calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md).
+> The closeout language below is post-pass; the stale specialist handoff
+> and public-framing surfaces still need the ratchet pass before external
+> reuse.
 
 **Headline:** of the four candidate `signature → h` inversion routes,
 **one is promoted into calibrated core**, and **the other three fail at
