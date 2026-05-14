@@ -21,26 +21,33 @@ async function htmlFiles(dir) {
 }
 
 for (const htmlPath of await htmlFiles(dist)) {
-  const html = await readFile(htmlPath, "utf8");
-  const hrefs = [...html.matchAll(/\bhref=(["'])(.*?)\1/g)].map((match) => match[2]);
+  const html = (await readFile(htmlPath, "utf8")).replace(/<!--[\s\S]*?-->/g, "");
+  const refs = [
+    ...[...html.matchAll(/\bhref=(["'])(.*?)\1/g)].map((match) => match[2]),
+    ...[...html.matchAll(/\bsrc=(["'])(.*?)\1/g)].map((match) => match[2]),
+    ...[...html.matchAll(/\bposter=(["'])(.*?)\1/g)].map((match) => match[2])
+  ];
 
-  for (const href of hrefs) {
+  for (const href of refs) {
     if (
       href.startsWith("#") ||
       href.startsWith("http://") ||
       href.startsWith("https://") ||
       href.startsWith("mailto:") ||
-      href.startsWith("tel:")
+      href.startsWith("tel:") ||
+      href.startsWith("data:")
     ) {
       continue;
     }
 
-    const cleanHref = href.split("#")[0].split("?")[0];
+    const cleanHref = decodeURIComponent(href.split("#")[0].split("?")[0]);
     if (!cleanHref) {
       continue;
     }
 
-    const target = normalize(join(dirname(htmlPath), cleanHref));
+    const target = normalize(cleanHref.startsWith("/")
+      ? join(dist, cleanHref.slice(1))
+      : join(dirname(htmlPath), cleanHref));
     if (!target.startsWith(dist)) {
       missing.push(`${htmlPath}: ${href}`);
       continue;
