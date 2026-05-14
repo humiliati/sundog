@@ -83,7 +83,7 @@ route	current status	limiting reason
 Parhelion offset -> sun altitude	promoted, post-hedged	survives only on strict three-photo eligibility
 CZA apex -> sun altitude	not promoted	fails coverage; only one in-window measured case
 Supralateral -> sun altitude	not promoted	fails structural discrimination; h-sensitivity below visual-edge noise
-Tangent-arc curvature -> sun altitude	not promoted	fails detection under two literature-standard detectors (column-peak intensity at sun meridian; Pass C2 2026-05-14 wing-radial Lab b* with halo-radial subtraction); tooling-conditional narrows to non-literature-standard designs
+Tangent-arc curvature -> sun altitude	not promoted	fails detection under three literature-standard detectors (column-peak intensity at sun meridian; wing-radial Lab b* with halo-radial subtraction per Pass C2 2026-05-14; wing-slope luminance-gradient curvature with circle fit per Pass C4 2026-05-14); tooling-conditional narrows to manual sample selection, matched-filter detection, polarization filtering, or new calibration photos with stronger tangent display
 Strongest surviving bounded claim
 The strongest surviving inverse-use claim is:
 

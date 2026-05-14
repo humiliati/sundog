@@ -125,10 +125,21 @@ authoritative.
    `scripts/test_tangent_detector.py`) and ran it on the post-C1 sampled
    set (p2 / p13 / p27): route **not-recovered** on all three under a
    pre-registered 8 / 24 coherent-sample gate. C3 verdict edit landed
-   in same wave: tangent route fails detection under **two**
-   literature-standard detector families; tooling-conditional framing
-   narrows to non-literature-standard designs (wing-slope curvature,
-   matched-filter, polarization), filed as Phase 10 backlog.
+   in same wave.
+7. **Pass C4.** **Landed 2026-05-14.** Built the wing-slope geometric
+   curvature detector Persona 1 §5 explicitly named — luminance-gradient
+   edge detection with circle fit (`scripts/tangent_curvature.py`,
+   regression runner `scripts/test_tangent_curvature.py`). Ran on
+   p2 / p13 / p27: 88-100% of wing samples rejected as weak-gradient
+   (< 1.5 L\*/px); too few candidates for a circle fit on any photo.
+   Route **not-recovered**. Tangent route now fails under **three**
+   literature-standard detector families across two signal modalities
+   (chromatic ridge in C2; luminance edge in C4). Tooling-conditional
+   framing narrows further: only manual sample selection from visual
+   crops, matched-filter detection, polarization filtering, or new
+   calibration photos with stronger tangent display remain as
+   non-literature-standard / new-substrate paths to route recovery.
+   All filed as Phase 10 backlog.
 7. **Pass B2.** **Landed 2026-05-14.** Re-derive the parhelion verdict against the
    now-finalized eligibility set. Runs last of the technical passes
    so the verdict reads from the post-A3 / post-C3 table.
@@ -515,11 +526,15 @@ column-peak result remains as a cautionary sample, but no longer counts
 as a tangent-route residual. The post-C1 tangent set is p2 / p13 / p27:
 column-peak detection still fails there, so the route stays blocked, but
 the verdict was **protocol-conditional** pending C2 rather than a
-class-level negative. *(Post-C2 update 2026-05-14: Pass C2 ran and also
-returned not-recovered; the verdict is now "fails under two
-literature-standard detectors", with the tooling-conditional framing
-narrowing to non-literature-standard designs. See Pass C2 entry below.)* A circumscribed-halo ellipticity → h test is
-left as a Phase 10 backlog idea, not a deliverable.
+class-level negative. *(Post-C2 + Post-C4 update 2026-05-14: Passes C2
+and C4 both ran and returned not-recovered; the verdict is now "fails
+under three literature-standard detectors" across two signal
+modalities (chromatic ridge in C2; luminance edge in C4), with the
+tooling-conditional framing narrowing to manual sample selection,
+matched-filter detection, polarization filtering, or new calibration
+photos. See Pass C2 and Pass C4 entries below.)* A circumscribed-halo
+ellipticity → h test is left as a Phase 10 backlog idea, not a
+deliverable.
 
 **Goal.** Remove the literature-level primitive misclassification.
 
@@ -557,11 +572,13 @@ survives the halo-radial subtraction step (median offsets ranged −7.5
 to +10.5 px, not boundary-pinned), so the failure cannot be attributed
 to 22°-halo-ridge contamination of the detection window. C3 verdict
 landed in the same wave (see below). The "tooling-conditional"
-framing now narrows from "any wing-based or Lab b\* detector might
-work" to "non-literature-standard detector designs (wing-slope
-geometric curvature, matched-filter against parameterized arc shape,
-polarization-channel filtering) might recover the route" — filed as
-Phase 10 backlog ideas, not Phase 10 deliverables.
+framing narrowed to a second-detector question that **Pass C4 then
+closed** (see Pass C4 section): the wing-slope geometric curvature
+detector Persona 1 §5 explicitly named was built and ran, also
+not-recovered. Tangent route now fails under three literature-standard
+detector families across two signal modalities; remaining open
+candidates are manual sample selection, matched-filter detection,
+polarization filtering, or new calibration photos — Phase 10 backlog.
 
 **Goal.** Build the literature-standard detector and re-test p2 and
 p13 (the two photos the audit flags as protocol-artifact failures
@@ -593,21 +610,26 @@ under column-peak). This is the "tooling vs. physics" question.
 
 **Status: landed 2026-05-14.** Pass C2 result was **not-recovered** on
 p2 / p13 / p27 under the wing-radial Lab b\* ridge detector with
-22°-halo-radial-profile subtraction. The verdict landed across coupled
+22°-halo-radial-profile subtraction; Pass C4 (next section) extended
+the test with a wing-slope luminance-gradient curvature detector and
+also returned not-recovered. Both verdicts landed across coupled
 surfaces in the same wave: `RICH_DISPLAY_OVERLAY_NOTES.md` route-residual
 table + Promotion Verdict table, `SUNDOG_V_GEOMETRY.md` Phase 10
 closeout headline table + post-audit-state block,
-`PHASE10_OPTICAL_AUDIT_HANDOFF.md` verdict table,
+`PHASE10_OPTICAL_AUDIT_HANDOFF.md` verdict table + §2.3,
 `SUNDOG_V_GRAVITY.md` forward/inverse asymmetry receipt,
-`MESA_CROSSOVER_NOTE.md` Geometry Phase 10 closeout subsection. The
-route is **not** classified as class-level negative — the negative is
-specific to the two literature-standard detector families tested
-(column-peak intensity at sun meridian; wing-radial Lab b\* with
-halo-radial subtraction). Non-literature-standard detector designs
-(wing-slope geometric curvature, matched-filter, polarization
-filtering) remain candidates but are filed as Phase 10 backlog.
-The single-handle verdict survives unchanged: parhelion-offset remains
-the sole promoted inverse handle on the strict 3-photo subset.
+`MESA_CROSSOVER_NOTE.md` Geometry Phase 10 closeout subsection,
+`PROMO_HIGHLIGHTS.md` atlas-side receipt,
+`PHASE11_OUTREACH_BRIEF.md` route taxonomy table. The route is **not**
+classified as class-level negative — the negative is specific to the
+three literature-standard detector families tested (column-peak
+intensity at sun meridian; wing-radial Lab b\* with halo-radial
+subtraction; wing-slope luminance-gradient curvature with circle fit).
+Remaining candidate paths (manual sample selection from visual crops,
+matched-filter detection, polarization filtering, new calibration
+photos) are filed as Phase 10 backlog. The single-handle verdict
+survives unchanged: parhelion-offset remains the sole promoted inverse
+handle on the strict 3-photo subset.
 
 **Goal.** Decide whether the tangent-arc route is *class-level
 negative*, *tooling-conditional negative*, or *recovered* after Pass
@@ -628,6 +650,66 @@ C2.
 outcomes above, with the supporting evidence in the residual table
 and the language ratcheted in (or out of) the public-framing
 surfaces accordingly.
+
+### Finding C — Pass C4: Wing-slope geometric curvature detector
+
+**Status: landed 2026-05-14.** Detector module at
+`scripts/tangent_curvature.py` (reuses geometry helpers from
+`scripts/tangent_detector.py`); regression runner at
+`scripts/test_tangent_curvature.py`; captured run output at
+`docs/calibration/PASS_C4_DETECTOR_OUTPUT.txt`; full receipt under "###
+Pass C4 Update" in
+[`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`](calibration/RICH_DISPLAY_OVERLAY_NOTES.md).
+**Verdict: not-recovered on all three photos in the post-C1 sampled
+set.** The wing-region radial luminance transitions are below the
+pre-registered 1.5 L\*/px gradient threshold on 88-100% of wing samples
+per photo — too few surviving candidates for a circle fit on any
+photo. p27 had 48/48 weak-gradient rejection, consistent with Persona
+1's sun-bloom / forward-scatter haze observation for h = 0.5°. The
+"tooling-conditional" framing narrows further: the gradient-based
+edge detection alternative Persona 1 §5 named is now also tested
+negative, so the remaining candidates (manual sample selection from
+visual crops, matched-filter detection, polarization filtering, new
+calibration photos with stronger tangent display) are the only
+paths to potential route recovery — Phase 10 backlog, not Phase 10
+deliverables.
+
+**Goal.** Pick up the wing-slope geometric curvature alternative that
+Persona 1 §3 p2 entry and §5 explicitly recommended ("a curvature
+detector applied to the wings would work" / "gradient-based edge
+detection (the spine is at a brightness or chromaticity *transition*,
+not a peak)"). C2 tested chromatic ridge; C4 tests luminance edge.
+
+**Touch.**
+
+- New detector code at `scripts/tangent_curvature.py`. Reuses
+  `predicted_wing_point`, `sun_to_point_direction`, `load_image_lab`,
+  and the wing-azimuth constants from `tangent_detector.py`. Adds a
+  radial L\*-gradient peak picker, a linearized circle-fit, and
+  pre-registered gates: gradient ≥ 1.5 L\*/px, offset ≤ ±12 px, ≥ 12
+  surviving candidates, RMS ≤ 8 px, fitted R\_uta / R22 ∈ [0.7, 1.3].
+- New regression runner at `scripts/test_tangent_curvature.py`.
+- Append "### Pass C4 Update" subsection to
+  `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`.
+
+**Entry criteria.** Pass C2 landed (Pass C4 reuses C2's geometry).
+
+**Exit criteria.**
+
+- The wing-slope curvature detector exists, is committed, and has
+  been run against the post-C1 tangent eligibility set.
+- The receipt language is updated: caps the detection claim at
+  *"three literature-standard detector families — column-peak
+  intensity at sun meridian; wing-radial Lab b\* with halo-radial
+  subtraction (Pass C2); wing-slope luminance-gradient curvature
+  with circle fit (Pass C4) — all return not-recovered on
+  p2 / p13 / p27."* The route-level verdict follows the empirical
+  result of the new detector.
+- Coupled-surface ratchet propagates the "three literature-standard
+  detectors" framing across all the surfaces previously updated for
+  Pass C2 (geometry doc Phase 10 closeout, handoff verdict + §2.3,
+  gravity ledger, mesa crossover, promo highlights, outreach brief,
+  re-audit memo Post-C4 addendum).
 
 ## 4. Sequencing and Dependencies
 
@@ -709,18 +791,22 @@ re-audit" below are committed:
 - **C2** (new tangent detector) — *landed 2026-05-14*. Wing-radial
   Lab b\* ridge detector with 22°-halo-radial-profile subtraction
   (`scripts/tangent_detector.py`) ran on the post-C1 sampled set
-  (p2 / p13 / p27) and did **not** recover the route. The receipt
-  language now resolves the §4.8 template to: *"column-peak fails on
-  p2 / p13 / p27; a literature-standard wing-based Lab b\* ridge
-  detector with 22°-halo-radial-profile subtraction does not recover
-  the route on p2 / p13 / p27 either."* Non-literature-standard
-  detector designs (wing-slope geometric curvature, matched-filter,
-  polarization filtering) are filed as Phase 10 backlog.
+  (p2 / p13 / p27) and did **not** recover the route.
 - **C3** (tangent-arc re-verdict) — *landed 2026-05-14*, gated on
   C2's not-recovered outcome. Verdict edits propagated to the coupled
-  surfaces in the same wave (RICH_DISPLAY_OVERLAY_NOTES.md route-residual
-  + Promotion tables, SUNDOG_V_GEOMETRY.md Phase 10 closeout, handoff
-  verdict table, gravity ledger, mesa crossover note).
+  surfaces in the same wave.
+- **C4** (wing-slope geometric curvature detector) — *landed 2026-05-14*.
+  Gradient-based edge detector Persona 1 §5 explicitly named,
+  implemented as `scripts/tangent_curvature.py`. Ran on p2 / p13 / p27
+  and also did **not** recover the route (88-100% weak-gradient
+  rejection on every photo). The receipt language now resolves the §4.8
+  template to: *"column-peak fails on p2 / p13 / p27; wing-radial Lab b\*
+  with halo-radial subtraction also fails (Pass C2); wing-slope
+  luminance-gradient curvature also fails (Pass C4) — three
+  literature-standard detector families across two signal modalities
+  return not-recovered."* The remaining open paths to route recovery
+  are manual sample selection, matched-filter detection, polarization
+  filtering, or new calibration photos — all Phase 10 backlog.
 - **B2** (parhelion-route re-verdict) — required, runs *last* of the
   technical passes so it reads from the post-A3/post-C3 table.
 
@@ -736,11 +822,13 @@ No new load-bearing code, anchor, or route-math blocker was found. The
 technical-pass wave clears with the post-pass taxonomy: parhelion promoted
 on the strict 3-photo subset; CZA coverage-gated; supralateral
 physics-discrimination-gated; tangent detector unresolved under C2.
-**Post-C2 update 2026-05-14:** Pass C2 then landed, with verdict
-**not-recovered** on p2 / p13 / p27 under the wing-radial Lab b\*
-detector with halo-radial subtraction. The re-audit memo's tangent
-disposition is amended via its Post-C2 addendum; the taxonomy
-otherwise survives.
+**Post-C2 + Post-C4 update 2026-05-14:** Passes C2 and C4 both landed,
+each with verdict **not-recovered** on p2 / p13 / p27 (C2 = wing-radial
+Lab b\* with halo-radial subtraction; C4 = wing-slope luminance-gradient
+curvature with circle fit). The re-audit memo's tangent disposition is
+amended via its Post-C2 and Post-C4 addenda; the taxonomy otherwise
+survives. The route now fails under three literature-standard detector
+families across two signal modalities.
 
 **Specialist handoff entry criteria.** Re-audit completes with no new
 load-bearing findings, or with new findings that are bounded to known
