@@ -22,6 +22,10 @@ Image 1 is the label key; images 2, 7, and 13 are the first tuning set.
 | p13 | `(543, 372)` | 211 | 213 / 212 | 6.83° | **Re-anchored 2026-05-13 (Task #52 step 1).** Supersedes rough hand-anchor: sun_x corrected −14 px, offsets refined from assumed-symmetric 220 to measured 213/212, h drops from 17.3° to ~6.8°. p13 is a low-altitude photo, not mid-altitude. Anchor file: `p13-anchor.json`. |
 | p20 | `(1011, 827)` | 455 | 457 / 457 | ~5° | **Task #55 fallback check.** Plausible R22 anchors put the CZA apex above the frame (`y ≈ -83`), so p20 is not CZA-eligible. Anchor file: `p20-anchor.json`. |
 | p27 | `(596, 559)` | 219 | 219 / 219 | ~0.5° | **Task #55 CZA expansion check.** Strong visible CZA, but visual apex `(599,142)` sits below predicted `(596,121)`, giving +21 px y residual under the notes' observed-minus-predicted convention. Anchor file: `p27-anchor.json`. |
+| p22 | `(668, 453)` | 505 | 508 / 507 | ~5.7 deg | **Phase 10 belt-y FF anchor.** Strong bilateral low-sun parhelia; observed belt y `428` lands on the current `-0.05 * R22` rule. Anchor file: `p22-anchor.json`. |
+| p26 | `(464, 204)` | 323 | 332 / 322 | ~9.0 deg | **Phase 10 belt-y FF anchor.** Observed belt y `177` sits ~11 px above the current rule; left/right parhelion y differ by 12 px, so this also carries a parhelic-tilt flag. Anchor file: `p26-anchor.json`. |
+| p30 | `(701, 934)` | 650 | 666 / 659 | ~11.1 deg | **Phase 10 belt-y FF anchor.** Rich low-sun halo reference; observed belt y `899` is ~3 px above the current rule. Side parhelia are edge-supported and vertically broad, so keep the tilt/edge flag attached. Anchor file: `p30-anchor.json`. |
+| p25 | `(489, 186)` | 300 | 305 / 307 | ~11.4 deg | **Phase 10 belt-y robustness anchor.** Observed belt y `176` is about 5 px below the current rule under the script convention; right-side reference is cleaner than the foreground/flare-contaminated left, so keep the single-side confidence caveat attached. Anchor file: `p25-anchor.json`. |
 
 All generated overlays now apply `--parhelic-y-offset-r22 = -0.05`, raising
 the parhelic belt and dagger markers by 5% of the observed 22° halo radius.

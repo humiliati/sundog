@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "name": "p30",
+    "photo": "30.Sundog1.jpg",
+    "anchored": "2026-05-13",
+    "task": "Phase 10 belt-y FF anchor capture",
+    "method": "Central saturated-core centroid, edge-supported side parhelia, and visual confirmation against the full 22-degree halo diagnostic overlay.",
+    "status": "belt-y FF anchor with parhelion-y tilt / edge-support flag; do not treat as a new inversion-route verdict",
+    "inferred_h_deg_from_anchor": 11.15,
+    "note": "The 22-degree halo is strong, but both parhelia are near image edges and the side brightness is vertically broad. Use this as a belt-y FF anchor, with tilt/edge uncertainty recorded."
+  },
+  "sun": [701, 934],
+  "r22": 650,
+  "parhelion": {
+    "left_x": 35,
+    "right_x": 1360,
+    "left": [35, 894],
+    "right": [1360, 913],
+    "left_y": 894,
+    "right_y": 913,
+    "y": 899,
+    "tilt_flag": "left/right y differ by 19 px; side features are edge-supported and vertically broad"
+  },
+  "parhelic_belt_y": 899
+}
