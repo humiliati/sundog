@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "name": "p26",
+    "photo": "26.Martin-MacFarlane.jpg",
+    "anchored": "2026-05-13",
+    "task": "Phase 10 belt-y FF anchor capture",
+    "method": "Central saturated-core centroid, warm-index side-parhelion scan, and visual confirmation against 22-degree halo diagnostic overlay.",
+    "status": "belt-y FF anchor with parhelion-y tilt flag; do not treat as a new inversion-route verdict",
+    "inferred_h_deg_from_anchor": 8.97,
+    "note": "Left and right parhelion y picks differ by 12 px, so this should also feed the candidate parhelic-tilt analysis if that branch opens."
+  },
+  "sun": [464, 204],
+  "r22": 323,
+  "parhelion": {
+    "left_x": 132,
+    "right_x": 786,
+    "left": [132, 183],
+    "right": [786, 171],
+    "left_y": 183,
+    "right_y": 171,
+    "y": 177,
+    "tilt_flag": "left/right y differ by 12 px"
+  },
+  "parhelic_belt_y": 177
+}

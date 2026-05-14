@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "name": "p25",
+    "photo": "25.Karen-Peck.jpg",
+    "anchored": "2026-05-13",
+    "task": "Phase 10 belt-y FF anchor capture",
+    "method": "Central saturated-core centroid, side parhelion warm-index scan, and visual confirmation against 22-degree halo diagnostic overlay.",
+    "status": "belt-y FF robustness anchor with single-side confidence caveat; do not treat as a clean deciding vote without manual review",
+    "inferred_h_deg_from_anchor": 11.36,
+    "note": "Right-side parhelion and belt reference are cleaner than the left. The left warm centroid is pulled downward by a broad/foreground-contaminated feature, so this anchor should retain its caveat in any FF result table."
+  },
+  "sun": [489, 186],
+  "r22": 300,
+  "parhelion": {
+    "left_x": 184,
+    "right_x": 796,
+    "left": [184, 207],
+    "right": [796, 171],
+    "left_y": 207,
+    "right_y": 171,
+    "y": 176,
+    "tilt_flag": "left/right y differ by 36 px; left side is foreground/flare contaminated"
+  },
+  "parhelic_belt_y": 176
+}

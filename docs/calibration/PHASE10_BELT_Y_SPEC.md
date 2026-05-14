@@ -91,11 +91,11 @@ filter to low-h candidates with visible parhelia / belt evidence:
 | --- | ---: | --- | --- |
 | p13 | `(543, 372)` | h ≈ 6.83° | already anchored; baseline +10.4 px residual under test |
 | p27 | `(596, 559)` | h ≈ 0.5° | already anchored; baseline belt residual to compute |
-| p18 | `(269, 108)` | low / mid | new anchor — strong parhelia / belt reference per triage |
-| p22 | `(646, 449)` | low / mid | new anchor — strong parhelia / belt reference |
-| p25 | `(490, 189)` | low / mid | new anchor — parhelia / belt reference |
-| p26 | `(465, 203)` | low / mid | new anchor — parhelia / belt reference |
-| p30 | `(700, 933)` | low | new anchor — rich parhelia / possible outer arcs |
+| p18 | `(269, 108)` | low / mid | new anchor — lower-confidence candidate; small image and fuzzy belt, use after stronger candidates |
+| p22 | `(646, 449)` | low / mid | new anchor — priority candidate; strong bilateral parhelia / belt reference |
+| p25 | `(490, 189)` | low / mid | new anchor — usable parhelia / belt reference, but foreground / flare contamination raises anchor risk |
+| p26 | `(465, 203)` | low / mid | new anchor — priority candidate; strong bilateral parhelia and horizontal belt |
+| p30 | `(700, 933)` | low | new anchor — priority candidate; rich low-sun 22° halo / parhelia reference |
 
 p7 (h = 59.4°) and p2 (h = 18.6°) are out of the low-h regime for the
 test, but p2 may be recorded as an above-regime reference if its belt-y
@@ -104,6 +104,30 @@ residual is computable on the existing anchor.
 Minimum FF coverage: anchors for p13, p27, and at least three of p18 /
 p22 / p25 / p26 / p30. Five anchor cells total at floor; seven if all
 listed candidates anchor cleanly.
+
+Visual sanity-check order, 2026-05-13:
+
+1. Anchor **p22**, **p26**, and **p30** first. These are the cleanest belt
+   candidates by eye.
+2. Anchor **p25** next if one of the first three fails or if broader coverage
+   is cheap.
+3. Anchor **p18** last among the primary set; it is valid to try, but its
+   low resolution and weaker belt make it a lower-confidence cell.
+4. Reserve lane if the first five do not produce at least three new low-h
+   anchors:
+   - **p20** first reserve. It is not CZA-eligible, but it has low-sun
+     parhelia / belt evidence; the right side is contaminated by watermark
+     and flare, so record single-side or asymmetric confidence if needed.
+   - **p19** second reserve. The CZA interpretation was demoted, but the
+     R22 ~= 270 px / h ~= 11° provisional anchor makes it a usable low-sun
+     halo-separation and belt candidate if the treeline / edge parhelia can
+     be measured cleanly.
+   - **p28** emergency reserve only; low resolution and haze make it weaker
+     than p20 / p19.
+
+If a candidate anchor yields `h > 20°`, drop it from the low-h FF set and
+pull the next reserve. The result note may still record the photo as an
+above-regime reference, but it does not count toward FF1/FF2/FF3 coverage.
 
 ### 4.2 Per-photo capture
 

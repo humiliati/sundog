@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "name": "p22",
+    "photo": "22.i553d1heikh61.jpg",
+    "anchored": "2026-05-13",
+    "task": "Phase 10 belt-y FF anchor capture",
+    "method": "Central saturated-core centroid, warm-index parhelion centroids, and visual confirmation against 22-degree halo diagnostic overlay.",
+    "status": "belt-y FF anchor; do not treat as a new inversion-route verdict",
+    "inferred_h_deg_from_anchor": 5.69,
+    "note": "Strong bilateral low-sun parhelia and a clean horizontal belt. Current -0.05*R22 belt rule lands directly on the observed belt."
+  },
+  "sun": [668, 453],
+  "r22": 505,
+  "parhelion": {
+    "left_x": 160,
+    "right_x": 1175,
+    "left": [160, 427],
+    "right": [1175, 429],
+    "left_y": 427,
+    "right_y": 429,
+    "y": 428
+  },
+  "parhelic_belt_y": 428
+}
