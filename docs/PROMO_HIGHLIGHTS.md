@@ -612,8 +612,14 @@ grounds (the h-signal across the route's eligibility window is below
 visual-edge measurement noise even with perfect coverage); and
 **tangent-arc curvature** on **detection-protocol tooling** grounds
 (column-peak detection fails on the post-C1 sampled set with three
-distinct degeneracy modes; a wing-based or Lab b\* ridge detector has
-not been built, so the route is filed as Unresolved Open Question).
+distinct degeneracy modes; Pass C2 landed 2026-05-14 — a wing-radial
+Lab b\* ridge detector with 22°-halo-radial-profile subtraction
+(`scripts/tangent_detector.py`) was built and ran on p2 / p13 / p27,
+returning not-recovered on all three under a pre-registered 8 / 24
+coherent-sample gate. Tangent route fails detection under two
+literature-standard detector families; tooling-conditional narrows to
+non-literature-standard designs (wing-slope curvature, matched-filter,
+polarization filtering), filed as Phase 10 backlog).
 This is an atlas-side / single-handle receipt, not a new universal
 proof surface: the shape we observed is the same forward-rich /
 inverse-narrow asymmetry the mesa side exhibits in-vitro, now at

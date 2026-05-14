@@ -119,11 +119,16 @@ authoritative.
    fixed atlas and the re-classified p27 (A3).
 5. **Pass C1.** **Landed 2026-05-14.** Drop p7 from tangent-arc eligibility per the
    circumscribed-halo regime literature.
-6. **Pass C2 (optional) → C3 (gated).** **Open.** Build the wing-based /
-   chromaticity-based tangent detector and re-test p2 / p13 only if
-   the team wants to settle tangent before specialist handoff. If C2
-   is skipped, the tangent detector is marked **Unresolved Open
-   Question** in the handoff and the route verdict is not edited.
+6. **Pass C2 → C3.** **Landed 2026-05-14.** Built the wing-azimuth-offset
+   Lab b\* ridge detector with 22°-halo-radial-profile subtraction
+   (`scripts/tangent_detector.py`, regression runner
+   `scripts/test_tangent_detector.py`) and ran it on the post-C1 sampled
+   set (p2 / p13 / p27): route **not-recovered** on all three under a
+   pre-registered 8 / 24 coherent-sample gate. C3 verdict edit landed
+   in same wave: tangent route fails detection under **two**
+   literature-standard detector families; tooling-conditional framing
+   narrows to non-literature-standard designs (wing-slope curvature,
+   matched-filter, polarization), filed as Phase 10 backlog.
 7. **Pass B2.** **Landed 2026-05-14.** Re-derive the parhelion verdict against the
    now-finalized eligibility set. Runs last of the technical passes
    so the verdict reads from the post-A3 / post-C3 table.
@@ -465,9 +470,15 @@ Downstream public-framing surfaces already landed the matching hedges
 in §6 steps 2–4; B2's substantive content matches what those hedges
 anticipated. **B2 closes the technical-pass wave.** All required
 re-audit-gate passes (§6 hedges, B1, A1a, A1b, A2, A3, C1, B2) are
-now landed; C2 was skipped per the recommended execution order and
-the tangent-arc detector is filed as Unresolved Open Question for the
-specialist (memo §4.8).
+now landed. Pass C2 then landed in the same 2026-05-14 wave: the
+wing-radial Lab b\* ridge detector with 22°-halo-radial-profile
+subtraction (`scripts/tangent_detector.py`) ran on the post-C1
+sampled set (p2 / p13 / p27) and returned **not-recovered** on all
+three under a pre-registered 8 / 24 coherent-sample gate. The
+tangent-route open question narrows from "Unresolved Open Question for
+a wing-based / Lab b\* detector" to "non-literature-standard detector
+designs (wing-slope curvature, matched-filter, polarization filtering)
+might recover the route" — filed as Phase 10 backlog.
 
 **Goal.** Re-derive the parhelion promotion verdict against the now-honest
 eligibility set. The audit predicts the verdict survives but with
@@ -503,8 +514,11 @@ circumscribed-halo regime, not an upper-tangent regime. The historical
 column-peak result remains as a cautionary sample, but no longer counts
 as a tangent-route residual. The post-C1 tangent set is p2 / p13 / p27:
 column-peak detection still fails there, so the route stays blocked, but
-the verdict is now explicitly **protocol-conditional** pending C2 rather
-than a class-level negative. A circumscribed-halo ellipticity → h test is
+the verdict was **protocol-conditional** pending C2 rather than a
+class-level negative. *(Post-C2 update 2026-05-14: Pass C2 ran and also
+returned not-recovered; the verdict is now "fails under two
+literature-standard detectors", with the tooling-conditional framing
+narrowing to non-literature-standard designs. See Pass C2 entry below.)* A circumscribed-halo ellipticity → h test is
 left as a Phase 10 backlog idea, not a deliverable.
 
 **Goal.** Remove the literature-level primitive misclassification.
@@ -528,6 +542,26 @@ left as a Phase 10 backlog idea, not a deliverable.
   misclassification at the top.
 
 ### Finding C — Pass C2: Wing-based / chromaticity-based tangent detector spike
+
+**Status: landed 2026-05-14.** Detector module at
+`scripts/tangent_detector.py`, regression runner at
+`scripts/test_tangent_detector.py`, captured run output at
+`docs/calibration/PASS_C2_DETECTOR_OUTPUT.txt`, full receipt under
+"### Pass C2 Update" in
+[`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`](calibration/RICH_DISPLAY_OVERLAY_NOTES.md).
+**Verdict: not-recovered on all three photos in the post-C1 sampled
+set.** Coherent ridge samples (residual Lab b\* ≥ 3.0 AND radial offset
+≤ ±10 px from predicted tangent locus) are 0-2 / ~24 per wing on every
+photo — well below the pre-registered 8 / 24 minimum. The negative
+survives the halo-radial subtraction step (median offsets ranged −7.5
+to +10.5 px, not boundary-pinned), so the failure cannot be attributed
+to 22°-halo-ridge contamination of the detection window. C3 verdict
+landed in the same wave (see below). The "tooling-conditional"
+framing now narrows from "any wing-based or Lab b\* detector might
+work" to "non-literature-standard detector designs (wing-slope
+geometric curvature, matched-filter against parameterized arc shape,
+polarization-channel filtering) might recover the route" — filed as
+Phase 10 backlog ideas, not Phase 10 deliverables.
 
 **Goal.** Build the literature-standard detector and re-test p2 and
 p13 (the two photos the audit flags as protocol-artifact failures
@@ -556,6 +590,24 @@ under column-peak). This is the "tooling vs. physics" question.
   the new detector.
 
 ### Finding C — Pass C3: Tangent-arc route re-verdict
+
+**Status: landed 2026-05-14.** Pass C2 result was **not-recovered** on
+p2 / p13 / p27 under the wing-radial Lab b\* ridge detector with
+22°-halo-radial-profile subtraction. The verdict landed across coupled
+surfaces in the same wave: `RICH_DISPLAY_OVERLAY_NOTES.md` route-residual
+table + Promotion Verdict table, `SUNDOG_V_GEOMETRY.md` Phase 10
+closeout headline table + post-audit-state block,
+`PHASE10_OPTICAL_AUDIT_HANDOFF.md` verdict table,
+`SUNDOG_V_GRAVITY.md` forward/inverse asymmetry receipt,
+`MESA_CROSSOVER_NOTE.md` Geometry Phase 10 closeout subsection. The
+route is **not** classified as class-level negative — the negative is
+specific to the two literature-standard detector families tested
+(column-peak intensity at sun meridian; wing-radial Lab b\* with
+halo-radial subtraction). Non-literature-standard detector designs
+(wing-slope geometric curvature, matched-filter, polarization
+filtering) remain candidates but are filed as Phase 10 backlog.
+The single-handle verdict survives unchanged: parhelion-offset remains
+the sole promoted inverse handle on the strict 3-photo subset.
 
 **Goal.** Decide whether the tangent-arc route is *class-level
 negative*, *tooling-conditional negative*, or *recovered* after Pass
@@ -654,19 +706,21 @@ re-audit" below are committed:
 - **A3** (CZA-route re-verdict) — required, gated on A1b and A2.
 - **C1** (drop p7 from tangent eligibility) — required, **landed
   2026-05-14**.
-- **C2** (new tangent detector) — *optional*. If C2 has not landed,
-  the re-audit and the new specialist handoff both explicitly mark
-  the tangent detector as **Unresolved Open Question** rather than
-  asserting a class-level tangent verdict. The receipt language must
-  cap at *"column-peak fails on the post-C1 sampled set (p2 / p13 /
-  p27); p7 is circumscribed-halo regime; a literature-standard
-  wing-based or Lab b\*-channel ridge detector has not been built"*
-  per memo §4.8. The specialist is invited to weigh in on whether
-  building such a detector is worthwhile before the route is called
-  dead.
-- **C3** (tangent-arc re-verdict) — gated on C2. If C2 is skipped,
-  C3 is not a re-audit blocker; the unresolved-open-question marker
-  in C2's disposition stands in for the verdict edit.
+- **C2** (new tangent detector) — *landed 2026-05-14*. Wing-radial
+  Lab b\* ridge detector with 22°-halo-radial-profile subtraction
+  (`scripts/tangent_detector.py`) ran on the post-C1 sampled set
+  (p2 / p13 / p27) and did **not** recover the route. The receipt
+  language now resolves the §4.8 template to: *"column-peak fails on
+  p2 / p13 / p27; a literature-standard wing-based Lab b\* ridge
+  detector with 22°-halo-radial-profile subtraction does not recover
+  the route on p2 / p13 / p27 either."* Non-literature-standard
+  detector designs (wing-slope geometric curvature, matched-filter,
+  polarization filtering) are filed as Phase 10 backlog.
+- **C3** (tangent-arc re-verdict) — *landed 2026-05-14*, gated on
+  C2's not-recovered outcome. Verdict edits propagated to the coupled
+  surfaces in the same wave (RICH_DISPLAY_OVERLAY_NOTES.md route-residual
+  + Promotion tables, SUNDOG_V_GEOMETRY.md Phase 10 closeout, handoff
+  verdict table, gravity ledger, mesa crossover note).
 - **B2** (parhelion-route re-verdict) — required, runs *last* of the
   technical passes so it reads from the post-A3/post-C3 table.
 
@@ -682,6 +736,11 @@ No new load-bearing code, anchor, or route-math blocker was found. The
 technical-pass wave clears with the post-pass taxonomy: parhelion promoted
 on the strict 3-photo subset; CZA coverage-gated; supralateral
 physics-discrimination-gated; tangent detector unresolved under C2.
+**Post-C2 update 2026-05-14:** Pass C2 then landed, with verdict
+**not-recovered** on p2 / p13 / p27 under the wing-radial Lab b\*
+detector with halo-radial subtraction. The re-audit memo's tangent
+disposition is amended via its Post-C2 addendum; the taxonomy
+otherwise survives.
 
 **Specialist handoff entry criteria.** Re-audit completes with no new
 load-bearing findings, or with new findings that are bounded to known

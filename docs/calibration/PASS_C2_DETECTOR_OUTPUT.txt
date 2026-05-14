@@ -1,0 +1,43 @@
+=== Spec geometry check ===
+  p2: sun=(567,496) R22=182 apex_y=314; left wing x range [391,520]; right wing x range [614,743]
+  p13: sun=(543,372) R22=211 apex_y=161; left wing x range [339,488]; right wing x range [598,747]
+  p27: sun=(596,559) R22=219 apex_y=340; left wing x range [384,539]; right wing x range [653,808]
+  Wing azimuth window: [15.0°, 75.0°], 24 samples per wing.
+  PASS
+
+=== Detector run on post-C1 eligibility set ===
+
+--- p2 (h=18.6°) ---
+2.Photometeor-jeff_mod_red.jpg  sun=(567, 496)  R22=182
+  left  wing: verdict=ridge-absent   coherent=2/24  (out-of-frame=0)
+           amplitude(b*) median=+1.01  max=+7.83
+           offset(px)    median=-7.50  abs-median=15.00
+  right wing: verdict=ridge-absent   coherent=2/24  (out-of-frame=0)
+           amplitude(b*) median=-0.45  max=+7.78
+           offset(px)    median=+6.00  abs-median=13.00
+  PHOTO VERDICT: not-recovered
+
+--- p13 (h=6.83°) ---
+13.480859565_17934474635991868_323320248088719839_n.jpg  sun=(543, 372)  R22=211
+  left  wing: verdict=ridge-absent   coherent=1/22  (out-of-frame=2)
+           amplitude(b*) median=-4.00  max=+13.42
+           offset(px)    median=+10.50  abs-median=13.00
+  right wing: verdict=ridge-absent   coherent=1/22  (out-of-frame=2)
+           amplitude(b*) median=-7.01  max=+12.77
+           offset(px)    median=+9.50  abs-median=15.00
+  PHOTO VERDICT: not-recovered
+
+--- p27 (h=0.5°) ---
+27.Zzhau2Uiospj37zhwHEr4D-1200-80.jpg.webp  sun=(596, 559)  R22=219
+  left  wing: verdict=ridge-absent   coherent=0/24  (out-of-frame=0)
+           amplitude(b*) median=+0.33  max=+3.64
+           offset(px)    median=-3.00  abs-median=11.00
+  right wing: verdict=ridge-absent   coherent=2/24  (out-of-frame=0)
+           amplitude(b*) median=-5.13  max=+3.91
+           offset(px)    median=-10.00  abs-median=11.00
+  PHOTO VERDICT: not-recovered
+
+=== Per-photo verdict roll-up ===
+  p2: not-recovered
+  p13: not-recovered
+  p27: not-recovered

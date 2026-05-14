@@ -207,7 +207,10 @@ new methodological vocabulary worth carrying back to mesa.
 > from this file in favor of **three structurally different failure
 > modes**: dataset/aspect-ratio coverage (CZA), atmospheric-physics
 > discrimination (supralateral), and detection-protocol tooling
-> (tangent under column-peak; tooling-conditional pending C2). The
+> (tangent under two literature-standard detectors after Pass C2
+> landed 2026-05-14: column-peak intensity AND wing-radial Lab b\*
+> with halo-radial subtraction; tooling-conditional narrows to
+> non-literature-standard designs). The
 > two-substrate field-shape *pattern* survives unchanged; the inverse
 > direction is narrower than the pre-audit framing implied, in
 > directions that vary by route. The cross-substrate transfer of the
@@ -231,7 +234,7 @@ gates.
 | Parhelion offset → h | **promoted (post-hedged)** | 3-photo strict eligibility: p2 (h = 18.6°), p7 (h = 59.4°), p13 (h = 6.83°). Unambiguous bilateral peaks, valid geometry, ring-fit R22, non-trivial discrimination (p2, p7) or low-lever-but-supported (p13). |
 | CZA apex → h | **fails coverage gate** | **dataset / aspect-ratio.** After Pass A1b fixed the atlas formula bug and Pass A2 re-classified p27's chromatic feature as 46° halo top / supralateral merger, p2 is the only in-window photo with an independent CZA residual (+1.3 px). Every other anchored photo is either past the h = 32.2° disappearance threshold or has the literature CZA apex predicted above the top of the frame. |
 | Supralateral → h | **fails structural-discrimination gate** | **atmospheric physics.** Even at the two-photo eligibility threshold (p2 eligible-unmeasured + p27 measured post-A2), the predicted h-spread is ~0.3° (~2.5 px at p2 R22), below the typical 5–10 px visual-edge measurement noise on a chromatic-broadened halo arc. The route would not be a useful inverse handle even with perfect coverage. |
-| Tangent-arc curvature → h | **detection gate under column-peak; class-level verdict pending C2** | **tooling protocol.** Pass C1 dropped p7 from upper-tangent eligibility (h = 59.4° is circumscribed-halo regime per atoptics.co.uk and dewbow.co.uk). Column-peak detection still fails on the post-C1 sampled set (p2, p13, p27) with three distinct degeneracy modes; the audit memo recommends a wing-based or Lab b\* ridge detector. Filed as Unresolved Open Question for the specialist; C2 was the optional pass that would have tested this. |
+| Tangent-arc curvature → h | **fails under two literature-standard detectors** *(Pass C1 + Pass C2 landed 2026-05-14)* | **tooling protocol.** Pass C1 dropped p7 (circumscribed-halo regime at h = 59.4°). Pass C2 built the wing-radial Lab b\* ridge detector with 22°-halo-radial-profile subtraction recommended by audit memo §4.8 / Persona 1 §4 (`scripts/tangent_detector.py`) and ran it on p2 / p13 / p27: not-recovered on all three under a pre-registered 8 / 24 coherent-sample gate. The halo-radial subtraction explicitly addresses Persona 1's methodological recommendation, so the failure is not detection-window contamination. The "tooling-conditional" framing narrows to non-literature-standard detector designs (wing-slope geometric curvature, matched-filter, polarization filtering), filed as Phase 10 backlog. |
 
 The careful taxonomy still matters, but the *type* of failure has
 sharpened. The pre-audit reading "CZA-apex reaches residual
@@ -298,9 +301,15 @@ Post-pass + post-re-audit, the three open questions resolve as follows:
 2. **Tangent-curvature tooling — wing-based / Lab b\* detector.** The
    campaign's optional Pass C2 was the pass that would have built and
    tested this; C2 was skipped per the recommended execution order.
-   The tangent-route detection-gate failure remains as a
-   *protocol-conditional* negative, filed as Unresolved Open Question
-   in the specialist handoff (memo §4.8).
+   Pass C2 landed 2026-05-14: the wing-radial Lab b\* ridge detector
+   with 22°-halo-radial-profile subtraction was built
+   (`scripts/tangent_detector.py`) and ran on p2 / p13 / p27 —
+   **not-recovered** on all three under a pre-registered 8 / 24
+   coherent-sample gate. The route fails detection under two
+   literature-standard detector families; the open question narrows
+   to non-literature-standard detector designs (wing-slope curvature,
+   matched-filter, polarization filtering), filed as Phase 10 backlog
+   rather than Unresolved Open Question.
 3. **Parhelic-belt-y replication.** Closed by Phase 10-FF
    ([`docs/calibration/PHASE10_BELT_Y_RESULTS.md`](calibration/PHASE10_BELT_Y_RESULTS.md)):
    p13's residual is photo-specific; the belt-y watch-list flag is
@@ -325,8 +334,11 @@ The post-audit framing:
 > tested routes fail at three structurally different failure modes:
 > dataset / aspect-ratio coverage (CZA), atmospheric-physics
 > discrimination (supralateral), and detection-protocol tooling
-> (tangent; tooling-conditional pending a wing-based or Lab b\*
-> detector). None of the three implicates the atlas inversion math.
+> (tangent; fails under two literature-standard detectors after Pass
+> C2 landed 2026-05-14 — column-peak intensity AND wing-radial Lab b\*
+> with halo-radial subtraction; tooling-conditional narrows to
+> non-literature-standard detector designs). None of the three
+> implicates the atlas inversion math.
 > The mesa cliff is the same forward-rich / inverse-narrow asymmetric
 > field-shape pattern in the controller substrate.
 
