@@ -1,0 +1,97 @@
+{
+  "name": "phase10-belt-y",
+  "date": "2026-05-13",
+  "spec": "docs/calibration/PHASE10_BELT_Y_SPEC.md",
+  "residual_convention": "observed_parhelic_belt_y_px - predicted_belt_y_px",
+  "prediction_rule": {
+    "predicted_belt_y_px": "sun_y + (-0.05 * R22_px)",
+    "pattern_threshold_px": 5,
+    "primitive_threshold_px": 12,
+    "spearman_neutral_band": [-0.3, 0.3]
+  },
+  "anchored_photo_set": ["p27", "p22", "p13", "p26", "p30", "p25"],
+  "classifications": {
+    "FF1": {
+      "status": "falsified",
+      "label": "photo-specific / no low-h belt-y pattern",
+      "reason": "Three photos meet |residual| >= 5 px, but the signs disagree: p13 and p26 are negative, p25 is positive. Spearman rho is also inside the neutral band."
+    },
+    "FF2": {
+      "status": "not_gated",
+      "label": "altitude dependence not evaluated",
+      "reason": "FF2 only triggers if FF1 confirms."
+    },
+    "FF3": {
+      "status": "passes",
+      "label": "no primitive-threshold breach",
+      "reason": "No anchored low-h photo has |belt_y_residual_px| >= 12 px."
+    }
+  },
+  "spearman_rho_h_vs_residual": 0.08571428571428572,
+  "residual_threshold_hits": {
+    "absolute_residual_at_least_5_px": ["p13", "p26", "p25"],
+    "positive_at_least_5_px": ["p25"],
+    "negative_at_most_minus_5_px": ["p13", "p26"],
+    "absolute_residual_at_least_12_px": []
+  },
+  "caveats": [
+    "p25 is a caveated robustness anchor: the right-side reference is cleaner than the foreground/flare-contaminated left side.",
+    "p26 and p30 carry parhelic-tilt flags because left/right parhelion y differs by at least 5 px."
+  ],
+  "rows": [
+    {
+      "photo": "p27",
+      "h_inferred": 0.00,
+      "R22_px": 219.0,
+      "predicted_belt_y_px": 548.0,
+      "observed_belt_y_px": 548.0,
+      "belt_y_residual_px": -0.0,
+      "belt_y_residual_pct_R22": -0.0002
+    },
+    {
+      "photo": "p22",
+      "h_inferred": 5.69,
+      "R22_px": 505.0,
+      "predicted_belt_y_px": 427.8,
+      "observed_belt_y_px": 428.0,
+      "belt_y_residual_px": 0.2,
+      "belt_y_residual_pct_R22": 0.0005
+    },
+    {
+      "photo": "p13",
+      "h_inferred": 6.81,
+      "R22_px": 211.0,
+      "predicted_belt_y_px": 361.4,
+      "observed_belt_y_px": 351.0,
+      "belt_y_residual_px": -10.4,
+      "belt_y_residual_pct_R22": -0.0495
+    },
+    {
+      "photo": "p26",
+      "h_inferred": 8.97,
+      "R22_px": 323.0,
+      "predicted_belt_y_px": 187.8,
+      "observed_belt_y_px": 177.0,
+      "belt_y_residual_px": -10.8,
+      "belt_y_residual_pct_R22": -0.0336
+    },
+    {
+      "photo": "p30",
+      "h_inferred": 11.15,
+      "R22_px": 650.0,
+      "predicted_belt_y_px": 901.5,
+      "observed_belt_y_px": 899.0,
+      "belt_y_residual_px": -2.5,
+      "belt_y_residual_pct_R22": -0.0038
+    },
+    {
+      "photo": "p25",
+      "h_inferred": 11.36,
+      "R22_px": 300.0,
+      "predicted_belt_y_px": 171.0,
+      "observed_belt_y_px": 176.0,
+      "belt_y_residual_px": 5.0,
+      "belt_y_residual_pct_R22": 0.0167
+    }
+  ]
+}

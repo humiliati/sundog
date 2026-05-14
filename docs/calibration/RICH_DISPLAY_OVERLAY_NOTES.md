@@ -25,15 +25,28 @@ Image 1 is the label key; images 2, 7, and 13 are the first tuning set.
 | p22 | `(668, 453)` | 505 | 508 / 507 | ~5.7 deg | **Phase 10 belt-y FF anchor.** Strong bilateral low-sun parhelia; observed belt y `428` lands on the current `-0.05 * R22` rule. Anchor file: `p22-anchor.json`. |
 | p26 | `(464, 204)` | 323 | 332 / 322 | ~9.0 deg | **Phase 10 belt-y FF anchor.** Observed belt y `177` sits ~11 px above the current rule; left/right parhelion y differ by 12 px, so this also carries a parhelic-tilt flag. Anchor file: `p26-anchor.json`. |
 | p30 | `(701, 934)` | 650 | 666 / 659 | ~11.1 deg | **Phase 10 belt-y FF anchor.** Rich low-sun halo reference; observed belt y `899` is ~3 px above the current rule. Side parhelia are edge-supported and vertically broad, so keep the tilt/edge flag attached. Anchor file: `p30-anchor.json`. |
-| p25 | `(489, 186)` | 300 | 305 / 307 | ~11.4 deg | **Phase 10 belt-y robustness anchor.** Observed belt y `176` is about 5 px below the current rule under the script convention; right-side reference is cleaner than the foreground/flare-contaminated left, so keep the single-side confidence caveat attached. Anchor file: `p25-anchor.json`. |
+| p25 | `(489, 186)` | 300 | 305 / 307 | ~11.4 deg | **Phase 10 belt-y robustness anchor.** Observed belt y `176` is about 5 px below the predicted line in image coordinates (script residual -5 px; FF residual +5 px); right-side reference is cleaner than the foreground/flare-contaminated left, so keep the single-side confidence caveat attached. Anchor file: `p25-anchor.json`. |
 
 All generated overlays now apply `--parhelic-y-offset-r22 = -0.05`, raising
 the parhelic belt and dagger markers by 5% of the observed 22° halo radius.
 This fixes the shared vertical belt bias without changing the 22°/46° halo
 registration. Track that belt-height residual separately from the
 parhelion-offset inversion route: p13's committed anchor clears the x-offset
-route, but its JSON `parhelion.y = 351` still leaves a +10.4 px belt-y
-residual against the current `-0.05 * R22` overlay rule.
+route, but its JSON `parhelion.y = 351` left a single-photo belt-y
+watch-list residual against the current `-0.05 * R22` overlay rule
+(+10.4 px in the script's predicted-minus-observed convention; -10.4 px
+in the FF observed-minus-predicted convention).
+
+## Phase 10-FF Belt-Y Verdict
+
+Result note: [`PHASE10_BELT_Y_RESULTS.md`](PHASE10_BELT_Y_RESULTS.md)
+
+The belt-y watch-list flag is retired. The Phase 10-FF replication set
+(p27, p22, p13, p26, p30, p25) falsified FF1: three photos reached
+`|residual| >= 5 px`, but the signs disagreed and Spearman
+`rho(h, residual)` was +0.086. FF2 was not gated. FF3 passed: no low-h
+anchor reached the 12 px primitive threshold. Do not promote a low-h
+parhelic-belt correction from p13 alone.
 
 ## Phase 10 Measurement Pre-Registration
 
@@ -104,7 +117,7 @@ fit makes every route good.
 | CZA apex → sun altitude / visibility | x: −6.7 px, **y: −19.3 px (−10.6% R₂₂)** | p7 not applicable (h = 59.4° > 32.2° cutoff); p13 cropped (predicted apex y = −50) | p27: x +3 px, **y +21 px (+9.6% R₂₂)**; p19 / p20 cropped | **fails residual gate on expanded set** | Task #55 corrects the earlier interpretation: p2 and p27 both exceed the 8 px / 0.04*R22 route threshold, but their signs are opposite. This is not a stable direction-and-magnitude atlas bias. It is a clean negative for CZA-apex inversion promotion and a weaker Mesa #3 receipt: parhelion-offset remains ~0-1 px while CZA-apex is photo-specific and unreliable. Anchors: `p2-anchor.json`, `p27-anchor.json`, `p20-anchor.json`. |
 | Tangent-arc curvature → sun altitude | **detection-degenerate** (fuses with halo top at h=18.6°) | p7 (h=59.4°): column-peak grabs halo outer edge not broad tangent; p13 (h=6.83°): chromatic-haze contamination, no clean smile to fit | p27 (h=0.5°): merges with CZA / sun bloom at horizon transition; p20 not measured | **fails detection across all 4 eligible photos** (v3.8 partition: detection-degenerate, not residual-bounded) | Task #54 first pass 2026-05-13 found the route fails column-peak detection on every photo in the calibration set, with a *different* failure mode at each altitude. Not a residual-gate failure — the residual was never measurable. The earlier 'altitude-regime validity window' framing was too generous; the route's degeneracy is photo-and-feature-specific across the entire altitude range. Promotion blocked until a different detection method (edge-based gradient tracking, template matching, or manual sampling) is built and verified. |
 | Supralateral position → sun altitude | _measurement pending_ | p7 cropped; p13 not visible | p27 candidate; p20 weak/cropped | pending expansion | p27 may reopen supralateral coverage, but no residual has been measured. Keep the previous fail verdict for the original p2/p7/p13 set; do not promote the expanded route without p27 anchors. |
-| Parhelic-belt y residual (primitive, not route) | not separately measured (Phase 2 set only had x-residuals) | p7 not applicable; p13 +10.4 px (4.9% R₂₂) on new anchor | p20 / p27 not scored for belt promotion | **tracked separately** (below 12 px primitive threshold; under probation watch) | This is a *primitive vertical placement* residual, not a route residual. Comes from the shared `--parhelic-y-offset-r22 = -0.05` setting applied uniformly across the calibration set. At p13's corrected h ~= 6.8°, the parhelion peak sits ~10 px above the predicted belt y; below the 12 px primitive cutoff but worth re-checking after p2 step-2 anchors land, since the global offset may want per-altitude refinement at low h. |
+| Parhelic-belt y residual (primitive, not route) | not separately measured (Phase 2 set only had x-residuals) | p7 not applicable; p13 -10.4 px under the FF observed-minus-predicted convention | p27 -0.0 px; p22 +0.2 px; p26 -10.8 px; p30 -2.5 px; p25 +5.0 px (caveated) | **watch-list retired 2026-05-13** (FF1 falsified; FF3 passed) | Phase 10-FF tested the shared `--parhelic-y-offset-r22 = -0.05` rule across six low-h anchors. FF1 falsified: the >=5 px residuals do not share a sign (p13 / p26 negative, p25 positive) and Spearman rho is +0.086. FF3 passed: no photo breaches the 12 px primitive threshold. Record p13 as photo-specific / anchor-local, not a promoted low-h correction. See `PHASE10_BELT_Y_RESULTS.md`. |
 
 ## Tangent-Curvature v3.8 Receipt *(updated 2026-05-13)*
 
