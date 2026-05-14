@@ -4,8 +4,11 @@ Phase 10 of `docs/SUNDOG_V_GEOMETRY.md` uses these notes to keep the
 optional vocabulary layers separate from the calibrated parhelion core.
 Image 1 is the label key; images 2, 7, and 13 are the first tuning set.
 
-> **Post-audit state, 2026-05-13.** This file is in
-> mid-campaign rewrite per
+> **Post-audit state, 2026-05-14.** Required Phase 10 attack passes
+> have landed and the re-audit gate is recorded in
+> [`PHASE10_OPTICAL_REAUDIT_MEMO.md`](PHASE10_OPTICAL_REAUDIT_MEMO.md).
+> This file now carries the post-pass route verdicts; the specialist
+> handoff and public-framing surfaces still need their ratchet pass per
 > [`../PHASE10_ATTACK_ROADMAP.md`](../PHASE10_ATTACK_ROADMAP.md).
 >
 > - **Pass B1 landed 2026-05-13** (first technical gate). The
@@ -21,31 +24,23 @@ Image 1 is the label key; images 2, 7, and 13 are the first tuning set.
 >   ([`PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
 >   §2 items 4–7 and §2 item 6.
 > - **Phase 10 Promotion Verdict and Single-handle closeout below
->   are pre-audit.** They are *pending re-derivation* per the
->   attack roadmap's Pass B2 (parhelion route), Pass A3 (CZA
->   route), and Pass C3 (tangent-arc route). Read the closeout as
->   the state of the verdict *before* the audit; the verdict
->   language is hedge-required until the re-audit gate clears
->   (attack roadmap §5).
-> - **CZA-route residual table entries below are formula-bug
->   contaminated.** The atlas hardcodes CZA apex as `sun_y − R46`
->   at `scripts/overlay_calibrate.py:381–384`, geometrically
->   correct only at h ≈ 22°. Pass A1a (formula spec + literature
->   regression test) and Pass A1b (atlas patch) are the next
->   technical work; Pass A2 (p27 re-classification as supralateral /
->   46° halo top, not CZA) and Pass A3 (CZA-route re-verdict)
->   follow.
-> - **Tangent-arc detection-degenerate verdict below applies the
->   wrong primitive at p7.** p7 (h = 59.4°) is in the
->   circumscribed-halo regime per atoptics.co.uk and dewbow.co.uk,
->   not the upper-tangent regime. Pass C1 drops p7 from
->   tangent-arc eligibility; Pass C2 (optional) builds a
->   wing-based / Lab b\* detector before the route is called dead.
+>   are post-pass.** Pass A3 re-derived the CZA and supralateral
+>   verdicts, Pass C1 removed p7 from upper-tangent eligibility,
+>   and Pass B2 re-derived the parhelion route against the honest
+>   eligibility set.
+> - **The CZA-route residual table has been repaired.** A1a/A1b
+>   replaced the legacy `sun_y - R46` hardcode with the literature
+>   CZA expression; p2 now has a +1.3 px y residual, and p27 is no
+>   longer CZA evidence.
+> - **The tangent verdict remains detector-bounded.** p7 is removed
+>   as circumscribed-halo regime; column-peak still fails on p2 /
+>   p13 / p27, and optional Pass C2 remains the open tooling
+>   question.
 >
 > Do not export the closeout language below to public-framing
 > surfaces (gravity ledger, mesa crossover note, homepage elevator
-> pitch) without the post-audit hedges already landed there per
-> attack roadmap §6.
+> pitch) until the post-re-audit ratchet pass has rewritten those
+> surfaces from the re-audit memo.
 
 ## Artifacts
 
@@ -159,10 +154,10 @@ fit makes every route good.
 > the new `sec(h) − 1` (geometric lever), `R22-source`, and
 > `geometric_validity` columns required by the audit memo §2 items 4–7
 > — lives in the **Parhelion-Route Per-Photo Eligibility** sub-table
-> immediately below this table. The summary row's "promoted" status
-> is *pending re-derivation in Pass B2* against the now-honest
-> eligibility set; do not read the rolled-up row as the audit-survived
-> verdict on its own.
+> immediately below this table. Pass B2 has now re-derived the row
+> against that honest eligibility set; read the rolled-up row together
+> with the per-photo table rather than as a free-standing "all photos"
+> claim.
 
 | route | p2 residual | p7 / p13 residual | expansion residuals | promotion status | note |
 | --- | ---: | ---: | ---: | --- | --- |
@@ -711,9 +706,9 @@ Concrete output of the Phase 10 gate, in the form the roadmap asks for:
 ### Single-handle closeout
 
 The Phase 10 gate closed 2026-05-13 and was post-audit hedged by Passes
-B1, A1a/A1b, A2, A3, and C1. **One inversion route remains promoted
-pending B2 re-derivation; the other candidate inversion routes fail or
-remain blocked for distinct, now better-named reasons.**
+B1, A1a/A1b, A2, A3, C1, and B2. **One inversion route remains promoted;
+the other candidate inversion routes fail or remain blocked for distinct,
+now better-named reasons.**
 
 | route | gate outcome | failure layer |
 | --- | --- | --- |
@@ -726,8 +721,8 @@ The old "three independent failure layers" language is retired. The
 post-audit taxonomy is more precise: CZA is dataset/aspect-ratio
 coverage-limited, supralateral is physics-discrimination-limited,
 tangent is detector-limited under the current column-peak protocol, and
-parhelion offset is the only currently promoted inverse handle, pending
-B2's final wording.
+parhelion offset is the only currently promoted inverse handle, with B2's
+final wording now landed.
 
 Phase 11 can proceed against the visibility-promoted vocabulary now.
 Three open questions are filed but not blocking:
