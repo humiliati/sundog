@@ -52,7 +52,7 @@ After the post-re-audit campaign, the verdict is:
 | Parhelion offset → h | **promoted (post-hedged)** | 3-photo strict eligibility (p2 h = 18.6°, p7 h = 59.4°, p13 h = 6.83°): unambiguous bilateral peaks, valid geometry, ring-fit R22, non-trivial discrimination (for p2, p7) or low-lever-but-supported (for p13) |
 | CZA apex → h | **fails coverage gate** | dataset / aspect-ratio: only p2 is in-window with an independent residual (+1.3 px under the post-A1b literature formula); other anchored photos are either past the CZA disappearance threshold (h > 32.2°) or have the literature CZA apex predicted above the top of the frame |
 | Supralateral position → h | **fails structural-discrimination gate** | atmospheric physics: supralateral angular distance from sun varies only ~0.5° across h = 0–22°, below the typical 5–10 px visual-edge measurement noise even at perfect coverage |
-| Tangent-arc curvature → h | **detection gate under column-peak**; class-level verdict pending C2 | tooling protocol: column-peak detection fails on the post-C1 sampled set (p2, p13, p27) with three distinct degeneracy modes; p7 was dropped as circumscribed-halo regime. A wing-based or Lab b\* ridge detector has not been built and tested. Filed as **Unresolved Open Question.** |
+| Tangent-arc curvature → h | **detection gate under two literature-standard detectors** *(C1 + C2 landed 2026-05-14)* | tooling protocol: column-peak fails on the post-C1 sampled set (p2, p13, p27); p7 dropped as circumscribed-halo regime at h = 59.4°. **Pass C2 then built a wing-radial Lab b\* ridge detector with 22°-halo-radial-profile subtraction (`scripts/tangent_detector.py`) and ran it on p2 / p13 / p27: not-recovered on all three photos under a pre-registered 8 / 24 coherent-sample gate (amplitude ≥ 3.0 in residual b\*, radial offset ≤ ±10 px from predicted locus).** The halo-radial subtraction explicitly addresses Persona 1's methodological recommendation, so the failure is not detection-window contamination. The "tooling-conditional" framing now narrows to non-literature-standard detector designs (wing-slope geometric curvature, matched-filter against parameterized arc, polarization-channel filtering) — Phase 10 backlog. |
 
 The audit-survived public-framing sentence in
 [`../SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md) is:
@@ -62,8 +62,10 @@ The audit-survived public-framing sentence in
 > independently fittable 22° halo. The three other tested routes fail
 > for three different reasons: dataset / aspect-ratio coverage (CZA),
 > atmospheric-physics discrimination (supralateral), and
-> detection-protocol tooling (tangent under column-peak;
-> tooling-conditional).*
+> detection-protocol tooling (tangent fails under two literature-standard
+> detectors — column-peak intensity and wing-radial Lab b\* with
+> halo-radial subtraction — after Pass C2 landed 2026-05-14;
+> tooling-conditional narrows to non-literature-standard designs).*
 
 We want pushback on this verdict from atmospheric-optics specialists.
 The audit is most useful if it ends in a counterexample we can act on.
@@ -112,21 +114,52 @@ the h-spread is materially larger? (iii) Is the supralateral arc
 genuinely structurally weak as an inverse handle in atmospheric optics,
 or is the team interpreting a non-canonical formulation?
 
-### 2.3 Tangent-arc curvature: is a wing-based / Lab b\* detector worth building?
+### 2.3 Tangent-arc curvature: now negative under two literature-standard detectors — is a non-literature-standard detector worth building?
 
-Pass C2 (the optional detector-rebuild pass) was *not* run. The
-current tangent verdict is **detection gate under column-peak**, with
-the route filed as Unresolved Open Question. The audit memo §4.8
-recommends capping receipt language at *"column-peak fails on all four
-photos; a literature-standard wing-based or Lab b\*-channel ridge
-detector has not been built and tested."*
+**Pass C2 update 2026-05-14.** The wing-based / Lab b\* detector has
+now been built and run. Implementation:
+[`scripts/tangent_detector.py`](../../scripts/tangent_detector.py) (a
+wing-azimuth-offset Lab b\* ridge detector with 22°-halo-radial-profile
+subtraction — the literature-standard substrate audit memo §4.8 /
+Persona 1 §4 item 6 explicitly recommended). On the post-C1 sampled
+set (p2 / p13 / p27), the detector returns **not-recovered** on every
+photo: 0-2 / ~24 coherent ridge samples per wing under a pre-registered
+gate (amplitude ≥ 3.0 in residual b\*, radial offset ≤ ±10 px from
+predicted tangent locus, ≥ 8 / 24 samples coherent). The negative
+survives the halo-radial-profile subtraction step that addresses the
+audit memo's methodological concern; it cannot be attributed to
+22°-halo-ridge contamination of the detection window. Full receipt:
+"### Pass C2 Update" in
+[`RICH_DISPLAY_OVERLAY_NOTES.md`](RICH_DISPLAY_OVERLAY_NOTES.md);
+captured run output at [`PASS_C2_DETECTOR_OUTPUT.txt`](PASS_C2_DETECTOR_OUTPUT.txt);
+re-audit memo addendum in
+[`PHASE10_OPTICAL_REAUDIT_MEMO.md`](PHASE10_OPTICAL_REAUDIT_MEMO.md).
 
-Questions: (i) what is the actual literature-standard detector for
-upper-tangent-arc curvature measurement? (ii) On photos with this
-range of altitudes and chromatic-contrast levels, would such a
-detector be expected to recover the route, or is the team's
-"column-peak is the wrong instrument" reading itself wrong? (iii) Is
-"upper tangent arc curvature → h" even the right inverse-route framing
+The route is now **detection-gate negative under two literature-standard
+detector families**: column-peak intensity at sun meridian, and
+wing-radial Lab b\* with halo-radial subtraction. The "tooling-conditional"
+framing narrows to non-literature-standard detector designs.
+
+Reframed questions for the specialist:
+
+(i) The wing-slope **geometric** curvature detector (Persona 1 §3 p2
+entry recommended this for the locally-flat-apex case — C2 tested
+chromatic ridge, not geometric curvature). Is this a literature-standard
+approach the team missed, or is it a non-literature-standard design that
+needs new tooling work?
+
+(ii) Matched-filter detection against a parameterized upper-tangent-arc
+model (template correlation, which uses the full arc geometry rather
+than per-sample ridge picks). Standard practice in halo-observation
+literature, or a non-literature-standard escalation?
+
+(iii) Polarization-channel filtering — the upper tangent arc is
+partially polarized. Is a polarizer-equipped follow-up photo at
+controlled altitude (cf. [`../SUNDOG_V_PERCEPTION.md`](../SUNDOG_V_PERCEPTION.md)
+Phase 1) a different *substrate test* the specialist would recommend
+before declaring the route dead?
+
+(iv) Is "upper tangent arc curvature → h" even the right inverse-route framing
 at the literature level, or is the canonical route something like
 "upper-tangent opening angle"?
 
@@ -224,7 +257,9 @@ generation + one image-recoverable inverse handle" framing):
 > three other tested routes fail at three structurally different
 > failure modes: dataset / aspect-ratio coverage (CZA), atmospheric-
 > physics discrimination (supralateral), and detection-protocol tooling
-> (tangent; tooling-conditional pending C2).*
+> (tangent fails under two literature-standard detectors after C2 landed
+> 2026-05-14; tooling-conditional narrows to non-literature-standard
+> designs).*
 
 Question: is this defensible to atmospheric-optics readers? Where it
 isn't, what would the right hedged phrasing be?
