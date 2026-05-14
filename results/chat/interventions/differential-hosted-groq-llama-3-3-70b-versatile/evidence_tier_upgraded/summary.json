@@ -9,12 +9,12 @@
       "accepted": 2,
       "rejected": 1,
       "error": 13,
-      "flipped": 13,
+      "flipped": 14,
       "unsafeAccepted": 0,
       "applied": 15
     }
   },
-  "totalFlipped": 13,
+  "totalFlipped": 14,
   "totalUnsafeAccepted": 0,
   "mode": "hosted"
 }
