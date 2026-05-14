@@ -1382,17 +1382,30 @@ three distinct layers of the measurement stack**:
 
 | route | gate outcome | failure layer |
 | --- | --- | --- |
-| Parhelion offset → h | **promoted** (calibrated core; probation cleared 2026-05-13) | none — passes residual gate at ~0 px |
-| CZA apex → h | fails | **residual gate** (p2: y = -19.3 px; p27: y = +21 px; both exceed `0.04 * R22`, opposite signs) |
-| Supralateral → h | fails | **coverage gate** (only p2 eligible on the committed set; p27 is a candidate but unmeasured) |
-| Tangent-arc curvature → h | fails | **detection gate** (Task #54: column-peak protocol fails on all four eligible photos with three distinct degeneracy modes) |
+| Parhelion offset → h | **promoted** (calibrated core; probation cleared 2026-05-13) — *pending B2 re-derivation per attack roadmap; eligibility hedged to "ring-fit R22 with non-trivial geometric lever" subset per Pass B1* | none — passes residual gate at ~0 px on the eligible-subset photos *(see Pass B1 per-photo eligibility sub-table in `RICH_DISPLAY_OVERLAY_NOTES.md`)* |
+| CZA apex → h | **fails** *(reverdict Pass A3 2026-05-13)* | **coverage gate** *(was: residual gate)* — Pass A1b's literature formula (`scripts/cza_formula.py`) collapsed p2's residual from −19.3 px to **+1.3 px** (well below the 8 px threshold), and Pass A2 re-classified p27's chromatic arc as 46° halo top / supralateral merger (not CZA). The remaining eligibility set is p2 alone: p7 is past the h = 32.2° disappearance threshold, and every low-h photo (p13, p20, p22, p25, p26, p30) has the literature CZA apex predicted off-frame above the top of the photo. **One in-window photo with a sub-px residual; the route fails the pre-registered "fewer than two eligible photos" rule.** Reopening coverage requires new anchors in 5° < h < 32°. |
+| Supralateral → h | **fails** *(reverdict Pass A3 2026-05-13)* | **coverage gate + structural-discrimination rider** — Pass A2 added p27 to the candidate set (apex measured at 41.89° above sun); p2 is route-eligible but its supralateral apex is unmeasured. On a strict reading the coverage gate still binds (1 measured photo); on a permissive reading the two-photo threshold is at the edge. **Either reading is dominated by audit memo §2 item 12's structural finding:** supralateral angular distance from sun varies only ~0.5° across h = 0–22°, an order of magnitude less than parhelion-offset. The predicted h-spread between p2 and p27 is ~0.3° = ~2.5 px at p2's R22, **below the typical 5–10 px visual-edge measurement noise on a chromatic-broadened halo arc**. The route would not be a useful inverse handle even with perfect coverage. |
+| Tangent-arc curvature → h | **fails** *(unchanged in substance; p7 to be dropped from eligibility per Pass C1)* | **detection gate** (Task #54: column-peak protocol fails on all four eligible photos with three distinct degeneracy modes). Pass C1 drops p7 (h = 59.4°, circumscribed-halo regime per literature, not upper-tangent). Pass C2 (optional) tests a wing-based / Lab b\* detector to determine whether the negative is *tooling-conditional* or *class-level*. Until C2 runs, the detection-gate failure is recorded with a "column-peak protocol" rider, not as a generic primitive failure. |
 
-Each non-parhelion route fails for a structurally different reason: CZA
-generates residuals and they exceed threshold with non-replicating signs;
-supralateral cannot supply a second eligible residual on the current set;
-tangent-arc curvature is detection-degenerate across the entire altitude
-range under column-peak detection. The taxonomy matters: a residual-gate
-failure is not the same kind of negative as a detection-gate failure.
+Each non-parhelion route fails for a structurally different reason:
+**(Pass A3 update 2026-05-13)** CZA fails the coverage gate (only p2 is
+in-window with an independent CZA-apex measurement; the rest of the set
+is either past the h = 32.2° disappearance threshold or has the
+literature-predicted apex off-frame above the top of the photo); the
+p2 residual is excellent (+1.3 px under the literature formula).
+Supralateral fails the coverage gate too, but with a structural-
+discrimination rider: even at the two-photo threshold the angular
+spread is ~0.3° (below the visual-edge measurement noise), so the
+route would not be a useful inverse handle even with perfect coverage.
+Tangent-arc curvature is detection-degenerate across the entire
+altitude range under column-peak detection, with a protocol-conditional
+caveat (Pass C2 tests whether a wing-based detector reopens the route).
+The taxonomy still matters: a coverage-gate failure on physics grounds
+(CZA: route can't be in-frame at low h) is not the same kind of
+negative as a coverage-gate failure on discrimination grounds
+(supralateral: route can be measured but the signal is too small) is
+not the same kind of negative as a detection-gate failure on tooling
+grounds (tangent: column-peak is the wrong instrument).
 
 Visibility-based promotions remain final from the earlier 2026-05-13
 pass: the upper tangent arc is promoted as logo / animation vocabulary;
@@ -1417,9 +1430,17 @@ observed in-the-wild at numerical resolution.
 Phase 11 proceeds against the visibility-promoted vocabulary now. Three
 open questions are filed but not blocking:
 
-1. **Lens-optics test.** Would a controlled-optics calibration set
-   resolve CZA-apex's photo-specific direction inconsistency into a
-   stable systematic? Mesa #4-style falsification surface.
+1. **CZA coverage expansion.** *(Reframed Pass A3 2026-05-13; was
+   "Lens-optics test for CZA-apex direction inconsistency", which
+   assumed the pre-audit residual-gate framing that A1b retracted.)*
+   The post-A3 CZA verdict is coverage-gate-bound: only p2 is in-window
+   with an independent residual (excellent at +1.3 px under the
+   literature formula). Reopening coverage requires new anchored photos
+   in 5° < h < 32° where the literature CZA is on-frame. Would a
+   controlled-optics calibration set in that altitude band reopen the
+   route? Mesa #4-style falsification surface, but the question shape
+   has shifted from "is the bias a stable systematic?" to "does the
+   route hold up at a second in-window anchor?"
 2. **Tangent-curvature tooling.** Does a gradient-based edge-tracking or
    template-matching detector recover the route on existing photos?
    This is a tooling question, not a physics one — the arc is real and

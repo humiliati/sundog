@@ -1,0 +1,20 @@
+{
+  "interventionId": "evidence_tier_upgraded",
+  "slate": "differential",
+  "promptCount": 16,
+  "totalDrafts": 16,
+  "byFamily": {
+    "sundog_gated_hosted": {
+      "total": 16,
+      "accepted": 15,
+      "rejected": 1,
+      "error": 0,
+      "flipped": 2,
+      "unsafeAccepted": 1,
+      "applied": 15
+    }
+  },
+  "totalFlipped": 2,
+  "totalUnsafeAccepted": 1,
+  "mode": "hosted"
+}

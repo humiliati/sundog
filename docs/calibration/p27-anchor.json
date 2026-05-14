@@ -3,28 +3,66 @@
     "name": "p27",
     "photo": "27.Zzhau2Uiospj37zhwHEr4D-1200-80.jpg.webp",
     "anchored": "2026-05-13",
-    "method": "Task #55 visual CZA-apex check; R22 from low-sun 22-degree halo support, CZA apex from visual lower-edge compromise after flat-parabola fit proved unstable",
-    "status": "provisional CZA-apex measurement; use for route-failure evidence, not promotion",
-    "note": "The CZA band is clear, but the flat apex makes the fitted math apex sensitive. The visual lower edge puts the apex below the atlas prediction, opposite p2."
+    "method": "Pass A2 re-anchor (2026-05-13): chromatic arc at y=142 re-classified as 46-deg halo top / supralateral merger (the two coincide at h=0.5 deg per literature); previously anchored as CZA apex but the literature CZA at h=0.5 deg sits ~57 deg above sun (off-frame). R22 from low-sun 22-degree halo support; chromatic apex at visible lower edge after Pass A1a/A1b confirmed legacy CZA misidentification.",
+    "status": "Pass A2 re-classified primitive; CZA fields moved to _disputed for reversibility. Use for supralateral / 46-deg halo top route eligibility (candidate, pending coverage check), NOT for CZA-route residual evidence.",
+    "note": "The chromatic band is clear, but the flat apex makes the fitted math apex sensitive (per Pass A1a/A1b reverification: at h=0.5 deg the literature CZA apex is at y=-11.5 px, above the top of the frame, so the visible arc at y=142 cannot be CZA). The visible apex sits ~4 deg below the geometric 46-deg halo top / supralateral position; likely chromatic broadening of the diffuse lower edge or visual-edge measurement bias. Precise sub-classification (46-deg halo top vs. supralateral) deferred to Phase 10 backlog (audit memo s2 item 12: supralateral angular distance changes only ~0.5 deg across h=0-22 deg, so the two arcs are observationally indistinguishable on a single low-h photo)."
   },
-  "sun": [596, 559],
+  "sun": [
+    596,
+    559
+  ],
   "r22": 219,
   "r22_source": "ring-fit",
-  "r22_source_note": "R22 came from low-sun 22° halo support (per existing _meta). However, the parhelion offsets (offset_L = offset_R = 219 = R22) are inferred FROM R22, not measured independently. Audit memo §2 item 5: 'The recorded offset_L = offset_R = R22 = 219 is what you get when you stipulate offset := R22; the 0 px residual is tautological.' So the parhelion-route residual is tautological in the OPPOSITE direction from p20/p25/p26: R22 is ring-supported but the parhelion is r22-derived. Pass B1 classification 2026-05-13; ineligible for parhelion-route promotion (tautology), regardless of residual. Lever sec(h)-1 ≈ 0.004% (essentially zero).",
+  "r22_source_note": "R22 came from low-sun 22-degree halo support (per existing _meta). However, the parhelion offsets (offset_L = offset_R = 219 = R22) are inferred FROM R22, not measured independently. Audit memo section 2 item 5: 'The recorded offset_L = offset_R = R22 = 219 is what you get when you stipulate offset := R22; the 0 px residual is tautological.' So the parhelion-route residual is tautological in the OPPOSITE direction from p20/p25/p26: R22 is ring-supported but the parhelion is r22-derived. Pass B1 classification 2026-05-13; ineligible for parhelion-route promotion (tautology), regardless of residual. Lever sec(h)-1 ~= 0.004 percent (essentially zero).",
+  "sun_altitude": 0.5,
   "parhelion": {
     "left_x": 377,
     "right_x": 815,
     "y": 548,
     "visibility": "low-sun dagger estimate from R22 support; not an independent parhelion-core pick"
   },
-  "cza_apex": [599, 142],
-  "cza_apex_residual": {
-    "predicted": [596, 121],
-    "observed": [599, 142],
-    "x_px_observed_minus_predicted": 3,
-    "y_px_observed_minus_predicted": 21,
-    "normalized_y_by_r22": 0.096,
-    "direction": "apex below prediction; opposite p2",
-    "threshold_status": "exceeds 8 px / 0.04*R22 route threshold"
+  "supralateral_46halo_merger": {
+    "apex": [
+      599,
+      142
+    ],
+    "deg_above_sun": 41.89,
+    "px_above_sun": 417,
+    "candidate_primitives": [
+      "halo_46_top",
+      "supralateral_arc"
+    ],
+    "note": "At h=0.5 deg the supralateral arc and the 46-deg halo top theoretically coincide at ~46 deg above sun, so observationally indistinguishable on this photo. Visible apex sits ~4 deg lower than theoretical (likely chromatic-broadening / visual-edge bias). Pass A2 stamp 2026-05-13.",
+    "rationale_pointer": "PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md s2 item 3; PHASE10_ATTACK_ROADMAP.md Pass A2"
+  },
+  "supralateral_route_eligibility": {
+    "status": "candidate",
+    "coverage_note": "p27 is the second eligible candidate for the supralateral route (after p2). Whether the supralateral coverage gate reopens with p2 + p27 is for Pass A3 to decide; per audit memo s2 item 12 the route has structurally weak h-discrimination (~0.5 deg change across h=0-22 deg) so a useful inverse handle is unlikely even with two photos."
+  },
+  "_disputed": {
+    "cza_apex_legacy_2026_05_13": {
+      "value": [
+        599,
+        142
+      ],
+      "rationale": "Originally anchored as CZA apex on 2026-05-13 (Task #55 visual CZA-apex check). Reverified by Pass A1a/A1b 2026-05-13: the literature CZA apex at h=0.5 deg sits ~57 deg above sun (px y = -11.5, above the top of the frame). The visible chromatic arc at y=142 is the 46-deg halo top / supralateral merger, NOT the CZA. See PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md s2 item 3 and PHASE10_ATTACK_ROADMAP.md Pass A2.",
+      "kept_for_reversibility": true
+    },
+    "cza_apex_residual_legacy_2026_05_13": {
+      "predicted": [
+        596,
+        121
+      ],
+      "observed": [
+        599,
+        142
+      ],
+      "x_px_observed_minus_predicted": 3,
+      "y_px_observed_minus_predicted": 21,
+      "normalized_y_by_r22": 0.096,
+      "direction": "apex below prediction; opposite p2",
+      "threshold_status": "exceeds 8 px / 0.04*R22 route threshold",
+      "rationale_for_disputed": "Residual was computed against the legacy WB_R46-anchored prediction (which is the formula bug A1b corrected) AND against a misidentified primitive (the visible feature is not CZA). Both the residual value and the route assignment are legacy artifacts; do not feed into CZA-route eligibility. See PHASE10_ATTACK_ROADMAP.md Pass A1b and Pass A2."
+    }
   }
 }

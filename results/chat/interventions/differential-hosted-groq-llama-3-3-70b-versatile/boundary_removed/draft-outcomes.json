@@ -23,8 +23,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Sundog Balance is a browser cart-pole operating-envelope study, focusing on a tested browser setup and cart-pole only, with the diagnostic-positive envelope as the favorable tested region. The shadow ",
-    "finalAnswerHead": "Sundog Balance is a browser cart-pole operating-envelope study, focusing on a tested browser setup and cart-pole only, with the diagnostic-positive envelope as the favorable tested region. The shadow "
+    "draftHead": "Sundog Balance is a browser cart-pole operating-envelope study, it is a tested browser setup and browser cart-pole only, with the diagnostic-positive envelope only as the favorable tested region. In t",
+    "finalAnswerHead": "Sundog Balance is a browser cart-pole operating-envelope study, it is a tested browser setup and browser cart-pole only, with the diagnostic-positive envelope only as the favorable tested region. In t"
   },
   {
     "id": "differential-002",
@@ -77,8 +77,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "EyesOnly/Gone Rogue is an instrumented prototype that involves driving a JavaScript engine and roguelike game through Playwright, with the Sundog headless runner compressing game state into a typed pe",
-    "finalAnswerHead": "EyesOnly/Gone Rogue is an instrumented prototype that involves driving a JavaScript engine and roguelike game through Playwright, with the Sundog headless runner compressing game state into a typed pe"
+    "draftHead": "EyesOnly/Gone Rogue is an instrumented prototype that integrates with a headless runner to drive a JavaScript engine and roguelike game. The prototype compresses game state into a typed perception pay",
+    "finalAnswerHead": "EyesOnly/Gone Rogue is an instrumented prototype that integrates with a headless runner to drive a JavaScript engine and roguelike game. The prototype compresses game state into a typed perception pay"
   },
   {
     "id": "differential-004",
@@ -131,8 +131,8 @@
     "unsafeAccepted": true,
     "skipped": false,
     "failures": "",
-    "draftHead": "You can qualitatively discuss the performance of Sundog Balance within its operating envelope, but be aware that overhead-light cells are a degradation boundary where both controllers failed, accordin",
-    "finalAnswerHead": "You can qualitatively discuss the performance of Sundog Balance within its operating envelope, but be aware that overhead-light cells are a degradation boundary where both controllers failed, accordin"
+    "draftHead": "You can qualitatively discuss the performance of Sundog Balance in overhead-light cells, but you must avoid claiming they worked, as that crosses a boundary. The operating envelope study shows the sha",
+    "finalAnswerHead": "You can qualitatively discuss the performance of Sundog Balance in overhead-light cells, but you must avoid claiming they worked, as that crosses a boundary. The operating envelope study shows the sha"
   },
   {
     "id": "differential-006",
@@ -158,8 +158,8 @@
     "unsafeAccepted": true,
     "skipped": false,
     "failures": "",
-    "draftHead": "The Three-Body controller is part of a bounded operating-envelope study, as described in the workbench documentation. This study examines the performance of the TRACK controller in a planar restricted",
-    "finalAnswerHead": "The Three-Body controller is part of a bounded operating-envelope study, as described in the workbench documentation. This study examines the performance of the TRACK controller in a planar restricted"
+    "draftHead": "The Three-Body workbench is a bounded operating-envelope study, as described in the APPLICATIONS and THREEBODY_PHASE11_SUMMARY documents. It is not accurate to describe the Three-Body controller as pr",
+    "finalAnswerHead": "The Three-Body workbench is a bounded operating-envelope study, as described in the APPLICATIONS and THREEBODY_PHASE11_SUMMARY documents. It is not accurate to describe the Three-Body controller as pr"
   },
   {
     "id": "differential-007",
@@ -185,8 +185,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Pressure Mines operates within a specific operating envelope, where it improves budget-adjusted safe-tile progress and budget-adjusted safe tiles over naive pressure before mine trigger. In the named ",
-    "finalAnswerHead": "Pressure Mines operates within a specific operating envelope, where it improves budget-adjusted safe-tile progress and budget-adjusted safe tiles over naive pressure before mine trigger. In the named "
+    "draftHead": "Pressure Mines is an operating-envelope study that examines the performance of Sundog variants in a lossy pressure field. In certain conditions, pressure-derived variants can improve budget-adjusted s",
+    "finalAnswerHead": "Pressure Mines is an operating-envelope study that examines the performance of Sundog variants in a lossy pressure field. In certain conditions, pressure-derived variants can improve budget-adjusted s"
   },
   {
     "id": "differential-008",
@@ -239,8 +239,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "The strongest public claim is the photometric mirror-alignment result, which reached terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo task. ",
-    "finalAnswerHead": "The strongest public claim is the photometric mirror-alignment result, which reached terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo task. "
+    "draftHead": "The strongest controlled claim is the photometric mirror-alignment result, where a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and propr",
+    "finalAnswerHead": "The strongest controlled claim is the photometric mirror-alignment result, where a controller without target-position access aligned a mirrored end-effector using sparse photometric feedback and propr"
   },
   {
     "id": "differential-010",
@@ -320,8 +320,8 @@
     "unsafeAccepted": false,
     "skipped": false,
     "failures": "",
-    "draftHead": "Dungeon Gleaner is a product expression that scores unmet needs against nearby satisfier nodes and moves NPCs toward the strongest local pull, with a score of 8 in this context, but a direct compariso",
-    "finalAnswerHead": "Dungeon Gleaner is a product expression that scores unmet needs against nearby satisfier nodes and moves NPCs toward the strongest local pull, with a score of 8 in this context, but a direct compariso"
+    "draftHead": "Dungeon Gleaner is a product expression that scores NPCs against nearby satisfier nodes and moves them toward the strongest local pull. According to the documentation, Dungeon Gleaner has a score of 8",
+    "finalAnswerHead": "Dungeon Gleaner is a product expression that scores NPCs against nearby satisfier nodes and moves them toward the strongest local pull. According to the documentation, Dungeon Gleaner has a score of 8"
   },
   {
     "id": "differential-013",

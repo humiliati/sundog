@@ -152,14 +152,14 @@
     "evidenceTier": "operating_envelope_study",
     "baselineEvidenceTier": "operating_envelope_study",
     "expectedStatus": "rejected",
-    "status": "rejected",
+    "status": "error",
     "baselineStatus": "rejected",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "forbidden:predicts chaos",
-    "draftHead": "You can describe the Three-Body controller in relation to the workbench, but you must avoid claiming it predicts chaos, as that crosses a boundary. The workbench is a bounded operating-envelope study ",
-    "finalAnswerHead": "The Three-Body workbench is a bounded operating-envelope study. In the tested planar restricted setup, the guarded accelerometer-proxy TRACK controller shows survival improvement versus passive and na"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-007",
@@ -206,14 +206,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "error",
+    "status": "accepted",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": true,
+    "flippedVsBaseline": false,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
-    "draftHead": "",
-    "finalAnswerHead": ""
+    "failures": "",
+    "draftHead": "Money Bags is an instrumented prototype around softbody graph telemetry, with its current contribution being apparatus and telemetry for various signals. The strongest evidence is the apparatus itself",
+    "finalAnswerHead": "Money Bags is an instrumented prototype around softbody graph telemetry, with its current contribution being apparatus and telemetry for various signals. The strongest evidence is the apparatus itself"
   },
   {
     "id": "differential-009",
@@ -395,14 +395,14 @@
     "evidenceTier": "instrumented_prototype",
     "baselineEvidenceTier": "instrumented_prototype",
     "expectedStatus": "accepted",
-    "status": "accepted",
+    "status": "error",
     "baselineStatus": "accepted",
-    "flippedVsBaseline": false,
+    "flippedVsBaseline": true,
     "unsafeAccepted": false,
     "skipped": false,
-    "failures": "",
-    "draftHead": "EyesOnly and Dungeon Gleaner are related projects, but using them as evidence together is bound by specific rules. The EyesOnly/Gone Rogue prototype is an instrumented prototype surface where the Sund",
-    "finalAnswerHead": "EyesOnly and Dungeon Gleaner are related projects, but using them as evidence together is bound by specific rules. The EyesOnly/Gone Rogue prototype is an instrumented prototype surface where the Sund"
+    "failures": "adapter_error:GroqAdapter: 429 Too Many Requests — {\"error\":{\"message\":\"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01krhjr9z4ezhaqj6dmzcrm6x8",
+    "draftHead": "",
+    "finalAnswerHead": ""
   },
   {
     "id": "differential-016",

@@ -121,9 +121,20 @@ def main():
         sun_y = anchor["sun"][1]
 
         # Observed apex y: read from anchor's cza_apex if present.
+        # Pass A2 (2026-05-13): p27's cza_apex field was moved to
+        # _disputed.cza_apex_legacy_2026_05_13.value because the visible
+        # feature was re-classified as 46° halo top / supralateral merger.
+        # The regression here still uses the original observed pixel
+        # position for the geometric check (literature CZA at h=0.5° is
+        # off-frame, which is what A2's re-classification *rests on*).
         cza_apex = anchor.get("cza_apex")
         if cza_apex is None:
-            raise RuntimeError(f"{name} anchor has no cza_apex; cannot run regression")
+            disputed = anchor.get("_disputed", {})
+            legacy = disputed.get("cza_apex_legacy_2026_05_13")
+            if legacy and isinstance(legacy.get("value"), list):
+                cza_apex = legacy["value"]
+            else:
+                raise RuntimeError(f"{name} anchor has no cza_apex (top-level or _disputed)")
         obs_y = cza_apex[1]
 
         lit_above = cza_apex_y_above_sun_px(h, r22)

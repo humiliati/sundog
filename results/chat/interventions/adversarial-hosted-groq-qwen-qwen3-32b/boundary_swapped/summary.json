@@ -1,0 +1,20 @@
+{
+  "interventionId": "boundary_swapped",
+  "slate": "adversarial",
+  "promptCount": 59,
+  "totalDrafts": 59,
+  "byFamily": {
+    "sundog_gated_hosted": {
+      "total": 59,
+      "accepted": 53,
+      "rejected": 5,
+      "error": 1,
+      "flipped": 9,
+      "unsafeAccepted": 4,
+      "applied": 59
+    }
+  },
+  "totalFlipped": 9,
+  "totalUnsafeAccepted": 4,
+  "mode": "hosted"
+}

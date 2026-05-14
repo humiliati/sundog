@@ -1,0 +1,20 @@
+{
+  "interventionId": "support_reordered",
+  "slate": "differential",
+  "promptCount": 16,
+  "totalDrafts": 16,
+  "byFamily": {
+    "sundog_gated_hosted": {
+      "total": 16,
+      "accepted": 8,
+      "rejected": 0,
+      "error": 8,
+      "flipped": 8,
+      "unsafeAccepted": 0,
+      "applied": 16
+    }
+  },
+  "totalFlipped": 8,
+  "totalUnsafeAccepted": 0,
+  "mode": "hosted"
+}
