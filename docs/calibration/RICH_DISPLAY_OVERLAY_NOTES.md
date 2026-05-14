@@ -443,10 +443,11 @@ but the *failure modes* remain three structurally different things:
 2. **Supralateral — coverage on discrimination grounds.** Route exists
    and is in-window across most of h, but h-sensitivity is structurally
    below the noise floor. Coverage cannot fix this; new physics could.
-3. **Tangent — detection on tooling grounds.** Route exists and is
-   visible in all four eligible photos, but the column-peak detection
-   protocol fails on every one. Pass C2 (optional) tests whether a
-   wing-based detector recovers the route.
+3. **Tangent — detection on tooling grounds.** Route remains blocked
+   under column-peak detection on the post-C1 sampled set (p2 / p13 /
+   p27). p7 is removed as circumscribed-halo regime, not upper-tangent
+   route evidence. Pass C2 (optional) tests whether a wing-based
+   detector recovers the route.
 
 The mesa↔geometry crossover note's "two-of-three have non-atlas
 explanations" hedge (per §6 step 2) now lands its substantive
@@ -511,37 +512,44 @@ the same name plus a `r22_source_note` rationale. p26's anchor adds a
 `geometric_validity` block with per-side flags and the audit memo
 citation.
 | CZA apex → sun altitude / visibility | **+7.0 px / y: +1.3 px (literature; Pass A1b)** | p7 NOT APPLICABLE (h = 59.4° > 32.2° cutoff; CZA disappears); p13 (h = 6.83°) OFF-FRAME, predicted apex y = −125.6 (above top of photo) | p20 (h ≈ 5°), p22 (h ≈ 5.7°), p25 (h ≈ 11.4°), p26 (h ≈ 9°), p30 (h ≈ 11.1°): all OFF-FRAME (predicted apex y < 0 at every low-h photo because CZA sits ~50–58° above sun in the disappearance approach); **p27 REMOVED Pass A2** (visible feature is 46° halo top / supralateral merger, not CZA) | **fails coverage gate** *(Pass A3 verdict 2026-05-13; was: "fails residual gate on expanded set")* | **Pass A3 verdict, 2026-05-13.** Re-derived against the post-A1b atlas and post-A2 eligibility set. **Only p2 is in-window with an independent CZA-apex measurement**, and on that single photo the residual is **+1.3 px** — well below the 8 px / 0.04*R22 route threshold. The route does *not* fail the residual gate on its own merits; the pre-audit "opposite-sign residuals on p2 and p27" framing dissolved when (a) A1b corrected the atlas formula bug that was creating the p2 −19 px artifact, and (b) A2 re-classified the p27 chromatic arc as a different primitive. **The route fails the coverage gate**: the pre-registered "fewer than two eligible photos" rule binds because all other anchored photos are out-of-window (p7) or off-frame at the low altitudes where the CZA sits ~50–58° above sun. This is a structurally different failure mode from the pre-audit verdict — *not* a "route-reliability" finding but a "single in-window photo in the calibration set" finding. Reopening coverage would require either anchoring new photos in the 5° < h < 32° range where CZA stays on-frame, or accepting p2's sub-px residual as the single eligible result. Anchors: `p2-anchor.json` (in-window, sub-px); `p27-anchor.json` (re-classified per Pass A2); other six anchored photos all off-frame at literature CZA position. |
-| Tangent-arc curvature → sun altitude | **detection-degenerate** (fuses with halo top at h=18.6°) | p7 (h=59.4°): column-peak grabs halo outer edge not broad tangent; p13 (h=6.83°): chromatic-haze contamination, no clean smile to fit | p27 (h=0.5°): merges with CZA / sun bloom at horizon transition; p20 not measured | **fails detection across all 4 eligible photos** (v3.8 partition: detection-degenerate, not residual-bounded) | Task #54 first pass 2026-05-13 found the route fails column-peak detection on every photo in the calibration set, with a *different* failure mode at each altitude. Not a residual-gate failure — the residual was never measurable. The earlier 'altitude-regime validity window' framing was too generous; the route's degeneracy is photo-and-feature-specific across the entire altitude range. Promotion blocked until a different detection method (edge-based gradient tracking, template matching, or manual sampling) is built and verified. |
+| Tangent-arc curvature → sun altitude | **detection-degenerate** (fuses with halo top at h=18.6°) | **p7 REMOVED Pass C1** (h=59.4° is circumscribed-halo regime, not upper-tangent-route eligibility); p13 (h=6.83°): chromatic-haze contamination, no clean smile to fit | p27 (h=0.5°): sun-bloom flare contaminates the sun-meridian column; p20 not measured | **fails detection across the post-C1 sampled set under column-peak** *(protocol-conditional; p7 historical sample reclassified)* | **Pass C1 verdict, 2026-05-14.** p7 is dropped from tangent-route eligibility because h=59.4° is the circumscribed-halo regime per the tangent-arc literature, so the original "all four eligible photos" count included a primitive misclassification. The remaining measured tangent-route set is p2 / p13 / p27. Column-peak detection still fails on those photos, but the negative is explicitly **protocol-conditional**, not a class-level tangent-route verdict. Pass C2 may reopen the route with a wing-based / Lab b* detector; if C2 is skipped, the specialist handoff must list tangent detection as an unresolved open question. |
 | Supralateral position → sun altitude | _measurement pending_ (route-eligible but no apex anchored) | p7 cropped; p13 not visible | **p27 measured Pass A2** with apex at (599, 142) = ~41.89° above sun (~4° below the ~46° literature prediction at h = 0.5°, likely chromatic-broadening); p20 weak/cropped | **fails on structural discrimination (Pass A3 verdict 2026-05-13)** *(coverage-gate hedged: 1 measured + 1 eligible-unmeasured)* | **Pass A3 verdict, 2026-05-13.** Post-A2 the eligibility set is p2 (eligible per existing notes, apex unmeasured) + p27 (measured at 41.89° above sun). On a strict reading the route fails the coverage gate (1 measured photo); on a permissive reading it's at the two-photo threshold. **Either reading is dominated by the structural-discrimination finding from audit memo §2 item 12.** Supralateral angular distance from sun varies only ~0.5° across the entire h = 0–22° eligibility range, an order of magnitude less h-sensitivity than parhelion-offset. The predicted h-spread between p2 (h = 18.6° → ~45.7°) and p27 (h = 0.5° → ~46.0°) is **~0.3°**, which at p2's R22 = 182 px corresponds to **~2.5 px**. Visual-edge apex measurement noise on a chromatic-broadened halo arc is easily 5–10 px (see p27's existing "flat apex makes the fitted math apex sensitive" flag in `_meta.note`). The h-spread the route can resolve is below the measurement noise floor on either photo, so **the route would not be a useful inverse handle even with perfect coverage**. Distinct from the pre-audit framing in two ways: (a) it is *not* "p27 might reopen coverage" — coverage may reopen but the route is still dead; (b) the structural limit is in the *atmospheric physics*, not in the dataset or the detection protocol. Reopening coverage on a third low-h photo will not restore the route. Anchors: `p2-anchor.json` (no supralateral apex), `p27-anchor.json` (`supralateral_46halo_merger` block). |
 | Parhelic-belt y residual (primitive, not route) | not separately measured (Phase 2 set only had x-residuals) | p7 not applicable; p13 -10.4 px under the FF observed-minus-predicted convention | p27 -0.0 px; p22 +0.2 px; p26 -10.8 px; p30 -2.5 px; p25 +5.0 px (caveated) | **watch-list retired 2026-05-13** (FF1 falsified; FF3 passed) | Phase 10-FF tested the shared `--parhelic-y-offset-r22 = -0.05` rule across six low-h anchors. FF1 falsified: the >=5 px residuals do not share a sign (p13 / p26 negative, p25 positive) and Spearman rho is +0.086. FF3 passed: no photo breaches the 12 px primitive threshold. Record p13 as photo-specific / anchor-local, not a promoted low-h correction. See `PHASE10_BELT_Y_RESULTS.md`. |
 
-## Tangent-Curvature v3.8 Receipt *(updated 2026-05-13)*
+## Tangent-Curvature v3.8 Receipt *(updated Pass C1 2026-05-14)*
 
-Task #54 measurement pass across all four eligible photos (p2 h=18.6°,
-p7 h=59.4°, p13 h=6.83°, p27 h=0.5°) produced a strong Mesa #5 receipt:
-**the upper-tangent inversion route is detection-degenerate across the
-entire calibration altitude range, with a different failure mode at each
-photo.** This is a publishable clean-negative rather than a measurement
-backlog item.
+Task #54 originally sampled p2 (h=18.6°), p7 (h=59.4°), p13
+(h=6.83°), and p27 (h=0.5°). Pass C1 drops p7 from the
+upper-tangent-route eligibility set: at h=59.4° the display is in the
+circumscribed-halo regime, so testing it as an "upper tangent arc" was a
+primitive misclassification. The post-C1 receipt is therefore narrower:
+**column-peak detection fails on the sampled in-window / low-sun tangent
+set (p2, p13, p27), while p7 becomes a high-sun circumscribed-halo
+backlog reference.**
+
+This is still a useful clean-negative for the current detector, but it is
+not a class-level negative for tangent curvature. C2 is the optional
+detector spike that decides whether a wing-based / Lab b* method recovers
+the route.
 
 Per-photo v3.8 schema:
 
 | photo | h | salience | route-local residual | route-local sensitivity | full-overlay interaction | partition/conflict |
 | --- | ---: | --- | --- | --- | --- | --- |
 | p2 | 18.6° | high (b-contrast 35.7) | unmeasurable: samples hit halo top within 5 px | n/a — fit degenerate | depends on sun_x as expected | tangent fuses with 22° halo top at this h (compression regime) |
-| p7 | 59.4° | broad-tangent visible | unmeasurable: column-peak grabs halo outer edge, not broad tangent above | n/a | n/a | broad-tangent regime; halo's outer edge dominates the detection signal |
+| p7 | 59.4° | high-sun circumscribed-halo display | **removed from upper-tangent-route eligibility by Pass C1** | n/a | n/a | At h>29° the upper/lower tangent arcs have joined into the circumscribed halo. Historical column-peak result is retained only as a cautionary sample, not as a tangent-route residual. |
 | p13 | 6.83° | medium (b-contrast 15.8 = 23% sky) | RMS=41 px on saturation fit; radius 196 vs predicted 1774 | ±5 px wiggle → ±1.2 px Δr (misleadingly low; fit is already stuck) | n/a | chromatic-haze contamination; no clean smile to fit |
 | p27 | 0.5° | tangent essentially absent between ~~CZA~~ *(retracted Pass A2)* and halo top | both fits have RMS=22 px with non-physical centers (brightness fit center *below* sun) | n/a | n/a | **Pass A2 2026-05-13 retracts "tangent merges with CZA":** at h = 0.5° the literature CZA apex is ~57° above sun while the upper tangent arc is ~22° above sun — separated by ~35°, they cannot merge optically (audit memo §4.4). The actual failure mode is sun-bloom flare contaminating the sun-meridian column. Substantively: tangent-route detection still fails at p27 (RMS=22 px, non-physical centers), but the failure cause is sun-bloom contamination, not feature merger. |
 
-The Mesa #5 reading: visual salience, route-local residual, sensitivity,
-and full-overlay interaction are **not the same property**. The tangent
-arc is atmospherically real and visible in all four photos. It still
-fails to dominate the route-local detection signal in any of them. A
-primitive that exists, is visible, and is geometrically meaningful can
-still be route-local-unmeasurable under a given detection method. The
-v3.8 schema's job was to record those distinctions; it correctly
-prevented a "the tangent route works" claim that the data does not
-support.
+The Mesa #5 reading survives C1, but in a narrower form: visual salience,
+route-local residual, sensitivity, and full-overlay interaction are **not
+the same property**. For p2 / p13 / p27, the tangent primitive may be
+atmospherically real and geometrically meaningful while remaining
+route-local-unmeasurable under the column-peak detector. For p7, the
+mistake was earlier in the stack: the photo belongs to the
+circumscribed-halo regime, not the upper-tangent-route eligibility set.
+The v3.8 schema's job was to record those distinctions; Pass C1 sharpens
+that record instead of treating all four failures as one class.
 
 Atmospheric-optics atlas-model implication: the upper tangent arc's
 brightness/chromatic peak does NOT generally coincide with its
@@ -552,23 +560,20 @@ detection (the spine is at a brightness or chromaticity *transition*, not a
 peak) or manual sample selection from visual crops.
 
 This receipt also weakens the earlier framing that p2 alone was the
-exception. The other three altitudes are degenerate too, just in
-different ways. **Three of the four alternative-to-parhelion-offset
-inversion routes now have measured failure modes on the current
-calibration set**: CZA-apex (opposite-sign residuals exceed threshold),
-supralateral (coverage gate), and tangent-curvature (detection-degenerate).
-Only parhelion-offset remains as a viable inversion route. That is a
-substantively stronger Mesa #3 receipt than the earlier "different routes
-have different residuals" — it is "one route works, three others fail at
-different layers of the measurement stack."
+exception. The post-C1 state is: CZA-apex fails coverage after formula
+repair and p27 reclassification; supralateral fails on coverage plus
+structural h-discrimination; tangent-curvature fails under the
+column-peak protocol on the remaining sampled set and is unresolved
+pending C2. Only parhelion-offset remains as a currently promoted
+inverse route, with its B2 re-verdict still pending.
 
 ## Vocabulary Classification
 
 | primitive | p2 | p7 | p13 | promote? |
 | --- | --- | --- | --- | --- |
-| CZA | visible | not applicable / high sun | cropped or not visible | Conditional core: render only inside the CZA sun-altitude validity window; CZA-apex inversion route fails residual gate on the expanded p2/p27 set. |
-| Supralateral arc | visible | candidate only | not visible / cropped | Keep as optional vocabulary; p2 carries the strongest evidence. |
-| Upper tangent arc | visible | visible / broad | candidate | Promote as stable logo/animation shape language. |
+| CZA | visible | not applicable / high sun | cropped or not visible | Conditional core: render only inside the CZA sun-altitude validity window; CZA-apex inversion route fails coverage after A1b/A2/A3, not residual. |
+| Supralateral arc | visible | candidate only | not visible / cropped | Keep as optional vocabulary; p27 is now a measured 46°-halo-top / supralateral-merger candidate, but the inversion route fails structural h-discrimination. |
+| Upper tangent arc | visible | high-sun circumscribed-halo regime, not upper-tangent-route evidence | candidate | Promote as stable logo/animation shape language from visibility; curvature-as-inversion-route remains protocol-conditional pending C2. |
 | Lower tangent arc | visible near lower 22° contact | not clear | not clear | Annotation only until another clean low-sun source supports it. |
 | Suncave Parry arc | visible/candidate using image 1 key | weak candidate | weak candidate | Candidate label only; useful for education, not logo default. |
 | Parry supralateral arc | candidate in image 1 | not visible | not visible | Do not promote beyond optional annotation. |
@@ -585,11 +590,11 @@ back; reason recorded), or **pending** (cannot be promoted until measured).
 | --- | --- | --- |
 | Parhelion offset to h inversion route | **promoted** (calibrated core; probation cleared 2026-05-13) | Task #52 step 1: re-anchored p13 from (557, 372) / R22=210 / offset=220 to (543, 372) / R22=211 / offsets=213/212. New residual is ~0/0 px. The probation finding is recorded as 'bad anchor, route OK' -- the route was never the problem; the rough hand-anchor was. |
 | 22 deg halo, parhelia (L/R), parhelic-circle | **promoted** (calibrated core) | Already in core via Phase 2. No regression observed in Phase 10 inspection. |
-| Upper tangent arc | **promoted as logo / animation vocabulary** | Visible across p2 and p7; candidate on p13. Two-of-three eligible visibility. Curvature-as-inversion-route remains pending measurement, but visibility is sufficient for shape-language use. |
-| CZA primitive (rendered) | **promoted as conditional core** | Render only when `h < 32.2 deg` (atmospheric cutoff). Visible on p2 at h = 18.6 deg and p27 at h ~= 0.5 deg; correctly not applicable on p7. p13 / p19 / p20 are low-altitude but cropped above the predicted apex. The primitive remains core while the CZA-apex inversion route fails residual gate. |
-| CZA apex to h inversion route | **fails residual gate on expanded set** | Task #55 added p27 as a second eligible CZA photo. p2 residual is y = -19.3 px; p27 residual is y = +21 px. Both exceed the 8 px route threshold, but the direction does not replicate. Verdict: do not promote; this is a clean negative for a simple CZA-apex inverse. |
-| Tangent-arc curvature to h inversion route | **fails detection gate on all four eligible photos** | Task #54 (2026-05-13) measured the route across p2 (h=18.6°), p7 (h=59.4°), p13 (h=6.83°), and p27 (h=0.5°). Column-peak detection produces no measurable curvature fit at any altitude, with a *different* failure mode at each photo: compression into halo top at p2; halo outer edge dominance at p7; chromatic-haze contamination at p13; CZA / sun-bloom merge at p27. The arc is atmospherically real and visible in all four photos, but its brightness/chromatic spine does not dominate any per-column signal. The earlier "altitude-regime validity window" framing was too generous; the route is detection-degenerate across the entire calibration altitude range. Promotion blocked until a non-column-peak detection method (gradient-based edge tracking, template matching, or manual sampling) is built and verified. See the Tangent-Curvature v3.8 Receipt section above for the per-photo v3.8 schema. |
-| Supralateral position to h inversion route | **fails coverage gate** | Visible only on p2 of the Phase 10 set. Pre-registered rule blocks promotion at < 2 eligible photos. Supralateral primitive itself stays in optional vocabulary; the *inversion route* does not promote on this evidence. |
+| Upper tangent arc | **promoted as logo / animation vocabulary** | Visible shape-language support remains; p7 is now treated as high-sun circumscribed-halo vocabulary rather than upper-tangent-route evidence. Curvature-as-inversion-route remains protocol-conditional pending C2. |
+| CZA primitive (rendered) | **promoted as conditional core** | Render only when `h < 32.2 deg` (atmospheric cutoff). Visible and measured on p2; p27's former CZA mark is reclassified as 46° halo top / supralateral merger. The primitive remains core while the CZA-apex inversion route fails coverage. |
+| CZA apex to h inversion route | **fails coverage gate** *(Pass A3 2026-05-13)* | A1b fixed the CZA formula and p2 now has a +1.3 px y residual, below threshold. A2 removed p27 from CZA evidence. The remaining eligible set has only p2; all other anchored photos are out-of-window or off-frame at the literature CZA position. |
+| Tangent-arc curvature to h inversion route | **fails detection gate under column-peak on the post-C1 sampled set** | Pass C1 (2026-05-14) removes p7 from upper-tangent-route eligibility because h=59.4° is circumscribed-halo regime. Column-peak detection still fails on p2 / p13 / p27, but this is a protocol-conditional negative, not a class-level tangent verdict. Promotion blocked unless C2 recovers the route with a wing-based / Lab b* detector. |
+| Supralateral position to h inversion route | **fails structural-discrimination gate** *(coverage hedged; Pass A3 2026-05-13)* | Post-A2/A3, p27 is measured as a supralateral / 46°-halo-top candidate and p2 is eligible but unmeasured. Even if coverage is treated permissively, the predicted p2-vs-p27 h-spread is ~0.3° (~2.5 px at p2 R22), below visual-edge noise. The route is not a useful inverse handle on atmospheric-physics grounds. |
 | Lower tangent arc | **promoted as low-sun annotation only** | Visible at p2's lower 22 deg contact; not clear on p7 or p13. One photo of evidence -- fails the two-photo bar for core promotion. Held as low-sun-display annotation; compatible with `low-altitude.json` named-pose examples, but the pose is not additional evidence. |
 | Suncave Parry arc | **fails gate** (weak evidence) | Weak/candidate on all three Phase 10 photos. Below the visibility bar for inversion measurement; insufficient for shape-language promotion. Stays in atlas vocabulary as an educational label only. |
 | Parry supralateral arc | **fails gate** (weak evidence + coverage) | Candidate on image 1 key only; not visible on p7 or p13. Promotion blocked on coverage. Vocabulary-label-only status confirmed. |
@@ -619,17 +624,20 @@ Concrete output of the Phase 10 gate, in the form the roadmap asks for:
 2. **Parry supralateral as anything beyond an optional annotation.**
    Coverage fails -- candidate on image 1 only.
 3. **Supralateral inversion route on the current committed evidence.**
-   Coverage fails (only p2 eligible). The primitive itself stays in
-   optional vocabulary. p27 is documented as a candidate but no
-   supralateral residual has been measured; the route does not reopen
-   without explicit anchor capture and a second eligible residual.
+   Pass A3 records a coverage hedge plus structural-discrimination
+   failure. p27 is now a measured supralateral / 46°-halo-top candidate,
+   but the route's h-signal is below visual-edge noise even if coverage
+   is read permissively.
 4. **Tangent-arc curvature inversion route under the column-peak detection
-   protocol.** Detection-degenerate across all four eligible photos with
-   three distinct failure modes (Task #54). Reopening the route requires
-   a different detection method, not new photos.
-5. **CZA-apex inversion route on the expanded p2/p27 set.** Residual gate
-   fails with opposite-sign residuals (p2: y = -19.3 px; p27: y = +21 px),
-   so the failure is route-reliability, not a stable systematic.
+   protocol.** Detection-degenerate on the post-C1 sampled set
+   (p2 / p13 / p27). p7 is removed from route eligibility because it is
+   circumscribed-halo regime. Reopening the route requires C2's
+   wing-based / Lab b* detector, not simply more photos.
+5. **CZA-apex inversion route on the current committed evidence.** Pass
+   A3 converts the verdict from residual-gate failure to coverage-gate
+   failure: p2 has a good +1.3 px residual under the repaired formula,
+   p27 was a misidentified primitive, and all other anchors are
+   out-of-window or off-frame.
 6. **Lower tangent as core logo geometry.** Single-photo evidence; usable
    only as labeled low-sun annotation or in named-pose examples, not in core
    marks.
@@ -638,36 +646,38 @@ Concrete output of the Phase 10 gate, in the form the roadmap asks for:
 
 ### Single-handle closeout
 
-The Phase 10 gate closed 2026-05-13. **One inversion route is promoted to
-calibrated core; the other three candidate inversion routes fail at three
-distinct layers of the measurement stack.**
+The Phase 10 gate closed 2026-05-13 and was post-audit hedged by Passes
+B1, A1a/A1b, A2, A3, and C1. **One inversion route remains promoted
+pending B2 re-derivation; the other candidate inversion routes fail or
+remain blocked for distinct, now better-named reasons.**
 
 | route | gate outcome | failure layer |
 | --- | --- | --- |
-| Parhelion offset → h | **promoted** (calibrated core) | none — passes residual gate |
-| CZA apex → h | fails | **residual gate** (p2 and p27 both exceed `0.04 * R22`, opposite signs) |
-| Supralateral → h | fails | **coverage gate** (only p2 eligible on the committed set; p27 candidate but unmeasured) |
-| Tangent-arc curvature → h | fails | **detection gate** (column-peak protocol fails on all four eligible photos, three distinct degeneracy modes) |
+| Parhelion offset → h | **promoted** *(pending B2 re-derivation)* | Pass B1 hedges eligibility to photos with independent R22 and non-trivial lever; B2 restates the final verdict. |
+| CZA apex → h | fails | **coverage gate** after A1b/A2/A3: p2 residual is good (+1.3 px), but it is the only in-window measured CZA anchor. |
+| Supralateral → h | fails | **coverage + structural-discrimination gate** after A2/A3: p27 is measured and p2 is eligible, but h-sensitivity is below measurement noise. |
+| Tangent-arc curvature → h | fails / unresolved | **detection gate under column-peak** on p2 / p13 / p27 after C1 removes p7 as circumscribed-halo regime; C2 decides whether this is tooling-conditional or recovered. |
 
-Three independent failure layers is a stronger Mesa #3 receipt than
-"different routes have different residuals." It is "one route works, three
-others fail at different layers of the measurement stack." The atlas is
-**rich in forward generation** (`h → all primitives`) but supports
-**one image-recoverable inverse handle** (parhelion offset), not a
-redundant four.
+The old "three independent failure layers" language is retired. The
+post-audit taxonomy is more precise: CZA is dataset/aspect-ratio
+coverage-limited, supralateral is physics-discrimination-limited,
+tangent is detector-limited under the current column-peak protocol, and
+parhelion offset is the only currently promoted inverse handle, pending
+B2's final wording.
 
 Phase 11 can proceed against the visibility-promoted vocabulary now.
 Three open questions are filed but not blocking:
 
-1. **Lens-optics test.** Would a controlled-optics calibration set resolve
-   CZA-apex's photo-specific direction inconsistency into a stable
-   systematic? Mesa #4-style falsification surface.
+1. **CZA coverage expansion.** Would a controlled photo set in
+   5° < h < 32° supply a second in-window CZA apex anchor? The old
+   "direction inconsistency" question was dissolved by A1b/A2.
 2. **Tangent-curvature tooling.** Does a gradient-based edge-tracking or
    template-matching detector recover the route on existing photos? This
    is a tooling question, not a physics question — the arc is real and
    visible; the column-peak method is the wrong instrument.
-3. **Parhelic-belt-y replication.** Does p13's +10.4 px belt-y residual
-   replicate across multiple low-h photos, or is it photo-specific?
+3. **Parhelic-belt-y replication.** Closed by Phase 10-FF:
+   p13's residual is photo-specific; the belt-y watch-list flag is
+   retired.
 
 Each is scoped well enough to file as a separate task when attacked. None
 gate Phase 11.
@@ -702,16 +712,16 @@ Closeout summary:
   residual is sub-px; the route has no residual-gate failure on its own
   merits.
 - **Task #54 — tangent-arc curvature sampling:** done. Column-peak
-  detection fails on all four eligible photos with three distinct
-  degeneracy modes (compression at p2, halo-edge dominance at p7,
-  chromatic-haze at p13, ~~CZA / sun-bloom merge at p27~~ **sun-bloom
-  flare contaminating the sun-meridian column at p27** (Pass A2 retracts
-  the "merges with CZA" framing — at h = 0.5° CZA and tangent are
-  ~35° apart in altitude, not coincident; per audit memo §4.4)). See
-  the Tangent-Curvature v3.8 Receipt section above. Tangent-arc
-  curvature inversion route detection-gate finding stands as a
-  *protocol-conditional* negative pending Pass C2 wing-based detector
-  rebuild.
+  detection fails on the post-C1 sampled set (p2 / p13 / p27), with p7
+  removed from upper-tangent-route eligibility as a circumscribed-halo
+  display. Historical p7 sampling is retained only as a primitive-ID
+  caution. p27's failure mode is ~~CZA / sun-bloom merge~~ **sun-bloom
+  flare contaminating the sun-meridian column** (Pass A2 retracts the
+  "merges with CZA" framing — at h = 0.5° CZA and tangent are ~35°
+  apart in altitude, not coincident; per audit memo §4.4). See the
+  Tangent-Curvature v3.8 Receipt section above. Tangent-arc curvature
+  inversion remains a *protocol-conditional* negative pending Pass C2
+  wing-based detector rebuild.
 - **Supralateral inversion:** ~~coverage gate failure on the current
   committed set (only p2 eligible). p27 remains a candidate but no
   supralateral residual has been measured~~ **Pass A3 verdict 2026-05-13:
@@ -733,17 +743,15 @@ Historical execution order (now retired):
    hand-anchor with measured (sun_px, R22_px, parhelion_left_px,
    parhelion_right_px) tuple; new residual ~0/0 px. Anchor Summary and
    Per-Inversion-Route Residual Table updated.
-2. **CZA apex anchor check (Task #53, expanded by Task #55).** p2 apex
-   captured (residual y = -19.3 px). Task #55 added p27 (residual
-   y = +21 px). Opposite signs convert the verdict from coverage-gate
-   failure to residual-gate failure on the expanded set.
-3. **Tangent-arc curvature anchors (Task #54).** Four eligible photos
-   sampled (p2 / p7 / p13 / p27). No measurable curvature fit at any
-   altitude; column-peak detection grabs the wrong feature in a
-   photo-specific way. Verdict: detection-gate failure; route blocked
-   pending a non-column-peak detector.
-4. **Supralateral inversion stays failed unless a new visible-supralateral
-   reference enters the calibration set.** Coverage rule is unchanged
-   (`>= 2 eligible photos`). p27 is documented as a candidate but
-   unmeasured; the route does not reopen without explicit anchor capture
-   and a second eligible residual.
+2. **CZA apex anchor check (Task #53, expanded by Task #55).** Historical
+   result was p2 y = -19.3 px and p27 y = +21 px. Pass A1b/A2/A3
+   supersedes that reading: p2 is +1.3 px under the repaired formula,
+   p27 is not CZA, and the route fails coverage rather than residual.
+3. **Tangent-arc curvature anchors (Task #54).** Historical sample was
+   p2 / p7 / p13 / p27. Pass C1 supersedes the eligibility list: p7 is
+   circumscribed-halo regime and drops out. Column-peak still fails on
+   p2 / p13 / p27; route remains blocked pending C2.
+4. **Supralateral inversion.** Pass A2/A3 supersedes the old coverage-only
+   reading. p27 is now a measured candidate, p2 is eligible but
+   unmeasured, and the route fails on structural h-discrimination even
+   if coverage is read permissively.

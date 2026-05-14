@@ -103,28 +103,28 @@ This is the order to actually run the work in. Pass-detail blocks below
 are organized by finding for navigation, but the sequencing here is
 authoritative.
 
-1. **Public/doc hedge + handoff stop banner.** Run §6 steps 1–5 in
+1. **Public/doc hedge + handoff stop banner.** **Landed.** Run §6 steps 1–5 in
    parallel with the `PHASE10_OPTICAL_AUDIT_HANDOFF.md` stop banner.
    No technical pass starts until these land.
-2. **Pass B1.** Add `r22_source`, `sec(h) − 1`, and
+2. **Pass B1.** **Landed.** Add `r22_source`, `sec(h) − 1`, and
    `geometric_validity` columns to the residual table; flag p26 right
    `invalid`; backfill `r22_source` on every anchor JSON. First
    technical gate.
-3. **Pass A1a → A1b.** Write the CZA formula spec + literature
+3. **Pass A1a → A1b.** **Landed.** Write the CZA formula spec + literature
    regression test (A1a); only if A1a confirms the memo's qualitative
    finding, patch `overlay_calibrate.py` (A1b). The patch is gated on
    the test, not on the memo.
-4. **Pass A2 → A3.** Re-anchor p27's chromatic arc as supralateral /
+4. **Pass A2 → A3.** **Landed.** Re-anchor p27's chromatic arc as supralateral /
    46° halo top (A2); re-derive the CZA-route verdict against the
    fixed atlas and the re-classified p27 (A3).
-5. **Pass C1.** Drop p7 from tangent-arc eligibility per the
+5. **Pass C1.** **Landed 2026-05-14.** Drop p7 from tangent-arc eligibility per the
    circumscribed-halo regime literature.
-6. **Pass C2 (optional) → C3 (gated).** Build the wing-based /
+6. **Pass C2 (optional) → C3 (gated).** **Open.** Build the wing-based /
    chromaticity-based tangent detector and re-test p2 / p13 only if
    the team wants to settle tangent before specialist handoff. If C2
    is skipped, the tangent detector is marked **Unresolved Open
    Question** in the handoff and the route verdict is not edited.
-7. **Pass B2.** Re-derive the parhelion verdict against the
+7. **Pass B2.** **Next required pass.** Re-derive the parhelion verdict against the
    now-finalized eligibility set. Runs last of the technical passes
    so the verdict reads from the post-A3 / post-C3 table.
 8. **Re-audit gate (§5).** Re-run the synthetic three-persona
@@ -472,6 +472,16 @@ materially weaker language.
 
 ### Finding C — Pass C1: Drop p7 from the tangent-arc eligibility set
 
+**Status: landed 2026-05-14.** p7 is removed from upper-tangent-route
+eligibility in `RICH_DISPLAY_OVERLAY_NOTES.md` because h = 59.4° is the
+circumscribed-halo regime, not an upper-tangent regime. The historical
+column-peak result remains as a cautionary sample, but no longer counts
+as a tangent-route residual. The post-C1 tangent set is p2 / p13 / p27:
+column-peak detection still fails there, so the route stays blocked, but
+the verdict is now explicitly **protocol-conditional** pending C2 rather
+than a class-level negative. A circumscribed-halo ellipticity → h test is
+left as a Phase 10 backlog idea, not a deliverable.
+
 **Goal.** Remove the literature-level primitive misclassification.
 
 **Touch.**
@@ -617,12 +627,14 @@ re-audit" below are committed:
 - **A1b** (atlas formula patch) — required, gated on A1a.
 - **A2** (p27 re-classification) — required, gated on A1b.
 - **A3** (CZA-route re-verdict) — required, gated on A1b and A2.
-- **C1** (drop p7 from tangent eligibility) — required.
+- **C1** (drop p7 from tangent eligibility) — required, **landed
+  2026-05-14**.
 - **C2** (new tangent detector) — *optional*. If C2 has not landed,
   the re-audit and the new specialist handoff both explicitly mark
   the tangent detector as **Unresolved Open Question** rather than
   asserting a class-level tangent verdict. The receipt language must
-  cap at *"column-peak fails on all four photos; a literature-standard
+  cap at *"column-peak fails on the post-C1 sampled set (p2 / p13 /
+  p27); p7 is circumscribed-halo regime; a literature-standard
   wing-based or Lab b\*-channel ridge detector has not been built"*
   per memo §4.8. The specialist is invited to weigh in on whether
   building such a detector is worthwhile before the route is called
