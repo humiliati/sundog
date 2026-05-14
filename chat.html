@@ -543,8 +543,8 @@
             </section>
 
             <section class="content-section">
-                <h2>The result has been verified across two backends and 96 cells.</h2>
-                <p class="section-note">Phase 5b/5c hosted-adapter replication + Phase 7 operating envelope</p>
+                <h2>The result has been verified across six model implementations and four training lineages.</h2>
+                <p class="section-note">Hosted replication, causal interventions, falsification, operating envelope, and open-weight cross-architecture pass</p>
                 <div class="body">
                     <p>
                         The table above is the original deterministic result. Two follow-on phases stress-tested it from different directions, and the safety floor held in both.
@@ -576,11 +576,11 @@
                         </li>
                         <li>
                             <strong>Phase 7: operating envelope.</strong>
-                            All trials from Phases 3 / 4 / 5 / 5b / 5c / 8d re-projected into a unified cell-class-map: <strong>3,570 trials, 112 unique cells</strong> covering (prompt type × severity × evidence tier × model family). Boundary preservation rate is <strong>1.000 across every cell</strong> of every family. The <code>claude-haiku-4-5</code> family shows the cleanest profile of all six measured: 16/16 cells covered_holds, zero weak cells. Cells where the architecture is in scope all hold; cells out of scope (corpus conflict, retrieval depth ≠ k=3, hidden trace, offline mode, vendors other than OpenAI/Anthropic) are named explicitly in <code>results/chat/operating-envelope/manifest.json</code>.
+                            All trials from Phases 3 / 4 / 5 / 5b / 5c / 8d re-projected into a unified cell-class-map: <strong>3,570 trials, 112 unique cells</strong> covering (prompt type × severity × evidence tier × model family). Boundary preservation rate is <strong>1.000 across every cell</strong> of every family. Later phases extended that envelope through corpus conflict, retrieval depth, falsification, and open-weight cross-architecture replication; the current public ratchet is the 5,670-trial / six-implementation result summarized above.
                         </li>
                     </ul>
                     <p>
-                        The §13 ratchet that started as "the trace-conditioned scaffold preserves discipline better than a generic boundary prefix" now reads more precisely: <strong>zero unsafe-accepts across 5,178 trials, three backends, eight trace-field ablations × two hosted vendors, three corpus-conflict mutations, three prompt-type slates, four severity levels — with empirical evidence (Phase 5d) that the trace is causally load-bearing on at least one hosted model. Bounded to this corpus, retrieval depth k=3, visible trace, browser_live, the two named hosted vendors at the named models.</strong>
+                        The §13 ratchet that started as "the trace-conditioned scaffold preserves discipline better than a generic boundary prefix" now reads more precisely: <strong>zero unsafe-accepts across 5,670 trials, six model implementations across four training lineages, three retrieval depths, three prompt-type slates plus a hand-authored falsification slate, four severity levels, eight trace-field ablations across two hosted vendors, and three corpus-conflict mutations. Bounded to this corpus, k∈{0, 3, 8} retrieval depth, visible trace, browser_live, and the named model implementations at the named temperatures.</strong>
                     </p>
                 </div>
             </section>
@@ -601,8 +601,8 @@
                         Some injection prompts in our slate were caught; others routed to clean refusals. We did not run a comprehensive prompt-injection battery.
                     </li>
                     <li>
-                        <strong>It does not show that every hosted-model family reproduces the separation.</strong>
-                        We've verified the result holds on two hosted vendors so far: <code>gpt-4o-mini</code> (OpenAI) and <code>claude-haiku-4-5</code> (Anthropic) both reach 75/75 accepted with zero gate escapes on the differential + adversarial slates. The two vendors prefer different refusal idioms (unabbreviated "I cannot" vs contracted "I can't"), which exposed gate-brittleness asymmetries the gate's negation lexicon has now been tightened to cover. The result is bounded to these two vendors at the named models and temperature 0. Open-weight models and other vendors remain the cross-architecture thread.
+                        <strong>It does not show that every model family reproduces the separation.</strong>
+                        We have verified the safety floor on six named implementations: deterministic compositor, <code>gpt-4o-mini</code>, <code>claude-haiku-4-5</code>, <code>llama-3.3-70b-versatile</code>, <code>llama-3.1-8b-instant</code>, and <code>qwen/qwen3-32b</code>. That closes the measured cross-architecture thread for OpenAI, Anthropic, Meta, and Alibaba lineages, but it is still bounded to these exact models, prompts, temperatures, trace contract, and gate ruleset.
                     </li>
                     <li>
                         <strong>It does not show mesa-optimization absence or reward-hacking absence.</strong>
@@ -679,14 +679,14 @@
 
             <section class="content-section">
                 <h2>What we are doing next</h2>
-                <p class="section-note">Open questions after Phases 5b / 5c / 7</p>
+                <p class="section-note">No load-bearing open threads; Phase 12c is a strengthening run</p>
                 <div class="body">
-                    <p>The two largest deferred questions when this page first shipped — "does the result reproduce on a hosted model?" and "which trace fields are causally load-bearing?" — both have empirical answers now. Three new follow-ups inherit the open thread.</p>
+                    <p>The two largest deferred questions when this page first shipped — "does the result reproduce on a hosted model?" and "which trace fields are causally load-bearing?" — both have empirical answers now. The cross-architecture open-weight pass also landed. What remains is strengthening work, not a prerequisite for the public claim.</p>
                     <div class="followup-grid">
                         <article class="followup-card">
                             <h3>Cross-architecture replication</h3>
                             <p>
-                                <strong>Closed.</strong> Six distinct model implementations across four training lineages (deterministic compositor + OpenAI <code>gpt-4o-mini</code> + Anthropic <code>claude-haiku-4-5</code> + Meta <code>llama-3.3-70b-versatile</code> + Meta <code>llama-3.1-8b-instant</code> + Alibaba <code>qwen/qwen3-32b</code>) — full Phase 12 sweep landed via a throttled local PowerShell driver that paces calls under free-tier TPM caps. <strong>225 open-weight drafts, zero unsafe-accepts.</strong> No load-bearing open threads remain. Discretionary follow-ups: hosted intervention battery on the open-weight models (would extend Phase 5c/5d's causal-authority surface), larger falsification slate, production widget integration of reasoning-trace stripping.
+                                <strong>Closed.</strong> Six distinct model implementations across four training lineages (deterministic compositor + OpenAI <code>gpt-4o-mini</code> + Anthropic <code>claude-haiku-4-5</code> + Meta <code>llama-3.3-70b-versatile</code> + Meta <code>llama-3.1-8b-instant</code> + Alibaba <code>qwen/qwen3-32b</code>) — full Phase 12 sweep landed via a throttled local PowerShell driver that paces calls under free-tier TPM caps. <strong>225 open-weight drafts, zero unsafe-accepts.</strong> No load-bearing open threads remain. Phase 12c is now running as a discretionary strengthening pass: the same trace-field intervention battery on Llama/Qwen to compare open-weight causal-authority profiles with OpenAI and Claude.
                             </p>
                         </article>
                         <article class="followup-card">

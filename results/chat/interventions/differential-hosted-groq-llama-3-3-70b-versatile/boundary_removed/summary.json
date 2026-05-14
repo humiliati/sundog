@@ -1,0 +1,20 @@
+{
+  "interventionId": "boundary_removed",
+  "slate": "differential",
+  "promptCount": 16,
+  "totalDrafts": 16,
+  "byFamily": {
+    "sundog_gated_hosted": {
+      "total": 16,
+      "accepted": 16,
+      "rejected": 0,
+      "error": 0,
+      "flipped": 3,
+      "unsafeAccepted": 3,
+      "applied": 16
+    }
+  },
+  "totalFlipped": 3,
+  "totalUnsafeAccepted": 3,
+  "mode": "hosted"
+}

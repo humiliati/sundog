@@ -94,38 +94,144 @@ with the §3 attack passes.
 ## 3. Pass-by-Pass Attack Plan
 
 Each finding gets a sequence of named passes. Passes within a finding are
-ordered; passes across findings are independent unless an explicit
-dependency is called out.
+ordered; passes across findings are coordinated via the §4 sequencing
+diagram (B1 is the first technical gate; B2 is last; C2 is optional).
 
-### Finding A — Pass A1: Formula fix (the smoking gun)
+### 3.0 Recommended Execution Order
 
-**Goal.** Land the literature CZA formula in the atlas so any rerun is
-testing the route fairly. Single-edit fix.
+This is the order to actually run the work in. Pass-detail blocks below
+are organized by finding for navigation, but the sequencing here is
+authoritative.
+
+1. **Public/doc hedge + handoff stop banner.** Run §6 steps 1–5 in
+   parallel with the `PHASE10_OPTICAL_AUDIT_HANDOFF.md` stop banner.
+   No technical pass starts until these land.
+2. **Pass B1.** Add `r22_source`, `sec(h) − 1`, and
+   `geometric_validity` columns to the residual table; flag p26 right
+   `invalid`; backfill `r22_source` on every anchor JSON. First
+   technical gate.
+3. **Pass A1a → A1b.** Write the CZA formula spec + literature
+   regression test (A1a); only if A1a confirms the memo's qualitative
+   finding, patch `overlay_calibrate.py` (A1b). The patch is gated on
+   the test, not on the memo.
+4. **Pass A2 → A3.** Re-anchor p27's chromatic arc as supralateral /
+   46° halo top (A2); re-derive the CZA-route verdict against the
+   fixed atlas and the re-classified p27 (A3).
+5. **Pass C1.** Drop p7 from tangent-arc eligibility per the
+   circumscribed-halo regime literature.
+6. **Pass C2 (optional) → C3 (gated).** Build the wing-based /
+   chromaticity-based tangent detector and re-test p2 / p13 only if
+   the team wants to settle tangent before specialist handoff. If C2
+   is skipped, the tangent detector is marked **Unresolved Open
+   Question** in the handoff and the route verdict is not edited.
+7. **Pass B2.** Re-derive the parhelion verdict against the
+   now-finalized eligibility set. Runs last of the technical passes
+   so the verdict reads from the post-A3 / post-C3 table.
+8. **Re-audit gate (§5).** Re-run the synthetic three-persona
+   protocol against the post-pass state; consolidator verification
+   gate is mandatory.
+9. **Specialist handoff** (rewrites
+   `PHASE10_OPTICAL_AUDIT_HANDOFF.md` with the post-audit verdict
+   table) and **public-framing ratchet** (re-tightens the §6 hedges
+   based on the re-audit result).
+
+### Finding A — Pass A1a: CZA formula spec + literature regression test
+
+**Goal.** Before changing the atlas, write down the literature CZA
+formula as an executable spec and verify it against the calibration
+photos. The audit memo's exact px collapse numbers ("~0.7 px on p2")
+are *test hypotheses*, not implementation truth — even the memo §3
+flags that the specific numerical values were not independently
+re-derived. The spec + test answers the question "what does the
+literature predict?" before the patch answers "what should the atlas
+do about it?"
 
 **Touch.**
 
-- `scripts/overlay_calibrate.py:381–384`: replace
-  `anchored = WB_SUN[1] - WB_R46` with the literature formula
-  `sun_y − (90° − h − arcsin(√(n² − cos²h))) × (R22/22°)` (n = 1.31).
-- Same file: replace the `WB_R46 = 440` constant with
-  `WB_R46 = round(2.091 * WB_R22)` (≈ 460), or — preferable — derive
-  `R46_px = r22_obs × (46/22)` from `r22_obs` directly per overlay so
-  the constant is no longer load-bearing.
+- New module `scripts/cza_formula.py` (or a similarly named file in
+  the same directory as `overlay_calibrate.py`): one function
+  `cza_apex_y_above_sun(h_deg, r22_px, n=1.31)` returning the predicted
+  CZA apex y-offset above the sun in the same pixel scale as `r22_px`.
+  Implement the literature formula
+  `cza_offset_deg = 90° − h − arcsin(√(n² − cos²h))`, scaled by
+  `r22_px / 22°`.
+- New test file `scripts/test_cza_formula.py`: regression test against
+  hand-anchored CZA y-positions on the eligible photos. Measure
+  predicted-vs-observed for p2 (h = 18.6°) and p27 (h = 0.5°) at
+  minimum; record the actual residual deltas and compare against the
+  memo's predicted directions ("p2 should collapse from ~−19 px to
+  near-zero"; "p27 should reveal that the visible arc at y = 142 is
+  not CZA at all because the literature CZA at h = 0.5° lies off-frame").
+  The test does *not* assert specific px values; it asserts the
+  qualitative direction of the correction.
 
 **Entry criteria.** Audit memo accepted; this roadmap filed.
 
 **Exit criteria.**
 
-- Formula edit committed.
+- `cza_formula.py` exists, is importable, and round-trips at h = 22°
+  to the legacy `sun_y − R46` value within rounding (sanity check that
+  the formula reduces correctly at the legacy operating point).
+- The regression test runs and prints predicted-vs-observed deltas for
+  p2 and p27. The result is recorded as a note in
+  `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md` under "Pass A1a
+  spec results", with the actual numbers (not the memo's predicted
+  numbers).
+- The note explicitly flags whether the test confirms the memo's
+  qualitative finding (formula bug, p27 is mis-identified) or
+  contradicts it. If the test contradicts the memo, A1b does *not*
+  proceed and Pass A1 is reopened with a new hypothesis.
+
+**Out of scope.** Editing `overlay_calibrate.py` (that is A1b).
+
+### Finding A — Pass A1b: Atlas formula patch (gated on A1a)
+
+**Goal.** Replace the atlas's hardcoded CZA expression with the
+A1a-validated formula. Single touch on a workbench-space constant
+plus a single touch on the line-381 expression. Do *not* mix
+workbench-space and per-overlay pixel-space derivations in this pass.
+
+**Touch.**
+
+- `scripts/overlay_calibrate.py:381–384`: replace
+  `anchored = WB_SUN[1] - WB_R46` with a call to
+  `cza_formula.cza_apex_y_above_sun(h, WB_R22)` (subtracted from
+  `WB_SUN[1]` per the existing convention). Imports added at the top
+  of the file.
+- `scripts/overlay_calibrate.py:66`: replace `WB_R46 = 440` with
+  `WB_R46 = round(2.091 * WB_R22)` (≈ 460). Update the `# holds at
+  440 — see SUNDOG_V_GEOMETRY.md "R_46 note"` comment to point at the
+  audit memo and this roadmap.
+- **Out of scope (intentional):** the audit memo also discusses
+  deriving `R46_px = r22_obs × (46/22)` per overlay rather than from
+  `WB_R46`. That option would also touch supralateral placement and
+  any other workbench-to-photo consumer of `WB_R46`. It is *not* a
+  drop-in patch and is filed as a follow-up Phase 10 backlog item.
+  Pass A1b commits to the workbench-space constant fix only.
+
+**Entry criteria.** Pass A1a landed and its result note confirms the
+memo's qualitative finding.
+
+**Exit criteria.**
+
+- Both edits committed.
 - The two affected pixel-position tests, if any, regenerated against
   the new formula and the diff inspected by hand on at least p2 and p27.
-- Smoke run: on p2 the predicted CZA apex y collapses from ~19 px below
-  the literature locus to within ~5 px of it (memo §2 predicts ~0.7 px;
-  treat as illustrative — the *direction* is what matters).
+- Smoke run: on p2 the predicted CZA apex y collapses from ~19 px
+  below the literature locus to within the tolerance recorded in A1a's
+  result note (the memo's "~0.7 px" is a hypothesis; A1a's measured
+  delta is the actual target).
+- Spot-check: render a supralateral overlay on p2 and confirm visually
+  that the supralateral position has not shifted unreasonably as a
+  side-effect of the `WB_R46` constant change. (Supralateral *should*
+  shift ~4 % outward from sun-above; if it shifts much more, the
+  workbench-space change has a knock-on effect that needs a follow-up
+  pass.)
 
 **Out of scope for this pass.** Re-classifying p27's chromatic arc
 (that is Pass A2). Re-running the residual gate (that is Pass A3).
 Updating `MESA_CROSSOVER_NOTE.md` (that is the §2 cross-cutting work).
+Per-overlay R46_px derivation (deferred; see Touch above).
 
 ### Finding A — Pass A2: p27 primitive re-classification
 
@@ -136,14 +242,14 @@ the 46° halo top / supralateral merger.
 
 **Touch.**
 
-- `docs/calibration/anchors/p27-anchor.json`: re-anchor the chromatic
+- `docs/calibration/p27-anchor.json`: re-anchor the chromatic
   arc as `supralateral / 46° halo top` rather than `cza_apex`. Preserve
   the existing CZA fields under a `_disputed` sub-key so the change is
   reversible.
 - `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`: note the
   re-classification with the audit memo as the rationale pointer.
 
-**Entry criteria.** Pass A1 landed (so the residual table is being
+**Entry criteria.** Pass A1b landed (so the residual table is being
 read from a fixed atlas).
 
 **Exit criteria.**
@@ -175,7 +281,7 @@ more anchored photos.
 - Phase 10 closeout in `SUNDOG_V_GEOMETRY.md`: rewrite the CZA-route
   row of the table per memo §4.2.
 
-**Entry criteria.** Passes A1 and A2 landed.
+**Entry criteria.** Passes A1b and A2 landed.
 
 **Exit criteria.**
 
@@ -185,11 +291,23 @@ more anchored photos.
   (with the formula bug call-out) or retracted (if the new count is
   two-failures-plus-tooling-question).
 
-### Finding B — Pass B1: Add lever and R22-source columns to the residual table
+### Finding B — Pass B1: Add lever, R22-source, and geometric-validity columns *(first technical gate)*
 
-**Goal.** Make the parhelion-route eligibility honest at the schema
+**Goal.** Make the parhelion-route eligibility honest at the *schema*
 level, so future runs cannot accidentally promote a row that fails the
-audit's two real eligibility tests.
+audit's two real eligibility tests, and so the geometric-impossibility
+already present in p26 (`right_x − sun_x = 322`, `R22 = 323`,
+`arccos(R22/offset)` undefined) is flagged before any other pass
+re-runs verdict tables.
+
+**Why this is the first technical gate (post-hedge).** The audit's
+parhelion-circularity finding is the least speculative of the three —
+the arithmetic is mechanical, the JSON evidence is in
+`docs/calibration/p27-anchor.json` verbatim, and the p26 impossibility
+is a one-subtraction confirmation. Landing the schema columns first
+means every later pass (A3, B2, C3) reads its eligibility from a table
+that already enforces the constraints rather than restating them in
+prose.
 
 **Touch.**
 
@@ -197,23 +315,29 @@ audit's two real eligibility tests.
   the parhelion-route residual table: `sec(h) − 1` (geometric lever)
   and `R22-source` (`ring-fit` / `parhelion-derived` /
   `inferred-other`).
-- Anchor JSON schema (across `docs/calibration/anchors/*.json`): add an
+- Anchor JSON schema (across `docs/calibration/p*-anchor.json`): add an
   `r22_source` field declaring whether `R22` was independently fit
   from a visible ring or inferred. p20, p25, p26, p27 are
   `parhelion-derived` per the audit; verify the others by image
   inspection.
-- Add a `geometric_validity` flag for rows where `R22 / offset > 1`
-  (p26 right side is the known offender).
+- Add a `geometric_validity` column for rows where `R22 / offset > 1`
+  (p26 right side is the known offender — `R22 = 323`,
+  `right_x − sun_x = 322`, so `R22/offset = 1.003 > 1`). Mark the
+  offending row `invalid` in the table and add a note pointing at
+  the audit memo §2 item 6.
 
-**Entry criteria.** None — this pass is independent of A1–A3 and can
-run in parallel.
+**Entry criteria.** Public/doc hedges (§6) landed; no other technical
+pass started.
 
 **Exit criteria.**
 
 - Every anchor JSON has an `r22_source` field.
 - The residual table has both new columns and the geometric-validity
-  flag on p26 right.
+  column with p26 right flagged `invalid`.
 - The audit memo is cited as the rationale in the doc header.
+- The "post-audit hedged 2026-05-13" stamp on
+  `RICH_DISPLAY_OVERLAY_NOTES.md` (added by §6 step 1) is updated to
+  point at this pass as the first technical gate landed.
 
 ### Finding B — Pass B2: Parhelion-route re-verdict on the eligible subset
 
@@ -317,38 +441,57 @@ surfaces accordingly.
 
 ## 4. Sequencing and Dependencies
 
-The passes form three independent threads that converge at the
-re-audit gate. Within each thread the order is fixed; across threads
-the work can run in parallel.
+B1 is the first technical gate. Threads A and C converge after it,
+and all three converge at the re-audit gate.
 
 ```
-Thread A (CZA + atlas):  A1 → A2 → A3
-Thread B (parhelion):    B1 → B2
-Thread C (tangent):      C1 → C2 → C3
-                         ↓    ↓    ↓
-                         Re-audit gate (§5)
-                         ↓
-                         Real-specialist handoff
-                         ↓
-                         Public-framing ratchet (§2)
+§6 Public/doc hedges  (run first, in parallel with handoff stop banner)
+            ↓
+B1  (first technical gate — schema columns + p26 invalidation)
+            ↓
+   ┌────────┴────────┐
+   ↓                 ↓
+Thread A:     Thread C:
+A1a → A1b     C1
+   ↓          ↓
+A2            C2  (optional — see §5)
+   ↓          ↓
+A3            C3  (gated on C2)
+   ↓          ↓
+   └────┬─────┘
+        ↓
+B2  (parhelion-route re-verdict; reads the now-honest table)
+        ↓
+Re-audit gate (§5)
+        ↓
+Specialist handoff
+        ↓
+Public-framing ratchet (§2)
 ```
 
 Cross-thread coupling worth naming explicitly:
 
-- **B1 has no upstream dependency** but its output (the
-  geometric-validity flag, the lever column) makes A3 and C3 easier
-  to write honestly. Recommend running B1 first if there is any pass
-  contention.
-- **A2 may unlock supralateral**. If the re-classified p27 plus p2
+- **B1 lands first** because it makes the residual table enforce
+  the audit's two real eligibility tests (lever + R22-source) and
+  flags the p26 geometric impossibility as a column rather than a
+  prose footnote. A3, B2, and C3 all read from this table, so
+  landing B1 first means each later pass restates a verdict whose
+  eligibility set is already correct.
+- **B2 lands last** of the technical passes because its job is to
+  re-derive the parhelion verdict against the now-finalized
+  eligibility set. Running B2 before A3 / C3 risks restating the
+  parhelion verdict and then having to restate it again if A3 or
+  C3 changes the surrounding table.
+- **A2 may unlock supralateral.** If the re-classified p27 plus p2
   gives two eligible supralateral measurements, the supralateral
   coverage gate may reopen — though memo §2 item 12 notes the route
   has structurally weak h-discrimination (~0.5° change across h =
   0–22°) and is unlikely to be a useful inverse handle in principle.
   Treat any reopening as a Phase 10 backlog item, not a blocker.
-- **None of the passes block the public-framing hedges** in §2.
-  Those should land as soon as this roadmap is filed, with the
-  hedged language carrying a "pending re-audit" stamp. Waiting for
-  the re-audit to land before hedging the public copy keeps a known
+- **None of the passes block the public-framing hedges** in §6.
+  Those should land *first*, in parallel with the handoff stop
+  banner, before any technical pass begins. Waiting for the
+  re-audit to land before hedging the public copy keeps a known
   integrity gap open longer than necessary.
 
 ## 5. Re-Audit Gate (Before Real-Specialist Outreach)
@@ -362,16 +505,30 @@ audit credibility takes damage.
 **Re-audit entry criteria.** All passes labelled "Required for
 re-audit" below are committed:
 
-- **A1** (formula fix) — required.
-- **A2** (p27 re-classification) — required.
-- **A3** (CZA-route re-verdict) — required.
-- **B1** (lever and R22-source columns) — required.
-- **B2** (parhelion-route re-verdict) — required.
+- **§6 hedges** (public/doc) — required, must land first.
+- **Handoff stop banner** on `PHASE10_OPTICAL_AUDIT_HANDOFF.md` —
+  required, in parallel with §6 hedges.
+- **B1** (schema columns + p26 invalidation) — required, first
+  technical gate.
+- **A1a** (formula spec + literature regression test) — required.
+- **A1b** (atlas formula patch) — required, gated on A1a.
+- **A2** (p27 re-classification) — required, gated on A1b.
+- **A3** (CZA-route re-verdict) — required, gated on A1b and A2.
 - **C1** (drop p7 from tangent eligibility) — required.
-- **C2** (new tangent detector) — *recommended but not required*. If
-  C2 has not landed, the re-audit explicitly lists tangent-detector
-  rebuild as Open Question for the specialist, per memo §4.8.
-- **C3** (tangent-arc re-verdict) — gated on C2; same disposition.
+- **C2** (new tangent detector) — *optional*. If C2 has not landed,
+  the re-audit and the new specialist handoff both explicitly mark
+  the tangent detector as **Unresolved Open Question** rather than
+  asserting a class-level tangent verdict. The receipt language must
+  cap at *"column-peak fails on all four photos; a literature-standard
+  wing-based or Lab b\*-channel ridge detector has not been built"*
+  per memo §4.8. The specialist is invited to weigh in on whether
+  building such a detector is worthwhile before the route is called
+  dead.
+- **C3** (tangent-arc re-verdict) — gated on C2. If C2 is skipped,
+  C3 is not a re-audit blocker; the unresolved-open-question marker
+  in C2's disposition stands in for the verdict edit.
+- **B2** (parhelion-route re-verdict) — required, runs *last* of the
+  technical passes so it reads from the post-A3/post-C3 table.
 
 **Re-audit shape.** Re-run the synthetic three-persona protocol
 against the post-pass state of the docs and code. The consolidator's
@@ -389,13 +546,21 @@ language.
 
 Independent of the §3 passes, the surfaces in §2 should be hedged
 *now* and re-ratcheted (or further retracted) after the re-audit. The
-order minimizes window-of-inconsistency between coupled surfaces.
+order minimizes window-of-inconsistency between coupled surfaces. All
+six steps run before any §3 technical pass starts.
 
+0. **`docs/calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md` STOP banner.**
+   Add a `⛔ DO NOT SEND` block at the top of the handoff naming the
+   audit, the three findings, and pointing at this roadmap's re-audit
+   gate (§5). The handoff doc itself is rewritten *after* the
+   re-audit; the banner is what prevents the stale verdict table from
+   being shipped to a specialist in the meantime. **Status: landed
+   2026-05-13.**
 1. **`docs/SUNDOG_V_GEOMETRY.md` Phase 10 closeout.** Add a
    "Post-audit hedge 2026-05-13" sub-block at the top of the closeout
    that names the audit memo, the three load-bearing findings, and
    the fact that the closeout language below is pending re-derivation
-   per this roadmap.
+   per this roadmap. **Status: landed 2026-05-13.**
 2. **`docs/MESA_CROSSOVER_NOTE.md` Phase 10 closeout subsection.** Add
    the same hedge stamp; walk back "three independent failure
    layers" to the audit-survived language ("three structurally
@@ -463,5 +628,6 @@ Going forward, the protocol is:
 - [`docs/SUNDOG_V_CHAT.md` §16](SUNDOG_V_CHAT.md#16-coupled-public-copy-surfaces-integrity-coordination)
   — coupled-public-copy integrity protocol; §16.2 third item is
   updated by §6 of this roadmap.
-- `scripts/overlay_calibrate.py:381–384` — the load-bearing edit for
-  Pass A1.
+- `scripts/overlay_calibrate.py:381–384` — the line-381 expression
+  edit for Pass A1b. `scripts/overlay_calibrate.py:66` — the
+  workbench-space `WB_R46` constant edit for Pass A1b.

@@ -1395,6 +1395,9 @@ Across **3,570 trials**, **two model vendors** (OpenAI gpt-4o-mini + Anthropic c
 - `results/chat/operating-envelope/cell-class-map.csv` — re-emitted with claude-haiku-4-5 family at 16/16 holds.
 
 **Remaining open threads (after Phase 8d):**
+
+Historical note: all three items below were later closed or superseded by Phases 9-12. The list is retained here as phase-history context, not as the current roadmap state.
+
 1. **Stale-doc corpus-conflict slate** — still the largest gap. The Phase 5 reserved label `stale_doc_capture` has no trials. Engineering: mutate a chunk's text to disagree with the claim-map; rerun harness; see if the gate / drafts surface the mismatch.
 2. **Hosted intervention battery on Claude** — 8 interventions × 75 prompts × Claude ≈ ~$0.40. Tests whether `trace.evidenceTier` is still the only weak-authority handle, or whether Claude exposes different trace fields.
 3. **Phase 8 public copy update** — citations in chat.html / index.html teaser should now name two vendors instead of one. The "what we are doing next" cross-vendor card on chat.html can graduate to "completed: extended to Claude family; cross-architecture (open-weight) remains open".
@@ -1476,7 +1479,7 @@ This is the cleanest test yet of the architecture's core design principle: **cla
 | severity | ✅ covered | ✅ covered |
 | **corpusConflict** | 🔴 gap | **✅ covered** |
 | evidenceTier | ✅ partial | ✅ partial |
-| modelFamily | 🟡 partial (OpenAI + Anthropic) | 🟡 partial (open-weight pending) |
+| modelFamily | 🟡 partial (OpenAI + Anthropic) | ✅ covered after Phase 12 (OpenAI + Anthropic + Meta + Alibaba) |
 | retrievalDepth | 🔴 gap | 🔴 gap |
 | boundaryVisibility | 🟡 partial | 🟡 partial |
 | browserMode | 🔴 gap | 🔴 gap |
@@ -1486,6 +1489,9 @@ This is the cleanest test yet of the architecture's core design principle: **cla
 Across **4,578 trials** (3,570 baseline operating envelope + 1,008 corpus-conflict), spanning **deterministic + two hosted vendors**, **three prompt-type slates**, **four severity levels**, **eight one-factor-at-a-time trace-field interventions**, and **three corpus-conflict mutations**, the Sundog-gated chat architecture preserves evidence-tier and claim-boundary discipline with **zero unsafe-accepts**. Bounded to: sundog.cc claim map, k=3 retrieval depth, visible trace, browser_live mode, the two named hosted vendors at the named models.
 
 **Remaining open threads (post-Phase 9):**
+
+Historical note: these Phase 9 followups were later closed or superseded by Phases 10-12. The current status is the Phase 12 final section.
+
 1. **Hosted intervention battery on Claude** — Phase 5c was OpenAI-only; the 8 trace-field interventions × Claude would test whether the hosted causal-authority profile is vendor-invariant. ~$0.40.
 2. **Open-weight model pass (Llama, Mistral)** — closes the modelFamily axis from partial → covered for cross-architecture, not just cross-vendor.
 3. **Retrieval depth sweep** — k=0 (router-only) and k=8 (wide). Closes the retrievalDepth axis. Engineering: add a runner flag to override the default in `sundog-retrieval.mjs`.
@@ -1561,6 +1567,9 @@ Across **5,178 trials** (4,578 prior + 600 Phase 5d), three backends, three prom
 - `results/chat/interventions/{differential,adversarial}-hosted-anthropic/{intervention-response-matrix,causal-authority,failure-taxonomy,representative-transcripts}.{csv,json}` — aggregator outputs.
 
 **Remaining open threads:**
+
+Historical note: these Phase 5d followups were later closed or superseded by Phases 10-12. The current status is the Phase 12 final section.
+
 1. **Open-weight model pass (Llama, Mistral)** — closes modelFamily axis for cross-architecture, not just cross-vendor.
 2. **Retrieval depth sweep** — k=0 / k=8.
 3. **Falsification slate** — for the §13 claim itself: invent prompts designed to make the gate accept overclaim drafts. The current zero gate escapes is across our chosen slates; an adversarial "break the gate" slate would test the safety floor's actual ceiling.
@@ -1610,12 +1619,15 @@ Zero unsafe-accepts across **5,335 trials** (5,178 prior + 157 retrieval-depth),
 | severity | ✅ covered |
 | corpusConflict | ✅ covered |
 | evidenceTier | ✅ partial (6 of 7 tiers) |
-| modelFamily | 🟡 partial (det + OpenAI + Claude; open-weight pending) |
+| modelFamily | ✅ covered after Phase 12 (det + OpenAI + Claude + Meta + Alibaba) |
 | **retrievalDepth** | **✅ covered** (k=0, k=3, k=8) |
 | boundaryVisibility | 🟡 partial (only `visible`) |
 | browserMode | 🔴 gap (only `browser_live`) |
 
 **Remaining open threads (3 → 2):**
+
+Historical note: both items below were later closed by Phases 11-12. The current status is the Phase 12 final section.
+
 1. **Open-weight model pass** — last cross-architecture step.
 2. **Falsification slate** — invent prompts designed to *make* the gate accept overclaim drafts. The safety floor is currently confirmed across 5,335 trials of *engineered-adversarial* probes; a "break the gate" slate would test the ceiling not just deepen the floor.
 
@@ -1748,11 +1760,11 @@ All originally-named open threads from earlier phases are now closed:
 - **Cross-architecture / open-weight (Phase 12 closed for Meta Llama at two sizes + Alibaba Qwen)**
 
 Discretionary follow-ups (not blocking §13):
-- Hosted intervention battery on Llama/Qwen — Phase 12c staged, see below
+- Hosted intervention battery on Llama/Qwen — Phase 12c running locally, see below
 - Larger falsification slate (current 22 prompts could grow to 50–100 if a specific blind-spot family is hypothesized)
 - Production widget integration of the reasoning-trace stripping (Qwen-class output handling)
 
-### Phase 12c — Open-Weight Intervention Battery (staged, run-locally)
+### Phase 12c — Open-Weight Intervention Battery (running, run-locally)
 
 Goal:
 Extend Phase 5c (OpenAI) and Phase 5d (Claude) causal-authority surfaces to the three open-weight models from Phase 12. Same 8 trace-field interventions × differential/adversarial slates × hosted family. Tests whether Meta and Alibaba models pattern with Claude (trace-as-primary-constraint) or with OpenAI (system-prompt-as-primary-constraint) — or expose a third profile entirely.
@@ -1767,9 +1779,11 @@ Extend Phase 5c (OpenAI) and Phase 5d (Claude) causal-authority surfaces to the 
 
 The driver excludes the daily-cap-blocked `llama-3.3-70b-versatile × adversarial` combo silently. Total in-scope: 5 (model × slate) combos × 8 interventions = 40 intervention runs.
 
+Phase 12c run status (2026-05-13): in progress locally via `scripts/run-groq-interventions.ps1`. This is a discretionary strengthening pass, not a prerequisite for the public §13 claim.
+
 **Engineering pieces:**
 - `chat/eval/run_phase5_interventions.mjs` — extended with `--backend groq`. The hosted baseline path resolves to `phase5-hosted/<slate>/groq-<model>/draft-outcomes.json` (or `-rescored.json` if present), where `<model>` is the Groq model id with `/` and `.` replaced by `-`. Worker loop now wires `--delay-ms` into the hosted pacing.
-- `scripts/run-groq-interventions.ps1` — Windows PowerShell 5.1 driver, 275 lines. Per-(model × slate) loop: (a) verify the hosted baseline file is healthy (parses, row count matches expected); (b) regenerate it via `run_hosted_drafts.mjs` if corrupt or missing (Phase 12 disk-drift left several baselines truncated); (c) run all 8 interventions sequentially with per-model `--delay-ms` throttling. Logs to `results/chat/phase12c-groq-interventions-log.jsonl`. Resume-safe via `-SkipDone`.
+- `scripts/run-groq-interventions.ps1` — Windows PowerShell 5.1 driver. Per-(model × slate) loop: (a) verify the hosted baseline file is healthy (parses, row count matches expected); (b) regenerate it via `run_hosted_drafts.mjs` if corrupt or missing; (c) run all 8 interventions sequentially with per-model `--delay-ms` throttling. Logs to `results/chat/phase12c-groq-interventions-log.jsonl`. Resume-safe via `-SkipDone`.
 
 **Expected wall times (single worker, free tier):**
 
@@ -1804,7 +1818,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interve
 
 **Expected result based on prior phases:** zero unsafe-accepts is the prior across all five model implementations that ran the intervention battery (deterministic + gpt-4o-mini + claude-haiku-4-5). The novel question Phase 12c answers is *which trace fields show causal authority on which open-weight models*: do they pattern with Claude (5 of 6 fields strong on adversarial) or with OpenAI (only `trace.evidenceTier` weak), or split? Either result extends §13's causal-substantiation surface from 3 to 5 model implementations.
 
-**Baseline regeneration note:** the Phase 12 sweep left three differential baseline JSON files truncated by disk-drift (`groq-llama-3-3-70b-versatile`, `groq-llama-3-1-8b-instant`, `groq-qwen-qwen3-32b` — all on the differential slate; adversarial baselines parsed clean). The driver detects this on dry-run as `[REGEN BASELINE]` and re-runs the corresponding baseline sweep automatically before starting interventions. No manual cleanup required.
+**Baseline regeneration note:** the driver verifies hosted baseline health before each intervention block and regenerates any missing or corrupt baseline automatically. The completed Phase 12 baseline surface is now healthy; this guard remains in place for resume-after-kill and future disk-drift recovery.
 
 ### Phase 12b — Throttled-Sweep Driver (run-locally plan)
 
@@ -1858,13 +1872,19 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.p
 
 Use `powershell.exe`, not `pwsh`, on the Windows 10 project machine unless PowerShell 7 has been installed explicitly. `-DryRun` prints the plan and exits without loading the Groq key or making hosted calls. Non-dry runs read the Groq key from `C:\Users\hughe\Dev\syek.corg.txt` and verify it before the first call. Each step's outcome lands in `results/chat/phase5-hosted/<slate>/groq-<model>/draft-outcomes.{csv,json}` and `summary.json`. The driver log at `results/chat/phase12-groq-driver-log.jsonl` records one line per step with timing + outcome counts so a multi-hour run is recoverable and inspectable mid-stream.
 
-**After the local sweep completes, what to do with the data:**
+**Completion note:** the local sweep completed successfully and the Phase 12
+section above now carries the final numbers: 225 open-weight drafts, 210
+accepted, 15 gate-rejected, 0 errors, and 0 unsafe-accepts.
+
+**Original operator checklist, now complete:**
 1. The runner's `summary.json` already carries the per-step accept/reject/escape counts; the driver log mirrors this.
 2. Re-rescore each backend's outcomes against the current patched gate if needed (the rescore is fast; just point the existing rescoring scripts at the new paths).
 3. Re-run `chat/eval/aggregate_operating_envelope.mjs` to fold the open-weight family rows into the cell-class-map (requires extending the SOURCES list in the aggregator with the new groq-* paths).
-4. Update SUNDOG_V_CHAT.md §Phase 12 with the full sweep numbers, replacing the "partial" qualifier.
+4. Update SUNDOG_V_CHAT.md §Phase 12 with the full sweep numbers. Completed in the Phase 12 final section.
 
-This run-locally plan is a clean route around the broken paid-tier waitlist. The architecture's safety claim doesn't depend on completing it — the 15 successful drafts already demonstrate the finding — but the full sweep would tighten the cross-architecture cell-class-map.
+This run-locally plan completed and became the clean route around the broken
+paid-tier waitlist. It tightened the cross-architecture cell-class-map rather
+than remaining a partial-coverage caveat.
 
 ## 11. Browser Architecture
 ```text
