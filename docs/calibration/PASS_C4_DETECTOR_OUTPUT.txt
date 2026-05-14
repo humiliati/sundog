@@ -1,0 +1,25 @@
+=== Pass C4 -- wing-slope geometric curvature detector ===
+  Gates: gradient >= 1.5 L*; offset <= +/-12 px; >= 12 candidates; RMS <= 8.0 px; R_uta/R22 in [0.7, 1.3]
+
+--- p2 (h=18.6 deg) ---
+2.Photometeor-jeff_mod_red.jpg  sun=(567, 496)  R22=182  R_uta_pred=182
+  edge candidates kept: 2  (out-of-frame=0, weak=42, far=4)
+  circle fit: SINGULAR or too few points
+  VERDICT: not-recovered
+
+--- p13 (h=6.83 deg) ---
+13.480859565_17934474635991868_323320248088719839_n.jpg  sun=(543, 372)  R22=211  R_uta_pred=211
+  edge candidates kept: 4  (out-of-frame=4, weak=38, far=2)
+  circle fit: SINGULAR or too few points
+  VERDICT: not-recovered
+
+--- p27 (h=0.5 deg) ---
+27.Zzhau2Uiospj37zhwHEr4D-1200-80.jpg.webp  sun=(596, 559)  R22=219  R_uta_pred=219
+  edge candidates kept: 0  (out-of-frame=0, weak=48, far=0)
+  circle fit: SINGULAR or too few points
+  VERDICT: not-recovered
+
+=== Per-photo verdict roll-up ===
+  p2: not-recovered
+  p13: not-recovered
+  p27: not-recovered

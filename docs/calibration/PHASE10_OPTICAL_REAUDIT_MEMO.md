@@ -26,10 +26,11 @@ p27.
 
 The remaining tangent verdict is bounded: the column-peak detector fails on
 the post-C1 sampled set, but this is a protocol-conditional negative. With
-C2 unrun *(at original filing — see Post-C2 Addendum below; C2 landed
-later the same day and returned not-recovered)*, the correct handoff
-language was "unresolved open question" for a wing-based or Lab b* ridge
-detector, not a class-level tangent failure.
+C2 unrun *(at original filing — see Post-C2 and Post-C4 Addenda
+below; both passes landed later the same day, each returning
+not-recovered)*, the correct handoff language was "unresolved open
+question" for a wing-based or Lab b* ridge detector, not a class-level
+tangent failure.
 
 Finding: no new tangent-route blocker. The only remaining risk is stale
 surface language that still says "all four eligible photos" or implies a
@@ -100,7 +101,7 @@ consolidator pass.
 | Parhelion offset -> h | promoted, post-hedged | 3-photo strict eligibility: p2, p7, p13 |
 | CZA apex -> h | fails coverage | dataset/aspect-ratio: only p2 is in-window and measured |
 | Supralateral -> h | fails structural discrimination | physics-shape: h-spread below visual-edge noise |
-| Tangent-arc curvature -> h | detection gate under two literature-standard detectors *(see Post-C2 Addendum)* | tooling-shape: C2 detector built and ran; not-recovered |
+| Tangent-arc curvature -> h | detection gate under three literature-standard detectors *(see Post-C2 + Post-C4 Addenda)* | tooling-shape: C2 and C4 detectors built and ran; both not-recovered |
 
 The pre-audit "three independent failure layers" phrase stays retired. The
 post-audit phrasing is "three structurally different failure modes":
@@ -176,4 +177,71 @@ promoted inverse handle. The forward-rich / inverse-narrow asymmetric
 field-shape pattern survives at the same one-handle resolution; C2
 ruled out a *literature-standard* path to two-handle promotion but did
 not rule out two-handle promotion via a different detector substrate.
+
+## Post-C4 Addendum *(2026-05-14)*
+
+The Post-C2 Addendum above narrowed the tangent-route open question to
+"non-literature-standard detector designs (wing-slope curvature,
+matched-filter, polarization)." Pass C4 lands the first of those —
+the wing-slope geometric curvature detector Persona 1 §5 explicitly
+named — and tests it on the same eligibility set. Implementation:
+`scripts/tangent_curvature.py` (regression runner
+`scripts/test_tangent_curvature.py`; captured run output at
+`docs/calibration/PASS_C4_DETECTOR_OUTPUT.txt`; full receipt in "###
+Pass C4 Update" of `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`).
+
+**Pass C4 result.** A wing-slope luminance-gradient edge detector with
+circle fit ran on p2 / p13 / p27. Pre-registered gates: gradient
+magnitude ≥ 1.5 L\*/px AND radial offset ≤ ±12 px from predicted
+tangent locus AND ≥ 12 surviving candidates AND circle-fit RMS ≤ 8 px
+AND fitted R\_uta / R22 ∈ [0.7, 1.3]. Result on every photo: 88-100%
+of wing samples rejected as weak-gradient, leaving 0-4 surviving
+candidates — too few for any circle fit. **Not-recovered** on all
+three photos.
+
+**Reclassification of Persona 1's §5 alternative.** The Post-C2
+addendum classified wing-slope geometric curvature as a
+"non-literature-standard detector design." Reading Persona 1 §5 more
+carefully, this is wrong: Persona 1 explicitly named gradient-based
+edge detection as the literature-standard alternative to peak-based
+ridge detection (*"real measurement needs either gradient-based edge
+detection (the spine is at a brightness or chromaticity transition,
+not a peak) or manual sample selection from visual crops"*). C4
+tested the gradient-based edge detection branch. The route now fails
+under **three** literature-standard detector families.
+
+**Taxonomy update.** The "tooling-protocol" classification of the
+tangent-route failure survives but narrows further. The remaining
+candidate detector designs / substrates that have NOT been tested:
+
+- **Manual sample selection from visual crops** (Persona 1 §5's
+  literature-standard alternative #2). Hand-anchoring rather than
+  automated detection. `tangent_curvature.fit_circle` already accepts
+  arbitrary (x, y) point lists, so if the team hand-anchored arc
+  points on each photo, the existing circle-fit machinery could run.
+- **Matched-filter detection against a parameterized arc model.** A
+  different signal (whole-shape correlation) than the per-sample edge
+  or ridge picks tested so far. Audit memo doesn't classify this as
+  literature-standard or not.
+- **Polarization-channel filtering.** Different *substrate* — requires
+  polarizer-equipped follow-up photos. Substrate test, not detector
+  test on the same substrate.
+- **New calibration photos with stronger tangent display.** Coverage
+  expansion rather than detector design. The wing-region L\*-gradient
+  rejection rate (88-100%) suggests the calibration set may genuinely
+  not carry enough tangent signal for any radial-profile detector at
+  the pre-registered amplitude.
+
+**Handoff implication.** `PHASE10_OPTICAL_AUDIT_HANDOFF.md` §2.3 was
+updated in the same wave to reflect the post-C4 state: the specialist
+question reframes from "is wing-slope curvature worth building?" (now
+answered: built and ran negative) to "is manual hand-anchoring,
+matched-filter detection, polarization filtering, or new calibration
+photos the right next step?" The §2.3 prose carries the four options.
+
+**Single-handle verdict unchanged.** Parhelion-offset remains the sole
+promoted inverse handle. The "forward-rich / inverse-narrow" framing
+stays at the same one-handle resolution; C4 ruled out the second
+literature-standard alternative for two-handle promotion but did not
+rule out the remaining four candidates.
 
