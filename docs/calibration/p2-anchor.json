@@ -20,5 +20,16 @@
     "right_x": 759,
     "y": 495
   },
-  "cza_apex": [560, 113]
+  "cza_apex": [560, 113],
+  "upper_tangent_manual_samples": {
+    "method": "Pass C5 2026-05-14: visual identification from photograph at original display resolution; per-point uncertainty estimated at +/-15 px. Sun and R22 anchors from this file's existing fields used as the coordinate reference. The chromatic dome at the 22-degree halo crown is clearly visible (consistent with Persona 1 section 3 p2 entry: 'clean, brilliantly coloured upper-tangent smile that sits on the 22-degree halo crown exactly where Cowley's standard description places it').",
+    "rationale_pointer": "PHASE10_ATTACK_ROADMAP.md Pass C5; PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md Persona 1 section 5 manual sample selection alternative",
+    "points": [
+      {"x": 567, "y": 312, "label": "apex at halo crown"},
+      {"x": 505, "y": 295, "label": "left inner wing"},
+      {"x": 455, "y": 260, "label": "left outer wing"},
+      {"x": 630, "y": 295, "label": "right inner wing"},
+      {"x": 680, "y": 260, "label": "right outer wing"}
+    ]
+  }
 }

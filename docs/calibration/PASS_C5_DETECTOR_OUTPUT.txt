@@ -1,0 +1,25 @@
+=== Pass C5 -- manual sample selection from visual crops ===
+  Gates: >= 5 manual points; RMS <= 10.0 px; R_uta_obs / R22 in [0.7, 1.3]
+
+--- p2 ---
+  sun=(567, 496)  R22=182  n_points=5
+  fit center: (567.5, 160.3)  R_uta_obs=149.9  R_uta_pred=182  ratio=0.824  RMS=1.23px
+  VERDICT: manual_recovered
+
+--- p13 ---
+  sun=(543, 372)  R22=211  n_points=1
+  anchor status: insufficient_samples_for_fit
+  circle fit: insufficient points or singular
+  VERDICT: not_recovered_too_few_or_singular
+
+--- p27 ---
+  status: no_samples_anchorable
+  verdict: not_recovered_too_few_or_singular
+
+=== Per-photo verdict roll-up ===
+  p2: manual_recovered
+  p13: not_recovered_too_few_or_singular
+  p27: not_recovered_too_few_or_singular
+
+Recovered photos: 1 / 3
+Coverage gate: FAIL (< 2 eligible photos for route promotion)

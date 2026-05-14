@@ -577,11 +577,11 @@ the same name plus a `r22_source_note` rationale. p26's anchor adds a
 `geometric_validity` block with per-side flags and the audit memo
 citation.
 | CZA apex → sun altitude / visibility | **+7.0 px / y: +1.3 px (literature; Pass A1b)** | p7 NOT APPLICABLE (h = 59.4° > 32.2° cutoff; CZA disappears); p13 (h = 6.83°) OFF-FRAME, predicted apex y = −125.6 (above top of photo) | p20 (h ≈ 5°), p22 (h ≈ 5.7°), p25 (h ≈ 11.4°), p26 (h ≈ 9°), p30 (h ≈ 11.1°): all OFF-FRAME (predicted apex y < 0 at every low-h photo because CZA sits ~50–58° above sun in the disappearance approach); **p27 REMOVED Pass A2** (visible feature is 46° halo top / supralateral merger, not CZA) | **fails coverage gate** *(Pass A3 verdict 2026-05-13; was: "fails residual gate on expanded set")* | **Pass A3 verdict, 2026-05-13.** Re-derived against the post-A1b atlas and post-A2 eligibility set. **Only p2 is in-window with an independent CZA-apex measurement**, and on that single photo the residual is **+1.3 px** — well below the 8 px / 0.04*R22 route threshold. The route does *not* fail the residual gate on its own merits; the pre-audit "opposite-sign residuals on p2 and p27" framing dissolved when (a) A1b corrected the atlas formula bug that was creating the p2 −19 px artifact, and (b) A2 re-classified the p27 chromatic arc as a different primitive. **The route fails the coverage gate**: the pre-registered "fewer than two eligible photos" rule binds because all other anchored photos are out-of-window (p7) or off-frame at the low altitudes where the CZA sits ~50–58° above sun. This is a structurally different failure mode from the pre-audit verdict — *not* a "route-reliability" finding but a "single in-window photo in the calibration set" finding. Reopening coverage would require either anchoring new photos in the 5° < h < 32° range where CZA stays on-frame, or accepting p2's sub-px residual as the single eligible result. Anchors: `p2-anchor.json` (in-window, sub-px); `p27-anchor.json` (re-classified per Pass A2); other six anchored photos all off-frame at literature CZA position. |
-| Tangent-arc curvature → sun altitude | **detection-degenerate** (fuses with halo top at h=18.6°) | **p7 REMOVED Pass C1** (h=59.4° is circumscribed-halo regime, not upper-tangent-route eligibility); p13 (h=6.83°): chromatic-haze contamination, no clean smile to fit | p27 (h=0.5°): sun-bloom flare contaminates the sun-meridian column; p20 not measured | **fails detection across the post-C1 sampled set under three literature-standard detectors** *(Pass C2 + Pass C4 landed 2026-05-14)* | **Pass C2 + C4 verdict, 2026-05-14.** Pass C1 dropped p7 from eligibility (circumscribed-halo regime at h=59.4°). Pass C2 built a wing-azimuth-offset Lab b\* ridge detector with 22°-halo-radial-profile subtraction (`scripts/tangent_detector.py`) — coherent ridge samples 0-2 / ~24 per wing on every photo, well below the pre-registered 8 / 24 gate. Pass C4 followed with the gradient-based edge detector Persona 1 §5 explicitly named (`scripts/tangent_curvature.py`): luminance-gradient circle-fit on the wing region — surviving candidates 0-4 / 48 per photo (88-100% rejected as weak-gradient), too few for a circle fit on any photo. Result: **not-recovered on p2 / p13 / p27 under three literature-standard detectors** (column-peak intensity at sun meridian; wing-radial Lab b\* with halo-radial subtraction; wing-slope luminance-gradient curvature). The "tooling-conditional" framing narrows from "any literature-standard detector might work" to "only manual sample selection from visual crops, matched-filter detection, polarization filtering, or new calibration photos with stronger tangent display might recover the route — all Phase 10 backlog." The route remains blocked. See ### Pass C2 Update and ### Pass C4 Update below for the full receipts. |
+| Tangent-arc curvature → sun altitude | **detection-degenerate** (fuses with halo top at h=18.6°) | **p7 REMOVED Pass C1** (h=59.4° is circumscribed-halo regime, not upper-tangent-route eligibility); p13 (h=6.83°): chromatic-haze contamination, no clean smile to fit | p27 (h=0.5°): sun-bloom flare contaminates the sun-meridian column; p20 not measured | **partially recovered on p2 under manual sample selection; coverage gate fails; C5↔C6 substrate tension flagged** *(Pass C2 + C4 + C5 + C6 landed 2026-05-14)* | **Pass C2 + C4 + C5 + C6 verdict, 2026-05-14.** Pass C1 dropped p7. Three automated detectors fail on every photo: Pass C2 wing-radial Lab b\* ridge (`scripts/tangent_detector.py`, 0-2 / ~24 coherent samples); Pass C4 wing-slope luminance-gradient curvature (`scripts/tangent_curvature.py`, 88-100% weak-gradient rejection); **Pass C6 matched-filter against parameterized arc on halo-subtracted b\* (`scripts/tangent_matched_filter.py`), the natural follow-up the C5 receipt named** — negative correlation across the entire R\_uta scan on p2 (peak −0.117 at R\_uta = 263, outside tolerance). **Pass C5 (manual sample selection) recovered the route on p2** (R\_uta / R22 = 0.824, RMS = 1.23 px) with a methodology hedge (possible symmetry bias). On p13 only the apex was marginally anchorable; on p27 the sun-bloom column prevents any anchoring. The C5↔C6 contradiction on the same b\* substrate flags **two open interpretations**: (a) gestalt signal in a different substrate (untested: absolute b\*, L\* magnitude, chromaticity magnitude); (b) C5's tight fit is hand-anchoring symmetry-bias artifact. Recommended verify gate: specialist re-anchoring of p2. Coverage gate fails (1 / 3 photos). See ### Pass C6 Update and ### Pass C5 Update below for the full receipts. |
 | Supralateral position → sun altitude | _measurement pending_ (route-eligible but no apex anchored) | p7 cropped; p13 not visible | **p27 measured Pass A2** with apex at (599, 142) = ~41.89° above sun (~4° below the ~46° literature prediction at h = 0.5°, likely chromatic-broadening); p20 weak/cropped | **fails on structural discrimination (Pass A3 verdict 2026-05-13)** *(coverage-gate hedged: 1 measured + 1 eligible-unmeasured)* | **Pass A3 verdict, 2026-05-13.** Post-A2 the eligibility set is p2 (eligible per existing notes, apex unmeasured) + p27 (measured at 41.89° above sun). On a strict reading the route fails the coverage gate (1 measured photo); on a permissive reading it's at the two-photo threshold. **Either reading is dominated by the structural-discrimination finding from audit memo §2 item 12.** Supralateral angular distance from sun varies only ~0.5° across the entire h = 0–22° eligibility range, an order of magnitude less h-sensitivity than parhelion-offset. The predicted h-spread between p2 (h = 18.6° → ~45.7°) and p27 (h = 0.5° → ~46.0°) is **~0.3°**, which at p2's R22 = 182 px corresponds to **~2.5 px**. Visual-edge apex measurement noise on a chromatic-broadened halo arc is easily 5–10 px (see p27's existing "flat apex makes the fitted math apex sensitive" flag in `_meta.note`). The h-spread the route can resolve is below the measurement noise floor on either photo, so **the route would not be a useful inverse handle even with perfect coverage**. Distinct from the pre-audit framing in two ways: (a) it is *not* "p27 might reopen coverage" — coverage may reopen but the route is still dead; (b) the structural limit is in the *atmospheric physics*, not in the dataset or the detection protocol. Reopening coverage on a third low-h photo will not restore the route. Anchors: `p2-anchor.json` (no supralateral apex), `p27-anchor.json` (`supralateral_46halo_merger` block). |
 | Parhelic-belt y residual (primitive, not route) | not separately measured (Phase 2 set only had x-residuals) | p7 not applicable; p13 -10.4 px under the FF observed-minus-predicted convention | p27 -0.0 px; p22 +0.2 px; p26 -10.8 px; p30 -2.5 px; p25 +5.0 px (caveated) | **watch-list retired 2026-05-13** (FF1 falsified; FF3 passed) | Phase 10-FF tested the shared `--parhelic-y-offset-r22 = -0.05` rule across six low-h anchors. FF1 falsified: the >=5 px residuals do not share a sign (p13 / p26 negative, p25 positive) and Spearman rho is +0.086. FF3 passed: no photo breaches the 12 px primitive threshold. Record p13 as photo-specific / anchor-local, not a promoted low-h correction. See `PHASE10_BELT_Y_RESULTS.md`. |
 
-## Tangent-Curvature v3.8 Receipt *(updated Pass C1 + Pass C2 + Pass C4 2026-05-14)*
+## Tangent-Curvature v3.8 Receipt *(updated Pass C1 + Pass C2 + Pass C4 + Pass C5 + Pass C6 2026-05-14)*
 
 Task #54 originally sampled p2 (h=18.6°), p7 (h=59.4°), p13
 (h=6.83°), and p27 (h=0.5°). Pass C1 drops p7 from the
@@ -754,6 +754,275 @@ remains a promoted **logo / animation vocabulary primitive** based on
 visibility; only the inversion route remains blocked. See the
 Vocabulary Classification table below.
 
+### Pass C6 Update — Matched-Filter Detection Against Parameterized Arc Model *(landed 2026-05-14)*
+
+Pass C6 was the natural follow-up to Pass C5: C5's manual sample
+selection recovered the upper-tangent route on p2 (R\_uta\_obs / R22 =
+0.824, RMS = 1.23 px), and the C5 receipt named matched-filter
+detection as the highest-leverage next detector candidate. The
+hypothesis was: **C2 (wing-radial Lab b\* ridge) and C4 (wing-slope
+luminance-gradient) sampled per-point features and missed p2's signal;
+C5 manual recovered at "whole-arc-shape" resolution; a matched-filter
+that correlates a synthetic whole-arc template with the b\* residual
+image should recover what C2 / C4 missed.**
+
+**That hypothesis is falsified by Pass C6.**
+
+**Implementation.**
+[`scripts/tangent_matched_filter.py`](../../scripts/tangent_matched_filter.py)
+with regression runner
+[`scripts/test_tangent_matched_filter.py`](../../scripts/test_tangent_matched_filter.py).
+Captured run output: [`PASS_C6_DETECTOR_OUTPUT.txt`](PASS_C6_DETECTOR_OUTPUT.txt).
+The detector reuses Pass C2's halo-subtracted Lab b\* substrate
+(via `tangent_detector.compute_halo_b_radial_profile` and
+`halo_subtracted_b`).
+
+**Algorithm.**
+
+1. Compute the halo-subtracted Lab b\* residual image (same substrate
+   as C2).
+2. For each candidate R\_uta ∈ [0.5 × R22, 1.5 × R22] in 4 px steps
+   (~45 candidates per photo), generate a 2D synthetic template: a
+   Gaussian-thickened arc trace (σ = 4 px) along the predicted
+   locally-circular upper-tangent locus, restricted to azimuth
+   ∈ [0°, 75°] from the apex direction. Templates include the apex
+   (different from C2 / C4 which excluded the inner strip).
+3. Compute Pearson correlation between template and b\* residual over
+   the template's support (pixels with template weight > 0.05).
+4. Find the R\_uta with peak correlation. Report peak score, ratio
+   R\_uta\_obs / R22, baseline mean (correlation over the other
+   R\_uta values), and prominence ratio (peak / baseline mean).
+
+**Pre-registered gates.**
+
+- R\_uta\_obs / R22 ∈ [0.7, 1.3]
+- Peak correlation score ≥ 0.10 (positive, above-noise correlation)
+- Peak prominence ≥ 1.5× baseline mean
+
+**Per-photo results.**
+
+| photo | h | peak R\_uta | ratio | peak corr | baseline mean | prominence | verdict |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| p2  | 18.6° | 263 px | 1.445 | **−0.117** | −0.185 | 0.00× (peak still negative) | **not-recovered** |
+| p13 | 6.83° | 106 px | **0.502** | +0.191 | +0.093 | 2.05× | not-recovered *(prominence passes but R\_uta way below tolerance)* |
+| p27 | 0.5°  | 258 px | 1.178 | −0.001 | −0.021 | 0.00× | **not-recovered** *(score essentially zero)* |
+
+**The headline finding: the matched-filter hypothesis is falsified on
+the halo-subtracted b\* substrate.**
+
+- On **p2**, the correlation is **negative across the entire R\_uta
+  scan** (from −0.244 at R\_uta = 91 to −0.117 at R\_uta = 267). There
+  is no positive correlation anywhere — the template-vs-residual
+  signal-coupling reverses sign in the wing region. The geometry C5
+  hand-anchored on p2 (R\_uta\_obs = 149.9, ratio = 0.824) shows a
+  matched-filter score of approximately −0.21 — the *opposite* sign
+  from what a successful match would produce.
+- On **p13**, matched-filter found a positive correlation peak (0.191)
+  with 2.05× prominence, but at **R\_uta = 106 px = 0.502 × R22** —
+  way below the predicted curvature. This is not the upper tangent
+  arc; the matched-filter is picking up some other chromatic feature
+  (possibly haze-edge structure or a parhelic-circle artifact at half
+  the predicted radius).
+- On **p27**, the score is effectively zero everywhere. The sun-bloom
+  column dominates the upper region; no coherent chromatic structure
+  matches the predicted upper-tangent template at any R\_uta.
+
+**Two interpretations of the C5↔C6 contradiction:**
+
+(a) **Substrate mismatch.** C5's manual identification picked up the
+arc by *visual gestalt* (combining luminance, chromaticity, spatial
+coherence, and likely some prior expectation of arc shape). C6
+correlates only Lab b\* halo-subtracted residual. The arc's gestalt
+signal may not be in the b\* channel alone — it could be in absolute
+b\* (no subtraction), in L\* magnitude, in chromaticity vector
+magnitude (`sqrt(a*² + b*²)`), or in some derived combination. C5
+positive + C6 negative narrows the substrate space the route's signal
+lives in; it does not rule out automated detection on a different
+substrate.
+
+(b) **Symmetry bias in C5.** The C5 receipt explicitly hedged: *"RMS
+= 1.23 px is suspiciously tight given ±15 px per-point uncertainty,
+possibly reflecting symmetry bias."* If the manual hand-anchoring
+unconsciously favored points consistent with circular shape, C5's
+clean fit would be partly artifact, and the route's "geometric
+realness on p2" claim would weaken. C6's null result on the same
+substrate is consistent with this reading — the matched-filter
+doesn't share the symmetry bias and reports honestly.
+
+Both interpretations are testable. (a) tests by running matched-filter
+on different substrates (no halo subtraction; L\* magnitude;
+chromaticity magnitude). (b) tests by specialist re-anchoring. Both
+are filed as **Phase 10 backlog**.
+
+**Implication for the failure-mode taxonomy.** The "hybrid coverage +
+detection-tooling" classification from Post-C5 stands, but its
+detection-tooling sub-claim now has a key qualifier:
+
+> *Three automated detectors (C2 wing-radial Lab b\*; C4 wing-slope
+> luminance-gradient; C6 matched-filter on halo-subtracted b\*) all
+> miss p2's signal. Manual sample selection (C5) recovers on p2 but
+> with a methodology hedge. Whether the recovery is a real positive
+> awaiting the right automated substrate, or a hand-anchoring artifact
+> from symmetry bias, is the remaining question.*
+
+The single-handle verdict survives unchanged. Parhelion-offset is
+still the sole *promoted* inverse handle. Tangent's verdict stays at
+"partially recovered on p2 under manual sample selection; coverage
+gate fails (1 / 3 photos); the manual positive is now in tension with
+C6's automated negative on the same b\* substrate — recommend
+specialist re-anchoring as the verify gate before propagating C5's
+positive into public framing."
+
+**Methodology note.** The C6 gates were pre-registered (R\_uta /
+R22 ∈ [0.7, 1.3], peak corr ≥ 0.10, prominence ≥ 1.5×). All three
+photos fail the gates. The negative is a clean pre-registered
+result, not a tuning artifact. Future matched-filter passes on
+alternative substrates would need their own pre-registration.
+
+### Pass C5 Update — Manual Sample Selection from Visual Crops *(landed 2026-05-14)*
+
+Pass C5 tests the **other** literature-standard alternative Persona 1
+§5 explicitly named alongside gradient-based edge detection:
+
+> *"Real measurement needs either gradient-based edge detection (the
+> spine is at a brightness or chromaticity transition, not a peak) or
+> manual sample selection from visual crops."*
+
+C4 tested gradient-based edge detection (not-recovered). C5 tests
+manual sample selection. The two together exhaust Persona 1's literal
+list of literature-standard alternatives to peak-based ridge
+detection.
+
+**Implementation.** Hand-anchored (x, y) point lists added to the
+`upper_tangent_manual_samples` block of each of the post-C1 eligibility
+photos' anchor JSONs (`p2-anchor.json`, `p13-anchor.json`,
+`p27-anchor.json`). Runner at
+[`scripts/test_tangent_manual.py`](../../scripts/test_tangent_manual.py)
+loads the manual points and applies `tangent_curvature.fit_circle` (the
+same linearized least-squares circle fit Pass C4 used). Captured run
+output: [`PASS_C5_DETECTOR_OUTPUT.txt`](PASS_C5_DETECTOR_OUTPUT.txt).
+
+**Pre-registered gates** (different from C4 — fewer manual points are
+expected than per-azimuth automated candidates, and each manual point
+is selected with visual care, so the gates relax candidate count and
+tighten RMS):
+
+- ≥ 5 surviving manual points per photo
+- circle-fit RMS ≤ 10 px
+- R\_uta\_obs / R22 ∈ [0.7, 1.3]
+
+**Hand-anchoring procedure.** Each photo was read at original display
+resolution and the visible upper-tangent chromatic feature was
+identified by eye. Apex was anchored at the point where the chromatic
+dome touches the 22° halo crown; wing points were anchored at the
+visible spine of the chromatic dome at approximately ±25° and ±50°
+from the apex. Per-point uncertainty estimated at ±15 px. The
+anchor-JSON `upper_tangent_manual_samples.method` field records the
+methodology per photo and explicitly flags photos where anchoring was
+not possible.
+
+**Per-photo results.**
+
+| photo | h | n manual points | fit center | R\_uta\_obs | R\_uta / R22 | RMS | verdict |
+| --- | ---: | ---: | --- | ---: | ---: | ---: | --- |
+| p2  | 18.6° | 5 | (567.5, 160.3) | 149.9 px | **0.824** | 1.23 px | **manual_recovered** |
+| p13 | 6.83° | 1 (apex only) | n/a | n/a | n/a | n/a | not-recovered (insufficient samples) |
+| p27 | 0.5°  | 0 | n/a | n/a | n/a | n/a | not-recovered (sun-bloom contamination; no anchorable points) |
+
+**Two structurally distinct findings:**
+
+1. **On p2, the arc is geometrically real and circular.** Five
+   hand-anchored points trace a circle with **RMS = 1.23 px** — far
+   below the 10 px tolerance, and below the typical noise floor for
+   visual edge measurement on a chromatic-broadened halo arc. The
+   fitted radius R\_uta\_obs = 149.9 px is **82.4% of R22**, well
+   inside the [0.7, 1.3] tolerance band. This is a clean *positive*
+   result on a single photo: the upper tangent arc on p2 sits where
+   the locally-circular literature approximation predicts, with
+   measurable circular curvature.
+
+2. **The signal that p2 carries is not what C2 / C4 measured.** Pass
+   C2 (wing-radial Lab b\* with halo-radial subtraction) found 0-2/24
+   coherent ridge candidates per wing on p2; Pass C4 (wing-slope
+   luminance-gradient circle-fit) rejected 42/48 wing samples as
+   weak-gradient. Both detectors operated on the same wing region the
+   manual anchoring used and missed the arc. The conclusion is that
+   **the upper tangent arc's signature on p2 is at the resolution of
+   visual chromatic-dome identification rather than at the resolution
+   of per-sample radial-profile peak picks** — a substantive update
+   to the C2 / C4 detector-design space, not a substrate failure.
+
+3. **On p13 and p27, even manual anchoring fails.** p13 is washed
+   into a luminous chromatic gradient at the halo crown with no
+   localizable wing spine (Persona 1 §3 p13 entry); only the apex
+   could be marginally anchored. p27 has the sun-bloom column
+   dominating the halo-crown region; no upper-tangent feature is
+   separable. The "tooling-protocol" framing collapses on these
+   photos to a **substrate-signal-availability** finding: the arc
+   carries insufficient image information for *any* detector
+   (automated or manual) to localize.
+
+**Coverage gate.** Pre-registered ≥ 2 eligible photos rule for route
+promotion. Manual sample selection recovers on **1 / 3** photos.
+**Coverage gate fails.** Route promotion remains blocked.
+
+**Failure-mode taxonomy update.** The pure "detection-protocol
+tooling" classification from the C2 + C4 receipts is now refined into
+a **hybrid coverage + detection-tooling failure**:
+
+- **On p2:** detection-tooling failure (signal present, three
+  automated detectors miss it; manual anchoring recovers).
+- **On p13 / p27:** substrate-signal-availability failure (signal too
+  weak / contaminated for any detector — automated or manual).
+
+This is structurally different from the pre-C5 framing in two ways:
+(a) the route is no longer presumed to fail uniformly across the
+sampled set; p2's signal is real and circular, (b) future detector
+improvements (matched-filter, smarter ridge picks) could plausibly
+recover the route on p2-like photos, but **coverage expansion is
+needed regardless** because p13 / p27 don't carry enough substrate
+signal even for manual measurement.
+
+**Implications for the open-questions list.** The remaining tangent
+recovery candidates are now narrower:
+
+- **Matched-filter detection against a parameterized arc model.**
+  Still open. The p2 finding (signal at visual-dome resolution, not at
+  per-sample-peak resolution) makes matched-filter MORE promising
+  than C2 / C4: a template-correlation detector would test the
+  whole-arc-shape hypothesis the manual anchoring confirmed.
+- **Polarization-channel filtering.** Different substrate; still
+  open.
+- **New calibration photos with stronger tangent display.** Most
+  load-bearing for coverage expansion: even with a perfect detector,
+  the route needs ≥ 2 photos with anchorable signal, and the current
+  set has 1.
+- **Manual sample selection (now tested).** Confirmed as
+  literature-standard recovery on p2; insufficient coverage on
+  current calibration set.
+
+**Single-handle verdict unchanged.** Parhelion-offset remains the
+sole *promoted* inverse handle. Tangent-arc curvature → h is now
+classified as **"partially recovered (1 / 3 photos under manual
+sample selection); coverage gate fails"** rather than "fails under
+three literature-standard detectors." The route's status moves from
+"blocked by detector tooling" to "blocked by hybrid
+coverage-plus-tooling; signal confirmed present on the cleanest
+display, absent on the two contaminated ones." This is a meaningful
+weakening of the route's verdict in a constructive direction — the
+arc is now known to be measurable in principle, just not on enough of
+the current set.
+
+**Methodology hedge.** The p2 manual anchoring was performed by
+visual identification at display resolution by claude assistant, with
+per-point uncertainty estimated at ±15 px. The RMS = 1.23 px fit
+result is suspiciously tight given that uncertainty and could
+partially reflect symmetry bias (the visual identification favored
+points consistent with circular shape). A specialist hand-anchoring
+the same photo could confirm or weaken the result; recording the
+points in the anchor JSON makes that re-verification a one-script
+operation.
+
 ### Pass C4 Update — Wing-Slope Geometric Curvature Detector *(landed 2026-05-14)*
 
 Pass C4 was the immediate follow-up that the Pass C2 receipt above named
@@ -870,7 +1139,7 @@ animation vocabulary is unchanged.
 | --- | --- | --- | --- | --- |
 | CZA | visible | not applicable / high sun | cropped or not visible | Conditional core: render only inside the CZA sun-altitude validity window; CZA-apex inversion route fails coverage after A1b/A2/A3, not residual. |
 | Supralateral arc | visible | candidate only | not visible / cropped | Keep as optional vocabulary; p27 is now a measured 46°-halo-top / supralateral-merger candidate, but the inversion route fails structural h-discrimination. |
-| Upper tangent arc | visible | high-sun circumscribed-halo regime, not upper-tangent-route evidence | candidate | Promote as stable logo/animation shape language from visibility; curvature-as-inversion-route fails detection under three literature-standard detectors (Passes C2 + C4 landed 2026-05-14); tooling-conditional narrows to manual sample selection, matched-filter, polarization, or new calibration photos. |
+| Upper tangent arc | visible | high-sun circumscribed-halo regime, not upper-tangent-route evidence | candidate | Promote as stable logo/animation shape language from visibility; curvature-as-inversion-route partially recovered on p2 via Pass C5 manual sample selection (R\_uta\_obs / R22 = 0.824, RMS = 1.23 px), coverage gate fails at 1 / 3 photos; three automated detectors (C2/C4 plus original column-peak) miss the signal that manual recovers; remaining candidates are matched-filter detection (now more promising), polarization filtering, or new calibration photos. |
 | Lower tangent arc | visible near lower 22° contact | not clear | not clear | Annotation only until another clean low-sun source supports it. |
 | Suncave Parry arc | visible/candidate using image 1 key | weak candidate | weak candidate | Candidate label only; useful for education, not logo default. |
 | Parry supralateral arc | candidate in image 1 | not visible | not visible | Do not promote beyond optional annotation. |
@@ -887,10 +1156,10 @@ back; reason recorded), or **pending** (cannot be promoted until measured).
 | --- | --- | --- |
 | Parhelion offset to h inversion route | **promoted (post-audit hedged; Pass B2 2026-05-14)** | **Pass B2 verdict 2026-05-14:** Route survives the post-B1 eligibility re-derivation, with the language hedged per audit memo §4.1 and §6. Audit-survived wording: *passes residual gate at ~0 px on three photos (p2, p7, p13) with both unambiguous bilateral peaks and an independently fittable 22° halo.* On five additional low-h anchored photos the geometric lever is below 2 % of R22; on three of those (p20, p25, p26) the 22° halo arc is not visible so R22 was parhelion-derived (tautological); p27 explicitly stipulates `offset := R22`; p26 right encodes a geometric impossibility (Pass B1 flagged `invalid`). The pre-audit "~0 px on every eligible photo" framing is retired. The route stays in calibrated core; verdict now reads as 'route holds on the strict eligible subset, anchor-noise-dominated below the 2 % lever.' Original Task #52 step 1 finding ('bad anchor, route OK' after re-anchoring p13 from (557, 372) / R22=210 / offset=220 to (543, 372) / R22=211 / offsets=213/212; x-offset residual dropped to ~0/0 px) survives unchanged. |
 | 22 deg halo, parhelia (L/R), parhelic-circle | **promoted** (calibrated core) | Already in core via Phase 2. No regression observed in Phase 10 inspection. |
-| Upper tangent arc | **promoted as logo / animation vocabulary** | Visible shape-language support remains; p7 is now treated as high-sun circumscribed-halo vocabulary rather than upper-tangent-route evidence. Curvature-as-inversion-route fails detection under three literature-standard detectors (Passes C2 + C4 landed 2026-05-14); tooling-conditional narrows to manual sample selection, matched-filter, polarization, or new calibration photos. |
+| Upper tangent arc | **promoted as logo / animation vocabulary** | Visible shape-language support remains; p7 is now treated as high-sun circumscribed-halo vocabulary rather than upper-tangent-route evidence. Curvature-as-inversion-route partially recovered on p2 via Pass C5 manual sample selection (R\_uta\_obs / R22 = 0.824, RMS = 1.23 px); three automated detectors (C2/C4 plus original column-peak) miss the signal manual recovers; coverage gate fails at 1 / 3 photos; remaining candidates are matched-filter detection (now more promising given p2's circular fit), polarization filtering, or new calibration photos. |
 | CZA primitive (rendered) | **promoted as conditional core** | Render only when `h < 32.2 deg` (atmospheric cutoff). Visible and measured on p2; p27's former CZA mark is reclassified as 46° halo top / supralateral merger. The primitive remains core while the CZA-apex inversion route fails coverage. |
 | CZA apex to h inversion route | **fails coverage gate** *(Pass A3 2026-05-13)* | A1b fixed the CZA formula and p2 now has a +1.3 px y residual, below threshold. A2 removed p27 from CZA evidence. The remaining eligible set has only p2; all other anchored photos are out-of-window or off-frame at the literature CZA position. |
-| Tangent-arc curvature to h inversion route | **fails detection gate under three literature-standard detectors** *(Pass C1 + C2 + C4 landed 2026-05-14)* | Pass C1 (2026-05-14) removed p7 from upper-tangent-route eligibility (circumscribed-halo regime at h=59.4°). Pass C2 (2026-05-14) built a wing-azimuth-offset Lab b\* ridge detector with 22°-halo-radial-profile subtraction (`scripts/tangent_detector.py`); coherent ridge samples 0-2 / ~24 per wing on every photo, below 8 / 24 gate. Pass C4 (2026-05-14) built the wing-slope luminance-gradient curvature detector Persona 1 §5 explicitly named (`scripts/tangent_curvature.py`); 88-100% of wing samples rejected as weak-gradient on every photo, too few candidates for a circle fit. The route fails detection under **three literature-standard detector families** (column-peak intensity; wing-radial Lab b\* with halo-radial subtraction; wing-slope luminance-gradient curvature). Open questions narrow to manual sample selection, matched-filter detection, polarization filtering, or new calibration photos — all Phase 10 backlog. Promotion remains blocked. |
+| Tangent-arc curvature to h inversion route | **partially recovered on p2 under manual sample selection; coverage gate fails (1 / 3 photos); C5↔C6 substrate tension on b\* residual** *(Pass C1 + C2 + C4 + C5 + C6 landed 2026-05-14)* | Pass C1 removed p7. Passes C2 (wing-radial Lab b\* ridge), C4 (wing-slope luminance-gradient), and **C6 (matched-filter on halo-subtracted b\* — the natural follow-up the C5 receipt named)** all return not-recovered on every photo. **Pass C5 (manual sample selection)** recovered the route on **p2** (R\_uta / R22 = 0.824, RMS = 1.23 px) — with methodology hedge (possible symmetry bias). C6 specifically falsified the C5→matched-filter natural-extension: on p2 the correlation is negative across the entire R\_uta scan, including at R\_uta values consistent with C5's manual fit. The route's recovery on p2 is now in **C5↔C6 substrate tension**: either the gestalt signal C5 picked up lives in a different substrate (not halo-subtracted b\*), or C5's tight fit is hand-anchoring bias. Recommended verify gate: specialist re-anchoring of p2 before further propagation. Coverage gate still fails (1 / 3 photos). Remaining open paths: matched-filter on alternative substrates (absolute b\*, L\* magnitude, chromaticity magnitude — untested); polarization filtering; new calibration photos for coverage expansion. Promotion remains blocked. |
 | Supralateral position to h inversion route | **fails structural-discrimination gate** *(coverage hedged; Pass A3 2026-05-13)* | Post-A2/A3, p27 is measured as a supralateral / 46°-halo-top candidate and p2 is eligible but unmeasured. Even if coverage is treated permissively, the predicted p2-vs-p27 h-spread is ~0.3° (~2.5 px at p2 R22), below visual-edge noise. The route is not a useful inverse handle on atmospheric-physics grounds. |
 | Lower tangent arc | **promoted as low-sun annotation only** | Visible at p2's lower 22 deg contact; not clear on p7 or p13. One photo of evidence -- fails the two-photo bar for core promotion. Held as low-sun-display annotation; compatible with `low-altitude.json` named-pose examples, but the pose is not additional evidence. |
 | Suncave Parry arc | **fails gate** (weak evidence) | Weak/candidate on all three Phase 10 photos. Below the visibility bar for inversion measurement; insufficient for shape-language promotion. Stays in atlas vocabulary as an educational label only. |

@@ -39,6 +39,12 @@
     "status": "candidate",
     "coverage_note": "p27 is the second eligible candidate for the supralateral route (after p2). Whether the supralateral coverage gate reopens with p2 + p27 is for Pass A3 to decide; per audit memo s2 item 12 the route has structurally weak h-discrimination (~0.5 deg change across h=0-22 deg) so a useful inverse handle is unlikely even with two photos."
   },
+  "upper_tangent_manual_samples": {
+    "method": "Pass C5 2026-05-14: visual identification attempted from photograph at original display resolution. The sun-bloom column (vertical bright streak above the sun caused by camera flare / lens scattering / sun-pillar component) dominates the halo-crown region where the upper tangent arc would sit (predicted apex y = 340). No distinct upper-tangent chromatic feature is separable from the sun-bloom column. Consistent with Persona 1 section 3 p27 entry ('sun-bloom column ... swamping the per-column brightness signal at the sun-meridian') and section 5 deflare recommendation. The visible chromatic arc at the top of the frame is the supralateral / 46-degree halo top merger (see supralateral_46halo_merger block), NOT upper tangent.",
+    "rationale_pointer": "PHASE10_ATTACK_ROADMAP.md Pass C5",
+    "status": "no_samples_anchorable",
+    "points": []
+  },
   "_disputed": {
     "cza_apex_legacy_2026_05_13": {
       "value": [

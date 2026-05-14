@@ -612,17 +612,28 @@ grounds (the h-signal across the route's eligibility window is below
 visual-edge measurement noise even with perfect coverage); and
 **tangent-arc curvature** on **detection-protocol tooling** grounds
 (column-peak detection fails on the post-C1 sampled set with three
-distinct degeneracy modes; Passes C2 + C4 landed 2026-05-14 — a
-wing-radial Lab b\* ridge detector with 22°-halo-radial-profile
-subtraction (`scripts/tangent_detector.py`) plus a wing-slope
+distinct degeneracy modes; Passes C2 + C4 + C5 + C6 landed 2026-05-14
+— a wing-radial Lab b\* ridge detector with 22°-halo-radial-profile
+subtraction (`scripts/tangent_detector.py`), a wing-slope
 luminance-gradient curvature detector with circle fit
-(`scripts/tangent_curvature.py`) were built and ran on p2 / p13 / p27,
-both returning not-recovered on all three. Tangent route fails
-detection under three literature-standard detector families across two
-signal modalities (chromatic ridge in C2; luminance edge in C4);
-tooling-conditional narrows to manual sample selection, matched-filter
-detection, polarization filtering, or new calibration photos, filed as
-Phase 10 backlog).
+(`scripts/tangent_curvature.py`), and a matched-filter detector
+against a parameterized arc model on halo-subtracted b\*
+(`scripts/tangent_matched_filter.py`, the natural follow-up the Pass
+C5 receipt named) all returned not-recovered on every photo, but
+manual sample selection from visual crops
+(`scripts/test_tangent_manual.py`) recovered the route on p2 with
+R\_uta\_obs / R22 = 0.824 and RMS = 1.23 px. p13 (washed) and p27
+(sun-bloom) yield no usable manual anchoring. C6's falsification of
+the natural-extension matched-filter on the same b\* substrate that
+C5 found a circular fit on puts the route in C5↔C6 substrate tension
+— either the gestalt signal C5 picked up is in a different substrate,
+or C5's tight fit is hand-anchoring symmetry-bias artifact;
+recommended specialist re-anchoring as the verify gate. Tangent route
+fails coverage gate at 1 / 3 photos under hybrid coverage +
+detection-tooling. Remaining candidates: matched-filter on alternative
+substrates (absolute b\*, L\* magnitude, chromaticity magnitude),
+polarization filtering, or new calibration photos for coverage
+expansion, filed as Phase 10 backlog).
 This is an atlas-side / single-handle receipt, not a new universal
 proof surface: the shape we observed is the same forward-rich /
 inverse-narrow asymmetry the mesa side exhibits in-vitro, now at

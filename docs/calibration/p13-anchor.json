@@ -18,5 +18,13 @@
     "left_x": 330,
     "right_x": 755,
     "y": 351
+  },
+  "upper_tangent_manual_samples": {
+    "method": "Pass C5 2026-05-14: visual identification attempt from photograph at original display resolution. Only the apex at the halo crown is marginally identifiable as a faint chromatic brightening; the wing region is washed into a luminous chromatic gradient with no localizable spine, consistent with Persona 1 section 3 p13 entry ('upper-tangent region above the sun is washed into a luminous chromatic gradient with no localizable brightness peak'). Insufficient for a circle fit.",
+    "rationale_pointer": "PHASE10_ATTACK_ROADMAP.md Pass C5",
+    "status": "insufficient_samples_for_fit",
+    "points": [
+      {"x": 543, "y": 165, "label": "apex marginally visible at halo crown", "confidence": "low"}
+    ]
   }
 }

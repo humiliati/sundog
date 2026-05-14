@@ -1,0 +1,32 @@
+=== Pass C6 -- matched-filter tangent-arc detection ===
+  Template: Gaussian arc, sigma=4.0 px, azimuth window [0, 75.0] deg
+  Gates: R_uta/R22 in [0.7, 1.3]; peak corr >= 0.1; prominence >= 1.5x baseline
+
+--- p2 (h=18.6 deg) ---
+2.Photometeor-jeff_mod_red.jpg  sun=(567, 496)  R22=182
+  R_uta scan: [91, 271] step 4 px
+  peak: R_uta=263 px  score=-0.1168  ratio=1.445
+  baseline mean: -0.1848  prominence: 0.00x
+  VERDICT: not-recovered
+  scan (every 4th): R=91:-0.244, R=107:-0.243, R=123:-0.229, R=139:-0.217, R=155:-0.212, R=171:-0.194, R=187:-0.175, R=203:-0.163, R=219:-0.149, R=235:-0.143, R=251:-0.124, R=267:-0.118
+
+--- p13 (h=6.83 deg) ---
+13.480859565_17934474635991868_323320248088719839_n.jpg  sun=(543, 372)  R22=211
+  R_uta scan: [106, 314] step 4 px
+  peak: R_uta=106 px  score=0.1906  ratio=0.502
+  baseline mean: 0.0930  prominence: 2.05x
+  VERDICT: not-recovered
+  scan (every 4th): R=106:+0.191, R=122:+0.164, R=138:+0.148, R=154:+0.134, R=170:+0.123, R=186:+0.094, R=202:+0.056, R=218:+0.058, R=234:+0.066, R=250:+0.074, R=266:+0.072, R=282:+0.064, R=298:+0.060, R=314:+0.053
+
+--- p27 (h=0.5 deg) ---
+27.Zzhau2Uiospj37zhwHEr4D-1200-80.jpg.webp  sun=(596, 559)  R22=219
+  R_uta scan: [110, 326] step 4 px
+  peak: R_uta=258 px  score=-0.0006  ratio=1.178
+  baseline mean: -0.0209  prominence: 0.00x
+  VERDICT: ratio-pass-score-fails
+  scan (every 4th): R=110:-0.053, R=126:-0.037, R=142:-0.018, R=158:-0.032, R=174:-0.026, R=190:-0.035, R=206:-0.022, R=222:-0.018, R=238:-0.009, R=254:-0.004, R=270:-0.008, R=286:-0.009, R=302:-0.006, R=318:-0.015
+
+=== Per-photo verdict roll-up ===
+  p2: not-recovered
+  p13: not-recovered
+  p27: ratio-pass-score-fails

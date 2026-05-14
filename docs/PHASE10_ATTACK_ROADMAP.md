@@ -132,14 +132,33 @@ authoritative.
    regression runner `scripts/test_tangent_curvature.py`). Ran on
    p2 / p13 / p27: 88-100% of wing samples rejected as weak-gradient
    (< 1.5 L\*/px); too few candidates for a circle fit on any photo.
-   Route **not-recovered**. Tangent route now fails under **three**
-   literature-standard detector families across two signal modalities
-   (chromatic ridge in C2; luminance edge in C4). Tooling-conditional
-   framing narrows further: only manual sample selection from visual
-   crops, matched-filter detection, polarization filtering, or new
-   calibration photos with stronger tangent display remain as
-   non-literature-standard / new-substrate paths to route recovery.
-   All filed as Phase 10 backlog.
+   Route **not-recovered**.
+8. **Pass C5.** **Landed 2026-05-14.** Tested the manual-sample-selection
+   alternative Persona 1 §5 explicitly named alongside gradient-based
+   edge detection. Result: **route recovered on p2** (R\_uta\_obs /
+   R22 = 0.824, RMS = 1.23 px) with a methodology hedge (possible
+   symmetry bias); p13 only apex anchorable; p27 no anchorable points.
+9. **Pass C6.** **Landed 2026-05-14.** Built the matched-filter
+   detector against a parameterized arc model on the halo-subtracted
+   Lab b\* substrate (`scripts/tangent_matched_filter.py`, regression
+   runner `scripts/test_tangent_matched_filter.py`). This was the
+   natural follow-up the Pass C5 receipt explicitly named ("MORE
+   promising given p2's circular fit"). **Result FALSIFIED the
+   C5→matched-filter hypothesis**: on p2 the correlation is negative
+   across the entire R\_uta scan (peak −0.117 at R\_uta = 263, outside
+   [0.7, 1.3] tolerance), including at R\_uta values consistent with
+   C5's manual fit; on p13 a spurious positive peak appears at
+   R\_uta = 106 (ratio = 0.502, way below tolerance); on p27 the
+   correlation is essentially zero. Four automated detectors now fail
+   on p2's signal that C5 manual recovers, putting the route in
+   **C5↔C6 substrate tension**: either the gestalt signal C5 picked
+   up is in a different substrate than halo-subtracted b\*, or C5's
+   tight fit reflects hand-anchoring symmetry bias. Recommended
+   verify gate before further propagation: specialist re-anchoring of
+   p2. Remaining open candidates narrow further: matched-filter on
+   alternative substrates (absolute b\*, L\* magnitude, chromaticity
+   magnitude — untested), polarization filtering, new calibration
+   photos. All filed as Phase 10 backlog.
 7. **Pass B2.** **Landed 2026-05-14.** Re-derive the parhelion verdict against the
    now-finalized eligibility set. Runs last of the technical passes
    so the verdict reads from the post-A3 / post-C3 table.
@@ -526,13 +545,15 @@ column-peak result remains as a cautionary sample, but no longer counts
 as a tangent-route residual. The post-C1 tangent set is p2 / p13 / p27:
 column-peak detection still fails there, so the route stays blocked, but
 the verdict was **protocol-conditional** pending C2 rather than a
-class-level negative. *(Post-C2 + Post-C4 update 2026-05-14: Passes C2
-and C4 both ran and returned not-recovered; the verdict is now "fails
-under three literature-standard detectors" across two signal
-modalities (chromatic ridge in C2; luminance edge in C4), with the
-tooling-conditional framing narrowing to manual sample selection,
-matched-filter detection, polarization filtering, or new calibration
-photos. See Pass C2 and Pass C4 entries below.)* A circumscribed-halo
+class-level negative. *(Post-C2 + Post-C4 + Post-C5 update 2026-05-14:
+Passes C2 and C4 ran and returned not-recovered on every photo; Pass
+C5 (manual sample selection from visual crops) recovered the route on
+p2 with R\_uta\_obs / R22 = 0.824 and RMS = 1.23 px but failed on p13
+and p27 due to substrate-signal absence; coverage gate fails at 1 / 3
+photos. Failure-mode refines to hybrid coverage + detection-tooling:
+signal present on p2 (missed by 3 automated detectors, recovered by
+manual); signal absent on p13 / p27 (no detector helps).
+See Pass C2 / C4 / C5 entries below.)* A circumscribed-halo
 ellipticity → h test is left as a Phase 10 backlog idea, not a
 deliverable.
 
@@ -575,10 +596,16 @@ landed in the same wave (see below). The "tooling-conditional"
 framing narrowed to a second-detector question that **Pass C4 then
 closed** (see Pass C4 section): the wing-slope geometric curvature
 detector Persona 1 §5 explicitly named was built and ran, also
-not-recovered. Tangent route now fails under three literature-standard
-detector families across two signal modalities; remaining open
-candidates are manual sample selection, matched-filter detection,
-polarization filtering, or new calibration photos — Phase 10 backlog.
+not-recovered, and Pass C5 (manual sample selection — see Pass C5
+section below) then recovered the route on p2 (R\_uta\_obs / R22 =
+0.824, RMS = 1.23 px) while p13 and p27 yielded no usable manual
+anchoring. Tangent route now classified as **hybrid coverage +
+detection-tooling failure**: signal present and recoverable on p2;
+absent / contaminated on p13 / p27; coverage gate fails at 1 / 3
+photos. Remaining open candidates are matched-filter detection (now
+more promising given p2's confirmed circular fit), polarization
+filtering, or new calibration photos for coverage expansion — Phase
+10 backlog.
 
 **Goal.** Build the literature-standard detector and re-test p2 and
 p13 (the two photos the audit flags as protocol-artifact failures
@@ -650,6 +677,151 @@ C2.
 outcomes above, with the supporting evidence in the residual table
 and the language ratcheted in (or out of) the public-framing
 surfaces accordingly.
+
+### Finding C — Pass C6: Matched-filter detection against parameterized arc model
+
+**Status: landed 2026-05-14.** Detector module at
+`scripts/tangent_matched_filter.py`; regression runner at
+`scripts/test_tangent_matched_filter.py`; captured run output at
+`docs/calibration/PASS_C6_DETECTOR_OUTPUT.txt`; full receipt under "###
+Pass C6 Update" in
+[`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`](calibration/RICH_DISPLAY_OVERLAY_NOTES.md).
+**Verdict: the C5→matched-filter natural-extension hypothesis is
+FALSIFIED on the halo-subtracted b\* substrate.** On p2 the matched-filter
+correlation is **negative across the entire R\_uta scan** (peak −0.117
+at R\_uta = 263, outside [0.7, 1.3] tolerance), including at R\_uta
+values consistent with C5's manual fit (R\_uta\_obs = 149.9). On p13 a
+spurious positive peak (score +0.191, prominence 2.05×) appears at
+R\_uta = 106 = 0.502 × R22, well below tolerance — not the upper
+tangent arc, some other chromatic feature. On p27 the signal is
+effectively zero (−0.001) at all R\_uta values.
+
+Four automated detectors (column-peak, C2 wing-radial Lab b\* ridge,
+C4 wing-slope luminance-gradient curvature, C6 matched-filter) now
+fail on p2's signal that Pass C5 manual sample selection recovers.
+The route is in **C5↔C6 substrate tension**: either the gestalt
+signal C5 picked up is in a different substrate than halo-subtracted
+b\*, or C5's tight fit is hand-anchoring symmetry-bias artifact.
+Recommended verify gate before further propagation: specialist
+re-anchoring of p2. Remaining candidates narrow further: matched-filter
+on alternative substrates (absolute b\*, L\* magnitude, chromaticity
+magnitude — untested), polarization filtering, new calibration photos.
+
+**Goal.** Test the whole-arc-shape detection hypothesis that the Pass
+C5 receipt named as MORE promising than per-sample detectors after
+C5's positive on p2. The synthetic upper-tangent template encodes the
+entire arc shape parameterized by R\_uta; correlation against the
+b\*-residual image scans for the best-fit curvature. If matched-filter
+recovers p2 with R\_uta ~ R22, the C2 / C4 misses are about per-sample
+features (template correlation gets the arc); if matched-filter ALSO
+misses p2, the signal is at a deeper level than template correlation
+can reach OR C5's positive is artifact.
+
+**Touch.**
+
+- New detector module `scripts/tangent_matched_filter.py`. Reuses
+  `tangent_detector.load_image_lab`,
+  `tangent_detector.compute_halo_b_radial_profile`, and
+  `tangent_detector.halo_subtracted_b` (same b\*-residual substrate
+  C2 used). Adds:
+  - 2D template generator: Gaussian-thickened arc trace (σ = 4 px)
+    along the predicted locally-circular upper-tangent locus,
+    restricted to azimuth ∈ [0°, 75°] from the apex direction
+    (includes the apex, unlike C2 / C4).
+  - Pearson correlation between template and b\*-residual over the
+    template's support (pixels with template weight > 0.05).
+  - R\_uta scan over [0.5 × R22, 1.5 × R22] in 4 px steps.
+  - Peak detection + prominence ratio against baseline mean of
+    non-peak scores.
+- New regression runner `scripts/test_tangent_matched_filter.py`.
+- Append "### Pass C6 Update" subsection to
+  `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`.
+
+**Entry criteria.** Pass C5 landed (Pass C6 is the C5 receipt's named
+natural extension).
+
+**Exit criteria.**
+
+- The matched-filter detector exists, is committed, and has been run
+  against the post-C1 tangent eligibility set.
+- Pre-registered gates: R\_uta\_obs / R22 ∈ [0.7, 1.3]; peak correlation
+  ≥ 0.10; peak prominence ≥ 1.5× baseline mean.
+- The receipt language is updated: caps the detection claim at
+  *"four automated detectors fail on p2's signal that C5 manual
+  recovers; C5↔C6 substrate tension flagged; recommended specialist
+  re-anchoring as the verify gate before further propagation."*
+- Coupled-surface ratchet propagates the "C5↔C6 substrate tension"
+  framing across the surfaces previously updated for Pass C2 + C4 +
+  C5.
+
+### Finding C — Pass C5: Manual sample selection from visual crops
+
+**Status: landed 2026-05-14.** Manual-sample-selection runner at
+`scripts/test_tangent_manual.py`; hand-anchored upper-tangent points
+recorded in the `upper_tangent_manual_samples` block of each post-C1
+eligibility photo's anchor JSON (`p2-anchor.json`, `p13-anchor.json`,
+`p27-anchor.json`); captured run output at
+`docs/calibration/PASS_C5_DETECTOR_OUTPUT.txt`; full receipt under "###
+Pass C5 Update" in
+[`docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`](calibration/RICH_DISPLAY_OVERLAY_NOTES.md).
+**Verdict: route recovered on p2 (1 / 3 photos); coverage gate fails.**
+On p2, 5 hand-anchored points fit a circle with R\_uta\_obs / R22 =
+0.824 (within [0.7, 1.3]) and RMS = 1.23 px (well under 10 px) — the
+upper tangent arc is geometrically real and circular on the cleanest
+display. p13 yields only the apex (washed wings per Persona 1 §3 p13
+entry); p27 yields zero anchorable points (sun-bloom column per
+Persona 1 §3 p27 entry). The 3 automated detectors (C1 column-peak,
+C2 wing-radial Lab b\*, C4 wing-slope luminance-gradient) all miss
+p2's signal that manual anchoring recovers — a substantive finding
+about the C2 / C4 detector design space, not a substrate failure.
+Failure-mode classification refines from pure "detection-protocol
+tooling" to **hybrid coverage + detection-tooling**: signal present
+and recoverable on p2 (via manual or matched-filter detectors that
+weren't built); signal absent / contaminated on p13 / p27 (substrate
+failure). Coverage gate's ≥ 2 eligible-photo rule blocks promotion;
+new calibration photos are needed for coverage expansion regardless
+of detector improvements.
+
+**Goal.** Pick up Persona 1 §5's manual-sample-selection alternative
+to gradient-based edge detection. C4 tested gradient; C5 tests manual.
+The two together exhaust Persona 1's explicitly-named
+literature-standard list.
+
+**Touch.**
+
+- Hand-anchored points added to the `upper_tangent_manual_samples`
+  block of each post-C1 eligibility photo's anchor JSON. Per-point
+  visual-identification uncertainty estimated at ±15 px. Anchor JSON
+  `method` field records methodology per photo; photos where
+  anchoring is impossible carry `status: no_samples_anchorable` or
+  `status: insufficient_samples_for_fit`.
+- New regression runner `scripts/test_tangent_manual.py` loads the
+  manual samples and applies `tangent_curvature.fit_circle` — the
+  same linearized circle-fit Pass C4 used, just on hand-anchored
+  rather than gradient-picked points.
+- Append "### Pass C5 Update" subsection to
+  `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`.
+
+**Entry criteria.** Pass C4 landed (Pass C5 reuses C4's circle-fit
+machinery).
+
+**Exit criteria.**
+
+- Anchor JSONs for p2, p13, p27 carry the `upper_tangent_manual_samples`
+  block with explicit methodology and (where anchorable) (x, y)
+  points.
+- The runner exists, is committed, and has been run against the
+  manual samples.
+- Pre-registered gates: ≥ 5 manual points; RMS ≤ 10 px;
+  R\_uta\_obs / R22 ∈ [0.7, 1.3].
+- The receipt language is updated: caps the detection claim at *"three
+  literature-standard automated detectors fail on p2 / p13 / p27;
+  manual sample selection — Persona 1's other literature-standard
+  alternative — recovers the route on p2 (R\_uta\_obs / R22 = 0.824,
+  RMS = 1.23 px) but fails coverage (1 / 3 photos)."*
+- Coupled-surface ratchet propagates the "hybrid coverage +
+  detection-tooling" framing across the surfaces previously updated
+  for Pass C2 + C4.
 
 ### Finding C — Pass C4: Wing-slope geometric curvature detector
 
@@ -798,15 +970,31 @@ re-audit" below are committed:
 - **C4** (wing-slope geometric curvature detector) — *landed 2026-05-14*.
   Gradient-based edge detector Persona 1 §5 explicitly named,
   implemented as `scripts/tangent_curvature.py`. Ran on p2 / p13 / p27
-  and also did **not** recover the route (88-100% weak-gradient
-  rejection on every photo). The receipt language now resolves the §4.8
-  template to: *"column-peak fails on p2 / p13 / p27; wing-radial Lab b\*
-  with halo-radial subtraction also fails (Pass C2); wing-slope
-  luminance-gradient curvature also fails (Pass C4) — three
-  literature-standard detector families across two signal modalities
-  return not-recovered."* The remaining open paths to route recovery
-  are manual sample selection, matched-filter detection, polarization
-  filtering, or new calibration photos — all Phase 10 backlog.
+  and did **not** recover the route (88-100% weak-gradient rejection
+  on every photo).
+- **C5** (manual sample selection from visual crops) — *landed 2026-05-14*.
+  Persona 1 §5's other literature-standard alternative. Hand-anchored
+  points added to `upper_tangent_manual_samples` blocks. Result:
+  **route recovered on p2** (R\_uta\_obs / R22 = 0.824, RMS = 1.23 px)
+  with methodology hedge.
+- **C6** (matched-filter detection against parameterized arc model) —
+  *landed 2026-05-14*. The natural follow-up the C5 receipt named.
+  Built `scripts/tangent_matched_filter.py` (template-correlation on
+  halo-subtracted b\*) and ran it; the C5→matched-filter natural
+  extension is **falsified**: correlation is negative across the
+  entire R\_uta scan on p2, spurious half-R22 peak on p13, zero
+  signal on p27. Four automated detectors now fail on p2's signal
+  that C5 manual recovers. The receipt language now resolves the §4.8
+  template to: *"column-peak fails (original); wing-radial Lab b\*
+  fails (Pass C2); wing-slope luminance-gradient curvature fails
+  (Pass C4); manual sample selection recovers on p2 only with a
+  methodology hedge (Pass C5); matched-filter on halo-subtracted b\*
+  fails on every photo (Pass C6). C5↔C6 substrate tension flagged —
+  recommended specialist re-anchoring as the verify gate before
+  further propagation."* The remaining open paths are matched-filter
+  on alternative substrates (absolute b\*, L\* magnitude, chromaticity
+  magnitude — untested), polarization filtering, or new calibration
+  photos — all Phase 10 backlog.
 - **B2** (parhelion-route re-verdict) — required, runs *last* of the
   technical passes so it reads from the post-A3/post-C3 table.
 
@@ -822,13 +1010,22 @@ No new load-bearing code, anchor, or route-math blocker was found. The
 technical-pass wave clears with the post-pass taxonomy: parhelion promoted
 on the strict 3-photo subset; CZA coverage-gated; supralateral
 physics-discrimination-gated; tangent detector unresolved under C2.
-**Post-C2 + Post-C4 update 2026-05-14:** Passes C2 and C4 both landed,
-each with verdict **not-recovered** on p2 / p13 / p27 (C2 = wing-radial
-Lab b\* with halo-radial subtraction; C4 = wing-slope luminance-gradient
-curvature with circle fit). The re-audit memo's tangent disposition is
-amended via its Post-C2 and Post-C4 addenda; the taxonomy otherwise
-survives. The route now fails under three literature-standard detector
-families across two signal modalities.
+**Post-C2 + Post-C4 + Post-C5 + Post-C6 update 2026-05-14:** Passes
+C2, C4, C5, and C6 all landed. C2 (wing-radial Lab b\*) and C4
+(wing-slope luminance-gradient curvature) returned not-recovered. **C5
+(manual sample selection) recovered the route on p2** with
+R\_uta\_obs / R22 = 0.824 and RMS = 1.23 px, but failed on p13 / p27.
+**C6 (matched-filter against parameterized arc on halo-subtracted b\*)
+falsified the C5→matched-filter natural extension**: correlation is
+negative across the entire R\_uta scan on p2; spurious half-R22 peak
+on p13; zero signal on p27. Four automated detectors fail on p2's
+signal that C5 manual recovers, putting the route in **C5↔C6 substrate
+tension**: either the gestalt signal C5 found is in a different
+substrate, or C5's tight fit is hand-anchoring symmetry bias.
+Recommended specialist verify gate before further propagation.
+Coverage gate still fails (1 / 3 photos). The re-audit memo's tangent
+disposition is amended via its Post-C2, Post-C4, Post-C5, and Post-C6
+addenda; the taxonomy otherwise survives.
 
 **Specialist handoff entry criteria.** Re-audit completes with no new
 load-bearing findings, or with new findings that are bounded to known
