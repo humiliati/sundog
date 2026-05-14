@@ -732,11 +732,14 @@ six steps run before any §3 technical pass starts.
 
 ## 7. Meta: Treat the Verify Gate as Load-Bearing
 
-The synthetic audit's consolidator verification step caught one
-Persona 3 over-statement (the p22 halo claim) and several uncited
-Persona invocations. Both would have leaked into the handoff if the
-audit had been sent without the verify gate. That is not a "courtesy
-step"; it is the load-bearing one.
+The synthetic audit's consolidator verification step has now paid for
+itself three times: it caught one Persona 3 over-statement (the p22 halo
+claim) plus several uncited Persona invocations in the first audit; Pass
+A1a's executable spec caught the audit memo's CZA formula transcription
+error before the atlas patch landed; and the re-audit gate forced the
+post-pass taxonomy back through numeric, schema, and stale-surface checks
+before specialist handoff. These are not "courtesy steps"; they are the
+load-bearing part of the audit protocol.
 
 Going forward, the protocol is:
 

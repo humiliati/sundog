@@ -148,72 +148,102 @@ methods. See [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) for the
 full transfer, including the methodological lessons for Phase 10/11
 overlay tuning.
 
-**Forward/inverse asymmetry receipt *(sharpened 2026-05-13 after Phase 10
-closeout; post-audit hedged 2026-05-13).* The atlas is rich in forward
-generation and supports one image-recoverable inverse handle.** Four
-candidate inversion routes were tested across the calibration set;
-**one survived; the other three failed at three structurally different
-layers of the measurement stack.**
+**Forward/inverse asymmetry receipt *(re-derived 2026-05-14 after the Phase 10 attack campaign + re-audit gate).* The atlas is forward-rich on the primitive classes the literature parameterizes from `h` alone, and inverse-narrow on the strict 3-photo parhelion-offset eligibility set.** Four candidate inversion routes were tested across the calibration set; **one survived (post-hedged); the other three failed at three structurally different failure modes.**
 
-> **Post-audit hedge, 2026-05-13:** the synthetic optical audit
-> ([`docs/calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
-> hedges both halves of the receipt. **Forward-richness:** retract-required
-> for the parhelic-circle rule (FF1-falsified; the atlas continues to draw
-> `−0.05 · R22` but the rule does not hold across photos), retract-required
-> for the CZA position (the atlas mispredicts by 19+ px at h ≠ 22° because
-> of the hardcoded `sun_y − R46` formula at `scripts/overlay_calibrate.py:381–384`),
-> caveat-required for the 46° halo and infralateral arcs (drawn on every
-> overlay but visible only on p2). The forward-richness claim should hedge
-> to *"`h → primitive locus` (geometric); not every primitive is visible
-> at predicted locus on every photo."* **Inverse-narrowness (one image-recoverable
-> handle):** defensible on the three photos with both unambiguous bilateral
-> peaks and an independently fittable 22° halo (p2, p7, p13). Not defensible
-> on the language *"every eligible photo"* — on five low-h photos the
-> geometric lever `sec(h) − 1` is below 2 % of `R22`, and on three of those
-> (p20, p25, p26) the 22° halo arc is not visible so `R22` is not
-> independent of the parhelion. The hedged version — *"one image-recoverable
-> inverse handle on photos where sun altitude provides a non-trivial
-> geometric lever and an independent 22° halo ring is fittable"* — survives
-> the audit. **Three-failure framing:** the three failures are at three
-> structurally different layers, but two of the three have non-atlas
-> explanations (CZA = formula bug; supralateral = literature base-rate
-> near-certainty; tangent = protocol artifact under any literature-standard
-> wing-based or Lab b\* detector). The campaign to re-derive each verdict
-> is filed in [`docs/PHASE10_ATTACK_ROADMAP.md`](PHASE10_ATTACK_ROADMAP.md).
-> The two-substrate field-shape *pattern* survives; the *receipt language
-> below* is pending re-derivation.
+> **Post-re-audit substantive update, 2026-05-14.** This receipt was
+> re-derived against the post-pass state of the [Phase 10 attack
+> campaign](PHASE10_ATTACK_ROADMAP.md) and verified by the [re-audit
+> memo](calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md). The pre-audit
+> "rich in forward generation + one image-recoverable inverse handle"
+> framing is retired from this section in favor of the
+> audit-survived wording below. The two-substrate field-shape pattern
+> claim survives unchanged; what tightens is (a) which primitives
+> count as "forward-rich" (hedges named explicitly), (b) which
+> eligibility set the inverse-narrowness claim holds on (3 strict
+> photos rather than "every eligible photo"), and (c) what kind of
+> failure the three non-promoted routes exhibit (three structurally
+> different *failure modes*, not three independent measurement-stack
+> gates).
 
-| route | gate outcome | failure layer |
+**Audit-survived public-framing sentence:**
+
+> *The atlas is forward-rich for primitives the literature
+> parameterizes from `h` alone, and inverse-narrow on the strict
+> 3-photo parhelion-offset eligibility set (p2 h = 18.6°, p7 h = 59.4°,
+> p13 h = 6.83°). The three other tested routes fail at three
+> structurally different failure modes: dataset / aspect-ratio
+> coverage (CZA), atmospheric-physics discrimination (supralateral),
+> and detection-protocol tooling (tangent; tooling-conditional pending
+> a wing-based or Lab b\* detector). None of the three failures
+> implicates the atlas inversion math. The mesa cliff is the same
+> forward-rich / inverse-narrow asymmetric field-shape pattern in the
+> controller substrate.*
+
+| route | gate outcome | failure-mode kind |
 | --- | --- | --- |
-| Parhelion offset → h | promoted (calibrated core) | none — passes residual gate at ~0 px |
-| CZA apex → h | fails | residual gate (p2 y = -19.3 px; p27 y = +21 px; opposite signs) |
-| Supralateral → h | fails | coverage gate (only p2 eligible on the committed set; p27 candidate, unmeasured) |
-| Tangent-arc curvature → h | fails | detection gate (column-peak fails on all four eligible photos, three distinct degeneracy modes) |
+| Parhelion offset → h | **promoted (post-hedged)** | 3-photo strict eligibility: p2, p7, p13. Audit-survived wording replaces the pre-audit "every eligible photo" framing. |
+| CZA apex → h | **fails coverage gate** | **dataset / aspect-ratio.** After Pass A1b fixed the atlas formula bug (literature `arcsin(√(n²−cos²h)) − h` replaces legacy `sun_y − WB_R46`) and Pass A2 re-classified p27's chromatic feature as 46° halo top / supralateral merger, p2 is the only in-window photo with an independent CZA residual (+1.3 px). |
+| Supralateral → h | **fails structural-discrimination gate** | **atmospheric physics.** Even at the two-photo eligibility threshold, the predicted h-spread is ~0.3° = ~2.5 px at p2's R22, below the typical 5–10 px visual-edge measurement noise. The route would not be a useful inverse handle even with perfect coverage. |
+| Tangent-arc curvature → h | **detection gate under column-peak; class-level verdict pending C2** | **tooling protocol.** Pass C1 dropped p7 from upper-tangent eligibility (h = 59.4° is circumscribed-halo regime per atoptics.co.uk and dewbow.co.uk). Column-peak detection still fails on the post-C1 sampled set (p2, p13, p27); a wing-based or Lab b\* ridge detector has not been built. Filed as Unresolved Open Question. |
 
-The atlas is **forward-rich** — `h → all primitives` runs cleanly through
-parhelion offset, halo radii, CZA visibility window, tangent positions,
-supralateral position — and **inverse-narrow** — only the parhelion-offset
-route survives image-recoverable inversion at numerical resolution on the
-calibration set. That is the same forward-rich / inverse-narrow asymmetric
-field-shape pattern the mesa-side cliff exhibits in-vitro, now observed
-in-the-wild at numerical resolution. **Do not frame the atlas as
-"multiple independent inverse routes converging."** The receipt is sharper
-and more falsifiable than that: one route works, three others fail at
-three different layers, and the failure-layer taxonomy itself is a
-methodological deliverable.
+**Forward-richness, with explicit hedges:**
+
+Forward generation `h → primitive locus` runs cleanly through:
+
+- **Parhelion offset** (`R22 / cos(h)`)
+- **22° halo radius** (anchor)
+- **46° halo radius** (post-A1b correction; `WB_R46` now `round(2.091 · WB_R22) = 460`, was legacy `2 · WB_R22 = 440` which encoded 44° rather than 46°)
+- **CZA visibility window** (`h < 32.2°`) and **CZA apex position** when in-window (post-A1b literature formula)
+- **Upper tangent geometric spine** (with the caveat that brightness/chromatic spine ≠ geometric spine)
+
+The atlas still *draws* but the receipt now hedges for:
+
+- **Parhelic-circle vertical offset** (`−0.05 · R22`): the Phase 10-FF
+  belt-y replication study (PHASE10_BELT_Y_RESULTS.md) falsified this
+  as a generic rule; p13's residual is photo-specific.
+- **46° halo and infralateral arcs**: drawn on every rich-vocabulary
+  overlay but visible only on p2 in the current calibration set.
+
+The forward-richness claim should be stated as *"`h → primitive locus`
+(geometric); not every primitive is visible at predicted locus on every
+photo."* The receipt is sharper and more falsifiable than the
+pre-audit version: it names which primitives the claim holds on and
+which require additional photo-set evidence.
+
+**Inverse-narrowness** is now bounded to **the strict 3-photo
+parhelion-offset eligibility set**. Photos with parhelion-derived R22
+(p20, p25, p26 — no continuous 22° halo arc visible) contribute as
+tautological evidence and are informational only. p27 explicitly
+stipulates `offset := R22` and is a self-consistency check. p26 right
+side encodes a literal geometric impossibility (`R22 / offset = 1.003 > 1`)
+and is flagged `invalid` in the Pass B1 schema. Five additional low-h
+photos (p13, p20, p22, p25, p26, p27, p30) have geometric lever
+`sec(h) − 1` below 2 % of R22 and contribute as anchor-noise-bounded
+evidence rather than route-validating residuals.
+
+**Do not frame the atlas as "multiple independent inverse routes
+converging."** The receipt is sharper and more falsifiable than that:
+one route is promoted on a 3-photo strict-eligibility set, three
+others fail at three structurally different failure modes (dataset
+coverage, atmospheric physics, detection tooling), and the failure-mode
+taxonomy itself is a methodological deliverable that ports back to the
+mesa side ([`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md)
+three-failure-mode taxonomy section).
 
 For now this stays inside the Gravity Claim rather than becoming a
 separate appendix. The two-substrate convergence claim survives
 (same field-shape pattern, two substrates, independent methods); what
-this paragraph retires is any "redundant routes" reading. Promotion
-trigger: if downstream work produces additional inverse-route receipts
-under controlled-optics or alternate-detection protocols, split this
-subsection into an appendix and link it from the claim ledger. The three
-open Phase 10 questions (lens-optics test, tangent-curvature tooling,
-parhelic-belt-y replication; see
+this paragraph retires is any "redundant routes" reading. **Promotion
+trigger:** if downstream work produces a second image-recoverable
+inverse-route receipt (e.g., the optional Pass C2 wing-based tangent
+detector recovering the tangent route, or new anchored photos in
+5° < h < 32° supplying a second in-window CZA residual), split this
+subsection into an appendix and link it from the claim ledger. The
+relevant open Phase 10 questions (CZA coverage expansion; tangent-
+curvature tooling rebuild; both filed in
 [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) Geometry Phase 10
-closeout section) name the next experiments that could move this from
-single-handle to multi-handle if they confirm.
+closeout section as updated 2026-05-14) name the next experiments
+that could move this from single-handle to multi-handle.
 
 **Predictive-receipt extension *(staged 2026-05-13)*.** A third receipt
 is staged in [`SUNDOG_V_PERCEPTION.md`](SUNDOG_V_PERCEPTION.md): the
@@ -922,290 +952,4 @@ Measure which edits change policy, regime retention, and failure mode.
 - **Indirect signal:** causal child of environment geometry.
 - **Transformation:** controller response to the signature rather than to
   reward-channel edits.
-- **Actionable output:** intervention-response matrix and causal graph.
-- **Failure boundary:** the signature controller follows edited proxies even
-  when the external signature is unchanged.
-
-### Falsification target
-
-Modes (1), (2), and (3), depending on which intervention succeeds. The cleanest
-failure is a cheap reward-like edit that steers the signature controller without
-moving the field or corrupting the sensor.
-
-### Current recommendation
-
-*Promoted to [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) Phase 4 as the Causal
-Intervention Battery.* High-value proof instrument; less a standalone
-workbench than a battery attached to the mesa harness. The roadmap is the
-active working location; this entry is retained for archival reference.
-
----
-
-## Candidate 8 - Fluid / Wake Navigation
-
-Working hook:
-
-> The obstacle is hidden. The flow remembers it.
-
-### Why it is strong
-
-Fluid wakes are real environmental signatures. A hidden object, source, sink,
-or current can be invisible while still shaping local velocity, pressure,
-vorticity, or dye traces. This makes the candidate a natural physical cousin
-to Shadow Fleet and a more defensible engineering domain than a purely game
-native wake metaphor.
-
-The public image is strong: the agent does not see the obstacle, but the water
-or air carries the shape of its absence.
-
-### Why it is weaker
-
-Fluid simulation can become expensive and fragile. If the harness is too
-simple, reviewers may call it a toy; if it is too realistic, the work may turn
-into a computational fluid dynamics project instead of a Sundog proof.
-
-### Sundog variant
-
-Construct a 2D or 3D flow field with hidden obstacles or sources. The agent
-receives local flow measurements, pressure samples, or tracer histories and
-must navigate, station-keep, or choose safe passages without privileged access
-to obstacle geometry.
-
-### Sundog expression
-
-- **Hidden target:** obstacle/source geometry and safe flow regime.
-- **Indirect signal:** wake, pressure, vorticity, dye trace, or velocity
-  gradient.
-- **Transformation:** SCAN/SEEK/TRACK over flow-derived signatures.
-- **Actionable output:** steering, station-keeping, abort, or probe.
-- **Failure boundary:** turbulence, diffusion, sensor delay, or overlapping
-  wakes erase the useful signature.
-
-### Falsification target
-
-Mode (1): field-manipulation cost. If cheap perturbations or fake wakes steer
-the controller more easily than matched reward or map-based baselines, the
-gravity analogy weakens.
-
-### Current recommendation
-
-Strong second-wave physical candidate. It has better public feel than many
-benchmarks and better scientific footing than most game metaphors.
-
----
-
-## Candidate 9 - Embodied Robotics Under Denied State
-
-Working hook:
-
-> The robot does not know the object. It reads what the object does to the
-> world.
-
-### Why it is strong
-
-This is the highest public-legibility move outside spacecraft. A robot
-grasping, balancing, pouring, or navigating from tactile slip, vibration,
-acoustic echo, shadow, airflow, pressure, or deformation makes the gravity
-claim concrete without asking the audience to accept a metaphor first.
-
-It also attacks the assumption that Sundog is only a simulation idea. Physical
-worlds naturally generate signatures that are hard to fake without doing real
-work.
-
-### Why it is weaker
-
-Hardware turns every clean claim into a maintenance project. Sensor
-calibration, repeatability, cost, and safety could dominate the research. A
-robotics result also risks being read as "better tactile control" unless the
-signature/reward comparison is designed from the beginning.
-
-### Sundog variant
-
-Choose one narrow task:
-
-- grasp unknown objects from tactile slip fields;
-- navigate low-light or smoke-like occlusion from acoustic/airflow returns;
-- balance contact from pressure gradients;
-- pour or transfer material from sound and weight-shift signatures.
-
-Run a signature controller against a vision/classifier or reward-trained
-baseline under occlusion, distribution shift, and sensor perturbation.
-
-### Sundog expression
-
-- **Hidden target:** object state, contact regime, or navigable geometry.
-- **Indirect signal:** slip, vibration, sound, pressure, deformation, shadow,
-  or airflow.
-- **Transformation:** signature tracking with confidence gating and abort
-  states.
-- **Actionable output:** grasp, move, tilt, slow, retry, or abstain.
-- **Failure boundary:** sensor noise, contact ambiguity, material variation, or
-  cheap spoofing collapses the signature.
-
-### Falsification target
-
-Modes (1) and (2): if the physical signature can be cheaply spoofed or if the
-signature controller reduces to a tuned task reward, the grand claim does not
-gain support.
-
-### Current recommendation
-
-High-investment public proof, not first-wave. Best after a simulator and
-theoremic foundation have already made the comparison precise.
-
----
-
-## Candidate 10 - Conservation-Law Domain
-
-Working hook:
-
-> The signature is protected by physics.
-
-### Why it is strong
-
-Conservation laws give the gravity claim its most defensible non-gravity
-analogue. Mass, momentum, charge, energy, flow continuity, and structural modes
-constrain what signatures can be faked cheaply. A controller reading those
-signatures is not merely reading a learned proxy; it is reading something the
-world must pay to change.
-
-Possible domains include thermal diffusion, leak detection from pressure decay,
-electrical grid phase/frequency stability, structural health from vibration
-modes, and flow continuity around hidden obstructions.
-
-### Why it is weaker
-
-The candidate can become too diffuse. "Use physics" is not an experiment. It
-needs one carefully selected domain with a measurable adversary budget and a
-baseline that makes Goodhart pressure visible.
-
-### Sundog variant
-
-Select one conservation-governed system and build a matched task:
-
-- **Thermal:** hidden heat source tracked from diffusion signatures.
-- **Pressure:** hidden leak or blockage inferred from pressure decay.
-- **Grid:** unstable operating regime detected from phase/frequency signatures.
-- **Structure:** damage inferred from modal vibration shifts.
-
-Compare signature-driven control or detection against a metric-trained or
-label-trained baseline under spoofing and perturbation.
-
-### Sundog expression
-
-- **Hidden target:** physical regime governed by a conservation constraint.
-- **Indirect signal:** conserved-flow residue, diffusion trace, phase drift, or
-  modal distortion.
-- **Transformation:** regime tracking over physically constrained signatures.
-- **Actionable output:** control, flag, throttle, isolate, or abstain.
-- **Failure boundary:** adversary can fake the conserved signature at lower
-  cost than expected, or the signature is not unique enough to guide action.
-
-### Falsification target
-
-Mode (1): field-manipulation cost. A positive result shows that physics
-increases the cost of spoofing the signature relative to manipulating a metric
-or label channel.
-
-### Current recommendation
-
-*Soft dependency on [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) controller-family
-architecture and harness, once one concrete physical domain is chosen.*
-Long-horizon engineering candidate. Keep it in the ledger as a principled
-family; the domain pick (thermal, pressure, grid, structural) is the gating
-decision before any roadmap promotion. Reusing mesa infrastructure is the
-cheapest implementation path once a domain is selected.
-
----
-
-## Candidate 11 - Side-Channel Defense *(stretch)*
-
-Working hook:
-
-> The detector does not classify attacks. It reads the disturbance the system
-> casts when something is trying to corrupt it.
-
-### Why it is strong
-
-High stir. Cybersecurity is an industry currently shipping reward-trained
-classifiers that are observably being Goodharted in production by adversarial
-example crafting and APT-style behavior masking. A signature-driven detector
-that reads syscall residue, EM/timing side-channels, or network flow geometry
-rather than labeled-attack examples puts the gravity claim inside a domain
-where the failure mode is visible.
-
-### Why it is weaker
-
-Domain-expertise burden is high and the public is already saturated with "AI
-for cybersecurity" pitches. The misread risk is severe: collapsing into "we
-built better intrusion detection" loses the point entirely.
-
-### Sundog variant
-
-A monitored process exposes a signature derived from syscall sequence
-geometry, timing residue, or network flow shape. The signature is defined
-without reference to known attack labels. A signature-tracking controller
-flags regime departures; a matched supervised baseline classifies on labeled
-attack samples. An active red team crafts adversarial patterns against both.
-
-### Sundog expression
-
-- **Hidden target:** intent of the process running in the system.
-- **Indirect signal:** geometric residue (syscall n-gram structure, timing
-  distribution, flow autocorrelation).
-- **Transformation:** signature departure from baseline regime.
-- **Actionable output:** flag, throttle, escalate, abstain.
-- **Failure boundary:** signature can be flattened by adversary at lower cost
-  than the matched classifier can be evaded.
-
-### Falsification target
-
-Modes (1) and (2) jointly: in a domain where the adversary is unusually
-sophisticated, both field-manipulation and signature-decompilation pressure
-should be high. If the gravity claim is real, signature-driven detection
-should outlast labeled-attack classifiers on a matched red-team slate. If
-not, this is where the costume falls off.
-
-### Current recommendation
-
-Long-term aspiration, not first-wave. Listed here because the broadcast value
-of a positive result would be disproportionate to the cost of ratcheting the
-claim, and because the cybersecurity framing is the most natural translation
-of the gravity claim into a domain where reviewers care.
-
----
-
-## Promotion Guidance
-
-A candidate leaves this ledger and earns a `SUNDOG_V_*.md` roadmap document
-only when:
-
-- the proof or experiment design names a specific falsification mode from
-  §Falsification Surface;
-- the signature is structurally separated from privileged state in the
-  three-body sensor-tier style;
-- for empirical candidates, a matched reward-trained or metric-driven baseline
-  is committed to;
-- for empirical candidates, a named adversary or perturbation schedule is
-  committed to;
-- the boundary language in `presentation/claims-and-scope.md` is updated to
-  reflect what the candidate, if completed, would ratchet.
-
-Until those are in place, the gravity claim remains the program's most
-outlandish published frame and the most carefully boundaried one. Public
-communication may use it (see `PROMO_HIGHLIGHTS.md` §The Gravity Claim) but
-must mark it speculative and link to this ledger and to the controlled
-three-body and photometric results that anchor the analogy.
-
-## Broadcast-Aligned Summary
-
-For public communication, the gravity-family framing summarizes this way:
-
-> The photometric experiment and the three-body workbench demonstrate that
-> useful control is possible from indirect environmental signatures rather
-> than from privileged state. The gravity claim is the structural argument
-> for why this matters: a controller that tracks a property of the
-> environment's geometry, rather than optimizing a designer-specified metric,
-> inhabits a different threat model than reward-trained control. The
-> proof targets that would test this difference are listed in this ledger and
-> are deliberately expensive. None has been completed.
+- **Actionable output:** interventi

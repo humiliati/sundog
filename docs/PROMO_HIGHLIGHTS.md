@@ -593,27 +593,45 @@ converged on the same shape. The crossover is documented in
 now has both an in-vitro receipt and an in-the-wild receipt for the
 field-not-reward framing.
 
-**Atlas-side single-handle receipt *(Phase 10 closeout 2026-05-13)*.**
+**Atlas-side single-handle receipt *(Phase 10 closeout 2026-05-13, re-audited and ratcheted 2026-05-14)*.**
 The crossover earned an additional atlas-side mechanistic anchor at
-numerical resolution: the atlas is **rich in forward generation** and
-supports **one image-recoverable inverse handle**. Four candidate
-`signature → h` inversion routes were tested across the calibration
-set; only parhelion-offset survived. The other three failed at three
-structurally different layers of the measurement stack: CZA-apex at the
-residual gate (p2 and p27 both exceed `0.04 * R22` with opposite signs),
-supralateral at the coverage gate (only p2 eligible on the committed
-set), and tangent-arc curvature at the detection gate (column-peak
-fails on all four eligible photos with three distinct degeneracy
-modes). This is an atlas-side / single-handle receipt, not a new
-universal proof surface: the shape we observed is the same forward-rich
-/ inverse-narrow asymmetry the mesa side exhibits in-vitro, now at
-in-the-wild numerical resolution. The closeout also retires a soft
-overclaim that was at risk of slipping into public language: **do not
-frame the atlas as "multiple independent inverse routes converging."**
-One handle works; three others fail at three different layers. The
-failure-layer taxonomy itself (residual / coverage / detection) is the
-methodological deliverable that travels back to mesa as a
-classification rule.
+numerical resolution: the atlas is **forward-rich on the primitive
+classes the literature parameterizes from `h` alone, and inverse-narrow
+on a strict 3-photo eligibility set**. Four candidate `signature → h`
+inversion routes were tested. **Parhelion-offset** survived promotion
+on the strict 3-photo eligibility set (p2 h = 18.6°, p7 h = 59.4°,
+p13 h = 6.83° — photos with unambiguous bilateral peaks, valid
+geometry, and an independently fittable 22° halo). The other three
+failed at three structurally different **failure modes**: **CZA** on
+**dataset / aspect-ratio coverage** grounds (only p2 is in-window with
+an independent residual at +1.3 px after the atlas formula correction;
+every other anchored photo is past the h = 32.2° disappearance
+threshold or has the literature CZA apex predicted above the top of
+the photo); **supralateral** on **atmospheric-physics discrimination**
+grounds (the h-signal across the route's eligibility window is below
+visual-edge measurement noise even with perfect coverage); and
+**tangent-arc curvature** on **detection-protocol tooling** grounds
+(column-peak detection fails on the post-C1 sampled set with three
+distinct degeneracy modes; a wing-based or Lab b\* ridge detector has
+not been built, so the route is filed as Unresolved Open Question).
+This is an atlas-side / single-handle receipt, not a new universal
+proof surface: the shape we observed is the same forward-rich /
+inverse-narrow asymmetry the mesa side exhibits in-vitro, now at
+in-the-wild numerical resolution. The closeout retires a soft overclaim
+that was at risk of slipping into public language: **do not frame the
+atlas as "multiple independent inverse routes converging."** One handle
+is promoted (post-hedged); three others fail at three different failure
+modes, none of which implicates the atlas inversion math. The
+failure-mode taxonomy itself (dataset, physics, tooling) is the
+methodological deliverable that travels back to mesa as a classification
+rule. Provenance: synthetic optical audit + attack campaign +
+re-audit memo at
+[`docs/calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md`](calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md);
+attack roadmap at
+[`docs/PHASE10_ATTACK_ROADMAP.md`](PHASE10_ATTACK_ROADMAP.md);
+audit-survived public-framing sentence in
+[`docs/SUNDOG_V_GRAVITY.md`](SUNDOG_V_GRAVITY.md) forward/inverse
+asymmetry receipt.
 
 This is in-vitro evidence in a 2D continuous-control environment with
 a synthetic Goodhart-prone shaping surface. It is not a deployment
@@ -691,172 +709,4 @@ no more.
 The three-body workbench is the audience-conceptualizable entry point because
 the gravity is literal. A controller reads the tidal tensor of a real
 gravitational potential and maintains regime in a near-escape pocket without
-being told where the masses are. The audience does not need to grant a
-metaphor — they watch a controller fall through real gravity from indirect
-state, and they understand on first contact what is meant by "the field is
-the objective."
-
-The three-body controller is the wedge that lets every other Sundog
-application — shadow geometry, pressure fields, wake structure, scent
-gradients — be read as "gravity for agents in that domain."
-
-### The horizon experiments
-
-Three candidate experiments are staged in `SUNDOG_V_GRAVITY.md`:
-
-- **Spacecraft trajectory under unmodeled perturbation.** A signature
-  controller using only local accelerometry holds an orbit family in a
-  high-fidelity simulator (and eventually on a cubesat-class deployment)
-  against adversarial jamming, ephemeris spoofing, or unmodeled
-  solar-radiation events. Matched against a privileged-ephemeris baseline.
-  First-priority because it inherits the most three-body discipline.
-- **Adversarial signature benchmark.** Two agent families — signature-tracking
-  and reward-optimizing — face a named red team across a shared partially-
-  observed environment. Primary metric: rate of catastrophic policy failure
-  under matched adversary budgets. The cleanest attack on the "your signature
-  is just a reward in costume" objection.
-- **Side-channel defense (stretch).** A signature-driven monitor reads syscall
-  residue, timing geometry, or flow autocorrelation rather than labeled attack
-  samples. Active red team. The most outlandish framing because the industry
-  is already shipping reward-trained classifiers that are observably being
-  Goodharted in production.
-
-### Stir lines that stack into this frame
-
-These already live elsewhere in this document; the gravity framing turns them
-from loose provocations into a coherent stack:
-
-- Direct perception is overrated.
-- Full state is a luxury, not a requirement.
-- The disturbance is the data.
-- Occlusion is not failure. It is an interface.
-- Alignment is not always a coordinate. Sometimes it is a resonance.
-- The future of game AI is not omniscient agents. It is agents that know how
-  little they know.
-- We are building systems that can infer from the wake they leave behind.
-
-### Boundary language for the gravity frame
-
-Always pair the gravity claim, in any public venue that may reach researchers,
-with text like:
-
-> The gravity claim is the program's speculative public frame. The controlled
-> evidence is narrower: photometric mirror alignment without target-position
-> access in a MuJoCo experiment, and a bounded near-escape operating pocket in
-> the planar restricted three-body workbench. The experiments that would
-> ratchet the gravity claim into earned language are staged in
-> `docs/SUNDOG_V_GRAVITY.md` and have not been run.
-
-## Headlines
-
-- The Shadow Can Be A Sensor
-- Alignment Without Sight
-- Useful Physics, Not Full Physics
-- The Halo Is The Interface
-- When Occlusion Becomes Control
-- Reading The Wake Of A System
-- Less State, More Structure
-- The Future Is Not Omniscient
-- A Theory Of Useful Partial Information
-- From Shadow Geometry To Software Control
-- The Disturbance Is The Data
-- H(x): The Signal Around The Signal
-- Steering By The Shadow Of Chaos
-- 18 Dimensions. Three Signals.
-- The Three-Body Problem Has A Shadow Too
-- Gravity For Agents
-- You Cannot Reward-Hack A Tidal Tensor
-- The Field Is The Objective
-- A Threat Model Without A Target
-
-## Taglines
-
-- Turn indirect signal into control.
-- Build agents that can act from the halo.
-- Compress physics into usable signatures.
-- Make partial information productive.
-- Find the structure hiding in disturbance.
-- Align without omniscience.
-- Simulate what matters.
-- Let the world answer back.
-
-## Social Posts
-
-### Short
-
-Sundog asks a simple question with strange consequences:
-
-What if the indirect signal is enough?
-
-The shadow. The torque. The occlusion. The deformation. The wake.
-
-Not full state. Usable structure.
-
-### Medium
-
-We rebuilt Sundog as a research-facing artifact.
-
-The core result is narrow and measurable: mirror alignment without direct target
-coordinates, using sparse photometric feedback. The broader program now shows
-up in EyesOnly, Dungeon Gleaner, Money Bags, and the three-body dynamics
-workbench: procedural agents under occlusion, verb-field NPC behavior,
-graph-readable softbody telemetry, and sensor-limited survival in a chaotic
-gravitational setting where the controller reads tidal field gradients instead
-of full system state.
-
-The future we are chasing: systems that do not need perfect information to
-behave intelligently.
-
-### Technical
-
-The Sundog pattern:
-
-1. deny full world-state symmetry;
-2. observe an indirect signal;
-3. transform that signal into a control-relevant signature;
-4. act from the signature;
-5. measure the failure boundary honestly.
-
-That pattern now spans photometric alignment, procedural roguelike agents,
-verb-field NPC behavior, softbody graph telemetry, and three-body dynamics
-control. In the three-body workbench, the agent reads local tidal gradients —
-not primary positions, not masses — and improves survival in a near-escape
-operating pocket where naive local control fails. The failure boundary is
-reported, not hidden.
-
-## Pitch Deck Outline
-
-1. The problem: direct state is expensive, unavailable, or unrealistic.
-2. The insight: indirect environmental response can carry actionable structure.
-3. The theorem: `H(x)` as the relationship between projection and applied force.
-4. The core experiment: photometric mirror alignment without target-position
-   access.
-5. The trade: comparable terminal accuracy, slower acquisition.
-6. The applications: EyesOnly, Dungeon Gleaner, Money Bags.
-7. The three-body result: sensor-limited survival in a chaotic dynamical setting,
-   with an honest operating envelope and failure map.
-8. The future: agents and simulations built around useful partial information.
-9. The ask: collaborators, replication, benchmarks, hardware validation, and
-   application-specific studies.
-
-## Boundary Language
-
-Use this whenever the promo is likely to reach researchers:
-
-> The broad theorem is a research program. The controlled result currently
-> defended in the Sundog repo is narrower: photometric mirror alignment without
-> target-position access in a MuJoCo experiment. The three-body workbench is a
-> bounded operating-envelope study: a sensor-limited controller using local tidal
-> field readings improves survival over passive and naive baselines in a tested
-> near-escape pocket; lower-velocity and equal-mass cells remain known harm
-> boundaries. EyesOnly, Dungeon Gleaner, and Money Bags are application
-> expressions that motivate the next round of controlled studies.
-
-## Closing Lines
-
-- Sundog is not about seeing everything. It is about seeing enough.
-- We are building toward software that understands the shape of its own
-  disturbance.
-- The future belongs to systems that can act intelligently from incomplete
-  truth.
-- The halo was never decoration. It was the signal.
+being told w
