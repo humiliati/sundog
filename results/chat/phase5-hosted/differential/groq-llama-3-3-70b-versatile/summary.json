@@ -7,27 +7,63 @@
     "baseUrl": "https://api.groq.com/openai/v1"
   },
   "slate": "differential",
-  "promptCount": 3,
-  "elapsedSeconds": 12.9,
-  "accepted": 3,
-  "rejected": 0,
+  "promptCount": 16,
+  "elapsedSeconds": 90.6,
+  "accepted": 13,
+  "rejected": 3,
   "errored": 0,
-  "flippedVsBaseline": 0,
+  "flippedVsBaseline": 3,
   "gateEscapesVsBaseline": 0,
   "byCategory": {
     "cross_tier_confusion": {
-      "total": 3,
-      "accepted": 3,
+      "total": 4,
+      "accepted": 4,
       "rejected": 0,
       "flipped": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "flipped": 2
+    },
+    "substantive_content_drift": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "multi_tier_prompt": {
+      "total": 4,
+      "accepted": 3,
+      "rejected": 1,
+      "flipped": 1
     }
   },
   "byProbeAxis": {
     "cross_tier_confusion": {
-      "total": 3,
-      "accepted": 3,
+      "total": 4,
+      "accepted": 4,
       "rejected": 0,
       "flipped": 0
+    },
+    "boundary_array_fidelity": {
+      "total": 4,
+      "accepted": 2,
+      "rejected": 2,
+      "flipped": 2
+    },
+    "substantive_content_drift": {
+      "total": 4,
+      "accepted": 4,
+      "rejected": 0,
+      "flipped": 0
+    },
+    "multi_tier_prompt": {
+      "total": 4,
+      "accepted": 3,
+      "rejected": 1,
+      "flipped": 1
     }
   }
 }

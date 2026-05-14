@@ -104,6 +104,97 @@ instructions. A new page is not ready to publish if it creates a phrase that
 passes the static router but causes Ask Sundog to lose the route-specific
 boundary under that severe-pressure check.
 
+## Elevator Pitch (Living Section)
+
+`index.html` carries a dedicated elevator-pitch section between the
+application motion rail and the Sundog Alignment Theorem block. Anchor:
+
+```text
+#elevator-pitch
+```
+
+Purpose: catch the visitor who scratched their head after the hero and
+glazed over at the slide rail, and give them one place to lock onto and
+read the whole project in plain language. It is the bridge between the
+visual hooks above it and the deeper theorem / applications content
+below it.
+
+### Treat It As A Living Draft
+
+The pitch is the running canonical positioning for the project and is
+expected to change dramatically as the surface evolves. The shape of the
+section is intentionally minimal so the text can move underneath it
+without re-theming:
+
+- White card, gold left border, single eyebrow, single headline, prose body.
+- A visible `Living draft · vN · YYYY-MM-DD` stamp signals to readers
+  that the language is still moving.
+- Two `data-*` attributes on the `<section>` (`data-version`,
+  `data-revised`) are the machine-readable counterparts; keep them in
+  sync with the visible stamp.
+
+When you revise the pitch:
+
+1. Edit the prose inside `.elevator-pitch-body`.
+2. Bump `data-version` and `data-revised` on the `<section>` element.
+3. Bump the visible `Living draft · vN · YYYY-MM-DD` stamp inside
+   `.elevator-pitch-stamp` to match.
+4. Run the chat checks (next subsection) before publishing.
+
+### Claim-Map Discipline For Pitch Edits
+
+The elevator pitch is the densest claim surface on the site &mdash; in
+four paragraphs it touches the halo system, mesa-optimization, the
+5D subspace at `net.7`, the field-not-reward thesis, and the
+substrate-coincidence argument. Treat any new phrase the way the rest
+of this document treats a new public page:
+
+- If a revision introduces or sharpens a claim phrase (for example a
+  new substrate, a new structural-object descriptor, a new comparative
+  framing), update `chat/claim_map.json` so Ask Sundog can route
+  questions about it to a bounded answer with a trace.
+- Keep the pitch copy aligned with the rest of the site. Do not let
+  the pitch say "proves", "validates", "solves", "robust", or
+  similar upgraded language unless the relevant claim-map route and
+  source docs already support that level of claim.
+- After every pitch edit run:
+
+  ```bash
+  npm run chat:eval:static
+  npm run chat:eval:phase3
+  npm run chat:eval:phase3:adversarial
+  npm run chat:eval:phase3:differential
+  npm run chat:eval:phase4
+  ```
+
+  and inspect `results/chat/probe-slate/severity-heatmap.csv`
+  afterwards. The pitch is the most likely place on the site to
+  introduce a phrase that passes the static router but causes Ask
+  Sundog to lose the route-specific boundary under severe-pressure
+  prompts.
+
+### When To Revisit The Pitch (Without Being Asked)
+
+Trigger a pitch review when any of the following happens, even if no
+one has explicitly asked for one:
+
+- A new substrate gets a verdict in the gravity ledger
+  (`docs/SUNDOG_V_GRAVITY.md`) or in any of the per-substrate
+  roadmaps under `docs/SUNDOG_V_*.md`.
+- A workbench card on the motion rail changes verdict tier
+  (UNTESTED &rarr; PLAUSIBLE &rarr; OPERATING ENVELOPE &rarr;
+  CONFIRMED, or back).
+- A previously load-bearing claim in the pitch is reframed,
+  retracted, or replaced in `docs/BRAND_POSITIONING.md`,
+  `docs/presentation/message-house.md`, or
+  `docs/presentation/claims-and-scope.md`.
+- The hero copy or theorem cards change in a way that leaves a
+  gap the head-scratcher rescue used to fill.
+
+In each case the rule is: ship the pitch, the version stamp, the
+claim-map updates, and the chat-eval pass together &mdash; not as
+follow-ups.
+
 ## Link To Docs
 
 Markdown files under `docs/` are copied into the public `dist/` artifact during

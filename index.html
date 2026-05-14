@@ -846,6 +846,88 @@
             }
         }
 
+        /* Elevator Pitch — head-scratcher rescue between the rail and the
+           theorem. Living draft; pitch text bumps the data-version /
+           data-revised stamps. See docs/WEBSITE_DEVELOPMENT.md → "Elevator
+           Pitch (Living Section)" before editing. */
+        .elevator-pitch-section {
+            width: min(1120px, calc(100vw - 3rem));
+            margin: 0 auto;
+            padding: clamp(2.5rem, 5vw, 4rem) 0;
+        }
+
+        .elevator-pitch-section .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .elevator-pitch-stamp {
+            color: #6A7A86;
+            font-family: var(--sd-font-data);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: none;
+            border: 1px solid var(--line);
+            padding: 0.18rem 0.5rem;
+            border-radius: 999px;
+        }
+
+        .elevator-pitch-shell {
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 4px;
+            padding: clamp(1.8rem, 3.2vw, 2.6rem) clamp(1.6rem, 3vw, 2.4rem);
+        }
+
+        .elevator-pitch-headline {
+            color: var(--primary-dark);
+            font-size: clamp(1.5rem, 3vw, 2.1rem);
+            line-height: 1.18;
+            letter-spacing: -0.01em;
+            margin: 0 0 1.4rem;
+        }
+
+        .elevator-pitch-body p {
+            color: #2C3E4A;
+            font-size: 1.02rem;
+            line-height: 1.75;
+            margin: 0 0 1.1rem;
+            max-width: 68ch;
+        }
+
+        .elevator-pitch-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .elevator-pitch-body code {
+            font-family: var(--sd-font-data);
+            font-size: 0.92em;
+            color: var(--primary-dark);
+            background: rgba(125, 162, 184, 0.12);
+            padding: 0.05em 0.35em;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 760px) {
+            .elevator-pitch-section {
+                width: calc(100vw - 2rem);
+            }
+
+            .elevator-pitch-shell {
+                padding: 1.6rem 1.3rem;
+            }
+        }
+
     </style>
     <link rel="stylesheet" href="/css/sundog-theme.css">
 </head>
@@ -1189,6 +1271,52 @@
                         </div>
                     </a>
                 </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Elevator Pitch (Living Section)
+         Purpose: catch visitors who scratched their heads after the hero and
+         glazed over at the rail, and give them one place to lock onto and
+         read the whole project in plain language. The pitch is a working
+         draft of our canonical positioning and is expected to change
+         dramatically as the project's surface evolves.
+
+         When editing the pitch text:
+           - Bump data-version and data-revised on <section>
+           - Bump the visible "Living draft · vN · YYYY-MM-DD" stamp
+           - Re-run the chat:eval suite per docs/WEBSITE_DEVELOPMENT.md →
+             "Elevator Pitch (Living Section)" so any new claim phrases
+             are bounded by Ask Sundog before publish.
+    -->
+    <section
+        class="elevator-pitch-section"
+        id="elevator-pitch"
+        aria-labelledby="elevator-pitch-title"
+        data-version="v1"
+        data-revised="2026-05-13"
+    >
+        <div class="elevator-pitch-shell">
+            <p class="eyebrow">
+                Elevator Pitch
+                <span class="elevator-pitch-stamp">Living draft &middot; v1 &middot; 2026-05-13</span>
+            </p>
+            <h2 id="elevator-pitch-title" class="elevator-pitch-headline">
+                Field-not-reward, in plain language.
+            </h2>
+            <div class="elevator-pitch-body">
+                <p>
+                    A sundog is an optical phenomenon beside the sun, formed when ice crystals in the atmosphere deflect light by 22&deg; and concentrate it into a small set of geometrically determined spots, arcs, and rings. The sky doesn&rsquo;t pick where these features land; their positions fall out deterministically from sun altitude and crystal orientation. Several of the halo system&rsquo;s visible arcs &mdash; circumzenithal, circumhorizon, tangent &mdash; are partial traces of complete figures in the theory, with the visible portion fixed by sun&ndash;observer geometry.
+                </p>
+                <p>
+                    A mesa neuron, by contrast, is a unit inside a trained reinforcement-learning agent&rsquo;s network &mdash; in our case, one of 256 in the final hidden layer of a controller trained to track an indirect environmental signal rather than a direct reward. When we ran capacity and selection-pressure experiments on these agents, we found that mesa-optimization &mdash; the failure mode in which a learned policy develops internal optimization targets that diverge from its training signal &mdash; localizes causally to an entangled 5-dimensional subspace at that layer. In the architecture and capacity regime we tested, that subspace is not recoverable by any single neuron, any handful of features, or any linear decomposition we ran.
+                </p>
+                <p>
+                    Here&rsquo;s why the coincidence matters. In both substrates we found the same structural object: a small-dimensional, holistically-read, asymmetric-under-inversion field whose visible signatures fall out as consequences of hidden state rather than as targets in their own right. The atmosphere produces the halo system from sun altitude and ice geometry; the trained network produces basin-attractor behavior from a 5D subspace at <code>net.7</code>. Finding that same shape on both sides of the substrate divide is the first empirical hint that &ldquo;field-not-reward&rdquo; &mdash; our claim that agents can be aligned by coupling to environmental structure rather than by optimizing a scalar objective &mdash; is describing a real category of object in the world, not a rhetorical move.
+                </p>
+                <p>
+                    If the geometry holds up across enough independent substrates, the implication is large: the engineering surface for alignment looks more like coupling-to-environmental-structure than like optimizing-a-scalar, and the agent, robot, and game engineering that follow from that distinction are different, more economical, and more traceable.
+                </p>
             </div>
         </div>
     </section>
