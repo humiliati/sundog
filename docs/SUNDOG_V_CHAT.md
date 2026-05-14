@@ -2120,14 +2120,29 @@ lost in the next chat-eval pass.
 3. **Mesa&harr;geometry crossover.** The pitch leans on the Phase 10
    single-handle verdict (parhelion-offset promoted; three other
    routes failed at residual / coverage / detection gates) at
-   "first empirical hint" weight. No claim-map route covers this
-   crossover. Either add a route tied to the relevant phase summary,
-   or weaken the pitch's framing of the crossover.
+   "first empirical hint" weight. **Resolution path, updated
+   2026-05-13: audit-driven retraction pending re-audit; do not
+   ratchet `claim_map.json` routes.** The synthetic optical audit
+   ([`docs/calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](../calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
+   weakened the Phase 10 verdict's evidentiary chain: the CZA-route
+   "failure" is partly an atlas formula bug, the parhelion route
+   passes on three photos with meaningful discrimination rather than
+   "every eligible photo," and the tangent-arc detection gate
+   includes a literature-level primitive misclassification. The
+   campaign to re-derive each verdict is filed in
+   [`docs/PHASE10_ATTACK_ROADMAP.md`](../PHASE10_ATTACK_ROADMAP.md);
+   the elevator pitch is hedged in place at v1.1 (per attack roadmap
+   §6 step 4) until the re-audit gate clears. Do *not* promote any
+   `claim_map.json` route covering the crossover at this time &mdash;
+   the audit weakens, not strengthens, the case for ratcheting. If
+   the re-audit clears with the verdict surviving, revisit this
+   bullet's resolution path; if it doesn't, the pitch's third
+   paragraph is retracted, not ratcheted.
 
-Until each of these is resolved, v1 of the pitch is a known-pending
-integrity gap and the Phase 4 severity heatmap should be inspected
-specifically for prompts that quote the pitch language back at the
-assistant.
+Until each of these is resolved, the elevator pitch (now v1.1,
+audit-hedged) is a known-pending integrity gap and the Phase 4
+severity heatmap should be inspected specifically for prompts that
+quote the pitch language back at the assistant.
 
 ### 16.3 Failure Modes To Watch
 

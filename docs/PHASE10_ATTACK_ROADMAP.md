@@ -565,18 +565,22 @@ six steps run before any §3 technical pass starts.
    the same hedge stamp; walk back "three independent failure
    layers" to the audit-survived language ("three structurally
    different failure layers, two of which have non-atlas
-   explanations").
+   explanations"). **Status: landed 2026-05-13.**
 3. **`docs/SUNDOG_V_GRAVITY.md` public-framing sentence.** Hedge the
-   forward-richness half per memo §6.
-4. **`index.html#elevator-pitch` v1 pitch.** Either pull the
-   third paragraph (the "first empirical hint" sentence) until the
-   re-audit, or add a hedging clause that names the audit-driven
-   retraction. Bump `data-version` to v1.1, `data-revised` to today,
-   and update the visible stamp.
+   forward-richness half per memo §6. **Status: landed 2026-05-13.**
+4. **`index.html#elevator-pitch` v1 pitch.** Hedge in place: keep
+   the third paragraph but add an inline audit-driven hedge clause at
+   the load-bearing sentence. Bump `data-version` to v1.1,
+   `data-revised` to today, update the visible stamp, and add a
+   `data-audit-hedge` attribute naming the controlling roadmap.
+   **Status: landed 2026-05-13 as v1.1.** (Pull-paragraph option from
+   the original step 4 was considered and rejected in favor of
+   hedge-in-place to preserve structure for the re-audit re-ratchet.)
 5. **`docs/SUNDOG_V_CHAT.md` §16.2.** Update the third bullet
    (mesa↔geometry crossover) to flip the resolution path from
    "decide whether to ratchet a route" to "audit-driven retraction
    pending re-audit; do not ratchet `claim_map.json` routes."
+   **Status: landed 2026-05-13.**
 
 ## 7. Meta: Treat the Verify Gate as Load-Bearing
 
