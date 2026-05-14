@@ -44,12 +44,17 @@ uses the verified formula.
 import math
 
 # Refractive index of ice. n = 1.31 is the visible-band centroid for
-# ice; the CZA disappearance altitude varies by ~0.1° across the visible
-# chromatic spread (ice n ~1.308 at 589 nm yellow, ~1.317 at violet),
-# which is below this atlas's measurement precision. The CZA itself
-# forms by refraction through the top face and out the side face of a
-# horizontally-oriented hexagonal plate ice crystal (Bravais's classical
-# derivation; atoptics.co.uk).
+# ice; ice n ranges from ~1.306 (red, ~670 nm) to ~1.317 (violet,
+# ~404 nm) across the visible. The CZA disappearance altitude
+# therefore varies by ~1.8° across the visible chromatic spread:
+# red drops out last at ~32.9°, yellow (589 nm) at ~32.5°, centroid
+# at 32.2°, violet first at ~31.0°. The disappearance is gradual
+# rather than a sharp cutoff. (Wave-2 §8.4 of
+# PHASE11_OUTREACH_SYNTHETIC_MEMO.md re-derived this 2026-05-14 from
+# the formula below; supersedes wave-1's earlier ~0.1° claim.) The
+# CZA itself forms by refraction through the top face and out the
+# side face of a horizontally-oriented hexagonal plate ice crystal
+# (Bravais's classical derivation; atoptics.co.uk).
 ICE_REFRACTIVE_INDEX = 1.31
 
 # Sun altitude above which the CZA disappears geometrically. Solved from

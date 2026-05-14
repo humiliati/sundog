@@ -29,9 +29,14 @@
       "inLanguage": "en",
       "url": "https://sundog.cc/sundog.html",
       "author": {
-        "@type": "Organization",
-        "name": "Stellar Aqua LLC",
-        "url": "https://sundog.cc/"
+        "@type": "Person",
+        "name": "humiliati",
+        "url": "https://github.com/humiliati",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Stellar Aqua LLC",
+          "url": "https://sundog.cc/"
+        }
       },
       "learningResourceType": ["Interactive Resource", "Article"],
       "educationalLevel": "general",
@@ -958,6 +963,7 @@
             <div class="stage-copy">
                 <div class="eyebrow">Sundog · Atmospheric Optics</div>
                 <h1>A sun dog is geometry doing optics.</h1>
+                <p class="lit-attribution" style="font-size: 0.85rem; color: rgba(245, 245, 245, 0.66); margin-bottom: 0.5rem;">Geometry follows Greenler (1980) and Tape (1994); see <a href="#history">History &amp; reading</a> for citations.</p>
                 <p>Every visible arc you see in a sundog photograph is the upper slice of a complete circle in the sky. Move the sliders, watch the math draw the eye. Or scroll on for the explainer.</p>
                 <div class="stage-cta">
                     <a href="#why-22" class="is-primary">Why 22°?</a>
@@ -972,7 +978,7 @@
             <p class="lead">Default view is the canonical pose calibrated against the Troels Nielsen DR photograph. Toggle <em>advanced</em> for the full rail.</p>
 
             <h3>Sun &amp; Altitude</h3>
-            <div class="control-group">
+            <div class="control-group" id="parhelion-offset-demo">
                 <label>Sun Altitude (°)<span class="value" id="sun-altitude-value">25</span></label>
                 <input type="range" id="sun-altitude" data-param="sun-altitude" min="0" max="60" step="1" value="25">
             </div>

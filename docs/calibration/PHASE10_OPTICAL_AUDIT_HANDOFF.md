@@ -52,7 +52,7 @@ After the post-re-audit campaign, the verdict is:
 | Parhelion offset → h | **promoted (post-hedged)** | 3-photo strict eligibility (p2 h = 18.6°, p7 h = 59.4°, p13 h = 6.83°): unambiguous bilateral peaks, valid geometry, ring-fit R22, non-trivial discrimination (for p2, p7) or low-lever-but-supported (for p13) |
 | CZA apex → h | **fails coverage gate** | dataset / aspect-ratio: only p2 is in-window with an independent residual (+1.3 px under the post-A1b literature formula); other anchored photos are either past the CZA disappearance threshold (h > 32.2°) or have the literature CZA apex predicted above the top of the frame |
 | Supralateral position → h | **fails structural-discrimination gate** | atmospheric physics: supralateral angular distance from sun varies only ~0.5° across h = 0–22°, below the typical 5–10 px visual-edge measurement noise even at perfect coverage |
-| Tangent-arc curvature → h | **partially recovered on p2 under manual sample selection; coverage gate fails; C5↔C6 substrate tension flagged** *(C1 + C2 + C4 + C5 + C6 landed 2026-05-14)* | hybrid coverage + detection-tooling with verify-gate flagged: column-peak fails on the post-C1 sampled set (p2, p13, p27); p7 dropped as circumscribed-halo regime at h = 59.4°. **Pass C2** wing-radial Lab b\* ridge detector (`scripts/tangent_detector.py`): not-recovered. **Pass C4** gradient-based edge detector Persona 1 §5 named (`scripts/tangent_curvature.py`): not-recovered. **Pass C5** manual sample selection: 5 hand-anchored points on p2 fit a clean circle with R\_uta\_obs / R22 = 0.824 and RMS = 1.23 px — **recovered on p2** with methodology hedge (possible symmetry bias). p13 / p27 yield no usable anchoring. **Pass C6** matched-filter against parameterized arc model on halo-subtracted b\* (`scripts/tangent_matched_filter.py`) — the natural follow-up the C5 receipt named: **falsified the C5→matched-filter extension** with negative correlation across the entire R\_uta scan on p2; spurious half-R22 peak on p13; zero signal on p27. Four automated detectors now fail on p2's signal that C5 manual recovers. Two interpretations: (a) gestalt signal in a different substrate (untested: absolute b\*, L\* magnitude, chromaticity magnitude); (b) C5's tight fit is symmetry-bias artifact. Recommended specialist verify gate: independent re-anchoring of p2. Coverage gate still fails (1 / 3 photos). |
+| Tangent-arc curvature → h | **partially recovered on p2 under manual sample selection; coverage gate fails; C5↔C6 substrate tension flagged** *(C1 + C2 + C4 + C5 + C6 landed 2026-05-14)* | hybrid coverage + detection-tooling with verify-gate flagged: column-peak fails on the post-C1 sampled set (p2, p13, p27); p7 dropped as circumscribed-halo regime at h = 59.4°. **Pass C2** wing-radial Lab b\* ridge detector (`scripts/tangent_detector.py`): not-recovered. **Pass C4** gradient-based edge detector Persona 1 §5 named (`scripts/tangent_curvature.py`): not-recovered. **Pass C5** manual sample selection: 5 hand-anchored points on p2 fit a clean circle with R\_uta\_obs / R22 = 0.824 and RMS = 1.23 px — **recovered on p2** with methodology hedge (possible symmetry bias). p13 / p27 yield no usable anchoring. **Pass C6** matched-filter against parameterized arc model on halo-subtracted b\* (`scripts/tangent_matched_filter.py`) — the natural follow-up the C5 receipt named: **falsified the C5→matched-filter extension** with negative correlation across the entire R\_uta scan on p2; spurious half-R22 peak on p13; zero signal on p27. Four automated detectors now fail on p2's signal that C5 manual recovers. Two interpretations: (a) gestalt signal in a different substrate (untested: absolute b\*, L\* magnitude, chromaticity magnitude); (b) C5's tight fit is symmetry-bias artifact. Recommended specialist verify gate: independent re-anchoring of p2. Coverage gate still fails (1 / 3 photos). **Inverse-handle framing caveat (wave-2 W4, added 2026-05-14):** the literature-standard tangent-arc inverse uses opening angle / arc extent (Tape 1994 §6; Cowley tangent-arcs page), not circle-fit curvature; "curvature → h" is the project's exploratory framing — see §2.3 (v) for the open framing question. |
 
 The audit-survived public-framing sentence in
 [`../SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md) is:
@@ -109,14 +109,16 @@ construction)?
 ### 2.2 Is the supralateral structural-discrimination finding correctly bounded?
 
 Pass A3's verdict: supralateral angular distance from sun varies only
-~0.5° across the h = 0–22° eligibility range, which puts the available
-h-signal below the typical 5–10 px visual-edge measurement noise. We
-read this as a *route-physics* limitation, not a *dataset* limitation:
-no realistic photo set fixes it.
+~0.5° across the h = 0–22° eligibility range (Tape 1994 §6.4 has the
+canonical Bravais-geometry parameterization the team's ~0.5° figure
+derives from), which puts the available h-signal below the typical
+5–10 px visual-edge measurement noise. We read this as a
+*route-physics* limitation, not a *dataset* limitation: no realistic
+photo set fixes it.
 
-Questions: (i) is the ~0.5° figure (audit memo §2 item 12) actually
-the right number under the literature's standard supralateral
-parameterization, or is there a better one? (ii) Are there sub-cases
+Questions: (i) is the ~0.5° figure actually the right number under
+the literature's standard supralateral parameterization, or is there
+a better one? (ii) Are there sub-cases
 (specific crystal habits, viewing azimuths, low-h-only regimes) where
 the h-spread is materially larger? (iii) Is the supralateral arc
 genuinely structurally weak as an inverse handle in atmospheric optics,
@@ -339,6 +341,48 @@ generation + one image-recoverable inverse handle" framing):
 
 Question: is this defensible to atmospheric-optics readers? Where it
 isn't, what would the right hedged phrasing be?
+
+### 2.8 Parhelion route — is p7 (h = 59.4°) a parhelion or a circumscribed-halo brightness? *(wave-2 specialist question; added 2026-05-14)*
+
+The strict 3-photo set promoted under Pass B2 includes p7 at
+h = 59.4°. At that altitude the column-plate parhelion mechanism is
+at the edge of its plausible regime: Tape (1994) §3 and Greenler ch. 3
+frame parhelia as low-to-moderate-`h` plate-refraction features, and
+circumscribed-halo brightness on the parhelic circle competes
+strongly at h ≈ 60°. The campaign's Pass C1 explicitly dropped p7
+from *tangent-arc* eligibility on circumscribed-halo-regime grounds
+(handoff §1 verdict-table footnote) without posing the symmetric
+question about *parhelion* eligibility.
+
+**Question: is the bright spot we read as a parhelion on p7 actually
+a plate-population parhelion (column-prism refraction in the
+classical Greenler ch. 3 sense), or is it more likely a
+circumscribed-halo brightness enhancement at the parhelic-circle
+intersection?**
+
+If a specialist reads it as circumscribed-halo:
+
+- p7 demotes from route-validating to informational.
+- The strict-eligibility set becomes (p2, p13), with p2 carrying the
+  high-lever discrimination (5.52% lever) and p13 the unambiguous
+  bilateral-peaks + ring-fit-halo eligibility (0.71% lever;
+  anchor-noise-bounded).
+- Rewrites cascade through handoff §1 verdict-table, packet §2
+  item 3, reaudit memo §94, and brief §5.
+
+If a specialist confirms p7 *is* a plate-population parhelion at
+h ≈ 60°, the strict set stands as-is and the p7 result becomes
+specifically interesting (a high-`h` plate-population case where
+`R₂₂ / cos(h)` still inverts cleanly).
+
+This question was surfaced by the wave-2 independent synthetic
+re-dispatch (see
+[`PHASE11_OUTREACH_SYNTHETIC_MEMO.md`](PHASE11_OUTREACH_SYNTHETIC_MEMO.md)
+§8.6a W1) rather than by the original campaign passes; the campaign
+treated p7's parhelion bright-spot as established once Pass B2's
+ring-fit-halo + unambiguous-bilateral-peaks gates passed. The wave-2
+finding is that those gates verify *measurement reliability*, not
+*production-mechanism identity*.
 
 ## 3. What would change the verdict
 
