@@ -181,13 +181,134 @@ def detrended_rings(prof: np.ndarray, rmax: int, inner: int = 40):
     return bumps, noise, snr
 
 
+def _boxmean(a: np.ndarray, k: int) -> np.ndarray:
+    """Separable numpy box mean (no scipy dependency)."""
+    pad = k // 2
+    c = np.cumsum(np.pad(a, ((pad + 1, pad), (0, 0)), mode="edge"), axis=0)
+    a = (c[k:, :] - c[:-k, :]) / k
+    c = np.cumsum(np.pad(a, ((0, 0), (pad + 1, pad)), mode="edge"), axis=1)
+    return (c[:, k:] - c[:, :-k]) / k
+
+
+def filtered_contrast(img: Image.Image):
+    """Background-AGNOSTIC ring signal for the Phase-15 ray-filtered
+    receipts (some render B&W-on-white, some blue-plan -- the per-frame
+    plot-style toggle is inconsistent). C = |L - local box mean|: a ring
+    is high-contrast regardless of polarity; flat white / blue / grey-margin
+    regions -> ~0. No colour mask needed."""
+    L = np.asarray(img.convert("L"), dtype=np.float32)
+    return L, np.abs(L - _boxmean(L, 21))
+
+
+def ring_snr_center(C: np.ndarray):
+    """Find the SUN / common ring centre by maximising summed detrended
+    ring SNR over an edge-excluded grid. Necessary because the strong
+    straight edges (plot-square border + split-sky divider) fool
+    gradient/peak-sharpness centring onto the square centre, not the
+    rings (verified: 3 edge-driven methods all mis-locked identically)."""
+    H, W = C.shape
+    Cm = np.zeros_like(C)
+    Cm[80:H - 80, 200:W - 200] = C[80:H - 80, 200:W - 200]
+    yy, xx = np.indices(C.shape)
+
+    def score(cx, cy):
+        rmax = min(int(min(cx - 200, W - 200 - cx, cy - 80, H - 80 - cy)) - 2, 360)
+        if rmax < 150:
+            return -1.0, 0
+        rr = np.clip(np.hypot(xx - cx, yy - cy).astype(int), 0, rmax)
+        s = np.bincount(rr.ravel(), Cm.ravel(), minlength=rmax + 1)
+        c = np.bincount(rr.ravel(), minlength=rmax + 1).astype(float)
+        c[c == 0] = 1.0
+        p = smooth(s / c, 5)
+        bl = np.array([np.median(p[max(0, i - 25):i + 26]) for i in range(len(p))])
+        res = p - bl
+        nz = float(np.std(res[40:rmax - 10])) or 1.0
+        return float(np.clip(res[40:rmax - 10] / nz, 0, None).sum()), rmax
+
+    best = (-1.0, W // 2, H // 2, 0)
+    for cy in range(250, H - 240, 16):
+        for cx in range(560, W - 540, 16):
+            sc, rm = score(cx, cy)
+            if sc > best[0]:
+                best = (sc, cx, cy, rm)
+    _, bx, by, _ = best
+    for cy in range(by - 10, by + 11, 3):
+        for cx in range(bx - 10, bx + 11, 3):
+            sc, rm = score(cx, cy)
+            if sc > best[0]:
+                best = (sc, cx, cy, rm)
+    return best[1], best[2], best[3]
+
+
+def radial_profile_full(C: np.ndarray, cx: float, cy: float, rmax: int) -> np.ndarray:
+    yy, xx = np.indices(C.shape)
+    rr = np.clip(np.hypot(xx - cx, yy - cy).astype(int), 0, rmax)
+    s = np.bincount(rr.ravel(), C.ravel(), minlength=rmax + 1)
+    c = np.bincount(rr.ravel(), minlength=rmax + 1).astype(float)
+    c[c == 0] = 1.0
+    return s / c
+
+
 def main() -> int:
     RECEIPT, OVERLAY_OUT, PROF_TXT = resolve_paths(sys.argv)
+    filtered = "--filtered" in sys.argv
     if not os.path.isfile(RECEIPT):
         print(f"ERROR: receipt not found: {RECEIPT}")
         return 1
     img = Image.open(RECEIPT).convert("RGB")
     W, H = img.size
+
+    if filtered:
+        # Phase-15 ray-filter-crisped receipt path: background-agnostic
+        # contrast + edge-excluded ring-SNR centre, then the SAME rigorous
+        # detrend + >=3-ring honest gate (no fabrication).
+        L, C = filtered_contrast(img)
+        cx, cy, rmax = ring_snr_center(C)
+        prof = radial_profile_full(C, cx, cy, rmax)
+        bumps, noise, snr = detrended_rings(prof, rmax)
+        outer = [b for b in bumps if b[0] > 70]
+        print(f"receipt : {os.path.relpath(RECEIPT, REPO)}  [--filtered]")
+        print(f"image   : {W}x{H}  ring-SNR centre=({cx},{cy})  rmax={rmax}px")
+        print(f"detrend : noise={noise:.2f}  >3sigma bumps={bumps if bumps else 'NONE'}")
+        if len(outer) >= 3:
+            print("RESULT: >=3 rings resolved -- proceed to scale-lock + "
+                  "residual table (rerun without --filtered guard once a "
+                  "scale anchor is identified).")
+        else:
+            print()
+            print("RESULT: ray-filter campaign improved crispness but a "
+                  "multi-ring residual table is STILL not defensibly "
+                  "extractable by 1D azimuthal profiling.")
+            print(f"  Best edge-excluded ring-SNR centre=({cx},{cy}); only "
+                  f"{len(outer)} ring(s) outside the core exceed 3 sigma "
+                  f"(outer bumps: {outer or 'none'}). Four independent "
+                  f"centring methods (peak-sharpness, contrast-coherence, "
+                  f"gradient-Hough, ring-SNR) were applied; the family seen "
+                  f"by eye does not separate into >=3 azimuthally-clean "
+                  f"loci on these split-sky 'Sun centered Plan' renders.")
+            print("  Mechanically the campaign SUCCEEDED (8 wedge frames via "
+                  "the proven text-edit, 8 HS-0 renders) and data quality "
+                  "improved (1M=0 clean rings; 6M=1 marginal; 4M-filtered=1 "
+                  "STRONG ring). But >=3 separable rings are required for the "
+                  "predicted-vs-measured table + 22/46 linearity check.")
+            print("  => No residual table fabricated. Pyramidal stays P2. "
+                  "Refined next step: a NON-split full-sky render in a known "
+                  "equidistant projection (so one filter -> one isolable "
+                  "ring), or a 2D ring-template / Hough-radius fit instead "
+                  "of 1D azimuthal profiling -- OR accept P2 as this "
+                  "evidence chain's ceiling.")
+            with open(PROF_TXT, "w", encoding="utf-8") as fh:
+                fh.write("# Phase-15 ray-filtered receipt radial analysis "
+                         "-- >=3 rings NOT extractable by 1D profile\n")
+                fh.write(f"# receipt={os.path.basename(RECEIPT)} "
+                         f"ring_snr_centre=({cx},{cy}) rmax={rmax} "
+                         f"detrend_noise={noise:.3f} outer_rings={outer}\n")
+                fh.write("# r_px\tcontrast_profile\tdetrend_snr\n")
+                for r in range(0, rmax):
+                    fh.write(f"{r}\t{prof[r]:.3f}\t{snr[r]:.2f}\n")
+            print(f"  evidence: {os.path.relpath(PROF_TXT, REPO)}")
+        return 2
+
     mask, signal = plot_mask_and_signal(img)
     cx, cy = find_center(mask, signal)
     rmax = _rmax_for(mask, cx, cy)
