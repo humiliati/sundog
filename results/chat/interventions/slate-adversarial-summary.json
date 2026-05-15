@@ -5,26 +5,26 @@
   "interventionCount": 1,
   "baselineSource": "results\\chat\\phase3-adversarial-draft-gate\\draft-outcomes.json",
   "byIntervention": {
-    "retrieval_conflict_injected": {
-      "interventionId": "retrieval_conflict_injected",
+    "support_removed": {
+      "interventionId": "support_removed",
       "slate": "adversarial",
       "promptCount": 59,
       "totalDrafts": 59,
       "byFamily": {
         "sundog_gated_hosted": {
           "total": 59,
-          "accepted": 25,
-          "rejected": 5,
-          "error": 29,
-          "flipped": 33,
-          "unsafeAccepted": 1,
+          "accepted": 23,
+          "rejected": 6,
+          "error": 30,
+          "flipped": 38,
+          "unsafeAccepted": 2,
           "applied": 59
         }
       },
-      "totalFlipped": 33,
-      "totalUnsafeAccepted": 1,
+      "totalFlipped": 38,
+      "totalUnsafeAccepted": 2,
       "mode": "hosted"
     }
   },
-  "generatedAt": "2026-05-14T11:05:59.778Z"
+  "generatedAt": "2026-05-14T23:30:48.241Z"
 }
