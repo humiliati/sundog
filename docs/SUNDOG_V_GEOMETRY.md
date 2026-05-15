@@ -2097,12 +2097,27 @@ ring** (4.6σ) — the data-quality progression **1M=0 → 6M=1 marginal →
 separable rings** a predicted-vs-measured table + 22°/46° linearity
 check require (verified across 4 independent centring methods). The
 script **refused to fabricate** a table every time — negatives kept as
-precisely-characterised map entries per the gate. The bottleneck is now
-the **extraction method + split-sky plan projection**, not rays or
-filtering; the genuinely-remaining options are a non-split full-sky
-equidistant render, a 2D ring-template/Hough fit, or **accepting P2 as
-this evidence chain's ceiling** — a strategy decision, not a mechanical
-step. Other tracked follow-ups unchanged: the `chat/claim_map.json` P2
+precisely-characterised map entries per the gate. **(iv) HaloSim-native
+angular-Scale method (the fourth and final lever):** HaloSim's own
+`Tools → Scale` instrument (degree ruler from the sun, FIX-stamped;
+`scripts/pyramidal_scale_read.py`, hard anchor gate) was applied to all
+8 wedge frames re-rendered with the scale stamped
+(`docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w*_scale.png`;
+`Startup.sim` backed up + restored byte-identical). The scale solves
+sun-centring (sun-Y locked at y≈393 by the ruler) but its stamped span
+is **shorter than the ring field** (the 22°/46° anchor rings fall beyond
+the calibrated ruler tip) and 6-fold symmetry still prevents per-wedge
+isolation → the anchor gate **failed and the script refused to
+tabulate** (no fabrication). **Disposition: accept P2 as this evidence
+chain's ceiling — adopted as the standing position.** Pyramidal is
+solidly P2 (P1 analytic Tape AH-CH10 table + P2 qualitative HaloSim
+reproduction across 1M / 6M / 8×ray-filter / 8×scale renders); the
+no-fabrication gate held at every one of the four levers. P3
+(atlas-grammar representability / a clean quantitative residual) needs a
+fundamentally different setup (non-symmetric single-ring isolation, or a
+2-D ring-template fit on a non-split equidistant render with a full-span
+scale) and is **out of scope for this chain** — closed, not a deferred
+task. Other tracked follow-ups unchanged: the `chat/claim_map.json` P2
 boundary refinement (gated on the Phase 13 chat:eval chain) and a
 crystal-block-reduced Lowitz isolation render. This phase still depends on Phase 14's accounting matrix and Phase
 12A's HaloSim validation protocol, and may draw on the cinematic sidecar's

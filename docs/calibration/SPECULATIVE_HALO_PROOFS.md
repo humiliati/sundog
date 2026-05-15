@@ -184,6 +184,43 @@ Sundog result.
   **No residual table fabricated. Pyramidal stays P2.** Evidence:
   `phase14e/pyr_w9_e3_x26_4M_radialprofile.txt`; 8 receipts +
   byte-safe frame sims retained. Refined remaining path is #1′ below.
+- **HaloSim-native angular-Scale method (follow-up #1′ final lever) —
+  2026-05-15, METHOD IMPLEMENTED · ANCHORS FAIL · P2 UNCHANGED.** Recon
+  found HaloSim's own measurement instrument (`Tools → Scale`, FIX —
+  help h10/h1/h5: a degree-graduated ruler drawn *from the sun*,
+  stampable into the render). It dissolves the px↔° scale-lock and
+  centre-finding in principle: the ruler's row gives the exact sun-Y and
+  its ticks encode HaloSim's own non-linear projection mapping. All 8
+  Tape-wedge frames were re-rendered with the scale FIXed mid-render and
+  harvested (`phase15_pyrfilter/pyr_w*_scale.png` — 8 scale-stamped
+  artifacts; sun-Y robustly locked at y≈393 by the ruler; new tool
+  [`scripts/pyramidal_scale_read.py`](../../scripts/pyramidal_scale_read.py)
+  with a hard anchor gate). **Outcome:** the anchor gate **failed and the
+  script refused to tabulate** — two compounding limits: (a) the stamped
+  ruler's angular span is *shorter than the ring field* (the ordinary
+  22°/46° anchor rings at 21.8°/45.7° fall **beyond** the calibrated
+  ruler tip, so they cannot be read against it), and (b) per-wedge
+  isolation is still structurally impossible (6-fold symmetry → the same
+  dense family in every wedge frame). The Scale tool itself works and the
+  artifacts are a genuine asset (HaloSim's own calibrated instrument
+  stamped per frame), but as executed it does not yield an
+  anchor-validated measured-vs-Tape set. **No fabrication; pyramidal
+  stays P2.** Artifacts + script retained as precise map entries per the
+  gate.
+- **Status of the P3 probe — four methods exhausted.** 1M (0 rings) →
+  6M (1 marginal) → 8× ray-filter isolation (crisp family, no
+  per-wedge isolation, 1 ring by 1-D profile) → HaloSim-native Scale
+  (instrument works but span < ring field; anchors un-validatable).
+  The project's no-fabrication gate held at **every** step. The
+  bottleneck is structural (6-fold-symmetry non-isolation + the
+  Plan-projection/scale-span), not a tooling tweak away. **Recommended
+  disposition: accept P2 as this evidence chain's ceiling.** Pyramidal
+  is solidly P2 — P1 analytic (Tape AH-CH10 closed-form table) + P2
+  qualitative HaloSim reproduction across many independent renders. P3
+  (atlas-grammar representability / clean quantitative residual) requires
+  a fundamentally different setup (a non-symmetric single-ring isolation,
+  or a 2-D ring-template fit on a non-split equidistant render with a
+  full-span scale) and is out of scope for this chain.
 
 ---
 
@@ -279,16 +316,29 @@ what would promote it.
    ring). The face-pair filters crispen but do **not** single-isolate
    (6-fold crystal symmetry), and ≥3 azimuthally-separable rings still do
    not extract from the split-sky "Sun centered Plan" renders. The
-   bottleneck is no longer rays/filtering — it is the **extraction method
-   + projection**. Genuinely-remaining options, in order of leverage:
-   (a) a **non-split, full-sky render in a known equidistant projection**
-   (one filter → one cleanly isolable ring, az-averaging valid); (b) a
-   **2D ring-template / Hough-radius fit** instead of 1D azimuthal
-   profiling (robust to the split-sky and off-centre rings); or (c)
-   **accept P2 as this evidence chain's ceiling** — the analytic table
-   (P1) + qualitative HaloSim reproduction (P2) stand; P3 (atlas-grammar
-   representability) was always the harder, separately-gated bar. This
-   is now a strategy decision, not a mechanical next step.
+   bottleneck is no longer rays/filtering — it is the extraction method
+   + projection. Superseded by **#1″**.
+1″. ~~Pyramidal residual via HaloSim-native angular Scale.~~ **Done
+   2026-05-15 → method implemented, anchors fail, P2 unchanged** (see
+   the Pyramidal record's "HaloSim-native angular-Scale method" entry).
+   The fourth and final lever: HaloSim's own `Tools → Scale` instrument
+   (degree ruler from the sun, FIX-stamped) was applied to all 8 wedge
+   frames (`phase15_pyrfilter/pyr_w*_scale.png`,
+   [`scripts/pyramidal_scale_read.py`](../../scripts/pyramidal_scale_read.py),
+   hard anchor gate). The scale solves sun-Y/centring but its stamped
+   span is shorter than the ring field (the 22°/46° anchors fall beyond
+   the calibrated ruler tip) and 6-fold symmetry still prevents per-wedge
+   isolation — anchors un-validatable, no table, **no fabrication**.
+   **Disposition (recommended & adopted as the standing position):
+   accept P2 as this evidence chain's ceiling.** Pyramidal is solidly
+   P2 (P1 analytic Tape table + P2 qualitative HaloSim reproduction
+   across 1M/6M/8×ray-filter/8×scale renders). P3 (atlas-grammar
+   representability / a clean quantitative residual) requires a
+   fundamentally different setup — a non-symmetric single-ring isolation
+   or a 2-D ring-template fit on a non-split equidistant render with a
+   full-span scale — and is **out of scope for this chain**. No further
+   mechanical levers; this is a closed strategy decision, not a deferred
+   task.
 2. **Chat boundary refinement.** `chat/claim_map.json`
    `halo_atlas_vocabulary_status` currently frames pyramidal/CHA as
    "named-only / not modeled." It should be refined so Ask Sundog says
