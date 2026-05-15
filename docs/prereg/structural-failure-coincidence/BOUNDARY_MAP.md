@@ -175,4 +175,14 @@ Constraint is in force.
 Append-only. Each amendment: timestamp (date + zone), author, one-line
 justification. The body above is frozen at P0 write time.
 
-*(no amendments yet)*
+**2026-05-15 (PT) — maintainer.** Context integration: cross-reference against
+[`docs/Debunked.md`](../../Debunked.md) completed. The BOUNDARY_MAP path
+(halo-geometry altitude inference, traceability test) is **orthogonal** to the
+Pushable Occluder path documented in docs/Debunked.md (photometric controller,
+PATH domain). No locus in L1–L5 depends on any assumption challenged or
+invalidated in Debunked.md; the two documents test different failure modes in
+different experimental domains. Full cross-reference analysis, unresolved-risk
+inventory, and prioritization recommendation:
+[`DEBUNKED_CROSSREF.md`](DEBUNKED_CROSSREF.md).
+Verdict: treat this path as **primary** — advance to P1 (falsifier admission
+review) using DEBUNKED_CROSSREF.md as the context-integration step.

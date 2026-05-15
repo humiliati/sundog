@@ -64,3 +64,35 @@ Dungeon Gleaner — Product Expression
 Money Bags — Plausible / Apparatus Built
 
 The important design move is to make the failure card visually interrupt the row. The stamp should arrive after the clip’s last beat, not sit there from the beginning: beam dims, controller searches, block remains in path, detector never peaks, then the stamp hits: BOUNDARY FOUND. That makes the transition itself feel like the experimental verdict.
+
+---
+
+## Relationship to the Structural Failure Coincidence Path
+
+The Pushable Occluder analysis above is in the **PATH domain** (photometric
+controller, beam alignment). A separate, orthogonal falsification path for the
+**geometry / gravity domain** was pre-registered 2026-05-15 and covers a
+different question: whether an inference agent uses the actual closed-form halo
+inverse or a learned correlate.
+
+That path is documented in:
+
+- Pre-registration:
+  [`docs/prereg/structural-failure-coincidence/README.md`](prereg/structural-failure-coincidence/README.md)
+- Frozen boundary map (P0 deliverable):
+  [`docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md`](prereg/structural-failure-coincidence/BOUNDARY_MAP.md) —
+  five inverse-handle loci (parhelion offset, CZA cutoff, tangent-arc merge,
+  supralateral discrimination gate, rendered-vs-anchored honesty ratchet), each
+  with eligible regime, fail/abstain/switch regime, source receipt, and
+  traceable-vs-correlate predictions.
+- Cross-reference analysis (this document ↔ BOUNDARY_MAP.md):
+  [`docs/prereg/structural-failure-coincidence/DEBUNKED_CROSSREF.md`](prereg/structural-failure-coincidence/DEBUNKED_CROSSREF.md)
+
+**Key finding from the cross-reference analysis:** the two paths are
+**orthogonal** — they test different failure modes in different experimental
+domains, and no BOUNDARY_MAP locus depends on any assumption challenged in this
+document. The structural-failure-coincidence path is more foundational
+(traceability must be established before any alignment result is defensible)
+and should be treated as **primary**; the Pushable Occluder path is the best
+operational / visual failure for the rail and should run second, enriched by a
+post-hoc traceability audit using the L1–L5 locus map.
