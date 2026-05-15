@@ -5,12 +5,23 @@ This document records Phase 14 results for
 guarded-TRACK survival win into warning quality, action coupling, and outcome
 effect.
 
-Status: full lock complete; exact Phase 13 regression gate not shown in the
-supplied transcript. A shared-mode aggregate subset check against Phase 13
-passes exactly for `naive` and `track_sensor_accel_guarded`, so the result below
-is a strong provisional read. The spec's exact `npm run threebody:phase13`
-rerun should still be recorded before treating the Phase 14 result as fully
-locked.
+Status: full lock complete. The spec's exact Phase 13 regression gate
+(`npm run threebody:phase13`, unchanged command) was rerun this session and
+reproduced the Phase 13 lock bit-for-bit (3,456 trials; 88 / 324 candidate
+envelope rows; 81 promising best cells; terminal outcomes 1,154 bounded /
+2,030 escape / 272 close approach, matching `PHASE13_RESULTS.md`), so the
+shared-harness edit is verified non-perturbing. Remaining caveats are
+scientific, not gate-related: see Sections 5 and 8.
+
+Cross-doc verification (2026-05-15): Phase 14 numbers confirmed consistent
+across `PHASE14_RESULTS.md`, `SUNDOG_V_THREEBODY.md`, and `threebody-writeup.md`
+and matching the lock result files (130 / 648 envelope rows; guarded TRACK
+77/108 · 71/81; signal delay 48/108 · 36/81; action shuffle 3/108 · 0/81;
+signal shuffle 2/108 · 0/81; sign flip 0/108 · 0/81). The favorable-pocket
+passive tidal AUROC ≈ 0.006 is a genuine decidable failure (81/81 favorable
+cells have defined AUROC; the high 0.38–0.47 values sit in the
+`velocityScale=0.95` boundary column, not the favorable pocket), not a
+coverage/undecidable artifact.
 
 ## 1. Full Lock
 
@@ -36,17 +47,26 @@ The run used seven executed modes: `off`, `naive`,
 
 ## 2. Regression Check
 
-The exact Phase 13 baseline rerun is not present in the supplied transcript. The
-aggregate subset shared between Phase 13 and Phase 14 does match exactly:
+The spec's exact regression gate (`npm run threebody:phase13`, unchanged
+command) was rerun after the shared-harness edit and reproduced the Phase 13
+lock bit-for-bit:
+
+- 3,456 trials
+- 88 / 324 candidate envelope rows
+- 81 promising best cells
+- terminal outcomes 1,154 bounded / 2,030 escape / 272 close approach
+
+These match `PHASE13_RESULTS.md` exactly, so the additive ablation modes and the
+flag-gated action-coupling instrumentation did not perturb the frozen guard or
+the Phase 13 code path. Log: `results/phase13-regression.log`.
+
+The shared-mode aggregate subset is also internally consistent between the two
+runs:
 
 | mode | Phase 13 candidates | Phase 14 candidates | class balance | mean survival delta | mean time delta |
 | --- | ---: | ---: | --- | ---: | ---: |
 | naive | 0 | 0 | 57 neutral / 24 risky / 27 negative | -0.166667 | -2.786674 |
 | guarded TRACK | 77 | 77 | 77 promising / 19 mixed / 7 risky / 5 negative | 0.700231 | 8.998706 |
-
-This is useful evidence that the shared harness path did not drift for the two
-most important comparable modes, but it is not the exact full Phase 13
-regression gate required by the spec.
 
 ## 3. Per-Arm Outcome Table
 

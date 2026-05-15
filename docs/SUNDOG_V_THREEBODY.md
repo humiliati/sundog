@@ -709,15 +709,17 @@ Phase 14 result:
   `results/threebody/phase14-mechanism-decomposition-lock/`.
 - Candidate envelope rows: 130 / 648. Guarded TRACK contributes 77, signal
   delay 48, action shuffle 3, signal shuffle 2, naive 0, and sign flip 0.
-- The shared Phase 13/14 aggregate subset matches exactly for `naive` and
-  `track_sensor_accel_guarded`, but the exact full `npm run threebody:phase13`
-  regression rerun is not recorded in the supplied transcript. Treat this as a
-  strong provisional read until that gate is recorded.
-- Pre-registered branch: provisional partial / mechanism narrowed. The
-  guard-only explanation is weakened because action shuffle and signal shuffle
-  lose almost all candidate rows and sign flip destroys the pocket. The clean
-  causal-handle pass is not earned because passive tidal AUROC fails the
-  warning-quality bar and a 0.5-second signal delay retains 48 candidate rows.
+- The spec's exact `npm run threebody:phase13` regression gate was rerun this
+  session and reproduced Phase 13 bit-for-bit (3,456 trials; 88 / 324 candidate
+  envelope rows; 81 promising best cells; outcomes 1,154 bounded / 2,030 escape
+  / 272 close approach), so the shared-harness edit is verified non-perturbing.
+- Pre-registered branch: provisional partial / mechanism narrowed (the
+  "provisional" qualifier now rests only on the science below, not on a gate
+  caveat). The guard-only explanation is weakened because
+  action shuffle and signal shuffle lose almost all candidate rows and sign
+  flip destroys the pocket. The clean causal-handle pass is not earned because
+  passive tidal AUROC fails the warning-quality bar and a 0.5-second signal
+  delay retains 48 candidate rows.
 - Summary: [`docs/threebody/PHASE14_RESULTS.md`](threebody/PHASE14_RESULTS.md).
 
 ### Cross-Substrate Hand-Offs

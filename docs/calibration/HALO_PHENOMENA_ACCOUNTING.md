@@ -106,11 +106,11 @@ This ledger is organized into three lenses, matching the Phase 14 directive:
 | Infralateral arcs | §B | `rendered-optional` | 90° end→side face, horizontal columns; `Infralateral arc.sim` | install only |
 | Suncave / sunvex Parry; Parry supralateral | §B/§C | `rendered-optional`, `named-only` | Parry orientation; Tape AH-CH06 Fig 6-14/6-17; `Parry arcs.sim` | install + route to §C |
 | Circumscribed halo | §B | `not-modeled` (= UTA/LTA merged) | 60° prism, singly-oriented columns, h≳29°; `Circumscribed halo.sim` | install only |
-| Pyramidal / odd-radius halos | §C | `named-only`, `not-modeled` | Tape AH-CH10 p6 table; SAX-CH11 Galle α=180−2x; `Pyramidal *.sim` | P1 analytic-feasible |
+| Pyramidal / odd-radius halos | §C | `named-only`, `not-modeled`, `halosim-reproducible` | Tape AH-CH10 p6 table; SAX-CH11 Galle α=180−2x; `Pyramidal *.sim`; phase15 ray-filter receipts | P2 simulated candidate; P3 not met |
 | Lowitz arcs | §C | `named-only`, `not-modeled` | 60° prism, Lowitz orientation; `Lowitz arcs.sim` | P0/P1 |
 | Antisolar features | §C | `named-only`, `not-modeled` | multi-internal-reflection, rear sky; `Anthelic Point display.sim` | P0 |
 | Subhorizon halos | §C | `named-only`, `not-modeled` | reflection off horizontal plates, observer-above | P0 |
-| Circumhorizon arc | §C | `named-only`, `not-modeled` | 90° side→bottom face, plate/Parry, h>58°; `Circumhorizon arc.sim` | P1 |
+| Circumhorizon arc | §C | `named-only`, `not-modeled`, `halosim-reproducible` | 90° side→bottom face, plate/Parry, h>58°; `Circumhorizon arc.sim` | P2 simulated candidate; P3 not met |
 
 ## §A — Anchor: what we know
 
@@ -388,8 +388,13 @@ halos".
 - **Falsification:** a measured ring that does not match any
   wedge→Δ_min row for any crystallographically rational *x* (Rational
   Tangents) falsifies the pyramidal attribution.
-- **Tier:** **P1 analytic-feasible** (closed-form table exists; no project
-  ray-trace receipt yet). Phase 15 candidate.
+- **Tier:** **P2 simulated candidate.** The analytic table and HaloSim
+  reproduction stand, but the 2026-05-15 1D residual campaign is a clean
+  negative for P3: 1M gave 0 clean rings, 6M gave 1 marginal ring, and the
+  8-frame 4M ray-filter isolation run gave 1 strong ring (4.6σ), still
+  below the ≥3 azimuthally-separable rings required for a residual table.
+  The bottleneck is now the extraction method / split-sky projection, not
+  more rays or face-filter setup.
 
 ### Lowitz arcs · upper / middle / lower Lowitz
 - **Predicts:** 60° prism refraction under **Lowitz orientation** (crystal
