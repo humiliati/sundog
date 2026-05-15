@@ -592,6 +592,39 @@
             margin-top: 0.5rem;
             display: block;
         }
+        .vocab-heading {
+            font-size: 1.05rem;
+            color: var(--accent-gold);
+            margin-top: 2.5rem;
+        }
+        .vocab-lead {
+            margin-top: 0.5rem;
+        }
+        .atlas-card .vocab-cite {
+            font-size: 0.78rem;
+            color: rgba(245, 245, 245, 0.55);
+            line-height: 1.55;
+            margin-top: 0.6rem;
+        }
+        .atlas-card .vocab-cite code {
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+        }
+        .atlas-card .atlas-status {
+            display: inline-block;
+            margin-top: 0.6rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            letter-spacing: 0.02em;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(245, 245, 245, 0.55);
+        }
+        .atlas-card .atlas-status.s-partial {
+            border-color: rgba(244, 196, 48, 0.4);
+            color: rgba(244, 196, 48, 0.85);
+        }
 
         /* ---------- section-6 upload (placeholder) -------------------------- */
 
@@ -1284,7 +1317,7 @@
             <div class="eyebrow">§5 · The full atlas</div>
             <h2>Every visible arc, mapped to a circle.</h2>
             <p class="lead">
-                Atmospheric optics has spent two centuries naming the arcs in a halo display. The atlas embedded above renders each as the upper portion of its own complete circle, anchored to environmental state. Below is one paragraph per primitive — what it is, where it sits, and how the atlas constructs it.
+                Atmospheric optics has spent two centuries naming the arcs in a halo display. The twelve primitives below are the set this atlas renders — each drawn as the upper portion of its own complete circle, anchored to environmental state. One paragraph each: what it is, where it sits, and how the atlas constructs it.
             </p>
 
             <div class="atlas-walkthrough">
@@ -1300,6 +1333,44 @@
                 <div class="atlas-card"><h3>Parry supralateral arc</h3><p>Parry-orientation flanking shoulders near the supralateral. Optional vocabulary in the atlas.</p><span class="construct">mirror-image arcs along the 46° halo top</span></div>
                 <div class="atlas-card"><h3>Infralateral arcs</h3><p>Lower-half mirror of the supralateral. Tangent to the 46° halo's bottom region.</p><span class="construct">circle tangent to 46° halo bottom</span></div>
                 <div class="atlas-card"><h3>Sun pillar</h3><p>Vertical light column above and below the sun, from horizontally-floating ice plates. Rendered in the atlas as the vesica between two virtual halos centered at the parhelia.</p><span class="construct">vesica (left-parhelion-halo, right-parhelion-halo)</span></div>
+            </div>
+
+            <h3 class="vocab-heading">Named in the literature, beyond the rendered set</h3>
+            <p class="lead vocab-lead">
+                The set above is a deliberate subset. The standard atmospheric-optics literature names several more halo families this atlas does not draw as separate primitives — some are rare, some need a crystal-population model the geometry layer does not carry, and some require viewing geometry outside this explainer's audience. They are catalogued here so the canonical vocabulary is complete in one place: formation mechanism in a sentence, where to read more (Tape chapter · HaloSim simulation file · Cowley's <em>Atmospheric Optics</em>), and this project's rendering status.
+            </p>
+
+            <div class="atlas-walkthrough vocab-walkthrough">
+                <div class="atlas-card">
+                    <h3>Parry-family arcs</h3>
+                    <p>Arcs from Parry-oriented column crystals (one prism face held level): the suncave Parry caps the upper tangent arc, the rarer sunvex Parry opens beneath it, and the Parry supralateral flanks the 46° halo top.</p>
+                    <p class="vocab-cite">Tape, <em>Atmospheric Halos</em> ch. 3 · HaloSim <code>Parry arcs.sim</code>, <code>Parry 1820 display.sim</code> · <a href="https://atoptics.co.uk/" rel="external">Cowley, atoptics</a></p>
+                    <span class="atlas-status s-partial">Sundog: suncave Parry &amp; Parry supralateral rendered as optional vocabulary overlays (not Parry-orientation physics); sunvex Parry named-only</span>
+                </div>
+                <div class="atlas-card">
+                    <h3>Pyramidal / odd-radius halos</h3>
+                    <p>Faint rings at 9°, 18°, 20°, 22.9°, 23.8°, 24° and 35° from the sun, refracted through the shallow end-faces of pyramidal ice crystals rather than the 60°/90° prisms that give the 22° and 46° halos.</p>
+                    <p class="vocab-cite">Tape, <em>Atmospheric Halos</em> ch. 10; Tape &amp; Moilanen, <em>…the Search for Angle x</em> ch. 11 (on disk: <code>docs/calibration/AH-CH10/</code>, <code>docs/calibration/AH-SAX-CH11/</code>) · HaloSim <code>Pyramidal *d halo.sim</code> · <a href="https://atoptics.co.uk/" rel="external">Cowley, atoptics</a></p>
+                    <span class="atlas-status s-notmodeled">Sundog: not modeled</span>
+                </div>
+                <div class="atlas-card">
+                    <h3>Lowitz arcs</h3>
+                    <p>Arcs sweeping between the sundogs and the 22° halo from plate crystals rotating about a horizontal axis through two opposite corners (the Lowitz orientation); long contested until photography confirmed them.</p>
+                    <p class="vocab-cite">Tape, <em>Atmospheric Halos</em> (Lowitz orientation) · HaloSim <code>Lowitz arcs.sim</code>; St Petersburg 1790 historical display · <a href="https://atoptics.co.uk/" rel="external">Cowley, atoptics</a></p>
+                    <span class="atlas-status s-notmodeled">Sundog: not modeled</span>
+                </div>
+                <div class="atlas-card">
+                    <h3>Antisolar features</h3>
+                    <p>Structure gathered opposite the sun — the anthelion (a bright spot 180° from the sun on the parhelic circle), the diffuse anthelic arcs that cross it, and the paranthelia or 120° parhelia partway around the parhelic circle.</p>
+                    <p class="vocab-cite">Tape, <em>Atmospheric Halos</em> (anthelic arcs) · HaloSim <code>Anthelic Point display.sim</code> · <a href="https://atoptics.co.uk/" rel="external">Cowley, atoptics</a></p>
+                    <span class="atlas-status s-notmodeled">Sundog: not modeled</span>
+                </div>
+                <div class="atlas-card">
+                    <h3>Sub-horizon halos &amp; circumhorizon arc</h3>
+                    <p>The subsun and subparhelia (mirror features below the horizon, seen from aircraft or mountaintops) and the circumhorizon arc (a near-horizontal spectral band ~46° below the sun, only when the sun rises above ~58°) — both need viewing geometry outside this explainer's audience.</p>
+                    <p class="vocab-cite">Tape, <em>Atmospheric Halos</em> (subhorizon family) · Greenler, <em>Rainbows, Halos, and Glories</em> · <a href="https://atoptics.co.uk/" rel="external">Cowley, atoptics</a></p>
+                    <span class="atlas-status s-notmodeled">Sundog: not modeled — audience mismatch (aircraft / high-summer-noon specific)</span>
+                </div>
             </div>
         </div>
     </section>
