@@ -1648,6 +1648,17 @@ the worked example the procedure doc cites.
 
 Effort estimate: 1–2 hours, writing-only.
 
+**Status: LANDED 2026-05-14.** Procedure document at
+[`docs/calibration/HALOSIM_VALIDATION_PROTOCOL.md`](calibration/HALOSIM_VALIDATION_PROTOCOL.md):
+when-to-use criteria, 5-step procedure (configure → render → convert +
+scale-lock → extract feature locus → compare to claim), the
+render-naming convention, the reusable-scripts inventory, six documented
+gotchas (auto-zoom per crystal-block config, sun-detection ambiguity,
+Monte Carlo noise, concurrent-feature isolation, perspective projection,
+AGU paywall), and Pass C7 as the worked example. Gate met: the doc is
+self-contained enough that a future inverse-handle test can run without
+re-deriving the method.
+
 #### Phase 12B — Tilt-dispersion as math-bindable parameter *(engineering)*
 
 Goal: surface the canonical physical parameter underneath several existing
@@ -1684,6 +1695,45 @@ HaloSim ground truth at canonical dispersion values. The audit campaign's
 asserted.
 
 Effort estimate: 0.5–1 day.
+
+**Status: INCREMENT-1 LANDED 2026-05-14.** The circular tangent-arc
+primitive (`R_uta = 200` hardcode that Pass C7 falsified) is replaced by
+the parametric canonical curl in
+[`public/js/parhelion-geometry.mjs`](../public/js/parhelion-geometry.mjs):
+
+- `tangentArcLocus(altitudeDeg, columnTiltDispDeg)` returns the
+  `ρ(ψ) = 22 + A(h)·|ψ|^1.5` curve; `tangentArcOpeningCoefficient(h)`
+  uses the Tape AH Ch 6 / Pass C7 circumscribed-transition boundary at
+  h ≈ 29° (`A(h) = 0.031·(29−18.6)/(29−h)`). Returns `null` for
+  h ≥ 29° (circumscribed-halo regime, no separate tangent arc) —
+  mirrors the `czaVisibleAtAltitude` guard pattern.
+- `applyUpperTangentArc` / `applyLowerTangentArc` rewritten to render
+  the parametric locus; `--column-tilt-disp-deg` CSS knob wired
+  (canonical default 0.1°, the Pass C7 reference cell).
+- Added to the `phase3` test export (`tangentArcLocus`,
+  `tangentArcOpeningCoefficient`, `tangentArcCircumscribedAltitude`).
+- Verified: reproduces Pass C7 within ~0.2° at the h=18.6° / 0.1°-tilt
+  cell; correct h=29° circumscribed boundary; `npm run sundog:check`
+  passes (page contract + Phase 6 drag constraints — tangent arcs are
+  default-OFF so no canonical-pose regression).
+
+**Single-cell-calibrated.** Only the h=18.6° / 0.1°-tilt cell is
+HaloSim-validated. **Increment-2 (pending)** = the HaloSim
+(h, tilt-disp) render grid to validate / refine the h-dependence and
+the tilt-dispersion broadening, the advanced-controls UI slider for
+`--column-tilt-disp-deg`, and tilt-dispersion-driven rendered stroke
+width. The render-grid spec follows the
+[`HALOSIM_VALIDATION_PROTOCOL.md`](calibration/HALOSIM_VALIDATION_PROTOCOL.md)
+procedure (Phase 12A).
+
+**Adjacent fix surfaced 2026-05-14:** running `npm run sundog:check`
+during this work caught that the wave-2 W15 patch (schema.org author →
+named human "Jeffery Hughes Jr." with Stellar Aqua LLC affiliation, for
+WP:SELFPUB compliance) had diverged from the
+`scripts/check-sundog-page.mjs` author assertion (still expecting
+`author.name === "Stellar Aqua LLC"`). The checker was updated to
+validate the W15-intended structure. The W15 patch and its test
+contract are now reconciled.
 
 #### Phase 12C — Full-atlas vocabulary completeness *(writing)*
 
