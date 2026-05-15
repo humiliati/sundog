@@ -106,6 +106,80 @@ sidecar to the **atlas-only fallback** — an autoplay sun-altitude sweep
 of the existing atlas SVG with §5 labels as on-canvas callouts (no
 HaloSim beauty layer; HS-4/HS-5/HS-6 still apply to the atlas raster).
 
+### Status: **PASSED 2026-05-14** — HS-1…HS-7 unblocked
+
+**Chosen mechanism (no CLI exists; confirmed via the bundled help
+corpus `README.txt`/`h2.txt`: "double-click HALOSIM3.EXE" is the only
+documented launch path).** Fully-automated zero-dialog loop:
+
+1. **Write `C:\Users\hughe\Startup.sim`** with the target frame's `.sim`
+   (plain file copy — scriptable, no GUI). `Startup.sim` is HaloSim's
+   special auto-loaded preference file (`h7.txt` §D: "automatically
+   loaded when HALOSIM starts or the Reset button is clicked").
+2. **Launch HaloSim once** (first frame) — it auto-loads `Startup.sim`.
+   For every subsequent frame, click **Reset** (reloads `Startup.sim`).
+3. Click **Start**. Two fixed-position clicks per frame
+   (Reset ≈ (99,282), Start ≈ (218,279) at the observed window pose);
+   no file dialogs.
+4. **Harvest `C:\Users\hughe\autosave.bmp`** — written automatically on
+   completion because Tools→Options ▸ *Autosave simulation* is enabled
+   (`h6.txt` §B). Overwritten each run, so the runner copies/renames it
+   before the next Start.
+
+**Completion detection — poll, never fixed-wait.** Render wall-clock
+scales with ray count; the on-screen *Run Status* panel shows
+`<rays> / 100% in <N>s`, and `autosave.bmp` mtime strictly advances only
+after Run Status hits 100%. The reliable headless signal is
+`mtime(autosave.bmp) > baseline`; the Run Status text is the visual
+cross-check.
+
+**Reliability: 5/5 distinct sims, zero manual interaction** (receipts in
+[`calibration/halosim_outputs/hs0_spike/`](calibration/halosim_outputs/hs0_spike/)):
+
+| run | sim | sun alt | rays | render time | result |
+| ---: | --- | ---: | ---: | ---: | --- |
+| 1 | `22deg halo` | 22° | 650k | 8 s | non-blank ✓ |
+| 2 | `46halo` | 46° | 1.0M | 9 s | non-blank ✓ |
+| 3 | `Circumzenithal arc` | 26° | 220k | 3 s | non-blank ✓ |
+| 4 | `Parhelia` | 7° | 250k | 7 s | non-blank ✓ |
+| 5 | `22deg halo_coloured` | 85° | 3.0M | 36 s | non-blank ✓ |
+
+Every per-frame parameter (sun altitude, ray count, levels, projection,
+orientation) propagated correctly from the swapped `Startup.sim` via the
+Reset button. Render time ranged 3 s (220k rays) → 36 s (3.0M rays);
+extrapolates to minutes at the 4–6M press-grade counts (HS-7).
+
+**Failure modes / notes for HS-2 to handle:**
+
+- *Variable render time* → HS-2 must poll `autosave.bmp` mtime (or Run
+  Status OCR) with a generous timeout, not a fixed sleep.
+- *Per-sim floating panels*: `46halo`/`CZA` sims spawned a "Ray Filters
+  – Trace" window. It did not block the run or autosave and did not move
+  the main Control Panel, but an unattended runner should screenshot-
+  verify the Reset/Start button location each frame rather than trust
+  hard-coded coordinates blindly (window pose can shift across sessions
+  / DPI).
+- *`autosave.bmp` is a single overwritten file at a fixed path* →
+  harvest-and-rename must complete before the next Start (the
+  poll-then-copy order already enforces this).
+- *No headless mode* → a HaloSim GUI window is unavoidably on-screen for
+  the whole batch; the run is "unattended" (no human clicks) but not
+  "background". Acceptable for an offline pre-render; flagged so HS-6
+  scheduling does not assume it can run invisibly.
+
+**Cleanup performed:** the real `Startup.sim` was backed up before the
+spike and restored byte-for-byte afterward (3150 b). HaloSim was left
+running (the user may inspect; it is idle).
+
+**Verdict:** HS-0 gate met — *one `.sim` rendered to a verified
+non-blank BMP with no human interaction, repeatable 5×* (exceeded: 5
+distinct sims spanning sun altitudes 7°–85°). The atlas-only fallback is
+**not** triggered. **HS-1 through HS-7 are unblocked.** The earlier
+*(blocked on HS-0)* tags on the sections below are now historical;
+HS-1 (`.sim` frame generator) is the next actionable step and inherits
+the Startup.sim-swap + Reset/Start + autosave-poll primitive proven
+here.
+
 ## HS-1 — `.sim` frame generator *(blocked on HS-0)*
 
 Goal: deterministically emit one `.sim` per frame for the 0–60° sweep.
