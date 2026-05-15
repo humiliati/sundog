@@ -522,6 +522,37 @@ independently.
   public-facing reference with HaloSim ray-trace renderings and short
   geometric explanations of every arc family in our Canonical Halo Atlas
   Vocabulary. Used as a sanity check against our circle-primitive model.
+- **Tape, W. (1994) — *Atmospheric Halos*** (AGU Antarctic Research Series
+  Vol. 64). Chapters on disk:
+  [`docs/calibration/AH-CH06/`](calibration/AH-CH06) (Chapter 6: "The Role
+  of Sun Elevation" — display gallery with sun-elevation dependence of arc
+  shape; verifies the 29° tangent-arc → circumscribed-halo transition cited
+  in wave-2 W1 of the Phase 11 dispatch) and
+  [`docs/calibration/AH-CH10/`](calibration/AH-CH10) (Chapter 10:
+  "Pyramidal Crystals and Odd Radius Circular Halos"). Tape Ch 10
+  establishes the pyramidal-crystal odd-radius family (9°, 18°, 20°,
+  22.9°, 23.8°, 24°, 35° halos) — currently outside Sundog's primitive
+  set; see "What the atlas does NOT yet model" below.
+- **Tape, W. & Moilanen, J. (2006) — *Atmospheric Halos and the Search for
+  Angle x*** (AGU Antarctic Research Series Vol. 84). Chapter 11 on disk
+  at [`docs/calibration/AH-SAX-CH11/`](calibration/AH-SAX-CH11). Establishes
+  the pyramidal-crystal {1 0 -1 1} face inclination history (Bravais 1847's
+  x ≈ 54.7°; HaloSim's filename convention `Pyr_*_27.98.xsh` uses the
+  complementary 27.98°) and Table 11.1's wedge-angle / halo-radius mapping
+  for the Bravais-Clarke pyramidal crystal (9°/18°/22°/28°/35°/46° halo
+  radii from specific wedge configurations).
+- **HaloSim3** (Cowley, L. & Schroeder, M. 2004). The standard Monte Carlo
+  halo simulator. Installed at `C:\Users\hughe\HalSim361.exe` with the full
+  asset library (40 orientation `.xng` files, 6 crystal shape `.xsh` files,
+  `Water-Ice.xmt` material file, 38 canonical simulation `.sim` files
+  including named historical displays such as Parry 1820 and St Petersburg
+  1790). **Used as ground-truth oracle for Pass C7** (Phase 11 wave-2 W4
+  follow-up); receipt at
+  [`docs/calibration/PASS_C7_OUTPUT.txt`](calibration/PASS_C7_OUTPUT.txt).
+  Provides the canonical vocabulary for crystal-orientation populations
+  (Horiz column, plate, Parry, Lowitz, random) and their tilt-dispersion
+  parameterization. See "Crystal orientation vocabulary" + "HaloSim as
+  ground-truth oracle" subsections below.
 
 ### Formula provenance
 
@@ -536,6 +567,35 @@ independently.
 | `Suncave Parry Arc nested inside Upper Tangent` | Tape, Parry-orientation chapter; Cowley atoptics Parry article |
 | `Supralateral Arc tangent to 46° halo top` | Greenler ch. 4 — column-oriented 90° path; the upper sibling of the infralateral |
 | `Infralateral Arc tangent to 46° halo bottom` | Greenler ch. 4 — mirror of supralateral |
+
+### Crystal orientation vocabulary (HaloSim-aligned)
+
+Atmospheric optics distinguishes halo families by the *crystal orientation
+distribution* that produces them, not just by the geometric arc shape.
+HaloSim canonizes this vocabulary with named orientation files (`.xng`)
+parameterized by tilt dispersion (standard deviation in degrees of the
+crystal's tilt from the canonical orientation). The Sundog atlas inherits
+this vocabulary even where it doesn't yet expose the underlying physical
+knob:
+
+| HaloSim orientation | tilt-dispersion exposed | produces (in this atlas) | Sundog status |
+| --- | --- | --- | --- |
+| `random.xng` | n/a (isotropic) | 22° halo, 46° halo, pyramidal odd-radius halos | implicit in atlas formulas (formulas assume random orientation for halo radii) |
+| `Horiz column .{N} deg disp.xng` (N = 0.05° → 5°, 9 levels) | yes | upper / lower tangent arc, circumscribed halo (h > 29°), parhelic circle, Wegener arcs | rendered, but tilt-dispersion is implicit / fixed |
+| `plate .{N} deg disp.xng` (N = 0.05° → 34°, 13 levels) | yes | parhelia, CZA, supralateral, infralateral, 120° parhelia | rendered, tilt-dispersion implicit / fixed |
+| `Parry .{N} - .{M} deg disp.xng` (8 two-parameter levels) | yes | suncave Parry, sunvex Parry, Parry supralateral, Parry tangent arcs | named in vocabulary but not separately rendered |
+| `Lowitz .{N} deg disp.xng` (8 levels including angle-specific 18° / 36°) | yes | Lowitz arcs | not modeled |
+| Pyramidal shapes (`Pyr_*_27.98.xsh`) | n/a (shape parameter) | 9°, 18°, 20°, 22.9°, 23.8°, 24°, 35°, 46° odd-radius halos | not modeled — vocabulary recognized via Tape AH Ch 10 + AH-SAX Ch 11 citations |
+
+**Physical parameter, not visual proxy.** Tilt dispersion is a real physical
+property of the crystal population at the moment of the halo display
+(temperature, crystal-formation conditions, fall-orientation stability). The
+atlas's current visual knobs (`--parhelic-curvature`, `--cza-curvature`,
+`--cza-secondary-offset`, etc.) implicitly absorb tilt-dispersion effects
+without naming them. A future revision (composition-fiction phase beyond
+Phase 11) could bind these knobs to explicit tilt-dispersion parameters via
+Phase 3-style math binding; this would canonize the physical interpretation
+that the visual sliders currently obscure.
 
 ### What the atlas does NOT yet model
 
@@ -577,6 +637,51 @@ remains out of scope for the workbench.
 > ledger with no committed perception phase. The perception roadmap
 > inherits the pre-registration / smoke-gate discipline from mesa
 > Phase 6 wholesale.
+
+### HaloSim as ground-truth oracle
+
+The Phase 10 attack campaign and Phase 11 outreach passes (especially Pass
+C7) used HaloSim ray-tracing output as ground truth for testing the atlas's
+forward rendering and inverse-inference under canonical literature
+parameterizations. The pattern generalizes:
+
+1. **Forward-rendering claims.** When the atlas asserts a specific arc
+   shape or position as a function of `h` (or any other parameter), a
+   HaloSim Monte Carlo render at the same `h` provides an independent
+   reference. Pass C7 used this to test the upper-tangent-arc opening-
+   angle inverse handle against the Pass C5 hand-anchor circle fit and
+   found the C5 circle geometrically inconsistent with the canonical
+   curve (1.2-5.6° radial over-extension, progressive with azimuth).
+2. **Inverse-handle validation.** Where the inverse inference depends on
+   the canonical literature parameterization being the one the atlas
+   geometric primitives realize, HaloSim becomes the disambiguation
+   oracle. Pass C7 demonstrated that "project-original circle-fit
+   curvature" and "canonical literature opening-angle" are *not*
+   equivalent under the tilt-dispersion conditions HaloSim renders.
+3. **Tilt-dispersion sensitivity.** HaloSim renders at different tilt
+   dispersions (0.05°, 0.1°, 0.5°, 1°, …) characterize how arc shape
+   and brightness profile change with crystal-population parameters that
+   the atlas currently hides. This is the natural way to quantify any
+   "below atlas measurement precision" hedge the project writes about
+   atmospheric effects.
+
+The procedure is documented in
+[`docs/calibration/PASS_C7_OUTPUT.txt`](calibration/PASS_C7_OUTPUT.txt):
+acquire a HaloSim render at the target `h`, lock the pixel-to-degree
+scale via the 22° halo radius (sun-centered Camera View; HaloSim
+auto-zooms with crystal-block configuration, so the scale must be
+re-locked per render configuration), then run a 2D arc-locus search
+(radial scan at each azimuth) to extract the canonical arc curve.
+
+HaloSim does not replace the Sundog atlas: it provides forward-direction
+ground truth that the atlas's inverse inference can be validated against.
+The two tools are complementary — HaloSim is a desktop Monte Carlo
+ray-tracer for atmospheric-optics specialists; the Sundog atlas is an
+interactive browser-based parametric workbench with photo-overlay
+calibration and inverse inference. Use HaloSim as oracle when a
+forward-rendering claim or inverse-handle choice needs independent
+verification; use the Sundog atlas as the public-facing interactive
+surface and the inverse-inference instrument.
 
 ### Theorem Anchor: What the Atlas Demonstrates
 
@@ -1497,3 +1602,142 @@ Deliverables:
 Gate: the design team can reproduce the characterized Sundog mark from a
 small documented toolset, and the exported assets preserve the calibrated
 22° halo / parhelion / conditional-CZA grammar at both icon and motion sizes.
+
+### Phase 12 - HaloSim-Aligned Vocabulary + Ground-Truth Discipline
+
+*Scheduled 2026-05-14 from the HaloSim gap-check (see "Crystal orientation
+vocabulary" and "HaloSim as ground-truth oracle" subsections under
+Atmospheric Optics References). Brings the project-internal tool integration
+into the roadmap as three bounded sub-phases. Pass C7
+([`docs/calibration/PASS_C7_OUTPUT.txt`](calibration/PASS_C7_OUTPUT.txt))
+is the worked precedent for the methodological half.*
+
+Goal: formalize HaloSim as a project-internal tool — canonize the
+crystal-orientation vocabulary the atlas inherits implicitly, expose
+tilt-dispersion as a math-bindable physical parameter alongside the existing
+visual sliders, and codify the HaloSim ground-truth check as standard
+discipline for any new forward-rendering or inverse-handle claim.
+
+#### Phase 12A — HaloSim ground-truth validation gate *(methodological)*
+
+Goal: codify the discipline Pass C7 established. Any new forward-rendering
+claim, new inverse-handle proposal, or atmospheric-optics measurement-
+precision hedge should be cross-checked against a HaloSim Monte Carlo
+reference render under matched crystal-orientation + tilt-dispersion
+assumptions.
+
+Deliverables:
+
+- A short "HaloSim validation procedure" document (or addition to
+  [`SUNDOG_OVERLAY_PROTOCOL.md`](SUNDOG_OVERLAY_PROTOCOL.md)) covering: (i)
+  acquiring a HaloSim render at the target `h`; (ii) locking the
+  pixel-to-degree scale via the visible 22° halo radius (Camera View
+  auto-zooms by crystal-block configuration; re-lock per render); (iii) 2D
+  arc-locus search (radial scan at each azimuth) to extract the canonical
+  curve.
+- A standardized naming convention for HaloSim reference renders under
+  `docs/calibration/halosim_outputs/` (e.g.
+  `halosim_<feature>_p{NN}_h{H.H}_<config>_<rays>mr.bmp`).
+- The existing `scripts/tangent_halosim_*.py` measurement scripts elevated
+  to reusable project infrastructure (with a short script-level README).
+
+Gate: a developer adding a new arc-shape claim or inverse-handle proposal
+can reference the procedure doc and produce a HaloSim-validated cross-check
+without re-deriving Pass C7's method from scratch. Pass C7's receipt is
+the worked example the procedure doc cites.
+
+Effort estimate: 1–2 hours, writing-only.
+
+#### Phase 12B — Tilt-dispersion as math-bindable parameter *(engineering)*
+
+Goal: surface the canonical physical parameter underneath several existing
+visual sliders. HaloSim parameterizes orientation populations by tilt
+dispersion (stddev in degrees); the atlas's `--parhelic-curvature`,
+`--cza-curvature`, `--cza-secondary-offset`, and tangent-arc width are all
+implicitly absorbing tilt-dispersion effects. Phase 12B exposes the physical
+parameter without removing the existing visual sliders (advanced-controls
+tier).
+
+Deliverables:
+
+- **Parameter Taxonomy extension** (Phase 0 retroactive update): add
+  `--column-tilt-disp-deg` and `--plate-tilt-disp-deg` as math-derived
+  parameters with canonical default values (0.1° per HaloSim's
+  `Horiz column .1 deg disp.xng`; matches the project's existing audit
+  campaign's tilt assumption).
+- **Math bindings** (Phase 3 extension): `tangentArcOpening(h,
+  column_tilt_disp_deg)`, `plateOrientationShape(h, plate_tilt_disp_deg)`.
+  Bindings reference HaloSim-validated tabulated arc-shape responses at
+  canonical tilt-dispersion values (0.05°, 0.1°, 0.5°, 1°, 2°).
+- **Workbench UI**: tilt-dispersion controls in the advanced-controls rail.
+  Existing visual sliders kept as primary controls; advanced-controls
+  expose the physical knobs. A "physics-anchored mode" toggle binds the
+  visual sliders to the tilt-dispersion outputs.
+- **HaloSim reference render set** under `docs/calibration/halosim_outputs/`
+  capturing canonical tangent-arc and CZA shapes at several
+  (h, tilt-dispersion) cells for cross-validation.
+
+Gate: the workbench's tangent-arc and CZA shape responds in a physics-
+anchored way to a labeled tilt-dispersion control, validated against
+HaloSim ground truth at canonical dispersion values. The audit campaign's
+"below atlas measurement precision" hedge can be quantified rather than
+asserted.
+
+Effort estimate: 0.5–1 day.
+
+#### Phase 12C — Full-atlas vocabulary completeness *(writing)*
+
+Goal: extend Phase 4's §5 "Full atlas" section in `sundog.html` to name
+every halo family in the canonical literature vocabulary, with a one-
+paragraph description each, even when the atlas doesn't render the family
+as a separate primitive. Treats vocabulary completeness as an educational
+deliverable orthogonal to rendering scope.
+
+Deliverables: §5 prose expansion in `sundog.html` covering, at minimum:
+
+- Parry-family arcs (suncave Parry, sunvex Parry, Parry supralateral) —
+  citing Tape AH Ch 3 and HaloSim's `Parry arcs.sim` + `Parry 1820
+  display.sim`. Already in vocabulary, not yet separately rendered.
+- Pyramidal / odd-radius halos (9°, 18°, 20°, 22.9°, 23.8°, 24°, 35°) —
+  citing Tape AH Ch 10 + AH-SAX Ch 11 (both on disk under
+  `docs/calibration/AH-CH10/` and `docs/calibration/AH-SAX-CH11/`) and
+  HaloSim's `Pyramidal *d halo.sim` family. Not modeled.
+- Lowitz arcs — citing HaloSim's `Lowitz arcs.sim` + the St Petersburg
+  1790 historical display. Not modeled.
+- Antisolar features (anthelion, anthelic arcs, paranthelia) — citing
+  HaloSim's `Anthelic Point display.sim`. Not modeled.
+- Sub-horizon halos and circumhorizon arc — flagged as audience-mismatch
+  for the public explainer (aircraft / high-noon-summer specific).
+
+Each entry follows the format: name, formation mechanism (one sentence),
+where to learn more (Tape chapter + HaloSim sim file + Cowley atoptics
+page), Sundog status (rendered / named-only / not-modeled).
+
+Gate: an attentive reader of `sundog.html` §5 encounters the full halo
+vocabulary in one place, with citations, without needing to chase external
+references for canonical names. Wikipedia editors reviewing the page can
+verify that Sundog's primitive set is a documented subset of the canonical
+literature vocabulary.
+
+Effort estimate: 2–4 hours, writing-only (no rendering work).
+
+#### Phase 12 deferred items (low-priority gaps, not scheduled)
+
+The HaloSim gap-check surfaced additional candidate features that remain
+proposed-only and are not part of Phase 12:
+
+- Pyramidal halos as rendered primitives (engineering scope, separate
+  optional Phase 13 candidate; vocabulary entry lands here in 12C
+  regardless).
+- Parry-arc family rendered as separate primitives (Phase 13 candidate).
+- Lowitz arcs / Kern arc / Liljequist parhelia / Wegener arcs / antisolar
+  features as rendered primitives (specialist scope; defer indefinitely
+  unless a specific user case appears).
+- Canonical historical displays as named-pose targets (Parry 1820, St
+  Petersburg 1790, Saskatoon 1970) — could fit Phase 8 named-pose library
+  extension or Phase 11 logo / illustration assets.
+
+These are recorded here so the rationale for the Phase 12 scope is
+explicit: 12 covers the *infrastructure and vocabulary* moves with broad
+applicability; the *individual exotic features* are downstream candidates
+that depend on a clear user-need signal.
