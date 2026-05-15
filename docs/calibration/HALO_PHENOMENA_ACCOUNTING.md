@@ -368,6 +368,14 @@ the falsification criterion, and the Phase 15 proof tier. **No result
 language**: these are simulated / speculative candidates, never "discovered
 halos".
 
+> Full per-candidate proof records (generator, crystal population, window,
+> signature, HaloSim config + receipt, atlas-projection status,
+> falsification, pre-registration, tier) live in the Phase 15 ledger
+> [`SPECULATIVE_HALO_PROOFS.md`](SPECULATIVE_HALO_PROOFS.md). As of
+> 2026-05-15, pyramidal/odd-radius and circumhorizon are **P2** (analytic
+> + 14E HaloSim receipt); Lowitz/antisolar/subhorizon are P0 stubs. The
+> tiers below are the summary; that doc is canonical for proof status.
+
 ### Pyramidal / odd-radius halos
 - **Predicts:** discrete rings at 9°, 18°, 20°, 23°, 35° (plus 22°/46°)
   from the §B wedge table, for random pyramidal crystals; the ~18° and
@@ -477,9 +485,13 @@ and a Phase 15 proof tier.
    22°/46°/CZA/parhelion (`hs0_spike/`) and the upper tangent arc (Pass C7)
    were already receipted. Empirical finding: ~300k b&w is unreliable —
    ~1M b&w is the floor (AGENTS.md + HALOSIM_VALIDATION_PROTOCOL.md updated).
-6. **14F — Proof routing:** *partially landed.* §C rows carry P0–P5 tiers
-   and falsification lines; full Phase 15 records (`SPECULATIVE_HALO_PROOFS.md`)
-   are still downstream.
+6. **14F — Proof routing:** *partially landed; Phase 15 seeded
+   2026-05-15.* §C rows carry P0–P5 tiers and falsification lines, and the
+   full Phase 15 proof records now live in
+   [`SPECULATIVE_HALO_PROOFS.md`](SPECULATIVE_HALO_PROOFS.md): pyramidal /
+   odd-radius and circumhorizon reached **P2** (analytic + a 14E HaloSim
+   reproduction receipt); Lowitz / antisolar / subhorizon are P0 stubs.
+   P3+ and the public-language gate remain downstream.
 
 ## Gate
 

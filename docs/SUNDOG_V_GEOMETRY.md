@@ -2062,9 +2062,25 @@ until it reaches at least P4 with pre-registration and independent
 simulation receipts; P5 requires real observation or specialist-confirmed
 classification. Negative results are kept as useful map entries, not buried.
 
-Status: **planned.** This phase depends on Phase 14's accounting matrix and
-Phase 12A's HaloSim validation protocol. It may also draw on the HaloSim
-cinematic sidecar's batch-render automation when proof work needs sweeps.
+Status: **seeded 2026-05-15.**
+[`docs/calibration/SPECULATIVE_HALO_PROOFS.md`](calibration/SPECULATIVE_HALO_PROOFS.md)
+created with the P0–P5 ladder, the gate, and per-candidate proof records.
+**Pyramidal / odd-radius halos** and **circumhorizon arc** are at **P2**
+(P1 analytic-feasible via the Tape AH-CH10 p6 wedge→Δ_min table + Galle
+α=180−2x / Rational-Tangents for pyramidal, and the 90° side→basal-face
+generator + Tape AH-CH06 p65 for CHA — **plus** a 14E HaloSim reproduction
+receipt under declared crystal/observer conditions:
+`docs/calibration/halosim_outputs/phase14e/`). Lowitz / antisolar /
+subhorizon are P0 catalogue stubs with promotion paths. P3 is explicitly
+**not** claimed (neither locus is in the `parhelion-geometry.mjs` atlas
+grammar). The gate is **not** reached — nothing here is public-facing
+result language; P4 + pre-registration is required first. Tracked
+follow-ups: the quantitative pyramidal predicted-vs-measured ring-radius
+residual table, the `chat/claim_map.json` P2 boundary refinement (gated on
+the Phase 13 chat:eval chain), and a crystal-block-reduced Lowitz isolation
+render. This phase still depends on Phase 14's accounting matrix and Phase
+12A's HaloSim validation protocol, and may draw on the cinematic sidecar's
+batch-render automation when proof work needs sweeps.
 
 #### Phase 12 deferred items (low-priority gaps, not scheduled)
 
