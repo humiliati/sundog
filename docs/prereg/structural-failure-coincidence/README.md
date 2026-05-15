@@ -127,4 +127,16 @@ Append-only. Each amendment must carry a timestamp (date + zone), author, and
 a one-line justification. The body above this rule is frozen at
 pre-registration time.
 
-*(no amendments yet)*
+**2026-05-15 (PT) — maintainer.** P0 deliverable created and frozen:
+[`BOUNDARY_MAP.md`](BOUNDARY_MAP.md) — the "First Falsifier Before
+Agents" boundary map (loci L1–L5, each with eligible / abstain-switch-fail
+regime, exact source receipt, and traceable-vs-correlate predictions).
+Justification: the prereg required this artifact to exist before any
+agent run; it is now written entirely from existing geometry receipts.
+P0 completion-gate verdict: **PASSES** — all five loci are receipt-cited,
+no row BLOCKED; two coded-vs-stated reconciliations recorded (L2 CZA
+coded `h ≤ 32°` operative vs literature ~32.2°; L4 supralateral receipt
+~0.5°/h=0–22° vs prereg ~0.3°), neither altering a regime. Program
+admitted to **P1 (falsifier admission review)**; P2 (agent run) remains
+blocked. Roadmap phase ladder added to
+[`SUNDOG_V_GRAVITY.md`](../../SUNDOG_V_GRAVITY.md) Candidate 13.
