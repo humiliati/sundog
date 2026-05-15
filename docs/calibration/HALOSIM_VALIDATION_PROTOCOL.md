@@ -98,9 +98,13 @@ the canonical value.
 **Sun altitude.** Set to match the claim's target altitude. For
 calibration-photo work, use the photo's measured h (e.g. p2 h = 18.6°).
 
-**Ray count.** 4–6 million rays for clean measurements; 25k–100k for
+**Ray count.** 4–6 million rays for clean measurements; **≥1M for any
+B&W reproduction receipt** ("Grey shades on white"); 25k–100k for
 sanity-check renders only (Monte Carlo noise at low ray count produces
 asymmetric brightness patterns that confound feature detection).
+**~300k b&w is NOT reliable** even for a presence/reproduction receipt —
+empirically found in the Phase 14E pass (sparse, asymmetric features);
+the AGENTS.md ray-count table is corrected to ~1M b&w accordingly.
 
 ### Step 2 — render and save
 
@@ -281,7 +285,13 @@ altitudes.
    visible asymmetry that confounds feature detection. Use ≥1M rays
    for measurement; higher (4–6M) is better. The 25k-ray render Pass C7
    first attempted gave R/L asymmetry of 110 vs 255 brightness at
-   symmetric positions — that asymmetry vanished at 3M rays.
+   symmetric positions — that asymmetry vanished at 3M rays. **This
+   applies to B&W too:** the Phase 14E pass confirmed ~300k b&w is
+   unreliable (sparse/asymmetric) — ~1M b&w is the reliable floor even
+   for a non-measurement reproduction receipt. For receipt isolation of
+   one feature in a multi-block recipe, use the **Crystal-block
+   reduction** technique (Step 1) — disable non-target blocks, keep the
+   target (+ `random.xng` for the 22° scale ref).
 4. **HaloSim renders concurrent features.** Parhelia + 22° halo + 46°
    halo + supralateral arc + circumscribed halo etc. all render
    together in a multi-block .sim. To isolate one feature for clean

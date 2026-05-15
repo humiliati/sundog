@@ -46,6 +46,43 @@ The deploy helper loads `CLOUDFLARE_TOKEN_SUNDOG_PAGES_DEPLOY` from
 `C:\Users\hughe\syek.c` and passes it to Wrangler as `CLOUDFLARE_API_TOKEN`.
 If `CLOUDFLARE_API_TOKEN` is already set in the environment, that wins.
 
+## Workflow — Running Experiments, Smokes, and Measurements
+
+**The ~10-minute rule.** Run an experiment, smoke test, or timing
+measurement inline only if it completes in **under ~10 minutes**
+wall-clock. For anything expected to exceed that, **do not run it** —
+instead **stage the exact PowerShell command(s)** for the operator,
+with a wall-clock estimate and the decision/output it feeds.
+
+Why: the project machine is CPU-only (no GPU; `torch` is
+`*+cpu`), and several pipelines (mesa Large-tier PPO, HaloSim long
+sweeps, full probe×intervention cross-products) run hours-to-days. An
+agent should *measure* with cheap capped probes, *extrapolate*, and
+hand the operator the long runs rather than block on them.
+
+How to apply:
+
+- **Prefer a capped probe over the full run.** Measure a per-unit rate
+  (s/update, env-steps/sec, frames/sec) from a short capped run, then
+  extrapolate the full cost. Capped probes themselves must obey the
+  ~10-min rule.
+- **Staged commands are a deliverable, not a deferral.** Write them
+  into the relevant spec/results doc as runnable PowerShell with: the
+  exact invocation (module form where needed, e.g. `python -m
+  training.mesa.train_ppo …`), a wall-clock estimate, resume-safety
+  notes, and the read-back path + the branch each outcome selects.
+  Canonical example: `docs/mesa/PHASE7_SPEC.md` §14.6.
+- **Record measured rates in the doc**, not just the conclusion, so a
+  later agent can re-extrapolate without re-measuring.
+- **Pre-register the negative.** When a measurement gates a go/no-go,
+  state the threshold and the branch each result selects *before*
+  running it (mesa pre-registered-negative discipline).
+- Domain specs may pin their own threshold (e.g.
+  `PHASE7_SPEC.md` §11 used 30 min for cheap missing-cell fills); the
+  general default when a doc is silent is **~10 minutes**.
+- Clean up throwaway probe output (`results/**/_*` scratch dirs) once
+  the rate is recorded.
+
 ## HaloSim Halo Rendering (cinematic + geometry confirmation)
 
 HaloSim3 is a Monte Carlo halo ray-tracer used two ways in this repo:
@@ -90,14 +127,22 @@ for the same signal-to-noise:
 
 | purpose | mode | rays |
 | --- | --- | --- |
-| Geometry confirmation | **B&W** (black dots / grey-on-white) | **~300k** — fast (seconds); cleanest loci for overlay & scale-lock |
-| Geometry confirmation | **Colour** | **~3M** — colour equivalent of the 300k B&W pass |
+| Geometry confirmation / reproduction receipt | **B&W** ("Grey shades on white") | **~1M** — clean, reliable loci. **~300k b&w is NOT reliable** (Monte-Carlo noise; empirically found in the Phase 14E receipt pass — sparse, asymmetric features). Do not drop below ~1M for any geometry/receipt work. |
+| Geometry confirmation | **Colour** | **~3M** — colour equivalent of the ~1M B&W pass |
 | Spectacular thumbnails / logo candidates | Colour | **~10M** — press-grade; tune up/down by the contrast wanted (more rays = smoother gradients, fewer = punchier highlights) |
 
-Below ~1M rays colour renders show Monte-Carlo asymmetry — never measure
-geometry off a noisy colour render. Use the **B&W ~300k** pass for
-geometry, **~3M colour** to confirm, and reserve **~10M colour** for
-beauty / logo exploration.
+Below ~1M rays **both** B&W and colour renders show Monte-Carlo
+asymmetry/sparseness — never measure geometry or take a receipt off a
+sub-1M render. Use the **B&W ~1M** pass for geometry/receipts, **~3M
+colour** to confirm, and reserve **~10M colour** for beauty / logo
+exploration.
+
+**Isolating one feature.** When a multi-block recipe renders unrelated
+halos that drown the target, disable the non-target crystal blocks
+("Clr" them or pre-edit the `.sim` block to the `no selection` pattern,
+as `halosim_p2_h18.6_columnonly.sim` keeps only column+random) and keep
+the target block (+ optionally `random.xng` for the 22° scale
+reference). See `docs/calibration/HALOSIM_VALIDATION_PROTOCOL.md`.
 
 ### Long-run sweeps (HS-1 / HS-2)
 

@@ -1990,7 +1990,8 @@ Gate: any public or chat answer about "all sundog geometry" can point to
 the matrix and distinguish complete, partial, named-only, not-modeled, and
 speculative entries without improvising.
 
-Status 2026-05-14: **14A landed · 14D source pass landed · 14F partially
+Status 2026-05-14 (14E addendum 2026-05-15): **14A landed · 14D source pass
+landed · 14E receipt pass landed (11/11) · 14F partially
 routed.** The ledger at `docs/calibration/HALO_PHENOMENA_ACCOUNTING.md` is
 reworked into three lenses matching the Phase 14 directive — **§A Anchor**
 (proven core; generator = the project's own validated closed form in
@@ -2010,9 +2011,16 @@ infralateral / sun-pillar / parhelic-circle atlas primitives are hardcoded
 placeholders (rendered ≠ anchored) routed to §B for reconciliation. **14B**
 `legend.html` is a parallel workstream the owner runs separately — the ledger
 is kept row-consistent with it but does not edit it; **14C** machine-readable
-mirror stays deferred; **14E** HaloSim receipt pass still pending. The Gate
-is **not** closed by this revision (ledger ↔ legend row-consistency is
-cross-checked against the in-parallel `legend.html`, not closed here).
+mirror stays deferred. **14E** landed 2026-05-15: all 11 un-receipted
+`.sim`-backed rows rendered B&W @1M via HS-0 and confirmed reproducing
+(`halosim-candidate` → `halosim-reproducible`, 0 not-reproducible) —
+receipts at `docs/calibration/halosim_outputs/phase14e/`
+(`_PHASE14E_RECEIPTS.md`), source frames byte-safe-pinned by
+`scripts/halosim_pin_rays.py`; empirical finding that ~300k b&w is
+unreliable (AGENTS.md + HALOSIM_VALIDATION_PROTOCOL.md ray-count guidance
+corrected to ~1M b&w). The Gate is **not** closed by this revision
+(ledger ↔ legend row-consistency is cross-checked against the in-parallel
+`legend.html`, not closed here).
 
 ### Phase 15 - Speculative / Unphotographed Halo Proof Program
 

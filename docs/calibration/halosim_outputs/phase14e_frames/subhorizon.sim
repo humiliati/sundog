@@ -1,0 +1,172 @@
+ 12 
+ 1 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Horiz column .2 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 65 
+ 2 
+ .6
+ 2 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+plate 2 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 35 
+ 2 
+ .2
+ 3 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ .2
+ 4 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 5 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 6 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 7 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 8 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 9 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 10 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 11 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 12 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 18.5
+ 5             1000000        32            6 
+ 9536352 
+ 2             8             0            -11 
+Type9
+ 12961221      0             9843250       1             9536352       0             16777215 
+ 2 
+ 2.9           .55           1
+False
+True
+False
+True
+""
+""
+""
+"1"
+"6"
+ 60
+-11            0
+ 1
+ 2.02          1            -540          -330
+ 4 
+420   0    510    1     600    0.4      680    0
+ 0.5          -1            -1            -1            -1             1             1             1             0             1 
+-1            -1            -1            -1            -1             1             1             1             1            42
+*#*#*#*#*#* description follows *
+Subhorizon halos.   They form when clouds containing ice crystals are below the observer.   Look for them from aircraft and mountains.
+
+The simulation shows a Subsun created by direct reflection from horizontal plate crystals.   On each side is a subparhelion.   These result from an additional reflection within the plate crystals - multiple scattering by more than one crystal is not necessary to form subparhelia.
+
+Compare the parhelia and subparhelia - the refraction is subtly different and changes their shapes.
+
+The other arc below the horizon is not a subhorizon halo proper, it is a lower tangent arc from column crystals.   
+
+This display was photographed by Don Davis over the United States - see the halos website at: www.sundog.clara.co.uk/halo/subpars.htm
+
+
+
+

@@ -1,0 +1,167 @@
+ 12 
+ 1 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+plate 5 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 25 
+ 2 
+ .2
+ 2 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+random.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 45 
+ 2 
+ .8
+ 3 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+plate .3 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 30 
+ 2 
+ .2
+ 4 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ .3
+ 5 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 6 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 7 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 8 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 9 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 10 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 11 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 12 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 22
+ 5             1000000        16            7 
+ 8215080 
+ 1             8            -12            25 
+Type9
+ 14737632      0             9843250       0             16777215      0             16777215 
+ 2 
+ 6.9           .55           1
+False
+True
+False
+True
+""
+""
+""
+"1"
+"6"
+ 57.5
+ 25           -12
+ 1
+ 1             1             0             0
+ 4 
+420   0    510    1     600    0.4      680    0
+ 0.5          -1            -1            -1            -1             1             1             1             0             1 
+-1            -1            -1            -1            -1             1             1             1             1            42
+*#*#*#*#*#* description follows *
+A parhelic circle formed by plate-shaped ice crystals sweeps around the sky.   The same crystals crystals make the bright sundogs flanking the sun.   A circumzenithal arc flies above. Randomly oriented crystals spin a 22 deg halo.    Beneath the sky, subhorizon halos visible from aircraft or mountains shine.
+
+Switch on the ray filters, change the filtered view to full sky, then activate the ray trace.    Position the box over the parhelic circle to reveal that this is at once one of the most simple yet complicated halo.    It is formed via a greater variety of  ray paths than any other halo and the contributions of the components changes with distance from the sun and solar altitude.  Near to the sun, a single external reflection dominates - further away, rays enter through all faces and undergo one or more internal reflections.
+
+
+
+
+
