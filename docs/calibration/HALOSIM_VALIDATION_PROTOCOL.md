@@ -333,11 +333,131 @@ literature handle.
 
 ---
 
-## Updates / extensions
+## Tilt-dispersion sensitivity sweep (Phase 12B increment-2 render grid)
 
-When Phase 12B (tilt-dispersion as math-bindable parameter) lands, add
-a "Tilt-dispersion sensitivity sweep" subsection here that documents
-the canonical (h, tilt_disp) cells to render for cross-validation.
+Phase 12B increment-1 landed a parametric tangent-arc model
+(`tangentArcLocus` in
+[`public/js/parhelion-geometry.mjs`](../../public/js/parhelion-geometry.mjs))
+calibrated to **a single HaloSim cell**: h = 18.6°, column tilt
+dispersion 0.1° (the Pass C7 render). The model is:
+
+    ρ(ψ) = 22 + A(h) · |ψ|^p          (ρ, ψ in degrees)
+    A(18.6°) = 0.031,  p = 1.5         (Pass C7 fit)
+    A(h)     = 0.031 · (29 − 18.6)/(29 − h)   (boundary-condition model:
+               A → ∞ as h → 29°, the Tape Ch 6 / Pass C7 circumscribed-
+               transition altitude)
+
+Increment-2 validates and refines this against a render grid. The
+single-cell calibration carries two untested assumptions:
+
+- **A(h) shape.** The `1/(29−h)` form is a boundary-condition guess
+  pinned at one interior point. Real A(h) could be sub- or
+  super-linear in `1/(29−h)`, or `p` itself could be h-dependent.
+- **Tilt-disp ↦ width only.** Increment-1 assumes tilt dispersion
+  broadens the rendered stroke but does *not* shift the locus center.
+  Untested.
+
+### The grid (L-shaped sampling, ~11 renders)
+
+Full cross-product (7 h × 5 tilt = 35) is unnecessary until the
+L-sample shows the axes interact. Sample each axis at the other's
+canonical value:
+
+**Arm 1 — h-sweep at fixed 0.1° column tilt dispersion** (refines A(h)):
+
+| cell | sun altitude h | column orientation file | expected |
+| --- | ---: | --- | --- |
+| H0   | 0°    | `Horiz column .1 deg disp.xng` | widest / flattest arc |
+| H5   | 5°    | `Horiz column .1 deg disp.xng` | wide |
+| H10  | 10°   | `Horiz column .1 deg disp.xng` | wide-moderate |
+| H18  | 18.6° | `Horiz column .1 deg disp.xng` | **re-confirms the Pass C7 anchor** |
+| H22  | 22°   | `Horiz column .1 deg disp.xng` | curling in |
+| H25  | 25°   | `Horiz column .1 deg disp.xng` | tight curl |
+| H28  | 28°   | `Horiz column .1 deg disp.xng` | near-circumscribed (A large) |
+| H29  | 29.5° | `Horiz column .1 deg disp.xng` | **boundary check: should be circumscribed (no separate tangent arc)** |
+
+**Arm 2 — tilt-disp-sweep at fixed h = 18.6°** (characterizes the
+tilt-disp effect; H18 above already covers 0.1°):
+
+| cell | column orientation file | tilt disp | expected |
+| --- | --- | ---: | --- |
+| T005 | `Horiz column .05 deg disp.xng` | 0.05° | sharpest arc |
+| T05  | `Horiz column .5 deg disp.xng`  | 0.5°  | moderate broadening |
+| T1   | `Horiz column 1 deg disp.xng`   | 1°    | broad |
+| T2   | `Horiz column 2 deg disp.xng`   | 2°    | very broad |
+
+### Render configuration (per cell)
+
+Use the column-only `.sim` template from Pass C7
+([`halosim_outputs/halosim_p2_h18.6_columnonly.sim`](halosim_outputs/halosim_p2_h18.6_columnonly.sim)):
+column block + random block (for the 22° halo scale reference) active,
+the two plate blocks disabled. Per cell, change only:
+
+- **Block 1 orientation file** to the cell's `Horiz column .{N} deg
+  disp.xng`.
+- **Sun elevation** to the cell's h.
+- **Ray count:** ≥ 3M (Pass C7 used 3M for the measurement render; 1M
+  acceptable for the boundary-check H29 cell since it only confirms
+  presence/absence).
+
+Save b&w (cleanest geometry) and optionally colour, named per the
+[Naming convention](#naming-convention-for-renders):
+
+```
+halosim_tangent_<cell>_columnonly_<rays>mr.bmp
+```
+
+e.g. `halosim_tangent_H5_columnonly_3mr.bmp`,
+`halosim_tangent_T1_columnonly_3mr.bmp`. (The `p<NN>` photo-number slot
+is dropped here since these are reference renders, not photo-targeted —
+the `<cell>` token H0/H5/.../T1/T2 carries the grid coordinate.)
+
+### What gets measured per cell
+
+For each render, the agent runs the Step 3–4 procedure: convert
+BMP→PNG, lock the pixel-to-degree scale via the 22° halo radius
+(re-lock per render — auto-zoom), 2D arc-locus search → extract the
+(ψ, ρ) curve, then fit `ρ(ψ) = 22 + A·|ψ|^p` to recover `A` and `p`
+for that cell. Outputs a table:
+
+| cell | h | tilt | fitted A | fitted p | model-predicted A | Δ |
+| --- | --- | --- | --- | --- | --- | --- |
+
+### Acceptance criteria for Phase 12B increment-2
+
+1. **A(h) refined.** Replace the single-boundary-condition `A(h)` with
+   a form fit to Arm-1's 7 interior points. If `p` is h-dependent,
+   make `p` a function of h too. Re-verify the model reproduces all
+   Arm-1 cells within ±0.3° radial (the Pass C7 tolerance).
+2. **Tilt-disp effect characterized.** From Arm 2: confirm whether the
+   locus center is tilt-independent (increment-1's assumption — then
+   tilt-disp only drives a rendered stroke-width term) or
+   tilt-dependent (then `tangentArcLocus` must take tilt-disp into the
+   curve and a fuller grid is needed).
+3. **H29 boundary confirmed.** The 29.5° cell shows a circumscribed
+   halo (no separate upper/lower tangent arc), validating the
+   `tangentArcLocus` `null`-return guard.
+4. **Model + tests updated.** `parhelion-geometry.mjs` model updated;
+   `phase3` export still reproduces every grid cell; a `phase3`-style
+   assertion added per grid arm; `npm run sundog:check` passes.
+5. **UI slider.** `--column-tilt-disp-deg` surfaced in the
+   `sundog.html` advanced-controls rail (the increment-1 CSS knob is
+   wired but has no UI control yet).
+6. **Tilt-width rendering.** If Arm 2 shows meaningful broadening,
+   add a tilt-dispersion-driven stroke-width term to
+   `tangentArcPath`.
+
+### User effort estimate
+
+~11 renders. Each is: load the column-only template, change orientation
+file + sun elevation in the HaloSim GUI, render at 3M rays (a few
+minutes wall-clock each), save. Estimate ~1.5–2 hours of HaloSim
+operation. The agent-side measurement + model-refinement is a separate
+~half-day once the renders are on disk.
+
+---
+
+## Updates / extensions
 
 When new feature families enter the atlas (Phase 12C deferred items —
 pyramidal halos, Parry arcs as rendered primitives, etc.), add

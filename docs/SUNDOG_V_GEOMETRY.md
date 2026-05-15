@@ -1718,13 +1718,16 @@ the parametric canonical curl in
   default-OFF so no canonical-pose regression).
 
 **Single-cell-calibrated.** Only the h=18.6° / 0.1°-tilt cell is
-HaloSim-validated. **Increment-2 (pending)** = the HaloSim
-(h, tilt-disp) render grid to validate / refine the h-dependence and
-the tilt-dispersion broadening, the advanced-controls UI slider for
-`--column-tilt-disp-deg`, and tilt-dispersion-driven rendered stroke
-width. The render-grid spec follows the
+HaloSim-validated. **Increment-2 (spec'd 2026-05-14, pending renders)**
+= validate / refine the h-dependence + characterize tilt-dispersion
+broadening + add the advanced-controls UI slider for
+`--column-tilt-disp-deg`. The render-grid spec is written:
 [`HALOSIM_VALIDATION_PROTOCOL.md`](calibration/HALOSIM_VALIDATION_PROTOCOL.md)
-procedure (Phase 12A).
+§"Tilt-dispersion sensitivity sweep" — an L-shaped ~11-render grid
+(7-cell h-sweep at 0.1° tilt + 4-cell tilt-sweep at h=18.6°), with
+per-cell HaloSim config, what-gets-measured, and 6 acceptance criteria.
+User effort ≈ 1.5–2 h of HaloSim operation; agent-side measurement +
+model refinement ≈ half-day once renders are on disk.
 
 **Adjacent fix surfaced 2026-05-14:** running `npm run sundog:check`
 during this work caught that the wave-2 W15 patch (schema.org author →
