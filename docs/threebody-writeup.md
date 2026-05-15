@@ -391,6 +391,20 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   candidate rows out of 81, naive local control produced none, and the
   privileged heuristic oracle produced 34 of 81. See
   [THREEBODY_PHASE11_SUMMARY.md](THREEBODY_PHASE11_SUMMARY.md).
+- **Phase 13, longer-horizon lock**: Test whether the Phase 11 pocket is
+  durable over a longer rollout or mainly delays failures that still arrive
+  shortly after the original 8-second window. The first command,
+  `npm run threebody:phase13:smoke`, runs a tiny 16-second
+  pocket-plus-boundary slate. If that smoke passes, `npm run threebody:phase13`
+  is the staged evidence run across mass ratio, timestep, radius, velocity,
+  passive/naive/guarded/oracle modes, and eight seeds. The claim ratchet is
+  pre-registered: pass means "longer tested horizon inside the mapped pocket,"
+  partial means "bounded survival/delay benefit," and fail means controller
+  redesign before larger sweeps. The smoke has now run: it kept the
+  larger-radius high-velocity cell promising at 16 seconds, left one
+  high-velocity cell neutral because passive already survived, and confirmed
+  the low-velocity boundary as risky. See
+  [THREEBODY_PHASE13_SUMMARY.md](THREEBODY_PHASE13_SUMMARY.md).
 - **Spatial extension**: Extend from planar to full 3D three-body problem.
 - **General three-body**: Move beyond circular restricted problem to include test particle mass and general initial conditions.
 - **Orbit family maintenance**: Demonstrate maintenance of specific orbit families (halo orbits around Lagrange points, periodic Lyapunov orbits) using only indirect signatures.
@@ -404,7 +418,9 @@ scan/seek/track-style controller usefully inside a measured high-velocity
 near-escape pocket. That pocket survives a larger seed slate, a scoped
 mass-ratio/timestep probe, Phase 11 guard-quantile variation, and matched
 comparison against naive local and privileged heuristic baselines, but it does
-not erase the low-velocity or equal-mass boundary harms.
+not erase the low-velocity or equal-mass boundary harms. Phase 13 now asks the
+next necessary question: does that pocket persist when the rollout is doubled,
+and at what control-effort cost?
 
 The target trade is the same as photometric alignment: useful action from
 partial information, with known failure modes and a measurable cost. The honest

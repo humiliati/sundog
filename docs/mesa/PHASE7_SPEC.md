@@ -503,9 +503,9 @@ was measured directly.
 
 | Large env-step budget | updates | wall / policy |
 | --- | ---: | --- |
-| ~0.66M (train_ppo default `--updates 80`; what Small/Medium actually used) | 80 | **~25 min** |
+| ~0.66M (train_ppo default `--updates 80`) | 80 | **~25 min** |
 | 1M (roadmap Small cap) | ~122 | **~37 min** |
-| 10M (roadmap Medium cap) | ~1,221 | **~6.3 h** |
+| **10M (canonical Medium convergence budget — see §14.4.1)** | **~1,221** | **~6.3 h** |
 | 100M (roadmap Large cap) | ~12,207 | **~62 h (~2.6 days)** |
 
 **Full Large set** (~12 cliff-relevant policies) / **down-scope** (~6):
@@ -518,13 +518,53 @@ was measured directly.
 | 100M cap | ~31 days | ~16 days |
 
 **The residual unknown is no longer timing - it is the convergence
-budget.** Small/Medium reached their success behavior at the
-train_ppo default (~0.66M env-steps, 80 updates). *If Large converges
-at a similar budget, full v2 is a ~5 h overnight GO. If Large needs
-10M+ steps to clear the 0.75 success floor, it is DOWN-SCOPE/DEFER
-territory.* That question is answered by **one full-default-budget
-Large convergence run (~25 min)** - staged in §14.6 (it exceeds the
-~10-min inline-run threshold, so it is staged rather than run here).
+budget**, and the 2026-05-15 probe + a canonical-artifact check
+resolved most of it (§14.4.1).
+
+### 14.4.1 Operator probe result + budget recalibration (2026-05-15)
+
+The §14.6 staged Large convergence probe was run by the operator at
+the train_ppo default budget (80 updates ≈ 0.655M env-steps,
+`signature_ppo_terminal`, Large, 64 eval seeds). Result:
+
+- `success_rate = 0.000` (0/64), **below the 0.75 floor**;
+- `mean_terminal_alignment = 0.360`, `mean_steps = 200` (horizon).
+
+Read naively against the pre-registered gate this looks like "raise
+to 10M then DEFER." But a canonical-artifact check **corrects a wrong
+assumption this spec previously baked in.** §14.4 (pre-correction) and
+§14.6 asserted "Small/Medium converged at the ~0.66M / 80-update
+default." That is **false for the canonical converged policies**:
+`results/mesa/phase5-selection-pressure/policies-summary.csv` shows
+the canonical converged Medium signature-terminal policy has
+`training_slug =
+signature_ppo_terminal_medium_seed_0_medium_phase5_terminal_10m`
+with **`success_rate = 1.0`** — it was trained at a **10M env-step
+budget, not 0.66M** (the `_10m` suffix is explicit). Small
+signature-terminal at the ~0.66M-class budget reaches only
+`success_rate ≈ 0.578` (also sub-0.75). The 0.66M default was never
+the proven convergence budget; it was a mis-calibrated GO threshold.
+
+Therefore the probe result is **uninformative for DEFER**: Large at
+0.66M scoring 0.000/0.360-alignment is exactly what "20×-Medium-params
+net at <7% of Medium's proven budget" predicts. The alignment of
+0.360 (vs random ~0, vs converged Medium 0.999) confirms Large is
+**learning but under-budget — not broken, not a DEFER signal.**
+
+**Recalibrated decision probe.** Re-anchor the convergence budget to
+the *Medium-proven* 10M (not the arbitrary default). The operative
+decision probe is now **Large @ 10M env-steps** (`--updates 1221`),
+measured cost **~6.3 h** — which exceeds the ~10-min inline-run
+threshold, so it is **staged in §14.6, not run here**. Pre-registered:
+Large @ 10M `success_rate ≥ 0.75` → GO/DOWN-SCOPE by set size
+(full ~12-policy set ≈ ~75 h / ~3 days at 10M; cliff subset ≈ ~38 h);
+`< 0.75` at 10M → **DEFER** (Large needs >10M on CPU-only torch:
+full set ≥ ~31 days — intractable locally; re-openable only with GPU
+or a vectorized env).
+
+The probe receipt is kept at
+`results/mesa/phase7v2-large-convergence/` (a real staged-command
+read-back path, not scratch — do not delete).
 
 ### 14.5 What Phase 8 v2 inherits from this
 
@@ -540,28 +580,33 @@ replay or the Axis-A/SAE-redux deferred items.
 
 ### 14.6 Pre-registered decision gate
 
-The §14.4 timing is now measured, so the gate is budget-conditioned
-rather than timing-unknown. The branch is selected by the **Large
-convergence budget**, established by the staged probe below:
+The gate is budget-conditioned. Probe-1 (Large @ 0.66M default) ran
+2026-05-15 and was **mis-calibrated** (§14.4.1): the 0.66M GO
+threshold was never the proven convergence budget — the canonical
+converged Medium policy used **10M** (`..._terminal_10m`,
+success 1.0). The branch is now selected by the **recalibrated
+Large @ 10M probe** (probe-2 below):
 
-- **GO (full v2):** the staged convergence probe shows Large clears
-  the 0.75 success floor at ≤ ~1M env-steps (like Small/Medium). Full
-  ~12-policy Large set is then a ~5-7.4 h overnight batch - tractable.
-- **DOWN-SCOPE (cliff-subset v2):** Large needs ~10M env-steps to
-  converge (full set ~3 days; cliff subset ~38 h). Train Large *only*
-  on the cliff-relevant L-Mixed subset (`lambda ∈ {0.90, 0.95, 0.97,
-  0.99}`) + L-Signature-terminal + L-Reward anchors (~6 policies), and
-  scope the probe x intervention cross-product to the cliff cells.
-  Still delivers the Phase 8 v2 third-tier toggle on the
+- **GO (full v2):** probe-2 shows Large clears the 0.75 floor at
+  **10M env-steps** (the Medium-proven budget). Full ~12-policy Large
+  set ≈ **~75 h (~3 days)** at 10M; cliff subset ≈ **~38 h**. Tractable
+  as a multi-day batch — call it GO if the operator accepts a multi-day
+  local run, else take DOWN-SCOPE.
+- **DOWN-SCOPE (cliff-subset v2):** train Large *only* on the
+  cliff-relevant L-Mixed subset (`lambda ∈ {0.90, 0.95, 0.97, 0.99}`)
+  + L-Signature-terminal + L-Reward anchors (~6 policies) at 10M
+  (≈ ~38 h), and scope the probe × intervention cross-product to the
+  cliff cells. Still delivers the Phase 8 v2 third-tier toggle on the
   program-significant boundary.
-- **DEFER (stay v1):** Large needs ~100M env-steps (full set ~31 days,
-  CPU-only - intractable locally). v2 is deferred; `mesa.html` stays
-  two-tier. This is a compute-budget boundary, not a claim failure;
-  the v1 "partially holds" verdict is unaffected. (Re-openable if GPU
-  or a vectorized env replaces the JS-bridge bottleneck.)
+- **DEFER (stay v1):** probe-2 shows Large still sub-0.75 at 10M (i.e.
+  Large needs >10M; full set ≥ ~31 days CPU-only — intractable
+  locally). v2 deferred; `mesa.html` stays two-tier. Compute-budget
+  boundary, not a claim failure; v1 "partially holds" unaffected.
+  Re-openable only with GPU or a vectorized env (the JS-bridge +
+  CPU-torch stack is the bottleneck, per §14.4).
 
-The decision is the operator's; no v2 training batch starts until the
-convergence probe is run and a branch is selected in writing
+The decision is the operator's; no v2 training batch starts until
+probe-2 is read and a branch is selected in writing
 (pre-registered-negative discipline).
 
 #### Staged commands (exceed the ~10-min inline-run threshold - run by operator)
@@ -570,36 +615,42 @@ Module invocation from repo root `C:\Users\hughe\Dev\sundog` (the
 `-m` form is required - `training` is a package; `python
 training/mesa/train_ppo.py` fails with `ModuleNotFoundError`).
 
-**1. Large convergence probe (~25 min) - the decision input.**
-Runs the cliff-canonical signature baseline at the train_ppo default
-budget (80 updates ≈ 0.66M env-steps) and reports whether Large
-clears the success floor at the Small/Medium budget:
+**Probe-1 (DONE 2026-05-15, mis-calibrated — see §14.4.1).** Large @
+0.66M default → `success_rate 0.000`, `alignment 0.360`. Not a DEFER
+signal; the 0.66M threshold was wrong (canonical Medium used 10M).
+Receipt: `results/mesa/phase7v2-large-convergence/`.
+
+**Probe-2 — recalibrated decision input: Large @ 10M (~6.3 h).**
+Re-anchored to the Medium-proven budget. `1221 updates × 8,192
+env-steps/update ≈ 10M`:
 
 ```powershell
-# ~25 min wall (80 updates x 18.43 s/update + ~10 s overhead)
+# ~6.3 h wall (1221 updates x 18.43 s/update). Resume-safe via --out.
 python -m training.mesa.train_ppo --variant signature_ppo_terminal `
-  --tier Large --updates 80 --eval-seeds 64 `
-  --out results/mesa/phase7v2-large-convergence --progress
-# Read: results/mesa/phase7v2-large-convergence/logs/*_evaluation_summary.json
-#   success_rate >= 0.75  -> GO branch (Large converges at default budget)
-#   success_rate  < 0.75  -> raise --updates (1221 = 10M steps) and re-probe;
-#                            if still sub-floor at 10M -> DEFER
+  --tier Large --updates 1221 --eval-seeds 64 `
+  --out results/mesa/phase7v2-large-conv-10m --progress
+# Read: results/mesa/phase7v2-large-conv-10m/logs/*_evaluation_summary.json
+#   success_rate >= 0.75  -> GO / DOWN-SCOPE (by set size, below)
+#   success_rate  < 0.75  -> DEFER (Large needs >10M; intractable CPU-only)
+# Optional cross-check: also read mean_terminal_alignment vs the
+#   canonical Medium 0.999 to see how close 10M gets if sub-floor.
 ```
 
-**2. Full Large cliff-set training batch (GO branch; ~5-7 h).**
-One invocation per variant; enumerate the cliff set from `VARIANTS`
-in `train_ppo.py` (signature_ppo_terminal, reward_ppo_dense, and the
-mixed variants at `--mixed-lambda` ∈ {0.90, 0.95, 0.97, 0.99}; extend
-to the full ~12 set only on the GO branch). Pattern:
+**Batch (GO/DOWN-SCOPE branch; full ~75 h / cliff-subset ~38 h at
+10M).** One invocation per variant; enumerate the cliff set from
+`VARIANTS` in `train_ppo.py` (`signature_ppo_terminal`,
+`reward_ppo_dense`, and the mixed variants at `--mixed-lambda` ∈
+{0.90, 0.95, 0.97, 0.99}; full ~12 set only on a GO that accepts the
+multi-day cost). Pattern:
 
 ```powershell
-# Per policy: --updates from the convergence probe outcome (80 if GO).
-# Stage one line per (variant[,lambda]); resume-safe via distinct --out.
+# --updates from probe-2 (1221 = 10M if probe-2 cleared at 10M;
+# higher only if probe-2 needed more). Resume-safe via distinct --out.
 python -m training.mesa.train_ppo --variant signature_ppo_terminal `
-  --tier Large --updates <converged_updates> --eval-seeds 64 `
+  --tier Large --updates 1221 --eval-seeds 64 `
   --out results/mesa/phase7v2-large/sig_terminal --progress
 python -m training.mesa.train_ppo --variant mixed_ppo_terminal `
-  --tier Large --mixed-lambda 0.95 --updates <converged_updates> `
+  --tier Large --mixed-lambda 0.95 --updates 1221 `
   --eval-seeds 64 --out results/mesa/phase7v2-large/mixed_l095 --progress
 # ... remaining cliff variants; then re-run scripts/mesa-phase7-envelope.mjs
 #     to fold Large rows into results/mesa/operating-envelope/.
@@ -607,8 +658,10 @@ python -m training.mesa.train_ppo --variant mixed_ppo_terminal `
 
 *(The exact `mixed_*` variant slug should be read from `VARIANTS` in
 `train_ppo.py` before staging the batch - only `signature_ppo_terminal`
-was verified in the timing probes; the mixed slug is named here from
-the spec's variant family, not from a verified run.)*
+was verified. Note Small signature-terminal reaches only
+`success_rate ≈ 0.578` even at its phase5 budget, so a sub-0.75
+Large @ 10M is not automatically DEFER if alignment is climbing
+toward the Medium 0.999 — operator judgement, recorded in writing.)*
 
 ## 15. Versioning
 
@@ -630,6 +683,17 @@ the spec's variant family, not from a verified run.)*
   throughput from capped probes: Small 1.74 / Medium 2.35 / Large
   18.43 s/update; bottleneck flips bridge-bound→PyTorch-CPU-bound at
   Large. §14.6 gate rewritten as budget-conditioned with staged
-  operator PowerShell (a ~25-min Large convergence probe as the
-  decision input; the full ~5-7 h Large batch on the GO branch). The
-  residual unknown is the Large convergence budget, not timing.
+  operator PowerShell. The residual unknown is the Large convergence
+  budget, not timing.
+- **v2-probe1-recalibrated (2026-05-15)** - operator ran the staged
+  Large @ 0.66M probe → `success_rate 0.000`, `alignment 0.360`. A
+  canonical-artifact check (`phase5 policies-summary.csv`) found the
+  v2-measured assumption "Small/Medium converged at the ~0.66M
+  default" **false**: canonical converged Medium signature-terminal
+  used a **10M** budget (`..._terminal_10m`, success 1.0). New
+  §14.4.1 records the probe receipt + recalibration; §14.4 budget
+  table and §14.6 gate/staged-commands re-anchored to the
+  Medium-proven 10M. The decision input is now the recalibrated
+  **Large @ 10M probe (~6.3 h, staged)**, not the mis-calibrated
+  0.66M one. Probe-1's 0.000 is *not* a DEFER signal — it was an
+  under-budget run against a wrong threshold.

@@ -592,10 +592,21 @@ Medium `lambda=0.95` / `lambda=0.97` cliff boundary.
 > throughput (Small 1.74 / Medium 2.35 / Large 18.43 s/update; the
 > bottleneck flips bridge-bound→PyTorch-CPU-bound at Large), and a
 > budget-conditioned GO / DOWN-SCOPE / DEFER gate with staged operator
-> PowerShell. The binding question is now the Large *convergence
-> budget*, not timing: a staged ~25-min Large convergence probe is the
-> decision input. No v2 training batch starts until that probe runs
-> and a branch is selected in writing.
+> PowerShell. The binding question is the Large *convergence budget*,
+> not timing.
+>
+> **Probe-1 ran 2026-05-15 and recalibrated the gate (PHASE7_SPEC
+> §14.4.1).** Large @ the 0.66M default budget scored `success_rate
+> 0.000` / `alignment 0.360`. A canonical-artifact check found the
+> "Small/Medium converged at ~0.66M" assumption *false*: the canonical
+> converged Medium signature-terminal policy used a **10M** budget
+> (`..._terminal_10m`, success 1.0). So probe-1's 0.000 is an
+> under-budget run against a mis-calibrated threshold — **not a DEFER
+> signal**. The decision input is now the **recalibrated Large @ 10M
+> probe (~6.3 h, staged in §14.6)**. GO/DOWN-SCOPE if it clears 0.75 at
+> 10M (full ~12-policy set ≈ ~3 days / cliff subset ≈ ~38 h); DEFER
+> only if still sub-floor at 10M. No v2 training batch starts until
+> probe-2 is read and a branch is selected in writing.
 
 Result note at [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md) v1
 (2026-05-12). The first envelope map classifies 22 Small/Medium policies with
