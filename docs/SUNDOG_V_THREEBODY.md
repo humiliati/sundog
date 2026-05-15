@@ -678,6 +678,34 @@ Phase 13 result:
   `1.741` over 8 seconds (`0.218` per second).
 - Summary: [`docs/threebody/PHASE13_RESULTS.md`](threebody/PHASE13_RESULTS.md).
 
+### Phase 14 - Mechanism Decomposition and Action Coupling
+
+Goal: decompose the Phase 13 guarded-TRACK win into warning quality, action
+coupling, and outcome effect, to test whether the accelerometer/tidal signal is
+the operative causal handle or whether the frozen guard mostly suppresses bad
+thrust in the tested pocket.
+
+Implementation-grade spec and result note:
+
+- [`docs/threebody/PHASE14_SPEC.md`](threebody/PHASE14_SPEC.md)
+- `docs/threebody/PHASE14_RESULTS.md` (pending the full lock)
+
+Commands:
+
+```bash
+npm run threebody:phase14:smoke
+npm run threebody:phase14
+```
+
+Exit criterion: the project can say whether the Phase 13 survival benefit
+depends on intact signal-directed action, or whether it survives signal and
+action ablation and is therefore a guard-suppression artifact. Pre-registered
+negative branch: high warning quality with weak action coupling does not support
+a controller claim.
+
+Status: spec pre-registered 2026-05-15. Harness, smoke, and full lock are
+pending pre-registration lock review; no Phase 14 code has been written or run.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
