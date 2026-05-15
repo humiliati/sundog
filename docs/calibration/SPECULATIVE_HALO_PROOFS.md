@@ -129,11 +129,32 @@ Sundog result.
   rings if present. **No predicted-vs-measured residual table was
   produced; the script refuses to fabricate one off a smooth profile.**
   *Consequence:* pyramidal **remains P2** — this evidence does **not**
-  advance it toward P3. Refined next step is now follow-up #1′ below.
-  Evidence retained:
-  [`halosim_outputs/phase14e/pyramidal_h18_radialprofile.txt`](halosim_outputs/phase14e/pyramidal_h18_radialprofile.txt)
+  advance it toward P3. Evidence retained:
+  [`halosim_outputs/phase14e/pyramidal_h18_1M_bw_radialprofile.txt`](halosim_outputs/phase14e/pyramidal_h18_1M_bw_radialprofile.txt)
   (radial profile + detrended SNR) and the script. Negative result kept
   as a map entry per the gate, not buried.
+- **Higher-fidelity retry (follow-up #1′, ray-count lever) — 6M render,
+  2026-05-15, VERIFIED NEGATIVE.** A dedicated 6M-ray B&W "Sun centered
+  Plan" render
+  ([`halosim_outputs/phase14e/pyramidal_h18_6M_bw.png`](halosim_outputs/phase14e/pyramidal_h18_6M_bw.png),
+  source frame `phase14e_frames/pyramidal_6M.sim`, HS-0 mechanism,
+  `Startup.sim` backed up + restored byte-identical) re-run through the
+  gated script. 6× the rays gave only a **marginal** gain: **one** outer
+  ring now resolves (r ≈ 132 px, 4.0σ) versus zero at 1M — still short of
+  the ≥3 distinct rings a scale-locked residual table + 46° linearity
+  cross-check require. Critically, this was **not** a centring artifact: a
+  wide center-grid brute search confirmed (944,393) is the
+  peak-sharpness-optimal centre, and **no** centre anywhere in the plot
+  yields >1 resolvable outer ring. Conclusion: the **pure ray-count lever
+  is insufficient** for the all-sky plan projection — the closely-spaced
+  odd-radius rings (18.3/19.9°, 22.9/23.8°) stay blended under the diffuse
+  glow and the dominant 22° prism halo. Pyramidal **still P2**, no
+  residual table, nothing fabricated. The 6M PNG is kept as a
+  *higher-fidelity qualitative* reproduction receipt (it does strengthen
+  the P2 visual reproduction); evidence:
+  `phase14e/pyramidal_h18_6M_bw_radialprofile.txt`. The definitive
+  remaining path is now follow-up #1′ below — **ray-filter isolation**,
+  not more rays.
 
 ---
 
@@ -221,14 +242,23 @@ what would promote it.
    is built and resolvability-gated — it will emit the residual table +
    46° linearity cross-check automatically once a sufficient receipt
    exists. Superseded by **#1′**.
-1′. **Higher-fidelity pyramidal render for the residual table.** A
-   dedicated render that resolves the odd-radius family: **≥4–10M rays**
-   and/or **per-ring HaloSim ray-filter isolation** (filter by entry/exit
-   faces per the Tape AH-CH10 wedge table — 3–26 for 9°, 13–25 for 18.3°,
-   etc.) and/or a tighter sun-centred FOV than the all-sky plan. Then
-   re-run `scripts/pyramidal_ring_residual.py` (the gate passes → residual
-   table + linearity cross-check + overlay). This is the real concrete
-   probe toward pyramidal P3; the 1M 14E receipt was insufficient.
+1′. **Pyramidal residual via ray-filter isolation** *(ray-count
+   sub-lever tried 2026-05-15 → verified insufficient: 1M = 0 rings, 6M =
+   1 ring; see the Pyramidal record).* The definitive remaining method is
+   **per-ring HaloSim ray-filter isolation**: render each odd-radius ring
+   *alone* by setting the Ray Filters panel Entrance/Exit faces per the
+   Tape AH-CH10 wedge table — `3→26` (9°), `13→25` (18.3°), `23→26`
+   (19.9°), `3→5` (21.8°, the 22° anchor), `1→25` (22.9°), `3→25`
+   (23.8°), `23→25` (34.9°), `1→5` (45.7°, the 46° linearity anchor) — at
+   ≥4M rays, ~8 filtered renders. Each isolated ring gives an unambiguous
+   radius (no blend, no diffuse-glow contamination). Optionally also
+   tighten the sun-centred FOV for more px/°. Then a small extension to
+   `scripts/pyramidal_ring_residual.py` (single-ring mode: locate the one
+   ring per isolated render, no resolvability gate needed) tabulates the
+   predicted-vs-measured residual + the `3→5`/`1→5` linearity check. This
+   is a heavier ~8-render GUI campaign — the concrete but non-trivial
+   probe toward pyramidal P3; flagged as the next decision, not
+   auto-run.
 2. **Chat boundary refinement.** `chat/claim_map.json`
    `halo_atlas_vocabulary_status` currently frames pyramidal/CHA as
    "named-only / not modeled." It should be refined so Ask Sundog says
