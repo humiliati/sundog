@@ -8,10 +8,11 @@ The three-body problem is famously intractable in closed form — no general ana
 
 The current answer is bounded but no longer merely speculative. In the tested
 planar restricted setup, a guarded accelerometer-proxy TRACK controller improves
-survival over passive and naive local baselines in a robust high-velocity
-near-escape operating pocket. The effect is not global: low-velocity and
-equal-mass boundary cells still show harms, and guard quantile choice controls
-the survival/effort trade.
+survival over passive and naive local baselines across a mapped high-velocity
+near-escape operating pocket through a 16-second tested horizon. The effect is
+not global: the low-velocity boundary, especially equal-mass cells near
+`velocityScale=0.95`, still shows controller harms, and guard quantile choice
+controls the survival/effort trade.
 
 ## The Pattern
 
@@ -126,9 +127,10 @@ where:
 3. Events evolve at timescales comparable to or slower than controller response
 
 This is not a universal theorem. The current evidence supports a bounded
-near-escape pocket, not general three-body control. Phase 11 shows the pocket is
-not an artifact of a single guard quantile, but also confirms that lower
-velocity and equal-mass boundary cells remain the first regions where the
+near-escape pocket, not general three-body control. Phase 11 showed the pocket
+is not an artifact of a single guard quantile. Phase 13 shows the high-velocity
+pocket survives a 16-second tested horizon, but also confirms that the
+low-velocity and equal-mass boundary cells remain the first regions where the
 controller should not be used.
 
 ## Connection to Photometric Alignment
@@ -403,7 +405,10 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   redesign before larger sweeps. The smoke has now run: it kept the
   larger-radius high-velocity cell promising at 16 seconds, left one
   high-velocity cell neutral because passive already survived, and confirmed
-  the low-velocity boundary as risky. See
+  the low-velocity boundary as risky. The full lock has now run too: 3,456
+  trials, 88 candidate envelope rows out of 324, 81 promising best cells out of
+  108, and no high-velocity risky/negative best cells. The boundary is still
+  the `velocityScale=0.95` band, including all 5 negative equal-mass cells. See
   [threebody/PHASE13_RESULTS.md](threebody/PHASE13_RESULTS.md).
 - **Cross-substrate follow-ups**: Mesa's entangled 5D `net.7` result and
   Geometry's HaloSim-oracle discipline now inform the next Threebody build
@@ -423,11 +428,10 @@ The three-body experiment is not a solution to celestial mechanics. It is an app
 The current result: locally motivated proxies can drive a guarded
 scan/seek/track-style controller usefully inside a measured high-velocity
 near-escape pocket. That pocket survives a larger seed slate, a scoped
-mass-ratio/timestep probe, Phase 11 guard-quantile variation, and matched
-comparison against naive local and privileged heuristic baselines, but it does
-not erase the low-velocity or equal-mass boundary harms. Phase 13 now asks the
-next necessary question: does that pocket persist when the rollout is doubled,
-and at what control-effort cost?
+mass-ratio/timestep probe, Phase 11 guard-quantile variation, matched comparison
+against naive local and privileged heuristic baselines, and a Phase 13
+16-second long-horizon lock. It still does not erase the low-velocity or
+equal-mass boundary harms.
 
 The target trade is the same as photometric alignment: useful action from
 partial information, with known failure modes and a measurable cost. The honest
