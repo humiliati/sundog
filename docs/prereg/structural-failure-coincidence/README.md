@@ -127,6 +127,13 @@ Append-only. Each amendment must carry a timestamp (date + zone), author, and
 a one-line justification. The body above this rule is frozen at
 pre-registration time.
 
+**2026-05-15 (PT) — maintainer.** P1 (falsifier admission review) **PASSES**.
+All five loci confirmed receipt-cited with all five mandatory fields. Two
+coded-vs-stated reconciliations checked (L2 CZA 32° vs ~32.2°; L4 supralateral
+~0.5° vs ~0.3° prereg span) — neither alters a regime. Zero BLOCKED rows. Full
+review artifact: [`P1_ADMISSION_REVIEW.md`](P1_ADMISSION_REVIEW.md).
+**P2 (agent run) is now unblocked.**
+
 **2026-05-15 (PT) — maintainer.** P0 deliverable created and frozen:
 [`BOUNDARY_MAP.md`](BOUNDARY_MAP.md) — the "First Falsifier Before
 Agents" boundary map (loci L1–L5, each with eligible / abstain-switch-fail

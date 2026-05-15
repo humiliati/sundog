@@ -184,5 +184,17 @@ invalidated in Debunked.md; the two documents test different failure modes in
 different experimental domains. Full cross-reference analysis, unresolved-risk
 inventory, and prioritization recommendation:
 [`DEBUNKED_CROSSREF.md`](DEBUNKED_CROSSREF.md).
-Verdict: treat this path as **primary** — advance to P1 (falsifier admission
-review) using DEBUNKED_CROSSREF.md as the context-integration step.
+Verdict: treat this path as **primary** — context-integration step complete;
+advance to P1 (falsifier admission review).
+
+**2026-05-15 (PT) — maintainer.** P1 (falsifier admission review) **PASSES**.
+Independent pass over the frozen boundary map confirms: (a) all five fields
+present for every locus L1–L5; (b) every source receipt is a real, locatable
+file with the cited content confirmed at the cited location; (c) two
+coded-vs-stated reconciliations documented (L2 CZA: coded 32° operative vs
+literature ~32.2° / prereg ~32.2° — ~0.2° spread, no regime change; L4
+supralateral: receipt ~0.5°/0–22° vs prereg ~0.3° narrower span — both well
+below noise floor, no regime change); (d) zero BLOCKED rows.
+Full review artifact: [`P1_ADMISSION_REVIEW.md`](P1_ADMISSION_REVIEW.md).
+**P2 (agent run) is now unblocked.** Public-Language Constraint remains in
+force until structural-failure-coincidence test (P2 quantity 3) passes.
