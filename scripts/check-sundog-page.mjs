@@ -54,7 +54,14 @@ ok(html.includes("phase6-handle-cza-apex"), "missing Phase 6 CZA apex handle sty
 const jsonLd = extractJsonLd(html);
 const learningResource = jsonLd.find((item) => item["@type"] === "LearningResource");
 ok(!!learningResource, "missing LearningResource JSON-LD");
-ok(learningResource?.author?.name === "Stellar Aqua LLC", "LearningResource missing author");
+// Wave-2 W15 (2026-05-14): author is a named human (WP:SELFPUB compliance —
+// a corporate-only author is a self-published-source yellow flag on
+// Wikipedia external-link review) with Stellar Aqua LLC as the affiliation.
+ok(
+  learningResource?.author?.name === "Jeffery Hughes Jr." &&
+    learningResource?.author?.affiliation?.name === "Stellar Aqua LLC",
+  "LearningResource author must be the named human contributor with Stellar Aqua LLC affiliation",
+);
 ok(Array.isArray(learningResource?.citation) && learningResource.citation.length >= 3, "LearningResource citations incomplete");
 ok(!!learningResource?.educationalLevel, "LearningResource missing educationalLevel");
 ok(Array.isArray(learningResource?.teaches) && learningResource.teaches.length >= 5, "LearningResource teaches list incomplete");

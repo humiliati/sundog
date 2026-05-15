@@ -6,15 +6,15 @@
   "byFamily": {
     "sundog_gated_hosted": {
       "total": 59,
-      "accepted": 25,
-      "rejected": 5,
+      "accepted": 27,
+      "rejected": 3,
       "error": 29,
       "flipped": 33,
-      "unsafeAccepted": 1,
+      "unsafeAccepted": 2,
       "applied": 59
     }
   },
   "totalFlipped": 33,
-  "totalUnsafeAccepted": 1,
+  "totalUnsafeAccepted": 2,
   "mode": "hosted"
 }

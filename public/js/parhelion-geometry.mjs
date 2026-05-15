@@ -761,80 +761,122 @@ function applySupralateralArc(svg, intensity) {
   supra.setAttribute("d", parts.join(" "));
 }
 
-function applyLowerTangentArc(svg, intensity) {
-  // Mirror of applyUpperTangentArc. Tangent to the 22° halo at its BOTTOM
-  // point (SUN.x, SUN.y + 220) — curves DOWN from there on either side.
-  // Geometric mirror: circle whose center sits R_lta directly BELOW the
-  // tangent point; visible portion is the UPPER arc of that circle, which
-  // tops out at the tangent and falls on either side. Atmospheric-optics
-  // counterpart to the upper tangent arc that the vocabulary references in
-  // docs/calibration/1 explicitly name.
+function applyLowerTangentArc(svg, intensity, altitudeDeg, columnTiltDispDeg) {
+  // Parametric lower tangent arc (Phase 12B): mirror of the upper tangent
+  // arc about the sun-horizontal axis. Apex tangent to the 22° halo
+  // BOTTOM; same canonical curl ρ(ψ) = 22 + A(h)·|ψ|^1.5, reflected.
   const arc = svg.querySelector("#lower-tangent-path");
   if (!arc) return;
   if (intensity <= 0.001) {
     arc.setAttribute("d", "");
     return;
   }
-  const tangentY = SUN.y + HALO_22_RADIUS; // 720
-  const R_lta = 200;
-  const cx = SUN.x;
-  const cy = tangentY + R_lta;
-  const xMin = Math.max(cx - R_lta, 0);
-  const xMax = Math.min(cx + R_lta, 1000);
-  const dx = xMax - xMin;
-  if (dx <= 1e-6) return;
-  const steps = 160;
+  const locus = tangentArcLocus(altitudeDeg, columnTiltDispDeg);
+  if (!locus) {
+    // h ≥ 29°: circumscribed-halo regime, no separate lower tangent arc.
+    arc.setAttribute("d", "");
+    return;
+  }
+  arc.setAttribute("d", tangentArcPath(locus, "lower"));
+}
+
+// --- Phase 12B: parametric tangent-arc locus ---------------------------------
+//
+// The upper/lower tangent arc is NOT a circle. Pass C7 (HaloSim column-only
+// render, h = 18.6°, 0.1° column tilt dispersion; receipt at
+// docs/calibration/PASS_C7_OUTPUT.txt) measured the canonical locus: apex
+// tangent to the 22° halo (ρ = 22°, ψ = 0°), curling outward as
+//
+//     ρ(ψ) = 22 + A(h) · |ψ|^1.5      (ρ, ψ in degrees; ψ from sun-meridian)
+//
+// with A(18.6°) ≈ 0.031 deg^-0.5 fitting the Pass C7 points
+// (ψ=17° → ρ≈24.3°; ψ=25° → ρ≈25.7°; ψ=32° → ρ≈27.5°). The earlier
+// circular primitive (R_uta = 200) was the project-original framing that
+// Pass C7 falsified — see SUNDOG_V_GEOMETRY.md "HaloSim as ground-truth
+// oracle" and the Pass C7 verdict.
+//
+// h-dependence uses the Tape AH Ch 6 / Pass C7 boundary condition that the
+// upper + lower tangent arcs merge into the circumscribed halo at h ≈ 29°:
+//
+//     A(h) = A(18.6°) · (29 − 18.6) / (29 − h)
+//
+// → A → ∞ as h → 29° (arc closes into circumscribed halo); flatter / wider
+// arc at low h. **Single-cell-calibrated.** Only the h = 18.6° / 0.1°-tilt
+// cell is HaloSim-validated; intermediate-h accuracy is PROVISIONAL pending
+// the Phase 12B-increment-2 HaloSim (h, tilt-disp) render grid.
+//
+// columnTiltDispDeg is accepted for forward-compat. Tilt dispersion mainly
+// broadens the *rendered stroke width* (a future increment-2 rendering
+// refinement); the locus center is ~tilt-independent to first order, so the
+// parameter does not yet shift the curve.
+
+const TANGENT_ARC_CIRCUMSCRIBED_H = 29; // deg; upper+lower merge above this
+const TANGENT_ARC_A_ANCHOR = 0.031;     // deg^-0.5, Pass C7 h=18.6° fit
+const TANGENT_ARC_A_ANCHOR_H = 18.6;    // deg, the HaloSim-validated cell
+
+function tangentArcOpeningCoefficient(altitudeDeg) {
+  const h = clamp(altitudeDeg, 0, TANGENT_ARC_CIRCUMSCRIBED_H - 0.5);
+  return (
+    TANGENT_ARC_A_ANCHOR *
+    (TANGENT_ARC_CIRCUMSCRIBED_H - TANGENT_ARC_A_ANCHOR_H) /
+    (TANGENT_ARC_CIRCUMSCRIBED_H - h)
+  );
+}
+
+function tangentArcLocus(altitudeDeg, columnTiltDispDeg = 0.1, psiMaxDeg = 45) {
+  // Returns [{ psiDeg, radialDeg }] from -psiMax to +psiMax, or null when
+  // h ≥ the circumscribed-transition altitude (no separate tangent arc —
+  // it's a circumscribed halo, mirroring czaVisibleAtAltitude's guard).
+  if (altitudeDeg >= TANGENT_ARC_CIRCUMSCRIBED_H) return null;
+  void columnTiltDispDeg; // forward-compat; see increment-2 note above
+  const A = tangentArcOpeningCoefficient(altitudeDeg);
+  const pts = [];
+  for (let psi = -psiMaxDeg; psi <= psiMaxDeg + 1e-6; psi += 1) {
+    pts.push({ psiDeg: psi, radialDeg: 22 + A * Math.pow(Math.abs(psi), 1.5) });
+  }
+  return pts;
+}
+
+// Render a tangent-arc path. branch "upper": apex on the 22° halo TOP, wings
+// rise up-and-out. branch "lower": mirror about the sun-horizontal axis,
+// apex on the halo BOTTOM, wings fall down-and-out.
+function tangentArcPath(locus, branch) {
+  const pxPerDeg = HALO_22_RADIUS / 22; // 10 px/° (220 px = 22°)
+  const sign = branch === "lower" ? +1 : -1;
   const parts = [];
   let started = false;
-  for (let i = 0; i <= steps; i += 1) {
-    const x = xMin + (dx * i) / steps;
-    const u = (x - cx) / R_lta;
-    const inside = 1 - u * u;
-    if (inside < 0) continue;
-    // Upper arc of circle: y = cy - r*sqrt(1-u²) — peaks at the tangent
-    // point (y = tangentY) when u=0, drops on either side as |u| grows.
-    const y = cy - R_lta * Math.sqrt(inside);
-    if (y < tangentY - 5 || y > 800) continue;
+  for (const { psiDeg, radialDeg } of locus) {
+    const psi = (psiDeg * Math.PI) / 180;
+    const rpx = radialDeg * pxPerDeg;
+    const x = SUN.x + rpx * Math.sin(psi);
+    const y = SUN.y + sign * rpx * Math.cos(psi);
+    if (x < 0 || x > 1000 || y < 0 || y > 1000) {
+      started = false;
+      continue;
+    }
     parts.push((started ? "L " : "M ") + x.toFixed(2) + " " + y.toFixed(2));
     started = true;
   }
-  arc.setAttribute("d", parts.join(" "));
+  return parts.join(" ");
 }
 
-function applyUpperTangentArc(svg, intensity) {
-  // Tangent to the 22° halo at its TOP point (SUN.x, SUN.y - 220). Curves UP
-  // from there — the "eyelid above the 22° halo" feature distinct from the
-  // CZA. Geometrically: circle whose center sits R_uta directly ABOVE the
-  // tangent point; visible portion is the LOWER arc of that circle, which
-  // bottoms out at the tangent and rises on either side.
+function applyUpperTangentArc(svg, intensity, altitudeDeg, columnTiltDispDeg) {
+  // Parametric upper tangent arc (Phase 12B). Apex tangent to the 22° halo
+  // TOP; the canonical curl ρ(ψ) = 22 + A(h)·|ψ|^1.5 replaces the
+  // Pass-C7-falsified circular primitive.
   const arc = svg.querySelector("#upper-tangent-path");
   if (!arc) return;
   if (intensity <= 0.001) {
     arc.setAttribute("d", "");
     return;
   }
-  const tangentY = SUN.y - HALO_22_RADIUS; // 280
-  const R_uta = 200;
-  const cx = SUN.x;
-  const cy = tangentY - R_uta;
-  const xMin = Math.max(cx - R_uta, 0);
-  const xMax = Math.min(cx + R_uta, 1000);
-  const dx = xMax - xMin;
-  if (dx <= 1e-6) return;
-  const steps = 160;
-  const parts = [];
-  let started = false;
-  for (let i = 0; i <= steps; i += 1) {
-    const x = xMin + (dx * i) / steps;
-    const u = (x - cx) / R_uta;
-    const inside = 1 - u * u;
-    if (inside < 0) continue;
-    const y = cy + R_uta * Math.sqrt(inside);
-    if (y < 0 || y > tangentY + 5) continue;
-    parts.push((started ? "L " : "M ") + x.toFixed(2) + " " + y.toFixed(2));
-    started = true;
+  const locus = tangentArcLocus(altitudeDeg, columnTiltDispDeg);
+  if (!locus) {
+    // h ≥ 29°: circumscribed-halo regime, no separate upper tangent arc.
+    arc.setAttribute("d", "");
+    return;
   }
-  arc.setAttribute("d", parts.join(" "));
+  arc.setAttribute("d", tangentArcPath(locus, "upper"));
 }
 
 function applySuncaveParryArc(svg, intensity) {
@@ -955,6 +997,9 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   const supralateralIntensity = readCssNumber(rootStyle, "--supralateral-intensity", 0);
   const upperTangentIntensity = readCssNumber(rootStyle, "--upper-tangent-intensity", 0);
   const lowerTangentIntensity = readCssNumber(rootStyle, "--lower-tangent-intensity", 0);
+  // Phase 12B: column tilt-dispersion knob (canonical default 0.1° per
+  // HaloSim `Horiz column .1 deg disp.xng` — the Pass C7 reference cell).
+  const columnTiltDispDeg = readCssNumber(rootStyle, "--column-tilt-disp-deg", 0.1);
   const suncaveParryIntensity = readCssNumber(rootStyle, "--suncave-parry-intensity", 0);
   const parrySupralateralIntensity = readCssNumber(rootStyle, "--parry-supralateral-intensity", 0);
   const infralateralIntensity = readCssNumber(rootStyle, "--infralateral-intensity", 0);
@@ -983,8 +1028,8 @@ function applyGeometryHaloAtlas(svg, rootStyle) {
   }
 
   applySupralateralArc(svg, supralateralIntensity);
-  applyUpperTangentArc(svg, upperTangentIntensity);
-  applyLowerTangentArc(svg, lowerTangentIntensity);
+  applyUpperTangentArc(svg, upperTangentIntensity, sunAltitude, columnTiltDispDeg);
+  applyLowerTangentArc(svg, lowerTangentIntensity, sunAltitude, columnTiltDispDeg);
   applySuncaveParryArc(svg, suncaveParryIntensity);
   applyParrySupralateralArc(svg, parrySupralateralIntensity);
   applyInfralateralArc(svg, infralateralIntensity);
@@ -1019,6 +1064,10 @@ export const phase3 = {
   parhelicCurvature: parhelicCurvatureFromAltitude,
   HALO_22_RADIUS,
   HALO_46_RADIUS: 440,
+  // Phase 12B: parametric tangent-arc locus (Pass C7-anchored).
+  tangentArcLocus,
+  tangentArcOpeningCoefficient,
+  tangentArcCircumscribedAltitude: TANGENT_ARC_CIRCUMSCRIBED_H,
 };
 
 export function applyParhelionGeometry({ svg, rootStyle, model }) {
