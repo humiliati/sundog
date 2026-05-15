@@ -32,23 +32,35 @@ Exit codes: 0 resolvable+tabulated, 2 attempted-but-not-resolvable,
 1 unmeasurable. This is a reproduction-strengthening measurement, NOT a
 public result; see the gate in SPECULATIVE_HALO_PROOFS.md.
 
-Usage:  python scripts/pyramidal_ring_residual.py
+Usage:  python scripts/pyramidal_ring_residual.py [receipt.png]
+        (receipt arg is abs or relative to phase14e/; default = the 1M
+        14E receipt. Overlay/evidence names derive from the receipt stem,
+        so a higher-ray re-run never clobbers the 1M artifact.)
 """
 from __future__ import annotations
 import os
+import sys
 import numpy as np
 from PIL import Image, ImageDraw
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(THIS_DIR)
-RECEIPT = os.path.join(
-    REPO, "docs", "calibration", "halosim_outputs",
-    "phase14e", "pyramidal_h18_1M_bw.png",
-)
-OVERLAY_OUT = os.path.join(
-    REPO, "docs", "calibration", "halosim_outputs",
-    "phase14e", "pyramidal_h18_residual_overlay.png",
-)
+PHASE14E = os.path.join(REPO, "docs", "calibration", "halosim_outputs", "phase14e")
+DEFAULT_RECEIPT = os.path.join(PHASE14E, "pyramidal_h18_1M_bw.png")
+
+
+def resolve_paths(argv: list[str]) -> tuple[str, str, str]:
+    """Receipt path = argv[1] (abs, or relative to phase14e/), else the
+    1M 14E default. Overlay / evidence names are derived from the receipt
+    stem so a higher-ray re-run does not clobber the 1M artifact."""
+    rcpt = DEFAULT_RECEIPT
+    if len(argv) > 1:
+        cand = argv[1]
+        rcpt = cand if os.path.isabs(cand) else os.path.join(PHASE14E, cand)
+    stem = os.path.splitext(os.path.basename(rcpt))[0]
+    overlay = os.path.join(PHASE14E, stem + "_residual_overlay.png")
+    proftxt = os.path.join(PHASE14E, stem + "_radialprofile.txt")
+    return rcpt, overlay, proftxt
 
 # Tape AH-CH10 p6 (Fig 10-8), n = 1.31. (faces, wedge_deg, halo_radius_deg).
 # The ordinary 22 deg (3-5) and 46 deg (1-5) rings are the scale anchors;
@@ -170,6 +182,10 @@ def detrended_rings(prof: np.ndarray, rmax: int, inner: int = 40):
 
 
 def main() -> int:
+    RECEIPT, OVERLAY_OUT, PROF_TXT = resolve_paths(sys.argv)
+    if not os.path.isfile(RECEIPT):
+        print(f"ERROR: receipt not found: {RECEIPT}")
+        return 1
     img = Image.open(RECEIPT).convert("RGB")
     W, H = img.size
     mask, signal = plot_mask_and_signal(img)
@@ -212,17 +228,16 @@ def main() -> int:
               "the residual table + linearity cross-check).")
         # Evidence artifact: detrended SNR profile (NOT a circle overlay --
         # drawing predicted circles needs a scale lock we do not have).
-        prof_txt = OVERLAY_OUT.replace("_residual_overlay.png",
-                                       "_radialprofile.txt")
-        with open(prof_txt, "w", encoding="utf-8") as fh:
-            fh.write("# pyramidal 14E receipt radial analysis -- "
-                     "rings NOT resolvable at 1M rays\n")
-            fh.write(f"# centre=({cx:.0f},{cy:.0f}) rmax={rmax} "
+        with open(PROF_TXT, "w", encoding="utf-8") as fh:
+            fh.write("# pyramidal receipt radial analysis -- "
+                     "rings NOT resolvable\n")
+            fh.write(f"# receipt={os.path.basename(RECEIPT)} "
+                     f"centre=({cx:.0f},{cy:.0f}) rmax={rmax} "
                      f"detrend_noise={noise:.3f}\n")
             fh.write("# r_px\tprofile\tdetrend_snr\n")
             for r in range(0, rmax):
                 fh.write(f"{r}\t{prof[r]:.2f}\t{snr[r]:.2f}\n")
-        print(f"  evidence: {os.path.relpath(prof_txt, REPO)} "
+        print(f"  evidence: {os.path.relpath(PROF_TXT, REPO)} "
               f"(radial profile + detrended SNR)")
         return 2  # 2 = attempted, not resolvable (distinct from 0/1)
 
