@@ -392,6 +392,7 @@ export function computeTidalGradient(state, config = {}) {
 function controllerSensorVariant(mode) {
   if (mode.endsWith("_sensor_accel")) return "accelerometer_array_noisy";
   if (mode === "track_sensor_accel_guarded") return "accelerometer_array_noisy";
+  if (PHASE14_ABLATION_MODES.has(mode)) return "accelerometer_array_noisy";
   if (mode.endsWith("_sensor_delayed")) return "delayed_local_probe";
   if (mode.endsWith("_sensor_micro")) return "micro_maneuver_noisy";
   return null;
@@ -458,6 +459,77 @@ function controllerRng(controllerState, config) {
     controllerState.rng = makeRng(((config.seed ?? 0) * 1009 + modeHash(config.controllerMode)) >>> 0);
   }
   return controllerState.rng;
+}
+
+const PHASE14_ABLATION_MODES = new Set([
+  "track_sensor_accel_signal_shuffle",
+  "track_sensor_accel_action_shuffle",
+  "track_sensor_accel_signal_delay",
+  "track_sensor_accel_sign_flip",
+]);
+
+function phase14PlannedSteps(config) {
+  return Math.max(1, Math.round(config.duration / config.dt)) + 1;
+}
+
+function phase14Permutation(controllerState, config, kind) {
+  const cacheKey = `${kind}Perm`;
+  if (!controllerState[cacheKey]) {
+    const n = phase14PlannedSteps(config);
+    const perm = Array.from({ length: n }, (_, i) => i);
+    const rng = controllerRng(controllerState, config);
+    for (let i = n - 1; i > 0; i -= 1) {
+      const j = Math.floor(rng() * (i + 1));
+      const tmp = perm[i];
+      perm[i] = perm[j];
+      perm[j] = tmp;
+    }
+    controllerState[cacheKey] = perm;
+  }
+  return controllerState[cacheKey];
+}
+
+function phase14SignalAblation(mode, gradient, controllerState, config) {
+  if (mode === "track_sensor_accel_signal_delay") {
+    const delaySteps = Math.max(0, Math.round(0.5 / config.dt));
+    if (!controllerState.signalDelayBuffer) controllerState.signalDelayBuffer = [];
+    controllerState.signalDelayBuffer.push(gradient);
+    if (controllerState.signalDelayBuffer.length <= delaySteps) return { suppressStep: true };
+    return { gradient: controllerState.signalDelayBuffer.shift() };
+  }
+  if (mode === "track_sensor_accel_signal_shuffle") {
+    const t = (controllerState.step ?? 1) - 1;
+    if (!controllerState.signalHistory) controllerState.signalHistory = [];
+    controllerState.signalHistory[t] = {
+      tidal: gradient.tidal,
+      gradX: gradient.gradX,
+      gradY: gradient.gradY,
+    };
+    const perm = phase14Permutation(controllerState, config, "signal");
+    const target = perm[t] ?? t;
+    if (target <= t && controllerState.signalHistory[target]) {
+      return { gradient: controllerState.signalHistory[target] };
+    }
+    return { suppressStep: true };
+  }
+  return {};
+}
+
+function phase14ActionAblation(mode, thrust, controllerState, config) {
+  if (mode === "track_sensor_accel_sign_flip") return [-thrust[0], -thrust[1]];
+  if (mode === "track_sensor_accel_action_shuffle") {
+    const t = (controllerState.step ?? 1) - 1;
+    if (!controllerState.actionHistory) controllerState.actionHistory = [];
+    controllerState.actionHistory[t] = thrust;
+    const perm = phase14Permutation(controllerState, config, "action");
+    const target = perm[t] ?? t;
+    if (target <= t && controllerState.actionHistory[target]) {
+      return controllerState.actionHistory[target];
+    }
+    controllerState.stepWarmup = true;
+    return [0, 0];
+  }
+  return thrust;
 }
 
 function computeNaiveLocalThrust(state, config) {
@@ -580,6 +652,7 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
   const cfg = normalizeConfig(config);
   const mode = cfg.controllerMode;
   controllerState.step = (controllerState.step ?? 0) + 1;
+  controllerState.stepWarmup = false;
   if (mode === "off") return [0, 0];
 
   let thrustX = 0;
@@ -609,6 +682,7 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
     || mode === "track_sensor_delayed"
     || mode === "seek_sensor_micro"
     || mode === "track_sensor_micro"
+    || PHASE14_ABLATION_MODES.has(mode)
   ) {
     const sensorVariant = controllerSensorVariant(mode);
     let gradient = sensorVariant
@@ -624,12 +698,24 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
         gradY: shuffled.gradY,
       };
     }
+    if (PHASE14_ABLATION_MODES.has(mode)) {
+      const ablated = phase14SignalAblation(mode, gradient, controllerState, cfg);
+      if (ablated.suppressStep) {
+        controllerState.stepWarmup = true;
+        return [0, 0];
+      }
+      if (ablated.gradient) gradient = ablated.gradient;
+    }
     const { tidal, gradX, gradY } = gradient;
     if (mode === "track_sensor_accel_guarded" && !shouldRunGuardedTrack(state, tidal, cfg)) {
       return [0, 0];
     }
+    let guardSuppressed = false;
+    if (PHASE14_ABLATION_MODES.has(mode) && !shouldRunGuardedTrack(state, tidal, cfg)) {
+      guardSuppressed = true;
+    }
     const gradMag = Math.sqrt(gradX * gradX + gradY * gradY);
-    if (gradMag > 0.001) {
+    if (!guardSuppressed && gradMag > 0.001) {
       if (mode.startsWith("seek")) {
         thrustX = -cfg.thrustLimit * gradX / gradMag;
         thrustY = -cfg.thrustLimit * gradY / gradMag;
@@ -643,6 +729,9 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
     }
   }
 
+  if (PHASE14_ABLATION_MODES.has(mode)) {
+    return phase14ActionAblation(mode, [thrustX, thrustY], controllerState, cfg);
+  }
   return [thrustX, thrustY];
 }
 
@@ -859,6 +948,9 @@ export function runTrial(config = {}) {
   const sensorAudit = [];
   const sensorStates = new Map();
   let totalDeltaV = 0;
+  let acEligible = 0;
+  let acPositive = 0;
+  let acSignedSum = 0;
 
   for (let step = 0; step <= steps; step += 1) {
     const time = step * cfg.dt;
@@ -869,6 +961,20 @@ export function runTrial(config = {}) {
     const [localAx, localAy] = computeAcceleration(2, state.slice(0, 6), cfg);
     const localAccelerationMagnitude = Math.sqrt(localAx * localAx + localAy * localAy);
     const thrustMagnitude = Math.sqrt(thrust[0] * thrust[0] + thrust[1] * thrust[1]);
+    if (cfg.trackActionCoupling) {
+      const idealGradient = computeTidalGradient(state, cfg);
+      const idealGradMagnitude = Math.sqrt(
+        idealGradient.gradX * idealGradient.gradX + idealGradient.gradY * idealGradient.gradY,
+      );
+      if (!controllerState.stepWarmup && thrustMagnitude > 1e-6 && idealGradMagnitude > 1e-6) {
+        const signedAlignment = Math.sign(cfg.targetTidal - idealGradient.tidal.magnitude)
+          * (thrust[0] * idealGradient.gradX + thrust[1] * idealGradient.gradY)
+          / (thrustMagnitude * idealGradMagnitude);
+        acEligible += 1;
+        if (signedAlignment > 0) acPositive += 1;
+        acSignedSum += signedAlignment;
+      }
+    }
     eventHistory.push({
       time,
       events,
@@ -957,6 +1063,13 @@ export function runTrial(config = {}) {
       totalDeltaV: roundNumber(totalDeltaV),
       loggedRecords: records.length,
       simulatedTime: records.at(-1)?.time ?? 0,
+      ...(cfg.trackActionCoupling
+        ? {
+          actionCouplingEligibleSteps: acEligible,
+          actionCouplingAgreementRate: acEligible > 0 ? roundNumber(acPositive / acEligible) : null,
+          actionCouplingSignedEffect: acEligible > 0 ? roundNumber(acSignedSum / acEligible) : null,
+        }
+        : {}),
     },
   };
 }
