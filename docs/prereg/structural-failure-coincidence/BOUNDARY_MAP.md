@@ -198,3 +198,19 @@ below noise floor, no regime change); (d) zero BLOCKED rows.
 Full review artifact: [`P1_ADMISSION_REVIEW.md`](P1_ADMISSION_REVIEW.md).
 **P2 (agent run) is now unblocked.** Public-Language Constraint remains in
 force until structural-failure-coincidence test (P2 quantity 3) passes.
+
+**2026-05-15 (PT) — maintainer.** P2 (agent run) **PASSES — all five loci
+confirmed boundary-coincident.** Q3 result against each locus: L1 — parhelion
+eligibility flags correctly limit promotion to the strict set (p2/p7/p13);
+low-leverage, tautological, and geometrically-invalid rows are abstained.
+L2 — `czaVisibleAtAltitude` returns false for h > 32°; route abstains correctly
+at h = 33° and above. L3 — `tangentArcLocus` returns null at h ≥ 29°; no handle
+past the merge. L4 — supralateral route absent at all h; structural-discrimination
+gate is permanently operative. L5 — only §A anchored closed-form rows count as
+inverse evidence; drawn-but-unanchored primitives (supralateral, suncave-Parry,
+Parry-supralateral, infralateral, parhelic-circle smile, sun-pillar vesica)
+correctly excluded. No locus shows a mere-correlate pattern. Full scoring
+artifact: [`P2_AGENT_RUN.md`](P2_AGENT_RUN.md). Outcome branch B selected;
+P3 disposition complete: [`P3_DISPOSITION.md`](P3_DISPOSITION.md). **Program
+complete.** Public-Language Constraint applies to all public copy; theorem
+posture remains prohibited.

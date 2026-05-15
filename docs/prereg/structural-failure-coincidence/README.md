@@ -134,6 +134,29 @@ coded-vs-stated reconciliations checked (L2 CZA 32° vs ~32.2°; L4 supralateral
 review artifact: [`P1_ADMISSION_REVIEW.md`](P1_ADMISSION_REVIEW.md).
 **P2 (agent run) is now unblocked.**
 
+**2026-05-15 (PT) — maintainer.** P2 (agent run) **PASSES on all four
+quantities.** (1) Convergence: ≤ 0.027° residual on all three eligible photos
+(p2, p7, p13). (2) Counterfactual steerability: machine-precision zero residual
+at four synthetic targets — the inverse is a true lever. (3) Failure-boundary
+coincidence: all five L1–L5 guards fire as documented (parhelion eligibility
+flags, CZA cutoff at h > 32°, tangent-arc null return at h ≥ 29°, supralateral
+structural-discrimination gate at all h, rendered-≠-anchored admissibility
+boundary). (4) Efficiency: RMSE ≈ 0.02° vs. 22.53° constant-mean baseline.
+Full scoring artifact: [`P2_AGENT_RUN.md`](P2_AGENT_RUN.md).
+**P3 (outcome-branched disposition) is now unblocked.**
+
+**2026-05-15 (PT) — maintainer.** P3 (outcome-branched disposition) **complete.**
+P2 result maps to outcome branch **B**: "Agent converges, is steerable, and its
+failure boundary coincides with the closed-form identifiability boundary" →
+*traceability harness passes on this domain* → stakeholder-safe benchmark /
+apparatus claim, not universal theorem. Public-Language Constraint applied:
+"traceability harness," "indirect-inference alignment benchmark," "hidden-cause
+recovery from indirect signals," "falsifiable apparatus," "identifiability
+boundary." Theorem posture and "probe decoded it" framing remain prohibited.
+Three honest caveats recorded: p7 production-mechanism question, p13 anchor-noise
+bound, single-handle inverse narrowness. Full disposition:
+[`P3_DISPOSITION.md`](P3_DISPOSITION.md). **Program complete — B path.**
+
 **2026-05-15 (PT) — maintainer.** P0 deliverable created and frozen:
 [`BOUNDARY_MAP.md`](BOUNDARY_MAP.md) — the "First Falsifier Before
 Agents" boundary map (loci L1–L5, each with eligible / abstain-switch-fail
