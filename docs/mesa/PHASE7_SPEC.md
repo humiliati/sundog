@@ -403,7 +403,129 @@ Phase 8 consumes:
 Phase 8 should not promote any claim that is not backed by Phase 7
 classification rows.
 
-## 14. Versioning
+## 14. v2 Scope and Decision Gate (added 2026-05-14)
+
+This section exists so the v2 step (full probe x intervention
+cross-product + Large tier) can be decided on grounded information
+rather than estimated cold. It is a **decision aid, not the v2
+implementation spec**. The v2 implementation spec is written only
+after the go decision below clears.
+
+### 14.1 Compute model (load-bearing context)
+
+The mesa experiment is **100% local Node.js**. `scripts/mesa-harness.mjs`
+and `scripts/mesa-phase7-envelope.mjs` import only `node:*` plus the
+local `public/js/mesa-core.mjs` (`runMesaTrial`). There is **no LLM
+API anywhere in the mesa pipeline** - no OpenAI, Anthropic, or
+Groq/Llama call, no API key, no HTTP. PPO training and trial
+evaluation are hand-rolled pure-JS, no GPU/vectorized backend.
+
+Implication for budgeting: **API dollars are the wrong currency for
+this work. v2 cost is local wall-clock, not spend.** A
+"$X OpenAI / $Y Anthropic / N Llama prompts-per-day" budget sizes the
+*chat-gate evaluation workstream* (`chat/eval/run_hosted_drafts.mjs`,
+driven by `scripts/run-groq-*.ps1`), which is a separate program from
+mesa and is not gated by this spec.
+
+### 14.2 What v2 adds over v1
+
+v1 was a read-only Small/Medium aggregation over existing Phase 3-6
+artifacts (22 policy rows; class split hold=8 / collapse=7 / fragile=1
+/ incompetent=4 / ambiguous=2; Medium breach ~lambda=0.953). v2 adds
+three things, each of which carries cost v1 did not:
+
+1. **Large tier - NEW PPO training.** v1 ran no training. Large is a
+   6-layer MLP / small transformer, ~5M params, with a **100M
+   environment-step budget cap per policy** (roadmap capacity ladder).
+   The cliff-relevant Large policy set mirrors Medium's: L-Signature
+   (terminal, integrated), L-Reward, and L-Mixed across the
+   `lambda ∈ {0.3, 0.5, 0.7, 0.8, 0.9, 0.95, 0.97, 0.99}` grid -
+   roughly **11-12 new Large training runs**.
+2. **Full probe x intervention cross-product.** v1 kept Phase 3
+   probes (5 axes x 3 severities ~= 15 probe cells) and Phase 4
+   interventions (3 channels: reward / observation / geometry) as
+   *separate* evidence planes (15 + 3 conditions). v2 crosses them:
+   ~15 x 3 ~= **45 combined probe x intervention conditions per
+   policy**, replacing the v1 additive plane structure.
+3. **Sensor-tier fill.** v1 emitted a `degradation_missing` gap
+   report; v2 fills delayed / noisy / delayed-noisy tiers for the
+   shape-compatible learned policies.
+
+### 14.3 Cell-count math
+
+Order-of-magnitude, to make the scale legible:
+
+- Tiers: 3 (Small, Medium, **Large**); XL still deferred.
+- Policy rows: ~22 Small/Medium (unchanged) **+ ~12 new Large**.
+- Conditions per policy: ~45 probe x intervention (v2) vs ~18
+  additive (v1), x sensor tiers where applicable.
+
+Evaluated-cell count goes from v1's 22 classified rows to
+**low-thousands of (policy, tier, selection-pressure, probe x
+intervention, sensor-tier) cells**. The aggregation/classification
+half scales with that count but is cheap per cell (it reuses the v1
+`mesa-phase7-envelope.mjs` machinery). **The binding cost is the
+Large-tier PPO training**: ~12 policies x 100M env-steps budget cap,
+pure-JS, no GPU.
+
+### 14.4 The one measurement that gates the decision
+
+Everything above is structural; the missing number is **per-env-step
+wall-clock for `mesa-core.mjs` at Large-tier width (~5M params) on
+the project machine**. With that rate, `12 policies x (up to) 100M
+steps` resolves to a real wall-clock estimate. Until measured, treat
+Large-tier feasibility as *unknown*, not assumed.
+
+Recommended measurement (cheap, no commitment): time a Small-tier run
+(~5K params, 1M-step cap) and a Medium-tier run (~250K params,
+10M-step cap) end-to-end, derive steps/sec vs parameter count, and
+extrapolate to Large. Pure-JS NN training typically scales worse than
+linearly in parameter count, so the extrapolation should be treated
+as a lower bound on cost.
+
+### 14.5 What Phase 8 v2 inherits from this
+
+Phase 7 v2 is the data-generation half of the Phase 8 v2
+"operating-envelope cross-product" deferred item
+([`../SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md) Phase 8 v1 section,
+"v1 deferred - becomes v2 work"). Phase 7 v2 produces the expanded
+`results/mesa/operating-envelope/` artifacts; Phase 8 v2 renders them
+as the **third tier toggle on the `mesa.html` cliff chart** and the
+**expanded policy chip grid**. Phase 7 v2 serves *only* that one
+Phase 8 v2 sub-item - it does not subsume the best-cell/worst-cell
+replay or the Axis-A/SAE-redux deferred items.
+
+### 14.6 Pre-registered decision gate
+
+Before committing to v2, the go/no-go is pinned here so the choice is
+not made implicitly mid-run:
+
+- **GO (full v2):** the §14.4 measurement shows the ~12-policy Large
+  cross-product completes within the project's acceptable wall-clock
+  budget (operator-defined; suggested default: a single Large policy
+  trains to its 100M-step cap in under ~24h pure-JS, making the full
+  set a multi-day-but-tractable batch).
+- **DOWN-SCOPE (cliff-subset v2):** if full Large is intractable,
+  train Large *only* on the cliff-relevant L-Mixed subset
+  (`lambda ∈ {0.90, 0.95, 0.97, 0.99}`) plus L-Signature-terminal and
+  L-Reward anchors - ~6 policies. This still delivers the Phase 8 v2
+  third-tier toggle on the program-significant boundary, at roughly
+  half the training cost. The probe x intervention cross-product can
+  also be scoped to the cliff cells only.
+- **DEFER (stay v1):** if even the cliff-subset Large training is
+  intractable on local compute, v2 is deferred. The Phase 8 v2
+  third-tier toggle is dropped from scope and `mesa.html` stays at
+  the Small/Medium two-tier presentation. This is an acceptable
+  outcome - it is a compute-budget boundary, not a claim failure;
+  the v1 "partially holds" envelope verdict is unaffected.
+
+The decision is the operator's; this spec's job is to make all three
+branches explicit and grounded so the choice is informed. No v2
+training starts until the §14.4 measurement is recorded and a branch
+above is selected in writing (mirroring the mesa "pre-registered
+negative" discipline).
+
+## 15. Versioning
 
 - **v1 (2026-05-12)** - initial pin. Read-only Small/Medium aggregation,
   no new training, no full probe x intervention cross-product, Phase 6
@@ -411,3 +533,9 @@ classification rows.
 - **v1.1 (2026-05-12)** - implementation alignment. Adds the dedicated
   `reports/breach-threshold.csv` output and clarifies that pocket reports,
   not `aggregate-envelope.csv` alone, carry the envelope details.
+- **v2-scoping (2026-05-14)** - added §14 v2 Scope and Decision Gate:
+  compute-model statement (local, zero-API), v2 scope delta over v1,
+  grounded cell-count math, the per-env-step measurement that gates
+  feasibility, the Phase 8 v2 linkage, and a pre-registered
+  GO / DOWN-SCOPE / DEFER decision gate. This is a decision aid; the
+  full v2 implementation spec is written only after the gate clears.
