@@ -43,8 +43,9 @@ different control problems, not as sign-flipped versions of one policy.
 
 **Honor smoke-gate negatives.** If a boundary cell fails, stop the branch and
 record the failure instead of widening the sweep to average it away. Phase 13's
-low-velocity risky cells are exactly the kind of negative Mesa taught us to
-keep visible.
+full lock passed the high-velocity horizon test, but all risky/negative best
+cells stayed in the `velocityScale=0.95` band, with all 5 negative cells at mass
+ratio `1`. That is exactly the kind of boundary Mesa taught us to keep visible.
 
 ## 3. HaloSim / Geometry Lessons for Threebody
 

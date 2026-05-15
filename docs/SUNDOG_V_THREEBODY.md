@@ -542,13 +542,13 @@ Current Phase 9 earned wording:
 > near-escape cells still show harms, and hazard-derived gates trade a smaller
 > candidate region for lower control effort.
 
-Current Phase 11 earned wording:
+Current Phase 13 earned wording:
 
 > In the tested planar restricted setup, the guarded accelerometer-proxy TRACK
-> controller improves survival over passive and naive local baselines in a
-> robust high-velocity near-escape pocket. The result is not global: lower
-> velocity and equal-mass boundary cells still expose controller harms, mostly
-> through controller-shortened passive survival and control effort/saturation.
+> controller improves survival over passive and naive local baselines across a
+> mapped high-velocity near-escape pocket through a 16-second tested horizon.
+> The result is not global: the low-velocity boundary, especially equal-mass
+> cells near `velocityScale=0.95`, still exposes controller harms.
 
 Do not claim:
 
@@ -657,17 +657,25 @@ Exit criterion: the project can say whether the Phase 11 positive pocket
 survives horizon extension, and can distinguish durable survival improvement
 from short-window delay.
 
-Initial Phase 13 smoke result:
+Phase 13 result:
 
 - `npm run threebody:phase13:smoke` emitted 32 trials under
   `results/threebody/phase13-long-horizon-smoke/` at `duration=16`.
-- The smoke found 2 candidate envelope rows out of 12. The high-velocity,
-  larger-radius cell (`radiusScale=1.075`, `velocityScale=1.1`) remains
-  promising: guarded accelerometer TRACK bounded both seeds while passive
-  bounded none, with mean time delta `+9.85` seconds and mean delta-v `1.948`.
-- The high-velocity, smaller-radius cell is neutral because passive already
-  survives both seeds. The lower-velocity boundary cells are risky, dominated by
-  `controller_destabilized_or_shortened_passive`.
+- `npm run threebody:phase13` emitted 3,456 trials under
+  `results/threebody/phase13-long-horizon-lock/` at `duration=16`.
+- The full lock found 88 candidate envelope rows out of 324: guarded TRACK 77,
+  heuristic oracle 11, naive local 0.
+- Best-cell class balance: 81 promising, 17 mixed, 5 risky, and 5 negative.
+  Guarded TRACK is the best controller in 100 of 108 cells; the heuristic oracle
+  is best in 8.
+- The high-velocity pocket survives horizon extension. `velocityScale=1.05`
+  and `1.15` are 27 / 27 promising; `velocityScale=1.1` is 19 / 27 promising
+  and 8 / 27 mixed, with no risky or negative cells.
+- The boundary remains visible. All risky and negative best cells sit at
+  `velocityScale=0.95`; all 5 negative cells are equal-mass cases.
+- Cost rate does not materially explode: guarded TRACK candidate rows use mean
+  delta-v `3.665` over 16 seconds (`0.229` per second), compared with Phase 11's
+  `1.741` over 8 seconds (`0.218` per second).
 - Summary: [`docs/threebody/PHASE13_RESULTS.md`](threebody/PHASE13_RESULTS.md).
 
 ### Cross-Substrate Hand-Offs
@@ -1007,14 +1015,16 @@ Current Phase 9 implementation:
   accelerometer TRACK, and a privileged heuristic oracle. Guarded TRACK produces
   81 candidate rows out of 81, the naive local baseline produces none, and the
   heuristic oracle produces 34 of 81.
-- Phase 13 next run: `npm run threebody:phase13:smoke` checks the longer
-  16-second horizon on a tiny pocket-plus-boundary slate. It emitted 32 trials,
-  kept the larger-radius high-velocity cell promising, left the smaller-radius
-  high-velocity cell neutral, and confirmed low-velocity boundary risk. See
+- Phase 13 long-horizon result: `npm run threebody:phase13` emits 3,456 trials
+  at `duration=16`. The lock passes with boundary sharpening: 88 / 324
+  candidate envelope rows, 81 / 108 promising best cells, guarded TRACK best in
+  100 / 108 cells, and no high-velocity risky/negative best cells. The
+  low-velocity `velocityScale=0.95` boundary contains all risky/negative cells,
+  including all 5 negative equal-mass cells. Cost rate stays comparable to
+  Phase 11 (`0.229` vs `0.218` delta-v per simulated second for guarded TRACK
+  candidate rows). See
   [`docs/threebody/PHASE13_RESULTS.md`](threebody/PHASE13_RESULTS.md).
-- Next work: run `npm run threebody:phase13` as the staged long-horizon lock,
-  then decide whether Phase 11 is durable control rather than short-window delay
-  before moving to the cross-substrate follow-ups in
+- Next work: move to the cross-substrate follow-ups in
   [`docs/threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md).
 
 **Interactive demonstration**: [threebody.html](../threebody.html)

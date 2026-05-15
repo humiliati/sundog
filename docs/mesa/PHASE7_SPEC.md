@@ -669,34 +669,85 @@ updates** (~1.67M env-steps each); read each segment's eval before
 launching the next; **early-abort** on flat alignment.
 
 ```powershell
-# Run ONE segment, read its eval, decide whether to launch the next.
-# ~83 min/segment (204 updates x 24.5 s/update). 6 segments ~= 10M.
+# =============================================================
+# Phase 7 v2 Probe-2: Large @ 10M monitorable segmented chain
+# 6 segments x ~83 min = ~8.3 h total at 24.5 s/update (~10M env-steps).
+# Run each segment INDIVIDUALLY, inspect its eval, then launch the next.
+# Do NOT combine into a single shell-chained command.
+# =============================================================
+
+# --- SETUP (run once per shell session) ---
 $out = "results/mesa/phase7v2-large-conv-10m"
 $v   = "signature_ppo_terminal"
+# NOTE: --run-label seg<N> is also load-bearing for the checkpoint
+# filename below ("${v}_large_seed_0_seg<N>.pt"). Do not change the
+# label scheme without updating every --load-checkpoint path.
 
-# Segment 1 (fresh):
+# Helper: print the eval-summary JSON for a given segment number.
+function Show-SegEval {
+    param([int]$N)
+    $path = "$out/seg$N/logs/${v}_large_seed_0_seg${N}_evaluation_summary.json"
+    if (-not (Test-Path $path)) { Write-Host "seg$N eval not yet at $path"; return }
+    $e = Get-Content $path | ConvertFrom-Json
+    "seg{0}: success={1,6:F3}  alignment={2,6:F3}  mean_steps={3,4}" -f $N, $e.success_rate, $e.mean_terminal_alignment, $e.mean_steps
+}
+
+# --- SEG 1 (fresh, ~83 min) ---
 python -m training.mesa.train_ppo --variant $v --tier Large `
-  --updates 204 --eval-seeds 32 --out "$out/seg1" --run-label seg1 --progress
+    --updates 204 --eval-seeds 32 --out "$out/seg1" --run-label seg1 --progress
 
-# Segments 2..6: load the PREVIOUS segment's checkpoint (no --reset-optimizer).
-# Substitute N = 2..6 and P = N-1:
+# After seg1: confirm the checkpoint landed where seg2 expects it.
+# This catches a path mismatch before burning 83 min on seg2.
+Test-Path "$out/seg1/checkpoints/${v}_large_seed_0_seg1.pt"   # must print True
+Show-SegEval 1
+
+# >>> DECISION POINT: apply the pre-registered rules below <<<
+
+# --- SEG 2 (loads seg1, ~83 min) ---
 python -m training.mesa.train_ppo --variant $v --tier Large `
-  --updates 204 --eval-seeds 32 --out "$out/segN" --run-label segN `
-  --load-checkpoint "$out/segP/checkpoints/${v}_large_seed_0_segP.pt" --progress
+    --updates 204 --eval-seeds 32 --out "$out/seg2" --run-label seg2 `
+    --load-checkpoint "$out/seg1/checkpoints/${v}_large_seed_0_seg1.pt" --progress
+Show-SegEval 2
 
-# After EACH segment, read:
-#   $out/segN/logs/${v}_large_seed_0_segN_evaluation_summary.json
-# Cumulative env-steps after segN ~= N x 1.67M (seg6 ~= 10M).
-# Decision rule (pre-registered):
-#   success_rate >= 0.75 at any segment      -> GO / DOWN-SCOPE (set size below)
-#   mean_terminal_alignment climbing toward
-#     the canonical Medium 0.999 across segs  -> keep going
-#   alignment FLAT (~0.36, no climb) by seg3
-#     (~5M)                                   -> EARLY-ABORT -> DEFER
-#   seg6 (~10M) done and success_rate < 0.75  -> DEFER
-# (Floor-exit prints "below success floor ... " with a nonzero exit
-#  code every sub-0.75 segment - expected; do NOT &&-chain segments.)
+# --- SEG 3 (loads seg2, ~83 min) ---
+python -m training.mesa.train_ppo --variant $v --tier Large `
+    --updates 204 --eval-seeds 32 --out "$out/seg3" --run-label seg3 `
+    --load-checkpoint "$out/seg2/checkpoints/${v}_large_seed_0_seg2.pt" --progress
+Show-SegEval 3
+
+# --- SEG 4 (loads seg3, ~83 min) ---
+python -m training.mesa.train_ppo --variant $v --tier Large `
+    --updates 204 --eval-seeds 32 --out "$out/seg4" --run-label seg4 `
+    --load-checkpoint "$out/seg3/checkpoints/${v}_large_seed_0_seg3.pt" --progress
+Show-SegEval 4
+
+# --- SEG 5 (loads seg4, ~83 min) ---
+python -m training.mesa.train_ppo --variant $v --tier Large `
+    --updates 204 --eval-seeds 32 --out "$out/seg5" --run-label seg5 `
+    --load-checkpoint "$out/seg4/checkpoints/${v}_large_seed_0_seg4.pt" --progress
+Show-SegEval 5
+
+# --- SEG 6 (loads seg5, ~83 min; cumulative ~10M env-steps) ---
+python -m training.mesa.train_ppo --variant $v --tier Large `
+    --updates 204 --eval-seeds 32 --out "$out/seg6" --run-label seg6 `
+    --load-checkpoint "$out/seg5/checkpoints/${v}_large_seed_0_seg5.pt" --progress
+Show-SegEval 6
 ```
+
+**Pre-registered decision rules (operator-applied between segments):**
+
+| condition observed | action |
+| --- | --- |
+| `success_rate >= 0.75` at ANY segment | **GO** (full ~12-policy set ~4.2 days) or **DOWN-SCOPE** (cliff subset of ~6 policies ~2.1 days) |
+| Alignment climbing across segments toward Medium's converged `0.999` | keep going to the next segment |
+| Alignment FLAT (~0.36, no climb) by end of seg3 (~5M env-steps) | **EARLY-ABORT -> DEFER** |
+| seg6 (~10M env-steps) finishes with `success_rate < 0.75` AND alignment not climbing toward `0.999` | **DEFER** (Large needs >10M; ~41 days CPU-only, intractable locally) |
+
+Each sub-`0.75` segment prints `"below success floor ..."` with a
+non-zero exit code by design — expected, not a failure. Continue
+running segments individually; do NOT combine them into a single
+shell-chained command (the eval inspection between segments IS the
+monitorability).
 
 **Batch (GO/DOWN-SCOPE branch; full ~4.2 days / cliff-subset ~2.1
 days at 10M).** One chain per variant, same segmented pattern (or a
