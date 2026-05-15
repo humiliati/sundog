@@ -159,6 +159,36 @@ authoritative.
    alternative substrates (absolute b\*, L\* magnitude, chromaticity
    magnitude — untested), polarization filtering, new calibration
    photos. All filed as Phase 10 backlog.
+10. **Pass C7.** **Landed 2026-05-14** (Phase 11 wave-2 W4 follow-up).
+    Reformulated the tangent-route test under the **canonical
+    literature inverse handle** (opening angle / arc extent per Tape
+    1994 Ch 6, verified on disk; Cowley tangent-arcs page) instead of
+    the project-original circle-fit curvature handle. Methodology:
+    column-orientation-only HaloSim ray-tracing at h = 18.6° (using
+    the project-pre-edited `halosim_p2_h18.6_columnonly.sim` plus the
+    user's GUI-edited equivalent, with column + random crystal blocks
+    active and the two plate-orientation blocks disabled), with the
+    pixel-to-degree scale locked per-render via the visible 22-deg
+    halo radius. 2D arc-locus search (radial scan at each azimuth)
+    extracted the canonical arc curve from the rendered ray density,
+    bypassing the project-original circle-fit assumption.
+    **Result: FALSIFIED the C5 hand-anchor circle fit under the
+    canonical handle.** C5's wings sit 1.2° too-far-radially at
+    azimuth ±17° (inner wings) and 5.6° too-far-radially at azimuth
+    ±25° (outer wings), with progressive over-extension consistent
+    with a too-tight circle-fit curvature. C5's full opening angle
+    (51°) matches the canonical arc's faint outer envelope (10%
+    threshold), not its bright body (50% threshold = 24°; 30%
+    threshold = 32°). **The C5↔C6 substrate tension resolves: C5
+    was the symmetry-bias artifact the C5 receipt hedged against**,
+    not a genuine recovery of the canonical inverse. Full numerical
+    receipt: [`docs/calibration/PASS_C7_OUTPUT.txt`](calibration/PASS_C7_OUTPUT.txt).
+    The tangent route remains unpromoted *including* under the
+    canonical literature handle. Cleanup of the §2.3 (v) framing
+    question in `PHASE10_OPTICAL_AUDIT_HANDOFF.md`: hedge replaced
+    with the C7 answer (no longer load-bearing for the specialist's
+    verify gate, though a third-party re-anchor on the canonical
+    curve is still an available check).
 7. **Pass B2.** **Landed 2026-05-14.** Re-derive the parhelion verdict against the
    now-finalized eligibility set. Runs last of the technical passes
    so the verdict reads from the post-A3 / post-C3 table.

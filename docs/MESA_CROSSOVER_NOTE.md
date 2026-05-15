@@ -564,13 +564,30 @@ synthetic memo §8.4), not on mesa's earned claim language.
 
 ### Open items, none blocking mesa
 
-1. **Geometry W4 follow-up — Tape §6 opening-angle / arc-extent
-   tangent inverse as a candidate Pass C7.** Project-internal
-   investigation, doesn't depend on specialist reply. If positive, the
-   tangent route moves from "C5↔C6 substrate tension" to "passes
-   under the canonical-handle reformulation," which would add a third
-   promoted inverse route on the geometry side and a corresponding
-   refinement to the in-the-wild receipt for the gravity claim.
+1. ~~**Geometry W4 follow-up — Tape §6 opening-angle / arc-extent
+   tangent inverse as a candidate Pass C7.**~~ **CLOSED 2026-05-14
+   — Pass C7 landed; receipt at
+   [`docs/calibration/PASS_C7_OUTPUT.txt`](calibration/PASS_C7_OUTPUT.txt).**
+   The canonical-handle reformulation tested C5's circle fit against
+   HaloSim ray-tracing under the column-orientation tilt-dispersion
+   assumption (0.1° per Cowley's HaloSim 22-deg-halo.sim defaults).
+   **Verdict: C5's circle fit is geometrically inconsistent with the
+   canonical literature arc curve at h = 18.6° — C5 places wings
+   1.2-5.6° too-far-radially, progressively with azimuth.** The
+   C5↔C6 substrate tension resolves: C5 was likely the symmetry-bias
+   artifact the C5 receipt hedged against, not a genuine recovery.
+   The tangent route remains unpromoted *including* under the canonical
+   handle. **Mesa transferable lesson:** the canonical-vs-project-original
+   inverse-handle distinction in §Wave-2 W4 above is now empirically
+   anchored on the geometry side; mesa's net.7 entangled-5D substrate
+   analog should treat "canonical-handle test against an independent
+   ground truth" as a discipline pattern worth importing if Phase 8 v2
+   work surfaces a similar handle-vs-substrate ambiguity.
+   Net change to the gravity-ledger "in-the-wild receipt": none —
+   forward/inverse asymmetry receipt was already 3-photo strict on
+   parhelion-offset only; tangent route remains unpromoted, just now
+   for *two* independent reasons (C6 + C7) rather than one (C6 with
+   C5↔C6 tension flagged).
 2. **Specialist reply on handoff §2.8 (p7 mechanism question).**
    External dependency. If specialist confirms mis-attribution, strict
    3-photo wording cascades through handoff §1, packet §2 item 3,
