@@ -732,7 +732,8 @@ warning-quality readout.
 Implementation-grade spec and result note:
 
 - [`docs/threebody/PHASE15_SPEC.md`](threebody/PHASE15_SPEC.md)
-- `docs/threebody/PHASE15_RESULTS.md` (pending the full lock)
+- [`docs/threebody/PHASE15_RESULTS.md`](threebody/PHASE15_RESULTS.md) (pending
+  smoke and the full lock)
 
 Commands:
 
@@ -748,8 +749,9 @@ the Phase 14 agreement metric failed. Pre-registered negative: a positive
 outcome envelope without privileged one-step counterfactual hazard improvement
 does not support a causal-control claim.
 
-Status: spec pre-registered 2026-05-15; pending lock review. No Phase 15
-harness code has been written or run.
+Status: spec pre-registered and lock-reviewed 2026-05-15. No Phase 15 harness
+code has been written or run; smoke must stop for `D_smoke` readback before the
+full lock starts.
 
 ### Cross-Substrate Hand-Offs
 

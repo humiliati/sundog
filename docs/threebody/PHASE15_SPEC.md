@@ -31,16 +31,18 @@ Phase 15 starts with eight pinned calls:
   boundary). Timesteps are `0.004, 0.006, 0.008, 0.01, 0.012`: the Phase 13/14
   steps plus two finer steps for the precision lock.
 - **Privileged forward oracle is explicitly non-deployable.** `forward_oracle_strict`
-  integrates its rollouts at `dt/8` with a 32-step horizon (privileged information a
-  runtime controller cannot pay for), identical 9-direction candidate set and
-  scoreState weights to the deployable `oracle`. It is a reference yardstick: its
-  candidate rows and best-cell wins are reported but never used to support or refute
-  the deployable claim. The existing `oracle` stays in the slate as a continuity
-  anchor.
+  chooses from the same 9-direction candidate set as the deployable `oracle`, but
+  scores each candidate over a 32-coarse-step horizon, with each coarse step
+  resolved by eight `dt/8` RK4 substeps and the same scoreState weighting shape as
+  the deployable `oracle`. It is a reference yardstick: its candidate rows and
+  best-cell wins are reported but never used to support or refute the deployable
+  claim. The existing `oracle` stays in the slate as a continuity anchor.
 - **Per-step counterfactual is measured against privileged read-only truth.** The
-  timing-sensitive coupling metric uses a privileged hazard potential `H = -energy`
-  evaluated on one-step `integrateStep` rollouts (actual action vs no-op vs
-  `forward_oracle_strict`), never the controller's possibly-ablated signal.
+  timing-sensitive coupling metric uses an energy-like hazard score
+  `H = computeSignatures(state).energy`, where lower is safer for the escape-risk
+  component, evaluated on one-step `integrateStep` rollouts (actual action vs
+  no-op vs the first action chosen by `forward_oracle_strict`), never the
+  controller's possibly-ablated signal.
 - **Warning quality is re-grounded.** The pre-registered warning-quality readout is
   `oracleHazardAuroc` (energy-precursor score, privileged forward-oracle hazard
   label), computed on passive trials only. The Phase 14 passive tidal-magnitude
@@ -66,8 +68,8 @@ Phase 15 owns:
   `--track-action-coupling` flag
 - `npm run threebody:phase15:smoke`
 - `npm run threebody:phase15`
-- Outputs under `results/threebody/phase15-forward-oracle-precision-lock-smoke/`
-- Outputs under `results/threebody/phase15-forward-oracle-precision-lock-lock/`
+- Outputs under `results/threebody/phase15-forward-oracle-precision-smoke/`
+- Outputs under `results/threebody/phase15-forward-oracle-precision-lock/`
 - `cell-precision-map.csv` (new additive output)
 - Result note [`PHASE15_RESULTS.md`](PHASE15_RESULTS.md)
 - Roadmap and writeup receipt bullets after the lock lands
@@ -99,8 +101,11 @@ The smoke covers mass ratio `1`, timesteps `0.004` and `0.012`, radii `1.025` an
 `track_sensor_accel_guarded`, `track_sensor_accel_signal_shuffle`,
 `track_sensor_accel_action_shuffle`, `track_sensor_accel_signal_delay`,
 `track_sensor_accel_sign_flip`, `oracle`, `forward_oracle_strict`), and two seeds at
-`duration=16`. That is 8 cases and 144 trials. The smoke spans the ladder extremes so
-the precision-map proxy and the passive energy-drift measurement are exercised.
+`duration=16`. That is 8 cases and 144 trials. At `dt=0.004`, each actual trial has
+4,000 simulation steps; the strict oracle is expensive because each oracle decision
+evaluates 9 candidates over 32 coarse steps x 8 substeps. The smoke spans the
+ladder extremes so the precision-map proxy and the passive energy-drift measurement
+are exercised.
 
 The full lock covers:
 
@@ -114,9 +119,11 @@ The full lock covers:
 
 That is 180 cases, 12,960 trials, 11,520 paired non-passive rows, and 1,440 envelope
 rows; candidate envelope rows are reported as `N / 1,440`. The finer timesteps and
-the `dt/8` strict oracle make this materially heavier per trial than Phase 13/14;
-treat the full lock as a multi-hour staged operator run under the repository's
-long-run rule (a linear-from-Phase-13 estimate is a lower bound, not a promise).
+the strict oracle make this materially heavier per trial than Phase 13/14; treat
+the full lock as a multi-hour staged operator run under the repository's long-run
+rule (a linear-from-Phase-13 estimate is a lower bound, not a promise).
+Implementation must run the smoke, record `D_smoke`, and stop for readback before
+the full lock is started.
 
 Two exact unchanged regression commands are rerun and reported pass/fail **before
 any Phase 15 column is interpreted**; both are hard-void gates:
@@ -165,7 +172,8 @@ Primary metrics, reported per arm and per timestep:
 Operational definitions:
 
 - Per-step counterfactual is evaluated only on non-warmup steps with
-  `|thrust| > 1e-6`. Hazard potential `H(state) = -computeSignatures(state).energy`.
+  `|thrust| > 1e-6`. Hazard score `H(state) = computeSignatures(state).energy`;
+  lower `H` is safer for the escape-risk component of this test.
   At each eligible step, one-step `integrateStep` rollouts from the realized state
   give `H(noop)`, `H(actual)`, `H(oracleStrict)`; `effectVsNoop = H(noop) −
   H(actual)`; `normalizer = max(|H(noop) − H(oracleStrict)|, 1e-9)`;
@@ -173,10 +181,13 @@ Operational definitions:
   `counterfactualMeanEffect` = mean over eligible steps. The oracle/no-op rollouts
   use the privileged read-only `forward_oracle_strict` and `[0,0]`, never the
   controller's signal.
+  `H(oracleStrict)` means the one-step state reached by applying the first action
+  selected by `forward_oracle_strict` and then integrating one normal `dt` step;
+  it is not the endpoint of the strict oracle's internal 32-step scoring rollout.
 - `oracleHazardAuroc` is computed on passive/off trials only, score channel
-  `-energy`, label positive iff `forward_oracle_strict` (dt/8, 32-step) rollouts
-  from the sample state reach `r3 > escapeRadius` or `minPrimaryDistance <
-  closeApproachRadius`. AUROC-null cells are reported as coverage, not successes. A
+  `energy`, label positive iff `forward_oracle_strict` rollouts from the sample
+  state reach `r3 > escapeRadius` or `minPrimaryDistance < closeApproachRadius`.
+  AUROC-null cells are reported as coverage, not successes. A
   pass on warning quality requires mean defined `oracleHazardAuroc >= 0.70` and at
   least two thirds of favorable high-velocity cells with defined passive
   `oracleHazardAuroc`; otherwise warning quality is partial/undecidable.
@@ -236,7 +247,7 @@ redesign, not bigger sweeps.
 **Pre-registered negative (explicit):** if the frozen guarded arm retains its
 candidate envelope at finer timesteps but `counterfactualMeanEffect <= 0` for intact
 control in the favorable pocket (the privileged one-step counterfactual shows the
-controller's actions do not improve the hazard potential versus no-op), this is
+controller's actions do not improve the hazard score versus no-op), this is
 registered as a mechanism negative even with a positive outcome envelope: outcome
 survival without privileged-counterfactual hazard improvement does not support a
 causal-control claim. The survival wording is preserved; any "signal-directed
