@@ -722,6 +722,35 @@ Phase 14 result:
   delay retains 48 candidate rows.
 - Summary: [`docs/threebody/PHASE14_RESULTS.md`](threebody/PHASE14_RESULTS.md).
 
+### Phase 15 - Forward-Oracle / Precision Lock
+
+Goal: test whether the Phase 13/14 high-velocity pocket survives stricter
+numerical and privileged forward checks, and resolve the Phase 14 mechanism
+question with a timing-sensitive per-step counterfactual and a re-grounded
+warning-quality readout.
+
+Implementation-grade spec and result note:
+
+- [`docs/threebody/PHASE15_SPEC.md`](threebody/PHASE15_SPEC.md)
+- `docs/threebody/PHASE15_RESULTS.md` (pending the full lock)
+
+Commands:
+
+```bash
+npm run threebody:phase15:smoke
+npm run threebody:phase15
+```
+
+Exit criterion: the project can say whether the pocket survives finer timesteps
+and a privileged forward oracle, and whether the per-step counterfactual cleanly
+separates intact signal-directed control from shuffled/mistimed control where
+the Phase 14 agreement metric failed. Pre-registered negative: a positive
+outcome envelope without privileged one-step counterfactual hazard improvement
+does not support a causal-control claim.
+
+Status: spec pre-registered 2026-05-15; pending lock review. No Phase 15
+harness code has been written or run.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
