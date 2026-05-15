@@ -83,6 +83,7 @@ function parseArgs(argv) {
     else if (flag === "--candidate-max-worsened-rate") args.candidateMaxWorsenedRate = Number.parseFloat(value);
     else if (flag === "--candidate-min-survival-delta") args.candidateMinSurvivalDelta = Number.parseFloat(value);
     else if (flag === "--track-action-coupling") args.trackActionCoupling = !["0", "false", "no"].includes(String(value).toLowerCase());
+    else if (flag === "--precision-receipts") args.precisionReceipts = !["0", "false", "no"].includes(String(value).toLowerCase());
     else throw new Error(`Unknown flag: ${flag}`);
   }
 
@@ -381,6 +382,7 @@ function makeTrialConfig(args, envelopeCase, seed, regime, mode, guardThresholds
     trackGuardMaxLocalAcceleration: thresholds.trackGuardMaxLocalAcceleration,
     trackGuardMaxTidalMagnitude: thresholds.trackGuardMaxTidalMagnitude,
     trackActionCoupling: args.trackActionCoupling ?? false,
+    precisionReceipts: args.precisionReceipts ?? false,
     initialParticle: scaleInitialParticle(baseParticle, envelopeCase.radiusScale, envelopeCase.velocityScale),
   });
 }
@@ -432,6 +434,29 @@ function makePairedRows(trials) {
       passiveMaxRadius: passive?.summary.maxRadius,
       tidalMagnitudeAuroc: trial.summary.tidalMagnitudeAuroc,
       localAccelerationMagnitudeAuroc: trial.summary.localAccelerationMagnitudeAuroc,
+      ...(trial.summary.counterfactualEligibleSteps !== undefined
+        ? {
+          counterfactualEligibleSteps: trial.summary.counterfactualEligibleSteps,
+          counterfactualMeanEffect: trial.summary.counterfactualMeanEffect,
+          counterfactualPositiveRate: trial.summary.counterfactualPositiveRate,
+          meanGapToOracle: trial.summary.meanGapToOracle,
+        }
+        : {}),
+      ...(trial.summary.finalRelEnergyDrift !== undefined
+        ? {
+          finalRelEnergyDrift: trial.summary.finalRelEnergyDrift,
+          maxAbsEnergyDrift: trial.summary.maxAbsEnergyDrift,
+          passiveFinalRelEnergyDrift: passive ? passive.summary.finalRelEnergyDrift : null,
+          passiveMaxAbsEnergyDrift: passive ? passive.summary.maxAbsEnergyDrift : null,
+        }
+        : {}),
+      ...(passive?.summary.oracleHazardAuroc !== undefined
+        ? {
+          passiveOracleHazardAuroc: passive.summary.oracleHazardAuroc,
+          passiveOracleHazardSampleCount: passive.summary.oracleHazardSampleCount,
+          passiveOracleHazardPositiveSampleCount: passive.summary.oracleHazardPositiveSampleCount,
+        }
+        : {}),
       ...(trial.summary.actionCouplingEligibleSteps !== undefined
         ? {
           actionCouplingEligibleSteps: trial.summary.actionCouplingEligibleSteps,
@@ -503,6 +528,29 @@ function makeTrialOutcomeRows(pairedRows) {
     passive_max_radius: row.passiveMaxRadius,
     tidal_magnitude_auroc: row.tidalMagnitudeAuroc,
     local_acceleration_magnitude_auroc: row.localAccelerationMagnitudeAuroc,
+    ...(row.counterfactualEligibleSteps !== undefined
+      ? {
+        counterfactual_eligible_steps: row.counterfactualEligibleSteps,
+        counterfactual_mean_effect: row.counterfactualMeanEffect,
+        counterfactual_positive_rate: row.counterfactualPositiveRate,
+        mean_gap_to_oracle: row.meanGapToOracle,
+      }
+      : {}),
+    ...(row.finalRelEnergyDrift !== undefined
+      ? {
+        final_rel_energy_drift: row.finalRelEnergyDrift,
+        max_abs_energy_drift: row.maxAbsEnergyDrift,
+        passive_final_rel_energy_drift: row.passiveFinalRelEnergyDrift,
+        passive_max_abs_energy_drift: row.passiveMaxAbsEnergyDrift,
+      }
+      : {}),
+    ...(row.passiveOracleHazardAuroc !== undefined
+      ? {
+        passive_oracle_hazard_auroc: row.passiveOracleHazardAuroc,
+        passive_oracle_hazard_sample_count: row.passiveOracleHazardSampleCount,
+        passive_oracle_hazard_positive_sample_count: row.passiveOracleHazardPositiveSampleCount,
+      }
+      : {}),
     sensor_sample_count: row.sensorSampleCount,
     sensor_delay_warmup_count: row.sensorDelayWarmupCount,
     mean_sensor_magnitude_rel_error: row.meanSensorMagnitudeRelError,
@@ -618,6 +666,27 @@ function summarizeRows(rows, args, includeRegime = true) {
       meanGuardCalibrationSampleCount: roundMetric(mean(group.map((row) => row.guardCalibrationSampleCount))),
       meanTidalMagnitudeAuroc: roundMetric(mean(group.map((row) => row.tidalMagnitudeAuroc))),
       meanLocalAccelerationMagnitudeAuroc: roundMetric(mean(group.map((row) => row.localAccelerationMagnitudeAuroc))),
+      ...(group.some((row) => row.counterfactualEligibleSteps !== undefined)
+        ? {
+          meanCounterfactualMeanEffect: roundMetric(mean(group.map((row) => row.counterfactualMeanEffect))),
+          meanCounterfactualPositiveRate: roundMetric(mean(group.map((row) => row.counterfactualPositiveRate))),
+          meanGapToOracle: roundMetric(mean(group.map((row) => row.meanGapToOracle))),
+          totalCounterfactualEligibleSteps: group.reduce((sum, row) => sum + (row.counterfactualEligibleSteps ?? 0), 0),
+        }
+        : {}),
+      ...(group.some((row) => row.finalRelEnergyDrift !== undefined)
+        ? {
+          meanFinalRelEnergyDrift: roundMetric(mean(group.map((row) => row.finalRelEnergyDrift)), 10),
+          meanMaxAbsEnergyDrift: roundMetric(mean(group.map((row) => row.maxAbsEnergyDrift)), 10),
+          meanPassiveFinalRelEnergyDrift: roundMetric(mean(group.map((row) => row.passiveFinalRelEnergyDrift)), 10),
+          meanPassiveMaxAbsEnergyDrift: roundMetric(mean(group.map((row) => row.passiveMaxAbsEnergyDrift)), 10),
+          meanPassiveOracleHazardAuroc: roundMetric(mean(group.map((row) => row.passiveOracleHazardAuroc))),
+          meanPassiveOracleHazardSampleCount: roundMetric(mean(group.map((row) => row.passiveOracleHazardSampleCount))),
+          meanPassiveOracleHazardPositiveSampleCount: roundMetric(
+            mean(group.map((row) => row.passiveOracleHazardPositiveSampleCount)),
+          ),
+        }
+        : {}),
       ...(group.some((row) => row.actionCouplingEligibleSteps !== undefined)
         ? {
           meanActionCouplingAgreementRate: roundMetric(mean(group.map((row) => row.actionCouplingAgreementRate))),
@@ -724,6 +793,72 @@ function makeCellMatrixRows(bestByCellRows, valueKey) {
   ));
 }
 
+function precisionBaselineKey(row) {
+  return [
+    row.regime,
+    row.controllerMode,
+    row.massRatio,
+    row.radiusScale,
+    row.velocityScale,
+    row.thrustLimit,
+    row.sensorNoiseStd,
+    row.trackGuardMode,
+    row.trackGuardQuantile,
+    row.trackGuardMinRadius,
+    row.trackGuardMaxLocalAcceleration,
+    row.trackGuardMaxTidalMagnitude,
+  ].join("\t");
+}
+
+function makePrecisionMapRows(envelopeRows) {
+  const baselineRows = new Map();
+  for (const row of envelopeRows) {
+    if (row.timestep === 0.004) baselineRows.set(precisionBaselineKey(row), row);
+  }
+
+  return envelopeRows.map((row) => {
+    const baseline = baselineRows.get(precisionBaselineKey(row));
+    const integrationErrorProxy = baseline
+      && Number.isFinite(row.survivalDeltaVsPassive)
+      && Number.isFinite(baseline.survivalDeltaVsPassive)
+      ? Math.abs(row.survivalDeltaVsPassive - baseline.survivalDeltaVsPassive)
+      : null;
+    return {
+      regime: row.regime,
+      controllerMode: row.controllerMode,
+      massRatio: row.massRatio,
+      timestep: row.timestep,
+      radiusScale: row.radiusScale,
+      velocityScale: row.velocityScale,
+      thrustLimit: row.thrustLimit,
+      sensorNoiseStd: row.sensorNoiseStd,
+      trackGuardMode: row.trackGuardMode,
+      trackGuardQuantile: row.trackGuardQuantile,
+      candidateEnvelope: row.candidateEnvelope,
+      regionClass: row.regionClass,
+      survivalDeltaVsPassive: row.survivalDeltaVsPassive,
+      baselineTimestep: baseline ? baseline.timestep : null,
+      baselineSurvivalDeltaVsPassive: baseline ? baseline.survivalDeltaVsPassive : null,
+      integrationErrorProxy: roundMetric(integrationErrorProxy),
+      meanPassiveFinalRelEnergyDrift: row.meanPassiveFinalRelEnergyDrift,
+      meanPassiveMaxAbsEnergyDrift: row.meanPassiveMaxAbsEnergyDrift,
+      meanCounterfactualMeanEffect: row.meanCounterfactualMeanEffect,
+      meanCounterfactualPositiveRate: row.meanCounterfactualPositiveRate,
+      meanGapToOracle: row.meanGapToOracle,
+      meanPassiveOracleHazardAuroc: row.meanPassiveOracleHazardAuroc,
+      meanPassiveOracleHazardSampleCount: row.meanPassiveOracleHazardSampleCount,
+      meanPassiveOracleHazardPositiveSampleCount: row.meanPassiveOracleHazardPositiveSampleCount,
+    };
+  }).sort((a, b) => (
+    a.regime.localeCompare(b.regime)
+    || a.massRatio - b.massRatio
+    || a.radiusScale - b.radiusScale
+    || a.velocityScale - b.velocityScale
+    || a.timestep - b.timestep
+    || a.controllerMode.localeCompare(b.controllerMode)
+  ));
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(repoRoot, args.out);
@@ -821,9 +956,10 @@ async function main() {
   const cellClassMapRows = makeCellMatrixRows(bestByCellRows, "bestRegionClass");
   const cellDeltaMapRows = makeCellMatrixRows(bestByCellRows, "bestSurvivalDeltaVsPassive");
   const candidateRows = envelopeRows.filter((row) => row.candidateEnvelope);
+  const cellPrecisionMapRows = args.precisionReceipts ? makePrecisionMapRows(envelopeRows) : null;
 
   let cellWarningQualityMapRows = null;
-  if (args.trackActionCoupling) {
+  if (args.trackActionCoupling || args.precisionReceipts) {
     const warningGroups = new Map();
     for (const row of envelopeRows) {
       const key = `${row.regime}\t${row.massRatio}\t${row.timestep}\t${row.radiusScale}\t${row.velocityScale}`;
@@ -838,10 +974,12 @@ async function main() {
         timestep: Number.parseFloat(timestepText),
         radiusScale: Number.parseFloat(radiusScaleText),
         velocityScale: Number.parseFloat(velocityScaleText),
-        meanPassiveTidalMagnitudeAuroc: roundMetric(mean(rows.map((row) => row.meanPassiveTidalMagnitudeAuroc))),
+        meanPassiveWarningAuroc: args.precisionReceipts
+          ? roundMetric(mean(rows.map((row) => row.meanPassiveOracleHazardAuroc)))
+          : roundMetric(mean(rows.map((row) => row.meanPassiveTidalMagnitudeAuroc))),
       };
     });
-    cellWarningQualityMapRows = makeCellMatrixRows(warningRows, "meanPassiveTidalMagnitudeAuroc");
+    cellWarningQualityMapRows = makeCellMatrixRows(warningRows, "meanPassiveWarningAuroc");
   }
 
   await writeFile(path.join(outDir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
@@ -854,6 +992,9 @@ async function main() {
   await writeFile(path.join(outDir, "cell-delta-map.csv"), rowsToCsv(cellDeltaMapRows), "utf8");
   if (cellWarningQualityMapRows) {
     await writeFile(path.join(outDir, "cell-warning-quality-map.csv"), rowsToCsv(cellWarningQualityMapRows), "utf8");
+  }
+  if (cellPrecisionMapRows) {
+    await writeFile(path.join(outDir, "cell-precision-map.csv"), rowsToCsv(cellPrecisionMapRows), "utf8");
   }
   await writeFile(
     path.join(outDir, "candidate-envelope.csv"),
@@ -868,6 +1009,7 @@ async function main() {
 
   console.log(`[threebody] wrote ${manifest.trials.length} ${args.phase} trials to ${path.relative(repoRoot, outDir)}`);
   console.log(`[threebody] wrote trial-outcomes.csv, paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv`);
+  if (cellPrecisionMapRows) console.log("[threebody] wrote cell-precision-map.csv");
   console.log(`[threebody] candidate envelope rows ${candidateRows.length}/${envelopeRows.length}`);
   console.log(`[threebody] outcomes ${JSON.stringify(outcomeCounts)}`);
 }

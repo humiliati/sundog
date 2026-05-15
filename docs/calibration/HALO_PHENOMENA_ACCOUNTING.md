@@ -393,8 +393,16 @@ halos".
   negative for P3: 1M gave 0 clean rings, 6M gave 1 marginal ring, and the
   8-frame 4M ray-filter isolation run gave 1 strong ring (4.6σ), still
   below the ≥3 azimuthally-separable rings required for a residual table.
-  The bottleneck is now the extraction method / split-sky projection, not
-  more rays or face-filter setup.
+  A fourth lever — HaloSim's own `Tools → Scale` instrument stamped on
+  all 8 wedge frames (`phase15_pyrfilter/pyr_w*_scale.png`) — likewise
+  could not anchor-validate (the stamped ruler's span is shorter than the
+  ring field; 6-fold symmetry still prevents per-wedge isolation), and
+  the read script refused to tabulate. **Disposition (closed strategy
+  decision, not a deferred task): P2 is this evidence chain's ceiling.**
+  Four fundamentally different methods (1M / 6M / 8×ray-filter /
+  8×HaloSim-Scale) were exhausted with the no-fabrication gate holding
+  every time; P3 needs a fundamentally different setup and is out of
+  scope here. Canonical detail: [`SPECULATIVE_HALO_PROOFS.md`](SPECULATIVE_HALO_PROOFS.md).
 
 ### Lowitz arcs · upper / middle / lower Lowitz
 - **Predicts:** 60° prism refraction under **Lowitz orientation** (crystal

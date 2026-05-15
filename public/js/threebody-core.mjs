@@ -24,6 +24,7 @@ export const DEFAULT_THREEBODY_CONFIG = Object.freeze({
   trackGuardMinRadius: 1.15,
   trackGuardMaxLocalAcceleration: 2.5,
   trackGuardMaxTidalMagnitude: 35,
+  precisionReceipts: false,
   logEvery: 10,
 });
 
@@ -648,6 +649,127 @@ function computeOracleThrust(state, config) {
   return bestThrust;
 }
 
+function oracleScoreState(simState, thrustCost, config) {
+  const positions = simState.slice(0, 6);
+  const velocities = simState.slice(6, 12);
+  const x3 = positions[4];
+  const y3 = positions[5];
+  const vx3 = velocities[4];
+  const vy3 = velocities[5];
+  const radius = Math.sqrt(x3 * x3 + y3 * y3);
+  const speed = Math.sqrt(vx3 * vx3 + vy3 * vy3);
+  let minPrimaryDistance = Infinity;
+  for (let i = 0; i < 2; i += 1) {
+    const dx = x3 - positions[i * 2];
+    const dy = y3 - positions[i * 2 + 1];
+    minPrimaryDistance = Math.min(minPrimaryDistance, Math.sqrt(dx * dx + dy * dy));
+  }
+  const tidal = computeTidalTensor(simState, config);
+  const targetError = Math.abs(tidal.magnitude - config.targetTidal);
+  const closePenalty = minPrimaryDistance < config.closeApproachRadius
+    ? 1_000
+    : 1 / Math.max(minPrimaryDistance, 0.04) ** 2;
+  const escapePenalty = radius > config.escapeRadius ? 1_000 : Math.max(0, radius - 1.8) ** 2;
+  return (
+    8 * closePenalty
+    + 3 * escapePenalty
+    + 0.12 * speed * speed
+    + 0.002 * targetError
+    + 0.05 * thrustCost
+  );
+}
+
+function oracleCandidateThrusts(config) {
+  return [
+    [0, 0],
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+    [Math.SQRT1_2, Math.SQRT1_2],
+    [Math.SQRT1_2, -Math.SQRT1_2],
+    [-Math.SQRT1_2, Math.SQRT1_2],
+    [-Math.SQRT1_2, -Math.SQRT1_2],
+  ].map(([x, y]) => [
+    x * config.thrustLimit,
+    y * config.thrustLimit,
+  ]);
+}
+
+function stateHasTerminalHazard(state, config) {
+  const positions = state.slice(0, 6);
+  const x3 = positions[4];
+  const y3 = positions[5];
+  const r3 = Math.sqrt(x3 * x3 + y3 * y3);
+  let minPrimaryDistance = Infinity;
+  for (let i = 0; i < 2; i += 1) {
+    const dx = x3 - positions[i * 2];
+    const dy = y3 - positions[i * 2 + 1];
+    minPrimaryDistance = Math.min(minPrimaryDistance, Math.sqrt(dx * dx + dy * dy));
+  }
+  return r3 > config.escapeRadius || minPrimaryDistance < config.closeApproachRadius;
+}
+
+function computeStrictOracleDetails(state, config) {
+  const cfg = normalizeConfig(config);
+  const candidates = oracleCandidateThrusts(cfg);
+  const horizonSteps = 32;
+  const substeps = 8;
+  const subDt = cfg.dt / substeps;
+
+  let bestThrust = [0, 0];
+  let bestScore = Infinity;
+  let bestHazardReached = false;
+
+  for (const thrust of candidates) {
+    let simState = state;
+    let score = 0;
+    let hazardReached = false;
+    const thrustCost = Math.sqrt(thrust[0] * thrust[0] + thrust[1] * thrust[1]);
+    for (let step = 0; step < horizonSteps; step += 1) {
+      for (let substep = 0; substep < substeps; substep += 1) {
+        simState = integrateStep(simState, subDt, cfg, thrust);
+        if (stateHasTerminalHazard(simState, cfg)) hazardReached = true;
+      }
+      score += oracleScoreState(simState, thrustCost, cfg) * (1 + step / horizonSteps);
+    }
+    if (score < bestScore) {
+      bestScore = score;
+      bestThrust = thrust;
+      bestHazardReached = hazardReached;
+    }
+  }
+
+  return {
+    thrust: bestThrust,
+    score: bestScore,
+    hazardReached: bestHazardReached,
+  };
+}
+
+function computeStrictOracleThrust(state, config) {
+  return computeStrictOracleDetails(state, config).thrust;
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function computeCounterfactualReceipt(state, thrust, config, oracleStrictThrust) {
+  const noopState = integrateStep(state, config.dt, config, [0, 0]);
+  const actualState = integrateStep(state, config.dt, config, thrust);
+  const oracleState = integrateStep(state, config.dt, config, oracleStrictThrust);
+  const noopEnergy = computeSignatures(noopState, config).energy;
+  const actualEnergy = computeSignatures(actualState, config).energy;
+  const oracleEnergy = computeSignatures(oracleState, config).energy;
+  const effectVsNoop = noopEnergy - actualEnergy;
+  const normalizer = Math.max(Math.abs(noopEnergy - oracleEnergy), 1e-9);
+  return {
+    score: clamp(effectVsNoop / normalizer, -1, 1),
+    gapToOracle: actualEnergy - oracleEnergy,
+  };
+}
+
 export function computeControlThrust(state, controllerState = {}, config = {}) {
   const cfg = normalizeConfig(config);
   const mode = cfg.controllerMode;
@@ -668,6 +790,8 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
     [thrustX, thrustY] = computeNaiveLocalThrust(state, cfg);
   } else if (mode === "oracle") {
     [thrustX, thrustY] = computeOracleThrust(state, cfg);
+  } else if (mode === "forward_oracle_strict") {
+    [thrustX, thrustY] = computeStrictOracleThrust(state, cfg);
   } else if (
     mode === "seek"
     || mode === "track"
@@ -927,6 +1051,16 @@ export function summarizeEventDiagnostics(eventHistory, config = {}) {
     cfg,
   );
   const localAccelerationAuroc = computeAuroc(localAccelerationSamples);
+  const oracleHazardSamples = cfg.precisionReceipts
+    ? eventHistory
+      .filter((entry) => Number.isFinite(entry.oracleHazardScore) && typeof entry.oracleHazardLabel === "boolean")
+      .map((entry) => ({
+        time: entry.time,
+        score: entry.oracleHazardScore,
+        label: entry.oracleHazardLabel,
+      }))
+    : [];
+  const oracleHazardAuroc = cfg.precisionReceipts ? computeAuroc(oracleHazardSamples) : null;
 
   return {
     ...thresholdMetrics,
@@ -935,6 +1069,13 @@ export function summarizeEventDiagnostics(eventHistory, config = {}) {
     localAccelerationMagnitudeAuroc: localAccelerationAuroc === null
       ? null
       : roundNumber(localAccelerationAuroc, 6),
+    ...(cfg.precisionReceipts
+      ? {
+        oracleHazardAuroc: oracleHazardAuroc === null ? null : roundNumber(oracleHazardAuroc, 6),
+        oracleHazardSampleCount: oracleHazardSamples.length,
+        oracleHazardPositiveSampleCount: oracleHazardSamples.filter((sample) => sample.label).length,
+      }
+      : {}),
   };
 }
 
@@ -943,6 +1084,9 @@ export function runTrial(config = {}) {
   const steps = Math.max(1, Math.round(cfg.duration / cfg.dt));
   const controllerState = { scanPhase: 0 };
   let state = initializeState(cfg);
+  const initialEnergy = computeSignatures(state, cfg).energy;
+  let finalEnergy = initialEnergy;
+  let maxAbsEnergyDrift = 0;
   const records = [];
   const eventHistory = [];
   const sensorAudit = [];
@@ -951,6 +1095,10 @@ export function runTrial(config = {}) {
   let acEligible = 0;
   let acPositive = 0;
   let acSignedSum = 0;
+  let cfEligible = 0;
+  let cfPositive = 0;
+  let cfSignedSum = 0;
+  let cfGapSum = 0;
 
   for (let step = 0; step <= steps; step += 1) {
     const time = step * cfg.dt;
@@ -961,6 +1109,25 @@ export function runTrial(config = {}) {
     const [localAx, localAy] = computeAcceleration(2, state.slice(0, 6), cfg);
     const localAccelerationMagnitude = Math.sqrt(localAx * localAx + localAy * localAy);
     const thrustMagnitude = Math.sqrt(thrust[0] * thrust[0] + thrust[1] * thrust[1]);
+    const shouldAuditStep = step % cfg.sensorAuditEvery === 0
+      || events.invalid
+      || events.escape
+      || events.closeApproach
+      || step === steps;
+    finalEnergy = signatures.energy;
+    if (cfg.precisionReceipts) {
+      maxAbsEnergyDrift = Math.max(maxAbsEnergyDrift, Math.abs(signatures.energy - initialEnergy));
+      if (!controllerState.stepWarmup && thrustMagnitude > 1e-6) {
+        const oracleStrictThrust = cfg.controllerMode === "forward_oracle_strict"
+          ? thrust
+          : computeStrictOracleThrust(state, cfg);
+        const counterfactual = computeCounterfactualReceipt(state, thrust, cfg, oracleStrictThrust);
+        cfEligible += 1;
+        if (counterfactual.score > 0) cfPositive += 1;
+        cfSignedSum += counterfactual.score;
+        cfGapSum += counterfactual.gapToOracle;
+      }
+    }
     if (cfg.trackActionCoupling) {
       const idealGradient = computeTidalGradient(state, cfg);
       const idealGradMagnitude = Math.sqrt(
@@ -975,16 +1142,26 @@ export function runTrial(config = {}) {
         acSignedSum += signedAlignment;
       }
     }
+    const oracleHazard = cfg.precisionReceipts && cfg.controllerMode === "off" && shouldAuditStep
+      ? computeStrictOracleDetails(state, cfg)
+      : null;
     eventHistory.push({
       time,
       events,
       tidalMagnitude: tidal.magnitude,
       localAccelerationMagnitude,
+      ...(cfg.precisionReceipts
+        ? {
+          energy: signatures.energy,
+          oracleHazardScore: oracleHazard ? signatures.energy : null,
+          oracleHazardLabel: oracleHazard ? oracleHazard.hazardReached : null,
+        }
+        : {}),
     });
 
     if (
       cfg.sensorAuditVariants.length > 0
-      && (step % cfg.sensorAuditEvery === 0 || events.invalid || events.escape || events.closeApproach || step === steps)
+      && shouldAuditStep
     ) {
       for (const variant of cfg.sensorAuditVariants) {
         if (!sensorStates.has(variant)) sensorStates.set(variant, {});
@@ -1039,6 +1216,13 @@ export function runTrial(config = {}) {
           T_yy: roundNumber(tidal.T_yy),
         },
         localAccelerationMagnitude: roundNumber(localAccelerationMagnitude),
+        ...(cfg.precisionReceipts
+          ? {
+            energyDrift: roundNumber(signatures.energy - initialEnergy),
+            oracleHazardScore: oracleHazard ? roundNumber(signatures.energy) : null,
+            oracleHazardLabel: oracleHazard ? oracleHazard.hazardReached : null,
+          }
+          : {}),
         events: {
           ...events,
           minPrimaryDistance: roundNumber(events.minPrimaryDistance),
@@ -1063,6 +1247,16 @@ export function runTrial(config = {}) {
       totalDeltaV: roundNumber(totalDeltaV),
       loggedRecords: records.length,
       simulatedTime: records.at(-1)?.time ?? 0,
+      ...(cfg.precisionReceipts
+        ? {
+          finalRelEnergyDrift: roundNumber(Math.abs(finalEnergy - initialEnergy) / Math.max(Math.abs(initialEnergy), 1e-9), 10),
+          maxAbsEnergyDrift: roundNumber(maxAbsEnergyDrift, 10),
+          counterfactualEligibleSteps: cfEligible,
+          counterfactualMeanEffect: cfEligible > 0 ? roundNumber(cfSignedSum / cfEligible, 6) : null,
+          counterfactualPositiveRate: cfEligible > 0 ? roundNumber(cfPositive / cfEligible, 6) : null,
+          meanGapToOracle: cfEligible > 0 ? roundNumber(cfGapSum / cfEligible, 8) : null,
+        }
+        : {}),
       ...(cfg.trackActionCoupling
         ? {
           actionCouplingEligibleSteps: acEligible,

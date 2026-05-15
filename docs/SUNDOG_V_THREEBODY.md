@@ -749,8 +749,9 @@ the Phase 14 agreement metric failed. Pre-registered negative: a positive
 outcome envelope without privileged one-step counterfactual hazard improvement
 does not support a causal-control claim.
 
-Status: spec pre-registered and lock-reviewed 2026-05-15. No Phase 15 harness
-code has been written or run; smoke must stop for `D_smoke` readback before the
+Status: spec pre-registered and lock-reviewed 2026-05-15. Additive core and
+harness implementation is in place; Phase 13/14 hard-void gates and Phase 15
+smoke are pending operator run. Smoke must stop for `D_smoke` readback before the
 full lock starts.
 
 ### Cross-Substrate Hand-Offs
