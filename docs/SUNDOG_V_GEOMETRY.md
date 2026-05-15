@@ -70,10 +70,10 @@ document — see Cross-references.*
 | 1690 | Phase 12A — HaloSim ground-truth validation gate |
 | 1731 | Phase 12B — Tilt-dispersion as math-bindable parameter |
 | 1810 | Phase 12C — Full-atlas vocabulary completeness |
-| 1869 | Phase 13 — Atlas Claim Governance + Ask Sundog Coupling |
-| 1925 | Phase 14 — Complete Halo Phenomena Accounting Matrix |
-| 1985 | Phase 15 — Speculative / Unphotographed Halo Proof Program |
-| 2050 | Phase 12 deferred items |
+| 1907 | Phase 13 — Atlas Claim Governance + Ask Sundog Coupling |
+| 1955 | Phase 14 — Complete Halo Phenomena Accounting Matrix |
+| 1998 | Phase 15 — Speculative / Unphotographed Halo Proof Program |
+| 2042 | Phase 12 deferred items |
 
 **Cross-references**
 
@@ -1961,9 +1961,12 @@ what Sundog does, does not, and might later do with each one.
 
 Deliverables:
 
-- New canonical matrix, proposed path:
+- New canonical matrix:
   `docs/calibration/HALO_PHENOMENA_ACCOUNTING.md` plus optional machine-readable
   mirror `public/data/halo-phenomena-status.json`.
+- Public dictionary surface:
+  `legend.html`, a lightweight halo legend that can absorb named-only,
+  not-modeled, and speculative vocabulary without burying `sundog.html`.
 - One row per named phenomenon / family, with at least:
   canonical name, aliases, literature source (Greenler / Tape / Cowley /
   HaloSim `.sim`), crystal-orientation family, geometric generator,
@@ -1987,8 +1990,10 @@ Gate: any public or chat answer about "all sundog geometry" can point to
 the matrix and distinguish complete, partial, named-only, not-modeled, and
 speculative entries without improvising.
 
-Status: **planned.** Phase 12C supplied the first prose catalogue; Phase 14
-turns that catalogue into a maintained evidence ledger.
+Status 2026-05-14: **initiated.** The Phase 14 tracking ledger now lives at
+`docs/calibration/HALO_PHENOMENA_ACCOUNTING.md`, and the public-facing
+dictionary surface starts at `legend.html`. The optional machine-readable
+mirror remains deferred until promotion pressure or UI filtering needs it.
 
 ### Phase 15 - Speculative / Unphotographed Halo Proof Program
 
