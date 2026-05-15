@@ -7,6 +7,15 @@ TRACK mostly delays failures inside the original 8-second horizon.
 
 Status: smoke run and full lock complete.
 
+Cross-doc verification (2026-05-15): result trail confirmed consistent across
+`SUNDOG_V_THREEBODY.md` (claim ladder, rollup, receipt), `threebody-writeup.md`,
+and `CROSS_SUBSTRATE_NOTES.md`. Metrics (3,456 / 88·324 / 81·108 / 100·108 /
+0.229 vs 0.218) agree on every surface; no Phase 12 bleed or transposition.
+Reconciled the Phase 13 claim-ladder article in `SUNDOG_V_THREEBODY.md` and
+added the pre-registered-branch verdict to `threebody-writeup.md`; low-velocity
+boundary negatives carried in `CROSS_SUBSTRATE_NOTES.md` as designed (no numeric
+trail expected there).
+
 ## 1. Smoke Run
 
 Command:

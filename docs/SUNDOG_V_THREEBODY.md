@@ -544,7 +544,7 @@ Current Phase 9 earned wording:
 
 Current Phase 13 earned wording:
 
-> In the tested planar restricted setup, the guarded accelerometer-proxy TRACK
+> In the tested planar restricted setup, a guarded accelerometer-proxy TRACK
 > controller improves survival over passive and naive local baselines across a
 > mapped high-velocity near-escape pocket through a 16-second tested horizon.
 > The result is not global: the low-velocity boundary, especially equal-mass
