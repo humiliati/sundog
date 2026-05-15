@@ -1,0 +1,151 @@
+================================================================
+Pass C7 — Canonical-handle reformulation of upper-tangent-arc inverse
+Recorded: 2026-05-14
+================================================================
+
+Origin: wave-2 W4 (Persona A, atmospheric-optics specialist) in
+PHASE11_OUTREACH_SYNTHETIC_MEMO.md §8.6b: the literature standard
+tangent-arc inverse handle is opening angle / arc extent (Tape 1994
+§6 — confirmed on disk at docs/calibration/AH-CH06/; Cowley
+tangent-arcs page), not the circle-fit curvature R_uta / R22 the
+project's earlier passes tested.
+
+Pass C5 (manual sample selection 2026-05-14) recovered the route on
+p2 under the project-original CIRCLE-FIT framing with R_uta_obs / R22
+= 0.824 and RMS = 1.23 px. Pass C6 (matched filter on halo-subtracted
+b*) then FALSIFIED the natural-extension of C5 across the entire
+R_uta scan on the same b* substrate, putting the route in C5↔C6
+substrate tension.
+
+Pass C7 reformulates the test under the CANONICAL LITERATURE INVERSE
+HANDLE (opening angle measured against HaloSim ray-tracing at the
+same sun altitude).
+
+PROCEDURE
+---------
+1. Acquired HaloSim3.61 (Cowley & Schroeder, atoptics.co.uk;
+   installed at C:\Users\hughe\HalSim361.exe).
+2. Used h=0° clean-halo calibration renders (with multi-block
+   simulation) to LOCK pixel-to-degree scale via the 22° halo radius.
+   Calibration files: docs/calibration/halosim_outputs/
+   halosim_color_p2_h0_6mr.bmp, halosim_blacknwhite_p2_h0_4.5mr.bmp.
+   Initial calibration: R22 = 207 px in HaloSim coords → 1° = 9.41
+   px/° under the multi-block simulation.
+3. **HaloSim auto-zooms when crystal-block configuration changes.**
+   A column-only render of p2 at h=18.6° (plate blocks 3+4 disabled,
+   column + random kept) at 3 million rays produces a different scale:
+   sun at (768, 730), 22° halo crown / upper-tangent-arc apex at
+   y=266, R22 = 464 px → 1° = 21.09 px/°. Scale factor must be
+   re-locked per render configuration.
+   Column-only .sim file: docs/calibration/halosim_outputs/
+   halosim_p2_h18.6_columnonly.sim (project pre-edit) +
+   halosim_tangent_p2_h18.6_columnonly.sim (user's GUI edit; same
+   result).
+   Column-only output: docs/calibration/halosim_outputs/
+   halosim_tangent_p2_h18.6_columnonly_3mr.bmp (color, 3M rays);
+   halosim_b&w_p2_h18.6_columnonly_1mr.bmp (b&w, 1M rays).
+4. 2D arc-locus search: at each azimuth from -50° to +50° (relative
+   to sun-zenith axis), scan radii from 20° to 45° from sun and find
+   the brightness peak. This traces the canonical arc curve without
+   pre-supposing the C5 circle-fit shape.
+
+RESULTS
+-------
+Canonical upper-tangent-arc curve at h=18.6° (from 3M-ray column-only
+HaloSim):
+
+  Apex: az=0°, radial=22.1° from sun (on the 22° halo crown).
+        Brightness peak ≈ 232 (saturated band ≈ 252).
+  Arc shape: gentle outward curl. At az=±17° canonical radial ≈
+        24.2-24.5° (1.9-2.5° outside halo); at az=±25° canonical
+        radial ≈ 25.4-26.0° (3.4-4.0° outside halo); at az=±32°
+        canonical radial ≈ 27.5°; at az=±35° brightness has dropped
+        to ~98 (above background ~68 but no clearly bright arc
+        signal).
+  Wing extent by threshold:
+        50% threshold: ±12° (full opening 24°)
+        30% threshold: ±16° (full opening 32°)
+        10% threshold: ±25° (full opening 50°)
+
+C5 hand-anchor measurement on p2 (photo space):
+  Outer wings at azimuth ±25.5° from sun-zenith axis,
+  radial 31.6° from sun.
+  Inner wings at azimuth ±17°, radial 25.4° from sun.
+  C5 circle fit: R_uta / R22 = 0.824, RMS = 1.23 px on 5 hand-
+  anchored points.
+
+DISCREPANCY (the load-bearing comparison)
+-----------------------------------------
+At C5's INNER-wing azimuth (±17°): canonical radial is ≈ 24.2°
+(HaloSim) vs C5's stated 25.4°. **Δ = 1.2° over-extension by C5.**
+
+At C5's OUTER-wing azimuth (±25.5°): canonical radial is ≈ 25.4-26°
+(HaloSim) vs C5's stated 31.6°. **Δ = 5.6° over-extension by C5.**
+
+The over-extension grows progressively with azimuth. This is the
+signature of a circle-fit with too-tight curvature: the fitted
+circle bulges outward more aggressively than the canonical arc
+curls, placing wing points "past" the canonical envelope as they
+move away from the apex.
+
+C5's full opening angle (51°) matches the HaloSim canonical arc's
+**very faint outer-envelope** (10% threshold = 50°), not its bright
+body (50% threshold = 24°; 30% threshold = 32°). The C5 hand-anchor
+points sit at or beyond the canonical arc's fading limit, not on
+the canonical arc proper.
+
+VERDICT
+-------
+**Pass C7 confirms that C5's circle fit is geometrically inconsistent
+with the canonical literature upper-tangent-arc curve at h = 18.6°.**
+
+This is consistent with wave-2 W4's hypothesis (Persona A:
+"`R_uta/R22` is not the canonical literature inverse handle") and
+with Pass C6's falsification of the C5→matched-filter natural
+extension. The two falsification lines now converge:
+
+  - C6 (matched-filter on b* substrate, project-original handle):
+    C5's positive doesn't extend.
+  - C7 (canonical literature opening-angle handle via HaloSim):
+    C5's circle doesn't match the canonical arc shape.
+
+The C5↔C6 substrate tension resolves: **C5's tight RMS = 1.23 px
+fit appears to be the symmetry-bias artifact the C5 receipt itself
+hedged against**, not a genuine recovery of the canonical inverse.
+
+The tangent-arc-curvature inverse route remains **UNPROMOTED**
+including under the canonical literature handle. The earlier "route
+in C5↔C6 substrate tension; recommended specialist re-anchoring as
+the verify gate" framing is replaced with: "route falsified under
+two complementary falsification protocols (C6 matched-filter on b*;
+C7 canonical-handle reformulation against HaloSim ray-tracing
+ground truth)."
+
+OPEN ITEMS / DEFERRED
+---------------------
+1. A specialist could still independently re-anchor p2's upper
+   tangent arc to verify the C7 canonical-curve fit (i.e., place
+   wing points on the canonical curve rather than C5's circle fit).
+   This is no longer load-bearing for the route verdict but would
+   provide a third-party check on the canonical-handle measurement.
+2. Other photos with visible upper tangent arc + clean substrate
+   (none in current calibration set; would need coverage expansion
+   per handoff §2.3 (iv)).
+3. Specialist confirmation that HaloSim's column-orientation tilt-
+   dispersion (0.1° in autosav1.sim Block 1) is the right
+   atmospheric assumption for the calibration set's photos. Real
+   conditions may have wider tilt dispersion, producing wider arcs.
+   If specialists confirm wider tilt for p2's conditions, the
+   canonical opening could be wider than 24-32° and the C5 hand-
+   anchor could land closer to the canonical arc. Filed for tier-1
+   dispatch alongside the W1 p7 question.
+
+ARTIFACTS
+---------
+- scripts/tangent_opening_angle.py — C5 hand-anchor reduction
+- scripts/tangent_halosim_horizon.py — horizon-based scale lock
+  attempt (deprecated by column-only render approach)
+- scripts/tangent_halosim_calibrate.py — h=0° calibration script
+- HaloSim column-only renders under docs/calibration/halosim_outputs/
+  (halosim_tangent_p2_h18.6_columnonly_*.bmp and .png variants)
+- This receipt file
