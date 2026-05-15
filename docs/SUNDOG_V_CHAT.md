@@ -11,7 +11,9 @@ Short version:
 > The site helper is not tested by whether it sounds smart. It is tested by
 > whether it refuses to turn weak evidence into strong claims.
 
-Status: Phases 0–12 landed in full (2026-05-13). The strong-ratchet §13 result spans **six distinct model implementations across four training lineages** (deterministic compositor + `gpt-4o-mini` + `claude-haiku-4-5` + `llama-3.3-70b-versatile` + `llama-3.1-8b-instant` + `qwen/qwen3-32b`), three retrieval depths, three prompt-type slates plus a 22-prompt falsification slate, eight trace-field ablations × two hosted vendors, three corpus-conflict mutations. **Total: 5,670 trials, 0 unsafe-accepts.** The Phase 12 open-weight cross-architecture sweep is **complete** — the Phase 12b throttled local-run driver replaced the broken paid-tier waitlist with a ~50-minute ratelimit-respecting PowerShell sweep. No load-bearing open threads remain.
+Status: Phases 0–12 landed in full (2026-05-13). The strong-ratchet §13 result spans **six distinct model implementations across four training lineages** (deterministic compositor + `gpt-4o-mini` + `claude-haiku-4-5` + `llama-3.3-70b-versatile` + `llama-3.1-8b-instant` + `qwen/qwen3-32b`), three retrieval depths, three prompt-type slates plus a 22-prompt falsification slate, eight trace-field ablations × two hosted vendors, three corpus-conflict mutations. **Total: 5,670 trials, 0 unsafe-accepts.** The Phase 12 open-weight cross-architecture sweep is **complete** — the Phase 12b throttled local-run driver replaced the broken paid-tier waitlist with a ~50-minute ratelimit-respecting PowerShell sweep. No Phase 12 measurement thread remains load-bearing for the public §13 claim.
+
+Current integrity status (2026-05-14): public-copy governance is active again. `sundog.html` now carries an expanded academic halo-vocabulary atlas, including named halo families that are not yet separately rendered, detected, or fully described by the current geometry layer. Several deploys also landed without the chat-check gate described in `docs/WEBSITE_DEVELOPMENT.md`. The immediate chat task is therefore not another §13 ratchet; it is claim-map alignment: Ask Sundog must route the new vocabulary honestly as literature/catalogue coverage, not as a new Sundog result or complete modeling claim.
 
 Audience:
 - Sundog research maintainers.
@@ -2173,10 +2175,40 @@ the pitch is live:
   same change &mdash; otherwise the assistant continues asserting
   something the homepage no longer does.
 
-### 16.4 Update Discipline
+### 16.4 Sundog Halo-Atlas Vocabulary Gap (2026-05-14)
 
-When the elevator pitch (or any other coupled surface in &sect;16.1)
-changes:
+`sundog.html` has become a second dense claim surface. The new atlas copy
+introduces academic atmospheric-optics vocabulary for halo families the
+project is cataloguing but has not yet fully modeled, detected, or described
+to the same standard as the main 22-degree / parhelion / tangent-arc
+primitives. The relevant public section is:
+
+- `sundog.html` &rarr; "The full atlas" / "Named in the literature, beyond the
+  rendered set".
+
+The honest route boundary is now explicit in `chat/claim_map.json` as
+`halo_atlas_vocabulary_status`:
+
+- **Allowed:** say the page is a literature and atlas guide that names
+  atmospheric-optics families such as Parry-family arcs, pyramidal or
+  odd-radius halos, Lowitz arcs, antisolar features, and sub-horizon /
+  circumhorizon features.
+- **Required:** distinguish the rendered subset from named-only or
+  not-modeled vocabulary.
+- **Forbidden:** imply Sundog discovered the vocabulary, imply every named
+  halo family is rendered or detected, or promote the vocabulary catalogue
+  into evidence for the paper-grade photometric mirror-alignment result.
+
+This is a content-governance gap, not a failure of the Phase 12 chat
+measurement. The measurement result remains bounded to the prompt slates and
+claim map that were tested. Once `sundog.html` changes, the honest next step is
+to update the claim map, rebuild public chat data, and rerun the chat checks
+before the next deploy.
+
+### 16.5 Update Discipline
+
+When the elevator pitch, `sundog.html`, or any other coupled surface in
+&sect;16.1 changes:
 
 1. List the claim phrases the revision adds, sharpens, retracts, or
    reframes.

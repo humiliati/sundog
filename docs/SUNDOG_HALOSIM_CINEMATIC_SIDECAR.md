@@ -195,6 +195,68 @@ view fields; only sun elevation varies per frame.
 Gate: every emitted `.sim` opens in HaloSim without a parse error
 (spot-check 3 across the range under HS-0's mechanism).
 
+### Status: **LANDED 2026-05-14**
+
+**`.sim` format decoded** (HaloSim 3.6.1; reverse-engineered by
+correlating 5 HS-0 sims against their GUI-known values — exact match
+5/5). Files are **CRLF / latin-1** with a trailing blank line. The
+constant `Type9` line is the structural anchor `T` (found by content
+scan, robust to how many of the 12 crystal channels are populated):
+
+| line | field | per-frame action |
+| --- | --- | --- |
+| `T−4` | sun altitude (deg) | **set to frame altitude** |
+| `T−3` | `<plotStyle> <rays> <levels> <maxFaces>` | rays/levels **pinned** |
+| `T−1` field 4 | camera-aim altitude (Camera-View only) | synced to sun if Camera-View |
+| `T+0` | `Type9` (constant marker) | untouched |
+| `T+14` field 1 | camera-aim altitude (Camera-View only) | synced to sun if Camera-View |
+
+Fisheye / sky-fixed templates keep the camera fields `0` (sun position
+is intrinsic to the projection) so **only `T−4` and `T−3` change** —
+this is the recommended cinematic path because it also sidesteps the
+HS-3 Camera-View auto-zoom risk entirely.
+
+**Generator:**
+[`scripts/halosim_gen_frames.py`](../scripts/halosim_gen_frames.py).
+`--template <sim> --out <dir> --start --stop --step --rays [--levels]
+[--dry-run]`. Byte-safe: reads bytes, edits only the targeted numeric
+tokens preserving every surrounding whitespace run, rejoins with
+`\r\n`, and self-checks that no unintended line differs from the
+template (aborts if it does). Auto-detects Camera-View vs fisheye and
+syncs camera-aim only when needed. Refuses to write into the HaloSim
+home dir.
+
+**Frame set emitted:** 31 sims
+`docs/calibration/halosim_outputs/hs_frames/hs_frame_000deg.sim …
+hs_frame_060deg.sim` (0–60°, 2° step) from the `46halo.sim` fisheye
+template at 200k rays. External diff confirmed each frame differs from
+the template at **only** `T−4` (sun alt) and `T−3` (rays); line count
+and CRLF count preserved.
+
+**Gate met — exceeds "spot-check 3":** frames 000 / 030 / 060 were each
+loaded into HaloSim via the HS-0 Startup.sim-swap mechanism. HaloSim's
+own GUI confirmed the injected value (Sun-altitude box read **0 / 30 /
+60**, Rays **200**, view + crystals inherited from template) — i.e. no
+parse error and the format decode is validated by HaloSim's parser, not
+just by inspection. Each rendered cleanly ("100% in 02s") to a fresh
+non-blank `autosave.bmp`; the halo/horizon geometry shifts correctly
+with altitude. Receipts:
+`docs/calibration/halosim_outputs/hs0_spike/hs1_gate_frame{000,030,060}_h{0,30,60}.png`.
+
+**Failure-mode confirmed:** the HaloSim control-panel window pose
+**shifted between sessions** (HS-0 buttons ≈ (99,282)/(218,279); HS-1
+≈ (463,281)/(581,278)). HS-2's runner must screenshot-locate Reset/Start
+each frame, never hard-code — exactly as the HS-0 note warned.
+
+**Cleanup:** the real `Startup.sim` was backed up and restored
+byte-for-byte (3150 b). HaloSim left running.
+
+**Verdict:** HS-1 gate met. The frame-generation primitive is proven and
+byte-safe. **HS-2 (automated batch render runner)** is next: wrap the
+HS-0 Reset/Start/poll loop around the HS-1 frame set with
+screenshot-located buttons, mtime-poll completion, and harvest-rename of
+`autosave.bmp` per frame.
+
 ## HS-2 — Automated batch render runner *(blocked on HS-0)*
 
 Goal: render the full frame set unattended.
@@ -207,6 +269,63 @@ verify result). Resumable; retries a failed frame once.
 
 Gate: a 0–60° set rendered with zero manual interaction; receipt table
 on disk; ≤1 frame requiring a manual rerun.
+
+### Status: **MECHANISM LANDED & PROVEN 2026-05-14** (full sweep is operator-launched)
+
+**Runner:** [`scripts/halosim_run_sweep.py`](../scripts/halosim_run_sweep.py)
+— a **standalone local controller**, deliberately *not* driven through
+the agent/MCP, so a 1000-frame / multi-hour sweep is not bound by any
+agent-session limit. The operator brings HaloSim to the foreground and
+launches it once; it then runs unattended.
+
+Per frame it executes the proven HS-0/HS-1 primitive: copy the frame
+`.sim` → `Startup.sim`; `pyautogui` click **Reset** then **Start** at
+calibrated fixed coords; **poll `autosave.bmp` mtime until it advances
+and the size is stable** (robust at any ray count — no fixed wait, no
+desync); verify non-blank; harvest → `_staging/<runtag>/<frame>.png`
+(+ `.bmp` unless `--no-bmp`) with a per-frame `_sweep_log.tsv`. Backs
+up and restores `Startup.sim` in a `finally` block; resumable
+(`--resume` skips already-harvested non-blank frames); retries a frame
+once; **stall-aborts** after N consecutive no-render frames (the cheap
+vision-free guard for a moved/closed window).
+
+**Input-driver decision (2026-05-14):** `pyautogui` chosen.
+**PyMacroRecord was evaluated and rejected** as the driver — it replays
+only *fixed delays*, which desync on variable render time (2 s @ 200k …
+minutes @ 10M); it remains a no-dependency fallback only for a strictly
+uniform ray-count sweep. **Window-pose assumption (operator-ratified):**
+the HaloSim window is kept placed consistently between sessions, so
+fixed coords are valid; `python scripts/halosim_run_sweep.py calibrate`
+re-reads true-1920×1080 button coords into
+`scripts/halosim_sweep_config.json` if it is ever repositioned. *(Note:
+the window **did** move between the HS-1 and HS-2 sessions in practice —
+the stall-abort guard exists precisely because the assumption is not
+free; recalibrate after any relaunch.)*
+
+**Staging + git hygiene:** bulk output lands in
+`docs/calibration/halosim_outputs/_staging/<runtag>/`, which is
+**gitignored** (along with a global `*.bmp` rule) so a 5-h / ~4 GB
+sweep never reaches GitHub. Only the final compiled clip (HS-5) and a
+few curated stills get tracked. ~25 legacy halosim `.bmp` committed
+before this rule remain tracked by owner decision (history left as-is).
+
+**Proof receipt (2026-05-14):** a 3-frame end-to-end run
+(`hs_frame_000/002/004deg`, 200k-ray fisheye frames) drove HaloSim with
+**zero manual interaction via the local script alone**, each rendered
+~5.1 s and harvested non-blank to
+`docs/calibration/halosim_outputs/_staging/20260514-223735/`
+(`_sweep_log.tsv`: 3× OK); `Startup.sim` restored to 3150 b and the
+backup auto-removed; `git status` shows the staging tree fully excluded.
+
+**Gate status:** the *mechanism* gate is met (zero-interaction render +
+on-disk receipt + resumable/stall-safe). The *full 0–60° set* is
+intentionally **operator-launched** — a multi-hour ray-traced sweep is
+the user's call to start (and exceeds an agent session); run e.g.
+`python scripts/halosim_run_sweep.py run --frames-dir
+docs/calibration/halosim_outputs/hs_frames --resume` after pinning the
+cinematic ray count (B&W ~300k or colour ~3M per the AGENTS.md
+guidance; ~10M for the beauty pass). **HS-3 (scale-normalization) is
+unblocked** and is the next crux step.
 
 ## HS-3 — Scale-normalization & canvas lock *(the crux)*
 

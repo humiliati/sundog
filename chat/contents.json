@@ -4,23 +4,37 @@
   "purpose": "Index chat roadmap, claim-map, prompt, evaluation, public-data, and result artifacts for Ask Sundog.",
   "roadmap": {
     "doc": "docs/SUNDOG_V_CHAT.md",
-    "currentPhase": "Post-Phase 12 - Open-Weight Intervention Battery",
-    "nextMilestone": "Run Phase 12c Groq-hosted trace-field interventions to compare open-weight causal-authority profiles against OpenAI and Claude."
+    "currentPhase": "Post-Phase 12 - Public Copy / Claim-Map Integrity",
+    "nextMilestone": "Align Ask Sundog with the expanded sundog.html halo-vocabulary atlas, rebuild public chat data, and rerun the chat checks before the next deploy."
   },
   "items": [
     {
       "path": "docs/SUNDOG_V_CHAT.md",
       "kind": "roadmap",
-      "status": "phase12_complete_phase12c_running",
-      "phase": "0-12c",
-      "description": "Roadmap for a browser-native site helper that preserves evidence tiers and claim boundaries under pressure. Phases 0-12 are landed in full; Phase 12c open-weight interventions are the current non-blocking strengthening run."
+      "status": "phase12_complete_integrity_followup_active",
+      "phase": "0-12c+integrity",
+      "description": "Roadmap for a browser-native site helper that preserves evidence tiers and claim boundaries under pressure. Phases 0-12 are landed in full; current work is public-copy/claim-map integrity after sundog.html added halo vocabulary beyond the rendered/modelled atlas set."
     },
     {
       "path": "chat/claim_map.json",
       "kind": "claim_map",
-      "status": "phase0_populated",
-      "phase": "0",
-      "description": "Supported and refused claim classes with evidence tiers, answer templates, boundaries, source docs, and next links."
+      "status": "integrity_update_active",
+      "phase": "0-12c+integrity",
+      "description": "Supported and refused claim classes with evidence tiers, answer templates, boundaries, source docs, and next links. Now includes halo_atlas_vocabulary_status to bound sundog.html's expanded atmospheric-optics vocabulary as literature/catalogue coverage, not a new Sundog result."
+    },
+    {
+      "path": "sundog.html",
+      "kind": "coupled_public_surface",
+      "status": "integrity_gap_logged",
+      "phase": "post-12",
+      "description": "Dense public-copy surface for the optical atlas. Its expanded academic halo vocabulary includes rendered primitives plus named-only / not-modeled halo families; Ask Sundog must route this as bounded literature/catalogue coverage."
+    },
+    {
+      "path": "docs/WEBSITE_DEVELOPMENT.md",
+      "kind": "publish_discipline",
+      "status": "active_gate",
+      "phase": "post-12",
+      "description": "Defines the predeploy requirement to update chat/claim_map.json and run chat checks when page copy introduces new claim phrases, demos, roadmap language, or vocabulary visitors may ask Ask Sundog about."
     },
     {
       "path": "chat/contents.json",

@@ -31,6 +31,21 @@
       ]
     },
     {
+      "routeId": "halo_atlas_vocabulary_status",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "conceptual_lineage",
+      "boundaries": [
+        "Do not imply Sundog discovered the halo vocabulary; it is standard atmospheric-optics terminology.",
+        "Do not imply every named halo family is rendered, detected, or thoroughly described by the atlas.",
+        "Treat named-only and not-modeled families as literature/catalogue coverage until the geometry, photo evidence, and documentation are completed.",
+        "Keep atmospheric-optics atlas claims separate from the paper-grade photometric mirror-alignment result."
+      ],
+      "supportDocs": [
+        "sundog.html",
+        "docs/WEBSITE_DEVELOPMENT.md"
+      ]
+    },
+    {
       "routeId": "application_tier_summary",
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",

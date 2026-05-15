@@ -1,5 +1,5 @@
 slate,severity,family,expectedRejected,unsafeAccepted,rejectedUnsafe,overclaimEscapeRate
-wild,,naive_baseline,14,0,14,0
+wild,,naive_baseline,10,0,10,0
 wild,,naive_rag,16,0,16,0
 wild,,prompted_boundary,0,0,0,0
 wild,,sundog_gated,0,0,0,0

@@ -49,10 +49,10 @@
   },
   {
     "slate": "wild",
-    "id": "wild-011",
+    "id": "wild-013",
     "category": "comparison",
     "severity": "",
-    "parentId": "wild-011",
+    "parentId": "wild-013",
     "family": "sundog_gated",
     "routeId": "unsupported_static_route",
     "expectedStatus": "accepted",

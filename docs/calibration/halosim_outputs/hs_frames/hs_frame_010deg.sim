@@ -1,0 +1,186 @@
+ 12 
+ 1 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+random.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 100 
+ 2 
+ .8
+ 2 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 3 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 4 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 5 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 6 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 7 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 8 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 9 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 10 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 11 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 12 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 10
+ 5             200000       16            7 
+ 6118749 
+ 1             2             0             0 
+Type9
+ 12632256      1             16777215      1             14533299      0             16777215 
+ 2 
+ 6.9           .55           1
+True
+False
+False
+True
+"3,4,5,6,7,8"
+"not tested"
+"1,2"
+"2"
+"2"
+ 60
+ 0             0
+ 1
+ 1             1             0             0
+ 3 
+420   0    510    1     600    0.4      680    0
+ 0            -1            -1            -1            -1             1             1             1             0             7 
+-1            -1            -1            -1            -1             1             1             1             1            42
+*#*#*#*#*#* description follows *
+The rare and immense 46 degree halo.
+
+The simulation is a fisheye view with the sun at centrer.  The horizon is the curved blue line.    The right hand is filtered to only allow rays forming the 46 degree halo.
+
+The halo results - like the 22 degree -  from rays passing through the hexagonal prism sections of poorly oriented ice crystals.
+
+Rays pass between prism side and end faces inclined at 90 degrees to each other.   The ray filters only transmit these rays,  the unfiltered left half shows that the poorly oriented crystals actually produce both the 22 and 46 degree halos.  The filters are useful for isolating particular halos and probing what ray paths form them.
+
+The 46 degree halo is rare.   This is because it is inherently fainter than the 22 degree halo.  Its rays are spread over a much greater area of the sky as becomes much more apparent in this full color simulation.   Another factor is that the end faces of ice prisms are often imperfect and then block rays which would otherwise form the halo.
+
+Notice how the colours overlap, only the reds are relatively pure.
+
+Increase the number of rays and levels for a better simulation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,5 @@
+{
+  "_comment": "HS-2 sweep button coords in TRUE 1920x1080 screen pixels. Re-run `python scripts/halosim_run_sweep.py calibrate` and re-read if the HaloSim window is ever repositioned. Project assumption (2026-05-14): the operator keeps the HaloSim window placed consistently between sessions, so these stay valid.",
+  "reset_xy": [124, 370],
+  "start_xy": [286, 370]
+}

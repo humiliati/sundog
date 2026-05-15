@@ -138,6 +138,54 @@
       }
     },
     {
+      "id": "halo_atlas_vocabulary_status",
+      "questionPatterns": [
+        "halo vocabulary",
+        "academic halo vocabulary",
+        "atmospheric optics vocabulary",
+        "halo atlas vocabulary",
+        "what halos does the atlas model",
+        "what halos are not modeled",
+        "named halo families",
+        "parry family arcs",
+        "sunvex parry",
+        "pyramidal halos",
+        "odd radius halos",
+        "lowitz arcs",
+        "antisolar features",
+        "anthelic arcs",
+        "subhorizon halos",
+        "circumhorizon arc",
+        "halos not rendered",
+        "halos beyond the rendered set"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "conceptual_lineage",
+      "answerTemplate": "The halo vocabulary on sundog.html is an atlas and literature guide, not a new Sundog result. The page renders a deliberate subset of named atmospheric-optics primitives and also catalogs families beyond the rendered set: Parry-family arcs, pyramidal or odd-radius halos, Lowitz arcs, antisolar features, and sub-horizon or circumhorizon features. Those names come from the atmospheric-optics literature and HaloSim/AtOptics references; several are named-only or not modeled by the current geometry layer.",
+      "support": [
+        {
+          "doc": "sundog.html",
+          "section": "The full atlas / Named in the literature, beyond the rendered set",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/WEBSITE_DEVELOPMENT.md",
+          "section": "Ask Sundog / Claim-boundary checks before publishing",
+          "status": "boundary"
+        }
+      ],
+      "boundaries": [
+        "Do not imply Sundog discovered the halo vocabulary; it is standard atmospheric-optics terminology.",
+        "Do not imply every named halo family is rendered, detected, or thoroughly described by the atlas.",
+        "Treat named-only and not-modeled families as literature/catalogue coverage until the geometry, photo evidence, and documentation are completed.",
+        "Keep atmospheric-optics atlas claims separate from the paper-grade photometric mirror-alignment result."
+      ],
+      "nextAction": {
+        "label": "Open halo atlas",
+        "href": "/sundog.html"
+      }
+    },
+    {
       "id": "application_tier_summary",
       "questionPatterns": [
         "which applications are research results",
