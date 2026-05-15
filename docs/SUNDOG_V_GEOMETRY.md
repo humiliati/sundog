@@ -2076,25 +2076,35 @@ subhorizon are P0 catalogue stubs with promotion paths. P3 is explicitly
 grammar). The gate is **not** reached — nothing here is public-facing
 result language; P4 + pre-registration is required first.
 
-Follow-up #1 (quantitative pyramidal residual) was **attempted
-2026-05-15 → NEGATIVE**, twice: the 14E 1M receipt resolved **zero**
-discrete odd-radius rings, and a dedicated **6M** B&W "Sun centered
-Plan" re-render (HS-0 mechanism; `Startup.sim` backed up + restored
-byte-identical) resolved only **one** outer ring — short of the ≥3 a
-scale-locked residual table needs. The 6M negative was *verified* (a
-wide center-grid brute search ruled out a centring artifact), so the
-**pure ray-count lever is insufficient** for the all-sky plan
-projection. `scripts/pyramidal_ring_residual.py` (resolvability-gated,
-now receipt-path-parameterized) **refused to fabricate** a table off the
-smooth profile both times — **pyramidal stays P2**; negatives kept as
-map entries per the gate. The 6M PNG is retained as a higher-fidelity
-*qualitative* reproduction receipt. The definitive remaining path,
-**#1′**, is now scoped as **per-ring HaloSim ray-filter isolation**
-(~8 filtered renders, faces per the Tape wedge table) — a heavier GUI
-campaign flagged as the next decision, not auto-run. Other tracked
-follow-ups unchanged: the `chat/claim_map.json` P2 boundary refinement
-(gated on the Phase 13 chat:eval chain) and a crystal-block-reduced
-Lowitz isolation render. This phase still depends on Phase 14's accounting matrix and Phase
+Follow-up #1 (quantitative pyramidal residual) was pursued through
+**all three levers, 2026-05-15 → mechanically successful but
+quantitatively NEGATIVE; pyramidal stays P2**. (i) 14E 1M receipt:
+**0** clean rings. (ii) Dedicated **6M** re-render: **1** marginal ring
+(verified not a centring artifact). (iii) **Ray-filter-isolation
+campaign**: built `scripts/halosim_filter_frames.py` (byte-safe edit of
+the `.sim` ray-filter Entrance/Exit fields — a clean text-edit
+extension of the proven HS-0 loop), generated **8 wedge frames**
+(entry→exit faces per the Tape AH-CH10 table) and ran 8 HS-0 renders at
+4M (`Startup.sim` backed up + restored byte-identical; receipts in
+`docs/calibration/halosim_outputs/phase15_pyrfilter/`). Findings: the
+face-pair filters do **not** single-isolate one ring (6-fold crystal
+symmetry) but **markedly crispened** the family; under the rigorous
+detrend+3σ test with a background-agnostic contrast signal and an
+edge-excluded ring-SNR centre (the new `--filtered` mode of
+`pyramidal_ring_residual.py`) the crispest receipt resolves **1 strong
+ring** (4.6σ) — the data-quality progression **1M=0 → 6M=1 marginal →
+4M-filtered=1 strong** is real, but still **< the ≥3 azimuthally-
+separable rings** a predicted-vs-measured table + 22°/46° linearity
+check require (verified across 4 independent centring methods). The
+script **refused to fabricate** a table every time — negatives kept as
+precisely-characterised map entries per the gate. The bottleneck is now
+the **extraction method + split-sky plan projection**, not rays or
+filtering; the genuinely-remaining options are a non-split full-sky
+equidistant render, a 2D ring-template/Hough fit, or **accepting P2 as
+this evidence chain's ceiling** — a strategy decision, not a mechanical
+step. Other tracked follow-ups unchanged: the `chat/claim_map.json` P2
+boundary refinement (gated on the Phase 13 chat:eval chain) and a
+crystal-block-reduced Lowitz isolation render. This phase still depends on Phase 14's accounting matrix and Phase
 12A's HaloSim validation protocol, and may draw on the cinematic sidecar's
 batch-render automation when proof work needs sweeps.
 

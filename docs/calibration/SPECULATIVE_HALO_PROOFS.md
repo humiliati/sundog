@@ -155,6 +155,35 @@ Sundog result.
   `phase14e/pyramidal_h18_6M_bw_radialprofile.txt`. The definitive
   remaining path is now follow-up #1′ below — **ray-filter isolation**,
   not more rays.
+- **Ray-filter-isolation campaign (follow-up #1′) — 2026-05-15,
+  MECHANICALLY SUCCESSFUL · QUANTITATIVELY NEGATIVE.** Built
+  [`scripts/halosim_filter_frames.py`](../../scripts/halosim_filter_frames.py)
+  (byte-safe `.sim` edit of the ray-filter Entrance T+8 / Exit T+10
+  fields + rays — a clean text-edit extension of the proven HS-0 loop,
+  *not* GUI face-typing), generated **8 wedge frames** (entry→exit faces
+  per the Tape AH-CH10 table: 3→26, 13→25, 23→26, 3→5, 1→25, 3→25,
+  23→25, 1→5) at 4M, and ran all 8 through HS-0 (`Startup.sim` backed up
+  + restored byte-identical). Receipts:
+  [`halosim_outputs/phase15_pyrfilter/`](halosim_outputs/phase15_pyrfilter)
+  (`pyr_w*_4M.png`). **Finding 1 (mechanism):** the face-pair filters do
+  **not** single-isolate one ring — the crystal's 6-fold symmetry admits
+  many symmetry-equivalent paths, so each filtered render still shows the
+  *family*; but the filter (+ 2-face-traversal cap) **markedly crispened**
+  the rings vs the diffuse 1M/6M. **Finding 2 (quantitative):** under the
+  rigorous detrend + 3σ test with a background-agnostic contrast signal
+  and an edge-excluded ring-SNR centre (the `--filtered` mode of
+  `pyramidal_ring_residual.py`), the crispest receipt (`pyr_w9`,
+  ring-SNR centre 783,441) resolves **1 strong ring** (r ≈ 211 px,
+  4.6σ) — the clear data-quality progression is **1M = 0 clean rings →
+  6M = 1 marginal → 4M-filtered = 1 strong** — but **still < the ≥3
+  azimuthally-separable rings** a predicted-vs-measured table + the
+  22°/46° linearity cross-check require. Four independent centring
+  methods (peak-sharpness, contrast-coherence, gradient-Hough, ring-SNR)
+  were applied; the family visible *by eye* does not separate into ≥3
+  clean loci on these split-sky "Sun centered Plan" renders.
+  **No residual table fabricated. Pyramidal stays P2.** Evidence:
+  `phase14e/pyr_w9_e3_x26_4M_radialprofile.txt`; 8 receipts +
+  byte-safe frame sims retained. Refined remaining path is #1′ below.
 
 ---
 
@@ -242,23 +271,24 @@ what would promote it.
    is built and resolvability-gated — it will emit the residual table +
    46° linearity cross-check automatically once a sufficient receipt
    exists. Superseded by **#1′**.
-1′. **Pyramidal residual via ray-filter isolation** *(ray-count
-   sub-lever tried 2026-05-15 → verified insufficient: 1M = 0 rings, 6M =
-   1 ring; see the Pyramidal record).* The definitive remaining method is
-   **per-ring HaloSim ray-filter isolation**: render each odd-radius ring
-   *alone* by setting the Ray Filters panel Entrance/Exit faces per the
-   Tape AH-CH10 wedge table — `3→26` (9°), `13→25` (18.3°), `23→26`
-   (19.9°), `3→5` (21.8°, the 22° anchor), `1→25` (22.9°), `3→25`
-   (23.8°), `23→25` (34.9°), `1→5` (45.7°, the 46° linearity anchor) — at
-   ≥4M rays, ~8 filtered renders. Each isolated ring gives an unambiguous
-   radius (no blend, no diffuse-glow contamination). Optionally also
-   tighten the sun-centred FOV for more px/°. Then a small extension to
-   `scripts/pyramidal_ring_residual.py` (single-ring mode: locate the one
-   ring per isolated render, no resolvability gate needed) tabulates the
-   predicted-vs-measured residual + the `3→5`/`1→5` linearity check. This
-   is a heavier ~8-render GUI campaign — the concrete but non-trivial
-   probe toward pyramidal P3; flagged as the next decision, not
-   auto-run.
+1′. ~~Pyramidal residual via ray-filter isolation.~~ **Done 2026-05-15 →
+   mechanically successful, quantitatively negative** (see the Pyramidal
+   record's "Ray-filter-isolation campaign" entry). All three levers have
+   now been exhausted on the 1D-azimuthal-profile method: ray count
+   (1M→0, 6M→1) and per-wedge ray-filtering (8 frames, 4M → 1 strong
+   ring). The face-pair filters crispen but do **not** single-isolate
+   (6-fold crystal symmetry), and ≥3 azimuthally-separable rings still do
+   not extract from the split-sky "Sun centered Plan" renders. The
+   bottleneck is no longer rays/filtering — it is the **extraction method
+   + projection**. Genuinely-remaining options, in order of leverage:
+   (a) a **non-split, full-sky render in a known equidistant projection**
+   (one filter → one cleanly isolable ring, az-averaging valid); (b) a
+   **2D ring-template / Hough-radius fit** instead of 1D azimuthal
+   profiling (robust to the split-sky and off-centre rings); or (c)
+   **accept P2 as this evidence chain's ceiling** — the analytic table
+   (P1) + qualitative HaloSim reproduction (P2) stand; P3 (atlas-grammar
+   representability) was always the harder, separately-gated bar. This
+   is now a strategy decision, not a mechanical next step.
 2. **Chat boundary refinement.** `chat/claim_map.json`
    `halo_atlas_vocabulary_status` currently frames pyramidal/CHA as
    "named-only / not modeled." It should be refined so Ask Sundog says
