@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sundog Halo Legend</title>
+    <meta name="description" content="A public dictionary for the halo phenomena named around the Sundog atlas: what is rendered, what is calibrated, and what is only named for now.">
+    <link rel="canonical" href="https://sundog.cc/legend.html">
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        :root {
+            --legend-panel: rgba(8, 15, 31, 0.76);
+            --legend-border: rgba(255, 255, 255, 0.14);
+            --legend-muted: rgba(236, 242, 255, 0.72);
+            --legend-soft: rgba(255, 255, 255, 0.06);
+            --legend-gold: #f2c85b;
+            --legend-cyan: #78dce8;
+            --legend-red: #ff8a80;
+            --legend-green: #9be38f;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #07111f 0%, #0d172a 58%, #07111f 100%);
+            color: var(--sd-text, #f5f7fb);
+        }
+
+        main {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 6rem 0 5rem;
+        }
+
+        .legend-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 220px;
+            gap: 2rem;
+            align-items: center;
+            padding-bottom: 2.5rem;
+        }
+
+        .legend-kicker {
+            margin: 0 0 0.7rem;
+            color: var(--legend-cyan);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            max-width: 820px;
+            font-size: clamp(2.3rem, 7vw, 5.4rem);
+            line-height: 0.96;
+        }
+
+        .legend-lead {
+            max-width: 820px;
+            margin: 1.1rem 0 0;
+            color: var(--legend-muted);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .legend-mark {
+            width: 100%;
+            max-width: 190px;
+            justify-self: end;
+            filter: drop-shadow(0 22px 50px rgba(242, 200, 91, 0.2));
+        }
+
+        .legend-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--legend-border);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.045);
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.42rem;
+            min-height: 2rem;
+            padding: 0.35rem 0.62rem;
+            border: 1px solid var(--legend-border);
+            border-radius: 999px;
+            color: rgba(248, 250, 255, 0.88);
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 0.56rem;
+            height: 0.56rem;
+            border-radius: 999px;
+            background: var(--legend-gold);
+        }
+
+        .status-chip[data-status="optional"] .status-dot { background: var(--legend-cyan); }
+        .status-chip[data-status="named"] .status-dot { background: var(--legend-green); }
+        .status-chip[data-status="not-modeled"] .status-dot { background: var(--legend-red); }
+
+        .legend-section {
+            margin-top: 3.25rem;
+        }
+
+        .section-heading {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: clamp(1.65rem, 4vw, 2.55rem);
+        }
+
+        .section-note {
+            max-width: 620px;
+            margin: 0;
+            color: var(--legend-muted);
+            line-height: 1.6;
+        }
+
+        .phenomena-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.85rem;
+        }
+
+        .phenomenon-card {
+            min-height: 15rem;
+            padding: 1rem;
+            border: 1px solid var(--legend-border);
+            border-radius: 8px;
+            background: var(--legend-panel);
+        }
+
+        .phenomenon-card h3 {
+            margin: 0 0 0.55rem;
+            font-size: 1.05rem;
+        }
+
+        .phenomenon-card p {
+            margin: 0.65rem 0 0;
+            color: var(--legend-muted);
+            line-height: 1.55;
+        }
+
+        .phenomenon-card code {
+            color: var(--legend-gold);
+        }
+
+        .status-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.85rem;
+        }
+
+        .mini-chip {
+            padding: 0.22rem 0.48rem;
+            border: 1px solid var(--legend-border);
+            border-radius: 999px;
+            background: var(--legend-soft);
+            color: rgba(248, 250, 255, 0.82);
+            font-size: 0.72rem;
+            line-height: 1.2;
+        }
+
+        .legend-callout {
+            margin-top: 3rem;
+            padding: 1.2rem;
+            border: 1px solid rgba(242, 200, 91, 0.34);
+            border-radius: 8px;
+            background: rgba(242, 200, 91, 0.08);
+        }
+
+        .legend-callout p {
+            margin: 0;
+            color: rgba(248, 250, 255, 0.86);
+            line-height: 1.65;
+        }
+
+        .legend-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .legend-links a {
+            color: var(--legend-gold);
+            font-weight: 700;
+        }
+
+        @media (max-width: 900px) {
+            main { padding-top: 4.5rem; }
+            .legend-hero { grid-template-columns: 1fr; }
+            .legend-mark { justify-self: start; width: 132px; }
+            .phenomena-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 640px) {
+            .phenomena-grid { grid-template-columns: 1fr; }
+            .phenomenon-card { min-height: auto; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="about.html">About</a>
+                <a href="applications-gallery.html">Applications</a>
+                <a href="threebody.html">Three-Body</a>
+                <a href="balance.html">Balance</a>
+                <a href="mines.html">Mines</a>
+                <a href="mesa.html">Mesa</a>
+                <a href="sundog.html">Sundog</a>
+                <a href="legend.html" aria-current="page">Legend</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="legend-hero" aria-labelledby="legend-title">
+            <div>
+                <p class="legend-kicker">Halo vocabulary ledger</p>
+                <h1 id="legend-title">Sundog Halo Legend</h1>
+                <p class="legend-lead">
+                    A public dictionary for the optical phenomena around the Sundog atlas. The atlas renders a useful subset; this page keeps the broader vocabulary honest by separating rendered primitives, optional labels, named-only literature, and not-modeled halo families.
+                </p>
+            </div>
+            <img class="legend-mark" src="/icons/sundog-character-mark.svg" alt="">
+        </section>
+
+        <div class="legend-toolbar" aria-label="Status legend">
+            <span class="status-chip"><span class="status-dot"></span>rendered core</span>
+            <span class="status-chip" data-status="optional"><span class="status-dot"></span>rendered optional</span>
+            <span class="status-chip" data-status="named"><span class="status-dot"></span>named only</span>
+            <span class="status-chip" data-status="not-modeled"><span class="status-dot"></span>not modeled</span>
+        </div>
+
+        <section class="legend-section" aria-labelledby="rendered-heading">
+            <div class="section-heading">
+                <h2 id="rendered-heading">Rendered Atlas Vocabulary</h2>
+                <p class="section-note">These are the primitives shown or named in the current atlas. Only the parhelion-offset route is promoted as an inverse measurement handle.</p>
+            </div>
+            <div class="phenomena-grid">
+                <article class="phenomenon-card">
+                    <h3>22 deg halo</h3>
+                    <p>The common ring around the sun and the scale reference for the atlas.</p>
+                    <p><code>circle(sun, R22)</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">scale-lock</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>46 deg halo</h3>
+                    <p>A larger halo used as context for CZA, supralateral, and infralateral vocabulary.</p>
+                    <p><code>circle(sun, R46)</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">forward vocabulary</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Sundog / parhelion</h3>
+                    <p>Bright flanking spots on the parhelic circle. The offset recovers sun altitude when the anchors are eligible.</p>
+                    <p><code>offset = R22 / cos(h)</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">promoted inverse</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Parhelic circle</h3>
+                    <p>The horizontal belt through the sun and parhelia. It is rendered, but not promoted as a hidden-state handle.</p>
+                    <p><code>circle through sun and parhelia</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">primitive QA</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Circumzenithal arc</h3>
+                    <p>The high smile-shaped arc. The current route is visibility-gated; pre-A1b anchors need rechecking before proof use.</p>
+                    <p><code>visible when h &lt; 32.196 deg</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">coverage-gated inverse</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Supralateral arc</h3>
+                    <p>High arc near the 46 deg halo/CZA region. The inverse route failed coverage and structural-discrimination gates.</p>
+                    <p><code>46 deg family context</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">not promoted</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Upper tangent arc</h3>
+                    <p>Column-crystal tangent vocabulary above the 22 deg halo. It remains useful for logo language, not inverse proof.</p>
+                    <p><code>tangent-family candidate</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">C5/C6/C7 tension</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Suncave Parry arc</h3>
+                    <p>A Parry-family cap near the upper tangent arc. It is optional vocabulary with weak photo support.</p>
+                    <p><code>Parry-oriented family</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">weak evidence</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Lower tangent arc</h3>
+                    <p>The lower counterpart of the upper tangent family, tied to low-altitude/observer geometry.</p>
+                    <p><code>22 deg lower tangent family</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">pose-bound</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Parry supralateral arc</h3>
+                    <p>Parry-family shoulders near the 46 deg top region. Coverage and weak evidence blocked promotion.</p>
+                    <p><code>Parry + 46 deg family</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">not promoted</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Infralateral arcs</h3>
+                    <p>Lower-side 46 deg family vocabulary. Present as periphery language, not a calibrated inverse route.</p>
+                    <p><code>46 deg lower-side family</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">photo-partial</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Sun pillar</h3>
+                    <p>A vertical light column from plate-crystal reflection. The atlas renders it as stylized visual vocabulary.</p>
+                    <p><code>plate-crystal reflection</code></p>
+                    <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">stylized generator</span></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="legend-section" aria-labelledby="named-heading">
+            <div class="section-heading">
+                <h2 id="named-heading">Named, Not Yet Modeled</h2>
+                <p class="section-note">These rows keep the vocabulary visible without pretending the atlas already accounts for every halo family.</p>
+            </div>
+            <div class="phenomena-grid">
+                <article class="phenomenon-card">
+                    <h3>Parry-family arcs</h3>
+                    <p>Includes suncave, sunvex, and Parry supralateral members. Some are optional labels today; the family still needs subrows and HaloSim receipts.</p>
+                    <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">partial optional render</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Pyramidal / odd-radius halos</h3>
+                    <p>Faint odd-radius rings from pyramidal ice crystals. They are not part of the current atlas generator.</p>
+                    <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">not-modeled</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Lowitz arcs</h3>
+                    <p>Arcs from rotating plate orientations, historically contested and now photographically observed. Not modeled here yet.</p>
+                    <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">HaloSim candidate</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Antisolar features</h3>
+                    <p>Anthelion, anthelic arcs, paranthelia, and 120 deg parhelia live opposite or far around from the sun.</p>
+                    <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">not-modeled</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Sub-horizon halos</h3>
+                    <p>Subsun and subparhelia require aircraft, mountain, or below-horizon observer geometry.</p>
+                    <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">observer extension</span></div>
+                </article>
+                <article class="phenomenon-card">
+                    <h3>Circumhorizon arc</h3>
+                    <p>A high-sun plate-crystal arc sometimes called a fire rainbow. It is outside the current sundog-facing regime.</p>
+                    <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">not-modeled</span></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="legend-callout" aria-label="Project boundary">
+            <p>
+                This legend is a map of current project status, not a claim that Sundog has solved every halo. Phase 14 fills the accounting matrix; Phase 15 is reserved for speculative or unphotographed halos that need math, brute-force ray tracing, atlas comparison, and HaloSim receipts before promotion.
+            </p>
+            <div class="legend-links">
+                <a href="sundog.html#full-atlas">Open the live atlas</a>
+                <a href="docs/calibration/HALO_PHENOMENA_ACCOUNTING.md">Read the Phase 14 matrix</a>
+                <a href="docs/SUNDOG_V_GEOMETRY.md">Read the geometry roadmap</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
