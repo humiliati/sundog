@@ -408,7 +408,11 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   the low-velocity boundary as risky. The full lock has now run too: 3,456
   trials, 88 candidate envelope rows out of 324, 81 promising best cells out of
   108, and no high-velocity risky/negative best cells. The boundary is still
-  the `velocityScale=0.95` band, including all 5 negative equal-mass cells. See
+  the `velocityScale=0.95` band, including all 5 negative equal-mass cells. On
+  the pre-registered ratchet this is a pass, with boundary sharpening: the
+  high-velocity pocket holds at the longer tested horizon while the
+  low-velocity `velocityScale=0.95` boundary stays a mapped warning region
+  rather than widening. See
   [threebody/PHASE13_RESULTS.md](threebody/PHASE13_RESULTS.md).
 - **Cross-substrate follow-ups**: Mesa's entangled 5D `net.7` result and
   Geometry's HaloSim-oracle discipline now inform the next Threebody build
