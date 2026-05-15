@@ -2074,10 +2074,19 @@ receipt under declared crystal/observer conditions:
 subhorizon are P0 catalogue stubs with promotion paths. P3 is explicitly
 **not** claimed (neither locus is in the `parhelion-geometry.mjs` atlas
 grammar). The gate is **not** reached — nothing here is public-facing
-result language; P4 + pre-registration is required first. Tracked
-follow-ups: the quantitative pyramidal predicted-vs-measured ring-radius
-residual table, the `chat/claim_map.json` P2 boundary refinement (gated on
-the Phase 13 chat:eval chain), and a crystal-block-reduced Lowitz isolation
+result language; P4 + pre-registration is required first.
+
+Follow-up #1 (quantitative pyramidal residual) was **attempted
+2026-05-15 → NEGATIVE**: `scripts/pyramidal_ring_residual.py`
+(resolvability-gated) found the 14E 1M receipt has no resolvable discrete
+odd-radius rings (core-dominated diffuse glow; only the ~9° inner feature
+> 3σ), so **no residual table was produced and pyramidal stays P2** — the
+script refuses to fabricate a table off a smooth profile (negative kept
+as a map entry per the gate). Remaining tracked follow-ups: **#1′** a
+higher-fidelity pyramidal render (≥4–10M rays and/or per-ring ray-filter
+isolation) to actually resolve the rings, then re-run the (already-built)
+script; the `chat/claim_map.json` P2 boundary refinement (gated on the
+Phase 13 chat:eval chain); and a crystal-block-reduced Lowitz isolation
 render. This phase still depends on Phase 14's accounting matrix and Phase
 12A's HaloSim validation protocol, and may draw on the cinematic sidecar's
 batch-render automation when proof work needs sweeps.

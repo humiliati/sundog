@@ -115,6 +115,25 @@ Sundog result.
     placement; **P4 only** with a pre-registered photo-search /
     controlled-observation plan; **P5** requires real observation or
     specialist-confirmed classification.
+- **Quantitative probe (follow-up #1) — attempted 2026-05-15, NEGATIVE.**
+  [`scripts/pyramidal_ring_residual.py`](../../scripts/pyramidal_ring_residual.py)
+  masked the blue plot, found the ring centre by radial-profile
+  peak-sharpness, and applied a detrend + 3σ resolvability gate to the
+  14E receipt. **Result: no resolvable discrete ring loci.** The
+  azimuthally-averaged radial profile is a smooth, core-dominated diffuse
+  glow; only the inner bright feature (r ≲ 62 px — the ~9° ring blended
+  with the sun core) exceeds 3σ. No discrete 18–35° rings rise above
+  Monte-Carlo noise. This is a **data** limit (1M rays is too few for the
+  intrinsically-faint pyramidal paths spread over an all-sky plan
+  projection), **not** a method limit — the detrend+3σ test would surface
+  rings if present. **No predicted-vs-measured residual table was
+  produced; the script refuses to fabricate one off a smooth profile.**
+  *Consequence:* pyramidal **remains P2** — this evidence does **not**
+  advance it toward P3. Refined next step is now follow-up #1′ below.
+  Evidence retained:
+  [`halosim_outputs/phase14e/pyramidal_h18_radialprofile.txt`](halosim_outputs/phase14e/pyramidal_h18_radialprofile.txt)
+  (radial profile + detrended SNR) and the script. Negative result kept
+  as a map entry per the gate, not buried.
 
 ---
 
@@ -194,12 +213,22 @@ what would promote it.
 
 ## Tracked follow-ups (deferred, not dropped)
 
-1. **Quantitative pyramidal residual artifact.** Scale-lock
-   `phase14e/pyramidal_h18_1M_bw.png`, radial-profile the ring loci, and
-   tabulate measured vs predicted radii against the AH-CH10 wedge→Δ_min
-   table. Strengthens the pyramidal P2 and is the concrete probe toward
-   P3. Method: the 22°-halo scale-lock + radial-profile procedure in
-   `HALOSIM_VALIDATION_PROTOCOL.md`.
+1. ~~Quantitative pyramidal residual artifact off the 14E receipt.~~
+   **Done 2026-05-15 → NEGATIVE** (see the Pyramidal record's
+   "Quantitative probe" entry). The 14E 1M receipt has no resolvable
+   discrete rings; no residual table was produced. The tooling
+   ([`scripts/pyramidal_ring_residual.py`](../../scripts/pyramidal_ring_residual.py))
+   is built and resolvability-gated — it will emit the residual table +
+   46° linearity cross-check automatically once a sufficient receipt
+   exists. Superseded by **#1′**.
+1′. **Higher-fidelity pyramidal render for the residual table.** A
+   dedicated render that resolves the odd-radius family: **≥4–10M rays**
+   and/or **per-ring HaloSim ray-filter isolation** (filter by entry/exit
+   faces per the Tape AH-CH10 wedge table — 3–26 for 9°, 13–25 for 18.3°,
+   etc.) and/or a tighter sun-centred FOV than the all-sky plan. Then
+   re-run `scripts/pyramidal_ring_residual.py` (the gate passes → residual
+   table + linearity cross-check + overlay). This is the real concrete
+   probe toward pyramidal P3; the 1M 14E receipt was insufficient.
 2. **Chat boundary refinement.** `chat/claim_map.json`
    `halo_atlas_vocabulary_status` currently frames pyramidal/CHA as
    "named-only / not modeled." It should be refined so Ask Sundog says
