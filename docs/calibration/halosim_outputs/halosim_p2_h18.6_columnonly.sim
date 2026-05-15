@@ -7,7 +7,7 @@ Horiz column .1 deg disp.xng
  1.31
  16777215 
 FFFFFF
- 100 
+ 40 
  2 
  2
  2 
@@ -18,31 +18,31 @@ random.xng
  1.31
  16777215 
 FFFFFF
- 0 
+ 25 
  2 
  2
  3 
-Hexagonal Ice Prism.xsh
-Hexagonal Ice Prism
+
+no selection
 Water-Ice.xmt
-plate 8 deg disp.xng
+no selection
  1.31
  16777215 
 FFFFFF
  0 
- 2 
- .2
+ 0 
+ 1
  4 
-Hexagonal Ice Prism.xsh
-Hexagonal Ice Prism
+
+no selection
 Water-Ice.xmt
-plate 5 deg disp.xng
+no selection
  1.31
  16777215 
 FFFFFF
  0 
- 2 
- .2
+ 0 
+ 1
  5 
 
 no selection
@@ -131,12 +131,12 @@ FFFFFF
  0 
  0 
  1
--18.6
- 2             300000000     16            8 
+ 20
+ 5             25000000      16            8 
  6045979 
- 2             7             0            -18.6 
+ 2             7             0             18.6 
 Type9
- 12961221      0             16777215      0             16777215      0             16777215 
+ 12961221      0             9843250       0             16777215      0             16777215 
  2 
  6.9           .65           1
 False
@@ -149,7 +149,7 @@ True
 "1"
 "6"
  60
--18.6          0
+ 18.6          0
  1
  2.752164      1            -716          -240
  4 
@@ -175,7 +175,6 @@ These also produce most of the Parhelic Circle extending each side of the sun an
 Column crystals with their long axes horizontal form an Upper Tangent Arc directly above the sun.
 
 The "Subhorizon Halos" beneath the horizon are real and can be seen from aircraft or mountains when above cirrus clouds. 
-
 
 
 
