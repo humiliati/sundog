@@ -413,12 +413,20 @@ after the go decision below clears.
 
 ### 14.1 Compute model (load-bearing context)
 
-The mesa experiment is **100% local Node.js**. `scripts/mesa-harness.mjs`
-and `scripts/mesa-phase7-envelope.mjs` import only `node:*` plus the
-local `public/js/mesa-core.mjs` (`runMesaTrial`). There is **no LLM
-API anywhere in the mesa pipeline** - no OpenAI, Anthropic, or
-Groq/Llama call, no API key, no HTTP. PPO training and trial
-evaluation are hand-rolled pure-JS, no GPU/vectorized backend.
+The mesa experiment is **fully local, two-process**: the canonical
+environment is JS (`public/js/mesa-core.mjs`), stepped via a persistent
+Node stdio bridge (`scripts/mesa-env-bridge.mjs`, `step_batch`
+protocol); the policy + PPO/BC loop is **Python + PyTorch**
+(`training/mesa/train_ppo.py`, `train_bc.py`). The Phase-1 and
+aggregation harnesses (`scripts/mesa-harness.mjs`,
+`scripts/mesa-phase7-envelope.mjs`) are pure Node and import only
+`node:*` + `mesa-core.mjs`. There is **no LLM API anywhere in the mesa
+pipeline** - no OpenAI, Anthropic, or Groq/Llama call, no API key, no
+HTTP. **PyTorch is CPU-only on the project machine** (`torch
+2.11.0+cpu`, `cuda False`): there is no GPU acceleration available for
+Large-tier training. *(Corrected 2026-05-14: an earlier draft of this
+section wrongly said "PPO training is hand-rolled pure-JS." The env is
+JS-via-bridge; training is Python/PyTorch, CPU-only.)*
 
 Implication for budgeting: **API dollars are the wrong currency for
 this work. v2 cost is local wall-clock, not spend.** A
@@ -465,23 +473,58 @@ Evaluated-cell count goes from v1's 22 classified rows to
 intervention, sensor-tier) cells**. The aggregation/classification
 half scales with that count but is cheap per cell (it reuses the v1
 `mesa-phase7-envelope.mjs` machinery). **The binding cost is the
-Large-tier PPO training**: ~12 policies x 100M env-steps budget cap,
-pure-JS, no GPU.
+Large-tier PPO training** (Python/PyTorch CPU-only; see §14.4 for the
+measured rate).
 
-### 14.4 The one measurement that gates the decision
+### 14.4 Measured throughput (2026-05-14)
 
-Everything above is structural; the missing number is **per-env-step
-wall-clock for `mesa-core.mjs` at Large-tier width (~5M params) on
-the project machine**. With that rate, `12 policies x (up to) 100M
-steps` resolves to a real wall-clock estimate. Until measured, treat
-Large-tier feasibility as *unknown*, not assumed.
+The gating measurement has been **taken** (capped 2-3 update probes,
+`signature_ppo_terminal`, `batch_envs=64 x rollout_length=128 =
+8,192 env-steps/update`, plus the stdlib bridge smoke). Results:
 
-Recommended measurement (cheap, no commitment): time a Small-tier run
-(~5K params, 1M-step cap) and a Medium-tier run (~250K params,
-10M-step cap) end-to-end, derive steps/sec vs parameter count, and
-extrapolate to Large. Pure-JS NN training typically scales worse than
-linearly in parameter count, so the extrapolation should be treated
-as a lower bound on cost.
+| tier | params | s/update | env-steps/sec | bottleneck |
+| --- | ---: | ---: | ---: | --- |
+| bare bridge (no policy, batch-256) | - | - | **~19,851** | env stepping ceiling |
+| Small | ~5K | **1.74** | ~4,700 | bridge-bound |
+| Medium | ~250K | **2.35** | ~3,500 | bridge-bound |
+| Large | ~5M | **18.43** | ~445 | **PyTorch CPU forward/backward** |
+
+Per-policy fixed overhead (torch import + bridge spawn + 8-seed eval +
+checkpoint/JSON/history writes) ≈ ~10 s, negligible at any real
+training budget. Key finding: **the bottleneck flips between tiers.**
+Small→Medium (50x params) is only 1.35x slower/update because the JS
+env-bridge dominates. Medium→Large (20x params) is **~8x
+slower/update** because CPU-only PyTorch forward/backward on a ~5M
+param net overtakes the bridge. This is *not* extrapolation - Large
+was measured directly.
+
+**Single Large policy, wall-clock by env-step budget**
+(updates = budget / 8,192; x 18.43 s/update):
+
+| Large env-step budget | updates | wall / policy |
+| --- | ---: | --- |
+| ~0.66M (train_ppo default `--updates 80`; what Small/Medium actually used) | 80 | **~25 min** |
+| 1M (roadmap Small cap) | ~122 | **~37 min** |
+| 10M (roadmap Medium cap) | ~1,221 | **~6.3 h** |
+| 100M (roadmap Large cap) | ~12,207 | **~62 h (~2.6 days)** |
+
+**Full Large set** (~12 cliff-relevant policies) / **down-scope** (~6):
+
+| budget | full set (~12) | down-scope (~6) |
+| --- | --- | --- |
+| ~0.66M default | ~5 h | ~2.5 h |
+| 1M | ~7.4 h | ~3.7 h |
+| 10M | ~75 h (~3 days) | ~38 h |
+| 100M cap | ~31 days | ~16 days |
+
+**The residual unknown is no longer timing - it is the convergence
+budget.** Small/Medium reached their success behavior at the
+train_ppo default (~0.66M env-steps, 80 updates). *If Large converges
+at a similar budget, full v2 is a ~5 h overnight GO. If Large needs
+10M+ steps to clear the 0.75 success floor, it is DOWN-SCOPE/DEFER
+territory.* That question is answered by **one full-default-budget
+Large convergence run (~25 min)** - staged in §14.6 (it exceeds the
+~10-min inline-run threshold, so it is staged rather than run here).
 
 ### 14.5 What Phase 8 v2 inherits from this
 
@@ -497,33 +540,75 @@ replay or the Axis-A/SAE-redux deferred items.
 
 ### 14.6 Pre-registered decision gate
 
-Before committing to v2, the go/no-go is pinned here so the choice is
-not made implicitly mid-run:
+The §14.4 timing is now measured, so the gate is budget-conditioned
+rather than timing-unknown. The branch is selected by the **Large
+convergence budget**, established by the staged probe below:
 
-- **GO (full v2):** the §14.4 measurement shows the ~12-policy Large
-  cross-product completes within the project's acceptable wall-clock
-  budget (operator-defined; suggested default: a single Large policy
-  trains to its 100M-step cap in under ~24h pure-JS, making the full
-  set a multi-day-but-tractable batch).
-- **DOWN-SCOPE (cliff-subset v2):** if full Large is intractable,
-  train Large *only* on the cliff-relevant L-Mixed subset
-  (`lambda ∈ {0.90, 0.95, 0.97, 0.99}`) plus L-Signature-terminal and
-  L-Reward anchors - ~6 policies. This still delivers the Phase 8 v2
-  third-tier toggle on the program-significant boundary, at roughly
-  half the training cost. The probe x intervention cross-product can
-  also be scoped to the cliff cells only.
-- **DEFER (stay v1):** if even the cliff-subset Large training is
-  intractable on local compute, v2 is deferred. The Phase 8 v2
-  third-tier toggle is dropped from scope and `mesa.html` stays at
-  the Small/Medium two-tier presentation. This is an acceptable
-  outcome - it is a compute-budget boundary, not a claim failure;
-  the v1 "partially holds" envelope verdict is unaffected.
+- **GO (full v2):** the staged convergence probe shows Large clears
+  the 0.75 success floor at ≤ ~1M env-steps (like Small/Medium). Full
+  ~12-policy Large set is then a ~5-7.4 h overnight batch - tractable.
+- **DOWN-SCOPE (cliff-subset v2):** Large needs ~10M env-steps to
+  converge (full set ~3 days; cliff subset ~38 h). Train Large *only*
+  on the cliff-relevant L-Mixed subset (`lambda ∈ {0.90, 0.95, 0.97,
+  0.99}`) + L-Signature-terminal + L-Reward anchors (~6 policies), and
+  scope the probe x intervention cross-product to the cliff cells.
+  Still delivers the Phase 8 v2 third-tier toggle on the
+  program-significant boundary.
+- **DEFER (stay v1):** Large needs ~100M env-steps (full set ~31 days,
+  CPU-only - intractable locally). v2 is deferred; `mesa.html` stays
+  two-tier. This is a compute-budget boundary, not a claim failure;
+  the v1 "partially holds" verdict is unaffected. (Re-openable if GPU
+  or a vectorized env replaces the JS-bridge bottleneck.)
 
-The decision is the operator's; this spec's job is to make all three
-branches explicit and grounded so the choice is informed. No v2
-training starts until the §14.4 measurement is recorded and a branch
-above is selected in writing (mirroring the mesa "pre-registered
-negative" discipline).
+The decision is the operator's; no v2 training batch starts until the
+convergence probe is run and a branch is selected in writing
+(pre-registered-negative discipline).
+
+#### Staged commands (exceed the ~10-min inline-run threshold - run by operator)
+
+Module invocation from repo root `C:\Users\hughe\Dev\sundog` (the
+`-m` form is required - `training` is a package; `python
+training/mesa/train_ppo.py` fails with `ModuleNotFoundError`).
+
+**1. Large convergence probe (~25 min) - the decision input.**
+Runs the cliff-canonical signature baseline at the train_ppo default
+budget (80 updates ≈ 0.66M env-steps) and reports whether Large
+clears the success floor at the Small/Medium budget:
+
+```powershell
+# ~25 min wall (80 updates x 18.43 s/update + ~10 s overhead)
+python -m training.mesa.train_ppo --variant signature_ppo_terminal `
+  --tier Large --updates 80 --eval-seeds 64 `
+  --out results/mesa/phase7v2-large-convergence --progress
+# Read: results/mesa/phase7v2-large-convergence/logs/*_evaluation_summary.json
+#   success_rate >= 0.75  -> GO branch (Large converges at default budget)
+#   success_rate  < 0.75  -> raise --updates (1221 = 10M steps) and re-probe;
+#                            if still sub-floor at 10M -> DEFER
+```
+
+**2. Full Large cliff-set training batch (GO branch; ~5-7 h).**
+One invocation per variant; enumerate the cliff set from `VARIANTS`
+in `train_ppo.py` (signature_ppo_terminal, reward_ppo_dense, and the
+mixed variants at `--mixed-lambda` ∈ {0.90, 0.95, 0.97, 0.99}; extend
+to the full ~12 set only on the GO branch). Pattern:
+
+```powershell
+# Per policy: --updates from the convergence probe outcome (80 if GO).
+# Stage one line per (variant[,lambda]); resume-safe via distinct --out.
+python -m training.mesa.train_ppo --variant signature_ppo_terminal `
+  --tier Large --updates <converged_updates> --eval-seeds 64 `
+  --out results/mesa/phase7v2-large/sig_terminal --progress
+python -m training.mesa.train_ppo --variant mixed_ppo_terminal `
+  --tier Large --mixed-lambda 0.95 --updates <converged_updates> `
+  --eval-seeds 64 --out results/mesa/phase7v2-large/mixed_l095 --progress
+# ... remaining cliff variants; then re-run scripts/mesa-phase7-envelope.mjs
+#     to fold Large rows into results/mesa/operating-envelope/.
+```
+
+*(The exact `mixed_*` variant slug should be read from `VARIANTS` in
+`train_ppo.py` before staging the batch - only `signature_ppo_terminal`
+was verified in the timing probes; the mixed slug is named here from
+the spec's variant family, not from a verified run.)*
 
 ## 15. Versioning
 
@@ -539,3 +624,12 @@ negative" discipline).
   feasibility, the Phase 8 v2 linkage, and a pre-registered
   GO / DOWN-SCOPE / DEFER decision gate. This is a decision aid; the
   full v2 implementation spec is written only after the gate clears.
+- **v2-measured (2026-05-14)** - §14.1 compute-model corrected
+  (Python/PyTorch CPU-only + Node JS env-bridge, *not* pure-JS;
+  `torch 2.11.0+cpu`, `cuda False`). §14.4 replaced with **measured**
+  throughput from capped probes: Small 1.74 / Medium 2.35 / Large
+  18.43 s/update; bottleneck flips bridge-bound→PyTorch-CPU-bound at
+  Large. §14.6 gate rewritten as budget-conditioned with staged
+  operator PowerShell (a ~25-min Large convergence probe as the
+  decision input; the full ~5-7 h Large batch on the GO branch). The
+  residual unknown is the Large convergence budget, not timing.

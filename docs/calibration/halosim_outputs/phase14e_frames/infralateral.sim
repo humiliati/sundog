@@ -1,0 +1,181 @@
+ 12 
+ 1 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+random.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 30 
+ 2 
+ .5
+ 2 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Horiz column .1 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 70 
+ 2 
+ .5
+ 3 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ .3
+ 4 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ .5
+ 5 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 6 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 7 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 8 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 9 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 10 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 11 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 12 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 15
+ 5             1000000        8             8 
+ 8152647 
+ 2             7             0             15 
+Type9
+ 14343655      0             9843250       1             8421504       1             16777215 
+ 2 
+ 5.9           .35           1
+True
+False
+False
+True
+"1,2"
+"not tested"
+"not tested"
+"2"
+"2"
+ 60
+ 15            0
+ 1
+ 1             1             0             0
+ 3 
+420   0    510    1     600    0.4      680    0
+ 0.5          -1            -1            -1            -1             1             1             1             0             1 
+-1            -1            -1            -1            -1             1             1             1             1            42
+*#*#*#*#*#* description follows *
+The colourful but rare Infralateral Arc.   
+
+The simulation is a split-sky filtered view.  The right hand half isolates the infralateral arc (IA) jutting up from the horizon
+
+Hexagonal column crystals falling with their long axes nearly horizontal form the Infralateral Arc. Rays enter a vertical end face and leave through a side face.  
+
+The Infralateral Arc changes its shape as the sun's elevation increases.   Try 62 degrees - what other arc does it now resemble?   Why is the parhelic circle distorted?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

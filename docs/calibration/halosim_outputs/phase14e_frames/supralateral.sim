@@ -1,0 +1,181 @@
+ 12 
+ 1 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+random.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 30 
+ 2 
+ .5
+ 2 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Horiz column .1 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 70 
+ 2 
+ .5
+ 3 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ .3
+ 4 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ .5
+ 5 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 6 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 7 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 8 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 9 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 10 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 11 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 12 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 22
+ 5             1000000        8             8 
+ 8152647 
+ 2             7             0             22 
+Type9
+ 14343655      0             9843250       1             8421504       1             16777215 
+ 2 
+ 5.9           .35           1
+True
+False
+False
+True
+"not tested"
+"not tested"
+"1,2"
+"2"
+"2"
+ 60
+ 22            0
+ 1
+ 1             1             0             0
+ 3 
+420   0    510    1     600    0.4      680    0
+ 0.5          -1            -1            -1            -1             1             1             1             0             1 
+-1            -1            -1            -1            -1             1             1             1             1            42
+*#*#*#*#*#* description follows *
+Split-sky filtered view showing a Supralateral Arc (SA).
+
+The right hand half shows the rare, brightly colored SA and faint traces of the 46 degree halo.   
+
+Horizontal column crystals, 'singly oriented columns', form the SA.   Rays enter a side face and leave through a perpendicular end face.   Like the circumzenithal arc, the SA can only form when the solar altitude is less than about 32 degrees.
+
+What happens to the arc at low solar altitudes?
+
+The simulation contains poorly oriented crystals to produce a 46 degree halo.    When only segments are visible it can be difficult to distinguish between the SA and the 46 degree halo.
+
+The unfiltered view also includes - near to the horizon -  the cIosely related Infraleral Arc.   To produce a filtered Infralateral Arc, edit the ray filters so that rays can only enter through an end face (1,2) but may leave through any face (blank).
+
+
+
+
+
+
+
+
+
+
+

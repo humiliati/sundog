@@ -1,0 +1,175 @@
+ 12 
+ 1 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+random.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 25 
+ 2 
+ .5
+ 2 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Horiz column .3 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 50 
+ 2 
+ 2
+ 3 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+plate .3 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ .3
+ 4 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Parry .2 - .2 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 25 
+ 2 
+ 2
+ 5 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 2
+ 6 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 7 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 8 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 9 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 10 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 11 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 12 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 15
+ 5             1000000        8             7 
+ 10186799 
+ 2             7             0             15 
+Type9
+ 15131099      0             9843250       0             16777215      0             16777215 
+ 2 
+ 4.4           .41           1
+True
+False
+False
+True
+"3"
+"not tested"
+"5,7"
+"2"
+"2"
+ 50
+ 15            0
+ 1
+ 1             1             0             0
+ 3 
+420   0    510    1     600    0.4      680    0
+ 1             1             1             1             1             1             1             1             0             1 
+ 1             1             1             1             1             1             1             1             1            42
+*#*#*#*#*#* description follows *
+Look for the rare Parry arcs whenever there are halos - sooner or later you will see one.
+
+The filters in this simulation are set to show a "suncave" Parry arc which is in the vicinity of the Upper Tangent Arc (some of which also 'leaks' through the filters). It's position and appearance alter dramatically with the Sun's altitude.   Run this simulation with altitudes from 5 - 75 degrees.  While doing this also watch the unfiltered view - there are other parry arcs at low and high solar altitudes.  Click on the "Show Box" of the Ray Tracer.  Move the box over one of the Parry arcs and click Start again to show the ray paths through the crystals.
+
+Parry arcs are formed by highly oriented column crystals.  Their long axes are nearly horizontal as with the 'singly oriented columns' which form tangent arcs.  AND their upper and lower prism side faces are nearly horizontal.  This 'Parry Orientation' sounds improbable, yet it occurs.
+
+Parry arcs proper result from ray paths through prism side faces inclined at 60°.   There are four possibilities and the Parry arcs are called 'suncave' or 'sunvex' depending whether they are concave or convex with respect to the sun.
+
+The high degree of orientation produces many different rare halos.
+
+
+
+
+
+
+

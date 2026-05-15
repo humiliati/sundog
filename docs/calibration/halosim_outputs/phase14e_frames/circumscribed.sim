@@ -1,0 +1,181 @@
+ 12 
+ 1 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+random.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 30 
+ 2 
+ .5
+ 2 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Horiz column .3 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 70 
+ 2 
+ 2
+ 3 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+plate .3 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ .3
+ 4 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Parry 1 - 1 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 2 
+ 2
+ 5 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 6 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 7 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 8 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 9 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 10 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 11 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 12 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 45
+ 4             1000000         16            7 
+ 9856045 
+ 2             1             0             0 
+Type9
+ 14737632      0             9843250       0             16777215      0             16777215 
+ 2 
+ 1.9           .75           1
+True
+False
+False
+True
+"3,4,5,6,7,8"
+"not tested"
+"3,4,5,6,7,8"
+"2"
+"2"
+ 60
+ 0             0
+ 1
+ 1             1             0             0
+ 3 
+420   0    510    1     600    0.4      680    0
+ 0.5          -1            -1            -1            -1             1             1             1             0             1 
+-1            -1            -1            -1            -1             1             1             1             1            42
+*#*#*#*#*#* description follows *
+The circumscribed halo is the high sun version of the tangent arcs.  It is formed by rays passing through side faces inclined at 60 deg to each other of singly oriented column crystals. 
+
+The simulation includes some randomly oriented crystals to form the weak 22 deg reference halo.
+
+The right hand view is filtered to isolate the circumscribed halo and 22 degree halos.   The filters pass only rays entering hexagonal prism side faces and leaving through another side face without any internal reflection.  
+
+Note how the circumscribed halo is brighter at top and bottom compared to the uniform 22 degree halo.   At high solar elevations the two halos can be difficult to distinguish apart.
+
+When the sun is lower, the circumscribed halo 'splits' into upper and lower tangent arcs.   
+
+Try simulations at other solar elevations.
+
+
+
+
+
+
+
+
+
+
+

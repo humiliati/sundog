@@ -584,6 +584,19 @@ explicit `hold`, `collapse`, `fragile`, `incompetent`, or `ambiguous` status.
 Phase 6's `net.7` result is attached as a mechanistic annotation to the
 Medium `lambda=0.95` / `lambda=0.97` cliff boundary.
 
+> **v2 scoping landed 2026-05-14.** [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md)
+> §14 (v2 Scope and Decision Gate) carries the informed-step-forward
+> material for the Phase 8 v2 "operating-envelope cross-product"
+> deferred item: the corrected compute model (Python/PyTorch CPU-only
+> + Node JS env-bridge — not pure-JS; no GPU), **measured** training
+> throughput (Small 1.74 / Medium 2.35 / Large 18.43 s/update; the
+> bottleneck flips bridge-bound→PyTorch-CPU-bound at Large), and a
+> budget-conditioned GO / DOWN-SCOPE / DEFER gate with staged operator
+> PowerShell. The binding question is now the Large *convergence
+> budget*, not timing: a staged ~25-min Large convergence probe is the
+> decision input. No v2 training batch starts until that probe runs
+> and a branch is selected in writing.
+
 Result note at [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md) v1
 (2026-05-12). The first envelope map classifies 22 Small/Medium policies with
 zero missing cells: 8 `hold`, 7 `collapse`, 1 `fragile`, 4 `incompetent`, and
