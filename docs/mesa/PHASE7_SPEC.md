@@ -478,7 +478,8 @@ measured rate).
 
 ### 14.4 Measured throughput (2026-05-14)
 
-The gating measurement has been **taken** (capped 2-3 update probes,
+The gating measurement has been **taken and firmed** (initial capped
+2-3 update probes, then a 20-update steady-state firm-up 2026-05-15;
 `signature_ppo_terminal`, `batch_envs=64 x rollout_length=128 =
 8,192 env-steps/update`, plus the stdlib bridge smoke). Results:
 
@@ -487,35 +488,44 @@ The gating measurement has been **taken** (capped 2-3 update probes,
 | bare bridge (no policy, batch-256) | - | - | **~19,851** | env stepping ceiling |
 | Small | ~5K | **1.74** | ~4,700 | bridge-bound |
 | Medium | ~250K | **2.35** | ~3,500 | bridge-bound |
-| Large | ~5M | **18.43** | ~445 | **PyTorch CPU forward/backward** |
+| Large | ~5M | **~24.5** | ~334 | **PyTorch CPU forward/backward** |
 
-Per-policy fixed overhead (torch import + bridge spawn + 8-seed eval +
+> **Timing-firm-up correction (2026-05-15).** The first Large rate
+> (18.43 s/update) came from a 3-update probe and **underestimated
+> steady-state by ~33%**. A 20-update firm-up gives **~24.5 s/update**
+> (tqdm stabilized at 24.4-24.9; 20 updates / 525 s wall ≈ 25.8
+> incl. overhead). All Large numbers below use **24.5 s/update**.
+> This is exactly why the §14 ~10-min-rule discipline stages long
+> runs off a *firmed* rate, not a first short probe — the operator
+> was about to commit multi-day compute against numbers ~⅓ too low.
+
+Per-policy fixed overhead (torch import + bridge spawn + eval +
 checkpoint/JSON/history writes) ≈ ~10 s, negligible at any real
 training budget. Key finding: **the bottleneck flips between tiers.**
 Small→Medium (50x params) is only 1.35x slower/update because the JS
-env-bridge dominates. Medium→Large (20x params) is **~8x
-slower/update** because CPU-only PyTorch forward/backward on a ~5M
-param net overtakes the bridge. This is *not* extrapolation - Large
-was measured directly.
+env-bridge dominates. Medium→Large (20x params) is **~10x
+slower/update** (2.35 → 24.5) because CPU-only PyTorch forward/backward
+on a ~5M param net overtakes the bridge. Measured directly, not
+extrapolated.
 
 **Single Large policy, wall-clock by env-step budget**
-(updates = budget / 8,192; x 18.43 s/update):
+(updates = budget / 8,192; x **24.5 s/update**):
 
 | Large env-step budget | updates | wall / policy |
 | --- | ---: | --- |
-| ~0.66M (train_ppo default `--updates 80`) | 80 | **~25 min** |
-| 1M (roadmap Small cap) | ~122 | **~37 min** |
-| **10M (canonical Medium convergence budget — see §14.4.1)** | **~1,221** | **~6.3 h** |
-| 100M (roadmap Large cap) | ~12,207 | **~62 h (~2.6 days)** |
+| ~0.66M (train_ppo default `--updates 80`) | 80 | **~33 min** |
+| 1M (roadmap Small cap) | ~122 | **~50 min** |
+| **10M (canonical Medium convergence budget — see §14.4.1)** | **~1,221** | **~8.3 h** |
+| 100M (roadmap Large cap) | ~12,207 | **~83 h (~3.5 days)** |
 
 **Full Large set** (~12 cliff-relevant policies) / **down-scope** (~6):
 
 | budget | full set (~12) | down-scope (~6) |
 | --- | --- | --- |
-| ~0.66M default | ~5 h | ~2.5 h |
-| 1M | ~7.4 h | ~3.7 h |
-| 10M | ~75 h (~3 days) | ~38 h |
-| 100M cap | ~31 days | ~16 days |
+| ~0.66M default | ~6.5 h | ~3.3 h |
+| 1M | ~10 h | ~5 h |
+| 10M | ~100 h (~4.2 days) | ~50 h (~2.1 days) |
+| 100M cap | ~41 days | ~21 days |
 
 **The residual unknown is no longer timing - it is the convergence
 budget**, and the 2026-05-15 probe + a canonical-artifact check
@@ -553,18 +563,46 @@ net at <7% of Medium's proven budget" predicts. The alignment of
 
 **Recalibrated decision probe.** Re-anchor the convergence budget to
 the *Medium-proven* 10M (not the arbitrary default). The operative
-decision probe is now **Large @ 10M env-steps** (`--updates 1221`),
-measured cost **~6.3 h** — which exceeds the ~10-min inline-run
-threshold, so it is **staged in §14.6, not run here**. Pre-registered:
-Large @ 10M `success_rate ≥ 0.75` → GO/DOWN-SCOPE by set size
-(full ~12-policy set ≈ ~75 h / ~3 days at 10M; cliff subset ≈ ~38 h);
-`< 0.75` at 10M → **DEFER** (Large needs >10M on CPU-only torch:
-full set ≥ ~31 days — intractable locally; re-openable only with GPU
-or a vectorized env).
+decision probe is **Large @ 10M env-steps** (`--updates 1221`),
+firmed cost **~8.3 h** (24.5 s/update) — exceeds the ~10-min
+inline-run threshold, so **staged in §14.6, not run here**.
+Pre-registered: Large @ 10M `success_rate ≥ 0.75` → GO/DOWN-SCOPE by
+set size (full ~12-policy set ≈ **~4.2 days** at 10M; cliff subset ≈
+**~2.1 days**); `< 0.75` at 10M → **DEFER** (Large needs >10M on
+CPU-only torch: full set ≥ **~41 days** — intractable locally;
+re-openable only with GPU or a vectorized env).
 
-The probe receipt is kept at
+The probe-1 receipt is kept at
 `results/mesa/phase7v2-large-convergence/` (a real staged-command
 read-back path, not scratch — do not delete).
+
+### 14.4.2 Resume mechanics verified — probe-2 is monitorable (2026-05-15)
+
+A resume-mechanics test (two chained 3-update Large runs) confirms
+`--load-checkpoint <ckpt>` **without** `--reset-optimizer` genuinely
+*continues* training, not cold-restarts:
+
+- segB logged `loaded_checkpoint ... optimizer_state_loaded=True`;
+- **`explained_variance` = 0.919 at segB-update-1 vs 0.103 at
+  segA-update-1** — a cold-init critic cannot explain 92% of return
+  variance on its first update, so segB's critic is the resumed one;
+- `log_std` continues segA's trajectory (−0.477 → −0.454), not reset
+  to the −0.490 cold-start value.
+
+Consequence: the ~8.3 h Large @ 10M probe-2 does **not** have to be a
+single black-box run (the trainer has *no* in-run eval/checkpoint
+cadence and writes `_history.csv` only at the end, so a single run is
+unobservable until done). Instead probe-2 is staged as a **monitorable
+segmented chain**: ~6 segments of ~204 updates (~1.67M env-steps,
+~83 min each), each completing with its own `evaluation_summary.json`
+and checkpoint; segment N+1 continues via `--load-checkpoint`
+segment N. The operator reads `success_rate` + `mean_terminal_alignment`
+after each segment and **early-aborts** if alignment is flat across
+segments (no climb toward the canonical Medium 0.999), converting a
+~8.3 h all-or-nothing gamble into a per-~1.5 h go/no-go. Caveat:
+segmented ≠ bit-identical to one continuous run (each segment re-seeds
+the env batch; obs_rms/optimizer carry over) — fine for a convergence
+go/no-go, not for a reproducibility receipt.
 
 ### 14.5 What Phase 8 v2 inherits from this
 
@@ -589,21 +627,22 @@ Large @ 10M probe** (probe-2 below):
 
 - **GO (full v2):** probe-2 shows Large clears the 0.75 floor at
   **10M env-steps** (the Medium-proven budget). Full ~12-policy Large
-  set ≈ **~75 h (~3 days)** at 10M; cliff subset ≈ **~38 h**. Tractable
-  as a multi-day batch — call it GO if the operator accepts a multi-day
-  local run, else take DOWN-SCOPE.
+  set ≈ **~4.2 days** at 10M (24.5 s/update firmed); cliff subset ≈
+  **~2.1 days**. GO only if the operator accepts a multi-day local
+  batch; else take DOWN-SCOPE.
 - **DOWN-SCOPE (cliff-subset v2):** train Large *only* on the
   cliff-relevant L-Mixed subset (`lambda ∈ {0.90, 0.95, 0.97, 0.99}`)
   + L-Signature-terminal + L-Reward anchors (~6 policies) at 10M
-  (≈ ~38 h), and scope the probe × intervention cross-product to the
-  cliff cells. Still delivers the Phase 8 v2 third-tier toggle on the
-  program-significant boundary.
-- **DEFER (stay v1):** probe-2 shows Large still sub-0.75 at 10M (i.e.
-  Large needs >10M; full set ≥ ~31 days CPU-only — intractable
-  locally). v2 deferred; `mesa.html` stays two-tier. Compute-budget
-  boundary, not a claim failure; v1 "partially holds" unaffected.
-  Re-openable only with GPU or a vectorized env (the JS-bridge +
-  CPU-torch stack is the bottleneck, per §14.4).
+  (≈ **~2.1 days**), and scope the probe × intervention cross-product
+  to the cliff cells. Still delivers the Phase 8 v2 third-tier toggle
+  on the program-significant boundary.
+- **DEFER (stay v1):** probe-2's early segments show alignment flat
+  (no climb toward the Medium 0.999) — Large needs ≫10M; full set
+  ≥ **~41 days** CPU-only, intractable locally. v2 deferred;
+  `mesa.html` stays two-tier. Compute-budget boundary, not a claim
+  failure; v1 "partially holds" unaffected. Re-openable only with GPU
+  or a vectorized env (the JS-bridge + CPU-torch stack is the
+  bottleneck, per §14.4).
 
 The decision is the operator's; no v2 training batch starts until
 probe-2 is read and a branch is selected in writing
@@ -620,47 +659,63 @@ training/mesa/train_ppo.py` fails with `ModuleNotFoundError`).
 signal; the 0.66M threshold was wrong (canonical Medium used 10M).
 Receipt: `results/mesa/phase7v2-large-convergence/`.
 
-**Probe-2 — recalibrated decision input: Large @ 10M (~6.3 h).**
-Re-anchored to the Medium-proven budget. `1221 updates × 8,192
-env-steps/update ≈ 10M`:
+**Probe-2 — recalibrated decision input: Large @ 10M as a MONITORABLE
+SEGMENTED CHAIN (~8.3 h total; ~83 min/segment).** Resume mechanics
+verified in §14.4.2 (`--load-checkpoint` without `--reset-optimizer`
+continues training). The trainer has no in-run eval/checkpoint cadence
+and flushes `_history.csv` only at the end, so a single `--updates
+1221` run is unobservable for ~8.3 h. Instead run **6 segments of 204
+updates** (~1.67M env-steps each); read each segment's eval before
+launching the next; **early-abort** on flat alignment.
 
 ```powershell
-# ~6.3 h wall (1221 updates x 18.43 s/update). Resume-safe via --out.
-python -m training.mesa.train_ppo --variant signature_ppo_terminal `
-  --tier Large --updates 1221 --eval-seeds 64 `
-  --out results/mesa/phase7v2-large-conv-10m --progress
-# Read: results/mesa/phase7v2-large-conv-10m/logs/*_evaluation_summary.json
-#   success_rate >= 0.75  -> GO / DOWN-SCOPE (by set size, below)
-#   success_rate  < 0.75  -> DEFER (Large needs >10M; intractable CPU-only)
-# Optional cross-check: also read mean_terminal_alignment vs the
-#   canonical Medium 0.999 to see how close 10M gets if sub-floor.
+# Run ONE segment, read its eval, decide whether to launch the next.
+# ~83 min/segment (204 updates x 24.5 s/update). 6 segments ~= 10M.
+$out = "results/mesa/phase7v2-large-conv-10m"
+$v   = "signature_ppo_terminal"
+
+# Segment 1 (fresh):
+python -m training.mesa.train_ppo --variant $v --tier Large `
+  --updates 204 --eval-seeds 32 --out "$out/seg1" --run-label seg1 --progress
+
+# Segments 2..6: load the PREVIOUS segment's checkpoint (no --reset-optimizer).
+# Substitute N = 2..6 and P = N-1:
+python -m training.mesa.train_ppo --variant $v --tier Large `
+  --updates 204 --eval-seeds 32 --out "$out/segN" --run-label segN `
+  --load-checkpoint "$out/segP/checkpoints/${v}_large_seed_0_segP.pt" --progress
+
+# After EACH segment, read:
+#   $out/segN/logs/${v}_large_seed_0_segN_evaluation_summary.json
+# Cumulative env-steps after segN ~= N x 1.67M (seg6 ~= 10M).
+# Decision rule (pre-registered):
+#   success_rate >= 0.75 at any segment      -> GO / DOWN-SCOPE (set size below)
+#   mean_terminal_alignment climbing toward
+#     the canonical Medium 0.999 across segs  -> keep going
+#   alignment FLAT (~0.36, no climb) by seg3
+#     (~5M)                                   -> EARLY-ABORT -> DEFER
+#   seg6 (~10M) done and success_rate < 0.75  -> DEFER
+# (Floor-exit prints "below success floor ... " with a nonzero exit
+#  code every sub-0.75 segment - expected; do NOT &&-chain segments.)
 ```
 
-**Batch (GO/DOWN-SCOPE branch; full ~75 h / cliff-subset ~38 h at
-10M).** One invocation per variant; enumerate the cliff set from
-`VARIANTS` in `train_ppo.py` (`signature_ppo_terminal`,
-`reward_ppo_dense`, and the mixed variants at `--mixed-lambda` ∈
-{0.90, 0.95, 0.97, 0.99}; full ~12 set only on a GO that accepts the
-multi-day cost). Pattern:
+**Batch (GO/DOWN-SCOPE branch; full ~4.2 days / cliff-subset ~2.1
+days at 10M).** One chain per variant, same segmented pattern (or a
+single `--updates 1221` run per variant if the operator no longer
+needs per-segment monitoring once probe-2 has shown the budget is
+sufficient). Enumerate the cliff set from `VARIANTS` in
+`train_ppo.py` (`signature_ppo_terminal`, `reward_ppo_dense`, and the
+mixed variants at `--mixed-lambda` ∈ {0.90, 0.95, 0.97, 0.99}; full
+~12 set only on a GO that accepts the multi-day cost). Per policy use
+the budget probe-2 established (1221 updates if 10M sufficed; more
+only if probe-2 needed it). Then re-run
+`scripts/mesa-phase7-envelope.mjs` to fold the Large rows into
+`results/mesa/operating-envelope/`.
 
-```powershell
-# --updates from probe-2 (1221 = 10M if probe-2 cleared at 10M;
-# higher only if probe-2 needed more). Resume-safe via distinct --out.
-python -m training.mesa.train_ppo --variant signature_ppo_terminal `
-  --tier Large --updates 1221 --eval-seeds 64 `
-  --out results/mesa/phase7v2-large/sig_terminal --progress
-python -m training.mesa.train_ppo --variant mixed_ppo_terminal `
-  --tier Large --mixed-lambda 0.95 --updates 1221 `
-  --eval-seeds 64 --out results/mesa/phase7v2-large/mixed_l095 --progress
-# ... remaining cliff variants; then re-run scripts/mesa-phase7-envelope.mjs
-#     to fold Large rows into results/mesa/operating-envelope/.
-```
-
-*(The exact `mixed_*` variant slug should be read from `VARIANTS` in
+*(The exact `mixed_*` variant slug must be read from `VARIANTS` in
 `train_ppo.py` before staging the batch - only `signature_ppo_terminal`
-was verified. Note Small signature-terminal reaches only
+was verified in probes. Note Small signature-terminal reaches only
 `success_rate ≈ 0.578` even at its phase5 budget, so a sub-0.75
-Large @ 10M is not automatically DEFER if alignment is climbing
+Large @ 10M is not automatically DEFER if alignment is still climbing
 toward the Medium 0.999 — operator judgement, recorded in writing.)*
 
 ## 15. Versioning
@@ -697,3 +752,14 @@ toward the Medium 0.999 — operator judgement, recorded in writing.)*
   **Large @ 10M probe (~6.3 h, staged)**, not the mis-calibrated
   0.66M one. Probe-1's 0.000 is *not* a DEFER signal — it was an
   under-budget run against a wrong threshold.
+- **v2-timing-firmed + monitorable (2026-05-15)** - 20-update Large
+  firm-up: steady-state **~24.5 s/update** (the 3-update probe's
+  18.43 underestimated by ~33%). §14.4 throughput table, budget
+  tables, and §14.4.1/§14.6 numbers re-derived: Large @ 10M ≈
+  **~8.3 h** (not 6.3); full ~12-policy set ≈ ~4.2 days; cliff subset
+  ≈ ~2.1 days; 100M-cap DEFER regime ≈ ~41 days. New §14.4.2:
+  resume-mechanics verified (`--load-checkpoint` w/o
+  `--reset-optimizer` continues training — explained_variance 0.92 at
+  resumed-update-1 vs 0.10 cold), so §14.6 probe-2 is rewritten as a
+  **monitorable 6-segment chain** (~83 min/segment, per-segment eval,
+  early-abort on flat alignment) instead of an ~8.3 h black-box run.

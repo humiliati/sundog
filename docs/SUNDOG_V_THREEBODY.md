@@ -641,55 +641,17 @@ Goal: test whether the Phase 11 operating pocket represents durable control
 over a longer rollout, or whether guarded TRACK mainly delays the same failure
 within the original 8-second window.
 
-Primary checks:
+Implementation-grade spec and result note:
 
-- Horizon extension: rerun the favorable Phase 11 comparison slate at
-  `duration=16`, with the same passive, naive local, guarded accelerometer
-  TRACK, and privileged heuristic oracle modes.
-- Boundary inclusion: keep low-velocity boundary cells in the long-horizon
-  slate so the negative region remains visible instead of selecting only wins.
-- Cost-rate audit: compare total delta-v and delta-v per simulated second, so a
-  survival gain that only comes from rapidly growing control effort is not
-  overclaimed.
-- Late-failure audit: separate runs that survive the original 8-second horizon
-  but fail before 16 seconds from runs that remain stable through the longer
-  horizon.
-- Claim ratchet: decide whether the public claim can move from "improves
-  survival in an 8-second tested pocket" to "improves survival over a longer
-  tested horizon," while still avoiding any indefinite stability claim.
+- [`docs/threebody/PHASE13_SPEC.md`](threebody/PHASE13_SPEC.md)
+- [`docs/threebody/PHASE13_RESULTS.md`](threebody/PHASE13_RESULTS.md)
 
-Suggested commands/scripts:
+Commands:
 
 ```bash
 npm run threebody:phase13:smoke
 npm run threebody:phase13
 ```
-
-The smoke is deliberately tiny: it checks two radii, one low-velocity boundary
-cell, one high-velocity pocket cell, four controller modes, and two seeds at the
-longer horizon. The full Phase 13 command is the staged evidence run: 3 mass
-ratios x 3 timesteps x 3 radii x 4 velocity scales x 4 modes x 8 seeds at
-`duration=16`. Based on Phase 11 runtime, expect this to exceed the normal
-inline-agent window; run it as an operator/staged command if the smoke passes.
-
-Outputs:
-
-- `results/threebody/phase13-long-horizon-smoke/`;
-- `results/threebody/phase13-long-horizon-lock/`;
-- `docs/THREEBODY_PHASE13_SUMMARY.md`;
-- updated receipt bullets in this roadmap and the public writeup.
-
-Pre-registered branch:
-
-- Pass: guarded accelerometer TRACK remains positive against passive and naive
-  baselines in the high-velocity pocket, has no large late-failure cliff, and
-  its delta-v-per-second does not materially explode relative to Phase 11.
-- Partial: survival improves at 16 seconds but cost-rate or late failures grow
-  enough that the claim remains "delay and survival improvement in a bounded
-  pocket," not durable longer-horizon control.
-- Fail: the Phase 11 pocket disappears or becomes naive/oracle-dominated at the
-  longer horizon. In that case, Phase 13 becomes a useful negative result and
-  the next project step should be controller redesign, not bigger sweeps.
 
 Exit criterion: the project can say whether the Phase 11 positive pocket
 survives horizon extension, and can distinguish durable survival improvement
@@ -706,7 +668,16 @@ Initial Phase 13 smoke result:
 - The high-velocity, smaller-radius cell is neutral because passive already
   survives both seeds. The lower-velocity boundary cells are risky, dominated by
   `controller_destabilized_or_shortened_passive`.
-- Summary: `docs/THREEBODY_PHASE13_SUMMARY.md`.
+- Summary: [`docs/threebody/PHASE13_RESULTS.md`](threebody/PHASE13_RESULTS.md).
+
+### Cross-Substrate Hand-Offs
+
+The Threebody project now has a Mesa/Geometry-style crossover note at
+[`docs/threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md).
+It translates Mesa's entangled-substrate discipline and Geometry's
+HaloSim-oracle discipline into candidate Threebody phases: mechanism
+decomposition/action coupling, forward-oracle precision lock, and spatial/3D
+extension. The note is a design guardrail, not evidence by itself.
 
 ## Recommendation
 
@@ -1040,9 +1011,10 @@ Current Phase 9 implementation:
   16-second horizon on a tiny pocket-plus-boundary slate. It emitted 32 trials,
   kept the larger-radius high-velocity cell promising, left the smaller-radius
   high-velocity cell neutral, and confirmed low-velocity boundary risk. See
-  `docs/THREEBODY_PHASE13_SUMMARY.md`.
+  [`docs/threebody/PHASE13_RESULTS.md`](threebody/PHASE13_RESULTS.md).
 - Next work: run `npm run threebody:phase13` as the staged long-horizon lock,
   then decide whether Phase 11 is durable control rather than short-window delay
-  before moving to spatial/3D extension.
+  before moving to the cross-substrate follow-ups in
+  [`docs/threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md).
 
 **Interactive demonstration**: [threebody.html](../threebody.html)

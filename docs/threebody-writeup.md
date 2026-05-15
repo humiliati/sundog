@@ -404,7 +404,14 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   larger-radius high-velocity cell promising at 16 seconds, left one
   high-velocity cell neutral because passive already survived, and confirmed
   the low-velocity boundary as risky. See
-  [THREEBODY_PHASE13_SUMMARY.md](THREEBODY_PHASE13_SUMMARY.md).
+  [threebody/PHASE13_RESULTS.md](threebody/PHASE13_RESULTS.md).
+- **Cross-substrate follow-ups**: Mesa's entangled 5D `net.7` result and
+  Geometry's HaloSim-oracle discipline now inform the next Threebody build
+  sequence. The actionable transfer is not "same mechanism everywhere"; it is
+  "separate warning quality, action coupling, and outcome effect; use
+  forward-oracle checks before promoting inverse/control handles; preserve
+  boundary negatives." See
+  [threebody/CROSS_SUBSTRATE_NOTES.md](threebody/CROSS_SUBSTRATE_NOTES.md).
 - **Spatial extension**: Extend from planar to full 3D three-body problem.
 - **General three-body**: Move beyond circular restricted problem to include test particle mass and general initial conditions.
 - **Orbit family maintenance**: Demonstrate maintenance of specific orbit families (halo orbits around Lagrange points, periodic Lyapunov orbits) using only indirect signatures.

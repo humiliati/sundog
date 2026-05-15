@@ -2077,17 +2077,24 @@ grammar). The gate is **not** reached — nothing here is public-facing
 result language; P4 + pre-registration is required first.
 
 Follow-up #1 (quantitative pyramidal residual) was **attempted
-2026-05-15 → NEGATIVE**: `scripts/pyramidal_ring_residual.py`
-(resolvability-gated) found the 14E 1M receipt has no resolvable discrete
-odd-radius rings (core-dominated diffuse glow; only the ~9° inner feature
-> 3σ), so **no residual table was produced and pyramidal stays P2** — the
-script refuses to fabricate a table off a smooth profile (negative kept
-as a map entry per the gate). Remaining tracked follow-ups: **#1′** a
-higher-fidelity pyramidal render (≥4–10M rays and/or per-ring ray-filter
-isolation) to actually resolve the rings, then re-run the (already-built)
-script; the `chat/claim_map.json` P2 boundary refinement (gated on the
-Phase 13 chat:eval chain); and a crystal-block-reduced Lowitz isolation
-render. This phase still depends on Phase 14's accounting matrix and Phase
+2026-05-15 → NEGATIVE**, twice: the 14E 1M receipt resolved **zero**
+discrete odd-radius rings, and a dedicated **6M** B&W "Sun centered
+Plan" re-render (HS-0 mechanism; `Startup.sim` backed up + restored
+byte-identical) resolved only **one** outer ring — short of the ≥3 a
+scale-locked residual table needs. The 6M negative was *verified* (a
+wide center-grid brute search ruled out a centring artifact), so the
+**pure ray-count lever is insufficient** for the all-sky plan
+projection. `scripts/pyramidal_ring_residual.py` (resolvability-gated,
+now receipt-path-parameterized) **refused to fabricate** a table off the
+smooth profile both times — **pyramidal stays P2**; negatives kept as
+map entries per the gate. The 6M PNG is retained as a higher-fidelity
+*qualitative* reproduction receipt. The definitive remaining path,
+**#1′**, is now scoped as **per-ring HaloSim ray-filter isolation**
+(~8 filtered renders, faces per the Tape wedge table) — a heavier GUI
+campaign flagged as the next decision, not auto-run. Other tracked
+follow-ups unchanged: the `chat/claim_map.json` P2 boundary refinement
+(gated on the Phase 13 chat:eval chain) and a crystal-block-reduced
+Lowitz isolation render. This phase still depends on Phase 14's accounting matrix and Phase
 12A's HaloSim validation protocol, and may draw on the cinematic sidecar's
 batch-render automation when proof work needs sweeps.
 
