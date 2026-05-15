@@ -70,19 +70,23 @@ document — see Cross-references.*
 | 1690 | Phase 12A — HaloSim ground-truth validation gate |
 | 1731 | Phase 12B — Tilt-dispersion as math-bindable parameter |
 | 1810 | Phase 12C — Full-atlas vocabulary completeness |
-| 1869 | Phase 12 deferred items |
+| 1869 | Phase 13 — Atlas Claim Governance + Ask Sundog Coupling |
+| 1925 | Phase 14 — Complete Halo Phenomena Accounting Matrix |
+| 1985 | Phase 15 — Speculative / Unphotographed Halo Proof Program |
+| 2050 | Phase 12 deferred items |
 
 **Cross-references**
 
 - [`SUNDOG_HALOSIM_CINEMATIC_SIDECAR.md`](SUNDOG_HALOSIM_CINEMATIC_SIDECAR.md)
   — the **generative** HS-0…HS-7 sidecar (split out 2026-05-14; does not
-  gate hero promotion; not in the Phase 0–12 chain).
+  gate hero promotion; not in the main validation / claim-governance chain).
 - [`HALOSIM_VALIDATION_PROTOCOL.md`](calibration/HALOSIM_VALIDATION_PROTOCOL.md)
   — the **validation**-direction HaloSim procedure (Phase 12A/12B). Do
   not conflate with the generative sidecar.
 - [`SUNDOG_GENERATOR_SPEC.md`](SUNDOG_GENERATOR_SPEC.md) ·
   [`SUNDOG_OVERLAY_PROTOCOL.md`](SUNDOG_OVERLAY_PROTOCOL.md) ·
   [`SUNDOG_V_PERCEPTION.md`](SUNDOG_V_PERCEPTION.md) ·
+  [`SUNDOG_V_CHAT.md`](SUNDOG_V_CHAT.md) ·
   [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) — companion
   docs; full descriptions in **Related Documents** below.
 
@@ -130,6 +134,12 @@ distributed so no document trampolines another's decisions.
   parhelic continuation, intersection enhancement, color-order
   inversion at tangencies) ranked by apparatus cost. Inherits mesa
   Phase 6 pre-registration discipline.
+- [`SUNDOG_V_CHAT.md`](SUNDOG_V_CHAT.md) — the public assistant /
+  claim-boundary roadmap. Phase 13 below borrows its update discipline:
+  when `sundog.html` adds or sharpens halo vocabulary, Ask Sundog must
+  distinguish rendered primitives, named-only literature coverage,
+  not-modeled families, and speculative / proof-program work before the
+  next deploy.
 - `public/poses/*.json` — the named-pose library. `canonical.json`
   snapshots the locked default; future poses (`low-altitude`, `cza-heavy`,
   `nine-halo-eye`, `rich-display-vocabulary`) ship as Phase 8 and Phase
@@ -1561,6 +1571,15 @@ subsection.
 > selection; coverage gate fails; C5↔C6 substrate tension flagged**;
 > visibility-based upper-tangent promotion as logo / animation
 > vocabulary is unchanged.
+>
+> **Post-C7 update, 2026-05-14:** C7 supersedes the C5-positive half of
+> that tangent wording. The canonical literature handle is opening angle /
+> arc extent, not the project-original circle-fit curvature handle. Against
+> HaloSim ray-tracing at h = 18.6°, C5's circle fit places wing points
+> progressively too far radially, so the tangent route remains unpromoted
+> under both handles. The useful lesson is now methodological: C5 was a
+> tempting manual-anchor positive that failed both natural-extension and
+> oracle checks.
 
 **Headline:** of the four candidate `signature → h` inversion routes,
 **one is promoted into calibrated core**, and **the other three fail at
@@ -1573,6 +1592,19 @@ three distinct layers of the measurement stack**:
 | Supralateral → h | **fails** *(reverdict Pass A3 2026-05-13)* | **coverage gate + structural-discrimination rider** — Pass A2 added p27 to the candidate set (apex measured at 41.89° above sun); p2 is route-eligible but its supralateral apex is unmeasured. On a strict reading the coverage gate still binds (1 measured photo); on a permissive reading the two-photo threshold is at the edge. **Either reading is dominated by audit memo §2 item 12's structural finding:** supralateral angular distance from sun varies only ~0.5° across h = 0–22°, an order of magnitude less than parhelion-offset. The predicted h-spread between p2 and p27 is ~0.3° = ~2.5 px at p2's R22, **below the typical 5–10 px visual-edge measurement noise on a chromatic-broadened halo arc**. The route would not be a useful inverse handle even with perfect coverage. |
 | Tangent-arc curvature → h | **partially recovered on p2 under manual sample selection; coverage gate fails; C5↔C6 substrate tension** *(Pass C1 + C2 + C4 + C5 + C6 landed 2026-05-14)* | **hybrid coverage + detection-tooling failure with verify-gate flagged.** Pass C1 dropped p7. Four automated detector families on the post-C1 sampled set return not-recovered: column-peak intensity (original); wing-radial Lab b\* with halo-radial subtraction (`scripts/tangent_detector.py`, Pass C2); wing-slope luminance-gradient curvature (`scripts/tangent_curvature.py`, Pass C4); **matched-filter on halo-subtracted b\* against a parameterized arc model (`scripts/tangent_matched_filter.py`, Pass C6 — the natural follow-up the C5 receipt named)**. **Pass C5 (manual sample selection)** recovered the route on p2 (R\_uta\_obs / R22 = 0.824, RMS = 1.23 px) with a methodology hedge (possible symmetry bias). **Pass C6 falsified the C5→matched-filter natural extension**: on p2, the matched-filter correlation is negative across the entire R\_uta scan (peak −0.117 at R\_uta = 263, outside tolerance) — even at R\_uta values consistent with C5's manual fit. The route is now in **C5↔C6 substrate tension**: either the gestalt signal C5 found is in a different substrate (not halo-subtracted b\*), or C5's tight fit is hand-anchoring bias. Recommended verify gate before further propagation: specialist re-anchoring of p2. Coverage gate fails (1 / 3 photos). Remaining open paths: matched-filter on alternative substrates (absolute b\*, L\* magnitude, chromaticity magnitude — untested); polarization filtering; new calibration photos. Visibility-based upper-tangent promotion as logo / animation vocabulary is unchanged. |
 
+> **Post-C7 supersession, 2026-05-14:** read the tangent row above as the
+> C6 state. Pass C7 reformulated the tangent test under the canonical
+> literature handle (opening angle / arc extent; Tape 1994 ch. 6) and
+> checked it against HaloSim ray-tracing. That pass found the C5 circle fit
+> geometrically inconsistent with the canonical upper-tangent curve at
+> h = 18.6°: C5's wing points sit 1.2-5.6° too far radially as azimuth
+> increases. The current tangent verdict is therefore **not promoted under
+> either the project-original circle-fit handle or the canonical
+> opening-angle handle**. C5 is best treated as likely symmetry-bias
+> artifact unless an independent specialist re-anchors p2 differently. See
+> [`docs/calibration/PASS_C7_OUTPUT.txt`](calibration/PASS_C7_OUTPUT.txt)
+> and the Phase 12B / HaloSim-oracle sections below.
+
 Each non-parhelion route fails for a structurally different reason:
 **(Pass A3 update 2026-05-13)** CZA fails the coverage gate (only p2 is
 in-window with an independent CZA-apex measurement; the rest of the set
@@ -1583,16 +1615,18 @@ Supralateral fails the coverage gate too, but with a structural-
 discrimination rider: even at the two-photo threshold the angular
 spread is ~0.3° (below the visual-edge measurement noise), so the
 route would not be a useful inverse handle even with perfect coverage.
-Tangent-arc curvature is detection-degenerate under column-peak detection
-on the post-C1 sampled set (p2 / p13 / p27), with p7 removed as
-circumscribed-halo regime. The caveat is protocol-conditional: Pass C2
-tests whether a wing-based detector reopens the route.
+Tangent-arc curvature first failed under column-peak detection, then under
+C2/C4/C6 automated detector variants, and finally under C7's canonical
+opening-angle / HaloSim check. The caveat is no longer "detector not built";
+it is that one hand-selected p2 circle fit existed but does not survive the
+natural matched-filter or canonical-curve tests.
 The taxonomy still matters: a coverage-gate failure on physics grounds
 (CZA: route can't be in-frame at low h) is not the same kind of
 negative as a coverage-gate failure on discrimination grounds
 (supralateral: route can be measured but the signal is too small) is
-not the same kind of negative as a detection-gate failure on tooling
-grounds (tangent: column-peak is the wrong instrument).
+not the same kind of negative as a detection / anchoring failure with an
+oracle check (tangent: manual sample selection found a tempting fit, but
+HaloSim plus the canonical opening-angle handle rejected it).
 
 Visibility-based promotions remain final from the earlier 2026-05-13
 pass: the upper tangent arc is promoted as logo / animation vocabulary;
@@ -1628,10 +1662,14 @@ open questions are filed but not blocking:
    route? Mesa #4-style falsification surface, but the question shape
    has shifted from "is the bias a stable systematic?" to "does the
    route hold up at a second in-window anchor?"
-2. **Tangent-curvature tooling.** Does a gradient-based edge-tracking or
-   template-matching detector recover the route on existing photos?
-   This is a tooling question, not a physics one — the arc is real and
-   visible; column-peak is the wrong instrument.
+2. **Tangent specialist re-anchoring / new photos.** Pass C7 moves the
+   open question away from "which detector should we build?" and toward
+   "does any independent specialist anchor p2 in a way that agrees with
+   the canonical upper-tangent curve?" On the current evidence, the route
+   remains unpromoted under both the project-original circle-fit handle and
+   the literature-standard opening-angle handle. Reopening it requires
+   either independent specialist re-anchoring, a stronger tangent photo, or
+   an alternative substrate that passes a pre-registered detector gate.
 3. **Parhelic-belt-y replication.** Does p13's +10.4 px belt-y residual
    replicate across multiple low-h photos, or is it photo-specific?
 
@@ -1866,15 +1904,146 @@ JSON-LD regression). Gate met: the full canonical halo vocabulary is in
 one place with citations, and the rendered set is explicitly labelled as
 a documented subset.
 
+### Phase 13 - Atlas Claim Governance + Ask Sundog Coupling
+
+*Scheduled 2026-05-14 from the `sundog.html` vocabulary expansion and the
+`SUNDOG_V_CHAT.md` §16.4 integrity gap.*
+
+Goal: make the public atlas and Ask Sundog move together. Whenever
+`sundog.html`, the outreach packet, or this roadmap adds a halo name,
+sharpens a rendering claim, retracts a route, or promotes a proof tier, the
+chat claim map must know the difference between:
+
+- **rendered primitive** — visible in the atlas geometry layer;
+- **annotation / optional vocabulary** — drawn or labelled, but not promoted
+  as calibrated core;
+- **named-only literature coverage** — present in the page as a canonical
+  atmospheric-optics name, not rendered or detected by Sundog;
+- **not modeled** — acknowledged as outside the current geometry layer;
+- **speculative / proof-program candidate** — analytically or
+  computationally interesting, but not a public result.
+
+Deliverables:
+
+- A standing "claim phrase inventory" step for any `sundog.html` or
+  geometry-roadmap edit that touches halo vocabulary.
+- `chat/claim_map.json` route coverage for atlas vocabulary claims. Current
+  route: `halo_atlas_vocabulary_status`, with boundaries forbidding Ask
+  Sundog from saying the atlas renders, detects, or fully describes every
+  named halo family.
+- Public data rebuild after claim-map changes:
+  `npm run chat:index` / `npm run build` as appropriate.
+- Chat gate before deploy for geometry-surface changes:
+  `chat:eval:static`, `chat:eval:phase3`, `chat:eval:phase3:adversarial`,
+  `chat:eval:phase3:differential`, and `chat:eval:phase4` unless the change
+  is provably copy-only outside the indexed chat corpus.
+- A "no complete-geometry claim" guardrail in public copy: the atlas can say
+  it is a literature-grounded halo vocabulary / workbench; it cannot say it
+  has accounted for all sundog geometry until Phase 14/15 evidence supports
+  that claim.
+
+Gate: a visitor can ask Ask Sundog "does the atlas model all halos?" or
+"what halos are not rendered?" and receive the same boundary that
+`sundog.html` uses: rendered subset, named-only literature coverage,
+not-modeled families, and future proof-program candidates are distinct.
+
+Status 2026-05-14: **initial coupling landed on the chat side.**
+`chat/claim_map.json` has `halo_atlas_vocabulary_status`; `SUNDOG_V_CHAT.md`
+§16.4/§16.5 record the update discipline. This phase remains open as a
+standing deploy gate for every future geometry-vocabulary change.
+
+### Phase 14 - Complete Halo Phenomena Accounting Matrix
+
+Goal: turn "the full atlas" from prose into an auditable accounting system.
+The page already names the first extended families; this phase builds the
+project's canonical inventory of atmospheric-optics phenomena and records
+what Sundog does, does not, and might later do with each one.
+
+Deliverables:
+
+- New canonical matrix, proposed path:
+  `docs/calibration/HALO_PHENOMENA_ACCOUNTING.md` plus optional machine-readable
+  mirror `public/data/halo-phenomena-status.json`.
+- One row per named phenomenon / family, with at least:
+  canonical name, aliases, literature source (Greenler / Tape / Cowley /
+  HaloSim `.sim`), crystal-orientation family, geometric generator,
+  observer-geometry requirements, Sundog rendering status, HaloSim status,
+  photo-overlay status, inverse-handle status, chat route / public boundary,
+  and next proof step.
+- Status vocabulary shared with Phase 13:
+  `rendered-core`, `rendered-optional`, `named-only`, `not-modeled`,
+  `halosim-reproducible`, `analytic-candidate`, `speculative`, `observed`,
+  `rejected`.
+- Coverage for the families already introduced in Phase 12C:
+  Parry-family arcs, pyramidal / odd-radius halos, Lowitz arcs, antisolar
+  features, sub-horizon halos, circumhorizon arc, plus the current rendered
+  12-primitive subset.
+- A "what counts as accounted for?" definition:
+  a phenomenon is not accounted for just because its name appears on the
+  page. It is accounted for only when the matrix identifies source,
+  geometry, render/simulation status, evidence status, and claim boundary.
+
+Gate: any public or chat answer about "all sundog geometry" can point to
+the matrix and distinguish complete, partial, named-only, not-modeled, and
+speculative entries without improvising.
+
+Status: **planned.** Phase 12C supplied the first prose catalogue; Phase 14
+turns that catalogue into a maintained evidence ledger.
+
+### Phase 15 - Speculative / Unphotographed Halo Proof Program
+
+Goal: investigate unseen, rarely photographed, or speculated halo forms
+without turning speculation into public proof. This is the program for
+"can the math, a brute-force ray trace, the atlas, and HaloSim together
+predict a halo before photographs or specialist consensus catch up?"
+
+Proof tiers:
+
+| tier | meaning | public boundary |
+| --- | --- | --- |
+| P0 named / rumored | name appears in literature, historical report, or HaloSim catalogue | catalogue only |
+| P1 analytic-feasible | ray geometry or projection math says the locus is possible | speculative math candidate |
+| P2 brute-force reproducible | independent ray tracer or HaloSim produces the feature under declared crystal / observer conditions | simulated candidate |
+| P3 atlas-representable | the locus can be expressed in the atlas parameter grammar without ad hoc placement | model candidate |
+| P4 predictive target | pre-registered conditions and photo-search / controlled-observation plan exist | prediction |
+| P5 observed / specialist-confirmed | photograph, simulation, and specialist taxonomy agree | promotable evidence |
+
+Deliverables:
+
+- `docs/calibration/SPECULATIVE_HALO_PROOFS.md` with one proof record per
+  candidate. Each record names the phenomenon, the proposed generator,
+  necessary crystal population, sun-altitude / observer-geometry window,
+  expected visual signature, HaloSim configuration, atlas projection,
+  falsification criteria, and current proof tier.
+- A small brute-force ray-trace or HaloSim-batch workflow for candidates
+  where HaloSim's built-in `.sim` files are insufficient.
+- Atlas + HaloSim comparison artifacts: rendered locus, ray-trace image,
+  overlay in common coordinates, and a residual / disagreement table.
+- Pre-registration before any "unseen halo" claim: what would count as a
+  positive, what would count as a null, and which proof tier the result can
+  enter.
+- Chat boundary route updates for any P1-P4 candidate so Ask Sundog says
+  "simulated / speculative candidate," never "discovered halo."
+
+Gate: a speculative halo cannot move into public-facing result language
+until it reaches at least P4 with pre-registration and independent
+simulation receipts; P5 requires real observation or specialist-confirmed
+classification. Negative results are kept as useful map entries, not buried.
+
+Status: **planned.** This phase depends on Phase 14's accounting matrix and
+Phase 12A's HaloSim validation protocol. It may also draw on the HaloSim
+cinematic sidecar's batch-render automation when proof work needs sweeps.
+
 #### Phase 12 deferred items (low-priority gaps, not scheduled)
 
 The HaloSim gap-check surfaced additional candidate features that remain
 proposed-only and are not part of Phase 12:
 
-- Pyramidal halos as rendered primitives (engineering scope, separate
-  optional Phase 13 candidate; vocabulary entry lands here in 12C
+- Pyramidal halos as rendered primitives (engineering scope, future
+  Phase 14/15 candidate; vocabulary entry lands here in 12C
   regardless).
-- Parry-arc family rendered as separate primitives (Phase 13 candidate).
+- Parry-arc family rendered as separate primitives (future Phase 14/15
+  candidate).
 - Lowitz arcs / Kern arc / Liljequist parhelia / Wegener arcs / antisolar
   features as rendered primitives (specialist scope; defer indefinitely
   unless a specific user case appears).
@@ -1898,8 +2067,8 @@ That sidecar is the **generative** use of HaloSim — driving it
 non-interactively to render a labelled, sun-altitude-swept halo film for
 hero / press / animation use. It is deliberately distinct from Phase
 12A/12B above, which use HaloSim as a **validation oracle**. The sidecar
-does **not** gate hero promotion and is **not** in the Phase 0–12
-dependency chain; its outputs feed Phase 7 (press assets), Phase 11
+does **not** gate hero promotion and is **not** in the main validation /
+claim-governance dependency chain; its outputs feed Phase 7 (press assets), Phase 11
 (animation toolkit), and Phase 4 (active-reveal polish). HS-0 is a hard
 automation-feasibility gate with a named atlas-only fallback — see that
 document for the full HS-0…HS-7 breakdown and ratified scope.
