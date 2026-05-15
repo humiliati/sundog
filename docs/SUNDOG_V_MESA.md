@@ -25,17 +25,43 @@ together, each tells the other what counts as a real result.
 > ([`docs/calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md`](calibration/PHASE10_OPTICAL_AUDIT_SYNTHETIC_MEMO.md))
 > returned three load-bearing findings that materially weaken the geometry
 > verdict's evidentiary chain. The campaign to address them is filed in
-> [`docs/PHASE10_ATTACK_ROADMAP.md`](PHASE10_ATTACK_ROADMAP.md). Until that
-> roadmap's re-audit gate clears, treat the geometry side of the crossover
-> as *hedged pending re-audit*: the field-shape pattern is still observed
-> in two substrates, but the "three independent failure layers" framing
-> and the "passes residual gate at every eligible photo" framing both
-> require the post-audit hedged language documented in the attack roadmap
-> §6 and the audit memo §6. This is a substantiation-chain dependency,
-> not a falsification: the mesa empirical front itself is unaffected, but
-> any "mesa↔geometry crossover at first-empirical-hint weight" framing
-> downstream of this roadmap (notably the homepage elevator pitch and
-> the gravity-ledger public-framing sentence) is also hedge-required.
+> [`docs/PHASE10_ATTACK_ROADMAP.md`](PHASE10_ATTACK_ROADMAP.md). This was
+> a substantiation-chain dependency, not a falsification: the mesa
+> empirical front itself was never affected; the dependency was on the
+> geometry side's evidentiary chain and the downstream public-framing
+> surfaces.
+>
+> **Re-audit cleared, 2026-05-14 — dependency resolved.** The attack
+> roadmap's re-audit gate landed
+> ([`docs/calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md`](calibration/PHASE10_OPTICAL_REAUDIT_MEMO.md)):
+> no new load-bearing code, anchor, or route-math blocker. The eight
+> required passes plus the optional C-series all landed (C1 dropped p7
+> as circumscribed-halo regime; C2 wing-radial Lab b\*, C4 wing-slope
+> luminance-gradient, and C6 matched-filter all returned not-recovered;
+> C5 manual sample selection recovered on p2 but C6 falsified the
+> C5→matched-filter natural extension; **C7's HaloSim ray-tracing
+> reformulation under the canonical opening-angle handle resolved the
+> C5↔C6 tension toward "C5 was the symmetry-bias artifact the C5
+> receipt hedged against," so the tangent route remains unpromoted
+> *including* under the canonical literature handle**). The post-audit
+> hedged language is now **in place across every coupled surface**, not
+> pending: the "three independent failure layers" and "passes residual
+> gate at every eligible photo" framings are retired everywhere; the
+> homepage elevator pitch (v1.1, `data-audit-hedge`) and the
+> gravity-ledger public-framing sentence carry the settled post-audit
+> wording. The settled geometry verdict is **forward-rich /
+> inverse-narrow with a single promoted inverse handle**
+> (parhelion-offset on the strict 3-photo subset p2/p7/p13); CZA fails
+> the coverage gate, supralateral fails structural-discrimination, and
+> tangent is unpromoted under the full C1–C7 detector series. The
+> two-substrate field-shape pattern *survives* — it is now stated at
+> its settled post-audit strength (narrower than the pre-audit framing,
+> and with the inverse-narrowness *sharpened* rather than weakened by
+> the audit). Mesa↔geometry crossover framing downstream of this
+> roadmap is no longer hedge-required-pending; it is hedged-and-settled.
+> Mesa work that was held on the geometry clearance — pattern-confirmation
+> and consolidation moves the crossover note has been tracking — is now
+> unblocked.
 
 ## Why Mesa Is the Right Next Roadmap
 

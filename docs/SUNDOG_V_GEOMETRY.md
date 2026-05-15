@@ -1990,10 +1990,29 @@ Gate: any public or chat answer about "all sundog geometry" can point to
 the matrix and distinguish complete, partial, named-only, not-modeled, and
 speculative entries without improvising.
 
-Status 2026-05-14: **initiated.** The Phase 14 tracking ledger now lives at
-`docs/calibration/HALO_PHENOMENA_ACCOUNTING.md`, and the public-facing
-dictionary surface starts at `legend.html`. The optional machine-readable
-mirror remains deferred until promotion pressure or UI filtering needs it.
+Status 2026-05-14: **14A landed · 14D source pass landed · 14F partially
+routed.** The ledger at `docs/calibration/HALO_PHENOMENA_ACCOUNTING.md` is
+reworked into three lenses matching the Phase 14 directive — **§A Anchor**
+(proven core; generator = the project's own validated closed form in
+`public/js/parhelion-geometry.mjs` + a receipt), **§B Install** (the
+canonical pre-existing generator for every family, read straight from the
+on-disk Tape chapter scans `AH-CH06`/`AH-CH10`/`AH-SAX-CH11` and the HaloSim
+`.sim` recipe descriptions), and **§C Extrapolate** (named-only / not-modeled
+/ speculative rows carry a predicted locus, an inverse-handle candidate, a
+falsification line, and a P0–P5 Phase 15 tier). This installs the geometry
+the project had wrongly believed it needed to invent: the `parhelion-geometry.mjs`
+closed forms (parhelion `R22/cos h`, CZA `h≤32°`, the Pass-C7 `tangentArcLocus`
++ its 29° circumscribed-merge guard) are independently confirmed by Tape
+AH-CH06 p62–63, and the odd-radius family's generator is the Tape AH-CH10 p6
+wedge→radius table + Galle `α=180−2x` / Rational-Tangents (SAX-CH11), not a
+reinvented formula. Honesty ratchet recorded: the supralateral / Parry /
+infralateral / sun-pillar / parhelic-circle atlas primitives are hardcoded
+placeholders (rendered ≠ anchored) routed to §B for reconciliation. **14B**
+`legend.html` is a parallel workstream the owner runs separately — the ledger
+is kept row-consistent with it but does not edit it; **14C** machine-readable
+mirror stays deferred; **14E** HaloSim receipt pass still pending. The Gate
+is **not** closed by this revision (ledger ↔ legend row-consistency is
+cross-checked against the in-parallel `legend.html`, not closed here).
 
 ### Phase 15 - Speculative / Unphotographed Halo Proof Program
 
