@@ -62,6 +62,7 @@ async function initAskSundog() {
   const close = root.querySelector(".sd-chat-close");
   const form = root.querySelector(".sd-chat-form");
   const input = root.querySelector(".sd-chat-input");
+  const body = root.querySelector(".sd-chat-body");
   const answerStack = root.querySelector(".sd-chat-answer-stack");
   const faqs = root.querySelector(".sd-chat-faqs");
 
@@ -109,8 +110,9 @@ async function initAskSundog() {
   async function answerQuestion(question) {
     const trace = await traceFor(question);
     const mascotState = deriveMascotState(trace, lastTrace);
-    answerStack.replaceChildren(renderExchange(question, trace, mascotState));
-    answerStack.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    collapsePreviousTraces(answerStack);
+    answerStack.append(renderExchange(question, trace, mascotState));
+    body.scrollTo({ top: body.scrollHeight, behavior: "smooth" });
     applyMascotState(launch, trace, { previousTrace: lastTrace });
     applyPanelMascotState(panel, trace, { previousTrace: lastTrace });
     lastTrace = trace;
@@ -172,6 +174,12 @@ async function initAskSundog() {
     panel.hidden = true;
     launch.setAttribute("aria-expanded", "false");
     launch.focus({ preventScroll: true });
+  }
+}
+
+function collapsePreviousTraces(container) {
+  for (const trace of container.querySelectorAll(".sd-chat-trace[open]")) {
+    trace.open = false;
   }
 }
 

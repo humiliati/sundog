@@ -46,6 +46,59 @@ The deploy helper loads `CLOUDFLARE_TOKEN_SUNDOG_PAGES_DEPLOY` from
 `C:\Users\hughe\syek.c` and passes it to Wrangler as `CLOUDFLARE_API_TOKEN`.
 If `CLOUDFLARE_API_TOKEN` is already set in the environment, that wins.
 
+## HaloSim Halo Rendering (cinematic + geometry confirmation)
+
+HaloSim3 is a Monte Carlo halo ray-tracer used two ways in this repo:
+**validation** (is the atlas geometry right?) and **generation**
+(labelled, sun-altitude-swept renders for hero / press / logo).
+
+- Binary: `C:\Users\hughe\HalSim361.exe` — a 2004 GUI app with **no CLI
+  and no headless mode**. The `.sim` / `.xsh` / `.xng` / `.xmt` asset
+  library and the `h*.txt` help corpus are in `C:\Users\hughe\`.
+- Canonical docs (read before touching HaloSim):
+  - `docs/SUNDOG_HALOSIM_CINEMATIC_SIDECAR.md` — the HS-0…HS-7 pipeline.
+    **HS-0 is proven**; its mechanism, timing table, and receipts
+    (`docs/calibration/halosim_outputs/hs0_spike/`) live there.
+  - `docs/calibration/HALOSIM_VALIDATION_PROTOCOL.md` — the
+    validation-direction procedure (22°-halo scale-lock, feature-locus
+    search, auto-zoom gotcha).
+
+### Proven zero-click mechanism (HS-0)
+
+No CLI exists. Drive it file-first, GUI-minimal:
+
+1. Copy the target `.sim` over `C:\Users\hughe\Startup.sim` (HaloSim's
+   auto-loaded preference file). **Back it up first and restore it
+   afterward** — it is the user's real preference file.
+2. Launch HaloSim once (auto-loads `Startup.sim`); for each subsequent
+   frame click **Reset** to reload it.
+3. Click **Start** — two fixed-position clicks per frame, no dialogs.
+4. Harvest `C:\Users\hughe\autosave.bmp` (auto-written on completion;
+   needs Tools→Options ▸ *Autosave simulation* checked). It is one file
+   overwritten every run — rename it before the next Start.
+5. **Completion is poll-based, never a fixed sleep.** `autosave.bmp`
+   mtime advances only after the on-screen Run Status reads `100%`.
+
+GUI driving uses the computer-use MCP (HaloSim resolves as app name
+`HaloSim`, full tier). The window is unavoidably on-screen for the whole
+batch — unattended (no human clicks) but not background.
+
+### Ray-count guidance
+
+Pick ray count by purpose. Colour costs roughly **10× the rays of B&W**
+for the same signal-to-noise:
+
+| purpose | mode | rays |
+| --- | --- | --- |
+| Geometry confirmation | **B&W** (black dots / grey-on-white) | **~300k** — fast (seconds); cleanest loci for overlay & scale-lock |
+| Geometry confirmation | **Colour** | **~3M** — colour equivalent of the 300k B&W pass |
+| Spectacular thumbnails / logo candidates | Colour | **~10M** — press-grade; tune up/down by the contrast wanted (more rays = smoother gradients, fewer = punchier highlights) |
+
+Below ~1M rays colour renders show Monte-Carlo asymmetry — never measure
+geometry off a noisy colour render. Use the **B&W ~300k** pass for
+geometry, **~3M colour** to confirm, and reserve **~10M colour** for
+beauty / logo exploration.
+
 ## Cloudflare Credentials
 
 There is a local legacy Cloudflare Global API Key file at:
