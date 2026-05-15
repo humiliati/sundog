@@ -345,14 +345,53 @@ isn't, what would the right hedged phrasing be?
 ### 2.8 Parhelion route — is p7 (h = 59.4°) a parhelion or a circumscribed-halo brightness? *(wave-2 specialist question; added 2026-05-14)*
 
 The strict 3-photo set promoted under Pass B2 includes p7 at
-h = 59.4°. At that altitude the column-plate parhelion mechanism is
-at the edge of its plausible regime: Tape (1994) §3 and Greenler ch. 3
-frame parhelia as low-to-moderate-`h` plate-refraction features, and
-circumscribed-halo brightness on the parhelic circle competes
-strongly at h ≈ 60°. The campaign's Pass C1 explicitly dropped p7
-from *tangent-arc* eligibility on circumscribed-halo-regime grounds
-(handoff §1 verdict-table footnote) without posing the symmetric
-question about *parhelion* eligibility.
+h = 59.4°. Two literature anchors are relevant:
+
+1. **Circumscribed halo regime is reached at h ≈ 29°.** Tape (1994)
+   *Chapter 6: The Role of Sun Elevation*, Display 6-4 text (book p. 62,
+   verified on disk at `docs/calibration/AH-CH06/ah-ch06-p5.png`):
+   > *"As the sun rises in the sky, the upper and lower tangent arcs
+   > bend toward each other at their extremities, and at a sun elevation
+   > of 29° the two halos merge to form the circumscribed halo. As the
+   > sun climbs further, the circumscribed halo continues to change
+   > shape, becoming less distorted and more nearly circular… The
+   > value 29° mentioned above is theoretical. For sun elevations less
+   > than about 35°, the sides of the circumscribed halo are normally
+   > imperceptible, and separate upper and lower tangent arcs are
+   > seen."*
+
+   So at h = 59.4° the *circumscribed halo* is present, the upper and
+   lower tangent arcs are not separately visible, and bright features
+   on the parhelic circle at the sun-meridian intersection are
+   structurally available from the circumscribed-halo population.
+   This confirms the campaign's Pass C1 decision to drop p7 from
+   *tangent-arc* eligibility.
+
+2. **Whether plate-orientation parhelia survive at h = 59.4° is the
+   open question.** Persona A's wave-2 framing argued the column-plate
+   parhelion mechanism is "at the edge of its plausible regime" at
+   h ≈ 60°, but Tape Ch 6 Display 6-5 (h ≈ 39°) and Display 6-6
+   (h ≈ 72°) both still show parhelion-related features, so the
+   "parhelia don't form at high h" framing is not directly supported
+   by what's on disk. Tape's actual treatment of plate-orientation
+   parhelia lives in *Chapter 1: Halos From Plate Crystals*, which is
+   **not on disk**; the campaign's parhelia-low-to-moderate-h claim
+   is currently uncited at the chapter level.
+
+The question the specialist is best-positioned to answer therefore
+narrows from "is p7 a parhelion at all?" to:
+
+**Question: at h = 59.4°, is the bright spot we anchor as a parhelion
+on p7's parhelic circle (a) a real plate-population parhelion, (b)
+circumscribed-halo brightness at the parhelic-circle intersection,
+or (c) ambiguous on this photograph at the resolution available?**
+
+Pass C1 already dropped p7 from *tangent-arc* eligibility on
+circumscribed-halo-regime grounds (handoff §1 verdict-table footnote)
+without posing the symmetric *parhelion* eligibility question. The
+literature anchor in (1) makes the (b) interpretation structurally
+available; the literature anchor for (a) is incomplete without Tape
+Chapter 1 / Greenler Chapter 3 in hand.
 
 **Question: is the bright spot we read as a parhelion on p7 actually
 a plate-population parhelion (column-prism refraction in the

@@ -1,0 +1,211 @@
+ 12 
+ 1 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+Horiz column .1 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 40 
+ 2 
+ 2
+ 2 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+random.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 25 
+ 2 
+ 2
+ 3 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+plate 8 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 20 
+ 2 
+ .2
+ 4 
+Hexagonal Ice Prism.xsh
+Hexagonal Ice Prism
+Water-Ice.xmt
+plate 5 deg disp.xng
+ 1.31
+ 16777215 
+FFFFFF
+ 15 
+ 2 
+ .2
+ 5 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 6 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 7 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 8 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 9 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 10 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 11 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 12 
+
+no selection
+Water-Ice.xmt
+no selection
+ 1.31
+ 16777215 
+FFFFFF
+ 0 
+ 0 
+ 1
+ 46
+ 5             10000000      16            8 
+ 6045979 
+ 2             7             0             46 
+Type9
+ 12961221      0             9843250       0             16777215      0             16777215 
+ 2 
+ 6.9           .65           1
+False
+True
+False
+True
+""
+""
+""
+"1"
+"6"
+ 60
+ 46            0
+ 1
+ 2.752164      1            -716          -240
+ 4 
+420   0    510    1     600    0.4      680    0
+ .5           -1            -1            -1            -1             1             1             1             0             1 
+-1            -1            -1            -1            -1             1             1             1             1            42
+*#*#*#*#*#* description follows *
+WELCOME TO HaloSim
+
+This is one of several stored simulations.   Click 'Load Parameters' to find others.   To run them just click 'Start'.
+
+The stored simulations are tuned to 'show' quite quickly.  For smoother results increase the number of rays and levels from the Control Panel.
+
+                                  --------------------
+The sun is 10 degrees high in the 200,000 ray simulation.    The projection is a "Camera View".     The horizon is the white horizontal line.
+
+A 22 degree Circular Halo is centered on the sun.  This is  produced by randomly oriented (poorly oriented in nature) hexagonal ice crystals.  
+
+To the right and left of the sun just outside the Circular Halo are two Parhelia (Sundogs) produced by horizontal platelet crystals.   
+
+These also produce most of the Parhelic Circle extending each side of the sun and around the sky.
+
+Column crystals with their long axes horizontal form an Upper Tangent Arc directly above the sun.
+
+The "Subhorizon Halos" beneath the horizon are real and can be seen from aircraft or mountains when above cirrus clouds. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -450,15 +450,34 @@ both at `scripts/cza_formula.py` lines 46-57 and at packet §1 row 5.
 ### Wave-2 W1 — p7 production-mechanism question
 
 Wave-2 Persona A flagged that the strict 3-photo parhelion-set
-includes p7 at h = 59.4°, where the column-plate parhelion production
-mechanism is at the edge of its plausible regime. Tape (1994) §3 and
-Greenler ch. 3 frame parhelia as low-to-moderate-`h` plate-refraction
-features; circumscribed-halo brightness on the parhelic circle
-competes at h ≈ 60°. The campaign's Pass C1 dropped p7 from
-*tangent-arc* eligibility on circumscribed-halo grounds without
-posing the symmetric question about *parhelion* eligibility. The
-question is now filed as tier-1 specialist dispatch material at
-handoff §2.8.
+includes p7 at h = 59.4°. Persona A's recall cited "Tape (1994) §3
+and Greenler ch. 3" for the parhelia-low-to-moderate-`h` framing;
+that citation has since been verified to be **partly wrong** by direct
+read of Tape Ch 6 (on disk at `docs/calibration/AH-CH06/`).
+
+What Tape *does* directly support (Chapter 6, Display 6-4 text, verified):
+
+> *"As the sun rises in the sky, the upper and lower tangent arcs
+> bend toward each other at their extremities, and at a sun elevation
+> of 29° the two halos merge to form the circumscribed halo… For sun
+> elevations less than about 35°, the sides of the circumscribed halo
+> are normally imperceptible, and separate upper and lower tangent
+> arcs are seen."*
+
+So at h = 59.4° the circumscribed halo regime is structurally
+available, which confirms Pass C1's decision to drop p7 from
+*tangent-arc* eligibility, and makes "circumscribed-halo brightness
+at the parhelic-circle intersection" an available alternative
+interpretation for p7's parhelion anchor.
+
+What Tape Ch 6 does *not* support: the "parhelia don't form at high
+h" framing. Display 6-5 (h ≈ 39°) and Display 6-6 (h ≈ 72°) both show
+parhelion-related features. The plate-orientation parhelia treatment
+lives in Tape *Chapter 1: Halos From Plate Crystals*, which is **not
+on disk**. So the open W1 question for the specialist tier
+sharpens to: at h = 59.4°, is p7's bright spot a real plate-population
+parhelion, circumscribed-halo brightness, or ambiguous? Filed at
+handoff §2.8 with the updated literature anchors.
 
 **Mesa cross-substrate analog.** Mesa's Phase 4 basin-capture receipt
 shows canonical L-Reward has zero action-response to live `x_false`
@@ -468,14 +487,18 @@ attractor reading. The geometry analog asks a sharpening question:
 **is the observable we measure actually produced by the mechanism we
 think it is, or by a different effect competing for the same
 observable?** Mesa's existing discipline (Phase 4 distinguishes
-action-response from end-position) already encodes this principle, but
-the geometry side now has a concrete worked example — same bright
-spot, two production mechanisms (plate parhelion vs circumscribed
-halo). Worth banking as a methodological reminder for Phase 8 v2
-replay design: when the replay shows continued attraction to the
-training-time basin, the replay shows the *effect*; whether the
-*mechanism* is internalized-basin or environment-feature is a separate
-question to keep posable.
+action-response from end-position) already encodes this principle,
+and the geometry side now has a concrete worked example with
+**literature-confirmed structural availability of the alternative
+interpretation** — same bright spot, two production mechanisms (plate
+parhelion vs circumscribed halo), with Tape Ch 6 directly confirming
+that the circumscribed-halo regime starts at h ≈ 29° (i.e., the
+alternative-mechanism brightness *is* present at h = 59.4°). Worth
+banking as a methodological reminder for Phase 8 v2 replay design:
+when the replay shows continued attraction to the training-time
+basin, the replay shows the *effect*; whether the *mechanism* is
+internalized-basin or environment-feature is a separate question to
+keep posable.
 
 ### Wave-2 W4 — canonical vs project-original inverse handle
 
