@@ -21,17 +21,19 @@ Phase 14 starts with seven pinned calls:
 
 - **The Phase 13 guard is frozen, not re-derived.** Every arm reuses the
   Phase 13 `hazard_quantile` `0.75` freeze and the identical constant fallback
-  sweeps; the guard predicate is byte-identical across all arms. A run
-  restricted to `off` and `track_sensor_accel_guarded` over the lock slate must
-  reproduce the Phase 13 lock numbers bit-for-bit or the run is void.
+  sweeps; the guard predicate is byte-identical across all arms. After the
+  shared harness is edited, the exact Phase 13 baseline command must reproduce
+  the Phase 13 lock numbers bit-for-bit before any Phase 14 ablation result is
+  interpreted.
 - **Same Phase 13 locked slate.** Mass ratios, timesteps, radii, velocities,
   seeds, and duration are exactly the `phase13-long-horizon-lock` slate,
   including the `velocityScale=0.95` boundary cells; only the controller arm
   varies.
-- **Five controller arms, pre-registered and fixed.** Frozen guarded TRACK plus
-  signal-shuffled, action-shuffled, signal-delayed, and sign-flipped. Passive,
-  naive, and oracle stay on the slate so outcome effect is measured against
-  passive and naive. No arm is added or dropped after observing results.
+- **Seven executed modes, pre-registered and fixed.** Passive, naive local,
+  frozen guarded TRACK, signal-shuffled, action-shuffled, signal-delayed, and
+  sign-flipped. The Phase 13 oracle result remains the privileged reference, but
+  oracle is not rerun in Phase 14 proper because it is not a mechanism
+  ablation. No arm is added or dropped after observing results.
 - **Three mechanisms are separate columns, never collapsed.** Warning quality,
   action coupling, and outcome effect are reported as distinct columns; a
   survival gain that does not require intact action coupling is not a controller
@@ -40,8 +42,9 @@ Phase 14 starts with seven pinned calls:
   are within-trial temporal permutations with a fixed mode-hashed per-trial seed
   and a causal earlier-or-equal clamp; the signal delay is
   `round(0.5 simulated seconds / dt)` steps with a neutral warmup; sign-flip
-  negates the post-guard thrust vector. Cross-trial shuffles and signal-level
-  sign-flip are rejected.
+  negates the post-guard thrust vector. Empty-history shuffle steps emit neutral
+  zero signal/action and are counted as warmup. Cross-trial shuffles and
+  signal-level sign-flip are rejected.
 - **Boundary negatives stay visible.** `velocityScale=0.95` and equal-mass best
   cells are reported as their own rows in every column and are never averaged
   into the pocket verdict.
@@ -90,9 +93,8 @@ The smoke covers mass ratio `1`, timestep `0.01`, radii `1.025` and `1.075`,
 velocities `0.95` and `1.1`, seven controller modes
 (`off`, `naive`, `track_sensor_accel_guarded`,
 `track_sensor_accel_signal_shuffle`, `track_sensor_accel_action_shuffle`,
-`track_sensor_accel_signal_delay`, `track_sensor_accel_sign_flip`, `oracle`),
-and two seeds at `duration=16`. That is 56 trials, expected to take about a
-minute.
+`track_sensor_accel_signal_delay`, `track_sensor_accel_sign_flip`), and two
+seeds at `duration=16`. That is 56 trials, expected to take about a minute.
 
 The full lock covers:
 
@@ -102,7 +104,7 @@ The full lock covers:
 - velocities: `0.95`, `1.05`, `1.1`, `1.15`
 - modes: `off`, `naive`, `track_sensor_accel_guarded`,
   `track_sensor_accel_signal_shuffle`, `track_sensor_accel_action_shuffle`,
-  `track_sensor_accel_signal_delay`, `track_sensor_accel_sign_flip`, `oracle`
+  `track_sensor_accel_signal_delay`, `track_sensor_accel_sign_flip`
 - seeds: `8`
 - duration: `16`
 
@@ -114,11 +116,16 @@ repository's long-run rule.
 The ablation modes and the action-coupling metric are added additively to the
 shared envelope harness; existing Phase 9, 11, and 13 scripts pass fixed mode
 lists that do not include the new names and must remain byte-identical in
-behavior. Before the ablation arms are trusted, a Phase 14 run restricted to
-`off` and `track_sensor_accel_guarded` over the full lock slate must reproduce
-the Phase 13 lock result exactly: 3,456 trials, 88 / 324 candidate envelope
-rows, and 81 promising best cells. If it does not, the shared-harness edit broke
-the guard freeze and the run is void.
+behavior. Before the ablation arms are trusted, rerun the exact Phase 13
+baseline command:
+
+```bash
+npm run threebody:phase13
+```
+
+It must reproduce the Phase 13 lock result exactly: 3,456 trials, 88 / 324
+candidate envelope rows, and 81 promising best cells. If it does not, the
+shared-harness edit broke the guard freeze and the Phase 14 run is void.
 
 ## 4. Metrics
 
@@ -149,6 +156,22 @@ Pre-registered numeric bars:
   the favorable high-velocity pocket.
 - "Weak action coupling" means mean intended-direction agreement `<= 0.55`, or
   agreement less than `0.05` above the action-shuffled arm.
+
+Operational definitions:
+
+- Passive warning quality is computed from passive/off event histories, not from
+  controlled rows. AUROC-null cells are reported as coverage, not counted as
+  successes. A pass on warning quality requires mean defined AUROC `>= 0.70`
+  and at least two thirds of favorable high-velocity cells with defined passive
+  AUROC; otherwise warning quality is partial/undecidable.
+- Action coupling is evaluated only on non-warmup thrusting steps where
+  `|thrust| > 1e-6` and the read-only ideal tidal-gradient magnitude is
+  `> 1e-6`. Use `computeTidalGradient(state, cfg)` as the reference field,
+  not the controller's ablated signal. The signed alignment is
+  `sign(targetTidal - tidal.magnitude) * dot(thrust, idealGrad) /
+  (|thrust| * |idealGrad|)`. Intended-direction agreement is the fraction of
+  eligible thrusting steps with positive signed alignment; signed effect size is
+  the mean signed alignment. Report the eligible-step count beside both values.
 
 Phase 14-specific checks:
 
@@ -199,6 +222,7 @@ with:
 - total trial count and terminal outcome counts
 - the Phase 13-equivalence regression check result
 - warning quality, action coupling, and outcome effect as a per-arm table
+- passive warning-AUROC coverage
 - candidate-envelope count and best-cell class balance per arm
 - the action-shuffled contrast read
 - favorable-pocket read

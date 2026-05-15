@@ -688,7 +688,7 @@ thrust in the tested pocket.
 Implementation-grade spec and result note:
 
 - [`docs/threebody/PHASE14_SPEC.md`](threebody/PHASE14_SPEC.md)
-- `docs/threebody/PHASE14_RESULTS.md` (pending the full lock)
+- [`docs/threebody/PHASE14_RESULTS.md`](threebody/PHASE14_RESULTS.md)
 
 Commands:
 
@@ -703,8 +703,8 @@ action ablation and is therefore a guard-suppression artifact. Pre-registered
 negative branch: high warning quality with weak action coupling does not support
 a controller claim.
 
-Status: spec pre-registered 2026-05-15. Harness, smoke, and full lock are
-pending pre-registration lock review; no Phase 14 code has been written or run.
+Status: spec pre-registered and lock-reviewed 2026-05-15. Harness, smoke, and
+full lock remain pending; no Phase 14 code has been written or run.
 
 ### Cross-Substrate Hand-Offs
 
