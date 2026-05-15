@@ -589,11 +589,11 @@ Medium `lambda=0.95` / `lambda=0.97` cliff boundary.
 > material for the Phase 8 v2 "operating-envelope cross-product"
 > deferred item: the corrected compute model (Python/PyTorch CPU-only
 > + Node JS env-bridge — not pure-JS; no GPU), **measured** training
-> throughput (Small 1.74 / Medium 2.35 / Large 18.43 s/update; the
-> bottleneck flips bridge-bound→PyTorch-CPU-bound at Large), and a
-> budget-conditioned GO / DOWN-SCOPE / DEFER gate with staged operator
-> PowerShell. The binding question is the Large *convergence budget*,
-> not timing.
+> throughput (Small 1.74 / Medium 2.35 / Large **~24.5** s/update,
+> firmed by a 20-update probe — the bottleneck flips
+> bridge-bound→PyTorch-CPU-bound at Large), and a budget-conditioned
+> GO / DOWN-SCOPE / DEFER gate with staged operator PowerShell. The
+> binding question is the Large *convergence budget*, not timing.
 >
 > **Probe-1 ran 2026-05-15 and recalibrated the gate (PHASE7_SPEC
 > §14.4.1).** Large @ the 0.66M default budget scored `success_rate
@@ -603,10 +603,14 @@ Medium `lambda=0.95` / `lambda=0.97` cliff boundary.
 > (`..._terminal_10m`, success 1.0). So probe-1's 0.000 is an
 > under-budget run against a mis-calibrated threshold — **not a DEFER
 > signal**. The decision input is now the **recalibrated Large @ 10M
-> probe (~6.3 h, staged in §14.6)**. GO/DOWN-SCOPE if it clears 0.75 at
-> 10M (full ~12-policy set ≈ ~3 days / cliff subset ≈ ~38 h); DEFER
-> only if still sub-floor at 10M. No v2 training batch starts until
-> probe-2 is read and a branch is selected in writing.
+> probe**, firmed at **~8.3 h** and rewritten as a **monitorable
+> 6-segment chain** (~83 min/segment, per-segment eval via verified
+> `--load-checkpoint` resume, early-abort on flat alignment — not an
+> 8.3 h black box; PHASE7_SPEC §14.4.2 / §14.6). GO/DOWN-SCOPE if it
+> clears 0.75 at 10M (full ~12-policy set ≈ **~4.2 days** / cliff
+> subset ≈ **~2.1 days**); DEFER if alignment stays flat / still
+> sub-floor at 10M. No v2 training batch starts until probe-2 is read
+> and a branch is selected in writing.
 
 Result note at [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md) v1
 (2026-05-12). The first envelope map classifies 22 Small/Medium policies with
