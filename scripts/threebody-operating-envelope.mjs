@@ -82,6 +82,7 @@ function parseArgs(argv) {
     else if (flag === "--track-guard-max-tidal-magnitude-sweep") args.trackGuardMaxTidalMagnitudeSweep = parseNumberList(value);
     else if (flag === "--candidate-max-worsened-rate") args.candidateMaxWorsenedRate = Number.parseFloat(value);
     else if (flag === "--candidate-min-survival-delta") args.candidateMinSurvivalDelta = Number.parseFloat(value);
+    else if (flag === "--track-action-coupling") args.trackActionCoupling = !["0", "false", "no"].includes(String(value).toLowerCase());
     else throw new Error(`Unknown flag: ${flag}`);
   }
 
@@ -379,6 +380,7 @@ function makeTrialConfig(args, envelopeCase, seed, regime, mode, guardThresholds
     trackGuardMinRadius: thresholds.trackGuardMinRadius,
     trackGuardMaxLocalAcceleration: thresholds.trackGuardMaxLocalAcceleration,
     trackGuardMaxTidalMagnitude: thresholds.trackGuardMaxTidalMagnitude,
+    trackActionCoupling: args.trackActionCoupling ?? false,
     initialParticle: scaleInitialParticle(baseParticle, envelopeCase.radiusScale, envelopeCase.velocityScale),
   });
 }
@@ -430,6 +432,15 @@ function makePairedRows(trials) {
       passiveMaxRadius: passive?.summary.maxRadius,
       tidalMagnitudeAuroc: trial.summary.tidalMagnitudeAuroc,
       localAccelerationMagnitudeAuroc: trial.summary.localAccelerationMagnitudeAuroc,
+      ...(trial.summary.actionCouplingEligibleSteps !== undefined
+        ? {
+          actionCouplingEligibleSteps: trial.summary.actionCouplingEligibleSteps,
+          actionCouplingAgreementRate: trial.summary.actionCouplingAgreementRate,
+          actionCouplingSignedEffect: trial.summary.actionCouplingSignedEffect,
+          passiveTidalMagnitudeAuroc: passive ? passive.summary.tidalMagnitudeAuroc : null,
+          passiveTidalWarningLeadTime: passive ? passive.summary.tidalWarningLeadTime : null,
+        }
+        : {}),
       ...summarizeSensorAudit(trial.sensorAudit),
       log: trial.log,
     };
@@ -498,6 +509,15 @@ function makeTrialOutcomeRows(pairedRows) {
     mean_sensor_magnitude_abs_error: row.meanSensorMagnitudeAbsError,
     mean_sensor_component_rmse: row.meanSensorComponentRmse,
     max_sensor_magnitude_abs_error: row.maxSensorMagnitudeAbsError,
+    ...(row.actionCouplingEligibleSteps !== undefined
+      ? {
+        action_coupling_eligible_steps: row.actionCouplingEligibleSteps,
+        action_coupling_agreement_rate: row.actionCouplingAgreementRate,
+        action_coupling_signed_effect: row.actionCouplingSignedEffect,
+        passive_tidal_magnitude_auroc: row.passiveTidalMagnitudeAuroc,
+        passive_tidal_warning_lead_time: row.passiveTidalWarningLeadTime,
+      }
+      : {}),
     trial_log: row.log,
     case_id: row.caseId,
   }));
@@ -598,6 +618,14 @@ function summarizeRows(rows, args, includeRegime = true) {
       meanGuardCalibrationSampleCount: roundMetric(mean(group.map((row) => row.guardCalibrationSampleCount))),
       meanTidalMagnitudeAuroc: roundMetric(mean(group.map((row) => row.tidalMagnitudeAuroc))),
       meanLocalAccelerationMagnitudeAuroc: roundMetric(mean(group.map((row) => row.localAccelerationMagnitudeAuroc))),
+      ...(group.some((row) => row.actionCouplingEligibleSteps !== undefined)
+        ? {
+          meanActionCouplingAgreementRate: roundMetric(mean(group.map((row) => row.actionCouplingAgreementRate))),
+          meanActionCouplingSignedEffect: roundMetric(mean(group.map((row) => row.actionCouplingSignedEffect))),
+          meanPassiveTidalMagnitudeAuroc: roundMetric(mean(group.map((row) => row.passiveTidalMagnitudeAuroc))),
+          totalActionCouplingEligibleSteps: group.reduce((sum, row) => sum + (row.actionCouplingEligibleSteps ?? 0), 0),
+        }
+        : {}),
       dominantFailureMechanism: mostCommon(harmfulRows.map((row) => row.failureMechanism)),
       candidateEnvelope,
       regionClass,
@@ -794,6 +822,28 @@ async function main() {
   const cellDeltaMapRows = makeCellMatrixRows(bestByCellRows, "bestSurvivalDeltaVsPassive");
   const candidateRows = envelopeRows.filter((row) => row.candidateEnvelope);
 
+  let cellWarningQualityMapRows = null;
+  if (args.trackActionCoupling) {
+    const warningGroups = new Map();
+    for (const row of envelopeRows) {
+      const key = `${row.regime}\t${row.massRatio}\t${row.timestep}\t${row.radiusScale}\t${row.velocityScale}`;
+      if (!warningGroups.has(key)) warningGroups.set(key, []);
+      warningGroups.get(key).push(row);
+    }
+    const warningRows = Array.from(warningGroups.entries()).map(([key, rows]) => {
+      const [regime, massRatioText, timestepText, radiusScaleText, velocityScaleText] = key.split("\t");
+      return {
+        regime,
+        massRatio: Number.parseFloat(massRatioText),
+        timestep: Number.parseFloat(timestepText),
+        radiusScale: Number.parseFloat(radiusScaleText),
+        velocityScale: Number.parseFloat(velocityScaleText),
+        meanPassiveTidalMagnitudeAuroc: roundMetric(mean(rows.map((row) => row.meanPassiveTidalMagnitudeAuroc))),
+      };
+    });
+    cellWarningQualityMapRows = makeCellMatrixRows(warningRows, "meanPassiveTidalMagnitudeAuroc");
+  }
+
   await writeFile(path.join(outDir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   await writeFile(path.join(outDir, "trial-outcomes.csv"), rowsToCsv(trialOutcomeRows), "utf8");
   await writeFile(path.join(outDir, "paired.csv"), rowsToCsv(pairedRows), "utf8");
@@ -802,6 +852,9 @@ async function main() {
   await writeFile(path.join(outDir, "best-by-cell.csv"), rowsToCsv(bestByCellRows), "utf8");
   await writeFile(path.join(outDir, "cell-class-map.csv"), rowsToCsv(cellClassMapRows), "utf8");
   await writeFile(path.join(outDir, "cell-delta-map.csv"), rowsToCsv(cellDeltaMapRows), "utf8");
+  if (cellWarningQualityMapRows) {
+    await writeFile(path.join(outDir, "cell-warning-quality-map.csv"), rowsToCsv(cellWarningQualityMapRows), "utf8");
+  }
   await writeFile(
     path.join(outDir, "candidate-envelope.csv"),
     rowsToCsv(candidateRows, envelopeRows.length > 0 ? Object.keys(envelopeRows[0]) : []),
