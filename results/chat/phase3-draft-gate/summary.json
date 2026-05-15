@@ -5,9 +5,9 @@
   "byFamily": {
     "naive_baseline": {
       "total": 30,
-      "accepted": 16,
-      "rejected": 14,
-      "gateHits": 30,
+      "accepted": 18,
+      "rejected": 12,
+      "gateHits": 28,
       "addedValue": 0
     },
     "naive_rag": {
@@ -29,7 +29,7 @@
       "accepted": 30,
       "rejected": 0,
       "gateHits": 30,
-      "addedValue": 9
+      "addedValue": 6
     }
   },
   "byCategory": {
@@ -51,8 +51,8 @@
       "total": 12,
       "accepted": 6,
       "rejected": 6,
-      "gateHits": 12,
-      "addedValue": 3
+      "gateHits": 10,
+      "addedValue": 1
     },
     "off_topic": {
       "total": 12,
@@ -66,7 +66,7 @@
       "accepted": 6,
       "rejected": 6,
       "gateHits": 12,
-      "addedValue": 2
+      "addedValue": 1
     },
     "multi_intent": {
       "total": 8,
@@ -77,8 +77,8 @@
     },
     "typo_noise": {
       "total": 12,
-      "accepted": 10,
-      "rejected": 2,
+      "accepted": 11,
+      "rejected": 1,
       "gateHits": 12,
       "addedValue": 2
     },
@@ -98,8 +98,8 @@
     },
     "ambiguous_route": {
       "total": 4,
-      "accepted": 2,
-      "rejected": 2,
+      "accepted": 3,
+      "rejected": 1,
       "gateHits": 4,
       "addedValue": 0
     }
@@ -107,10 +107,10 @@
   "divergence": {
     "byFamily": {
       "naive_baseline": {
-        "identical": 16,
+        "identical": 18,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 14
+        "rejected": 12
       },
       "naive_rag": {
         "identical": 0,
@@ -125,9 +125,9 @@
         "rejected": 0
       },
       "sundog_gated": {
-        "identical": 21,
+        "identical": 24,
         "extends": 1,
-        "rewrites": 8,
+        "rewrites": 5,
         "rejected": 0
       }
     },
@@ -145,9 +145,9 @@
         "rejected": 0
       },
       "comparison": {
-        "identical": 3,
+        "identical": 5,
         "extends": 0,
-        "rewrites": 3,
+        "rewrites": 1,
         "rejected": 6
       },
       "off_topic": {
@@ -157,9 +157,9 @@
         "rejected": 6
       },
       "prompt_injection": {
-        "identical": 4,
+        "identical": 5,
         "extends": 0,
-        "rewrites": 2,
+        "rewrites": 1,
         "rejected": 6
       },
       "multi_intent": {
@@ -169,10 +169,10 @@
         "rejected": 0
       },
       "typo_noise": {
-        "identical": 8,
+        "identical": 9,
         "extends": 0,
         "rewrites": 2,
-        "rejected": 2
+        "rejected": 1
       },
       "opinion_subjective": {
         "identical": 6,
@@ -187,10 +187,10 @@
         "rejected": 1
       },
       "ambiguous_route": {
-        "identical": 2,
+        "identical": 3,
         "extends": 0,
         "rewrites": 0,
-        "rejected": 2
+        "rejected": 1
       }
     }
   },
@@ -198,16 +198,16 @@
     "naive_baseline": 0,
     "naive_rag": 14,
     "prompted_boundary": 0,
-    "sundog_gated": 9
+    "sundog_gated": 6
   },
   "addedValueRate": {
     "naive_baseline": 0,
     "naive_rag": 0.467,
     "prompted_boundary": 0,
-    "sundog_gated": 0.3
+    "sundog_gated": 0.2
   },
-  "gateHitRate": 1,
+  "gateHitRate": 0.983,
   "gateEscapes": 0,
-  "rejectedUnsafeNaive": 14,
+  "rejectedUnsafeNaive": 10,
   "acceptedGatedDrafts": 30
 }

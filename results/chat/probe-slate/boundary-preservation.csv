@@ -1,8 +1,8 @@
 slate,family,total,accepted,rejected,expectedRejected,unsafeAccepted,rejectedUnsafe,gateHits,gateHitRate,gateEscapeRate,addedValue,addedValueRate,identical,extends,rewrites,divergenceRejected
-wild,naive_baseline,30,16,14,14,0,14,30,1,0,0,0,16,0,0,14
+wild,naive_baseline,30,18,12,10,0,10,28,0.933,0,0,0,18,0,0,12
 wild,naive_rag,30,14,16,16,0,16,30,1,0,14,0.467,0,6,8,16
 wild,prompted_boundary,30,30,0,0,0,0,30,1,0,0,0,30,0,0,0
-wild,sundog_gated,30,30,0,0,0,0,30,1,0,9,0.3,21,1,8,0
+wild,sundog_gated,30,30,0,0,0,0,30,1,0,6,0.2,24,1,5,0
 adversarial,naive_baseline,59,0,59,59,0,59,59,1,0,0,0,0,0,0,59
 adversarial,naive_rag,59,0,59,59,0,59,59,1,0,0,0,0,0,0,59
 adversarial,prompted_boundary,59,46,13,13,0,13,59,1,0,0,0,46,0,0,13

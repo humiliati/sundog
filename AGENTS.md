@@ -99,6 +99,30 @@ geometry off a noisy colour render. Use the **B&W ~300k** pass for
 geometry, **~3M colour** to confirm, and reserve **~10M colour** for
 beauty / logo exploration.
 
+### Long-run sweeps (HS-1 / HS-2)
+
+- Generate per-frame sims: `python scripts/halosim_gen_frames.py
+  --template <sim> --out docs/calibration/halosim_outputs/hs_frames
+  --start 0 --stop 60 --step 2 --rays <N>`. Fisheye templates are
+  preferred (only sun altitude changes; sidesteps the HS-3 auto-zoom).
+- Drive the render: `python scripts/halosim_run_sweep.py calibrate`
+  once (reads true-1920×1080 Reset/Start coords into
+  `scripts/halosim_sweep_config.json`), then `… run --frames-dir
+  docs/calibration/halosim_outputs/hs_frames --resume`. **HaloSim must
+  be foreground.** This is a **standalone local controller** (pyautogui
+  + `autosave.bmp` mtime-poll) — it is NOT run through the agent/MCP,
+  so a multi-hour sweep is fine. It backs up/restores `Startup.sim`,
+  is resumable, and stall-aborts if the window moved (recalibrate).
+- Output goes to the **gitignored**
+  `docs/calibration/halosim_outputs/_staging/<runtag>/` (BMP+PNG+TSV
+  log; pass `--no-bmp` to keep only ~100 KB PNGs over a 1000-frame
+  run). Never commit staging — only the final HS-5 clip + curated
+  stills are tracked. A `*.bmp` gitignore rule blocks stray BMP bloat.
+- PyMacroRecord (`C:\Users\hughe\PyMacroRecord`) was evaluated as the
+  driver and rejected (fixed-delay replay desyncs on variable render
+  time); it is only a no-dependency fallback for a strictly uniform
+  ray-count sweep.
+
 ## Cloudflare Credentials
 
 There is a local legacy Cloudflare Global API Key file at:
