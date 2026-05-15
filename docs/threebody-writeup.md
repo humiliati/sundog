@@ -422,11 +422,12 @@ This separation keeps the experiment honest: if a compressed diagnostic works on
   boundary negatives." See
   [threebody/CROSS_SUBSTRATE_NOTES.md](threebody/CROSS_SUBSTRATE_NOTES.md).
 - **Phase 14, mechanism decomposition**: The first mechanism-decomposition lock
-  has run as a strong provisional result. Guarded TRACK remains the only strong
-  favorable-pocket arm; action shuffle and signal shuffle lose nearly all
-  candidate rows, and sign flip destroys the pocket. The clean causal-handle
-  pass is not earned, however: the passive tidal-AUROC warning gate fails, and a
-  0.5-second delayed signal keeps a substantial fraction of the benefit. See
+  has run and the exact Phase 13 regression gate passed bit-for-bit. Guarded
+  TRACK remains the only strong favorable-pocket arm; action shuffle and signal
+  shuffle lose nearly all candidate rows, and sign flip destroys the pocket.
+  The branch remains provisional partial / mechanism narrowed on scientific
+  grounds: the passive tidal-AUROC warning gate fails, and a 0.5-second delayed
+  signal keeps a substantial fraction of the benefit. See
   [threebody/PHASE14_RESULTS.md](threebody/PHASE14_RESULTS.md).
 - **Spatial extension**: Extend from planar to full 3D three-body problem.
 - **General three-body**: Move beyond circular restricted problem to include test particle mass and general initial conditions.
