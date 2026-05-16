@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog's structural-failure boundary map: a pre-registered falsifier for indirect-inference traceability.">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Structural Failure Boundary Map - Sundog</title>
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        main {
+            background:
+                radial-gradient(circle at 18% 8%, rgba(244, 196, 48, 0.12), transparent 22rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 36rem);
+        }
+
+        .boundary-hero {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 7rem 2rem 3rem;
+        }
+
+        .boundary-hero .eyebrow,
+        .boundary-section .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .boundary-hero h1 {
+            max-width: 880px;
+            margin: 1rem 0 1.25rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(2.4rem, 7vw, 5rem);
+            line-height: 1.02;
+        }
+
+        .boundary-hero .lede {
+            max-width: 760px;
+            color: #40505C;
+            font-size: 1.18rem;
+            line-height: 1.8;
+        }
+
+        .status-ribbon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .status-ribbon span {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 0.55rem 0.8rem;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .boundary-section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .boundary-figure {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: clamp(0.75rem, 2vw, 1.25rem);
+        }
+
+        .boundary-figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .boundary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+
+        .boundary-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.25rem;
+        }
+
+        .boundary-card h2,
+        .boundary-card h3 {
+            margin-bottom: 0.75rem;
+            color: var(--primary-dark);
+            font-size: 1rem;
+        }
+
+        .boundary-card p,
+        .boundary-card li {
+            color: #40505C;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .boundary-card ul {
+            padding-left: 1.1rem;
+        }
+
+        .source-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .source-list a {
+            display: block;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+            color: var(--primary-mid);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .source-list a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 760px) {
+            .boundary-hero {
+                padding: 5.5rem 1.25rem 2rem;
+            }
+
+            .boundary-section {
+                padding: 1.25rem;
+            }
+
+            .boundary-figure {
+                margin-inline: -0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="about.html">About</a>
+                <a href="applications-gallery.html">Applications</a>
+                <a href="mesa.html">Mesa</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="boundary-hero">
+            <p class="eyebrow">Structural Failure Boundary Map</p>
+            <h1>The falsifier before the agent.</h1>
+            <p class="lede">
+                A traceable system should fail where the closed-form inverse loses
+                identifiability. Sundog froze this five-locus map before agent
+                execution so the test cannot be rescued later by a convenient
+                interpretation of success.
+            </p>
+            <div class="status-ribbon" aria-label="Current status">
+                <span>P0/P1 passed</span>
+                <span>P2 first cut vacuous</span>
+                <span>Cut 2 regime-separability</span>
+                <span>Rendered Cut 3 held</span>
+            </div>
+        </section>
+
+        <section class="boundary-section" aria-label="Five-locus boundary map">
+            <figure class="boundary-figure">
+                <img src="/media/structural-boundary-five-locus-map.svg" alt="Five-locus structural failure boundary map showing eligible windows, required breaks, and correlate tells.">
+            </figure>
+        </section>
+
+        <section class="boundary-section">
+            <p class="eyebrow">How To Read It</p>
+            <div class="boundary-grid">
+                <div class="boundary-card">
+                    <h2>What It Is</h2>
+                    <p>
+                        A pre-registered apparatus map: which indirect handles are
+                        eligible, where each handle must fail or switch, and what a
+                        shortcut correlate would keep doing past the boundary.
+                    </p>
+                </div>
+                <div class="boundary-card">
+                    <h2>What It Is Not</h2>
+                    <p>
+                        Not a universal proof, not a rendered-signal pass, and not
+                        evidence that a probe-readout proves route use. The current
+                        public claim is narrower than that on purpose.
+                    </p>
+                </div>
+                <div class="boundary-card">
+                    <h2>Current Finding</h2>
+                    <p>
+                        The closed-form Cut 2 line produced regime-separability:
+                        the route dominates where eligible, while the correlate only
+                        substitutes where the route already abstains.
+                    </p>
+                </div>
+                <div class="boundary-card">
+                    <h2>Next Gate</h2>
+                    <p>
+                        Rendered Cut 3 is open but held. It needs H0 angular
+                        calibration, corpus records, baselines, edit operators, and
+                        renewed admission before any execution claim.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="boundary-section">
+            <p class="eyebrow">Inspection Trail</p>
+            <div class="source-list">
+                <a href="docs/prereg/structural-failure-coincidence/PUBLICATION_PLAN.md">Publication Plan</a>
+                <a href="docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md">Frozen Boundary Map</a>
+                <a href="docs/prereg/structural-failure-coincidence/README.md">Pre-Registration</a>
+                <a href="docs/prereg/structural-failure-coincidence/P2_CUT2_WAVE42_DISPOSITION.md">Cut 2 Disposition</a>
+                <a href="docs/prereg/structural-failure-coincidence/P2_CUT3_ADMISSION.md">Cut 3 Admission</a>
+                <a href="data/structural-failure-boundary-map.json">Public Data Contract</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="origin.html">Origin</a> |
+            <a href="applications-gallery.html">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
+            <a href="docs/presentation/claims-and-scope.md">Claims Policy</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
