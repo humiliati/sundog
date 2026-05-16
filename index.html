@@ -133,6 +133,28 @@
             margin-bottom: 1rem;
         }
 
+        .proof-placeholder.evidence-map-visual {
+            height: clamp(14rem, 32vw, 22rem);
+            padding: 0.5rem;
+            background: #FFFFFF;
+            overflow: hidden;
+        }
+
+        .proof-visual-link {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .proof-visual-link img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
         .cta-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1695,12 +1717,13 @@
                 <p>The measured cost of indirect feedback is roughly 16x slower acquisition.</p>
             </div>
             <div class="proof-item">
-                <h4>Stress Test Results</h4>
-                <div class="proof-placeholder">
-                    [Failure boundary curve]<br>
-                    Joint limits at 1.0 rad
+                <h4>Structural Failure Boundary Map</h4>
+                <div class="proof-placeholder evidence-map-visual">
+                    <a class="proof-visual-link" href="structural-failure.html" aria-label="Open the structural failure boundary map">
+                        <img src="/media/structural-boundary-five-locus-map.svg" alt="Five-locus structural failure boundary map showing eligible windows, required breaks, and correlate tells." loading="lazy">
+                    </a>
                 </div>
-                <p>Known failure at tight joint limits.</p>
+                <p>Frozen falsifier: a traceable system should fail where the closed-form inverse loses identifiability.</p>
             </div>
             <div class="proof-item">
                 <h4>Application Metrics</h4>

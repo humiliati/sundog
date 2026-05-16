@@ -20,6 +20,8 @@ Phase 4 has one satisfied entry condition and one unsatisfied entry condition:
 Therefore the substrate is **not yet admitted** to the proof track. This spec
 pins the intended objects and the blockers, but no Phase 4 proof run is
 authorized until the Bayesian floor and regret reducer land.
+The build path for that blocker is staged in
+[`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
 
 Roadmap gate, quoted unchanged:
 
@@ -40,7 +42,7 @@ to oracle comparison, candidate-envelope count, or survival-vs-passive.
 | `X` | Pinned below as the raw planar restricted decision state plus time/config. |
 | `Φ, Σ` | Pinned below as the guarded accelerometer-proxy signature, including noise and guard handling. |
 | `J, μ, regret` | Pinned below as safe-time regret against Bayes, with bootstrap readout. |
-| `π*` | **Blocked:** no Bayesian-floor policy exists yet. Existing oracles are reference yardsticks only. |
+| `π*` | **Blocked:** no Bayesian-floor policy exists yet. Existing oracles are reference yardsticks only; buildout staged in [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md). |
 | Measurable/off-cell split | Procedure pinned below, but final labels depend on the missing Bayes floor. |
 
 ## 1. `X`
@@ -194,7 +196,9 @@ It is **not** the existing `oracle` mode, and it is **not**
 forward rollouts and remain useful for debugging and upper-bound context only.
 
 The Bayesian floor must be implemented and documented before any Phase 4 proof
-run. Acceptable implementations:
+run. The build contract is
+[`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
+Acceptable implementations:
 
 1. exact dynamic programming on a pre-registered finite belief grid;
 2. particle-belief MPC with fixed particle count, action lattice, resampling
@@ -354,4 +358,6 @@ with one load-bearing correction: the current three-body workbench does not yet
 meet the roadmap Entry condition because the Bayesian floor is absent. The
 existing harness, signature definition, regret readout, measurable-cell
 vocabulary, and long-run discipline are pinned here so the missing floor can be
-implemented without moving the gate.
+implemented without moving the gate. The implementation roadmap for that missing
+floor is now staged in
+[`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).

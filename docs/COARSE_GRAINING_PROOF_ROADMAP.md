@@ -24,7 +24,10 @@
 > [`proof/PHASE3_BOUNDARY.md`](proof/PHASE3_BOUNDARY.md); Phase 4 three-body
 > spec is drafted at
 > [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md), but empirical entry
-> is blocked until the Bayesian-floor baseline exists in the workbench; Phase 6
+> is blocked until the Bayesian-floor baseline exists in the workbench; the
+> controller buildout is staged at
+> [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md);
+> Phase 6
 > lambda-confound control is staged at
 > [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md) with the
 > empirical result still open.
@@ -157,15 +160,17 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   [`internal/anniversary/attack_vectors.md`](../internal/anniversary/attack_vectors.md) — a baseline
   *inside* the workbench, **not** a `bayes_v_sundog` track).
 - **Work.** Use the planar restricted three-body near-escape pocket, where `Φ`
-  (the guarded accelerometer-proxy signature) and a tractable `π*` proxy are
-  both available. Measure signature-only regret vs the Bayes-optimal controller.
+  (the guarded accelerometer-proxy signature) is available and the Bayesian-floor
+  buildout pins the tractable `π*` proxy path. Measure signature-only regret vs
+  the Bayes-optimal controller once that floor exists.
 - **Exit.** Regret curve + the pre-registered gate result, in
   `results/proof/phase4/` with a summary in `docs/proof/PHASE4_THREEBODY.md`.
   **Spec drafted 2026-05-16** at
   [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md); empirical entry
   blocked because the current three-body workbench has privileged oracle /
   `forward_oracle_strict` references but no Bayesian-floor controller under the
-  signature information regime.
+  signature information regime. Buildout staged at
+  [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
 - **Pre-registered negative.** Gate, fixed now: signature-only regret vs Bayes
   must → 0 (within bootstrap CI) **on** the `𝓕_σ`-measurable cell set and stay
   bounded away from 0 (CI excludes 0) **off** it. If regret is bounded-away *on*

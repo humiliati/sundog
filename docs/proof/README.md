@@ -20,5 +20,7 @@ that claim provably fails.
   (reviewed, closed positive) and pushable-occluder mapping.
 - [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) — Phase 4 three-body measured
   substrate spec (drafted; empirical entry blocked on Bayesian floor).
+- [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md) —
+  Phase 4 Bayesian-floor controller buildout roadmap (staged/open).
 - [`PHASE6_LAMBDA_CONTROL.md`](PHASE6_LAMBDA_CONTROL.md) — Phase 6
   lambda-confound control spec (staged; empirical result open).
