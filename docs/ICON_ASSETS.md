@@ -1,10 +1,11 @@
 # Sundog Icon Assets
 
-The Sundog site icon system uses a halo/parhelion mark:
+The Sundog site icon system now uses the characterized halo/parhelion mark
+from the logo toolkit:
 
 - deep blue field for the research site background;
 - gold sun for observable signal;
-- outer halo and tangent arcs for the theorem animation;
+- outer halo and tangent arcs for the geometry animation;
 - left/right parhelion glints for indirect alignment without direct sight.
 
 ## Files
@@ -24,16 +25,17 @@ The Sundog site icon system uses a halo/parhelion mark:
 | `public/icons/icon-512.png` | Large Android/PWA icon. |
 | `public/icons/maskable-192.png` | Android maskable icon. |
 | `public/icons/maskable-512.png` | Android maskable icon. |
-| `public/icons/sundog-character-mark.svg` | Phase 11 characterized static SVG prototype. |
-| `public/icons/sundog-character-mark.transparent.svg` | Phase 11 transparent SVG prototype. |
-| `public/icons/sundog-character-mark.animated.svg` | Phase 11 SVG/CSS animation prototype. |
-| `public/icons/sundog-character-mark.layers.json` | Phase 11 layer, geometry, color, and motion manifest. |
-| `public/icons/sundog-character-favicon-16.png` | Phase 11 tiny favicon proof. |
-| `public/icons/sundog-character-favicon-32.png` | Phase 11 favicon proof. |
-| `public/icons/sundog-character-favicon-48.png` | Phase 11 browser icon proof. |
-| `public/icons/sundog-character-icon-192.png` | Phase 11 app/PWA icon proof. |
-| `public/icons/sundog-character-icon-512.png` | Phase 11 large app/social icon proof. |
-| `public/icons/sundog-character-transparent-512.png` | Phase 11 transparent PNG proof. |
+| `public/icons/sundog-character-mark.svg` | Characterized static SVG source/proof. |
+| `public/icons/sundog-character-mark.transparent.svg` | Transparent SVG proof for lockups and slides. |
+| `public/icons/sundog-character-mark.animated.svg` | SVG/CSS animation prototype. |
+| `public/icons/sundog-character-mark.layers.json` | Layer, geometry, color, and motion manifest. |
+| `public/icons/sundog-character-favicon-16.png` | Tiny favicon proof. |
+| `public/icons/sundog-character-favicon-32.png` | Favicon proof. |
+| `public/icons/sundog-character-favicon-48.png` | Browser icon proof. |
+| `public/icons/sundog-character-icon-180.png` | Apple touch icon proof. |
+| `public/icons/sundog-character-icon-192.png` | App/PWA icon proof. |
+| `public/icons/sundog-character-icon-512.png` | Large app/social icon proof. |
+| `public/icons/sundog-character-transparent-512.png` | Transparent PNG proof. |
 
 ## HTML Integration
 
@@ -49,24 +51,27 @@ These tags are wired into `index.html`:
 
 ## Regeneration
 
-The PNG and ICO files were generated from the same geometry as
-`public/icons/sundog-icon.svg` using a small standard-library Python renderer,
-because the repo does not require ImageMagick or Pillow.
-
-The characterized Phase 11 prototype set is regenerated with:
+The toolkit proof set is regenerated with:
 
 ```bash
 npm run logo:toolkit
 ```
 
-That command uses `scripts/generate-sundog-logo-toolkit.mjs`, which writes
-SVG, SVG/CSS animation, manifest JSON, and dependency-free PNG proofs.
+The production favicon/app-icon set is promoted from the same geometry with:
+
+```bash
+npm run logo:promote
+```
+
+Both commands use `scripts/generate-sundog-logo-toolkit.mjs`, which writes SVG,
+SVG/CSS animation, manifest JSON, dependency-free PNG proofs, and
+PNG-in-ICO favicon output without ImageMagick or Pillow.
 
 ## Characterized Logo Toolkit
 
-`SUNDOG_V_GEOMETRY.md` Phase 11 turns this asset inventory into a
-graphic-design handoff kit after the richer overlay tuning pass against
-calibration images 2, 7, and 13. The first tuning notes live in
+`SUNDOG_V_GEOMETRY.md` turns this asset inventory into a graphic-design
+handoff kit after the richer overlay tuning pass against calibration images
+2, 7, and 13. The first tuning notes live in
 `docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md`; the design handoff lives in
 [`LOGO_ANIMATION_TOOLKIT.md`](LOGO_ANIMATION_TOOLKIT.md).
 

@@ -717,3 +717,51 @@ before any corpus frame is admitted). Runnable checker + per-frame
 records + residual table + known-PASS fixture remain maintainer pre-run
 fill. No frozen Cut-3 value changed; admission stays HOLD; execution
 HELD; nothing run.
+
+**2026-05-16 (PT) — maintainer. Wave H0-1 fixture manifest + checker
+filed (mechanical scaffolding; H0-B negative side passing).** Same
+Wave-1 cadence (Cut-1 fixture + C5 guard) lifted to the measurement
+layer. Append-only filing on
+[`P2_CUT3_H0_CALIBRATION.md`](P2_CUT3_H0_CALIBRATION.md) audit-notes.
+Pinned artifacts:
+
+- Phase-15 known-FAIL fixture manifest at
+  `results/structural-failure/cut3-prereg/h0-known-fail-fixture.json`
+  (canonical-SHA `75577d51…2c05`): the 8 immutable real
+  `pyr_w*_scale.png` frames hashed with paired `*_4M.png` + `*.sim`,
+  expected `admit=false` + `reason_codes_allowed ∈ {SPAN_TOO_SHORT,
+  ANCHOR_OFF_RULER}` declared per frame. Extractor:
+  `scripts/cut3-h0-known-fail-extract.mjs` (SHA `69731e86…6b8c`).
+- Runnable H0 checker at `scripts/cut3-h0-checker.mjs` (SHA
+  `75bd6b32…1e2d`): implements the §1 record schema literally with
+  three `theta_map` kinds (`scale_ticks` / `renderer_metadata` /
+  `fit2locus`). **Structural call-order enforcement** of the §2
+  anti-self-seal: `calibrate(sidecar)` has no access to the scored
+  feature; `admit(calibration, scored_feature_deg)` is a separate
+  function. There is no API path for the feature to enter span
+  computation.
+- H0-B negative-side self-test PASS: 8/8 Phase-15 frames rejected with
+  `reason_code=SPAN_TOO_SHORT`. Self-test result at
+  `results/structural-failure/cut3-prereg/h0-self-test-result.json`
+  (canonical-SHA `e345f872…8c81`). Test sidecars model the documented
+  Phase-15 failure (short ruler 5°–18°, anchors 22°/46° off-ruler); they
+  are not fabricated H0 records.
+
+Honest tightness — h-leak detection scope: the mechanical checker flags
+**explicitly-labeled** h-encoding patterns (`h\d+`, `altitude_\d+`,
+`elevation_\d+`, `sun_alt`/`solar_alt` variants, `h_deg`, named sidecar
+fields). Compound HaloSim crystal-config codes in the actual Phase-15
+filenames (e.g. `e13` in `pyr_w18_e13_x25`) are NOT auto-flagged —
+operator review of whether such codes encode h is part of Wave H0-2
+pre-fill. The predicate already supports h-leak rejection; one operator
+decision wires it in.
+
+Open in H0 (Wave H0-2 scope): known-PASS full-span fixture
+identification, per-frame H0 records, anchor-residual table, operator
+review of HaloSim crystal-config codes. H0 closes only when both sides
+of the two-sided self-test resolve correctly. **No frozen H0 protocol
+value, geometry boundary, or admission rule changed. Cut-3 admission
+remains HOLD; execution HELD; Public-Language Constraint in force.**
+Justification: closes the mechanical-scaffolding half of H0 (the
+explicitly-allowed admission next work). H0-B negative side passes
+8/8; positive side waits on a real known-PASS render.

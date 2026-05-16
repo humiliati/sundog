@@ -1,8 +1,8 @@
 # Sundog Logo Animation Toolkit
 
-This is the Phase 11 handoff kit for a characterized Sundog mark. It gives a
-designer or motion pass a small source of truth without requiring the full
-geometry roadmap.
+This is the handoff kit for the characterized Sundog mark. It gives a designer
+or motion pass a small source of truth without requiring the full geometry
+roadmap.
 
 The toolkit is deliberately bounded: the mark can feel alive, but it should
 still trace back to the calibrated Halo Atlas overlay work.
@@ -21,6 +21,13 @@ The command writes all current assets from:
 scripts/generate-sundog-logo-toolkit.mjs
 ```
 
+To promote the same characterized geometry into the production favicon and app
+icon paths, run:
+
+```bash
+npm run logo:promote
+```
+
 ## Outputs
 
 | File | Use |
@@ -32,12 +39,15 @@ scripts/generate-sundog-logo-toolkit.mjs
 | `public/icons/sundog-character-favicon-16.png` | Tiny favicon proof. |
 | `public/icons/sundog-character-favicon-32.png` | Browser favicon proof. |
 | `public/icons/sundog-character-favicon-48.png` | Windows/browser icon proof. |
+| `public/icons/sundog-character-icon-180.png` | Apple touch icon proof. |
 | `public/icons/sundog-character-icon-192.png` | App/PWA icon proof. |
 | `public/icons/sundog-character-icon-512.png` | Large app/social icon proof. |
 | `public/icons/sundog-character-transparent-512.png` | Transparent PNG proof for decks and overlays. |
 
-These files are not wired into `index.html` yet. They are Phase 11 design
-prototypes that can replace the production favicon set after visual review.
+The `sundog-character-*` files are retained as proofs and design handoff
+assets. `npm run logo:promote` mirrors the reviewed static mark into
+`public/favicon.svg`, `public/favicon.ico`, `public/apple-touch-icon.png`, and
+the manifest-linked `public/icons/icon-*` / `maskable-*` files.
 
 ## Character Sheet
 

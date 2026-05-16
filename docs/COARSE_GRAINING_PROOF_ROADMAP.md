@@ -17,8 +17,9 @@
 > **Status as of 2026-05-16:** Phase 0 definitions lock landed at
 > [`proof/POSTULATE1_DEFINITIONS.md`](proof/POSTULATE1_DEFINITIONS.md);
 > Phase 1 LQG proof reviewed and closed **positive** at
-> [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); Phase 2 finite-MDP proof draft
-> landed at [`proof/PHASE2_MDP.md`](proof/PHASE2_MDP.md), reviewer pass pending.
+> [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); Phase 2 finite-MDP proof
+> reviewed and closed **positive** at
+> [`proof/PHASE2_MDP.md`](proof/PHASE2_MDP.md); Phase 3 is unblocked.
 > This is a
 > theory-track roadmap, not an operating-envelope workbench — it is the *trunk*
 > of which the Formal Separability Theorem appendix
@@ -112,12 +113,14 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
 
 - **Entry.** Phase 1 exit (positive).
 - **Work.** Extend to finite MDPs: prove `Φ` is control-sufficient iff `π*` is
-  constant on `Φ`-fibers, via policy equivalence on the quotient MDP. Derive the
-  **Formal Separability** statement (§2) as the bounded-agent-class corollary.
+  constant on `Φ`-fibers over the occupancy support, via policy equivalence on
+  `Φ`-fibers (Markov quotient in the lumpable special case). Derive the
+  **Formal Separability** statement (§2) as the bounded-agent-class corollary
+  that *subsumes* the appendix, leaving it in place (no replace).
 - **Exit.** Proof + a *constructed* finite-MDP counterexample where sufficiency
-  fails, characterizing the boundary, in `docs/proof/PHASE2_MDP.md`. **Draft
-  landed 2026-05-16** at [`proof/PHASE2_MDP.md`](proof/PHASE2_MDP.md); review
-  pending.
+  fails, characterizing the boundary, in `docs/proof/PHASE2_MDP.md`. **Reviewed
+  and closed positive 2026-05-16** at
+  [`proof/PHASE2_MDP.md`](proof/PHASE2_MDP.md).
 - **Pre-registered negative.** If the separability corollary does **not** drop
   out of the trunk, this roadmap has forked the theory rather than generalized
   it (§2 violated) — stop, reconcile with the mesa appendix before continuing.

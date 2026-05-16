@@ -290,6 +290,13 @@ Initial visible hit list, 2026-05-16:
 - `sundog.html` / `sundog-workbench.html`: visible phase labels around math
   binding and upload. Rewrite in public page; comments can stay.
 
+Solo pass, 2026-05-16:
+
+- Visible `Phase 11` shorthand was removed from public HTML. The three-body,
+  applications-gallery, chat, and docs-index surfaces now use "later trials"
+  / "later-trials" wording with inspectable links instead of relying on the
+  internal phase label.
+
 Exit:
 
 - A non-repo reader does not need the internal phase calendar to understand a
@@ -409,6 +416,55 @@ Exit:
 
 - Missing-doc audit returns zero.
 - `npm run build` passes with `dist link check passed`.
+
+### 7a. Hero rail artwork and logo readiness
+
+**Solo status:** inventory and logo promotion are soloable; new screenshots and
+clips depend on each workbench being opened and framed deliberately.
+
+Problem:
+
+The homepage rail behavior is stronger than its visual evidence. Only Balance
+has a real poster today; the other active cards rely on CSS placeholders. The
+logo toolkit is ready, but production favicons must be promoted explicitly.
+
+Scope:
+
+- `index.html`
+- `public/js/motion-rail.mjs`
+- `public/media/`
+- `public/favicon.*`
+- `public/apple-touch-icon.png`
+- `public/icons/`
+- `docs/ICON_ASSETS.md`
+- `docs/LOGO_ANIMATION_TOOLKIT.md`
+- [`hero_rail_artwork_inventory.md`](hero_rail_artwork_inventory.md)
+
+Steps:
+
+1. Keep the Pushable Occluder interrupt disabled until its poster/clip and
+   boundary receipt exist.
+2. Promote the characterized logo set with `npm run logo:promote`.
+3. Capture rail screenshots at 390 px, 520 px, 1280 px, and reduced-motion.
+4. Replace CSS placeholders with real posters one card at a time, keeping the
+   stamp tier unchanged unless the owning evidence doc changes.
+5. Before adding video clips, update the rail script so `data-media` duration
+   actually drives the stamp handoff.
+
+Checks:
+
+```powershell
+rg -n /media index.html
+npm run logo:promote
+npm run build
+```
+
+Exit:
+
+- Logo production assets are regenerated from the characterized mark.
+- The artwork inventory names every missing rail poster and the screenshot QA
+  matrix.
+- Build passes after the promoted assets are in place.
 
 ## P2 - After The First Wave
 
