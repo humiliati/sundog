@@ -1,0 +1,97 @@
+{
+  "generatedAt": "2026-05-16T04:34:53.669Z",
+  "schema": "sundog.structural-failure.p2-execute.v1",
+  "thresholds": {
+    "convergenceDeg": 1.5,
+    "handleSteerDeg": 2,
+    "decoyInvariantDeg": 0.5,
+    "boundaryWindowDeg": 1.5,
+    "positiveControlMoveDeg": 2
+  },
+  "geometryBoundaries": {
+    "czaCutoffDeg": 32,
+    "tangentMergeDeg": 29,
+    "l1LeverageAltitudeDeg": 11.364876967033691
+  },
+  "adapterInvariant": {
+    "transparentAdapterInputs": [
+      "f_par",
+      "f_cza",
+      "f_tan",
+      "R22",
+      "q"
+    ],
+    "hiddenAltitudeReadInsideAdapter": false,
+    "decoysReadInsideAdapter": false
+  },
+  "routeConstructionAudit": {
+    "routeTestVacuous": true,
+    "reason": "The bundle generator sets f_par = R22/cos(h), while the route objective maximizes -abs(f_par - R22/cos(q)); the matched analytic baseline is the same inverse arccos(R22/f_par). The route is g^-1(g(h)) by grid search, not an independent policy test.",
+    "routeAndAnalyticBaselineSameInverse": true,
+    "decoysReachableThroughRouteObjective": false,
+    "czaTangentAffectQEstimate": false,
+    "supralateralHardcodedNonHandle": true
+  },
+  "quantities": {
+    "convergence": {
+      "pass": true,
+      "eligibleCount": 59,
+      "eligiblePassCount": 59,
+      "passRate": 1,
+      "maxEligibleAbsErrorDeg": 1.8332002582610585e-12
+    },
+    "steerability": {
+      "pass": true,
+      "inconclusive": false,
+      "handleEditPassCount": 59,
+      "handleEditCount": 59,
+      "maxHandleEditAbsErrorDeg": 1.8332002582610585e-12,
+      "routeDecoyInvariant": true,
+      "positiveControlMoved": true,
+      "maxRouteDecoyDeltaDeg": 0,
+      "maxPositiveControlDecoyDeltaDeg": 69.99999999999817,
+      "minPositiveControlBatteryDeltaDeg": 12.000000000000036
+    },
+    "boundaries": {
+      "pass": true,
+      "l1": {
+        "pass": true,
+        "lowLeverageAbstainCount": 12,
+        "lowLeverageCount": 12,
+        "thresholdAltitudeDeg": 11.364876967033691
+      },
+      "l2": {
+        "pass": true,
+        "observedDeg": 32.125,
+        "expectedDeg": 32,
+        "toleranceDeg": 1.5
+      },
+      "l3": {
+        "pass": true,
+        "observedDeg": 28.875,
+        "expectedDeg": 29,
+        "toleranceDeg": 1.5
+      },
+      "l4": {
+        "pass": true,
+        "promotedAsHandle": false
+      }
+    },
+    "efficiency": {
+      "routeToAnalyticSampleRatio": 1601,
+      "meanRouteSamples": 1601,
+      "analyticSamples": 1
+    }
+  },
+  "routeOutcome": {
+    "verdict": "MACHINERY_LIVE_ROUTE_TEST_VACUOUS",
+    "preregOutcome": "instrument does not exercise discriminating route behavior",
+    "railVerdict": "STALLED / UNTESTED",
+    "traceabilityClaim": false
+  },
+  "positiveControl": {
+    "outcome": "OPAQUE_CORRELATE_POSITIVE_CONTROL_CONFIRMED",
+    "readsDecoys": true,
+    "policy": "generic least-squares fit over normalized full bundle, including d_sup, d_unanch, and d_style"
+  }
+}

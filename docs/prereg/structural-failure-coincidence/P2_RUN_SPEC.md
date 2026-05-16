@@ -229,3 +229,33 @@ already pre-registered (this spec).
 Justification: each required pre-run amendment (F1–F3, plus the
 non-blocking F4) is resolved closed-form before any controller run;
 re-admission check appended to `P2_SPEC_ADMISSION.md`.
+
+**2026-05-15 (PT) — Codex execution.** P2 first-cut executed under this
+admitted spec; result filed in [`P2_RESULTS.md`](P2_RESULTS.md). Command:
+`npm run p2:structural`. Harness:
+`scripts/structural-failure-p2-harness.mjs`. Output:
+`results/structural-failure/p2-execute-first-cut/`. Verdict:
+`TRACEABILITY_HARNESS_PASS` for the admitted transparent route controller;
+positive-control verdict:
+`OPAQUE_CORRELATE_POSITIVE_CONTROL_CONFIRMED`. This amendment records
+execution only; it changes no threshold, boundary, adapter rule, or
+outcome mapping. Public-language guard: apparatus / benchmark result,
+not universal theorem proof and not a debunking result.
+
+**2026-05-15 (PT) — correction / reviewer challenge accepted.** The
+execution note immediately above is reclassified. The first-cut harness
+did **not** instantiate a route that could fail the traceability test:
+`makeBundle(h)` generated `f_par = R22/cos(h)`, the route objective
+maximized `-|f_par - R22/cos(q)|`, and the matched baseline computed
+`arccos(R22/f_par)`. Thus the route and analytic baseline were the same
+inverse (`g^-1(g(h))`), with the route doing it by grid search. Decoys
+were structurally outside `J`, CZA/tangent terms did not affect `q`, and
+supralateral was hardcoded as a non-handle. Corrected disposition:
+`MACHINERY_LIVE_ROUTE_TEST_VACUOUS`, not `TRACEABILITY_HARNESS_PASS`.
+The positive-control result stands:
+`OPAQUE_CORRELATE_POSITIVE_CONTROL_CONFIRMED`; the A1 adapter invariant
+also stands. This correction changes no frozen thresholds or outcome
+mapping; it records that the first execution was inconclusive for
+quantities (1)–(3) as a discriminating route-use test. Public-language
+guard remains fully in force: no `CONFIRMED`, no traceability-success,
+and no theorem language from this first cut.
