@@ -539,3 +539,13 @@ C4-A artifacts also landed. Justification: closes the C5
 operational-artifact gate and lands the first immutable C4-A artifact
 (zero coupling to upstream `[E]` fills) as Wave-1 of the ordered
 concrete fill.
+
+**2026-05-16 (PT) — Codex audit.** Wave-1 artifacts verified. The C5
+manifest/script hashes and the C4-A Cut-1 fixture manifest/extractor
+hashes match the pinned values; the fixture extractor reruns with no
+diff. C5's full snapshot/check round-trip remains a host-run receipt
+because the full tree exceeds the authoring sandbox timeout. Also note:
+because `cut2-prereg` matches the C5 results allowlist, C5 guards
+publication plumbing, not immutability of the prereg artifacts stored
+there; C2/C3/C4 artifact hashes must still be re-checked explicitly at
+joint admission. No harness/controller run.

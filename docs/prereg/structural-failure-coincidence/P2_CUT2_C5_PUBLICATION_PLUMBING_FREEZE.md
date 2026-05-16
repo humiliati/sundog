@@ -272,3 +272,24 @@ Justification: closes the C5 operational-artifact obligations (manifest
 No frozen body edited; no threshold/boundary moved; Public-Language
 Constraint remains fully in force. Cut-2-execute remains HELD on the
 joint admission re-run with C2-A / C3-A / C4-A receipts also landed.
+
+**2026-05-16 (PT) — Codex audit of Wave-1 C5 concrete fill.**
+Operational artifacts verified as filed: `hash-canonical-json` for the
+C5 manifest returned `bfa2dd666068d0c180a46ad4469f122a9c34a4970b7348c54a716f7309b3b40f`,
+`hash-file` for the manifest returned
+`7e51bc304ead2b057b6d0ab575f9ee666437bd6ec58ae3f2fe279e3e5e2ab3bf`,
+and `hash-file` for the guard script returned
+`5e85928384140f584a55e75df7ed4795f209426b3ba1603a13e0d717e95ffa06`,
+matching the pinned table above. The implementation resolves the prior
+C5 audit holds: snapshot semantics are explicit, tracked/untracked/
+ignored file coverage is implemented by filesystem traversal rather
+than `git diff`, paths are normalized, and symlink escapes are rejected.
+Two joint-admission notes remain. First, the full snapshot/check
+round-trip is deliberately host-run because this repo's full tree
+exceeds the authoring sandbox's short timeout; admission should require
+that host receipt before the first Cut-2 step. Second, the broad
+`results/structural-failure/cut2-*/` allowlist intentionally includes
+`cut2-prereg`; therefore C5 is the publication-plumbing guard, not the
+immutability guard for other prereg artifacts stored there. C4/C2/C3
+artifact immutability must still be checked by their own pinned hashes
+at the joint admission re-run. No harness/controller run.
