@@ -469,3 +469,30 @@ run below threshold; reacquire is a sustained-TRACK behavior after
 `reacquire_hold_steps`, so "lock/confident qhat" needs a frozen
 sustained-TRACK readout. C2-A-2 needs the objective scan receipt. No
 harness run.
+
+**2026-05-16 (PT) — filing log (not a ruling).** C3-A numeric freeze
+filed: [`P2_CUT2_C3A_NUMERIC_FREEZE.md`](P2_CUT2_C3A_NUMERIC_FREEZE.md).
+Mirrors the C2-A scaffold discipline (slots/provenance/receipt
+obligations now; concrete `[E]` values + the C3-A-R/T/B receipt tables
+still owed before closure); inherits C2-A scale/seed/grid; propagates
+the sustained-TRACK readout. **Filing only, not a ruling.** Reviewer
+should scrutinize at the joint re-run: (a) the §2 independent `P_in`
+freeze (the C3 keystone anti-self-seal — verify no correlation-strength
+freedom remains and a failing C3-A-T/B blocks rather than tunes); (b)
+that the C3-A-R floor equals the C4 D2 floor (one number, cross-checked
+in C4-A); (c) the C3-B(ii)↔C2-B coupling is genuinely discharged now
+that `π_route` is well-posed. The re-check verdict stays withheld until
+**C2-A receipts, C3-A receipts, C4-A/B/C/D, C5** are all filed and
+audited as one object. Cut-2 build/run remains **blocked**;
+Public-Language Constraint in force.
+
+**2026-05-16 (PT) — C3-A audit.** C3-A direction accepted; closure
+withheld. C3-A correctly propagates the C2-A sustained-TRACK readout and
+uses argmax-sensitivity for reachability, but it inherits a C2-A scaffold
+that is not itself closed. Admission must treat C3-A as
+slots/provenance/obligations until concrete values and receipt tables
+are appended for `P_in`, decoy correlations, `kappa`, `sigma_D`, `M`,
+edit magnitudes, and the shared C3-C/C4-D2 floor. The independent
+`P_in` freeze also needs an operational finite sample/generator + seed +
+coefficient table + frozen `(w,b)` receipt; a general "co-varies with
+`h`" principle is not enough to close C3-A-T/B. No harness run.

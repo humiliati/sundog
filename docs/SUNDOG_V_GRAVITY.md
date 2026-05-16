@@ -1105,3 +1105,14 @@ lock/confident-`qhat` using `PhotometricAgent`'s actual sustained-TRACK
 behavior after `reacquire_hold_steps`, and C2-A-2 still needs the
 objective scan receipt for invalid versus eligible rows. Cut-2 remains
 held; no controller run.
+
+**C3-A numeric freeze filed, 2026-05-16.** [`P2_CUT2_C3A_NUMERIC_FREEZE.md`](prereg/structural-failure-coincidence/P2_CUT2_C3A_NUMERIC_FREEZE.md): mirrors the C2-A scaffold (slots/provenance/receipt obligations; concrete `[E]` values + tables are the maintainer's pre-run fill). Inherits C2-A scale/seed/grid; propagates the sustained-TRACK confident-`q̂` readout. Keystone anti-self-seal: `P_in` decoy↔`h` correlation / `κ` / `M` frozen by an independent principle before any run. Receipts C3-A-R (argmax-sensitivity reachability), C3-A-T (temptation + reversal, `π_route` C2-B-well-posed), C3-A-B (κ window); C3-A-R floor = the C4 D2 floor (one shared number). Open-conditions list for Cut-2-execute re-admission: **C2-A receipts · C3-A receipts · C4-A/B/C/D · C5** — one joint audit, withheld until all filed. No controller run; Public-Language Constraint in force.
+
+**C3-A audit addendum, 2026-05-16.** C3-A direction accepted, but not
+closed for admission. It inherits C2-A's not-yet-closed scaffold, so C3
+receipts cannot admit Cut-2 until C2-A values/receipts are concrete. The
+`P_in` anti-self-seal must be made operational with a frozen finite
+sample/generator, seed, decoy coefficients, and `(w,b)` receipt; the
+runtime decoy ridge must read only frozen coefficients and observable
+decoys, with C4-D checking no hidden `h` input. Cut-2 remains held; no
+controller run.

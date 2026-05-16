@@ -425,3 +425,29 @@ holds: populate all [E] values/tables, define lock/confident-`qhat` as a
 sustained-TRACK readout consistent with `PhotometricAgent`'s actual
 SCAN/SEEK/TRACK semantics, and add the C2-A-2 objective scan receipt. No
 harness/controller run.
+
+**2026-05-16 (PT) — maintainer.** C3-A numeric freeze filed
+(append-only):
+[`P2_CUT2_C3A_NUMERIC_FREEZE.md`](P2_CUT2_C3A_NUMERIC_FREEZE.md).
+Mirrors the C2-A structure (slots/provenance/receipt obligations now;
+concrete `[E]` values + tables are the maintainer's pre-run fill).
+Inherits C2-A's scale/seed/grid and propagates the sustained-TRACK
+confident-`q̂` readout across the whole C3 column. Keystone
+anti-self-seal: `P_in` decoy↔`h` correlation / `κ` / `M` frozen by an
+independent principle before any run. Three receipts (C3-A-R
+argmax-sensitivity reachability, C3-A-T temptation+reversal with the
+now-well-posed `π_route`, C3-A-B κ window); C3-A-R floor **= the C4 D2
+floor (one shared number)**. Full open-conditions list for
+Cut-2-execute re-admission is now **C2-A receipts · C3-A receipts ·
+C4-A/B/C/D · C5**; one joint audit, withheld until all filed. No frozen
+threshold/boundary moved; Public-Language Constraint in force.
+Justification: closes the C3 numeric-freeze structure as an
+artifact-before-agent.
+
+**2026-05-16 (PT) — Codex audit.** C3-A direction accepted; closure
+withheld. It correctly propagates C2-A's sustained-TRACK readout and the
+C3-C argmax-sensitivity repair, but cannot close until C2-A's inherited
+values close and C3-A's own [E] values/receipt tables are appended. The
+`P_in` independent freeze must become an operational artifact (finite
+sample or generator, seed, decoy coefficients, frozen `(w,b)`), not only
+a principle. No harness/controller run.
