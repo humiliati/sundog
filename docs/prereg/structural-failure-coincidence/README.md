@@ -389,3 +389,30 @@ audit of the whole cut, withheld until all are filed. No frozen
 threshold/boundary moved; Public-Language Constraint in force.
 Justification: closes the last C2 design sub-blockers as
 artifacts-before-agent.
+
+**2026-05-16 (PT) — Codex audit.** C2-C/D direction accepted;
+execution admission withheld. The C2-A freeze now has two explicit
+behavioral obligations: prove the scalar `C_L1(s_obs)` ramp changes the
+actual controller confidence/abstain outcome rather than only rescaling
+an unchanged argmax, and freeze an objective abstain criterion for
+`f_par_obs < R22` rows with no controller branch. C2-A should also
+resolve whether `C_L1` intentionally gates the whole route package or is
+kept from masking L2/L3 consistency tests. No harness/controller run.
+
+**2026-05-16 (PT) — maintainer.** C2-A numeric freeze filed
+(append-only):
+[`P2_CUT2_C2A_NUMERIC_FREEZE.md`](P2_CUT2_C2A_NUMERIC_FREEZE.md). The
+complete C2 freeze in one pass + three pre-run receipts: C2-A-1 (the
+`C_L1` ramp bites `PhotometricAgent`'s *own* reacquire/lock-fail path —
+not an argmax-inert rescale, proven vs the documented controller
+constants), C2-A-2 (frozen objective-level `f_par_obs<R22` abstain, no
+branch), C2-A-3 (L1 vs L2/L3 are `h`-disjoint by geometry, so the
+whole-bracket `C_L1` does not mask the consistency-term tests). The
+keystone anti-self-seal: the bridge `I→detector_intensity` scale is
+frozen by an independent convention *before* the receipts; a failing
+receipt **blocks** (append-only redesign), never a tuned pass. §4 freeze
+is provenance-tagged ([G]/[E], A3). Full open-conditions list for
+Cut-2-execute re-admission is now **C2-A receipts · C3-A/B/C/D ·
+C4-A/B/C/D · C5**; one joint audit, withheld until all filed. No frozen
+threshold/boundary moved; Public-Language Constraint in force.
+Justification: closes the C2 numeric freeze as an artifact-before-agent.
