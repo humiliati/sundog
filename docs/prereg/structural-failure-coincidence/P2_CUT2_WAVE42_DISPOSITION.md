@@ -124,3 +124,13 @@ pre-registered route — which is the entire point of the apparatus.
 ## Audit Notes
 
 *(reviewer space — append-only below)*
+
+**2026-05-16 (PT) — maintainer. Cut-3 spec/admission opened.**
+[`P2_CUT3_RUN_SPEC.md`](P2_CUT3_RUN_SPEC.md) and
+[`P2_CUT3_ADMISSION.md`](P2_CUT3_ADMISSION.md) now instantiate the
+gated escalation named above. The px↔° / Phase-15 hazard is handled as
+H0 angular calibration: per-frame sun-centered angular map, valid span,
+anchor residuals, and hashes before any rendered-signal run. Admission
+is **HOLD**, not ADMIT: the protocol shape is accepted, but no concrete
+render corpus, H0 residual table, agent path, baselines, or edit
+operators exist yet. Cut-3 remains opened but not started.
