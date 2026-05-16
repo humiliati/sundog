@@ -376,5 +376,14 @@ its reachability/temptation (**C3**) and the derived audit (**C4**)
 remain open. No threshold/boundary moved (`ρ, A, σ, seed, κ` are A3
 engineering tolerances, never post-results). Cut-2 execution stays
 **HELD** pending C3, C4, and the admission re-check; Public-Language
-Constraint in force. Justification: closes the C2 admission condition as
-a frozen artifact-before-agent; no harness, nothing run.
+Constraint in force. Justification: drafts the C2 admission condition as
+an artifact-before-agent; no harness, nothing run.
+
+**2026-05-15 (PT) — Codex freeze audit.** C2 execution freeze withheld.
+The C2 document is now explicitly **filed for audit — HOLD for
+execution**. Blockers: freeze the numerical engineering
+tolerances/domains; define `pen(q)` and the allowed `q_a` range so
+`I_route` is not a degenerate exact ridge; define the leverage-confidence
+gate without hidden-`h` access; define invalid naive-inverse handling for
+`f_par_obs < R22`. C3 remains the next design condition, but it should
+build on a C2 bridge that resolves these blockers. No controller run.

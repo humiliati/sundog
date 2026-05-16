@@ -4,9 +4,10 @@ Pre-registration: [`README.md`](README.md)
 Run spec: [`P2_RUN_SPEC.md`](P2_RUN_SPEC.md)
 Admission check: [`P2_SPEC_ADMISSION.md`](P2_SPEC_ADMISSION.md)
 Controller binding: [`P2_CUT2_C1_CONTROLLER_BINDING.md`](P2_CUT2_C1_CONTROLLER_BINDING.md)
-Filed: **2026-05-15 (PT)**. Status: **C2 DRAFT** — pre-registers the
-nuisance, the bias demonstration, and the bridge architecture only.
-Cut-2 execution remains **HELD** on C3, C4, and a fresh P2-spec
+Filed: **2026-05-15 (PT)**. Status: **C2 FILED FOR AUDIT — HOLD FOR
+EXECUTION**. This pre-registers the nuisance, the bias-demonstration
+intent, and the bridge architecture only. Cut-2 execution remains
+**HELD** on the C2 audit blockers below, C3, C4, and a fresh P2-spec
 admission re-check. No harness written; nothing run.
 
 ## Purpose
@@ -157,8 +158,28 @@ engineering tolerances (A3 rule), never post-results.
 
 ## Open items
 
-C2 closes the **nuisance**, the **bias-demonstration design**, the
-**bridge architecture**, and the **P-A/P-B obligations**. Still open:
+C2 files the **nuisance**, the **bias-demonstration design**, the
+**bridge architecture**, and the **P-A/P-B obligations** for audit. It is
+not execution-admitted until the blockers below are discharged. Still
+open:
+
+- **C2-A:** freeze the numerical engineering tolerances and domains that
+  the text currently names but does not instantiate: `ρ`, `A`, `σ`,
+  `seed`, the `h` grid, the epsilon sample count, the `q_h`/`q_a`
+  domains, and the P-B condition-number bound.
+- **C2-B:** specify `pen(q)` and the admissible `q_a` range. With a free
+  `q_a`, `I_route` has a perfect ridge for many `q_h` values
+  (`q_a = f_par_obs - R22/cos(q_h)`), so P-A cannot yet prove that
+  `argmax_q I_route` sits at the biased `q_naive` rather than on a
+  degenerate relation manifold.
+- **C2-C:** specify the leverage-confidence function and its inputs
+  exactly. It may depend on carrier/query state and observable bundle
+  fields, but not hidden true `h`.
+- **C2-D:** specify invalid naive-inverse handling when
+  `f_par_obs < R22` makes `arccos(R22/f_par_obs)` undefined. Those cases
+  are probably the sharpest low-leverage failure receipts, but the table
+  must predefine whether they are excluded, clipped, or counted as
+  abstain/invalid.
 
 - **C3:** concrete decoy term `D`, its reachability-through-`I` proof
   (non-zero `∂I/∂decoy` on the carrier path), and the in-sample
@@ -180,3 +201,18 @@ confirmation avenue (`debunked.md`, P1 §C). **B** is earned *only* by a
 measured refusal of the tempting decoy at a convergence cost **and**
 emergent failure coincident with L1/L2/L3. Either is a clean result; the
 in-between is not.
+
+---
+
+## Audit Notes
+
+**2026-05-15 (PT) — Codex freeze audit.** Direction accepted, freeze for
+execution **withheld**. The C2 move solves the right Cut-1 failure in
+principle: the observed parhelion handle is no longer exactly invertible,
+and the bridge is aimed at the real `PhotometricAgent` intensity path.
+However, C2 cannot be treated as closed until C2-A through C2-D are
+resolved. The load-bearing blocker is C2-B: if `q_a` is unconstrained,
+the stated `I_route` admits a continuum of exact peaks and the P-A
+"argmax differs from h by the biased naive inverse" demonstration is not
+defined. This is a pre-run design issue, not a result. No controller has
+been instantiated.
