@@ -102,8 +102,8 @@ It would be strengthened by:
 The paper should use precise language:
 
 - Say "photometric mirror alignment without target-position access."
-- Say "statistically indistinguishable terminal accuracy in this MuJoCo task."
-- Say "the cost is slower acquisition."
+- Say "no detected terminal-intensity difference at n=30 in this MuJoCo task."
+- Say "the cost is slower acquisition, roughly 16x in the reported core run."
 - Say "the theorem motivates the controller and application program."
 
 Avoid saying:

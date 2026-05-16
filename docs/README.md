@@ -24,6 +24,8 @@ code, experiments, prior theorem materials, and application bridges.
   its corollary). Theory-track, research-internal until its Phase 5 lands.
 - [Postulate 1 definitions lock](proof/POSTULATE1_DEFINITIONS.md): Phase 0
   proof-track symbol ledger and Sundog-solvable predicate.
+- [Proof artifacts index](proof/README.md): current proof-track artifacts,
+  including the Phase 1 LQG draft.
 - [Application map](APPLICATIONS.md): how the operating-envelope workbenches
   and product systems relate to the theorem.
 - [Promo highlights](PROMO_HIGHLIGHTS.md): hooks, headlines, provocative

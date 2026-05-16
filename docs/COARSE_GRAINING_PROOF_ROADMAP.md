@@ -16,7 +16,8 @@
 >
 > **Status as of 2026-05-16:** Phase 0 definitions lock landed at
 > [`proof/POSTULATE1_DEFINITIONS.md`](proof/POSTULATE1_DEFINITIONS.md);
-> Phase 1 not started. This is a
+> Phase 1 LQG proof draft landed at
+> [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md) and needs review. This is a
 > theory-track roadmap, not an operating-envelope workbench — it is the *trunk*
 > of which the Formal Separability Theorem appendix
 > ([`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md), promoted from
@@ -97,7 +98,8 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   compute `∂S/∂τ` at the optimum and the Fisher information of `Φ`; record
   whether they are proportional.
 - **Exit.** A written proof (LQG) + the recorded Postulate-6 proportionality
-  result (pass/fail), both in `docs/proof/PHASE1_LQG.md`.
+  result (pass/fail), both in `docs/proof/PHASE1_LQG.md`. **Draft landed
+  2026-05-16** at [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); review pending.
 - **Pre-registered negative.** If signature-only LQG control does **not** reach
   Bayes-optimal cost on the `𝓕_σ`-measurable set, the schema is false in its
   easiest case — halt the whole roadmap and file the falsification against

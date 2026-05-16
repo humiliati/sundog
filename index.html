@@ -1417,10 +1417,11 @@
                 </div>
                 <p>
                     When the iris closes, the claim becomes measurable. In 30 matched
-                    MuJoCo scenes, the photometric controller reached terminal accuracy
-                    statistically indistinguishable from the target-aware analytic
-                    baseline. The trade was time: indirect feedback converged more
-                    slowly. The known failure boundary is tight joint limits.
+                    MuJoCo scenes, the photometric controller reached comparable
+                    terminal accuracy to the target-aware analytic baseline; no
+                    terminal-intensity difference was detected at n=30. The trade was
+                    time: indirect feedback converged roughly 16x more slowly. The
+                    known failure boundary is tight joint limits.
                 </p>
             </div>
 
@@ -1504,7 +1505,7 @@
                     <span class="tier">Research Result</span>
                     <h3>Photometric Mirror Alignment</h3>
                     <p>
-                        A controller aligns a reflected beam without target coordinates, matching oracle baseline accuracy in controlled experiments.
+                        A controller aligns a reflected beam without target coordinates, reaching comparable terminal accuracy to the oracle baseline while taking longer to acquire the target.
                     </p>
                     <a href="applications-gallery.html#photometric-alignment">Learn More →</a>
                 </div>
@@ -1606,7 +1607,7 @@
                     <ul>
                         <li>Operates from partial information</li>
                         <li>Indirect signal observation</li>
-                        <li>Comparable terminal accuracy in the core task</li>
+                        <li>Comparable terminal accuracy in the core task, with slower acquisition</li>
                         <li>Mapped failure boundaries in workbenches</li>
                     </ul>
                 </div>
@@ -1624,7 +1625,7 @@
                     [Bar chart: photometric vs oracle]<br>
                     p = 0.264
                 </div>
-                <p>Photometric controller reaches comparable terminal accuracy.</p>
+                <p>No terminal-intensity difference was detected at n=30.</p>
             </div>
             <div class="proof-item">
                 <h4>Time-to-Convergence</h4>
@@ -1632,7 +1633,7 @@
                     [Line graph: convergence curves]<br>
                     188 vs 11.5 steps
                 </div>
-                <p>The cost of indirect feedback is time, not accuracy.</p>
+                <p>The measured cost of indirect feedback is roughly 16x slower acquisition.</p>
             </div>
             <div class="proof-item">
                 <h4>Stress Test Results</h4>

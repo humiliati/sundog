@@ -11,4 +11,5 @@ that claim provably fails.
 
 - [`POSTULATE1_DEFINITIONS.md`](POSTULATE1_DEFINITIONS.md) — Phase 0
   definitions lock for the Coarse-Graining Postulate.
-
+- [`PHASE1_LQG.md`](PHASE1_LQG.md) — Phase 1 LQG proof draft and Postulate 6
+  toy check.

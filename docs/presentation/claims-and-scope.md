@@ -18,8 +18,8 @@ These claims are defensible with current evidence:
 - We developed a framework we call the Sundog Theorem / Sundog framework.
 - We have been using it in software applications for a year.
 - A photometric controller can align a mirrored end-effector without direct target coordinates, using only sparse photometric feedback and proprioception.
-- The controller reaches terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo setting (U=526, p=0.264 on terminal target intensity).
-- The cost of indirect feedback is convergence time, not terminal accuracy, inside the tested operating envelope.
+- The controller reaches comparable terminal accuracy to a target-aware analytic baseline in the tested MuJoCo setting; no terminal-intensity difference was detected at `n=30` (`U=526`, `p=0.264`).
+- The cost of indirect feedback is convergence time, not terminal accuracy, inside the tested operating envelope; acquisition is roughly 16x slower in the reported core run.
 - The known failure boundary is tight joint limits.
 
 ### Framework Characteristics
@@ -115,7 +115,7 @@ Replace risky language with measured alternatives:
 
 ### Sundog Core Repo
 **Safe:**
-"A controller with no Cartesian access to a target can align a mirrored end-effector using only sparse photometric feedback, reaching terminal accuracy statistically indistinguishable from a target-aware analytic baseline in the tested MuJoCo setting."
+"A controller with no Cartesian access to a target can align a mirrored end-effector using only sparse photometric feedback. In the tested MuJoCo setting, no terminal-intensity difference was detected against a target-aware analytic baseline at `n=30`; the cost was roughly 16x slower acquisition."
 
 **Boundary:**
 "The defensible scientific claim is the photometric mirror-alignment experiment. The broader theorem language represents a research program."

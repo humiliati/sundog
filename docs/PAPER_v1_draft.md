@@ -12,12 +12,13 @@ eight-detector floor ring and joint proprioception. We propose a three-phase
 scan-then-extremum-seek controller — a Lissajous joint-space scan locates
 the empirical maximum, a short dwell settles the joints, and a perturb-and-
 observe ESC loop refines the lock. On 30 matched MuJoCo scenes the
-photometric controller reaches terminal target intensity 0.945,
-statistically indistinguishable from an analytic oracle at 0.936
-(Mann-Whitney $U = 526$, $p = 0.26$), and above a noisy-oracle baseline at
-0.911 ($p = 0.003$). The cost is convergence time: 188 steps vs. 11.5. A
-five-stressor sweep confirms the equality under detector noise, beam width,
-scan duration, and laser height, but breaks at joint limits below 1.2 rad.
+photometric controller reaches terminal target intensity 0.945. We do not
+detect a terminal-intensity difference against an analytic oracle at 0.936
+(Mann-Whitney $U = 526$, $p = 0.26$), and the controller exceeds a
+noisy-oracle baseline at 0.911 ($p = 0.003$). The cost is convergence time:
+188 steps vs. 11.5. A five-stressor sweep preserves the terminal-accuracy
+pattern under detector noise, beam width, scan duration, and laser height, but
+breaks at joint limits below 1.2 rad.
 
 ## 1. Introduction
 
@@ -43,8 +44,9 @@ workspace and records the highest target intensity observed; the carrier
 jumps to that maximum and an ESC loop refines. We instantiate the
 architecture on a MuJoCo mirror-alignment task and compare against an
 analytic target-aware oracle, the same oracle with 5 cm of position noise,
-and a random lower bound. The photometric controller matches the oracle's
-terminal alignment at the cost of ~16× longer convergence. A five-stressor
+and a random lower bound. The photometric controller shows no detected
+terminal-alignment gap against the oracle at `n=30`, at the cost of ~16x
+longer convergence. A five-stressor
 sweep documents the operating envelope; the only failure mode is tight
 joint limits, where the optimum lies outside reachability.
 
@@ -374,11 +376,11 @@ exception is the joint-limit sweep at $\theta_{\max} \leq 1.0$.
 
 ### 5.1 Headline interpretation
 
-A controller with no Cartesian access to the target reaches the same
-terminal alignment as a target-aware analytic oracle ($U = 526$, $p =
-0.26$). The cost is convergence speed: 188 vs. 11.5 steps to threshold,
-~16×. This inverts the standard reading of indirect feedback: instead of
-degraded terminal accuracy, equality with cost paid in time. For
+A controller with no Cartesian access to the target shows no detected
+terminal-alignment gap against a target-aware analytic oracle at `n=30`
+($U = 526$, $p = 0.26$). The cost is convergence speed: 188 vs. 11.5 steps to
+threshold, ~16x. This sharpens the standard reading of indirect feedback: the
+tested cost is not terminal degradation in this operating point, but time. For
 applications that can afford a few seconds of acquisition — beam
 steering at startup, calibration, fixed-geometry pointing servos — the
 indirect approach is effectively free in steady-state and removes the
