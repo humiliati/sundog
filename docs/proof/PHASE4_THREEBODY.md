@@ -27,7 +27,7 @@ Roadmap gate, quoted unchanged:
 > **on** the `𝓕_σ`-measurable cell set and stay bounded away from 0 (CI excludes
 > 0) **off** it. If regret is bounded-away *on* the measurable set,
 > sufficiency-for-control is empirically false on a real substrate → halt and
-> falsify. If regret -> 0 *off* the measurable set, the boundary (Phase 3) is
+> falsify. If regret → 0 *off* the measurable set, the boundary (Phase 3) is
 > wrong → reopen Phase 3.
 
 This exact gate is the one the eventual result must evaluate. It is not softened
