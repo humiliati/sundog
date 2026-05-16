@@ -699,3 +699,12 @@ stays **HELD** pending C4-A artifacts/receipts, C5 and the joint
 admission re-run; Public-Language Constraint in force. Justification:
 closes the final C-condition column's structure as an
 artifact-before-agent; receipts pre-run, no harness, nothing run.
+
+**2026-05-16 (PT) — Codex audit.** C4-A direction accepted, but closure
+is withheld. "Minimal mechanical flip" must become a reproducible
+fixture generator/diff plus manifests proving only D1/D2/D3-relevant
+fields changed; the Cut-1 fixture must be extracted/hashable from the
+real harness; the D1 probe set, D2 floor, and C4-D taint/perturbation
+script need concrete files/tables and frozen pass/fail readouts. C4-A
+also remains provisional until C2-A/C3-A close, because it inherits
+their scale/grid/readout and D2 floor. No controller run.

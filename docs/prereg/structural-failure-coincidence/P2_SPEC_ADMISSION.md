@@ -514,3 +514,14 @@ re-check verdict stays withheld until **C2-A, C3-A, C4-A
 receipts/artifacts, C5** are all filed *with concrete
 values/artifacts/receipts landed* and audited as one object. Cut-2
 build/run remains **blocked**; Public-Language Constraint in force.
+
+**2026-05-16 (PT) — C4-A audit.** C4-A direction accepted; closure
+withheld. The minimal-mechanical-flip fixture is the right C4-B
+anti-self-seal, and C4-D is correctly moved from prose to manifest +
+perturbation checks. Admission still requires concrete frozen artifacts:
+D1 probe-set table/file; Cut-1 fixture extraction/manifest; synthetic
+fixture generator/diff showing exactly the D1/D2/D3 flips; D2 floor
+matching the eventual C3-A-R floor; and a runnable taint/perturbation
+script with frozen magnitudes/readouts. Until those artifacts and the
+C2-A/C3-A inherited receipts close, C4-A is a scaffold, not an
+execution-closing gate. No harness run.

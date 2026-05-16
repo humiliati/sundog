@@ -469,3 +469,11 @@ filed *and their concrete values/artifacts landed*. No frozen
 threshold/boundary moved; Public-Language Constraint in force.
 Justification: closes the final C-condition column as an
 artifact-before-agent.
+
+**2026-05-16 (PT) — Codex audit.** C4-A direction accepted; closure
+withheld. The two-sided Cut-1/minimal-flip self-test is the right shape,
+but admission still needs concrete artifacts: hashable Cut-1 fixture
+manifest, minimal-flip generator/diff, D1 probe-set table, shared D2
+floor after C3-A closes, and runnable C4-D taint/perturbation script
+with frozen readouts. C4-A is provisional while C2-A/C3-A remain
+scaffolds. No harness/controller run.
