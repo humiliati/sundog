@@ -18,6 +18,10 @@ code, experiments, prior theorem materials, and application bridges.
   collaborators.
 - [Scientific criteria](SCIENTIFIC_CRITERIA.md): what is testable, what is
   only partially supported, and what remains future work.
+- [Coarse-graining proof roadmap](COARSE_GRAINING_PROOF_ROADMAP.md): staged
+  analytical + empirical proof path for the Coarse-Graining Postulate (the
+  sufficient-statistic-for-control trunk; the Formal Separability appendix is
+  its corollary). Theory-track, research-internal until its Phase 5 lands.
 - [Application map](APPLICATIONS.md): how the operating-envelope workbenches
   and product systems relate to the theorem.
 - [Promo highlights](PROMO_HIGHLIGHTS.md): hooks, headlines, provocative
