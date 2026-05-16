@@ -73,10 +73,16 @@ The no-op form is:
 J_lambda = S + lambda (R - S)
 ```
 
-At `kappa = 1`, these are the same objective. Phase 6 uses the new trainer flag
-`--reward-compose-form delta` to run the no-op form. The pass condition is not
-bitwise identity of training trajectories; PPO can amplify harmless floating
-point differences. The pass condition is side-of-cliff invariance:
+These are the **same objective for every `kappa`**, not only at `kappa = 1`:
+both reduce to `(1 - lambda) S + lambda kappa R` (`S + lambda (kappa R - S) =
+(1 - lambda) S + lambda kappa R`). The delta form is therefore a pure
+reparameterization the optimizer must be invariant to at any scale; the only
+thing that can move the cliff under it is optimizer path-dependence or
+amplified float noise — which is exactly what this control is built to detect.
+Phase 6 uses the new trainer flag `--reward-compose-form delta` to run the
+no-op form. The pass condition is not bitwise identity of training
+trajectories; PPO can amplify harmless floating point differences. The pass
+condition is side-of-cliff invariance:
 
 - `lambda=0.95` remains protected: `old_basin_pref < 1.0` and competence does
   not collapse.
@@ -243,8 +249,12 @@ For each label, read:
   `results/proof/phase6/intervention-battery/<label>/*_basin-internalization.csv`
 
 The decisive field is the `basin-position` row's
-`mean_old_basin_preference`. The registered breach threshold is unchanged from
-Phase 5: `old_basin_pref > 1.0`.
+`mean_old_basin_preference`. This is the same quantity as the Source Cliff
+table's `old_basin_pref` column — the per-trial mean of the basin-position
+intervention's old-basin preference, just under its full CSV field name. The
+gate therefore compares like-for-like against the Phase 5 baseline column. The
+registered breach threshold is unchanged from Phase 5: `old_basin_pref > 1.0`
+(i.e. `mean_old_basin_preference > 1.0`).
 
 ## Outcome Branches
 

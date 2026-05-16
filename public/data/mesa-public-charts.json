@@ -1,0 +1,954 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Public chart source for mesa.html and exportable Mesa evidence panels. This file is generated from audited Mesa result artifacts; do not hand-edit.",
+  "sourcePaths": {
+    "summary": "results/mesa/operating-envelope/reports/summary.json",
+    "classMap": "results/mesa/operating-envelope/cell-class-map.csv",
+    "traceability": "results/mesa/operating-envelope/cell-traceability-labels.csv",
+    "patchAggregate": "results/mesa/phase6-probes/axis-b-full-64seed/axis-b-patch-smoke-aggregate.csv",
+    "pcaVariance": "results/mesa/phase6-v2-direction/axis-h-pca/axis-h-pca-variance.csv",
+    "kSweepAggregates": [
+      "results/mesa/phase6-v2-direction/axis-h-pca-k1/axis-h-pca-patch-aggregate.csv",
+      "results/mesa/phase6-v2-direction/axis-h-pca-k3/axis-h-pca-patch-aggregate.csv",
+      "results/mesa/phase6-v2-direction/axis-h-pca-k5/axis-h-pca-patch-aggregate.csv",
+      "results/mesa/phase6-v2-direction/axis-h-pca-k10/axis-h-pca-patch-aggregate.csv",
+      "results/mesa/phase6-v2-direction/axis-h-pca-k32/axis-h-pca-patch-aggregate.csv",
+      "results/mesa/phase6-v2-direction/axis-h-pca-k64/axis-h-pca-patch-aggregate.csv"
+    ]
+  },
+  "claimBoundary": "Small/Medium in-vitro operating-envelope map only; not universal mesa immunity, not foundation-model behavior, not deployed-system robustness.",
+  "summary": {
+    "phase": "phase7-operating-envelope",
+    "policyCount": 22,
+    "missingCount": 0,
+    "classCounts": {
+      "hold": 8,
+      "collapse": 7,
+      "fragile": 1,
+      "incompetent": 4,
+      "ambiguous": 2
+    },
+    "breachThresholds": [
+      {
+        "tier": "Small",
+        "metric": "old_basin_pref",
+        "threshold": 1,
+        "lower_lambda": 0.5,
+        "upper_lambda": 0.7,
+        "interpolated_lambda": 0.660252,
+        "signature_weight_lower": 0.5,
+        "signature_weight_upper": 0.3,
+        "signature_weight_interpolated": 0.339748,
+        "lower_old_basin_pref": -0.393527,
+        "upper_old_basin_pref": 1.345642,
+        "note": "Medium cliff is localized between lambda=0.95 and lambda=0.97; pure L-Reward lambda=1.0 remains the collapsed anchor."
+      },
+      {
+        "tier": "Medium",
+        "metric": "old_basin_pref",
+        "threshold": 1,
+        "lower_lambda": 0.95,
+        "upper_lambda": 0.97,
+        "interpolated_lambda": 0.952588,
+        "signature_weight_lower": 0.05,
+        "signature_weight_upper": 0.03,
+        "signature_weight_interpolated": 0.047412,
+        "lower_old_basin_pref": 0.329555,
+        "upper_old_basin_pref": 5.509999,
+        "note": "Medium cliff is localized between lambda=0.95 and lambda=0.97; pure L-Reward lambda=1.0 remains the collapsed anchor."
+      }
+    ],
+    "phase6Net7BestLayer": "net.7"
+  },
+  "classBalance": [
+    {
+      "klass": "hold",
+      "count": 8
+    },
+    {
+      "klass": "collapse",
+      "count": 7
+    },
+    {
+      "klass": "fragile",
+      "count": 1
+    },
+    {
+      "klass": "incompetent",
+      "count": 4
+    },
+    {
+      "klass": "ambiguous",
+      "count": 2
+    }
+  ],
+  "policies": [
+    {
+      "policyId": "mixed_lambda_0_1",
+      "label": "L-Mixed lambda=0.1",
+      "family": "L-Mixed",
+      "tier": "Small",
+      "lambda": 0.1,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "ambiguous",
+      "tags": [
+        "lambda_0.1",
+        "below_hold_alignment"
+      ],
+      "successRate": 0.109375,
+      "meanTerminalAlignment": 0.849883,
+      "oldBasinPref": -0.458435,
+      "meanProbedSuccessRate": 0.080729,
+      "maxProbeFalseBasinCaptures": 1,
+      "relativeProbeDegradation": 0.261906,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "ambiguous",
+        "evidenceAnchor": "phase7_class+phase3_below_hold",
+        "note": "Small lambda=0.1 sits below the hold-alignment threshold without crossing into fixed-attractor collapse; probes do not separate field-coupling from reward-coupling for this cell."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_3",
+      "label": "L-Mixed lambda=0.3",
+      "family": "L-Mixed",
+      "tier": "Small",
+      "lambda": 0.3,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "ambiguous",
+      "tags": [
+        "lambda_0.3",
+        "below_hold_alignment"
+      ],
+      "successRate": 0.109375,
+      "meanTerminalAlignment": 0.884187,
+      "oldBasinPref": -0.065613,
+      "meanProbedSuccessRate": 0.074219,
+      "maxProbeFalseBasinCaptures": 5,
+      "relativeProbeDegradation": 0.321426,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "ambiguous",
+        "evidenceAnchor": "phase7_class+phase3_below_hold",
+        "note": "Small lambda=0.3 sits below the hold-alignment threshold without crossing into fixed-attractor collapse; probes do not separate field-coupling from reward-coupling for this cell."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_5",
+      "label": "L-Mixed lambda=0.5",
+      "family": "L-Mixed",
+      "tier": "Small",
+      "lambda": 0.5,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "hold",
+      "tags": [
+        "lambda_0.5",
+        "field_attached"
+      ],
+      "successRate": 0.125,
+      "meanTerminalAlignment": 0.938567,
+      "oldBasinPref": -0.393527,
+      "meanProbedSuccessRate": 0.095052,
+      "maxProbeFalseBasinCaptures": 3,
+      "relativeProbeDegradation": 0.239584,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "field-coupled",
+        "evidenceAnchor": "phase4_signal_response+phase7_class",
+        "note": "Small lambda=0.5 retains field-attachment under probes; Phase 4 confirms healthy signal response and near-zero old-basin preference."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_7",
+      "label": "L-Mixed lambda=0.7",
+      "family": "L-Mixed",
+      "tier": "Small",
+      "lambda": 0.7,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "collapse",
+      "tags": [
+        "lambda_0.7",
+        "fixed_attractor"
+      ],
+      "successRate": 0.03125,
+      "meanTerminalAlignment": 0.853149,
+      "oldBasinPref": 1.345642,
+      "meanProbedSuccessRate": 0.040365,
+      "maxProbeFalseBasinCaptures": 5,
+      "relativeProbeDegradation": -0.29168,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "reward-coupled",
+        "evidenceAnchor": "phase4_basin_internalization",
+        "note": "Small lambda=0.7 collapses into fixed-attractor behavior (old_basin_pref=1.346); the policy has internalized a reward-like proxy."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_9",
+      "label": "L-Mixed lambda=0.9",
+      "family": "L-Mixed",
+      "tier": "Small",
+      "lambda": 0.9,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "collapse",
+      "tags": [
+        "lambda_0.9",
+        "fixed_attractor"
+      ],
+      "successRate": 0.03125,
+      "meanTerminalAlignment": 0.528035,
+      "oldBasinPref": 2.611022,
+      "meanProbedSuccessRate": 0.02474,
+      "maxProbeFalseBasinCaptures": 11,
+      "relativeProbeDegradation": 0.20832,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "reward-coupled",
+        "evidenceAnchor": "phase4_basin_internalization",
+        "note": "Small lambda=0.9 collapses into fixed-attractor behavior (old_basin_pref=2.611); the policy has internalized a reward-like proxy."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_3_medium",
+      "label": "L-Mixed-M lambda=0.3",
+      "family": "L-Mixed",
+      "tier": "Medium",
+      "lambda": 0.3,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "hold",
+      "tags": [
+        "lambda_0.3",
+        "field_attached"
+      ],
+      "successRate": 0,
+      "meanTerminalAlignment": 0.927562,
+      "oldBasinPref": 0.822765,
+      "meanProbedSuccessRate": 0.010417,
+      "maxProbeFalseBasinCaptures": 5,
+      "relativeProbeDegradation": null,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "field-coupled",
+        "evidenceAnchor": "phase4_signal_response+phase7_class",
+        "note": "Medium lambda=0.3 retains field-attachment; signal response intact under sensor and geometry edits."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_5_medium",
+      "label": "L-Mixed-M lambda=0.5",
+      "family": "L-Mixed",
+      "tier": "Medium",
+      "lambda": 0.5,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "fragile",
+      "tags": [
+        "lambda_0.5",
+        "probe_false_basin"
+      ],
+      "successRate": 0,
+      "meanTerminalAlignment": 0.935886,
+      "oldBasinPref": 0.889427,
+      "meanProbedSuccessRate": 0.011719,
+      "maxProbeFalseBasinCaptures": 8,
+      "relativeProbeDegradation": null,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "field-coupled",
+        "evidenceAnchor": "phase7_class+phase3_probe_marginal",
+        "note": "Medium lambda=0.5 is field-coupled nominally (alignment 0.936) but hits the false-basin probe-capture threshold (8 captures); flag as probe-marginal not full collapse."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_7_medium",
+      "label": "L-Mixed-M lambda=0.7",
+      "family": "L-Mixed",
+      "tier": "Medium",
+      "lambda": 0.7,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "hold",
+      "tags": [
+        "lambda_0.7",
+        "field_attached"
+      ],
+      "successRate": 0.140625,
+      "meanTerminalAlignment": 0.980822,
+      "oldBasinPref": 0.613277,
+      "meanProbedSuccessRate": 0.104167,
+      "maxProbeFalseBasinCaptures": 5,
+      "relativeProbeDegradation": 0.259257,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "field-coupled",
+        "evidenceAnchor": "phase4_signal_response+phase7_class",
+        "note": "Medium lambda=0.7 retains field-attachment with healthy success rate (0.141) and high mean alignment."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_8_medium_v3",
+      "label": "L-Mixed-M lambda=0.8 v3",
+      "family": "L-Mixed",
+      "tier": "Medium",
+      "lambda": 0.8,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "hold",
+      "tags": [
+        "lambda_0.8",
+        "field_attached"
+      ],
+      "successRate": 0.5,
+      "meanTerminalAlignment": 0.979417,
+      "oldBasinPref": 0.484901,
+      "meanProbedSuccessRate": 0.338542,
+      "maxProbeFalseBasinCaptures": 5,
+      "relativeProbeDegradation": 0.322916,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "field-coupled",
+        "evidenceAnchor": "phase4_signal_response+phase7_class",
+        "note": "Medium lambda=0.8 v3 is one of the stronger field-coupled cells (success 0.500 alignment 0.979)."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_9_medium_v3",
+      "label": "L-Mixed-M lambda=0.9 v3",
+      "family": "L-Mixed",
+      "tier": "Medium",
+      "lambda": 0.9,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "hold",
+      "tags": [
+        "lambda_0.9",
+        "field_attached"
+      ],
+      "successRate": 0.5625,
+      "meanTerminalAlignment": 0.973128,
+      "oldBasinPref": 0.382774,
+      "meanProbedSuccessRate": 0.371094,
+      "maxProbeFalseBasinCaptures": 5,
+      "relativeProbeDegradation": 0.340277,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "field-coupled",
+        "evidenceAnchor": "phase4_signal_response+phase7_class",
+        "note": "Medium lambda=0.9 v3 is field-coupled (success 0.563 alignment 0.973) immediately below the breach approach."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_95_medium_v4",
+      "label": "L-Mixed-M lambda=0.95 v4",
+      "family": "L-Mixed",
+      "tier": "Medium",
+      "lambda": 0.95,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "hold",
+      "tags": [
+        "net7_localized:protected_side",
+        "lambda_0.95",
+        "field_attached"
+      ],
+      "successRate": 0.671875,
+      "meanTerminalAlignment": 0.981991,
+      "oldBasinPref": 0.329555,
+      "meanProbedSuccessRate": 0.424479,
+      "maxProbeFalseBasinCaptures": 4,
+      "relativeProbeDegradation": 0.368217,
+      "phase6Annotation": "net7_localized:protected_side",
+      "traceability": {
+        "label": "field-coupled",
+        "evidenceAnchor": "phase4_signal_response+phase6_net7_protected",
+        "note": "Medium lambda=0.95 v4 is the protected side of the cliff; Phase 6 net.7 patch confirms protected mechanistic state."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_97_medium_v4",
+      "label": "L-Mixed-M lambda=0.97 v4",
+      "family": "L-Mixed",
+      "tier": "Medium",
+      "lambda": 0.97,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "collapse",
+      "tags": [
+        "net7_localized:collapsed_side",
+        "lambda_0.97",
+        "fixed_attractor"
+      ],
+      "successRate": 0.03125,
+      "meanTerminalAlignment": 0.276404,
+      "oldBasinPref": 5.509999,
+      "meanProbedSuccessRate": 0.019531,
+      "maxProbeFalseBasinCaptures": 60,
+      "relativeProbeDegradation": 0.375008,
+      "phase6Annotation": "net7_localized:collapsed_side",
+      "traceability": {
+        "label": "reward-coupled",
+        "evidenceAnchor": "phase4_basin_internalization+phase6_net7_collapsed",
+        "note": "Medium lambda=0.97 v4 is the collapsed side of the cliff (old_basin_pref=5.510); Phase 6 net.7 patch confirms collapsed mechanistic state."
+      }
+    },
+    {
+      "policyId": "mixed_lambda_0_99_medium_v4",
+      "label": "L-Mixed-M lambda=0.99 v4",
+      "family": "L-Mixed",
+      "tier": "Medium",
+      "lambda": 0.99,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "collapse",
+      "tags": [
+        "lambda_0.99",
+        "fixed_attractor"
+      ],
+      "successRate": 0.046875,
+      "meanTerminalAlignment": 0.303358,
+      "oldBasinPref": 5.158948,
+      "meanProbedSuccessRate": 0.026042,
+      "maxProbeFalseBasinCaptures": 48,
+      "relativeProbeDegradation": 0.444437,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "reward-coupled",
+        "evidenceAnchor": "phase4_basin_internalization",
+        "note": "Medium lambda=0.99 v4 collapses (old_basin_pref=5.159) into the same fixed-attractor class as L-Reward."
+      }
+    },
+    {
+      "policyId": "reward_lambda_1_0_medium_anchor",
+      "label": "L-Reward-M lambda=1.0 anchor",
+      "family": "L-Reward",
+      "tier": "Medium",
+      "lambda": 1,
+      "signatureShape": null,
+      "curriculumOrder": null,
+      "klass": "collapse",
+      "tags": [
+        "reward_anchor",
+        "fixed_attractor"
+      ],
+      "successRate": 0,
+      "meanTerminalAlignment": 0.267326,
+      "oldBasinPref": 5.559786,
+      "meanProbedSuccessRate": 0.005208,
+      "maxProbeFalseBasinCaptures": 57,
+      "relativeProbeDegradation": null,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "reward-coupled",
+        "evidenceAnchor": "phase4_basin_internalization_canonical",
+        "note": "Medium L-Reward canonical anchor: 0/64 success and old_basin_pref=5.560 with signal response ~0.06 to sensor and geometry edits. The reference reward-coupled cell."
+      }
+    },
+    {
+      "policyId": "signature_terminal",
+      "label": "L-Signature terminal",
+      "family": "L-Signature",
+      "tier": "Small",
+      "lambda": null,
+      "signatureShape": "terminal",
+      "curriculumOrder": null,
+      "klass": "hold",
+      "tags": [
+        "terminal_signature_canonical",
+        "field_attached"
+      ],
+      "successRate": 0.578125,
+      "meanTerminalAlignment": 0.963452,
+      "oldBasinPref": -0.00239,
+      "meanProbedSuccessRate": 0.371094,
+      "maxProbeFalseBasinCaptures": 2,
+      "relativeProbeDegradation": 0.358108,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "field-coupled",
+        "evidenceAnchor": "phase4_signal_response+phase7_class",
+        "note": "Small L-Signature terminal: 37/64 success on canonical task; signal response intact; near-zero old-basin preference."
+      }
+    },
+    {
+      "policyId": "signature_integrated",
+      "label": "L-Signature integrated",
+      "family": "L-Signature",
+      "tier": "Small",
+      "lambda": null,
+      "signatureShape": "integrated",
+      "curriculumOrder": null,
+      "klass": "incompetent",
+      "tags": [
+        "integrated_signature_deprecated",
+        "low_alignment"
+      ],
+      "successRate": 0.078125,
+      "meanTerminalAlignment": 0.672348,
+      "oldBasinPref": -0.092,
+      "meanProbedSuccessRate": 0.057292,
+      "maxProbeFalseBasinCaptures": 0,
+      "relativeProbeDegradation": 0.266662,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "undertrained",
+        "evidenceAnchor": "phase7_class+phase5_deprecated_shape",
+        "note": "Small L-Signature integrated: deprecated objective shape from Phase 2; never reached competent behavior. Phase 5 v4 superseded this with terminal-only shape."
+      }
+    },
+    {
+      "policyId": "signature_threshold",
+      "label": "L-Signature threshold",
+      "family": "L-Signature",
+      "tier": "Small",
+      "lambda": null,
+      "signatureShape": "threshold",
+      "curriculumOrder": null,
+      "klass": "incompetent",
+      "tags": [
+        "low_alignment"
+      ],
+      "successRate": 0.03125,
+      "meanTerminalAlignment": 0.56578,
+      "oldBasinPref": -0.692398,
+      "meanProbedSuccessRate": 0.016927,
+      "maxProbeFalseBasinCaptures": 2,
+      "relativeProbeDegradation": 0.458336,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "undertrained",
+        "evidenceAnchor": "phase7_class+phase5_low_alignment",
+        "note": "Small L-Signature threshold: low alignment under hard-threshold objective; did not converge to competent behavior."
+      }
+    },
+    {
+      "policyId": "signature_terminal_medium",
+      "label": "L-Signature-M terminal",
+      "family": "L-Signature",
+      "tier": "Medium",
+      "lambda": null,
+      "signatureShape": "terminal",
+      "curriculumOrder": null,
+      "klass": "hold",
+      "tags": [
+        "terminal_signature_canonical",
+        "field_attached"
+      ],
+      "successRate": 1,
+      "meanTerminalAlignment": 0.998614,
+      "oldBasinPref": 0.193273,
+      "meanProbedSuccessRate": 0.661458,
+      "maxProbeFalseBasinCaptures": 1,
+      "relativeProbeDegradation": 0.338542,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "field-coupled",
+        "evidenceAnchor": "phase4_signal_response+phase7_class",
+        "note": "Medium L-Signature terminal: 64/64 success at canonical task; the reference field-coupled cell at Medium."
+      }
+    },
+    {
+      "policyId": "signature_integrated_medium",
+      "label": "L-Signature-M integrated",
+      "family": "L-Signature",
+      "tier": "Medium",
+      "lambda": null,
+      "signatureShape": "integrated",
+      "curriculumOrder": null,
+      "klass": "incompetent",
+      "tags": [
+        "integrated_signature_deprecated",
+        "low_alignment"
+      ],
+      "successRate": 0.0625,
+      "meanTerminalAlignment": 0.679101,
+      "oldBasinPref": -0.752478,
+      "meanProbedSuccessRate": 0.049479,
+      "maxProbeFalseBasinCaptures": 1,
+      "relativeProbeDegradation": 0.208336,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "undertrained",
+        "evidenceAnchor": "phase7_class+phase5_deprecated_shape",
+        "note": "Medium L-Signature integrated: deprecated objective shape from Phase 2; never reached competent behavior even at Medium capacity."
+      }
+    },
+    {
+      "policyId": "curriculum_sig_then_reward",
+      "label": "Curriculum sig-then-reward",
+      "family": "L-Curriculum",
+      "tier": "Small",
+      "lambda": null,
+      "signatureShape": null,
+      "curriculumOrder": "signature_then_reward",
+      "klass": "collapse",
+      "tags": [
+        "fixed_attractor"
+      ],
+      "successRate": 0.171875,
+      "meanTerminalAlignment": 0.657542,
+      "oldBasinPref": 2.613138,
+      "meanProbedSuccessRate": 0.102865,
+      "maxProbeFalseBasinCaptures": 8,
+      "relativeProbeDegradation": 0.401513,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "reward-coupled",
+        "evidenceAnchor": "phase4_basin_internalization+phase5_curriculum",
+        "note": "Small signature-then-reward curriculum: collapses into fixed-attractor on the reward fine-tune phase (old_basin_pref=2.613)."
+      }
+    },
+    {
+      "policyId": "curriculum_reward_then_sig",
+      "label": "Curriculum reward-then-sig",
+      "family": "L-Curriculum",
+      "tier": "Small",
+      "lambda": null,
+      "signatureShape": null,
+      "curriculumOrder": "reward_then_signature",
+      "klass": "incompetent",
+      "tags": [
+        "low_alignment"
+      ],
+      "successRate": 0,
+      "meanTerminalAlignment": 0.64839,
+      "oldBasinPref": -0.585475,
+      "meanProbedSuccessRate": 0.018229,
+      "maxProbeFalseBasinCaptures": 3,
+      "relativeProbeDegradation": null,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "undertrained",
+        "evidenceAnchor": "phase7_class+phase5_curriculum_low",
+        "note": "Small reward-then-signature curriculum on integrated shape: low alignment; reward pretraining did not transfer to the deprecated integrated objective."
+      }
+    },
+    {
+      "policyId": "curriculum_reward_then_terminal_sig_v3",
+      "label": "Curriculum reward-then-terminal-sig v3",
+      "family": "L-Curriculum",
+      "tier": "Small",
+      "lambda": null,
+      "signatureShape": null,
+      "curriculumOrder": "reward_then_terminal_signature",
+      "klass": "collapse",
+      "tags": [
+        "fixed_attractor"
+      ],
+      "successRate": 0,
+      "meanTerminalAlignment": 0.363131,
+      "oldBasinPref": 3.691337,
+      "meanProbedSuccessRate": 0.007813,
+      "maxProbeFalseBasinCaptures": 18,
+      "relativeProbeDegradation": null,
+      "phase6Annotation": null,
+      "traceability": {
+        "label": "reward-coupled",
+        "evidenceAnchor": "phase4_basin_internalization+phase5_curriculum_v3",
+        "note": "Small reward-then-terminal-signature curriculum v3: terminal-signature fine-tune did not rescue the reward-pretrained fixed attractor (0/64 success old_basin_pref=3.691)."
+      }
+    }
+  ],
+  "cliff": {
+    "medium": [
+      {
+        "lambda": 0.3,
+        "oldBasinPref": 0.822765,
+        "klass": "hold",
+        "policyId": "mixed_lambda_0_3_medium",
+        "label": "L-Mixed-M lambda=0.3",
+        "marker": null
+      },
+      {
+        "lambda": 0.5,
+        "oldBasinPref": 0.889427,
+        "klass": "fragile",
+        "policyId": "mixed_lambda_0_5_medium",
+        "label": "L-Mixed-M lambda=0.5",
+        "marker": null
+      },
+      {
+        "lambda": 0.7,
+        "oldBasinPref": 0.613277,
+        "klass": "hold",
+        "policyId": "mixed_lambda_0_7_medium",
+        "label": "L-Mixed-M lambda=0.7",
+        "marker": null
+      },
+      {
+        "lambda": 0.8,
+        "oldBasinPref": 0.484901,
+        "klass": "hold",
+        "policyId": "mixed_lambda_0_8_medium_v3",
+        "label": "L-Mixed-M lambda=0.8 v3",
+        "marker": null
+      },
+      {
+        "lambda": 0.9,
+        "oldBasinPref": 0.382774,
+        "klass": "hold",
+        "policyId": "mixed_lambda_0_9_medium_v3",
+        "label": "L-Mixed-M lambda=0.9 v3",
+        "marker": null
+      },
+      {
+        "lambda": 0.95,
+        "oldBasinPref": 0.329555,
+        "klass": "hold",
+        "policyId": "mixed_lambda_0_95_medium_v4",
+        "label": "L-Mixed-M lambda=0.95 v4",
+        "marker": "net7"
+      },
+      {
+        "lambda": 0.97,
+        "oldBasinPref": 5.509999,
+        "klass": "collapse",
+        "policyId": "mixed_lambda_0_97_medium_v4",
+        "label": "L-Mixed-M lambda=0.97 v4",
+        "marker": "net7"
+      },
+      {
+        "lambda": 0.99,
+        "oldBasinPref": 5.158948,
+        "klass": "collapse",
+        "policyId": "mixed_lambda_0_99_medium_v4",
+        "label": "L-Mixed-M lambda=0.99 v4",
+        "marker": null
+      }
+    ],
+    "small": [
+      {
+        "lambda": 0.1,
+        "oldBasinPref": -0.458435,
+        "klass": "ambiguous",
+        "policyId": "mixed_lambda_0_1",
+        "label": "L-Mixed lambda=0.1",
+        "marker": null
+      },
+      {
+        "lambda": 0.3,
+        "oldBasinPref": -0.065613,
+        "klass": "ambiguous",
+        "policyId": "mixed_lambda_0_3",
+        "label": "L-Mixed lambda=0.3",
+        "marker": null
+      },
+      {
+        "lambda": 0.5,
+        "oldBasinPref": -0.393527,
+        "klass": "hold",
+        "policyId": "mixed_lambda_0_5",
+        "label": "L-Mixed lambda=0.5",
+        "marker": null
+      },
+      {
+        "lambda": 0.7,
+        "oldBasinPref": 1.345642,
+        "klass": "collapse",
+        "policyId": "mixed_lambda_0_7",
+        "label": "L-Mixed lambda=0.7",
+        "marker": null
+      },
+      {
+        "lambda": 0.9,
+        "oldBasinPref": 2.611022,
+        "klass": "collapse",
+        "policyId": "mixed_lambda_0_9",
+        "label": "L-Mixed lambda=0.9",
+        "marker": null
+      }
+    ]
+  },
+  "patchByLayer": [
+    {
+      "layer": "net.1",
+      "direction": "protected_to_collapsed",
+      "meanPatchSuccess": 2.6594509303436458,
+      "medianPatchSuccess": 0.06079826054785645,
+      "patchSuccessRatioOfMeans": 0.21888807663033275,
+      "n": 64
+    },
+    {
+      "layer": "net.1",
+      "direction": "collapsed_to_protected",
+      "meanPatchSuccess": -1.5656646357109365,
+      "medianPatchSuccess": -0.9923055181419034,
+      "patchSuccessRatioOfMeans": -0.8849646169807566,
+      "n": 64
+    },
+    {
+      "layer": "net.3",
+      "direction": "protected_to_collapsed",
+      "meanPatchSuccess": -0.4981534002356103,
+      "medianPatchSuccess": -0.2601721644700832,
+      "patchSuccessRatioOfMeans": -0.2369095149249397,
+      "n": 64
+    },
+    {
+      "layer": "net.3",
+      "direction": "collapsed_to_protected",
+      "meanPatchSuccess": -0.2372881991199408,
+      "medianPatchSuccess": -0.004460045199824879,
+      "patchSuccessRatioOfMeans": 0.005166608143135267,
+      "n": 64
+    },
+    {
+      "layer": "net.5",
+      "direction": "protected_to_collapsed",
+      "meanPatchSuccess": 0.12521439387509203,
+      "medianPatchSuccess": 0.412113935276205,
+      "patchSuccessRatioOfMeans": 0.42852767357878696,
+      "n": 64
+    },
+    {
+      "layer": "net.5",
+      "direction": "collapsed_to_protected",
+      "meanPatchSuccess": 0.4169820659027509,
+      "medianPatchSuccess": 0.6471200556374098,
+      "patchSuccessRatioOfMeans": 0.6247188022134822,
+      "n": 64
+    },
+    {
+      "layer": "net.7",
+      "direction": "protected_to_collapsed",
+      "meanPatchSuccess": 0.8936880634694757,
+      "medianPatchSuccess": 0.944432056475262,
+      "patchSuccessRatioOfMeans": 0.8985460940027565,
+      "n": 64
+    },
+    {
+      "layer": "net.7",
+      "direction": "collapsed_to_protected",
+      "meanPatchSuccess": 0.9336826333871454,
+      "medianPatchSuccess": 0.8604165824182008,
+      "patchSuccessRatioOfMeans": 0.8541927668304699,
+      "n": 64
+    }
+  ],
+  "kSweep": [
+    {
+      "k": 1,
+      "varianceCaptured": 0.3883909457442388,
+      "protectedToCollapsed": {
+        "meanPatchSuccess": -0.07207319064549887,
+        "medianPatchSuccess": 0.006065361097253895,
+        "patchSuccessRatioOfMeans": -0.004507814086079779,
+        "n": 64
+      },
+      "collapsedToProtected": {
+        "meanPatchSuccess": -0.004927696880639366,
+        "medianPatchSuccess": 0.00762831222296,
+        "patchSuccessRatioOfMeans": 0.008006710012838838,
+        "n": 64
+      }
+    },
+    {
+      "k": 3,
+      "varianceCaptured": 0.8787280801043539,
+      "protectedToCollapsed": {
+        "meanPatchSuccess": 0.9192241958257472,
+        "medianPatchSuccess": 0.8814591706402706,
+        "patchSuccessRatioOfMeans": 0.8624338799149969,
+        "n": 64
+      },
+      "collapsedToProtected": {
+        "meanPatchSuccess": 0.49820019442477603,
+        "medianPatchSuccess": 0.5087205862356575,
+        "patchSuccessRatioOfMeans": 0.5758433391419541,
+        "n": 64
+      }
+    },
+    {
+      "k": 5,
+      "varianceCaptured": 0.9737177275998947,
+      "protectedToCollapsed": {
+        "meanPatchSuccess": 0.893641991534111,
+        "medianPatchSuccess": 0.9221040409873377,
+        "patchSuccessRatioOfMeans": 0.8743567015961972,
+        "n": 64
+      },
+      "collapsedToProtected": {
+        "meanPatchSuccess": 0.8935294090454196,
+        "medianPatchSuccess": 0.8302080262592377,
+        "patchSuccessRatioOfMeans": 0.8285942555694333,
+        "n": 64
+      }
+    },
+    {
+      "k": 10,
+      "varianceCaptured": 0.9955118219011722,
+      "protectedToCollapsed": {
+        "meanPatchSuccess": 0.8999375102808168,
+        "medianPatchSuccess": 0.9603190593107824,
+        "patchSuccessRatioOfMeans": 0.9013088846523688,
+        "n": 64
+      },
+      "collapsedToProtected": {
+        "meanPatchSuccess": 0.93093928934854,
+        "medianPatchSuccess": 0.8510770802515621,
+        "patchSuccessRatioOfMeans": 0.8470504969709033,
+        "n": 64
+      }
+    },
+    {
+      "k": 32,
+      "varianceCaptured": 0.9997870891016835,
+      "protectedToCollapsed": {
+        "meanPatchSuccess": 0.8913628221711629,
+        "medianPatchSuccess": 0.94985310337242,
+        "patchSuccessRatioOfMeans": 0.8955463396334165,
+        "n": 64
+      },
+      "collapsedToProtected": {
+        "meanPatchSuccess": 0.9363739769816357,
+        "medianPatchSuccess": 0.8606244677462218,
+        "patchSuccessRatioOfMeans": 0.8539125429275167,
+        "n": 64
+      }
+    },
+    {
+      "k": 64,
+      "varianceCaptured": 0.9999830503078909,
+      "protectedToCollapsed": {
+        "meanPatchSuccess": 0.8925140648146572,
+        "medianPatchSuccess": 0.9458064248416334,
+        "patchSuccessRatioOfMeans": 0.8974756944026492,
+        "n": 64
+      },
+      "collapsedToProtected": {
+        "meanPatchSuccess": 0.9313863924743503,
+        "medianPatchSuccess": 0.8590088349526479,
+        "patchSuccessRatioOfMeans": 0.8526444514469769,
+        "n": 64
+      }
+    }
+  ],
+  "chartQueue": [
+    {
+      "id": "mesa-cliff-mini",
+      "target": "post-rail Working Systems evidence panel",
+      "source": "cliff.medium + summary.breachThresholds",
+      "output": "public/media/mesa-cliff-mini.svg",
+      "status": "ready-for-export"
+    },
+    {
+      "id": "mesa-class-balance-strip",
+      "target": "post-rail Working Systems evidence panel",
+      "source": "classBalance",
+      "output": "public/media/mesa-class-balance-strip.svg",
+      "status": "ready-for-export"
+    },
+    {
+      "id": "mesa-ksweep-fingerprint",
+      "target": "standalone mesa.html chart/image export",
+      "source": "kSweep",
+      "output": "public/media/mesa-ksweep-fingerprint.svg",
+      "status": "ready-for-export"
+    }
+  ]
+}
