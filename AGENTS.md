@@ -126,6 +126,16 @@ measurement issue MUST explicitly authorize the specific phases
 rule for that issue, and instruct per-phase incremental commits to the PR
 branch. Full lock stays out of scope and operator-gated.
 
+Run 3 (2026-05-16, issue-assigned, **Intel Xeon 8370C** — a different ISA from
+Runs 1/2 on AMD EPYC) reproduced phase13 bit-for-bit a 4th time: caveat 1 is
+retired across ISAs. Structural limit confirmed: phase13 alone (~46 min)
+consumes a ~1 h session, so Runs 2 and 3 each landed phase13 only even when
+the issue authorized all three phases. Authorizing phases cannot create
+session time. **Cloud measurement issues must therefore drop phase13
+(measured 4×) and run `phase14` and `phase15:smoke` as separate, each-under-1h
+issues with per-phase commits** — see `copilot_test_readme.md` ▸ "Revised
+next-issue guidance".
+
 ## HaloSim Halo Rendering (cinematic + geometry confirmation)
 
 HaloSim3 is a Monte Carlo halo ray-tracer used two ways in this repo:
