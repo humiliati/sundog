@@ -1,0 +1,66 @@
+{
+  "self_test": "Residual-table generator plumbing (schema-mechanical only)",
+  "spec_reference": "P2_CUT3_H0_2_SCHEMA.md §2-C, §3, §6.2 — exercises parser, validator, consistency-detector, row emitter, CSV column order, orphan handling on synthetic conformant inputs.",
+  "disclosure": "PASS here means the generator's plumbing behaves as specified. It does NOT mean H0-2 is closed; H0-2 closure requires §6.3–§6.4 operator pre-fill on real Phase-15 frames + a known-PASS fixture. Synthetic test inputs are unit-test fixtures, not fabricated H0 records.",
+  "tmp_dir_used": "/sessions/magical-upbeat-goldberg/mnt/sundog/results/structural-failure/cut3-prereg/h0-residual-selftest-tmp",
+  "pass_count": 11,
+  "fail_count": 0,
+  "overall_pass": true,
+  "checks": [
+    {
+      "name": "happy_path_two_rows",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "happy_path_both_consistent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "happy_path_admit_copied_byte_for_byte",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "sha_mismatch_consistency_false",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "sha_mismatch_emits_RECORD_SIDECAR_SHA_MISMATCH",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "timestamp_ordering_violation_caught",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "orphan_sidecar_emits_ORPHAN_RECORD",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "orphan_record_emits_ORPHAN_SIDECAR",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "csv_header_matches_spec",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no_verdict_synthesis_on_happy_path",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "orphan_sidecar_admit_null",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

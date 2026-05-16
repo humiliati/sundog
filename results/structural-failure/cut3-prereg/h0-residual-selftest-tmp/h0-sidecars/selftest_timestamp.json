@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "sidecar_kind": "h0-measured-sidecar",
+  "frame_id": "selftest_timestamp",
+  "frame_path": "selftest/pair.png",
+  "render_sha256": "0000000000000000000000000000000000000000000000000000000000000001",
+  "config_path": null,
+  "config_sha256": null,
+  "measurement_method": "operator_manual",
+  "measured_at_pt": "2026-05-16T00:00:00",
+  "measured_by": "selftest",
+  "sun_px": [
+    400,
+    400
+  ],
+  "projection": "selftest",
+  "theta_map_kind": "scale_ticks",
+  "scale_ticks": [
+    {
+      "px_radius": 100,
+      "deg": 11,
+      "source": "operator-eye"
+    },
+    {
+      "px_radius": 200,
+      "deg": 22,
+      "source": "operator-eye"
+    },
+    {
+      "px_radius": 400,
+      "deg": 46,
+      "source": "operator-eye"
+    }
+  ],
+  "anchors": [
+    {
+      "locus_deg": 22,
+      "px_radius": 200,
+      "off_ruler": false,
+      "measurement_note": ""
+    },
+    {
+      "locus_deg": 46,
+      "px_radius": 400,
+      "off_ruler": false,
+      "measurement_note": ""
+    }
+  ],
+  "scored_feature_deg": 22,
+  "operator_decisions": {
+    "compound_code_is_h_leak": "no",
+    "compound_code_basis": "no compound code present",
+    "known_pass_selection_basis": "synthetic selftest fixture",
+    "fixture_class": "known_pass_fullspan"
+  },
+  "calib_sha256": "37cde583b0758d3857cfafcbc85e5b9966ea68bbf98220444ccd030680039355"
+}

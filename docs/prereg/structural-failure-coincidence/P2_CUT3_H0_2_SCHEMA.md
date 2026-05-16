@@ -261,4 +261,84 @@ additive and semantics-preserving. Body frozen; §0 H0-1-correction gate
 remains the hard precondition; Cut-3 admission HOLD, execution HELD,
 Public-Language Constraint in force; nothing run.
 
+**2026-05-16 (PT) — maintainer. Wave H0-2 §6.2 generator filed.** The
+residual-table generator (artifact C + manifest D producer) is filed at
+`scripts/cut3-h0-residual-table.mjs` with §3 anti-self-seal applied at
+the generator layer: **no verdict synthesis** (admit/reason_code/
+measured_deg/residual_deg copied byte-for-byte from artifact B; the
+generator never invents a verdict) and **consistency-fail-loud** (the
+three pin checks per (sidecar, record) pair — sidecar self-pin recompute,
+record↔sidecar SHA equality per red-line A, timestamp ordering as
+defense-in-depth — each fail emits a row with `consistency: false` and
+the specific failure code; the generator never silently corrects). The
+PRIMARY mechanical detector at this layer is the
+`record.provenance.source_sidecar_sha256 == sidecar.calib_sha256` SHA
+equality check, mirroring the schema's §3 red-line A primacy. Orphan
+sidecars/records emit rows with `reason_code = ORPHAN_RECORD` /
+`ORPHAN_SIDECAR` and no synthesized admit.
+
+*§G.1 — Schema-mechanical self-test: 11/11 PASS (plumbing only).* Run:
+`node scripts/cut3-h0-residual-table.mjs self-test`. Exercises eleven
+predicates of the generator's plumbing — happy-path two-row emission +
+byte-for-byte admit copying, SHA-mismatch detection emitting
+`RECORD_SIDECAR_SHA_MISMATCH`, timestamp-ordering-violation detection,
+orphan-sidecar/orphan-record handling, CSV column order matching §2-C
+verbatim, and the no-verdict-synthesis invariant on both happy and
+orphan paths — using synthetic conformant inputs. **This is a unit
+check of the generator's parsing/dispatch/emit logic only.** PASS here
+makes no substantive claim about H0-2; per §6.7, H0-2 closure requires
+operator-pre-fill on real Phase-15 frames + a known-PASS fixture.
+Synthetic self-test inputs are written under
+`results/structural-failure/cut3-prereg/h0-residual-selftest-tmp/` and
+are explicitly NOT H0 records.
+
+*§G.2 — Empty-state outputs pinned.* Running `generate` against the
+currently-empty `h0-sidecars/` and `h0-records/` directories (Wave H0-2
+operator pre-fill has not yet produced any) emits scaffolding artifacts
+showing 0 rows and 0 inputs. These exist as evidence the generator is
+deployed and ready; they will be byte-replaced on the first real run
+once operator pre-fill lands.
+
+*Pinned artifacts (paths repo-relative, hashes SHA-256, 2026-05-16 PT).*
+
+| artifact | path | sha256 |
+| --- | --- | --- |
+| §6.2 generator script | `scripts/cut3-h0-residual-table.mjs` | `d93ac6e1bde9751347eaa5060351dc87cdf8b79ad302e918e842a393151a0c46` |
+| Self-test result (11/11 plumbing) | `results/structural-failure/cut3-prereg/h0-residual-table-self-test-result.json` | raw `dbe44a4ce8e7f13d9d753988facb2102e3f232abdf2f9583c47b67ff1fd5481f` · canonical `1819462a17fdb6f084321aad6883a519b2358bdd1f9da5c0ab776a88b371e276` |
+| Residual table (empty-state, JSON) | `results/structural-failure/cut3-prereg/h0-anchor-residual-table.json` | raw `33b1f83a48a506fb594598e4fb49a35e8daa1ca1be7270348cdef24445cd21fb` · canonical `d1b559b88ec2e7aaf265dedb19f9da29d2da0b3f4eafb13baed7eee11d15bbc6` |
+| Residual table (empty-state, CSV header only) | `results/structural-failure/cut3-prereg/h0-anchor-residual-table.csv` | `892dce86ad29c3fdbdb21539590024ee951cc3db8a046f38788d0a9bbb7c2b31` |
+| Manifest (empty-state) | `results/structural-failure/cut3-prereg/h0-2-manifest.json` | raw `6467086c8bc934af89c7a5be34eb212282f7e9cfb4132824e80ae05d0b61612d` · canonical `172a1b006e67cce9f32b566f9cb23b3548952d6938922f3b44ae6ea8e3753d9a` |
+
+*§G.3 — CLI surface.* `generate` (deterministic given the input
+directories), `validate --sidecar <path>` / `validate --record <path>`
+(schema-mechanical pre-flight that an operator can run on a single
+candidate file before committing to the corpus), `self-test` (the §G.1
+plumbing check), and `hash-file <path>` (utility).
+
+*§G.4 — Re-run determinism.* Re-running the generator against the same
+inputs produces byte-identical outputs. Verified locally: self-test
+re-run hash `dbe44a4c…481f` (unchanged); generate re-run manifest hash
+`6467086c…612d` (unchanged).
+
+*§G.5 — Authoring-side scratch.* The self-test tmp directory at
+`results/structural-failure/cut3-prereg/h0-residual-selftest-tmp/`
+contains eight synthetic JSON files (four sidecars, four records) used
+by the self-test. These are unit-test fixtures, not H0 records; the
+real `generate` mode reads from the canonical `h0-sidecars/` and
+`h0-records/` paths and never consumes anything from the tmp directory.
+Safe to leave; reproduced by every self-test run.
+
+*§G.6 — Discipline.* No frozen schema body edited. §0 H0-1-correction
+gate continues to apply (already satisfied on git main per commit
+`bf6aa2a` / current canonical checker SHA `7a520f3f…f05cb`). H0-2
+landing order now stands at §6.3–§6.4 (operator pre-fill on real
+Phase-15 frames + known-PASS fixture identification + measurement).
+Cut-3 admission **HOLD**; execution **HELD**; Public-Language
+Constraint in force; H0-B negative side on real frames remains OPEN.
+
+Justification: closes §6.2 of the schema's landing order with the
+generator filed, plumbing self-test passing, empty-state outputs pinned,
+and §3 anti-self-seal applied at the aggregator layer. Real-table
+generation is gated on operator pre-fill landing.
+
 *(reviewer space continues — append-only)*

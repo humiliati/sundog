@@ -1,0 +1,25 @@
+{
+  "frame_id": "selftest_timestamp",
+  "valid_angular_span_deg": 46,
+  "anchors": [
+    {
+      "locus_deg": 22,
+      "measured_deg": 22,
+      "residual_deg": 0,
+      "off_ruler": false
+    },
+    {
+      "locus_deg": 46,
+      "measured_deg": 46,
+      "residual_deg": 0,
+      "off_ruler": false
+    }
+  ],
+  "admit": true,
+  "reason_code": "OK",
+  "provenance": {
+    "source_sidecar_sha256": "37cde583b0758d3857cfafcbc85e5b9966ea68bbf98220444ccd030680039355",
+    "checker_sha256": "0000000000000000000000000000000000000000000000000000000000000002",
+    "checker_runtime_pt": "2025-01-01T00:00:00"
+  }
+}
