@@ -286,3 +286,19 @@ moved; D2 floor still pending C3-A-R closure (one shared number).
 Public-Language Constraint remains fully in force. Cut-2-execute
 remains HELD on the joint admission re-run with the four remaining
 C4-A artifacts + C2-A receipts + C3-A receipts + C5 also landed.
+
+**2026-05-16 (PT) — Codex audit of Wave-1 C4-A concrete fill.**
+The Cut-1 known-vacuous fixture manifest is reproducible and hash-pinned:
+rerunning `node scripts/cut2-cut1-fixture-extract.mjs` regenerated the
+same manifest with no diff, and `hash-canonical-json` returned
+`3b69bf3c3e32a9a7807ed7ce3382629e9f5864c42671fc79a2f11c062458c97e`;
+`hash-file` for the extractor returned
+`894e6efbd3e8732e273db8f84ecb84df5fe4995ed6355db82523147375c36fde`.
+This closes the zero-coupling C4-A fixture artifact, subject to the
+existing rule that the seven pinned line ranges are immutable. Because
+the manifest lives under the C5 results allowlist, C4-A immutability is
+not delegated to the C5 write guard; the joint admission re-run must
+explicitly re-check the manifest/extractor/source hashes against this
+append. The remaining C4-A artifacts are unchanged: D1 probe set,
+minimal-flip generator/diff, C4-D taint/perturbation script, and C4-B
+two-sided self-test table. No harness/controller run.
