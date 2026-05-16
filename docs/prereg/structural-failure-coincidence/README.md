@@ -342,3 +342,11 @@ full open-conditions list for Cut-2-execute re-admission is now
 re-check is one audit of the whole cut, withheld until all are filed. No
 frozen threshold/boundary moved; Public-Language Constraint in force.
 Justification: files the C4 meta-condition as an artifact-before-agent.
+
+**2026-05-16 (PT) — Codex audit.** C4 execution admission withheld. The
+derived-audit direction is accepted, including the Cut-1 known-vacuous
+fixture and synthetic non-vacuous fixture requirement. Two blockers were
+added: D1 must audit route construction rather than the bound
+controller's output, and D3 needs a mechanical input/taint or
+boundary-perturbation method rather than a prose "not a flag" assertion.
+Cut-2 execution remains HELD; no harness, nothing run.

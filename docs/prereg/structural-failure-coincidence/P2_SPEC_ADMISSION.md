@@ -376,3 +376,14 @@ C4-B), C5** — and audits one coherent object, including whether C4-B's
 Cut-1 fixture actually flags vacuous in the harness suite and whether
 the cross-couplings are discharged. Cut-2 build/run remains **blocked**;
 Public-Language Constraint in force.
+
+**2026-05-16 (PT) — C4 audit.** C4 direction accepted; execution
+admission withheld. Two C4-local blockers added in
+[`P2_CUT2_C4_DERIVED_AUDIT.md`](P2_CUT2_C4_DERIVED_AUDIT.md): (C4-C)
+D1 must be construction-level (`π_route` / `argmax I_route` vs
+`arccos(R22/f_par_obs)` on the must-differ region), not computed from
+the bound controller's final `q̂`, because controller behavior belongs
+to the four-quantity score; (C4-D) D3 needs a frozen mechanical
+inspection/taint or perturbation method proving boundary behavior comes
+from observable intensity/curvature collapse rather than a generator-bit
+echo. C4-A/C4-B remain open; no harness run.
