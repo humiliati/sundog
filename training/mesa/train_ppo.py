@@ -820,6 +820,21 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
 def main() -> int:
     args = parse_args()
     summary = run_training(args)
+    if summary.get("eval_only"):
+        eval_summary_path = Path(summary["evaluation_summary_path"])
+        if not eval_summary_path.is_absolute():
+            eval_summary_path = REPO_ROOT / eval_summary_path
+        eval_summary = json.loads(eval_summary_path.read_text(encoding="utf-8"))
+        print(
+            "mesa ppo eval-only: "
+            f"variant={args.variant} tier={args.tier} "
+            f"seed_start={summary['eval_seed_start']} seeds={summary['eval_seeds']} "
+            f"success={eval_summary.get('success_count', 0)}/{eval_summary.get('seeds', 0)} "
+            f"({100 * eval_summary.get('success_rate', 0):.1f}%) "
+            f"mean_S_T={eval_summary.get('mean_terminal_alignment', 0):.4f} "
+            f"checkpoint={summary['checkpoint']}"
+        )
+        return 0
     evaluation = summary["evaluation"]
     print(
         "mesa ppo train: "
