@@ -477,3 +477,17 @@ manifest, minimal-flip generator/diff, D1 probe-set table, shared D2
 floor after C3-A closes, and runnable C4-D taint/perturbation script
 with frozen readouts. C4-A is provisional while C2-A/C3-A remain
 scaffolds. No harness/controller run.
+
+**2026-05-16 (PT) — maintainer.** C5 publication-plumbing freeze filed
+(append-only) — **all pre-registration conditions are now filed**:
+[`P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md`](P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md).
+Default-deny / allowlist-complement guard over the full tree (writes
+only under `results/structural-failure/cut2-*/`), not an under-scopable
+blocklist; operational artifacts (hashable manifest + runnable pre/post
+guard script + terminal-dominant `PUBLICATION_PLUMBING_VIOLATION`). The
+full condition set is **C2-A · C3-A · C4-A · C5**; the only remaining
+gate to the single joint admission re-run is the maintainer's concrete
+fill (the `[E]` values, operational artifacts, and receipt tables
+across all four). No frozen threshold/boundary moved; Public-Language
+Constraint in force. Justification: closes the final pre-registration
+condition as an artifact-before-agent.

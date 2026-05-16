@@ -708,3 +708,24 @@ real harness; the D1 probe set, D2 floor, and C4-D taint/perturbation
 script need concrete files/tables and frozen pass/fail readouts. C4-A
 also remains provisional until C2-A/C3-A close, because it inherits
 their scale/grid/readout and D2 floor. No controller run.
+
+**2026-05-16 (PT) — maintainer. C5 publication-plumbing freeze drafted
+(append-only) — all pre-registration conditions now filed.** Filed
+[`P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md`](P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md).
+Operationalizes the prose C5 amendment, propagating the C4-A
+artifact-not-principle ruling. **Keystone anti-self-seal:** the guard is
+**default-deny / allowlist-complement over the full tree** (writes
+allowed *only* under `results/structural-failure/cut2-*/`), **not** a
+blocklist of shipping surfaces that could be under-scoped post-hoc —
+anything outside the tiny allowlist trips it by construction, and the
+scope is never re-curated to make a run "clean". Operational artifacts:
+a hashable write-path manifest + a runnable pre/post guard script + the
+terminal-dominant `PUBLICATION_PLUMBING_VIOLATION` wiring (overrides any
+D1∧D2∧D3 / four-quantity pass). `scripts/copy-site-docs.mjs` left
+untouched (out of scope, as originally stated). C5 is independent of the
+numeric fills but the single joint admission re-run still gates on
+C2-A+C3-A+C4-A+C5 together. No threshold/boundary moved; Cut-2 execution
+stays **HELD** pending the maintainer's concrete fills + the joint
+admission re-run; Public-Language Constraint in force. Justification:
+closes the last pre-registration condition as an artifact-before-agent;
+no harness, nothing run.
