@@ -185,6 +185,16 @@ Corrected execution verdict:
 (1)–(3) have **not** established traceability under an admitted
 discriminating run; the Public-Language Constraint remains in force.
 
+**2026-05-15 (PT) — C1 re-check note.** C1 is closed only by
+[`P2_CUT2_C1_CONTROLLER_BINDING.md`](P2_CUT2_C1_CONTROLLER_BINDING.md):
+Cut 2 must bind `sundog.agents.photometric.PhotometricAgent` from
+`agents/photometric.py`, preserving its `reset(...)` / `act(obs)`
+interface. This closes the "named existing controller" gap that Cut 1
+violated. Cut-2-execute is still **NOT admitted**: C2 (non-invertible
+nuisance + bias demonstration), C3 (reachable tempting decoys), and C4
+(computed vacuity audit) remain open, and the admission check must be
+re-run after they are filed.
+
 **2026-05-15 (PT) — Codex audit. Admission re-check of the staged
 discriminating-cut pre-registration (Cut 2 + Cut 3).** Reviewing the
 `P2_RUN_SPEC.md` staged-cut amendment of the same date. This is a

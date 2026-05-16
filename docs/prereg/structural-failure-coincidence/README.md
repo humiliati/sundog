@@ -226,6 +226,14 @@ route-test-vacuous. Public-language guard remains in force: no
 `CONFIRMED`, no traceability-success, and no theorem language from this
 first cut.
 
+**2026-05-15 (PT) — Cut 2 C1 filed.** Controller binding record filed:
+[`P2_CUT2_C1_CONTROLLER_BINDING.md`](P2_CUT2_C1_CONTROLLER_BINDING.md).
+The named existing Sundog extremum-seeking controller for Cut 2 is
+`sundog.agents.photometric.PhotometricAgent` from `agents/photometric.py`,
+with existing runner evidence in `experiments/run_baseline_comparison.py`
+and `experiments/stress_tests.py`. This closes **C1 only**. Cut-2-execute
+remains **HELD** pending C2-C4 and a fresh admission re-check.
+
 **2026-05-15 (PT) — maintainer.** Staged discriminating-cut
 pre-registration filed (append-only) to
 [`P2_RUN_SPEC.md`](P2_RUN_SPEC.md): **Cut 2** (closed-form

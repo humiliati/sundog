@@ -260,6 +260,18 @@ quantities (1)–(3) as a discriminating route-use test. Public-language
 guard remains fully in force: no `CONFIRMED`, no traceability-success,
 and no theorem language from this first cut.
 
+**2026-05-15 (PT) — Cut 2 C1 controller binding.** C1 is closed only:
+the actual existing Sundog extremum-seeking / photometric controller is
+named and bound in
+[`P2_CUT2_C1_CONTROLLER_BINDING.md`](P2_CUT2_C1_CONTROLLER_BINDING.md).
+Canonical binding: `sundog.agents.photometric.PhotometricAgent`
+(`agents/photometric.py`), instantiated and reset as in
+`experiments/run_baseline_comparison.py` `_make_photometric`. Any inlined
+route inverter, analytic inverse, grid-search proxy, or reimplemented
+extremum seeker is not the existing controller and voids a Cut-2 run under
+C1. Cut-2 execution remains **HELD** pending C2-C4 and a fresh admission
+re-check.
+
 **2026-05-15 (PT) — maintainer. Staged discriminating-cut
 pre-registration (Cut 2 + Cut 3).** Append-only; the frozen body is
 unchanged. This operationalizes the frozen body's own staging rule
