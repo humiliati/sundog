@@ -138,10 +138,14 @@ any Cut-2 run:
   set, and both C4-B fixtures.
 - **C4-C:** make D1 construction-level, not controller-outcome-level.
   D1 should compare the route-only construction (for example `π_route`
-  / `argmax I_route`) against `arccos(R22/f_par_obs)` on the
-  must-differ region. If D1 instead reads the bound controller's final
-  `q̂`, then a behavioral outcome can masquerade as a machinery-vacuity
-  audit failure, conflating the audit with the four-quantity score.
+  / `argmax I_route`) against the true hidden `h` on the must-differ
+  region, not against `arccos(R22/f_par_obs)`. C2-B makes
+  `argmax I_route = arccos(R22/f_par_obs)` by design; that equality is
+  the fixed route, not a vacuity. D1's anti-Cut-1 target is whether the
+  route construction is a clean readout of hidden `h`. If D1 reads the
+  bound controller's final `q̂`, then a behavioral outcome can
+  masquerade as a machinery-vacuity audit failure, conflating the audit
+  with the four-quantity score.
 - **C4-D:** make D3 mechanically auditable. `h ∉ adapterInputs` and
   "not a generator-bit echo" need a frozen inspection/taint method:
   e.g. an adapter input-manifest check plus a boundary perturbation test
@@ -183,3 +187,12 @@ machinery vacuity. Second, D3 needs a mechanical inspection/taint or
 perturbation method; a prose claim that boundary behavior is emergent is
 not enough for an audit whose purpose is to avoid self-sealing. No
 harness has been written and no controller has been instantiated.
+
+**2026-05-16 (PT) — C2-B reconciliation.** C2-B resolves the
+construction-level target for D1: because the admitted route construction
+is intentionally `argmax I_route = arccos(R22/f_par_obs)`, D1 must not
+compare the route against that same closed form. The repaired D1 target
+is the P-A form: on the must-differ low-leverage/noisy band, the route
+optimum must differ from true hidden `h` by the frozen D1/P-A floor. Cut
+1 fails because `g^-1(g(h)) = h`; Cut 2 should pass D1 only if the
+route construction is not a clean hidden-cause readout.

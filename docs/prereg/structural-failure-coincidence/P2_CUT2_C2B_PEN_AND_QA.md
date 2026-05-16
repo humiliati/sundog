@@ -167,4 +167,17 @@ in-between is not.
 
 ## Audit Notes
 
-*(reviewer space — append-only below)*
+**2026-05-16 (PT) — Codex audit.** Direction accepted; execution
+admission withheld pending numeric freeze and the C4-D1 repair. The
+`q_a ∈ [-A,+A]`, `pen(q)=λ(q_a/A)^2` construction is A1-safe and
+receipt-grounded: it uses only the bounded, zero-centred anchor-error
+support already introduced in C2 and the observable `R22` scale. It
+also correctly makes the route optimum unique at
+`(arccos(R22/f_par_obs), 0)` when `f_par_obs ≥ R22`, so `π_route` and
+P-A become well-defined. However, the C2-B(i)/(ii) λ-window remains an
+open numeric obligation folded into C2-A, and the C4-D1 comparison must
+be amended from "route differs from `arccos(R22/f_par_obs)`" to the P-A
+form "route optimum differs from true hidden `h` on the must-differ
+band." Without that C4 amendment, the derived audit would incorrectly
+flag the now-well-posed route as vacuous. No harness has been written
+and no controller has been instantiated.

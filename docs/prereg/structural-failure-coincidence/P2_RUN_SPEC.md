@@ -561,3 +561,11 @@ execution stays **HELD** pending C2-A/C/D, C3-A/B/C/D, C4-A/B/C/D, C5
 and the admission re-run; Public-Language Constraint in force.
 Justification: closes the cascade-hub C2-B as an artifact-before-agent;
 no harness, nothing run.
+
+**2026-05-16 (PT) — Codex audit.** C2-B direction accepted; execution
+admission withheld. The convex anchor prior removes the free-`q_a`
+degeneracy and makes `π_route` well-defined without hidden-`h` access.
+The λ-window remains an open C2-A numeric freeze item, and C4-D1 must be
+repaired to the P-A target (route optimum differs from true hidden `h`
+on the must-differ band) because C2-B intentionally makes the route
+optimum equal `arccos(R22/f_par_obs)`. No controller run.

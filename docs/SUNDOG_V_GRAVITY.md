@@ -1077,3 +1077,11 @@ explicit: D1 must audit route construction (`π_route` / `argmax I_route`)
 rather than the bound controller's final `q̂`, and D3 needs a mechanical
 input/taint or boundary-perturbation method proving the boundary behavior
 is emergent rather than a generator-bit echo.
+
+**C2-B audit addendum, 2026-05-16.** C2-B's convex anchor-prior
+resolution is accepted as the right cascade-hub move: it removes the
+free-`q_a` degeneracy and makes `π_route` well-defined without hidden
+`h`. The λ-window is still an open C2-A numeric freeze item. It also
+forces the C4-D1 repair: D1 must compare the route optimum against true
+hidden `h` on the must-differ band, not against
+`arccos(R22/f_par_obs)`, because C2-B intentionally makes those equal.

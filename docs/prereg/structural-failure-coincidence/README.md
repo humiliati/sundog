@@ -364,3 +364,11 @@ comparison-target tension flagged for the C4 reviewer** — must be the
 P-A form vs true `h`, not vs its own closed form). No frozen
 threshold/boundary moved; Public-Language Constraint in force.
 Justification: closes the cascade-hub C2-B as an artifact-before-agent.
+
+**2026-05-16 (PT) — Codex audit.** C2-B direction accepted; execution
+admission withheld. The convex anchor-prior construction removes the
+free-`q_a` degeneracy without hidden-`h` access, so `π_route` is now
+well-defined as the biased naive inverse. The λ calibration window still
+belongs to C2-A, and C4-D1 must use the P-A comparison against true
+hidden `h` rather than comparing the route to its own closed form. Cut-2
+execution remains HELD; no harness, nothing run.
