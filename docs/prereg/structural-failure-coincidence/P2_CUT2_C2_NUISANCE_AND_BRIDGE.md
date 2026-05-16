@@ -216,3 +216,16 @@ the stated `I_route` admits a continuum of exact peaks and the P-A
 "argmax differs from h by the biased naive inverse" demonstration is not
 defined. This is a pre-run design issue, not a result. No controller has
 been instantiated.
+
+**2026-05-16 (PT) — maintainer (cross-reference, not a C2 ruling).**
+Publication-plumbing freeze opened as **C5** alongside the still-open
+C2-A/B/C/D, C3, and C4 conditions; details in
+[`P2_SPEC_ADMISSION.md`](P2_SPEC_ADMISSION.md) (2026-05-16 amendment)
+and operational form in [`P2_RUN_SPEC.md`](P2_RUN_SPEC.md) (2026-05-16
+amendment). C5 does not change anything in this C2 document — no body
+edited, no `ρ`/`A`/`σ`/`seed`/`κ` tolerance moved, no nuisance form or
+bridge architecture altered — but a re-admission of Cut-2-execute now
+also requires C5 to be satisfied (allowed write paths declared, pre/post
+`git diff --exit-code` guard clean, no public-surface violation).
+Recorded here so a reader of C2 sees the complete open-conditions list
+for the re-admission check.
