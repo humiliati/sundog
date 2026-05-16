@@ -265,5 +265,15 @@ deterministic bias-demonstration table. **C3** (decoy term +
 reachability/temptation) and **C4** (derived audit) remain open; Cut-2
 execution stays HELD pending them and the admission re-check. No frozen
 threshold/boundary moved; Public-Language Constraint in force.
-Justification: closes C1 + the C2 design condition as frozen
-artifacts-before-agent.
+Justification: closes C1 and files the C2 design condition as an
+artifact-before-agent.
+
+**2026-05-15 (PT) — Codex freeze audit.** C2 is **not execution-frozen**.
+[`P2_CUT2_C2_NUISANCE_AND_BRIDGE.md`](P2_CUT2_C2_NUISANCE_AND_BRIDGE.md)
+has been marked **filed for audit — HOLD for execution**. The design is
+directionally correct, but the audit found C2-local blockers: missing
+numeric tolerance/domain values, unspecified `pen(q)` / `q_a` range
+creating an exact-ridge degeneracy, unspecified leverage-confidence
+function, and undefined noisy-inverse handling when `f_par_obs < R22`.
+Cut-2 execution remains HELD; C3 is still the next design condition, but
+must not assume C2 is admitted until those blockers are resolved.

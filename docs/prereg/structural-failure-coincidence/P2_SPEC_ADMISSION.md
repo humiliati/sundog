@@ -249,3 +249,16 @@ in-sample temptation) and **C4** (derived `routeConstructionAudit`) are
 also filed, so the re-run audits the *whole* discriminating cut at once —
 including whether C2's P-A/P-B numeric artifacts actually exist and hold.
 Cut-2 build/run remains **blocked**; Public-Language Constraint in force.
+
+**2026-05-15 (PT) — C2 freeze audit.** C2 direction accepted but
+execution freeze **withheld**. [`P2_CUT2_C2_NUISANCE_AND_BRIDGE.md`](P2_CUT2_C2_NUISANCE_AND_BRIDGE.md)
+now records C2 as **filed for audit — HOLD for execution**, not as an
+admitted cut component. Four C2-local blockers must be resolved before
+the C3/C4/full admission re-check can pass: (C2-A) freeze the numerical
+engineering tolerances/domains (`ρ`, `A`, `σ`, `seed`, grid, sample count,
+`q_h`/`q_a` domains, condition-number bound); (C2-B) specify `pen(q)` and
+the admissible `q_a` range, because free `q_a` makes `I_route` a
+degenerate exact ridge and defeats P-A; (C2-C) specify the
+leverage-confidence function without hidden-`h` access; (C2-D) specify
+undefined `arccos` handling when noisy `f_par_obs < R22`. No controller
+run; Public-Language Constraint remains in force.
