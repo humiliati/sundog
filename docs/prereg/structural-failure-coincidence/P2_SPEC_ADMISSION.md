@@ -496,3 +496,21 @@ edit magnitudes, and the shared C3-C/C4-D2 floor. The independent
 `P_in` freeze also needs an operational finite sample/generator + seed +
 coefficient table + frozen `(w,b)` receipt; a general "co-varies with
 `h`" principle is not enough to close C3-A-T/B. No harness run.
+
+**2026-05-16 (PT) — filing log (not a ruling).** C4-A audit freeze
+filed: [`P2_CUT2_C4A_AUDIT_FREEZE.md`](P2_CUT2_C4A_AUDIT_FREEZE.md) —
+**all C-condition columns are now filed**. Mirrors the C2-A/C3-A
+scaffold discipline; propagates the operational-frozen-artifact ruling
+to C4's probe set / fixtures / taint method. **Filing only, not a
+ruling.** Reviewer should scrutinize at the joint re-run: (a) the
+keystone — the synthetic non-vacuous fixture is the *minimal mechanical
+flip of the real Cut-1 fixture*, frozen **before** the audit logic, so
+C4-B is a genuine two-sided self-test with no fixture-design freedom;
+(b) the D2 floor literally equals the C3-A-R floor (one number, void on
+mismatch); (c) C4-D's two concrete checks (input-manifest assertion;
+boundary-perturbation via the sustained-TRACK readout) are operational,
+not prose; (d) C4 receipts are provisional until C2-A/C3-A close. The
+re-check verdict stays withheld until **C2-A, C3-A, C4-A
+receipts/artifacts, C5** are all filed *with concrete
+values/artifacts/receipts landed* and audited as one object. Cut-2
+build/run remains **blocked**; Public-Language Constraint in force.
