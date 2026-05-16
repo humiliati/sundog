@@ -1118,3 +1118,10 @@ decoys, with C4-D checking no hidden `h` input. Cut-2 remains held; no
 controller run.
 
 **C4-A audit freeze filed, 2026-05-16 — C-condition columns complete.** [`P2_CUT2_C4A_AUDIT_FREEZE.md`](prereg/structural-failure-coincidence/P2_CUT2_C4A_AUDIT_FREEZE.md): mirrors the C2-A/C3-A scaffold; propagates the operational-frozen-artifact ruling to C4's probe set / Cut-1 fixture / synthetic fixture / taint method. D2 floor = the shared C3-A-R floor (one number); sustained-TRACK readout inherited; C4-C repaired D1 (route construction vs true `h`). Keystone: the synthetic non-vacuous fixture is the minimal mechanical flip of the real Cut-1 fixture, frozen before the audit logic — C4-B is a two-sided self-test, no fixture-design freedom; C4-D is two concrete checks (input-manifest + boundary-perturbation via the sustained-TRACK readout). Open-conditions list for Cut-2-execute re-admission: **C2-A · C3-A · C4-A receipts/artifacts · C5** — one joint audit, withheld until all filed with concrete values/artifacts landed. No controller run; Public-Language Constraint in force.
+
+**C4-A audit addendum, 2026-05-16.** C4-A direction accepted, but not
+closed for admission. The minimal-flip self-test must land as actual
+frozen artifacts: Cut-1 fixture manifest, synthetic fixture generator or
+diff, D1 probe set, shared D2 floor, and C4-D taint/perturbation script
+with frozen readouts. C4-A remains provisional until C2-A/C3-A close;
+Cut-2 remains held; no controller run.

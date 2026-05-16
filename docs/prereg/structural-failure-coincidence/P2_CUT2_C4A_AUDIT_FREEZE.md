@@ -184,3 +184,19 @@ result; the in-between is not.
 ## Audit Notes
 
 *(reviewer space — append-only below)*
+
+**2026-05-16 (PT) — Codex audit.** Direction accepted; C4-A is **not
+yet execution-closing**. The right anti-self-seal is identified: the
+non-vacuous fixture must be a minimal mechanical flip of the real Cut-1
+fixture, and the same derived audit must return vacuous on Cut-1 and
+non-vacuous on the flip. Closure still requires concrete operational
+artifacts, not descriptions: a frozen D1 probe-set file/table; a
+hashable Cut-1 fixture extraction or fixture manifest from
+`scripts/structural-failure-p2-harness.mjs`; a synthetic fixture
+generator/diff that mechanically flips exactly D1/D2/D3 and records
+which fields changed; a D2 floor matching the C3-A-R value after C3-A
+closes; and a C4-D taint/perturbation script with frozen perturbation
+magnitudes and pass/fail readout. The "minimal flip" must be auditable
+by comparing fixture manifests before the derived-audit logic is trusted;
+otherwise fixture design freedom has merely moved later. C4-A remains
+provisional while C2-A/C3-A are scaffolds. No controller/harness run.
