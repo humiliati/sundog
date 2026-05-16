@@ -413,3 +413,17 @@ Open items: C2-B(i)/(ii) λ-window numerics fold into C2-A, and C4-D1
 must use the P-A target (route optimum versus true hidden `h` on the
 must-differ band), not route optimum versus `arccos(R22/f_par_obs)`.
 No harness run.
+
+**2026-05-16 (PT) — filing log (not a ruling).** C2-C + C2-D filed,
+completing the C2 design layer:
+[`P2_CUT2_C2CD_LEVERAGE_GATE_AND_INVALID.md`](P2_CUT2_C2CD_LEVERAGE_GATE_AND_INVALID.md).
+C2-C = observable-only leverage-confidence gate with a load-bearing
+detectable-and-discriminating window and an explicit emergent-vs-flag
+coupling to C4-D's D3 taint test; C2-D = `f_par_obs<R22` abstain/invalid
+(never clipped), a built-in q3-L1 correlate detector whose abstain must
+be emergent from C2-B's degenerate objective. **Filing only, not a
+ruling.** Reviewer should note the two new cross-couplings (C2-C↔C4-D,
+C2-D↔C2-B/C4-D) for the joint audit. With this, the full open set is
+**C2-A, C3-A/B/C/D, C4-A/B/C/D, C5**; the re-check verdict stays
+withheld until all are filed and audited as one object. Cut-2 build/run
+remains **blocked**; Public-Language Constraint in force.
