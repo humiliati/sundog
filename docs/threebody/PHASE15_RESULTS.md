@@ -75,7 +75,8 @@ sign convention: smoke `counterfactualMeanEffect` ranges are guarded TRACK
 — harmful action drives the metric negative as intended (this is an
 instrumentation check, not a Phase 15 result; the smoke is 2 seeds off-slate).
 
-**Pre-registered drift bound:**
+**Pre-registered drift bound (DEMOTED 2026-05-15 — superseded by the amendment
+below; retained only as a reported, non-gating diagnostic):**
 
 - `D_smoke` = max passive/off `finalRelEnergyDrift` over the 16 smoke passive
   trials = **0.0087190059**
@@ -85,20 +86,44 @@ instrumentation check, not a Phase 15 result; the smoke is 2 seeds off-slate).
   0.0087190059. Finer is not worse than coarser, so the pre-registered
   "non-worsening as `dt` shrinks" expectation holds at the ladder extremes.
 
-**Observation requiring an operator call before the full lock:** passive
-relative energy drift is essentially **flat across the timestep ladder**
-(≈0.00871 at both `dt=0.004` and `dt=0.012`) rather than shrinking with RK4
-order (a true O(dt⁴) truncation receipt would differ by ≈81× between those
-steps). The drift therefore appears dominated by a `dt`-insensitive source —
-most likely close-encounter softening from the `r < 0.01` acceleration cutoff
-and the `0.01` potential-energy cutoff near hazards — not integration order.
-This does not void the pre-registered procedure (bound derived from the smoke;
-finer-not-worse satisfied) and the harness is sound, but it means the full-lock
-"precision lock" receipt would largely test softening robustness, not RK4
-numerical order. How the precision receipt should be read at the 12,960-trial
-full lock is an operator decision (proceed and interpret with this caveat
-recorded; or investigate the drift metric / softening before committing the
-multi-hour run).
+**Drift-receipt investigation outcome (2026-05-15):** the flat-across-ladder
+drift was investigated. Root cause confirmed: the integrator runs the restricted
+problem (primaries ignore the test particle, `computeAcceleration`
+`if (index < 2 && j === 2) continue;`), so total 3-body energy is not a
+conserved invariant of the integrated equations — its drift is structural
+non-conservation + close-encounter softening, `dt`-insensitive, never an
+RK4-order signal. The genuinely conserved two-primary subsystem energy is
+conserved ~1e-8 but at the 8-digit logging floor and `dt`-insensitive (a vacuous
+gate). Conclusion: no energy-conservation quantity can serve as the Phase 15 RK4
+precision gate. The energy-drift bound above is therefore **demoted to a
+reported, non-gating diagnostic** and the precision receipt is **replaced** by
+an early-window Richardson cross-timestep trajectory receipt (`PHASE15_SPEC.md`
+§4/§5 amended). An in-process scan over the existing smoke `off` cells measured
+fitted order p ≈ 4.31 (textbook RK4 O(dt⁴)), validating the replacement.
 
-The full lock (`npm run threebody:phase15`) remains **not run**, pending
-operator go/no-go on the observation above.
+## Pre-registered early-window Richardson receipt (2026-05-15 amendment)
+
+Resolved binding pins (operator lock review): position-only L2 test-particle
+divergence; common-grid `Δ = 0.12` (divides every ladder dt: 30/20/15/12/10);
+reference `dt = 0.004`; fitted order `p` = OLS slope over
+`dt ∈ {0.006,0.008,0.01,0.012}`; `EARLY_GRID_MAX_T = 4.8`;
+`EARLY_DIV_ABS_CAP = 1e-6`; `MIN_INWINDOW_GRID_POINTS = 12`;
+`T_WINDOW_CAP = 2.4`; median per-seed `p`; favorable pocket
+`velocityScale ≥ 1.05`; decidable iff `≥ 2/3` favorable `off` cells defined
+(else Partial, not Fail); Pass floor `p ≥ 3.0`; Fail iff decidable and
+`p < 3.0`.
+
+To be recorded here after the re-run smoke, before the full lock is interpreted:
+
+- the locked `T_window` (largest grid `t* ≤ 4.8` meeting order ∈ [3,5],
+  `max D(0.012) < 1e-6`, no early termination on any smoke `off` cell-seed;
+  capped at 2.4)
+- per-smoke-`off`-cell fitted-order evidence and coverage
+- confirmation both hard-void gates still reproduce bit-for-bit after the
+  additive sampler edit
+
+The full lock (`npm run threebody:phase15`) remains **not run**, pending:
+(1) operator lock review of the `PHASE15_SPEC.md` amendment, (2) additive
+implementation of the in-`runTrial` sampler + `richardson-order-map.csv`,
+(3) re-run of both hard-void gates + the smoke, (4) the locked `T_window`
+recorded above, (5) operator readback sign-off.

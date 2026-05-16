@@ -140,3 +140,19 @@ coded `h ≤ 32°` operative vs literature ~32.2°; L4 supralateral receipt
 admitted to **P1 (falsifier admission review)**; P2 (agent run) remains
 blocked. Roadmap phase ladder added to
 [`SUNDOG_V_GRAVITY.md`](../../SUNDOG_V_GRAVITY.md) Candidate 13.
+
+**2026-05-15 (PT) — maintainer.** P1 admission review filed and passed:
+[`P1_ADMISSION.md`](P1_ADMISSION.md). Findings: L5 re-scoped to an
+evidence-admissibility rule (not a behavioral locus); L2/L4 reconciliation
+rulings fixed (operative `h≤32°`; supralateral permanent-fail). The
+falsifier is confirmed *informed by* the existing falsifiability surface
+[`../../debunked.md`](../../debunked.md): orthogonal to Pushable Occluder,
+adjacent to Occluded-Code Score Aliasing, and the rigorous pre-agent
+instrument for the `Proxy Collapse` ("most important scientific failure")
+avenue. Prioritization + a shared verdict-vocabulary bridge are fixed in
+P1_ADMISSION §C so the surfaces communicate. **P2 (agent run) unblocked
+in principle but not started** — gated on the agent + matched-baseline
+harness; Public-Language Constraint remains in force (no theorem language
+anywhere, including the rail) until structural-failure-coincidence passes
+in P2. Justification: roadmap P1 gate executed; review carried as
+amendments, frozen bodies unedited.
