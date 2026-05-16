@@ -1,0 +1,200 @@
+{
+  "receipt": "C2-A-3",
+  "title": "Package-gating separation — C_L1 ≈ 1 throughout the L2/L3 region",
+  "spec_reference": "P2_CUT2_C2A_NUMERIC_FREEZE.md §3 + Wave-2/Wave-3 audit-notes",
+  "h_star_deg": 25,
+  "epsilon_C": 0.001,
+  "L2_deg": 32,
+  "L3_deg": 29,
+  "h_star_below_L3": true,
+  "min_C_L1_above_h_star": 1,
+  "pass": true,
+  "rows": [
+    {
+      "h_deg": 25,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 25.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 26,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 26.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 27,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 27.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 28,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 28.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 29,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 29.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 30,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 30.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 31,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 31.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 32,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 32.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 33,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 33.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 34,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 34.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 35,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 35.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 36,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 36.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 37,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 37.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 38,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 38.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 39,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 39.5,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    },
+    {
+      "h_deg": 40,
+      "C_L1": 1,
+      "passes_threshold": true,
+      "threshold": 0.999
+    }
+  ]
+}

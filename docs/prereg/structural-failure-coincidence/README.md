@@ -580,3 +580,55 @@ remains HELD on Waves 3–7 + joint admission re-run. Justification:
 closes Wave-2 of the ordered concrete fill (C2-A `[E]` values +
 bridge-scale convention) with values + defenses + comparator semantics
 recorded in writing.
+
+**2026-05-16 (PT) — maintainer. Wave-3 C2-A receipts filed
+(narrative-ordered).** Append-only filing on
+[`P2_CUT2_C2A_NUMERIC_FREEZE.md`](P2_CUT2_C2A_NUMERIC_FREEZE.md)
+2026-05-16 audit-notes. Receipt order is strictly chronological:
+**v1 freeze → C2-A-2 v1 BLOCK → Wave-3.1 algebraic amendment → C2-A-2
+v2 PASS** (per Wave-3 sign-off conditions). Verdicts:
+
+- **C2-A-1** sustained-TRACK landscape — **PASS**. Transition at
+  `h = 10.0°` (grid-evaluated), margin to lower coincidence-window
+  edge `0.135°`. Continuous 5% `C_L1` crossing at `h ≈ 9.89°` under
+  Wave-2 frozen `k = 600`; the "effective k ≈ 645.7" that maps the
+  analytical crossing to the discrete grid is recorded as a
+  discretization observation, not a re-pick.
+- **C2-A-2 v1** under Wave-2 `κ_cond_max = 100` — **BLOCK** (permanent
+  receipt of the algebraic miss; 222/479 L1-eligible-by-obs rows trip
+  on `cond > κ_cond_max` alone).
+- **Wave-3.1 amendment** — `κ_cond_max` v1 = 100 → v2 = 10⁴ on
+  principled chain-rule Hessian algebra at `h_L1`: `|H_qa|/|H_qh|
+  ≈ 14.33 / 0.01239 ≈ 1156`; `10⁴` buffers ~8.7× above this geometric
+  extreme. Degenerate `cond → ∞` analytically as `q_h → 0` (chain
+  factor `χ → 0`); the `~10⁵` floor seen in computation is the
+  grid-resolution practical floor under the frozen `q`-grid and
+  finite-difference Hessian estimator, **not a universal analytic
+  floor**. A3-compliant: bounded by algebra, not receipt data.
+- **C2-A-2 v2** under amendment `κ_cond_max = 10⁴` — **PASS**
+  (degenerate 61/61 trip, L1-eligible-by-obs 0/479 trip, by-f_par_obs
+  classification).
+- **C2-A-3** package-gating separation — **PASS** (min `C_L1` for
+  `h ≥ 25°` is `1.0` to 10 decimals; bracket multiplication doesn't
+  mask L2/L3 consistency tests).
+
+Honest disclosure: the v1 implementation initially carried **two**
+distinct defects — (a) a script-level bug evaluating `C_L1` from
+`sec(true_h) − 1` against the freeze §1 observable-only requirement,
+and (b) the Wave-2 algebraic miss on `κ_cond_max`. The Wave-3 v1
+receipt was generated with defect (a) FIXED to isolate defect (b);
+v2 fixes both. Legacy buggy-state artifact preserved at
+`results/structural-failure/cut2-prereg/_legacy_pre_w3_c2a2-abstain-scan.json`
+for audit archeology. Canonical Wave-3 script:
+`scripts/cut2-c2a-w3.mjs` (SHA-256 `3e06221b…d104`); stepping-stone
+scripts `cut2-c2a-receipts.mjs` and `cut2-c2a-amendment-v2.mjs` are
+superseded.
+
+**No frozen body edited; no `[G]` boundary moved; only `κ_cond_max`
+`[E]` value changed (principled re-pick).** Public-Language Constraint
+remains in force. Cut-2-execute remains HELD on Wave 4 (C3-A `P_in` +
+receipts), Wave 6 (C4-A remaining artifacts), Wave 7 (C4-B
+self-test), and the joint admission re-run. Justification: closes
+Wave-3 of the ordered concrete fill with the receipt-blocking
+discipline upheld — v1 BLOCK filed permanently, amendment bounded by
+algebra not data, v2 PASS recorded under the amended value.
