@@ -103,6 +103,19 @@ gives *offload*, not speedup, unless the harness is sharded first. The full
 lock stays operator-gated by the locked spec — the cloud experiment measures
 the gates + smoke only and never unblocks or interprets the full lock.
 
+First run (2026-05-16, Linux x86_64 / AMD EPYC 7763 4-core / Node v20.20.2):
+**feasible** — both hard-void gates reproduced **bit-for-bit** (caveat 1 did
+not bite on this stack; triage rule retained for any future deviation), and
+the harness is pure Node (no build step). But raw compute was **≈ parity with
+high variance** (phase13 ~45 min vs 48.7 local; phase14 ~10 min vs 4.9 local —
+*slower*) on a contended 4-core host: the win is offload + cross-platform
+reproducibility, not speed. The chat-pool agent hit a **~1 h session cap** and
+timed out after phase14 *before reporting* — so the operative rule is:
+**direct the cloud agent to persist/report results incrementally per phase,
+before expiry, never batched to the end**; budget ~1 h; prefer an
+issue-assigned Copilot coding agent (possibly a longer-lived pool) but still
+report incrementally. Full detail + per-run log: `copilot_test_readme.md`.
+
 ## HaloSim Halo Rendering (cinematic + geometry confirmation)
 
 HaloSim3 is a Monte Carlo halo ray-tracer used two ways in this repo:
