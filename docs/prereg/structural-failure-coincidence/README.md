@@ -225,3 +225,20 @@ adapter invariant remains valid, so the honest result is machinery-live /
 route-test-vacuous. Public-language guard remains in force: no
 `CONFIRMED`, no traceability-success, and no theorem language from this
 first cut.
+
+**2026-05-15 (PT) — maintainer.** Staged discriminating-cut
+pre-registration filed (append-only) to
+[`P2_RUN_SPEC.md`](P2_RUN_SPEC.md): **Cut 2** (closed-form
+discriminating — named existing controller, non-invertible nuisance,
+*tempting* in-sample decoys reachable through `J`, emergent boundary,
+derived vacuity audit) to run after admission; **Cut 3** (rendered
+signal) pre-registered as the conditional escalation if Cut 2 is
+ambiguous. Admission re-check appended to
+[`P2_SPEC_ADMISSION.md`](P2_SPEC_ADMISSION.md): verdict **HOLD —
+Cut-2 design admitted in principle, Cut-2-execute NOT admitted** pending
+C1 (bind the named existing controller), C2 (concrete non-invertible
+nuisance), C3 (demonstrate decoy temptation + reachability), C4 (derived
+audit). No harness written for either cut; no frozen threshold/boundary
+moved. Public-Language Constraint remains fully in force. Justification:
+the spec's own staging rule, applied after the first cut proved vacuous
+rather than ambiguous; artifact-before-agent re-asserted.
