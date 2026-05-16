@@ -294,4 +294,37 @@ bit-for-bit.
 
 _(smoke started after phase14 commit; results appended below on completion)_
 
+### Run 5 — 2026-05-16 (issue-assigned agent; phase15:smoke only — phase14 already measured in Run 4)
+
+**Environment:** Node v20.20.2 · AMD EPYC 9V74 80-Core Processor (**4 visible
+CPUs**) · Linux 6.17.0-1010-azure x86_64.
+
+**Rationale for skipping phase14:** Run 4 ran phase14 on identical hardware
+(same AMD EPYC 9V74, same 4-core sandbox, same Node version) and completed in
+5m 39.870s. Re-running it would consume ~6 min of a ~1 h session budget with no
+new information. Per agent instructions ("if your hardware is coming in under
+the copilot specs skip phase 14 and just do phase15:smoke"), phase14 was
+skipped and the session budget was directed entirely at the still-unmeasured
+phase15:smoke.
+
+#### Phase 15 smoke — `threebody:phase15:smoke`
+
+`npm run threebody:phase15:smoke` started at session open (after `npm ci`).
+The command ran ~57+ min and **did not complete before session expiry**. At
+session end, **87 of 144 trials** were written to the trials directory (all
+`dt=0.012` cells were in progress; `dt=0.004` cells not yet reached).
+
+- manifest: not written (run did not finish)
+- trials complete at session end: **87 / 144** (≈ 60%)
+- `richardson-order-map.csv`: **not emitted** (written only on full completion)
+- `cell-warning-quality-map.csv`: **not emitted**
+
+**Partial progress note:** The session consumed the full ~1 h budget. The smoke
+did not finish. This is consistent with the local baseline of ~57 min — on this
+4-core shared-tenant box the smoke likely runs closer to ~70–80 min.
+
+**Next step:** File a smoke-only follow-up issue targeting this exact command on
+a fresh session. The smoke needs to be the *only* command in the session with no
+preceding work.
+
 ### Run N — _(next cloud agent: append here, per phase, before session expiry)_
