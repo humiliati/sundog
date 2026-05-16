@@ -424,9 +424,11 @@ clips depend on each workbench being opened and framed deliberately.
 
 Problem:
 
-The homepage rail behavior is stronger than its visual evidence. Only Balance
-has a real poster today; the other active cards rely on CSS placeholders. The
-logo toolkit is ready, but production favicons must be promoted explicitly.
+The homepage rail behavior is stronger than its visual evidence. Balance,
+Photometric Alignment, EyesOnly, Dungeon Gleaner, and Money Bags now have real
+posters; Three-Body and Pressure Mines still rely on CSS visuals until we have
+clean screenshots. The logo toolkit is ready, but production favicons must be
+promoted explicitly.
 
 Scope:
 
@@ -472,6 +474,12 @@ Solo pass, 2026-05-16:
   Dungeon Gleaner from `assets/images/`.
 - Left the MuJoCo graph and aquarium image unassigned pending a cleaner card
   mapping.
+- Added a Money Bags telemetry poster from the local Money Bags playtest
+  output.
+- Upgraded the remaining Three-Body and Pressure Mines CSS visuals so the
+  placeholders are card-specific rather than generic grid marks.
+- Removed the commented Pushable Occluder image URL from `index.html` to avoid
+  false broken-asset hits before the interrupt card is ready.
 
 ## P2 - After The First Wave
 

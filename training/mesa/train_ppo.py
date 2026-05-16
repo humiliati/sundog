@@ -195,6 +195,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--false-basin-beta", type=float, default=None)
     parser.add_argument("--mixed-lambda", type=float, default=None, help="override lambda for mixed variants")
     parser.add_argument(
+        "--reward-compose-form",
+        choices=["canonical", "delta"],
+        default="canonical",
+        help=(
+            "mixed-reward composition form; 'delta' uses "
+            "S + lambda * (R - S), algebraically equal to canonical at scale 1"
+        ),
+    )
+    parser.add_argument(
+        "--reward-channel-scale",
+        type=float,
+        default=1.0,
+        help="multiply the reward channel before mixed-reward composition",
+    )
+    parser.add_argument(
         "--signature-shape",
         choices=["terminal", "integrated", "threshold"],
         default=None,
@@ -236,6 +251,8 @@ def reward_from_channels(
     *,
     reward_mode: str,
     mixed_lambda: float,
+    reward_compose_form: str,
+    reward_channel_scale: float,
     signature_shape: str,
     is_terminal_step: bool,
     signature_threshold: float,
@@ -255,9 +272,19 @@ def reward_from_channels(
     if reward_mode == "phase3_dense_action_basin":
         return phase3
     if reward_mode == "mixed":
-        return (1 - mixed_lambda) * signature + mixed_lambda * dense
+        scaled_reward = reward_channel_scale * dense
+        if reward_compose_form == "canonical":
+            return (1 - mixed_lambda) * signature + mixed_lambda * scaled_reward
+        if reward_compose_form == "delta":
+            return signature + mixed_lambda * (scaled_reward - signature)
+        raise ValueError(f"unknown reward_compose_form: {reward_compose_form}")
     if reward_mode == "mixed_phase3":
-        return (1 - mixed_lambda) * signature + mixed_lambda * phase3
+        scaled_reward = reward_channel_scale * phase3
+        if reward_compose_form == "canonical":
+            return (1 - mixed_lambda) * signature + mixed_lambda * scaled_reward
+        if reward_compose_form == "delta":
+            return signature + mixed_lambda * (scaled_reward - signature)
+        raise ValueError(f"unknown reward_compose_form: {reward_compose_form}")
     raise ValueError(f"unknown reward_mode: {reward_mode}")
 
 
@@ -275,6 +302,8 @@ def status(message: str) -> None:
 def resolved_variant_config(args: argparse.Namespace) -> dict[str, Any]:
     variant_config = dict(VARIANTS[args.variant])
     reward_mode = str(variant_config["reward_mode"])
+    if args.reward_channel_scale <= 0:
+        raise ValueError("--reward-channel-scale must be positive")
     if args.mixed_lambda is not None:
         if not 0.0 < args.mixed_lambda < 1.0:
             raise ValueError("--mixed-lambda must satisfy 0 < lambda < 1")
@@ -295,6 +324,12 @@ def relative_path(path: Path) -> str:
         return str(path.resolve().relative_to(REPO_ROOT)).replace("\\", "/")
     except ValueError:
         return str(path.resolve()).replace("\\", "/")
+
+
+def effective_mixed_lambda(mixed_lambda: float, reward_channel_scale: float) -> float:
+    """Return the equivalent unscaled lambda for positive reward rescaling."""
+    denominator = (1.0 - mixed_lambda) + mixed_lambda * reward_channel_scale
+    return (mixed_lambda * reward_channel_scale) / denominator
 
 
 def load_pretrain_checkpoint(
@@ -376,6 +411,9 @@ def append_training_run(out_dir: Path, row: dict[str, Any]) -> None:
         "checkpoint_path",
         "policy_json_path",
         "mixed_lambda",
+        "effective_mixed_lambda",
+        "reward_compose_form",
+        "reward_channel_scale",
         "signature_shape",
         "load_checkpoint_path",
         "reset_optimizer",
@@ -506,6 +544,8 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
         f"start variant={args.variant} tier={args.tier} updates={args.updates} "
         f"batch_envs={args.batch_envs} rollout_length={args.rollout_length} "
         f"lambda={variant_config['lambda']} signature_shape={variant_config['signature_shape']} "
+        f"reward_compose_form={args.reward_compose_form} "
+        f"reward_channel_scale={args.reward_channel_scale} "
         f"run_label={args.run_label or '-'}"
     )
     with BridgeClient() as client:
@@ -550,6 +590,8 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
                         channels,
                         reward_mode=variant_config["reward_mode"],
                         mixed_lambda=float(variant_config["lambda"]),
+                        reward_compose_form=args.reward_compose_form,
+                        reward_channel_scale=args.reward_channel_scale,
                         signature_shape=str(variant_config["signature_shape"]),
                         is_terminal_step=bool(done),
                         signature_threshold=args.signature_threshold,
@@ -686,6 +728,13 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
         "reward": {
             "mode": variant_config["reward_mode"],
             "lambda": variant_config["lambda"],
+            "effective_mixed_lambda": (
+                effective_mixed_lambda(float(variant_config["lambda"]), args.reward_channel_scale)
+                if variant_config["reward_mode"] in {"mixed", "mixed_phase3"}
+                else variant_config["lambda"]
+            ),
+            "compose_form": args.reward_compose_form,
+            "reward_channel_scale": args.reward_channel_scale,
             "signature_shape": variant_config["signature_shape"],
             "signature_threshold": args.signature_threshold,
             "env_config": env_config,
@@ -706,6 +755,9 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
             "env_steps": global_step,
             "reward_mode": variant_config["reward_mode"],
             "lambda": variant_config["lambda"],
+            "effective_mixed_lambda": checkpoint["reward"]["effective_mixed_lambda"],
+            "reward_compose_form": args.reward_compose_form,
+            "reward_channel_scale": args.reward_channel_scale,
             "signature_shape": variant_config["signature_shape"],
             "signature_threshold": args.signature_threshold,
             "env_config": env_config,
@@ -795,6 +847,9 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
         "checkpoint_path": run_manifest["checkpoint_path"],
         "policy_json_path": run_manifest["policy_json_path"],
         "mixed_lambda": variant_config["lambda"],
+        "effective_mixed_lambda": checkpoint["reward"]["effective_mixed_lambda"],
+        "reward_compose_form": args.reward_compose_form,
+        "reward_channel_scale": args.reward_channel_scale,
         "signature_shape": variant_config["signature_shape"],
         "load_checkpoint_path": pretrain_metadata["path"] if pretrain_metadata else "",
         "reset_optimizer": str(bool(args.reset_optimizer)),

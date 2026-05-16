@@ -18,3 +18,5 @@ that claim provably fails.
   corollary.
 - [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md) — Phase 3 boundary theorem
   (reviewed, closed positive) and pushable-occluder mapping.
+- [`PHASE6_LAMBDA_CONTROL.md`](PHASE6_LAMBDA_CONTROL.md) — Phase 6
+  lambda-confound control spec (staged; empirical result open).
