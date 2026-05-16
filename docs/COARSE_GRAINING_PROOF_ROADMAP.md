@@ -16,8 +16,8 @@
 >
 > **Status as of 2026-05-16:** Phase 0 definitions lock landed at
 > [`proof/POSTULATE1_DEFINITIONS.md`](proof/POSTULATE1_DEFINITIONS.md);
-> Phase 1 LQG proof draft landed at
-> [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md) and needs review. This is a
+> Phase 1 LQG proof reviewed and closed **positive** at
+> [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); Phase 2 is unblocked. This is a
 > theory-track roadmap, not an operating-envelope workbench — it is the *trunk*
 > of which the Formal Separability Theorem appendix
 > ([`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md), promoted from
@@ -98,8 +98,9 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   compute `∂S/∂τ` at the optimum and the Fisher information of `Φ`; record
   whether they are proportional.
 - **Exit.** A written proof (LQG) + the recorded Postulate-6 proportionality
-  result (pass/fail), both in `docs/proof/PHASE1_LQG.md`. **Draft landed
-  2026-05-16** at [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); review pending.
+  result (pass/fail), both in `docs/proof/PHASE1_LQG.md`. **Reviewed and
+  closed positive 2026-05-16** at
+  [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md).
 - **Pre-registered negative.** If signature-only LQG control does **not** reach
   Bayes-optimal cost on the `𝓕_σ`-measurable set, the schema is false in its
   easiest case — halt the whole roadmap and file the falsification against
@@ -208,8 +209,14 @@ bounded-away on the measurable set; Phase 6 cliff moves under the no-op.
 
 It is **strengthened** if: Phases 1–3 prove cleanly; Phase 4 gate passes on a
 real substrate; Phase 5 shows a *measured* shared operator across ≥2 substrates;
-the Postulate 6 proportionality holds in the LQG toy (closes the year-one
-`H(x)`-was-an-entropy arc — but only then; do not ship that line until Phase 1).
+the Postulate 6 **metric/Jacobian interpretation** holds in the LQG toy — i.e.
+Fisher information is the noise-weighted contraction of the signature Jacobian
+(a *qualified* pass, recorded 2026-05-16 in
+[`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md)). Literal signed-scalar
+`I_Φ ∝ ∂S/∂τ` is **not** the strengthening condition and is known to fail.
+This qualified pass holds under the torque-coordinate reading only; it does
+**not** by itself close the year-one proper-time `H(x)`-was-an-entropy arc, and
+that stronger line stays unshipped regardless of Phase 1.
 
 ## 5. Compute & spec discipline
 

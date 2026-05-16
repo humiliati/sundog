@@ -2,10 +2,12 @@
 
 > Phase 1 artifact for
 > [`COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md).
-> Status: desk-proof draft, 2026-05-16. Phase 0 definitions are locked in
-> [`POSTULATE1_DEFINITIONS.md`](POSTULATE1_DEFINITIONS.md). This draft records a
-> positive LQG existence proof and a qualified Postulate 6 toy check; it still
-> wants reviewer pass before being treated as final theorem text.
+> Status: reviewed, 2026-05-16. Phase 0 definitions are locked in
+> [`POSTULATE1_DEFINITIONS.md`](POSTULATE1_DEFINITIONS.md). This records a
+> positive LQG existence proof and a qualified Postulate 6 toy check; the
+> reviewer pass is complete (see *Exit Status*) and Phase 1 closes positive.
+> Not yet final theorem prose — public-prose citations are deferred per
+> roadmap §5.
 
 ## Entry And Gate
 
@@ -14,7 +16,15 @@ state, not necessarily the raw hidden plant state. The pre-registered negative
 for this phase is:
 
 > If signature-only LQG control does not reach Bayes-optimal cost on the
-> `𝓕_σ`-measurable set, the schema is false in its easiest case.
+> `𝓕_σ`-measurable set, the schema is false in its easiest case — halt the
+> whole roadmap and file the falsification against
+> [`SCIENTIFIC_CRITERIA.md`](../SCIENTIFIC_CRITERIA.md) ▸ Falsifiable
+> Expectations.
+
+In the uncoarsened full-belief signature the `𝓕_σ`-measurable set is the
+*entire* evaluation support, so the gate's "on the measurable set" qualifier is
+met everywhere; the off-set boundary is reached only by deliberate coarsening
+and is deferred to Phase 3 (see *Boundary Inside The Toy*).
 
 Draft verdict: **negative not triggered** under standard finite-horizon LQG
 assumptions. The Kalman belief is a sufficient statistic for Bayes-optimal
@@ -57,6 +67,23 @@ With fixed model and observation schedule, `P_t` is deterministic in many LQG
 settings, so the minimal signature may reduce to `m_t`. This draft keeps
 `(m_t, P_t)` in `Φ_t` so the sufficiency statement remains explicit.
 
+### Local Symbols
+
+Phase-1-local symbols, defined once so Phase 2 can import the notation without
+collision (Phase 0 review standard: every symbol defined once):
+
+| Symbol | Definition |
+| --- | --- |
+| `m_t` | Kalman posterior mean, `E[z_t \| h_t]`. |
+| `P_t` | Kalman posterior (filter) covariance, `Cov(z_t \| h_t)`. |
+| `Π_t` | **Control** Riccati matrix from the LQG backward recursion. Distinct from the filter covariance `P_t` — same neighbourhood of the alphabet, different object; do not conflate. |
+| `K_t` | LQG feedback gain derived from `Π_t`. |
+
+Note the `S` overload, carried intentionally and not redefined here: legacy
+scalar readout `S(x)` (Phase 0 ledger) and the toy readout `S(τ)` in the
+Postulate 6 section are the *same* scalar-coordinate-of-`Φ` device, not a
+control-Riccati `S`. The control Riccati is `Π_t`, never `S`.
+
 ## Theorem
 
 In finite-horizon LQG, the Bayes-optimal policy is `𝓕_σ`-measurable for
@@ -84,10 +111,15 @@ for each decision time `t`.
    V_t(m_t, P_t) = m_t' Π_t m_t + tr(Π_t P_t) + c_t
    ```
 
-   with the usual Riccati recursion for `Π_t` and constants determined by the
-   process and observation noise. The term involving `P_t` affects expected
-   cost, but under the standard LQG separation principle the minimizing action
-   is the same linear feedback applied to the posterior mean.
+   where `Π_t` is the **control** Riccati matrix (the LQG backward recursion),
+   *not* the filter covariance `P_t`. The `tr(Π_t P_t)` term and `c_t` are
+   written schematically: the exact estimation-error / noise-trace bookkeeping
+   is standard LQG and is not load-bearing for this existence proof — the
+   load-bearing facts are the minimizer form (step 3) and cost attainment
+   (step 5). Final theorem text, if promoted to public prose, should either
+   carry the full Riccati bookkeeping or cite a standard LQG reference for it.
+   Under the standard LQG separation principle the minimizing action is the
+   same linear feedback applied to the posterior mean regardless of `P_t`.
 
 3. **Optimal action depends only on the signature.** The minimizer has the form
 
@@ -163,6 +195,14 @@ Safe downstream wording after this draft:
 > In the LQG toy, the founding `H` term becomes the local signature Jacobian;
 > Fisher information is its noise-weighted metric contraction.
 
+**Scope limit on `τ`.** The founding anniversary line `H(x) = ∂S/∂τ` had `τ` as
+*proper time* (the year-one entropy arc). This toy reinterprets `τ` as a local
+torque coordinate. The Jacobian/metric reading is therefore vindicated *only
+under the torque-coordinate reading*; the toy does **not** by itself rescue the
+original proper-time/entropy interpretation. This is an independent reason the
+roadmap §4 strengthening clause must not be read as "the year-one
+`H`-was-an-entropy arc is closed."
+
 Do **not** promote the stronger anniversary line that `H` "was entropy all
 along" unless Phase 1 review accepts this metric/Jacobian interpretation and
 later phases preserve it.
@@ -174,11 +214,28 @@ Phase 1 proof draft: **positive under standard LQG assumptions.**
 Postulate 6 toy check: **qualified pass for the metric/Jacobian reading; fail
 for literal signed-scalar proportionality.**
 
-Remaining review items before final Phase 1 closure:
+Reviewer pass: **complete, 2026-05-16.** The measurability chain (steps 1–4),
+cost attainment (step 5), the gate, and the Postulate 6 Fisher derivation were
+checked and are correct. Symbol hygiene, the schematic value-form, the gate
+quote, and the `τ` reinterpretation were flagged and are now resolved in this
+draft (Local Symbols ledger; step 2 control-Riccati naming + schematic note;
+Entry And Gate consequence + measurable-set scope; Postulate 6 `τ` scope limit).
+The roadmap §4 strengthening clause was reconciled to the qualified-pass reality.
 
-1. Decide whether final theorem text keeps `(m_t, P_t)` as `Φ_t` or reduces to
-   `m_t` under deterministic covariance assumptions.
-2. Add citations or appendix references if this becomes public theorem prose.
-3. Confirm whether Phase 2 finite-MDP notation should use the same
-   decision-information-state convention.
+Resolved review-item dispositions:
+
+1. **Keep `(m_t, P_t)` as `Φ_t`** in the theorem statement. Under
+   deterministic-covariance schedules `P_t` is a known function of `t`, so the
+   *effective* signature reduces to `m_t`; but keeping both makes sufficiency
+   robust to the cost convention and to observation-dependent covariance
+   (intermittent / missing sensing) and matches the Phase 0 handoff wording.
+2. **Citations deferred, non-blocking.** The proof track is research-internal
+   (roadmap §5); citations are required only if this reaches the Phase 5 public
+   gate.
+3. **Phase 2 must reuse the decision-information-state convention** — confirmed
+   and pre-committed: finite-MDP `X` is the information state / belief simplex,
+   predicate = constancy of `π*` on `Φ`-fibers. This is binding so Phase 2 does
+   not fork notation (roadmap §2 no-fork constraint).
+
+Phase 1 closes **positive**; Phase 2 entry (Phase 1 exit positive) is satisfied.
 
