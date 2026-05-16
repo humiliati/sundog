@@ -108,6 +108,11 @@ appears only *after* a preparatory action.
 - **Predicts (verbatim):** the pushable-occluder boundary in
   `../../docs/PHASE2_BLOCKS_DESIGN.md` — Sundog stalls when alignment requires moving an
   occluder *first*. The dam is the occluder.
+- **Proof-track update (2026-05-16):** `../../docs/proof/PHASE3_BOUNDARY.md`
+  makes the boundary exact: it applies when the flat signature collapses states
+  that require different preparatory block actions. If a flat controller
+  succeeds, either the decisive bit leaked into the signature or the boundary
+  theorem is wrong.
 - **Why it matters:** this is the honest one. It does not flatter the theorem; it
   hands a skeptic the failure mode before they find it, and the failure mode is
   *the same object* (a bit outside the current σ-algebra) as Postulate 1's

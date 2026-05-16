@@ -6,6 +6,15 @@
 > baseline slate, metrics, outcome branching, and rail-card hooks. This
 > document remains the upstream design reference; the roadmap is the
 > productised expression.
+>
+> **2026-05-16 proof-track update:** Phase 3 of the Coarse-Graining proof path
+> now treats Option B as a theorem-predicted boundary when the seed slate
+> instantiates a genuine fiber conflict: matched states share the flat
+> photometric/proprioceptive signature but require different preparatory block
+> actions. See [`proof/PHASE3_BOUNDARY.md`](proof/PHASE3_BOUNDARY.md). If the
+> flat controller succeeds, the result means the decisive bit leaked into the
+> signature or the boundary theorem is wrong; do not soften that branch after
+> seeing data.
 
 Phase-1 (current rebuild) defends the small claim: an articulated agent
 can align a mirrored end-effector to a structured-light source using

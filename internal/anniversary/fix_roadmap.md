@@ -466,6 +466,13 @@ Exit:
   matrix.
 - Build passes after the promoted assets are in place.
 
+Solo pass, 2026-05-16:
+
+- Added real homepage rail posters for Photometric Alignment, EyesOnly, and
+  Dungeon Gleaner from `assets/images/`.
+- Left the MuJoCo graph and aquarium image unassigned pending a cleaner card
+  mapping.
+
 ## P2 - After The First Wave
 
 These are good follow-through once the initial public statement is out.
