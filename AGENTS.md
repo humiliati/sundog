@@ -136,6 +136,19 @@ session time. **Cloud measurement issues must therefore drop phase13
 issues with per-phase commits** — see `copilot_test_readme.md` ▸ "Revised
 next-issue guidance".
 
+Runs 4–5 (2026-05-16, EPYC 9V74) closed the gate question and escalated the
+blocker: phase14 reproduced bit-for-bit on the assigned pool in 5m40s (gates
+are now **done** on the agent path — phase13 5×, phase14 3×, stop issuing
+them). But Run 5 proved `phase15:smoke` **does not fit a ~1 h interactive
+session even as the sole command** (expired at 87/144 trials, no manifest, no
+`richardson-order-map.csv`; ~70–80 min on the contended 4-core box).
+Conclusion: interactive Copilot-agent offload is structurally unfit for the
+smoke and the ~75 h full lock — **move those to a long-budget runner** (GitHub
+Actions `workflow_dispatch`, ~6 h job limit; or self-hosted) rather than an
+agent session. Full lock + `T_window` stay operator-gated by the locked spec
+regardless of where the compute runs. See `copilot_test_readme.md` ▸
+"Synthesis (current — after Run 5) + revised plan".
+
 ## HaloSim Halo Rendering (cinematic + geometry confirmation)
 
 HaloSim3 is a Monte Carlo halo ray-tracer used two ways in this repo:
