@@ -569,3 +569,27 @@ The λ-window remains an open C2-A numeric freeze item, and C4-D1 must be
 repaired to the P-A target (route optimum differs from true hidden `h`
 on the must-differ band) because C2-B intentionally makes the route
 optimum equal `arccos(R22/f_par_obs)`. No controller run.
+
+**2026-05-16 (PT) — maintainer. C2-C + C2-D drafted (append-only),
+completing the C2 design layer.** Filed
+[`P2_CUT2_C2CD_LEVERAGE_GATE_AND_INVALID.md`](P2_CUT2_C2CD_LEVERAGE_GATE_AND_INVALID.md).
+**C2-C** specifies the observable-only leverage-confidence gate
+`I_route_full = C_L1(s_obs)·[P + 1[f_cza_obs]·T_cza + 1[f_tan_obs]·T_tan]`,
+`s_obs = f_par_obs/R22 − 1` (no `h`): a smooth L1 ramp (noise-bounded,
+hence graded) and genuine CZA/tangent consistency-term *presence* whose
+removal at L2/L3 is the documented singularity, not a controller branch
+— with the honest "emergent vs flag-read" question explicitly handed to
+C4-D's D3 taint test, and a load-bearing C2-C(i)/(ii) window
+(boundary must be detectable **and** discriminating, not invisible and
+not rigged-to-fail). **C2-D** classifies `f_par_obs < R22`
+(`arccos` undefined) rows as **abstain/invalid, never clipped**: not
+counted in q1, scored under q3-L1 as a built-in zero-ambiguity
+correlate detector (a confident `q̂` where the inverse is undefined ⇒
+q3 fail), with the abstain required to be emergent from C2-B's
+degenerate objective (coupled to C2-B and C4-D, not an injected branch).
+All C2-C/C2-D numerics fold into the C2-A freeze; the C2 design layer is
+now complete. No immutable boundary moved; Cut-2 execution stays
+**HELD** pending C2-A, C3-A/B/C/D, C4-A/B/C/D, C5 and the admission
+re-run; Public-Language Constraint in force. Justification: closes the
+last C2 design sub-blockers as artifacts-before-agent; no harness,
+nothing run.

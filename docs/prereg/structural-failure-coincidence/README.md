@@ -372,3 +372,20 @@ well-defined as the biased naive inverse. The λ calibration window still
 belongs to C2-A, and C4-D1 must use the P-A comparison against true
 hidden `h` rather than comparing the route to its own closed form. Cut-2
 execution remains HELD; no harness, nothing run.
+
+**2026-05-16 (PT) — maintainer.** C2-C + C2-D filed (append-only),
+**completing the C2 design layer**:
+[`P2_CUT2_C2CD_LEVERAGE_GATE_AND_INVALID.md`](P2_CUT2_C2CD_LEVERAGE_GATE_AND_INVALID.md).
+C2-C = observable-only leverage-confidence gate (smooth L1 ramp + genuine
+CZA/tangent consistency-term presence; L2/L3 degradation emergent, the
+"emergent vs flag-read" check handed to C4-D; load-bearing C2-C(i)/(ii)
+detectable-and-discriminating window). C2-D = `f_par_obs<R22` rows are
+abstain/invalid (never clipped), scored under q3-L1 as a built-in
+zero-ambiguity correlate detector; abstain must be emergent from C2-B's
+degenerate objective. All C2-C/C2-D numerics fold into the C2-A freeze.
+Full open-conditions list for Cut-2-execute re-admission is now
+**C2-A · C3-A/B/C/D · C4-A/B/C/D · C5**; the admission re-check is one
+audit of the whole cut, withheld until all are filed. No frozen
+threshold/boundary moved; Public-Language Constraint in force.
+Justification: closes the last C2 design sub-blockers as
+artifacts-before-agent.
