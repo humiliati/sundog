@@ -13,3 +13,5 @@ that claim provably fails.
   definitions lock for the Coarse-Graining Postulate.
 - [`PHASE1_LQG.md`](PHASE1_LQG.md) — Phase 1 LQG proof draft and Postulate 6
   toy check.
+- [`PHASE2_MDP.md`](PHASE2_MDP.md) — Phase 2 finite-MDP sufficiency proof
+  draft, counterexample, and Formal Separability corollary.
