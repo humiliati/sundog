@@ -1,8 +1,8 @@
 {
   "self_test": "H0-B negative side (Phase-15 known-FAIL fixture)",
-  "spec_reference": "P2_CUT3_H0_CALIBRATION.md §3",
+  "spec_reference": "P2_CUT3_H0_CALIBRATION.md §3 — checker MUST reject all 8 Phase-15 frames with reason_code ∈ {SPAN_TOO_SHORT, ANCHOR_OFF_RULER}",
   "fixture_manifest": "results/structural-failure/cut3-prereg/h0-known-fail-fixture.json",
-  "test_sidecar_disposition": "Test sidecars model the documented Phase-15 failure modes (short ruler + off-ruler 22°/46° anchors). They are test inputs exercising the predicate's reject-on-failure logic; they are NOT fabricated H0 records and they are NOT the real per-frame H0 records that Wave H0-2 will produce from the actual frames. frame_path in test sidecars is set to frame_id without extension so the mechanical filename-leak check does not fire — the negative self-test exercises the SPAN/ANCHOR reject path specifically. Operator review of whether the actual Phase-15 filenames (HaloSim crystal-config codes like 'e13') semantically encode h is part of Wave H0-2 pre-fill.",
+  "test_sidecar_disposition": "Test sidecars model the documented Phase-15 failure modes (short ruler + off-ruler 22°/46° anchors). They are test inputs that exercise the predicate's reject-on-failure logic; they are NOT fabricated H0 records and they are NOT the real per-frame H0 records that operator pre-fill (Wave H0-2) will produce from the actual frames. frame_path in the test sidecars is set to frame_id without extension so the mechanical filename-leak check does not fire — the negative self-test exercises the SPAN/ANCHOR reject path specifically. Operator review of whether the actual Phase-15 filenames (which contain HaloSim crystal-config codes like 'e13') semantically encode h is part of Wave H0-2 pre-fill.",
   "pass_count": 8,
   "fail_count": 0,
   "overall_pass": true,
