@@ -5,12 +5,14 @@ Cut-3 run spec: [`P2_CUT3_RUN_SPEC.md`](P2_CUT3_RUN_SPEC.md) (§"H0 — angular-
 Cut-3 admission: [`P2_CUT3_ADMISSION.md`](P2_CUT3_ADMISSION.md) (HOLD)
 H0 instrument **+ Wave-H0-1 NOT-sealed correction**: [`P2_CUT3_H0_CALIBRATION.md`](P2_CUT3_H0_CALIBRATION.md) (corrections C1–C3, 2026-05-16)
 Phase-15 fixture (real, immutable): `results/structural-failure/cut3-prereg/h0-known-fail-fixture.json`
-Filed: **2026-05-16 (PT)**. Status: **DRAFT — FOR REVIEW; FREEZES ON
-SIGN-OFF.** Scope-locked: this defines the H0-2 schema only. It produces
-no sidecars, runs no checker, emits no records or table, admits no
-corpus. On sign-off it freezes (frozen body + append-only Amendments)
-and the trail pointers are added then — not before (a draft must not be
-wired into the trail as if real).
+Filed & frozen: **2026-05-16 (PT)**. Status: **FROZEN ON SIGN-OFF —
+body frozen; append-only below the Audit Notes rule.** Maintainer
+sign-off recorded 2026-05-16 (PT): the three judgment calls confirmed
+and red-lines A (§3 clause ordering) + B (`known_pass_selection_basis`)
+integrated into the frozen body. Scope-locked: defines the H0-2 schema
+only — produces no sidecars, runs no checker, emits no records or table,
+admits no corpus. Gated on §0 (H0-1 correction). Trail pointers added at
+sign-off (admission filing-log · rail · prereg README).
 
 ## §0 — Hard gate on the H0-1 correction (precondition, non-negotiable)
 
@@ -77,6 +79,7 @@ sidecar's.
   "operator_decisions": {
     "compound_code_is_h_leak": "yes"|"no"|"deferred",
     "compound_code_basis": "<written one-line basis>",
+    "known_pass_selection_basis": "<written basis if fixture_class == known_pass_fullspan, else null>",
     "fixture_class": "phase15_known_fail"|"known_pass_fullspan"|"corpus_candidate" },
   "calib_sha256": "<sha256 of this file's canonical JSON with calib_sha256
                     set to \"\" — deterministic self-pin>" }
@@ -121,17 +124,20 @@ vs admit" separation one level out):
 
 1. The measured sidecar (A) contains **no verdict field**; it is frozen
    and self-pinned (`calib_sha256`) *before* the checker runs.
-2. The H0 record (B) pins `source_sidecar_sha256 == A.calib_sha256` and
-   carries `checker_runtime_pt`. The invariant
-   `A.measured_at_pt < B.checker_runtime_pt` must hold.
-3. If A is altered after B exists (to make it admit), A's self-pin
-   changes and B's `source_sidecar_sha256` no longer matches ⇒
-   **void**, detectable mechanically by the manifest (D) check.
+2. **Primary mechanical detector (load-bearing):** the H0 record (B)
+   pins `source_sidecar_sha256 == A.calib_sha256`. If A is altered after
+   B exists (to make it admit), A's self-pin changes and B's
+   `source_sidecar_sha256` no longer matches ⇒ **void**, mechanically
+   detectable by the manifest (D) check.
+3. **Additional ordering check (defense in depth):** B carries
+   `checker_runtime_pt`; the invariant
+   `A.measured_at_pt < B.checker_runtime_pt` must hold. Secondary to
+   clause 2 — the SHA-mismatch is the load-bearing test.
 4. **Known-PASS sub-hazard:** the H0-calibration freeze forbids a
    synthetic stub for the known-PASS side. The known-PASS render must be
    a *real full-span* render selected **by the instrument criterion**
    (stamped ruler genuinely covers 22° and 46°), with the selection
-   basis written in `operator_decisions.compound_code_basis`-style prose
+   basis written in `operator_decisions.known_pass_selection_basis`
    *before* the checker is run on it. "It happened to pass" is not a
    selection basis.
 
@@ -217,10 +223,11 @@ dependency.)
 
 ## Open items
 
-This is a DRAFT for review. On sign-off: freeze the body, add the
-Amendments rule, and add the trail pointers (admission filing-log,
-rail, prereg README) — not before. Wave H0-2 then executes §6 in order,
-gated on §0. Nothing is run by filing this schema.
+Frozen 2026-05-16 (PT) on maintainer sign-off (three judgment calls
+confirmed; red-lines A+B integrated). Trail pointers added at sign-off
+(admission filing-log · rail · prereg README); the body above is now
+append-only below the Audit Notes rule. Wave H0-2 then executes §6 in
+order, gated on §0. Nothing is run by filing or freezing this schema.
 
 ## Public-Language guard
 
@@ -232,4 +239,26 @@ frames per §6.7. Cut-3 admission remains **HOLD**; execution **HELD**.
 
 ## Audit Notes
 
-*(reviewer space — append-only below)*
+Append-only below this rule. Each entry: timestamp (date + zone),
+author, one-line justification. The body above is frozen at sign-off
+(2026-05-16 PT).
+
+**2026-05-16 (PT) — maintainer. Sign-off + freeze.** The three judgment
+calls confirmed: (1) `expected_checker_verdict` provenance
+(Phase-15 inherited from the frozen `h0-known-fail-fixture.json`,
+instrument-criterion for known-PASS, operator-blind/null for corpus);
+(2) DRAFT-freezes-on-sign-off status with trail pointers unwired until
+now; (3) §6.7 — H0-B negative side claimable only after real measured
+sidecars + records exist (H0-2 is the path to proving it, not a rescue
+of the Wave-H0-1 BLOCK). Red-line A integrated: §3 file-separation
+enforcement reordered so the `source_sidecar_sha256 == calib_sha256`
+mismatch is the primary load-bearing detector (clause 2) and the
+`measured_at_pt < checker_runtime_pt` ordering is demoted to
+defense-in-depth (clause 3). Red-line B integrated: dedicated
+`known_pass_selection_basis` field added to the §2-A
+`operator_decisions` block; §3 clause 4 prose now references it. Both
+additive and semantics-preserving. Body frozen; §0 H0-1-correction gate
+remains the hard precondition; Cut-3 admission HOLD, execution HELD,
+Public-Language Constraint in force; nothing run.
+
+*(reviewer space continues — append-only)*

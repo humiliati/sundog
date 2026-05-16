@@ -155,3 +155,17 @@ structural design is genuine and the honest disclosures stand. This does
 **not** change the verdict — admission was and remains **HOLD**; it
 removes any implication H0 advanced toward closure. No corpus, script,
 training, or controller run is approved.
+
+**2026-05-16 (PT) — filing log (not a ruling).** H0-2 schema signed off
+and frozen as the sibling
+[`P2_CUT3_H0_2_SCHEMA.md`](P2_CUT3_H0_2_SCHEMA.md): the operator-pre-fill
+measured-sidecar + residual-table schema for the admission's
+"allowed next work." It is **gated on its §0** — the H0-1 correction's
+C1/C2 fix (restore the real checker to its named path, quarantine the
+misnamed `_legacy_…`, re-pin §F, re-run §G) must be done and verified
+before any H0-2 sidecar/checker/record/table step. Its §3 carries the
+measure-before-verdict keystone (SHA-mismatch primary detector;
+timestamp ordering defense-in-depth) and the no-synthetic-stub
+known-PASS rule; the Phase-5 link is a **severable** one-way note, not a
+dependency. This does **not** change the verdict — admission remains
+**HOLD**; H0-B negative side on real frames stays **OPEN**; nothing run.

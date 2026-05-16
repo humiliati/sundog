@@ -819,3 +819,14 @@ real frames — the Cut-1 tautology pattern at the measurement layer. §2
 structural design genuine; honest disclosures stand. H0-B negative side
 on real frames **OPEN**; Cut-3 admission HOLD, execution HELD; no frozen
 value changed.
+
+**2026-05-16 (PT) — maintainer. H0-2 schema frozen on sign-off.**
+[`P2_CUT3_H0_2_SCHEMA.md`](P2_CUT3_H0_2_SCHEMA.md) (sibling doc) —
+operator-pre-fill measured-sidecar + residual-table schema; three
+judgment calls confirmed, red-lines A (§3 SHA-mismatch as the primary
+detector) + B (`known_pass_selection_basis`) integrated, body frozen.
+Hard-gated on §0 (the H0-1 C1/C2 correction); it does not re-seal
+Wave-H0-1 — it is the path to proving the H0-B negative side on real
+measured frames. Phase-5 coupling is a severable one-way note, not a
+dependency. No frozen run-spec/H0 value changed; Cut-3 admission HOLD,
+execution HELD; nothing run.
