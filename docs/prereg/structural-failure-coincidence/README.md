@@ -549,3 +549,34 @@ because `cut2-prereg` matches the C5 results allowlist, C5 guards
 publication plumbing, not immutability of the prereg artifacts stored
 there; C2/C3/C4 artifact hashes must still be re-checked explicitly at
 joint admission. No harness/controller run.
+
+**2026-05-16 (PT) — maintainer. Wave-2 C2-A `[E]` values + bridge-scale
+convention frozen.** Append-only filing to
+[`P2_CUT2_C2A_NUMERIC_FREEZE.md`](P2_CUT2_C2A_NUMERIC_FREEZE.md)
+2026-05-16 audit-notes. Concrete values now A3-immutable:
+`ρ = 0.02`, `σ = 0.5°`, `seed = 20260516`, `h`-grid `[0°, 40°]` step
+`0.5°`, `q_h ∈ [0°, 60°]`, `q_a ∈ [−A, +A]` with `A = ρ·R22 ≈ 0.44°`,
+`λ = 1.0`, `τ_C2-B-ii = 0.05°` (argmax-stability tolerance — distinct
+from `D1_min_bias`), `C_L1` = sigmoid centred at `s = 0.02` with
+**steepness `k = 600`** (calibrated so the full 5–95% sigmoid
+transition fits **inside** the ±1.5° L1 coincidence window around
+`h_L1 ≈ 11.37°` — 5% crossing at `h ≈ 9.89°`, 95% at `h ≈ 12.66°`),
+`T_cza = T_tan = 0.3`, `detect_threshold_T = 0.2`,
+`separation_min = 2.0°`, `O_floor = 0.1`, `r_tol = 0.66°` (= `1.5·A`),
+`κ_cond_max = 100`, `D1_min_bias = 1.5°` (= τ1, comparator semantics
+frozen: `b(h,ε) = |q_naive − h|`, min over ε ≥ floor for every h in the
+must-differ L1-ineligible band). Bridge-scale convention pinned: bridge
+is identity in the route channel; eligible-band route peak ≡ 1.0 by
+construction, frozen before any C2-A-1/2/3 receipt. Maintainer-side
+arithmetic correction: `h_L1 = arccos(1/1.02) ≈ 11.37°`
+(v1 proposal's `11.48°` was sloppy cosine; corrected here once,
+propagates to all downstream receipts; no frozen body edited).
+Wave-2 deliberately does **not** compute the C2-A-1/2/3 receipt
+tables — those are Wave 3, computed against the now-frozen `[E]`
+values under the §5 bridge convention; a failing receipt blocks
+(append-only redesign), never silently tunes a value above (A3).
+Public-Language Constraint remains fully in force. Cut-2-execute
+remains HELD on Waves 3–7 + joint admission re-run. Justification:
+closes Wave-2 of the ordered concrete fill (C2-A `[E]` values +
+bridge-scale convention) with values + defenses + comparator semantics
+recorded in writing.
