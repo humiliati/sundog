@@ -175,4 +175,20 @@ Constraint is in force.
 Append-only. Each amendment: timestamp (date + zone), author, one-line
 justification. The body above is frozen at P0 write time.
 
-*(no amendments yet)*
+**2026-05-15 (PT) — maintainer.** P1 admission review filed
+([`P1_ADMISSION.md`](P1_ADMISSION.md)); verdict **PASS** with carried
+findings: (1) **L5 re-scoped** — admitted as the *evidence-admissibility
+rule governing L1–L4 scoring*, not as a standalone behavioral
+failure-coincidence locus (closes a definitional-escape soft spot; the
+frozen L5 body above stands as the pre-registered record, this is the
+reviewed operative interpretation); (2) **B-1** operative L2 boundary
+fixed at the coded guard `h ≤ 32°` (literature ~32.2°/32.196° recorded,
+not averaged); (3) **B-2** operative L4 figure fixed at ~0.5°/h=0–22°
+(`PHASE10_OPTICAL_AUDIT_HANDOFF.md` line 54), L4 remains a permanent-fail
+row at all altitudes. Justification: independent P1 pass per the roadmap
+gate; reconciliations ruled in writing; no regime reclassified. The
+falsifier is now cross-referenced to the existing surface
+([`../../debunked.md`](../../debunked.md)) — orthogonal to Pushable
+Occluder, adjacent to Score Aliasing, and the rigorous instrument for the
+`Proxy Collapse` avenue; prioritization + verdict-vocabulary bridge fixed
+in `P1_ADMISSION.md` §C.
