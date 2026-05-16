@@ -387,3 +387,83 @@ tolerances/domains; define `pen(q)` and the allowed `q_a` range so
 gate without hidden-`h` access; define invalid naive-inverse handling for
 `f_par_obs < R22`. C3 remains the next design condition, but it should
 build on a C2 bridge that resolves these blockers. No controller run.
+
+**2026-05-16 (PT) — maintainer. Cut-2 write-path policy + derived-audit
+verdict default.** Append-only; the frozen body is unchanged.
+Operationalises the new **C5 — publication-plumbing freeze** condition
+filed against [`P2_SPEC_ADMISSION.md`](P2_SPEC_ADMISSION.md) and makes
+precise the verdict-file consequence of the C4-required derived
+`routeConstructionAudit`. **No frozen threshold, boundary, adapter rule,
+decoy obligation, or outcome mapping changes.**
+
+*Cut-2 allowed write paths.* A Cut-2 harness invocation, and any helper
+script it invokes, may write only to:
+
+- `results/structural-failure/cut2-*/` (e.g.
+  `results/structural-failure/cut2-preflight/`,
+  `results/structural-failure/cut2-execute/`);
+- transient stdout/stderr and node-module/temp paths outside the
+  repository tree.
+
+The amendment files under
+`docs/prereg/structural-failure-coincidence/`
+(`P2_CUT2_C3_*.md`, `P2_CUT2_C4_*.md`, any addendum to
+`P2_RESULTS.md`) are filed **by hand** under the existing append-only
+discipline; the harness itself MUST NOT write into `docs/`.
+
+*Cut-2 forbidden write paths.* The Cut-2 harness, and any helper script
+it invokes, MUST NOT modify any of:
+
+- `README.md`
+- repo-root `*.html`
+- `public/data/`
+- `chat/`
+- `docs/SUNDOG_V_*.md`
+- `docs/index.html`
+- anywhere under `dist/`
+- any deployment / build artifact
+
+Any violation ⇒ run **VOID**, verdict reclassified
+`PUBLICATION_PLUMBING_VIOLATION` per C5. The pre/post `git diff
+--exit-code` guard specified in C5 of `P2_SPEC_ADMISSION.md` is the
+mechanical enforcement bookending the run.
+
+*Verdict-file default-HOLD on derived-audit failure (makes the C4
+consequence explicit).* C4 already requires the harness to **compute**
+`routeConstructionAudit` from the live objects (not return a hardcoded
+boolean), with predicates: (i) route `q̂` differs from
+`analyticInverse(bundle)` on a probe set; (ii) decoy gradient into the
+objective is non-zero (decoys reachable); (iii) boundary behavior is
+not a direct function of a generator flag the route reads. This
+amendment fixes what the verdict file is allowed to say:
+
+- If **any** `routeConstructionAudit` predicate returns `false`, the
+  harness MUST emit verdict `MACHINERY_LIVE_ROUTE_TEST_VACUOUS` (or
+  `PUBLICATION_PLUMBING_VIOLATION` if C5 has also tripped) and MUST NOT
+  emit `TRACEABILITY_HARNESS_PASS`, `CONFIRMED`, or any
+  traceability-success language anywhere in the verdict, manifest, or
+  emitted markdown.
+- The verdict file MUST log which predicate(s) failed, with the live
+  values used by the computation. A hardcoded or asserted predicate
+  result is itself a C4 violation and voids the run.
+- A `TRACEABILITY_HARNESS_PASS` verdict is permitted only when **all
+  three** `routeConstructionAudit` predicates return `true` *and* the
+  four-quantity score (1)+(2)+(3) passes under the admitted Cut-2 spec.
+  Neither half alone authorises PASS.
+
+*Scope of this amendment.* This is the verdict-file rule and the
+harness write-path policy. It is not a threshold or boundary change.
+The τ-thresholds (τ1=1.5°, τ2=2.0°, decoy-invariance ≤0.5°, coincidence
+window ±1.5°, τ_pc=2.0°), the 32°/29° loci, the 2%·R22 leverage line,
+the L4 supralateral permanent-fail classification, the A1 adapter input
+set, the A2 paired-contrast decoy-edit rule, and the A3 immutability /
+amend-only-never-post-results rule all remain unchanged.
+
+Justification: closes the publication-plumbing seam at the harness
+level and pins the verdict-file consequence of a computed-audit
+failure. Both clauses are mechanical re-statements of guards the
+prereg already mandates in prose; neither moves a frozen receipt
+boundary or an engineering tolerance, and neither edits a frozen body.
+Public-Language Constraint remains fully in force everywhere
+(including the rail) until quantities (1)+(2)+(3) actually pass under
+an admitted discriminating run that also satisfies C5.

@@ -277,3 +277,27 @@ creating an exact-ridge degeneracy, unspecified leverage-confidence
 function, and undefined noisy-inverse handling when `f_par_obs < R22`.
 Cut-2 execution remains HELD; C3 is still the next design condition, but
 must not assume C2 is admitted until those blockers are resolved.
+
+**2026-05-16 (PT) — maintainer.** Publication-plumbing freeze opened as
+**C5**, a fifth open condition Cut-2-execute must clear at the C3/C4
+admission re-check alongside C1 (closed), C2 (filed for audit; C2-A/B/C/D
+open), C3 (open), and C4 (open). Filed in response to an external read
+of the program's publication-plumbing risk surface
+([`../../geometry_agent_audit.md`](../../geometry_agent_audit.md)).
+**C5** condition opened in
+[`P2_SPEC_ADMISSION.md`](P2_SPEC_ADMISSION.md): the Cut-2 harness may
+write only under `results/structural-failure/cut2-*/`; a pre/post
+`git diff --exit-code` guard scoped to `README.md` / root `*.html` /
+`docs/` excluding `docs/prereg/structural-failure-coincidence/` /
+`chat/` / `public/data/` / `dist/` must return clean; any violation ⇒
+verdict `PUBLICATION_PLUMBING_VIOLATION`, never PASS. Companion
+amendment in [`P2_RUN_SPEC.md`](P2_RUN_SPEC.md) declares the matching
+allowed/forbidden write paths and pins the verdict-file rule on
+derived-audit failure (any `routeConstructionAudit` predicate `false` ⇒
+`MACHINERY_LIVE_ROUTE_TEST_VACUOUS`; PASS requires all three predicates
+true *and* the four-quantity score to pass). **No frozen body edited;
+no threshold, boundary, adapter rule, decoy obligation, or outcome
+mapping moved.** Public-Language Constraint remains fully in force.
+Justification: closes the prose-only Public-Language seam by adding a
+mechanical guard at admission and at run time, while explicitly leaving
+`scripts/copy-site-docs.mjs` untouched.

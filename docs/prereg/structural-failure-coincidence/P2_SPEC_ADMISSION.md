@@ -262,3 +262,78 @@ degenerate exact ridge and defeats P-A; (C2-C) specify the
 leverage-confidence function without hidden-`h` access; (C2-D) specify
 undefined `arccos` handling when noisy `f_par_obs < R22`. No controller
 run; Public-Language Constraint remains in force.
+
+**2026-05-16 (PT) — maintainer.** Append-only amendment opening **C5 —
+publication-plumbing freeze** as a fifth open condition Cut-2-execute
+must clear at the C3/C4 admission re-check, alongside C1 (closed), C2
+(filed for audit; blockers C2-A/B/C/D), C3 (open), and C4 (open). Filed
+in response to an external read of the program's publication-plumbing
+risk surface
+([`../../geometry_agent_audit.md`](../../geometry_agent_audit.md)).
+**No frozen body edited; no threshold moved; no regime reclassified.**
+
+*Why C5 is needed.* The Public-Language Constraint is currently a
+**prose** guard. `scripts/copy-site-docs.mjs` runs as `postbuild` and
+copies the entire `docs/` tree to `dist/docs/` with no excludes, so any
+verdict file or summary written under `docs/` propagates to public
+posture on the next `npm run build` / `npm run deploy`. Today's harness
+happens to write only to `results/structural-failure/...`
+(`scripts/structural-failure-p2-harness.mjs` lines 710–736), but that is
+discipline, not enforcement. C5 makes the constraint mechanical at
+admission and at run time.
+
+*C5 — publication-plumbing freeze (open).* Cut-2-execute is blocked
+until the re-admission check verifies all three:
+
+1. **Allowed write paths declared and enforced.** The Cut-2 harness
+   writes only under `results/structural-failure/cut2-*/`. The
+   amendment files under
+   `docs/prereg/structural-failure-coincidence/`
+   (`P2_CUT2_C3_*.md`, `P2_CUT2_C4_*.md`, any addendum to
+   `P2_RESULTS.md`) are filed **by hand** under the existing append-only
+   discipline — the harness itself may not write into `docs/`.
+
+2. **Pre/post diff guard.** A `git diff --exit-code` taken *before* any
+   Cut-2 build step and again *after* the run, scoped to:
+
+       README.md
+       *.html              (repo root)
+       docs/               EXCLUDING docs/prereg/structural-failure-coincidence/
+       chat/
+       public/data/
+       dist/
+
+   must return clean on both bookends. The pre-run snapshot is the
+   baseline; the post-run snapshot must match it byte-for-byte over
+   that scope. The exact `git diff` invocation used as the guard is
+   pre-registered alongside the C3/C4 filings.
+
+3. **Violation ⇒ reclassified verdict, never PASS.** Any non-clean diff
+   in (2), or any harness write outside the allowed paths in (1),
+   reclassifies the verdict as `PUBLICATION_PLUMBING_VIOLATION`. The
+   Public-Language Constraint stays in force; the harness MUST NOT emit
+   `TRACEABILITY_HARNESS_PASS`, `CONFIRMED`, or any traceability-success
+   language; and no public-surface edit produced during the violating
+   run may be merged.
+
+*What C5 deliberately does NOT do.* It does not edit
+`scripts/copy-site-docs.mjs`, does not introduce a `dist/` build exclude
+for the prereg folder, and does not move any frozen threshold or
+boundary. The prereg folder may still ship to `dist/` on a normal
+build; C5 prevents the Cut-2 *experiment itself* from being the thing
+that writes into surfaces that ship. Hardening
+`scripts/copy-site-docs.mjs` is a separate, larger decision and is
+deliberately out of scope for this amendment.
+
+*Companion amendment.* The matching harness-level write-path policy and
+the verdict-file rule on derived-audit failure are filed as the
+2026-05-16 amendment to [`P2_RUN_SPEC.md`](P2_RUN_SPEC.md). C5 is the
+admission-gate condition; the P2_RUN_SPEC amendment is its operational
+form during a Cut-2 run.
+
+Justification: closes the publication-plumbing seam at the admission
+gate before any Cut-2 run, by adding a mechanical guard alongside the
+prose Public-Language Constraint. C5 is opened, not closed; it must be
+satisfied at the re-admission check together with C2-A/B/C/D, C3, and
+C4. No body rewrite, no threshold move, no post-hoc edit. The
+Public-Language Constraint remains fully in force.
