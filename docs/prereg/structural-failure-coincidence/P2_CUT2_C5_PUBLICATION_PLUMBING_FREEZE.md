@@ -153,3 +153,22 @@ result; the in-between is not.
 ## Audit Notes
 
 *(reviewer space — append-only below)*
+
+**2026-05-16 (PT) — Codex audit.** Direction accepted; C5 is **not yet
+execution-closing** until the manifest and runnable guard land. The
+default-deny / allowlist-complement design is the right anti-self-seal:
+it avoids an under-scoped shipping-surface blocklist, and
+`PUBLICATION_PLUMBING_VIOLATION` correctly dominates any scientific
+pass. Two implementation holds are load-bearing. (1) The guard must
+define its baseline semantics: either require a clean full-tree baseline
+before Cut-2 starts, or snapshot the pre-run tree and reject only **new**
+out-of-allowlist changes. Given this repo's normal dirty-workflow risk,
+the choice must be explicit and reproducible; otherwise pre-existing
+dirty files can either cause false violations or hide new writes. (2)
+`git diff --exit-code` alone is insufficient: it misses untracked files,
+and ordinary `git status --porcelain` can miss ignored files. The guard
+script must include tracked modifications, untracked files, and any
+ignored-but-public/shipping paths in its full-tree check, with
+normalized repo-relative paths and symlink/junction escape rejection
+before applying the `results/structural-failure/cut2-*/` allowlist. No
+harness/controller run.

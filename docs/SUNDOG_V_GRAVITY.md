@@ -1127,3 +1127,10 @@ with frozen readouts. C4-A remains provisional until C2-A/C3-A close;
 Cut-2 remains held; no controller run.
 
 **C5 publication-plumbing freeze filed, 2026-05-16 — all pre-registration conditions filed.** [`P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md`](prereg/structural-failure-coincidence/P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md): default-deny / allowlist-complement guard over the full tree (writes only under `results/structural-failure/cut2-*/`), not an under-scopable blocklist; hashable manifest + runnable pre/post guard script + terminal-dominant `PUBLICATION_PLUMBING_VIOLATION`. Full condition set **C2-A · C3-A · C4-A · C5**; the only remaining gate to the single joint P2-spec admission re-run is the maintainer's concrete fill ([E] values + operational artifacts + receipt tables across all four). No controller run; Public-Language Constraint in force.
+
+**C5 audit addendum, 2026-05-16.** C5 direction accepted, but not closed
+for admission. The guard artifact must define clean-baseline versus
+pre/post-snapshot semantics, detect tracked/untracked/ignored
+public-surface changes, and normalize paths with symlink/junction escape
+rejection before applying the cut2-results allowlist. Cut-2 remains
+held; no controller run.

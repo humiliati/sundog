@@ -543,3 +543,13 @@ The re-check verdict stays withheld until **all four conditions are
 filed with concrete values/artifacts/receipts landed** and audited as
 one object. Cut-2 build/run remains **blocked**; Public-Language
 Constraint in force.
+
+**2026-05-16 (PT) — C5 audit.** C5 direction accepted; closure withheld.
+The default-deny allowlist is the right shape, but the runnable guard
+must make baseline semantics explicit (clean pre-run tree versus
+pre/post snapshot that rejects only new out-of-allowlist changes).
+Admission also requires the guard to cover tracked modifications,
+untracked files, and ignored-but-public/shipping paths; `git diff
+--exit-code` alone is not sufficient. The manifest/guard must normalize
+repo-relative paths and reject symlink/junction escapes before applying
+the `results/structural-failure/cut2-*/` allowlist. No harness run.
