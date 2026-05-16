@@ -376,8 +376,10 @@ asks.
 
    Priority panels for the next pass are Mesa Optimization (`SUNDOG_V_MESA.md`
    / `mesa.html` lambda cliff and class balance), the structural-failure
-   boundary map (`prereg/structural-failure-coincidence/BOUNDARY_MAP.md`), and
-   the coarse-graining proof trunk (`COARSE_GRAINING_PROOF_ROADMAP.md` plus
+   boundary map (`prereg/structural-failure-coincidence/BOUNDARY_MAP.md`,
+   `PUBLICATION_PLAN.md`, and
+   `public/data/structural-failure-boundary-map.json`), and the
+   coarse-graining proof trunk (`COARSE_GRAINING_PROOF_ROADMAP.md` plus
    `docs/proof/*`). These belong after the rail because they are interpretation
    surfaces rather than motion hooks: they help readers understand why the
    result is bounded.

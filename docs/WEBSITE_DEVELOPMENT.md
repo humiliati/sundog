@@ -278,7 +278,10 @@ Current priority fills:
 1. Mesa Optimization: lambda cliff and class-balance strip from
    `docs/SUNDOG_V_MESA.md` / `mesa.html`.
 2. Structural Failure Coincidence: five-locus identifiability boundary map from
-   `docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md`.
+   `docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md`, with
+   publication rules in
+   `docs/prereg/structural-failure-coincidence/PUBLICATION_PLAN.md` and chart
+   data generated at `public/data/structural-failure-boundary-map.json`.
 3. Coarse-Graining: proof-trunk status ladder from
    `docs/COARSE_GRAINING_PROOF_ROADMAP.md` and `docs/proof/*`.
 
