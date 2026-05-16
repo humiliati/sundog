@@ -365,6 +365,28 @@ asks.
    and failure boundary, and link onward to `balance.html` plus the relevant
    evidence artifact.
 
+   **4e - Post-rail evidence interpretation panels.**
+
+   The Working Systems grid that follows the motion rail should stop using
+   generic labelled slabs as a long-term visual strategy. On mobile those
+   `.app-card-img` placeholders stack into large empty-feeling blocks and repeat
+   the card heading. Treat the slot as an evidence interpretation panel instead:
+   a compact chart, boundary map, proof ladder, telemetry thumbnail, or
+   workbench screenshot that clarifies the claim boundary named by the card.
+
+   Priority panels for the next pass are Mesa Optimization (`SUNDOG_V_MESA.md`
+   / `mesa.html` lambda cliff and class balance), the structural-failure
+   boundary map (`prereg/structural-failure-coincidence/BOUNDARY_MAP.md`), and
+   the coarse-graining proof trunk (`COARSE_GRAINING_PROOF_ROADMAP.md` plus
+   `docs/proof/*`). These belong after the rail because they are interpretation
+   surfaces rather than motion hooks: they help readers understand why the
+   result is bounded.
+
+   Visual rule: no panel may consist only of the project title. If an image or
+   chart is not ready, use a visibly intentional "chart pending" state with
+   centered text, responsive height, and a source trail. The current placeholder
+   polish is a holding state, not the finished design.
+
 5. Decide whether BoxForge exports live as hand-curated CSS snippets or as
    generated files from `.boxforge.json` templates.
 6. When the canonical topography/typography direction lands, map it onto the
