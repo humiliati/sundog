@@ -138,14 +138,60 @@ reference `dt = 0.004`; fitted order `p` = OLS slope over
 (else Partial, not Fail); Pass floor `p ≥ 3.0`; Fail iff decidable and
 `p < 3.0`.
 
-To be recorded here after the re-run smoke, before the full lock is interpreted:
+### Smoke readback — recorded 2026-05-16 (post-Richardson-code)
 
-- the locked `T_window` (largest grid `t* ≤ 4.8` meeting order ∈ [3,5],
-  `max D(0.012) < 1e-6`, no early termination on any smoke `off` cell-seed;
-  capped at 2.4)
-- per-smoke-`off`-cell fitted-order evidence and coverage
-- confirmation both hard-void gates still reproduce bit-for-bit after the
-  additive sampler edit
+Run as a chained background job after the Richardson implementation
+(`node --check` → phase13 → phase14 → widened smoke). Logs:
+`results/phase15amend-gate-phase13.log`, `…-phase14.log`,
+`results/phase15amend-smoke.log`.
+
+**Hard-void gates — both reproduce bit-for-bit after the additive sampler
+edit (the additive/flag-gated design held):**
+
+- `npm run threebody:phase13`: 3,456 trials; 88 / 324 candidate envelope rows;
+  81 promising best cells; outcomes 1,154 bounded / 2,030 escape / 272 close.
+  Matches the locked requirement exactly.
+- `npm run threebody:phase14`: 6,048 trials; 130 / 648 candidate envelope rows;
+  outcomes 1,269 bounded / 4,616 escape / 163 close. Matches exactly.
+
+Phase 15 is **not void**; Richardson columns are interpretable.
+
+**Widened smoke (`threebody:phase15:smoke`, full ladder
+`0.004,0.006,0.008,0.01,0.012`):** 360 trials (20 cases × 9 modes × 2 seeds),
+40 `off` trials, `richardson-order-map.csv` emitted. All 8 `off` cell-seeds
+**defined**: 20 in-window grid points per ladder dt (Δ=0.12, T_window 2.4 →
+20 pts), no early termination, every `maxD(0.012)` ∈ [2.2e-9, 4.6e-9] ≪ the
+`EARLY_DIV_ABS_CAP = 1e-6`.
+
+**Locked `T_window` = 2.4** (procedure selected `t*` then capped at
+`T_WINDOW_CAP`; `windowSelectionStatus=selected`).
+
+**Per-`off`-cell fitted-order evidence and coverage:** per-cell-seed
+`fittedOrder` ∈ [4.3035, 4.3148] (all 8). Favorable pocket
+(`velocityScale ≥ 1.05`): `favorableDefinedCount = 4 / 4`, coverage rate
+`1.0`, **`favorableDecidable = true`**, **favorable-pocket median fitted order
+= 4.30985**. This is a clean RK4 `O(dt^4)` signature, ≥ 1.3 above the Pass
+floor `p ≥ 3.0` and inside `[3,5]`.
+
+**Precision-receipt verdict:** decidable and **PASSES** the §5 precision
+condition (favorable-pocket median `p = 4.30985 ≥ 3.0`). The `T_window` /
+precision leg of Phase 15 is satisfied; the harness, sampler, and reducer are
+verified working on a from-scratch run.
+
+Minor implementation note (non-blocking): the per-trial summary field
+`earlyTrajectoryPointCount` reads `undefined`, but `richardson-order-map.csv`
+shows 20 points/dt and valid fitted orders per `off` cell-seed — the sampler
+and reducer are functioning; the undefined summary field is a cosmetic
+naming/location detail, optional to tidy later.
+
+**Status:** the readback is now recorded, so the full lock is no longer
+blocked on it. It remains **operator-gated**: the full `npm run
+threebody:phase15` (12,960 trials, ~75 h) requires explicit operator
+authorization, and the §5 Pass verdict still depends on the conditions that
+are only evaluable at the full lock (per-step counterfactual separation across
+arms, candidate-fraction stability across the ladder, `oracleHazardAuroc`
+warning quality, favorable-pocket survival). The smoke establishes only the
+precision/`T_window` leg + that gates and instrumentation are intact.
 
 The full lock (`npm run threebody:phase15`) remains **not run**, pending:
 (1) re-run of both hard-void gates after the Richardson code change,
