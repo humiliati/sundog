@@ -2,7 +2,7 @@
 
 > The staged proof path for **Postulate 1** — the Coarse-Graining Postulate, the
 > theorem the project has been circling for a year without naming. Source and
-> ranking: [`anniversary/postulations.md`](anniversary/postulations.md) ▸
+> ranking: [`internal/anniversary/postulations.md`](../internal/anniversary/postulations.md) ▸
 > Postulate 1. This roadmap turns that conjecture into a sequenced campaign of
 > analytical and empirical phases, each with entry/exit criteria and a
 > pre-registered negative, so the result can be re-audited cleanly and so the
@@ -14,7 +14,9 @@
 > cross-substrate "convergence" is a shared **operator**, not a shared word —
 > and the pre-registered failure boundary is *predicted*, not patched.
 >
-> **Status as of filing (2026-05-16):** filed, not started. This is a
+> **Status as of 2026-05-16:** Phase 0 definitions lock landed at
+> [`proof/POSTULATE1_DEFINITIONS.md`](proof/POSTULATE1_DEFINITIONS.md);
+> Phase 1 not started. This is a
 > theory-track roadmap, not an operating-envelope workbench — it is the *trunk*
 > of which the Formal Separability Theorem appendix
 > ([`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md), promoted from
@@ -49,7 +51,7 @@ appendix names the structural condition under which a signature-trained agent
 does *not* grow an internal reward proxy. The Coarse-Graining Postulate is the
 **generalization**: separability is the special case of `𝓕_σ`-measurability
 where the agent class is bounded so it cannot invert `Φ` (this is Postulate 2's
-capacity relativity, [`anniversary/postulations.md`](anniversary/postulations.md)
+capacity relativity, [`internal/anniversary/postulations.md`](../internal/anniversary/postulations.md)
 ▸ Postulate 2). To avoid a parallel theory track:
 
 - The separability appendix remains the **mesa-specific** formal statement.
@@ -77,11 +79,12 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   p=0.26, n=30; 16× acquisition; ρ≈0.086 parhelic-belt) are *referenced*, never
   re-derived or restated at a different value (spec self-consistency rule).
 - **Exit.** `docs/proof/POSTULATE1_DEFINITIONS.md` reviewed for internal
-  consistency (every symbol used once, defined once).
+  consistency (every symbol used once, defined once). **Landed 2026-05-16** at
+  [`proof/POSTULATE1_DEFINITIONS.md`](proof/POSTULATE1_DEFINITIONS.md).
 - **Pre-registered negative.** If the predicate cannot be stated without
   reference to an unmeasurable quantity in *every* candidate substrate, the
   postulate is not operational — stop, and demote Postulate 1 to speculative in
-  [`anniversary/postulations.md`](anniversary/postulations.md).
+  [`internal/anniversary/postulations.md`](../internal/anniversary/postulations.md).
 
 ### Phase 1 — Linear-Gaussian existence proof (the computable case)
 
@@ -122,7 +125,7 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
 - **Exit.** Proof + an explicit statement that the pushable-occluder failure is
   now a *theorem-predicted* boundary, cross-filed in
   [`PHASE2_BLOCKS_DESIGN.md`](PHASE2_BLOCKS_DESIGN.md) and the "river and dam"
-  entry of [`anniversary/analogies.md`](anniversary/analogies.md).
+  entry of [`internal/anniversary/analogies.md`](../internal/anniversary/analogies.md).
 - **Pre-registered negative.** If a flat `𝓕_σ`-controller *does* solve a task
   whose decisive bit is provably not `𝓕_σ`-measurable, the boundary is wrong and
   Postulate 1's failure prediction is falsified — record, do not rescue.
@@ -131,7 +134,7 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
 
 - **Entry.** Phase 3 exit. Bayesian-floor baseline available in the chosen
   workbench (per the "Bayesian floor" standing commitment in
-  [`anniversary/attack_vectors.md`](anniversary/attack_vectors.md) — a baseline
+  [`internal/anniversary/attack_vectors.md`](../internal/anniversary/attack_vectors.md) — a baseline
   *inside* the workbench, **not** a `bayes_v_sundog` track).
 - **Work.** Use the planar restricted three-body near-escape pocket, where `Φ`
   (the guarded accelerometer-proxy signature) and a tractable `π*` proxy are
@@ -168,13 +171,13 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   at its settled post-audit strength — inherited unchanged from
   [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md), **not** re-opened).
   Optional third: the vortex/wishing-well toy
-  ([`anniversary/postulations.md`](anniversary/postulations.md) ▸ Postulate 5).
+  ([`internal/anniversary/postulations.md`](../internal/anniversary/postulations.md) ▸ Postulate 5).
 - **Exit.** A cross-substrate operator-identity table (same `Φ` up to
   isomorphism of the coarse-graining) in `docs/proof/PHASE5_CROSS_SUBSTRATE.md`,
   hedged at settled strength.
 - **Pre-registered negative.** If the substrates do **not** share the operator
   structure under measurement, the cross-substrate convergence *was* the
-  equivocation of [`anniversary/attack_vectors.md`](anniversary/attack_vectors.md)
+  equivocation of [`internal/anniversary/attack_vectors.md`](../internal/anniversary/attack_vectors.md)
   ▸ #1 — concede it in those words; the grand frame loses its empirical support
   and Postulate 1 stays a single-substrate result.
 
@@ -185,7 +188,7 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   promoted out of speculative.
 - **Work.** Show the Mesa cliff is **invariant** under a transformation that
   should not move it and **moves predictably** under reward-gradient rescale
-  (the [`anniversary/attack_vectors.md`](anniversary/attack_vectors.md) ▸ #4
+  (the [`internal/anniversary/attack_vectors.md`](../internal/anniversary/attack_vectors.md) ▸ #4
   defense — an experiment, not an argument).
 - **Exit.** `docs/proof/PHASE6_LAMBDA_CONTROL.md` with the invariance/scaling
   result.
@@ -222,12 +225,12 @@ the Postulate 6 proportionality holds in the LQG toy (closes the year-one
 ## 6. Cross-references
 
 - **Origin / ranking:**
-  [`anniversary/postulations.md`](anniversary/postulations.md) ▸ Postulate 1
+  [`internal/anniversary/postulations.md`](../internal/anniversary/postulations.md) ▸ Postulate 1
   (trunk), 2 (capacity relativity), 3 (conservation law), 4 (5D invariant),
   5 (substrates), 6 (founding `H`).
-- **The analogy this formalizes:** [`anniversary/analogies.md`](anniversary/analogies.md)
+- **The analogy this formalizes:** [`internal/anniversary/analogies.md`](../internal/anniversary/analogies.md)
   ▸ "The thermometer / statistical mechanics."
-- **The attack this answers:** [`anniversary/attack_vectors.md`](anniversary/attack_vectors.md)
+- **The attack this answers:** [`internal/anniversary/attack_vectors.md`](../internal/anniversary/attack_vectors.md)
   ▸ #1 (equivocation), with the Bayesian-floor standing defense feeding Phase 4.
 - **Existing formal front (not forked):** [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md)
   (Separability appendix), [`SUNDOG_V_GRAVITY.md`](SUNDOG_V_GRAVITY.md) (ledger),
@@ -237,5 +240,5 @@ the Postulate 6 proportionality holds in the LQG toy (closes the year-one
 - **Scope guardrails:** [`SCIENTIFIC_CRITERIA.md`](SCIENTIFIC_CRITERIA.md),
   `presentation/claims-and-scope.md`.
 - **Deferred siblings:** the publication-gating wording fixes remain in
-  [`anniversary/fix_roadmap.md`](anniversary/fix_roadmap.md) (owner-deferred
+  [`internal/anniversary/fix_roadmap.md`](../internal/anniversary/fix_roadmap.md) (owner-deferred
   until the brainstorm docs are massaged and staged).
