@@ -196,3 +196,22 @@ L1/L2/L3. Either is a clean result; the in-between is not.
 ## Audit Notes
 
 *(reviewer space — append-only below)*
+
+**2026-05-16 (PT) — Codex audit.** Direction accepted; C2-A is **not
+yet execution-closing**. The key C2-C/D objection is resolved in the
+right way: the L1 ramp is tied to `PhotometricAgent`'s actual
+absolute-intensity reacquire path, and the bridge-scale anti-self-seal
+(eligible-band peak `= 1.0` before receipts) is load-bearing. However,
+this file currently freezes the **provenance slots and receipt
+obligations**, not all numeric values: `rho`, `sigma`, `lambda`, the
+grid/domains, `C_L1` steepness/form parameters, `T_cza`/`T_tan`
+magnitudes, `O_floor`, `r_tol`, `kappa_cond_max`, floors, and receipt
+tables still need concrete values before C2-A can be counted closed.
+Two receipt-level holds remain: (1) the reacquire argument must follow
+the actual phase semantics in `agents/photometric.py` (SCAN/SEEK always
+proceed; the threshold is enforced only during TRACK after
+`reacquire_hold_steps`), so the confidence/lock readout must be frozen
+as a sustained-TRACK criterion, not inferred from peak intensity alone;
+(2) C2-A-2 must include a reproducible objective scan proving invalid
+rows trip the abstain criterion while eligible rows do not. No
+controller/harness run.

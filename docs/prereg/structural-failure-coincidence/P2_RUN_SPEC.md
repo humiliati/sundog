@@ -631,3 +631,14 @@ tolerance, A3). No immutable boundary moved; Cut-2 execution stays
 joint admission re-run; Public-Language Constraint in force.
 Justification: closes the C2 numeric freeze as an artifact-before-agent;
 receipts pre-run, no harness, nothing run.
+
+**2026-05-16 (PT) — Codex audit.** C2-A direction accepted, but the
+freeze is not closed yet. The file freezes the correct mechanism and
+anti-self-seal convention, but the [E] rows still require concrete
+numeric values plus the three receipt tables before admission. C2-A-1
+must phrase lock/fail using the real `PhotometricAgent` phase semantics:
+the threshold is checked during TRACK after `reacquire_hold_steps`, not
+as a pre-SCAN lock gate. Therefore the receipt needs a frozen
+sustained-TRACK/confident-`qhat` readout. C2-A-2 still needs the
+objective scan showing invalid rows abstain and eligible rows do not. No
+controller run.

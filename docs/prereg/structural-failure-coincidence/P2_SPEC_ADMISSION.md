@@ -455,3 +455,17 @@ as a **block / append-only redesign**, never a tuned pass; (c) the
 **C2-A receipts, C3-A/B/C/D, C4-A/B/C/D, C5** are all filed and audited
 as one object. Cut-2 build/run remains **blocked**; Public-Language
 Constraint in force.
+
+**2026-05-16 (PT) — C2-A audit.** C2-A direction accepted; closure
+withheld. The document correctly moves the scalar-ramp proof onto the
+bound controller's real reacquire path and freezes the bridge scale by
+an independent eligible-band peak convention. But the admission check
+must treat the current file as a **numeric-freeze scaffold**, not a
+completed freeze, until concrete values and receipt tables are appended
+for the [E] rows (`rho`, `sigma`, `lambda`, domains, `C_L1`, `T_*`,
+`O_floor`, `r_tol`, `kappa_cond_max`, floors). The C2-A-1 receipt must
+respect actual `PhotometricAgent` phase semantics: SCAN/SEEK can still
+run below threshold; reacquire is a sustained-TRACK behavior after
+`reacquire_hold_steps`, so "lock/confident qhat" needs a frozen
+sustained-TRACK readout. C2-A-2 needs the objective scan receipt. No
+harness run.

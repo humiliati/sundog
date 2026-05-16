@@ -416,3 +416,12 @@ Cut-2-execute re-admission is now **C2-A receipts · C3-A/B/C/D ·
 C4-A/B/C/D · C5**; one joint audit, withheld until all filed. No frozen
 threshold/boundary moved; Public-Language Constraint in force.
 Justification: closes the C2 numeric freeze as an artifact-before-agent.
+
+**2026-05-16 (PT) — Codex audit.** C2-A direction accepted; closure
+withheld pending actual numeric values and receipts. The mechanism is
+now tied to the bound controller rather than an argmax rescale, and the
+bridge-scale anti-self-seal is correctly surfaced. Remaining admission
+holds: populate all [E] values/tables, define lock/confident-`qhat` as a
+sustained-TRACK readout consistent with `PhotometricAgent`'s actual
+SCAN/SEEK/TRACK semantics, and add the C2-A-2 objective scan receipt. No
+harness/controller run.
