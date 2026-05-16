@@ -259,3 +259,87 @@ mapping; it records that the first execution was inconclusive for
 quantities (1)–(3) as a discriminating route-use test. Public-language
 guard remains fully in force: no `CONFIRMED`, no traceability-success,
 and no theorem language from this first cut.
+
+**2026-05-15 (PT) — maintainer. Staged discriminating-cut
+pre-registration (Cut 2 + Cut 3).** Append-only; the frozen body is
+unchanged. This operationalizes the frozen body's own staging rule
+("a trained learning agent and/or rendered-image signal are out of scope
+here and are promoted only if this cut is ambiguous") — except the first
+cut was not ambiguous, it was **vacuous** (`g^-1(g(h))`). The amendment
+pre-registers the next two cuts *before* either is built or run; no
+harness has been written for them. No frozen threshold, boundary,
+adapter rule, or outcome mapping changes.
+
+*Defect being removed.* Cut 1's feature was `g(h)`, its route was
+`g^-1`, its matched baseline was `g^-1` — an identity measured against
+itself. A discriminating cut must make each quantity *earned*: the
+inverse not algebraically recoverable; the decoy shortcut *tempting*
+(in-sample-predictive and reachable through the objective, so a
+correlate genuinely wins in-sample and a traceable route must decline at
+a convergence cost); boundary degradation *emergent* from the route's
+own signal, not a generator flag echoed against its own constant.
+
+**Cut 2 — closed-form discriminating (run after admission).**
+
+- *Agent under test (binding requirement).* The harness must invoke the
+  project's **named existing extremum-seeking controller** (the Sundog
+  controller family) through the frozen A1 transparent adapter. It
+  **may not inline a fresh inverter** as Cut 1 did. The concrete
+  controller entrypoint must be named in the admission check and bound by
+  reference; an inlined proxy ⇒ run **VOID**.
+- *Signal.* Closed-form, seconds-scale. `f_par` carries a pre-registered
+  **non-invertible nuisance** (not merely zero-mean noise): a monotone
+  unknown-parameter confound such that `arccos(R22/f_par)` is **not** an
+  unbiased recovery of `h`. Convergence must be *worked for*.
+- *Decoys must tempt.* `d_sup`, `d_unanch`, `d_style` are
+  **in-sample-predictive of `h`** and enter the **same observation space
+  the route optimizes over** (reachable through the objective, not
+  excluded by construction). A decoy-seeking policy must achieve
+  *better* in-sample convergence than the anchored route; the traceable
+  route must refuse the shortcut. Decoy-edit invariance is now a costly
+  behavioral choice, not a structural identity.
+- *Boundary emergence.* At L2 (`h→32°`) / L3 (`h→29°`) the anchored
+  signal's leverage must vanish **from the signal itself**; the route
+  may not read a generator gating bit. q3 passes only if degradation /
+  abstention / handle-switch is driven by vanishing signal leverage.
+- *Derived vacuity audit (hard gate, not asserted).* The harness must
+  **compute** `routeConstructionAudit` from the live objects, not return
+  hardcoded `true`/`false`: (i) route `q̂` differs from
+  `analyticInverse(bundle)` on a probe set; (ii) the decoy gradient into
+  the objective is non-zero (decoys reachable); (iii) boundary behavior
+  is not a direct function of a generator flag the route reads. If any
+  predicate fails ⇒ `MACHINERY_LIVE_ROUTE_TEST_VACUOUS`, never a pass.
+- *Thresholds.* τ1=1.5°, τ2=2.0°, decoy-invariance ≤0.5°,
+  coincidence ±1.5°, τ_pc=2.0° — **unchanged, immutable** (A3 rule). The
+  only additions are pre-registered engineering tolerances strictly
+  required by the nuisance: noise scale `σ` and RNG `seed`, fixed here
+  before any run, never edited post-results.
+- *Outcome framing (honest prior).* The frozen Outcome Branching table
+  governs. The likely honest result is **D / BOUNDARY FOUND** — the
+  existing photometric controller riding the in-sample correlate is the
+  `debunked.md` Proxy-Collapse confirmation ("most important scientific
+  failure" avenue, P1 §C). **B** is earned *only* by a measured refusal
+  of the tempting decoy at a convergence cost *and* emergent boundary
+  coincidence. Either is a clean result; the in-between is not.
+
+**Cut 3 — rendered-signal escalation (pre-registered, conditional).**
+Triggered **only if Cut 2 is ambiguous**, defined crisply as: q1
+within `±0.5°` of τ1 (borderline), **or** q2 decoy-edit and the
+positive-control contrast both inconclusive, **or** the derived audit
+cannot establish decoy-reachability. On trigger, the signal becomes a
+HaloSim render / atlas raster (inverse genuinely non-algebraic from
+pixels). Known blocking hazard, pre-named: the px↔° centring / scale
+problem exhausted in Phase 15 (`SPECULATIVE_HALO_PROOFS.md` follow-ups)
+— Cut 3 admission must show that hazard is resolved (e.g. HaloSim-native
+Scale) or Cut 3 is itself blocked, not forced.
+
+**Process gate (the lesson of the near-miss).** Neither cut may be
+built or run until a P2-spec admission re-check (appended to
+`P2_SPEC_ADMISSION.md`) records **ADMIT** for it. Patch-then-run is the
+self-seal this program exists to prevent. Public-Language Constraint
+stays fully in force until (1)+(2)+(3) pass under an admitted
+*discriminating* run; nothing here is a pass.
+
+Justification: stages the next two cuts as frozen artifacts-before-agent
+under the spec's own escalation rule; removes the Cut-1 tautology by
+construction; no body rewrite, no threshold move, no post-hoc edit.

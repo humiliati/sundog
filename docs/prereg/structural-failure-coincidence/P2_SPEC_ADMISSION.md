@@ -184,3 +184,43 @@ Corrected execution verdict:
 `OPAQUE_CORRELATE_POSITIVE_CONTROL_CONFIRMED`. Therefore P2 quantities
 (1)–(3) have **not** established traceability under an admitted
 discriminating run; the Public-Language Constraint remains in force.
+
+**2026-05-15 (PT) — Codex audit. Admission re-check of the staged
+discriminating-cut pre-registration (Cut 2 + Cut 3).** Reviewing the
+`P2_RUN_SPEC.md` staged-cut amendment of the same date. This is a
+genuine pass, not a rubber stamp: the design is scrutinized for whether
+it actually removes the Cut-1 tautology.
+
+| requirement | ruling | notes |
+| --- | --- | --- |
+| Cut 2 makes convergence non-tautological | **PARTIAL** | A pre-registered *non-invertible* nuisance is specified, but "monotone unknown-parameter confound" is not yet a concrete closed form. Until written, it is not provable that `arccos(R22/f_par)` is a biased recovery of `h` — otherwise Cut 2 silently re-collapses to `g^-1∘g` + denoise. |
+| Decoys genuinely tempt (in-sample-predictive **and** reachable through `J`) | **PARTIAL** | The intent is correct and is the sharp move Cut 1 lacked. But "reachable through the objective" must be demonstrated pre-run (non-zero decoy gradient into `J`) **and** the decoy must measurably *beat* the anchored route in-sample, or invariance is not a costly choice. Not yet shown numerically. |
+| Agent under test is the **named existing** controller | **HOLD** | The binding requirement is correctly stated, but the concrete Sundog-controller entrypoint is **not yet named**. Cut 1's core failure was an inlined proxy; Cut 2 cannot be admitted until the real controller module/function is identified and bound by reference. |
+| Vacuity audit is **derived**, not asserted | **HOLD** | Spec correctly requires `routeConstructionAudit` be computed from live objects. Current harness returns it hardcoded (correct fail-safe *now*, unacceptable for a discriminating run). Must be re-implemented as a computed predicate before Cut 2. |
+| Cut 3 trigger is crisp; px↔° hazard pre-named | **PASS** | Ambiguity trigger is operationalized (three explicit branches); the Phase-15 px↔° centring hazard is named as a Cut-3 admission blocker, not glossed. |
+| Thresholds immutable; only σ/seed added | **PASS** | No frozen threshold moved; σ and RNG seed are correctly scoped as pre-registered, never-post-results engineering tolerances under the A3 rule. |
+| Outcome framing honest | **PASS** | The amendment states the honest prior (likely **D / BOUNDARY FOUND** = Proxy-Collapse confirmation; **B** only on measured refusal-under-temptation). No theorem posture; the in-between is explicitly disclaimed. |
+
+**Re-admission verdict: HOLD — Cut-2 *design* admitted in principle;
+Cut-2-execute NOT admitted.** The staged pre-registration is the right
+artifact-before-agent move and the gate did its job: it caught four
+pre-run gaps that would otherwise let a "discriminating" run be
+self-sealed again. Cut-2 build/run remains **blocked** until append-only
+amendments close, and this check is re-run on:
+
+- **C1** name and bind the existing Sundog controller entrypoint (no
+  inlined proxy);
+- **C2** write the concrete non-invertible nuisance closed form and show
+  `arccos(R22/f_par)` is biased under it;
+- **C3** demonstrate pre-run that decoys are reachable through `J`
+  (non-zero gradient) **and** an explicit decoy-correlate policy beats
+  the anchored route in-sample (temptation is real);
+- **C4** re-implement `routeConstructionAudit` as a derived predicate.
+
+Cut 3 stays staged-and-blocked behind Cut 2 plus its own px↔° hazard
+resolution. Public-Language Constraint remains in force everywhere
+(including the rail): no `CONFIRMED` / traceability-success / theorem
+language until (1)+(2)+(3) pass under an admitted discriminating run.
+Justification: mirrors P1 / P2-spec admission discipline; prevents a
+second self-sealing P2 run by gating execution on closed-form closure of
+C1–C4.
