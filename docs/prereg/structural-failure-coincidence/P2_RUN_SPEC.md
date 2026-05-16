@@ -642,3 +642,35 @@ as a pre-SCAN lock gate. Therefore the receipt needs a frozen
 sustained-TRACK/confident-`qhat` readout. C2-A-2 still needs the
 objective scan showing invalid rows abstain and eligible rows do not. No
 controller run.
+
+**2026-05-16 (PT) — maintainer. C3-A numeric freeze drafted
+(append-only).** Filed
+[`P2_CUT2_C3A_NUMERIC_FREEZE.md`](P2_CUT2_C3A_NUMERIC_FREEZE.md). Mirrors
+the accepted C2-A structure: freezes the C3 numeric **slots + provenance
++ receipt obligations** (concrete `[E]` values and receipt tables are
+the maintainer's pre-run fill, same as C2-A; a failing receipt blocks,
+never tunes). Inherits C2-A's scale/seed/grid and **propagates the
+sustained-TRACK confident-`q̂` readout** so every C3 bound-controller
+readout respects `PhotometricAgent`'s real SCAN/SEEK/TRACK semantics
+(not peak-intensity-alone). Keystone anti-self-seal (the C3 analog of
+C2-A §5): the `P_in` decoy↔`h` correlation, `κ`, `M` are frozen by an
+independent principle **before** any run, so the temptation cannot be
+tuned to "come out right." Three receipts: C3-A-R (argmax-sensitivity
+reachability, the C3-C fix), C3-A-T (in-sample temptation + reversal,
+`π_route` now C2-B-well-posed), C3-A-B (κ calibration window, C3-B(ii)↔
+C2-B now dischargeable). The C3-A-R floor **= the C4 D2 floor (one
+shared number)**. No immutable boundary moved; Cut-2 execution stays
+**HELD** pending the C3 receipts, C4-A/B/C/D, C5 and the joint admission
+re-run; Public-Language Constraint in force. Justification: closes the
+C3 numeric-freeze structure as an artifact-before-agent; receipts
+pre-run, no harness, nothing run.
+
+**2026-05-16 (PT) — Codex audit.** C3-A direction accepted, but closure
+is withheld. The C3 file is a numeric-freeze scaffold until the concrete
+[E] values and C3-A-R/T/B receipt tables are appended, and it cannot
+close ahead of C2-A because it inherits C2-A's scale/seed/grid/readout.
+The `P_in` anti-self-seal needs an operational frozen sample/generator,
+seed, decoy coefficient table, and `(w,b)` fit receipt; a prose
+independent principle is not sufficient for admission. Runtime `D` must
+read only frozen coefficients and observable decoys; C4-D must taint
+check no hidden `h` input. No controller run.
