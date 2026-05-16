@@ -21,10 +21,13 @@
 > reviewed and closed **positive** at
 > [`proof/PHASE2_MDP.md`](proof/PHASE2_MDP.md); Phase 3 boundary theorem
 > reviewed and closed **positive** at
-> [`proof/PHASE3_BOUNDARY.md`](proof/PHASE3_BOUNDARY.md); Phase 6
+> [`proof/PHASE3_BOUNDARY.md`](proof/PHASE3_BOUNDARY.md); Phase 4 three-body
+> spec is drafted at
+> [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md), but empirical entry
+> is blocked until the Bayesian-floor baseline exists in the workbench; Phase 6
 > lambda-confound control is staged at
 > [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md) with the
-> empirical result still open; Phase 4 is unblocked.
+> empirical result still open.
 > This is a
 > theory-track roadmap, not an operating-envelope workbench — it is the *trunk*
 > of which the Formal Separability Theorem appendix
@@ -158,6 +161,11 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   both available. Measure signature-only regret vs the Bayes-optimal controller.
 - **Exit.** Regret curve + the pre-registered gate result, in
   `results/proof/phase4/` with a summary in `docs/proof/PHASE4_THREEBODY.md`.
+  **Spec drafted 2026-05-16** at
+  [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md); empirical entry
+  blocked because the current three-body workbench has privileged oracle /
+  `forward_oracle_strict` references but no Bayesian-floor controller under the
+  signature information regime.
 - **Pre-registered negative.** Gate, fixed now: signature-only regret vs Bayes
   must → 0 (within bootstrap CI) **on** the `𝓕_σ`-measurable cell set and stay
   bounded away from 0 (CI excludes 0) **off** it. If regret is bounded-away *on*
