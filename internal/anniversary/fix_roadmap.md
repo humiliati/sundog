@@ -522,7 +522,7 @@ First chart candidates:
 | panel | source | visual to create | why it belongs after the rail |
 | --- | --- | --- | --- |
 | Mesa Optimization | `docs/SUNDOG_V_MESA.md`, `mesa.html`, `results/mesa/operating-envelope/` | Lambda-cliff mini chart plus class-balance strip. | Shows the boundary between protected and collapsed proxy behavior without universalizing the result. |
-| Structural Failure Boundary Map | `docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md` | Five-locus eligibility / abstain / switch / fail map. | Makes the traceability harness legible: a real inverse must fail where the inverse is ill-posed. |
+| Structural Failure Boundary Map | `docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md`, `docs/prereg/structural-failure-coincidence/PUBLICATION_PLAN.md`, `public/data/structural-failure-boundary-map.json` | Five-locus eligibility / abstain / switch / fail map. | Makes the traceability harness legible: a real inverse must fail where the inverse is ill-posed. |
 | Coarse-Graining Proof Trunk | `docs/COARSE_GRAINING_PROOF_ROADMAP.md`, `docs/proof/*` | Phase ladder from definitions through LQG, MDP, boundary theorem, and open empirical controls. | Gives the theorem-track work a disciplined public shape without turning it into an overclaim. |
 | Three-Body Dynamics | `docs/threebody/PHASE13_RESULTS.md`, `PHASE14_RESULTS.md`, `PHASE15_RESULTS.md` | Pocket-vs-boundary heatmap with low-velocity warning cells explicit. | Replaces a generic orbit slab with the actual operating-envelope result. |
 | Photometric Alignment | paper/result artifacts and current MuJoCo poster | Acquisition-time vs terminal-accuracy comparison or R22/cos(h) route sketch. | Keeps the confirmed result narrow and inspectable. |
