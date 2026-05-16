@@ -1,0 +1,4 @@
+
+> sundog-site@0.1.0 threebody:phase15:smoke
+> node scripts/threebody-operating-envelope.mjs --phase phase15-forward-oracle-precision-smoke --out results/threebody/phase15-forward-oracle-precision-smoke --regimes near_escape --modes off,naive,track_sensor_accel_guarded,track_sensor_accel_signal_shuffle,track_sensor_accel_action_shuffle,track_sensor_accel_signal_delay,track_sensor_accel_sign_flip,oracle,forward_oracle_strict --mass-ratios 1 --timesteps 0.004,0.006,0.008,0.01,0.012 --radius-scales 1.025,1.075 --velocity-scales 0.95,1.1 --thrust-limits 0.4 --sensor-noise-sweep 0 --track-guard-mode hazard_quantile --track-guard-quantile 0.75 --track-guard-min-radius-sweep 1.15 --track-guard-max-local-acceleration-sweep 2.5 --track-guard-max-tidal-magnitude-sweep 35 --seeds 2 --duration 16 --sensor-audit-every 240 --track-action-coupling 1 --precision-receipts 1
+

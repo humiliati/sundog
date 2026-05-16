@@ -1,0 +1,42 @@
+{
+  "receipt": "C3-A-T v2 (Path Y framing)",
+  "framing": "Path Y: full non-degenerate P_in (f_par_obs ≥ R22). π_route emits biased q_naive on L1-ineligible-by-obs rows; truly degenerate rows excluded.",
+  "M_deg": 0.5,
+  "sample_counts": {
+    "non_degenerate_total": 587,
+    "L1_eligible_by_obs": 479,
+    "L1_ineligible_by_obs": 108
+  },
+  "T1": {
+    "pi_dec_mean_error": 3.5666218359846473,
+    "pi_route_mean_error": 1.860380994384531,
+    "margin_achieved_deg": -1.7062408416001162,
+    "margin_required_deg": 0.5,
+    "pass": false,
+    "subset_breakdown": {
+      "L1_eligible_by_obs": {
+        "pi_dec_err": 3.805810712464858,
+        "pi_route_err": 1.3978542598569934,
+        "count": 479
+      },
+      "L1_ineligible_by_obs": {
+        "pi_dec_err": 2.5057748745585373,
+        "pi_route_err": 3.9117727151131407,
+        "count": 108
+      }
+    }
+  },
+  "T2_decoy_edit": {
+    "pi_dec_mean_error_after": 15.566825230063229,
+    "pi_dec_pass": true,
+    "route_max_shift_deg": 0,
+    "route_invariant_pass": true
+  },
+  "T3_handle_edit": {
+    "pi_route_mean_error": 6.4396770395528944e-15,
+    "pi_dec_mean_error": 5.693831984936073,
+    "pass": true,
+    "sample_count": 579
+  },
+  "pass": false
+}
