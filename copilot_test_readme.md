@@ -232,4 +232,23 @@ rule fights this experiment's purpose. The next issue MUST:
 3. Keep the full lock (`threebody:phase15`) explicitly out of scope and
    operator-gated, unchanged.
 
+### Run 3 — 2026-05-16 (issue-assigned agent; incremental per-phase report)
+
+**Environment:** Node v20.20.2 · Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz
+(**4 visible CPUs**) · Linux 6.17.0-1010-azure x86_64.
+
+**Phase completed:** `threebody:phase13` (reported immediately after completion).
+
+- manifest: `results/threebody/phase13-long-horizon-lock/manifest.json`
+  - `startedAt`: `2026-05-16T05:31:06.365Z`
+  - `completedAt`: `2026-05-16T06:16:58.658Z`
+  - wall-clock: **45m 52.293s**
+
+**Gate reproduction numbers (exact run outputs):**
+
+- phase13 trials: **3,456** (**PASS**)
+- candidate envelope rows: **88/324** (**PASS**)
+- promising best cells: **81** (`grep -c ',promising,' best-by-cell.csv`) (**PASS**)
+- outcomes: **1,154 bounded / 2,030 escape / 272 close_approach** (**PASS**)
+
 ### Run N — _(next cloud agent: append here, per phase, before session expiry)_
