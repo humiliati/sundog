@@ -525,3 +525,21 @@ matching the eventual C3-A-R floor; and a runnable taint/perturbation
 script with frozen magnitudes/readouts. Until those artifacts and the
 C2-A/C3-A inherited receipts close, C4-A is a scaffold, not an
 execution-closing gate. No harness run.
+
+**2026-05-16 (PT) — filing log (not a ruling).** C5 publication-plumbing
+freeze filed:
+[`P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md`](P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md)
+— **every pre-registration condition is now filed.** Operationalizes the
+prose C5 amendment per the C4-A artifact discipline. **Filing only, not
+a ruling.** Reviewer should scrutinize at the joint re-run: (a) the
+keystone — the guard is genuinely default-deny / allowlist-complement
+over the *full tree*, not a blocklist that can be under-scoped, and the
+scope is never re-curated post-run; (b) the manifest is hashable and the
+pre/post guard script is actually runnable by a third party (not prose);
+(c) `PUBLICATION_PLUMBING_VIOLATION` is terminal-dominant over any
+D1∧D2∧D3 / four-quantity pass; (d) C5 is independent of the numeric
+fills but the joint re-run still gates on C2-A+C3-A+C4-A+C5 together.
+The re-check verdict stays withheld until **all four conditions are
+filed with concrete values/artifacts/receipts landed** and audited as
+one object. Cut-2 build/run remains **blocked**; Public-Language
+Constraint in force.
