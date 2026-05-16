@@ -163,3 +163,24 @@ append-only, justified, and never post-results, and geometry/receipt
 boundaries are immutable. Justification: all three blocking findings are
 closed by explicit, closed-form, pre-run amendments; the gate did its job
 and is now satisfied.
+
+**2026-05-15 (PT) — Codex execution note.** The admitted P2 first-cut run
+has executed; result filed in [`P2_RESULTS.md`](P2_RESULTS.md). This does
+not alter the admission ruling. It records that the admitted conditions
+were consumed by `npm run p2:structural`, which completed under the
+~10-minute rule and produced `TRACEABILITY_HARNESS_PASS` for the route
+controller plus `OPAQUE_CORRELATE_POSITIVE_CONTROL_CONFIRMED` for the
+decoy-correlate positive control.
+
+**2026-05-15 (PT) — correction / reviewer challenge accepted.** The
+execution note immediately above is superseded as an interpretation. The
+admission ruling remains valid, but the executed harness was not an
+adequate admitted route-use test: it reduced the route controller to the
+same inverse as the analytic baseline (`g^-1(g(h))`), kept decoys
+structurally unreachable by the route objective, did not use CZA/tangent
+state to estimate `q`, and hardcoded supralateral as a non-handle.
+Corrected execution verdict:
+`MACHINERY_LIVE_ROUTE_TEST_VACUOUS`. The positive-control verdict remains
+`OPAQUE_CORRELATE_POSITIVE_CONTROL_CONFIRMED`. Therefore P2 quantities
+(1)–(3) have **not** established traceability under an admitted
+discriminating run; the Public-Language Constraint remains in force.

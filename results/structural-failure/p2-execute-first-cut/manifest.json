@@ -1,0 +1,53 @@
+{
+  "schema": "sundog.structural-failure.p2-execute.v1",
+  "generatedAt": "2026-05-16T04:34:53.669Z",
+  "args": {
+    "phase": "p2-execute-first-cut",
+    "out": "results/structural-failure/p2-execute-first-cut",
+    "hMin": 0,
+    "hMax": 70,
+    "hStep": 1,
+    "boundaryMin": 0,
+    "boundaryMax": 40,
+    "boundaryStep": 0.25,
+    "qStep": 0.05,
+    "counterfactualDelta": 20,
+    "decoyEditAltitudes": [
+      0,
+      80
+    ]
+  },
+  "thresholds": {
+    "convergenceDeg": 1.5,
+    "handleSteerDeg": 2,
+    "decoyInvariantDeg": 0.5,
+    "boundaryWindowDeg": 1.5,
+    "positiveControlMoveDeg": 2
+  },
+  "geometryBoundaries": {
+    "czaCutoffDeg": 32,
+    "tangentMergeDeg": 29,
+    "l1LeverageAltitudeDeg": 11.364876967033691
+  },
+  "adapterInvariant": {
+    "transparentAdapterInputs": [
+      "f_par",
+      "f_cza",
+      "f_tan",
+      "R22",
+      "q"
+    ],
+    "hiddenAltitudeReadInsideAdapter": false,
+    "decoysReadInsideAdapter": false
+  },
+  "routeConstructionAudit": {
+    "routeTestVacuous": true,
+    "reason": "The bundle generator sets f_par = R22/cos(h), while the route objective maximizes -abs(f_par - R22/cos(q)); the matched analytic baseline is the same inverse arccos(R22/f_par). The route is g^-1(g(h)) by grid search, not an independent policy test.",
+    "routeAndAnalyticBaselineSameInverse": true,
+    "decoysReachableThroughRouteObjective": false,
+    "czaTangentAffectQEstimate": false,
+    "supralateralHardcodedNonHandle": true
+  },
+  "verdict": "MACHINERY_LIVE_ROUTE_TEST_VACUOUS",
+  "positiveControlOutcome": "OPAQUE_CORRELATE_POSITIVE_CONTROL_CONFIRMED"
+}

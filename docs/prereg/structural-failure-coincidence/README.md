@@ -197,3 +197,31 @@ quantities (1)+(2)+(3) actually pass under the admitted run; geometry
 boundaries immutable, tolerances amend-only/never post-results.
 Justification: the gate caught real pre-run ambiguities and is now
 satisfied by explicit closed-form fixes.
+
+**2026-05-15 (PT) — Codex execution.** P2 first-cut execution completed:
+[`P2_RESULTS.md`](P2_RESULTS.md). Command: `npm run p2:structural`.
+Harness: `scripts/structural-failure-p2-harness.mjs`. Output:
+`results/structural-failure/p2-execute-first-cut/`. Verdict:
+`TRACEABILITY_HARNESS_PASS` for the admitted transparent route controller
+on the closed-form feature bundle; decoy-correlate positive control:
+`OPAQUE_CORRELATE_POSITIVE_CONTROL_CONFIRMED`. Quantities (1)–(3) all
+passed for this first cut; (4) recorded a route/analytic sample ratio of
+`1601`. Public-language guard remains: this is an apparatus / benchmark
+result for this domain, **not** a universal theorem proof and **not** a
+debunking result. Justification: P2-execute was admitted, deterministic,
+and completed under the ~10-minute rule.
+
+**2026-05-15 (PT) — correction / reviewer challenge accepted.** The P2
+execution interpretation immediately above is reclassified. The first-cut
+harness was a tautological route test: `f_par` was generated as
+`R22/cos(h)`, the route objective inverted it by grid search, and the
+analytic baseline inverted it in closed form. It therefore did not
+exercise a policy distinct from the analytic inverse, did not make decoy
+invariance behavioral, and did not establish q1–q3 traceability. Corrected
+verdict:
+`MACHINERY_LIVE_ROUTE_TEST_VACUOUS`. The positive-control result remains
+valid (`OPAQUE_CORRELATE_POSITIVE_CONTROL_CONFIRMED`) and the no-leak
+adapter invariant remains valid, so the honest result is machinery-live /
+route-test-vacuous. Public-language guard remains in force: no
+`CONFIRMED`, no traceability-success, and no theorem language from this
+first cut.
