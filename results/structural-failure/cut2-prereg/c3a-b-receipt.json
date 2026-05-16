@@ -1,0 +1,155 @@
+{
+  "receipt": "C3-A-B",
+  "title": "Kappa window — temptation real AND route optimum stays a feasible competing optimum",
+  "spec_reference": "P2_CUT2_C3A_NUMERIC_FREEZE.md §4 + Wave-4 audit-notes",
+  "kappa": 0.5,
+  "sub_i_temptation_real": false,
+  "sub_ii_route_peak_preserved": 343,
+  "sub_ii_eligible_count": 479,
+  "sub_ii_fraction_preserved": 0.7160751565762005,
+  "sub_ii_pass_threshold": 0.9,
+  "sub_ii_pass": false,
+  "pass": false,
+  "samples_summary": [
+    {
+      "sample_index": 61,
+      "h_deg": 3.5,
+      "q_naive_deg": 11.693567810665332,
+      "I_center": 0.6718542328849979,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 75,
+      "h_deg": 4.5,
+      "q_naive_deg": 11.946635703834252,
+      "I_center": 0.7829957524787138,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 78,
+      "h_deg": 4.5,
+      "q_naive_deg": 11.525346192340399,
+      "I_center": 0.5859175650597105,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 89,
+      "h_deg": 5.5,
+      "q_naive_deg": 11.979561416980994,
+      "I_center": 0.7954164113726431,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 96,
+      "h_deg": 6,
+      "q_naive_deg": 12.763075387320775,
+      "I_center": 0.9608498866266317,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 97,
+      "h_deg": 6,
+      "q_naive_deg": 12.613025384219213,
+      "I_center": 0.9446841577243041,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 98,
+      "h_deg": 6,
+      "q_naive_deg": 12.494108790035334,
+      "I_center": 0.927821903046341,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 112,
+      "h_deg": 7,
+      "q_naive_deg": 13.187043504128237,
+      "I_center": 0.9859391449168898,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 119,
+      "h_deg": 7,
+      "q_naive_deg": 13.255248596150178,
+      "I_center": 0.9881390371987259,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 121,
+      "h_deg": 7.5,
+      "q_naive_deg": 12.397282741051209,
+      "I_center": 0.9108888392887597,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 122,
+      "h_deg": 7.5,
+      "q_naive_deg": 13.42199425622158,
+      "I_center": 0.9922175167615171,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 124,
+      "h_deg": 7.5,
+      "q_naive_deg": 11.835263008249978,
+      "I_center": 0.7373500960396087,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 125,
+      "h_deg": 7.5,
+      "q_naive_deg": 13.16002996107468,
+      "I_center": 0.9849645976996843,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 129,
+      "h_deg": 8,
+      "q_naive_deg": 12.387694549745525,
+      "I_center": 0.9090382266273606,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 135,
+      "h_deg": 8,
+      "q_naive_deg": 13.753346363001487,
+      "I_center": 0.9967011982640688,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 136,
+      "h_deg": 8.5,
+      "q_naive_deg": 13.89356619611603,
+      "I_center": 0.9977238131532467,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 137,
+      "h_deg": 8.5,
+      "q_naive_deg": 14.109147806075066,
+      "I_center": 0.9987245049195977,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 138,
+      "h_deg": 8.5,
+      "q_naive_deg": 12.567949756509162,
+      "I_center": 0.9387602964459265,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 139,
+      "h_deg": 8.5,
+      "q_naive_deg": 13.189723884153986,
+      "I_center": 0.9860324929782213,
+      "is_local_max": true
+    },
+    {
+      "sample_index": 140,
+      "h_deg": 8.5,
+      "q_naive_deg": 13.739326580352715,
+      "I_center": 0.996577369168592,
+      "is_local_max": true
+    }
+  ]
+}
