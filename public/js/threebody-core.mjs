@@ -448,6 +448,35 @@ function computeSensorTidalGradient(state, config, variant, controllerState) {
   };
 }
 
+function observeGuardedAccelSignatureDetails(state, config, controllerState = {}) {
+  const cfg = normalizeConfig(config);
+  const gradient = computeSensorTidalGradient(
+    state,
+    cfg,
+    "accelerometer_array_noisy",
+    controllerState,
+  );
+  const guard = shouldRunGuardedTrack(state, gradient.tidal, cfg);
+  const signature = {
+    tidalMagnitude: gradient.tidal.magnitude,
+    absTidalMagnitude: gradient.tidal.magnitude,
+    gradX: gradient.gradX,
+    gradY: gradient.gradY,
+    guard,
+    sensorVariant: "accelerometer_array_noisy",
+    sensorTier: gradient.sensorTier,
+    sensorNoiseStd: cfg.sensorNoiseStd,
+    probeDelta: gradient.tidal.probeDelta ?? cfg.tidalProbeDelta,
+    delayWarmup: Boolean(gradient.delayWarmup),
+    seed: cfg.seed ?? null,
+  };
+  return { signature, gradient };
+}
+
+export function observeGuardedAccelSignature(state, config = {}, controllerState = {}) {
+  return observeGuardedAccelSignatureDetails(state, config, controllerState).signature;
+}
+
 function limitVector(x, y, maxMagnitude) {
   const magnitude = Math.sqrt(x * x + y * y);
   if (magnitude <= 0.001) return [0, 0];
@@ -467,6 +496,28 @@ const PHASE14_ABLATION_MODES = new Set([
   "track_sensor_accel_action_shuffle",
   "track_sensor_accel_signal_delay",
   "track_sensor_accel_sign_flip",
+]);
+
+export const KNOWN_CONTROLLER_MODES = new Set([
+  "off",
+  "scan",
+  "naive",
+  "oracle",
+  "forward_oracle_strict",
+  "seek",
+  "track",
+  "seek_noisy",
+  "track_noisy",
+  "seek_shuffled",
+  "track_shuffled",
+  "seek_sensor_accel",
+  "track_sensor_accel",
+  "track_sensor_accel_guarded",
+  "seek_sensor_delayed",
+  "track_sensor_delayed",
+  "seek_sensor_micro",
+  "track_sensor_micro",
+  ...PHASE14_ABLATION_MODES,
 ]);
 
 function phase14PlannedSteps(config) {
@@ -679,7 +730,7 @@ function oracleScoreState(simState, thrustCost, config) {
   );
 }
 
-function oracleCandidateThrusts(config) {
+export function oracleCandidateThrusts(config) {
   return [
     [0, 0],
     [1, 0],
@@ -773,6 +824,9 @@ function computeCounterfactualReceipt(state, thrust, config, oracleStrictThrust)
 export function computeControlThrust(state, controllerState = {}, config = {}) {
   const cfg = normalizeConfig(config);
   const mode = cfg.controllerMode;
+  if (!KNOWN_CONTROLLER_MODES.has(mode)) {
+    throw new Error(`unknown controllerMode: ${mode}`);
+  }
   controllerState.step = (controllerState.step ?? 0) + 1;
   controllerState.stepWarmup = false;
   if (mode === "off") return [0, 0];
@@ -809,9 +863,20 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
     || PHASE14_ABLATION_MODES.has(mode)
   ) {
     const sensorVariant = controllerSensorVariant(mode);
-    let gradient = sensorVariant
-      ? computeSensorTidalGradient(state, cfg, sensorVariant, controllerState)
-      : computeTidalGradient(state, cfg);
+    let guardedSignature = null;
+    let gradient = null;
+    if (
+      sensorVariant === "accelerometer_array_noisy"
+      && (mode === "track_sensor_accel_guarded" || PHASE14_ABLATION_MODES.has(mode))
+    ) {
+      const observed = observeGuardedAccelSignatureDetails(state, cfg, controllerState);
+      guardedSignature = observed.signature;
+      gradient = observed.gradient;
+    } else {
+      gradient = sensorVariant
+        ? computeSensorTidalGradient(state, cfg, sensorVariant, controllerState)
+        : computeTidalGradient(state, cfg);
+    }
     if (!sensorVariant && mode.endsWith("_noisy")) {
       gradient = perturbTidalGradient(gradient, controllerState, cfg);
     } else if (!sensorVariant && mode.endsWith("_shuffled")) {
@@ -831,7 +896,7 @@ export function computeControlThrust(state, controllerState = {}, config = {}) {
       if (ablated.gradient) gradient = ablated.gradient;
     }
     const { tidal, gradX, gradY } = gradient;
-    if (mode === "track_sensor_accel_guarded" && !shouldRunGuardedTrack(state, tidal, cfg)) {
+    if (mode === "track_sensor_accel_guarded" && !guardedSignature.guard) {
       return [0, 0];
     }
     let guardSuppressed = false;

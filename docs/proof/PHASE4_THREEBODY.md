@@ -166,12 +166,21 @@ recorded in the result manifest. If a Bayes proxy produces negative regret on
 more than 5% of rows, the proxy is not acting as a floor and the run is
 non-decisive until the floor is repaired.
 
-The gate interpretation is:
+The gate interpretation below is the **pre-registered operationalization of the
+verbatim roadmap gate**, not a new or softened gate. The roadmap condition is
+"signature-only regret vs Bayes → 0 (within bootstrap CI) on the measurable set
+and bounded away from 0 (CI excludes 0) off it"; the numeric realizations of
+"→ 0" and "bounded away" are fixed here, before any run, and only tighten — they
+never relax — that condition:
 
-- **On measurable cells:** pass only if the 95% CI includes `0` and the point
-  estimate is no larger than one timestep divided by `T_max`.
-- **Off measurable cells:** boundary pass only if the 95% CI lower bound is
-  strictly above `0`.
+- **On measurable cells:** "→ 0" is realized as: the 95% CI includes `0` **and**
+  the point estimate is no larger than one timestep divided by `T_max`. The
+  magnitude bound is what makes "→ 0" testable (a CI that includes 0 but is wide
+  could still hide a large regret); it is a strengthening of the roadmap
+  condition, fixed at spec time.
+- **Off measurable cells:** "bounded away from 0" is realized as: the 95% CI
+  lower bound is strictly above `0` (equivalently, the CI excludes `0` from
+  below).
 
 Fuel tie-break readout:
 

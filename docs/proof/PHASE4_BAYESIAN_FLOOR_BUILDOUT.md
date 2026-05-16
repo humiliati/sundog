@@ -173,7 +173,15 @@ cell-seed and computes the Phase 4 regret readout:
 regret_i = (T_safe(π*_Bayes, i) - T_safe(π_signature, i)) / T_max
 ```
 
-The reducer also writes the empirical fiber classification:
+The reducer also writes the empirical fiber classification. It must use the
+fiber-classification procedure pinned in
+[`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) §5 exactly as written — the same
+`Σ` partition keys, the ≥20-Bayes-reached-samples bin threshold, the
+exact-match common-action rule, and the `undecidable` handling — not a
+reinvented binning. That section is the single authoritative definition; this
+reducer is its implementation.
+
+Outputs:
 
 - `phase4-regret.csv`;
 - `phase4-regret-summary.csv`;
@@ -215,7 +223,10 @@ gate outcome. The full lock stays operator/runner-gated.
 - **Degenerate-full-observation gate:** in a smoke-only fixture where `Φ` is
   deliberately enriched to full state and the action lattice/horizon match the
   strict oracle, the Bayes evaluator should match the strict oracle's chosen
-  action except for documented tie cases.
+  action except for documented tie cases. This fixture is a planner-correctness
+  check only; it does **not** alter the admitted Phase 4 signature defined in
+  [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) §2, and no proof run may use the
+  enriched `Φ`.
 - **Floor-sanity gate:** negative regret above 5% voids the run as a floor.
 - **Runtime gate:** capped probe completes within ~10 minutes or the remaining
   work is staged to a long-budget runner.
