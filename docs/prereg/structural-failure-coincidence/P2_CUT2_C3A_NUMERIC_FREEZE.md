@@ -178,3 +178,86 @@ audited. Using true `h` to fit `(w,b)` is allowed only as this pre-run
 reference artifact; the runtime adapter/decoy ridge must read frozen
 coefficients and observable `d` only, with C4-D taint checking no `h`
 input. No controller/harness run.
+
+**2026-05-16 (PT) — maintainer. Wave-4 C3-A receipts filed.** Canonical
+generator: `scripts/cut2-c3a-w4.mjs` (SHA-256
+`85d7d0a06548e777b5022c1af00ed357dfe2da09325b5543a044a5f35bec7707`).
+Artifacts: `c3a-pin-generator.json`, `c3a-r-receipt.json`,
+`c3a-t-receipt.json`, `c3a-b-receipt.json`, and `c3a-w4-summary.md`
+under `results/structural-failure/cut2-prereg/`. Rerun receipt hashes:
+`c3a-pin-generator.json` raw
+`ba5445a581f1a9e091f894ba96fe47982d2c371e00dbe3caa1f6d31f2cb7f2ee`,
+canonical
+`84b21ca8b13107e794970dbe1fe1c289d2a441d2a2d2089c66db9bba3c29d826`;
+`c3a-r-receipt.json` raw
+`4c2e29ecc6aee56b1c056ea5434038e411c5e446fbac6af8ac809ac8bde18bcf`,
+canonical
+`79fb2aec36bca183172ab9523df7cd68d2d4f0a8b0c5153a13c112e21dfba0dd`;
+`c3a-t-receipt.json` raw
+`ca1cfff12420b2b56aec63ac502a49af09a6c81dc714149a460512c0886cd0ec`,
+canonical
+`8d0183ad6d16efe315188d7054b3a6a88d04d81b2524ab5289a2440bc6808685`;
+`c3a-b-receipt.json` raw
+`6af8919d00165fe2723c58f5d128dbc5ac4aa87fe9e2fde9039dab1188bae5df`,
+canonical
+`059f038d5db09f51f24a7f69698c3521c5e0293e224d8b79c25a929e478ca1cf`;
+`c3a-w4-summary.md` raw
+`93c8c0e8f7e90961fea3e7022a0cde77808148a696c9a0f7028ada996813d3c8`.
+Verdict: **C3-A-R PASS**, **C3-A-T BLOCK**, **C3-A-B BLOCK**. The
+reachability receipt clears under the pre-audited Path-B median rule
+(`421/648 = 65.0%` above `F* = 0.05 deg`, required at least `50%`).
+Temptation fails on the L1-eligible-by-obs subset: mean `|pi_dec - h|`
+`3.806 deg` vs mean `|pi_route - h|` `1.398 deg`, margin
+`-2.408 deg` where `+0.5 deg` is required. Reversal subtests pass
+(`pi_dec` breaks under decoy edit, `pi_route` stays invariant, handle
+edit steers `pi_route` while `pi_dec` is stale), but T1 is binding.
+C3-A-B fails because sub-(i) inherits the T1 BLOCK and sub-(ii) preserves
+the route argmax as a local maximum on only `343/479 = 71.6%` of
+L1-eligible-by-obs rows where `90%` was required. This is a permanent
+Wave-4 receipt, not a value-tuning prompt.
+
+**2026-05-16 (PT) — maintainer. Wave-4.1 Path Y + Path Z amendment
+filed; Path W closeout selected.** Canonical amendment generator:
+`scripts/cut2-c3a-w4-v2.mjs` (SHA-256
+`882a2c5b393a1d3c3a5f6ce75b2daaf09502d67f6cb74a162f9588b6a41955ed`).
+Companion amendment draft/helper retained at
+`scripts/cut2-c3a-w4-amendment.mjs` (SHA-256
+`ae56488d7d2d8f1086de280c202d36ae9ffe27f46ca6ac764633ee05ccca2974`).
+Artifacts: `c3a-r-receipt-v2.json`, `c3a-t-receipt-v2.json`,
+`c3a-b-receipt-v2.json`, and `c3a-w4-v2-summary.md`. Rerun receipt
+hashes: `c3a-r-receipt-v2.json` raw
+`3141834b9919ebdd8467eec726b71b5a8bfefec93cc3a3dde774c42389f71d08`,
+canonical
+`a9839c6230ae3609c2be8c890cf6f66712ed7d8a7aa56f98aed8c75a7dfa1fab`;
+`c3a-t-receipt-v2.json` raw
+`dfe60fefbdedfc77bffcbc1bf07fd38f6361317776a5953fc46278fb9f303162`,
+canonical
+`a8d1c892bc7df0a0e0433647b5c036972fa79ee1f700f30868cc6a543ca89e26`;
+`c3a-b-receipt-v2.json` raw
+`ecfc38483e379d350cd13220e67a66d43e1c1efe2c97675d64a9d7d72fdc0382`,
+canonical
+`b81843cebcce0b1a5a30ea63a29bb34f9bd3f1f10fbb9fe5628579971ce71193`;
+`c3a-w4-v2-summary.md` raw
+`8bf109dfca4577cb3cc17ade18100287e9a97cfb4bc363feb5901b8a40cc9092`.
+Path Y expands T1 to the full non-degenerate `P_in` (`587` rows:
+`479` L1-eligible-by-obs, `108` L1-ineligible-by-obs) and lets
+`pi_route` emit the biased `q_naive` where it is defined rather than
+restricting to eligible rows only. Path Z relaxes C3-A-B sub-(ii) to
+"route basin represented": a local maximum within `0.5 deg` of
+`q_naive`, accepting merged small-delta peaks as represented rather than
+erased. Results remain **BLOCK/BLOCK**. C3-A-T v2: mean
+`|pi_dec - h| = 3.567 deg` vs `|pi_route - h| = 1.860 deg`, margin
+`-1.706 deg` where `+0.5 deg` is required. Subset finding: decoys help
+exactly where the route is weak (`L1-ineligible-by-obs`: `pi_dec`
+`2.506 deg`, `pi_route` `3.912 deg`, decoy wins by `1.406 deg`) and
+hurt where the route is strong (`L1-eligible-by-obs`: `pi_dec`
+`3.806 deg`, `pi_route` `1.398 deg`, route wins by `2.408 deg`). The
+sample-count-weighted non-degenerate average is dominated by the larger
+eligible subset, so `pi_route` wins overall. C3-A-B v2: sub-(i) remains
+BLOCK via T1; sub-(ii) improves from `71.6%` to `381/479 = 79.5%` but
+still misses the frozen `90%` threshold. **Path W is selected**:
+Wave-4 v1 and Wave-4.1 v2 BLOCK receipts are permanent. No leverage
+weighting, kappa increase, threshold relaxation, or decoy re-pinning is
+performed inside Wave 4. Any Wave-4.2 response is a separate
+freeze-level redesign discussion. Cut-2 execution remains HELD; Public
+Language Constraint remains in force.

@@ -1,5 +1,6 @@
 {
   "receipt": "C3-A-R (v2, identical to v1)",
+  "title": "Reachability — argmax-sensitivity to frozen decoy-edit (Path B quantile rule)",
   "F_star_deg": 0.05,
   "pass_quantile_threshold": 0.5,
   "samples_total": 648,
