@@ -250,6 +250,18 @@ also filed, so the re-run audits the *whole* discriminating cut at once —
 including whether C2's P-A/P-B numeric artifacts actually exist and hold.
 Cut-2 build/run remains **blocked**; Public-Language Constraint in force.
 
+**2026-05-16 (PT) — C3 audit.** C3 direction accepted; execution
+admission withheld. [`P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md`](P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md)
+correctly puts a decoy ridge `κ·D` in the same intensity field the
+controller climbs and records the C3-B(ii)↔C2-B coupling. Additional
+audit blockers now explicit: (C3-C) reachability must be defined in a
+way that survives the Gaussian ridge's zero-gradient point at
+`q_h = ĥ_dec(d)` and any clipped `ĥ_dec` regions, either by an
+off-ridge carrier band or a finite-difference argmax-sensitivity test;
+(C3-D) the C3-T temptation margin against `π_route` is also coupled to
+C2-B, not only C3-B(ii), because `π_route` is not well-defined until
+`pen(q)` and `q_a` are frozen. C3-A/C3-B remain open; no controller run.
+
 **2026-05-15 (PT) — C2 freeze audit.** C2 direction accepted but
 execution freeze **withheld**. [`P2_CUT2_C2_NUISANCE_AND_BRIDGE.md`](P2_CUT2_C2_NUISANCE_AND_BRIDGE.md)
 now records C2 as **filed for audit — HOLD for execution**, not as an
@@ -337,3 +349,16 @@ prose Public-Language Constraint. C5 is opened, not closed; it must be
 satisfied at the re-admission check together with C2-A/B/C/D, C3, and
 C4. No body rewrite, no threshold move, no post-hoc edit. The
 Public-Language Constraint remains fully in force.
+
+**2026-05-16 (PT) — filing log (not a ruling).** C3 has been filed:
+[`P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md`](P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md)
+(concrete decoy ridge `κ·D`; obligations C3-R reachability, C3-T
+in-sample temptation that reverses under the q2 edits, C3-B calibration
+window; C3-A numerics open; C3-B(ii) honestly recorded as coupled to
+C2-B). **This records filing only and is not an admission ruling.** The
+re-check verdict stays withheld until the *entire* discriminating cut is
+filed — **C2-A/B/C/D, C3 (incl. C3-A, C3-B), C4, C5** — so the re-run
+audits one coherent object, including whether each condition's pre-run
+numeric artifact actually exists and holds, and whether the
+cross-couplings (notably C3-B(ii)↔C2-B) are discharged. Cut-2 build/run
+remains **blocked**; Public-Language Constraint in force.

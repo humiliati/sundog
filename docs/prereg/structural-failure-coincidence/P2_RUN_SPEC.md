@@ -467,3 +467,38 @@ boundary or an engineering tolerance, and neither edits a frozen body.
 Public-Language Constraint remains fully in force everywhere
 (including the rail) until quantities (1)+(2)+(3) actually pass under
 an admitted discriminating run that also satisfies C5.
+
+**2026-05-16 (PT) — maintainer. C3 pre-registration drafted
+(append-only).** Filed
+[`P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md`](P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md):
+the decoy term is a competing Gaussian ridge `D(q;d) =
+exp(−[q_h − ĥ_dec(d)]²/2σ_D²)` centred on an in-sample decoy→altitude
+correlate `ĥ_dec` (the A2 positive-control policy instantiated), entering
+the *same* scalar `I = I_route + κ·D − pen` the bound controller climbs.
+Three pre-run, auditable obligations: **C3-R** (`∂I/∂d` bounded away
+from zero on the carrier path — reachability, the explicit removal of
+Cut-1's `∂J/∂d ≡ 0` vacuity); **C3-T** (a decoy-correlate policy beats
+the anchor-biased route in-sample by margin `M`, and that advantage
+**reverses** under the pre-registered decoy-edit and counterfactual
+handle-edit — a genuine trap, not a superior route); **C3-B** (the
+load-bearing calibration window: `κ` large enough to be reachable, small
+enough that the route stays a feasible competing optimum — no
+rigged-to-fail null). `D` reads only observable `d_*` and `q_h`; true
+`h` anywhere in the adapter ⇒ VOID (A1). No threshold/boundary moved
+(`κ, σ_D, M, P_in, (w,b), seed, τ_pc` are A3 engineering tolerances,
+never post-results). **Honest coupling recorded:** C3-B(ii)'s
+route-side check needs C2-B's `pen(q)`/`q_a` fixed first; C3-R, C3-T,
+C3-B(i) are well-posed independently. C3-A (freeze the named C3
+numerics) remains open. Cut-2 execution stays **HELD** pending
+C2-A/B/C/D, C3 (incl. C3-A, C3-B), C4, C5 and the admission re-run;
+Public-Language Constraint in force. Justification: files the C3 design
+condition as an artifact-before-agent; no harness, nothing run.
+
+**2026-05-16 (PT) — Codex audit.** C3 execution admission withheld.
+Additional C3 blockers recorded in
+[`P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md`](P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md):
+define reachability so it is not falsified by the Gaussian decoy ridge's
+own zero-gradient point at `q_h=ĥ_dec(d)` or by clipped regions, and
+couple C3-T's temptation margin against `π_route` to C2-B because the
+route policy is not well-defined until `pen(q)` / `q_a` are fixed. No
+threshold/boundary moved; no controller run.

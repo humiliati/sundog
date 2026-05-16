@@ -301,3 +301,28 @@ mapping moved.** Public-Language Constraint remains fully in force.
 Justification: closes the prose-only Public-Language seam by adding a
 mechanical guard at admission and at run time, while explicitly leaving
 `scripts/copy-site-docs.mjs` untouched.
+
+**2026-05-16 (PT) — maintainer.** C3 filed (append-only):
+[`P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md`](P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md)
+— concrete decoy ridge `κ·D` in the same intensity field the bound
+controller climbs, with pre-run obligations C3-R (reachability,
+`∂I/∂d ≠ 0` — the explicit fix for Cut-1's structural decoy exclusion),
+C3-T (decoy policy beats the anchor-biased route in-sample but the
+advantage reverses under the q2 edits — a genuine trap), and C3-B (the
+load-bearing `κ` calibration window — no vacuous, no rigged-to-fail),
+with the honest C3-B(ii)↔C2-B coupling recorded. C3-A (freeze the named
+C3 numerics) remains open. Open-conditions list for Cut-2-execute
+re-admission is now **C2-A/B/C/D, C3 (incl. C3-A, C3-B), C4, C5**; the
+admission re-check is one audit of the whole cut and remains withheld
+until all are filed. No frozen threshold/boundary moved; Public-Language
+Constraint in force. Justification: files the C3 design condition as an
+artifact-before-agent.
+
+**2026-05-16 (PT) — Codex audit.** C3 execution admission withheld. The
+decoy-ridge direction is accepted, but
+[`P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md`](P2_CUT2_C3_DECOY_TERM_AND_TEMPTATION.md)
+now records two additional C3-local blockers: reachability must be
+defined away from the Gaussian ridge's zero-gradient point / clipped
+regions, and C3-T's temptation margin against `π_route` is coupled to
+C2-B because the route baseline is not defined until `pen(q)` / `q_a`
+are fixed. Cut-2 execution remains HELD; no harness, nothing run.
