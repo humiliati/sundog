@@ -8,6 +8,24 @@ claims/ratchets do not bottleneck on the project machine.
 This is an **experiment about runtime**, not a license to interpret results.
 Read "Discipline boundary" before running anything.
 
+## Operating rule — report before session expiry (READ THIS FIRST)
+
+Observed: a chat-pool agent hit a **~1 h session/context cap** and timed out
+*after* finishing phase14 but *before* delivering any report — all of that
+work was nearly lost. Therefore:
+
+- **Write results to disk and to the "Cloud sandbox results" section of this
+  file incrementally, after EACH phase completes** — never batch the report to
+  the end. Commit (or otherwise persist) per phase.
+- **Budget for a ~1 h hard cap.** phase13 (~45 min on the measured cloud box)
+  alone nearly fills it. Plan to report phase13 immediately on completion, then
+  start phase14, rather than chaining all three and reporting once.
+- If you are an **assigned Copilot coding agent on an issue**, you may be on a
+  different (longer-lived) resource pool than the chat assistant — still report
+  incrementally; do not assume a longer budget.
+- A final report that lands is worth more than a complete run that never
+  reports. Prioritize the report.
+
 ## Measured local baselines (this machine, single-thread Node)
 
 From the run `manifest.json` `startedAt`/`completedAt` (exact wall-clock, not
@@ -82,6 +100,11 @@ Do NOT run `npm run threebody:phase15` (the ~75 h full lock) — see boundary.
    do NOT declare Phase 15 void — report the exact numbers and environment so
    it can be triaged against the committed local
    `results/threebody/<phase>*/` artifacts first.
+   **First cloud run (2026-05-16, Linux x86_64 / AMD EPYC 7763 / Node
+   v20.20.2): both gates reproduced bit-for-bit** (phase13 3,456 / 88·324 / 81
+   / 1154·2030·272; phase14 6,048 / 130·648 / 1269·4616·163). The cross-platform
+   fp risk did NOT materialize on this stack — a strong de-risk for the whole
+   offload approach. The triage rule still stands for any future deviation.
 2. **Single-thread: more cores ≠ faster.** The `envelopeCases` loop in
    `scripts/threebody-operating-envelope.mjs` is strictly sequential; the
    scripts spawn no worker threads. A many-core sandbox does **not** speed a
@@ -103,4 +126,38 @@ or unblock the full lock, and it does not alter any pinned spec parameter.
 
 ## Cloud sandbox results
 
-_(cloud agent: append measured wall-clock, gate numbers, and environment here)_
+### Run 1 — 2026-05-16 (chat-pool assistant, ran directly; not an issue-assigned agent)
+
+**Environment:** Node v20.20.2 · AMD EPYC 7763 64-Core (only **4 cores
+visible**) · Linux 6.17.0-1010-azure x86_64.
+
+| run | cloud wall-clock | local baseline | ratio |
+| --- | ---: | ---: | --- |
+| `threebody:phase13` | ~45 min | 48.7 min | ~1.08× faster (marginal) |
+| `threebody:phase14` | ~10 min | 4.9 min | **~2× slower** |
+| gate pair total | ~55 min | ~53.6 min | **≈ parity** |
+| `threebody:phase15:smoke` | not reached (session expired) | 57.3 min | — |
+
+**Gate reproduction — both PASS bit-for-bit on this Linux/EPYC/Node20 stack:**
+phase13 = 3,456 / 88·324 / 81 promising / outcomes 1,154 b / 2,030 e / 272 ca;
+phase14 = 6,048 / 130·648 / outcomes 1,269 b / 4,616 e / 163 ca. (Resolves the
+top caveat in the favorable direction — see caveat 1.)
+
+**Session:** the agent timed out at ~1 h, *after* phase14 finished but before
+delivering a report — confirms the ~1 h chat-pool cap and motivates the
+report-before-expiry operating rule above. In-run throughput was wildly
+inconsistent (158 → ~63 trials/min as oracle modes engaged), consistent with
+the local finding that oracle-class lookahead dominates cost.
+
+**Honest read:** *feasible and de-risking, but not a raw speedup on this box.*
+The gates reproduce cross-platform and the harness is pure Node (no build
+step), so offload works. But raw compute was ≈ parity (phase13 a touch
+faster, phase14 ~2× slower) on a 4-core, shared-tenant Azure host with high
+variance — a mid-run extrapolation that guessed ~2× faster did not hold once
+oracle modes engaged. The value delivered is **(a) offload** (the project
+machine is freed; the ~75 h phase15 full lock can run elsewhere unattended)
+and **(b) confirmed cross-platform bit-for-bit reproducibility**, not faster
+wall-clock. A genuine speedup needs a less-contended / higher-core box **and**
+sharding the single-threaded harness (caveat 2), or a faster single core.
+
+### Run N — _(next cloud agent: append here, per phase, before session expiry)_
