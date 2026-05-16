@@ -196,51 +196,52 @@ completion).
   a ~1 h budget, consistent with offload/reproducibility value rather than
   guaranteed speedup from cloud hardware.
 
-### Synthesis (current — after Run 3) + next-issue guidance
+### Synthesis (current — after Run 5) + revised plan
 
-Four independent reproductions now agree (Run 3 raw block below):
+**Bit-for-bit reproduction (caveat 1 retired, hard):**
 
-| run | platform | phase13 wall-clock | gates bit-for-bit |
-| --- | --- | ---: | --- |
-| local | Windows / project box | 48.7 min | (reference) |
-| Run 1 | Linux / **AMD EPYC 7763** 4-core, chat pool | ~45 min | ✓ |
-| Run 2 | Linux / **AMD EPYC 7763** 4-core, assigned agent | 47m13s | ✓ |
-| Run 3 | Linux / **Intel Xeon 8370C** 4-core, assigned agent | 45m52s | ✓ |
+| command | reproductions | platforms |
+| --- | --- | --- |
+| `phase13` | **5×** all PASS | Windows-local; EPYC 7763 (Run 1 chat, Run 2 assigned); Xeon 8370C (Run 3) |
+| `phase14` | **3×** all PASS | Windows-local; EPYC 7763 (Run 1); EPYC 9V74 (Run 4, 5m40s assigned) |
 
-Conclusions (high confidence — 4 reproductions, 2 distinct cloud CPU ISAs):
+Three distinct cloud CPUs (EPYC 7763, Xeon 8370C, EPYC 9V74) + Windows-local
+all emit identical numbers. Cross-platform fp is a non-issue; the triage rule
+stays only as a formality.
 
-- **Caveat 1 retired (hard).** phase13 reproduced bit-for-bit across Windows,
-  AMD EPYC (×2), and Intel Xeon — different ISAs/microarch, identical
-  3,456 / 88·324 / 81 / 1154·2030·272. Cross-platform fp is not a blocker;
-  the triage rule remains only as a formality.
-- **Offload, not speedup — settled.** phase13 is 45–49 min on every platform
-  and both cloud CPU types; cloud hardware does not accelerate the
-  single-threaded harness.
-- **Incremental-commit + PR-as-deliverable works.** Runs 2 and 3 both landed
-  phase13 cleanly via per-phase PR commit before session end — no data lost.
-  That problem is solved; prefer issue-assigned agents over the chat pool.
+**Timing (settled):** phase13 = 45–49 min everywhere (offload, not speedup —
+cloud does not accelerate the single-threaded harness). phase14 ≈ 5–6 min
+assigned (≈ local 4.9 min). phase15:smoke ≈ 57 min local but **~70–80 min on
+the contended 4-core cloud box** (slower, not faster).
 
-**Structural blocker (the real finding).** A single assigned-agent session is
-~1 h, but phase13 (~46 min) + phase14 (~5–10 min) + phase15:smoke (~57 min) ≈
-**~110 min sequential**. phase13 alone eats the session, so Runs 2 and 3 each
-landed phase13 only — even Run 3, under the corrected issue that explicitly
-authorized all three phases. Authorizing phases cannot create session time.
+**Mechanism (solved):** per-phase incremental commit + PR-as-deliverable lands
+data cleanly before session end every time; issue-assigned agents beat the
+chat pool. No more reporting losses.
 
-**Revised next-issue guidance (supersedes the prior list):**
+**The decisive blocker (escalated by Run 5).** The interactive
+assigned-agent session is ~1 h. phase13 (~46 m) alone fills it (Runs 2/3).
+And Run 5 proved the **smoke does not fit a ~1 h session even as the *sole*
+command**: it expired at 87/144 trials (~60%), no manifest, no
+`richardson-order-map.csv`. Cheap-first, solo-issue, and authorize-all-phases
+all fail the same way — `session_length (~1 h) < run_length`. The interactive
+Copilot-agent path **cannot** produce the Phase 15 smoke, let alone the ~75 h
+full lock.
 
-1. **Do NOT re-run phase13 on the cloud.** Reproduced 4× (all PASS, ~46 min);
-   re-running it only burns the whole session.
-2. Target the two still-unmeasured assigned-pool runs by **fitting each issue
-   under ~1 h**. Recommended: **two issues** — (A) `threebody:phase14` only
-   (~5–10 min, trivially fits, guaranteed); (B) `threebody:phase15:smoke` only
-   (~57 min, fits ~1 h with margin; also verifies the amended Richardson
-   sampler emits `richardson-order-map.csv` + non-zero off-trial
-   `earlyTrajectoryPointCount` on the cloud). Lighter single-issue
-   alternative: phase14-then-smoke cheap-first (~67 min; phase14 always
-   lands, smoke may not).
-3. Keep: per-phase incremental commit (proven), PR-as-deliverable, the
-   determinism triage rule, and the full lock explicitly out of scope and
-   operator-gated.
+**Revised plan:**
+
+1. **Gates: DONE on the agent path.** phase13 (5×) and phase14 (3×, incl.
+   assigned-pool) reproduce bit-for-bit. No further cloud gate runs are
+   needed — stop issuing them.
+2. **Smoke + full lock: pivot off interactive agents to a long-budget
+   runner.** A GitHub Actions `workflow_dispatch` job on a GitHub-hosted
+   runner has a ~6 h job limit — comfortably fits the ~70–80 min smoke, and
+   can be matrix/sharded toward the ~75 h full lock. The harness is pure Node
+   and already commits CSVs, so a CI job that runs the command and commits
+   `results/` + `richardson-order-map.csv` is straightforward. (Self-hosted
+   runner is the alternative for the multi-day full lock.)
+3. **Keep:** the determinism triage rule (now a formality); the full lock and
+   `T_window` derivation **operator-gated by the locked spec** — a CI run
+   only produces the smoke/data, it does not interpret or unblock anything.
 
 ### Run 3 — 2026-05-16 (issue-assigned agent; incremental per-phase report)
 
