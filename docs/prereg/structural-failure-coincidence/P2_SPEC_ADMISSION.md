@@ -126,4 +126,40 @@ run.
 Append-only. Each amendment: timestamp (date + zone), author, one-line
 justification. The body above is the frozen P2-spec admission record.
 
-*(no amendments yet)*
+**2026-05-15 (PT) — re-review (maintainer).** Re-run of this admission
+check after the F1–F4 resolution amendment in
+[`P2_RUN_SPEC.md`](P2_RUN_SPEC.md). Each prior HOLD re-checked against
+the cited clause, not rubber-stamped:
+
+- **F1 → CLOSED.** Spec amendment A1 publishes the adapter as an explicit
+  closed-form algorithm with input set fixed to `{f_par, f_cza, f_tan,
+  R22, q}`; `h` excluded; CZA/tangent gating is now on observed
+  `f_cza==0` / `f_tan==null`; hard VOID invariant if `h` is read inside
+  the adapter. The leak path is removed and the terms are implementable
+  without interpretation. **PASS.**
+- **F2 → CLOSED.** A2 takes Option 2: a pre-registered decoy-correlate
+  positive control (raw-bundle, reads `d_*`) plus `τ_pc = 2.0°`. The
+  decoy-edit is now the paired contrast (route invariant **and** positive
+  control moves ≥ τ_pc), with an explicit *inconclusive* branch and a
+  guard that, absent the positive control, a decoy-invariance pass is
+  adapter-integrity only and **never** a Proxy-Collapse falsification.
+  Non-vacuous. **PASS.**
+- **F3 → CLOSED.** A3 adds the provenance table separating immutable
+  geometry/receipt boundaries (32°, 29°, 2%·R22, supralateral) from
+  pre-registered engineering tolerances (τ1, τ2, decoy-invariance,
+  coincidence window, τ_pc), with the immutability rule. No value
+  changed. **PASS.**
+- **F4 → RESOLVED** (was non-blocking). A4 names the matched baseline
+  (`q = arccos(R22/f_par)`, L1-eligible, no decoy access), distinct from
+  the A2 positive control.
+
+**Re-admission verdict: ADMIT — P2-execute is admitted.** Conditions
+carried: (i) the controller run obeys the AGENTS.md "~10-minute rule" —
+stage as operator PowerShell if the sweep exceeds ~10 min, with the
+frozen thresholds/branches; (ii) the Public-Language Constraint stays in
+force everywhere (including the rail) until quantities (1)+(2)+(3)
+actually pass under this admitted run; (iii) any threshold change remains
+append-only, justified, and never post-results, and geometry/receipt
+boundaries are immutable. Justification: all three blocking findings are
+closed by explicit, closed-form, pre-run amendments; the gate did its job
+and is now satisfied.

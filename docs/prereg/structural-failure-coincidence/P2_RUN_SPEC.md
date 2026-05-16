@@ -156,3 +156,76 @@ boundaries from pre-registered operational tolerances. No controller has
 been run; Public-Language Constraint remains in force. Justification:
 the run-admission gate is designed to catch self-sealing or under-specified
 P2 protocols before execution.
+
+**2026-05-15 (PT) — maintainer.** Resolves the admission HOLD (F1–F4).
+Append-only; the frozen body is unchanged — the clauses below **override
+and make precise** the cited frozen passages, per pre-registration
+discipline (no body rewrite, no silent post-hoc edit).
+
+*A1 — F1: explicit no-hidden-`h` adapter.* The frozen "per `h`-regime"
+wording is made precise. Adapter input set is **exactly
+`{f_par, f_cza, f_tan, R22, q}`** (`R22` = scale-lock constant, `q` =
+controller's candidate altitude); **`h` is not an input.** Closed-form,
+fixed, no free parameters:
+
+```
+adapter(f_par, f_cza, f_tan, R22, q):
+  eligible = (f_par >= 1.02 * R22)     # observed sec−1 ≥ 2%·R22 (L1); no h
+  if not eligible: return ABSTAIN       # no objective; no confident q̂
+  J = -abs(f_par - R22 / cos(q))        # data=observed f_par; model=own q
+  if f_cza == 0:    drop CZA term       # observed h>32 regime (no h read)
+  if f_tan is null: drop tangent term   # observed h≥29 regime (no h read)
+  return J
+```
+
+All gating is on **observed bundle state** only. **Hard invariant:** any
+implementation that reads `h` (or anything `h`-derived beyond the
+already-observable bundle values) inside the adapter ⇒ run **VOID**. The
+generator/scorer may use true `h`; the adapter may not.
+
+*A2 — F2: decoy-edit made non-vacuous (Option 2).* Adds a pre-registered
+**decoy-correlate positive control**: a raw-bundle controller whose
+objective is a generic least-squares fit of `q` over the **full** bundle
+**including** `d_sup, d_unanch, d_style` (the explicit opaque-correlate
+policy). Decoy-edit passes iff **both** (a) route controller
+`|Δq̂| ≤ 0.5°` and (b) positive control `|Δq̂| ≥ τ_pc`, **τ_pc = 2.0°**.
+If the positive control does not move ≥ τ_pc the decoy battery is too
+weak ⇒ result **inconclusive**, not pass. Only under this paired
+contrast may a decoy-invariance pass be read as Proxy-Collapse-relevant;
+absent the positive control it is **adapter-integrity only**, never a
+Proxy-Collapse falsification.
+
+*A3 — F3: threshold provenance (no value changed).*
+
+| threshold | value | provenance | mutable? |
+| --- | --- | --- | --- |
+| L2 CZA cutoff | `h=32°` | **geometry boundary** — `czaVisibleAtAltitude`; BOUNDARY_MAP L2 / P1 §B-1 | **No** — immutable physics; a change is a geometry re-spec, not a tolerance edit (forbidden goalpost-move) |
+| L3 tangent merge | `h=29°` | **geometry boundary** — `TANGENT_ARC_CIRCUMSCRIBED_H`; Pass C7; Tape AH Ch6 p62 | **No** |
+| L1 leverage line | `f_par ≥ 1.02·R22` | **receipt-derived boundary** — BOUNDARY_MAP L1 | **No** |
+| L4 supralateral | permanent-fail ∀`h` | **geometry boundary** — BOUNDARY_MAP L4 / P1 §B-2 | **No** |
+| τ1 convergence | `1.5°` | **pre-registered engineering tolerance** (vs visual-edge noise) | amend-only, justified, **never post-results** |
+| τ2 handle-steerability | `2.0°` | pre-registered engineering tolerance | as τ1 |
+| decoy-invariance | `≤0.5°` | pre-registered engineering tolerance | as τ1 |
+| coincidence window | `±1.5°` about the 32°/29° loci | pre-registered engineering tolerance (window chosen; locus center immutable) | as τ1 |
+| τ_pc positive-control | `2.0°` | pre-registered engineering tolerance | as τ1 |
+
+Rule: **geometry/receipt boundaries are immutable** (editing one moves
+the falsifier's goalposts — prohibited). Only engineering tolerances may
+be amended, with written justification, never after results are seen.
+
+*A4 — F4: matched baseline named (non-blocking).* Quantity-(4) matched
+baseline = the **analytic-inverse controller** `q = arccos(R22/f_par)`
+on L1-eligible inputs, **no decoy access** (distinct from the A2
+decoy-correlate positive control, which deliberately reads decoys).
+Efficiency = iteration/sample ratio (under-test : analytic baseline);
+non-fatal annotation only.
+
+*Execution discipline.* P2-execute obeys the AGENTS.md "~10-minute
+rule": a controller sweep over ~10 min wall-clock is **staged as
+operator PowerShell** with the frozen thresholds/branches above, not run
+inline; measured rates recorded in the P2 results doc. The negative is
+already pre-registered (this spec).
+
+Justification: each required pre-run amendment (F1–F3, plus the
+non-blocking F4) is resolved closed-form before any controller run;
+re-admission check appended to `P2_SPEC_ADMISSION.md`.
