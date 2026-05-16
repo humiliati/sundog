@@ -28,7 +28,7 @@ noticing that many things fall and announcing gravity.
 - **Defense (real, but unbuilt):** a *shared mechanism*, not a shared adjective.
   Postulate 1 (coarse-graining / sufficient-statistic-for-control) is precisely
   the claim that the same operator appears in all three. The defense exists only
-  once the [proof roadmap](../COARSE_GRAINING_PROOF_ROADMAP.md) lands a substrate
+  once the [proof roadmap](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md) lands a substrate
   with the *measured* sufficient statistic, not the eyeballed asymmetry. Until
   then this attack is correct and must be conceded in those words.
 
@@ -123,7 +123,7 @@ claims are the survivors of an adaptively pruned search.
   program-level accounting of the decision tree. The honest concession: each
   result stands on its own pre-registered gate; the *program* is hypothesis-
   generating, not a single confirmatory study — which is exactly how
-  `../SCIENTIFIC_CRITERIA.md` already frames it. Do not overclaim past that.
+  `../../docs/SCIENTIFIC_CRITERIA.md` already frames it. Do not overclaim past that.
 
 ## Standing defense: the Bayesian floor
 
@@ -145,7 +145,7 @@ Why this is the right answer to #3 and #6 at once:
   conservation law.
 - It is a measurement commitment, not a new doc — it slots into each existing
   roadmap's baseline slate. Tracked as a cross-cutting control in
-  [`../COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md).
+  [`../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
 
 ---
 
@@ -158,7 +158,7 @@ Why this is the right answer to #3 and #6 at once:
 | 2 | Goodhart success story | Framing, free, do before 5/19 | `postulations.md` ▸ Post. 2 |
 | 5 | Atlas draws falsified rule | Cosmetic-loud | `fix_roadmap.md` (deferred) |
 | 1 | "Inverse problems are hard" | Deep; defended only by Post. 1 | proof roadmap |
-| 6 | Forking paths | Meta; conceded honestly | `../SCIENTIFIC_CRITERIA.md` |
+| 6 | Forking paths | Meta; conceded honestly | `../../docs/SCIENTIFIC_CRITERIA.md` |
 
 **Cross-references**
 
@@ -166,6 +166,6 @@ Why this is the right answer to #3 and #6 at once:
   attacks 1, 2, and 5.
 - Defenses 1–4 are not arguments; they are work items in
   [`postulations.md`](postulations.md) and
-  [`../COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md).
-- Scope guardrails: `../SCIENTIFIC_CRITERIA.md`,
-  `../presentation/claims-and-scope.md`.
+  [`../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
+- Scope guardrails: `../../docs/SCIENTIFIC_CRITERIA.md`,
+  `../../docs/presentation/claims-and-scope.md`.

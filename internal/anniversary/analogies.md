@@ -5,7 +5,7 @@
 > **predicts** and where it **breaks**, because an analogy that cannot break is
 > decoration. The load-bearing one (the thermometer) is promoted to a formal
 > program in [`postulations.md`](postulations.md) ▸ Postulate 1 and staged as
-> [`../COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md).
+> [`../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
 >
 > **Status (2026-05-16):** staging, internal. Not public-facing. The sundial and
 > atlas-as-computer framings are cleared for anniversary copy *only with the
@@ -84,7 +84,7 @@ outcome. Signature control is blinded from the target by construction.
   from reward back into the policy interior; below the dose the blind holds,
   above it the agent reconstructs a proxy.
 - **Breaks when:** blinding is incomplete by leakage rather than by capacity —
-  the oracle-state leakage falsifier in `../SCIENTIFIC_CRITERIA.md`. A blinded
+  the oracle-state leakage falsifier in `../../docs/SCIENTIFIC_CRITERIA.md`. A blinded
   trial with an unblinded nurse is not blinded.
 
 ### 5. A one-way function — *Goodhart-immunity ≈ preimage resistance*
@@ -106,7 +106,7 @@ bribed uphill. Dam it and it pools — it fails exactly where the useful gradien
 appears only *after* a preparatory action.
 
 - **Predicts (verbatim):** the pushable-occluder boundary in
-  `../PHASE2_BLOCKS_DESIGN.md` — Sundog stalls when alignment requires moving an
+  `../../docs/PHASE2_BLOCKS_DESIGN.md` — Sundog stalls when alignment requires moving an
   occluder *first*. The dam is the occluder.
 - **Why it matters:** this is the honest one. It does not flatter the theorem; it
   hands a skeptic the failure mode before they find it, and the failure mode is
@@ -161,6 +161,6 @@ field from the envelope is the narrow inverse.
   thermometer made rigorous; 4 is Königsberg; 5/6 the wishing-well and `H(x)`).
 - Adversary: [`attack_vectors.md`](attack_vectors.md) — every "breaks when" above
   is someone's attack; the strongest is the sundial's movable gnomon.
-- Proof path: [`../COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md).
-- Scope discipline: `../SCIENTIFIC_CRITERIA.md`, `../presentation/claims-and-scope.md`
+- Proof path: [`../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
+- Scope discipline: `../../docs/SCIENTIFIC_CRITERIA.md`, `../../docs/presentation/claims-and-scope.md`
   — analogy is Layer-A framing language; it never carries an evidentiary claim.

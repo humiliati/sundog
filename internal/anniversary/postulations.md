@@ -3,7 +3,7 @@
 > Anniversary brainstorm staging — Sundog Year 1. These are the parts worth
 > chasing: conjectures with a formal sketch, a concrete test, and an explicit
 > falsifier. Postulate 1 is promoted to a staged program in
-> [`../COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md);
+> [`../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md);
 > the rest are ranked by whether they are *load-bearing* (the public claim leans
 > on them) or *speculative* (anniversary color, killable on contact).
 >
@@ -57,7 +57,7 @@ year without naming.
   cross-substrate sameness becomes a *shared operator* (`Φ` is a coarse-graining
   in all three substrates), not a shared adjective. It also *predicts* the
   pre-registered failure boundary instead of patching it. Staged as
-  [`../COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md).
+  [`../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
 
 ## 2. Goodhart-immunity ⟺ one-wayness of the reward channel — *capacity-relative*
 
@@ -183,7 +183,7 @@ year without naming.
 ## Proof path & next actions
 
 Of the six, **Postulate 1 is the proof path** and is staged as
-[`../COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md).
+[`../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
 Dependency order:
 
 1. **Postulate 1** is the trunk — sufficiency-for-control. Postulates 3, 5, 6 are
@@ -210,7 +210,7 @@ re-audit).
   8→Post.5, the founding-`H` thread→Post.6).
 - What they answer: [`attack_vectors.md`](attack_vectors.md) (Post.1→#1,
   Post.2→#2, Post.3→#3).
-- Scope discipline: `../SCIENTIFIC_CRITERIA.md`,
-  `../presentation/claims-and-scope.md`,
-  `../MESA_CROSSOVER_NOTE.md` (the in-vitro/in-the-wild pairing Post.1 formalizes),
-  `../SUNDOG_V_GRAVITY.md` (the ledger Post.2 makes defensible).
+- Scope discipline: `../../docs/SCIENTIFIC_CRITERIA.md`,
+  `../../docs/presentation/claims-and-scope.md`,
+  `../../docs/MESA_CROSSOVER_NOTE.md` (the in-vitro/in-the-wild pairing Post.1 formalizes),
+  `../../docs/SUNDOG_V_GRAVITY.md` (the ledger Post.2 makes defensible).
