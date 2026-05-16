@@ -729,3 +729,12 @@ stays **HELD** pending the maintainer's concrete fills + the joint
 admission re-run; Public-Language Constraint in force. Justification:
 closes the last pre-registration condition as an artifact-before-agent;
 no harness, nothing run.
+
+**2026-05-16 (PT) — Codex audit.** C5 direction accepted, but closure is
+withheld until the concrete manifest and guard script land. The guard
+must state whether Cut-2 requires a clean baseline or uses a pre/post
+snapshot to reject only new out-of-allowlist writes. It must also detect
+tracked, untracked, and ignored public/shipping-path changes; a plain
+`git diff --exit-code` guard is too weak. Path checks must normalize
+repo-relative paths and reject symlink/junction escapes before applying
+the cut2-results allowlist. No controller run.

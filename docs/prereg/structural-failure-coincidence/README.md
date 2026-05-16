@@ -491,3 +491,11 @@ fill (the `[E]` values, operational artifacts, and receipt tables
 across all four). No frozen threshold/boundary moved; Public-Language
 Constraint in force. Justification: closes the final pre-registration
 condition as an artifact-before-agent.
+
+**2026-05-16 (PT) — Codex audit.** C5 direction accepted; closure
+withheld until the manifest and guard script exist. The guard must
+explicitly choose clean-baseline versus pre/post-snapshot semantics, must
+catch tracked, untracked, and ignored public/shipping-path changes, and
+must normalize paths / reject symlink escapes before the
+`results/structural-failure/cut2-*/` allowlist is applied. No
+harness/controller run.
