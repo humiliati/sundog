@@ -160,4 +160,40 @@ and **(b) confirmed cross-platform bit-for-bit reproducibility**, not faster
 wall-clock. A genuine speedup needs a less-contended / higher-core box **and**
 sharding the single-threaded harness (caveat 2), or a faster single core.
 
+### Run 2 — 2026-05-16 (issue-assigned cloud agent; incremental report after phase13)
+
+**Environment:** Node v20.20.2 · AMD EPYC 7763 64-Core Processor (**4 visible
+CPUs**) · Linux 6.17.0-1010-azure x86_64.
+
+**Phase completed:** `threebody:phase13` only (reported immediately after phase
+completion).
+
+- manifest: `results/threebody/phase13-long-horizon-lock/manifest.json`
+  - `startedAt`: `2026-05-16T03:35:03.926Z`
+  - `completedAt`: `2026-05-16T04:22:17.010Z`
+  - wall-clock: **47m 13.084s**
+
+**Gate reproduction numbers (exact run outputs):**
+
+- phase13 trials: **3,456**
+- candidate envelope rows: **88/324**
+- promising best cells: **81** (`best-by-cell.csv` with `bestRegionClass=promising`)
+- outcomes: **1,154 bounded / 2,030 escape / 272 close_approach**
+
+**Runtime-gated skip decisions for this run:**
+
+- `threebody:phase14`: **skipped** because phase13 wall-clock exceeded the
+  issue threshold (~30 min).
+- `threebody:phase15:smoke`: **skipped** because phase14 was skipped by the
+  prior gate; full lock remains explicitly out-of-scope.
+
+**Caveat-aware interpretation (incremental):**
+
+- This run supports the caveat that cloud hard-void comparisons must include
+  exact environment metadata + exact emitted numbers for triage (platform-fp
+  effects remain a possible explanation for any future deviation).
+- This run also supports the harness caveat: phase13 alone consumed most of
+  a ~1 h budget, consistent with offload/reproducibility value rather than
+  guaranteed speedup from cloud hardware.
+
 ### Run N — _(next cloud agent: append here, per phase, before session expiry)_
