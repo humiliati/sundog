@@ -766,6 +766,47 @@ Justification: closes the mechanical-scaffolding half of H0 (the
 explicitly-allowed admission next work). H0-B negative side passes
 8/8; positive side waits on a real known-PASS render.
 
+**2026-05-16 (PT) — maintainer. Wave H0-1 correction in the open
+(append-only).** Reviewer pushback caught two genuine defects in the
+prior filing. Both recorded on
+[`P2_CUT3_H0_CALIBRATION.md`](P2_CUT3_H0_CALIBRATION.md) 2026-05-16
+"Wave H0-1 correction" audit-notes:
+
+- **C1/C2 artifact-identity defect.** `scripts/cut3-h0-checker.mjs` was
+  committed as a **0-byte file**; the working 477-line checker is the
+  misnamed tracked `scripts/_legacy_cut3-h0-checker-v0.mjs`. The prior
+  §F checker hash and §G "re-run reproduces" were untrue as committed.
+  The prior §I instructed deleting the *only working copy* — that
+  instruction is **VOIDED on the record**.
+- **C3 stub-tautology.** The "8/8 negative side" was a reject-branch
+  unit check: one hardcoded test sidecar (`buildPhase15TestSidecar`)
+  looped 8×, never measuring the real Phase-15 PNG bytes. This is the
+  **Cut-1 `g⁻¹(g(h))` tautology at the measurement layer**. **The §3
+  H0-B negative side on the real frames remains OPEN.**
+
+Corrected state on disk: canonical `scripts/cut3-h0-checker.mjs` now
+holds the working 18976-byte checker (SHA `7a520f3f67bb73bf38ad91b1d418d468aa6c42c2d2488722305e31e5768f05cb`);
+`scripts/_legacy_cut3-h0-checker-v0.mjs` is a 551-byte quarantine stub
+(SHA `29db501ee02f63832fa8b5e93a623c87c1b292c01801ea058cefed5ba51e0db6`).
+Self-test from the canonical path reproduces the unit-check result
+(SHA `dedeffea716a3023af4d45c29bd9663f0a0654bf31b6ff2b4684278be09ec2a2`).
+Fixture manifest unchanged.
+
+What stands, credited and preserved: §2 structural anti-self-seal in
+the working checker (calibrate()/admit() separation); pre-filing
+disclosures (test sidecars NOT fabricated H0 records, negative-side
+only, known-PASS Wave H0-2, operator review of compound HaloSim codes
+Wave H0-2); 8-real-frame fixture manifest with content hashes.
+
+**Wave H0-1 reclassified: reject-branch unit check + fixture pinned,
+NOT sealed.** Cut-3 admission HOLD; execution HELD; Public-Language
+Constraint in force. The next real H0-B step replaces the hardcoded
+stub with operator/tool-produced per-frame sidecars that read the
+real PNG bytes; only then can H0-B be measurement-grounded rather
+than predicate-shaped. Justification: corrects the artifact-identity
+defect and the unit-check overclaim append-only — nothing deleted, no
+value tuned, "sealed" withdrawn from the record.
+
 **2026-05-16 (PT) — correction. Wave H0-1 NOT sealed.** The H0 entry
 above is corrected in the open (append-only, Cut-1 precedent), per
 [`P2_CUT3_H0_CALIBRATION.md`](P2_CUT3_H0_CALIBRATION.md) corrections

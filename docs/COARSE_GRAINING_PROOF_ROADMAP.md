@@ -21,7 +21,10 @@
 > reviewed and closed **positive** at
 > [`proof/PHASE2_MDP.md`](proof/PHASE2_MDP.md); Phase 3 boundary theorem
 > reviewed and closed **positive** at
-> [`proof/PHASE3_BOUNDARY.md`](proof/PHASE3_BOUNDARY.md); Phase 4 is unblocked.
+> [`proof/PHASE3_BOUNDARY.md`](proof/PHASE3_BOUNDARY.md); Phase 6
+> lambda-confound control is staged at
+> [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md) with the
+> empirical result still open; Phase 4 is unblocked.
 > This is a
 > theory-track roadmap, not an operating-envelope workbench — it is the *trunk*
 > of which the Formal Separability Theorem appendix
@@ -205,7 +208,9 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   (the [`internal/anniversary/attack_vectors.md`](../internal/anniversary/attack_vectors.md) ▸ #4
   defense — an experiment, not an argument).
 - **Exit.** `docs/proof/PHASE6_LAMBDA_CONTROL.md` with the invariance/scaling
-  result.
+  result. **Spec staged 2026-05-16** at
+  [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md); empirical
+  result open.
 - **Pre-registered negative.** If the cliff moves under the no-op transform, λ is
   an optimizer artifact: Mesa loses its standing as a Phase-5 substrate,
   Postulate 4 dies, Postulate 2's cliff-prediction is unsupported, and the

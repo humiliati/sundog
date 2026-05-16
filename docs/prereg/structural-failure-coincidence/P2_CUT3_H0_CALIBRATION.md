@@ -318,6 +318,118 @@ passing 8/8). The remaining H0 obligations are operator-in-the-loop
 pre-fill, listed explicitly in §H. Same Wave-1 cadence as Cut-1 fixture
 + C5 guard, applied one level out at the measurement layer.
 
+**2026-05-16 (PT) — maintainer. Wave H0-1 correction in the open
+(append-only, no tuning, nothing deleted).** Reviewer pushback caught
+two genuine defects in the prior audit-notes filing. This append records
+both in writing, voids the wrong instruction, re-pins §F, and reclassifies
+Wave H0-1 disposition. No frozen H0 protocol value, geometry boundary,
+or admission rule is changed. Public-Language Constraint remains in
+force everywhere; nothing is run beyond the same reject-branch unit
+check.
+
+*C1 — artifact-identity defect (file inversion).* The prior filing
+recorded the canonical checker at `scripts/cut3-h0-checker.mjs` with
+SHA `75bd6b32…1e2d`. In git HEAD that path is committed as a **0-byte
+file**; the working 477-line checker is the misnamed tracked
+`scripts/_legacy_cut3-h0-checker-v0.mjs` (HEAD blob 18976 bytes, SHA
+`7a520f3f67bb73bf38ad91b1d418d468aa6c42c2d2488722305e31e5768f05cb`).
+The prior §F checker hash was for an authoring-side artifact that did
+not survive into the committed state; the canonical path was an empty
+shell at the time of filing.
+
+*C2 — §I instruction VOIDED.* The prior §I told the reader the legacy
+path was a 0-byte scratch and "safe to delete from Windows". That was
+**exactly backwards**: deleting the legacy path would delete the
+**only working copy** of the checker. The §I instruction is hereby
+VOIDED on the record. The legacy path is now occupied by a 551-byte
+quarantine stub (SHA `29db501ee02f63832fa8b5e93a623c87c1b292c01801ea058cefed5ba51e0db6`)
+that points readers at the canonical path; the legacy path can still
+be removed from the Windows working tree once the next commit lands,
+but the warning that previously sat there is replaced by the
+quarantine notice.
+
+*C3 — "8/8 negative side" is a reject-branch unit check, not the §3
+H0-B negative side.* The prior filing reported the H0-B negative
+self-test as "PASS, 8/8 frames rejected with SPAN_TOO_SHORT". On
+inspection the test loops one hardcoded test sidecar
+(`buildPhase15TestSidecar`) 8 times — the ruler ticks, anchor placement,
+and sun position are hand-crafted to model the Phase-15 failure mode;
+the real Phase-15 PNGs are never measured. The predicate's
+reject-on-failure logic is exercised, but the §3 H0-B negative side
+("the H0 checker must reject **the Phase-15 frames**") is **not**
+exercised. **This is the Cut-1 `g⁻¹(g(h))` tautology at the
+measurement layer**: the input is built to produce the expected reason
+code, the predicate returns it, and the equality reads as if it were
+about the frames. **The §3 H0-B negative side on real frames is OPEN.**
+
+*What stands, credited and preserved.* The §2 anti-self-seal in the
+working checker (calibrate() has no API path to the scored feature;
+admit() is a separate function consuming the precomputed Calibration)
+is real and intact. The pre-filing disclosures — "test sidecars are
+NOT fabricated H0 records", "negative side only", "known-PASS fixture is
+Wave H0-2 territory", "operator review of compound HaloSim codes is
+Wave H0-2 pre-fill" — were honest and remain on the record. The 8-real-
+frame fixture manifest stands as filed (extractor SHA `69731e86…6b8c`,
+manifest raw SHA `fb5987f0…51ea` / canonical `75577d51…2c05`), unchanged.
+
+*Re-pinned §F (canonical paths after correction; 2026-05-16 PT).*
+
+| artifact | path | sha256 |
+| --- | --- | --- |
+| Phase-15 fixture extractor (unchanged) | `scripts/cut3-h0-known-fail-extract.mjs` | `69731e86b398f61db6a21d1bd63678c498add7ca3c017c9ac7bb91c787c16b8c` |
+| Runnable H0 checker (canonical path **restored**) | `scripts/cut3-h0-checker.mjs` | `7a520f3f67bb73bf38ad91b1d418d468aa6c42c2d2488722305e31e5768f05cb` |
+| Quarantine stub at the misnamed path | `scripts/_legacy_cut3-h0-checker-v0.mjs` | `29db501ee02f63832fa8b5e93a623c87c1b292c01801ea058cefed5ba51e0db6` |
+| Phase-15 known-FAIL fixture manifest (unchanged) | `results/structural-failure/cut3-prereg/h0-known-fail-fixture.json` | raw `fb5987f0eefa12a9342794414ed3c11008776404b30c19bccca71faee42851ea` · canonical `75577d51253a469592d2538d9464cb3570fb19d8423a5dd8185f751eda022c05` |
+| Reject-branch unit-check result (regenerated from canonical) | `results/structural-failure/cut3-prereg/h0-self-test-result.json` | raw `dedeffea716a3023af4d45c29bd9663f0a0654bf31b6ff2b4684278be09ec2a2` · canonical `8c36546db411d389357c12698e4d7a86fba97bfe01cced9bef8a8a918eb6837b` |
+
+*§G is now true.* Running `node scripts/cut3-h0-checker.mjs self-test`
+from the canonical path reproduces the unit-check result file; running
+`node scripts/cut3-h0-known-fail-extract.mjs` reproduces the fixture
+manifest byte-for-byte. The previous §G claim was untrue **as
+committed** because the canonical-path checker was 0 bytes; this
+correction makes it true going forward.
+
+*Disposition.* Wave H0-1 is reclassified to **reject-branch unit check
++ Phase-15 fixture pinned, NOT sealed**. The 8/8 result is a unit-test
+verdict on the predicate's reject branch under a hand-crafted Phase-15-
+shaped sidecar; it is **not** the §3 H0-B negative side. **H0-B negative
+side on the real Phase-15 frames remains OPEN.** Cut-3 admission stays
+**HOLD**; execution **HELD**; Public-Language Constraint in force.
+
+*What it takes to actually prove H0-B negative.* Replace the hardcoded
+test sidecar with a real-frame measurement step: an
+operator/tool-produced sidecar per Phase-15 frame that encodes the
+actual stamped scale ticks (or the renderer metadata, or the
+fit2locus anchor pixels) read from the **real PNG bytes**. Once that
+lands, the checker's `check --sidecar` runs over the real measurements
+and the rejection becomes a measurement-grounded verdict, not a
+predicate-shaped tautology. That work is Wave H0-2 and gates H0
+closure together with the known-PASS positive side.
+
+*Honest meta-read.* The falsifier-on-the-experimenter held where it
+mattered: the pre-filing disclosures named what would later need
+verification, and the verification caught both the file-inversion and
+the unit-check-vs-H0-B overclaim before they could harden as "sealed".
+The lesson the corrected record carries forward: "passes 8/8" inside
+the same script that builds the inputs is structurally the Cut-1
+tautology one layer out; only an externally-supplied real-measurement
+sidecar earns the H0-B label.
+
+*Authoring-side scratch.* Two zero-byte `.bak` files appear in the
+working tree from the inode-break operation that broke the prior
+file-inversion: `scripts/_tmp_canonical_was.bak` and
+`scripts/_tmp_legacy_was.bak`. Both are bash-mount unlink-restricted
+scratch (same Windows mount class as the Wave-1
+`_smoke_test_scratch_DELETE_FROM_WINDOWS.txt`). Safe to delete from
+the Windows working tree at any time; not part of the H0 instrument
+and not hashed.
+
+Justification: corrects the artifact-identity defect (C1/C2),
+reclassifies the unit-check claim that overstated H0-B closure (C3),
+and re-pins the §F hashes to the now-canonical paths — append-only,
+nothing deleted, no value tuned. The earlier disclosures stand;
+"sealed" is withdrawn from the record.
+
 **2026-05-16 (PT) — correction / reviewer challenge accepted. Wave H0-1
 is NOT sealed.** This append-only correction supersedes the
 "self-test passing 8/8 / structural call-order enforcement [as
