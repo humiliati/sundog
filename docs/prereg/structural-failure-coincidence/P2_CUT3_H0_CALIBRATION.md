@@ -317,3 +317,74 @@ with structural call-order enforcement; H0-B negative-side self-test
 passing 8/8). The remaining H0 obligations are operator-in-the-loop
 pre-fill, listed explicitly in §H. Same Wave-1 cadence as Cut-1 fixture
 + C5 guard, applied one level out at the measurement layer.
+
+**2026-05-16 (PT) — correction / reviewer challenge accepted. Wave H0-1
+is NOT sealed.** This append-only correction supersedes the
+"self-test passing 8/8 / structural call-order enforcement [as
+accomplished] / closes the mechanical-scaffolding half" framing of the
+immediately preceding append. Independent verification of the committed
+tree (in sync with `origin/main`) found a frozen-record integrity
+defect plus an overclaim — the Cut-1 pattern recurring at the
+measurement layer. No frozen H0 protocol value, geometry boundary, or
+admission rule is changed; this corrects the *record*, append-only, no
+tuning. The honest disclosures already in §D/§E, the self-test JSON,
+and the checker code comments **stand** and are not the problem.
+
+*Correction C1 — §I and §F have the two checker files inverted.* On
+disk and in git: `scripts/cut3-h0-checker.mjs` is **0 bytes** (and is
+what is committed); the **real, working 477-line checker is the tracked
+file `scripts/_legacy_cut3-h0-checker-v0.mjs`** (18,976 bytes). §I
+states the opposite and instructs deletion of `_legacy_…`; **§I's
+delete instruction is VOIDED** — following it would destroy the only
+working copy of the checker and leave the 0-byte file as the
+instrument.
+
+*Correction C2 — §F checker hash and §G re-run claim are not true as
+committed.* The §F row pins `cut3-h0-checker.mjs` sha256 `75bd6b32…`;
+the committed artifact is 0 bytes, whose sha256 is the well-known
+`e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
+§G's "a re-run should reproduce all four pinned hashes" is therefore
+false as committed: `node scripts/cut3-h0-checker.mjs self-test` on an
+empty file runs nothing. The §F extractor / fixture / self-test-result
+hashes are not impugned by this correction; only the checker row and
+the §G reproducibility claim are.
+
+*Correction C3 — §D reclassified: the 8/8 is a reject-branch unit
+check, not the §3 negative side.* `buildPhase15TestSidecar` in the real
+checker hardcodes one synthetic sidecar (`scale_ticks` 5°–18°, bare
+`{22},{46}` anchors), **identical for all 8 frames**, looped 8×. The
+real Phase-15 PNGs are never read; `theta_map.pxToDeg` / ruler-extent
+detection is never exercised. So the test proves only "the predicate
+returns reject when handed a stub that already declares span = 18 and
+off-ruler anchors." That is the H0-layer analog of the Cut-1
+`g⁻¹(g(h))` tautology — the failure mode is typed into the input, not
+measured from the instrument. Frozen §3 requires rejecting the **real
+frames because measured span < ring field**; that is **not**
+demonstrated. **H0-B negative side on the real frames remains OPEN.**
+
+*What genuinely stands (not under-credited).* The §2 structural
+anti-self-seal is **real in the working (legacy) checker**:
+`calibrate()` derives the span from the instrument's own ticks and has
+no access to the scored feature; `admit()` is a separate function over
+the frozen calibration. The §D/§E/JSON/code disclosures (modeled
+sidecars, not real H0 records; negative-side only; `e13` h-leak +
+known-PASS deferred to H0-2; synthetic-stub-for-known-PASS forbidden)
+are honest and stand. The fixture manifest pinning 8 immutable real
+Phase-15 frames stands.
+
+*Required maintainer follow-up before any "sealed" language* (pre-run
+fill, not done here — no fabrication): (1) make `cut3-h0-checker.mjs`
+actually contain the working checker; remove/quarantine the misnamed
+`_legacy_…_v0.mjs`; recompute and re-pin the §F checker hash; re-run
+the self-test from the real path so §G is true; (2) replace the
+hardcoded-stub negative test with a real-frame measurement (Wave H0-2)
+before the H0-B negative side may be called proven.
+
+**Disposition: Wave H0-1 reclassified from "mechanical scaffolding,
+negative side passing" to "reject-branch predicate unit-checked against
+a modeled stub + 8 real frames pinned in the fixture; §2 structural
+design genuine; artifact-identity defect (empty primary checker);
+H0-B negative side on real frames OPEN; Wave H0-1 NOT sealed."** Cut-3
+admission stays HOLD; execution HELD; Public-Language Constraint in
+force. Corrected in the open, append-only, per the Cut-1 →
+`MACHINERY_LIVE_ROUTE_TEST_VACUOUS` precedent.

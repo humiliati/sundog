@@ -765,3 +765,16 @@ remains HOLD; execution HELD; Public-Language Constraint in force.**
 Justification: closes the mechanical-scaffolding half of H0 (the
 explicitly-allowed admission next work). H0-B negative side passes
 8/8; positive side waits on a real known-PASS render.
+
+**2026-05-16 (PT) — correction. Wave H0-1 NOT sealed.** The H0 entry
+above is corrected in the open (append-only, Cut-1 precedent), per
+[`P2_CUT3_H0_CALIBRATION.md`](P2_CUT3_H0_CALIBRATION.md) corrections
+C1–C3. Verification of the committed tree found an artifact-identity
+defect (named checker committed 0-byte; working checker is the misnamed
+tracked `_legacy_…_v0.mjs`; §I delete-instruction VOIDED; §F/§G claims
+untrue as committed) and that the "8/8 negative side" is a reject-branch
+unit check against a hardcoded modeled stub, not the §3 rejection of the
+real frames — the Cut-1 tautology pattern at the measurement layer. §2
+structural design genuine; honest disclosures stand. H0-B negative side
+on real frames **OPEN**; Cut-3 admission HOLD, execution HELD; no frozen
+value changed.
