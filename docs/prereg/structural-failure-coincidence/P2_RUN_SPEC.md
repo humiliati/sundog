@@ -674,3 +674,28 @@ seed, decoy coefficient table, and `(w,b)` fit receipt; a prose
 independent principle is not sufficient for admission. Runtime `D` must
 read only frozen coefficients and observable decoys; C4-D must taint
 check no hidden `h` input. No controller run.
+
+**2026-05-16 (PT) — maintainer. C4-A audit freeze drafted
+(append-only), completing the C-condition columns.** Filed
+[`P2_CUT2_C4A_AUDIT_FREEZE.md`](P2_CUT2_C4A_AUDIT_FREEZE.md). Mirrors
+the C2-A/C3-A scaffold discipline and **propagates the C3-A operational-
+artifact ruling**: the D1 probe set, the Cut-1 known-vacuous fixture,
+the synthetic non-vacuous fixture, and the C4-D taint method must each
+be concrete reproducible seed-deterministic objects, not prose. D2
+floor **= the shared C3-A-R floor (one number)**; sustained-TRACK
+readout inherited; honest ordering recorded (C4 receipts provisional
+until C2-A/C3-A close). C4-C repaired D1 = route construction vs **true
+`h`** on the must-differ band (not vs `arccos(R22/f_par_obs)`).
+**Keystone anti-self-seal:** the synthetic non-vacuous fixture is the
+*minimal mechanical flip of the real Cut-1 fixture* (toggling exactly
+the D1/D2/D3 properties), frozen before the audit logic — C4-B is the
+same audit run both ways (vacuous-on-Cut-1 / non-vacuous-on-flip), no
+fixture-design freedom. C4-D made concrete: an input-manifest assertion
+(no `h`, no boundary-branch flags, `(w,b)` frozen at runtime) + a
+boundary-perturbation test (behavior tracks identifiability collapse via
+the sustained-TRACK readout). A failing self-test blocks (append-only
+redesign), never tunes. No immutable boundary moved; Cut-2 execution
+stays **HELD** pending C4-A artifacts/receipts, C5 and the joint
+admission re-run; Public-Language Constraint in force. Justification:
+closes the final C-condition column's structure as an
+artifact-before-agent; receipts pre-run, no harness, nothing run.

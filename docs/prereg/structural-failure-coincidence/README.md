@@ -451,3 +451,21 @@ values close and C3-A's own [E] values/receipt tables are appended. The
 `P_in` independent freeze must become an operational artifact (finite
 sample or generator, seed, decoy coefficients, frozen `(w,b)`), not only
 a principle. No harness/controller run.
+
+**2026-05-16 (PT) — maintainer.** C4-A audit freeze filed
+(append-only), **completing the C-condition columns**:
+[`P2_CUT2_C4A_AUDIT_FREEZE.md`](P2_CUT2_C4A_AUDIT_FREEZE.md). Mirrors
+the C2-A/C3-A scaffold; propagates the operational-frozen-artifact
+ruling to C4's fixtures/probe-set/taint-method. D2 floor = the shared
+C3-A-R floor (one number); sustained-TRACK readout inherited; C4-C
+repaired D1 (route construction vs true `h`). Keystone anti-self-seal:
+the synthetic non-vacuous fixture is the minimal mechanical flip of the
+real Cut-1 fixture, frozen before the audit logic — C4-B is a two-sided
+self-test with no fixture-design freedom. C4-D made concrete
+(input-manifest assertion + boundary-perturbation test). Full
+open-conditions list for Cut-2-execute re-admission is now **C2-A · C3-A
+· C4-A receipts/artifacts · C5**; one joint audit, withheld until all
+filed *and their concrete values/artifacts landed*. No frozen
+threshold/boundary moved; Public-Language Constraint in force.
+Justification: closes the final C-condition column as an
+artifact-before-agent.
