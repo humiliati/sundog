@@ -116,6 +116,16 @@ before expiry, never batched to the end**; budget ~1 h; prefer an
 issue-assigned Copilot coding agent (possibly a longer-lived pool) but still
 report incrementally. Full detail + per-run log: `copilot_test_readme.md`.
 
+Run 2 (2026-05-16, issue-assigned agent) validated the model: it worked
+silently ~1 h then delivered a **PR** (durable — dodges the chat-pool
+timeout entirely; prefer this over the chat pool). Gates reproduced
+bit-for-bit a third time (caveat 1 retired in practice). But it
+runtime-gate-skipped phase14 + the smoke on a ~30-min threshold — so a
+measurement issue MUST explicitly authorize the specific phases
+(`phase13` + `phase14` + `phase15:smoke`), overriding the generic ~10/30-min
+rule for that issue, and instruct per-phase incremental commits to the PR
+branch. Full lock stays out of scope and operator-gated.
+
 ## HaloSim Halo Rendering (cinematic + geometry confirmation)
 
 HaloSim3 is a Monte Carlo halo ray-tracer used two ways in this repo:

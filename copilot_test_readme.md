@@ -196,4 +196,40 @@ completion).
   a ~1 h budget, consistent with offload/reproducibility value rather than
   guaranteed speedup from cloud hardware.
 
+### Synthesis after Run 2 + next-issue guidance
+
+Three independent runs now agree:
+
+| run | platform | phase13 wall-clock | gates bit-for-bit |
+| --- | --- | ---: | --- |
+| local | Windows / project box | 48.7 min | (reference) |
+| Run 1 | Linux/EPYC 4-core, **chat pool** | ~45 min | ✓ |
+| Run 2 | Linux/EPYC 4-core, **issue-assigned agent** | 47m13s | ✓ |
+
+Conclusions (high confidence — 3 independent reproductions):
+
+- **Caveat 1 retired in practice.** The hard-void gates reproduced bit-for-bit
+  on every platform/pool tried. Keep the triage rule, but cross-platform fp is
+  no longer a live blocker for offload.
+- **Offload, not speedup — confirmed, not a fluke.** phase13 is ~45–49 min
+  everywhere; cloud hardware does not accelerate the single-threaded harness.
+- **Issue-assigned agent + PR-as-deliverable is the right model.** It works
+  silently ~1 h then lands a durable PR — this structurally defeats the
+  chat-pool timeout (no report to lose). Prefer it over the chat pool.
+
+**Open gap / next-issue guidance.** The assigned agent runtime-gate-skipped
+phase14 and the smoke on a ~30-min threshold, so there is still **no
+assigned-pool measurement of phase14 (~5–10 min) or phase15:smoke (~57 min)** —
+the two runs we most need to characterize. The generic AGENTS.md ~10/30-min
+rule fights this experiment's purpose. The next issue MUST:
+
+1. Explicitly authorize `threebody:phase13`, `threebody:phase14`, AND
+   `threebody:phase15:smoke` as in-scope, overriding the generic runtime gate
+   for this measurement issue specifically.
+2. Instruct: **commit each phase's manifest timing + gate numbers to the PR
+   branch immediately on that phase completing** (incremental commits), so a
+   later-phase skip or expiry never loses the earlier phases' data.
+3. Keep the full lock (`threebody:phase15`) explicitly out of scope and
+   operator-gated, unchanged.
+
 ### Run N — _(next cloud agent: append here, per phase, before session expiry)_
