@@ -83,6 +83,26 @@ How to apply:
 - Clean up throwaway probe output (`results/**/_*` scratch dirs) once
   the rate is recorded.
 
+### Cloud-agent run offload (experimental) — threebody:phaseNN
+
+A second lane of the same long-run principle: instead of (or alongside)
+staging for the local operator, hand the gates + smoke to a GitHub cloud
+agent and have it report wall-clock from each run's
+`manifest.json` `startedAt`/`completedAt`. Brief + measured local baselines
++ the extrapolated full-lock cost live in **`copilot_test_readme.md`** (repo
+root); the cloud agent appends its sandbox timings + environment there.
+
+Two caveats are load-bearing and documented in that file: (1) the hard-void
+gates demand *bit-for-bit* reproduction, but `Math.sqrt/sin/cos/log` can
+differ ~1 ULP across CPU/libm/Node and RK4 amplifies it in the chaotic
+regime — a cloud gate "deviation" may be platform-fp, not a code regression,
+so triage against the committed local `results/` artifacts before declaring
+any phase void; (2) the harness is strictly single-threaded
+(`envelopeCases` is a sequential loop, no workers), so a many-core sandbox
+gives *offload*, not speedup, unless the harness is sharded first. The full
+lock stays operator-gated by the locked spec — the cloud experiment measures
+the gates + smoke only and never unblocks or interprets the full lock.
+
 ## HaloSim Halo Rendering (cinematic + geometry confirmation)
 
 HaloSim3 is a Monte Carlo halo ray-tracer used two ways in this repo:
