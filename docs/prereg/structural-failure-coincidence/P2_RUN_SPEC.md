@@ -355,3 +355,26 @@ stays fully in force until (1)+(2)+(3) pass under an admitted
 Justification: stages the next two cuts as frozen artifacts-before-agent
 under the spec's own escalation rule; removes the Cut-1 tautology by
 construction; no body rewrite, no threshold move, no post-hoc edit.
+
+**2026-05-15 (PT) — maintainer. C2 pre-registration drafted
+(append-only).** Filed
+[`P2_CUT2_C2_NUISANCE_AND_BRIDGE.md`](P2_CUT2_C2_NUISANCE_AND_BRIDGE.md):
+the concrete non-invertible nuisance is a receipt-grounded bounded
+additive anchor error `f_par_obs = R22/cos(h) + ε`,
+`ε ~ U[−ρ·R22, +ρ·R22]`, whose single-handle inverse
+`arccos(R22/f_par_obs)` is biased with the bias blowing up *exactly* at
+the L1 leverage boundary (`sec(h)−1 < 2%·R22`) — the non-invertibility
+*is* the documented singularity. The bundle→Observation bridge is
+pre-registered as a closed-form A1-compliant intensity field
+`I = I_route + κ·D − pen` that the bound `PhotometricAgent` climbs, with
+two pre-run, auditable anti-self-seal obligations: **P-A**
+(`argmax I_route ≠ h` by construction — no back-door tautology) and
+**P-B** (landscape climbable on the eligible band — no rigged null),
+plus a deterministic pre-run bias-demonstration table. C2 closes the
+nuisance + bias-demo + bridge architecture **only**; the decoy term `D`,
+its reachability/temptation (**C3**) and the derived audit (**C4**)
+remain open. No threshold/boundary moved (`ρ, A, σ, seed, κ` are A3
+engineering tolerances, never post-results). Cut-2 execution stays
+**HELD** pending C3, C4, and the admission re-check; Public-Language
+Constraint in force. Justification: closes the C2 admission condition as
+a frozen artifact-before-agent; no harness, nothing run.

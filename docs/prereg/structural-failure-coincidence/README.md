@@ -250,3 +250,20 @@ audit). No harness written for either cut; no frozen threshold/boundary
 moved. Public-Language Constraint remains fully in force. Justification:
 the spec's own staging rule, applied after the first cut proved vacuous
 rather than ambiguous; artifact-before-agent re-asserted.
+
+**2026-05-15 (PT) — maintainer.** C1 + C2 filed (append-only). **C1**:
+[`P2_CUT2_C1_CONTROLLER_BINDING.md`](P2_CUT2_C1_CONTROLLER_BINDING.md) —
+bound the actual pre-existing controller
+`sundog.agents.photometric.PhotometricAgent` (verified 2026-04-27
+origin, inverse-free extremum-seeker, line-cited). **C2**:
+[`P2_CUT2_C2_NUISANCE_AND_BRIDGE.md`](P2_CUT2_C2_NUISANCE_AND_BRIDGE.md)
+— receipt-grounded non-invertible anchor nuisance (single-handle inverse
+biased exactly at the L1 leverage boundary), the A1-compliant
+bundle→Observation intensity-field bridge, and two pre-run anti-self-seal
+obligations (P-A no back-door tautology, P-B no rigged null) plus a
+deterministic bias-demonstration table. **C3** (decoy term +
+reachability/temptation) and **C4** (derived audit) remain open; Cut-2
+execution stays HELD pending them and the admission re-check. No frozen
+threshold/boundary moved; Public-Language Constraint in force.
+Justification: closes C1 + the C2 design condition as frozen
+artifacts-before-agent.

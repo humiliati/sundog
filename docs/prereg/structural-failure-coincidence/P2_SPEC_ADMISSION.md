@@ -234,3 +234,18 @@ language until (1)+(2)+(3) pass under an admitted discriminating run.
 Justification: mirrors P1 / P2-spec admission discipline; prevents a
 second self-sealing P2 run by gating execution on closed-form closure of
 C1–C4.
+
+**2026-05-15 (PT) — filing log (not a ruling).** C1 and C2 have been
+filed against the open conditions:
+[`P2_CUT2_C1_CONTROLLER_BINDING.md`](P2_CUT2_C1_CONTROLLER_BINDING.md)
+(C1 — controller bound, independently verified pre-existing 2026-04-27,
+inverse-free, line-cited) and
+[`P2_CUT2_C2_NUISANCE_AND_BRIDGE.md`](P2_CUT2_C2_NUISANCE_AND_BRIDGE.md)
+(C2 — non-invertible nuisance, bias-demonstration design, bridge
+architecture, P-A/P-B obligations). This entry **records filing only and
+is not an admission ruling**. The re-check verdict is deliberately
+withheld until **C3** (concrete decoy term, reachability-through-`I`,
+in-sample temptation) and **C4** (derived `routeConstructionAudit`) are
+also filed, so the re-run audits the *whole* discriminating cut at once —
+including whether C2's P-A/P-B numeric artifacts actually exist and hold.
+Cut-2 build/run remains **blocked**; Public-Language Constraint in force.
