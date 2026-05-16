@@ -195,3 +195,20 @@ L1/L2/L3. Either is a clean result; the in-between is not.
 ## Audit Notes
 
 *(reviewer space — append-only below)*
+
+**2026-05-16 (PT) — Codex audit.** Direction accepted; execution
+admission withheld. C2-C correctly keeps the L1/L2/L3 boundary sources
+observable-only and assigns the emergent-vs-flag-read question to C4-D;
+C2-D correctly treats `f_par_obs < R22` as abstain/invalid, never
+clipped, and as a q3-L1 correlate detector if a controller returns a
+confident `qhat`. Two C2-A holds are load-bearing: (1) because
+`C_L1(s_obs)` is scalar for a fixed sample, it changes intensity scale
+rather than the route argmax; C2-A must prove that the frozen ramp
+produces measurable degradation or abstain behavior for the actual
+`PhotometricAgent` confidence/readout, not merely a cosmetic rescale.
+(2) C2-D needs a frozen objective-level abstain criterion (`O*` floor,
+residual, curvature, or condition-number receipt) rather than any branch
+on `f_par_obs < R22`. C2-A should also verify that multiplying the whole
+bracket by `C_L1` does not accidentally mask the L2/L3 consistency-term
+tests, or state explicitly that this is intended whole-route-package
+gating. No harness/controller instantiated.

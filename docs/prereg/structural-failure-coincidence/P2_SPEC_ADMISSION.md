@@ -427,3 +427,31 @@ C2-D↔C2-B/C4-D) for the joint audit. With this, the full open set is
 **C2-A, C3-A/B/C/D, C4-A/B/C/D, C5**; the re-check verdict stays
 withheld until all are filed and audited as one object. Cut-2 build/run
 remains **blocked**; Public-Language Constraint in force.
+
+**2026-05-16 (PT) — C2-C/D audit.** C2-C/D direction accepted;
+execution admission withheld. The joint admission re-check must require
+C2-A to prove the scalar `C_L1(s_obs)` ramp is behaviorally load-bearing
+for the actual `PhotometricAgent` confidence/readout (not only an
+argmax-preserving intensity rescale), and to freeze the C2-D
+objective-level abstain criterion for `f_par_obs < R22` rows (`O*` floor
+/ residual / curvature / condition receipt, no injected branch). C2-A
+should also state whether `C_L1` intentionally gates the whole route
+package or prove it does not mask L2/L3 consistency-term tests. No
+harness run.
+
+**2026-05-16 (PT) — filing log (not a ruling).** C2-A numeric freeze
+filed: [`P2_CUT2_C2A_NUMERIC_FREEZE.md`](P2_CUT2_C2A_NUMERIC_FREEZE.md).
+Resolves the two C2-C/D holds (C2-A-1 `C_L1` proven to drive
+`PhotometricAgent`'s own reacquire/lock-fail path, not an argmax-inert
+rescale; C2-A-2 frozen objective-level `f_par_obs<R22` abstain, no
+branch) and the package-gating clarification (C2-A-3: L1↔L2/L3
+`h`-disjoint by geometry, separation receipt). **Filing only, not a
+ruling.** Reviewer should specifically scrutinize: (a) the §5
+independent bridge-scale freeze (eligible-band peak ≡ 1.0, fixed
+*before* the receipts) — this is the keystone anti-self-seal, verify no
+residual scale freedom; (b) that a failing C2-A-1/2/3 receipt is treated
+as a **block / append-only redesign**, never a tuned pass; (c) the
+[G]/[E] provenance tags in §4. The re-check verdict stays withheld until
+**C2-A receipts, C3-A/B/C/D, C4-A/B/C/D, C5** are all filed and audited
+as one object. Cut-2 build/run remains **blocked**; Public-Language
+Constraint in force.

@@ -1085,3 +1085,14 @@ free-`q_a` degeneracy and makes `π_route` well-defined without hidden
 forces the C4-D1 repair: D1 must compare the route optimum against true
 hidden `h` on the must-differ band, not against
 `arccos(R22/f_par_obs)`, because C2-B intentionally makes those equal.
+
+**C2-C/D audit addendum, 2026-05-16.** C2-C/D's leverage gate and
+invalid-row handling are accepted as design-filed, not execution
+admitted. C2-A must prove the scalar `C_L1(s_obs)` ramp is behaviorally
+load-bearing for the actual `PhotometricAgent` confidence/abstain
+readout, and must freeze the objective-level abstain criterion for
+`f_par_obs < R22` rows. It should also rule whether `C_L1` deliberately
+gates the whole route package or prove it does not mask L2/L3
+consistency tests. Cut-2 remains held; no controller run.
+
+**C2-A numeric freeze filed, 2026-05-16.** [`P2_CUT2_C2A_NUMERIC_FREEZE.md`](prereg/structural-failure-coincidence/P2_CUT2_C2A_NUMERIC_FREEZE.md): complete C2 freeze + three pre-run receipts — C2-A-1 (`C_L1` proven to bite `PhotometricAgent`'s own reacquire/lock-fail path, not an argmax-inert rescale), C2-A-2 (frozen objective-level `f_par_obs<R22` abstain, no branch), C2-A-3 (L1↔L2/L3 `h`-disjoint, separation receipt). Keystone anti-self-seal: the bridge `I→detector_intensity` scale is frozen by an independent convention *before* the receipts; a failing receipt blocks (append-only redesign), never a tuned pass. §4 is [G]/[E] provenance-tagged. Open-conditions list for Cut-2-execute re-admission: **C2-A receipts · C3-A/B/C/D · C4-A/B/C/D · C5** — one joint audit, withheld until all filed. No controller run; Public-Language Constraint in force.

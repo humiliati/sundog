@@ -593,3 +593,41 @@ now complete. No immutable boundary moved; Cut-2 execution stays
 re-run; Public-Language Constraint in force. Justification: closes the
 last C2 design sub-blockers as artifacts-before-agent; no harness,
 nothing run.
+
+**2026-05-16 (PT) — Codex audit.** C2-C/D direction accepted;
+execution admission withheld. C2-A must now freeze and demonstrate two
+behavioral facts before any Cut-2 harness exists: the scalar
+`C_L1(s_obs)` ramp actually produces detectable degradation/abstain
+behavior for `PhotometricAgent` rather than merely preserving the same
+argmax at lower amplitude, and `f_par_obs < R22` abstention is read from
+a frozen objective-level criterion rather than a branch. C2-A should
+also rule whether `C_L1` is deliberate whole-route-package gating or
+prove it does not mask L2/L3 tests. No controller run.
+
+**2026-05-16 (PT) — maintainer. C2-A numeric freeze drafted
+(append-only).** Filed
+[`P2_CUT2_C2A_NUMERIC_FREEZE.md`](P2_CUT2_C2A_NUMERIC_FREEZE.md),
+resolving the two C2-C/D holds + the package-gating clarification.
+**C2-A-1:** `C_L1` is not argmax-inert because `PhotometricAgent` has an
+absolute-intensity reacquire path (`reacquire_threshold=0.05`,
+`reacquire_hold_steps=30`) and a curvature-limited TRACK estimator;
+receipt obligation = the frozen ramp drives the full-field target
+intensity below the controller's *own* reacquire threshold in the
+L1-ineligible band (emergent re-scan, no confident `q̂`) and above it in
+the eligible band — proven against the documented controller constants,
+not a rescaled argmax, not a branch. **C2-A-2:** `f_par_obs<R22` abstain
+is a frozen objective-level criterion (`max_q O<O_floor` / no
+`|r|≤r_tol` / cond `>κ_cond_max`), no branch. **C2-A-3:** ruling — not
+whole-package masking; L1 (low-`h`) and L2/L3 (high-`h`,`C_L1≈1`) are
+`h`-disjoint by geometry, with a separation receipt. **Load-bearing
+anti-self-seal:** the bridge `I→detector_intensity` scale is frozen by
+an independent convention (eligible-band peak ≡ 1.0) *before* the
+receipts, so "prove C_L1 bites" cannot degenerate into "pick a scale
+that makes it bite"; a failing receipt **blocks** (append-only
+redesign), never a tuned pass. Full §4 freeze is provenance-tagged
+([G] immutable geometry/receipt vs [E] pre-registered engineering
+tolerance, A3). No immutable boundary moved; Cut-2 execution stays
+**HELD** pending the C2-A receipts, C3-A/B/C/D, C4-A/B/C/D, C5 and the
+joint admission re-run; Public-Language Constraint in force.
+Justification: closes the C2 numeric freeze as an artifact-before-agent;
+receipts pre-run, no harness, nothing run.
