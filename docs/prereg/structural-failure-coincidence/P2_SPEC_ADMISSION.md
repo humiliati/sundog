@@ -404,3 +404,12 @@ whole cut is filed — **C2-A/B/C/D, C3-A/B/C/D, C4-A/B/C/D, C5** — and
 audited as one object including this C4-C/D1 reformulation and all
 cross-couplings. Cut-2 build/run remains **blocked**; Public-Language
 Constraint in force.
+
+**2026-05-16 (PT) — C2-B audit.** C2-B direction accepted; execution
+admission withheld. The `q_a∈[-A,+A]` plus
+`pen(q)=λ(q_a/A)^2` construction is A1-safe and removes the free-`q_a`
+degeneracy, making `π_route` well-defined as the biased naive inverse.
+Open items: C2-B(i)/(ii) λ-window numerics fold into C2-A, and C4-D1
+must use the P-A target (route optimum versus true hidden `h` on the
+must-differ band), not route optimum versus `arccos(R22/f_par_obs)`.
+No harness run.
