@@ -1,0 +1,14 @@
+{
+  "receipt": "C3-A-R (v2, identical to v1)",
+  "F_star_deg": 0.05,
+  "pass_quantile_threshold": 0.5,
+  "samples_total": 648,
+  "samples_above_floor": 421,
+  "fraction_above_floor": 0.6496913580246914,
+  "shift_distribution": {
+    "median_deg": 1.4506674325978577,
+    "p75_deg": 7.550000000000107,
+    "p90_deg": 22.6000000000002
+  },
+  "pass": true
+}
