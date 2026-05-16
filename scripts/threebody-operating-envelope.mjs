@@ -859,6 +859,219 @@ function makePrecisionMapRows(envelopeRows) {
   ));
 }
 
+const RICHARDSON_REFERENCE_TIMESTEP = 0.004;
+const RICHARDSON_FIT_TIMESTEPS = [0.006, 0.008, 0.01, 0.012];
+const RICHARDSON_GRID_STEP = 0.12;
+const RICHARDSON_MAX_T = 4.8;
+const RICHARDSON_T_WINDOW_CAP = 2.4;
+const RICHARDSON_MIN_INWINDOW_POINTS = 12;
+const RICHARDSON_DIV_ABS_CAP = 1e-6;
+
+function richardsonColumn(value) {
+  return String(value).replace(".", "p");
+}
+
+function richardsonGroupKey(trial) {
+  return [
+    trial.regime,
+    trial.massRatio,
+    trial.radiusScale,
+    trial.velocityScale,
+    trial.thrustLimit,
+    trial.sensorNoiseStd,
+    trial.trackGuardMinRadius,
+    trial.trackGuardMaxLocalAcceleration,
+    trial.trackGuardMaxTidalMagnitude,
+    trial.seed,
+  ].join("\t");
+}
+
+function sampleMap(samples) {
+  const map = new Map();
+  for (const sample of samples ?? []) {
+    const index = Math.round(sample.time / RICHARDSON_GRID_STEP);
+    map.set(index, sample);
+  }
+  return map;
+}
+
+function survivedThrough(trial, tWindow) {
+  if (trial.summary.terminalOutcome === "bounded") return trial.summary.simulatedTime >= tWindow;
+  return trial.summary.simulatedTime > tWindow + 1e-9;
+}
+
+function divergenceAgainstReference(referenceTrial, trial, tWindow) {
+  if (!survivedThrough(referenceTrial, tWindow) || !survivedThrough(trial, tWindow)) return null;
+  const referenceSamples = sampleMap(referenceTrial.earlyTrajectory);
+  const samples = sampleMap(trial.earlyTrajectory);
+  const maxIndex = Math.round(tWindow / RICHARDSON_GRID_STEP);
+  let count = 0;
+  let maxDistance = 0;
+
+  for (let index = 1; index <= maxIndex; index += 1) {
+    const referenceSample = referenceSamples.get(index);
+    const sample = samples.get(index);
+    if (!referenceSample || !sample) continue;
+    count += 1;
+    const dx = sample.x3 - referenceSample.x3;
+    const dy = sample.y3 - referenceSample.y3;
+    maxDistance = Math.max(maxDistance, Math.sqrt(dx * dx + dy * dy));
+  }
+
+  return { count, maxDistance };
+}
+
+function olsSlope(xs, ys) {
+  const xMean = mean(xs);
+  const yMean = mean(ys);
+  if (!Number.isFinite(xMean) || !Number.isFinite(yMean)) return null;
+  let numerator = 0;
+  let denominator = 0;
+  for (let i = 0; i < xs.length; i += 1) {
+    numerator += (xs[i] - xMean) * (ys[i] - yMean);
+    denominator += (xs[i] - xMean) ** 2;
+  }
+  if (denominator <= 0) return null;
+  return numerator / denominator;
+}
+
+function richardsonOrderForGroup(group, tWindow) {
+  const byTimestep = new Map(group.map((trial) => [trial.timestep, trial]));
+  const referenceTrial = byTimestep.get(RICHARDSON_REFERENCE_TIMESTEP);
+  const first = group[0];
+  const base = {
+    regime: first.regime,
+    massRatio: first.massRatio,
+    radiusScale: first.radiusScale,
+    velocityScale: first.velocityScale,
+    thrustLimit: first.thrustLimit,
+    sensorNoiseStd: first.sensorNoiseStd,
+    seed: first.seed,
+    tWindow,
+    gridStep: RICHARDSON_GRID_STEP,
+    minInWindowGridPoints: RICHARDSON_MIN_INWINDOW_POINTS,
+    referenceTimestep: RICHARDSON_REFERENCE_TIMESTEP,
+  };
+  if (!referenceTrial) return { ...base, defined: false, nullReason: "missing_reference_timestep" };
+  if (!survivedThrough(referenceTrial, tWindow)) return { ...base, defined: false, nullReason: "reference_terminated_in_window" };
+
+  const distances = [];
+  const logsX = [];
+  const logsY = [];
+  const distanceColumns = {};
+  const pointColumns = {};
+  let minPointCount = Infinity;
+
+  for (const timestep of RICHARDSON_FIT_TIMESTEPS) {
+    const trial = byTimestep.get(timestep);
+    const suffix = richardsonColumn(timestep);
+    if (!trial) return { ...base, defined: false, nullReason: `missing_dt_${suffix}` };
+    if (!survivedThrough(trial, tWindow)) return { ...base, defined: false, nullReason: `terminated_dt_${suffix}` };
+    const divergence = divergenceAgainstReference(referenceTrial, trial, tWindow);
+    if (!divergence) return { ...base, defined: false, nullReason: `no_common_points_dt_${suffix}` };
+    distanceColumns[`d_${suffix}`] = roundMetric(divergence.maxDistance, 12);
+    pointColumns[`points_${suffix}`] = divergence.count;
+    minPointCount = Math.min(minPointCount, divergence.count);
+    if (
+      divergence.count < RICHARDSON_MIN_INWINDOW_POINTS
+      || !Number.isFinite(divergence.maxDistance)
+      || divergence.maxDistance <= 0
+    ) {
+      return {
+        ...base,
+        ...distanceColumns,
+        ...pointColumns,
+        defined: false,
+        nullReason: `insufficient_or_zero_divergence_dt_${suffix}`,
+        minPointCount,
+      };
+    }
+    distances.push(divergence.maxDistance);
+    logsX.push(Math.log(timestep));
+    logsY.push(Math.log(divergence.maxDistance));
+  }
+
+  const fittedOrder = olsSlope(logsX, logsY);
+  if (!Number.isFinite(fittedOrder)) {
+    return {
+      ...base,
+      ...distanceColumns,
+      ...pointColumns,
+      defined: false,
+      nullReason: "undefined_ols_slope",
+      minPointCount,
+    };
+  }
+
+  return {
+    ...base,
+    ...distanceColumns,
+    ...pointColumns,
+    defined: true,
+    nullReason: "",
+    minPointCount,
+    fittedOrder: roundMetric(fittedOrder),
+    maxD012: roundMetric(distances.at(-1), 12),
+  };
+}
+
+function makeRichardsonOrderRows(trials) {
+  const groups = new Map();
+  for (const trial of trials) {
+    if (trial.controllerMode !== "off") continue;
+    if (!Array.isArray(trial.earlyTrajectory)) continue;
+    const key = richardsonGroupKey(trial);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(trial);
+  }
+  const groupedTrials = [...groups.values()];
+  if (groupedTrials.length === 0) return [];
+
+  const candidateWindows = [];
+  const maxIndex = Math.round(Math.min(RICHARDSON_MAX_T, RICHARDSON_T_WINDOW_CAP) / RICHARDSON_GRID_STEP);
+  for (let index = 1; index <= maxIndex; index += 1) {
+    candidateWindows.push(roundMetric(index * RICHARDSON_GRID_STEP, 6));
+  }
+
+  let selectedTWindow = null;
+  for (const tWindow of candidateWindows) {
+    const rows = groupedTrials.map((group) => richardsonOrderForGroup(group, tWindow));
+    const passes = rows.length > 0 && rows.every((row) => (
+      row.defined
+      && row.fittedOrder >= 3
+      && row.fittedOrder <= 5
+      && row.maxD012 < RICHARDSON_DIV_ABS_CAP
+    ));
+    if (passes) selectedTWindow = tWindow;
+  }
+
+  const tWindow = selectedTWindow ?? RICHARDSON_T_WINDOW_CAP;
+  const rows = groupedTrials.map((group) => richardsonOrderForGroup(group, tWindow));
+  const favorableRows = rows.filter((row) => row.velocityScale >= 1.05);
+  const favorableDefined = favorableRows.filter((row) => row.defined);
+  const favorableCoverageRate = ratio(favorableDefined.length, favorableRows.length);
+  const favorableMedianOrder = quantile(favorableDefined.map((row) => row.fittedOrder), 0.5);
+  const favorableDecidable = favorableCoverageRate !== null && favorableCoverageRate >= 2 / 3;
+
+  return rows.map((row) => ({
+    ...row,
+    selectedTWindow,
+    windowSelectionStatus: selectedTWindow === null ? "no_window_passed_smoke_procedure" : "selected",
+    earlyDivAbsCap: RICHARDSON_DIV_ABS_CAP,
+    favorableDefinedCount: favorableDefined.length,
+    favorableTotalCount: favorableRows.length,
+    favorableCoverageRate: roundMetric(favorableCoverageRate),
+    favorableDecidable,
+    favorableMedianOrder: roundMetric(favorableMedianOrder),
+  })).sort((a, b) => (
+    a.regime.localeCompare(b.regime)
+    || a.massRatio - b.massRatio
+    || a.radiusScale - b.radiusScale
+    || a.velocityScale - b.velocityScale
+    || a.seed - b.seed
+  ));
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(repoRoot, args.out);
@@ -914,6 +1127,7 @@ async function main() {
             summary: trial.summary,
             sensorAudit: trial.sensorAudit,
             eventHistory: trial.eventHistory,
+            ...(args.precisionReceipts ? { earlyTrajectory: trial.earlyTrajectory ?? [] } : {}),
           };
           trials.push(row);
           manifest.trials.push({
@@ -933,6 +1147,7 @@ async function main() {
             log: relativePath,
             summary: trial.summary,
             sensorAuditSampleCount: trial.sensorAudit.length,
+            ...(args.precisionReceipts ? { earlyTrajectorySampleCount: trial.earlyTrajectory?.length ?? 0 } : {}),
           });
         }
         if (mode === "off" && args.trackGuardMode === "hazard_quantile") {
@@ -957,6 +1172,7 @@ async function main() {
   const cellDeltaMapRows = makeCellMatrixRows(bestByCellRows, "bestSurvivalDeltaVsPassive");
   const candidateRows = envelopeRows.filter((row) => row.candidateEnvelope);
   const cellPrecisionMapRows = args.precisionReceipts ? makePrecisionMapRows(envelopeRows) : null;
+  const richardsonOrderRows = args.precisionReceipts ? makeRichardsonOrderRows(trials) : null;
 
   let cellWarningQualityMapRows = null;
   if (args.trackActionCoupling || args.precisionReceipts) {
@@ -996,6 +1212,9 @@ async function main() {
   if (cellPrecisionMapRows) {
     await writeFile(path.join(outDir, "cell-precision-map.csv"), rowsToCsv(cellPrecisionMapRows), "utf8");
   }
+  if (richardsonOrderRows) {
+    await writeFile(path.join(outDir, "richardson-order-map.csv"), rowsToCsv(richardsonOrderRows), "utf8");
+  }
   await writeFile(
     path.join(outDir, "candidate-envelope.csv"),
     rowsToCsv(candidateRows, envelopeRows.length > 0 ? Object.keys(envelopeRows[0]) : []),
@@ -1010,6 +1229,7 @@ async function main() {
   console.log(`[threebody] wrote ${manifest.trials.length} ${args.phase} trials to ${path.relative(repoRoot, outDir)}`);
   console.log(`[threebody] wrote trial-outcomes.csv, paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv`);
   if (cellPrecisionMapRows) console.log("[threebody] wrote cell-precision-map.csv");
+  if (richardsonOrderRows) console.log("[threebody] wrote richardson-order-map.csv");
   console.log(`[threebody] candidate envelope rows ${candidateRows.length}/${envelopeRows.length}`);
   console.log(`[threebody] outcomes ${JSON.stringify(outcomeCounts)}`);
 }

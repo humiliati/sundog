@@ -1079,6 +1079,9 @@ export function summarizeEventDiagnostics(eventHistory, config = {}) {
   };
 }
 
+const EARLY_TRAJECTORY_GRID_STEP = 0.12;
+const EARLY_TRAJECTORY_MAX_T = 4.8;
+
 export function runTrial(config = {}) {
   const cfg = normalizeConfig(config);
   const steps = Math.max(1, Math.round(cfg.duration / cfg.dt));
@@ -1090,7 +1093,9 @@ export function runTrial(config = {}) {
   const records = [];
   const eventHistory = [];
   const sensorAudit = [];
+  const earlyTrajectory = [];
   const sensorStates = new Map();
+  let lastEarlyTrajectoryGridIndex = -1;
   let totalDeltaV = 0;
   let acEligible = 0;
   let acPositive = 0;
@@ -1145,6 +1150,27 @@ export function runTrial(config = {}) {
     const oracleHazard = cfg.precisionReceipts && cfg.controllerMode === "off" && shouldAuditStep
       ? computeStrictOracleDetails(state, cfg)
       : null;
+    if (cfg.precisionReceipts && cfg.controllerMode === "off") {
+      const gridIndex = Math.round(time / EARLY_TRAJECTORY_GRID_STEP);
+      const gridTime = gridIndex * EARLY_TRAJECTORY_GRID_STEP;
+      const onGrid = Math.abs(time - gridTime) <= Math.max(1e-9, cfg.dt * 1e-6);
+      if (
+        gridIndex > lastEarlyTrajectoryGridIndex
+        && onGrid
+        && gridTime <= EARLY_TRAJECTORY_MAX_T + 1e-9
+      ) {
+        earlyTrajectory.push({
+          step,
+          time: gridTime,
+          x3: state[4],
+          y3: state[5],
+          vx3: state[10],
+          vy3: state[11],
+          terminal: events.invalid || events.escape || events.closeApproach,
+        });
+        lastEarlyTrajectoryGridIndex = gridIndex;
+      }
+    }
     eventHistory.push({
       time,
       events,
@@ -1241,6 +1267,7 @@ export function runTrial(config = {}) {
     records,
     eventHistory,
     sensorAudit,
+    ...(cfg.precisionReceipts ? { earlyTrajectory } : {}),
     summary: {
       ...summarizeOutcome(eventHistory),
       ...summarizeEventDiagnostics(eventHistory, cfg),

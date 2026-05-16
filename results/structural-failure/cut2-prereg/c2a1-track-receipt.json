@@ -1,0 +1,833 @@
+{
+  "receipt": "C2-A-1",
+  "title": "C_L1 behavioral-effectiveness — sustained-TRACK landscape vs PhotometricAgent reacquire threshold",
+  "spec_reference": "P2_CUT2_C2A_NUMERIC_FREEZE.md §1 + Wave-2/Wave-3 audit-notes",
+  "sustained_track_criterion": "bridge-mapped target intensity at the joint optimum (= C_L1(s_obs(h)) · 1.0 per §5 bridge convention) ≥ reacquire_threshold = 0.05. PhotometricAgent's phase semantics (agents/photometric.py:163-166): reacquire enforced only after TRACK is entered; if i_now < threshold for reacquire_hold_steps = 30 consecutive control steps the agent re-enters SCAN. Sustained TRACK therefore fails iff C_L1(s_obs(h)) < 0.05.",
+  "h_L1_deg": 11.364876967033691,
+  "coincidence_window_deg": 1.5,
+  "coincidence_window_lower_h_deg": 9.864876967033691,
+  "coincidence_window_upper_h_deg": 12.864876967033691,
+  "sustained_track_transition_h_deg": 10,
+  "transition_inside_coincidence_window": true,
+  "transition_margin_to_lower_edge_deg": 0.1351230329663089,
+  "k_observation": {
+    "analytical_5pct_crossing_h_deg": 9.89,
+    "grid_step_deg": 0.5,
+    "first_grid_point_above_5pct_h_deg": 10,
+    "k_that_puts_analytical_5pct_at_grid_transition": 645.7,
+    "note": "k = 600 is the Wave-2 frozen value. The grid-discretized transition lands at the first grid point ≥ 9.89° (the continuous 5% crossing), which is h = 10.0° at step 0.5°. The 'effective k = 645.7' is what k would put the continuous 5% crossing exactly at h = 10°; recorded as a discretization observation, not a re-pick. k_v1 = 200 (sketched in proposal pre-Wave-2) was an arithmetic error caught at Wave-2 audit and is not in play here."
+  },
+  "pass": true,
+  "rows": [
+    {
+      "h_deg": 0,
+      "s_obs": 0,
+      "C_L1": 0.000006144174602214718,
+      "bridge_intensity_peak": 0.000006144174602214718,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 0.5471782821411671
+    },
+    {
+      "h_deg": 0.5,
+      "s_obs": 0.000038078385736994846,
+      "C_L1": 0.000006286165731604211,
+      "bridge_intensity_peak": 0.000006286165731604211,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 0.5584112587788674
+    },
+    {
+      "h_deg": 1,
+      "s_obs": 0.00015232804390774568,
+      "C_L1": 0.0000067321910283715135,
+      "bridge_intensity_peak": 0.0000067321910283715135,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 0.593330779786451
+    },
+    {
+      "h_deg": 1.5,
+      "s_obs": 0.00034279249086788255,
+      "C_L1": 0.0000075472141260662305,
+      "bridge_intensity_peak": 0.0000075472141260662305,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 0.6557410502559576
+    },
+    {
+      "h_deg": 2,
+      "s_obs": 0.0006095442988216515,
+      "C_L1": 0.000008857178675940187,
+      "bridge_intensity_peak": 0.000008857178675940187,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 0.7524297694174772
+    },
+    {
+      "h_deg": 2.5,
+      "s_obs": 0.0009526851633199218,
+      "C_L1": 0.000010882007898434714,
+      "bridge_intensity_peak": 0.000010882007898434714,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 0.8936965348275325
+    },
+    {
+      "h_deg": 3,
+      "s_obs": 0.0013723459979209096,
+      "C_L1": 0.000013997855772290239,
+      "bridge_intensity_peak": 0.000013997855772290239,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 1.0936191223418321
+    },
+    {
+      "h_deg": 3.5,
+      "s_obs": 0.0018686870561792635,
+      "C_L1": 0.000018853601146321653,
+      "bridge_intensity_peak": 0.000018853601146321653,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 1.3691078485681256
+    },
+    {
+      "h_deg": 4,
+      "s_obs": 0.0024418980811722335,
+      "C_L1": 0.00002659232961816297,
+      "bridge_intensity_peak": 0.00002659232961816297,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 1.7359655823719007
+    },
+    {
+      "h_deg": 4.5,
+      "s_obs": 0.0030921984828256033,
+      "C_L1": 0.00003928294141460886,
+      "bridge_intensity_peak": 0.00003928294141460886,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 2.1999130400614924
+    },
+    {
+      "h_deg": 5,
+      "s_obs": 0.0038198375433473597,
+      "C_L1": 0.00006078556217602988,
+      "bridge_intensity_peak": 0.00006078556217602988,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 2.743388262066415
+    },
+    {
+      "h_deg": 5.5,
+      "s_obs": 0.004625094651127926,
+      "C_L1": 0.00009854061548811084,
+      "bridge_intensity_peak": 0.00009854061548811084,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 3.316958636676647
+    },
+    {
+      "h_deg": 6,
+      "s_obs": 0.005508279563516405,
+      "C_L1": 0.00016738740138204567,
+      "bridge_intensity_peak": 0.00016738740138204567,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 3.849979352940332
+    },
+    {
+      "h_deg": 6.5,
+      "s_obs": 0.006469732698935138,
+      "C_L1": 0.00029798768055686135,
+      "bridge_intensity_peak": 0.00029798768055686135,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 4.281583762965569
+    },
+    {
+      "h_deg": 7,
+      "s_obs": 0.007509825458848374,
+      "C_L1": 0.0005560452264043971,
+      "bridge_intensity_peak": 0.0005560452264043971,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 4.5874895319558515
+    },
+    {
+      "h_deg": 7.5,
+      "s_obs": 0.008628960580152834,
+      "C_L1": 0.0010876760534102511,
+      "bridge_intensity_peak": 0.0010876760534102511,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 4.780253790830343
+    },
+    {
+      "h_deg": 8,
+      "s_obs": 0.0098275725186181,
+      "C_L1": 0.0022301439962176205,
+      "bridge_intensity_peak": 0.0022301439962176205,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 4.890357801781507
+    },
+    {
+      "h_deg": 8.5,
+      "s_obs": 0.011106127864062065,
+      "C_L1": 0.004790477097157248,
+      "bridge_intensity_peak": 0.004790477097157248,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 4.9483521985576955
+    },
+    {
+      "h_deg": 9,
+      "s_obs": 0.012465125788002851,
+      "C_L1": 0.010761883015349194,
+      "bridge_intensity_peak": 0.010761883015349194,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 4.976877293285075
+    },
+    {
+      "h_deg": 9.5,
+      "s_obs": 0.01390509852459898,
+      "C_L1": 0.025161889575589534,
+      "bridge_intensity_peak": 0.025161889575589534,
+      "reacquire_threshold": 0.05,
+      "sustains_track": false,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 4.990084043512468
+    },
+    {
+      "h_deg": 10,
+      "s_obs": 0.015426611885745123,
+      "C_L1": 0.06042453730760354,
+      "bridge_intensity_peak": 0.06042453730760354,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 4.99586602872663
+    },
+    {
+      "h_deg": 10.5,
+      "s_obs": 0.017030265811265544,
+      "C_L1": 0.1440760167447057,
+      "bridge_intensity_peak": 0.1440760167447057,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 4.9982654068595895
+    },
+    {
+      "h_deg": 11,
+      "s_obs": 0.01871669495521422,
+      "C_L1": 0.3164827779036694,
+      "bridge_intensity_peak": 0.3164827779036694,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": false,
+      "track_gradient_snr_estimate": 4.999210192379898
+    },
+    {
+      "h_deg": 11.5,
+      "s_obs": 0.020486569309361657,
+      "C_L1": 0.572471398651978,
+      "bridge_intensity_peak": 0.572471398651978,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.9995633350987605
+    },
+    {
+      "h_deg": 12,
+      "s_obs": 0.022340594865029262,
+      "C_L1": 0.8028743556514588,
+      "bridge_intensity_peak": 0.8028743556514588,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.9996886381659245
+    },
+    {
+      "h_deg": 12.5,
+      "s_obs": 0.024279514314509143,
+      "C_L1": 0.9287542225321062,
+      "bridge_intensity_peak": 0.9287542225321062,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.9997308367103255
+    },
+    {
+      "h_deg": 13,
+      "s_obs": 0.02630410779339165,
+      "C_L1": 0.9777402663057765,
+      "bridge_intensity_peak": 0.9777402663057765,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999744321447437
+    },
+    {
+      "h_deg": 13.5,
+      "s_obs": 0.028415193665208616,
+      "C_L1": 0.9936258893981763,
+      "bridge_intensity_peak": 0.9936258893981763,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999748408910121
+    },
+    {
+      "h_deg": 14,
+      "s_obs": 0.030613629349898197,
+      "C_L1": 0.9982876548629123,
+      "bridge_intensity_peak": 0.9982876548629123,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999749583721718
+    },
+    {
+      "h_deg": 14.5,
+      "s_obs": 0.03290031219768541,
+      "C_L1": 0.9995651990483952,
+      "bridge_intensity_peak": 0.9995651990483952,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.99974990376273
+    },
+    {
+      "h_deg": 15,
+      "s_obs": 0.03527618041008296,
+      "C_L1": 0.9998954466201372,
+      "bridge_intensity_peak": 0.9998954466201372,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999749986360911
+    },
+    {
+      "h_deg": 15.5,
+      "s_obs": 0.037742214009817365,
+      "C_L1": 0.9999761887456553,
+      "bridge_intensity_peak": 0.9999761887456553,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750006547015
+    },
+    {
+      "h_deg": 16,
+      "s_obs": 0.040299435861602007,
+      "C_L1": 0.9999948662113894,
+      "bridge_intensity_peak": 0.9999948662113894,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750011216049
+    },
+    {
+      "h_deg": 16.5,
+      "s_obs": 0.042948912745801815,
+      "C_L1": 0.9999989527560924,
+      "bridge_intensity_peak": 0.9999989527560924,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.99975001223759
+    },
+    {
+      "h_deg": 17,
+      "s_obs": 0.04569175648714796,
+      "C_L1": 0.9999997980113026,
+      "bridge_intensity_peak": 0.9999997980113026,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012448883
+    },
+    {
+      "h_deg": 17.5,
+      "s_obs": 0.04852912514081065,
+      "C_L1": 0.9999999631892207,
+      "bridge_intensity_peak": 0.9999999631892207,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012490173
+    },
+    {
+      "h_deg": 18,
+      "s_obs": 0.051462224238267185,
+      "C_L1": 0.9999999936660042,
+      "bridge_intensity_peak": 0.9999999936660042,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012497792
+    },
+    {
+      "h_deg": 18.5,
+      "s_obs": 0.05449230809555661,
+      "C_L1": 0.9999999989717268,
+      "bridge_intensity_peak": 0.9999999989717268,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499118
+    },
+    {
+      "h_deg": 19,
+      "s_obs": 0.05762068118667063,
+      "C_L1": 0.9999999998426281,
+      "bridge_intensity_peak": 0.9999999998426281,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.9997500124993355
+    },
+    {
+      "h_deg": 19.5,
+      "s_obs": 0.06084869958499706,
+      "C_L1": 0.9999999999773128,
+      "bridge_intensity_peak": 0.9999999999773128,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.99975001249937
+    },
+    {
+      "h_deg": 20,
+      "s_obs": 0.06417777247591205,
+      "C_L1": 0.9999999999969218,
+      "bridge_intensity_peak": 0.9999999999969218,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 20.5,
+      "s_obs": 0.06760936374380644,
+      "C_L1": 0.9999999999996072,
+      "bridge_intensity_peak": 0.9999999999996072,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 21,
+      "s_obs": 0.07114499363702897,
+      "C_L1": 0.9999999999999529,
+      "bridge_intensity_peak": 0.9999999999999529,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 21.5,
+      "s_obs": 0.07478624051445215,
+      "C_L1": 0.9999999999999947,
+      "bridge_intensity_peak": 0.9999999999999947,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.9997500124993755
+    },
+    {
+      "h_deg": 22,
+      "s_obs": 0.07853474267758331,
+      "C_L1": 0.9999999999999993,
+      "bridge_intensity_peak": 0.9999999999999993,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 22.5,
+      "s_obs": 0.08239220029239402,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 23,
+      "s_obs": 0.08636037740529612,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 23.5,
+      "s_obs": 0.09044110405797134,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 24,
+      "s_obs": 0.09463627850604683,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 24.5,
+      "s_obs": 0.09894786954693657,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 25,
+      "s_obs": 0.10337791896249171,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 25.5,
+      "s_obs": 0.10792854408246644,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 26,
+      "s_obs": 0.11260194047518879,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 26.5,
+      "s_obs": 0.11740038477223802,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 27,
+      "s_obs": 0.12232623763436079,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 27.5,
+      "s_obs": 0.1273819468663424,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 28,
+      "s_obs": 0.13257005068903904,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 28.5,
+      "s_obs": 0.1378931811773303,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 29,
+      "s_obs": 0.14335406787332006,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 29.5,
+      "s_obs": 0.14895554158475055,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 30,
+      "s_obs": 0.15470053837925146,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 30.5,
+      "s_obs": 0.16059210378577315,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 31,
+      "s_obs": 0.16663339721533044,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 31.5,
+      "s_obs": 0.17282769661400876,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 32,
+      "s_obs": 0.17917840336209645,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 32.5,
+      "s_obs": 0.1856890474341606,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 33,
+      "s_obs": 0.19236329283594733,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 33.5,
+      "s_obs": 0.19920494333509797,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 34,
+      "s_obs": 0.2062179485039055,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 34.5,
+      "s_obs": 0.21340641009364725,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 35,
+      "s_obs": 0.22077458876145606,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 35.5,
+      "s_obs": 0.22832691117223436,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 36,
+      "s_obs": 0.23606797749978958,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 36.5,
+      "s_obs": 0.24400256935318065,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 37,
+      "s_obs": 0.25213565815622574,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 37.5,
+      "s_obs": 0.26047241401026455,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 38,
+      "s_obs": 0.26901821507257884,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 38.5,
+      "s_obs": 0.27777865748539887,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 39,
+      "s_obs": 0.2867595658931672,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 39.5,
+      "s_obs": 0.29596700458871683,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    },
+    {
+      "h_deg": 40,
+      "s_obs": 0.30540728933227856,
+      "C_L1": 1,
+      "bridge_intensity_peak": 1,
+      "reacquire_threshold": 0.05,
+      "sustains_track": true,
+      "eligible_L1": true,
+      "track_gradient_snr_estimate": 4.999750012499375
+    }
+  ]
+}

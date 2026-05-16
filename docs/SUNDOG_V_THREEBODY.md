@@ -751,9 +751,10 @@ does not support a causal-control claim.
 
 Status: spec pre-registered and lock-reviewed 2026-05-15; precision gate amended
 and lock-reviewed to early-window Richardson cross-timestep trajectory order.
-Additive core and harness implementation is in place; the Richardson sampler,
-Phase 13/14 hard-void gate reruns, and amended Phase 15 smoke are pending. Smoke
-must stop for `T_window` and order-coverage readback before the full lock starts.
+Additive core and harness implementation is in place, including the Richardson
+sampler and `richardson-order-map.csv`; Phase 13/14 hard-void gate reruns and
+the amended Phase 15 smoke are pending. Smoke must stop for `T_window` and
+order-coverage readback before the full lock starts.
 
 ### Cross-Substrate Hand-Offs
 

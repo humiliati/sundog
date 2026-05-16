@@ -319,3 +319,188 @@ boundary moved; no Wave-3 receipt computed. Public-Language Constraint
 remains fully in force. Cut-2-execute remains HELD on Wave 3 (C2-A-1/2/3
 receipts), Wave 4 (C3-A `P_in` + receipts), Wave 6 (C4-A remaining
 artifacts), Wave 7 (C4-B self-test), and the joint admission re-run.
+
+**2026-05-16 (PT) — maintainer. Wave-3 C2-A receipts filed (composite,
+narrative-ordered).** Append-only; the frozen body and the Wave-2
+`[E]` values above are unchanged. This entry files C2-A-1, C2-A-3, and
+both versions of C2-A-2 (v1 BLOCK + Wave-3.1 algebraic amendment + v2
+PASS), in that order, with all hashes pinned. Receipt order is
+deliberate per the Wave-3 sign-off conditions: **v1 freeze → C2-A-2 v1
+BLOCK → algebraic amendment → C2-A-2 v2 re-run**, never v2-as-original.
+
+*§A — Honest disclosure: two distinct defects in the v1
+implementation.* The first end-to-end receipt computation surfaced two
+defects that BOTH needed correction. Recording them once here so the
+receipt provenance is unambiguous:
+
+- **Defect 1 — script-level (implementation against freeze §1).** The
+  initial Wave-3 authoring script
+  (`scripts/cut2-c2a-receipts.mjs` and its sibling
+  `scripts/cut2-c2a-amendment-v2.mjs`) evaluated `C_L1` from
+  `sec(true_h) − 1` inside the objective. The C2-A freeze §1 specifies
+  `s_obs = f_par_obs/R22 − 1` (observable, no `h`). At `ε = 0` the two
+  forms agree; with `ε ≠ 0` they diverge. This was an implementation
+  bug against the freeze text, not a Wave-2 calibration issue. It was
+  fixed by reading `C_L1` from the observable
+  `sObsFromFParObs(f_par_obs)` everywhere inside the objective. The
+  initial buggy-state v1 abstain JSON is preserved as
+  `results/structural-failure/cut2-prereg/_legacy_pre_w3_c2a2-abstain-scan.json`
+  for the audit archeology — it is **not** the canonical v1 receipt
+  below.
+
+- **Defect 2 — algebraic (Wave-2 calibration miss).** Once Defect 1
+  was fixed, the v1 receipt still BLOCKED on `cond > κ_cond_max` for
+  ~46% of L1-eligible-by-observation rows. Root cause: the Wave-2
+  `[E]` pick `κ_cond_max = 100` was calibrated against the q_a-only
+  curvature scale (`2λ/A² ≈ 10 /deg²`) and missed the chain-rule
+  scaling of the q_h Hessian eigenvalue. With the (q_h, q_a)
+  parameterisation, `|H_qh|` at the joint optimum carries a factor
+  `χ² = (R22·tan(q_h)·sec(q_h)·π/180)²`, which collapses to ~6.20·10⁻³
+  near the L1 boundary `h_L1 ≈ 11.366°` and shrinks further at lower
+  `q_h`. The principled chain-rule re-derivation is in §C below.
+
+*§B — C2-A-1 sustained-TRACK landscape receipt (PASS).*
+Bridge-mapped target intensity at the joint optimum
+(`= C_L1(s_obs(h)) · 1.0` per §5 bridge convention) crosses
+`reacquire_threshold = 0.05` at the first `h` on the frozen grid where
+`C_L1 ≥ 0.05`. Under `k = 600` (Wave-2 frozen) the continuous 5%
+crossing of `C_L1(s_obs(h))` is at `h ≈ 9.89°`; the discrete
+grid-evaluated transition lands at `h = 10.0°` (= first grid point
+≥ 9.89° at step 0.5°). The "effective `k ≈ 645.7`" that would put the
+continuous 5% crossing exactly at `h = 10°` is recorded in the JSON's
+`k_observation` field as a **grid-discretization observation, not a
+re-pick** of `k`. `k` stays at the Wave-2 frozen 600; the v1 proposal's
+sketched `k = 200` (a separate Wave-2 arithmetic error caught at
+that audit) is not in play here.
+
+Transition margin to lower coincidence-window edge: **0.135°** under
+grid quantization (continuous margin would be `10.0° − 9.866° = 0.134°`
+— same up to grid effects). Receipt PASS.
+
+*§C — Wave-3.1 amendment: principled re-pick `κ_cond_max` 100 → 10⁴.*
+Append-only [E] amendment. The basis is one-way Hessian chain-rule
+algebra at the L1 boundary; **no receipt-data flowed into the choice
+of 10⁴**.
+
+Derivation (sanity-checked against the Wave-3 review):
+
+```
+h_L1 = arccos(1/1.02) ≈ 11.366°
+A = ρ·R22 ≈ 0.44°
+χ  = R22·tan(h_L1)·sec(h_L1)·(π/180)
+   = 22·0.20096·1.02041·0.017453
+   ≈ 0.07872 /deg
+
+|H_qa| at joint optimum (eligible-band)
+   = 2λ/A² + 1/σ²
+   = 2·1.0/0.44² + 1/0.5²
+   ≈ 10.33 + 4.00
+   = 14.33 /deg²
+
+|H_qh| at h_L1, with C_L1(h_L1)=0.5:
+   = C_L1·χ²/σ²
+   = 0.5·(0.07872)²/0.25
+   ≈ 0.01239 /deg²
+
+cond_L1 = |H_qa| / |H_qh| ≈ 14.33 / 0.01239 ≈ 1156
+```
+
+`κ_cond_max v2 = 10⁴` sits **~8.7× above** this principled eligible
+geometric-extreme value at h_L1 (buffering ε perturbations and grid
+quantisation), and well below the degenerate cond regime.
+
+**Degenerate cond framing (per Wave-3 sign-off condition).** For
+degenerate bundles the argmax sits at or near `q_h = 0`, where
+`χ = R22·tan(0)·sec(0)·(π/180) = 0`. Therefore `|H_qh| → 0` and
+**`cond → ∞` analytically**. The `~10⁵` floor empirically seen in the
+receipt computation is **the grid-resolution practical floor under the
+frozen q-grid step (0.05°) and the finite-difference Hessian estimator
+(`eps_fd = 1e-3`)** — NOT a universal analytic floor. A finer grid or
+a different Hessian estimator would push that floor higher; the
+analytic statement is the one that's load-bearing.
+
+The v1 value of `100` was the maintainer-side algebraic miss; `10⁴` is
+the principled chain-rule value. A3 compliance: the new value is
+derived from algebra that should have been done at Wave 2, not from
+where the v1 receipt happened to fail.
+
+*§D — C2-A-2 v1 receipt under Wave-2 `κ_cond_max = 100` (BLOCK).*
+Recorded with Defect 1 fixed (observable `s_obs`) and Defect 2 still
+active (algebraic κ miss) to **isolate** the calibration defect from
+the script bug.
+
+Trip-cause breakdown (v1): all eligible-by-observation trips fire on
+`cond > κ_cond_max` alone — none on `max_O < O_floor` or `|r| > r_tol`.
+The κ criterion is the sole failure mode; the other two criteria work
+correctly. This isolates the v1 BLOCK to the algebraic miss.
+
+| metric | v1 value |
+| --- | --- |
+| degenerate trip rate | 61/61 = 100.0% |
+| L1_eligible_by_obs tripped | 222/479 |
+| L1_ineligible_by_obs tripped (borderline) | recorded, not constrained |
+
+v1 is filed as a **permanent BLOCK receipt** of the Wave-2 κ_cond_max
+algebraic miss. It is not re-tuned, not deleted, not amended after
+results.
+
+*§E — C2-A-2 v2 receipt under Wave-3.1 amendment `κ_cond_max = 10⁴`
+(PASS).* Re-classified by `f_par_obs` (strict spec reading: degenerate
+= `f_par_obs < R22`; L1_eligible_by_obs = `f_par_obs ≥ 1.02·R22`).
+
+| metric | v2 value |
+| --- | --- |
+| degenerate trip rate | 61/61 = 100.0% |
+| L1_eligible_by_obs tripped | 0/479 |
+| pass criterion | all degenerate trip AND all L1_eligible_by_obs do not trip |
+| verdict | **PASS** |
+
+*§F — C2-A-3 package-gating separation receipt (PASS).* Min `C_L1` for
+`h ≥ h* = 25°` is `1.0000000000` to 10 decimals; threshold is
+`1 − ε_C = 0.9990000000`. The L1 ramp is functionally 1.0 throughout
+the L2/L3 region; multiplying the bracket by `C_L1` does NOT mask the
+L2/L3 consistency-term tests. PASS.
+
+*§G — Pinned artifacts (paths repo-relative, hashes SHA-256, 2026-05-16
+PT).*
+
+| artifact | path | sha256 |
+| --- | --- | --- |
+| Wave-3 consolidated generator (canonical) | `scripts/cut2-c2a-w3.mjs` | `3e06221b6f7ad81a6e7f6482eba019265330860c2280f2f545e16894d276d104` |
+| C2-A-1 sustained-TRACK landscape receipt | `results/structural-failure/cut2-prereg/c2a1-track-receipt.json` | raw `5e613270f44c3839fb361a51283b3d348e05fb5889595131b8adb17a844d8d18` · canonical `6cd231cd52201dcc3c712c37b1a162a67cec453444aa0ebf630abf34350c1ef8` |
+| C2-A-2 v1 abstain scan (BLOCK, κ=100, observable s_obs, Wave-2 algebraic miss isolated) | `results/structural-failure/cut2-prereg/c2a2-abstain-scan-v1.json` | raw `b2086eb7517b3aaebdf1e90d4a3db820e25ce74b05e81357658163e284f59b09` · canonical `b036407d2d3cd617f1c587b693344ba434288791fb0af826aa6eb76b1bfbaceb` |
+| C2-A-2 v2 abstain scan (PASS, κ=10⁴, observable s_obs, Wave-3.1 amendment) | `results/structural-failure/cut2-prereg/c2a2-abstain-scan-v2.json` | raw `f9f26ad40e3046a30b40c56b69745da9df4ed9bb518cfbe8497826366c51165d` · canonical `3cab30a3d40a4fcb009248dc599873cb0fc9a07dc14ddaa330228b20f456a47e` |
+| C2-A-3 separation receipt | `results/structural-failure/cut2-prereg/c2a3-separation-receipt.json` | raw `ac73eb6f42807ad4f6263b39b8941fb2bcf8bb94819dfeb49e7165ef03fd6bc4` · canonical `78f8f3079580f8039b81161bfbf3b794cffe7d9d39ce6b962c63c468ffaa460c` |
+| Wave-3 markdown summary | `results/structural-failure/cut2-prereg/c2a-w3-summary.md` | raw `aaff2041bbf45b8140c7a7244377b8a4fef6995d6202a84ff06af7d8ec2a0a31` |
+
+*Stepping-stone scripts (preserved, not canonical).*
+`scripts/cut2-c2a-receipts.mjs` and `scripts/cut2-c2a-amendment-v2.mjs`
+were the initial authoring scripts; both carry the s_obs fix in their
+final state but a Windows-mount truncation artifact prevented their
+end-to-end execution from the bash sandbox. They are superseded by
+`scripts/cut2-c2a-w3.mjs` (canonical, pinned above). The legacy
+buggy-state v1 abstain output is preserved at
+`results/structural-failure/cut2-prereg/_legacy_pre_w3_c2a2-abstain-scan.json`
+(buggy s_obs + κ=100, both defects active) for the audit archeology.
+None of these are part of the Wave-3 receipt set.
+
+*§H — What this composite filing does NOT do.* No frozen body edited;
+no `[G]` boundary moved; no Wave-2 `[E]` value other than `κ_cond_max`
+was changed (the principled re-pick is bounded by chain-rule Hessian
+algebra at h_L1, NOT by the receipt outcome). All other Wave-2 values
+— `ρ`, `σ`, `seed`, `h`-grid, `q_h`/`q_a` domains, `λ`, `τ_C2-B-ii`,
+`k=600`, `T_cza`, `T_tan`, `detect_threshold_T`, `separation_min`,
+`O_floor`, `r_tol`, bridge scale, `D1_min_bias`, plus the inherited
+`[G]` values — stay exactly as filed at Wave-2. Public-Language
+Constraint remains fully in force.
+
+Cut-2-execute remains HELD on Wave 4 (C3-A `P_in` + receipts), Wave 6
+(C4-A remaining artifacts: D1 probe set, minimal-flip generator/diff,
+C4-D taint script), Wave 7 (C4-B two-sided self-test), and the joint
+admission re-run.
+
+Justification: closes Wave-3 of the ordered concrete fill. C2-A-1
+PASS, C2-A-3 PASS, C2-A-2 v1 BLOCK (filed as the permanent
+calibration-miss receipt), Wave-3.1 algebraic amendment to
+`κ_cond_max`, C2-A-2 v2 PASS. All hashes pinned; receipt order is
+strictly chronological in the narrative arc.

@@ -6,22 +6,20 @@ cross-timestep trajectory order. The PRE-amendment Phase 15 code (behind
 `forward_oracle_strict` / `--precision-receipts`: counterfactual, energy-drift,
 oracle-hazard, `cell-precision-map.csv`) is written and the pre-amendment smoke
 ran. **The amended Richardson sampler + `makeRichardsonOrderRows` +
-`richardson-order-map.csv` are NOT yet implemented in code** — verified
-2026-05-16: zero `earlyTrajectory`/Richardson tokens in
-`threebody-core.mjs` / `threebody-operating-envelope.mjs`. No `T_window` has
-been derived; no full-lock result exists.
+`richardson-order-map.csv` are now implemented in code** as of 2026-05-16.
+The post-code hard-void gates and widened smoke have not been rerun, no locked
+`T_window` has been derived, and no full-lock result exists.
 
 Smoke-slate amendment (2026-05-16, lock-reviewed): the smoke timestep slate is
 widened from `0.004,0.012` to the full ladder `0.004,0.006,0.008,0.01,0.012`
 (20 cases / 360 trials, ≈ 2 h local) so the 4-point Richardson order fit is
 evaluable in the smoke itself, as the §4 `T_window` procedure requires.
 
-Pending sequence before any full-lock interpretation: (1) implement the
-post-lock Richardson code (additive, flag-gated); (2) re-run BOTH hard-void
-gates bit-for-bit (`threebody:phase13`, `threebody:phase14`); (3) re-run the
-widened smoke; (4) derive + record `T_window` + per-`off`-cell fitted-order
-evidence here; (5) operator readback sign-off. The full lock stays
-operator-gated throughout.
+Pending sequence before any full-lock interpretation: (1) re-run BOTH
+hard-void gates bit-for-bit (`threebody:phase13`, `threebody:phase14`);
+(2) re-run the widened smoke; (3) derive + record `T_window` +
+per-`off`-cell fitted-order evidence here; (4) operator readback sign-off. The
+full lock stays operator-gated throughout.
 
 Implementation receipt:
 
@@ -35,9 +33,16 @@ Implementation receipt:
 - oracle-hazard labels are computed on passive/off precision-audit samples at
   the locked `sensor-audit-every` cadence, plus terminal/hazard endpoints; AUROC
   nulls remain coverage, not successes
+- post-amendment `node --check public/js/threebody-core.mjs` passed
+- post-amendment `node --check scripts/threebody-operating-envelope.mjs` passed
+- post-amendment `npm run build` passed, including the dist link check
+- a five-timestep passive scratch probe exercised `earlyTrajectory`,
+  `makeRichardsonOrderRows`, and `richardson-order-map.csv`; it selected
+  `T_window = 2.4` with `20` in-window points and fitted order `p = 4.314838`
+  for the single scratch cell. Scratch output was removed and is not a result.
 
 For the amended Richardson gate, the exact locked gates and smoke are staged for
-the operator after the additive sampler implementation:
+the operator; they have not been run after the Richardson sampler change:
 
 ```powershell
 npm run threebody:phase13 *> results/threebody/phase15-phase13-gate.log
@@ -143,7 +148,6 @@ To be recorded here after the re-run smoke, before the full lock is interpreted:
   additive sampler edit
 
 The full lock (`npm run threebody:phase15`) remains **not run**, pending:
-(1) operator lock review of the `PHASE15_SPEC.md` amendment, (2) additive
-implementation of the in-`runTrial` sampler + `richardson-order-map.csv`,
-(3) re-run of both hard-void gates + the smoke, (4) the locked `T_window`
-recorded above, (5) operator readback sign-off.
+(1) re-run of both hard-void gates after the Richardson code change,
+(2) re-run of the widened smoke, (3) the locked `T_window` recorded above,
+(4) operator readback sign-off.
