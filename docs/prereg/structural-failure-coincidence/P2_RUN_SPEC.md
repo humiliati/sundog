@@ -535,3 +535,29 @@ bound controller's final behavior; D3 must specify a mechanical
 inspection/taint or boundary-perturbation method for proving emergent
 boundary behavior rather than generator-bit echo. No threshold/boundary
 moved; no harness written or run.
+
+**2026-05-16 (PT) — maintainer. C2-B resolution drafted
+(append-only).** Filed
+[`P2_CUT2_C2B_PEN_AND_QA.md`](P2_CUT2_C2B_PEN_AND_QA.md). The free-`q_a`
+degeneracy is removed by a receipt-grounded convex anchor-prior:
+`q_a ∈ [−A,+A]` (`A = ρ·R22`, no `h`) and `pen(q) = λ(q_a/A)²`. The
+controller climbs `O = I_route − pen`, whose **unique** global maximum
+is `(q_h*, q_a*) = (arccos(R22/f_par_obs), 0)` — exactly the biased
+naive inverse `q_naive ≠ h`. This makes `π_route` well-defined and C2
+P-A computable, unblocking C3-T's baseline, C3-B(ii), C3-D and C4-C/D1.
+Load-bearing **C2-B(i)/(ii)**, surfaced adversarially: pre-run numeric
+proof that the frozen `λ` both breaks the degeneracy (along-manifold
+conditioning ≥ floor) and does **not** move the optimum off
+`arccos(R22/f_par_obs)` (P-A not a λ-artifact). Honest findings
+recorded: C2-B(ii) numerics fold into the C2-A freeze; the
+`f_par_obs<R22` geometry is made explicit but its classification is
+**deferred to C2-D**; and a genuine **C4-C/D1 tension is flagged** —
+once `argmax I_route ≡ arccos(R22/f_par_obs)` by construction, D1's
+comparison target must be the **P-A form (vs true `h` on the
+must-differ band)**, not "vs its own closed form" (raised for the C4
+reviewer; frozen C4 body not edited). `λ`/floor/tolerance are A3
+tolerances, never post-results; no immutable boundary moved. Cut-2
+execution stays **HELD** pending C2-A/C/D, C3-A/B/C/D, C4-A/B/C/D, C5
+and the admission re-run; Public-Language Constraint in force.
+Justification: closes the cascade-hub C2-B as an artifact-before-agent;
+no harness, nothing run.

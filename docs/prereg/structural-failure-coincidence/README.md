@@ -350,3 +350,17 @@ added: D1 must audit route construction rather than the bound
 controller's output, and D3 needs a mechanical input/taint or
 boundary-perturbation method rather than a prose "not a flag" assertion.
 Cut-2 execution remains HELD; no harness, nothing run.
+
+**2026-05-16 (PT) — maintainer.** C2-B resolution filed (append-only):
+[`P2_CUT2_C2B_PEN_AND_QA.md`](P2_CUT2_C2B_PEN_AND_QA.md) — the
+cascade-hub fix. `q_a ∈ [−A,+A]` (`A=ρ·R22`, no `h`) + convex
+`pen(q)=λ(q_a/A)²` give `O=I_route−pen` a **unique** max at
+`(arccos(R22/f_par_obs), 0)` = the biased naive inverse, so `π_route`
+is well-defined and C2 P-A computable — unblocking C3-T/C3-B(ii)/C3-D
+and C4-C/D1. Load-bearing C2-B(i)/(ii) `λ`-calibration window surfaced;
+honest findings recorded (C2-B(ii)→C2-A freeze; `f_par_obs<R22`
+geometry explicit, classification deferred to C2-D; **C4-C/D1
+comparison-target tension flagged for the C4 reviewer** — must be the
+P-A form vs true `h`, not vs its own closed form). No frozen
+threshold/boundary moved; Public-Language Constraint in force.
+Justification: closes the cascade-hub C2-B as an artifact-before-agent.

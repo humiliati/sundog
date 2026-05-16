@@ -387,3 +387,20 @@ to the four-quantity score; (C4-D) D3 needs a frozen mechanical
 inspection/taint or perturbation method proving boundary behavior comes
 from observable intensity/curvature collapse rather than a generator-bit
 echo. C4-A/C4-B remain open; no harness run.
+
+**2026-05-16 (PT) — filing log (not a ruling).** C2-B resolution filed:
+[`P2_CUT2_C2B_PEN_AND_QA.md`](P2_CUT2_C2B_PEN_AND_QA.md) — convex
+anchor-prior `pen(q)=λ(q_a/A)²` with `q_a∈[−A,+A]` gives a unique
+route-optimum `(arccos(R22/f_par_obs),0)` = the biased naive inverse;
+`π_route`/P-A now well-posed (unblocks C3-T, C3-B(ii), C3-D, C4-C/D1);
+load-bearing C2-B(i)/(ii) `λ`-window open. **Filing only, not a ruling.**
+**Reviewer action item raised:** C2-B exposes that C4-C/D1's comparison
+target is degenerate once `argmax I_route ≡ arccos(R22/f_par_obs)` by
+construction — D1 must be the **P-A form** (`argmax I_route = q_naive ≠
+true h` on the must-differ band), not "differs from its own closed
+form." The C4 reviewer should rule on this at the next audit; the
+frozen C4 body was not edited. Re-check verdict stays withheld until the
+whole cut is filed — **C2-A/B/C/D, C3-A/B/C/D, C4-A/B/C/D, C5** — and
+audited as one object including this C4-C/D1 reformulation and all
+cross-couplings. Cut-2 build/run remains **blocked**; Public-Language
+Constraint in force.
