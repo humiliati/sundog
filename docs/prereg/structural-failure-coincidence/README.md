@@ -180,3 +180,20 @@ the non-vacuity / scope of the decoy-edit test under the transparent
 adapter, and (3) threshold provenance. Justification: mirrors P1's
 admission discipline; prevents a self-sealing P2 run from being reported
 as a controller-vs-correlate discriminator.
+
+**2026-05-15 (PT) — maintainer.** P2-spec admission HOLD **resolved and
+re-admitted**. F1–F4 closed by an append-only amendment to
+[`P2_RUN_SPEC.md`](P2_RUN_SPEC.md): A1 explicit no-hidden-`h` adapter
+algorithm (input set `{f_par,f_cza,f_tan,R22,q}`, VOID if `h` read); A2
+decoy-edit made non-vacuous via a pre-registered decoy-correlate
+positive control (`τ_pc=2.0°`, paired contrast, inconclusive branch); A3
+threshold-provenance table separating immutable geometry/receipt
+boundaries from pre-registered engineering tolerances; A4 names the
+analytic-inverse matched baseline. Re-review appended to
+[`P2_SPEC_ADMISSION.md`](P2_SPEC_ADMISSION.md): **ADMIT — P2-execute
+admitted.** Carried conditions: the controller run obeys the AGENTS.md
+~10-min staging rule; the Public-Language Constraint stays in force until
+quantities (1)+(2)+(3) actually pass under the admitted run; geometry
+boundaries immutable, tolerances amend-only/never post-results.
+Justification: the gate caught real pre-run ambiguities and is now
+satisfied by explicit closed-form fixes.
