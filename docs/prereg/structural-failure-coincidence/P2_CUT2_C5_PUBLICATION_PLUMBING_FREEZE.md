@@ -172,3 +172,103 @@ ignored-but-public/shipping paths in its full-tree check, with
 normalized repo-relative paths and symlink/junction escape rejection
 before applying the `results/structural-failure/cut2-*/` allowlist. No
 harness/controller run.
+
+**2026-05-16 (PT) — maintainer. Operational artifacts landed (concrete
+fill).** The C5 manifest and runnable guard now exist on disk, with
+hashes pinned below. The 2026-05-16 Codex audit's two implementation
+holds are addressed in the artifact bodies themselves; this append
+records the artifacts and their hashes — it does not change the freeze
+above.
+
+*Hold (1) — baseline semantics chosen and frozen.* **Snapshot mode** is
+the elected semantics: pre-run, the guard captures a SHA-256 of every
+file outside the allowlist (tracked + untracked + ignored); post-run,
+it re-hashes the same paths and flags any new path, removed path, or
+content-hash delta. Snapshot mode tolerates a normal dirty workflow
+while still catching pre-existing-file overwrites because the snapshot
+records content hashes, not just presence. Semantics frozen here:
+amending requires an append-only justification, never a post-results
+flip.
+
+*Hold (2) — full-tree coverage with normalization and symlink-escape
+rejection.* The guard walks the entire working tree (excluding only
+`.git/` and `node_modules/`, which never ship and would add only hashing
+cost). It uses `lstat` at scan time and `realpath` to reject any
+symlink whose real path escapes the repo root **before** the allowlist
+check runs. Repo-relative paths are normalized to POSIX form
+(`a/b/c`, not `a\\b\\c`) so the allowlist regex applies identically on
+Windows and Linux.
+
+*Manifest immutability.* The guard's `check` step reads the current
+manifest's canonical-JSON SHA-256 and refuses to validate if the
+snapshot's recorded canonical-SHA differs. This means the manifest
+itself cannot be silently widened between snapshot and check —
+attempting to do so is its own `PUBLICATION_PLUMBING_VIOLATION`. The
+canonical-JSON hash is used (sorted keys, no whitespace) so pretty-print
+reformatting doesn't drift the hash.
+
+*Pinned artifacts (paths repo-relative, hashes SHA-256, 2026-05-16
+PT).*
+
+| artifact | path | sha256 |
+| --- | --- | --- |
+| C5 write-path manifest | `results/structural-failure/cut2-prereg/c5-write-path-manifest.json` | raw `7e51bc304ead2b057b6d0ab575f9ee666437bd6ec58ae3f2fe279e3e5e2ab3bf` · canonical `bfa2dd666068d0c180a46ad4469f122a9c34a4970b7348c54a716f7309b3b40f` |
+| C5 guard script | `scripts/cut2-publication-plumbing-guard.mjs` | `5e85928384140f584a55e75df7ed4795f209426b3ba1603a13e0d717e95ffa06` |
+
+The **canonical** manifest SHA is the one the guard's `check` step
+verifies against; the raw SHA is recorded for human spot-checks of the
+on-disk pretty-printed file. Pretty-print reformatting that leaves the
+canonical bytes unchanged is **not** a manifest drift.
+
+*Usage (frozen as the Cut-2-step wrapper).*
+
+```
+# pre-run, snapshot full tree state
+node scripts/cut2-publication-plumbing-guard.mjs snapshot \
+     --out results/structural-failure/cut2-<step>/c5-pre-snapshot.json
+
+# ... Cut-2 step runs here; harness writes only under
+# results/structural-failure/cut2-*/ per C5/§1; doc filings are by-hand
+# under docs/prereg/structural-failure-coincidence/ and are NOT
+# admissible from within the run ...
+
+# post-run, diff against the snapshot
+node scripts/cut2-publication-plumbing-guard.mjs check \
+     --snapshot results/structural-failure/cut2-<step>/c5-pre-snapshot.json
+```
+
+Non-zero exit + `PUBLICATION_PLUMBING_VIOLATION` from the `check` step
+is **terminal**: the Cut-2 step is VOID and may not be reported as
+PASS, regardless of D1∧D2∧D3 / four-quantity outcome.
+
+*Smoke-test verification status.* The guard script's hash utilities
+(`hash-file`, `hash-canonical-json`) were exercised in the authoring
+environment and match independent SHA-256 of the same bytes; the
+manifest and the script both round-trip cleanly through them. A
+**full** snapshot+check round-trip was attempted but exceeded the
+authoring environment's 45-second sandbox time budget: the repo's
+`results/` tree is ~67k files / ~3.9 GB outside the allowlist by
+design, and hashing all of it takes longer than the sandbox allows.
+This is **expected and intentional**: the freeze chose full-tree
+coverage over a blocklist precisely to make the guard un-narrowable.
+The round-trip will be verified on the Windows host (which has no
+sandbox timeout) before the first real Cut-2 step.
+
+*Scope deliberately unchanged.* `scripts/copy-site-docs.mjs` is **still
+not** modified — hardening it remains a separate, larger decision out
+of C5 scope, per the original C5 amendment and this freeze's §4.
+
+*Note on a stray scratch file.* The C5 smoke-test left one zero-byte
+stray file inside the C5 allowlist:
+`results/structural-failure/cut2-prereg/_smoke_test_scratch_DELETE_FROM_WINDOWS.txt`.
+It exists because the authoring sandbox can rename but not unlink
+files under the Windows mount; it has been truncated to 0 bytes and
+moved inside the allowlist so it does not pollute the working tree or
+trip the guard. It is safe to delete from the Windows side at any time
+and is not a Cut-2 artifact.
+
+Justification: closes the C5 operational-artifact obligations (manifest
++ runnable guard) with hashes pinned and semantics frozen in writing.
+No frozen body edited; no threshold/boundary moved; Public-Language
+Constraint remains fully in force. Cut-2-execute remains HELD on the
+joint admission re-run with C2-A / C3-A / C4-A receipts also landed.

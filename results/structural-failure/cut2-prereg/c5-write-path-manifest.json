@@ -1,0 +1,21 @@
+{
+  "manifest_version": 1,
+  "frozen_at_pt": "2026-05-16",
+  "purpose": "C5 publication-plumbing freeze: default-deny allowlist-complement for Cut-2 runs (Structural Failure Coincidence, Sundog prereg Candidate 13)",
+  "spec": "docs/prereg/structural-failure-coincidence/P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md",
+  "allowlist": [
+    "results/structural-failure/cut2-*/"
+  ],
+  "snapshot_excludes": [
+    ".git",
+    "node_modules"
+  ],
+  "default_deny": true,
+  "baseline_semantics": "snapshot",
+  "baseline_semantics_rationale": "Pre-run snapshots full-tree state (tracked + untracked + ignored, normalized paths, symlink-rejected). Post-run rejects any new path, removed path, or content-hash delta outside the allowlist. Tolerates a normal dirty workflow while catching pre-existing-file overwrites because the snapshot records content hashes, not just presence.",
+  "guard_script": "scripts/cut2-publication-plumbing-guard.mjs",
+  "verdict_on_violation": "PUBLICATION_PLUMBING_VIOLATION",
+  "verdict_terminal_dominant": true,
+  "scope_re_curation_forbidden": true,
+  "scope_re_curation_rule": "The allowlist is never widened post-hoc to admit a write a run actually made. A tripped guard ⇒ append-only redesign, never a manifest amendment that retroactively legitimizes the violating write (A3 rule)."
+}

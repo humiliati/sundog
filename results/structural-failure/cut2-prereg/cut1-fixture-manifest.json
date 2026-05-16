@@ -1,0 +1,108 @@
+{
+  "manifest_version": 1,
+  "frozen_at_pt": "2026-05-16",
+  "purpose": "C4-A operational artifact: hashable Cut-1 known-vacuous fixture manifest. The real `structural-failure-p2-harness.mjs` objects whose collective behavior the derived C4 audit must classify `MACHINERY_LIVE_ROUTE_TEST_VACUOUS`. C4-B is the two-sided self-test: same audit on this fixture must return vacuous, on the minimal-flip fixture must return non-vacuous.",
+  "spec": "docs/prereg/structural-failure-coincidence/P2_CUT2_C4A_AUDIT_FREEZE.md",
+  "source_file": "scripts/structural-failure-p2-harness.mjs",
+  "source_file_sha256": "43001506e569f5e646afac4e52b59af94c61fdd2ba70d473f60a501038e56015",
+  "source_file_byte_count": 27148,
+  "source_file_line_count": 750,
+  "source_file_immutability": "The Cut-1 fixture is fixed real artifact (C4-A §6 [G]). The named objects below MUST NOT be edited; doing so voids the C4-B self-test by changing the known-vacuous side of the two-sided audit. Any modification within these line ranges requires an append-only redesign of C4-B, not a manifest amendment.",
+  "fixture_objects": [
+    {
+      "name": "makeBundle",
+      "role": "C4-B fixture: bundle generator. Produces f_par = R22/cos(h) — the source of Cut-1's g(h) tautology. The thing that, paired with `routeEstimate`/`analyticInverseEstimate`, makes route ≡ analytic baseline by construction.",
+      "lines_inclusive": [
+        154,
+        159
+      ],
+      "first_line_marker": "function makeBundle(altitudeDeg) {",
+      "content_sha256": "f10eb0ea5917a3d61685bbfa8d65c923a49012a9976e2a3956f37ed4de964a4f",
+      "content_length_bytes": 135,
+      "content_line_count": 6
+    },
+    {
+      "name": "transparentAdapter",
+      "role": "C4-B fixture: the A1 transparent adapter. Inputs `{f_par, f_cza, f_tan, R22, q}`; abstains on L1-ineligible bundles; emits objective `J = -|f_par - R22/cos(q)|`. Decoys are not inputs (structural exclusion — Cut-1 vacuity factor #2).",
+      "lines_inclusive": [
+        175,
+        201
+      ],
+      "first_line_marker": "function transparentAdapter(bundle, qDeg) {",
+      "content_sha256": "dc132106de62d78ddfe9637dd5bd582e476d0b229ea1832ea628ac776c1bc89a",
+      "content_length_bytes": 633,
+      "content_line_count": 27
+    },
+    {
+      "name": "routeEstimate",
+      "role": "C4-B fixture: the Cut-1 route (grid-search extremum seeker on `J`). Inverts `f_par = R22/cos(h)` by grid search — `g^-1(g(h))`. C4 D1 must show that route construction differs from true `h` on the must-differ band; for this fixture it does not (the famous Cut-1 vacuity).",
+      "lines_inclusive": [
+        203,
+        237
+      ],
+      "first_line_marker": "function routeEstimate(bundle, args) {",
+      "content_sha256": "a93b07f37cda6dde5cd4483abe1479a6a4e86e72a77fe2e24f3cfeb495232e1b",
+      "content_length_bytes": 945,
+      "content_line_count": 35
+    },
+    {
+      "name": "analyticInverseEstimate",
+      "role": "C4-B fixture: matched closed-form baseline `q = arccos(R22 / f_par)`. By design identical to the route on the eligible set — this is the C2-B/D1 'route ≡ analytic baseline' equality that motivates D1 comparing route vs TRUE `h`, not vs this baseline.",
+      "lines_inclusive": [
+        239,
+        250
+      ],
+      "first_line_marker": "function analyticInverseEstimate(bundle) {",
+      "content_sha256": "79d2266a6036f50ed1f1c315b48499f601be754eec58cb1c1fdb660233da8e43",
+      "content_length_bytes": 359,
+      "content_line_count": 12
+    },
+    {
+      "name": "positiveControlEstimate",
+      "role": "C4-B fixture: the decoy-correlate positive control (raw-bundle least-squares over all 8 features). Did move under decoy edits in Cut-1, yielding `OPAQUE_CORRELATE_POSITIVE_CONTROL_CONFIRMED` — the result whose validity stands even after Cut-1 was reclassified vacuous.",
+      "lines_inclusive": [
+        282,
+        312
+      ],
+      "first_line_marker": "function positiveControlEstimate(bundle, args) {",
+      "content_sha256": "89466d2d7783859185a735c2fa9226c2fc091ba9796d6fd69d15af8b1f522e6a",
+      "content_length_bytes": 809,
+      "content_line_count": 31
+    },
+    {
+      "name": "routeConstructionAudit",
+      "role": "C4-B fixture: the HARDCODED Cut-1 vacuity audit. Returns `{routeTestVacuous: true, ...}` as constants — *asserted*, not *derived* from live objects. The thing C4 reimplements as a computed predicate set; this fixture is the negative side of the C4-B two-sided self-test.",
+      "lines_inclusive": [
+        367,
+        376
+      ],
+      "first_line_marker": "function routeConstructionAudit() {",
+      "content_sha256": "537ce83141ee2a4c10f9cc3f24fac41fdc18fc63c1a134a82e4291fa42f70349",
+      "content_length_bytes": 521,
+      "content_line_count": 10
+    },
+    {
+      "name": "classifyRouteOutcome",
+      "role": "C4-B fixture: Cut-1 verdict classifier. Wraps the audit in the verdict tree (MACHINERY_LIVE_ROUTE_TEST_VACUOUS / CONVERGENCE_NULL / INCONCLUSIVE_DECOY_BATTERY / OPAQUE_CORRELATE / ROUTE_NOT_THE_INVERSE / TRACEABILITY_HARNESS_PASS). For C4-B audit replay, this is how the verdict actually surfaces — and why a hardcoded `routeTestVacuous: true` short-circuits to the vacuous verdict regardless of q1/q2/q3.",
+      "lines_inclusive": [
+        378,
+        427
+      ],
+      "first_line_marker": "function classifyRouteOutcome({ q1, q2, q3, audit, positiveControlMoved }) {",
+      "content_sha256": "2b644b5fae18d5df45225b54508594479e2c08cc40610d9ab481d083f36330b3",
+      "content_length_bytes": 1417,
+      "content_line_count": 50
+    }
+  ],
+  "fixture_vacuity_summary": {
+    "route_equals_analytic_baseline_by_construction": true,
+    "decoys_outside_route_objective": true,
+    "cza_tangent_do_not_affect_q_estimate": true,
+    "supralateral_hardcoded_as_non_handle": true,
+    "route_construction_audit_hardcoded": true,
+    "decoy_correlate_positive_control_moves": true,
+    "summary": "Cut-1 is g^-1(g(h)) by grid search with a hardcoded vacuity audit; the positive control moves (correlate path exists) but the route side cannot fail the structural test by construction. This is exactly the case the derived C4 audit must catch."
+  },
+  "extractor_script": "scripts/cut2-cut1-fixture-extract.mjs",
+  "rerun_command": "node scripts/cut2-cut1-fixture-extract.mjs"
+}
