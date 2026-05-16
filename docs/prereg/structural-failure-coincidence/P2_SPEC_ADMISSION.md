@@ -567,3 +567,22 @@ freeze-level discussion. This filing cannot admit Cut-2 execution; the
 joint admission re-run must treat C3-A-T/B as blocking unless a later
 append-only redesign is itself admitted. Public-Language Constraint
 remains in force.
+
+**2026-05-16 (PT) — filing log (not a ruling).** The later append-only
+redesign anticipated above is filed:
+[`P2_CUT2_WAVE42_DISPOSITION.md`](P2_CUT2_WAVE42_DISPOSITION.md)
+(user-selected **α+γ**). It does **not** admit closed-form Cut-2: it
+records the C3-A-T/B BLOCK as a permanent γ regime-separability finding
+(no pass language) and escalates to Cut-3 per the pre-registered staged
+rule. **Filing only, not a ruling.** For the joint re-run the reviewer
+should hold: (a) the disposition changes **no** C3 frozen value and
+reopens **no** Wave-4 receipt (verify append-only, no tuning); (b) γ is
+mapped to "Cut-2 ambiguous", **not** to a D-null and **not** to a B
+pass — confirm no `CONFIRMED`/theorem/"harness passes" leakage anywhere
+incl. the rail; (c) the Cut-3 escalation is *gated*, not started — a
+Cut-3 run spec + Cut-3 admission resolving the px↔°/Phase-15 hazard must
+exist before any Cut-3 controller run (artifact-before-agent, one level
+up); (d) Path β is recorded as not-pursued so it cannot resurface as a
+tuning hiding place. The closed-form joint re-run can now only certify
+γ + the escalation. Cut-2 build/run remains **blocked**;
+Public-Language Constraint in force.
