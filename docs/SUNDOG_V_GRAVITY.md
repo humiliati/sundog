@@ -1070,3 +1070,10 @@ zero-gradient/clipped regions, and C3-T's temptation comparison against
 `π_route` is coupled to C2-B until `pen(q)` / `q_a` are fixed. The
 open-condition list for Cut-2 execute is therefore C2-A/B/C/D, C3-A/B/C/D,
 C4, C5, followed by one admission re-check of the whole cut.
+
+**C4 audit addendum, 2026-05-16.** C4's derived-audit direction is
+accepted but not execution-admitted. Two additional holds are now
+explicit: D1 must audit route construction (`π_route` / `argmax I_route`)
+rather than the bound controller's final `q̂`, and D3 needs a mechanical
+input/taint or boundary-perturbation method proving the boundary behavior
+is emergent rather than a generator-bit echo.

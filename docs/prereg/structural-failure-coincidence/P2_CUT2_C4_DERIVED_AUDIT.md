@@ -136,6 +136,17 @@ any Cut-2 run:
   divergence floor + the exact region it is measured on, the D2 floor
   (= the C3-C receipt floor), the D3 structural assertions, the probe
   set, and both C4-B fixtures.
+- **C4-C:** make D1 construction-level, not controller-outcome-level.
+  D1 should compare the route-only construction (for example `π_route`
+  / `argmax I_route`) against `arccos(R22/f_par_obs)` on the
+  must-differ region. If D1 instead reads the bound controller's final
+  `q̂`, then a behavioral outcome can masquerade as a machinery-vacuity
+  audit failure, conflating the audit with the four-quantity score.
+- **C4-D:** make D3 mechanically auditable. `h ∉ adapterInputs` and
+  "not a generator-bit echo" need a frozen inspection/taint method:
+  e.g. an adapter input-manifest check plus a boundary perturbation test
+  showing L2/L3 behavior follows observable intensity/curvature collapse
+  rather than discrete `f_cza`/`f_tan` bits passed to the controller.
 - **D1 is coupled to C2-A/B; D2 is coupled to C3-C/C3-A** (see §3) —
   C4 closes only once those close.
 - Still-open siblings: **C2-A/B/C/D**, **C3-A/B/C/D**,
@@ -160,4 +171,15 @@ result; the in-between is not.
 
 ## Audit Notes
 
-*(reviewer space — append-only below)*
+**2026-05-16 (PT) — Codex audit.** Direction accepted; execution
+admission withheld. C4 fixes the right meta-failure: the
+`routeConstructionAudit` must become a derived predicate set and must be
+tested against both the known-vacuous Cut-1 fixture and a synthetic
+non-vacuous fixture before it can guard a novel run. Two additional
+blockers are now explicit. First, D1 must be computed from the route
+construction itself (`π_route` / `argmax I_route`), not from the bound
+controller's final behavior, or the audit can reclassify an outcome as
+machinery vacuity. Second, D3 needs a mechanical inspection/taint or
+perturbation method; a prose claim that boundary behavior is emergent is
+not enough for an audit whose purpose is to avoid self-sealing. No
+harness has been written and no controller has been instantiated.

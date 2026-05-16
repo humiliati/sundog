@@ -526,3 +526,12 @@ execution stays **HELD** pending C2-A/B/C/D, C3-A/B/C/D, C4
 (incl. C4-A, C4-B), C5 and the admission re-run; Public-Language
 Constraint in force. Justification: files the C4 meta-condition as an
 artifact-before-agent; no harness, nothing run.
+
+**2026-05-16 (PT) — Codex audit.** C4 execution admission withheld.
+Additional C4 blockers recorded in
+[`P2_CUT2_C4_DERIVED_AUDIT.md`](P2_CUT2_C4_DERIVED_AUDIT.md): D1 must be
+computed from route construction (`π_route` / `argmax I_route`), not the
+bound controller's final behavior; D3 must specify a mechanical
+inspection/taint or boundary-perturbation method for proving emergent
+boundary behavior rather than generator-bit echo. No threshold/boundary
+moved; no harness written or run.
