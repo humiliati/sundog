@@ -504,3 +504,15 @@ PASS, C2-A-3 PASS, C2-A-2 v1 BLOCK (filed as the permanent
 calibration-miss receipt), Wave-3.1 algebraic amendment to
 `κ_cond_max`, C2-A-2 v2 PASS. All hashes pinned; receipt order is
 strictly chronological in the narrative arc.
+
+**2026-05-16 (PT) — Codex audit of Wave-3 C2-A receipts.** Verified.
+Reran canonical `node scripts/cut2-c2a-w3.mjs`; it reproduced the
+pinned raw/canonical hashes with no diff. Receipt fields match the
+strict-order narrative: C2-A-1 PASS (`h = 10.0°`, lower-window margin
+`0.135°`, `k = 600` unchanged and `k ≈ 645.7` only a grid-observation);
+C2-A-2 v1 BLOCK under `κ_cond_max = 100` (`222/479`
+L1-eligible-by-observation rows trip); Wave-3.1 amendment to
+`κ_cond_max = 10^4` is recorded after the BLOCK and justified by
+chain-rule Hessian algebra; C2-A-2 v2 PASS (`61/61` degenerate trip,
+`0/479` L1-eligible-by-observation trip); C2-A-3 PASS. No frozen body
+edited, no `[G]` boundary moved, no harness/controller run.
