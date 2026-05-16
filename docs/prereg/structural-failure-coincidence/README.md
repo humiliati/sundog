@@ -156,3 +156,27 @@ harness; Public-Language Constraint remains in force (no theorem language
 anywhere, including the rail) until structural-failure-coincidence passes
 in P2. Justification: roadmap P1 gate executed; review carried as
 amendments, frozen bodies unedited.
+
+**2026-05-15 (PT) — maintainer.** P2 run specification authored and
+frozen: [`P2_RUN_SPEC.md`](P2_RUN_SPEC.md). First-cut scope (user-fixed):
+the **existing photometric/extremum-seeking controller** (no training)
+on a **closed-form feature bundle** (no renders). Spec pre-registers the
+decoy-bearing bundle (`d_sup`/`d_unanch`/`d_style`), a hard
+**transparent-adapter constraint** (closed-form, fixed, no learned/
+post-hoc parameters — closes the P1-L5 hazard one level down), and the
+four quantities with frozen thresholds (τ1=1.5°, τ2=2.0°, decoy-
+invariance ≤0.5°, boundary-coincidence ±1.5° at h=32°/29°). Justification:
+P2's analog of the "artifact before the agent" rule — the run protocol
+is frozen *before* the controller is run. **P2-execute remains blocked**
+pending a short P2-spec admission check (mirrors P1). Public-Language
+Constraint still in force.
+
+**2026-05-15 (PT) — Codex audit.** P2-spec admission check filed:
+[`P2_SPEC_ADMISSION.md`](P2_SPEC_ADMISSION.md). Verdict **HOLD, no
+controller execution yet**. The audit confirms the frozen P2 artifact is
+the right desk-work gate, but execution remains blocked until append-only
+amendments resolve: (1) adapter gating without hidden-`h` leakage, (2)
+the non-vacuity / scope of the decoy-edit test under the transparent
+adapter, and (3) threshold provenance. Justification: mirrors P1's
+admission discipline; prevents a self-sealing P2 run from being reported
+as a controller-vs-correlate discriminator.

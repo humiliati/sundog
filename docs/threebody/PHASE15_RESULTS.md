@@ -1,9 +1,11 @@
 # Three-Body Phase 15 - Forward-Oracle / Precision Lock Results
 
-Status: pre-registered and lock-reviewed on 2026-05-15. Additive Phase 15 core
-and harness code has been written behind `forward_oracle_strict` and
-`--precision-receipts`; no Phase 15 smoke has run, and no full-lock result exists
-yet.
+Status: pre-registered and lock-reviewed on 2026-05-15, then amended and
+lock-reviewed to replace the precision gate with an early-window Richardson
+cross-timestep trajectory order. Additive Phase 15 core and harness code has
+been written behind `forward_oracle_strict` and `--precision-receipts`; the
+pre-amendment smoke ran, the amended Richardson sampler/smoke has not run, and
+no full-lock result exists yet.
 
 Implementation receipt:
 
@@ -18,8 +20,8 @@ Implementation receipt:
   the locked `sensor-audit-every` cadence, plus terminal/hazard endpoints; AUROC
   nulls remain coverage, not successes
 
-Per the repository long-run rule, the exact locked gates and smoke are staged for
-the operator rather than silently run by the agent:
+For the amended Richardson gate, the exact locked gates and smoke are staged for
+the operator after the additive sampler implementation:
 
 ```powershell
 npm run threebody:phase13 *> results/threebody/phase15-phase13-gate.log
@@ -40,19 +42,20 @@ Gate readback requirements:
 Before the full lock is interpreted, record:
 
 - the exact smoke command and transcript
-- `D_smoke`, the maximum passive/off `finalRelEnergyDrift` observed in the smoke
-- the pre-registered full-lock drift bound `2 * D_smoke`
+- the locked `T_window`
+- per-smoke-`off`-cell Richardson fitted-order evidence and coverage
 - whether the smoke supports starting the staged multi-hour full lock unchanged
 
-The full lock remains pending until that smoke readback is recorded here.
+The full lock remains pending until that amended smoke readback is recorded here.
 
-## Gate + Smoke Readback (2026-05-15)
+## Pre-Amendment Gate + Smoke Readback (2026-05-15)
 
 Sequence run unattended as a chained background job; logs:
 `results/phase15-gate-phase13.log`, `results/phase15-gate-phase14.log`,
 `results/phase15-smoke.log`.
 
-**Hard-void regression gates — both PASS bit-for-bit:**
+**Hard-void regression gates: both PASS bit-for-bit for the pre-amendment
+implementation.**
 
 - `npm run threebody:phase13`: 3,456 trials; 88 / 324 candidate envelope rows;
   81 promising best cells; outcomes 1,154 bounded / 2,030 escape / 272 close
@@ -61,9 +64,10 @@ Sequence run unattended as a chained background job; logs:
   130 / 648 candidate envelope rows; outcomes 1,269 bounded / 4,616 escape /
   163 close approach. Matches the locked requirement exactly.
 
-The additive `forward_oracle_strict` mode and `--precision-receipts`
-instrumentation did not perturb the frozen Phase 13/14 code paths. Phase 15
-columns are interpretable.
+The additive `forward_oracle_strict` mode and initial `--precision-receipts`
+instrumentation did not perturb the frozen Phase 13/14 code paths. The amended
+Richardson sampler still requires a fresh hard-void gate rerun before amended
+Phase 15 columns are interpreted.
 
 **Smoke (`npm run threebody:phase15:smoke`):** 144 trials (8 cases × 9 modes ×
 2 seeds), all 9 modes including `forward_oracle_strict` executed; all new

@@ -733,7 +733,7 @@ Implementation-grade spec and result note:
 
 - [`docs/threebody/PHASE15_SPEC.md`](threebody/PHASE15_SPEC.md)
 - [`docs/threebody/PHASE15_RESULTS.md`](threebody/PHASE15_RESULTS.md) (pending
-  smoke and the full lock)
+  amended Richardson smoke and the full lock)
 
 Commands:
 
@@ -749,10 +749,11 @@ the Phase 14 agreement metric failed. Pre-registered negative: a positive
 outcome envelope without privileged one-step counterfactual hazard improvement
 does not support a causal-control claim.
 
-Status: spec pre-registered and lock-reviewed 2026-05-15. Additive core and
-harness implementation is in place; Phase 13/14 hard-void gates and Phase 15
-smoke are pending operator run. Smoke must stop for `D_smoke` readback before the
-full lock starts.
+Status: spec pre-registered and lock-reviewed 2026-05-15; precision gate amended
+and lock-reviewed to early-window Richardson cross-timestep trajectory order.
+Additive core and harness implementation is in place; the Richardson sampler,
+Phase 13/14 hard-void gate reruns, and amended Phase 15 smoke are pending. Smoke
+must stop for `T_window` and order-coverage readback before the full lock starts.
 
 ### Cross-Substrate Hand-Offs
 

@@ -62,7 +62,8 @@ Phase 15 starts with eight pinned calls:
 Phase 15 owns:
 
 - The `forward_oracle_strict` controller mode and the per-step counterfactual,
-  energy-drift, and oracle-warning instrumentation, added additively to the shared
+  Richardson sampler, energy-drift diagnostics, and oracle-warning instrumentation,
+  added additively to the shared
   `scripts/threebody-operating-envelope.mjs` and `public/js/threebody-core.mjs`
   behind a new default-off `--precision-receipts` flag and the existing
   `--track-action-coupling` flag
@@ -105,8 +106,8 @@ The smoke covers mass ratio `1`, timesteps `0.004` and `0.012`, radii `1.025` an
 `duration=16`. That is 8 cases and 144 trials. At `dt=0.004`, each actual trial has
 4,000 simulation steps; the strict oracle is expensive because each oracle decision
 evaluates 9 candidates over 32 coarse steps x 8 substeps. The smoke spans the
-ladder extremes so the precision-map proxy and the passive energy-drift measurement
-are exercised.
+ladder extremes so the Richardson sampler, precision-map proxy, and demoted
+energy-drift diagnostics are exercised.
 
 The full lock covers:
 
@@ -123,8 +124,8 @@ rows; candidate envelope rows are reported as `N / 1,440`. The finer timesteps a
 the strict oracle make this materially heavier per trial than Phase 13/14; treat
 the full lock as a multi-hour staged operator run under the repository's long-run
 rule (a linear-from-Phase-13 estimate is a lower bound, not a promise).
-Implementation must run the smoke, record `D_smoke`, and stop for readback before
-the full lock is started.
+Implementation must run the smoke, derive and record `T_window` plus supporting
+Richardson-order evidence, and stop for readback before the full lock is started.
 
 Two exact unchanged regression commands are rerun and reported pass/fail **before
 any Phase 15 column is interpreted**; both are hard-void gates:
@@ -312,7 +313,8 @@ After the full lock finishes, update [`PHASE15_RESULTS.md`](PHASE15_RESULTS.md) 
 - command and wall-clock runtime
 - total trial count and terminal outcome counts
 - both regression-gate results (Phase 13 and Phase 14), pass/fail with numbers
-- the smoke-derived passive energy-drift bound `2 * D_smoke` and its `D_smoke`
+- the smoke-derived `T_window`, supporting smoke Richardson-order evidence, and
+  favorable-pocket decidability coverage
 - per-arm × per-timestep outcome table
 - per-step counterfactual table (intact vs each shuffled arm vs sign-flip)
 - warning-quality table (`oracleHazardAuroc` primary; tidal AUROC non-gating)
