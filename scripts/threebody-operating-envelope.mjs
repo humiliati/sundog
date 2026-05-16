@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  KNOWN_CONTROLLER_MODES,
   normalizeConfig,
   runTrial,
   seededInitialParticle,
@@ -113,6 +114,10 @@ function parseArgs(argv) {
   if (args.timesteps.some((value) => value <= 0)) throw new Error("--timesteps values must be positive");
   if (!args.modes.includes("off")) {
     throw new Error("--modes must include off for matched passive baselines");
+  }
+  const unknownModes = args.modes.filter((mode) => !KNOWN_CONTROLLER_MODES.has(mode));
+  if (unknownModes.length > 0) {
+    throw new Error(`Unknown mode in --modes: ${unknownModes.join(",")}`);
   }
   if (!["constant", "hazard_quantile"].includes(args.trackGuardMode)) {
     throw new Error("--track-guard-mode must be constant or hazard_quantile");
@@ -1087,6 +1092,7 @@ async function main() {
     purpose: `${args.phase} operating-envelope map for guarded sensor-tier control across initial-condition, thrust, noise, and guard settings.`,
     args,
     cases,
+    acceptedControllerModes: [...KNOWN_CONTROLLER_MODES],
     trials: [],
   };
 
