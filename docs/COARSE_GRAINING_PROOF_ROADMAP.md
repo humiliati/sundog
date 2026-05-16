@@ -17,7 +17,9 @@
 > **Status as of 2026-05-16:** Phase 0 definitions lock landed at
 > [`proof/POSTULATE1_DEFINITIONS.md`](proof/POSTULATE1_DEFINITIONS.md);
 > Phase 1 LQG proof reviewed and closed **positive** at
-> [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); Phase 2 is unblocked. This is a
+> [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); Phase 2 finite-MDP proof draft
+> landed at [`proof/PHASE2_MDP.md`](proof/PHASE2_MDP.md), reviewer pass pending.
+> This is a
 > theory-track roadmap, not an operating-envelope workbench — it is the *trunk*
 > of which the Formal Separability Theorem appendix
 > ([`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md), promoted from
@@ -113,7 +115,9 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   constant on `Φ`-fibers, via policy equivalence on the quotient MDP. Derive the
   **Formal Separability** statement (§2) as the bounded-agent-class corollary.
 - **Exit.** Proof + a *constructed* finite-MDP counterexample where sufficiency
-  fails, characterizing the boundary, in `docs/proof/PHASE2_MDP.md`.
+  fails, characterizing the boundary, in `docs/proof/PHASE2_MDP.md`. **Draft
+  landed 2026-05-16** at [`proof/PHASE2_MDP.md`](proof/PHASE2_MDP.md); review
+  pending.
 - **Pre-registered negative.** If the separability corollary does **not** drop
   out of the trunk, this roadmap has forked the theory rather than generalized
   it (§2 violated) — stop, reconcile with the mesa appendix before continuing.

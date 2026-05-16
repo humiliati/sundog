@@ -1,0 +1,221 @@
+{
+  "manifest_version": 1,
+  "frozen_at_pt": "2026-05-16",
+  "purpose": "H0-B known-FAIL fixture — Phase-15 pyramidal scale-stamped frames. The runnable checker (cut3-h0-checker.mjs) MUST reject all 8 with reason_code ∈ {SPAN_TOO_SHORT, ANCHOR_OFF_RULER}; if it does not, H0 is self-sealed and remains UNCLOSED.",
+  "spec_reference": "docs/prereg/structural-failure-coincidence/P2_CUT3_H0_CALIBRATION.md §3 (H0-B self-test) and §4 (provenance: [G] immutable real artifact).",
+  "fixture_role": "The C4-B pattern applied one level out: the H0 instrument is proved on the exact historical negative (Phase-15) that motivated its existence, BEFORE any Cut-3 corpus frame is admitted.",
+  "fixture_immutability": "Real, frozen Phase-15 receipt as-is. Editing any of these eight frames voids the H0-B negative side of the two-sided self-test; doing so requires an append-only redesign of H0-B, not a manifest amendment that retroactively legitimizes the edit.",
+  "source_directory": "docs/calibration/halosim_outputs/phase15_pyrfilter",
+  "fixture_objects": [
+    {
+      "frame_id": "pyr_w18_e13_x25",
+      "scale_stamped_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w18_e13_x25_scale.png",
+        "sha256": "7294b6147411bbd7b2026beccafe80d354c433a4dee548b8ddc6607780c70773",
+        "byte_size": 196555
+      },
+      "raw_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w18_e13_x25_4M.png",
+        "sha256": "995238b44ce48ffa74d16310f0ddc78fa5fa2c629e5bbf6a978623c80f9a927c",
+        "byte_size": 422908
+      },
+      "config": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w18_e13_x25.sim",
+        "sha256": "19dd615db90fe4b9c412393fc243124e7b9bd794c90a43087b800b9f3e0df44f",
+        "byte_size": 2143
+      },
+      "expected_self_test": {
+        "admit": false,
+        "reason_codes_allowed": [
+          "SPAN_TOO_SHORT",
+          "ANCHOR_OFF_RULER"
+        ],
+        "note": "Phase-15 failure: ruler span shorter than the ring field; 22° / 46° anchors off-ruler. The H0 checker MUST emit one of these reason codes for every frame."
+      }
+    },
+    {
+      "frame_id": "pyr_w20_e23_x26",
+      "scale_stamped_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w20_e23_x26_scale.png",
+        "sha256": "50e83f9a06df0f282caaa6906491dfd47a6cb7869303f695a404346659842380",
+        "byte_size": 197617
+      },
+      "raw_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w20_e23_x26_4M.png",
+        "sha256": "485f0e674e499b306436b425ffb394b470db8f54bf3a12adb648e61dedaa75a3",
+        "byte_size": 430584
+      },
+      "config": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w20_e23_x26.sim",
+        "sha256": "034517a4b2f433df9ad2dd6429f74d9da8de6cafc9b68f0e5b111f369821b0ea",
+        "byte_size": 2143
+      },
+      "expected_self_test": {
+        "admit": false,
+        "reason_codes_allowed": [
+          "SPAN_TOO_SHORT",
+          "ANCHOR_OFF_RULER"
+        ],
+        "note": "Phase-15 failure: ruler span shorter than the ring field; 22° / 46° anchors off-ruler. The H0 checker MUST emit one of these reason codes for every frame."
+      }
+    },
+    {
+      "frame_id": "pyr_w22_e3_x5",
+      "scale_stamped_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w22_e3_x5_scale.png",
+        "sha256": "738e8af44a2c924018b102042d9aadc40b6bb59cc29c3b12d191328b45a80865",
+        "byte_size": 203612
+      },
+      "raw_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w22_e3_x5_4M.png",
+        "sha256": "8b10599d62d0c439946e88977bcd558f4ee071f4b8a7b976154ab240e5c1a192",
+        "byte_size": 436098
+      },
+      "config": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w22_e3_x5.sim",
+        "sha256": "8bd644df27f35eddab37c86219b76fba1019b20d9b50cfc440aa24f7c539fa94",
+        "byte_size": 2141
+      },
+      "expected_self_test": {
+        "admit": false,
+        "reason_codes_allowed": [
+          "SPAN_TOO_SHORT",
+          "ANCHOR_OFF_RULER"
+        ],
+        "note": "Phase-15 failure: ruler span shorter than the ring field; 22° / 46° anchors off-ruler. The H0 checker MUST emit one of these reason codes for every frame."
+      }
+    },
+    {
+      "frame_id": "pyr_w23a_e1_x25",
+      "scale_stamped_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w23a_e1_x25_scale.png",
+        "sha256": "e05a7babf2ad4b7874f7e202267a981b4587d72d03da8e0b4340aa19052544b7",
+        "byte_size": 206879
+      },
+      "raw_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w23a_e1_x25_4M.png",
+        "sha256": "2d486fefe513e6cc2727de475acf9e99e695996607c86b77c4f497900547eb2c",
+        "byte_size": 442723
+      },
+      "config": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w23a_e1_x25.sim",
+        "sha256": "a80f3d6e943e379a77d8032adb4a8fed5f6869670418f3bdcf81d86ab625077b",
+        "byte_size": 2142
+      },
+      "expected_self_test": {
+        "admit": false,
+        "reason_codes_allowed": [
+          "SPAN_TOO_SHORT",
+          "ANCHOR_OFF_RULER"
+        ],
+        "note": "Phase-15 failure: ruler span shorter than the ring field; 22° / 46° anchors off-ruler. The H0 checker MUST emit one of these reason codes for every frame."
+      }
+    },
+    {
+      "frame_id": "pyr_w23b_e3_x25",
+      "scale_stamped_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w23b_e3_x25_scale.png",
+        "sha256": "a22670ba9aacd4b3251331b8da0fe00ac8b5c8cd5f6b4268237eb8815b483886",
+        "byte_size": 201636
+      },
+      "raw_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w23b_e3_x25_4M.png",
+        "sha256": "9be1a260a0b7e72562d35b0bd4af3ced5f24ca3ea45acad7fff00cb0cf2037d8",
+        "byte_size": 432749
+      },
+      "config": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w23b_e3_x25.sim",
+        "sha256": "60fb6a278d4b551b64dc5ebad395d887eed1298dfd689128b0d2f7d5a6328b7f",
+        "byte_size": 2142
+      },
+      "expected_self_test": {
+        "admit": false,
+        "reason_codes_allowed": [
+          "SPAN_TOO_SHORT",
+          "ANCHOR_OFF_RULER"
+        ],
+        "note": "Phase-15 failure: ruler span shorter than the ring field; 22° / 46° anchors off-ruler. The H0 checker MUST emit one of these reason codes for every frame."
+      }
+    },
+    {
+      "frame_id": "pyr_w35_e23_x25",
+      "scale_stamped_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w35_e23_x25_scale.png",
+        "sha256": "b830dda88b68c4c34119797d3161fa0350f00dd4c7529c6fb9569b090b23b353",
+        "byte_size": 198401
+      },
+      "raw_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w35_e23_x25_4M.png",
+        "sha256": "a8e7d14330bac8ccff50dce78bf64590a25c5133821af8945f4e87988889a3d4",
+        "byte_size": 428385
+      },
+      "config": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w35_e23_x25.sim",
+        "sha256": "24f2c0255090f1802ac0b1b128a591e0c5610199f57313b71837926087522299",
+        "byte_size": 2143
+      },
+      "expected_self_test": {
+        "admit": false,
+        "reason_codes_allowed": [
+          "SPAN_TOO_SHORT",
+          "ANCHOR_OFF_RULER"
+        ],
+        "note": "Phase-15 failure: ruler span shorter than the ring field; 22° / 46° anchors off-ruler. The H0 checker MUST emit one of these reason codes for every frame."
+      }
+    },
+    {
+      "frame_id": "pyr_w46_e1_x5",
+      "scale_stamped_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w46_e1_x5_scale.png",
+        "sha256": "4fb44acbb0df817ab9bd33ea3d11421d4a8c281bd5b8c903e9841b87cef82c82",
+        "byte_size": 198131
+      },
+      "raw_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w46_e1_x5_4M.png",
+        "sha256": "9ad5a56eac87fa557098e964eaeee3049588164d22f0e8d7c59a658c5e7841fc",
+        "byte_size": 427534
+      },
+      "config": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w46_e1_x5.sim",
+        "sha256": "5f844cfde7f5267a05b7a36d5b68d7f2745e6348d8494da05a5ba483d438ad5c",
+        "byte_size": 2141
+      },
+      "expected_self_test": {
+        "admit": false,
+        "reason_codes_allowed": [
+          "SPAN_TOO_SHORT",
+          "ANCHOR_OFF_RULER"
+        ],
+        "note": "Phase-15 failure: ruler span shorter than the ring field; 22° / 46° anchors off-ruler. The H0 checker MUST emit one of these reason codes for every frame."
+      }
+    },
+    {
+      "frame_id": "pyr_w9_e3_x26",
+      "scale_stamped_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w9_e3_x26_scale.png",
+        "sha256": "06e63ab97b422ba3f9625c237fb2c930150177958d894732641182b6b2c3490a",
+        "byte_size": 422420
+      },
+      "raw_render": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w9_e3_x26_4M.png",
+        "sha256": "b1d9199fe80b2c88cf2d55fb8f1fea0bc6424dc6fc3f7a6243128deb543fa08d",
+        "byte_size": 192343
+      },
+      "config": {
+        "path": "docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w9_e3_x26.sim",
+        "sha256": "44f46a91f17174a37bde70f6b9fede99a6775fe2a990877944259304d8a1f5ea",
+        "byte_size": 2142
+      },
+      "expected_self_test": {
+        "admit": false,
+        "reason_codes_allowed": [
+          "SPAN_TOO_SHORT",
+          "ANCHOR_OFF_RULER"
+        ],
+        "note": "Phase-15 failure: ruler span shorter than the ring field; 22° / 46° anchors off-ruler. The H0 checker MUST emit one of these reason codes for every frame."
+      }
+    }
+  ],
+  "extractor_script": "scripts/cut3-h0-known-fail-extract.mjs",
+  "rerun_command": "node scripts/cut3-h0-known-fail-extract.mjs"
+}
