@@ -196,41 +196,51 @@ completion).
   a ~1 h budget, consistent with offload/reproducibility value rather than
   guaranteed speedup from cloud hardware.
 
-### Synthesis after Run 2 + next-issue guidance
+### Synthesis (current — after Run 3) + next-issue guidance
 
-Three independent runs now agree:
+Four independent reproductions now agree (Run 3 raw block below):
 
 | run | platform | phase13 wall-clock | gates bit-for-bit |
 | --- | --- | ---: | --- |
 | local | Windows / project box | 48.7 min | (reference) |
-| Run 1 | Linux/EPYC 4-core, **chat pool** | ~45 min | ✓ |
-| Run 2 | Linux/EPYC 4-core, **issue-assigned agent** | 47m13s | ✓ |
+| Run 1 | Linux / **AMD EPYC 7763** 4-core, chat pool | ~45 min | ✓ |
+| Run 2 | Linux / **AMD EPYC 7763** 4-core, assigned agent | 47m13s | ✓ |
+| Run 3 | Linux / **Intel Xeon 8370C** 4-core, assigned agent | 45m52s | ✓ |
 
-Conclusions (high confidence — 3 independent reproductions):
+Conclusions (high confidence — 4 reproductions, 2 distinct cloud CPU ISAs):
 
-- **Caveat 1 retired in practice.** The hard-void gates reproduced bit-for-bit
-  on every platform/pool tried. Keep the triage rule, but cross-platform fp is
-  no longer a live blocker for offload.
-- **Offload, not speedup — confirmed, not a fluke.** phase13 is ~45–49 min
-  everywhere; cloud hardware does not accelerate the single-threaded harness.
-- **Issue-assigned agent + PR-as-deliverable is the right model.** It works
-  silently ~1 h then lands a durable PR — this structurally defeats the
-  chat-pool timeout (no report to lose). Prefer it over the chat pool.
+- **Caveat 1 retired (hard).** phase13 reproduced bit-for-bit across Windows,
+  AMD EPYC (×2), and Intel Xeon — different ISAs/microarch, identical
+  3,456 / 88·324 / 81 / 1154·2030·272. Cross-platform fp is not a blocker;
+  the triage rule remains only as a formality.
+- **Offload, not speedup — settled.** phase13 is 45–49 min on every platform
+  and both cloud CPU types; cloud hardware does not accelerate the
+  single-threaded harness.
+- **Incremental-commit + PR-as-deliverable works.** Runs 2 and 3 both landed
+  phase13 cleanly via per-phase PR commit before session end — no data lost.
+  That problem is solved; prefer issue-assigned agents over the chat pool.
 
-**Open gap / next-issue guidance.** The assigned agent runtime-gate-skipped
-phase14 and the smoke on a ~30-min threshold, so there is still **no
-assigned-pool measurement of phase14 (~5–10 min) or phase15:smoke (~57 min)** —
-the two runs we most need to characterize. The generic AGENTS.md ~10/30-min
-rule fights this experiment's purpose. The next issue MUST:
+**Structural blocker (the real finding).** A single assigned-agent session is
+~1 h, but phase13 (~46 min) + phase14 (~5–10 min) + phase15:smoke (~57 min) ≈
+**~110 min sequential**. phase13 alone eats the session, so Runs 2 and 3 each
+landed phase13 only — even Run 3, under the corrected issue that explicitly
+authorized all three phases. Authorizing phases cannot create session time.
 
-1. Explicitly authorize `threebody:phase13`, `threebody:phase14`, AND
-   `threebody:phase15:smoke` as in-scope, overriding the generic runtime gate
-   for this measurement issue specifically.
-2. Instruct: **commit each phase's manifest timing + gate numbers to the PR
-   branch immediately on that phase completing** (incremental commits), so a
-   later-phase skip or expiry never loses the earlier phases' data.
-3. Keep the full lock (`threebody:phase15`) explicitly out of scope and
-   operator-gated, unchanged.
+**Revised next-issue guidance (supersedes the prior list):**
+
+1. **Do NOT re-run phase13 on the cloud.** Reproduced 4× (all PASS, ~46 min);
+   re-running it only burns the whole session.
+2. Target the two still-unmeasured assigned-pool runs by **fitting each issue
+   under ~1 h**. Recommended: **two issues** — (A) `threebody:phase14` only
+   (~5–10 min, trivially fits, guaranteed); (B) `threebody:phase15:smoke` only
+   (~57 min, fits ~1 h with margin; also verifies the amended Richardson
+   sampler emits `richardson-order-map.csv` + non-zero off-trial
+   `earlyTrajectoryPointCount` on the cloud). Lighter single-issue
+   alternative: phase14-then-smoke cheap-first (~67 min; phase14 always
+   lands, smoke may not).
+3. Keep: per-phase incremental commit (proven), PR-as-deliverable, the
+   determinism triage rule, and the full lock explicitly out of scope and
+   operator-gated.
 
 ### Run 3 — 2026-05-16 (issue-assigned agent; incremental per-phase report)
 
