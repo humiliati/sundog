@@ -140,3 +140,18 @@ the unchanged §D items (corpus manifest, agent path, baselines, edit
 operators, write-path guard). Cut-3 admission must be re-run once those
 land. No corpus, script, training, or controller run is approved by this
 note.
+
+**2026-05-16 (PT) — correction (filing log, not a ruling).** The H0
+filing note immediately above is corrected: Wave H0-1 is **NOT sealed**.
+Independent verification found (a) an artifact-identity defect — the
+named `cut3-h0-checker.mjs` is committed as a 0-byte file while the
+working checker is the misnamed tracked `_legacy_cut3-h0-checker-v0.mjs`
+(H0 doc correction C1/C2; §I delete-instruction VOIDED, §F checker hash
++ §G re-run claim untrue as committed); and (b) the "H0-B negative side
+8/8" is a reject-branch unit check against a hardcoded modeled stub, not
+the §3 rejection of the real frames by measured span (H0 doc correction
+C3). H0-B negative side on the real frames is **OPEN**. The §2
+structural design is genuine and the honest disclosures stand. This does
+**not** change the verdict — admission was and remains **HOLD**; it
+removes any implication H0 advanced toward closure. No corpus, script,
+training, or controller run is approved.
