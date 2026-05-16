@@ -499,3 +499,43 @@ catch tracked, untracked, and ignored public/shipping-path changes, and
 must normalize paths / reject symlink escapes before the
 `results/structural-failure/cut2-*/` allowlist is applied. No
 harness/controller run.
+
+**2026-05-16 (PT) — maintainer. Wave-1 concrete fill landed
+(C5 closed; C4-A Cut-1 fixture pinned).** Two of the five C4-A
+operational-artifact obligations + both C5 operational artifacts now
+exist on disk, with all hashes recorded in writing:
+
+- **C5 closed** — manifest `results/structural-failure/cut2-prereg/c5-write-path-manifest.json`
+  (canonical-SHA `bfa2dd66…b40f`) and runnable guard
+  `scripts/cut2-publication-plumbing-guard.mjs` (SHA `5e859283…fa06`).
+  Snapshot semantics frozen; full-tree coverage with normalized
+  paths + symlink-escape rejection; `PUBLICATION_PLUMBING_VIOLATION`
+  terminal-dominant. Details + usage in
+  [`P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md`](P2_CUT2_C5_PUBLICATION_PLUMBING_FREEZE.md)
+  2026-05-16 audit-notes append.
+- **C4-A partial fill** — Cut-1 known-vacuous fixture manifest
+  `results/structural-failure/cut2-prereg/cut1-fixture-manifest.json`
+  (canonical-SHA `3b69bf3c…c97e`); seven fixture objects from
+  `scripts/structural-failure-p2-harness.mjs` (file SHA
+  `43001506…6015`) hashed individually with line ranges; deterministic
+  re-generator at `scripts/cut2-cut1-fixture-extract.mjs` (SHA
+  `894e6efb…36fde`). Details +
+  per-fixture-object table in
+  [`P2_CUT2_C4A_AUDIT_FREEZE.md`](P2_CUT2_C4A_AUDIT_FREEZE.md)
+  2026-05-16 audit-notes append.
+
+The remaining C4-A artifacts (D1 probe set, minimal-flip
+generator/diff, C4-D taint/perturbation script, C4-B self-test table)
+and the C2-A / C3-A receipts wait on the next waves of the ordered
+execution plan: C2-A `[E]` values + bridge-scale convention → C2-A-1/2/3
+receipts → C3-A `P_in` + shared C3-A-R/D2 floor + receipts → C4-A
+remaining artifacts → C4-B two-sided self-test → joint admission
+re-run. **No frozen body edited; no threshold/boundary moved;** the
+C4-A and C5 freeze bodies are untouched and the receipts/artifacts
+above are filed as append-only audit-notes per the existing discipline.
+Public-Language Constraint remains fully in force. Cut-2-execute
+remains HELD on the joint admission re-run with C2-A + C3-A + remaining
+C4-A artifacts also landed. Justification: closes the C5
+operational-artifact gate and lands the first immutable C4-A artifact
+(zero coupling to upstream `[E]` fills) as Wave-1 of the ordered
+concrete fill.
