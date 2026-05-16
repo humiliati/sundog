@@ -116,7 +116,8 @@ Avoid:
 ## Implementation steps
 
 1. Land the generated JSON contract and wire it into `npm run build`.
-2. Export `public/media/structural-boundary-five-locus-map.svg` from the JSON.
+2. Export `public/media/structural-boundary-five-locus-map.svg` from the JSON
+   with `npm run structural:boundary-svg`.
 3. Replace the relevant post-rail card placeholder with the SVG and a source
    trail to this prereg folder.
 4. Add a small status ladder panel only if the card needs more context.
@@ -128,6 +129,7 @@ Run:
 
 ```powershell
 npm run structural:public-data
+npm run structural:boundary-svg
 npm run build
 ```
 
