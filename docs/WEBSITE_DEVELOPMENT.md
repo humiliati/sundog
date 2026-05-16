@@ -104,20 +104,19 @@ instructions. A new page is not ready to publish if it creates a phrase that
 passes the static router but causes Ask Sundog to lose the route-specific
 boundary under that severe-pressure check.
 
-## Elevator Pitch (Living Section)
+## Top-Level Positioning (Living Section)
 
-`index.html` carries a dedicated elevator-pitch section between the
-application motion rail and the Sundog Alignment Theorem block. Anchor:
+`index.html` carries a dedicated elevator-pitch section after the application
+motion rail and before the deeper claim/evidence blocks. Anchor:
 
 ```text
 #elevator-pitch
 ```
 
-Purpose: catch the visitor who scratched their head after the hero and
-glazed over at the slide rail, and give them one place to lock onto and
-read the whole project in plain language. It is the bridge between the
-visual hooks above it and the deeper theorem / applications content
-below it.
+Purpose: catch the visitor who scratched their head after the hero and give
+them one place to lock onto the project in plain language. It is the bridge
+between the visual hooks above it and the deeper evidence / applications
+content below it.
 
 ### Treat It As A Living Draft
 
@@ -141,7 +140,7 @@ When you revise the pitch:
    `.elevator-pitch-stamp` to match.
 4. Run the chat checks (next subsection) before publishing.
 
-### Claim-Map Discipline For Pitch Edits
+### Claim-Map Discipline For Positioning Edits
 
 The elevator pitch is the densest claim surface on the site &mdash; in
 four paragraphs it touches the halo system, mesa-optimization, the
@@ -193,8 +192,8 @@ one has explicitly asked for one:
   retracted, or replaced in `docs/BRAND_POSITIONING.md`,
   `docs/presentation/message-house.md`, or
   `docs/presentation/claims-and-scope.md`.
-- The hero copy or theorem cards change in a way that leaves a
-  gap the head-scratcher rescue used to fill.
+- The hero copy, evidence cards, or public About language change in a way that
+  leaves a gap the head-scratcher rescue used to fill.
 
 In each case the rule is: ship the pitch, the version stamp, the
 claim-map updates, and the chat-eval pass together &mdash; not as
@@ -224,6 +223,43 @@ research outputs, notebooks, MuJoCo binaries, and generated experiment results.
 
 Do not link public pages directly to large files in `results/`, `Mujoco/`, or
 `notebooks/` unless the intent is to publish those files.
+
+### Logo Assets
+
+The characterized logo toolkit is the current production source for the site
+mark. Regenerate design proofs with:
+
+```bash
+npm run logo:toolkit
+```
+
+Promote the same geometry into the live favicon, app icon, Apple touch icon,
+and manifest-linked PNG set with:
+
+```bash
+npm run logo:promote
+```
+
+Do not hand-edit production icon binaries. If the logo changes, update
+`scripts/generate-sundog-logo-toolkit.mjs`, regenerate, and review the 32 px
+favicon plus the 512 px app icon before publishing.
+
+### Motion Rail Artwork
+
+The homepage rail can use CSS placeholders, static posters, or later video
+clips. Keep posters under `public/media/` and reference them with `/media/...`
+paths.
+
+Before adding or changing a rail visual:
+
+1. Confirm the card's stamp tier is still supported by its evidence doc.
+2. Add the poster or clip path to `index.html`.
+3. Screenshot the rail at 390 px, 520 px, 1280 px, and reduced-motion.
+4. Re-run `npm run build` so missing local assets are caught.
+
+The Pushable Occluder interrupt stays disabled until its owning roadmap ships
+the boundary evidence and poster/clip. Do not activate the card just to fill
+the sequence.
 
 ## Build And Check
 
@@ -279,6 +315,16 @@ Run:
 npm run build
 git status --short
 ```
+
+For anniversary or other public-positioning copy, also run a targeted phrase
+search for any internal shorthand you just retired. Example:
+
+```bash
+rg -n "Phase 11|phase 11" --glob "*.html" --glob "!dist/**"
+```
+
+For rail or logo changes, review the small and large icon outputs and take the
+rail screenshots named in the Motion Rail Artwork section above.
 
 Commit and push website tooling/content changes when you want Cloudflare's
 Git-connected build to reproduce the site from the repository.

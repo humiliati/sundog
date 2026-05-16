@@ -5,6 +5,8 @@ import { deflateSync } from "node:zlib";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ICON_DIR = resolve(ROOT, "public", "icons");
+const PUBLIC_DIR = resolve(ROOT, "public");
+const promoteProduction = process.argv.includes("--promote-production");
 
 const COLORS = {
   skyInner: "#2c5f7f",
@@ -51,9 +53,24 @@ const GENERATED_FILES = [
   "public/icons/sundog-character-favicon-16.png",
   "public/icons/sundog-character-favicon-32.png",
   "public/icons/sundog-character-favicon-48.png",
+  "public/icons/sundog-character-icon-180.png",
   "public/icons/sundog-character-icon-192.png",
   "public/icons/sundog-character-icon-512.png",
   "public/icons/sundog-character-transparent-512.png",
+];
+
+const PRODUCTION_FILES = [
+  "public/favicon.svg",
+  "public/favicon.ico",
+  "public/apple-touch-icon.png",
+  "public/icons/icon-16.png",
+  "public/icons/icon-32.png",
+  "public/icons/icon-48.png",
+  "public/icons/icon-180.png",
+  "public/icons/icon-192.png",
+  "public/icons/icon-512.png",
+  "public/icons/maskable-192.png",
+  "public/icons/maskable-512.png",
 ];
 
 function round1(value) {
@@ -709,9 +726,67 @@ function encodePng(width, height, rgba) {
   ]);
 }
 
-async function writePng(path, size, options = {}) {
+function pngBuffer(size, options = {}) {
   const rgba = drawMark(size, options);
-  await writeFile(path, encodePng(size, size, rgba));
+  return encodePng(size, size, rgba);
+}
+
+async function writePng(path, size, options = {}) {
+  await writeFile(path, pngBuffer(size, options));
+}
+
+function encodeIco(images) {
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0);
+  header.writeUInt16LE(1, 2);
+  header.writeUInt16LE(images.length, 4);
+
+  const entries = [];
+  let offset = header.length + images.length * 16;
+  for (const image of images) {
+    const entry = Buffer.alloc(16);
+    entry[0] = image.size >= 256 ? 0 : image.size;
+    entry[1] = image.size >= 256 ? 0 : image.size;
+    entry[2] = 0;
+    entry[3] = 0;
+    entry.writeUInt16LE(1, 4);
+    entry.writeUInt16LE(32, 6);
+    entry.writeUInt32LE(image.buffer.length, 8);
+    entry.writeUInt32LE(offset, 12);
+    entries.push(entry);
+    offset += image.buffer.length;
+  }
+
+  return Buffer.concat([header, ...entries, ...images.map((image) => image.buffer)]);
+}
+
+async function writeProductionAssets() {
+  const png16 = pngBuffer(16);
+  const png32 = pngBuffer(32);
+  const png48 = pngBuffer(48);
+  const png180 = pngBuffer(180);
+  const png192 = pngBuffer(192);
+  const png512 = pngBuffer(512);
+
+  await writeFile(resolve(PUBLIC_DIR, "favicon.svg"), svgMarkup(), "utf8");
+  await writeFile(
+    resolve(PUBLIC_DIR, "favicon.ico"),
+    encodeIco([
+      { size: 16, buffer: png16 },
+      { size: 32, buffer: png32 },
+      { size: 48, buffer: png48 },
+    ]),
+  );
+  await writeFile(resolve(PUBLIC_DIR, "apple-touch-icon.png"), png180);
+
+  await writeFile(resolve(ICON_DIR, "icon-16.png"), png16);
+  await writeFile(resolve(ICON_DIR, "icon-32.png"), png32);
+  await writeFile(resolve(ICON_DIR, "icon-48.png"), png48);
+  await writeFile(resolve(ICON_DIR, "icon-180.png"), png180);
+  await writeFile(resolve(ICON_DIR, "icon-192.png"), png192);
+  await writeFile(resolve(ICON_DIR, "icon-512.png"), png512);
+  await writeFile(resolve(ICON_DIR, "maskable-192.png"), png192);
+  await writeFile(resolve(ICON_DIR, "maskable-512.png"), png512);
 }
 
 async function main() {
@@ -741,6 +816,7 @@ async function main() {
   await writePng(resolve(ICON_DIR, "sundog-character-favicon-16.png"), 16);
   await writePng(resolve(ICON_DIR, "sundog-character-favicon-32.png"), 32);
   await writePng(resolve(ICON_DIR, "sundog-character-favicon-48.png"), 48);
+  await writePng(resolve(ICON_DIR, "sundog-character-icon-180.png"), 180);
   await writePng(resolve(ICON_DIR, "sundog-character-icon-192.png"), 192);
   await writePng(resolve(ICON_DIR, "sundog-character-icon-512.png"), 512);
   await writePng(
@@ -751,6 +827,13 @@ async function main() {
 
   for (const file of GENERATED_FILES) {
     console.log(`generated ${file}`);
+  }
+
+  if (promoteProduction) {
+    await writeProductionAssets();
+    for (const file of PRODUCTION_FILES) {
+      console.log(`promoted ${file}`);
+    }
   }
 }
 
