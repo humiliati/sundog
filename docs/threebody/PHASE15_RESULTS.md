@@ -2,10 +2,26 @@
 
 Status: pre-registered and lock-reviewed on 2026-05-15, then amended and
 lock-reviewed to replace the precision gate with an early-window Richardson
-cross-timestep trajectory order. Additive Phase 15 core and harness code has
-been written behind `forward_oracle_strict` and `--precision-receipts`; the
-pre-amendment smoke ran, the amended Richardson sampler/smoke has not run, and
-no full-lock result exists yet.
+cross-timestep trajectory order. The PRE-amendment Phase 15 code (behind
+`forward_oracle_strict` / `--precision-receipts`: counterfactual, energy-drift,
+oracle-hazard, `cell-precision-map.csv`) is written and the pre-amendment smoke
+ran. **The amended Richardson sampler + `makeRichardsonOrderRows` +
+`richardson-order-map.csv` are NOT yet implemented in code** — verified
+2026-05-16: zero `earlyTrajectory`/Richardson tokens in
+`threebody-core.mjs` / `threebody-operating-envelope.mjs`. No `T_window` has
+been derived; no full-lock result exists.
+
+Smoke-slate amendment (2026-05-16, lock-reviewed): the smoke timestep slate is
+widened from `0.004,0.012` to the full ladder `0.004,0.006,0.008,0.01,0.012`
+(20 cases / 360 trials, ≈ 2 h local) so the 4-point Richardson order fit is
+evaluable in the smoke itself, as the §4 `T_window` procedure requires.
+
+Pending sequence before any full-lock interpretation: (1) implement the
+post-lock Richardson code (additive, flag-gated); (2) re-run BOTH hard-void
+gates bit-for-bit (`threebody:phase13`, `threebody:phase14`); (3) re-run the
+widened smoke; (4) derive + record `T_window` + per-`off`-cell fitted-order
+evidence here; (5) operator readback sign-off. The full lock stays
+operator-gated throughout.
 
 Implementation receipt:
 

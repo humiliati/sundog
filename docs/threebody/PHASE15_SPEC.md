@@ -98,16 +98,23 @@ Full lock:
 npm run threebody:phase15
 ```
 
-The smoke covers mass ratio `1`, timesteps `0.004` and `0.012`, radii `1.025` and
-`1.075`, velocities `0.95` and `1.1`, nine modes (`off`, `naive`,
-`track_sensor_accel_guarded`, `track_sensor_accel_signal_shuffle`,
-`track_sensor_accel_action_shuffle`, `track_sensor_accel_signal_delay`,
-`track_sensor_accel_sign_flip`, `oracle`, `forward_oracle_strict`), and two seeds at
-`duration=16`. That is 8 cases and 144 trials. At `dt=0.004`, each actual trial has
-4,000 simulation steps; the strict oracle is expensive because each oracle decision
-evaluates 9 candidates over 32 coarse steps x 8 substeps. The smoke spans the
-ladder extremes so the Richardson sampler, precision-map proxy, and demoted
-energy-drift diagnostics are exercised.
+The smoke covers mass ratio `1`, timesteps `0.004, 0.006, 0.008, 0.01, 0.012`
+(the full ladder), radii `1.025` and `1.075`, velocities `0.95` and `1.1`, nine
+modes (`off`, `naive`, `track_sensor_accel_guarded`,
+`track_sensor_accel_signal_shuffle`, `track_sensor_accel_action_shuffle`,
+`track_sensor_accel_signal_delay`, `track_sensor_accel_sign_flip`, `oracle`,
+`forward_oracle_strict`), and two seeds at `duration=16`. That is **20 cases
+and 360 trials** (1 mass-ratio × 5 timesteps × 2 radii × 2 velocities = 20
+cases × 9 modes × 2 seeds). At `dt=0.004`, each actual trial has 4,000
+simulation steps; the strict oracle is expensive because each oracle decision
+evaluates 9 candidates over 32 coarse steps × 8 substeps. The smoke runs the
+**full timestep ladder** (amended 2026-05-16, from `0.004,0.012`) so the
+early-window Richardson fit — a 4-point OLS slope over
+dt ∈ {0.006, 0.008, 0.01, 0.012} vs the `dt=0.004` reference — is evaluable in
+the smoke itself, which the §4 `T_window` procedure requires before the full
+lock. Extrapolated from the measured 23.86 s/trial smoke rate (dt-mix
+adjusted), the widened smoke is ≈ 2 h local — itself a long-budget run, not a
+quick smoke, so it is operator-staged (not an interactive cloud-agent target).
 
 The full lock covers:
 
