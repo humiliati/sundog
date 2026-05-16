@@ -667,3 +667,22 @@ or decoy re-pinning is made inside Wave 4; Wave-4.2, if any, is a
 separate freeze-level redesign discussion. Cut-2-execute remains HELD
 on C3-A BLOCK plus remaining C4-A/C4-B/joint-admission work; Public
 Language Constraint remains fully in force.
+
+**2026-05-16 (PT) — maintainer. Wave-4.2 disposition (α+γ) filed
+(append-only):** [`P2_CUT2_WAVE42_DISPOSITION.md`](P2_CUT2_WAVE42_DISPOSITION.md).
+γ — the Wave-4 C3-A result is permanent and recorded as a
+**regime-separability finding** (route strictly dominates the
+closed-form correlate where eligible; correlate only substitutes in the
+abstain region) — traceability-favorable but **not a pass / not a
+controller result** (no `CONFIRMED`/theorem/"harness passes"). α — this
+is the pre-registered "Cut-2 ambiguous" trigger → **escalate to Cut-3
+(rendered signal)**, where a learned image correlate can compete in the
+eligible band that closed-form scalar decoys cannot; Cut-3 is **not
+started** and carries its own px↔° / Phase-15 admission gate. Path β
+(closed-form eligible-band decoy) recorded as a tuning hiding place,
+**not** pursued. No C3 frozen value/threshold/boundary changed; Wave-4
+receipts permanent, not reopened. The closed-form Cut-2 line can now
+only certify γ + the escalation, never a closed-form traceability pass.
+Cut-2 execution remains HELD; Public-Language Constraint in force.
+Justification: records the user-selected α+γ named freeze-level redesign
+as an append-only disposition.

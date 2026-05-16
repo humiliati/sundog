@@ -738,3 +738,30 @@ tracked, untracked, and ignored public/shipping-path changes; a plain
 `git diff --exit-code` guard is too weak. Path checks must normalize
 repo-relative paths and reject symlink/junction escapes before applying
 the cut2-results allowlist. No controller run.
+
+**2026-05-16 (PT) — maintainer. Wave-4.2 disposition filed (α+γ;
+append-only, not a patch).** Filed
+[`P2_CUT2_WAVE42_DISPOSITION.md`](P2_CUT2_WAVE42_DISPOSITION.md). The
+permanent Wave-4 C3-A result (C3-A-R PASS; C3-A-T/B BLOCK, T1 binding,
+untuned) is recorded as a permanent honest **regime-separability
+finding** (γ): in the closed-form parhelion bundle the documented
+inverse strictly dominates the closed-form correlate wherever eligible,
+and the correlate only substitutes in the route's abstain region —
+traceability-favorable in spirit but **explicitly not a traceability
+pass and not a controller result** (Public-Language Constraint:
+no `CONFIRMED`/theorem/"harness passes"). Mapped to the prereg's
+"Cut-2 ambiguous → escalate" condition, **not** a convergence null and
+**not** B. Per the pre-registered staged rule this triggers **Cut-3
+(rendered-signal) escalation** (α): a *learned* image correlate can
+compete in the eligible band where closed-form scalar decoys
+structurally cannot — which is *why* Cut-3 is the non-arbitrary
+escalation. **Cut-3 is not started**: it carries its own pre-registered
+gate (Cut-3 admission must first resolve the px↔° / Phase-15 hazard or
+be blocked, not forced). Path β (a principled closed-form eligible-band
+decoy) is recorded as most-likely-vacuous / a tuning hiding place and is
+**not** pursued. No C3 frozen value/boundary/threshold changed; Wave-4
+receipts permanent and not reopened; Cut-2 closed-form line can now only
+certify γ + the escalation, never a closed-form traceability pass. Cut-2
+execution remains HELD; Public-Language Constraint in force.
+Justification: files the user-selected α+γ named freeze-level redesign
+as an append-only disposition; no tuning, no harness, nothing run.
