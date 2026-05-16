@@ -1134,3 +1134,11 @@ pre/post-snapshot semantics, detect tracked/untracked/ignored
 public-surface changes, and normalize paths with symlink/junction escape
 rejection before applying the cut2-results allowlist. Cut-2 remains
 held; no controller run.
+
+**Wave-3 C2-A receipts verified, 2026-05-16.** C2-A concrete receipts
+now close under strict order: C2-A-1 PASS; C2-A-2 v1 BLOCK under
+`κ_cond_max = 100`; Wave-3.1 algebraic amendment to `κ_cond_max = 10^4`;
+C2-A-2 v2 PASS; C2-A-3 PASS. Canonical generator rerun reproduced the
+pinned hashes with no diff. Cut-2 remains held on C3-A receipts, the
+remaining C4-A artifacts/self-test, the C5 host snapshot/check receipt,
+and the joint admission re-run; no controller run.

@@ -632,3 +632,10 @@ self-test), and the joint admission re-run. Justification: closes
 Wave-3 of the ordered concrete fill with the receipt-blocking
 discipline upheld — v1 BLOCK filed permanently, amendment bounded by
 algebra not data, v2 PASS recorded under the amended value.
+
+**2026-05-16 (PT) — Codex audit.** Wave-3 C2-A receipts verified by
+rerunning `node scripts/cut2-c2a-w3.mjs`; all pinned hashes reproduced
+and no diff was produced. The filed arc remains strict-order:
+C2-A-1 PASS, C2-A-2 v1 BLOCK under `κ_cond_max = 100`, algebraic
+Wave-3.1 amendment to `10^4`, C2-A-2 v2 PASS, C2-A-3 PASS. No
+harness/controller run.
