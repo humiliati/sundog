@@ -16,3 +16,5 @@ that claim provably fails.
 - [`PHASE2_MDP.md`](PHASE2_MDP.md) — Phase 2 finite-MDP sufficiency proof
   (reviewed, closed positive), counterexample, and Formal Separability
   corollary.
+- [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md) — Phase 3 boundary theorem
+  (reviewed, closed positive) and pushable-occluder mapping.

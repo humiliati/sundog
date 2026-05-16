@@ -19,7 +19,9 @@
 > Phase 1 LQG proof reviewed and closed **positive** at
 > [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); Phase 2 finite-MDP proof
 > reviewed and closed **positive** at
-> [`proof/PHASE2_MDP.md`](proof/PHASE2_MDP.md); Phase 3 is unblocked.
+> [`proof/PHASE2_MDP.md`](proof/PHASE2_MDP.md); Phase 3 boundary theorem
+> reviewed and closed **positive** at
+> [`proof/PHASE3_BOUNDARY.md`](proof/PHASE3_BOUNDARY.md); Phase 4 is unblocked.
 > This is a
 > theory-track roadmap, not an operating-envelope workbench — it is the *trunk*
 > of which the Formal Separability Theorem appendix
@@ -136,6 +138,8 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   now a *theorem-predicted* boundary, cross-filed in
   [`PHASE2_BLOCKS_DESIGN.md`](PHASE2_BLOCKS_DESIGN.md) and the "river and dam"
   entry of [`internal/anniversary/analogies.md`](../internal/anniversary/analogies.md).
+  **Reviewed and closed positive 2026-05-16** at
+  [`proof/PHASE3_BOUNDARY.md`](proof/PHASE3_BOUNDARY.md).
 - **Pre-registered negative.** If a flat `𝓕_σ`-controller *does* solve a task
   whose decisive bit is provably not `𝓕_σ`-measurable, the boundary is wrong and
   Postulate 1's failure prediction is falsified — record, do not rescue.
