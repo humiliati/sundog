@@ -261,6 +261,32 @@ The Pushable Occluder interrupt stays disabled until its owning roadmap ships
 the boundary evidence and poster/clip. Do not activate the card just to fill
 the sequence.
 
+### Post-Rail Evidence Panels
+
+The Working Systems grid after the motion rail uses `.app-card-img` slots. Treat
+those as evidence interpretation panels, not permanent title placeholders. A
+finished panel should contain one of:
+
+- a chart exported from an owned result or public page;
+- a boundary map;
+- a proof/status ladder;
+- a telemetry thumbnail;
+- a workbench screenshot with enough context to read the claim.
+
+Current priority fills:
+
+1. Mesa Optimization: lambda cliff and class-balance strip from
+   `docs/SUNDOG_V_MESA.md` / `mesa.html`.
+2. Structural Failure Coincidence: five-locus identifiability boundary map from
+   `docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md`.
+3. Coarse-Graining: proof-trunk status ladder from
+   `docs/COARSE_GRAINING_PROOF_ROADMAP.md` and `docs/proof/*`.
+
+Do not leave the visual as duplicated heading text once a panel is promoted.
+Keep exported assets under `public/media/`, link with `/media/...`, and run the
+same 390 px, 520 px, 1280 px, reduced-motion screenshot check used for rail
+artwork.
+
 ## Build And Check
 
 Run:

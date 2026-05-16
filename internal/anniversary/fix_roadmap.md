@@ -481,6 +481,99 @@ Solo pass, 2026-05-16:
 - Removed the commented Pushable Occluder image URL from `index.html` to avoid
   false broken-asset hits before the interrupt card is ready.
 
+### 7b. Post-rail Working Systems evidence panels
+
+**Solo status:** roadmap and placeholder polish are soloable; chart generation
+should be done one evidence panel at a time from the owning result docs.
+
+Problem:
+
+On phone-width layouts, the Working Systems grid after the motion rail stacks
+seven 200px placeholder bands. The bands are intentional "no image yet"
+slots, but they read as broken empty sections because the label duplicates the
+card heading, the label is not centered, and the dark pinstripe background does
+not communicate "chart pending." This is also a missed opportunity: the site
+now has heavily documented interpretation surfaces that would benefit from
+small charts more than more generic screenshots.
+
+Scope:
+
+- `index.html`
+- `public/css/sundog-theme.css`
+- `public/media/`
+- `docs/WEBSITE_DEVELOPMENT.md`
+- `docs/UI_UX_THEME_FOUNDATION.md`
+- `docs/SUNDOG_V_MESA.md`
+- `docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md`
+- `docs/COARSE_GRAINING_PROOF_ROADMAP.md`
+
+Panel contract:
+
+- Replace placeholder labels with an actual visual or a deliberately styled
+  "chart pending" treatment; do not duplicate the card `h3`.
+- Every visual names its evidence source in the card link or caption trail.
+- Static PNG/SVG exports under `public/media/` are preferred for launch; live
+  canvas is allowed only after mobile screenshots prove it does not jank.
+- The visual must interpret a claim boundary, not decorate the card.
+- Mobile height should be responsive, not a fixed 200px slab.
+
+First chart candidates:
+
+| panel | source | visual to create | why it belongs after the rail |
+| --- | --- | --- | --- |
+| Mesa Optimization | `docs/SUNDOG_V_MESA.md`, `mesa.html`, `results/mesa/operating-envelope/` | Lambda-cliff mini chart plus class-balance strip. | Shows the boundary between protected and collapsed proxy behavior without universalizing the result. |
+| Structural Failure Boundary Map | `docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md` | Five-locus eligibility / abstain / switch / fail map. | Makes the traceability harness legible: a real inverse must fail where the inverse is ill-posed. |
+| Coarse-Graining Proof Trunk | `docs/COARSE_GRAINING_PROOF_ROADMAP.md`, `docs/proof/*` | Phase ladder from definitions through LQG, MDP, boundary theorem, and open empirical controls. | Gives the theorem-track work a disciplined public shape without turning it into an overclaim. |
+| Three-Body Dynamics | `docs/threebody/PHASE13_RESULTS.md`, `PHASE14_RESULTS.md`, `PHASE15_RESULTS.md` | Pocket-vs-boundary heatmap with low-velocity warning cells explicit. | Replaces a generic orbit slab with the actual operating-envelope result. |
+| Photometric Alignment | paper/result artifacts and current MuJoCo poster | Acquisition-time vs terminal-accuracy comparison or R22/cos(h) route sketch. | Keeps the confirmed result narrow and inspectable. |
+| Money Bags | local playtest telemetry already promoted to rail poster | Softbody telemetry thumbnail or graph-metric mini panel. | Uses the strongest current evidence shape: telemetry before verdict. |
+
+Steps:
+
+1. Keep the temporary placeholder treatment centered and responsive so mobile
+   no longer reads as a chrome bug while real visuals are staged.
+2. Add a small shared visual primitive, likely `.sd-evidence-panel-visual`,
+   that accepts `<img>` first and can later host inline SVG/canvas.
+3. Build the Mesa panel first because `mesa.html` already carries the chart
+   model and claim language.
+4. Build the structural-failure boundary-map panel second because it is the
+   cleanest public expression of the "apparatus, not theorem" pivot.
+5. Build the coarse-graining proof ladder third, with status language that
+   distinguishes closed proofs from open empirical controls.
+6. Revisit the existing Working Systems cards: either replace their
+   `.app-card-img` blocks with evidence visuals or split the section into
+   "Working Systems" and "Interpretation Surfaces" if the research-track cards
+   make the app grid too broad.
+
+Checks:
+
+```powershell
+npm run build
+npm run dev -- --port 5173
+```
+
+Then screenshot:
+
+- `390px` width after the rail;
+- `520px` width after the rail;
+- `1280px` desktop grid;
+- reduced-motion mode.
+
+Exit:
+
+- No mobile card has a large undifferentiated blank visual slab.
+- No visual repeats the heading as its only content.
+- Mesa, structural-failure boundary map, and coarse-graining each have at
+  least one chart/diagram slot with a source trail.
+- Build passes and the mobile screenshots show no text overlap.
+
+Solo pass, 2026-05-16:
+
+- Centered the current placeholder labels, made the pinstripe/grid treatment
+  more visibly intentional, and changed the app-card visual height from fixed
+  `200px` plus shared `12rem` min-height to a responsive clamp so the mobile
+  stack is less slabby while the real evidence panels are created.
+
 ## P2 - After The First Wave
 
 These are good follow-through once the initial public statement is out.

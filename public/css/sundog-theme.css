@@ -659,11 +659,20 @@ body {
 }
 
 .app-card-img {
+  display: grid;
+  place-items: center;
+  padding: 1rem;
   background:
-    linear-gradient(135deg, rgba(11, 23, 32, 0.76), rgba(20, 43, 58, 0.90)),
-    repeating-linear-gradient(90deg, rgba(244, 196, 48, 0.18) 0 1px, transparent 1px 18px);
+    repeating-linear-gradient(90deg, rgba(244, 196, 48, 0.22) 0 1px, transparent 1px 18px),
+    repeating-linear-gradient(0deg, rgba(245, 245, 245, 0.10) 0 1px, transparent 1px 28px),
+    linear-gradient(135deg, rgba(11, 23, 32, 0.76), rgba(20, 43, 58, 0.90));
+  color: rgba(245, 245, 245, 0.82);
   font-family: var(--sd-font-data);
+  font-size: 0.78rem;
   letter-spacing: 0.04em;
+  line-height: 1.35;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .tier {
@@ -1307,7 +1316,7 @@ section p {
 }
 
 .app-card-img {
-  min-height: 12rem;
+  min-height: clamp(8.5rem, 34vw, 12rem);
 }
 
 .app-card-content {
