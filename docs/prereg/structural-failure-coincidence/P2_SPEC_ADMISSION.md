@@ -362,3 +362,17 @@ audits one coherent object, including whether each condition's pre-run
 numeric artifact actually exists and holds, and whether the
 cross-couplings (notably C3-B(ii)↔C2-B) are discharged. Cut-2 build/run
 remains **blocked**; Public-Language Constraint in force.
+
+**2026-05-16 (PT) — filing log (not a ruling).** C4 has been filed:
+[`P2_CUT2_C4_DERIVED_AUDIT.md`](P2_CUT2_C4_DERIVED_AUDIT.md) — the
+derived `routeConstructionAudit` predicate set (D1 separability, D2 the
+C3-C argmax-sensitivity receipt, D3 emergent boundary), the load-bearing
+**C4-B** self-test (the audit must flag the Cut-1 known-vacuous fixture
+and pass a synthetic non-vacuous one), and the honest D1↔C2-A/B,
+D2↔C3-C/C3-A couplings; C4-A numerics open. **Filing only, not an
+admission ruling.** The re-check verdict stays withheld until the entire
+discriminating cut is filed — **C2-A/B/C/D, C3-A/B/C/D, C4 (incl. C4-A,
+C4-B), C5** — and audits one coherent object, including whether C4-B's
+Cut-1 fixture actually flags vacuous in the harness suite and whether
+the cross-couplings are discharged. Cut-2 build/run remains **blocked**;
+Public-Language Constraint in force.

@@ -502,3 +502,27 @@ own zero-gradient point at `q_h=ĥ_dec(d)` or by clipped regions, and
 couple C3-T's temptation margin against `π_route` to C2-B because the
 route policy is not well-defined until `pen(q)` / `q_a` are fixed. No
 threshold/boundary moved; no controller run.
+
+**2026-05-16 (PT) — maintainer. C4 pre-registration drafted
+(append-only).** Filed
+[`P2_CUT2_C4_DERIVED_AUDIT.md`](P2_CUT2_C4_DERIVED_AUDIT.md): the
+`routeConstructionAudit` becomes a predicate set **computed from the
+live run objects**, not the current hardcoded fail-safe. Three derived
+predicates, each with a frozen floor written to `verdict.json`: **D1**
+route separable from `arccos(R22/f_par_obs)` on the region they must
+differ by construction (not "differ everywhere" — that would forbid the
+correct answer); **D2** the C3-C argmax-sensitivity receipt
+(`‖Δ(argmax_q I)/Δd‖` > floor — decoys move the *converged answer*, the
+correct fix for the Gaussian zero-gradient point); **D3** boundary
+behavior emergent (`h ∉ adapterInputs`, no generator-bit echo). Pass
+requires D1∧D2∧D3 **and** the four-quantity score. Load-bearing
+**C4-B**, surfaced adversarially: the derived audit must be regression-
+tested against the **Cut-1 known-vacuous fixture** (must flag vacuous)
+*and* a synthetic non-vacuous fixture (must not) — the audit is proven
+on the very self-seal it exists to catch before it is trusted. Honest
+couplings recorded: D1↔C2-A/B, D2↔C3-C/C3-A, D3↔A1; C4-A (freeze the
+floors/fixtures/probe set) open. No threshold/boundary moved; Cut-2
+execution stays **HELD** pending C2-A/B/C/D, C3-A/B/C/D, C4
+(incl. C4-A, C4-B), C5 and the admission re-run; Public-Language
+Constraint in force. Justification: files the C4 meta-condition as an
+artifact-before-agent; no harness, nothing run.
