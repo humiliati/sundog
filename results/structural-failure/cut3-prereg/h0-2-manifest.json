@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "artifact": "h0-2-manifest",
+  "spec_reference": "docs/prereg/structural-failure-coincidence/P2_CUT3_H0_2_SCHEMA.md §2-D",
+  "sidecars": [],
+  "records": [],
+  "table": {
+    "json_path": "results/structural-failure/cut3-prereg/h0-anchor-residual-table.json",
+    "json_sha256": "33b1f83a48a506fb594598e4fb49a35e8daa1ca1be7270348cdef24445cd21fb",
+    "json_canonical_sha256": "d1b559b88ec2e7aaf265dedb19f9da29d2da0b3f4eafb13baed7eee11d15bbc6",
+    "csv_path": "results/structural-failure/cut3-prereg/h0-anchor-residual-table.csv",
+    "csv_sha256": "892dce86ad29c3fdbdb21539590024ee951cc3db8a046f38788d0a9bbb7c2b31"
+  },
+  "inputs_summary": {
+    "sidecars": 0,
+    "records": 0,
+    "paired": 0,
+    "orphan_sidecars": 0,
+    "orphan_records": 0,
+    "consistency_failures": 0
+  }
+}

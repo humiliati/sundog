@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "artifact": "h0-anchor-residual-table",
+  "spec_reference": "docs/prereg/structural-failure-coincidence/P2_CUT3_H0_2_SCHEMA.md §2-C",
+  "generator": "scripts/cut3-h0-residual-table.mjs",
+  "generator_disclosure": "Aggregator only — no verdict synthesis. admit/reason_code/measured_deg/residual_deg are byte-for-byte from artifact B (H0 records). Consistency-fail-loud: pin/timestamp mismatches emit rows with consistency=false and specific failure codes; the generator never silently corrects.",
+  "anchor_residual_tolerance_deg": 0.5,
+  "inputs_summary": {
+    "sidecars": 0,
+    "records": 0,
+    "paired": 0,
+    "orphan_sidecars": 0,
+    "orphan_records": 0,
+    "consistency_failures": 0
+  },
+  "row_count": 0,
+  "rows": []
+}

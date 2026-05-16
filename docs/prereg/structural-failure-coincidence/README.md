@@ -830,3 +830,40 @@ Wave-H0-1 — it is the path to proving the H0-B negative side on real
 measured frames. Phase-5 coupling is a severable one-way note, not a
 dependency. No frozen run-spec/H0 value changed; Cut-3 admission HOLD,
 execution HELD; nothing run.
+
+**2026-05-16 (PT) — maintainer. Wave H0-2 §6.2 residual-table generator
+filed (mechanical scaffolding; plumbing self-test 11/11 PASS).**
+Append-only filing on
+[`P2_CUT3_H0_2_SCHEMA.md`](P2_CUT3_H0_2_SCHEMA.md) audit-notes. Pinned
+artifacts:
+
+- `scripts/cut3-h0-residual-table.mjs` (SHA `d93ac6e1…0c46`): aggregator
+  that reads sidecars (A) + records (B), verifies pin/timestamp
+  consistency, emits artifact C (residual table, JSON + CSV) and
+  artifact D (manifest). §3 anti-self-seal applied at the generator
+  layer: **no verdict synthesis** (admit/reason_code copied byte-for-byte
+  from artifact B) and **consistency-fail-loud** (SHA mismatch is the
+  primary mechanical detector per red-line A, timestamp ordering is
+  defense-in-depth; failures emit rows with `consistency: false` and
+  specific failure codes, never silently corrected). Orphan sidecars/
+  records get `reason_code = ORPHAN_RECORD` / `ORPHAN_SIDECAR`.
+- Schema-mechanical self-test: 11/11 plumbing checks pass (happy-path
+  two-row emission + admit byte-for-byte copy, SHA-mismatch detection,
+  timestamp-ordering detection, orphan handling, CSV column order
+  matching §2-C, no-verdict-synthesis invariant). **PASS makes no
+  substantive H0-2 claim** — it's a unit check of the generator's
+  plumbing on synthetic conformant inputs. H0-2 closure (per §6.7)
+  still requires §6.3–§6.4 operator pre-fill on real Phase-15 frames +
+  a known-PASS fixture.
+- Empty-state outputs pinned (artifact C + D produced cleanly against
+  the currently-empty `h0-sidecars/` and `h0-records/` directories):
+  table-JSON canonical `d1b559b8…bbc6`, manifest canonical `172a1b00…3d9a`.
+  Byte-replaced on the first real run.
+
+Re-run determinism verified. §0 gate continues to apply (already
+satisfied on git main). Landing order now stands at §6.3–§6.4 (operator
+pre-fill on real Phase-15 frames + known-PASS fixture identification
+and measurement). Cut-3 admission HOLD; execution HELD;
+Public-Language Constraint in force; H0-B negative side on real frames
+remains OPEN. Justification: closes §6.2 of the schema's landing order
+with §3 anti-self-seal applied at the aggregator layer.
