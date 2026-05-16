@@ -251,4 +251,37 @@ rule fights this experiment's purpose. The next issue MUST:
 - promising best cells: **81** (`grep -c ',promising,' best-by-cell.csv`) (**PASS**)
 - outcomes: **1,154 bounded / 2,030 escape / 272 close_approach** (**PASS**)
 
+### Run 4 — 2026-05-16 (issue-assigned agent; phase14+smoke cheap-first, incremental)
+
+**Environment:** Node v20.20.2 · AMD EPYC 9V74 80-Core Processor (**4 visible
+CPUs**) · Linux 6.17.0-1010-azure x86_64.
+
+#### Phase 14 — `threebody:phase14` (hard-void gate B)
+
+- manifest: `results/threebody/phase14-mechanism-decomposition-lock/manifest.json`
+  - `startedAt`: `2026-05-16T07:31:28.158Z`
+  - `completedAt`: `2026-05-16T07:37:08.028Z`
+  - wall-clock: **5m 39.870s**
+
+**Gate reproduction numbers (exact run outputs):**
+
+```
+[threebody] wrote 6048 phase14-mechanism-decomposition-lock trials to results/threebody/phase14-mechanism-decomposition-lock
+[threebody] wrote trial-outcomes.csv, paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv
+[threebody] candidate envelope rows 130/648
+[threebody] outcomes {"escape":4616,"close_approach":163,"bounded":1269}
+```
+
+- trials: **6,048** ✓
+- paired non-passive rows: **5,184** (paired.csv has 5185 lines incl. header) ✓
+- candidate envelope rows: **130/648** ✓
+- outcomes: **1,269 bounded / 4,616 escape / 163 close_approach** ✓
+
+**Gate verdict: PASS** — all four numbers match the pre-registered expected values
+bit-for-bit.
+
+#### Phase 15 smoke — `threebody:phase15:smoke`
+
+_(smoke started after phase14 commit; results appended below on completion)_
+
 ### Run N — _(next cloud agent: append here, per phase, before session expiry)_
