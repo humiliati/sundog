@@ -639,3 +639,31 @@ and no diff was produced. The filed arc remains strict-order:
 C2-A-1 PASS, C2-A-2 v1 BLOCK under `κ_cond_max = 100`, algebraic
 Wave-3.1 amendment to `10^4`, C2-A-2 v2 PASS, C2-A-3 PASS. No
 harness/controller run.
+
+**2026-05-16 (PT) — maintainer. Wave-4 C3-A receipts filed and Path W
+closeout selected.** Canonical Wave-4 generator
+`scripts/cut2-c3a-w4.mjs` (SHA-256
+`85d7d0a06548e777b5022c1af00ed357dfe2da09325b5543a044a5f35bec7707`)
+files `c3a-pin-generator.json`, `c3a-r-receipt.json`,
+`c3a-t-receipt.json`, `c3a-b-receipt.json`, and `c3a-w4-summary.md`.
+Verdicts: **C3-A-R PASS**, **C3-A-T BLOCK**, **C3-A-B BLOCK**. Canonical
+Wave-4.1 amendment generator `scripts/cut2-c3a-w4-v2.mjs` (SHA-256
+`882a2c5b393a1d3c3a5f6ce75b2daaf09502d67f6cb74a162f9588b6a41955ed`)
+files `c3a-r-receipt-v2.json`, `c3a-t-receipt-v2.json`,
+`c3a-b-receipt-v2.json`, and `c3a-w4-v2-summary.md`; results remain
+**PASS/BLOCK/BLOCK**. The useful scientific finding is the Path-Y subset
+split: BOUNDARY_MAP-pinned decoys help in the low-leverage band where
+the route is weak (`L1-ineligible-by-obs`: `pi_dec` `2.506 deg`,
+`pi_route` `3.912 deg`) and hurt in the eligible band where the route is
+strong (`L1-eligible-by-obs`: `pi_dec` `3.806 deg`, `pi_route`
+`1.398 deg`). Because the eligible subset is `479` rows vs `108`
+ineligible rows, the full non-degenerate average still gives the route
+the win (`pi_dec` `3.567 deg`, `pi_route` `1.860 deg`, margin
+`-1.706 deg` where `+0.5 deg` was required). Path Z improves route-basin
+preservation from `71.6%` to `79.5%`, still below the frozen `90%`
+threshold. Path W therefore records both v1 and v2 as permanent BLOCK
+receipts. No leverage-weighting, `kappa` increase, threshold relaxation,
+or decoy re-pinning is made inside Wave 4; Wave-4.2, if any, is a
+separate freeze-level redesign discussion. Cut-2-execute remains HELD
+on C3-A BLOCK plus remaining C4-A/C4-B/joint-admission work; Public
+Language Constraint remains fully in force.

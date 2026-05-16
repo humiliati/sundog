@@ -553,3 +553,17 @@ untracked files, and ignored-but-public/shipping paths; `git diff
 --exit-code` alone is not sufficient. The manifest/guard must normalize
 repo-relative paths and reject symlink/junction escapes before applying
 the `results/structural-failure/cut2-*/` allowlist. No harness run.
+
+**2026-05-16 (PT) — filing log (not a ruling).** Wave-4 C3-A receipts
+and Wave-4.1 amendment receipts are filed. C3-A-R passes, but C3-A-T and
+C3-A-B both BLOCK in v1 and remain BLOCK after the Path-Y/Path-Z
+amendment. The load-bearing observation is the split: the frozen decoy
+policy helps where the route is low-leverage/ineligible-by-obs and hurts
+where the route is eligible/strong; the larger eligible subset dominates
+the non-degenerate average, so the route wins overall. Path W is the
+filed closeout: preserve the BLOCK receipts, do not tune thresholds or
+weights inside Wave 4, and defer any Wave-4.2 redesign to a separate
+freeze-level discussion. This filing cannot admit Cut-2 execution; the
+joint admission re-run must treat C3-A-T/B as blocking unless a later
+append-only redesign is itself admitted. Public-Language Constraint
+remains in force.

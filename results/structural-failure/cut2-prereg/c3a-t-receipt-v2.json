@@ -1,7 +1,11 @@
 {
   "receipt": "C3-A-T v2 (Path Y framing)",
-  "framing": "Path Y: full non-degenerate P_in (f_par_obs ≥ R22). π_route emits biased q_naive on L1-ineligible-by-obs rows; truly degenerate rows excluded.",
+  "title": "Temptation + reversal — evaluated on full non-degenerate P_in",
+  "spec_reference": "P2_CUT2_C3A_NUMERIC_FREEZE.md §4 + Wave-4.1 audit-notes (Path Y)",
+  "framing": "Path Y: full non-degenerate P_in (f_par_obs ≥ R22). π_route emits biased q_naive on L1-ineligible-by-obs rows; π_dec emits ĥ_dec(d) on all rows. Truly-degenerate rows excluded because q_naive is undefined.",
   "M_deg": 0.5,
+  "tau_pc_deg": 2,
+  "tau2_deg": 2,
   "sample_counts": {
     "non_degenerate_total": 587,
     "L1_eligible_by_obs": 479,

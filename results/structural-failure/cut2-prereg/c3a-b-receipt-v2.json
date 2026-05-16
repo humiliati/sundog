@@ -1,6 +1,8 @@
 {
   "receipt": "C3-A-B v2 (Path Z sub-(ii) reformulation)",
-  "framing": "Path Z: 'route basin preserved' = exists local max within radius 0.5° of q_naive. The route is REPRESENTED in the (possibly merged) peak, not strictly distinct.",
+  "title": "Kappa window — sub-(ii) reformulated as 'route basin preserved within 0.5° of q_naive'",
+  "spec_reference": "P2_CUT2_C3A_NUMERIC_FREEZE.md §4 + Wave-4.1 audit-notes (Path Z)",
+  "framing": "Path Z: route argmax is REPRESENTED in the full I — there exists a local max within radius 0.5° of q_naive. Accepts that small-Δ decoy merging is geometric, not erasure; the route is represented in the merged peak.",
   "kappa": 0.5,
   "sub_ii_radius_deg": 0.5,
   "sub_i_temptation_real": false,
@@ -16,160 +18,160 @@
       "h_deg": 3.5,
       "q_naive_deg": 11.693567810665332,
       "local_argmax_q_h": 11.69356781066534,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 75,
       "h_deg": 4.5,
       "q_naive_deg": 11.946635703834252,
       "local_argmax_q_h": 11.946635703834259,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 78,
       "h_deg": 4.5,
       "q_naive_deg": 11.525346192340399,
       "local_argmax_q_h": 11.525346192340406,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 89,
       "h_deg": 5.5,
       "q_naive_deg": 11.979561416980994,
       "local_argmax_q_h": 11.979561416981001,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 96,
       "h_deg": 6,
       "q_naive_deg": 12.763075387320775,
       "local_argmax_q_h": 12.763075387320782,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 97,
       "h_deg": 6,
       "q_naive_deg": 12.613025384219213,
       "local_argmax_q_h": 12.61302538421922,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 98,
       "h_deg": 6,
       "q_naive_deg": 12.494108790035334,
       "local_argmax_q_h": 12.494108790035341,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 112,
       "h_deg": 7,
       "q_naive_deg": 13.187043504128237,
       "local_argmax_q_h": 13.187043504128244,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 119,
       "h_deg": 7,
       "q_naive_deg": 13.255248596150178,
       "local_argmax_q_h": 13.255248596150185,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 121,
       "h_deg": 7.5,
       "q_naive_deg": 12.397282741051209,
       "local_argmax_q_h": 12.397282741051216,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 122,
       "h_deg": 7.5,
       "q_naive_deg": 13.42199425622158,
       "local_argmax_q_h": 13.421994256221588,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 124,
       "h_deg": 7.5,
       "q_naive_deg": 11.835263008249978,
       "local_argmax_q_h": 11.835263008249985,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 125,
       "h_deg": 7.5,
       "q_naive_deg": 13.16002996107468,
       "local_argmax_q_h": 13.160029961074686,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 129,
       "h_deg": 8,
       "q_naive_deg": 12.387694549745525,
       "local_argmax_q_h": 12.387694549745532,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 135,
       "h_deg": 8,
       "q_naive_deg": 13.753346363001487,
       "local_argmax_q_h": 13.753346363001494,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 136,
       "h_deg": 8.5,
       "q_naive_deg": 13.89356619611603,
       "local_argmax_q_h": 13.893566196116037,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 137,
       "h_deg": 8.5,
       "q_naive_deg": 14.109147806075066,
       "local_argmax_q_h": 14.109147806075073,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 138,
       "h_deg": 8.5,
       "q_naive_deg": 12.567949756509162,
       "local_argmax_q_h": 12.567949756509169,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 139,
       "h_deg": 8.5,
       "q_naive_deg": 13.189723884153986,
       "local_argmax_q_h": 13.189723884153993,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     },
     {
       "sample_index": 140,
       "h_deg": 8.5,
       "q_naive_deg": 13.739326580352715,
       "local_argmax_q_h": 13.739326580352722,
-      "offset_from_q_naive": 7.105427357601002e-15,
-      "is_interior": true
+      "local_argmax_offset_from_q_naive": 7.105427357601002e-15,
+      "is_interior_local_max": true
     }
   ]
 }
