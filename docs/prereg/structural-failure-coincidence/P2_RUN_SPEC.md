@@ -765,3 +765,19 @@ certify γ + the escalation, never a closed-form traceability pass. Cut-2
 execution remains HELD; Public-Language Constraint in force.
 Justification: files the user-selected α+γ named freeze-level redesign
 as an append-only disposition; no tuning, no harness, nothing run.
+
+**2026-05-16 (PT) — maintainer. Cut-3 run spec filed; execution HELD.**
+[`P2_CUT3_RUN_SPEC.md`](P2_CUT3_RUN_SPEC.md) opens the rendered-signal
+front as an artifact-before-agent record. It resolves the Phase-15
+px↔° / centering hazard at the protocol level with an **H0 angular
+calibration gate**: every admitted render frame needs a sun-centered
+angular map, valid span, anchor check (residual <= 0.5 deg), and source
+hashes; features outside span are not scored. HaloSim-native Scale is
+accepted as a method only when full-span and anchor-validated. The
+Phase-15 pyramidal Scale receipt is the negative example: instrument
+works, but short span + off-ruler 22/46 anchors fail H0. Companion
+admission check [`P2_CUT3_ADMISSION.md`](P2_CUT3_ADMISSION.md) rules
+**HOLD**: spec shape and H0 gate pass in principle, but no Cut-3 corpus,
+H0 residual table, agent path, baselines, or edit operators exist yet.
+No script, render sweep, controller run, or training run is admitted.
+Public-Language Constraint remains in force.

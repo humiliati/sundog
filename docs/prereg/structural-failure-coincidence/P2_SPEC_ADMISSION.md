@@ -586,3 +586,18 @@ up); (d) Path β is recorded as not-pursued so it cannot resurface as a
 tuning hiding place. The closed-form joint re-run can now only certify
 γ + the escalation. Cut-2 build/run remains **blocked**;
 Public-Language Constraint in force.
+
+**2026-05-16 (PT) — Cut-3 admission check filed.**
+[`P2_CUT3_ADMISSION.md`](P2_CUT3_ADMISSION.md) reviews the new
+[`P2_CUT3_RUN_SPEC.md`](P2_CUT3_RUN_SPEC.md). Verdict: **HOLD — spec
+admitted in principle, execution not admitted**. The H0 angular-
+calibration gate resolves the Phase-15 px↔° / centering hazard at the
+protocol level by requiring a per-frame sun-centered angular map, valid
+span, anchor residuals, and hashes before any rendered-signal agent run.
+The Phase-15 HaloSim Scale receipt is absorbed honestly: Scale is an
+admissible method only when full-span and anchor-validated; the pyramidal
+scale-stamped frames remain a negative example because the ruler span was
+too short and the anchors were off-ruler. Execution blockers: no Cut-3
+render-corpus manifest, H0 residual table, concrete agent path, baselines,
+edit operators, or Cut-3 write-path guard exist yet. No controller run,
+training run, or render sweep admitted.
