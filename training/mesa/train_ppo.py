@@ -186,6 +186,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--log-std-init", type=float, default=-0.5)
     parser.add_argument("--eval-seed-start", type=int, default=10_000)
     parser.add_argument("--eval-seeds", type=int, default=64)
+    parser.add_argument(
+        "--eval-only",
+        action="store_true",
+        help="skip training; evaluate --load-checkpoint at --eval-seed-start / --eval-seeds and write the eval summary, then exit. Requires --load-checkpoint.",
+    )
     parser.add_argument("--success-floor", type=float, default=0.75)
     parser.add_argument("--false-basin-beta", type=float, default=None)
     parser.add_argument("--mixed-lambda", type=float, default=None, help="override lambda for mixed variants")
@@ -418,6 +423,61 @@ def run_training(args: argparse.Namespace) -> dict[str, Any]:
             f"path={pretrain_metadata['path']} "
             f"optimizer_state_loaded={pretrain_metadata['optimizer_state_loaded']}"
         )
+
+    if args.eval_only:
+        if args.load_checkpoint is None:
+            raise SystemExit("--eval-only requires --load-checkpoint")
+        out_dir = args.out.resolve()
+        eval_slug = slug_for(args.variant, args.tier, args.seed, args.run_label)
+        logs_dir = out_dir / "logs"
+        logs_dir.mkdir(parents=True, exist_ok=True)
+        eval_rows_path = logs_dir / f"{eval_slug}_evaluation.csv"
+        eval_summary_path = logs_dir / f"{eval_slug}_evaluation_summary.json"
+        env_config = training_env_config(args)
+        status(
+            f"eval_only seeds={args.eval_seeds} seed_start={args.eval_seed_start} "
+            f"checkpoint={args.load_checkpoint}"
+        )
+        eval_rows, eval_summary = evaluate_checkpoint(
+            Path(args.load_checkpoint),
+            sensor_tier=args.sensor_tier,
+            seed_start=args.eval_seed_start,
+            seeds=args.eval_seeds,
+            horizon=200,
+            env_config=env_config,
+        )
+        status(f"writing_evaluation path={eval_summary_path.relative_to(REPO_ROOT)}")
+        write_rows(
+            eval_rows_path,
+            eval_rows,
+            [
+                "seed",
+                "terminalOutcome",
+                "steps",
+                "terminalAlignment",
+                "terminalDistance",
+                "pathEfficiency",
+                "saturationCount",
+            ],
+        )
+        eval_summary_path.write_text(
+            json.dumps(eval_summary, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        success_rate = float(eval_summary.get("success_rate", 0.0))
+        if success_rate < args.success_floor:
+            status(
+                f"{args.variant} below success floor: {success_rate:.3f} < {args.success_floor:.3f}"
+            )
+        return {
+            "eval_only": True,
+            "evaluation_summary_path": str(
+                eval_summary_path.relative_to(REPO_ROOT)
+            ).replace("\\", "/"),
+            "checkpoint": str(args.load_checkpoint),
+            "eval_seed_start": int(args.eval_seed_start),
+            "eval_seeds": int(args.eval_seeds),
+        }
 
     out_dir = args.out.resolve()
     slug = slug_for(args.variant, args.tier, args.seed, args.run_label)

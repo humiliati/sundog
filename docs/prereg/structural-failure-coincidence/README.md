@@ -326,3 +326,19 @@ defined away from the Gaussian ridge's zero-gradient point / clipped
 regions, and C3-T's temptation margin against `π_route` is coupled to
 C2-B because the route baseline is not defined until `pen(q)` / `q_a`
 are fixed. Cut-2 execution remains HELD; no harness, nothing run.
+
+**2026-05-16 (PT) — maintainer.** C4 filed (append-only):
+[`P2_CUT2_C4_DERIVED_AUDIT.md`](P2_CUT2_C4_DERIVED_AUDIT.md) — the
+`routeConstructionAudit` is made a predicate set **derived from the live
+objects** (D1 route≠analytic on the must-differ region · D2 the C3-C
+argmax-sensitivity receipt · D3 emergent boundary), pass requires
+D1∧D2∧D3 plus the four-quantity score. Load-bearing **C4-B**: the
+derived audit must be regression-tested against the Cut-1 known-vacuous
+fixture (must flag vacuous) and a synthetic non-vacuous fixture (must
+not) — the guard proven on the self-seal it exists to catch. Honest
+couplings recorded (D1↔C2-A/B, D2↔C3-C/C3-A); C4-A numerics open. The
+full open-conditions list for Cut-2-execute re-admission is now
+**C2-A/B/C/D · C3-A/B/C/D · C4 (incl. C4-A, C4-B) · C5**; the admission
+re-check is one audit of the whole cut, withheld until all are filed. No
+frozen threshold/boundary moved; Public-Language Constraint in force.
+Justification: files the C4 meta-condition as an artifact-before-agent.
