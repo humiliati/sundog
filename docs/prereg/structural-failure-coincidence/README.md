@@ -703,3 +703,17 @@ agent-under-test path, baselines, or edit operators exist yet. Allowed
 next work is H0 manifest/schema/checker and corpus preparation; forbidden
 until later ADMIT/PARTIAL ADMIT: training, controller evaluation, or any
 public implication that Cut-3 has begun or passed.
+
+**2026-05-16 (PT) — maintainer. H0 instrument operationalized
+(append-only).** Filed
+[`P2_CUT3_H0_CALIBRATION.md`](P2_CUT3_H0_CALIBRATION.md) — the explicitly
+allowed next work (H0 schema/checker). Per-(frame,feature) record
+schema; keystone anti-self-seal (`valid_angular_span_deg` measured from
+the instrument's own extent **before** the scored feature is read —
+coverage shortfall ⇒ Cut-3 BLOCKED, never span-stretched); C4-B-style
+two-sided self-test whose immutable known-FAIL fixture is the real
+Phase-15 pyramidal `pyr_w*_scale.png` set (the checker must reject them
+before any corpus frame is admitted). Runnable checker + per-frame
+records + residual table + known-PASS fixture remain maintainer pre-run
+fill. No frozen Cut-3 value changed; admission stays HOLD; execution
+HELD; nothing run.

@@ -121,3 +121,22 @@ Forbidden until a later ADMIT or PARTIAL ADMIT:
 ## Audit Notes
 
 *(reviewer space — append-only below)*
+
+**2026-05-16 (PT) — filing log (not a ruling).** H0 operational
+instrument filed:
+[`P2_CUT3_H0_CALIBRATION.md`](P2_CUT3_H0_CALIBRATION.md). This is the
+admission's explicitly *allowed* next work (§D-1; "draft the H0 manifest
+schema; build a small calibration-manifest reader/checker") — it does
+**not** change this verdict. Admission stays **HOLD**. What H0 files:
+the per-(frame,feature) record schema; the keystone anti-self-seal
+(`valid_angular_span_deg` measured from the instrument's own extent
+*before* the scored-feature position is read — coverage shortfall ⇒
+Cut-3 BLOCKED, never span-stretched); and the H0-B self-test that the
+runnable checker must FAIL on the real Phase-15 pyramidal
+`pyr_w*_scale.png` frames and PASS on a full-span fixture before any
+corpus frame is admitted. Still HOLD for execution: the runnable
+checker, per-frame H0 records, residual table, known-PASS fixture, plus
+the unchanged §D items (corpus manifest, agent path, baselines, edit
+operators, write-path guard). Cut-3 admission must be re-run once those
+land. No corpus, script, training, or controller run is approved by this
+note.

@@ -211,3 +211,14 @@ commands with wall-clock estimates and read-back paths.
 ## Audit Notes
 
 *(reviewer space — append-only below)*
+
+**2026-05-16 (PT) — maintainer.** H0 operationalized (append-only;
+consistent with the frozen §"H0" protocol, no value changed):
+[`P2_CUT3_H0_CALIBRATION.md`](P2_CUT3_H0_CALIBRATION.md). Turns the
+frozen H0 protocol into a concrete per-(frame,feature) record schema, a
+keystone span-measured-before-feature invariant (the Phase-15 failure
+mechanism made the guarded rule; coverage shortfall ⇒ Cut-3 BLOCKED,
+not forced), and a two-sided self-test whose immutable known-FAIL
+fixture is the real Phase-15 pyramidal `pyr_w*_scale.png` set. Runnable
+checker + per-frame records + residual table + known-PASS fixture remain
+the maintainer's pre-run fill; execution stays HELD; nothing run.
