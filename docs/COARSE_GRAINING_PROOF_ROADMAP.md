@@ -26,8 +26,9 @@
 > [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md); the Bayesian-floor
 > controller buildout is staged and BF-4 smoke-passed at
 > [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md);
-> BF-5 sharded/full-lock staging is open before the Phase 4 gate can be
-> interpreted;
+> BF-4b off-set calibration has a first negative receipt (cell `off`, regret CI
+> `[0, 0]`), so BF-5 sharded/full-lock staging remains blocked before the Phase
+> 4 gate can be interpreted;
 > Phase 6
 > lambda-confound control is staged at
 > [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md) with the
@@ -171,8 +172,10 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   advanced through the BF-4 Bayesian-floor smoke: the current three-body
   workbench now has a smoke-passed separate `bayes_floor_particle_mpc`
   evaluator under the signature information regime, while the privileged oracle /
-  `forward_oracle_strict` references remain yardsticks only. BF-5
-  sharded/full-lock staging remains open at
+  `forward_oracle_strict` references remain yardsticks only. BF-4b off-set
+  calibration first receipt failed criterion (2): the cell classified `off`,
+  floor sanity passed, but the off-set regret CI was `[0, 0]`. BF-5
+  sharded/full-lock staging remains blocked at
   [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
 - **Pre-registered negative.** Gate, fixed now: signature-only regret vs Bayes
   must → 0 (within bootstrap CI) **on** the `𝓕_σ`-measurable cell set and stay

@@ -2,9 +2,11 @@
 
 > Buildout roadmap for the Bayesian-floor controller required by
 > [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md).
-> Status: staged/open, 2026-05-16. This document is a build contract, not an
-> empirical result. No Phase 4 proof run is admitted until the floor, regret
-> reducer, and capped-probe receipt land.
+> Status: staged/open, 2026-05-16. BF-4b off-set calibration has a first
+> negative receipt: the pre-registered cell classified `off`, but the off-set
+> regret CI was `[0, 0]`, so BF-5 remains blocked. No Phase 4 proof run is
+> admitted until the floor, regret reducer, capped-probe receipt, and a passing
+> BF-4b receipt land.
 
 ## Purpose
 
@@ -413,13 +415,41 @@ This is a hard gate: **BF-5 staging is blocked until a BF-4b receipt records
 to the full lock and converts the off-set arm's sensitivity from an untested
 default into a pre-registered, validated quantity.
 
+#### BF-4b Receipt (2026-05-16, `bf4b-offset-guard-20260516-215056`)
+
+Operator-gated smoke ran the pre-registered cell with
+`signatureAdvantageDtMultiplier = 1`, 8 seeds, `particleCount = 256`,
+`planningHorizonSteps = 16`, `shapeFraction = 0.5`, and
+`sensorNoiseStd = 0.01`. Artifacts:
+`results/proof/phase4/bf4b-offset-guard-20260516-215056/`.
+
+Acceptance result: **FAIL; BF-5 remains blocked.**
+
+- Criterion (1), classifier: **PASS.** The reducer joined 8 rows and every row
+  classified as `off`.
+- Criterion (2), off-set arm: **FAIL.** Off-set mean regret was `0`, with 95%
+  CI `[0, 0]`; the floor exactly matched the signature policy on every joined
+  seed.
+- Criterion (3), floor-validity: **PASS.** `floor_sanity_pass` with global
+  negative-regret rate `0`.
+
+Diagnostics: all 4,175 Bayes action rows selected `signature_policy`; 806 of
+those rows were nonzero only because the signature policy itself thrusts. The
+largest recorded pre-guard score advantage over the signature baseline was
+`0.000001`, i.e. `0.0001 dt`, far below the configured threshold
+`signatureAdvantageDtMultiplier * dt = 0.01`. This is the failure mode the
+BF-4b gate was meant to catch: the floor is valid but the off-set arm does not
+fire. Retune `signatureAdvantageDtMultiplier` or repair the floor/objective and
+re-run BF-4b before staging BF-5.
+
 ### BF-5: Full Lock Handoff
 
 BF-4 floor-sanity is passed for the smoke slate, **but BF-5 is additionally
 blocked on a passing BF-4b off-set guard-calibration receipt** (floor-sanity
 alone is near-tautological under the signature-baseline guard and does not
-certify the off-set arm can fire). Assuming BF-4b passes, the measured rate
-changes the BF-5 handoff: the full proof lock must be staged as
+certify the off-set arm can fire). The first BF-4b receipt failed criterion
+(2), so BF-5 is not yet stageable. Assuming a later BF-4b passes, the measured
+rate changes the BF-5 handoff: the full proof lock must be staged as
 sharded/resumable PowerShell (or a long-budget workflow) with per-shard
 manifests and merge readbacks. A single full-grid invocation is intentionally
 not written here, because the measured serial cost is multi-week and violates
@@ -519,9 +549,10 @@ node scripts/threebody-phase4-bayes-floor.mjs `
 4. **Signature-advantage multiplier.** `signatureAdvantageDtMultiplier`
    default `1` is *pinned* only by a passing BF-4b receipt (off-set cell regret
    CI lower > 0 ∧ sufficient cell negative-regret ≤ 5%), not by the
-   floor-validity argument alone. If BF-4b forces a retune, the new value and
-   its BF-4b receipt are the recorded pre-registration; BF-5 uses that value
-   unchanged.
+   floor-validity argument alone. The first BF-4b receipt with multiplier `1`
+   failed the off-set CI condition, so the multiplier remains unpinned. If
+   BF-4b forces a retune, the new value and its BF-4b receipt are the recorded
+   pre-registration; BF-5 uses that value unchanged.
 
 ## Exit Criteria
 
