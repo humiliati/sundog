@@ -306,7 +306,7 @@ much from weak baselines.
 | Workbench | Bayesian comparator status | Cross-reference |
 | --- | --- | --- |
 | Balance | Executable same-shadow floor scaffold. `bayes_floor_shadow_particle` runs with observation parity, no-state-leak, unknown-mode rejection, Phase 10 slate loading, and regret receipts. Final Phase 15 lock ran 27,200 trials with audits passing, claim gate 56/56 hard-gate cells, 12 reported-only observation-degradation cells, zero negative mean-regret cells, and aggregate regret versus `sundog_shadow` +0.00395. Treat Balance as having earned a same-information Bayesian-floor claim-lock receipt, with reported-only delay/noise/dropout failure-regime lanes preserved as boundary diagnostics. | [`SUNDOG_V_BALANCE.md` - Bayesian Floor Profile](SUNDOG_V_BALANCE.md#bayesian-floor-profile) and Phase 15 status |
-| Pressure Mines | Active next applied profile. The staged same-field baseline is `mines-bayesian-baseline-v1`: a frontier-limited posterior over hidden mine occupancy, strict budget parity between pressure-only and full Sundog-legal lanes, and a Phase 12 implementation order that starts with legal `Phi_t` serialization, no-leak, observation parity, and tiny posterior smoke before any claim lock. No executable runner yet. | [`sundog_v_minesweeper.md` - Bayesian Baseline Profile](sundog_v_minesweeper.md#bayesian-baseline-profile) and Phase 12 status |
+| Pressure Mines | Active next applied profile. The staged same-field baseline is `mines-bayesian-baseline-v1`: a frontier-limited posterior over hidden mine occupancy, strict budget parity between pressure-only and full Sundog-legal lanes, and a Phase 12 implementation order that starts with legal `Phi_t` serialization, no-leak, observation parity, and tiny posterior smoke before any claim lock. Admission plumbing has started: pending Bayes lanes, legal `Phi_t` serializer, and `npm run mines:phase12:admission` all exist. No executable posterior runner yet. | [`sundog_v_minesweeper.md` - Bayesian Baseline Profile](sundog_v_minesweeper.md#bayesian-baseline-profile) and Phase 12 status |
 | Three-Body / Coarse Graining | Current pattern source for the receipt shape: admission spec, same-information guard, belief diagnostics, regret reducer, and capped-probe discipline. Still not a closed floor. | [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md) and [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md) |
 
 The interpretation rule is shared across all applied profiles:
@@ -325,7 +325,7 @@ Applied queue after the Balance lock:
 1. **Pressure Mines Phase 12 admission path.** Declare
    `bayes_frontier_pressure` / `bayes_frontier_full`, serialize the legal
    `Phi_t`, and prove no-leak / observation parity before implementing the
-   posterior policy.
+   posterior policy. First pass landed with `npm run mines:phase12:admission`.
 2. **Pressure Mines tiny posterior smoke.** Run only the Phase 10 confirmed
    pocket plus paired failure cell with capped particles and seeds. This checks
    action plumbing, easy-cell sanity, and runtime; it does not promote public

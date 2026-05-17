@@ -49,6 +49,7 @@
     "mines:phase9": "node scripts/mines-phase9-boundary.mjs --phase phase9-boundary --out results/mines/phase9-boundary --seeds 8 --turn-cap 160",
     "mines:phase10": "node scripts/mines-phase10-envelope.mjs --phase phase10-envelope --out results/mines/phase10-envelope --seeds 64 --turn-cap 160",
     "mines:phase10:smoke": "node scripts/mines-phase10-envelope.mjs --phase phase10-smoke --out results/mines/phase10-smoke --seeds 16 --turn-cap 160 --bootstrap-iterations 200",
+    "mines:phase12:admission": "node scripts/mines-bayes-admission.test.mjs",
     "mesa:phase1": "node scripts/mesa-harness.mjs --phase phase1-hc-baseline --out results/mesa/phase1-hc-baseline --seeds 32",
     "mesa:phase2:bridge-smoke": "python training/mesa/smoke_bridge.py",
     "mesa:phase2:bc-dataset-smoke": "python -m training.mesa.smoke_bc_dataset --manifest results/mesa/phase1-hc-baseline/manifest.json",
