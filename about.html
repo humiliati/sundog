@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="About Sundog Research Lab: software for useful partial information, hidden-state control, and indirect signals.">
+    <meta name="description" content="About Sundog Research Lab: a traceability harness for indirect-inference alignment, hidden-state control, and explicit failure boundaries.">
     <meta name="theme-color" content="#1A3A52">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -215,6 +215,57 @@
             margin-top: 1.5rem;
         }
 
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+            gap: 1rem;
+            margin: 1.6rem 0 0.5rem;
+        }
+
+        .evidence-item {
+            display: block;
+            min-height: 100%;
+            padding: 1rem;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.78);
+            color: inherit;
+            text-decoration: none;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .evidence-item:hover,
+        .evidence-item:focus-visible {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .evidence-label {
+            display: block;
+            margin-bottom: 0.55rem;
+            color: #6b5a1f;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .evidence-item h3 {
+            color: var(--primary-dark);
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .evidence-item p {
+            color: #4C5D68;
+            font-size: 0.95rem;
+            line-height: 1.62;
+            margin-bottom: 0;
+        }
+
         .surface-item {
             padding-top: 1rem;
             border-top: 3px solid rgba(20, 43, 58, 0.18);
@@ -341,13 +392,13 @@
         <section class="about-hero">
             <div>
                 <p class="eyebrow">About Sundog Research Lab</p>
-                <h1>Software for useful partial information.</h1>
+                <h1>A traceability harness for useful partial information.</h1>
                 <p class="lede">
-                    Sundog Research Lab is an independent applied research project and experimental software lab studying how systems act when they cannot see the full truth.
+                    Sundog Research Lab builds small, inspectable systems that act from indirect signals, then asks whether the route is traceable and where the coupling fails.
                 </p>
             </div>
             <aside class="signal-stack" aria-label="Sundog pattern summary">
-                <h2>The working pattern</h2>
+                <h2>The apparatus pattern</h2>
                 <div class="signal-row">
                     <strong>Hidden</strong>
                     <span>The decisive state is unavailable, occluded, delayed, or intentionally withheld.</span>
@@ -357,8 +408,8 @@
                     <span>The world leaks structure through light, force, pressure, deformation, fields, or behavior.</span>
                 </div>
                 <div class="signal-row">
-                    <strong>Action</strong>
-                    <span>The system transforms that trace into control, then measures where the coupling fails.</span>
+                    <strong>Boundary</strong>
+                    <span>The system acts from the trace, then the failure surface is named before the claim grows.</span>
                 </div>
             </aside>
         </section>
@@ -371,13 +422,52 @@
                 </div>
                 <div class="section-body">
                     <p>
-                        Most software asks for more state: more sensors, more labels, more simulation fidelity, more privileged access. Sundog asks a narrower question. When direct inspection is blocked, expensive, delayed, or unrealistic, does the world still leak enough structure to act?
+                        Sundog is a traceability harness for indirect-inference alignment: a way to test whether a system can act from indirect signals, whether the route is inspectable, and where the coupling fails.
                     </p>
                     <p>
-                        We build small, inspectable systems where the decisive state is hidden, the world still leaks structure, and action can be taken from the trace. Then we measure where that stops working.
+                        The year-one result is not a universal theorem. It is an apparatus: small systems, explicit baselines, public stress tests, and named failure boundaries around the cases where partial information becomes useful.
                     </p>
                     <div class="thesis-line">
                         Intelligence under partial observability is not only a limitation problem. It is a design medium.
+                    </div>
+                </div>
+            </article>
+
+            <article class="about-section">
+                <div>
+                    <h2>Current Public Readout</h2>
+                    <p class="section-note">Pillars before theorem posture</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        The public site now leads with evidence surfaces that can be inspected independently. The photometric result remains the narrow controlled claim. Three load-bearing pillars keep the broader apparatus honest: write the falsifier first, map the operating envelope, and keep proof-status gates visible.
+                    </p>
+                    <div class="evidence-grid">
+                        <a href="applications-gallery.html#photometric-alignment" class="evidence-item">
+                            <span class="evidence-label">Core result</span>
+                            <h3>Photometric Mirror Alignment</h3>
+                            <p>No target-position access; comparable terminal accuracy in the tested setting, with the acquisition-cost caveat kept visible.</p>
+                        </a>
+                        <a href="structural-failure.html" class="evidence-item">
+                            <span class="evidence-label">Load-bearing pillar</span>
+                            <h3>Structural Failure Boundary</h3>
+                            <p>A frozen falsifier: a traceable route should fail where the closed-form inverse loses identifiability.</p>
+                        </a>
+                        <a href="mesa.html" class="evidence-item">
+                            <span class="evidence-label">Load-bearing pillar</span>
+                            <h3>Mesa Operating Envelope</h3>
+                            <p>A bounded in-vitro map of where signature-trained policies hold, collapse, and remain confound-gated.</p>
+                        </a>
+                        <a href="docs/COARSE_GRAINING_PROOF_ROADMAP.md" class="evidence-item">
+                            <span class="evidence-label">Load-bearing pillar</span>
+                            <h3>Coarse-Graining Proof Trunk</h3>
+                            <p>A proof-status ladder, not a victory lap: positive phases, open gates, and blocked phases stay labeled.</p>
+                        </a>
+                        <a href="chat.html" class="evidence-item">
+                            <span class="evidence-label">Claim boundary</span>
+                            <h3>Ask Sundog</h3>
+                            <p>The browser chat widget is a claim-boundary experiment, built to keep public answers inside the evidence ledger.</p>
+                        </a>
                     </div>
                 </div>
             </article>
@@ -430,7 +520,7 @@
                 </div>
                 <div class="section-body">
                     <p>
-                        Sundog workbenches and product systems follow a recurring pattern:
+                        Sundog workbenches and product systems still follow one recurring pattern:
                     </p>
                     <ol class="pattern-list">
                         <li>The decisive state is hidden.</li>
@@ -442,19 +532,19 @@
                     <div class="surface-grid">
                         <div class="surface-item">
                             <h3>Research Result</h3>
-                            <p>Photometric mirror alignment without target-position access in a controlled MuJoCo experiment.</p>
+                            <p>Photometric mirror alignment without target-position access in a controlled MuJoCo experiment, with acquisition cost reported rather than hidden.</p>
                         </div>
                         <div class="surface-item">
                             <h3>Operating-Envelope Studies</h3>
-                            <p>Three-body, Balance, and Pressure Mines workbenches that map where indirect control helps and where it breaks.</p>
+                            <p>Three-body, Balance, Pressure Mines, and Mesa workbenches that map where indirect control helps, collapses, or needs a stronger falsifier.</p>
                         </div>
                         <div class="surface-item">
-                            <h3>Instrumented Prototypes</h3>
-                            <p>EyesOnly / Gone Rogue and Money Bags surfaces that make compressed perception and softbody telemetry inspectable.</p>
+                            <h3>Falsification Surfaces</h3>
+                            <p>Structural-failure and proof-roadmap artifacts that define what would count against the claim before stronger language is allowed.</p>
                         </div>
                         <div class="surface-item">
                             <h3>Product Expressions</h3>
-                            <p>Dungeon Gleaner and related game systems showing how the pattern can shape practical software behavior.</p>
+                            <p>Game and tool systems remain useful when they expose the same hidden-state, trace, action, and boundary pattern without pretending to be proofs.</p>
                         </div>
                     </div>
                     <p>
@@ -473,10 +563,10 @@
                         The current scientific claim is deliberately narrow: in a controlled MuJoCo mirror-alignment experiment, a controller with no Cartesian target access aligns from sparse photometric feedback and reaches terminal accuracy comparable to a target-aware analytic baseline, while taking longer to acquire the target.
                     </p>
                     <p>
-                        The broader program is staged. Applications motivate new controlled studies. Controlled studies earn stronger language. Failures are part of the result.
+                        The broader program is staged, and the theorem posture has been deliberately demoted. Applications motivate controlled studies. Controlled studies earn stronger language. Failure-boundary coincidence, causal steerability, and preregistered nulls decide whether the language grows or shrinks.
                     </p>
                     <p>
-                        We publish the repository, docs, workbenches, stress tests, and claim boundaries because the idea is only useful if it can survive inspection. We invite replication, formalization, application-specific benchmarks, hardware validation, and critical review.
+                        We publish the repository, docs, workbenches, stress tests, and claim boundaries because the idea is only useful if it can survive inspection. A clean debunk path is not a threat to the project; it is the project doing its job.
                     </p>
                     <p>
                         Humility, for Sundog, is methodological. We do not assume full sight. We do not promote a broad theorem before the evidence earns it. We do not hide the boundary where the signal stops working.
@@ -496,7 +586,7 @@
                         <li>Sundog is not a claim that indirect signals always beat direct state.</li>
                         <li>Sundog is not a claim that agents should be denied information for aesthetic reasons.</li>
                         <li>Sundog is not "better game AI" or deeper search. Game-facing workbenches matter only when they express hidden state, indirect signal, transformation, action, and failure boundary.</li>
-                        <li>Sundog is not a universal alignment proof. The broad theorem is a research program. The controlled evidence remains narrower.</li>
+                        <li>Sundog is not a universal alignment proof. The defensible contribution today is an inspectable apparatus plus bounded results.</li>
                     </ul>
                 </div>
             </article>
@@ -533,6 +623,14 @@
                         <a href="applications-gallery.html" class="resource-card">
                             <h3>Applications</h3>
                             <p>Working systems across research, workbench, prototype, and product tiers.</p>
+                        </a>
+                        <a href="structural-failure.html" class="resource-card">
+                            <h3>Boundary Map</h3>
+                            <p>The structural falsifier: where a traceable route should break.</p>
+                        </a>
+                        <a href="chat.html" class="resource-card">
+                            <h3>Ask Sundog</h3>
+                            <p>The public claim-boundary harness behind the browser chat widget.</p>
                         </a>
                         <a href="docs/RESEARCHER_GUIDE.md" class="resource-card">
                             <h3>Researcher Guide</h3>
