@@ -139,16 +139,15 @@ noise.
 
 Profile id: `mines-bayesian-baseline-v1`
 
-Status: staged profile, active next roadmap item, not yet an earned result.
+Status: staged profile with admission plumbing and first posterior smoke
+landed; not yet an earned result.
 
-Active next slice (2026-05-17): start Phase 12 with the admission path, not
-with a full posterior sweep. The first implementation pass should declare the
-two Bayesian lanes as pending or smoke-only modes, add a legal observation
-serializer for `Phi_t`, and write no-leak / observation-parity fixtures against
-the existing replay harness. Only after those gates pass should the
-frontier-particle posterior pick actions. This mirrors the Balance Phase 15
-lesson: a Bayesian comparator is claim hygiene only if the observation lane is
-auditable before the floor is interpreted.
+Active next slice (2026-05-17): repair the weak first posterior before any
+claim-language work. The admission path is now auditable and the tiny smoke can
+write receipts, but `bayes_frontier_pressure` does not yet pass the easy-cell
+sanity gate. This mirrors the Balance Phase 15 lesson: a Bayesian comparator is
+claim hygiene only if the observation lane is auditable and the posterior is
+strong enough not to become a strawman.
 
 Admission plumbing status (2026-05-17): first pass landed.
 `public/js/mines-controllers.mjs` declares `bayes_frontier_pressure` and
@@ -160,6 +159,29 @@ checks unknown-mode rejection, pending-mode rejection, no-leak, pressure-budget
 parity across `sundog_minimal`, `sundog_lean`, and `bayes_frontier_pressure`,
 and scan/gradient masking between pressure and full budgets. Run with
 `npm run mines:phase12:admission`.
+
+Posterior smoke status (2026-05-17): first pass landed in
+`scripts/mines-bayes-baseline.mjs` and can be run with
+`npm run mines:phase12:posterior-smoke`. It consumes the Phase 10
+`best-worst-cells.csv` slate, runs the confirmed pocket plus paired failure
+cell, keeps `bayes_frontier_pressure` out of the implemented controller
+registry, serializes `Phi_t` at decision time, and writes:
+
+- `results/mines/phase12-bayes-admission-smoke/manifest.json`
+- `results/mines/phase12-bayes-admission-smoke/observation-parity.jsonl`
+- `results/mines/phase12-bayes-admission-smoke/posterior-diagnostics.csv`
+- `results/mines/phase12-bayes-admission-smoke/bayes-actions.csv`
+- `results/mines/phase12-bayes-admission-smoke/bayes-regret-summary.csv`
+- `results/mines/phase12-bayes-admission-smoke/frontier-posterior-map.json`
+
+Smoke receipt: 20 trials, 2 Phase 10 cells, 2 representative seeds per cell,
+64 particles, 0.120 s wall clock, no-leak audit pass. This is an action-plumbing
+receipt, not a claim receipt. The first posterior is weak: in the confirmed
+`best_cell` it trails `naive_pressure` by -19.5 budget-adjusted safe tiles and
+trails `sundog_minimal` / `sundog_lean` by -19.5 / -23.5. In the paired
+`worst_cell` it trails `naive_pressure`, `sundog_minimal`, and `sundog_lean` by
+-13, -15.5, and -3.5 respectively. Result branch: Phase 12 stays in baseline
+repair, not public claim promotion.
 
 Purpose: add a same-field Bayesian baseline for Pressure Mines so the confirmed
 Phase 10 pocket is not judged only against naive local heuristics. This is not
@@ -1146,16 +1168,17 @@ Phase 12.0 implementation order:
    `sundog_minimal`, `sundog_lean`, and `bayes_frontier_pressure` and prove
    that the fields common to their declared budgets match the legal controller
    observation stream exactly. *(first fixture landed; replay-URL fixture can
-   be added with the posterior smoke)*
+   be added as a richer reducer)*
 4. **No-leak fixture.** Grep/fixture-check the serialized rows and manifest for
    forbidden keys. Truth may appear in audit outputs only after the action has
    been selected. *(first fixture landed)*
 5. **Tiny posterior smoke.** Implement the frontier particle posterior with a
    deliberately tiny particle count and only the confirmed pocket plus the
    paired failure cell. This smoke decides action-plumbing validity, not claim
-   strength.
-6. **Runtime probe and staged lock.** Measure trials/sec on the capped smoke;
-   if the Phase 10-equivalent slate exceeds the repo inline-runtime rule, stage
+   strength. *(first pass landed; plumbing valid, easy-cell sanity failed)*
+6. **Baseline repair and staged lock.** Repair the first posterior until the
+   easy-cell sanity gate passes, then measure trials/sec on the capped smoke.
+   If the Phase 10-equivalent slate exceeds the repo inline-runtime rule, stage
    the exact PowerShell commands and wall-clock estimate instead of running it
    in-session.
 
@@ -1175,8 +1198,7 @@ Deliverables:
   the repo's inline runtime rule, stage the exact PowerShell commands instead
   of running it in-session.
 - A regret reducer writing `bayes-regret.csv` and
-  `bayes-regret-summary.csv` under
-  `results/mines/phase12-bayesian-baseline/`.
+  `bayes-regret-summary.csv` under the active Phase 12 result directory.
 - A posterior reducer writing `frontier-posterior-map.json` for the confirmed
   pocket and paired failure cell.
 
@@ -1186,17 +1208,28 @@ Public data products, only after the gates pass:
 - `public/data/mines-bayesian-baseline-summary.json`
 - `public/data/mines-frontier-posterior-map.json`
 
-Starter smoke commands, after `bayes_frontier_pressure` is runnable:
+Current smoke command:
+
+```powershell
+npm run mines:phase12:posterior-smoke
+```
+
+Equivalent direct command:
 
 ```powershell
 node scripts/mines-bayes-baseline.mjs --phase phase12-bayes-admission-smoke --out results/mines/phase12-bayes-admission-smoke --cell-slate phase10-best-worst --phase10-out results/mines/phase10-envelope --modes naive_pressure,sundog_minimal,sundog_lean,bayes_frontier_pressure,oracle_safe --seeds 2 --particle-count 64 --turn-cap 160
+```
 
+Next repair probe, after the pressure posterior passes easy-cell sanity:
+
+```powershell
 node scripts/mines-bayes-baseline.mjs --phase phase12-bayes-pocket-probe --out results/mines/phase12-bayes-pocket-probe --cell-slate phase10-best-worst --phase10-out results/mines/phase10-envelope --modes naive_pressure,sundog_minimal,sundog_lean,bayes_frontier_pressure,bayes_frontier_full,oracle_safe --seeds 8 --particle-count 128 --turn-cap 160
 ```
 
-These are staged roadmap commands, not current runnable commands. If the actual
-runner chooses different flag names, update this block before the first probe
-rather than letting the roadmap drift behind the harness.
+First smoke receipt (2026-05-17): 20 trials in 0.120 s
+(166.67 trials/sec), no-leak audit pass, artifacts written to
+`results/mines/phase12-bayes-admission-smoke/`. Easy-cell sanity failed, so the
+branch is posterior repair before any larger run.
 
 Exit criterion: a complete regret summary over the locked Phase 10 cell slate,
 or a documented runtime-gated staged-command package with enough capped
@@ -1326,12 +1359,18 @@ Core shipped pieces:
 
 Active next work:
 
-- Phase 12 admission plumbing has started: Bayesian lane declarations, legal
-  `Phi_t` serialization, no-leak, and observation-parity fixtures have a first
+- Phase 12 admission plumbing has landed: Bayesian lane declarations, legal
+  `Phi_t` serialization, no-leak, and observation-parity fixtures have a
   passing check in `npm run mines:phase12:admission`.
-- The next engineering move is the tiny frontier-particle posterior smoke on
-  the Phase 10 confirmed pocket plus paired failure cell, using the serialized
-  `Phi_t` stream rather than reading board truth.
+- The tiny frontier-particle posterior smoke has landed and runs with
+  `npm run mines:phase12:posterior-smoke`. It writes Phase 10 best/worst
+  receipts and passes the no-leak audit, but its first pressure posterior fails
+  easy-cell sanity by trailing `naive_pressure`, `sundog_minimal`, and
+  `sundog_lean` in both cells.
+- The next engineering move is posterior repair: improve the legal likelihood,
+  action utility, or resampling discipline until `bayes_frontier_pressure`
+  clears the confirmed pocket sanity gate without widening its information
+  budget.
 - Phase 13 remains blocked on Phase 12 receipts. Until then the public Mines
   surface should continue to show the Phase 10 pocket claim and the paired
   failure replay without implying same-field Bayesian near-optimality.
