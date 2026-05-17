@@ -1091,11 +1091,11 @@
                 <div class="eyebrow">Sundog Atlas · Atmospheric Optics</div>
                 <h1>A sundog is geometry doing optics.</h1>
                 <p class="lit-attribution" style="font-size: 0.85rem; color: rgba(245, 245, 245, 0.66); margin-bottom: 0.5rem;">Geometry follows Greenler (1980) and Tape (1994); see <a href="#history">History &amp; reading</a> for citations.</p>
-                <p>Every visible arc in a <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog: a bright spot beside the sun, also called a parhelion">sundog</a> photograph is a slice of a complete circle. The live atlas keeps the physics visible: the <a class="glossary-link" href="/legend#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degree halo: the common halo radius used as the atlas scale reference">22° halo</a> for scale, <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="The paired sundog spots on the parhelic circle. Their offset follows R₂₂ / cos(h) in the promoted inverse." aria-label="parhelia: paired sundog spots on the parhelic circle">parhelia</a> for the inverse, and boundary-gated arcs such as the <a class="glossary-link" href="/legend#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="CZA: the high smile-shaped circumzenithal arc">CZA</a> and <a class="glossary-link" href="/legend#phenomenon-upper-tangent-arc" data-definition="A column-crystal arc near the 22° halo. The tangent-arc route is vocabulary here, not a promoted inverse handle." aria-label="upper tangent arc: a column-crystal arc near the 22 degree halo">upper tangent arc</a>.</p>
+                <p>Every visible arc in a <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog: a bright spot beside the sun, also called a parhelion">sundog</a> photograph is a slice of a complete circle. The live atlas keeps the physics visible: the <a class="glossary-link" href="/legend#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degree halo: the common halo radius used as the atlas scale reference">22° halo</a> for scale, <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="The paired sundog spots on the parhelic circle. Their offset follows R₂₂ / cos(h) in the promoted inverse." aria-label="parhelia: paired sundog spots on the parhelic circle">parhelia</a> for the promoted inverse, and boundary-gated arcs such as the <a class="glossary-link" href="/legend#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="CZA: the high smile-shaped circumzenithal arc">CZA</a> and <a class="glossary-link" href="/legend#phenomenon-upper-tangent-arc" data-definition="A column-crystal arc near the 22° halo. The tangent-arc route is vocabulary here, not a promoted inverse handle." aria-label="upper tangent arc: a column-crystal arc near the 22 degree halo">upper tangent arc</a>. Rendered does not mean promoted: most layers are forward geometry or vocabulary; only the eligible parhelion-offset route is currently treated as a hidden-state measurement handle.</p>
                 <div class="stage-status" aria-label="Current atlas posture">
                     <span><strong>Live</strong> geometry</span>
-                    <span><strong>Promoted</strong> R₂₂ / cos(h)</span>
-                    <span><strong>Gated</strong> CZA + tangent arcs</span>
+                    <span><strong>Promoted</strong> parhelion offset</span>
+                    <span><strong>Gated</strong> rendered context</span>
                 </div>
                 <div class="stage-cta">
                     <a href="#why-22" class="is-primary">Why 22°?</a>
@@ -1139,7 +1139,7 @@
                 <input type="range" id="parhelic-curvature" data-param="parhelic-curvature" min="0" max="1" step="0.01" value="0.05">
                 <label class="derive-toggle">
                     <input type="checkbox" id="parhelic-curvature-derive">
-                    <span>derive from sun altitude (Phase 3 binding)</span>
+                    <span>derive from sun altitude binding</span>
                 </label>
             </div>
 
@@ -1258,7 +1258,7 @@
             <div class="eyebrow">§2 · What you're looking at</div>
             <h2>Every bright feature has a name.</h2>
             <p class="lead">
-                When you photograph a <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog: a bright spot beside the sun, also called a parhelion">sundog</a> you don't see one phenomenon; you see a stack of them. The bright spots at the sun's left and right are the <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="The paired sundog spots on the parhelic circle. Their offset follows R₂₂ / cos(h) in the promoted inverse." aria-label="parhelia: paired sundog spots on the parhelic circle">parhelia</a>. The white ring around the sun is the <a class="glossary-link" href="/legend#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degree halo: the common halo radius used as the atlas scale reference">22° halo</a>. The colorful arc near the top of the sky is the <a class="glossary-link" href="/legend#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="circumzenithal arc: the high smile-shaped arc above the sun">circumzenithal arc</a>. The vertical light shaft is the <span class="glossary-link" role="term" tabindex="0" data-definition="A vertical reflection column from horizontally oriented plate crystals. Rendered here as vocabulary, not as a promoted inverse handle." aria-label="sun pillar: a vertical reflection column from plate crystals">sun pillar</span>. Each is its own geometric primitive: its own complete circle in the sky, and the sundog is what happens when several show up at once.
+                When you photograph a <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog: a bright spot beside the sun, also called a parhelion">sundog</a> you don't see one phenomenon; you see a stack of them. The bright spots at the sun's left and right are the <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="The paired sundog spots on the parhelic circle. Their offset follows R₂₂ / cos(h) in the promoted inverse." aria-label="parhelia: paired sundog spots on the parhelic circle">parhelia</a>. The white ring around the sun is the <a class="glossary-link" href="/legend#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degree halo: the common halo radius used as the atlas scale reference">22° halo</a>. The colorful arc near the top of the sky is the <a class="glossary-link" href="/legend#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="circumzenithal arc: the high smile-shaped arc above the sun">circumzenithal arc</a>. The vertical light shaft is the <span class="glossary-link" role="term" tabindex="0" data-definition="A vertical reflection column from horizontally oriented plate crystals. Rendered here as vocabulary, not as a promoted inverse handle." aria-label="sun pillar: a vertical reflection column from plate crystals">sun pillar</span>. Each is its own geometric primitive, but they do not carry the same evidence weight.
             </p>
 
             <div class="photo-grid">
@@ -1391,7 +1391,7 @@
                     <label for="demo-altitude">Sun altitude (°)</label>
                     <input type="range" id="demo-altitude" min="0" max="60" step="1" value="25">
                     <p style="font-size: 0.85rem; color: rgba(245, 245, 245, 0.6); margin-top: 0.4rem;">
-                        Drag the slider. The atlas above re-derives every dependent primitive. At h = 32° the CZA disappears (it has exited the visible hemisphere); the parhelia drift outward across the entire range.
+                        Drag the slider. The atlas above re-derives every dependent primitive. At h ≈ 32.2° the CZA disappears (it has exited the visible hemisphere); near 29° the tangent arcs merge into the circumscribed halo regime; the parhelia drift outward across the entire range.
                     </p>
                 </div>
                 <div class="demo-readout">
@@ -1405,6 +1405,9 @@
             <p>
                 This is also how a sundog photograph can become a measuring instrument. The 7-photo calibration pass shipped with this project (see <a href="docs/SUNDOG_V_GEOMETRY.md#multi-photo-calibration-pass-2026-05-12">§Multi-Photo Calibration Pass</a>) recovers the sun's altitude from each photograph with no EXIF or astronomical metadata, within roughly 1 pixel of residual.
             </p>
+            <p>
+                Current evidence keeps this narrow. The promoted inverse handle is parhelion offset on eligible photos with bilateral parhelia and an independent 22° halo anchor; the CZA, supralateral, tangent-family, parhelic-belt, and pillar layers are rendered context, vocabulary, or coverage-gated routes unless their own receipts say otherwise.
+            </p>
         </div>
     </section>
 
@@ -1416,10 +1419,13 @@
             <div class="eyebrow">§5 · The full atlas</div>
             <h2>Every visible arc, mapped to a circle.</h2>
             <p class="lead">
-                Atmospheric optics has spent two centuries naming the arcs in a halo display. The twelve primitives below are the set this atlas renders — each drawn as the upper portion of its own complete circle, anchored to environmental state. One paragraph each: what it is, where it sits, and how the atlas constructs it.
+                Atmospheric optics has spent two centuries naming the arcs in a halo display. The twelve primitives below are the set this atlas renders. Some are scale or context; some are optional vocabulary; one route, parhelion offset, is promoted as the current inverse measurement handle. One paragraph each: what it is, where it sits, how the atlas constructs it, and what status it carries.
             </p>
             <p class="lead">
                 For the broader vocabulary ledger — including named-only, not-modeled, and speculative families — see the <a href="/legend">Sundog Halo Legend</a>. This page stays focused on the live atlas.
+            </p>
+            <p class="lead">
+                Boundary landmarks: tangent arcs merge into the circumscribed halo near 29° sun elevation; the CZA leaves the visible hemisphere at about 32.2°; parhelic-belt y and the stylized pillar generator remain visual QA, not hidden-state evidence.
             </p>
 
             <div class="atlas-walkthrough">
@@ -1546,7 +1552,7 @@
                     <p style="margin-top: 0.6rem;"><a href="/poses/canonical-halo-atlas.json"><code>canonical-halo-atlas.json</code></a></p>
                 </div>
                 <div class="tool-card">
-                    <h3>Phase 3 math binding</h3>
+                    <h3>Math binding tests</h3>
                     <p>Exported <code>phase3</code> namespace with <code>daggerOffset(h)</code>, <code>czaVisible(h)</code>, <code>parhelicCurvature(h)</code>. 33 assertions in the browser-side test harness.</p>
                     <p style="margin-top: 0.6rem;"><a href="/phase3-tests">Phase 3 math-binding tests</a></p>
                 </div>

@@ -222,6 +222,19 @@ Exit:
 - A reader can tell what is rendered, what is anchored, and what is only named
   or speculative without opening an internal memo.
 
+Solo pass, 2026-05-17:
+
+- `legend.html` already separated rendered core, rendered optional, named-only,
+  and not-modeled families, with only parhelion offset promoted as the inverse
+  handle.
+- Patched `sundog.html` so the hero, sun-altitude demo, and full-atlas lead
+  say explicitly that rendered does not mean promoted. The page now names the
+  current promoted inverse handle, the strict eligible-photo posture, the
+  29 degree tangent/circumscribed merge, the ~32.2 degree CZA cutoff, and the
+  parhelic-belt / pillar visual-QA caveat.
+- Remaining work is visual: future atlas cards can carry explicit status chips,
+  but the launch-blocking copy distinction is now public.
+
 ## P1 - Same-Day Public Coherence
 
 These do not block the first post, but should land before wider technical
@@ -1001,7 +1014,7 @@ The public statement may ship when:
       rerun the final search before posting.
 - [ ] P0.2 oracle-leakage receipt exists or the claim is demoted.
 - [ ] P0.3 Mesa cliff language is bounded.
-- [ ] P0.4 geometry rendered-vs-anchored distinction is visible.
+- [x] P0.4 geometry rendered-vs-anchored distinction is visible.
 - [ ] `first_public_statement.md` passes the public guardrails in
       `anni_spam_roadmap.md`.
 
