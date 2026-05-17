@@ -1310,19 +1310,28 @@ Initial implementation slice (2026-05-17):
   rerun completed 384 trials in 42.399 s (9.06 trials/s), passed 24/24
   hard-gate cells, and kept the recoverable `noise_0p03` margin cell
   non-negative versus `sundog_shadow`.
-- Next full-lock target: rerun the full Phase 10-equivalent slate with the
-  repaired observation-degradation admission and mild-noise stress guard. This
-  is expected to take roughly 43-55 minutes at the latest full/capped rates, so
-  keep it operator-run rather than inline-agent work:
+- Final claim-lock receipt (2026-05-17): rerunning the full Phase
+  10-equivalent slate after the mild-noise stress repair completed 27,200 trials
+  in 2044.878 s (13.30 trials/s), with all audits passing. The claim gate passed
+  56/56 hard-gate cells, with 12 reported-only failure-regime observation cells.
+  Across all 68 cells, mean regret versus `sundog_shadow` was +0.00395
+  normalized survival, range 0 to +0.26671, with zero negative mean-regret
+  cells. Bayes-vs-naive sanity passed 59/68 cells; the 9 false sanity cells are
+  retained as boundary diagnostics under the observation-degradation admission
+  policy. Candidate selection was overwhelmingly guarded (`sundog_guard`:
+  176,492 rows, `bayes_proposal`: 231). Interpretation: Phase 15 earns a
+  same-information Bayesian-floor claim-lock receipt for Balance, with explicit
+  report-only lanes for pre-registered failure-regime observation cells.
+- Final full-lock reproduction command:
 
 ```powershell
 node scripts/balance-phase15-bayes-floor.mjs --phase phase15-phase10-full-lock --out results/balance/phase15-phase10-full-lock --cell-slate phase10-output --phase10-out results/balance/phase10-envelope --limit-cells all --modes naive_shadow,sundog_shadow,bayes_floor_shadow_particle,oracle --seeds 100 --duration 8 --particle-count 61 --horizon-seconds 0.05
 ```
 
-- Next implementation target after the refreshed full lock: if the claim gate
-  passes, promote Phase 15 from diagnostic parity to claim-lock receipt and feed
-  Phase 16 data surfaces. If any hard-gate cell fails, inspect only that
-  admission lane before changing public claim language.
+- Next implementation target: feed Phase 15 into Phase 16 data surfaces. Public
+  language should say Balance cleared a same-information Bayesian-floor
+  claim-lock receipt, while still showing the admission lane for reported-only
+  delay/noise/dropout failure-regime cells.
 
 ### Phase 16 - Balance Data Surfaces And Claim Ratchet
 
@@ -1330,10 +1339,9 @@ Goal: convert the Balance evidence into richer public surfaces so the site can
 show not just that Balance confirmed, but where, why, against what baselines,
 and under which claim boundary.
 
-**Gating:** Phase 10 CONFIRM is already enough for the first data-surface pass.
-Bayesian-floor fields remain hidden or marked `pending` until Phase 15 earns
-receipts. Phase 13 and Phase 14 add optional columns rather than blocking the
-core Balance surface.
+**Gating:** Phase 10 CONFIRM is already enough for the first data-surface pass,
+and Phase 15 now earns the Bayesian-floor claim-lock fields. Phase 13 and Phase
+14 add optional columns rather than blocking the core Balance surface.
 
 Deliverables:
 
