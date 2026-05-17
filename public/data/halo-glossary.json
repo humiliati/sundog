@@ -1,0 +1,39 @@
+{
+  "terms": [
+    {
+      "term": "parhelion",
+      "plain": "A bright spot beside the sun, also called a sundog. Its offset can recover sun altitude when the anchors are eligible.",
+      "href": "legend.html#phenomenon-parhelion"
+    },
+    {
+      "term": "22 deg halo",
+      "plain": "The common ring around the sun. Sundog uses it as the scale reference for the atlas.",
+      "href": "legend.html#phenomenon-22-degree-halo"
+    },
+    {
+      "term": "46 deg halo",
+      "plain": "A larger halo used as context for several high-arc families. It is rendered as vocabulary, not as the promoted inverse handle.",
+      "href": "legend.html#phenomenon-46-degree-halo"
+    },
+    {
+      "term": "circumzenithal arc",
+      "plain": "The high smile-shaped arc above the sun. Its visibility is gated by observer geometry.",
+      "href": "legend.html#phenomenon-circumzenithal-arc"
+    },
+    {
+      "term": "circumhorizon arc",
+      "plain": "A high-sun plate-crystal arc sometimes called a fire rainbow. It is named in the legend but outside the current sundog-facing regime.",
+      "href": "legend.html#phenomenon-circumhorizon-arc"
+    },
+    {
+      "term": "tangent arc",
+      "plain": "An arc from column-crystal geometry near the 22 degree halo. It is useful vocabulary, not a promoted proof route.",
+      "href": "legend.html#phenomenon-upper-tangent-arc"
+    },
+    {
+      "term": "parhelic circle",
+      "plain": "The horizontal belt through the sun and parhelia. It is rendered in the atlas but not promoted as a hidden-state handle.",
+      "href": "legend.html#phenomenon-parhelic-circle"
+    }
+  ]
+}

@@ -256,49 +256,49 @@
                 <p class="section-note">These are the primitives shown or named in the current atlas. Only the parhelion-offset route is promoted as an inverse measurement handle.</p>
             </div>
             <div class="phenomena-grid">
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" id="phenomenon-22-degree-halo">
                     <h3>22 deg halo</h3>
                     <p>The common ring around the sun and the scale reference for the atlas.</p>
                     <p><code>circle(sun, R22)</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">scale-lock</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" id="phenomenon-46-degree-halo">
                     <h3>46 deg halo</h3>
                     <p>A larger halo used as context for CZA, supralateral, and infralateral vocabulary.</p>
                     <p><code>circle(sun, R46)</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">forward vocabulary</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" id="phenomenon-parhelion">
                     <h3>Sundog / parhelion</h3>
                     <p>Bright flanking spots on the parhelic circle. The offset recovers sun altitude when the anchors are eligible.</p>
                     <p><code>offset = R22 / cos(h)</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">promoted inverse</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" id="phenomenon-parhelic-circle">
                     <h3>Parhelic circle</h3>
                     <p>The horizontal belt through the sun and parhelia. It is rendered, but not promoted as a hidden-state handle.</p>
                     <p><code>circle through sun and parhelia</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">primitive QA</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" id="phenomenon-circumzenithal-arc">
                     <h3>Circumzenithal arc</h3>
                     <p>The high smile-shaped arc. The current route is visibility-gated; pre-A1b anchors need rechecking before proof use.</p>
                     <p><code>visible when h &lt; 32.196 deg</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">coverage-gated inverse</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" id="phenomenon-supralateral-arc">
                     <h3>Supralateral arc</h3>
                     <p>High arc near the 46 deg halo/CZA region. The inverse route failed coverage and structural-discrimination gates.</p>
                     <p><code>46 deg family context</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">not promoted</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" id="phenomenon-upper-tangent-arc">
                     <h3>Upper tangent arc</h3>
                     <p>Column-crystal tangent vocabulary above the 22 deg halo. It remains useful for logo language, not inverse proof.</p>
                     <p><code>tangent-family candidate</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">C5/C6/C7 tension</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" id="phenomenon-circumhorizon-arc">
                     <h3>Suncave Parry arc</h3>
                     <p>A Parry-family cap near the upper tangent arc. It is optional vocabulary with weak photo support.</p>
                     <p><code>Parry-oriented family</code></p>
