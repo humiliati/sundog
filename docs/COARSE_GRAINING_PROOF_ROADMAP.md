@@ -23,10 +23,11 @@
 > reviewed and closed **positive** at
 > [`proof/PHASE3_BOUNDARY.md`](proof/PHASE3_BOUNDARY.md); Phase 4 three-body
 > spec is drafted at
-> [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md), but empirical entry
-> is blocked until the Bayesian-floor baseline exists in the workbench; the
-> controller buildout is staged at
+> [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md); the Bayesian-floor
+> controller buildout is staged and BF-4 smoke-passed at
 > [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md);
+> BF-5 sharded/full-lock staging is open before the Phase 4 gate can be
+> interpreted;
 > Phase 6
 > lambda-confound control is staged at
 > [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md) with the
@@ -167,9 +168,11 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   `results/proof/phase4/` with a summary in `docs/proof/PHASE4_THREEBODY.md`.
   **Spec drafted 2026-05-16** at
   [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md); empirical entry
-  blocked because the current three-body workbench has privileged oracle /
-  `forward_oracle_strict` references but no Bayesian-floor controller under the
-  signature information regime. Buildout staged at
+  advanced through the BF-4 Bayesian-floor smoke: the current three-body
+  workbench now has a smoke-passed separate `bayes_floor_particle_mpc`
+  evaluator under the signature information regime, while the privileged oracle /
+  `forward_oracle_strict` references remain yardsticks only. BF-5
+  sharded/full-lock staging remains open at
   [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
 - **Pre-registered negative.** Gate, fixed now: signature-only regret vs Bayes
   must → 0 (within bootstrap CI) **on** the `𝓕_σ`-measurable cell set and stay

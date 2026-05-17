@@ -22,9 +22,12 @@ buildout smoke passed, but no full proof-track empirical lock has run:
   heuristic / forward-lookahead references; they are not the Phase 4 floor.
 
 Therefore the substrate is **not yet closed** on the proof track. This spec pins
-the intended objects and the blocker that remains: BF-5 must stage and run a
-sharded/resumable full lock on a long-budget runner before the Phase 4 gate can
-be interpreted. The Bayes-floor build path is tracked in
+the intended objects and the blockers that remain: (a) a passing BF-4b off-set
+guard-calibration receipt — the BF-4 smoke floor-sanity pass alone is
+near-tautological under the signature-baseline guard and does not certify the
+off-set arm can fire; then (b) BF-5 must stage and run a sharded/resumable full
+lock on a long-budget runner before the Phase 4 gate can be interpreted. The
+Bayes-floor build path is tracked in
 [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
 
 Roadmap gate, quoted unchanged:
@@ -46,7 +49,7 @@ to oracle comparison, candidate-envelope count, or survival-vs-passive.
 | `X` | Pinned below as the raw planar restricted decision state plus time/config. |
 | `Φ, Σ` | Pinned below as the guarded accelerometer-proxy signature, including noise and guard handling. |
 | `J, μ, regret` | Pinned below as safe-time regret against Bayes, with bootstrap readout. |
-| `π*` | BF-4 smoke-passed as the separate `bayes_floor_particle_mpc` evaluator; full-lock use still requires BF-5 sharded/resumable staging. Existing oracles are reference yardsticks only. |
+| `π*` | BF-4 smoke floor-sanity passed as the separate `bayes_floor_particle_mpc` evaluator, but floor-sanity is near-tautological under the signature-baseline guard; pinning `π*` requires the hard BF-4b off-set guard-calibration gate, then BF-5 sharded/resumable staging. Existing oracles are reference yardsticks only. |
 | Measurable/off-cell split | Procedure pinned below, but final labels depend on the missing Bayes floor. |
 
 ## 1. `X`
@@ -244,6 +247,17 @@ reason recorded in the BF-4 Probe Receipt (it degenerated the floor to passive).
 The shaped re-probe then showed active worse-than-signature behavior; the
 signature-baseline guard is the follow-up repair. This remains a floor-internal
 surrogate change only; the Phase 4 objects and gate are still unchanged.
+
+Consequence for gate interpretation: because the signature-baseline guard makes
+the floor `≥ signature` by construction, a `floor_sanity_pass` (negative-regret
+≤ 5%) certifies only floor-validity, **not** floor quality — it is
+near-tautological on its own, and all gate-discriminating power moves to the
+off-set arm. Its sensitivity is the `signatureAdvantageDtMultiplier`. That
+multiplier is therefore **not** pinned until the hard pre-BF-5 BF-4b off-set
+guard-calibration gate passes (pre-registered off-set cell classified `off`,
+floor regret 95% CI lower bound `> 0` there, sufficient cell negative-regret
+≤ 5%); see [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md)
+▸ BF-4b. A BF-4 smoke floor-sanity pass alone does **not** unblock BF-5.
 
 Resolved blocker: the harness previously did not validate unknown controller
 mode names inside `computeControlThrust` (an unimplemented mode silently acted
