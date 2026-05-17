@@ -14,7 +14,7 @@
 > cross-substrate "convergence" is a shared **operator**, not a shared word —
 > and the pre-registered failure boundary is *predicted*, not patched.
 >
-> **Status as of 2026-05-16:** Phase 0 definitions lock landed at
+> **Status as of 2026-05-17:** Phase 0 definitions lock landed at
 > [`proof/POSTULATE1_DEFINITIONS.md`](proof/POSTULATE1_DEFINITIONS.md);
 > Phase 1 LQG proof reviewed and closed **positive** at
 > [`proof/PHASE1_LQG.md`](proof/PHASE1_LQG.md); Phase 2 finite-MDP proof
@@ -27,8 +27,11 @@
 > controller buildout is staged and BF-4 smoke-passed at
 > [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md);
 > BF-4b off-set calibration has a first negative receipt (cell `off`, regret CI
-> `[0, 0]`), so BF-5 sharded/full-lock staging remains blocked before the Phase
-> 4 gate can be interpreted;
+> `[0, 0]`), but the satisfiability probe validated the pre-registered cell
+> (oracle-signature headroom CI `[0.064, 0.499]`), so the next gate is the
+> compute-unconstrained Information-Accessibility Diagnostic and BF-5
+> sharded/full-lock staging remains blocked before the Phase 4 gate can be
+> interpreted;
 > Phase 6
 > lambda-confound control is staged at
 > [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md) with the
@@ -174,8 +177,12 @@ redirects the campaign, fixed *before* the phase runs, per AGENTS.md ▸
   evaluator under the signature information regime, while the privileged oracle /
   `forward_oracle_strict` references remain yardsticks only. BF-4b off-set
   calibration first receipt failed criterion (2): the cell classified `off`,
-  floor sanity passed, but the off-set regret CI was `[0, 0]`. BF-5
-  sharded/full-lock staging remains blocked at
+  floor sanity passed, but the off-set regret CI was `[0, 0]`. Follow-up
+  diagnostic work rejected multiplier-only tuning, retained the energy-trend
+  terminal value, and validated the pre-registered cell by the satisfiability
+  probe (oracle-signature headroom mean `0.310`, CI `[0.064, 0.499]`). Next
+  operator gate is the compute-unconstrained Information-Accessibility
+  Diagnostic; BF-5 sharded/full-lock staging remains blocked at
   [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
 - **Pre-registered negative.** Gate, fixed now: signature-only regret vs Bayes
   must → 0 (within bootstrap CI) **on** the `𝓕_σ`-measurable cell set and stay
