@@ -25,9 +25,14 @@ code, experiments, prior theorem materials, and application bridges.
 - [Postulate 1 definitions lock](proof/POSTULATE1_DEFINITIONS.md): Phase 0
   proof-track symbol ledger and Sundog-solvable predicate.
 - [Proof artifacts index](proof/README.md): current proof-track artifacts,
-  including the Phase 1 LQG draft.
+  including the Phase 1 LQG draft, Phase 2 finite-MDP proof, Phase 3 boundary
+  theorem, Phase 4 three-body spec, Bayesian-floor buildout, and Phase 6
+  lambda-control spec.
 - [Application map](APPLICATIONS.md): how the operating-envelope workbenches
   and product systems relate to the theorem.
+- [Near-anniversary roadmap triage](ANNIVERSARY_ROADMAP_TRIAGE.md): low-risk
+  and high-value roadmap lanes to slide in before the 2026-05-19 anniversary
+  target.
 - [Promo highlights](PROMO_HIGHLIGHTS.md): hooks, headlines, provocative
   statements, and future-facing language.
 - [Brand positioning](BRAND_POSITIONING.md): public lab posture after the
