@@ -831,7 +831,9 @@ async function main() {
   console.log("[threebody-bayes-floor] wrote manifest.json, signature-observations.jsonl, belief-diagnostics.csv, bayes-actions.csv, bayes-trial-outcomes.csv");
 }
 
-main().catch((error) => {
+main().then(() => {
+  process.exit(0);
+}).catch((error) => {
   console.error(error);
   process.exit(1);
 });

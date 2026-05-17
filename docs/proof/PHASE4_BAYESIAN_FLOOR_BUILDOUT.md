@@ -308,12 +308,40 @@ Second capped probe, same 1-cell / 2-seed slate. Recorded:
   `signatureAdvantageDtMultiplier * dt` before deviating from the signature
   baseline. Re-probe required again before BF-5.
 
+#### BF-4 Signature-Guard Re-Probe Receipt (2026-05-16, `bf4-shaped-reprobe-20260516-191423`)
+
+Third capped probe, same 1-cell / 2-seed slate, with
+`signatureAdvantageDtMultiplier = 1`. Recorded:
+
+- **Join / caseId-drift guard: PASS.** `joinedRowCount = 2`.
+- **Floor-sanity gate: PASS.** `globalNegativeRegretRate = 0`,
+  `floorSanity.status = floor_sanity_pass`; both rows had
+  `T_safe_bayes = T_safe_signature = 16`, `regret = 0`, and
+  `fuel_excess = 0`.
+- **Signature-baseline guard receipt: PASS.** `3202 / 3202` Bayes action rows
+  used `action_family = signature_policy`; `974 / 3202` rows were nonzero
+  thrust, matching the guarded signature controller rather than passive zero
+  thrust.
+- **Runtime gate: EXCEEDED.** Bayes manifest records
+  `2026-05-17T02:14:25.659Z -> 2026-05-17T03:39:01.236Z`, about 84.6 minutes
+  for 2 Bayes trials, or about **42.3 minutes per Bayes trial** at the probe
+  settings. The serial full proof grid (216 cells x 8 seeds = 1728 Bayes
+  trials, before signature/passive harness cost) extrapolates to roughly
+  **51 days**. BF-5 must therefore be sharded/resumable on a long-budget runner;
+  a single monolithic local or interactive-agent command is not admissible.
+- **Operational repair applied:** the Bayes evaluator wrote complete artifacts
+  but left an idle Node process alive after `completedAt`; the script now exits
+  explicitly after successful writes. Re-run the small receipts before any BF-5
+  shard.
+
 ### BF-5: Full Lock Handoff
 
-Only after BF-0 through BF-4 pass, update
-[`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) with the exact runnable PowerShell
-for the proof lock, resume rules, read-back paths, and branch selected by each
-gate outcome. The full lock stays operator/runner-gated.
+BF-4 is passed for the smoke slate, but the measured rate changes the BF-5
+handoff: the full proof lock must first be staged as sharded/resumable
+PowerShell (or a long-budget workflow) with per-shard manifests and merge
+readbacks. A single full-grid invocation is intentionally not written here,
+because the measured serial cost is multi-week and violates the compute
+discipline.
 
 ## Validation Gates
 
