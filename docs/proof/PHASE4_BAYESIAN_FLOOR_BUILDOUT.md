@@ -535,6 +535,83 @@ the floor — is the problem and must be re-picked before any further floor work
 This is the next operator-gated action; no more inline floor building until the
 probe decides.
 
+#### BF-4b Satisfiability Probe Receipt (2026-05-17, `_bf4b-satisfiability`)
+
+Ran the pre-registered cell, modes `off, track_sensor_accel_guarded,
+forward_oracle_strict`, 8 seeds, duration 16.
+
+- `forward_oracle_strict` mean `T_safe = 10.16` (7 escape, 1 close-approach);
+  `track_sensor_accel_guarded` mean `T_safe = 5.21` (7 escape, 1
+  close-approach). Signature is far below the `T_safe = 16` cap, so the cell is
+  **not** signature-saturated.
+- Paired oracle−signature headroom mean `0.310`, 95% bootstrap CI
+  (`makeRng(40604)`, 2.5/97.5) **`[0.064, 0.499]`**, lower bound `> 0`; 7/8
+  seeds positive.
+- **Branch: SATISFIABLE, privileged-only.** The pre-registered off-set cell is
+  **validated** (not vacuous): real, statistically-robust headroom over
+  signature exists. The advantage was earned by `forward_oracle_strict`
+  (privileged forward rollouts of the true dynamics); the same-`Φ` particle-MPC
+  captured ~0 of it. The open question is now whether that headroom is
+  *accessible from the `Φ` history alone* (tractability problem) or
+  *genuinely privileged* (the off-set arm is unsatisfiable by any admissible
+  floor) — resolved by the Information-Accessibility Diagnostic below.
+
+#### BF-4b Information-Accessibility Diagnostic (B2; one cell; compute-unconstrained; operator-gated)
+
+Decides whether the validated headroom is `Φ`-accessible. Run a same-`Φ`
+belief planner with **both** binding constraints removed on the **single
+validated cell only**:
+
+- long planning horizon (toward the escape timescale, not the 16-step smoke
+  horizon — inline tests showed a 16-step horizon is non-discriminating even
+  for a full-horizon sustained action, max advantage `~9e-6 ≪ 0.01`);
+- sustained candidate action (`--candidate-hold-steps` = the horizon), so a
+  deviation actually propagates;
+- many particles.
+
+`--candidate-hold-steps` default `1` preserves all prior BF-4 / BF-4b
+behaviour; `>1` is diagnostic-only. This is a single deliberately heavy
+one-cell run on the long-budget runner (not the proof grid, not inline).
+
+```powershell
+$diag = "results\proof\phase4\_bf4b-accessibility"
+node scripts/threebody-phase4-bayes-floor.mjs `
+  --phase phase4-bf4b-accessibility --out $diag `
+  --regimes near_escape --mass-ratios 1 --timesteps 0.01 --radius-scales 1.075 `
+  --velocity-scales 1.15 --thrust-limits 0.4 --sensor-noise-sweep 0.01 `
+  --track-guard-mode hazard_quantile --track-guard-quantile 0.75 `
+  --track-guard-min-radius-sweep 1.15 `
+  --track-guard-max-local-acceleration-sweep 2.5 `
+  --track-guard-max-tidal-magnitude-sweep 35 `
+  --seeds 8 --duration 16 `
+  --particle-count 512 --planning-horizon-steps 800 `
+  --candidate-hold-steps 800 --resample-threshold 0.5 `
+  --shape-fraction 0.5 --signature-advantage-dt-multiplier 1
+```
+
+Then regret-reduce this against the satisfiability-probe signature rows (same
+cell-seed slate) and read `phase4-regret-summary.csv`. If wall-clock is
+infeasible the operator may reduce `--particle-count` first (least-sensitive to
+the accessibility verdict) and record the measured rate; do **not** reduce the
+horizon (it is the binding constraint).
+
+Pre-registered decision (uses the gate's regret readout + CI):
+
+- **`Φ`-accessible** — same-`Φ` planner recovers headroom over signature with
+  regret CI lower bound `> 0` and mean approaching the oracle's `~0.31`: the
+  off-set arm *is* satisfiable from `Φ` history; the BF-4b/BF-5 problem is
+  purely proof-scale **tractability** → need a cheaper sufficient floor or an
+  exact belief-grid DP, but the gate is sound.
+- **Privileged-only** — same-`Φ` planner stays ≈ signature (regret CI includes
+  0) even compute-unconstrained: the headroom is **not** recoverable from `Φ`
+  history. No admissible floor can make the off-set arm fire on this cell. This
+  is a Phase-4-decisive finding: the off-set arm of the gate is not satisfiable
+  by an admissible controller on this substrate → Phase 4 scope reassessment,
+  not more floor engineering.
+- **Partial** — recovers some but not all (CI lower `> 0` but mean ≪ 0.31):
+  quantify the accessible fraction; decide tractable-floor vs. scope on the
+  recorded number, pre-registered before the run.
+
 ### BF-5: Full Lock Handoff
 
 BF-4 floor-sanity is passed for the smoke slate, **but BF-5 is additionally
