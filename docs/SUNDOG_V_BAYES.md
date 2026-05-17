@@ -343,12 +343,15 @@ Applied queue after the Balance lock:
    pressure-floor parity, not posterior dominance over `sundog_lean`.
    Phase 13.1 adds representative posterior-cell slices and replay selectors
    for the confirmed pocket, paired failure, and Bayes-divergence cell.
-5. **Template backfill.** Current next hygiene task. Any Mines-specific deviations from the generic
+5. **Template backfill.** Any Mines-specific deviations from the generic
    [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md)
    have now been backfilled: admission lanes, same-observation seed policy,
    claim-gate fields, reported-only lanes, posterior/evidence slices, and
-   public interpretation copy. Next roadmap move: start the standalone Phase 1
-   exact Bayes-Correct reference task before creating `bayes.html`.
+   public interpretation copy.
+6. **Standalone Phase 1 exact reference.** Landed as
+   `scripts/bayes-phase1-reference.mjs` with `npm run bayes:phase1:smoke` and
+   `npm run bayes:phase1`. The 128-seed lock passes the known-model gate before
+   any `bayes.html` work begins.
 
 ## Controller-Family Architecture
 
@@ -744,6 +747,43 @@ Deliverables:
 - Oracle and random baselines.
 - JSONL trial logs and replay manifest.
 
+Status, 2026-05-17: executable lock landed.
+
+Commands:
+
+```bash
+npm run bayes:phase1:smoke
+npm run bayes:phase1
+```
+
+Receipt paths:
+
+- `results/bayes/phase1-reference-smoke/manifest.json`
+- `results/bayes/phase1-reference-lock/manifest.json`
+- `results/bayes/phase1-reference-lock/trials.jsonl`
+- `results/bayes/phase1-reference-lock/steps.jsonl`
+- `results/bayes/phase1-reference-lock/replay-manifest.json`
+
+Phase 1 lock summary (`npm run bayes:phase1`, 128 seeds, 512 trials, 17.523s):
+
+| Mode | Successes | Success rate | Mean score | Mean hit turn |
+| --- | ---: | ---: | ---: | ---: |
+| `oracle` | 128/128 | 1.000000 | 1.623372 | 9.039063 |
+| `bayes_correct` | 126/128 | 0.984375 | 1.486077 | 11.738095 |
+| `hc_sundog` | 27/128 | 0.210938 | 0.062268 | 11.481481 |
+| `random` | 10/128 | 0.078125 | -0.257697 | 12.900000 |
+
+Exit gate: **pass**. `bayes_correct` beats `hc_sundog` under the known model:
+mean score delta +1.423809, success-rate gate true, score gate true. The hit
+turn comparison is only gate-active when success rates are tied, to avoid
+rewarding a controller for succeeding only on easy seeds.
+
+Representative replay roles are now selected in
+`replay-manifest.json`: `bayes_advantage`, `closest_pair`, and
+`bayes_boundary`. The boundary role is useful claim hygiene, not a Phase 1
+failure: Bayes still clears the aggregate known-model gate, but the replay keeps
+the two missed seeds visible before Phase 2.
+
 Exit criterion: Bayes-Correct beats or matches HC-Sundog under the known model.
 If it does not, fix Bayes before proceeding.
 
@@ -901,9 +941,9 @@ Immediate work after the Pressure Mines applied lane:
 - Keep `alignment.html` as the public Bayes/Sundog side-by-side. The Mines row
   now has the explicit middle claim: stronger than "Sundog beat naive," weaker
   than "Sundog beat Bayes."
-- Start Phase 1 exact Bayes-Correct reference task: small hidden-source grid,
-  correct likelihood, exact posterior, and Sundog response-control comparator.
-  Bayes should win here; if it does not, fix Bayes before moving on.
+- Phase 1 exact Bayes-Correct reference task has landed: small hidden-source
+  grid, correct likelihood, exact posterior, and Sundog response-control
+  comparator. The 128-seed lock passes the known-model gate.
 - Add `bayes.html` only after the standalone benchmark has real run artifacts.
   Do not publish a decorative Bayes page before Phase 1/2 receipts exist.
 - Add a public rail card only if Round 3 or Phase 5 includes a real failure
@@ -949,7 +989,7 @@ sundog/
 │   ├── bayes-visualizer.mjs
 │   └── bayes-replay.mjs
 ├── scripts/
-│   └── bayes-runner.mjs
+│   └── bayes-phase1-reference.mjs
 └── results/
     └── bayes/
         ├── phase1-reference/
@@ -1019,8 +1059,8 @@ Avoid:
 
 ## Open Questions
 
-1. Should Phase 1 use a discrete grid exact posterior first, or jump directly to
-   continuous particles? Recommendation: grid first.
+1. Phase 1 first substrate is resolved: discrete grid exact posterior first.
+   Continuous particles wait for the later continuous-field extension.
 2. Should Bayes-Adaptive use Gaussian processes, particles with hyperparameter
    learning, or a small mixture model? Recommendation: mixture first, GP second.
 3. Should the public failure card be called **SIGNAL ALIASED**, **BOUNDARY
