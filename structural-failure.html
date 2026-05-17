@@ -12,6 +12,12 @@
     <title>Structural Failure Boundary Map - Sundog</title>
     <link rel="stylesheet" href="/css/sundog-theme.css">
     <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
         main {
             background:
                 radial-gradient(circle at 18% 8%, rgba(244, 196, 48, 0.12), transparent 22rem),
@@ -38,8 +44,9 @@
             margin: 1rem 0 1.25rem;
             color: var(--primary-dark);
             font-family: var(--sd-font-display);
-            font-size: clamp(2.4rem, 7vw, 5rem);
+            font-size: clamp(2.1rem, 7vw, 5rem);
             line-height: 1.02;
+            overflow-wrap: anywhere;
         }
 
         .boundary-hero .lede {
@@ -47,6 +54,7 @@
             color: #40505C;
             font-size: 1.18rem;
             line-height: 1.8;
+            overflow-wrap: break-word;
         }
 
         .status-ribbon {
@@ -65,6 +73,7 @@
             font-family: var(--sd-font-data);
             font-size: 0.78rem;
             font-weight: 700;
+            overflow-wrap: anywhere;
         }
 
         .boundary-section {
@@ -135,6 +144,7 @@
             color: var(--primary-mid);
             text-decoration: none;
             font-weight: 700;
+            overflow-wrap: anywhere;
         }
 
         .source-list a:hover {

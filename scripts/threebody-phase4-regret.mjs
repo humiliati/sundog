@@ -312,6 +312,10 @@ async function reduceRegret(args) {
     const signatureDeltaV = asNumber(signature.total_delta_v);
     const classEntry = cellFibers.cells[cellKey(bayes)] ?? { cellClass: "undecidable" };
     const regret = bayesSafe !== null && signatureSafe !== null ? (bayesSafe - signatureSafe) / tMax : null;
+    const stepDt = asNumber(bayes.timestep);
+    const fuelExcessReportable = bayesSafe !== null && signatureSafe !== null && stepDt !== null
+      ? Math.abs(bayesSafe - signatureSafe) <= stepDt
+      : false;
     regretRows.push({
       case_id: bayes.case_id,
       seed: bayes.seed,
@@ -334,6 +338,7 @@ async function reduceRegret(args) {
       fuel_excess: signatureDeltaV !== null && bayesDeltaV !== null
         ? roundNumber(signatureDeltaV - bayesDeltaV, 8)
         : null,
+      fuel_excess_reportable: fuelExcessReportable,
     });
   }
 
@@ -344,11 +349,12 @@ async function reduceRegret(args) {
     ? "non_decisive_floor_repair_required"
     : "floor_sanity_pass";
   const summaryRows = classes.map((cellClass, index) => {
+    const classSeed = args.bootstrapSeed + index * 1009;
     const group = regretRows.filter((row) => row.cell_class === cellClass);
     const ci = bootstrapMeanCi(
       group.map((row) => asNumber(row.regret)),
       args.bootstrapIterations,
-      args.bootstrapSeed + index * 1009,
+      classSeed,
     );
     return {
       cell_class: cellClass,
@@ -362,10 +368,40 @@ async function reduceRegret(args) {
         : null,
       global_negative_regret_rate: negativeRegretRate === null ? null : roundNumber(negativeRegretRate, 8),
       floor_status: floorStatus,
+      bootstrap_seed: args.bootstrapSeed,
+      bootstrap_class_seed: classSeed,
+      bootstrap_iterations: args.bootstrapIterations,
     };
   });
 
-  return { regretRows, summaryRows, cellFibers };
+  const manifest = {
+    schema: "sundog.threebody.phase4.regret_reducer.v1",
+    generatedAt: new Date().toISOString(),
+    inputs: {
+      bayesIn: args.bayesIn,
+      signatureIn: args.signatureIn,
+      signatureMode: args.signatureMode,
+    },
+    tMax,
+    regret: {
+      formula: "(T_safe_bayes - T_safe_signature) / t_max",
+      joinedRowCount: regretRows.length,
+    },
+    bootstrap: {
+      seed: args.bootstrapSeed,
+      iterations: args.bootstrapIterations,
+      classSeedRule: "bootstrap_seed + classIndex * 1009 over [on, off, undecidable]",
+      ci: "95% paired bootstrap (2.5/97.5 percentile)",
+    },
+    floorSanity: {
+      threshold: 0.05,
+      globalNegativeRegretRate: negativeRegretRate === null ? null : roundNumber(negativeRegretRate, 8),
+      status: floorStatus,
+    },
+    fiberClassifier: cellFibers.classifier,
+  };
+
+  return { regretRows, summaryRows, cellFibers, manifest };
 }
 
 async function runSelfTest() {
@@ -484,12 +520,13 @@ async function main() {
   }
   const outDir = path.resolve(repoRoot, args.out);
   await mkdir(outDir, { recursive: true });
-  const { regretRows, summaryRows, cellFibers } = await reduceRegret(args);
+  const { regretRows, summaryRows, cellFibers, manifest } = await reduceRegret(args);
   await writeFile(path.join(outDir, "phase4-regret.csv"), rowsToCsv(regretRows), "utf8");
   await writeFile(path.join(outDir, "phase4-regret-summary.csv"), rowsToCsv(summaryRows), "utf8");
   await writeFile(path.join(outDir, "cell-fibers.json"), `${JSON.stringify(cellFibers, null, 2)}\n`, "utf8");
+  await writeFile(path.join(outDir, "phase4-regret-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   console.log(`[threebody-phase4-regret] wrote ${regretRows.length} joined rows to ${path.relative(repoRoot, outDir)}`);
-  console.log("[threebody-phase4-regret] wrote phase4-regret.csv, phase4-regret-summary.csv, cell-fibers.json");
+  console.log("[threebody-phase4-regret] wrote phase4-regret.csv, phase4-regret-summary.csv, cell-fibers.json, phase4-regret-manifest.json");
 }
 
 main().catch((error) => {
