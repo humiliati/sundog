@@ -57,6 +57,8 @@
     "mines:phase12:phase10-slate": "node scripts/mines-bayes-baseline.mjs --phase phase12-phase10-slate-reducer-64 --out results/mines/phase12-phase10-slate-reducer-64 --cell-slate phase10-output --phase10-out results/mines/phase10-envelope --limit-cells all --modes naive_pressure,sundog_minimal,sundog_lean,bayes_frontier_pressure,oracle_safe --seed-start 0 --seeds 64 --particle-count 128 --turn-cap 160",
     "bayes:phase1:smoke": "node scripts/bayes-phase1-reference.mjs --phase phase1-reference-smoke --out results/bayes/phase1-reference-smoke --seeds 32 --max-turns 24",
     "bayes:phase1": "node scripts/bayes-phase1-reference.mjs --phase phase1-reference-lock --out results/bayes/phase1-reference-lock --seeds 128 --max-turns 24",
+    "bayes:phase2:smoke": "node scripts/bayes-phase1-reference.mjs --phase phase2-mismatch-smoke --out results/bayes/phase2-mismatch-smoke --scenarios phase2 --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,random --seeds 16 --max-turns 40",
+    "bayes:phase2": "node scripts/bayes-phase1-reference.mjs --phase phase2-mismatch-lock --out results/bayes/phase2-mismatch-lock --scenarios phase2 --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,random --seeds 96 --max-turns 40",
     "mesa:phase1": "node scripts/mesa-harness.mjs --phase phase1-hc-baseline --out results/mesa/phase1-hc-baseline --seeds 32",
     "mesa:phase2:bridge-smoke": "python training/mesa/smoke_bridge.py",
     "mesa:phase2:bc-dataset-smoke": "python -m training.mesa.smoke_bc_dataset --manifest results/mesa/phase1-hc-baseline/manifest.json",

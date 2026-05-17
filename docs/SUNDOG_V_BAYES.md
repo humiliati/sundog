@@ -352,6 +352,10 @@ Applied queue after the Balance lock:
    `scripts/bayes-phase1-reference.mjs` with `npm run bayes:phase1:smoke` and
    `npm run bayes:phase1`. The 128-seed lock passes the known-model gate before
    any `bayes.html` work begins.
+7. **Standalone Phase 2 mismatch slate.** Landed in the same runner with
+   `npm run bayes:phase2:smoke` and `npm run bayes:phase2`. The lock finds a
+   narrow anisotropic separation for `sundog_memory` over fixed clean
+   `bayes_misspecified`; other variants remain boundary or Bayes-favorable.
 
 ## Controller-Family Architecture
 
@@ -764,7 +768,8 @@ Receipt paths:
 - `results/bayes/phase1-reference-lock/steps.jsonl`
 - `results/bayes/phase1-reference-lock/replay-manifest.json`
 
-Phase 1 lock summary (`npm run bayes:phase1`, 128 seeds, 512 trials, 17.523s):
+Phase 1 lock summary (`npm run bayes:phase1`, 128 seeds, 512 trials, 29.529s
+after the Phase 2 schema extension):
 
 | Mode | Successes | Success rate | Mean score | Mean hit turn |
 | --- | ---: | ---: | ---: | ---: |
@@ -802,6 +807,51 @@ Deliverables:
 - Bayes-Misspecified baseline locked to the clean likelihood.
 - Bayes-Adaptive baseline with limited parameter learning.
 - Matched trials against HC-Sundog and Sundog-Memory.
+
+Status, 2026-05-17: executable mismatch lock landed.
+
+Commands:
+
+```bash
+npm run bayes:phase2:smoke
+npm run bayes:phase2
+```
+
+Receipt paths:
+
+- `results/bayes/phase2-mismatch-smoke/manifest.json`
+- `results/bayes/phase2-mismatch-lock/manifest.json`
+- `results/bayes/phase2-mismatch-lock/summary.csv`
+- `results/bayes/phase2-mismatch-lock/regret.csv`
+- `results/bayes/phase2-mismatch-lock/replay-manifest.json`
+
+Implementation details:
+
+- `bayes_misspecified` keeps an exact grid posterior, but its likelihood is
+  locked to the clean radial Gaussian regardless of the true field variant.
+- `bayes_adaptive` is a finite-mixture Bayesian baseline over clean, warped,
+  anisotropic, calibration-shift, clipped, and delayed model families.
+- `sundog_memory` is the response-control repair lane: it scans until the live
+  signal rises above its own starting baseline, then probes from remembered
+  high-response cells.
+
+Phase 2 lock summary (`npm run bayes:phase2`, 96 seeds, 2,880 trials,
+239.345s):
+
+| Scenario | `bayes_misspecified` score / success | best response lane | best response score / success | Result |
+| --- | ---: | --- | ---: | --- |
+| `anisotropic` | 0.767947 / 0.500000 | `sundog_memory` | 1.359587 / 0.875000 | separated |
+| `calibration_shift` | 0.520778 / 0.458333 | `sundog_memory` | 0.549783 / 0.500000 | near miss under +0.1 margin |
+| `warped` | 0.978200 / 0.614583 | `sundog_memory` | 0.905387 / 0.677083 | response wins survival, loses score |
+| `clipped` | 1.646094 / 1.000000 | `sundog_memory` | 0.785773 / 0.604167 | Bayes-favorable |
+| `delayed` | 1.466406 / 1.000000 | `hc_sundog` | 0.108966 / 0.208333 | Bayes-favorable |
+
+Exit gate: **separation_found**. The current Phase 2 receipt supports a narrow
+claim: under an anisotropic response surface, fixed clean Bayes is brittle and
+the memory response-control lane recovers better. It does **not** support a
+blanket mismatch claim; clipped and delayed variants still favor the fixed
+posterior baseline, and calibration shift is a close boundary rather than a
+locked win.
 
 Exit criterion: at least one mismatch regime cleanly separates fixed posterior
 failure from response-control recovery, or the roadmap records that the tested
@@ -944,6 +994,10 @@ Immediate work after the Pressure Mines applied lane:
 - Phase 1 exact Bayes-Correct reference task has landed: small hidden-source
   grid, correct likelihood, exact posterior, and Sundog response-control
   comparator. The 128-seed lock passes the known-model gate.
+- Phase 2 mismatch slate has landed: five field variants, fixed clean
+  `bayes_misspecified`, finite-mixture `bayes_adaptive`, `hc_sundog`, and
+  `sundog_memory`. The lock finds one real separation (`anisotropic`) plus
+  boundary cells, so the claim is complementary and narrow.
 - Add `bayes.html` only after the standalone benchmark has real run artifacts.
   Do not publish a decorative Bayes page before Phase 1/2 receipts exist.
 - Add a public rail card only if Round 3 or Phase 5 includes a real failure
