@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Explicit public-launch manifest for root HTML pages built by Vite. A root *.html file ships only after it is listed here with publicLaunchIntent.",
+  "pages": [
+    {
+      "entry": "index.html",
+      "kind": "home",
+      "publicLaunchIntent": "Primary Sundog public website entry point."
+    },
+    {
+      "entry": "about.html",
+      "kind": "positioning",
+      "publicLaunchIntent": "Public lab positioning, philosophy, origin bridge, and claim boundaries."
+    },
+    {
+      "entry": "applications-gallery.html",
+      "kind": "applications",
+      "publicLaunchIntent": "Public gallery of application surfaces and evidence tiers."
+    },
+    {
+      "entry": "balance.html",
+      "kind": "workbench",
+      "publicLaunchIntent": "Public Balance workbench interface."
+    },
+    {
+      "entry": "chat.html",
+      "kind": "experiment",
+      "publicLaunchIntent": "Public Ask Sundog claim-boundary experiment page."
+    },
+    {
+      "entry": "legend.html",
+      "kind": "reference",
+      "publicLaunchIntent": "Public legend/reference page for site vocabulary and visual cues."
+    },
+    {
+      "entry": "mesa.html",
+      "kind": "experiment",
+      "publicLaunchIntent": "Public Mesa operating-envelope and traceability page."
+    },
+    {
+      "entry": "mines.html",
+      "kind": "workbench",
+      "publicLaunchIntent": "Public Pressure Mines workbench interface."
+    },
+    {
+      "entry": "origin.html",
+      "kind": "origin",
+      "publicLaunchIntent": "Public origin and provenance story."
+    },
+    {
+      "entry": "paper-theme-demo.html",
+      "kind": "design-system",
+      "publicLaunchIntent": "Public paper-theme design primitive demo linked from docs."
+    },
+    {
+      "entry": "structural-failure.html",
+      "kind": "evidence-page",
+      "publicLaunchIntent": "Public structural-failure boundary-map page: frozen falsifier, closed-form regime-separability, rendered Cut-3 held."
+    },
+    {
+      "entry": "sundog.html",
+      "kind": "atlas",
+      "publicLaunchIntent": "Public Sundog geometry and halo-atlas page."
+    },
+    {
+      "entry": "sundog-workbench.html",
+      "kind": "workbench",
+      "publicLaunchIntent": "Public Sundog workbench interface."
+    },
+    {
+      "entry": "threebody.html",
+      "kind": "workbench",
+      "publicLaunchIntent": "Public Three-Body workbench interface."
+    }
+  ]
+}

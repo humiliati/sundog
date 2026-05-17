@@ -9,7 +9,9 @@ Sources:
 
 Public data contract: `public/data/structural-failure-boundary-map.json`
 in the source tree, served as `/data/structural-failure-boundary-map.json`
-after build.
+after build. Public page launch intent: `structural-failure.html` is listed
+in `site-pages.json`; it ships through Vite as a root HTML page, not through
+`scripts/copy-site-docs.mjs`.
 
 Filed: **2026-05-16 (PT)**. Status: **publication plan, not a result**.
 This document explains how to publish the structural-failure boundary map
@@ -57,8 +59,8 @@ This status should be visible anywhere the map appears. The safe label is:
 3. **Post-rail evidence panel.** Replace the generic app-card placeholder with
    a compact five-locus map. The panel should say "Pre-registered falsifier,"
    not "confirmed."
-4. **Expanded page, later.** Add a `structural-failure.html` page only after
-   the first visual panel is stable. The page can hold the five-locus map, the
+4. **Expanded page.** `structural-failure.html` is a launched root HTML page
+   with explicit intent in `site-pages.json`. It holds the five-locus map, the
    status ladder, links to the prereg trail, and the public-language guard.
 5. **About page, later.** Link the map as an example of Sundog's research
    posture: write the failure boundary first, then test against it.
@@ -121,7 +123,8 @@ Avoid:
 3. Replace the relevant post-rail card placeholder with the SVG and a source
    trail to this prereg folder.
 4. Add a small status ladder panel only if the card needs more context.
-5. Consider `structural-failure.html` after the card is readable on mobile.
+5. Keep `structural-failure.html` listed in `site-pages.json`; any future root
+   HTML page needs the same public-launch manifest entry before build.
 
 ## Checks
 
