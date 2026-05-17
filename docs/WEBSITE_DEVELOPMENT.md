@@ -287,7 +287,9 @@ Current priority fills:
    `docs/prereg/structural-failure-coincidence/PUBLICATION_PLAN.md` and chart
    data generated at `public/data/structural-failure-boundary-map.json`.
 3. Coarse-Graining: proof-trunk status ladder from
-   `docs/COARSE_GRAINING_PROOF_ROADMAP.md` and `docs/proof/*`.
+   `docs/COARSE_GRAINING_PROOF_ROADMAP.md` and `docs/proof/*`; homepage
+   evidence panel generated at
+   `public/media/coarse-graining-proof-ladder.svg`.
 
 Do not leave the visual as duplicated heading text once a panel is promoted.
 Keep exported assets under `public/media/`, link with `/media/...`, and run the
