@@ -2,11 +2,16 @@
 
 > Buildout roadmap for the Bayesian-floor controller required by
 > [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md).
-> Status: staged/open, 2026-05-16. BF-4b off-set calibration has a first
-> negative receipt: the pre-registered cell classified `off`, but the off-set
-> regret CI was `[0, 0]`, so BF-5 remains blocked. No Phase 4 proof run is
-> admitted until the floor, regret reducer, capped-probe receipt, and a passing
-> BF-4b receipt land.
+> Status: staged/open, 2026-05-17. BF-4b off-set calibration first receipt
+> failed criterion (2) (cell `off`, regret CI `[0, 0]`). Multiplier retune
+> rejected by diagnostic; energy-trend terminal value retained but structurally
+> insufficient. The BF-4b Satisfiability Probe then **validated the
+> pre-registered cell** (oracle−signature headroom CI `[0.064, 0.499]`): the
+> off-set arm is satisfiable by a privileged controller; same-`Φ` particle-MPC
+> captured none. Next gate is the compute-unconstrained
+> **Information-Accessibility Diagnostic** (Φ-accessible ⇒ tractability problem;
+> privileged-only ⇒ Phase-4 scope reassessment). BF-5 remains blocked until a
+> passing BF-4b receipt lands.
 
 ## Purpose
 

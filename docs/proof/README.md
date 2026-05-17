@@ -19,10 +19,12 @@ that claim provably fails.
 - [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md) — Phase 3 boundary theorem
   (reviewed, closed positive) and pushable-occluder mapping.
 - [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) — Phase 4 three-body measured
-  substrate spec (drafted; Bayesian-floor BF-4 smoke passed; BF-4b first
-  receipt failed; full proof lock open).
+  substrate spec (drafted; BF-4 smoke passed; BF-4b first receipt failed; cell
+  validated by the satisfiability probe; Information-Accessibility Diagnostic
+  pending; full proof lock open).
 - [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md) —
   Phase 4 Bayesian-floor controller buildout roadmap (BF-4 smoke passed; BF-4b
-  off-set calibration failed criterion 2; BF-5 blocked).
+  failed criterion 2; cell validated; accessibility diagnostic next; BF-5
+  blocked).
 - [`PHASE6_LAMBDA_CONTROL.md`](PHASE6_LAMBDA_CONTROL.md) — Phase 6
   lambda-confound control spec (staged; empirical result open).

@@ -3,7 +3,10 @@
 > Phase 4 artifact for
 > [`COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md).
 > Status: spec drafted; Bayesian-floor BF-4 smoke passed; BF-4b off-set
-> calibration failed criterion (2); full proof lock not run, 2026-05-16. Phase
+> calibration failed criterion (2); satisfiability probe **validated the
+> pre-registered cell** (oracle−signature headroom CI `[0.064, 0.499]`); next
+> gate is the compute-unconstrained Information-Accessibility Diagnostic; full
+> proof lock not run, 2026-05-17. Phase
 > 3 closed positive in
 > [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md). This document maps the planar
 > restricted three-body workbench onto the Phase 0 substrate-admission checklist
@@ -443,12 +446,22 @@ The eventual Phase 4 result must land under `results/proof/phase4/` and include:
 
 Phase 4 result: **open; full proof lock not run.**
 
-Spec status: **BF-4 smoke passed; BF-4b first receipt failed, 2026-05-16.** The
-Bayesian floor is no longer absent: `bayes_floor_particle_mpc` passed the smoke
-floor-sanity gate in
-[`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md). The
-first BF-4b off-set calibration receipt classified the cell as `off` but
-produced regret CI `[0, 0]`, so the off-set arm did not fire. The remaining
-blocker is to retune or repair the floor/guard, pass BF-4b, and only then stage
-a sharded/resumable long-budget BF-5 full lock before the Phase 4 gate can be
-interpreted.
+Spec status: **BF-4 smoke passed; BF-4b first receipt failed; cell validated;
+accessibility diagnostic pending, 2026-05-17.** Sequence of record:
+`bayes_floor_particle_mpc` passed the BF-4 smoke floor-sanity gate; the first
+BF-4b off-set receipt classified the cell `off` but produced regret CI
+`[0, 0]`; a multiplier retune was rejected by diagnostic and an energy-trend
+terminal value (retained, correct) did not move it (structural one-step /
+short-horizon cause); per the pre-registered "escalate, don't keep turning
+knobs" bound the **BF-4b Satisfiability Probe** then ran and **validated the
+pre-registered cell** (oracle−signature headroom mean `0.310`, CI
+`[0.064, 0.499]` — not vacuous, off-set arm satisfiable by a *privileged*
+controller; same-`Φ` particle-MPC captured none). The next and
+Phase-4-decisive action is the **BF-4b Information-Accessibility Diagnostic**
+(one cell, compute-unconstrained, long horizon + sustained action; see
+[`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md) ▸
+BF-4b): if a same-`Φ` planner recovers the headroom the blocker is mere
+proof-scale tractability (then a sharded/resumable long-budget BF-5 full lock);
+if it cannot even unconstrained, the off-set arm is unsatisfiable by *any*
+admissible floor and Phase 4 scope is reassessed — not more floor engineering.
+BF-5 remains blocked either way.
