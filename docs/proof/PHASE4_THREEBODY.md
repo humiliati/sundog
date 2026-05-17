@@ -2,25 +2,29 @@
 
 > Phase 4 artifact for
 > [`COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md).
-> Status: spec drafted, empirical entry blocked, 2026-05-16. Phase 3 closed
-> positive in [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md). This document maps the
-> planar restricted three-body workbench onto the Phase 0 substrate-admission
-> checklist before any proof-track empirical run is admitted.
+> Status: spec drafted; Bayesian-floor BF-4 smoke passed; full proof lock not
+> run, 2026-05-16. Phase 3 closed positive in
+> [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md). This document maps the planar
+> restricted three-body workbench onto the Phase 0 substrate-admission checklist
+> before any proof-track empirical run is admitted.
 
 ## Entry & Gate
 
-Phase 4 has one satisfied entry condition and one unsatisfied entry condition:
+Phase 4 now has its analytical entry condition satisfied and its Bayesian-floor
+buildout smoke passed, but no full proof-track empirical lock has run:
 
 - Phase 3 exit is satisfied.
-- The required Bayesian-floor baseline is **not** found in the current
-  three-body workbench. Existing `oracle` and `forward_oracle_strict` modes are
-  privileged heuristic / forward-lookahead references; they are not a
-  Bayes-optimal controller under the signature information regime.
+- The required Bayesian-floor baseline is staged as the separate
+  `bayes_floor_particle_mpc` evaluator and passed the BF-4 smoke floor-sanity
+  gate in
+  [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
+  Existing `oracle` and `forward_oracle_strict` modes remain privileged
+  heuristic / forward-lookahead references; they are not the Phase 4 floor.
 
-Therefore the substrate is **not yet admitted** to the proof track. This spec
-pins the intended objects and the blockers, but no Phase 4 proof run is
-authorized until the Bayesian floor and regret reducer land.
-The build path for that blocker is staged in
+Therefore the substrate is **not yet closed** on the proof track. This spec pins
+the intended objects and the blocker that remains: BF-5 must stage and run a
+sharded/resumable full lock on a long-budget runner before the Phase 4 gate can
+be interpreted. The Bayes-floor build path is tracked in
 [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
 
 Roadmap gate, quoted unchanged:
@@ -42,7 +46,7 @@ to oracle comparison, candidate-envelope count, or survival-vs-passive.
 | `X` | Pinned below as the raw planar restricted decision state plus time/config. |
 | `Φ, Σ` | Pinned below as the guarded accelerometer-proxy signature, including noise and guard handling. |
 | `J, μ, regret` | Pinned below as safe-time regret against Bayes, with bootstrap readout. |
-| `π*` | **Blocked:** no Bayesian-floor policy exists yet. Existing oracles are reference yardsticks only; buildout staged in [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md). |
+| `π*` | BF-4 smoke-passed as the separate `bayes_floor_particle_mpc` evaluator; full-lock use still requires BF-5 sharded/resumable staging. Existing oracles are reference yardsticks only. |
 | Measurable/off-cell split | Procedure pinned below, but final labels depend on the missing Bayes floor. |
 
 ## 1. `X`
@@ -332,11 +336,22 @@ Read:
 If this probe exceeds ~10 minutes, stop and stage all further work to a
 long-budget runner.
 
-### Blocked Proof Lock
+### BF-5 Full-Lock Staging
 
-The full proof lock is **not pinned as runnable** until the Bayes-floor decision
-is made. Do not use a placeholder controller mode. The post-blocker command must
-be written here with:
+The Bayes-floor decision is made for the smoke slate: BF-4 passed with
+`bayes_floor_particle_mpc`, `particleCount = 256`, `planningHorizonSteps = 16`,
+`shapeFraction = 0.5`, `signatureAdvantageDtMultiplier = 1`, and
+`resampleThreshold = 0.5`.
+
+The full proof lock is still **not pinned as a single runnable command** because
+the BF-4 signature-guard re-probe measured about 84.6 minutes for 2 Bayes
+trials, or about 42.3 minutes per Bayes trial. The default proof grid has
+216 cells x 8 seeds = 1728 Bayes trials before signature/passive harness cost,
+which extrapolates to roughly 51 serial days. Do not use a monolithic local or
+interactive-agent command. BF-5 must first add or stage sharded/resumable
+runner commands with per-shard manifests and a merge readback.
+
+The BF-5 command set must include:
 
 - the accepted Bayes-floor mode or evaluator name;
 - its action lattice / belief approximation settings;
@@ -349,7 +364,9 @@ Current lower-bound scale, before Bayes overhead: the settled Phase 13 lock ran
 3,456 trials in roughly one hour; Phase 15's strict-oracle smoke measured about
 23.86 seconds per trial for the expensive precision/strict-oracle mix, making
 the full precision lock a multi-day operator run. The Bayes floor may be closer
-to Phase 15 than Phase 13, so no inline run is admissible.
+to Phase 15 than Phase 13, so no inline run is admissible. The BF-4
+signature-guard re-probe supersedes that prior lower-bound estimate: Bayes is
+slower still and requires sharding.
 
 ## 7. Read-Back
 
@@ -383,13 +400,11 @@ The eventual Phase 4 result must land under `results/proof/phase4/` and include:
 
 ## Exit Status
 
-Phase 4 result: **blocked / open.**
+Phase 4 result: **open; full proof lock not run.**
 
-Spec status: **drafted, 2026-05-16.** The user-proposed structure is accepted
-with one load-bearing correction: the current three-body workbench does not yet
-meet the roadmap Entry condition because the Bayesian floor is absent. The
-existing harness, signature definition, regret readout, measurable-cell
-vocabulary, and long-run discipline are pinned here so the missing floor can be
-implemented without moving the gate. The implementation roadmap for that missing
-floor is now staged in
+Spec status: **BF-4 smoke passed, 2026-05-16.** The Bayesian floor is no longer
+absent: `bayes_floor_particle_mpc` passed the smoke floor-sanity gate in
 [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
+The remaining blocker is operational, not definitional: BF-5 must stage a
+sharded/resumable long-budget full lock before the Phase 4 gate can be
+interpreted.

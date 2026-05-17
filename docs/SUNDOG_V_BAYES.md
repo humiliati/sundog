@@ -291,6 +291,35 @@ The comparison is fair only if Bayes is allowed to be genuinely Bayesian under
 partial observation. The comparison is unfair if Bayes is forced to be a direct
 state oracle or if Sundog is allowed privileged geometry.
 
+## Applied Workbench Cross-References
+
+This roadmap now has two lanes:
+
+1. the standalone Bayes-vs-Sundog benchmark defined below; and
+2. Bayesian-floor profiles stamped into existing Sundog workbenches as
+   claim-hygiene comparators.
+
+The applied profiles are not substitutes for the standalone benchmark. They are
+the local audit surfaces that keep each workbench from accidentally claiming too
+much from weak baselines.
+
+| Workbench | Bayesian comparator status | Cross-reference |
+| --- | --- | --- |
+| Balance | Executable same-shadow floor scaffold. `bayes_floor_shadow_particle` runs with observation parity, no-state-leak, unknown-mode rejection, Phase 10 slate loading, and regret receipts. Current result: floor is runnable but not claim-ready because it still trails `sundog_shadow` in several loaded Phase 10 cells. | [`SUNDOG_V_BALANCE.md` - Bayesian Floor Profile](SUNDOG_V_BALANCE.md#bayesian-floor-profile) and Phase 15 status |
+| Pressure Mines | Staged same-field Bayesian baseline profile. The intended first implementation is a frontier-limited posterior over hidden mine occupancy, with strict budget parity between pressure-only and full Sundog-legal lanes. No executable runner yet. | [`sundog_v_minesweeper.md` - Bayesian Baseline Profile](sundog_v_minesweeper.md#bayesian-baseline-profile) |
+| Three-Body / Coarse Graining | Current pattern source for the receipt shape: admission spec, same-information guard, belief diagnostics, regret reducer, and capped-probe discipline. Still not a closed floor. | [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md) and [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md) |
+
+The interpretation rule is shared across all applied profiles:
+
+- if Bayes is invalid or weak, repair it before interpreting the Sundog result;
+- if Bayes dominates, narrow the Sundog claim to a weaker controller or
+  heuristic claim;
+- if Sundog tracks a repaired same-observation floor, the workbench earns
+  stronger evidence that response-control recovered most of the actionable
+  information in that envelope;
+- if both fail in the same cells, the boundary is more likely to be an
+  observability boundary than merely a controller boundary.
+
 ## Controller-Family Architecture
 
 Run all controller families on the same seeded slates, same observation stream,
@@ -658,6 +687,9 @@ Deliverables:
 - Definitions of observation, hidden state, action, field, and success.
 - Baseline list: Oracle, Bayes-Correct, Bayes-Misspecified, Bayes-Adaptive,
   HC-Sundog, Sundog-Memory, Hybrid, Naive Local, Random.
+- Applied-profile index pointing to Balance, Pressure Mines, and Three-Body so
+  the standalone benchmark inherits the strongest existing receipt conventions
+  instead of inventing a parallel shape.
 - Literature spine covering Bayesian filtering, Bayesian decision theory,
   active inference / active sensing, Bayesian optimization, POMDPs, extremum
   seeking, visual servoing, and model mismatch.
@@ -835,6 +867,10 @@ Immediate work:
 - Add `docs/SUNDOG_V_BAYES.md` to the documentation index.
 - Add Bayes row to the workbench roadmap list, not to application evidence until
   Phase 5 or Phase 6 earns it.
+- Keep the applied Bayesian-floor profiles cross-linked from this roadmap:
+  Balance as the first executable same-shadow floor, Pressure Mines as the
+  staged same-field posterior baseline, and Three-Body as the current receipt
+  pattern source.
 - Add `bayes.html` only after the visualization reflects real run artifacts.
 - Add a public rail card only if Round 3 or Phase 5 includes a real failure
   boundary.
