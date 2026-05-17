@@ -35,8 +35,10 @@ const nextSeedButton = document.getElementById("mines-next-seed");
 const copyReplayButton = document.getElementById("mines-copy-replay");
 const loadBestButton = document.getElementById("mines-load-best");
 const loadWorstButton = document.getElementById("mines-load-worst");
+const loadDivergenceButton = document.getElementById("mines-load-bayes-divergence");
 const bodyLoadBestButton = document.getElementById("mines-body-load-best");
 const bodyLoadWorstButton = document.getElementById("mines-body-load-worst");
+const bodyLoadDivergenceButton = document.getElementById("mines-body-load-bayes-divergence");
 const boundaryPanel = document.getElementById("mines-boundary-panel");
 const boundaryStatus = document.getElementById("mines-boundary-status");
 const boundarySummary = document.getElementById("mines-boundary-summary");
@@ -48,6 +50,7 @@ const bayesFloorTargets = document.getElementById("mines-bayes-floor-targets");
 const bayesFloorAdmission = document.getElementById("mines-bayes-floor-admission");
 const bayesFloorCandidate = document.getElementById("mines-bayes-floor-candidate");
 const bayesFloorArtifact = document.getElementById("mines-bayes-floor-artifact");
+const bayesPosteriorCells = document.getElementById("mines-bayes-posterior-cells");
 
 const BAYES_FLOOR_DATA_PATH = "/data/mines-phase13-bayes-floor.json";
 
@@ -122,6 +125,8 @@ let app = {
   sensorOverride: {},
 };
 
+let phase13PosteriorCells = [];
+
 function hashText(text) {
   let h = 2166136261;
   for (let i = 0; i < text.length; i += 1) {
@@ -155,6 +160,20 @@ function formatSigned(value, digits = 6) {
 
 function targetSummary(data, mode) {
   return data?.phase12?.targetSummary?.find((entry) => entry.targetMode === mode) ?? null;
+}
+
+function formatMetric(value, digits = 3) {
+  if (!Number.isFinite(value)) return "n/a";
+  if (Object.is(value, -0) || value === 0) return "0";
+  return Number.parseFloat(value.toFixed(digits)).toString();
+}
+
+function selectedConfidence(turn) {
+  const selected = turn.selected ?? {};
+  const match = (turn.candidates ?? []).find((candidate) => (
+    candidate.x === selected.x && candidate.y === selected.y
+  ));
+  return match?.confidence ?? null;
 }
 
 function seedValue() {
@@ -443,6 +462,79 @@ function renderBayesFloorPanel(data) {
     bayesFloorArtifact.href = BAYES_FLOOR_DATA_PATH;
     bayesFloorArtifact.textContent = "public Mines Phase 13 bundle";
   }
+
+  phase13PosteriorCells = data.posteriorCells ?? [];
+  renderPosteriorCells(phase13PosteriorCells);
+  for (const button of [loadDivergenceButton, bodyLoadDivergenceButton]) {
+    if (button) button.disabled = !phase13PosteriorCells.some((cell) => cell.role === "bayes_divergence");
+  }
+}
+
+function appendTextElement(parent, tag, text) {
+  const element = document.createElement(tag);
+  element.textContent = text;
+  parent.append(element);
+  return element;
+}
+
+function renderPosteriorCells(cells) {
+  if (!bayesPosteriorCells) return;
+  bayesPosteriorCells.replaceChildren();
+  if (cells.length === 0) {
+    const fallback = document.createElement("div");
+    fallback.className = "posterior-card";
+    appendTextElement(fallback, "h3", "Posterior cells unavailable");
+    appendTextElement(fallback, "p", "The Phase 13 bundle did not include representative posterior-cell traces.");
+    bayesPosteriorCells.append(fallback);
+    return;
+  }
+
+  for (const cell of cells) {
+    const card = document.createElement("div");
+    card.className = "posterior-card";
+    appendTextElement(card, "h3", cell.label ?? cell.role);
+    const leanDelta = cell.bayesRegret?.sundog_lean?.meanBudgetAdjustedDelta;
+    appendTextElement(card, "p", [
+      `${cell.cell?.cellClass ?? "cell"} seed ${cell.seed}.`,
+      `Bayes vs sundog_lean mean delta ${formatSigned(leanDelta)}.`,
+      cell.reason,
+    ].filter(Boolean).join(" "));
+
+    const turnList = document.createElement("ul");
+    for (const turn of (cell.turns ?? []).slice(0, 3)) {
+      const selected = turn.selected ?? {};
+      appendTextElement(turnList, "li", [
+        `T${turn.turn}: ${selected.action ?? "action"} ${selected.x ?? "?"},${selected.y ?? "?"}`,
+        `hazard ${formatMetric(selected.hazard)}`,
+        `pressure ${formatMetric(selected.pressure)}`,
+        `confidence ${formatMetric(selectedConfidence(turn))}`,
+        selected.riskSource ? `source ${selected.riskSource}` : "",
+      ].filter(Boolean).join("; "));
+    }
+    if (turnList.children.length > 0) card.append(turnList);
+
+    const firstTurn = cell.turns?.[0];
+    if (firstTurn?.candidates?.length) {
+      const candidateList = document.createElement("ul");
+      for (const candidate of firstTurn.candidates.slice(0, 3)) {
+        appendTextElement(candidateList, "li", [
+          `Candidate ${candidate.x},${candidate.y}`,
+          `h ${formatMetric(candidate.hazard)}`,
+          `p ${formatMetric(candidate.pressure)}`,
+          `c ${formatMetric(candidate.confidence)}`,
+        ].join("; "));
+      }
+      card.append(candidateList);
+    }
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Load replay";
+    button.disabled = !cell.replayParams;
+    button.addEventListener("click", () => loadPosteriorCellReplay(cell.role));
+    card.append(button);
+    bayesPosteriorCells.append(card);
+  }
 }
 
 async function hydrateBayesFloorPanel() {
@@ -728,6 +820,11 @@ function loadCellParams(cellParams) {
 
 function loadBestCell() { loadCellParams(BEST_CELL_PARAMS); }
 function loadWorstCell() { loadCellParams(WORST_CELL_PARAMS); }
+function loadPosteriorCellReplay(role) {
+  const cell = phase13PosteriorCells.find((candidate) => candidate.role === role);
+  if (cell?.replayParams) loadCellParams(cell.replayParams);
+}
+function loadDivergenceCell() { loadPosteriorCellReplay("bayes_divergence"); }
 
 function bindControls() {
   runButton.addEventListener("click", () => {
@@ -748,8 +845,10 @@ function bindControls() {
   // Phase 11 best/worst-cell shortcuts in the right rail and body copy.
   loadBestButton?.addEventListener("click", loadBestCell);
   loadWorstButton?.addEventListener("click", loadWorstCell);
+  loadDivergenceButton?.addEventListener("click", loadDivergenceCell);
   bodyLoadBestButton?.addEventListener("click", loadBestCell);
   bodyLoadWorstButton?.addEventListener("click", loadWorstCell);
+  bodyLoadDivergenceButton?.addEventListener("click", loadDivergenceCell);
   // Preset and sensor changes invalidate URL-hydrated overrides because the
   // overrides were specific to the cell that was hydrated. Other inputs
   // (mode/compare/seed/audit) preserve overrides so the user can sweep

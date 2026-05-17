@@ -9,9 +9,14 @@ const sourcePaths = Object.freeze({
   phase12Manifest: "results/mines/phase12-phase10-slate-reducer-64/manifest.json",
   phase12Summary: "results/mines/phase12-phase10-slate-reducer-64/summary.json",
   phase12RegretSummary: "results/mines/phase12-phase10-slate-reducer-64/bayes-regret-summary.csv",
+  phase12Actions: "results/mines/phase12-phase10-slate-reducer-64/bayes-actions.csv",
+  phase12Diagnostics: "results/mines/phase12-phase10-slate-reducer-64/posterior-diagnostics.csv",
+  phase12PosteriorMap: "results/mines/phase12-phase10-slate-reducer-64/frontier-posterior-map.json",
 });
 
 const outputPath = "public/data/mines-phase13-bayes-floor.json";
+const posteriorTurnLimit = 6;
+const posteriorCandidateLimit = 10;
 
 function parseCsv(text) {
   const rows = [];
@@ -143,6 +148,59 @@ function cleanBestWorst(row) {
   };
 }
 
+function cleanAction(row) {
+  return {
+    phase: row.phase,
+    selection: row.selection,
+    cellId: row.cell_id,
+    mode: row.mode,
+    seed: asNumber(row.seed),
+    turn: asNumber(row.turn),
+    budget: row.budget,
+    action: row.action,
+    x: asNumber(row.x),
+    y: asNumber(row.y),
+    posteriorHazard: asNumber(row.posterior_hazard),
+    pressureScore: asNumber(row.pressure_score),
+    actionRisk: asNumber(row.action_risk),
+    riskSource: row.risk_source,
+    ess: asNumber(row.ess),
+    frontierSize: asNumber(row.frontier_size),
+    legal: asBool(row.legal),
+    terminalAfter: row.terminal_after || null,
+  };
+}
+
+function cleanDiagnostic(row) {
+  return {
+    phase: row.phase,
+    selection: row.selection,
+    cellId: row.cell_id,
+    mode: row.mode,
+    seed: asNumber(row.seed),
+    turn: asNumber(row.turn),
+    budget: row.budget,
+    phiHash: row.phi_hash,
+    frontierSize: asNumber(row.frontier_size),
+    particleCount: asNumber(row.particle_count),
+    ess: asNumber(row.ess),
+    minHazard: asNumber(row.min_hazard),
+    maxHazard: asNumber(row.max_hazard),
+    selectedAction: row.selected_action,
+    selectedX: asNumber(row.selected_x),
+    selectedY: asNumber(row.selected_y),
+    selectedIdx: asNumber(row.selected_idx),
+    selectedHazard: asNumber(row.selected_hazard),
+    selectedPressure: asNumber(row.selected_pressure),
+    selectedActionRisk: asNumber(row.selected_action_risk),
+    riskSource: row.risk_source,
+    observedPressureCount: asNumber(row.observed_pressure_count),
+    scanReadingCount: asNumber(row.scan_reading_count),
+    forbiddenKeyCount: asNumber(row.forbidden_key_count),
+    leakFree: asBool(row.leak_free),
+  };
+}
+
 function manifestCellKey(cell) {
   return cell.cellId;
 }
@@ -228,20 +286,191 @@ function pressureFloorGate(targets) {
   };
 }
 
+function paramsFromReplayUrl(replayUrl) {
+  if (!replayUrl) return {};
+  const url = new URL(replayUrl);
+  return Object.fromEntries(url.searchParams.entries());
+}
+
+function makeTurnKey(row) {
+  return `${row.cellId}|${row.seed}|${row.turn}`;
+}
+
+function compactCandidate(candidate) {
+  return {
+    idx: candidate.idx,
+    x: candidate.x,
+    y: candidate.y,
+    hazard: candidate.hazard,
+    entropy: candidate.entropy,
+    pressure: candidate.pressure,
+    confidence: candidate.confidence,
+    pressureScore: candidate.pressureScore,
+    actionRisk: candidate.actionRisk,
+  };
+}
+
+function selectedCellRegrets(cellId, regretRows) {
+  return Object.fromEntries(regretRows
+    .filter((row) => row.cellId === cellId)
+    .map((row) => [row.targetMode, {
+      meanBudgetAdjustedDelta: row.meanBudgetAdjustedDelta,
+      minBudgetAdjustedDelta: row.minBudgetAdjustedDelta,
+      maxBudgetAdjustedDelta: row.maxBudgetAdjustedDelta,
+      winDelta: row.winDelta,
+      n: row.n,
+    }]));
+}
+
+function divergenceCell(regretRows) {
+  return regretRows
+    .filter((row) => row.targetMode === "sundog_lean")
+    .sort((a, b) => (
+      Math.abs(b.meanBudgetAdjustedDelta ?? 0) - Math.abs(a.meanBudgetAdjustedDelta ?? 0)
+      || String(a.cellId).localeCompare(String(b.cellId))
+    ))[0] ?? null;
+}
+
+function selectedCellSpecs(bestWorst, regretRows) {
+  const best = bestWorst.find((row) => row.selection === "best_cell");
+  const worst = bestWorst.find((row) => row.selection === "worst_cell");
+  const divergence = divergenceCell(regretRows);
+  return [
+    best && {
+      role: "confirmed_pocket",
+      label: "Confirmed pocket",
+      reason: "Phase 10 promoted positive pocket.",
+      cellId: best.cellId,
+    },
+    worst && {
+      role: "mapped_failure",
+      label: "Mapped failure",
+      reason: "Phase 10 paired negative region.",
+      cellId: worst.cellId,
+    },
+    divergence && {
+      role: "bayes_divergence",
+      label: "Bayes-divergence cell",
+      reason: "Largest absolute mean delta between bayes_frontier_pressure and sundog_lean in the Phase 10-slate reducer.",
+      cellId: divergence.cellId,
+    },
+  ].filter(Boolean);
+}
+
+function buildPosteriorCells({
+  cells,
+  bestWorst,
+  regretRows,
+  actions,
+  diagnostics,
+  posteriorMap,
+}) {
+  const cellsById = new Map(cells.map((cell) => [cell.cellId, cell]));
+  const diagnosticsByTurn = new Map(diagnostics.map((row) => [makeTurnKey(row), row]));
+  const actionsByTurn = new Map(actions.map((row) => [makeTurnKey(row), row]));
+  const entriesByCellSeed = new Map();
+  for (const entry of posteriorMap.entries ?? []) {
+    if (entry.mode !== "bayes_frontier_pressure") continue;
+    const key = `${entry.cellId}|${entry.seed}`;
+    if (!entriesByCellSeed.has(key)) entriesByCellSeed.set(key, []);
+    entriesByCellSeed.get(key).push(entry);
+  }
+
+  return selectedCellSpecs(bestWorst, regretRows).map((spec) => {
+    const cell = cellsById.get(spec.cellId);
+    const seed = cell?.representativeSeed ?? 0;
+    const entries = [...(entriesByCellSeed.get(`${spec.cellId}|${seed}`) ?? [])]
+      .sort((a, b) => a.turn - b.turn)
+      .slice(0, posteriorTurnLimit);
+    return {
+      ...spec,
+      seed,
+      replayUrl: cell?.replayUrl ?? null,
+      replayParams: paramsFromReplayUrl(cell?.replayUrl),
+      cell: cell ? {
+        cellId: cell.cellId,
+        selection: cell.selection,
+        cellClass: cell.cellClass,
+        preset: cell.preset,
+        board: cell.board,
+        sensor: cell.sensor,
+      } : null,
+      bayesRegret: selectedCellRegrets(spec.cellId, regretRows),
+      traceSamplePolicy: {
+        turns: `first ${posteriorTurnLimit} representative-seed Bayes pressure decisions`,
+        candidates: `first ${posteriorCandidateLimit} candidates from each stored posterior map entry`,
+      },
+      turns: entries.map((entry) => {
+        const turnKey = makeTurnKey(entry);
+        const diagnostic = diagnosticsByTurn.get(turnKey);
+        const action = actionsByTurn.get(turnKey);
+        return {
+          turn: entry.turn,
+          budget: entry.budget,
+          frontierSize: entry.frontierSize,
+          selected: {
+            action: action?.action ?? diagnostic?.selectedAction ?? null,
+            x: action?.x ?? diagnostic?.selectedX ?? null,
+            y: action?.y ?? diagnostic?.selectedY ?? null,
+            hazard: action?.posteriorHazard ?? diagnostic?.selectedHazard ?? null,
+            pressure: diagnostic?.selectedPressure ?? null,
+            pressureScore: action?.pressureScore ?? null,
+            actionRisk: action?.actionRisk ?? diagnostic?.selectedActionRisk ?? null,
+            riskSource: action?.riskSource ?? diagnostic?.riskSource ?? null,
+            ess: action?.ess ?? diagnostic?.ess ?? null,
+            terminalAfter: action?.terminalAfter ?? null,
+            leakFree: diagnostic?.leakFree ?? null,
+          },
+          hazardRange: {
+            min: diagnostic?.minHazard ?? min(entry.candidates.map((candidate) => candidate.hazard)),
+            max: diagnostic?.maxHazard ?? max(entry.candidates.map((candidate) => candidate.hazard)),
+          },
+          observedPressureCount: diagnostic?.observedPressureCount ?? null,
+          candidates: entry.candidates
+            .slice(0, posteriorCandidateLimit)
+            .map(compactCandidate),
+        };
+      }),
+    };
+  });
+}
+
 async function main() {
-  const [phase10Manifest, bestWorstCsv, phase12Manifest, phase12Summary, phase12RegretCsv] = await Promise.all([
+  const [
+    phase10Manifest,
+    bestWorstCsv,
+    phase12Manifest,
+    phase12Summary,
+    phase12RegretCsv,
+    phase12ActionsCsv,
+    phase12DiagnosticsCsv,
+    phase12PosteriorMap,
+  ] = await Promise.all([
     readText(sourcePaths.phase10Manifest).then(JSON.parse),
     readText(sourcePaths.phase10BestWorst),
     readText(sourcePaths.phase12Manifest).then(JSON.parse),
     readText(sourcePaths.phase12Summary).then(JSON.parse),
     readText(sourcePaths.phase12RegretSummary),
+    readText(sourcePaths.phase12Actions),
+    readText(sourcePaths.phase12Diagnostics),
+    readText(sourcePaths.phase12PosteriorMap).then(JSON.parse),
   ]);
 
   const bestWorst = parseCsv(bestWorstCsv).map(cleanBestWorst);
   const regretRows = parseCsv(phase12RegretCsv).map(cleanRegret);
+  const actions = parseCsv(phase12ActionsCsv).map(cleanAction);
+  const diagnostics = parseCsv(phase12DiagnosticsCsv).map(cleanDiagnostic);
   const targetSummary = targetSummaries(regretRows);
   const cells = buildCellRows(phase12Manifest, regretRows);
   const gate = pressureFloorGate(targetSummary);
+  const posteriorCells = buildPosteriorCells({
+    cells,
+    bestWorst,
+    regretRows,
+    actions,
+    diagnostics,
+    posteriorMap: phase12PosteriorMap,
+  });
 
   const data = {
     schemaVersion: 1,
@@ -291,6 +520,7 @@ async function main() {
           "Same-field pressure-budget Bayes matches naive_pressure and sundog_minimal floors across the Phase 10 cell slate; sundog_lean remains a separate stronger comparator in the promoted candidate.",
       },
     ],
+    posteriorCells,
     cells,
   };
 
