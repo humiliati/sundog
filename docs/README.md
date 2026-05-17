@@ -41,6 +41,8 @@ code, experiments, prior theorem materials, and application bridges.
 - [Brand positioning](BRAND_POSITIONING.md): public lab posture after the
   Mythos stress test, including the About-page spine and what-not-to-claim
   boundaries.
+- [Gemini benchmark](gemini-benchmark.md): external Gemini read on site
+  legibility, access ambiguity, and anniversary posture risks.
 - [Standalone app roadmap](STANDALONE_APP_ROADMAP.md): plan for a no/low
   dependency `.html`, `.exe`, and eventual `.apk` observer app.
 - [Three-Body roadmap](SUNDOG_V_THREEBODY.md): Phase 11 operating-envelope

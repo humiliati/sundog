@@ -994,24 +994,134 @@ Exit criterion: either a real Sundog failure boundary is mapped, or the result
 shows that the selected aliasing slate was not strong enough and Phase 3 must
 be redesigned.
 
-### Phase 4 — Hybrid Controller
+### Phase 4 - Hybrid Controller
 
-Goal: test the minimum posterior needed to repair the Sundog failure.
+Goal: test the minimum posterior needed to repair the lock-backed Phase 3
+`decoy` and `alias` response-control failure regimes.
 
-Deliverables:
+Frozen claim surface:
 
-- Hybrid controller that uses Sundog response tracking locally and posterior
-  hypothesis management only at ambiguity gates.
-- Ablations:
-  - no posterior;
-  - posterior only;
-  - posterior for reset only;
-  - posterior for decoy disambiguation;
-  - full Bayes-Correct.
-- Cost report: action cost, compute cost, memory, implementation complexity.
+- Claim-bearing scenarios: `decoy` and `alias`.
+- Diagnostic-only scenarios: `symmetric` and `low_probe`.
+- `oracle` remains a privileged yardstick and is never claim-gated.
+- `bestSundog := hc_sundog`, because Phase 4's locked mode set has only one
+  no-posterior response lane.
 
-Exit criterion: Hybrid earns a measurable niche or is dropped. Do not keep a
-hybrid merely because it sounds conciliatory.
+Frozen mode set:
+
+```text
+oracle,bayes_adaptive,hc_sundog,hybrid,hybrid_no_posterior,hybrid_posterior_only,hybrid_posterior_reset_only,hybrid_posterior_decoy_disambig
+```
+
+The repair predicate is fixed once and reused by the repair and load-bearing
+arms:
+
+```text
+repair(M) =
+  (M.meanScore - hc_sundog.meanScore >= 0.10)
+  AND (M.successRate - hc_sundog.successRate >= 0)
+```
+
+`0.10` is the existing `phase2SeparationMargin`, reused unchanged from Phases
+2 and 3.
+
+Three-arm gate, evaluated per scenario:
+
+| Arm | Predicate |
+| --- | --- |
+| Repair arm | `repair(hybrid)` |
+| Frugality arm | `hybrid.meanLikelihoodEvals <= 0.5 * bayes_adaptive.meanLikelihoodEvals` |
+| Load-bearing arm | `NOT repair(hybrid_no_posterior) AND repair(hybrid_posterior_decoy_disambig)` |
+
+New frozen constants:
+
+| Constant | Value | Use |
+| --- | ---: | --- |
+| `FRUGALITY_FRACTION` | 0.5 | Hybrid must use no more than half the full-posterior ceiling's likelihood-eval count. |
+| `AMBIGUITY_MASS` | 0.5 | Posterior ambiguity gate for the Phase 3 ambiguity model families. |
+
+`likelihoodEvals` is the cumulative per-candidate Gaussian log-likelihood eval
+count used by posterior updates. It is reported per trial and summarized as
+`meanLikelihoodEvals`.
+
+Harness policy note: `hybrid` takes the HC-Sundog response action by default
+and allows a frugality/ambiguity-paced posterior refresh to override only when
+the Phase 3 ambiguity-family mass is at least `AMBIGUITY_MASS`.
+
+Hard-drop override:
+
+```text
+if repair(hybrid_no_posterior) is true in either decoy or alias:
+  status = hybrid_unnecessary
+```
+
+Otherwise, Phase 4 reports:
+
+- `hybrid_niche_confirmed` only if all three arms are true in both `decoy` and
+  `alias`;
+- `hybrid_no_niche` if the hard-drop does not fire but either claim scenario
+  misses at least one arm.
+
+The Phase 4 gate is non-fatal (`pass: true`), matching the Phase 2/3 pattern.
+
+Commands:
+
+```bash
+npm run bayes:phase4:smoke
+npm run bayes:phase4
+```
+
+The smoke ships first. The lock command is staged unchanged for the operator
+after the smoke verifies the harness shape.
+
+Smoke receipt, 2026-05-17:
+
+```text
+npm run bayes:phase4:smoke
+512 trials in 462.877s
+Exit gate: hybrid_niche_confirmed (2/2 claim scenarios all-arms)
+```
+
+Receipt paths:
+
+- `results/bayes/phase4-hybrid-smoke/manifest.json`
+- `results/bayes/phase4-hybrid-smoke/summary.csv`
+- `results/bayes/phase4-hybrid-smoke/regret.csv`
+- `results/bayes/phase4-hybrid-smoke/replay-manifest.json`
+
+Smoke gate rows:
+
+| Scenario | Hybrid score / success | HC-Sundog score / success | Hybrid evals | Bayes-adaptive evals | Arms |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `decoy` | 1.564062 / 1.0000 | -0.061427 / 0.1875 | 1260.25 | 3674.25 | repair true; frugality true; load-bearing true |
+| `alias` | 0.810088 / 0.6250 | -0.355776 / 0.0625 | 1881.50 | 4615.00 | repair true; frugality true; load-bearing true |
+
+Smoke interpretation: the harness now confirms the full Phase 4 niche gate in
+the cheap run. `hybrid_no_posterior` does not repair either claim scenario, so
+the hard-drop override does not fire. `hybrid_posterior_decoy_disambig` repairs
+both claim scenarios, making the posterior load-bearing in the ablation arm.
+The staged lock should run unchanged unless the smoke artifact itself is being
+audited.
+
+Lock staging:
+
+```bash
+npm run bayes:phase4
+```
+
+Estimate from the smoke rate: 3,072 trials at 1.11 trials/s is about 46
+minutes on the current CPU lane, so the lock is operator-run under the repo's
+long-run rule. The read-back artifact is
+`results/bayes/phase4-hybrid-lock/manifest.json`.
+
+Outcome branches:
+
+- `hybrid_niche_confirmed`: promote Phase 4 from smoke to lock-backed niche
+  claim.
+- `hybrid_unnecessary`: drop Hybrid; the no-posterior response floor repaired
+  a claim scenario.
+- `hybrid_no_niche`: keep the smoke receipt but redesign or narrow Phase 4
+  before claiming a hybrid niche.
 
 ### Phase 5 — Operating Envelope Sweep
 

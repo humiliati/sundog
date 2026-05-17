@@ -249,10 +249,20 @@ function applyActiveFlags(state) {
 function centreCard(state, index, { instant = false } = {}) {
   const card = state.cards[index];
   if (!card) return;
-  card.scrollIntoView({
+  const track = state.track;
+  // Scroll ONLY the rail's own horizontal track. Element.scrollIntoView()
+  // walks every scrollable ancestor up to the document, so each auto-cycle
+  // advance yanked the whole page back to the rail while the reader was
+  // elsewhere. Translating the card-vs-track centre delta into a track-local
+  // horizontal scroll leaves the window scroll position untouched.
+  const cardRect = card.getBoundingClientRect();
+  const trackRect = track.getBoundingClientRect();
+  const delta =
+    cardRect.left + cardRect.width / 2 - (trackRect.left + trackRect.width / 2);
+  if (Math.abs(delta) < 1) return;
+  track.scrollBy({
+    left: delta,
     behavior: instant ? "auto" : "smooth",
-    block: "nearest",
-    inline: "center",
   });
 }
 
