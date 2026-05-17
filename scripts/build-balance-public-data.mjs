@@ -191,16 +191,22 @@ function summarizeLane(lane, cells) {
   const sanityPass = cells.filter((cell) => cell.phase15.bayesSanityPass).length;
   const claimPass = cells.filter((cell) => cell.phase15.claimGatePass).length;
   const hardGateCells = cells.filter((cell) => cell.phase15.claimGateRequired).length;
+  const hardGatePass = cells.filter((cell) => cell.phase15.claimGateRequired && cell.phase15.claimGatePass).length;
+  const bayesSanityGateCells = cells.filter((cell) => cell.phase15.bayesSanityGateRequired).length;
+  const bayesSanityGatePass = cells.filter((cell) => cell.phase15.bayesSanityGateRequired && cell.phase15.bayesSanityPass).length;
   const reportedOnlyCells = cells.length - hardGateCells;
   return {
     lane,
     label: laneLabels[lane] ?? lane,
     cells: cells.length,
     hardGateCells,
-    hardGatePassCells: claimPass,
+    hardGatePassCells: hardGatePass,
+    claimGatePassCells: claimPass,
     reportedOnlyCells,
     bayesSanityPassCells: sanityPass,
     bayesSanityCells: cells.length,
+    bayesSanityGateCells,
+    bayesSanityGatePassCells: bayesSanityGatePass,
     meanRegretVsSundog: round(mean(regrets), 6),
     minRegretVsSundog: round(min(regrets), 6),
     maxRegretVsSundog: round(max(regrets), 6),
