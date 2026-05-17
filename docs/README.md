@@ -28,6 +28,9 @@ code, experiments, prior theorem materials, and application bridges.
   including the Phase 1 LQG draft, Phase 2 finite-MDP proof, Phase 3 boundary
   theorem, Phase 4 three-body spec, Bayesian-floor buildout, and Phase 6
   lambda-control spec.
+- [Bayesian floor profile template](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md):
+  reusable profile contract for installing same-observation Bayesian floors
+  across workbenches without reinventing the audit shape.
 - [Application map](APPLICATIONS.md): how the operating-envelope workbenches
   and product systems relate to the theorem.
 - [Near-anniversary roadmap triage](ANNIVERSARY_ROADMAP_TRIAGE.md): low-risk

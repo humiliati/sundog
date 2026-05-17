@@ -140,6 +140,71 @@ When you revise the pitch:
    `.elevator-pitch-stamp` to match.
 4. Run the chat checks (next subsection) before publishing.
 
+### Readability And Halo Glossary Pass
+
+The next pitch revision should be a compression pass, not another prose
+expansion. The current four-paragraph block is too dense for the homepage
+surface and introduces specialist halo words before the reader has a visual
+handle on them.
+
+Target shape:
+
+- One short hook sentence.
+- Three scannable claim blocks: optics, hidden-state inference, applications.
+- One compact caution / inspection link.
+- No large uninterrupted paragraph longer than about 45 words.
+
+Style rules:
+
+- Strip most em dash characters from public pitch copy. Prefer commas, colons,
+  parentheses, or separate sentences.
+- Do not lead with hard-to-parse terms such as "circumzenithal" unless the
+  term is visually grounded nearby and has a definition path.
+- Keep "field-not-reward" only if the surrounding text explains it in ordinary
+  language before moving into mesa or substrate-coincidence framing.
+- Avoid turning the pitch into a theorem defense. Its job is orientation.
+
+Halo term handling:
+
+- Add stable IDs to relevant `legend.html` phenomenon cards before linking
+  terms into them.
+- A small glossary data file, likely `public/data/halo-glossary.json`, can map
+  terms such as `parhelion`, `circumzenithal arc`, `circumhorizon arc`,
+  `tangent arc`, `parhelic circle`, `22 deg halo`, and `46 deg halo` to a
+  plain-language definition plus a deep link into `legend.html` or
+  `sundog.html`.
+- Public text should use focusable links or accessible definition popovers,
+  not hover-only behavior. Hover can enrich desktop reading, but tap/focus
+  must work on mobile and keyboard.
+
+Visual treatment:
+
+- Promote curated pitch thumbnails into `public/media/` rather than embedding
+  raw calibration paths directly in `index.html`.
+- HaloSim-generated receipts are the safest launch default because they are
+  project-created. Candidate sources include
+  `docs/calibration/halosim_outputs/hs0_spike/hs0_run3_cza_h26.png`,
+  `docs/calibration/halosim_outputs/hs0_spike/hs0_run4_parhelia_h7.png`, and
+  selected Phase 14E receipts.
+- Calibration photo `docs/calibration/33.webp` is a candidate margin image only
+  after the credit / reuse status is verified and surfaced.
+- On desktop, thumbnails can sit in the pitch margins. On mobile, they should
+  collapse into one inline visual strip so the pitch does not become a tall
+  gallery.
+
+Hero phase cards:
+
+- The current `index.html` hero is a static SVG atlas snapshot, not a realtime
+  drawing sequence. Do not imply live drawing unless that behavior is rebuilt.
+- Add a nearby set of explanatory cards for the hero phases instead:
+  "what the viewer sees optically", "what the geometry / physics means", and
+  "why this matters for applications."
+- Each card should link to the owning inspection surface: the live atlas,
+  `legend.html`, the calibration/accounting docs, or the relevant application
+  workbench.
+- The cards should explain the same scene in three registers rather than
+  repeat the theorem grid below it.
+
 ### Claim-Map Discipline For Positioning Edits
 
 The elevator pitch is the densest claim surface on the site &mdash; in
