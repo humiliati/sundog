@@ -13,6 +13,11 @@
       "publicLaunchIntent": "Public lab positioning, philosophy, origin bridge, and claim boundaries."
     },
     {
+      "entry": "alignment.html",
+      "kind": "positioning",
+      "publicLaunchIntent": "Public alignment and Bayes comparator primer defining route fidelity, same-information baselines, and current claim-hygiene ledger."
+    },
+    {
       "entry": "applications-gallery.html",
       "kind": "applications",
       "publicLaunchIntent": "Public gallery of application surfaces and evidence tiers."

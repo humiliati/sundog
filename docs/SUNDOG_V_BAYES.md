@@ -306,7 +306,7 @@ much from weak baselines.
 | Workbench | Bayesian comparator status | Cross-reference |
 | --- | --- | --- |
 | Balance | Executable same-shadow floor scaffold. `bayes_floor_shadow_particle` runs with observation parity, no-state-leak, unknown-mode rejection, Phase 10 slate loading, and regret receipts. Final Phase 15 lock ran 27,200 trials with audits passing, claim gate 56/56 hard-gate cells, 12 reported-only observation-degradation cells, zero negative mean-regret cells, and aggregate regret versus `sundog_shadow` +0.00395. Treat Balance as having earned a same-information Bayesian-floor claim-lock receipt, with reported-only delay/noise/dropout failure-regime lanes preserved as boundary diagnostics. | [`SUNDOG_V_BALANCE.md` - Bayesian Floor Profile](SUNDOG_V_BALANCE.md#bayesian-floor-profile) and Phase 15 status |
-| Pressure Mines | Active applied profile. The staged same-field baseline is `mines-bayesian-baseline-v1`: a frontier-limited posterior over hidden mine occupancy, strict budget parity between pressure-only and full Sundog-legal lanes, and a Phase 12 path that starts with legal `Phi_t` serialization, no-leak, observation parity, and tiny posterior smoke before any claim lock. Admission plumbing exists (`npm run mines:phase12:admission`) and the first executable posterior smoke exists (`npm run mines:phase12:posterior-smoke`). The smoke passed no-leak on the Phase 10 best/worst cells, but the initial posterior is weak and fails easy-cell sanity, so this is a repair target rather than an earned comparator. | [`sundog_v_minesweeper.md` - Bayesian Baseline Profile](sundog_v_minesweeper.md#bayesian-baseline-profile) and Phase 12 status |
+| Pressure Mines | Active applied profile. The staged same-field baseline is `mines-bayesian-baseline-v1`: a frontier-limited posterior over hidden mine occupancy, strict budget parity between pressure-only and full Sundog-legal lanes, and a Phase 12 path that starts with legal `Phi_t` serialization, no-leak, observation parity, and tiny posterior smoke before any claim lock. Admission plumbing exists (`npm run mines:phase12:admission`). The repaired executable smoke exists (`npm run mines:phase12:posterior-smoke`) and uses shared cell/seed sensor streams plus a pressure-floor action guard. The 64-seed Phase 10 reducer ran 14,720 trials with no-leak pass: `bayes_frontier_pressure` matches `naive_pressure` / `sundog_minimal` exactly across all 46 cells, while `sundog_lean` remains stronger in the promoted candidate cell. Treat this as a same-field pressure-floor receipt, not a posterior-dominance claim lock. | [`sundog_v_minesweeper.md` - Bayesian Baseline Profile](sundog_v_minesweeper.md#bayesian-baseline-profile) and Phase 12 status |
 | Three-Body / Coarse Graining | Current pattern source for the receipt shape: admission spec, same-information guard, belief diagnostics, regret reducer, and capped-probe discipline. Still not a closed floor. | [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md) and [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md) |
 
 The interpretation rule is shared across all applied profiles:
@@ -328,15 +328,18 @@ Applied queue after the Balance lock:
    posterior policy. Landed with `npm run mines:phase12:admission`.
 2. **Pressure Mines tiny posterior smoke.** Run only the Phase 10 confirmed
    pocket plus paired failure cell with capped particles and seeds. Landed with
-   `npm run mines:phase12:posterior-smoke`; no-leak passed, but easy-cell
-   sanity failed.
-3. **Pressure Mines posterior repair.** Improve the legal posterior/action
-   utility until the pressure-budget Bayes lane no longer trails `naive_pressure`
-   in the confirmed pocket. No public Bayes claim before this.
-4. **Pressure Mines regret reducer and larger probe.** After repair, broaden to
-   the `bayes_frontier_full` pocket probe and reduce Bayes-vs-`sundog_minimal`
-   / `sundog_lean` regret into the Phase 12 summary shape. Phase 13 public data
-   surfaces stay pending until this receipt exists.
+   `npm run mines:phase12:posterior-smoke`; no-leak and easy-cell sanity now
+   pass after the same-field sensor repair.
+3. **Pressure Mines pocket probe.** Broaden to the `bayes_frontier_full` pocket
+   probe and reduce Bayes-vs-`sundog_minimal` / `sundog_lean` regret into the
+   Phase 12 summary shape. Landed with `npm run mines:phase12:pocket-probe`.
+4. **Pressure Mines Phase 10-slate reducer.** Run the repaired pressure lane
+   over the locked Phase 10 envelope cells, then surface Bayes regret fields
+   only if the same-field floor holds. Loader smoke landed with
+   `npm run mines:phase12:phase10-slate:smoke`; the 64-seed all-cell reducer
+   landed as `npm run mines:phase12:phase10-slate`. Next is public data
+   surfacing with explicit language that this is pressure-floor parity, not
+   posterior dominance over `sundog_lean`.
 5. **Template backfill.** Any Mines-specific deviations from the generic
    [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md)
    should update the template after the smoke, not before the first runner

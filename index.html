@@ -135,6 +135,19 @@
             color: var(--accent-gold);
         }
 
+        .comparison-note {
+            max-width: 720px;
+            margin: 1.75rem auto 0;
+            color: #40505C;
+            line-height: 1.65;
+            text-align: center;
+        }
+
+        .comparison-note a {
+            color: var(--primary-mid);
+            font-weight: 800;
+        }
+
         /* Page-local: .proof-placeholder dimensions retained; shared sets bg/border but not size */
         .proof-placeholder {
             width: 100%;
@@ -2186,31 +2199,34 @@
 
     <!-- Comparison Section -->
     <section class="comparison-section">
-        <h2>Classic AI vs Sundog AI</h2>
+        <h2>Alignment And Comparators</h2>
         <div class="comparison-container">
             <p class="comparison-lead">
-                Same environment. Same task. Different control logic. Observable difference in behavior.
+                Same hidden task. Same admitted observations. Different route from signal to action.
             </p>
             <div class="comparison-grid">
                 <div class="comparison-side">
-                    <h4>Classic Approach</h4>
+                    <h4>Posterior / ML Baselines</h4>
                     <ul>
-                        <li>Requires complete world state</li>
-                        <li>Direct target coordinates</li>
-                        <li>Immediate convergence</li>
-                        <li>Brittle under constraints</li>
+                        <li>Partial observation is allowed</li>
+                        <li>Belief, model, or objective drives the action</li>
+                        <li>Should win when the model is right and cheap enough</li>
+                        <li>Must be repaired before any weak-baseline claim grows</li>
                     </ul>
                 </div>
                 <div class="comparison-side">
-                    <h4>Sundog Approach</h4>
+                    <h4>Sundog Trace Control</h4>
                     <ul>
-                        <li>Operates from partial information</li>
-                        <li>Indirect signal observation</li>
+                        <li>Acts from declared indirect traces</li>
+                        <li>Checks whether the route is causal and structural</li>
                         <li>Comparable terminal accuracy in the core task, with slower acquisition</li>
-                        <li>Mapped failure boundaries in workbenches</li>
+                        <li>Names the boundary where the trace stops being enough</li>
                     </ul>
                 </div>
             </div>
+            <p class="comparison-note">
+                The public comparison is complementary, not conquest: Bayes turns evidence into belief, Sundog turns response into control. Read the <a href="alignment.html">alignment and Bayes primer</a>.
+            </p>
         </div>
     </section>
 
@@ -2276,6 +2292,10 @@
             <a href="docs/README.md" class="cta-link">
                 <h3>Documentation</h3>
                 <p>Read the docs</p>
+            </a>
+            <a href="alignment.html" class="cta-link">
+                <h3>Alignment</h3>
+                <p>Read the comparator ledger</p>
             </a>
             <a href="structural-failure.html" class="cta-link">
                 <h3>Boundary Map</h3>

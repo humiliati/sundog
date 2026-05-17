@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="What Sundog means by alignment: route fidelity under partial observation, compared carefully with Bayesian inference, ML baselines, and same-information tests.">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Alignment &amp; Bayes - Sundog Research Lab</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            overflow-x: hidden;
+            background:
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 18rem, #F2F7F5 100%);
+        }
+
+        .alignment-hero {
+            width: min(1120px, calc(100vw - 3rem));
+            margin: 0 auto;
+            padding: clamp(5rem, 9vw, 8rem) 0 clamp(3rem, 6vw, 5rem);
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.46fr);
+            gap: clamp(2rem, 5vw, 4rem);
+            align-items: end;
+        }
+
+        .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            max-width: 820px;
+            color: var(--primary-dark);
+            font-size: clamp(2.55rem, 6.5vw, 5.3rem);
+            line-height: 0.98;
+            margin-bottom: 1.4rem;
+        }
+
+        .lede {
+            max-width: 780px;
+            color: #40505C;
+            font-size: clamp(1.08rem, 2vw, 1.26rem);
+            line-height: 1.78;
+        }
+
+        .quick-card {
+            border-left: 3px solid var(--accent-gold);
+            background: rgba(255, 255, 255, 0.76);
+            padding: 1.3rem 0 1.3rem 1.25rem;
+        }
+
+        .quick-card h2 {
+            color: var(--primary-dark);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .quick-row {
+            display: grid;
+            grid-template-columns: 5.6rem minmax(0, 1fr);
+            gap: 0.85rem;
+            padding: 0.82rem 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .quick-row:first-of-type {
+            border-top: 0;
+        }
+
+        .quick-row strong {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.76rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .quick-row span {
+            color: #40505C;
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+
+        .content {
+            width: min(1120px, calc(100vw - 3rem));
+            margin: 0 auto;
+            padding: 0 0 clamp(4rem, 8vw, 7rem);
+        }
+
+        .alignment-section {
+            display: grid;
+            grid-template-columns: minmax(12rem, 0.36fr) minmax(0, 1fr);
+            gap: clamp(1.5rem, 4vw, 3.5rem);
+            padding: clamp(2.4rem, 5.7vw, 4.2rem) 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .alignment-section h2 {
+            color: var(--primary-dark);
+            font-size: clamp(1.5rem, 2.8vw, 2.18rem);
+            line-height: 1.08;
+            margin-bottom: 0.75rem;
+            text-align: left;
+        }
+
+        .section-note {
+            color: var(--primary-mid);
+            font-family: var(--sd-font-data);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            line-height: 1.45;
+            text-transform: uppercase;
+        }
+
+        .section-body {
+            min-width: 0;
+        }
+
+        .section-body p {
+            color: #354752;
+            font-size: 1.02rem;
+            line-height: 1.78;
+            margin-bottom: 1.1rem;
+        }
+
+        .claim-line {
+            margin: 1.35rem 0;
+            padding: 1.1rem 1.2rem;
+            border-left: 4px solid var(--accent-gold);
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-size: clamp(1.18rem, 2.2vw, 1.55rem);
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .principles {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.95rem;
+            margin: 1.35rem 0 0;
+        }
+
+        .principles li,
+        .method-card,
+        .result-card {
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .principles strong,
+        .method-card strong,
+        .result-card strong {
+            display: block;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .principles span,
+        .method-card span,
+        .result-card span {
+            color: #40505C;
+            line-height: 1.58;
+        }
+
+        .method-grid,
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 1.35rem;
+        }
+
+        .formula-pair {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin: 1.35rem 0;
+        }
+
+        .formula-card {
+            background: #102B3B;
+            border: 1px solid rgba(230, 190, 76, 0.34);
+            border-radius: 8px;
+            color: #ECF6F6;
+            padding: 1.1rem;
+        }
+
+        .formula-card h3 {
+            color: #FFFFFF;
+            font-size: 1rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .formula-card code {
+            display: block;
+            margin: 0.65rem 0;
+            color: #FFE8A6;
+            font-family: var(--sd-font-data);
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .formula-card p {
+            color: #DCE8E8;
+            font-size: 0.95rem;
+            line-height: 1.62;
+            margin: 0;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            margin: 1.4rem 0;
+        }
+
+        table {
+            width: 100%;
+            min-width: 780px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--line);
+            color: #354752;
+            font-size: 0.95rem;
+            line-height: 1.56;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        tr:last-child td {
+            border-bottom: 0;
+        }
+
+        td strong {
+            color: var(--primary-dark);
+        }
+
+        .inspection-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 1.3rem;
+        }
+
+        .inspection-card {
+            display: block;
+            min-height: 100%;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.05rem;
+            color: inherit;
+            text-decoration: none;
+            transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+        }
+
+        .inspection-card:hover,
+        .inspection-card:focus-visible {
+            border-color: rgba(213, 170, 68, 0.78);
+            box-shadow: 0 12px 28px rgba(26, 58, 82, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .inspection-card h3 {
+            color: var(--primary-dark);
+            font-size: 1.02rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .inspection-card p {
+            color: #52616B;
+            font-size: 0.93rem;
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        .caution-box {
+            background: #FDF7E8;
+            border: 1px solid rgba(213, 170, 68, 0.45);
+            border-radius: 8px;
+            padding: 1.1rem;
+            margin-top: 1.2rem;
+        }
+
+        .caution-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 860px) {
+            .alignment-hero,
+            .alignment-section {
+                grid-template-columns: 1fr;
+            }
+
+            .alignment-hero {
+                align-items: start;
+            }
+
+            .principles,
+            .method-grid,
+            .result-grid,
+            .formula-pair,
+            .inspection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .alignment-hero,
+            .content {
+                width: min(100% - 2rem, 1120px);
+            }
+
+            h1 {
+                font-size: clamp(2.15rem, 10.5vw, 3rem);
+            }
+
+            .quick-row {
+                grid-template-columns: 1fr;
+                gap: 0.3rem;
+            }
+
+            th,
+            td {
+                padding: 0.9rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="index.html" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="about.html">About</a>
+                <a href="sundog.html">Atlas</a>
+                <a href="applications-gallery.html">Applications</a>
+                <a href="legend.html">Legend</a>
+                <a href="chat.html">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="alignment-hero">
+            <div>
+                <p class="eyebrow">Alignment &amp; Bayes</p>
+                <h1>Alignment means route fidelity, not just task success.</h1>
+                <p class="lede">
+                    Sundog uses alignment in a narrow, inspectable sense: can a system act from an admitted indirect trace, can the route be checked, and does it fail where the trace stops carrying control-relevant structure?
+                </p>
+            </div>
+            <aside class="quick-card" aria-label="Short distinction between Bayes and Sundog">
+                <h2>The short distinction</h2>
+                <div class="quick-row">
+                    <strong>Bayes</strong>
+                    <span>Evidence becomes belief, then action follows from the posterior.</span>
+                </div>
+                <div class="quick-row">
+                    <strong>Sundog</strong>
+                    <span>Action perturbs the world, the response changes, and control follows the trace.</span>
+                </div>
+                <div class="quick-row">
+                    <strong>Hybrid</strong>
+                    <span>Use belief to manage ambiguity, and response control where the field is locally readable.</span>
+                </div>
+            </aside>
+        </section>
+
+        <section class="content">
+            <article class="alignment-section">
+                <div>
+                    <h2>Alignment, Generally</h2>
+                    <p class="section-note">The broad problem</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        In machine learning and control, alignment is the question of whether a system's behavior remains coupled to the intended objective, constraints, and users when uncertainty, optimization pressure, partial observation, and distribution shift enter the room.
+                    </p>
+                    <p>
+                        That broad field includes reward design, reinforcement learning, imitation learning, Bayesian filtering, POMDP planning, robustness testing, interpretability, oversight, red teaming, and formal verification. Sundog is not a replacement for that field.
+                    </p>
+                    <div class="claim-line">
+                        Sundog's smaller claim is about route fidelity under hidden-state control.
+                    </div>
+                    <p>
+                        A run is not aligned merely because it succeeds. It is aligned, in the Sundog sense, only if the system used the admitted trace, stayed inside the stated information lane, and exposed the boundary where that trace no longer supports action.
+                    </p>
+                </div>
+            </article>
+
+            <article class="alignment-section">
+                <div>
+                    <h2>What Sundog Means</h2>
+                    <p class="section-note">The local definition</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        Sundog studies cases where the decisive state is hidden but the world still leaks useful structure. The lab builds small workbenches where each information source is typed before stronger language is allowed.
+                    </p>
+                    <ul class="principles">
+                        <li>
+                            <strong>Hidden target</strong>
+                            <span>The controller is denied the decisive variable: target coordinates, pole angle, true mine layout, full orbital state, or internal truth labels.</span>
+                        </li>
+                        <li>
+                            <strong>Admitted trace</strong>
+                            <span>The controller gets only the declared signal: light, shadow, pressure, local field readings, compressed game state, or bounded action history.</span>
+                        </li>
+                        <li>
+                            <strong>Route check</strong>
+                            <span>The result must survive no-leak audits, baselines, interventions, or structural failure predictions. Decodable is not the same as used.</span>
+                        </li>
+                        <li>
+                            <strong>Failure boundary</strong>
+                            <span>The public claim names where the trace aliases, collapses, delays, or stops being enough.</span>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="alignment-section">
+                <div>
+                    <h2>Existing Techniques</h2>
+                    <p class="section-note">Not a strawman</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        The comparison is only useful if the other methods are treated strongly. Bayes does not require full sight. Reinforcement learning is not just brute force. Interpretability probes are useful, but they do not by themselves prove causal use.
+                    </p>
+                    <div class="method-grid">
+                        <div class="method-card">
+                            <strong>Reward and RL</strong>
+                            <span>Optimizes behavior against a signal. Sundog asks whether the learned behavior remains coupled to the intended trace instead of a shortcut.</span>
+                        </div>
+                        <div class="method-card">
+                            <strong>Bayesian inference</strong>
+                            <span>Maintains belief over hidden causes. Sundog asks when action can be controlled directly from response without reconstructing the full hidden world.</span>
+                        </div>
+                        <div class="method-card">
+                            <strong>Model-based control</strong>
+                            <span>Uses dynamics and sensor models. Sundog shares the control discipline, but makes the information lane and failure map the central public artifact.</span>
+                        </div>
+                        <div class="method-card">
+                            <strong>Interpretability</strong>
+                            <span>Can show a representation contains a variable. Sundog requires causal steerability or structural failure coincidence before calling the route traceable.</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="alignment-section">
+                <div>
+                    <h2>Bayes And Sundog</h2>
+                    <p class="section-note">Belief versus response</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        The fair head-to-head is not "Bayes gets the world and Sundog gets shadows." A fair Bayesian baseline receives the same partial observations, then maintains a posterior over hidden state. Sundog receives the same observations, then acts from the local response field.
+                    </p>
+                    <div class="formula-pair">
+                        <div class="formula-card">
+                            <h3>Bayes</h3>
+                            <code>P(hidden world | signal) ~= likelihood * prior</code>
+                            <p>Where is the hidden thing, probably?</p>
+                        </div>
+                        <div class="formula-card">
+                            <h3>Sundog</h3>
+                            <code>response coupling ~= change in signal / action</code>
+                            <p>Which action makes the trace improve?</p>
+                        </div>
+                    </div>
+                    <p>
+                        The strongest public posture is complementary: Bayes is for knowing under uncertainty. Sundog is for acting under partial sight. The comparison should report where each earns its keep, where each fails, and when a hybrid is the honest answer.
+                    </p>
+                </div>
+            </article>
+
+            <article class="alignment-section">
+                <div>
+                    <h2>Comparator Ledger</h2>
+                    <p class="section-note">Current public read</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        This is the space the site needs: not a victory table, but a running ledger of what Sundog did, what Bayes or other ML baselines did against the same information lane, and what language is safe.
+                    </p>
+                    <div class="table-wrap" role="region" aria-label="Sundog and comparator ledger" tabindex="0">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Surface</th>
+                                    <th>Sundog readout</th>
+                                    <th>Comparator state</th>
+                                    <th>Safe interpretation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Photometric mirror alignment</strong></td>
+                                    <td>No target-position access; terminal target intensity is comparable to target-aware analytic and noisy-oracle baselines in the controlled MuJoCo result.</td>
+                                    <td>The serious same-observation Bayesian comparator is not the primary public baseline yet. The existing target-aware baseline wins hard on acquisition speed: median threshold time about 11.5 steps versus about 188 for photometric feedback.</td>
+                                    <td>Core result, not a Bayes win. It proves the apparatus shape and motivates the fair Bayesian comparison.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Balance</strong></td>
+                                    <td>Shadow controller cleared the Phase 10 operating-envelope claim and keeps overhead-light / degradation lanes visible.</td>
+                                    <td>Phase 15 same-shadow Bayesian-floor lock ran 27,200 trials with audits passing, 56/56 hard-gate cells admitted, zero negative mean-regret cells, and aggregate regret near parity at +0.00395 normalized survival versus <code>sundog_shadow</code>.</td>
+                                    <td>Earned same-information Bayes receipt. The careful claim is near-floor behavior inside the mapped envelope, with reported-only degradation boundaries preserved.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pressure Mines</strong></td>
+                                    <td>Phase 10 confirmed a narrow pressure-field pocket: density 0.16, pressure noise 2.0, dropout 0.2 improved budget-adjusted safe-tile progress versus <code>naive_pressure</code>, beside a matched failure cell.</td>
+                                    <td>The same-field Bayesian baseline is active but not locked. Admission and posterior smokes pass; the pocket probe keeps <code>bayes_frontier_pressure</code> at parity or near parity in the small best/worst slice, but the Phase 10-slate reducer is still next.</td>
+                                    <td>Current public claim remains the operating-envelope pocket versus naive pressure. Bayes fields stay claim-hygiene, pending full reduction.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Three-Body / Coarse Proof</strong></td>
+                                    <td>Guarded accelerometer-proxy TRACK improved survival over passive and naive local baselines in the tested high-velocity near-escape pocket, with harms exposed outside it.</td>
+                                    <td>The proof-track Bayesian floor exists as a staged particle-MPC evaluator and passed smoke, but the BF-4b information-accessibility diagnostic and BF-5 full lock remain blockers.</td>
+                                    <td>Operating-envelope evidence, not proof closure. The Bayesian-floor gate is exactly why the proof trunk stays labeled open.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mesa / learned policy work</strong></td>
+                                    <td>Signature-trained and mixed-objective policy studies map where trace-conditioned behavior holds, collapses, or localizes causally in the tested architecture.</td>
+                                    <td>This is an ML alignment surface rather than a Bayes comparator. The relevant comparison is reward-only, signature-only, mixed objectives, probes, and interventions under controlled capacity and selection pressure.</td>
+                                    <td>Use it to discuss causal route fidelity and operating envelopes. Do not treat it as evidence that Sundog replaces mainstream ML alignment.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="caution-box">
+                        <p>
+                            The ledger should get stricter over time. A weak comparator does not make Sundog stronger; it makes the claim less interpretable. When Bayes wins, the site should say Bayes wins.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="alignment-section">
+                <div>
+                    <h2>Result Shape</h2>
+                    <p class="section-note">What would count</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        The Bayes roadmap is strongest when it predicts wins and losses before the run. A useful comparison should have at least four stamps.
+                    </p>
+                    <div class="result-grid">
+                        <div class="result-card">
+                            <strong>Model known</strong>
+                            <span>Bayes should win when the likelihood model is right and the posterior is cheap enough to maintain.</span>
+                        </div>
+                        <div class="result-card">
+                            <strong>Field readable</strong>
+                            <span>Sundog should hold when the assumed model is wrong but the live response field still answers action coherently.</span>
+                        </div>
+                        <div class="result-card">
+                            <strong>Signal aliased</strong>
+                            <span>Flat Sundog should fail when a trace improves for the wrong hidden reason and belief over hypotheses is necessary.</span>
+                        </div>
+                        <div class="result-card">
+                            <strong>Hybrid needed</strong>
+                            <span>Real systems may use Bayes to manage ambiguity and Sundog-style response tracking for local control.</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="alignment-section">
+                <div>
+                    <h2>Inspection Path</h2>
+                    <p class="section-note">Source trail</p>
+                </div>
+                <div class="section-body">
+                    <p>
+                        The page is a public wrapper over the research trail. Use these links to inspect the current comparator status and the places where the language is intentionally still pending.
+                    </p>
+                    <div class="inspection-grid">
+                        <a href="docs/SUNDOG_V_BAYES.md" class="inspection-card">
+                            <h3>Sundog vs. Bayes</h3>
+                            <p>Roadmap, controller families, result stamps, and applied Bayes-floor profiles.</p>
+                        </a>
+                        <a href="docs/sundog_v_balance.md#bayesian-floor-profile" class="inspection-card">
+                            <h3>Balance Bayes Floor</h3>
+                            <p>Same-shadow Bayesian-floor profile and Phase 15 claim-lock status.</p>
+                        </a>
+                        <a href="docs/sundog_v_minesweeper.md#bayesian-baseline-profile" class="inspection-card">
+                            <h3>Mines Bayes Profile</h3>
+                            <p>Same-field frontier posterior, admission tests, smoke receipts, and pending lock path.</p>
+                        </a>
+                        <a href="docs/proof/PHASE4_THREEBODY.md" class="inspection-card">
+                            <h3>Three-Body Gate</h3>
+                            <p>Bayesian-floor proof-track gate and the current open blockers.</p>
+                        </a>
+                        <a href="mesa.html" class="inspection-card">
+                            <h3>Mesa Envelope</h3>
+                            <p>Public ML alignment surface for signature-trained policies and causal route checks.</p>
+                        </a>
+                        <a href="about.html" class="inspection-card">
+                            <h3>Lab Positioning</h3>
+                            <p>The broader apparatus framing, claim boundaries, and evidence tiers.</p>
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>Sundog Research Lab - <a href="index.html">Home</a> | <a href="about.html">About</a> | <a href="applications-gallery.html">Applications Gallery</a></p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
