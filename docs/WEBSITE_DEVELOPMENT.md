@@ -276,7 +276,11 @@ finished panel should contain one of:
 Current priority fills:
 
 1. Mesa Optimization: lambda cliff and class-balance strip from
-   `docs/SUNDOG_V_MESA.md` / `mesa.html`.
+   `docs/SUNDOG_V_MESA.md` / `mesa.html`; homepage evidence panel generated
+   at `public/media/mesa-evidence-panel.svg`, with standalone exports at
+   `public/media/mesa-cliff-mini.svg`,
+   `public/media/mesa-class-balance-strip.svg`, and
+   `public/media/mesa-ksweep-fingerprint.svg`.
 2. Structural Failure Coincidence: five-locus identifiability boundary map from
    `docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md`, with
    publication rules in
