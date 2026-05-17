@@ -356,10 +356,10 @@ Applied queue after the Balance lock:
    `npm run bayes:phase2:smoke` and `npm run bayes:phase2`. The lock finds a
    narrow anisotropic separation for `sundog_memory` over fixed clean
    `bayes_misspecified`; other variants remain boundary or Bayes-favorable.
-8. **Standalone Phase 3 aliasing smoke.** Pre-registered dual gate landed and
-   `npm run bayes:phase3:smoke` reports `dual_gate_pass` in `decoy`, `alias`,
-   and `low_probe`. The 96-seed lock command is fixed but deferred until the
-   smoke shape is reviewed.
+8. **Standalone Phase 3 aliasing lock.** Pre-registered dual gate landed and
+   `npm run bayes:phase3` reports `dual_gate_pass` in `decoy` and `alias`.
+   `symmetric` and `low_probe` remain diagnostic: both show Bayes-adaptive
+   recovery, but not the pre-registered HC-Sundog wrong-lock failure arm.
 
 ## Controller-Family Architecture
 
@@ -924,9 +924,9 @@ npm run bayes:phase3:smoke
 npm run bayes:phase3
 ```
 
-The lock command is pre-registered here but deferred until the smoke shape is
-validated. Do not edit the thresholds, classifier radius/dwell, or recovery
-margin after smoke results land.
+The lock command was pre-registered before the smoke run and then run unchanged.
+Do not edit the thresholds, classifier radius/dwell, or recovery margin after
+results land.
 
 Smoke receipt, 2026-05-17:
 
@@ -942,6 +942,10 @@ Receipt paths:
 - `results/bayes/phase3-aliasing-smoke/summary.csv`
 - `results/bayes/phase3-aliasing-smoke/regret.csv`
 - `results/bayes/phase3-aliasing-smoke/replay-manifest.json`
+- `results/bayes/phase3-aliasing-lock/manifest.json`
+- `results/bayes/phase3-aliasing-lock/summary.csv`
+- `results/bayes/phase3-aliasing-lock/regret.csv`
+- `results/bayes/phase3-aliasing-lock/replay-manifest.json`
 
 Smoke gate rows:
 
@@ -952,9 +956,33 @@ Smoke gate rows:
 | `symmetric` | 0.3125 | false | `sundog_memory` | 0.400235 / 0.3750 | +0.107920 | 0.0000 | false |
 | `low_probe` | 0.5000 | true | `sundog_memory` | 1.085602 / 0.8125 | +1.170522 | +0.6250 | true |
 
-Interpretation: the smoke harness is strong enough to proceed to the
-pre-registered lock unchanged. The result should still be treated as smoke
-only until the 96-seed command runs.
+Smoke interpretation: the smoke harness was strong enough to proceed to the
+pre-registered lock unchanged. The lock receipt below is now the claim-bearing
+Phase 3 result.
+
+Lock receipt, 2026-05-17:
+
+```text
+npm run bayes:phase3
+2,304 trials in 512.632s
+Exit gate: dual_gate_pass (2/4 dual-gate scenarios)
+```
+
+Lock gate rows:
+
+| Scenario | HC wrong-lock rate | Failure arm | Best Sundog lane | Bayes-adaptive score / success | Score delta | Success delta | Dual gate |
+| --- | ---: | --- | --- | ---: | ---: | ---: | --- |
+| `decoy` | 0.572917 | true | `sundog_memory` | 1.722396 / 1.000000 | +1.329126 | +0.604167 | true |
+| `alias` | 0.510417 | true | `sundog_memory` | 1.483721 / 0.906250 | +1.060612 | +0.510417 | true |
+| `symmetric` | 0.375000 | false | `sundog_memory` | 0.818609 / 0.562500 | +0.210788 | +0.052083 | false |
+| `low_probe` | 0.395833 | false | `sundog_memory` | 1.067770 / 0.781250 | +0.819386 | +0.427083 | false |
+
+Interpretation: Phase 3 now has a lock-backed aliasing boundary. `decoy` and
+`alias` satisfy the dual gate: HC-Sundog wrong-locks at or above the
+pre-registered 0.50 threshold, and Bayes-adaptive recovers with non-negative
+success delta plus score delta above +0.10. `symmetric` and `low_probe` show
+Bayes-adaptive recovery but do not satisfy the failure arm, so they stay
+diagnostic rather than claim support.
 
 Expected outcome:
 
