@@ -159,6 +159,21 @@
             background: #fff;
         }
 
+        .claim-box.bayes-floor {
+            border-left-color: #2b8c76;
+        }
+
+        .claim-box.bayes-floor strong {
+            color: #2b8c76;
+        }
+
+        .bayes-floor-note {
+            margin-top: 0.75rem;
+            margin-bottom: 0;
+            font-size: 0.92rem;
+            color: rgba(26, 58, 82, 0.78);
+        }
+
         .result-pair {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -472,6 +487,38 @@
                     <button id="mines-body-load-worst" type="button">Load failure region</button>
                     <button id="mines-body-load-best" type="button">Load confirmed pocket</button>
                 </div>
+            </div>
+
+            <div class="claim-box bayes-floor" id="mines-bayes-floor-panel">
+                <strong style="text-transform: uppercase; letter-spacing: 0.08em;">Bayesian Pressure Floor</strong>
+                <p id="mines-bayes-floor-summary" style="margin-top: 0.5rem; margin-bottom: 0.75rem;">
+                    Phase 13 publishes the repaired same-field Bayesian pressure-floor receipt
+                    beside the Phase 10 pocket. The floor compares against the pressure-ordering
+                    lanes; it is not a posterior-dominance claim.
+                </p>
+                <div class="result-pair" aria-label="Phase 13 Bayesian pressure floor evidence">
+                    <div class="result-panel confirmed">
+                        <h3 id="mines-bayes-floor-status">Receipt loading</h3>
+                        <p id="mines-bayes-floor-targets">
+                            Waiting for the public data bundle to report the pressure-floor gate.
+                        </p>
+                    </div>
+                    <div class="result-panel">
+                        <h3>Admission lanes</h3>
+                        <p id="mines-bayes-floor-admission">
+                            Hard lane: pressure-only Bayes versus <code>naive_pressure</code>
+                            and <code>sundog_minimal</code>. Diagnostic lane:
+                            <code>sundog_lean</code> remains visible as controller headroom.
+                        </p>
+                    </div>
+                </div>
+                <p id="mines-bayes-floor-candidate" class="bayes-floor-note">
+                    The promoted pocket remains a cautious operating-envelope result until
+                    the posterior lane earns more than pressure-floor parity.
+                </p>
+                <p class="bayes-floor-note">
+                    Data: <a id="mines-bayes-floor-artifact" href="/data/mines-phase13-bayes-floor.json">public Mines Phase 13 bundle</a>.
+                </p>
             </div>
 
             <h2 style="margin-top: 3rem;">Why This Workbench</h2>
