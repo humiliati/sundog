@@ -198,6 +198,141 @@ balance residual. In other geometries, such as near-overhead lighting or heavy
 sensor delay, the projection should become uninformative and the controller
 should lose.
 
+## Bayesian Floor Profile
+
+Profile id: `balance-bayesian-floor-v1`
+
+Status: staged profile, not yet an earned result.
+
+Purpose: add a same-observation Bayesian floor for Balance so the shadow
+controller is compared against the best partial-observation controller we can
+reasonably afford, not only against passive, naive, and privileged-oracle
+baselines. The floor is a claim-hygiene instrument: it can strengthen the
+Balance row only after it passes the gates below, and it can also narrow the
+claim if the same-shadow floor materially dominates SCAN/SEEK/TRACK inside the
+confirmed Phase 10 envelope.
+
+Truth state and hidden variables:
+
+- `X_t = (x, x_dot, theta, theta_dot, t, c)`, where `c` records the preset,
+  light elevation, rail and force limits, noise, delay, dropout, disturbance
+  schedule, seed, and envelope cell.
+- `theta`, `theta_dot`, pole energy, and terminal verdict labels remain hidden
+  from the Bayesian-floor controller during a run.
+- Truth-state logging is allowed for oracle comparison, metrics, fixtures, and
+  post-run audits.
+- The first population `mu` is the repaired Phase 10 envelope slate. Any
+  capped probe must use the same cell and seed definitions, with fewer cells or
+  seeds only when the runtime budget requires it.
+
+Admitted observation:
+
+```text
+Phi_t = [
+  shadow_endpoint_x,
+  shadow_centroid_x,
+  shadow_length,
+  shadow_residual,
+  shadow_confidence,
+  finite_difference_shadow_velocity,
+  cart_x,
+  cart_x_dot,
+  recent_force_commands,
+  light_elevation_deg,
+  sensor_noise,
+  sensor_delay,
+  sensor_dropout,
+  dt,
+  preset_id,
+  envelope_cell
+]
+```
+
+The floor may use the full history of prior `Phi_t` values and its own prior
+actions. It may not read true pole angle, true angular velocity, pole energy,
+oracle actions, or post-hoc verdict labels. The observation source should be
+the same `sampleShadowSensor` path that feeds `computeBalanceControl`, with a
+parity test proving that serialized floor observations match the
+`sundog_shadow` controller input on the same replay.
+
+Objective and regret:
+
+```text
+J(pi) = E_mu[survival_time / T_max]
+regret_cell = (T_safe_bayes_floor - T_safe_sundog_shadow) / T_max
+```
+
+Recovery time, upright-angle margin, shadow confidence, and action effort are
+diagnostics. Action effort is a tie-breaker only when survival performance is
+otherwise tied. A floor that performs worse than the existing shadow controller
+on easy observable cells is not evidence for the shadow controller; it is a
+failed floor and must be repaired before claim language is promoted.
+
+Floor policy:
+
+- First implementation: a low-dimensional particle filter over `(theta,
+  theta_dot)` using cart state as admitted proprioception.
+- Likelihood: compare predicted shadow endpoint, centroid, length, residual,
+  and confidence against `sampleShadowSensor` under the configured noise,
+  delay, and dropout model.
+- Candidate actions: include the live `sundog_shadow` action as candidate 0,
+  plus a fixed bounded force lattice such as `[-F, -0.5F, 0, 0.5F, F]`.
+- Planning horizon: modest, pre-locked after the capped probe, and scored by
+  expected survival plus a bounded terminal-upright diagnostic. Do not tune the
+  horizon per failed seed.
+- Optional follow-up: an EKF floor may be added later if the particle floor is
+  too slow, but the first public profile should prefer auditability over speed.
+
+Required comparators:
+
+- `sundog_shadow`
+- `bayes_floor_shadow_particle`
+- `oracle`
+- `naive_shadow`
+- `naive_cart`
+- `passive`
+
+Receipts should live under `results/balance/phase15-bayesian-floor/` and be
+reduced into public data only after the gates pass:
+
+- `manifest.json`
+- `signature-observations.jsonl`
+- `belief-diagnostics.csv`
+- `bayes-actions.csv`
+- `trial-outcomes.csv`
+- `bayes-regret.csv`
+- `bayes-regret-summary.csv`
+- `observability-fibers.json`
+
+Gates:
+
+- unknown mode is rejected by the harness;
+- no-state-leak audit proves `theta`, `theta_dot`, pole energy, oracle action,
+  and verdict labels are unavailable to the floor at decision time;
+- observation parity proves serialized `Phi_t` equals the shadow-controller
+  observation on the same run;
+- easy-cell sanity proves the floor can match or exceed naive baselines on
+  diagnostic-positive observable cells;
+- runtime probe records particles, horizon, cells, seeds, trials/sec, and the
+  estimated full-slate wall clock before any full run is staged;
+- claim gate blocks public language until the regret summary has been reduced
+  and linked from the Balance data surface.
+
+Outcome branches:
+
+- If the floor fails the no-leak, parity, or easy-cell sanity gates, Phase 15 is
+  invalid and earns no claim.
+- If the floor materially dominates `sundog_shadow` inside confirmed Phase 10
+  cells, keep the Phase 10 operating-envelope claim but narrow any language
+  about near-optimality or recovered hidden-state structure.
+- If `sundog_shadow` stays near the floor in diagnostic-positive cells and both
+  fail in the predicted overhead/delay cells, the claim can strengthen to:
+  *the hand-built shadow controller recovers most of the same-observation
+  Bayesian floor inside the mapped envelope while failing at the same
+  observability boundary.*
+- If `sundog_shadow` appears to beat a weak floor, do not promote the result
+  until the floor has passed an adversarial repair pass.
+
 ## Ratified Hook Language
 
 Safe hook:
@@ -1003,6 +1138,96 @@ enters `docs/APPLICATIONS.md § Cross-Application Comparison` as a
 sibling-plant rows as evidence under that meta-row. The Pre-Committed
 Cross-Application Comparison Row below is updated at that point to
 distinguish the per-plant rows from the pattern meta-row.
+
+### Phase 15 - Bayesian Floor Profile And Same-Shadow Baseline
+
+Goal: turn the staged Bayesian Floor Profile into an executable, reusable
+Balance baseline that uses the same shadow observations as SCAN/SEEK/TRACK.
+This is the highest-value next research add because it tests whether the
+confirmed Balance envelope is merely beating weak baselines or is recovering
+most of what a same-information Bayesian controller can extract.
+
+**Gating:** Phase 10 CONFIRM is sufficient to start. Phase 13 and Phase 14 are
+not prerequisites because the floor is a claim-hygiene layer on the existing
+cart-pole workbench. If Phase 13 lands first, run the floor against both the
+Phase 10 sim controller and the hardware-realistic constrained variant, but do
+not mix those tiers in one summary table.
+
+Deliverables:
+
+- `scripts/balance-bayes-floor.mjs`, sharing Balance core dynamics and the
+  existing `sampleShadowSensor` observation path.
+- A mode registry entry for `bayes_floor_shadow_particle` that rejects unknown
+  modes and cannot silently fall back to `sundog_shadow`.
+- Observation-parity and no-state-leak tests proving the floor receives only
+  the admitted `Phi_t` profile.
+- A capped runtime probe that records particles, horizon, cells, seeds,
+  trials/sec, and estimated full-slate wall clock. If the full slate exceeds
+  the repo's inline runtime rule, stage the exact PowerShell commands instead
+  of running it in-session.
+- A regret reducer writing `bayes-regret.csv` and
+  `bayes-regret-summary.csv` under
+  `results/balance/phase15-bayesian-floor/`.
+- A short negative-result branch documenting what changes if the floor
+  dominates, ties, or fails the shadow controller.
+
+Public data products, only after the gates pass:
+
+- `public/data/balance-bayesian-floor-profile.json`
+- `public/data/balance-bayesian-floor-summary.json`
+- `public/data/balance-observability-fibers.json`
+
+Exit criterion: a complete regret summary across the repaired Phase 10 cell
+slate, or a documented runtime-gated staged-command package with enough capped
+measurements to estimate the full run. The public claim is promoted only if the
+floor itself passes sanity and no-leak gates.
+
+### Phase 16 - Balance Data Surfaces And Claim Ratchet
+
+Goal: convert the Balance evidence into richer public surfaces so the site can
+show not just that Balance confirmed, but where, why, against what baselines,
+and under which claim boundary.
+
+**Gating:** Phase 10 CONFIRM is already enough for the first data-surface pass.
+Bayesian-floor fields remain hidden or marked `pending` until Phase 15 earns
+receipts. Phase 13 and Phase 14 add optional columns rather than blocking the
+core Balance surface.
+
+Deliverables:
+
+- A public Balance data bundle that reduces Phase 10, Phase 11, and Phase 15
+  receipts into cell-level JSON: preset, light geometry, delay/noise/dropout,
+  controller, survival, verdict, boundary reason, and artifact links.
+- A claim-card data shape with explicit tiers: current Phase 10 claim, optional
+  same-shadow Bayesian-floor claim, optional hardware-realistic sim claim, and
+  optional sibling-plant pattern claim.
+- A `balance.html` evidence panel that can render the operating-envelope map,
+  best/worst replay selectors, raw artifact links, and a Bayesian-floor regret
+  strip when Phase 15 data exists.
+- A compact `docs/APPLICATIONS.md` refresh that links the richer Balance data
+  instead of relying only on prose.
+- A gallery/poster refresh that can use the richer claim-card data without
+  expanding the claim language by hand.
+
+Claim ladder:
+
+- Baseline live claim: Balance maintains and recovers from shadow-derived
+  projection signals inside a mapped lighting and delay envelope, and fails
+  cleanly outside it.
+- If Phase 15 passes and `sundog_shadow` tracks the same-shadow floor: Balance
+  recovers most of the actionable information available from the admitted
+  shadow observation inside the mapped envelope.
+- If Phase 15 shows the floor dominates: Balance remains a confirmed
+  operating-envelope workbench, but the site must avoid any near-optimality or
+  floor-adjacent language.
+- If Phase 13 passes: add "hardware-realistic constraints in simulation" as a
+  separate tier.
+- If Phase 14 passes on sibling plants: add the pattern claim as a meta-row,
+  not as a replacement for the cart-pole row.
+
+Exit criterion: a public Balance evidence surface where each visible claim is
+backed by a machine-readable receipt path, and missing future tiers are visibly
+absent rather than implied.
 
 ## Claim Boundary
 

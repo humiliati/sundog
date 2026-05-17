@@ -577,6 +577,128 @@ Solo pass, 2026-05-16:
   `200px` plus shared `12rem` min-height to a responsive clamp so the mobile
   stack is less slabby while the real evidence panels are created.
 
+### 7c. Homepage elevator pitch and hero explanation pass
+
+**Solo status:** roadmap, copy compression, stable glossary IDs, and HaloSim
+thumbnail promotion are soloable. Using third-party calibration photographs as
+public margin art requires an attribution / reuse check first.
+
+Problem:
+
+The homepage elevator pitch is doing too much at once. It is a four-paragraph
+claim block, it leans on terms like "circumzenithal" before the reader has a
+visual grip on them, and it uses punctuation that makes the prose feel more
+academic than readable. The hero also now renders as a static atlas snapshot;
+it no longer teaches the old phase sequence directly, so readers need nearby
+cards that explain what the hero means optically, physically, and
+application-wise.
+
+Scope:
+
+- `index.html`
+- `legend.html`
+- `sundog.html`
+- `docs/WEBSITE_DEVELOPMENT.md`
+- `public/media/`
+- `public/data/`
+- `docs/calibration/33.webp`
+- `docs/calibration/halosim_outputs/hs0_spike/`
+- `docs/calibration/halosim_outputs/phase14e/`
+
+Pitch v2 contract:
+
+- Compress the pitch into a hook plus three scannable blocks: optics,
+  hidden-state inference, and applications.
+- Keep each public paragraph short enough to scan on mobile; no large
+  uninterrupted prose wall.
+- Strip most em dash characters from the public pitch. Use shorter sentences,
+  commas, colons, or parentheses instead.
+- Put hard halo vocabulary behind plain-language phrasing. The reader should
+  understand "high smile-shaped arc" before seeing "circumzenithal arc."
+- Keep the audit hedge and claim-map discipline intact; do not strengthen the
+  substrate-coincidence claim just because the copy gets shorter.
+
+Glossary / hover contract:
+
+- Add stable IDs to the relevant `legend.html` phenomenon cards so terms can
+  link somewhere exact.
+- Add a small glossary source, likely `public/data/halo-glossary.json`, with
+  term, plain definition, and target URL.
+- Implement definitions as accessible links or focusable popovers. Hover can
+  help desktop readers, but mobile tap and keyboard focus must work.
+- First terms to wire: `parhelion`, `circumzenithal arc`,
+  `circumhorizon arc`, `tangent arc`, `parhelic circle`, `22 deg halo`, and
+  `46 deg halo`.
+
+Margin image contract:
+
+- Promote curated images into `public/media/` with launch-safe names such as
+  `elevator-halosim-cza.png`, `elevator-halosim-parhelia.png`, or
+  `elevator-sundog-photo-33.webp`.
+- Prefer HaloSim-generated receipts for the first pass because they are
+  project-created and already tied to the geometry audit trail.
+- Treat `docs/calibration/33.webp` as visually promising but attribution-gated.
+  Do not make it homepage art until credit and reuse status are clear.
+- On desktop, images can sit in the pitch margins. On mobile, collapse them
+  into a short inline strip or one selected image so the pitch does not become
+  a gallery.
+
+Hero phase-card contract:
+
+- Do not imply the hero is drawing in real time unless the real-time animation
+  is rebuilt.
+- Add a compact card trio near the hero or immediately after it:
+
+  | card | reader question | link trail |
+  | --- | --- | --- |
+  | Optics | What am I seeing in the sky? | `sundog.html`, `legend.html` |
+  | Physics | What geometry fixes the arcs? | calibration/accounting docs |
+  | Applications | Why does this matter beyond halos? | motion rail / workbenches |
+
+- These cards should explain the static hero scene in three registers, not
+  duplicate the theorem grid or the motion rail.
+
+Steps:
+
+1. Add stable `id` anchors to the core `legend.html` phenomenon cards.
+2. Draft `public/data/halo-glossary.json` and one small accessible term-link
+   primitive.
+3. Promote two HaloSim thumbnails into `public/media/` and wire them into a
+   margin/inline visual treatment for the pitch.
+4. Rewrite the pitch to v1.2: shorter, mostly no em dash characters, simpler
+   vocabulary first, same audit boundary.
+5. Add the three hero explanation cards and link them to inspection surfaces.
+6. Run the chat claim-map checks because this is a positioning edit.
+
+Checks:
+
+```powershell
+rg -n "$([char]0x2014)|&mdash;|circumzenithal|circumhorizon|Phase [0-9]+|phase [0-9]+" index.html
+npm run build
+npm run chat:eval:static
+npm run chat:eval:phase3
+npm run chat:eval:phase3:adversarial
+npm run chat:eval:phase3:differential
+npm run chat:eval:phase4
+```
+
+Then screenshot:
+
+- 390 px homepage top through the elevator pitch;
+- 520 px homepage top through the elevator pitch;
+- 1280 px desktop top through the elevator pitch;
+- one keyboard-focus pass over glossary terms.
+
+Exit:
+
+- The pitch is no longer a large block of text.
+- Specialist halo words are either avoided, defined inline, or linked to a
+  relevant atlas/legend target.
+- The homepage has at least one real sundog / HaloSim image near the pitch with
+  a clear provenance trail.
+- The static hero has explanatory cards that say what it means optically, what
+  it means physically, and why it matters for applications.
+
 ## P2 - After The First Wave
 
 These are good follow-through once the initial public statement is out.
