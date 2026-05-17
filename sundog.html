@@ -142,6 +142,48 @@
         .page-section a {
             color: var(--accent-gold);
         }
+        .glossary-link {
+            position: relative;
+            color: var(--accent-gold);
+            font-weight: 800;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 0.2em;
+        }
+        .glossary-link::after {
+            content: attr(data-definition);
+            display: none;
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 0.65rem);
+            z-index: 40;
+            width: min(19rem, calc(100vw - 2rem));
+            padding: 0.7rem 0.8rem;
+            color: var(--text-light);
+            background: rgba(7, 18, 28, 0.97);
+            border: 1px solid rgba(244, 196, 48, 0.34);
+            border-radius: 6px;
+            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.34);
+            font-family: var(--sd-font-body);
+            font-size: 0.78rem;
+            font-weight: 700;
+            line-height: 1.45;
+            white-space: normal;
+            pointer-events: none;
+            text-decoration: none;
+            text-shadow: none;
+            transform: translate(-50%, 0.35rem);
+        }
+        .glossary-link:hover::after,
+        .glossary-link:focus-visible::after {
+            display: block;
+            transform: translate(-50%, 0);
+        }
+        .glossary-link:focus-visible {
+            outline: 2px solid rgba(244, 196, 48, 0.64);
+            outline-offset: 0.18rem;
+        }
 
         /* ---------- hero / workbench ---------------------------------------- */
 
@@ -167,11 +209,12 @@
         }
         .stage-copy {
             position: absolute;
-            top: 1.5rem;
+            top: clamp(1.2rem, 3vw, 2.4rem);
             left: 2rem;
             z-index: 5;
-            width: min(560px, calc(100% - 4rem));
+            width: min(620px, calc(100% - 4rem));
             pointer-events: none;
+            text-shadow: 0 2px 18px rgba(0, 0, 0, 0.42);
         }
         .stage-copy .eyebrow {
             color: var(--accent-gold);
@@ -191,8 +234,51 @@
         .stage-copy p {
             color: rgba(245, 245, 245, 0.78);
             font-size: 0.98rem;
+            line-height: 1.62;
             max-width: 38rem;
             margin-bottom: 0.9rem;
+        }
+        .stage-copy a {
+            pointer-events: auto;
+            color: var(--accent-gold);
+            text-underline-offset: 0.18em;
+        }
+        .stage-copy .glossary-link::after {
+            left: 0;
+            top: calc(100% + 0.65rem);
+            bottom: auto;
+            transform: translate(0, -0.25rem);
+        }
+        .stage-copy .glossary-link:hover::after,
+        .stage-copy .glossary-link:focus-visible::after {
+            transform: translate(0, 0);
+        }
+        .stage-status {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin: 0.35rem 0 0.95rem;
+            pointer-events: auto;
+        }
+        .stage-status span {
+            display: inline-flex;
+            align-items: center;
+            min-height: 1.85rem;
+            padding: 0.25rem 0.55rem;
+            color: rgba(245, 245, 245, 0.82);
+            background: rgba(11, 23, 32, 0.46);
+            border: 1px solid rgba(244, 196, 48, 0.26);
+            border-radius: 4px;
+            backdrop-filter: blur(8px);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        .stage-status strong {
+            color: var(--accent-gold);
+            font-weight: 900;
+            margin-right: 0.28rem;
         }
         .stage-cta {
             display: flex;
@@ -500,6 +586,10 @@
             font-weight: 800;
             font-size: 0.82rem;
             margin-top: 0.7rem;
+        }
+        .photo-key dt .glossary-link,
+        .atlas-card h3 .glossary-link {
+            color: inherit;
         }
         .photo-key dt:first-child { margin-top: 0; }
         .photo-key dd {
@@ -883,6 +973,12 @@
                 grid-template-columns: 1fr;
             }
         }
+        @media (max-width: 560px) {
+            .stage-copy h1 { font-size: clamp(2rem, 12vw, 3rem); }
+            .stage-copy p { font-size: 0.9rem; }
+            .stage-status span { font-size: 0.66rem; }
+            .glossary-link::after { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -891,9 +987,8 @@
             <a href="index.html" class="site-brand">Sundog</a>
             <div class="site-links">
                 <a href="about.html">About</a>
+                <a href="sundog.html" aria-current="page">Atlas</a>
                 <a href="applications-gallery.html">Applications</a>
-                <a href="mesa.html">Mesa</a>
-                <a href="sundog.html" aria-current="page">Sundog</a>
                 <a href="legend.html">Legend</a>
                 <a href="docs/">Docs</a>
                 <a href="https://github.com/humiliati/sundog">GitHub</a>
@@ -992,10 +1087,15 @@
             <div class="atmosphere" aria-hidden="true"></div>
 
             <div class="stage-copy">
-                <div class="eyebrow">Sundog · Atmospheric Optics</div>
-                <h1>A sun dog is geometry doing optics.</h1>
+                <div class="eyebrow">Sundog Atlas · Atmospheric Optics</div>
+                <h1>A sundog is geometry doing optics.</h1>
                 <p class="lit-attribution" style="font-size: 0.85rem; color: rgba(245, 245, 245, 0.66); margin-bottom: 0.5rem;">Geometry follows Greenler (1980) and Tape (1994); see <a href="#history">History &amp; reading</a> for citations.</p>
-                <p>Every visible arc you see in a sundog photograph is the upper slice of a complete circle in the sky. Move the sliders, watch the math draw the eye. Or scroll on for the explainer.</p>
+                <p>Every visible arc in a <a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog: a bright spot beside the sun, also called a parhelion">sundog</a> photograph is a slice of a complete circle. The live atlas keeps the physics visible: the <a class="glossary-link" href="legend.html#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degree halo: the common halo radius used as the atlas scale reference">22° halo</a> for scale, <a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="The paired sundog spots on the parhelic circle. Their offset follows R₂₂ / cos(h) in the promoted inverse." aria-label="parhelia: paired sundog spots on the parhelic circle">parhelia</a> for the inverse, and boundary-gated arcs such as the <a class="glossary-link" href="legend.html#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="CZA: the high smile-shaped circumzenithal arc">CZA</a> and <a class="glossary-link" href="legend.html#phenomenon-upper-tangent-arc" data-definition="A column-crystal arc near the 22° halo. The tangent-arc route is vocabulary here, not a promoted inverse handle." aria-label="upper tangent arc: a column-crystal arc near the 22 degree halo">upper tangent arc</a>.</p>
+                <div class="stage-status" aria-label="Current atlas posture">
+                    <span><strong>Live</strong> geometry</span>
+                    <span><strong>Promoted</strong> R₂₂ / cos(h)</span>
+                    <span><strong>Gated</strong> CZA + tangent arcs</span>
+                </div>
                 <div class="stage-cta">
                     <a href="#why-22" class="is-primary">Why 22°?</a>
                     <a href="#try-your-photo">Try your photo</a>
@@ -1157,7 +1257,7 @@
             <div class="eyebrow">§2 · What you're looking at</div>
             <h2>Every bright feature has a name.</h2>
             <p class="lead">
-                When you photograph a sundog you don't see one phenomenon; you see a stack of them. The bright spots at the sun's left and right are the <em>parhelia</em>. The white ring around the sun is the <em>22° halo</em>. The colorful arc near the top of the sky is the <em>circumzenithal arc</em>. The vertical light shaft is the <em>sun pillar</em>. Each is its own geometric primitive — its own complete circle in the sky — and the sundog is what happens when several show up at once.
+                When you photograph a <a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog: a bright spot beside the sun, also called a parhelion">sundog</a> you don't see one phenomenon; you see a stack of them. The bright spots at the sun's left and right are the <a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="The paired sundog spots on the parhelic circle. Their offset follows R₂₂ / cos(h) in the promoted inverse." aria-label="parhelia: paired sundog spots on the parhelic circle">parhelia</a>. The white ring around the sun is the <a class="glossary-link" href="legend.html#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degree halo: the common halo radius used as the atlas scale reference">22° halo</a>. The colorful arc near the top of the sky is the <a class="glossary-link" href="legend.html#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="circumzenithal arc: the high smile-shaped arc above the sun">circumzenithal arc</a>. The vertical light shaft is the <span class="glossary-link" role="term" tabindex="0" data-definition="A vertical reflection column from horizontally oriented plate crystals. Rendered here as vocabulary, not as a promoted inverse handle." aria-label="sun pillar: a vertical reflection column from plate crystals">sun pillar</span>. Each is its own geometric primitive: its own complete circle in the sky, and the sundog is what happens when several show up at once.
             </p>
 
             <div class="photo-grid">
@@ -1167,19 +1267,19 @@
                 </figure>
 
                 <dl class="photo-key">
-                    <dt>22° halo</dt>
+                    <dt><a class="glossary-link" href="legend.html#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degree halo: the common halo radius used as the atlas scale reference">22° halo</a></dt>
                     <dd>Tight ring around the sun. Most commonly seen alone.</dd>
-                    <dt>46° halo</dt>
+                    <dt><a class="glossary-link" href="legend.html#phenomenon-46-degree-halo" data-definition="A larger, fainter ring used as context for upper-arc geometry. It is not the promoted inverse handle." aria-label="46 degree halo: a larger faint ring used as context">46° halo</a></dt>
                     <dd>Larger faint ring, roughly twice the 22° halo's radius.</dd>
-                    <dt>Sundog / parhelion</dt>
+                    <dt><a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog slash parhelion: a bright spot beside the sun">Sundog / parhelion</a></dt>
                     <dd>Bright spot on the parhelic circle at the sun's altitude, just outside the 22° halo.</dd>
-                    <dt>Parhelic circle</dt>
+                    <dt><a class="glossary-link" href="legend.html#phenomenon-parhelic-circle" data-definition="A horizontal great circle through the sun and parhelia. It is shown as structure, not promoted as the inverse route." aria-label="parhelic circle: a horizontal great circle through the sun and parhelia">Parhelic circle</a></dt>
                     <dd>Horizontal great circle through the sun. Looks roughly horizontal in a photo.</dd>
-                    <dt>Circumzenithal arc (CZA)</dt>
+                    <dt><a class="glossary-link" href="legend.html#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="circumzenithal arc: the high smile-shaped arc above the sun">Circumzenithal arc (CZA)</a></dt>
                     <dd>Colorful "smile" near the zenith, tangent to the 46° halo at its top.</dd>
                     <dt>Supralateral arc</dt>
                     <dd>Less common arc tangent to the 46° halo, just outside the CZA.</dd>
-                    <dt>Upper tangent arc</dt>
+                    <dt><a class="glossary-link" href="legend.html#phenomenon-upper-tangent-arc" data-definition="A column-crystal arc near the 22° halo. The tangent-arc route is vocabulary here, not a promoted inverse handle." aria-label="upper tangent arc: a column-crystal arc near the 22 degree halo">Upper tangent arc</a></dt>
                     <dd>"Eyelid" tangent to the 22° halo's top, from column-oriented crystals.</dd>
                     <dt>Suncave Parry arc</dt>
                     <dd>Parry-orientation cousin of the upper tangent, nested inside it.</dd>
@@ -1198,7 +1298,7 @@
             <div class="eyebrow">§3 · The physics</div>
             <h2>Why do the bright spots sit at 22° from the sun?</h2>
             <p class="lead">
-                Sundogs form when sunlight refracts through hexagonal ice crystals — tiny six-sided columns or plates falling through high cirrus clouds. A light ray entering one face of a hexagonal column and exiting an adjacent face traverses a 60° prism. The minimum-deviation angle of that prism for visible light in ice is — by refraction-index calculation — almost exactly <strong>22°</strong>. So most refracted light bunches up at 22° from the source. To an observer, that's a bright spot 22° away from the sun.
+                <a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundogs: bright spots beside the sun">Sundogs</a> form when sunlight refracts through hexagonal ice crystals: tiny six-sided columns or plates falling through high cirrus clouds. A light ray entering one face of a hexagonal column and exiting an adjacent face traverses a 60° prism. The minimum-deviation angle of that prism for visible light in ice is almost exactly <strong>22°</strong>. So most refracted light bunches up at <a class="glossary-link" href="legend.html#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degrees: the common halo radius used as the atlas scale reference">22°</a> from the source. To an observer, that's a bright spot 22° away from the sun.
             </p>
 
             <div class="crystal-grid">
@@ -1255,10 +1355,10 @@
                         The two crystal families that matter for the most common arcs:
                     </p>
                     <p>
-                        <strong style="color: var(--accent-gold);">Plate-oriented hexagonal crystals</strong> — flat hexagonal disks falling with their flat face horizontal. Light entering a side face and exiting the bottom face passes through a 90° prism, producing the <em>46° halo</em> and the <em>circumzenithal arc</em>.
+                        <strong style="color: var(--accent-gold);">Plate-oriented hexagonal crystals</strong> — flat hexagonal disks falling with their flat face horizontal. Light entering a side face and exiting the bottom face passes through a 90° prism, producing the <a class="glossary-link" href="legend.html#phenomenon-46-degree-halo" data-definition="A larger, fainter ring used as context for upper-arc geometry. It is not the promoted inverse handle." aria-label="46 degree halo: a larger faint ring used as context">46° halo</a> and the <a class="glossary-link" href="legend.html#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="circumzenithal arc: the high smile-shaped arc above the sun">circumzenithal arc</a>.
                     </p>
                     <p>
-                        <strong style="color: var(--accent-gold);">Column-oriented hexagonal crystals</strong> — hexagonal columns with their long axis horizontal. Light entering one side face and exiting the adjacent side face passes through a 60° prism, producing the <em>22° halo</em>, the <em>parhelia</em>, and the <em>upper tangent arc</em>.
+                        <strong style="color: var(--accent-gold);">Column-oriented hexagonal crystals</strong> — hexagonal columns with their long axis horizontal. Light entering one side face and exiting the adjacent side face passes through a 60° prism, producing the <a class="glossary-link" href="legend.html#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degree halo: the common halo radius used as the atlas scale reference">22° halo</a>, the <a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="The paired sundog spots on the parhelic circle. Their offset follows R₂₂ / cos(h) in the promoted inverse." aria-label="parhelia: paired sundog spots on the parhelic circle">parhelia</a>, and the <a class="glossary-link" href="legend.html#phenomenon-upper-tangent-arc" data-definition="A column-crystal arc near the 22° halo. The tangent-arc route is vocabulary here, not a promoted inverse handle." aria-label="upper tangent arc: a column-crystal arc near the 22 degree halo">upper tangent arc</a>.
                     </p>
                     <p style="font-size: 0.86rem; color: rgba(245,245,245,0.62);">
                         Sources: Greenler, <em>Rainbows, Halos, and Glories</em> (1980), Ch. 2–4. Tape, <em>Atmospheric Halos</em> (1994). Cowley, <a href="https://atoptics.co.uk/halo/circ1.htm" rel="external">atoptics.co.uk</a>.
@@ -1276,13 +1376,13 @@
             <div class="eyebrow">§4 · Sun altitude</div>
             <h2>When the sun rises, the parhelia slide outward.</h2>
             <p class="lead">
-                The 22° angle is measured along the <em>shortest path</em> on the celestial sphere — the great-circle distance from the sun. But the parhelion sits on the <em>parhelic circle</em>, which is horizontal through the sun. Those two are the same thing only when the sun is on the horizon. When the sun rises, the parhelic-circle azimuthal offset has to grow to keep the actual angle from the sun at 22°. The exact relationship is
+                The <a class="glossary-link" href="legend.html#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degree angle: the common halo radius used as the atlas scale reference">22° angle</a> is measured along the <em>shortest path</em> on the celestial sphere: the great-circle distance from the sun. But the <a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="parhelion: a bright spot beside the sun">parhelion</a> sits on the <a class="glossary-link" href="legend.html#phenomenon-parhelic-circle" data-definition="A horizontal great circle through the sun and parhelia. It is shown as structure, not promoted as the inverse route." aria-label="parhelic circle: a horizontal great circle through the sun and parhelia">parhelic circle</a>, which is horizontal through the sun. Those two are the same thing only when the sun is on the horizon. When the sun rises, the parhelic-circle azimuthal offset has to grow to keep the actual angle from the sun at 22°. The exact relationship is
             </p>
             <p style="text-align: center; font-family: var(--sd-font-data); font-size: 1.15rem; color: var(--accent-gold);">
                 parhelion offset = R₂₂ / cos(h)
             </p>
             <p>
-                where R₂₂ is the apparent 22° halo radius and h is the sun's altitude. This is one of those rare cases where you can read the sun's altitude directly from a photograph, with no metadata and no instruments — just measure where the parhelion sits, divide.
+                where R₂₂ is the apparent 22° halo radius and h is the sun's altitude. This is one of those rare cases where you can read the sun's altitude directly from a photograph, with no metadata and no instruments: just measure where the parhelion sits, divide.
             </p>
 
             <div class="demo-card" aria-label="Sun altitude binding live demo">
@@ -1322,18 +1422,18 @@
             </p>
 
             <div class="atlas-walkthrough">
-                <div class="atlas-card"><h3>22° halo</h3><p>The bright ring around the sun. The most common halo phenomenon. Refraction through 60° prism in column-oriented hexagonal ice crystals.</p><span class="construct">circle (sun, R₂₂)</span></div>
-                <div class="atlas-card"><h3>46° halo</h3><p>Larger faint ring, roughly twice the 22° halo's radius. Refraction through 90° prism in plate-oriented crystals.</p><span class="construct">circle (sun, 2·R₂₂)</span></div>
-                <div class="atlas-card"><h3>Sundog / parhelion</h3><p>Bright spot on the parhelic circle just outside the 22° halo. Offset grows with sun altitude as R₂₂/cos(h).</p><span class="construct">point on parhelic ∩ 22°-cone</span></div>
-                <div class="atlas-card"><h3>Parhelic circle</h3><p>Horizontal great circle through the sun, carrying the parhelia. The atlas draws the unique circle through both parhelia and the sun.</p><span class="construct">circle through (sun, L-parhelion, R-parhelion)</span></div>
-                <div class="atlas-card"><h3>Circumzenithal arc (CZA)</h3><p>"Smile" near the zenith, colored like an inverted rainbow. Always tangent to the 46° halo at its top.</p><span class="construct">circle tangent to 46° halo at its top point</span></div>
-                <div class="atlas-card"><h3>Supralateral arc</h3><p>Tangent to the 46° halo just outside the CZA, curving away from the sun. Less common than the CZA.</p><span class="construct">circle tangent to 46° halo, sun-side</span></div>
-                <div class="atlas-card"><h3>Upper tangent arc</h3><p>"Eyelid" above the 22° halo's top. Forms in column-oriented crystals. Visually nests near the suncave Parry arc.</p><span class="construct">circle tangent to 22° halo at top</span></div>
-                <div class="atlas-card"><h3>Suncave Parry arc</h3><p>Parry-orientation companion above the upper tangent. Shoulders bend back toward the sun ("suncave" = concave-toward-sun).</p><span class="construct">tighter circle tangent to 22° halo at top</span></div>
-                <div class="atlas-card"><h3>Lower tangent arc</h3><p>Mirror of the upper tangent at the 22° halo's bottom. Only visible when the sun is high enough that the bottom of the halo isn't below the horizon.</p><span class="construct">circle tangent to 22° halo at bottom</span></div>
-                <div class="atlas-card"><h3>Parry supralateral arc</h3><p>Parry-orientation flanking shoulders near the supralateral. Optional vocabulary in the atlas.</p><span class="construct">mirror-image arcs along the 46° halo top</span></div>
-                <div class="atlas-card"><h3>Infralateral arcs</h3><p>Lower-half mirror of the supralateral. Tangent to the 46° halo's bottom region.</p><span class="construct">circle tangent to 46° halo bottom</span></div>
-                <div class="atlas-card"><h3>Sun pillar</h3><p>Vertical light column above and below the sun, from horizontally-floating ice plates. Rendered in the atlas as the vesica between two virtual halos centered at the parhelia.</p><span class="construct">vesica (left-parhelion-halo, right-parhelion-halo)</span></div>
+                <div class="atlas-card"><h3><a class="glossary-link" href="legend.html#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degree halo: the common halo radius used as the atlas scale reference">22° halo</a></h3><p>The bright ring around the sun. The most common halo phenomenon. Refraction through 60° prism in column-oriented hexagonal ice crystals.</p><span class="construct">circle (sun, R₂₂)</span></div>
+                <div class="atlas-card"><h3><a class="glossary-link" href="legend.html#phenomenon-46-degree-halo" data-definition="A larger, fainter ring used as context for upper-arc geometry. It is not the promoted inverse handle." aria-label="46 degree halo: a larger faint ring used as context">46° halo</a></h3><p>Larger faint ring, roughly twice the 22° halo's radius. Refraction through 90° prism in plate-oriented crystals.</p><span class="construct">circle (sun, 2·R₂₂)</span></div>
+                <div class="atlas-card"><h3><a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog slash parhelion: a bright spot beside the sun">Sundog / parhelion</a></h3><p>Bright spot on the parhelic circle just outside the 22° halo. Offset grows with sun altitude as R₂₂/cos(h).</p><span class="construct">point on parhelic ∩ 22°-cone</span></div>
+                <div class="atlas-card"><h3><a class="glossary-link" href="legend.html#phenomenon-parhelic-circle" data-definition="A horizontal great circle through the sun and parhelia. It is shown as structure, not promoted as the inverse route." aria-label="parhelic circle: a horizontal great circle through the sun and parhelia">Parhelic circle</a></h3><p>Horizontal great circle through the sun, carrying the parhelia. The atlas draws the unique circle through both parhelia and the sun.</p><span class="construct">circle through (sun, L-parhelion, R-parhelion)</span></div>
+                <div class="atlas-card"><h3><a class="glossary-link" href="legend.html#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="circumzenithal arc: the high smile-shaped arc above the sun">Circumzenithal arc (CZA)</a></h3><p>"Smile" near the zenith, colored like an inverted rainbow. Always tangent to the 46° halo at its top.</p><span class="construct">circle tangent to 46° halo at its top point</span></div>
+                <div class="atlas-card"><h3><a class="glossary-link" href="legend.html#phenomenon-supralateral-arc" data-definition="An upper 46°-family arc just outside the CZA. Kept as vocabulary until coverage and detection gates support promotion." aria-label="supralateral arc: an upper 46 degree family arc">Supralateral arc</a></h3><p>Tangent to the 46° halo just outside the CZA, curving away from the sun. Less common than the CZA.</p><span class="construct">circle tangent to 46° halo, sun-side</span></div>
+                <div class="atlas-card"><h3><a class="glossary-link" href="legend.html#phenomenon-upper-tangent-arc" data-definition="A column-crystal arc near the 22° halo. The tangent-arc route is vocabulary here, not a promoted inverse handle." aria-label="upper tangent arc: a column-crystal arc near the 22 degree halo">Upper tangent arc</a></h3><p>"Eyelid" above the 22° halo's top. Forms in column-oriented crystals. Visually nests near the suncave Parry arc.</p><span class="construct">circle tangent to 22° halo at top</span></div>
+                <div class="atlas-card"><h3><a class="glossary-link" href="legend.html#phenomenon-suncave-parry-arc" data-definition="A Parry-family cap near the upper tangent arc. It is optional vocabulary with weak photo support." aria-label="suncave Parry arc: a Parry-family cap near the upper tangent arc">Suncave Parry arc</a></h3><p>Parry-orientation companion above the upper tangent. Shoulders bend back toward the sun ("suncave" = concave-toward-sun).</p><span class="construct">tighter circle tangent to 22° halo at top</span></div>
+                <div class="atlas-card"><h3><a class="glossary-link" href="legend.html#phenomenon-lower-tangent-arc" data-definition="The lower counterpart of the upper tangent arc. Visibility depends on the bottom of the 22° halo clearing the horizon." aria-label="lower tangent arc: the lower counterpart of the upper tangent arc">Lower tangent arc</a></h3><p>Mirror of the upper tangent at the 22° halo's bottom. Only visible when the sun is high enough that the bottom of the halo isn't below the horizon.</p><span class="construct">circle tangent to 22° halo at bottom</span></div>
+                <div class="atlas-card"><h3><span class="glossary-link" role="term" tabindex="0" data-definition="Parry-family shoulders near the 46° top region. Coverage and weak evidence blocked promotion." aria-label="Parry supralateral arc: Parry-family shoulders near the 46 degree top region">Parry supralateral arc</span></h3><p>Parry-orientation flanking shoulders near the supralateral. Optional vocabulary in the atlas.</p><span class="construct">mirror-image arcs along the 46° halo top</span></div>
+                <div class="atlas-card"><h3><span class="glossary-link" role="term" tabindex="0" data-definition="Lower-half 46°-family arcs. Present as vocabulary here because the photographed coverage does not support promotion." aria-label="infralateral arcs: lower-half 46 degree family arcs">Infralateral arcs</span></h3><p>Lower-half mirror of the supralateral. Tangent to the 46° halo's bottom region.</p><span class="construct">circle tangent to 46° halo bottom</span></div>
+                <div class="atlas-card"><h3><span class="glossary-link" role="term" tabindex="0" data-definition="A vertical reflection column from horizontally oriented plate crystals. Rendered here as vocabulary, not as a promoted inverse handle." aria-label="sun pillar: a vertical reflection column from plate crystals">Sun pillar</span></h3><p>Vertical light column above and below the sun, from horizontally-floating ice plates. Rendered in the atlas as the vesica between two virtual halos centered at the parhelia.</p><span class="construct">vesica (left-parhelion-halo, right-parhelion-halo)</span></div>
             </div>
 
             <h3 class="vocab-heading">Named in the literature, beyond the rendered set</h3>
