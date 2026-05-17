@@ -867,3 +867,74 @@ and measurement). Cut-3 admission HOLD; execution HELD;
 Public-Language Constraint in force; H0-B negative side on real frames
 remains OPEN. Justification: closes §6.2 of the schema's landing order
 with §3 anti-self-seal applied at the aggregator layer.
+
+**2026-05-16 (PT) — maintainer. Optional H0 measurement-helper tool
+filed (convenience UX for §6.3 / §6.4).** Single-file HTML/canvas
+measurement helper at `tools/h0-measurement/index.html` (SHA-256
+`7e9f279e41d11780af58ce98a47c7990e01c59884b38f48343a21f9c83a52d77`).
+UX inspired by the constellation-tracer style: load a halo PNG → click
+sun center → drag radial line to 22° → click → drag to 46° → click →
+download §2-A-conformant sidecar with live `calib_sha256` self-pin.
+Both `fit2locus` (clicks at 22°/46°) and `scale_ticks` (per-tick click
+with degree label) modes supported. **§3-blind structurally**: the tool
+does NOT import the checker, does NOT call the predicate, does NOT
+display admit/reason_code; its only output is the measured sidecar.
+**Public-Language Constraint disclosure baked into the in-page
+header** — "No theorem claim. H0 is measurement hygiene." Lives under
+`tools/` (outside `dist/` deploy path); promotion to `public/` for a
+public demo would be a separate filed decision. Optional convenience
+artifact only — operators can use manual JSON authoring instead and
+nothing changes. No frozen schema rule affected; Cut-3 admission HOLD;
+execution HELD; nothing run. Filed alongside the schema audit-notes on
+[`P2_CUT3_H0_2_SCHEMA.md`](P2_CUT3_H0_2_SCHEMA.md).
+
+**2026-05-16 (PT) — Critic + maintainer. Finding-1 fix filed:
+cross-runtime canonicalization pinned (shared library + test vector +
+new §0 acceptance criterion).** Append-only filing on
+[`P2_CUT3_H0_2_SCHEMA.md`](P2_CUT3_H0_2_SCHEMA.md) audit-notes.
+Reviewer caught that §2-A's "canonical JSON" prose was underspecified:
+the three existing implementations (Node guard, residual-table
+generator, browser measurement tool) happen to be byte-identical
+algorithms, but only by happy coincidence — a future Node-checker
+re-implementer who wrote `JSON.stringify(obj)` (top-level only, no
+sort) would silently break red-line A's mismatch detector. Pinning
+fix: shared canonicalizer library at `scripts/lib/canonical-json.mjs`
+(SHA `e2e32a03…c730`), cross-runtime test vector at
+`results/structural-failure/cut3-prereg/h0-canonicalization-test-vector.json`
+(canonical-SHA `6cf64a11…80a6`, expected `calib_sha256`
+`9c52ab15d5293341cfd45e52dba615d01b6698ee2c5345f59942e25f711ac8b6`,
+922 UTF-8 bytes), and a new §0 acceptance criterion: **the restored
+Node H0 checker MUST `verifySidecarSelfPin(pinned_sidecar).ok ===
+true`** on the test vector. Cross-runtime parity verified in this
+filing: Node `canonicalize` and browser-tool `canonicalJSON` produce
+byte-identical 922-byte canonical strings and byte-identical sha256
+on the same input. No frozen schema body edited; no value tuned. The
+fix is purely about contracting the existing parity in writing so
+future implementations can't drift unnoticed.
+
+**2026-05-16 (PT) — Critic + maintainer. Finding-2 flag (not a
+revert): `structural-failure.html` at repo root will ship to `dist/`
+via vite's auto-build of root *.html files.** Reviewer audit of recent
+maintainer commits flagged a lane-hygiene observation. Diagnosis:
+`copy-site-docs.mjs`'s `rootPublicArtifacts` is `["README.md",
+"LICENSE", "COPYRIGHT.md", "CITATION.cff"]` and does NOT include
+`structural-failure.html` — so copy-site-docs alone would NOT ship it.
+However, `vite.config.mjs` does `readdirSync(root)` and auto-detects
+EVERY root `.html` as a rollup build entry; this is a separate ship
+path. On the next `npm run build` / `npm run deploy`, vite will build
+and emit `dist/structural-failure.html`. That makes it a public
+surface on the next deploy. Not reverting (per maintainer's explicit
+"flag, not revert" framing — the commit was intentional and not the
+critic's history to rewrite); recorded here so the publication-surface
+implication is visible in the trail. **Discipline suggestion going
+forward (not mandated):** any new root *.html should be filed with
+explicit public-launch intent (file the framing decision, then commit),
+matching the operator-pre-fill discipline that gates other public-
+adjacent moves. C5's guard wraps Cut-2 runs, not maintainer commits,
+so this is not a C5 trip — but the *kind of drift* C5's default-deny
+philosophy was designed to surface is exactly the kind happening here
+via vite auto-detection. Same `scripts/threebody-phase4-regret.mjs`
+threebody-lane file committed alongside H0 work in commit `3351a48`
+is the parallel lane-hygiene observation; both noted for awareness.
+No Cut-3 admission move; no frozen value changed; HOLD/HELD/PLC
+intact.

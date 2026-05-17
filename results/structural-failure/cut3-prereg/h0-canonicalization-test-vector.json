@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "artifact": "h0-canonicalization-test-vector",
+  "purpose": "Cross-runtime canonicalization contract for the H0-2 schema sidecar self-pin. Any implementation of the canonicalization algorithm MUST produce byte-identical canonical_string and calib_sha256 for this input. The Node and browser implementations are required to agree; the restored H0 checker's first acceptance test on a Node-restore is `verifySidecarSelfPin(this_sidecar).ok === true`.",
+  "spec_reference": "docs/prereg/structural-failure-coincidence/P2_CUT3_H0_2_SCHEMA.md (Finding-1 audit-notes, 2026-05-16) and scripts/lib/canonical-json.mjs",
+  "canonicalization_algorithm_summary": "Recursive: arrays as `[v0,v1,...]` in order; objects as `{\"k0\":v0,\"k1\":v1,...}` with keys sorted lexicographically (by JS Object.keys().sort() = UTF-16 code-unit order, byte-equivalent for ASCII keys); leaves via JSON.stringify(value). No whitespace. UTF-8 output. See scripts/lib/canonical-json.mjs for the reference implementation.",
+  "self_pin_convention": "Set sidecar.calib_sha256 = \"\" (empty string, NOT null and NOT absent). canonicalize the result. SHA-256 the UTF-8 bytes. Hex-encode lowercase. Write back to sidecar.calib_sha256.",
+  "input_sidecar": {
+    "sidecar_kind": "h0-measured-sidecar",
+    "frame_id": "test_vector_v1",
+    "schema_version": 1,
+    "frame_path": "test_vector_v1.png",
+    "render_sha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "config_path": null,
+    "config_sha256": null,
+    "measurement_method": "operator_manual",
+    "measured_at_pt": "2026-05-16T00:00:00",
+    "measured_by": "test-vector",
+    "sun_px": [
+      400,
+      400
+    ],
+    "projection": "operator_measured",
+    "theta_map_kind": "fit2locus",
+    "anchors": [
+      {
+        "locus_deg": 22,
+        "px_radius": 200,
+        "off_ruler": false,
+        "measurement_note": "synthetic — 22° anchor at 200 px from sun"
+      },
+      {
+        "locus_deg": 46,
+        "px_radius": 400,
+        "off_ruler": false,
+        "measurement_note": "synthetic — 46° anchor at 400 px from sun (degree symbol)"
+      }
+    ],
+    "scored_feature_deg": 22,
+    "operator_decisions": {
+      "fixture_class": "corpus_candidate",
+      "compound_code_is_h_leak": "no",
+      "compound_code_basis": "test vector; no compound code in filename",
+      "known_pass_selection_basis": null
+    },
+    "calib_sha256": ""
+  },
+  "expected_canonical_string": "{\"anchors\":[{\"locus_deg\":22,\"measurement_note\":\"synthetic — 22° anchor at 200 px from sun\",\"off_ruler\":false,\"px_radius\":200},{\"locus_deg\":46,\"measurement_note\":\"synthetic — 46° anchor at 400 px from sun (degree symbol)\",\"off_ruler\":false,\"px_radius\":400}],\"calib_sha256\":\"\",\"config_path\":null,\"config_sha256\":null,\"frame_id\":\"test_vector_v1\",\"frame_path\":\"test_vector_v1.png\",\"measured_at_pt\":\"2026-05-16T00:00:00\",\"measured_by\":\"test-vector\",\"measurement_method\":\"operator_manual\",\"operator_decisions\":{\"compound_code_basis\":\"test vector; no compound code in filename\",\"compound_code_is_h_leak\":\"no\",\"fixture_class\":\"corpus_candidate\",\"known_pass_selection_basis\":null},\"projection\":\"operator_measured\",\"render_sha256\":\"0000000000000000000000000000000000000000000000000000000000000001\",\"schema_version\":1,\"scored_feature_deg\":22,\"sidecar_kind\":\"h0-measured-sidecar\",\"sun_px\":[400,400],\"theta_map_kind\":\"fit2locus\"}",
+  "expected_canonical_string_byte_length": 922,
+  "expected_calib_sha256": "9c52ab15d5293341cfd45e52dba615d01b6698ee2c5345f59942e25f711ac8b6",
+  "pinned_sidecar_with_calib_sha256": {
+    "sidecar_kind": "h0-measured-sidecar",
+    "frame_id": "test_vector_v1",
+    "schema_version": 1,
+    "frame_path": "test_vector_v1.png",
+    "render_sha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "config_path": null,
+    "config_sha256": null,
+    "measurement_method": "operator_manual",
+    "measured_at_pt": "2026-05-16T00:00:00",
+    "measured_by": "test-vector",
+    "sun_px": [
+      400,
+      400
+    ],
+    "projection": "operator_measured",
+    "theta_map_kind": "fit2locus",
+    "anchors": [
+      {
+        "locus_deg": 22,
+        "px_radius": 200,
+        "off_ruler": false,
+        "measurement_note": "synthetic — 22° anchor at 200 px from sun"
+      },
+      {
+        "locus_deg": 46,
+        "px_radius": 400,
+        "off_ruler": false,
+        "measurement_note": "synthetic — 46° anchor at 400 px from sun (degree symbol)"
+      }
+    ],
+    "scored_feature_deg": 22,
+    "operator_decisions": {
+      "fixture_class": "corpus_candidate",
+      "compound_code_is_h_leak": "no",
+      "compound_code_basis": "test vector; no compound code in filename",
+      "known_pass_selection_basis": null
+    },
+    "calib_sha256": "9c52ab15d5293341cfd45e52dba615d01b6698ee2c5345f59942e25f711ac8b6"
+  },
+  "cross_runtime_consumers": [
+    "scripts/cut2-publication-plumbing-guard.mjs canonicalize() (Node; predates this file but identical algorithm)",
+    "scripts/cut3-h0-residual-table.mjs canonicalJSON() (Node; predates this file but identical algorithm)",
+    "tools/h0-measurement/index.html canonicalJSON() (browser; inline copy of identical algorithm)",
+    "scripts/cut3-h0-checker.mjs (when restored to canonical path; MUST adopt scripts/lib/canonical-json.mjs)"
+  ],
+  "s0_acceptance_criterion": "The restored Node H0 checker (P2_CUT3_H0_CALIBRATION.md §0/C1 follow-up) MUST pass: import { verifySidecarSelfPin } from scripts/lib/canonical-json.mjs; verifySidecarSelfPin(pinned_sidecar_with_calib_sha256).ok === true. If it does not, red-line A's primary mismatch detector is broken at the canonicalization layer and Cut-3 stays blocked."
+}
