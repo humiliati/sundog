@@ -198,7 +198,7 @@ is decisive.
 
 Phase 10 slate-loader smoke: `npm run mines:phase12:phase10-slate:smoke` loads
 `cell-manifest.csv` plus `cell-class-map.csv` from the Phase 10 envelope,
-limits to 3 cells, and ran 6 trials in 0.171 s with no-leak audit pass. This
+limits to 3 cells, and ran 6 trials in 0.142 s with no-leak audit pass. This
 proves the runner can move beyond the best/worst pocket without changing the
 Bayes observation contract.
 
@@ -1216,7 +1216,7 @@ Phase 12.0 implementation order:
    same-field sensor policy and pressure-evidence action guard)*
 6. **Baseline repair and staged lock.** Repair the first posterior until the
    easy-cell sanity gate passes, then measure trials/sec on the capped smoke.
-   *(pressure lane repaired; 96-trial pocket probe ran in 1.137 s)* If the
+   *(pressure lane repaired; 96-trial pocket probe ran in 1.158 s)* If the
    Phase 10-equivalent slate exceeds the repo inline-runtime rule, stage the
    exact PowerShell commands and wall-clock estimate instead of running it
    in-session.
@@ -1271,8 +1271,8 @@ Equivalent direct command:
 node scripts/mines-bayes-baseline.mjs --phase phase12-bayes-pocket-probe --out results/mines/phase12-bayes-pocket-probe --cell-slate phase10-best-worst --phase10-out results/mines/phase10-envelope --modes naive_pressure,sundog_minimal,sundog_lean,bayes_frontier_pressure,bayes_frontier_full,oracle_safe --seeds 8 --particle-count 128 --turn-cap 160
 ```
 
-First repaired smoke receipt (2026-05-17): 20 trials in 0.222 s
-(90.09 trials/sec), no-leak audit pass, artifacts written to
+First repaired smoke receipt (2026-05-17): 20 trials in 0.367 s
+(54.50 trials/sec), no-leak audit pass, artifacts written to
 `results/mines/phase12-bayes-admission-smoke/`. Easy-cell sanity passes for
 `bayes_frontier_pressure` in the confirmed pocket. Pocket probe receipt:
 96 trials in 1.158 s (82.90 trials/sec), no-leak audit pass, artifacts written
