@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430" role="img" aria-labelledby="title desc">
+  <title id="title">Mesa k-sweep Patch Fingerprint</title>
+  <desc id="desc">Generated Mesa operating-envelope chart from public Sundog data.</desc>
+  <rect width="900" height="430" fill="#F8FBFC"/>
+  <path d="M0 0H900V430H0Z" fill="url(#grid)" opacity="0.72"/>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#DCE6EC" stroke-width="1" opacity="0.38"/>
+    </pattern>
+  </defs>
+  
+      <g>
+    <rect x="38" y="36" width="824" height="340" rx="10" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
+    <text x="56" y="61" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="850" letter-spacing="0">PCA k-sweep patch fingerprint</text>
+    <line x1="86" y1="334" x2="840" y2="334" stroke="#DCE6EC" stroke-width="1"/><text x="78" y="338" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0</text>
+<line x1="86" y1="268.5" x2="840" y2="268.5" stroke="#DCE6EC" stroke-width="1"/><text x="78" y="272.5" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0.25</text>
+<line x1="86" y1="203" x2="840" y2="203" stroke="#DCE6EC" stroke-width="1"/><text x="78" y="207" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0.5</text>
+<line x1="86" y1="137.5" x2="840" y2="137.5" stroke="#DCE6EC" stroke-width="1"/><text x="78" y="141.5" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0.75</text>
+<line x1="86" y1="72" x2="840" y2="72" stroke="#DCE6EC" stroke-width="1"/><text x="78" y="76" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">1</text>
+    <line x1="92" y1="72" x2="92" y2="334" stroke="#DCE6EC" stroke-width="1"/><text x="92" y="359" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">k1</text>
+<line x1="289.5919917565708" y1="72" x2="289.5919917565708" y2="334" stroke="#DCE6EC" stroke-width="1"/><text x="289.5919917565708" y="359" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">k3</text>
+<line x1="381.46703582929115" y1="72" x2="381.46703582929115" y2="334" stroke="#DCE6EC" stroke-width="1"/><text x="381.46703582929115" y="359" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">k5</text>
+<line x1="506.13370249595783" y1="72" x2="506.13370249595783" y2="334" stroke="#DCE6EC" stroke-width="1"/><text x="506.13370249595783" y="359" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">k10</text>
+<line x1="715.3333333333334" y1="72" x2="715.3333333333334" y2="334" stroke="#DCE6EC" stroke-width="1"/><text x="715.3333333333334" y="359" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">k32</text>
+<line x1="840" y1="72" x2="840" y2="334" stroke="#DCE6EC" stroke-width="1"/><text x="840" y="359" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">k64</text>
+    <polyline points="92,334 289.5919917565708,93.16326069365422 381.46703582929115,99.86579821806293 506.13370249595783,98.216372306426 715.3333333333334,100.4629405911553 840,100.1613150185598" fill="none" stroke="#A85043" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <polyline points="92,334 289.5919917565708,203.47154906070867 381.46703582929115,99.89529483010008 506.13370249595783,90.09390619068253 715.3333333333334,88.67001803081143 840,89.97676517172022" fill="none" stroke="#3D7A5A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="92" cy="334" r="5" fill="#A85043" stroke="#FFFFFF" stroke-width="2"/><circle cx="92" cy="334" r="5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2"/>
+<circle cx="289.5919917565708" cy="93.16326069365422" r="5" fill="#A85043" stroke="#FFFFFF" stroke-width="2"/><circle cx="289.5919917565708" cy="203.47154906070867" r="5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2"/>
+<circle cx="381.46703582929115" cy="99.86579821806293" r="5" fill="#A85043" stroke="#FFFFFF" stroke-width="2"/><circle cx="381.46703582929115" cy="99.89529483010008" r="5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2"/>
+<circle cx="506.13370249595783" cy="98.216372306426" r="5" fill="#A85043" stroke="#FFFFFF" stroke-width="2"/><circle cx="506.13370249595783" cy="90.09390619068253" r="5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2"/>
+<circle cx="715.3333333333334" cy="100.4629405911553" r="5" fill="#A85043" stroke="#FFFFFF" stroke-width="2"/><circle cx="715.3333333333334" cy="88.67001803081143" r="5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2"/>
+<circle cx="840" cy="100.1613150185598" r="5" fill="#A85043" stroke="#FFFFFF" stroke-width="2"/><circle cx="840" cy="89.97676517172022" r="5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2"/>
+    <rect x="106" y="86" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
+    <line x1="120" y1="104" x2="154" y2="104" stroke="#A85043" stroke-width="3"/>
+    <text x="164" y="108" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="700" letter-spacing="0">protected -> collapsed</text>
+    <line x1="120" y1="124" x2="154" y2="124" stroke="#3D7A5A" stroke-width="3"/>
+    <text x="164" y="128" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="700" letter-spacing="0">collapsed -> protected</text>
+  </g>
+      <text x="38" y="404" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="700" letter-spacing="0">Patch success rises after k=1; exported for mesa.html interpretation, not homepage overclaim.</text>
+    
+</svg>

@@ -85,11 +85,19 @@ events in `belief-diagnostics.csv`.
 
 Use a fixed thrust lattice derived from the current oracle candidate directions,
 scaled by `thrustLimit`, including zero thrust. The action order is part of the
-contract and must be recorded in the manifest. Ties resolve in this order:
+contract and must be recorded in the manifest. Ties resolve in this order
+(reconciled 2026-05-16 after the BF-4 probe; see Planning Objective):
 
-1. maximize expected `T_safe / T_max`;
-2. if tied within one integrator step, minimize expected `totalDeltaV`;
+1. maximize the **shaped planning score** (Planning Objective below);
+2. if within `1e-9` of the best shaped score, minimize expected `totalDeltaV`;
 3. if still tied, choose the first action in the pre-registered order.
+
+The pre-BF-4 wording "maximize expected `T_safe / T_max`; if tied within one
+integrator step, minimize `totalDeltaV`" is superseded: the dt-wide tie band
+combined with a horizon-flat survival estimate is exactly what degenerated the
+floor to passive. The shaped score (which already folds a sub-dt safety-margin
+discriminator) replaces it; the `1e-9` band only collapses genuinely identical
+trajectories.
 
 The initial candidate order should put zero thrust first, then the existing
 axis and diagonal directions from `oracleCandidateThrusts`. If implementation
@@ -99,9 +107,31 @@ proof run rather than silently changing the order.
 ### Planning Objective
 
 For each candidate action, propagate particles forward with the existing
-integrator and estimate expected safe time under the finite planning horizon.
-The final horizon, particle count, and resampling threshold are locked only
-after the capped probe records a rate.
+integrator. The score is **not** raw within-horizon survival time (the BF-4
+probe proved that is non-discriminative — see BF-4 Probe Receipt). The pinned
+objective is the **shaped planning score**:
+
+```text
+score(action) = E[ survivalTime_within_horizon
+                    + shapeFraction * dt * terminalSafetyMargin ]
+terminalSafetyMargin = min( escape-radius margin, close-approach margin )
+                       of the horizon-end state, in [0,1];
+                       0 if a terminal hazard was reached during the rollout.
+```
+
+**Floor-validity invariant (load-bearing):** `shapeFraction ∈ [0, 1)`, so the
+shaping term is strictly less than one `dt`. A candidate whose true survival is
+longer by at least one `dt` therefore can never be overtaken on margin alone —
+the floor never prefers an earlier-escape action, so it remains a valid lower
+bound. `shapeFraction = 0` recovers the old pure-survival objective; the
+intended `π*_Bayes` (`argmax E[T_safe/T_max | h]`) is recovered as
+`shapeFraction → 0` with horizon → escape timescale. Shaping is an internal
+tractable surrogate for that argmax under a finite horizon; it does **not**
+change `J`, `Φ`, `μ`, the regret readout, or the Phase 4 gate.
+
+The final horizon, particle count, resampling threshold, and `shapeFraction`
+are locked only after the (re-)capped probe records a rate and a passing
+floor-sanity result.
 
 Start with this smoke profile:
 
@@ -205,6 +235,39 @@ Run a capped probe that obeys the ~10-minute rule. Record:
 Scratch output should live under `results/proof/phase4/_probe-*` and be cleaned
 after the measured rate is copied into the spec or result note.
 
+#### BF-4 Probe Receipt (2026-05-16, `bf4-probe-20260516-173223`)
+
+First capped probe, 1 envelope cell (`mu_1 dt_0.01 r_1.075 v_1.1 thrust_0.4
+noise_0`, near_escape, 2 seeds). Recorded:
+
+- **Rate / runtime gate: EXCEEDED.** Bayes-floor step
+  `00:32:25 → 00:46:55` ≈ 14.5 min for 2 trials + per-cell passive guard
+  calibration ⇒ **~7 min per Bayes trial** at smoke settings (256 particles,
+  horizon 16). The PHASE4_THREEBODY §3 proof grid (~216 cells × seeds + per-cell
+  calibration) extrapolates to a multi-day run. **Disposition: BF-5 / full lock
+  must move to a long-budget runner; no inline or local expansion.**
+- **Join / caseId-drift guard: PASS.** `joinedRowCount = 2`; the pre-run
+  zero-join assertion held (finding-3 trap did not bite this run). Keep the
+  assertion before any future probe.
+- **Floor-sanity gate: NON-DECISIVE — root cause found.** Negative regret on
+  both rows (`regret ≈ −0.60`). Diagnosis from `bayes-actions.csv`: the floor
+  chose zero thrust on 643/649 steps and `expected_safe_time` was identically
+  `0.16` (= horizon 16 × dt 0.01) across **all nine** candidates. Escape in the
+  near-escape pocket occurs at ~6 time units (~600 steps), so within any
+  16-step rollout no particle reaches a terminal event — every candidate
+  accrues the full horizon, the dt-wide tie band flattens them, and the ΔV
+  tie-break forces zero thrust. The floor degenerated to the passive `off`
+  controller (ΔV ≈ 0.024 vs the signature controller's ≈ 1.99), so it is not a
+  valid lower bound and the gate is correctly held un-evaluated.
+- **Repair applied (BF-2 design change, 2026-05-16):** the shaped planning
+  objective + reconciled tie order above. A tiny sanity smoke confirmed the
+  shaped score now discriminates candidates (terminal-margin spread) and the
+  floor selects steering actions instead of passive zero thrust. Floor-validity
+  invariant preserved by construction.
+- **Required before BF-5:** a fresh capped re-probe on the long-budget runner
+  with the shaped objective, confirming floor-sanity PASS (negative-regret rate
+  ≤ 5%) and recording the new per-trial rate, before the full lock is staged.
+
 ### BF-5: Full Lock Handoff
 
 Only after BF-0 through BF-4 pass, update
@@ -292,8 +355,10 @@ node scripts/threebody-phase4-bayes-floor.mjs `
 2. **Integration form.** Prefer a separate proof evaluator until the no-leak
    and runtime gates pass. A harness controller mode is acceptable afterward if
    it is validated explicitly.
-3. **Final approximation settings.** Lock particle count, horizon, and
-   resampling threshold after the capped probe, not before rate measurement.
+3. **Final approximation settings.** Lock particle count, horizon, resampling
+   threshold, and `shapeFraction` after the capped re-probe, not before rate
+   measurement. `shapeFraction` default `0.5`; must stay in `[0, 1)` to keep
+   the floor-validity invariant.
 
 ## Exit Criteria
 

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480" role="img" aria-labelledby="title desc">
+  <title id="title">Mesa Medium Lambda Cliff</title>
+  <desc id="desc">Generated Mesa operating-envelope chart from public Sundog data.</desc>
+  <rect width="900" height="480" fill="#F8FBFC"/>
+  <path d="M0 0H900V480H0Z" fill="url(#grid)" opacity="0.72"/>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#DCE6EC" stroke-width="1" opacity="0.38"/>
+    </pattern>
+  </defs>
+  
+      <text x="38" y="50" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="30" font-weight="850" letter-spacing="0">Mesa Medium Lambda Cliff</text>
+      <text x="38" y="82" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="600" letter-spacing="0">old_basin_pref crosses the pre-set threshold between lambda=0.95 and lambda=0.97.</text>
+      <g>
+    <rect x="38" y="112" width="824" height="318" rx="10" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
+    <rect x="92" y="136" width="748" height="192.30769230769232" fill="#F8E7E3" opacity="0.55"/>
+    <rect x="92" y="328.3076923076923" width="748" height="57.69230769230768" fill="#E8F2ED" opacity="0.62"/>
+    <line x1="92" y1="136" x2="92" y2="386" stroke="#DCE6EC" stroke-width="1"/><text x="92" y="411" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0</text>
+<line x1="279" y1="136" x2="279" y2="386" stroke="#DCE6EC" stroke-width="1"/><text x="279" y="411" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0.25</text>
+<line x1="466" y1="136" x2="466" y2="386" stroke="#DCE6EC" stroke-width="1"/><text x="466" y="411" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0.5</text>
+<line x1="653" y1="136" x2="653" y2="386" stroke="#DCE6EC" stroke-width="1"/><text x="653" y="411" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0.75</text>
+<line x1="840" y1="136" x2="840" y2="386" stroke="#DCE6EC" stroke-width="1"/><text x="840" y="411" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">1</text>
+    <line x1="86" y1="366.7692307692308" x2="840" y2="366.7692307692308" stroke="#DCE6EC" stroke-width="1" opacity="0.8"/><text x="78" y="370.7692307692308" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0</text>
+<line x1="86" y1="328.3076923076923" x2="840" y2="328.3076923076923" stroke="#C9972F" stroke-width="2" opacity="0.95"/><text x="78" y="332.3076923076923" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">1</text>
+<line x1="86" y1="251.3846153846154" x2="840" y2="251.3846153846154" stroke="#DCE6EC" stroke-width="1" opacity="0.8"/><text x="78" y="255.3846153846154" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">3</text>
+<line x1="86" y1="174.46153846153845" x2="840" y2="174.46153846153845" stroke="#DCE6EC" stroke-width="1" opacity="0.8"/><text x="78" y="178.46153846153845" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">5</text>
+    <polyline points="316.4,335.1244230769231 466,332.5605 615.6,343.18165384615384 690.4,348.1191923076923 765.2,352.04715384615383 802.6,354.09403846153845 817.56,154.84619230769232 832.52,168.34815384615385" fill="none" stroke="#1A3A52" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="804.535824" y1="136" x2="804.535824" y2="386" stroke="#C9972F" stroke-width="2.5" stroke-dasharray="7 6"/>
+           <text x="635" y="158" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" letter-spacing="0">breach lambda ~= 0.952588</text>
+    <circle cx="316.4" cy="335.1244230769231" r="5.5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.3: old_basin_pref=0.823 (hold)</title>
+        </circle>
+<circle cx="466" cy="332.5605" r="5.5" fill="#B8831E" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.5: old_basin_pref=0.889 (fragile)</title>
+        </circle>
+<circle cx="615.6" cy="343.18165384615384" r="5.5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.7: old_basin_pref=0.613 (hold)</title>
+        </circle>
+<circle cx="690.4" cy="348.1191923076923" r="5.5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.8 v3: old_basin_pref=0.485 (hold)</title>
+        </circle>
+<circle cx="765.2" cy="352.04715384615383" r="5.5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.9 v3: old_basin_pref=0.383 (hold)</title>
+        </circle>
+<circle cx="802.6" cy="354.09403846153845" r="7" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.95 v4: old_basin_pref=0.33 (hold)</title>
+        </circle>
+<circle cx="817.56" cy="154.84619230769232" r="7" fill="#A85043" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.97 v4: old_basin_pref=5.51 (collapse)</title>
+        </circle>
+<circle cx="832.52" cy="168.34815384615385" r="5.5" fill="#A85043" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.99 v4: old_basin_pref=5.159 (collapse)</title>
+        </circle>
+    <text x="466" y="428" text-anchor="middle" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="700" letter-spacing="0">reward weight lambda</text>
+    <text x="56" y="136" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="850" letter-spacing="0">Medium L-Mixed lambda cliff</text>
+    <text x="56" y="416" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="700" letter-spacing="0">old_basin_pref threshold = 1</text>
+  </g>
+    
+</svg>
