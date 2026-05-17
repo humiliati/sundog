@@ -532,6 +532,15 @@ function runTrial(args, { preset, cell, mode, seed }) {
           particleCount: control.belief.particleCount,
           candidateCount: control.belief.candidateCount,
           selectedScore: roundNumber(control.belief.selectedScore, 9),
+          posteriorReady: control.belief.posteriorReady,
+          inverseValid: control.belief.inverseValid,
+          inverseTheta: Number.isFinite(control.belief.inverseTheta) ? roundNumber(control.belief.inverseTheta, 9) : "",
+          inverseThetaDot: Number.isFinite(control.belief.inverseThetaDot) ? roundNumber(control.belief.inverseThetaDot, 9) : "",
+          inverseWeight: roundNumber(control.belief.inverseWeight, 9),
+          sundogScore: roundNumber(control.belief.sundogScore, 9),
+          proposalScore: roundNumber(control.belief.proposalScore, 9),
+          scoreAdvantage: roundNumber(control.belief.scoreAdvantage, 9),
+          selectedCandidate: control.belief.selectedCandidate,
           force: roundNumber(control.force, 9),
         });
       }

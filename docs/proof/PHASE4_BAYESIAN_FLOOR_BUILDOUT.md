@@ -284,7 +284,9 @@ noise_0`, near_escape, 2 seeds). Recorded:
   invariant preserved by construction.
 - **Required before BF-5:** a fresh capped re-probe on the long-budget runner
   with the shaped objective, confirming floor-sanity PASS (negative-regret rate
-  ≤ 5%) and recording the new per-trial rate, before the full lock is staged.
+  ≤ 5%) and recording the new per-trial rate; **and** a passing BF-4b off-set
+  guard-calibration receipt (see below) — floor-sanity alone is no longer
+  sufficient to stage the full lock.
 
 #### BF-4 Shaped Re-Probe Receipt (2026-05-16, `bf4-shaped-reprobe-20260516-180425`)
 
@@ -334,14 +336,94 @@ Third capped probe, same 1-cell / 2-seed slate, with
   explicitly after successful writes. Re-run the small receipts before any BF-5
   shard.
 
+### BF-4b: Off-Set Guard Calibration (hard pre-BF-5 gate)
+
+**Why this gate exists.** The signature-baseline guard makes the floor
+`max(signature_policy, confident-deviation) ≥ signature` *by construction*.
+Two consequences, pinned here so they are not over-read later:
+
+1. `floor_sanity_pass` (negative-regret ≤ 5%) is now **near-tautological**: a
+   completely inert planner that always falls back to the signature policy also
+   passes it. Floor-sanity therefore certifies only *floor ≥ signature*
+   (floor-validity), **not** that the floor is a good Bayes proxy. It is no
+   longer a floor-quality gate.
+2. All gate-discriminating power now rests on the **off-set arm** of the Phase 4
+   gate (regret bounded away from 0 where signature is insufficient). Its
+   sensitivity is governed entirely by `signatureAdvantageDtMultiplier`
+   (default `1`), a value chosen for floor-*validity* and never calibrated for
+   off-set *detection power*. Too high ⇒ a real Bayes advantage is suppressed,
+   the floor collapses to signature off-set, regret → 0 off-set, and the gate
+   misreads it as "boundary wrong → reopen the closed-positive Phase 3" or
+   masks a true separation. Too low ⇒ the floor deviates on noise and can drop
+   below signature, breaking floor-validity. Discovering either *after* the
+   ~51-day full lock is the expensive failure mode this gate prevents.
+
+**Pre-registered off-set calibration cell (fixed now, before any run).**
+A single grid cell where the *reactive* guarded-signature policy is expected
+insufficient but a history-integrating belief floor has a real informational
+advantage (the particle filter averages the noisy signature *history*; the
+reactive controller acts on each noisy instantaneous gradient):
+
+```text
+regime: near_escape
+mass-ratio: 1
+timestep: 0.01
+radius-scale: 1.075
+velocity-scale: 1.15      # high-velocity near-escape stress (vs 1.1 on-set probe)
+sensor-noise-sweep: 0.01  # noisy Φ: history/belief should beat reactive
+thrust-limit: 0.4
+track-guard-mode: hazard_quantile
+track-guard-quantile: 0.75
+track-guard-min-radius-sweep: 1.15
+track-guard-max-local-acceleration-sweep: 2.5
+track-guard-max-tidal-magnitude-sweep: 35
+duration: 16
+seeds: ≥ 8   # enough for the §5 fiber classifier to decide on/off, not undecidable
+```
+
+**Acceptance criteria (same readout, off-set definition, and CI as the real
+gate — only the slate is one pre-registered cell at smoke scale).** All must
+hold before BF-5 may stage the full lock:
+
+1. **The cell is empirically off-set.** The PHASE4_THREEBODY §5 fiber
+   classifier labels it `off` on the smoke slate (a positive-mass fiber with a
+   disjoint Bayes-optimal action set). If it comes back `undecidable`, raise
+   only this cell's seed count until it decides — do not reinterpret an
+   undecidable cell as a pass.
+2. **The off-set arm fires.** On that off-set cell, the floor with the chosen
+   `signatureAdvantageDtMultiplier` yields regret whose 95% paired-bootstrap CI
+   lower bound is strictly `> 0` (the exact §3 off-set pass condition). This
+   demonstrates the floor *can and does* beat the signature policy where
+   signature is insufficient — i.e. the guard is not so conservative that it
+   suppresses the gate.
+3. **Floor-validity still holds.** On the existing sufficient/on-set probe cell
+   the negative-regret rate stays ≤ 5% (already shown), so the multiplier is
+   not so low that the floor drops below signature.
+
+If (2) fails while (1) holds, the multiplier is too conservative *or* the
+particle-MPC floor is too weak off-set: retune `signatureAdvantageDtMultiplier`
+(or repair the floor) and re-run BF-4b — **do not stage the 51-day BF-5 lock
+on an off-set arm that has never been shown to fire.** The chosen multiplier is
+pre-registered only once (1) ∧ (2) ∧ (3) hold simultaneously; that triple is
+the recorded justification, replacing the floor-validity-only rationale in the
+Planning Objective.
+
+This is a hard gate: **BF-5 staging is blocked until a BF-4b receipt records
+(1) ∧ (2) ∧ (3) PASS.** It is cheap (one extra cell at smoke scale) relative
+to the full lock and converts the off-set arm's sensitivity from an untested
+default into a pre-registered, validated quantity.
+
 ### BF-5: Full Lock Handoff
 
-BF-4 is passed for the smoke slate, but the measured rate changes the BF-5
-handoff: the full proof lock must first be staged as sharded/resumable
-PowerShell (or a long-budget workflow) with per-shard manifests and merge
-readbacks. A single full-grid invocation is intentionally not written here,
-because the measured serial cost is multi-week and violates the compute
-discipline.
+BF-4 floor-sanity is passed for the smoke slate, **but BF-5 is additionally
+blocked on a passing BF-4b off-set guard-calibration receipt** (floor-sanity
+alone is near-tautological under the signature-baseline guard and does not
+certify the off-set arm can fire). Assuming BF-4b passes, the measured rate
+changes the BF-5 handoff: the full proof lock must be staged as
+sharded/resumable PowerShell (or a long-budget workflow) with per-shard
+manifests and merge readbacks. A single full-grid invocation is intentionally
+not written here, because the measured serial cost is multi-week and violates
+the compute discipline.
 
 ## Validation Gates
 
@@ -359,6 +441,13 @@ discipline.
   [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) §2, and no proof run may use the
   enriched `Φ`.
 - **Floor-sanity gate:** negative regret above 5% voids the run as a floor.
+  Under the signature-baseline guard this certifies only *floor ≥ signature*
+  (floor-validity), **not** floor quality — it is near-tautological on its own.
+- **Off-set guard-calibration gate (BF-4b, hard pre-BF-5):** on the
+  pre-registered off-set cell the §5 classifier returns `off` and the floor's
+  regret 95% CI lower bound is strictly `> 0`, while the sufficient cell keeps
+  negative-regret ≤ 5%. This is the actual floor-quality / off-set-sensitivity
+  gate; BF-5 staging is blocked until it passes.
 - **Runtime gate:** capped probe completes within ~10 minutes or the remaining
   work is staged to a long-budget runner.
 
@@ -427,6 +516,12 @@ node scripts/threebody-phase4-bayes-floor.mjs `
    threshold, and `shapeFraction` after the capped re-probe, not before rate
    measurement. `shapeFraction` default `0.5`; must stay in `[0, 1)` to keep
    the floor-validity invariant.
+4. **Signature-advantage multiplier.** `signatureAdvantageDtMultiplier`
+   default `1` is *pinned* only by a passing BF-4b receipt (off-set cell regret
+   CI lower > 0 ∧ sufficient cell negative-regret ≤ 5%), not by the
+   floor-validity argument alone. If BF-4b forces a retune, the new value and
+   its BF-4b receipt are the recorded pre-registration; BF-5 uses that value
+   unchanged.
 
 ## Exit Criteria
 
@@ -437,6 +532,8 @@ This buildout exits when:
 - the particle-belief Bayes evaluator writes the target receipts;
 - the regret reducer and cell-fiber classifier write Phase 4 readbacks;
 - a capped probe records measured rate and floor sanity;
+- a BF-4b off-set guard-calibration receipt records (1) ∧ (2) ∧ (3) PASS, with
+  the pinned `signatureAdvantageDtMultiplier`;
 - [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) is updated with the exact proof
   lock command and outcome branches.
 

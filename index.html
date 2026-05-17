@@ -870,8 +870,12 @@
             }
         }
 
-        /* Static atlas snapshot in the hero */
-        .hero { position: relative; overflow: hidden; }
+        /* Phase-3-bound atlas sketch in the hero */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding-bottom: clamp(7rem, 14vh, 9rem);
+        }
         .hero-atlas {
             position: absolute;
             inset: 0;
@@ -882,7 +886,50 @@
             opacity: 0.78;
             mask-image: radial-gradient(ellipse at center, black 50%, transparent 85%);
         }
-        .hero-atlas svg { width: min(820px, 92%); height: auto; }
+        .hero-atlas svg {
+            width: min(880px, 94%);
+            height: auto;
+            max-height: min(78vh, 760px);
+        }
+        .hero-atlas path,
+        .hero-atlas circle,
+        .hero-atlas ellipse,
+        .hero-atlas line {
+            transition: opacity 450ms ease, transform 450ms ease;
+        }
+        .hero-atlas .hero-boundary {
+            stroke-dasharray: 7 9;
+        }
+        .hero-atlas .hero-canonical {
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .hero-atlas .hero-conditional {
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .hero-atlas .hero-parhelion-core {
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+        .hero-altitude-chip {
+            position: absolute;
+            left: 50%;
+            bottom: clamp(0.75rem, 2.5vw, 2.25rem);
+            transform: translateX(-50%);
+            z-index: 2;
+            width: min(32rem, calc(100vw - 2rem));
+            padding: 0.65rem 0.9rem;
+            border: 1px solid rgba(244, 196, 48, 0.28);
+            border-radius: 999px;
+            background: rgba(12, 32, 49, 0.72);
+            color: rgba(245, 245, 245, 0.82);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            line-height: 1.35;
+            letter-spacing: 0.02em;
+            backdrop-filter: blur(10px);
+        }
         .hero-content { position: relative; z-index: 2; }
         .hero-content .eyebrow {
             color: var(--accent-gold);
@@ -891,6 +938,32 @@
             letter-spacing: 0.18em;
             text-transform: uppercase;
             margin-bottom: 0.6rem;
+        }
+        .hero .cta-buttons .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3.25rem;
+            text-decoration: none;
+        }
+        .hero .cta-buttons .btn.btn-primary,
+        .hero .cta-buttons .btn.btn-primary:visited {
+            color: var(--primary-dark);
+        }
+        .hero .cta-buttons .btn.btn-secondary,
+        .hero .cta-buttons .btn.btn-secondary:visited {
+            color: var(--text-light);
+            background: rgba(8, 26, 40, 0.5);
+            border-color: rgba(245, 245, 245, 0.58);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-atlas path,
+            .hero-atlas circle,
+            .hero-atlas ellipse,
+            .hero-atlas line {
+                transition: none;
+            }
         }
 
         /* Chat experiment teaser — links to chat.html */
@@ -1246,8 +1319,8 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-atlas" aria-hidden="true">
-            <svg viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Static snapshot of the calibrated Halo Atlas pose">
+        <div class="hero-atlas" aria-hidden="true" data-hero-atlas>
+            <svg viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Animated Phase-3-bound Halo Atlas sketch">
                 <defs>
                     <linearGradient id="hero-prism" x1="0%" y1="100%" x2="0%" y2="0%">
                         <stop offset="0%"  stop-color="#ff6b6b" stop-opacity="0.78"/>
@@ -1266,26 +1339,29 @@
                         <feGaussianBlur stdDeviation="2"/>
                     </filter>
                 </defs>
-                <!-- 46° halo -->
-                <circle cx="500" cy="500" r="440" fill="none" stroke="rgba(255,255,255,0.32)" stroke-width="1.2"/>
-                <!-- 22° halo -->
-                <circle cx="500" cy="500" r="220" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.5"/>
-                <!-- Parhelic circle: nearly-horizontal smile through daggers at sun altitude 25° -->
-                <path d="M 156 489 Q 500 510 844 489" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.1" stroke-dasharray="4 6"/>
-                <!-- CZA primary, tangent to 46° halo top -->
-                <path d="M 200 240 Q 500 80 800 240" fill="none" stroke="url(#hero-prism)" stroke-width="7" filter="url(#hero-glow)"/>
-                <path d="M 260 300 Q 500 200 740 300" fill="none" stroke="url(#hero-prism)" stroke-width="5" opacity="0.65"/>
-                <!-- Daggers (parhelia at sun altitude 25°: offset = R22/cos(25°) ≈ 243) -->
-                <g transform="translate(257, 489)">
+                <!-- 46 degree contextual halo -->
+                <circle id="hero-halo-46" cx="500" cy="500" r="440" fill="none" stroke="rgba(255,255,255,0.32)" stroke-width="1.2"/>
+                <!-- 22 degree scale anchor -->
+                <circle id="hero-halo-22" cx="500" cy="500" r="220" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.5"/>
+                <!-- Phase 3 parhelic belt: animated from sun altitude -->
+                <path id="hero-parhelic-path" class="hero-boundary" d="M 257 489 Q 500 500 743 489" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.15"/>
+                <!-- CZA is conditional vocabulary: rendered only within the coded h <= 32 degree guard -->
+                <path id="hero-cza-primary" class="hero-conditional" d="" fill="none" stroke="url(#hero-prism)" stroke-width="7" filter="url(#hero-glow)"/>
+                <path id="hero-cza-secondary" class="hero-conditional" d="" fill="none" stroke="url(#hero-prism)" stroke-width="5" opacity="0.65"/>
+                <!-- Tangent arcs are optional vocabulary and disappear at the 29 degree circumscribed merge -->
+                <path id="hero-upper-tangent-path" class="hero-conditional" d="" fill="none" stroke="rgba(255,248,220,0.78)" stroke-width="3.5" filter="url(#hero-glow)"/>
+                <path id="hero-lower-tangent-path" class="hero-conditional" d="" fill="none" stroke="rgba(255,248,220,0.34)" stroke-width="2.4"/>
+                <!-- Daggers / parhelia: offset = R22 / cos(h) -->
+                <g id="hero-left-parhelion" class="hero-parhelion-core" transform="translate(257, 489)">
                     <line x1="-80" y1="0" x2="55" y2="0" stroke="url(#hero-prism)" stroke-width="6" stroke-linecap="round" opacity="0.85" filter="url(#hero-glow)"/>
                     <ellipse cx="0" cy="0" rx="22" ry="14" fill="url(#hero-dagger-core)" filter="url(#hero-glow)"/>
                 </g>
-                <g transform="translate(743, 489)">
+                <g id="hero-right-parhelion" class="hero-parhelion-core" transform="translate(743, 489)">
                     <line x1="80" y1="0" x2="-55" y2="0" stroke="url(#hero-prism)" stroke-width="6" stroke-linecap="round" opacity="0.85" filter="url(#hero-glow)"/>
                     <ellipse cx="0" cy="0" rx="22" ry="14" fill="url(#hero-dagger-core)" filter="url(#hero-glow)"/>
                 </g>
-                <!-- Sun pillar lens -->
-                <path d="M 500 308 A 240 240 0 0 1 500 690 A 240 240 0 0 1 500 308 Z" fill="rgba(255,222,140,0.18)" filter="url(#hero-glow)"/>
+                <!-- Sun pillar / central atmospheric glow, not an inverse handle -->
+                <path id="hero-sun-pillar" d="M 500 308 A 240 240 0 0 1 500 690 A 240 240 0 0 1 500 308 Z" fill="rgba(255,222,140,0.18)" filter="url(#hero-glow)"/>
                 <!-- Compass-rose sun -->
                 <g transform="rotate(22.5 500 500)">
                     <line x1="500" y1="500" x2="540" y2="460" stroke="rgba(255,248,220,0.55)" stroke-width="1.4"/>
@@ -1297,11 +1373,11 @@
             </svg>
         </div>
         <div class="hero-content">
-            <p class="eyebrow">Sundog</p>
-            <h1>The math draws the sky.</h1>
-            <p class="tagline">An atlas for sundogs, calibrated against the photographs.</p>
+            <p class="eyebrow">Sundog Research Lab</p>
+            <h1>Math draws the sky.</h1>
+            <p class="tagline">Halo alignment.</p>
             <p class="value-prop">
-                The visible arcs of a sun dog are upper slices of complete circles. The atlas renders them parametrically, then runs backwards to recover the sun&rsquo;s altitude from a single photograph.
+                Explore the h(x) geometry behind solar halos, then follow the same traceability discipline into robotic control, agents, and workbenches.
             </p>
             <div class="cta-buttons">
                 <a href="sundog.html" class="btn btn-primary">Open the Sundog atlas</a>
@@ -1309,6 +1385,9 @@
                 <a href="balance.html" class="btn btn-secondary">Balance workbench</a>
             </div>
         </div>
+        <p class="hero-altitude-chip" data-hero-altitude-readout>
+            Forward geometry sketch: parhelion offset is the promoted inverse handle; CZA and tangent arcs stay boundary-gated.
+        </p>
     </section>
 
     <!-- SVG defs for the verdict-stamp ink-bleed filter. Hidden from
@@ -1390,121 +1469,111 @@
         </div>
     </section>
 
-    <!-- Sundog Alignment Theorem Proof Section -->
+    <!-- Hero Reading Section -->
     <div class="theorem-band">
     <section class="theorem-section" id="theorem-proof">
-        <h2>The Sundog Alignment Theorem</h2>
+        <h2>How To Read The Hero</h2>
         <p>
-            The hero scene above is not decoration. It is a map of the idea in three registers:
-            theorem as math, theorem as design method, and theorem as empirical claim.
-            The paper-grade result remains narrow: photometric mirror alignment without target-position access.
-            The application layer now adds bounded operating-envelope studies in three-body dynamics,
-            shadow balance, and pressure mines.
+            The moving scene above is a forward-geometry sketch, not a calibration receipt.
+            It uses the current Phase 3 bindings where they are load-bearing: parhelion
+            offset follows sun altitude, the CZA disappears at its coded cutoff, and
+            tangent arcs stop at the circumscribed merge. The cards separate optics,
+            physics, and application meaning so the picture does not overclaim.
         </p>
         <div class="theorem-grid">
 
             <div class="theorem-card" id="theorem-premise">
-                <div class="step-number">Step I · Left Parhelion</div>
-                <h3>A Signal Beside The Source</h3>
+                <div class="step-number">Step I · Scale</div>
+                <h3>The 22 Degree Ruler</h3>
                 <div class="proof-snippet">
-                    The first bright spot is not the sun.<br>
-                    It is a displaced signature produced by geometry.<br>
-                    That is the premise.
+                    Optics: 22 degree halo.<br>
+                    Physics: scale reference.<br>
+                    Application: measure before inferring.
                 </div>
                 <p>
-                    A sundog is useful here because it makes the core move visible:
-                    the thing you can use is not always the thing itself. In the field
-                    origin, the laser was blocked by the fastener head. In the experiment,
-                    the target position is hidden. Sundog begins when occlusion stops
-                    being treated as missing data and becomes a readable signal.
+                    The inner ring is the ruler. By itself it is not a hidden-state
+                    proof and it does not recover sun altitude. It fixes the scale that
+                    lets every other feature be tested against a common geometry.
                 </p>
             </div>
 
             <div class="theorem-card" id="theorem-variables">
-                <div class="step-number">Step II · Right Parhelion</div>
-                <h3>The Frame Of Reference</h3>
+                <div class="step-number">Step II · Parhelia</div>
+                <h3>The Promoted Inverse</h3>
                 <div class="proof-snippet">
-                    P = alignment target &nbsp;·&nbsp; L = illumination vector<br>
-                    S(x) = shadow projection &nbsp;·&nbsp; τ(x) = torque<br>
-                    H(x) = ∂S/∂τ &nbsp;(the halo signature)
+                    offset = R22 / cos(h)<br>
+                    strict eligible photos: p2, p7, p13<br>
+                    everything else is bounded or ineligible.
                 </div>
                 <p>
-                    The second parhelion gives the scene a frame: source, target,
-                    obstruction, projection, and action. As math, Sundog asks whether
-                    the projection changes coherently when the agent acts. As design
-                    method, it says to instrument that relationship instead of demanding
-                    full world state up front.
+                    The side glints are the only promoted image-recoverable inverse
+                    handle after the geometry audit. As sun altitude changes, their
+                    distance from the sun changes by the closed form. That is why the
+                    hero moves the parhelia, not the claim boundary.
                 </p>
             </div>
 
             <div class="theorem-card" id="theorem-assertion">
-                <div class="step-number">Step III · Upper Tangent Arc</div>
-                <h3>The Coupling Claim</h3>
+                <div class="step-number">Step III · CZA</div>
+                <h3>A Conditional Arc</h3>
                 <div class="proof-snippet">
-                    If action changes the signature coherently,<br>
-                    then the hidden target may be inferable.<br>
-                    H(x) names that coupling.
+                    visible only while h &le; 32&deg;<br>
+                    rendered core, not promoted inverse<br>
+                    above the cutoff: fail, abstain, or switch.
                 </div>
                 <p>
-                    The upper arc is the dangerous part: it tempts a universal theorem.
-                    We keep it conditional. A nonzero relationship between action and
-                    signal is not magic; it is a candidate observability channel. The
-                    mathematical work is to define that coupling tightly enough that it
-                    predicts progress instead of merely sounding profound.
+                    The high smile is useful vocabulary, but it is not currently a
+                    promoted route for recovering altitude from public photos. The
+                    important behavior is the boundary: when the coded geometry says
+                    the CZA exits the visible regime, the hero lets it disappear.
                 </p>
             </div>
 
             <div class="theorem-card" id="theorem-experiment">
-                <div class="step-number">Step IV · Lower Tangent Arc</div>
-                <h3>The Procedure Becomes A Test</h3>
+                <div class="step-number">Step IV · Tangent</div>
+                <h3>Vocabulary With A Merge</h3>
                 <div class="proof-snippet">
-                    Field method: occlude, seat, reacquire.<br>
-                    Lab method: scan, seek, track.<br>
-                    No Cartesian target coordinates.
+                    tangentArcLocus(h) exists below 29&deg;<br>
+                    h &ge; 29&deg; returns null<br>
+                    the arc merges into the circumscribed regime.
                 </div>
                 <p>
-                    The lower arc turns the origin story into an empirical task. The
-                    controller moves a mirrored end-effector and sees detector intensity
-                    plus proprioception, not the target coordinates. Its job is to make
-                    the reflected beam land where it should by following the signature
-                    produced by its own motion.
+                    The upper tangent arc is allowed as logo and animation vocabulary,
+                    but not as an altitude inverse. The current model is single-cell
+                    calibrated and guarded at the 29 degree merge, so the animation
+                    treats disappearance as part of the physics.
                 </p>
             </div>
 
             <div class="theorem-card" id="theorem-findings">
-                <div class="step-number">Step V · Inner Circle (Iris)</div>
-                <h3>The Closed Loop</h3>
+                <div class="step-number">Step V · Boundary</div>
+                <h3>Failure Is A Prediction</h3>
                 <div class="proof-snippet">
-                    Photometric terminal intensity: 0.945.<br>
-                    Oracle terminal intensity: 0.936.<br>
-                    U = 526, p = 0.264.
+                    traceable route: breaks at the guard.<br>
+                    mere correlate: stays smooth past it.<br>
+                    boundary map first, agent second.
                 </div>
                 <p>
-                    When the iris closes, the claim becomes measurable. In 30 matched
-                    MuJoCo scenes, the photometric controller reached comparable
-                    terminal accuracy to the target-aware analytic baseline; no
-                    terminal-intensity difference was detected at n=30. The trade was
-                    time: indirect feedback converged roughly 16x more slowly. The
-                    known failure boundary is tight joint limits.
+                    This is the structural-failure lesson: a trustworthy indirect
+                    route should fail where the closed form becomes ill-posed. The
+                    hero therefore shows the limits as behavior, not as a footnote.
                 </p>
             </div>
 
             <div class="theorem-card" id="theorem-conclusion">
-                <div class="step-number">Step VI · Outer Halo</div>
-                <h3>What The Halo Holds</h3>
+                <div class="step-number">Step VI · Workbench</div>
+                <h3>From Sky To Control</h3>
                 <div class="proof-snippet">
-                    Math: define the coupling.<br>
-                    Method: act from indirect structure.<br>
-                    Claim: one research result, three bounded workbenches.
+                    hidden state &rarr; trace<br>
+                    trace &rarr; transformation<br>
+                    transformation &rarr; action with a boundary.
                 </div>
                 <p>
-                    The outer halo keeps the registers separate. As math, Sundog is a
-                    coupling problem. As design method, it is a way to build from
-                    partial, indirect signals. As empirical claim, today, it starts
-                    with the photometric mirror-alignment result and extends through
-                    bounded operating-envelope studies in Three-Body, Balance, and
-                    Pressure Mines. EyesOnly, Dungeon Gleaner, and Money Bags remain
-                    application expressions and instrumentation surfaces.
+                    The atmospheric sketch is not the whole lab. It is the visual
+                    grammar for the apparatus: separate hidden state, indirect trace,
+                    transformation, action, and the place where the coupling stops
+                    working. The photometric result and the operating-envelope
+                    workbenches carry that discipline into control systems.
                 </p>
             </div>
 
@@ -2120,6 +2189,7 @@
         </p>
     </footer>
 
+    <script type="module" src="/js/home-hero.mjs"></script>
     <script type="module" src="/js/motion-rail.mjs"></script>
 
     <script type="module" src="/js/sundog-chat-widget.mjs"></script>

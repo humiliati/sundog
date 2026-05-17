@@ -1216,10 +1216,31 @@ Initial implementation slice (2026-05-17):
   mode rejection. The loaded cells all passed Bayes-vs-naive sanity but still
   showed negative regret versus `sundog_shadow`, so this remains an executable
   floor scaffold rather than a promoted claim.
-- Next implementation target: run a capped loader probe on a larger, stratified
-  Phase 10 slate (diagnostic-positive, borderline, and failure-regime cells) to
-  estimate the full Phase 10-equivalent wall clock. Do not run the full
-  Phase 10-equivalent baseline inline until that rate is recorded.
+- Stratified Phase 10 loader probe (2026-05-17): the operator ran
+  `phase15-phase10-stratified-probe` against 12 loaded Phase 10 cells, 4 seeds,
+  and the four-mode slate (`naive_shadow`, `sundog_shadow`,
+  `bayes_floor_shadow_particle`, `oracle`). It completed 192 trials in
+  21.166 s (9.07 trials/s), with observation parity, no-state-leak, and
+  unknown-mode rejection all passing. All 12 cells passed Bayes-vs-naive
+  sanity, but every cell still showed negative mean regret versus
+  `sundog_shadow`: mean -0.687 normalized survival, range -0.782 to -0.350,
+  mean negative-regret rate 0.958. Interpretation: the floor is now measurable
+  across loaded Phase 10 cells, but it remains a weak-floor artifact rather than
+  a same-floor claim.
+- Full Phase 10-equivalent estimate: 68 loaded Phase 10 cells x 100 seeds x 4
+  modes = 27,200 trials. At the measured 9.07 trials/s, the full run is about
+  50 minutes, which exceeds the repo's inline runtime rule. Stage, do not run
+  inline:
+
+```powershell
+node scripts/balance-phase15-bayes-floor.mjs --phase phase15-phase10-full-lock --out results/balance/phase15-phase10-full-lock --cell-slate phase10-output --phase10-out results/balance/phase10-envelope --limit-cells all --modes naive_shadow,sundog_shadow,bayes_floor_shadow_particle,oracle --seeds 100 --duration 8 --particle-count 61 --horizon-seconds 0.05
+```
+
+- Next implementation target: repair or replace the weak particle floor before
+  interpreting a full lock. Good candidates are an EKF over `(theta, thetaDot)`,
+  a stronger particle proposal seeded from the analytic shadow inverse, or a
+  hybrid ambiguity-gated posterior that defaults to `sundog_shadow` when the
+  posterior adds no expected value.
 
 ### Phase 16 - Balance Data Surfaces And Claim Ratchet
 
