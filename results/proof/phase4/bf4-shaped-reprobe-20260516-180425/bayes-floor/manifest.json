@@ -1,0 +1,206 @@
+{
+  "schema": "sundog.threebody.phase4-bayes-floor-shaped-reprobe.bayes_floor.v1",
+  "startedAt": "2026-05-17T01:04:27.618Z",
+  "purpose": "Phase 4 same-signature particle-belief MPC Bayesian-floor evaluator.",
+  "args": {
+    "phase": "phase4-bayes-floor-shaped-reprobe",
+    "out": "results\\proof\\phase4\\bf4-shaped-reprobe-20260516-180425\\bayes-floor",
+    "seedStart": 0,
+    "seeds": 2,
+    "regimes": [
+      "near_escape"
+    ],
+    "duration": 16,
+    "timesteps": [
+      0.01
+    ],
+    "logEvery": 1,
+    "massRatios": [
+      1
+    ],
+    "targetTidal": 2,
+    "tidalSpikeThreshold": 50,
+    "localAccelerationWarningThreshold": 10,
+    "eventWarningHorizon": 1,
+    "radiusScales": [
+      1.075
+    ],
+    "velocityScales": [
+      1.1
+    ],
+    "thrustLimits": [
+      0.4
+    ],
+    "sensorNoiseSweep": [
+      0
+    ],
+    "trackGuardMode": "hazard_quantile",
+    "trackGuardQuantiles": [
+      0.75
+    ],
+    "trackGuardMinRadiusSweep": [
+      1.15
+    ],
+    "trackGuardMaxLocalAccelerationSweep": [
+      2.5
+    ],
+    "trackGuardMaxTidalMagnitudeSweep": [
+      35
+    ],
+    "particleCount": 256,
+    "planningHorizonSteps": 16,
+    "resampleThreshold": 0.5,
+    "shapeFraction": 0.5,
+    "bootstrapSeed": 40604
+  },
+  "cases": [
+    {
+      "massRatio": 1,
+      "timestep": 0.01,
+      "radiusScale": 1.075,
+      "velocityScale": 1.1,
+      "thrustLimit": 0.4,
+      "sensorNoiseStd": 0,
+      "sensorDelaySteps": 0,
+      "microManeuverContaminationStd": 0.08,
+      "trackGuardQuantile": 0.75,
+      "trackGuardMinRadius": 1.15,
+      "trackGuardMaxLocalAcceleration": 2.5,
+      "trackGuardMaxTidalMagnitude": 35
+    }
+  ],
+  "actionSelectionInputs": [
+    "guarded_accelerometer_signature_history",
+    "particle_belief"
+  ],
+  "rawStateUse": [
+    "truth_rollout",
+    "particle_simulation",
+    "readout_only"
+  ],
+  "controllerMode": "bayes_floor_particle_mpc",
+  "observationModel": {
+    "observedSignature": "observeGuardedAccelSignature(state, cfg, actualSensorState)",
+    "particlePrediction": "observeGuardedAccelSignature(particle.state, { ...cfg, sensorNoiseStd: 0 }, particle.sensorState)",
+    "likelihood": "diagonal Gaussian-like score over |T_hat|, gradX, gradY plus guard mismatch penalty"
+  },
+  "planningObjective": {
+    "form": "expected within-horizon survival time + shapeFraction * dt * expected terminal safety margin",
+    "shapeFraction": 0.5,
+    "terminalMargin": "min(escape-radius margin, close-approach margin) of the horizon-end state; 0 if a terminal hazard was reached in the rollout",
+    "floorValidityInvariant": "shapeFraction < 1 => shaping term < one dt, so a candidate whose true survival is longer by >= one dt is never overtaken on margin; the floor never prefers an earlier-escape action",
+    "supersedes": "BF-4 smoke-only pure steps-survived objective, which the 2026-05-16 probe showed degenerates to passive when planning horizon << escape timescale",
+    "tieOrder": "max shaped score; within 1e-9 -> min expected delta-V; then first in lattice order"
+  },
+  "actionLattice": [
+    {
+      "index": 0,
+      "actionKey": "0:0",
+      "thrust": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "actionKey": "0.4:0",
+      "thrust": [
+        0.4,
+        0
+      ]
+    },
+    {
+      "index": 2,
+      "actionKey": "-0.4:0",
+      "thrust": [
+        -0.4,
+        0
+      ]
+    },
+    {
+      "index": 3,
+      "actionKey": "0:0.4",
+      "thrust": [
+        0,
+        0.4
+      ]
+    },
+    {
+      "index": 4,
+      "actionKey": "0:-0.4",
+      "thrust": [
+        0,
+        -0.4
+      ]
+    },
+    {
+      "index": 5,
+      "actionKey": "0.28284271:0.28284271",
+      "thrust": [
+        0.28284271247461906,
+        0.28284271247461906
+      ]
+    },
+    {
+      "index": 6,
+      "actionKey": "0.28284271:-0.28284271",
+      "thrust": [
+        0.28284271247461906,
+        -0.28284271247461906
+      ]
+    },
+    {
+      "index": 7,
+      "actionKey": "-0.28284271:0.28284271",
+      "thrust": [
+        -0.28284271247461906,
+        0.28284271247461906
+      ]
+    },
+    {
+      "index": 8,
+      "actionKey": "-0.28284271:-0.28284271",
+      "thrust": [
+        -0.28284271247461906,
+        -0.28284271247461906
+      ]
+    }
+  ],
+  "trials": [
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p1__thrust_0p4__noise_0__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_000",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p1__thrust_0p4__noise_0__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 0,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.6158809704752637,
+        "y": 0.062131857094354925,
+        "vx": 0.2303566891420633,
+        "vy": 1.4846058638487012
+      },
+      "summary": {
+        "terminalOutcome": "escape",
+        "simulatedTime": 7.73,
+        "totalDeltaV": 3.092
+      }
+    },
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p1__thrust_0p4__noise_0__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_001",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p1__thrust_0p4__noise_0__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 1,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.7081045114895095,
+        "y": 0.022208717950852577,
+        "vx": 0.07718947368441151,
+        "vy": 1.4582853719173
+      },
+      "summary": {
+        "terminalOutcome": "close_approach",
+        "simulatedTime": 15.42,
+        "totalDeltaV": 2.872
+      }
+    }
+  ],
+  "completedAt": "2026-05-17T01:31:14.291Z"
+}
