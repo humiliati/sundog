@@ -475,4 +475,85 @@ purely about contracting the existing parity in writing + giving any
 future Node checker re-implementation a one-line acceptance test it
 must pass.
 
+**2026-05-16 (PT) — Tool v2 staged for operator shots.** Followed up the
+optional measurement helper with a polish pass aimed at operator
+ergonomics ahead of §6.3 pre-fill. New pinned hash:
+`tools/h0-measurement/index.html` SHA-256
+`0dee083ad48f3a7b137b4332da9a257f949e00f8d2347715ca755fe9abe40fde`
+(supersedes the v1 pin
+`7e9f279e41d11780af58ce98a47c7990e01c59884b38f48343a21f9c83a52d77`).
+
+Polish additions (additive only; no algorithm or output-schema change):
+
+1. **On-load canonicalizer self-check.** The Finding-1 cross-runtime
+   test vector is now inlined verbatim into the tool
+   (`TEST_VECTOR_SIDECAR_INPUT` + `TEST_VECTOR_EXPECTED_SHA256 =
+   "9c52ab15d5293341cfd45e52dba615d01b6698ee2c5345f59942e25f711ac8b6"`).
+   On page load the tool runs `canonicalJSON` + `SubtleCrypto`
+   sha-256 on the vector and surfaces a green/red badge in the
+   header: green iff the browser reproduces the pinned 922-byte
+   canonical string and the pinned `calib_sha256` byte-for-byte. Re-
+   verified out-of-band: a Node run of the shared library against the
+   same inlined input also produces `9c52ab15…c8b6` (parity intact).
+   If a future browser, Node, or vendored copy drifts, the operator
+   sees the bad badge before placing a single anchor.
+
+2. **`render_sha256` computed via `SubtleCrypto`.** The image file's
+   raw bytes are hashed on load; the resulting SHA-256 hex populates
+   the sidecar's `render_sha256` field automatically and is shown in
+   the UI alongside the loaded frame. This removes a class of manual
+   error (operator typing the wrong hex) and makes the §6.3 sidecars'
+   `render_sha256` field self-pinned to the actual loaded frame.
+
+3. **Per-anchor `measurement_note` editable text input.** After each
+   anchor is placed, an editable text field appears with a sensible
+   default (`"operator-eye on N° halo arc"`) the operator can refine
+   in-place. Per-anchor notes are required by §2-A; the v1 tool only
+   surfaced one global field.
+
+4. **Phase-15 preset selector.** A dropdown lists the eight Phase-15
+   known-FAIL frame_ids (matching the pinned fixture manifest); when
+   the dev server is running the tool can `fetch()` the frame
+   directly. Falls back gracefully to drag-and-drop / file-picker
+   under `file://`.
+
+5. **Validation panel with hard block.** A live warnings panel
+   surfaces missing required fields (`frame_id`, `measured_by`,
+   `compound_code_basis`, per-anchor `measurement_note`). Critically,
+   when the operator sets `fixture_class = known_pass_fullspan` but
+   leaves `known_pass_selection_basis` empty, the panel raises a hard
+   warning AND `passesHardValidation()` returns false, blocking the
+   download button. This is a structural enforcement of §2-A's "if
+   `fixture_class = known_pass_fullspan` then `known_pass_selection_basis`
+   MUST be non-null" rule at the tool level, so an operator cannot
+   ship a malformed known-PASS sidecar by accident.
+
+6. **Click-position storage + canvas redraw fidelity.** Per-anchor
+   and per-tick `click_x` / `click_y` are stored and the canvas
+   redraws radial lines from `sun_px` to each placed point on every
+   state change (Reset / Undo properly clear). The visible geometry
+   matches what gets serialized into the sidecar, removing a "what
+   you see vs. what you save" trap that v1 had.
+
+*Discipline still holds.* §3-blind structural property is unchanged:
+the v2 tool does not import the H0 checker, does not call the
+predicate, does not display admit / reason_code anywhere. The
+download is still `application/json` of a §2-A sidecar; that sidecar
+goes through the separate checker run, post-hoc, per §6.5. No frozen
+schema body edited. Public-Language Constraint banner preserved
+verbatim in the header. Cut-3 admission remains **HOLD**; execution
+**HELD**; H0-B negative side on real frames remains **OPEN**.
+
+*Scope of this filing.* Pinning the v2 hash + recording what changed
+between v1 and v2 so an operator using the tool can verify they have
+the v2 build (by hash) before measuring. No schema artifact's bytes
+changed; the residual-table generator self-test still passes; the
+test-vector script still reproduces the canonical 922-byte string
+and `9c52ab15…c8b6` hex. The pinned hashes of all other artifacts
+(`canonical-json.mjs`, `cut3-h0-residual-table.mjs`,
+`cut3-h0-make-test-vector.mjs`, `cut3-h0-known-fail-extract.mjs`,
+`cut3-h0-checker.mjs`, the Phase-15 fixture manifest, and the
+test-vector JSON) are unchanged from their prior pins and re-verified
+in this filing.
+
 *(reviewer space continues — append-only)*
