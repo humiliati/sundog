@@ -647,6 +647,16 @@ function scoreBayesActionPoint(state, theta, thetaDot, action, cfg) {
     + Math.abs(action) / Math.max(cfg.forceLimit, 1e-6) * 0.08;
 }
 
+function bayesObservationStress(sensor, cfg) {
+  const delayStress = clamp((cfg.sensorDelaySteps - 12) / 18, 0, 1);
+  const noiseStress = clamp((cfg.sensorNoiseStd - 0.015) / 0.065, 0, 1);
+  const dropoutStress = clamp((cfg.sensorDropoutRate - 0.1) / 0.25, 0, 1);
+  const confidenceStress = sensor?.valid
+    ? clamp((0.55 - sensor.confidence) / 0.35, 0, 1)
+    : 1;
+  return Math.max(delayStress, noiseStress, dropoutStress, confidenceStress);
+}
+
 function computeSundogShadowForce(state, sensor, controllerState, cfg) {
   const proxy = sensor.valid ? sensor.residual / Math.max(cfg.poleLength, 1e-6) : 0;
   const proxyVelocity = sensor.valid ? sensor.residualVelocity / Math.max(cfg.poleLength, 1e-6) : 0;
@@ -694,8 +704,18 @@ function computeBayesFloorControl(state, sensor, controllerState, cfg) {
   const sundogScore = scoreBayesActionPoint(state, beliefTheta, beliefThetaDot, sundogAction, cfg);
   const proposalScore = scoreBayesActionPoint(state, beliefTheta, beliefThetaDot, proposalAction, cfg);
   const scoreAdvantage = sundogScore - proposalScore;
-  const advantageThreshold = cfg.bayesAdvantageThreshold ?? 0.06;
-  const useProposal = posteriorReady && scoreAdvantage > advantageThreshold;
+  const baseAdvantageThreshold = cfg.bayesAdvantageThreshold ?? 0.06;
+  const observationStress = bayesObservationStress(sensor, cfg);
+  const advantageThreshold = baseAdvantageThreshold + observationStress * 0.18;
+  const degradationReady = observationStress < 0.05
+    || (
+      shadowEstimate.valid
+      && shadowEstimate.confidence >= 0.58
+      && diagnostics.thetaStd < 0.08
+      && diagnostics.thetaDotStd < 0.55
+      && diagnostics.effectiveSampleSize >= bayes.particles.length * 0.4
+    );
+  const useProposal = posteriorReady && degradationReady && scoreAdvantage > advantageThreshold;
   const bestForce = useProposal ? proposalAction : sundogAction;
   const bestScore = useProposal ? proposalScore : sundogScore;
 
@@ -716,6 +736,10 @@ function computeBayesFloorControl(state, sensor, controllerState, cfg) {
     sundogScore,
     proposalScore,
     scoreAdvantage,
+    baseAdvantageThreshold,
+    advantageThreshold,
+    observationStress,
+    degradationReady,
     selectedCandidate: useProposal ? "bayes_proposal" : "sundog_guard",
   };
 
