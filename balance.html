@@ -224,6 +224,180 @@
             background: #fff;
         }
 
+        .balance-evidence-panel {
+            margin-top: 2.25rem;
+            padding: 1.35rem 0 0;
+            border-top: 1px solid rgba(26, 58, 82, 0.18);
+        }
+
+        .balance-evidence-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .balance-evidence-panel h2 {
+            font-size: 1.45rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .evidence-eyebrow {
+            color: #6b4d00;
+            font-size: 0.72rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .balance-evidence-status {
+            min-width: 10rem;
+            padding: 0.42rem 0.65rem;
+            border: 1px solid rgba(26, 58, 82, 0.18);
+            border-radius: 4px;
+            background: #f7fafb;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .balance-evidence-panel[data-status="pass"] .balance-evidence-status {
+            border-color: rgba(47, 116, 72, 0.34);
+            background: #f3fbf5;
+            color: #205232;
+        }
+
+        .balance-evidence-panel[data-status="unavailable"] .balance-evidence-status {
+            border-color: rgba(164, 63, 45, 0.34);
+            background: #fff6f3;
+            color: #7a2e1f;
+        }
+
+        .balance-evidence-summary {
+            max-width: 58rem;
+            color: #334b59;
+            font-size: 0.98rem;
+        }
+
+        .balance-evidence-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(136px, 1fr));
+            gap: 0.65rem;
+            margin: 1rem 0;
+        }
+
+        .balance-evidence-metric {
+            min-width: 0;
+            padding: 0.62rem 0.72rem;
+            border: 1px solid rgba(26, 58, 82, 0.14);
+            border-left: 3px solid var(--accent-gold);
+            border-radius: 6px;
+            background: #fbfcfd;
+        }
+
+        .balance-evidence-metric span,
+        .admission-lane-cell span {
+            display: block;
+            color: #607382;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .balance-evidence-metric strong,
+        .admission-lane-cell strong {
+            display: block;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            overflow-wrap: anywhere;
+        }
+
+        .balance-evidence-metric strong {
+            margin: 0.12rem 0;
+            font-size: 1.08rem;
+        }
+
+        .balance-evidence-metric em {
+            display: block;
+            color: #526673;
+            font-size: 0.78rem;
+            font-style: normal;
+            line-height: 1.3;
+        }
+
+        .balance-evidence-lanes {
+            margin-top: 0.35rem;
+        }
+
+        .balance-evidence-lanes h3 {
+            margin: 1rem 0 0.55rem;
+            color: var(--primary-dark);
+            font-size: 1rem;
+        }
+
+        .balance-admission-lanes {
+            display: grid;
+            gap: 0.45rem;
+        }
+
+        .admission-lane-row {
+            display: grid;
+            grid-template-columns: minmax(150px, 1.2fr) repeat(4, minmax(70px, 0.55fr)) minmax(180px, 1.6fr);
+            gap: 0.7rem;
+            align-items: center;
+            padding: 0.72rem 0.8rem;
+            border: 1px solid rgba(26, 58, 82, 0.14);
+            border-left: 4px solid #7da2b8;
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        .admission-lane-row[data-lane="hard_gate"] {
+            border-left-color: #2f7448;
+        }
+
+        .admission-lane-row[data-lane="observation_parity_gate"] {
+            border-left-color: #7da2b8;
+        }
+
+        .admission-lane-row[data-lane="reported_only"] {
+            border-left-color: #a46a2d;
+        }
+
+        .admission-lane-label strong {
+            color: var(--primary-dark);
+            font-size: 0.94rem;
+        }
+
+        .admission-lane-label em {
+            display: block;
+            color: #526673;
+            font-size: 0.78rem;
+            font-style: normal;
+            line-height: 1.3;
+        }
+
+        .balance-evidence-boundaries {
+            margin-top: 0.95rem;
+            padding: 0.8rem 0.9rem;
+            border: 1px solid rgba(26, 58, 82, 0.14);
+            border-radius: 6px;
+            background: #fbfcfd;
+            color: #334b59;
+            font-size: 0.92rem;
+            line-height: 1.45;
+        }
+
+        .balance-evidence-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+        }
+
         /* Page-local: footer styling lives in sundog-theme.css */
 
         @media (max-width: 900px) {
@@ -278,6 +452,25 @@
 
             #phase-display {
                 justify-self: start;
+            }
+
+            .balance-evidence-header {
+                display: block;
+            }
+
+            .balance-evidence-status {
+                width: fit-content;
+                margin-top: 0.65rem;
+            }
+
+            .admission-lane-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 0.6rem;
+            }
+
+            .admission-lane-label,
+            .admission-lane-cell:last-child {
+                grid-column: 1 / -1;
             }
         }
 
@@ -371,6 +564,7 @@
                     <button type="button" data-mode="naive_cart">Cart</button>
                     <button type="button" data-mode="naive_shadow">Naive</button>
                     <button type="button" data-mode="sundog_shadow">Sundog</button>
+                    <button type="button" data-mode="bayes_floor_shadow_particle">Bayes</button>
                     <button type="button" data-mode="oracle">Oracle</button>
                 </div>
 
@@ -436,11 +630,10 @@
                 <output id="replay-token" class="replay-token sd-replay-token" aria-live="polite"></output>
 
                 <div class="note sd-note">
-                    This page is not yet promoted as application evidence. It is the
-                    Phase 1-9 scaffold: deterministic dynamics, shadow sensor, baseline
-                    lanes, a prototype Sundog lane, replayable harness, and recovery
-                    metric instrumentation, plus live boundary warnings. Promotion remains
-                    gated by the Phase 10 operating envelope checks in the roadmap.
+                    This page is the public Balance workbench: deterministic dynamics,
+                    shadow sensor, controller lanes, replayable harness, recovery metrics,
+                    live boundary warnings, and the Phase 16 evidence surface. Admission
+                    lanes separate claim cells from reported-only observation degradation.
                 </div>
             </aside>
         </section>
@@ -465,11 +658,36 @@
                 confirmed the bounded operating envelope under repaired
                 verdict criteria.
             </p>
+            <section id="balance-evidence-panel" class="balance-evidence-panel" data-status="loading" aria-labelledby="balance-evidence-heading">
+                <div class="balance-evidence-header">
+                    <div>
+                        <div class="eyebrow evidence-eyebrow">Phase 16 Data Surface</div>
+                        <h2 id="balance-evidence-heading">Phase 15 Claim Lock</h2>
+                    </div>
+                    <div id="balance-evidence-status" class="balance-evidence-status">Loading</div>
+                </div>
+                <p id="balance-evidence-summary" class="balance-evidence-summary">
+                    Loading the Phase 15 Bayesian-floor receipt from the public Balance data bundle.
+                </p>
+                <div id="balance-evidence-metrics" class="balance-evidence-metrics" aria-live="polite"></div>
+                <div class="balance-evidence-lanes">
+                    <h3>Admission Lanes</h3>
+                    <div id="balance-admission-lanes" class="balance-admission-lanes" aria-live="polite"></div>
+                </div>
+                <div id="balance-evidence-boundaries" class="balance-evidence-boundaries" aria-live="polite">
+                    Receipt boundary details load with the data bundle.
+                </div>
+                <div class="balance-evidence-links">
+                    <a href="/data/balance-phase16-claim-lock.json">Phase 16 JSON</a>
+                    <a href="/docs/sundog_v_balance.md">Balance Roadmap</a>
+                    <a href="/docs/sundog_v_bayes.md">Bayes Roadmap</a>
+                </div>
+            </section>
             <div class="claim-box">
-                <strong>Current tier:</strong> Operating-Envelope Study.
-                P2b overhead-light margins are degradation behavior only: both
-                controllers fail there, with Sundog merely lasting longer under
-                confidence gating.
+                <strong>Current tier:</strong> Phase 15 claim-lock study.
+                The same-information Bayesian-floor receipt is locked for hard-gate
+                Balance cells; severe observation-degradation cells remain visible as
+                reported-only boundary diagnostics.
             </div>
         </section>
     </main>
@@ -487,7 +705,7 @@
         </p>
     </footer>
 
-    <script type="module" src="/js/balance-browser.mjs?v=20260508j"></script>
+    <script type="module" src="/js/balance-browser.mjs?v=20260517a"></script>
     <script type="module" src="/js/sundog-chat-widget.mjs"></script>
 </body>
 </html>

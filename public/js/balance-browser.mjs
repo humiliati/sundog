@@ -10,7 +10,7 @@ import {
   normalizeBalanceConfig,
   sampleShadowSensor,
   serializeBalanceSample,
-} from "./balance-core.mjs?v=20260508i";
+} from "./balance-core.mjs?v=20260517a";
 
 const canvas = document.getElementById("balance-canvas");
 const ctx = canvas.getContext("2d");
@@ -41,6 +41,12 @@ const replayToken = document.getElementById("replay-token");
 const statusDisplay = document.getElementById("balance-status");
 const metricsDisplay = document.getElementById("balance-metrics");
 const phaseDisplay = document.getElementById("phase-display");
+const evidencePanel = document.getElementById("balance-evidence-panel");
+const evidenceStatus = document.getElementById("balance-evidence-status");
+const evidenceSummary = document.getElementById("balance-evidence-summary");
+const evidenceMetrics = document.getElementById("balance-evidence-metrics");
+const admissionLanes = document.getElementById("balance-admission-lanes");
+const evidenceBoundaries = document.getElementById("balance-evidence-boundaries");
 
 const history = [];
 const maxHistory = 260;
@@ -62,7 +68,9 @@ let disturbanceTicks = 0;
 let lastFrameTime = performance.now();
 let initialStateOverride = null;
 let durationOverride = null;
+let balanceEvidenceData = null;
 let recoveryTracker = createRecoveryTracker();
+const evidenceIntegerFormatter = new Intl.NumberFormat("en-US");
 
 for (const [key, preset] of Object.entries(BALANCE_PRESETS)) {
   const option = document.createElement("option");
@@ -253,6 +261,183 @@ function roundedParam(value, digits = 9) {
 
 function formatMetric(value, digits = 2, suffix = "") {
   return Number.isFinite(value) ? `${value.toFixed(digits)}${suffix}` : "n/a";
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;",
+  })[char]);
+}
+
+function formatEvidenceInteger(value) {
+  return Number.isFinite(value) ? evidenceIntegerFormatter.format(value) : "n/a";
+}
+
+function formatEvidenceNumber(value, digits = 3) {
+  if (!Number.isFinite(value)) return "n/a";
+  return String(Number.parseFloat(value.toFixed(digits)));
+}
+
+function formatEvidenceSigned(value, digits = 6) {
+  if (!Number.isFinite(value)) return "n/a";
+  const formatted = formatEvidenceNumber(value, digits);
+  return value >= 0 ? `+${formatted}` : formatted;
+}
+
+function formatEvidenceDuration(seconds) {
+  if (!Number.isFinite(seconds)) return "n/a";
+  const minutes = Math.floor(seconds / 60);
+  const remaining = Math.round(seconds - minutes * 60);
+  return minutes > 0 ? `${minutes}m ${remaining}s` : `${remaining}s`;
+}
+
+function formatAxisName(axis) {
+  return String(axis ?? "").replace(/_/g, " ");
+}
+
+function formatAxisValue(value) {
+  if (!Number.isFinite(value)) return "n/a";
+  return Number.parseFloat(value.toFixed(4)).toString();
+}
+
+function formatAxes(axes = {}) {
+  const entries = Object.entries(axes);
+  if (!entries.length) return "none";
+  return entries
+    .map(([axis, count]) => `${formatAxisName(axis)} ${count}`)
+    .join(", ");
+}
+
+function laneSummary(lane) {
+  if (lane === "hard_gate") return "Canonical operating-envelope cells admitted as claim evidence.";
+  if (lane === "observation_parity_gate") return "Moderate sensor degradation admitted when Sundog parity holds.";
+  if (lane === "reported_only") return "Severe observation degradation kept visible outside the hard claim.";
+  return "Admission lane from the Phase 15 receipt.";
+}
+
+function metricCard(label, value, detail) {
+  return `
+    <div class="balance-evidence-metric">
+      <span>${escapeHtml(label)}</span>
+      <strong>${escapeHtml(value)}</strong>
+      <em>${escapeHtml(detail)}</em>
+    </div>
+  `;
+}
+
+function reportedBoundaryText(cells) {
+  const groups = new Map();
+  for (const cell of cells) {
+    if (!groups.has(cell.axis)) groups.set(cell.axis, new Set());
+    groups.get(cell.axis).add(formatAxisValue(cell.axisValue));
+  }
+  return [...groups.entries()]
+    .map(([axis, values]) => `${formatAxisName(axis)} ${[...values].sort((a, b) => Number(a) - Number(b)).join(", ")}`)
+    .join("; ");
+}
+
+function renderBalanceEvidence(data) {
+  if (!evidencePanel) return;
+  balanceEvidenceData = data;
+  const phase15 = data?.phase15 ?? {};
+  const claimGate = phase15.claimGate ?? {};
+  const hardGateCells = phase15.hardGateCells ?? claimGate.hardGateCells;
+  const hardGatePassCells = phase15.hardGatePassCells ?? claimGate.hardGatePassCells;
+  const reportedOnlyCells = phase15.reportedOnlyCells ?? claimGate.reportedOnlyCells;
+  const pass = claimGate.pass === true;
+
+  evidencePanel.dataset.status = pass ? "pass" : "pending";
+  if (evidenceStatus) evidenceStatus.textContent = pass ? "Claim Lock" : "Pending";
+  if (evidenceSummary) {
+    evidenceSummary.innerHTML = `
+      Phase 15 passes the same-information Bayesian-floor claim gate across
+      <strong>${escapeHtml(formatEvidenceInteger(hardGatePassCells))}/${escapeHtml(formatEvidenceInteger(hardGateCells))}</strong>
+      hard-gate cells. The bundle keeps
+      <strong>${escapeHtml(formatEvidenceInteger(reportedOnlyCells))}</strong>
+      severe observation-degradation cells visible as reported-only boundary evidence.
+    `;
+  }
+
+  if (evidenceMetrics) {
+    evidenceMetrics.innerHTML = [
+      metricCard("Hard gates", `${formatEvidenceInteger(hardGatePassCells)}/${formatEvidenceInteger(hardGateCells)}`, "claim cells passed"),
+      metricCard("Reported-only", formatEvidenceInteger(reportedOnlyCells), "boundary cells retained"),
+      metricCard("Mean regret", formatEvidenceSigned(phase15.meanRegretVsSundog, 6), "Bayes minus Sundog survival"),
+      metricCard("Bayes sanity", `${formatEvidenceInteger(phase15.bayesSanityPassCells)}/${formatEvidenceInteger(phase15.cellCount)}`, "all cells in the receipt"),
+      metricCard("Full lock", formatEvidenceInteger(phase15.trialCount), formatEvidenceDuration(phase15.elapsedSeconds)),
+    ].join("");
+  }
+
+  const lanes = phase15.admissionLanes ?? [];
+  if (admissionLanes) {
+    admissionLanes.innerHTML = lanes.map((lane) => {
+      const claimText = lane.hardGateCells > 0
+        ? `${formatEvidenceInteger(lane.hardGatePassCells)}/${formatEvidenceInteger(lane.hardGateCells)}`
+        : "reported";
+      const sanityText = `${formatEvidenceInteger(lane.bayesSanityPassCells)}/${formatEvidenceInteger(lane.bayesSanityCells)}`;
+      return `
+        <article class="admission-lane-row" data-lane="${escapeHtml(lane.lane)}">
+          <div class="admission-lane-label">
+            <strong>${escapeHtml(lane.label)}</strong>
+            <em>${escapeHtml(laneSummary(lane.lane))}</em>
+          </div>
+          <div class="admission-lane-cell">
+            <span>Cells</span>
+            <strong>${escapeHtml(formatEvidenceInteger(lane.cells))}</strong>
+          </div>
+          <div class="admission-lane-cell">
+            <span>Claim</span>
+            <strong>${escapeHtml(claimText)}</strong>
+          </div>
+          <div class="admission-lane-cell">
+            <span>Sanity</span>
+            <strong>${escapeHtml(sanityText)}</strong>
+          </div>
+          <div class="admission-lane-cell">
+            <span>Regret</span>
+            <strong>${escapeHtml(formatEvidenceSigned(lane.meanRegretVsSundog, 6))}</strong>
+          </div>
+          <div class="admission-lane-cell">
+            <span>Axes</span>
+            <strong>${escapeHtml(formatAxes(lane.axes))}</strong>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  if (evidenceBoundaries) {
+    const reportedCells = (data.cells ?? []).filter((cell) => cell.phase15?.admissionLane === "reported_only");
+    const parityLane = lanes.find((lane) => lane.lane === "observation_parity_gate");
+    const parityText = parityLane
+      ? `${formatEvidenceInteger(parityLane.hardGatePassCells)}/${formatEvidenceInteger(parityLane.hardGateCells)} observation-parity cells remain hard-gated`
+      : "observation-parity cells remain separated from standard hard gates";
+    evidenceBoundaries.innerHTML = `
+      <strong>Admission boundary:</strong> ${escapeHtml(parityText)}. Reported-only cells cover
+      ${escapeHtml(reportedBoundaryText(reportedCells))}; they stay in the public bundle without
+      expanding the same-information claim beyond its admitted lane.
+    `;
+  }
+}
+
+async function loadBalanceEvidence() {
+  if (!evidencePanel) return;
+  try {
+    const response = await fetch("/data/balance-phase16-claim-lock.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    renderBalanceEvidence(await response.json());
+  } catch (error) {
+    evidencePanel.dataset.status = "unavailable";
+    if (evidenceStatus) evidenceStatus.textContent = "Unavailable";
+    if (evidenceSummary) evidenceSummary.textContent = `Phase 16 receipt data unavailable: ${error.message}`;
+    if (evidenceMetrics) evidenceMetrics.innerHTML = "";
+    if (admissionLanes) admissionLanes.innerHTML = "";
+    if (evidenceBoundaries) evidenceBoundaries.textContent = "Rebuild the public Balance data bundle to restore this panel.";
+  }
 }
 
 function buildReplayUrl() {
@@ -815,6 +1000,7 @@ window.__sundogBalanceReplay = () => ({
   sample: serializeBalanceSample(state, currentSensor, currentControl, currentConfig()),
   recovery: recoveryTracker,
   boundary: assessBalanceBoundary(currentConfig(), currentSensor, currentControl, state),
+  evidence: balanceEvidenceData,
 });
 
 const replaySettings = readReplaySettings();
@@ -823,4 +1009,5 @@ resizeCanvas();
 applyPresetControlDefaults();
 applyReplaySettings(replaySettings);
 resetSimulation();
+loadBalanceEvidence();
 requestAnimationFrame(animate);
