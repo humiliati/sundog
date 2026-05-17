@@ -113,8 +113,9 @@ Use one or two, depending on channel.
 The original controlled result is photometric mirror alignment without
 target-position access. A controller denied Cartesian target coordinates aligns
 from sparse photometric feedback and proprioception in a bounded MuJoCo task.
-The cost of indirect feedback is slower acquisition; the reported terminal
-accuracy claim must be kept narrow and paired with that cost.
+The cost of indirect feedback is slower acquisition, about 16x in the reported
+core run; the reported terminal accuracy claim must be kept narrow and paired
+with that cost.
 
 ### Geometry
 
@@ -128,9 +129,16 @@ inconveniences.
 
 The Mesa-Trap front is the strongest warning against overclaiming. In the
 tested shadow-field navigation family, signature-trained policies hold across
-some selection-pressure pockets and collapse above a mapped threshold. That is
-not universal immunity. It is a measured operating envelope with a mechanistic
-cliff.
+some selection-pressure pockets and mixed-signal policies collapse at a mapped
+Medium threshold. That is not universal immunity. It is a measured operating
+envelope with a mechanistic failure boundary.
+
+The newest Large-tier subset should be framed even more carefully: `lambda=0.99`
+recovers by terminal-alignment eval (`mean_terminal_alignment ~= 0.885`), but
+the eval summary does not yet compute `old_basin_pref`. So the current reading
+is basin-reaching by the eval metric, not verified basin-attractor avoidance.
+The strategic claim is coherent-signal protection under tested conditions, not
+unique signature immunity.
 
 ### Applications
 
@@ -169,10 +177,10 @@ Use this in any broad public artifact:
 
 ## Publication Checklist
 
-- [ ] No universal-theorem language.
-- [ ] 16x acquisition cost is visible anywhere terminal-accuracy is mentioned.
-- [ ] Mesa language says "mapped threshold" or "operating envelope," not
+- [x] No universal-theorem language.
+- [x] 16x acquisition cost is visible anywhere terminal-accuracy is mentioned.
+- [x] Mesa language says "mapped threshold" or "operating envelope," not
       "immunity."
-- [ ] Geometry language distinguishes rendered from anchored.
-- [ ] Applications are called surfaces/workbenches, not proof.
-- [ ] Every broad artifact includes the boundary paragraph or close paraphrase.
+- [x] Geometry language distinguishes rendered from anchored.
+- [x] Applications are called surfaces/workbenches, not proof.
+- [x] Every broad artifact includes the boundary paragraph or close paraphrase.

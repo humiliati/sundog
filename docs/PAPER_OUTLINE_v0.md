@@ -42,8 +42,8 @@ position. We propose a scan-then-extremum-seek controller: a Lissajous
 joint-space scan locates the empirical maximum of the target intensity,
 then perturb-and-observe extremum-seeking refines the lock. On 30 matched
 scenes in a MuJoCo simulation, the photometric controller reaches terminal
-target intensity statistically indistinguishable from a target-aware
-analytic baseline (Mann-Whitney U=526, p=0.26), and significantly
+target intensity with no detected difference from a target-aware
+analytic baseline at n=30 (Mann-Whitney U=526, p=0.26), and significantly
 outperforms a noisy-oracle baseline with 5 cm of position perception
 error. The photometric controller pays for its lack of target access in
 convergence time: median 188 steps versus the oracle's 12. We discuss
@@ -72,9 +72,9 @@ architecture: a brief joint-space Lissajous scan acquires the empirical
 maximum of the target signal, then ESC refines the lock. We instantiate
 the architecture on a mirror-alignment task in MuJoCo and compare it
 against a target-aware analytic baseline. The empirical claim is narrow
-and quantitative: terminal alignment accuracy is statistically
-indistinguishable between the photometric controller and the oracle, at
-the cost of ~16x slower convergence.
+and quantitative: terminal alignment accuracy has no detected difference
+between the photometric controller and the oracle in the reported n=30 run,
+at the cost of ~16x slower convergence.
 
 **Roadmap (1 sentence).**
 
@@ -144,9 +144,11 @@ limits with margin). Position-controlled actuators in MuJoCo with kp=80,
 kv=8 servo to the target.
 
 **Oracle (used by baselines only):** laser position and target detector
-position. The photometric agent's API is constructed so that calling
-get_oracle() raises by design rather than silently leaking ground
-truth into agent code.
+position. The canonical runner queries this object once per episode for the
+target-aware baselines; the photometric factory deletes the oracle before
+constructing the controller. The environment still exposes `get_oracle()`, so
+the no-leakage claim is a property of the canonical runner/controller path, not
+a global API impossibility.
 
 ### 3.4 Photometric controller (~1/3 page)
 
@@ -239,10 +241,10 @@ sundog/results/analysis/convergence_curves.png)
 ### Headline interpretation
 On the noiseless scenes, **a controller that has no Cartesian access to
 the target and only an eight-detector floor ring as photometric feedback
-reaches the same terminal alignment as a target-aware controller with
-analytic geometry**. The difference is in convergence speed: photometric
-takes ~16x longer because it must scan to find the optimum before it can
-refine. This is the trade-off the paper documents.
+reaches comparable terminal alignment to a target-aware controller with
+analytic geometry in the reported n=30 run**. The difference is in convergence
+speed: photometric takes ~16x longer because it must scan to find the optimum
+before it can refine. This is the trade-off the paper documents.
 
 ### A caveat that deserves call-out
 Photometric's mean terminal (0.945) is fractionally higher than DOA-direct's
@@ -450,10 +452,11 @@ below threshold."
 
 ## What survived the stress tests
 
-The headline claim — terminal target intensity statistically
-indistinguishable from a target-aware analytic baseline — survives
-under detector noise (up to sigma=0.20), narrower beam sigma down to
-0.05, scan durations 1-4 s, and laser heights 1.5-3.5 m. It does NOT
+The headline claim - comparable terminal target intensity in the tested
+setting, with no detected difference from a target-aware analytic baseline in
+the reported n=30 run - survives under detector noise (up to sigma=0.20),
+narrower beam sigma down to 0.05, scan durations 1-4 s, and laser heights
+1.5-3.5 m. It does NOT
 survive at joint limits below ~1.2 rad. The paper should report this
 honestly and frame the joint-limit asymmetry as a known boundary,
 with the adaptive-SCAN extension noted as future work.

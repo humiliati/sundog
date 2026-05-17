@@ -66,6 +66,8 @@ Use:
 - "failure boundaries"
 - "pre-registered nulls"
 - "first year of self-falsification"
+- "coherent-signal controllers held in the tested pockets; mixed-signal
+  controllers are where the failure boundary appears"
 
 Avoid:
 
@@ -75,6 +77,8 @@ Avoid:
 - "Sundog sidesteps Goodhart" without the bounded Mesa caveat
 - "the agent uses the inverse" if the evidence is only probe decodability
 - "statistically indistinguishable from oracle" without the 16x acquisition caveat
+- "Large lambda=0.99 escaped the mesa trap" before `old_basin_pref`
+  intervention confirms basin-attractor avoidance
 
 ## 1. Personal Facebook Post
 

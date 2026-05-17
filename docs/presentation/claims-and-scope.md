@@ -298,6 +298,16 @@ defensible *bounded* form is:
 > localizes the behavioral cliff to an entangled 5D subspace at the actor's
 > final hidden layer.
 
+Phase 7 v2 / Large caveat: the Large cliff-subset now complicates the simple
+monotone-cliff story. The value-coef-stabilized Large `lambda=0.99` checkpoint
+recovers by the current eval metric (`mean_terminal_alignment ~= 0.885`), while
+`lambda=0.95` and `lambda=0.97` remain weak. That U-shape may be more important
+than the Medium cliff, but it is not yet a basin-attractor-avoidance receipt:
+the eval summary does not compute `old_basin_pref`, so it cannot separate
+basin-reaching from a fixed attractor that happens to co-point with the basin
+direction. Public material may call it an eval-metric recovery or a Phase 7 v3
+prompt, not a confirmed mesa-trap escape.
+
 The earned language has three load-bearing parts. Use them as a set, not
 piecemeal, because the parts qualify each other:
 
@@ -380,7 +390,9 @@ What is **still not earned**:
 - Foundation-model behavior.
 - Deployed-system robustness.
 - Adversarial robustness under named red-team budgets.
-- Large-tier capacity behavior (only Small and Medium tested).
+- Large-tier basin-attractor behavior. A provisional Large cliff-subset eval
+  exists, but it does not yet include Phase 4-style `old_basin_pref`
+  intervention.
 - Cross-architecture behavior (only the matched MLP family tested).
 - Any claim that signature controllers cannot be reward-hacked. They can —
   the program now has the receipt for *where* they can.

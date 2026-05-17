@@ -89,6 +89,15 @@ instability and the mesa story deflates.
   test and it is owed *before* the cliff is cited in any anniversary surface.
   Routed to the proof roadmap as a gating control.
 
+**2026-05-17 update.** Large Phase 7 v2 no longer supports a simple monotone
+cliff story: the `lambda=0.99` checkpoint recovers by terminal-alignment eval
+while `lambda=0.95` and `lambda=0.97` remain weak. This does not erase the
+Medium cliff, but it changes the public interpretation. The safer claim is
+coherent-signal protection, with signature-pure and possibly reward-pure as
+coherent classes, and mixed-signal control as the unstable region when the
+mixture creates inference noise. Because the Large eval summary lacks
+`old_basin_pref`, the recovery is not yet a mesa-trap escape receipt.
+
 ## The long-pole structural ones
 
 ### 5. HaloSim grades its own homework

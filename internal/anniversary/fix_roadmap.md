@@ -133,6 +133,17 @@ Exit:
 - Either "no leakage into controller/training path" is supported, or the public
   statement is revised downward.
 
+Solo pass, 2026-05-17:
+
+- Filed [`../../docs/ORACLE_LEAKAGE_AUDIT.md`](../../docs/ORACLE_LEAKAGE_AUDIT.md).
+- Result: no Cartesian target-position leakage found in the canonical
+  photometric controller path.
+- Correction made: old wording implying oracle access was impossible through
+  the environment API was too strong. The true boundary is narrower: the
+  environment exposes oracle state for baselines, while the canonical
+  photometric factory discards it and the controller receives only
+  `Observation`.
+
 ### 3. Mesa lambda-confound caveat
 
 **Solo status:** wording pass is soloable; confound experiment is not.
@@ -142,6 +153,20 @@ Problem:
 The Mesa cliff at `lambda ~= 0.952588` is powerful and suspicious for the same
 reason. If lambda is collinear with effective learning rate, reward-scale
 normalization, or gradient-norm ratio, the cliff could be an optimizer artifact.
+
+Phase 7 v2 / Large adds a second caveat worth banking before the cascade gets
+louder. The current eval summary does not compute `old_basin_pref`, so the
+Large `lambda=0.99` recovery cannot yet distinguish "the policy reaches the
+basin direction" from "the policy collapses onto a fixed attractor that happens
+to co-point with the basin direction." High terminal alignment
+(`mean_terminal_alignment ~= 0.885`) is consistent with both readings. To
+falsify the second reading, Phase 7 v3 needs a Phase 4-style intervention
+battery on these checkpoints. That is out of scope for Phase 7 v2, but it is
+the natural next Mesa thread.
+
+The public wording should therefore say: the Large U-shape recovery at
+`lambda=0.99` is basin-reaching by the current eval metric, but it is not yet
+verified as basin-attractor-avoiding in the mesa-trap sense.
 
 Scope:
 
@@ -159,6 +184,12 @@ Steps:
    reward-gradient rescale plus no-op transform invariance.
 4. Do not promote Postulate 2 / Postulate 4 language out of speculative until
    the confound test clears.
+5. When referencing Large Phase 7 v2, distinguish terminal-alignment recovery
+   from `old_basin_pref` / intervention-confirmed basin avoidance.
+6. Reframe the strategic Mesa sentence around coherent signals, not unique
+   signature protection: signature-pure and reward-pure may both be coherent
+   classes; mixed-signal controllers destabilize when the mixing creates
+   inference noise.
 
 Checks:
 
@@ -171,6 +202,15 @@ Exit:
 - Anniversary copy uses the cliff as a failure-boundary receipt.
 - Any gravity-frame sentence carries the bounded caveat or links the gravity
   ledger / proof roadmap.
+
+Solo pass, 2026-05-17:
+
+- Banked the Phase 7 v3 caveat: Large `lambda=0.99` currently recovers by
+  terminal-alignment eval, not by Phase 4-style `old_basin_pref` intervention.
+- Updated the public Mesa framing target from "signature controllers are
+  uniquely protected" to "coherent-signal controllers are protected in the
+  tested pockets; mixed-signal controllers are the unstable class when the
+  mixture creates inference noise."
 
 ### 4. Geometry rendered-vs-anchored surface check
 
@@ -1012,10 +1052,10 @@ The public statement may ship when:
 
 - [x] P0.1 terminal-accuracy wording is safe on the edited launch-facing set;
       rerun the final search before posting.
-- [ ] P0.2 oracle-leakage receipt exists or the claim is demoted.
-- [ ] P0.3 Mesa cliff language is bounded.
+- [x] P0.2 oracle-leakage receipt exists or the claim is demoted.
+- [x] P0.3 Mesa cliff language is bounded.
 - [x] P0.4 geometry rendered-vs-anchored distinction is visible.
-- [ ] `first_public_statement.md` passes the public guardrails in
+- [x] `first_public_statement.md` passes the public guardrails in
       `anni_spam_roadmap.md`.
 
 The broader social rollout may continue while P1/P2 work proceeds, as long as
