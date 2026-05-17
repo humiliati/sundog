@@ -1256,22 +1256,34 @@ Initial implementation slice (2026-05-17):
   regret versus `sundog_shadow` (recoverable `noise_0p03`: -0.0383;
   recoverable `noise_0p08`: -0.0008), and the high-noise failure-regime cells
   need an explicit admission rule before they can be treated as claim gates.
-- Full Phase 10-equivalent estimate: 68 loaded Phase 10 cells x 100 seeds x 4
-  modes = 27,200 trials. At the post-repair measured 7.36 trials/s, the full
-  run is about 62 minutes, which exceeds the repo's inline runtime rule. Do not
-  run it as a claim lock until the sensor-noise admission/guard issue above is
-  resolved; the command below is staged only as a diagnostic lock:
+- Full diagnostic lock (2026-05-17): the operator ran the full Phase
+  10-equivalent Phase 15 slate after refreshing `results/balance/phase10-envelope`.
+  It completed 27,200 trials in 2901.811 s (9.37 trials/s), with observation
+  parity, no-state-leak, and unknown-mode rejection all passing. Across 68
+  cells, aggregate mean regret versus `sundog_shadow` was +0.02645 normalized
+  survival, range -0.00889 to +0.76106, with mean negative-regret rate 0.0175.
+  The floor passed Bayes-vs-naive sanity on 59/68 cells and had two negative
+  mean-regret cells: near-fall `sensor_noise__0p015` (-0.00690, sanity true)
+  and recoverable `sensor_noise__0p03` (-0.00889, sanity false). Candidate
+  selection remained mostly guarded (`sundog_guard`: 179,286 rows,
+  `bayes_proposal`: 2,263). Interpretation: the repaired floor is a strong
+  diagnostic parity baseline, not a clean claim lock; the remaining failures
+  are concentrated in observation degradation.
+- Full-lock reproduction command:
 
 ```powershell
 node scripts/balance-phase15-bayes-floor.mjs --phase phase15-phase10-full-lock --out results/balance/phase15-phase10-full-lock --cell-slate phase10-output --phase10-out results/balance/phase10-envelope --limit-cells all --modes naive_shadow,sundog_shadow,bayes_floor_shadow_particle,oracle --seeds 100 --duration 8 --particle-count 61 --horizon-seconds 0.05
 ```
 
-- Next implementation target: repair the sensor-noise admission path before the
-  full claim lock. The minimum fix is to pre-register whether Phase 10
-  failure-regime noise cells are reported-only or hard Bayes-sanity gates, then
-  either tighten the noisy-cell guard or tune the posterior proposal until the
-  recoverable `noise_0p03` borderline cell is non-negative versus
-  `sundog_shadow` on a capped rerun.
+- Next implementation target: repair the observation-degradation admission path
+  before treating Phase 15 as a claim lock. The full diagnostic lock left nine
+  Bayes-sanity failures: four on long sensor delay (`delay_24`, `delay_30`
+  across both presets) and five on sensor noise (`near_fall noise_0p055/0p08`
+  and `recoverable noise_0p03/0p055/0p08`). The minimum fix is to pre-register
+  which Phase 10 failure-regime delay/noise cells are reported-only versus hard
+  Bayes-sanity gates, then tighten the noisy/delayed-cell guard or tune the
+  posterior proposal until the recoverable `noise_0p03` borderline cell is
+  non-negative versus `sundog_shadow` on a capped rerun.
 
 ### Phase 16 - Balance Data Surfaces And Claim Ratchet
 
