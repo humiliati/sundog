@@ -1475,7 +1475,8 @@ Active next work:
 - Bayesian-floor template backfill has landed with the reusable Balance + Mines
   profile fields. The next Bayes-roadmap move moved outside this Mines
   workbench and landed as the standalone Phase 1 exact Bayes-Correct reference
-  task (`npm run bayes:phase1`) before any new Bayes UI.
+  task (`npm run bayes:phase1`) and Phase 2 mismatch slate
+  (`npm run bayes:phase2`) before any new Bayes UI.
 
 The promoted page must keep the caveats visible: both Sundog and naive trigger
 mines on every seed in the best cell; `threshold_flagger` has higher survival
