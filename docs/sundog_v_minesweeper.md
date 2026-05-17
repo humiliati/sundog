@@ -135,6 +135,173 @@ The field should preserve local structure while introducing controlled
 uncertainty through blur, overlap, attenuation, delay, dropout, terrain, or
 noise.
 
+## Bayesian Baseline Profile
+
+Profile id: `mines-bayesian-baseline-v1`
+
+Status: staged profile, not yet an earned result.
+
+Purpose: add a same-field Bayesian baseline for Pressure Mines so the confirmed
+Phase 10 pocket is not judged only against naive local heuristics. This is not
+the privileged `oracle_safe` lane. The baseline receives the same public board
+state, pressure field, confidence/dropout, and bounded action ledger available
+to a legal controller, then maintains an explicit posterior over hidden mine
+occupancy on the active frontier. It is a claim-hygiene instrument: it can
+strengthen the Mines row if Sundog variants track the same-information
+posterior, and it can narrow the claim if a legal Bayesian baseline extracts
+substantially more value from the field.
+
+Truth state and hidden variables:
+
+- `X_t = (M, L_t, P_true, c, seed, t)`, where `M` is the true mine occupancy
+  grid, `L_t` is the public reveal / flag / scan ledger, `P_true` is the
+  noiseless pressure surface, `c` records board and sensor configuration, and
+  `seed` is the board/sensor seed pair.
+- `M`, exact adjacent mine counts, unrevealed action outcomes, `P_true`, future
+  scan noise, oracle actions, and Phase 10 verdict labels remain hidden from
+  the Bayesian baseline at decision time.
+- Board and sensor seeds are receipt metadata only. They are not an admitted
+  controller input, because the deterministic generator would make a seed a
+  privileged map handle.
+- Truth-state logging is allowed for oracle comparison, metrics, fixtures, and
+  post-run audits.
+- The first population `mu` is the locked Phase 10 envelope slate, with the
+  confirmed candidate cell and paired failure cell run first as the cheapest
+  claim-sensitive smoke.
+
+Admitted observation:
+
+```text
+Phi_t = [
+  board_width,
+  board_height,
+  mine_density,
+  sensor_config_without_seed,
+  visible_tile_state,
+  flag_state,
+  scan_state,
+  scans_remaining,
+  action_ledger,
+  observed_pressure_field,
+  pressure_confidence_field,
+  pressure_gradient_field,
+  scan_readings,
+  turn_index,
+  envelope_cell
+]
+```
+
+The baseline may use the full history of prior `Phi_t` values and its own
+prior actions. It may not read true mine occupancy, exact adjacency counts,
+noiseless pressure, board seed, sensor seed, oracle-safe moves, or post-hoc
+cell verdict labels. The observation source should be the same sensor/runtime
+path that feeds `chooseMinesAction`, with a parity test proving that serialized
+baseline observations match the legal controller observation on the same replay.
+
+Two legal information budgets should be kept distinct:
+
+- `bayes_frontier_pressure`: same pressure + confidence budget as the Phase 10
+  promoted `sundog_minimal` / `sundog_lean` family, with scan budget fixed at
+  zero when comparing against those lanes.
+- `bayes_frontier_full`: full Sundog-legal budget, including gradients, public
+  action history, and bounded scans. This is useful for future controller work,
+  but it must not be mixed into the Phase 10 promoted pocket unless the
+  compared Sundog lane has the same channels.
+
+Objective and regret:
+
+```text
+J(pi) = E_mu[budget_adjusted_safe_tiles_before_terminal]
+regret_cell = mean_budget_safe_bayes - mean_budget_safe_sundog_variant
+```
+
+Mine-trigger rate, false-flag count, scan count, frontier confidence, and raw
+safe tiles are required side metrics. A Bayesian baseline that buys safe tiles
+by increasing mine triggers or false flags does not strengthen the claim. A
+baseline that performs worse than `naive_pressure` on the confirmed Phase 10
+cell is a failed baseline and must be repaired before any claim language is
+promoted.
+
+Baseline policy:
+
+- First implementation: a frontier-limited particle posterior over concealed
+  mine occupancy near the active frontier, plus a coarse background reservoir
+  for mines outside the frontier neighborhood.
+- Particle constraints: revealed-safe tiles are fixed safe; known flags are
+  treated according to the mode contract; remaining mine count and density are
+  respected statistically without exposing the board seed.
+- Likelihood: compute each particle's predicted pressure surface from the
+  Gaussian kernel and compare it to observed pressure, confidence/dropout,
+  gradient, and scan readings under the configured sensor model.
+- Candidate actions: reveal the lowest posterior-hazard frontier tile, flag
+  high posterior-hazard tiles when the compared lane has a legal flag policy,
+  scan high-entropy frontier tiles only in the full-budget mode, or abstain if
+  no legal action clears the pre-registered risk threshold.
+- Approximation disclosure: the first public baseline is frontier-limited by
+  design. Exact full-board posterior is an audit follow-up only if the frontier
+  state is small enough to enumerate without changing the runtime tier.
+- Particle count, risk threshold, and any resampling cadence are locked after
+  the capped probe. Do not tune them per failed seed.
+
+Required comparators:
+
+- `sundog_minimal`
+- `sundog_lean`
+- `bayes_frontier_pressure`
+- `bayes_frontier_full`
+- `naive_pressure`
+- `threshold_flagger`
+- `random_reveal`
+- `oracle_safe`
+
+Receipts should live under `results/mines/phase12-bayesian-baseline/` and be
+reduced into public data only after the gates pass:
+
+- `manifest.json`
+- `profile.json`
+- `observation-parity.jsonl`
+- `posterior-diagnostics.csv`
+- `bayes-actions.csv`
+- `trial-outcomes.csv`
+- `bayes-regret.csv`
+- `bayes-regret-summary.csv`
+- `frontier-posterior-map.json`
+
+Gates:
+
+- unknown mode is rejected by the harness;
+- no-state-leak audit proves occupancy, exact counts, true pressure, seeds,
+  oracle action, and verdict labels are unavailable at decision time;
+- observation parity proves serialized `Phi_t` equals the legal Mines
+  controller observation on the same replay;
+- budget parity prevents a full-budget Bayesian mode from being compared as if
+  it were a minimal-budget controller;
+- easy-cell sanity proves `bayes_frontier_pressure` can match or exceed
+  `naive_pressure` on the confirmed Phase 10 pocket without increasing
+  mine-trigger or false-flag rates beyond the Phase 10 gates;
+- runtime probe records particles, frontier width, cells, seeds, trials/sec,
+  and the estimated full-slate wall clock before any full run is staged;
+- claim gate blocks public language until the regret summary has been reduced
+  and linked from the Mines data surface.
+
+Outcome branches:
+
+- If the baseline fails no-leak, parity, budget-parity, or easy-cell sanity
+  gates, Phase 12 is invalid and earns no claim.
+- If `bayes_frontier_pressure` materially dominates the promoted Sundog lanes
+  in the confirmed pocket, keep the Phase 10 operating-envelope claim but avoid
+  any language implying near-optimal use of the pressure field.
+- If `bayes_frontier_pressure` stays near `sundog_minimal` / `sundog_lean` in
+  the confirmed pocket and also fails in the paired negative region, the claim
+  can strengthen to: *the hand-built pressure-field controller recovers most of
+  the same-observation Bayesian baseline inside the mapped pocket while failing
+  at the same observability boundary.*
+- If the Bayesian baseline succeeds in Phase 10 failure cells where Sundog
+  fails, the public boundary must be relabeled as a controller boundary, not a
+  pressure-field observability boundary.
+- If Sundog appears to beat a weak Bayesian baseline, do not promote the result
+  until the baseline has passed an adversarial repair pass.
+
 ## Ratified Hook Language
 
 Safe hook:
@@ -930,6 +1097,99 @@ Phase 11 status:
   failure-first / confirmed-second pair. The runnable replay URLs are already
   locked and browser-visible, so this is an asset-production task rather than
   a blocker for Phase 11 evidence closure.
+
+### Phase 12 - Bayesian Baseline And Posterior Data Surface
+
+Goal: turn the staged Bayesian Baseline Profile into an executable,
+same-information comparator for the confirmed Phase 10 pocket and its paired
+failure region.
+
+**Gating:** Phase 10 CONFIRM is sufficient to start. Phase 11 is already live,
+so the baseline must be framed as a post-verdict claim-audit layer, not as a
+retroactive prerequisite for the existing Operating-Envelope Study tier.
+
+Deliverables:
+
+- `scripts/mines-bayes-baseline.mjs`, sharing the existing board, sensor, and
+  harness modules rather than introducing a parallel Mines implementation.
+- Controller mode declarations for `bayes_frontier_pressure` and
+  `bayes_frontier_full`, with information budgets explicit in
+  `public/js/mines-controllers.mjs`.
+- Observation-parity and no-state-leak tests proving the baseline receives
+  only the admitted `Phi_t` profile.
+- A budget-parity guard preventing full-budget Bayesian runs from being
+  summarized against minimal-budget Sundog lanes.
+- A capped runtime probe that records particles, frontier size, cells, seeds,
+  trials/sec, and estimated full-slate wall clock. If the full slate exceeds
+  the repo's inline runtime rule, stage the exact PowerShell commands instead
+  of running it in-session.
+- A regret reducer writing `bayes-regret.csv` and
+  `bayes-regret-summary.csv` under
+  `results/mines/phase12-bayesian-baseline/`.
+- A posterior reducer writing `frontier-posterior-map.json` for the confirmed
+  pocket and paired failure cell.
+
+Public data products, only after the gates pass:
+
+- `public/data/mines-bayesian-baseline-profile.json`
+- `public/data/mines-bayesian-baseline-summary.json`
+- `public/data/mines-frontier-posterior-map.json`
+
+Exit criterion: a complete regret summary over the locked Phase 10 cell slate,
+or a documented runtime-gated staged-command package with enough capped
+measurements to estimate the full run. The public claim is promoted only if the
+Bayesian baseline itself passes no-leak, parity, budget-parity, and easy-cell
+sanity gates.
+
+### Phase 13 - Mines Data Surfaces And Claim Ratchet
+
+Goal: enrich the public Pressure Mines surface so the site can show not just
+the confirmed pocket, but how that pocket compares to a legal posterior
+baseline and whether the paired failure region is a signal boundary or a
+controller boundary.
+
+**Gating:** Phase 10 and Phase 11 already support the current public surface.
+Bayesian-baseline fields remain hidden or marked `pending` until Phase 12 earns
+receipts.
+
+Deliverables:
+
+- A public Mines evidence bundle that reduces Phase 10, Phase 11, and Phase 12
+  receipts into cell-level JSON: density, pressure noise, dropout, delay,
+  clustering, scan budget, controller, budget-adjusted safe tiles, trigger
+  rate, false flags, verdict, boundary label, and artifact links.
+- A posterior data panel for `mines.html` that can render frontier posterior
+  hazard, observed pressure, confidence/dropout, chosen action, and Bayesian
+  regret for the confirmed and paired failure cells.
+- Best/worst/Bayes-divergence replay selectors so a visitor can inspect the
+  exact seeds where Sundog, naive, and Bayesian lanes disagree.
+- A claim-card data shape with explicit tiers: current Phase 10 pocket claim,
+  optional same-field Bayesian-baseline claim, and optional controller-boundary
+  relabel if Bayes succeeds where Sundog fails.
+- A compact `docs/APPLICATIONS.md` refresh that links the richer Mines data
+  instead of relying only on prose.
+
+Claim ladder:
+
+- Baseline live claim: in the named Phase 10 pocket, Sundog Mines reveals more
+  budget-adjusted safe tiles than `naive_pressure`, while a paired failure
+  region ships at equal prominence.
+- If Phase 12 passes and `sundog_minimal` / `sundog_lean` track
+  `bayes_frontier_pressure`: the pressure-field controller recovers most of
+  the actionable information available to a legal frontier posterior inside
+  the confirmed pocket.
+- If Phase 12 shows Bayes dominates in the confirmed pocket: the site keeps the
+  operating-envelope claim but avoids near-baseline language and reports the
+  gap as controller headroom.
+- If Phase 12 shows Bayes succeeds in the failure region: relabel that region
+  as a controller failure boundary, not an observability boundary.
+- If Phase 12 shows Bayes also fails in the paired negative cell: the pressure
+  field boundary becomes stronger evidence, because both a heuristic controller
+  and a legal posterior baseline lose there.
+
+Exit criterion: a public Pressure Mines evidence surface where each visible
+claim is backed by a machine-readable receipt path, and missing future tiers
+are visibly absent rather than implied.
 
 ## Pre-Registered Comparison Shape
 
