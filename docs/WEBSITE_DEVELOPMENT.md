@@ -140,28 +140,29 @@ When you revise the pitch:
    `.elevator-pitch-stamp` to match.
 4. Run the chat checks (next subsection) before publishing.
 
-### Readability And Halo Glossary Pass
+### Homepage Coherence Repair Pass
 
-The next pitch revision should be a compression pass, not another prose
-expansion. The current four-paragraph block is too dense for the homepage
-surface and introduces specialist halo words before the reader has a visual
-handle on them.
+The 2026-05-17 v1.2 compression pass improved glossary mechanics but weakened
+the content hierarchy. Do not keep compressing the homepage by adding more
+small explanation blocks. The next pass should restore the older v1.1
+field-not-reward body from `git show d529b68:index.html`, keep the useful
+glossary / hover / focus-link behavior, and then edit the restored body in a
+separate content pass.
 
 Target shape:
 
-- One short hook sentence.
-- Three scannable claim blocks: optics, hidden-state inference, applications.
-- One compact caution / inspection link.
-- No large uninterrupted paragraph longer than about 45 words.
+- One elevator-pitch section, not a cluster of competing summaries.
+- The v1.1 four-paragraph body restored with glossary links on hard terms.
+- The audit hedge retained; no stronger substrate-coincidence claim until the
+  controlling geometry re-audit earns it.
+- The existing Step I-Step VI theorem cards used as the hero explanation layer.
+- Load-bearing evidence graphics before the application rail.
 
 Style rules:
 
-- Strip most em dash characters from public pitch copy. Prefer commas, colons,
-  parentheses, or separate sentences.
-- Do not lead with hard-to-parse terms such as "circumzenithal" unless the
-  term is visually grounded nearby and has a definition path.
-- Keep "field-not-reward" only if the surrounding text explains it in ordinary
-  language before moving into mesa or substrate-coincidence framing.
+- Do not solve comprehension by adding another public block.
+- Keep hard-to-parse terms such as "circumzenithal" link-defined in place.
+- Keep "field-not-reward" only with surrounding ordinary-language context.
 - Avoid turning the pitch into a theorem defense. Its job is orientation.
 
 Halo term handling:
@@ -192,18 +193,18 @@ Visual treatment:
   collapse into one inline visual strip so the pitch does not become a tall
   gallery.
 
-Hero phase cards:
+Hero explanation:
 
-- The current `index.html` hero is a static SVG atlas snapshot, not a realtime
-  drawing sequence. Do not imply live drawing unless that behavior is rebuilt.
-- Add a nearby set of explanatory cards for the hero phases instead:
-  "what the viewer sees optically", "what the geometry / physics means", and
-  "why this matters for applications."
-- Each card should link to the owning inspection surface: the live atlas,
-  `legend.html`, the calibration/accounting docs, or the relevant application
-  workbench.
-- The cards should explain the same scene in three registers rather than
-  repeat the theorem grid below it.
+- The animated parhelion canvas was added in `f11fdf0` and replaced by the
+  current static atlas snapshot in `c7e6174`. Do not imply live drawing unless
+  that behavior is rebuilt.
+- The standalone `hero-phase-section` / "Static hero guide" pattern from
+  `74d5333` is superseded. It duplicated the pitch and theorem grid.
+- Use the existing Step I-Step VI theorem cards as the hero explanation layer.
+  Either restore the animation and align those cards to its phases, or rewrite
+  the cards so they honestly describe the static atlas pose.
+- The cards should carry the optical / physical / application interpretation
+  without creating another homepage explainer section.
 
 ### Claim-Map Discipline For Positioning Edits
 

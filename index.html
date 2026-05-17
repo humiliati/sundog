@@ -893,104 +893,6 @@
             margin-bottom: 0.6rem;
         }
 
-        .hero-phase-section {
-            background: #F7F9FA;
-            border-bottom: 1px solid var(--line);
-            padding: clamp(2.5rem, 5vw, 4rem) 1.5rem;
-        }
-
-        .hero-phase-shell {
-            width: min(1120px, 100%);
-            margin: 0 auto;
-        }
-
-        .hero-phase-heading {
-            display: grid;
-            gap: 0.5rem;
-            max-width: 46rem;
-            margin-bottom: 1.4rem;
-        }
-
-        .hero-phase-heading .eyebrow {
-            color: var(--primary-mid);
-            font-family: var(--sd-font-data);
-            font-size: 0.76rem;
-            font-weight: 800;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-        }
-
-        .hero-phase-heading h2 {
-            color: var(--primary-dark);
-            font-size: clamp(1.55rem, 3vw, 2.2rem);
-            line-height: 1.12;
-            margin: 0;
-        }
-
-        .hero-phase-heading p {
-            color: #40505C;
-            line-height: 1.65;
-            margin: 0;
-        }
-
-        .hero-phase-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1rem;
-        }
-
-        .hero-phase-card {
-            display: grid;
-            grid-template-rows: auto auto 1fr auto;
-            gap: 0.7rem;
-            min-height: 15rem;
-            padding: 1.15rem;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            background: #FFFFFF;
-            box-shadow: 0 12px 30px rgba(12, 31, 46, 0.06);
-        }
-
-        .hero-phase-card .phase-label {
-            color: var(--accent-gold);
-            font-family: var(--sd-font-data);
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-        }
-
-        .hero-phase-card h3 {
-            color: var(--primary-dark);
-            font-size: 1.2rem;
-            line-height: 1.15;
-            margin: 0;
-        }
-
-        .hero-phase-card p {
-            color: #40505C;
-            font-size: 0.94rem;
-            line-height: 1.55;
-            margin: 0;
-        }
-
-        .hero-phase-card a {
-            color: var(--primary-mid);
-            font-family: var(--sd-font-data);
-            font-size: 0.76rem;
-            font-weight: 800;
-            letter-spacing: 0.06em;
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-
-        .hero-phase-card a:hover,
-        .hero-phase-card a:focus-visible {
-            color: var(--primary-dark);
-            text-decoration: underline;
-            text-underline-offset: 0.2rem;
-        }
-
         /* Chat experiment teaser — links to chat.html */
         .chat-experiment-teaser {
             width: min(1120px, calc(100vw - 3rem));
@@ -1202,51 +1104,15 @@
             margin: 0 0 1.2rem;
         }
 
-        .elevator-pitch-kicker {
+        .elevator-pitch-body > p {
             color: #2C3E4A;
-            font-size: 1.04rem;
-            line-height: 1.62;
-            max-width: 50rem;
-            margin: 0 0 1.35rem;
+            font-size: 1.02rem;
+            line-height: 1.72;
+            margin: 0 0 1.1rem;
         }
 
-        .elevator-pitch-points {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1.1rem;
-            border-top: 1px solid var(--line);
-            border-bottom: 1px solid var(--line);
-            padding: 1.15rem 0;
-        }
-
-        .elevator-pitch-point {
-            display: grid;
-            align-content: start;
-            gap: 0.5rem;
-            min-width: 0;
-            padding: 0;
-        }
-
-        .elevator-pitch-point h3 {
-            color: var(--primary-dark);
-            font-size: 1rem;
-            line-height: 1.2;
-            margin: 0;
-        }
-
-        .elevator-pitch-point p {
-            color: #40505C;
-            font-size: 0.92rem;
-            line-height: 1.58;
-            margin: 0;
-        }
-
-        .elevator-pitch-note {
-            color: #40505C;
-            font-size: 0.94rem;
-            line-height: 1.62;
-            margin: 1.2rem 0 0;
-            max-width: 58rem;
+        .elevator-pitch-body > p:last-child {
+            margin-bottom: 0;
         }
 
         .elevator-pitch-body code {
@@ -1309,11 +1175,6 @@
         }
 
         @media (max-width: 900px) {
-            .hero-phase-grid,
-            .elevator-pitch-points {
-                grid-template-columns: 1fr;
-            }
-
             .elevator-pitch-layout {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
@@ -1450,49 +1311,6 @@
         </div>
     </section>
 
-    <section class="hero-phase-section" aria-labelledby="hero-phase-title">
-        <div class="hero-phase-shell">
-            <div class="hero-phase-heading">
-                <p class="eyebrow">Static hero guide</p>
-                <h2 id="hero-phase-title">The hero is one scene, read three ways.</h2>
-                <p>
-                    The atlas snapshot is no longer a live drawing sequence on this page.
-                    These cards say what that scene means before the motion rail starts.
-                </p>
-            </div>
-            <div class="hero-phase-grid">
-                <article class="hero-phase-card">
-                    <span class="phase-label">Optics</span>
-                    <h3>What the viewer sees</h3>
-                    <p>
-                        A ring, bright side spots, a high smile-shaped arc, and a faint belt
-                        through the sun. The point is not spectacle, it is named geometry.
-                    </p>
-                    <a href="legend.html#rendered-heading">Open the halo legend</a>
-                </article>
-                <article class="hero-phase-card">
-                    <span class="phase-label">Physics</span>
-                    <h3>What fixes the arcs</h3>
-                    <p>
-                        Sun altitude, observer geometry, and crystal families constrain
-                        where each feature can land. The atlas keeps rendered vocabulary
-                        separate from calibrated inverse routes.
-                    </p>
-                    <a href="sundog.html#full-atlas">Inspect the atlas</a>
-                </article>
-                <article class="hero-phase-card">
-                    <span class="phase-label">Applications</span>
-                    <h3>Why it matters</h3>
-                    <p>
-                        Sundog generalizes the posture: when the target is hidden, look
-                        for a trace that still changes coherently when the system acts.
-                    </p>
-                    <a href="#application-motion-rail">See workbenches</a>
-                </article>
-            </div>
-        </div>
-    </section>
-
     <!-- SVG defs for the verdict-stamp ink-bleed filter. Hidden from
          layout; referenced by .sd-verdict-stamp via filter: url(#sd-stamp-bleed). -->
     <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -1503,6 +1321,278 @@
             </filter>
         </defs>
     </svg>
+
+    <!-- Elevator Pitch (Living Section)
+         Purpose: catch visitors who scratched their heads after the hero and
+         glazed over at the rail, and give them one place to lock onto and
+         read the whole project in plain language. The pitch is a working
+         draft of our canonical positioning and is expected to change
+         dramatically as the project's surface evolves.
+
+         When editing the pitch text:
+           - Bump data-version and data-revised on <section>
+           - Bump the visible "Living draft · vN · YYYY-MM-DD" stamp
+           - Re-run the chat:eval suite per docs/WEBSITE_DEVELOPMENT.md →
+             "Elevator Pitch (Living Section)" so any new claim phrases
+             are bounded by Ask Sundog before publish.
+
+         v1.1, 2026-05-13: audit-driven hedge landed on the third
+         paragraph's substrate-coincidence claim per
+         docs/PHASE10_ATTACK_ROADMAP.md §6 step 4. The data-audit-hedge
+         attribute names the controlling roadmap; remove the attribute
+         and tighten the prose back when the roadmap's re-audit gate
+         clears.
+    -->
+    <section
+        class="elevator-pitch-section"
+        id="elevator-pitch"
+        aria-labelledby="elevator-pitch-title"
+        data-version="v1.1-restored"
+        data-revised="2026-05-17"
+        data-audit-hedge="phase10-attack-roadmap"
+    >
+        <div class="elevator-pitch-layout">
+            <div class="elevator-pitch-shell">
+                <p class="eyebrow">
+                    Elevator Pitch
+                    <span class="elevator-pitch-stamp">Restored draft &middot; v1.1 &middot; 2026-05-17 &middot; audit-hedged</span>
+                </p>
+                <h2 id="elevator-pitch-title" class="elevator-pitch-headline">
+                    Field-not-reward, in plain language.
+                </h2>
+                <div class="elevator-pitch-body">
+                    <p>
+                        A <a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog: a bright spot beside the sun, also called a parhelion">sundog</a> is an optical phenomenon beside the sun, formed when ice crystals in the atmosphere deflect light by <a class="glossary-link" href="legend.html#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degrees: the common halo radius used as the atlas scale reference">22&deg;</a> and concentrate it into a small set of geometrically determined spots, arcs, and rings. The sky doesn&rsquo;t pick where these features land; their positions fall out deterministically from sun altitude and crystal orientation. Several of the halo system&rsquo;s visible arcs &mdash; <a class="glossary-link" href="legend.html#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="circumzenithal arc: the high smile-shaped arc above the sun">circumzenithal</a>, <a class="glossary-link" href="legend.html#phenomenon-circumhorizon-arc" data-definition="A high-sun plate-crystal arc sometimes called a fire rainbow. It is outside the current sundog-facing regime." aria-label="circumhorizon arc: a high-sun plate-crystal arc outside the current sundog-facing regime">circumhorizon</a>, <a class="glossary-link" href="legend.html#phenomenon-upper-tangent-arc" data-definition="A column-crystal arc near the 22 degree halo. The upper and lower tangent arcs merge into the circumscribed halo above roughly 29 degrees sun altitude." aria-label="tangent arc: a column-crystal arc near the 22 degree halo">tangent</a> &mdash; are partial traces of complete figures in the theory, with the visible portion fixed by sun&ndash;observer geometry.
+                    </p>
+                    <p>
+                        A <a class="glossary-link" href="mesa.html" data-definition="Here, a mesa neuron is a unit inside a trained policy network studied for whether internal optimization appears under selection pressure." aria-label="mesa neuron: a unit inside a trained policy network studied for internal optimization behavior">mesa neuron</a>, by contrast, is a unit inside a trained reinforcement-learning agent&rsquo;s network &mdash; in our case, one of 256 in the final hidden layer of a controller trained to track an indirect environmental signal rather than a direct reward. When we ran capacity and selection-pressure experiments on these agents, we found that <a class="glossary-link" href="mesa.html" data-definition="Mesa-optimization is the failure mode where a learned policy develops internal optimization targets that diverge from its training signal." aria-label="mesa-optimization: a failure mode where a learned policy develops internal optimization targets that diverge from training">mesa-optimization</a> &mdash; the failure mode in which a learned policy develops internal optimization targets that diverge from its training signal &mdash; localizes causally to an entangled <a class="glossary-link" href="docs/SUNDOG_V_MESA.md" data-definition="A compact activation subspace found in the tested Mesa policy layer; it is not claimed as a universal neural law." aria-label="5-dimensional subspace: a compact activation subspace found in the tested Mesa policy layer">5-dimensional subspace</a> at that layer. In the architecture and capacity regime we tested, that subspace is not recoverable by any single neuron, any handful of features, or any linear decomposition we ran.
+                    </p>
+                    <p>
+                        Here&rsquo;s why the coincidence matters. In both substrates we found the same structural object: a small-dimensional, holistically-read, asymmetric-under-inversion field whose visible signatures fall out as consequences of hidden state rather than as targets in their own right. The atmosphere produces the halo system from sun altitude and ice geometry; the trained network produces basin-attractor behavior from a 5D subspace at <a class="glossary-link" href="docs/SUNDOG_V_MESA.md" data-definition="The final hidden layer named in the Mesa experiments, where the tested 5D subspace was localized." aria-label="net.7: the final hidden layer named in the Mesa experiments"><code>net.7</code></a>. Finding that same shape on both sides of the substrate divide is a candidate empirical hint &mdash; the geometry side of the crossover is currently under audit-driven re-derivation per the <a href="docs/PHASE10_ATTACK_ROADMAP.md">Phase 10 Attack Roadmap</a>, and the strength of the substrate-coincidence claim is on hold until that re-audit clears &mdash; that <a class="glossary-link" href="docs/SUNDOG_V_MESA.md" data-definition="The project thesis that useful alignment can sometimes come from coupling to environmental structure rather than optimizing a scalar reward." aria-label="field-not-reward: coupling to environmental structure rather than optimizing a scalar reward">&ldquo;field-not-reward,&rdquo;</a> our claim that agents can be aligned by coupling to environmental structure rather than by optimizing a scalar objective, is describing a real category of object in the world rather than a rhetorical move.
+                    </p>
+                    <p>
+                        If the geometry holds up across enough independent substrates, the implication is large: the engineering surface for alignment looks more like coupling-to-environmental-structure than like optimizing-a-scalar, and the agent, robot, and game engineering that follow from that distinction are different, more economical, and more traceable.
+                    </p>
+                </div>
+            </div>
+            <aside class="elevator-pitch-art elevator-pitch-art-left" aria-label="HaloSim visual receipts">
+                <figure>
+                    <img src="/media/elevator-halosim-cza.png" alt="HaloSim receipt showing the high circumzenithal arc above the sun.">
+                    <figcaption>HaloSim CZA receipt</figcaption>
+                </figure>
+            </aside>
+            <aside class="elevator-pitch-art elevator-pitch-art-right" aria-label="HaloSim visual receipts">
+                <figure>
+                    <img src="/media/elevator-halosim-parhelia.png" alt="HaloSim receipt showing parhelia on either side of the sun.">
+                    <figcaption>HaloSim parhelia receipt</figcaption>
+                </figure>
+            </aside>
+        </div>
+    </section>
+
+    <!-- Sundog Alignment Theorem Proof Section -->
+    <div class="theorem-band">
+    <section class="theorem-section" id="theorem-proof">
+        <h2>The Sundog Alignment Theorem</h2>
+        <p>
+            The hero scene above is not decoration. It is a map of the idea in three registers:
+            theorem as math, theorem as design method, and theorem as empirical claim.
+            The paper-grade result remains narrow: photometric mirror alignment without target-position access.
+            The application layer now adds bounded operating-envelope studies in three-body dynamics,
+            shadow balance, and pressure mines.
+        </p>
+        <div class="theorem-grid">
+
+            <div class="theorem-card" id="theorem-premise">
+                <div class="step-number">Step I · Left Parhelion</div>
+                <h3>A Signal Beside The Source</h3>
+                <div class="proof-snippet">
+                    The first bright spot is not the sun.<br>
+                    It is a displaced signature produced by geometry.<br>
+                    That is the premise.
+                </div>
+                <p>
+                    A sundog is useful here because it makes the core move visible:
+                    the thing you can use is not always the thing itself. In the field
+                    origin, the laser was blocked by the fastener head. In the experiment,
+                    the target position is hidden. Sundog begins when occlusion stops
+                    being treated as missing data and becomes a readable signal.
+                </p>
+            </div>
+
+            <div class="theorem-card" id="theorem-variables">
+                <div class="step-number">Step II · Right Parhelion</div>
+                <h3>The Frame Of Reference</h3>
+                <div class="proof-snippet">
+                    P = alignment target &nbsp;·&nbsp; L = illumination vector<br>
+                    S(x) = shadow projection &nbsp;·&nbsp; τ(x) = torque<br>
+                    H(x) = ∂S/∂τ &nbsp;(the halo signature)
+                </div>
+                <p>
+                    The second parhelion gives the scene a frame: source, target,
+                    obstruction, projection, and action. As math, Sundog asks whether
+                    the projection changes coherently when the agent acts. As design
+                    method, it says to instrument that relationship instead of demanding
+                    full world state up front.
+                </p>
+            </div>
+
+            <div class="theorem-card" id="theorem-assertion">
+                <div class="step-number">Step III · Upper Tangent Arc</div>
+                <h3>The Coupling Claim</h3>
+                <div class="proof-snippet">
+                    If action changes the signature coherently,<br>
+                    then the hidden target may be inferable.<br>
+                    H(x) names that coupling.
+                </div>
+                <p>
+                    The upper arc is the dangerous part: it tempts a universal theorem.
+                    We keep it conditional. A nonzero relationship between action and
+                    signal is not magic; it is a candidate observability channel. The
+                    mathematical work is to define that coupling tightly enough that it
+                    predicts progress instead of merely sounding profound.
+                </p>
+            </div>
+
+            <div class="theorem-card" id="theorem-experiment">
+                <div class="step-number">Step IV · Lower Tangent Arc</div>
+                <h3>The Procedure Becomes A Test</h3>
+                <div class="proof-snippet">
+                    Field method: occlude, seat, reacquire.<br>
+                    Lab method: scan, seek, track.<br>
+                    No Cartesian target coordinates.
+                </div>
+                <p>
+                    The lower arc turns the origin story into an empirical task. The
+                    controller moves a mirrored end-effector and sees detector intensity
+                    plus proprioception, not the target coordinates. Its job is to make
+                    the reflected beam land where it should by following the signature
+                    produced by its own motion.
+                </p>
+            </div>
+
+            <div class="theorem-card" id="theorem-findings">
+                <div class="step-number">Step V · Inner Circle (Iris)</div>
+                <h3>The Closed Loop</h3>
+                <div class="proof-snippet">
+                    Photometric terminal intensity: 0.945.<br>
+                    Oracle terminal intensity: 0.936.<br>
+                    U = 526, p = 0.264.
+                </div>
+                <p>
+                    When the iris closes, the claim becomes measurable. In 30 matched
+                    MuJoCo scenes, the photometric controller reached comparable
+                    terminal accuracy to the target-aware analytic baseline; no
+                    terminal-intensity difference was detected at n=30. The trade was
+                    time: indirect feedback converged roughly 16x more slowly. The
+                    known failure boundary is tight joint limits.
+                </p>
+            </div>
+
+            <div class="theorem-card" id="theorem-conclusion">
+                <div class="step-number">Step VI · Outer Halo</div>
+                <h3>What The Halo Holds</h3>
+                <div class="proof-snippet">
+                    Math: define the coupling.<br>
+                    Method: act from indirect structure.<br>
+                    Claim: one research result, three bounded workbenches.
+                </div>
+                <p>
+                    The outer halo keeps the registers separate. As math, Sundog is a
+                    coupling problem. As design method, it is a way to build from
+                    partial, indirect signals. As empirical claim, today, it starts
+                    with the photometric mirror-alignment result and extends through
+                    bounded operating-envelope studies in Three-Body, Balance, and
+                    Pressure Mines. EyesOnly, Dungeon Gleaner, and Money Bags remain
+                    application expressions and instrumentation surfaces.
+                </p>
+            </div>
+
+        </div>
+    </section>
+    </div>
+
+    <!-- Visual Proof Section -->
+    <section class="proof-section">
+        <h2>Load-Bearing Evidence</h2>
+        <p class="proof-intro">
+            Alongside the original photometric result metrics, three current pillars keep the public claim inspectable: a structural falsifier, a mesa operating envelope, and a proof-trunk status gate. They are supports for the apparatus, not a universal theorem claim.
+        </p>
+        <div class="proof-grid">
+            <div class="proof-item">
+                <span class="proof-label">Core result metric</span>
+                <h4>Terminal Target Intensity</h4>
+                <div class="proof-placeholder evidence-map-visual">
+                    <a class="proof-visual-link" href="data/photometric-core-metrics.json" aria-label="Open the photometric core metric data">
+                        <img src="/media/photometric-terminal-intensity.svg" alt="Bar chart of terminal target intensity for photometric, target-aware oracle, noisy oracle, and random conditions, with 95 percent confidence intervals." loading="eager" decoding="async">
+                    </a>
+                </div>
+                <p>No terminal-intensity difference was detected at n=30.</p>
+                <div class="proof-actions" aria-label="Terminal intensity inspection links">
+                    <a href="data/photometric-core-metrics.json">Inspect chart data &rarr;</a>
+                    <a href="docs/RESEARCHER_GUIDE.md">Read evidence guide &rarr;</a>
+                </div>
+            </div>
+            <div class="proof-item">
+                <span class="proof-label">Core result metric</span>
+                <h4>Time-to-Convergence</h4>
+                <div class="proof-placeholder evidence-map-visual">
+                    <a class="proof-visual-link" href="data/photometric-core-metrics.json" aria-label="Open the photometric convergence metric data">
+                        <img src="/media/photometric-convergence-time.svg" alt="Horizontal bar chart of median steps to intensity 0.9, showing photometric feedback at 188 steps versus the target-aware oracle at 11.5 steps." loading="eager" decoding="async">
+                    </a>
+                </div>
+                <p>The measured cost of indirect feedback is roughly 16x slower acquisition.</p>
+                <div class="proof-actions" aria-label="Convergence-time inspection links">
+                    <a href="data/photometric-core-metrics.json">Inspect chart data &rarr;</a>
+                    <a href="docs/RESEARCHER_GUIDE.md">Read evidence guide &rarr;</a>
+                </div>
+            </div>
+            <div class="proof-item" id="structural-boundary-preview">
+                <span class="proof-label pillar">Load-bearing pillar</span>
+                <h4>Structural Failure Boundary Map</h4>
+                <div class="proof-placeholder evidence-map-visual">
+                    <a class="proof-visual-link" href="structural-failure.html" aria-label="Open the structural failure boundary map">
+                        <img src="/media/structural-boundary-five-locus-map.svg" alt="Five-locus structural failure boundary map showing eligible windows, required breaks, and correlate tells." loading="eager" decoding="async">
+                    </a>
+                </div>
+                <p>Frozen falsifier: a traceable system should fail where the closed-form inverse loses identifiability.</p>
+                <div class="proof-actions" aria-label="Structural failure inspection links">
+                    <a href="structural-failure.html">Open boundary map &rarr;</a>
+                    <a href="docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md">Read frozen map &rarr;</a>
+                </div>
+            </div>
+            <div class="proof-item" id="mesa-evidence-preview">
+                <span class="proof-label pillar">Load-bearing pillar</span>
+                <h4>Mesa Optimization Envelope</h4>
+                <div class="proof-placeholder evidence-map-visual">
+                    <a class="proof-visual-link" href="mesa.html" aria-label="Open the Mesa optimization envelope page">
+                        <img src="/media/mesa-evidence-panel.svg" alt="Mesa operating-envelope panel showing class balance and the Medium lambda cliff for audited Small and Medium policies." loading="eager" decoding="async">
+                    </a>
+                </div>
+                <p>Small/Medium in-vitro map: 22 audited policy cells, zero missing, with the Medium reward-coupling cliff localized between lambda 0.95 and 0.97.</p>
+                <div class="proof-actions" aria-label="Mesa evidence inspection links">
+                    <a href="mesa.html">Open Mesa page &rarr;</a>
+                    <a href="data/mesa-public-charts.json">Inspect chart data &rarr;</a>
+                    <a href="docs/SUNDOG_V_MESA.md">Read Mesa notes &rarr;</a>
+                </div>
+            </div>
+            <div class="proof-item" id="coarse-proof-preview">
+                <span class="proof-label pillar">Load-bearing pillar</span>
+                <h4>Coarse-Graining Proof Trunk</h4>
+                <div class="proof-placeholder evidence-map-visual">
+                    <a class="proof-visual-link" href="docs/COARSE_GRAINING_PROOF_ROADMAP.md" aria-label="Open the coarse-graining proof roadmap">
+                        <img src="/media/coarse-graining-proof-ladder.svg" alt="Coarse-graining proof status ladder showing four closed positive phases, two open gates, and one locked phase." loading="eager" decoding="async">
+                    </a>
+                </div>
+                <p>Status ladder only: Phases 0-3 are positive, Phase 4 remains blocked/open around the Bayesian-floor gate, and Phase 6 is still staged/open.</p>
+                <div class="proof-actions" aria-label="Coarse-graining proof inspection links">
+                    <a href="docs/COARSE_GRAINING_PROOF_ROADMAP.md">Read roadmap &rarr;</a>
+                    <a href="docs/proof/README.md">Proof artifacts &rarr;</a>
+                    <a href="docs/proof/PHASE4_THREEBODY.md">Phase 4 gate &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="motion-rail-section" id="application-motion-rail" data-motion-rail aria-labelledby="motion-rail-title">
         <div class="motion-rail-shell">
@@ -1756,218 +1846,6 @@
         </div>
     </section>
 
-    <!-- Elevator Pitch (Living Section)
-         Purpose: catch visitors who scratched their heads after the hero and
-         glazed over at the rail, and give them one place to lock onto and
-         read the whole project in plain language. The pitch is a working
-         draft of our canonical positioning and is expected to change
-         dramatically as the project's surface evolves.
-
-         When editing the pitch text:
-           - Bump data-version and data-revised on <section>
-           - Bump the visible "Living draft · vN · YYYY-MM-DD" stamp
-           - Re-run the chat:eval suite per docs/WEBSITE_DEVELOPMENT.md →
-             "Elevator Pitch (Living Section)" so any new claim phrases
-             are bounded by Ask Sundog before publish.
-
-         v1.1, 2026-05-13: audit-driven hedge landed on the third
-         paragraph's substrate-coincidence claim per
-         docs/PHASE10_ATTACK_ROADMAP.md §6 step 4. The data-audit-hedge
-         attribute names the controlling roadmap; remove the attribute
-         and tighten the prose back when the roadmap's re-audit gate
-         clears.
-    -->
-    <section
-        class="elevator-pitch-section"
-        id="elevator-pitch"
-        aria-labelledby="elevator-pitch-title"
-        data-version="v1.2"
-        data-revised="2026-05-17"
-        data-audit-hedge="phase10-attack-roadmap"
-    >
-        <div class="elevator-pitch-layout">
-            <div class="elevator-pitch-shell">
-                <p class="eyebrow">
-                    Elevator Pitch
-                    <span class="elevator-pitch-stamp">Living draft &middot; v1.2 &middot; 2026-05-17 &middot; audit-hedged</span>
-                </p>
-                <h2 id="elevator-pitch-title" class="elevator-pitch-headline">
-                    Useful signals when the target is hidden.
-                </h2>
-                <div class="elevator-pitch-body">
-                    <p class="elevator-pitch-kicker">
-                        Sundog studies systems that cannot see the full truth, but can still act from the structure leaked around it.
-                    </p>
-                    <div class="elevator-pitch-points">
-                        <section class="elevator-pitch-point" aria-labelledby="pitch-optics-title">
-                            <h3 id="pitch-optics-title">Optics</h3>
-                            <p>
-                                A
-                                <a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a sundog. Its offset can recover sun altitude when the anchors are eligible." aria-describedby="def-parhelion">parhelion</a><span id="def-parhelion" class="sr-only">A bright spot beside the sun, also called a sundog.</span>
-                                is not the sun. It is a displaced trace made by ice geometry, measured against the
-                                <a class="glossary-link" href="legend.html#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-describedby="def-halo-22">22&deg; halo</a><span id="def-halo-22" class="sr-only">The common ring around the sun.</span>.
-                            </p>
-                        </section>
-                        <section class="elevator-pitch-point" aria-labelledby="pitch-inference-title">
-                            <h3 id="pitch-inference-title">Inference</h3>
-                            <p>
-                                The same question drives the lab: when the target is hidden, does the trace still preserve enough structure to steer action?
-                            </p>
-                        </section>
-                        <section class="elevator-pitch-point" aria-labelledby="pitch-applications-title">
-                            <h3 id="pitch-applications-title">Applications</h3>
-                            <p>
-                                Workbenches test the pattern in shadows, pressure maps, local fields, and learned agents. They publish the boundary, not a universal theorem.
-                            </p>
-                        </section>
-                    </div>
-                    <p class="elevator-pitch-note">
-                        A high smile-shaped
-                        <a class="glossary-link" href="legend.html#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-describedby="def-cza">circumzenithal arc</a><span id="def-cza" class="sr-only">The high smile-shaped arc above the sun.</span>
-                        and the
-                        <a class="glossary-link" href="legend.html#phenomenon-parhelic-circle" data-definition="The horizontal belt through the sun and parhelia. It is rendered in the atlas but not promoted as a hidden-state handle." aria-describedby="def-parhelic">parhelic circle</a><span id="def-parhelic" class="sr-only">The horizontal belt through the sun and parhelia.</span>
-                        help explain the atlas vocabulary. The crossover claim remains audit-hedged; read the
-                        <a href="docs/PHASE10_ATTACK_ROADMAP.md">geometry audit roadmap</a> before treating it as more than a staged research question.
-                    </p>
-                </div>
-            </div>
-            <aside class="elevator-pitch-art elevator-pitch-art-left" aria-label="HaloSim visual receipts">
-                <figure>
-                    <img src="/media/elevator-halosim-cza.png" alt="HaloSim receipt showing the high circumzenithal arc above the sun.">
-                    <figcaption>HaloSim CZA receipt</figcaption>
-                </figure>
-            </aside>
-            <aside class="elevator-pitch-art elevator-pitch-art-right" aria-label="HaloSim visual receipts">
-                <figure>
-                    <img src="/media/elevator-halosim-parhelia.png" alt="HaloSim receipt showing parhelia on either side of the sun.">
-                    <figcaption>HaloSim parhelia receipt</figcaption>
-                </figure>
-            </aside>
-        </div>
-    </section>
-
-    <!-- Sundog Alignment Theorem Proof Section -->
-    <div class="theorem-band">
-    <section class="theorem-section" id="theorem-proof">
-        <h2>The Sundog Alignment Theorem</h2>
-        <p>
-            The hero scene above is not decoration. It is a map of the idea in three registers:
-            theorem as math, theorem as design method, and theorem as empirical claim.
-            The paper-grade result remains narrow: photometric mirror alignment without target-position access.
-            The application layer now adds bounded operating-envelope studies in three-body dynamics,
-            shadow balance, and pressure mines.
-        </p>
-        <div class="theorem-grid">
-
-            <div class="theorem-card" id="theorem-premise">
-                <div class="step-number">Step I · Left Parhelion</div>
-                <h3>A Signal Beside The Source</h3>
-                <div class="proof-snippet">
-                    The first bright spot is not the sun.<br>
-                    It is a displaced signature produced by geometry.<br>
-                    That is the premise.
-                </div>
-                <p>
-                    A sundog is useful here because it makes the core move visible:
-                    the thing you can use is not always the thing itself. In the field
-                    origin, the laser was blocked by the fastener head. In the experiment,
-                    the target position is hidden. Sundog begins when occlusion stops
-                    being treated as missing data and becomes a readable signal.
-                </p>
-            </div>
-
-            <div class="theorem-card" id="theorem-variables">
-                <div class="step-number">Step II · Right Parhelion</div>
-                <h3>The Frame Of Reference</h3>
-                <div class="proof-snippet">
-                    P = alignment target &nbsp;·&nbsp; L = illumination vector<br>
-                    S(x) = shadow projection &nbsp;·&nbsp; τ(x) = torque<br>
-                    H(x) = ∂S/∂τ &nbsp;(the halo signature)
-                </div>
-                <p>
-                    The second parhelion gives the scene a frame: source, target,
-                    obstruction, projection, and action. As math, Sundog asks whether
-                    the projection changes coherently when the agent acts. As design
-                    method, it says to instrument that relationship instead of demanding
-                    full world state up front.
-                </p>
-            </div>
-
-            <div class="theorem-card" id="theorem-assertion">
-                <div class="step-number">Step III · Upper Tangent Arc</div>
-                <h3>The Coupling Claim</h3>
-                <div class="proof-snippet">
-                    If action changes the signature coherently,<br>
-                    then the hidden target may be inferable.<br>
-                    H(x) names that coupling.
-                </div>
-                <p>
-                    The upper arc is the dangerous part: it tempts a universal theorem.
-                    We keep it conditional. A nonzero relationship between action and
-                    signal is not magic; it is a candidate observability channel. The
-                    mathematical work is to define that coupling tightly enough that it
-                    predicts progress instead of merely sounding profound.
-                </p>
-            </div>
-
-            <div class="theorem-card" id="theorem-experiment">
-                <div class="step-number">Step IV · Lower Tangent Arc</div>
-                <h3>The Procedure Becomes A Test</h3>
-                <div class="proof-snippet">
-                    Field method: occlude, seat, reacquire.<br>
-                    Lab method: scan, seek, track.<br>
-                    No Cartesian target coordinates.
-                </div>
-                <p>
-                    The lower arc turns the origin story into an empirical task. The
-                    controller moves a mirrored end-effector and sees detector intensity
-                    plus proprioception, not the target coordinates. Its job is to make
-                    the reflected beam land where it should by following the signature
-                    produced by its own motion.
-                </p>
-            </div>
-
-            <div class="theorem-card" id="theorem-findings">
-                <div class="step-number">Step V · Inner Circle (Iris)</div>
-                <h3>The Closed Loop</h3>
-                <div class="proof-snippet">
-                    Photometric terminal intensity: 0.945.<br>
-                    Oracle terminal intensity: 0.936.<br>
-                    U = 526, p = 0.264.
-                </div>
-                <p>
-                    When the iris closes, the claim becomes measurable. In 30 matched
-                    MuJoCo scenes, the photometric controller reached comparable
-                    terminal accuracy to the target-aware analytic baseline; no
-                    terminal-intensity difference was detected at n=30. The trade was
-                    time: indirect feedback converged roughly 16x more slowly. The
-                    known failure boundary is tight joint limits.
-                </p>
-            </div>
-
-            <div class="theorem-card" id="theorem-conclusion">
-                <div class="step-number">Step VI · Outer Halo</div>
-                <h3>What The Halo Holds</h3>
-                <div class="proof-snippet">
-                    Math: define the coupling.<br>
-                    Method: act from indirect structure.<br>
-                    Claim: one research result, three bounded workbenches.
-                </div>
-                <p>
-                    The outer halo keeps the registers separate. As math, Sundog is a
-                    coupling problem. As design method, it is a way to build from
-                    partial, indirect signals. As empirical claim, today, it starts
-                    with the photometric mirror-alignment result and extends through
-                    bounded operating-envelope studies in Three-Body, Balance, and
-                    Pressure Mines. EyesOnly, Dungeon Gleaner, and Money Bags remain
-                    application expressions and instrumentation surfaces.
-                </p>
-            </div>
-
-        </div>
-    </section>
-    </div>
-
     <!-- What It Is Section -->
     <section class="what-section">
         <h2>Indirect Measurement, Direct Results</h2>
@@ -2130,88 +2008,6 @@
                         <li>Comparable terminal accuracy in the core task, with slower acquisition</li>
                         <li>Mapped failure boundaries in workbenches</li>
                     </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Visual Proof Section -->
-    <section class="proof-section">
-        <h2>Load-Bearing Evidence</h2>
-        <p class="proof-intro">
-            Alongside the original photometric result metrics, three current pillars keep the public claim inspectable: a structural falsifier, a mesa operating envelope, and a proof-trunk status gate. They are supports for the apparatus, not a universal theorem claim.
-        </p>
-        <div class="proof-grid">
-            <div class="proof-item">
-                <span class="proof-label">Core result metric</span>
-                <h4>Terminal Target Intensity</h4>
-                <div class="proof-placeholder evidence-map-visual">
-                    <a class="proof-visual-link" href="data/photometric-core-metrics.json" aria-label="Open the photometric core metric data">
-                        <img src="/media/photometric-terminal-intensity.svg" alt="Bar chart of terminal target intensity for photometric, target-aware oracle, noisy oracle, and random conditions, with 95 percent confidence intervals." loading="eager" decoding="async">
-                    </a>
-                </div>
-                <p>No terminal-intensity difference was detected at n=30.</p>
-                <div class="proof-actions" aria-label="Terminal intensity inspection links">
-                    <a href="data/photometric-core-metrics.json">Inspect chart data &rarr;</a>
-                    <a href="docs/RESEARCHER_GUIDE.md">Read evidence guide &rarr;</a>
-                </div>
-            </div>
-            <div class="proof-item">
-                <span class="proof-label">Core result metric</span>
-                <h4>Time-to-Convergence</h4>
-                <div class="proof-placeholder evidence-map-visual">
-                    <a class="proof-visual-link" href="data/photometric-core-metrics.json" aria-label="Open the photometric convergence metric data">
-                        <img src="/media/photometric-convergence-time.svg" alt="Horizontal bar chart of median steps to intensity 0.9, showing photometric feedback at 188 steps versus the target-aware oracle at 11.5 steps." loading="eager" decoding="async">
-                    </a>
-                </div>
-                <p>The measured cost of indirect feedback is roughly 16x slower acquisition.</p>
-                <div class="proof-actions" aria-label="Convergence-time inspection links">
-                    <a href="data/photometric-core-metrics.json">Inspect chart data &rarr;</a>
-                    <a href="docs/RESEARCHER_GUIDE.md">Read evidence guide &rarr;</a>
-                </div>
-            </div>
-            <div class="proof-item" id="structural-boundary-preview">
-                <span class="proof-label pillar">Load-bearing pillar</span>
-                <h4>Structural Failure Boundary Map</h4>
-                <div class="proof-placeholder evidence-map-visual">
-                    <a class="proof-visual-link" href="structural-failure.html" aria-label="Open the structural failure boundary map">
-                        <img src="/media/structural-boundary-five-locus-map.svg" alt="Five-locus structural failure boundary map showing eligible windows, required breaks, and correlate tells." loading="eager" decoding="async">
-                    </a>
-                </div>
-                <p>Frozen falsifier: a traceable system should fail where the closed-form inverse loses identifiability.</p>
-                <div class="proof-actions" aria-label="Structural failure inspection links">
-                    <a href="structural-failure.html">Open boundary map &rarr;</a>
-                    <a href="docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md">Read frozen map &rarr;</a>
-                </div>
-            </div>
-            <div class="proof-item" id="mesa-evidence-preview">
-                <span class="proof-label pillar">Load-bearing pillar</span>
-                <h4>Mesa Optimization Envelope</h4>
-                <div class="proof-placeholder evidence-map-visual">
-                    <a class="proof-visual-link" href="mesa.html" aria-label="Open the Mesa optimization envelope page">
-                        <img src="/media/mesa-evidence-panel.svg" alt="Mesa operating-envelope panel showing class balance and the Medium lambda cliff for audited Small and Medium policies." loading="eager" decoding="async">
-                    </a>
-                </div>
-                <p>Small/Medium in-vitro map: 22 audited policy cells, zero missing, with the Medium reward-coupling cliff localized between lambda 0.95 and 0.97.</p>
-                <div class="proof-actions" aria-label="Mesa evidence inspection links">
-                    <a href="mesa.html">Open Mesa page &rarr;</a>
-                    <a href="data/mesa-public-charts.json">Inspect chart data &rarr;</a>
-                    <a href="docs/SUNDOG_V_MESA.md">Read Mesa notes &rarr;</a>
-                </div>
-            </div>
-            <div class="proof-item" id="coarse-proof-preview">
-                <span class="proof-label pillar">Load-bearing pillar</span>
-                <h4>Coarse-Graining Proof Trunk</h4>
-                <div class="proof-placeholder evidence-map-visual">
-                    <a class="proof-visual-link" href="docs/COARSE_GRAINING_PROOF_ROADMAP.md" aria-label="Open the coarse-graining proof roadmap">
-                        <img src="/media/coarse-graining-proof-ladder.svg" alt="Coarse-graining proof status ladder showing four closed positive phases, two open gates, and one locked phase." loading="eager" decoding="async">
-                    </a>
-                </div>
-                <p>Status ladder only: Phases 0-3 are positive, Phase 4 remains blocked/open around the Bayesian-floor gate, and Phase 6 is still staged/open.</p>
-                <div class="proof-actions" aria-label="Coarse-graining proof inspection links">
-                    <a href="docs/COARSE_GRAINING_PROOF_ROADMAP.md">Read roadmap &rarr;</a>
-                    <a href="docs/proof/README.md">Proof artifacts &rarr;</a>
-                    <a href="docs/proof/PHASE4_THREEBODY.md">Phase 4 gate &rarr;</a>
                 </div>
             </div>
         </div>
