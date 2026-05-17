@@ -20,6 +20,7 @@ The repository now has:
 - ✅ Footer copyright notices across public HTML pages
 - ✅ About page establishing Sundog Research Lab's public research posture and current Stellar Aqua LLC sponsorship structure
 - ✅ Brand positioning note separating the Mythos stress-test lesson from the legal/IP roadmap
+- ✅ Gemini benchmark filed as second brand stress test, with crawler/redirect debugging topics recorded in `BRAND_POSITIONING.md`
 - ✅ Updated navigation with About page as primary identity page
 - ✅ Copyright headers on README.md and major documentation files
 - ✅ Package.json metadata (author, license, description)

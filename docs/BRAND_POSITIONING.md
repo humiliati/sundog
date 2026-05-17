@@ -45,6 +45,65 @@ The correction is load-bearing:
   narrow claims, inspectable workbenches, explicit failure boundaries, and
   practical systems that act from partial signals.
 
+## Gemini Benchmark Lesson
+
+The Gemini benchmark in [`gemini-benchmark.md`](gemini-benchmark.md) should be
+treated as the second public-legibility stress test. It is less confused than
+Mythos about Atari / p-system lineage, but it still overweights the early
+"Sundog Alignment Theorem" surface and the wider web namespace around
+Sundog.
+
+What it got usefully right:
+
+- The field-origin story is legible from outside the project.
+- The independent, blue-collar, maverick posture reads strongly.
+- The alignment-without-sight motif is memorable.
+- The project is now recognizable as an AI / control / embodiment artifact,
+  not only a strange repo name.
+
+What it still got wrong or overextended:
+
+- It treats the old theorem-front posture as the current brand center.
+- It synthesizes old external artifacts, search snippets, and current site
+  material into one narrative without preserving evidence tiers.
+- It frames academic friction as sociological drama more strongly than the
+  current site should.
+- It reports `legend.html`, `applications-gallery.html`, and `chat.html` as
+  inaccessible even though live probes show those pages reachable after
+  Cloudflare Pages clean-URL redirects.
+
+Infrastructure read from the first follow-up probe: no Cloudflare DDoS
+challenge was reproduced. The likely failure mode is a combination of stale
+Google-grounded search cache plus `.html` endpoints returning `308` redirects
+to extensionless clean URLs. A browser or redirect-following crawler lands on
+the pages; a stricter fetcher may mark the `.html` endpoints as null/offline.
+
+Brand correction:
+
+- Do not apologize for the early theorem frame as if it was merely foolish.
+  It was the first public shape of a real insight.
+- Do keep current public posture anchored in the traceability harness:
+  admitted information lanes, same-information comparators, bounded evidence,
+  and visible failure boundaries.
+- Do not let the "rejected maverick" story become the brand. It is background,
+  not the claim.
+- Use Gemini's coherence as validation that the origin and seriousness are
+  legible, while using its infrastructure and overclaim errors as the next
+  cleanup queue.
+
+Debugging topics raised by this benchmark:
+
+- Canonical URL policy: decide whether public links and sitemap entries should
+  use `.html` URLs or Cloudflare Pages extensionless URLs.
+- Search freshness: request recrawl after major homepage/About changes so
+  grounded models stop seeing stale theorem-copy snippets.
+- Bot smoke: add a lightweight live check that fetches key pages with
+  redirect-following disabled and enabled, and records `200` vs `308` vs
+  challenge status.
+- External artifact disambiguation: keep the site explicit that old LessWrong,
+  viXra, BitChute, crypto, and unrelated Sundog entities are not the current
+  claim surface.
+
 ## What Readers Must Understand
 
 Sundog studies cases where shadows, torque, occlusion, deformation, pressure,
@@ -115,4 +174,3 @@ Short founder voice:
 > expensive, partially observable, or deliberately hidden. Conventional
 > software often responds by demanding more state. Sundog asks whether the
 > trace is enough.
-
