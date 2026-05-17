@@ -1472,9 +1472,10 @@ Active next work:
 - Phase 13.1 posterior cell view has landed: selected-cell
   posterior hazard/pressure/confidence details plus replay selectors for
   best/worst/Bayes-divergence cells.
-- The next Bayes-roadmap hygiene move is template backfill: stamp the reusable
-  Balance + Mines Bayesian-floor profile fields into the generic profile
-  template before opening a new standalone Bayes UI.
+- Bayesian-floor template backfill has landed with the reusable Balance + Mines
+  profile fields. The next Bayes-roadmap move is outside this Mines workbench:
+  start the standalone Phase 1 exact Bayes-Correct reference task before
+  opening a new Bayes UI.
 
 The promoted page must keep the caveats visible: both Sundog and naive trigger
 mines on every seed in the best cell; `threshold_flagger` has higher survival

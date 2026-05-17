@@ -345,8 +345,10 @@ Applied queue after the Balance lock:
    for the confirmed pocket, paired failure, and Bayes-divergence cell.
 5. **Template backfill.** Current next hygiene task. Any Mines-specific deviations from the generic
    [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md)
-   should update the template after the smoke, not before the first runner
-   proves which fields are genuinely reusable.
+   have now been backfilled: admission lanes, same-observation seed policy,
+   claim-gate fields, reported-only lanes, posterior/evidence slices, and
+   public interpretation copy. Next roadmap move: start the standalone Phase 1
+   exact Bayes-Correct reference task before creating `bayes.html`.
 
 ## Controller-Family Architecture
 
@@ -895,10 +897,13 @@ Immediate work after the Pressure Mines applied lane:
 - Backfill [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md)
   with the fields that proved reusable in Balance and Mines: admission profile,
   same-observation seed policy, claim-gate fields, reported-only lanes,
-  posterior-cell slices, and public interpretation copy.
+  posterior-cell slices, and public interpretation copy. *(landed 2026-05-17)*
 - Keep `alignment.html` as the public Bayes/Sundog side-by-side. The Mines row
   now has the explicit middle claim: stronger than "Sundog beat naive," weaker
   than "Sundog beat Bayes."
+- Start Phase 1 exact Bayes-Correct reference task: small hidden-source grid,
+  correct likelihood, exact posterior, and Sundog response-control comparator.
+  Bayes should win here; if it does not, fix Bayes before moving on.
 - Add `bayes.html` only after the standalone benchmark has real run artifacts.
   Do not publish a decorative Bayes page before Phase 1/2 receipts exist.
 - Add a public rail card only if Round 3 or Phase 5 includes a real failure
