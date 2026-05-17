@@ -1,13 +1,16 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-17T17:26:59.459Z",
+  "generatedAt": "2026-05-17T17:47:39.204Z",
   "purpose": "Public Pressure Mines Phase 13 data surface. Generated from Phase 10 operating-envelope receipts and Phase 12 same-field Bayesian pressure-floor receipts; do not hand-edit.",
   "sourcePaths": {
     "phase10Manifest": "results/mines/phase10-envelope/manifest.json",
     "phase10BestWorst": "results/mines/phase10-envelope/best-worst-cells.csv",
     "phase12Manifest": "results/mines/phase12-phase10-slate-reducer-64/manifest.json",
     "phase12Summary": "results/mines/phase12-phase10-slate-reducer-64/summary.json",
-    "phase12RegretSummary": "results/mines/phase12-phase10-slate-reducer-64/bayes-regret-summary.csv"
+    "phase12RegretSummary": "results/mines/phase12-phase10-slate-reducer-64/bayes-regret-summary.csv",
+    "phase12Actions": "results/mines/phase12-phase10-slate-reducer-64/bayes-actions.csv",
+    "phase12Diagnostics": "results/mines/phase12-phase10-slate-reducer-64/posterior-diagnostics.csv",
+    "phase12PosteriorMap": "results/mines/phase12-phase10-slate-reducer-64/frontier-posterior-map.json"
   },
   "claimBoundary": "Pressure Mines remains an Operating-Envelope Study. The Bayesian comparator here is a pressure-floor parity receipt versus naive_pressure and sundog_minimal, not a claim that the current posterior policy dominates sundog_lean or clears the board.",
   "phase10": {
@@ -180,6 +183,1924 @@
       "label": "Phase 12 Bayesian pressure floor",
       "status": "PRESSURE_FLOOR_RECEIPT",
       "scope": "Same-field pressure-budget Bayes matches naive_pressure and sundog_minimal floors across the Phase 10 cell slate; sundog_lean remains a separate stronger comparator in the promoted candidate."
+    }
+  ],
+  "posteriorCells": [
+    {
+      "role": "confirmed_pocket",
+      "label": "Confirmed pocket",
+      "reason": "Phase 10 promoted positive pocket.",
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_2_dropout_0p2__w9__h9__m13__c0__s1__n2__d0p2__lag0__scan3",
+      "seed": 47,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=47&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.2",
+      "replayParams": {
+        "preset": "easy_sparse",
+        "seed": "47",
+        "mode": "sundog_lean",
+        "sensor": "doc_default",
+        "compare": "naive_pressure",
+        "mine_count": "13",
+        "scan_budget": "0",
+        "sigma_noise": "2",
+        "dropout": "0.2"
+      },
+      "cell": {
+        "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_2_dropout_0p2__w9__h9__m13__c0__s1__n2__d0p2__lag0__scan3",
+        "selection": "phase10_candidate",
+        "cellClass": "candidate_positive",
+        "preset": "easy_sparse",
+        "board": {
+          "width": 9,
+          "height": 9,
+          "mineCount": 13,
+          "replayScanBudget": 0,
+          "configuredScanBudget": 3
+        },
+        "sensor": {
+          "sigma": 1,
+          "sigmaNoise": 2,
+          "dropoutRate": 0.2,
+          "delaySteps": 0
+        }
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -1.515625,
+          "minBudgetAdjustedDelta": -46,
+          "maxBudgetAdjustedDelta": 38,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -39.859375,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -7,
+          "winDelta": -64,
+          "n": 64
+        }
+      },
+      "traceSamplePolicy": {
+        "turns": "first 6 representative-seed Bayes pressure decisions",
+        "candidates": "first 10 candidates from each stored posterior map entry"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "budget": "pressure",
+          "frontierSize": 8,
+          "selected": {
+            "action": "reveal",
+            "x": 3,
+            "y": 4,
+            "hazard": 0.170556,
+            "pressure": 0.089603,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 28.309217,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0.056714,
+            "max": 0.71163
+          },
+          "observedPressureCount": 65,
+          "candidates": [
+            {
+              "idx": 39,
+              "x": 3,
+              "y": 4,
+              "hazard": 0.170556,
+              "entropy": 0.658976,
+              "pressure": 0.089603,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 49,
+              "x": 4,
+              "y": 5,
+              "hazard": 0.260774,
+              "entropy": 0.827913,
+              "pressure": 0.142516,
+              "confidence": 1,
+              "pressureScore": 0.01635,
+              "actionRisk": 0.01635
+            },
+            {
+              "idx": 48,
+              "x": 3,
+              "y": 5,
+              "hazard": 0.091701,
+              "entropy": 0.442122,
+              "pressure": 0.813106,
+              "confidence": 1,
+              "pressureScore": 0.223565,
+              "actionRisk": 0.223565
+            },
+            {
+              "idx": 32,
+              "x": 5,
+              "y": 3,
+              "hazard": 0.128679,
+              "entropy": 0.553804,
+              "pressure": 0.996131,
+              "confidence": 1,
+              "pressureScore": 0.28012,
+              "actionRisk": 0.280121
+            },
+            {
+              "idx": 31,
+              "x": 4,
+              "y": 3,
+              "hazard": 0.328729,
+              "entropy": 0.913622,
+              "pressure": 1.200332,
+              "confidence": 1,
+              "pressureScore": 0.343219,
+              "actionRisk": 0.34322
+            },
+            {
+              "idx": 41,
+              "x": 5,
+              "y": 4,
+              "hazard": 0.71163,
+              "entropy": 0.866606,
+              "pressure": 3.325811,
+              "confidence": 1,
+              "pressureScore": 1,
+              "actionRisk": 1.000001
+            },
+            {
+              "idx": 50,
+              "x": 5,
+              "y": 5,
+              "hazard": 0.056714,
+              "entropy": 0.314259,
+              "pressure": "",
+              "confidence": 0,
+              "pressureScore": 1.5,
+              "actionRisk": 1.5
+            },
+            {
+              "idx": 30,
+              "x": 3,
+              "y": 3,
+              "hazard": 0.087755,
+              "entropy": 0.428931,
+              "pressure": "",
+              "confidence": 0,
+              "pressureScore": 1.5,
+              "actionRisk": 1.5
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "budget": "pressure",
+          "frontierSize": 15,
+          "selected": {
+            "action": "reveal",
+            "x": 5,
+            "y": 1,
+            "hazard": 0.095604,
+            "pressure": -2.314503,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 51.788064,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0.095604,
+            "max": 0.975521
+          },
+          "observedPressureCount": 67,
+          "candidates": [
+            {
+              "idx": 14,
+              "x": 5,
+              "y": 1,
+              "hazard": 0.095604,
+              "entropy": 0.454904,
+              "pressure": -2.314503,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 32,
+              "x": 5,
+              "y": 3,
+              "hazard": 0.104135,
+              "entropy": 0.481968,
+              "pressure": -1.541427,
+              "confidence": 1,
+              "pressureScore": 0.101132,
+              "actionRisk": 0.101132
+            },
+            {
+              "idx": 41,
+              "x": 5,
+              "y": 4,
+              "hazard": 0.105049,
+              "entropy": 0.484801,
+              "pressure": -1.086507,
+              "confidence": 1,
+              "pressureScore": 0.160643,
+              "actionRisk": 0.160643
+            },
+            {
+              "idx": 65,
+              "x": 2,
+              "y": 7,
+              "hazard": 0.355575,
+              "entropy": 0.938949,
+              "pressure": 0.053689,
+              "confidence": 1,
+              "pressureScore": 0.3098,
+              "actionRisk": 0.309801
+            },
+            {
+              "idx": 20,
+              "x": 2,
+              "y": 2,
+              "hazard": 0.46544,
+              "entropy": 0.996551,
+              "pressure": 1.459678,
+              "confidence": 1,
+              "pressureScore": 0.493728,
+              "actionRisk": 0.493729
+            },
+            {
+              "idx": 24,
+              "x": 6,
+              "y": 2,
+              "hazard": 0.423247,
+              "entropy": 0.982935,
+              "pressure": 1.881749,
+              "confidence": 1,
+              "pressureScore": 0.548942,
+              "actionRisk": 0.548943
+            },
+            {
+              "idx": 27,
+              "x": 0,
+              "y": 3,
+              "hazard": 0.631703,
+              "entropy": 0.949356,
+              "pressure": 2.498599,
+              "confidence": 1,
+              "pressureScore": 0.629637,
+              "actionRisk": 0.629638
+            },
+            {
+              "idx": 21,
+              "x": 3,
+              "y": 2,
+              "hazard": 0.860631,
+              "entropy": 0.582584,
+              "pressure": 3.213279,
+              "confidence": 1,
+              "pressureScore": 0.72313,
+              "actionRisk": 0.72313
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "budget": "pressure",
+          "frontierSize": 16,
+          "selected": {
+            "action": "reveal",
+            "x": 6,
+            "y": 2,
+            "hazard": 0.091403,
+            "pressure": -1.299581,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 61.06504,
+            "terminalAfter": "mine_triggered",
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0.091403,
+            "max": 1
+          },
+          "observedPressureCount": 59,
+          "candidates": [
+            {
+              "idx": 24,
+              "x": 6,
+              "y": 2,
+              "hazard": 0.091403,
+              "entropy": 0.441134,
+              "pressure": -1.299581,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 20,
+              "x": 2,
+              "y": 2,
+              "hazard": 0.345832,
+              "entropy": 0.93029,
+              "pressure": 1.569654,
+              "confidence": 1,
+              "pressureScore": 0.351115,
+              "actionRisk": 0.351115
+            },
+            {
+              "idx": 27,
+              "x": 0,
+              "y": 3,
+              "hazard": 0.451024,
+              "entropy": 0.993068,
+              "pressure": 1.980624,
+              "confidence": 1,
+              "pressureScore": 0.401407,
+              "actionRisk": 0.401407
+            },
+            {
+              "idx": 74,
+              "x": 2,
+              "y": 8,
+              "hazard": 0.368586,
+              "entropy": 0.94958,
+              "pressure": 2.285852,
+              "confidence": 1,
+              "pressureScore": 0.438758,
+              "actionRisk": 0.438758
+            },
+            {
+              "idx": 19,
+              "x": 1,
+              "y": 2,
+              "hazard": 0.487756,
+              "entropy": 0.999567,
+              "pressure": 2.330849,
+              "confidence": 1,
+              "pressureScore": 0.444264,
+              "actionRisk": 0.444265
+            },
+            {
+              "idx": 41,
+              "x": 5,
+              "y": 4,
+              "hazard": 0.557109,
+              "entropy": 0.990569,
+              "pressure": 2.941164,
+              "confidence": 1,
+              "pressureScore": 0.51895,
+              "actionRisk": 0.518951
+            },
+            {
+              "idx": 33,
+              "x": 6,
+              "y": 3,
+              "hazard": 0.680931,
+              "entropy": 0.903367,
+              "pressure": 3.030901,
+              "confidence": 1,
+              "pressureScore": 0.529931,
+              "actionRisk": 0.529932
+            },
+            {
+              "idx": 21,
+              "x": 3,
+              "y": 2,
+              "hazard": 0.484997,
+              "entropy": 0.99935,
+              "pressure": 3.133633,
+              "confidence": 1,
+              "pressureScore": 0.542503,
+              "actionRisk": 0.542504
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "role": "mapped_failure",
+      "label": "Mapped failure",
+      "reason": "Phase 10 paired negative region.",
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_1_dropout_0p35__w9__h9__m18__c0__s1__n1__d0p35__lag0__scan3",
+      "seed": 39,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=39&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.35",
+      "replayParams": {
+        "preset": "easy_sparse",
+        "seed": "39",
+        "mode": "sundog_lean",
+        "sensor": "doc_default",
+        "compare": "naive_pressure",
+        "mine_count": "18",
+        "scan_budget": "0",
+        "sigma_noise": "1",
+        "dropout": "0.35"
+      },
+      "cell": {
+        "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_1_dropout_0p35__w9__h9__m18__c0__s1__n1__d0p35__lag0__scan3",
+        "selection": "phase10_cell",
+        "cellClass": "failure_regime",
+        "preset": "easy_sparse",
+        "board": {
+          "width": 9,
+          "height": 9,
+          "mineCount": 18,
+          "replayScanBudget": 0,
+          "configuredScanBudget": 3
+        },
+        "sensor": {
+          "sigma": 1,
+          "sigmaNoise": 1,
+          "dropoutRate": 0.35,
+          "delaySteps": 0
+        }
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -0.234375,
+          "minBudgetAdjustedDelta": -16,
+          "maxBudgetAdjustedDelta": 1,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -43.046875,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -7,
+          "winDelta": -64,
+          "n": 64
+        }
+      },
+      "traceSamplePolicy": {
+        "turns": "first 6 representative-seed Bayes pressure decisions",
+        "candidates": "first 10 candidates from each stored posterior map entry"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "budget": "pressure",
+          "frontierSize": 8,
+          "selected": {
+            "action": "reveal",
+            "x": 3,
+            "y": 3,
+            "hazard": 0.003879,
+            "pressure": -0.181729,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 6.991769,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0.003879,
+            "max": 0.518979
+          },
+          "observedPressureCount": 53,
+          "candidates": [
+            {
+              "idx": 30,
+              "x": 3,
+              "y": 3,
+              "hazard": 0.003879,
+              "entropy": 0.036657,
+              "pressure": -0.181729,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 39,
+              "x": 3,
+              "y": 4,
+              "hazard": 0.28056,
+              "entropy": 0.856213,
+              "pressure": 1.206387,
+              "confidence": 1,
+              "pressureScore": 0.636888,
+              "actionRisk": 0.636888
+            },
+            {
+              "idx": 48,
+              "x": 3,
+              "y": 5,
+              "hazard": 0.029834,
+              "entropy": 0.193557,
+              "pressure": 1.245004,
+              "confidence": 1,
+              "pressureScore": 0.654606,
+              "actionRisk": 0.654606
+            },
+            {
+              "idx": 31,
+              "x": 4,
+              "y": 3,
+              "hazard": 0.146111,
+              "entropy": 0.600023,
+              "pressure": 1.997801,
+              "confidence": 1,
+              "pressureScore": 1,
+              "actionRisk": 1
+            },
+            {
+              "idx": 41,
+              "x": 5,
+              "y": 4,
+              "hazard": 0.114949,
+              "entropy": 0.514665,
+              "pressure": "",
+              "confidence": 0,
+              "pressureScore": 1.5,
+              "actionRisk": 1.5
+            },
+            {
+              "idx": 49,
+              "x": 4,
+              "y": 5,
+              "hazard": 0.116848,
+              "entropy": 0.520233,
+              "pressure": "",
+              "confidence": 0,
+              "pressureScore": 1.5,
+              "actionRisk": 1.5
+            },
+            {
+              "idx": 50,
+              "x": 5,
+              "y": 5,
+              "hazard": 0.129937,
+              "entropy": 0.557264,
+              "pressure": "",
+              "confidence": 0,
+              "pressureScore": 1.5,
+              "actionRisk": 1.5
+            },
+            {
+              "idx": 32,
+              "x": 5,
+              "y": 3,
+              "hazard": 0.518979,
+              "entropy": 0.99896,
+              "pressure": "",
+              "confidence": 0,
+              "pressureScore": 1.5,
+              "actionRisk": 1.500001
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "budget": "pressure",
+          "frontierSize": 12,
+          "selected": {
+            "action": "reveal",
+            "x": 2,
+            "y": 4,
+            "hazard": 0.177969,
+            "pressure": 1.061787,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 8.55493,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0.087144,
+            "max": 0.797046
+          },
+          "observedPressureCount": 48,
+          "candidates": [
+            {
+              "idx": 38,
+              "x": 2,
+              "y": 4,
+              "hazard": 0.177969,
+              "entropy": 0.675614,
+              "pressure": 1.061787,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 49,
+              "x": 4,
+              "y": 5,
+              "hazard": 0.087144,
+              "entropy": 0.426864,
+              "pressure": 1.207095,
+              "confidence": 1,
+              "pressureScore": 0.056428,
+              "actionRisk": 0.056428
+            },
+            {
+              "idx": 32,
+              "x": 5,
+              "y": 3,
+              "hazard": 0.519121,
+              "entropy": 0.998945,
+              "pressure": 2.035052,
+              "confidence": 1,
+              "pressureScore": 0.377949,
+              "actionRisk": 0.37795
+            },
+            {
+              "idx": 41,
+              "x": 5,
+              "y": 4,
+              "hazard": 0.326357,
+              "entropy": 0.911161,
+              "pressure": 2.074611,
+              "confidence": 1,
+              "pressureScore": 0.393311,
+              "actionRisk": 0.393312
+            },
+            {
+              "idx": 20,
+              "x": 2,
+              "y": 2,
+              "hazard": 0.797046,
+              "entropy": 0.727798,
+              "pressure": 3.104452,
+              "confidence": 1,
+              "pressureScore": 0.793231,
+              "actionRisk": 0.793231
+            },
+            {
+              "idx": 22,
+              "x": 4,
+              "y": 2,
+              "hazard": 0.377092,
+              "entropy": 0.955962,
+              "pressure": 3.284137,
+              "confidence": 1,
+              "pressureScore": 0.863008,
+              "actionRisk": 0.863008
+            },
+            {
+              "idx": 39,
+              "x": 3,
+              "y": 4,
+              "hazard": 0.657761,
+              "entropy": 0.926945,
+              "pressure": 3.316496,
+              "confidence": 1,
+              "pressureScore": 0.875574,
+              "actionRisk": 0.875574
+            },
+            {
+              "idx": 50,
+              "x": 5,
+              "y": 5,
+              "hazard": 0.749203,
+              "entropy": 0.812539,
+              "pressure": 3.630018,
+              "confidence": 1,
+              "pressureScore": 0.997324,
+              "actionRisk": 0.997325
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "budget": "pressure",
+          "frontierSize": 15,
+          "selected": {
+            "action": "reveal",
+            "x": 4,
+            "y": 5,
+            "hazard": 0.112318,
+            "pressure": -0.775118,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 3.487005,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0.02365,
+            "max": 0.984567
+          },
+          "observedPressureCount": 48,
+          "candidates": [
+            {
+              "idx": 49,
+              "x": 4,
+              "y": 5,
+              "hazard": 0.112318,
+              "entropy": 0.50687,
+              "pressure": -0.775118,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 39,
+              "x": 3,
+              "y": 4,
+              "hazard": 0.026515,
+              "entropy": 0.176603,
+              "pressure": 0.237786,
+              "confidence": 1,
+              "pressureScore": 0.202142,
+              "actionRisk": 0.202142
+            },
+            {
+              "idx": 31,
+              "x": 4,
+              "y": 3,
+              "hazard": 0.100814,
+              "entropy": 0.47157,
+              "pressure": 0.887405,
+              "confidence": 1,
+              "pressureScore": 0.331784,
+              "actionRisk": 0.331784
+            },
+            {
+              "idx": 37,
+              "x": 1,
+              "y": 4,
+              "hazard": 0.02365,
+              "entropy": 0.161472,
+              "pressure": 1.014424,
+              "confidence": 1,
+              "pressureScore": 0.357133,
+              "actionRisk": 0.357133
+            },
+            {
+              "idx": 50,
+              "x": 5,
+              "y": 5,
+              "hazard": 0.221654,
+              "entropy": 0.763175,
+              "pressure": 1.246968,
+              "confidence": 1,
+              "pressureScore": 0.403541,
+              "actionRisk": 0.403541
+            },
+            {
+              "idx": 29,
+              "x": 2,
+              "y": 3,
+              "hazard": 0.265866,
+              "entropy": 0.83547,
+              "pressure": 2.127625,
+              "confidence": 1,
+              "pressureScore": 0.579291,
+              "actionRisk": 0.579291
+            },
+            {
+              "idx": 21,
+              "x": 3,
+              "y": 2,
+              "hazard": 0.687787,
+              "entropy": 0.895711,
+              "pressure": 2.286736,
+              "confidence": 1,
+              "pressureScore": 0.611044,
+              "actionRisk": 0.611045
+            },
+            {
+              "idx": 22,
+              "x": 4,
+              "y": 2,
+              "hazard": 0.266835,
+              "entropy": 0.836886,
+              "pressure": 2.491967,
+              "confidence": 1,
+              "pressureScore": 0.652001,
+              "actionRisk": 0.652002
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "budget": "pressure",
+          "frontierSize": 17,
+          "selected": {
+            "action": "reveal",
+            "x": 5,
+            "y": 5,
+            "hazard": 0.297819,
+            "pressure": 0.670775,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 4.265058,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0.020776,
+            "max": 0.996249
+          },
+          "observedPressureCount": 47,
+          "candidates": [
+            {
+              "idx": 50,
+              "x": 5,
+              "y": 5,
+              "hazard": 0.297819,
+              "entropy": 0.878609,
+              "pressure": 0.670775,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 59,
+              "x": 5,
+              "y": 6,
+              "hazard": 0.020776,
+              "entropy": 0.145778,
+              "pressure": 1.222629,
+              "confidence": 1,
+              "pressureScore": 0.156073,
+              "actionRisk": 0.156073
+            },
+            {
+              "idx": 57,
+              "x": 3,
+              "y": 6,
+              "hazard": 0.089692,
+              "entropy": 0.435442,
+              "pressure": 1.331429,
+              "confidence": 1,
+              "pressureScore": 0.186843,
+              "actionRisk": 0.186843
+            },
+            {
+              "idx": 20,
+              "x": 2,
+              "y": 2,
+              "hazard": 0.448911,
+              "entropy": 0.992456,
+              "pressure": 1.733087,
+              "confidence": 1,
+              "pressureScore": 0.300438,
+              "actionRisk": 0.300438
+            },
+            {
+              "idx": 48,
+              "x": 3,
+              "y": 5,
+              "hazard": 0.463227,
+              "entropy": 0.996095,
+              "pressure": 1.734378,
+              "confidence": 1,
+              "pressureScore": 0.300803,
+              "actionRisk": 0.300803
+            },
+            {
+              "idx": 22,
+              "x": 4,
+              "y": 2,
+              "hazard": 0.118985,
+              "entropy": 0.526437,
+              "pressure": 1.882146,
+              "confidence": 1,
+              "pressureScore": 0.342594,
+              "actionRisk": 0.342594
+            },
+            {
+              "idx": 31,
+              "x": 4,
+              "y": 3,
+              "hazard": 0.948799,
+              "entropy": 0.291479,
+              "pressure": 3.041881,
+              "confidence": 1,
+              "pressureScore": 0.670584,
+              "actionRisk": 0.670585
+            },
+            {
+              "idx": 21,
+              "x": 3,
+              "y": 2,
+              "hazard": 0.996249,
+              "entropy": 0.03563,
+              "pressure": 4.206655,
+              "confidence": 1,
+              "pressureScore": 1,
+              "actionRisk": 1.000001
+            }
+          ]
+        },
+        {
+          "turn": 5,
+          "budget": "pressure",
+          "frontierSize": 19,
+          "selected": {
+            "action": "reveal",
+            "x": 4,
+            "y": 3,
+            "hazard": 0.03816,
+            "pressure": 0.251067,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 6.038743,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0.03816,
+            "max": 0.834552
+          },
+          "observedPressureCount": 50,
+          "candidates": [
+            {
+              "idx": 31,
+              "x": 4,
+              "y": 3,
+              "hazard": 0.03816,
+              "entropy": 0.233791,
+              "pressure": 0.251067,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 28,
+              "x": 1,
+              "y": 3,
+              "hazard": 0.06288,
+              "entropy": 0.338772,
+              "pressure": 0.521919,
+              "confidence": 1,
+              "pressureScore": 0.074424,
+              "actionRisk": 0.074424
+            },
+            {
+              "idx": 37,
+              "x": 1,
+              "y": 4,
+              "hazard": 0.045706,
+              "entropy": 0.26787,
+              "pressure": 0.526297,
+              "confidence": 1,
+              "pressureScore": 0.075627,
+              "actionRisk": 0.075627
+            },
+            {
+              "idx": 22,
+              "x": 4,
+              "y": 2,
+              "hazard": 0.224312,
+              "entropy": 0.767964,
+              "pressure": 0.987412,
+              "confidence": 1,
+              "pressureScore": 0.20233,
+              "actionRisk": 0.202331
+            },
+            {
+              "idx": 39,
+              "x": 3,
+              "y": 4,
+              "hazard": 0.507048,
+              "entropy": 0.999857,
+              "pressure": 1.076183,
+              "confidence": 1,
+              "pressureScore": 0.226723,
+              "actionRisk": 0.226723
+            },
+            {
+              "idx": 48,
+              "x": 3,
+              "y": 5,
+              "hazard": 0.435045,
+              "entropy": 0.987792,
+              "pressure": 1.933505,
+              "confidence": 1,
+              "pressureScore": 0.462295,
+              "actionRisk": 0.462295
+            },
+            {
+              "idx": 32,
+              "x": 5,
+              "y": 3,
+              "hazard": 0.082057,
+              "entropy": 0.409385,
+              "pressure": 2.16307,
+              "confidence": 1,
+              "pressureScore": 0.525374,
+              "actionRisk": 0.525374
+            },
+            {
+              "idx": 59,
+              "x": 5,
+              "y": 6,
+              "hazard": 0.628085,
+              "entropy": 0.952131,
+              "pressure": 2.372314,
+              "confidence": 1,
+              "pressureScore": 0.582869,
+              "actionRisk": 0.58287
+            }
+          ]
+        },
+        {
+          "turn": 6,
+          "budget": "pressure",
+          "frontierSize": 19,
+          "selected": {
+            "action": "reveal",
+            "x": 6,
+            "y": 4,
+            "hazard": 0.066767,
+            "pressure": -0.128886,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 7.860904,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0.031884,
+            "max": 0.98619
+          },
+          "observedPressureCount": 54,
+          "candidates": [
+            {
+              "idx": 42,
+              "x": 6,
+              "y": 4,
+              "hazard": 0.066767,
+              "entropy": 0.353741,
+              "pressure": -0.128886,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 58,
+              "x": 4,
+              "y": 6,
+              "hazard": 0.308265,
+              "entropy": 0.89116,
+              "pressure": 1.095432,
+              "confidence": 1,
+              "pressureScore": 0.3192,
+              "actionRisk": 0.319201
+            },
+            {
+              "idx": 39,
+              "x": 3,
+              "y": 4,
+              "hazard": 0.153438,
+              "entropy": 0.618378,
+              "pressure": 1.127505,
+              "confidence": 1,
+              "pressureScore": 0.327562,
+              "actionRisk": 0.327563
+            },
+            {
+              "idx": 28,
+              "x": 1,
+              "y": 3,
+              "hazard": 0.11177,
+              "entropy": 0.505233,
+              "pressure": 1.440878,
+              "confidence": 1,
+              "pressureScore": 0.409264,
+              "actionRisk": 0.409264
+            },
+            {
+              "idx": 57,
+              "x": 3,
+              "y": 6,
+              "hazard": 0.130677,
+              "entropy": 0.559293,
+              "pressure": 1.447908,
+              "confidence": 1,
+              "pressureScore": 0.411097,
+              "actionRisk": 0.411097
+            },
+            {
+              "idx": 21,
+              "x": 3,
+              "y": 2,
+              "hazard": 0.56053,
+              "entropy": 0.989402,
+              "pressure": 1.975051,
+              "confidence": 1,
+              "pressureScore": 0.548532,
+              "actionRisk": 0.548532
+            },
+            {
+              "idx": 23,
+              "x": 5,
+              "y": 2,
+              "hazard": 0.256196,
+              "entropy": 0.820952,
+              "pressure": 2.026932,
+              "confidence": 1,
+              "pressureScore": 0.562058,
+              "actionRisk": 0.562058
+            },
+            {
+              "idx": 59,
+              "x": 5,
+              "y": 6,
+              "hazard": 0.566184,
+              "entropy": 0.987324,
+              "pressure": 2.817221,
+              "confidence": 1,
+              "pressureScore": 0.7681,
+              "actionRisk": 0.7681
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "role": "bayes_divergence",
+      "label": "Bayes-divergence cell",
+      "reason": "Largest absolute mean delta between bayes_frontier_pressure and sundog_lean in the Phase 10-slate reducer.",
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_0p1_dropout_0p05__w9__h9__m13__c0__s1__n0p1__d0p05__lag0__scan3",
+      "seed": 61,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=61&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.05",
+      "replayParams": {
+        "preset": "easy_sparse",
+        "seed": "61",
+        "mode": "sundog_lean",
+        "sensor": "doc_default",
+        "compare": "naive_pressure",
+        "mine_count": "13",
+        "scan_budget": "0",
+        "dropout": "0.05"
+      },
+      "cell": {
+        "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_0p1_dropout_0p05__w9__h9__m13__c0__s1__n0p1__d0p05__lag0__scan3",
+        "selection": "phase10_cell",
+        "cellClass": "failure_regime",
+        "preset": "easy_sparse",
+        "board": {
+          "width": 9,
+          "height": 9,
+          "mineCount": 13,
+          "replayScanBudget": 0,
+          "configuredScanBudget": 3
+        },
+        "sensor": {
+          "sigma": 1,
+          "sigmaNoise": 0.1,
+          "dropoutRate": 0.05,
+          "delaySteps": 0
+        }
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 3.40625,
+          "minBudgetAdjustedDelta": -19,
+          "maxBudgetAdjustedDelta": 23,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -16.140625,
+          "minBudgetAdjustedDelta": -66,
+          "maxBudgetAdjustedDelta": -6,
+          "winDelta": -64,
+          "n": 64
+        }
+      },
+      "traceSamplePolicy": {
+        "turns": "first 6 representative-seed Bayes pressure decisions",
+        "candidates": "first 10 candidates from each stored posterior map entry"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "budget": "pressure",
+          "frontierSize": 8,
+          "selected": {
+            "action": "reveal",
+            "x": 4,
+            "y": 3,
+            "hazard": 0,
+            "pressure": 1.024962,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 1,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0,
+            "max": 1
+          },
+          "observedPressureCount": 76,
+          "candidates": [
+            {
+              "idx": 31,
+              "x": 4,
+              "y": 3,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 1.024962,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 48,
+              "x": 3,
+              "y": 5,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 1.125219,
+              "confidence": 1,
+              "pressureScore": 0.054916,
+              "actionRisk": 0.054916
+            },
+            {
+              "idx": 39,
+              "x": 3,
+              "y": 4,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 1.170186,
+              "confidence": 1,
+              "pressureScore": 0.079546,
+              "actionRisk": 0.079546
+            },
+            {
+              "idx": 32,
+              "x": 5,
+              "y": 3,
+              "hazard": 1,
+              "entropy": 0,
+              "pressure": 1.53825,
+              "confidence": 1,
+              "pressureScore": 0.281152,
+              "actionRisk": 0.281153
+            },
+            {
+              "idx": 49,
+              "x": 4,
+              "y": 5,
+              "hazard": 1,
+              "entropy": 0,
+              "pressure": 1.982194,
+              "confidence": 1,
+              "pressureScore": 0.524321,
+              "actionRisk": 0.524322
+            },
+            {
+              "idx": 41,
+              "x": 5,
+              "y": 4,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 2.375595,
+              "confidence": 1,
+              "pressureScore": 0.739806,
+              "actionRisk": 0.739806
+            },
+            {
+              "idx": 50,
+              "x": 5,
+              "y": 5,
+              "hazard": 1,
+              "entropy": 0,
+              "pressure": 2.850621,
+              "confidence": 1,
+              "pressureScore": 1,
+              "actionRisk": 1.000001
+            },
+            {
+              "idx": 30,
+              "x": 3,
+              "y": 3,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": "",
+              "confidence": 0,
+              "pressureScore": 1.5,
+              "actionRisk": 1.5
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "budget": "pressure",
+          "frontierSize": 10,
+          "selected": {
+            "action": "reveal",
+            "x": 5,
+            "y": 2,
+            "hazard": 0.000037,
+            "pressure": 0.522437,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 1.000228,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0,
+            "max": 0.999951
+          },
+          "observedPressureCount": 75,
+          "candidates": [
+            {
+              "idx": 23,
+              "x": 5,
+              "y": 2,
+              "hazard": 0.000037,
+              "entropy": 0.000592,
+              "pressure": 0.522437,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 22,
+              "x": 4,
+              "y": 2,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.739707,
+              "confidence": 1,
+              "pressureScore": 0.095229,
+              "actionRisk": 0.095229
+            },
+            {
+              "idx": 21,
+              "x": 3,
+              "y": 2,
+              "hazard": 0.000037,
+              "entropy": 0.000592,
+              "pressure": 0.765625,
+              "confidence": 1,
+              "pressureScore": 0.106589,
+              "actionRisk": 0.106589
+            },
+            {
+              "idx": 30,
+              "x": 3,
+              "y": 3,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 1.089775,
+              "confidence": 1,
+              "pressureScore": 0.248662,
+              "actionRisk": 0.248662
+            },
+            {
+              "idx": 39,
+              "x": 3,
+              "y": 4,
+              "hazard": 0.000012,
+              "entropy": 0.000212,
+              "pressure": 1.111356,
+              "confidence": 1,
+              "pressureScore": 0.258122,
+              "actionRisk": 0.258122
+            },
+            {
+              "idx": 48,
+              "x": 3,
+              "y": 5,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 1.141493,
+              "confidence": 1,
+              "pressureScore": 0.27133,
+              "actionRisk": 0.27133
+            },
+            {
+              "idx": 32,
+              "x": 5,
+              "y": 3,
+              "hazard": 0.999886,
+              "entropy": 0.001655,
+              "pressure": 1.560895,
+              "confidence": 1,
+              "pressureScore": 0.455153,
+              "actionRisk": 0.455154
+            },
+            {
+              "idx": 49,
+              "x": 4,
+              "y": 5,
+              "hazard": 0.999951,
+              "entropy": 0.000766,
+              "pressure": 1.988696,
+              "confidence": 1,
+              "pressureScore": 0.642657,
+              "actionRisk": 0.642658
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "budget": "pressure",
+          "frontierSize": 14,
+          "selected": {
+            "action": "reveal",
+            "x": 4,
+            "y": 1,
+            "hazard": 0,
+            "pressure": 0.326148,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 1.000723,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0,
+            "max": 0.999998
+          },
+          "observedPressureCount": 75,
+          "candidates": [
+            {
+              "idx": 13,
+              "x": 4,
+              "y": 1,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.326148,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 14,
+              "x": 5,
+              "y": 1,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.444186,
+              "confidence": 1,
+              "pressureScore": 0.047253,
+              "actionRisk": 0.047253
+            },
+            {
+              "idx": 22,
+              "x": 4,
+              "y": 2,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.589164,
+              "confidence": 1,
+              "pressureScore": 0.10529,
+              "actionRisk": 0.10529
+            },
+            {
+              "idx": 15,
+              "x": 6,
+              "y": 1,
+              "hazard": 0.000358,
+              "entropy": 0.00462,
+              "pressure": 0.685065,
+              "confidence": 1,
+              "pressureScore": 0.143681,
+              "actionRisk": 0.143681
+            },
+            {
+              "idx": 21,
+              "x": 3,
+              "y": 2,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.77385,
+              "confidence": 1,
+              "pressureScore": 0.179223,
+              "actionRisk": 0.179223
+            },
+            {
+              "idx": 48,
+              "x": 3,
+              "y": 5,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.953744,
+              "confidence": 1,
+              "pressureScore": 0.251238,
+              "actionRisk": 0.251238
+            },
+            {
+              "idx": 24,
+              "x": 6,
+              "y": 2,
+              "hazard": 0.000001,
+              "entropy": 0.000018,
+              "pressure": 1.064617,
+              "confidence": 1,
+              "pressureScore": 0.295623,
+              "actionRisk": 0.295623
+            },
+            {
+              "idx": 32,
+              "x": 5,
+              "y": 3,
+              "hazard": 0.000002,
+              "entropy": 0.000039,
+              "pressure": 1.552457,
+              "confidence": 1,
+              "pressureScore": 0.490914,
+              "actionRisk": 0.490914
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "budget": "pressure",
+          "frontierSize": 17,
+          "selected": {
+            "action": "reveal",
+            "x": 5,
+            "y": 0,
+            "hazard": 0,
+            "pressure": 0.27856,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 1.000162,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0,
+            "max": 1
+          },
+          "observedPressureCount": 77,
+          "candidates": [
+            {
+              "idx": 5,
+              "x": 5,
+              "y": 0,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.27856,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 14,
+              "x": 5,
+              "y": 1,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.529568,
+              "confidence": 1,
+              "pressureScore": 0.099974,
+              "actionRisk": 0.099974
+            },
+            {
+              "idx": 21,
+              "x": 3,
+              "y": 2,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.684294,
+              "confidence": 1,
+              "pressureScore": 0.1616,
+              "actionRisk": 0.1616
+            },
+            {
+              "idx": 4,
+              "x": 4,
+              "y": 0,
+              "hazard": 0.000055,
+              "entropy": 0.000863,
+              "pressure": 0.705004,
+              "confidence": 1,
+              "pressureScore": 0.169849,
+              "actionRisk": 0.169849
+            },
+            {
+              "idx": 15,
+              "x": 6,
+              "y": 1,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.715066,
+              "confidence": 1,
+              "pressureScore": 0.173857,
+              "actionRisk": 0.173857
+            },
+            {
+              "idx": 22,
+              "x": 4,
+              "y": 2,
+              "hazard": 0.000021,
+              "entropy": 0.00035,
+              "pressure": 0.758868,
+              "confidence": 1,
+              "pressureScore": 0.191303,
+              "actionRisk": 0.191303
+            },
+            {
+              "idx": 12,
+              "x": 3,
+              "y": 1,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.832477,
+              "confidence": 1,
+              "pressureScore": 0.22062,
+              "actionRisk": 0.22062
+            },
+            {
+              "idx": 3,
+              "x": 3,
+              "y": 0,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.893737,
+              "confidence": 1,
+              "pressureScore": 0.24502,
+              "actionRisk": 0.24502
+            }
+          ]
+        },
+        {
+          "turn": 5,
+          "budget": "pressure",
+          "frontierSize": 15,
+          "selected": {
+            "action": "reveal",
+            "x": 7,
+            "y": 0,
+            "hazard": 0.62832,
+            "pressure": 0.512601,
+            "pressureScore": 0,
+            "actionRisk": 0.000001,
+            "riskSource": "pressure_guard_high_hazard",
+            "ess": 1.877577,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0,
+            "max": 1
+          },
+          "observedPressureCount": 76,
+          "candidates": [
+            {
+              "idx": 7,
+              "x": 7,
+              "y": 0,
+              "hazard": 0.62832,
+              "entropy": 0.951953,
+              "pressure": 0.512601,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0.000001
+            },
+            {
+              "idx": 12,
+              "x": 3,
+              "y": 1,
+              "hazard": 0.999554,
+              "entropy": 0.005604,
+              "pressure": 0.674026,
+              "confidence": 1,
+              "pressureScore": 0.070001,
+              "actionRisk": 0.070002
+            },
+            {
+              "idx": 21,
+              "x": 3,
+              "y": 2,
+              "hazard": 0,
+              "entropy": 0.000003,
+              "pressure": 0.759894,
+              "confidence": 1,
+              "pressureScore": 0.107237,
+              "actionRisk": 0.107237
+            },
+            {
+              "idx": 39,
+              "x": 3,
+              "y": 4,
+              "hazard": 0.371253,
+              "entropy": 0.951629,
+              "pressure": 0.911077,
+              "confidence": 1,
+              "pressureScore": 0.172797,
+              "actionRisk": 0.172797
+            },
+            {
+              "idx": 48,
+              "x": 3,
+              "y": 5,
+              "hazard": 0,
+              "entropy": 0.000002,
+              "pressure": 1.080176,
+              "confidence": 1,
+              "pressureScore": 0.246125,
+              "actionRisk": 0.246125
+            },
+            {
+              "idx": 3,
+              "x": 3,
+              "y": 0,
+              "hazard": 0.371676,
+              "entropy": 0.951951,
+              "pressure": 1.168403,
+              "confidence": 1,
+              "pressureScore": 0.284384,
+              "actionRisk": 0.284385
+            },
+            {
+              "idx": 30,
+              "x": 3,
+              "y": 3,
+              "hazard": 0.62832,
+              "entropy": 0.951953,
+              "pressure": 1.215121,
+              "confidence": 1,
+              "pressureScore": 0.304643,
+              "actionRisk": 0.304644
+            },
+            {
+              "idx": 25,
+              "x": 7,
+              "y": 2,
+              "hazard": 0.62832,
+              "entropy": 0.951953,
+              "pressure": 1.248289,
+              "confidence": 1,
+              "pressureScore": 0.319026,
+              "actionRisk": 0.319027
+            }
+          ]
+        },
+        {
+          "turn": 6,
+          "budget": "pressure",
+          "frontierSize": 16,
+          "selected": {
+            "action": "reveal",
+            "x": 8,
+            "y": 0,
+            "hazard": 0,
+            "pressure": 0.398978,
+            "pressureScore": 0,
+            "actionRisk": 0,
+            "riskSource": "pressure_floor_guard",
+            "ess": 1,
+            "terminalAfter": null,
+            "leakFree": true
+          },
+          "hazardRange": {
+            "min": 0,
+            "max": 1
+          },
+          "observedPressureCount": 78,
+          "candidates": [
+            {
+              "idx": 8,
+              "x": 8,
+              "y": 0,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.398978,
+              "confidence": 1,
+              "pressureScore": 0,
+              "actionRisk": 0
+            },
+            {
+              "idx": 17,
+              "x": 8,
+              "y": 1,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.593278,
+              "confidence": 1,
+              "pressureScore": 0.080416,
+              "actionRisk": 0.080416
+            },
+            {
+              "idx": 12,
+              "x": 3,
+              "y": 1,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.666529,
+              "confidence": 1,
+              "pressureScore": 0.110732,
+              "actionRisk": 0.110732
+            },
+            {
+              "idx": 39,
+              "x": 3,
+              "y": 4,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.939573,
+              "confidence": 1,
+              "pressureScore": 0.223737,
+              "actionRisk": 0.223737
+            },
+            {
+              "idx": 21,
+              "x": 3,
+              "y": 2,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 0.946444,
+              "confidence": 1,
+              "pressureScore": 0.226581,
+              "actionRisk": 0.226581
+            },
+            {
+              "idx": 25,
+              "x": 7,
+              "y": 2,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 1.011271,
+              "confidence": 1,
+              "pressureScore": 0.253411,
+              "actionRisk": 0.253411
+            },
+            {
+              "idx": 48,
+              "x": 3,
+              "y": 5,
+              "hazard": 0,
+              "entropy": 0,
+              "pressure": 1.073045,
+              "confidence": 1,
+              "pressureScore": 0.278977,
+              "actionRisk": 0.278977
+            },
+            {
+              "idx": 16,
+              "x": 7,
+              "y": 1,
+              "hazard": 1,
+              "entropy": 0,
+              "pressure": 1.144418,
+              "confidence": 1,
+              "pressureScore": 0.308516,
+              "actionRisk": 0.308517
+            }
+          ]
+        }
+      ]
     }
   ],
   "cells": [

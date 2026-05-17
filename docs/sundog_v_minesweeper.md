@@ -1328,6 +1328,14 @@ gate, admission lanes, promoted-pocket comparator deltas, and the bundle link.
 The public copy stays explicit: this is same-field pressure-floor parity, not
 posterior dominance over `sundog_lean`.
 
+Phase 13.1 status (2026-05-17): immediate applied lane landed. The public data
+bundle now includes compact representative posterior-cell slices from
+`frontier-posterior-map.json`, `posterior-diagnostics.csv`, and
+`bayes-actions.csv`: confirmed pocket, mapped failure, and the largest
+Bayes-vs-`sundog_lean` divergence cell. `mines.html` renders hazard, pressure,
+confidence, selected-action, and candidate snippets for those cells and exposes
+replay selectors for all three.
+
 Deliverables:
 
 - A public Mines evidence bundle that reduces Phase 10 and Phase 12
@@ -1335,12 +1343,12 @@ Deliverables:
   clustering, scan budget, controller, budget-adjusted safe tiles, verdict,
   boundary label, Bayesian regret summary, and artifact links. *(first bundle
   landed for the pressure-floor receipt)*
-- A posterior data panel for `mines.html` that can render pressure-floor gate
-  status now, then frontier posterior hazard, observed pressure,
-  confidence/dropout, chosen action, and Bayesian regret for the confirmed and
-  paired failure cells.
+- A posterior data panel for `mines.html` that renders pressure-floor gate
+  status, frontier posterior hazard, observed pressure, confidence/dropout,
+  chosen action, and Bayesian regret for representative confirmed, failure,
+  and Bayes-divergence cells. *(landed as compact Phase 13.1 slices)*
 - Best/worst/Bayes-divergence replay selectors so a visitor can inspect the
-  exact seeds where Sundog, naive, and Bayesian lanes disagree.
+  exact seeds where Sundog, naive, and Bayesian lanes disagree. *(landed)*
 - A claim-card data shape with explicit tiers: current Phase 10 pocket claim,
   optional same-field Bayesian-baseline claim, and optional controller-boundary
   relabel if Bayes succeeds where Sundog fails.
@@ -1461,9 +1469,12 @@ Active next work:
   and the Mines evidence panel expose the Bayes pressure-floor gate, admission
   lanes, and promoted-pocket comparator deltas while keeping the public copy
   explicit that this is not a posterior-dominance claim.
-- The next engineering move is the richer posterior cell view: selected-cell
+- Phase 13.1 posterior cell view has landed: selected-cell
   posterior hazard/pressure/confidence details plus replay selectors for
   best/worst/Bayes-divergence cells.
+- The next Bayes-roadmap hygiene move is template backfill: stamp the reusable
+  Balance + Mines Bayesian-floor profile fields into the generic profile
+  template before opening a new standalone Bayes UI.
 
 The promoted page must keep the caveats visible: both Sundog and naive trigger
 mines on every seed in the best cell; `threshold_flagger` has higher survival

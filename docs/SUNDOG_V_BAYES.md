@@ -306,7 +306,7 @@ much from weak baselines.
 | Workbench | Bayesian comparator status | Cross-reference |
 | --- | --- | --- |
 | Balance | Executable same-shadow floor scaffold. `bayes_floor_shadow_particle` runs with observation parity, no-state-leak, unknown-mode rejection, Phase 10 slate loading, and regret receipts. Final Phase 15 lock ran 27,200 trials with audits passing, claim gate 56/56 hard-gate cells, 12 reported-only observation-degradation cells, zero negative mean-regret cells, and aggregate regret versus `sundog_shadow` +0.00395. Treat Balance as having earned a same-information Bayesian-floor claim-lock receipt, with reported-only delay/noise/dropout failure-regime lanes preserved as boundary diagnostics. | [`SUNDOG_V_BALANCE.md` - Bayesian Floor Profile](SUNDOG_V_BALANCE.md#bayesian-floor-profile) and Phase 15 status |
-| Pressure Mines | Active applied profile. The staged same-field baseline is `mines-bayesian-baseline-v1`: a frontier-limited posterior over hidden mine occupancy, strict budget parity between pressure-only and full Sundog-legal lanes, and a Phase 12 path that starts with legal `Phi_t` serialization, no-leak, observation parity, and tiny posterior smoke before any claim lock. Admission plumbing exists (`npm run mines:phase12:admission`). The repaired executable smoke exists (`npm run mines:phase12:posterior-smoke`) and uses shared cell/seed sensor streams plus a pressure-floor action guard. The 64-seed Phase 10 reducer ran 14,720 trials with no-leak pass: `bayes_frontier_pressure` matches `naive_pressure` / `sundog_minimal` exactly across all 46 cells, while `sundog_lean` remains stronger in the promoted candidate cell. Phase 13 now publishes `public/data/mines-phase13-bayes-floor.json` and a Mines evidence panel with the admission lanes visible. Treat this as a same-field pressure-floor receipt, not a posterior-dominance claim lock. | [`sundog_v_minesweeper.md` - Bayesian Baseline Profile](sundog_v_minesweeper.md#bayesian-baseline-profile) and Phase 13 status |
+| Pressure Mines | Active applied profile. The staged same-field baseline is `mines-bayesian-baseline-v1`: a frontier-limited posterior over hidden mine occupancy, strict budget parity between pressure-only and full Sundog-legal lanes, and a Phase 12 path that starts with legal `Phi_t` serialization, no-leak, observation parity, and tiny posterior smoke before any claim lock. Admission plumbing exists (`npm run mines:phase12:admission`). The repaired executable smoke exists (`npm run mines:phase12:posterior-smoke`) and uses shared cell/seed sensor streams plus a pressure-floor action guard. The 64-seed Phase 10 reducer ran 14,720 trials with no-leak pass: `bayes_frontier_pressure` matches `naive_pressure` / `sundog_minimal` exactly across all 46 cells, while `sundog_lean` remains stronger in the promoted candidate cell. Phase 13 now publishes `public/data/mines-phase13-bayes-floor.json`, a Mines evidence panel, representative posterior-cell hazard/pressure/confidence slices, and replay selectors for confirmed, failure, and Bayes-divergence cells. Treat this as a same-field pressure-floor receipt, not a posterior-dominance claim lock. | [`sundog_v_minesweeper.md` - Bayesian Baseline Profile](sundog_v_minesweeper.md#bayesian-baseline-profile) and Phase 13 status |
 | Three-Body / Coarse Graining | Current pattern source for the receipt shape: admission spec, same-information guard, belief diagnostics, regret reducer, and capped-probe discipline. Still not a closed floor. | [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md) and [`proof/PHASE4_THREEBODY.md`](proof/PHASE4_THREEBODY.md) |
 
 The interpretation rule is shared across all applied profiles:
@@ -338,10 +338,12 @@ Applied queue after the Balance lock:
    only if the same-field floor holds. Loader smoke landed with
    `npm run mines:phase12:phase10-slate:smoke`; the 64-seed all-cell reducer
    landed as `npm run mines:phase12:phase10-slate`. Public data surfacing now
-   lands through `npm run mines:public-data` and `mines.html`, with explicit
-   language that this is pressure-floor parity, not posterior dominance over
-   `sundog_lean`.
-5. **Template backfill.** Any Mines-specific deviations from the generic
+   lands through `npm run mines:public-data`, `mines.html`, and the
+   `alignment.html` side-by-side, with explicit language that this is
+   pressure-floor parity, not posterior dominance over `sundog_lean`.
+   Phase 13.1 adds representative posterior-cell slices and replay selectors
+   for the confirmed pocket, paired failure, and Bayes-divergence cell.
+5. **Template backfill.** Current next hygiene task. Any Mines-specific deviations from the generic
    [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md)
    should update the template after the smoke, not before the first runner
    proves which fields are genuinely reusable.
@@ -888,19 +890,17 @@ says "competition."
 
 Goal: update the research docs with the strongest claim actually earned.
 
-Immediate work:
+Immediate work after the Pressure Mines applied lane:
 
-- Add `docs/SUNDOG_V_BAYES.md` to the documentation index.
-- Add Bayes row to the workbench roadmap list, not to application evidence until
-  Phase 5 or Phase 6 earns it.
-- Keep the applied Bayesian-floor profiles cross-linked from this roadmap:
-  Balance as the first executable same-shadow floor, Pressure Mines as the
-  staged same-field posterior baseline, and Three-Body as the current receipt
-  pattern source.
-- Treat Pressure Mines Phase 12 as the next applied Bayes engineering lane now
-  that Balance has a claim-lock receipt: admission first, posterior smoke
-  second, regret reducer third, public surface only after receipts.
-- Add `bayes.html` only after the visualization reflects real run artifacts.
+- Backfill [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md)
+  with the fields that proved reusable in Balance and Mines: admission profile,
+  same-observation seed policy, claim-gate fields, reported-only lanes,
+  posterior-cell slices, and public interpretation copy.
+- Keep `alignment.html` as the public Bayes/Sundog side-by-side. The Mines row
+  now has the explicit middle claim: stronger than "Sundog beat naive," weaker
+  than "Sundog beat Bayes."
+- Add `bayes.html` only after the standalone benchmark has real run artifacts.
+  Do not publish a decorative Bayes page before Phase 1/2 receipts exist.
 - Add a public rail card only if Round 3 or Phase 5 includes a real failure
   boundary.
 - Update `docs/PROMO_HIGHLIGHTS.md` with a cautious comparison paragraph.
