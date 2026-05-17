@@ -649,7 +649,7 @@ function scoreBayesActionPoint(state, theta, thetaDot, action, cfg) {
 
 function bayesObservationStress(sensor, cfg) {
   const delayStress = clamp((cfg.sensorDelaySteps - 12) / 18, 0, 1);
-  const noiseStress = clamp((cfg.sensorNoiseStd - 0.015) / 0.065, 0, 1);
+  const noiseStress = clamp(cfg.sensorNoiseStd / 0.08, 0, 1);
   const dropoutStress = clamp((cfg.sensorDropoutRate - 0.1) / 0.25, 0, 1);
   const confidenceStress = sensor?.valid
     ? clamp((0.55 - sensor.confidence) / 0.35, 0, 1)
