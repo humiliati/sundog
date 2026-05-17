@@ -58,6 +58,11 @@
       "publicLaunchIntent": "Public structural-failure boundary-map page: frozen falsifier, closed-form regime-separability, rendered Cut-3 held."
     },
     {
+      "entry": "atlas.html",
+      "kind": "alias",
+      "publicLaunchIntent": "Public alias that redirects /atlas.html to the canonical Sundog geometry and halo-atlas page."
+    },
+    {
       "entry": "sundog.html",
       "kind": "atlas",
       "publicLaunchIntent": "Public Sundog geometry and halo-atlas page."

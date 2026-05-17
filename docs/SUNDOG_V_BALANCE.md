@@ -1241,20 +1241,37 @@ Initial implementation slice (2026-05-17):
   weaker than the same-information controller on this stratified probe, but it
   is still mostly a guarded parity floor rather than evidence that explicit
   belief dominates Balance.
+- Larger capped loader probe (2026-05-17): `phase15-phase10-stratified-probe-24`
+  expanded the loaded Phase 10 smoke slate to 24 cells and 4 seeds. It ran
+  384 trials in 50.515 s (7.6 trials/s), with observation parity,
+  no-state-leak, and unknown-mode rejection still passing. Aggregate mean
+  regret versus `sundog_shadow` was +0.0165 normalized survival, but one cell
+  was negative and failed Bayes-vs-naive sanity: recoverable
+  `sensor_noise__0p03` had mean regret -0.0112 and sanity false. The diagnostic
+  remained mostly guarded (`sundog_guard`: 2636 rows, `bayes_proposal`: 8).
+- Sensor-noise admission probe (2026-05-17): a focused 10-cell sensor-noise
+  slate with 8 seeds ran 320 trials in 22.57 s (14.18 trials/s), with all three
+  audits passing. It confirmed the block is on the sensor-noise axis rather than
+  a cell-ordering fluke: 6/10 cells passed sanity, two cells had negative mean
+  regret versus `sundog_shadow` (recoverable `noise_0p03`: -0.0383;
+  recoverable `noise_0p08`: -0.0008), and the high-noise failure-regime cells
+  need an explicit admission rule before they can be treated as claim gates.
 - Full Phase 10-equivalent estimate: 68 loaded Phase 10 cells x 100 seeds x 4
   modes = 27,200 trials. At the post-repair measured 7.36 trials/s, the full
-  run is about 62 minutes, which exceeds the repo's inline runtime rule. Stage,
-  do not run inline:
+  run is about 62 minutes, which exceeds the repo's inline runtime rule. Do not
+  run it as a claim lock until the sensor-noise admission/guard issue above is
+  resolved; the command below is staged only as a diagnostic lock:
 
 ```powershell
 node scripts/balance-phase15-bayes-floor.mjs --phase phase15-phase10-full-lock --out results/balance/phase15-phase10-full-lock --cell-slate phase10-output --phase10-out results/balance/phase10-envelope --limit-cells all --modes naive_shadow,sundog_shadow,bayes_floor_shadow_particle,oracle --seeds 100 --duration 8 --particle-count 61 --horizon-seconds 0.05
 ```
 
-- Next implementation target: run a larger capped loader probe with a
-  stratified mix of diagnostic-positive, borderline, and failure-regime cells.
-  If the guard remains non-negative against `sundog_shadow`, then stage the
-  full lock for the operator; if the Bayes proposal starts firing more often,
-  inspect those cells before using them in public claim language.
+- Next implementation target: repair the sensor-noise admission path before the
+  full claim lock. The minimum fix is to pre-register whether Phase 10
+  failure-regime noise cells are reported-only or hard Bayes-sanity gates, then
+  either tighten the noisy-cell guard or tune the posterior proposal until the
+  recoverable `noise_0p03` borderline cell is non-negative versus
+  `sundog_shadow` on a capped rerun.
 
 ### Phase 16 - Balance Data Surfaces And Claim Ratchet
 
