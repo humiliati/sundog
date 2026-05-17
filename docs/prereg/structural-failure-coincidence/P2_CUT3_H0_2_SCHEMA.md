@@ -341,4 +341,52 @@ generator filed, plumbing self-test passing, empty-state outputs pinned,
 and §3 anti-self-seal applied at the aggregator layer. Real-table
 generation is gated on operator pre-fill landing.
 
+**2026-05-16 (PT) — maintainer. Optional measurement-helper tool filed
+(convenience UX, NOT load-bearing).** A polished single-file
+HTML/canvas measurement helper for §6.3 operator pre-fill is filed at
+`tools/h0-measurement/index.html` (SHA-256
+`7e9f279e41d11780af58ce98a47c7990e01c59884b38f48343a21f9c83a52d77`).
+Workflow: load any halo PNG → click sun center → drag radial line to
+22° → click → drag to 46° → click → tool computes `sun_px` + radial
+`px_radius` per anchor + live `calib_sha256` self-pin → operator
+downloads a §2-A-conformant sidecar JSON. Both `fit2locus` (clicks at
+22°/46° loci, for halo photos without a stamped ruler) and
+`scale_ticks` (click each stamped degree mark for HaloSim-style
+renders) modes are supported.
+
+*Discipline alignment.* The tool implements §3-blind structurally: it
+does **not** import the H0 checker, does not call the predicate, does
+not display admit/reason_code anywhere in its UI. Its only output is
+the measured sidecar JSON. The checker runs separately, after all eight
+sidecars are sealed, per the schema's §6.5. The tool is therefore a
+pure-measurement UX layer and could be entirely replaced (or augmented
+with an alternative tool, or skipped in favor of manual JSON authoring)
+without affecting any frozen schema rule.
+
+*Public-Language Constraint baked into the tool's UI.* The header
+carries the disclosure: "No theorem claim. H0 is measurement hygiene —
+it decides whether a rendered frame is angularly trustworthy enough to
+score, not whether any downstream claim passes. Cut-3 admission remains
+HOLD; execution HELD." This is intentional — if the tool is later moved
+to `public/` for a public-facing demo, the PLC framing is already
+in-page and cannot be silently stripped. For now the tool lives under
+`tools/` (which `scripts/copy-site-docs.mjs` does not copy to `dist/`)
+and remains internal-facing; promotion to `public/` is a separate
+decision that should be filed on its own.
+
+*Scope deliberately limited.* The tool does not auto-detect sun
+position, halo arcs, or scale ticks from PNG pixels — measurement is
+operator-eye on the canvas. Auto-detection would introduce its own
+tautology hazards (a tool that "finds" the 22° halo at a hand-tuned
+expected location). The honest design keeps the operator's eye as the
+measurement substrate; the tool just records click coordinates and
+computes `px_radius` deterministically from `sun_px`.
+
+*Status.* This is an optional convenience for §6.3. §6.3 (8 Phase-15
+measured sidecars) and §6.4 (1 known-PASS measured sidecar) remain the
+operator pre-fill items. The tool does not produce them automatically;
+it makes producing them faster and less error-prone. Cut-3 admission
+remains **HOLD**; execution **HELD**; H0-B negative side on real frames
+remains **OPEN**; Public-Language Constraint in force.
+
 *(reviewer space continues — append-only)*

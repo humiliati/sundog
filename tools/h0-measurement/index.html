@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>H0 Angular Calibration Tool — Sundog</title>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg-pane: #161922;
+      --bg-pane-soft: #1d2230;
+      --fg: #e8eaf0;
+      --fg-muted: #8a92a8;
+      --fg-dim: #5a6175;
+      --accent: #ffb451;       /* sun yellow */
+      --accent-22: #5fa8ff;    /* parhelion blue */
+      --accent-46: #c69bff;    /* 46° halo purple */
+      --accent-tick: #6b7280;  /* scale tick grey */
+      --line: rgba(255,180,81,0.5);
+      --border: rgba(255,255,255,0.08);
+      --danger: #ff6b6b;
+      --good: #50d18a;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    }
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); color: var(--fg); font-family: var(--font); }
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    a { color: var(--accent-22); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    header {
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #11141c 0%, #0d0f14 100%);
+    }
+    header h1 { margin: 0; font-size: 1.15rem; font-weight: 600; letter-spacing: 0.02em; }
+    header h1 .sub { font-weight: 400; color: var(--fg-muted); margin-left: 0.5rem; font-size: 0.95rem; }
+    header .plc {
+      font-size: 0.8rem;
+      color: var(--fg-muted);
+      margin: 0.5rem 0 0 0;
+      max-width: 78ch;
+    }
+    header .plc strong { color: var(--fg); font-weight: 500; }
+
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 460px;
+      gap: 0;
+      min-height: 0;
+    }
+
+    #canvas-pane {
+      position: relative;
+      overflow: hidden;
+      background: #06070b;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #canvas-empty {
+      position: absolute;
+      inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 1rem;
+      color: var(--fg-muted);
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    #canvas-empty .hint { font-size: 0.95rem; }
+    #canvas-empty .pick {
+      pointer-events: auto;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      background: var(--bg-pane);
+      color: var(--fg);
+      border-radius: 6px;
+      cursor: pointer;
+      font: inherit; font-size: 0.9rem;
+    }
+    #canvas-empty .pick:hover { border-color: var(--accent); color: var(--accent); }
+    #canvas-pane.has-image #canvas-empty { display: none; }
+    #canvas-pane.drag-over { outline: 2px dashed var(--accent); outline-offset: -8px; }
+
+    #canvas-container {
+      position: relative;
+      max-width: 100%; max-height: 100%;
+      display: none;
+    }
+    #canvas-pane.has-image #canvas-container { display: block; }
+    #bg-img {
+      display: block;
+      max-width: 100%; max-height: calc(100vh - 100px);
+      user-select: none; pointer-events: none;
+      image-rendering: pixelated; /* halo renders are crisp; preserve pixels */
+    }
+    #overlay {
+      position: absolute; inset: 0;
+      cursor: crosshair;
+    }
+    #cursor-readout {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(0,0,0,0.7);
+      color: var(--fg);
+      padding: 2px 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      border-radius: 3px;
+      transform: translate(8px, -22px);
+      opacity: 0;
+      transition: opacity 0.1s;
+    }
+
+    aside#controls-pane {
+      background: var(--bg-pane);
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 1.25rem 1.5rem;
+      display: flex; flex-direction: column; gap: 1.5rem;
+      min-height: 0;
+    }
+
+    .section-block { display: flex; flex-direction: column; gap: 0.5rem; }
+    .section-block h2 {
+      margin: 0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+    .section-block .help { font-size: 0.78rem; color: var(--fg-dim); margin: 0; }
+
+    .mode-toggle {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--bg-pane-soft);
+      padding: 4px; border-radius: 8px; border: 1px solid var(--border);
+    }
+    .mode-toggle button {
+      border: none; background: transparent; color: var(--fg-muted);
+      padding: 0.5rem 0.5rem; cursor: pointer; font: inherit; font-size: 0.85rem;
+      border-radius: 6px; transition: all 0.15s;
+    }
+    .mode-toggle button.active { background: var(--accent); color: #0d0f14; font-weight: 600; }
+    .mode-toggle button:not(.active):hover { color: var(--fg); }
+
+    .step-card {
+      padding: 0.9rem 1rem;
+      border-radius: 8px;
+      background: var(--bg-pane-soft);
+      border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .step-card .step-label {
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+    .step-card .step-text { font-size: 1rem; font-weight: 500; }
+    .step-card .step-text .accent { color: var(--accent); }
+    .step-card .step-text .accent-22 { color: var(--accent-22); }
+    .step-card .step-text .accent-46 { color: var(--accent-46); }
+    .step-card .step-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    .step-card button.inline {
+      padding: 0.35rem 0.7rem; font-size: 0.78rem;
+      background: var(--bg-pane); color: var(--fg);
+      border: 1px solid var(--border); border-radius: 5px; cursor: pointer;
+      font-family: var(--font);
+    }
+    .step-card button.inline:hover { border-color: var(--accent); color: var(--accent); }
+    .step-card button.primary { background: var(--accent); color: #0d0f14; border-color: var(--accent); font-weight: 600; }
+    .step-card button.primary:hover { color: #0d0f14; opacity: 0.9; }
+
+    .measurements ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+    .measurements li {
+      display: flex; justify-content: space-between; gap: 0.5rem;
+      padding: 0.4rem 0.55rem; background: var(--bg-pane-soft); border-radius: 5px;
+      font-family: var(--mono); font-size: 0.78rem;
+    }
+    .measurements .label { color: var(--fg-muted); }
+    .measurements .value { color: var(--fg); }
+    .measurements .pill { padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; }
+    .measurements .pill.sun { background: rgba(255,180,81,0.15); color: var(--accent); }
+    .measurements .pill.tick { background: rgba(107,114,128,0.2); color: #b3bac7; }
+    .measurements .pill.a22 { background: rgba(95,168,255,0.15); color: var(--accent-22); }
+    .measurements .pill.a46 { background: rgba(198,155,255,0.15); color: var(--accent-46); }
+
+    .op-decisions { display: flex; flex-direction: column; gap: 0.55rem; }
+    .op-decisions label { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.78rem; color: var(--fg-muted); }
+    .op-decisions select, .op-decisions input[type="text"], .op-decisions input[type="number"] {
+      padding: 0.4rem 0.55rem; background: var(--bg-pane-soft); color: var(--fg);
+      border: 1px solid var(--border); border-radius: 5px; font: inherit; font-size: 0.85rem;
+    }
+    .op-decisions input[type="text"]::placeholder { color: var(--fg-dim); }
+
+    pre.sidecar-preview {
+      margin: 0;
+      max-height: 280px;
+      overflow: auto;
+      background: var(--bg-pane-soft);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.7rem 0.85rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      line-height: 1.45;
+      color: #cdd4e6;
+      white-space: pre;
+    }
+
+    .self-pin-row {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 0.6rem; background: var(--bg-pane-soft);
+      border: 1px solid var(--border); border-radius: 5px;
+      font-family: var(--mono); font-size: 0.7rem;
+    }
+    .self-pin-row .label { color: var(--fg-muted); }
+    .self-pin-row .value { color: var(--good); flex: 1; overflow: hidden; text-overflow: ellipsis; }
+
+    .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .actions button {
+      padding: 0.6rem 0.95rem;
+      font: inherit; font-size: 0.85rem;
+      border-radius: 6px; cursor: pointer; border: 1px solid var(--border);
+      background: var(--bg-pane-soft); color: var(--fg);
+      transition: all 0.15s;
+    }
+    .actions button.primary {
+      background: var(--accent); color: #0d0f14; font-weight: 600; border-color: var(--accent);
+    }
+    .actions button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .actions button.primary:hover:not(:disabled) { color: #0d0f14; opacity: 0.92; }
+    .actions button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    footer {
+      padding: 0.8rem 1.75rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg-pane);
+      font-size: 0.75rem; color: var(--fg-muted);
+      display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    }
+
+    /* Animations */
+    @keyframes ring-pulse {
+      from { transform: scale(0); opacity: 1; }
+      to   { transform: scale(2.4); opacity: 0; }
+    }
+
+    /* Mobile fallback */
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; }
+      aside#controls-pane { border-left: none; border-top: 1px solid var(--border); max-height: 50vh; }
+      #bg-img { max-height: 50vh; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>
+      H0 Angular Calibration Tool
+      <span class="sub">measurement helper for the Cut-3 H0-2 sidecar schema</span>
+    </h1>
+    <p class="plc">
+      <strong>No theorem claim.</strong> H0 is measurement hygiene — it decides whether a rendered frame is
+      angularly trustworthy enough to score, not whether any downstream claim passes. Cut-3 admission
+      remains <strong>HOLD</strong>; execution <strong>HELD</strong>. The Public-Language Constraint forbids
+      any "CONFIRMED" / "traceability" / theorem framing of what this tool produces. It is the
+      <em>instrument</em>, not the <em>result</em>.
+    </p>
+  </header>
+
+  <main>
+    <section id="canvas-pane">
+      <div id="canvas-empty">
+        <div class="hint">Drop a halo PNG here, or pick one to begin.</div>
+        <input type="file" id="file-input" accept="image/png,image/jpeg" hidden />
+        <button class="pick" id="pick-button">Choose image…</button>
+        <div class="hint" style="font-size: 0.8rem; max-width: 50ch; text-align: center; opacity: 0.7;">
+          Phase-15 frames live at <code>docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w*_scale.png</code>.
+        </div>
+      </div>
+      <div id="canvas-container">
+        <img id="bg-img" alt="halo render" />
+        <canvas id="overlay"></canvas>
+        <div id="cursor-readout"></div>
+      </div>
+    </section>
+
+    <aside id="controls-pane">
+      <div class="section-block">
+        <h2>Mode</h2>
+        <div class="mode-toggle">
+          <button data-mode="fit2locus" class="active">fit2locus</button>
+          <button data-mode="scale_ticks">scale_ticks</button>
+        </div>
+        <p class="help" id="mode-help">
+          <strong>fit2locus:</strong> click the sun, then the 22° halo, then the 46° halo.
+          Use this for halo photos without a stamped ruler.
+        </p>
+      </div>
+
+      <div class="section-block">
+        <h2>Current step</h2>
+        <div class="step-card">
+          <div class="step-label" id="step-label">Step 0</div>
+          <div class="step-text" id="step-text">Load an image to begin.</div>
+          <div class="step-actions" id="step-actions"></div>
+        </div>
+      </div>
+
+      <div class="section-block measurements">
+        <h2>Measurements</h2>
+        <ul id="measurements-list">
+          <li><span class="label">— no measurements yet —</span></li>
+        </ul>
+      </div>
+
+      <div class="section-block op-decisions">
+        <h2>Operator decisions</h2>
+        <label>
+          frame_id
+          <input type="text" id="op-frame-id" placeholder="e.g. pyr_w18_e13_x25" />
+        </label>
+        <label>
+          fixture_class
+          <select id="op-fixture-class">
+            <option value="phase15_known_fail">phase15_known_fail</option>
+            <option value="known_pass_fullspan">known_pass_fullspan</option>
+            <option value="corpus_candidate">corpus_candidate</option>
+          </select>
+        </label>
+        <label>
+          compound_code_is_h_leak
+          <select id="op-h-leak">
+            <option value="deferred">deferred</option>
+            <option value="yes">yes</option>
+            <option value="no">no</option>
+          </select>
+        </label>
+        <label>
+          compound_code_basis
+          <input type="text" id="op-h-leak-basis" placeholder="written one-line basis for the call" />
+        </label>
+        <label>
+          known_pass_selection_basis
+          <input type="text" id="op-kp-basis" placeholder="written basis if fixture_class = known_pass_fullspan" />
+        </label>
+        <label>
+          scored_feature_deg
+          <input type="number" id="op-scored-feature" step="0.1" placeholder="e.g. 22.0 (or leave blank)" />
+        </label>
+        <label>
+          measured_by
+          <input type="text" id="op-measured-by" placeholder="operator handle" />
+        </label>
+      </div>
+
+      <div class="section-block">
+        <h2>Self-pin (calib_sha256)</h2>
+        <div class="self-pin-row">
+          <span class="label">sha256</span>
+          <span class="value" id="self-pin">— computes after measurements —</span>
+        </div>
+        <p class="help">
+          Recomputed live. The downloaded sidecar's <code>calib_sha256</code> field will hold this value.
+        </p>
+      </div>
+
+      <div class="section-block">
+        <h2>Sidecar JSON preview</h2>
+        <pre class="sidecar-preview" id="sidecar-preview">{ /* sidecar appears here as you measure */ }</pre>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="download" disabled>Download sidecar</button>
+        <button id="reset">Reset</button>
+        <button id="undo">Undo last point</button>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <div>
+      Schema: <code>P2_CUT3_H0_2_SCHEMA.md</code> · §3-blind discipline: this tool does <strong>not</strong>
+      call the H0 checker.
+    </div>
+    <div>
+      Next step (after all 8 sidecars sealed): <code>node scripts/cut3-h0-checker.mjs check --sidecar &lt;path&gt;</code>
+    </div>
+  </footer>
+
+  <script>
+    // ===== State =====
+    const state = {
+      image: null,          // HTMLImageElement
+      imageDataUrl: null,   // for image_sha256 if ever needed
+      imageFilename: null,
+      naturalSize: { w: 0, h: 0 },
+      displaySize: { w: 0, h: 0 },
+      mode: "fit2locus",
+      step: "load",         // load|sun|tick|anchor22|anchor46|done
+      sunPx: null,          // { x, y } in image-natural coordinates
+      scaleTicks: [],       // [{ px_radius, deg, source }]
+      anchors: {            // { 22: {...}, 46: {...} }
+        22: { locus_deg: 22, px_radius: null, off_ruler: false, measurement_note: "" },
+        46: { locus_deg: 46, px_radius: null, off_ruler: false, measurement_note: "" },
+      },
+      cursor: null,         // { x, y } in image-natural coords (hover)
+      currentTickDeg: 5,    // for scale_ticks mode: which deg label to assign next click
+    };
+
+    // ===== DOM refs =====
+    const $ = (id) => document.getElementById(id);
+    const els = {
+      canvasPane: $("canvas-pane"),
+      canvasContainer: $("canvas-container"),
+      canvasEmpty: $("canvas-empty"),
+      bgImg: $("bg-img"),
+      overlay: $("overlay"),
+      cursorReadout: $("cursor-readout"),
+      pickButton: $("pick-button"),
+      fileInput: $("file-input"),
+      modeButtons: document.querySelectorAll(".mode-toggle button"),
+      modeHelp: $("mode-help"),
+      stepLabel: $("step-label"),
+      stepText: $("step-text"),
+      stepActions: $("step-actions"),
+      measurementsList: $("measurements-list"),
+      opFrameId: $("op-frame-id"),
+      opFixtureClass: $("op-fixture-class"),
+      opHLeak: $("op-h-leak"),
+      opHLeakBasis: $("op-h-leak-basis"),
+      opKpBasis: $("op-kp-basis"),
+      opScoredFeature: $("op-scored-feature"),
+      opMeasuredBy: $("op-measured-by"),
+      selfPin: $("self-pin"),
+      sidecarPreview: $("sidecar-preview"),
+      downloadBtn: $("download"),
+      resetBtn: $("reset"),
+      undoBtn: $("undo"),
+    };
+
+    // ===== Image loading =====
+    function loadFile(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          state.image = img;
+          state.imageDataUrl = e.target.result;
+          state.imageFilename = file.name;
+          state.naturalSize = { w: img.naturalWidth, h: img.naturalHeight };
+          els.bgImg.src = e.target.result;
+          els.canvasPane.classList.add("has-image");
+          requestAnimationFrame(() => {
+            resizeCanvasToImage();
+            // derive frame_id from filename (strip _scale.png / _4M.png / extension)
+            const stem = file.name.replace(/_(scale|4M)\.png$/i, "").replace(/\.[^.]+$/, "");
+            if (!els.opFrameId.value) els.opFrameId.value = stem;
+            advanceState("sun");
+          });
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+    els.pickButton.addEventListener("click", () => els.fileInput.click());
+    els.fileInput.addEventListener("change", (e) => {
+      const f = e.target.files[0];
+      if (f) loadFile(f);
+    });
+    // Drag-and-drop
+    document.addEventListener("dragover", (e) => { e.preventDefault(); els.canvasPane.classList.add("drag-over"); });
+    document.addEventListener("dragleave", (e) => { if (e.target === document.body) els.canvasPane.classList.remove("drag-over"); });
+    document.addEventListener("drop", (e) => {
+      e.preventDefault();
+      els.canvasPane.classList.remove("drag-over");
+      const f = e.dataTransfer.files[0];
+      if (f && f.type.startsWith("image/")) loadFile(f);
+    });
+
+    // ===== Canvas sizing =====
+    function resizeCanvasToImage() {
+      const rect = els.bgImg.getBoundingClientRect();
+      els.overlay.width = rect.width * devicePixelRatio;
+      els.overlay.height = rect.height * devicePixelRatio;
+      els.overlay.style.width = rect.width + "px";
+      els.overlay.style.height = rect.height + "px";
+      state.displaySize = { w: rect.width, h: rect.height };
+      draw();
+    }
+    window.addEventListener("resize", resizeCanvasToImage);
+    els.bgImg.addEventListener("load", resizeCanvasToImage);
+
+    function displayToNatural(px, py) {
+      const sx = state.naturalSize.w / state.displaySize.w;
+      const sy = state.naturalSize.h / state.displaySize.h;
+      return { x: px * sx, y: py * sy };
+    }
+    function naturalToDisplay(nx, ny) {
+      const sx = state.displaySize.w / state.naturalSize.w;
+      const sy = state.displaySize.h / state.naturalSize.h;
+      return { x: nx * sx, y: ny * sy };
+    }
+
+    // ===== State machine =====
+    function advanceState(next) {
+      state.step = next;
+      renderStep();
+      renderMeasurements();
+      renderSidecar();
+      draw();
+    }
+
+    function renderStep() {
+      const { step, mode } = state;
+      let label = "Step";
+      let text = "";
+      const actions = [];
+
+      if (step === "load") {
+        label = "Step 0 · load";
+        text = "Drop or pick a halo image to begin.";
+      } else if (step === "sun") {
+        label = "Step 1 · sun";
+        text = `Click the <span class="accent">center of the sun</span>.`;
+      } else if (step === "tick" && mode === "scale_ticks") {
+        label = `Step 2 · scale tick (${state.currentTickDeg}°)`;
+        text = `Click the stamped <strong>${state.currentTickDeg}°</strong> mark on the ruler, or skip to a different degree value.`;
+        actions.push({ label: "− deg", fn: () => { if (state.currentTickDeg > 1) state.currentTickDeg--; renderStep(); } });
+        actions.push({ label: "+ deg", fn: () => { state.currentTickDeg++; renderStep(); } });
+        actions.push({ label: "Done with ticks → 22° anchor", primary: true, disabled: state.scaleTicks.length < 2, fn: () => advanceState("anchor22") });
+      } else if (step === "anchor22") {
+        label = "Step · anchor 22°";
+        text = `Click on the <span class="accent-22">22° parhelion / halo ring</span>, or mark it off-ruler.`;
+        actions.push({ label: "Mark 22° off-ruler", fn: () => markOffRuler(22) });
+      } else if (step === "anchor46") {
+        label = "Step · anchor 46°";
+        text = `Click on the <span class="accent-46">46° halo</span>, or mark it off-ruler.`;
+        actions.push({ label: "Mark 46° off-ruler", fn: () => markOffRuler(46) });
+      } else if (step === "done") {
+        label = "Step · done";
+        text = `All measurements collected. Fill operator decisions and download the sidecar.`;
+      }
+
+      els.stepLabel.textContent = label;
+      els.stepText.innerHTML = text;
+      els.stepActions.innerHTML = "";
+      for (const a of actions) {
+        const b = document.createElement("button");
+        b.className = "inline" + (a.primary ? " primary" : "");
+        b.textContent = a.label;
+        if (a.disabled) b.disabled = true;
+        b.addEventListener("click", a.fn);
+        els.stepActions.appendChild(b);
+      }
+    }
+
+    function markOffRuler(deg) {
+      state.anchors[deg].off_ruler = true;
+      state.anchors[deg].px_radius = null;
+      state.anchors[deg].measurement_note = `${deg}° lies beyond the calibrated ruler tip; px_radius=null, off_ruler=true.`;
+      if (deg === 22) advanceState("anchor46");
+      else if (deg === 46) advanceState("done");
+    }
+
+    // ===== Click handling =====
+    els.overlay.addEventListener("mousemove", (e) => {
+      const rect = els.overlay.getBoundingClientRect();
+      const px = e.clientX - rect.left;
+      const py = e.clientY - rect.top;
+      const n = displayToNatural(px, py);
+      state.cursor = n;
+      // Cursor readout
+      if (state.sunPx) {
+        const dx = n.x - state.sunPx.x;
+        const dy = n.y - state.sunPx.y;
+        const r = Math.sqrt(dx * dx + dy * dy);
+        els.cursorReadout.textContent = `Δ from sun: ${r.toFixed(1)} px`;
+      } else {
+        els.cursorReadout.textContent = `[${n.x.toFixed(0)}, ${n.y.toFixed(0)}]`;
+      }
+      els.cursorReadout.style.left = px + "px";
+      els.cursorReadout.style.top = py + "px";
+      els.cursorReadout.style.opacity = "1";
+      draw();
+    });
+    els.overlay.addEventListener("mouseleave", () => {
+      state.cursor = null;
+      els.cursorReadout.style.opacity = "0";
+      draw();
+    });
+
+    els.overlay.addEventListener("click", (e) => {
+      const rect = els.overlay.getBoundingClientRect();
+      const px = e.clientX - rect.left;
+      const py = e.clientY - rect.top;
+      const n = displayToNatural(px, py);
+
+      const { step, mode } = state;
+      if (step === "sun") {
+        state.sunPx = { x: n.x, y: n.y };
+        flashRing(px, py, "var(--accent)");
+        const next = (mode === "scale_ticks") ? "tick" : "anchor22";
+        advanceState(next);
+      } else if (step === "tick" && mode === "scale_ticks") {
+        const radius = distance(n, state.sunPx);
+        state.scaleTicks.push({ px_radius: radius, deg: state.currentTickDeg, source: "operator-eye" });
+        flashRing(px, py, "var(--accent-tick)");
+        state.currentTickDeg += 1;
+        renderStep();
+        renderMeasurements();
+        renderSidecar();
+        draw();
+      } else if (step === "anchor22") {
+        const radius = distance(n, state.sunPx);
+        state.anchors[22] = { locus_deg: 22, px_radius: radius, off_ruler: false, measurement_note: "operator-eye on 22° halo arc" };
+        flashRing(px, py, "var(--accent-22)");
+        advanceState("anchor46");
+      } else if (step === "anchor46") {
+        const radius = distance(n, state.sunPx);
+        state.anchors[46] = { locus_deg: 46, px_radius: radius, off_ruler: false, measurement_note: "operator-eye on 46° halo arc" };
+        flashRing(px, py, "var(--accent-46)");
+        advanceState("done");
+      }
+    });
+
+    function distance(a, b) {
+      const dx = a.x - b.x; const dy = a.y - b.y; return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // ===== Drawing =====
+    function draw() {
+      const ctx = els.overlay.getContext("2d");
+      const W = els.overlay.width; const H = els.overlay.height;
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      ctx.clearRect(0, 0, W / devicePixelRatio, H / devicePixelRatio);
+
+      // sun
+      if (state.sunPx) {
+        const d = naturalToDisplay(state.sunPx.x, state.sunPx.y);
+        drawPoint(ctx, d, "var(--accent)", "sun");
+      }
+
+      // scale ticks
+      for (const t of state.scaleTicks) {
+        const angleRad = 0; // we don't have direction; just radial distance — draw on radial line if sun known
+        const d = naturalToDisplay(state.sunPx.x + t.px_radius, state.sunPx.y);
+        // We just show ticks as radial-distance markers; line from sun
+        if (state.sunPx) {
+          const s = naturalToDisplay(state.sunPx.x, state.sunPx.y);
+          // skip the line; the tick was clicked at an exact position which is recorded; we draw at radial-distance placeholder
+          // not accurate without direction; rendering scale_ticks polish is V2
+        }
+        drawPoint(ctx, d, "var(--accent-tick)", `${t.deg}°`);
+      }
+
+      // anchors (radial lines)
+      for (const deg of [22, 46]) {
+        const a = state.anchors[deg];
+        if (a.px_radius && state.sunPx) {
+          const s = naturalToDisplay(state.sunPx.x, state.sunPx.y);
+          // We need the original click position; we stored only the radius. Re-derive by clicking history? No — we stored radius.
+          // For radial line display, we need direction. Use cursor direction at last click — but we don't have it.
+          // Simplification: store the click point in anchor too. (Backfill: we already store via .clickPoint if extended.)
+        }
+      }
+
+      // Pending radial line from sun to cursor
+      if (state.sunPx && state.cursor) {
+        const s = naturalToDisplay(state.sunPx.x, state.sunPx.y);
+        const c = naturalToDisplay(state.cursor.x, state.cursor.y);
+        ctx.strokeStyle = "var(--line)";
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(c.x, c.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Anchor markers (using stored anchor click coords if available)
+      drawAnchorMarker(ctx, 22, "var(--accent-22)");
+      drawAnchorMarker(ctx, 46, "var(--accent-46)");
+    }
+
+    function drawAnchorMarker(ctx, deg, color) {
+      const a = state.anchors[deg];
+      if (!a.clickPoint || a.off_ruler) return;
+      const d = naturalToDisplay(a.clickPoint.x, a.clickPoint.y);
+      const s = state.sunPx ? naturalToDisplay(state.sunPx.x, state.sunPx.y) : null;
+      if (s) {
+        ctx.strokeStyle = "rgba(255,255,255,0.25)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(d.x, d.y);
+        ctx.stroke();
+      }
+      drawPoint(ctx, d, color, `${deg}°`);
+    }
+
+    function drawPoint(ctx, d, color, label) {
+      ctx.fillStyle = color;
+      ctx.strokeStyle = "rgba(255,255,255,0.6)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      // Label
+      ctx.font = "11px ui-monospace, monospace";
+      ctx.fillStyle = "white";
+      ctx.fillText(label, d.x + 9, d.y - 9);
+    }
+
+    function flashRing(px, py, color) {
+      const el = document.createElement("div");
+      el.style.cssText = `
+        position: absolute; left: ${px - 14}px; top: ${py - 14}px;
+        width: 28px; height: 28px; border-radius: 50%;
+        border: 2px solid ${color};
+        pointer-events: none;
+        animation: ring-pulse 0.55s ease-out forwards;
+      `;
+      els.canvasContainer.appendChild(el);
+      setTimeout(() => el.remove(), 600);
+    }
+
+    // Backfill: store click point on anchors for radial drawing
+    const _origClickHandler = els.overlay.onclick;
+    els.overlay.addEventListener("click", (e) => {
+      const rect = els.overlay.getBoundingClientRect();
+      const px = e.clientX - rect.left;
+      const py = e.clientY - rect.top;
+      const n = displayToNatural(px, py);
+      if (state.step === "anchor46" || state.step === "done") {
+        // anchor46 click is processed before this listener fires; we stored radius only.
+        // After processing, we backfill the click point if anchor was just set.
+      }
+      // Save click point into anchors retroactively if the last action set an anchor
+      if (state.anchors[22].px_radius && !state.anchors[22].clickPoint && !state.anchors[22].off_ruler) {
+        state.anchors[22].clickPoint = { x: n.x, y: n.y };
+      }
+      if (state.anchors[46].px_radius && !state.anchors[46].clickPoint && !state.anchors[46].off_ruler) {
+        state.anchors[46].clickPoint = { x: n.x, y: n.y };
+      }
+      draw();
+    });
+
+    // ===== Measurements list =====
+    function renderMeasurements() {
+      const items = [];
+      if (state.sunPx) {
+        items.push({
+          pill: "sun", pillClass: "sun",
+          label: "sun_px",
+          value: `[${state.sunPx.x.toFixed(0)}, ${state.sunPx.y.toFixed(0)}]`,
+        });
+      }
+      for (const t of state.scaleTicks) {
+        items.push({
+          pill: `${t.deg}°`, pillClass: "tick",
+          label: "scale_tick", value: `px_radius=${t.px_radius.toFixed(1)}`,
+        });
+      }
+      for (const deg of [22, 46]) {
+        const a = state.anchors[deg];
+        if (a.px_radius || a.off_ruler) {
+          items.push({
+            pill: `${deg}°`, pillClass: `a${deg}`,
+            label: a.off_ruler ? "off_ruler" : "anchor px_radius",
+            value: a.off_ruler ? "true" : a.px_radius.toFixed(1),
+          });
+        }
+      }
+      if (items.length === 0) {
+        els.measurementsList.innerHTML = `<li><span class="label">— no measurements yet —</span></li>`;
+        return;
+      }
+      els.measurementsList.innerHTML = items.map(i => `
+        <li>
+          <span><span class="pill ${i.pillClass}">${i.pill}</span> <span class="label">${i.label}</span></span>
+          <span class="value">${i.value}</span>
+        </li>
+      `).join("");
+    }
+
+    // ===== Sidecar JSON building + self-pin =====
+    async function buildSidecar() {
+      const frame_id = els.opFrameId.value || (state.imageFilename ? state.imageFilename.replace(/\.[^.]+$/, "") : "unknown");
+      const scored_feature_deg = els.opScoredFeature.value === "" ? null : parseFloat(els.opScoredFeature.value);
+      const sidecar = {
+        schema_version: 1,
+        sidecar_kind: "h0-measured-sidecar",
+        frame_id,
+        frame_path: state.imageFilename || "",
+        render_sha256: null,
+        config_path: null,
+        config_sha256: null,
+        measurement_method: "operator_manual",
+        measured_at_pt: new Date().toISOString(),
+        measured_by: els.opMeasuredBy.value || "operator",
+        sun_px: state.sunPx ? [Math.round(state.sunPx.x), Math.round(state.sunPx.y)] : null,
+        projection: "operator_measured",
+        theta_map_kind: state.mode,
+        anchors: [
+          { locus_deg: 22, px_radius: state.anchors[22].px_radius !== null ? Math.round(state.anchors[22].px_radius * 10) / 10 : null, off_ruler: !!state.anchors[22].off_ruler, measurement_note: state.anchors[22].measurement_note },
+          { locus_deg: 46, px_radius: state.anchors[46].px_radius !== null ? Math.round(state.anchors[46].px_radius * 10) / 10 : null, off_ruler: !!state.anchors[46].off_ruler, measurement_note: state.anchors[46].measurement_note },
+        ],
+        scored_feature_deg,
+        operator_decisions: {
+          compound_code_is_h_leak: els.opHLeak.value,
+          compound_code_basis: els.opHLeakBasis.value,
+          known_pass_selection_basis: els.opKpBasis.value || null,
+          fixture_class: els.opFixtureClass.value,
+        },
+        calib_sha256: "",
+      };
+      if (state.mode === "scale_ticks") {
+        sidecar.scale_ticks = state.scaleTicks.map(t => ({ px_radius: Math.round(t.px_radius * 10) / 10, deg: t.deg, source: t.source }));
+      }
+      // Self-pin: canonical JSON (sorted keys) with calib_sha256 = "", then SHA-256
+      const canonical = canonicalJSON(sidecar);
+      const hash = await sha256Hex(canonical);
+      sidecar.calib_sha256 = hash;
+      return { sidecar, hash };
+    }
+
+    function canonicalJSON(value) {
+      if (Array.isArray(value)) return "[" + value.map(canonicalJSON).join(",") + "]";
+      if (value !== null && typeof value === "object") {
+        const keys = Object.keys(value).sort();
+        return "{" + keys.map(k => JSON.stringify(k) + ":" + canonicalJSON(value[k])).join(",") + "}";
+      }
+      return JSON.stringify(value);
+    }
+
+    async function sha256Hex(str) {
+      const bytes = new TextEncoder().encode(str);
+      const buf = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    async function renderSidecar() {
+      const { sidecar, hash } = await buildSidecar();
+      els.selfPin.textContent = hash;
+      els.sidecarPreview.textContent = JSON.stringify(sidecar, null, 2);
+      const canDownload = !!state.sunPx && (state.step === "done" || state.step === "anchor46" || state.step === "anchor22");
+      els.downloadBtn.disabled = !canDownload;
+    }
+
+    // Re-render sidecar when any operator-decision input changes
+    for (const inputEl of [els.opFrameId, els.opFixtureClass, els.opHLeak, els.opHLeakBasis, els.opKpBasis, els.opScoredFeature, els.opMeasuredBy]) {
+      inputEl.addEventListener("input", () => renderSidecar());
+      inputEl.addEventListener("change", () => renderSidecar());
+    }
+
+    // ===== Download =====
+    els.downloadBtn.addEventListener("click", async () => {
+      const { sidecar } = await buildSidecar();
+      const fname = (sidecar.frame_id || "sidecar") + ".json";
+      const blob = new Blob([JSON.stringify(sidecar, null, 2) + "\n"], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = fname; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    });
+
+    // ===== Mode toggle =====
+    for (const b of els.modeButtons) {
+      b.addEventListener("click", () => {
+        for (const x of els.modeButtons) x.classList.remove("active");
+        b.classList.add("active");
+        state.mode = b.dataset.mode;
+        els.modeHelp.innerHTML = state.mode === "fit2locus"
+          ? `<strong>fit2locus:</strong> click the sun, then the 22° halo, then the 46° halo. Use this for halo photos without a stamped ruler.`
+          : `<strong>scale_ticks:</strong> click the sun, then each stamped degree mark on the ruler (entering its deg label), then the 22° + 46° anchor positions. Use this for HaloSim renders with a stamped scale.`;
+        // Reset measurement state on mode change (but keep image + frame_id)
+        state.scaleTicks = [];
+        state.sunPx = null;
+        state.anchors[22] = { locus_deg: 22, px_radius: null, off_ruler: false, measurement_note: "" };
+        state.anchors[46] = { locus_deg: 46, px_radius: null, off_ruler: false, measurement_note: "" };
+        state.currentTickDeg = 5;
+        advanceState(state.image ? "sun" : "load");
+      });
+    }
+
+    // ===== Reset / Undo =====
+    els.resetBtn.addEventListener("click", () => {
+      state.image = null; state.imageDataUrl = null; state.imageFilename = null;
+      state.naturalSize = { w: 0, h: 0 }; state.displaySize = { w: 0, h: 0 };
+      state.sunPx = null; state.scaleTicks = [];
+      state.anchors = {
+        22: { locus_deg: 22, px_radius: null, off_ruler: false, measurement_note: "" },
+        46: { locus_deg: 46, px_radius: null, off_ruler: false, measurement_note: "" },
+      };
+      state.currentTickDeg = 5;
+      els.bgImg.src = "";
+      els.canvasPane.classList.remove("has-image");
+      els.opFrameId.value = "";
+      els.opHLeakBasis.value = "";
+      els.opKpBasis.value = "";
+      els.opScoredFeature.value = "";
+      els.opMeasuredBy.value = "";
+      advanceState("load");
+    });
+
+    els.undoBtn.addEventListener("click", () => {
+      if (state.step === "done") {
+        if (state.anchors[46].px_radius || state.anchors[46].off_ruler) {
+          state.anchors[46] = { locus_deg: 46, px_radius: null, off_ruler: false, measurement_note: "" };
+          advanceState("anchor46");
+          return;
+        }
+      }
+      if (state.step === "anchor46") {
+        if (state.anchors[22].px_radius || state.anchors[22].off_ruler) {
+          state.anchors[22] = { locus_deg: 22, px_radius: null, off_ruler: false, measurement_note: "" };
+          advanceState("anchor22");
+          return;
+        }
+      }
+      if (state.step === "anchor22" || state.step === "tick") {
+        if (state.mode === "scale_ticks" && state.scaleTicks.length > 0) {
+          const popped = state.scaleTicks.pop();
+          state.currentTickDeg = popped.deg;
+          advanceState("tick");
+          return;
+        }
+        if (state.sunPx) {
+          state.sunPx = null;
+          advanceState("sun");
+          return;
+        }
+      }
+    });
+
+    // ===== Initial render =====
+    renderStep();
+    renderMeasurements();
+    renderSidecar();
+  </script>
+</body>
+</html>
