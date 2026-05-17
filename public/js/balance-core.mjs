@@ -50,6 +50,69 @@ export const BALANCE_PRESETS = Object.freeze({
   }),
 });
 
+export const BALANCE_CONTROLLER_MODES = Object.freeze({
+  passive: Object.freeze({
+    label: "Passive",
+    status: "implemented",
+    informationBudget: "No control force.",
+    usesShadow: false,
+    usesCartState: false,
+    usesBelief: false,
+    usesPrivileged: false,
+  }),
+  naive_cart: Object.freeze({
+    label: "Naive cart",
+    status: "implemented",
+    informationBudget: "Cart position and velocity only; no shadow field or true pole angle.",
+    usesShadow: false,
+    usesCartState: true,
+    usesBelief: false,
+    usesPrivileged: false,
+  }),
+  naive_shadow: Object.freeze({
+    label: "Naive shadow",
+    status: "implemented",
+    informationBudget: "Current shadow residual plus cart proprioception; no dynamics or observability gating.",
+    usesShadow: true,
+    usesCartState: true,
+    usesBelief: false,
+    usesPrivileged: false,
+  }),
+  sundog_shadow: Object.freeze({
+    label: "Sundog shadow",
+    status: "implemented",
+    informationBudget: "Shadow residual, residual velocity, confidence gating, cart proprioception, and bounded reacquire probe.",
+    usesShadow: true,
+    usesCartState: true,
+    usesBelief: false,
+    usesPrivileged: false,
+  }),
+  bayes_floor_shadow_particle: Object.freeze({
+    label: "Bayesian floor: shadow particle",
+    status: "implemented",
+    informationBudget: "Same shadow observation and cart proprioception as the legal controller, with a particle belief over theta/thetaDot. No true theta/thetaDot.",
+    usesShadow: true,
+    usesCartState: true,
+    usesBelief: true,
+    usesPrivileged: false,
+  }),
+  oracle: Object.freeze({
+    label: "Privileged oracle",
+    status: "implemented",
+    informationBudget: "Privileged true pole angle and angular velocity. Diagnostic ceiling only.",
+    usesShadow: false,
+    usesCartState: true,
+    usesBelief: false,
+    usesPrivileged: true,
+  }),
+});
+
+export const IMPLEMENTED_BALANCE_MODES = Object.freeze(
+  Object.entries(BALANCE_CONTROLLER_MODES)
+    .filter(([, definition]) => definition.status === "implemented")
+    .map(([mode]) => mode),
+);
+
 export function makeRng(seed) {
   let t = seed >>> 0;
   return function rng() {
@@ -297,12 +360,278 @@ export function sampleShadowSensor(state, runtime, config = {}) {
   return output;
 }
 
+export function serializeBalanceObservation(state, sensor, config = {}) {
+  const cfg = normalizeBalanceConfig(config);
+  return {
+    x: state.x,
+    xDot: state.xDot,
+    t: state.t,
+    shadowTipX: sensor.shadowTipX,
+    shadowCentroidX: sensor.centroid,
+    shadowLength: sensor.length,
+    shadowResidual: sensor.residual,
+    shadowConfidence: sensor.valid ? sensor.confidence : 0,
+    shadowValid: sensor.valid,
+    residualVelocity: sensor.valid ? sensor.residualVelocity : 0,
+    lengthVelocity: sensor.valid ? sensor.lengthVelocity : 0,
+    lightElevationDeg: cfg.lightElevationDeg,
+    sensorNoiseStd: cfg.sensorNoiseStd,
+    sensorDelaySteps: cfg.sensorDelaySteps,
+    sensorDropoutRate: cfg.sensorDropoutRate,
+    dt: cfg.dt,
+    preset: cfg.preset,
+    forceLimit: cfg.forceLimit,
+    railLimit: cfg.railLimit,
+  };
+}
+
+function hashText(text) {
+  let hash = 2166136261;
+  for (let i = 0; i < text.length; i += 1) {
+    hash ^= text.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function uniqueSortedForces(values, forceLimit) {
+  return [...new Set(values
+    .map((value) => roundNumber(clamp(value, -forceLimit, forceLimit), 4)))]
+    .sort((a, b) => a - b);
+}
+
+function ensureBayesState(controllerState, cfg) {
+  if (controllerState.bayes?.particles?.length > 0) return controllerState.bayes;
+  const particleCount = Math.max(31, Math.round(cfg.bayesParticleCount ?? 121));
+  const seed = ((cfg.seed + 1) * 2654435761) ^ hashText(`${cfg.preset}:balance-bayes-floor`);
+  const rng = makeRng(seed >>> 0);
+  const thetaRange = Math.min(cfg.fallAngle * 0.82, 0.52);
+  const thetaDotRange = 0.9;
+  const particles = [];
+  for (let i = 0; i < particleCount; i += 1) {
+    particles.push({
+      theta: (rng() * 2 - 1) * thetaRange,
+      thetaDot: (rng() * 2 - 1) * thetaDotRange,
+      weight: 1 / particleCount,
+    });
+  }
+  controllerState.bayes = {
+    particles,
+    rng,
+    lastForce: 0,
+    initialized: false,
+    diagnostics: null,
+  };
+  return controllerState.bayes;
+}
+
+function predictBayesParticles(bayes, state, cfg) {
+  if (!bayes.initialized) {
+    bayes.initialized = true;
+    return;
+  }
+  for (const particle of bayes.particles) {
+    const predicted = integrateBalanceStep({
+      x: state.x,
+      xDot: state.xDot,
+      theta: particle.theta,
+      thetaDot: particle.thetaDot,
+      t: state.t,
+      fallen: false,
+      railHit: false,
+    }, bayes.lastForce, cfg);
+    const processTheta = (bayes.rng() - 0.5) * 0.002;
+    const processThetaDot = (bayes.rng() - 0.5) * 0.01;
+    particle.theta = clamp(predicted.theta + processTheta, -cfg.fallAngle * 0.98, cfg.fallAngle * 0.98);
+    particle.thetaDot = clamp(predicted.thetaDot + processThetaDot, -4, 4);
+  }
+}
+
+function weightBayesParticles(bayes, state, sensor, cfg) {
+  if (!sensor.valid) return;
+  const sigma = Math.max(0.018, cfg.sensorNoiseStd * 2.5, (1 - sensor.confidence) * 0.055);
+  const lengthSigma = Math.max(0.035, sigma * 1.6);
+  const centroidSigma = Math.max(0.03, sigma * 1.3);
+  let total = 0;
+
+  for (const particle of bayes.particles) {
+    const predicted = computeShadowGeometry({
+      x: state.x,
+      xDot: state.xDot,
+      theta: particle.theta,
+      thetaDot: particle.thetaDot,
+      t: state.t,
+      fallen: false,
+      railHit: false,
+    }, cfg);
+    const residualErr = (sensor.residual - predicted.residual) / sigma;
+    const lengthErr = (sensor.length - predicted.length) / lengthSigma;
+    const centroidErr = (sensor.centroid - predicted.centroid) / centroidSigma;
+    const confidenceErr = (sensor.confidence - predicted.confidence) / 0.25;
+    const exponent = -0.5 * (
+      residualErr * residualErr
+      + 0.35 * lengthErr * lengthErr
+      + 0.2 * centroidErr * centroidErr
+      + 0.05 * confidenceErr * confidenceErr
+    );
+    particle.weight *= Math.max(1e-12, Math.exp(Math.max(-60, exponent)));
+    total += particle.weight;
+  }
+
+  if (!(total > 0)) {
+    const w = 1 / bayes.particles.length;
+    for (const particle of bayes.particles) particle.weight = w;
+    return;
+  }
+  for (const particle of bayes.particles) particle.weight /= total;
+}
+
+function bayesDiagnostics(particles) {
+  let thetaMean = 0;
+  let thetaDotMean = 0;
+  let weightSquareSum = 0;
+  for (const particle of particles) {
+    thetaMean += particle.weight * particle.theta;
+    thetaDotMean += particle.weight * particle.thetaDot;
+    weightSquareSum += particle.weight * particle.weight;
+  }
+  let thetaVariance = 0;
+  let thetaDotVariance = 0;
+  for (const particle of particles) {
+    thetaVariance += particle.weight * (particle.theta - thetaMean) ** 2;
+    thetaDotVariance += particle.weight * (particle.thetaDot - thetaDotMean) ** 2;
+  }
+  return {
+    thetaMean,
+    thetaDotMean,
+    thetaStd: Math.sqrt(Math.max(0, thetaVariance)),
+    thetaDotStd: Math.sqrt(Math.max(0, thetaDotVariance)),
+    effectiveSampleSize: weightSquareSum > 0 ? 1 / weightSquareSum : 0,
+  };
+}
+
+function resampleBayesParticlesIfNeeded(bayes) {
+  const diagnostics = bayesDiagnostics(bayes.particles);
+  if (diagnostics.effectiveSampleSize >= bayes.particles.length * 0.5) return diagnostics;
+
+  const cumulative = [];
+  let sum = 0;
+  for (const particle of bayes.particles) {
+    sum += particle.weight;
+    cumulative.push(sum);
+  }
+  const n = bayes.particles.length;
+  const step = 1 / n;
+  let u = bayes.rng() * step;
+  let j = 0;
+  const next = [];
+  for (let i = 0; i < n; i += 1) {
+    while (j < cumulative.length - 1 && u > cumulative[j]) j += 1;
+    next.push({
+      theta: clamp(bayes.particles[j].theta + (bayes.rng() - 0.5) * 0.004, -Math.PI / 2, Math.PI / 2),
+      thetaDot: clamp(bayes.particles[j].thetaDot + (bayes.rng() - 0.5) * 0.02, -4, 4),
+      weight: step,
+    });
+    u += step;
+  }
+  bayes.particles = next;
+  return bayesDiagnostics(bayes.particles);
+}
+
+function scoreBayesAction(particles, state, action, cfg) {
+  const horizonSteps = Math.max(2, Math.round((cfg.bayesHorizonSeconds ?? 0.18) / cfg.dt));
+  let score = 0;
+  for (const particle of particles) {
+    let simulated = {
+      x: state.x,
+      xDot: state.xDot,
+      theta: particle.theta,
+      thetaDot: particle.thetaDot,
+      t: state.t,
+      fallen: false,
+      railHit: false,
+    };
+    for (let i = 0; i < horizonSteps && !simulated.fallen && !simulated.railHit; i += 1) {
+      simulated = integrateBalanceStep(simulated, action, cfg);
+    }
+    const terminalPenalty = simulated.fallen || simulated.railHit ? 30 : 0;
+    score += particle.weight * (
+      terminalPenalty
+      + Math.abs(simulated.theta) * 5
+      + Math.abs(simulated.thetaDot) * 0.7
+      + Math.abs(simulated.x) * 0.35
+      + Math.abs(action) / Math.max(cfg.forceLimit, 1e-6) * 0.08
+    );
+  }
+  return score;
+}
+
+function computeSundogShadowForce(state, sensor, controllerState, cfg) {
+  const proxy = sensor.valid ? sensor.residual / Math.max(cfg.poleLength, 1e-6) : 0;
+  const proxyVelocity = sensor.valid ? sensor.residualVelocity / Math.max(cfg.poleLength, 1e-6) : 0;
+  const confidence = sensor.valid ? sensor.confidence : 0;
+  const probe = Math.sin((controllerState.step ?? 0) * 0.11) * (1 - confidence) * 1.2;
+  return confidence * (50 * proxy + 8 * proxyVelocity) + 1.0 * state.x + 2.0 * state.xDot + probe;
+}
+
+function computeBayesFloorControl(state, sensor, controllerState, cfg) {
+  const bayes = ensureBayesState(controllerState, cfg);
+  predictBayesParticles(bayes, state, cfg);
+  weightBayesParticles(bayes, state, sensor, cfg);
+  let diagnostics = resampleBayesParticlesIfNeeded(bayes);
+  diagnostics = bayesDiagnostics(bayes.particles);
+
+  const beliefFeedback = 50 * diagnostics.thetaMean + 8 * diagnostics.thetaDotMean + 1.0 * state.x + 2.0 * state.xDot;
+  const sundogForce = computeSundogShadowForce(state, sensor, controllerState, cfg);
+  const candidateForces = uniqueSortedForces([
+    sundogForce,
+    beliefFeedback,
+    -cfg.forceLimit,
+    -0.5 * cfg.forceLimit,
+    0,
+    0.5 * cfg.forceLimit,
+    cfg.forceLimit,
+  ], cfg.forceLimit);
+  let bestForce = candidateForces[0] ?? 0;
+  let bestScore = Number.POSITIVE_INFINITY;
+  for (const candidate of candidateForces) {
+    const score = scoreBayesAction(bayes.particles, state, candidate, cfg);
+    if (score < bestScore) {
+      bestScore = score;
+      bestForce = candidate;
+    }
+  }
+
+  bayes.lastForce = bestForce;
+  bayes.diagnostics = {
+    ...diagnostics,
+    particleCount: bayes.particles.length,
+    candidateCount: candidateForces.length,
+    selectedScore: bestScore,
+    beliefFeedback,
+    sundogCandidateForce: sundogForce,
+  };
+
+  return {
+    force: bestForce,
+    rawForce: bestForce,
+    saturated: Math.abs(bestForce) >= cfg.forceLimit - 1e-9,
+    phase: sensor.valid && sensor.confidence > 0.35 ? "BAYES_TRACK" : "BAYES_SCAN",
+    reason: "same-shadow particle belief over theta/thetaDot",
+    belief: bayes.diagnostics,
+  };
+}
+
 export function computeBalanceControl(state, sensor, controllerState = {}, config = {}) {
   const cfg = normalizeBalanceConfig(config);
   const mode = cfg.controllerMode;
   let force = 0;
   let phase = "PASSIVE";
   let reason = "no force";
+
+  if (!BALANCE_CONTROLLER_MODES[mode]) {
+    throw new Error(`Unknown balance controller mode: ${mode}`);
+  }
 
   if (mode === "naive_cart") {
     force = -3.2 * state.x - 2.1 * state.xDot;
@@ -318,13 +647,14 @@ export function computeBalanceControl(state, sensor, controllerState = {}, confi
     phase = "ORACLE";
     reason = "privileged theta feedback";
   } else if (mode === "sundog_shadow") {
-    const proxy = sensor.valid ? sensor.residual / Math.max(cfg.poleLength, 1e-6) : 0;
-    const proxyVelocity = sensor.valid ? sensor.residualVelocity / Math.max(cfg.poleLength, 1e-6) : 0;
     const confidence = sensor.valid ? sensor.confidence : 0;
-    const probe = Math.sin((controllerState.step ?? 0) * 0.11) * (1 - confidence) * 1.2;
-    force = confidence * (50 * proxy + 8 * proxyVelocity) + 1.0 * state.x + 2.0 * state.xDot + probe;
+    force = computeSundogShadowForce(state, sensor, controllerState, cfg);
     phase = confidence > 0.35 ? "TRACK" : "SCAN";
     reason = "shadow residual plus history";
+  } else if (mode === "bayes_floor_shadow_particle") {
+    const control = computeBayesFloorControl(state, sensor, controllerState, cfg);
+    controllerState.step = (controllerState.step ?? 0) + 1;
+    return control;
   }
 
   controllerState.step = (controllerState.step ?? 0) + 1;

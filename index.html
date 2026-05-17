@@ -19,6 +19,19 @@
             box-sizing: border-box;
         }
 
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: clip;
+        }
+
+        @supports not (overflow: clip) {
+            html,
+            body {
+                overflow-x: hidden;
+            }
+        }
+
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -1166,6 +1179,10 @@
             object-fit: cover;
         }
 
+        .elevator-pitch-art-left img {
+            object-position: 66% center;
+        }
+
         .elevator-pitch-art figcaption {
             color: rgba(245, 245, 245, 0.82);
             font-family: var(--sd-font-data);
@@ -1206,6 +1223,8 @@
             display: grid;
             align-content: start;
             gap: 0.5rem;
+            min-width: 0;
+            padding: 0;
         }
 
         .elevator-pitch-point h3 {
@@ -1340,6 +1359,10 @@
             .elevator-pitch-art-left,
             .elevator-pitch-art-right {
                 grid-column: 1;
+            }
+
+            .glossary-link::after {
+                display: none;
             }
         }
 

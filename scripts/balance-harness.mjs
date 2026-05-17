@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   BALANCE_PRESETS,
+  BALANCE_CONTROLLER_MODES,
   clamp,
   computeBalanceControl,
   createBalanceRuntime,
@@ -17,13 +18,7 @@ import {
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const MODE_DEFINITIONS = Object.freeze({
-  passive: "No control force.",
-  naive_cart: "Cart-centering baseline with proprioception only.",
-  naive_shadow: "Shadow residual baseline without dynamics or observability gating.",
-  sundog_shadow: "Prototype Sundog shadow controller: residual and residual velocity gated by shadow confidence.",
-  oracle: "Privileged true-angle controller; diagnostic ceiling, not an allowed Sundog input.",
-});
+const MODE_DEFINITIONS = BALANCE_CONTROLLER_MODES;
 
 function parseList(value) {
   return value.split(",").map((item) => item.trim()).filter(Boolean);
@@ -135,6 +130,10 @@ export function parseArgs(argv) {
   }
   if (args.modes.some((mode) => !MODE_DEFINITIONS[mode])) {
     throw new Error(`Unknown mode in --modes: ${args.modes.join(",")}`);
+  }
+  const nonRunnableMode = args.modes.find((mode) => MODE_DEFINITIONS[mode].status !== "implemented");
+  if (nonRunnableMode) {
+    throw new Error(`Balance mode ${nonRunnableMode} is ${MODE_DEFINITIONS[nonRunnableMode].status}, not runnable yet`);
   }
   if (args.lightElevations.some((value) => !Number.isFinite(value) || value <= 1 || value >= 89)) {
     throw new Error("--light-elevations values must be between 1 and 89 degrees");
