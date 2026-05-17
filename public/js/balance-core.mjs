@@ -625,6 +625,28 @@ function scoreBayesAction(particles, state, action, cfg) {
   return score;
 }
 
+function scoreBayesActionPoint(state, theta, thetaDot, action, cfg) {
+  const horizonSteps = Math.max(2, Math.round((cfg.bayesHorizonSeconds ?? 0.18) / cfg.dt));
+  let simulated = {
+    x: state.x,
+    xDot: state.xDot,
+    theta,
+    thetaDot,
+    t: state.t,
+    fallen: false,
+    railHit: false,
+  };
+  for (let i = 0; i < horizonSteps && !simulated.fallen && !simulated.railHit; i += 1) {
+    simulated = integrateBalanceStep(simulated, action, cfg);
+  }
+  const terminalPenalty = simulated.fallen || simulated.railHit ? 30 : 0;
+  return terminalPenalty
+    + Math.abs(simulated.theta) * 5
+    + Math.abs(simulated.thetaDot) * 0.7
+    + Math.abs(simulated.x) * 0.35
+    + Math.abs(action) / Math.max(cfg.forceLimit, 1e-6) * 0.08;
+}
+
 function computeSundogShadowForce(state, sensor, controllerState, cfg) {
   const proxy = sensor.valid ? sensor.residual / Math.max(cfg.poleLength, 1e-6) : 0;
   const proxyVelocity = sensor.valid ? sensor.residualVelocity / Math.max(cfg.poleLength, 1e-6) : 0;
@@ -669,8 +691,8 @@ function computeBayesFloorControl(state, sensor, controllerState, cfg) {
   const blendedBeliefForce = 0.65 * sundogForce + 0.35 * beliefFeedback;
   const sundogAction = clamp(sundogForce, -cfg.forceLimit, cfg.forceLimit);
   const proposalAction = clamp(blendedBeliefForce, -cfg.forceLimit, cfg.forceLimit);
-  const sundogScore = scoreBayesAction(bayes.particles, state, sundogAction, cfg);
-  const proposalScore = scoreBayesAction(bayes.particles, state, proposalAction, cfg);
+  const sundogScore = scoreBayesActionPoint(state, beliefTheta, beliefThetaDot, sundogAction, cfg);
+  const proposalScore = scoreBayesActionPoint(state, beliefTheta, beliefThetaDot, proposalAction, cfg);
   const scoreAdvantage = sundogScore - proposalScore;
   const advantageThreshold = cfg.bayesAdvantageThreshold ?? 0.06;
   const useProposal = posteriorReady && scoreAdvantage > advantageThreshold;
