@@ -360,11 +360,17 @@ Two consequences, pinned here so they are not over-read later:
    below signature, breaking floor-validity. Discovering either *after* the
    ~51-day full lock is the expensive failure mode this gate prevents.
 
-**Pre-registered off-set calibration cell (fixed now, before any run).**
-A single grid cell where the *reactive* guarded-signature policy is expected
-insufficient but a history-integrating belief floor has a real informational
-advantage (the particle filter averages the noisy signature *history*; the
-reactive controller acts on each noisy instantaneous gradient):
+**Pre-registered off-set calibration cell.** The cell must satisfy a
+*demonstrated-headroom* criterion, not just a physics hunch: a valid
+pre-registered off-set cell is one where (i) §5 classifies it `off` **and**
+(ii) the privileged oracle yardstick beats the signature policy on it with
+regret-headroom 95% CI lower bound `> 0` (the Satisfiability Probe). Criterion
+(ii) is what makes the off-set arm physically able to fire for *some* floor;
+without it an `off` label is necessary but not sufficient. The current
+candidate cell (below) was chosen by physics hunch and **must pass the
+Satisfiability Probe before it is treated as pre-registered**; if it fails,
+re-pick by scanning the §3 grid for a cell maximizing oracle-minus-signature
+headroom subject to a `§5 off` label, then re-register here:
 
 ```text
 regime: near_escape
@@ -387,6 +393,16 @@ seeds: ≥ 8   # enough for the §5 fiber classifier to decide on/off, not undec
 gate — only the slate is one pre-registered cell at smoke scale).** All must
 hold before BF-5 may stage the full lock:
 
+0. **The cell is satisfiable (cell-validity gate; runs first).** A `§5`-`off`
+   fiber label does **not** imply regret headroom: if the *signature* policy
+   already reaches the `T_safe = duration` cap (or no admissible controller can
+   beat it on this cell), then regret is structurally `0` for *every* floor and
+   the off-set arm cannot fire there — the cell, not the floor, is the problem.
+   Before any floor calibration on the cell, the **BF-4b Satisfiability Probe**
+   below must show privileged-yardstick headroom over signature (oracle beats
+   signature, 95% CI lower bound `> 0`). If it does not, the pre-registered
+   cell is vacuous: re-pick it by the strengthened criterion below and
+   re-register — do **not** build or tune any more floor on a vacuous cell.
 1. **The cell is empirically off-set.** The PHASE4_THREEBODY §5 fiber
    classifier labels it `off` on the smoke slate (a positive-mass fiber with a
    disjoint Bayes-optimal action set). If it comes back `undecidable`, raise
@@ -411,9 +427,58 @@ the recorded justification, replacing the floor-validity-only rationale in the
 Planning Objective.
 
 This is a hard gate: **BF-5 staging is blocked until a BF-4b receipt records
-(1) ∧ (2) ∧ (3) PASS.** It is cheap (one extra cell at smoke scale) relative
-to the full lock and converts the off-set arm's sensitivity from an untested
-default into a pre-registered, validated quantity.
+(0) ∧ (1) ∧ (2) ∧ (3) PASS.** It is cheap (one extra cell at smoke scale)
+relative to the full lock and converts the off-set arm's sensitivity from an
+untested default into a pre-registered, validated quantity.
+
+#### BF-4b Satisfiability Probe (criterion 0; no new code; operator-gated)
+
+Purpose: decide whether the off-set arm is even *satisfiable* on the candidate
+cell before any further floor building, using the existing envelope harness and
+the privileged oracle **as a yardstick only** (it is not the floor and is never
+admitted as `π*_Bayes`; this is the sanctioned reference use). This runs before
+criteria (1)–(3).
+
+Compute discipline: `forward_oracle_strict` is the expensive mode (~24 s/trial
+in prior receipts); 1 cell × 8 seeds × 3 modes may exceed the ~10-min inline
+budget. **Do not run inline** — stage to the operator/long-budget runner; the
+agent only pins the command and the decision.
+
+```powershell
+$cell = "results\proof\phase4\_bf4b-satisfiability"
+node scripts/threebody-operating-envelope.mjs `
+  --phase phase4-bf4b-satisfiability `
+  --out $cell `
+  --regimes near_escape --modes off,track_sensor_accel_guarded,forward_oracle_strict `
+  --mass-ratios 1 --timesteps 0.01 --radius-scales 1.075 `
+  --velocity-scales 1.15 --thrust-limits 0.4 --sensor-noise-sweep 0.01 `
+  --track-guard-mode hazard_quantile --track-guard-quantile 0.75 `
+  --track-guard-min-radius-sweep 1.15 `
+  --track-guard-max-local-acceleration-sweep 2.5 `
+  --track-guard-max-tidal-magnitude-sweep 35 `
+  --seeds 8 --duration 16
+```
+
+Headroom readout (same `T_safe`/`T_max`/bootstrap-CI machinery as the gate):
+`headroom_i = (T_safe(forward_oracle_strict, i) − T_safe(track_sensor_accel_guarded, i)) / T_max`,
+mean with 95% paired-bootstrap CI over the 8 seeds.
+
+Decision branches (pre-registered):
+
+- **Vacuous cell** — signature already at the `T_safe = duration` cap, or the
+  oracle-minus-signature headroom CI includes `0`: the off-set arm cannot fire
+  here for *any* floor. The cell choice was wrong, not the floor. **Re-pick**:
+  scan the §3 grid for the cell maximizing oracle-minus-signature headroom
+  subject to a `§5 off` label, re-register it above, and only then resume floor
+  work. No particle-MPC / exact-DP building until a non-vacuous cell exists.
+- **Satisfiable, privileged-only** — headroom CI lower bound `> 0` but the
+  advantage comes from forward lookahead / full state: the arm is non-vacuous
+  but may need a stronger same-`Φ` floor than particle-MPC. Escalate to the
+  (B) decision (exact belief-grid DP vs. a structural floor redesign) with the
+  knowledge that headroom genuinely exists.
+- **Satisfiable** — headroom CI lower bound `> 0`: proceed to criteria (1)–(3)
+  with the (still open) floor-objective work, now justified because the arm
+  provably can fire.
 
 #### BF-4b Receipt (2026-05-16, `bf4b-offset-guard-20260516-215056`)
 
@@ -441,6 +506,34 @@ largest recorded pre-guard score advantage over the signature baseline was
 BF-4b gate was meant to catch: the floor is valid but the off-set arm does not
 fire. Retune `signatureAdvantageDtMultiplier` or repair the floor/objective and
 re-run BF-4b before staging BF-5.
+
+#### BF-4b Follow-up (2026-05-17): energy-trend objective tried, then bounded out
+
+Per the pre-registered "escalate, don't keep turning knobs" bound, two repair
+attempts were made and capped:
+
+- **Multiplier retune rejected by diagnostic.** The largest pre-guard
+  advantage (`0.000001`) is numerically ~0, not a real advantage clipped by a
+  too-high threshold. Lowering `signatureAdvantageDtMultiplier` would
+  manufacture noise-driven, non-real deviations and break floor-validity — so
+  the multiplier is not the lever.
+- **Energy-trend terminal value implemented, smoke still inert.** The bounded
+  radius/close-approach margin was replaced with a self-scaled energy-trend
+  margin (`clamp(0.5 + 0.5·(E_start − E_end)/max(|E_start|,1e-9), 0, 1)`,
+  belief-only). It is the correct terminal value and is **retained**, but a
+  tiny sanity smoke still showed max pre-guard advantage `~1e-6`. Root cause is
+  structural and upstream of the terminal-value form: candidates differ by
+  exactly one thrust step then follow the signature policy over a horizon ~40×
+  shorter than the escape timescale, so all rollout end-states — and any
+  function of them — are near-identical. No terminal-value form escapes a
+  one-step perturbation that has not propagated.
+
+Decision (honoring the pre-registered bound): **stop tuning the particle-MPC
+floor** and run the **BF-4b Satisfiability Probe** first. If the candidate cell
+is vacuous (signature already optimal / no privileged headroom), the cell — not
+the floor — is the problem and must be re-picked before any further floor work.
+This is the next operator-gated action; no more inline floor building until the
+probe decides.
 
 ### BF-5: Full Lock Handoff
 

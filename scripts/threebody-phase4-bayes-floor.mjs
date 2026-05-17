@@ -457,31 +457,27 @@ function terminalEventsForState(state, config) {
   return events.invalid || events.escape || events.closeApproach;
 }
 
-function terminalSafetyMargin(state, config) {
-  const positions = state.slice(0, 6);
-  const x3 = positions[4];
-  const y3 = positions[5];
-  const r3 = Math.sqrt(x3 * x3 + y3 * y3);
-  let minPrimary = Infinity;
-  for (let i = 0; i < 2; i += 1) {
-    const dx = x3 - positions[i * 2];
-    const dy = y3 - positions[i * 2 + 1];
-    minPrimary = Math.min(minPrimary, Math.sqrt(dx * dx + dy * dy));
-  }
-  const rMargin = Math.min(1, Math.max(0, (config.escapeRadius - r3) / config.escapeRadius));
-  const caMargin = Math.min(1, Math.max(0, (minPrimary - config.closeApproachRadius) / config.closeApproachRadius));
-  return Math.min(rMargin, caMargin);
+// Energy-trend terminal value (BF-2 repair after the BF-4b inert-floor
+// receipt). The earlier bounded radius/close-approach margin was
+// non-discriminating over a short horizon: 16 integrator steps barely move the
+// trajectory, so the cross-candidate margin spread was ~1e-6 and every
+// deviation fell under the signature-baseline guard (floor valid but inert
+// off-set). Total energy = kinetic + (negative) potential; lower/more-negative
+// energy is more bound, higher is toward escape. Thrust does work and changes
+// energy *immediately*, so the energy trend over the rollout discriminates a
+// one-step deviation even when within-horizon survival is flat. The value is
+// self-scaled by the particle's own binding energy (belief-only: computed from
+// the particle rollout, never the true state; no oracle), centered at 0.5, and
+// clamped to [0,1] so the shaping term stays strictly below one dt and the
+// floor-validity invariant (never prefer an earlier-escape action) is
+// preserved exactly as before — only what `margin in [0,1]` measures changed.
+function terminalEnergyMargin(startState, endState, config) {
+  const startEnergy = computeSignatures(startState, config).energy;
+  const endEnergy = computeSignatures(endState, config).energy;
+  const scale = Math.max(Math.abs(startEnergy), 1e-9);
+  const trend = (startEnergy - endEnergy) / scale;
+  return Math.min(1, Math.max(0, 0.5 + 0.5 * trend));
 }
-
-// Shaped planning score. The BF-4 probe showed the pure steps-survived
-// objective is non-discriminative when the planning horizon is far shorter
-// than the escape timescale (every candidate accrues the full horizon, so the
-// dV tie-break degenerates the floor to passive). The shaping term is the
-// expected terminal safety margin scaled by shapeFraction * dt. Because
-// shapeFraction < 1 the shaping is strictly less than one dt, so a candidate
-// whose true survival is longer by >= one dt can never be overtaken on margin
-// alone: the floor never prefers an earlier-escape action (floor-validity
-// invariant preserved).
 function candidateThrustAtStep(candidate, simState, config, sensorState, stepIndex) {
   if (candidate.kind === "signature_policy" || stepIndex > 0) {
     const predicted = observeGuardedAccelSignature(simState, { ...config, sensorNoiseStd: 0 }, sensorState);
@@ -511,7 +507,7 @@ function scoreCandidateAction(particles, candidate, config, args) {
       expectedDeltaV += particle.weight * thrustMagnitude * config.dt;
       simState = integrateStep(simState, config.dt, config, thrust);
     }
-    const margin = hazardReached ? 0 : terminalSafetyMargin(simState, config);
+    const margin = hazardReached ? 0 : terminalEnergyMargin(particle.state, simState, config);
     const particleScore = safeTime + args.shapeFraction * config.dt * margin;
     expectedSafeTime += particle.weight * safeTime;
     expectedTerminalMargin += particle.weight * margin;
@@ -761,13 +757,13 @@ async function main() {
       likelihood: "diagonal Gaussian-like score over |T_hat|, gradX, gradY plus guard mismatch penalty",
     },
     planningObjective: {
-      form: "expected within-horizon survival time + shapeFraction * dt * expected terminal safety margin",
+      form: "expected within-horizon survival time + shapeFraction * dt * expected terminal energy-trend margin",
       shapeFraction: args.shapeFraction,
       signatureAdvantageDtMultiplier: args.signatureAdvantageDtMultiplier,
-      terminalMargin: "min(escape-radius margin, close-approach margin) of the horizon-end state; 0 if a terminal hazard was reached in the rollout",
-      floorValidityInvariant: "shapeFraction < 1 => shaping term < one dt, so a candidate whose true survival is longer by >= one dt is never overtaken on margin; the floor never prefers an earlier-escape action",
+      terminalMargin: "energy-trend margin clamp(0.5 + 0.5 * (E_start - E_end) / max(|E_start|, 1e-9), 0, 1) over the particle rollout (total energy = kinetic + potential; lower = more bound); 0 if a terminal hazard was reached in the rollout. Belief-only: computed from particle rollout states, never the true state.",
+      floorValidityInvariant: "terminal margin in [0,1] and shapeFraction < 1 => shaping term < one dt, so a candidate whose true survival is longer by >= one dt is never overtaken on margin; the floor never prefers an earlier-escape action",
       signatureFallbackInvariant: "the guarded-signature policy is an explicit same-information candidate; the evaluator deviates from it only when predicted shaped-score advantage exceeds signatureAdvantageDtMultiplier * dt",
-      supersedes: "BF-4 smoke-only pure steps-survived objective, which the 2026-05-16 probe showed degenerates to passive when planning horizon << escape timescale",
+      supersedes: "BF-4 pure steps-survived objective (degenerated to passive) then the bounded radius/close-approach margin (BF-4b: valid but inert off-set, cross-candidate spread ~1e-6); replaced 2026-05-16 with the energy-trend margin so a one-step deviation is discriminable even when within-horizon survival is flat",
       tieOrder: "signature baseline unless best predicted shaped score beats it by the configured dt-scaled advantage threshold; within 1e-9 -> min expected delta-V; then first in candidate order",
     },
     actionCandidates: [

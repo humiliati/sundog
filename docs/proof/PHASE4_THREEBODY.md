@@ -33,8 +33,15 @@ Bayes-floor build path is tracked in
 
 The first BF-4b receipt (`bf4b-offset-guard-20260516-215056`) classified the
 pre-registered cell as `off` and preserved floor sanity, but the off-set regret
-CI was `[0, 0]`. BF-5 therefore remains blocked until the floor/guard is
-retuned or repaired and BF-4b passes.
+CI was `[0, 0]`. A multiplier retune was rejected by diagnostic (pre-guard
+advantage ~1e-6 is numerically zero, not threshold-clipped) and an energy-trend
+terminal value, though retained as the correct terminal value, did not move it
+(structural: one-step deviation over a horizon ~40× shorter than the escape
+timescale). Per the pre-registered "escalate, don't keep turning knobs" bound,
+the next operator action is the **BF-4b Satisfiability Probe** (criterion 0):
+determine whether the off-set arm is satisfiable on that cell at all
+(privileged-oracle-vs-signature headroom) before any further floor work. If the
+cell is vacuous it is re-picked, not the floor retuned. BF-5 remains blocked.
 
 Roadmap gate, quoted unchanged:
 
@@ -260,9 +267,16 @@ the floor `≥ signature` by construction, a `floor_sanity_pass` (negative-regre
 near-tautological on its own, and all gate-discriminating power moves to the
 off-set arm. Its sensitivity is the `signatureAdvantageDtMultiplier`. That
 multiplier is therefore **not** pinned until the hard pre-BF-5 BF-4b off-set
-guard-calibration gate passes (pre-registered off-set cell classified `off`,
-floor regret 95% CI lower bound `> 0` there, sufficient cell negative-regret
-≤ 5%); see [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md)
+guard-calibration gate passes. Note an `off` §5 label is necessary but **not
+sufficient** to pre-register an off-set calibration cell: if the signature
+policy is already at the `T_safe` cap (or no admissible controller beats it),
+regret is structurally `0` for *every* floor and the off-set arm cannot fire —
+the cell, not the floor, is then the problem. BF-4b therefore gates on a
+**Satisfiability Probe (criterion 0)** — privileged-oracle-vs-signature
+headroom CI lower bound `> 0` on the cell — before the floor criteria
+(off-set classification, floor regret CI `> 0`, sufficient-cell
+negative-regret ≤ 5%). See
+[`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md)
 ▸ BF-4b. A BF-4 smoke floor-sanity pass alone does **not** unblock BF-5.
 
 Resolved blocker: the harness previously did not validate unknown controller
