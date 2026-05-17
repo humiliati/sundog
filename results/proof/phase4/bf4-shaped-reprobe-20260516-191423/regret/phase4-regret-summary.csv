@@ -1,0 +1,4 @@
+cell_class,row_count,mean_regret,ci_lower_95,ci_upper_95,negative_regret_count,negative_regret_rate,global_negative_regret_rate,floor_status,bootstrap_seed,bootstrap_class_seed,bootstrap_iterations
+on,0,,,,0,,0,floor_sanity_pass,40604,40604,2000
+off,2,0,0,0,0,0,0,floor_sanity_pass,40604,41613,2000
+undecidable,0,,,,0,,0,floor_sanity_pass,40604,42622,2000
