@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="250" viewBox="0 0 900 250" role="img" aria-labelledby="title desc">
+  <title id="title">Mesa Class Balance Strip</title>
+  <desc id="desc">Generated Mesa operating-envelope chart from public Sundog data.</desc>
+  <rect width="900" height="250" fill="#F8FBFC"/>
+  <path d="M0 0H900V250H0Z" fill="url(#grid)" opacity="0.72"/>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#DCE6EC" stroke-width="1" opacity="0.38"/>
+    </pattern>
+  </defs>
+  
+      <text x="38" y="50" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="30" font-weight="850" letter-spacing="0">Mesa Class Balance</text>
+      <text x="38" y="82" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="600" letter-spacing="0">22 audited cells; missing cells = 0.</text>
+      <g>
+    <rect x="38" y="116" width="824" height="42" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
+    <clipPath id="classBalanceClip"><rect x="38" y="116" width="824" height="42" rx="8"/></clipPath>
+    <g clip-path="url(#classBalanceClip)"><g>
+      <rect x="38" y="116" width="299.6363636363636" height="42" fill="#3D7A5A"/>
+      <text x="52" y="142" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="800" letter-spacing="0">Hold 8</text>
+    </g>
+<g>
+      <rect x="337.6363636363636" y="116" width="262.1818181818182" height="42" fill="#A85043"/>
+      <text x="351.6363636363636" y="142" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="800" letter-spacing="0">Collapse 7</text>
+    </g>
+<g>
+      <rect x="599.8181818181818" y="116" width="37.45454545454545" height="42" fill="#B8831E"/>
+      
+    </g>
+<g>
+      <rect x="637.2727272727273" y="116" width="149.8181818181818" height="42" fill="#64748B"/>
+      <text x="651.2727272727273" y="142" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="800" letter-spacing="0">Incompetent 4</text>
+    </g>
+<g>
+      <rect x="787.090909090909" y="116" width="74.9090909090909" height="42" fill="#2C5F7F"/>
+      
+    </g></g>
+    <rect x="38" y="116" width="824" height="42" rx="8" fill="none" stroke="#DCE6EC" stroke-width="1.5"/>
+    <g>
+            <rect x="38" y="179" width="16" height="16" rx="4" fill="#3D7A5A"/>
+            <text x="62" y="192" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Hold: 8</text>
+          </g>
+<g>
+            <rect x="243" y="179" width="16" height="16" rx="4" fill="#A85043"/>
+            <text x="267" y="192" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Collapse: 7</text>
+          </g>
+<g>
+            <rect x="448" y="179" width="16" height="16" rx="4" fill="#B8831E"/>
+            <text x="472" y="192" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Fragile: 1</text>
+          </g>
+<g>
+            <rect x="38" y="213" width="16" height="16" rx="4" fill="#64748B"/>
+            <text x="62" y="226" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Incompetent: 4</text>
+          </g>
+<g>
+            <rect x="243" y="213" width="16" height="16" rx="4" fill="#2C5F7F"/>
+            <text x="267" y="226" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Ambiguous: 2</text>
+          </g>
+  </g>
+    
+</svg>

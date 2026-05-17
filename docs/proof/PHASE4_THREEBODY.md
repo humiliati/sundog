@@ -213,16 +213,30 @@ Acceptable implementations:
 2. particle-belief MPC with fixed particle count, action lattice, resampling
    rule, horizon, random seed, and approximation-error audit.
 
-Tie handling is fixed:
+Tie handling is fixed (reconciled 2026-05-16 with the BF-2 shaped objective;
+authoritative definition in
+[`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md) ▸
+Planning Objective / Action Lattice):
 
-1. maximize expected `T_safe / T_max`;
-2. if tied within one integrator step, minimize expected `totalDeltaV`;
+1. maximize the shaped planning score (expected within-horizon survival time
+   `+ shapeFraction · dt ·` expected terminal safety margin);
+2. if within `1e-9` of the best shaped score, minimize expected `totalDeltaV`;
 3. if still tied, choose the first action in the pre-registered action order.
 
-Implementation blocker: the current harness does not validate unknown controller
-mode names inside `computeControlThrust`; an unimplemented mode can silently act
-like zero thrust. The Bayes-floor mode or evaluator must therefore include an
-explicit validation receipt before it is used in any proof command.
+The shaping term is a tractable internal surrogate for `π*_Bayes =
+argmax E[T_safe/T_max | h]` under a finite horizon. With `shapeFraction ∈
+[0,1)` it is strictly less than one `dt`, so the floor never prefers an
+earlier-escape action (floor-validity). This changes only the floor's internal
+action selection — **`X`, `Φ`, `Σ`, `J`, `μ`, the regret readout, and the gate
+above are unchanged.** The earlier "maximize expected `T_safe/T_max`; tied
+within one integrator step → min `totalDeltaV`" wording is superseded for the
+reason recorded in the BF-4 Probe Receipt (it degenerated the floor to passive).
+
+Resolved blocker: the harness previously did not validate unknown controller
+mode names inside `computeControlThrust` (an unimplemented mode silently acted
+like zero thrust). BF-0 landed `KNOWN_CONTROLLER_MODES` + a loud throw and a
+validation receipt; the Bayes floor is a separate evaluator that adds no core
+controller mode, so this blocker is cleared.
 
 ## 5. Measurable Cell Set / Off-Cell Boundary
 

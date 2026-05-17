@@ -200,25 +200,32 @@ async function main() {
     kSweep: await buildKSweepRows(varianceRows),
     chartQueue: [
       {
+        id: "mesa-evidence-panel",
+        target: "homepage Evidence and Metrics panel",
+        source: "summary + classBalance + cliff.medium",
+        output: "public/media/mesa-evidence-panel.svg",
+        status: "generated-by-prebuild",
+      },
+      {
         id: "mesa-cliff-mini",
         target: "post-rail Working Systems evidence panel",
         source: "cliff.medium + summary.breachThresholds",
         output: "public/media/mesa-cliff-mini.svg",
-        status: "ready-for-export",
+        status: "generated-by-prebuild",
       },
       {
         id: "mesa-class-balance-strip",
         target: "post-rail Working Systems evidence panel",
         source: "classBalance",
         output: "public/media/mesa-class-balance-strip.svg",
-        status: "ready-for-export",
+        status: "generated-by-prebuild",
       },
       {
         id: "mesa-ksweep-fingerprint",
         target: "standalone mesa.html chart/image export",
         source: "kSweep",
         output: "public/media/mesa-ksweep-fingerprint.svg",
-        status: "ready-for-export",
+        status: "generated-by-prebuild",
       },
     ],
   };

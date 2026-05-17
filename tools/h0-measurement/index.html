@@ -9,138 +9,145 @@
       --bg: #0d0f14;
       --bg-pane: #161922;
       --bg-pane-soft: #1d2230;
+      --bg-pane-hover: #232838;
       --fg: #e8eaf0;
       --fg-muted: #8a92a8;
       --fg-dim: #5a6175;
       --accent: #ffb451;       /* sun yellow */
       --accent-22: #5fa8ff;    /* parhelion blue */
       --accent-46: #c69bff;    /* 46° halo purple */
-      --accent-tick: #6b7280;  /* scale tick grey */
+      --accent-tick: #8c95a8;  /* scale tick grey */
       --line: rgba(255,180,81,0.5);
       --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.18);
       --danger: #ff6b6b;
       --good: #50d18a;
+      --warning: #ffc857;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
       --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     }
-    *,
-    *::before,
-    *::after { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); color: var(--fg); font-family: var(--font); }
     body { display: flex; flex-direction: column; min-height: 100vh; }
     a { color: var(--accent-22); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
     header {
-      padding: 1.25rem 1.75rem;
+      padding: 0.95rem 1.75rem;
       border-bottom: 1px solid var(--border);
       background: linear-gradient(180deg, #11141c 0%, #0d0f14 100%);
+      display: flex; flex-direction: column; gap: 0.45rem;
     }
-    header h1 { margin: 0; font-size: 1.15rem; font-weight: 600; letter-spacing: 0.02em; }
-    header h1 .sub { font-weight: 400; color: var(--fg-muted); margin-left: 0.5rem; font-size: 0.95rem; }
+    .header-row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.02em; }
+    header h1 .sub { font-weight: 400; color: var(--fg-muted); margin-left: 0.5rem; font-size: 0.92rem; }
     header .plc {
-      font-size: 0.8rem;
-      color: var(--fg-muted);
-      margin: 0.5rem 0 0 0;
-      max-width: 78ch;
+      font-size: 0.78rem; color: var(--fg-muted); margin: 0; max-width: 90ch;
     }
     header .plc strong { color: var(--fg); font-weight: 500; }
+    .self-check-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.3rem 0.7rem; border-radius: 999px;
+      font-size: 0.74rem; font-family: var(--mono);
+      background: var(--bg-pane-soft); border: 1px solid var(--border);
+    }
+    .self-check-badge.good { color: var(--good); border-color: rgba(80,209,138,0.35); background: rgba(80,209,138,0.08); }
+    .self-check-badge.bad  { color: var(--danger); border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.08); }
+    .self-check-badge.checking { color: var(--fg-muted); }
+    .self-check-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
     main {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 460px;
+      grid-template-columns: 1fr 480px;
       gap: 0;
       min-height: 0;
     }
 
     #canvas-pane {
-      position: relative;
-      overflow: hidden;
-      background: #06070b;
+      position: relative; overflow: hidden; background: #06070b;
       display: flex; align-items: center; justify-content: center;
     }
     #canvas-empty {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 1rem;
-      color: var(--fg-muted);
-      pointer-events: none;
-      transition: opacity 0.2s;
+      gap: 1.1rem; padding: 2rem;
+      color: var(--fg-muted); pointer-events: none;
     }
-    #canvas-empty .hint { font-size: 0.95rem; }
-    #canvas-empty .pick {
-      pointer-events: auto;
-      padding: 0.5rem 1rem;
-      border: 1px solid var(--border);
-      background: var(--bg-pane);
-      color: var(--fg);
-      border-radius: 6px;
-      cursor: pointer;
-      font: inherit; font-size: 0.9rem;
+    #canvas-empty .hint { font-size: 0.95rem; max-width: 50ch; text-align: center; }
+    #canvas-empty .controls { display: flex; gap: 0.5rem; pointer-events: auto; align-items: center; flex-wrap: wrap; justify-content: center; }
+    #canvas-empty button, #canvas-empty select {
+      padding: 0.5rem 0.95rem;
+      border: 1px solid var(--border); background: var(--bg-pane);
+      color: var(--fg); border-radius: 6px; cursor: pointer;
+      font: inherit; font-size: 0.88rem;
     }
-    #canvas-empty .pick:hover { border-color: var(--accent); color: var(--accent); }
+    #canvas-empty button:hover, #canvas-empty select:hover { border-color: var(--accent); color: var(--accent); }
+    #canvas-empty .preset-note { font-size: 0.74rem; opacity: 0.65; max-width: 60ch; text-align: center; }
     #canvas-pane.has-image #canvas-empty { display: none; }
     #canvas-pane.drag-over { outline: 2px dashed var(--accent); outline-offset: -8px; }
 
     #canvas-container {
-      position: relative;
-      max-width: 100%; max-height: 100%;
-      display: none;
+      position: relative; max-width: 100%; max-height: 100%; display: none;
     }
     #canvas-pane.has-image #canvas-container { display: block; }
     #bg-img {
-      display: block;
-      max-width: 100%; max-height: calc(100vh - 100px);
+      display: block; max-width: 100%; max-height: calc(100vh - 110px);
       user-select: none; pointer-events: none;
-      image-rendering: pixelated; /* halo renders are crisp; preserve pixels */
+      image-rendering: pixelated;
     }
-    #overlay {
-      position: absolute; inset: 0;
-      cursor: crosshair;
-    }
+    #overlay { position: absolute; inset: 0; cursor: crosshair; }
     #cursor-readout {
-      position: absolute;
-      pointer-events: none;
-      background: rgba(0,0,0,0.7);
-      color: var(--fg);
-      padding: 2px 6px;
-      font-family: var(--mono);
-      font-size: 11px;
-      border-radius: 3px;
-      transform: translate(8px, -22px);
-      opacity: 0;
-      transition: opacity 0.1s;
+      position: absolute; pointer-events: none;
+      background: rgba(0,0,0,0.78); color: var(--fg);
+      padding: 3px 7px; font-family: var(--mono); font-size: 11px;
+      border-radius: 3px; transform: translate(10px, -24px);
+      opacity: 0; transition: opacity 0.1s;
+      border: 1px solid var(--border);
     }
+    #canvas-toolbar {
+      position: absolute; top: 12px; left: 12px;
+      display: flex; gap: 0.4rem; align-items: center;
+      background: rgba(13,15,20,0.85);
+      backdrop-filter: blur(8px);
+      padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border);
+      font-size: 0.75rem; color: var(--fg-muted);
+      pointer-events: auto;
+    }
+    #canvas-toolbar button {
+      padding: 3px 8px; background: transparent; color: var(--fg-muted);
+      border: 1px solid var(--border); border-radius: 4px; cursor: pointer;
+      font: inherit; font-size: 0.74rem;
+    }
+    #canvas-toolbar button:hover { color: var(--accent); border-color: var(--accent); }
 
     aside#controls-pane {
       background: var(--bg-pane);
       border-left: 1px solid var(--border);
       overflow-y: auto;
-      padding: 1.25rem 1.5rem;
-      display: flex; flex-direction: column; gap: 1.5rem;
+      padding: 1.1rem 1.4rem;
+      display: flex; flex-direction: column; gap: 1.25rem;
       min-height: 0;
     }
+    aside#controls-pane::-webkit-scrollbar { width: 10px; }
+    aside#controls-pane::-webkit-scrollbar-track { background: transparent; }
+    aside#controls-pane::-webkit-scrollbar-thumb { background: var(--bg-pane-soft); border-radius: 5px; }
 
     .section-block { display: flex; flex-direction: column; gap: 0.5rem; }
     .section-block h2 {
       margin: 0;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      font-size: 0.74rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--fg-muted);
     }
-    .section-block .help { font-size: 0.78rem; color: var(--fg-dim); margin: 0; }
+    .section-block .help { font-size: 0.76rem; color: var(--fg-dim); margin: 0; line-height: 1.45; }
 
     .mode-toggle {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--bg-pane-soft);
-      padding: 4px; border-radius: 8px; border: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      background: var(--bg-pane-soft); padding: 4px; border-radius: 8px; border: 1px solid var(--border);
     }
     .mode-toggle button {
       border: none; background: transparent; color: var(--fg-muted);
-      padding: 0.5rem 0.5rem; cursor: pointer; font: inherit; font-size: 0.85rem;
+      padding: 0.5rem; cursor: pointer; font: inherit; font-size: 0.85rem;
       border-radius: 6px; transition: all 0.15s;
     }
     .mode-toggle button.active { background: var(--accent); color: #0d0f14; font-weight: 600; }
@@ -151,77 +158,101 @@
       border-radius: 8px;
       background: var(--bg-pane-soft);
       border: 1px solid var(--border);
-      display: flex; flex-direction: column; gap: 0.4rem;
+      display: flex; flex-direction: column; gap: 0.5rem;
+      transition: border-color 0.2s;
     }
+    .step-card.active { border-color: var(--accent); }
+    .step-card.done { border-color: var(--good); }
     .step-card .step-label {
-      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--fg-muted);
+      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-muted);
     }
-    .step-card .step-text { font-size: 1rem; font-weight: 500; }
+    .step-card .step-text { font-size: 0.98rem; font-weight: 500; line-height: 1.4; }
     .step-card .step-text .accent { color: var(--accent); }
     .step-card .step-text .accent-22 { color: var(--accent-22); }
     .step-card .step-text .accent-46 { color: var(--accent-46); }
-    .step-card .step-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    .step-card .step-actions { display: flex; gap: 0.5rem; margin-top: 0.4rem; flex-wrap: wrap; }
     .step-card button.inline {
-      padding: 0.35rem 0.7rem; font-size: 0.78rem;
+      padding: 0.35rem 0.75rem; font-size: 0.78rem;
       background: var(--bg-pane); color: var(--fg);
       border: 1px solid var(--border); border-radius: 5px; cursor: pointer;
       font-family: var(--font);
     }
     .step-card button.inline:hover { border-color: var(--accent); color: var(--accent); }
     .step-card button.primary { background: var(--accent); color: #0d0f14; border-color: var(--accent); font-weight: 600; }
-    .step-card button.primary:hover { color: #0d0f14; opacity: 0.9; }
+    .step-card button.primary:hover { color: #0d0f14; opacity: 0.92; }
+    .step-card button.inline:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .measurements ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+    .measurements ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
     .measurements li {
-      display: flex; justify-content: space-between; gap: 0.5rem;
-      padding: 0.4rem 0.55rem; background: var(--bg-pane-soft); border-radius: 5px;
-      font-family: var(--mono); font-size: 0.78rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.45rem 0.6rem; background: var(--bg-pane-soft); border-radius: 5px;
+      font-size: 0.78rem; flex-wrap: wrap;
     }
-    .measurements .label { color: var(--fg-muted); }
-    .measurements .value { color: var(--fg); }
-    .measurements .pill { padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; }
+    .measurements .pill {
+      padding: 1px 6px; border-radius: 10px; font-size: 0.66rem; font-family: var(--mono); font-weight: 600;
+    }
     .measurements .pill.sun { background: rgba(255,180,81,0.15); color: var(--accent); }
-    .measurements .pill.tick { background: rgba(107,114,128,0.2); color: #b3bac7; }
+    .measurements .pill.tick { background: rgba(140,149,168,0.18); color: #cdd4e6; }
     .measurements .pill.a22 { background: rgba(95,168,255,0.15); color: var(--accent-22); }
     .measurements .pill.a46 { background: rgba(198,155,255,0.15); color: var(--accent-46); }
+    .measurements .label { color: var(--fg-muted); }
+    .measurements .value { color: var(--fg); font-family: var(--mono); font-size: 0.74rem; }
+    .measurements .note-input {
+      flex: 1 1 100%; margin-top: 0.25rem;
+      padding: 0.3rem 0.5rem; background: var(--bg);
+      color: var(--fg); border: 1px solid var(--border); border-radius: 4px;
+      font: inherit; font-size: 0.72rem;
+    }
+    .measurements .note-input::placeholder { color: var(--fg-dim); }
+    .measurements .empty { color: var(--fg-dim); font-style: italic; }
 
     .op-decisions { display: flex; flex-direction: column; gap: 0.55rem; }
-    .op-decisions label { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.78rem; color: var(--fg-muted); }
+    .op-decisions label { display: flex; flex-direction: column; gap: 0.22rem; font-size: 0.76rem; color: var(--fg-muted); }
     .op-decisions select, .op-decisions input[type="text"], .op-decisions input[type="number"] {
       padding: 0.4rem 0.55rem; background: var(--bg-pane-soft); color: var(--fg);
       border: 1px solid var(--border); border-radius: 5px; font: inherit; font-size: 0.85rem;
     }
-    .op-decisions input[type="text"]::placeholder { color: var(--fg-dim); }
+    .op-decisions input::placeholder { color: var(--fg-dim); }
+    .op-decisions label.required { position: relative; }
+    .op-decisions label.required::after {
+      content: "*"; color: var(--warning);
+      position: absolute; top: 0; right: 0; font-size: 0.85rem;
+    }
 
     pre.sidecar-preview {
-      margin: 0;
-      max-height: 280px;
-      overflow: auto;
-      background: var(--bg-pane-soft);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      margin: 0; max-height: 280px; overflow: auto;
+      background: var(--bg-pane-soft); border: 1px solid var(--border); border-radius: 6px;
       padding: 0.7rem 0.85rem;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      line-height: 1.45;
-      color: #cdd4e6;
-      white-space: pre;
+      font-family: var(--mono); font-size: 0.7rem; line-height: 1.5;
+      color: #cdd4e6; white-space: pre;
     }
 
     .self-pin-row {
       display: flex; align-items: center; gap: 0.5rem;
-      padding: 0.4rem 0.6rem; background: var(--bg-pane-soft);
+      padding: 0.45rem 0.65rem; background: var(--bg-pane-soft);
       border: 1px solid var(--border); border-radius: 5px;
       font-family: var(--mono); font-size: 0.7rem;
     }
-    .self-pin-row .label { color: var(--fg-muted); }
+    .self-pin-row .label { color: var(--fg-muted); white-space: nowrap; }
     .self-pin-row .value { color: var(--good); flex: 1; overflow: hidden; text-overflow: ellipsis; }
+
+    .warnings {
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .warnings .warn {
+      padding: 0.5rem 0.7rem; background: rgba(255,200,87,0.08);
+      border-left: 3px solid var(--warning); border-radius: 4px;
+      font-size: 0.78rem; color: var(--fg);
+    }
+    .warnings .ok {
+      padding: 0.5rem 0.7rem; background: rgba(80,209,138,0.08);
+      border-left: 3px solid var(--good); border-radius: 4px;
+      font-size: 0.78rem; color: var(--fg);
+    }
 
     .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .actions button {
-      padding: 0.6rem 0.95rem;
-      font: inherit; font-size: 0.85rem;
+      padding: 0.55rem 0.95rem; font: inherit; font-size: 0.85rem;
       border-radius: 6px; cursor: pointer; border: 1px solid var(--border);
       background: var(--bg-pane-soft); color: var(--fg);
       transition: all 0.15s;
@@ -234,39 +265,49 @@
     .actions button:disabled { opacity: 0.4; cursor: not-allowed; }
 
     footer {
-      padding: 0.8rem 1.75rem;
+      padding: 0.75rem 1.75rem;
       border-top: 1px solid var(--border);
       background: var(--bg-pane);
-      font-size: 0.75rem; color: var(--fg-muted);
+      font-size: 0.74rem; color: var(--fg-muted);
       display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;
     }
+    code { font-family: var(--mono); font-size: 0.9em; color: var(--fg); }
 
-    /* Animations */
     @keyframes ring-pulse {
       from { transform: scale(0); opacity: 1; }
-      to   { transform: scale(2.4); opacity: 0; }
+      to   { transform: scale(2.6); opacity: 0; }
     }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(2px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .step-card, .warnings > div { animation: fade-in 0.2s ease-out; }
 
-    /* Mobile fallback */
-    @media (max-width: 980px) {
+    @media (max-width: 1080px) {
       main { grid-template-columns: 1fr; }
-      aside#controls-pane { border-left: none; border-top: 1px solid var(--border); max-height: 50vh; }
+      aside#controls-pane { border-left: none; border-top: 1px solid var(--border); max-height: 55vh; }
       #bg-img { max-height: 50vh; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>
-      H0 Angular Calibration Tool
-      <span class="sub">measurement helper for the Cut-3 H0-2 sidecar schema</span>
-    </h1>
+    <div class="header-row">
+      <h1>
+        H0 Angular Calibration Tool
+        <span class="sub">measurement helper for the Cut-3 H0-2 sidecar schema</span>
+      </h1>
+      <div id="self-check-badge" class="self-check-badge checking">
+        <span class="dot"></span>
+        <span id="self-check-text">canonicalizer self-check…</span>
+      </div>
+    </div>
     <p class="plc">
       <strong>No theorem claim.</strong> H0 is measurement hygiene — it decides whether a rendered frame is
       angularly trustworthy enough to score, not whether any downstream claim passes. Cut-3 admission
-      remains <strong>HOLD</strong>; execution <strong>HELD</strong>. The Public-Language Constraint forbids
-      any "CONFIRMED" / "traceability" / theorem framing of what this tool produces. It is the
-      <em>instrument</em>, not the <em>result</em>.
+      remains <strong>HOLD</strong>; execution <strong>HELD</strong>. PLC forbids any
+      "CONFIRMED" / "traceability" / theorem framing of what this tool produces.
+      It is the <em>instrument</em>, not the <em>result</em>.
     </p>
   </header>
 
@@ -274,16 +315,27 @@
     <section id="canvas-pane">
       <div id="canvas-empty">
         <div class="hint">Drop a halo PNG here, or pick one to begin.</div>
-        <input type="file" id="file-input" accept="image/png,image/jpeg" hidden />
-        <button class="pick" id="pick-button">Choose image…</button>
-        <div class="hint" style="font-size: 0.8rem; max-width: 50ch; text-align: center; opacity: 0.7;">
-          Phase-15 frames live at <code>docs/calibration/halosim_outputs/phase15_pyrfilter/pyr_w*_scale.png</code>.
+        <div class="controls">
+          <input type="file" id="file-input" accept="image/png,image/jpeg" hidden />
+          <button id="pick-button">Choose image…</button>
+          <select id="preset-select">
+            <option value="">— Phase-15 presets —</option>
+          </select>
+        </div>
+        <div class="preset-note">
+          Presets resolve via fetch — they only load when served from a dev server (e.g.
+          <code>npx vite serve tools/h0-measurement</code> from the repo root and then choose the
+          frame). When opened via <code>file://</code>, use the file picker / drag-and-drop.
         </div>
       </div>
       <div id="canvas-container">
         <img id="bg-img" alt="halo render" />
         <canvas id="overlay"></canvas>
         <div id="cursor-readout"></div>
+        <div id="canvas-toolbar">
+          <span id="canvas-filename"></span>
+          <button id="canvas-change">change image…</button>
+        </div>
       </div>
     </section>
 
@@ -295,14 +347,14 @@
           <button data-mode="scale_ticks">scale_ticks</button>
         </div>
         <p class="help" id="mode-help">
-          <strong>fit2locus:</strong> click the sun, then the 22° halo, then the 46° halo.
-          Use this for halo photos without a stamped ruler.
+          <strong>fit2locus:</strong> click the sun, then the 22° halo, then the 46° halo. For halo photos
+          without a stamped ruler.
         </p>
       </div>
 
       <div class="section-block">
         <h2>Current step</h2>
-        <div class="step-card">
+        <div class="step-card" id="step-card">
           <div class="step-label" id="step-label">Step 0</div>
           <div class="step-text" id="step-text">Load an image to begin.</div>
           <div class="step-actions" id="step-actions"></div>
@@ -312,7 +364,7 @@
       <div class="section-block measurements">
         <h2>Measurements</h2>
         <ul id="measurements-list">
-          <li><span class="label">— no measurements yet —</span></li>
+          <li class="empty">— no measurements yet —</li>
         </ul>
       </div>
 
@@ -342,13 +394,15 @@
           compound_code_basis
           <input type="text" id="op-h-leak-basis" placeholder="written one-line basis for the call" />
         </label>
-        <label>
+        <label id="op-kp-basis-label">
           known_pass_selection_basis
-          <input type="text" id="op-kp-basis" placeholder="written basis if fixture_class = known_pass_fullspan" />
+          <input type="text" id="op-kp-basis"
+                 placeholder="instrument criterion — required if fixture_class = known_pass_fullspan" />
         </label>
         <label>
           scored_feature_deg
-          <input type="number" id="op-scored-feature" step="0.1" placeholder="e.g. 22.0 (or leave blank)" />
+          <input type="number" id="op-scored-feature" step="0.1"
+                 placeholder="e.g. 22.0 (Phase-15 convention) — leave blank if not scoring" />
         </label>
         <label>
           measured_by
@@ -363,8 +417,16 @@
           <span class="value" id="self-pin">— computes after measurements —</span>
         </div>
         <p class="help">
-          Recomputed live. The downloaded sidecar's <code>calib_sha256</code> field will hold this value.
+          Live recompute. The downloaded sidecar's <code>calib_sha256</code> field holds this value, computed
+          via the algorithm pinned at <code>scripts/lib/canonical-json.mjs</code>.
         </p>
+      </div>
+
+      <div class="section-block warnings">
+        <h2>Validation</h2>
+        <div id="warnings-container">
+          <div class="warn">Load an image to begin.</div>
+        </div>
       </div>
 
       <div class="section-block">
@@ -382,35 +444,124 @@
 
   <footer>
     <div>
-      Schema: <code>P2_CUT3_H0_2_SCHEMA.md</code> · §3-blind discipline: this tool does <strong>not</strong>
-      call the H0 checker.
+      Schema: <code>P2_CUT3_H0_2_SCHEMA.md</code> ·
+      Canonicalization: <code>scripts/lib/canonical-json.mjs</code> ·
+      <strong>§3-blind</strong>: this tool does NOT call the H0 checker.
     </div>
     <div>
-      Next step (after all 8 sidecars sealed): <code>node scripts/cut3-h0-checker.mjs check --sidecar &lt;path&gt;</code>
+      Next step (after all 8 sidecars sealed):
+      <code>node scripts/cut3-h0-checker.mjs check --sidecar &lt;path&gt;</code>
     </div>
   </footer>
 
   <script>
-    // ===== State =====
+    // =========================================================================
+    // Cross-runtime canonicalization (pinned at scripts/lib/canonical-json.mjs)
+    // =========================================================================
+    // ALGORITHM — must remain byte-identical to the shared library.
+    // See Finding-1 audit-notes on P2_CUT3_H0_2_SCHEMA.md.
+
+    function canonicalJSON(value) {
+      if (Array.isArray(value)) return "[" + value.map(canonicalJSON).join(",") + "]";
+      if (value !== null && typeof value === "object") {
+        const keys = Object.keys(value).sort();
+        return "{" + keys.map(k => JSON.stringify(k) + ":" + canonicalJSON(value[k])).join(",") + "}";
+      }
+      return JSON.stringify(value);
+    }
+    async function sha256Hex(str) {
+      const bytes = new TextEncoder().encode(str);
+      const buf = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+    async function sha256HexOfBytes(arrayBuffer) {
+      const buf = await crypto.subtle.digest("SHA-256", arrayBuffer);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    // =========================================================================
+    // Self-test of canonicalizer against the pinned cross-runtime test vector.
+    // Inlined so the tool can verify at load time WITHOUT a fetch (fetch fails
+    // under file:// for security reasons).
+    // =========================================================================
+    // The input sidecar and expected hash below MUST stay byte-equal to
+    // results/structural-failure/cut3-prereg/h0-canonicalization-test-vector.json
+    // (pinned 2026-05-16).
+
+    const TEST_VECTOR_SIDECAR_INPUT = {
+      sidecar_kind: "h0-measured-sidecar",
+      frame_id: "test_vector_v1",
+      schema_version: 1,
+      frame_path: "test_vector_v1.png",
+      render_sha256: "0000000000000000000000000000000000000000000000000000000000000001",
+      config_path: null,
+      config_sha256: null,
+      measurement_method: "operator_manual",
+      measured_at_pt: "2026-05-16T00:00:00",
+      measured_by: "test-vector",
+      sun_px: [400, 400],
+      projection: "operator_measured",
+      theta_map_kind: "fit2locus",
+      anchors: [
+        { locus_deg: 22, px_radius: 200, off_ruler: false, measurement_note: "synthetic — 22° anchor at 200 px from sun" },
+        { locus_deg: 46, px_radius: 400, off_ruler: false, measurement_note: "synthetic — 46° anchor at 400 px from sun (degree symbol)" },
+      ],
+      scored_feature_deg: 22,
+      operator_decisions: {
+        fixture_class: "corpus_candidate",
+        compound_code_is_h_leak: "no",
+        compound_code_basis: "test vector; no compound code in filename",
+        known_pass_selection_basis: null,
+      },
+      calib_sha256: "",
+    };
+    const TEST_VECTOR_EXPECTED_SHA256 = "9c52ab15d5293341cfd45e52dba615d01b6698ee2c5345f59942e25f711ac8b6";
+
+    async function runSelfCheck() {
+      const badge = document.getElementById("self-check-badge");
+      const text = document.getElementById("self-check-text");
+      try {
+        const canon = canonicalJSON({ ...TEST_VECTOR_SIDECAR_INPUT, calib_sha256: "" });
+        const hex = await sha256Hex(canon);
+        if (hex === TEST_VECTOR_EXPECTED_SHA256) {
+          badge.className = "self-check-badge good";
+          text.textContent = "canonicalizer ✓ (matches pinned test vector)";
+        } else {
+          badge.className = "self-check-badge bad";
+          text.textContent = "canonicalizer ✗ — DRIFT from pinned vector — DO NOT USE";
+          console.error("Self-check failed:", { got: hex, expected: TEST_VECTOR_EXPECTED_SHA256, canonical: canon });
+        }
+      } catch (e) {
+        badge.className = "self-check-badge bad";
+        text.textContent = "canonicalizer self-check error: " + e.message;
+      }
+    }
+
+    // =========================================================================
+    // State
+    // =========================================================================
     const state = {
-      image: null,          // HTMLImageElement
-      imageDataUrl: null,   // for image_sha256 if ever needed
+      image: null,
+      imageDataUrl: null,
       imageFilename: null,
+      imageSha256: null,
       naturalSize: { w: 0, h: 0 },
       displaySize: { w: 0, h: 0 },
       mode: "fit2locus",
-      step: "load",         // load|sun|tick|anchor22|anchor46|done
-      sunPx: null,          // { x, y } in image-natural coordinates
-      scaleTicks: [],       // [{ px_radius, deg, source }]
-      anchors: {            // { 22: {...}, 46: {...} }
-        22: { locus_deg: 22, px_radius: null, off_ruler: false, measurement_note: "" },
-        46: { locus_deg: 46, px_radius: null, off_ruler: false, measurement_note: "" },
+      step: "load",
+      sunPx: null,
+      scaleTicks: [],         // [{ click_x, click_y, px_radius, deg, source }]
+      anchors: {              // { 22|46: { locus_deg, click_x?, click_y?, px_radius, off_ruler, measurement_note } }
+        22: { locus_deg: 22, click_x: null, click_y: null, px_radius: null, off_ruler: false, measurement_note: "" },
+        46: { locus_deg: 46, click_x: null, click_y: null, px_radius: null, off_ruler: false, measurement_note: "" },
       },
-      cursor: null,         // { x, y } in image-natural coords (hover)
-      currentTickDeg: 5,    // for scale_ticks mode: which deg label to assign next click
+      cursor: null,
+      currentTickDeg: 5,
     };
 
-    // ===== DOM refs =====
+    // =========================================================================
+    // DOM refs
+    // =========================================================================
     const $ = (id) => document.getElementById(id);
     const els = {
       canvasPane: $("canvas-pane"),
@@ -419,10 +570,14 @@
       bgImg: $("bg-img"),
       overlay: $("overlay"),
       cursorReadout: $("cursor-readout"),
+      canvasFilename: $("canvas-filename"),
+      canvasChange: $("canvas-change"),
       pickButton: $("pick-button"),
       fileInput: $("file-input"),
+      presetSelect: $("preset-select"),
       modeButtons: document.querySelectorAll(".mode-toggle button"),
       modeHelp: $("mode-help"),
+      stepCard: $("step-card"),
       stepLabel: $("step-label"),
       stepText: $("step-text"),
       stepActions: $("step-actions"),
@@ -432,45 +587,96 @@
       opHLeak: $("op-h-leak"),
       opHLeakBasis: $("op-h-leak-basis"),
       opKpBasis: $("op-kp-basis"),
+      opKpBasisLabel: $("op-kp-basis-label"),
       opScoredFeature: $("op-scored-feature"),
       opMeasuredBy: $("op-measured-by"),
       selfPin: $("self-pin"),
       sidecarPreview: $("sidecar-preview"),
+      warningsContainer: $("warnings-container"),
       downloadBtn: $("download"),
       resetBtn: $("reset"),
       undoBtn: $("undo"),
     };
 
-    // ===== Image loading =====
-    function loadFile(file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          state.image = img;
-          state.imageDataUrl = e.target.result;
-          state.imageFilename = file.name;
-          state.naturalSize = { w: img.naturalWidth, h: img.naturalHeight };
-          els.bgImg.src = e.target.result;
-          els.canvasPane.classList.add("has-image");
-          requestAnimationFrame(() => {
-            resizeCanvasToImage();
-            // derive frame_id from filename (strip _scale.png / _4M.png / extension)
-            const stem = file.name.replace(/_(scale|4M)\.png$/i, "").replace(/\.[^.]+$/, "");
-            if (!els.opFrameId.value) els.opFrameId.value = stem;
-            advanceState("sun");
-          });
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    // =========================================================================
+    // Phase-15 preset frames (dev-server mode only)
+    // =========================================================================
+    const PHASE15_PRESETS = [
+      "pyr_w18_e13_x25_scale.png",
+      "pyr_w20_e23_x26_scale.png",
+      "pyr_w22_e3_x5_scale.png",
+      "pyr_w23a_e1_x25_scale.png",
+      "pyr_w23b_e3_x25_scale.png",
+      "pyr_w35_e23_x25_scale.png",
+      "pyr_w46_e1_x5_scale.png",
+      "pyr_w9_e3_x26_scale.png",
+    ];
+    function populatePresets() {
+      for (const name of PHASE15_PRESETS) {
+        const opt = document.createElement("option");
+        opt.value = "/docs/calibration/halosim_outputs/phase15_pyrfilter/" + name;
+        opt.textContent = name;
+        els.presetSelect.appendChild(opt);
+      }
     }
+    populatePresets();
+    els.presetSelect.addEventListener("change", async () => {
+      const url = els.presetSelect.value;
+      if (!url) return;
+      try {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error("fetch " + resp.status);
+        const blob = await resp.blob();
+        const filename = url.split("/").pop();
+        const f = new File([blob], filename, { type: blob.type });
+        loadFile(f);
+      } catch (e) {
+        alert("Preset fetch failed: " + e.message + "\n\nServe via 'npx vite serve' from the repo root, or use the file picker.");
+        els.presetSelect.value = "";
+      }
+    });
+
+    // =========================================================================
+    // Image loading + render_sha256 computation
+    // =========================================================================
+    async function loadFile(file) {
+      const arrayBuffer = await file.arrayBuffer();
+      const imageSha = await sha256HexOfBytes(arrayBuffer);
+      const blob = new Blob([arrayBuffer], { type: file.type });
+      const dataUrl = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(blob);
+      });
+      const img = new Image();
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = () => reject(new Error("image decode failed"));
+        img.src = dataUrl;
+      });
+      state.image = img;
+      state.imageDataUrl = dataUrl;
+      state.imageFilename = file.name;
+      state.imageSha256 = imageSha;
+      state.naturalSize = { w: img.naturalWidth, h: img.naturalHeight };
+      els.bgImg.src = dataUrl;
+      els.canvasPane.classList.add("has-image");
+      els.canvasFilename.textContent = file.name + " (" + img.naturalWidth + "×" + img.naturalHeight + ")";
+      requestAnimationFrame(() => {
+        resizeCanvasToImage();
+        // Derive frame_id from filename
+        const stem = file.name.replace(/_(scale|4M)\.png$/i, "").replace(/\.[^.]+$/, "");
+        if (!els.opFrameId.value) els.opFrameId.value = stem;
+        advanceState("sun");
+      });
+    }
+
     els.pickButton.addEventListener("click", () => els.fileInput.click());
+    els.canvasChange.addEventListener("click", () => els.fileInput.click());
     els.fileInput.addEventListener("change", (e) => {
       const f = e.target.files[0];
       if (f) loadFile(f);
     });
-    // Drag-and-drop
     document.addEventListener("dragover", (e) => { e.preventDefault(); els.canvasPane.classList.add("drag-over"); });
     document.addEventListener("dragleave", (e) => { if (e.target === document.body) els.canvasPane.classList.remove("drag-over"); });
     document.addEventListener("drop", (e) => {
@@ -480,7 +686,9 @@
       if (f && f.type.startsWith("image/")) loadFile(f);
     });
 
-    // ===== Canvas sizing =====
+    // =========================================================================
+    // Canvas sizing + coordinate mapping
+    // =========================================================================
     function resizeCanvasToImage() {
       const rect = els.bgImg.getBoundingClientRect();
       els.overlay.width = rect.width * devicePixelRatio;
@@ -503,13 +711,20 @@
       const sy = state.displaySize.h / state.naturalSize.h;
       return { x: nx * sx, y: ny * sy };
     }
+    function distance(a, b) {
+      const dx = a.x - b.x; const dy = a.y - b.y;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
 
-    // ===== State machine =====
+    // =========================================================================
+    // State machine
+    // =========================================================================
     function advanceState(next) {
       state.step = next;
       renderStep();
       renderMeasurements();
       renderSidecar();
+      renderWarnings();
       draw();
     }
 
@@ -518,19 +733,26 @@
       let label = "Step";
       let text = "";
       const actions = [];
+      let cardClass = "step-card active";
 
       if (step === "load") {
         label = "Step 0 · load";
         text = "Drop or pick a halo image to begin.";
+        cardClass = "step-card";
       } else if (step === "sun") {
         label = "Step 1 · sun";
         text = `Click the <span class="accent">center of the sun</span>.`;
       } else if (step === "tick" && mode === "scale_ticks") {
         label = `Step 2 · scale tick (${state.currentTickDeg}°)`;
-        text = `Click the stamped <strong>${state.currentTickDeg}°</strong> mark on the ruler, or skip to a different degree value.`;
+        text = `Click the stamped <strong>${state.currentTickDeg}°</strong> mark on the ruler.`;
         actions.push({ label: "− deg", fn: () => { if (state.currentTickDeg > 1) state.currentTickDeg--; renderStep(); } });
         actions.push({ label: "+ deg", fn: () => { state.currentTickDeg++; renderStep(); } });
-        actions.push({ label: "Done with ticks → 22° anchor", primary: true, disabled: state.scaleTicks.length < 2, fn: () => advanceState("anchor22") });
+        actions.push({
+          label: "Done with ticks → 22° anchor",
+          primary: true,
+          disabled: state.scaleTicks.length < 2,
+          fn: () => advanceState("anchor22"),
+        });
       } else if (step === "anchor22") {
         label = "Step · anchor 22°";
         text = `Click on the <span class="accent-22">22° parhelion / halo ring</span>, or mark it off-ruler.`;
@@ -540,10 +762,12 @@
         text = `Click on the <span class="accent-46">46° halo</span>, or mark it off-ruler.`;
         actions.push({ label: "Mark 46° off-ruler", fn: () => markOffRuler(46) });
       } else if (step === "done") {
-        label = "Step · done";
+        label = "Step · ready";
         text = `All measurements collected. Fill operator decisions and download the sidecar.`;
+        cardClass = "step-card done";
       }
 
+      els.stepCard.className = cardClass;
       els.stepLabel.textContent = label;
       els.stepText.innerHTML = text;
       els.stepActions.innerHTML = "";
@@ -560,26 +784,29 @@
     function markOffRuler(deg) {
       state.anchors[deg].off_ruler = true;
       state.anchors[deg].px_radius = null;
+      state.anchors[deg].click_x = null;
+      state.anchors[deg].click_y = null;
       state.anchors[deg].measurement_note = `${deg}° lies beyond the calibrated ruler tip; px_radius=null, off_ruler=true.`;
       if (deg === 22) advanceState("anchor46");
       else if (deg === 46) advanceState("done");
     }
 
-    // ===== Click handling =====
+    // =========================================================================
+    // Click + hover handlers
+    // =========================================================================
     els.overlay.addEventListener("mousemove", (e) => {
       const rect = els.overlay.getBoundingClientRect();
       const px = e.clientX - rect.left;
       const py = e.clientY - rect.top;
       const n = displayToNatural(px, py);
       state.cursor = n;
-      // Cursor readout
       if (state.sunPx) {
         const dx = n.x - state.sunPx.x;
         const dy = n.y - state.sunPx.y;
         const r = Math.sqrt(dx * dx + dy * dy);
-        els.cursorReadout.textContent = `Δ from sun: ${r.toFixed(1)} px`;
+        els.cursorReadout.textContent = "Δ from sun: " + r.toFixed(1) + " px";
       } else {
-        els.cursorReadout.textContent = `[${n.x.toFixed(0)}, ${n.y.toFixed(0)}]`;
+        els.cursorReadout.textContent = "[" + n.x.toFixed(0) + ", " + n.y.toFixed(0) + "]";
       }
       els.cursorReadout.style.left = px + "px";
       els.cursorReadout.style.top = py + "px";
@@ -597,8 +824,8 @@
       const px = e.clientX - rect.left;
       const py = e.clientY - rect.top;
       const n = displayToNatural(px, py);
-
       const { step, mode } = state;
+
       if (step === "sun") {
         state.sunPx = { x: n.x, y: n.y };
         flashRing(px, py, "var(--accent)");
@@ -606,72 +833,59 @@
         advanceState(next);
       } else if (step === "tick" && mode === "scale_ticks") {
         const radius = distance(n, state.sunPx);
-        state.scaleTicks.push({ px_radius: radius, deg: state.currentTickDeg, source: "operator-eye" });
+        state.scaleTicks.push({
+          click_x: n.x, click_y: n.y,
+          px_radius: radius,
+          deg: state.currentTickDeg,
+          source: "operator-eye",
+        });
         flashRing(px, py, "var(--accent-tick)");
         state.currentTickDeg += 1;
         renderStep();
         renderMeasurements();
         renderSidecar();
+        renderWarnings();
         draw();
       } else if (step === "anchor22") {
         const radius = distance(n, state.sunPx);
-        state.anchors[22] = { locus_deg: 22, px_radius: radius, off_ruler: false, measurement_note: "operator-eye on 22° halo arc" };
+        state.anchors[22] = {
+          locus_deg: 22,
+          click_x: n.x, click_y: n.y,
+          px_radius: radius,
+          off_ruler: false,
+          measurement_note: "operator-eye on 22° halo arc",
+        };
         flashRing(px, py, "var(--accent-22)");
         advanceState("anchor46");
       } else if (step === "anchor46") {
         const radius = distance(n, state.sunPx);
-        state.anchors[46] = { locus_deg: 46, px_radius: radius, off_ruler: false, measurement_note: "operator-eye on 46° halo arc" };
+        state.anchors[46] = {
+          locus_deg: 46,
+          click_x: n.x, click_y: n.y,
+          px_radius: radius,
+          off_ruler: false,
+          measurement_note: "operator-eye on 46° halo arc",
+        };
         flashRing(px, py, "var(--accent-46)");
         advanceState("done");
       }
     });
 
-    function distance(a, b) {
-      const dx = a.x - b.x; const dy = a.y - b.y; return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    // ===== Drawing =====
+    // =========================================================================
+    // Drawing
+    // =========================================================================
     function draw() {
       const ctx = els.overlay.getContext("2d");
-      const W = els.overlay.width; const H = els.overlay.height;
+      const W = els.overlay.width;
+      const H = els.overlay.height;
       ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
       ctx.clearRect(0, 0, W / devicePixelRatio, H / devicePixelRatio);
 
-      // sun
-      if (state.sunPx) {
-        const d = naturalToDisplay(state.sunPx.x, state.sunPx.y);
-        drawPoint(ctx, d, "var(--accent)", "sun");
-      }
-
-      // scale ticks
-      for (const t of state.scaleTicks) {
-        const angleRad = 0; // we don't have direction; just radial distance — draw on radial line if sun known
-        const d = naturalToDisplay(state.sunPx.x + t.px_radius, state.sunPx.y);
-        // We just show ticks as radial-distance markers; line from sun
-        if (state.sunPx) {
-          const s = naturalToDisplay(state.sunPx.x, state.sunPx.y);
-          // skip the line; the tick was clicked at an exact position which is recorded; we draw at radial-distance placeholder
-          // not accurate without direction; rendering scale_ticks polish is V2
-        }
-        drawPoint(ctx, d, "var(--accent-tick)", `${t.deg}°`);
-      }
-
-      // anchors (radial lines)
-      for (const deg of [22, 46]) {
-        const a = state.anchors[deg];
-        if (a.px_radius && state.sunPx) {
-          const s = naturalToDisplay(state.sunPx.x, state.sunPx.y);
-          // We need the original click position; we stored only the radius. Re-derive by clicking history? No — we stored radius.
-          // For radial line display, we need direction. Use cursor direction at last click — but we don't have it.
-          // Simplification: store the click point in anchor too. (Backfill: we already store via .clickPoint if extended.)
-        }
-      }
-
-      // Pending radial line from sun to cursor
+      // Pending dashed line from sun to cursor
       if (state.sunPx && state.cursor) {
         const s = naturalToDisplay(state.sunPx.x, state.sunPx.y);
         const c = naturalToDisplay(state.cursor.x, state.cursor.y);
-        ctx.strokeStyle = "var(--line)";
+        ctx.strokeStyle = "rgba(255,180,81,0.45)";
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
@@ -681,39 +895,61 @@
         ctx.setLineDash([]);
       }
 
-      // Anchor markers (using stored anchor click coords if available)
-      drawAnchorMarker(ctx, 22, "var(--accent-22)");
-      drawAnchorMarker(ctx, 46, "var(--accent-46)");
-    }
-
-    function drawAnchorMarker(ctx, deg, color) {
-      const a = state.anchors[deg];
-      if (!a.clickPoint || a.off_ruler) return;
-      const d = naturalToDisplay(a.clickPoint.x, a.clickPoint.y);
-      const s = state.sunPx ? naturalToDisplay(state.sunPx.x, state.sunPx.y) : null;
-      if (s) {
-        ctx.strokeStyle = "rgba(255,255,255,0.25)";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(d.x, d.y);
-        ctx.stroke();
+      // Scale tick radial lines + dots (at recorded click positions)
+      if (state.sunPx) {
+        const s = naturalToDisplay(state.sunPx.x, state.sunPx.y);
+        for (const t of state.scaleTicks) {
+          const d = naturalToDisplay(t.click_x, t.click_y);
+          // faint radial line from sun
+          ctx.strokeStyle = "rgba(140,149,168,0.25)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(s.x, s.y);
+          ctx.lineTo(d.x, d.y);
+          ctx.stroke();
+          drawPoint(ctx, d, "var(--accent-tick)", t.deg + "°", 4);
+        }
       }
-      drawPoint(ctx, d, color, `${deg}°`);
+
+      // Anchor markers + radial lines
+      for (const deg of [22, 46]) {
+        const a = state.anchors[deg];
+        if (!a.off_ruler && a.click_x !== null && a.click_y !== null && state.sunPx) {
+          const s = naturalToDisplay(state.sunPx.x, state.sunPx.y);
+          const d = naturalToDisplay(a.click_x, a.click_y);
+          const color = deg === 22 ? "var(--accent-22)" : "var(--accent-46)";
+          ctx.strokeStyle = "rgba(255,255,255,0.35)";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(s.x, s.y);
+          ctx.lineTo(d.x, d.y);
+          ctx.stroke();
+          drawPoint(ctx, d, color, deg + "°", 7);
+        }
+      }
+
+      // Sun marker LAST so it sits on top
+      if (state.sunPx) {
+        const d = naturalToDisplay(state.sunPx.x, state.sunPx.y);
+        drawPoint(ctx, d, "var(--accent)", "sun", 8);
+      }
     }
 
-    function drawPoint(ctx, d, color, label) {
+    function drawPoint(ctx, d, color, label, radius) {
+      const r = radius || 6;
       ctx.fillStyle = color;
-      ctx.strokeStyle = "rgba(255,255,255,0.6)";
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(255,255,255,0.7)";
+      ctx.lineWidth = 1.25;
       ctx.beginPath();
-      ctx.arc(d.x, d.y, 6, 0, Math.PI * 2);
+      ctx.arc(d.x, d.y, r, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
-      // Label
       ctx.font = "11px ui-monospace, monospace";
       ctx.fillStyle = "white";
-      ctx.fillText(label, d.x + 9, d.y - 9);
+      ctx.strokeStyle = "rgba(0,0,0,0.7)";
+      ctx.lineWidth = 3;
+      ctx.strokeText(label, d.x + r + 4, d.y - r - 2);
+      ctx.fillText(label, d.x + r + 4, d.y - r - 2);
     }
 
     function flashRing(px, py, color) {
@@ -729,75 +965,80 @@
       setTimeout(() => el.remove(), 600);
     }
 
-    // Backfill: store click point on anchors for radial drawing
-    const _origClickHandler = els.overlay.onclick;
-    els.overlay.addEventListener("click", (e) => {
-      const rect = els.overlay.getBoundingClientRect();
-      const px = e.clientX - rect.left;
-      const py = e.clientY - rect.top;
-      const n = displayToNatural(px, py);
-      if (state.step === "anchor46" || state.step === "done") {
-        // anchor46 click is processed before this listener fires; we stored radius only.
-        // After processing, we backfill the click point if anchor was just set.
-      }
-      // Save click point into anchors retroactively if the last action set an anchor
-      if (state.anchors[22].px_radius && !state.anchors[22].clickPoint && !state.anchors[22].off_ruler) {
-        state.anchors[22].clickPoint = { x: n.x, y: n.y };
-      }
-      if (state.anchors[46].px_radius && !state.anchors[46].clickPoint && !state.anchors[46].off_ruler) {
-        state.anchors[46].clickPoint = { x: n.x, y: n.y };
-      }
-      draw();
-    });
-
-    // ===== Measurements list =====
+    // =========================================================================
+    // Measurements list (with editable measurement_note per anchor / tick)
+    // =========================================================================
     function renderMeasurements() {
       const items = [];
       if (state.sunPx) {
         items.push({
           pill: "sun", pillClass: "sun",
           label: "sun_px",
-          value: `[${state.sunPx.x.toFixed(0)}, ${state.sunPx.y.toFixed(0)}]`,
+          value: "[" + state.sunPx.x.toFixed(0) + ", " + state.sunPx.y.toFixed(0) + "]",
         });
       }
-      for (const t of state.scaleTicks) {
+      for (let i = 0; i < state.scaleTicks.length; i++) {
+        const t = state.scaleTicks[i];
         items.push({
-          pill: `${t.deg}°`, pillClass: "tick",
-          label: "scale_tick", value: `px_radius=${t.px_radius.toFixed(1)}`,
+          pill: t.deg + "°", pillClass: "tick",
+          label: "scale_tick",
+          value: "px_radius=" + t.px_radius.toFixed(1),
         });
       }
       for (const deg of [22, 46]) {
         const a = state.anchors[deg];
-        if (a.px_radius || a.off_ruler) {
+        if (a.px_radius !== null || a.off_ruler) {
           items.push({
-            pill: `${deg}°`, pillClass: `a${deg}`,
+            pill: deg + "°",
+            pillClass: deg === 22 ? "a22" : "a46",
             label: a.off_ruler ? "off_ruler" : "anchor px_radius",
             value: a.off_ruler ? "true" : a.px_radius.toFixed(1),
+            note: a.measurement_note,
+            anchorDeg: deg,
           });
         }
       }
       if (items.length === 0) {
-        els.measurementsList.innerHTML = `<li><span class="label">— no measurements yet —</span></li>`;
+        els.measurementsList.innerHTML = "<li class='empty'>— no measurements yet —</li>";
         return;
       }
-      els.measurementsList.innerHTML = items.map(i => `
-        <li>
-          <span><span class="pill ${i.pillClass}">${i.pill}</span> <span class="label">${i.label}</span></span>
-          <span class="value">${i.value}</span>
-        </li>
-      `).join("");
+      els.measurementsList.innerHTML = "";
+      for (const it of items) {
+        const li = document.createElement("li");
+        li.innerHTML =
+          '<span><span class="pill ' + it.pillClass + '">' + it.pill + '</span> ' +
+          '<span class="label">' + it.label + '</span></span> ' +
+          '<span class="value">' + it.value + '</span>';
+        if (it.anchorDeg) {
+          const input = document.createElement("input");
+          input.type = "text";
+          input.className = "note-input";
+          input.placeholder = "measurement_note (operator's witness — e.g. 'eye on inner edge of bright arc')";
+          input.value = it.note || "";
+          input.addEventListener("input", (e) => {
+            state.anchors[it.anchorDeg].measurement_note = e.target.value;
+            renderSidecar();
+          });
+          li.appendChild(input);
+        }
+        els.measurementsList.appendChild(li);
+      }
     }
 
-    // ===== Sidecar JSON building + self-pin =====
+    // =========================================================================
+    // Sidecar JSON + self-pin
+    // =========================================================================
     async function buildSidecar() {
-      const frame_id = els.opFrameId.value || (state.imageFilename ? state.imageFilename.replace(/\.[^.]+$/, "") : "unknown");
+      const frame_id = els.opFrameId.value || (state.imageFilename ? state.imageFilename.replace(/_(scale|4M)\.png$/i, "").replace(/\.[^.]+$/, "") : "unknown");
       const scored_feature_deg = els.opScoredFeature.value === "" ? null : parseFloat(els.opScoredFeature.value);
+      const fixture_class = els.opFixtureClass.value;
+      const kpBasis = els.opKpBasis.value;
       const sidecar = {
         schema_version: 1,
         sidecar_kind: "h0-measured-sidecar",
         frame_id,
         frame_path: state.imageFilename || "",
-        render_sha256: null,
+        render_sha256: state.imageSha256 || null,
         config_path: null,
         config_sha256: null,
         measurement_method: "operator_manual",
@@ -807,58 +1048,128 @@
         projection: "operator_measured",
         theta_map_kind: state.mode,
         anchors: [
-          { locus_deg: 22, px_radius: state.anchors[22].px_radius !== null ? Math.round(state.anchors[22].px_radius * 10) / 10 : null, off_ruler: !!state.anchors[22].off_ruler, measurement_note: state.anchors[22].measurement_note },
-          { locus_deg: 46, px_radius: state.anchors[46].px_radius !== null ? Math.round(state.anchors[46].px_radius * 10) / 10 : null, off_ruler: !!state.anchors[46].off_ruler, measurement_note: state.anchors[46].measurement_note },
+          {
+            locus_deg: 22,
+            px_radius: state.anchors[22].px_radius !== null ? Math.round(state.anchors[22].px_radius * 10) / 10 : null,
+            off_ruler: !!state.anchors[22].off_ruler,
+            measurement_note: state.anchors[22].measurement_note || "",
+          },
+          {
+            locus_deg: 46,
+            px_radius: state.anchors[46].px_radius !== null ? Math.round(state.anchors[46].px_radius * 10) / 10 : null,
+            off_ruler: !!state.anchors[46].off_ruler,
+            measurement_note: state.anchors[46].measurement_note || "",
+          },
         ],
         scored_feature_deg,
         operator_decisions: {
           compound_code_is_h_leak: els.opHLeak.value,
-          compound_code_basis: els.opHLeakBasis.value,
-          known_pass_selection_basis: els.opKpBasis.value || null,
-          fixture_class: els.opFixtureClass.value,
+          compound_code_basis: els.opHLeakBasis.value || "",
+          known_pass_selection_basis: fixture_class === "known_pass_fullspan" ? (kpBasis || "") : null,
+          fixture_class,
         },
         calib_sha256: "",
       };
       if (state.mode === "scale_ticks") {
-        sidecar.scale_ticks = state.scaleTicks.map(t => ({ px_radius: Math.round(t.px_radius * 10) / 10, deg: t.deg, source: t.source }));
+        sidecar.scale_ticks = state.scaleTicks.map(t => ({
+          px_radius: Math.round(t.px_radius * 10) / 10,
+          deg: t.deg,
+          source: t.source,
+        }));
       }
-      // Self-pin: canonical JSON (sorted keys) with calib_sha256 = "", then SHA-256
-      const canonical = canonicalJSON(sidecar);
-      const hash = await sha256Hex(canonical);
+      const canon = canonicalJSON(sidecar);
+      const hash = await sha256Hex(canon);
       sidecar.calib_sha256 = hash;
       return { sidecar, hash };
-    }
-
-    function canonicalJSON(value) {
-      if (Array.isArray(value)) return "[" + value.map(canonicalJSON).join(",") + "]";
-      if (value !== null && typeof value === "object") {
-        const keys = Object.keys(value).sort();
-        return "{" + keys.map(k => JSON.stringify(k) + ":" + canonicalJSON(value[k])).join(",") + "}";
-      }
-      return JSON.stringify(value);
-    }
-
-    async function sha256Hex(str) {
-      const bytes = new TextEncoder().encode(str);
-      const buf = await crypto.subtle.digest("SHA-256", bytes);
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
     }
 
     async function renderSidecar() {
       const { sidecar, hash } = await buildSidecar();
       els.selfPin.textContent = hash;
       els.sidecarPreview.textContent = JSON.stringify(sidecar, null, 2);
-      const canDownload = !!state.sunPx && (state.step === "done" || state.step === "anchor46" || state.step === "anchor22");
+      const canDownload = !!state.sunPx && state.step === "done" && passesHardValidation(sidecar);
       els.downloadBtn.disabled = !canDownload;
     }
 
-    // Re-render sidecar when any operator-decision input changes
-    for (const inputEl of [els.opFrameId, els.opFixtureClass, els.opHLeak, els.opHLeakBasis, els.opKpBasis, els.opScoredFeature, els.opMeasuredBy]) {
-      inputEl.addEventListener("input", () => renderSidecar());
-      inputEl.addEventListener("change", () => renderSidecar());
+    function passesHardValidation(sidecar) {
+      // Hard validation = blocks download. Soft warnings just show up in the panel.
+      if (sidecar.operator_decisions.fixture_class === "known_pass_fullspan" &&
+          (!sidecar.operator_decisions.known_pass_selection_basis ||
+           sidecar.operator_decisions.known_pass_selection_basis.trim() === "")) {
+        return false;
+      }
+      if (sidecar.frame_id === "unknown" || !sidecar.frame_id) return false;
+      return true;
     }
 
-    // ===== Download =====
+    // =========================================================================
+    // Validation warnings panel (schema/decision conformance only — NOT verdict)
+    // =========================================================================
+    async function renderWarnings() {
+      const container = els.warningsContainer;
+      container.innerHTML = "";
+      if (!state.image) {
+        container.innerHTML = '<div class="warn">Load an image to begin.</div>';
+        return;
+      }
+      const { sidecar } = await buildSidecar();
+      const issues = [];
+      if (sidecar.frame_id === "unknown" || !sidecar.frame_id) {
+        issues.push("frame_id is empty; required.");
+      }
+      if (!sidecar.measured_by || sidecar.measured_by === "operator") {
+        issues.push("measured_by is set to the default 'operator' — record an actual handle.");
+      }
+      if (!sidecar.operator_decisions.compound_code_basis ||
+          sidecar.operator_decisions.compound_code_basis.trim() === "") {
+        issues.push("compound_code_basis is empty; write a one-line basis even if the call is 'deferred'.");
+      }
+      if (sidecar.operator_decisions.fixture_class === "known_pass_fullspan" &&
+          (!sidecar.operator_decisions.known_pass_selection_basis ||
+           sidecar.operator_decisions.known_pass_selection_basis.trim() === "")) {
+        issues.push("fixture_class = known_pass_fullspan REQUIRES known_pass_selection_basis (§3.4 — selection by instrument criterion, written BEFORE the checker is run). Download is blocked until this is filled.");
+      }
+      if (sidecar.operator_decisions.fixture_class !== "known_pass_fullspan" &&
+          sidecar.operator_decisions.known_pass_selection_basis !== null) {
+        issues.push("known_pass_selection_basis is set but fixture_class ≠ known_pass_fullspan; the field will be saved as null.");
+      }
+      for (const a of sidecar.anchors) {
+        if (!a.off_ruler && a.px_radius !== null && (!a.measurement_note || a.measurement_note.trim() === "")) {
+          issues.push("anchor " + a.locus_deg + "° has no measurement_note — record what you saw (the operator's witness).");
+        }
+      }
+      if (state.step !== "done") {
+        issues.push("Measurements incomplete (current step: " + state.step + "). Download enables after the final anchor or off-ruler call.");
+      }
+      if (issues.length === 0) {
+        container.innerHTML = '<div class="ok">All schema fields filled and consistent. Ready to download.</div>';
+        return;
+      }
+      for (const i of issues) {
+        const d = document.createElement("div");
+        d.className = "warn";
+        d.textContent = i;
+        container.appendChild(d);
+      }
+    }
+
+    // =========================================================================
+    // Operator decision input wiring
+    // =========================================================================
+    function onOpInputChange() {
+      const fc = els.opFixtureClass.value;
+      els.opKpBasisLabel.classList.toggle("required", fc === "known_pass_fullspan");
+      renderSidecar();
+      renderWarnings();
+    }
+    for (const inputEl of [els.opFrameId, els.opFixtureClass, els.opHLeak, els.opHLeakBasis, els.opKpBasis, els.opScoredFeature, els.opMeasuredBy]) {
+      inputEl.addEventListener("input", onOpInputChange);
+      inputEl.addEventListener("change", onOpInputChange);
+    }
+
+    // =========================================================================
+    // Download
+    // =========================================================================
     els.downloadBtn.addEventListener("click", async () => {
       const { sidecar } = await buildSidecar();
       const fname = (sidecar.frame_id || "sidecar") + ".json";
@@ -869,56 +1180,57 @@
       setTimeout(() => URL.revokeObjectURL(url), 100);
     });
 
-    // ===== Mode toggle =====
+    // =========================================================================
+    // Mode toggle, Reset, Undo
+    // =========================================================================
     for (const b of els.modeButtons) {
       b.addEventListener("click", () => {
         for (const x of els.modeButtons) x.classList.remove("active");
         b.classList.add("active");
         state.mode = b.dataset.mode;
         els.modeHelp.innerHTML = state.mode === "fit2locus"
-          ? `<strong>fit2locus:</strong> click the sun, then the 22° halo, then the 46° halo. Use this for halo photos without a stamped ruler.`
-          : `<strong>scale_ticks:</strong> click the sun, then each stamped degree mark on the ruler (entering its deg label), then the 22° + 46° anchor positions. Use this for HaloSim renders with a stamped scale.`;
-        // Reset measurement state on mode change (but keep image + frame_id)
+          ? "<strong>fit2locus:</strong> click the sun, then the 22° halo, then the 46° halo. For halo photos without a stamped ruler."
+          : "<strong>scale_ticks:</strong> click the sun, then each stamped degree mark on the ruler, then the 22° + 46° anchor positions. For HaloSim renders with a stamped scale.";
         state.scaleTicks = [];
         state.sunPx = null;
-        state.anchors[22] = { locus_deg: 22, px_radius: null, off_ruler: false, measurement_note: "" };
-        state.anchors[46] = { locus_deg: 46, px_radius: null, off_ruler: false, measurement_note: "" };
+        state.anchors[22] = { locus_deg: 22, click_x: null, click_y: null, px_radius: null, off_ruler: false, measurement_note: "" };
+        state.anchors[46] = { locus_deg: 46, click_x: null, click_y: null, px_radius: null, off_ruler: false, measurement_note: "" };
         state.currentTickDeg = 5;
         advanceState(state.image ? "sun" : "load");
       });
     }
 
-    // ===== Reset / Undo =====
     els.resetBtn.addEventListener("click", () => {
-      state.image = null; state.imageDataUrl = null; state.imageFilename = null;
+      state.image = null; state.imageDataUrl = null; state.imageFilename = null; state.imageSha256 = null;
       state.naturalSize = { w: 0, h: 0 }; state.displaySize = { w: 0, h: 0 };
       state.sunPx = null; state.scaleTicks = [];
       state.anchors = {
-        22: { locus_deg: 22, px_radius: null, off_ruler: false, measurement_note: "" },
-        46: { locus_deg: 46, px_radius: null, off_ruler: false, measurement_note: "" },
+        22: { locus_deg: 22, click_x: null, click_y: null, px_radius: null, off_ruler: false, measurement_note: "" },
+        46: { locus_deg: 46, click_x: null, click_y: null, px_radius: null, off_ruler: false, measurement_note: "" },
       };
       state.currentTickDeg = 5;
       els.bgImg.src = "";
       els.canvasPane.classList.remove("has-image");
-      els.opFrameId.value = "";
-      els.opHLeakBasis.value = "";
-      els.opKpBasis.value = "";
-      els.opScoredFeature.value = "";
-      els.opMeasuredBy.value = "";
+      els.canvasFilename.textContent = "";
+      els.opFrameId.value = ""; els.opHLeakBasis.value = ""; els.opKpBasis.value = "";
+      els.opScoredFeature.value = ""; els.opMeasuredBy.value = "";
+      els.presetSelect.value = "";
       advanceState("load");
     });
 
     els.undoBtn.addEventListener("click", () => {
       if (state.step === "done") {
-        if (state.anchors[46].px_radius || state.anchors[46].off_ruler) {
-          state.anchors[46] = { locus_deg: 46, px_radius: null, off_ruler: false, measurement_note: "" };
+        const a = state.anchors[46];
+        if (a.px_radius !== null || a.off_ruler) {
+          state.anchors[46] = { locus_deg: 46, click_x: null, click_y: null, px_radius: null, off_ruler: false, measurement_note: "" };
           advanceState("anchor46");
           return;
         }
       }
       if (state.step === "anchor46") {
-        if (state.anchors[22].px_radius || state.anchors[22].off_ruler) {
-          state.anchors[22] = { locus_deg: 22, px_radius: null, off_ruler: false, measurement_note: "" };
+        const a = state.anchors[22];
+        if (a.px_radius !== null || a.off_ruler) {
+          state.anchors[22] = { locus_deg: 22, click_x: null, click_y: null, px_radius: null, off_ruler: false, measurement_note: "" };
           advanceState("anchor22");
           return;
         }
@@ -938,10 +1250,14 @@
       }
     });
 
-    // ===== Initial render =====
+    // =========================================================================
+    // Initial render
+    // =========================================================================
+    runSelfCheck();
     renderStep();
     renderMeasurements();
     renderSidecar();
+    renderWarnings();
   </script>
 </body>
 </html>

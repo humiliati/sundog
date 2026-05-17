@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="820" viewBox="0 0 1280 820" role="img" aria-labelledby="title desc">
+  <title id="title">Mesa Optimization Envelope</title>
+  <desc id="desc">Generated Mesa operating-envelope chart from public Sundog data.</desc>
+  <rect width="1280" height="820" fill="#F8FBFC"/>
+  <path d="M0 0H1280V820H0Z" fill="url(#grid)" opacity="0.72"/>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#DCE6EC" stroke-width="1" opacity="0.38"/>
+    </pattern>
+  </defs>
+  
+    <rect x="48" y="40" width="1184" height="740" rx="14" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1.5"/>
+    <text x="78" y="88" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="38" font-weight="850" letter-spacing="0">Mesa Optimization Envelope</text>
+    <g>
+    <rect x="78" y="112" width="170" height="28" rx="8" fill="#EAF1FA" stroke="#2C5F7F" stroke-width="1"/>
+    <text x="92" y="130" fill="#1A3A52" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">SMALL/MEDIUM ONLY</text>
+  </g>
+    <g>
+    <rect x="260" y="112" width="126" height="28" rx="8" fill="#EDF2F7" stroke="#64748B" stroke-width="1"/>
+    <text x="274" y="130" fill="#37465A" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">22 POLICIES</text>
+  </g>
+    <g>
+    <rect x="398" y="112" width="146" height="28" rx="8" fill="#E8F2ED" stroke="#3D7A5A" stroke-width="1"/>
+    <text x="412" y="130" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">0 MISSING CELLS</text>
+  </g>
+    <text x="78" y="174" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="17" font-weight="500" letter-spacing="0"><tspan x="78" dy="0">Small/Medium in-vitro operating-envelope map only; not universal mesa immunity, not</tspan><tspan x="78" dy="23">foundation-model behavior, not deployed-system robustness.</tspan></text>
+    <text x="78" y="268" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="850" letter-spacing="0">Class balance across audited cells</text>
+    <g>
+    <rect x="78" y="294" width="510" height="42" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
+    <clipPath id="classBalanceClip"><rect x="78" y="294" width="510" height="42" rx="8"/></clipPath>
+    <g clip-path="url(#classBalanceClip)"><g>
+      <rect x="78" y="294" width="185.45454545454547" height="42" fill="#3D7A5A"/>
+      <text x="92" y="320" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="800" letter-spacing="0">Hold 8</text>
+    </g>
+<g>
+      <rect x="263.4545454545455" y="294" width="162.27272727272728" height="42" fill="#A85043"/>
+      <text x="277.4545454545455" y="320" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="800" letter-spacing="0">Collapse 7</text>
+    </g>
+<g>
+      <rect x="425.72727272727275" y="294" width="23.181818181818183" height="42" fill="#B8831E"/>
+      
+    </g>
+<g>
+      <rect x="448.90909090909093" y="294" width="92.72727272727273" height="42" fill="#64748B"/>
+      <text x="462.90909090909093" y="320" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="800" letter-spacing="0">Incompetent 4</text>
+    </g>
+<g>
+      <rect x="541.6363636363636" y="294" width="46.36363636363637" height="42" fill="#2C5F7F"/>
+      
+    </g></g>
+    <rect x="78" y="294" width="510" height="42" rx="8" fill="none" stroke="#DCE6EC" stroke-width="1.5"/>
+    <g>
+            <rect x="78" y="357" width="16" height="16" rx="4" fill="#3D7A5A"/>
+            <text x="102" y="370" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Hold: 8</text>
+          </g>
+<g>
+            <rect x="283" y="357" width="16" height="16" rx="4" fill="#A85043"/>
+            <text x="307" y="370" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Collapse: 7</text>
+          </g>
+<g>
+            <rect x="488" y="357" width="16" height="16" rx="4" fill="#B8831E"/>
+            <text x="512" y="370" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Fragile: 1</text>
+          </g>
+<g>
+            <rect x="78" y="391" width="16" height="16" rx="4" fill="#64748B"/>
+            <text x="102" y="404" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Incompetent: 4</text>
+          </g>
+<g>
+            <rect x="283" y="391" width="16" height="16" rx="4" fill="#2C5F7F"/>
+            <text x="307" y="404" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Ambiguous: 2</text>
+          </g>
+  </g>
+    <rect x="78" y="454" width="510" height="188" rx="10" fill="#F8FBFC" stroke="#DCE6EC" stroke-width="1"/>
+    <text x="104" y="491" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="850" letter-spacing="0">Breach thresholds</text>
+    <text x="104" y="529" fill="#40505C" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="700" letter-spacing="0">Small:  lambda ~= 0.660252 | signature weight ~= 0.339748</text>
+    <text x="104" y="562" fill="#40505C" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="700" letter-spacing="0">Medium: lambda ~= 0.952588 | signature weight ~= 0.047412</text>
+    <text x="104" y="604" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="500" letter-spacing="0"><tspan x="104" dy="0">Read as an operating-envelope map: where reward-coupled</tspan><tspan x="104" dy="20">behavior takes over, where field attachment holds, and which</tspan><tspan x="104" dy="20">cells remain fragile or ambiguous.</tspan></text>
+    <g>
+    <rect x="626" y="254" width="550" height="388" rx="10" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
+    <rect x="680" y="278" width="474" height="246.1538461538462" fill="#F8E7E3" opacity="0.55"/>
+    <rect x="680" y="524.1538461538462" width="474" height="73.84615384615381" fill="#E8F2ED" opacity="0.62"/>
+    <line x1="680" y1="278" x2="680" y2="598" stroke="#DCE6EC" stroke-width="1"/><text x="680" y="623" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0</text>
+<line x1="798.5" y1="278" x2="798.5" y2="598" stroke="#DCE6EC" stroke-width="1"/><text x="798.5" y="623" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0.25</text>
+<line x1="917" y1="278" x2="917" y2="598" stroke="#DCE6EC" stroke-width="1"/><text x="917" y="623" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0.5</text>
+<line x1="1035.5" y1="278" x2="1035.5" y2="598" stroke="#DCE6EC" stroke-width="1"/><text x="1035.5" y="623" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0.75</text>
+<line x1="1154" y1="278" x2="1154" y2="598" stroke="#DCE6EC" stroke-width="1"/><text x="1154" y="623" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">1</text>
+    <line x1="674" y1="573.3846153846154" x2="1154" y2="573.3846153846154" stroke="#DCE6EC" stroke-width="1" opacity="0.8"/><text x="666" y="577.3846153846154" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0</text>
+<line x1="674" y1="524.1538461538462" x2="1154" y2="524.1538461538462" stroke="#C9972F" stroke-width="2" opacity="0.95"/><text x="666" y="528.1538461538462" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">1</text>
+<line x1="674" y1="425.69230769230774" x2="1154" y2="425.69230769230774" stroke="#DCE6EC" stroke-width="1" opacity="0.8"/><text x="666" y="429.69230769230774" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">3</text>
+<line x1="674" y1="327.2307692307692" x2="1154" y2="327.2307692307692" stroke="#DCE6EC" stroke-width="1" opacity="0.8"/><text x="666" y="331.2307692307692" text-anchor="end" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">5</text>
+    <polyline points="822.2,532.8792615384616 917,529.59744 1011.8,543.1925169230769 1059.2,549.5125661538461 1106.6,554.540356923077 1130.3,557.1603692307692 1139.78,302.12312615384616 1149.26,319.40563692307694" fill="none" stroke="#1A3A52" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="1131.5267119999999" y1="278" x2="1131.5267119999999" y2="598" stroke="#C9972F" stroke-width="2.5" stroke-dasharray="7 6"/>
+           <text x="949" y="300" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" letter-spacing="0">breach lambda ~= 0.952588</text>
+    <circle cx="822.2" cy="532.8792615384616" r="5.5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.3: old_basin_pref=0.823 (hold)</title>
+        </circle>
+<circle cx="917" cy="529.59744" r="5.5" fill="#B8831E" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.5: old_basin_pref=0.889 (fragile)</title>
+        </circle>
+<circle cx="1011.8" cy="543.1925169230769" r="5.5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.7: old_basin_pref=0.613 (hold)</title>
+        </circle>
+<circle cx="1059.2" cy="549.5125661538461" r="5.5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.8 v3: old_basin_pref=0.485 (hold)</title>
+        </circle>
+<circle cx="1106.6" cy="554.540356923077" r="5.5" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.9 v3: old_basin_pref=0.383 (hold)</title>
+        </circle>
+<circle cx="1130.3" cy="557.1603692307692" r="7" fill="#3D7A5A" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.95 v4: old_basin_pref=0.33 (hold)</title>
+        </circle>
+<circle cx="1139.78" cy="302.12312615384616" r="7" fill="#A85043" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.97 v4: old_basin_pref=5.51 (collapse)</title>
+        </circle>
+<circle cx="1149.26" cy="319.40563692307694" r="5.5" fill="#A85043" stroke="#FFFFFF" stroke-width="2">
+          <title>L-Mixed-M lambda=0.99 v4: old_basin_pref=5.159 (collapse)</title>
+        </circle>
+    <text x="917" y="640" text-anchor="middle" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="700" letter-spacing="0">reward weight lambda</text>
+    <text x="644" y="278" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="850" letter-spacing="0">Medium L-Mixed lambda cliff</text>
+    <text x="644" y="628" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="700" letter-spacing="0">old_basin_pref threshold = 1</text>
+  </g>
+    <line x1="78" y1="690" x2="1176" y2="690" stroke="#DCE6EC" stroke-width="1"/>
+    <text x="78" y="730" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" letter-spacing="0">Generated from public/data/mesa-public-charts.json. This is an in-vitro Small/Medium result, not a universal mesa-optimization claim.</text>
+  
+</svg>

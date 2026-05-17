@@ -55,6 +55,7 @@ function parseArgs(argv) {
     particleCount: 256,
     planningHorizonSteps: 16,
     resampleThreshold: 0.5,
+    shapeFraction: 0.5,
     bootstrapSeed: 40604,
   };
 
@@ -92,6 +93,7 @@ function parseArgs(argv) {
     else if (flag === "--particle-count") args.particleCount = Number.parseInt(value, 10);
     else if (flag === "--planning-horizon-steps") args.planningHorizonSteps = Number.parseInt(value, 10);
     else if (flag === "--resample-threshold") args.resampleThreshold = Number.parseFloat(value);
+    else if (flag === "--shape-fraction") args.shapeFraction = Number.parseFloat(value);
     else if (flag === "--bootstrap-seed") args.bootstrapSeed = Number.parseInt(value, 10);
     else throw new Error(`Unknown flag: ${flag}`);
   }
@@ -105,6 +107,9 @@ function parseArgs(argv) {
   }
   if (!Number.isFinite(args.resampleThreshold) || args.resampleThreshold <= 0 || args.resampleThreshold > 1) {
     throw new Error("--resample-threshold must be in (0, 1]");
+  }
+  if (!Number.isFinite(args.shapeFraction) || args.shapeFraction < 0 || args.shapeFraction >= 1) {
+    throw new Error("--shape-fraction must be in [0, 1) so shaping stays strictly below one dt (floor-validity)");
   }
   for (const [name, values] of [
     ["--mass-ratios", args.massRatios],
@@ -434,26 +439,63 @@ function terminalEventsForState(state, config) {
   return events.invalid || events.escape || events.closeApproach;
 }
 
+function terminalSafetyMargin(state, config) {
+  const positions = state.slice(0, 6);
+  const x3 = positions[4];
+  const y3 = positions[5];
+  const r3 = Math.sqrt(x3 * x3 + y3 * y3);
+  let minPrimary = Infinity;
+  for (let i = 0; i < 2; i += 1) {
+    const dx = x3 - positions[i * 2];
+    const dy = y3 - positions[i * 2 + 1];
+    minPrimary = Math.min(minPrimary, Math.sqrt(dx * dx + dy * dy));
+  }
+  const rMargin = Math.min(1, Math.max(0, (config.escapeRadius - r3) / config.escapeRadius));
+  const caMargin = Math.min(1, Math.max(0, (minPrimary - config.closeApproachRadius) / config.closeApproachRadius));
+  return Math.min(rMargin, caMargin);
+}
+
+// Shaped planning score. The BF-4 probe showed the pure steps-survived
+// objective is non-discriminative when the planning horizon is far shorter
+// than the escape timescale (every candidate accrues the full horizon, so the
+// dV tie-break degenerates the floor to passive). The shaping term is the
+// expected terminal safety margin scaled by shapeFraction * dt. Because
+// shapeFraction < 1 the shaping is strictly less than one dt, so a candidate
+// whose true survival is longer by >= one dt can never be overtaken on margin
+// alone: the floor never prefers an earlier-escape action (floor-validity
+// invariant preserved).
 function scoreCandidateAction(particles, thrust, config, args) {
   let expectedSafeTime = 0;
+  let expectedTerminalMargin = 0;
+  let expectedScore = 0;
   let expectedDeltaV = 0;
   const thrustMagnitude = Math.sqrt(thrust[0] * thrust[0] + thrust[1] * thrust[1]);
   for (const particle of particles) {
     let simState = particle.state.slice();
     let safeTime = 0;
+    let hazardReached = false;
     for (let step = 0; step < args.planningHorizonSteps; step += 1) {
-      if (terminalEventsForState(simState, config)) break;
+      if (terminalEventsForState(simState, config)) {
+        hazardReached = true;
+        break;
+      }
       safeTime += config.dt;
       simState = integrateStep(simState, config.dt, config, thrust);
     }
+    const margin = hazardReached ? 0 : terminalSafetyMargin(simState, config);
+    const particleScore = safeTime + args.shapeFraction * config.dt * margin;
     expectedSafeTime += particle.weight * safeTime;
+    expectedTerminalMargin += particle.weight * margin;
+    expectedScore += particle.weight * particleScore;
     expectedDeltaV += particle.weight * thrustMagnitude * Math.min(
       args.planningHorizonSteps * config.dt,
       Math.max(config.dt, config.duration),
     );
   }
-  return { expectedSafeTime, expectedDeltaV };
+  return { expectedSafeTime, expectedTerminalMargin, expectedScore, expectedDeltaV };
 }
+
+const SCORE_TIE_EPS = 1e-9;
 
 function chooseBayesAction(particles, config, args) {
   const candidates = oracleCandidateThrusts(config);
@@ -469,11 +511,15 @@ function chooseBayesAction(particles, config, args) {
       ...score,
     };
     scores.push(row);
+    // Pinned tie order: (1) maximize the shaped planning score;
+    // (2) within SCORE_TIE_EPS of the best shaped score, minimize expected
+    // delta-V; (3) first in the pre-registered lattice order (zero-first,
+    // preserved by only replacing on strict improvement).
     if (
       best === null
-      || row.expectedSafeTime > best.expectedSafeTime + config.dt
+      || row.expectedScore > best.expectedScore + SCORE_TIE_EPS
       || (
-        Math.abs(row.expectedSafeTime - best.expectedSafeTime) <= config.dt
+        Math.abs(row.expectedScore - best.expectedScore) <= SCORE_TIE_EPS
         && row.expectedDeltaV < best.expectedDeltaV - 1e-12
       )
     ) {
@@ -569,11 +615,15 @@ function runBayesTrial(args, envelopeCase, regime, seed, guardThresholds) {
       thrust_x: roundNumber(thrust[0]),
       thrust_y: roundNumber(thrust[1]),
       expected_safe_time: roundMetric(decision.selected.expectedSafeTime),
+      expected_terminal_margin: roundMetric(decision.selected.expectedTerminalMargin),
+      expected_score: roundMetric(decision.selected.expectedScore),
       expected_delta_v: roundMetric(decision.selected.expectedDeltaV),
       candidate_scores: JSON.stringify(decision.scores.map((score) => ({
         index: score.index,
         action_key: score.actionKey,
         expected_safe_time: roundMetric(score.expectedSafeTime),
+        expected_terminal_margin: roundMetric(score.expectedTerminalMargin),
+        expected_score: roundMetric(score.expectedScore),
         expected_delta_v: roundMetric(score.expectedDeltaV),
       }))),
     });
@@ -643,6 +693,14 @@ async function main() {
       observedSignature: "observeGuardedAccelSignature(state, cfg, actualSensorState)",
       particlePrediction: "observeGuardedAccelSignature(particle.state, { ...cfg, sensorNoiseStd: 0 }, particle.sensorState)",
       likelihood: "diagonal Gaussian-like score over |T_hat|, gradX, gradY plus guard mismatch penalty",
+    },
+    planningObjective: {
+      form: "expected within-horizon survival time + shapeFraction * dt * expected terminal safety margin",
+      shapeFraction: args.shapeFraction,
+      terminalMargin: "min(escape-radius margin, close-approach margin) of the horizon-end state; 0 if a terminal hazard was reached in the rollout",
+      floorValidityInvariant: "shapeFraction < 1 => shaping term < one dt, so a candidate whose true survival is longer by >= one dt is never overtaken on margin; the floor never prefers an earlier-escape action",
+      supersedes: "BF-4 smoke-only pure steps-survived objective, which the 2026-05-16 probe showed degenerates to passive when planning horizon << escape timescale",
+      tieOrder: "max shaped score; within 1e-9 -> min expected delta-V; then first in lattice order",
     },
     actionLattice: oracleCandidateThrusts(normalizeConfig({ thrustLimit: args.thrustLimits[0] })).map((thrust, index) => ({
       index,
