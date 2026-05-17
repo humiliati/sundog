@@ -938,3 +938,42 @@ threebody-lane file committed alongside H0 work in commit `3351a48`
 is the parallel lane-hygiene observation; both noted for awareness.
 No Cut-3 admission move; no frozen value changed; HOLD/HELD/PLC
 intact.
+
+**2026-05-16 (PT) — maintainer. H0 measurement tool v2 staged for
+operator shots.** Append-only filing on
+[`P2_CUT3_H0_2_SCHEMA.md`](P2_CUT3_H0_2_SCHEMA.md) audit-notes.
+Polish pass on the optional helper at `tools/h0-measurement/index.html`
+ahead of §6.3 / §6.4 operator pre-fill. New pinned SHA-256
+`0dee083ad48f3a7b137b4332da9a257f949e00f8d2347715ca755fe9abe40fde`
+(supersedes the v1 pin `7e9f279e…a52d77`). Polish additions, all
+additive: (1) on-load canonicalizer self-check with green/red header
+badge — the Finding-1 cross-runtime test vector is inlined verbatim,
+and the page reports DRIFT if the browser fails to reproduce the
+pinned 922-byte canonical string and `calib_sha256` `9c52ab15…c8b6`;
+(2) `render_sha256` computed via `SubtleCrypto` on image load, so the
+sidecar self-pins to the actual loaded PNG bytes; (3) per-anchor
+`measurement_note` editable text input (§2-A requires per-anchor
+notes; v1 carried only one global field); (4) Phase-15 preset
+selector listing the eight pinned known-FAIL frame_ids with
+`fetch()` under the dev server and graceful drag-and-drop fallback;
+(5) live validation panel with hard block — when
+`fixture_class = known_pass_fullspan` and
+`known_pass_selection_basis` is empty, the download button is
+disabled (structural enforcement of §2-A at the tool layer); (6)
+proper click-position storage + canvas redraw so the visible
+geometry matches what gets serialized. §3-blind discipline holds
+structurally: no checker import, no predicate call, no admit /
+reason_code display; download is still a §2-A sidecar. Public-
+Language Constraint banner preserved verbatim. No frozen schema body
+edited; the residual-table generator self-test still PASSES 11/11
+and the test-vector generator still produces canonical 922 bytes
+and `9c52ab15…c8b6`. All other pinned hashes
+(`canonical-json.mjs`, `cut3-h0-residual-table.mjs`,
+`cut3-h0-make-test-vector.mjs`, `cut3-h0-known-fail-extract.mjs`,
+`cut3-h0-checker.mjs`, the Phase-15 fixture manifest, the
+canonicalization test-vector JSON) are unchanged and re-verified.
+Cut-3 admission HOLD; execution HELD; H0-B negative side on real
+frames remains OPEN. Justification: stages the tool for operator
+shots by pinning the v2 hash so an operator can verify by hash they
+have the v2 build before measuring; no measurement performed in
+this filing.
