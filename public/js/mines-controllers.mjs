@@ -163,6 +163,33 @@ export const MINES_CONTROLLER_MODES = Object.freeze({
     boardOverride: Object.freeze({ scanBudget: 0 }),
     ablation: "minimal_composition",
   }),
+  bayes_frontier_pressure: Object.freeze({
+    label: "Bayes frontier pressure",
+    status: "pending",
+    informationBudget: "Same legal public board state plus observed pressure and confidence as the promoted no-scan lanes; no true occupancy, exact counts, seeds, gradients, or scan readings.",
+    usesPressure: true,
+    usesGradient: false,
+    usesConfidence: true,
+    usesActionHistory: true,
+    usesScan: false,
+    usesPrivileged: false,
+    boardOverride: Object.freeze({ scanBudget: 0 }),
+    bayesProfileId: "mines-bayesian-baseline-v1",
+    bayesBudget: "pressure",
+  }),
+  bayes_frontier_full: Object.freeze({
+    label: "Bayes frontier full",
+    status: "pending",
+    informationBudget: "Full Sundog-legal public budget: board state, observed pressure, confidence, gradients, public action ledger, and bounded scan readings; no true occupancy, exact counts, seeds, oracle actions, or verdict labels.",
+    usesPressure: true,
+    usesGradient: true,
+    usesConfidence: true,
+    usesActionHistory: true,
+    usesScan: true,
+    usesPrivileged: false,
+    bayesProfileId: "mines-bayesian-baseline-v1",
+    bayesBudget: "full",
+  }),
 });
 
 export const IMPLEMENTED_MINES_MODES = Object.freeze(

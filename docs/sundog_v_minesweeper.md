@@ -150,6 +150,17 @@ frontier-particle posterior pick actions. This mirrors the Balance Phase 15
 lesson: a Bayesian comparator is claim hygiene only if the observation lane is
 auditable before the floor is interpreted.
 
+Admission plumbing status (2026-05-17): first pass landed.
+`public/js/mines-controllers.mjs` declares `bayes_frontier_pressure` and
+`bayes_frontier_full` as pending lanes with explicit budgets.
+`public/js/mines-bayes-admission.mjs` serializes the legal `Phi_t` for pressure
+and full budgets while stripping seeds, true pressure, occupancy, adjacency,
+oracle, verdict, and audit-only fields. `scripts/mines-bayes-admission.test.mjs`
+checks unknown-mode rejection, pending-mode rejection, no-leak, pressure-budget
+parity across `sundog_minimal`, `sundog_lean`, and `bayes_frontier_pressure`,
+and scan/gradient masking between pressure and full budgets. Run with
+`npm run mines:phase12:admission`.
+
 Purpose: add a same-field Bayesian baseline for Pressure Mines so the confirmed
 Phase 10 pocket is not judged only against naive local heuristics. This is not
 the privileged `oracle_safe` lane. The baseline receives the same public board
@@ -1123,21 +1134,22 @@ Phase 12.0 implementation order:
    `bayes_frontier_full` to `MINES_CONTROLLER_MODES` with explicit information
    budgets. They may remain non-runnable until the posterior policy lands, but
    unknown-mode rejection and pending-mode rejection must be tested before the
-   runner accepts them.
+   runner accepts them. *(landed in the admission fixture)*
 2. **Legal observation serializer.** Add a pure helper, tentatively
    `serializeMinesBayesObservation`, that emits the admitted `Phi_t` from
    public memory, observed pressure, confidence, gradient, scan readings,
    action ledger, turn index, sensor config without seeds, and envelope-cell
    metadata. It must not include true occupancy, exact adjacency counts,
    `p_true`, board seed, sensor seed, oracle actions, or Phase 10 verdict
-   labels.
+   labels. *(landed as `public/js/mines-bayes-admission.mjs`)*
 3. **Parity fixture.** On a locked replay URL, serialize `Phi_t` for
    `sundog_minimal`, `sundog_lean`, and `bayes_frontier_pressure` and prove
    that the fields common to their declared budgets match the legal controller
-   observation stream exactly.
+   observation stream exactly. *(first fixture landed; replay-URL fixture can
+   be added with the posterior smoke)*
 4. **No-leak fixture.** Grep/fixture-check the serialized rows and manifest for
    forbidden keys. Truth may appear in audit outputs only after the action has
-   been selected.
+   been selected. *(first fixture landed)*
 5. **Tiny posterior smoke.** Implement the frontier particle posterior with a
    deliberately tiny particle count and only the confirmed pocket plus the
    paired failure cell. This smoke decides action-plumbing validity, not claim
@@ -1314,10 +1326,12 @@ Core shipped pieces:
 
 Active next work:
 
-- Phase 12 starts with `mines-bayesian-baseline-v1` admission plumbing:
-  Bayesian lane declarations, legal `Phi_t` serialization, no-leak and
-  observation-parity fixtures, then a tiny frontier-particle posterior smoke on
-  the Phase 10 confirmed pocket plus paired failure cell.
+- Phase 12 admission plumbing has started: Bayesian lane declarations, legal
+  `Phi_t` serialization, no-leak, and observation-parity fixtures have a first
+  passing check in `npm run mines:phase12:admission`.
+- The next engineering move is the tiny frontier-particle posterior smoke on
+  the Phase 10 confirmed pocket plus paired failure cell, using the serialized
+  `Phi_t` stream rather than reading board truth.
 - Phase 13 remains blocked on Phase 12 receipts. Until then the public Mines
   surface should continue to show the Phase 10 pocket claim and the paired
   failure replay without implying same-field Bayesian near-optimality.
