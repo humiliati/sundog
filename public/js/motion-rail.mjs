@@ -100,7 +100,9 @@ function initMotionRail() {
 
   setupActiveTracking(state);
   wireSkipArrows(state);
+  wireKeyboardNavigation(state);
   wireReplayButton(state);
+  wireManualTakeover(state);
   setupPauseListeners(state);
   setupReducedMotion(state);
 
@@ -405,6 +407,50 @@ function wireSkipArrows(state) {
   if (next) {
     next.addEventListener("click", () => skipTo(state, state.activeIndex + 1));
   }
+}
+
+function wireKeyboardNavigation(state) {
+  state.track.addEventListener("keydown", (event) => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+      return;
+    }
+
+    let targetIndex = null;
+    if (event.key === "ArrowLeft") {
+      targetIndex = state.activeIndex - 1;
+    } else if (event.key === "ArrowRight") {
+      targetIndex = state.activeIndex + 1;
+    } else if (event.key === "Home") {
+      targetIndex = 0;
+    } else if (event.key === "End") {
+      targetIndex = state.cards.length - 1;
+    }
+
+    if (targetIndex == null) {
+      return;
+    }
+
+    event.preventDefault();
+    const clampedIndex = Math.max(0, Math.min(state.cards.length - 1, targetIndex));
+    if (clampedIndex === state.activeIndex) {
+      armStamp(state.cards[state.activeIndex]);
+      goUserDriven(state);
+      return;
+    }
+
+    skipTo(state, clampedIndex);
+  });
+}
+
+function wireManualTakeover(state) {
+  const takeOver = () => {
+    if (state.userDriven) return;
+    armStamp(state.cards[state.activeIndex]);
+    goUserDriven(state);
+  };
+
+  state.track.addEventListener("pointerdown", takeOver, { passive: true });
+  state.track.addEventListener("wheel", takeOver, { passive: true });
 }
 
 function skipTo(state, targetIndex) {
