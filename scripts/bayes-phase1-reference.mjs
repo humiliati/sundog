@@ -17,6 +17,16 @@ const PHASE2_MODES = Object.freeze([
   "sundog_memory",
   "random",
 ]);
+const PHASE4_MODES = Object.freeze([
+  "oracle",
+  "bayes_adaptive",
+  "hc_sundog",
+  "hybrid",
+  "hybrid_no_posterior",
+  "hybrid_posterior_only",
+  "hybrid_posterior_reset_only",
+  "hybrid_posterior_decoy_disambig",
+]);
 const DEFAULT_MODES = PHASE1_MODES;
 const CLEAN_SCENARIO = "clean";
 const PHASE2_SCENARIOS = Object.freeze([
@@ -51,6 +61,8 @@ const WRONG_LOCK_RADIUS = 1.5;
 const WRONG_LOCK_DWELL_TURNS = 5;
 const WRONG_LOCK_THRESHOLD = 0.5;
 const LOW_PROBE_MAX_TURNS = 20;
+const FRUGALITY_FRACTION = 0.5;
+const AMBIGUITY_MASS = 0.5;
 const ACTIONS = Object.freeze([
   { id: "stay", dx: 0, dy: 0 },
   { id: "east", dx: 1, dy: 0 },
@@ -96,7 +108,7 @@ const DEFAULT_ARGS = Object.freeze({
 function usage() {
   return [
     "Usage:",
-    "  node scripts/bayes-phase1-reference.mjs --phase <name> --out <dir> --seeds <n> [--scenarios clean|phase2|phase3|csv] [--modes csv]",
+    "  node scripts/bayes-phase1-reference.mjs --phase <name> --out <dir> --seeds <n> [--scenarios clean|phase2|phase3|phase4|csv] [--modes csv]",
     "",
     "Defaults run a small exact Bayes-Correct hidden-source reference task.",
     "",
@@ -104,6 +116,7 @@ function usage() {
     "  node scripts/bayes-phase1-reference.mjs --phase phase1-reference-smoke --out results/bayes/phase1-reference-smoke --seeds 32 --max-turns 24",
     "  node scripts/bayes-phase1-reference.mjs --phase phase2-mismatch-smoke --out results/bayes/phase2-mismatch-smoke --scenarios phase2 --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,random --seeds 16 --max-turns 32",
     "  node scripts/bayes-phase1-reference.mjs --phase phase3-aliasing-smoke --out results/bayes/phase3-aliasing-smoke --scenarios phase3 --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,random --seeds 16 --max-turns 40",
+    "  node scripts/bayes-phase1-reference.mjs --phase phase4-hybrid-smoke --out results/bayes/phase4-hybrid-smoke --scenarios phase4 --modes oracle,bayes_adaptive,hc_sundog,hybrid,hybrid_no_posterior,hybrid_posterior_only,hybrid_posterior_reset_only,hybrid_posterior_decoy_disambig --seeds 16 --max-turns 40",
   ].join("\n");
 }
 
@@ -158,6 +171,7 @@ function parseList(value) {
 function parseScenarios(value) {
   if (value === "phase2") return [...PHASE2_SCENARIOS];
   if (value === "phase3") return [...PHASE3_SCENARIOS];
+  if (value === "phase4") return [...PHASE3_SCENARIOS];
   if (value === "all") return [...ALL_SCENARIOS];
   return parseList(value);
 }
@@ -199,7 +213,7 @@ function parseBoolean(value, flag) {
 }
 
 function validateArgs(args) {
-  const knownModes = new Set(PHASE2_MODES);
+  const knownModes = new Set([...PHASE2_MODES, ...PHASE4_MODES]);
   const unknownMode = args.modes.find((mode) => !knownModes.has(mode));
   if (unknownMode) throw new Error(`Unknown mode: ${unknownMode}`);
   const knownScenarios = new Set(ALL_SCENARIOS);
@@ -428,16 +442,25 @@ function normalizeLogWeights(logWeights) {
   return shifted.map((value) => value / sum);
 }
 
-function updatePosterior(posterior, pos, observationValue, config, model = CLEAN_SCENARIO, context = {}) {
-  return updatePosteriorWithEvidence(posterior, pos, observationValue, config, model, context).posterior;
+function updatePosterior(posterior, pos, observationValue, config, model = CLEAN_SCENARIO, context = {}, metrics = null) {
+  return updatePosteriorWithEvidence(posterior, pos, observationValue, config, model, context, metrics).posterior;
 }
 
-function updatePosteriorWithEvidence(posterior, pos, observationValue, config, model = CLEAN_SCENARIO, context = {}) {
+function updatePosteriorWithEvidence(
+  posterior,
+  pos,
+  observationValue,
+  config,
+  model = CLEAN_SCENARIO,
+  context = {},
+  metrics = null,
+) {
   const priorProbs = normalizeLogWeights(posterior.logWeights);
   const likelihoodLogs = posterior.candidates.map((candidate) => {
     const mean = signalMean(pos, candidate, config, model, context);
     return gaussianLogLikelihood(observationValue, mean, config.noiseStd);
   });
+  if (metrics) metrics.likelihoodEvals += likelihoodLogs.length;
   const evidenceTerms = likelihoodLogs.map((logLikelihood, index) => Math.log(Math.max(priorProbs[index], 1e-300)) + logLikelihood);
   const logEvidence = logSumExp(evidenceTerms);
   const nextLogWeights = posterior.logWeights.map((logWeight, index) => logWeight + likelihoodLogs[index]);
@@ -586,21 +609,24 @@ function createControllerState(mode, config) {
     return { posterior: createPosterior(enumerateTargetCandidates(config)), previousPos: null };
   }
   if (mode === "bayes_adaptive") return createAdaptiveState(config);
-  if (mode === "hc_sundog" || mode === "sundog_memory") {
-    return {
-      phase: "scan",
-      bestSignal: -Infinity,
-      bestPos: { x: config.startX, y: config.startY },
-      scanPath: createScanPath(config),
-      scanIndex: 0,
-      lastSignal: null,
-      lastAction: null,
-      rotateIndex: 0,
-      memory: {},
-      visits: {},
-    };
-  }
+  if (isHybridMode(mode)) return createHybridState(mode, config);
+  if (mode === "hc_sundog" || mode === "sundog_memory") return createSundogState(config);
   return {};
+}
+
+function createSundogState(config) {
+  return {
+    phase: "scan",
+    bestSignal: -Infinity,
+    bestPos: { x: config.startX, y: config.startY },
+    scanPath: createScanPath(config),
+    scanIndex: 0,
+    lastSignal: null,
+    lastAction: null,
+    rotateIndex: 0,
+    memory: {},
+    visits: {},
+  };
 }
 
 function createAdaptiveState(config) {
@@ -613,12 +639,28 @@ function createAdaptiveState(config) {
   return { models, previousPos: null };
 }
 
+function createHybridState(mode, config) {
+  return {
+    mode,
+    response: createSundogState(config),
+    adaptive: createAdaptiveState(config),
+    posteriorReady: false,
+    posteriorActionTurns: 0,
+    responseActionTurns: 0,
+    previousPos: null,
+  };
+}
+
+function isHybridMode(mode) {
+  return mode.startsWith("hybrid");
+}
+
 function adaptiveModelsForScenarios(scenarios) {
   if (scenarios.some((scenario) => PHASE3_SCENARIOS.includes(scenario))) return PHASE3_ADAPTIVE_MODELS;
   return PHASE2_ADAPTIVE_MODELS;
 }
 
-function chooseAction({ mode, seed, turn, pos, target, scenario, observation, state, config }) {
+function chooseAction({ mode, seed, turn, pos, target, scenario, observation, state, config, metrics }) {
   if (mode === "oracle") return { action: moveToward(pos, target, config), diagnostics: { policy: "truth_shortest_path" } };
   if (mode === "random") {
     const options = legalActions(pos, config, { includeStay: false });
@@ -629,7 +671,7 @@ function chooseAction({ mode, seed, turn, pos, target, scenario, observation, st
     const model = mode === "bayes_correct" ? scenario : CLEAN_SCENARIO;
     const likelihoodPos = likelihoodPositionForModel(model, pos, state);
     const context = { seed, scenario };
-    state.posterior = updatePosterior(state.posterior, likelihoodPos, observation.value, config, model, context);
+    state.posterior = updatePosterior(state.posterior, likelihoodPos, observation.value, config, model, context, metrics);
     const stats = posteriorStats(state.posterior, target);
     const choice = chooseBayesAction(pos, state.posterior, config, model === "delayed" ? CLEAN_SCENARIO : model, context);
     return {
@@ -650,7 +692,10 @@ function chooseAction({ mode, seed, turn, pos, target, scenario, observation, st
       },
     };
   }
-  if (mode === "bayes_adaptive") return chooseBayesAdaptiveAction({ seed, scenario, pos, target, observation, state, config });
+  if (mode === "bayes_adaptive") return chooseBayesAdaptiveAction({ seed, scenario, pos, target, observation, state, config, metrics });
+  if (isHybridMode(mode)) {
+    return chooseHybridAction({ mode, seed, turn, scenario, pos, target, observation, state, config, metrics });
+  }
   if (mode === "hc_sundog") return chooseHcSundogAction({ pos, observation, state, config });
   if (mode === "sundog_memory") return chooseSundogMemoryAction({ pos, observation, state, config });
   throw new Error(`Unknown mode: ${mode}`);
@@ -661,7 +706,20 @@ function likelihoodPositionForModel(model, pos, state) {
   return pos;
 }
 
-function chooseBayesAdaptiveAction({ seed, scenario, pos, target, observation, state, config }) {
+function chooseBayesAdaptiveAction({ seed, scenario, pos, target, observation, state, config, metrics }) {
+  const view = updateAdaptivePosterior({ seed, scenario, pos, target, observation, state, config, metrics });
+  return chooseFromAdaptivePosterior({
+    seed,
+    scenario,
+    pos,
+    state,
+    config,
+    view,
+    policy: "finite_model_mixture_expected_utility",
+  });
+}
+
+function updateAdaptivePosterior({ seed, scenario, pos, target, observation, state, config, metrics }) {
   const nextModelStates = [];
   const nextModelLogWeights = [];
 
@@ -675,6 +733,7 @@ function chooseBayesAdaptiveAction({ seed, scenario, pos, target, observation, s
       config,
       modelState.model,
       context,
+      metrics,
     );
     nextModelStates.push({
       model: modelState.model,
@@ -690,27 +749,152 @@ function chooseBayesAdaptiveAction({ seed, scenario, pos, target, observation, s
     logWeight: Math.log(Math.max(modelWeights[index], 1e-300)),
   }));
 
+  return adaptivePosteriorView(state, target);
+}
+
+function adaptivePosteriorView(state, target = null) {
+  const modelWeights = normalizeLogWeights(state.models.map((modelState) => modelState.logWeight));
   const combinedPosterior = combineAdaptivePosterior(state.models);
   const stats = posteriorStats(combinedPosterior, target);
   const modelSummary = state.models
     .map((modelState, index) => ({ model: modelState.model, prob: round(modelWeights[index], 6) }))
     .sort((a, b) => b.prob - a.prob);
   const dominantModel = modelSummary[0]?.model ?? CLEAN_SCENARIO;
-  const choice = chooseBayesAction(pos, combinedPosterior, config, dominantModel, { seed, scenario });
+  return { combinedPosterior, stats, modelSummary, dominantModel };
+}
+
+function chooseFromAdaptivePosterior({ seed, scenario, pos, state, config, view, policy }) {
+  const selectedView = view ?? adaptivePosteriorView(state, null);
+  const choice = chooseBayesAction(pos, selectedView.combinedPosterior, config, selectedView.dominantModel, { seed, scenario });
 
   return {
     action: choice.action,
     diagnostics: {
-      policy: "finite_model_mixture_expected_utility",
-      modelWeights: modelSummary,
-      entropy: round(stats.entropy, 6),
-      map: stats.map,
-      mapProb: round(stats.mapProb, 6),
-      truthProb: round(stats.truthProb, 6),
-      top: stats.top,
+      policy,
+      modelWeights: selectedView.modelSummary,
+      entropy: round(selectedView.stats.entropy, 6),
+      map: selectedView.stats.map,
+      mapProb: round(selectedView.stats.mapProb, 6),
+      truthProb: selectedView.stats.truthProb === null ? null : round(selectedView.stats.truthProb, 6),
+      top: selectedView.stats.top,
       utility: round(choice.utility, 6),
       hitMass: round(choice.hitMass, 6),
       expectedDistance: round(choice.expectedDistance, 6),
+    },
+  };
+}
+
+function chooseHybridAction({ mode, seed, turn, scenario, pos, target, observation, state, config, metrics }) {
+  const responseChoice = chooseHcSundogAction({ pos, observation, state: state.response, config });
+  const responseDiagnostics = responseChoice.diagnostics;
+
+  if (mode === "hybrid_no_posterior") {
+    state.responseActionTurns += 1;
+    return {
+      action: responseChoice.action,
+      diagnostics: {
+        ...responseDiagnostics,
+        policy: "hybrid_no_posterior_floor",
+        responsePolicy: responseDiagnostics.policy,
+        posteriorUsed: false,
+      },
+    };
+  }
+
+  if (mode === "hybrid_posterior_only") {
+    const posteriorChoice = chooseBayesAdaptiveAction({
+      seed,
+      scenario,
+      pos,
+      target,
+      observation,
+      state: state.adaptive,
+      config,
+      metrics,
+    });
+    state.posteriorReady = true;
+    state.posteriorActionTurns += 1;
+    return withHybridDiagnostics(posteriorChoice, mode, responseDiagnostics, {
+      posteriorUsed: true,
+      posteriorRefreshed: true,
+      gate: "posterior_only",
+    });
+  }
+
+  const shouldRefresh =
+    mode === "hybrid_posterior_decoy_disambig" ||
+    (mode === "hybrid" && turn % Math.ceil(1 / (FRUGALITY_FRACTION * AMBIGUITY_MASS)) === 1) ||
+    (mode === "hybrid_posterior_reset_only" && responseDiagnostics.policy === "return_to_best_signal");
+  const view = shouldRefresh
+    ? updateAdaptivePosterior({ seed, scenario, pos, target, observation, state: state.adaptive, config, metrics })
+    : adaptivePosteriorView(state.adaptive, target);
+  if (shouldRefresh) state.posteriorReady = true;
+
+  const ambiguityMass = phase3AmbiguityMass(view.modelSummary);
+  const ambiguityGate = ambiguityMass >= AMBIGUITY_MASS;
+  const resetGate = responseDiagnostics.policy === "return_to_best_signal";
+  const usePosterior =
+    mode === "hybrid_posterior_decoy_disambig"
+      ? ambiguityGate
+      : mode === "hybrid_posterior_reset_only"
+        ? resetGate && state.posteriorReady
+        : state.posteriorReady && ambiguityGate;
+
+  if (!usePosterior) {
+    state.responseActionTurns += 1;
+    return {
+      action: responseChoice.action,
+      diagnostics: {
+        ...responseDiagnostics,
+        policy: `hybrid_response_${responseDiagnostics.policy}`,
+        responsePolicy: responseDiagnostics.policy,
+        posteriorUsed: false,
+        posteriorRefreshed: shouldRefresh,
+        phase3AmbiguityMass: round(ambiguityMass, 6),
+        ambiguityGate,
+      },
+    };
+  }
+
+  const posteriorChoice = chooseFromAdaptivePosterior({
+    seed,
+    scenario,
+    pos,
+    state: state.adaptive,
+    config,
+    view,
+    policy:
+      mode === "hybrid_posterior_reset_only"
+        ? "hybrid_posterior_reset_action"
+        : "hybrid_posterior_decoy_disambig_action",
+  });
+  state.posteriorActionTurns += 1;
+  return withHybridDiagnostics(posteriorChoice, mode, responseDiagnostics, {
+    posteriorUsed: true,
+    posteriorRefreshed: shouldRefresh,
+    phase3AmbiguityMass: round(ambiguityMass, 6),
+    ambiguityGate,
+    resetGate,
+  });
+}
+
+function phase3AmbiguityMass(modelSummary) {
+  return modelSummary
+    .filter((entry) => entry.model === "decoy" || entry.model === "alias" || entry.model === "symmetric")
+    .reduce((acc, entry) => acc + entry.prob, 0);
+}
+
+function withHybridDiagnostics(choice, mode, responseDiagnostics, extra) {
+  return {
+    action: choice.action,
+    diagnostics: {
+      ...choice.diagnostics,
+      policy: `${mode}_${choice.diagnostics.policy}`,
+      responsePolicy: responseDiagnostics.policy,
+      responsePhase: responseDiagnostics.phase,
+      responseBestSignal: responseDiagnostics.bestSignal,
+      responseBestPos: responseDiagnostics.bestPos,
+      ...extra,
     },
   };
 }
@@ -904,11 +1088,12 @@ function simulateTrial({ mode, scenario, seed, config, candidates }) {
   let success = false;
   let turnsToHit = null;
   let cumulativeSignal = 0;
+  const metrics = { likelihoodEvals: 0 };
 
   for (let turn = 0; turn < maxTurns; turn += 1) {
     const observation = observe({ seed, turn, pos, previousPos, target, scenario, config });
     cumulativeSignal += observation.value;
-    const { action, diagnostics } = chooseAction({ mode, seed, turn, pos, target, scenario, observation, state, config });
+    const { action, diagnostics } = chooseAction({ mode, seed, turn, pos, target, scenario, observation, state, config, metrics });
     const nextPos = applyAction(pos, action);
     if (!inBounds(nextPos, config)) throw new Error(`Illegal ${mode} action ${action.id} at ${positionKey(pos)}`);
 
@@ -928,7 +1113,7 @@ function simulateTrial({ mode, scenario, seed, config, candidates }) {
       diagnostics,
     });
 
-    state.previousPos = pos;
+    setControllerPreviousPos(state, pos);
     previousPos = pos;
     pos = nextPos;
     if (hit) {
@@ -959,10 +1144,18 @@ function simulateTrial({ mode, scenario, seed, config, candidates }) {
     finalPosition: pos,
     finalDistance: round(finalDistance, 6),
     cumulativeSignal: round(cumulativeSignal, 6),
+    likelihoodEvals: metrics.likelihoodEvals,
+    posteriorActionTurns: state.posteriorActionTurns ?? 0,
+    responseActionTurns: state.responseActionTurns ?? 0,
     score: round(scoreOutcome({ success, turnsToHit, finalDistance, maxTurns, config }), 6),
     path: steps.map((step) => step.position).concat([pos]),
   };
   return { outcome, steps };
+}
+
+function setControllerPreviousPos(state, pos) {
+  state.previousPos = pos;
+  if (state.adaptive) state.adaptive.previousPos = pos;
 }
 
 function effectiveMaxTurns(scenario, config) {
@@ -974,6 +1167,11 @@ function modelStatusForMode(mode, scenario) {
   if (mode === "bayes_correct") return scenario === CLEAN_SCENARIO ? "correct" : "variant-correct";
   if (mode === "bayes_misspecified") return scenario === CLEAN_SCENARIO ? "correct-clean" : "misspecified-clean";
   if (mode === "bayes_adaptive") return "finite-mixture-adaptive";
+  if (mode === "hybrid") return "response-control-with-gated-posterior";
+  if (mode === "hybrid_no_posterior") return "no-posterior-response-floor";
+  if (mode === "hybrid_posterior_only") return "posterior-only-ablation";
+  if (mode === "hybrid_posterior_reset_only") return "posterior-reset-ablation";
+  if (mode === "hybrid_posterior_decoy_disambig") return "posterior-decoy-disambiguation-ablation";
   return "none";
 }
 
@@ -1031,6 +1229,9 @@ function summarizeTrials(trials, scenarios, modes) {
         medianTurnsToHit: successes.length ? median(successes.map((trial) => trial.turnsToHit)) : null,
         meanFinalDistance: round(mean(rows.map((trial) => trial.finalDistance)), 6),
         meanCumulativeSignal: round(mean(rows.map((trial) => trial.cumulativeSignal)), 6),
+        meanLikelihoodEvals: round(mean(rows.map((trial) => trial.likelihoodEvals ?? 0)), 6),
+        meanPosteriorActionTurns: round(mean(rows.map((trial) => trial.posteriorActionTurns ?? 0)), 6),
+        meanResponseActionTurns: round(mean(rows.map((trial) => trial.responseActionTurns ?? 0)), 6),
       });
     }
   }
@@ -1052,7 +1253,7 @@ function summaryFor(summaryRows, scenario, mode) {
 }
 
 function buildRegretRows(trials, modes) {
-  const bayesModes = modes.filter((mode) => mode.startsWith("bayes_"));
+  const bayesModes = modes.filter((mode) => mode.startsWith("bayes_") || mode.startsWith("hybrid"));
   const bySeedScenarioMode = new Map(trials.map((trial) => [`${trial.scenario}|${trial.seed}|${trial.mode}`, trial]));
   const rows = [];
   for (const trial of trials) {
@@ -1080,6 +1281,9 @@ function buildRegretRows(trials, modes) {
 }
 
 function buildExitGate(summaryRows, regretRows, config) {
+  if (isPhase4Config(config)) {
+    return buildPhase4ExitGate(summaryRows, config);
+  }
   if (config.scenarios.some((scenario) => PHASE3_SCENARIOS.includes(scenario))) {
     return buildPhase3ExitGate(summaryRows, config);
   }
@@ -1087,6 +1291,10 @@ function buildExitGate(summaryRows, regretRows, config) {
     return buildPhase2ExitGate(summaryRows, config);
   }
   return buildPhase1ExitGate(summaryRows, regretRows);
+}
+
+function isPhase4Config(config) {
+  return config.phase.includes("phase4") || config.modes.some((mode) => PHASE4_MODES.includes(mode) && mode.startsWith("hybrid"));
 }
 
 function buildPhase1ExitGate(summaryRows, regretRows) {
@@ -1216,14 +1424,126 @@ function buildPhase3ExitGate(summaryRows, config) {
   };
 }
 
+function buildPhase4ExitGate(summaryRows, config) {
+  const claimScenarios = ["decoy", "alias"];
+  const scenarioGates = [];
+  for (const scenario of config.scenarios.filter((entry) => PHASE3_SCENARIOS.includes(entry))) {
+    const hcSundog = summaryFor(summaryRows, scenario, "hc_sundog");
+    const bayesAdaptive = summaryFor(summaryRows, scenario, "bayes_adaptive");
+    const hybrid = summaryFor(summaryRows, scenario, "hybrid");
+    const hybridNoPosterior = summaryFor(summaryRows, scenario, "hybrid_no_posterior");
+    const hybridDecoyDisambig = summaryFor(summaryRows, scenario, "hybrid_posterior_decoy_disambig");
+    if (!hcSundog || !bayesAdaptive || !hybrid || !hybridNoPosterior || !hybridDecoyDisambig) continue;
+
+    const hybridRepair = repairAgainstSundog(hybrid, hcSundog, config);
+    const noPosteriorRepair = repairAgainstSundog(hybridNoPosterior, hcSundog, config);
+    const decoyDisambigRepair = repairAgainstSundog(hybridDecoyDisambig, hcSundog, config);
+    const frugalityArm = hybrid.meanLikelihoodEvals <= FRUGALITY_FRACTION * bayesAdaptive.meanLikelihoodEvals;
+    const loadBearingArm = !noPosteriorRepair.repair && decoyDisambigRepair.repair;
+    const repairArm = hybridRepair.repair;
+    const claimScenario = claimScenarios.includes(scenario);
+
+    scenarioGates.push({
+      scenario,
+      claimScenario,
+      bestSundogMode: "hc_sundog",
+      recoveryMargin: config.phase2SeparationMargin,
+      repairArm,
+      frugalityArm,
+      loadBearingArm,
+      allArms: repairArm && frugalityArm && loadBearingArm,
+      hybrid: {
+        meanScore: hybrid.meanScore,
+        successRate: hybrid.successRate,
+        meanLikelihoodEvals: hybrid.meanLikelihoodEvals,
+        meanPosteriorActionTurns: hybrid.meanPosteriorActionTurns,
+        scoreDeltaVsHcSundog: hybridRepair.scoreDelta,
+        successDeltaVsHcSundog: hybridRepair.successDelta,
+      },
+      hcSundog: {
+        meanScore: hcSundog.meanScore,
+        successRate: hcSundog.successRate,
+        meanLikelihoodEvals: hcSundog.meanLikelihoodEvals,
+      },
+      bayesAdaptive: {
+        meanScore: bayesAdaptive.meanScore,
+        successRate: bayesAdaptive.successRate,
+        meanLikelihoodEvals: bayesAdaptive.meanLikelihoodEvals,
+      },
+      hybridNoPosterior: {
+        meanScore: hybridNoPosterior.meanScore,
+        successRate: hybridNoPosterior.successRate,
+        meanLikelihoodEvals: hybridNoPosterior.meanLikelihoodEvals,
+        repair: noPosteriorRepair.repair,
+        scoreDeltaVsHcSundog: noPosteriorRepair.scoreDelta,
+        successDeltaVsHcSundog: noPosteriorRepair.successDelta,
+      },
+      hybridPosteriorDecoyDisambig: {
+        meanScore: hybridDecoyDisambig.meanScore,
+        successRate: hybridDecoyDisambig.successRate,
+        meanLikelihoodEvals: hybridDecoyDisambig.meanLikelihoodEvals,
+        repair: decoyDisambigRepair.repair,
+        scoreDeltaVsHcSundog: decoyDisambigRepair.scoreDelta,
+        successDeltaVsHcSundog: decoyDisambigRepair.successDelta,
+      },
+      frugalityFraction: FRUGALITY_FRACTION,
+      frugalityLimit: round(FRUGALITY_FRACTION * bayesAdaptive.meanLikelihoodEvals, 6),
+    });
+  }
+
+  const claimGates = scenarioGates.filter((gate) => gate.claimScenario);
+  const unnecessaryScenarios = claimGates
+    .filter((gate) => gate.hybridNoPosterior.repair)
+    .map((gate) => gate.scenario);
+  const claimScenarioSet = new Set(claimGates.map((gate) => gate.scenario));
+  const hasAllClaimScenarios = claimScenarios.every((scenario) => claimScenarioSet.has(scenario));
+  const nicheConfirmed =
+    hasAllClaimScenarios && claimGates.filter((gate) => claimScenarios.includes(gate.scenario)).every((gate) => gate.allArms);
+  const status = unnecessaryScenarios.length
+    ? "hybrid_unnecessary"
+    : nicheConfirmed
+      ? "hybrid_niche_confirmed"
+      : "hybrid_no_niche";
+
+  return {
+    kind: "phase4-hybrid",
+    name: "Hybrid niche gate: repair, frugality, and load-bearing posterior in decoy plus alias",
+    status,
+    pass: true,
+    bestSundogDefinition: "hc_sundog",
+    claimScenarios,
+    diagnosticScenarios: PHASE3_SCENARIOS.filter((scenario) => !claimScenarios.includes(scenario)),
+    recoveryMargin: config.phase2SeparationMargin,
+    frugalityFraction: FRUGALITY_FRACTION,
+    ambiguityMass: AMBIGUITY_MASS,
+    hardDropOverride: "repair(hybrid_no_posterior) in any claim scenario => hybrid_unnecessary",
+    unnecessaryScenarios,
+    nicheConfirmed,
+    scenarioGates,
+  };
+}
+
+function repairAgainstSundog(row, hcSundog, config) {
+  const scoreDelta = row.meanScore - hcSundog.meanScore;
+  const successDelta = row.successRate - hcSundog.successRate;
+  return {
+    repair: scoreDelta >= config.phase2SeparationMargin && successDelta >= 0,
+    scoreDelta: round(scoreDelta, 6),
+    successDelta: round(successDelta, 6),
+  };
+}
+
 function selectReplayTrials(trials, config) {
+  const phase4 = isPhase4Config(config);
   const phase3 = config.scenarios.some((scenario) => PHASE3_SCENARIOS.includes(scenario));
-  const referenceMode = phase3
+  const referenceMode = phase4
+    ? "hybrid"
+    : phase3
     ? "bayes_adaptive"
     : config.modes.includes("bayes_misspecified")
       ? "bayes_misspecified"
       : "bayes_correct";
-  const responseMode = phase3 ? "hc_sundog" : config.modes.includes("sundog_memory") ? "sundog_memory" : "hc_sundog";
+  const responseMode = phase3 || phase4 ? "hc_sundog" : config.modes.includes("sundog_memory") ? "sundog_memory" : "hc_sundog";
   const byScenarioSeed = new Map();
   for (const trial of trials) {
     const key = `${trial.scenario}|${trial.seed}`;
@@ -1345,7 +1665,9 @@ async function main() {
     completedAt,
     elapsedSeconds: round(elapsedSeconds, 6),
     purpose:
-      exitGate.kind === "phase3-aliasing"
+      exitGate.kind === "phase4-hybrid"
+        ? "Standalone Phase 4 Bayes-vs-Sundog hybrid controller smoke and lock harness."
+        : exitGate.kind === "phase3-aliasing"
         ? "Standalone Phase 3 Bayes-vs-Sundog aliasing and decoy slate."
         : exitGate.kind === "phase2-mismatch"
           ? "Standalone Phase 2 Bayes-vs-Sundog model-mismatch slate."
@@ -1389,6 +1711,14 @@ async function main() {
         dwellTurns: WRONG_LOCK_DWELL_TURNS,
         threshold: WRONG_LOCK_THRESHOLD,
       },
+      phase4HybridGate: {
+        bestSundog: "hc_sundog",
+        claimScenarios: ["decoy", "alias"],
+        diagnosticScenarios: ["symmetric", "low_probe"],
+        repairPredicate: "scoreDeltaVsHcSundog >= phase2SeparationMargin AND successDeltaVsHcSundog >= 0",
+        frugalityFraction: FRUGALITY_FRACTION,
+        ambiguityMass: AMBIGUITY_MASS,
+      },
       lowProbeMaxTurns: LOW_PROBE_MAX_TURNS,
     },
     policies: {
@@ -1415,6 +1745,26 @@ async function main() {
         observation: "position and scalar field observation only",
         actionRule: "response-control controller with remembered best cells and neighbor probing",
       },
+      hybrid: {
+        observation: "position and scalar field observation only plus a gated finite-mixture posterior",
+        actionRule: "HC-Sundog response action by default; frugality/ambiguity-paced posterior refreshes may override when phase3 ambiguity mass >= AMBIGUITY_MASS",
+      },
+      hybrid_no_posterior: {
+        observation: "position and scalar field observation only",
+        actionRule: "HC-Sundog response controller under the Phase 4 locked no-posterior floor label",
+      },
+      hybrid_posterior_only: {
+        observation: "position and scalar field observation plus finite-mixture posterior",
+        actionRule: "Bayes-adaptive posterior action without response controller",
+      },
+      hybrid_posterior_reset_only: {
+        observation: "position and scalar field observation plus finite-mixture posterior at response reset gates",
+        actionRule: "HC-Sundog response action except return-to-best-signal reset turns may use posterior action",
+      },
+      hybrid_posterior_decoy_disambig: {
+        observation: "position and scalar field observation plus finite-mixture posterior at decoy-disambiguation gates",
+        actionRule: "posterior action when phase3 ambiguity model mass >= AMBIGUITY_MASS",
+      },
       oracle: {
         observation: "privileged hidden source for apparatus ceiling only",
       },
@@ -1428,6 +1778,8 @@ async function main() {
       bayesMisspecifiedLockedToCleanLikelihood: args.modes.includes("bayes_misspecified"),
       bayesAdaptiveUsesFiniteModelMixture: args.modes.includes("bayes_adaptive"),
       phase3WrongLockClassifierPreRegistered: args.scenarios.some((scenario) => PHASE3_SCENARIOS.includes(scenario)),
+      phase4BestSundogIsHcSundog: isPhase4Config(args) ? true : null,
+      phase4FrugalityUsesLikelihoodEvals: isPhase4Config(args) ? "cumulative per-candidate Gaussian log-likelihood evals" : null,
       noTargetCoordinateInBayesObservation: true,
       noTargetCoordinateInSundogObservation: true,
       oracleExcludedFromClaimGate: true,
@@ -1463,6 +1815,9 @@ async function main() {
       "medianTurnsToHit",
       "meanFinalDistance",
       "meanCumulativeSignal",
+      "meanLikelihoodEvals",
+      "meanPosteriorActionTurns",
+      "meanResponseActionTurns",
     ]),
     "utf8",
   );
@@ -1490,7 +1845,11 @@ async function main() {
       `(${round(trials.length / Math.max(elapsedSeconds, 1e-9), 2)} trials/s)`,
   );
   console.log("Audits: pass");
-  if (exitGate.kind === "phase3-aliasing") {
+  if (exitGate.kind === "phase4-hybrid") {
+    const claimGates = exitGate.scenarioGates.filter((gate) => gate.claimScenario);
+    const passedClaims = claimGates.filter((gate) => gate.allArms);
+    console.log(`Exit gate: ${exitGate.status} (${passedClaims.length}/${exitGate.claimScenarios.length} claim scenarios all-arms)`);
+  } else if (exitGate.kind === "phase3-aliasing") {
     console.log(
       `Exit gate: ${exitGate.status} ` +
         `(${exitGate.dualGateScenarios.length}/${exitGate.scenarioGates.length} dual-gate scenarios)`,

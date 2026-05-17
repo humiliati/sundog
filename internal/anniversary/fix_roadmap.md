@@ -913,6 +913,21 @@ Exit:
 - Header nav is consistent across top-level pages.
 - Hero copy uses the new motto direction without adding an unsupported claim.
 
+Clearance pass, 2026-05-17:
+
+- Public/internal residue removed from `applications-gallery.html`; the
+  "Next Gallery Pass" maintenance block and its page-local CSS are no longer
+  public.
+- Rechecked the high-risk homepage coherence markers: no standalone static hero
+  guide remains, the glossary-linked v1.1 elevator pitch is present, and the
+  load-bearing evidence section precedes the applications rail.
+- Added `docs/gemini-benchmark.md` to the public docs inspection path
+  (`docs/index.html`) and docs README so the new brand stress test is filed
+  beside the Mythos benchmark.
+- Remaining launch-sensitive item in this cluster is Ask Sundog prompt/data
+  alignment. Treat that as an isolated experiment-preserving pass, not as a
+  casual copy rewrite.
+
 ## P2 - After The First Wave
 
 These are good follow-through once the initial public statement is out.
