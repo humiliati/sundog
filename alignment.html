@@ -231,6 +231,59 @@
             margin: 0;
         }
 
+        .side-by-side {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin: 1.45rem 0;
+        }
+
+        .analysis-heading {
+            color: var(--primary-dark);
+            font-size: 1rem;
+            margin: 1.65rem 0 0.45rem;
+        }
+
+        .side-column {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+        }
+
+        .side-column h3 {
+            color: var(--primary-dark);
+            font-size: 0.92rem;
+            letter-spacing: 0.07em;
+            margin-bottom: 0.55rem;
+            text-transform: uppercase;
+        }
+
+        .side-column p {
+            color: #40505C;
+            font-size: 0.94rem;
+            line-height: 1.62;
+            margin-bottom: 0.7rem;
+        }
+
+        .side-column p:last-child {
+            margin-bottom: 0;
+        }
+
+        .analysis-line {
+            margin: 1rem 0 0;
+            padding: 0.95rem 1rem;
+            border-left: 4px solid #2B8C76;
+            background: #FFFFFF;
+        }
+
+        .analysis-line p {
+            color: #354752;
+            font-size: 0.98rem;
+            line-height: 1.68;
+            margin: 0;
+        }
+
         .table-wrap {
             overflow-x: auto;
             border: 1px solid var(--line);
@@ -337,6 +390,7 @@
             .method-grid,
             .result-grid,
             .formula-pair,
+            .side-by-side,
             .inspection-grid {
                 grid-template-columns: 1fr;
             }
@@ -513,6 +567,44 @@
                     <p>
                         The strongest public posture is complementary: Bayes is for knowing under uncertainty. Sundog is for acting under partial sight. The comparison should report where each earns its keep, where each fails, and when a hybrid is the honest answer.
                     </p>
+                    <h3 class="analysis-heading">Pressure Mines side-by-side</h3>
+                    <p>
+                        Pressure Mines is the clearest current Bayes plus Sundog alignment example because both lanes now run on the same admitted pressure field. The Phase 13 bundle is not just extra experiment data; it tells the public page which interpretation is allowed.
+                    </p>
+                    <div class="side-by-side" aria-label="Pressure Mines Bayes and Sundog side-by-side analysis">
+                        <div class="side-column">
+                            <h3>Sundog lane</h3>
+                            <p>
+                                Phase 10 keeps the public claim local: in the confirmed pocket, <code>sundog_minimal</code> improved budget-adjusted safe-tile progress by +7.21875 versus <code>naive_pressure</code>, and <code>sundog_lean</code> also cleared the gate at +6.3125.
+                            </p>
+                            <p>
+                                This is route evidence for pressure-field action, not a board-clearance claim.
+                            </p>
+                        </div>
+                        <div class="side-column">
+                            <h3>Bayes lane</h3>
+                            <p>
+                                The Phase 12 all-cell reducer ran 14,720 same-field trials across 46 Phase 10 cells. <code>bayes_frontier_pressure</code> had zero negative mean-regret cells versus <code>naive_pressure</code> and <code>sundog_minimal</code>.
+                            </p>
+                            <p>
+                                The hard lane is pressure-floor parity; <code>sundog_lean</code> stays a diagnostic headroom lane.
+                            </p>
+                        </div>
+                        <div class="side-column">
+                            <h3>Allowed read</h3>
+                            <p>
+                                Bayes prevents the Mines result from resting on a weak naive comparator, but it does not make the stronger claim that Sundog beats posterior inference.
+                            </p>
+                            <p>
+                                In the promoted pocket, Bayes is 0 versus <code>sundog_minimal</code> and -1.515625 versus <code>sundog_lean</code>, so the safe language is same-field floor, not posterior dominance.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="analysis-line">
+                        <p>
+                            Alignment reading: the side-by-side says the admitted pressure trace contains enough structure for both a legal posterior floor and a Sundog controller family to act, while the boundary remains visible. That is stronger than "Sundog beat naive" and weaker than "Sundog beat Bayes." It is exactly the middle claim this page should preserve.
+                        </p>
+                    </div>
                 </div>
             </article>
 
@@ -551,8 +643,8 @@
                                 <tr>
                                     <td><strong>Pressure Mines</strong></td>
                                     <td>Phase 10 confirmed a narrow pressure-field pocket: density 0.16, pressure noise 2.0, dropout 0.2 improved budget-adjusted safe-tile progress versus <code>naive_pressure</code>, beside a matched failure cell.</td>
-                                    <td>The same-field Bayesian baseline is active but not locked. Admission and posterior smokes pass; the pocket probe keeps <code>bayes_frontier_pressure</code> at parity or near parity in the small best/worst slice, but the Phase 10-slate reducer is still next.</td>
-                                    <td>Current public claim remains the operating-envelope pocket versus naive pressure. Bayes fields stay claim-hygiene, pending full reduction.</td>
+                                    <td>Phase 13 now publishes the same-field Bayesian pressure-floor receipt: 14,720 trials across all 46 Phase 10 cells, no-leak pass, zero negative cells versus <code>naive_pressure</code> / <code>sundog_minimal</code>, and visible <code>sundog_lean</code> headroom.</td>
+                                    <td>Upgrade the public read from pending hygiene to earned pressure-floor parity. Keep the claim narrow: this validates the comparator lane, not posterior dominance or field clearance.</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Three-Body / Coarse Proof</strong></td>
@@ -627,7 +719,7 @@
                         </a>
                         <a href="docs/sundog_v_minesweeper.md#bayesian-baseline-profile" class="inspection-card">
                             <h3>Mines Bayes Profile</h3>
-                            <p>Same-field frontier posterior, admission tests, smoke receipts, and pending lock path.</p>
+                            <p>Same-field frontier posterior, Phase 13 pressure-floor receipt, and public claim boundary.</p>
                         </a>
                         <a href="docs/proof/PHASE4_THREEBODY.md" class="inspection-card">
                             <h3>Three-Body Gate</h3>
