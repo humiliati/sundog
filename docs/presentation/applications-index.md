@@ -88,7 +88,7 @@ The three-body tab tests whether guarded proxy control can improve survival from
 - Comparison slate: `track_sensor_accel_guarded` positive in 81/81 high-velocity near-escape rows; naive local baseline 0/81 candidate rows
 
 **Assets Available:**
-- Interactive experiment page (`threebody.html`)
+- Interactive experiment page (`/threebody`)
 - Phase 11 summary
 - Roadmap and detailed writeup
 - Result directories for guard quantiles, outside-pocket expansion, and comparison
@@ -127,7 +127,7 @@ The Pressure Mines workbench tests whether a controller can make safer progress 
 - Paired failure: density 0.22 / pressure noise 1.0 / dropout 0.35; `sundog_lean` -4.71875 versus `naive_pressure`, 95% CI [-8.375781, -1.496484]
 
 **Assets Available:**
-- Interactive workbench (`mines.html`)
+- Interactive workbench (`/mines`)
 - Roadmap and audit trail
 - Phase 10 verdict artifacts under `results/mines/phase10-envelope`
 - Browser replay URLs for the failure and confirmed cells
@@ -138,7 +138,7 @@ The Pressure Mines workbench tests whether a controller can make safer progress 
 - Later controller-redesign phase if a broader controller claim is desired
 
 **Links:**
-- [Workbench](../../mines.html)
+- [Workbench](../../mines)
 - [Roadmap](../sundog_v_minesweeper.md)
 - [Application Map](../APPLICATIONS.md#sundog-pressure-mines-workbench)
 

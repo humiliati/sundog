@@ -42,7 +42,7 @@ for (const id of [
   ok(html.includes(`id="${id}"`), `sundog.html missing #${id}`);
 }
 
-ok(html.includes('<link rel="canonical" href="https://sundog.cc/sundog.html">'), "missing canonical sundog URL");
+ok(html.includes('<link rel="canonical" href="https://sundog.cc/sundog">'), "missing canonical sundog URL");
 ok(html.includes('property="og:image"'), "missing og:image");
 ok(html.includes('name="twitter:card"'), "missing Twitter card");
 ok(html.includes('id="photo-upload-mount"'), "missing Phase 5 upload mount");
@@ -84,7 +84,7 @@ ok(workbench.includes("enablePhase6Drag"), "workbench missing Phase 6 drag wirin
 ok(phase6Drag.includes("data-phase6-binding") && phase6Drag.includes('binding: "parhelic-curvature"'), "Phase 6 drag missing parhelic curvature binding");
 ok(phase6Drag.includes('binding: "cza-curvature"'), "Phase 6 drag missing CZA curvature binding");
 ok(phase6Drag.includes("phase3.daggerOffset"), "Phase 6 drag missing sun-altitude dagger binding");
-ok(sitemap.includes("https://sundog.cc/sundog.html"), "sitemap missing sundog.html");
+ok(sitemap.includes("https://sundog.cc/sundog"), "sitemap missing /sundog");
 ok(robots.includes("Sitemap: https://sundog.cc/sitemap.xml"), "robots.txt missing sitemap pointer");
 
 if (failures.length > 0) {

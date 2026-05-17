@@ -92,8 +92,8 @@ Plain-English glosses for readers who haven't read the audit memos:
 
 ## Quick links
 
-- Live atlas explainer: <https://sundog.cc/sundog.html>
-- Interactive math-binding tests (developer-facing implementation validation; not a citation surface): <https://sundog.cc/phase3-tests.html>
+- Live atlas explainer: <https://sundog.cc/sundog>
+- Interactive math-binding tests (developer-facing implementation validation; not a citation surface): <https://sundog.cc/phase3-tests>
 - Geometry source module: [`public/js/parhelion-geometry.mjs`](../public/js/parhelion-geometry.mjs)
 - Calibration script: [`scripts/overlay_calibrate.py`](../scripts/overlay_calibrate.py)
 - 7-photo calibration overlays: [`docs/calibration/overlays/`](calibration/overlays/)
@@ -261,7 +261,7 @@ circumzenithal arc) drawn at the geometric positions the formulas in
 §1 predict. A control panel lets you drag the sun across the sky,
 adjust sun altitude, and toggle individual features on and off.
 
-1. Open <https://sundog.cc/sundog.html>.
+1. Open <https://sundog.cc/sundog>.
 2. §4 "Sun altitude" shows the parhelion offset live as `R₂₂ × sec(h)`
    for any `h` you choose with the slider. The parhelia move outward
    from the sun as you raise the slider; below ~32° sun altitude the
@@ -273,7 +273,7 @@ adjust sun altitude, and toggle individual features on and off.
 
 ### Path B — run the assertions
 
-1. Open <https://sundog.cc/phase3-tests.html>.
+1. Open <https://sundog.cc/phase3-tests>.
 2. The page loads `parhelion-geometry.mjs` and runs **32 assertions**
    against the exported `phase3` namespace:
    - `daggerOffset(h)` matches `R₂₂ / cos(h)` to within 0.05 px across
@@ -386,7 +386,7 @@ supplement:
   in the article body)
 - **Suggested supplement:** External-links entry: "Interactive
   demonstration of the `R₂₂ / cos(h)` parhelion-offset relation
-  (Greenler 1980, ch. 3): sundog.cc/sundog.html"
+  (Greenler 1980, ch. 3): sundog.cc/sundog"
 - **Why it fits:** the article asserts the relationship qualitatively;
   the atlas demonstrates it quantitatively with a slider, anchored to
   Greenler's derivation rather than to project-original work.
@@ -401,7 +401,7 @@ The article describes CZA visibility cutoff at sun altitudes above
   Greenler ch. 4)
 - **Suggested supplement:** External-links entry: "Atlas with live
   visibility-cutoff demonstration (Greenler 1980, ch. 4):
-  sundog.cc/sundog.html#sun-altitude-binding"
+  sundog.cc/sundog#sun-altitude-binding"
 - **Why it fits:** the explanatory threshold is a fact in the article;
   a manipulable slider that disappears the arc at exactly that
   threshold is a useful pedagogical adjunct.
@@ -419,7 +419,7 @@ guidance (`WP:EL`) is conservative; the post-audit dispatch
 (2026-05-14) flagged that any external-link case must satisfy three
 constraints before being defensible: (i) on-workbench attribution to
 Greenler / Tape / Cowley must be visible above-the-fold on
-`sundog.cc/sundog.html` itself (a Wikipedia reviewer clicks the link,
+`sundog.cc/sundog` itself (a Wikipedia reviewer clicks the link,
 not this packet); (ii) link blurbs must name the literature source by
 surname, not the workbench's framing; (iii) the project-internal
 "we are not aware of an existing public resource…" line (§2 item 1),
@@ -451,7 +451,7 @@ If a Wikipedia editor decides to add the atlas as an external link,
 the suggested citation template:
 
 ```
-* [https://sundog.cc/sundog.html The Sundog Halo Atlas — interactive
+* [https://sundog.cc/sundog The Sundog Halo Atlas — interactive
   parametric model of the parhelion display, calibrated against
   photographs]. Jeffery Hughes Jr. (Stellar Aqua LLC), 2026. Source
   code under MIT license at https://github.com/humiliati/sundog.

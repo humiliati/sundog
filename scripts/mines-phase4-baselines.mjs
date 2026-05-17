@@ -49,7 +49,7 @@ function parseList(value) {
 // Replay URL contract — kept in lockstep with mines-browser.mjs.
 //   Required params: preset, seed, mode, sensor
 //   Optional params: compare (a second mode run on the same matched seed)
-// Accepts either a full URL (https://sundog.cc/mines.html?...) or a bare
+// Accepts either a full URL (https://sundog.cc/mines?...) or a bare
 // query string ("?preset=easy_sparse&seed=42&mode=sundog_lean&sensor=doc_default").
 function parseReplayURL(value) {
   if (!value || typeof value !== "string") {
@@ -60,7 +60,7 @@ function parseReplayURL(value) {
     const trimmed = value.trim();
     const url = trimmed.startsWith("http")
       ? new URL(trimmed)
-      : new URL(trimmed.startsWith("?") ? trimmed : `?${trimmed}`, "https://sundog.cc/mines.html");
+      : new URL(trimmed.startsWith("?") ? trimmed : `?${trimmed}`, "https://sundog.cc/mines");
     params = url.searchParams;
   } catch (err) {
     throw new Error(`--replay-url could not be parsed: ${err.message}`);
@@ -282,7 +282,7 @@ function makeBrowserReplayURL({ preset, seed, mode, sensorCell }) {
     mode,
     sensor: sensorCell,
   });
-  return `https://sundog.cc/mines.html?${params.toString()}`;
+  return `https://sundog.cc/mines?${params.toString()}`;
 }
 
 function makeHarnessReplayCommand(replayURL) {

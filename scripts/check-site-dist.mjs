@@ -1,5 +1,5 @@
 import { access, readdir, readFile } from "node:fs/promises";
-import { dirname, join, normalize } from "node:path";
+import { dirname, extname, join, normalize } from "node:path";
 
 const dist = join(process.cwd(), "dist");
 const missing = [];
@@ -56,6 +56,15 @@ for (const htmlPath of await htmlFiles(dist)) {
     try {
       await access(target);
     } catch {
+      const htmlFallback = extname(target) === "" ? `${target}.html` : "";
+      if (htmlFallback) {
+        try {
+          await access(htmlFallback);
+          continue;
+        } catch {
+          // Fall through to the missing-link report below.
+        }
+      }
       missing.push(`${htmlPath}: ${href}`);
     }
   }

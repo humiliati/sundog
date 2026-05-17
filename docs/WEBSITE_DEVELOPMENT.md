@@ -28,20 +28,22 @@ Create a root-level HTML file:
 example.html
 ```
 
-Use ordinary relative links. For example, from `index.html`:
+Use extensionless public links. The source file remains `example.html`, but the
+public URL should be `/example`:
 
 ```html
-<a href="example.html">Example</a>
+<a href="/example">Example</a>
 ```
 
 And from `example.html` back to the homepage:
 
 ```html
-<a href="index.html">Home</a>
+<a href="/">Home</a>
 ```
 
-Root-level `*.html` files are automatically included in the production build.
-Use lowercase, hyphenated filenames for public pages, such as:
+Root-level `*.html` files ship only after they are listed in
+`site-pages.json`. Use lowercase, hyphenated filenames for public pages, such
+as:
 
 ```text
 research-notes.html
@@ -167,13 +169,12 @@ Style rules:
 
 Halo term handling:
 
-- Add stable IDs to relevant `legend.html` phenomenon cards before linking
+- Add stable IDs to relevant `/legend` phenomenon cards before linking
   terms into them.
 - A small glossary data file, likely `public/data/halo-glossary.json`, can map
   terms such as `parhelion`, `circumzenithal arc`, `circumhorizon arc`,
   `tangent arc`, `parhelic circle`, `22 deg halo`, and `46 deg halo` to a
-  plain-language definition plus a deep link into `legend.html` or
-  `sundog.html`.
+  plain-language definition plus a deep link into `/legend` or `/sundog`.
 - Public text should use focusable links or accessible definition popovers,
   not hover-only behavior. Hover can enrich desktop reading, but tap/focus
   must work on mobile and keyboard.
@@ -390,6 +391,26 @@ files. The build runs `scripts/build-chat-index.mjs` first, so Ask Sundog's
 public claim map, retrieval index, evidence tiers, and boundary rules are
 regenerated from `chat/claim_map.json`. If a new page is linked from
 `index.html` but not present in `dist`, the build fails.
+
+Public routes are canonical without `.html` extensions: `/about`, `/sundog`,
+`/legend`, `/chat`, and so on. Keep `href`, canonical tags, sitemap entries,
+JSON-LD URLs, and generated replay URLs on the extensionless form. Cloudflare
+Pages redirects legacy `.html` routes through `public/_redirects`; keep that
+file updated when a new root page launches. Use `/sundog` for the visual Halo
+Atlas and `/legend` for vocabulary/reference. `/atlas` is only a legacy alias
+to `/sundog`.
+
+After route or canonical changes, run:
+
+```bash
+npm run site:routes -- --base http://127.0.0.1:5173
+```
+
+The local Vite server may serve legacy `.html` files directly, so local route
+smoke allows `200` for old URLs. Cloudflare preview and live checks require the
+legacy routes to redirect to the clean canonical paths. Before relying on a
+route-policy change, run the same check against a Pages preview URL, then use
+`npm run site:routes` after deploy to smoke the live `sundog.cc` surface.
 
 ### Root HTML Publication Manifest
 

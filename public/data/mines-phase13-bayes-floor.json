@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-17T19:28:49.063Z",
+  "generatedAt": "2026-05-17T22:21:56.276Z",
   "purpose": "Public Pressure Mines Phase 13 data surface. Generated from Phase 10 operating-envelope receipts and Phase 12 same-field Bayesian pressure-floor receipts; do not hand-edit.",
   "sourcePaths": {
     "phase10Manifest": "results/mines/phase10-envelope/manifest.json",
@@ -43,7 +43,7 @@
           "controller_overcommitted"
         ],
         "representativeSeed": 39,
-        "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=39&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.35"
+        "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=39&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.35"
       },
       {
         "selection": "best_cell",
@@ -66,7 +66,7 @@
           "field_uninformative"
         ],
         "representativeSeed": 47,
-        "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=47&mode=sundog_minimal&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.2"
+        "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=47&mode=sundog_minimal&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.2"
       }
     ]
   },
@@ -192,7 +192,7 @@
       "reason": "Phase 10 promoted positive pocket.",
       "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_2_dropout_0p2__w9__h9__m13__c0__s1__n2__d0p2__lag0__scan3",
       "seed": 47,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=47&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=47&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.2",
       "replayParams": {
         "preset": "easy_sparse",
         "seed": "47",
@@ -605,7 +605,7 @@
       "reason": "Phase 10 paired negative region.",
       "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_1_dropout_0p35__w9__h9__m18__c0__s1__n1__d0p35__lag0__scan3",
       "seed": 39,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=39&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=39&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.35",
       "replayParams": {
         "preset": "easy_sparse",
         "seed": "39",
@@ -1357,7 +1357,7 @@
       "reason": "Largest absolute mean delta between bayes_frontier_pressure and sundog_lean in the Phase 10-slate reducer.",
       "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_0p1_dropout_0p05__w9__h9__m13__c0__s1__n0p1__d0p05__lag0__scan3",
       "seed": 61,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=61&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=61&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.05",
       "replayParams": {
         "preset": "easy_sparse",
         "seed": "61",
@@ -2110,7 +2110,7 @@
       "cellClass": "candidate_positive",
       "preset": "easy_sparse",
       "representativeSeed": 47,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=47&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=47&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -2161,7 +2161,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 0,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=0&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=0&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -2212,7 +2212,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 20,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=20&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=0.5&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=20&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=0.5&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -2263,7 +2263,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 54,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=54&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=1&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=54&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=1&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -2314,7 +2314,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 16,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=16&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=2&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=16&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=2&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -2365,7 +2365,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 61,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=61&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=61&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -2416,7 +2416,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 34,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=34&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=0.5&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=34&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=0.5&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -2467,7 +2467,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 49,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=49&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=0.5&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=49&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=0.5&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -2518,7 +2518,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 38,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=38&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=1&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=38&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=1&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -2569,7 +2569,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 54,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=54&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=1&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=54&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=1&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -2620,7 +2620,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 3,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -2671,7 +2671,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 4,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -2722,7 +2722,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 41,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -2773,7 +2773,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 43,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=43&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=0.5&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=43&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=0.5&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -2824,7 +2824,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 43,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=43&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=0.5&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=43&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=0.5&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -2875,7 +2875,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 37,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=37&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=37&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -2926,7 +2926,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 39,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=39&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=39&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -2977,7 +2977,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 35,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=35&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&cluster_strength=0.65",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=35&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&cluster_strength=0.65",
       "board": {
         "width": 9,
         "height": 9,
@@ -3028,7 +3028,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 41,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
       "board": {
         "width": 9,
         "height": 9,
@@ -3079,7 +3079,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 41,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
       "board": {
         "width": 9,
         "height": 9,
@@ -3130,7 +3130,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 41,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
       "board": {
         "width": 9,
         "height": 9,
@@ -3181,7 +3181,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 41,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
       "board": {
         "width": 9,
         "height": 9,
@@ -3232,7 +3232,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 41,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&delay=1",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&delay=1",
       "board": {
         "width": 9,
         "height": 9,
@@ -3283,7 +3283,7 @@
       "cellClass": "failure_regime",
       "preset": "easy_sparse",
       "representativeSeed": 61,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=61&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&delay=2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=61&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&delay=2",
       "board": {
         "width": 9,
         "height": 9,
@@ -3334,7 +3334,7 @@
       "cellClass": "neutral",
       "preset": "easy_sparse",
       "representativeSeed": 1,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=1&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=1&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -3385,7 +3385,7 @@
       "cellClass": "neutral",
       "preset": "easy_sparse",
       "representativeSeed": 3,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=0.5&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=0.5&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -3436,7 +3436,7 @@
       "cellClass": "neutral",
       "preset": "easy_sparse",
       "representativeSeed": 6,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=6&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=0.5&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=6&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=0.5&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -3487,7 +3487,7 @@
       "cellClass": "neutral",
       "preset": "easy_sparse",
       "representativeSeed": 27,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=27&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=27&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -3538,7 +3538,7 @@
       "cellClass": "neutral",
       "preset": "easy_sparse",
       "representativeSeed": 0,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=0&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=0.5&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=0&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=0.5&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -3589,7 +3589,7 @@
       "cellClass": "neutral",
       "preset": "easy_sparse",
       "representativeSeed": 4,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&cluster_strength=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&cluster_strength=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -3640,7 +3640,7 @@
       "cellClass": "neutral",
       "preset": "easy_sparse",
       "representativeSeed": 6,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=6&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&sigma=2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=6&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&sigma=2",
       "board": {
         "width": 9,
         "height": 9,
@@ -3691,7 +3691,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 4,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -3742,7 +3742,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 1,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=1&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=1&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=1&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=1&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -3793,7 +3793,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 1,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=1&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=1&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=1&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=1&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -3844,7 +3844,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 13,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=13&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=2&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=13&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=2&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -3895,7 +3895,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 19,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=19&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=2&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=19&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=2&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -3946,7 +3946,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 49,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=49&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=49&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -3997,7 +3997,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 25,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=25&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=1&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=25&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=1&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -4048,7 +4048,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 3,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -4099,7 +4099,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 7,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=7&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=7&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -4150,7 +4150,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 3,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=0.5&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=0.5&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -4201,7 +4201,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 10,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=10&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=10&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -4252,7 +4252,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 16,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=16&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=2&dropout=0.05",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=16&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=2&dropout=0.05",
       "board": {
         "width": 9,
         "height": 9,
@@ -4303,7 +4303,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 47,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=47&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=2&dropout=0.2",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=47&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=2&dropout=0.2",
       "board": {
         "width": 9,
         "height": 9,
@@ -4354,7 +4354,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 4,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=2&dropout=0.35",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=2&dropout=0.35",
       "board": {
         "width": 9,
         "height": 9,
@@ -4405,7 +4405,7 @@
       "cellClass": "watch_boundary",
       "preset": "easy_sparse",
       "representativeSeed": 36,
-      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=36&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&sigma=3",
+      "replayUrl": "https://sundog.cc/mines?preset=easy_sparse&seed=36&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&sigma=3",
       "board": {
         "width": 9,
         "height": 9,

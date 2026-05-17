@@ -44,7 +44,7 @@ them separate.
 
 ## Three-Body Dynamics Workbench
 
-Local page: [`threebody.html`](../threebody.html)
+Local page: [`/threebody`](../threebody)
 
 Phase 11 summary:
 [`docs/THREEBODY_PHASE11_SUMMARY.md`](THREEBODY_PHASE11_SUMMARY.md)
@@ -84,7 +84,7 @@ without borrowing certainty from the photometric research result.
 
 ## Sundog Balance Workbench
 
-Local page: [`balance.html`](../balance.html)
+Local page: [`/balance`](../balance)
 
 Phase 10 verdict artifact:
 `results/balance/phase10-envelope/verdict.md` (ignored local result; summarized
@@ -128,7 +128,7 @@ signal stops being enough.
 
 ## Sundog Pressure Mines Workbench
 
-Local page: [`mines.html`](../mines.html)
+Local page: [`/mines`](../mines)
 
 Roadmap: [`docs/sundog_v_minesweeper.md`](sundog_v_minesweeper.md)
 
@@ -856,8 +856,8 @@ For academic communication, add the boundary:
 1. Read the root `README.md` in this repo.
 2. Read `docs/RESEARCHER_GUIDE.md`.
 3. Inspect `docs/PAPER_v1_draft.md` and `results/analysis/analysis_summary.json`.
-4. Read `docs/THREEBODY_PHASE11_SUMMARY.md` and launch `threebody.html`.
-5. Read `docs/sundog_v_balance.md`, then launch `balance.html` and inspect
+4. Read `docs/THREEBODY_PHASE11_SUMMARY.md` and launch `/threebody`.
+5. Read `docs/sundog_v_balance.md`, then launch `/balance` and inspect
    `results/balance/phase10-envelope/verdict.md`.
 6. Read `docs/runners.md` for the EyesOnly bridge.
 7. Inspect EyesOnly's headless runner, UI automation neighbor, and LAGM design

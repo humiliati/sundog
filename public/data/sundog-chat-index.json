@@ -130,7 +130,7 @@
       "id": "halo_atlas_vocabulary_status:1",
       "routeId": "halo_atlas_vocabulary_status",
       "doc": "sundog.html",
-      "href": "/sundog.html",
+      "href": "/sundog",
       "section": "The full atlas / Named in the literature, beyond the rendered set",
       "tier": "conceptual_lineage",
       "disposition": "allow_with_boundary",
@@ -162,7 +162,7 @@
         "halos not rendered",
         "halos beyond the rendered set"
       ],
-      "text": "The halo vocabulary on sundog.html is an atlas and literature guide, not a new Sundog result. The page renders a deliberate subset of named atmospheric-optics primitives and also catalogs families beyond the rendered set: Parry-family arcs, pyramidal or odd-radius halos, Lowitz arcs, antisolar features, and sub-horizon or circumhorizon features. Those names come from the atmospheric-optics literature and HaloSim/AtOptics references; several are named-only or not modeled by the current geometry layer. halo vocabulary academic halo vocabulary atmospheric optics vocabulary halo atlas vocabulary what halos does the atlas model what halos are not modeled named halo families parry family arcs sunvex parry pyramidal halos odd radius halos lowitz arcs antisolar features anthelic arcs subhorizon halos circumhorizon arc halos not rendered halos beyond the rendered set Do not imply Sundog discovered the halo vocabulary; it is standard atmospheric-optics terminology. Do not imply every named halo family is rendered, detected, or thoroughly described by the atlas. Treat named-only and not-modeled families as literature/catalogue coverage until the geometry, photo evidence, and documentation are completed. Keep atmospheric-optics atlas claims separate from the paper-grade photometric mirror-alignment result."
+      "text": "The halo vocabulary on /sundog is an atlas and literature guide, not a new Sundog result. The page renders a deliberate subset of named atmospheric-optics primitives and also catalogs families beyond the rendered set: Parry-family arcs, pyramidal or odd-radius halos, Lowitz arcs, antisolar features, and sub-horizon or circumhorizon features. Those names come from the atmospheric-optics literature and HaloSim/AtOptics references; several are named-only or not modeled by the current geometry layer. halo vocabulary academic halo vocabulary atmospheric optics vocabulary halo atlas vocabulary what halos does the atlas model what halos are not modeled named halo families parry family arcs sunvex parry pyramidal halos odd radius halos lowitz arcs antisolar features anthelic arcs subhorizon halos circumhorizon arc halos not rendered halos beyond the rendered set Do not imply Sundog discovered the halo vocabulary; it is standard atmospheric-optics terminology. Do not imply every named halo family is rendered, detected, or thoroughly described by the atlas. Treat named-only and not-modeled families as literature/catalogue coverage until the geometry, photo evidence, and documentation are completed. Keep atmospheric-optics atlas claims separate from the paper-grade photometric mirror-alignment result."
     },
     {
       "id": "halo_atlas_vocabulary_status:2",
@@ -200,7 +200,7 @@
         "halos not rendered",
         "halos beyond the rendered set"
       ],
-      "text": "The halo vocabulary on sundog.html is an atlas and literature guide, not a new Sundog result. The page renders a deliberate subset of named atmospheric-optics primitives and also catalogs families beyond the rendered set: Parry-family arcs, pyramidal or odd-radius halos, Lowitz arcs, antisolar features, and sub-horizon or circumhorizon features. Those names come from the atmospheric-optics literature and HaloSim/AtOptics references; several are named-only or not modeled by the current geometry layer. halo vocabulary academic halo vocabulary atmospheric optics vocabulary halo atlas vocabulary what halos does the atlas model what halos are not modeled named halo families parry family arcs sunvex parry pyramidal halos odd radius halos lowitz arcs antisolar features anthelic arcs subhorizon halos circumhorizon arc halos not rendered halos beyond the rendered set Do not imply Sundog discovered the halo vocabulary; it is standard atmospheric-optics terminology. Do not imply every named halo family is rendered, detected, or thoroughly described by the atlas. Treat named-only and not-modeled families as literature/catalogue coverage until the geometry, photo evidence, and documentation are completed. Keep atmospheric-optics atlas claims separate from the paper-grade photometric mirror-alignment result."
+      "text": "The halo vocabulary on /sundog is an atlas and literature guide, not a new Sundog result. The page renders a deliberate subset of named atmospheric-optics primitives and also catalogs families beyond the rendered set: Parry-family arcs, pyramidal or odd-radius halos, Lowitz arcs, antisolar features, and sub-horizon or circumhorizon features. Those names come from the atmospheric-optics literature and HaloSim/AtOptics references; several are named-only or not modeled by the current geometry layer. halo vocabulary academic halo vocabulary atmospheric optics vocabulary halo atlas vocabulary what halos does the atlas model what halos are not modeled named halo families parry family arcs sunvex parry pyramidal halos odd radius halos lowitz arcs antisolar features anthelic arcs subhorizon halos circumhorizon arc halos not rendered halos beyond the rendered set Do not imply Sundog discovered the halo vocabulary; it is standard atmospheric-optics terminology. Do not imply every named halo family is rendered, detected, or thoroughly described by the atlas. Treat named-only and not-modeled families as literature/catalogue coverage until the geometry, photo evidence, and documentation are completed. Keep atmospheric-optics atlas claims separate from the paper-grade photometric mirror-alignment result."
     },
     {
       "id": "application_tier_summary:1",
@@ -941,7 +941,7 @@
       "id": "team_and_attribution:1",
       "routeId": "team_and_attribution",
       "doc": "about.html",
-      "href": "/about.html",
+      "href": "/about",
       "section": "Current Legal Structure",
       "tier": "navigation",
       "disposition": "allow_with_correction",

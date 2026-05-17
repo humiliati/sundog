@@ -4,7 +4,7 @@
 
 This policy covers the optional "Share my photo with the Sundog project for
 atlas-model training" checkbox in the photo-upload widget at
-[`/sundog.html`](../sundog.html) §6. It does NOT cover any other interaction
+[`/sundog`](../sundog) §6. It does NOT cover any other interaction
 with the site. If you don't check that box, none of the data described
 below ever leaves your browser.
 
@@ -67,7 +67,7 @@ removed, and the KV index entry is deleted so the token can't be replayed.
 
 The Sundog project's browser saves a copy of your deletion URL in
 `localStorage` after a successful submission (under the key
-`sundog.submissions`), so you can revisit `/sundog.html` and click "manage
+`sundog.submissions`), so you can revisit `/sundog` and click "manage
 my submissions" to find your token again. Clearing your browser storage
 will lose this — keep a copy elsewhere if you want long-term recovery.
 
@@ -117,4 +117,4 @@ metadata (`consent.policy_version`).
 
 The project lives at [github.com/humiliati/sundog](https://github.com/humiliati/sundog).
 For policy questions or expedited deletion, file an issue or reach out via
-the contact links on `index.html`.
+the contact links on `/`.
