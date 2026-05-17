@@ -57,6 +57,7 @@ function parseArgs(argv) {
     resampleThreshold: 0.5,
     shapeFraction: 0.5,
     signatureAdvantageDtMultiplier: 1,
+    candidateHoldSteps: 1,
     bootstrapSeed: 40604,
   };
 
@@ -96,6 +97,7 @@ function parseArgs(argv) {
     else if (flag === "--resample-threshold") args.resampleThreshold = Number.parseFloat(value);
     else if (flag === "--shape-fraction") args.shapeFraction = Number.parseFloat(value);
     else if (flag === "--signature-advantage-dt-multiplier") args.signatureAdvantageDtMultiplier = Number.parseFloat(value);
+    else if (flag === "--candidate-hold-steps") args.candidateHoldSteps = Number.parseInt(value, 10);
     else if (flag === "--bootstrap-seed") args.bootstrapSeed = Number.parseInt(value, 10);
     else throw new Error(`Unknown flag: ${flag}`);
   }
@@ -115,6 +117,9 @@ function parseArgs(argv) {
   }
   if (!Number.isFinite(args.signatureAdvantageDtMultiplier) || args.signatureAdvantageDtMultiplier < 0) {
     throw new Error("--signature-advantage-dt-multiplier must be non-negative");
+  }
+  if (!Number.isInteger(args.candidateHoldSteps) || args.candidateHoldSteps < 1) {
+    throw new Error("--candidate-hold-steps must be a positive integer (1 = prior single-step behaviour)");
   }
   for (const [name, values] of [
     ["--mass-ratios", args.massRatios],
@@ -478,8 +483,15 @@ function terminalEnergyMargin(startState, endState, config) {
   const trend = (startEnergy - endEnergy) / scale;
   return Math.min(1, Math.max(0, 0.5 + 0.5 * trend));
 }
-function candidateThrustAtStep(candidate, simState, config, sensorState, stepIndex) {
-  if (candidate.kind === "signature_policy" || stepIndex > 0) {
+// Candidate rollout: the signature-policy baseline is pure signature policy at
+// every step; a lattice candidate holds its thrust for the first
+// `candidateHoldSteps` steps, then follows the signature policy. Holding for >1
+// step is required for the information-accessibility diagnostic: a single-step
+// perturbation does not propagate over a short horizon, so K=1 makes every
+// deviation invisible (the BF-4b inert-floor root cause). Default
+// `candidateHoldSteps = 1` preserves all prior BF-4 / BF-4b behaviour exactly.
+function candidateThrustAtStep(candidate, simState, config, sensorState, stepIndex, holdSteps) {
+  if (candidate.kind === "signature_policy" || stepIndex >= holdSteps) {
     const predicted = observeGuardedAccelSignature(simState, { ...config, sensorNoiseStd: 0 }, sensorState);
     return guardedSignatureThrust(predicted, config);
   }
@@ -501,7 +513,7 @@ function scoreCandidateAction(particles, candidate, config, args) {
         hazardReached = true;
         break;
       }
-      const thrust = candidateThrustAtStep(candidate, simState, config, rolloutSensorState, step);
+      const thrust = candidateThrustAtStep(candidate, simState, config, rolloutSensorState, step, args.candidateHoldSteps);
       const thrustMagnitude = Math.sqrt(thrust[0] * thrust[0] + thrust[1] * thrust[1]);
       safeTime += config.dt;
       expectedDeltaV += particle.weight * thrustMagnitude * config.dt;
@@ -760,6 +772,8 @@ async function main() {
       form: "expected within-horizon survival time + shapeFraction * dt * expected terminal energy-trend margin",
       shapeFraction: args.shapeFraction,
       signatureAdvantageDtMultiplier: args.signatureAdvantageDtMultiplier,
+      candidateHoldSteps: args.candidateHoldSteps,
+      candidateHoldNote: "lattice candidate holds its thrust for candidateHoldSteps steps then follows signature policy; 1 = prior single-step rollout (one-step deviations are invisible over a short horizon); >1 is the information-accessibility diagnostic rollout",
       terminalMargin: "energy-trend margin clamp(0.5 + 0.5 * (E_start - E_end) / max(|E_start|, 1e-9), 0, 1) over the particle rollout (total energy = kinetic + potential; lower = more bound); 0 if a terminal hazard was reached in the rollout. Belief-only: computed from particle rollout states, never the true state.",
       floorValidityInvariant: "terminal margin in [0,1] and shapeFraction < 1 => shaping term < one dt, so a candidate whose true survival is longer by >= one dt is never overtaken on margin; the floor never prefers an earlier-escape action",
       signatureFallbackInvariant: "the guarded-signature policy is an explicit same-information candidate; the evaluator deviates from it only when predicted shaped-score advantage exceeds signatureAdvantageDtMultiplier * dt",

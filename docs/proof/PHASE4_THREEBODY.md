@@ -37,11 +37,18 @@ CI was `[0, 0]`. A multiplier retune was rejected by diagnostic (pre-guard
 advantage ~1e-6 is numerically zero, not threshold-clipped) and an energy-trend
 terminal value, though retained as the correct terminal value, did not move it
 (structural: one-step deviation over a horizon ~40× shorter than the escape
-timescale). Per the pre-registered "escalate, don't keep turning knobs" bound,
-the next operator action is the **BF-4b Satisfiability Probe** (criterion 0):
-determine whether the off-set arm is satisfiable on that cell at all
-(privileged-oracle-vs-signature headroom) before any further floor work. If the
-cell is vacuous it is re-picked, not the floor retuned. BF-5 remains blocked.
+timescale). The **BF-4b Satisfiability Probe** then ran and **validated the
+pre-registered cell**: oracle−signature headroom mean `0.310`, 95% CI
+`[0.064, 0.499]` — the cell is not vacuous and the off-set arm is satisfiable
+*by a privileged controller*. The same-`Φ` particle-MPC captured none of it.
+The next and Phase-4-decisive operator action is the **BF-4b
+Information-Accessibility Diagnostic** (one cell, compute-unconstrained, long
+horizon + sustained action): if a same-`Φ` planner recovers the headroom the
+problem is mere tractability; if it cannot even unconstrained, the off-set arm
+is unsatisfiable by *any* admissible floor and Phase 4 scope is reassessed —
+not more floor engineering. See
+[`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md) ▸ BF-4b.
+BF-5 remains blocked.
 
 Roadmap gate, quoted unchanged:
 

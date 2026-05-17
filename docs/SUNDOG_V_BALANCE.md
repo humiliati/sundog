@@ -1291,10 +1291,29 @@ Initial implementation slice (2026-05-17):
   `bayes_proposal`: 2,263). Interpretation: the repaired floor is a strong
   diagnostic parity baseline, not a clean claim lock under the old admission
   schema; the remaining failures were concentrated in observation degradation.
+- Refreshed admission-schema full lock (2026-05-17): rerunning the full slate
+  with explicit claim-gate admission completed 27,200 trials in 2558.402 s
+  (10.63 trials/s), with all audits passing. The claim gate still failed
+  55/56 hard-gate cells, with 12 reported-only failure-regime observation cells.
+  The single hard-gate failure was near-fall `sensor_noise__0p015`, a
+  diagnostic-positive mild-noise cell: mean regret versus `sundog_shadow`
+  -0.00690, Bayes sanity true, negative-regret rate 0.01. Inspecting the
+  receipt showed one harmful proposal at seed 37 after the observation-stress
+  ramp treated `noise_0p015` as zero stress.
+- Mild-noise stress repair (2026-05-17): the Bayes observation-stress ramp now
+  starts at nonzero sensor noise instead of waiting until `noise_0p015`. The
+  exact failed cell rerun with 100 seeds completed 400 trials in 51.010 s
+  (7.84 trials/s), audits passed, claim gate passed 1/1, and mean regret versus
+  `sundog_shadow` was 0. The sensor-noise panel rerun completed 320 trials in
+  19.194 s (16.67 trials/s), passed 6/6 hard-gate cells with 4 reported-only
+  cells, and had no negative mean-regret cells. The 24-cell stratified probe
+  rerun completed 384 trials in 42.399 s (9.06 trials/s), passed 24/24
+  hard-gate cells, and kept the recoverable `noise_0p03` margin cell
+  non-negative versus `sundog_shadow`.
 - Next full-lock target: rerun the full Phase 10-equivalent slate with the
-  repaired observation-degradation admission and stricter proposal guard. This
-  is expected to take roughly 45-55 minutes at the latest capped-probe rates,
-  so keep it operator-run rather than inline-agent work:
+  repaired observation-degradation admission and mild-noise stress guard. This
+  is expected to take roughly 43-55 minutes at the latest full/capped rates, so
+  keep it operator-run rather than inline-agent work:
 
 ```powershell
 node scripts/balance-phase15-bayes-floor.mjs --phase phase15-phase10-full-lock --out results/balance/phase15-phase10-full-lock --cell-slate phase10-output --phase10-out results/balance/phase10-envelope --limit-cells all --modes naive_shadow,sundog_shadow,bayes_floor_shadow_particle,oracle --seeds 100 --duration 8 --particle-count 61 --horizon-seconds 0.05
