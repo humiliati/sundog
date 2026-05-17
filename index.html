@@ -1296,17 +1296,25 @@
             }
 
             .elevator-pitch-layout {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
-            .elevator-pitch-shell,
-            .elevator-pitch-art {
-                grid-column: 1;
+            .elevator-pitch-shell {
+                grid-column: 1 / -1;
                 grid-row: auto;
             }
 
-            .elevator-pitch-art {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+            .elevator-pitch-art-left,
+            .elevator-pitch-art-right {
+                grid-row: auto;
+            }
+
+            .elevator-pitch-art-left {
+                grid-column: 1;
+            }
+
+            .elevator-pitch-art-right {
+                grid-column: 2;
             }
 
             .elevator-pitch-art img {
@@ -1321,6 +1329,17 @@
 
             .elevator-pitch-shell {
                 padding: 1.6rem 1.3rem;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .elevator-pitch-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .elevator-pitch-art-left,
+            .elevator-pitch-art-right {
+                grid-column: 1;
             }
         }
 
@@ -1739,32 +1758,68 @@
         class="elevator-pitch-section"
         id="elevator-pitch"
         aria-labelledby="elevator-pitch-title"
-        data-version="v1.1"
-        data-revised="2026-05-13"
+        data-version="v1.2"
+        data-revised="2026-05-17"
         data-audit-hedge="phase10-attack-roadmap"
     >
-        <div class="elevator-pitch-shell">
-            <p class="eyebrow">
-                Elevator Pitch
-                <span class="elevator-pitch-stamp">Living draft &middot; v1.1 &middot; 2026-05-13 &middot; audit-hedged</span>
-            </p>
-            <h2 id="elevator-pitch-title" class="elevator-pitch-headline">
-                Field-not-reward, in plain language.
-            </h2>
-            <div class="elevator-pitch-body">
-                <p>
-                    A sundog is an optical phenomenon beside the sun, formed when ice crystals in the atmosphere deflect light by 22&deg; and concentrate it into a small set of geometrically determined spots, arcs, and rings. The sky doesn&rsquo;t pick where these features land; their positions fall out deterministically from sun altitude and crystal orientation. Several of the halo system&rsquo;s visible arcs &mdash; circumzenithal, circumhorizon, tangent &mdash; are partial traces of complete figures in the theory, with the visible portion fixed by sun&ndash;observer geometry.
+        <div class="elevator-pitch-layout">
+            <div class="elevator-pitch-shell">
+                <p class="eyebrow">
+                    Elevator Pitch
+                    <span class="elevator-pitch-stamp">Living draft &middot; v1.2 &middot; 2026-05-17 &middot; audit-hedged</span>
                 </p>
-                <p>
-                    A mesa neuron, by contrast, is a unit inside a trained reinforcement-learning agent&rsquo;s network &mdash; in our case, one of 256 in the final hidden layer of a controller trained to track an indirect environmental signal rather than a direct reward. When we ran capacity and selection-pressure experiments on these agents, we found that mesa-optimization &mdash; the failure mode in which a learned policy develops internal optimization targets that diverge from its training signal &mdash; localizes causally to an entangled 5-dimensional subspace at that layer. In the architecture and capacity regime we tested, that subspace is not recoverable by any single neuron, any handful of features, or any linear decomposition we ran.
-                </p>
-                <p>
-                    Here&rsquo;s why the coincidence matters. In both substrates we found the same structural object: a small-dimensional, holistically-read, asymmetric-under-inversion field whose visible signatures fall out as consequences of hidden state rather than as targets in their own right. The atmosphere produces the halo system from sun altitude and ice geometry; the trained network produces basin-attractor behavior from a 5D subspace at <code>net.7</code>. Finding that same shape on both sides of the substrate divide is a candidate empirical hint &mdash; the geometry side of the crossover is currently under audit-driven re-derivation per the <a href="docs/PHASE10_ATTACK_ROADMAP.md">Phase 10 Attack Roadmap</a>, and the strength of the substrate-coincidence claim is on hold until that re-audit clears &mdash; that &ldquo;field-not-reward,&rdquo; our claim that agents can be aligned by coupling to environmental structure rather than by optimizing a scalar objective, is describing a real category of object in the world rather than a rhetorical move.
-                </p>
-                <p>
-                    If the geometry holds up across enough independent substrates, the implication is large: the engineering surface for alignment looks more like coupling-to-environmental-structure than like optimizing-a-scalar, and the agent, robot, and game engineering that follow from that distinction are different, more economical, and more traceable.
-                </p>
+                <h2 id="elevator-pitch-title" class="elevator-pitch-headline">
+                    Useful signals when the target is hidden.
+                </h2>
+                <div class="elevator-pitch-body">
+                    <p class="elevator-pitch-kicker">
+                        Sundog studies systems that cannot see the full truth, but can still act from the structure leaked around it.
+                    </p>
+                    <div class="elevator-pitch-points">
+                        <section class="elevator-pitch-point" aria-labelledby="pitch-optics-title">
+                            <h3 id="pitch-optics-title">Optics</h3>
+                            <p>
+                                A
+                                <a class="glossary-link" href="legend.html#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a sundog. Its offset can recover sun altitude when the anchors are eligible." aria-describedby="def-parhelion">parhelion</a><span id="def-parhelion" class="sr-only">A bright spot beside the sun, also called a sundog.</span>
+                                is not the sun. It is a displaced trace made by ice geometry, measured against the
+                                <a class="glossary-link" href="legend.html#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-describedby="def-halo-22">22&deg; halo</a><span id="def-halo-22" class="sr-only">The common ring around the sun.</span>.
+                            </p>
+                        </section>
+                        <section class="elevator-pitch-point" aria-labelledby="pitch-inference-title">
+                            <h3 id="pitch-inference-title">Inference</h3>
+                            <p>
+                                The same question drives the lab: when the target is hidden, does the trace still preserve enough structure to steer action?
+                            </p>
+                        </section>
+                        <section class="elevator-pitch-point" aria-labelledby="pitch-applications-title">
+                            <h3 id="pitch-applications-title">Applications</h3>
+                            <p>
+                                Workbenches test the pattern in shadows, pressure maps, local fields, and learned agents. They publish the boundary, not a universal theorem.
+                            </p>
+                        </section>
+                    </div>
+                    <p class="elevator-pitch-note">
+                        A high smile-shaped
+                        <a class="glossary-link" href="legend.html#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-describedby="def-cza">circumzenithal arc</a><span id="def-cza" class="sr-only">The high smile-shaped arc above the sun.</span>
+                        and the
+                        <a class="glossary-link" href="legend.html#phenomenon-parhelic-circle" data-definition="The horizontal belt through the sun and parhelia. It is rendered in the atlas but not promoted as a hidden-state handle." aria-describedby="def-parhelic">parhelic circle</a><span id="def-parhelic" class="sr-only">The horizontal belt through the sun and parhelia.</span>
+                        help explain the atlas vocabulary. The crossover claim remains audit-hedged; read the
+                        <a href="docs/PHASE10_ATTACK_ROADMAP.md">geometry audit roadmap</a> before treating it as more than a staged research question.
+                    </p>
+                </div>
             </div>
+            <aside class="elevator-pitch-art elevator-pitch-art-left" aria-label="HaloSim visual receipts">
+                <figure>
+                    <img src="/media/elevator-halosim-cza.png" alt="HaloSim receipt showing the high circumzenithal arc above the sun.">
+                    <figcaption>HaloSim CZA receipt</figcaption>
+                </figure>
+            </aside>
+            <aside class="elevator-pitch-art elevator-pitch-art-right" aria-label="HaloSim visual receipts">
+                <figure>
+                    <img src="/media/elevator-halosim-parhelia.png" alt="HaloSim receipt showing parhelia on either side of the sun.">
+                    <figcaption>HaloSim parhelia receipt</figcaption>
+                </figure>
+            </aside>
         </div>
     </section>
 
@@ -1773,7 +1828,7 @@
     <section class="theorem-section" id="theorem-proof">
         <h2>The Sundog Alignment Theorem</h2>
         <p>
-            The animation above is not decoration. It is a map of the idea in three registers:
+            The hero scene above is not decoration. It is a map of the idea in three registers:
             theorem as math, theorem as design method, and theorem as empirical claim.
             The paper-grade result remains narrow: photometric mirror alignment without target-position access.
             The application layer now adds bounded operating-envelope studies in three-body dynamics,
