@@ -139,7 +139,16 @@ noise.
 
 Profile id: `mines-bayesian-baseline-v1`
 
-Status: staged profile, not yet an earned result.
+Status: staged profile, active next roadmap item, not yet an earned result.
+
+Active next slice (2026-05-17): start Phase 12 with the admission path, not
+with a full posterior sweep. The first implementation pass should declare the
+two Bayesian lanes as pending or smoke-only modes, add a legal observation
+serializer for `Phi_t`, and write no-leak / observation-parity fixtures against
+the existing replay harness. Only after those gates pass should the
+frontier-particle posterior pick actions. This mirrors the Balance Phase 15
+lesson: a Bayesian comparator is claim hygiene only if the observation lane is
+auditable before the floor is interpreted.
 
 Purpose: add a same-field Bayesian baseline for Pressure Mines so the confirmed
 Phase 10 pocket is not judged only against naive local heuristics. This is not
@@ -1108,6 +1117,36 @@ failure region.
 so the baseline must be framed as a post-verdict claim-audit layer, not as a
 retroactive prerequisite for the existing Operating-Envelope Study tier.
 
+Phase 12.0 implementation order:
+
+1. **Lane declarations and mode guard.** Add `bayes_frontier_pressure` and
+   `bayes_frontier_full` to `MINES_CONTROLLER_MODES` with explicit information
+   budgets. They may remain non-runnable until the posterior policy lands, but
+   unknown-mode rejection and pending-mode rejection must be tested before the
+   runner accepts them.
+2. **Legal observation serializer.** Add a pure helper, tentatively
+   `serializeMinesBayesObservation`, that emits the admitted `Phi_t` from
+   public memory, observed pressure, confidence, gradient, scan readings,
+   action ledger, turn index, sensor config without seeds, and envelope-cell
+   metadata. It must not include true occupancy, exact adjacency counts,
+   `p_true`, board seed, sensor seed, oracle actions, or Phase 10 verdict
+   labels.
+3. **Parity fixture.** On a locked replay URL, serialize `Phi_t` for
+   `sundog_minimal`, `sundog_lean`, and `bayes_frontier_pressure` and prove
+   that the fields common to their declared budgets match the legal controller
+   observation stream exactly.
+4. **No-leak fixture.** Grep/fixture-check the serialized rows and manifest for
+   forbidden keys. Truth may appear in audit outputs only after the action has
+   been selected.
+5. **Tiny posterior smoke.** Implement the frontier particle posterior with a
+   deliberately tiny particle count and only the confirmed pocket plus the
+   paired failure cell. This smoke decides action-plumbing validity, not claim
+   strength.
+6. **Runtime probe and staged lock.** Measure trials/sec on the capped smoke;
+   if the Phase 10-equivalent slate exceeds the repo inline-runtime rule, stage
+   the exact PowerShell commands and wall-clock estimate instead of running it
+   in-session.
+
 Deliverables:
 
 - `scripts/mines-bayes-baseline.mjs`, sharing the existing board, sensor, and
@@ -1134,6 +1173,18 @@ Public data products, only after the gates pass:
 - `public/data/mines-bayesian-baseline-profile.json`
 - `public/data/mines-bayesian-baseline-summary.json`
 - `public/data/mines-frontier-posterior-map.json`
+
+Starter smoke commands, after `bayes_frontier_pressure` is runnable:
+
+```powershell
+node scripts/mines-bayes-baseline.mjs --phase phase12-bayes-admission-smoke --out results/mines/phase12-bayes-admission-smoke --cell-slate phase10-best-worst --phase10-out results/mines/phase10-envelope --modes naive_pressure,sundog_minimal,sundog_lean,bayes_frontier_pressure,oracle_safe --seeds 2 --particle-count 64 --turn-cap 160
+
+node scripts/mines-bayes-baseline.mjs --phase phase12-bayes-pocket-probe --out results/mines/phase12-bayes-pocket-probe --cell-slate phase10-best-worst --phase10-out results/mines/phase10-envelope --modes naive_pressure,sundog_minimal,sundog_lean,bayes_frontier_pressure,bayes_frontier_full,oracle_safe --seeds 8 --particle-count 128 --turn-cap 160
+```
+
+These are staged roadmap commands, not current runnable commands. If the actual
+runner chooses different flag names, update this block before the first probe
+rather than letting the roadmap drift behind the harness.
 
 Exit criterion: a complete regret summary over the locked Phase 10 cell slate,
 or a documented runtime-gated staged-command package with enough capped
@@ -1260,6 +1311,16 @@ Core shipped pieces:
   `results/mines/phase10-envelope`.
 - `mines.html`: Phase 11 public surface, defaulting to the matched failure
   replay first and publishing the confirmed replay beside it.
+
+Active next work:
+
+- Phase 12 starts with `mines-bayesian-baseline-v1` admission plumbing:
+  Bayesian lane declarations, legal `Phi_t` serialization, no-leak and
+  observation-parity fixtures, then a tiny frontier-particle posterior smoke on
+  the Phase 10 confirmed pocket plus paired failure cell.
+- Phase 13 remains blocked on Phase 12 receipts. Until then the public Mines
+  surface should continue to show the Phase 10 pocket claim and the paired
+  failure replay without implying same-field Bayesian near-optimality.
 
 The promoted page must keep the caveats visible: both Sundog and naive trigger
 mines on every seed in the best cell; `threshold_flagger` has higher survival
