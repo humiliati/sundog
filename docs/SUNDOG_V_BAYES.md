@@ -356,6 +356,10 @@ Applied queue after the Balance lock:
    `npm run bayes:phase2:smoke` and `npm run bayes:phase2`. The lock finds a
    narrow anisotropic separation for `sundog_memory` over fixed clean
    `bayes_misspecified`; other variants remain boundary or Bayes-favorable.
+8. **Standalone Phase 3 aliasing smoke.** Pre-registered dual gate landed and
+   `npm run bayes:phase3:smoke` reports `dual_gate_pass` in `decoy`, `alias`,
+   and `low_probe`. The 96-seed lock command is fixed but deferred until the
+   smoke shape is reviewed.
 
 ## Controller-Family Architecture
 
@@ -870,6 +874,87 @@ Deliverables:
 - Disambiguating probe protocol available to Bayes and Hybrid.
 - Wrong-lock classifier.
 - Representative replay clips.
+
+Pre-registered smoke-harness-first spec, locked before the Phase 3 smoke run:
+
+| Scenario | Field shape | Intended Sundog failure |
+| --- | --- | --- |
+| `decoy` | True radial Gaussian plus lower-amplitude false peak at a seeded decoy cell. | Flat climb locks onto local decoy. |
+| `alias` | True radial Gaussian plus near-equal seeded second source. | Response improves toward either basin. |
+| `symmetric` | Target-reflected source makes the field nearly symmetric about an axis. | Identical local response on two sides. |
+| `low_probe` | `alias` field with `maxTurns` overridden to 20. | No budget to disambiguate. |
+
+Modes:
+
+```text
+oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,random
+```
+
+Admission notes:
+
+- `bayes_misspecified` remains locked to the clean single-radial likelihood.
+- `bayes_adaptive` extends the finite model mixture with `decoy`, `alias`, and
+  `symmetric` families; this is the recovery lane. No new Hybrid mode is
+  admitted in Phase 3.
+- `low_probe` is a scenario-level budget override; the npm commands stay fixed
+  at `--max-turns 40`, and the runner applies 20 only inside `low_probe`.
+
+Wrong-lock classifier:
+
+```text
+wrong_lock =
+  !success
+  AND dist(finalPos, nearestNonTargetBasin) <= 1.5
+  AND dwellTurns(within 1.5 of that basin) >= 5
+```
+
+Dual gate: Phase 3 is `dual_gate_pass` only if both arms are true in the same
+eligible scenario; otherwise it records `aliasing_insufficient` and exits
+non-fatally (`pass: true`), matching the Phase 2 pattern.
+
+| Arm | Fixed threshold |
+| --- | --- |
+| Failure arm | `hc_sundog` wrong-lock rate >= 0.50 in at least one `decoy`, `alias`, or `low_probe` regime. |
+| Recovery arm | In that same scenario, `bayes_adaptive` versus the best Sundog lane has `successDelta >= 0` and `scoreDelta >= 0.10`. |
+
+Commands:
+
+```bash
+npm run bayes:phase3:smoke
+npm run bayes:phase3
+```
+
+The lock command is pre-registered here but deferred until the smoke shape is
+validated. Do not edit the thresholds, classifier radius/dwell, or recovery
+margin after smoke results land.
+
+Smoke receipt, 2026-05-17:
+
+```text
+npm run bayes:phase3:smoke
+384 trials in 104.937s
+Exit gate: dual_gate_pass (3/4 dual-gate scenarios)
+```
+
+Receipt paths:
+
+- `results/bayes/phase3-aliasing-smoke/manifest.json`
+- `results/bayes/phase3-aliasing-smoke/summary.csv`
+- `results/bayes/phase3-aliasing-smoke/regret.csv`
+- `results/bayes/phase3-aliasing-smoke/replay-manifest.json`
+
+Smoke gate rows:
+
+| Scenario | HC wrong-lock rate | Failure arm | Best Sundog lane | Bayes-adaptive score / success | Score delta | Success delta | Dual gate |
+| --- | ---: | --- | --- | ---: | ---: | ---: | --- |
+| `decoy` | 0.5000 | true | `sundog_memory` | 1.676563 / 1.0000 | +1.648635 | +0.8125 | true |
+| `alias` | 0.7500 | true | `sundog_memory` | 1.427670 / 0.8750 | +1.441081 | +0.6875 | true |
+| `symmetric` | 0.3125 | false | `sundog_memory` | 0.400235 / 0.3750 | +0.107920 | 0.0000 | false |
+| `low_probe` | 0.5000 | true | `sundog_memory` | 1.085602 / 0.8125 | +1.170522 | +0.6250 | true |
+
+Interpretation: the smoke harness is strong enough to proceed to the
+pre-registered lock unchanged. The result should still be treated as smoke
+only until the 96-seed command runs.
 
 Expected outcome:
 
