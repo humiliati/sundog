@@ -11,6 +11,7 @@ Sources:
 - [`internal/anniversary/fix_roadmap.md`](../internal/anniversary/fix_roadmap.md)
 - [`SUNDOG_V_PATH.md`](SUNDOG_V_PATH.md)
 - [`SUNDOG_V_BAYES.md`](SUNDOG_V_BAYES.md)
+- [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md)
 - [`proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md)
 - [`proof/PHASE6_LAMBDA_CONTROL.md`](proof/PHASE6_LAMBDA_CONTROL.md)
 
@@ -40,9 +41,10 @@ Good near-anniversary work should satisfy at least two of these:
 
 The cleanest near-anniversary lane is a two-step move:
 
-1. **Low-risk claim hygiene:** land the Bayesian-floor baseline rows across the
-   applicable roadmaps. This directly addresses the standing defense in
-   `attack_vectors.md` and the fix roadmap's Section 9 without creating a
+1. **Low-risk claim hygiene:** stamp the Bayesian-floor profile from
+   [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md)
+   into the applicable roadmaps. This directly addresses the standing defense
+   in `attack_vectors.md` and the fix roadmap's Section 9 without creating a
    separate "Bayes vs Sundog" identity track.
 2. **One empirical probe, if time is available:** run or stage the Mesa Phase 6
    capped probe. This is the smallest live experiment that can protect the
