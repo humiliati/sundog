@@ -585,6 +585,9 @@
             <p class="lede">
                 The Medium-tier L-Mixed protection curve crosses from <em>hold</em> to <em>collapse</em> inside a 0.02-wide window in objective mixing weight. Below the cliff, a signature anchor of just <code>1 − λ ≈ 0.047</code> (~5%) is sufficient to prevent basin internalization. Above it, the high-reward mixed policy collapses into the same fixed-attractor class as a controller trained on the basin-corrupted reward alone.
             </p>
+            <p class="lede">
+                <strong>Large-tier v2 caveat.</strong> The newer Large cliff-subset complicates the Medium story: <code>lambda=0.99</code> recovers by terminal-alignment eval (<code>mean_terminal_alignment ~= 0.885</code>), while <code>lambda=0.95</code> and <code>lambda=0.97</code> remain weak. The eval summary does not compute <code>old_basin_pref</code>, so this is basin-reaching by the current metric, not yet verified basin-attractor avoidance. That intervention check is a Phase 7 v3 job.
+            </p>
 
             <div class="chart-card">
                 <h3>old_basin_pref by λ</h3>
@@ -691,10 +694,10 @@
             <div class="claim-boundary">
                 <h4>Earned floor, honest ceiling</h4>
                 <p>
-                    The result is an <strong>in-vitro operating-envelope map</strong> in a 2D continuous-control environment with a synthetic Goodhart-prone shaping surface. It is not a deployment guarantee, not foundation-model behavior, not universal mesa immunity, and not adversarial robustness under named red-team budgets. The Large tier remains unrun; only Small and Medium are characterized. Only the matched-architecture MLP family is characterized; cross-architecture behavior is unknown.
+                    The result is an <strong>in-vitro operating-envelope map</strong> in a 2D continuous-control environment with a synthetic Goodhart-prone shaping surface. It is not a deployment guarantee, not foundation-model behavior, not universal mesa immunity, and not adversarial robustness under named red-team budgets. The plotted public envelope remains Small and Medium; the Large cliff-subset is provisional until it gets Phase 4-style intervention metrics. Only the matched-architecture MLP family is characterized; cross-architecture behavior is unknown.
                 </p>
                 <p>
-                    Signature controllers <em>can</em> be reward-hacked — the program now has the receipt for <em>where</em> they can: above the measured selection-pressure threshold, in a controller family that participates in the basin-corrupted reward during training. The bounded form of the gravity claim is that there is a measurable region below the threshold where signature-shaped training preserves field attachment, and that region has a mechanistic explanation at a specific, causally patchable layer of the actor.
+                    Signature controllers <em>can</em> be reward-hacked — the program now has the receipt for <em>where</em> they can: above the measured Medium selection-pressure threshold, in a controller family that participates in the basin-corrupted reward during training. The bounded form of the gravity claim is now more careful: coherent-signal controllers can preserve field attachment in mapped pockets; mixed-signal controllers destabilize when the mixture creates inference noise. Signature-pure is one coherent-signal class, and reward-pure may be another.
                 </p>
                 <p>
                     The horizon experiments staged in <a href="docs/SUNDOG_V_GRAVITY.md">SUNDOG_V_GRAVITY.md</a> — adversarial signature benchmark, spacecraft trajectory under unmodeled perturbation, the side-channel defense stretch — remain unrun. Each would ratchet the envelope further. This page is the earned floor, no more.

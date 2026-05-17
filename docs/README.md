@@ -65,6 +65,8 @@ code, experiments, prior theorem materials, and application bridges.
 - [Paper draft](PAPER_v1_draft.md): current academic paper draft.
 - [Paper outline](PAPER_OUTLINE_v0.md): venue framing, reviewer risks, and
   stress-test interpretation.
+- [Oracle leakage audit](ORACLE_LEAKAGE_AUDIT.md): P0 receipt for the
+  photometric "without target-position access" claim and its API boundary.
 
 ## Supporting Docs
 

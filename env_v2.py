@@ -69,9 +69,10 @@ class Observation:
 class Oracle:
     """Ground-truth info for evaluation and for the DOA-direct baseline.
 
-    Photometric agents must not read this. The experiment runner enforces
-    that by passing only the Observation to such agents and by running
-    a static check at registration time.
+    Photometric agents must not read this. The canonical experiment runner
+    constructs the photometric condition through a factory that discards the
+    oracle before instantiating the controller; target-aware baselines receive
+    this object explicitly.
     """
 
     laser_pos: np.ndarray             # shape (3,)
