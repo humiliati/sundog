@@ -1197,16 +1197,18 @@ Initial implementation slice (2026-05-17):
   `manifest.json`, `profile.json`, `signature-observations.jsonl`,
   `observation-parity.jsonl`, `belief-diagnostics.csv`, `bayes-actions.csv`,
   `trial-outcomes.csv`, `bayes-regret.csv`, `bayes-regret-summary.csv`, and
-  `observability-fibers.json`.
-- `npm run balance:phase15:smoke` is the capped probe. The first repaired smoke
-  ran 128 trials in 21.443 s (5.97 trials/s) with 61 particles and a 0.05 s
-  horizon. Observation parity, no-state-leak, and unknown-mode rejection passed.
-- Smoke interpretation after the analytic-inverse / guard repair: the baseline
-  passes the easy-cell sanity check versus `naive_shadow`, exactly matches
-  `sundog_shadow` in the two readable 28-degree smoke cells, and improves over
-  Sundog in the two 84-degree overhead-light smoke cells. This still does not
-  promote claim language; it marks Phase 15 as executable with a sane
-  same-information guard.
+  `observability-fibers.json`. The regret summary and manifest now include
+  claim-gate admission fields for standard cells, observation-parity cells, and
+  reported-only failure-regime observation cells.
+- `npm run balance:phase15:smoke` is the capped probe. After the
+  observation-degradation guard repair, it ran 128 trials in 9.13 s
+  (14.02 trials/s) with 61 particles and a 0.05 s horizon. Observation parity,
+  no-state-leak, unknown-mode rejection, and the claim gate all passed.
+- Smoke interpretation after the analytic-inverse / observation-stress guard:
+  the baseline passes the easy-cell sanity check versus `naive_shadow` and
+  matches `sundog_shadow` in all four smoke cells. This still does not promote
+  claim language; it marks Phase 15 as executable with a sane same-information
+  guard and explicit admission receipts.
 - Phase 10 cell-slate loader (2026-05-17): the Phase 15 harness now accepts
   `--cell-slate phase10-output` to read Phase 10 `envelope.csv` or
   `cell-class-map.csv`, preserving per-cell preset, axis, light, delay, noise,
@@ -1241,7 +1243,8 @@ Initial implementation slice (2026-05-17):
   weaker than the same-information controller on this stratified probe, but it
   is still mostly a guarded parity floor rather than evidence that explicit
   belief dominates Balance.
-- Larger capped loader probe (2026-05-17): `phase15-phase10-stratified-probe-24`
+- Pre-admission larger capped loader probe (2026-05-17):
+  `phase15-phase10-stratified-probe-24`
   expanded the loaded Phase 10 smoke slate to 24 cells and 4 seeds. It ran
   384 trials in 50.515 s (7.6 trials/s), with observation parity,
   no-state-leak, and unknown-mode rejection still passing. Aggregate mean
@@ -1256,6 +1259,25 @@ Initial implementation slice (2026-05-17):
   regret versus `sundog_shadow` (recoverable `noise_0p03`: -0.0383;
   recoverable `noise_0p08`: -0.0008), and the high-noise failure-regime cells
   need an explicit admission rule before they can be treated as claim gates.
+- Observation-degradation admission/guard repair (2026-05-17): Phase 15 now
+  writes explicit claim-gate fields into `bayes-regret-summary.csv`,
+  `manifest.json`, and `observability-fibers.json`. Standard cells gate on both
+  Bayes-vs-naive sanity and non-negative mean regret versus `sundog_shadow`;
+  observation-degradation diagnostic/borderline cells gate on Sundog parity
+  while reporting Bayes-vs-naive as a boundary diagnostic; Phase 10
+  failure-regime delay/noise/dropout cells are reported-only until promoted by a
+  separate admission spec. The controller also raises the proposal advantage
+  threshold under noisy, delayed, low-confidence, or dropped-frame observations.
+- Repaired capped receipts (2026-05-17): rerunning the 24-cell stratified probe
+  completed 384 trials in 40.212 s (9.55 trials/s), audits passed, and the claim
+  gate passed 24/24 hard-gate cells. Mean regret versus `sundog_shadow` was
+  +0.0169, range 0 to +0.403; candidate selection was `sundog_guard`: 2637,
+  `bayes_proposal`: 6. The focused sensor-noise panel ran 320 trials in
+  17.506 s (18.28 trials/s), passed 6/6 hard-gate cells with 4 reported-only
+  failure-regime cells, and had no negative mean-regret cells. The matching
+  sensor-delay panel ran 320 trials in 16.269 s (19.67 trials/s), passed 6/6
+  hard-gate cells with 4 reported-only failure-regime cells, and had no negative
+  mean-regret cells.
 - Full diagnostic lock (2026-05-17): the operator ran the full Phase
   10-equivalent Phase 15 slate after refreshing `results/balance/phase10-envelope`.
   It completed 27,200 trials in 2901.811 s (9.37 trials/s), with observation
@@ -1267,23 +1289,21 @@ Initial implementation slice (2026-05-17):
   and recoverable `sensor_noise__0p03` (-0.00889, sanity false). Candidate
   selection remained mostly guarded (`sundog_guard`: 179,286 rows,
   `bayes_proposal`: 2,263). Interpretation: the repaired floor is a strong
-  diagnostic parity baseline, not a clean claim lock; the remaining failures
-  are concentrated in observation degradation.
-- Full-lock reproduction command:
+  diagnostic parity baseline, not a clean claim lock under the old admission
+  schema; the remaining failures were concentrated in observation degradation.
+- Next full-lock target: rerun the full Phase 10-equivalent slate with the
+  repaired observation-degradation admission and stricter proposal guard. This
+  is expected to take roughly 45-55 minutes at the latest capped-probe rates,
+  so keep it operator-run rather than inline-agent work:
 
 ```powershell
 node scripts/balance-phase15-bayes-floor.mjs --phase phase15-phase10-full-lock --out results/balance/phase15-phase10-full-lock --cell-slate phase10-output --phase10-out results/balance/phase10-envelope --limit-cells all --modes naive_shadow,sundog_shadow,bayes_floor_shadow_particle,oracle --seeds 100 --duration 8 --particle-count 61 --horizon-seconds 0.05
 ```
 
-- Next implementation target: repair the observation-degradation admission path
-  before treating Phase 15 as a claim lock. The full diagnostic lock left nine
-  Bayes-sanity failures: four on long sensor delay (`delay_24`, `delay_30`
-  across both presets) and five on sensor noise (`near_fall noise_0p055/0p08`
-  and `recoverable noise_0p03/0p055/0p08`). The minimum fix is to pre-register
-  which Phase 10 failure-regime delay/noise cells are reported-only versus hard
-  Bayes-sanity gates, then tighten the noisy/delayed-cell guard or tune the
-  posterior proposal until the recoverable `noise_0p03` borderline cell is
-  non-negative versus `sundog_shadow` on a capped rerun.
+- Next implementation target after the refreshed full lock: if the claim gate
+  passes, promote Phase 15 from diagnostic parity to claim-lock receipt and feed
+  Phase 16 data surfaces. If any hard-gate cell fails, inspect only that
+  admission lane before changing public claim language.
 
 ### Phase 16 - Balance Data Surfaces And Claim Ratchet
 

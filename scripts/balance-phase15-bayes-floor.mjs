@@ -540,6 +540,10 @@ function runTrial(args, { preset, cell, mode, seed }) {
           sundogScore: roundNumber(control.belief.sundogScore, 9),
           proposalScore: roundNumber(control.belief.proposalScore, 9),
           scoreAdvantage: roundNumber(control.belief.scoreAdvantage, 9),
+          baseAdvantageThreshold: roundNumber(control.belief.baseAdvantageThreshold, 9),
+          advantageThreshold: roundNumber(control.belief.advantageThreshold, 9),
+          observationStress: roundNumber(control.belief.observationStress, 9),
+          degradationReady: control.belief.degradationReady,
           selectedCandidate: control.belief.selectedCandidate,
           force: roundNumber(control.force, 9),
         });
@@ -613,6 +617,44 @@ function mean(values) {
   return finite.reduce((sum, value) => sum + value, 0) / finite.length;
 }
 
+function axisFromCellId(cellId) {
+  return String(cellId ?? "").split("__")[0] || "";
+}
+
+function observationAdmission(row) {
+  const axis = row.axis || axisFromCellId(row.cellId);
+  const cellClass = row.cellClass || "";
+  const mechanisms = String(row.staticBoundaryMechanisms ?? "");
+  const observationAxis = ["sensor_delay", "sensor_noise", "sensor_dropout"].includes(axis);
+  const failureRegime = cellClass === "failure_regime"
+    || /delay_destabilized|sensor_noise_floor|dropped_frames/.test(mechanisms);
+
+  if (observationAxis && failureRegime) {
+    return {
+      claimGateRequired: false,
+      bayesSanityGateRequired: false,
+      admissionLane: "reported_only",
+      admissionReason: `${axis}_failure_regime`,
+    };
+  }
+
+  if (observationAxis) {
+    return {
+      claimGateRequired: true,
+      bayesSanityGateRequired: false,
+      admissionLane: "observation_parity_gate",
+      admissionReason: `${axis}_diagnostic_or_borderline`,
+    };
+  }
+
+  return {
+    claimGateRequired: true,
+    bayesSanityGateRequired: true,
+    admissionLane: "hard_gate",
+    admissionReason: "standard_cell",
+  };
+}
+
 function makeRegretRows(results) {
   const byKey = groupBy(results, (row) => `${row.preset}\t${row.cellId}\t${row.seed}`);
   const rows = [];
@@ -626,6 +668,13 @@ function makeRegretRows(results) {
       phase: bayes.phase,
       preset: bayes.preset,
       cellId: bayes.cellId,
+      axis: bayes.axis,
+      axisValue: bayes.axisValue,
+      cellClass: bayes.cellClass,
+      staticBoundaryMechanisms: bayes.staticBoundaryMechanisms,
+      sensorDelaySteps: bayes.sensorDelaySteps,
+      sensorNoiseStd: bayes.sensorNoiseStd,
+      sensorDropoutRate: bayes.sensorDropoutRate,
       seed: bayes.seed,
       bayesOutcome: bayes.outcome,
       sundogOutcome: sundog.outcome,
@@ -657,16 +706,32 @@ function makeRegretSummary(regretRows) {
       const bayesMinusNaive = rows.map((row) => row.bayesMinusNaive).filter(Number.isFinite);
       const negativeRegretCount = rows.filter((row) => row.regretVsSundog < -1e-9).length;
       const bayesWorseThanNaiveCount = rows.filter((row) => Number.isFinite(row.bayesMinusNaive) && row.bayesMinusNaive < -1e-9).length;
+      const meanRegretVsSundog = roundNumber(mean(regretValues) ?? NaN, 9);
+      const bayesSanityPass = bayesWorseThanNaiveCount === 0;
+      const admission = observationAdmission(rows[0]);
+      const sundogParityPass = meanRegretVsSundog >= -1e-9;
+      const claimGatePass = !admission.claimGateRequired
+        || (sundogParityPass && (!admission.bayesSanityGateRequired || bayesSanityPass));
       return {
         phase: rows[0].phase,
         preset,
         cellId,
+        axis: rows[0].axis,
+        axisValue: rows[0].axisValue,
+        cellClass: rows[0].cellClass,
+        staticBoundaryMechanisms: rows[0].staticBoundaryMechanisms,
+        admissionLane: admission.admissionLane,
+        admissionReason: admission.admissionReason,
+        claimGateRequired: admission.claimGateRequired,
+        bayesSanityGateRequired: admission.bayesSanityGateRequired,
         n: rows.length,
-        meanRegretVsSundog: roundNumber(mean(regretValues) ?? NaN, 9),
+        meanRegretVsSundog,
         negativeRegretRate: roundNumber(negativeRegretCount / Math.max(1, rows.length), 9),
+        sundogParityPass,
         meanBayesMinusNaive: roundNumber(mean(bayesMinusNaive) ?? NaN, 9),
         bayesWorseThanNaiveRate: roundNumber(bayesWorseThanNaiveCount / Math.max(1, rows.length), 9),
-        bayesSanityPass: bayesWorseThanNaiveCount === 0,
+        bayesSanityPass,
+        claimGatePass,
       };
     })
     .sort((a, b) => a.preset.localeCompare(b.preset) || a.cellId.localeCompare(b.cellId));
@@ -825,6 +890,9 @@ async function main() {
   const elapsedSeconds = (performance.now() - started) / 1000;
   const regretRows = makeRegretRows(results);
   const regretSummaryRows = makeRegretSummary(regretRows);
+  const claimGateRows = regretSummaryRows.filter((row) => row.claimGateRequired);
+  const reportOnlyRows = regretSummaryRows.filter((row) => !row.claimGateRequired);
+  const claimGateFailures = claimGateRows.filter((row) => !row.claimGatePass);
   const audits = runAudits(args);
   const trialRate = results.length / Math.max(elapsedSeconds, 1e-9);
   const manifest = {
@@ -857,6 +925,23 @@ async function main() {
     estimatedFullPhase10Seconds: args.estimateFullPhase10Trials > 0
       ? roundNumber(args.estimateFullPhase10Trials / Math.max(trialRate, 1e-9), 3)
       : null,
+    claimGate: {
+      policy: "standard cells gate on Bayes-vs-naive sanity and Sundog parity; observation-degradation margin cells gate on Sundog parity while reporting Bayes-vs-naive as a boundary diagnostic; Phase 10 failure-regime observation-degradation cells are reported-only until a separate admission spec promotes them.",
+      pass: claimGateFailures.length === 0,
+      hardGateCells: claimGateRows.length,
+      hardGatePassCells: claimGateRows.length - claimGateFailures.length,
+      hardGateFailureCells: claimGateFailures.length,
+      reportedOnlyCells: reportOnlyRows.length,
+      failures: claimGateFailures.map((row) => ({
+        preset: row.preset,
+        cellId: row.cellId,
+        admissionReason: row.admissionReason,
+        meanRegretVsSundog: row.meanRegretVsSundog,
+        bayesSanityPass: row.bayesSanityPass,
+        bayesSanityGateRequired: row.bayesSanityGateRequired,
+        sundogParityPass: row.sundogParityPass,
+      })),
+    },
     audits,
     note: "Ignored local Phase 15 smoke receipts. Bayesian mode is a same-shadow particle-belief baseline, not a privileged oracle.",
   };
@@ -885,6 +970,11 @@ async function main() {
       "railLimit",
     ],
     forbiddenKeys: FORBIDDEN_OBSERVATION_KEYS,
+    claimGateAdmission: {
+      hardGate: "standard diagnostic-positive and borderline cells gate on Bayes-vs-naive sanity plus Sundog parity",
+      observationParityGate: "sensor_delay, sensor_noise, and sensor_dropout diagnostic/borderline cells gate on Sundog parity; Bayes-vs-naive remains a reported boundary diagnostic",
+      reportedOnly: "Phase 10 failure-regime sensor_delay, sensor_noise, and sensor_dropout cells",
+    },
     objective: "E_mu[normalized_survival]",
     regret: "bayes_floor_shadow_particle.normalized_survival - sundog_shadow.normalized_survival",
   };
@@ -907,14 +997,19 @@ async function main() {
       meanRegretVsSundog: row.meanRegretVsSundog,
       negativeRegretRate: row.negativeRegretRate,
       bayesSanityPass: row.bayesSanityPass,
+      admissionLane: row.admissionLane,
+      claimGateRequired: row.claimGateRequired,
+      bayesSanityGateRequired: row.bayesSanityGateRequired,
+      claimGatePass: row.claimGatePass,
     })),
   }, null, 2)}\n`);
 
   console.log(`Balance ${args.phase}: ${results.length} trials in ${roundNumber(elapsedSeconds, 3)}s (${roundNumber(trialRate, 2)} trials/s)`);
   console.log(`Audits: ${audits.pass ? "pass" : "FAIL"}`);
+  console.log(`Claim gate: ${manifest.claimGate.pass ? "pass" : "FAIL"} (${manifest.claimGate.hardGatePassCells}/${manifest.claimGate.hardGateCells} hard-gate cells; ${manifest.claimGate.reportedOnlyCells} reported-only cells)`);
   console.log(`Wrote ${path.relative(repoRoot, outDir)}`);
   for (const row of regretSummaryRows) {
-    console.log(`${row.preset} ${row.cellId}: mean regret vs sundog ${row.meanRegretVsSundog}, Bayes sanity ${row.bayesSanityPass}`);
+    console.log(`${row.preset} ${row.cellId}: mean regret vs sundog ${row.meanRegretVsSundog}, Bayes sanity ${row.bayesSanityPass}, claim gate ${row.claimGateRequired ? row.claimGatePass : "reported-only"}`);
   }
   if (!audits.pass) process.exitCode = 1;
 }
