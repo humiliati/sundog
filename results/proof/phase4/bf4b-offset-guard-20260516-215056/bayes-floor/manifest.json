@@ -1,0 +1,325 @@
+{
+  "schema": "sundog.threebody.phase4-bf4b-bayes-offset-guard.bayes_floor.v1",
+  "startedAt": "2026-05-17T04:50:59.589Z",
+  "purpose": "Phase 4 same-signature particle-belief MPC Bayesian-floor evaluator.",
+  "args": {
+    "phase": "phase4-bf4b-bayes-offset-guard",
+    "out": "results\\proof\\phase4\\bf4b-offset-guard-20260516-215056\\bayes-floor",
+    "seedStart": 0,
+    "seeds": 8,
+    "regimes": [
+      "near_escape"
+    ],
+    "duration": 16,
+    "timesteps": [
+      0.01
+    ],
+    "logEvery": 1,
+    "massRatios": [
+      1
+    ],
+    "targetTidal": 2,
+    "tidalSpikeThreshold": 50,
+    "localAccelerationWarningThreshold": 10,
+    "eventWarningHorizon": 1,
+    "radiusScales": [
+      1.075
+    ],
+    "velocityScales": [
+      1.15
+    ],
+    "thrustLimits": [
+      0.4
+    ],
+    "sensorNoiseSweep": [
+      0.01
+    ],
+    "trackGuardMode": "hazard_quantile",
+    "trackGuardQuantiles": [
+      0.75
+    ],
+    "trackGuardMinRadiusSweep": [
+      1.15
+    ],
+    "trackGuardMaxLocalAccelerationSweep": [
+      2.5
+    ],
+    "trackGuardMaxTidalMagnitudeSweep": [
+      35
+    ],
+    "particleCount": 256,
+    "planningHorizonSteps": 16,
+    "resampleThreshold": 0.5,
+    "shapeFraction": 0.5,
+    "signatureAdvantageDtMultiplier": 1,
+    "bootstrapSeed": 40604
+  },
+  "cases": [
+    {
+      "massRatio": 1,
+      "timestep": 0.01,
+      "radiusScale": 1.075,
+      "velocityScale": 1.15,
+      "thrustLimit": 0.4,
+      "sensorNoiseStd": 0.01,
+      "sensorDelaySteps": 0,
+      "microManeuverContaminationStd": 0.08,
+      "trackGuardQuantile": 0.75,
+      "trackGuardMinRadius": 1.15,
+      "trackGuardMaxLocalAcceleration": 2.5,
+      "trackGuardMaxTidalMagnitude": 35
+    }
+  ],
+  "actionSelectionInputs": [
+    "guarded_accelerometer_signature_history",
+    "particle_belief"
+  ],
+  "rawStateUse": [
+    "truth_rollout",
+    "particle_simulation",
+    "readout_only"
+  ],
+  "controllerMode": "bayes_floor_particle_mpc",
+  "observationModel": {
+    "observedSignature": "observeGuardedAccelSignature(state, cfg, actualSensorState)",
+    "particlePrediction": "observeGuardedAccelSignature(particle.state, { ...cfg, sensorNoiseStd: 0 }, particle.sensorState)",
+    "likelihood": "diagonal Gaussian-like score over |T_hat|, gradX, gradY plus guard mismatch penalty"
+  },
+  "planningObjective": {
+    "form": "expected within-horizon survival time + shapeFraction * dt * expected terminal safety margin",
+    "shapeFraction": 0.5,
+    "signatureAdvantageDtMultiplier": 1,
+    "terminalMargin": "min(escape-radius margin, close-approach margin) of the horizon-end state; 0 if a terminal hazard was reached in the rollout",
+    "floorValidityInvariant": "shapeFraction < 1 => shaping term < one dt, so a candidate whose true survival is longer by >= one dt is never overtaken on margin; the floor never prefers an earlier-escape action",
+    "signatureFallbackInvariant": "the guarded-signature policy is an explicit same-information candidate; the evaluator deviates from it only when predicted shaped-score advantage exceeds signatureAdvantageDtMultiplier * dt",
+    "supersedes": "BF-4 smoke-only pure steps-survived objective, which the 2026-05-16 probe showed degenerates to passive when planning horizon << escape timescale",
+    "tieOrder": "signature baseline unless best predicted shaped score beats it by the configured dt-scaled advantage threshold; within 1e-9 -> min expected delta-V; then first in candidate order"
+  },
+  "actionCandidates": [
+    {
+      "index": 0,
+      "kind": "signature_policy",
+      "description": "guarded-signature controller action computed from the admitted observation"
+    },
+    {
+      "index": 1,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0:0",
+      "thrust": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 2,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0.4:0",
+      "thrust": [
+        0.4,
+        0
+      ]
+    },
+    {
+      "index": 3,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "-0.4:0",
+      "thrust": [
+        -0.4,
+        0
+      ]
+    },
+    {
+      "index": 4,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0:0.4",
+      "thrust": [
+        0,
+        0.4
+      ]
+    },
+    {
+      "index": 5,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0:-0.4",
+      "thrust": [
+        0,
+        -0.4
+      ]
+    },
+    {
+      "index": 6,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0.28284271:0.28284271",
+      "thrust": [
+        0.28284271247461906,
+        0.28284271247461906
+      ]
+    },
+    {
+      "index": 7,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "0.28284271:-0.28284271",
+      "thrust": [
+        0.28284271247461906,
+        -0.28284271247461906
+      ]
+    },
+    {
+      "index": 8,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "-0.28284271:0.28284271",
+      "thrust": [
+        -0.28284271247461906,
+        0.28284271247461906
+      ]
+    },
+    {
+      "index": 9,
+      "kind": "lattice_first_step_then_signature_policy",
+      "actionKey": "-0.28284271:-0.28284271",
+      "thrust": [
+        -0.28284271247461906,
+        -0.28284271247461906
+      ]
+    }
+  ],
+  "trials": [
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_000",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 0,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.6158809704752637,
+        "y": 0.062131857094354925,
+        "vx": 0.24082744773942977,
+        "vy": 1.5520879485690966
+      },
+      "summary": {
+        "terminalOutcome": "escape",
+        "simulatedTime": 5.02,
+        "totalDeltaV": 0.44
+      }
+    },
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_001",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 1,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.7081045114895095,
+        "y": 0.022208717950852577,
+        "vx": 0.08069808612461203,
+        "vy": 1.5245710706408133
+      },
+      "summary": {
+        "terminalOutcome": "escape",
+        "simulatedTime": 4.91,
+        "totalDeltaV": 0.356
+      }
+    },
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_002",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 2,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.3984459563187557,
+        "y": 0.013253908500191766,
+        "vx": 0.2716760395723395,
+        "vy": 1.6831847018108235
+      },
+      "summary": {
+        "terminalOutcome": "close_approach",
+        "simulatedTime": 14.25,
+        "totalDeltaV": 1.012
+      }
+    },
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_003",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 3,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.6543414173391646,
+        "y": 0.10930181774077936,
+        "vx": 0.2987264852749649,
+        "vy": 1.8114599177788475
+      },
+      "summary": {
+        "terminalOutcome": "escape",
+        "simulatedTime": 2.67,
+        "totalDeltaV": 0.204
+      }
+    },
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_004",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 4,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.6716593742114492,
+        "y": 0.07332495575537905,
+        "vx": 0.2868617067707237,
+        "vy": 1.6545528088882564
+      },
+      "summary": {
+        "terminalOutcome": "escape",
+        "simulatedTime": 3.34,
+        "totalDeltaV": 0.28
+      }
+    },
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_005",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 5,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.6185790465184253,
+        "y": 0.2628873222187394,
+        "vx": 0.09346722342888826,
+        "vy": 1.6163721340720074
+      },
+      "summary": {
+        "terminalOutcome": "escape",
+        "simulatedTime": 3.8,
+        "totalDeltaV": 0.296
+      }
+    },
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_006",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 6,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.653821564480313,
+        "y": 0.25042568196135107,
+        "vx": 0.23151319373166188,
+        "vy": 1.5289164100552441
+      },
+      "summary": {
+        "terminalOutcome": "escape",
+        "simulatedTime": 4.12,
+        "totalDeltaV": 0.332
+      }
+    },
+    {
+      "id": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35__near_escape__bayes_floor_particle_mpc__seed_007",
+      "caseId": "mu_1__dt_0p01__r_1p075__v_1p15__thrust_0p4__noise_0p01__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35",
+      "seed": 7,
+      "regime": "near_escape",
+      "initialParticle": {
+        "x": 1.4663277819298672,
+        "y": 0.12453566237585618,
+        "vx": 0.2980164098646491,
+        "vy": 1.7675314417632761
+      },
+      "summary": {
+        "terminalOutcome": "escape",
+        "simulatedTime": 3.56,
+        "totalDeltaV": 0.296
+      }
+    }
+  ],
+  "completedAt": "2026-05-17T06:09:11.555Z"
+}

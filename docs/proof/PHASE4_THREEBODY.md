@@ -2,8 +2,9 @@
 
 > Phase 4 artifact for
 > [`COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md).
-> Status: spec drafted; Bayesian-floor BF-4 smoke passed; full proof lock not
-> run, 2026-05-16. Phase 3 closed positive in
+> Status: spec drafted; Bayesian-floor BF-4 smoke passed; BF-4b off-set
+> calibration failed criterion (2); full proof lock not run, 2026-05-16. Phase
+> 3 closed positive in
 > [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md). This document maps the planar
 > restricted three-body workbench onto the Phase 0 substrate-admission checklist
 > before any proof-track empirical run is admitted.
@@ -29,6 +30,11 @@ off-set arm can fire; then (b) BF-5 must stage and run a sharded/resumable full
 lock on a long-budget runner before the Phase 4 gate can be interpreted. The
 Bayes-floor build path is tracked in
 [`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
+
+The first BF-4b receipt (`bf4b-offset-guard-20260516-215056`) classified the
+pre-registered cell as `off` and preserved floor sanity, but the off-set regret
+CI was `[0, 0]`. BF-5 therefore remains blocked until the floor/guard is
+retuned or repaired and BF-4b passes.
 
 Roadmap gate, quoted unchanged:
 
@@ -416,9 +422,12 @@ The eventual Phase 4 result must land under `results/proof/phase4/` and include:
 
 Phase 4 result: **open; full proof lock not run.**
 
-Spec status: **BF-4 smoke passed, 2026-05-16.** The Bayesian floor is no longer
-absent: `bayes_floor_particle_mpc` passed the smoke floor-sanity gate in
-[`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md).
-The remaining blocker is operational, not definitional: BF-5 must stage a
-sharded/resumable long-budget full lock before the Phase 4 gate can be
+Spec status: **BF-4 smoke passed; BF-4b first receipt failed, 2026-05-16.** The
+Bayesian floor is no longer absent: `bayes_floor_particle_mpc` passed the smoke
+floor-sanity gate in
+[`PHASE4_BAYESIAN_FLOOR_BUILDOUT.md`](PHASE4_BAYESIAN_FLOOR_BUILDOUT.md). The
+first BF-4b off-set calibration receipt classified the cell as `off` but
+produced regret CI `[0, 0]`, so the off-set arm did not fire. The remaining
+blocker is to retune or repair the floor/guard, pass BF-4b, and only then stage
+a sharded/resumable long-budget BF-5 full lock before the Phase 4 gate can be
 interpreted.
