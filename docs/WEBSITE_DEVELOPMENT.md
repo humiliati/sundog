@@ -304,6 +304,30 @@ public claim map, retrieval index, evidence tiers, and boundary rules are
 regenerated from `chat/claim_map.json`. If a new page is linked from
 `index.html` but not present in `dist`, the build fails.
 
+### Root HTML Publication Manifest
+
+Root `*.html` files are public website pages. Vite builds them from
+`site-pages.json`, not from an implicit directory scan. The manifest is the
+public-launch ledger: every root HTML page must be listed with a non-empty
+`publicLaunchIntent` before it can ship. The build fails if:
+
+- a root `*.html` file exists but is missing from `site-pages.json`;
+- `site-pages.json` references a missing root `*.html` file;
+- a manifest entry has no launch intent;
+- a root page is listed twice.
+
+`scripts/copy-site-docs.mjs` still copies root public artifacts such as
+`README.md`, `LICENSE`, `COPYRIGHT.md`, and `CITATION.cff`; it does not govern
+root HTML pages. Root HTML pages ship through Vite.
+
+Before adding a new root page:
+
+1. Create the page.
+2. Add it to `site-pages.json` with its evidence tier / page kind and explicit
+   launch intent.
+3. Link it from the relevant public surface or docs entry.
+4. Run `npm run build` and the appropriate responsive smoke checks.
+
 Preview the production artifact locally:
 
 ```bash
