@@ -478,6 +478,9 @@ Solo pass, 2026-05-16:
   output.
 - Upgraded the remaining Three-Body and Pressure Mines CSS visuals so the
   placeholders are card-specific rather than generic grid marks.
+- Added keyboard stepping plus wheel/pointer takeover to the motion rail script,
+  then smoke-checked 390 px, 520 px, 1280 px, keyboard takeover, wheel takeover,
+  and reduced-motion behavior.
 - Removed the commented Pushable Occluder image URL from `index.html` to avoid
   false broken-asset hits before the interrupt card is ready.
 

@@ -7,11 +7,12 @@ anniversary screenshot needs.
 ## Summary
 
 The rail behavior is in good shape for the anniversary pass: center-focus
-carousel, stamp-cued auto-cycle, manual controls, replay, and reduced-motion
-fallback all have live code in `public/js/motion-rail.mjs`. The visual evidence
-gap is now smaller: Balance, Photometric Alignment, EyesOnly, Dungeon Gleaner,
-and Money Bags have real poster images in `public/media`; Three-Body and
-Pressure Mines still rely on bespoke CSS visuals.
+carousel, stamp-cued auto-cycle, manual controls, keyboard stepping,
+drag/wheel takeover, replay, and reduced-motion fallback all have live code in
+`public/js/motion-rail.mjs`. The visual evidence gap is now smaller: Balance,
+Photometric Alignment, EyesOnly, Dungeon Gleaner, and Money Bags have real
+poster images in `public/media`; Three-Body and Pressure Mines still rely on
+bespoke CSS visuals.
 
 The logo roadmap is ready to promote: the characterized halo mark already has
 SVG and PNG proofs. Production favicons were still using the older mark until
@@ -47,10 +48,28 @@ Check:
 - No text wraps outside card or button bounds.
 - CSS placeholders read as intentional placeholders, not broken media.
 
+Latest smoke pass, 2026-05-17:
+
+- `npm run build` passed, including the dist link check.
+- Headless Chrome checks at 390 px, 520 px, and 1280 px found seven active rail
+  cards, no horizontal page overflow, reachable controls, injected verdict
+  stamps, and no text escaping card bounds.
+- Keyboard `ArrowRight` moves the rail from Sundog Balance to Three-Body
+  Dynamics and sets `data-rail-state="user"`.
+- Wheel interaction on the rail sets `data-rail-state="user"` and arms the
+  current card's stamp, so the auto-cycle does not fight manual exploration.
+- Reduced-motion emulation at 520 px sets `data-rail-state="settled"` and arms
+  all seven stamps at load.
+- Offscreen lazy poster images can remain unloaded until their cards approach
+  the viewport; this is expected and separate from broken-link checks.
+
 ## Rail Implementation Notes
 
 - `public/js/motion-rail.mjs` injects accessible verdict stamps and keeps the
   visible stamps decorative with screen-reader verdict text.
+- Keyboard navigation now supports `ArrowLeft`, `ArrowRight`, `Home`, and
+  `End`. Wheel or pointer takeover also switches the rail to user-driven mode
+  for the rest of the page session.
 - The roadmap says `data-media` duration should override `data-clip-ms`, but
   the current script still uses `data-clip-ms` or the static default. This is
   harmless while all active cards are static, but it must be fixed before
