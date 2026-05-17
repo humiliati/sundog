@@ -857,7 +857,7 @@
             }
         }
 
-        /* Phase 7: static atlas snapshot in the hero */
+        /* Static atlas snapshot in the hero */
         .hero { position: relative; overflow: hidden; }
         .hero-atlas {
             position: absolute;
@@ -878,6 +878,104 @@
             letter-spacing: 0.18em;
             text-transform: uppercase;
             margin-bottom: 0.6rem;
+        }
+
+        .hero-phase-section {
+            background: #F7F9FA;
+            border-bottom: 1px solid var(--line);
+            padding: clamp(2.5rem, 5vw, 4rem) 1.5rem;
+        }
+
+        .hero-phase-shell {
+            width: min(1120px, 100%);
+            margin: 0 auto;
+        }
+
+        .hero-phase-heading {
+            display: grid;
+            gap: 0.5rem;
+            max-width: 46rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .hero-phase-heading .eyebrow {
+            color: var(--primary-mid);
+            font-family: var(--sd-font-data);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .hero-phase-heading h2 {
+            color: var(--primary-dark);
+            font-size: clamp(1.55rem, 3vw, 2.2rem);
+            line-height: 1.12;
+            margin: 0;
+        }
+
+        .hero-phase-heading p {
+            color: #40505C;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        .hero-phase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .hero-phase-card {
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 0.7rem;
+            min-height: 15rem;
+            padding: 1.15rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            box-shadow: 0 12px 30px rgba(12, 31, 46, 0.06);
+        }
+
+        .hero-phase-card .phase-label {
+            color: var(--accent-gold);
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .hero-phase-card h3 {
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            line-height: 1.15;
+            margin: 0;
+        }
+
+        .hero-phase-card p {
+            color: #40505C;
+            font-size: 0.94rem;
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        .hero-phase-card a {
+            color: var(--primary-mid);
+            font-family: var(--sd-font-data);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .hero-phase-card a:hover,
+        .hero-phase-card a:focus-visible {
+            color: var(--primary-dark);
+            text-decoration: underline;
+            text-underline-offset: 0.2rem;
         }
 
         /* Chat experiment teaser — links to chat.html */
@@ -1020,7 +1118,16 @@
             border-radius: 999px;
         }
 
+        .elevator-pitch-layout {
+            display: grid;
+            grid-template-columns: minmax(7.5rem, 0.18fr) minmax(0, 1fr) minmax(7.5rem, 0.18fr);
+            gap: 1rem;
+            align-items: center;
+        }
+
         .elevator-pitch-shell {
+            grid-column: 2;
+            grid-row: 1;
             background: #FFFFFF;
             border: 1px solid var(--line);
             border-left: 4px solid var(--accent-gold);
@@ -1028,24 +1135,99 @@
             padding: clamp(1.8rem, 3.2vw, 2.6rem) clamp(1.6rem, 3vw, 2.4rem);
         }
 
+        .elevator-pitch-art {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .elevator-pitch-art-left {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .elevator-pitch-art-right {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        .elevator-pitch-art figure {
+            margin: 0;
+            overflow: hidden;
+            border: 1px solid rgba(12, 31, 46, 0.16);
+            border-radius: 8px;
+            background: #102334;
+            box-shadow: 0 14px 32px rgba(12, 31, 46, 0.12);
+        }
+
+        .elevator-pitch-art img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+        }
+
+        .elevator-pitch-art figcaption {
+            color: rgba(245, 245, 245, 0.82);
+            font-family: var(--sd-font-data);
+            font-size: 0.64rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            line-height: 1.35;
+            padding: 0.55rem 0.65rem;
+            text-transform: uppercase;
+        }
+
         .elevator-pitch-headline {
             color: var(--primary-dark);
             font-size: clamp(1.5rem, 3vw, 2.1rem);
             line-height: 1.18;
-            letter-spacing: -0.01em;
-            margin: 0 0 1.4rem;
+            letter-spacing: 0;
+            margin: 0 0 1.2rem;
         }
 
-        .elevator-pitch-body p {
+        .elevator-pitch-kicker {
             color: #2C3E4A;
-            font-size: 1.02rem;
-            line-height: 1.75;
-            margin: 0 0 1.1rem;
-            max-width: 68ch;
+            font-size: 1.04rem;
+            line-height: 1.62;
+            max-width: 50rem;
+            margin: 0 0 1.35rem;
         }
 
-        .elevator-pitch-body p:last-child {
-            margin-bottom: 0;
+        .elevator-pitch-points {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.1rem;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            padding: 1.15rem 0;
+        }
+
+        .elevator-pitch-point {
+            display: grid;
+            align-content: start;
+            gap: 0.5rem;
+        }
+
+        .elevator-pitch-point h3 {
+            color: var(--primary-dark);
+            font-size: 1rem;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .elevator-pitch-point p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.58;
+            margin: 0;
+        }
+
+        .elevator-pitch-note {
+            color: #40505C;
+            font-size: 0.94rem;
+            line-height: 1.62;
+            margin: 1.2rem 0 0;
+            max-width: 58rem;
         }
 
         .elevator-pitch-body code {
@@ -1055,6 +1237,81 @@
             background: rgba(125, 162, 184, 0.12);
             padding: 0.05em 0.35em;
             border-radius: 3px;
+        }
+
+        .glossary-link {
+            position: relative;
+            color: var(--primary-mid);
+            font-weight: 800;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            text-underline-offset: 0.18em;
+        }
+
+        .glossary-link::after {
+            content: attr(data-definition);
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 0.6rem);
+            z-index: 8;
+            width: min(18rem, calc(100vw - 2rem));
+            padding: 0.7rem 0.8rem;
+            border: 1px solid rgba(244, 196, 48, 0.32);
+            border-radius: 6px;
+            color: var(--text-light);
+            background: rgba(8, 20, 30, 0.96);
+            box-shadow: 0 14px 32px rgba(12, 31, 46, 0.28);
+            font-size: 0.78rem;
+            font-weight: 700;
+            line-height: 1.45;
+            opacity: 0;
+            pointer-events: none;
+            text-decoration: none;
+            transform: translate(-50%, 0.35rem);
+            transition: opacity 0.16s ease, transform 0.16s ease;
+        }
+
+        .glossary-link:hover::after,
+        .glossary-link:focus-visible::after {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (max-width: 900px) {
+            .hero-phase-grid,
+            .elevator-pitch-points {
+                grid-template-columns: 1fr;
+            }
+
+            .elevator-pitch-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .elevator-pitch-shell,
+            .elevator-pitch-art {
+                grid-column: 1;
+                grid-row: auto;
+            }
+
+            .elevator-pitch-art {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .elevator-pitch-art img {
+                aspect-ratio: 16 / 11;
+            }
         }
 
         @media (max-width: 760px) {
@@ -1141,12 +1398,55 @@
             <h1>The math draws the sky.</h1>
             <p class="tagline">An atlas for sundogs, calibrated against the photographs.</p>
             <p class="value-prop">
-                The visible arcs of a sun dog are upper slices of complete circles. The atlas renders them parametrically &mdash; and runs backwards to recover the sun&rsquo;s altitude from a single photograph.
+                The visible arcs of a sun dog are upper slices of complete circles. The atlas renders them parametrically, then runs backwards to recover the sun&rsquo;s altitude from a single photograph.
             </p>
             <div class="cta-buttons">
                 <a href="sundog.html" class="btn btn-primary">Open the Sundog atlas</a>
                 <a href="threebody.html" class="btn btn-secondary">Three-Body workbench</a>
                 <a href="balance.html" class="btn btn-secondary">Balance workbench</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero-phase-section" aria-labelledby="hero-phase-title">
+        <div class="hero-phase-shell">
+            <div class="hero-phase-heading">
+                <p class="eyebrow">Static hero guide</p>
+                <h2 id="hero-phase-title">The hero is one scene, read three ways.</h2>
+                <p>
+                    The atlas snapshot is no longer a live drawing sequence on this page.
+                    These cards say what that scene means before the motion rail starts.
+                </p>
+            </div>
+            <div class="hero-phase-grid">
+                <article class="hero-phase-card">
+                    <span class="phase-label">Optics</span>
+                    <h3>What the viewer sees</h3>
+                    <p>
+                        A ring, bright side spots, a high smile-shaped arc, and a faint belt
+                        through the sun. The point is not spectacle, it is named geometry.
+                    </p>
+                    <a href="legend.html#rendered-heading">Open the halo legend</a>
+                </article>
+                <article class="hero-phase-card">
+                    <span class="phase-label">Physics</span>
+                    <h3>What fixes the arcs</h3>
+                    <p>
+                        Sun altitude, observer geometry, and crystal families constrain
+                        where each feature can land. The atlas keeps rendered vocabulary
+                        separate from calibrated inverse routes.
+                    </p>
+                    <a href="sundog.html#full-atlas">Inspect the atlas</a>
+                </article>
+                <article class="hero-phase-card">
+                    <span class="phase-label">Applications</span>
+                    <h3>Why it matters</h3>
+                    <p>
+                        Sundog generalizes the posture: when the target is hidden, look
+                        for a trace that still changes coherently when the system acts.
+                    </p>
+                    <a href="#application-motion-rail">See workbenches</a>
+                </article>
             </div>
         </div>
     </section>

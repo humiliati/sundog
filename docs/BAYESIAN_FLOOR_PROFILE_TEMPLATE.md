@@ -317,7 +317,7 @@ into each roadmap.
 | Surface | Best first floor form | Why | Notes |
 | --- | --- | --- | --- |
 | Three-body | Particle-belief MPC | Continuous hidden state and existing particle-friendly simulator. | Current pattern source; blocked on passing re-probe after same-information guard. |
-| Balance | Low-dimensional particle or EKF floor over pole state | Hidden state is only four-dimensional and `sampleShadowSensor` already isolates the observation. | Likely the easiest next concrete implementation. Candidate actions can be a fixed force lattice plus `sundog_shadow`. |
+| Balance | Low-dimensional particle or EKF floor over pole state | Hidden state is only four-dimensional and `sampleShadowSensor` already isolates the observation. | The staged profile now lives in [`SUNDOG_V_BALANCE.md`](SUNDOG_V_BALANCE.md#bayesian-floor-profile). Candidate actions can be a fixed force lattice plus `sundog_shadow`. |
 | Pressure Mines | Frontier-limited occupancy belief / particle board posterior | Discrete hidden mine grid; actions are already enumerated as reveal/flag/scan. | Exact full-board posterior may be too large; start with frontier particles and explicit approximation limits. |
 | Core photometric | Particle or coarse grid posterior over source/beam geometry | The scientific spine needs the comparator, but MuJoCo/Python makes this heavier. | Start after a JS workbench proves the template. Keep oracle DOA separate. |
 | Pushable Occluder | Same as core photometric plus occluder pose belief | High-value boundary, but only after the scene/oracle apparatus exists. | The floor should not run before Phase 1 apparatus passes. |
