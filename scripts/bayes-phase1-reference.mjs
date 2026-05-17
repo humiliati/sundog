@@ -7,7 +7,34 @@ import { fileURLToPath } from "node:url";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const DEFAULT_MODES = Object.freeze(["oracle", "bayes_correct", "hc_sundog", "random"]);
+const PHASE1_MODES = Object.freeze(["oracle", "bayes_correct", "hc_sundog", "random"]);
+const PHASE2_MODES = Object.freeze([
+  "oracle",
+  "bayes_correct",
+  "bayes_misspecified",
+  "bayes_adaptive",
+  "hc_sundog",
+  "sundog_memory",
+  "random",
+]);
+const DEFAULT_MODES = PHASE1_MODES;
+const CLEAN_SCENARIO = "clean";
+const PHASE2_SCENARIOS = Object.freeze([
+  "warped",
+  "anisotropic",
+  "calibration_shift",
+  "clipped",
+  "delayed",
+]);
+const ALL_SCENARIOS = Object.freeze([CLEAN_SCENARIO, ...PHASE2_SCENARIOS]);
+const ADAPTIVE_MODELS = Object.freeze([
+  "clean",
+  "warped",
+  "anisotropic",
+  "calibration_shift",
+  "clipped",
+  "delayed",
+]);
 const ACTIONS = Object.freeze([
   { id: "stay", dx: 0, dy: 0 },
   { id: "east", dx: 1, dy: 0 },
@@ -30,6 +57,7 @@ const DEFAULT_ARGS = Object.freeze({
   seedStart: 0,
   seeds: 32,
   modes: DEFAULT_MODES,
+  scenarios: [CLEAN_SCENARIO],
   gridSize: 9,
   maxTurns: 24,
   startX: 0,
@@ -45,18 +73,20 @@ const DEFAULT_ARGS = Object.freeze({
   bayesStayPenalty: 0.35,
   sundogSeekThreshold: 0.16,
   sundogTrackThreshold: 0.52,
+  phase2SeparationMargin: 0.1,
   traceSteps: true,
 });
 
 function usage() {
   return [
     "Usage:",
-    "  node scripts/bayes-phase1-reference.mjs --phase <name> --out <dir> --seeds <n>",
+    "  node scripts/bayes-phase1-reference.mjs --phase <name> --out <dir> --seeds <n> [--scenarios clean|phase2|csv] [--modes csv]",
     "",
     "Defaults run a small exact Bayes-Correct hidden-source reference task.",
     "",
     "Example:",
     "  node scripts/bayes-phase1-reference.mjs --phase phase1-reference-smoke --out results/bayes/phase1-reference-smoke --seeds 32 --max-turns 24",
+    "  node scripts/bayes-phase1-reference.mjs --phase phase2-mismatch-smoke --out results/bayes/phase2-mismatch-smoke --scenarios phase2 --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,random --seeds 16 --max-turns 32",
   ].join("\n");
 }
 
@@ -79,6 +109,7 @@ function parseArgs(argv) {
     else if (flag === "--seed-start") args.seedStart = parseInteger(value, flag);
     else if (flag === "--seeds") args.seeds = parsePositiveInteger(value, flag);
     else if (flag === "--modes") args.modes = parseList(value);
+    else if (flag === "--scenarios") args.scenarios = parseScenarios(value);
     else if (flag === "--grid-size") args.gridSize = parsePositiveInteger(value, flag);
     else if (flag === "--max-turns") args.maxTurns = parsePositiveInteger(value, flag);
     else if (flag === "--start-x") args.startX = parseInteger(value, flag);
@@ -94,6 +125,7 @@ function parseArgs(argv) {
     else if (flag === "--bayes-stay-penalty") args.bayesStayPenalty = parseNonNegativeNumber(value, flag);
     else if (flag === "--sundog-seek-threshold") args.sundogSeekThreshold = parseNumber(value, flag);
     else if (flag === "--sundog-track-threshold") args.sundogTrackThreshold = parseNumber(value, flag);
+    else if (flag === "--phase2-separation-margin") args.phase2SeparationMargin = parseNumber(value, flag);
     else if (flag === "--trace-steps") args.traceSteps = parseBoolean(value, flag);
     else throw new Error(`Unknown flag: ${flag}`);
   }
@@ -104,6 +136,12 @@ function parseArgs(argv) {
 
 function parseList(value) {
   return value.split(",").map((item) => item.trim()).filter(Boolean);
+}
+
+function parseScenarios(value) {
+  if (value === "phase2") return [...PHASE2_SCENARIOS];
+  if (value === "all") return [...ALL_SCENARIOS];
+  return parseList(value);
 }
 
 function parseInteger(value, flag) {
@@ -143,9 +181,13 @@ function parseBoolean(value, flag) {
 }
 
 function validateArgs(args) {
-  const knownModes = new Set(DEFAULT_MODES);
+  const knownModes = new Set(PHASE2_MODES);
   const unknownMode = args.modes.find((mode) => !knownModes.has(mode));
   if (unknownMode) throw new Error(`Unknown mode: ${unknownMode}`);
+  const knownScenarios = new Set(ALL_SCENARIOS);
+  const unknownScenario = args.scenarios.find((scenario) => !knownScenarios.has(scenario));
+  if (unknownScenario) throw new Error(`Unknown scenario: ${unknownScenario}`);
+  if (!args.scenarios.length) throw new Error("--scenarios must include at least one scenario");
   if (args.gridSize < 5) throw new Error("--grid-size must be at least 5");
   if (args.startX < 0 || args.startX >= args.gridSize || args.startY < 0 || args.startY >= args.gridSize) {
     throw new Error("--start-x/--start-y must be inside the grid");
@@ -237,18 +279,40 @@ function selectTarget(seed, config, candidates) {
   return candidates[Math.floor(rng() * candidates.length)];
 }
 
-function signalMean(pos, target, config) {
+function radialAmplitude(pos, target, config, model = CLEAN_SCENARIO) {
+  const dx = pos.x - target.x;
+  const dy = pos.y - target.y;
+  if (model === "warped") {
+    const warpedX = dx + 0.42 * dy;
+    const warpedY = 0.72 * dy;
+    return config.amplitude * Math.exp(-(warpedX ** 2 + warpedY ** 2) / (2 * config.sigma ** 2));
+  }
+  if (model === "anisotropic") {
+    const sigmaX = config.sigma * 0.58;
+    const sigmaY = config.sigma * 1.9;
+    return config.amplitude * Math.exp(-(dx ** 2 / (2 * sigmaX ** 2) + dy ** 2 / (2 * sigmaY ** 2)));
+  }
   const d2 = (pos.x - target.x) ** 2 + (pos.y - target.y) ** 2;
-  return config.baseline + config.amplitude * Math.exp(-d2 / (2 * config.sigma ** 2));
+  return config.amplitude * Math.exp(-d2 / (2 * config.sigma ** 2));
 }
 
-function observe({ seed, turn, pos, target, config }) {
-  const mean = signalMean(pos, target, config);
+function signalMean(pos, target, config, model = CLEAN_SCENARIO) {
+  const amplitude = radialAmplitude(pos, target, config, model === "delayed" ? CLEAN_SCENARIO : model);
+  if (model === "calibration_shift") return config.baseline + 0.34 + 0.52 * amplitude;
+  if (model === "clipped") return config.baseline + Math.min(0.52, amplitude);
+  return config.baseline + amplitude;
+}
+
+function observe({ seed, turn, pos, previousPos, target, scenario, config }) {
+  const emissionPos = scenario === "delayed" && previousPos ? previousPos : pos;
+  const mean = signalMean(emissionPos, target, config, scenario);
   const noise = config.noiseStd * gaussianFromParts("observation", seed, turn, pos.x, pos.y);
   return {
     value: mean + noise,
     mean,
     noise,
+    scenario,
+    emissionPos,
   };
 }
 
@@ -267,17 +331,34 @@ function normalizeLogWeights(logWeights) {
   return shifted.map((value) => value / sum);
 }
 
-function updatePosterior(posterior, pos, observationValue, config) {
-  const nextLogWeights = posterior.logWeights.map((logWeight, index) => {
-    const mean = signalMean(pos, posterior.candidates[index], config);
-    return logWeight + gaussianLogLikelihood(observationValue, mean, config.noiseStd);
+function updatePosterior(posterior, pos, observationValue, config, model = CLEAN_SCENARIO) {
+  return updatePosteriorWithEvidence(posterior, pos, observationValue, config, model).posterior;
+}
+
+function updatePosteriorWithEvidence(posterior, pos, observationValue, config, model = CLEAN_SCENARIO) {
+  const priorProbs = normalizeLogWeights(posterior.logWeights);
+  const likelihoodLogs = posterior.candidates.map((candidate) => {
+    const mean = signalMean(pos, candidate, config, model);
+    return gaussianLogLikelihood(observationValue, mean, config.noiseStd);
   });
+  const evidenceTerms = likelihoodLogs.map((logLikelihood, index) => Math.log(Math.max(priorProbs[index], 1e-300)) + logLikelihood);
+  const logEvidence = logSumExp(evidenceTerms);
+  const nextLogWeights = posterior.logWeights.map((logWeight, index) => logWeight + likelihoodLogs[index]);
   const probs = normalizeLogWeights(nextLogWeights);
   const normalizedLogs = probs.map((prob) => Math.log(Math.max(prob, 1e-300)));
   return {
-    candidates: posterior.candidates,
-    logWeights: normalizedLogs,
+    posterior: {
+      candidates: posterior.candidates,
+      logWeights: normalizedLogs,
+    },
+    logEvidence,
   };
+}
+
+function logSumExp(values) {
+  const maxValue = Math.max(...values);
+  const sum = values.reduce((acc, value) => acc + Math.exp(value - maxValue), 0);
+  return maxValue + Math.log(sum);
 }
 
 function gaussianLogLikelihood(value, mean, std) {
@@ -317,7 +398,7 @@ function posteriorStats(posterior, truth = null) {
   };
 }
 
-function expectedInformationGain(posterior, probePos, config) {
+function expectedInformationGain(posterior, probePos, config, model = CLEAN_SCENARIO) {
   const probs = normalizeLogWeights(posterior.logWeights);
   const currentEntropy = entropyFromProbs(probs);
   let expectedEntropy = 0;
@@ -325,12 +406,12 @@ function expectedInformationGain(posterior, probePos, config) {
   for (let actualIndex = 0; actualIndex < posterior.candidates.length; actualIndex += 1) {
     const actualProb = probs[actualIndex];
     if (actualProb < 1e-12) continue;
-    const actualMean = signalMean(probePos, posterior.candidates[actualIndex], config);
+    const actualMean = signalMean(probePos, posterior.candidates[actualIndex], config, model);
 
     for (const [z, weight] of QUADRATURE) {
       const hypotheticalObservation = actualMean + z * config.noiseStd;
       const nextLogs = posterior.logWeights.map((logWeight, candidateIndex) => {
-        const mean = signalMean(probePos, posterior.candidates[candidateIndex], config);
+        const mean = signalMean(probePos, posterior.candidates[candidateIndex], config, model);
         return logWeight + gaussianLogLikelihood(hypotheticalObservation, mean, config.noiseStd);
       });
       expectedEntropy += actualProb * weight * entropyFromProbs(normalizeLogWeights(nextLogs));
@@ -344,7 +425,7 @@ function entropyFromProbs(probs) {
   return probs.reduce((acc, prob) => (prob > 0 ? acc - prob * Math.log(prob) : acc), 0);
 }
 
-function chooseBayesAction(pos, posterior, config) {
+function chooseBayesAction(pos, posterior, config, model = CLEAN_SCENARIO) {
   const probs = normalizeLogWeights(posterior.logWeights);
   const stats = posteriorStats(posterior);
   let best = null;
@@ -361,7 +442,7 @@ function chooseBayesAction(pos, posterior, config) {
       expectedDistance += prob * distance(nextPos, candidate);
     }
 
-    const informationGain = expectedInformationGain(posterior, nextPos, config);
+    const informationGain = expectedInformationGain(posterior, nextPos, config, model);
     const stayPenalty = action.id === "stay" ? config.bayesStayPenalty : 0;
     const mapDistance = distance(nextPos, stats.map);
     const utility =
@@ -404,8 +485,11 @@ function createScanPath(config) {
 }
 
 function createControllerState(mode, config) {
-  if (mode === "bayes_correct") return { posterior: createPosterior(enumerateTargetCandidates(config)) };
-  if (mode === "hc_sundog") {
+  if (mode === "bayes_correct" || mode === "bayes_misspecified") {
+    return { posterior: createPosterior(enumerateTargetCandidates(config)), previousPos: null };
+  }
+  if (mode === "bayes_adaptive") return createAdaptiveState(config);
+  if (mode === "hc_sundog" || mode === "sundog_memory") {
     return {
       phase: "scan",
       bestSignal: -Infinity,
@@ -415,26 +499,41 @@ function createControllerState(mode, config) {
       lastSignal: null,
       lastAction: null,
       rotateIndex: 0,
+      memory: {},
+      visits: {},
     };
   }
   return {};
 }
 
-function chooseAction({ mode, seed, turn, pos, target, observation, state, config }) {
+function createAdaptiveState(config) {
+  const models = ADAPTIVE_MODELS.map((model) => ({
+    model,
+    posterior: createPosterior(enumerateTargetCandidates(config)),
+    logWeight: -Math.log(ADAPTIVE_MODELS.length),
+  }));
+  return { models, previousPos: null };
+}
+
+function chooseAction({ mode, seed, turn, pos, target, scenario, observation, state, config }) {
   if (mode === "oracle") return { action: moveToward(pos, target, config), diagnostics: { policy: "truth_shortest_path" } };
   if (mode === "random") {
     const options = legalActions(pos, config, { includeStay: false });
     const rng = rngFromParts("random-action", seed, turn, pos.x, pos.y);
     return { action: options[Math.floor(rng() * options.length)], diagnostics: { policy: "legal_uniform_random" } };
   }
-  if (mode === "bayes_correct") {
-    state.posterior = updatePosterior(state.posterior, pos, observation.value, config);
+  if (mode === "bayes_correct" || mode === "bayes_misspecified") {
+    const model = mode === "bayes_correct" ? scenario : CLEAN_SCENARIO;
+    const likelihoodPos = likelihoodPositionForModel(model, pos, state);
+    state.posterior = updatePosterior(state.posterior, likelihoodPos, observation.value, config, model);
     const stats = posteriorStats(state.posterior, target);
-    const choice = chooseBayesAction(pos, state.posterior, config);
+    const choice = chooseBayesAction(pos, state.posterior, config, model === "delayed" ? CLEAN_SCENARIO : model);
     return {
       action: choice.action,
       diagnostics: {
-        policy: "exact_posterior_expected_utility",
+        policy: mode === "bayes_correct" ? "exact_posterior_expected_utility" : "locked_clean_likelihood_expected_utility",
+        assumedModel: model,
+        likelihoodPosition: likelihoodPos,
         entropy: round(stats.entropy, 6),
         map: stats.map,
         mapProb: round(stats.mapProb, 6),
@@ -447,8 +546,82 @@ function chooseAction({ mode, seed, turn, pos, target, observation, state, confi
       },
     };
   }
+  if (mode === "bayes_adaptive") return chooseBayesAdaptiveAction({ pos, target, observation, state, config });
   if (mode === "hc_sundog") return chooseHcSundogAction({ pos, observation, state, config });
+  if (mode === "sundog_memory") return chooseSundogMemoryAction({ pos, observation, state, config });
   throw new Error(`Unknown mode: ${mode}`);
+}
+
+function likelihoodPositionForModel(model, pos, state) {
+  if (model === "delayed") return state.previousPos ?? pos;
+  return pos;
+}
+
+function chooseBayesAdaptiveAction({ pos, target, observation, state, config }) {
+  const nextModelStates = [];
+  const nextModelLogWeights = [];
+
+  for (const modelState of state.models) {
+    const likelihoodPos = likelihoodPositionForModel(modelState.model, pos, state);
+    const updated = updatePosteriorWithEvidence(
+      modelState.posterior,
+      likelihoodPos,
+      observation.value,
+      config,
+      modelState.model,
+    );
+    nextModelStates.push({
+      model: modelState.model,
+      posterior: updated.posterior,
+      logWeight: modelState.logWeight + updated.logEvidence,
+    });
+    nextModelLogWeights.push(modelState.logWeight + updated.logEvidence);
+  }
+
+  const modelWeights = normalizeLogWeights(nextModelLogWeights);
+  state.models = nextModelStates.map((modelState, index) => ({
+    ...modelState,
+    logWeight: Math.log(Math.max(modelWeights[index], 1e-300)),
+  }));
+
+  const combinedPosterior = combineAdaptivePosterior(state.models);
+  const stats = posteriorStats(combinedPosterior, target);
+  const choice = chooseBayesAction(pos, combinedPosterior, config, CLEAN_SCENARIO);
+  const modelSummary = state.models
+    .map((modelState, index) => ({ model: modelState.model, prob: round(modelWeights[index], 6) }))
+    .sort((a, b) => b.prob - a.prob);
+
+  return {
+    action: choice.action,
+    diagnostics: {
+      policy: "finite_model_mixture_expected_utility",
+      modelWeights: modelSummary,
+      entropy: round(stats.entropy, 6),
+      map: stats.map,
+      mapProb: round(stats.mapProb, 6),
+      truthProb: round(stats.truthProb, 6),
+      top: stats.top,
+      utility: round(choice.utility, 6),
+      hitMass: round(choice.hitMass, 6),
+      expectedDistance: round(choice.expectedDistance, 6),
+    },
+  };
+}
+
+function combineAdaptivePosterior(modelStates) {
+  const candidates = modelStates[0].posterior.candidates;
+  const modelWeights = normalizeLogWeights(modelStates.map((modelState) => modelState.logWeight));
+  const combined = candidates.map(() => 0);
+  for (let modelIndex = 0; modelIndex < modelStates.length; modelIndex += 1) {
+    const posteriorProbs = normalizeLogWeights(modelStates[modelIndex].posterior.logWeights);
+    for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex += 1) {
+      combined[candidateIndex] += modelWeights[modelIndex] * posteriorProbs[candidateIndex];
+    }
+  }
+  return {
+    candidates,
+    logWeights: combined.map((prob) => Math.log(Math.max(prob, 1e-300))),
+  };
 }
 
 function moveToward(pos, target, config) {
@@ -503,6 +676,95 @@ function chooseHcSundogAction({ pos, observation, state, config }) {
   };
 }
 
+function chooseSundogMemoryAction({ pos, observation, state, config }) {
+  if (state.initialSignal === undefined) state.initialSignal = observation.value;
+  rememberSignal(pos, observation.value, state);
+  if (observation.value > state.bestSignal) {
+    state.bestSignal = observation.value;
+    state.bestPos = { ...pos };
+  }
+  const dynamicSeekThreshold = Math.max(config.sundogSeekThreshold, state.initialSignal + config.noiseStd * 1.8);
+  const dynamicTrackThreshold = Math.max(config.sundogTrackThreshold, state.initialSignal + config.noiseStd * 4.5);
+  if (state.phase === "scan" && observation.value >= dynamicSeekThreshold) state.phase = "seek";
+  if (state.phase === "seek" && observation.value >= dynamicTrackThreshold) state.phase = "track";
+
+  const currentKey = positionKey(pos);
+  state.visits[currentKey] = (state.visits[currentKey] ?? 0) + 1;
+
+  if (state.phase === "scan") {
+    const action = nextScanAction(pos, state, config);
+    state.lastSignal = observation.value;
+    state.lastAction = action;
+    return {
+      action,
+      diagnostics: {
+        policy: "memory_baseline_scan",
+        phase: state.phase,
+        initialSignal: round(state.initialSignal, 6),
+        dynamicSeekThreshold: round(dynamicSeekThreshold, 6),
+        bestSignal: round(state.bestSignal, 6),
+        bestPos: state.bestPos,
+        rememberedCells: Object.keys(state.memory).length,
+      },
+    };
+  }
+
+  const fellAwayFromBest = observation.value < state.bestSignal - config.noiseStd * 1.1;
+  if (fellAwayFromBest && currentKey !== positionKey(state.bestPos)) {
+    const action = moveToward(pos, state.bestPos, config);
+    state.lastSignal = observation.value;
+    state.lastAction = action;
+    return {
+      action,
+      diagnostics: {
+        policy: "memory_return_to_best_signal",
+        phase: state.phase,
+        dynamicSeekThreshold: round(dynamicSeekThreshold, 6),
+        bestSignal: round(state.bestSignal, 6),
+        bestPos: state.bestPos,
+        rememberedCells: Object.keys(state.memory).length,
+      },
+    };
+  }
+
+  const candidates = legalActions(pos, config, { includeStay: false }).map((action) => {
+    const nextPos = applyAction(pos, action);
+    const key = positionKey(nextPos);
+    const remembered = state.memory[key];
+    const knownSignal = remembered ?? null;
+    const unexploredBonus = remembered === undefined ? 0.18 : 0;
+    const bestAttraction = -0.08 * distance(nextPos, state.bestPos);
+    const repeatPenalty = -0.04 * (state.visits[key] ?? 0);
+    const continuationBonus = state.lastAction?.id === action.id ? 0.03 : 0;
+    const score = (knownSignal ?? state.bestSignal - 0.08) + unexploredBonus + bestAttraction + repeatPenalty + continuationBonus;
+    return { action, nextPos, score, knownSignal };
+  });
+  candidates.sort((a, b) => {
+    if (a.score !== b.score) return b.score - a.score;
+    return a.action.id.localeCompare(b.action.id);
+  });
+  const selected = candidates[0];
+  state.lastSignal = observation.value;
+  state.lastAction = selected.action;
+  return {
+    action: selected.action,
+    diagnostics: {
+      policy: "response_memory_neighbor_probe",
+      phase: state.phase,
+      dynamicSeekThreshold: round(dynamicSeekThreshold, 6),
+      bestSignal: round(state.bestSignal, 6),
+      bestPos: state.bestPos,
+      selectedKnownSignal: selected.knownSignal === null ? null : round(selected.knownSignal, 6),
+      rememberedCells: Object.keys(state.memory).length,
+    },
+  };
+}
+
+function rememberSignal(pos, value, state) {
+  const key = positionKey(pos);
+  state.memory[key] = Math.max(state.memory[key] ?? -Infinity, value);
+}
+
 function nextScanAction(pos, state, config) {
   while (state.scanIndex < state.scanPath.length && positionKey(state.scanPath[state.scanIndex]) === positionKey(pos)) {
     state.scanIndex += 1;
@@ -524,9 +786,10 @@ function rotatingAction(pos, state, config) {
   return ACTIONS[0];
 }
 
-function simulateTrial({ mode, seed, config, candidates }) {
+function simulateTrial({ mode, scenario, seed, config, candidates }) {
   const target = selectTarget(seed, config, candidates);
   let pos = { x: config.startX, y: config.startY };
+  let previousPos = null;
   const state = createControllerState(mode, config);
   const steps = [];
   let success = false;
@@ -534,26 +797,30 @@ function simulateTrial({ mode, seed, config, candidates }) {
   let cumulativeSignal = 0;
 
   for (let turn = 0; turn < config.maxTurns; turn += 1) {
-    const observation = observe({ seed, turn, pos, target, config });
+    const observation = observe({ seed, turn, pos, previousPos, target, scenario, config });
     cumulativeSignal += observation.value;
-    const { action, diagnostics } = chooseAction({ mode, seed, turn, pos, target, observation, state, config });
+    const { action, diagnostics } = chooseAction({ mode, seed, turn, pos, target, scenario, observation, state, config });
     const nextPos = applyAction(pos, action);
     if (!inBounds(nextPos, config)) throw new Error(`Illegal ${mode} action ${action.id} at ${positionKey(pos)}`);
 
     const hit = positionKey(nextPos) === positionKey(target);
     steps.push({
       seed,
+      scenario,
       mode,
       turn,
       position: pos,
       observation: round(observation.value, 6),
       expectedMeanAtTruth: round(observation.mean, 6),
+      emissionPosition: observation.emissionPos,
       action: action.id,
       nextPosition: nextPos,
       hit,
       diagnostics,
     });
 
+    state.previousPos = pos;
+    previousPos = pos;
     pos = nextPos;
     if (hit) {
       success = true;
@@ -565,7 +832,10 @@ function simulateTrial({ mode, seed, config, candidates }) {
   const finalDistance = distance(pos, target);
   const outcome = {
     seed,
+    scenario,
     mode,
+    modelStatus: modelStatusForMode(mode, scenario),
+    fieldVariant: scenario,
     target,
     start: { x: config.startX, y: config.startY },
     success,
@@ -580,42 +850,71 @@ function simulateTrial({ mode, seed, config, candidates }) {
   return { outcome, steps };
 }
 
+function modelStatusForMode(mode, scenario) {
+  if (mode === "oracle") return "privileged";
+  if (mode === "bayes_correct") return scenario === CLEAN_SCENARIO ? "correct" : "variant-correct";
+  if (mode === "bayes_misspecified") return scenario === CLEAN_SCENARIO ? "correct-clean" : "misspecified-clean";
+  if (mode === "bayes_adaptive") return "finite-mixture-adaptive";
+  return "none";
+}
+
 function scoreOutcome({ success, turnsToHit, finalDistance, config }) {
   if (success) return 1 + (config.maxTurns - turnsToHit) / config.maxTurns;
   return -finalDistance / (config.gridSize * Math.SQRT2);
 }
 
-function summarizeTrials(trials, modes) {
-  const byMode = {};
-  for (const mode of modes) {
-    const rows = trials.filter((trial) => trial.mode === mode);
-    const successes = rows.filter((trial) => trial.success);
-    byMode[mode] = {
-      mode,
-      trials: rows.length,
-      successes: successes.length,
-      successRate: round(successes.length / Math.max(1, rows.length), 6),
-      meanScore: round(mean(rows.map((trial) => trial.score)), 6),
-      meanTurnsToHit: successes.length ? round(mean(successes.map((trial) => trial.turnsToHit)), 6) : null,
-      medianTurnsToHit: successes.length ? median(successes.map((trial) => trial.turnsToHit)) : null,
-      meanFinalDistance: round(mean(rows.map((trial) => trial.finalDistance)), 6),
-      meanCumulativeSignal: round(mean(rows.map((trial) => trial.cumulativeSignal)), 6),
-    };
+function summarizeTrials(trials, scenarios, modes) {
+  const summaryRows = [];
+  for (const scenario of scenarios) {
+    for (const mode of modes) {
+      const rows = trials.filter((trial) => trial.scenario === scenario && trial.mode === mode);
+      if (!rows.length) continue;
+      const successes = rows.filter((trial) => trial.success);
+      summaryRows.push({
+        scenario,
+        mode,
+        trials: rows.length,
+        successes: successes.length,
+        successRate: round(successes.length / Math.max(1, rows.length), 6),
+        meanScore: round(mean(rows.map((trial) => trial.score)), 6),
+        meanTurnsToHit: successes.length ? round(mean(successes.map((trial) => trial.turnsToHit)), 6) : null,
+        medianTurnsToHit: successes.length ? median(successes.map((trial) => trial.turnsToHit)) : null,
+        meanFinalDistance: round(mean(rows.map((trial) => trial.finalDistance)), 6),
+        meanCumulativeSignal: round(mean(rows.map((trial) => trial.cumulativeSignal)), 6),
+      });
+    }
   }
-  return byMode;
+  return summaryRows;
+}
+
+function nestSummary(summaryRows) {
+  const nested = {};
+  for (const row of summaryRows) {
+    if (!nested[row.scenario]) nested[row.scenario] = {};
+    nested[row.scenario][row.mode] = { ...row };
+    delete nested[row.scenario][row.mode].scenario;
+  }
+  return nested;
+}
+
+function summaryFor(summaryRows, scenario, mode) {
+  return summaryRows.find((row) => row.scenario === scenario && row.mode === mode) ?? null;
 }
 
 function buildRegretRows(trials, modes) {
-  const bySeedMode = new Map(trials.map((trial) => [`${trial.seed}|${trial.mode}`, trial]));
+  const bayesModes = modes.filter((mode) => mode.startsWith("bayes_"));
+  const bySeedScenarioMode = new Map(trials.map((trial) => [`${trial.scenario}|${trial.seed}|${trial.mode}`, trial]));
   const rows = [];
   for (const trial of trials) {
-    if (trial.mode !== "bayes_correct") continue;
+    if (!bayesModes.includes(trial.mode)) continue;
     for (const targetMode of modes) {
-      if (targetMode === "bayes_correct") continue;
-      const target = bySeedMode.get(`${trial.seed}|${targetMode}`);
+      if (targetMode === trial.mode) continue;
+      const target = bySeedScenarioMode.get(`${trial.scenario}|${trial.seed}|${targetMode}`);
       if (!target) continue;
       rows.push({
+        scenario: trial.scenario,
         seed: trial.seed,
+        bayesMode: trial.mode,
         targetMode,
         bayesScore: trial.score,
         targetScore: target.score,
@@ -630,10 +929,27 @@ function buildRegretRows(trials, modes) {
   return rows;
 }
 
-function buildExitGate(summary, regretRows) {
-  const bayes = summary.bayes_correct;
-  const sundog = summary.hc_sundog;
-  const bayesVsSundogRows = regretRows.filter((row) => row.targetMode === "hc_sundog");
+function buildExitGate(summaryRows, regretRows, config) {
+  if (config.modes.includes("bayes_misspecified") && config.scenarios.some((scenario) => scenario !== CLEAN_SCENARIO)) {
+    return buildPhase2ExitGate(summaryRows, config);
+  }
+  return buildPhase1ExitGate(summaryRows, regretRows);
+}
+
+function buildPhase1ExitGate(summaryRows, regretRows) {
+  const bayes = summaryFor(summaryRows, CLEAN_SCENARIO, "bayes_correct");
+  const sundog = summaryFor(summaryRows, CLEAN_SCENARIO, "hc_sundog");
+  if (!bayes || !sundog) {
+    return {
+      kind: "phase1-known-model",
+      name: "Bayes-Correct beats or matches HC-Sundog under the known model",
+      pass: false,
+      reason: "missing bayes_correct or hc_sundog rows",
+    };
+  }
+  const bayesVsSundogRows = regretRows.filter(
+    (row) => row.scenario === CLEAN_SCENARIO && row.bayesMode === "bayes_correct" && row.targetMode === "hc_sundog",
+  );
   const meanScoreDelta = mean(bayesVsSundogRows.map((row) => row.scoreDelta));
   const successOk = bayes.successRate >= sundog.successRate - 1e-9;
   const scoreOk = bayes.meanScore >= sundog.meanScore - 1e-9;
@@ -643,6 +959,7 @@ function buildExitGate(summary, regretRows) {
     sundog.meanTurnsToHit === null ||
     bayes.meanTurnsToHit <= sundog.meanTurnsToHit + 1e-9;
   return {
+    kind: "phase1-known-model",
     name: "Bayes-Correct beats or matches HC-Sundog under the known model",
     pass: successOk && scoreOk && turnOk,
     successOk,
@@ -658,19 +975,61 @@ function buildExitGate(summary, regretRows) {
   };
 }
 
-function selectReplayTrials(trials) {
-  const bySeed = new Map();
-  for (const trial of trials) {
-    if (!bySeed.has(trial.seed)) bySeed.set(trial.seed, {});
-    bySeed.get(trial.seed)[trial.mode] = trial;
+function buildPhase2ExitGate(summaryRows, config) {
+  const responseModes = ["sundog_memory", "hc_sundog"].filter((mode) => config.modes.includes(mode));
+  const scenarioGates = [];
+  for (const scenario of config.scenarios.filter((entry) => entry !== CLEAN_SCENARIO)) {
+    const misspecified = summaryFor(summaryRows, scenario, "bayes_misspecified");
+    if (!misspecified) continue;
+    const responseRows = responseModes.map((mode) => summaryFor(summaryRows, scenario, mode)).filter(Boolean);
+    if (!responseRows.length) continue;
+    const bestResponse = [...responseRows].sort((a, b) => b.meanScore - a.meanScore)[0];
+    const scoreDelta = bestResponse.meanScore - misspecified.meanScore;
+    const successDelta = bestResponse.successRate - misspecified.successRate;
+    scenarioGates.push({
+      scenario,
+      bestResponseMode: bestResponse.mode,
+      bayesMisspecifiedMeanScore: misspecified.meanScore,
+      bestResponseMeanScore: bestResponse.meanScore,
+      responseMinusBayesScoreDelta: round(scoreDelta, 6),
+      bayesMisspecifiedSuccessRate: misspecified.successRate,
+      bestResponseSuccessRate: bestResponse.successRate,
+      responseMinusBayesSuccessDelta: round(successDelta, 6),
+      separated: scoreDelta >= config.phase2SeparationMargin && successDelta >= 0,
+    });
   }
-  const candidates = [...bySeed.entries()]
-    .filter(([, rows]) => rows.bayes_correct && rows.hc_sundog)
-    .map(([seed, rows]) => ({
-      seed,
-      bayes: rows.bayes_correct,
-      sundog: rows.hc_sundog,
-      delta: rows.bayes_correct.score - rows.hc_sundog.score,
+  const separatedScenarios = scenarioGates.filter((gate) => gate.separated);
+  return {
+    kind: "phase2-mismatch",
+    name: "At least one mismatch regime separates fixed clean Bayes from response control",
+    status: separatedScenarios.length ? "separation_found" : "insufficient_mismatch",
+    pass: true,
+    separated: separatedScenarios.length > 0,
+    separationMargin: config.phase2SeparationMargin,
+    separatedScenarios: separatedScenarios.map((gate) => gate.scenario),
+    scenarioGates,
+  };
+}
+
+function selectReplayTrials(trials, config) {
+  const referenceMode = config.modes.includes("bayes_misspecified") ? "bayes_misspecified" : "bayes_correct";
+  const responseMode = config.modes.includes("sundog_memory") ? "sundog_memory" : "hc_sundog";
+  const byScenarioSeed = new Map();
+  for (const trial of trials) {
+    const key = `${trial.scenario}|${trial.seed}`;
+    if (!byScenarioSeed.has(key)) byScenarioSeed.set(key, { scenario: trial.scenario, seed: trial.seed, rows: {} });
+    byScenarioSeed.get(key).rows[trial.mode] = trial;
+  }
+  const candidates = [...byScenarioSeed.values()]
+    .filter((entry) => entry.rows[referenceMode] && entry.rows[responseMode])
+    .map((entry) => ({
+      seed: entry.seed,
+      scenario: entry.scenario,
+      referenceMode,
+      responseMode,
+      bayes: entry.rows[referenceMode],
+      response: entry.rows[responseMode],
+      delta: entry.rows[referenceMode].score - entry.rows[responseMode].score,
     }));
   const bestBayes = [...candidates].sort((a, b) => b.delta - a.delta)[0];
   const closest = [...candidates].sort((a, b) => Math.abs(a.delta) - Math.abs(b.delta))[0];
@@ -685,21 +1044,24 @@ function selectReplayTrials(trials) {
 function replayEntry(role, entry) {
   return {
     role,
+    scenario: entry.scenario,
     seed: entry.seed,
     target: entry.bayes.target,
-    bayes: {
+    referenceMode: entry.referenceMode,
+    responseMode: entry.responseMode,
+    bayesReference: {
       success: entry.bayes.success,
       turnsToHit: entry.bayes.turnsToHit,
       score: entry.bayes.score,
       path: entry.bayes.path,
     },
-    hcSundog: {
-      success: entry.sundog.success,
-      turnsToHit: entry.sundog.turnsToHit,
-      score: entry.sundog.score,
-      path: entry.sundog.path,
+    response: {
+      success: entry.response.success,
+      turnsToHit: entry.response.turnsToHit,
+      score: entry.response.score,
+      path: entry.response.path,
     },
-    bayesMinusHcScoreDelta: round(entry.delta, 6),
+    bayesMinusResponseScoreDelta: round(entry.delta, 6),
   };
 }
 
@@ -743,24 +1105,26 @@ async function main() {
   const trials = [];
   const steps = [];
 
-  for (let seedOffset = 0; seedOffset < args.seeds; seedOffset += 1) {
-    const seed = args.seedStart + seedOffset;
-    for (const mode of args.modes) {
-      const trial = simulateTrial({ mode, seed, config: args, candidates });
-      trials.push(trial.outcome);
-      if (args.traceSteps) steps.push(...trial.steps);
+  for (const scenario of args.scenarios) {
+    for (let seedOffset = 0; seedOffset < args.seeds; seedOffset += 1) {
+      const seed = args.seedStart + seedOffset;
+      for (const mode of args.modes) {
+        const trial = simulateTrial({ mode, scenario, seed, config: args, candidates });
+        trials.push(trial.outcome);
+        if (args.traceSteps) steps.push(...trial.steps);
+      }
     }
   }
 
   const completedAt = new Date().toISOString();
   const elapsedSeconds = (performance.now() - t0) / 1000;
-  const summary = summarizeTrials(trials, args.modes);
+  const summaryRows = summarizeTrials(trials, args.scenarios, args.modes);
   const regretRows = buildRegretRows(trials, args.modes);
-  const exitGate = buildExitGate(summary, regretRows);
+  const exitGate = buildExitGate(summaryRows, regretRows, args);
   const replayManifest = {
     phase: args.phase,
     sourceManifest: "manifest.json",
-    selectedTrials: selectReplayTrials(trials),
+    selectedTrials: selectReplayTrials(trials, args),
   };
 
   const manifest = {
@@ -770,12 +1134,16 @@ async function main() {
     startedAt,
     completedAt,
     elapsedSeconds: round(elapsedSeconds, 6),
-    purpose: "Standalone Phase 1 Bayes-vs-Sundog exact hidden-source reference task.",
+    purpose:
+      exitGate.kind === "phase2-mismatch"
+        ? "Standalone Phase 2 Bayes-vs-Sundog model-mismatch slate."
+        : "Standalone Phase 1 Bayes-vs-Sundog exact hidden-source reference task.",
     command: `node ${path.relative(REPO_ROOT, fileURLToPath(import.meta.url)).replaceAll("\\", "/")} ${process.argv.slice(2).join(" ")}`,
     config: {
       seedStart: args.seedStart,
       seeds: args.seeds,
       modes: args.modes,
+      scenarios: args.scenarios,
       gridSize: args.gridSize,
       start: { x: args.startX, y: args.startY },
       targetPrior: {
@@ -784,7 +1152,15 @@ async function main() {
       },
       maxTurns: args.maxTurns,
       observationModel: {
-        family: "known Gaussian radial field plus known Gaussian measurement noise",
+        family: "hidden-source scalar field plus known Gaussian measurement noise",
+        scenarios: {
+          clean: "radial Gaussian field matching Bayes-Correct",
+          warped: "sheared response surface with same target peak",
+          anisotropic: "axis-stretched Gaussian response surface",
+          calibration_shift: "affine detector offset/contrast shift",
+          clipped: "mild saturation near the source",
+          delayed: "one-step delayed sensor response",
+        },
         baseline: args.baseline,
         amplitude: args.amplitude,
         sigma: args.sigma,
@@ -796,12 +1172,26 @@ async function main() {
     policies: {
       bayes_correct: {
         posterior: "exact grid posterior over target location",
-        likelihood: "matches generator",
+        likelihood: "matches generator and selected scenario",
         actionRule: "one-step expected utility with exact posterior, hit mass, distance cost, and quadrature information gain",
+      },
+      bayes_misspecified: {
+        posterior: "exact grid posterior over target location",
+        likelihood: "locked to clean radial Gaussian regardless of true scenario",
+        actionRule: "same expected utility as Bayes-Correct under the clean likelihood",
+      },
+      bayes_adaptive: {
+        posterior: "finite mixture of exact grid posteriors",
+        likelihood: "model weights over clean, warped, anisotropic, calibration_shift, clipped, and delayed families",
+        actionRule: "expected utility over the mixture posterior",
       },
       hc_sundog: {
         observation: "position and scalar field observation only",
         actionRule: "SCAN/SEEK/TRACK response controller with serpentine scan, best-signal return, and local probe rotation",
+      },
+      sundog_memory: {
+        observation: "position and scalar field observation only",
+        actionRule: "response-control controller with remembered best cells and neighbor probing",
       },
       oracle: {
         observation: "privileged hidden source for apparatus ceiling only",
@@ -812,12 +1202,15 @@ async function main() {
     },
     audits: {
       exactPosterior: true,
-      bayesLikelihoodMatchesGenerator: true,
+      bayesCorrectLikelihoodMatchesGenerator: true,
+      bayesMisspecifiedLockedToCleanLikelihood: args.modes.includes("bayes_misspecified"),
+      bayesAdaptiveUsesFiniteModelMixture: args.modes.includes("bayes_adaptive"),
       noTargetCoordinateInBayesObservation: true,
-      noTargetCoordinateInHcSundogObservation: true,
+      noTargetCoordinateInSundogObservation: true,
       oracleExcludedFromClaimGate: true,
     },
-    summary,
+    summary: nestSummary(summaryRows),
+    summaryRows,
     exitGate,
     artifacts: {
       trials: "trials.jsonl",
@@ -834,7 +1227,8 @@ async function main() {
   if (args.traceSteps) await writeFile(path.join(outDir, "steps.jsonl"), toJsonl(steps), "utf8");
   await writeFile(
     path.join(outDir, "summary.csv"),
-    toCsv(Object.values(summary), [
+    toCsv(summaryRows, [
+      "scenario",
       "mode",
       "trials",
       "successes",
@@ -850,7 +1244,9 @@ async function main() {
   await writeFile(
     path.join(outDir, "regret.csv"),
     toCsv(regretRows, [
+      "scenario",
       "seed",
+      "bayesMode",
       "targetMode",
       "bayesScore",
       "targetScore",
@@ -869,14 +1265,21 @@ async function main() {
       `(${round(trials.length / Math.max(elapsedSeconds, 1e-9), 2)} trials/s)`,
   );
   console.log("Audits: pass");
-  console.log(
-    `Exit gate: ${exitGate.pass ? "pass" : "FAIL"} ` +
-      `(Bayes score ${exitGate.bayesMeanScore}, HC-Sundog score ${exitGate.sundogMeanScore}, ` +
-      `delta ${exitGate.bayesMinusSundogMeanScoreDelta})`,
-  );
+  if (exitGate.kind === "phase2-mismatch") {
+    console.log(
+      `Exit gate: ${exitGate.status} ` +
+        `(${exitGate.separatedScenarios.length}/${exitGate.scenarioGates.length} separated scenarios)`,
+    );
+  } else {
+    console.log(
+      `Exit gate: ${exitGate.pass ? "pass" : "FAIL"} ` +
+        `(Bayes score ${exitGate.bayesMeanScore}, HC-Sundog score ${exitGate.sundogMeanScore}, ` +
+        `delta ${exitGate.bayesMinusSundogMeanScoreDelta})`,
+    );
+  }
   console.log(`Wrote ${path.relative(REPO_ROOT, outDir)}`);
 
-  if (!exitGate.pass) process.exitCode = 1;
+  if (exitGate.kind !== "phase2-mismatch" && !exitGate.pass) process.exitCode = 1;
 }
 
 main().catch((error) => {
