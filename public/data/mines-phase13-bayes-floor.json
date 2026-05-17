@@ -1,0 +1,2533 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-05-17T17:26:59.459Z",
+  "purpose": "Public Pressure Mines Phase 13 data surface. Generated from Phase 10 operating-envelope receipts and Phase 12 same-field Bayesian pressure-floor receipts; do not hand-edit.",
+  "sourcePaths": {
+    "phase10Manifest": "results/mines/phase10-envelope/manifest.json",
+    "phase10BestWorst": "results/mines/phase10-envelope/best-worst-cells.csv",
+    "phase12Manifest": "results/mines/phase12-phase10-slate-reducer-64/manifest.json",
+    "phase12Summary": "results/mines/phase12-phase10-slate-reducer-64/summary.json",
+    "phase12RegretSummary": "results/mines/phase12-phase10-slate-reducer-64/bayes-regret-summary.csv"
+  },
+  "claimBoundary": "Pressure Mines remains an Operating-Envelope Study. The Bayesian comparator here is a pressure-floor parity receipt versus naive_pressure and sundog_minimal, not a claim that the current posterior policy dominates sundog_lean or clears the board.",
+  "phase10": {
+    "phase": "phase10-envelope",
+    "generatedAt": "2026-05-11T16:27:37.382Z",
+    "verdict": "CONFIRM",
+    "cellCount": 46,
+    "trialCount": 20608,
+    "bestWorst": [
+      {
+        "selection": "worst_cell",
+        "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_1_dropout_0p35__w9__h9__m18__c0__s1__n1__d0p35__lag0__scan3",
+        "cellClass": "failure_regime",
+        "mode": "sundog_lean",
+        "candidate": false,
+        "failureRegime": true,
+        "mineDensity": 0.222222,
+        "mineCount": 18,
+        "sigmaNoise": 1,
+        "dropoutRate": 0.35,
+        "targetBudgetAdjustedSafeTilesMean": 18.9375,
+        "naiveBudgetAdjustedSafeTilesMean": 23.65625,
+        "budgetDeltaVsNaiveMean": -4.71875,
+        "budgetDeltaVsNaiveCiLow": -8.375781,
+        "budgetDeltaVsNaiveCiHigh": -1.496484,
+        "staticBoundaryStatus": "watch_boundary",
+        "mechanismCodes": [
+          "frontier_ambiguity",
+          "field_uninformative",
+          "controller_overcommitted"
+        ],
+        "representativeSeed": 39,
+        "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=39&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.35"
+      },
+      {
+        "selection": "best_cell",
+        "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_2_dropout_0p2__w9__h9__m13__c0__s1__n2__d0p2__lag0__scan3",
+        "cellClass": "candidate_positive",
+        "mode": "sundog_minimal",
+        "candidate": true,
+        "failureRegime": false,
+        "mineDensity": 0.160494,
+        "mineCount": 13,
+        "sigmaNoise": 2,
+        "dropoutRate": 0.2,
+        "targetBudgetAdjustedSafeTilesMean": 28.4375,
+        "naiveBudgetAdjustedSafeTilesMean": 21.21875,
+        "budgetDeltaVsNaiveMean": 7.21875,
+        "budgetDeltaVsNaiveCiLow": 3.375,
+        "budgetDeltaVsNaiveCiHigh": 11.078516,
+        "staticBoundaryStatus": "watch_boundary",
+        "mechanismCodes": [
+          "field_uninformative"
+        ],
+        "representativeSeed": 47,
+        "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=47&mode=sundog_minimal&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.2"
+      }
+    ]
+  },
+  "phase12": {
+    "phase": "phase12-phase10-slate-reducer-64",
+    "startedAt": "2026-05-17T17:12:58.014Z",
+    "completedAt": "2026-05-17T17:14:39.404Z",
+    "wallSeconds": 101.39,
+    "trials": 14720,
+    "cells": 46,
+    "particleCount": 128,
+    "sensorSeedPolicy": "shared_cell",
+    "leakFree": true,
+    "posteriorDecisions": 21195,
+    "pressureFloorGate": {
+      "label": "Pressure-floor parity",
+      "pass": true,
+      "comparators": [
+        "naive_pressure",
+        "sundog_minimal"
+      ],
+      "negativeVsNaiveCells": 0,
+      "negativeVsMinimalCells": 0,
+      "note": "Pass means the pressure-budget Bayes lane is never worse than the pressure-ordering floor on mean budget-adjusted safe tiles. It does not mean Bayes dominates sundog_lean."
+    },
+    "targetSummary": [
+      {
+        "targetMode": "naive_pressure",
+        "cells": 46,
+        "meanBudgetAdjustedDelta": 0,
+        "minBudgetAdjustedDelta": 0,
+        "maxBudgetAdjustedDelta": 0,
+        "negativeCells": 0,
+        "zeroCells": 46,
+        "positiveCells": 0
+      },
+      {
+        "targetMode": "sundog_minimal",
+        "cells": 46,
+        "meanBudgetAdjustedDelta": 0,
+        "minBudgetAdjustedDelta": 0,
+        "maxBudgetAdjustedDelta": 0,
+        "negativeCells": 0,
+        "zeroCells": 46,
+        "positiveCells": 0
+      },
+      {
+        "targetMode": "sundog_lean",
+        "cells": 46,
+        "meanBudgetAdjustedDelta": 0.18784,
+        "minBudgetAdjustedDelta": -2.578125,
+        "maxBudgetAdjustedDelta": 3.40625,
+        "negativeCells": 15,
+        "zeroCells": 5,
+        "positiveCells": 26
+      },
+      {
+        "targetMode": "oracle_safe",
+        "cells": 46,
+        "meanBudgetAdjustedDelta": -25.190557,
+        "minBudgetAdjustedDelta": -50.015625,
+        "maxBudgetAdjustedDelta": -3.8125,
+        "negativeCells": 46,
+        "zeroCells": 0,
+        "positiveCells": 0
+      }
+    ],
+    "promotedCandidate": {
+      "naive_pressure": {
+        "meanBudgetAdjustedDelta": 0,
+        "minBudgetAdjustedDelta": 0,
+        "maxBudgetAdjustedDelta": 0,
+        "winDelta": 0,
+        "n": 64
+      },
+      "sundog_minimal": {
+        "meanBudgetAdjustedDelta": 0,
+        "minBudgetAdjustedDelta": 0,
+        "maxBudgetAdjustedDelta": 0,
+        "winDelta": 0,
+        "n": 64
+      },
+      "sundog_lean": {
+        "meanBudgetAdjustedDelta": -1.515625,
+        "minBudgetAdjustedDelta": -46,
+        "maxBudgetAdjustedDelta": 38,
+        "winDelta": 0,
+        "n": 64
+      },
+      "oracle_safe": {
+        "meanBudgetAdjustedDelta": -39.859375,
+        "minBudgetAdjustedDelta": -67,
+        "maxBudgetAdjustedDelta": -7,
+        "winDelta": -64,
+        "n": 64
+      }
+    },
+    "classCounts": {
+      "candidate_positive": 1,
+      "failure_regime": 23,
+      "neutral": 7,
+      "watch_boundary": 15
+    }
+  },
+  "claimCards": [
+    {
+      "id": "phase10-operating-envelope",
+      "label": "Phase 10 operating envelope",
+      "status": "CONFIRM",
+      "scope": "A narrow confirmed density/noise/dropout pocket is published beside its matched failure region."
+    },
+    {
+      "id": "phase12-bayes-pressure-floor",
+      "label": "Phase 12 Bayesian pressure floor",
+      "status": "PRESSURE_FLOOR_RECEIPT",
+      "scope": "Same-field pressure-budget Bayes matches naive_pressure and sundog_minimal floors across the Phase 10 cell slate; sundog_lean remains a separate stronger comparator in the promoted candidate."
+    }
+  ],
+  "cells": [
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_2_dropout_0p2__w9__h9__m13__c0__s1__n2__d0p2__lag0__scan3",
+      "selection": "phase10_candidate",
+      "cellClass": "candidate_positive",
+      "preset": "easy_sparse",
+      "representativeSeed": 47,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=47&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 2,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -1.515625,
+          "minBudgetAdjustedDelta": -46,
+          "maxBudgetAdjustedDelta": 38,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -39.859375,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -7,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_0p1_dropout_0p05__w9__h9__m8__c0__s1__n0p1__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 0,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=0&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 1.640625,
+          "minBudgetAdjustedDelta": -5,
+          "maxBudgetAdjustedDelta": 16,
+          "winDelta": 1,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -3.8125,
+          "minBudgetAdjustedDelta": -17,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": -62,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_0p5_dropout_0p35__w9__h9__m8__c0__s1__n0p5__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 20,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=20&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=0.5&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.5,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.015625,
+          "minBudgetAdjustedDelta": -1,
+          "maxBudgetAdjustedDelta": 1,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -15.96875,
+          "minBudgetAdjustedDelta": -71,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": -62,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_1_dropout_0p35__w9__h9__m8__c0__s1__n1__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 54,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=54&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=1&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 1,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.015625,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 1,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -23.625,
+          "minBudgetAdjustedDelta": -72,
+          "maxBudgetAdjustedDelta": -3,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_2_dropout_0p35__w9__h9__m8__c0__s1__n2__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 16,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=16&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=2&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 2,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -28.796875,
+          "minBudgetAdjustedDelta": -72,
+          "maxBudgetAdjustedDelta": -3,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_0p1_dropout_0p05__w9__h9__m13__c0__s1__n0p1__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 61,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=61&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 3.40625,
+          "minBudgetAdjustedDelta": -19,
+          "maxBudgetAdjustedDelta": 23,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -16.140625,
+          "minBudgetAdjustedDelta": -66,
+          "maxBudgetAdjustedDelta": -6,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_0p5_dropout_0p2__w9__h9__m13__c0__s1__n0p5__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 34,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=34&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=0.5&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.5,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -0.90625,
+          "minBudgetAdjustedDelta": -51,
+          "maxBudgetAdjustedDelta": 27,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -31.671875,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -9,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_0p5_dropout_0p35__w9__h9__m13__c0__s1__n0p5__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 49,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=49&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=0.5&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.5,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -0.046875,
+          "minBudgetAdjustedDelta": -3,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -28.25,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -6,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_1_dropout_0p05__w9__h9__m13__c0__s1__n1__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 38,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=38&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=1&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 1,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -2.40625,
+          "minBudgetAdjustedDelta": -57,
+          "maxBudgetAdjustedDelta": 45,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -37.421875,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -12,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_1_dropout_0p35__w9__h9__m13__c0__s1__n1__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 54,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=54&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=1&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 1,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -35.515625,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -9,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_2_dropout_0p05__w9__h9__m13__c0__s1__n2__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 3,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 2,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -1.8125,
+          "minBudgetAdjustedDelta": -52,
+          "maxBudgetAdjustedDelta": 43,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -40,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -10,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_2_dropout_0p35__w9__h9__m13__c0__s1__n2__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 4,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=2&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 2,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -40.25,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -7,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_0p1_dropout_0p05__w9__h9__m18__c0__s1__n0p1__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 41,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 1.671875,
+          "minBudgetAdjustedDelta": -24,
+          "maxBudgetAdjustedDelta": 33,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -27.9375,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -7,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_0p5_dropout_0p05__w9__h9__m18__c0__s1__n0p5__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 43,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=43&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=0.5&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.5,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.109375,
+          "minBudgetAdjustedDelta": -35,
+          "maxBudgetAdjustedDelta": 41,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -37.953125,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -13,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_0p5_dropout_0p35__w9__h9__m18__c0__s1__n0p5__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 43,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=43&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=0.5&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.5,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.09375,
+          "minBudgetAdjustedDelta": -6,
+          "maxBudgetAdjustedDelta": 12,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -41.859375,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -13,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_1_dropout_0p2__w9__h9__m18__c0__s1__n1__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 37,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=37&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 1,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.46875,
+          "minBudgetAdjustedDelta": -35,
+          "maxBudgetAdjustedDelta": 31,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -43.21875,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -18,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_1_dropout_0p35__w9__h9__m18__c0__s1__n1__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 39,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=39&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 1,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -0.234375,
+          "minBudgetAdjustedDelta": -16,
+          "maxBudgetAdjustedDelta": 1,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -43.046875,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -7,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "spoke__clustering_strength__0p65__w9__h9__m10__c0p65__s1__n0p1__d0p1__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 35,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=35&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&cluster_strength=0.65",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 10,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.1,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.6875,
+          "minBudgetAdjustedDelta": -17,
+          "maxBudgetAdjustedDelta": 16,
+          "winDelta": 2,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -5.34375,
+          "minBudgetAdjustedDelta": -28,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": -62,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "spoke__scan_budget__0__w9__h9__m10__c0__s1__n0p1__d0p1__lag0__scan0",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 41,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 10,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 0
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.1,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.65625,
+          "minBudgetAdjustedDelta": -3,
+          "maxBudgetAdjustedDelta": 8,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -6.53125,
+          "minBudgetAdjustedDelta": -16,
+          "maxBudgetAdjustedDelta": -1,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "spoke__scan_budget__1__w9__h9__m10__c0__s1__n0p1__d0p1__lag0__scan1",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 41,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 10,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 1
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.1,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.421875,
+          "minBudgetAdjustedDelta": -19,
+          "maxBudgetAdjustedDelta": 18,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -7.390625,
+          "minBudgetAdjustedDelta": -28,
+          "maxBudgetAdjustedDelta": -2,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "spoke__scan_budget__6__w9__h9__m10__c0__s1__n0p1__d0p1__lag0__scan6",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 41,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 10,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 6
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.1,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 1.40625,
+          "minBudgetAdjustedDelta": -3,
+          "maxBudgetAdjustedDelta": 23,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -6.5625,
+          "minBudgetAdjustedDelta": -23,
+          "maxBudgetAdjustedDelta": -2,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "spoke__sensor_delay__0__w9__h9__m10__c0__s1__n0p1__d0p1__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 41,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 10,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.1,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -0.203125,
+          "minBudgetAdjustedDelta": -60,
+          "maxBudgetAdjustedDelta": 13,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -7.453125,
+          "minBudgetAdjustedDelta": -69,
+          "maxBudgetAdjustedDelta": -1,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "spoke__sensor_delay__1__w9__h9__m10__c0__s1__n0p1__d0p1__lag1__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 41,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=41&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&delay=1",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 10,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.1,
+        "delaySteps": 1
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 1.515625,
+          "minBudgetAdjustedDelta": -6,
+          "maxBudgetAdjustedDelta": 24,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -6.484375,
+          "minBudgetAdjustedDelta": -13,
+          "maxBudgetAdjustedDelta": -1,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "spoke__sensor_delay__2__w9__h9__m10__c0__s1__n0p1__d0p1__lag2__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "failure_regime",
+      "preset": "easy_sparse",
+      "representativeSeed": 61,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=61&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&delay=2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 10,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.1,
+        "delaySteps": 2
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -0.078125,
+          "minBudgetAdjustedDelta": -60,
+          "maxBudgetAdjustedDelta": 12,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -7.796875,
+          "minBudgetAdjustedDelta": -69,
+          "maxBudgetAdjustedDelta": -1,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_0p1_dropout_0p2__w9__h9__m8__c0__s1__n0p1__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "neutral",
+      "preset": "easy_sparse",
+      "representativeSeed": 1,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=1&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.296875,
+          "minBudgetAdjustedDelta": -3,
+          "maxBudgetAdjustedDelta": 11,
+          "winDelta": -1,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -3.984375,
+          "minBudgetAdjustedDelta": -15,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": -63,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_0p5_dropout_0p05__w9__h9__m8__c0__s1__n0p5__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "neutral",
+      "preset": "easy_sparse",
+      "representativeSeed": 3,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=0.5&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.5,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 1.375,
+          "minBudgetAdjustedDelta": -48,
+          "maxBudgetAdjustedDelta": 43,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -12.921875,
+          "minBudgetAdjustedDelta": -72,
+          "maxBudgetAdjustedDelta": -1,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_0p5_dropout_0p2__w9__h9__m8__c0__s1__n0p5__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "neutral",
+      "preset": "easy_sparse",
+      "representativeSeed": 6,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=6&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=0.5&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.5,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.90625,
+          "minBudgetAdjustedDelta": -9,
+          "maxBudgetAdjustedDelta": 25,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -11.609375,
+          "minBudgetAdjustedDelta": -72,
+          "maxBudgetAdjustedDelta": -1,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_0p1_dropout_0p2__w9__h9__m13__c0__s1__n0p1__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "neutral",
+      "preset": "easy_sparse",
+      "representativeSeed": 27,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=27&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.453125,
+          "minBudgetAdjustedDelta": -5,
+          "maxBudgetAdjustedDelta": 18,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -15.3125,
+          "minBudgetAdjustedDelta": -51,
+          "maxBudgetAdjustedDelta": -5,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_0p5_dropout_0p05__w9__h9__m13__c0__s1__n0p5__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "neutral",
+      "preset": "easy_sparse",
+      "representativeSeed": 0,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=0&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=0.5&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.5,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 2.59375,
+          "minBudgetAdjustedDelta": -38,
+          "maxBudgetAdjustedDelta": 28,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -25.109375,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -5,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "spoke__clustering_strength__0p35__w9__h9__m10__c0p35__s1__n0p1__d0p1__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "neutral",
+      "preset": "easy_sparse",
+      "representativeSeed": 4,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&cluster_strength=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 10,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.1,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -0.3125,
+          "minBudgetAdjustedDelta": -28,
+          "maxBudgetAdjustedDelta": 7,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -8.34375,
+          "minBudgetAdjustedDelta": -33,
+          "maxBudgetAdjustedDelta": -2,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "spoke__kernel_blur__2__w9__h9__m10__c0__s2__n0p1__d0p1__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "neutral",
+      "preset": "easy_sparse",
+      "representativeSeed": 6,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=6&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&sigma=2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 10,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 2,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.1,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.28125,
+          "minBudgetAdjustedDelta": -21,
+          "maxBudgetAdjustedDelta": 29,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -28.609375,
+          "minBudgetAdjustedDelta": -70,
+          "maxBudgetAdjustedDelta": -3,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_0p1_dropout_0p35__w9__h9__m8__c0__s1__n0p1__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 4,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -5,
+          "minBudgetAdjustedDelta": -17,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": -61,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_1_dropout_0p05__w9__h9__m8__c0__s1__n1__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 1,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=1&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=1&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 1,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -2.578125,
+          "minBudgetAdjustedDelta": -56,
+          "maxBudgetAdjustedDelta": 28,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -18.671875,
+          "minBudgetAdjustedDelta": -72,
+          "maxBudgetAdjustedDelta": -2,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_1_dropout_0p2__w9__h9__m8__c0__s1__n1__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 1,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=1&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=1&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 1,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -0.921875,
+          "minBudgetAdjustedDelta": -64,
+          "maxBudgetAdjustedDelta": 4,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -16.140625,
+          "minBudgetAdjustedDelta": -72,
+          "maxBudgetAdjustedDelta": -2,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_2_dropout_0p05__w9__h9__m8__c0__s1__n2__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 13,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=13&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=2&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 2,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 2.15625,
+          "minBudgetAdjustedDelta": -46,
+          "maxBudgetAdjustedDelta": 67,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -24.296875,
+          "minBudgetAdjustedDelta": -72,
+          "maxBudgetAdjustedDelta": -1,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p1_noise_2_dropout_0p2__w9__h9__m8__c0__s1__n2__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 19,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=19&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=8&scan_budget=0&sigma_noise=2&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 8,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 2,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.09375,
+          "minBudgetAdjustedDelta": -3,
+          "maxBudgetAdjustedDelta": 10,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -29.9375,
+          "minBudgetAdjustedDelta": -72,
+          "maxBudgetAdjustedDelta": -1,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_0p1_dropout_0p35__w9__h9__m13__c0__s1__n0p1__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 49,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=49&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -18.84375,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -6,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p16_noise_1_dropout_0p2__w9__h9__m13__c0__s1__n1__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 25,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=25&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=13&scan_budget=0&sigma_noise=1&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 13,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 1,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -0.421875,
+          "minBudgetAdjustedDelta": -19,
+          "maxBudgetAdjustedDelta": 25,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -37.859375,
+          "minBudgetAdjustedDelta": -67,
+          "maxBudgetAdjustedDelta": -5,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_0p1_dropout_0p2__w9__h9__m18__c0__s1__n0p1__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 3,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -1.671875,
+          "minBudgetAdjustedDelta": -31,
+          "maxBudgetAdjustedDelta": 5,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -29.21875,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -7,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_0p1_dropout_0p35__w9__h9__m18__c0__s1__n0p1__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 7,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=7&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.171875,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 9,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -29.78125,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -10,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_0p5_dropout_0p2__w9__h9__m18__c0__s1__n0p5__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 3,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=3&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=0.5&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 0.5,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.5625,
+          "minBudgetAdjustedDelta": -28,
+          "maxBudgetAdjustedDelta": 33,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -37.96875,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -11,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_1_dropout_0p05__w9__h9__m18__c0__s1__n1__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 10,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=10&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=1&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 1,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -1.875,
+          "minBudgetAdjustedDelta": -47,
+          "maxBudgetAdjustedDelta": 27,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -44.03125,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -14,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_2_dropout_0p05__w9__h9__m18__c0__s1__n2__d0p05__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 16,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=16&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=2&dropout=0.05",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 2,
+        "dropoutRate": 0.05,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 0.359375,
+          "minBudgetAdjustedDelta": -26,
+          "maxBudgetAdjustedDelta": 32,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -48.96875,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -18,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_2_dropout_0p2__w9__h9__m18__c0__s1__n2__d0p2__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 47,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=47&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=2&dropout=0.2",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 2,
+        "dropoutRate": 0.2,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 1.0625,
+          "minBudgetAdjustedDelta": -18,
+          "maxBudgetAdjustedDelta": 33,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -47.15625,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -16,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "primary_factorial__density_noise_dropout__density_0p22_noise_2_dropout_0p35__w9__h9__m18__c0__s1__n2__d0p35__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 4,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=4&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&mine_count=18&scan_budget=0&sigma_noise=2&dropout=0.35",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 18,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 1,
+        "sigmaNoise": 2,
+        "dropoutRate": 0.35,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": -0.125,
+          "minBudgetAdjustedDelta": -12,
+          "maxBudgetAdjustedDelta": 4,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -50.015625,
+          "minBudgetAdjustedDelta": -62,
+          "maxBudgetAdjustedDelta": -19,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    },
+    {
+      "cellId": "spoke__kernel_blur__3__w9__h9__m10__c0__s3__n0p1__d0p1__lag0__scan3",
+      "selection": "phase10_cell",
+      "cellClass": "watch_boundary",
+      "preset": "easy_sparse",
+      "representativeSeed": 36,
+      "replayUrl": "https://sundog.cc/mines.html?preset=easy_sparse&seed=36&mode=sundog_lean&sensor=doc_default&compare=naive_pressure&scan_budget=0&sigma=3",
+      "board": {
+        "width": 9,
+        "height": 9,
+        "mineCount": 10,
+        "replayScanBudget": 0,
+        "configuredScanBudget": 3
+      },
+      "sensor": {
+        "sigma": 3,
+        "sigmaNoise": 0.1,
+        "dropoutRate": 0.1,
+        "delaySteps": 0
+      },
+      "bayesRegret": {
+        "naive_pressure": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_minimal": {
+          "meanBudgetAdjustedDelta": 0,
+          "minBudgetAdjustedDelta": 0,
+          "maxBudgetAdjustedDelta": 0,
+          "winDelta": 0,
+          "n": 64
+        },
+        "sundog_lean": {
+          "meanBudgetAdjustedDelta": 1.328125,
+          "minBudgetAdjustedDelta": -20,
+          "maxBudgetAdjustedDelta": 43,
+          "winDelta": 0,
+          "n": 64
+        },
+        "oracle_safe": {
+          "meanBudgetAdjustedDelta": -32.09375,
+          "minBudgetAdjustedDelta": -70,
+          "maxBudgetAdjustedDelta": -3,
+          "winDelta": -64,
+          "n": 64
+        }
+      }
+    }
+  ]
+}

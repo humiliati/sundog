@@ -41,6 +41,15 @@ const boundaryPanel = document.getElementById("mines-boundary-panel");
 const boundaryStatus = document.getElementById("mines-boundary-status");
 const boundarySummary = document.getElementById("mines-boundary-summary");
 const boundaryList = document.getElementById("mines-boundary-list");
+const bayesFloorPanel = document.getElementById("mines-bayes-floor-panel");
+const bayesFloorStatus = document.getElementById("mines-bayes-floor-status");
+const bayesFloorSummary = document.getElementById("mines-bayes-floor-summary");
+const bayesFloorTargets = document.getElementById("mines-bayes-floor-targets");
+const bayesFloorAdmission = document.getElementById("mines-bayes-floor-admission");
+const bayesFloorCandidate = document.getElementById("mines-bayes-floor-candidate");
+const bayesFloorArtifact = document.getElementById("mines-bayes-floor-artifact");
+
+const BAYES_FLOOR_DATA_PATH = "/data/mines-phase13-bayes-floor.json";
 
 const BEST_CELL_PARAMS = Object.freeze({
   preset: "easy_sparse",
@@ -132,6 +141,20 @@ function centerAction(board) {
 
 function modeLabel(mode) {
   return MINES_CONTROLLER_MODES[mode]?.label ?? mode;
+}
+
+function formatCount(value) {
+  return Number.isFinite(value) ? value.toLocaleString("en-US") : "n/a";
+}
+
+function formatSigned(value, digits = 6) {
+  if (!Number.isFinite(value)) return "n/a";
+  if (Object.is(value, -0) || value === 0) return "0";
+  return `${value > 0 ? "+" : ""}${Number.parseFloat(value.toFixed(digits))}`;
+}
+
+function targetSummary(data, mode) {
+  return data?.phase12?.targetSummary?.find((entry) => entry.targetMode === mode) ?? null;
 }
 
 function seedValue() {
@@ -375,6 +398,65 @@ function updateBoundaryPanel(primary) {
     const value = mechanism.value === null || mechanism.value === undefined ? "" : ` (${mechanism.value})`;
     return `<li>${mechanism.code}${value}</li>`;
   }).join("");
+}
+
+function renderBayesFloorPanel(data) {
+  if (!bayesFloorPanel || !bayesFloorStatus || !bayesFloorSummary || !bayesFloorTargets) return;
+  const phase12 = data?.phase12 ?? {};
+  const gate = phase12.pressureFloorGate ?? {};
+  const naive = targetSummary(data, "naive_pressure");
+  const minimal = targetSummary(data, "sundog_minimal");
+  const lean = targetSummary(data, "sundog_lean");
+  const candidate = phase12.promotedCandidate ?? {};
+  const candidateLean = candidate.sundog_lean;
+  const candidateMinimal = candidate.sundog_minimal;
+  const comparatorCells = Math.max(naive?.cells ?? 0, minimal?.cells ?? 0);
+
+  bayesFloorPanel.dataset.status = gate.pass ? "pass" : "repair_required";
+  bayesFloorStatus.textContent = gate.pass ? "Pressure floor pass" : "Repair required";
+  bayesFloorSummary.textContent = [
+    `${phase12.phase ?? "Phase 12 reducer"} ran ${formatCount(phase12.trials)} trials across ${formatCount(phase12.cells)} Phase 10 cells.`,
+    `No-leak audit ${phase12.leakFree ? "passed" : "did not pass"}; sensor policy ${phase12.sensorSeedPolicy ?? "unknown"}.`,
+    data.claimBoundary,
+  ].filter(Boolean).join(" ");
+
+  bayesFloorTargets.textContent = [
+    `Hard gate: ${formatCount(comparatorCells)} cells, ${gate.negativeVsNaiveCells ?? "n/a"} negative versus naive_pressure, ${gate.negativeVsMinimalCells ?? "n/a"} negative versus sundog_minimal.`,
+    lean ? `Diagnostic lean lane: mean ${formatSigned(lean.meanBudgetAdjustedDelta)}, ${lean.negativeCells} negative, ${lean.zeroCells} zero, ${lean.positiveCells} positive cells.` : "",
+  ].filter(Boolean).join(" ");
+
+  if (bayesFloorAdmission) {
+    bayesFloorAdmission.textContent = [
+      `Admitted pressure lane: ${gate.comparators?.join(" / ") ?? "naive_pressure / sundog_minimal"}.`,
+      "sundog_lean stays visible as controller headroom, and oracle_safe remains a ceiling comparator rather than a claim lane.",
+    ].join(" ");
+  }
+
+  if (bayesFloorCandidate) {
+    bayesFloorCandidate.textContent = [
+      candidateMinimal ? `Promoted pocket: Bayes pressure delta versus sundog_minimal is ${formatSigned(candidateMinimal.meanBudgetAdjustedDelta)}.` : "",
+      candidateLean ? `Versus sundog_lean it is ${formatSigned(candidateLean.meanBudgetAdjustedDelta)}, so the public claim stays at pressure-floor parity.` : "",
+    ].filter(Boolean).join(" ");
+  }
+
+  if (bayesFloorArtifact) {
+    bayesFloorArtifact.href = BAYES_FLOOR_DATA_PATH;
+    bayesFloorArtifact.textContent = "public Mines Phase 13 bundle";
+  }
+}
+
+async function hydrateBayesFloorPanel() {
+  if (!bayesFloorPanel) return;
+  try {
+    const response = await fetch(BAYES_FLOOR_DATA_PATH, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    renderBayesFloorPanel(await response.json());
+  } catch (error) {
+    if (bayesFloorStatus) bayesFloorStatus.textContent = "Receipt unavailable";
+    if (bayesFloorSummary) {
+      bayesFloorSummary.textContent = `The Phase 13 data bundle could not be loaded in this session (${error.message}).`;
+    }
+  }
 }
 
 function drawPanelFrame(box, lane) {
@@ -708,4 +790,5 @@ if (!hydrateFromURL() && window.location.search === "") {
 bindControls();
 resetWorkbench();
 resizeCanvas();
+hydrateBayesFloorPanel();
 requestAnimationFrame(frame);
