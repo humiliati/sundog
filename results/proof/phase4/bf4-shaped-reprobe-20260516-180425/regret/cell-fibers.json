@@ -1,0 +1,396 @@
+{
+  "schema": "sundog.threebody.phase4.cell_fibers.v1",
+  "classifier": {
+    "partitionKeys": [
+      "guard_t",
+      "log_binned_abs_tidal_magnitude",
+      "gradient_angle_sector",
+      "log_binned_gradient_magnitude",
+      "sensor_noise_std"
+    ],
+    "fiberMinSamples": 20,
+    "tidalLogBinWidth": 0.25,
+    "gradientMagnitudeLogBinWidth": 0.25,
+    "gradientAngleSectors": 8,
+    "commonActionRule": "exact action_key match; zero action is represented by its exact key",
+    "undecidableRule": "no fiber with at least fiberMinSamples Bayes-reached samples"
+  },
+  "cells": {
+    "mu_1__dt_0p01__r_1p075__v_1p1__thrust_0p4__noise_0__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35\tnear_escape": {
+      "cellKey": "mu_1__dt_0p01__r_1p075__v_1p1__thrust_0p4__noise_0__gq_0p75__gminr_1p15__gaccel_2p5__gtidal_35\tnear_escape",
+      "cellClass": "off",
+      "decidableFiberCount": 37,
+      "fiberCount": 121,
+      "fibers": [
+        {
+          "fiber": "guard=false|tidal=[0.25,0.5)|angle=4|grad=[0.75,1)|noise=0",
+          "sampleCount": 33,
+          "actionSet": [
+            "-0.4:0"
+          ],
+          "commonAction": "-0.4:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=5|grad=[0.25,0.5)|noise=0",
+          "sampleCount": 36,
+          "actionSet": [
+            "-0.28284271:-0.28284271",
+            "0:-0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=5|grad=[0,0.25)|noise=0",
+          "sampleCount": 33,
+          "actionSet": [
+            "-0.28284271:-0.28284271"
+          ],
+          "commonAction": "-0.28284271:-0.28284271",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=5|grad=[-0.25,0)|noise=0",
+          "sampleCount": 24,
+          "actionSet": [
+            "-0.28284271:-0.28284271"
+          ],
+          "commonAction": "-0.28284271:-0.28284271",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=5|grad=[-0.5,-0.25)|noise=0",
+          "sampleCount": 22,
+          "actionSet": [
+            "-0.28284271:-0.28284271"
+          ],
+          "commonAction": "-0.28284271:-0.28284271",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=4|grad=[-0.5,-0.25)|noise=0",
+          "sampleCount": 21,
+          "actionSet": [
+            "-0.28284271:-0.28284271"
+          ],
+          "commonAction": "-0.28284271:-0.28284271",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=4|grad=[-0.25,0)|noise=0",
+          "sampleCount": 25,
+          "actionSet": [
+            "-0.28284271:-0.28284271"
+          ],
+          "commonAction": "-0.28284271:-0.28284271",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=4|grad=[0,0.25)|noise=0",
+          "sampleCount": 36,
+          "actionSet": [
+            "-0.28284271:-0.28284271",
+            "0:-0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=5|grad=[0.5,0.75)|noise=0",
+          "sampleCount": 21,
+          "actionSet": [
+            "0:-0.4"
+          ],
+          "commonAction": "0:-0.4",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0.25,0.5)|angle=5|grad=[0.75,1)|noise=0",
+          "sampleCount": 39,
+          "actionSet": [
+            "0:-0.4"
+          ],
+          "commonAction": "0:-0.4",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0.25,0.5)|angle=6|grad=[0.75,1)|noise=0",
+          "sampleCount": 79,
+          "actionSet": [
+            "0.28284271:-0.28284271",
+            "0:-0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=7|grad=[0.5,0.75)|noise=0",
+          "sampleCount": 28,
+          "actionSet": [
+            "0.28284271:-0.28284271",
+            "0:-0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=7|grad=[0.25,0.5)|noise=0",
+          "sampleCount": 22,
+          "actionSet": [
+            "0.28284271:-0.28284271",
+            "0:-0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=7|grad=[0,0.25)|noise=0",
+          "sampleCount": 23,
+          "actionSet": [
+            "0.28284271:-0.28284271",
+            "0:-0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=7|grad=[-0.25,0)|noise=0",
+          "sampleCount": 20,
+          "actionSet": [
+            "0.28284271:-0.28284271"
+          ],
+          "commonAction": "0.28284271:-0.28284271",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=2|grad=[0.5,0.75)|noise=0",
+          "sampleCount": 33,
+          "actionSet": [
+            "-0.28284271:0.28284271",
+            "0.28284271:0.28284271",
+            "0.4:0",
+            "0:0",
+            "0:0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=2|grad=[0.25,0.5)|noise=0",
+          "sampleCount": 28,
+          "actionSet": [
+            "-0.28284271:0.28284271",
+            "0.28284271:0.28284271",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=1|grad=[0,0.25)|noise=0",
+          "sampleCount": 23,
+          "actionSet": [
+            "0.28284271:0.28284271"
+          ],
+          "commonAction": "0.28284271:0.28284271",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=1|grad=[0.25,0.5)|noise=0",
+          "sampleCount": 23,
+          "actionSet": [
+            "0.28284271:0.28284271",
+            "0.4:0",
+            "0:0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[0,0.25)|angle=1|grad=[0.5,0.75)|noise=0",
+          "sampleCount": 24,
+          "actionSet": [
+            "0.4:0",
+            "0:0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.25,0)|angle=3|grad=[0,0.25)|noise=0",
+          "sampleCount": 22,
+          "actionSet": [
+            "-0.4:0",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-0.5,-0.25)|angle=3|grad=[-0.5,-0.25)|noise=0",
+          "sampleCount": 106,
+          "actionSet": [
+            "-0.28284271:-0.28284271",
+            "-0.4:0",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-0.75,-0.5)|angle=3|grad=[-0.5,-0.25)|noise=0",
+          "sampleCount": 42,
+          "actionSet": [
+            "-0.28284271:-0.28284271",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-0.75,-0.5)|angle=3|grad=[-0.75,-0.5)|noise=0",
+          "sampleCount": 50,
+          "actionSet": [
+            "-0.28284271:-0.28284271",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-1,-0.75)|angle=3|grad=[-1,-0.75)|noise=0",
+          "sampleCount": 46,
+          "actionSet": [
+            "-0.28284271:-0.28284271",
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-1,-0.75)|angle=3|grad=[-1.25,-1)|noise=0",
+          "sampleCount": 72,
+          "actionSet": [
+            "0.28284271:-0.28284271",
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-1.25,-1)|angle=3|grad=[-1.25,-1)|noise=0",
+          "sampleCount": 125,
+          "actionSet": [
+            "0.28284271:-0.28284271",
+            "0.4:0",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[0.5,0.75)|angle=0|grad=[1,1.25)|noise=0",
+          "sampleCount": 20,
+          "actionSet": [
+            "0.4:0"
+          ],
+          "commonAction": "0.4:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=1|grad=[-0.25,0)|noise=0",
+          "sampleCount": 65,
+          "actionSet": [
+            "-0.28284271:0.28284271",
+            "-0.4:0",
+            "0.28284271:0.28284271",
+            "0:0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=1|grad=[-0.5,-0.25)|noise=0",
+          "sampleCount": 50,
+          "actionSet": [
+            "0.28284271:0.28284271",
+            "0:0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-0.5,-0.25)|angle=2|grad=[-0.25,0)|noise=0",
+          "sampleCount": 24,
+          "actionSet": [
+            "-0.28284271:-0.28284271",
+            "-0.4:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-0.75,-0.5)|angle=2|grad=[-0.5,-0.25)|noise=0",
+          "sampleCount": 23,
+          "actionSet": [
+            "-0.28284271:-0.28284271"
+          ],
+          "commonAction": "-0.28284271:-0.28284271",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=true|tidal=[-0.75,-0.5)|angle=2|grad=[-0.75,-0.5)|noise=0",
+          "sampleCount": 54,
+          "actionSet": [
+            "-0.28284271:-0.28284271",
+            "0:-0.4",
+            "0:0"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-1,-0.75)|angle=2|grad=[-1,-0.75)|noise=0",
+          "sampleCount": 309,
+          "actionSet": [
+            "0:-0.4",
+            "0:0",
+            "0:0.4"
+          ],
+          "commonAction": null,
+          "status": "conflict"
+        },
+        {
+          "fiber": "guard=true|tidal=[-1,-0.75)|angle=2|grad=[-1.25,-1)|noise=0",
+          "sampleCount": 106,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=true|tidal=[-1.25,-1)|angle=2|grad=[-1.25,-1)|noise=0",
+          "sampleCount": 28,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        },
+        {
+          "fiber": "guard=false|tidal=[-0.5,-0.25)|angle=3|grad=[-0.5,-0.25)|noise=0",
+          "sampleCount": 58,
+          "actionSet": [
+            "0:0"
+          ],
+          "commonAction": "0:0",
+          "status": "common_action"
+        }
+      ]
+    }
+  }
+}
