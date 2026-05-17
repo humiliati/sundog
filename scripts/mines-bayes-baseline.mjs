@@ -45,6 +45,7 @@ const DEFAULT_ARGS = {
   out: "results/mines/phase12-bayes-admission-smoke",
   cellSlate: "phase10-best-worst",
   phase10Out: "results/mines/phase10-envelope",
+  limitCells: "all",
   modes: DEFAULT_MODES,
   seeds: 2,
   seedStart: null,
@@ -52,7 +53,8 @@ const DEFAULT_ARGS = {
   turnCap: 160,
   pressureThreshold: 1.2,
   revealRiskThreshold: 0.42,
-  flagRiskThreshold: 0.82
+  flagRiskThreshold: 0.82,
+  sensorSeedPolicy: "shared_cell"
 };
 
 const CSV_HEADERS = {
@@ -105,6 +107,9 @@ const CSV_HEADERS = {
     "selected_y",
     "selected_idx",
     "selected_hazard",
+    "selected_pressure",
+    "selected_action_risk",
+    "risk_source",
     "observed_pressure_count",
     "scan_reading_count",
     "forbidden_key_count",
@@ -122,6 +127,9 @@ const CSV_HEADERS = {
     "x",
     "y",
     "posterior_hazard",
+    "pressure_score",
+    "action_risk",
+    "risk_source",
     "ess",
     "frontier_size",
     "legal",
@@ -159,7 +167,7 @@ const CSV_HEADERS = {
 function usage() {
   return [
     "Usage:",
-    "  node scripts/mines-bayes-baseline.mjs --phase <name> --out <dir> --cell-slate phase10-best-worst --phase10-out <dir> --modes <csv> --seeds <n> --particle-count <n> --turn-cap <n>",
+    "  node scripts/mines-bayes-baseline.mjs --phase <name> --out <dir> --cell-slate phase10-best-worst|phase10-output --phase10-out <dir> --modes <csv> --seeds <n> --particle-count <n> --turn-cap <n>",
     "",
     "Example:",
     "  node scripts/mines-bayes-baseline.mjs --phase phase12-bayes-admission-smoke --out results/mines/phase12-bayes-admission-smoke --cell-slate phase10-best-worst --phase10-out results/mines/phase10-envelope --modes naive_pressure,sundog_minimal,sundog_lean,bayes_frontier_pressure,oracle_safe --seeds 2 --particle-count 64 --turn-cap 160"
@@ -196,6 +204,9 @@ function parseArgs(argv) {
       case "--phase10-out":
         args.phase10Out = value;
         break;
+      case "--limit-cells":
+        args.limitCells = value === "all" ? "all" : parsePositiveInteger(value, key);
+        break;
       case "--modes":
         args.modes = value.split(",").map((mode) => mode.trim()).filter(Boolean);
         break;
@@ -220,13 +231,19 @@ function parseArgs(argv) {
       case "--flag-risk-threshold":
         args.flagRiskThreshold = parseFiniteNumber(value, key);
         break;
+      case "--sensor-seed-policy":
+        if (!["shared_cell", "mode_specific"].includes(value)) {
+          throw new Error(`${key} must be shared_cell or mode_specific; got ${value}`);
+        }
+        args.sensorSeedPolicy = value;
+        break;
       default:
         throw new Error(`Unknown option: ${key}`);
     }
   }
 
-  if (args.cellSlate !== "phase10-best-worst") {
-    throw new Error(`Unsupported --cell-slate ${args.cellSlate}; expected phase10-best-worst`);
+  if (!["phase10-best-worst", "phase10-output"].includes(args.cellSlate)) {
+    throw new Error(`Unsupported --cell-slate ${args.cellSlate}; expected phase10-best-worst or phase10-output`);
   }
   if (args.modes.length === 0) {
     throw new Error("--modes must include at least one mode");
@@ -363,6 +380,16 @@ async function writeJson(filePath, value) {
   await writeFile(filePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
+async function loadPhase10Cells(args) {
+  const cells = args.cellSlate === "phase10-best-worst"
+    ? await loadPhase10BestWorst(args.phase10Out)
+    : await loadPhase10OutputCells(args.phase10Out);
+  if (args.limitCells === "all") {
+    return cells;
+  }
+  return cells.slice(0, args.limitCells);
+}
+
 async function loadPhase10BestWorst(phase10Out) {
   const filePath = path.join(toRelPath(phase10Out), "best-worst-cells.csv");
   const rows = parseCsv(await readText(filePath));
@@ -371,6 +398,19 @@ async function loadPhase10BestWorst(phase10Out) {
     throw new Error(`Expected best_cell and worst_cell in ${filePath}; found ${selected.length}`);
   }
   return selected.map((row) => normalizePhase10Cell(row));
+}
+
+async function loadPhase10OutputCells(phase10Out) {
+  const root = toRelPath(phase10Out);
+  const manifestRows = parseCsv(await readText(path.join(root, "cell-manifest.csv")));
+  const classRows = parseCsv(await readText(path.join(root, "cell-class-map.csv")));
+  const classByCell = new Map();
+  for (const row of classRows) {
+    if (!classByCell.has(row.cell_id)) {
+      classByCell.set(row.cell_id, row);
+    }
+  }
+  return manifestRows.map((row, index) => normalizePhase10ManifestCell(row, classByCell.get(row.cell_id), index));
 }
 
 function normalizePhase10Cell(row) {
@@ -427,6 +467,63 @@ function normalizePhase10Cell(row) {
   };
 }
 
+function normalizePhase10ManifestCell(row, classRow = null, index = 0) {
+  const replay = parseReplayUrl(classRow?.replay_url ?? "");
+  const width = asInteger(row.width, 9);
+  const height = asInteger(row.height, 9);
+  const mineCount = replay.mineCount ?? asInteger(row.mine_count, 0);
+  const configuredScanBudget = asInteger(row.scan_budget, 0);
+  const replayScanBudget = replay.scanBudget ?? 0;
+  const sigmaNoise = replay.sigmaNoise ?? asNumber(row.sigma_noise, 0);
+  const dropoutRate = replay.dropoutRate ?? asNumber(row.dropout_rate, 0);
+  const cellClass = classRow?.cell_class || row.static_boundary_status || "phase10_cell";
+
+  return {
+    selection: classRow?.candidate === "true" ? "phase10_candidate" : "phase10_cell",
+    cellId: row.cell_id,
+    cellClass,
+    phase10Mode: classRow?.mode ?? "phase10_cell",
+    representativeSeed: replaySeed(classRow?.replay_url) ?? 0,
+    replayUrl: classRow?.replay_url ?? "",
+    preset: replay.preset || row.preset || "easy_sparse",
+    width,
+    height,
+    mineCount,
+    mineDensity: asNumber(row.mine_density, mineCount / Math.max(1, width * height)),
+    clusterStrength: asNumber(row.cluster_strength, 0),
+    configuredScanBudget,
+    replayScanBudget,
+    scanBudget: replayScanBudget,
+    sigma: asNumber(row.sigma, 1),
+    sigmaNoise,
+    dropoutRate,
+    delaySteps: asInteger(row.delay_steps, 0),
+    scanBudgetDeltaVsNaive: asNumber(classRow?.budget_delta_vs_naive_mean, 0),
+    lowerCiVsNaive: asNumber(classRow?.budget_delta_vs_naive_ci_low, 0),
+    upperCiVsNaive: 0,
+    envelopeCell: {
+      selection: classRow?.candidate === "true" ? "phase10_candidate" : "phase10_cell",
+      cellId: row.cell_id,
+      cellClass,
+      phase10Mode: classRow?.mode ?? "phase10_cell",
+      width,
+      height,
+      mineCount,
+      mineDensity: asNumber(row.mine_density, mineCount / Math.max(1, width * height)),
+      clusterStrength: asNumber(row.cluster_strength, 0),
+      configuredScanBudget,
+      replayScanBudget,
+      sigma: asNumber(row.sigma, 1),
+      sigmaNoise,
+      dropoutRate,
+      delaySteps: asInteger(row.delay_steps, 0),
+      budgetAdjustedDeltaVsNaive: asNumber(classRow?.budget_delta_vs_naive_mean, 0),
+      lowerCiVsNaive: asNumber(classRow?.budget_delta_vs_naive_ci_low, 0),
+      manifestIndex: index
+    }
+  };
+}
+
 function parseReplayUrl(value) {
   const parsed = {
     preset: null,
@@ -449,6 +546,18 @@ function parseReplayUrl(value) {
     return parsed;
   }
   return parsed;
+}
+
+function replaySeed(value) {
+  if (!value) {
+    return null;
+  }
+  try {
+    const url = new URL(value);
+    return integerParam(url.searchParams, "seed");
+  } catch {
+    return null;
+  }
 }
 
 function numberParam(params, key) {
@@ -484,13 +593,16 @@ function buildBoardConfig(cell, mode, seed, args) {
   };
 }
 
-function buildSensorConfig(cell, mode, seed) {
+function buildSensorConfig(cell, mode, seed, args) {
+  const sensorSeedSalt = args.sensorSeedPolicy === "mode_specific"
+    ? `${cell.cellId}:${mode}:${seed}:sensor`
+    : `${cell.cellId}:${seed}:sensor`;
   return normalizeSensorConfig({
     sigma: cell.sigma,
     sigmaNoise: cell.sigmaNoise,
     dropoutRate: cell.dropoutRate,
     delaySteps: cell.delaySteps,
-    sensorSeed: deterministicSeed(`${cell.cellId}:${mode}:${seed}:sensor`)
+    sensorSeed: deterministicSeed(sensorSeedSalt)
   });
 }
 
@@ -557,7 +669,7 @@ function randomLegalAction(memory, rng) {
 
 function runTrial({ args, cell, mode, seed }) {
   const boardConfig = buildBoardConfig(cell, mode, seed, args);
-  const sensorConfig = buildSensorConfig(cell, mode, seed);
+  const sensorConfig = buildSensorConfig(cell, mode, seed, args);
   const boardState = initializeBoardState(boardConfig);
   applyMinesAction(boardState, centerAction(boardState));
   const sensorRuntime = createSensorRuntime(sensorConfig);
@@ -648,6 +760,9 @@ function runTrial({ args, cell, mode, seed }) {
         selected_y: action.y,
         selected_idx: indexFromPoint(action.x, action.y, phiWidth(phi)),
         selected_hazard: roundMetric(bayesDecision.selectedHazard),
+        selected_pressure: roundMetric(bayesDecision.selectedPressure),
+        selected_action_risk: roundMetric(bayesDecision.selectedActionRisk),
+        risk_source: bayesDecision.riskSource,
         forbidden_key_count: forbiddenKeys.length,
         leak_free: forbiddenKeys.length === 0
       };
@@ -670,6 +785,9 @@ function runTrial({ args, cell, mode, seed }) {
         x: action.x,
         y: action.y,
         posterior_hazard: roundMetric(bayesDecision.selectedHazard),
+        pressure_score: roundMetric(bayesDecision.selectedPressureScore),
+        action_risk: roundMetric(bayesDecision.selectedActionRisk),
+        risk_source: bayesDecision.riskSource,
         ess: roundMetric(bayesDecision.ess),
         frontier_size: bayesDecision.frontierSize,
         legal: result.applied,
@@ -763,6 +881,10 @@ function chooseBayesAction({ phi, mode, rng, args }) {
       minHazard: NaN,
       maxHazard: NaN,
       selectedHazard: NaN,
+      selectedPressure: NaN,
+      selectedPressureScore: NaN,
+      selectedActionRisk: NaN,
+      riskSource: "fallback_no_frontier",
       observedPressureCount: countObservedPressure(phi),
       scanReadingCount: phi.scanReadings?.length ?? 0,
       candidates: []
@@ -770,43 +892,71 @@ function chooseBayesAction({ phi, mode, rng, args }) {
   }
 
   const posterior = estimatePosteriorHazards(phi, frontier, args.particleCount, rng);
+  const pressureScores = pressureEvidenceScores(phi, frontier);
+  const hazardActionWeight = mode === "bayes_frontier_pressure" ? 0.000001 : 0.35;
   const candidates = frontier.map((idx) => {
     const hazard = posterior.hazards.get(idx) ?? posterior.priorMineRate;
+    const pressureScore = pressureScores.scores.get(idx) ?? pressureScores.fallbackScore;
+    const confidence = confidenceAtPhi(phi, idx);
+    const pressure = pressureAtPhi(phi, idx);
+    const actionRisk = pressureScore + hazardActionWeight * hazard;
     return {
       idx,
       x: idx % phiWidth(phi),
       y: Math.floor(idx / phiWidth(phi)),
       hazard: roundMetric(hazard),
-      entropy: roundMetric(binaryEntropy(hazard))
+      entropy: roundMetric(binaryEntropy(hazard)),
+      pressure: roundMetric(pressure),
+      confidence: roundMetric(confidence),
+      pressureScore: roundMetric(pressureScore),
+      actionRisk: roundMetric(actionRisk)
     };
   }).sort((a, b) => {
-    const hazardDelta = a.hazard - b.hazard;
-    if (Math.abs(hazardDelta) > 1e-12) {
-      return hazardDelta;
+    const riskDelta = a.actionRisk - b.actionRisk;
+    if (Math.abs(riskDelta) > 1e-12) {
+      return riskDelta;
     }
+    const hazardDelta = a.hazard - b.hazard;
+    if (Math.abs(hazardDelta) > 1e-12) return hazardDelta;
     return a.idx - b.idx;
   });
 
   const safest = candidates[0];
   const riskiest = [...candidates].sort((a, b) => b.hazard - a.hazard || a.idx - b.idx)[0];
   const uncertain = [...candidates].sort((a, b) => b.entropy - a.entropy || a.idx - b.idx)[0];
+  const minHazardCandidate = [...candidates].sort((a, b) => a.hazard - b.hazard || a.idx - b.idx)[0];
   let action = revealActionFromIndex(safest.idx, phiWidth(phi));
   let selected = safest;
+  let riskSource = mode === "bayes_frontier_pressure"
+    ? "pressure_floor_guard"
+    : (posterior.ess < Math.max(4, args.particleCount * 0.12)
+        ? "pressure_guard_low_ess"
+        : "pressure_posterior_blend");
 
-  if (mode === "bayes_frontier_full" && riskiest.hazard >= args.flagRiskThreshold) {
+  const decisivePosterior = posterior.ess >= Math.max(12, args.particleCount * 0.2);
+  if (
+    mode === "bayes_frontier_full" &&
+    decisivePosterior &&
+    riskiest.hazard >= Math.max(args.flagRiskThreshold, 0.96) &&
+    riskiest.pressureScore >= 0.85
+  ) {
     action = flagActionFromIndex(riskiest.idx, phiWidth(phi));
     selected = riskiest;
+    riskSource = "posterior_flag";
   } else if (
     mode === "bayes_frontier_full" &&
     phi.scansRemaining > 0 &&
+    !Number.isFinite(safest.pressure) &&
     uncertain.entropy >= 0.95 &&
     !isScanned(phi, uncertain.idx)
   ) {
     action = scanActionFromIndex(uncertain.idx, phiWidth(phi));
     selected = uncertain;
+    riskSource = "posterior_entropy_scan";
   } else if (safest.hazard > args.revealRiskThreshold) {
     action = revealActionFromIndex(safest.idx, phiWidth(phi));
     selected = safest;
+    riskSource = "pressure_guard_high_hazard";
   }
 
   return {
@@ -815,9 +965,13 @@ function chooseBayesAction({ phi, mode, rng, args }) {
     frontierSize: frontier.length,
     particleCount: args.particleCount,
     ess: posterior.ess,
-    minHazard: candidates[0]?.hazard ?? NaN,
+    minHazard: minHazardCandidate?.hazard ?? NaN,
     maxHazard: riskiest?.hazard ?? NaN,
     selectedHazard: selected?.hazard ?? NaN,
+    selectedPressure: selected?.pressure ?? NaN,
+    selectedPressureScore: selected?.pressureScore ?? NaN,
+    selectedActionRisk: selected?.actionRisk ?? NaN,
+    riskSource,
     observedPressureCount: posterior.observedPressureCount,
     scanReadingCount: phi.scanReadings?.length ?? 0,
     candidates
@@ -828,9 +982,10 @@ function estimatePosteriorHazards(phi, frontier, particleCount, rng) {
   const particles = [];
   let maxLogWeight = -Infinity;
   const observed = observedPressureSamples(phi);
+  const proposalWeights = mineProposalWeights(phi);
 
   for (let i = 0; i < particleCount; i += 1) {
-    const occupancy = sampleMineOccupancy(phi, rng);
+    const occupancy = sampleMineOccupancy(phi, rng, proposalWeights);
     const predicted = pressureFromOccupancy(occupancy, phiWidth(phi), phiHeight(phi), phi.sensorConfig.sigma);
     const logWeight = pressureLogLikelihood({ phi, observed, predicted });
     particles.push({ occupancy, logWeight });
@@ -875,10 +1030,11 @@ function estimatePosteriorHazards(phi, frontier, particleCount, rng) {
   };
 }
 
-function sampleMineOccupancy(phi, rng) {
+function sampleMineOccupancy(phi, rng, proposalWeights = null) {
   const n = phiWidth(phi) * phiHeight(phi);
   const occupancy = Array(n).fill(0);
   const available = [];
+  const weights = [];
   let fixedMines = 0;
 
   for (let idx = 0; idx < n; idx += 1) {
@@ -887,22 +1043,56 @@ function sampleMineOccupancy(phi, rng) {
       fixedMines += 1;
     } else if (phi.visibleTileState[idx] === "concealed") {
       available.push(idx);
+      weights.push(proposalWeights?.get(idx) ?? 1);
     }
   }
 
   const remainingMines = Math.max(0, Math.min(available.length, phiMineCount(phi) - fixedMines));
-  shuffleInPlace(available, rng);
-  for (let i = 0; i < remainingMines; i += 1) {
-    occupancy[available[i]] = 1;
+  const sampled = weightedSampleWithoutReplacement(available, weights, remainingMines, rng);
+  for (const idx of sampled) {
+    occupancy[idx] = 1;
   }
   return occupancy;
+}
+
+function mineProposalWeights(phi) {
+  const indices = [];
+  const pressures = [];
+  for (let idx = 0; idx < phi.visibleTileState.length; idx += 1) {
+    if (phi.visibleTileState[idx] !== "concealed" || phi.flagState?.[idx]) {
+      continue;
+    }
+    const pressure = pressureAtPhi(phi, idx);
+    if (Number.isFinite(pressure)) {
+      indices.push(idx);
+      pressures.push(pressure);
+    }
+  }
+  const center = median(pressures);
+  const scale = robustScale(pressures, Math.max(0.35, phi.sensorConfig.sigmaNoise || 0.35));
+  const weights = new Map();
+  for (let idx = 0; idx < phi.visibleTileState.length; idx += 1) {
+    if (phi.visibleTileState[idx] !== "concealed" || phi.flagState?.[idx]) {
+      continue;
+    }
+    const pressure = pressureAtPhi(phi, idx);
+    const confidence = confidenceAtPhi(phi, idx);
+    if (!Number.isFinite(pressure) || !Number.isFinite(center)) {
+      weights.set(idx, 1);
+      continue;
+    }
+    const z = clamp((pressure - center) / scale, -3, 3);
+    const confidenceWeight = 0.35 + 0.65 * confidence;
+    weights.set(idx, Math.max(0.02, Math.exp(z) * confidenceWeight));
+  }
+  return weights;
 }
 
 function pressureFromOccupancy(occupancy, width, height, sigma) {
   const field = Array(width * height).fill(0);
   const sigmaSafe = Math.max(0.1, sigma || 1);
   const twoSigmaSq = 2 * sigmaSafe * sigmaSafe;
-  const radius = Math.max(1, Math.ceil(sigmaSafe * 3));
+  const radius = Math.max(1, Math.ceil(sigmaSafe * 4));
 
   for (let idx = 0; idx < occupancy.length; idx += 1) {
     if (!occupancy[idx]) {
@@ -924,6 +1114,31 @@ function pressureFromOccupancy(occupancy, width, height, sigma) {
     }
   }
   return field;
+}
+
+function pressureEvidenceScores(phi, frontier) {
+  const raw = frontier
+    .map((idx) => pressureAtPhi(phi, idx))
+    .filter(Number.isFinite);
+  const low = minFinite(raw);
+  const high = maxFinite(raw);
+  const span = Number.isFinite(low) && Number.isFinite(high) && high > low
+    ? high - low
+    : 1;
+  const fallbackScore = 1.5;
+  const scores = new Map();
+  for (const idx of frontier) {
+    const pressure = pressureAtPhi(phi, idx);
+    const confidence = confidenceAtPhi(phi, idx);
+    if (!Number.isFinite(pressure) || confidence <= 0) {
+      scores.set(idx, fallbackScore);
+      continue;
+    }
+    const normalizedPressure = (pressure - low) / span;
+    const confidencePenalty = (1 - confidence) * 0.5;
+    scores.set(idx, normalizedPressure + confidencePenalty);
+  }
+  return { scores, fallbackScore };
 }
 
 function pressureLogLikelihood({ phi, observed, predicted }) {
@@ -961,6 +1176,16 @@ function observedPressureSamples(phi) {
 
 function countObservedPressure(phi) {
   return observedPressureSamples(phi).length;
+}
+
+function pressureAtPhi(phi, idx) {
+  const value = phi.observedPressureField?.[idx];
+  return Number.isFinite(value) ? value : NaN;
+}
+
+function confidenceAtPhi(phi, idx) {
+  const value = phi.pressureConfidenceField?.[idx];
+  return Number.isFinite(value) ? value : 0;
 }
 
 function frontierIndicesFromPhi(phi) {
@@ -1073,6 +1298,57 @@ function shuffleInPlace(values, rng) {
     const j = Math.floor(rng() * (i + 1));
     [values[i], values[j]] = [values[j], values[i]];
   }
+}
+
+function weightedSampleWithoutReplacement(indices, weights, count, rng) {
+  const pool = indices.map((idx, index) => ({
+    idx,
+    weight: Math.max(1e-9, Number.isFinite(weights[index]) ? weights[index] : 1)
+  }));
+  const sampled = [];
+  for (let draw = 0; draw < count && pool.length > 0; draw += 1) {
+    const total = pool.reduce((sum, item) => sum + item.weight, 0);
+    let threshold = rng() * total;
+    let selectedIndex = pool.length - 1;
+    for (let i = 0; i < pool.length; i += 1) {
+      threshold -= pool[i].weight;
+      if (threshold <= 0) {
+        selectedIndex = i;
+        break;
+      }
+    }
+    const [selected] = pool.splice(selectedIndex, 1);
+    sampled.push(selected.idx);
+  }
+  return sampled;
+}
+
+function median(values) {
+  const finite = values.filter(Number.isFinite).sort((a, b) => a - b);
+  if (finite.length === 0) {
+    return NaN;
+  }
+  const mid = Math.floor(finite.length / 2);
+  if (finite.length % 2 === 1) {
+    return finite[mid];
+  }
+  return (finite[mid - 1] + finite[mid]) / 2;
+}
+
+function robustScale(values, fallback) {
+  const med = median(values);
+  if (!Number.isFinite(med)) {
+    return fallback;
+  }
+  const deviations = values
+    .filter(Number.isFinite)
+    .map((value) => Math.abs(value - med));
+  const mad = median(deviations);
+  return Math.max(0.1, Number.isFinite(mad) ? mad * 1.4826 : fallback, fallback);
+}
+
+function clamp(value, low, high) {
+  return Math.max(low, Math.min(high, value));
 }
 
 function binaryEntropy(p) {
@@ -1195,7 +1471,7 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = toRelPath(args.out);
   const startedAt = new Date();
-  const cells = await loadPhase10BestWorst(args.phase10Out);
+  const cells = await loadPhase10Cells(args);
   await mkdir(outDir, { recursive: true });
 
   const trialOutcomes = [];
@@ -1238,6 +1514,7 @@ async function main() {
     modes: args.modes,
     seedsPerCell: args.seeds,
     particleCount: args.particleCount,
+    sensorSeedPolicy: args.sensorSeedPolicy,
     posteriorDecisions: posteriorDiagnostics.length,
     leakFree,
     regretSummary
