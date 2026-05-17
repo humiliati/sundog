@@ -223,6 +223,12 @@ Planning Objective / Action Lattice):
 2. if within `1e-9` of the best shaped score, minimize expected `totalDeltaV`;
 3. if still tied, choose the first action in the pre-registered action order.
 
+Updated after the shaped re-probe: the guarded-signature policy is now explicit
+candidate `0`, and the evaluator deviates from it only when the best predicted
+shaped-score advantage is at least `signatureAdvantageDtMultiplier * dt`.
+Lattice actions are scored as one-step deviations followed by guarded-signature
+rollout. This supersedes the bare shaped-score tie order above for BF-2.
+
 The shaping term is a tractable internal surrogate for `π*_Bayes =
 argmax E[T_safe/T_max | h]` under a finite horizon. With `shapeFraction ∈
 [0,1)` it is strictly less than one `dt`, so the floor never prefers an
@@ -231,6 +237,9 @@ action selection — **`X`, `Φ`, `Σ`, `J`, `μ`, the regret readout, and the g
 above are unchanged.** The earlier "maximize expected `T_safe/T_max`; tied
 within one integrator step → min `totalDeltaV`" wording is superseded for the
 reason recorded in the BF-4 Probe Receipt (it degenerated the floor to passive).
+The shaped re-probe then showed active worse-than-signature behavior; the
+signature-baseline guard is the follow-up repair. This remains a floor-internal
+surrogate change only; the Phase 4 objects and gate are still unchanged.
 
 Resolved blocker: the harness previously did not validate unknown controller
 mode names inside `computeControlThrust` (an unimplemented mode silently acted

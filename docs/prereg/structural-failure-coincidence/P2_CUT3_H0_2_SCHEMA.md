@@ -557,3 +557,60 @@ test-vector JSON) are unchanged from their prior pins and re-verified
 in this filing.
 
 *(reviewer space continues — append-only)*
+
+**2026-05-17 (PT) — maintainer. Operator HOWTO + end-to-end tool smoke filed.**
+Filed `tools/h0-measurement/HOWTO.md` (SHA-256
+`10dfa8caa1883152ae5545a38ac173a02a9d21683a5851cd2ff0f228c9e6aa3c`) as
+the operator-facing procedure for the optional H0 measurement helper and
+companion Node tools. While testing the documented path, two integration
+gaps were found and fixed without changing the frozen schema body:
+
+1. `scripts/cut3-h0-checker.mjs` now accepts the H0-2 sidecar shape for
+   `fit2locus` by deriving fit anchors from top-level `anchors` when the
+   legacy nested `fit2locus.anchors` block is absent; verifies the
+   sidecar `calib_sha256` self-pin before `check`; emits the required
+   H0-2 `provenance` block (`source_sidecar_sha256`, `checker_sha256`,
+   `checker_runtime_pt`); supports `check --out <path>` so Windows
+   operators do not need shell redirection; and treats
+   `operator_decisions.compound_code_is_h_leak = "yes"` as a real
+   `H_LEAK` channel. New checker SHA-256:
+   `298a7cf5567e5b077bb7b6e8edbce8ebac6b1926270a16743f9e5b01bdd767b8`.
+2. `scripts/cut3-h0-residual-table.mjs` now honors `generate --out-dir`
+   for scratch runs, records actual sidecar/record/table paths in the
+   manifest, and writes the self-test tmp path repo-relative so the
+   self-test result does not churn across Windows/Linux paths. New
+   generator SHA-256:
+   `b689511259c5c3e5677ad978796f9a808678db965ea403461ca1cfebdd3007e7`.
+
+The browser helper's preset-load instructions were corrected to the
+repo-root server path (`npm run dev -- --port 5173`, then open
+`/tools/h0-measurement/`), because the preset dropdown fetches PNGs from
+`/docs/calibration/...`. New helper SHA-256:
+`ca5668478516750035ef54e3d9228196fce2e30d3c23489443bd41c59964ae94`.
+
+Verification run: canonical test-vector self-pin reproduced
+`9c52ab15d5293341cfd45e52dba615d01b6698ee2c5345f59942e25f711ac8b6`;
+`node scripts/cut3-h0-residual-table.mjs self-test` passed 11/11
+(updated self-test-result raw SHA
+`2ba1dc088925a134976903fafcc8783def1ac0ebe7025d4d5b6cc07d7a0a7e0f`,
+canonical SHA
+`9be1e73c9c9fe54b9d94d06dc05edd60b53582f1f39d93ce968b6bbfb8d669ac`);
+empty-state `generate` stayed byte-identical for the canonical table
+and manifest (`d1b559b8...bbc6` and `172a1b00...3d9a` canonical);
+`node scripts/cut3-h0-checker.mjs self-test` still passed 8/8 as the
+documented reject-branch unit check only; and a scratch end-to-end
+smoke using the pinned canonicalization test vector produced one
+sidecar, one H0 record, a two-row residual table, `consistency=true` on
+both rows, and `reason_code=OK` on both rows under
+`generate --out-dir` without touching canonical H0-2 outputs. Browser
+verification against a repo-root static server loaded
+`tools/h0-measurement/`, showed the green canonicalizer badge, listed
+the eight Phase-15 presets plus placeholder, loaded
+`pyr_w18_e13_x25_scale.png`, computed the expected render hash prefix,
+derived `frame_id=pyr_w18_e13_x25`, and advanced to Step 1 (sun).
+
+Discipline unchanged: the helper remains §3-blind (no checker import,
+no verdict display); the checker/generator tests are mechanical only;
+H0-B negative side on real frames remains OPEN until real Phase-15
+measured sidecars and the known-PASS fixture are filed; Cut-3 admission
+remains HOLD and execution HELD.

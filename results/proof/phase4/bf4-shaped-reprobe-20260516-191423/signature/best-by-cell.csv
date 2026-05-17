@@ -1,0 +1,2 @@
+regime,massRatio,timestep,radiusScale,velocityScale,bestControllerMode,bestRegionClass,bestCandidateEnvelope,bestThrustLimit,bestSensorNoiseStd,bestTrackGuardMaxLocalAcceleration,bestTrackGuardMode,bestTrackGuardQuantile,bestSurvivalRate,bestPassiveSurvivalRate,bestSurvivalDeltaVsPassive,bestWorsenedRate,bestMeanDeltaV,bestDominantFailureMechanism
+near_escape,1,0.01,1.075,1.1,track_sensor_accel_guarded,promising,true,0.4,0,0.43511803825344103,hazard_quantile,0.75,1,0,1,0,1.948,

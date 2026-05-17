@@ -296,6 +296,21 @@ Keep exported assets under `public/media/`, link with `/media/...`, and run the
 same 390 px, 520 px, 1280 px, reduced-motion screenshot check used for rail
 artwork.
 
+### Homepage Core Metric Panels
+
+The two core result metric cards in `index.html` are generated from
+`results/analysis/analysis_summary.json` by
+`scripts/build-photometric-core-media.mjs`. The build writes public chart data
+to `public/data/photometric-core-metrics.json` and the two homepage SVGs to:
+
+- `public/media/photometric-terminal-intensity.svg`
+- `public/media/photometric-convergence-time.svg`
+
+Do not hand-draw those cards or restate the locked numbers manually; regenerate
+from the analysis summary and keep the public copy at the existing bounded
+claim: no detected terminal-intensity difference at `n=30`, with slower
+acquisition for indirect photometric feedback.
+
 ## Build And Check
 
 Run:

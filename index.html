@@ -1767,20 +1767,30 @@
             <div class="proof-item">
                 <span class="proof-label">Core result metric</span>
                 <h4>Terminal Target Intensity</h4>
-                <div class="proof-placeholder">
-                    [Bar chart: photometric vs oracle]<br>
-                    p = 0.264
+                <div class="proof-placeholder evidence-map-visual">
+                    <a class="proof-visual-link" href="data/photometric-core-metrics.json" aria-label="Open the photometric core metric data">
+                        <img src="/media/photometric-terminal-intensity.svg" alt="Bar chart of terminal target intensity for photometric, target-aware oracle, noisy oracle, and random conditions, with 95 percent confidence intervals." loading="eager" decoding="async">
+                    </a>
                 </div>
                 <p>No terminal-intensity difference was detected at n=30.</p>
+                <div class="proof-actions" aria-label="Terminal intensity inspection links">
+                    <a href="data/photometric-core-metrics.json">Inspect chart data &rarr;</a>
+                    <a href="docs/RESEARCHER_GUIDE.md">Read evidence guide &rarr;</a>
+                </div>
             </div>
             <div class="proof-item">
                 <span class="proof-label">Core result metric</span>
                 <h4>Time-to-Convergence</h4>
-                <div class="proof-placeholder">
-                    [Line graph: convergence curves]<br>
-                    188 vs 11.5 steps
+                <div class="proof-placeholder evidence-map-visual">
+                    <a class="proof-visual-link" href="data/photometric-core-metrics.json" aria-label="Open the photometric convergence metric data">
+                        <img src="/media/photometric-convergence-time.svg" alt="Horizontal bar chart of median steps to intensity 0.9, showing photometric feedback at 188 steps versus the target-aware oracle at 11.5 steps." loading="eager" decoding="async">
+                    </a>
                 </div>
                 <p>The measured cost of indirect feedback is roughly 16x slower acquisition.</p>
+                <div class="proof-actions" aria-label="Convergence-time inspection links">
+                    <a href="data/photometric-core-metrics.json">Inspect chart data &rarr;</a>
+                    <a href="docs/RESEARCHER_GUIDE.md">Read evidence guide &rarr;</a>
+                </div>
             </div>
             <div class="proof-item" id="structural-boundary-preview">
                 <span class="proof-label pillar">Load-bearing pillar</span>

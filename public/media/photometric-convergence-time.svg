@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
+  <title id="title">Time-to-Convergence</title>
+  <desc id="desc">Generated Sundog photometric core metric chart from analysis summary.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#DCE6EC" stroke-width="1" opacity="0.38"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="520" fill="#F8FBFC"/>
+  <rect width="900" height="520" fill="url(#grid)" opacity="0.72"/>
+  <rect x="30" y="28" width="840" height="464" rx="14" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1.5"/>
+  
+    <text x="64" y="76" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="34" font-weight="850" letter-spacing="0">Time-to-Convergence</text>
+    <text x="64" y="110" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="600" letter-spacing="0"><tspan x="64" dy="0">Median steps to intensity 0.9. Indirect photometric feedback pays an acquisition cost: 188 vs</tspan><tspan x="64" dy="20">11.5 steps, about 16.3x slower.</tspan></text>
+    <rect x="230" y="136" width="580" height="236" rx="10" fill="#F8FBFC" stroke="#DCE6EC" stroke-width="1"/>
+    <line x1="230" y1="136" x2="230" y2="372" stroke="#DCE6EC" stroke-width="1"/>
+    <text x="230" y="404" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">0</text>
+<line x1="375" y1="136" x2="375" y2="372" stroke="#DCE6EC" stroke-width="1"/>
+    <text x="375" y="404" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">50</text>
+<line x1="520" y1="136" x2="520" y2="372" stroke="#DCE6EC" stroke-width="1"/>
+    <text x="520" y="404" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">100</text>
+<line x1="665" y1="136" x2="665" y2="372" stroke="#DCE6EC" stroke-width="1"/>
+    <text x="665" y="404" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">150</text>
+<line x1="810" y1="136" x2="810" y2="372" stroke="#DCE6EC" stroke-width="1"/>
+    <text x="810" y="404" text-anchor="middle" fill="#6B7B88" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="0">200</text>
+    <g>
+      <text x="204" y="184" text-anchor="end" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="850" letter-spacing="0">Photometric</text>
+      <rect x="230" y="160" width="580" height="32" rx="8" fill="#E8F2ED" stroke="#DCE6EC" stroke-width="1"/>
+      <rect x="230" y="160" width="545.1999999999999" height="32" rx="8" fill="#3D7A5A"/>
+      
+      <text x="698" y="181" fill="#FFFFFF" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="14" font-weight="850" letter-spacing="0">188 steps</text>
+    </g>
+<g>
+      <text x="204" y="242" text-anchor="end" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="850" letter-spacing="0">Target-aware oracle</text>
+      <rect x="230" y="218" width="580" height="32" rx="8" fill="#EAF1FA" stroke="#DCE6EC" stroke-width="1"/>
+      <rect x="230" y="218" width="33.35" height="32" rx="8" fill="#1A3A52"/>
+      
+      <text x="275.35" y="239" fill="#173348" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="14" font-weight="850" letter-spacing="0">11.5 steps</text>
+    </g>
+<g>
+      <text x="204" y="300" text-anchor="end" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="850" letter-spacing="0">Noisy oracle</text>
+      <rect x="230" y="276" width="580" height="32" rx="8" fill="#FFF4D6" stroke="#DCE6EC" stroke-width="1"/>
+      <rect x="230" y="276" width="40.6" height="32" rx="8" fill="#B8831E"/>
+      
+      <text x="282.6" y="297" fill="#173348" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="14" font-weight="850" letter-spacing="0">14 steps</text>
+    </g>
+<g>
+      <text x="204" y="358" text-anchor="end" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="850" letter-spacing="0">Random</text>
+      <rect x="230" y="334" width="580" height="32" rx="8" fill="#EDF2F7" stroke="#DCE6EC" stroke-width="1"/>
+      <rect x="230" y="334" width="580" height="32" rx="8" fill="#64748B"/>
+      <path d="M814 344l12 10-12 10" fill="none" stroke="#64748B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="698" y="355" fill="#FFFFFF" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="14" font-weight="850" letter-spacing="0">500 censored</text>
+    </g>
+    <text x="520" y="474" text-anchor="middle" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="700" letter-spacing="0">Horizontal scale is 0-200 steps; random is fully censored at 500 and marked at the edge.</text>
+  
+</svg>

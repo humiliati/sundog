@@ -32,7 +32,7 @@
 //
 // Modes:
 //   check --sidecar <path>        Run the full H0 check on a sidecar.
-//                                 Emits the H0 record.
+//        [--out <path>]           Emits the H0 record to stdout or writes it.
 //   self-test                     Run the H0-B negative side (Phase-15
 //                                 fixture) using test sidecars that
 //                                 encode the documented Phase-15 failure
@@ -56,6 +56,7 @@ import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { resolve, dirname, basename } from "node:path";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { verifySidecarSelfPin } from "./lib/canonical-json.mjs";
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(
@@ -95,6 +96,15 @@ const H_LEAK_TEXT_PATTERNS = [
 
 function checkHLeak(sidecar) {
   const channels = [];
+
+  if (sidecar.operator_decisions?.compound_code_is_h_leak === "yes") {
+    channels.push({
+      channel: "operator_decision",
+      field: "operator_decisions.compound_code_is_h_leak",
+      value: "yes",
+      basis: sidecar.operator_decisions.compound_code_basis || "",
+    });
+  }
 
   const fname = basename(sidecar.frame_path || "");
   if (fname) {
@@ -180,7 +190,11 @@ function buildThetaMap(sidecar) {
     };
   }
   if (kind === "fit2locus") {
-    const fit = sidecar.fit2locus;
+    const fit = sidecar.fit2locus ?? {
+      anchors: (sidecar.anchors || [])
+        .filter((a) => typeof a.px_radius === "number" && a.off_ruler !== true)
+        .map((a) => ({ px_radius: a.px_radius, deg: a.locus_deg })),
+    };
     if (!fit || !Array.isArray(fit.anchors) || fit.anchors.length < 2) {
       throw new Error("fit2locus requires ≥2 anchors");
     }
@@ -426,14 +440,35 @@ async function selfTest() {
 // CLI
 // ----------------------------------------------------------------------------
 
-async function checkCmd(sidecarPath) {
+async function checkCmd(sidecarPath, outPath = null) {
   const sidecar = JSON.parse(await readFile(resolve(REPO, sidecarPath), "utf8"));
+  if (sidecar.sidecar_kind === "h0-measured-sidecar") {
+    const pin = verifySidecarSelfPin(sidecar);
+    if (!pin.ok) {
+      throw new Error(
+        `sidecar calib_sha256 self-pin mismatch: stored=${sidecar.calib_sha256} recomputed=${pin.recomputed}`
+      );
+    }
+  }
   const calibration = calibrate(sidecar);
   if (typeof sidecar.scored_feature_deg !== "number") {
     throw new Error("sidecar.scored_feature_deg is required for `check` mode");
   }
   const record = admit(calibration, sidecar.scored_feature_deg);
-  console.log(JSON.stringify(record, null, 2));
+  record.provenance = {
+    source_sidecar_sha256: sidecar.calib_sha256 || null,
+    checker_sha256: await hashFile("scripts/cut3-h0-checker.mjs"),
+    checker_runtime_pt: new Date().toISOString(),
+  };
+  const json = JSON.stringify(record, null, 2) + "\n";
+  if (outPath) {
+    const absOut = resolve(REPO, outPath);
+    await mkdir(dirname(absOut), { recursive: true });
+    await writeFile(absOut, json);
+    console.log(`[h0-checker] wrote ${outPath}`);
+    return;
+  }
+  console.log(json.trimEnd());
 }
 
 async function hashFile(path) {
@@ -450,10 +485,15 @@ async function main() {
   if (cmd === "check") {
     const i = rest.indexOf("--sidecar");
     if (i < 0 || !rest[i + 1]) {
-      console.error("usage: check --sidecar <path>");
+      console.error("usage: check --sidecar <path> [--out <path>]");
       process.exit(64);
     }
-    await checkCmd(rest[i + 1]);
+    const outIndex = rest.indexOf("--out");
+    if (outIndex >= 0 && !rest[outIndex + 1]) {
+      console.error("usage: check --sidecar <path> [--out <path>]");
+      process.exit(64);
+    }
+    await checkCmd(rest[i + 1], outIndex >= 0 ? rest[outIndex + 1] : null);
     return;
   }
   if (cmd === "hash-file") {
@@ -462,9 +502,9 @@ async function main() {
     return;
   }
   console.error(
-    "usage:\n" +
+      "usage:\n" +
       "  cut3-h0-checker.mjs self-test\n" +
-      "  cut3-h0-checker.mjs check --sidecar <path>\n" +
+      "  cut3-h0-checker.mjs check --sidecar <path> [--out <path>]\n" +
       "  cut3-h0-checker.mjs hash-file <path>"
   );
   process.exit(64);
