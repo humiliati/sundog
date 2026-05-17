@@ -88,9 +88,13 @@ scaled by `thrustLimit`, including zero thrust. The action order is part of the
 contract and must be recorded in the manifest. Ties resolve in this order
 (reconciled 2026-05-16 after the BF-4 probe; see Planning Objective):
 
-1. maximize the **shaped planning score** (Planning Objective below);
-2. if within `1e-9` of the best shaped score, minimize expected `totalDeltaV`;
-3. if still tied, choose the first action in the pre-registered order.
+1. include the guarded-signature policy itself as candidate `0`;
+2. deviate from that same-information baseline only if the best predicted
+   shaped score exceeds it by at least `signatureAdvantageDtMultiplier * dt`;
+3. inside that guard, maximize the **shaped planning score** (Planning
+   Objective below);
+4. if within `1e-9` of the best shaped score, minimize expected `totalDeltaV`;
+5. if still tied, choose the first action in the pre-registered order.
 
 The pre-BF-4 wording "maximize expected `T_safe / T_max`; if tied within one
 integrator step, minimize `totalDeltaV`" is superseded: the dt-wide tie band
@@ -99,10 +103,12 @@ floor to passive. The shaped score (which already folds a sub-dt safety-margin
 discriminator) replaces it; the `1e-9` band only collapses genuinely identical
 trajectories.
 
-The initial candidate order should put zero thrust first, then the existing
-axis and diagonal directions from `oracleCandidateThrusts`. If implementation
-discovers a mismatch with the existing helper, update this document before the
-proof run rather than silently changing the order.
+The candidate order should put the guarded-signature policy first, then the
+existing zero/axis/diagonal lattice from `oracleCandidateThrusts`. Lattice
+candidates are scored as one-step deviations followed by the guarded-signature
+policy on the rollout particles. If implementation discovers a mismatch with
+the existing helper, update this document before the proof run rather than
+silently changing the order.
 
 ### Planning Objective
 
@@ -129,9 +135,19 @@ intended `π*_Bayes` (`argmax E[T_safe/T_max | h]`) is recovered as
 tractable surrogate for that argmax under a finite horizon; it does **not**
 change `J`, `Φ`, `μ`, the regret readout, or the Phase 4 gate.
 
-The final horizon, particle count, resampling threshold, and `shapeFraction`
-are locked only after the (re-)capped probe records a rate and a passing
-floor-sanity result.
+The second BF-4 shaped re-probe showed that shaped-margin differences alone can
+still authorize destructive max-thrust actions when within-horizon survival is
+flat. Therefore the evaluator now uses a **signature-baseline guard**: the
+guarded-signature policy is an explicit candidate, and the Bayes floor only
+deviates from it when predicted shaped-score advantage is at least
+`signatureAdvantageDtMultiplier * dt` (default `1`). This is conservative but
+valid for BF-4: the signature policy is admissible under the same `Φ` history,
+so the floor approximation must not be worse than it before Phase 4 can
+interpret regret.
+
+The final horizon, particle count, resampling threshold, `shapeFraction`, and
+`signatureAdvantageDtMultiplier` are locked only after the (re-)capped probe
+records a rate and a passing floor-sanity result.
 
 Start with this smoke profile:
 
@@ -139,6 +155,8 @@ Start with this smoke profile:
 particle-count: 256
 planning-horizon-steps: 16
 resample-threshold: 0.5
+shape-fraction: 0.5
+signature-advantage-dt-multiplier: 1
 duration: 16
 ```
 
@@ -267,6 +285,28 @@ noise_0`, near_escape, 2 seeds). Recorded:
 - **Required before BF-5:** a fresh capped re-probe on the long-budget runner
   with the shaped objective, confirming floor-sanity PASS (negative-regret rate
   ≤ 5%) and recording the new per-trial rate, before the full lock is staged.
+
+#### BF-4 Shaped Re-Probe Receipt (2026-05-16, `bf4-shaped-reprobe-20260516-180425`)
+
+Second capped probe, same 1-cell / 2-seed slate. Recorded:
+
+- **Rate / runtime gate: EXCEEDED.** Elapsed wall-clock was 26.82 min; Bayes
+  `01:04:27 -> 01:31:14` UTC. This confirms BF-5 / full lock must remain on a
+  long-budget runner.
+- **Join / caseId-drift guard: PASS.** `joinedRowCount = 2`.
+- **Floor-sanity gate: NON-DECISIVE.** Negative regret on both rows
+  (`T_safe_bayes = 7.73, 15.42` vs signature `16, 16`; global negative-regret
+  rate `1`). Nonzero action rows were `1492 / 2317`, so the passive-degeneracy
+  repair worked, but the floor became an active worse-than-signature controller.
+- **Root cause:** expected survival remained flat at the short horizon; tiny
+  shaped-margin differences chose full-thrust lattice actions. The lattice did
+  not include the guarded-signature policy itself, even though that policy is
+  admissible under the same signature history and survived both rows.
+- **Repair applied (BF-2 design change):** add the guarded-signature policy as
+  candidate `0`; score lattice candidates as one-step deviations followed by
+  the guarded-signature rollout policy; require predicted advantage of at least
+  `signatureAdvantageDtMultiplier * dt` before deviating from the signature
+  baseline. Re-probe required again before BF-5.
 
 ### BF-5: Full Lock Handoff
 

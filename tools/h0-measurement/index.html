@@ -324,8 +324,9 @@
         </div>
         <div class="preset-note">
           Presets resolve via fetch — they only load when served from a dev server (e.g.
-          <code>npx vite serve tools/h0-measurement</code> from the repo root and then choose the
-          frame). When opened via <code>file://</code>, use the file picker / drag-and-drop.
+          <code>npm run dev -- --port 5173</code> from the repo root, then open
+          <code>/tools/h0-measurement/</code>). When opened via <code>file://</code>,
+          use the file picker / drag-and-drop.
         </div>
       </div>
       <div id="canvas-container">
@@ -631,7 +632,7 @@
         const f = new File([blob], filename, { type: blob.type });
         loadFile(f);
       } catch (e) {
-        alert("Preset fetch failed: " + e.message + "\n\nServe via 'npx vite serve' from the repo root, or use the file picker.");
+        alert("Preset fetch failed: " + e.message + "\n\nServe via 'npm run dev -- --port 5173' from the repo root and open /tools/h0-measurement/, or use the file picker.");
         els.presetSelect.value = "";
       }
     });

@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Public chart source for the homepage core photometric metric panels. Generated from results/analysis/analysis_summary.json; do not hand-edit.",
+  "sourcePath": "results/analysis/analysis_summary.json",
+  "claimBoundary": "Core MuJoCo mirror-alignment task only; no detected terminal-intensity difference at n=30, with slower acquisition for indirect photometric feedback.",
+  "conditions": [
+    {
+      "id": "photometric",
+      "label": "Photometric",
+      "n": 30,
+      "terminalIntensity": {
+        "mean": 0.9450328920156512,
+        "median": 0.9480618773978949,
+        "ci95": [
+          0.9364686764300245,
+          0.9536709108236213
+        ]
+      },
+      "timeToThreshold": {
+        "medianSteps": 188,
+        "meanSteps": 175,
+        "failedSeeds": 0
+      }
+    },
+    {
+      "id": "doa_direct",
+      "label": "Target-aware oracle",
+      "n": 30,
+      "terminalIntensity": {
+        "mean": 0.9359264439535153,
+        "median": 0.9363606710510393,
+        "ci95": [
+          0.9246796424310998,
+          0.9467443341547158
+        ]
+      },
+      "timeToThreshold": {
+        "medianSteps": 11.5,
+        "meanSteps": 11.733333333333333,
+        "failedSeeds": 0
+      }
+    },
+    {
+      "id": "doa_noisy",
+      "label": "Noisy oracle",
+      "n": 30,
+      "terminalIntensity": {
+        "mean": 0.9114715926263149,
+        "median": 0.9188739883095015,
+        "ci95": [
+          0.8942049196678586,
+          0.9273099963830758
+        ]
+      },
+      "timeToThreshold": {
+        "medianSteps": 14,
+        "meanSteps": 78.56666666666666,
+        "failedSeeds": 4
+      }
+    },
+    {
+      "id": "random",
+      "label": "Random",
+      "n": 30,
+      "terminalIntensity": {
+        "mean": 6.160339323225958e-36,
+        "median": 0,
+        "ci95": [
+          6.483395432800781e-74,
+          1.848101796967755e-35
+        ]
+      },
+      "timeToThreshold": {
+        "medianSteps": 500,
+        "meanSteps": 500,
+        "failedSeeds": 30
+      }
+    }
+  ],
+  "tests": {
+    "photometric_vs_doa_direct_terminal_intensity": {
+      "U": 526,
+      "p": 0.26432621279678536,
+      "mean_diff_photometric_minus_other": 0.009106448062135897
+    },
+    "photometric_vs_doa_noisy_terminal_intensity": {
+      "U": 649,
+      "p": 0.003338612259442543,
+      "mean_diff_photometric_minus_other": 0.033561299389336274
+    },
+    "photometric_vs_random_terminal_intensity": {
+      "U": 900,
+      "p": 1.9558095152782195e-11,
+      "mean_diff_photometric_minus_other": 0.9450328920156512
+    }
+  },
+  "chartQueue": [
+    {
+      "id": "photometric-terminal-intensity",
+      "target": "homepage core result metric panel",
+      "source": "conditions[*].terminalIntensity + photometric_vs_doa_direct_terminal_intensity",
+      "output": "public/media/photometric-terminal-intensity.svg",
+      "status": "generated-by-prebuild"
+    },
+    {
+      "id": "photometric-convergence-time",
+      "target": "homepage core result metric panel",
+      "source": "conditions[*].timeToThreshold",
+      "output": "public/media/photometric-convergence-time.svg",
+      "status": "generated-by-prebuild"
+    }
+  ]
+}

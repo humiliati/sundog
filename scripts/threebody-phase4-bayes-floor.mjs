@@ -56,6 +56,7 @@ function parseArgs(argv) {
     planningHorizonSteps: 16,
     resampleThreshold: 0.5,
     shapeFraction: 0.5,
+    signatureAdvantageDtMultiplier: 1,
     bootstrapSeed: 40604,
   };
 
@@ -94,6 +95,7 @@ function parseArgs(argv) {
     else if (flag === "--planning-horizon-steps") args.planningHorizonSteps = Number.parseInt(value, 10);
     else if (flag === "--resample-threshold") args.resampleThreshold = Number.parseFloat(value);
     else if (flag === "--shape-fraction") args.shapeFraction = Number.parseFloat(value);
+    else if (flag === "--signature-advantage-dt-multiplier") args.signatureAdvantageDtMultiplier = Number.parseFloat(value);
     else if (flag === "--bootstrap-seed") args.bootstrapSeed = Number.parseInt(value, 10);
     else throw new Error(`Unknown flag: ${flag}`);
   }
@@ -110,6 +112,9 @@ function parseArgs(argv) {
   }
   if (!Number.isFinite(args.shapeFraction) || args.shapeFraction < 0 || args.shapeFraction >= 1) {
     throw new Error("--shape-fraction must be in [0, 1) so shaping stays strictly below one dt (floor-validity)");
+  }
+  if (!Number.isFinite(args.signatureAdvantageDtMultiplier) || args.signatureAdvantageDtMultiplier < 0) {
+    throw new Error("--signature-advantage-dt-multiplier must be non-negative");
   }
   for (const [name, values] of [
     ["--mass-ratios", args.massRatios],
@@ -432,6 +437,19 @@ function actionKey(thrust) {
   return `${roundNumber(thrust[0], 8)}:${roundNumber(thrust[1], 8)}`;
 }
 
+function guardedSignatureThrust(signature, config) {
+  if (!signature.guard) return [0, 0];
+  const gradMag = Math.sqrt(signature.gradX * signature.gradX + signature.gradY * signature.gradY);
+  if (gradMag <= 0.001) return [0, 0];
+  const error = signature.tidalMagnitude - config.targetTidal;
+  const thrustMagnitude = Math.min(Math.abs(0.5 * error), config.thrustLimit);
+  const direction = error > 0 ? -1 : 1;
+  return [
+    direction * thrustMagnitude * signature.gradX / gradMag,
+    direction * thrustMagnitude * signature.gradY / gradMag,
+  ];
+}
+
 function terminalEventsForState(state, config) {
   const signatures = computeSignatures(state, config);
   const tidal = computeTidalTensor(state, config);
@@ -464,14 +482,22 @@ function terminalSafetyMargin(state, config) {
 // whose true survival is longer by >= one dt can never be overtaken on margin
 // alone: the floor never prefers an earlier-escape action (floor-validity
 // invariant preserved).
-function scoreCandidateAction(particles, thrust, config, args) {
+function candidateThrustAtStep(candidate, simState, config, sensorState, stepIndex) {
+  if (candidate.kind === "signature_policy" || stepIndex > 0) {
+    const predicted = observeGuardedAccelSignature(simState, { ...config, sensorNoiseStd: 0 }, sensorState);
+    return guardedSignatureThrust(predicted, config);
+  }
+  return candidate.thrust;
+}
+
+function scoreCandidateAction(particles, candidate, config, args) {
   let expectedSafeTime = 0;
   let expectedTerminalMargin = 0;
   let expectedScore = 0;
   let expectedDeltaV = 0;
-  const thrustMagnitude = Math.sqrt(thrust[0] * thrust[0] + thrust[1] * thrust[1]);
   for (const particle of particles) {
     let simState = particle.state.slice();
+    const rolloutSensorState = cloneSensorState(particle.sensorState);
     let safeTime = 0;
     let hazardReached = false;
     for (let step = 0; step < args.planningHorizonSteps; step += 1) {
@@ -479,7 +505,10 @@ function scoreCandidateAction(particles, thrust, config, args) {
         hazardReached = true;
         break;
       }
+      const thrust = candidateThrustAtStep(candidate, simState, config, rolloutSensorState, step);
+      const thrustMagnitude = Math.sqrt(thrust[0] * thrust[0] + thrust[1] * thrust[1]);
       safeTime += config.dt;
+      expectedDeltaV += particle.weight * thrustMagnitude * config.dt;
       simState = integrateStep(simState, config.dt, config, thrust);
     }
     const margin = hazardReached ? 0 : terminalSafetyMargin(simState, config);
@@ -487,27 +516,43 @@ function scoreCandidateAction(particles, thrust, config, args) {
     expectedSafeTime += particle.weight * safeTime;
     expectedTerminalMargin += particle.weight * margin;
     expectedScore += particle.weight * particleScore;
-    expectedDeltaV += particle.weight * thrustMagnitude * Math.min(
-      args.planningHorizonSteps * config.dt,
-      Math.max(config.dt, config.duration),
-    );
   }
   return { expectedSafeTime, expectedTerminalMargin, expectedScore, expectedDeltaV };
 }
 
 const SCORE_TIE_EPS = 1e-9;
 
-function chooseBayesAction(particles, config, args) {
-  const candidates = oracleCandidateThrusts(config);
+function makeActionCandidates(config, observed) {
+  const signatureThrust = guardedSignatureThrust(observed, config);
+  const candidates = [{
+    index: 0,
+    kind: "signature_policy",
+    thrust: signatureThrust,
+    actionKey: actionKey(signatureThrust),
+  }];
+  const seen = new Set([candidates[0].actionKey]);
+  for (const thrust of oracleCandidateThrusts(config)) {
+    const key = actionKey(thrust);
+    if (seen.has(key)) continue;
+    candidates.push({
+      index: candidates.length,
+      kind: "lattice_first_step_then_signature_policy",
+      thrust,
+      actionKey: key,
+    });
+    seen.add(key);
+  }
+  return candidates;
+}
+
+function chooseBayesAction(particles, config, args, observed) {
+  const candidates = makeActionCandidates(config, observed);
   let best = null;
   const scores = [];
-  for (let index = 0; index < candidates.length; index += 1) {
-    const thrust = candidates[index];
-    const score = scoreCandidateAction(particles, thrust, config, args);
+  for (const candidate of candidates) {
+    const score = scoreCandidateAction(particles, candidate, config, args);
     const row = {
-      index,
-      thrust,
-      actionKey: actionKey(thrust),
+      ...candidate,
       ...score,
     };
     scores.push(row);
@@ -526,7 +571,19 @@ function chooseBayesAction(particles, config, args) {
       best = row;
     }
   }
-  return { selected: best, scores };
+  const signatureBaseline = scores[0];
+  const advantageThreshold = args.signatureAdvantageDtMultiplier * config.dt;
+  const selected = best.expectedScore > signatureBaseline.expectedScore + advantageThreshold
+    ? best
+    : signatureBaseline;
+  return {
+    selected,
+    scores,
+    signatureBaseline,
+    bestBeforeGuard: best,
+    advantageThreshold,
+    fallbackGuardApplied: selected === signatureBaseline && best !== signatureBaseline,
+  };
 }
 
 function eventHistoryEntry(time, state, thrust, config) {
@@ -560,7 +617,7 @@ function runBayesTrial(args, envelopeCase, regime, seed, guardThresholds) {
     const time = step * config.dt;
     const observed = observeGuardedAccelSignature(state, config, actualSensorState);
     const belief = updateParticleBelief(particles, observed, config, args, rng);
-    const decision = chooseBayesAction(particles, config, args);
+    const decision = chooseBayesAction(particles, config, args, observed);
     const thrust = decision.selected.thrust;
     const historyEntry = eventHistoryEntry(time, state, thrust, config);
     eventHistory.push(historyEntry);
@@ -586,6 +643,7 @@ function runBayesTrial(args, envelopeCase, regime, seed, guardThresholds) {
       sensor_tier: observed.sensorTier,
       probe_delta: observed.probeDelta,
       action_index: decision.selected.index,
+      action_family: decision.selected.kind,
       action_key: decision.selected.actionKey,
       thrust_x: roundNumber(thrust[0]),
       thrust_y: roundNumber(thrust[1]),
@@ -611,6 +669,7 @@ function runBayesTrial(args, envelopeCase, regime, seed, guardThresholds) {
       step,
       time: roundMetric(time),
       action_index: decision.selected.index,
+      action_family: decision.selected.kind,
       action_key: decision.selected.actionKey,
       thrust_x: roundNumber(thrust[0]),
       thrust_y: roundNumber(thrust[1]),
@@ -618,8 +677,15 @@ function runBayesTrial(args, envelopeCase, regime, seed, guardThresholds) {
       expected_terminal_margin: roundMetric(decision.selected.expectedTerminalMargin),
       expected_score: roundMetric(decision.selected.expectedScore),
       expected_delta_v: roundMetric(decision.selected.expectedDeltaV),
+      signature_baseline_action_key: decision.signatureBaseline.actionKey,
+      signature_baseline_score: roundMetric(decision.signatureBaseline.expectedScore),
+      best_pre_guard_action_key: decision.bestBeforeGuard.actionKey,
+      best_pre_guard_score: roundMetric(decision.bestBeforeGuard.expectedScore),
+      signature_advantage_threshold: roundMetric(decision.advantageThreshold),
+      fallback_guard_applied: decision.fallbackGuardApplied,
       candidate_scores: JSON.stringify(decision.scores.map((score) => ({
         index: score.index,
+        kind: score.kind,
         action_key: score.actionKey,
         expected_safe_time: roundMetric(score.expectedSafeTime),
         expected_terminal_margin: roundMetric(score.expectedTerminalMargin),
@@ -697,16 +763,26 @@ async function main() {
     planningObjective: {
       form: "expected within-horizon survival time + shapeFraction * dt * expected terminal safety margin",
       shapeFraction: args.shapeFraction,
+      signatureAdvantageDtMultiplier: args.signatureAdvantageDtMultiplier,
       terminalMargin: "min(escape-radius margin, close-approach margin) of the horizon-end state; 0 if a terminal hazard was reached in the rollout",
       floorValidityInvariant: "shapeFraction < 1 => shaping term < one dt, so a candidate whose true survival is longer by >= one dt is never overtaken on margin; the floor never prefers an earlier-escape action",
+      signatureFallbackInvariant: "the guarded-signature policy is an explicit same-information candidate; the evaluator deviates from it only when predicted shaped-score advantage exceeds signatureAdvantageDtMultiplier * dt",
       supersedes: "BF-4 smoke-only pure steps-survived objective, which the 2026-05-16 probe showed degenerates to passive when planning horizon << escape timescale",
-      tieOrder: "max shaped score; within 1e-9 -> min expected delta-V; then first in lattice order",
+      tieOrder: "signature baseline unless best predicted shaped score beats it by the configured dt-scaled advantage threshold; within 1e-9 -> min expected delta-V; then first in candidate order",
     },
-    actionLattice: oracleCandidateThrusts(normalizeConfig({ thrustLimit: args.thrustLimits[0] })).map((thrust, index) => ({
-      index,
-      actionKey: actionKey(thrust),
-      thrust,
-    })),
+    actionCandidates: [
+      {
+        index: 0,
+        kind: "signature_policy",
+        description: "guarded-signature controller action computed from the admitted observation",
+      },
+      ...oracleCandidateThrusts(normalizeConfig({ thrustLimit: args.thrustLimits[0] })).map((thrust, index) => ({
+        index: index + 1,
+        kind: "lattice_first_step_then_signature_policy",
+        actionKey: actionKey(thrust),
+        thrust,
+      })),
+    ],
     trials: [],
   };
   const signatureRows = [];

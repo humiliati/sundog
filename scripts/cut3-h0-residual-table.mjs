@@ -46,7 +46,7 @@
 
 import { createHash } from "node:crypto";
 import { readFile, readdir, mkdir, writeFile, stat } from "node:fs/promises";
-import { resolve, dirname, basename, join } from "node:path";
+import { resolve, dirname, basename, join, relative, sep } from "node:path";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -61,6 +61,7 @@ const TABLE_JSON_REL = "results/structural-failure/cut3-prereg/h0-anchor-residua
 const TABLE_CSV_REL = "results/structural-failure/cut3-prereg/h0-anchor-residual-table.csv";
 const MANIFEST_REL = "results/structural-failure/cut3-prereg/h0-2-manifest.json";
 const SELF_TEST_OUT_REL = "results/structural-failure/cut3-prereg/h0-residual-table-self-test-result.json";
+const DEFAULT_OUT_DIR_REL = "results/structural-failure/cut3-prereg";
 
 const ANCHOR_RESIDUAL_TOL_DEG = 0.5; // [E] inherited from P2_CUT3_RUN_SPEC.md
 
@@ -90,6 +91,10 @@ const CSV_COLUMNS = [
 
 function sha256(bytes) {
   return createHash("sha256").update(bytes).digest("hex");
+}
+
+function toPosix(p) {
+  return p.split(sep).join("/");
 }
 
 function canonicalJSON(value) {
@@ -544,8 +549,12 @@ async function generate({ sidecarsDir, recordsDir, outDir }) {
   // Write outputs
   const absOutDir = resolve(REPO, outDir ?? "results/structural-failure/cut3-prereg");
   await mkdir(absOutDir, { recursive: true });
-  const tableJsonAbs = resolve(REPO, TABLE_JSON_REL);
-  const tableCsvAbs = resolve(REPO, TABLE_CSV_REL);
+  const tableJsonAbs = join(absOutDir, basename(TABLE_JSON_REL));
+  const tableCsvAbs = join(absOutDir, basename(TABLE_CSV_REL));
+  const manifestAbs = join(absOutDir, basename(MANIFEST_REL));
+  const tableJsonRel = toPosix(relative(REPO, tableJsonAbs));
+  const tableCsvRel = toPosix(relative(REPO, tableCsvAbs));
+  const manifestRel = toPosix(relative(REPO, manifestAbs));
   const tableJsonPretty = JSON.stringify(tablePayload, null, 2) + "\n";
   await writeFile(tableJsonAbs, tableJsonPretty);
   const csvText = rowsToCSV(allRows);
@@ -558,31 +567,37 @@ async function generate({ sidecarsDir, recordsDir, outDir }) {
     spec_reference: "docs/prereg/structural-failure-coincidence/P2_CUT3_H0_2_SCHEMA.md §2-D",
     sidecars: sidecars.map((s) => ({
       frame_id: s.json.frame_id,
-      path: SIDECARS_DIR_REL + "/" + s.filename,
+      path: toPosix(relative(REPO, s.abs_path)),
       raw_sha256: s.raw_sha256,
       calib_sha256: s.json.calib_sha256 ?? null,
     })),
     records: records.map((r) => ({
       frame_id: r.json.frame_id,
-      path: RECORDS_DIR_REL + "/" + r.filename,
+      path: toPosix(relative(REPO, r.abs_path)),
       raw_sha256: r.raw_sha256,
       source_sidecar_sha256: r.json.provenance?.source_sidecar_sha256 ?? null,
       checker_sha256: r.json.provenance?.checker_sha256 ?? null,
     })),
     table: {
-      json_path: TABLE_JSON_REL,
+      json_path: tableJsonRel,
       json_sha256: sha256(Buffer.from(tableJsonPretty)),
       json_canonical_sha256: sha256(Buffer.from(canonicalJSON(tablePayload))),
-      csv_path: TABLE_CSV_REL,
+      csv_path: tableCsvRel,
       csv_sha256: sha256(Buffer.from(csvText)),
     },
     inputs_summary,
   };
-  const manifestAbs = resolve(REPO, MANIFEST_REL);
   const manifestPretty = JSON.stringify(manifest, null, 2) + "\n";
   await writeFile(manifestAbs, manifestPretty);
 
-  return { tablePayload, manifest, tableJsonPretty, csvText, manifestPretty };
+  return {
+    tablePayload,
+    manifest,
+    tableJsonPretty,
+    csvText,
+    manifestPretty,
+    outputPaths: { tableJsonRel, tableCsvRel, manifestRel },
+  };
 }
 
 // ============================================================================
@@ -815,7 +830,7 @@ async function selfTest() {
       "P2_CUT3_H0_2_SCHEMA.md §2-C, §3, §6.2 — exercises parser, validator, consistency-detector, row emitter, CSV column order, orphan handling on synthetic conformant inputs.",
     disclosure:
       "PASS here means the generator's plumbing behaves as specified. It does NOT mean H0-2 is closed; H0-2 closure requires §6.3–§6.4 operator pre-fill on real Phase-15 frames + a known-PASS fixture. Synthetic test inputs are unit-test fixtures, not fabricated H0 records.",
-    tmp_dir_used: tmpDir,
+    tmp_dir_used: toPosix(relative(REPO, tmpDir)),
     pass_count,
     fail_count,
     overall_pass,
@@ -931,7 +946,7 @@ async function main() {
   if (cmd === "generate") {
     const sidecarsDir = parseArg(rest, "--sidecars") ?? SIDECARS_DIR_REL;
     const recordsDir = parseArg(rest, "--records") ?? RECORDS_DIR_REL;
-    const outDir = parseArg(rest, "--out-dir") ?? "results/structural-failure/cut3-prereg";
+    const outDir = parseArg(rest, "--out-dir") ?? DEFAULT_OUT_DIR_REL;
     const result = await generate({ sidecarsDir, recordsDir, outDir });
     const tableHash = sha256(Buffer.from(result.tableJsonPretty));
     const csvHash = sha256(Buffer.from(result.csvText));
@@ -939,9 +954,9 @@ async function main() {
     console.log(`[h0-residual-table generate] inputs: ${result.tablePayload.inputs_summary.sidecars} sidecars, ${result.tablePayload.inputs_summary.records} records`);
     console.log(`[h0-residual-table generate] paired: ${result.tablePayload.inputs_summary.paired}, orphan_sidecars: ${result.tablePayload.inputs_summary.orphan_sidecars}, orphan_records: ${result.tablePayload.inputs_summary.orphan_records}, consistency_failures: ${result.tablePayload.inputs_summary.consistency_failures}`);
     console.log(`[h0-residual-table generate] rows: ${result.tablePayload.row_count}`);
-    console.log(`[h0-residual-table generate]   ${TABLE_JSON_REL}  raw=${tableHash}`);
-    console.log(`[h0-residual-table generate]   ${TABLE_CSV_REL}   raw=${csvHash}`);
-    console.log(`[h0-residual-table generate]   ${MANIFEST_REL}    raw=${manifestHash}`);
+    console.log(`[h0-residual-table generate]   ${result.outputPaths.tableJsonRel}  raw=${tableHash}`);
+    console.log(`[h0-residual-table generate]   ${result.outputPaths.tableCsvRel}   raw=${csvHash}`);
+    console.log(`[h0-residual-table generate]   ${result.outputPaths.manifestRel}    raw=${manifestHash}`);
     return;
   }
   if (cmd === "validate") {
