@@ -1343,11 +1343,21 @@ and under which claim boundary.
 and Phase 15 now earns the Bayesian-floor claim-lock fields. Phase 13 and Phase
 14 add optional columns rather than blocking the core Balance surface.
 
+First pass landed (2026-05-17): `scripts/build-balance-public-data.mjs`
+reduces the Phase 10 operating-envelope receipt and the Phase 15 Bayesian-floor
+claim-lock receipt into `public/data/balance-phase16-claim-lock.json`.
+`balance.html` now exposes the Bayes-floor controller lane and renders a public
+evidence panel from that bundle: hard-gate cells, observation-parity cells, and
+reported-only observation-degradation cells are visible as separate admission
+lanes. This is a claim-surface ratchet, not a claim expansion; Phase 11 and
+later enrichment columns remain optional fills for the same bundle shape.
+
 Deliverables:
 
-- A public Balance data bundle that reduces Phase 10, Phase 11, and Phase 15
-  receipts into cell-level JSON: preset, light geometry, delay/noise/dropout,
-  controller, survival, verdict, boundary reason, and artifact links.
+- A public Balance data bundle that reduces Phase 10 and Phase 15 receipts into
+  cell-level JSON now, with Phase 11 enrichment columns to append later: preset,
+  light geometry, delay/noise/dropout, controller, survival, verdict, boundary
+  reason, claim gate, admission lane, and artifact links.
 - A claim-card data shape with explicit tiers: current Phase 10 claim, optional
   same-shadow Bayesian-floor claim, optional hardware-realistic sim claim, and
   optional sibling-plant pattern claim.
