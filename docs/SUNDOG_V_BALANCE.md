@@ -1187,9 +1187,12 @@ Initial implementation slice (2026-05-17):
 - `public/js/balance-core.mjs` now declares a shared Balance controller registry
   and adds `bayes_floor_shadow_particle` as a runnable same-shadow,
   particle-belief baseline. The mode keeps a posterior over `(theta,
-  thetaDot)` from legal shadow observations and cart proprioception, then uses a
-  conservative blend of the live `sundog_shadow` candidate and particle-belief
-  feedback. This is a floor scaffold, not a claim-ready floor.
+  thetaDot)` from legal shadow observations and cart proprioception. The first
+  repair adds an analytic inverse from shadow residual to angle proposal, then
+  uses a same-information guard: the floor defaults to the live
+  `sundog_shadow` candidate unless the posterior proposal clears a predicted
+  advantage threshold. This is now a guarded floor scaffold, not yet a
+  claim-ready floor.
 - `scripts/balance-phase15-bayes-floor.mjs` writes the Phase 15 receipt shape:
   `manifest.json`, `profile.json`, `signature-observations.jsonl`,
   `observation-parity.jsonl`, `belief-diagnostics.csv`, `bayes-actions.csv`,
@@ -1198,12 +1201,12 @@ Initial implementation slice (2026-05-17):
 - `npm run balance:phase15:smoke` is the capped probe. The first repaired smoke
   ran 128 trials in 21.443 s (5.97 trials/s) with 61 particles and a 0.05 s
   horizon. Observation parity, no-state-leak, and unknown-mode rejection passed.
-- Smoke interpretation: the baseline passes the easy-cell sanity check versus
-  `naive_shadow`, but it still trails `sundog_shadow` in the two 28-degree cells
-  (`near_fall`: -0.594 normalized-survival regret; `recoverable`: -0.657). It
-  slightly exceeds Sundog in the 84-degree overhead-light cells. This does not
-  promote claim language; it marks Phase 15 as executable and says the floor
-  needs an adversarial repair pass before any same-floor claim is earned.
+- Smoke interpretation after the analytic-inverse / guard repair: the baseline
+  passes the easy-cell sanity check versus `naive_shadow`, exactly matches
+  `sundog_shadow` in the two readable 28-degree smoke cells, and improves over
+  Sundog in the two 84-degree overhead-light smoke cells. This still does not
+  promote claim language; it marks Phase 15 as executable with a sane
+  same-information guard.
 - Phase 10 cell-slate loader (2026-05-17): the Phase 15 harness now accepts
   `--cell-slate phase10-output` to read Phase 10 `envelope.csv` or
   `cell-class-map.csv`, preserving per-cell preset, axis, light, delay, noise,
@@ -1216,7 +1219,7 @@ Initial implementation slice (2026-05-17):
   mode rejection. The loaded cells all passed Bayes-vs-naive sanity but still
   showed negative regret versus `sundog_shadow`, so this remains an executable
   floor scaffold rather than a promoted claim.
-- Stratified Phase 10 loader probe (2026-05-17): the operator ran
+- Pre-repair stratified Phase 10 loader probe (2026-05-17): the operator ran
   `phase15-phase10-stratified-probe` against 12 loaded Phase 10 cells, 4 seeds,
   and the four-mode slate (`naive_shadow`, `sundog_shadow`,
   `bayes_floor_shadow_particle`, `oracle`). It completed 192 trials in
@@ -1227,20 +1230,31 @@ Initial implementation slice (2026-05-17):
   mean negative-regret rate 0.958. Interpretation: the floor is now measurable
   across loaded Phase 10 cells, but it remains a weak-floor artifact rather than
   a same-floor claim.
+- Post-repair stratified Phase 10 loader probe (2026-05-17): rerunning the same
+  12-cell / 4-seed probe after the analytic-inverse proposal and
+  same-information guard completed 192 trials in 26.08 s (7.36 trials/s), with
+  all three audits passing. All 12 cells passed Bayes-vs-naive sanity. Mean
+  regret versus `sundog_shadow` was +0.0336 normalized survival, range 0 to
+  +0.403; mean negative-regret rate was 0. The candidate-selection diagnostic
+  shows the guard doing most of the work (`sundog_guard`: 1531 logged rows,
+  `bayes_proposal`: 5 logged rows). Interpretation: the floor is no longer
+  weaker than the same-information controller on this stratified probe, but it
+  is still mostly a guarded parity floor rather than evidence that explicit
+  belief dominates Balance.
 - Full Phase 10-equivalent estimate: 68 loaded Phase 10 cells x 100 seeds x 4
-  modes = 27,200 trials. At the measured 9.07 trials/s, the full run is about
-  50 minutes, which exceeds the repo's inline runtime rule. Stage, do not run
-  inline:
+  modes = 27,200 trials. At the post-repair measured 7.36 trials/s, the full
+  run is about 62 minutes, which exceeds the repo's inline runtime rule. Stage,
+  do not run inline:
 
 ```powershell
 node scripts/balance-phase15-bayes-floor.mjs --phase phase15-phase10-full-lock --out results/balance/phase15-phase10-full-lock --cell-slate phase10-output --phase10-out results/balance/phase10-envelope --limit-cells all --modes naive_shadow,sundog_shadow,bayes_floor_shadow_particle,oracle --seeds 100 --duration 8 --particle-count 61 --horizon-seconds 0.05
 ```
 
-- Next implementation target: repair or replace the weak particle floor before
-  interpreting a full lock. Good candidates are an EKF over `(theta, thetaDot)`,
-  a stronger particle proposal seeded from the analytic shadow inverse, or a
-  hybrid ambiguity-gated posterior that defaults to `sundog_shadow` when the
-  posterior adds no expected value.
+- Next implementation target: run a larger capped loader probe with a
+  stratified mix of diagnostic-positive, borderline, and failure-regime cells.
+  If the guard remains non-negative against `sundog_shadow`, then stage the
+  full lock for the operator; if the Bayes proposal starts firing more often,
+  inspect those cells before using them in public claim language.
 
 ### Phase 16 - Balance Data Surfaces And Claim Ratchet
 

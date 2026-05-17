@@ -225,6 +225,88 @@
             text-decoration: underline;
         }
 
+        .what-intro {
+            max-width: 760px;
+            margin: -0.55rem auto 2rem;
+            color: var(--sd-muted);
+            text-align: center;
+        }
+
+        .what-primer {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.52fr);
+            gap: clamp(1.3rem, 3vw, 2.2rem);
+            align-items: start;
+        }
+
+        .what-def-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .what-def,
+        .what-media figure {
+            border: 1px solid rgba(20, 43, 58, 0.12);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.76);
+            box-shadow: 0 10px 26px rgba(14, 30, 44, 0.08);
+        }
+
+        .what-def {
+            padding: 1rem;
+        }
+
+        .what-def .label {
+            display: block;
+            margin-bottom: 0.55rem;
+            color: var(--primary-mid);
+            font-family: var(--sd-font-data);
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .what-def h3 {
+            margin: 0 0 0.5rem;
+            color: var(--primary-dark);
+            font-size: 1.05rem;
+            line-height: 1.2;
+        }
+
+        .what-def p {
+            margin: 0;
+            color: #40505c;
+            font-size: 0.94rem;
+            line-height: 1.55;
+        }
+
+        .what-media {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .what-media figure {
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .what-media img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            object-fit: cover;
+            background: #102334;
+        }
+
+        .what-media figcaption {
+            padding: 0.75rem 0.9rem 0.85rem;
+            color: #40505c;
+            font-size: 0.84rem;
+            line-height: 1.45;
+        }
+
         .proof-item[id] {
             scroll-margin-top: 6rem;
         }
@@ -868,6 +950,11 @@
             .theorem-grid {
                 grid-template-columns: 1fr;
             }
+
+            .what-primer,
+            .what-def-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Phase-3-bound atlas sketch in the hero */
@@ -1309,8 +1396,8 @@
             <a href="index.html" class="site-brand">Sundog</a>
             <div class="site-links">
                 <a href="about.html">About</a>
+                <a href="sundog.html">Atlas</a>
                 <a href="applications-gallery.html">Applications</a>
-                <a href="mesa.html">Mesa</a>
                 <a href="docs/">Docs</a>
                 <a href="https://github.com/humiliati/sundog">GitHub</a>
             </div>
@@ -1380,7 +1467,6 @@
                 Explore the h(x) geometry behind solar halos, then follow the same traceability discipline into robotic control, agents, and workbenches.
             </p>
             <div class="cta-buttons">
-                <a href="sundog.html" class="btn btn-primary">Open the Sundog atlas</a>
                 <a href="threebody.html" class="btn btn-secondary">Three-Body workbench</a>
                 <a href="balance.html" class="btn btn-secondary">Balance workbench</a>
             </div>
@@ -1916,18 +2002,62 @@
     </section>
 
     <!-- What It Is Section -->
-    <section class="what-section">
-        <h2>Indirect Measurement, Direct Results</h2>
-        <div class="content">
-            <p>
-                Most systems do not reveal their truth directly. You infer them from signatures: shadows, feedback, distortions, response curves.
-            </p>
-            <p>
-                The Sundog Project is a framework for turning those indirect signals into actionable software control. Where conventional approaches demand complete world state, Sundog asks whether the partial signal, the shadow, the torque, the occlusion, already contains enough structure to act.
-            </p>
-            <p>
-                In the core experiment, a controller aligns a reflected beam without target coordinates, using only sparse photometric feedback. In workbench systems, the same pattern now has bounded operating-envelope reads in guarded three-body control, shadow-derived cart-pole balance, and noisy pressure-field mine avoidance. Product systems carry the pattern into procedural agents, verb-field NPC behavior, and softbody motion made interpretable through graph signatures.
-            </p>
+    <section class="what-section" id="core-vocabulary">
+        <h2>Core Vocabulary</h2>
+        <p class="what-intro">
+            A short relevance check for the rest of the page: Sundog is not a mood about mystery.
+            It is a repeatable split between what is hidden, what is measured, what transforms,
+            and where the method stops working.
+        </p>
+        <div class="what-primer">
+            <div class="what-def-grid" aria-label="Sundog core terms">
+                <article class="what-def">
+                    <span class="label">Hidden State</span>
+                    <h3>The thing the system does not get to inspect.</h3>
+                    <p>
+                        In the atlas, that is sun altitude. In control, it can be a target position,
+                        pole angle, local field, obstacle geometry, or player intent.
+                    </p>
+                </article>
+                <article class="what-def">
+                    <span class="label">Trace</span>
+                    <h3>The indirect signal left in the world.</h3>
+                    <p>
+                        A parhelion, detector intensity, shadow, pressure field, deformation, or
+                        behavior wake can carry structure without revealing the full cause.
+                    </p>
+                </article>
+                <article class="what-def">
+                    <span class="label">Transformation</span>
+                    <h3>The rule that makes the trace usable.</h3>
+                    <p>
+                        Sometimes it is closed form, like <code>R22 / cos(h)</code>. Sometimes it is
+                        a bounded controller or measured operating envelope.
+                    </p>
+                </article>
+                <article class="what-def">
+                    <span class="label">Boundary</span>
+                    <h3>The point where the trace should fail.</h3>
+                    <p>
+                        The credibility test is not smooth storytelling. A traceable route should
+                        lose confidence at the same boundary as the underlying geometry.
+                    </p>
+                </article>
+            </div>
+            <div class="what-media" aria-label="Visual examples of traces">
+                <figure>
+                    <img src="/media/elevator-halosim-parhelia.png" alt="HaloSim parhelia receipt showing bright spots beside the sun.">
+                    <figcaption>
+                        Halo trace: the side glints move with sun altitude and supply the promoted atlas inverse.
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img src="/media/photometric-alignment-rail-poster.png" alt="Photometric alignment workbench image showing a beam and detector feedback.">
+                    <figcaption>
+                        Control trace: the mirror controller acts from detector response, not target coordinates.
+                    </figcaption>
+                </figure>
+            </div>
         </div>
     </section>
 
