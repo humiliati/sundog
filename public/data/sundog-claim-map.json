@@ -161,7 +161,7 @@
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "conceptual_lineage",
-      "answerTemplate": "The halo vocabulary on sundog.html is an atlas and literature guide, not a new Sundog result. The page renders a deliberate subset of named atmospheric-optics primitives and also catalogs families beyond the rendered set: Parry-family arcs, pyramidal or odd-radius halos, Lowitz arcs, antisolar features, and sub-horizon or circumhorizon features. Those names come from the atmospheric-optics literature and HaloSim/AtOptics references; several are named-only or not modeled by the current geometry layer.",
+      "answerTemplate": "The halo vocabulary on /sundog is an atlas and literature guide, not a new Sundog result. The page renders a deliberate subset of named atmospheric-optics primitives and also catalogs families beyond the rendered set: Parry-family arcs, pyramidal or odd-radius halos, Lowitz arcs, antisolar features, and sub-horizon or circumhorizon features. Those names come from the atmospheric-optics literature and HaloSim/AtOptics references; several are named-only or not modeled by the current geometry layer.",
       "support": [
         {
           "doc": "sundog.html",
@@ -182,7 +182,7 @@
       ],
       "nextAction": {
         "label": "Open halo atlas",
-        "href": "/sundog.html"
+        "href": "/sundog"
       }
     },
     {
@@ -264,7 +264,7 @@
       ],
       "nextAction": {
         "label": "Open Three-Body page",
-        "href": "/threebody.html"
+        "href": "/threebody"
       }
     },
     {
@@ -308,7 +308,7 @@
       ],
       "nextAction": {
         "label": "Open Balance page",
-        "href": "/balance.html"
+        "href": "/balance"
       }
     },
     {
@@ -658,7 +658,7 @@
       ],
       "nextAction": {
         "label": "Open About page",
-        "href": "/about.html"
+        "href": "/about"
       }
     },
     {

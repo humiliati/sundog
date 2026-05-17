@@ -2,22 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://sundog.cc/</loc>
-    <lastmod>2026-05-12</lastmod>
-  </url>
-  <url>
-    <loc>https://sundog.cc/sundog.html</loc>
-    <lastmod>2026-05-12</lastmod>
-  </url>
-  <url>
-    <loc>https://sundog.cc/about.html</loc>
-    <lastmod>2026-05-12</lastmod>
-  </url>
-  <url>
-    <loc>https://sundog.cc/alignment.html</loc>
     <lastmod>2026-05-17</lastmod>
   </url>
   <url>
-    <loc>https://sundog.cc/applications-gallery.html</loc>
-    <lastmod>2026-05-12</lastmod>
+    <loc>https://sundog.cc/about</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/alignment</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/sundog</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/legend</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/applications-gallery</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/chat</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/structural-failure</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/mesa</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/balance</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/mines</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/threebody</loc>
+    <lastmod>2026-05-17</lastmod>
+  </url>
+  <url>
+    <loc>https://sundog.cc/origin</loc>
+    <lastmod>2026-05-17</lastmod>
   </url>
 </urlset>

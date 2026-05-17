@@ -68,6 +68,19 @@ function asNumber(value) {
   return Number.isFinite(numeric) ? numeric : null;
 }
 
+function normalizePublicUrl(value) {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    if (url.hostname === "sundog.cc" && url.pathname.endsWith(".html")) {
+      url.pathname = url.pathname.slice(0, -5);
+    }
+    return url.href;
+  } catch {
+    return value;
+  }
+}
+
 function asBool(value) {
   if (typeof value === "boolean") return value;
   if (value === "true") return true;
@@ -144,7 +157,7 @@ function cleanBestWorst(row) {
     staticBoundaryStatus: row.static_boundary_status,
     mechanismCodes: row.mechanism_codes ? row.mechanism_codes.split("|").filter(Boolean) : [],
     representativeSeed: asNumber(row.representative_seed),
-    replayUrl: row.replay_url || null,
+    replayUrl: normalizePublicUrl(row.replay_url),
   };
 }
 
@@ -250,7 +263,7 @@ function buildCellRows(phase12Manifest, regretRows) {
     cellClass: cell.cellClass,
     preset: cell.preset,
     representativeSeed: cell.representativeSeed,
-    replayUrl: cell.replayUrl || null,
+    replayUrl: normalizePublicUrl(cell.replayUrl),
     board: cell.board,
     sensor: cell.sensor,
     bayesRegret: regretsByCell.get(manifestCellKey(cell)) ?? {},
@@ -288,7 +301,7 @@ function pressureFloorGate(targets) {
 
 function paramsFromReplayUrl(replayUrl) {
   if (!replayUrl) return {};
-  const url = new URL(replayUrl);
+  const url = new URL(normalizePublicUrl(replayUrl));
   return Object.fromEntries(url.searchParams.entries());
 }
 

@@ -515,7 +515,7 @@ function makeReplayURL({ seed, mode, compareMode, boardConfig, sensorConfig }) {
   if (sensorConfig.sigmaNoise !== BASE_SENSOR.sigmaNoise) params.set("sigma_noise", String(sensorConfig.sigmaNoise));
   if (sensorConfig.dropoutRate !== BASE_SENSOR.dropoutRate) params.set("dropout", String(sensorConfig.dropoutRate));
   if (sensorConfig.delaySteps !== BASE_SENSOR.delaySteps) params.set("delay", String(sensorConfig.delaySteps));
-  return `https://sundog.cc/mines.html?${params.toString()}`;
+  return `https://sundog.cc/mines?${params.toString()}`;
 }
 
 function groupBy(rows, keyFn) {

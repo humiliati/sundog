@@ -77,7 +77,9 @@ async function writeJson(path, value) {
 function toHref(doc) {
   if (!doc) return "/docs/SUNDOG_V_CHAT.md";
   if (doc.startsWith("/")) return doc;
-  return `/${doc.replaceAll("\\", "/")}`;
+  const normalized = doc.replaceAll("\\", "/");
+  if (/^[^/]+\.html$/.test(normalized)) return `/${normalized.slice(0, -5)}`;
+  return `/${normalized}`;
 }
 
 function freshnessFor(route, entry) {

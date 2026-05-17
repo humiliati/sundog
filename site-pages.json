@@ -35,7 +35,7 @@
     {
       "entry": "legend.html",
       "kind": "reference",
-      "publicLaunchIntent": "Public legend/reference page for site vocabulary and visual cues."
+      "publicLaunchIntent": "Public vocabulary legend/reference page for halo terms and site terms; distinct from the visual Halo Atlas."
     },
     {
       "entry": "mesa.html",
@@ -65,12 +65,12 @@
     {
       "entry": "atlas.html",
       "kind": "alias",
-      "publicLaunchIntent": "Public alias that redirects /atlas.html to the canonical Sundog geometry and halo-atlas page."
+      "publicLaunchIntent": "Legacy public alias that redirects /atlas or /atlas.html to the canonical visual Halo Atlas at /sundog."
     },
     {
       "entry": "sundog.html",
       "kind": "atlas",
-      "publicLaunchIntent": "Public Sundog geometry and halo-atlas page."
+      "publicLaunchIntent": "Canonical public Sundog geometry and visual Halo Atlas page; distinct from the vocabulary Legend."
     },
     {
       "entry": "sundog-workbench.html",
