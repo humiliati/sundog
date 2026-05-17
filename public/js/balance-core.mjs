@@ -581,7 +581,11 @@ function computeBayesFloorControl(state, sensor, controllerState, cfg) {
   let diagnostics = resampleBayesParticlesIfNeeded(bayes);
   diagnostics = bayesDiagnostics(bayes.particles);
 
-  const beliefFeedback = 50 * diagnostics.thetaMean + 8 * diagnostics.thetaDotMean + 1.0 * state.x + 2.0 * state.xDot;
+  const shadowThetaProxy = sensor.valid ? sensor.residual / Math.max(cfg.poleLength, 1e-6) : diagnostics.thetaMean;
+  const shadowThetaDotProxy = sensor.valid ? sensor.residualVelocity / Math.max(cfg.poleLength, 1e-6) : diagnostics.thetaDotMean;
+  const beliefTheta = 0.55 * diagnostics.thetaMean + 0.45 * shadowThetaProxy;
+  const beliefThetaDot = 0.35 * diagnostics.thetaDotMean + 0.65 * shadowThetaDotProxy;
+  const beliefFeedback = 50 * beliefTheta + 8 * beliefThetaDot + 1.0 * state.x + 2.0 * state.xDot;
   const sundogForce = computeSundogShadowForce(state, sensor, controllerState, cfg);
   const candidateForces = uniqueSortedForces([
     sundogForce,
@@ -592,15 +596,14 @@ function computeBayesFloorControl(state, sensor, controllerState, cfg) {
     0.5 * cfg.forceLimit,
     cfg.forceLimit,
   ], cfg.forceLimit);
-  let bestForce = candidateForces[0] ?? 0;
-  let bestScore = Number.POSITIVE_INFINITY;
-  for (const candidate of candidateForces) {
-    const score = scoreBayesAction(bayes.particles, state, candidate, cfg);
-    if (score < bestScore) {
-      bestScore = score;
-      bestForce = candidate;
-    }
-  }
+  const posteriorReady = sensor.valid
+    && diagnostics.thetaStd < 0.12
+    && diagnostics.effectiveSampleSize >= bayes.particles.length * 0.2;
+  const blendedBeliefForce = 0.8 * sundogForce + 0.2 * beliefFeedback;
+  const bestForce = posteriorReady
+    ? clamp(blendedBeliefForce, -cfg.forceLimit, cfg.forceLimit)
+    : clamp(sundogForce, -cfg.forceLimit, cfg.forceLimit);
+  const bestScore = scoreBayesAction(bayes.particles, state, bestForce, cfg);
 
   bayes.lastForce = bestForce;
   bayes.diagnostics = {
@@ -608,7 +611,9 @@ function computeBayesFloorControl(state, sensor, controllerState, cfg) {
     particleCount: bayes.particles.length,
     candidateCount: candidateForces.length,
     selectedScore: bestScore,
+    posteriorReady,
     beliefFeedback,
+    blendedBeliefForce,
     sundogCandidateForce: sundogForce,
   };
 

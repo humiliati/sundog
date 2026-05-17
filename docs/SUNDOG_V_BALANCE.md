@@ -1182,6 +1182,45 @@ slate, or a documented runtime-gated staged-command package with enough capped
 measurements to estimate the full run. The public claim is promoted only if the
 floor itself passes sanity and no-leak gates.
 
+Initial implementation slice (2026-05-17):
+
+- `public/js/balance-core.mjs` now declares a shared Balance controller registry
+  and adds `bayes_floor_shadow_particle` as a runnable same-shadow,
+  particle-belief baseline. The mode keeps a posterior over `(theta,
+  thetaDot)` from legal shadow observations and cart proprioception, then uses a
+  conservative blend of the live `sundog_shadow` candidate and particle-belief
+  feedback. This is a floor scaffold, not a claim-ready floor.
+- `scripts/balance-phase15-bayes-floor.mjs` writes the Phase 15 receipt shape:
+  `manifest.json`, `profile.json`, `signature-observations.jsonl`,
+  `observation-parity.jsonl`, `belief-diagnostics.csv`, `bayes-actions.csv`,
+  `trial-outcomes.csv`, `bayes-regret.csv`, `bayes-regret-summary.csv`, and
+  `observability-fibers.json`.
+- `npm run balance:phase15:smoke` is the capped probe. The first repaired smoke
+  ran 128 trials in 21.443 s (5.97 trials/s) with 61 particles and a 0.05 s
+  horizon. Observation parity, no-state-leak, and unknown-mode rejection passed.
+- Smoke interpretation: the baseline passes the easy-cell sanity check versus
+  `naive_shadow`, but it still trails `sundog_shadow` in the two 28-degree cells
+  (`near_fall`: -0.594 normalized-survival regret; `recoverable`: -0.657). It
+  slightly exceeds Sundog in the 84-degree overhead-light cells. This does not
+  promote claim language; it marks Phase 15 as executable and says the floor
+  needs an adversarial repair pass before any same-floor claim is earned.
+- Phase 10 cell-slate loader (2026-05-17): the Phase 15 harness now accepts
+  `--cell-slate phase10-output` to read Phase 10 `envelope.csv` or
+  `cell-class-map.csv`, preserving per-cell preset, axis, light, delay, noise,
+  dropout, force limit, rail limit, disturbance magnitude, cell class, and
+  static-boundary mechanisms. It also accepts `--cell-slate phase10-default`
+  when receipts are not present locally.
+- `npm run balance:phase15:phase10-slate:smoke` is the capped loader check. It
+  read four cells from `results/balance/phase10-smoke`, ran 32 trials in 3.889 s
+  (8.23 trials/s), and passed observation parity, no-state-leak, and unknown
+  mode rejection. The loaded cells all passed Bayes-vs-naive sanity but still
+  showed negative regret versus `sundog_shadow`, so this remains an executable
+  floor scaffold rather than a promoted claim.
+- Next implementation target: run a capped loader probe on a larger, stratified
+  Phase 10 slate (diagnostic-positive, borderline, and failure-regime cells) to
+  estimate the full Phase 10-equivalent wall clock. Do not run the full
+  Phase 10-equivalent baseline inline until that rate is recorded.
+
 ### Phase 16 - Balance Data Surfaces And Claim Ratchet
 
 Goal: convert the Balance evidence into richer public surfaces so the site can

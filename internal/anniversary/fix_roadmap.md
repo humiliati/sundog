@@ -579,6 +579,12 @@ Solo pass, 2026-05-16:
 
 ### 7c. Homepage elevator pitch and hero explanation pass
 
+**2026-05-17 reality check:** this pass improved mechanics but moved the page
+in the wrong content direction. The compressed v1.2 pitch, standalone static
+hero guide, and added explanatory cards made the page more redundant and less
+serious. Treat this section as historical context only. The corrective roadmap
+is **7d. Homepage coherence rollback and evidence-first reorder** below.
+
 **Solo status:** roadmap, copy compression, stable glossary IDs, and HaloSim
 thumbnail promotion are soloable. Using third-party calibration photographs as
 public margin art requires an attribution / reuse check first.
@@ -698,6 +704,161 @@ Exit:
   a clear provenance trail.
 - The static hero has explanatory cards that say what it means optically, what
   it means physically, and why it matters for applications.
+
+### 7d. Homepage coherence rollback and evidence-first reorder
+
+**Solo status:** roadmap and first implementation passes are soloable. Rebuilding
+the original animated hero is soloable only as a visual/interaction pass if it
+can be verified locally at mobile and desktop widths. Any stronger scientific
+copy still needs the usual chat/evidence checks.
+
+Problem:
+
+The homepage is becoming additive instead of coherent. Recent passes improved
+hover definitions, image handling, and mobile spacing, but also created content
+duplication:
+
+- the v1.2 elevator pitch became a second lightweight explanation block;
+- the new "Static hero guide" repeats the theorem cards and sounds weaker than
+  both;
+- the existing Step I-Step VI theorem cards still describe the old animated
+  hero sequence, but the hero is now a static SVG snapshot;
+- the application rail appears before the load-bearing evidence graphics, so
+  product/workbench breadth arrives before the evidence spine;
+- nav links are inconsistent across pages, with Mesa promoted as a top-level
+  item while Legend and Chat are harder to reach;
+- `applications-gallery.html` has a bottom "Next Gallery Pass" block that reads
+  internal and should not be public;
+- the hero motto/tagline/value prop need a deliberate brand copy pass, not
+  incremental phrase accretion.
+
+Recovered source material:
+
+- Old elevator pitch source: `git show d529b68:index.html`, section
+  `#elevator-pitch`, `data-version="v1.1"`, headline
+  "Field-not-reward, in plain language."
+- The old body is the four-paragraph field-not-reward pitch beginning
+  "A sundog is an optical phenomenon beside the sun..." and ending
+  "the agent, robot, and game engineering that follow from that distinction are
+  different, more economical, and more traceable."
+- Hero animation history:
+  - `f11fdf0` added the animated parhelion canvas sequence.
+  - `c7e6174` replaced it with the current static atlas snapshot.
+  - `74d5333` added the separate static hero guide.
+
+Order of operations:
+
+1. **Freeze additive content work.**
+   - Do not add another homepage explainer block.
+   - Do not create more cards to solve a copy hierarchy problem.
+   - Keep the glossary/hover primitive because it is useful.
+
+2. **Reinstate the old elevator pitch body with glossary links.**
+   - Restore the v1.1 four-paragraph pitch from `d529b68`.
+   - Preserve the modern accessible glossary behavior on terms such as
+     `sundog`, `22 deg`, `circumzenithal`, `circumhorizon`, `tangent`,
+     `mesa-optimization`, `5-dimensional subspace`, and `net.7`.
+   - Keep the audit hedge from v1.1. Do not strengthen the
+     substrate-coincidence claim while restoring the older prose.
+   - Defer content rewriting until the restored version is readable and linked.
+
+3. **Remove the standalone static hero guide.**
+   - Delete or hide `.hero-phase-section`; it is currently a weaker duplicate
+     of both the pitch and theorem cards.
+   - Move any genuinely useful link targets into the existing Step I-Step VI
+     cards or the hero CTA cluster.
+
+4. **Decide hero animation vs. static hero explicitly.**
+   - Audit whether the old canvas animation can be safely restored from
+     `f11fdf0` without regressing performance or clashing with the current
+     atlas/brand direction.
+   - If restored, the Step I-Step VI cards should roll with or point to the
+     animated phases: left parhelion, right parhelion, upper tangent, lower
+     tangent, inner iris, outer halo.
+   - If the static SVG stays, rewrite Step I-Step VI so they describe the
+     current single atlas pose honestly and stop implying a live sequence.
+
+5. **Promote the existing Step I-Step VI cards to the hero explanation layer.**
+   - These cards are the right place for "what this means optically, what this
+     means physically, and what this could mean for applications."
+   - Rewrite them around the new traceability posture: apparatus first,
+     boundary-visible, theorem language held as research-program language.
+   - Each step should have one job: observed trace, geometric constraint,
+     hidden-state inference, controlled experiment, measured result, boundary.
+
+6. **Reorder homepage sections evidence-first.**
+   - Proposed order:
+     1. Hero.
+     2. Restored elevator pitch.
+     3. Step I-Step VI / theorem explanation.
+     4. Load-Bearing Evidence graphics: photometric metrics, structural-failure
+        boundary map, Mesa envelope, coarse-graining proof ladder.
+     5. Application motion rail.
+     6. Working systems / applications grid or CTA.
+   - Rationale: the page should establish claim, apparatus, and evidence before
+     it asks the reader to scan every workbench and product expression.
+
+7. **Clean public/internal boundaries.**
+   - Move the `applications-gallery.html` bottom "Next Gallery Pass" block to
+     an internal roadmap doc or remove it from the public page.
+   - Public applications copy should show current tiers and links, not the
+     maintenance checklist.
+
+8. **Normalize top navigation.**
+   - Remove `Mesa` as a persistent top-nav item unless the whole nav becomes an
+     evidence menu.
+   - Candidate public nav: `About`, `Atlas`, `Legend`, `Applications`, `Chat`,
+     `Docs`, `GitHub`.
+   - Keep mobile density in mind; if this is too wide, use `About`, `Atlas`,
+     `Applications`, `Docs`, `GitHub` in the header and surface `Legend` /
+     `Chat` in a secondary homepage evidence/inspection strip.
+   - Apply the same nav decision across `index.html`, `about.html`,
+     `applications-gallery.html`, `sundog.html`, `legend.html`, `mesa.html`,
+     `chat.html`, and `docs/index.html`.
+
+9. **Hero motto and leading statement pass.**
+   - Replace `The math draws the sky.` with `Math draws the sky.`
+   - Replace `An atlas for sundogs, calibrated against the photographs.` with
+     `Halo alignment` or a slightly more legible variant such as
+     `Halo alignment from indirect traces.`
+   - Replace the current value prop with a disciplined version of:
+     `Explore our discovery of the mathematical formula h(x) that describes
+     solar phenomena and builds robots.`
+   - Before shipping that exact line, check whether "builds robots" overclaims
+     the current evidence. Safer candidate:
+     `Explore the h(x) geometry behind solar halos, then follow the same
+     traceability pattern into robots, agents, and workbenches.`
+
+Checks:
+
+```powershell
+rg -n "Static hero guide|The hero is one scene|Next Gallery Pass|Mesa</a>" index.html applications-gallery.html about.html sundog.html legend.html mesa.html chat.html docs/index.html
+rg -n "data-version=\"v1.1\"|Field-not-reward|data-definition|glossary-link" index.html
+npm run build
+npm run chat:eval:static
+npm run chat:eval:phase3
+npm run chat:eval:phase3:adversarial
+npm run chat:eval:phase3:differential
+npm run chat:eval:phase4
+```
+
+Browser screenshots:
+
+- 390 px: hero through restored pitch.
+- 390 px: evidence graphics before rail.
+- 760 px: nav/header plus first two sections.
+- 1280 px: full top-down section order through the rail.
+- Reduced motion mode if the animated hero returns.
+
+Exit:
+
+- No standalone static hero guide remains.
+- The old elevator pitch body is restored and glossary-linked.
+- Step I-Step VI cards are the only hero explanation cards.
+- Evidence pillars with graphics appear before working applications.
+- Public application gallery no longer exposes internal maintenance notes.
+- Header nav is consistent across top-level pages.
+- Hero copy uses the new motto direction without adding an unsupported claim.
 
 ## P2 - After The First Wave
 
