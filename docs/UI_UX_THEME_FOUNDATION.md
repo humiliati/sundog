@@ -1,7 +1,7 @@
 # Sundog UI/UX Theme Foundation
 
 Date: 2026-05-07
-Status: living roadmap; refreshed 2026-05-11 after the About/nav and shared-theme passes
+Status: living roadmap; refreshed 2026-05-18 after the homepage information-architecture review
 
 ## Purpose
 
@@ -388,6 +388,88 @@ asks.
    chart is not ready, use a visibly intentional "chart pending" state with
    centered text, responsive height, and a source trail. The current placeholder
    polish is a holding state, not the finished design.
+
+   **4f - Homepage information-architecture cleanup.**
+
+   Status: proposed 2026-05-18. This pass supersedes the older assumption that
+   the index page needs both a motion rail and a full static Working Systems
+   grid. The cleaner public shape is:
+
+   ```text
+   index.html = hero, comprehension pitch, load-bearing evidence, application rail,
+   compact project map.
+
+   applications-gallery.html = full inventory of working systems, prototypes,
+   product expressions, and lower-tier application notes.
+
+   alignment.html / mesa.html / structural-failure.html / chat.html = experiment
+   and evidence pages.
+   ```
+
+   The goal is to remove reductionist duplication from `index.html`. The home
+   page should answer three questions only: what is Sundog, what currently bears
+   evidence weight, and where can I inspect the working surfaces.
+
+   **Pass 0 - inventory before moving anything.**
+
+   - Classify every `index.html` section as one of: home spine, evidence pillar,
+     experiment teaser, application preview, glossary/support, or duplicate.
+   - Record the intended destination for any removed content:
+     `applications-gallery.html`, `about.html`, `legend.html`, `h-of-x.html`,
+     `alignment.html`, or delete.
+   - Check before proceeding: no section is removed without a destination or an
+     explicit "duplicate, delete" note.
+
+   **Pass 1 - make the index contract explicit.**
+
+   - Keep the hero, the comprehension pitch, the hero-reading cards if they still
+     describe the current animated hero, Load-Bearing Evidence, the motion rail,
+     Ask Sundog only as an evidence teaser, and the compact project map.
+   - Add or adjust one sentence above the rail so readers understand the rail is
+     application preview, not the evidence ledger.
+   - Check before proceeding: a new reader can distinguish "evidence pillar" from
+     "application surface" without reading card internals.
+
+   **Pass 2 - move static application inventory out of index.**
+
+   - Remove the static `Working Systems` app-card grid from `index.html`.
+   - Confirm every removed card has a richer anchor on `applications-gallery.html`
+     with the same or stronger evidence-tier language.
+   - Add a clear rail/footer link to the full applications gallery if needed.
+   - Checks: anchor sweep for every rail `data-href`; browser smoke at desktop
+     and 390px mobile; no large empty `.app-card-img` slabs remain on the
+     homepage.
+
+   **Pass 3 - collapse support prose into owning pages.**
+
+   - Move or delete `Core Vocabulary` from the homepage. Vocabulary belongs in
+     `legend.html`, `h-of-x.html`, and `about.html`.
+   - Move or delete `Why Indirect Signals Matter` if it repeats About-page
+     positioning.
+   - Shrink `Alignment And Comparators` to a compact pointer unless it is carrying
+     data not visible on `alignment.html`.
+   - Shrink `Ongoing Research` if About or Repo Map already carries the posture.
+   - Check before proceeding: every remaining homepage section has a unique job
+     label: hero, pitch, evidence, application rail, experiment teaser, or map.
+
+   **Pass 4 - verification gate.**
+
+   - Run:
+
+     ```powershell
+     npm exec -- vite build
+     npm run postbuild
+     npm run site:routes -- --base http://127.0.0.1:<preview-port>
+     ```
+
+   - Browser-smoke `index.html`, `/applications-gallery`, `/alignment`, `/sundog`,
+     and `/h-of-x`.
+   - Visual checks: desktop, 900px tablet, and 390px mobile. Confirm no horizontal
+     overflow, no CTA overlap, no rail controls covering card text, and no section
+     that repeats the same app inventory in a different costume.
+   - Human-read check: a proofreader should be able to summarize the homepage as
+     "claim, pillars, applications" rather than "many cards saying the same
+     thing."
 
 5. Decide whether BoxForge exports live as hand-curated CSS snippets or as
    generated files from `.boxforge.json` templates.
