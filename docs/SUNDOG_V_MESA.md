@@ -627,6 +627,13 @@ single sharp cliff, recovery at `λ=0.99` (1% signature anchor), and
 bootstrap failure at `λ=1.00`. v2 is a sibling to v1, not a successor;
 the v1 22-cell classification is unchanged.
 
+v3 spec at [`mesa/PHASE7_V3_SPEC.md`](mesa/PHASE7_V3_SPEC.md) (2026-05-18).
+v3 is a Phase-4-style causal intervention battery on the six Large
+cliff-subset checkpoints, designed to close the v2 caveat by
+probe-confirming whether `λ=0.99` recovery is basin-attractor avoidance
+or co-pointing fixed-attractor collapse. v3 is read-only over existing
+checkpoints (no new training); compute envelope ~60–70 minutes total.
+
 ### Phase 8 - Writeup, Claim Ratchet, and Public Artifact
 
 Goal: turn the result into a defensible Sundog hook, update the boundary
@@ -1265,6 +1272,9 @@ coherent-signal protection inside mapped pockets: signature-pure is one
 coherent-signal class, reward-pure may be another, and mixed-signal
 controllers destabilize when the mixture creates inference noise. Full v2
 envelope (six policies including the `lambda=1.0` bootstrap-failure datapoint)
-is at [`mesa/PHASE7_V2_RESULTS.md`](mesa/PHASE7_V2_RESULTS.md).
+is at [`mesa/PHASE7_V2_RESULTS.md`](mesa/PHASE7_V2_RESULTS.md). v3 spec
+filed at [`mesa/PHASE7_V3_SPEC.md`](mesa/PHASE7_V3_SPEC.md) (2026-05-18) —
+intervention battery to disambiguate `lambda=0.99` recovery; ~60–70 min
+operator wall-clock, no new training.
 
 **Phase 8:** Not started.

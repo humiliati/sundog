@@ -190,6 +190,8 @@ extension, not a deployed-system claim.
 
 - Single seed per non-λ=0.90 cell. v3 should triangulate `λ=0.95` and
   `λ=0.97` at two additional seeds before claiming the trough.
+  (Deferred to v3.1; the v3 spec covers intervention-battery
+  disambiguation first.)
 - Path B did not exhaust the candidate ladder. `--entropy-coef 0.001`
   and `--clip-range 0.1` (candidates 3 and 4 in
   [`PHASE7_V2_PATH_B_HPARAM_SPEC.md`](PHASE7_V2_PATH_B_HPARAM_SPEC.md) §3)
@@ -197,14 +199,19 @@ extension, not a deployed-system claim.
 - v1 Phase 6 `net.7` patching has no Large-tier analog. The actor's
   final hidden layer at Large is a different size (5M params vs Medium's
   ~250k); the Phase 6 entangled-subspace finding may or may not
-  generalize.
+  generalize. (Separate Phase 6.x v3 task; not folded into the v3
+  intervention battery.)
 - Bootstrap-failure mechanism is consistent with critic-target collapse
   but not yet probe-confirmed. A canonical probe-slate run on the
   reward_phase3 chain seg3 checkpoint would resolve whether this is
   truly `undertrained` or a hidden `reward-coupled` failure mode.
+  (Covered by GG5 in [`PHASE7_V3_SPEC.md`](PHASE7_V3_SPEC.md) §5.)
 - Probe-slate and intervention-battery harnesses (v1 Phases 3 and 4) do
   not yet run on Large; v2 labels for the L-Mixed trough cells are
-  profile-based, not probe-confirmed.
+  profile-based, not probe-confirmed. **v3 spec at
+  [`PHASE7_V3_SPEC.md`](PHASE7_V3_SPEC.md) (2026-05-18) closes the
+  intervention-battery half of this edge.** Probe-slate extension to
+  Large remains a separate v3.x candidate.
 
 ## 11. Versioning
 
