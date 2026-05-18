@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog's h-of-x math page: a plain interactive first equation for recovering sun altitude from eligible parhelion offset, with evidence boundaries kept visible.">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/h-of-x">
+    <meta property="og:title" content="h-of-x Math - Sundog Research Lab">
+    <meta property="og:description" content="A plain interactive first equation for the promoted Sundog inverse: parhelion offset to hidden sun altitude, with eligibility boundaries attached.">
+    <meta property="og:url" content="https://sundog.cc/h-of-x">
+    <title>h-of-x Math - Sundog Research Lab</title>
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        main {
+            background:
+                radial-gradient(circle at 18% 8%, rgba(244, 196, 48, 0.16), transparent 28rem),
+                radial-gradient(circle at 82% 4%, rgba(103, 201, 166, 0.12), transparent 24rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 34rem, #F1F7F5 100%);
+        }
+
+        .math-hero,
+        .math-section {
+            width: min(1120px, calc(100vw - 3rem));
+            margin: 0 auto;
+        }
+
+        .math-hero {
+            padding: 6.5rem 0 2rem;
+            display: grid;
+            grid-template-columns: minmax(0, 0.98fr) minmax(18rem, 0.62fr);
+            gap: 2.5rem;
+            align-items: end;
+        }
+
+        .eyebrow {
+            color: var(--primary-mid);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            max-width: 760px;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 4.2rem;
+            line-height: 1;
+            margin-bottom: 1.1rem;
+        }
+
+        .math-lede {
+            max-width: 760px;
+            color: #40505C;
+            font-size: 1.16rem;
+            line-height: 1.78;
+        }
+
+        .math-lede a,
+        .math-card a,
+        .math-section a {
+            color: var(--primary-dark);
+            font-weight: 800;
+            text-decoration-color: rgba(215, 169, 40, 0.62);
+            text-underline-offset: 0.18em;
+        }
+
+        .math-tagbox {
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.82);
+            padding: 1.15rem;
+            box-shadow: var(--sd-shadow-soft);
+        }
+
+        .math-tagbox strong {
+            display: block;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.55rem;
+            text-transform: uppercase;
+        }
+
+        .math-tagbox p {
+            color: #40505C;
+            font-size: 0.96rem;
+            line-height: 1.66;
+        }
+
+        .math-section {
+            padding: 2.1rem 0;
+        }
+
+        .math-demo {
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(19rem, 0.74fr);
+            gap: 1.25rem;
+            align-items: stretch;
+        }
+
+        .math-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: var(--sd-shadow-soft);
+            padding: 1.25rem;
+        }
+
+        .math-card h2,
+        .math-card h3 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            line-height: 1.1;
+            margin-bottom: 0.8rem;
+            text-align: left;
+        }
+
+        .math-card h2 {
+            font-size: 2rem;
+        }
+
+        .math-card h3 {
+            font-size: 1.35rem;
+        }
+
+        .math-card p,
+        .math-card li {
+            color: #40505C;
+            font-size: 0.98rem;
+            line-height: 1.68;
+        }
+
+        .equation-stack {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .formula {
+            display: block;
+            border: 1px solid rgba(20, 43, 58, 0.12);
+            border-radius: 8px;
+            background: #fffaf0;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 1.06rem;
+            font-weight: 800;
+            padding: 0.85rem 1rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .demo-stage {
+            margin-top: 1rem;
+            border: 1px solid rgba(20, 43, 58, 0.12);
+            border-radius: 8px;
+            background:
+                radial-gradient(circle at 50% 50%, rgba(255, 236, 170, 0.5), transparent 7rem),
+                linear-gradient(180deg, #17364d 0%, #274f62 52%, #f6efe1 100%);
+            overflow: hidden;
+        }
+
+        .demo-stage svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .demo-controls {
+            display: grid;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .demo-controls label {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .demo-controls input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-gold);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .metric {
+            border: 1px solid rgba(20, 43, 58, 0.12);
+            border-radius: 8px;
+            background: #F8FBFC;
+            padding: 0.8rem;
+            min-width: 0;
+        }
+
+        .metric span {
+            display: block;
+            color: #64727b;
+            font-family: var(--sd-font-data);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+        }
+
+        .metric strong {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 1rem;
+            overflow-wrap: anywhere;
+        }
+
+        .eligibility-list {
+            display: grid;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .eligibility-item {
+            border-left: 3px solid var(--accent-gold);
+            background: rgba(244, 196, 48, 0.1);
+            padding: 0.85rem 0.95rem;
+        }
+
+        .eligibility-item[data-state="no"] {
+            border-left-color: #b04535;
+            background: rgba(176, 69, 53, 0.08);
+        }
+
+        .eligibility-item strong {
+            display: block;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            letter-spacing: 0.07em;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+        }
+
+        .plot-shell {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .curve-card {
+            border: 1px solid rgba(20, 43, 58, 0.12);
+            border-radius: 8px;
+            background: #0b1720;
+            color: var(--text-light);
+            padding: 0.8rem;
+        }
+
+        .curve-card svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .evidence-title {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 2.25rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .evidence-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.1rem;
+        }
+
+        .evidence-card .stamp {
+            display: inline-flex;
+            margin-bottom: 0.75rem;
+            border: 1px solid currentColor;
+            border-radius: 999px;
+            color: var(--primary-mid);
+            font-family: var(--sd-font-data);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            padding: 0.28rem 0.52rem;
+            text-transform: uppercase;
+        }
+
+        .evidence-card h3 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.2rem;
+            line-height: 1.18;
+            margin-bottom: 0.55rem;
+        }
+
+        .evidence-card p {
+            color: #40505C;
+            font-size: 0.95rem;
+            line-height: 1.62;
+        }
+
+        .route-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .route-strip a {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.82rem;
+            font-weight: 800;
+            padding: 0.58rem 0.8rem;
+            text-decoration: none;
+        }
+
+        .route-strip a:hover,
+        .route-strip a:focus-visible {
+            border-color: var(--accent-gold);
+            outline: none;
+            text-decoration: underline;
+        }
+
+        .fine-print {
+            border-top: 1px solid var(--line);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            color: #64727b;
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 900px) {
+            .math-hero,
+            .math-demo,
+            .evidence-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .math-hero,
+            .math-section {
+                width: min(100% - 2rem, 1120px);
+            }
+
+            .math-hero {
+                padding-top: 5.5rem;
+            }
+
+            h1 {
+                font-size: 2.35rem;
+            }
+
+            .math-lede {
+                font-size: 1.02rem;
+            }
+
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .formula {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="math-hero" aria-labelledby="math-title">
+            <div>
+                <p class="eyebrow">Math &middot; h-of-x</p>
+                <h1 id="math-title">The first equation.</h1>
+                <p class="math-lede">
+                    Sundog's public math starts with a narrow inverse: if an eligible photo gives the <a class="glossary-link" href="/legend#phenomenon-22-degree-halo" data-definition="The common halo ring used as the scale ruler for this inverse." aria-label="22 degree halo: the scale ruler for this inverse">22&deg; halo</a> as a scale ruler and both <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="The bright flanking spots beside the sun, also called sundogs. Their offset is the promoted inverse handle." aria-label="parhelia: bright flanking spots used as the promoted inverse handle">parhelia</a> are visible, the side-glint offset recovers hidden sun altitude. This page keeps the handle, the measurement, and the failure boundary in the same room.
+                </p>
+            </div>
+            <aside class="math-tagbox" aria-label="Current scope">
+                <strong>Plain claim</strong>
+                <p>
+                    h-of-x is a public tag for the first equation, not a claim that every halo route is solved. The equation is useful exactly where its anchors are eligible.
+                </p>
+            </aside>
+        </section>
+
+        <section class="math-section" id="demo" aria-labelledby="demo-title">
+            <div class="math-demo">
+                <article class="math-card" aria-label="Interactive h-of-x demo">
+                    <p class="eyebrow">Interactive handle</p>
+                    <h2 id="demo-title">Move the hidden altitude.</h2>
+                    <p>
+                        The sun altitude is hidden in the photograph. What moves in the image is the parhelion offset, measured in units of the 22&deg; halo radius.
+                    </p>
+
+                    <div class="demo-stage">
+                        <svg id="hofx-sky" viewBox="0 0 640 360" role="img" aria-label="Interactive schematic showing the 22 degree halo, the sun, and parhelion offset">
+                            <defs>
+                                <radialGradient id="hofx-sun" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#fffbe8"/>
+                                    <stop offset="42%" stop-color="#ffd06b"/>
+                                    <stop offset="100%" stop-color="#ff9a54" stop-opacity="0"/>
+                                </radialGradient>
+                                <radialGradient id="hofx-dog" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#fffbe8"/>
+                                    <stop offset="52%" stop-color="#ffd06b"/>
+                                    <stop offset="100%" stop-color="#f06a54" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+                            <line x1="60" y1="180" x2="580" y2="180" stroke="rgba(255,255,255,0.28)" stroke-width="1" stroke-dasharray="4 6"/>
+                            <circle cx="320" cy="180" r="86" fill="none" stroke="rgba(255,236,170,0.68)" stroke-width="2.2"/>
+                            <circle cx="320" cy="180" r="18" fill="url(#hofx-sun)"/>
+                            <line id="hofx-offset-line" x1="320" y1="214" x2="406" y2="214" stroke="#ffd06b" stroke-width="2.2" stroke-linecap="round"/>
+                            <line x1="320" y1="206" x2="320" y2="222" stroke="#ffd06b" stroke-width="1.5"/>
+                            <line id="hofx-offset-cap" x1="406" y1="206" x2="406" y2="222" stroke="#ffd06b" stroke-width="1.5"/>
+                            <text id="hofx-offset-label" x="363" y="240" fill="#fff3bd" font-size="13" text-anchor="middle">x = 1.00 R22</text>
+                            <g id="hofx-left-dog">
+                                <line x1="234" y1="180" x2="190" y2="180" stroke="#ff8f5f" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                                <ellipse cx="234" cy="180" rx="22" ry="13" fill="url(#hofx-dog)"/>
+                            </g>
+                            <g id="hofx-right-dog">
+                                <line x1="406" y1="180" x2="450" y2="180" stroke="#ff8f5f" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                                <ellipse cx="406" cy="180" rx="22" ry="13" fill="url(#hofx-dog)"/>
+                            </g>
+                            <text x="320" y="318" fill="rgba(255,255,255,0.78)" font-size="12" text-anchor="middle">22&deg; halo is the ruler; parhelion offset is the handle.</text>
+                        </svg>
+                    </div>
+
+                    <div class="demo-controls">
+                        <label for="altitude-slider">
+                            <span>Sun altitude h</span>
+                            <span id="altitude-readout">25.0&deg;</span>
+                        </label>
+                        <input id="altitude-slider" type="range" min="0" max="60" step="0.5" value="25" aria-describedby="altitude-help">
+                        <p id="altitude-help" class="fine-print">
+                            The slider moves the hidden altitude. The sketch updates the measurement you would see in the photograph.
+                        </p>
+                    </div>
+
+                    <div class="metric-grid" aria-live="polite">
+                        <div class="metric">
+                            <span>normalized offset</span>
+                            <strong id="x-readout">x = 1.103</strong>
+                        </div>
+                        <div class="metric">
+                            <span>pixel example</span>
+                            <strong id="pixel-readout">132.4 px</strong>
+                        </div>
+                        <div class="metric">
+                            <span>recovered h(x)</span>
+                            <strong id="recovered-readout">25.0&deg;</strong>
+                        </div>
+                    </div>
+                </article>
+
+                <aside class="math-card" id="equation" aria-labelledby="equation-title">
+                    <p class="eyebrow">First equation</p>
+                    <h2 id="equation-title">Offset to altitude.</h2>
+                    <p>
+                        On the eligible parhelion route, the photograph gives a measured offset. Divide that offset by the 22&deg; halo radius, then invert.
+                    </p>
+                    <div class="equation-stack">
+                        <code class="formula">offset = R<sub>22</sub> / cos(h)</code>
+                        <code class="formula">x = offset / R<sub>22</sub></code>
+                        <code class="formula">h(x) = arccos(1 / x)</code>
+                    </div>
+                    <p>
+                        The small miracle is not that the equation is ornate. It is that a visible displacement can carry a hidden angle when the geometry is anchored.
+                    </p>
+                    <div class="plot-shell">
+                        <div class="curve-card" aria-label="Curve of normalized offset x as altitude rises">
+                            <svg id="hofx-curve" viewBox="0 0 360 190" role="img" aria-label="Curve showing normalized offset x increasing with sun altitude">
+                                <line x1="38" y1="150" x2="330" y2="150" stroke="rgba(255,255,255,0.38)" stroke-width="1"/>
+                                <line x1="38" y1="24" x2="38" y2="150" stroke="rgba(255,255,255,0.38)" stroke-width="1"/>
+                                <path id="hofx-curve-path" d="" fill="none" stroke="#67c9a6" stroke-width="3" stroke-linecap="round"/>
+                                <circle id="hofx-curve-dot" cx="160" cy="118" r="5" fill="#ffd06b"/>
+                                <text x="38" y="171" fill="rgba(255,255,255,0.72)" font-size="11" text-anchor="middle">0&deg;</text>
+                                <text x="330" y="171" fill="rgba(255,255,255,0.72)" font-size="11" text-anchor="middle">60&deg;</text>
+                                <text x="16" y="153" fill="rgba(255,255,255,0.72)" font-size="11" text-anchor="middle">1x</text>
+                                <text x="16" y="31" fill="rgba(255,255,255,0.72)" font-size="11" text-anchor="middle">2x</text>
+                                <text x="184" y="18" fill="rgba(255,255,255,0.78)" font-size="12" text-anchor="middle">parhelion offset grows as altitude rises</text>
+                            </svg>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="math-section" id="eligibility" aria-labelledby="eligibility-title">
+            <div class="math-demo">
+                <article class="math-card">
+                    <p class="eyebrow">Eligibility</p>
+                    <h2 id="eligibility-title">The boundary is part of the math.</h2>
+                    <p>
+                        h-of-x is valuable because it says where it can be used. Without that gate, a pretty inverse becomes a storytelling machine.
+                    </p>
+                    <div class="eligibility-list">
+                        <div class="eligibility-item">
+                            <strong>Allowed</strong>
+                            <p>Bilateral parhelia, independent 22&deg; halo anchor, and a photo route that does not infer the ruler from the answer.</p>
+                        </div>
+                        <div class="eligibility-item" data-state="no">
+                            <strong>Not enough</strong>
+                            <p>One flanking spot, a named arc with no calibrated route, or a rendered layer that only supplies vocabulary.</p>
+                        </div>
+                        <div class="eligibility-item" data-state="no">
+                            <strong>Structural stop</strong>
+                            <p>CZA cutoff near 32.2&deg;, tangent-family merge near 29&deg;, and coverage-gated supralateral or tangent routes stay outside this handle unless their own receipts promote them.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <aside class="math-card">
+                    <p class="eyebrow">Translation</p>
+                    <h2>What the equation means.</h2>
+                    <p>
+                        For a general reader, the math is not the typography. It is the measurement discipline:
+                    </p>
+                    <ul class="eligibility-list">
+                        <li>find a hidden state,</li>
+                        <li>identify a visible trace that must move with it,</li>
+                        <li>write the inverse before touching the result,</li>
+                        <li>measure where the inverse breaks.</li>
+                    </ul>
+                    <p class="fine-print">
+                        That same discipline is why the site distinguishes the <a href="/sundog">visual atlas</a>, the <a href="/legend">vocabulary legend</a>, the <a href="/structural-failure">structural failure map</a>, and the <a href="/alignment">alignment comparator page</a>.
+                    </p>
+                </aside>
+            </div>
+        </section>
+
+        <section class="math-section" id="evidence" aria-labelledby="evidence-title">
+            <p class="eyebrow">Current readout</p>
+            <h2 id="evidence-title" class="evidence-title">How h-of-x sits inside the larger apparatus.</h2>
+            <div class="evidence-grid">
+                <article class="evidence-card">
+                    <span class="stamp">Geometry</span>
+                    <h3>Promoted handle</h3>
+                    <p>The parhelion-offset inverse is the current image-recoverable handle. The seven-photo calibration pass keeps it narrow and inspectable.</p>
+                </article>
+                <article class="evidence-card">
+                    <span class="stamp">Falsifier</span>
+                    <h3>Failure first</h3>
+                    <p>The structural boundary map asks whether traceable systems fail where the closed-form inverse loses identifiability.</p>
+                </article>
+                <article class="evidence-card">
+                    <span class="stamp">Alignment</span>
+                    <h3>One surface, not the whole field</h3>
+                    <p>Bayes, mesa, mirror alignment, and game workbenches test the same posture under other substrates; they do not enlarge this optical claim by rhetoric.</p>
+                </article>
+            </div>
+            <div class="route-strip" aria-label="Inspection routes">
+                <a href="/sundog#why-22">Open atlas math</a>
+                <a href="/legend#phenomenon-parhelion">Define parhelion</a>
+                <a href="/structural-failure">Open boundary map</a>
+                <a href="/alignment">Open alignment primer</a>
+                <a href="docs/SUNDOG_V_GEOMETRY.md">Read geometry roadmap</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Sundog - <a href="/">Home</a> | <a href="/sundog">Atlas</a> | <a href="/alignment">Align</a> | <a href="/repo-map">Repo map</a></p>
+    </footer>
+
+    <script>
+        (() => {
+            const slider = document.getElementById("altitude-slider");
+            const altitudeReadout = document.getElementById("altitude-readout");
+            const xReadout = document.getElementById("x-readout");
+            const pixelReadout = document.getElementById("pixel-readout");
+            const recoveredReadout = document.getElementById("recovered-readout");
+            const leftDog = document.getElementById("hofx-left-dog");
+            const rightDog = document.getElementById("hofx-right-dog");
+            const offsetLine = document.getElementById("hofx-offset-line");
+            const offsetCap = document.getElementById("hofx-offset-cap");
+            const offsetLabel = document.getElementById("hofx-offset-label");
+            const curvePath = document.getElementById("hofx-curve-path");
+            const curveDot = document.getElementById("hofx-curve-dot");
+
+            const centerX = 320;
+            const r22Svg = 86;
+            const r22Pixels = 120;
+            const deg = Math.PI / 180;
+
+            function curvePoint(altitude) {
+                const x = 1 / Math.cos(altitude * deg);
+                const plotX = 38 + (altitude / 60) * 292;
+                const plotY = 150 - ((x - 1) / 1) * 126;
+                return [plotX, plotY];
+            }
+
+            const points = [];
+            for (let h = 0; h <= 60; h += 1) {
+                const [px, py] = curvePoint(h);
+                points.push(`${h === 0 ? "M" : "L"} ${px.toFixed(2)} ${py.toFixed(2)}`);
+            }
+            curvePath.setAttribute("d", points.join(" "));
+
+            function update() {
+                const h = Number(slider.value);
+                const x = 1 / Math.cos(h * deg);
+                const offset = r22Svg * x;
+                const rightX = centerX + offset;
+                const leftX = centerX - offset;
+                const pixelOffset = r22Pixels * x;
+                const recovered = Math.acos(1 / x) / deg;
+
+                altitudeReadout.textContent = `${h.toFixed(1)}\u00B0`;
+                xReadout.textContent = `x = ${x.toFixed(3)}`;
+                pixelReadout.textContent = `${pixelOffset.toFixed(1)} px`;
+                recoveredReadout.textContent = `${recovered.toFixed(1)}\u00B0`;
+
+                leftDog.setAttribute("transform", `translate(${(leftX - 234).toFixed(2)} 0)`);
+                rightDog.setAttribute("transform", `translate(${(rightX - 406).toFixed(2)} 0)`);
+                offsetLine.setAttribute("x2", rightX.toFixed(2));
+                offsetCap.setAttribute("x1", rightX.toFixed(2));
+                offsetCap.setAttribute("x2", rightX.toFixed(2));
+                offsetLabel.setAttribute("x", ((centerX + rightX) / 2).toFixed(2));
+                offsetLabel.textContent = `x = ${x.toFixed(2)} R22`;
+
+                const [dotX, dotY] = curvePoint(h);
+                curveDot.setAttribute("cx", dotX.toFixed(2));
+                curveDot.setAttribute("cy", dotY.toFixed(2));
+            }
+
+            slider.addEventListener("input", update);
+            update();
+        })();
+    </script>
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>

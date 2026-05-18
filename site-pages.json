@@ -33,6 +33,11 @@
       "publicLaunchIntent": "Public Ask Sundog claim-boundary experiment page."
     },
     {
+      "entry": "h-of-x.html",
+      "kind": "math",
+      "publicLaunchIntent": "Public h-of-x math workbench: plain first-equation demo for the promoted parhelion-offset inverse and its eligibility boundary."
+    },
+    {
       "entry": "legend.html",
       "kind": "reference",
       "publicLaunchIntent": "Public vocabulary legend/reference page for halo terms and site terms; distinct from the visual Halo Atlas."
