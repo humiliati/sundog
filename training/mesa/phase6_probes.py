@@ -683,6 +683,7 @@ def run_patched_rollout(
     info = made["info"]
     terminal_position = np.asarray(info["position"], dtype=np.float32)
     terminal_outcome = "not_done"
+    terminal_alignment = float("nan")  # PHASE6B_SPEC v1.1 §5: captured on done.
     captures: list[np.ndarray] = []
     step_index = 0
 
@@ -710,6 +711,12 @@ def run_patched_rollout(
             step_index += 1
             if response["done"]:
                 terminal_outcome = str(info.get("terminal_outcome") or "done")
+                # PHASE6B_SPEC v1.1 §5: bridge exposes metrics.terminalAlignment
+                # in info on done=true (see scripts/mesa-env-bridge.mjs asInfo()).
+                metrics = info.get("metrics") or {}
+                ta = metrics.get("terminalAlignment")
+                if ta is not None:
+                    terminal_alignment = float(ta)
                 break
     finally:
         handle.remove()
@@ -720,6 +727,7 @@ def run_patched_rollout(
         terminal_outcome=terminal_outcome,
         steps=step_index,
         activations=captures,
+        terminal_alignment=terminal_alignment,
     )
 
 
@@ -848,6 +856,22 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
                         patched_collapsed_to_protected.old_basin_pref,
                         direction="collapsed_to_protected",
                     )
+                    # PHASE6B_SPEC v1.1 §6: parallel alignment-normalized metric.
+                    # safe_patch_success is metric-agnostic; same formula, different
+                    # reference values. NaN-propagates if any rollout truncated
+                    # without `done` (terminal_alignment unset).
+                    success_pc_align = safe_patch_success(
+                        clean_protected.terminal_alignment,
+                        clean_collapsed.terminal_alignment,
+                        patched_protected_to_collapsed.terminal_alignment,
+                        direction="protected_to_collapsed",
+                    )
+                    success_cp_align = safe_patch_success(
+                        clean_protected.terminal_alignment,
+                        clean_collapsed.terminal_alignment,
+                        patched_collapsed_to_protected.terminal_alignment,
+                        direction="collapsed_to_protected",
+                    )
                     rows.append(
                         {
                             "condition": condition,
@@ -860,6 +884,14 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
                             "patch_success_protected_to_collapsed": success_pc,
                             "patch_success_collapsed_to_protected": success_cp,
                             "baseline_gap_collapsed_minus_protected": clean_collapsed.old_basin_pref - clean_protected.old_basin_pref,
+                            # PHASE6B_SPEC v1.1 §5: alignment-based parallel metric.
+                            "protected_terminal_alignment": clean_protected.terminal_alignment,
+                            "collapsed_terminal_alignment": clean_collapsed.terminal_alignment,
+                            "patched_protected_to_collapsed_terminal_alignment": patched_protected_to_collapsed.terminal_alignment,
+                            "patched_collapsed_to_protected_terminal_alignment": patched_collapsed_to_protected.terminal_alignment,
+                            "patch_success_align_protected_to_collapsed": success_pc_align,
+                            "patch_success_align_collapsed_to_protected": success_cp_align,
+                            "baseline_gap_align_protected_minus_collapsed": clean_protected.terminal_alignment - clean_collapsed.terminal_alignment,
                             "protected_outcome": clean_protected.terminal_outcome,
                             "collapsed_outcome": clean_collapsed.terminal_outcome,
                             "patched_protected_to_collapsed_outcome": patched_protected_to_collapsed.terminal_outcome,
@@ -882,6 +914,14 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
             patched_cp_values = [float(row["patched_collapsed_to_protected_old_basin_pref"]) for row in condition_rows]
             success_pc_values = [float(row["patch_success_protected_to_collapsed"]) for row in condition_rows]
             success_cp_values = [float(row["patch_success_collapsed_to_protected"]) for row in condition_rows]
+            # PHASE6B_SPEC v1.1 §6: alignment-normalized parallel metric.
+            protected_align_values = [float(row["protected_terminal_alignment"]) for row in condition_rows]
+            collapsed_align_values = [float(row["collapsed_terminal_alignment"]) for row in condition_rows]
+            patched_pc_align_values = [float(row["patched_protected_to_collapsed_terminal_alignment"]) for row in condition_rows]
+            patched_cp_align_values = [float(row["patched_collapsed_to_protected_terminal_alignment"]) for row in condition_rows]
+            success_pc_align_values = [float(row["patch_success_align_protected_to_collapsed"]) for row in condition_rows]
+            success_cp_align_values = [float(row["patch_success_align_collapsed_to_protected"]) for row in condition_rows]
+            align_gap_values = [float(row["baseline_gap_align_protected_minus_collapsed"]) for row in condition_rows]
             aggregate_rows.append(
                 {
                     "condition": condition,
@@ -899,6 +939,21 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
                     "mean_protected_old_basin_pref": mean_finite(protected_values),
                     "mean_collapsed_old_basin_pref": mean_finite(collapsed_values),
                     "mean_patched_old_basin_pref": mean_finite(patched_pc_values),
+                    # PHASE6B_SPEC v1.1 §6: alignment-normalized columns. The
+                    # canonical v1.1 reading lives here; basin-pref columns
+                    # above are retained for transparency only.
+                    "mean_patch_success_align": mean_finite(success_pc_align_values),
+                    "median_patch_success_align": median_finite(success_pc_align_values),
+                    "patch_success_align_ratio_of_means": ratio_of_means(
+                        protected_align_values,
+                        collapsed_align_values,
+                        patched_pc_align_values,
+                        direction="protected_to_collapsed",
+                    ),
+                    "mean_baseline_gap_align": mean_finite(align_gap_values),
+                    "mean_protected_alignment": mean_finite(protected_align_values),
+                    "mean_collapsed_alignment": mean_finite(collapsed_align_values),
+                    "mean_patched_alignment": mean_finite(patched_pc_align_values),
                     "n": len(condition_rows),
                 }
             )
@@ -919,6 +974,18 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
                     "mean_protected_old_basin_pref": mean_finite(protected_values),
                     "mean_collapsed_old_basin_pref": mean_finite(collapsed_values),
                     "mean_patched_old_basin_pref": mean_finite(patched_cp_values),
+                    "mean_patch_success_align": mean_finite(success_cp_align_values),
+                    "median_patch_success_align": median_finite(success_cp_align_values),
+                    "patch_success_align_ratio_of_means": ratio_of_means(
+                        protected_align_values,
+                        collapsed_align_values,
+                        patched_cp_align_values,
+                        direction="collapsed_to_protected",
+                    ),
+                    "mean_baseline_gap_align": mean_finite(align_gap_values),
+                    "mean_protected_alignment": mean_finite(protected_align_values),
+                    "mean_collapsed_alignment": mean_finite(collapsed_align_values),
+                    "mean_patched_alignment": mean_finite(patched_cp_align_values),
                     "n": len(condition_rows),
                 }
             )
@@ -951,12 +1018,17 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
 
     print(f"phase6 axis-b smoke: wrote {trial_path.relative_to(REPO_ROOT)}", flush=True)
     for row in aggregate_rows:
+        # PHASE6B_SPEC v1.1: print both the v1 basin-pref metric (legacy
+        # column, not used for v1.1 verdicts) and the canonical v1.1
+        # alignment-normalized metric.
+        layer_label = row.get("layer", "")
         print(
-            f"  {row['condition']} {row['direction']}: "
-            f"patch_success_mean={row['mean_patch_success']:.3f} "
-            f"median={row['median_patch_success']:.3f} "
-            f"ratio_of_means={row['patch_success_ratio_of_means']:.3f} "
-            f"baseline_gap={row['mean_baseline_gap']:.3f}",
+            f"  {layer_label} {row['condition']} {row['direction']}: "
+            f"ps_align_mean={row['mean_patch_success_align']:.3f} "
+            f"median={row['median_patch_success_align']:.3f} "
+            f"ratio_of_means={row['patch_success_align_ratio_of_means']:.3f} "
+            f"align_gap={row['mean_baseline_gap_align']:.3f}"
+            f"   [v1: ps={row['mean_patch_success']:.3f} bp_gap={row['mean_baseline_gap']:.3f}]",
             flush=True,
         )
 
