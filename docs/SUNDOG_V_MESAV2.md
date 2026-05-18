@@ -141,7 +141,7 @@ MESAv2 Spine — Status Roll-Up.
 | --- | --- | --- | --- |
 | 0.5 — Traceability Claim Boundary | ✅ complete (2026-05-13) | 2026-05-13 | 4-row layer taxonomy; mirrored to `docs/presentation/claims-and-scope.md` |
 | 0.6 — Bayes-Net / NN / Sundog Comparison | ✅ complete (2026-05-13, stamped 2026-05-18) | 2026-05-18 | Comparison table in-doc; exit-criterion self-check landed |
-| 1' — Reference Signature Path Audit | 📝 spec filed (2026-05-18); implementation queued | 2026-05-18 | Spec at [`mesa/PHASE1_PRIME_SPEC.md`](mesa/PHASE1_PRIME_SPEC.md); 4 leakage tests pre-registered; 3 outcome branches; manifest + audit + result note unbuilt |
+| 1' — Reference Signature Path Audit | ✅ complete — GREEN (2026-05-18) | 2026-05-18 | All 4 LTs pass; clean-traceability branch routed to Phase 8'. Spec [`mesa/PHASE1_PRIME_SPEC.md`](mesa/PHASE1_PRIME_SPEC.md) v1.2; result note [`mesa/V2_SIGNATURE_PATH_AUDIT.md`](mesa/V2_SIGNATURE_PATH_AUDIT.md); v1 PHASE1_HC_BASELINE unamended |
 | 6.5 — Formal Separability Counterexample Pass | ⏳ not started | 2026-05-13 | ~1–2 weeks Small-tier; sequenced after 1'; reserves `sensor-hacked` / `geometry-hacked` labels |
 | 7' — Envelope Cell Relabeling | ✅ complete + 2× extended | 2026-05-18 | v1 retrofit 2026-05-13; **v2 envelope extension (Phase 7 v2)** and **v3 vocabulary extension (Phase 7 v3, new labels `field-coupled, under-budget` and `bootstrap-collapse`)** both 2026-05-18 |
 | 8' — Traceability Claim Ratchet | ⏳ not started | 2026-05-13 | Post-v2 writeup; depends on 0.5/0.6/1'/6.5/7' |
@@ -269,24 +269,22 @@ of agent performance. Any unexpected coupling found by the audit is
 filed as a v2 finding and routed back to v1's PHASE1_HC_BASELINE before
 the audit is declared green.
 
-**Status:** **spec filed (2026-05-18), amended to v1.1 (2026-05-18)**
-at [`mesa/PHASE1_PRIME_SPEC.md`](mesa/PHASE1_PRIME_SPEC.md). Four
-pre-registered leakage tests (LT1–LT4) with pass/fail verdicts,
-manifest schema with `leakage_audit_verdict` per-test field, three
-pre-registered outcomes (clean / partial-collapse / leakage-found)
-that route Phase 8' between its three drafted claim-language
-branches. Compute envelope: ~1–2 days, mechanical, no env runs.
-**v1.1 amendment (2026-05-18)** reconciled the four tests against
-the reference implementation's intentional benign coupling:
-goal-centered env design has `S(x)` peak at `this.xGoal` and reward
-as distance-to-`this.xGoal`, so the geometry baseline is a
-*documented* shared field, not leakage. LT1 scoped to non-privileged
-tiers; LT2 allowlist extended with `this.xGoal`; LT3 extended to
-check the labeled-signature reward channel doesn't feed back into
-observation; LT4 rewritten with an explicit pre-registered effect
-table that encodes the geometry-affects-both case as expected;
-§6 manifest dependency corrected. Manifest emitter, audit script,
-and result note are all unbuilt; spec ratification is the v1 gate.
+**Status:** **complete — GREEN verdict (2026-05-18).** Spec at
+[`mesa/PHASE1_PRIME_SPEC.md`](mesa/PHASE1_PRIME_SPEC.md) (v1.2,
+field-level LT2 allowlist); result note at
+[`mesa/V2_SIGNATURE_PATH_AUDIT.md`](mesa/V2_SIGNATURE_PATH_AUDIT.md).
+All four leakage tests pass on the reference source tree at git_sha
+`6e5533080904f719915b646193f2af7fcd3d27fc`. **Overall: GREEN →
+clean-traceability branch routed to Phase 8'.** v1
+PHASE1_HC_BASELINE.md is **unamended** — no leakage findings; no
+coupling-caveat amendment required. Manifest emitter shipped in
+`scripts/mesa-harness.mjs`; audit script at
+`scripts/mesa-signature-provenance-audit.mjs` v1.0; audit-report
+artifacts at `results/mesa/phase1-prime/audit/`. Two retrofit v2
+manifests synthesized for the existing v1 envelope's Phase 1 +
+Phase 2 run directories. Audit-script tuning (transitive method
+expansion, exact-path matching) was implementation-side; no spec
+amendment required.
 
 ### Phase 6.5 — Formal Separability Counterexample Pass (net-new)
 

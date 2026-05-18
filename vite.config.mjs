@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { basename, extname, resolve } from "node:path";
 import { defineConfig } from "vite";
 
@@ -49,7 +49,44 @@ const htmlEntries = Object.fromEntries(
   manifestEntries.map((page) => [basename(page.entry, ".html"), resolve(root, page.entry)]),
 );
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function bayesVerdictFallbackPlugin() {
+  const dataPath = resolve(root, "public/data/bayes-comparison.json");
+  const keys = ["sundogReadout", "comparatorState", "safeInterpretation"];
+
+  return {
+    name: "sundog-bayes-verdict-fallback",
+    transformIndexHtml(html, context) {
+      if (!context.filename.endsWith("alignment.html") || !existsSync(dataPath)) {
+        return html;
+      }
+
+      const data = JSON.parse(readFileSync(dataPath, "utf8"));
+      const verdict = data.verdict ?? {};
+      return keys.reduce((updatedHtml, key) => {
+        if (typeof verdict[key] !== "string") return updatedHtml;
+        const pattern = new RegExp(
+          `(<td\\b(?=[^>]*\\bdata-bayes-verdict="${escapeRegExp(key)}")[^>]*>)[\\s\\S]*?(<\\/td>)`,
+        );
+        return updatedHtml.replace(pattern, `$1${escapeHtml(verdict[key])}$2`);
+      }, html);
+    },
+  };
+}
+
 export default defineConfig({
+  plugins: [bayesVerdictFallbackPlugin()],
   build: {
     rollupOptions: {
       input: htmlEntries,
