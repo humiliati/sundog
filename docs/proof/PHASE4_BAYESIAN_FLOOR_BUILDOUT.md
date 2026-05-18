@@ -594,11 +594,31 @@ node scripts/threebody-phase4-bayes-floor.mjs `
   --shape-fraction 0.5 --signature-advantage-dt-multiplier 1
 ```
 
-Then regret-reduce this against the satisfiability-probe signature rows (same
-cell-seed slate) and read `phase4-regret-summary.csv`. If wall-clock is
-infeasible the operator may reduce `--particle-count` first (least-sensitive to
-the accessibility verdict) and record the measured rate; do **not** reduce the
-horizon (it is the binding constraint).
+Seed-matched regret anchor (added before the IAD run): the regret reducer now
+code-enforces the already pre-registered "same cell-seed slate" requirement
+above, following the Phase 6 precedent of making the apparatus evidence an
+integrity condition rather than relying on manual `joinedRowCount` inspection.
+This is opt-in for the IAD reduce step only; the floor command above and the
+decision branches below are unchanged. The reducer self-test includes a
+negative missing-seed slate that fails loudly and writes no artifacts. The
+committed `_bf4b-satisfiability` receipt contains `forward_oracle_strict` and
+`track_sensor_accel_guarded`; the anchor pins `track_sensor_accel_guarded` as
+the signature-controller lane for regret comparison, with the oracle retained
+as a yardstick.
+
+```powershell
+$sig = "results\proof\phase4\_bf4b-satisfiability"
+node scripts/threebody-phase4-regret.mjs `
+  --bayes-in $diag `
+  --signature-in $sig `
+  --anchor-slate $sig `
+  --signature-mode track_sensor_accel_guarded
+```
+
+Read `phase4-regret-summary.csv` after the anchored reducer passes. If
+wall-clock is infeasible the operator may reduce `--particle-count` first
+(least-sensitive to the accessibility verdict) and record the measured rate; do
+**not** reduce the horizon (it is the binding constraint).
 
 Pre-registered decision (uses the gate's regret readout + CI):
 
