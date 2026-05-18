@@ -1501,6 +1501,99 @@ single-class; the phase closes as a negative.
 Exit criterion: the comparison can be summarized as an operating envelope with
 failure classes, not as a winner-take-all benchmark.
 
+### Phase 5b - Mismatch-Severity Sweep
+
+Goal: map the axis Phase 5 deliberately traded away: adaptive-mixture
+misspecification severity. Phase 5b is descriptive, not a new Hybrid gate.
+Hybrid remains reported-only.
+
+Frozen severity axis, implemented by filtering the Phase 3 adaptive model
+family list and re-normalizing the remaining models to a uniform prior:
+
+- `s0`: full Phase 3 mixture (`clean`, `decoy`, `alias`, `symmetric`) -
+  equivalent to Phase 5 `bayes_adaptive`.
+- `s1`: remove `decoy`.
+- `s2`: remove `decoy`, `alias`.
+- `s3`: `clean` only - behaviorally equivalent to `bayes_misspecified`.
+
+The severity filter is applied in `createAdaptiveState` /
+`adaptiveModelsForScenarios`, so it affects `bayes_adaptive` and the
+adaptive-posterior Hybrid lanes. `oracle`, `random`, `hc_sundog`,
+`sundog_memory`, and `bayes_misspecified` are severity-invariant.
+
+Frozen grid: severity `{s0, s1, s2, s3}` x decoy-strength `{0.82, 0.98}`,
+budget fixed at `40` = eight swept cells. Modes are unchanged from Phase 5:
+`oracle`, `bayes_misspecified`, `bayes_adaptive`, `hc_sundog`,
+`sundog_memory`, `hybrid`, `hybrid_posterior_decoy_disambig`, `random`.
+
+Classifier and status are identical to Phase 5: dominance margin
+`phase2SeparationMargin = 0.10`, Hybrid reported-only with no gate arm,
+`envelope_mapped` / `envelope_incomplete`, non-fatal `pass: true`.
+
+Seed-matched anchor: `(s0, decoy-strength=0.82, max-turns=40)` must reproduce
+the Phase 5 lock `decoy_strength_0p82_turns_40` cell exactly against
+`results/bayes/phase5-envelope-lock/trials.jsonl` using
+`referenceBasis = seed_matched_trials_jsonl`. The anchor cell is in the smoke
+grid.
+
+Secondary consistency check, reported not gated: at `s3`, `bayes_adaptive`
+should match `bayes_misspecified` as a single clean-model mixture. The runner
+records the residual score and success deltas as `s3AdaptiveMinusMisspecified`
+columns.
+
+Commands:
+
+```powershell
+npm run bayes:phase5b:smoke
+npm run bayes:phase5b
+```
+
+Output directories:
+
+- Smoke: `results/bayes/phase5b-mismatch-severity-smoke/`
+- Lock: `results/bayes/phase5b-mismatch-severity-lock/`
+
+Frozen filenames under each output directory remain the Phase 5 envelope set:
+`manifest.json`, `trial-outcomes.csv`, `envelope-map.csv`,
+`aggregate-envelope.csv`, `best-by-cell.csv`, `cell-class-map.csv`,
+`cell-delta-map.csv`, and `candidate-envelope.csv`.
+
+Smoke receipt, 2026-05-18:
+
+```text
+npm run bayes:phase5b:smoke
+Bayes phase5b-mismatch-severity-smoke: 128 trials in 28.561s (4.48 trials/s)
+Audits: pass
+Exit gate: envelope_mapped (2/2 cells classified)
+Wrote results\bayes\phase5b-mismatch-severity-smoke
+```
+
+Anchor receipt: `selfConsistencyAnchor.status = reproduced_phase5_lock_cell`,
+`referenceBasis = seed_matched_trials_jsonl`, with eight seed-matched reference
+trials from the Phase 5 lock. All shared lanes (`oracle`,
+`bayes_misspecified`, `bayes_adaptive`, `hc_sundog`, `sundog_memory`,
+`hybrid`, `hybrid_posterior_decoy_disambig`, `random`) reproduce the Phase 5
+lock anchor cell with exactly zero score and success difference.
+
+Smoke class map:
+
+| Cell | Class | Best family | Best mode |
+| --- | --- | --- | --- |
+| `severity_s0_decoy_strength_0p82_turns_40` | `bayes_dominant` | bayes | `bayes_adaptive` |
+| `severity_s3_decoy_strength_0p82_turns_40` | `mixed` | response | `sundog_memory` |
+
+Secondary sanity: at `s3`, `bayes_adaptive` and `bayes_misspecified` match
+exactly (`s3AdaptiveMinusMisspecifiedScoreDelta = 0`,
+`s3AdaptiveMinusMisspecifiedSuccessDelta = 0`).
+
+The full lock is deferred by the long-run rule. The smoke has 128 trials; the
+full grid has 6,144 trials. Linear estimate from the smoke is roughly
+23 minutes:
+
+```powershell
+npm run bayes:phase5b
+```
+
 ### Phase 6 — Photometric Port
 
 Goal: port the comparison back to the core mirror-alignment experiment.
