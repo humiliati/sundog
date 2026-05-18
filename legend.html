@@ -17,6 +17,7 @@
             --legend-cyan: #78dce8;
             --legend-red: #ff8a80;
             --legend-green: #9be38f;
+            --legend-violet: #b7a7ff;
         }
 
         body {
@@ -87,23 +88,26 @@
             gap: 0.42rem;
             min-height: 2rem;
             padding: 0.35rem 0.62rem;
-            border: 1px solid var(--legend-border);
+            border: 1px solid color-mix(in srgb, var(--status-color, var(--legend-gold)) 42%, transparent);
             border-radius: 999px;
-            color: rgba(248, 250, 255, 0.88);
+            background: color-mix(in srgb, var(--status-color, var(--legend-gold)) 10%, transparent);
+            color: rgba(248, 250, 255, 0.9);
             font-size: 0.78rem;
             white-space: nowrap;
         }
+
+        .status-chip[data-status="core"] { --status-color: var(--legend-gold); }
+        .status-chip[data-status="optional"] { --status-color: var(--legend-cyan); }
+        .status-chip[data-status="named"] { --status-color: var(--legend-green); }
+        .status-chip[data-status="not-modeled"] { --status-color: var(--legend-red); }
 
         .status-dot {
             width: 0.56rem;
             height: 0.56rem;
             border-radius: 999px;
-            background: var(--legend-gold);
+            background: var(--status-color, var(--legend-gold));
+            box-shadow: 0 0 18px color-mix(in srgb, var(--status-color, var(--legend-gold)) 42%, transparent);
         }
-
-        .status-chip[data-status="optional"] .status-dot { background: var(--legend-cyan); }
-        .status-chip[data-status="named"] .status-dot { background: var(--legend-green); }
-        .status-chip[data-status="not-modeled"] .status-dot { background: var(--legend-red); }
 
         .legend-section {
             margin-top: 3.25rem;
@@ -118,9 +122,21 @@
             margin-bottom: 1rem;
         }
 
-        h2 {
+        .legend-section h2 {
             margin: 0;
+            color: rgba(248, 250, 255, 0.96);
             font-size: clamp(1.65rem, 4vw, 2.55rem);
+            text-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
+        }
+
+        .legend-section h2::after {
+            content: "";
+            display: block;
+            width: 3.75rem;
+            height: 2px;
+            margin-top: 0.58rem;
+            background: linear-gradient(90deg, var(--legend-gold), rgba(120, 220, 232, 0));
+            opacity: 0.9;
         }
 
         .section-note {
@@ -137,13 +153,35 @@
         }
 
         .phenomenon-card {
+            --card-status: var(--legend-gold);
             scroll-margin-top: 6rem;
+            position: relative;
+            overflow: hidden;
             min-height: 15rem;
             padding: 1rem;
-            border: 1px solid var(--legend-border);
+            border: 1px solid color-mix(in srgb, var(--card-status) 24%, var(--legend-border));
+            border-left-color: color-mix(in srgb, var(--card-status) 78%, var(--legend-border));
+            border-left-width: 3px;
             border-radius: 8px;
-            background: var(--legend-panel);
+            background:
+                linear-gradient(135deg, color-mix(in srgb, var(--card-status) 10%, transparent), transparent 38%),
+                var(--legend-panel);
         }
+
+        .phenomenon-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--card-status), transparent 78%);
+            pointer-events: none;
+        }
+
+        .phenomenon-card[data-status="core"] { --card-status: var(--legend-gold); }
+        .phenomenon-card[data-status="optional"] { --card-status: var(--legend-cyan); }
+        .phenomenon-card[data-status="named"] { --card-status: var(--legend-green); }
+        .phenomenon-card[data-status="not-modeled"] { --card-status: var(--legend-red); }
+        .phenomenon-card[data-status="method"] { --card-status: var(--legend-violet); }
 
         .phenomenon-card h3 {
             margin: 0 0 0.55rem;
@@ -175,6 +213,19 @@
             color: rgba(248, 250, 255, 0.82);
             font-size: 0.72rem;
             line-height: 1.2;
+        }
+
+        .phenomenon-card .status-line .mini-chip:first-child {
+            border-color: color-mix(in srgb, var(--card-status) 54%, transparent);
+            background: color-mix(in srgb, var(--card-status) 14%, transparent);
+            color: rgba(248, 250, 255, 0.94);
+            font-weight: 800;
+        }
+
+        .mini-chip[data-status="not-modeled"] {
+            border-color: color-mix(in srgb, var(--legend-red) 54%, transparent);
+            background: color-mix(in srgb, var(--legend-red) 12%, transparent);
+            color: rgba(255, 235, 232, 0.96);
         }
 
         .legend-callout {
@@ -245,7 +296,7 @@
         </section>
 
         <div class="legend-toolbar" aria-label="Status legend">
-            <span class="status-chip"><span class="status-dot"></span>rendered core</span>
+            <span class="status-chip" data-status="core"><span class="status-dot"></span>rendered core</span>
             <span class="status-chip" data-status="optional"><span class="status-dot"></span>rendered optional</span>
             <span class="status-chip" data-status="named"><span class="status-dot"></span>named only</span>
             <span class="status-chip" data-status="not-modeled"><span class="status-dot"></span>not modeled</span>
@@ -257,73 +308,73 @@
                 <p class="section-note">These are the primitives shown or named in the current atlas. Only the parhelion-offset route is promoted as an inverse measurement handle.</p>
             </div>
             <div class="phenomena-grid">
-                <article class="phenomenon-card" id="phenomenon-22-degree-halo">
+                <article class="phenomenon-card" id="phenomenon-22-degree-halo" data-status="core">
                     <h3>22 deg halo</h3>
                     <p>The common ring around the sun and the scale reference for the atlas.</p>
                     <p><code>circle(sun, R22)</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">scale-lock</span></div>
                 </article>
-                <article class="phenomenon-card" id="phenomenon-46-degree-halo">
+                <article class="phenomenon-card" id="phenomenon-46-degree-halo" data-status="core">
                     <h3>46 deg halo</h3>
                     <p>A larger halo used as context for CZA, supralateral, and infralateral vocabulary.</p>
                     <p><code>circle(sun, R46)</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">forward vocabulary</span></div>
                 </article>
-                <article class="phenomenon-card" id="phenomenon-parhelion">
+                <article class="phenomenon-card" id="phenomenon-parhelion" data-status="core">
                     <h3>Sundog / parhelion</h3>
                     <p>Bright flanking spots on the parhelic circle. The offset recovers sun altitude when the anchors are eligible.</p>
                     <p><code>offset = R22 / cos(h)</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">promoted inverse</span></div>
                 </article>
-                <article class="phenomenon-card" id="phenomenon-parhelic-circle">
+                <article class="phenomenon-card" id="phenomenon-parhelic-circle" data-status="core">
                     <h3>Parhelic circle</h3>
                     <p>The horizontal belt through the sun and parhelia. It is rendered, but not promoted as a hidden-state handle.</p>
                     <p><code>circle through sun and parhelia</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">primitive QA</span></div>
                 </article>
-                <article class="phenomenon-card" id="phenomenon-circumzenithal-arc">
+                <article class="phenomenon-card" id="phenomenon-circumzenithal-arc" data-status="core">
                     <h3>Circumzenithal arc</h3>
                     <p>The high smile-shaped arc. The current route is visibility-gated; pre-A1b anchors need rechecking before proof use.</p>
                     <p><code>visible when h &lt; 32.196 deg</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-core</span><span class="mini-chip">coverage-gated inverse</span></div>
                 </article>
-                <article class="phenomenon-card" id="phenomenon-supralateral-arc">
+                <article class="phenomenon-card" id="phenomenon-supralateral-arc" data-status="optional">
                     <h3>Supralateral arc</h3>
                     <p>High arc near the 46 deg halo/CZA region. The inverse route failed coverage and structural-discrimination gates.</p>
                     <p><code>46 deg family context</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">not promoted</span></div>
                 </article>
-                <article class="phenomenon-card" id="phenomenon-upper-tangent-arc">
+                <article class="phenomenon-card" id="phenomenon-upper-tangent-arc" data-status="optional">
                     <h3>Upper tangent arc</h3>
                     <p>Column-crystal tangent vocabulary above the 22 deg halo. It remains useful for logo language, not inverse proof.</p>
                     <p><code>tangent-family candidate</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">C5/C6/C7 tension</span></div>
                 </article>
-                <article class="phenomenon-card" id="phenomenon-suncave-parry-arc">
+                <article class="phenomenon-card" id="phenomenon-suncave-parry-arc" data-status="optional">
                     <h3>Suncave Parry arc</h3>
                     <p>A Parry-family cap near the upper tangent arc. It is optional vocabulary with weak photo support.</p>
                     <p><code>Parry-oriented family</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">weak evidence</span></div>
                 </article>
-                <article class="phenomenon-card" id="phenomenon-lower-tangent-arc">
+                <article class="phenomenon-card" id="phenomenon-lower-tangent-arc" data-status="optional">
                     <h3>Lower tangent arc</h3>
                     <p>The lower counterpart of the upper tangent family, tied to low-altitude/observer geometry.</p>
                     <p><code>22 deg lower tangent family</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">pose-bound</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" data-status="optional">
                     <h3>Parry supralateral arc</h3>
                     <p>Parry-family shoulders near the 46 deg top region. Coverage and weak evidence blocked promotion.</p>
                     <p><code>Parry + 46 deg family</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">not promoted</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" data-status="optional">
                     <h3>Infralateral arcs</h3>
                     <p>Lower-side 46 deg family vocabulary. Present as periphery language, not a calibrated inverse route.</p>
                     <p><code>46 deg lower-side family</code></p>
                     <div class="status-line"><span class="mini-chip">rendered-optional</span><span class="mini-chip">photo-partial</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" data-status="core">
                     <h3>Sun pillar</h3>
                     <p>A vertical light column from plate-crystal reflection. The atlas renders it as stylized visual vocabulary.</p>
                     <p><code>plate-crystal reflection</code></p>
@@ -338,35 +389,35 @@
                 <p class="section-note">These rows keep the vocabulary visible without pretending the atlas already accounts for every halo family.</p>
             </div>
             <div class="phenomena-grid">
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" data-status="named">
                     <h3>Parry-family arcs</h3>
                     <p>Includes suncave, sunvex, and Parry supralateral members. Some are optional labels today; the family still needs subrows and HaloSim receipts.</p>
                     <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">partial optional render</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" data-status="not-modeled">
                     <h3>Pyramidal / odd-radius halos</h3>
                     <p>Faint odd-radius rings from pyramidal ice crystals. HaloSim reproduces the family, but the atlas does not model it and the quantitative ring-isolation route topped out below promotion.</p>
-                    <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">P2 simulated candidate</span><span class="mini-chip">not atlas-modeled</span></div>
+                    <div class="status-line"><span class="mini-chip">not-modeled</span><span class="mini-chip">P2 simulated candidate</span><span class="mini-chip">not atlas-modeled</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" data-status="named">
                     <h3>Lowitz arcs</h3>
                     <p>Arcs from rotating plate orientations, historically contested and now photographically observed. Not modeled here yet.</p>
                     <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">HaloSim candidate</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" data-status="not-modeled">
                     <h3>Antisolar features</h3>
                     <p>Anthelion, anthelic arcs, paranthelia, and 120 deg parhelia live opposite or far around from the sun.</p>
-                    <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">not-modeled</span></div>
+                    <div class="status-line"><span class="mini-chip">not-modeled</span><span class="mini-chip">named-only</span></div>
                 </article>
-                <article class="phenomenon-card">
+                <article class="phenomenon-card" data-status="named">
                     <h3>Sub-horizon halos</h3>
                     <p>Subsun and subparhelia require aircraft, mountain, or below-horizon observer geometry.</p>
                     <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">observer extension</span></div>
                 </article>
-                <article class="phenomenon-card" id="phenomenon-circumhorizon-arc">
+                <article class="phenomenon-card" id="phenomenon-circumhorizon-arc" data-status="not-modeled">
                     <h3>Circumhorizon arc</h3>
                     <p>A high-sun plate-crystal arc sometimes called a fire rainbow. It is outside the current sundog-facing regime.</p>
-                    <div class="status-line"><span class="mini-chip">named-only</span><span class="mini-chip">not-modeled</span></div>
+                    <div class="status-line"><span class="mini-chip">not-modeled</span><span class="mini-chip">named-only</span></div>
                 </article>
             </div>
         </section>
@@ -377,22 +428,22 @@
                 <p class="section-note">These are the project terms that used to be repeated on the homepage. The short version lives here; the math version lives on <a href="/h-of-x">h-of-x</a>, and the lab posture lives on <a href="/about">About</a>.</p>
             </div>
             <div class="phenomena-grid">
-                <article class="phenomenon-card" id="method-hidden-state">
+                <article class="phenomenon-card" id="method-hidden-state" data-status="method">
                     <h3>Hidden state</h3>
                     <p>The decisive quantity the system does not get to inspect directly: sun altitude, target position, pole angle, local field, obstacle geometry, or player intent.</p>
                     <div class="status-line"><span class="mini-chip">method term</span><span class="mini-chip">no privileged access</span></div>
                 </article>
-                <article class="phenomenon-card" id="method-trace">
+                <article class="phenomenon-card" id="method-trace" data-status="method">
                     <h3>Trace</h3>
                     <p>The indirect signal left in the world: parhelion offset, detector intensity, shadow, pressure field, deformation, local acceleration, or behavior wake.</p>
                     <div class="status-line"><span class="mini-chip">method term</span><span class="mini-chip">indirect signal</span></div>
                 </article>
-                <article class="phenomenon-card" id="method-transformation">
+                <article class="phenomenon-card" id="method-transformation" data-status="method">
                     <h3>Transformation</h3>
                     <p>The rule that makes the trace usable. Sometimes it is closed form, like <code>R22 / cos(h)</code>; sometimes it is a bounded controller or measured operating envelope.</p>
                     <div class="status-line"><span class="mini-chip">method term</span><span class="mini-chip">route to action</span></div>
                 </article>
-                <article class="phenomenon-card" id="method-boundary">
+                <article class="phenomenon-card" id="method-boundary" data-status="method">
                     <h3>Boundary</h3>
                     <p>The point where the trace stops being enough. A credible indirect route names the boundary where it should fail instead of smoothing that failure into a story.</p>
                     <div class="status-line"><span class="mini-chip">method term</span><span class="mini-chip">failure visible</span></div>
