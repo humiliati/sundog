@@ -295,6 +295,85 @@
             text-transform: uppercase;
         }
 
+        .glossary-line {
+            border-left-color: #1F7A8C;
+        }
+
+        .glossary-line p {
+            margin-bottom: 0.65rem;
+        }
+
+        .glossary-line p:last-child {
+            margin-bottom: 0;
+        }
+
+        .gloss-term {
+            position: relative;
+            border-bottom: 1px dotted rgba(31, 122, 140, 0.78);
+            color: #173B50;
+            cursor: help;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        .gloss-term::after {
+            content: attr(data-gloss);
+            position: absolute;
+            z-index: 5;
+            left: 0;
+            bottom: calc(100% + 0.55rem);
+            width: min(18rem, 70vw);
+            padding: 0.7rem 0.8rem;
+            border: 1px solid rgba(31, 122, 140, 0.28);
+            border-radius: 8px;
+            background: #FFFFFF;
+            box-shadow: 0 14px 32px rgba(26, 58, 82, 0.15);
+            color: #354752;
+            font-family: var(--sd-font-body);
+            font-size: 0.86rem;
+            font-weight: 500;
+            letter-spacing: 0;
+            line-height: 1.45;
+            opacity: 0;
+            pointer-events: none;
+            text-transform: none;
+            transform: translateY(0.25rem);
+            transition: opacity 140ms ease, transform 140ms ease;
+        }
+
+        .gloss-term:hover::after,
+        .gloss-term:focus-visible::after {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .phase-link-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin: 0.75rem 0 1.35rem;
+        }
+
+        .phase-link-list a {
+            border: 1px solid rgba(31, 122, 140, 0.22);
+            border-radius: 999px;
+            background: #FFFFFF;
+            color: #1F6678;
+            font-family: var(--sd-font-data);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            padding: 0.46rem 0.72rem;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .phase-link-list a:hover,
+        .phase-link-list a:focus-visible {
+            border-color: rgba(213, 170, 68, 0.72);
+            color: var(--primary-dark);
+        }
+
         .table-wrap {
             overflow-x: auto;
             border: 1px solid var(--line);
@@ -561,13 +640,13 @@
                 </div>
                 <div class="section-body">
                     <p>
-                        The fair head-to-head is not "Bayes gets the world and Sundog gets shadows." A fair Bayesian baseline receives the same partial observations, then maintains a posterior over hidden state. Sundog receives the same observations, then acts from the local response field.
+                        The fair head-to-head is not "Bayes gets the world and Sundog gets shadows." A fair Bayesian baseline receives the same partial observations, then maintains a <dfn class="gloss-term" tabindex="0" data-gloss="A probability distribution over hidden causes after the current evidence is observed.">posterior</dfn> over hidden state. Sundog receives the same observations, then acts from the local response field.
                     </p>
                     <div class="formula-pair">
                         <div class="formula-card">
                             <h3>Bayes</h3>
                             <code>P(hidden world | signal) ~= likelihood * prior</code>
-                            <p>Where is the hidden thing, probably?</p>
+                            <p>Where is the hidden thing, probably? A <dfn class="gloss-term" tabindex="0" data-gloss="A Bayesian filter represented by weighted sampled hypotheses instead of one closed-form equation.">particle Bayes</dfn> lane answers by carrying many weighted guesses.</p>
                         </div>
                         <div class="formula-card">
                             <h3>Sundog</h3>
@@ -578,9 +657,17 @@
                     <p>
                         The strongest public posture is complementary: Bayes is for knowing under uncertainty. Sundog is for acting under partial sight. The comparison should report where each earns its keep, where each fails, and when neither earns the headline.
                     </p>
+                    <div class="analysis-line glossary-line" aria-label="Bayes comparator glossary">
+                        <p>
+                            Reader glossary: <dfn class="gloss-term" tabindex="0" data-gloss="The assumed model is wrong in a way that changes what the observations mean.">misspecification</dfn> is a wrong-world assumption; <dfn class="gloss-term" tabindex="0" data-gloss="A false signal peak or repeated-looking signal that can pull a response controller toward the wrong cause.">decoy / alias</dfn> is a wrong or ambiguous trace; <dfn class="gloss-term" tabindex="0" data-gloss="A result that holds on the tested task family or simulator substrate, not automatically on every physical system.">substrate-conditional</dfn> means the claim belongs to the tested regime.
+                        </p>
+                        <p>
+                            <dfn class="gloss-term" tabindex="0" data-gloss="Final closeness to the target at the end of a run versus how quickly a method reaches a usable threshold.">Terminal accuracy versus time-to-threshold</dfn> is why the core task can tie on final accuracy while Bayes still wins on speed. <dfn class="gloss-term" tabindex="0" data-gloss="The s3 structure rung gives Bayes no useful model family, so the particle filter collapses into a degenerate fixed-action behavior.">Model-family collapse (s3)</dfn> is not a normal Bayes loss; it is the model-less limit.
+                        </p>
+                    </div>
                     <h3 class="analysis-heading">Pressure Mines side-by-side</h3>
                     <p>
-                        Pressure Mines is the clearest current Bayes plus Sundog alignment example because both lanes now run on the same admitted pressure field. The Phase 13 bundle is not just extra experiment data; it tells the public page which interpretation is allowed.
+                        Pressure Mines is the clearest current Bayes plus Sundog alignment example because both lanes now run on the same admitted pressure field. The Phase 13 bundle is not just extra experiment data; it tells the public page which interpretation is allowed, then feeds the <a href="#mines-ledger-row">Pressure Mines ledger row</a>.
                     </p>
                     <div class="side-by-side" aria-label="Pressure Mines Bayes and Sundog side-by-side analysis">
                         <div class="side-column">
@@ -619,6 +706,14 @@
                     <h3 class="analysis-heading">Standalone Bayes-vs-Sundog side-by-side</h3>
                     <p class="data-note" id="bayes-data-source-note">Loading generated comparator receipt.</p>
                     <div class="side-by-side" id="bayes-comparison-side" aria-label="Standalone Bayes and Sundog side-by-side analysis"></div>
+                    <div class="phase-link-list" aria-label="Bayes phase closeout links">
+                        <a href="docs/SUNDOG_V_BAYES.md#phase-2--model-mismatch-slate">Phase 2 mismatch</a>
+                        <a href="docs/SUNDOG_V_BAYES.md#phase-3--aliasing-and-decoy-failure-slate">Phase 3 decoy / alias</a>
+                        <a href="docs/SUNDOG_V_BAYES.md#phase-4b---no-progress-hybrid-trigger">Phase 4b hybrid dropped</a>
+                        <a href="docs/SUNDOG_V_BAYES.md#phase-5b---mismatch-severity-sweep">Phase 5b boundary</a>
+                        <a href="docs/SUNDOG_V_BAYES.md#phase-6---photometric-port">Phase 6 core task</a>
+                        <a href="docs/SUNDOG_V_BAYES.md#phase-6b---core-photometric-structure-mismatch-hard-stop">Phase 6b structure</a>
+                    </div>
                 </div>
             </article>
 
@@ -642,7 +737,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr id="photometric-ledger-row">
                                     <td><strong>Photometric mirror alignment</strong></td>
                                     <td>No target-position access; terminal target intensity is comparable to target-aware analytic and noisy-oracle baselines in the controlled MuJoCo result.</td>
                                     <td>The serious same-observation Bayesian comparator is not the primary public baseline yet. The existing target-aware baseline wins hard on acquisition speed: median threshold time about 11.5 steps versus about 188 for photometric feedback.</td>
@@ -660,7 +755,7 @@
                                     <td>Phase 15 same-shadow Bayesian-floor lock ran 27,200 trials with audits passing, 56/56 hard-gate cells admitted, zero negative mean-regret cells, and aggregate regret near parity at +0.00395 normalized survival versus <code>sundog_shadow</code>.</td>
                                     <td>Earned same-information Bayes receipt. The careful claim is near-floor behavior inside the mapped envelope, with reported-only degradation boundaries preserved.</td>
                                 </tr>
-                                <tr>
+                                <tr id="mines-ledger-row">
                                     <td><strong>Pressure Mines</strong></td>
                                     <td>Phase 10 confirmed a narrow pressure-field pocket: density 0.16, pressure noise 2.0, dropout 0.2 improved budget-adjusted safe-tile progress versus <code>naive_pressure</code>, beside a matched failure cell.</td>
                                     <td>Phase 13 now publishes the same-field Bayesian pressure-floor receipt: 14,720 trials across all 46 Phase 10 cells, no-leak pass, zero negative cells versus <code>naive_pressure</code> / <code>sundog_minimal</code>, and visible <code>sundog_lean</code> headroom.</td>
@@ -696,13 +791,21 @@
                 </div>
                 <div class="section-body">
                     <p>
-                        The Bayes roadmap is strongest when it predicts wins and losses before the run. The closed comparison now publishes its public stamp sequence from the generated receipt bundle.
+                        The Bayes roadmap is strongest when it <a href="#pre-registration-note">pre-registers</a> wins and losses before the run. The closed comparison now publishes its public stamp sequence from the generated receipt bundle.
                     </p>
                     <div class="result-grid" id="bayes-stamp-sequence">
                         <div class="result-card">
                             <strong>Loading</strong>
                             <span>Generated Bayes comparison receipts are loading.</span>
                         </div>
+                    </div>
+                    <div class="caution-box" id="pre-registration-note">
+                        <p>
+                            <strong>Pre-registration</strong> means the command, thresholds, cell slate, and allowed interpretations were frozen before the claim-bearing run. In this page it is the difference between a result that reports what happened and a story rewritten after the outcome was visible.
+                        </p>
+                        <p>
+                            Comparator trail: <a href="#bayes-comparator-ledger-row">standalone benchmark row</a>, <a href="#photometric-ledger-row">photometric ledger row</a>, and <a href="#mines-ledger-row">Pressure Mines ledger row</a>.
+                        </p>
                     </div>
                 </div>
             </article>

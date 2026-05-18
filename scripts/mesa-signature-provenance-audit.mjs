@@ -699,3 +699,46 @@ main().catch((err) => {
   console.error("audit failed:", err);
   process.exitCode = 3;
 });
+
+  // Text summary
+  const lines = [];
+  lines.push(`Phase 1' signature-provenance audit — ${AUDIT_SCRIPT_VERSION}`);
+  lines.push(`run_at: ${report.audit_run_at}`);
+  lines.push(`git_sha: ${report.git_sha ?? "(no git)"}`);
+  lines.push("");
+  lines.push(`overall: ${overall.toUpperCase()}`);
+  lines.push("");
+  for (const [name, r] of Object.entries(results)) {
+    lines.push(`${name}: ${r.verdict.toUpperCase()}`);
+    if (r.verdict === "fail" && r.evidence) {
+      const failureKey = ["failures", "deviations", "outside_allowlist", "forbidden_overlap", "error"]
+        .find((k) => r.evidence[k] && (Array.isArray(r.evidence[k]) ? r.evidence[k].length > 0 : true));
+      if (failureKey) {
+        const detail = r.evidence[failureKey];
+        if (Array.isArray(detail)) {
+          for (const d of detail) lines.push(`  - ${typeof d === "object" ? JSON.stringify(d) : d}`);
+        } else {
+          lines.push(`  - ${detail}`);
+        }
+      }
+    }
+  }
+  if (retrofitUpdates.length > 0) {
+    lines.push("");
+    lines.push(`retrofit: updated ${retrofitUpdates.length} v2 manifest(s)`);
+  }
+  const summary = lines.join("\n") + "\n";
+  await writeFile(path.join(outDir, "audit-report.txt"), summary, "utf8");
+
+  console.log(summary);
+  if (overall === "red") {
+    process.exitCode = 2;
+  } else if (overall === "yellow") {
+    process.exitCode = 1;
+  }
+}
+
+main().catch((err) => {
+  console.error("audit failed:", err);
+  process.exitCode = 3;
+});
