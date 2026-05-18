@@ -1162,6 +1162,96 @@ Outcome branches:
 - `hybrid_no_niche`: keep the smoke receipt but redesign or narrow Phase 4
   before claiming a hybrid niche.
 
+### Phase 4b - No-Progress Hybrid Trigger
+
+Goal: isolate whether the Phase 4 negative came from the track/plateau trigger
+rather than from the frozen three-arm gate or the hybrid mode set.
+
+Phase 4b is a single-variable preregistered change against Phase 4. Only the
+plain `hybrid` trigger changes; the gate arms, constants, ablations, claim
+scenarios, hard-drop override, statuses, and non-fatal `pass: true` behavior
+remain identical to Phase 4.
+
+Frozen Phase 4b trigger for plain `hybrid`:
+
+- maintain `noProgressTurns` on the plain-`hybrid` response state;
+- each turn, if `state.response.bestSignal` strictly increased, reset
+  `noProgressTurns` to 0; otherwise increment it;
+- fire when `noProgressTurns >= WRONG_LOCK_DWELL_TURNS`;
+- on fire, do one `updateAdaptivePosterior` refresh, then compute
+  `posteriorOffBasinMass(view, state.response.bestPos)`;
+- use the posterior action only when that off-response-basin mass is at least
+  `AMBIGUITY_MASS`;
+- reset `noProgressTurns` to 0 after every fire, whether or not the posterior
+  action is taken.
+
+There are zero new constants. Phase 4b reuses `WRONG_LOCK_DWELL_TURNS = 5`,
+`AMBIGUITY_MASS = 0.5`, and `WRONG_LOCK_RADIUS = 1.5` inside
+`posteriorOffBasinMass`. The controller contains no `FRUGALITY_FRACTION`
+coupling.
+
+Unchanged from Phase 4:
+
+- modes:
+  `oracle,bayes_adaptive,hc_sundog,hybrid,hybrid_no_posterior,hybrid_posterior_only,hybrid_posterior_reset_only,hybrid_posterior_decoy_disambig`;
+- `repair(M) = scoreDelta >= 0.10 AND successDelta >= 0` versus `hc_sundog`;
+- frugality arm: `hybrid.meanLikelihoodEvals <= 0.5 * bayes_adaptive.meanLikelihoodEvals`;
+- load-bearing arm:
+  `NOT repair(hybrid_no_posterior) AND repair(hybrid_posterior_decoy_disambig)`;
+- hard-drop: `repair(hybrid_no_posterior)` in either claim scenario yields
+  `hybrid_unnecessary`;
+- claim scenarios: `decoy` and `alias`; `symmetric` and `low_probe` remain
+  diagnostic-only.
+
+Commands:
+
+```bash
+npm run bayes:phase4b:smoke
+npm run bayes:phase4b
+```
+
+Smoke ships first. The lock command is frozen but deferred and operator-run.
+
+Smoke receipt, 2026-05-17:
+
+```text
+npm run bayes:phase4b:smoke
+512 trials in 203.108s
+Exit gate: hybrid_niche_confirmed (2/2 claim scenarios all-arms)
+```
+
+Receipt paths:
+
+- `results/bayes/phase4b-hybrid-smoke/manifest.json`
+- `results/bayes/phase4b-hybrid-smoke/summary.csv`
+- `results/bayes/phase4b-hybrid-smoke/regret.csv`
+- `results/bayes/phase4b-hybrid-smoke/replay-manifest.json`
+
+Smoke gate rows:
+
+| Scenario | Hybrid score / success | HC-Sundog score / success | Hybrid evals | Bayes-adaptive evals | Arms |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `decoy` | 0.089803 / 0.2500 | -0.061427 / 0.1875 | 1082.75 | 3674.25 | repair true; frugality true; load-bearing true |
+| `alias` | -0.196441 / 0.1250 | -0.355776 / 0.0625 | 1224.75 | 4615.00 | repair true; frugality true; load-bearing true |
+
+Trigger diagnostics from `steps.jsonl`:
+
+| Scenario | Hybrid steps | Stuck-window fires | Posterior actions | Posterior refreshes |
+| --- | ---: | ---: | ---: | ---: |
+| `decoy` | 551 | 61 | 59 | 61 |
+| `alias` | 615 | 69 | 61 | 69 |
+
+Smoke interpretation: Phase 4b earns the smoke niche with a real non-zero
+stuck-window path rather than a periodic clock. The claim is still smoke-only:
+the frozen lock command is deferred. Smoke-derived lock estimate is 3,072
+trials at 2.52 trials/s, about 20 minutes on the current CPU lane.
+
+Margin fragility: the repair arm is thin in the smoke. `decoy` clears the
+score margin by about +0.051 and `alias` by about +0.059, while both success
+deltas are +0.0625, exactly one extra success in a 16-seed smoke. The lock is
+therefore a real arbiter: a downgrade to `hybrid_no_niche` at 96 seeds would
+be the preregistration mechanism working, not a regression.
+
 ### Phase 5 — Operating Envelope Sweep
 
 Goal: map regions rather than narrate cherry-picked rounds.
