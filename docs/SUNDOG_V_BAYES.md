@@ -360,6 +360,11 @@ Applied queue after the Balance lock:
    `npm run bayes:phase3` reports `dual_gate_pass` in `decoy` and `alias`.
    `symmetric` and `low_probe` remain diagnostic: both show Bayes-adaptive
    recovery, but not the pre-registered HC-Sundog wrong-lock failure arm.
+9. **Standalone Phase 5 operating-envelope closeout.** Phase 5 closed with an
+   anchor-validated lock and a degenerate single-class envelope:
+   `bayes_adaptive` dominates throughout the decoy-strength x budget grid. No
+   boundary was mapped; the likely boundary axis is model-mismatch severity,
+   deferred only to an optional separately pre-registered Phase 5b.
 
 ## Controller-Family Architecture
 
@@ -1428,6 +1433,70 @@ minutes:
 ```powershell
 npm run bayes:phase5
 ```
+
+Lock receipt, 2026-05-18:
+
+```text
+npm run bayes:phase5
+15,360 trials in 4618.776s (3.33 trials/s)
+Audits: pass
+Exit gate: envelope_mapped (20/20 cells classified)
+```
+
+Lock receipt paths:
+
+- `results/bayes/phase5-envelope-lock/manifest.json`
+- `results/bayes/phase5-envelope-lock/cell-class-map.csv`
+- `results/bayes/phase5-envelope-lock/aggregate-envelope.csv`
+- `results/bayes/phase5-envelope-lock/candidate-envelope.csv`
+
+Self-consistency anchor: **pass**. `status = reproduced_p4b_lock_decoy`,
+`referenceBasis = seed_matched_trials_jsonl`, 96 seed-matched reference trials.
+All five shared lanes (`oracle`, `bayes_adaptive`, `hc_sundog`, `hybrid`,
+`hybrid_posterior_decoy_disambig`) reproduce the Phase 4b lock decoy deltas at
+exactly zero score and success difference. The harness is trustworthy at lock
+scale; the result below is real, not an artifact of the earlier
+`mismatch_void` defect.
+
+Lock class map, aggregate:
+
+| Class | Cells | Swept decoy | Alias reference |
+| --- | ---: | ---: | ---: |
+| `bayes_dominant` | 20 / 20 | 16 / 16 | 4 / 4 |
+
+Every cell is `bayes_dominant` with `bestMode = bayes_adaptive`, across the
+full decoy-strength `{0.50, 0.66, 0.82, 0.98}` x budget `{20, 30, 40, 60}`
+grid and all alias-reference budgets.
+
+Phase 5 closeout interpretation: the envelope is **degenerate**: a single class
+over the entire pre-registered grid. `envelope_mapped` here means complete and
+anchor-valid, not a rich multi-class envelope. The roadmap exit criterion -
+"summarized as an operating envelope with failure classes, not a winner-take-all
+benchmark" - is therefore satisfied only trivially: the decoy-strength x budget
+slice contains no Bayes / response / hybrid boundary.
+
+This is a legitimate negative that sharpens, rather than weakens, the
+cross-phase claim. The Phase 3/4 failure boundary was a failure of misspecified
+/ fixed-clean Bayes (`bayes_misspecified`) and of response and
+frugal-gated-hybrid controllers - not of adaptive Bayes. Once the Bayesian agent
+may adapt its model family (`bayes_adaptive` with the decoy/alias/symmetric
+mixture), it dominates the whole decoy-strength x budget envelope, including
+near-equal decoy (`0.98`), the alias reference, and the tightest budget (`20`).
+The Sundog / hybrid edge in this benchmark is specific to misspecified or fixed
+Bayes; it does not survive against correctly specified adaptive Bayes on these
+two axes.
+
+Consequence: any operating boundary lives on an axis not in this grid - most
+plausibly model-mismatch severity, the axis traded away at Phase 5 scoping,
+consistent with the entire Phase 2 to Phase 4 record. Phase 5 is closed as a
+pre-registered degenerate-envelope negative. The flat result is recorded as-run;
+the margin is not re-sliced and the grid is not re-cut to manufacture a
+boundary. A mismatch-severity sweep, if pursued, is a separate Phase 5b
+pre-registration with its own seed-matched anchor, not an amendment here.
+
+Exit criterion outcome: **met trivially / no boundary mapped.** The comparison
+is summarizable as an envelope, but the decoy-strength x budget envelope is
+single-class; the phase closes as a negative.
 
 Exit criterion: the comparison can be summarized as an operating envelope with
 failure classes, not as a winner-take-all benchmark.
