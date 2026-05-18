@@ -233,34 +233,67 @@ output. The denominator is the alignment gap (~0.426 for the Large
 cliff pair, see preamble) — by construction the metric is bounded
 [~0, 1] for patched outputs that interpolate between source and
 target, > 1 if patching overshoots toward the target, < 0 if it
-diverges away. P4 threshold of **0.8** carries the same semantic as
-v1's basin-pref-based metric ("patching covers ≥ 80% of the gap"),
-but is now applied to an outcome variable the pair actually
-separates on.
+diverges away.
+
+**P4 verdict rule (conjunctive, inherited from v1):** "clears P4" at
+a (layer, condition, direction) means **all three** of
+`mean_patch_success_align`, `median_patch_success_align`, and
+`patch_success_align_ratio_of_means` clear 0.8. This mirrors v1's
+published P4 reading (PHASE6_RESULTS.md net.7: P→C
+`0.894 / 0.944 / 0.899`, C→P `0.934 / 0.860 / 0.854` — all three
+statistics clearing in both directions). Mean alone is not
+sufficient: the v1.1 smoke (2026-05-18, n=8) showed mean values can
+be outlier-dominated and disagree with median by orders of magnitude
+(mean 5.42 vs median 0.05) without indicating a real transfer.
+
+**Destructive-transfer falsifier (v1.1, new).** Independent of the
+P4 conjunctive rule, a (layer, condition, direction) is classified
+as **destructive** rather than transferring when
+`|mean_patched_alignment − target_alignment| / mean_baseline_gap_align > 0.5`,
+where `target_alignment` is `mean_protected_alignment` for P→C
+(rescue) and `mean_collapsed_alignment` for C→P (break). This
+catches the case where patching drives the policy *away from both*
+references — e.g., toward `alignment ≈ 0` — rather than
+interpolating between source and target. A destructive layer
+contributes to GG6b-loc-D regardless of how the conjunctive P4
+statistics look at that layer; it does not contribute to
+GG6b-loc-A/B/C.
 
 ### GG6b-localization (v1.1) — net.9 is the Large cliff locus
 
 Pre-registered: **at least one of the two patch directions clears
-0.8 in `patch_success_align` at net.9**, and no earlier Large layer
-(net.1, net.3, net.5, net.7) clears 0.8 in either direction.
+the conjunctive P4 rule (mean ∧ median ∧ ratio_of_means all ≥ 0.8)
+at net.9 without triggering the destructive-transfer falsifier**,
+and no earlier Large layer (net.1, net.3, net.5, net.7) clears it in
+either direction.
 
-- **GG6b-loc-A (confirm)** — net.9 clears P4 in at least one
-  direction, earlier layers do not. The Large recovery-vs-trough
-  cliff localizes structurally analogous to Medium net.7's basin
-  cliff.
+- **GG6b-loc-A (confirm)** — net.9 clears the conjunctive P4 rule in
+  at least one direction, earlier layers do not, and the locus
+  layer is not destructive. The Large recovery-vs-trough cliff
+  localizes structurally analogous to Medium net.7's basin cliff.
 - **GG6b-loc-B (falsify — earlier locus)** — some earlier layer
-  (net.1, net.3, net.5, or net.7) clears P4 and net.9 does not. The
-  Large cliff lives upstream of the final hidden, consistent with
-  the v3 §7 position-observation pathway hint.
-- **GG6b-loc-C (falsify — no locus)** — no layer clears P4 in either
-  direction at `patch_success_align`. The Large recovery-vs-trough
-  cliff is distributed rather than localized.
+  (net.1, net.3, net.5, or net.7) clears the conjunctive P4 rule
+  without being destructive, and net.9 does not. The Large cliff
+  lives upstream of the final hidden, consistent with the v3 §7
+  position-observation pathway hint.
+- **GG6b-loc-C (falsify — no locus)** — no layer clears the
+  conjunctive P4 rule in either direction without being
+  destructive. The Large recovery-vs-trough cliff is distributed
+  rather than localized.
 - **GG6b-loc-D (falsify — Phase 6 v1 protocol doesn't generalize)** —
-  `patch_success_align` is also unbounded or chaotic at Large
-  (e.g., values regularly outside [-2, 2], or median and mean
-  disagree by orders of magnitude), indicating the activation-patching
-  mechanism itself doesn't transfer to Large at this pair. File as a
-  methodology limit, not a substrate finding.
+  the patching mechanism itself doesn't transfer to Large at this
+  pair. Triggered by *any* of the following at *most* of the swept
+  layers: (a) `patch_success_align` mean and median disagree by
+  orders of magnitude (mean / median ratio > 10 or < -10),
+  (b) the destructive-transfer falsifier fires (patched alignment
+  falls outside the protected↔collapsed band by more than half a
+  gap-width in either direction), (c) the median is near zero
+  while raw `mean_patched_alignment` differs from both reference
+  alignments by more than the gap (signature of "patching destroys
+  navigation rather than transferring"). The v1.1 smoke (n=8) at
+  net.9 partially hit (a) and (b); the full sweep determines
+  whether this is a net.9-specific artifact or a methodology
+  limit at Large.
 
 ### GG6b-mech (v1.1) — observation-pathway dependence
 
@@ -282,23 +315,39 @@ mixed_0_99 activations into the mixed_0_97 policy should restore
 some of the missing navigation more than injecting mixed_0_97
 activations into mixed_0_99 disrupts it.
 
-- **GG6b-mech-A (confirm)** — P→C (rescue) `patch_success_align` is
-  decisively higher than C→P (break) at the locus layer (mean delta
-  ≥ 0.2). Confirms the observation-pathway / signature-pathway
-  asymmetry hinted at by v3 §7. The trough has a missing-piece that
-  the locus layer carries and that's restorable by injecting
-  recovered-side activations.
+- **GG6b-mech-A (confirm)** — P→C (rescue) clears the conjunctive
+  P4 rule, and C→P (break) does not (or P→C clears more cleanly:
+  mean delta ≥ 0.2 across all three statistics, and C→P fails at
+  least one statistic of the conjunction). Confirms the observation-
+  pathway / signature-pathway asymmetry hinted at by v3 §7. The
+  trough has a missing-piece that the locus layer carries and
+  that's restorable by injecting recovered-side activations.
 - **GG6b-mech-B (falsify)** — symmetric patch behavior. Both
-  directions clear P4 at comparable magnitudes (|P→C − C→P| < 0.2);
-  the v3 §7 observation-sensitivity finding does not translate to a
+  directions clear the conjunctive P4 rule at comparable magnitudes
+  (|P→C − C→P| < 0.2 across all three statistics); the v3 §7
+  observation-sensitivity finding does not translate to a
   directional patching asymmetry. The cliff is bidirectional in
   alignment, like Medium v1 was bidirectional in basin-pref.
-- **GG6b-mech-C (falsify — inverted asymmetry)** — C→P (break) is
-  decisively higher than P→C (rescue). This would mean the recovered
-  side is *fragile* to collapsed activation injection while the
-  trough is *unresponsive* to recovered activation injection — a
-  qualitatively different story than v3 §7 implies, and worth its
-  own GG-line so the result isn't conflated with GG6b-mech-A.
+- **GG6b-mech-C (falsify — inverted asymmetry)** — C→P (break)
+  clears the conjunctive P4 rule and P→C (rescue) does not. This
+  would mean the recovered side is *fragile* to collapsed activation
+  injection while the trough is *unresponsive* to recovered
+  activation injection — a qualitatively different story than v3 §7
+  implies, and worth its own GG-line so the result isn't conflated
+  with GG6b-mech-A.
+
+**GG6b-mech is not called at a layer that fired GG6b-loc-D
+(destructive-transfer falsifier).** Both directions being
+destructive at a layer doesn't tell us about the rescue/break
+asymmetry; it tells us the patching mechanism doesn't transfer
+there. The v1.1 smoke (n=8) at net.9 is a concrete illustration:
+under the mean alone, P→C looked like rescue-clears (5.42 ≥ 0.8)
+and C→P didn't (-4.54), which would point at GG6b-mech-A — but
+median (P→C 0.05, C→P 1.30), ratio_of_means (-1.00, 2.24), and raw
+`mean_patched_alignment` (P→C 0.10, C→P 0.007, neither near either
+target) together show the patching is destructive in both
+directions, not asymmetric rescue. The full sweep determines
+whether some non-net.9 layer is non-destructive and asymmetric.
 
 ### GG6b-substrate-shape — 5D entangled subspace at Large?
 
@@ -552,3 +601,20 @@ Phase 6b does not own:
   predicts P→C `patch_success_align` decisively higher than C→P,
   plus a new GG6b-mech-C falsifier branch for inverted asymmetry.
   `clean` / `intervened` bit-identity investigation still queued.
+- **v1.1 (2026-05-18, P4 verdict rule sharpened post-smoke)** —
+  Smoke-v11 (8 seeds, net.9) showed alignment-normalized metric is
+  *bounded* (single digits vs hundreds, falsifying GG6b-loc-D's
+  unbounded-metric subcondition) but *mean values are outlier-
+  dominated* with small-n (P→C mean 5.42 vs median 0.05; C→P mean
+  -4.54 vs median 1.30) and raw `mean_patched_alignment` for both
+  directions fell near 0 rather than near either reference target.
+  Spec §6 verdict rule updated: P4 reading is now explicitly
+  conjunctive (mean ∧ median ∧ ratio_of_means all ≥ 0.8), mirroring
+  v1's published net.7 receipt (P→C 0.894/0.944/0.899). A new
+  destructive-transfer falsifier is introduced, classifying any
+  (layer, condition, direction) where patched alignment falls more
+  than half a gap-width outside the protected↔collapsed band; such
+  layers contribute to GG6b-loc-D rather than to A/B/C. GG6b-mech
+  is explicitly not called at destructive layers. Reasoning anchored
+  to the v1.1 smoke results directly so future readers can
+  recapitulate the decision.

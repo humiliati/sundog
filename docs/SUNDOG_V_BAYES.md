@@ -1895,6 +1895,51 @@ edge only under Bayesian misspecification severity - is a shadow-field toy
 artifact or replicates on the core photometric task. The phase is descriptive,
 non-fatal, and does not create a winner-take-all claim.
 
+### Phase 6b - Core Photometric Structure-Mismatch Hard Stop
+
+Phase 6b is the final single-variable transfer test flagged by Phase 6:
+wrong likelihood structure on the core photometric task. It maps; it does not
+rescue a controller, reopen Hybrid, add a new lane, or create a Phase 6c.
+
+Frozen cell set: nominal optics only, `beam_sigma = 0.15` and
+`detector_noise_sigma = 0.0`, crossed with structure rungs `{s0,s1,s2,s3}`.
+The structure ladder affects only the `bayes_particle` assumed likelihood path:
+`s0` is the Phase 6 identity reflected-likelihood path; `s1` removes
+reflection from the assumed model; `s2` keeps only the target-detector channel;
+`s3` is uninformative. The environment, seed path, detector observations, and
+assumed sigma stay Phase 6 nominal throughout. Lock cells are
+`nominal x {s0,s1,s2,s3}` (4 cells); smoke cells are
+`nominal x {s0,s3}` (2 cells).
+
+Classifier and reporting are unchanged from Phase 6: median
+`time_to_threshold` primary, ci95-half-width dominance, `doa_direct` excluded
+as a privileged yardstick, `doa_noisy` and `random` reported rails,
+descriptive/non-fatal. Particle counts remain 64 for smoke and 128 for lock;
+smoke seeds are the strict `range(6)` prefix of the lock `range(30)`.
+
+Anchor discipline is Phase 6 plus the nominal structure nest. Applicable
+gating components are `nominalLiveReexecution`, `analysisSummaryAggregate`,
+`mannWhitneyTests`, and `structureS0Nest`. With no stress cells,
+`stressLiveReexecution` and `stressSweepAggregate` have no inputs and must be
+recorded as `not_applicable`, not silently passed. `structureS0Nest` requires
+the `s0` `bayes_particle` nominal cell to reproduce the Phase 6 lock nominal
+`bayes_particle` episode receipt exactly (`diff == 0.0`). Because the smoke
+lane itself keeps the frozen 64-particle smoke count while the Phase 6 lock
+receipt is 128-particle, the smoke nest is an auxiliary s0 live re-execution
+at the 128-particle reference count; classification rows still use the frozen
+smoke particle count.
+
+Binary exit: `response_edge_transfers` if any structure rung produces a
+`photometric_dominant` cell; otherwise `core_task_bayes_speed_dominant`.
+Hard stop either way; no Phase 6c is bundled.
+
+Frozen commands:
+
+```powershell
+$env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6b-structure-smoke --results-dir results/bayes/phase6b-structure-smoke --phase6-cells smoke --seeds 6 --steps 500 --particle-count 64 --conditions photometric doa_direct doa_noisy random bayes_particle
+$env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6b-structure-lock --results-dir results/bayes/phase6b-structure-lock --phase6-cells lock --seeds 30 --steps 500 --particle-count 128 --conditions photometric doa_direct doa_noisy random bayes_particle
+```
+
 ### Phase 7 — Public Visualization and Motion Rail Card
 
 Goal: make the comparison legible on `sundog.cc` without flattening it into
