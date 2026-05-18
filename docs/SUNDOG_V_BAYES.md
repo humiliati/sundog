@@ -1038,15 +1038,25 @@ New frozen constants:
 | Constant | Value | Use |
 | --- | ---: | --- |
 | `FRUGALITY_FRACTION` | 0.5 | Hybrid must use no more than half the full-posterior ceiling's likelihood-eval count. |
-| `AMBIGUITY_MASS` | 0.5 | Posterior ambiguity gate for the Phase 3 ambiguity model families. |
+| `AMBIGUITY_MASS` | 0.5 | Posterior ambiguity gate for off-response-basin posterior mass. |
 
 `likelihoodEvals` is the cumulative per-candidate Gaussian log-likelihood eval
 count used by posterior updates. It is reported per trial and summarized as
 `meanLikelihoodEvals`.
 
-Harness policy note: `hybrid` takes the HC-Sundog response action by default
-and allows a frugality/ambiguity-paced posterior refresh to override only when
-the Phase 3 ambiguity-family mass is at least `AMBIGUITY_MASS`.
+Frozen ambiguity trigger for plain `hybrid`:
+
+- the response controller is in `track` for at least `WRONG_LOCK_DWELL_TURNS`
+  turns without success;
+- every consecutive signal delta in that track-dwell window is `< noiseStd`;
+- after the posterior is consulted, posterior mass outside the current
+  response basin is at least `AMBIGUITY_MASS`.
+
+The response basin is centered on HC-Sundog's current `bestPos`; "off basin"
+means candidate distance greater than `WRONG_LOCK_RADIUS`. The trigger reuses
+the Phase 3 wrong-lock dwell/radius constants rather than introducing new
+thresholds. `hybrid` takes the HC-Sundog response action by default and only
+allows the posterior to override when all three trigger clauses are true.
 
 Hard-drop override:
 
@@ -1071,15 +1081,43 @@ npm run bayes:phase4:smoke
 npm run bayes:phase4
 ```
 
-The smoke ships first. The lock command is staged unchanged for the operator
-after the smoke verifies the harness shape.
+Command-text audit note: the frozen draft named `--scenarios phase3`; the npm
+scripts use `--scenarios phase4`, which is a pure runner alias to the same four
+Phase 3 scenarios (`decoy`, `alias`, `symmetric`, `low_probe`). This is command
+text drift only, not a scenario-set change.
 
-Smoke receipt, 2026-05-17:
+The smoke ships first. The lock command is staged unchanged for the operator
+only after the smoke verifies the harness shape.
+
+Superseded exploratory smoke, 2026-05-17:
 
 ```text
 npm run bayes:phase4:smoke
 512 trials in 462.877s
 Exit gate: hybrid_niche_confirmed (2/2 claim scenarios all-arms)
+```
+
+Historical gate rows, retained here because the standard smoke path was later
+overwritten by the repaired frozen-trigger smoke:
+
+| Scenario | Hybrid score / success | HC-Sundog score / success | Hybrid evals | Bayes-adaptive evals | Arms |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `decoy` | 1.564062 / 1.0000 | -0.061427 / 0.1875 | 1260.25 | 3674.25 | repair true; frugality true; load-bearing true |
+| `alias` | 0.810088 / 0.6250 | -0.355776 / 0.0625 | 1881.50 | 4615.00 | repair true; frugality true; load-bearing true |
+
+Audit interpretation: this smoke is exploratory/diagnostic only and must not
+be promoted. The gate scaffolding was faithful, but plain `hybrid` used a
+periodic posterior refresh derived from `FRUGALITY_FRACTION` and
+`AMBIGUITY_MASS`, so the frugality arm was not an independent measurement of
+the frozen ambiguity-triggered controller. The Phase 4 claim remains unearned
+until the frozen trigger is rerun.
+
+Repaired frozen-trigger smoke receipt, 2026-05-17:
+
+```text
+npm run bayes:phase4:smoke
+512 trials in 191.794s
+Exit gate: hybrid_no_niche (0/2 claim scenarios all-arms)
 ```
 
 Receipt paths:
@@ -1089,29 +1127,30 @@ Receipt paths:
 - `results/bayes/phase4-hybrid-smoke/regret.csv`
 - `results/bayes/phase4-hybrid-smoke/replay-manifest.json`
 
-Smoke gate rows:
+Repaired smoke gate rows:
 
 | Scenario | Hybrid score / success | HC-Sundog score / success | Hybrid evals | Bayes-adaptive evals | Arms |
 | --- | ---: | ---: | ---: | ---: | --- |
-| `decoy` | 1.564062 / 1.0000 | -0.061427 / 0.1875 | 1260.25 | 3674.25 | repair true; frugality true; load-bearing true |
-| `alias` | 0.810088 / 0.6250 | -0.355776 / 0.0625 | 1881.50 | 4615.00 | repair true; frugality true; load-bearing true |
+| `decoy` | -0.061427 / 0.1875 | -0.061427 / 0.1875 | 0.00 | 3674.25 | repair false; frugality true; load-bearing true |
+| `alias` | -0.355776 / 0.0625 | -0.355776 / 0.0625 | 35.50 | 4615.00 | repair false; frugality true; load-bearing true |
 
-Smoke interpretation: the harness now confirms the full Phase 4 niche gate in
-the cheap run. `hybrid_no_posterior` does not repair either claim scenario, so
-the hard-drop override does not fire. `hybrid_posterior_decoy_disambig` repairs
-both claim scenarios, making the posterior load-bearing in the ablation arm.
-The staged lock should run unchanged unless the smoke artifact itself is being
-audited.
+Repaired smoke interpretation: the frozen trigger is now faithful and the
+result is a clean smoke negative. `hybrid` does not repair either claim
+scenario, so Phase 4 has not earned a niche. The load-bearing ablation still
+repairs both claim scenarios, which means the posterior can be sufficient; the
+plain ambiguity trigger is too restrictive or fires too late on this smoke.
 
-Lock staging:
+Lock staging, held after repaired smoke:
 
 ```bash
 npm run bayes:phase4
 ```
 
-Estimate from the smoke rate: 3,072 trials at 1.11 trials/s is about 46
-minutes on the current CPU lane, so the lock is operator-run under the repo's
-long-run rule. The read-back artifact is
+Estimate from the repaired smoke rate: 3,072 trials at 2.67 trials/s is about
+19 minutes on the current CPU lane, so the lock remains operator-run under the
+repo's long-run rule. Because the repaired smoke is `hybrid_no_niche`, do not
+run or promote the lock as claim support without an explicit redesign or
+decision to test the negative at lock scale. The read-back artifact would be
 `results/bayes/phase4-hybrid-lock/manifest.json`.
 
 Outcome branches:
