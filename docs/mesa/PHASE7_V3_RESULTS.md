@@ -335,6 +335,12 @@ v3 receipt records it as a candidate handoff for a Phase 6.x Large
 follow-up — possibly a `net.X` activation-patching study against the
 trough cells specifically.
 
+**Handoff filed (2026-05-18):** Phase 6b spec at
+[`PHASE6B_SPEC.md`](PHASE6B_SPEC.md) picks up this side-finding as
+the pre-registered GG6b-mech hypothesis. Cliff pair is mixed_0_99 vs
+mixed_0_97 (the v3 "recovery / trough" boundary); Large net.9 is the
+analog of Medium net.7; layer sweep across net.1/3/5/7/9 at 64 seeds.
+
 ## 8. Open edges for v3.x
 
 - Seed-shift triangulation of mixed_0_95 / 0_97 / 0_99 — single seed
