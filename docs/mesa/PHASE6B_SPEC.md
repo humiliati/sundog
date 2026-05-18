@@ -410,21 +410,30 @@ the metric question, because they shape v1.1 expectations:
 
 Phase 6b v1.1 is complete when:
 
-- The harness `--cliff-pair large-v3` flag is implemented (v1, done)
-  *and* the alignment-patch_success metric is computed and written
-  to the aggregate CSV (v1.1, queued — see §5 v1.1 bullet).
-- The `clean` / `intervened` bit-identity bug is investigated and
+- ✓ The harness `--cliff-pair large-v3` flag is implemented (v1,
+  landed) *and* the alignment-patch_success metric is computed and
+  written to the aggregate CSV (v1.1, landed — see §5 v1.1 bullet).
+- ⏳ The `clean` / `intervened` bit-identity bug is investigated and
   either fixed or its non-effect explained mechanistically. v1.1
   verdicts default to `clean` rows only until the bug is resolved.
-- A v1.1 smoke (8 seeds, `--layer net.9`) lands with sensible
+  *Status:* open; doesn't change the destructive-transfer verdict
+  in v1.1 (which is condition-independent).
+- ✓ A v1.1 smoke (8 seeds, `--layer net.9`) lands with sensible
   `patch_success_align` magnitudes (bounded, not in the hundreds).
-- The v1.1 full layer sweep (`--layers net.1,net.3,net.5,net.7,net.9`
-  at 64 seeds) has run and the parallel-column CSVs are written.
-- Each of GG6b-loc-{A,B,C,D} is called against
+  *Smoke-v11 landed 2026-05-18 ~15s wall-clock; metric bounded
+  (single digits); see §13 versioning for the per-statistic
+  numbers that drove the P4-rule sharpening.*
+- ✓ The v1.1 full layer sweep
+  (`--layers net.1,net.3,net.5,net.7,net.9` at 64 seeds) has run and
+  the parallel-column CSVs are written. *Full-v11 landed 2026-05-18
+  ~13.5 min wall-clock.*
+- ✓ Each of GG6b-loc-{A,B,C,D} is called against
   `patch_success_align`; if A or B confirms, the locus layer is
-  named.
-- GG6b-mech is called against the locus layer (if any).
-- [`PHASE6B_RESULTS.md`](PHASE6B_RESULTS.md) is written with the
+  named. *Called: GG6b-loc-D (destructive-transfer at all 10 cells).*
+- ✓ GG6b-mech is called against the locus layer (if any).
+  *Not called per spec §6 — mech is not evaluated at destructive
+  layers; every layer fired the falsifier.*
+- ✓ [`PHASE6B_RESULTS.md`](PHASE6B_RESULTS.md) is written with the
   v1.1 verdicts and a back-reference to the §6.A first-sweep
   receipt for methodological completeness.
 
@@ -476,25 +485,36 @@ hour session, not a same-budget extension of v3.
 
 ## 9. Staged Commands (operator)
 
+The v1.1 canonical commands as actually executed (wall-clock
+measured, not estimated):
+
 ```powershell
 # repo root: C:\Users\hughe\Dev\sundog
 
-# SMOKE — Large cliff pair, single layer net.9, 8 seeds (~5-10 min;
-# this run is the calibration measurement for the full sweep below)
+# SMOKE — Large cliff pair, single layer net.9, 8 seeds.
+# Measured wall-clock 2026-05-18: ~15 seconds.
 python -m training.mesa.phase6_probes axis-b-smoke `
   --cliff-pair large-v3 `
   --layer net.9 `
   --seeds 8 `
-  --out results/mesa/phase6b-large-cliff-pair/smoke
+  --out results/mesa/phase6b-large-cliff-pair/smoke-v11
 
-# FULL — Large cliff pair, layer sweep, 64 seeds (~2.5-4 hours
-# pre-measurement; scale from smoke wall-clock × ~32 once smoke lands)
+# FULL — Large cliff pair, layer sweep, 64 seeds.
+# Measured wall-clock 2026-05-18: ~13.5 minutes (10:32 → 10:46).
 python -m training.mesa.phase6_probes axis-b-smoke `
   --cliff-pair large-v3 `
   --layers net.1,net.3,net.5,net.7,net.9 `
   --seeds 64 `
-  --out results/mesa/phase6b-large-cliff-pair/full
+  --out results/mesa/phase6b-large-cliff-pair/full-v11
 ```
+
+The smoke-v1 (basin-pref-only, before the v1.1 harness change) and
+full-v1 receipts are preserved alongside at `.../smoke/` and
+`.../full/` respectively; see §6.A. Pre-measurement wall-clock
+estimates in §8 (~5–10 min smoke, ~2.5–4 h full) were conservative
+by a factor of ~10× on both — bridge round-trip dominates at Large
+inference-only patching the same way it does at Medium, and the
+torch forward at hidden_size=1024 is not the bottleneck.
 
 (The subcommand keeps the `axis-b-smoke` name from Phase 6 v1 even
 though the full run is not a smoke; renaming the subcommand is out of
@@ -618,3 +638,16 @@ Phase 6b does not own:
   is explicitly not called at destructive layers. Reasoning anchored
   to the v1.1 smoke results directly so future readers can
   recapitulate the decision.
+- **v1.1 (2026-05-18, full-v11 sweep executed, result note filed)** —
+  Full sweep at 64 seeds × 5 layers × 2 conditions, ~13.5 min wall-
+  clock. All 10 cells fired the destructive-transfer falsifier
+  (gap-delta range 0.92–2.11); zero cells cleared the conjunctive
+  P4 rule. **GG6b-loc-D called** (Phase 6 v1 protocol doesn't
+  generalize to Large for this cliff pair); GG6b-mech not called;
+  GG6b-shape deferred. Receipt at
+  [`PHASE6B_RESULTS.md`](PHASE6B_RESULTS.md). The verdict rests on
+  three independent readings (raw `mean_patched_alignment`,
+  destructive-transfer falsifier, conjunctive P4) and is consistent
+  with the v3 finding that the Large recovery/trough cliff is not a
+  basin-attractor collapse cliff — there is no transferable basin
+  circuit to probe between two field-coupled policies.

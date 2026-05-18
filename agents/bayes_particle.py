@@ -81,17 +81,30 @@ class BayesParticleAgent:
         actions = np.empty((particles.shape[0], 2), dtype=np.float64)
         for i, xy in enumerate(particles):
             laser_pos = np.array([xy[0], xy[1], self.laser_z], dtype=np.float64)
-            tx, ty = optics.optimal_joint_angles(
-                laser_pos=laser_pos,
-                target_pos=self.target_detector_pos,
-            )
-            actions[i] = np.array(
-                [
-                    np.clip(tx, -self.joint_limit, self.joint_limit),
-                    np.clip(ty, -self.joint_limit, self.joint_limit),
-                ]
-            )
+            if self.structure_filter == "s0":
+                tx, ty = optics.optimal_joint_angles(
+                    laser_pos=laser_pos,
+                    target_pos=self.target_detector_pos,
+                )
+                actions[i] = np.array(
+                    [
+                        np.clip(tx, -self.joint_limit, self.joint_limit),
+                        np.clip(ty, -self.joint_limit, self.joint_limit),
+                    ]
+                )
+            else:
+                actions[i] = self._grid_argmax_action(laser_pos)
         return actions
+
+    def _grid_argmax_action(self, laser_pos: np.ndarray) -> np.ndarray:
+        best_action = None
+        best_value = -math.inf
+        for action in optics.joint_angle_lattice(self.joint_limit):
+            value = self._predict_for_action(laser_pos, action)[self.target_detector_index]
+            if value > best_value:
+                best_value = value
+                best_action = action
+        return np.asarray(best_action, dtype=np.float64)
 
     def _precompute_target_matrix(self) -> np.ndarray:
         matrix = np.empty((self.particle_count, self.particle_count), dtype=np.float64)
