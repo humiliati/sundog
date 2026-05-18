@@ -1333,3 +1333,34 @@ intervention battery to disambiguate `lambda=0.99` recovery; ~60–70 min
 operator wall-clock, no new training.
 
 **Phase 8:** Not started.
+
+### MESAv2 Spine — Status Roll-Up (2026-05-18)
+
+The v2 spine is filed separately at
+[`SUNDOG_V_MESAV2.md`](SUNDOG_V_MESAV2.md) as a sister roadmap; this
+roll-up surfaces its state from the v1 Implementation Status entry
+point so the spine isn't invisible to readers landing here.
+
+| v2 Phase | Status | Last touched | Notes |
+| --- | --- | --- | --- |
+| 0.5 — Traceability Claim Boundary | ✅ complete (2026-05-13) | 2026-05-13 | 4-row layer taxonomy; mirrored to `docs/presentation/claims-and-scope.md` |
+| 0.6 — Bayes-Net / NN / Sundog Comparison | ✅ complete (2026-05-13, stamped 2026-05-18) | 2026-05-18 | Comparison table in-doc; exit criterion self-check landed |
+| 1' — Reference Signature Path Audit | ⏳ not started | 2026-05-13 | ~1–2 days; unblocked; highest-leverage next step |
+| 6.5 — Formal Separability Counterexample Pass | ⏳ not started | 2026-05-13 | ~1–2 weeks Small-tier; sequenced after 1'; reserves `sensor-hacked` / `geometry-hacked` labels |
+| 7' — Envelope Cell Relabeling | ✅ complete + 2× extended | 2026-05-18 | v1 retrofit landed 2026-05-13; **v2 envelope extension (Phase 7 v2)** and **v3 vocabulary extension (Phase 7 v3, new labels `field-coupled, under-budget` and `bootstrap-collapse`)** both landed 2026-05-18 |
+| 8' — Traceability Claim Ratchet | ⏳ not started | 2026-05-13 | Post-v2 writeup; depends on 0.5/0.6/1'/6.5/7' |
+
+The v3 labels in 7' partially falsified the v2 `reward-coupled
+(profile)` qualifier for the Large U-trough cells (now
+`field-coupled, under-budget`) and partially falsified the v2
+`undertrained` label for the bootstrap-failed cell (now
+`bootstrap-collapse`). Phase 7 v2 amendments to surface those
+relabels are queued in [`mesa/PHASE7_V3_RESULTS.md`](mesa/PHASE7_V3_RESULTS.md) §6
+but not yet applied to the v2 result note.
+
+Mechanistic side-thread on the v3 cliff pair (Phase 6b) closed
+2026-05-18 with GG6b-loc-D — the Phase 6 v1 activation-patching
+protocol does not generalize to Large for the mixed_0_99 /
+mixed_0_97 pair (destructive transfer at every swept layer). Result
+note at [`mesa/PHASE6B_RESULTS.md`](mesa/PHASE6B_RESULTS.md); does
+not affect the v2 spine vocabulary.

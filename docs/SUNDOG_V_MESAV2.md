@@ -129,6 +129,31 @@ Avoid:
 - "Learned signature-trained agents are interpretable by construction."
 - "External signature implies external objective."
 
+## v2 Spine Status (2026-05-18)
+
+A single-glance status surface for the v2 spine. Per-phase status
+lines below are authoritative; this table mirrors them and is
+also mirrored in
+[`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md) §Implementation Status →
+MESAv2 Spine — Status Roll-Up.
+
+| v2 Phase | Status | Last touched | Notes |
+| --- | --- | --- | --- |
+| 0.5 — Traceability Claim Boundary | ✅ complete (2026-05-13) | 2026-05-13 | 4-row layer taxonomy; mirrored to `docs/presentation/claims-and-scope.md` |
+| 0.6 — Bayes-Net / NN / Sundog Comparison | ✅ complete (2026-05-13, stamped 2026-05-18) | 2026-05-18 | Comparison table in-doc; exit-criterion self-check landed |
+| 1' — Reference Signature Path Audit | ⏳ not started | 2026-05-13 | ~1–2 days; unblocked; highest-leverage next step |
+| 6.5 — Formal Separability Counterexample Pass | ⏳ not started | 2026-05-13 | ~1–2 weeks Small-tier; sequenced after 1'; reserves `sensor-hacked` / `geometry-hacked` labels |
+| 7' — Envelope Cell Relabeling | ✅ complete + 2× extended | 2026-05-18 | v1 retrofit 2026-05-13; **v2 envelope extension (Phase 7 v2)** and **v3 vocabulary extension (Phase 7 v3, new labels `field-coupled, under-budget` and `bootstrap-collapse`)** both 2026-05-18 |
+| 8' — Traceability Claim Ratchet | ⏳ not started | 2026-05-13 | Post-v2 writeup; depends on 0.5/0.6/1'/6.5/7' |
+
+Next-step decision-leverage (per the 2026-05-18 v2-spine survey):
+**Phase 1' is the highest-leverage substantive forward motion** —
+unblocked, cheap (~1–2 days, mechanical), and its outcome forks
+Phase 8' between the three pre-drafted claim-language branches
+(clean / partial-collapse / leakage-found). Phase 6.5 is the larger
+v2 lift but is sequenced after 1' per this doc's "Sequencing &
+sizing" section.
+
 ## v2 Phases
 
 ### Phase 0.5 — Traceability Claim Boundary (net-new)
@@ -187,6 +212,21 @@ just another interpretability problem" and a reviewer who says "Bayes
 nets already solved traceability," using only the table above plus the
 v1 envelope receipts. Not a literature survey.
 
+**Status:** **complete (2026-05-13, stamped 2026-05-18).** The
+comparison table above is the deliverable and is in-doc. Exit-criterion
+self-check: the table separates Bayes nets (auditable structure,
+inference-scale hard) from transformer/deep-RL (auditable training
+signal, internal objective opaque) from hand-coded Sundog (auditable
+SCAN/SEEK/TRACK logic, envelope-bounded) from learned Sundog
+(auditable external signature path, internal proxy formation under
+test by Phases 3/4/6/7). A reviewer raising "just another
+interpretability problem" can be pointed at row 4's "What remains
+hard" column; a reviewer raising "Bayes nets already solved
+traceability" can be pointed at row 1's same column. The table plus
+the v1 envelope receipts (PHASE3/4/5/6/7 result notes) satisfy the
+exit criterion without a literature survey. No amendments since
+initial filing.
+
 ### Phase 1' — Reference Signature Path Audit (retrofit on v1 Phase 1)
 
 **Goal:** prove `S(x)` is externally defined, reproducible, separable
@@ -228,6 +268,16 @@ from reward, and inspectable before any learning enters.
 of agent performance. Any unexpected coupling found by the audit is
 filed as a v2 finding and routed back to v1's PHASE1_HC_BASELINE before
 the audit is declared green.
+
+**Status:** **spec filed (2026-05-18)** at
+[`mesa/PHASE1_PRIME_SPEC.md`](mesa/PHASE1_PRIME_SPEC.md). Four
+pre-registered leakage tests (LT1–LT4) with pass/fail verdicts,
+manifest schema with `leakage_audit_verdict` per-test field, three
+pre-registered outcomes (clean / partial-collapse / leakage-found)
+that route Phase 8' between its three drafted claim-language
+branches. Compute envelope: ~1–2 days, mechanical, no env runs.
+Manifest emitter, audit script, and result note are all unbuilt;
+spec ratification is the v1 gate.
 
 ### Phase 6.5 — Formal Separability Counterexample Pass (net-new)
 
