@@ -1669,21 +1669,75 @@ overtakes only when the family collapses to clean-only; the intermediate band is
 contested. Recorded as-run; the margin is not re-sliced and no cell is re-cut to
 sharpen the boundary.
 
-### Phase 6 — Photometric Port
+### Phase 6 - Photometric Port
 
-Goal: port the comparison back to the core mirror-alignment experiment.
+Frozen canonical record, 2026-05-18:
 
-Deliverables:
+Goal: port the standalone Bayes-vs-response comparison back to the core
+MuJoCo mirror-alignment experiment without changing the existing photometric
+receipts.
 
-- Bayesian baseline for the photometric task, likely particle or grid posterior
-  over laser / target / floor-hit geometry given detector readings.
-- Direct comparison against the existing photometric scan/seek/track controller
-  and analytic oracle.
-- Known-model and wrong-model optical variants.
-- At least one occlusion or detector-alias variant if feasible.
+Lanes:
 
-Exit criterion: a reviewer can see whether the Bayes-vs-Sundog result is only a
-shadow-field toy artifact or relevant to the core photometric task.
+- `photometric`
+- `doa_direct` (privileged yardstick; excluded from classification)
+- `doa_noisy` (reported rail)
+- `random` (reported rail)
+- `bayes_particle`
+
+`bayes_particle` is a particle filter over laser `xy` in `[-0.4,0.4]^2` from
+the 8 detector intensities. It always predicts observations with the nominal
+model (`beam_sigma = 0.15`, `detector_noise_sigma = 0.0`); stress enters only
+through the environment, so mismatch is model-side and pre-registered. Particle
+counts are frozen at 64 for smoke and 128 for lock.
+
+Two single-axis severity ladders are mapped, nesting the committed stress
+receipts exactly:
+
+- `beam_sigma = [0.05, 0.10, 0.15, 0.25, 0.40]` at
+  `detector_noise_sigma = 0.0`
+- `detector_noise_sigma = [0.0, 0.02, 0.05, 0.10, 0.20]` at
+  `beam_sigma = 0.15`
+
+The shared nominal cell `(0.15, 0.0)` is counted once, yielding 9 distinct
+cells. The smoke is a strict seed-prefix run over `nominal`, `beam_sigma=0.40`,
+and `detector_noise_sigma=0.20`.
+
+Metric and classifier:
+
+- Primary metric: median `time_to_threshold`, right-censored at 500 steps.
+  Censored seeds enter as 500.
+- Receipt extension: `experiments/analysis.py` now emits
+  `time_to_threshold.ci95` using the same bootstrap estimator already used for
+  `terminal_intensity.ci95`.
+- A class is assigned only between `photometric` and `bayes_particle`.
+  A lane is dominant only when its median-time lead over the runner-up exceeds
+  the `ci95` half-width of the better lane's per-seed `time_to_threshold`;
+  otherwise the cell is `mixed`.
+- `terminal_intensity` is reported alongside the acquisition metric.
+
+Substrate-validity anchors:
+
+1. The nominal `photometric` and `doa_direct` lanes reproduce the committed
+   `results/analysis/analysis_summary.json` aggregates exactly at lock scale.
+   The smoke checks the same deterministic receipt as a strict seed-prefix
+   NPZ replay before any lock is run.
+2. Each ladder's `photometric` lane reproduces the committed
+   `results/stress_tests/{beam_sigma,detector_noise}/sweep_summary.json`
+   photometric column at lock scale. Smoke checks the included cells by
+   seed-prefix NPZ replay.
+
+Frozen commands:
+
+```powershell
+$env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6-photometric-smoke --results-dir results/bayes/phase6-photometric-smoke --phase6-cells smoke --seeds 6 --steps 500 --particle-count 64 --conditions photometric doa_direct doa_noisy random bayes_particle
+$env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6-photometric-lock --results-dir results/bayes/phase6-photometric-lock --phase6-cells lock --seeds 30 --steps 500 --particle-count 128 --conditions photometric doa_direct doa_noisy random bayes_particle
+```
+
+Exit criterion: a reviewer can see whether the Phase 1-5b result - response
+edge only under Bayesian misspecification severity - is a shadow-field toy
+artifact or replicates on the core photometric task. The phase is descriptive,
+non-fatal, and does not create a winner-take-all claim.
 
 ### Phase 7 — Public Visualization and Motion Rail Card
 
