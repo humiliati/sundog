@@ -97,64 +97,7 @@
             border-color: var(--accent-gold);
         }
 
-        /* Page-local: section / card / grid styling lives in sundog-theme.css.
-           Only retained: page-specific .app-card-img dimensions, .comparison-grid,
-           and the .comparison-side list styling, which are not in shared. */
-
-        .app-card-img {
-            width: 100%;
-            height: clamp(8.5rem, 34vw, 12.5rem);
-        }
-
-        .comparison-container {
-            max-width: 900px;
-            margin: 3rem auto;
-            padding: 2rem;
-        }
-
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .comparison-side h4 {
-            color: var(--primary-dark);
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-        }
-
-        .comparison-side ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .comparison-side li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .comparison-side li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--accent-gold);
-        }
-
-        .comparison-note {
-            max-width: 720px;
-            margin: 1.75rem auto 0;
-            color: #40505C;
-            line-height: 1.65;
-            text-align: center;
-        }
-
-        .comparison-note a {
-            color: var(--primary-mid);
-            font-weight: 800;
-        }
+        /* Page-local: section / card / grid styling lives in sundog-theme.css. */
 
         /* Page-local: .proof-placeholder dimensions retained; shared sets bg/border but not size */
         .proof-placeholder {
@@ -244,88 +187,6 @@
             color: var(--primary-dark);
             border-color: rgba(244, 196, 48, 0.52);
             text-decoration: underline;
-        }
-
-        .what-intro {
-            max-width: 760px;
-            margin: -0.55rem auto 2rem;
-            color: var(--sd-muted);
-            text-align: center;
-        }
-
-        .what-primer {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.52fr);
-            gap: clamp(1.3rem, 3vw, 2.2rem);
-            align-items: start;
-        }
-
-        .what-def-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1rem;
-        }
-
-        .what-def,
-        .what-media figure {
-            border: 1px solid rgba(20, 43, 58, 0.12);
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.76);
-            box-shadow: 0 10px 26px rgba(14, 30, 44, 0.08);
-        }
-
-        .what-def {
-            padding: 1rem;
-        }
-
-        .what-def .label {
-            display: block;
-            margin-bottom: 0.55rem;
-            color: var(--primary-mid);
-            font-family: var(--sd-font-data);
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-        }
-
-        .what-def h3 {
-            margin: 0 0 0.5rem;
-            color: var(--primary-dark);
-            font-size: 1.05rem;
-            line-height: 1.2;
-        }
-
-        .what-def p {
-            margin: 0;
-            color: #40505c;
-            font-size: 0.94rem;
-            line-height: 1.55;
-        }
-
-        .what-media {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .what-media figure {
-            overflow: hidden;
-            margin: 0;
-        }
-
-        .what-media img {
-            display: block;
-            width: 100%;
-            aspect-ratio: 16 / 10;
-            object-fit: cover;
-            background: #102334;
-        }
-
-        .what-media figcaption {
-            padding: 0.75rem 0.9rem 0.85rem;
-            color: #40505c;
-            font-size: 0.84rem;
-            line-height: 1.45;
         }
 
         .proof-item[id] {
@@ -846,10 +707,6 @@
                 font-size: 2rem;
             }
 
-            .comparison-grid {
-                grid-template-columns: 1fr;
-            }
-
             .proof-grid {
                 grid-template-columns: 1fr;
             }
@@ -969,11 +826,6 @@
 
         @media (max-width: 768px) {
             .theorem-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .what-primer,
-            .what-def-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -2067,161 +1919,11 @@
         <a href="/applications-gallery">See every working system, with its evidence tier &rarr;</a>
     </p>
 
-    <!-- What It Is Section -->
-    <section class="what-section" id="core-vocabulary">
-        <h2>Core Vocabulary</h2>
-        <p class="what-intro">
-            A short relevance check for the rest of the page: Sundog is not a mood about mystery.
-            It is a repeatable split between what is hidden, what is measured, what transforms,
-            and where the method stops working.
-        </p>
-        <div class="what-primer">
-            <div class="what-def-grid" aria-label="Sundog core terms">
-                <article class="what-def">
-                    <span class="label">Hidden State</span>
-                    <h3>The thing the system does not get to inspect.</h3>
-                    <p>
-                        In the atlas, that is sun altitude. In control, it can be a target position,
-                        pole angle, local field, obstacle geometry, or player intent.
-                    </p>
-                </article>
-                <article class="what-def">
-                    <span class="label">Trace</span>
-                    <h3>The indirect signal left in the world.</h3>
-                    <p>
-                        A parhelion, detector intensity, shadow, pressure field, deformation, or
-                        behavior wake can carry structure without revealing the full cause.
-                    </p>
-                </article>
-                <article class="what-def">
-                    <span class="label">Transformation</span>
-                    <h3>The rule that makes the trace usable.</h3>
-                    <p>
-                        Sometimes it is closed form, like <code>R22 / cos(h)</code>. Sometimes it is
-                        a bounded controller or measured operating envelope.
-                    </p>
-                </article>
-                <article class="what-def">
-                    <span class="label">Boundary</span>
-                    <h3>The point where the trace should fail.</h3>
-                    <p>
-                        The credibility test is not smooth storytelling. A traceable route should
-                        lose confidence at the same boundary as the underlying geometry.
-                    </p>
-                </article>
-            </div>
-            <div class="what-media" aria-label="Visual examples of traces">
-                <figure>
-                    <img src="/media/elevator-halosim-parhelia.png" alt="HaloSim parhelia receipt showing bright spots beside the sun.">
-                    <figcaption>
-                        Halo trace: the side glints move with sun altitude and supply the promoted atlas inverse.
-                    </figcaption>
-                </figure>
-                <figure>
-                    <img src="/media/photometric-alignment-rail-poster.png" alt="Photometric alignment workbench image showing a beam and detector feedback.">
-                    <figcaption>
-                        Control trace: the mirror controller acts from detector response, not target coordinates.
-                    </figcaption>
-                </figure>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why It Matters Section -->
-    <section class="why-section">
-        <h2>Why Indirect Signals Matter</h2>
-        <div class="benefits-grid">
-            <div class="benefit-card">
-                <h3>Works Where Direct Inspection Is Hard</h3>
-                <p>
-                    Occlusion, expense, or design constraints often make full state access impossible. Sundog operates from partial information.
-                </p>
-            </div>
-            <div class="benefit-card">
-                <h3>Agents With Incomplete Knowledge</h3>
-                <p>
-                    Agents that know less can feel more alive. Sundog enables coherent behavior from compressed state.
-                </p>
-            </div>
-            <div class="benefit-card">
-                <h3>Interpretable Proxy Signals</h3>
-                <p>
-                    Instead of raw simulation noise, Sundog transforms physical traces into legible metrics: alignment, torsion, deformation, recovery.
-                </p>
-            </div>
-            <div class="benefit-card">
-                <h3>Practical Value</h3>
-                <p>
-                    Demonstrated across one controlled research result, multiple operating-envelope workbenches, procedural roguelikes, physical simulation, and softbody terrain systems.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- "Working Systems" static inventory removed in UI_UX_THEME_FOUNDATION
-         4f Pass 2 (2026-05-18): full inventory + evidence tiers now live only
-         on /applications-gallery (each card has a richer, equal-tier anchor
-         there). The motion rail above is application *preview*, not the ledger. -->
-
-    <!-- Comparison Section -->
-    <section class="comparison-section">
-        <h2>Alignment And Comparators</h2>
-        <div class="comparison-container">
-            <p class="comparison-lead">
-                Same hidden task. Same admitted observations. Different route from signal to action.
-            </p>
-            <div class="comparison-grid">
-                <div class="comparison-side">
-                    <h4>Posterior / ML Baselines</h4>
-                    <ul>
-                        <li>Partial observation is allowed</li>
-                        <li>Belief, model, or objective drives the action</li>
-                        <li>Should win when the model is right and cheap enough</li>
-                        <li>Must be repaired before any weak-baseline claim grows</li>
-                    </ul>
-                </div>
-                <div class="comparison-side">
-                    <h4>Sundog Trace Control</h4>
-                    <ul>
-                        <li>Acts from declared indirect traces</li>
-                        <li>Checks whether the route is causal and structural</li>
-                        <li>Comparable terminal accuracy in the core task, with slower acquisition</li>
-                        <li>Names the boundary where the trace stops being enough</li>
-                    </ul>
-                </div>
-            </div>
-            <p class="comparison-note">
-                The public comparison is complementary, not conquest: Bayes turns evidence into belief, Sundog turns response into control. Read the <a href="/alignment">alignment and Bayes primer</a>; optical vocabulary stays in the <a href="/legend">halo legend</a>.
-            </p>
-        </div>
-    </section>
-
-    <!-- Research Posture Section -->
-    <section class="research-section">
-        <h2>Ongoing Research</h2>
-        <div class="research-content">
-            <p>
-                The Sundog Project is an independent applied research initiative. The paper-grade scientific claim is narrow: photometric mirror alignment without target-position access in a controlled MuJoCo experiment. The application layer now includes bounded operating-envelope studies in Three-Body, Balance, and Pressure Mines, plus product and instrumentation systems at lower evidence tiers.
-            </p>
-            <p>
-                We are continuing to formalize the mathematics, strengthen experimental evidence, and explore new application domains. The current public readout is organized around load-bearing pillars: write the failure boundary first, map the operating envelope, and keep proof-status gates visible.
-            </p>
-        </div>
-        <div class="research-highlights">
-            <div class="research-highlight">
-                <h4>What We're Sharing</h4>
-                <p>Open repository, reproducible experiments, comprehensive documentation, and stress test results.</p>
-            </div>
-            <div class="research-highlight">
-                <h4>What We're Inviting</h4>
-                <p>Independent replication, collaboration on formalization, application-specific studies, and critical review.</p>
-            </div>
-            <div class="research-highlight">
-                <h4>Our Posture</h4>
-                <p>Independent applied research project with experimental software lab as secondary identity.</p>
-            </div>
-        </div>
-    </section>
+    <!-- Homepage support prose removed in UI_UX_THEME_FOUNDATION 4f Pass 3
+         (2026-05-18): vocabulary lives on /legend and /h-of-x, comparator
+         framing lives on /alignment, and research posture lives on /about and
+         /repo-map. The homepage now proceeds from application previews to the
+         measured Ask Sundog experiment and the compact project map. -->
 
     <!-- Chat Experiment Teaser — links to /chat -->
     <section class="chat-experiment-teaser" aria-label="Ask Sundog claim-boundary experiment">
