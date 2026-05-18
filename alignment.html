@@ -347,6 +347,11 @@
             transform: translateY(0);
         }
 
+        .formula-card .gloss-term {
+            border-bottom-color: rgba(255, 232, 166, 0.82);
+            color: #FFE8A6;
+        }
+
         .phase-link-list {
             display: flex;
             flex-wrap: wrap;
@@ -517,7 +522,7 @@
                 <a href="/about">About</a>
                 <a href="/sundog">Atlas</a>
                 <a href="/applications-gallery">Applications</a>
-                <a href="/legend">Legend</a>
+                <a href="/alignment" aria-current="page">Align</a>
                 <a href="/chat">Chat</a>
                 <a href="docs/">Docs</a>
                 <a href="https://github.com/humiliati/sundog">GitHub</a>
@@ -659,7 +664,7 @@
                     </p>
                     <div class="analysis-line glossary-line" aria-label="Bayes comparator glossary">
                         <p>
-                            Reader glossary: <dfn class="gloss-term" tabindex="0" data-gloss="The assumed model is wrong in a way that changes what the observations mean.">misspecification</dfn> is a wrong-world assumption; <dfn class="gloss-term" tabindex="0" data-gloss="A false signal peak or repeated-looking signal that can pull a response controller toward the wrong cause.">decoy / alias</dfn> is a wrong or ambiguous trace; <dfn class="gloss-term" tabindex="0" data-gloss="A result that holds on the tested task family or simulator substrate, not automatically on every physical system.">substrate-conditional</dfn> means the claim belongs to the tested regime.
+                            Reader glossary: <dfn class="gloss-term" tabindex="0" data-gloss="The assumed model is wrong in a way that changes what the observations mean.">misspecification</dfn> is a wrong-world assumption; <dfn class="gloss-term" tabindex="0" data-gloss="A false signal peak or repeated-looking signal that can pull a response controller toward the wrong cause.">decoy / alias</dfn> is a wrong or ambiguous trace; <dfn class="gloss-term" tabindex="0" data-gloss="A result that holds on the tested task family or simulator substrate, not automatically on every physical system.">substrate-conditional</dfn> means the claim belongs to the tested regime. Atmospheric-optics terms such as <a href="/legend#phenomenon-parhelion">parhelion</a>, <a href="/legend#phenomenon-circumzenithal-arc">circumzenithal arc</a>, and <a href="/legend#phenomenon-22-degree-halo">22° halo</a> live in the halo legend.
                         </p>
                         <p>
                             <dfn class="gloss-term" tabindex="0" data-gloss="Final closeness to the target at the end of a run versus how quickly a method reaches a usable threshold.">Terminal accuracy versus time-to-threshold</dfn> is why the core task can tie on final accuracy while Bayes still wins on speed. <dfn class="gloss-term" tabindex="0" data-gloss="The s3 structure rung gives Bayes no useful model family, so the particle filter collapses into a degenerate fixed-action behavior.">Model-family collapse (s3)</dfn> is not a normal Bayes loss; it is the model-less limit.
