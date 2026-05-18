@@ -1057,6 +1057,11 @@
             background: rgba(8, 26, 40, 0.5);
             border-color: rgba(245, 245, 245, 0.58);
         }
+        .hero .cta-buttons {
+            grid-template-columns: repeat(2, minmax(11rem, 14rem));
+            justify-content: center;
+            width: min(100%, 34rem);
+        }
 
         @media (prefers-reduced-motion: reduce) {
             .hero-atlas path,
@@ -1483,8 +1488,8 @@
                 Explore the h(x) geometry behind solar halos, then follow the same traceability discipline into robotic control, agents, and workbenches.
             </p>
             <div class="cta-buttons">
-                <a href="/threebody" class="btn btn-secondary">Three-Body workbench</a>
-                <a href="/balance" class="btn btn-secondary">Balance workbench</a>
+                <a href="/repo-map" class="btn btn-primary">Repo map</a>
+                <a href="https://github.com/humiliati/sundog" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">GitHub</a>
             </div>
         </div>
         <p class="hero-altitude-chip" data-hero-altitude-readout>
@@ -2283,9 +2288,13 @@
     </section>
 
     <!-- Call to Action Section -->
-    <section class="cta-section">
-        <h2>Explore Sundog</h2>
+    <section class="cta-section" id="project-map">
+        <h2>Project Map</h2>
         <div class="cta-grid">
+            <a href="/repo-map" class="cta-link">
+                <h3>Repo Map</h3>
+                <p>Choose the inspection path</p>
+            </a>
             <a href="https://github.com/humiliati/sundog" class="cta-link">
                 <h3>GitHub</h3>
                 <p>View the repository</p>

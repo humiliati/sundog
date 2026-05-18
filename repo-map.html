@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A human and agent navigation map for the Sundog repository, public evidence pages, docs, and workbenches.">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/repo-map">
+    <meta property="og:url" content="https://sundog.cc/repo-map">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sundog Project Map">
+    <meta property="og:description" content="Choose the right Sundog inspection path: evidence, atlas, alignment, applications, chat, docs, and source.">
+    <title>Sundog - Project Map</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            overflow: hidden;
+        }
+
+        .map-hero {
+            padding: clamp(5.5rem, 12vw, 8rem) var(--sd-space-page) clamp(3rem, 7vw, 5rem);
+            background:
+                linear-gradient(120deg, rgba(11, 23, 32, 0.9), rgba(20, 43, 58, 0.78)),
+                radial-gradient(circle at 72% 28%, rgba(244, 196, 48, 0.24), transparent 22rem);
+            color: var(--text-light);
+        }
+
+        .map-hero-inner,
+        .map-board,
+        .agent-path {
+            width: min(100%, var(--sd-page-max));
+            margin: 0 auto;
+        }
+
+        .eyebrow {
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+            font-family: var(--sd-font-data);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            max-width: 850px;
+            margin-bottom: 1.25rem;
+            font-family: var(--sd-font-display);
+            font-size: clamp(2.6rem, 7vw, 5.4rem);
+            line-height: 0.98;
+            letter-spacing: 0;
+        }
+
+        .lede {
+            max-width: 780px;
+            color: rgba(245, 245, 245, 0.84);
+            font-size: clamp(1.04rem, 2vw, 1.28rem);
+            line-height: 1.8;
+        }
+
+        .map-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            margin-top: 2rem;
+        }
+
+        .map-actions a {
+            display: inline-flex;
+            min-height: 3rem;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(245, 245, 245, 0.42);
+            border-radius: var(--sd-radius-md);
+            color: var(--text-light);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .map-actions a:first-child {
+            border-color: rgba(244, 196, 48, 0.85);
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+        }
+
+        .map-board {
+            padding: clamp(3rem, 7vw, 5.5rem) var(--sd-space-page);
+        }
+
+        .map-intro {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(16rem, 0.55fr);
+            gap: clamp(1.5rem, 4vw, 3rem);
+            align-items: start;
+            margin-bottom: 2.5rem;
+        }
+
+        .map-intro h2,
+        .agent-path h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(2rem, 4vw, 3.1rem);
+            line-height: 1.05;
+            letter-spacing: 0;
+        }
+
+        .map-intro p,
+        .agent-path p {
+            color: #40505c;
+            line-height: 1.75;
+        }
+
+        .map-key {
+            display: grid;
+            gap: 0.65rem;
+            padding: 1rem;
+            border: 1px solid var(--line);
+            border-radius: var(--sd-radius-md);
+            background: rgba(255, 255, 255, 0.72);
+        }
+
+        .key-row {
+            display: grid;
+            grid-template-columns: 1rem 1fr;
+            gap: 0.7rem;
+            align-items: center;
+            color: #40505c;
+            font-size: 0.94rem;
+        }
+
+        .key-dot {
+            width: 0.8rem;
+            height: 0.8rem;
+            border-radius: 999px;
+            background: var(--lane-color);
+        }
+
+        .repo-lanes {
+            display: grid;
+            gap: 1.4rem;
+        }
+
+        .repo-lane {
+            --lane-color: var(--sd-sky);
+            display: grid;
+            grid-template-columns: minmax(12rem, 0.35fr) minmax(0, 1fr);
+            gap: clamp(1rem, 3vw, 2rem);
+            align-items: stretch;
+            padding: clamp(1rem, 3vw, 1.35rem);
+            border: 1px solid color-mix(in srgb, var(--lane-color), transparent 68%);
+            border-left: 0.45rem solid var(--lane-color);
+            border-radius: var(--sd-radius-md);
+            background: rgba(255, 255, 255, 0.74);
+            box-shadow: var(--sd-shadow-soft);
+        }
+
+        .repo-lane[data-lane="evidence"] { --lane-color: var(--sd-brass); }
+        .repo-lane[data-lane="atlas"] { --lane-color: var(--sd-signal); }
+        .repo-lane[data-lane="alignment"] { --lane-color: var(--sd-violet); }
+        .repo-lane[data-lane="apps"] { --lane-color: var(--sd-copper); }
+        .repo-lane[data-lane="chat"] { --lane-color: #b04535; }
+        .repo-lane[data-lane="source"] { --lane-color: var(--sd-ink); }
+
+        .lane-label h3 {
+            margin-bottom: 0.45rem;
+            color: var(--primary-dark);
+            font-size: 1.25rem;
+        }
+
+        .lane-label p {
+            color: #40505c;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .node-row {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .node-row::before {
+            content: "";
+            position: absolute;
+            left: 0.6rem;
+            right: 0.6rem;
+            top: 1.15rem;
+            height: 2px;
+            background: color-mix(in srgb, var(--lane-color), transparent 58%);
+            pointer-events: none;
+        }
+
+        .map-node {
+            position: relative;
+            display: grid;
+            gap: 0.35rem;
+            min-height: 8.4rem;
+            padding: 2rem 0.95rem 0.95rem;
+            border: 1px solid var(--line);
+            border-radius: var(--sd-radius-md);
+            background: rgba(255, 250, 240, 0.96);
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .map-node::before {
+            content: "";
+            position: absolute;
+            top: 0.75rem;
+            left: 0.95rem;
+            width: 0.78rem;
+            height: 0.78rem;
+            border: 3px solid var(--lane-color);
+            border-radius: 999px;
+            background: var(--sd-paper);
+            box-shadow: 0 0 0 4px rgba(255, 250, 240, 0.96);
+        }
+
+        .map-node:hover,
+        .map-node:focus-visible {
+            transform: translateY(-2px);
+            border-color: color-mix(in srgb, var(--lane-color), transparent 25%);
+            box-shadow: 0 16px 34px rgba(11, 23, 32, 0.14);
+            outline: none;
+        }
+
+        .map-node strong {
+            color: var(--primary-dark);
+            font-size: 1.02rem;
+            line-height: 1.25;
+        }
+
+        .map-node span {
+            color: #40505c;
+            font-size: 0.91rem;
+            line-height: 1.5;
+        }
+
+        .agent-path-wrap {
+            padding: 0 var(--sd-space-page) clamp(4rem, 8vw, 6rem);
+        }
+
+        .agent-path {
+            display: grid;
+            grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+            gap: clamp(1.5rem, 4vw, 3rem);
+            align-items: start;
+            padding: clamp(1.25rem, 4vw, 2rem);
+            border: 1px solid rgba(20, 43, 58, 0.16);
+            border-radius: var(--sd-radius-md);
+            background:
+                linear-gradient(135deg, rgba(255, 250, 240, 0.94), rgba(247, 250, 248, 0.96)),
+                linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), rgba(20, 43, 58, 0.08) calc(100% - 1px));
+            box-shadow: var(--sd-shadow-soft);
+        }
+
+        .agent-list {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .agent-list a {
+            display: grid;
+            gap: 0.25rem;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--line);
+            border-radius: var(--sd-radius-md);
+            color: var(--primary-dark);
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.68);
+        }
+
+        .agent-list a strong {
+            font-size: 0.98rem;
+        }
+
+        .agent-list a span {
+            color: #40505c;
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+
+        @media (max-width: 860px) {
+            .map-intro,
+            .repo-lane,
+            .agent-path {
+                grid-template-columns: 1fr;
+            }
+
+            .node-row {
+                grid-template-columns: 1fr;
+            }
+
+            .node-row::before {
+                left: 1.3rem;
+                right: auto;
+                top: 0.75rem;
+                bottom: 0.75rem;
+                width: 2px;
+                height: auto;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .map-actions a {
+                width: 100%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/legend">Legend</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="map-hero">
+            <div class="map-hero-inner">
+                <p class="eyebrow">Project map</p>
+                <h1>Choose the right inspection path.</h1>
+                <p class="lede">
+                    Sundog is a research site, a public claim ledger, and a working repository. This map gives visitors and agents the same first move: pick the evidence lane, then follow the receipts before the interpretation grows.
+                </p>
+                <div class="map-actions" aria-label="Primary repository actions">
+                    <a href="https://github.com/humiliati/sundog" target="_blank" rel="noopener noreferrer">Open raw GitHub</a>
+                    <a href="docs/">Open docs index</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="map-board" aria-labelledby="map-title">
+            <div class="map-intro">
+                <div>
+                    <p class="eyebrow">Living map</p>
+                    <h2 id="map-title">A curated map first, a generated graph later.</h2>
+                </div>
+                <div class="map-key" aria-label="Map key">
+                    <div class="key-row"><span class="key-dot" style="--lane-color: var(--sd-brass);"></span><span>Evidence pages and falsifiers</span></div>
+                    <div class="key-row"><span class="key-dot" style="--lane-color: var(--sd-signal);"></span><span>Atlas and geometry receipts</span></div>
+                    <div class="key-row"><span class="key-dot" style="--lane-color: var(--sd-violet);"></span><span>Alignment and comparator language</span></div>
+                    <div class="key-row"><span class="key-dot" style="--lane-color: var(--sd-copper);"></span><span>Applications and workbenches</span></div>
+                    <div class="key-row"><span class="key-dot" style="--lane-color: #b04535;"></span><span>Claim-boundary and chat experiments</span></div>
+                    <div class="key-row"><span class="key-dot" style="--lane-color: var(--sd-ink);"></span><span>Source and operator context</span></div>
+                </div>
+            </div>
+
+            <div class="repo-lanes">
+                <article class="repo-lane" data-lane="evidence">
+                    <div class="lane-label">
+                        <h3>Evidence Spine</h3>
+                        <p>Start here when the question is whether the public claim has receipts.</p>
+                    </div>
+                    <div class="node-row">
+                        <a class="map-node" href="/structural-failure"><strong>Structural Failure</strong><span>Boundary-map falsifier for closed-form traceability.</span></a>
+                        <a class="map-node" href="/mesa"><strong>Mesa Envelope</strong><span>Capacity and signal-mixing results with caveats visible.</span></a>
+                        <a class="map-node" href="docs/COARSE_GRAINING_PROOF_ROADMAP.md"><strong>Proof Trunk</strong><span>Coarse-graining status gate and proof-roadmap ledger.</span></a>
+                    </div>
+                </article>
+
+                <article class="repo-lane" data-lane="atlas">
+                    <div class="lane-label">
+                        <h3>Halo Atlas</h3>
+                        <p>Use this lane for geometry, vocabulary, calibration, and public disambiguation.</p>
+                    </div>
+                    <div class="node-row">
+                        <a class="map-node" href="/sundog"><strong>Visual Atlas</strong><span>The canonical halo geometry page and browser atlas.</span></a>
+                        <a class="map-node" href="/legend"><strong>Legend</strong><span>Vocabulary ledger, distinct from the live atlas.</span></a>
+                        <a class="map-node" href="docs/prereg/structural-failure-coincidence/README.md"><strong>Pre-Registration</strong><span>The structural-failure coincidence falsifier.</span></a>
+                    </div>
+                </article>
+
+                <article class="repo-lane" data-lane="alignment">
+                    <div class="lane-label">
+                        <h3>Alignment Frame</h3>
+                        <p>Use this lane when the question is what Sundog means by alignment.</p>
+                    </div>
+                    <div class="node-row">
+                        <a class="map-node" href="/about"><strong>About</strong><span>Lab posture, boundaries, and what Sundog is not.</span></a>
+                        <a class="map-node" href="/alignment"><strong>Alignment</strong><span>Comparator language for route fidelity and Bayes baselines.</span></a>
+                        <a class="map-node" href="docs/presentation/claims-and-scope.md"><strong>Claims &amp; Scope</strong><span>Safe public language and evidence-tier boundaries.</span></a>
+                    </div>
+                </article>
+
+                <article class="repo-lane" data-lane="apps">
+                    <div class="lane-label">
+                        <h3>Applications</h3>
+                        <p>Use this lane for workbenches. Treat tiers as part of the result.</p>
+                    </div>
+                    <div class="node-row">
+                        <a class="map-node" href="/applications-gallery"><strong>Applications Gallery</strong><span>Public overview of surfaces and evidence tiers.</span></a>
+                        <a class="map-node" href="/balance"><strong>Balance</strong><span>Shadow-control operating-envelope workbench.</span></a>
+                        <a class="map-node" href="/threebody"><strong>Three-Body</strong><span>Local-field and hazard-envelope workbench.</span></a>
+                    </div>
+                </article>
+
+                <article class="repo-lane" data-lane="chat">
+                    <div class="lane-label">
+                        <h3>Claim Boundary</h3>
+                        <p>Use this lane when the question is how the browser helper stays bounded.</p>
+                    </div>
+                    <div class="node-row">
+                        <a class="map-node" href="/chat"><strong>Ask Sundog</strong><span>Public claim-boundary experiment page.</span></a>
+                        <a class="map-node" href="docs/SUNDOG_V_CHAT.md"><strong>Chat Roadmap</strong><span>Prompt, routing, and evaluation history.</span></a>
+                        <a class="map-node" href="/data/sundog-claim-map.json"><strong>Claim Map</strong><span>Generated public claim classes and source routes.</span></a>
+                    </div>
+                </article>
+
+                <article class="repo-lane" data-lane="source">
+                    <div class="lane-label">
+                        <h3>Source</h3>
+                        <p>Use this lane when you need raw files, build context, or operator instructions.</p>
+                    </div>
+                    <div class="node-row">
+                        <a class="map-node" href="https://github.com/humiliati/sundog" target="_blank" rel="noopener noreferrer"><strong>GitHub</strong><span>Raw repository in a new tab.</span></a>
+                        <a class="map-node" href="docs/README.md"><strong>Docs README</strong><span>Human-readable index of public documentation.</span></a>
+                        <a class="map-node" href="https://github.com/humiliati/sundog/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer"><strong>AGENTS.md</strong><span>Local operator and agent workflow notes.</span></a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="agent-path-wrap">
+            <div class="agent-path">
+                <div>
+                    <p class="eyebrow">Agent context</p>
+                    <h2>Start narrow, then expand by lane.</h2>
+                    <p>
+                        The map is intentionally curated. A full generated code graph can support review work, but the public entry point should avoid exposing every internal filename as if all paths carry the same public evidence weight.
+                    </p>
+                </div>
+                <div class="agent-list" aria-label="Agent quick path">
+                    <a href="README.md"><strong>Repository README</strong><span>Project identity, public shape, and top-level navigation.</span></a>
+                    <a href="https://github.com/humiliati/sundog/blob/main/site-pages.json" target="_blank" rel="noopener noreferrer"><strong>site-pages.json</strong><span>Explicit public-launch intent for root HTML surfaces.</span></a>
+                    <a href="docs/README.md"><strong>Docs README</strong><span>Inspection path for papers, roadmaps, and evidence ledgers.</span></a>
+                    <a href="docs/presentation/claims-and-scope.md"><strong>Claims &amp; Scope</strong><span>Use before writing public claims, summaries, or chat answers.</span></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Sundog - <a href="/">Home</a> | <a href="/about">About</a> | <a href="/sundog">Atlas</a></p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
