@@ -430,11 +430,14 @@ after the go decision below clears.
 >
 > **v3 result note filed (2026-05-18).** Battery executed; receipt at
 > [`PHASE7_V3_RESULTS.md`](PHASE7_V3_RESULTS.md). Headline: **v2 caveat
-> closes (GG4-A confirmed — basin-attractor avoidance), but GG3
-> falsifies — the U-trough is field-coupled, not collapse.** New
-> traceability labels `field-coupled, under-budget` and
-> `bootstrap-collapse` introduced. v2 amendments queued for §5, §6,
-> §8, §10 of [`PHASE7_V2_RESULTS.md`](PHASE7_V2_RESULTS.md).
+> closes (GG4-A confirmed — basin-attractor avoidance), but GG3 and
+> GG5 each partially falsify** (one of two pre-registered conditions
+> held in both cases). The U-trough is field-coupled but with
+> moderately elevated bp_obp — neither the collapse class nor the
+> spec's pre-registered low-obp alternative; a new third class
+> `field-coupled, under-budget` is introduced. `bootstrap-collapse`
+> introduced for the reward_phase3 seg3 chain. v2 amendments queued
+> for §5, §6, §8, §10 of [`PHASE7_V2_RESULTS.md`](PHASE7_V2_RESULTS.md).
 
 ### 14.1 Compute model (load-bearing context)
 
