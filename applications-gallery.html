@@ -123,6 +123,84 @@
             color: #A97700;
         }
 
+        .commercial-section {
+            margin-top: 2rem;
+            padding: clamp(1.4rem, 4vw, 2rem);
+            border: 1px solid rgba(20, 43, 58, 0.16);
+            border-radius: 8px;
+            background:
+                linear-gradient(135deg, rgba(255, 250, 240, 0.92), rgba(247, 250, 248, 0.96)),
+                radial-gradient(circle at 100% 0%, rgba(244, 196, 48, 0.16), transparent 18rem);
+            box-shadow: var(--sd-shadow-soft);
+        }
+
+        .commercial-section h2 {
+            max-width: 760px;
+            color: var(--primary-dark);
+            font-size: clamp(1.8rem, 4vw, 2.7rem);
+            line-height: 1.08;
+            margin-bottom: 0.85rem;
+        }
+
+        .commercial-section > p {
+            max-width: 840px;
+            color: #40505C;
+            line-height: 1.75;
+        }
+
+        .commercial-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 1.4rem;
+        }
+
+        .value-card {
+            display: grid;
+            gap: 0.55rem;
+            padding: 1rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .value-card h3 {
+            color: var(--primary-dark);
+            font-size: 1.02rem;
+        }
+
+        .value-card p {
+            color: #40505C;
+            font-size: 0.94rem;
+            line-height: 1.62;
+        }
+
+        .value-card .tier-note {
+            color: var(--muted);
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .sponsor-note {
+            margin-top: 1.4rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--line);
+            color: #40505C;
+            font-size: 0.96rem;
+        }
+
+        .sponsor-note a {
+            color: var(--primary-dark);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .sponsor-note a:hover {
+            color: #A97700;
+        }
+
         /* Page-local: footer styling lives in sundog-theme.css */
 
         @media (max-width: 760px) {
@@ -135,6 +213,10 @@
             }
 
             .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .commercial-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -275,6 +357,41 @@
                     </div>
                 </article>
             </div>
+
+            <section class="commercial-section" id="commercial-translation" aria-labelledby="commercial-translation-title">
+                <p class="eyebrow">Commercial Translation</p>
+                <h2 id="commercial-translation-title">Where this could matter, if the evidence holds.</h2>
+                <p>
+                    Sundog is not a services catalog and this page is not an offer for sale. The commercial question is still fair: if indirect signals can be made inspectable, bounded, and useful, they may reduce instrumentation cost, improve field diagnostics, or make control systems more legible when full-state measurement is unavailable, expensive, or undesirable.
+                </p>
+
+                <div class="commercial-grid">
+                    <article class="value-card">
+                        <span class="tier-note">Closest to origin</span>
+                        <h3>Inspection and calibration</h3>
+                        <p>Blocked sightlines, alignment checks, and field procedures where the trace can confirm placement before the operator has direct visual access.</p>
+                    </article>
+                    <article class="value-card">
+                        <span class="tier-note">Operator background</span>
+                        <h3>Aquaculture and environmental systems</h3>
+                        <p>Pressure, flow, water-quality, behavior, and equipment traces may become health or alarm signals when direct inspection is sparse or delayed.</p>
+                    </article>
+                    <article class="value-card">
+                        <span class="tier-note">Engineering translation</span>
+                        <h3>PLC and controls work</h3>
+                        <p>Indirect process signals can support diagnostics, alarms, and bounded control logic, provided the failure surface is measured instead of assumed away.</p>
+                    </article>
+                    <article class="value-card">
+                        <span class="tier-note">Current workbenches</span>
+                        <h3>Robotics, agents, and simulations</h3>
+                        <p>The research value is route fidelity: whether a system acts from the trace, whether that route is inspectable, and where it stops working.</p>
+                    </article>
+                </div>
+
+                <p class="sponsor-note">
+                    Sundog Research Lab is sponsored by <a href="https://stellaraqua.com/" target="_blank" rel="noopener noreferrer">Stellar Aqua LLC</a>, an operating business with roots in aquaculture services, controls work, and project engineering. Sundog remains the research and evidence surface; business inquiries belong with Stellar Aqua.
+                </p>
+            </section>
         </section>
     </main>
 
