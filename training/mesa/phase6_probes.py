@@ -103,6 +103,51 @@ CLIFF_COLLAPSED = PolicySpec(
     sensor_tier="local-probe-field",
 )
 
+# Phase 6b Large cliff pair (PHASE6B_SPEC.md §3): the Phase 7 v3
+# recovery/trough boundary at Large under vc=0.25. mixed_0_99 is the
+# field-coupled recovered side (1% signature anchor; v3 GG4-A);
+# mixed_0_97 is the field-coupled-under-budget trough side (v3 GG3
+# partial-falsify). Both at 10M env-steps, seed=10000.
+CLIFF_PROTECTED_LARGE = PolicySpec(
+    policy_id="mixed_lambda_0_99_large_vc0_25",
+    label="L-Mixed-Large-lambda-0.99",
+    kind="learned",
+    checkpoint=(
+        REPO_ROOT
+        / "results"
+        / "mesa"
+        / "phase7v2-large-cliff-subset"
+        / "mixed_0_99_vc0_25"
+        / "checkpoints"
+        / "mixed_ppo_phase3_lambda_0_9_large_seed_0_mixed_0_99_vc0_25.pt"
+    ),
+    sensor_tier="local-probe-field",
+)
+
+CLIFF_COLLAPSED_LARGE = PolicySpec(
+    policy_id="mixed_lambda_0_97_large_vc0_25",
+    label="L-Mixed-Large-lambda-0.97",
+    kind="learned",
+    checkpoint=(
+        REPO_ROOT
+        / "results"
+        / "mesa"
+        / "phase7v2-large-cliff-subset"
+        / "mixed_0_97_vc0_25"
+        / "checkpoints"
+        / "mixed_ppo_phase3_lambda_0_9_large_seed_0_mixed_0_97_vc0_25.pt"
+    ),
+    sensor_tier="local-probe-field",
+)
+
+# Cliff-pair registry. The `--cliff-pair` flag on `axis-b-smoke`
+# selects which pair `run_axis_b_patch` loads; default `medium-v1`
+# preserves Phase 6 v1 behavior unchanged.
+CLIFF_PAIRS: dict[str, tuple[PolicySpec, PolicySpec]] = {
+    "medium-v1": (CLIFF_PROTECTED, CLIFF_COLLAPSED),
+    "large-v3": (CLIFF_PROTECTED_LARGE, CLIFF_COLLAPSED_LARGE),
+}
+
 
 GEOMETRY_FEATURES = ("dist_to_x_goal", "dist_to_x_false", "vec_to_x_goal", "vec_to_x_false")
 BEHAVIOR_FEATURES = ("basin_pref_intervened",)
@@ -715,8 +760,15 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
         out_dir = REPO_ROOT / out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    protected_policy, protected_mean, protected_std = load_learned_policy(CLIFF_PROTECTED)
-    collapsed_policy, collapsed_mean, collapsed_std = load_learned_policy(CLIFF_COLLAPSED)
+    cliff_pair_key = getattr(args, "cliff_pair", "medium-v1")
+    if cliff_pair_key not in CLIFF_PAIRS:
+        raise ValueError(
+            f"unknown cliff pair {cliff_pair_key!r}; "
+            f"expected one of {sorted(CLIFF_PAIRS)}"
+        )
+    protected_spec, collapsed_spec = CLIFF_PAIRS[cliff_pair_key]
+    protected_policy, protected_mean, protected_std = load_learned_policy(protected_spec)
+    collapsed_policy, collapsed_mean, collapsed_std = load_learned_policy(collapsed_spec)
     conditions = [part.strip() for part in args.conditions.split(",") if part.strip()]
     invalid = [condition for condition in conditions if condition not in {"clean", "intervened"}]
     if invalid:
@@ -876,15 +928,16 @@ def run_axis_b_patch(args: argparse.Namespace) -> None:
     write_csv(aggregate_path, aggregate_rows)
     manifest = {
         "phase": "phase6-axis-b-smoke",
+        "cliff_pair": cliff_pair_key,
         "protected": {
-            "policy_id": CLIFF_PROTECTED.policy_id,
-            "label": CLIFF_PROTECTED.label,
-            "checkpoint": str(CLIFF_PROTECTED.checkpoint.relative_to(REPO_ROOT)) if CLIFF_PROTECTED.checkpoint else None,
+            "policy_id": protected_spec.policy_id,
+            "label": protected_spec.label,
+            "checkpoint": str(protected_spec.checkpoint.relative_to(REPO_ROOT)) if protected_spec.checkpoint else None,
         },
         "collapsed": {
-            "policy_id": CLIFF_COLLAPSED.policy_id,
-            "label": CLIFF_COLLAPSED.label,
-            "checkpoint": str(CLIFF_COLLAPSED.checkpoint.relative_to(REPO_ROOT)) if CLIFF_COLLAPSED.checkpoint else None,
+            "policy_id": collapsed_spec.policy_id,
+            "label": collapsed_spec.label,
+            "checkpoint": str(collapsed_spec.checkpoint.relative_to(REPO_ROOT)) if collapsed_spec.checkpoint else None,
         },
         "layers": layers,
         "seed_start": args.seed_start,
@@ -1085,6 +1138,16 @@ def parse_args() -> argparse.Namespace:
     patch.add_argument("--layer", default="net.1")
     patch.add_argument("--layers", default="")
     patch.add_argument("--conditions", default="clean,intervened")
+    patch.add_argument(
+        "--cliff-pair",
+        default="medium-v1",
+        choices=sorted(CLIFF_PAIRS.keys()),
+        help=(
+            "which cliff pair to patch. 'medium-v1' (default) is the Phase 6 v1 "
+            "Medium pair (mixed_0_95 vs mixed_0_97); 'large-v3' is the Phase 6b "
+            "Large pair (mixed_0_99 vs mixed_0_97 at vc=0.25). See PHASE6B_SPEC.md §3."
+        ),
+    )
     args = parser.parse_args()
     if args.command is None:
         args.command = "axis-a-smoke"
