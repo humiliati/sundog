@@ -320,6 +320,19 @@ envelope — `sensor-hacked` and `geometry-hacked` are reserved for
 Phase 6.5 counterexample cells; the other two are probe-resolution
 slots.
 
+**v2 envelope extension (Phase 7 v2, 2026-05-18).** A separate
+v2 result note at
+[`mesa/PHASE7_V2_RESULTS.md`](mesa/PHASE7_V2_RESULTS.md) labels the
+six Large-tier cliff-subset cells under the same traceability vocab
+introduced here. Profile-based labels only — v2 did not run the Phase 3
+probe-slate or Phase 4 intervention battery on Large, so
+`reward-coupled (profile)` is used for the L-Mixed trough cells. The
+`λ=1.00` Large cell adds the first probe-confirmed `undertrained` row
+caused by a *bootstrap failure* rather than a deprecated objective —
+suggesting the `undertrained` label spans at least two distinct
+mechanisms (deprecated-objective vs critic-target-collapse) that v3
+labels should disambiguate.
+
 ### Phase 8' — Traceability Claim Ratchet (post-v2 writeup)
 
 **Goal:** replace "Sundog solves traceability" or any broad equivalent

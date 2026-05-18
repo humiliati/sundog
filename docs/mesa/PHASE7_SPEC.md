@@ -411,6 +411,16 @@ rather than estimated cold. It is a **decision aid, not the v2
 implementation spec**. The v2 implementation spec is written only
 after the go decision below clears.
 
+> **v2 outcome (2026-05-18) — DOWN-SCOPE branch executed.** Probe-2 led
+> to the DOWN-SCOPE cliff-subset selection. The Path B hparam
+> investigation (`PHASE7_V2_PATH_B_HPARAM_SPEC.md`) adopted
+> `--value-coef 0.25` after the mixed_0_90 default-hparam regression;
+> the full v2 result note (six policies, U-trough finding,
+> bootstrap-failure finding) is at
+> [`PHASE7_V2_RESULTS.md`](PHASE7_V2_RESULTS.md). v2 is a sibling to v1,
+> not a successor; the v1 22-cell classification in
+> [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md) is unchanged.
+
 ### 14.1 Compute model (load-bearing context)
 
 The mesa experiment is **fully local, two-process**: the canonical
