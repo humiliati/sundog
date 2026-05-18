@@ -264,24 +264,41 @@ Pre-registered: **at least one of the two patch directions clears
 
 ### GG6b-mech (v1.1) — observation-pathway dependence
 
-From v3 §7: trough cells show ~3× the observation-channel response of
-the canonical signature controller. Pre-registered against
-`patch_success_align`: **at the layer that clears GG6b-loc-A or
-GG6b-loc-B, the dominant patch direction is the one restoring the
-trough's missing navigation capability — collapsed → protected
-(mixed_0_97 → mixed_0_99) is the larger `patch_success_align`
-direction.**
+**Harness naming clarification** (precondition for the prediction):
+in `phase6_probes.py`, `patched_protected_to_collapsed` (P→C in
+CSV columns) is the **collapsed policy with protected activations
+injected at the patched layer** — the *rescue* direction (move the
+trough toward recovered behavior by giving it the recovered side's
+activations). `patched_collapsed_to_protected` (C→P) is the
+**protected policy with collapsed activations injected** — the
+*break* direction.
 
-- **GG6b-mech-A (confirm)** — C→P `patch_success_align` is decisively
-  higher than P→C at the locus layer (mean delta ≥ 0.2). Confirms the
-  observation-pathway / signature-pathway asymmetry hinted at by v3
-  §7. The trough has a missing-piece that the locus layer carries
-  and that's restorable by injecting recovered-side activations.
+From v3 §7: trough cells show ~3× the observation-channel response
+of the canonical signature controller, suggesting the trough has
+signature responsiveness but is missing the navigation circuit the
+recovered side has. Pre-registered against `patch_success_align`:
+**rescue (P→C) is decisively the larger direction.** Injecting
+mixed_0_99 activations into the mixed_0_97 policy should restore
+some of the missing navigation more than injecting mixed_0_97
+activations into mixed_0_99 disrupts it.
+
+- **GG6b-mech-A (confirm)** — P→C (rescue) `patch_success_align` is
+  decisively higher than C→P (break) at the locus layer (mean delta
+  ≥ 0.2). Confirms the observation-pathway / signature-pathway
+  asymmetry hinted at by v3 §7. The trough has a missing-piece that
+  the locus layer carries and that's restorable by injecting
+  recovered-side activations.
 - **GG6b-mech-B (falsify)** — symmetric patch behavior. Both
-  directions clear P4 at comparable magnitudes; the v3 §7
-  observation-sensitivity finding does not translate to a directional
-  patching asymmetry. The cliff is bidirectional in alignment, like
-  Medium v1 was bidirectional in basin-pref.
+  directions clear P4 at comparable magnitudes (|P→C − C→P| < 0.2);
+  the v3 §7 observation-sensitivity finding does not translate to a
+  directional patching asymmetry. The cliff is bidirectional in
+  alignment, like Medium v1 was bidirectional in basin-pref.
+- **GG6b-mech-C (falsify — inverted asymmetry)** — C→P (break) is
+  decisively higher than P→C (rescue). This would mean the recovered
+  side is *fragile* to collapsed activation injection while the
+  trough is *unresponsive* to recovered activation injection — a
+  qualitatively different story than v3 §7 implies, and worth its
+  own GG-line so the result isn't conflated with GG6b-mech-A.
 
 ### GG6b-substrate-shape — 5D entangled subspace at Large?
 
@@ -515,5 +532,23 @@ Phase 6b does not own:
   verdicts. New falsification branch added: GG6b-loc-D for "Phase 6
   v1 patching protocol doesn't generalize to Large in either
   metric." `clean` / `intervened` bit-identity flagged as v1.1
-  prerequisite to investigate before re-run. Harness extension
-  queued in §5 v1.1 bullet; re-run pending.
+  prerequisite to investigate before re-run.
+- **v1.1 (2026-05-18, harness landed)** — `terminal_alignment`
+  added to `PatchRollout` and captured from
+  `info.metrics.terminalAlignment` on `done=true` (bridge already
+  exposes it; no bridge change needed). `safe_patch_success` reused
+  with alignment values (the formula is metric-agnostic;
+  semantically `safe_patch_success_align`). Parallel CSV columns
+  added: `*_terminal_alignment` per side and patch direction,
+  `patch_success_align_*` per direction, `baseline_gap_align_*`,
+  and aggregate `mean_patch_success_align`,
+  `median_patch_success_align`, `patch_success_align_ratio_of_means`,
+  `mean_baseline_gap_align`, `mean_protected_alignment`,
+  `mean_collapsed_alignment`, `mean_patched_alignment`. Console
+  summary rewritten to lead with `ps_align_*` and trail with the
+  legacy basin-pref metric in brackets. Spec §6 GG6b-mech wording
+  corrected: the rescue direction is P→C (in harness CSV naming),
+  not C→P as the prior amendment text said; GG6b-mech-A now
+  predicts P→C `patch_success_align` decisively higher than C→P,
+  plus a new GG6b-mech-C falsifier branch for inverted asymmetry.
+  `clean` / `intervened` bit-identity investigation still queued.
