@@ -380,6 +380,15 @@ Applied queue after the Balance lock:
     1-5b response-control edge does not replicate on the core task under this
     optical-parameter axis; this does not refute Phase 5b, because a
     wrong-likelihood-structure axis would be a separate Phase 6b.
+12. **Standalone Phase 6b likelihood-structure ablation.** Anchor-complete
+    lock (structureS0Nest, nominal aggregate, Mann-Whitney all `diff == 0.0`;
+    stress `not_applicable`). 4-rung map: `s0/s1/s2`
+    `bayes_particle_dominant` (ttt 11.0, identical), `s3`
+    `photometric_dominant` (ttt 500, 30/30 failed). Partial wrong structure
+    does not degrade core-task particle Bayes; only the degenerate model-less
+    `s3` flips. The Phase 1-5b response-control edge does not transfer to the
+    core task under non-degenerate wrong structure - the synthetic edge is
+    substrate-specific. Experimental arc closed; no Phase 6c.
 
 ## Controller-Family Architecture
 
@@ -2018,6 +2027,74 @@ Phase 6b lock-interpretation constraints, frozen before the lock:
    `s2` target-only), and those cells are lock-only. Closeout copy must report
    `s3`-only transfer separately from `s1`/`s2` transfer and must not state
    "the response edge transfers to the core task" unless the lock supports it.
+
+Lock receipt, 2026-05-18:
+
+```text
+$env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6b-structure-lock --results-dir results/bayes/phase6b-structure-lock --phase6-cells lock --seeds 30 --steps 500 --particle-count 128 --conditions photometric doa_direct doa_noisy random bayes_particle
+Photometric phase6b-structure-lock: 600 trials in 388.494s (1.54 trials/s)
+Audits: pass
+Exit gate: response_edge_transfers (4/4 cells classified)
+```
+
+Lock receipt paths:
+
+- `results/bayes/phase6b-structure-lock/manifest.json`
+- `results/bayes/phase6b-structure-lock/cell-class-map.csv`
+- `results/bayes/phase6b-structure-lock/candidate-envelope.csv`
+
+Anchor: **pass**, all applicable components gating at `seeds == 30`.
+`structureS0Nest` exact against the Phase 6 lock nominal `bayes_particle`
+receipt (`max_abs_diff = 0.0`); `nominalLiveReexecution` pass;
+`analysisSummaryAggregate` evaluated (not `lock_only`) with `photometric` and
+`doa_direct` `max_abs_diff = 0.0` on every field; Mann-Whitney
+`photometric_vs_doa_direct_terminal_intensity` actual == expected
+(U 526.0, p 0.264, `diff = 0.0`); `stressLiveReexecution` and
+`stressSweepAggregate` `not_applicable` (no stress cells in Phase 6b). No
+recording gap; the substrate-validity and s0-nest hard gates are demonstrated
+and gating.
+
+Lock 4-rung map:
+
+| Cell | Structure | Class | Bayes median ttt | Bayes n_failed | Lead |
+| --- | --- | --- | ---: | ---: | ---: |
+| `nominal_structure_s0` | correct optics | `bayes_particle_dominant` | 11.0 | 0 | 177.0 |
+| `nominal_structure_s1` | no-reflection (partial) | `bayes_particle_dominant` | 11.0 | 0 | 177.0 |
+| `nominal_structure_s2` | target-only (partial) | `bayes_particle_dominant` | 11.0 | 0 | 177.0 |
+| `nominal_structure_s3` | model-less (`predict == 0`) | `photometric_dominant` | 500.0 | 30 | 312.0 |
+
+Phase 6b closeout interpretation, applying the pre-frozen constraints:
+
+The raw exit string `response_edge_transfers` is emitted **only because the
+`s3` cell flips**. Per frozen constraint 2, `s3` is the degenerate,
+observation-independent, model-less limit (`predict_s3 == 0`); a response
+controller beating a model-less agent is a near-tautological transfer, not
+evidence that the response edge reaches the core task. It is recorded here as
+the `s3`-only degenerate result and is **not** the headline.
+
+The substantive, non-degenerate result is `s1` and `s2`: under partial wrong
+likelihood structure (no-reflection, target-only) the particle Bayes lane is
+**undegraded** - median `time_to_threshold` 11.0, zero failures, identical to
+`s0`, same 177-step lead. Partial structural misspecification produces no
+measurable convergence-speed degradation on the core photometric task. This is
+robust, not a non-biting artifact: the ladder demonstrably bites at `s3`
+(500.0, 30/30 failed) and `s0` nests the Phase 6 lock exactly, so the
+structure mechanism is active across all rungs.
+
+Therefore: the Phase 1-5b synthetic response-control edge **does not transfer**
+to the core photometric task under any non-degenerate wrong-structure regime.
+It appears only when Bayes is stripped to a model-less control. This confirms
+and strengthens the Phase 6 parameter-axis conclusion on the true structural
+axis (the Phase 5b analog): the synthetic Sundog/response edge is
+substrate-specific, not a core-task property. "The response edge transfers to
+the core task" is **not supported** and must not appear in public copy.
+
+Recorded as-run. No grid recut, no structure-axis change, no Phase 6c.
+
+Exit criterion outcome: **resolved.** The last live scientific ambiguity -
+whether wrong likelihood structure bridges synthetic to core - is closed:
+non-transfer under partial misspecification, degenerate-only flip at `s3`. The
+Bayes-vs-Sundog experimental arc (Phases 1-6b) is complete.
 
 ### Phase 7 — Public Visualization and Motion Rail Card
 

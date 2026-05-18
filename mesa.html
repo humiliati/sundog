@@ -589,7 +589,7 @@
                 The Medium-tier L-Mixed protection curve crosses from <em>hold</em> to <em>collapse</em> inside a 0.02-wide window in objective mixing weight. Below the cliff, a signature anchor of just <code>1 − λ ≈ 0.047</code> (~5%) is sufficient to prevent basin internalization. Above it, the high-reward mixed policy collapses into the same fixed-attractor class as a controller trained on the basin-corrupted reward alone.
             </p>
             <p class="lede">
-                <strong>Large-tier v2 caveat.</strong> The newer Large cliff-subset complicates the Medium story: <code>lambda=0.99</code> recovers by terminal-alignment eval (<code>mean_terminal_alignment ~= 0.885</code>), while <code>lambda=0.95</code> and <code>lambda=0.97</code> remain weak. The eval summary does not compute <code>old_basin_pref</code>, so this is basin-reaching by the current metric, not yet verified basin-attractor avoidance. That intervention check is a Phase 7 v3 job.
+                <strong>Large-tier v3 update.</strong> The newer Large cliff-subset complicates the Medium story in a stronger way than v2 first showed. Phase 7 v3 ran the intervention battery that v2 was missing: <code>lambda=0.99</code> is now probe-confirmed basin-attractor avoidance, not just high terminal alignment. The <code>lambda=0.95</code> and <code>lambda=0.97</code> trough cells are not collapse-class either; they remain field-coupled but under-budget. Pure reward at <code>lambda=1.0</code> is now labeled bootstrap-collapse.
             </p>
 
             <div class="chart-card">
@@ -611,15 +611,15 @@
             </div>
 
             <div class="chart-card">
-                <h3>Large tier (Phase 7 v2): mean terminal alignment by λ</h3>
+                <h3>Large tier (Phase 7 v2 -> v3): mean terminal alignment by λ</h3>
                 <p class="chart-caption">
-                    A <strong>different axis by necessity</strong>: v2 did not compute <code>old_basin_pref</code> for Large, so this plots mean terminal alignment — basin-<em>reaching</em>, not verified basin-attractor avoidance, and not comparable to the obp cliff chart above. The Medium single cliff broadens into a <strong>U-trough at λ ∈ {0.95, 0.97}</strong>; a 1% signature anchor (λ=0.99) recovers; pure reward (λ=1.0) does not bootstrap at all — a distinct <em>undertrained</em> failure mode, not the Medium collapse class. At Large, signature shaping looks constitutive of learnability, not just protective. Large labels are <strong>profile-based, not probe-confirmed</strong>; mostly single-seed (λ=0.90 triangulated, one strict-fail by 0.025); PPO-specific (<code>--value-coef 0.25</code>); no Phase 6 <code>net.7</code> analog. Sibling to v1; v1 verdicts unchanged. Source: <a href="docs/mesa/PHASE7_V2_RESULTS.md">PHASE7_V2_RESULTS.md</a> §2.
+                    A <strong>different axis by design</strong>: this chart keeps v2's mean-terminal-alignment y-axis because it shows the Large U-profile, but the labels now use the Phase 7 v3 intervention battery. The Medium single cliff broadens into a <strong>U-trough at λ ∈ {0.95, 0.97}</strong>; v3 relabels those trough cells as <em>field-coupled, under-budget</em>, not reward-coupled collapse. A 1% signature anchor (λ=0.99) is now probe-confirmed basin-attractor avoidance. Pure reward (λ=1.0) is <em>bootstrap-collapse</em>: a degenerate basin-attracted fixed trajectory, not harmless undertraining. Still bounded: one Large tier, mostly single-seed cells, PPO-specific (<code>--value-coef 0.25</code>), no Large probe-slate yet, and Phase 6b did not find a clean transferable <code>net.9</code>-style basin circuit. Sources: <a href="docs/mesa/PHASE7_V2_RESULTS.md">PHASE7_V2_RESULTS.md</a> and <a href="docs/mesa/PHASE7_V3_RESULTS.md">PHASE7_V3_RESULTS.md</a>.
                 </p>
-                <svg id="cliff-large-chart" class="chart" viewBox="0 0 720 340" aria-label="Large-tier mean terminal alignment by lambda: a U-trough at lambda 0.95 to 0.97, recovery at 0.99, and bootstrap-failure at 1.0 (Phase 7 v2, profile-based, not probe-confirmed)"></svg>
+                <svg id="cliff-large-chart" class="chart" viewBox="0 0 720 340" aria-label="Large-tier mean terminal alignment by lambda: a U-trough at lambda 0.95 to 0.97, probe-confirmed basin-attractor avoidance at 0.99, and bootstrap-collapse at 1.0"></svg>
                 <div class="chart-legend">
-                    <span class="legend-item"><span class="swatch" style="background:#2E8B57"></span> field-coupled (profile)</span>
-                    <span class="legend-item"><span class="swatch" style="background:#C0392B"></span> reward-coupled (profile)</span>
-                    <span class="legend-item"><span class="swatch" style="background:#7F8C8D"></span> undertrained / bootstrap-failure</span>
+                    <span class="legend-item"><span class="swatch" style="background:#2E8B57"></span> field-coupled</span>
+                    <span class="legend-item"><span class="swatch" style="background:#D68910"></span> field-coupled, under-budget</span>
+                    <span class="legend-item"><span class="swatch" style="background:#7F8C8D"></span> bootstrap-collapse</span>
                 </div>
             </div>
         </div>
@@ -710,7 +710,7 @@
             <div class="claim-boundary">
                 <h4>Earned floor, honest ceiling</h4>
                 <p>
-                    The result is an <strong>in-vitro operating-envelope map</strong> in a 2D continuous-control environment with a synthetic Goodhart-prone shaping surface. It is not a deployment guarantee, not foundation-model behavior, not universal mesa immunity, and not adversarial robustness under named red-team budgets. The probe-confirmed envelope is Small and Medium (the old_basin_pref cliff); the Large cliff-subset is now charted separately on mean alignment but stays provisional and profile-based — single-tier, mostly single-seed, PPO-specific, with no Phase 4-style intervention metrics or Phase 6 net.7 analog yet. Only the matched-architecture MLP family is characterized; cross-architecture behavior is unknown.
+                    The result is an <strong>in-vitro operating-envelope map</strong> in a 2D continuous-control environment with a synthetic Goodhart-prone shaping surface. It is not a deployment guarantee, not foundation-model behavior, not universal mesa immunity, and not adversarial robustness under named red-team budgets. The probe-confirmed envelope is Small and Medium, plus a six-cell Large intervention extension. Large now has Phase 7 v3 intervention metrics for the cliff-subset, but it is still single-tier, mostly single-seed, PPO-specific, missing the Large probe-slate half, and without a clean Phase 6-style transferable basin-circuit analog. Only the matched-architecture MLP family is characterized; cross-architecture behavior is unknown.
                 </p>
                 <p>
                     Signature controllers <em>can</em> be reward-hacked — the program now has the receipt for <em>where</em> they can: above the measured Medium selection-pressure threshold, in a controller family that participates in the basin-corrupted reward during training. The bounded form of the gravity claim is now more careful: coherent-signal controllers can preserve field attachment in mapped pockets; mixed-signal controllers destabilize when the mixture creates inference noise. Signature-pure is one coherent-signal class, and reward-pure may be another.
@@ -741,6 +741,8 @@
                 <a href="docs/mesa/PHASE6_V36_RESULTS.md"><strong>Phase 6 v3.6 Results</strong><span>Cliff-pair C→P mask transfers functionally to J1/J2</span></a>
                 <a href="docs/mesa/PHASE6_V37_RESULTS.md"><strong>Phase 6 v3.7 Results</strong><span>Own-mask functional ablation closes the three-layer cross-policy table</span></a>
                 <a href="docs/mesa/PHASE6_V38_RESULTS.md"><strong>Phase 6 v3.8 Results</strong><span>Per-PC anatomy and signed effects sharpen the mesa-to-geometry crossover</span></a>
+                <a href="docs/mesa/PHASE7_V3_RESULTS.md"><strong>Phase 7 v3 Results</strong><span>Large intervention battery: v2 caveat closed, trough relabeled, bootstrap-collapse identified</span></a>
+                <a href="docs/mesa/PHASE6B_RESULTS.md"><strong>Phase 6b Results</strong><span>Negative Large mechanism side-thread: single-layer cross-policy patching is destructive</span></a>
                 <a href="docs/MESA_CROSSOVER_NOTE.md"><strong>Mesa ↔ Geometry Crossover</strong><span>Bounded two-substrate analogy; not a proof surface</span></a>
                 <a href="data/mesa-public-charts.json"><strong>Mesa Public Chart Data</strong><span>Generated source for chart exports and evidence panels</span></a>
                 <a href="docs/mesa/PHASE6_V31_RESULTS.md"><strong>Phase 6 Results (v3.1)</strong><span>Entangled 5D subspace and directional transfer</span></a>
@@ -822,19 +824,19 @@
             { lambda: 0.9, obp:  2.611, klass: 'collapse' },
         ];
 
-        // Phase 7 v2 Large-tier cliff-subset — PHASE7_V2_RESULTS.md §2, verbatim.
-        // v2 did NOT compute old_basin_pref for Large, so the honest metric is
-        // mean terminal alignment (basin-reaching, not basin-attractor
-        // avoidance). Sibling to v1; profile-based labels, not probe-confirmed;
-        // one tier; mostly single-seed (λ=0.90 triangulated); PPO vc=0.25;
-        // no Phase 6 net.7 analog. Plotted on its own axis, not the obp toggle.
+        // Phase 7 v2 -> v3 Large-tier cliff-subset. The plotted y-axis is
+        // still v2 mean terminal alignment because it shows the U-profile.
+        // Labels are updated by the v3 intervention battery: lambda=0.99 is
+        // basin-attractor avoidance, the trough is field-coupled/under-budget,
+        // and pure reward is bootstrap-collapse. Still not comparable to the
+        // Medium old_basin_pref cliff chart.
         const CLIFF_LARGE = [
             { lambda: 0.00, align: 0.993, klass: 'field',        label: 'L-Sig-Terminal-L (pure-signature ref)', ref: true },
             { lambda: 0.90, align: 0.934, klass: 'field',        label: 'λ=0.90 (borderline hold, adopted)' },
-            { lambda: 0.95, align: 0.599, klass: 'reward',       label: 'λ=0.95 (under-budget)' },
-            { lambda: 0.97, align: 0.506, klass: 'reward',       label: 'λ=0.97 (trough)' },
-            { lambda: 0.99, align: 0.885, klass: 'field',        label: 'λ=0.99 (1% signature anchor — recovers)' },
-            { lambda: 1.00, align: 0.003, klass: 'undertrained', label: 'λ=1.0 (pure reward — bootstrap-failed)' },
+            { lambda: 0.95, align: 0.599, klass: 'underbudget',  label: 'λ=0.95 (field-coupled, under-budget)' },
+            { lambda: 0.97, align: 0.506, klass: 'underbudget',  label: 'λ=0.97 (field-coupled, under-budget)' },
+            { lambda: 0.99, align: 0.885, klass: 'field',        label: 'λ=0.99 (basin-attractor avoidance)' },
+            { lambda: 1.00, align: 0.003, klass: 'bootstrap',    label: 'λ=1.0 (bootstrap-collapse)' },
         ];
 
         // The Phase 6 v1 patch-success battery
@@ -1205,16 +1207,16 @@
         }
 
         // ============================================================
-        // Large-tier U-trough (Phase 7 v2) — its own panel, on mean
-        // alignment. NOT the obp toggle: v2 has no old_basin_pref for
-        // Large, so plotting it on the obp axis would fabricate the metric.
+        // Large-tier U-trough (Phase 7 v2 -> v3) — its own panel, on mean
+        // alignment. v3 supplies intervention labels, but this remains a
+        // terminal-alignment shape chart rather than an old_basin_pref sweep.
         // ============================================================
 
         function renderCliffLarge() {
             const svg = document.getElementById('cliff-large-chart');
             if (!svg) return;
             const data = CLIFF_LARGE;
-            const colorOf = k => k === 'field' ? '#2E8B57' : k === 'reward' ? '#C0392B' : '#7F8C8D';
+            const colorOf = k => k === 'field' ? '#2E8B57' : k === 'underbudget' ? '#D68910' : '#7F8C8D';
 
             const xMin = 0, xMax = 1, yMin = 0, yMax = 1;
             const W = CLIFF_W - CLIFF_PAD.left - CLIFF_PAD.right;
@@ -1271,8 +1273,8 @@
                 } else {
                     out += `<circle cx="${xScale(d.lambda)}" cy="${yScale(d.align)}" r="5" fill="${c}"/>`;
                 }
-                if (d.klass === 'undertrained') {
-                    out += `<text x="${xScale(d.lambda)}" y="${yScale(d.align) - 12}" text-anchor="middle" font-size="10" font-family="var(--sd-font-data)" fill="#7F8C8D">bootstrap-fail (distinct from collapse)</text>`;
+                if (d.klass === 'bootstrap') {
+                    out += `<text x="${xScale(d.lambda)}" y="${yScale(d.align) - 12}" text-anchor="middle" font-size="10" font-family="var(--sd-font-data)" fill="#7F8C8D">bootstrap-collapse</text>`;
                 }
             }
 
