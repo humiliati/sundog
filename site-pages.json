@@ -53,6 +53,11 @@
       "publicLaunchIntent": "Public origin and provenance story."
     },
     {
+      "entry": "repo-map.html",
+      "kind": "reference",
+      "publicLaunchIntent": "Public human and agent navigation map for evidence pages, docs, workbenches, and source context."
+    },
+    {
       "entry": "paper-theme-demo.html",
       "kind": "design-system",
       "publicLaunchIntent": "Public paper-theme design primitive demo linked from docs."
