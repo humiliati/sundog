@@ -80,7 +80,18 @@ const PHASE5_BUDGETS = Object.freeze([20, 30, 40, 60]);
 const PHASE5_SMOKE_BUDGETS = Object.freeze([20, 40]);
 const PHASE5_DECOY_SIGMA_SCALE = 0.82;
 const PHASE5_ALIAS_AMPLITUDE = 0.96;
-const PHASE5_SCENARIO_ALIASES = Object.freeze(["phase5-smoke", "phase5"]);
+const PHASE5_SCENARIO_ALIASES = Object.freeze(["phase5-smoke", "phase5", "phase5b-smoke", "phase5b"]);
+const PHASE5B_SEVERITIES = Object.freeze(["s0", "s1", "s2", "s3"]);
+const PHASE5B_SMOKE_SEVERITIES = Object.freeze(["s0", "s3"]);
+const PHASE5B_DECOY_STRENGTHS = Object.freeze([0.82, 0.98]);
+const PHASE5B_SMOKE_DECOY_STRENGTHS = Object.freeze([0.82]);
+const PHASE5B_BUDGETS = Object.freeze([40]);
+const PHASE5B_SEVERITY_FILTERS = Object.freeze({
+  s0: Object.freeze([]),
+  s1: Object.freeze(["decoy"]),
+  s2: Object.freeze(["decoy", "alias"]),
+  s3: Object.freeze(["decoy", "alias", "symmetric"]),
+});
 const PHASE5_MODE_FAMILIES = Object.freeze({
   bayes: Object.freeze(["bayes_misspecified", "bayes_adaptive"]),
   response: Object.freeze(["hc_sundog", "sundog_memory"]),
@@ -131,7 +142,7 @@ const DEFAULT_ARGS = Object.freeze({
 function usage() {
   return [
     "Usage:",
-    "  node scripts/bayes-phase1-reference.mjs --phase <name> --out <dir> --seeds <n> [--scenarios clean|phase2|phase3|phase4|phase5-smoke|phase5|csv] [--modes csv]",
+    "  node scripts/bayes-phase1-reference.mjs --phase <name> --out <dir> --seeds <n> [--scenarios clean|phase2|phase3|phase4|phase5-smoke|phase5|phase5b-smoke|phase5b|csv] [--modes csv]",
     "",
     "Defaults run a small exact Bayes-Correct hidden-source reference task.",
     "",
@@ -141,6 +152,7 @@ function usage() {
     "  node scripts/bayes-phase1-reference.mjs --phase phase3-aliasing-smoke --out results/bayes/phase3-aliasing-smoke --scenarios phase3 --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,random --seeds 16 --max-turns 40",
     "  node scripts/bayes-phase1-reference.mjs --phase phase4-hybrid-smoke --out results/bayes/phase4-hybrid-smoke --scenarios phase4 --modes oracle,bayes_adaptive,hc_sundog,hybrid,hybrid_no_posterior,hybrid_posterior_only,hybrid_posterior_reset_only,hybrid_posterior_decoy_disambig --seeds 16 --max-turns 40",
     "  node scripts/bayes-phase1-reference.mjs --phase phase5-envelope-smoke --out results/bayes/phase5-envelope-smoke --scenarios phase5-smoke --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,hybrid,hybrid_posterior_decoy_disambig,random --seeds 8 --max-turns 40",
+    "  node scripts/bayes-phase1-reference.mjs --phase phase5b-mismatch-severity-smoke --out results/bayes/phase5b-mismatch-severity-smoke --scenarios phase5b-smoke --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,hybrid,hybrid_posterior_decoy_disambig,random --seeds 8 --max-turns 40",
   ].join("\n");
 }
 
@@ -198,6 +210,8 @@ function parseScenarios(value) {
   if (value === "phase4") return [...PHASE3_SCENARIOS];
   if (value === "phase5-smoke") return ["phase5-smoke"];
   if (value === "phase5") return ["phase5"];
+  if (value === "phase5b-smoke") return ["phase5b-smoke"];
+  if (value === "phase5b") return ["phase5b"];
   if (value === "all") return [...ALL_SCENARIOS];
   return parseList(value);
 }
@@ -697,6 +711,10 @@ function isPhase5Config(config) {
   return config.phase.includes("phase5") || config.scenarios.some((scenario) => PHASE5_SCENARIO_ALIASES.includes(scenario));
 }
 
+function isPhase5bConfig(config) {
+  return config.phase.includes("phase5b") || config.scenarios.some((scenario) => scenario === "phase5b-smoke" || scenario === "phase5b");
+}
+
 function isPhase5SmokeConfig(config) {
   return config.phase.includes("smoke") || config.scenarios.includes("phase5-smoke");
 }
@@ -710,6 +728,7 @@ function phase5NumberToken(value) {
 }
 
 function phase5CellsForConfig(config) {
+  if (isPhase5bConfig(config)) return phase5bCellsForConfig(config);
   const decoyStrengths = isPhase5SmokeConfig(config) ? PHASE5_SMOKE_DECOY_STRENGTHS : PHASE5_DECOY_STRENGTHS;
   const budgets = isPhase5SmokeConfig(config) ? PHASE5_SMOKE_BUDGETS : PHASE5_BUDGETS;
   const cells = [];
@@ -740,6 +759,32 @@ function phase5CellsForConfig(config) {
   return cells;
 }
 
+function phase5bCellsForConfig(config) {
+  const severities = isPhase5SmokeConfig(config) ? PHASE5B_SMOKE_SEVERITIES : PHASE5B_SEVERITIES;
+  const decoyStrengths = isPhase5SmokeConfig(config) ? PHASE5B_SMOKE_DECOY_STRENGTHS : PHASE5B_DECOY_STRENGTHS;
+  const cells = [];
+  for (const severity of severities) {
+    for (const decoyStrength of decoyStrengths) {
+      const removedModels = PHASE5B_SEVERITY_FILTERS[severity] ?? [];
+      const adaptiveModels = PHASE3_ADAPTIVE_MODELS.filter((model) => !removedModels.includes(model));
+      cells.push({
+        id: `severity_${severity}_decoy_strength_${phase5NumberToken(decoyStrength)}_turns_40`,
+        baseScenario: "decoy",
+        cellKind: "severity_decoy",
+        severity,
+        severityRemovedModels: removedModels.join(";"),
+        adaptiveModels: adaptiveModels.join(";"),
+        decoyStrength,
+        decoySigmaScale: PHASE5_DECOY_SIGMA_SCALE,
+        aliasAmplitude: null,
+        maxTurns: 40,
+        reference: false,
+      });
+    }
+  }
+  return cells;
+}
+
 function phase5CellConfig(config, cell) {
   return {
     ...config,
@@ -747,11 +792,19 @@ function phase5CellConfig(config, cell) {
     phase5Cell: cell,
     phase5DecoyStrength: cell.decoyStrength,
     phase5DecoySigmaScale: cell.decoySigmaScale,
+    phase5bSeverity: cell.severity,
+    phase5bSeverityRemovedModels: cell.severityRemovedModels,
+    phase5bAdaptiveModels: cell.adaptiveModels,
   };
 }
 
 function adaptiveModelsForScenarios(scenariosOrConfig) {
   const scenarios = Array.isArray(scenariosOrConfig) ? scenariosOrConfig : scenariosOrConfig.scenarios;
+  if (!Array.isArray(scenariosOrConfig) && isPhase5bConfig(scenariosOrConfig)) {
+    const severity = scenariosOrConfig.phase5bSeverity ?? "s0";
+    const removedModels = PHASE5B_SEVERITY_FILTERS[severity] ?? PHASE5B_SEVERITY_FILTERS.s0;
+    return PHASE3_ADAPTIVE_MODELS.filter((model) => !removedModels.includes(model));
+  }
   if (!Array.isArray(scenariosOrConfig) && isPhase5Config(scenariosOrConfig)) return PHASE3_ADAPTIVE_MODELS;
   if (scenarios.some((scenario) => PHASE3_SCENARIOS.includes(scenario))) return PHASE3_ADAPTIVE_MODELS;
   return PHASE2_ADAPTIVE_MODELS;
@@ -1287,6 +1340,9 @@ function simulateTrial({ mode, scenario, seed, config, candidates, cell = null }
       baseScenario,
       cellId: cell?.id ?? null,
       cellKind: cell?.cellKind ?? null,
+      severity: cell?.severity ?? null,
+      severityRemovedModels: cell?.severityRemovedModels ?? null,
+      adaptiveModels: cell?.adaptiveModels ?? null,
       decoyStrength: cell?.decoyStrength ?? null,
       decoySigmaScale: cell?.decoySigmaScale ?? null,
       aliasAmplitude: cell?.aliasAmplitude ?? null,
@@ -1320,6 +1376,9 @@ function simulateTrial({ mode, scenario, seed, config, candidates, cell = null }
     baseScenario,
     cellId: cell?.id ?? null,
     cellKind: cell?.cellKind ?? null,
+    severity: cell?.severity ?? null,
+    severityRemovedModels: cell?.severityRemovedModels ?? null,
+    adaptiveModels: cell?.adaptiveModels ?? null,
     decoyStrength: cell?.decoyStrength ?? null,
     decoySigmaScale: cell?.decoySigmaScale ?? null,
     aliasAmplitude: cell?.aliasAmplitude ?? null,
@@ -1745,6 +1804,9 @@ function buildPhase5Envelope(summaryRows, config, cells) {
         cellId: cell.id,
         cellKind: cell.cellKind,
         baseScenario: cell.baseScenario,
+        severity: cell.severity ?? null,
+        severityRemovedModels: cell.severityRemovedModels ?? null,
+        adaptiveModels: cell.adaptiveModels ?? null,
         decoyStrength: cell.decoyStrength,
         decoySigmaScale: cell.decoySigmaScale,
         aliasAmplitude: cell.aliasAmplitude,
@@ -1780,10 +1842,14 @@ function buildPhase5Envelope(summaryRows, config, cells) {
     const bestFamily = bestFamilyEntry?.[0] ?? null;
     const bestRow = bestFamilyEntry?.[1] ?? null;
     const deltas = phase5FamilyDeltas(familyBests);
+    const severitySanity = phase5bSeveritySanity(summaryRows, cell);
     const commonCell = {
       cellId: cell.id,
       cellKind: cell.cellKind,
       baseScenario: cell.baseScenario,
+      severity: cell.severity ?? null,
+      severityRemovedModels: cell.severityRemovedModels ?? null,
+      adaptiveModels: cell.adaptiveModels ?? null,
       decoyStrength: cell.decoyStrength,
       decoySigmaScale: cell.decoySigmaScale,
       aliasAmplitude: cell.aliasAmplitude,
@@ -1807,6 +1873,8 @@ function buildPhase5Envelope(summaryRows, config, cells) {
       bayesMinusResponseScoreDelta: deltas.bayesMinusResponseScoreDelta,
       bayesMinusHybridScoreDelta: deltas.bayesMinusHybridScoreDelta,
       hybridMinusResponseScoreDelta: deltas.hybridMinusResponseScoreDelta,
+      s3AdaptiveMinusMisspecifiedScoreDelta: severitySanity.scoreDelta,
+      s3AdaptiveMinusMisspecifiedSuccessDelta: severitySanity.successDelta,
       missingFamilies: missingFamilies.join(";"),
     });
     bestByCellRows.push({
@@ -1832,6 +1900,8 @@ function buildPhase5Envelope(summaryRows, config, cells) {
       bayesMinusResponseScoreDelta: deltas.bayesMinusResponseScoreDelta,
       bayesMinusHybridScoreDelta: deltas.bayesMinusHybridScoreDelta,
       hybridMinusResponseScoreDelta: deltas.hybridMinusResponseScoreDelta,
+      s3AdaptiveMinusMisspecifiedScoreDelta: severitySanity.scoreDelta,
+      s3AdaptiveMinusMisspecifiedSuccessDelta: severitySanity.successDelta,
     });
   }
 
@@ -1840,6 +1910,8 @@ function buildPhase5Envelope(summaryRows, config, cells) {
   const selfConsistencyAnchor = buildPhase5SelfConsistencyAnchor(summaryRows, config, cells);
   const complete = classifiedCells.length === cells.length && selfConsistencyAnchor.pass;
   const status = complete ? "envelope_mapped" : "envelope_incomplete";
+  const sweptDecoyCells = cells.filter((cell) => cell.cellKind === "swept_decoy" || cell.cellKind === "severity_decoy").length;
+  const aliasReferenceCells = cells.filter((cell) => cell.cellKind === "alias_reference").length;
 
   return {
     candidateRows,
@@ -1851,14 +1923,16 @@ function buildPhase5Envelope(summaryRows, config, cells) {
     selfConsistencyAnchor,
     exitGate: {
       kind: "phase5-envelope",
-      name: "Phase 5 operating-envelope map with descriptive per-cell family classes",
+      name: isPhase5bConfig(config)
+        ? "Phase 5b mismatch-severity envelope map with descriptive per-cell family classes"
+        : "Phase 5 operating-envelope map with descriptive per-cell family classes",
       status,
       pass: true,
       mapped: complete,
       cells: cells.length,
       classifiedCells: classifiedCells.length,
-      sweptDecoyCells: cells.filter((cell) => cell.cellKind === "swept_decoy").length,
-      aliasReferenceCells: cells.filter((cell) => cell.cellKind === "alias_reference").length,
+      sweptDecoyCells,
+      aliasReferenceCells,
       dominanceMargin: config.phase2SeparationMargin,
       classifier:
         "all_fail if best non-yardstick family score < 0; otherwise bayes/response/hybrid dominant only when that family best beats both others by dominanceMargin; else mixed",
@@ -1898,6 +1972,17 @@ function phase5FamilyDeltas(familyBests) {
   };
 }
 
+function phase5bSeveritySanity(summaryRows, cell) {
+  if (cell.severity !== "s3") return { scoreDelta: null, successDelta: null };
+  const adaptive = summaryFor(summaryRows, cell.id, "bayes_adaptive");
+  const misspecified = summaryFor(summaryRows, cell.id, "bayes_misspecified");
+  if (!adaptive || !misspecified) return { scoreDelta: null, successDelta: null };
+  return {
+    scoreDelta: round(adaptive.meanScore - misspecified.meanScore, 6),
+    successDelta: round(adaptive.successRate - misspecified.successRate, 6),
+  };
+}
+
 function buildPhase5AggregateRows(envelopeRows) {
   const labels = ["all_fail", "bayes_dominant", "response_dominant", "hybrid_dominant", "mixed", "unclassified"];
   const rows = [];
@@ -1908,25 +1993,49 @@ function buildPhase5AggregateRows(envelopeRows) {
       classLabel,
       cells: cellRows.length,
       cellFraction: round(cellRows.length / Math.max(1, envelopeRows.length), 6),
-      sweptDecoyCells: cellRows.filter((row) => row.cellKind === "swept_decoy").length,
+      sweptDecoyCells: cellRows.filter((row) => row.cellKind === "swept_decoy" || row.cellKind === "severity_decoy").length,
       aliasReferenceCells: cellRows.filter((row) => row.cellKind === "alias_reference").length,
     });
   }
   return rows;
 }
 
+function phase5AnchorSpec(config) {
+  if (isPhase5bConfig(config)) {
+    return {
+      anchorCellId: "severity_s0_decoy_strength_0p82_turns_40",
+      referenceManifestPath: path.join(REPO_ROOT, "results", "bayes", "phase5-envelope-lock", "manifest.json"),
+      referenceScenario: "decoy_strength_0p82_turns_40",
+      sharedModes: config.modes,
+      passStatus: "reproduced_phase5_lock_cell",
+      missingStatus: "not_in_smoke_grid",
+    };
+  }
+  return {
+    anchorCellId: "decoy_strength_0p82_turns_40",
+    referenceManifestPath: path.join(REPO_ROOT, "results", "bayes", "phase4b-hybrid-lock", "manifest.json"),
+    referenceScenario: "decoy",
+    sharedModes: ["oracle", "bayes_adaptive", "hc_sundog", "hybrid", "hybrid_posterior_decoy_disambig"].filter((mode) =>
+      config.modes.includes(mode),
+    ),
+    passStatus: "reproduced_p4b_lock_decoy",
+    missingStatus: "not_in_smoke_grid",
+  };
+}
+
 function buildPhase5SelfConsistencyAnchor(summaryRows, config, cells) {
-  const anchorCellId = "decoy_strength_0p82_turns_40";
+  const anchorSpec = phase5AnchorSpec(config);
+  const { anchorCellId } = anchorSpec;
   if (!cells.some((cell) => cell.id === anchorCellId)) {
     return {
-      status: "not_in_smoke_grid",
+      status: anchorSpec.missingStatus,
       pass: true,
       anchorCellId,
-      reference: "results/bayes/phase4b-hybrid-lock/manifest.json",
+      reference: path.relative(REPO_ROOT, anchorSpec.referenceManifestPath).replaceAll("\\", "/"),
     };
   }
 
-  const referencePath = path.join(REPO_ROOT, "results", "bayes", "phase4b-hybrid-lock", "manifest.json");
+  const referencePath = anchorSpec.referenceManifestPath;
   if (!existsSync(referencePath)) {
     return {
       status: "reference_missing",
@@ -1937,9 +2046,7 @@ function buildPhase5SelfConsistencyAnchor(summaryRows, config, cells) {
   }
 
   const referenceManifest = JSON.parse(readFileSync(referencePath, "utf8"));
-  const sharedModes = ["oracle", "bayes_adaptive", "hc_sundog", "hybrid", "hybrid_posterior_decoy_disambig"].filter((mode) =>
-    config.modes.includes(mode),
-  );
+  const sharedModes = anchorSpec.sharedModes.filter((mode) => config.modes.includes(mode));
   const currentSeeds = Array.from({ length: config.seeds }, (_, index) => config.seedStart + index);
   const referenceSeedStart = referenceManifest.config?.seedStart ?? 0;
   const referenceSeeds = referenceManifest.config?.seeds ?? null;
@@ -1951,11 +2058,11 @@ function buildPhase5SelfConsistencyAnchor(summaryRows, config, cells) {
   if (existsSync(referenceTrialPath)) {
     const currentSeedSet = new Set(currentSeeds);
     const referenceTrials = readJsonlFile(referenceTrialPath).filter(
-      (trial) => trial.scenario === "decoy" && currentSeedSet.has(trial.seed) && sharedModes.includes(trial.mode),
+      (trial) => trial.scenario === anchorSpec.referenceScenario && currentSeedSet.has(trial.seed) && sharedModes.includes(trial.mode),
     );
     const expectedReferenceTrials = currentSeeds.length * sharedModes.length;
     if (referenceTrials.length === expectedReferenceTrials) {
-      referenceRows = summarizeTrials(referenceTrials, ["decoy"], sharedModes);
+      referenceRows = summarizeTrials(referenceTrials, [anchorSpec.referenceScenario], sharedModes);
       referenceBasis = "seed_matched_trials_jsonl";
       referenceComparisonSeeds = currentSeeds.length;
     }
@@ -1974,12 +2081,12 @@ function buildPhase5SelfConsistencyAnchor(summaryRows, config, cells) {
     };
   }
   const currentHc = summaryFor(summaryRows, anchorCellId, "hc_sundog");
-  const referenceHc = summaryFor(referenceRows, "decoy", "hc_sundog");
+  const referenceHc = summaryFor(referenceRows, anchorSpec.referenceScenario, "hc_sundog");
   const comparisons = [];
   let pass = Boolean(currentHc && referenceHc);
   for (const mode of sharedModes) {
     const current = summaryFor(summaryRows, anchorCellId, mode);
-    const reference = summaryFor(referenceRows, "decoy", mode);
+    const reference = summaryFor(referenceRows, anchorSpec.referenceScenario, mode);
     if (!current || !reference || !currentHc || !referenceHc) {
       pass = false;
       comparisons.push({ mode, status: "missing_row" });
@@ -2004,9 +2111,10 @@ function buildPhase5SelfConsistencyAnchor(summaryRows, config, cells) {
   }
 
   return {
-    status: pass ? "reproduced_p4b_lock_decoy" : "mismatch_void",
+    status: pass ? anchorSpec.passStatus : "mismatch_void",
     pass,
     anchorCellId,
+    referenceScenario: anchorSpec.referenceScenario,
     reference: path.relative(REPO_ROOT, referencePath).replaceAll("\\", "/"),
     referenceTrials: path.relative(REPO_ROOT, referenceTrialPath).replaceAll("\\", "/"),
     referencePhase: referenceManifest.phase ?? null,
@@ -2170,7 +2278,9 @@ async function main() {
     completedAt,
     elapsedSeconds: round(elapsedSeconds, 6),
     purpose:
-      exitGate.kind === "phase5-envelope"
+      exitGate.kind === "phase5-envelope" && isPhase5bConfig(args)
+        ? "Standalone Phase 5b Bayes-vs-Sundog model-mismatch severity envelope map."
+        : exitGate.kind === "phase5-envelope"
         ? "Standalone Phase 5 Bayes-vs-Sundog operating-envelope map."
         : exitGate.kind === "phase4-hybrid"
         ? "Standalone Phase 4 Bayes-vs-Sundog hybrid controller smoke and lock harness."
@@ -2232,12 +2342,15 @@ async function main() {
       phase5Envelope: phase5Envelope
         ? {
             axes: {
-              decoyStrength: PHASE5_DECOY_STRENGTHS,
-              smokeDecoyStrength: PHASE5_SMOKE_DECOY_STRENGTHS,
-              maxTurns: PHASE5_BUDGETS,
-              smokeMaxTurns: PHASE5_SMOKE_BUDGETS,
+              severity: isPhase5bConfig(args) ? PHASE5B_SEVERITIES : null,
+              smokeSeverity: isPhase5bConfig(args) ? PHASE5B_SMOKE_SEVERITIES : null,
+              severityFilters: isPhase5bConfig(args) ? PHASE5B_SEVERITY_FILTERS : null,
+              decoyStrength: isPhase5bConfig(args) ? PHASE5B_DECOY_STRENGTHS : PHASE5_DECOY_STRENGTHS,
+              smokeDecoyStrength: isPhase5bConfig(args) ? PHASE5B_SMOKE_DECOY_STRENGTHS : PHASE5_SMOKE_DECOY_STRENGTHS,
+              maxTurns: isPhase5bConfig(args) ? PHASE5B_BUDGETS : PHASE5_BUDGETS,
+              smokeMaxTurns: isPhase5bConfig(args) ? PHASE5B_BUDGETS : PHASE5_SMOKE_BUDGETS,
               decoySigmaScale: PHASE5_DECOY_SIGMA_SCALE,
-              aliasReferenceAmplitude: PHASE5_ALIAS_AMPLITUDE,
+              aliasReferenceAmplitude: isPhase5bConfig(args) ? null : PHASE5_ALIAS_AMPLITUDE,
             },
             cells: phase5Cells,
             modes: PHASE5_MODES,
@@ -2400,6 +2513,9 @@ async function main() {
         "cellId",
         "cellKind",
         "baseScenario",
+        "severity",
+        "severityRemovedModels",
+        "adaptiveModels",
         "decoyStrength",
         "decoySigmaScale",
         "aliasAmplitude",
@@ -2428,6 +2544,9 @@ async function main() {
         "cellId",
         "cellKind",
         "baseScenario",
+        "severity",
+        "severityRemovedModels",
+        "adaptiveModels",
         "decoyStrength",
         "decoySigmaScale",
         "aliasAmplitude",
@@ -2447,6 +2566,8 @@ async function main() {
         "bayesMinusResponseScoreDelta",
         "bayesMinusHybridScoreDelta",
         "hybridMinusResponseScoreDelta",
+        "s3AdaptiveMinusMisspecifiedScoreDelta",
+        "s3AdaptiveMinusMisspecifiedSuccessDelta",
         "missingFamilies",
       ]),
       "utf8",
@@ -2462,6 +2583,9 @@ async function main() {
         "cellId",
         "cellKind",
         "baseScenario",
+        "severity",
+        "severityRemovedModels",
+        "adaptiveModels",
         "decoyStrength",
         "decoySigmaScale",
         "aliasAmplitude",
@@ -2481,6 +2605,9 @@ async function main() {
         "cellId",
         "cellKind",
         "baseScenario",
+        "severity",
+        "severityRemovedModels",
+        "adaptiveModels",
         "decoyStrength",
         "decoySigmaScale",
         "aliasAmplitude",
@@ -2499,6 +2626,9 @@ async function main() {
         "cellId",
         "cellKind",
         "baseScenario",
+        "severity",
+        "severityRemovedModels",
+        "adaptiveModels",
         "decoyStrength",
         "decoySigmaScale",
         "aliasAmplitude",
@@ -2510,6 +2640,8 @@ async function main() {
         "bayesMinusResponseScoreDelta",
         "bayesMinusHybridScoreDelta",
         "hybridMinusResponseScoreDelta",
+        "s3AdaptiveMinusMisspecifiedScoreDelta",
+        "s3AdaptiveMinusMisspecifiedSuccessDelta",
       ]),
       "utf8",
     );
@@ -2519,6 +2651,9 @@ async function main() {
         "cellId",
         "cellKind",
         "baseScenario",
+        "severity",
+        "severityRemovedModels",
+        "adaptiveModels",
         "decoyStrength",
         "decoySigmaScale",
         "aliasAmplitude",
