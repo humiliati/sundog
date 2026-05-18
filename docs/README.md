@@ -14,6 +14,8 @@ code, experiments, prior theorem materials, and application bridges.
 
 - [Table of contents](index.html): browsable HTML index of all documents in
   this folder.
+- [Active TODO](TODO.md): consolidated operator queue for outstanding
+  experiments, blockers, public-surface gates, and launch follow-ups.
 - [Researcher guide](RESEARCHER_GUIDE.md): shortest path for reviewers and
   collaborators.
 - [Scientific criteria](SCIENTIFIC_CRITERIA.md): what is testable, what is
