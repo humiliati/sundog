@@ -1292,26 +1292,52 @@ claim. The lock-backed affirmative finding is narrower:
 claim is the frugal gate, not posterior sufficiency. Treat the alias/decoy
 split as Phase 5 operating-envelope material rather than a Phase 4c redesign.
 
-### Phase 5 — Operating Envelope Sweep
+### Phase 5 - Operating Envelope Sweep
 
-Goal: map regions rather than narrate cherry-picked rounds.
+Goal: map regions rather than narrate cherry-picked rounds. Phase 5 is
+descriptive, not a Hybrid claim gate. Hybrid remains reported-only after the
+Phase 4b lock negative.
 
-Sweep axes:
+Frozen axes:
 
-- field noise;
-- sensor count;
-- model mismatch severity;
-- decoy strength;
-- action budget;
-- compute budget;
-- prior quality;
-- field smoothness;
-- target drift rate;
-- delayed observation severity.
+- `decoy-strength in {0.50, 0.66, 0.82, 0.98}` with `sigmaScale = 0.82`
+  held fixed.
+- `max-turns in {20, 30, 40, 60}`.
+- Sixteen swept `decoy` cells, plus fixed `alias` reference cells at each
+  budget with amplitude `0.96`.
 
-Outputs:
+Frozen modes, all reported and none gated:
 
-- `results/bayes/phase5-envelope/manifest.json`
+`oracle`, `bayes_misspecified`, `bayes_adaptive`, `hc_sundog`,
+`sundog_memory`, `hybrid`, `hybrid_posterior_decoy_disambig`, `random`.
+
+Per-cell classifier: reuse `phase2SeparationMargin = 0.10`. If the best
+non-yardstick family score is `< 0`, label `all_fail`; otherwise label
+`bayes_dominant`, `response_dominant`, or `hybrid_dominant` only when that
+family's best lane beats both other family bests by at least `0.10`; otherwise
+label `mixed`.
+
+Self-consistency anchor: the full `(decoy-strength=0.82, max-turns=40)` cell
+must reproduce the Phase 4b lock decoy deltas against `hc_sundog` for the shared
+lanes. The smoke corner grid intentionally does not include the anchor; the
+full lock checks it against
+`results/bayes/phase4b-hybrid-lock/manifest.json`.
+
+Commands:
+
+```powershell
+npm run bayes:phase5:smoke
+npm run bayes:phase5
+```
+
+Output directories:
+
+- Smoke: `results/bayes/phase5-envelope-smoke/`
+- Lock: `results/bayes/phase5-envelope-lock/`
+
+Frozen filenames under each output directory:
+
+- `manifest.json`
 - `trial-outcomes.csv`
 - `envelope-map.csv`
 - `aggregate-envelope.csv`
@@ -1319,8 +1345,35 @@ Outputs:
 - `cell-class-map.csv`
 - `cell-delta-map.csv`
 - `candidate-envelope.csv`
-- heatmaps for Bayes-dominant, Sundog-dominant, Hybrid-dominant, all-fail;
-- representative replays for each boundary class.
+
+Smoke receipt, 2026-05-18:
+
+```text
+npm run bayes:phase5:smoke
+Bayes phase5-envelope-smoke: 384 trials in 37.588s (10.22 trials/s)
+Audits: pass
+Exit gate: envelope_mapped (6/6 cells classified)
+Wrote results\bayes\phase5-envelope-smoke
+```
+
+Smoke class map:
+
+| Cell | Class | Best family | Best mode |
+| --- | --- | --- | --- |
+| `decoy_strength_0p50_turns_20` | `bayes_dominant` | bayes | `bayes_adaptive` |
+| `decoy_strength_0p98_turns_20` | `mixed` | bayes | `bayes_adaptive` |
+| `alias_ref_turns_20` | `bayes_dominant` | bayes | `bayes_misspecified` |
+| `decoy_strength_0p50_turns_40` | `bayes_dominant` | bayes | `bayes_misspecified` |
+| `decoy_strength_0p98_turns_40` | `mixed` | bayes | `bayes_adaptive` |
+| `alias_ref_turns_40` | `bayes_dominant` | bayes | `bayes_misspecified` |
+
+The full lock is deferred by the long-run rule. The smoke has 384 trials; the
+full grid has 15,360 trials, with a higher average action budget. Budget-scaled
+estimate from the smoke is roughly 31 minutes:
+
+```powershell
+npm run bayes:phase5
+```
 
 Exit criterion: the comparison can be summarized as an operating envelope with
 failure classes, not as a winner-take-all benchmark.
