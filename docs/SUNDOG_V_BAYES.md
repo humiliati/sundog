@@ -365,6 +365,13 @@ Applied queue after the Balance lock:
    `bayes_adaptive` dominates throughout the decoy-strength x budget grid. No
    boundary was mapped; the likely boundary axis is model-mismatch severity,
    deferred only to an optional separately pre-registered Phase 5b.
+10. **Standalone Phase 5b mismatch-severity sweep.** Anchor-validated lock
+    (`reproduced_phase5_lock_cell`, seed-matched, exact) maps a genuine
+    multi-class envelope monotone in severity: `bayes_dominant` (s0-s1) ->
+    `mixed` (s1-s2) -> `response_dominant` (s3). The Bayes-versus-response
+    boundary is misspecification severity; the s3 response win is the Phase 2
+    separation re-derived (s3 is equivalent to `bayes_misspecified`), not a
+    new claim.
 
 ## Controller-Family Architecture
 
@@ -1593,6 +1600,74 @@ full grid has 6,144 trials. Linear estimate from the smoke is roughly
 ```powershell
 npm run bayes:phase5b
 ```
+
+Lock receipt, 2026-05-18:
+
+```text
+npm run bayes:phase5b
+6,144 trials in 889.476s (6.91 trials/s)
+Audits: pass
+Exit gate: envelope_mapped (8/8 cells classified)
+```
+
+Lock receipt paths:
+
+- `results/bayes/phase5b-mismatch-severity-lock/manifest.json`
+- `results/bayes/phase5b-mismatch-severity-lock/cell-class-map.csv`
+- `results/bayes/phase5b-mismatch-severity-lock/aggregate-envelope.csv`
+- `results/bayes/phase5b-mismatch-severity-lock/candidate-envelope.csv`
+
+Self-consistency anchor: **pass**. `status = reproduced_phase5_lock_cell`,
+`referenceBasis = seed_matched_trials_jsonl`, 96 seed-matched reference trials
+from `results/bayes/phase5-envelope-lock/trials.jsonl`. All eight shared lanes
+reproduce the Phase 5 lock `decoy_strength_0p82_turns_40` cell at exactly zero
+score and success difference. The harness is trustworthy at lock scale; the
+`s0` column is, by construction, the Phase 5 result re-derived (chain: 5b.s0 =
+Phase 5 = Phase 4b = Phase 3).
+
+Lock class map, aggregate: 3 `bayes_dominant`, 3 `mixed`, 2
+`response_dominant` over 8 swept cells.
+
+| Severity | decoy 0.82 | decoy 0.98 |
+| --- | --- | --- |
+| `s0` full mixture | `bayes_dominant` (bayes-resp +1.329) | `bayes_dominant` (+1.417) |
+| `s1` -decoy | `bayes_dominant` (+0.345) | `mixed` (+0.244) |
+| `s2` -decoy -alias | `mixed` (+0.098) | `mixed` (best `hybrid_posterior_decoy_disambig`, bayes-hyb -0.009) |
+| `s3` clean-only | `response_dominant` (`sundog_memory`, -0.196) | `response_dominant` (`sundog_memory`, -0.180) |
+
+Phase 5b closeout interpretation: this is a genuine multi-class operating
+envelope, monotone in misspecification severity: **Bayes-dominant (`s0`-`s1`) ->
+contested `mixed` (`s1`-`s2`) -> response-dominant (`s3`)**, with
+decoy-strength a secondary modulator (`0.98` crosses one severity step earlier
+than `0.82`). The roadmap Phase 5 exit criterion - "an operating envelope with
+failure classes, not a winner-take-all benchmark" - is satisfied non-trivially,
+in contrast to the Phase 5 degenerate single-class result.
+
+Three framing constraints, pre-committed at audit and binding on any public
+copy:
+
+1. The response win is `response_dominant` via `sundog_memory` and only at
+   `s3`. Because `s3` is the `clean`-only mixture, it is behaviorally
+   `bayes_misspecified`; this cell is the Phase 2 narrow-separation result
+   re-derived inside the envelope, not an independent new win. The honest
+   statement is: response control wins under severe clean-only Bayesian
+   misspecification; partial misspecification (`s2`) is contested `mixed`, not
+   a response win. "Sundog beats Bayes under mismatch" unqualified is not
+   supported.
+2. `s2` / `0.98` is the only cell where the Phase 4-dropped
+   `hybrid_posterior_decoy_disambig` lane is nominally best (bayes-hybrid
+   -0.009). The cell is `mixed` because no family clears the 0.10 margin, so
+   this is not a `hybrid_dominant` claim and does not reopen the Phase 4 close.
+   It is recorded as a faint reported-only transition-zone artifact.
+3. The `s0` margins (+1.329 / +1.417) restate the Phase 5 degenerate result and
+   the anchor-consistent nesting; reported as continuity, not novelty.
+
+Exit criterion outcome: **met non-trivially / boundary mapped.** The
+Bayes-versus-response operating boundary is misspecification severity: adaptive
+Bayes dominates with a correct or mildly degraded model family; response control
+overtakes only when the family collapses to clean-only; the intermediate band is
+contested. Recorded as-run; the margin is not re-sliced and no cell is re-cut to
+sharpen the boundary.
 
 ### Phase 6 — Photometric Port
 
