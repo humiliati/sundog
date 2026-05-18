@@ -61,7 +61,6 @@ from sundog.experiments.stress_tests import (
     apply_joint_limit_to_action,
     apply_laser_height,
     apply_obs_perturbation,
-    run_episode_with_stressor,
 )
 
 
@@ -226,6 +225,8 @@ PHASE6_DETECTOR_NOISE_SIGMAS = [0.0, 0.02, 0.05, 0.10, 0.20]
 PHASE6_NOMINAL_BEAM_SIGMA = 0.15
 PHASE6_NOMINAL_DETECTOR_NOISE = 0.0
 PHASE6_SMOKE_CELLS = ["nominal", "beam_sigma_0p40", "detector_noise_0p20"]
+PHASE6_LIVE_ANCHOR_CONDITIONS = ["photometric", "doa_direct"]
+PHASE6_LIVE_ANCHOR_ATOL = 1e-12
 
 
 @dataclass(frozen=True)
@@ -287,6 +288,50 @@ def _phase6_stressor(cell: Phase6Cell) -> Stressor:
     )
 
 
+def _make_phase6_live_agent(
+    condition: str,
+    stressor: Stressor,
+    seed: int,
+    initial_obs: Observation,
+    oracle: Oracle,
+    env: SundogEnvV2,
+    particle_count: int,
+):
+    if condition == "photometric":
+        agent = PhotometricAgent(
+            scan_duration_s=stressor.photometric_scan_duration_s,
+            joint_limit=min(stressor.joint_limit - 0.05, 1.45),
+        )
+        agent.reset(carrier_init=tuple(initial_obs.joint_angles))
+        return agent
+    if condition == "doa_direct":
+        agent = DOADirectAgent(joint_limit=stressor.joint_limit)
+        agent.reset(oracle)
+        return agent
+    if condition == "doa_noisy":
+        agent = DOANoisyAgent(
+            noise_std=0.05,
+            joint_limit=stressor.joint_limit,
+            seed=seed * 71 + 5,
+        )
+        agent.reset(oracle)
+        return agent
+    if condition == "random":
+        agent = RandomAgent(joint_limit=stressor.joint_limit, seed=seed * 31 + 7)
+        agent.reset()
+        return agent
+    if condition == "bayes_particle":
+        return BayesParticleAgent(
+            particle_count=particle_count,
+            seed=seed,
+            detector_positions=env._detector_positions.copy(),
+            target_detector_pos=oracle.target_detector_pos,
+            target_detector_index=oracle.target_detector_index,
+            joint_limit=stressor.joint_limit,
+        )
+    raise ValueError(f"unknown Phase 6 condition: {condition}")
+
+
 def _phase6_reference_episode_path(cell: Phase6Cell, condition: str, seed: int) -> str:
     if cell.axis == "nominal":
         return os.path.join("results", condition, f"seed_{seed:03d}.npz")
@@ -322,14 +367,15 @@ def load_phase6_reference_episode(cell: Phase6Cell, condition: str, seed: int) -
     }
 
 
-def run_phase6_bayes_particle_episode(
+def run_phase6_live_episode(
     env: SundogEnvV2,
+    condition: str,
     stressor: Stressor,
     seed: int,
     particle_count: int,
     n_steps: int = N_STEPS,
 ) -> dict:
-    """Run the nominal-assumption particle Bayes lane under a Phase 6 stressor."""
+    """Run one Phase 6 lane through the live env/stressor/seed orchestration."""
     laser_xy = laser_xy_for_seed(seed)
     obs_clean = env.reset(laser_xy=laser_xy)
     apply_laser_height(env, stressor)
@@ -345,13 +391,14 @@ def run_phase6_bayes_particle_episode(
     oracle = env.get_oracle()
     rng = np.random.default_rng(seed * 17 + 3)
     obs_seen = apply_obs_perturbation(obs_clean, stressor, rng)
-    agent = BayesParticleAgent(
-        particle_count=particle_count,
-        seed=seed,
-        detector_positions=env._detector_positions.copy(),
-        target_detector_pos=oracle.target_detector_pos,
-        target_detector_index=oracle.target_detector_index,
-        joint_limit=stressor.joint_limit,
+    agent = _make_phase6_live_agent(
+        condition,
+        stressor,
+        seed,
+        obs_seen,
+        oracle,
+        env,
+        particle_count,
     )
 
     target_intensity = np.empty(n_steps, dtype=np.float64)
@@ -369,7 +416,7 @@ def run_phase6_bayes_particle_episode(
         "target_intensity": target_intensity,
         "joint_angles": joint_angles,
         "laser_xy": np.asarray(laser_xy),
-        "condition": "bayes_particle",
+        "condition": condition,
     }
 
 
@@ -469,6 +516,65 @@ def _compare_reference_series(
     }
 
 
+def _compare_reference_series_tolerance(
+    actual: np.ndarray,
+    path: str,
+    atol: float,
+) -> dict:
+    expected = _load_reference_target(path)
+    if expected.shape != actual.shape:
+        return {
+            "pass": False,
+            "path": path,
+            "reason": f"shape mismatch {actual.shape} != {expected.shape}",
+            "max_abs_diff": None,
+            "atol": atol,
+        }
+    diff = np.abs(actual - expected)
+    max_diff = float(np.max(diff)) if diff.size else 0.0
+    return {
+        "pass": bool(max_diff <= atol),
+        "path": path,
+        "max_abs_diff": max_diff,
+        "atol": atol,
+    }
+
+
+def _live_anchor_checks_for_cell(
+    cell: Phase6Cell,
+    condition: str,
+    seeds: int,
+    particle_count: int,
+    n_steps: int,
+    reference_path_for_seed=None,
+) -> list[dict]:
+    stressor = _phase6_stressor(cell)
+    env = SundogEnvV2(sigma=stressor.beam_sigma, seed=0)
+    checks = []
+    for seed in range(seeds):
+        rec = run_phase6_live_episode(
+            env,
+            condition,
+            stressor,
+            seed=seed,
+            particle_count=particle_count,
+            n_steps=n_steps,
+        )
+        path = (
+            reference_path_for_seed(seed)
+            if reference_path_for_seed is not None
+            else _phase6_reference_episode_path(cell, condition, seed)
+        )
+        checks.append(
+            _compare_reference_series_tolerance(
+                rec["target_intensity"],
+                path,
+                PHASE6_LIVE_ANCHOR_ATOL,
+            )
+        )
+    return checks
+
+
 def phase6_anchor_report(
     out_dir: str,
     phase_cells: list[Phase6Cell],
@@ -476,26 +582,39 @@ def phase6_anchor_report(
     summaries: dict[str, dict[str, dict]],
     seeds: int,
     n_steps: int,
+    particle_count: int,
 ) -> dict:
     report: dict = {
         "status": "pass",
         "seedPrefix": list(range(seeds)),
+        "liveAnchorAtol": PHASE6_LIVE_ANCHOR_ATOL,
         "nominal": {},
         "stressPhotometric": [],
     }
 
     nominal = summaries.get("nominal", {})
     for condition in ["photometric", "doa_direct"]:
-        checks = []
+        replay_checks = []
         for seed in range(seeds):
             key = ("nominal", condition, seed)
             if key not in trial_series:
                 continue
             path = os.path.join("results", condition, f"seed_{seed:03d}.npz")
-            checks.append(_compare_reference_series(trial_series[key], path))
+            replay_checks.append(_compare_reference_series(trial_series[key], path))
+        live_checks = []
+        if condition in PHASE6_LIVE_ANCHOR_CONDITIONS:
+            live_checks = _live_anchor_checks_for_cell(
+                phase_cells[0],
+                condition,
+                seeds=seeds,
+                particle_count=particle_count,
+                n_steps=n_steps,
+            )
         report["nominal"][condition] = {
-            "seedMatchedNpz": checks,
-            "seedMatchedPass": all(check["pass"] for check in checks),
+            "receiptReplayLoadability": replay_checks,
+            "receiptReplayPass": all(check["pass"] for check in replay_checks),
+            "liveReexecutionNpz": live_checks,
+            "liveReexecutionPass": all(check["pass"] for check in live_checks) if live_checks else False,
         }
 
     analysis_path = os.path.join("results", "analysis", "analysis_summary.json")
@@ -563,7 +682,7 @@ def phase6_anchor_report(
         else:
             stress_refs = []
         for stressor_name, level in stress_refs:
-            checks = []
+            replay_checks = []
             for seed in range(seeds):
                 key = (cell.cell_id, "photometric", seed)
                 if key not in trial_series:
@@ -576,7 +695,25 @@ def phase6_anchor_report(
                     "photometric",
                     f"seed_{seed:03d}.npz",
                 )
-                checks.append(_compare_reference_series(trial_series[key], path))
+                replay_checks.append(_compare_reference_series(trial_series[key], path))
+            def stress_reference_path(seed, stressor_name=stressor_name, level=level):
+                return os.path.join(
+                    "results",
+                    "stress_tests",
+                    stressor_name,
+                    f"level_{level}",
+                    "photometric",
+                    f"seed_{seed:03d}.npz",
+                )
+
+            live_checks = _live_anchor_checks_for_cell(
+                cell,
+                "photometric",
+                seeds=seeds,
+                particle_count=particle_count,
+                n_steps=n_steps,
+                reference_path_for_seed=stress_reference_path,
+            )
             aggregate_check = {"checked": False}
             sweep_path = os.path.join(
                 "results",
@@ -599,17 +736,19 @@ def phase6_anchor_report(
                 "cell_id": cell.cell_id,
                 "stressor": stressor_name,
                 "level": level,
-                "seedMatchedPass": all(check["pass"] for check in checks),
-                "seedMatchedNpz": checks,
+                "receiptReplayPass": all(check["pass"] for check in replay_checks),
+                "receiptReplayNpz": replay_checks,
+                "liveReexecutionPass": all(check["pass"] for check in live_checks),
+                "liveReexecutionNpz": live_checks,
                 "sweepSummaryAggregate": aggregate_check,
             })
 
     nominal_pass = all(
-        entry.get("seedMatchedPass", False)
+        entry.get("liveReexecutionPass", False)
         for entry in report["nominal"].values()
-        if isinstance(entry, dict) and "seedMatchedPass" in entry
+        if isinstance(entry, dict) and "liveReexecutionPass" in entry
     )
-    stress_pass = all(row["seedMatchedPass"] for row in report["stressPhotometric"])
+    stress_pass = all(row["liveReexecutionPass"] for row in report["stressPhotometric"])
     aggregate_pass = True
     aggregate = report["nominal"].get("analysisSummaryAggregate")
     if isinstance(aggregate, dict) and aggregate.get("checked", True) is not False:
@@ -711,8 +850,9 @@ def run_phase6(args: argparse.Namespace) -> None:
             wall_t0 = time.time()
             for seed in range(args.seeds):
                 if condition == "bayes_particle":
-                    rec = run_phase6_bayes_particle_episode(
+                    rec = run_phase6_live_episode(
                         env,
+                        condition,
                         stressor,
                         seed=seed,
                         particle_count=args.particle_count,
@@ -871,6 +1011,7 @@ def run_phase6(args: argparse.Namespace) -> None:
         summaries=summaries,
         seeds=args.seeds,
         n_steps=args.steps,
+        particle_count=args.particle_count,
     )
     completed_at = time.time()
     status = (

@@ -1721,11 +1721,20 @@ Substrate-validity anchors:
 1. The nominal `photometric` and `doa_direct` lanes reproduce the committed
    `results/analysis/analysis_summary.json` aggregates exactly at lock scale.
    The smoke checks the same deterministic receipt as a strict seed-prefix
-   NPZ replay before any lock is run.
+   live re-execution before any lock is run.
 2. Each ladder's `photometric` lane reproduces the committed
    `results/stress_tests/{beam_sigma,detector_noise}/sweep_summary.json`
    photometric column at lock scale. Smoke checks the included cells by
-   seed-prefix NPZ replay.
+   seed-prefix live re-execution.
+
+Anchor clarification, recorded before the repaired smoke: the initial smoke
+receipt below is void because the anchor compared committed NPZ receipts to
+themselves. A valid anchor must re-execute `photometric` and `doa_direct` live
+through the shared Phase 6 env/seed/stressor path at the nominal cell, and must
+re-execute `photometric` live for the included stress cells. Those live traces
+must match the committed NPZ receipts within `1e-12` max absolute target-trace
+difference. Receipt replay may remain as loadability evidence for non-anchored
+rails, but it is not an anchor pass condition.
 
 Frozen commands:
 
@@ -1733,6 +1742,53 @@ Frozen commands:
 $env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6-photometric-smoke --results-dir results/bayes/phase6-photometric-smoke --phase6-cells smoke --seeds 6 --steps 500 --particle-count 64 --conditions photometric doa_direct doa_noisy random bayes_particle
 $env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6-photometric-lock --results-dir results/bayes/phase6-photometric-lock --phase6-cells lock --seeds 30 --steps 500 --particle-count 128 --conditions photometric doa_direct doa_noisy random bayes_particle
 ```
+
+Voided smoke receipt, 2026-05-18:
+
+```text
+$env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6-photometric-smoke --results-dir results/bayes/phase6-photometric-smoke --phase6-cells smoke --seeds 6 --steps 500 --particle-count 64 --conditions photometric doa_direct doa_noisy random bayes_particle
+Photometric phase6-photometric-smoke: 90 trials in 41.933s (2.15 trials/s)
+Audits: pass
+Exit gate: envelope_mapped (3/3 cells classified)
+```
+
+This receipt is retained only as a voided implementation receipt. It is not
+claim support and must not be used to unlock the Phase 6 lock, because the
+anchor was circular.
+
+Voided smoke receipt paths:
+
+- `results/bayes/phase6-photometric-smoke/manifest.json`
+- `results/bayes/phase6-photometric-smoke/trial-outcomes.csv`
+- `results/bayes/phase6-photometric-smoke/candidate-envelope.csv`
+- `results/bayes/phase6-photometric-smoke/cell-class-map.csv`
+- `results/bayes/phase6-photometric-smoke/aggregate-envelope.csv`
+
+Voided smoke interpretation: the 3 / 3 `bayes_particle_dominant` class map is
+not interpretable because the anchor did not validate the live Phase 6 path.
+The repaired smoke must be run before any Phase 6 lock or result framing.
+
+Repaired smoke receipt, 2026-05-18:
+
+```text
+$env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6-photometric-smoke --results-dir results/bayes/phase6-photometric-smoke --phase6-cells smoke --seeds 6 --steps 500 --particle-count 64 --conditions photometric doa_direct doa_noisy random bayes_particle
+Photometric phase6-photometric-smoke: 90 trials in 34.622s (2.60 trials/s)
+Audits: pass
+Exit gate: envelope_mapped (3/3 cells classified)
+```
+
+Repaired smoke anchor: **pass**. Live re-execution through the shared Phase 6
+env/seed/stressor path matches committed receipts within the frozen `1e-12`
+tolerance:
+
+- nominal `photometric`: max absolute target-trace diff `1.39e-14`
+- nominal `doa_direct`: max absolute target-trace diff `4.77e-15`
+- included stress photometric cells: max absolute target-trace diff `1.81e-14`
+
+Repaired smoke class map: 3 / 3 `bayes_particle_dominant` cells over `nominal`,
+`beam_sigma_0p40`, and `detector_noise_0p20`. This is now a valid smoke-shape
+receipt, not a lock. The full 9-cell, 128-particle lock remains the arbiter
+before interpreting the surprising max-severity Bayes result.
 
 Exit criterion: a reviewer can see whether the Phase 1-5b result - response
 edge only under Bayesian misspecification severity - is a shadow-field toy

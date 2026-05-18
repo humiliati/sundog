@@ -313,8 +313,13 @@ v3 does not own:
   total operator wall-clock.
 - **v3 (2026-05-18, result note filed)** — battery executed and
   receipt recorded in [`PHASE7_V3_RESULTS.md`](PHASE7_V3_RESULTS.md).
-  GG1 / GG2 / GG4 confirm; GG3 falsifies; GG5 partially falsifies.
-  v2 caveat closes (GG4-A: basin-attractor avoidance). New
-  traceability labels introduced: `field-coupled, under-budget` for
-  the U-trough cells, `bootstrap-collapse` for reward_phase3 seg3.
-  Four v2 amendments queued (PHASE7_V2_RESULTS.md §5, §6, §8, §10).
+  GG1 / GG2 / GG4 confirm; GG3 *and* GG5 each partially falsify
+  (one of two pre-registered conditions held in both cases). v2
+  caveat closes (GG4-A: basin-attractor avoidance). GG3 introduces
+  a new third class `field-coupled, under-budget` for the U-trough
+  cells — neither the spec's confirm branch (collapse) nor the spec's
+  falsify branch (field-coupled with low obp). `bootstrap-collapse`
+  introduced for reward_phase3 seg3 (zero intervention response with
+  obp ~7, distinct from the spec's predicted near-zero-obp
+  `undertrained`). Four v2 amendments queued
+  (PHASE7_V2_RESULTS.md §5, §6, §8, §10).

@@ -25,14 +25,22 @@ predictions:
    — comparable to signature_terminal and mixed_0_90, decisively
    below the Medium collapse floor (5.560). The 1% signature anchor
    recovery is real; v2 §6 "constitutive of learnability" stands.
-2. **GG3 falsifies: the U-trough is NOT collapse.** L-Mixed-0.95 and
-   0.97 are *field-coupled*, with healthy signature-sensor responses
-   (0.580 / **0.973**) and bp_obp in a middle band (1.5) well below
-   collapse. mixed_0_97's signature response is the *highest* of any
-   cell in the battery — even higher than signature_terminal. A new
-   class is introduced: **`field-coupled, under-budget`** — signature-
-   tracking, but ineffective at navigation. The v2 §5 "U-trough is the
-   collapse class" framing is wrong and is amended in §6 below.
+2. **GG3 partially falsifies, into a new third class.** L-Mixed-0.95
+   and 0.97 are *field-coupled*, with healthy signature-sensor
+   responses (0.580 / **0.973**). The spec's pre-registered falsify
+   branch required *both* "response stays healthy" *and* "`old_basin_pref`
+   stays low"; only the first lands. Observed bp_obp 1.47–1.52 is
+   moderately elevated — above the Medium hold-cell range (max 0.823)
+   though well below the Medium collapse floor (5.560). The outcome
+   therefore lies *between* the spec's two pre-registered branches and
+   introduces a new third class: **`field-coupled, under-budget`** —
+   signature-tracking but with moderately elevated basin-attraction
+   and ineffective navigation. mixed_0_97's signature response is the
+   *highest* of any cell in the battery — even higher than
+   signature_terminal. The v2 §5 "U-trough is the collapse class"
+   framing is wrong (and amended in §6 below) but the trough is not
+   the cleanly pre-registered "field-coupled with low obp" branch
+   either.
 3. **GG5 partially falsifies: bootstrap-failure has structure.** The
    reward_phase3 seg3 chain shows action_response_L2 = 0 across *every*
    channel — the policy is genuinely degenerate, not responding to any
@@ -58,23 +66,41 @@ persistence to episode end. `seed_start = 10000` (canonical).
 `sig_resp_L2` = `mean_action_response_L2` on the `signature-sensor`
 channel (`scale = 0.1`). `bp_obp` = `mean_old_basin_preference` on the
 `basin-position` channel (`xFalseNew = (+2.5, +2.5)`). `succ_off` and
-`align_off` are nominal-control trial metrics (no intervention), and
-they match the v2 §2 32-seed eval to within seed variance, validating
-the harness reconciliation.
+`align_off` are nominal-control trial metrics (no intervention); the
+seed-count expansion comparison against v2 §2 is treated explicitly
+in the seed-variance paragraph at the end of this section.
 
 Calibration anchors carried in from the spec §10:
 
 - Medium L-Signature signature-sensor reference: `0.343` (Phase 4 §4).
 - Medium L-Reward collapse `old_basin_pref`: `5.560` (Phase 4 §4).
-- Medium hold-cell `old_basin_pref` range: `-0.394` to `+0.823`
-  ([`PHASE7_RESULTS.md`](PHASE7_RESULTS.md) §4).
+- Medium-tier hold-cell `old_basin_pref` range: `+0.193` to `+0.823`
+  ([`PHASE7_RESULTS.md`](PHASE7_RESULTS.md) §4; bounds are
+  L-Signature-M terminal and L-Mixed-M λ=0.3 respectively, both
+  Medium-tier). Small-tier hold cells extend below this (Small L-Mixed
+  λ=0.5 at `-0.394` and Small L-Signature terminal at `-0.002`) but
+  the Medium-only range is the relevant comparison for Large.
 
 All four `field-coupled` Large cells have sig_resp_L2 well above the
-Medium L-Signature reference (0.343), and all four sit in or near the
-Medium hold-cell `old_basin_pref` range. The two `field-coupled,
-under-budget` cells have signature responses *exceeding* the canonical
-Large signature controller. The `bootstrap-collapse` cell has zero
-intervention response on every channel but ends at the old basin.
+Medium L-Signature reference (0.343). signature_terminal (0.354) and
+mixed_0_99 (0.459) sit inside the Medium hold-cell range; mixed_0_90
+(0.569) sits inside the range close to its upper bound; the two
+`field-coupled, under-budget` cells (1.47–1.52) sit above the upper
+bound but well below the Medium collapse floor. The two trough cells
+have signature responses *exceeding* the canonical Large signature
+controller, despite their elevated `old_basin_pref`. The
+`bootstrap-collapse` cell has zero intervention response on every
+channel but consistently ends at the old basin.
+
+Nominal-control trial success and alignment numbers (`succ_off`,
+`align_off`) are broadly consistent with the v2 §2 32-seed eval but
+not seed-for-seed identical: v3 doubled the seed count from 32 to 64
+(seed_start unchanged at 10000), and the additional 32 seeds shifted
+several rates. The largest delta is mixed_0_99 at `succ_off 0.516`
+(v3, 64 seeds) versus `0.406` (v2, 32 seeds) — a +0.110 shift, just
+outside the v2 §7 Stage 3 strict ±0.10 band but consistent with the
+seed-shifted triangulation in v2 §7 (seed=30000 returned 0.625). The
+other five cells are within ±0.05.
 
 ## 3. Artifacts
 
@@ -109,40 +135,56 @@ extension at Large. The spec's GG1 prediction lands cleanly.
 
 ### GG2 — mixed_0_90 Path B adopted: **PASS**
 
-sig_resp_L2 = 0.518 (within 12% of signature_terminal's 0.593).
-bp_obp = 0.569 (above Medium hold range but ~10× below Medium
-collapse floor 5.560).
+sig_resp_L2 = 0.518 (within ~13% of signature_terminal's 0.593, and
+well above the Medium L-Signature reference 0.343).
+bp_obp = 0.569 (*inside* the Medium hold-cell range +0.193 to +0.823,
+positioned in its upper half but below the upper bound; ~10× below
+the Medium collapse floor 5.560).
 Confirms `field-coupled` for the borderline-hold cell. The Path B
 adoption of `--value-coef 0.25` validated by intervention-level
 evidence, not just terminal-alignment eval.
 
-### GG3 — mixed_0_95 / mixed_0_97 Large U-trough: **FALSIFY**
+### GG3 — mixed_0_95 / mixed_0_97 Large U-trough: **PARTIAL FALSIFY**
 
-The spec's GG3 predicted: "degraded signature-sensor response and
-elevated `old_basin_pref` (well above Medium hold cells, in the
-Medium collapse range or higher)." What landed:
+The spec's GG3 had two pre-registered branches. Primary (confirm):
+"degraded signature-sensor response *and* elevated `old_basin_pref`
+in the Medium collapse range or higher." Alternative (falsify):
+"response stays healthy *and* `old_basin_pref` stays low at the
+trough cells." Both branches paired a signature-response condition
+with an `old_basin_pref` condition. What landed:
 
 | cell | sig_resp_L2 | bp_obp |
 | --- | ---: | ---: |
 | mixed_0_95 | 0.580 | 1.520 |
 | mixed_0_97 | **0.973** | 1.474 |
 
-Both trough cells have *healthy* signature responses — mixed_0_97's
-sig_resp 0.973 is the **highest of any cell in the v3 battery**,
-exceeding signature_terminal (0.593). bp_obp 1.47–1.52 sits well below
-the Medium collapse floor and forms a band above the Medium hold
-range. The trough is *not* the collapse class.
+The signature-response half satisfies the falsify branch: responses
+are *healthy* — mixed_0_97's sig_resp 0.973 is the **highest of any
+cell in the v3 battery**, exceeding signature_terminal (0.593).
 
-GG3 falsifies cleanly into the spec's pre-registered alternative:
+The `old_basin_pref` half satisfies *neither* branch. bp_obp 1.47–1.52
+is moderately elevated — above the Medium hold-cell upper bound
+(0.823) but well below the Medium collapse floor (5.560). The spec's
+falsify branch required `old_basin_pref` to "stay low" alongside the
+healthy response; the trough cells fail that condition.
 
-> If GG3 falsifies (response stays healthy and `old_basin_pref` stays
-> low at the trough cells), the U-trough is **field-coupled but
-> weak-success**, a substantively different finding that would weaken
-> the "Large cliff broadens but collapse class is the same shape"
-> sentence in [`PHASE7_V2_RESULTS.md`](PHASE7_V2_RESULTS.md) §6 and
-> require a v2 amendment.
+The outcome therefore falls between the two pre-registered branches
+and introduces a **new third class** beyond what the spec named:
 
-The v2 amendment is filed in §6 below.
+> **`field-coupled, under-budget`** — the policy reads the external
+> signature (probe-confirmed healthy sig response) and is not basin-
+> internalized (bp_obp ~10× below Medium collapse floor), but exhibits
+> moderately elevated basin-attraction (bp_obp ~2× the Medium hold
+> upper bound) and does not navigate effectively (nominal success
+> 0.03–0.06, alignment 0.49–0.55).
+
+GG3 is therefore labeled **PARTIAL FALSIFY** symmetrically with GG5:
+one of the two pre-registered conditions held (sig response), the
+other did not (`old_basin_pref` is not low). The v2 §5 "U-trough is
+the collapse class" framing is *also* falsified, but the alternative
+the spec named is not the alternative that landed. The v2 amendment
+list (§6 below) reflects the actual finding — a new class, not the
+pre-registered "weak-success with low obp."
 
 ### GG4 — mixed_0_99 Large (load-bearing): **PASS as GG4-A**
 
@@ -335,9 +377,12 @@ trough cells specifically.
 
 - **v3 (2026-05-18)** — initial Phase 7 v3 result note. Six-cell
   Large intervention battery, 64 seeds × 5 channels per cell.
-  GG1 / GG2 / GG4 confirm; GG3 falsifies; GG5 partially falsifies.
-  Introduces `field-coupled, under-budget` and `bootstrap-collapse`
-  as new traceability labels. Formally closes the
+  GG1 / GG2 / GG4 confirm; GG3 *and* GG5 each partially falsify
+  (one of two pre-registered conditions held in both cases). GG3
+  introduces a third class — `field-coupled, under-budget` — that
+  was not in either pre-registered branch; GG5 introduces
+  `bootstrap-collapse` as a sub-class of collapse distinct from
+  `undertrained`. Formally closes the
   [`SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md) Phase 7 v2 caveat
   (basin-attractor avoidance vs co-pointing) in favor of basin-
   attractor avoidance. Filed as a sibling to
