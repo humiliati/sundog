@@ -1790,6 +1790,32 @@ Repaired smoke class map: 3 / 3 `bayes_particle_dominant` cells over `nominal`,
 receipt, not a lock. The full 9-cell, 128-particle lock remains the arbiter
 before interpreting the surprising max-severity Bayes result.
 
+Phase 6 lock-interpretation constraints, frozen before the lock:
+
+1. **Severity-axis weakness.** Phase 6 perturbs optical parameters
+   (`beam_sigma`, `detector_noise_sigma`), which is weaker than the
+   model-family ablation that produced the Phase 5b synthetic boundary. If the
+   lock stays Bayes-dominant, the supported statement is that this
+   optical-parameter misspecification axis does not break the nominal particle
+   filter in the tested range. It does not refute the Phase 5b result; a wrong
+   likelihood-structure axis would require a separate Phase 6b pre-registration.
+2. **Smoke is not a claim.** The repaired smoke validates the live anchor and
+   the shape of the result on a strict 6-seed prefix only. The public Phase 6
+   interpretation requires the frozen 30-seed lock, including the aggregate
+   exact anchor against `analysis_summary.json` and the committed stress
+   `sweep_summary.json` receipts.
+3. **Speed, not accuracy.** The primary comparison is median
+   `time_to_threshold`; `terminal_intensity` must be reported alongside it. If
+   the lock preserves the smoke shape, public copy should say "far faster at
+   comparable terminal accuracy," not "better" without qualification.
+
+If the lock confirms the smoke, the honest closeout is that the Phase 1-5b
+synthetic response-control edge does not replicate on the core photometric task
+under these tested optical/detector severities. If the lock downgrades the
+smoke, the smoke is recorded as an over-optimistic prefix and the lock result
+wins. In either case, the result is reported as-run; the grid is not re-cut and
+the severity axis is not changed after seeing the lock.
+
 Exit criterion: a reviewer can see whether the Phase 1-5b result - response
 edge only under Bayesian misspecification severity - is a shadow-field toy
 artifact or replicates on the core photometric task. The phase is descriptive,

@@ -1261,6 +1261,20 @@ crossover inherits the same rule in a cleaner form: do not collapse
 variance, single-route sensitivity, and full multi-component mechanism
 into one "importance" score.
 
+**Phase 6b spec filed (2026-05-18)** at
+[`mesa/PHASE6B_SPEC.md`](mesa/PHASE6B_SPEC.md). Large-tier activation
+patching on the v3 cliff pair (mixed_0_99 vs mixed_0_97 at vc=0.25),
+analog of Medium net.7 is Large **net.9** (final hidden Tanh,
+hidden_size=1024 in depth=5 actor). Three pre-registered predictions:
+GG6b-loc (cliff localizes at net.9 like Medium net.7), GG6b-mech (the
+v3 §7 observation-pathway hypothesis produces directional patching
+asymmetry — C→P decisively higher than P→C), GG6b-shape (5D entangled
+subspace from v3.1 generalizes to Large net.9 or scales with hidden
+dim; deferred to v1.1 after GG6b-loc resolves). Harness extension
+bounded: `--cliff-pair {medium-v1,large-v3}` flag added to
+`training/mesa/phase6_probes.py axis-b-smoke`, v1 code path
+preserved. Compute envelope: ~1.5–2.5 hours full, ~3–5 minutes smoke.
+
 **Phase 7:** v1 **complete**. See
 [`mesa/PHASE7_SPEC.md`](mesa/PHASE7_SPEC.md) and
 [`mesa/PHASE7_RESULTS.md`](mesa/PHASE7_RESULTS.md). The harness

@@ -14,6 +14,14 @@ collapsed side?
 Where this spec and the roadmap disagree, the roadmap wins. Where both
 are silent, this spec is authoritative for Phase 6.
 
+> **Large-tier sibling (Phase 6b, 2026-05-18).** A Large extension of
+> the Phase 6 v1 cliff-pair patching design is specified at
+> [`PHASE6B_SPEC.md`](PHASE6B_SPEC.md). It runs the same axis-b
+> patching mechanism on the Phase 7 v3 cliff pair (mixed_0_99 vs
+> mixed_0_97 at Large with vc=0.25), with `net.9` as the Large analog
+> of Medium `net.7`. Phase 6b is a sibling to v1, not a successor;
+> the v1 Medium net.7 result on the 0.95/0.97 cliff pair is unchanged.
+
 ## 1. Decision Lock
 
 Phase 6 v1 starts with six pinned calls:
