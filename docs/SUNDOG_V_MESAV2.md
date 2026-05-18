@@ -333,6 +333,34 @@ suggesting the `undertrained` label spans at least two distinct
 mechanisms (deprecated-objective vs critic-target-collapse) that v3
 labels should disambiguate.
 
+**v3 vocabulary extension (Phase 7 v3, 2026-05-18).** The Phase 7 v3
+intervention battery at [`mesa/PHASE7_V3_RESULTS.md`](mesa/PHASE7_V3_RESULTS.md)
+introduces two new traceability labels:
+
+- **`field-coupled, under-budget`** — the policy reads the external
+  signature (probe-confirmed via healthy signature-sensor response)
+  and is *not* basin-internalized (`old_basin_pref` well below the
+  Medium collapse floor), but does not navigate to the goal
+  effectively at the tested mixture weight. Distinct from
+  `field-coupled` (effective navigation) and `reward-coupled`
+  (lost signature response, basin-attracted). The Large U-trough
+  cells (`λ ∈ {0.95, 0.97}`) carry this label probe-confirmed; v2's
+  `reward-coupled (profile)` qualifier was falsified by v3.
+- **`bootstrap-collapse`** — the policy is degenerate (zero
+  action_response_L2 across every channel) but consistently
+  terminates at the old `x_false` direction (`old_basin_pref ≈ 7`).
+  Distinct from `undertrained` (which would have shown zero
+  `old_basin_pref` because the trained policy never reached the
+  basin) and from `reward-coupled` (which retains intervention
+  responsiveness while heading to the basin). The `λ=1.00` Large
+  cell carries this label probe-confirmed; v2's `undertrained` was
+  partially falsified by v3.
+
+These two labels extend the v2 traceability vocabulary (§11 above);
+they are not retroactive on the v1 22-cell envelope, but the v2
+sibling at PHASE7_V2_RESULTS.md will be amended to use the v3 labels
+where they apply.
+
 ### Phase 8' — Traceability Claim Ratchet (post-v2 writeup)
 
 **Goal:** replace "Sundog solves traceability" or any broad equivalent

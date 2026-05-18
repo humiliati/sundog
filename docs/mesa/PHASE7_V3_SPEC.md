@@ -311,3 +311,10 @@ v3 does not own:
   between basin-attractor avoidance and co-pointing fixed-attractor
   collapse for L-Mixed-0.99 Large. Compute envelope: ~60–70 minutes
   total operator wall-clock.
+- **v3 (2026-05-18, result note filed)** — battery executed and
+  receipt recorded in [`PHASE7_V3_RESULTS.md`](PHASE7_V3_RESULTS.md).
+  GG1 / GG2 / GG4 confirm; GG3 falsifies; GG5 partially falsifies.
+  v2 caveat closes (GG4-A: basin-attractor avoidance). New
+  traceability labels introduced: `field-coupled, under-budget` for
+  the U-trough cells, `bootstrap-collapse` for reward_phase3 seg3.
+  Four v2 amendments queued (PHASE7_V2_RESULTS.md §5, §6, §8, §10).

@@ -634,6 +634,18 @@ probe-confirming whether `λ=0.99` recovery is basin-attractor avoidance
 or co-pointing fixed-attractor collapse. v3 is read-only over existing
 checkpoints (no new training); compute envelope ~60–70 minutes total.
 
+v3 result note at [`mesa/PHASE7_V3_RESULTS.md`](mesa/PHASE7_V3_RESULTS.md)
+(2026-05-18). All six policies evaluated at 64 seeds × 5 channels.
+**GG4-A confirmed: the v2 caveat closes** — `λ=0.99` Large is genuine
+basin-attractor avoidance (sig_resp 0.579, bp_obp 0.459). **GG3
+falsifies: the U-trough is field-coupled, not collapse** — mixed_0_95
+and mixed_0_97 retain healthy signature responses (0.580 / 0.973) and
+bp_obp 1.5 well below collapse. New traceability label
+`field-coupled, under-budget` introduced for the trough cells. GG5
+partially falsifies: reward_phase3 seg3 is `bootstrap-collapse`
+(degenerate fixed trajectory at the old basin), not `undertrained`.
+Four amendments required to PHASE7_V2_RESULTS.md §5, §6, §8, §10.
+
 ### Phase 8 - Writeup, Claim Ratchet, and Public Artifact
 
 Goal: turn the result into a defensible Sundog hook, update the boundary

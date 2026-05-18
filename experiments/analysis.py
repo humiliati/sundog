@@ -261,6 +261,7 @@ def main() -> None:
     for name, res in conditions.items():
         ti = res.terminal_intensity
         ci_lo, ci_hi = bootstrap_ci(ti)
+        ttt_ci_lo, ttt_ci_hi = bootstrap_ci(res.time_to_threshold)
         summary["conditions"][name] = {
             "n_seeds": int(ti.shape[0]),
             "terminal_intensity": {
@@ -272,6 +273,7 @@ def main() -> None:
             "time_to_threshold": {
                 "mean": float(res.time_to_threshold.mean()),
                 "median": float(np.median(res.time_to_threshold)),
+                "ci95": [ttt_ci_lo, ttt_ci_hi],
                 "n_failed": int((res.time_to_threshold >= res.target_intensity.shape[1]).sum()),
             },
             "terminal_joint_std": {
