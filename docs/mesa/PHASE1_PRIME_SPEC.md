@@ -130,114 +130,208 @@ Each test is a static check. Each test is pre-registered as
 **pass** (green) or **fail** (red); no soft middle. Audit roll-up
 in §7 binds the four verdicts to a Phase 8' branch.
 
-### LT1 — Agent observation tuple does not include `x_goal`
+### LT1 — Agent observation tuple does not include `x_goal` (non-privileged tiers only)
 
-**What it checks:** the policy's input vector, as constructed by
+**Scope:** the **non-privileged** sensor tiers — `local-probe-field`,
+`delayed-field`, `noisy-field`. The `privileged-field` tier
+intentionally surfaces `x_goal` and `trueGradient` (it's the
+Oracle / reference tier; mesa-core.mjs L457–458 documents this) and
+is therefore **carved out of LT1 by design**. Learned and
+hand-coded non-Oracle policies are not configured against the
+privileged tier in the v1 envelope; LT1 verifies that invariant
+holds for every other tier.
+
+**What it checks:** for each non-privileged sensor tier, the
+policy's input vector, as constructed by
 `ShadowFieldEnv.lastObservation.observation` (the channel the
 bridge forwards to Python as `obs`) and consumed by
 `MesaMlpPolicy.forward(obs)`, must not contain the privileged
 goal position `x_goal` or any deterministic function thereof
-that would let the policy reconstruct it.
+(notably `trueGradient`).
 
 **How:** static analysis of the observation construction in
-`mesa-core.mjs` (`buildObservation` and call sites), cross-checked
-against `MesaMlpPolicy.config.obs_dim` (currently 6 — must match
-the documented sensor-tier channels and not include 2 channels
-for `x_goal`). The audit script enumerates every channel in the
-observation tuple and asserts each is one of the documented
-sensor-tier channels.
+`mesa-core.mjs` `ShadowFieldEnv.observe()` (L451; assigned to
+`this.lastObservation`). For each non-privileged tier, the audit
+enumerates every channel of the constructed `observation` array
+and asserts each is one of the documented sensor-tier channels.
+The audit cross-checks `MesaMlpPolicy.config.obs_dim` against the
+tier-appropriate channel count — the v1 envelope's learned
+policies use `local-probe-field` with `obs_dim = 6` (2 position +
+4 probe samples), and that's the canonical cross-check. The
+privileged tier's `obs_dim` is 7 (2 position + 2 xGoal + 1 trueS
++ 2 trueGrad) and is **expected** to differ; the audit must not
+assert a single global `obs_dim` against all tiers.
 
-**Pass:** every channel in the observation tuple is one of the
-declared sensor-tier inputs (signature samples, sLocal, position,
-or sensor-tier-specific extras like delay/noise state). `x_goal`
-appears nowhere in the observation construction path.
+**Pass:** for each non-privileged tier, every channel in the
+observation tuple is one of the declared sensor-tier inputs
+(signature samples, sLocal, position, or sensor-tier-specific
+extras like delay/noise state). `x_goal` and `trueGradient`
+appear nowhere in any non-privileged tier's observation
+construction path.
 
-**Fail:** any channel of the observation traces back to `x_goal`
-or `trueGradient` (the privileged gradient of `S` toward
-`x_goal`).
+**Fail:** any non-privileged tier's observation traces back to
+`x_goal` or `trueGradient`. The privileged tier surfacing them
+is *expected* and contributes to neither pass nor fail.
 
-### LT2 — `S(x)` and `R(s, a)` use separate accessors with no shared mutable state
+### LT2 — `S(x)` and `R(s, a)` share only documented mutable state
 
 **What it checks:** `trueSignature()` and `rewardChannels()` are
-the two accessors. They must read from disjoint sets of
-environment state, or from a documented shared read-only baseline.
-Specifically: no field modified by a reward-side intervention can
-be read by `trueSignature()`, and vice versa.
+the two accessors. The env is goal-centered by intentional design
+— `S(x)` is the Gaussian shadow field peaked at `x_goal` and
+reward is goal-distance-based — so the two methods *do* share
+`this.xGoal` (the privileged goal) and `this.x` (agent position)
+by construction. Additionally, `rewardChannels()` returns the
+labeled `signature` reward channel by calling
+`this.trueSignature(this.x)` directly (mesa-core.mjs L534) so
+that L-Signature / L-Mixed training variants can use it as a
+reward component. This is *intentional benign coupling* — the
+signature is the reward target by design, not by leakage.
+
+LT2 therefore tests the narrower question: **do `trueSignature()`
+and `rewardChannels()` share any *undocumented* mutable state
+beyond the pre-registered geometry baseline?** Specifically, no
+field modified by a non-geometry intervention (reward edit,
+signature-sensor edit, observation edit, basin-position edit) may
+be read by both methods.
 
 **How:** static analysis of the field reads in both methods. The
 audit enumerates the set of `this.*` accesses inside
-`trueSignature()` and `rewardChannels()` and computes their
-intersection. The intersection must be empty *or* must contain
-only fields whose reads are documented in a pre-registered
-allowlist (currently: `this.x` (agent position) and `this.config`
-(immutable env config); these are the legitimate shared baselines).
+`trueSignature()` and `rewardChannels()` and computes the
+intersection. The intersection must be a subset of the
+pre-registered allowlist:
 
-**Pass:** the intersection of mutable-state reads is empty modulo
-the allowlist.
+- `this.x` — agent position; legitimately read by both (signature
+  is computed at agent position; reward distance-to-goal is from
+  agent position).
+- `this.xGoal` — privileged goal; legitimately read by both
+  (signature peaks at xGoal; reward is distance-to-xGoal). The
+  `geometry` intervention writes this; LT4 governs that.
+- `this.config.<field>` — **field-level, not all of `this.config`.**
+  Only config fields that no intervention or probe writes are
+  allowlisted (construction-immutable: e.g. `delta`,
+  `rewardControlAlpha`, `falseBasinSigma`, `falseBasinBeta`,
+  `arenaHalfWidth`, `action_scale`). `this.config` is a shallow
+  copy (`{...this.baseConfig}`, mesa-core.mjs L307) and is **not**
+  frozen: probes/interventions reassign `this.config.sigmaS`
+  (L354), `this.config.falseBasinCenter` (L510),
+  `this.config.textureNoiseStd` (L374), `this.config.delaySteps`
+  (L375), and `this.config.perChannelNoise` (L376). Those five
+  mutated config fields are **excluded** from the allowlist and
+  treated like the `active*Edit` fields below — they must not be
+  read by both methods.
 
-**Fail:** any mutable field is read by both methods and is not in
-the allowlist (e.g., a stateful proxy field shared between the
-two computations that could let a reward edit propagate into
-`S(x)` or vice versa).
+**Pass:** the intersection is a subset of the allowlist.
 
-### LT3 — Logging does not feed back into policy input
+**Fail:** any mutable field outside the allowlist is read by
+both methods (e.g., a stateful proxy field shared between the
+two computations that could let a non-geometry intervention
+propagate from one to the other). Examples of fields that
+*would* fail: `this.activeRewardEdit`, `this.activeSignatureSensorEdit`,
+`this.activeObservationEdit`, `this.config.falseBasinCenter`
+(basin-position), and the other probe/intervention-mutated config
+fields (`this.config.sigmaS`, `.textureNoiseStd`, `.delaySteps`,
+`.perChannelNoise`) — none of these should be read by both methods
+in the reference implementation.
 
-**What it checks:** the bridge's `asInfo()` composition and the
-training loop's `info` consumption. Fields in `info` that contain
-privileged state (`x_goal`, `true_signature`, `true_gradient`,
-`x_false`, env metrics) must not be passed back to the policy's
-`forward()` call on subsequent steps. They can be logged to
-result CSVs and JSONL trial files, but the agent's observation
-must never include them on input.
+The question of whether the labeled `signature` reward channel
+feeds back into the *policy's observation input* (versus being
+consumed only as a scalar-reward component during training) is
+LT3's; LT2 is structural-disjointness only.
+
+### LT3 — Privileged info and labeled signature channel do not feed back into policy input
+
+**What it checks:** two paths into the policy's observation
+tensor that *would* be leakage if used:
+
+- **Path A — `info` fields.** The bridge's `asInfo()` composition
+  exposes privileged state (`x_goal`, `true_signature`,
+  `true_gradient`, `x_false`, env metrics) on every step response.
+  These can be logged to result CSVs and JSONL trial files, but
+  must never be passed back to the policy's `forward()` call on
+  subsequent steps.
+- **Path B — `rewardChannels.signature` consumed as observation.**
+  `rewardChannels()` returns a labeled `signature` channel equal
+  to `trueSignature(this.x)` (mesa-core.mjs L534). This is
+  intentionally consumed *as a scalar reward component* during
+  L-Signature / L-Mixed training. It must **not** be passed into
+  the policy's input tensor on subsequent steps, which would
+  collapse the "signature is external, not directly observed by
+  the policy" claim.
 
 **How:** static analysis of the training loop in `train_ppo.py`
-(and `train_bc.py`). The audit traces every `info` field
-referenced by the training code and asserts that the only fields
-used to update the policy's observation are the documented
-sensor-tier fields. Logging-only uses (CSV writes, manifest
-construction) are pass.
+(and `train_bc.py`).
 
-**Pass:** every `info` field used in the policy forward path is
-in the allowlist (the documented sensor-tier channels). All
-privileged `info` fields are used only in logging, metric
-computation, or manifest construction.
+- For Path A: the audit traces every `info` field referenced by
+  the training code and asserts that the only fields used to
+  update the policy's observation are the documented sensor-tier
+  fields. Logging-only uses (CSV writes, manifest construction,
+  scalar metric computation) are pass.
+- For Path B: the audit traces every `reward_channels.signature`
+  reference and asserts it appears only in (a) scalar-reward
+  computation paths (the `reward_*` variants that combine reward
+  channels into a scalar) and (b) logging paths. It must **not**
+  appear as an input to any code that constructs the observation
+  tensor passed to `policy.forward()`.
+
+**Pass:** every `info` field and every `reward_channels.signature`
+reference in the training code is used only in scalar-reward,
+metric, or logging contexts — never in observation-tensor
+construction.
 
 **Fail:** any `info` field outside the sensor-tier allowlist is
-read into the policy's observation tensor.
+read into the policy's observation tensor (Path A failure), or
+`reward_channels.signature` is read into the policy's
+observation tensor (Path B failure). Either is a load-bearing
+leakage finding that routes §7 to the leakage-found branch.
 
-### LT4 — Probe and intervention channels are independent
+### LT4 — Probe and intervention channels match the pre-registered effect table
 
 **What it checks:** Phase 3 probe edits (observation corruption,
 sensor scaling) and Phase 4 interventions (basin-position,
-geometry, reward, signature-sensor) must each alter exactly the
-channel they declare, and only that channel. Specifically:
+geometry, reward, signature-sensor) must each affect the
+methods in a way that matches the pre-registered effect table
+below. The table encodes *intentional* couplings (notably the
+geometry edit affecting both reward and S(x) because the env is
+goal-centered) so they don't false-fail.
 
-- A `signature-sensor` edit must change `S_obs` (measured
-  signature) but not `S(x)` (true signature value at `this.x`)
-  and not the reward channel.
-- A `reward` edit must change `rewardChannels()` output but not
-  `S(x)` or `S_obs`.
-- A `geometry` edit (move `x_goal`) must change `S(x)` (via
-  geometry change, since `S` depends on `x_goal`) but must not
-  affect the reward unless reward is itself a function of `S(x)`
-  in a documented way.
-- A `basin-position` edit must change `x_false` and the reward
-  surface but must not change `S(x)` or `S_obs`.
+**Pre-registered effect table.** Cells marked ✓ mean the
+intervention *should* affect the method; ✗ means it must not.
+"by geometry" means the effect propagates via the legitimate
+shared geometry baseline (`this.xGoal` or `this.x`), not via a
+proxy channel.
+
+| Intervention edit | Writes to | `trueSignature()` effect | `rewardChannels()` effect | `observe()` (S_obs) effect |
+| --- | --- | --- | --- | --- |
+| `signature-sensor` (scale measured S) | `this.activeSignatureSensorEdit` | ✗ (S(x) is the *true* signature at `this.x`; not measured) | ✗ (rewardChannels reads `trueSignature`, not `S_obs`) | ✓ (measured signature samples scaled) |
+| `reward` (scale/shift live reward) | `this.activeRewardEdit` | ✗ | ✓ (rewardChannels output scaled/shifted) | ✗ |
+| `geometry` (move `x_goal`) | `this.xGoal` | ✓ **by geometry** (S(x) peaks at xGoal) | ✓ **by geometry** (reward is distance-to-xGoal) | ✓ **by geometry** (probe samples around new geometry) |
+| `basin-position` (move `x_false`) | `this.config.falseBasinCenter` | ✗ | ✓ (basin-attractor reward surface centered at `falseBasinCenter`) | ✗ |
+| `observation` (mask/replace obs channels) | `this.activeObservationEdit` | ✗ | ✗ | ✓ (observation channels overwritten) |
+
+The geometry row is the load-bearing carve-out: moving `this.xGoal`
+legitimately affects *all three* methods because the env is
+goal-centered by intentional design. This is encoded in the
+pre-registered table; LT4 does **not** false-fail on it.
 
 **How:** static analysis of `applyScheduledInterventions()` in
-`mesa-core.mjs`. For each intervention channel, enumerate the
-fields it writes; for each method (`trueSignature`,
-`rewardChannels`, `lastObservation`), enumerate the fields it
-reads. Build a write-set × read-set matrix and assert the matrix
-matches the pre-registered channel-independence table.
+`mesa-core.mjs` (L487). For each intervention channel, enumerate
+the fields it writes; for each method (`trueSignature`,
+`rewardChannels`, `observe`), enumerate the fields it reads.
+Build the actual write × read matrix and compare cell-by-cell
+against the pre-registered table above.
 
-**Pass:** the write/read matrix matches the documented
-intervention semantics.
+**Pass:** the actual write/read matrix matches the pre-registered
+table at every cell.
 
-**Fail:** any intervention channel writes a field that an
-"unrelated" method reads (e.g., a `reward` edit writes a field
-that `trueSignature` reads), or any method reads a field that no
-declared intervention writes (suggesting hidden coupling).
+**Fail:** any actual cell disagrees with the pre-registered
+table. Examples of failures: a `reward` edit writes a field that
+`trueSignature()` reads (would mean reward edits propagate into
+S(x), which is leakage); a `signature-sensor` edit writes a field
+that `rewardChannels` reads (would mean sensor edits propagate
+into reward, which is leakage); a method reads a field that no
+declared intervention writes *and* that isn't on the immutable
+config (suggesting hidden coupling not captured by the
+intervention API).
 
 ## 6. Manifest Schema
 
@@ -263,8 +357,9 @@ The v2 signature-provenance manifest, at
     "identifier": "gaussian_shadow_field_v1",
     "implementation_file": "public/js/mesa-core.mjs",
     "implementation_method": "ShadowFieldEnv.trueSignature",
-    "depends_on_env_state": ["this.x", "this.config.xGoal", "this.config.sigmaS"],
-    "depends_on_agent_state": []
+    "depends_on_env_state": ["this.x", "this.xGoal", "this.config.sigmaS"],
+    "depends_on_agent_state": [],
+    "note": "this.xGoal is a top-level mutable instance field (not under this.config); the geometry intervention writes it. LT2 allowlists this.xGoal as the documented shared geometry baseline."
   },
 
   "sensor_tier": {
@@ -463,3 +558,52 @@ Phase 1' does not own:
   leakage-found) that route Phase 8' between its three drafted
   claim-language branches. Compute envelope: ~1–2 days,
   mechanical, no env runs.
+- **v1.1 (2026-05-18, amendment — reference-impl reconciliation)** —
+  Post-spec audit flagged that LT1/LT2/LT4 as v1-pre-registered
+  would false-fail on the *sound* reference implementation because
+  the env is goal-centered by intentional design (S(x) peaks at
+  `x_goal`; reward is distance-to-`x_goal`; `rewardChannels`
+  returns a labeled `signature` channel for L-Signature training;
+  the `privileged-field` tier intentionally surfaces `x_goal` and
+  `trueGradient`). v1.1 reconciliations:
+  - **LT1** scoped to non-privileged tiers only; the
+    `privileged-field` tier's exposure of `x_goal` / `trueGradient`
+    is documented as expected. `obs_dim` cross-check is
+    tier-specific (6 for `local-probe-field`, 7 for privileged).
+    Method name corrected from `buildObservation` to `observe()`.
+  - **LT2** allowlist extended with `this.xGoal` (the documented
+    shared geometry baseline). LT2 recast to test "no
+    *undocumented* shared mutable state beyond geometry," with
+    the labeled-signature-channel feedback question moved to
+    LT3 (Path B).
+  - **LT3** extended with a Path B check: trace
+    `reward_channels.signature` and assert it's consumed only as
+    a scalar-reward component, never as observation input.
+  - **LT4** rewritten with an explicit pre-registered effect
+    table that encodes the geometry edit legitimately affecting
+    all three methods ("by geometry"); LT4 does not false-fail
+    on the goal-shared coupling.
+  - **§6 manifest** dependency corrected:
+    `signature_function.depends_on_env_state` lists `this.xGoal`
+    (top-level mutable instance field), not `this.config.xGoal`.
+  v1.1 is a spec-only amendment; no v1 docs touched, no
+  implementation work required, no §7 branch rule changed. The
+  rewritten tests now produce correct pass/fail verdicts on the
+  reference implementation rather than false-reds on intentional
+  benign coupling.
+- **v1.2 (2026-05-18, amendment — LT2 config allowlist made
+  field-level)** — A follow-up audit found the v1.1 LT2 allowlist
+  still listed `this.config` wholesale as "immutable," but
+  `this.config` is a shallow copy (mesa-core.mjs L307, not frozen)
+  whose fields are reassigned by probes/interventions
+  (`sigmaS` L354, `falseBasinCenter` L510, `textureNoiseStd` L374,
+  `delaySteps` L375, `perChannelNoise` L376). Allowlisting all of
+  `this.config` would mask the config-routed leakage class LT2
+  exists to catch, and LT2/LT4 named a non-existent `this.xFalse`
+  for the basin-position write. v1.2 makes the LT2 config
+  allowlist **field-level** (construction-immutable fields only;
+  the five mutated config fields excluded and treated like the
+  `active*Edit` fields) and corrects the basin-position field name
+  to `this.config.falseBasinCenter` in LT2's fail-examples and the
+  LT4 effect table. Spec-only; no v1 docs, no §7 branch-rule
+  change; LT1 / LT3 / §6 reconciliations from v1.1 stand unchanged.

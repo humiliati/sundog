@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-05-18T18:12:50.931Z",
+  "sourcePaths": {
+    "phase1": "results/bayes/phase1-reference-lock/manifest.json",
+    "phase2": "results/bayes/phase2-mismatch-lock/manifest.json",
+    "phase3": "results/bayes/phase3-aliasing-lock/manifest.json",
+    "phase4b": "results/bayes/phase4b-hybrid-lock/manifest.json",
+    "phase5": "results/bayes/phase5-envelope-lock/manifest.json",
+    "phase5b": "results/bayes/phase5b-mismatch-severity-lock/manifest.json",
+    "phase6": "results/bayes/phase6-photometric-lock/manifest.json",
+    "phase6b": "results/bayes/phase6b-structure-lock/manifest.json"
+  },
+  "phases": [
+    {
+      "phase": "phase1-reference-lock",
+      "status": "pass",
+      "sourcePath": "results/bayes/phase1-reference-lock/manifest.json",
+      "completedAt": "2026-05-17T18:37:26.360Z",
+      "anchorPass": null,
+      "headline": {
+        "kind": "phase1-known-model",
+        "bayesSuccessRate": 0.984375,
+        "sundogSuccessRate": 0.210938,
+        "bayesMinusSundogMeanScoreDelta": 1.423809
+      }
+    },
+    {
+      "phase": "phase2-mismatch-lock",
+      "status": "separation_found",
+      "sourcePath": "results/bayes/phase2-mismatch-lock/manifest.json",
+      "completedAt": "2026-05-17T18:36:37.922Z",
+      "anchorPass": null,
+      "headline": {
+        "kind": "phase2-mismatch",
+        "separatedScenarios": [
+          "anisotropic"
+        ],
+        "separationMargin": 0.1,
+        "anisotropicScoreDelta": 0.59164
+      }
+    },
+    {
+      "phase": "phase3-aliasing-lock",
+      "status": "dual_gate_pass",
+      "sourcePath": "results/bayes/phase3-aliasing-lock/manifest.json",
+      "completedAt": "2026-05-17T19:35:03.571Z",
+      "anchorPass": null,
+      "headline": {
+        "kind": "phase3-aliasing",
+        "dualGateScenarios": [
+          "decoy",
+          "alias"
+        ],
+        "decoyWrongLockRate": 0.572917,
+        "aliasWrongLockRate": 0.510417,
+        "decoyBayesRecoveryScoreDelta": 1.329126,
+        "aliasBayesRecoveryScoreDelta": 1.060612
+      }
+    },
+    {
+      "phase": "phase4b-hybrid-lock",
+      "status": "hybrid_no_niche",
+      "sourcePath": "results/bayes/phase4b-hybrid-lock/manifest.json",
+      "completedAt": "2026-05-18T06:00:48.342Z",
+      "anchorPass": null,
+      "headline": {
+        "kind": "phase4-hybrid",
+        "nicheConfirmed": false,
+        "status": "hybrid_no_niche",
+        "claimScenarios": [
+          "decoy",
+          "alias"
+        ],
+        "allArmsClaimScenarios": [
+          "alias"
+        ],
+        "posteriorSufficiencyClaimScenarios": [
+          "decoy",
+          "alias"
+        ]
+      }
+    },
+    {
+      "phase": "phase5-envelope-lock",
+      "status": "envelope_mapped",
+      "sourcePath": "results/bayes/phase5-envelope-lock/manifest.json",
+      "completedAt": "2026-05-18T10:17:52.140Z",
+      "anchorPass": true,
+      "headline": {
+        "kind": "phase5-envelope",
+        "cells": 20,
+        "classifiedCells": 20,
+        "classCounts": {
+          "bayes_dominant": 20
+        },
+        "bestMode": "bayes_adaptive"
+      }
+    },
+    {
+      "phase": "phase5b-mismatch-severity-lock",
+      "status": "envelope_mapped",
+      "sourcePath": "results/bayes/phase5b-mismatch-severity-lock/manifest.json",
+      "completedAt": "2026-05-18T11:24:45.452Z",
+      "anchorPass": true,
+      "headline": {
+        "kind": "phase5-envelope",
+        "cells": 8,
+        "classifiedCells": 8,
+        "classCounts": {
+          "bayes_dominant": 3,
+          "response_dominant": 2,
+          "mixed": 3
+        },
+        "severityRows": {
+          "s0_0.82": {
+            "severity": "s0",
+            "decoyStrength": 0.82,
+            "classLabel": "bayes_dominant",
+            "bestFamily": "bayes",
+            "bestMode": "bayes_adaptive",
+            "bayesMinusResponseScoreDelta": 1.329126
+          },
+          "s0_0.98": {
+            "severity": "s0",
+            "decoyStrength": 0.98,
+            "classLabel": "bayes_dominant",
+            "bestFamily": "bayes",
+            "bestMode": "bayes_adaptive",
+            "bayesMinusResponseScoreDelta": 1.41698
+          },
+          "s1_0.82": {
+            "severity": "s1",
+            "decoyStrength": 0.82,
+            "classLabel": "bayes_dominant",
+            "bestFamily": "bayes",
+            "bestMode": "bayes_adaptive",
+            "bayesMinusResponseScoreDelta": 0.344791
+          },
+          "s1_0.98": {
+            "severity": "s1",
+            "decoyStrength": 0.98,
+            "classLabel": "mixed",
+            "bestFamily": "bayes",
+            "bestMode": "bayes_adaptive",
+            "bayesMinusResponseScoreDelta": 0.244352
+          },
+          "s2_0.82": {
+            "severity": "s2",
+            "decoyStrength": 0.82,
+            "classLabel": "mixed",
+            "bestFamily": "bayes",
+            "bestMode": "bayes_adaptive",
+            "bayesMinusResponseScoreDelta": 0.098246
+          },
+          "s2_0.98": {
+            "severity": "s2",
+            "decoyStrength": 0.98,
+            "classLabel": "mixed",
+            "bestFamily": "hybrid",
+            "bestMode": "hybrid_posterior_decoy_disambig",
+            "bayesMinusResponseScoreDelta": 0.036922
+          },
+          "s3_0.82": {
+            "severity": "s3",
+            "decoyStrength": 0.82,
+            "classLabel": "response_dominant",
+            "bestFamily": "response",
+            "bestMode": "sundog_memory",
+            "bayesMinusResponseScoreDelta": -0.195981
+          },
+          "s3_0.98": {
+            "severity": "s3",
+            "decoyStrength": 0.98,
+            "classLabel": "response_dominant",
+            "bestFamily": "response",
+            "bestMode": "sundog_memory",
+            "bayesMinusResponseScoreDelta": -0.180054
+          }
+        }
+      }
+    },
+    {
+      "phase": "phase6-photometric-lock",
+      "status": "envelope_mapped",
+      "sourcePath": "results/bayes/phase6-photometric-lock/manifest.json",
+      "completedAt": "2026-05-18T13:11:30.058Z",
+      "anchorPass": true,
+      "headline": {
+        "cells": 9,
+        "classCounts": {
+          "bayes_particle_dominant": 8,
+          "mixed": 1
+        },
+        "nominal": {
+          "cellId": "nominal",
+          "class": "bayes_particle_dominant",
+          "bestCondition": "bayes_particle",
+          "runnerUp": "photometric",
+          "leadVsRunnerUp": 177,
+          "ci95HalfWidth": 0.36666666666666625,
+          "bayesMedianTtt": 11,
+          "bayesFailedSeeds": 0
+        },
+        "maxBeam": {
+          "cellId": "beam_sigma_0p40",
+          "class": "bayes_particle_dominant",
+          "bestCondition": "bayes_particle",
+          "runnerUp": "photometric",
+          "leadVsRunnerUp": 23,
+          "ci95HalfWidth": 0.16666666666666607,
+          "bayesMedianTtt": 10,
+          "bayesFailedSeeds": 0
+        },
+        "maxDetectorNoise": {
+          "cellId": "detector_noise_0p20",
+          "class": "bayes_particle_dominant",
+          "bestCondition": "bayes_particle",
+          "runnerUp": "photometric",
+          "leadVsRunnerUp": 177,
+          "ci95HalfWidth": 0.36666666666666625,
+          "bayesMedianTtt": 11,
+          "bayesFailedSeeds": 0
+        },
+        "mixedCell": {
+          "cellId": "beam_sigma_0p05",
+          "class": "mixed",
+          "bestCondition": "photometric",
+          "runnerUp": "bayes_particle",
+          "leadVsRunnerUp": 0,
+          "ci95HalfWidth": 51.717083333333335,
+          "bayesMedianTtt": 500,
+          "bayesFailedSeeds": 22
+        }
+      }
+    },
+    {
+      "phase": "phase6b-structure-lock",
+      "status": "response_edge_transfers",
+      "sourcePath": "results/bayes/phase6b-structure-lock/manifest.json",
+      "completedAt": "2026-05-18T18:12:50.931Z",
+      "anchorPass": true,
+      "headline": {
+        "cells": 4,
+        "classCounts": {
+          "bayes_particle_dominant": 3,
+          "photometric_dominant": 1
+        },
+        "exitDeterminant": "photometric_dominant_present",
+        "s0": {
+          "cellId": "nominal_structure_s0",
+          "class": "bayes_particle_dominant",
+          "bestCondition": "bayes_particle",
+          "runnerUp": "photometric",
+          "leadVsRunnerUp": 177,
+          "ci95HalfWidth": 0.36666666666666625,
+          "bayesMedianTtt": 11,
+          "bayesFailedSeeds": 0
+        },
+        "s1": {
+          "cellId": "nominal_structure_s1",
+          "class": "bayes_particle_dominant",
+          "bestCondition": "bayes_particle",
+          "runnerUp": "photometric",
+          "leadVsRunnerUp": 177,
+          "ci95HalfWidth": 0.36666666666666625,
+          "bayesMedianTtt": 11,
+          "bayesFailedSeeds": 0
+        },
+        "s2": {
+          "cellId": "nominal_structure_s2",
+          "class": "bayes_particle_dominant",
+          "bestCondition": "bayes_particle",
+          "runnerUp": "photometric",
+          "leadVsRunnerUp": 177,
+          "ci95HalfWidth": 0.36666666666666625,
+          "bayesMedianTtt": 11,
+          "bayesFailedSeeds": 0
+        },
+        "s3": {
+          "cellId": "nominal_structure_s3",
+          "class": "photometric_dominant",
+          "bestCondition": "photometric",
+          "runnerUp": "bayes_particle",
+          "leadVsRunnerUp": 312,
+          "ci95HalfWidth": 13.70041666666667,
+          "bayesMedianTtt": 500,
+          "bayesFailedSeeds": 30
+        }
+      }
+    }
+  ],
+  "verdict": {
+    "sundogReadout": "Narrow separation only under specific synthetic misspecification: Phase 2 anisotropic, Phase 3 decoy/alias failure boundary, and Phase 5b clean-only model-family collapse. Hybrid did not earn a niche.",
+    "comparatorState": "Correctly specified adaptive or particle Bayes dominates the synthetic envelope and the core photometric task. On the core task it stays faster at comparable terminal accuracy under parameter stress and non-degenerate structural misspecification; response control flips only against degenerate model-less Bayes.",
+    "safeInterpretation": "Real but narrow and substrate-conditional: stronger than a naive-only comparator result, weaker than posterior dominance. The response edge does not transfer to the core task except degenerately.",
+    "stampSequence": [
+      "MODEL KNOWN -> BAYES WINS",
+      "SYNTHETIC MISSPECIFICATION -> NARROW RESPONSE EDGE",
+      "CORE TASK -> NO TRANSFER"
+    ]
+  }
+}
