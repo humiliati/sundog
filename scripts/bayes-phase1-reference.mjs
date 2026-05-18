@@ -647,6 +647,9 @@ function createHybridState(mode, config) {
     posteriorReady: false,
     posteriorActionTurns: 0,
     responseActionTurns: 0,
+    trackDwellTurns: 0,
+    trackSignalDeltas: [],
+    lastTrackSignal: null,
     previousPos: null,
   };
 }
@@ -822,23 +825,34 @@ function chooseHybridAction({ mode, seed, turn, scenario, pos, target, observati
   }
 
   const shouldRefresh =
-    mode === "hybrid_posterior_decoy_disambig" ||
-    (mode === "hybrid" && turn % Math.ceil(1 / (FRUGALITY_FRACTION * AMBIGUITY_MASS)) === 1) ||
-    (mode === "hybrid_posterior_reset_only" && responseDiagnostics.policy === "return_to_best_signal");
-  const view = shouldRefresh
-    ? updateAdaptivePosterior({ seed, scenario, pos, target, observation, state: state.adaptive, config, metrics })
-    : adaptivePosteriorView(state.adaptive, target);
+    mode === "hybrid_posterior_decoy_disambig" || (mode === "hybrid_posterior_reset_only" && responseDiagnostics.policy === "return_to_best_signal");
+  const ambiguityState = updateHybridAmbiguityState({ state, responseDiagnostics, observation, config });
+  let view = shouldRefresh ? updateAdaptivePosterior({ seed, scenario, pos, target, observation, state: state.adaptive, config, metrics }) : null;
   if (shouldRefresh) state.posteriorReady = true;
 
-  const ambiguityMass = phase3AmbiguityMass(view.modelSummary);
-  const ambiguityGate = ambiguityMass >= AMBIGUITY_MASS;
+  let offBasinMass = null;
+  let ambiguityGate = false;
+  let posteriorRefreshed = shouldRefresh;
+  if (mode === "hybrid") {
+    const triggerReady = ambiguityState.trackDwellTurns >= WRONG_LOCK_DWELL_TURNS && ambiguityState.signalPlateau;
+    if (triggerReady) {
+      view = updateAdaptivePosterior({ seed, scenario, pos, target, observation, state: state.adaptive, config, metrics });
+      state.posteriorReady = true;
+      posteriorRefreshed = true;
+      offBasinMass = posteriorOffBasinMass(view.combinedPosterior, state.response.bestPos);
+      ambiguityGate = offBasinMass >= AMBIGUITY_MASS;
+    }
+  } else if (view) {
+    offBasinMass = posteriorOffBasinMass(view.combinedPosterior, state.response.bestPos);
+    ambiguityGate = offBasinMass >= AMBIGUITY_MASS;
+  }
   const resetGate = responseDiagnostics.policy === "return_to_best_signal";
   const usePosterior =
     mode === "hybrid_posterior_decoy_disambig"
       ? ambiguityGate
       : mode === "hybrid_posterior_reset_only"
         ? resetGate && state.posteriorReady
-        : state.posteriorReady && ambiguityGate;
+        : ambiguityGate;
 
   if (!usePosterior) {
     state.responseActionTurns += 1;
@@ -849,12 +863,16 @@ function chooseHybridAction({ mode, seed, turn, scenario, pos, target, observati
         policy: `hybrid_response_${responseDiagnostics.policy}`,
         responsePolicy: responseDiagnostics.policy,
         posteriorUsed: false,
-        posteriorRefreshed: shouldRefresh,
-        phase3AmbiguityMass: round(ambiguityMass, 6),
+        posteriorRefreshed,
+        trackDwellTurns: ambiguityState.trackDwellTurns,
+        signalPlateau: ambiguityState.signalPlateau,
+        maxSignalDeltaInWindow: ambiguityState.maxSignalDeltaInWindow,
+        offBasinMass: offBasinMass === null ? null : round(offBasinMass, 6),
         ambiguityGate,
       },
     };
   }
+  view ??= adaptivePosteriorView(state.adaptive, target);
 
   const posteriorChoice = chooseFromAdaptivePosterior({
     seed,
@@ -871,17 +889,49 @@ function chooseHybridAction({ mode, seed, turn, scenario, pos, target, observati
   state.posteriorActionTurns += 1;
   return withHybridDiagnostics(posteriorChoice, mode, responseDiagnostics, {
     posteriorUsed: true,
-    posteriorRefreshed: shouldRefresh,
-    phase3AmbiguityMass: round(ambiguityMass, 6),
+    posteriorRefreshed,
+    trackDwellTurns: ambiguityState.trackDwellTurns,
+    signalPlateau: ambiguityState.signalPlateau,
+    maxSignalDeltaInWindow: ambiguityState.maxSignalDeltaInWindow,
+    offBasinMass: offBasinMass === null ? null : round(offBasinMass, 6),
     ambiguityGate,
     resetGate,
   });
 }
 
-function phase3AmbiguityMass(modelSummary) {
-  return modelSummary
-    .filter((entry) => entry.model === "decoy" || entry.model === "alias" || entry.model === "symmetric")
-    .reduce((acc, entry) => acc + entry.prob, 0);
+function updateHybridAmbiguityState({ state, responseDiagnostics, observation, config }) {
+  if (responseDiagnostics.phase !== "track") {
+    state.trackDwellTurns = 0;
+    state.trackSignalDeltas = [];
+    state.lastTrackSignal = null;
+    return { trackDwellTurns: 0, signalPlateau: false, maxSignalDeltaInWindow: null };
+  }
+
+  state.trackDwellTurns = (state.trackDwellTurns ?? 0) + 1;
+  if (!state.trackSignalDeltas) state.trackSignalDeltas = [];
+  if (state.lastTrackSignal !== null && state.lastTrackSignal !== undefined) {
+    state.trackSignalDeltas.push(Math.abs(observation.value - state.lastTrackSignal));
+    while (state.trackSignalDeltas.length > WRONG_LOCK_DWELL_TURNS - 1) state.trackSignalDeltas.shift();
+  }
+  state.lastTrackSignal = observation.value;
+
+  const enoughDwell = state.trackDwellTurns >= WRONG_LOCK_DWELL_TURNS;
+  const windowDeltas = state.trackSignalDeltas.slice(-(WRONG_LOCK_DWELL_TURNS - 1));
+  const signalPlateau =
+    enoughDwell && windowDeltas.length >= WRONG_LOCK_DWELL_TURNS - 1 && windowDeltas.every((delta) => delta < config.noiseStd);
+  const maxSignalDeltaInWindow = windowDeltas.length ? Math.max(...windowDeltas) : null;
+  return {
+    trackDwellTurns: state.trackDwellTurns,
+    signalPlateau,
+    maxSignalDeltaInWindow: maxSignalDeltaInWindow === null ? null : round(maxSignalDeltaInWindow, 6),
+  };
+}
+
+function posteriorOffBasinMass(posterior, basinCenter) {
+  const probs = normalizeLogWeights(posterior.logWeights);
+  return posterior.candidates.reduce((acc, candidate, index) => {
+    return distance(candidate, basinCenter) > WRONG_LOCK_RADIUS ? acc + probs[index] : acc;
+  }, 0);
 }
 
 function withHybridDiagnostics(choice, mode, responseDiagnostics, extra) {
@@ -1716,6 +1766,7 @@ async function main() {
         claimScenarios: ["decoy", "alias"],
         diagnosticScenarios: ["symmetric", "low_probe"],
         repairPredicate: "scoreDeltaVsHcSundog >= phase2SeparationMargin AND successDeltaVsHcSundog >= 0",
+        ambiguityTrigger: "track dwell >= WRONG_LOCK_DWELL_TURNS AND all signal deltas in the dwell window < noiseStd AND off-response-basin posterior mass >= AMBIGUITY_MASS",
         frugalityFraction: FRUGALITY_FRACTION,
         ambiguityMass: AMBIGUITY_MASS,
       },
@@ -1747,7 +1798,7 @@ async function main() {
       },
       hybrid: {
         observation: "position and scalar field observation only plus a gated finite-mixture posterior",
-        actionRule: "HC-Sundog response action by default; frugality/ambiguity-paced posterior refreshes may override when phase3 ambiguity mass >= AMBIGUITY_MASS",
+        actionRule: "HC-Sundog response action by default; posterior is consulted only after locked track-dwell and signal-plateau preconditions, and overrides when off-response-basin mass >= AMBIGUITY_MASS",
       },
       hybrid_no_posterior: {
         observation: "position and scalar field observation only",
@@ -1763,7 +1814,7 @@ async function main() {
       },
       hybrid_posterior_decoy_disambig: {
         observation: "position and scalar field observation plus finite-mixture posterior at decoy-disambiguation gates",
-        actionRule: "posterior action when phase3 ambiguity model mass >= AMBIGUITY_MASS",
+        actionRule: "posterior action when off-response-basin posterior mass >= AMBIGUITY_MASS",
       },
       oracle: {
         observation: "privileged hidden source for apparatus ceiling only",
