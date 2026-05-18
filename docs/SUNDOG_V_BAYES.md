@@ -1252,6 +1252,46 @@ deltas are +0.0625, exactly one extra success in a 16-seed smoke. The lock is
 therefore a real arbiter: a downgrade to `hybrid_no_niche` at 96 seeds would
 be the preregistration mechanism working, not a regression.
 
+Lock receipt, 2026-05-18:
+
+```text
+npm run bayes:phase4b
+3,072 trials in 1495.976s
+Exit gate: hybrid_no_niche (1/2 claim scenarios all-arms)
+```
+
+Lock receipt paths:
+
+- `results/bayes/phase4b-hybrid-lock/manifest.json`
+- `results/bayes/phase4b-hybrid-lock/summary.csv`
+- `results/bayes/phase4b-hybrid-lock/regret.csv`
+- `results/bayes/phase4b-hybrid-lock/replay-manifest.json`
+
+Lock gate rows:
+
+| Scenario | Hybrid score / success | HC-Sundog score / success | Score delta | Success delta | Hybrid evals | Bayes-adaptive evals | Arms |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| `decoy` | 0.179274 / 0.291667 | 0.141162 / 0.281250 | +0.038112 | +0.010417 | 1047.25 | 3153.58 | repair false; frugality true; load-bearing true |
+| `alias` | 0.248791 / 0.333333 | 0.097524 / 0.250000 | +0.151267 | +0.083333 | 988.08 | 4470.04 | repair true; frugality true; load-bearing true |
+
+Lock trigger diagnostics from `steps.jsonl`:
+
+| Scenario | Hybrid steps | Stuck-window fires | Posterior actions | Posterior refreshes |
+| --- | ---: | ---: | ---: | ---: |
+| `decoy` | 3233 | 354 | 314 | 354 |
+| `alias` | 3159 | 334 | 251 | 334 |
+
+Lock interpretation: Phase 4b does not earn a claim niche. The no-progress
+trigger is active and frugal, and the load-bearing ablation still shows the
+posterior can repair both claim regimes, but plain `hybrid` only clears the
+repair arm in `alias`. `decoy` falls below the fixed +0.10 score margin at
+lock scale, so the smoke niche is downgraded to `hybrid_no_niche`.
+This closes Phase 4 as a pre-registered negative for the frugal gated Hybrid
+claim. The lock-backed affirmative finding is narrower:
+`hybrid_posterior_decoy_disambig` repairs both `decoy` and `alias`; the dropped
+claim is the frugal gate, not posterior sufficiency. Treat the alias/decoy
+split as Phase 5 operating-envelope material rather than a Phase 4c redesign.
+
 ### Phase 5 — Operating Envelope Sweep
 
 Goal: map regions rather than narrate cherry-picked rounds.
