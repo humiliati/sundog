@@ -137,6 +137,18 @@ Phase 6 v1 found the cliff localized to Medium **net.7** (final hidden
 Tanh before the policy head). The Large structural analog is **net.9**
 (final hidden Tanh, 1024-dim vs Medium's 256-dim).
 
+Actor parameter counts (from the canonical `.policy.json` exports for
+each tier):
+
+| tier | hidden_size | depth | actor parameter_count |
+| --- | ---: | ---: | ---: |
+| Medium | 256 | 4 | 199,682 |
+| Large | 1024 | 5 | 4,207,618 |
+
+Large is **~21× Medium** in actor parameter count (not the rough 20×
+implied by hidden_size² × depth alone — the depth=5 vs depth=4 step
+adds another Linear layer on top of the 4× hidden-dim scaling).
+
 ## 5. Harness Extension
 
 `training/mesa/phase6_probes.py` requires one bounded change:
@@ -245,38 +257,65 @@ Phase 6b is complete when:
 
 ## 8. Compute Envelope
 
-Reference point: Phase 6 v1 axis-b at Medium ran 64 seeds × 9 layers ×
-4 patch directions × ~200 steps ≈ ~460k env-steps. Bridge-bound, ~2–3
-hours at Medium hidden_size 256.
+Reference point: Phase 6 v1 axis-b at Medium swept the four post-Tanh
+hidden layers (`net.1`, `net.3`, `net.5`, `net.7`; the final Linear
+head is excluded from the canonical v1 layer sweep). With the
+harness's default `--conditions clean,intervened` and four rollouts
+per inner iteration (clean_protected, clean_collapsed,
+patched_protected_to_collapsed, patched_collapsed_to_protected), the
+v1 step count is:
 
-Large hidden_size 1024 is 4× Medium. Per-step torch cost scales with
-the patched layer's dimensionality, but the env-bridge round-trip is
-the dominant per-step cost (per Phase 7 v2 §14.4 measurement). Phase
-6b runs 5 layers (not 9) and 1 cliff pair (not multiple). Rough
-estimate:
+```
+64 seeds × 4 layers × (2 patch directions × 2 conditions) × ~200 steps
+  ≈ ~205k env-steps
+```
 
-- **Smoke** (8 seeds × 1 layer × 4 directions × 200 steps ≈ 6.4k
-  step-equivalents): **~3–5 minutes**.
-- **Full** (64 seeds × 5 layers × 4 directions × 200 steps ≈ 256k
-  step-equivalents): **~1.5–2.5 hours**, single-threaded, CPU-only,
-  no GPU.
+at Medium hidden_size 256, bridge-bound, ~2–3 hours operator wall-
+clock.
 
-The compute is comparable to a single Phase 7 v3 intervention battery
-run (~60–70 minutes); within the same operator-session budget.
+Phase 6b at Large differs from v1 along two axes:
+
+- **Step count is ~1.25× v1** — 64 seeds × **5 layers** (net.1, net.3,
+  net.5, net.7, net.9 — one more Tanh layer than v1's four, because
+  Large is depth=5) × 2 patch directions × 2 conditions × 200 steps
+  ≈ **~256k env-steps**.
+- **Per-step cost is higher at Large** — actor parameter count is
+  ~21× Medium (§4), so the policy forward pass is heavier even
+  though the env-bridge round-trip is unchanged. The bridge round-
+  trip dominates per-step cost at Medium (per Phase 7 v2 §14.4);
+  whether it still dominates at Large during *inference-only*
+  patching is not measured yet. The smoke step (§9) is the
+  calibration measurement — wall-clock on smoke × ~32 gives the full
+  estimate.
+
+Pre-measurement estimates (to be confirmed by smoke):
+
+- **Smoke** (8 seeds × 1 layer × 2 patch directions × 2 conditions ×
+  200 steps ≈ 6.4k step-equivalents): **~5–10 minutes**.
+- **Full** (~256k step-equivalents): **~2.5–4 hours** if bridge-
+  bound holds at Large; longer if torch forward becomes a meaningful
+  per-step share. Single-threaded, CPU-only, no GPU.
+
+This is **larger** than a single Phase 7 v3 intervention battery
+(~60–70 minutes) — Phase 6b's step count is ~5× v3's and the per-step
+cost is comparable or slightly higher. Treat Phase 6b as a multi-
+hour session, not a same-budget extension of v3.
 
 ## 9. Staged Commands (operator)
 
 ```powershell
 # repo root: C:\Users\hughe\Dev\sundog
 
-# SMOKE — Large cliff pair, single layer net.9, 8 seeds (~3-5 min)
+# SMOKE — Large cliff pair, single layer net.9, 8 seeds (~5-10 min;
+# this run is the calibration measurement for the full sweep below)
 python -m training.mesa.phase6_probes axis-b-smoke `
   --cliff-pair large-v3 `
   --layer net.9 `
   --seeds 8 `
   --out results/mesa/phase6b-large-cliff-pair/smoke
 
-# FULL — Large cliff pair, layer sweep, 64 seeds (~1.5-2.5 hours)
+# FULL — Large cliff pair, layer sweep, 64 seeds (~2.5-4 hours
+# pre-measurement; scale from smoke wall-clock × ~32 once smoke lands)
 python -m training.mesa.phase6_probes axis-b-smoke `
   --cliff-pair large-v3 `
   --layers net.1,net.3,net.5,net.7,net.9 `
