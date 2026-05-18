@@ -650,12 +650,17 @@ function createHybridState(mode, config) {
     trackDwellTurns: 0,
     trackSignalDeltas: [],
     lastTrackSignal: null,
+    noProgressTurns: 0,
     previousPos: null,
   };
 }
 
 function isHybridMode(mode) {
   return mode.startsWith("hybrid");
+}
+
+function isPhase4bConfig(config) {
+  return config.phase.includes("phase4b");
 }
 
 function adaptiveModelsForScenarios(scenarios) {
@@ -788,8 +793,10 @@ function chooseFromAdaptivePosterior({ seed, scenario, pos, state, config, view,
 }
 
 function chooseHybridAction({ mode, seed, turn, scenario, pos, target, observation, state, config, metrics }) {
+  const previousResponseBestSignal = state.response.bestSignal;
   const responseChoice = chooseHcSundogAction({ pos, observation, state: state.response, config });
   const responseDiagnostics = responseChoice.diagnostics;
+  const responseBestSignalIncreased = state.response.bestSignal > previousResponseBestSignal;
 
   if (mode === "hybrid_no_posterior") {
     state.responseActionTurns += 1;
@@ -834,14 +841,25 @@ function chooseHybridAction({ mode, seed, turn, scenario, pos, target, observati
   let ambiguityGate = false;
   let posteriorRefreshed = shouldRefresh;
   if (mode === "hybrid") {
-    const triggerReady = ambiguityState.trackDwellTurns >= WRONG_LOCK_DWELL_TURNS && ambiguityState.signalPlateau;
-    if (triggerReady) {
+    const trigger = isPhase4bConfig(config)
+      ? updateHybridNoProgressTrigger({ state, responseBestSignalIncreased })
+      : {
+          triggerFired: ambiguityState.trackDwellTurns >= WRONG_LOCK_DWELL_TURNS && ambiguityState.signalPlateau,
+          noProgressTurns: state.noProgressTurns ?? 0,
+          noProgressTurnsBeforeRearm: null,
+          responseBestSignalIncreased,
+        };
+    if (trigger.triggerFired) {
       view = updateAdaptivePosterior({ seed, scenario, pos, target, observation, state: state.adaptive, config, metrics });
       state.posteriorReady = true;
       posteriorRefreshed = true;
       offBasinMass = posteriorOffBasinMass(view.combinedPosterior, state.response.bestPos);
       ambiguityGate = offBasinMass >= AMBIGUITY_MASS;
     }
+    ambiguityState.noProgressTurns = trigger.noProgressTurns;
+    ambiguityState.noProgressTurnsBeforeRearm = trigger.noProgressTurnsBeforeRearm;
+    ambiguityState.responseBestSignalIncreased = trigger.responseBestSignalIncreased;
+    ambiguityState.triggerFired = trigger.triggerFired;
   } else if (view) {
     offBasinMass = posteriorOffBasinMass(view.combinedPosterior, state.response.bestPos);
     ambiguityGate = offBasinMass >= AMBIGUITY_MASS;
@@ -867,6 +885,10 @@ function chooseHybridAction({ mode, seed, turn, scenario, pos, target, observati
         trackDwellTurns: ambiguityState.trackDwellTurns,
         signalPlateau: ambiguityState.signalPlateau,
         maxSignalDeltaInWindow: ambiguityState.maxSignalDeltaInWindow,
+        noProgressTurns: ambiguityState.noProgressTurns ?? null,
+        noProgressTurnsBeforeRearm: ambiguityState.noProgressTurnsBeforeRearm ?? null,
+        responseBestSignalIncreased: ambiguityState.responseBestSignalIncreased ?? responseBestSignalIncreased,
+        triggerFired: ambiguityState.triggerFired ?? false,
         offBasinMass: offBasinMass === null ? null : round(offBasinMass, 6),
         ambiguityGate,
       },
@@ -893,10 +915,30 @@ function chooseHybridAction({ mode, seed, turn, scenario, pos, target, observati
     trackDwellTurns: ambiguityState.trackDwellTurns,
     signalPlateau: ambiguityState.signalPlateau,
     maxSignalDeltaInWindow: ambiguityState.maxSignalDeltaInWindow,
+    noProgressTurns: ambiguityState.noProgressTurns ?? null,
+    noProgressTurnsBeforeRearm: ambiguityState.noProgressTurnsBeforeRearm ?? null,
+    responseBestSignalIncreased: ambiguityState.responseBestSignalIncreased ?? responseBestSignalIncreased,
+    triggerFired: ambiguityState.triggerFired ?? false,
     offBasinMass: offBasinMass === null ? null : round(offBasinMass, 6),
     ambiguityGate,
     resetGate,
   });
+}
+
+function updateHybridNoProgressTrigger({ state, responseBestSignalIncreased }) {
+  if (responseBestSignalIncreased) state.noProgressTurns = 0;
+  else state.noProgressTurns = (state.noProgressTurns ?? 0) + 1;
+
+  const noProgressTurnsBeforeRearm = state.noProgressTurns;
+  const triggerFired = noProgressTurnsBeforeRearm >= WRONG_LOCK_DWELL_TURNS;
+  if (triggerFired) state.noProgressTurns = 0;
+
+  return {
+    triggerFired,
+    noProgressTurns: state.noProgressTurns,
+    noProgressTurnsBeforeRearm,
+    responseBestSignalIncreased,
+  };
 }
 
 function updateHybridAmbiguityState({ state, responseDiagnostics, observation, config }) {
@@ -1766,7 +1808,9 @@ async function main() {
         claimScenarios: ["decoy", "alias"],
         diagnosticScenarios: ["symmetric", "low_probe"],
         repairPredicate: "scoreDeltaVsHcSundog >= phase2SeparationMargin AND successDeltaVsHcSundog >= 0",
-        ambiguityTrigger: "track dwell >= WRONG_LOCK_DWELL_TURNS AND all signal deltas in the dwell window < noiseStd AND off-response-basin posterior mass >= AMBIGUITY_MASS",
+        ambiguityTrigger: isPhase4bConfig(args)
+          ? "noProgressTurns >= WRONG_LOCK_DWELL_TURNS, then one posterior refresh; use posterior when off-response-basin mass >= AMBIGUITY_MASS; reset noProgressTurns after every fire"
+          : "track dwell >= WRONG_LOCK_DWELL_TURNS AND all signal deltas in the dwell window < noiseStd AND off-response-basin posterior mass >= AMBIGUITY_MASS",
         frugalityFraction: FRUGALITY_FRACTION,
         ambiguityMass: AMBIGUITY_MASS,
       },
@@ -1798,7 +1842,9 @@ async function main() {
       },
       hybrid: {
         observation: "position and scalar field observation only plus a gated finite-mixture posterior",
-        actionRule: "HC-Sundog response action by default; posterior is consulted only after locked track-dwell and signal-plateau preconditions, and overrides when off-response-basin mass >= AMBIGUITY_MASS",
+        actionRule: isPhase4bConfig(args)
+          ? "HC-Sundog response action by default; posterior is consulted after noProgressTurns reaches WRONG_LOCK_DWELL_TURNS, then noProgressTurns is reset whether or not posterior action is used"
+          : "HC-Sundog response action by default; posterior is consulted only after locked track-dwell and signal-plateau preconditions, and overrides when off-response-basin mass >= AMBIGUITY_MASS",
       },
       hybrid_no_posterior: {
         observation: "position and scalar field observation only",
