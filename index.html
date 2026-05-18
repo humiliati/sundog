@@ -221,6 +221,21 @@
             margin-bottom: 0.5rem;
         }
 
+        #project-map h2 {
+            color: var(--text-light);
+            text-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+        }
+
+        #project-map h2::after {
+            content: "";
+            display: block;
+            width: 4.5rem;
+            height: 2px;
+            margin: 0.85rem auto 0;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+            opacity: 0.86;
+        }
+
         .motion-rail-section {
             position: relative;
             overflow: hidden;
