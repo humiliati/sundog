@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { existsSync, readFileSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
@@ -26,6 +27,16 @@ const PHASE4_MODES = Object.freeze([
   "hybrid_posterior_only",
   "hybrid_posterior_reset_only",
   "hybrid_posterior_decoy_disambig",
+]);
+const PHASE5_MODES = Object.freeze([
+  "oracle",
+  "bayes_misspecified",
+  "bayes_adaptive",
+  "hc_sundog",
+  "sundog_memory",
+  "hybrid",
+  "hybrid_posterior_decoy_disambig",
+  "random",
 ]);
 const DEFAULT_MODES = PHASE1_MODES;
 const CLEAN_SCENARIO = "clean";
@@ -63,6 +74,18 @@ const WRONG_LOCK_THRESHOLD = 0.5;
 const LOW_PROBE_MAX_TURNS = 20;
 const FRUGALITY_FRACTION = 0.5;
 const AMBIGUITY_MASS = 0.5;
+const PHASE5_DECOY_STRENGTHS = Object.freeze([0.5, 0.66, 0.82, 0.98]);
+const PHASE5_SMOKE_DECOY_STRENGTHS = Object.freeze([0.5, 0.98]);
+const PHASE5_BUDGETS = Object.freeze([20, 30, 40, 60]);
+const PHASE5_SMOKE_BUDGETS = Object.freeze([20, 40]);
+const PHASE5_DECOY_SIGMA_SCALE = 0.82;
+const PHASE5_ALIAS_AMPLITUDE = 0.96;
+const PHASE5_SCENARIO_ALIASES = Object.freeze(["phase5-smoke", "phase5"]);
+const PHASE5_MODE_FAMILIES = Object.freeze({
+  bayes: Object.freeze(["bayes_misspecified", "bayes_adaptive"]),
+  response: Object.freeze(["hc_sundog", "sundog_memory"]),
+  hybrid: Object.freeze(["hybrid", "hybrid_posterior_decoy_disambig"]),
+});
 const ACTIONS = Object.freeze([
   { id: "stay", dx: 0, dy: 0 },
   { id: "east", dx: 1, dy: 0 },
@@ -108,7 +131,7 @@ const DEFAULT_ARGS = Object.freeze({
 function usage() {
   return [
     "Usage:",
-    "  node scripts/bayes-phase1-reference.mjs --phase <name> --out <dir> --seeds <n> [--scenarios clean|phase2|phase3|phase4|csv] [--modes csv]",
+    "  node scripts/bayes-phase1-reference.mjs --phase <name> --out <dir> --seeds <n> [--scenarios clean|phase2|phase3|phase4|phase5-smoke|phase5|csv] [--modes csv]",
     "",
     "Defaults run a small exact Bayes-Correct hidden-source reference task.",
     "",
@@ -117,6 +140,7 @@ function usage() {
     "  node scripts/bayes-phase1-reference.mjs --phase phase2-mismatch-smoke --out results/bayes/phase2-mismatch-smoke --scenarios phase2 --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,random --seeds 16 --max-turns 32",
     "  node scripts/bayes-phase1-reference.mjs --phase phase3-aliasing-smoke --out results/bayes/phase3-aliasing-smoke --scenarios phase3 --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,random --seeds 16 --max-turns 40",
     "  node scripts/bayes-phase1-reference.mjs --phase phase4-hybrid-smoke --out results/bayes/phase4-hybrid-smoke --scenarios phase4 --modes oracle,bayes_adaptive,hc_sundog,hybrid,hybrid_no_posterior,hybrid_posterior_only,hybrid_posterior_reset_only,hybrid_posterior_decoy_disambig --seeds 16 --max-turns 40",
+    "  node scripts/bayes-phase1-reference.mjs --phase phase5-envelope-smoke --out results/bayes/phase5-envelope-smoke --scenarios phase5-smoke --modes oracle,bayes_misspecified,bayes_adaptive,hc_sundog,sundog_memory,hybrid,hybrid_posterior_decoy_disambig,random --seeds 8 --max-turns 40",
   ].join("\n");
 }
 
@@ -172,6 +196,8 @@ function parseScenarios(value) {
   if (value === "phase2") return [...PHASE2_SCENARIOS];
   if (value === "phase3") return [...PHASE3_SCENARIOS];
   if (value === "phase4") return [...PHASE3_SCENARIOS];
+  if (value === "phase5-smoke") return ["phase5-smoke"];
+  if (value === "phase5") return ["phase5"];
   if (value === "all") return [...ALL_SCENARIOS];
   return parseList(value);
 }
@@ -213,12 +239,16 @@ function parseBoolean(value, flag) {
 }
 
 function validateArgs(args) {
-  const knownModes = new Set([...PHASE2_MODES, ...PHASE4_MODES]);
+  const knownModes = new Set([...PHASE2_MODES, ...PHASE4_MODES, ...PHASE5_MODES]);
   const unknownMode = args.modes.find((mode) => !knownModes.has(mode));
   if (unknownMode) throw new Error(`Unknown mode: ${unknownMode}`);
-  const knownScenarios = new Set(ALL_SCENARIOS);
+  const knownScenarios = new Set([...ALL_SCENARIOS, ...PHASE5_SCENARIO_ALIASES]);
   const unknownScenario = args.scenarios.find((scenario) => !knownScenarios.has(scenario));
   if (unknownScenario) throw new Error(`Unknown scenario: ${unknownScenario}`);
+  if (isPhase5Config(args)) {
+    const missingMode = PHASE5_MODES.find((mode) => !args.modes.includes(mode));
+    if (missingMode) throw new Error(`Phase 5 requires frozen reported mode: ${missingMode}`);
+  }
   if (!args.scenarios.length) throw new Error("--scenarios must include at least one scenario");
   if (args.gridSize < 5) throw new Error("--grid-size must be at least 5");
   if (args.startX < 0 || args.startX >= args.gridSize || args.startY < 0 || args.startY >= args.gridSize) {
@@ -360,14 +390,14 @@ function phase3Basins(seed, target, config, model) {
         kind: "decoy",
         x: basin.x,
         y: basin.y,
-        amplitude: 0.82,
-        sigmaScale: 0.82,
+        amplitude: config.phase5DecoyStrength ?? 0.82,
+        sigmaScale: config.phase5DecoySigmaScale ?? 0.82,
       },
     ];
   }
   if (model === "alias") {
     const basin = seededBasin(seed, target, config, "alias", { minTargetDistance: 4, preferNearStart: false });
-    return [{ kind: "alias", x: basin.x, y: basin.y, amplitude: 0.96, sigmaScale: 1 }];
+    return [{ kind: "alias", x: basin.x, y: basin.y, amplitude: PHASE5_ALIAS_AMPLITUDE, sigmaScale: 1 }];
   }
   if (model === "symmetric") {
     const basin = reflectedTarget(target, config);
@@ -663,7 +693,66 @@ function isPhase4bConfig(config) {
   return config.phase.includes("phase4b");
 }
 
-function adaptiveModelsForScenarios(scenarios) {
+function isPhase5Config(config) {
+  return config.phase.includes("phase5") || config.scenarios.some((scenario) => PHASE5_SCENARIO_ALIASES.includes(scenario));
+}
+
+function isPhase5SmokeConfig(config) {
+  return config.phase.includes("smoke") || config.scenarios.includes("phase5-smoke");
+}
+
+function usesNoProgressHybridTrigger(config) {
+  return isPhase4bConfig(config) || isPhase5Config(config);
+}
+
+function phase5NumberToken(value) {
+  return value.toFixed(2).replace(".", "p");
+}
+
+function phase5CellsForConfig(config) {
+  const decoyStrengths = isPhase5SmokeConfig(config) ? PHASE5_SMOKE_DECOY_STRENGTHS : PHASE5_DECOY_STRENGTHS;
+  const budgets = isPhase5SmokeConfig(config) ? PHASE5_SMOKE_BUDGETS : PHASE5_BUDGETS;
+  const cells = [];
+  for (const maxTurns of budgets) {
+    for (const decoyStrength of decoyStrengths) {
+      cells.push({
+        id: `decoy_strength_${phase5NumberToken(decoyStrength)}_turns_${maxTurns}`,
+        baseScenario: "decoy",
+        cellKind: "swept_decoy",
+        decoyStrength,
+        decoySigmaScale: PHASE5_DECOY_SIGMA_SCALE,
+        aliasAmplitude: null,
+        maxTurns,
+        reference: false,
+      });
+    }
+    cells.push({
+      id: `alias_ref_turns_${maxTurns}`,
+      baseScenario: "alias",
+      cellKind: "alias_reference",
+      decoyStrength: null,
+      decoySigmaScale: null,
+      aliasAmplitude: PHASE5_ALIAS_AMPLITUDE,
+      maxTurns,
+      reference: true,
+    });
+  }
+  return cells;
+}
+
+function phase5CellConfig(config, cell) {
+  return {
+    ...config,
+    maxTurns: cell.maxTurns,
+    phase5Cell: cell,
+    phase5DecoyStrength: cell.decoyStrength,
+    phase5DecoySigmaScale: cell.decoySigmaScale,
+  };
+}
+
+function adaptiveModelsForScenarios(scenariosOrConfig) {
+  const scenarios = Array.isArray(scenariosOrConfig) ? scenariosOrConfig : scenariosOrConfig.scenarios;
+  if (!Array.isArray(scenariosOrConfig) && isPhase5Config(scenariosOrConfig)) return PHASE3_ADAPTIVE_MODELS;
   if (scenarios.some((scenario) => PHASE3_SCENARIOS.includes(scenario))) return PHASE3_ADAPTIVE_MODELS;
   return PHASE2_ADAPTIVE_MODELS;
 }
@@ -841,7 +930,7 @@ function chooseHybridAction({ mode, seed, turn, scenario, pos, target, observati
   let ambiguityGate = false;
   let posteriorRefreshed = shouldRefresh;
   if (mode === "hybrid") {
-    const trigger = isPhase4bConfig(config)
+    const trigger = usesNoProgressHybridTrigger(config)
       ? updateHybridNoProgressTrigger({ state, responseBestSignalIncreased })
       : {
           triggerFired: ambiguityState.trackDwellTurns >= WRONG_LOCK_DWELL_TURNS && ambiguityState.signalPlateau,
@@ -1169,10 +1258,12 @@ function rotatingAction(pos, state, config) {
   return ACTIONS[0];
 }
 
-function simulateTrial({ mode, scenario, seed, config, candidates }) {
+function simulateTrial({ mode, scenario, seed, config, candidates, cell = null }) {
+  const scenarioKey = cell?.id ?? scenario;
+  const baseScenario = cell?.baseScenario ?? scenario;
   const target = selectTarget(seed, config, candidates);
-  const nonTargetBasins = phase3Basins(seed, target, config, scenario);
-  const maxTurns = effectiveMaxTurns(scenario, config);
+  const nonTargetBasins = phase3Basins(seed, target, config, baseScenario);
+  const maxTurns = effectiveMaxTurns(baseScenario, config);
   let pos = { x: config.startX, y: config.startY };
   let previousPos = null;
   const state = createControllerState(mode, config);
@@ -1183,16 +1274,22 @@ function simulateTrial({ mode, scenario, seed, config, candidates }) {
   const metrics = { likelihoodEvals: 0 };
 
   for (let turn = 0; turn < maxTurns; turn += 1) {
-    const observation = observe({ seed, turn, pos, previousPos, target, scenario, config });
+    const observation = observe({ seed, turn, pos, previousPos, target, scenario: baseScenario, config });
     cumulativeSignal += observation.value;
-    const { action, diagnostics } = chooseAction({ mode, seed, turn, pos, target, scenario, observation, state, config, metrics });
+    const { action, diagnostics } = chooseAction({ mode, seed, turn, pos, target, scenario: baseScenario, observation, state, config, metrics });
     const nextPos = applyAction(pos, action);
     if (!inBounds(nextPos, config)) throw new Error(`Illegal ${mode} action ${action.id} at ${positionKey(pos)}`);
 
     const hit = positionKey(nextPos) === positionKey(target);
     steps.push({
       seed,
-      scenario,
+      scenario: scenarioKey,
+      baseScenario,
+      cellId: cell?.id ?? null,
+      cellKind: cell?.cellKind ?? null,
+      decoyStrength: cell?.decoyStrength ?? null,
+      decoySigmaScale: cell?.decoySigmaScale ?? null,
+      aliasAmplitude: cell?.aliasAmplitude ?? null,
       mode,
       turn,
       position: pos,
@@ -1219,10 +1316,16 @@ function simulateTrial({ mode, scenario, seed, config, candidates }) {
   const wrongLock = classifyWrongLock({ success, path: steps.map((step) => step.position).concat([pos]), nonTargetBasins });
   const outcome = {
     seed,
-    scenario,
+    scenario: scenarioKey,
+    baseScenario,
+    cellId: cell?.id ?? null,
+    cellKind: cell?.cellKind ?? null,
+    decoyStrength: cell?.decoyStrength ?? null,
+    decoySigmaScale: cell?.decoySigmaScale ?? null,
+    aliasAmplitude: cell?.aliasAmplitude ?? null,
     mode,
-    modelStatus: modelStatusForMode(mode, scenario),
-    fieldVariant: scenario,
+    modelStatus: modelStatusForMode(mode, baseScenario),
+    fieldVariant: baseScenario,
     target,
     start: { x: config.startX, y: config.startY },
     success,
@@ -1373,6 +1476,9 @@ function buildRegretRows(trials, modes) {
 }
 
 function buildExitGate(summaryRows, regretRows, config) {
+  if (isPhase5Config(config)) {
+    return buildPhase5Envelope(summaryRows, config, phase5CellsForConfig(config)).exitGate;
+  }
   if (isPhase4Config(config)) {
     return buildPhase4ExitGate(summaryRows, config);
   }
@@ -1386,7 +1492,7 @@ function buildExitGate(summaryRows, regretRows, config) {
 }
 
 function isPhase4Config(config) {
-  return config.phase.includes("phase4") || config.modes.some((mode) => PHASE4_MODES.includes(mode) && mode.startsWith("hybrid"));
+  return !isPhase5Config(config) && (config.phase.includes("phase4") || config.modes.some((mode) => PHASE4_MODES.includes(mode) && mode.startsWith("hybrid")));
 }
 
 function buildPhase1ExitGate(summaryRows, regretRows) {
@@ -1625,6 +1731,258 @@ function repairAgainstSundog(row, hcSundog, config) {
   };
 }
 
+function buildPhase5Envelope(summaryRows, config, cells) {
+  const candidateRows = [];
+  const envelopeRows = [];
+  const bestByCellRows = [];
+  const cellClassRows = [];
+  const cellDeltaRows = [];
+
+  for (const cell of cells) {
+    const cellRows = summaryRows.filter((row) => row.scenario === cell.id);
+    for (const row of cellRows) {
+      candidateRows.push({
+        cellId: cell.id,
+        cellKind: cell.cellKind,
+        baseScenario: cell.baseScenario,
+        decoyStrength: cell.decoyStrength,
+        decoySigmaScale: cell.decoySigmaScale,
+        aliasAmplitude: cell.aliasAmplitude,
+        maxTurns: cell.maxTurns,
+        reference: cell.reference,
+        mode: row.mode,
+        family: phase5FamilyForMode(row.mode),
+        trials: row.trials,
+        successRate: row.successRate,
+        wrongLockRate: row.wrongLockRate,
+        meanScore: row.meanScore,
+        meanTurnsToHit: row.meanTurnsToHit,
+        meanFinalDistance: row.meanFinalDistance,
+        meanLikelihoodEvals: row.meanLikelihoodEvals,
+        meanPosteriorActionTurns: row.meanPosteriorActionTurns,
+        meanResponseActionTurns: row.meanResponseActionTurns,
+      });
+    }
+
+    const familyBests = {};
+    const missingFamilies = [];
+    for (const [family, modes] of Object.entries(PHASE5_MODE_FAMILIES)) {
+      const rows = modes.map((mode) => summaryFor(summaryRows, cell.id, mode)).filter(Boolean);
+      if (!rows.length) {
+        missingFamilies.push(family);
+        continue;
+      }
+      familyBests[family] = [...rows].sort((a, b) => b.meanScore - a.meanScore)[0];
+    }
+
+    const classLabel = missingFamilies.length ? null : classifyPhase5Cell(familyBests, config);
+    const bestFamilyEntry = Object.entries(familyBests).sort((a, b) => b[1].meanScore - a[1].meanScore)[0] ?? null;
+    const bestFamily = bestFamilyEntry?.[0] ?? null;
+    const bestRow = bestFamilyEntry?.[1] ?? null;
+    const deltas = phase5FamilyDeltas(familyBests);
+    const commonCell = {
+      cellId: cell.id,
+      cellKind: cell.cellKind,
+      baseScenario: cell.baseScenario,
+      decoyStrength: cell.decoyStrength,
+      decoySigmaScale: cell.decoySigmaScale,
+      aliasAmplitude: cell.aliasAmplitude,
+      maxTurns: cell.maxTurns,
+      reference: cell.reference,
+    };
+
+    envelopeRows.push({
+      ...commonCell,
+      classLabel,
+      dominanceMargin: config.phase2SeparationMargin,
+      bestFamily,
+      bestMode: bestRow?.mode ?? null,
+      bestMeanScore: bestRow?.meanScore ?? null,
+      bayesBestMode: familyBests.bayes?.mode ?? null,
+      bayesBestMeanScore: familyBests.bayes?.meanScore ?? null,
+      responseBestMode: familyBests.response?.mode ?? null,
+      responseBestMeanScore: familyBests.response?.meanScore ?? null,
+      hybridBestMode: familyBests.hybrid?.mode ?? null,
+      hybridBestMeanScore: familyBests.hybrid?.meanScore ?? null,
+      bayesMinusResponseScoreDelta: deltas.bayesMinusResponseScoreDelta,
+      bayesMinusHybridScoreDelta: deltas.bayesMinusHybridScoreDelta,
+      hybridMinusResponseScoreDelta: deltas.hybridMinusResponseScoreDelta,
+      missingFamilies: missingFamilies.join(";"),
+    });
+    bestByCellRows.push({
+      ...commonCell,
+      bestFamily,
+      bestMode: bestRow?.mode ?? null,
+      bestMeanScore: bestRow?.meanScore ?? null,
+      bestSuccessRate: bestRow?.successRate ?? null,
+      bestWrongLockRate: bestRow?.wrongLockRate ?? null,
+    });
+    cellClassRows.push({
+      ...commonCell,
+      classLabel,
+      bestFamily,
+      bestMode: bestRow?.mode ?? null,
+      missingFamilies: missingFamilies.join(";"),
+    });
+    cellDeltaRows.push({
+      ...commonCell,
+      bayesBestMode: familyBests.bayes?.mode ?? null,
+      responseBestMode: familyBests.response?.mode ?? null,
+      hybridBestMode: familyBests.hybrid?.mode ?? null,
+      bayesMinusResponseScoreDelta: deltas.bayesMinusResponseScoreDelta,
+      bayesMinusHybridScoreDelta: deltas.bayesMinusHybridScoreDelta,
+      hybridMinusResponseScoreDelta: deltas.hybridMinusResponseScoreDelta,
+    });
+  }
+
+  const classifiedCells = envelopeRows.filter((row) => row.classLabel !== null);
+  const aggregateRows = buildPhase5AggregateRows(envelopeRows);
+  const selfConsistencyAnchor = buildPhase5SelfConsistencyAnchor(summaryRows, config, cells);
+  const complete = classifiedCells.length === cells.length && selfConsistencyAnchor.pass;
+  const status = complete ? "envelope_mapped" : "envelope_incomplete";
+
+  return {
+    candidateRows,
+    envelopeRows,
+    aggregateRows,
+    bestByCellRows,
+    cellClassRows,
+    cellDeltaRows,
+    selfConsistencyAnchor,
+    exitGate: {
+      kind: "phase5-envelope",
+      name: "Phase 5 operating-envelope map with descriptive per-cell family classes",
+      status,
+      pass: true,
+      mapped: complete,
+      cells: cells.length,
+      classifiedCells: classifiedCells.length,
+      sweptDecoyCells: cells.filter((cell) => cell.cellKind === "swept_decoy").length,
+      aliasReferenceCells: cells.filter((cell) => cell.cellKind === "alias_reference").length,
+      dominanceMargin: config.phase2SeparationMargin,
+      classifier:
+        "all_fail if best non-yardstick family score < 0; otherwise bayes/response/hybrid dominant only when that family best beats both others by dominanceMargin; else mixed",
+      hybridReportedOnly: true,
+      selfConsistencyAnchor,
+      classCounts: aggregateRows,
+    },
+  };
+}
+
+function phase5FamilyForMode(mode) {
+  for (const [family, modes] of Object.entries(PHASE5_MODE_FAMILIES)) {
+    if (modes.includes(mode)) return family;
+  }
+  if (mode === "oracle") return "yardstick";
+  if (mode === "random") return "baseline";
+  return "reported";
+}
+
+function classifyPhase5Cell(familyBests, config) {
+  const entries = Object.entries(familyBests);
+  const best = [...entries].sort((a, b) => b[1].meanScore - a[1].meanScore)[0];
+  if (best[1].meanScore < 0) return "all_fail";
+  const beatsBoth = entries
+    .filter(([family]) => family !== best[0])
+    .every(([, row]) => best[1].meanScore - row.meanScore >= config.phase2SeparationMargin);
+  return beatsBoth ? `${best[0]}_dominant` : "mixed";
+}
+
+function phase5FamilyDeltas(familyBests) {
+  const score = (family) => familyBests[family]?.meanScore ?? null;
+  return {
+    bayesMinusResponseScoreDelta: score("bayes") === null || score("response") === null ? null : round(score("bayes") - score("response"), 6),
+    bayesMinusHybridScoreDelta: score("bayes") === null || score("hybrid") === null ? null : round(score("bayes") - score("hybrid"), 6),
+    hybridMinusResponseScoreDelta:
+      score("hybrid") === null || score("response") === null ? null : round(score("hybrid") - score("response"), 6),
+  };
+}
+
+function buildPhase5AggregateRows(envelopeRows) {
+  const labels = ["all_fail", "bayes_dominant", "response_dominant", "hybrid_dominant", "mixed", "unclassified"];
+  const rows = [];
+  for (const classLabel of labels) {
+    const cellRows = envelopeRows.filter((row) => (row.classLabel ?? "unclassified") === classLabel);
+    if (!cellRows.length) continue;
+    rows.push({
+      classLabel,
+      cells: cellRows.length,
+      cellFraction: round(cellRows.length / Math.max(1, envelopeRows.length), 6),
+      sweptDecoyCells: cellRows.filter((row) => row.cellKind === "swept_decoy").length,
+      aliasReferenceCells: cellRows.filter((row) => row.cellKind === "alias_reference").length,
+    });
+  }
+  return rows;
+}
+
+function buildPhase5SelfConsistencyAnchor(summaryRows, config, cells) {
+  const anchorCellId = "decoy_strength_0p82_turns_40";
+  if (!cells.some((cell) => cell.id === anchorCellId)) {
+    return {
+      status: "not_in_smoke_grid",
+      pass: true,
+      anchorCellId,
+      reference: "results/bayes/phase4b-hybrid-lock/manifest.json",
+    };
+  }
+
+  const referencePath = path.join(REPO_ROOT, "results", "bayes", "phase4b-hybrid-lock", "manifest.json");
+  if (!existsSync(referencePath)) {
+    return {
+      status: "reference_missing",
+      pass: false,
+      anchorCellId,
+      reference: path.relative(REPO_ROOT, referencePath).replaceAll("\\", "/"),
+    };
+  }
+
+  const referenceManifest = JSON.parse(readFileSync(referencePath, "utf8"));
+  const referenceRows = referenceManifest.summaryRows ?? [];
+  const sharedModes = ["oracle", "bayes_adaptive", "hc_sundog", "hybrid", "hybrid_posterior_decoy_disambig"].filter((mode) =>
+    config.modes.includes(mode),
+  );
+  const currentHc = summaryFor(summaryRows, anchorCellId, "hc_sundog");
+  const referenceHc = summaryFor(referenceRows, "decoy", "hc_sundog");
+  const comparisons = [];
+  let pass = Boolean(currentHc && referenceHc);
+  for (const mode of sharedModes) {
+    const current = summaryFor(summaryRows, anchorCellId, mode);
+    const reference = summaryFor(referenceRows, "decoy", mode);
+    if (!current || !reference || !currentHc || !referenceHc) {
+      pass = false;
+      comparisons.push({ mode, status: "missing_row" });
+      continue;
+    }
+    const currentScoreDelta = round(current.meanScore - currentHc.meanScore, 6);
+    const referenceScoreDelta = round(reference.meanScore - referenceHc.meanScore, 6);
+    const currentSuccessDelta = round(current.successRate - currentHc.successRate, 6);
+    const referenceSuccessDelta = round(reference.successRate - referenceHc.successRate, 6);
+    const scoreDeltaDifference = round(currentScoreDelta - referenceScoreDelta, 6);
+    const successDeltaDifference = round(currentSuccessDelta - referenceSuccessDelta, 6);
+    if (scoreDeltaDifference !== 0 || successDeltaDifference !== 0) pass = false;
+    comparisons.push({
+      mode,
+      currentScoreDeltaVsHcSundog: currentScoreDelta,
+      referenceScoreDeltaVsHcSundog: referenceScoreDelta,
+      scoreDeltaDifference,
+      currentSuccessDeltaVsHcSundog: currentSuccessDelta,
+      referenceSuccessDeltaVsHcSundog: referenceSuccessDelta,
+      successDeltaDifference,
+    });
+  }
+
+  return {
+    status: pass ? "reproduced_p4b_lock_decoy" : "mismatch_void",
+    pass,
+    anchorCellId,
+    reference: path.relative(REPO_ROOT, referencePath).replaceAll("\\", "/"),
+    referencePhase: referenceManifest.phase ?? null,
+    currentSeeds: config.seeds,
+    referenceSeeds: referenceManifest.config?.seeds ?? null,
+    comparisons,
+  };
+}
+
 function selectReplayTrials(trials, config) {
   const phase4 = isPhase4Config(config);
   const phase3 = config.scenarios.some((scenario) => PHASE3_SCENARIOS.includes(scenario));
@@ -1724,14 +2082,25 @@ async function main() {
   const startedAt = new Date().toISOString();
   const t0 = performance.now();
   const candidates = enumerateTargetCandidates(args);
+  const phase5Cells = isPhase5Config(args) ? phase5CellsForConfig(args) : null;
+  const scenarioEntries = phase5Cells ?? args.scenarios.map((scenario) => ({ id: scenario, baseScenario: scenario }));
+  const scenarioIds = scenarioEntries.map((entry) => entry.id);
   const trials = [];
   const steps = [];
 
-  for (const scenario of args.scenarios) {
+  for (const entry of scenarioEntries) {
     for (let seedOffset = 0; seedOffset < args.seeds; seedOffset += 1) {
       const seed = args.seedStart + seedOffset;
       for (const mode of args.modes) {
-        const trial = simulateTrial({ mode, scenario, seed, config: args, candidates });
+        const trialConfig = phase5Cells ? phase5CellConfig(args, entry) : args;
+        const trial = simulateTrial({
+          mode,
+          scenario: entry.baseScenario,
+          seed,
+          config: trialConfig,
+          candidates,
+          cell: phase5Cells ? entry : null,
+        });
         trials.push(trial.outcome);
         if (args.traceSteps) steps.push(...trial.steps);
       }
@@ -1740,9 +2109,10 @@ async function main() {
 
   const completedAt = new Date().toISOString();
   const elapsedSeconds = (performance.now() - t0) / 1000;
-  const summaryRows = summarizeTrials(trials, args.scenarios, args.modes);
+  const summaryRows = summarizeTrials(trials, scenarioIds, args.modes);
   const regretRows = buildRegretRows(trials, args.modes);
-  const exitGate = buildExitGate(summaryRows, regretRows, args);
+  const phase5Envelope = phase5Cells ? buildPhase5Envelope(summaryRows, args, phase5Cells) : null;
+  const exitGate = phase5Envelope?.exitGate ?? buildExitGate(summaryRows, regretRows, args);
   const replayManifest = {
     phase: args.phase,
     sourceManifest: "manifest.json",
@@ -1757,7 +2127,9 @@ async function main() {
     completedAt,
     elapsedSeconds: round(elapsedSeconds, 6),
     purpose:
-      exitGate.kind === "phase4-hybrid"
+      exitGate.kind === "phase5-envelope"
+        ? "Standalone Phase 5 Bayes-vs-Sundog operating-envelope map."
+        : exitGate.kind === "phase4-hybrid"
         ? "Standalone Phase 4 Bayes-vs-Sundog hybrid controller smoke and lock harness."
         : exitGate.kind === "phase3-aliasing"
         ? "Standalone Phase 3 Bayes-vs-Sundog aliasing and decoy slate."
@@ -1808,12 +2180,32 @@ async function main() {
         claimScenarios: ["decoy", "alias"],
         diagnosticScenarios: ["symmetric", "low_probe"],
         repairPredicate: "scoreDeltaVsHcSundog >= phase2SeparationMargin AND successDeltaVsHcSundog >= 0",
-        ambiguityTrigger: isPhase4bConfig(args)
+        ambiguityTrigger: usesNoProgressHybridTrigger(args)
           ? "noProgressTurns >= WRONG_LOCK_DWELL_TURNS, then one posterior refresh; use posterior when off-response-basin mass >= AMBIGUITY_MASS; reset noProgressTurns after every fire"
           : "track dwell >= WRONG_LOCK_DWELL_TURNS AND all signal deltas in the dwell window < noiseStd AND off-response-basin posterior mass >= AMBIGUITY_MASS",
         frugalityFraction: FRUGALITY_FRACTION,
         ambiguityMass: AMBIGUITY_MASS,
       },
+      phase5Envelope: phase5Envelope
+        ? {
+            axes: {
+              decoyStrength: PHASE5_DECOY_STRENGTHS,
+              smokeDecoyStrength: PHASE5_SMOKE_DECOY_STRENGTHS,
+              maxTurns: PHASE5_BUDGETS,
+              smokeMaxTurns: PHASE5_SMOKE_BUDGETS,
+              decoySigmaScale: PHASE5_DECOY_SIGMA_SCALE,
+              aliasReferenceAmplitude: PHASE5_ALIAS_AMPLITUDE,
+            },
+            cells: phase5Cells,
+            modes: PHASE5_MODES,
+            modeFamilies: PHASE5_MODE_FAMILIES,
+            dominanceMargin: args.phase2SeparationMargin,
+            classifier:
+              "all_fail if best non-yardstick family score < 0; otherwise bayes/response/hybrid dominant only when that family best beats both others by dominanceMargin; else mixed",
+            hybridReportedOnly: true,
+            selfConsistencyAnchor: phase5Envelope.selfConsistencyAnchor,
+          }
+        : null,
       lowProbeMaxTurns: LOW_PROBE_MAX_TURNS,
     },
     policies: {
@@ -1829,7 +2221,7 @@ async function main() {
       },
       bayes_adaptive: {
         posterior: "finite mixture of exact grid posteriors",
-        likelihood: `model weights over ${adaptiveModelsForScenarios(args.scenarios).join(", ")} families`,
+        likelihood: `model weights over ${adaptiveModelsForScenarios(args).join(", ")} families`,
         actionRule: "expected utility over the mixture posterior",
       },
       hc_sundog: {
@@ -1842,7 +2234,7 @@ async function main() {
       },
       hybrid: {
         observation: "position and scalar field observation only plus a gated finite-mixture posterior",
-        actionRule: isPhase4bConfig(args)
+        actionRule: usesNoProgressHybridTrigger(args)
           ? "HC-Sundog response action by default; posterior is consulted after noProgressTurns reaches WRONG_LOCK_DWELL_TURNS, then noProgressTurns is reset whether or not posterior action is used"
           : "HC-Sundog response action by default; posterior is consulted only after locked track-dwell and signal-plateau preconditions, and overrides when off-response-basin mass >= AMBIGUITY_MASS",
       },
@@ -1874,9 +2266,13 @@ async function main() {
       bayesCorrectLikelihoodMatchesGenerator: true,
       bayesMisspecifiedLockedToCleanLikelihood: args.modes.includes("bayes_misspecified"),
       bayesAdaptiveUsesFiniteModelMixture: args.modes.includes("bayes_adaptive"),
-      phase3WrongLockClassifierPreRegistered: args.scenarios.some((scenario) => PHASE3_SCENARIOS.includes(scenario)),
+      phase3WrongLockClassifierPreRegistered:
+        args.scenarios.some((scenario) => PHASE3_SCENARIOS.includes(scenario)) || Boolean(phase5Envelope),
       phase4BestSundogIsHcSundog: isPhase4Config(args) ? true : null,
       phase4FrugalityUsesLikelihoodEvals: isPhase4Config(args) ? "cumulative per-candidate Gaussian log-likelihood evals" : null,
+      phase5HybridReportedOnlyNoGateArm: phase5Envelope ? true : null,
+      phase5ClassifierUsesPhase2SeparationMargin: phase5Envelope ? args.phase2SeparationMargin : null,
+      phase5SmokePrecedesLock: phase5Envelope ? (args.phase.includes("smoke") ? true : "operator-verified by prior smoke receipt") : null,
       noTargetCoordinateInBayesObservation: true,
       noTargetCoordinateInSundogObservation: true,
       oracleExcludedFromClaimGate: true,
@@ -1884,12 +2280,29 @@ async function main() {
     summary: nestSummary(summaryRows),
     summaryRows,
     exitGate,
+    phase5Envelope: phase5Envelope
+      ? {
+          envelopeRows: phase5Envelope.envelopeRows,
+          aggregateRows: phase5Envelope.aggregateRows,
+          bestByCellRows: phase5Envelope.bestByCellRows,
+          cellClassRows: phase5Envelope.cellClassRows,
+          cellDeltaRows: phase5Envelope.cellDeltaRows,
+          selfConsistencyAnchor: phase5Envelope.selfConsistencyAnchor,
+        }
+      : null,
     artifacts: {
       trials: "trials.jsonl",
       steps: args.traceSteps ? "steps.jsonl" : null,
       summary: "summary.csv",
       regret: "regret.csv",
       replayManifest: "replay-manifest.json",
+      trialOutcomes: phase5Envelope ? "trial-outcomes.csv" : null,
+      envelopeMap: phase5Envelope ? "envelope-map.csv" : null,
+      aggregateEnvelope: phase5Envelope ? "aggregate-envelope.csv" : null,
+      bestByCell: phase5Envelope ? "best-by-cell.csv" : null,
+      cellClassMap: phase5Envelope ? "cell-class-map.csv" : null,
+      cellDeltaMap: phase5Envelope ? "cell-delta-map.csv" : null,
+      candidateEnvelope: phase5Envelope ? "candidate-envelope.csv" : null,
     },
   };
 
@@ -1935,6 +2348,154 @@ async function main() {
     ]),
     "utf8",
   );
+  if (phase5Envelope) {
+    await writeFile(
+      path.join(outDir, "trial-outcomes.csv"),
+      toCsv(trials, [
+        "seed",
+        "scenario",
+        "cellId",
+        "cellKind",
+        "baseScenario",
+        "decoyStrength",
+        "decoySigmaScale",
+        "aliasAmplitude",
+        "mode",
+        "modelStatus",
+        "fieldVariant",
+        "success",
+        "wrongLock",
+        "nearestNonTargetDistance",
+        "nearestNonTargetDwellTurns",
+        "turnsToHit",
+        "turnsElapsed",
+        "maxTurns",
+        "finalDistance",
+        "cumulativeSignal",
+        "likelihoodEvals",
+        "posteriorActionTurns",
+        "responseActionTurns",
+        "score",
+      ]),
+      "utf8",
+    );
+    await writeFile(
+      path.join(outDir, "envelope-map.csv"),
+      toCsv(phase5Envelope.envelopeRows, [
+        "cellId",
+        "cellKind",
+        "baseScenario",
+        "decoyStrength",
+        "decoySigmaScale",
+        "aliasAmplitude",
+        "maxTurns",
+        "reference",
+        "classLabel",
+        "dominanceMargin",
+        "bestFamily",
+        "bestMode",
+        "bestMeanScore",
+        "bayesBestMode",
+        "bayesBestMeanScore",
+        "responseBestMode",
+        "responseBestMeanScore",
+        "hybridBestMode",
+        "hybridBestMeanScore",
+        "bayesMinusResponseScoreDelta",
+        "bayesMinusHybridScoreDelta",
+        "hybridMinusResponseScoreDelta",
+        "missingFamilies",
+      ]),
+      "utf8",
+    );
+    await writeFile(
+      path.join(outDir, "aggregate-envelope.csv"),
+      toCsv(phase5Envelope.aggregateRows, ["classLabel", "cells", "cellFraction", "sweptDecoyCells", "aliasReferenceCells"]),
+      "utf8",
+    );
+    await writeFile(
+      path.join(outDir, "best-by-cell.csv"),
+      toCsv(phase5Envelope.bestByCellRows, [
+        "cellId",
+        "cellKind",
+        "baseScenario",
+        "decoyStrength",
+        "decoySigmaScale",
+        "aliasAmplitude",
+        "maxTurns",
+        "reference",
+        "bestFamily",
+        "bestMode",
+        "bestMeanScore",
+        "bestSuccessRate",
+        "bestWrongLockRate",
+      ]),
+      "utf8",
+    );
+    await writeFile(
+      path.join(outDir, "cell-class-map.csv"),
+      toCsv(phase5Envelope.cellClassRows, [
+        "cellId",
+        "cellKind",
+        "baseScenario",
+        "decoyStrength",
+        "decoySigmaScale",
+        "aliasAmplitude",
+        "maxTurns",
+        "reference",
+        "classLabel",
+        "bestFamily",
+        "bestMode",
+        "missingFamilies",
+      ]),
+      "utf8",
+    );
+    await writeFile(
+      path.join(outDir, "cell-delta-map.csv"),
+      toCsv(phase5Envelope.cellDeltaRows, [
+        "cellId",
+        "cellKind",
+        "baseScenario",
+        "decoyStrength",
+        "decoySigmaScale",
+        "aliasAmplitude",
+        "maxTurns",
+        "reference",
+        "bayesBestMode",
+        "responseBestMode",
+        "hybridBestMode",
+        "bayesMinusResponseScoreDelta",
+        "bayesMinusHybridScoreDelta",
+        "hybridMinusResponseScoreDelta",
+      ]),
+      "utf8",
+    );
+    await writeFile(
+      path.join(outDir, "candidate-envelope.csv"),
+      toCsv(phase5Envelope.candidateRows, [
+        "cellId",
+        "cellKind",
+        "baseScenario",
+        "decoyStrength",
+        "decoySigmaScale",
+        "aliasAmplitude",
+        "maxTurns",
+        "reference",
+        "mode",
+        "family",
+        "trials",
+        "successRate",
+        "wrongLockRate",
+        "meanScore",
+        "meanTurnsToHit",
+        "meanFinalDistance",
+        "meanLikelihoodEvals",
+        "meanPosteriorActionTurns",
+        "meanResponseActionTurns",
+      ]),
+      "utf8",
+    );
+  }
   await writeFile(path.join(outDir, "replay-manifest.json"), JSON.stringify(replayManifest, null, 2) + "\n", "utf8");
 
   console.log(
@@ -1942,7 +2503,9 @@ async function main() {
       `(${round(trials.length / Math.max(elapsedSeconds, 1e-9), 2)} trials/s)`,
   );
   console.log("Audits: pass");
-  if (exitGate.kind === "phase4-hybrid") {
+  if (exitGate.kind === "phase5-envelope") {
+    console.log(`Exit gate: ${exitGate.status} (${exitGate.classifiedCells}/${exitGate.cells} cells classified)`);
+  } else if (exitGate.kind === "phase4-hybrid") {
     const claimGates = exitGate.scenarioGates.filter((gate) => gate.claimScenario);
     const passedClaims = claimGates.filter((gate) => gate.allArms);
     console.log(`Exit gate: ${exitGate.status} (${passedClaims.length}/${exitGate.claimScenarios.length} claim scenarios all-arms)`);
