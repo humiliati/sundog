@@ -195,6 +195,114 @@ function verifyReplay(trial, replayTrial) {
   }
 }
 
+// PHASE1_PRIME_SPEC v1.2 §6: declarative per-tier observation channel
+// metadata. Audit script LT1 cross-checks this against the actual
+// observe() implementation in mesa-core.mjs. Channel counts here are
+// the documented sensor-tier channel counts; channel_count for the
+// learned-policy tier (local-probe-field) must match
+// MesaMlpPolicy.config.obs_dim = 6.
+const SENSOR_TIER_OBSERVATION_SPEC = Object.freeze({
+  "privileged-field": Object.freeze({
+    channels: ["pos_x", "pos_y", "xGoal_x", "xGoal_y", "trueSignature", "trueGrad_x", "trueGrad_y"],
+    channel_count: 7,
+    note: "Oracle tier; intentionally exposes x_goal and trueGradient. LT1 carves this tier out — no learned/HC-non-Oracle policy is configured against it.",
+  }),
+  "local-probe-field": Object.freeze({
+    channels: ["pos_x", "pos_y", "probe_0", "probe_1", "probe_2", "probe_3"],
+    channel_count: 6,
+    note: "Canonical learned-policy tier; v1 envelope is classified at this tier. matches MesaMlpPolicy.config.obs_dim.",
+  }),
+  "delayed-field": Object.freeze({
+    channels: ["pos_x", "pos_y", "probe_0", "probe_1", "probe_2", "probe_3"],
+    channel_count: 6,
+    note: "Same channels as local-probe-field, with delayed-state probe samples.",
+  }),
+  "noisy-field": Object.freeze({
+    channels: ["pos_x", "pos_y", "probe_0", "probe_1", "probe_2", "probe_3"],
+    channel_count: 6,
+    note: "Same channels as local-probe-field, with Gaussian noise applied to probe samples.",
+  }),
+});
+
+const AGENT_FORBIDDEN_CHANNELS = Object.freeze([
+  "x_goal",
+  "true_gradient",
+  "x_false",
+  "privileged_position",
+  "reward_edit_log",
+  "metrics",
+]);
+
+function buildSignatureProvenanceManifest({ args, manifestPath, repoRoot: root }) {
+  const v1Rel = path.relative(root, manifestPath).replaceAll("\\", "/");
+  const sensorTierBlocks = args.sensorTiers.map((tier) => {
+    const overrides = tierOverrides(args, tier);
+    const spec = SENSOR_TIER_OBSERVATION_SPEC[tier] ?? {
+      channels: ["unknown"],
+      channel_count: -1,
+      note: `Unrecognized sensor tier ${tier}; manifest carries placeholder metadata — audit LT1 will fail.`,
+    };
+    return {
+      identifier: tier,
+      delay_steps: overrides.delaySteps,
+      noise_std: overrides.noiseStd,
+      agent_observation: { ...spec },
+    };
+  });
+
+  const rewardFunctions = args.controllerFamilies.map((family) => ({
+    controller_family: family,
+    identifier: family === "hc_signature" || family === "oracle" ? "none" : family,
+    implementation_file: "public/js/mesa-core.mjs",
+    implementation_method: "ShadowFieldEnv.rewardChannels",
+    depends_on_env_state: ["this.x", "this.xGoal", "this.activeRewardEdit", "this.config.falseBasinCenter", "this.config.falseBasinSigma", "this.config.falseBasinBeta"],
+    active_channels: family === "hc_signature" || family === "oracle"
+      ? []
+      : ["dense", "phase3_dense_action_basin", "sparse", "signature"],
+    note: family === "hc_signature" || family === "oracle"
+      ? "HC controller; no learned reward path used. rewardChannels() is still computed by the env, but is consumed for nothing in this phase."
+      : "Learned policy variant; reward channels are combined into a scalar reward during training. The labeled `signature` channel is consumed as a reward component only, never as observation input (verified by LT3 Path B).",
+  }));
+
+  return {
+    phase_v2: "phase1-prime-signature-path",
+    schema_version: "v1",
+    emitted_at: new Date().toISOString(),
+    git_sha: gitSha(),
+    v1_manifest_path: v1Rel,
+
+    x_goal: {
+      privileged: true,
+      hidden_from_agent: true,
+      sampled_per_seed_from: "ShadowFieldEnv.initializeMesaState; deterministic on seed",
+      note: "Per-seed x_goal values are not enumerated here to keep the manifest stable across seed-count changes; they're reproducible from the seed and the env constructor. The audit script reads them from the v1 trial JSONLs if a per-seed cross-check is needed.",
+    },
+
+    signature_function: {
+      identifier: "gaussian_shadow_field_v1",
+      implementation_file: "public/js/mesa-core.mjs",
+      implementation_method: "ShadowFieldEnv.trueSignature",
+      depends_on_env_state: ["this.x", "this.xGoal", "this.config.sigmaS"],
+      depends_on_agent_state: [],
+      note: "this.xGoal is a top-level mutable instance field (not under this.config); the geometry intervention writes it. LT2 allowlists this.xGoal as the documented shared geometry baseline.",
+    },
+
+    sensor_tiers: sensorTierBlocks,
+    reward_functions: rewardFunctions,
+    agent_forbidden_channels: [...AGENT_FORBIDDEN_CHANNELS],
+
+    leakage_audit_verdict: {
+      audit_script_version: "pending",
+      audit_run_at: "pending",
+      LT1_no_xgoal_in_obs: "pending",
+      LT2_disjoint_accessors: "pending",
+      LT3_no_log_feedback: "pending",
+      LT4_channel_independence: "pending",
+      overall: "pending",
+    },
+  };
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(repoRoot, args.out);
@@ -330,6 +438,14 @@ async function main() {
     summary: Object.fromEntries(summaryRows.map((row) => [`${row.controllerFamily}/${row.sensorTier}`, row])),
   };
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+
+  // PHASE1_PRIME_SPEC v1.2 §6: emit a v2 signature-provenance manifest
+  // alongside the v1 manifest. Additive; v1 manifest is unchanged. The
+  // `leakage_audit_verdict` block starts as `pending` and is populated
+  // by `scripts/mesa-signature-provenance-audit.mjs` in a second pass.
+  const v2ManifestPath = path.join(outDir, "signature-provenance-manifest.json");
+  const v2Manifest = buildSignatureProvenanceManifest({ args, manifestPath, repoRoot });
+  await writeFile(v2ManifestPath, `${JSON.stringify(v2Manifest, null, 2)}\n`, "utf8");
 
   for (const row of summaryRows) {
     console.log(
