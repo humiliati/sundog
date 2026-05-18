@@ -590,6 +590,9 @@ def phase6_anchor_report(
         "liveAnchorAtol": PHASE6_LIVE_ANCHOR_ATOL,
         "nominal": {},
         "stressPhotometric": [],
+        "analysisSummaryAggregate": {"checked": False},
+        "tests": {},
+        "passComponents": {},
     }
 
     nominal = summaries.get("nominal", {})
@@ -622,6 +625,7 @@ def phase6_anchor_report(
         with open(analysis_path) as f:
             analysis = json.load(f)
         aggregate_checks = {}
+        tests = {}
         for condition in ["photometric", "doa_direct"]:
             expected = analysis["conditions"][condition]
             actual = nominal[condition]
@@ -658,13 +662,29 @@ def phase6_anchor_report(
             ]
             u, p = mann_whitney_u(np.asarray(p_vals), np.asarray(d_vals))
             expected_test = analysis["tests"]["photometric_vs_doa_direct_terminal_intensity"]
-            aggregate_checks["photometric_vs_doa_direct_terminal_intensity"] = [
-                {"field": "U", "max_abs_diff": float(abs(u - expected_test["U"])), "pass": bool(u == expected_test["U"])},
-                {"field": "p", "max_abs_diff": float(abs(p - expected_test["p"])), "pass": bool(abs(p - expected_test["p"]) <= 1e-12)},
-            ]
-        report["nominal"]["analysisSummaryAggregate"] = aggregate_checks
+            tests["photometric_vs_doa_direct_terminal_intensity"] = {
+                "actual": {"U": float(u), "p": float(p)},
+                "expected": {"U": expected_test["U"], "p": expected_test["p"]},
+                "checks": [
+                    {
+                        "field": "U",
+                        "max_abs_diff": float(abs(u - expected_test["U"])),
+                        "pass": bool(u == expected_test["U"]),
+                    },
+                    {
+                        "field": "p",
+                        "max_abs_diff": float(abs(p - expected_test["p"])),
+                        "pass": bool(abs(p - expected_test["p"]) <= 1e-12),
+                    },
+                ],
+            }
+        report["analysisSummaryAggregate"] = {
+            "checked": True,
+            "conditions": aggregate_checks,
+        }
+        report["tests"] = tests
     else:
-        report["nominal"]["analysisSummaryAggregate"] = {
+        report["analysisSummaryAggregate"] = {
             "checked": False,
             "reason": "strict seed-prefix smoke; full 30-seed aggregate checked only on lock",
         }
@@ -749,17 +769,33 @@ def phase6_anchor_report(
         if isinstance(entry, dict) and "liveReexecutionPass" in entry
     )
     stress_pass = all(row["liveReexecutionPass"] for row in report["stressPhotometric"])
-    aggregate_pass = True
-    aggregate = report["nominal"].get("analysisSummaryAggregate")
-    if isinstance(aggregate, dict) and aggregate.get("checked", True) is not False:
-        for checks in aggregate.values():
-            if isinstance(checks, list):
-                aggregate_pass = aggregate_pass and all(check["pass"] for check in checks)
+    analysis_aggregate_pass = True
+    aggregate = report["analysisSummaryAggregate"]
+    if aggregate.get("checked"):
+        for checks in aggregate["conditions"].values():
+            analysis_aggregate_pass = analysis_aggregate_pass and all(check["pass"] for check in checks)
+    tests_pass = True
+    for test in report["tests"].values():
+        tests_pass = tests_pass and all(check["pass"] for check in test["checks"])
+    stress_aggregate_pass = True
     for row in report["stressPhotometric"]:
         agg = row["sweepSummaryAggregate"]
         if agg.get("checked"):
-            aggregate_pass = aggregate_pass and bool(agg["pass"])
-    report["pass"] = bool(nominal_pass and stress_pass and aggregate_pass)
+            stress_aggregate_pass = stress_aggregate_pass and bool(agg["pass"])
+    report["passComponents"] = {
+        "nominalLiveReexecution": bool(nominal_pass),
+        "stressLiveReexecution": bool(stress_pass),
+        "analysisSummaryAggregate": bool(analysis_aggregate_pass),
+        "mannWhitneyTests": bool(tests_pass),
+        "stressSweepAggregate": bool(stress_aggregate_pass),
+    }
+    report["pass"] = bool(
+        nominal_pass
+        and stress_pass
+        and analysis_aggregate_pass
+        and tests_pass
+        and stress_aggregate_pass
+    )
     if not report["pass"]:
         report["status"] = "anchor_mismatch"
     return report
@@ -1038,6 +1074,8 @@ def run_phase6(args: argparse.Namespace) -> None:
         "classCounts": class_counts,
         "summaries": summaries,
         "anchor": anchor,
+        "tests": anchor.get("tests", {}),
+        "anchorPassComponents": anchor.get("passComponents", {}),
         "receiptExtension": {
             "time_to_threshold.ci95": "bootstrap_ci from experiments.analysis, same estimator as terminal_intensity.ci95",
         },
@@ -1058,6 +1096,128 @@ def run_phase6(args: argparse.Namespace) -> None:
     print(f"Audits: {'pass' if anchor['pass'] else 'FAIL'}")
     print(f"Exit gate: {status} ({len(class_rows)}/{len(cells)} cells classified)")
     print(f"Wrote {out_dir}")
+
+
+def load_phase6_existing_state(
+    out_dir: str,
+    cells: list[Phase6Cell],
+    conditions: list[str],
+    n_steps: int,
+) -> tuple[dict[str, dict[str, dict]], dict[tuple[str, str, int], np.ndarray], list[dict], dict[str, int]]:
+    trial_path = os.path.join(out_dir, "trial-outcomes.csv")
+    if not os.path.exists(trial_path):
+        raise FileNotFoundError(f"missing Phase 6 trial outcomes: {trial_path}")
+
+    trial_values: dict[tuple[str, str], list[dict]] = {}
+    trial_series: dict[tuple[str, str, int], np.ndarray] = {}
+    with open(trial_path, newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            cell_id = row["cell_id"]
+            condition = row["condition"]
+            seed = int(row["seed"])
+            if condition not in conditions:
+                continue
+            trial_values.setdefault((cell_id, condition), []).append({
+                "terminal_intensity": float(row["terminal_intensity"]),
+                "time_to_threshold": float(row["time_to_threshold"]),
+            })
+            episode_path = os.path.join(
+                out_dir,
+                "episodes",
+                cell_id,
+                condition,
+                f"seed_{seed:03d}.npz",
+            )
+            if os.path.exists(episode_path):
+                trial_series[(cell_id, condition, seed)] = np.load(episode_path)["target_intensity"].copy()
+
+    summaries: dict[str, dict[str, dict]] = {}
+    class_rows: list[dict] = []
+    class_counts: dict[str, int] = {}
+    for cell in cells:
+        cell_summary: dict[str, dict] = {}
+        for condition in conditions:
+            values = trial_values.get((cell.cell_id, condition), [])
+            if values:
+                cell_summary[condition] = phase6_aggregate(values, n_steps)
+        summaries[cell.cell_id] = cell_summary
+        classification = phase6_classify_cell(cell_summary)
+        class_row = {
+            "cell_id": cell.cell_id,
+            "axis": cell.axis,
+            "beam_sigma": cell.beam_sigma,
+            "detector_noise_sigma": cell.detector_noise_sigma,
+            "class": classification["class"],
+            "best_condition": classification["best_condition"],
+            "runner_up": classification.get("runner_up", ""),
+            "lead_vs_runner_up": classification["lead_vs_runner_up"],
+            "ci95_half_width": classification["ci95_half_width"],
+        }
+        class_rows.append(class_row)
+        class_counts[class_row["class"]] = class_counts.get(class_row["class"], 0) + 1
+
+    return summaries, trial_series, class_rows, class_counts
+
+
+def reemit_phase6_manifest(args: argparse.Namespace) -> None:
+    out_dir = args.results_dir
+    manifest_path = os.path.join(out_dir, "manifest.json")
+    if not os.path.exists(manifest_path):
+        raise FileNotFoundError(f"missing Phase 6 manifest: {manifest_path}")
+    with open(manifest_path) as f:
+        manifest = json.load(f)
+
+    cells = phase6_cells(args.phase6_cells)
+    conditions = args.conditions or manifest.get("conditions") or PHASE6_CONDITIONS
+    summaries, trial_series, class_rows, class_counts = load_phase6_existing_state(
+        out_dir=out_dir,
+        cells=cells,
+        conditions=conditions,
+        n_steps=args.steps,
+    )
+    anchor = phase6_anchor_report(
+        out_dir=out_dir,
+        phase_cells=cells,
+        trial_series=trial_series,
+        summaries=summaries,
+        seeds=args.seeds,
+        n_steps=args.steps,
+        particle_count=args.particle_count,
+    )
+    status = (
+        "envelope_mapped"
+        if len(class_rows) == len(cells) and anchor["pass"]
+        else "envelope_incomplete"
+    )
+    manifest.update({
+        "phase": args.phase or manifest.get("phase"),
+        "status": status,
+        "pass": True,
+        "seeds": args.seeds,
+        "steps": args.steps,
+        "particleCount": args.particle_count,
+        "conditions": conditions,
+        "cells": [cell.__dict__ for cell in cells],
+        "cellClasses": class_rows,
+        "classCounts": class_counts,
+        "summaries": summaries,
+        "anchor": anchor,
+        "tests": anchor.get("tests", {}),
+        "anchorPassComponents": anchor.get("passComponents", {}),
+        "manifestReemittedAt": time.time(),
+        "manifestReemitReason": (
+            "Record Phase 6 lock anchor aggregate checks and Mann-Whitney test "
+            "as manifest-visible, anchor-gating receipts without rerunning trials."
+        ),
+    })
+    with open(manifest_path, "w") as f:
+        json.dump(manifest, f, indent=2)
+
+    print(f"Photometric {manifest['phase']}: manifest re-emitted from existing artifacts")
+    print(f"Audits: {'pass' if anchor['pass'] else 'FAIL'}")
+    print(f"Exit gate: {status} ({len(class_rows)}/{len(cells)} cells classified)")
+    print(f"Wrote {manifest_path}")
 
 
 # ---------------------------------------------------------------------------
@@ -1081,9 +1241,14 @@ def main() -> None:
                         help="Particle count for the Phase 6 bayes_particle lane.")
     parser.add_argument("--phase6-cells", type=str, choices=["smoke", "lock"], default="smoke",
                         help="Phase 6 cell set to run.")
+    parser.add_argument("--phase6-reemit-manifest", action="store_true",
+                        help="Rebuild only the Phase 6 manifest from existing trial artifacts and anchor checks.")
     args = parser.parse_args()
 
     if args.phase and args.phase.startswith("phase6"):
+        if args.phase6_reemit_manifest:
+            reemit_phase6_manifest(args)
+            return
         run_phase6(args)
         return
 
