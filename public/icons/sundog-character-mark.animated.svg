@@ -92,7 +92,7 @@
     <circle cx="512" cy="512" r="258" fill="none" stroke="#f4c430" stroke-width="18" opacity="0.66"/>
   </g>
   <g data-layer="core.parhelic-belt">
-    <path class="parhelic-belt" d="M 166 499.1 C 340 481.1 684 481.1 858 499.1" fill="none" stroke="#f4c430" stroke-width="25" stroke-linecap="round" opacity="0.7"/>
+    <path class="parhelic-belt" d="M 166 512 C 340 494 684 494 858 512" fill="none" stroke="#f4c430" stroke-width="25" stroke-linecap="round" opacity="0.7"/>
   </g>
   <g data-layer="core.upper-tangent">
     <path class="upper-eyelid" d="M 276 392 C 356 292 668 292 748 392" fill="none" stroke="#fff4b2" stroke-width="28" stroke-linecap="round" opacity="0.82"/>
@@ -106,7 +106,7 @@
     <circle cx="512" cy="512" r="42" fill="#fff4b2" opacity="0.86"/>
   </g>
   <g data-layer="core.parhelia">
-    <path class="parhelion-left" d="M 150.7 499.1 L 240.7 456.1 L 330.7 499.1 L 240.7 542.1 Z" fill="url(#parhelion-left-gradient)" opacity="0.94"/>
-    <path class="parhelion-right" d="M 693.3 499.1 L 783.3 456.1 L 873.3 499.1 L 783.3 542.1 Z" fill="url(#parhelion-right-gradient)" opacity="0.94"/>
+    <path class="parhelion-left" d="M 150.7 512 L 240.7 469 L 330.7 512 L 240.7 555 Z" fill="url(#parhelion-left-gradient)" opacity="0.94"/>
+    <path class="parhelion-right" d="M 693.3 512 L 783.3 469 L 873.3 512 L 783.3 555 Z" fill="url(#parhelion-right-gradient)" opacity="0.94"/>
   </g>
 </svg>

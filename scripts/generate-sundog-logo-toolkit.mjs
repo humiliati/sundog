@@ -27,7 +27,11 @@ const GEOMETRY = {
   halo22Radius: 258,
   halo46Radius: 346,
   sunAltitudeDeg: 18,
-  parhelicYOffsetR22: -0.05,
+  // Decorative flat belt through the sun. The earlier -0.05 R22 belt-tilt
+  // rule was falsified (Spearman rho ~= 0.086) and is no longer asserted —
+  // see docs/PHASE10_ATTACK_ROADMAP.md. The valid promoted handle is the
+  // parhelion *horizontal* offset = R22 / cos(h), computed below.
+  parhelicYOffsetR22: 0,
 };
 
 const beltY =
@@ -251,8 +255,11 @@ function layerManifest() {
     roadmapPhase: "SUNDOG_V_GEOMETRY.md Phase 11",
     calibrationBasis: {
       phase10Images: ["p2", "p7", "p13"],
-      notes: "docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md",
-      parhelicYOffsetR22: GEOMETRY.parhelicYOffsetR22,
+      promotedHandle:
+        "parhelion horizontal offset = R22 / cos(h); see /h-of-x",
+      parhelicBeltVerticalOffset:
+        "decorative (flat through sun); the earlier -0.05 R22 belt-tilt rule was falsified and is not asserted",
+      notes: "docs/PHASE10_ATTACK_ROADMAP.md, docs/MESA_CROSSOVER_NOTE.md",
     },
     geometry: {
       viewBox: GEOMETRY.viewBox,
@@ -281,7 +288,7 @@ function layerManifest() {
       },
       {
         id: "core.parhelic-belt",
-        rule: "Belt uses the corrected -0.05 R22 vertical offset from Phase 10.",
+        rule: "Flat decorative band through the sun. Do NOT reintroduce a calibrated vertical offset; the earlier -0.05 R22 belt-tilt rule was falsified (see docs/PHASE10_ATTACK_ROADMAP.md).",
       },
       {
         id: "core.upper-tangent",

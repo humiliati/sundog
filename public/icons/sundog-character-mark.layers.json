@@ -7,8 +7,9 @@
       "p7",
       "p13"
     ],
-    "notes": "docs/calibration/RICH_DISPLAY_OVERLAY_NOTES.md",
-    "parhelicYOffsetR22": -0.05
+    "promotedHandle": "parhelion horizontal offset = R22 / cos(h); see /h-of-x",
+    "parhelicBeltVerticalOffset": "decorative (flat through sun); the earlier -0.05 R22 belt-tilt rule was falsified and is not asserted",
+    "notes": "docs/PHASE10_ATTACK_ROADMAP.md, docs/MESA_CROSSOVER_NOTE.md"
   },
   "geometry": {
     "viewBox": 1024,
@@ -21,12 +22,12 @@
     "halo22Radius": 258,
     "halo46Radius": 346,
     "sunAltitudeDeg": 18,
-    "parhelicBeltY": 499.1,
+    "parhelicBeltY": 512,
     "parhelionOffset": 271.3,
     "leftParhelionX": 240.7,
     "rightParhelionX": 783.3,
     "paths": {
-      "parhelicBelt": "M 166 499.1 C 340 481.1 684 481.1 858 499.1",
+      "parhelicBelt": "M 166 512 C 340 494 684 494 858 512",
       "upperTangent": "M 276 392 C 356 292 668 292 748 392",
       "cza": "M 328 276 C 420 232 604 232 696 276"
     }
@@ -46,7 +47,7 @@
     },
     {
       "id": "core.parhelic-belt",
-      "rule": "Belt uses the corrected -0.05 R22 vertical offset from Phase 10."
+      "rule": "Flat decorative band through the sun. Do NOT reintroduce a calibrated vertical offset; the earlier -0.05 R22 belt-tilt rule was falsified (see docs/PHASE10_ATTACK_ROADMAP.md)."
     },
     {
       "id": "core.upper-tangent",
