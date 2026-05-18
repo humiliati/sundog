@@ -441,6 +441,14 @@ asks.
 
    **Pass 2 - move static application inventory out of index.**
 
+   Status: completed 2026-05-18. The static `Working Systems` app-card grid was
+   removed from `index.html`; its full inventory now lives on
+   `applications-gallery.html`. A compact rail-to-gallery pointer remains after
+   the motion rail. The old `.app-card-img` page-local CSS tail was removed in
+   the same pass. Anchor sweep found one pre-existing nonblocking gap:
+   `/applications-gallery#pushable-occluder` exists in the dormant rail card but
+   has no gallery anchor yet.
+
    - Remove the static `Working Systems` app-card grid from `index.html`.
    - Confirm every removed card has a richer anchor on `applications-gallery.html`
      with the same or stronger evidence-tier language.
@@ -450,6 +458,14 @@ asks.
      homepage.
 
    **Pass 3 - collapse support prose into owning pages.**
+
+   Status: completed 2026-05-18. `Core Vocabulary` was removed from
+   `index.html` and rehomed as `Sundog Method Terms` on `legend.html`.
+   `Why Indirect Signals Matter` was removed as duplicate About-page posture.
+   `Alignment And Comparators` was collapsed into the existing nav/project-map
+   pointer to `alignment.html`; `Ongoing Research` was collapsed into the
+   existing About/Repo Map/Docs routes. The homepage now proceeds from
+   application previews to the Ask Sundog experiment teaser and Project Map.
 
    - Move or delete `Core Vocabulary` from the homepage. Vocabulary belongs in
      `legend.html`, `h-of-x.html`, and `about.html`.
