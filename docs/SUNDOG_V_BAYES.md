@@ -1319,9 +1319,45 @@ label `mixed`.
 
 Self-consistency anchor: the full `(decoy-strength=0.82, max-turns=40)` cell
 must reproduce the Phase 4b lock decoy deltas against `hc_sundog` for the shared
-lanes. The smoke corner grid intentionally does not include the anchor; the
-full lock checks it against
+lanes. The anchor checks against
 `results/bayes/phase4b-hybrid-lock/manifest.json`.
+
+Voided lock receipt, 2026-05-18: the first `phase5-envelope-lock` run wrote
+`results/bayes/phase5-envelope-lock/manifest.json` with `status:
+envelope_incomplete` because the anchor reported `selfConsistencyAnchor:
+mismatch_void`. The oracle and `hc_sundog` rows matched the Phase 4b lock, but
+posterior lanes did not, isolating the defect to the adaptive model slate:
+Phase 5 controller states were still passing `config.scenarios` into
+`adaptiveModelsForScenarios`, so Phase 5 missed the Phase 5 branch and used the
+Phase 2 adaptive families instead of the Phase 3 decoy/alias families. Treat
+that lock as void; do not interpret its envelope labels.
+
+Pre-registered amendment before resmoke, 2026-05-18:
+
+- Pass the full `config` object into `adaptiveModelsForScenarios` when creating
+  adaptive controller state, so Phase 5 uses the frozen Phase 3 decoy/alias
+  adaptive model slate. Phases 1-4 are unchanged because `isPhase5Config` is
+  false there.
+- Expand the smoke decoy-strength grid from `{0.50, 0.98}` to
+  `{0.50, 0.82, 0.98}`. Smoke becomes 8 cells / 512 trials and now includes
+  the `(0.82, 40)` anchor, catching any future anchor mismatch at smoke scale.
+  The anchor predicate, full grid, classifier, modes, and lock command remain
+  unchanged.
+
+Resmoke after that amendment still returned `envelope_incomplete` with all
+8/8 cells classified because the anchor comparator was exact summary-to-summary:
+it compared the 8-seed smoke summary to the 96-seed Phase 4b lock summary.
+That is stricter than the frozen "within seed-count variance" intent and is
+not a controller mismatch: the same seed subset from
+`results/bayes/phase4b-hybrid-lock/trials.jsonl` reproduced the smoke anchor
+exactly for `oracle`, `bayes_adaptive`, `hc_sundog`, `hybrid`, and
+`hybrid_posterior_decoy_disambig`.
+
+Pre-registered comparator repair before second resmoke, 2026-05-18: when the
+current run's seed window differs from the Phase 4b reference summary, the
+anchor compares against the same seed subset from the Phase 4b `trials.jsonl`
+receipt and remains exact. This adds no threshold and does not change the
+anchor predicate, grid, classifier, modes, or lock command.
 
 Commands:
 
@@ -1346,7 +1382,7 @@ Frozen filenames under each output directory:
 - `cell-delta-map.csv`
 - `candidate-envelope.csv`
 
-Smoke receipt, 2026-05-18:
+Superseded smoke receipt, 2026-05-18, before the anchor-in-smoke amendment:
 
 ```text
 npm run bayes:phase5:smoke
@@ -1356,20 +1392,38 @@ Exit gate: envelope_mapped (6/6 cells classified)
 Wrote results\bayes\phase5-envelope-smoke
 ```
 
-Smoke class map:
+Amended smoke receipt, 2026-05-18:
+
+```text
+npm run bayes:phase5:smoke
+Bayes phase5-envelope-smoke: 512 trials in 160.047s (3.2 trials/s)
+Audits: pass
+Exit gate: envelope_mapped (8/8 cells classified)
+Wrote results\bayes\phase5-envelope-smoke
+```
+
+Anchor receipt: `selfConsistencyAnchor.status =
+reproduced_p4b_lock_decoy`, using `referenceBasis =
+seed_matched_trials_jsonl`; all shared-lane score and success deltas match the
+Phase 4b seed-matched reference subset exactly.
+
+Amended smoke class map:
 
 | Cell | Class | Best family | Best mode |
 | --- | --- | --- | --- |
 | `decoy_strength_0p50_turns_20` | `bayes_dominant` | bayes | `bayes_adaptive` |
-| `decoy_strength_0p98_turns_20` | `mixed` | bayes | `bayes_adaptive` |
-| `alias_ref_turns_20` | `bayes_dominant` | bayes | `bayes_misspecified` |
-| `decoy_strength_0p50_turns_40` | `bayes_dominant` | bayes | `bayes_misspecified` |
-| `decoy_strength_0p98_turns_40` | `mixed` | bayes | `bayes_adaptive` |
-| `alias_ref_turns_40` | `bayes_dominant` | bayes | `bayes_misspecified` |
+| `decoy_strength_0p82_turns_20` | `bayes_dominant` | bayes | `bayes_adaptive` |
+| `decoy_strength_0p98_turns_20` | `bayes_dominant` | bayes | `bayes_adaptive` |
+| `alias_ref_turns_20` | `bayes_dominant` | bayes | `bayes_adaptive` |
+| `decoy_strength_0p50_turns_40` | `bayes_dominant` | bayes | `bayes_adaptive` |
+| `decoy_strength_0p82_turns_40` | `bayes_dominant` | bayes | `bayes_adaptive` |
+| `decoy_strength_0p98_turns_40` | `bayes_dominant` | bayes | `bayes_adaptive` |
+| `alias_ref_turns_40` | `mixed` | bayes | `bayes_adaptive` |
 
-The full lock is deferred by the long-run rule. The smoke has 384 trials; the
-full grid has 15,360 trials, with a higher average action budget. Budget-scaled
-estimate from the smoke is roughly 31 minutes:
+The full lock is deferred by the long-run rule. The amended smoke has
+512 trials; the full grid has 15,360 trials, with a higher average action
+budget. Budget-scaled estimate from the amended smoke is roughly 80-100
+minutes:
 
 ```powershell
 npm run bayes:phase5
