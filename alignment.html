@@ -285,6 +285,16 @@
             margin: 0;
         }
 
+        .data-note {
+            color: #66747D;
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            line-height: 1.5;
+            margin-top: -0.15rem;
+            text-transform: uppercase;
+        }
+
         .table-wrap {
             overflow-x: auto;
             border: 1px solid var(--line);
@@ -566,7 +576,7 @@
                         </div>
                     </div>
                     <p>
-                        The strongest public posture is complementary: Bayes is for knowing under uncertainty. Sundog is for acting under partial sight. The comparison should report where each earns its keep, where each fails, and when a hybrid is the honest answer.
+                        The strongest public posture is complementary: Bayes is for knowing under uncertainty. Sundog is for acting under partial sight. The comparison should report where each earns its keep, where each fails, and when neither earns the headline.
                     </p>
                     <h3 class="analysis-heading">Pressure Mines side-by-side</h3>
                     <p>
@@ -603,9 +613,12 @@
                     </div>
                     <div class="analysis-line">
                         <p>
-                            Alignment reading: the side-by-side says the admitted pressure trace contains enough structure for both a legal posterior floor and a Sundog controller family to act, while the boundary remains visible. That is stronger than "Sundog beat naive" and weaker than "Sundog beat Bayes." It is exactly the middle claim this page should preserve.
+                            Alignment reading: the side-by-side says the admitted pressure trace contains enough structure for both a legal posterior floor and a Sundog controller family to act, while the boundary remains visible. That is stronger than a naive-only result and weaker than posterior dominance. It is exactly the middle claim this page should preserve.
                         </p>
                     </div>
+                    <h3 class="analysis-heading">Standalone Bayes-vs-Sundog side-by-side</h3>
+                    <p class="data-note" id="bayes-data-source-note">Loading generated comparator receipt.</p>
+                    <div class="side-by-side" id="bayes-comparison-side" aria-label="Standalone Bayes and Sundog side-by-side analysis"></div>
                 </div>
             </article>
 
@@ -634,6 +647,12 @@
                                     <td>No target-position access; terminal target intensity is comparable to target-aware analytic and noisy-oracle baselines in the controlled MuJoCo result.</td>
                                     <td>The serious same-observation Bayesian comparator is not the primary public baseline yet. The existing target-aware baseline wins hard on acquisition speed: median threshold time about 11.5 steps versus about 188 for photometric feedback.</td>
                                     <td>Core result, not a Bayes win. It proves the apparatus shape and motivates the fair Bayesian comparison.</td>
+                                </tr>
+                                <tr id="bayes-comparator-ledger-row">
+                                    <td><strong>Standalone Bayes-vs-Sundog benchmark</strong></td>
+                                    <td data-bayes-verdict="sundogReadout">Loading generated receipt.</td>
+                                    <td data-bayes-verdict="comparatorState">Loading generated receipt.</td>
+                                    <td data-bayes-verdict="safeInterpretation">Loading generated receipt.</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Balance</strong></td>
@@ -677,24 +696,12 @@
                 </div>
                 <div class="section-body">
                     <p>
-                        The Bayes roadmap is strongest when it predicts wins and losses before the run. A useful comparison should have at least four stamps.
+                        The Bayes roadmap is strongest when it predicts wins and losses before the run. The closed comparison now publishes its public stamp sequence from the generated receipt bundle.
                     </p>
-                    <div class="result-grid">
+                    <div class="result-grid" id="bayes-stamp-sequence">
                         <div class="result-card">
-                            <strong>Model known</strong>
-                            <span>Bayes should win when the likelihood model is right and the posterior is cheap enough to maintain.</span>
-                        </div>
-                        <div class="result-card">
-                            <strong>Field readable</strong>
-                            <span>Sundog should hold when the assumed model is wrong but the live response field still answers action coherently.</span>
-                        </div>
-                        <div class="result-card">
-                            <strong>Signal aliased</strong>
-                            <span>Flat Sundog should fail when a trace improves for the wrong hidden reason and belief over hypotheses is necessary.</span>
-                        </div>
-                        <div class="result-card">
-                            <strong>Hybrid needed</strong>
-                            <span>Real systems may use Bayes to manage ambiguity and Sundog-style response tracking for local control.</span>
+                            <strong>Loading</strong>
+                            <span>Generated Bayes comparison receipts are loading.</span>
                         </div>
                     </div>
                 </div>
@@ -746,6 +753,104 @@
             &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
         </p>
     </footer>
+    <script type="module">
+        const dataUrl = "/data/bayes-comparison.json";
+
+        function formatNumber(value, digits = 3) {
+            if (!Number.isFinite(value)) return "n/a";
+            return value.toLocaleString(undefined, {
+                maximumFractionDigits: digits,
+                minimumFractionDigits: 0,
+            });
+        }
+
+        function phaseById(data, phaseId) {
+            return data.phases.find((phase) => phase.phase === phaseId)?.headline ?? {};
+        }
+
+        function setVerdictText(data) {
+            document.querySelectorAll("[data-bayes-verdict]").forEach((node) => {
+                const key = node.dataset.bayesVerdict;
+                node.textContent = data.verdict[key] ?? "Receipt unavailable.";
+            });
+        }
+
+        function makeSideColumn(title, bodyLines) {
+            const column = document.createElement("div");
+            column.className = "side-column";
+            const heading = document.createElement("h3");
+            heading.textContent = title;
+            column.append(heading);
+            bodyLines.forEach((line) => {
+                const paragraph = document.createElement("p");
+                paragraph.textContent = line;
+                column.append(paragraph);
+            });
+            return column;
+        }
+
+        function renderBayesComparison(data) {
+            const container = document.querySelector("#bayes-comparison-side");
+            if (!container) return;
+            const phase5b = phaseById(data, "phase5b-mismatch-severity-lock");
+            const phase6 = phaseById(data, "phase6-photometric-lock");
+            const phase6b = phaseById(data, "phase6b-structure-lock");
+            const p5bCounts = phase5b.classCounts ?? {};
+
+            container.replaceChildren(
+                makeSideColumn("Synthetic boundary", [
+                    `Phase 5b maps ${formatNumber(p5bCounts.bayes_dominant, 0)} Bayes-dominant, ${formatNumber(p5bCounts.mixed, 0)} mixed, and ${formatNumber(p5bCounts.response_dominant, 0)} response-dominant cells.`,
+                    "The response edge appears only on the synthetic model-family severity axis.",
+                ]),
+                makeSideColumn("Core task", [
+                    `Phase 6 maps ${formatNumber(phase6.classCounts?.bayes_particle_dominant, 0)} particle-Bayes-dominant cells and ${formatNumber(phase6.classCounts?.mixed, 0)} mixed cell under optical/detector stress.`,
+                    `Phase 6b keeps s1 and s2 Bayes-dominant at median ttt ${formatNumber(phase6b.s1?.bayesMedianTtt, 1)}; only s3 fails at ttt ${formatNumber(phase6b.s3?.bayesMedianTtt, 1)} with ${formatNumber(phase6b.s3?.bayesFailedSeeds, 0)} failed seeds.`,
+                ]),
+                makeSideColumn("Allowed read", [
+                    data.verdict.safeInterpretation,
+                    "The raw Phase 6b transfer string is quarantined to the degenerate s3 rung, not used as the headline.",
+                ]),
+            );
+
+            const note = document.querySelector("#bayes-data-source-note");
+            if (note) {
+                note.textContent = `Generated from ${data.phases.length} committed lock manifests; source timestamp ${data.generatedAt}.`;
+            }
+        }
+
+        function renderStampSequence(data) {
+            const container = document.querySelector("#bayes-stamp-sequence");
+            if (!container) return;
+            container.replaceChildren(...data.verdict.stampSequence.map((stamp) => {
+                const [label, detail] = stamp.split("->").map((part) => part.trim());
+                const card = document.createElement("div");
+                card.className = "result-card";
+                const strong = document.createElement("strong");
+                strong.textContent = label;
+                const span = document.createElement("span");
+                span.textContent = detail || stamp;
+                card.append(strong, span);
+                return card;
+            }));
+        }
+
+        async function hydrateBayesComparison() {
+            try {
+                const response = await fetch(dataUrl);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                setVerdictText(data);
+                renderBayesComparison(data);
+                renderStampSequence(data);
+            } catch (error) {
+                console.warn("Unable to load Bayes comparison data", error);
+                const note = document.querySelector("#bayes-data-source-note");
+                if (note) note.textContent = "Generated comparator receipt unavailable.";
+            }
+        }
+
+        hydrateBayesComparison();
+    </script>
     <script type="module" src="/js/sundog-chat-widget.mjs"></script>
 </body>
 </html>

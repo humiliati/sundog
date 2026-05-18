@@ -269,15 +269,24 @@ of agent performance. Any unexpected coupling found by the audit is
 filed as a v2 finding and routed back to v1's PHASE1_HC_BASELINE before
 the audit is declared green.
 
-**Status:** **spec filed (2026-05-18)** at
-[`mesa/PHASE1_PRIME_SPEC.md`](mesa/PHASE1_PRIME_SPEC.md). Four
+**Status:** **spec filed (2026-05-18), amended to v1.1 (2026-05-18)**
+at [`mesa/PHASE1_PRIME_SPEC.md`](mesa/PHASE1_PRIME_SPEC.md). Four
 pre-registered leakage tests (LT1–LT4) with pass/fail verdicts,
 manifest schema with `leakage_audit_verdict` per-test field, three
 pre-registered outcomes (clean / partial-collapse / leakage-found)
 that route Phase 8' between its three drafted claim-language
 branches. Compute envelope: ~1–2 days, mechanical, no env runs.
-Manifest emitter, audit script, and result note are all unbuilt;
-spec ratification is the v1 gate.
+**v1.1 amendment (2026-05-18)** reconciled the four tests against
+the reference implementation's intentional benign coupling:
+goal-centered env design has `S(x)` peak at `this.xGoal` and reward
+as distance-to-`this.xGoal`, so the geometry baseline is a
+*documented* shared field, not leakage. LT1 scoped to non-privileged
+tiers; LT2 allowlist extended with `this.xGoal`; LT3 extended to
+check the labeled-signature reward channel doesn't feed back into
+observation; LT4 rewritten with an explicit pre-registered effect
+table that encodes the geometry-affects-both case as expected;
+§6 manifest dependency corrected. Manifest emitter, audit script,
+and result note are all unbuilt; spec ratification is the v1 gate.
 
 ### Phase 6.5 — Formal Separability Counterexample Pass (net-new)
 
