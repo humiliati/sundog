@@ -380,7 +380,11 @@
             background: var(--border);
             border: 1px solid var(--border);
             border-radius: 6px;
-            overflow: hidden;
+            /* auto (not hidden) so the fixed-min 3 columns scroll instead of
+               silently clipping the third column on narrow viewports; rounded
+               corners are still clipped, desktop is unchanged (no overflow). */
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
             margin-top: 1rem;
         }
 
