@@ -445,9 +445,8 @@ asks.
    removed from `index.html`; its full inventory now lives on
    `applications-gallery.html`. A compact rail-to-gallery pointer remains after
    the motion rail. The old `.app-card-img` page-local CSS tail was removed in
-   the same pass. Anchor sweep found one pre-existing nonblocking gap:
-   `/applications-gallery#pushable-occluder` exists in the dormant rail card but
-   has no gallery anchor yet.
+   the same pass. Initial anchor sweep found one dormant-card fragment gap;
+   Pass 4 tail cleanup removed that dormant card from source.
 
    - Remove the static `Working Systems` app-card grid from `index.html`.
    - Confirm every removed card has a richer anchor on `applications-gallery.html`
@@ -478,6 +477,13 @@ asks.
      label: hero, pitch, evidence, application rail, experiment teaser, or map.
 
    **Pass 4 - verification gate.**
+
+   Status: completed 2026-05-18. Build, postbuild link check, route smoke, and
+   desktop/tablet/mobile visual overflow checks passed. Human-read check passed:
+   the homepage now summarizes as "claim, pillars, applications." Tail cleanup
+   closed the two nonblocking findings: the dormant Pushable Occluder rail card
+   with the missing gallery fragment was removed from source, and the static
+   app-grid CSS tail had already been stripped during Pass 2/3.
 
    - Run:
 
