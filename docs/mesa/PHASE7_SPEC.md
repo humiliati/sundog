@@ -420,6 +420,13 @@ after the go decision below clears.
 > [`PHASE7_V2_RESULTS.md`](PHASE7_V2_RESULTS.md). v2 is a sibling to v1,
 > not a successor; the v1 22-cell classification in
 > [`PHASE7_RESULTS.md`](PHASE7_RESULTS.md) is unchanged.
+>
+> **v3 spec filed (2026-05-18).** The v2 caveat (basin-attractor
+> avoidance vs co-pointing fixed-attractor collapse for `λ=0.99` Large)
+> drives Phase 7 v3: a Phase-4-style causal intervention battery on the
+> six Large cliff-subset checkpoints. Spec at
+> [`PHASE7_V3_SPEC.md`](PHASE7_V3_SPEC.md). Read-only over existing
+> checkpoints; no new training; ~60–70 minutes operator wall-clock.
 
 ### 14.1 Compute model (load-bearing context)
 
