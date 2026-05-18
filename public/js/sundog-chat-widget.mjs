@@ -26,8 +26,8 @@ async function initAskSundog() {
   root.id = ROOT_ID;
   root.className = "sd-chat-widget";
   root.innerHTML = `
-    <button class="sd-chat-launch" type="button" aria-expanded="false" aria-controls="sd-chat-panel">
-      Ask Sundog
+    <button class="sd-chat-launch" type="button" aria-label="Ask Sundog help" aria-expanded="false" aria-controls="sd-chat-panel">
+      <span class="sd-chat-launch__label">Help</span>
     </button>
     <section class="sd-chat-panel" id="sd-chat-panel" hidden aria-label="Ask Sundog">
       <header class="sd-chat-header">

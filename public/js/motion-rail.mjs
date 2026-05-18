@@ -26,8 +26,9 @@
  *                          on init.
  *
  * End of sequence:
- *   The last card settles in armed state. data-rail-state="settled".
- *   The persistent replay arrow button restarts from card 1.
+ *   The controller wraps last -> first and first -> last so the rail can
+ *   keep moving in either direction. The replay arrow remains a reset affordance
+ *   after manual takeover.
  */
 
 const RAIL_SELECTOR = "[data-motion-rail]";
@@ -36,6 +37,7 @@ const ACTIVE_ATTR = "data-rail-active";
 const ARMED_ATTR = "data-stamp-armed";
 const ARMED_JUST_FIRED_ATTR = "data-stamp-armed-just-fired";
 const RAIL_STATE_ATTR = "data-rail-state";
+const LOOP_CLONE_ATTR = "data-rail-clone";
 const STAMP_CLASS = "sd-verdict-stamp";
 const PREV_SELECTOR = "[data-rail-prev]";
 const NEXT_SELECTOR = "[data-rail-next]";
@@ -96,8 +98,17 @@ function initMotionRail() {
     userDriven: false,
     /** Track whether we're currently in a pause condition (hover/focus). */
     paused: false,
+    /** Circular-scroll clone buffers for the visual infinite rail. */
+    loopEnabled: false,
+    loopSpan: 0,
+    loopJumping: false,
+    beforeClones: [],
+    afterClones: [],
+    /** Direction of the current programmed move: -1, 0, or 1. */
+    moveDirection: 0,
   };
 
+  setupCircularScroll(state);
   setupActiveTracking(state);
   wireSkipArrows(state);
   wireKeyboardNavigation(state);
@@ -246,9 +257,80 @@ function applyActiveFlags(state) {
   }
 }
 
+function setupCircularScroll(state) {
+  if (state.cards.length < 2) return;
+
+  const before = document.createDocumentFragment();
+  const after = document.createDocumentFragment();
+  state.beforeClones = state.cards.map((card, index) => cloneLoopCard(card, "before", index));
+  state.afterClones = state.cards.map((card, index) => cloneLoopCard(card, "after", index));
+
+  for (const clone of state.beforeClones) before.appendChild(clone);
+  for (const clone of state.afterClones) after.appendChild(clone);
+  state.track.insertBefore(before, state.track.firstChild);
+  state.track.appendChild(after);
+  state.loopEnabled = true;
+
+  window.requestAnimationFrame(() => {
+    state.loopSpan = state.track.scrollWidth / 3;
+  });
+
+  state.track.addEventListener("scroll", () => maintainCircularScroll(state), { passive: true });
+}
+
+function cloneLoopCard(card, position, index) {
+  const clone = card.cloneNode(true);
+  clone.setAttribute(LOOP_CLONE_ATTR, position);
+  clone.dataset.railCloneIndex = String(index);
+  clone.setAttribute("aria-hidden", "true");
+  clone.removeAttribute(ACTIVE_ATTR);
+  clone.removeAttribute(ARMED_ATTR);
+  clone.removeAttribute(ARMED_JUST_FIRED_ATTR);
+
+  for (const focusable of clone.querySelectorAll("a, button, input, select, textarea, [tabindex]")) {
+    focusable.setAttribute("tabindex", "-1");
+  }
+
+  return clone;
+}
+
+function maintainCircularScroll(state) {
+  if (!state.loopEnabled || state.loopJumping) return;
+  const span = state.loopSpan || state.track.scrollWidth / 3;
+  if (!Number.isFinite(span) || span <= 0) return;
+
+  const low = span * 0.5;
+  const high = span * 1.5;
+  let delta = 0;
+  if (state.track.scrollLeft < low) {
+    delta = span;
+  } else if (state.track.scrollLeft > high) {
+    delta = -span;
+  }
+  if (delta === 0) return;
+
+  state.loopJumping = true;
+  state.track.scrollLeft += delta;
+  window.requestAnimationFrame(() => {
+    state.loopJumping = false;
+  });
+}
+
 function centreCard(state, index, { instant = false } = {}) {
-  const card = state.cards[index];
+  let card = state.cards[index];
   if (!card) return;
+  if (state.loopEnabled) {
+    if (state.moveDirection > 0 && index === 0 && state.afterClones[0]) {
+      card = state.afterClones[0];
+    } else if (
+      state.moveDirection < 0 &&
+      index === state.cards.length - 1 &&
+      state.beforeClones[state.cards.length - 1]
+    ) {
+      card = state.beforeClones[state.cards.length - 1];
+    }
+  }
+  state.moveDirection = 0;
   const track = state.track;
   // Scroll ONLY the rail's own horizontal track. Element.scrollIntoView()
   // walks every scrollable ancestor up to the document, so each auto-cycle
@@ -312,13 +394,8 @@ function onClipEnd(state) {
 
 function onDwellEnd(state) {
   if (state.userDriven) return;
-  const nextIndex = state.activeIndex + 1;
-  if (nextIndex >= state.cards.length) {
-    state.phase = "settled";
-    setRailState(state, "settled");
-    return;
-  }
-  state.activeIndex = nextIndex;
+  state.activeIndex = wrapIndex(state, state.activeIndex + 1);
+  state.moveDirection = 1;
   startClipPhase(state);
 }
 
@@ -441,14 +518,19 @@ function wireKeyboardNavigation(state) {
     }
 
     event.preventDefault();
-    const clampedIndex = Math.max(0, Math.min(state.cards.length - 1, targetIndex));
-    if (clampedIndex === state.activeIndex) {
+    const nextIndex = event.key === "Home" || event.key === "End"
+      ? Math.max(0, Math.min(state.cards.length - 1, targetIndex))
+      : targetIndex;
+    const resolvedIndex = event.key === "Home" || event.key === "End"
+      ? nextIndex
+      : wrapIndex(state, nextIndex);
+    if (resolvedIndex === state.activeIndex) {
       armStamp(state.cards[state.activeIndex]);
       goUserDriven(state);
       return;
     }
 
-    skipTo(state, clampedIndex);
+    skipTo(state, nextIndex);
   });
 }
 
@@ -464,15 +546,29 @@ function wireManualTakeover(state) {
 }
 
 function skipTo(state, targetIndex) {
-  const clamped = Math.max(0, Math.min(state.cards.length - 1, targetIndex));
-  if (clamped === state.activeIndex) return;
+  const wrapped = wrapIndex(state, targetIndex);
+  if (wrapped === state.activeIndex) return;
 
   armStamp(state.cards[state.activeIndex]);
   goUserDriven(state);
 
-  state.activeIndex = clamped;
-  setActive(state, clamped);
-  centreCard(state, clamped, { instant: reducedMotionQuery.matches });
+  state.moveDirection = movementDirection(state, targetIndex, wrapped);
+  state.activeIndex = wrapped;
+  setActive(state, wrapped);
+  centreCard(state, wrapped, { instant: reducedMotionQuery.matches });
+}
+
+function movementDirection(state, targetIndex, wrappedIndex) {
+  const count = state.cards.length;
+  if (targetIndex >= count) return 1;
+  if (targetIndex < 0) return -1;
+  return Math.sign(wrappedIndex - state.activeIndex);
+}
+
+function wrapIndex(state, index) {
+  const count = state.cards.length;
+  if (count <= 0) return 0;
+  return ((index % count) + count) % count;
 }
 
 function goUserDriven(state) {
