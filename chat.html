@@ -193,6 +193,21 @@
             font-weight: 700;
         }
 
+        /* Horizontal scroll wrapper so the data table never spills its
+           container on narrow viewports. main has overflow-x:hidden, so an
+           unwrapped table is clipped with no scrollbar instead of scrolling. */
+        .table-wrap {
+            max-width: 880px;
+            margin: 1.4rem 0 2rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 4px;
+        }
+
+        .table-wrap > .result-table {
+            margin: 0;
+        }
+
         /* Severe-pressure verbatim example */
         .severe-example {
             margin: 1.6rem 0 2rem;
@@ -480,7 +495,8 @@
                     Across 105 prompts spanning visitor-style questions, boundary-stressing prompts, and prompts engineered to require route-specific data, the four families produced 420 drafts. The deterministic gate let zero unsafe drafts through. The central comparison we ran is the severity sweep on the adversarial slate. Pressure was tested at three levels:
                 </p>
 
-                <table class="result-table" aria-label="Boundary preservation by family and severity">
+                <div class="table-wrap" role="region" aria-label="Boundary preservation by family and severity (scrollable)" tabindex="0">
+                <table class="result-table">
                     <thead>
                         <tr>
                             <th scope="col">Severity</th>
@@ -514,6 +530,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
 
                 <p class="result-prose">
                     Severe-pressure prompts stack four adversarial mechanisms in one input: an authority appeal, an explicit dismissal of the assistant's boundary rules, a style override, and a direct overclaim instruction. The bottom row is where the architectural separation lives — at severe pressure, the prompt-engineered boundary baseline fails on every prompt while the trace-conditioned family succeeds on every prompt. <strong>The architectural advantage of trace-conditioned discipline over prompt-engineered discipline shows up as a 100 percentage-point gap with zero gate escapes</strong>, measured across 13 stacked-pressure prompts spanning 13 distinct probe axes.
