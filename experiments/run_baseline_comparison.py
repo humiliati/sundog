@@ -49,7 +49,10 @@ import numpy as np
 from sundog.env_v2 import SundogEnvV2, Observation, Oracle, N_DETECTORS
 from sundog.agents.photometric import PhotometricAgent
 from sundog.agents.baselines import DOADirectAgent, DOANoisyAgent, RandomAgent
-from sundog.agents.bayes_particle import BayesParticleAgent
+from sundog.agents.bayes_particle import (
+    BAYES_PARTICLE_STRUCTURE_FILTERS,
+    BayesParticleAgent,
+)
 from sundog.experiments.analysis import (
     CONVERGENCE_THRESHOLD,
     TERMINAL_WINDOW,
@@ -227,6 +230,16 @@ PHASE6_NOMINAL_DETECTOR_NOISE = 0.0
 PHASE6_SMOKE_CELLS = ["nominal", "beam_sigma_0p40", "detector_noise_0p20"]
 PHASE6_LIVE_ANCHOR_CONDITIONS = ["photometric", "doa_direct"]
 PHASE6_LIVE_ANCHOR_ATOL = 1e-12
+PHASE6B_STRUCTURE_FILTERS = ["s0", "s1", "s2", "s3"]
+PHASE6B_SMOKE_STRUCTURE_FILTERS = ["s0", "s3"]
+PHASE6_LOCK_NOMINAL_BAYES_REFERENCE = os.path.join(
+    "results",
+    "bayes",
+    "phase6-photometric-lock",
+    "episodes",
+    "nominal",
+    "bayes_particle",
+)
 
 
 @dataclass(frozen=True)
@@ -235,6 +248,7 @@ class Phase6Cell:
     axis: str
     beam_sigma: float
     detector_noise_sigma: float
+    structure_filter: str = "s0"
 
 
 def _level_id(value: float) -> str:
@@ -281,6 +295,29 @@ def phase6_cells(kind: str) -> list[Phase6Cell]:
     raise ValueError(f"unknown phase6 cell set: {kind}")
 
 
+def phase6b_cells(kind: str) -> list[Phase6Cell]:
+    filters = PHASE6B_SMOKE_STRUCTURE_FILTERS if kind == "smoke" else PHASE6B_STRUCTURE_FILTERS
+    if kind not in {"smoke", "lock"}:
+        raise ValueError(f"unknown phase6b cell set: {kind}")
+    invalid = sorted(set(filters) - set(BAYES_PARTICLE_STRUCTURE_FILTERS))
+    if invalid:
+        raise ValueError(f"unknown Phase 6b structure filter(s): {invalid}")
+    return [
+        Phase6Cell(
+            cell_id=f"nominal_structure_{structure_filter}",
+            axis="structure",
+            beam_sigma=PHASE6_NOMINAL_BEAM_SIGMA,
+            detector_noise_sigma=PHASE6_NOMINAL_DETECTOR_NOISE,
+            structure_filter=structure_filter,
+        )
+        for structure_filter in filters
+    ]
+
+
+def is_phase6b_phase(phase: str | None) -> bool:
+    return bool(phase and phase.startswith("phase6b"))
+
+
 def _phase6_stressor(cell: Phase6Cell) -> Stressor:
     return Stressor(
         beam_sigma=cell.beam_sigma,
@@ -296,6 +333,7 @@ def _make_phase6_live_agent(
     oracle: Oracle,
     env: SundogEnvV2,
     particle_count: int,
+    structure_filter: str = "s0",
 ):
     if condition == "photometric":
         agent = PhotometricAgent(
@@ -328,12 +366,13 @@ def _make_phase6_live_agent(
             target_detector_pos=oracle.target_detector_pos,
             target_detector_index=oracle.target_detector_index,
             joint_limit=stressor.joint_limit,
+            structure_filter=structure_filter,
         )
     raise ValueError(f"unknown Phase 6 condition: {condition}")
 
 
 def _phase6_reference_episode_path(cell: Phase6Cell, condition: str, seed: int) -> str:
-    if cell.axis == "nominal":
+    if cell.axis in {"nominal", "structure"}:
         return os.path.join("results", condition, f"seed_{seed:03d}.npz")
     if cell.axis == "beam_sigma":
         return os.path.join(
@@ -374,6 +413,7 @@ def run_phase6_live_episode(
     seed: int,
     particle_count: int,
     n_steps: int = N_STEPS,
+    structure_filter: str = "s0",
 ) -> dict:
     """Run one Phase 6 lane through the live env/stressor/seed orchestration."""
     laser_xy = laser_xy_for_seed(seed)
@@ -399,6 +439,7 @@ def run_phase6_live_episode(
         oracle,
         env,
         particle_count,
+        structure_filter=structure_filter,
     )
 
     target_intensity = np.empty(n_steps, dtype=np.float64)
@@ -492,6 +533,14 @@ def phase6_classify_cell(cell_summary: dict[str, dict]) -> dict:
     }
 
 
+def phase6b_exit_status(class_rows: list[dict], cells: list[Phase6Cell], anchor_pass: bool) -> str:
+    if len(class_rows) != len(cells) or not anchor_pass:
+        return "envelope_incomplete"
+    if any(row.get("class") == "photometric_dominant" for row in class_rows):
+        return "response_edge_transfers"
+    return "core_task_bayes_speed_dominant"
+
+
 def _load_reference_target(path: str) -> np.ndarray:
     return np.load(path)["target_intensity"]
 
@@ -575,6 +624,79 @@ def _live_anchor_checks_for_cell(
     return checks
 
 
+def _phase6b_structure_s0_nest_report(
+    phase_cells: list[Phase6Cell],
+    trial_series: dict[tuple[str, str, int], np.ndarray],
+    seeds: int,
+    n_steps: int,
+    particle_count: int,
+) -> dict:
+    s0_cells = [cell for cell in phase_cells if cell.structure_filter == "s0"]
+    if len(s0_cells) != 1:
+        return {
+            "checked": False,
+            "status": "missing_s0_cell",
+            "pass": False,
+            "expectedS0Cells": 1,
+            "actualS0Cells": len(s0_cells),
+        }
+    s0_cell = s0_cells[0]
+    reference_particle_count = 128
+    use_trial_series = particle_count == reference_particle_count
+    stressor = _phase6_stressor(s0_cell)
+    env = SundogEnvV2(sigma=stressor.beam_sigma, seed=0)
+    checks = []
+    for seed in range(seeds):
+        if use_trial_series:
+            key = (s0_cell.cell_id, "bayes_particle", seed)
+            if key not in trial_series:
+                checks.append({
+                    "pass": False,
+                    "seed": seed,
+                    "reason": "missing s0 bayes_particle trial series",
+                    "max_abs_diff": None,
+                })
+                continue
+            actual = trial_series[key]
+            actual_source = "phase6b_trial_series"
+        else:
+            rec = run_phase6_live_episode(
+                env,
+                "bayes_particle",
+                stressor,
+                seed=seed,
+                particle_count=reference_particle_count,
+                n_steps=n_steps,
+                structure_filter="s0",
+            )
+            actual = rec["target_intensity"]
+            actual_source = "auxiliary_s0_live_reexecution_at_reference_particle_count"
+        path = os.path.join(
+            PHASE6_LOCK_NOMINAL_BAYES_REFERENCE,
+            f"seed_{seed:03d}.npz",
+        )
+        check = _compare_reference_series(actual, path)
+        check["seed"] = seed
+        check["actualSource"] = actual_source
+        checks.append(check)
+    return {
+        "checked": True,
+        "status": "reproduced_phase6_lock_nominal_bayes_particle",
+        "reference": PHASE6_LOCK_NOMINAL_BAYES_REFERENCE,
+        "referenceBasis": "seed_matched_phase6_lock_episode_npz",
+        "phase6bRunParticleCount": particle_count,
+        "referenceParticleCount": reference_particle_count,
+        "cell_id": s0_cell.cell_id,
+        "structure_filter": s0_cell.structure_filter,
+        "checks": checks,
+        "max_abs_diff": max(
+            float(check["max_abs_diff"] or 0.0)
+            for check in checks
+        ) if checks else None,
+        "pass": all(check["pass"] for check in checks),
+    }
+
+
 def phase6_anchor_report(
     out_dir: str,
     phase_cells: list[Phase6Cell],
@@ -583,6 +705,7 @@ def phase6_anchor_report(
     seeds: int,
     n_steps: int,
     particle_count: int,
+    phase6b: bool = False,
 ) -> dict:
     report: dict = {
         "status": "pass",
@@ -592,14 +715,27 @@ def phase6_anchor_report(
         "stressPhotometric": [],
         "analysisSummaryAggregate": {"checked": False},
         "tests": {},
+        "structureS0Nest": {"checked": False},
         "passComponents": {},
     }
 
-    nominal = summaries.get("nominal", {})
+    if phase6b:
+        nominal_cell = next(
+            (cell for cell in phase_cells if cell.structure_filter == "s0"),
+            phase_cells[0],
+        )
+    else:
+        nominal_cell = next(
+            (cell for cell in phase_cells if cell.axis == "nominal"),
+            phase_cells[0],
+        )
+    nominal_cell_id = nominal_cell.cell_id
+    nominal = summaries.get(nominal_cell_id, {})
+    report["nominalCellId"] = nominal_cell_id
     for condition in ["photometric", "doa_direct"]:
         replay_checks = []
         for seed in range(seeds):
-            key = ("nominal", condition, seed)
+            key = (nominal_cell_id, condition, seed)
             if key not in trial_series:
                 continue
             path = os.path.join("results", condition, f"seed_{seed:03d}.npz")
@@ -607,7 +743,7 @@ def phase6_anchor_report(
         live_checks = []
         if condition in PHASE6_LIVE_ANCHOR_CONDITIONS:
             live_checks = _live_anchor_checks_for_cell(
-                phase_cells[0],
+                nominal_cell,
                 condition,
                 seeds=seeds,
                 particle_count=particle_count,
@@ -654,11 +790,11 @@ def phase6_anchor_report(
         if "photometric" in nominal and "doa_direct" in nominal:
             p_vals = [
                 row["terminal_intensity"]
-                for row in trial_metrics_for_cell(out_dir, "nominal", "photometric")
+                for row in trial_metrics_for_cell(out_dir, nominal_cell_id, "photometric")
             ]
             d_vals = [
                 row["terminal_intensity"]
-                for row in trial_metrics_for_cell(out_dir, "nominal", "doa_direct")
+                for row in trial_metrics_for_cell(out_dir, nominal_cell_id, "doa_direct")
             ]
             u, p = mann_whitney_u(np.asarray(p_vals), np.asarray(d_vals))
             expected_test = analysis["tests"]["photometric_vs_doa_direct_terminal_intensity"]
@@ -688,6 +824,59 @@ def phase6_anchor_report(
             "checked": False,
             "reason": "strict seed-prefix smoke; full 30-seed aggregate checked only on lock",
         }
+
+    if phase6b:
+        report["structureS0Nest"] = _phase6b_structure_s0_nest_report(
+            phase_cells,
+            trial_series,
+            seeds,
+            n_steps,
+            particle_count,
+        )
+        report["stressPhotometric"] = {
+            "status": "not_applicable",
+            "reason": "Phase 6b nominal-only structure ladder has no stress cells",
+        }
+        nominal_pass = all(
+            entry.get("liveReexecutionPass", False)
+            for entry in report["nominal"].values()
+            if isinstance(entry, dict) and "liveReexecutionPass" in entry
+        )
+        aggregate = report["analysisSummaryAggregate"]
+        if aggregate.get("checked"):
+            analysis_aggregate_pass: bool | str = True
+            for checks in aggregate["conditions"].values():
+                analysis_aggregate_pass = bool(analysis_aggregate_pass) and all(
+                    check["pass"] for check in checks
+                )
+        else:
+            analysis_aggregate_pass = "lock_only"
+        if report["tests"]:
+            tests_pass: bool | str = True
+            for test in report["tests"].values():
+                tests_pass = bool(tests_pass) and all(
+                    check["pass"] for check in test["checks"]
+                )
+        else:
+            tests_pass = "lock_only"
+        structure_pass = bool(report["structureS0Nest"].get("pass", False))
+        report["passComponents"] = {
+            "nominalLiveReexecution": bool(nominal_pass),
+            "stressLiveReexecution": "not_applicable",
+            "analysisSummaryAggregate": analysis_aggregate_pass,
+            "mannWhitneyTests": tests_pass,
+            "stressSweepAggregate": "not_applicable",
+            "structureS0Nest": structure_pass,
+        }
+        applicable = [nominal_pass, structure_pass]
+        if isinstance(analysis_aggregate_pass, bool):
+            applicable.append(analysis_aggregate_pass)
+        if isinstance(tests_pass, bool):
+            applicable.append(tests_pass)
+        report["pass"] = all(bool(value) for value in applicable)
+        if not report["pass"]:
+            report["status"] = "anchor_mismatch"
+        return report
 
     for cell in phase_cells:
         if cell.axis == "nominal":
@@ -841,6 +1030,7 @@ def save_phase6_episode(
         phase6_cell_id=cell.cell_id,
         beam_sigma=cell.beam_sigma,
         detector_noise_sigma=cell.detector_noise_sigma,
+        structure_filter=cell.structure_filter,
     )
 
 
@@ -854,7 +1044,8 @@ def write_csv(path: str, rows: list[dict], fieldnames: list[str]) -> None:
 
 def run_phase6(args: argparse.Namespace) -> None:
     cell_kind = args.phase6_cells
-    cells = phase6_cells(cell_kind)
+    phase6b = is_phase6b_phase(args.phase)
+    cells = phase6b_cells(cell_kind) if phase6b else phase6_cells(cell_kind)
     conditions = args.conditions or PHASE6_CONDITIONS
     for condition in conditions:
         if condition not in PHASE6_CONDITIONS:
@@ -893,6 +1084,7 @@ def run_phase6(args: argparse.Namespace) -> None:
                         seed=seed,
                         particle_count=args.particle_count,
                         n_steps=args.steps,
+                        structure_filter=cell.structure_filter,
                     )
                 else:
                     rec = load_phase6_reference_episode(cell, condition, seed)
@@ -906,6 +1098,7 @@ def run_phase6(args: argparse.Namespace) -> None:
                     "axis": cell.axis,
                     "beam_sigma": cell.beam_sigma,
                     "detector_noise_sigma": cell.detector_noise_sigma,
+                    "structure_filter": cell.structure_filter,
                     "condition": condition,
                     "seed": seed,
                     "terminal_intensity": metrics["terminal_intensity"],
@@ -932,6 +1125,7 @@ def run_phase6(args: argparse.Namespace) -> None:
                 "axis": cell.axis,
                 "beam_sigma": cell.beam_sigma,
                 "detector_noise_sigma": cell.detector_noise_sigma,
+                "structure_filter": cell.structure_filter,
                 "condition": condition,
                 "n_seeds": agg["n_seeds"],
                 "median_time_to_threshold": agg["time_to_threshold"]["median"],
@@ -951,6 +1145,7 @@ def run_phase6(args: argparse.Namespace) -> None:
             "axis": cell.axis,
             "beam_sigma": cell.beam_sigma,
             "detector_noise_sigma": cell.detector_noise_sigma,
+            "structure_filter": cell.structure_filter,
             "class": classification["class"],
             "best_condition": classification["best_condition"],
             "runner_up": classification.get("runner_up", ""),
@@ -959,6 +1154,7 @@ def run_phase6(args: argparse.Namespace) -> None:
         })
         best_rows.append({
             "cell_id": cell.cell_id,
+            "structure_filter": cell.structure_filter,
             "best_condition": classification["best_condition"],
             "class": classification["class"],
             "median_time_to_threshold": (
@@ -986,6 +1182,7 @@ def run_phase6(args: argparse.Namespace) -> None:
             "axis",
             "beam_sigma",
             "detector_noise_sigma",
+            "structure_filter",
             "condition",
             "seed",
             "terminal_intensity",
@@ -1001,6 +1198,7 @@ def run_phase6(args: argparse.Namespace) -> None:
             "axis",
             "beam_sigma",
             "detector_noise_sigma",
+            "structure_filter",
             "condition",
             "n_seeds",
             "median_time_to_threshold",
@@ -1022,6 +1220,7 @@ def run_phase6(args: argparse.Namespace) -> None:
             "axis",
             "beam_sigma",
             "detector_noise_sigma",
+            "structure_filter",
             "class",
             "best_condition",
             "runner_up",
@@ -1037,7 +1236,7 @@ def run_phase6(args: argparse.Namespace) -> None:
     write_csv(
         os.path.join(out_dir, "best-by-cell.csv"),
         best_rows,
-        ["cell_id", "best_condition", "class", "median_time_to_threshold"],
+        ["cell_id", "structure_filter", "best_condition", "class", "median_time_to_threshold"],
     )
 
     anchor = phase6_anchor_report(
@@ -1048,15 +1247,21 @@ def run_phase6(args: argparse.Namespace) -> None:
         seeds=args.seeds,
         n_steps=args.steps,
         particle_count=args.particle_count,
+        phase6b=phase6b,
     )
     completed_at = time.time()
     status = (
-        "envelope_mapped"
-        if len(class_rows) == len(cells) and anchor["pass"]
-        else "envelope_incomplete"
+        phase6b_exit_status(class_rows, cells, anchor["pass"])
+        if phase6b
+        else (
+            "envelope_mapped"
+            if len(class_rows) == len(cells) and anchor["pass"]
+            else "envelope_incomplete"
+        )
     )
     manifest = {
         "phase": args.phase,
+        "phaseFamily": "phase6b-structure" if phase6b else "phase6-photometric",
         "status": status,
         "pass": True,
         "startedAt": started,
@@ -1072,6 +1277,11 @@ def run_phase6(args: argparse.Namespace) -> None:
         "cells": [cell.__dict__ for cell in cells],
         "cellClasses": class_rows,
         "classCounts": class_counts,
+        "phase6bExitDeterminant": (
+            "photometric_dominant_present"
+            if phase6b and any(row.get("class") == "photometric_dominant" for row in class_rows)
+            else ("no_photometric_dominant_cells" if phase6b else None)
+        ),
         "summaries": summaries,
         "anchor": anchor,
         "tests": anchor.get("tests", {}),
@@ -1084,6 +1294,18 @@ def run_phase6(args: argparse.Namespace) -> None:
             "assumedBeamSigma": PHASE6_NOMINAL_BEAM_SIGMA,
             "assumedDetectorNoiseSigma": PHASE6_NOMINAL_DETECTOR_NOISE,
             "likelihood": "negative squared residual against nominal noiseless detector intensities",
+            "phase6bStructureFilters": (
+                PHASE6B_STRUCTURE_FILTERS if phase6b else None
+            ),
+            "phase6bStructureSemantics": (
+                {
+                    "s0": "identity-passthrough Phase 6 nominal reflected likelihood",
+                    "s1": "no-reflection assumed likelihood",
+                    "s2": "target-detector-only assumed likelihood",
+                    "s3": "uninformative assumed likelihood",
+                }
+                if phase6b else None
+            ),
         },
     }
     with open(os.path.join(out_dir, "manifest.json"), "w") as f:
@@ -1148,6 +1370,7 @@ def load_phase6_existing_state(
             "axis": cell.axis,
             "beam_sigma": cell.beam_sigma,
             "detector_noise_sigma": cell.detector_noise_sigma,
+            "structure_filter": cell.structure_filter,
             "class": classification["class"],
             "best_condition": classification["best_condition"],
             "runner_up": classification.get("runner_up", ""),
@@ -1168,7 +1391,8 @@ def reemit_phase6_manifest(args: argparse.Namespace) -> None:
     with open(manifest_path) as f:
         manifest = json.load(f)
 
-    cells = phase6_cells(args.phase6_cells)
+    phase6b = is_phase6b_phase(args.phase or manifest.get("phase"))
+    cells = phase6b_cells(args.phase6_cells) if phase6b else phase6_cells(args.phase6_cells)
     conditions = args.conditions or manifest.get("conditions") or PHASE6_CONDITIONS
     summaries, trial_series, class_rows, class_counts = load_phase6_existing_state(
         out_dir=out_dir,
@@ -1184,14 +1408,20 @@ def reemit_phase6_manifest(args: argparse.Namespace) -> None:
         seeds=args.seeds,
         n_steps=args.steps,
         particle_count=args.particle_count,
+        phase6b=phase6b,
     )
     status = (
-        "envelope_mapped"
-        if len(class_rows) == len(cells) and anchor["pass"]
-        else "envelope_incomplete"
+        phase6b_exit_status(class_rows, cells, anchor["pass"])
+        if phase6b
+        else (
+            "envelope_mapped"
+            if len(class_rows) == len(cells) and anchor["pass"]
+            else "envelope_incomplete"
+        )
     )
     manifest.update({
         "phase": args.phase or manifest.get("phase"),
+        "phaseFamily": "phase6b-structure" if phase6b else "phase6-photometric",
         "status": status,
         "pass": True,
         "seeds": args.seeds,
@@ -1201,6 +1431,11 @@ def reemit_phase6_manifest(args: argparse.Namespace) -> None:
         "cells": [cell.__dict__ for cell in cells],
         "cellClasses": class_rows,
         "classCounts": class_counts,
+        "phase6bExitDeterminant": (
+            "photometric_dominant_present"
+            if phase6b and any(row.get("class") == "photometric_dominant" for row in class_rows)
+            else ("no_photometric_dominant_cells" if phase6b else None)
+        ),
         "summaries": summaries,
         "anchor": anchor,
         "tests": anchor.get("tests", {}),

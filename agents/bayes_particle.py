@@ -16,7 +16,9 @@ from sundog import optics
 from sundog.env_v2 import Observation, TARGET_DETECTOR_INDEX
 
 
-_ACTION_CACHE: dict[tuple[int, int, int, float], tuple[np.ndarray, np.ndarray]] = {}
+BAYES_PARTICLE_STRUCTURE_FILTERS = ("s0", "s1", "s2", "s3")
+
+_ACTION_CACHE: dict[tuple[int, int, int, float, str], tuple[np.ndarray, np.ndarray]] = {}
 
 
 class BayesParticleAgent:
@@ -32,6 +34,7 @@ class BayesParticleAgent:
         joint_limit: float = optics.JOINT_LIMIT,
         assumed_sigma: float = optics.DEFAULT_SIGMA,
         laser_z: float = 2.5,
+        structure_filter: str = "s0",
     ):
         self.particle_count = int(particle_count)
         if self.particle_count <= 0:
@@ -43,12 +46,16 @@ class BayesParticleAgent:
         self.joint_limit = float(joint_limit)
         self.assumed_sigma = float(assumed_sigma)
         self.laser_z = float(laser_z)
+        if structure_filter not in BAYES_PARTICLE_STRUCTURE_FILTERS:
+            raise ValueError(f"unknown Bayes particle structure filter: {structure_filter}")
+        self.structure_filter = structure_filter
 
         cache_key = (
             self.particle_count,
             self.seed,
             self.target_detector_index,
             round(self.joint_limit, 12),
+            self.structure_filter,
         )
         cached = _ACTION_CACHE.get(cache_key)
         if cached is None:
@@ -97,7 +104,7 @@ class BayesParticleAgent:
                 )[self.target_detector_index]
         return matrix
 
-    def _predict_for_action(self, laser_pos: np.ndarray, action: np.ndarray) -> np.ndarray:
+    def _predict_reflected(self, laser_pos: np.ndarray, action: np.ndarray) -> np.ndarray:
         normal = optics.joint_angles_to_mirror_normal(float(action[0]), float(action[1]))
         mirror_pos = optics.mirror_position_from_normal(normal)
         return optics.compute_detector_intensities(
@@ -107,6 +114,39 @@ class BayesParticleAgent:
             detector_positions=self.detector_positions,
             sigma=self.assumed_sigma,
         )
+
+    def _predict_no_reflection(self, laser_pos: np.ndarray, action: np.ndarray) -> np.ndarray:
+        normal = optics.joint_angles_to_mirror_normal(float(action[0]), float(action[1]))
+        mirror_pos = optics.mirror_position_from_normal(normal)
+        incident = mirror_pos - laser_pos
+        incident_norm = np.linalg.norm(incident)
+        if incident_norm < 1e-9:
+            return np.zeros(self.detector_positions.shape[0])
+        hit = optics.floor_hit(mirror_pos, incident / incident_norm)
+        if hit is None:
+            return np.zeros(self.detector_positions.shape[0])
+        intensities = np.empty(self.detector_positions.shape[0])
+        for i in range(self.detector_positions.shape[0]):
+            intensities[i] = optics.gaussian_intensity(
+                hit,
+                self.detector_positions[i],
+                self.assumed_sigma,
+            )
+        return intensities
+
+    def _predict_for_action(self, laser_pos: np.ndarray, action: np.ndarray) -> np.ndarray:
+        if self.structure_filter == "s0":
+            return self._predict_reflected(laser_pos, action)
+        if self.structure_filter == "s1":
+            return self._predict_no_reflection(laser_pos, action)
+        if self.structure_filter == "s2":
+            intensities = np.zeros(self.detector_positions.shape[0])
+            intensities[self.target_detector_index] = self._predict_reflected(
+                laser_pos,
+                action,
+            )[self.target_detector_index]
+            return intensities
+        return np.zeros(self.detector_positions.shape[0])
 
     def _predict_current(self, xy: np.ndarray, joint_angles: np.ndarray) -> np.ndarray:
         laser_pos = np.array([xy[0], xy[1], self.laser_z], dtype=np.float64)
