@@ -1940,6 +1940,24 @@ $env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparis
 $env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6b-structure-lock --results-dir results/bayes/phase6b-structure-lock --phase6-cells lock --seeds 30 --steps 500 --particle-count 128 --conditions photometric doa_direct doa_noisy random bayes_particle
 ```
 
+Smoke receipt, 2026-05-18:
+
+```text
+$env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6b-structure-smoke --results-dir results/bayes/phase6b-structure-smoke --phase6-cells smoke --seeds 6 --steps 500 --particle-count 64 --conditions photometric doa_direct doa_noisy random bayes_particle
+Photometric phase6b-structure-smoke: 60 trials in 73.615s (0.82 trials/s)
+Audits: pass
+Exit gate: core_task_bayes_speed_dominant (2/2 cells classified)
+```
+
+Smoke anchor: **pass**. `structureS0Nest` reproduces the Phase 6 lock nominal
+`bayes_particle` reference with `max_abs_diff = 0.0` via the auxiliary
+128-particle s0 live re-execution; the reported smoke cells remain the frozen
+64-particle endpoints. `stressLiveReexecution` and `stressSweepAggregate` are
+recorded as `not_applicable`; aggregate and Mann-Whitney checks are
+`lock_only`. Both endpoint cells are `bayes_particle_dominant`:
+`nominal_structure_s0` lead 178.0 / ci95 half-width 1.0, and
+`nominal_structure_s3` lead 178.0 / ci95 half-width 0.8333333333333339.
+
 ### Phase 7 — Public Visualization and Motion Rail Card
 
 Goal: make the comparison legible on `sundog.cc` without flattening it into
