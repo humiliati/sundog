@@ -541,6 +541,28 @@ def phase6b_exit_status(class_rows: list[dict], cells: list[Phase6Cell], anchor_
     return "core_task_bayes_speed_dominant"
 
 
+def phase6b_smoke_validity(class_rows: list[dict], cells: list[Phase6Cell]) -> dict:
+    by_filter = {
+        cell.structure_filter: next(
+            (row for row in class_rows if row.get("cell_id") == cell.cell_id),
+            {},
+        )
+        for cell in cells
+    }
+    s0_class = by_filter.get("s0", {}).get("class")
+    s3_class = by_filter.get("s3", {}).get("class")
+    s0_pass = s0_class == "bayes_particle_dominant"
+    s3_pass = s3_class != "bayes_particle_dominant"
+    return {
+        "checked": True,
+        "s0Class": s0_class,
+        "s3Class": s3_class,
+        "s0BayesParticleDominant": s0_pass,
+        "s3NotBayesParticleDominant": s3_pass,
+        "pass": bool(s0_pass and s3_pass),
+    }
+
+
 def _load_reference_target(path: str) -> np.ndarray:
     return np.load(path)["target_intensity"]
 
@@ -1250,8 +1272,17 @@ def run_phase6(args: argparse.Namespace) -> None:
         phase6b=phase6b,
     )
     completed_at = time.time()
+    smoke_validity = (
+        phase6b_smoke_validity(class_rows, cells)
+        if phase6b and cell_kind == "smoke"
+        else {"checked": False}
+    )
     status = (
-        phase6b_exit_status(class_rows, cells, anchor["pass"])
+        (
+            "structure_ablation_unresolved"
+            if smoke_validity.get("checked") and not smoke_validity.get("pass")
+            else phase6b_exit_status(class_rows, cells, anchor["pass"])
+        )
         if phase6b
         else (
             "envelope_mapped"
@@ -1277,6 +1308,7 @@ def run_phase6(args: argparse.Namespace) -> None:
         "cells": [cell.__dict__ for cell in cells],
         "cellClasses": class_rows,
         "classCounts": class_counts,
+        "phase6bSmokeValidity": smoke_validity,
         "phase6bExitDeterminant": (
             "photometric_dominant_present"
             if phase6b and any(row.get("class") == "photometric_dominant" for row in class_rows)
@@ -1410,8 +1442,17 @@ def reemit_phase6_manifest(args: argparse.Namespace) -> None:
         particle_count=args.particle_count,
         phase6b=phase6b,
     )
+    smoke_validity = (
+        phase6b_smoke_validity(class_rows, cells)
+        if phase6b and args.phase6_cells == "smoke"
+        else {"checked": False}
+    )
     status = (
-        phase6b_exit_status(class_rows, cells, anchor["pass"])
+        (
+            "structure_ablation_unresolved"
+            if smoke_validity.get("checked") and not smoke_validity.get("pass")
+            else phase6b_exit_status(class_rows, cells, anchor["pass"])
+        )
         if phase6b
         else (
             "envelope_mapped"
@@ -1431,6 +1472,7 @@ def reemit_phase6_manifest(args: argparse.Namespace) -> None:
         "cells": [cell.__dict__ for cell in cells],
         "cellClasses": class_rows,
         "classCounts": class_counts,
+        "phase6bSmokeValidity": smoke_validity,
         "phase6bExitDeterminant": (
             "photometric_dominant_present"
             if phase6b and any(row.get("class") == "photometric_dominant" for row in class_rows)

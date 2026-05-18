@@ -1903,11 +1903,13 @@ rescue a controller, reopen Hybrid, add a new lane, or create a Phase 6c.
 
 Frozen cell set: nominal optics only, `beam_sigma = 0.15` and
 `detector_noise_sigma = 0.0`, crossed with structure rungs `{s0,s1,s2,s3}`.
-The structure ladder affects only the `bayes_particle` assumed likelihood path:
+The structure ladder affects only the `bayes_particle` assumed model:
 `s0` is the Phase 6 identity reflected-likelihood path; `s1` removes
 reflection from the assumed model; `s2` keeps only the target-detector channel;
-`s3` is uninformative. The environment, seed path, detector observations, and
-assumed sigma stay Phase 6 nominal throughout. Lock cells are
+`s3` is uninformative. The same assumed model must drive belief update,
+target-matrix scoring, and candidate-action construction. The environment,
+seed path, detector observations, and assumed sigma stay Phase 6 nominal
+throughout. Lock cells are
 `nominal x {s0,s1,s2,s3}` (4 cells); smoke cells are
 `nominal x {s0,s3}` (2 cells).
 
@@ -1940,7 +1942,7 @@ $env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparis
 $env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6b-structure-lock --results-dir results/bayes/phase6b-structure-lock --phase6-cells lock --seeds 30 --steps 500 --particle-count 128 --conditions photometric doa_direct doa_noisy random bayes_particle
 ```
 
-Smoke receipt, 2026-05-18:
+Void smoke receipt, 2026-05-18:
 
 ```text
 $env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6b-structure-smoke --results-dir results/bayes/phase6b-structure-smoke --phase6-cells smoke --seeds 6 --steps 500 --particle-count 64 --conditions photometric doa_direct doa_noisy random bayes_particle
@@ -1949,14 +1951,73 @@ Audits: pass
 Exit gate: core_task_bayes_speed_dominant (2/2 cells classified)
 ```
 
-Smoke anchor: **pass**. `structureS0Nest` reproduces the Phase 6 lock nominal
-`bayes_particle` reference with `max_abs_diff = 0.0` via the auxiliary
-128-particle s0 live re-execution; the reported smoke cells remain the frozen
-64-particle endpoints. `stressLiveReexecution` and `stressSweepAggregate` are
-recorded as `not_applicable`; aggregate and Mann-Whitney checks are
-`lock_only`. Both endpoint cells are `bayes_particle_dominant`:
-`nominal_structure_s0` lead 178.0 / ci95 half-width 1.0, and
-`nominal_structure_s3` lead 178.0 / ci95 half-width 0.8333333333333339.
+This smoke is **void** and not interpretable. The structure axis did not bite:
+both `s0` and `s3` classified `bayes_particle_dominant`, with median
+`time_to_threshold = 11.0` and `n_failed = 0` in both endpoint cells. Root
+cause: candidate actions were still built by `optics.optimal_joint_angles`, a
+true-optics inverse solver, so each rung retained a privileged optics-optimal
+aim for every hypothesis. The structure filter reweighted belief among
+true-optics actions but did not faithfully control behavior.
+
+Fidelity clarification, frozen before re-smoke: the assumed forward model
+`predict_r(laser_xy, action)` must drive all three Bayes-particle paths:
+belief update, target matrix, and candidate-action construction. `s0` keeps
+`optics.optimal_joint_angles`, preserving the Phase 6 byte-nest, because that
+solver is the exact analytic argmax of the `s0` reflected model. `s1` and `s2`
+must use grid argmax over the shared 11x11 joint-angle lattice from
+`optics.py` (`[-JOINT_LIMIT, JOINT_LIMIT]` on each axis, the same lattice used
+to seed `optimal_joint_angles`). `s3` has `predict_s3 == 0`, so the grid
+argmax ties and all particles map to `G[0]`, yielding a fixed,
+observation-independent action. `_precompute_target_matrix` and `_update`
+remain structure-filtered through `_predict_for_action`.
+
+Sharpened smoke validity gate, frozen before re-smoke: on
+`nominal x {s0,s3}`, `structureS0Nest` must remain `max_abs_diff == 0.0`,
+`s0` must classify `bayes_particle_dominant`, and `s3` must **not** classify
+`bayes_particle_dominant` under the existing ttt-primary + ci95-half-width
+classifier. If `s3` still classifies `bayes_particle_dominant`, the structure
+ablation remains unresolved; stop, do not lock, and do not interpret it as
+`core_task_bayes_speed_dominant`.
+
+Repaired smoke receipt, 2026-05-18:
+
+```text
+$env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6b-structure-smoke --results-dir results/bayes/phase6b-structure-smoke --phase6-cells smoke --seeds 6 --steps 500 --particle-count 64 --conditions photometric doa_direct doa_noisy random bayes_particle
+Photometric phase6b-structure-smoke: 60 trials in 42.569s (1.41 trials/s)
+Audits: pass
+Exit gate: response_edge_transfers (2/2 cells classified)
+```
+
+Repaired smoke anchor and validity: **pass**. `structureS0Nest` remains exact
+against the Phase 6 lock nominal `bayes_particle` receipt
+(`max_abs_diff = 0.0`); `stressLiveReexecution` and `stressSweepAggregate`
+remain `not_applicable`; aggregate and Mann-Whitney checks remain `lock_only`.
+Smoke validity passes: `s0` is `bayes_particle_dominant`, while `s3` is
+`photometric_dominant`, not `bayes_particle_dominant`.
+
+Endpoint rows:
+
+| Cell | Class | Best | Runner-up | Lead | ci95 half-width | Bayes median ttt | Bayes n_failed |
+| --- | --- | --- | --- | ---: | ---: | ---: | ---: |
+| `nominal_structure_s0` | `bayes_particle_dominant` | `bayes_particle` | `photometric` | 178.0 | 1.0 | 11.0 | 0 |
+| `nominal_structure_s3` | `photometric_dominant` | `photometric` | `bayes_particle` | 311.0 | 13.333333333333329 | 500.0 | 6 |
+
+Phase 6b lock-interpretation constraints, frozen before the lock:
+
+1. **Smoke is not the verdict.** The repaired smoke proves only that the
+   endpoint ablation is valid: `s0` still nests the Phase 6 nominal Bayes lane
+   exactly, and `s3` now degrades enough that the structure axis bites. The
+   scientific binary exit is decided only by the 30-seed, 4-cell lock. The
+   smoke headline `response_edge_transfers` is a shape/validity receipt, not a
+   claim-grade conclusion.
+2. **Total collapse is distinct from partial misspecification.** The smoke
+   flip occurs only at `s3`, where `predict_s3 == 0` makes the Bayes particle
+   effectively model-less and observation-independent. A response edge over
+   `s3` alone is a weak transfer result. The meaningful transfer question is
+   whether the edge holds under partial wrong structure (`s1` no-reflection or
+   `s2` target-only), and those cells are lock-only. Closeout copy must report
+   `s3`-only transfer separately from `s1`/`s2` transfer and must not state
+   "the response edge transfers to the core task" unless the lock supports it.
 
 ### Phase 7 — Public Visualization and Motion Rail Card
 

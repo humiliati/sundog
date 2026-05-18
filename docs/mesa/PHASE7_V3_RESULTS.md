@@ -341,6 +341,22 @@ the pre-registered GG6b-mech hypothesis. Cliff pair is mixed_0_99 vs
 mixed_0_97 (the v3 "recovery / trough" boundary); Large net.9 is the
 analog of Medium net.7; layer sweep across net.1/3/5/7/9 at 64 seeds.
 
+**Handoff closed (2026-05-18):** Phase 6b v1.1 result note at
+[`PHASE6B_RESULTS.md`](PHASE6B_RESULTS.md) **falsified the v1 protocol
+hypothesis at this pair** (GG6b-loc-D called; GG6b-mech not called
+because mech isn't evaluated at destructive layers). The
+observation-pathway hint that motivated GG6b-mech remains a candidate
+question, but is now known not to be tractable via single-layer
+cross-policy activation injection between mixed_0_99 and mixed_0_97
+— at every MLP layer, the patching is destructive rather than
+transferring. The finding is consistent with this §7's framing
+(trough cells are field-coupled, not collapse-class) and tightens it:
+there's no transferable basin circuit because neither side
+internalizes a basin in the first place. Further mechanism work on
+the under-budget pathway needs a different protocol (multi-layer
+co-injection, alternative cliff-pair selection, or non-MLP
+architectural probes).
+
 ## 8. Open edges for v3.x
 
 - Seed-shift triangulation of mixed_0_95 / 0_97 / 0_99 — single seed

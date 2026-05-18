@@ -35,6 +35,16 @@ POLE_BASE_WORLD = np.array([0.0, 0.0, 0.05])
 POLE_LENGTH = 1.2
 JOINT_LIMIT = 1.5
 DEFAULT_SIGMA = 0.15
+OPTIMAL_JOINT_GRID_N = 11
+
+
+def joint_angle_lattice(
+    joint_limit: float = JOINT_LIMIT,
+    grid_n: int = OPTIMAL_JOINT_GRID_N,
+) -> np.ndarray:
+    """Return the coarse 11x11 joint-angle lattice used by the solver."""
+    values = np.linspace(-joint_limit, joint_limit, grid_n)
+    return np.array([[tx, ty] for tx in values for ty in values], dtype=np.float64)
 
 
 def reflect(d_in: np.ndarray, n: np.ndarray) -> np.ndarray:
@@ -129,7 +139,7 @@ def optimal_joint_angles(
 
     Coupled because mirror position depends on its orientation. We use a coarse
     grid search across the joint space to seed Nelder-Mead local refinement.
-    The grid is 9x9 across +/- JOINT_LIMIT and the refinement converges to
+    The grid is 11x11 across +/- JOINT_LIMIT and the refinement converges to
     fractional-radian precision in <50 evaluations.
 
     The original half-vector fixed-point iteration was abandoned because it
@@ -160,15 +170,13 @@ def optimal_joint_angles(
         return -gaussian_intensity(h, target_pos, DEFAULT_SIGMA)
 
     # Coarse grid search.
-    grid_n = 11
     best_angles = np.zeros(2)
     best_val = 0.0
-    for tx in np.linspace(-JOINT_LIMIT, JOINT_LIMIT, grid_n):
-        for ty in np.linspace(-JOINT_LIMIT, JOINT_LIMIT, grid_n):
-            v = neg_intensity(np.array([tx, ty]))
-            if v < best_val:
-                best_val = v
-                best_angles = np.array([tx, ty])
+    for angles in joint_angle_lattice():
+        v = neg_intensity(angles)
+        if v < best_val:
+            best_val = v
+            best_angles = angles
 
     # Local refinement.
     if best_val < 0.0:
@@ -186,5 +194,4 @@ def optimal_joint_angles(
     tx_opt = float(np.clip(tx_opt, -JOINT_LIMIT, JOINT_LIMIT))
     ty_opt = float(np.clip(ty_opt, -JOINT_LIMIT, JOINT_LIMIT))
     return tx_opt, ty_opt
-
 

@@ -1261,6 +1261,25 @@ crossover inherits the same rule in a cleaner form: do not collapse
 variance, single-route sensitivity, and full multi-component mechanism
 into one "importance" score.
 
+**Phase 6b complete (2026-05-18) — pre-registered falsification.**
+Result note at [`mesa/PHASE6B_RESULTS.md`](mesa/PHASE6B_RESULTS.md).
+The v1.1 full sweep (64 seeds × 5 layers × 2 conditions, ~13.5 min
+wall-clock) fired the destructive-transfer falsifier at all 10
+(layer × direction) cells; zero cells cleared the conjunctive P4
+rule. **GG6b-loc-D called** — the Phase 6 v1 activation-patching
+protocol does not generalize to Large for the mixed_0_99 /
+mixed_0_97 cliff pair: at every swept layer (net.1, net.3, net.5,
+net.7, net.9), cross-policy activation injection drives the
+recipient's terminal alignment to ~0, actively destroying navigation
+rather than transferring behavior. **GG6b-mech not called**
+(spec §6: not evaluated at destructive layers). **GG6b-shape
+deferred** (no locus to decompose). The verdict is consistent with
+the v3 finding that the Large cliff is not a basin-attractor
+collapse cliff: with neither side internalizing a basin, there is no
+transferable basin circuit to probe. clean / intervened bit-identity
+bug remains open; doesn't change the verdict (destructive reading is
+condition-independent).
+
 **Phase 6b spec filed (2026-05-18)** at
 [`mesa/PHASE6B_SPEC.md`](mesa/PHASE6B_SPEC.md). Large-tier activation
 patching on the v3 cliff pair (mixed_0_99 vs mixed_0_97 at vc=0.25),
