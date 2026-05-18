@@ -10,8 +10,10 @@ function parseArgs(argv) {
   const args = {
     bayesIn: "results/proof/phase4/bayes-floor-smoke",
     signatureIn: null,
+    anchorSlate: null,
     out: "results/proof/phase4",
     signatureMode: "track_sensor_accel_guarded",
+    signatureModeExplicit: false,
     bootstrapIterations: 2000,
     bootstrapSeed: 40604,
     fiberMinSamples: 20,
@@ -29,8 +31,12 @@ function parseArgs(argv) {
 
     if (flag === "--bayes-in") args.bayesIn = value;
     else if (flag === "--signature-in") args.signatureIn = value;
+    else if (flag === "--anchor-slate") args.anchorSlate = value;
     else if (flag === "--out") args.out = value;
-    else if (flag === "--signature-mode") args.signatureMode = value;
+    else if (flag === "--signature-mode") {
+      args.signatureMode = value;
+      args.signatureModeExplicit = true;
+    }
     else if (flag === "--bootstrap-iterations") args.bootstrapIterations = Number.parseInt(value, 10);
     else if (flag === "--bootstrap-seed") args.bootstrapSeed = Number.parseInt(value, 10);
     else if (flag === "--fiber-min-samples") args.fiberMinSamples = Number.parseInt(value, 10);
@@ -44,6 +50,9 @@ function parseArgs(argv) {
 
   if (args.selfTest) return args;
   if (!args.signatureIn) throw new Error("--signature-in is required");
+  if (args.anchorSlate && !args.signatureModeExplicit) {
+    throw new Error("--signature-mode must be explicitly set when --anchor-slate is used");
+  }
   if (!Number.isInteger(args.bootstrapIterations) || args.bootstrapIterations < 0) {
     throw new Error("--bootstrap-iterations must be a non-negative integer");
   }
@@ -143,6 +152,34 @@ function cellKey(row) {
     row.case_id,
     row.regime,
   ].join("\t");
+}
+
+function sortedUnique(values) {
+  return [...new Set(values)].sort();
+}
+
+function setDiff(left, right) {
+  const rightSet = new Set(right);
+  return left.filter((value) => !rightSet.has(value));
+}
+
+class AnchorMismatchError extends Error {
+  constructor(anchor) {
+    const lines = [
+      "[threebody-phase4-regret] seed-matched anchor failed",
+      `  anchorSlatePath: ${anchor.anchorSlatePath}`,
+      `  signatureMode: ${anchor.signatureMode}`,
+      `  expectedCount: ${anchor.expectedCount}`,
+      `  realizedCount: ${anchor.realizedCount}`,
+      `  droppedBayesCount: ${anchor.droppedBayesCount}`,
+      `  missingKeys (${anchor.missingKeys.length}): ${anchor.missingKeys.slice(0, 10).join(" | ") || "(none)"}`,
+      `  extraKeys (${anchor.extraKeys.length}): ${anchor.extraKeys.slice(0, 10).join(" | ") || "(none)"}`,
+    ];
+    if (anchor.emptyExpectedSlate) lines.push("  emptyExpectedSlate: true");
+    super(lines.join("\n"));
+    this.name = "AnchorMismatchError";
+    this.anchor = anchor;
+  }
 }
 
 function mean(values) {
@@ -290,6 +327,51 @@ async function inferTMax(args, bayesDir) {
   return duration;
 }
 
+async function assertAnchorSlate(args, regretRows, bayesRowsRaw, signatureByKey) {
+  if (!args.anchorSlate) return null;
+  if (!args.signatureModeExplicit) {
+    throw new Error("--signature-mode must be explicitly set when --anchor-slate is used");
+  }
+  const anchorRows = await readCsv(inputFile(args.anchorSlate, "trial-outcomes.csv"));
+  const expectedSlate = sortedUnique(
+    anchorRows
+      .filter((row) => row.controller_mode === args.signatureMode)
+      .map(joinKey),
+  );
+  const realizedSlate = sortedUnique(regretRows.map(joinKey));
+  const missingKeys = setDiff(expectedSlate, realizedSlate);
+  const extraKeys = setDiff(realizedSlate, expectedSlate);
+  const droppedBayesKeys = sortedUnique(
+    bayesRowsRaw
+      .map(joinKey)
+      .filter((key) => expectedSlate.includes(key) && !signatureByKey.has(key)),
+  );
+  const anchor = {
+    status: "seed_matched",
+    pass: true,
+    anchorSlatePath: args.anchorSlate,
+    signatureMode: args.signatureMode,
+    expectedCount: expectedSlate.length,
+    realizedCount: realizedSlate.length,
+    missingKeys,
+    extraKeys,
+    droppedBayesCount: droppedBayesKeys.length,
+    droppedBayesKeys: droppedBayesKeys.slice(0, 10),
+    emptyExpectedSlate: expectedSlate.length === 0,
+  };
+  if (
+    anchor.emptyExpectedSlate
+    || missingKeys.length > 0
+    || extraKeys.length > 0
+    || droppedBayesKeys.length > 0
+  ) {
+    anchor.status = "slate_mismatch";
+    anchor.pass = false;
+    throw new AnchorMismatchError(anchor);
+  }
+  return anchor;
+}
+
 async function reduceRegret(args) {
   const bayesDir = args.bayesIn;
   const signatureRowsRaw = await readCsv(inputFile(args.signatureIn, "trial-outcomes.csv"));
@@ -341,6 +423,7 @@ async function reduceRegret(args) {
       fuel_excess_reportable: fuelExcessReportable,
     });
   }
+  const anchor = await assertAnchorSlate(args, regretRows, bayesRowsRaw, signatureByKey);
 
   const classes = ["on", "off", "undecidable"];
   const negativeRegretCount = regretRows.filter((row) => asNumber(row.regret) < -1e-9).length;
@@ -381,6 +464,7 @@ async function reduceRegret(args) {
       bayesIn: args.bayesIn,
       signatureIn: args.signatureIn,
       signatureMode: args.signatureMode,
+      ...(args.anchorSlate ? { anchorSlate: args.anchorSlate } : {}),
     },
     tMax,
     regret: {
@@ -400,6 +484,7 @@ async function reduceRegret(args) {
     },
     fiberClassifier: cellFibers.classifier,
   };
+  if (anchor) manifest.anchor = anchor;
 
   return { regretRows, summaryRows, cellFibers, manifest };
 }
@@ -493,14 +578,17 @@ async function runSelfTest() {
     "utf8",
   );
 
-  const result = await reduceRegret({
+  const positiveArgs = {
     ...parseArgs([
       "--bayes-in", bayesDir,
       "--signature-in", sigDir,
+      "--anchor-slate", sigDir,
+      "--signature-mode", "track_sensor_accel_guarded",
       "--out", outDir,
       "--bootstrap-iterations", "20",
     ]),
-  });
+  };
+  const result = await reduceRegret(positiveArgs);
   const onRow = result.summaryRows.find((row) => row.cell_class === "on");
   const offRow = result.summaryRows.find((row) => row.cell_class === "off");
   if (onRow.row_count !== 1) throw new Error("self-test expected one on row");
@@ -508,8 +596,89 @@ async function runSelfTest() {
   if (!result.summaryRows.every((row) => row.floor_status === "non_decisive_floor_repair_required")) {
     throw new Error("self-test expected negative-regret sanity failure");
   }
+  if (!result.manifest.anchor?.pass) throw new Error("self-test expected positive anchor pass");
+  await writeRegretArtifacts(outDir, result);
+  for (const filename of [
+    "phase4-regret.csv",
+    "phase4-regret-summary.csv",
+    "cell-fibers.json",
+    "phase4-regret-manifest.json",
+  ]) {
+    await readFile(path.join(outDir, filename), "utf8");
+  }
+
+  const negativeBayesDir = path.join(tmp, "bayes-missing-seed");
+  const negativeOutDir = path.join(tmp, "out-negative");
+  await mkdir(negativeBayesDir, { recursive: true });
+  await writeFile(path.join(negativeBayesDir, "manifest.json"), `${JSON.stringify({ args: { duration: 10 } })}\n`, "utf8");
+  await writeFile(path.join(negativeBayesDir, "bayes-trial-outcomes.csv"), rowsToCsv([
+    {
+      case_id: "cell_a",
+      seed: 0,
+      regime: "near_escape",
+      mass_ratio: 1,
+      timestep: 0.01,
+      radius_scale: 1,
+      velocity_scale: 1,
+      thrust_limit: 0.4,
+      sensor_noise_std: 0,
+      controller_mode: "bayes_floor_particle_mpc",
+      simulated_time: 10,
+      total_delta_v: 0.1,
+    },
+  ]), "utf8");
+  await writeFile(
+    path.join(negativeBayesDir, "signature-observations.jsonl"),
+    `${observations.map((row) => JSON.stringify(row)).join("\n")}\n`,
+    "utf8",
+  );
+  let negativeFailed = false;
+  try {
+    await writeRegretOutputs({
+      ...parseArgs([
+        "--bayes-in", negativeBayesDir,
+        "--signature-in", sigDir,
+        "--anchor-slate", sigDir,
+        "--signature-mode", "track_sensor_accel_guarded",
+        "--out", negativeOutDir,
+        "--bootstrap-iterations", "20",
+      ]),
+    });
+  } catch (error) {
+    if (error instanceof AnchorMismatchError) negativeFailed = true;
+    else throw error;
+  }
+  if (!negativeFailed) throw new Error("self-test expected negative anchor mismatch");
+  for (const filename of [
+    "phase4-regret.csv",
+    "phase4-regret-summary.csv",
+    "cell-fibers.json",
+    "phase4-regret-manifest.json",
+  ]) {
+    try {
+      await readFile(path.join(negativeOutDir, filename), "utf8");
+      throw new Error(`self-test negative unexpectedly wrote ${filename}`);
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+    }
+  }
   await rm(tmp, { recursive: true, force: true });
   console.log("[threebody-phase4-regret] self-test passed");
+}
+
+async function writeRegretArtifacts(outDir, result) {
+  await mkdir(outDir, { recursive: true });
+  await writeFile(path.join(outDir, "phase4-regret.csv"), rowsToCsv(result.regretRows), "utf8");
+  await writeFile(path.join(outDir, "phase4-regret-summary.csv"), rowsToCsv(result.summaryRows), "utf8");
+  await writeFile(path.join(outDir, "cell-fibers.json"), `${JSON.stringify(result.cellFibers, null, 2)}\n`, "utf8");
+  await writeFile(path.join(outDir, "phase4-regret-manifest.json"), `${JSON.stringify(result.manifest, null, 2)}\n`, "utf8");
+}
+
+async function writeRegretOutputs(args) {
+  const outDir = path.resolve(repoRoot, args.out);
+  const result = await reduceRegret(args);
+  await writeRegretArtifacts(outDir, result);
+  return { outDir, result };
 }
 
 async function main() {
@@ -518,18 +687,17 @@ async function main() {
     await runSelfTest();
     return;
   }
-  const outDir = path.resolve(repoRoot, args.out);
-  await mkdir(outDir, { recursive: true });
-  const { regretRows, summaryRows, cellFibers, manifest } = await reduceRegret(args);
-  await writeFile(path.join(outDir, "phase4-regret.csv"), rowsToCsv(regretRows), "utf8");
-  await writeFile(path.join(outDir, "phase4-regret-summary.csv"), rowsToCsv(summaryRows), "utf8");
-  await writeFile(path.join(outDir, "cell-fibers.json"), `${JSON.stringify(cellFibers, null, 2)}\n`, "utf8");
-  await writeFile(path.join(outDir, "phase4-regret-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
-  console.log(`[threebody-phase4-regret] wrote ${regretRows.length} joined rows to ${path.relative(repoRoot, outDir)}`);
+  const { outDir, result } = await writeRegretOutputs(args);
+  console.log(`[threebody-phase4-regret] wrote ${result.regretRows.length} joined rows to ${path.relative(repoRoot, outDir)}`);
   console.log("[threebody-phase4-regret] wrote phase4-regret.csv, phase4-regret-summary.csv, cell-fibers.json, phase4-regret-manifest.json");
 }
 
 main().catch((error) => {
+  if (error instanceof AnchorMismatchError) {
+    console.error(error.message);
+    process.exitCode = 1;
+    return;
+  }
   console.error(error);
-  process.exit(1);
+  process.exitCode = 1;
 });
