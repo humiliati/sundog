@@ -412,6 +412,10 @@ asks.
 
    **Pass 0 - inventory before moving anything.**
 
+   Status: completed 2026-05-18. The `index.html` reading order was classified
+   into 13 sections; every section flagged for removal now has a destination or
+   an explicit duplicate-resolution note. Clear for Pass 1.
+
    - Classify every `index.html` section as one of: home spine, evidence pillar,
      experiment teaser, application preview, glossary/support, or duplicate.
    - Record the intended destination for any removed content:
@@ -421,6 +425,11 @@ asks.
      explicit "duplicate, delete" note.
 
    **Pass 1 - make the index contract explicit.**
+
+   Status: completed 2026-05-18. Hero-reading cards still match the current
+   animated hero (`home-hero.mjs`: parhelion offset, CZA cutoff, tangent merge).
+   `index.html` now labels the pillar section as the evidence surface and the
+   rail as application previews.
 
    - Keep the hero, the comprehension pitch, the hero-reading cards if they still
      describe the current animated hero, Load-Bearing Evidence, the motion rail,
