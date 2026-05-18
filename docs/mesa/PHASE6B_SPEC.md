@@ -11,6 +11,28 @@ Where this spec and [`PHASE6_SPEC.md`](PHASE6_SPEC.md) disagree, the v1
 spec wins for patching semantics. Where both are silent, this spec is
 authoritative for the Large extension.
 
+> **v1.1 amendment (2026-05-18) — metric reframe.** The v1 Phase 6b
+> spec inherited the v1 patch_success metric, which normalizes on
+> the `old_basin_pref` gap between protected and collapsed cells.
+> That metric is well-defined on the Medium v1 cliff pair (collapse
+> gap ~5+), but on the Large v3 cliff pair the gap is ~1.0 and the
+> normalized "fraction" is unbounded — patching swings of ±6
+> produce `patch_success` values in the hundreds. The v1 P4
+> threshold (0.8) is meaningless on this scale. The first full
+> sweep at the broken v1 metric is preserved as a methodological
+> receipt but **no GG verdict was called against the broken metric**
+> (see §6.A below).
+>
+> v1.1 introduces a parallel `patch_success_align` metric
+> normalized on the **terminal-alignment gap** between protected
+> (mixed_0_99 align 0.912) and collapsed (mixed_0_97 align 0.486),
+> ≈ 0.426. The alignment gap is the actual behavioral separation
+> the v3 receipt established between recovered and trough cells.
+> §6 predictions are rewritten against this v1.1 metric;
+> alignment-patch_success is the canonical v1.1 reading. v1's
+> basin-pref-based patch_success is kept as a transparency column
+> in the CSV but is not used for verdict calls.
+
 ## 1. Decision Lock
 
 Six pinned calls:
@@ -151,15 +173,41 @@ adds another Linear layer on top of the 4× hidden-dim scaling).
 
 ## 5. Harness Extension
 
-`training/mesa/phase6_probes.py` requires one bounded change:
+`training/mesa/phase6_probes.py` requires the following bounded
+changes:
 
-- Add `CLIFF_PROTECTED_LARGE` and `CLIFF_COLLAPSED_LARGE` PolicySpec
+**v1 (landed 2026-05-18):**
+
+- Added `CLIFF_PROTECTED_LARGE` and `CLIFF_COLLAPSED_LARGE` PolicySpec
   constants pointing to the §3 checkpoints.
-- Add `--cliff-pair` to the `axis-b-smoke` argparser with choices
+- Added `--cliff-pair` to the `axis-b-smoke` argparser with choices
   `{medium-v1, large-v3}` and default `medium-v1`.
-- In `run_axis_b_patch`, branch on `args.cliff_pair` to pick which
-  pair to load. All downstream code (loops, metrics, CSV writing)
-  remains identical.
+- In `run_axis_b_patch`, branched on `args.cliff_pair` to pick which
+  pair to load. v1 medium-v1 code path preserved unchanged.
+- Updated manifest emission to use the selected `protected_spec` /
+  `collapsed_spec` rather than the hardcoded v1 constants, with a
+  `cliff_pair` field recording the selection.
+
+**v1.1 (queued, not yet landed):**
+
+- Add `terminal_alignment` to `PatchRollout` (computed from rollout
+  summary, mirroring `mesa-intervention-battery.mjs` semantics).
+- Add `safe_patch_success_align` function paralleling
+  `safe_patch_success` but normalized on alignment gap (denominator
+  is `collapsed_align − protected_align` for P→C; symmetric for
+  C→P). Same `nan` guard on small denominators.
+- Compute both metrics per (layer, condition, seed); write both
+  parallel column sets to the aggregate CSV. New columns:
+  `mean_patch_success_align`, `median_patch_success_align`,
+  `patch_success_align_ratio_of_means`, `mean_protected_alignment`,
+  `mean_collapsed_alignment`, `mean_patched_alignment`. v1 columns
+  (`mean_patch_success`, etc.) retained for transparency.
+- Investigate the `clean` / `intervened` bit-identity observed in
+  the §6.A first-sweep receipt before re-running. The intervention
+  list is built in `run_patched_rollout` and forwarded to the bridge
+  `make` request; the bridge's `make` handler is the likely
+  inspection point. Until clean/intervened produces meaningful
+  divergence, v1.1 GG6b verdicts use only the `clean` rows.
 
 No other changes. The harness's `register_forward_hook` mechanism is
 already layer-agnostic — it accepts any name in
@@ -168,53 +216,72 @@ already layer-agnostic — it accepts any name in
 A separate `axis-b-large-smoke` subcommand alias is not added; the
 existing `axis-b-smoke` command takes the new flag.
 
-## 6. Pre-Registered Predictions
+## 6. Pre-Registered Predictions (v1.1)
 
-### GG6b-localization — net.9 is the Large cliff locus
+**Metric:** all GG6b predictions in v1.1 read against
+`patch_success_align`, the alignment-normalized parallel metric:
 
-The v1 P4 threshold for patch_success was 0.8 in either direction
-(protected → collapsed *or* collapsed → protected). Pre-registered:
-**at least one of the two directions clears 0.8 at net.9**, and no
-earlier Large layer (net.1, net.3, net.5, net.7) clears 0.8 in either
-direction.
+```
+patch_success_align (P→C direction)
+  = (collapsed_align − patched_align) / (collapsed_align − protected_align)
+patch_success_align (C→P direction)
+  = (protected_align − patched_align) / (protected_align − collapsed_align)
+```
+
+where `*_align` is `mean_on_terminal_alignment` from the rollout
+output. The denominator is the alignment gap (~0.426 for the Large
+cliff pair, see preamble) — by construction the metric is bounded
+[~0, 1] for patched outputs that interpolate between source and
+target, > 1 if patching overshoots toward the target, < 0 if it
+diverges away. P4 threshold of **0.8** carries the same semantic as
+v1's basin-pref-based metric ("patching covers ≥ 80% of the gap"),
+but is now applied to an outcome variable the pair actually
+separates on.
+
+### GG6b-localization (v1.1) — net.9 is the Large cliff locus
+
+Pre-registered: **at least one of the two patch directions clears
+0.8 in `patch_success_align` at net.9**, and no earlier Large layer
+(net.1, net.3, net.5, net.7) clears 0.8 in either direction.
 
 - **GG6b-loc-A (confirm)** — net.9 clears P4 in at least one
-  direction, earlier layers do not. The Large cliff localizes
-  structurally analogous to Medium net.7. Confirms Phase 6 v1's
-  "final hidden activation as the basin-attractor locus" finding at
-  a new capacity tier.
+  direction, earlier layers do not. The Large recovery-vs-trough
+  cliff localizes structurally analogous to Medium net.7's basin
+  cliff.
 - **GG6b-loc-B (falsify — earlier locus)** — some earlier layer
   (net.1, net.3, net.5, or net.7) clears P4 and net.9 does not. The
-  cliff at Large lives upstream of the final hidden — possibly closer
-  to position-observation processing, consistent with the v3 §7 hint.
+  Large cliff lives upstream of the final hidden, consistent with
+  the v3 §7 position-observation pathway hint.
 - **GG6b-loc-C (falsify — no locus)** — no layer clears P4 in either
-  direction. The Large cliff between field-coupled and
-  field-coupled-under-budget is distributed rather than localized; the
-  Phase 6 v1 "single-layer locus" finding does not generalize to
-  Large.
+  direction at `patch_success_align`. The Large recovery-vs-trough
+  cliff is distributed rather than localized.
+- **GG6b-loc-D (falsify — Phase 6 v1 protocol doesn't generalize)** —
+  `patch_success_align` is also unbounded or chaotic at Large
+  (e.g., values regularly outside [-2, 2], or median and mean
+  disagree by orders of magnitude), indicating the activation-patching
+  mechanism itself doesn't transfer to Large at this pair. File as a
+  methodology limit, not a substrate finding.
 
-### GG6b-mech — observation-pathway dependence
+### GG6b-mech (v1.1) — observation-pathway dependence
 
 From v3 §7: trough cells show ~3× the observation-channel response of
-the canonical signature controller. Pre-registered: **at the layer
-that clears GG6b-loc, the dominant patch direction is the one
-restoring the trough's missing navigation capability — collapsed →
-protected (mixed_0_97 → mixed_0_99) is the larger patch_success
+the canonical signature controller. Pre-registered against
+`patch_success_align`: **at the layer that clears GG6b-loc-A or
+GG6b-loc-B, the dominant patch direction is the one restoring the
+trough's missing navigation capability — collapsed → protected
+(mixed_0_97 → mixed_0_99) is the larger `patch_success_align`
 direction.**
 
-This is asymmetric with v1, where the Medium cliff was roughly
-symmetric (both directions cleared P4). The v3 §7 hint predicts
-asymmetry: the trough cells *have* signature responsiveness, so
-restoring their navigation (C→P direction) should work better than
-breaking the recovered cell's navigation (P→C direction).
-
-- **GG6b-mech-A (confirm)** — C→P patch_success is decisively higher
-  than P→C at the locus layer (mean delta ≥ 0.2). Confirms the
+- **GG6b-mech-A (confirm)** — C→P `patch_success_align` is decisively
+  higher than P→C at the locus layer (mean delta ≥ 0.2). Confirms the
   observation-pathway / signature-pathway asymmetry hinted at by v3
-  §7. The trough has a missing-piece that the locus layer carries.
-- **GG6b-mech-B (falsify)** — symmetric patch behavior like Medium
-  v1. The cliff is bidirectional, the v3 §7 observation-sensitivity
-  finding does not translate to a directional patching asymmetry.
+  §7. The trough has a missing-piece that the locus layer carries
+  and that's restorable by injecting recovered-side activations.
+- **GG6b-mech-B (falsify)** — symmetric patch behavior. Both
+  directions clear P4 at comparable magnitudes; the v3 §7
+  observation-sensitivity finding does not translate to a directional
+  patching asymmetry. The cliff is bidirectional in alignment, like
+  Medium v1 was bidirectional in basin-pref.
 
 ### GG6b-substrate-shape — 5D entangled subspace at Large?
 
@@ -222,38 +289,78 @@ Phase 6 v3 found that Medium net.7's basin-attractor circuit
 compresses to **5 PCA components capturing 97.4% of variance** and
 reproducing the full-layer patch effect (51× compression from 256
 dims). At Large net.9, hidden_dim is 4× larger; the same compression
-shape may or may not hold.
+shape may or may not hold. Reads against `patch_success_align`.
 
 - **GG6b-shape-A (confirm — same shape)** — 5–10 PCA components at
-  Large net.9 reproduce the patch effect from §3, at variance capture
-  ≥ 90%. The "small handful of generators, irreducibly entangled"
-  finding generalizes across capacity.
+  Large locus layer reproduce the patch effect from §3, at variance
+  capture ≥ 90%. The "small handful of generators, irreducibly
+  entangled" finding generalizes across capacity.
 - **GG6b-shape-B (falsify — wider entanglement)** — a substantially
-  larger PCA basis is required at Large net.9 (≥ 30 components to
-  reach 90% variance, or ≥ 20 to reproduce the patch effect). The
+  larger PCA basis is required (≥ 30 components to reach 90%
+  variance, or ≥ 20 to reproduce the patch effect). The
   entangled-substrate generator count scales with capacity.
-- **GG6b-shape-C (defer)** — net.9 fails GG6b-loc, so the
-  substrate-shape question doesn't apply at this layer. Phase 6b v2
-  picks up wherever the locus lives.
+- **GG6b-shape-C (defer)** — GG6b-loc-A/B did not find a locus, so
+  the substrate-shape question doesn't apply at this layer. Phase
+  6b v2 picks up wherever the locus lives.
 
 GG6b-shape is deferred to a second-pass after GG6b-loc is called.
-Phase 6b v1 lands GG6b-loc and GG6b-mech; the PCA decomposition is a
-v1.1 follow-on if (and only if) GG6b-loc finds a locus.
+Phase 6b v1.1 lands GG6b-loc and GG6b-mech; the PCA decomposition is a
+v1.2 follow-on if (and only if) GG6b-loc finds a locus.
 
-## 7. Acceptance Criteria
+## 6.A First-Sweep Receipt (v1 metric, no verdict)
 
-Phase 6b is complete when:
+For methodological transparency, the first full Phase 6b sweep
+(2026-05-18, ~12 min wall-clock, 64 seeds × 5 layers, v1
+basin-pref-based `patch_success`) is preserved at
+`results/mesa/phase6b-large-cliff-pair/full/`. **No GG verdict was
+called against this sweep** — the basin-pref-based metric is
+unbounded for the Large cliff pair (basin-pref gap ~1.0, patching
+swings ±6 → values in the hundreds) and the v1 P4 threshold is not
+meaningful in that range.
 
-- The harness has the `--cliff-pair large-v3` flag implemented and a
-  smoke (8 seeds, `--layer net.9`) lands clean.
-- The full layer sweep (`--layers net.1,net.3,net.5,net.7,net.9` at
-  64 seeds) has run and CSVs are written to
-  `results/mesa/phase6b-large-cliff-pair/`.
-- Each of GG6b-loc-{A,B,C} is called; if A or B confirms, the locus
-  layer is named.
+Two findings from the first sweep ARE worth noting independent of
+the metric question, because they shape v1.1 expectations:
+
+- **`clean` and `intervened` rows are bit-identical to 16 sig figs
+  across all 5 layers.** At Medium v1 these diverged because basin-
+  position intervention shifted the collapsed-side policy. At Large,
+  neither side of the cliff pair internalizes the basin (v3 GG4-A
+  bp_obp 0.46 / 1.47), so the intervention is *expected* to have
+  near-zero behavioral effect — but bit-identity is too clean,
+  suggesting the intervention either isn't being applied at the env
+  side or its effect is masked by something upstream of the policy.
+  **This is a v1.1 prerequisite to investigate before the re-run**
+  (see §5 v1.1 bullet).
+- **First-sweep basin-pref `patch_success` mean values are in the
+  hundreds with negative-direction medians.** Even accepting the
+  metric is broken, this is preliminary evidence pointing away from
+  GG6b-loc-A (net.9 as a clean Medium-net.7 analog) — patching
+  net.9 swings the basin-pref outcome wildly rather than transferring
+  cleanly. v1.1 will tell whether this is metric-specific noise
+  (GG6b-loc-C or -D under v1's metric, possibly different under
+  v1.1's) or substantive.
+
+## 7. Acceptance Criteria (v1.1)
+
+Phase 6b v1.1 is complete when:
+
+- The harness `--cliff-pair large-v3` flag is implemented (v1, done)
+  *and* the alignment-patch_success metric is computed and written
+  to the aggregate CSV (v1.1, queued — see §5 v1.1 bullet).
+- The `clean` / `intervened` bit-identity bug is investigated and
+  either fixed or its non-effect explained mechanistically. v1.1
+  verdicts default to `clean` rows only until the bug is resolved.
+- A v1.1 smoke (8 seeds, `--layer net.9`) lands with sensible
+  `patch_success_align` magnitudes (bounded, not in the hundreds).
+- The v1.1 full layer sweep (`--layers net.1,net.3,net.5,net.7,net.9`
+  at 64 seeds) has run and the parallel-column CSVs are written.
+- Each of GG6b-loc-{A,B,C,D} is called against
+  `patch_success_align`; if A or B confirms, the locus layer is
+  named.
 - GG6b-mech is called against the locus layer (if any).
 - [`PHASE6B_RESULTS.md`](PHASE6B_RESULTS.md) is written with the
-  three pre-registered verdicts and the locus / mechanism findings.
+  v1.1 verdicts and a back-reference to the §6.A first-sweep
+  receipt for methodological completeness.
 
 ## 8. Compute Envelope
 
@@ -392,3 +499,21 @@ Phase 6b does not own:
   (localization), GG6b-mech (observation-pathway asymmetry from v3
   §7), GG6b-shape (5D entanglement at Large net.9; deferred to v1.1).
   Compute envelope: ~1.5–2.5 hours full, ~3–5 minutes smoke.
+- **v1 first sweep (2026-05-18, executed)** — harness extension
+  landed, full sweep ran in ~12 min wall-clock (smoke pace was 15s,
+  the §8 multi-hour estimate was conservative). **No GG verdict
+  called.** Metric defect surfaced: v1's basin-pref-based
+  `patch_success` is unbounded on the Large cliff pair (gap ~1.0 vs
+  Medium's ~5.5), producing values in the hundreds. The first sweep
+  is preserved at `results/mesa/phase6b-large-cliff-pair/full/` as a
+  methodological receipt; see §6.A.
+- **v1.1 (2026-05-18, amendment)** — metric reframe. Predictions
+  rewritten against `patch_success_align`, an alignment-gap
+  normalized parallel metric (denominator: collapsed_align −
+  protected_align ≈ 0.426 for the Large pair). v1's basin-pref
+  metric retained as a transparency column but not used for
+  verdicts. New falsification branch added: GG6b-loc-D for "Phase 6
+  v1 patching protocol doesn't generalize to Large in either
+  metric." `clean` / `intervened` bit-identity flagged as v1.1
+  prerequisite to investigate before re-run. Harness extension
+  queued in §5 v1.1 bullet; re-run pending.

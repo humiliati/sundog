@@ -61,6 +61,8 @@ class PatchRollout:
     terminal_outcome: str
     steps: int
     activations: list[np.ndarray]
+    terminal_alignment: float  # signature(terminal_position); from env.metrics() on done.
+    # NaN if the trial never terminated (horizon-truncated without `done`).
 
 
 SMOKE_POLICIES = (
