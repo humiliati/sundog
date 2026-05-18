@@ -17,28 +17,59 @@
 /* ------------------------------------------------------------------ */
 
 .sd-chat-launch {
-  /* Keep room for the trace-state ring without changing existing layout. */
   position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  place-items: center;
+  overflow: visible;
 }
 
-/* The ring is a pseudo-element so existing button content stays intact. */
+.sd-chat-launch__label {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  color: var(--text-light, #f8fbfc);
+  font-size: 0.86rem;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 8px rgba(11, 23, 32, 0.9);
+}
+
+/* Two phase-shifted pseudo-elements make the halo appear to pass under,
+ * then over, the text without moving the button itself. */
+.sd-chat-launch::before,
 .sd-chat-launch::after {
   content: "";
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--sd-mascot-ring-fill, transparent);
+  left: 50%;
+  top: 50%;
+  width: 3.25rem;
+  height: 1.72rem;
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at center, var(--sd-mascot-ring-fill, transparent) 0 17%, transparent 46%),
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--sd-mascot-ring-edge, rgba(218, 162, 76, 0.45)), transparent 35%), transparent);
   border: 2px solid var(--sd-mascot-ring-edge, transparent);
   box-shadow: var(--sd-mascot-ring-glow, none);
+  transform: translate(-50%, -50%) rotate(-12deg) scale(0.96);
   transition:
     background 220ms ease,
     border-color 220ms ease,
     box-shadow 220ms ease,
     transform 220ms ease;
   pointer-events: none;
+}
+
+.sd-chat-launch::before {
+  z-index: 0;
+  opacity: 0.66;
+  animation: sd-help-halo-under 5.8s ease-in-out infinite;
+}
+
+.sd-chat-launch::after {
+  z-index: 2;
+  opacity: 0.12;
+  mix-blend-mode: screen;
+  animation: sd-help-halo-over 5.8s ease-in-out infinite;
 }
 
 /* Per-state ring tokens. Visual differentiation is intentional but quiet;
@@ -75,6 +106,38 @@
 }
 
 /* Idle pulse — only on neutral state, very subtle. Halo collar breath. */
+@keyframes sd-help-halo-under {
+  0%,
+  100% {
+    opacity: 0.68;
+    transform: translate(-50%, -50%) rotate(-12deg) scale(0.94);
+  }
+  42% {
+    opacity: 0.34;
+    transform: translate(-50%, -50%) rotate(13deg) scale(1.05);
+  }
+  56% {
+    opacity: 0.18;
+    transform: translate(-50%, -50%) rotate(16deg) scale(1.08);
+  }
+}
+
+@keyframes sd-help-halo-over {
+  0%,
+  100% {
+    opacity: 0.08;
+    transform: translate(-50%, -50%) rotate(14deg) scale(1.04);
+  }
+  42% {
+    opacity: 0.26;
+    transform: translate(-50%, -50%) rotate(-10deg) scale(0.98);
+  }
+  56% {
+    opacity: 0.58;
+    transform: translate(-50%, -50%) rotate(-16deg) scale(0.92);
+  }
+}
+
 @keyframes sd-mascot-idle-pulse {
   0%,
   100% { transform: scale(1); opacity: 1; }
@@ -82,7 +145,7 @@
 }
 
 .sd-chat-mascot--idle.sd-chat-launch::after {
-  animation: sd-mascot-idle-pulse 4.8s ease-in-out infinite;
+  animation: sd-help-halo-over 5.8s ease-in-out infinite;
 }
 
 /* Sweat state — a brief shudder when pressure is detected. Plays once on
@@ -371,8 +434,16 @@
 /* ------------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
-  .sd-chat-mascot--idle.sd-chat-launch::after {
+  .sd-chat-mascot--idle.sd-chat-launch::after,
+  .sd-chat-launch::before,
+  .sd-chat-launch::after {
     animation: none;
+  }
+  .sd-chat-launch::before {
+    opacity: 0.58;
+  }
+  .sd-chat-launch::after {
+    opacity: 0.12;
   }
   .sd-chat-launch::after {
     transition: none;

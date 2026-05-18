@@ -203,16 +203,19 @@ body {
 }
 
 .sd-chat-launch {
-  min-height: 3rem;
-  padding: 0 1rem;
+  width: 3.4rem;
+  height: 3.4rem;
+  min-height: 0;
+  padding: 0;
   border: 1px solid rgba(244, 196, 48, 0.72);
-  border-radius: var(--sd-radius-md);
+  border-radius: 999px;
   background: #0b1720;
   color: var(--text-light);
   box-shadow: 0 14px 36px rgba(11, 23, 32, 0.28);
   cursor: pointer;
   font-weight: 800;
   letter-spacing: 0;
+  text-transform: lowercase;
 }
 
 .sd-chat-launch:hover,
