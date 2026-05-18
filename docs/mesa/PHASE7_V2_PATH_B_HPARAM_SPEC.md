@@ -304,6 +304,10 @@ direction.
   [`../calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md`](../calibration/PHASE10_OPTICAL_AUDIT_HANDOFF.md).
 - **Path A alternative:** continue batch with best-state discipline; see
   conversation handoff for mixed_0_95/97/99 + reward_phase3 sequencing.
+- **Adopted-candidate result note:** Path B candidate 2 (`--value-coef
+  0.25`) was adopted under the 3-stage test; the full multi-substrate
+  receipt and the 6-policy Large-tier envelope this spec produced are in
+  [`PHASE7_V2_RESULTS.md`](PHASE7_V2_RESULTS.md) §2 and §7.
 
 ## 12. Versioning
 
@@ -313,3 +317,7 @@ direction.
   Phase 10 optical audit C5 -> C7 progression. No code changes
   authorized in v1; if all candidates fail, Phase 7 v3 (or equivalent)
   would own the code-level work.
+- **2026-05-18 (Path B closed)** — candidate 2 (`--value-coef 0.25`)
+  adopted under the 3-stage test. Subsequent cliff-subset batch
+  surfaced the U-trough finding and the `λ=1.00` bootstrap-failure
+  datapoint. Receipt at [`PHASE7_V2_RESULTS.md`](PHASE7_V2_RESULTS.md).

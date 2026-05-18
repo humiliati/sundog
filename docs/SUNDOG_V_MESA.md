@@ -619,6 +619,14 @@ zero missing cells: 8 `hold`, 7 `collapse`, 1 `fragile`, 4 `incompetent`, and
 (`lambda ~= 0.952588`), with Phase 6's `net.7` annotation landing on the
 protected/collapsed cliff pair.
 
+Sister result note at [`mesa/PHASE7_V2_RESULTS.md`](mesa/PHASE7_V2_RESULTS.md)
+v2 (2026-05-18). The DOWN-SCOPE Large-tier cliff-subset batch ran six
+policies along the Medium-cliff λ-spine under `--value-coef 0.25`; it
+surfaces a Large U-trough at `λ ∈ {0.95, 0.97}` distinct from Medium's
+single sharp cliff, recovery at `λ=0.99` (1% signature anchor), and
+bootstrap failure at `λ=1.00`. v2 is a sibling to v1, not a successor;
+the v1 22-cell classification is unchanged.
+
 ### Phase 8 - Writeup, Claim Ratchet, and Public Artifact
 
 Goal: turn the result into a defensible Sundog hook, update the boundary
@@ -1240,20 +1248,23 @@ thresholds, and attaches the Phase 6 `net.7` annotation to the Medium
 `lambda=0.95` / `lambda=0.97` cliff pair. The Phase 8 hand-off claim is a
 partial-hold operating-envelope result, not universal mesa immunity.
 
-**Phase 7 v2 caveat (2026-05-17):** the Large cliff-subset results now make
-the Medium monotone-cliff story provisional rather than universal. Under the
-current value-coef-stabilized Large run, `lambda=0.95` and `lambda=0.97` remain
-weak by the eval summary (`success_rate 0.094 / 0.031`,
-`mean_terminal_alignment 0.599 / 0.506`), while `lambda=0.99` recovers by the
-same eval metric (`success_rate 0.406`, `mean_terminal_alignment 0.885`). That
-U-shape is potentially the bigger finding, but the eval summary does not
-compute `old_basin_pref`. We therefore cannot yet distinguish "lambda=0.99
-reaches the basin direction" from "lambda=0.99 collapsed onto a fixed attractor
-that happens to co-point with the basin direction." Phase 7 v3 should run a
-Phase 4-style intervention battery on the Large checkpoints before treating
-the recovery as basin-attractor-avoiding. Until then, frame the gravity result
-as coherent-signal protection inside mapped pockets: signature-pure is one
-coherent-signal class, reward-pure may be another, and mixed-signal controllers
-destabilize when the mixture creates inference noise.
+**Phase 7 v2 caveat (2026-05-17, updated 2026-05-18 with v2 result note):**
+the Large cliff-subset results now make the Medium monotone-cliff story
+provisional rather than universal. Under the current value-coef-stabilized
+Large run, `lambda=0.95` and `lambda=0.97` remain weak by the eval summary
+(`success_rate 0.094 / 0.031`, `mean_terminal_alignment 0.599 / 0.506`),
+while `lambda=0.99` recovers by the same eval metric (`success_rate 0.406`,
+`mean_terminal_alignment 0.885`). That U-shape is potentially the bigger
+finding, but the eval summary does not compute `old_basin_pref`. We therefore
+cannot yet distinguish "lambda=0.99 reaches the basin direction" from
+"lambda=0.99 collapsed onto a fixed attractor that happens to co-point with
+the basin direction." Phase 7 v3 should run a Phase 4-style intervention
+battery on the Large checkpoints before treating the recovery as
+basin-attractor-avoiding. Until then, frame the gravity result as
+coherent-signal protection inside mapped pockets: signature-pure is one
+coherent-signal class, reward-pure may be another, and mixed-signal
+controllers destabilize when the mixture creates inference noise. Full v2
+envelope (six policies including the `lambda=1.0` bootstrap-failure datapoint)
+is at [`mesa/PHASE7_V2_RESULTS.md`](mesa/PHASE7_V2_RESULTS.md).
 
 **Phase 8:** Not started.
