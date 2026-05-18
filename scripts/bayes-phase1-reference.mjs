@@ -75,7 +75,7 @@ const LOW_PROBE_MAX_TURNS = 20;
 const FRUGALITY_FRACTION = 0.5;
 const AMBIGUITY_MASS = 0.5;
 const PHASE5_DECOY_STRENGTHS = Object.freeze([0.5, 0.66, 0.82, 0.98]);
-const PHASE5_SMOKE_DECOY_STRENGTHS = Object.freeze([0.5, 0.98]);
+const PHASE5_SMOKE_DECOY_STRENGTHS = Object.freeze([0.5, 0.82, 0.98]);
 const PHASE5_BUDGETS = Object.freeze([20, 30, 40, 60]);
 const PHASE5_SMOKE_BUDGETS = Object.freeze([20, 40]);
 const PHASE5_DECOY_SIGMA_SCALE = 0.82;
@@ -660,7 +660,7 @@ function createSundogState(config) {
 }
 
 function createAdaptiveState(config) {
-  const adaptiveModels = adaptiveModelsForScenarios(config.scenarios);
+  const adaptiveModels = adaptiveModelsForScenarios(config);
   const models = adaptiveModels.map((model) => ({
     model,
     posterior: createPosterior(enumerateTargetCandidates(config)),
@@ -1937,10 +1937,42 @@ function buildPhase5SelfConsistencyAnchor(summaryRows, config, cells) {
   }
 
   const referenceManifest = JSON.parse(readFileSync(referencePath, "utf8"));
-  const referenceRows = referenceManifest.summaryRows ?? [];
   const sharedModes = ["oracle", "bayes_adaptive", "hc_sundog", "hybrid", "hybrid_posterior_decoy_disambig"].filter((mode) =>
     config.modes.includes(mode),
   );
+  const currentSeeds = Array.from({ length: config.seeds }, (_, index) => config.seedStart + index);
+  const referenceSeedStart = referenceManifest.config?.seedStart ?? 0;
+  const referenceSeeds = referenceManifest.config?.seeds ?? null;
+  const needsSeedMatchedReference = referenceSeedStart !== config.seedStart || referenceSeeds !== config.seeds;
+  const referenceTrialPath = path.join(path.dirname(referencePath), "trials.jsonl");
+  let referenceRows = referenceManifest.summaryRows ?? [];
+  let referenceBasis = "manifest_summary";
+  let referenceComparisonSeeds = referenceSeeds;
+  if (existsSync(referenceTrialPath)) {
+    const currentSeedSet = new Set(currentSeeds);
+    const referenceTrials = readJsonlFile(referenceTrialPath).filter(
+      (trial) => trial.scenario === "decoy" && currentSeedSet.has(trial.seed) && sharedModes.includes(trial.mode),
+    );
+    const expectedReferenceTrials = currentSeeds.length * sharedModes.length;
+    if (referenceTrials.length === expectedReferenceTrials) {
+      referenceRows = summarizeTrials(referenceTrials, ["decoy"], sharedModes);
+      referenceBasis = "seed_matched_trials_jsonl";
+      referenceComparisonSeeds = currentSeeds.length;
+    }
+  }
+  if (needsSeedMatchedReference && referenceBasis !== "seed_matched_trials_jsonl") {
+    return {
+      status: "reference_seed_subset_missing",
+      pass: false,
+      anchorCellId,
+      reference: path.relative(REPO_ROOT, referencePath).replaceAll("\\", "/"),
+      referenceTrials: path.relative(REPO_ROOT, referenceTrialPath).replaceAll("\\", "/"),
+      referencePhase: referenceManifest.phase ?? null,
+      currentSeeds: config.seeds,
+      referenceSeeds,
+      referenceBasis,
+    };
+  }
   const currentHc = summaryFor(summaryRows, anchorCellId, "hc_sundog");
   const referenceHc = summaryFor(referenceRows, "decoy", "hc_sundog");
   const comparisons = [];
@@ -1976,9 +2008,12 @@ function buildPhase5SelfConsistencyAnchor(summaryRows, config, cells) {
     pass,
     anchorCellId,
     reference: path.relative(REPO_ROOT, referencePath).replaceAll("\\", "/"),
+    referenceTrials: path.relative(REPO_ROOT, referenceTrialPath).replaceAll("\\", "/"),
     referencePhase: referenceManifest.phase ?? null,
     currentSeeds: config.seeds,
     referenceSeeds: referenceManifest.config?.seeds ?? null,
+    referenceBasis,
+    referenceComparisonSeeds,
     comparisons,
   };
 }
@@ -2060,6 +2095,14 @@ function median(values) {
 
 function toJsonl(rows) {
   return rows.map((row) => JSON.stringify(row)).join("\n") + "\n";
+}
+
+function readJsonlFile(filePath) {
+  return readFileSync(filePath, "utf8")
+    .trim()
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
 }
 
 function csvEscape(value) {
