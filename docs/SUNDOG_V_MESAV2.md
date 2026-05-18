@@ -141,7 +141,7 @@ MESAv2 Spine — Status Roll-Up.
 | --- | --- | --- | --- |
 | 0.5 — Traceability Claim Boundary | ✅ complete (2026-05-13) | 2026-05-13 | 4-row layer taxonomy; mirrored to `docs/presentation/claims-and-scope.md` |
 | 0.6 — Bayes-Net / NN / Sundog Comparison | ✅ complete (2026-05-13, stamped 2026-05-18) | 2026-05-18 | Comparison table in-doc; exit-criterion self-check landed |
-| 1' — Reference Signature Path Audit | ⏳ not started | 2026-05-13 | ~1–2 days; unblocked; highest-leverage next step |
+| 1' — Reference Signature Path Audit | 📝 spec filed (2026-05-18); implementation queued | 2026-05-18 | Spec at [`mesa/PHASE1_PRIME_SPEC.md`](mesa/PHASE1_PRIME_SPEC.md); 4 leakage tests pre-registered; 3 outcome branches; manifest + audit + result note unbuilt |
 | 6.5 — Formal Separability Counterexample Pass | ⏳ not started | 2026-05-13 | ~1–2 weeks Small-tier; sequenced after 1'; reserves `sensor-hacked` / `geometry-hacked` labels |
 | 7' — Envelope Cell Relabeling | ✅ complete + 2× extended | 2026-05-18 | v1 retrofit 2026-05-13; **v2 envelope extension (Phase 7 v2)** and **v3 vocabulary extension (Phase 7 v3, new labels `field-coupled, under-budget` and `bootstrap-collapse`)** both 2026-05-18 |
 | 8' — Traceability Claim Ratchet | ⏳ not started | 2026-05-13 | Post-v2 writeup; depends on 0.5/0.6/1'/6.5/7' |

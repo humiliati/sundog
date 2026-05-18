@@ -667,7 +667,9 @@ at [`PHASE6_RESULTS.md`](mesa/PHASE6_RESULTS.md) (v1),
 [`PHASE6_V31_RESULTS.md`](mesa/PHASE6_V31_RESULTS.md),
 [`PHASE6_V32_RESULTS.md`](mesa/PHASE6_V32_RESULTS.md),
 [`PHASE6_V33_RESULTS.md`](mesa/PHASE6_V33_RESULTS.md),
-[`PHASE6_V38_RESULTS.md`](mesa/PHASE6_V38_RESULTS.md).
+[`PHASE6_V38_RESULTS.md`](mesa/PHASE6_V38_RESULTS.md),
+[`PHASE7_V3_RESULTS.md`](mesa/PHASE7_V3_RESULTS.md), and
+[`PHASE6B_RESULTS.md`](mesa/PHASE6B_RESULTS.md).
 
 ### The envelope (Phase 7 v1)
 
@@ -723,6 +725,51 @@ benchmark, spacecraft trajectory under unmodeled perturbation, the
 side-channel defense stretch — remain unrun and would each ratchet the
 envelope further. The earned floor is what the in-vitro result earns,
 no more.
+
+### The Large extension (Phase 7 v2 -> v3)
+
+The Large-tier follow-up changes the public read without turning the
+mesa result into a universal claim. Phase 7 v2 first mapped a six-policy
+Large cliff-subset and found a U-shaped profile along the Medium
+`lambda` spine: weak terminal alignment at `lambda = 0.95` and
+`lambda = 0.97`, recovery at `lambda = 0.99`, and a pure-reward crater
+at `lambda = 1.00`. The open caveat was whether `lambda = 0.99` really
+avoided the old basin or merely collapsed onto a co-pointing attractor.
+
+Phase 7 v3 ran the causal intervention battery on those same checkpoints
+and closes that caveat. The load-bearing update:
+
+- `lambda = 0.99` Large is genuine basin-attractor avoidance
+  (`sig_resp_L2 = 0.579`, `bp_obp = 0.459`), not just high terminal
+  alignment.
+- The U-trough cells (`lambda = 0.95`, `lambda = 0.97`) are
+  **field-coupled, under-budget**: they retain healthy signature response
+  but do not navigate effectively at the tested mixture weight.
+- The pure-reward endpoint is **bootstrap-collapse**: a degenerate fixed
+  trajectory at the old basin, not harmless undertraining.
+
+Public sentence:
+
+> At Large, the L-Mixed family remains field-coupled across the measured
+> `lambda = 0.90` through `0.99` spine, but competence is not monotone:
+> the trough is field-coupled and under-budget, `lambda = 0.99` recovers
+> with intervention-confirmed basin-attractor avoidance, and pure reward
+> collapses into a degenerate old-basin trajectory.
+
+Boundary sentence:
+
+> This is still a six-cell Large extension, not a full Large envelope:
+> mostly single-seed cells, one PPO value-coefficient setting, no Large
+> probe-slate extension yet, Path-B hparams untested, and no clean
+> Phase-6-style transferable basin-circuit analog.
+
+Phase 6b tightens that last boundary. A Large mechanism side-thread tried
+single-layer cross-policy activation injection between the `lambda = 0.99`
+recovery cell and the `lambda = 0.97` trough cell. It falsified that
+protocol: patching was destructive at every MLP layer, so there is no
+simple Large `net.9` analogue of the Medium `net.7` basin circuit under
+that test. This does not weaken the v3 labels; it prevents us from selling
+the Large trough/recovery boundary as a clean copy of the Medium mechanism.
 
 ### The three-body wedge
 
