@@ -372,6 +372,14 @@ Applied queue after the Balance lock:
     boundary is misspecification severity; the s3 response win is the Phase 2
     separation re-derived (s3 is equivalent to `bayes_misspecified`), not a
     new claim.
+11. **Standalone Phase 6 photometric port.** Anchor-complete lock (five gating
+    components, nominal aggregate + Mann-Whitney + stress all `diff == 0.0`):
+    8/9 `bayes_particle_dominant`, 1 degenerate `mixed`. Nominal-only particle
+    Bayes is far faster than SCAN/SEEK/TRACK at comparable terminal accuracy
+    across the tested optical/detector misspecification envelope. The Phase
+    1-5b response-control edge does not replicate on the core task under this
+    optical-parameter axis; this does not refute Phase 5b, because a
+    wrong-likelihood-structure axis would be a separate Phase 6b.
 
 ## Controller-Family Architecture
 
@@ -1815,6 +1823,72 @@ under these tested optical/detector severities. If the lock downgrades the
 smoke, the smoke is recorded as an over-optimistic prefix and the lock result
 wins. In either case, the result is reported as-run; the grid is not re-cut and
 the severity axis is not changed after seeing the lock.
+
+Lock receipt, 2026-05-18:
+
+```text
+$env:PYTHONPATH=(Resolve-Path ..).Path; python experiments/run_baseline_comparison.py --phase phase6-photometric-lock --results-dir results/bayes/phase6-photometric-lock --phase6-cells lock --seeds 30 --steps 500 --particle-count 128 --conditions photometric doa_direct doa_noisy random bayes_particle
+Photometric phase6-photometric-lock: 1350 trials in 1097.418s (1.23 trials/s)
+Audits: pass
+Exit gate: envelope_mapped (9/9 cells classified)
+```
+
+Anchor: **pass**, all five components gating (`anchorPassComponents`):
+nominal and stress live re-execution <= `1e-12` max target-trace diff; nominal
+`analysis_summary.json` aggregate exact (`time_to_threshold.{mean,median}`,
+`terminal_intensity.{mean,median,ci95}` all `diff == 0.0`);
+`photometric_vs_doa_direct_terminal_intensity` Mann-Whitney exact
+(U 526.0, p 0.264, `diff == 0.0`); stress `sweep_summary.json` mean_terminal
+exact (`diff == 0.0`). The recording gap in the first lock manifest was closed
+by manifest re-emit from existing artifacts plus fresh live anchor checks; no
+trial number changed.
+
+Lock class map: **8 / 9 `bayes_particle_dominant`, 1 `mixed`** over the 9-cell
+beam_sigma x detector_noise envelope.
+
+| Cell | Class | Best | Lead vs runner-up | ci95 half-width |
+| --- | --- | --- | ---: | ---: |
+| `nominal` (0.15, 0.0) | `bayes_particle_dominant` | bayes_particle | 177.0 | 0.37 |
+| `beam_sigma_0p05` | `mixed` | photometric | 0.0 | 51.7 |
+| `beam_sigma_0p10` | `bayes_particle_dominant` | bayes_particle | 181.0 | 65.3 |
+| `beam_sigma_0p25` | `bayes_particle_dominant` | bayes_particle | 25.0 | 0.17 |
+| `beam_sigma_0p40` | `bayes_particle_dominant` | bayes_particle | 23.0 | 0.17 |
+| `detector_noise_0p02/0p05/0p10/0p20` | `bayes_particle_dominant` | bayes_particle | 177.0 | 0.37 |
+
+Phase 6 closeout interpretation. The lock confirms the repaired smoke. On the
+core photometric mirror task, a nominal-only particle Bayes lane dominates the
+SCAN/SEEK/TRACK photometric controller on median `time_to_threshold` across the
+entire tested misspecification envelope, including the maximum tested optical
+(`beam_sigma=0.40`) and detector (`detector_noise=0.20`) severities. The Phase
+1-5b synthetic response-control edge **does not replicate** on the core task
+under these tested optical/detector severities.
+
+Binding framing (frozen pre-lock, applied as-is):
+
+1. **Severity-axis statement, not a refutation of Phase 5b.** Phase 6 perturbs
+   optical parameters, which is a weaker misspecification than the Phase 5b
+   model-family ablation. The supported claim is narrow: this
+   optical-parameter axis does not break the nominal particle filter in the
+   tested range. A wrong-likelihood-structure axis would require a separate
+   Phase 6b pre-registration; Phase 5b stands.
+2. **Speed at comparable terminal accuracy.** `terminal_intensity` is
+   approximately tied across cells; the entire `bayes_particle` advantage is
+   `time_to_threshold`. Public copy says "far faster at comparable terminal
+   accuracy," not "better" unqualified.
+3. **The lone `mixed` cell is a no-decision, not a photometric win.**
+   `beam_sigma_0p05` reports best=`photometric` with lead 0.0 and ci95
+   half-width 51.7 - the families are statistically indistinguishable there,
+   not a photometric-dominant regime. It must not be cited as a Sundog/response
+   foothold.
+
+Recorded as-run. The grid is not re-cut and the severity axis is not changed
+after the lock.
+
+Exit criterion outcome: **met.** A reviewer can now see that the Phase 1-5b
+response-control result does not transfer to the core photometric task under
+the tested optical/detector misspecification - i.e., the synthetic edge is, on
+this axis, a shadow-field/grid-substrate effect rather than a core-task
+property. Phase 6 closes as a pre-registered non-replication.
 
 Exit criterion: a reviewer can see whether the Phase 1-5b result - response
 edge only under Bayesian misspecification severity - is a shadow-field toy
