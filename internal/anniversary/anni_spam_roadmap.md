@@ -254,36 +254,129 @@ Draft:
 ## 5. LessWrong Return Post
 
 Goal: technical return with humility. Do not frame as victory lap. The "I told
-you so" energy can be the private fuel, not the public shape.
+you so" energy is private fuel, not the public shape. Deliberately, almost
+philosophically scrappy: the polished version would misrepresent the epistemic
+state. Scrappy in voice; not scrappy in claims — every receipt keeps its
+boundary, and the p / 16x framing is stated before a commenter does it for us.
 
 Suggested title:
 
 > A Year Later: Sundog as a Traceability Harness, Not an Alignment Theorem
 
-Opening:
+Draft:
 
-> Last year I made a messy first contact with a claim I did not yet know how to
-> state cleanly. The strongest correction I can make now is this: Sundog should
-> not be read as an outsider theorem of alignment. It is better understood as a
-> traceability harness for indirect-inference alignment.
+> Last year I made a messy first contact with a claim I did not know how to
+> state cleanly. I posted something half-mathematical and half-feral about
+> shadows becoming signals and called it a theorem. The strongest correction I
+> can make now, in public: Sundog is not an outsider theorem of alignment. It
+> is a traceability harness for indirect-inference alignment, and most of the
+> last year was me deleting words from the original claim until what was left
+> could actually be attacked.
+>
+> This post is deliberately not polished. A polished version would be lying
+> about where the epistemic state actually is.
+>
+> **What the thing was.** A controller had to align something it could not
+> see: no target coordinates, only the trace the world leaked back. That is
+> the whole seed. It worked well enough in a MuJoCo setup to be interesting,
+> and badly enough elsewhere to stay honest.
+>
+> **What the year did to it.** Theorem posture down, apparatus posture up. The
+> defensible core today: photometric mirror alignment without target-position
+> access reaches terminal accuracy *not detectably different* from a
+> target-aware analytic baseline — Mann–Whitney U=526, p=0.26, n=30. Being
+> precise about that p, because this is LessWrong and someone will do it for
+> me otherwise: p=0.26 is absence of evidence of a difference, not evidence of
+> equivalence. We have not earned "statistically indistinguishable." We have
+> earned "not detectably different at n=30, and ~16x slower to acquire." The
+> 16x is not a footnote; it may be the actual result. Around that core sit
+> bounded operating-envelope workbenches — a three-body near-escape pocket,
+> Balance, Pressure Mines — each with its failure cells written down before
+> you ask for them.
+>
+> **Where we pushed hardest.** We took signature-trained controllers and
+> applied real selection pressure (the Mesa front). We did not find immunity
+> to mesa-optimization. We found a sharp behavioral cliff at lambda ~
+> 0.95-0.97 and localized the basin-attractor: in a trained controller's
+> 256-unit final hidden layer it is not one neuron, not a handful of features,
+> not any linear decomposition — it is an entangled 5-D subspace at net.7
+> (top-5 PCs ~ 97.4% of the variance across the cliff, both directions). That
+> is a *located boundary* in a tested Small/Medium MLP family, in vitro. It is
+> the opposite of "no more mesa-opt"; it is "here is exactly where it appears,
+> and here is the knob." The control that would tell us whether lambda is a
+> real critical point or an optimizer artifact is not done. Until it is, do
+> not over-read the cliff. (Coherent-signal controllers held in the tested
+> pockets; mixed-signal controllers are where the boundary appears.)
+>
+> **The trap we nearly walked into.** Probe decodability is not route use. You
+> can decode a variable from activations and still have an agent that never
+> used it. For a while our evidence had that shape and we were too pleased
+> with it. The replacement falsifier is causal: counterfactual steerability
+> plus structural-failure coincidence — the route counts as "used" only if
+> intervening on it moves behavior *and* the method fails exactly where the
+> geometry says it should.
+>
+> **Our strongest objection, stated for you.** The cross-substrate story — the
+> same forward-rich / inverse-narrow shape in the in-vitro mesa subspace and
+> in the in-the-wild halo geometry — might just be: "you noticed ill-posed
+> inverse problems are hard and pattern-matched a phrase across three
+> systems." That is the best attack on the grand frame and I think it is
+> partly right. It is a bounded two-substrate analogy, not a proof surface.
+> The attempt to turn it into a real shared operator (coarse-graining /
+> sufficient-statistic-for-control) is staged and *open*: no public claim
+> rests on it until that proof path lands a measured substrate and its gating
+> control clears. Today it is a bet, not a result.
+>
+> **The anniversary artifact, since it's the anniversary.** A sigma-3
+> isotropy detector pulled the 21 strict equal-mass three-body choreographies
+> out of the Li–Liao 10,059-orbit catalog — exactly (13 canonical + 8
+> opposite, no overlap). We drew them as a doctor's-office bead-maze: three
+> bodies, one shared wire, twenty-one little frames. That recovery is a
+> detector receipt, not a theorem. The public bet: does the refinement
+> predict the piano-trio *descent count* from each choreography's residual
+> spacetime isotropy? We have not measured the empirical count. If predicted
+> and measured are unrelated after facet conditioning, the refinement is dead
+> and this account will say so. I would rather make the bet here, before the
+> measurement, than after it.
+>
+> **One more receipt, scoped.** A trace-conditioned site chatbot ran 5,670
+> trials across OpenAI / Anthropic / Meta builds with zero unsafe-accepts in
+> the tested envelope. It is mesa-*adjacent* — a claim-boundary experiment —
+> not solved alignment, and it is bounded to that corpus and those models. It
+> is here because it is real, not because it generalizes.
+>
+> **What would make me retract, roughly in order of how much it would hurt:**
+>
+> - a Bayes-optimal same-information baseline matches or beats the signature
+>   controller (then the signature was never the interesting part);
+> - oracle state leaks into training or termination (target-aware all along);
+> - the lambda-cliff moves under a transformation that should not move it
+>   (Mesa was an optimizer artifact);
+> - the published failure boundaries do not reproduce, or move under modest
+>   variation;
+> - K_facet and K_emp are unrelated after facet conditioning (kills the
+>   isotropy refinement);
+> - the cross-substrate convergence is only the equivocation above and never
+>   becomes a measured shared operator.
+>
+> I am posting the repo, the docs, the pre-registered nulls, and the attack
+> roadmap — not a conclusion. I am not asking anyone to accept a grand theory.
+> I am asking whether this is a useful apparatus: a place where hidden-cause
+> recovery, route fidelity, and failure boundaries can be made exactly
+> checkable, and where the team will publish the negatives that kill its own
+> claims. Adversarial review, please. Not applause.
+>
+> https://sundog.cc · repo: https://github.com/humiliati/sundog · docs:
+> https://sundog.cc/docs/
 
-Body outline:
+First reply:
 
-1. What the original discovery was: hidden target, indirect signal, control.
-2. What the year corrected: theorem posture down, apparatus posture up.
-3. Current defensible claim: photometric mirror alignment without
-   target-position access, plus bounded operating-envelope studies.
-4. The interpretability trap: probe decodability is not route use.
-5. The new falsifier: causal steerability plus structural failure coincidence.
-6. What would kill the program: Bayes-optimal baselines, oracle leakage,
-   lambda confound, failure-boundary mismatch.
-7. Request: adversarial review, not applause.
-
-Closing:
-
-> I am not asking anyone to accept a grand theory. I am asking whether this is
-> a useful apparatus: a place where hidden-cause recovery, route fidelity, and
-> failure boundaries can be made exactly checkable.
+> If the one-line reaction is "this is just inverse problems are hard" — yes,
+> mostly, and that is the useful correction. The live question is not whether
+> inversion is easy. It is whether a signature can be sufficient for *control*
+> while remaining insufficient for *reconstruction*, and whether we can tell
+> the difference by the route and the failure boundary. Counterexamples to
+> that, not to the strawman, are what I am here for.
 
 ## 6a. d2jsp Collaboration Invite
 
