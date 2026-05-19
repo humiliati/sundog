@@ -41,6 +41,7 @@ DEFAULT_RTOL = 1e-12
 DEFAULT_ATOL = 1e-12
 DEFAULT_MAX_STEP_FRACTION = 0.02
 DEFAULT_SIGMA_TOLERANCE = 1e-5
+DEFAULT_SIGMA_CLOSURE_MULTIPLE = 3.0
 DEFAULT_EXPECTED_SIGMA_COUNT = None
 DEFAULT_CLOSURE_FLOOR = 1e-15
 
@@ -376,6 +377,7 @@ def scan_record_from_residuals(
     sigma3_inverse: dict[str, object],
     f_beta: dict[str, object],
     sigma_tolerance: float,
+    sigma_closure_multiple: float,
     closure_floor: float,
 ) -> dict[str, object]:
     sigma3_residual = float(sigma3["residual_inf"])
@@ -391,6 +393,7 @@ def scan_record_from_residuals(
     sigma_group_residual = max(sigma3_residual, sigma3_inverse_residual)
 
     closure_scale = max(integrated.closure_position_inf, closure_floor)
+    sigma_group_to_closure = sigma_group_residual / closure_scale
     f_beta_residual = float(f_beta["residual_inf"])
     return {
         "label": integrated.row.label,
@@ -411,8 +414,9 @@ def scan_record_from_residuals(
         "sigma_best_phase": sigma_best_phase,
         "sigma_best_to_closure": sigma_best_residual / closure_scale,
         "sigma_group_residual_inf": sigma_group_residual,
-        "sigma_group_to_closure": sigma_group_residual / closure_scale,
-        "sigma_candidate": sigma_group_residual <= sigma_tolerance,
+        "sigma_group_to_closure": sigma_group_to_closure,
+        "sigma_absolute_candidate": sigma_group_residual <= sigma_tolerance,
+        "sigma_candidate": sigma_group_to_closure <= sigma_closure_multiple,
         "F_beta_residual_inf": f_beta_residual,
         "F_beta_to_closure": f_beta_residual / closure_scale,
     }
@@ -506,6 +510,7 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
                 sigma3_inverse,
                 f_beta,
                 args.sigma_tolerance,
+                args.sigma_closure_multiple,
                 args.closure_floor,
             )
         )
@@ -533,6 +538,7 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
         "n_samples": args.n_samples,
         "phase_grid": args.phase_grid,
         "sigma_tolerance": args.sigma_tolerance,
+        "sigma_closure_multiple": args.sigma_closure_multiple,
         "expected_sigma_count": args.expected_sigma_count,
         "sigma_candidate_count": len(sigma_candidates),
         "sigma_candidate_labels": [record["label"] for record in sigma_candidates],
@@ -593,6 +599,7 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--atol", type=float, default=DEFAULT_ATOL)
     scan.add_argument("--max-step-fraction", type=float, default=DEFAULT_MAX_STEP_FRACTION)
     scan.add_argument("--sigma-tolerance", type=float, default=DEFAULT_SIGMA_TOLERANCE)
+    scan.add_argument("--sigma-closure-multiple", type=float, default=DEFAULT_SIGMA_CLOSURE_MULTIPLE)
     scan.add_argument("--expected-sigma-count", type=int, default=DEFAULT_EXPECTED_SIGMA_COUNT)
     scan.add_argument("--closure-floor", type=float, default=DEFAULT_CLOSURE_FLOOR)
     scan.add_argument("--strict-expected", action="store_true")
