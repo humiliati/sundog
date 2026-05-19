@@ -63,28 +63,68 @@ These four exhaust the order-2 elements of G_ε with body-relabel component (12)
 
 ---
 
-## 4. The prediction
+## 4. The ansatz facet and corrected prediction
 
-Let the 21 equal-mass 3D choreographies be C₁, ..., C₂₁. For each C_i, classify Iso(C_i) ∩ G_ε. Define
+The compact Li-Liao supplementary ansatz is not an unbiased sample of full 3D
+orbit space. It is a symmetry-conditioned slice:
 
-  S_i := { ρ ∈ {α, β, γ, δ} : ρ ∈ Iso(C_i) }
+```text
+r1 = (-1, 0, 0)
+r2 = ( 1, 0, 0)
+r3 = ( 0, 0, z0)
 
-Possible strata:
+v1 = (vx, vy,  vz)
+v2 = (vx, vy, -vz)
+v3 = (-2vx/m3, -2vy/m3, 0)
+```
 
-- **Type 0:** S_i = ∅ — Iso(C_i) ∩ G_ε is trivial. C_i descends to a *generic* (no surviving symmetry) orbit under ε≠0. **No piano-trio daughter.**
-- **Type α / β / γ / δ:** |S_i| = 1 — exactly one residual Z₂. C_i descends to **one** piano-trio family parameterized by ε. (β/δ daughters appear as piano-trios after the parameterization is taken modulo time-reversal, which is invisible at the spatial-trace level Liao reports.)
-- **Type 2:** |S_i| = 2 — two residual Z₂s present. **Two** piano-trio families. Implies an enhanced isotropy beyond generic, candidate for special-position choreographies.
-- **Type ≥ 3:** higher enhancement, expected rare/empty.
+Let `Rpi = diag(-1, -1, 1)`, the 180-degree rotation around the z-axis. At
+`t=0`, the state is fixed by the beta-type operation
 
-Let
+```text
+F := ((12), time reversal, Rpi)
+```
 
-  K := #{ i : S_i ≠ ∅ }, weighted as needed by |S_i|
+because `Rpi r2 = r1`, `Rpi r1 = r2`, `Rpi r3 = r3`, and the velocity
+condition for time reversal gives `-Rpi v2 = v1`, `-Rpi v1 = v2`,
+`-Rpi v3 = v3`. Since the Newtonian flow with `m1=m2` commutes with `F`, every
+trajectory produced by this ansatz carries this structural residual `Z2`.
 
-**Hard prediction (sundog theorem v0.1):**
+So the original unconditioned estimator is void:
 
-  # distinct piano-trio families = K
+```text
+K_raw := #{ i : S_i != empty }
+```
 
-This is the falsifier. It is not predicted by equivariant bifurcation theory, which only says daughters exist generically when (and only when) a residual subgroup survives the broken-symmetry parameter.
+The catalog cannot populate the "Type 0" stratum, because generic asymmetric
+orbits are outside the facet by construction. The ansatz is the crystal cut.
+The 21 choreographies and 273 piano-trios are the sundogs visible through that
+cut, not all possible sundogs in the sky.
+
+Corrected working prediction (sundog theorem v0.2):
+
+For each equal-mass choreography `C_i` in the ansatz facet, classify its
+*enhanced* residual spacetime isotropy relative to the structural facet
+generator `F`. Define
+
+```text
+S_i := { rho in {alpha, beta, gamma, delta} : rho in Iso(C_i) }
+E_i := S_i / <F>     # inequivalent emergent residual generators inside facet
+d_i := facet-conditioned daughter multiplicity for C_i
+```
+
+The empirical target is now
+
+```text
+# distinct piano-trio families visible through the Li-Liao ansatz facet
+  = K_facet := sum_i d_i
+```
+
+The immediate workbench task is to make `d_i` operational: determine which of
+`alpha/beta/gamma/delta` is structurally baked in by the ansatz, which are
+emergent, and which are equivalent under `sigma3` conjugation and spatial gauge.
+The algebra above pins the structural generator as beta-type. The numerical
+detector should verify that before reading any daughter count.
 
 ---
 
@@ -94,13 +134,17 @@ Liao (2025) supplementary:
 - supplementary-A.txt: 10,059 3D periodic orbits with m₁=m₂=1, m₃ = 0.1·n for n ∈ {1, ..., 20}. Of these, 21 sit at the equal-mass slice n=10 with full Z₃ choreography property.
 - supplementary-B.txt: 273 3D piano-trio orbits across the same m₃ grid.
 
-Naïve ratio: 273 / 21 ≈ 13.
+Naïve ratio: 273 / 21 ≈ 13. After the ansatz correction, this is not an
+unconditioned branching ratio. It is a facet-conditioned multiplicity: roughly
+how many sampled piano-trio rows are visible per equal-mass choreography through
+the Li-Liao isosceles/time-reversal facet.
 
 We want either:
-- **(P1)** # of *distinct piano-trio families* K_emp matches the structurally-predicted K_pred. (Each family generically sampled at multiple m₃ values, average ~273/K_emp samples per family.)
-- **(P2)** If K_emp ≠ K_pred, the discrepancy is itself a structured object — should factor through one of: (i) family bifurcation as m₃ crosses critical values, (ii) chirality doubling we missed, (iii) under-discovered choreographies among the 21.
+- **(P1)** # of *facet-visible distinct piano-trio families* `K_emp` matches the structurally-predicted `K_facet`. Each family is sampled at multiple `m3` values, so `273/K_emp` remains a sampling-density diagnostic, not the prediction itself.
+- **(P2)** If `K_emp != K_facet`, the discrepancy is itself a structured object and should factor through one of: (i) family bifurcation as `m3` crosses critical values, (ii) chirality doubling we missed, (iii) equivalence collapse from `sigma3` conjugation or spatial gauge, (iv) an ansatz facet that enforces more symmetry than beta-type alone.
 
-Either P1 or P2 is informative. The only outcome that *kills* the theorem is K_pred and K_emp being unrelated in a way no rep-theoretic refinement repairs.
+Either P1 or P2 is informative. The outcome that kills the theorem is `K_facet`
+and `K_emp` being unrelated after the facet conditioning is accounted for.
 
 ---
 
@@ -108,21 +152,22 @@ Either P1 or P2 is informative. The only outcome that *kills* the theorem is K_p
 
 For each of the 21 choreographies:
 
-1. **Ingest** initial conditions and period from supplementary-A. The file uses a compact fixed ansatz, not full 18D state rows: expand `O_index(m3), z0, vx, vy, vz, T, stability` into the three positions and velocities before integrating. Filter the `m3=1` slice and validate `sigma3` before treating a row as one of the 21 choreographies.
+1. **Ingest** initial conditions and period from supplementary-A. The file uses a compact fixed ansatz, not full 18D state rows: expand `O_index(m3), z0, vx, vy, vz, T, stability` into the three positions and velocities before integrating. Filter the `m3=1` slice.
 2. **Discretize** X(t) on N samples per period (N ~ 10³ initially).
-3. **For each ρ ∈ {α, β, γ, δ}:**
+3. **Facet precondition:** verify the beta-type ansatz symmetry `F` and the choreography condition `sigma3` before treating a row as one of the 21 choreographies.
+4. **For each ρ ∈ {α, β, γ, δ}:**
    - Construct ρ·X(t) by permuting bodies, time-shifting, optionally reversing time, optionally flipping z.
    - Compute residual r_ρ(X) := min over rotation R ∈ SO(3) and time-phase φ ∈ S¹ of  ||ρ·X(·) − R · X(· + φ)||_∞ / scale(X).
    - Mark ρ ∈ Iso(C_i) if r_ρ(X) < tolerance.
-4. Tabulate S_i for each C_i. Sum to get K_pred.
+5. Tabulate `S_i`, quotient out the structural facet generator `F`, and compute `d_i`. Sum to get `K_facet`.
 
 For piano-trio family counting:
 
-5. **Ingest** supplementary-B. For each piano-trio orbit, identify the residual Z₂ type by the same procedure restricted to body-relabel (12).
-6. **Cluster** piano-trios into families by continuation in m₃: orbits with same residual type, same free-group-word, and continuously-deformable initial conditions belong to one family.
-7. Count K_emp = # of distinct families.
+6. **Ingest** supplementary-B. For each piano-trio orbit, identify the residual Z₂ type by the same procedure restricted to body-relabel (12).
+7. **Cluster** piano-trios into families by continuation in m₃: orbits with same residual type, same free-group-word, and continuously-deformable initial conditions belong to one family.
+8. Count `K_emp` = # of distinct facet-visible families.
 
-Compare K_pred ↔ K_emp.
+Compare `K_facet` ↔ `K_emp`.
 
 ---
 
@@ -130,7 +175,7 @@ Compare K_pred ↔ K_emp.
 
 - **SO(3) gauge:** every orbit lives in a 3-parameter SO(3) gauge orbit; isotropy checks must min over rotation. Standard fix: align orbits to principal axes of inertia tensor at t=0 before comparing.
 - **Time phase:** likewise S¹ phase. Fix by anchoring at, e.g., the configuration of minimal moment of inertia.
-- **Reflection ambiguity in 3D:** improper rotations are a separate factor; γ and δ require checking against O(3) not just SO(3) gauge.
+- **Reflection ambiguity in 3D:** improper rotations are a separate factor. The classifier should keep the main gauge at SO(3) and apply z-reflection only through the γ/δ candidate operators; otherwise a free O(3) minimization can collapse γ/δ into α/β.
 - **Period sampling:** time discretization should be coprime with T/2 and T/3 to avoid alias-induced false isotropies.
 - **Liao's "scale-invariant averaged period":** confirm normalization before doing any cross-orbit comparisons.
 
@@ -141,7 +186,7 @@ Compare K_pred ↔ K_emp.
 - **8.1 Lagrange vs figure-eight, formalized.** The persistence-vs-isolation diagnostic from the brainstorm: confirm the moduli-dimension criterion holds across all known equivariant 3-body families (Euler collinear, Lagrange equilateral, Broucke–Hadjidemetriou–Henon, Chenciner–Montgomery 8, the 695 planar, the 21 3D choreographies). Build a 2D table: (family, isotropy moduli dim, observed mass-range width).
 - **8.2 Higher-N generalization.** For N=4, S₄ has more subgroups; predict the analog descent multiplicities and check against the smaller-but-extant N=4 catalog (Chen et al.).
 - **8.3 Stability-as-coherence.** Among confirmed descended piano-trios, predict the *stable* subset using a Bragg-style integer matching between the Floquet exponents at ε=0 and the descended period ratio. Liao reports 1,996 / 10,059 ≈ 20% stable in 3D; sub-question: is the stable fraction among piano-trios systematically higher, lower, or equal?
-- **8.4 The mesa hook.** Once K_pred = K_emp is in hand (if it is), draft the mesa-analog: NN substrate hosts inner optimizers iff loss-landscape has a residual subgroup of the data-symmetry surviving the training perturbation. Make precise enough to be falsifiable on toy NN setups.
+- **8.4 The mesa hook.** Once `K_facet = K_emp` is in hand (if it is), draft the mesa-analog: NN substrate hosts inner optimizers iff loss-landscape has a residual subgroup of the data-symmetry surviving the training perturbation. Make precise enough to be falsifiable on toy NN setups.
 - **8.5 Shape-sphere visualization.** Plot the 21 + 273 + 10k orbits on the 3D analog of Montgomery's shape sphere (the shape *space* for 3D triangles is the closed half-space ℝ³₊ with metric from the inertia tensor). Look for the predicted halo-angle clustering.
 
 ---
@@ -163,6 +208,7 @@ Compare K_pred ↔ K_emp.
 | Date       | Note                                                                     |
 |------------|--------------------------------------------------------------------------|
 | 2026-05-18 | Skeleton drafted. Prediction K_pred = #{C_i : S_i ≠ ∅} stated.           |
+| 2026-05-18 | Corrected Section 4 after supplement-format grounding: Li-Liao ansatz is a beta-type symmetry facet, so raw K_pred is void and replaced by facet-conditioned K_facet. |
 | (next)     | Ingest supplementary A, run isotrophy detector on 21 choreographies.    |
 | (next)     | Ingest supplementary B, cluster into families, compute K_emp.            |
 | (next)     | Compare. Iterate.                                                        |
