@@ -450,6 +450,68 @@ def scan_record_from_residuals(
     }
 
 
+def invariant_record(row: OrbitRow) -> dict[str, object]:
+    masses, x, v = expand_initial_state(row, center_com=True)
+    kinetic = 0.5 * float(np.sum(masses * np.sum(v * v, axis=1)))
+    potential = 0.0
+    for i in range(3):
+        for j in range(i + 1, 3):
+            potential -= float(masses[i] * masses[j] / np.linalg.norm(x[i] - x[j]))
+    angular_vector = np.sum(masses[:, None] * np.cross(x, v), axis=0)
+    total_momentum = np.sum(masses[:, None] * v, axis=0)
+    center_of_mass = np.average(x, axis=0, weights=masses)
+    return {
+        "label": row.label,
+        "index": row.index,
+        "line_no": row.line_no,
+        "m3": row.m3,
+        "z0": row.z0,
+        "period": row.period,
+        "stability": row.stability,
+        "energy": kinetic + potential,
+        "kinetic_energy": kinetic,
+        "potential_energy": potential,
+        "angular_momentum_x": float(angular_vector[0]),
+        "angular_momentum_y": float(angular_vector[1]),
+        "angular_momentum_z": float(angular_vector[2]),
+        "angular_momentum_norm": float(np.linalg.norm(angular_vector)),
+        "total_momentum_norm": float(np.linalg.norm(total_momentum)),
+        "center_of_mass_norm": float(np.linalg.norm(center_of_mass)),
+    }
+
+
+def cluster_invariant_records(
+    records: list[dict[str, object]],
+    energy_abs_tol: float,
+    energy_rel_tol: float,
+    angular_abs_tol: float,
+    angular_rel_tol: float,
+) -> list[list[dict[str, object]]]:
+    groups: list[list[dict[str, object]]] = []
+    ordered = sorted(records, key=lambda record: (float(record["energy"]), float(record["angular_momentum_norm"]), int(record["index"])))
+    for record in ordered:
+        energy = float(record["energy"])
+        angular = float(record["angular_momentum_norm"])
+        for group in groups:
+            representative = group[0]
+            if math.isclose(
+                energy,
+                float(representative["energy"]),
+                rel_tol=energy_rel_tol,
+                abs_tol=energy_abs_tol,
+            ) and math.isclose(
+                angular,
+                float(representative["angular_momentum_norm"]),
+                rel_tol=angular_rel_tol,
+                abs_tol=angular_abs_tol,
+            ):
+                group.append(record)
+                break
+        else:
+            groups.append([record])
+    return groups
+
+
 def command_parse(args: argparse.Namespace) -> int:
     source = args.source.upper()
     text = read_text(args.path or SUPPLEMENT_URLS[source])
@@ -611,6 +673,65 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_invariants(args: argparse.Namespace) -> int:
+    source = args.source.upper()
+    text = read_text(args.path or SUPPLEMENT_URLS[source])
+    rows = parse_rows(text, source)
+    selected = select_rows(rows, args.m3, args.limit, args.sort_period, parse_indices(args.indices))
+    if not selected:
+        raise SystemExit("no rows selected")
+
+    records = [invariant_record(row) for row in selected]
+    groups = cluster_invariant_records(
+        records,
+        args.energy_abs_tol,
+        args.energy_rel_tol,
+        args.angular_abs_tol,
+        args.angular_rel_tol,
+    )
+    group_summaries: list[dict[str, object]] = []
+    for group_index, group in enumerate(groups, start=1):
+        energies = [float(record["energy"]) for record in group]
+        angulars = [float(record["angular_momentum_norm"]) for record in group]
+        group_summaries.append(
+            {
+                "group": group_index,
+                "size": len(group),
+                "labels": [str(record["label"]) for record in group],
+                "representative_energy": energies[0],
+                "representative_angular_momentum_norm": angulars[0],
+                "energy_span": max(energies) - min(energies),
+                "angular_momentum_norm_span": max(angulars) - min(angulars),
+            }
+        )
+
+    summary: dict[str, object] = {
+        "mode": "invariant_cluster",
+        "source": source,
+        "rows_total": len(rows),
+        "rows_selected": len(selected),
+        "m3": args.m3,
+        "energy_abs_tol": args.energy_abs_tol,
+        "energy_rel_tol": args.energy_rel_tol,
+        "angular_abs_tol": args.angular_abs_tol,
+        "angular_rel_tol": args.angular_rel_tol,
+        "group_count": len(groups),
+        "duplicate_group_count": sum(1 for group in groups if len(group) > 1),
+        "singleton_group_count": sum(1 for group in groups if len(group) == 1),
+        "groups": group_summaries,
+        "note": "Zero-integration invariant clustering from t=0 energy and angular-momentum norm.",
+    }
+
+    print(json.dumps(summary, indent=2))
+    if args.print_records and records:
+        writer = csv.DictWriter(sys.stdout, fieldnames=list(records[0].keys()))
+        writer.writeheader()
+        writer.writerows(records)
+    if args.out:
+        write_outputs(Path(args.out), summary, records)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Sundog isotrophy workbench smoke harness")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -659,6 +780,22 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--report-every", type=int, default=25)
     scan.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
     scan.set_defaults(func=command_sigma3_scan)
+
+    invariants = sub.add_parser("invariants", help="cluster selected rows by zero-integration conserved invariants")
+    invariants.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="A")
+    invariants.add_argument("--path", help="local supplementary file instead of the live URL")
+    invariants.add_argument("--m3", type=float, default=1.0)
+    invariants.add_argument("--limit", type=int, default=0)
+    invariants.add_argument("--indices", help="comma-separated orbit indices to include before limit is applied")
+    invariants.add_argument("--sort-period", action="store_true", default=True)
+    invariants.add_argument("--no-sort-period", dest="sort_period", action="store_false")
+    invariants.add_argument("--energy-abs-tol", type=float, default=1e-10)
+    invariants.add_argument("--energy-rel-tol", type=float, default=1e-10)
+    invariants.add_argument("--angular-abs-tol", type=float, default=1e-10)
+    invariants.add_argument("--angular-rel-tol", type=float, default=1e-10)
+    invariants.add_argument("--print-records", action="store_true")
+    invariants.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
+    invariants.set_defaults(func=command_invariants)
     return parser
 
 

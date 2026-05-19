@@ -786,9 +786,11 @@ canonical candidates, 12 opposite-orientation candidates, and 25
 any-orientation IC rows. The old three canonical absolute-pass/closure-fail
 near misses are not global rejects; the symmetric opposite-orientation gate
 places them at closure scale. The hard-21 readback is retracted pending an
-orientation-dedup / relative-equilibrium check against the catalog's isolated
-periodic-choreography convention. No `K_facet` computation or daughter-family
-count has been run.
+orientation/geometric-orbit convention check against the catalog's isolated
+periodic-choreography convention. A zero-integration `(E, |L|)` invariant
+cluster on the 25 rows produced 25 singleton groups, so the simplest conserved
+invariant dedup does not close the 25-vs-21 gap. No `K_facet` computation or
+daughter-family count has been run.
 
 ### Cross-Substrate Hand-Offs
 
