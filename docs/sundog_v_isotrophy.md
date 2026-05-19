@@ -214,17 +214,21 @@ G.2 precondition scan:
    The old gate splits as 10 sigma3-only rows, 8 opposite-orientation-only rows,
    and 7 rows accepted by both old tests. No exact duplicate groups appear under
    `(period,z0,stability)`, so exact-key pairing alone did not prove the
-   orientation story. The follow-up orientation audit did: the 8
-   opposite-orientation-only rows are genuine `<sigma3_opposite_orientation>`
-   choreographies at closure scale. A restricted true-inverse rerun on the 25
-   old candidates then split the canonical side trimodally: 14 closure-tight
-   rows (`sigma_group_to_closure <= 3`), 3 absolute-pass/closure-fail near
-   misses (`O_{64}`, `O_{231}`, `O_{791}`), and 8 canonical failures that belong
-   to the opposite orientation. The old full CSV already shows only 17 rows with
-   `sigma3 <= 1e-5`, so no full fixed-inverse rerun is needed to rule out
-   additional canonical absolute-pass rows. The remaining decision is whether
-   G.2 should compare the 14 canonical + 8 opposite rows against a
-   canonical-label count or an orientation-deduped geometric-orbit count.
+   orientation story. The follow-up orientation audit did: the old
+   opposite-orientation-only rows are genuine
+   `<sigma3_opposite_orientation>` choreographies at closure scale. After the
+   opposite orientation received the same full-group closure-relative gate,
+   however, the 25-row receipt no longer supports the provisional `14 + 8`
+   split. It reports 14 canonical candidates, 12 opposite-orientation
+   candidates, and 25 any-orientation IC rows. The extra opposite rows are
+   `O_{64}`, `O_{231}`, and `O_{791}` (canonical absolute-pass /
+   closure-relative failures, but opposite-orientation closure-tight) plus
+   `O_{62}` (closure-tight in both orientations). The old full CSV's
+   single-generator closure ratios already show the same 14 canonical / 12
+   opposite / 25 either-orientation support set, so this is not a 25-row
+   selection artifact. The remaining decision is whether G.2 should compare IC
+   rows, orientation-class memberships, canonical labels, or orientation-deduped
+   geometric orbits against the catalog's 21.
 
 For each confirmed sigma candidate under the chosen convention:
 
@@ -255,11 +259,13 @@ npm run isotrophy:sigma3-scan:smoke
 npm run isotrophy:sigma3-scan
 ```
 
-Current status (2026-05-19): `scripts/isotrophy_workbench.py` parses the live
-supplementary-A file, expands the compact ansatz, integrates selected rows with
-DOP853 at `rtol=atol=1e-12`, and runs the same explicit-spatial-matrix residual
-gate for all generators. Parse smoke recovered 10,059 rows and 1,504 `m3=1`
-rows. The one-row precondition smoke runs `sigma3`, the fixed true
+Current status (2026-05-19): `scripts/isotrophy_workbench.py` parses the local
+periodic-catalog mirror at
+`docs/isotrophy/supplementary-B_periodic-init-condit-3d.txt`, expands the
+compact ansatz, integrates selected rows with DOP853 at `rtol=atol=1e-12`, and
+runs the same explicit-spatial-matrix residual gate for all generators. Parse
+smoke recovered 10,059 rows and 1,504 `m3=1` rows. The one-row precondition
+smoke runs `sigma3`, the fixed true
 `sigma3_inverse`, `F_beta`, and `F_delta` through the same gate; the first
 shortest equal-mass row is not a choreography while `F_beta` lands at closure
 scale. The five-row structural smoke on the shortest equal-mass rows found
@@ -269,39 +275,45 @@ found 0 sigma candidates, as expected for this generic shortest-period subset.
 
 The full G.2 scan has run once and cost `29461 s` (`~8.18 h`) on the local CPU
 machine. Do not repeat it until the row/orbit convention is settled and the
-expected count has been explicitly re-registered. The future fixed-inverse
-`npm run isotrophy:sigma3-scan` writes to
-`results/isotrophy/m3eq1-sigma3-precondition-fixed-inverse/` so the old
-orientation-bug receipt is not overwritten. For the immediate fix, the
-already-discovered 25 indices were rerun with the fixed inverse:
+expected count has been explicitly re-registered. The restricted 25-row
+fixed-inverse/orientation receipt writes to
+`results/isotrophy/m3eq1-sigma3-precondition-fixed-inverse-orientation-25/`;
+the future full fixed-inverse `npm run isotrophy:sigma3-scan` writes to
+`results/isotrophy/m3eq1-sigma3-precondition-fixed-inverse-full/` so it cannot
+clobber the 25-row verification receipt. For the immediate fix, the
+already-discovered 25 indices are rerun with:
 
 ```bash
-python scripts/isotrophy_workbench.py sigma3-scan --source A --m3 1 \
-  --indices 62,64,231,264,468,524,574,609,617,623,735,791,793,941,983,1034,1062,1084,1114,1172,1265,1352,1414,1488,1497 \
-  --n-samples 1009 --phase-grid 73 --rtol 1e-12 --atol 1e-12 \
-  --sigma-tolerance 1e-5 --sigma-closure-multiple 3 --print-records
+npm run isotrophy:sigma3-scan:receipt25
 ```
 
-Readback under the corrected full-cyclic-group aggregator: `17` IC rows pass
-the absolute `1e-5` residual gate, but only `14` are closure-tight under the
-pre-registered H.1 criterion `sigma_group_to_closure <= 3`:
+Readback under the corrected full-cyclic-group aggregator: `17` canonical IC
+rows pass the absolute `1e-5` residual gate, but only `14` are closure-tight
+under the pre-registered H.1 criterion `sigma_group_to_closure <= 3`:
 `O_{62}`, `O_{264}`, `O_{468}`, `O_{574}`, `O_{609}`, `O_{623}`, `O_{735}`,
 `O_{793}`, `O_{1034}`, `O_{1114}`, `O_{1265}`, `O_{1352}`, `O_{1488}`,
 `O_{1497}`. The three absolute-pass / closure-fail rows are `O_{64}` (`55x`
-closure), `O_{231}` (`10x` closure), and `O_{791}` (`33x` closure). The old
-`sigma3_opposite_orientation` element remains available in the workbench as a
-named generator for follow-up orientation-class audits; it is no longer called
-`sigma3_inverse`. The corrected workbench now records
+closure), `O_{231}` (`10x` closure), and `O_{791}` (`33x` closure), all three
+of which are closure-tight in the opposite orientation. The old
+`sigma3_opposite_orientation` element is now paired with
+`sigma3_opposite_inverse` and gated symmetrically; the opposite-orientation
+receipt reports `12` candidates:
+`O_{62}`, `O_{64}`, `O_{231}`, `O_{524}`, `O_{617}`, `O_{791}`, `O_{941}`,
+`O_{983}`, `O_{1062}`, `O_{1084}`, `O_{1172}`, `O_{1414}`. The corrected
+workbench now records
 `sigma_group_residual_inf = max(sigma3_residual_inf, sigma3_inverse_residual_inf)`
 and sets `sigma_candidate` from `sigma_group_to_closure`, not from
 `sigma_best_residual_inf` or the absolute `1e-5` gate. The old absolute gate is
-retained as `sigma_absolute_candidate`.
+retained as `sigma_absolute_candidate`. The opposite-orientation group has the
+same fields under `sigma_opposite_*`, and `sigma_any_orientation_candidate`
+records the union.
 
 This is still not a `K_facet` result and not evidence for the theorem. It is a
-precondition gate plus a convention audit. The immediate follow-up is the +1
-physics check: run a shape-invariance diagnostic on the 22 closure-tight
-canonical/opposite IC rows, especially `O_{62}`, to see whether exactly one is a
-constant-shape relative equilibrium excluded from the catalog's 21 isolated
+precondition gate plus a convention audit. The immediate follow-up is no longer
+a clean +1 check; it is a shape-invariance / orientation-dedup diagnostic on the
+25 any-orientation IC rows, especially `O_{62}` and the three
+canonical-near-miss/opposite-tight rows, to see whether relative equilibria or
+label-equivalence collapse account for the gap to the catalog's 21 isolated
 periodic choreographies.
 
 ---
@@ -349,7 +361,7 @@ periodic choreographies.
 |------------|--------------------------------------------------------------------------|
 | 2026-05-18 | Skeleton drafted. Prediction K_pred = #{C_i : S_i ≠ ∅} stated.           |
 | 2026-05-18 | Corrected Section 4 after supplement-format grounding: Li-Liao ansatz is the concrete beta-class facet `F_beta`, so raw K_pred is void and replaced by facet-conditioned K_facet. |
-| 2026-05-19 | Full equal-mass precondition scan exposed the old opposite-orientation `sigma3_inverse` bug; corrected inverse + full-group closure-relative aggregator gives 14 canonical IC-row candidates plus 8 opposite-orientation candidates, leaving a structured +1 against the catalog's 21 pending the relative-equilibrium check. |
+| 2026-05-19 | Full equal-mass precondition scan exposed the old opposite-orientation `sigma3_inverse` bug; corrected inverse + symmetric full-group closure-relative aggregators give 14 canonical candidates, 12 opposite-orientation candidates, and 25 any-orientation IC rows, replacing the provisional +1 story with an orientation-dedup / relative-equilibrium question. |
 | (next)     | Ingest supplementary B, cluster into families, compute K_emp.            |
 | (next)     | Compare. Iterate.                                                        |
 
