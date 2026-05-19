@@ -465,37 +465,72 @@ Draft:
 
 ## 7. 4chan /sci Post
 
-Goal: adversarial field test. Short, plain, no mystic posture.
+Goal: adversarial field test. Short, plain, no mystic posture. The forum-ban
+line is a FLAT datum that pre-empts the "censored crank" read by agreeing it
+sounds like one and routing straight to the falsifiable repo — never a
+persecution narrative (that is the most mockable opener on /sci and it cuts
+against the whole apparatus posture). No named venue or dates unless an
+accurate one is supplied by the owner; a scrubbed thread is unprovable by
+nature and the draft says exactly that. There is no internal receipt for the
+ban; it stays a first-person aside, never load-bearing.
 
 Draft:
 
-> I built a public research repo/site around a small question in partial
-> observability:
+> A year ago I posted a partial-observability hypothesis to a physics forum.
+> The account got banned, the thread got scrubbed, outreach went unanswered.
+> I can't show you the thread — that is what a scrubbed thread is — so do not
+> take my word for any of it. That is the point: take the repo, it is the
+> part you can actually attack.
 >
-> when a system cannot see the true target, can it act from an indirect trace,
-> and can we tell whether it used the trace by the right route?
+> The small question: when a system cannot see the true target, can it act
+> from an indirect trace, and can you tell whether it used the trace by the
+> right route or just correlated with it?
 >
-> Site: https://sundog.cc
-> Docs: https://sundog.cc/docs/
-> Repo: https://github.com/humiliati/sundog
+> Site: https://sundog.cc · Docs: https://sundog.cc/docs/ · Repo:
+> https://github.com/humiliati/sundog
 >
-> The defensible claim is narrow: photometric mirror alignment without target
-> coordinates, plus several bounded workbenches with named failure cases.
+> Defensible and narrow: photometric mirror alignment with no target
+> coordinates reaches an endpoint not detectably different from a
+> target-aware baseline (Mann–Whitney U=526, p=0.26, n=30 — that is "not
+> detectably different," not "equivalent") and roughly 16x slower to get
+> there. Plus bounded workbenches (three-body near-escape pocket, Balance,
+> Pressure Mines), each with named failure cells.
 >
-> The broader framing is probably wrong unless the falsifiers survive. Looking
-> for hostile reads, especially:
+> Where we pushed hardest (the mesa front): no immunity. Sharp behavioral
+> cliff at lambda ~ 0.95-0.97; the basin-attractor localizes to an entangled
+> 5-D subspace at net.7 (top-5 PCs ~ 97.4%, not one neuron / feature / linear
+> decomposition) in a tested MLP family, in vitro. A located boundary, not
+> "we beat Goodhart."
 >
-> - oracle leakage;
-> - "probe decoded it" fallacy;
-> - Bayesian baseline missing;
-> - garden of forking paths;
-> - Goodhart / mesa confounds.
+> Anniversary: a sigma-3 detector pulled the 21 strict equal-mass 3-body
+> choreographies out of the 10,059-orbit Li–Liao catalog, exactly. Drawn as
+> a bead-maze. The bet, stated before the measurement: does the refinement
+> predict the piano-trio descent count? Not measured. If predicted and
+> measured are unrelated after facet conditioning, it is dead and the site
+> will say so.
+>
+> The broad framing is probably wrong unless the falsifiers survive. Hostile
+> reads I specifically want:
+>
+> - oracle / state leakage into training or termination;
+> - "a probe decoded it" is not "the agent used it";
+> - no Bayes-optimal same-information baseline yet;
+> - garden of forking paths across the phase count;
+> - the lambda-cliff is just an optimizer artifact;
+> - the cross-substrate thing is just "inverse problems are hard,"
+>   equivocated across three systems.
 
 Expected reply posture:
 
-> If someone says "inverse problems are hard, congrats," answer: correct. The
-> live question is whether the signature is sufficient for control, not for
-> reconstruction.
+> "inverse problems are hard, congrats" → correct, and that is the useful
+> correction. The live question is not whether inversion is hard; it is
+> whether a signature can be sufficient for *control* while insufficient for
+> *reconstruction*, testable by route and failure boundary. Counterexamples
+> to that, not to the strawman.
+>
+> "lol banned crank" → fair prior. That is exactly why nothing here asks for
+> belief; the repo, the docs, and the pre-registered nulls are the whole
+> argument. Break those.
 
 ## 8. YouTube Vlog Outline
 
