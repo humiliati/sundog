@@ -226,9 +226,13 @@ G.2 precondition scan:
    `O_{62}` (closure-tight in both orientations). The old full CSV's
    single-generator closure ratios already show the same 14 canonical / 12
    opposite / 25 either-orientation support set, so this is not a 25-row
-   selection artifact. The remaining decision is whether G.2 should compare IC
-   rows, orientation-class memberships, canonical labels, or orientation-deduped
-   geometric orbits against the catalog's 21.
+   selection artifact. A zero-integration invariant clustering pass on
+   `(E, |L|)` then gave 25 singleton groups, not 21; the nearest pair
+   (`O_{1172}`, `O_{1265}`) is still separated by `6.36e-5` in energy and
+   `2.71e-3` in angular-momentum norm. The remaining decision is therefore not
+   a simple conserved-invariant dedup. G.2 must distinguish IC rows,
+   orientation-class memberships, canonical labels, and geometric-orbit
+   conventions against the catalog's 21.
 
 For each confirmed sigma candidate under the chosen convention:
 
@@ -256,12 +260,14 @@ npm run isotrophy:parse
 npm run isotrophy:precondition-smoke
 npm run isotrophy:smoke
 npm run isotrophy:sigma3-scan:smoke
+npm run isotrophy:sigma3-scan:receipt25
+npm run isotrophy:invariants:receipt25
 npm run isotrophy:sigma3-scan
 ```
 
 Current status (2026-05-19): `scripts/isotrophy_workbench.py` parses the local
 periodic-catalog mirror at
-`docs/isotrophy/supplementary-B_periodic-init-condit-3d.txt`, expands the
+`docs/isotrophy/supplementary-A_periodic-3d_mirror.txt`, expands the
 compact ansatz, integrates selected rows with DOP853 at `rtol=atol=1e-12`, and
 runs the same explicit-spatial-matrix residual gate for all generators. Parse
 smoke recovered 10,059 rows and 1,504 `m3=1` rows. The one-row precondition
@@ -310,11 +316,11 @@ records the union.
 
 This is still not a `K_facet` result and not evidence for the theorem. It is a
 precondition gate plus a convention audit. The immediate follow-up is no longer
-a clean +1 check; it is a shape-invariance / orientation-dedup diagnostic on the
-25 any-orientation IC rows, especially `O_{62}` and the three
-canonical-near-miss/opposite-tight rows, to see whether relative equilibria or
-label-equivalence collapse account for the gap to the catalog's 21 isolated
-periodic choreographies.
+a clean +1 check, and the cheap `(E, |L|)` dedup did **not** collapse the 25
+any-orientation IC rows to 21. If this remains worth pursuing, the next
+dedup-level receipt needs a stronger geometric invariant such as action or a
+sorted mutual-distance-extrema spectrum; that requires an explicit integration
+scope and should be staged separately.
 
 ---
 
@@ -361,7 +367,7 @@ periodic choreographies.
 |------------|--------------------------------------------------------------------------|
 | 2026-05-18 | Skeleton drafted. Prediction K_pred = #{C_i : S_i ≠ ∅} stated.           |
 | 2026-05-18 | Corrected Section 4 after supplement-format grounding: Li-Liao ansatz is the concrete beta-class facet `F_beta`, so raw K_pred is void and replaced by facet-conditioned K_facet. |
-| 2026-05-19 | Full equal-mass precondition scan exposed the old opposite-orientation `sigma3_inverse` bug; corrected inverse + symmetric full-group closure-relative aggregators give 14 canonical candidates, 12 opposite-orientation candidates, and 25 any-orientation IC rows, replacing the provisional +1 story with an orientation-dedup / relative-equilibrium question. |
+| 2026-05-19 | Full equal-mass precondition scan exposed the old opposite-orientation `sigma3_inverse` bug; corrected inverse + symmetric full-group closure-relative aggregators give 14 canonical candidates, 12 opposite-orientation candidates, and 25 any-orientation IC rows; zero-integration `(E, |L|)` clustering leaves all 25 as singleton groups, so the simple dedup route is falsified. |
 | (next)     | Ingest supplementary B, cluster into families, compute K_emp.            |
 | (next)     | Compare. Iterate.                                                        |
 
