@@ -96,20 +96,29 @@ Primary route: compute `d_i` from the `m3=1` choreography alone using the
 monodromy/variational spectrum, not by continuing toward the supplementary-B
 catalog.
 
-Working definition to derive on paper:
+Corrected foundation to derive on paper:
 
-1. Integrate the variational equation along each of the 21 strict
-   choreographies at `m3=1` to get the monodromy matrix `M_i`.
-2. Project `M_i` onto the piano-trio twisted sector associated with
-   `alpha_I = ((12), T/2)`.
-3. Define `d_i` as the count of `+1` Floquet eigenvalues in that sector after
-   excluding the structural `F_beta` sector.
-4. Freeze the 21 integers and their sum before any supplementary-B clustering.
+Do not treat `alpha_I = ((12), T/2)` as an isotropy of the parent choreography.
+That would repeat the v0.2 failure one level up. At `m3=1`, `(12)` is a
+symmetry of the equal-mass equations, not necessarily of the individual orbit.
+For rows where `(12)` maps `C_i` to itself up to phase/spatial gauge, define:
+
+```text
+G_i := rho((12)) o Phi_{T/2}
+V_PT,i := ker(G_i - I)
+```
+
+and prove `[M_i, G_i] = 0` before block-diagonalizing the monodromy. For rows
+where `(12)` maps `C_i` to a different equal-mass orbit, use an induced
+representation over the `S3` group orbit instead.
 
 The load-bearing deliverable is not a run. It is the projector derivation:
-which finite-dimensional twisted subspace corresponds to `alpha_I`, how the
-structural `F_beta` sector is removed, and which neutral modes are quotiented
-before counting `+1`. If that derivation is fuzzy, v0.3 is not ready.
+which of the 21 rows are endomorphism cases, which require the induced
+representation, how the structural sector
+`(F_beta-even) cap (sigma3-trivial)` is removed without deleting real
+`alpha_I` branches, which neutral modes `span{ydot(0), J grad H}` are
+quotiented, and whether a `+1` pitchfork contributes `dim` or `1/2 dim`. If
+that derivation is fuzzy, v0.3 is not ready.
 
 Rejected as primary:
 
@@ -134,5 +143,7 @@ Before any future isotrophy run:
    accidental K2-K4 restart.
 2. If it is K2-K4 under v0.2, stop.
 3. If it is v0.3, write the `alpha_I` twisted-sector projector derivation,
-   the neutral-mode quotient, the negative, and the go/no-go branch before
-   running any monodromy or supplementary-B classification.
+   the `(12)` endomorphism-vs-induced-representation case split, the
+   structural `F_beta` removal, the neutral-mode quotient, the negative, and
+   the go/no-go branch before running any monodromy or supplementary-B
+   classification.

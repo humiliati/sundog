@@ -328,17 +328,22 @@ Draft:
 > rests on it until that proof path lands a measured substrate and its gating
 > control clears. Today it is a bet, not a result.
 >
-> **The anniversary artifact, since it's the anniversary.** A sigma-3
-> isotropy detector pulled the 21 strict equal-mass three-body choreographies
-> out of the Li–Liao 10,059-orbit catalog — exactly (13 canonical + 8
-> opposite, no overlap). We drew them as a doctor's-office bead-maze: three
-> bodies, one shared wire, twenty-one little frames. That recovery is a
-> detector receipt, not a theorem. The public bet: does the refinement
-> predict the piano-trio *descent count* from each choreography's residual
-> spacetime isotropy? We have not measured the empirical count. If predicted
-> and measured are unrelated after facet conditioning, the refinement is dead
-> and this account will say so. I would rather make the bet here, before the
-> measurement, than after it.
+> **The anniversary artifact, and it's a clean negative — good.** A sigma-3
+> isotropy detector reconciled the 21 strict equal-mass three-body
+> choreographies out of the Li–Liao 10,059-orbit catalog (13 canonical + 8
+> opposite, plus 4 relative ones it cleanly split off by a 2pi/3 global
+> rotation — which is why a gauge-invariant gate sees 25 where the literature
+> says 21). That part is a durable detector / literature-count result, not
+> theorem evidence. Then the proposed daughter-count theorem test: I froze
+> v0.2 and ran the cheap K1 precheck before the multi-hour sweep, and it
+> reduced to the equivariance-only null — K_facet = 0, because generically
+> Z3 ∩ Z2 = {e}. The v0.2 operator was never a Sundog test; it was the
+> equivariance-only null in operational form, and K1 caught that for the
+> price of one precheck. I am not going to patch d_i to dodge the zero.
+> K_facet = 0 does not mean "no piano-trios exist," and the 4 relatives are
+> outside the strict single-curve convention, not literature mistakes. This
+> is the part of the year I am most willing to stand behind: the cheap
+> falsifier ran first, and the operator was retired instead of rescued.
 >
 > **One more receipt, scoped.** A trace-conditioned site chatbot ran 5,670
 > trials across OpenAI / Anthropic / Meta builds with zero unsafe-accepts in
@@ -355,8 +360,10 @@ Draft:
 >   (Mesa was an optimizer artifact);
 > - the published failure boundaries do not reproduce, or move under modest
 >   variation;
-> - K_facet and K_emp are unrelated after facet conditioning (kills the
->   isotropy refinement);
+> - (the v0.2 isotropy daughter-count path is already closed: its K1
+>   precheck reduced to the equivariance-only null, recorded as a negative,
+>   not patched — any v0.3 needs a fresh derivation and fresh
+>   pre-registration);
 > - the cross-substrate convergence is only the equivocation above and never
 >   becomes a measured shared operator.
 >
@@ -382,9 +389,10 @@ First reply:
 ## 6a. d2jsp Collaboration Invite
 
 Goal: informal technical collaboration without sounding like a recruitment
-bot. Reeled-in anniversary receipts + open bet, callback to the original
-May-2025 d2jsp thread, framed as "come break it." Checked against the Use /
-Avoid guardrails above.
+bot. Reeled-in anniversary receipts incl. the isotrophy clean negative (K1
+equivariance-only null, per isotrophy_handoff_note.md), callback to the
+original May-2025 d2jsp thread, framed as "come break it." Checked against
+the Use / Avoid guardrails above and the handoff Do-Not-Say.
 
 Draft:
 
@@ -409,12 +417,16 @@ Draft:
 >   both directions). Sharp behavioral cliff at lambda ~ 0.95-0.97. Where we
 >   pushed hardest we did NOT get immunity; we got a boundary we can point
 >   at. Patch heatmaps, not a diagram: https://sundog.cc/mesa
-> - Anniversary drop: a detector pulled the 21 strict equal-mass three-body
->   choreographies out of a 10,059-orbit catalog — exactly — and we rendered
->   them as a doctor's-office bead-maze (three bodies, one wire). The open bet
->   we're putting public today: does the refinement predict the piano-trio
->   descent count? Not measured yet. If it's unrelated, that kills the
->   refinement and we'll say so.
+> - Anniversary, and it's a *negative* — that's the point: a detector
+>   reconciled the 21 equal-mass three-body choreographies out of the
+>   10,059-orbit catalog (rendered as a doctor's-office bead-maze, three
+>   bodies one wire; +4 relative ones split off by a 2pi/3 rotation, 25
+>   gauge-invariant vs the literature's 21). That part is a
+>   detector/literature-count win, not theorem evidence. Then the proposed
+>   daughter-count theorem test got retired at its cheap K1 precheck: under
+>   v0.2 it collapsed to the equivariance-only null (K_facet=0; Z3∩Z2={e}).
+>   We ran the cheap falsifier first and killed the operator instead of
+>   patching it. K_facet=0 does not mean "no piano-trios."
 > - Ask Sundog: 5,670 trace-conditioned chatbot trials across
 >   OpenAI / Anthropic / Meta builds, zero unsafe-accepts *in the tested
 >   envelope*. It's a mesa-*adjacent* boundary experiment, not a
@@ -503,12 +515,13 @@ Draft:
 > decomposition) in a tested MLP family, in vitro. A located boundary, not
 > "we beat Goodhart."
 >
-> Anniversary: a sigma-3 detector pulled the 21 strict equal-mass 3-body
-> choreographies out of the 10,059-orbit Li–Liao catalog, exactly. Drawn as
-> a bead-maze. The bet, stated before the measurement: does the refinement
-> predict the piano-trio descent count? Not measured. If predicted and
-> measured are unrelated after facet conditioning, it is dead and the site
-> will say so.
+> Anniversary, and it is a negative: a sigma-3 detector reconciled the 21
+> strict equal-mass 3-body choreographies from the 10,059-orbit Li–Liao
+> catalog (drawn as a bead-maze; +4 relative split off by a 2pi/3 rotation,
+> 25 gauge-invariant vs 21 literature). Detector/literature-count win, not
+> theorem evidence. The proposed daughter-count test was retired at the cheap
+> K1 precheck: under v0.2 it reduced to the equivariance-only null
+> (K_facet=0). Retired, not patched. K_facet=0 != "no piano-trios."
 >
 > The broad framing is probably wrong unless the falsifiers survive. Hostile
 > reads I specifically want:

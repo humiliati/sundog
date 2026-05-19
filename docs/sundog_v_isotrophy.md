@@ -488,31 +488,64 @@ alone. Do **not** use full numerical continuation in `m3` as the primary
 prediction, because supplementary-B is already a continuation-style catalog and
 that would make the test circular.
 
-Proposed v0.3 definition to derive:
+Corrected foundation:
+
+Do **not** define `P_alpha` as if `alpha_I = ((12), T/2, +, I)` were already an
+isotropy of each choreography. That was the v0.2 failure in spectral clothing:
+a strict choreography carries the cyclic `<sigma3>` symmetry, not generically
+the transposition-class piano-trio symmetry. The enabling fact is instead that
+at `m3=1` the equal-mass problem is `S3`-equivariant, so `(12)` is a symmetry
+of the equations even when it is not an isotropy of the individual orbit.
+
+For rows where `(12)` maps `C_i` to itself up to the validated phase/spatial
+gauge, define the twist operator on the variational state by
+
+```text
+G_i := rho((12)) o Phi_{T/2}
+```
+
+where `rho((12))` is the equal-mass relabel action and `Phi_{T/2}` is the
+linearized half-period flow map along `C_i`. The derivation must establish
+`[M_i, G_i] = 0`; only then does the piano-trio twisted sector
+`V_PT,i = ker(G_i - I)` make sense as a monodromy block.
+
+For rows where `(12)·C_i` is a different equal-mass choreography, `G_i` is not
+an endomorphism of `T_{C_i}`. Those rows require an induced-representation
+formula over the `S3` group orbit of `C_i`. The v0.3 formula cannot be frozen
+until the 21 rows are split into the endomorphism and induced-representation
+cases.
+
+Candidate endomorphism-case kernel to derive, not yet registered:
 
 ```text
 M_i := monodromy matrix of choreography C_i at m3 = 1
-P_alpha := projector onto the alpha_I twisted piano-trio sector
-Q_Fbeta := quotient/removal of the structural F_beta sector and neutral modes
-d_i := dim ker( (Q_Fbeta P_alpha M_i P_alpha Q_Fbeta) - I )
+V_PT,i := ker(G_i - I)
+N_i := span{ ydot(0), J grad H(y(0)) }       # forced Hamiltonian neutral block
+B_i := (F_beta-even) cap (sigma3-trivial)    # structural facet continuation
+K_i := ker( (M_i - I) |_{V_PT,i / (N_i + B_i)} )
+d_i := multiplicity_rule(K_i)                # pending, likely half-dimension
 K_facet_v0.3 := sum_i d_i
 ```
 
-The projector derivation is the next deliverable. It must specify:
+The derivation is the next deliverable. It must specify:
 
-1. the finite-dimensional representation of `alpha_I = ((12), T/2)` on the
-   variational state;
-2. the exact `P_alpha` twisted sector that corresponds to piano-trio branches;
-3. how the structural `F_beta` sector is removed without deleting a genuine
-   `alpha_I` branch;
-4. which Hamiltonian neutral modes are quotiented before counting `+1`
-   Floquet eigenvalues;
-5. the numerical tolerance and multiplicity rule for the `+1` kernel.
+1. `G_i = rho((12)) o Phi_{T/2}` and the proof or counter-proof of
+   `[M_i, G_i] = 0` for each case;
+2. the cheap `(12)`-up-to-gauge case split for the 21 strict choreographies:
+   endomorphism of `C_i` versus induced representation on the group orbit;
+3. why the structural removal is exactly
+   `(F_beta-even) cap (sigma3-trivial)`, not a blanket deletion of all
+   `F_beta`-even directions;
+4. the Hamiltonian neutral quotient `span{ydot(0), J grad H}`;
+5. the `+1` multiplicity rule, including whether a pitchfork branch contributes
+   `dim K_i` or `1/2 dim K_i`;
+6. the closure-relative tolerance for deciding the `+1` kernel, reusing the
+   G.2 ratio-to-floor discipline rather than an absolute threshold.
 
 Only after that derivation is written should any code integrate variational
-equations or freeze `K_facet_v0.3`. The frozen output would be the 21
-per-choreography integers plus their sum, recorded before any supplementary-B
-clustering.
+equations or freeze `K_facet_v0.3`. The frozen output would be the case split,
+21 per-choreography integers, and their sum, recorded before any
+supplementary-B clustering.
 
 Rejected as primary:
 
@@ -573,8 +606,8 @@ Rejected as primary:
 | 2026-05-19 | K_facet experiment pre-registered (§K_facet SCOPE): seed = 21 strict; freeze `K_facet` from the 6-generator classification on the 21 strict ICs (K1) before computing `K_emp` from supplementary-B's 273 (K2–K4); free-group-word deferred; P1/P2 falsifier registered. |
 | 2026-05-19 | **K1 COMPLETE.** `npm run isotrophy:kfacet:predict` froze primary strict `K_facet = 0` from the 21 strict G.2 rows. All 21 rows pass only `F_beta` strictly (`d_i=0` each; no `F_beta` failures). The SO(3)-gauged diagnostic is 21 because `beta_I` appears only with `Rpi` absorbed into free alignment, so it is not counted as the strict prediction. Receipt: `results/isotrophy/k-facet-prediction-21strict/`. |
 | 2026-05-19 | **v0.2 DISPOSITION.** K1 proved the static containment operator is structurally the equivariance-only null: `Z3` choreography symmetry does not generically contain the target transposition `Z2`, so `d_i=0` is forced by construction. K2-K4 are paused under v0.2; do not run the 273-row classification until a v0.3 branching/continuation `d_i` is derived and pre-registered. |
-| 2026-05-19 | **v0.3 DESIGN DECISION.** If isotrophy continues, primary `d_i` must be a monodromy/isotypic projection count computed from each `m3=1` choreography alone: count `+1` Floquet eigenvalues in the `alpha_I` piano-trio twisted sector after removing the structural `F_beta` sector and neutral modes. Full `m3` continuation is rejected as primary because it is circular with supplementary-B; Bragg/Floquet coherence is retained as a cross-check. |
-| (next)     | v0.3 derivation — write the `alpha_I` projector, `F_beta` removal, neutral-mode quotient, and `+1` multiplicity rule on paper before any monodromy code or supplementary-B classification. |
+| 2026-05-19 | **v0.3 DESIGN DECISION.** If isotrophy continues, primary `d_i` must be a monodromy/isotypic branching count computed from each `m3=1` choreography alone. Corrected foundation: `alpha_I` is not an isotropy of the parent orbit; define the twist as `G_i = rho((12)) o Phi_{T/2}` only where `(12)` acts as an endomorphism of the choreography, otherwise use an induced-representation formula over the `S3` group orbit. Full `m3` continuation is rejected as primary because it is circular with supplementary-B; Bragg/Floquet coherence is retained as a cross-check. |
+| (next)     | v0.3 derivation — specify the cheap `(12)`-up-to-gauge case-split classification, then write the `G_i` commutation proof, structural `(F_beta-even) cap (sigma3-trivial)` removal, neutral-mode quotient, `+1` multiplicity rule, and closure-relative tolerance before any monodromy code or supplementary-B classification. |
 
 ---
 
