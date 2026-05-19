@@ -1,7 +1,7 @@
 # Sundog v. Isotrophy
 
 **Test:** Z₃ → Z₂ descent of equal-mass 3D choreographies into (m₁=m₂=1, m₃≠1) piano-trios.
-**Status:** G.2 precondition **RESOLVED** (21 strict single-curve = catalog 21). K_facet experiment pre-registered, not yet run.
+**Status:** G.2 precondition **RESOLVED** (21 strict single-curve = catalog 21). K_facet K1 prediction frozen; K2-K4 not yet run.
 **Owner:** sundog
 **Related:** `./isotrophy/files.math` — symbolic + numerical scratch.
 
@@ -385,6 +385,45 @@ strict choreography ICs via `--indices` (minutes, no full scan). For each
 before K3.** Output: `results/isotrophy/k-facet-prediction-21strict/`
 (protected).
 
+**K1 receipt (2026-05-19, COMPLETE).** `npm run isotrophy:kfacet:predict`
+ran the registered 21 strict G.2 indices with `rtol=atol=1e-12`,
+`n_samples=1009`, `phase_grid=73`, closure multiple `k=3`, and identity
+rotation tolerance `1e-6`. Elapsed wall time: `447.54 s`. Receipt path:
+`results/isotrophy/k-facet-prediction-21strict/` (gitignored/protected).
+
+Primary strict result: **`K_facet = 0`**. `F_beta` passes for all 21 rows
+(`F_beta_precondition_failure_count = 0`), but no generator survives the
+strict quotient after removing the structural facet generator. The SO(3)-gauged
+diagnostic is **`SO3_gauged_K_facet = 21`** because every row also admits
+`beta_I` at closure scale only when the missing `Rpi` is absorbed into the free
+SO(3) alignment (`beta_I_rotation_angle_rad ~= pi`). That diagnostic is not the
+frozen prediction; it is the broadened-gauge shadow G.2 warned us not to count
+as strict single-curve evidence.
+
+| `C_i` | strict `S_i` | strict `E_i = S_i/<F_beta>` | `d_i` | SO(3)-gauged diagnostic |
+|---|---|---|---:|---|
+| `O_{62}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{64}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{231}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{264}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{468}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{524}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{574}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{609}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{617}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{623}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{735}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{793}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{941}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{1034}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{1062}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{1114}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{1172}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{1265}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{1414}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{1488}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+| `O_{1497}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
+
 **K2 — supplementary-B prerequisite.** Obtain a local supplementary-B mirror
 (upstream times out; the A mirror was localized for exactly this reason).
 Verify `parse --source B` reports the expected **273** piano-trio rows across
@@ -412,6 +451,11 @@ bifurcation across an `m3` critical value, (ii) chirality doubling
 (iv) facet enforcing more than `F_beta`. Unstructured `K_facet ≠ K_emp` after
 facet conditioning is the kill condition. `273/21 ≈ 13` is a sampling-density
 diagnostic, never the prediction.
+
+With K1 complete, P1 is now the deliberately hard equality `K_emp == 0`.
+Any nonzero empirical piano-trio family count must therefore land in P2 through
+a named structured channel; it cannot be patched after the fact by silently
+promoting the SO(3)-gauged `beta_I` shadow into the strict prediction.
 
 ---
 
@@ -461,7 +505,7 @@ diagnostic, never the prediction.
 | 2026-05-19 | Full equal-mass precondition scan exposed the old opposite-orientation `sigma3_inverse` bug; corrected inverse + symmetric full-group closure-relative aggregators give 14 canonical candidates, 12 opposite-orientation candidates, and 25 any-orientation IC rows; `(E, |L|)` leaves all 25 as singleton groups, while the optimized SO(3) rotation angle splits them into 21 strict single-curve choreographies plus 4 rotating/relative choreographies. |
 | 2026-05-19 | **G.2 RESOLVED.** Rotation-angle stratification: 25 SO(3)-gauged = 21 strict single-curve (= catalog 21; max strict rot `3.65e-8 rad`) + 4 rotating/relative (`O_{791,983,1084,1352}`, rot = `2π/3`). `(E,\|L\|)` → 25 singletons. Detector trustworthy; precondition passes, no residual discrepancy. |
 | 2026-05-19 | K_facet experiment pre-registered (§K_facet SCOPE): seed = 21 strict; freeze `K_facet` from the 6-generator classification on the 21 strict ICs (K1) before computing `K_emp` from supplementary-B's 273 (K2–K4); free-group-word deferred; P1/P2 falsifier registered. |
-| (next)     | K1 — run 6 generators on the 21 strict ICs, freeze `K_facet`.            |
+| 2026-05-19 | **K1 COMPLETE.** `npm run isotrophy:kfacet:predict` froze primary strict `K_facet = 0` from the 21 strict G.2 rows. All 21 rows pass only `F_beta` strictly (`d_i=0` each; no `F_beta` failures). The SO(3)-gauged diagnostic is 21 because `beta_I` appears only with `Rpi` absorbed into free alignment, so it is not counted as the strict prediction. Receipt: `results/isotrophy/k-facet-prediction-21strict/`. |
 | (next)     | K2–K4 — supplementary-B mirror, classify, cluster, compute `K_emp`, compare. |
 
 ---

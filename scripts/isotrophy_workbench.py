@@ -12,6 +12,10 @@ The smoke target is parser/integrator/gate sanity, especially:
     - sigma3 and residual generators use the same detector path;
     - F_beta is structural for the ansatz;
     - F_delta is tested as emergent, not quotiented away.
+
+It also owns the K1 prediction-freeze receipt: the 21 strict G.2
+choreographies are classified against six concrete generators before the
+supplementary-B empirical count is run.
 """
 
 from __future__ import annotations
@@ -45,6 +49,30 @@ DEFAULT_SIGMA_CLOSURE_MULTIPLE = 3.0
 DEFAULT_IDENTITY_ROTATION_TOLERANCE = 1e-6
 DEFAULT_EXPECTED_SIGMA_COUNT = None
 DEFAULT_CLOSURE_FLOOR = 1e-15
+DEFAULT_KFACET_GENERATORS = ("alpha_I", "beta_I", "gamma_Z", "delta_Z", "F_beta", "F_delta")
+DEFAULT_KFACET_STRICT_INDICES = (
+    62,
+    64,
+    231,
+    264,
+    468,
+    524,
+    574,
+    609,
+    617,
+    623,
+    735,
+    793,
+    941,
+    1034,
+    1062,
+    1114,
+    1172,
+    1265,
+    1414,
+    1488,
+    1497,
+)
 
 FLOAT = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
 ROW_RE = re.compile(
@@ -366,6 +394,14 @@ def parse_indices(indices: str | None) -> set[int] | None:
     return parsed
 
 
+def parse_generator_names(generators: str) -> list[str]:
+    names = [name.strip() for name in generators.split(",") if name.strip()]
+    missing = [name for name in names if name not in GENERATORS]
+    if missing:
+        raise SystemExit(f"unknown generators: {', '.join(missing)}")
+    return names
+
+
 def write_outputs(out_dir: Path, summary: dict[str, object], records: list[dict[str, object]]) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "manifest.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
@@ -480,6 +516,70 @@ def scan_record_from_residuals(
     }
 
 
+def kfacet_record_from_residuals(
+    integrated: IntegratedOrbit,
+    residuals: dict[str, dict[str, object]],
+    generator_names: list[str],
+    sigma_closure_multiple: float,
+    sigma_tolerance: float,
+    identity_rotation_tolerance: float,
+    closure_floor: float,
+) -> dict[str, object]:
+    closure_scale = max(integrated.closure_position_inf, closure_floor)
+    record: dict[str, object] = {
+        "label": integrated.row.label,
+        "index": integrated.row.index,
+        "line_no": integrated.row.line_no,
+        "m3": integrated.row.m3,
+        "z0": integrated.row.z0,
+        "period": integrated.row.period,
+        "stability": integrated.row.stability,
+        "inertia_degenerate": integrated.inertia_degenerate,
+        "closure_position_inf": integrated.closure_position_inf,
+        "closure_velocity_inf": integrated.closure_velocity_inf,
+        "integration_seconds": integrated.elapsed_seconds,
+    }
+    so3_s_i: list[str] = []
+    strict_s_i: list[str] = []
+    for name in generator_names:
+        residual = residuals[name]
+        residual_inf = float(residual["residual_inf"])
+        residual_to_closure = residual_inf / closure_scale
+        rotation_angle_rad = float(residual["rotation_angle_rad"])
+        candidate = residual_to_closure <= sigma_closure_multiple
+        strict_candidate = candidate and rotation_angle_rad <= identity_rotation_tolerance
+        if candidate:
+            so3_s_i.append(name)
+        if strict_candidate:
+            strict_s_i.append(name)
+        record[f"{name}_residual_inf"] = residual_inf
+        record[f"{name}_to_closure"] = residual_to_closure
+        record[f"{name}_rotation_angle_rad"] = rotation_angle_rad
+        record[f"{name}_absolute_candidate"] = residual_inf <= sigma_tolerance
+        record[f"{name}_candidate"] = candidate
+        record[f"{name}_strict_candidate"] = strict_candidate
+
+    # K1 freezes the concrete-generator prediction after quotienting away the
+    # structural facet generator. Primary K_facet uses the strict
+    # single-inertial-curve convention learned from G.2; the SO(3)-gauged
+    # closure-only set is preserved as a secondary diagnostic. No other
+    # generator-class merges are assumed.
+    e_i = [name for name in strict_s_i if name != "F_beta"]
+    so3_e_i = [name for name in so3_s_i if name != "F_beta"]
+    record["S_i"] = ";".join(strict_s_i)
+    record["E_i_mod_F_beta"] = ";".join(e_i)
+    record["d_i"] = len(e_i)
+    record["SO3_S_i"] = ";".join(so3_s_i)
+    record["SO3_E_i_mod_F_beta"] = ";".join(so3_e_i)
+    record["SO3_d_i"] = len(so3_e_i)
+    record["strict_S_i"] = ";".join(strict_s_i)
+    record["strict_E_i_mod_F_beta"] = ";".join(e_i)
+    record["strict_d_i"] = len(e_i)
+    record["F_beta_precondition"] = "F_beta" in strict_s_i
+    record["F_beta_SO3_precondition"] = "F_beta" in so3_s_i
+    return record
+
+
 def invariant_record(row: OrbitRow) -> dict[str, object]:
     masses, x, v = expand_initial_state(row, center_com=True)
     kinetic = 0.5 * float(np.sum(masses * np.sum(v * v, axis=1)))
@@ -566,10 +666,7 @@ def command_smoke(args: argparse.Namespace) -> int:
     if not selected:
         raise SystemExit("no rows selected")
 
-    generator_names = [name.strip() for name in args.generators.split(",") if name.strip()]
-    missing = [name for name in generator_names if name not in GENERATORS]
-    if missing:
-        raise SystemExit(f"unknown generators: {', '.join(missing)}")
+    generator_names = parse_generator_names(args.generators)
 
     started = time.perf_counter()
     records: list[dict[str, object]] = []
@@ -722,6 +819,107 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_kfacet_predict(args: argparse.Namespace) -> int:
+    source = args.source.upper()
+    text = read_text(args.path or SUPPLEMENT_URLS[source])
+    rows = parse_rows(text, source)
+    requested_indices = parse_indices(args.indices)
+    selected = select_rows(rows, args.m3, args.limit, args.sort_period, requested_indices)
+    if not selected:
+        raise SystemExit("no rows selected")
+    if requested_indices is not None:
+        selected_indices = {row.index for row in selected}
+        missing_indices = sorted(requested_indices - selected_indices)
+        if missing_indices:
+            raise SystemExit(f"requested indices not found: {','.join(str(index) for index in missing_indices)}")
+
+    generator_names = parse_generator_names(args.generators)
+    if "F_beta" not in generator_names:
+        raise SystemExit("K1 prediction requires F_beta in --generators")
+
+    started = time.perf_counter()
+    records: list[dict[str, object]] = []
+    for row_index, row in enumerate(selected, start=1):
+        integrated = integrate_orbit(row, args.rtol, args.atol, args.max_step_fraction)
+        residuals = {
+            name: residual_for_generator(integrated, GENERATORS[name], args.n_samples, args.phase_grid)
+            for name in generator_names
+        }
+        records.append(
+            kfacet_record_from_residuals(
+                integrated,
+                residuals,
+                generator_names,
+                args.sigma_closure_multiple,
+                args.sigma_tolerance,
+                args.identity_rotation_tolerance,
+                args.closure_floor,
+            )
+        )
+        if args.report_every and row_index % args.report_every == 0:
+            k_facet_partial = sum(int(record["d_i"]) for record in records)
+            print(
+                f"[isotrophy] K1 classified {row_index}/{len(selected)} rows; "
+                f"K_facet_partial={k_facet_partial}",
+                file=sys.stderr,
+                flush=True,
+            )
+
+    f_beta_failures = [record["label"] for record in records if not record["F_beta_precondition"]]
+    k_facet = sum(int(record["d_i"]) for record in records)
+    so3_k_facet = sum(int(record["SO3_d_i"]) for record in records)
+    per_orbit = [
+        {
+            "label": record["label"],
+            "S_i": record["S_i"],
+            "E_i_mod_F_beta": record["E_i_mod_F_beta"],
+            "d_i": record["d_i"],
+            "SO3_S_i": record["SO3_S_i"],
+            "SO3_d_i": record["SO3_d_i"],
+        }
+        for record in records
+    ]
+    summary: dict[str, object] = {
+        "mode": "kfacet_prediction",
+        "source": source,
+        "rows_total": len(rows),
+        "rows_selected": len(selected),
+        "selected_labels": [row.label for row in selected],
+        "m3": args.m3,
+        "rtol": args.rtol,
+        "atol": args.atol,
+        "n_samples": args.n_samples,
+        "phase_grid": args.phase_grid,
+        "sigma_tolerance": args.sigma_tolerance,
+        "sigma_closure_multiple": args.sigma_closure_multiple,
+        "identity_rotation_tolerance": args.identity_rotation_tolerance,
+        "generators": generator_names,
+        "quotient_generator": "F_beta",
+        "K_facet": k_facet,
+        "SO3_gauged_K_facet": so3_k_facet,
+        "F_beta_precondition_failure_count": len(f_beta_failures),
+        "F_beta_precondition_failures": f_beta_failures,
+        "per_orbit": per_orbit,
+        "elapsed_seconds": time.perf_counter() - started,
+        "note": (
+            "K1 prediction freeze: primary K_facet uses strict single-inertial-curve "
+            "candidates and quotients only the structural F_beta generator. "
+            "SO3_gauged_K_facet is secondary diagnostic output, not the frozen prediction."
+        ),
+    }
+
+    print(json.dumps(summary, indent=2))
+    if args.print_records and records:
+        writer = csv.DictWriter(sys.stdout, fieldnames=list(records[0].keys()))
+        writer.writeheader()
+        writer.writerows(records)
+    if args.out:
+        write_outputs(Path(args.out), summary, records)
+    if args.strict_fbeta and f_beta_failures:
+        return 2
+    return 0
+
+
 def command_invariants(args: argparse.Namespace) -> int:
     source = args.source.upper()
     text = read_text(args.path or SUPPLEMENT_URLS[source])
@@ -830,6 +1028,34 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--report-every", type=int, default=25)
     scan.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
     scan.set_defaults(func=command_sigma3_scan)
+
+    kfacet = sub.add_parser("kfacet-predict", help="freeze the K1 K_facet prediction on strict G.2 rows")
+    kfacet.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="A")
+    kfacet.add_argument("--path", help="local supplementary file instead of the live URL")
+    kfacet.add_argument("--m3", type=float, default=1.0)
+    kfacet.add_argument("--limit", type=int, default=0)
+    kfacet.add_argument(
+        "--indices",
+        default=",".join(str(index) for index in DEFAULT_KFACET_STRICT_INDICES),
+        help="comma-separated strict G.2 orbit indices for the K1 prediction",
+    )
+    kfacet.add_argument("--sort-period", action="store_true", default=False)
+    kfacet.add_argument("--no-sort-period", dest="sort_period", action="store_false")
+    kfacet.add_argument("--generators", default=",".join(DEFAULT_KFACET_GENERATORS))
+    kfacet.add_argument("--n-samples", type=int, default=1009)
+    kfacet.add_argument("--phase-grid", type=int, default=73)
+    kfacet.add_argument("--rtol", type=float, default=DEFAULT_RTOL)
+    kfacet.add_argument("--atol", type=float, default=DEFAULT_ATOL)
+    kfacet.add_argument("--max-step-fraction", type=float, default=DEFAULT_MAX_STEP_FRACTION)
+    kfacet.add_argument("--sigma-tolerance", type=float, default=DEFAULT_SIGMA_TOLERANCE)
+    kfacet.add_argument("--sigma-closure-multiple", type=float, default=DEFAULT_SIGMA_CLOSURE_MULTIPLE)
+    kfacet.add_argument("--identity-rotation-tolerance", type=float, default=DEFAULT_IDENTITY_ROTATION_TOLERANCE)
+    kfacet.add_argument("--closure-floor", type=float, default=DEFAULT_CLOSURE_FLOOR)
+    kfacet.add_argument("--strict-fbeta", action="store_true")
+    kfacet.add_argument("--print-records", action="store_true")
+    kfacet.add_argument("--report-every", type=int, default=7)
+    kfacet.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
+    kfacet.set_defaults(func=command_kfacet_predict)
 
     invariants = sub.add_parser("invariants", help="cluster selected rows by zero-integration conserved invariants")
     invariants.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="A")
