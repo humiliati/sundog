@@ -446,7 +446,11 @@
         }
 
         .motion-card-visual.has-poster::before {
-            opacity: 0.12;
+            opacity: 0;
+        }
+
+        .motion-card-visual.has-poster > :not(.motion-card-poster) {
+            display: none;
         }
 
         .motion-card-poster {
@@ -455,6 +459,7 @@
             z-index: 1;
             width: 100%;
             height: 100%;
+            background: #08141e;
             object-fit: cover;
         }
 
