@@ -774,9 +774,11 @@ an unconditioned orbit-space sample; the ansatz itself enforces the concrete
 beta-class symmetry cut `F_beta = ((12), time reversal, Rpi)`. This is a
 theorem-sharpening workbench, not a controller result and not evidence for
 Phase 13-15. A parser/gate smoke has run (`npm run isotrophy:parse`,
-`npm run isotrophy:precondition-smoke`, `npm run isotrophy:smoke`), but no full
-`m3=1` sigma3 precondition scan, no 21-choreography classification, and no
-daughter-family count has been run.
+`npm run isotrophy:precondition-smoke`, `npm run isotrophy:smoke`,
+`npm run isotrophy:sigma3-scan:smoke`), but no full `m3=1` sigma3 precondition
+scan, no 21-choreography classification, and no daughter-family count has been
+run. The staged full precondition command is `npm run isotrophy:sigma3-scan`;
+its hard readback is exactly 21 sigma candidates.
 
 ### Cross-Substrate Hand-Offs
 
