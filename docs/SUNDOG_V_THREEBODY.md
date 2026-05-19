@@ -780,11 +780,14 @@ scan has now run once as an 8.18-hour local receipt. It surfaced two gate issues
 rather than confirming the old "21 exactly" contract: the original
 `sigma3_inverse` was an opposite-orientation element, not the true inverse, and
 the scan aggregator accepted `min(sigma3,sigma3_inverse)` instead of requiring
-the full cyclic group to pass. With the true inverse and the full-group
-`max(sigma3,sigma3_inverse)` gate, the current IC-row precondition count is 17.
-The hard-21 readback is retracted pending a row/canonical-label/geometric-orbit
-convention decision. No 21-choreography classification, `K_facet` computation,
-or daughter-family count has been run.
+the full cyclic group to pass. With the true inverse and the closure-relative
+full-group `max(sigma3,sigma3_inverse)` gate, the current split is 14 canonical
+IC-row candidates plus 8 confirmed opposite-orientation candidates, with 3
+absolute-pass/closure-fail near misses rejected by the H.1 criterion. The
+hard-21 readback is retracted pending the +1 physics check: whether one of the
+22 closure-tight rows is a constant-shape relative equilibrium rather than an
+isolated periodic choreography. No `K_facet` computation or daughter-family
+count has been run.
 
 ### Cross-Substrate Hand-Offs
 
