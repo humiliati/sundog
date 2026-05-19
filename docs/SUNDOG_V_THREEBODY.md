@@ -773,8 +773,10 @@ the 273 reported two-equal-mass piano-trio orbits. The raw 21/273 ratio is not
 an unconditioned orbit-space sample; the ansatz itself enforces the concrete
 beta-class symmetry cut `F_beta = ((12), time reversal, Rpi)`. This is a
 theorem-sharpening workbench, not a controller result and not evidence for
-Phase 13-15. No supplementary data has been ingested and no isotrophy detector
-has been run.
+Phase 13-15. A parser/gate smoke has run (`npm run isotrophy:parse`,
+`npm run isotrophy:precondition-smoke`, `npm run isotrophy:smoke`), but no full
+`m3=1` sigma3 precondition scan, no 21-choreography classification, and no
+daughter-family count has been run.
 
 ### Cross-Substrate Hand-Offs
 

@@ -141,10 +141,17 @@ residualZ2representatives = { alphaI, betaI, gammaZ, deltaZ };
 Fbeta = << name -> "F_beta", class -> "beta",
            perm -> c12, tshift -> 0, treverse -> True, spatial -> Rpi >>;
 
-(* The chiral partner of the facet generator is not deltaZ. It is
+(* The chiral partner candidate of the facet generator is not deltaZ. It is
 
       Fdelta = Fbeta followed by Zmirror
                  = ((12), time reversal, PointInversion).
+
+   Negative receipt: Fdelta is NOT template-enforced for out-of-plane rows.
+
+      PointInversion . r3 = {0, 0, -z0} != r3  for z0 != 0.
+
+   Therefore Fdelta is an emergent detector column and must not be quotiented
+   away with the structural facet generator Fbeta.
 *)
 
 Fdelta = << name -> "F_delta", class -> "delta",
@@ -215,13 +222,20 @@ isotropyResidual[orbit_, g_] := Module[{Xperm, Xshift},
    (* 4. Apply the explicit spatial operator attached to g. *)
    Xshift = applySpatial[Xshift, g["spatial"]];
 
-   (* 5. Gauge: minimize over residual SO(3) and S^1 phase.
+   (* 5. Gauge: this is THE GATE -- a genuine constrained minimization over
+         residual SO(3) and S^1 phase, NOT an inertia-axis canonicalization.
+         The t=0 inertia frame and the argmin_t I_zz phase anchor are both
+         degenerate exactly on the symmetry under test (see notes), so a
+         canonicalized gauge can pass/fail the structural precondition for
+         the wrong reason. Parameterize R degeneracy-robustly (unit
+         quaternion or SVD/Procrustes; never Euler) and minimize phi over
+         [0, T) directly. Inertia may SEED the optimizer, never fix it.
          Do not allow arbitrary improper O(3) here, or concrete chiral
          generators collapse into non-chiral representatives by gauge choice.
          Improper operations belong in g["spatial"], not in the gauge. *)
-   minimum[
-     normInf[orbit - applyO3andPhase[Xshift, R, phi]] / scale[orbit],
-     {R in SO(3), phi in [0, T)}
+   minimize[
+     normInf[orbit - applyRotationAndPhase[Xshift, R, phi]] / scale[orbit],
+     {R in SO(3) via quaternion, phi in [0, T)}
    ]
 ];
 
@@ -234,14 +248,22 @@ isotropyResidual[orbit_, g_] := Module[{Xperm, Xshift},
      false positives for alpha (period-2) and sigma3 (period-3). N = 1009
      (prime) is convenient.
    - Gauge minimization:
-       * SO(3) alignment: rotate so that the inertia tensor at t = 0 is
-         diagonal with descending eigenvalues. Resolves continuous gauge.
+       * SO(3): the inertia frame at t=0 is a SEED for the optimizer, never
+         the answer. At the ansatz epoch the tensor is already diagonal,
+         diag(m3 z0^2, 2 + m3 z0^2, 2); eigenvalues collide on the locus
+         m3 z0^2 = 2 (z0 = sqrt 2 at equal mass). Even off that locus the
+         principal axes carry a Z2 x Z2 of 180-degree sign flips -- the same
+         family as Fbeta's Rpi -- so canonicalization can silently cancel the
+         structural generator. Resolve by minimization, inertia-seeded only.
        * Reflection diagnostic for gamma/delta/Fdelta: keep det(R) = +1
          in the main classifier and apply improper matrices only through
          g["spatial"]. A separate O(3)-collapsed residual may be reported as
          a gauge sanity check, but it must not decide chirality type.
-       * Phase phi: anchor at argmin_t I_zz(t) (epoch of minimum moment of
-         inertia about z-axis) to fix S^1.
+       * Phase phi: do NOT anchor at argmin_t I_zz(t). Fbeta makes the
+         trajectory time-reversal-symmetric, so I_zz(t) is even about the
+         symmetry epoch and its argmin is a non-unique symmetric pair --
+         degenerate exactly on the symmetry under test. Minimize phi over
+         [0, T) directly.
    - Tolerance: relative, against orbit scale. Start at 1e-4; tighten to
      1e-6 once integration precision confirmed.
 *)
@@ -288,6 +310,14 @@ github = "https://github.com/sjtu-liao/three-body";
          '''Parse Liao supplementary compact ansatz rows into Orbit records.
          Each Orbit has: source, index, m=(1,1,m3), x0, v0, T, stability.'''
          ...
+
+     def flag_inertia_degenerate(orbit: Orbit, tol=1e-3) -> bool:
+         '''Ansatz-epoch inertia tensor is diag(m3 z0^2, 2 + m3 z0^2, 2).
+         Eigenvalues collide when m3 * z0**2 ~= 2; there the t=0
+         canonicalization is ill-posed and any inertia-seeded residual is
+         untrusted -- resolve by full SO(3) minimization with an alternative
+         seed. Flag, do not drop the row.'''
+         return abs(orbit.m3 * orbit.z0**2 - 2.0) < tol
 
      def integrate_orbit(orbit: Orbit, n_samples: int) -> Array[N, 3, 3]:
          '''High-precision integrator. Use scipy.integrate.solve_ivp with
@@ -350,7 +380,10 @@ ComparisonTable = "
 
 (* G.2: Self-consistency of sigma_3 on the 21 choreographies. This is a
         precondition: if sigma_3 isn't satisfied to high precision on the
-        21 labeled choreographies, our integrator or ingestion is broken. *)
+        21 labeled choreographies, our integrator or ingestion is broken.
+        Run sigma3 through the same isotropyResidual path as every residual
+        candidate, including the explicit g["spatial"] application, so the
+        precondition cannot pass on a separate code path. *)
 
 (* G.3: Cross-check on figure-eight (planar, equal-mass, well-known).
         Expected isotropy of figure-8:
