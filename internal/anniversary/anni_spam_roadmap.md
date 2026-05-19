@@ -5,6 +5,7 @@ Internal rollout packet for the Sundog Year 1 public re-entry.
 Status: draft, 2026-05-16.
 Anniversary target: 2026-05-19.
 Source statement: [`first_public_statement.md`](first_public_statement.md).
+Recent theorem-path handoff: [`isotrophy_handoff_note.md`](isotrophy_handoff_note.md).
 
 ## Rollout Principle
 
