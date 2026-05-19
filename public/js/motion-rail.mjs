@@ -101,11 +101,16 @@ function initMotionRail() {
     /** Circular-scroll clone buffers for the visual infinite rail. */
     loopEnabled: false,
     loopSpan: 0,
+    loopLowBoundary: 0,
+    loopHighBoundary: 0,
     loopJumping: false,
     beforeClones: [],
     afterClones: [],
     /** Direction of the current programmed move: -1, 0, or 1. */
     moveDirection: 0,
+    /** Until this timestamp, observer updates are ignored because the
+     *  controller is settling a programmed scroll. */
+    programmaticScrollUntil: 0,
   };
 
   setupCircularScroll(state);
@@ -218,7 +223,11 @@ function setupActiveTracking(state) {
       // secondary signal for the cases where the user manually swiped
       // or scrolled. We deliberately *don't* re-enter cycle phases on
       // observer-only changes — that would race with the timer.
-      if (bestIndex !== state.activeIndex && bestRatio > 0.6) {
+      if (
+        bestIndex !== state.activeIndex &&
+        bestRatio > 0.6 &&
+        performance.now() > state.programmaticScrollUntil
+      ) {
         // Update the active flag silently — the controller's phase
         // machine still owns scheduling.
         markActiveOnly(state, bestIndex);
@@ -272,10 +281,11 @@ function setupCircularScroll(state) {
   state.loopEnabled = true;
 
   window.requestAnimationFrame(() => {
-    state.loopSpan = state.track.scrollWidth / 3;
+    updateLoopMetrics(state);
   });
 
   state.track.addEventListener("scroll", () => maintainCircularScroll(state), { passive: true });
+  window.addEventListener("resize", () => updateLoopMetrics(state), { passive: true });
 }
 
 function cloneLoopCard(card, position, index) {
@@ -296,11 +306,14 @@ function cloneLoopCard(card, position, index) {
 
 function maintainCircularScroll(state) {
   if (!state.loopEnabled || state.loopJumping) return;
+  if (!state.loopSpan || !state.loopLowBoundary || !state.loopHighBoundary) {
+    updateLoopMetrics(state);
+  }
   const span = state.loopSpan || state.track.scrollWidth / 3;
   if (!Number.isFinite(span) || span <= 0) return;
 
-  const low = span * 0.5;
-  const high = span * 1.5;
+  const low = state.loopLowBoundary || span * 0.85;
+  const high = state.loopHighBoundary || span * 1.85;
   let delta = 0;
   if (state.track.scrollLeft < low) {
     delta = span;
@@ -314,6 +327,42 @@ function maintainCircularScroll(state) {
   window.requestAnimationFrame(() => {
     state.loopJumping = false;
   });
+}
+
+function updateLoopMetrics(state) {
+  if (!state.loopEnabled || !state.cards.length) return;
+  const beforeLast = state.beforeClones[state.beforeClones.length - 1];
+  const first = state.cards[0];
+  const last = state.cards[state.cards.length - 1];
+  const afterFirst = state.afterClones[0];
+  if (!beforeLast || !first || !last || !afterFirst) return;
+
+  const beforeLastTarget = targetScrollLeftForCard(state.track, beforeLast);
+  const firstTarget = targetScrollLeftForCard(state.track, first);
+  const lastTarget = targetScrollLeftForCard(state.track, last);
+  const afterFirstTarget = targetScrollLeftForCard(state.track, afterFirst);
+
+  const forwardSpan = afterFirstTarget - firstTarget;
+  const backwardSpan = lastTarget - beforeLastTarget;
+  const span = (forwardSpan + backwardSpan) / 2;
+  if (!Number.isFinite(span) || span <= 0) return;
+
+  state.loopSpan = span;
+
+  state.loopLowBoundary = midpoint(beforeLastTarget, firstTarget);
+  state.loopHighBoundary = midpoint(lastTarget, afterFirstTarget);
+}
+
+function targetScrollLeftForCard(track, card) {
+  const cardRect = card.getBoundingClientRect();
+  const trackRect = track.getBoundingClientRect();
+  return track.scrollLeft +
+    cardRect.left + cardRect.width / 2 -
+    (trackRect.left + trackRect.width / 2);
+}
+
+function midpoint(a, b) {
+  return (a + b) / 2;
 }
 
 function centreCard(state, index, { instant = false } = {}) {
@@ -342,6 +391,7 @@ function centreCard(state, index, { instant = false } = {}) {
   const delta =
     cardRect.left + cardRect.width / 2 - (trackRect.left + trackRect.width / 2);
   if (Math.abs(delta) < 1) return;
+  state.programmaticScrollUntil = performance.now() + (instant ? 120 : 720);
   track.scrollBy({
     left: delta,
     behavior: instant ? "auto" : "smooth",
