@@ -767,11 +767,13 @@ Sidecar artifacts:
 - [`docs/sundog_v_isotrophy.md`](sundog_v_isotrophy.md)
 - [`docs/isotrophy/files.math`](isotrophy/files.math)
 
-The sidecar asks whether the residual spacetime `Z2` structure of the 21
-equal-mass 3D choreographies predicts the distinct piano-trio family count in
-the 273 reported two-equal-mass piano-trio orbits. This is a theorem-sharpening
-workbench, not a controller result and not evidence for Phase 13-15. No
-supplementary data has been ingested and no isotrophy detector has been run.
+The sidecar asks whether the residual spacetime `Z2` structure visible through
+Li-Liao's fixed ansatz facet predicts the distinct piano-trio family count in
+the 273 reported two-equal-mass piano-trio orbits. The raw 21/273 ratio is not
+an unconditioned orbit-space sample; the ansatz itself enforces a beta-type
+symmetry cut. This is a theorem-sharpening workbench, not a controller result
+and not evidence for Phase 13-15. No supplementary data has been ingested and
+no isotrophy detector has been run.
 
 ### Cross-Substrate Hand-Offs
 
