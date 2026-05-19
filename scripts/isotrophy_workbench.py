@@ -375,6 +375,8 @@ def scan_record_from_residuals(
     integrated: IntegratedOrbit,
     sigma3: dict[str, object],
     sigma3_inverse: dict[str, object],
+    sigma3_opposite: dict[str, object],
+    sigma3_opposite_inverse: dict[str, object],
     f_beta: dict[str, object],
     sigma_tolerance: float,
     sigma_closure_multiple: float,
@@ -392,8 +394,23 @@ def scan_record_from_residuals(
         sigma_best_phase = float(sigma3_inverse["phase"])
     sigma_group_residual = max(sigma3_residual, sigma3_inverse_residual)
 
+    sigma_opposite_residual = float(sigma3_opposite["residual_inf"])
+    sigma_opposite_inverse_residual = float(sigma3_opposite_inverse["residual_inf"])
+    if sigma_opposite_residual <= sigma_opposite_inverse_residual:
+        sigma_opposite_best_generator = "sigma3_opposite_orientation"
+        sigma_opposite_best_residual = sigma_opposite_residual
+        sigma_opposite_best_phase = float(sigma3_opposite["phase"])
+    else:
+        sigma_opposite_best_generator = "sigma3_opposite_inverse"
+        sigma_opposite_best_residual = sigma_opposite_inverse_residual
+        sigma_opposite_best_phase = float(sigma3_opposite_inverse["phase"])
+    sigma_opposite_group_residual = max(sigma_opposite_residual, sigma_opposite_inverse_residual)
+
     closure_scale = max(integrated.closure_position_inf, closure_floor)
     sigma_group_to_closure = sigma_group_residual / closure_scale
+    sigma_opposite_group_to_closure = sigma_opposite_group_residual / closure_scale
+    sigma_candidate = sigma_group_to_closure <= sigma_closure_multiple
+    sigma_opposite_candidate = sigma_opposite_group_to_closure <= sigma_closure_multiple
     f_beta_residual = float(f_beta["residual_inf"])
     return {
         "label": integrated.row.label,
@@ -409,6 +426,8 @@ def scan_record_from_residuals(
         "integration_seconds": integrated.elapsed_seconds,
         "sigma3_residual_inf": sigma3_residual,
         "sigma3_inverse_residual_inf": sigma3_inverse_residual,
+        "sigma3_opposite_residual_inf": sigma_opposite_residual,
+        "sigma3_opposite_inverse_residual_inf": sigma_opposite_inverse_residual,
         "sigma_best_generator": sigma_best_generator,
         "sigma_best_residual_inf": sigma_best_residual,
         "sigma_best_phase": sigma_best_phase,
@@ -416,7 +435,16 @@ def scan_record_from_residuals(
         "sigma_group_residual_inf": sigma_group_residual,
         "sigma_group_to_closure": sigma_group_to_closure,
         "sigma_absolute_candidate": sigma_group_residual <= sigma_tolerance,
-        "sigma_candidate": sigma_group_to_closure <= sigma_closure_multiple,
+        "sigma_candidate": sigma_candidate,
+        "sigma_opposite_best_generator": sigma_opposite_best_generator,
+        "sigma_opposite_best_residual_inf": sigma_opposite_best_residual,
+        "sigma_opposite_best_phase": sigma_opposite_best_phase,
+        "sigma_opposite_best_to_closure": sigma_opposite_best_residual / closure_scale,
+        "sigma_opposite_group_residual_inf": sigma_opposite_group_residual,
+        "sigma_opposite_group_to_closure": sigma_opposite_group_to_closure,
+        "sigma_opposite_absolute_candidate": sigma_opposite_group_residual <= sigma_tolerance,
+        "sigma_opposite_candidate": sigma_opposite_candidate,
+        "sigma_any_orientation_candidate": sigma_candidate or sigma_opposite_candidate,
         "F_beta_residual_inf": f_beta_residual,
         "F_beta_to_closure": f_beta_residual / closure_scale,
     }
@@ -502,12 +530,26 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
             args.n_samples,
             args.phase_grid,
         )
+        sigma3_opposite = residual_for_generator(
+            integrated,
+            GENERATORS["sigma3_opposite_orientation"],
+            args.n_samples,
+            args.phase_grid,
+        )
+        sigma3_opposite_inverse = residual_for_generator(
+            integrated,
+            GENERATORS["sigma3_opposite_inverse"],
+            args.n_samples,
+            args.phase_grid,
+        )
         f_beta = residual_for_generator(integrated, GENERATORS["F_beta"], args.n_samples, args.phase_grid)
         records.append(
             scan_record_from_residuals(
                 integrated,
                 sigma3,
                 sigma3_inverse,
+                sigma3_opposite,
+                sigma3_opposite_inverse,
                 f_beta,
                 args.sigma_tolerance,
                 args.sigma_closure_multiple,
@@ -516,14 +558,20 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
         )
         if args.report_every and row_index % args.report_every == 0:
             candidates = sum(1 for record in records if record["sigma_candidate"])
+            opposite_candidates = sum(1 for record in records if record["sigma_opposite_candidate"])
+            any_candidates = sum(1 for record in records if record["sigma_any_orientation_candidate"])
             print(
                 f"[isotrophy] scanned {row_index}/{len(selected)} rows; "
-                f"sigma_candidates={candidates}",
+                f"sigma_candidates={candidates}; "
+                f"sigma_opposite_candidates={opposite_candidates}; "
+                f"sigma_any_orientation_candidates={any_candidates}",
                 file=sys.stderr,
                 flush=True,
             )
 
     sigma_candidates = [record for record in records if record["sigma_candidate"]]
+    sigma_opposite_candidates = [record for record in records if record["sigma_opposite_candidate"]]
+    sigma_any_orientation_candidates = [record for record in records if record["sigma_any_orientation_candidate"]]
     expectation_met = (
         None if args.expected_sigma_count is None else len(sigma_candidates) == args.expected_sigma_count
     )
@@ -542,6 +590,10 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
         "expected_sigma_count": args.expected_sigma_count,
         "sigma_candidate_count": len(sigma_candidates),
         "sigma_candidate_labels": [record["label"] for record in sigma_candidates],
+        "sigma_opposite_candidate_count": len(sigma_opposite_candidates),
+        "sigma_opposite_candidate_labels": [record["label"] for record in sigma_opposite_candidates],
+        "sigma_any_orientation_candidate_count": len(sigma_any_orientation_candidates),
+        "sigma_any_orientation_candidate_labels": [record["label"] for record in sigma_any_orientation_candidates],
         "expectation_met": expectation_met,
         "elapsed_seconds": time.perf_counter() - started,
         "note": "G.2 scan: not a K_facet result or daughter-family count.",
