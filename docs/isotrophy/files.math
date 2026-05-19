@@ -1,0 +1,316 @@
+(* ====================================================================
+   sundog/docs/isotrophy/files.math
+   --------------------------------------------------------------------
+   Symbolic + numerical workbench for the Z_3 -> Z_2 descent check.
+   See ../sundog_v_isotrophy.md for the framing.
+
+   File format: Mathematica-flavored syntax, but every block is also
+   readable as language-agnostic pseudocode. Python equivalents are
+   noted inline where the numerical core will live (sympy + scipy +
+   numpy in the eventual blowout).
+
+   Conventions
+     - Bodies indexed 1..3.
+     - Positions x_i(t) in R^3. Velocities v_i(t) in R^3.
+     - Period T. Phase t in [0, T).
+     - Liao supplementary rows use a fixed symmetric ansatz, not full
+       18D state rows. Expand the ansatz first, then optionally translate
+       positions to the center-of-mass frame before integration/comparison.
+     - Total linear momentum is zero by the velocity ansatz.
+     - Raw scale has ||x_1(0) - x_2(0)|| = 2. Normalize only after ingestion
+       if the detector needs dimensionless residuals.
+   ==================================================================== *)
+
+
+(* ======================================================
+   Section A. Group-theoretic skeleton.
+   ====================================================== *)
+
+(* Body relabeling group at equal mass *)
+S3 = { e, c12, c13, c23, c123, c132 };
+(* in cycle notation:
+   e    = ()
+   c12  = (1 2)
+   c13  = (1 3)
+   c23  = (2 3)
+   c123 = (1 2 3)
+   c132 = (1 3 2)
+*)
+
+(* Surviving body-relabel stabilizer at m1 = m2 = 1, m3 = 1 + eps *)
+Z2massbreak = { e, c12 };
+
+(* Always-on dynamical symmetries (independent of mass perturbation) *)
+S1time      = "phase shift t -> t + phi, phi in [0, T)";
+TimeReverse = "t -> -t  (Hamiltonian symmetry of autonomous Newtonian dynamics)";
+O3spatial   = "rigid rotation + reflection of R^3 (acts diagonally on all bodies)";
+
+(* Full spacetime symmetry group *)
+Gfull = S3 ** S1time ** TimeReverse ** O3spatial;
+
+(* Surviving spacetime group after mass perturbation *)
+Geps  = Z2massbreak ** S1time ** TimeReverse ** O3spatial;
+
+
+(* ======================================================
+   Section B. The four candidate residual Z_2 generators.
+   ====================================================== *)
+
+(* A generic element g of Geps acts on an orbit X(t) = {x_1, x_2, x_3}(t) by
+
+      (g . X)(t) = R * P_perm * X( eps_t * (t - phi) )
+
+   where
+      P_perm  : permute body indices according to g.perm
+      phi     : time shift
+      eps_t   : +1 (forward) or -1 (time-reversed)
+      R       : O(3) action on R^3, applied diagonally to all bodies
+*)
+
+(* The order-2 elements of Geps with body-relabel component (12),
+   modulo conjugation by elements of the choreography's own Z_3: *)
+
+alpha = << perm -> c12, tshift -> T/2, treverse -> False, zreflect -> False >>;
+beta  = << perm -> c12, tshift -> 0,   treverse -> True,  zreflect -> False >>;
+gamma = << perm -> c12, tshift -> T/2, treverse -> False, zreflect -> True  >>;
+delta = << perm -> c12, tshift -> 0,   treverse -> True,  zreflect -> True  >>;
+
+residualZ2candidates = { alpha, beta, gamma, delta };
+
+(* Reading guide:
+   alpha = Liao's piano-trio generator (forward time, T/2 shift, no reflection)
+   beta  = isoscele time-reversal (body 1 forward == body 2 backward)
+   gamma = chirally-flipped piano-trio (only nontrivial in 3D)
+   delta = chirally-flipped time-reversal (only nontrivial in 3D)
+*)
+
+
+(* ======================================================
+   Section C. Choreography isotropy Z_3.
+   ====================================================== *)
+
+sigma3 = << perm -> c123, tshift -> T/3, treverse -> False, zreflect -> False >>;
+
+(* A choreography satisfies sigma3 . X = X. *)
+choreographyConstraint[X_] := (sigma3 . X) === X;
+
+(* For each choreography C_i (i = 1..21 at equal mass), the test is:
+   does C_i ALSO satisfy rho . C_i = C_i for any rho in residualZ2candidates ?
+
+   Define
+      S[i] := { rho in residualZ2candidates : isotropyHolds[C_i, rho] }
+
+   Theorem prediction (sundog v0.1):
+      # piano-trio families = #{ i : S[i] != {} }
+                            = K_pred
+*)
+
+
+(* ======================================================
+   Section D. Numerical isotropy detector.
+   ====================================================== *)
+
+(* Pseudocode -- to be implemented in Python (numpy + scipy.optimize). *)
+
+isotropyResidual[orbit_, g_] := Module[{Xperm, Xshift, Xreflect, Xrotated},
+   (* 1. Permute body labels according to g.perm *)
+   Xperm = permuteBodies[orbit, g["perm"]];
+
+   (* 2. Time shift: cyclic shift along the parameterization *)
+   Xshift = cyclicTimeShift[Xperm, g["tshift"]];
+
+   (* 3. Time reverse (if g.treverse) *)
+   If[g["treverse"], Xshift = reverseTime[Xshift]];
+
+   (* 4. z-reflection (if g.zreflect) *)
+   If[g["zreflect"], Xshift = reflectZ[Xshift]];
+
+   (* 5. Gauge: minimize over residual O(3) and S^1 phase *)
+   minimum[
+     normInf[orbit - applyO3andPhase[Xshift, R, phi]] / scale[orbit],
+     {R in O(3), phi in [0, T)}
+   ]
+];
+
+(* Mark g in Iso(orbit) iff isotropyResidual[orbit, g] < tolerance. *)
+
+(* Implementation notes -- to be expanded:
+
+   - Sampling: discretize X(t) on N points per period (start N = 1024).
+   - Choose N coprime with the small denominators {2, 3} to avoid aliasing
+     false positives for alpha (period-2) and sigma3 (period-3). N = 1009
+     (prime) is convenient.
+   - Gauge minimization:
+       * SO(3) alignment: rotate so that the inertia tensor at t = 0 is
+         diagonal with descending eigenvalues. Resolves continuous gauge.
+       * Reflection gauge for gamma, delta: include det(R) = -1 cases by
+         testing both X and reflectZ[X].
+       * Phase phi: anchor at argmin_t I_zz(t) (epoch of minimum moment of
+         inertia about z-axis) to fix S^1.
+   - Tolerance: relative, against orbit scale. Start at 1e-4; tighten to
+     1e-6 once integration precision confirmed.
+*)
+
+
+(* ======================================================
+   Section E. Data ingestion.
+   ====================================================== *)
+
+(* supplementary-A.txt and supplementary-B.txt:
+   Verified live format from Numerical Tank:
+
+     Orbit O_{index}(m_3)  z_0  v_x  v_y  v_z  T  stability
+
+   Both files use the fixed initial-position ansatz
+
+     r_1 = (-1, 0, 0)
+     r_2 = ( 1, 0, 0)
+     r_3 = ( 0, 0, z_0)
+
+   supplementary-A uses m_1 = m_2 = 1 and
+
+     v_1 = (v_x, v_y,  v_z)
+     v_2 = (v_x, v_y, -v_z)
+     v_3 = (-(m_1 + m_2) v_x / m_3,
+            -(m_1 + m_2) v_y / m_3,
+             0)
+
+   supplementary-B is the piano-trio subset and writes the same relation as
+
+     v_3 = (-2 v_x / m_3, -2 v_y / m_3, 0)
+
+   Therefore the loader reconstructs masses, positions, velocities, period,
+   and stability from compact rows. It must not expect full 18D state rows.
+*)
+
+suppA = "https://numericaltank.sjtu.edu.cn/three-body/three-body/gif/supplementary-A.txt";
+suppB = "https://numericaltank.sjtu.edu.cn/three-body/three-body/gif/supplementary-B.txt";
+github = "https://github.com/sjtu-liao/three-body";
+
+(* Loader stubs (Python target):
+
+     def load_supp(path: str) -> list[Orbit]:
+         '''Parse Liao supplementary compact ansatz rows into Orbit records.
+         Each Orbit has: source, index, m=(1,1,m3), x0, v0, T, stability.'''
+         ...
+
+     def integrate_orbit(orbit: Orbit, n_samples: int) -> Array[N, 3, 3]:
+         '''High-precision integrator. Use scipy.integrate.solve_ivp with
+         method='DOP853' and rtol=atol=1e-12 as a first pass; upgrade to
+         mpmath-based fixed-step Verlet if residuals don't reach tolerance.'''
+         ...
+*)
+
+
+(* ======================================================
+   Section F. Result tables (to be filled).
+   ====================================================== *)
+
+(* Table F.1: Equal-mass choreographies (m3 = 1 rows after sigma_3
+   choreography validation) -- 21 rows *)
+
+ChoreoTable = "
+| C_i | T | r_alpha | r_beta | r_gamma | r_delta | S_i (residual Z_2 set) | Type |
+|-----|---|---------|--------|---------|---------|------------------------|------|
+| 1   |   |         |        |         |         |                        |      |
+| 2   |   |         |        |         |         |                        |      |
+| ... |   |         |        |         |         |                        |      |
+| 21  |   |         |        |         |         |                        |      |
+";
+
+(* Aggregate: K_pred = #{ i : S_i != {} }, with multiplicities if |S_i| > 1 *)
+
+
+(* Table F.2: Piano-trio orbits (clustered into families) -- ~273 rows pre-cluster *)
+
+PianoTrioTable = "
+| Orbit ID | m3 | T | residual Z_2 type | family ID (post-cluster) |
+|----------|----|---|-------------------|--------------------------|
+|          |    |   |                   |                          |
+";
+
+(* Aggregate: K_emp = # of distinct family IDs *)
+
+
+(* Table F.3: Comparison *)
+
+ComparisonTable = "
+| Quantity                            | Predicted | Observed |
+|-------------------------------------|-----------|----------|
+| K (piano-trio families)             | K_pred =  | K_emp =  |
+| Avg samples per family (~273/K)     |           |          |
+| Type-0 choreographies (no daughter) |           |          |
+| Type-2+ choreographies (multi)      |           |          |
+";
+
+
+(* ======================================================
+   Section G. Sanity checks.
+   ====================================================== *)
+
+(* G.1: Closure check. After integrating one full period T, verify
+        ||X(T) - X(0)|| < integration tolerance. If not, T is wrong or
+        IC has drift. *)
+
+(* G.2: Self-consistency of sigma_3 on the 21 choreographies. This is a
+        precondition: if sigma_3 isn't satisfied to high precision on the
+        21 labeled choreographies, our integrator or ingestion is broken. *)
+
+(* G.3: Cross-check on figure-eight (planar, equal-mass, well-known).
+        Expected isotropy of figure-8:
+           sigma_3  : YES (Z_3 choreography)
+           alpha    : NO  (figure-8 is not a piano-trio; bodies trace a
+                          single curve, not pairwise)
+           beta     : YES (figure-8 has isoscele time-reversal symmetry --
+                          this is the Chenciner-Montgomery Z_2 reflection
+                          that makes the action minimum on D_3-fixed loops)
+           gamma    : NO  (planar, z-reflection trivial)
+           delta    : NO  (planar)
+        Predicted descent under m_3 perturbation: 1 piano-trio family
+        (from beta). This is a known reference point -- if our detector
+        gets the figure-8 wrong, stop. *)
+
+(* G.4: Conjugation closure. Verify that conjugating alpha by sigma_3
+        gives an equivalent operator: sigma3 . alpha . sigma3^{-1}
+        should equal ((23), 5T/6, +, I), which acts on a choreography
+        the same way alpha does (since the choreography is itself
+        sigma_3-invariant). If a choreography satisfies alpha but not
+        the conjugate, there is an error in the detector or in the
+        gauge fixing. *)
+
+
+(* ======================================================
+   Section H. Blowout hooks.
+   ====================================================== *)
+
+(* H.1: Replace the discrete classifier with a *continuous* "isotrophy
+        score" vector  s(X) = (r_alpha, r_beta, r_gamma, r_delta).
+        Cluster the 21 choreographies in s-space. The sundog theorem
+        predicts a *bimodal* distribution: residuals are either at
+        numerical zero or O(1). If we see intermediate values, the
+        theorem either needs a tolerance argument or has missed a
+        residual generator. *)
+
+(* H.2: Extend residualZ2candidates with composite operators of the form
+        ((12), k*T/n, treverse?, zreflect?) for rational k/n. The current
+        four are k/n in {0, 1/2}; if K_pred < K_emp, the missing daughters
+        may live at other rational time shifts. (Beware of overcounting
+        from conjugation by sigma_3 if so.) *)
+
+(* H.3: Replace the 21-and-273 slice with the full 13315 stable planar
+        catalog from Li-Li-Liao 2021. The same descent calculation,
+        now S_3 -> Z_2 in the planar setting, predicts a similar
+        ratio. Independent test. *)
+
+(* H.4: Reverse direction -- predict choreographies from piano-trios.
+        Given a piano-trio at m_3 ≠ 1, continue it to m_3 = 1 and
+        check whether it converges to a Z_3 choreography or to a generic
+        equal-mass orbit. The sundog theorem predicts: piano-trios with
+        residual type alpha (or any of the four) ascend to choreographies;
+        piano-trios that arose by other mechanisms (e.g., direct
+        bifurcation from a Z_2-equilibrium) do not. *)
+
+
+(* ======================================================
+   End of workbench skeleton.
+   ====================================================== *)

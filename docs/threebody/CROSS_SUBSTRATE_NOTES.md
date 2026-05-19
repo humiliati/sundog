@@ -117,6 +117,27 @@ Suggested checks:
   just absolute survival.
 - Use a smoke gate before any broad 3D sweep.
 
+### Sidecar - 3D Catalog Isotrophy / Symmetry Descent
+
+Question: can Sundog make a non-tautological first-principles prediction over
+an external three-body catalog, before writing another controller sweep?
+
+Suggested checks:
+
+- Use Li-Liao 2025's 21 equal-mass 3D choreographies and 273 piano-trio orbits
+  as an external catalog, not as a Phase 13-15 continuation.
+- Classify each choreography by residual spacetime `Z2` generators that survive
+  the `S3 -> Z2` mass perturbation.
+- Compare the predicted daughter-family count against piano-trio families
+  clustered across the `m3 = 0.1*n` grid.
+- Treat mismatch as a theorem-sharpening result, not a failed controller
+  experiment.
+
+Workbench:
+
+- [`../sundog_v_isotrophy.md`](../sundog_v_isotrophy.md)
+- [`../isotrophy/files.math`](../isotrophy/files.math)
+
 ## 5. Documentation Shape
 
 Follow the Mesa pattern:

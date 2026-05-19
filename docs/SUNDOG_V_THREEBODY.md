@@ -756,6 +756,23 @@ sampler and `richardson-order-map.csv`; Phase 13/14 hard-void gate reruns and
 the amended Phase 15 smoke are pending. Smoke must stop for `T_window` and
 order-coverage readback before the full lock starts.
 
+### 3D Catalog / Isotrophy Sidecar
+
+Goal: test whether the new Li-Liao 2025 three-dimensional orbit catalog gives
+Sundog a cheap first-principles, non-tautological theorem check independent of
+the current planar controller envelope.
+
+Sidecar artifacts:
+
+- [`docs/sundog_v_isotrophy.md`](sundog_v_isotrophy.md)
+- [`docs/isotrophy/files.math`](isotrophy/files.math)
+
+The sidecar asks whether the residual spacetime `Z2` structure of the 21
+equal-mass 3D choreographies predicts the distinct piano-trio family count in
+the 273 reported two-equal-mass piano-trio orbits. This is a theorem-sharpening
+workbench, not a controller result and not evidence for Phase 13-15. No
+supplementary data has been ingested and no isotrophy detector has been run.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
