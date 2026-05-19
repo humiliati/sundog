@@ -67,21 +67,37 @@ Geps  = Z2massbreak ** S1time ** TimeReverse ** O3spatial;
       R       : O(3) action on R^3, applied diagonally to all bodies
 *)
 
-(* The order-2 elements of Geps with body-relabel component (12),
-   modulo conjugation by elements of the choreography's own Z_3: *)
+(* Explicit spatial representatives. Detector generators must always carry a
+   spatial matrix; do not use a zreflect boolean. *)
+I3             = DiagonalMatrix[{ 1,  1,  1}];
+Zmirror        = DiagonalMatrix[{ 1,  1, -1}];
+Rpi            = DiagonalMatrix[{-1, -1,  1}];
+PointInversion = Rpi . Zmirror;  (* DiagonalMatrix[{-1, -1, -1}] *)
 
-alpha = << perm -> c12, tshift -> T/2, treverse -> False, zreflect -> False >>;
-beta  = << perm -> c12, tshift -> 0,   treverse -> True,  zreflect -> False >>;
-gamma = << perm -> c12, tshift -> T/2, treverse -> False, zreflect -> True  >>;
-delta = << perm -> c12, tshift -> 0,   treverse -> True,  zreflect -> True  >>;
+(* Abstract residual classes: alpha/beta/gamma/delta describe the
+   permutation-time pattern. Concrete detector elements are representatives
+   with explicit spatial matrices. *)
 
-residualZ2candidates = { alpha, beta, gamma, delta };
+alphaI = << name -> "alpha_I", class -> "alpha",
+            perm -> c12, tshift -> T/2, treverse -> False, spatial -> I3 >>;
+betaI  = << name -> "beta_I", class -> "beta",
+            perm -> c12, tshift -> 0,   treverse -> True,  spatial -> I3 >>;
+gammaZ = << name -> "gamma_Z", class -> "gamma",
+            perm -> c12, tshift -> T/2, treverse -> False, spatial -> Zmirror >>;
+deltaZ = << name -> "delta_Z", class -> "delta",
+            perm -> c12, tshift -> 0,   treverse -> True,  spatial -> Zmirror >>;
+
+residualZ2classes = { "alpha", "beta", "gamma", "delta" };
+residualZ2representatives = { alphaI, betaI, gammaZ, deltaZ };
 
 (* Reading guide:
-   alpha = Liao's piano-trio generator (forward time, T/2 shift, no reflection)
-   beta  = isoscele time-reversal (body 1 forward == body 2 backward)
-   gamma = chirally-flipped piano-trio (only nontrivial in 3D)
-   delta = chirally-flipped time-reversal (only nontrivial in 3D)
+   alpha = piano-trio time-shift class
+   beta  = isosceles time-reversal class
+   gamma = chirally-flipped alpha class (only nontrivial in 3D)
+   delta = chirally-flipped beta class (only nontrivial in 3D)
+
+   The Li-Liao ansatz does not realize beta as beta_I. It realizes a concrete
+   beta-class element with spatial matrix Rpi; see Fbeta below.
 *)
 
 
@@ -102,8 +118,6 @@ residualZ2candidates = { alpha, beta, gamma, delta };
    Let Rpi be the 180-degree rotation around the z-axis.
 *)
 
-Rpi = DiagonalMatrix[{-1, -1, 1}];
-
 (* At t = 0:
 
       Rpi . r2 = r1
@@ -116,15 +130,30 @@ Rpi = DiagonalMatrix[{-1, -1, 1}];
       -Rpi . v1 = v2
       -Rpi . v3 = v3
 
-   Therefore the initial state is fixed by a beta-type generator
+   Therefore the initial state is fixed by a concrete beta-class generator
 
-      facetBeta = ((12), time reversal, Rpi).
+      Fbeta = ((12), time reversal, Rpi).
 
    By uniqueness of the Newtonian flow and m1=m2 equivariance, every orbit
-   generated from this ansatz remains in the facet fixed by facetBeta.
+   generated from this ansatz remains in the facet fixed by Fbeta.
 *)
 
-facetBeta = << perm -> c12, tshift -> 0, treverse -> True, spatial -> Rpi >>;
+Fbeta = << name -> "F_beta", class -> "beta",
+           perm -> c12, tshift -> 0, treverse -> True, spatial -> Rpi >>;
+
+(* The chiral partner of the facet generator is not deltaZ. It is
+
+      Fdelta = Fbeta followed by Zmirror
+                 = ((12), time reversal, PointInversion).
+*)
+
+Fdelta = << name -> "F_delta", class -> "delta",
+            perm -> c12, tshift -> 0, treverse -> True,
+            spatial -> PointInversion >>;
+
+concreteResidualCandidates = {
+   alphaI, betaI, gammaZ, deltaZ, Fbeta, Fdelta
+};
 
 (* Consequence:
 
@@ -135,7 +164,7 @@ facetBeta = << perm -> c12, tshift -> 0, treverse -> True, spatial -> Rpi >>;
    is void for this catalog. Type-0 choreographies are outside the sampled
    template, not rare inside it. The corrected quantity is the
    facet-conditioned daughter multiplicity: count residual generators that
-   are emergent relative to facetBeta, modulo sigma3 conjugation and spatial
+   are emergent relative to Fbeta, modulo sigma3 conjugation and spatial
    gauge equivalences.
 *)
 
@@ -144,17 +173,18 @@ facetBeta = << perm -> c12, tshift -> 0, treverse -> True, spatial -> Rpi >>;
    Section C. Choreography isotropy Z_3.
    ====================================================== *)
 
-sigma3 = << perm -> c123, tshift -> T/3, treverse -> False, zreflect -> False >>;
+sigma3 = << name -> "sigma3", class -> "choreography",
+            perm -> c123, tshift -> T/3, treverse -> False, spatial -> I3 >>;
 
 (* A choreography satisfies sigma3 . X = X. *)
 choreographyConstraint[X_] := (sigma3 . X) === X;
 
 (* For each choreography C_i (i = 1..21 at equal mass), the first test is:
-   does C_i satisfy sigma3 in addition to the template-enforced facetBeta?
+   does C_i satisfy sigma3 in addition to the template-enforced Fbeta?
 
    Define
-      S[i] := { rho in residualZ2candidates : isotropyHolds[C_i, rho] }
-      E[i] := emergent residual generators in S[i] modulo <facetBeta>
+      S[i] := { rho in concreteResidualCandidates : isotropyHolds[C_i, rho] }
+      E[i] := emergent residual generators in S[i] modulo <Fbeta>
       d[i] := facet-conditioned daughter multiplicity
 
    Retired theorem prediction (sundog v0.1, invalid under ansatz):
@@ -172,7 +202,7 @@ choreographyConstraint[X_] := (sigma3 . X) === X;
 
 (* Pseudocode -- to be implemented in Python (numpy + scipy.optimize). *)
 
-isotropyResidual[orbit_, g_] := Module[{Xperm, Xshift, Xreflect, Xrotated},
+isotropyResidual[orbit_, g_] := Module[{Xperm, Xshift},
    (* 1. Permute body labels according to g.perm *)
    Xperm = permuteBodies[orbit, g["perm"]];
 
@@ -182,13 +212,13 @@ isotropyResidual[orbit_, g_] := Module[{Xperm, Xshift, Xreflect, Xrotated},
    (* 3. Time reverse (if g.treverse) *)
    If[g["treverse"], Xshift = reverseTime[Xshift]];
 
-   (* 4. z-reflection (if g.zreflect) *)
-   If[g["zreflect"], Xshift = reflectZ[Xshift]];
+   (* 4. Apply the explicit spatial operator attached to g. *)
+   Xshift = applySpatial[Xshift, g["spatial"]];
 
    (* 5. Gauge: minimize over residual SO(3) and S^1 phase.
-         Do not allow arbitrary improper O(3) here, or gamma/delta
-         collapse into alpha/beta by gauge choice. Keep z-reflection
-         as an explicit candidate operation. *)
+         Do not allow arbitrary improper O(3) here, or concrete chiral
+         generators collapse into non-chiral representatives by gauge choice.
+         Improper operations belong in g["spatial"], not in the gauge. *)
    minimum[
      normInf[orbit - applyO3andPhase[Xshift, R, phi]] / scale[orbit],
      {R in SO(3), phi in [0, T)}
@@ -206,9 +236,9 @@ isotropyResidual[orbit_, g_] := Module[{Xperm, Xshift, Xreflect, Xrotated},
    - Gauge minimization:
        * SO(3) alignment: rotate so that the inertia tensor at t = 0 is
          diagonal with descending eigenvalues. Resolves continuous gauge.
-       * Reflection diagnostic for gamma, delta: keep det(R) = +1 in the
-         main classifier and apply reflectZ only through the candidate
-         operator. A separate O(3)-collapsed residual may be reported as
+       * Reflection diagnostic for gamma/delta/Fdelta: keep det(R) = +1
+         in the main classifier and apply improper matrices only through
+         g["spatial"]. A separate O(3)-collapsed residual may be reported as
          a gauge sanity check, but it must not decide chirality type.
        * Phase phi: anchor at argmin_t I_zz(t) (epoch of minimum moment of
          inertia about z-axis) to fix S^1.
@@ -275,24 +305,24 @@ github = "https://github.com/sjtu-liao/three-body";
    choreography validation) -- 21 rows *)
 
 ChoreoTable = "
-| C_i | T | r_facetBeta | r_alpha | r_beta | r_gamma | r_delta | S_i | E_i | d_i |
-|-----|---|-------------|---------|--------|---------|---------|-----|-----|-----|
-| 1   |   |             |         |        |         |         |     |     |     |
-| 2   |   |             |         |        |         |         |     |     |     |
-| ... |   |             |         |        |         |         |     |     |     |
-| 21  |   |             |         |        |         |         |     |     |     |
+| C_i | T | r_alphaI | r_betaI | r_gammaZ | r_deltaZ | r_Fbeta | r_Fdelta | S_i | E_i | d_i |
+|-----|---|----------|---------|----------|----------|---------|----------|-----|-----|-----|
+| 1   |   |          |         |          |          |         |          |     |     |     |
+| 2   |   |          |         |          |          |         |          |     |     |     |
+| ... |   |          |         |          |          |         |          |     |     |     |
+| 21  |   |          |         |          |          |         |          |     |     |     |
 ";
 
 (* Aggregate: K_facet = Sum_i d_i after quotienting the structural
-   facetBeta generator and sigma3-conjugate duplicates. *)
+   Fbeta generator and sigma3-conjugate duplicates. *)
 
 
 (* Table F.2: Piano-trio orbits (clustered into families) -- ~273 rows pre-cluster *)
 
 PianoTrioTable = "
-| Orbit ID | m3 | T | residual Z_2 type | family ID (post-cluster) |
-|----------|----|---|-------------------|--------------------------|
-|          |    |   |                   |                          |
+| Orbit ID | m3 | T | concrete residual generator | abstract class | family ID (post-cluster) |
+|----------|----|---|-----------------------------|----------------|--------------------------|
+|          |    |   |                             |                |                          |
 ";
 
 (* Aggregate: K_emp = # of distinct family IDs *)
@@ -305,7 +335,7 @@ ComparisonTable = "
 |-------------------------------------|-----------|----------|
 | K (facet-visible piano-trio families) | K_facet = | K_emp =  |
 | Avg samples per family (~273/K_emp) |           |          |
-| facetBeta precondition failures     | 0         |          |
+| Fbeta precondition failures         | 0         |          |
 | enhanced-isotropy multi daughters   |           |          |
 ";
 
@@ -325,22 +355,22 @@ ComparisonTable = "
 (* G.3: Cross-check on figure-eight (planar, equal-mass, well-known).
         Expected isotropy of figure-8:
            sigma_3  : YES (Z_3 choreography)
-           alpha    : NO  (figure-8 is not a piano-trio; bodies trace a
-                          single curve, not pairwise)
-           beta     : YES (figure-8 has isoscele time-reversal symmetry --
-                          this is the Chenciner-Montgomery Z_2 reflection
-                          that makes the action minimum on D_3-fixed loops)
-           gamma    : NO  (planar, z-reflection trivial)
-           delta    : NO  (planar)
+           alpha class : NO  (figure-8 is not a piano-trio; bodies trace a
+                              single curve, not pairwise)
+           beta class  : YES (figure-8 has isosceles time-reversal symmetry --
+                              the concrete spatial representative depends on
+                              the planar gauge used for the fixture)
+           gamma class : NO  (planar, z-reflection trivial)
+           delta class : NO  (planar)
         Predicted descent under m_3 perturbation: 1 piano-trio family
         (from beta). This is a known reference point -- if our detector
         gets the figure-8 wrong, stop. *)
 
-(* G.4: Conjugation closure. Verify that conjugating alpha by sigma_3
-        gives an equivalent operator: sigma3 . alpha . sigma3^{-1}
+(* G.4: Conjugation closure. Verify that conjugating alphaI by sigma_3
+        gives an equivalent concrete operator: sigma3 . alphaI . sigma3^{-1}
         should equal ((23), 5T/6, +, I), which acts on a choreography
-        the same way alpha does (since the choreography is itself
-        sigma_3-invariant). If a choreography satisfies alpha but not
+        the same way alphaI does (since the choreography is itself
+        sigma_3-invariant). If a choreography satisfies alphaI but not
         the conjugate, there is an error in the detector or in the
         gauge fixing. *)
 
@@ -350,15 +380,16 @@ ComparisonTable = "
    ====================================================== *)
 
 (* H.1: Replace the discrete classifier with a *continuous* "isotrophy
-        score" vector  s(X) = (r_alpha, r_beta, r_gamma, r_delta).
+        score" vector over concreteResidualCandidates, e.g.
+        s(X) = (r_alphaI, r_betaI, r_gammaZ, r_deltaZ, r_Fbeta, r_Fdelta).
         Cluster the 21 choreographies in s-space after removing the
-        structural facetBeta direction. The sundog theorem predicts
+        structural Fbeta direction. The sundog theorem predicts
         emergent residuals are either at numerical zero or O(1). If we
         see intermediate values, the theorem either needs a tolerance
         argument or has missed a residual generator. *)
 
-(* H.2: Extend residualZ2candidates with composite operators of the form
-        ((12), k*T/n, treverse?, zreflect?) for rational k/n. The current
+(* H.2: Extend concreteResidualCandidates with composite operators of the form
+        ((12), k*T/n, treverse?, spatialMatrix) for rational k/n. The current
         four are k/n in {0, 1/2}; if K_facet < K_emp, the missing daughters
         may live at other rational time shifts. (Beware of overcounting
         from conjugation by sigma_3 and from the template facet if so.) *)
@@ -371,15 +402,10 @@ ComparisonTable = "
 (* H.4: Reverse direction -- predict choreographies from piano-trios.
         Given a piano-trio at m_3 ≠ 1, continue it to m_3 = 1 and
         check whether it converges to a Z_3 choreography or to a generic
-        equal-mass orbit. The sundog theorem predicts: piano-trios with
-        residual type alpha (or any of the four) ascend to choreographies;
-        piano-trios that arose by other mechanisms (e.g., direct
-        bifurcation from a Z_2-equilibrium) do not. *)
-
-(* Facet correction for H.4: interpret "ascend" inside the Li-Liao ansatz
-   facet. The post-grounding theorem predicts facet-visible piano-trios
-   with emergent residual structure ascend to facet-visible choreographies;
-   piano-trios produced by other mechanisms need not. *)
+        equal-mass orbit inside the Li-Liao ansatz facet. The post-grounding
+        theorem predicts facet-visible piano-trios with emergent residual
+        structure ascend to facet-visible choreographies; piano-trios
+        produced by other mechanisms need not. *)
 
 
 (* ======================================================

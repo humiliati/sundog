@@ -126,9 +126,10 @@ Suggested checks:
 
 - Use Li-Liao 2025's 21 equal-mass 3D choreographies and 273 piano-trio orbits
   as an external catalog, not as a Phase 13-15 continuation.
-- Treat the published fixed ansatz as the crystal cut: it enforces a beta-type
-  residual `Z2`, so the count test is facet-conditioned rather than an
-  unconditioned sample over all 3D orbit space.
+- Treat the published fixed ansatz as the crystal cut: it enforces the concrete
+  beta-class residual `Z2` called `F_beta`, so the count test is
+  facet-conditioned rather than an unconditioned sample over all 3D orbit
+  space.
 - Classify each choreography by residual spacetime `Z2` generators that survive
   the `S3 -> Z2` mass perturbation.
 - Compare the predicted daughter-family count against piano-trio families

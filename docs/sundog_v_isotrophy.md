@@ -44,22 +44,51 @@ A choreography orbit at ε=0 with isotropy Iso(X) ⊆ G_full continues into ε�
 
 ---
 
-## 3. The four residual Z₂ generators
+## 3. Residual classes and concrete generators
 
-Among elements of G_ε whose body-relabel component is (12), exactly four are independent under the always-on dynamical symmetries:
+Among elements of `G_epsilon` whose body-relabel component is `(12)`, the
+permutation-time part still falls into four residual classes:
 
-| Name | Permutation | Time shift | Time reversal | z-reflection |
-|------|-------------|------------|---------------|--------------|
-| α    | (12)        | T/2        | no            | no           |
-| β    | (12)        | 0          | **yes**       | no           |
-| γ    | (12)        | T/2        | no            | **yes**      |
-| δ    | (12)        | 0          | **yes**       | **yes**      |
+- `alpha`: half-period shift, no time reversal
+- `beta`: time reversal, no half-period shift
+- `gamma`: chiral alpha
+- `delta`: chiral beta
 
-α is the "pure" piano-trio generator (Liao's σ_2).
-β is the "isoscele time-reversal" — body 1's forward trajectory equals body 2's reversed trajectory.
-γ, δ are the chirality-flipped analogs (only nontrivial in 3D, vacuous in planar case).
+A detector element is not complete until it also carries an explicit spatial
+matrix. Keep the abstract residual class separate from the concrete spatial
+realization.
 
-These four exhaust the order-2 elements of G_ε with body-relabel component (12), up to redundancy with σ_3-conjugation inside the choreography itself. (Sanity: σ_3 · α · σ_3⁻¹ = ((23), 5T/6, +, I), which is α conjugated to a different transposition — same Z₂ orbit, not a new element.)
+Spatial representatives used in this workbench:
+
+```text
+I   = diag( 1,  1,  1)
+Z   = diag( 1,  1, -1)       # z-reflection
+Rpi = diag(-1, -1,  1)       # pi rotation about z
+P   = Rpi * Z = -I           # point inversion
+```
+
+Concrete generators:
+
+| Name | Class | Permutation | Time shift | Time reversal | Spatial matrix |
+|------|-------|-------------|------------|---------------|----------------|
+| `alpha_I` | alpha | (12) | T/2 | no | `I` |
+| `beta_I` | beta | (12) | 0 | yes | `I` |
+| `gamma_Z` | gamma | (12) | T/2 | no | `Z` |
+| `delta_Z` | delta | (12) | 0 | yes | `Z` |
+| `F_beta` | beta | (12) | 0 | yes | `Rpi` |
+| `F_delta` | delta | (12) | 0 | yes | `P = -I` |
+
+`F_beta` is the Li-Liao ansatz facet generator. It is a concrete beta-class
+element, not a redefinition of beta and not evidence for a fifth abstract
+class. Naming it separately prevents the detector from confusing `((12), tau,
+I)` with the actual facet symmetry `((12), tau, Rpi)`. `F_delta = F_beta * Z`
+is the chiral partner of the facet generator; it is not the same concrete
+operator as `delta_Z`.
+
+The four abstract classes are the representation-theory bookkeeping. The
+concrete generators are the detector basis. Quotients such as `/ <F_beta>` are
+only defined after everything has been lifted into this explicit spatial-matrix
+schema.
 
 ---
 
@@ -79,15 +108,15 @@ v3 = (-2vx/m3, -2vy/m3, 0)
 ```
 
 Let `Rpi = diag(-1, -1, 1)`, the 180-degree rotation around the z-axis. At
-`t=0`, the state is fixed by the beta-type operation
+`t=0`, the state is fixed by the concrete beta-class operation
 
 ```text
-F := ((12), time reversal, Rpi)
+F_beta := ((12), time reversal, Rpi)
 ```
 
 because `Rpi r2 = r1`, `Rpi r1 = r2`, `Rpi r3 = r3`, and the velocity
 condition for time reversal gives `-Rpi v2 = v1`, `-Rpi v1 = v2`,
-`-Rpi v3 = v3`. Since the Newtonian flow with `m1=m2` commutes with `F`, every
+`-Rpi v3 = v3`. Since the Newtonian flow with `m1=m2` commutes with `F_beta`, every
 trajectory produced by this ansatz carries this structural residual `Z2`.
 
 So the original unconditioned estimator is void:
@@ -105,11 +134,12 @@ Corrected working prediction (sundog theorem v0.2):
 
 For each equal-mass choreography `C_i` in the ansatz facet, classify its
 *enhanced* residual spacetime isotropy relative to the structural facet
-generator `F`. Define
+generator `F_beta`. Define
 
 ```text
-S_i := { rho in {alpha, beta, gamma, delta} : rho in Iso(C_i) }
-E_i := S_i / <F>     # inequivalent emergent residual generators inside facet
+S_i := { rho in {alpha_I, beta_I, gamma_Z, delta_Z, F_beta, F_delta}
+         : rho in Iso(C_i) }
+E_i := S_i / <F_beta>   # inequivalent emergent residual generators inside facet
 d_i := facet-conditioned daughter multiplicity for C_i
 ```
 
@@ -121,10 +151,11 @@ The empirical target is now
 ```
 
 The immediate workbench task is to make `d_i` operational: determine which of
-`alpha/beta/gamma/delta` is structurally baked in by the ansatz, which are
-emergent, and which are equivalent under `sigma3` conjugation and spatial gauge.
-The algebra above pins the structural generator as beta-type. The numerical
-detector should verify that before reading any daughter count.
+the concrete detector generators are structurally baked in by the ansatz, which
+are emergent, and which are equivalent under `sigma3` conjugation and spatial
+gauge. The algebra above pins the structural generator as `F_beta`, a concrete
+realization of the beta class. The numerical detector should verify that before
+reading any daughter count.
 
 ---
 
@@ -141,7 +172,7 @@ the Li-Liao isosceles/time-reversal facet.
 
 We want either:
 - **(P1)** # of *facet-visible distinct piano-trio families* `K_emp` matches the structurally-predicted `K_facet`. Each family is sampled at multiple `m3` values, so `273/K_emp` remains a sampling-density diagnostic, not the prediction itself.
-- **(P2)** If `K_emp != K_facet`, the discrepancy is itself a structured object and should factor through one of: (i) family bifurcation as `m3` crosses critical values, (ii) chirality doubling we missed, (iii) equivalence collapse from `sigma3` conjugation or spatial gauge, (iv) an ansatz facet that enforces more symmetry than beta-type alone.
+- **(P2)** If `K_emp != K_facet`, the discrepancy is itself a structured object and should factor through one of: (i) family bifurcation as `m3` crosses critical values, (ii) chirality doubling we missed, (iii) equivalence collapse from `sigma3` conjugation or spatial gauge, (iv) an ansatz facet that enforces more symmetry than `F_beta` alone.
 
 Either P1 or P2 is informative. The outcome that kills the theorem is `K_facet`
 and `K_emp` being unrelated after the facet conditioning is accounted for.
@@ -154,12 +185,12 @@ For each of the 21 choreographies:
 
 1. **Ingest** initial conditions and period from supplementary-A. The file uses a compact fixed ansatz, not full 18D state rows: expand `O_index(m3), z0, vx, vy, vz, T, stability` into the three positions and velocities before integrating. Filter the `m3=1` slice.
 2. **Discretize** X(t) on N samples per period (N ~ 10³ initially).
-3. **Facet precondition:** verify the beta-type ansatz symmetry `F` and the choreography condition `sigma3` before treating a row as one of the 21 choreographies.
-4. **For each ρ ∈ {α, β, γ, δ}:**
-   - Construct ρ·X(t) by permuting bodies, time-shifting, optionally reversing time, optionally flipping z.
-   - Compute residual r_ρ(X) := min over rotation R ∈ SO(3) and time-phase φ ∈ S¹ of  ||ρ·X(·) − R · X(· + φ)||_∞ / scale(X).
-   - Mark ρ ∈ Iso(C_i) if r_ρ(X) < tolerance.
-5. Tabulate `S_i`, quotient out the structural facet generator `F`, and compute `d_i`. Sum to get `K_facet`.
+3. **Facet precondition:** verify the concrete beta-class ansatz symmetry `F_beta` and the choreography condition `sigma3` before treating a row as one of the 21 choreographies.
+4. **For each concrete generator `rho` in `{alpha_I, beta_I, gamma_Z, delta_Z, F_beta, F_delta}`:**
+   - Construct `rho · X(t)` by permuting bodies, time-shifting, optionally reversing time, and applying `rho`'s explicit spatial matrix.
+   - Compute `r_rho(X) := min` over rotation `R ∈ SO(3)` and time-phase `phi ∈ S1` of `||rho · X(.) - R · X(. + phi)||_infty / scale(X)`.
+   - Mark `rho ∈ Iso(C_i)` if `r_rho(X) < tolerance`.
+5. Tabulate `S_i`, quotient out the structural facet generator `F_beta`, and compute `d_i`. Sum to get `K_facet`.
 
 For piano-trio family counting:
 
@@ -175,7 +206,7 @@ Compare `K_facet` ↔ `K_emp`.
 
 - **SO(3) gauge:** every orbit lives in a 3-parameter SO(3) gauge orbit; isotropy checks must min over rotation. Standard fix: align orbits to principal axes of inertia tensor at t=0 before comparing.
 - **Time phase:** likewise S¹ phase. Fix by anchoring at, e.g., the configuration of minimal moment of inertia.
-- **Reflection ambiguity in 3D:** improper rotations are a separate factor. The classifier should keep the main gauge at SO(3) and apply z-reflection only through the γ/δ candidate operators; otherwise a free O(3) minimization can collapse γ/δ into α/β.
+- **Reflection ambiguity in 3D:** improper rotations are a separate factor. The classifier should keep the main gauge at SO(3) and apply improper spatial matrices only through concrete candidate operators such as `gamma_Z`, `delta_Z`, and `F_delta`; otherwise a free O(3) minimization can collapse chiral and non-chiral representatives.
 - **Period sampling:** time discretization should be coprime with T/2 and T/3 to avoid alias-induced false isotropies.
 - **Liao's "scale-invariant averaged period":** confirm normalization before doing any cross-orbit comparisons.
 
@@ -208,7 +239,7 @@ Compare `K_facet` ↔ `K_emp`.
 | Date       | Note                                                                     |
 |------------|--------------------------------------------------------------------------|
 | 2026-05-18 | Skeleton drafted. Prediction K_pred = #{C_i : S_i ≠ ∅} stated.           |
-| 2026-05-18 | Corrected Section 4 after supplement-format grounding: Li-Liao ansatz is a beta-type symmetry facet, so raw K_pred is void and replaced by facet-conditioned K_facet. |
+| 2026-05-18 | Corrected Section 4 after supplement-format grounding: Li-Liao ansatz is the concrete beta-class facet `F_beta`, so raw K_pred is void and replaced by facet-conditioned K_facet. |
 | (next)     | Ingest supplementary A, run isotrophy detector on 21 choreographies.    |
 | (next)     | Ingest supplementary B, cluster into families, compute K_emp.            |
 | (next)     | Compare. Iterate.                                                        |
