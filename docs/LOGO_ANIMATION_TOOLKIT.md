@@ -21,6 +21,12 @@ The command writes all current assets from:
 scripts/generate-sundog-logo-toolkit.mjs
 ```
 
+To generate the optional pixel-chibi favicon proof set:
+
+```bash
+npm run logo:pixel-chibi
+```
+
 To promote the same characterized geometry into the production favicon and app
 icon paths, run:
 
@@ -43,11 +49,22 @@ npm run logo:promote
 | `public/icons/sundog-character-icon-192.png` | App/PWA icon proof. |
 | `public/icons/sundog-character-icon-512.png` | Large app/social icon proof. |
 | `public/icons/sundog-character-transparent-512.png` | Transparent PNG proof for decks and overlays. |
+| `public/icons/sundog-pixel-chibi-favicon-16.png` | Optional pixel-chibi favicon proof. |
+| `public/icons/sundog-pixel-chibi-favicon-32.png` | Optional pixel-chibi favicon proof. |
+| `public/icons/sundog-pixel-chibi-favicon-48.png` | Optional pixel-chibi browser icon proof. |
+| `public/icons/sundog-pixel-chibi-preview-512.png` | Nearest-neighbor review preview for the pixel-chibi proof. |
+| `public/icons/sundog-pixel-chibi-favicon.ico` | Optional multi-size ICO proof. |
+| `public/icons/sundog-pixel-chibi.layers.json` | Pixel-chibi layer, palette, and source-mapping manifest. |
 
 The `sundog-character-*` files are retained as proofs and design handoff
 assets. `npm run logo:promote` mirrors the reviewed static mark into
 `public/favicon.svg`, `public/favicon.ico`, `public/apple-touch-icon.png`, and
 the manifest-linked `public/icons/icon-*` / `maskable-*` files.
+
+The `sundog-pixel-chibi-*` files are a separate review lane. They translate the
+sun, 22 deg halo, parhelia, upper tangent, and parhelic belt into an original
+early-web forum-avatar pixel treatment. Use the broad chibi/pixel vocabulary
+only; do not copy Gaia Online assets, avatar parts, silhouettes, or palettes.
 
 ## Character Sheet
 

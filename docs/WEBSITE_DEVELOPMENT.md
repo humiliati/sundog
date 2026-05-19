@@ -300,6 +300,12 @@ mark. Regenerate design proofs with:
 npm run logo:toolkit
 ```
 
+Generate the optional pixel-chibi favicon proof set with:
+
+```bash
+npm run logo:pixel-chibi
+```
+
 Promote the same geometry into the live favicon, app icon, Apple touch icon,
 and manifest-linked PNG set with:
 
@@ -310,6 +316,10 @@ npm run logo:promote
 Do not hand-edit production icon binaries. If the logo changes, update
 `scripts/generate-sundog-logo-toolkit.mjs`, regenerate, and review the 32 px
 favicon plus the 512 px app icon before publishing.
+
+The pixel-chibi set is intentionally a review proof. It translates the Sundog
+sun/halo/parhelia layers into an original early-web forum-avatar pixel style
+without promoting those files to `public/favicon.*`.
 
 ### Motion Rail Artwork
 

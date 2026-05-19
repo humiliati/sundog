@@ -36,6 +36,12 @@ from the logo toolkit:
 | `public/icons/sundog-character-icon-192.png` | App/PWA icon proof. |
 | `public/icons/sundog-character-icon-512.png` | Large app/social icon proof. |
 | `public/icons/sundog-character-transparent-512.png` | Transparent PNG proof. |
+| `public/icons/sundog-pixel-chibi-favicon-16.png` | Optional pixel-chibi favicon proof. |
+| `public/icons/sundog-pixel-chibi-favicon-32.png` | Optional pixel-chibi favicon proof. |
+| `public/icons/sundog-pixel-chibi-favicon-48.png` | Optional pixel-chibi browser icon proof. |
+| `public/icons/sundog-pixel-chibi-preview-512.png` | Nearest-neighbor review preview for the pixel-chibi proof. |
+| `public/icons/sundog-pixel-chibi-favicon.ico` | Optional multi-size ICO proof. |
+| `public/icons/sundog-pixel-chibi.layers.json` | Pixel-chibi layer, palette, and source-mapping manifest. |
 
 ## HTML Integration
 
@@ -57,6 +63,12 @@ The toolkit proof set is regenerated with:
 npm run logo:toolkit
 ```
 
+The optional pixel-chibi favicon proof set is regenerated with:
+
+```bash
+npm run logo:pixel-chibi
+```
+
 The production favicon/app-icon set is promoted from the same geometry with:
 
 ```bash
@@ -66,6 +78,11 @@ npm run logo:promote
 Both commands use `scripts/generate-sundog-logo-toolkit.mjs`, which writes SVG,
 SVG/CSS animation, manifest JSON, dependency-free PNG proofs, and
 PNG-in-ICO favicon output without ImageMagick or Pillow.
+
+`logo:pixel-chibi` uses the same dependency-free PNG and ICO encoder, but keeps
+its files under `public/icons/sundog-pixel-chibi-*`. It is a review lane for an
+original early-web forum-avatar pixel treatment of the Sundog mark, not a
+production replacement.
 
 ## Characterized Logo Toolkit
 

@@ -38,6 +38,7 @@
     "p2:structural": "node scripts/structural-failure-p2-harness.mjs",
     "p2:structural:smoke": "node scripts/structural-failure-p2-harness.mjs --phase p2-smoke --out results/structural-failure/p2-smoke --h-step 2 --boundary-step 0.5 --q-step 0.1",
     "logo:toolkit": "node scripts/generate-sundog-logo-toolkit.mjs",
+    "logo:pixel-chibi": "node scripts/generate-sundog-logo-toolkit.mjs --pixel-chibi",
     "logo:promote": "node scripts/generate-sundog-logo-toolkit.mjs --promote-production",
     "preview": "vite preview --host 127.0.0.1",
     "mines:phase3": "node scripts/mines-phase3-diagnostics.mjs --phase phase3-diagnostic --out results/mines/phase3-diagnostic --seeds 24",

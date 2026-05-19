@@ -842,6 +842,119 @@ function drawMark(size, { transparent = false } = {}) {
   return raster.downsample();
 }
 
+function pixelPalette() {
+  return Object.fromEntries(
+    Object.entries(PIXEL_CHIBI_COLORS).map(([key, value]) => [key, hexToRgb(value)]),
+  );
+}
+
+function drawPixelGlint(canvas, cx, cy, side, colors) {
+  canvas.drawDiamond(cx, cy, 4.2, 2.7, colors.goldDeep, 0.95);
+  canvas.drawDiamond(cx, cy, 3.35, 2.05, (x) => {
+    const t = Math.max(0, Math.min(1, (x - (cx - 3.35)) / 6.7));
+    if (side === "left") {
+      return t < 0.5
+        ? mixColor(colors.blueOutside, colors.gold, t / 0.5)
+        : mixColor(colors.gold, colors.redInside, (t - 0.5) / 0.5);
+    }
+    return t < 0.5
+      ? mixColor(colors.redInside, colors.gold, t / 0.5)
+      : mixColor(colors.gold, colors.blueOutside, (t - 0.5) / 0.5);
+  });
+  canvas.drawDiamond(cx, cy - 0.2, 1.2, 0.75, colors.goldLight, 0.72);
+}
+
+function drawPixelChibiRgba(size) {
+  const canvas = new PixelCanvas(size);
+  const colors = pixelPalette();
+
+  canvas.drawRoundedRect(0, 0, 32, 32, 5, colors.bgOuter);
+  canvas.drawRoundedRect(1.2, 1.2, 29.6, 29.6, 4.2, colors.bg);
+  canvas.drawRoundedRect(3.2, 3.2, 25.6, 25.6, 3.2, colors.bgLight, 0.18);
+
+  canvas.drawRing(16, 16, 13.4, 1.25, colors.iceShadow, 0.85);
+  canvas.drawRing(16, 16, 12.7, 0.75, colors.ice, 0.62);
+  canvas.drawRing(16, 16, 10.25, 1.1, colors.goldDeep, 0.95);
+  canvas.drawRing(16, 16, 9.6, 0.55, colors.gold, 0.75);
+  canvas.drawLine(5.4, 16.1, 26.6, 16.1, 1.15, colors.goldDeep, 0.72);
+  canvas.drawLine(7.2, 15.25, 24.8, 15.25, 0.65, colors.gold, 0.5);
+
+  drawPixelGlint(canvas, 5.35, 16.1, "left", colors);
+  drawPixelGlint(canvas, 26.65, 16.1, "right", colors);
+
+  canvas.drawPolygon(
+    [
+      { x: 11.3, y: 22.8 },
+      { x: 20.7, y: 22.8 },
+      { x: 24, y: 29.4 },
+      { x: 8, y: 29.4 },
+    ],
+    colors.coatShadow,
+    0.95,
+  );
+  canvas.drawPolygon(
+    [
+      { x: 12.5, y: 23.3 },
+      { x: 19.5, y: 23.3 },
+      { x: 22, y: 28.6 },
+      { x: 10, y: 28.6 },
+    ],
+    colors.coat,
+    0.95,
+  );
+  canvas.drawLine(12.6, 24.1, 19.4, 24.1, 1, colors.goldLight, 0.86);
+  canvas.drawLine(15.8, 24.2, 15.2, 28.2, 0.75, colors.goldDeep, 0.7);
+  canvas.drawLine(16.2, 24.2, 16.8, 28.2, 0.75, colors.goldDeep, 0.7);
+
+  canvas.drawCircle(16, 15.2, 7.65, colors.goldDeep);
+  canvas.drawCircle(16, 14.8, 6.8, colors.gold);
+  canvas.drawCircle(13.5, 12.3, 2.45, colors.goldLight, 0.72);
+  canvas.drawCircle(18.8, 18.3, 3.6, colors.goldShadow, 0.28);
+
+  canvas.drawLine(10.2, 10.35, 21.8, 10.35, 1.25, colors.goldLight, 0.94);
+  canvas.drawLine(9.6, 11.15, 12.4, 12.1, 1.15, colors.goldLight, 0.8);
+  canvas.drawLine(19.6, 12.1, 22.4, 11.15, 1.15, colors.goldLight, 0.8);
+  canvas.drawLine(12.2, 10.9, 14.8, 12.7, 0.95, colors.goldShadow, 0.55);
+  canvas.drawLine(19.8, 10.9, 17.2, 12.7, 0.95, colors.goldShadow, 0.55);
+
+  canvas.drawCircle(13.25, 14.75, 1.25, colors.eye);
+  canvas.drawCircle(18.75, 14.75, 1.25, colors.eye);
+  canvas.drawCircle(12.85, 14.25, 0.42, colors.eyeSpark);
+  canvas.drawCircle(18.35, 14.25, 0.42, colors.eyeSpark);
+  canvas.drawCircle(11.15, 17.25, 0.78, colors.cheek, 0.78);
+  canvas.drawCircle(20.85, 17.25, 0.78, colors.cheek, 0.78);
+  canvas.drawLine(15.15, 18.65, 16.85, 18.65, 0.58, colors.mouth, 0.92);
+
+  canvas.drawLine(11.25, 20.4, 20.75, 20.4, 0.6, colors.goldDeep, 0.38);
+  return canvas.pixels;
+}
+
+function pixelChibiManifest() {
+  return {
+    generatedBy: "scripts/generate-sundog-logo-toolkit.mjs --pixel-chibi",
+    status: "Review proof; not promoted to production by default.",
+    visualBrief:
+      "Original Sundog pixel-chibi favicon in an early-2000s forum-avatar vocabulary: oversized head, tiny shoulders, crisp pixels, spark eyes, and accessory-like halo glints.",
+    referenceBoundary:
+      "Use the broad chibi/forum-avatar/pixel-art vocabulary only; do not copy Gaia Online assets, avatar parts, silhouettes, or palettes.",
+    sourceMapping: {
+      face: "The gold sun becomes the chibi face.",
+      halo: "The 22 degree halo becomes the head/halo outline.",
+      parhelia: "Left/right parhelia become side glints, reading like small avatar accessories.",
+      upperTangent: "The upper tangent arc becomes a bright bang/headband gesture.",
+      parhelicBelt: "The belt stays as a one-pixel horizontal signal line through the glints.",
+    },
+    smallSizeRules: {
+      "16px": "Face, halo ring, eyes, and side glints only; shoulders are almost symbolic.",
+      "32px": "Canonical favicon proof.",
+      "48px": "Browser icon proof with the same hard-pixel construction.",
+      "512px": "Nearest-neighbor preview for human review, not a production app icon.",
+    },
+    palette: PIXEL_CHIBI_COLORS,
+    outputs: PIXEL_CHIBI_FILES,
+  };
+}
+
 const CRC_TABLE = new Uint32Array(256).map((_, index) => {
   let c = index;
   for (let bit = 0; bit < 8; bit += 1) {
@@ -897,6 +1010,31 @@ function encodePng(width, height, rgba) {
 
 function pngBuffer(size, options = {}) {
   const rgba = drawMark(size, options);
+  return encodePng(size, size, rgba);
+}
+
+function scaleRgbaNearest(source, sourceSize, targetSize) {
+  const output = new Uint8ClampedArray(targetSize * targetSize * 4);
+  for (let y = 0; y < targetSize; y += 1) {
+    const sourceY = Math.min(sourceSize - 1, Math.floor((y * sourceSize) / targetSize));
+    for (let x = 0; x < targetSize; x += 1) {
+      const sourceX = Math.min(sourceSize - 1, Math.floor((x * sourceSize) / targetSize));
+      const sourceOffset = (sourceY * sourceSize + sourceX) * 4;
+      const targetOffset = (y * targetSize + x) * 4;
+      output[targetOffset] = source[sourceOffset];
+      output[targetOffset + 1] = source[sourceOffset + 1];
+      output[targetOffset + 2] = source[sourceOffset + 2];
+      output[targetOffset + 3] = source[sourceOffset + 3];
+    }
+  }
+  return output;
+}
+
+function pixelChibiPngBuffer(size) {
+  const rgba =
+    size === 512
+      ? scaleRgbaNearest(drawPixelChibiRgba(32), 32, 512)
+      : drawPixelChibiRgba(size);
   return encodePng(size, size, rgba);
 }
 
@@ -958,6 +1096,31 @@ async function writeProductionAssets() {
   await writeFile(resolve(ICON_DIR, "maskable-512.png"), png512);
 }
 
+async function writePixelChibiAssets() {
+  const png16 = pixelChibiPngBuffer(16);
+  const png32 = pixelChibiPngBuffer(32);
+  const png48 = pixelChibiPngBuffer(48);
+  const png512 = pixelChibiPngBuffer(512);
+
+  await writeFile(resolve(ICON_DIR, "sundog-pixel-chibi-favicon-16.png"), png16);
+  await writeFile(resolve(ICON_DIR, "sundog-pixel-chibi-favicon-32.png"), png32);
+  await writeFile(resolve(ICON_DIR, "sundog-pixel-chibi-favicon-48.png"), png48);
+  await writeFile(resolve(ICON_DIR, "sundog-pixel-chibi-preview-512.png"), png512);
+  await writeFile(
+    resolve(ICON_DIR, "sundog-pixel-chibi-favicon.ico"),
+    encodeIco([
+      { size: 16, buffer: png16 },
+      { size: 32, buffer: png32 },
+      { size: 48, buffer: png48 },
+    ]),
+  );
+  await writeFile(
+    resolve(ICON_DIR, "sundog-pixel-chibi.layers.json"),
+    `${JSON.stringify(pixelChibiManifest(), null, 2)}\n`,
+    "utf8",
+  );
+}
+
 async function main() {
   await mkdir(ICON_DIR, { recursive: true });
 
@@ -1002,6 +1165,13 @@ async function main() {
     await writeProductionAssets();
     for (const file of PRODUCTION_FILES) {
       console.log(`promoted ${file}`);
+    }
+  }
+
+  if (generatePixelChibi) {
+    await writePixelChibiAssets();
+    for (const file of PIXEL_CHIBI_FILES) {
+      console.log(`generated ${file}`);
     }
   }
 }
