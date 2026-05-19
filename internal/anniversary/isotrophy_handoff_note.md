@@ -120,6 +120,27 @@ representation, how the structural sector
 quotiented, and whether a `+1` pitchfork contributes `dim` or `1/2 dim`. If
 that derivation is fuzzy, v0.3 is not ready.
 
+The first allowed pre-derivation run is only the case-split receipt. It tests
+Condition 3, not strict `alpha_I` and not the K1 SO(3)-absorbed shadow:
+
+```text
+tau12_gauge := ((12), free phi, no time reversal, identity spatial, SO(3) gauge-min)
+```
+
+For each of the 21 strict rows, persist `R_i`, `phi_i`, `phi_i/(T/2)`,
+closure-relative residual, and rotation angle. Closure-tight rows are
+endomorphism candidates; `O(1)` rows are induced-representation candidates. If
+the split is not bimodal, stop and write the marginal category before any
+monodromy work.
+
+Receipt: `npm run isotrophy:tau12:cases` completed on 2026-05-19 in `120.61 s`
+and found **0 endomorphism cases, 21 induced-representation cases, 0 marginal
+reviews**. The best non-tight residual was still `2.815e7` times closure. So
+v0.3, if continued, is not a mixed endomorphism/induced derivation for the
+current catalog; it is induced-representation-only across all 21 strict
+choreographies. The receipt is protected at
+`results/isotrophy/k-facet-v03-tau12-case-split-21strict/`.
+
 Rejected as primary:
 
 - Full numerical continuation in `m3`. It is too circular with
@@ -142,8 +163,7 @@ Before any future isotrophy run:
 1. Confirm whether the work is G.2 detector maintenance, v0.3 derivation, or
    accidental K2-K4 restart.
 2. If it is K2-K4 under v0.2, stop.
-3. If it is v0.3, write the `alpha_I` twisted-sector projector derivation,
-   the `(12)` endomorphism-vs-induced-representation case split, the
-   structural `F_beta` removal, the neutral-mode quotient, the negative, and
-   the go/no-go branch before running any monodromy or supplementary-B
-   classification.
+3. If it is v0.3, use the completed all-induced case split, then write the
+   induced-representation derivation, the structural `F_beta` removal, the
+   neutral-mode quotient, the negative, and the go/no-go branch before running
+   any monodromy or supplementary-B classification.

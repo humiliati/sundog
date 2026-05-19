@@ -120,6 +120,7 @@ GENERATORS = {
     "sigma3_opposite_inverse": Generator(
         "sigma3_opposite_inverse", "choreography", PERMUTATIONS["cycle123"], 2.0 / 3.0, False, I3
     ),
+    "tau12_gauge": Generator("tau12_gauge", "case_split", PERMUTATIONS["swap12"], 0.0, False, I3),
     "alpha_I": Generator("alpha_I", "alpha", PERMUTATIONS["swap12"], 1.0 / 2.0, False, I3),
     "beta_I": Generator("beta_I", "beta", PERMUTATIONS["swap12"], 0.0, True, I3),
     "gamma_Z": Generator("gamma_Z", "gamma", PERMUTATIONS["swap12"], 1.0 / 2.0, False, Z_MIRROR),
@@ -292,6 +293,10 @@ def rotation_angle(rotation: np.ndarray) -> float:
     return math.acos(max(-1.0, min(1.0, cos_theta)))
 
 
+def rotation_matrix_string(rotation: np.ndarray) -> str:
+    return ";".join(f"{value:.17g}" for value in rotation.reshape(-1))
+
+
 def transform_positions(integrated: IntegratedOrbit, generator: Generator, times: np.ndarray) -> np.ndarray:
     period = integrated.row.period
     shift = generator.shift_fraction * period
@@ -350,6 +355,7 @@ def residual_for_generator(
         "phase": phase,
         "det_rotation": float(np.linalg.det(rotation)),
         "rotation_angle_rad": rotation_angle(rotation),
+        "rotation_matrix": rotation_matrix_string(rotation),
         "closure_position_inf": integrated.closure_position_inf,
         "closure_velocity_inf": integrated.closure_velocity_inf,
         "residual_to_closure": residual_inf / max(integrated.closure_position_inf, DEFAULT_CLOSURE_FLOOR),
@@ -920,6 +926,149 @@ def command_kfacet_predict(args: argparse.Namespace) -> int:
     return 0
 
 
+def tau12_case_record(integrated: IntegratedOrbit, residual: dict[str, object], closure_floor: float) -> dict[str, object]:
+    phase = float(residual["phase"])
+    period = integrated.row.period
+    return {
+        "label": integrated.row.label,
+        "index": integrated.row.index,
+        "line_no": integrated.row.line_no,
+        "m3": integrated.row.m3,
+        "z0": integrated.row.z0,
+        "period": period,
+        "stability": integrated.row.stability,
+        "closure_position_inf": integrated.closure_position_inf,
+        "closure_velocity_inf": integrated.closure_velocity_inf,
+        "integration_seconds": integrated.elapsed_seconds,
+        "tau12_residual_inf": float(residual["residual_inf"]),
+        "tau12_residual_rms": float(residual["residual_rms"]),
+        "tau12_to_closure": float(residual["residual_inf"]) / max(integrated.closure_position_inf, closure_floor),
+        "phi": phase,
+        "phi_over_T": phase / period,
+        "phi_over_half_T": phase / (0.5 * period),
+        "rotation_angle_rad": float(residual["rotation_angle_rad"]),
+        "det_rotation": float(residual["det_rotation"]),
+        "R_i": str(residual["rotation_matrix"]),
+    }
+
+
+def classify_tau12_records(
+    records: list[dict[str, object]],
+    closure_multiple: float,
+    induced_closure_multiple: float,
+    bimodal_gap_ratio: float,
+) -> dict[str, object]:
+    tight = [record for record in records if float(record["tau12_to_closure"]) <= closure_multiple]
+    loose = [record for record in records if float(record["tau12_to_closure"]) > closure_multiple]
+    max_tight = max((float(record["tau12_to_closure"]) for record in tight), default=None)
+    min_loose = min((float(record["tau12_to_closure"]) for record in loose), default=None)
+    gap_ratio = None if max_tight is None or min_loose is None else min_loose / max(max_tight, DEFAULT_CLOSURE_FLOOR)
+
+    if tight and loose and gap_ratio is not None and gap_ratio >= bimodal_gap_ratio:
+        status = "bimodal"
+    elif not tight and loose and min_loose is not None and min_loose >= induced_closure_multiple:
+        status = "all_induced_no_closure_tight_rows"
+    elif tight and not loose:
+        status = "all_endomorphism_closure_tight_rows"
+    else:
+        status = "not_bimodal_flag_marginal"
+
+    for record in records:
+        to_closure = float(record["tau12_to_closure"])
+        if to_closure <= closure_multiple:
+            tau12_case = "endomorphism"
+        elif status in {"bimodal", "all_induced_no_closure_tight_rows"}:
+            tau12_case = "induced"
+        else:
+            tau12_case = "marginal_review"
+        record["tau12_case"] = tau12_case
+        record["closure_tight"] = to_closure <= closure_multiple
+
+    return {
+        "bimodality_status": status,
+        "endomorphism_count": sum(1 for record in records if record["tau12_case"] == "endomorphism"),
+        "endomorphism_labels": [record["label"] for record in records if record["tau12_case"] == "endomorphism"],
+        "induced_count": sum(1 for record in records if record["tau12_case"] == "induced"),
+        "induced_labels": [record["label"] for record in records if record["tau12_case"] == "induced"],
+        "marginal_review_count": sum(1 for record in records if record["tau12_case"] == "marginal_review"),
+        "marginal_review_labels": [record["label"] for record in records if record["tau12_case"] == "marginal_review"],
+        "max_closure_tight_to_closure": max_tight,
+        "min_non_tight_to_closure": min_loose,
+        "bimodal_gap_ratio": gap_ratio,
+    }
+
+
+def command_tau12_cases(args: argparse.Namespace) -> int:
+    source = args.source.upper()
+    text = read_text(args.path or SUPPLEMENT_URLS[source])
+    rows = parse_rows(text, source)
+    requested_indices = parse_indices(args.indices)
+    selected = select_rows(rows, args.m3, args.limit, args.sort_period, requested_indices)
+    if not selected:
+        raise SystemExit("no rows selected")
+    if requested_indices is not None:
+        selected_indices = {row.index for row in selected}
+        missing_indices = sorted(requested_indices - selected_indices)
+        if missing_indices:
+            raise SystemExit(f"requested indices not found: {','.join(str(index) for index in missing_indices)}")
+
+    started = time.perf_counter()
+    records: list[dict[str, object]] = []
+    for row_index, row in enumerate(selected, start=1):
+        integrated = integrate_orbit(row, args.rtol, args.atol, args.max_step_fraction)
+        residual = residual_for_generator(integrated, GENERATORS["tau12_gauge"], args.n_samples, args.phase_grid)
+        records.append(tau12_case_record(integrated, residual, args.closure_floor))
+        if args.report_every and row_index % args.report_every == 0:
+            tight = sum(1 for record in records if float(record["tau12_to_closure"]) <= args.sigma_closure_multiple)
+            print(
+                f"[isotrophy] tau12 case-split classified {row_index}/{len(selected)} rows; "
+                f"closure_tight={tight}",
+                file=sys.stderr,
+                flush=True,
+            )
+
+    case_summary = classify_tau12_records(
+        records,
+        args.sigma_closure_multiple,
+        args.induced_closure_multiple,
+        args.bimodal_gap_ratio,
+    )
+    summary: dict[str, object] = {
+        "mode": "tau12_case_split",
+        "source": source,
+        "rows_total": len(rows),
+        "rows_selected": len(selected),
+        "selected_labels": [row.label for row in selected],
+        "m3": args.m3,
+        "rtol": args.rtol,
+        "atol": args.atol,
+        "n_samples": args.n_samples,
+        "phase_grid": args.phase_grid,
+        "sigma_closure_multiple": args.sigma_closure_multiple,
+        "induced_closure_multiple": args.induced_closure_multiple,
+        "bimodal_gap_ratio_required": args.bimodal_gap_ratio,
+        "generator": "tau12_gauge",
+        "condition": "exists R in SO(3), free phi in S1: P12 C_i(t) = R C_i(t + phi)",
+        "elapsed_seconds": time.perf_counter() - started,
+        "note": (
+            "v0.3 case-split gate only: endomorphism vs induced-representation selector. "
+            "Not a K_facet value and not monodromy evidence."
+        ),
+        **case_summary,
+    }
+
+    print(json.dumps(summary, indent=2))
+    if args.print_records and records:
+        writer = csv.DictWriter(sys.stdout, fieldnames=list(records[0].keys()))
+        writer.writeheader()
+        writer.writerows(records)
+    if args.out:
+        write_outputs(Path(args.out), summary, records)
+    if args.strict_bimodal and summary["bimodality_status"] == "not_bimodal_flag_marginal":
+        return 2
+    return 0
+
+
 def command_invariants(args: argparse.Namespace) -> int:
     source = args.source.upper()
     text = read_text(args.path or SUPPLEMENT_URLS[source])
@@ -1056,6 +1205,33 @@ def build_parser() -> argparse.ArgumentParser:
     kfacet.add_argument("--report-every", type=int, default=7)
     kfacet.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
     kfacet.set_defaults(func=command_kfacet_predict)
+
+    tau12 = sub.add_parser("tau12-cases", help="classify strict G.2 rows by the v0.3 tau12 gauge-case split")
+    tau12.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="A")
+    tau12.add_argument("--path", help="local supplementary file instead of the live URL")
+    tau12.add_argument("--m3", type=float, default=1.0)
+    tau12.add_argument("--limit", type=int, default=0)
+    tau12.add_argument(
+        "--indices",
+        default=",".join(str(index) for index in DEFAULT_KFACET_STRICT_INDICES),
+        help="comma-separated strict G.2 orbit indices for the tau12 case split",
+    )
+    tau12.add_argument("--sort-period", action="store_true", default=False)
+    tau12.add_argument("--no-sort-period", dest="sort_period", action="store_false")
+    tau12.add_argument("--n-samples", type=int, default=1009)
+    tau12.add_argument("--phase-grid", type=int, default=73)
+    tau12.add_argument("--rtol", type=float, default=DEFAULT_RTOL)
+    tau12.add_argument("--atol", type=float, default=DEFAULT_ATOL)
+    tau12.add_argument("--max-step-fraction", type=float, default=DEFAULT_MAX_STEP_FRACTION)
+    tau12.add_argument("--sigma-closure-multiple", type=float, default=DEFAULT_SIGMA_CLOSURE_MULTIPLE)
+    tau12.add_argument("--induced-closure-multiple", type=float, default=1e5)
+    tau12.add_argument("--bimodal-gap-ratio", type=float, default=1e5)
+    tau12.add_argument("--closure-floor", type=float, default=DEFAULT_CLOSURE_FLOOR)
+    tau12.add_argument("--strict-bimodal", action="store_true")
+    tau12.add_argument("--print-records", action="store_true")
+    tau12.add_argument("--report-every", type=int, default=7)
+    tau12.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
+    tau12.set_defaults(func=command_tau12_cases)
 
     invariants = sub.add_parser("invariants", help="cluster selected rows by zero-integration conserved invariants")
     invariants.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="A")

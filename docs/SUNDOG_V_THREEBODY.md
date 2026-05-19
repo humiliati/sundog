@@ -804,9 +804,11 @@ only with `Rpi` absorbed into free alignment, so it is not counted as the
 strict prediction. That is now dispositioned as a v0.2 spec failure, not a
 theorem result: the static containment operator is the equivariance-only null
 (`Z3` choreography symmetry does not generically contain the transposition
-`Z2` target). K2-K4 are paused until a v0.3 branching/continuation functional
-is derived and pre-registered, or the isotrophy line is accepted as a clean
-negative. This remains not evidence for the theorem or for Phase 13-15.
+`Z2` target). The v0.3a `tau12_gauge` case-split receipt then found 0
+endomorphism cases and 21 induced-representation cases among the strict
+choreographies, so any continued v0.3 must derive the induced-representation
+functional before monodromy code or supplementary-B clustering. K2-K4 remain
+paused, and this remains not evidence for the theorem or for Phase 13-15.
 
 ### Cross-Substrate Hand-Offs
 
