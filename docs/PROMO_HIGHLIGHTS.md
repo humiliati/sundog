@@ -245,31 +245,34 @@ Why it matters:
 - roadmap lives at [`PUSHABLE_OCCLUDER_ROADMAP.md`](PUSHABLE_OCCLUDER_ROADMAP.md);
   rail integration in [`HIGHLIGHTS_RAIL_ROADMAP.md`](HIGHLIGHTS_RAIL_ROADMAP.md).
 
-### Isotropy Bead-Maze (open bet)
+### Isotropy Bead-Maze (useful negative)
 
 Highlight:
 
-> A σ₃ isotropy detector recovered the 21 strict equal-mass three-body
-> choreographies from the Li–Liao 10,059-orbit catalog — exactly — and they
-> render as a doctor's-office bead-maze: three bodies strung on one shared
-> wire. The anniversary wager, made in public: does the sundog refinement
-> predict the piano-trio *descent count* from each choreography's residual
-> spacetime isotropy? The measured count is not in hand yet.
+> A σ₃ isotropy detector reconciled the 21 strict equal-mass three-body
+> choreographies from the Li–Liao 10,059-orbit catalog, and cleanly split off
+> 4 relative ones (a 2π/3 global rotation; 25 gauge-invariant vs the
+> literature's 21), rendered as a doctor's-office bead-maze. That is a
+> detector and literature-count win, not theorem evidence. The proposed
+> daughter-count theorem test was then retired at its cheap K1 precheck, when
+> under v0.2 it reduced to the equivariance-only null (K_facet = 0).
 
 Why it matters:
 
-- it is a detector receipt and a public bet, not a result: the recovered
-  count (21 = 13 canonical + 8 opposite) checks the catalog exactly, but the
-  predictive claim (K_facet vs. measured K_emp) is unmeasured;
-- it states its own kill condition out loud — if K_facet and K_emp are
-  unrelated after facet conditioning, the refinement dies and the site will
-  say so; this is the first-prediction stage of an open workbench, not a
-  theorem;
-- it gives the anniversary a true, inspectable artifact instead of a claim:
-  the bead-maze render at `public/media/isotrophy-bead-maze.svg` (served at
+- it is the discipline working, not a result: the cheap falsifier ran before
+  the multi-hour sweep, the operator was retired instead of patched, and the
+  boundary is published;
+- it is explicitly not a proof of Sundog; K_facet = 0 does not mean "no
+  piano-trios exist," and the 4 relatives are outside the strict
+  single-curve convention, not literature errors;
+- the durable part is the detector / literature reconciliation (21 strict +
+  4 relative = 25 gauge-invariant), inspectable in the bead-maze render at
+  `public/media/isotrophy-bead-maze.svg` (served at
   `/media/isotrophy-bead-maze.svg`);
-- workbench and falsifier live at
-  [`sundog_v_isotrophy.md`](sundog_v_isotrophy.md).
+- a v0.3 would need a fresh derivation and fresh pre-registration; the v0.2
+  path is closed. Workbench:
+  [`sundog_v_isotrophy.md`](sundog_v_isotrophy.md); handoff:
+  `internal/anniversary/isotrophy_handoff_note.md`.
 
 ## Future Bets
 
