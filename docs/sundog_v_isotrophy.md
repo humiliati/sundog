@@ -480,6 +480,51 @@ negative stated before any supplementary-B count is run.
 
 ---
 
+## K_facet — v0.3 DESIGN DECISION (spec only, not yet registered)
+
+Decision: if the isotrophy line continues, v0.3 should use a spectral
+equivariant-bifurcation functional computed from the `m3=1` choreography
+alone. Do **not** use full numerical continuation in `m3` as the primary
+prediction, because supplementary-B is already a continuation-style catalog and
+that would make the test circular.
+
+Proposed v0.3 definition to derive:
+
+```text
+M_i := monodromy matrix of choreography C_i at m3 = 1
+P_alpha := projector onto the alpha_I twisted piano-trio sector
+Q_Fbeta := quotient/removal of the structural F_beta sector and neutral modes
+d_i := dim ker( (Q_Fbeta P_alpha M_i P_alpha Q_Fbeta) - I )
+K_facet_v0.3 := sum_i d_i
+```
+
+The projector derivation is the next deliverable. It must specify:
+
+1. the finite-dimensional representation of `alpha_I = ((12), T/2)` on the
+   variational state;
+2. the exact `P_alpha` twisted sector that corresponds to piano-trio branches;
+3. how the structural `F_beta` sector is removed without deleting a genuine
+   `alpha_I` branch;
+4. which Hamiltonian neutral modes are quotiented before counting `+1`
+   Floquet eigenvalues;
+5. the numerical tolerance and multiplicity rule for the `+1` kernel.
+
+Only after that derivation is written should any code integrate variational
+equations or freeze `K_facet_v0.3`. The frozen output would be the 21
+per-choreography integers plus their sum, recorded before any supplementary-B
+clustering.
+
+Rejected as primary:
+
+- **Full continuation in `m3`:** too circular with supplementary-B. It can be a
+  later validation step only after the spectral prediction is frozen.
+- **Bragg/Floquet coherence:** promising as a cross-check and close to the
+  original coherence intuition, but not the primary readout unless the
+  projector derivation shows the `+1` kernel count is the wrong spectral
+  object.
+
+---
+
 ## 7. Sources of error to design around
 
 - **SO(3) gauge:** every orbit lives in a 3-parameter SO(3) gauge orbit; the isotropy check is a genuine constrained minimization over rotation with a degeneracy-robust parameterization (quaternion or SVD/Procrustes, never Euler). The t=0 inertia frame may *seed* the optimizer but must not *fix* it: at the ansatz epoch the tensor is `diag(m₃z₀², 2+m₃z₀², 2)`, eigenvalue-degenerate on the locus `m₃z₀²=2` (`z₀=√2` at equal mass), and even off it the principal axes carry a `Z₂×Z₂` of 180° sign flips — the same family as `F_beta`'s `Rπ` — so canonicalization can silently cancel the structural generator.
@@ -528,7 +573,8 @@ negative stated before any supplementary-B count is run.
 | 2026-05-19 | K_facet experiment pre-registered (§K_facet SCOPE): seed = 21 strict; freeze `K_facet` from the 6-generator classification on the 21 strict ICs (K1) before computing `K_emp` from supplementary-B's 273 (K2–K4); free-group-word deferred; P1/P2 falsifier registered. |
 | 2026-05-19 | **K1 COMPLETE.** `npm run isotrophy:kfacet:predict` froze primary strict `K_facet = 0` from the 21 strict G.2 rows. All 21 rows pass only `F_beta` strictly (`d_i=0` each; no `F_beta` failures). The SO(3)-gauged diagnostic is 21 because `beta_I` appears only with `Rpi` absorbed into free alignment, so it is not counted as the strict prediction. Receipt: `results/isotrophy/k-facet-prediction-21strict/`. |
 | 2026-05-19 | **v0.2 DISPOSITION.** K1 proved the static containment operator is structurally the equivariance-only null: `Z3` choreography symmetry does not generically contain the target transposition `Z2`, so `d_i=0` is forced by construction. K2-K4 are paused under v0.2; do not run the 273-row classification until a v0.3 branching/continuation `d_i` is derived and pre-registered. |
-| (next)     | v0.3 — decide whether to re-derive `d_i` as a branching/Morse continuation count, or accept the isotrophy line as a clean negative. |
+| 2026-05-19 | **v0.3 DESIGN DECISION.** If isotrophy continues, primary `d_i` must be a monodromy/isotypic projection count computed from each `m3=1` choreography alone: count `+1` Floquet eigenvalues in the `alpha_I` piano-trio twisted sector after removing the structural `F_beta` sector and neutral modes. Full `m3` continuation is rejected as primary because it is circular with supplementary-B; Bragg/Floquet coherence is retained as a cross-check. |
+| (next)     | v0.3 derivation — write the `alpha_I` projector, `F_beta` removal, neutral-mode quotient, and `+1` multiplicity rule on paper before any monodromy code or supplementary-B classification. |
 
 ---
 
