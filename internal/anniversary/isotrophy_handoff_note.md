@@ -88,20 +88,43 @@ Short copy:
 - Do not patch `d_i` to avoid zero. A v0.3 must be a fresh derivation with a
   fresh pre-registration.
 
-## Internal Decision Fork
+## v0.3 Design Decision
 
-Option A: open v0.3.
+Decision: open v0.3 in principle, but do not code or freeze it yet.
 
-Rebuild `d_i` around branching/Morse content: count `Z2`-isotropic piano-trio
-branches bifurcating from each `Z3` choreography under `m3 -> 1 + epsilon`.
-This is a continuation/bifurcation computation, not a static equal-mass
-isotropy tally. Pre-register the negative before touching supplementary-B.
+Primary route: compute `d_i` from the `m3=1` choreography alone using the
+monodromy/variational spectrum, not by continuing toward the supplementary-B
+catalog.
 
-Option B: accept terminus.
+Working definition to derive on paper:
 
-Treat isotrophy as a clean negative for the theorem path. Keep G.2 as a useful
-detector/literature reconciliation, and do not spend more compute on the
-daughter-family claim unless a non-tautological functional is derived.
+1. Integrate the variational equation along each of the 21 strict
+   choreographies at `m3=1` to get the monodromy matrix `M_i`.
+2. Project `M_i` onto the piano-trio twisted sector associated with
+   `alpha_I = ((12), T/2)`.
+3. Define `d_i` as the count of `+1` Floquet eigenvalues in that sector after
+   excluding the structural `F_beta` sector.
+4. Freeze the 21 integers and their sum before any supplementary-B clustering.
+
+The load-bearing deliverable is not a run. It is the projector derivation:
+which finite-dimensional twisted subspace corresponds to `alpha_I`, how the
+structural `F_beta` sector is removed, and which neutral modes are quotiented
+before counting `+1`. If that derivation is fuzzy, v0.3 is not ready.
+
+Rejected as primary:
+
+- Full numerical continuation in `m3`. It is too circular with
+  supplementary-B as a primary prediction, though it may become a validation
+  step after the spectral prediction is frozen.
+- Bragg/Floquet coherence as the primary. It is promising and Sundog-shaped,
+  but it should be a named cross-check unless the projector derivation shows
+  the kernel count is the wrong spectral readout.
+
+Remaining honest fork:
+
+- If the projector can be derived cleanly, pre-register v0.3 with the negative
+  stated first.
+- If it cannot, accept isotrophy as a clean negative plus the G.2 detector win.
 
 ## Operator Guardrail
 
@@ -110,5 +133,6 @@ Before any future isotrophy run:
 1. Confirm whether the work is G.2 detector maintenance, v0.3 derivation, or
    accidental K2-K4 restart.
 2. If it is K2-K4 under v0.2, stop.
-3. If it is v0.3, write the new `d_i`, the negative, and the go/no-go branch
-   before running any supplementary-B classification.
+3. If it is v0.3, write the `alpha_I` twisted-sector projector derivation,
+   the neutral-mode quotient, the negative, and the go/no-go branch before
+   running any monodromy or supplementary-B classification.
