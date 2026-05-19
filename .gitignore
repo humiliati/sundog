@@ -15,6 +15,7 @@ results/balance/
 results/bayes/
 results/mines/
 results/mesa/
+results/isotrophy/
 
 # Test artifacts
 *.jsonl
