@@ -245,6 +245,32 @@ Why it matters:
 - roadmap lives at [`PUSHABLE_OCCLUDER_ROADMAP.md`](PUSHABLE_OCCLUDER_ROADMAP.md);
   rail integration in [`HIGHLIGHTS_RAIL_ROADMAP.md`](HIGHLIGHTS_RAIL_ROADMAP.md).
 
+### Isotropy Bead-Maze (open bet)
+
+Highlight:
+
+> A σ₃ isotropy detector recovered the 21 strict equal-mass three-body
+> choreographies from the Li–Liao 10,059-orbit catalog — exactly — and they
+> render as a doctor's-office bead-maze: three bodies strung on one shared
+> wire. The anniversary wager, made in public: does the sundog refinement
+> predict the piano-trio *descent count* from each choreography's residual
+> spacetime isotropy? The measured count is not in hand yet.
+
+Why it matters:
+
+- it is a detector receipt and a public bet, not a result: the recovered
+  count (21 = 13 canonical + 8 opposite) checks the catalog exactly, but the
+  predictive claim (K_facet vs. measured K_emp) is unmeasured;
+- it states its own kill condition out loud — if K_facet and K_emp are
+  unrelated after facet conditioning, the refinement dies and the site will
+  say so; this is the first-prediction stage of an open workbench, not a
+  theorem;
+- it gives the anniversary a true, inspectable artifact instead of a claim:
+  the bead-maze render at `public/media/isotrophy-bead-maze.svg` (served at
+  `/media/isotrophy-bead-maze.svg`);
+- workbench and falsifier live at
+  [`sundog_v_isotrophy.md`](sundog_v_isotrophy.md).
+
 ## Future Bets
 
 These are forward-looking statements. They are useful for pitch language, but

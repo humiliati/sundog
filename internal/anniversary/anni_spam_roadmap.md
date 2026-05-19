@@ -287,23 +287,64 @@ Closing:
 
 ## 6a. d2jsp Collaboration Invite
 
-Goal: informal technical collaboration without sounding like a recruitment bot.
+Goal: informal technical collaboration without sounding like a recruitment
+bot. Reeled-in anniversary receipts + open bet, callback to the original
+May-2025 d2jsp thread, framed as "come break it." Checked against the Use /
+Avoid guardrails above.
 
 Draft:
 
-> I am opening up a weird applied research project called Sundog:
-> https://sundog.cc
+> **Sundog, one year later — come break it.**
 >
-> It is about systems that act from indirect signals when the true state is
-> hidden. Think shadows, pressure fields, local dynamics, compressed game state,
-> softbody deformation.
+> Some of you saw the feral version of this here last May (the
+> "shadow becomes signal" / Sundog Alignment Theorem thread). That post was
+> half-math, half-mania. I spent the year since trying to falsify it instead
+> of selling it. Year-one receipts, boundaries attached, because this crowd
+> will (correctly) shred anything that ships without them.
 >
-> The useful part for this crowd: several of the workbenches are game/sim
-> shaped, and I am looking for people who like breaking systems, writing small
-> baselines, and finding dumb counterexamples.
+> TL;DR: not "we solved alignment." A traceability harness for systems that
+> act without full sight — several workbenches are game/sim-shaped, every one
+> has named failure cells. https://sundog.cc
 >
-> Not asking for belief. Asking for attacks, replications, and better toy
-> environments.
+> What actually holds:
+>
+> - Mesa cliff, *located* — not "immunity." In a trained RL controller
+>   (256-unit final hidden layer) the basin-attractor isn't one neuron, a
+>   handful of features, or any linear decomposition — it's an entangled 5-D
+>   subspace at net.7 (top-5 PCs = 97.4% of the variance across the cliff,
+>   both directions). Sharp behavioral cliff at lambda ~ 0.95-0.97. Where we
+>   pushed hardest we did NOT get immunity; we got a boundary we can point
+>   at. Patch heatmaps, not a diagram: https://sundog.cc/mesa
+> - Anniversary drop: a detector pulled the 21 strict equal-mass three-body
+>   choreographies out of a 10,059-orbit catalog — exactly — and we rendered
+>   them as a doctor's-office bead-maze (three bodies, one wire). The open bet
+>   we're putting public today: does the refinement predict the piano-trio
+>   descent count? Not measured yet. If it's unrelated, that kills the
+>   refinement and we'll say so.
+> - Ask Sundog: 5,670 trace-conditioned chatbot trials across
+>   OpenAI / Anthropic / Meta builds, zero unsafe-accepts *in the tested
+>   envelope*. It's a mesa-*adjacent* boundary experiment, not a
+>   solved-alignment claim.
+>
+> Same shape across all of it: a hidden low-D structure throwing a visible,
+> traceable pattern, with the place it breaks written down. Still a bet, not
+> a QED — which is why d2jsp is exactly the right room for it.
+>
+> What I want here specifically: attacks, replications, dumb counterexamples,
+> better toy environments. The game/sim workbenches (three-body, Pressure
+> Mines, Balance) are the easiest place to come find where the trace stops
+> being enough. Repo and harness are public; the falsifiers are listed in the
+> docs. Not asking for belief — asking you to make it fail cleanly.
+>
+> Repo: https://github.com/humiliati/sundog · Docs: https://sundog.cc/docs/
+
+First reply:
+
+> If your first reaction is "inverse problems are hard, congrats" — correct,
+> and that's the useful correction. The live question isn't whether inversion
+> is easy; it's whether the signature is sufficient for *control* even when
+> it is not sufficient for *reconstruction*. Clean counterexamples to that
+> are exactly what I'm here for.
 
 ## 6b. Moltbook / Agent-to-Agent Outreach
 

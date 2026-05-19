@@ -791,8 +791,16 @@ admits 25 rows, but the optimized alignment rotation angle separates 21 strict
 inertial single-curve choreographies from 4 rotating/relative choreographies
 with a nontrivial `120 deg` global rotation. A zero-integration `(E, |L|)`
 invariant cluster on the 25 rows produced 25 singleton groups, confirming the
-four extra rows are distinct rotating orbits rather than duplicate listings. No
-`K_facet` computation or daughter-family count has been run.
+four extra rows are distinct rotating orbits rather than duplicate listings.
+
+G.2 (the σ3 precondition) is now **resolved**: the 21 strict single-curve
+choreographies match the catalog's 21 exactly, and the 4 relative/rotating
+choreographies are a separate, non-gating category. The `K_facet`
+daughter-family experiment is **scoped and pre-registered** in the sidecar
+(seed = the 21 strict; the prediction is frozen from a 6-generator
+classification of the 21 strict ICs *before* the supplementary-B empirical
+count) but **not yet run**. Still no `K_facet` result and not evidence for the
+theorem or for Phase 13-15.
 
 ### Cross-Substrate Hand-Offs
 
