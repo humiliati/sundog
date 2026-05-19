@@ -229,10 +229,14 @@ G.2 precondition scan:
    selection artifact. A zero-integration invariant clustering pass on
    `(E, |L|)` then gave 25 singleton groups, not 21; the nearest pair
    (`O_{1172}`, `O_{1265}`) is still separated by `6.36e-5` in energy and
-   `2.71e-3` in angular-momentum norm. The remaining decision is therefore not
-   a simple conserved-invariant dedup. G.2 must distinguish IC rows,
-   orientation-class memberships, canonical labels, and geometric-orbit
-   conventions against the catalog's 21.
+   `2.71e-3` in angular-momentum norm. The decisive distinction is the paper's
+   choreographic definition: a single closed trajectory in the inertial frame.
+   The SO(3)-gauged detector admits rows where `sigma3 * X = R * X` for a
+   non-identity global rotation. Recording the optimized rotation angle gives
+   the clean split: 21 any-orientation rows have identity rotation at numerical
+   floor, while 4 rows are rotating/relative choreographies with a nontrivial
+   `120 deg` global rotation. Thus `25 SO(3)-gauged = 21 strict single-curve +
+   4 rotating`.
 
 For each confirmed sigma candidate under the chosen convention:
 
@@ -312,15 +316,18 @@ and sets `sigma_candidate` from `sigma_group_to_closure`, not from
 `sigma_best_residual_inf` or the absolute `1e-5` gate. The old absolute gate is
 retained as `sigma_absolute_candidate`. The opposite-orientation group has the
 same fields under `sigma_opposite_*`, and `sigma_any_orientation_candidate`
-records the union.
+records the union. The scan also records each optimized SO(3) alignment angle:
+`rotation_angle_rad` per generator, group-level rotation angles, and strict
+single-curve flags gated by `identity_rotation_tolerance = 1e-6`.
 
 This is still not a `K_facet` result and not evidence for the theorem. It is a
-precondition gate plus a convention audit. The immediate follow-up is no longer
-a clean +1 check, and the cheap `(E, |L|)` dedup did **not** collapse the 25
-any-orientation IC rows to 21. If this remains worth pursuing, the next
-dedup-level receipt needs a stronger geometric invariant such as action or a
-sorted mutual-distance-extrema spectrum; that requires an explicit integration
-scope and should be staged separately.
+precondition gate plus a convention audit. The strict single-curve receipt now
+matches the catalog count exactly: `13` canonical-strict rows plus `8`
+opposite-strict rows, with no overlap, for `21` strict choreographies. The four
+SO(3)-gauged but non-strict rows are `O_{791}`, `O_{983}`, `O_{1084}`, and
+`O_{1352}`; their accepted generator has rotation angle `2.094395... rad`
+(`120 deg`). The maximum strict accepted rotation angle is `3.65e-8 rad`, so
+the separator is strongly bimodal.
 
 ---
 
@@ -367,7 +374,7 @@ scope and should be staged separately.
 |------------|--------------------------------------------------------------------------|
 | 2026-05-18 | Skeleton drafted. Prediction K_pred = #{C_i : S_i ≠ ∅} stated.           |
 | 2026-05-18 | Corrected Section 4 after supplement-format grounding: Li-Liao ansatz is the concrete beta-class facet `F_beta`, so raw K_pred is void and replaced by facet-conditioned K_facet. |
-| 2026-05-19 | Full equal-mass precondition scan exposed the old opposite-orientation `sigma3_inverse` bug; corrected inverse + symmetric full-group closure-relative aggregators give 14 canonical candidates, 12 opposite-orientation candidates, and 25 any-orientation IC rows; zero-integration `(E, |L|)` clustering leaves all 25 as singleton groups, so the simple dedup route is falsified. |
+| 2026-05-19 | Full equal-mass precondition scan exposed the old opposite-orientation `sigma3_inverse` bug; corrected inverse + symmetric full-group closure-relative aggregators give 14 canonical candidates, 12 opposite-orientation candidates, and 25 any-orientation IC rows; `(E, |L|)` leaves all 25 as singleton groups, while the optimized SO(3) rotation angle splits them into 21 strict single-curve choreographies plus 4 rotating/relative choreographies. |
 | (next)     | Ingest supplementary B, cluster into families, compute K_emp.            |
 | (next)     | Compare. Iterate.                                                        |
 

@@ -42,6 +42,7 @@ DEFAULT_ATOL = 1e-12
 DEFAULT_MAX_STEP_FRACTION = 0.02
 DEFAULT_SIGMA_TOLERANCE = 1e-5
 DEFAULT_SIGMA_CLOSURE_MULTIPLE = 3.0
+DEFAULT_IDENTITY_ROTATION_TOLERANCE = 1e-6
 DEFAULT_EXPECTED_SIGMA_COUNT = None
 DEFAULT_CLOSURE_FLOOR = 1e-15
 
@@ -258,6 +259,11 @@ def best_so3_rotation(source: np.ndarray, target: np.ndarray) -> np.ndarray:
     return r
 
 
+def rotation_angle(rotation: np.ndarray) -> float:
+    cos_theta = (float(np.trace(rotation)) - 1.0) / 2.0
+    return math.acos(max(-1.0, min(1.0, cos_theta)))
+
+
 def transform_positions(integrated: IntegratedOrbit, generator: Generator, times: np.ndarray) -> np.ndarray:
     period = integrated.row.period
     shift = generator.shift_fraction * period
@@ -315,6 +321,7 @@ def residual_for_generator(
         "residual_rms": residual_rms,
         "phase": phase,
         "det_rotation": float(np.linalg.det(rotation)),
+        "rotation_angle_rad": rotation_angle(rotation),
         "closure_position_inf": integrated.closure_position_inf,
         "closure_velocity_inf": integrated.closure_velocity_inf,
         "residual_to_closure": residual_inf / max(integrated.closure_position_inf, DEFAULT_CLOSURE_FLOOR),
@@ -380,10 +387,13 @@ def scan_record_from_residuals(
     f_beta: dict[str, object],
     sigma_tolerance: float,
     sigma_closure_multiple: float,
+    identity_rotation_tolerance: float,
     closure_floor: float,
 ) -> dict[str, object]:
     sigma3_residual = float(sigma3["residual_inf"])
     sigma3_inverse_residual = float(sigma3_inverse["residual_inf"])
+    sigma3_rotation_angle = float(sigma3["rotation_angle_rad"])
+    sigma3_inverse_rotation_angle = float(sigma3_inverse["rotation_angle_rad"])
     if sigma3_residual <= sigma3_inverse_residual:
         sigma_best_generator = "sigma3"
         sigma_best_residual = sigma3_residual
@@ -393,9 +403,12 @@ def scan_record_from_residuals(
         sigma_best_residual = sigma3_inverse_residual
         sigma_best_phase = float(sigma3_inverse["phase"])
     sigma_group_residual = max(sigma3_residual, sigma3_inverse_residual)
+    sigma_group_rotation_angle = max(sigma3_rotation_angle, sigma3_inverse_rotation_angle)
 
     sigma_opposite_residual = float(sigma3_opposite["residual_inf"])
     sigma_opposite_inverse_residual = float(sigma3_opposite_inverse["residual_inf"])
+    sigma_opposite_rotation_angle = float(sigma3_opposite["rotation_angle_rad"])
+    sigma_opposite_inverse_rotation_angle = float(sigma3_opposite_inverse["rotation_angle_rad"])
     if sigma_opposite_residual <= sigma_opposite_inverse_residual:
         sigma_opposite_best_generator = "sigma3_opposite_orientation"
         sigma_opposite_best_residual = sigma_opposite_residual
@@ -405,12 +418,20 @@ def scan_record_from_residuals(
         sigma_opposite_best_residual = sigma_opposite_inverse_residual
         sigma_opposite_best_phase = float(sigma3_opposite_inverse["phase"])
     sigma_opposite_group_residual = max(sigma_opposite_residual, sigma_opposite_inverse_residual)
+    sigma_opposite_group_rotation_angle = max(
+        sigma_opposite_rotation_angle,
+        sigma_opposite_inverse_rotation_angle,
+    )
 
     closure_scale = max(integrated.closure_position_inf, closure_floor)
     sigma_group_to_closure = sigma_group_residual / closure_scale
     sigma_opposite_group_to_closure = sigma_opposite_group_residual / closure_scale
     sigma_candidate = sigma_group_to_closure <= sigma_closure_multiple
     sigma_opposite_candidate = sigma_opposite_group_to_closure <= sigma_closure_multiple
+    sigma_strict_candidate = sigma_candidate and sigma_group_rotation_angle <= identity_rotation_tolerance
+    sigma_opposite_strict_candidate = (
+        sigma_opposite_candidate and sigma_opposite_group_rotation_angle <= identity_rotation_tolerance
+    )
     f_beta_residual = float(f_beta["residual_inf"])
     return {
         "label": integrated.row.label,
@@ -428,23 +449,32 @@ def scan_record_from_residuals(
         "sigma3_inverse_residual_inf": sigma3_inverse_residual,
         "sigma3_opposite_residual_inf": sigma_opposite_residual,
         "sigma3_opposite_inverse_residual_inf": sigma_opposite_inverse_residual,
+        "sigma3_rotation_angle_rad": sigma3_rotation_angle,
+        "sigma3_inverse_rotation_angle_rad": sigma3_inverse_rotation_angle,
+        "sigma3_opposite_rotation_angle_rad": sigma_opposite_rotation_angle,
+        "sigma3_opposite_inverse_rotation_angle_rad": sigma_opposite_inverse_rotation_angle,
         "sigma_best_generator": sigma_best_generator,
         "sigma_best_residual_inf": sigma_best_residual,
         "sigma_best_phase": sigma_best_phase,
         "sigma_best_to_closure": sigma_best_residual / closure_scale,
         "sigma_group_residual_inf": sigma_group_residual,
         "sigma_group_to_closure": sigma_group_to_closure,
+        "sigma_group_rotation_angle_rad": sigma_group_rotation_angle,
         "sigma_absolute_candidate": sigma_group_residual <= sigma_tolerance,
         "sigma_candidate": sigma_candidate,
+        "sigma_strict_single_curve_candidate": sigma_strict_candidate,
         "sigma_opposite_best_generator": sigma_opposite_best_generator,
         "sigma_opposite_best_residual_inf": sigma_opposite_best_residual,
         "sigma_opposite_best_phase": sigma_opposite_best_phase,
         "sigma_opposite_best_to_closure": sigma_opposite_best_residual / closure_scale,
         "sigma_opposite_group_residual_inf": sigma_opposite_group_residual,
         "sigma_opposite_group_to_closure": sigma_opposite_group_to_closure,
+        "sigma_opposite_group_rotation_angle_rad": sigma_opposite_group_rotation_angle,
         "sigma_opposite_absolute_candidate": sigma_opposite_group_residual <= sigma_tolerance,
         "sigma_opposite_candidate": sigma_opposite_candidate,
+        "sigma_opposite_strict_single_curve_candidate": sigma_opposite_strict_candidate,
         "sigma_any_orientation_candidate": sigma_candidate or sigma_opposite_candidate,
+        "sigma_any_strict_single_curve_candidate": sigma_strict_candidate or sigma_opposite_strict_candidate,
         "F_beta_residual_inf": f_beta_residual,
         "F_beta_to_closure": f_beta_residual / closure_scale,
     }
@@ -615,6 +645,7 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
                 f_beta,
                 args.sigma_tolerance,
                 args.sigma_closure_multiple,
+                args.identity_rotation_tolerance,
                 args.closure_floor,
             )
         )
@@ -622,11 +653,13 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
             candidates = sum(1 for record in records if record["sigma_candidate"])
             opposite_candidates = sum(1 for record in records if record["sigma_opposite_candidate"])
             any_candidates = sum(1 for record in records if record["sigma_any_orientation_candidate"])
+            strict_candidates = sum(1 for record in records if record["sigma_any_strict_single_curve_candidate"])
             print(
                 f"[isotrophy] scanned {row_index}/{len(selected)} rows; "
                 f"sigma_candidates={candidates}; "
                 f"sigma_opposite_candidates={opposite_candidates}; "
-                f"sigma_any_orientation_candidates={any_candidates}",
+                f"sigma_any_orientation_candidates={any_candidates}; "
+                f"sigma_any_strict_single_curve_candidates={strict_candidates}",
                 file=sys.stderr,
                 flush=True,
             )
@@ -634,6 +667,11 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
     sigma_candidates = [record for record in records if record["sigma_candidate"]]
     sigma_opposite_candidates = [record for record in records if record["sigma_opposite_candidate"]]
     sigma_any_orientation_candidates = [record for record in records if record["sigma_any_orientation_candidate"]]
+    sigma_strict_candidates = [record for record in records if record["sigma_strict_single_curve_candidate"]]
+    sigma_opposite_strict_candidates = [
+        record for record in records if record["sigma_opposite_strict_single_curve_candidate"]
+    ]
+    sigma_any_strict_candidates = [record for record in records if record["sigma_any_strict_single_curve_candidate"]]
     expectation_met = (
         None if args.expected_sigma_count is None else len(sigma_candidates) == args.expected_sigma_count
     )
@@ -649,6 +687,7 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
         "phase_grid": args.phase_grid,
         "sigma_tolerance": args.sigma_tolerance,
         "sigma_closure_multiple": args.sigma_closure_multiple,
+        "identity_rotation_tolerance": args.identity_rotation_tolerance,
         "expected_sigma_count": args.expected_sigma_count,
         "sigma_candidate_count": len(sigma_candidates),
         "sigma_candidate_labels": [record["label"] for record in sigma_candidates],
@@ -656,6 +695,16 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
         "sigma_opposite_candidate_labels": [record["label"] for record in sigma_opposite_candidates],
         "sigma_any_orientation_candidate_count": len(sigma_any_orientation_candidates),
         "sigma_any_orientation_candidate_labels": [record["label"] for record in sigma_any_orientation_candidates],
+        "sigma_strict_single_curve_candidate_count": len(sigma_strict_candidates),
+        "sigma_strict_single_curve_candidate_labels": [record["label"] for record in sigma_strict_candidates],
+        "sigma_opposite_strict_single_curve_candidate_count": len(sigma_opposite_strict_candidates),
+        "sigma_opposite_strict_single_curve_candidate_labels": [
+            record["label"] for record in sigma_opposite_strict_candidates
+        ],
+        "sigma_any_strict_single_curve_candidate_count": len(sigma_any_strict_candidates),
+        "sigma_any_strict_single_curve_candidate_labels": [
+            record["label"] for record in sigma_any_strict_candidates
+        ],
         "expectation_met": expectation_met,
         "elapsed_seconds": time.perf_counter() - started,
         "note": "G.2 scan: not a K_facet result or daughter-family count.",
@@ -773,6 +822,7 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--max-step-fraction", type=float, default=DEFAULT_MAX_STEP_FRACTION)
     scan.add_argument("--sigma-tolerance", type=float, default=DEFAULT_SIGMA_TOLERANCE)
     scan.add_argument("--sigma-closure-multiple", type=float, default=DEFAULT_SIGMA_CLOSURE_MULTIPLE)
+    scan.add_argument("--identity-rotation-tolerance", type=float, default=DEFAULT_IDENTITY_ROTATION_TOLERANCE)
     scan.add_argument("--expected-sigma-count", type=int, default=DEFAULT_EXPECTED_SIGMA_COUNT)
     scan.add_argument("--closure-floor", type=float, default=DEFAULT_CLOSURE_FLOOR)
     scan.add_argument("--strict-expected", action="store_true")

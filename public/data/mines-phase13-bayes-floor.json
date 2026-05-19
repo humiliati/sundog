@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-18T23:05:22.319Z",
+  "generatedAt": "2026-05-19T17:42:48.879Z",
   "purpose": "Public Pressure Mines Phase 13 data surface. Generated from Phase 10 operating-envelope receipts and Phase 12 same-field Bayesian pressure-floor receipts; do not hand-edit.",
   "sourcePaths": {
     "phase10Manifest": "results/mines/phase10-envelope/manifest.json",
