@@ -1,7 +1,7 @@
 # Sundog v. Isotrophy
 
 **Test:** Z₃ → Z₂ descent of equal-mass 3D choreographies into (m₁=m₂=1, m₃≠1) piano-trios.
-**Status:** workbench, open. First-prediction stage.
+**Status:** G.2 precondition **RESOLVED** (21 strict single-curve = catalog 21). K_facet experiment pre-registered, not yet run.
 **Owner:** sundog
 **Related:** `./isotrophy/files.math` — symbolic + numerical scratch.
 
@@ -167,12 +167,19 @@ gauge. The algebra above pins the structural generator as `F_beta`, a concrete
 realization of the beta class. The numerical detector should verify that before
 reading any daughter count.
 
+**Seed (post-G.2).** The `C_i` are exactly the **21 strict single-curve
+choreographies** confirmed by G.2 (catalog-matched, identity inertial-frame
+rotation). The 4 rotating/relative choreographies are *not* catalog
+choreographies and are excluded from the primary `K_facet`; whether they spawn
+their own piano-trio daughters is a separate secondary question, tracked but
+not part of the P1/P2 test.
+
 ---
 
 ## 5. The empirical pin
 
 Liao (2025) supplementary:
-- supplementary-A.txt: 10,059 3D periodic orbits with m₁=m₂=1, m₃ = 0.1·n for n ∈ {1, ..., 20}. Of these, 21 sit at the equal-mass slice n=10 with full Z₃ choreography property.
+- supplementary-A.txt: 10,059 3D periodic orbits with m₁=m₂=1, m₃ = 0.1·n for n ∈ {1, ..., 20}. At the equal-mass slice n=10, G.2 verified **21 strict single-curve choreographies** (canonical+opposite cyclic orientation, identity inertial-frame rotation) — matching the catalog's 21 exactly — plus 4 relative/rotating choreographies tracked separately.
 - supplementary-B.txt: 273 3D piano-trio orbits across the same m₃ grid.
 
 Naïve ratio: 273 / 21 ≈ 13. After the ansatz correction, this is not an
@@ -252,10 +259,11 @@ For each confirmed sigma candidate under the chosen convention:
 For piano-trio family counting:
 
 6. **Ingest** supplementary-B. For each piano-trio orbit, identify the residual Z₂ type by the same procedure restricted to body-relabel (12).
-7. **Cluster** piano-trios into families by continuation in m₃: orbits with same residual type, same free-group-word, and continuously-deformable initial conditions belong to one family.
+7. **Cluster** piano-trios into families by continuation in m₃ (first-pass key per the K_facet SCOPE block: residual-type-mod-`<F_beta>` × invariant-continuation; free-group-word deferred).
 8. Count `K_emp` = # of distinct facet-visible families.
 
-Compare `K_facet` ↔ `K_emp`.
+Compare `K_facet` ↔ `K_emp`. **Authoritative procedure: the pre-registered
+K_facet SCOPE block below (K1–K4 + falsifier) supersedes this sketch.**
 
 Executable harness:
 
@@ -331,6 +339,82 @@ the separator is strongly bimodal.
 
 ---
 
+## G.2 — RESOLVED (2026-05-19)
+
+The σ3 precondition is closed. The narrative above is the historical trail;
+the verified terminal result, independently read back from
+`results/isotrophy/m3eq1-sigma3-precondition-fixed-inverse-orientation-25/residuals.csv`,
+is:
+
+- **25** SO(3)-gauged any-orientation candidates — all closure-tight, razor
+  bimodal (accepted group-to-closure `≲ 3`, nearest reject `O(10⁶)`), zero
+  spurious.
+- **21 strict single-curve choreographies** — matched-orientation alignment
+  rotation at the numerical floor (max `3.65e-8 rad`). **Equals the catalog's
+  21 exactly.**
+- **4 rotating/relative choreographies** — `O_{791}`, `O_{983}`, `O_{1084}`,
+  `O_{1352}` — matched-orientation rotation = exactly `2π/3` (one full
+  precession per period). Separator ~8 orders wide; the `1e-6` strict
+  tolerance sits in empty space (count invariant for any tol in `[1e-7, 2]`).
+- `(E, |L|)` → 25 singletons: the 4 rotating are distinct orbits, not
+  duplicate listings.
+
+Resolution: the catalog's "21 equal-mass 3D choreographies" are the strict
+single-*inertial*-curve orbits (arXiv:2508.08568 verbatim: "a single closed
+trajectory"). The SO(3) gauge-min — required for a gauge-invariant isotropy
+test — necessarily admits 4 additional relative choreographies; the rotation
+angle the gate already computes is the exact discriminant. The detector is
+trustworthy. **G.2 passes; no residual discrepancy.** This is still not a
+`K_facet` result.
+
+---
+
+## K_facet — SCOPE (pre-registered, 2026-05-19)
+
+G.2 was the precondition; K_facet is the actual sundog test. Pre-registered so
+the prediction is frozen *before* the empirical count is seen.
+
+**Seed.** The 21 strict single-curve choreographies from G.2 (catalog-matched).
+Exclude the 4 rotating; track them only as a secondary, non-gating question.
+
+**K1 — freeze the prediction (cheap, do first).** Run the 6 concrete
+generators `{alpha_I, beta_I, gamma_Z, delta_Z, F_beta, F_delta}` on the 21
+strict choreography ICs via `--indices` (minutes, no full scan). For each
+`C_i` compute `S_i`, `E_i = S_i/<F_beta>`, `d_i`, and `K_facet := Σ d_i`.
+**Record the integer `K_facet` and the per-`C_i` table in this doc and the Log
+before K3.** Output: `results/isotrophy/k-facet-prediction-21strict/`
+(protected).
+
+**K2 — supplementary-B prerequisite.** Obtain a local supplementary-B mirror
+(upstream times out; the A mirror was localized for exactly this reason).
+Verify `parse --source B` reports the expected **273** piano-trio rows across
+`m3 = 0.1·n, n∈{1..20}` with the B-form `v3 = (-2 vx/m3, -2 vy/m3, 0)` ansatz.
+Do not proceed until row count and grid are confirmed.
+
+**K3 — classify (staged, multi-hour).** Same closure-relative + rotation-angle
+gate (the G.2-validated path), 6 generators, all 273 B rows, each flagged
+strict/rotating under the same single-inertial-curve convention G.2 fixed.
+Stage: smoke (5 rows) → restricted receipt → full. Full output:
+`results/isotrophy/k-facet-suppB-full/` (protected, never a receipt dir).
+Estimated ≈ 2–3 h at `rtol=atol=1e-12`; smoke-gate before the full sweep.
+
+**K4 — cluster → `K_emp`.** First-pass key:
+`(residual-type-mod-<F_beta>) × (continuation in m3 traced by conserved
+invariants E, |L|, period continuity across n=1..20)`. The free-group-word /
+braid label is **explicitly deferred** — the harness cannot compute it and
+requiring it now is scope creep that sinks the run; it is a later refinement
+(see 8.x), not a first-pass gate. `K_emp` = # distinct families.
+
+**Falsifier (pre-registered).** P1: `K_emp == K_facet` (frozen at K1). P2: if
+not, the gap must factor through one named structured channel — (i) family
+bifurcation across an `m3` critical value, (ii) chirality doubling
+(`F_delta`), (iii) `sigma3`-conjugation / spatial-gauge equivalence collapse,
+(iv) facet enforcing more than `F_beta`. Unstructured `K_facet ≠ K_emp` after
+facet conditioning is the kill condition. `273/21 ≈ 13` is a sampling-density
+diagnostic, never the prediction.
+
+---
+
 ## 7. Sources of error to design around
 
 - **SO(3) gauge:** every orbit lives in a 3-parameter SO(3) gauge orbit; the isotropy check is a genuine constrained minimization over rotation with a degeneracy-robust parameterization (quaternion or SVD/Procrustes, never Euler). The t=0 inertia frame may *seed* the optimizer but must not *fix* it: at the ansatz epoch the tensor is `diag(m₃z₀², 2+m₃z₀², 2)`, eigenvalue-degenerate on the locus `m₃z₀²=2` (`z₀=√2` at equal mass), and even off it the principal axes carry a `Z₂×Z₂` of 180° sign flips — the same family as `F_beta`'s `Rπ` — so canonicalization can silently cancel the structural generator.
@@ -375,8 +459,10 @@ the separator is strongly bimodal.
 | 2026-05-18 | Skeleton drafted. Prediction K_pred = #{C_i : S_i ≠ ∅} stated.           |
 | 2026-05-18 | Corrected Section 4 after supplement-format grounding: Li-Liao ansatz is the concrete beta-class facet `F_beta`, so raw K_pred is void and replaced by facet-conditioned K_facet. |
 | 2026-05-19 | Full equal-mass precondition scan exposed the old opposite-orientation `sigma3_inverse` bug; corrected inverse + symmetric full-group closure-relative aggregators give 14 canonical candidates, 12 opposite-orientation candidates, and 25 any-orientation IC rows; `(E, |L|)` leaves all 25 as singleton groups, while the optimized SO(3) rotation angle splits them into 21 strict single-curve choreographies plus 4 rotating/relative choreographies. |
-| (next)     | Ingest supplementary B, cluster into families, compute K_emp.            |
-| (next)     | Compare. Iterate.                                                        |
+| 2026-05-19 | **G.2 RESOLVED.** Rotation-angle stratification: 25 SO(3)-gauged = 21 strict single-curve (= catalog 21; max strict rot `3.65e-8 rad`) + 4 rotating/relative (`O_{791,983,1084,1352}`, rot = `2π/3`). `(E,\|L\|)` → 25 singletons. Detector trustworthy; precondition passes, no residual discrepancy. |
+| 2026-05-19 | K_facet experiment pre-registered (§K_facet SCOPE): seed = 21 strict; freeze `K_facet` from the 6-generator classification on the 21 strict ICs (K1) before computing `K_emp` from supplementary-B's 273 (K2–K4); free-group-word deferred; P1/P2 falsifier registered. |
+| (next)     | K1 — run 6 generators on the 21 strict ICs, freeze `K_facet`.            |
+| (next)     | K2–K4 — supplementary-B mirror, classify, cluster, compute `K_emp`, compare. |
 
 ---
 
