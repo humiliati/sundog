@@ -1,0 +1,47 @@
+{
+  "generatedBy": "scripts/generate-sundog-logo-toolkit.mjs --pixel-chibi",
+  "status": "Review proof; not promoted to production by default.",
+  "visualBrief": "Original Sundog pixel-chibi favicon in an early-2000s forum-avatar vocabulary: oversized head, tiny shoulders, crisp pixels, spark eyes, and accessory-like halo glints.",
+  "referenceBoundary": "Use the broad chibi/forum-avatar/pixel-art vocabulary only; do not copy Gaia Online assets, avatar parts, silhouettes, or palettes.",
+  "sourceMapping": {
+    "face": "The gold sun becomes the chibi face.",
+    "halo": "The 22 degree halo becomes the head/halo outline.",
+    "parhelia": "Left/right parhelia become side glints, reading like small avatar accessories.",
+    "upperTangent": "The upper tangent arc becomes a bright bang/headband gesture.",
+    "parhelicBelt": "The belt stays as a one-pixel horizontal signal line through the glints."
+  },
+  "smallSizeRules": {
+    "16px": "Face, halo ring, eyes, and side glints only; shoulders are almost symbolic.",
+    "32px": "Canonical favicon proof.",
+    "48px": "Browser icon proof with the same hard-pixel construction.",
+    "512px": "Nearest-neighbor preview for human review, not a production app icon."
+  },
+  "palette": {
+    "bgOuter": "#0d1f2e",
+    "bg": "#18384f",
+    "bgLight": "#245b78",
+    "ice": "#90bed2",
+    "iceShadow": "#567f95",
+    "gold": "#f4c430",
+    "goldLight": "#fff0a0",
+    "goldShadow": "#d89116",
+    "goldDeep": "#8e5b10",
+    "ink": "#102436",
+    "eye": "#12283a",
+    "eyeSpark": "#fff8d8",
+    "cheek": "#ff8a64",
+    "mouth": "#9f3b22",
+    "redInside": "#ff7442",
+    "blueOutside": "#73c7ef",
+    "coat": "#22556a",
+    "coatShadow": "#123246"
+  },
+  "outputs": [
+    "public/icons/sundog-pixel-chibi-favicon-16.png",
+    "public/icons/sundog-pixel-chibi-favicon-32.png",
+    "public/icons/sundog-pixel-chibi-favicon-48.png",
+    "public/icons/sundog-pixel-chibi-preview-512.png",
+    "public/icons/sundog-pixel-chibi-favicon.ico",
+    "public/icons/sundog-pixel-chibi.layers.json"
+  ]
+}
