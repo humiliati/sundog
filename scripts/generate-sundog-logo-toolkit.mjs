@@ -7,6 +7,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ICON_DIR = resolve(ROOT, "public", "icons");
 const PUBLIC_DIR = resolve(ROOT, "public");
 const promoteProduction = process.argv.includes("--promote-production");
+const generatePixelChibi = process.argv.includes("--pixel-chibi");
 
 const COLORS = {
   skyInner: "#2c5f7f",
@@ -76,6 +77,36 @@ const PRODUCTION_FILES = [
   "public/icons/maskable-192.png",
   "public/icons/maskable-512.png",
 ];
+
+const PIXEL_CHIBI_FILES = [
+  "public/icons/sundog-pixel-chibi-favicon-16.png",
+  "public/icons/sundog-pixel-chibi-favicon-32.png",
+  "public/icons/sundog-pixel-chibi-favicon-48.png",
+  "public/icons/sundog-pixel-chibi-preview-512.png",
+  "public/icons/sundog-pixel-chibi-favicon.ico",
+  "public/icons/sundog-pixel-chibi.layers.json",
+];
+
+const PIXEL_CHIBI_COLORS = {
+  bgOuter: "#0d1f2e",
+  bg: "#18384f",
+  bgLight: "#245b78",
+  ice: "#90bed2",
+  iceShadow: "#567f95",
+  gold: "#f4c430",
+  goldLight: "#fff0a0",
+  goldShadow: "#d89116",
+  goldDeep: "#8e5b10",
+  ink: "#102436",
+  eye: "#12283a",
+  eyeSpark: "#fff8d8",
+  cheek: "#ff8a64",
+  mouth: "#9f3b22",
+  redInside: "#ff7442",
+  blueOutside: "#73c7ef",
+  coat: "#22556a",
+  coatShadow: "#123246",
+};
 
 function round1(value) {
   return Math.round(value * 10) / 10;
@@ -527,6 +558,137 @@ class Raster {
       }
     }
     return output;
+  }
+}
+
+class PixelCanvas {
+  constructor(size) {
+    this.size = size;
+    this.pixels = new Uint8ClampedArray(size * size * 4);
+  }
+
+  toUnit(px) {
+    return ((px + 0.5) * 32) / this.size;
+  }
+
+  blend(ix, iy, color, alpha = 1) {
+    if (
+      ix < 0 ||
+      iy < 0 ||
+      ix >= this.size ||
+      iy >= this.size ||
+      alpha <= 0
+    ) {
+      return;
+    }
+    const offset = (iy * this.size + ix) * 4;
+    const dstA = this.pixels[offset + 3] / 255;
+    const srcA = Math.max(0, Math.min(1, alpha));
+    const outA = srcA + dstA * (1 - srcA);
+    if (outA <= 0) {
+      return;
+    }
+    this.pixels[offset] = Math.round(
+      (color[0] * srcA + this.pixels[offset] * dstA * (1 - srcA)) / outA,
+    );
+    this.pixels[offset + 1] = Math.round(
+      (color[1] * srcA + this.pixels[offset + 1] * dstA * (1 - srcA)) / outA,
+    );
+    this.pixels[offset + 2] = Math.round(
+      (color[2] * srcA + this.pixels[offset + 2] * dstA * (1 - srcA)) / outA,
+    );
+    this.pixels[offset + 3] = Math.round(outA * 255);
+  }
+
+  forUnitBox(x0, y0, x1, y1, fn) {
+    const minX = Math.max(0, Math.floor((x0 * this.size) / 32) - 1);
+    const minY = Math.max(0, Math.floor((y0 * this.size) / 32) - 1);
+    const maxX = Math.min(this.size - 1, Math.ceil((x1 * this.size) / 32) + 1);
+    const maxY = Math.min(this.size - 1, Math.ceil((y1 * this.size) / 32) + 1);
+    for (let py = minY; py <= maxY; py += 1) {
+      const y = this.toUnit(py);
+      for (let px = minX; px <= maxX; px += 1) {
+        fn(px, py, this.toUnit(px), y);
+      }
+    }
+  }
+
+  drawRoundedRect(x0, y0, width, height, radius, color, alpha = 1) {
+    const x1 = x0 + width;
+    const y1 = y0 + height;
+    this.forUnitBox(x0, y0, x1, y1, (px, py, x, y) => {
+      if (x < x0 || x > x1 || y < y0 || y > y1) {
+        return;
+      }
+      const dx = x < x0 + radius ? x - (x0 + radius) : x > x1 - radius ? x - (x1 - radius) : 0;
+      const dy = y < y0 + radius ? y - (y0 + radius) : y > y1 - radius ? y - (y1 - radius) : 0;
+      if (dx * dx + dy * dy <= radius * radius) {
+        this.blend(px, py, color, alpha);
+      }
+    });
+  }
+
+  drawCircle(cx, cy, radius, color, alpha = 1) {
+    this.forUnitBox(cx - radius, cy - radius, cx + radius, cy + radius, (px, py, x, y) => {
+      if (Math.hypot(x - cx, y - cy) <= radius) {
+        this.blend(px, py, color, alpha);
+      }
+    });
+  }
+
+  drawRing(cx, cy, radius, width, color, alpha = 1) {
+    const half = width / 2;
+    this.forUnitBox(
+      cx - radius - half,
+      cy - radius - half,
+      cx + radius + half,
+      cy + radius + half,
+      (px, py, x, y) => {
+        if (Math.abs(Math.hypot(x - cx, y - cy) - radius) <= half) {
+          this.blend(px, py, color, alpha);
+        }
+      },
+    );
+  }
+
+  drawLine(x1, y1, x2, y2, width, color, alpha = 1) {
+    const half = width / 2;
+    this.forUnitBox(
+      Math.min(x1, x2) - half,
+      Math.min(y1, y2) - half,
+      Math.max(x1, x2) + half,
+      Math.max(y1, y2) + half,
+      (px, py, x, y) => {
+        if (distanceToSegment(x, y, x1, y1, x2, y2) <= half) {
+          this.blend(px, py, color, alpha);
+        }
+      },
+    );
+  }
+
+  drawPolygon(points, color, alpha = 1) {
+    const xs = points.map((point) => point.x);
+    const ys = points.map((point) => point.y);
+    this.forUnitBox(
+      Math.min(...xs),
+      Math.min(...ys),
+      Math.max(...xs),
+      Math.max(...ys),
+      (px, py, x, y) => {
+        if (pointInPolygon(x, y, points)) {
+          this.blend(px, py, color, alpha);
+        }
+      },
+    );
+  }
+
+  drawDiamond(cx, cy, rx, ry, colorAt, alpha = 1) {
+    this.forUnitBox(cx - rx, cy - ry, cx + rx, cy + ry, (px, py, x, y) => {
+      if (Math.abs(x - cx) / rx + Math.abs(y - cy) / ry <= 1) {
+        const color = typeof colorAt === "function" ? colorAt(x, y) : colorAt;
+        this.blend(px, py, color, alpha);
+      }
+    });
   }
 }
 
