@@ -775,10 +775,16 @@ beta-class symmetry cut `F_beta = ((12), time reversal, Rpi)`. This is a
 theorem-sharpening workbench, not a controller result and not evidence for
 Phase 13-15. A parser/gate smoke has run (`npm run isotrophy:parse`,
 `npm run isotrophy:precondition-smoke`, `npm run isotrophy:smoke`,
-`npm run isotrophy:sigma3-scan:smoke`), but no full `m3=1` sigma3 precondition
-scan, no 21-choreography classification, and no daughter-family count has been
-run. The staged full precondition command is `npm run isotrophy:sigma3-scan`;
-its hard readback is exactly 21 sigma candidates.
+`npm run isotrophy:sigma3-scan:smoke`). The full `m3=1` sigma3 precondition
+scan has now run once as an 8.18-hour local receipt. It surfaced two gate issues
+rather than confirming the old "21 exactly" contract: the original
+`sigma3_inverse` was an opposite-orientation element, not the true inverse, and
+the scan aggregator accepted `min(sigma3,sigma3_inverse)` instead of requiring
+the full cyclic group to pass. With the true inverse and the full-group
+`max(sigma3,sigma3_inverse)` gate, the current IC-row precondition count is 17.
+The hard-21 readback is retracted pending a row/canonical-label/geometric-orbit
+convention decision. No 21-choreography classification, `K_facet` computation,
+or daughter-family count has been run.
 
 ### Cross-Substrate Hand-Offs
 

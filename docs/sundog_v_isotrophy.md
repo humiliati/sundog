@@ -215,15 +215,18 @@ G.2 precondition scan:
    and 7 rows accepted by both old tests. No exact duplicate groups appear under
    `(period,z0,stability)`, so the opposite-labeling-pair hypothesis is not
    confirmed by that key alone. A restricted rerun on the 25 old candidates
-   after fixing `sigma3_inverse` reduced the true-inverse gate to 17 candidates
-   in `298 s`. The remaining decision is whether G.2 counts IC rows,
-   canonical-label rows, or orientation-deduped geometric orbits.
+   after fixing `sigma3_inverse` and switching the aggregator to
+   `max(sigma3,sigma3_inverse)` gives 17 IC-row candidates. The old full CSV
+   already shows only 17 rows with `sigma3 <= 1e-5`, so no full fixed-inverse
+   rerun is needed to rule out additional max-gate candidates. The remaining
+   decision is whether G.2 should compare those 17 IC rows against a
+   canonical-label count or an orientation-deduped geometric-orbit count.
 
 For each confirmed sigma candidate under the chosen convention:
 
 1. **Ingest** initial conditions and period from supplementary-A. The file uses a compact fixed ansatz, not full 18D state rows: expand `O_index(m3), z0, vx, vy, vz, T, stability` into the three positions and velocities before integrating. Filter the `m3=1` slice.
 2. **Discretize** X(t) on N samples per period (N ~ 10³ initially).
-3. **Facet precondition:** verify the concrete beta-class ansatz symmetry `F_beta` and the choreography condition `sigma3` before treating a row as one of the 21 choreographies.
+3. **Facet precondition:** verify the concrete beta-class ansatz symmetry `F_beta` and the full cyclic choreography condition `<sigma3>` before treating a row as a choreography candidate.
 4. **For each concrete generator `rho` in `{alpha_I, beta_I, gamma_Z, delta_Z, F_beta, F_delta}`:**
    - Construct `rho · X(t)` by permuting bodies, time-shifting, optionally reversing time, and applying `rho`'s explicit spatial matrix.
    - Compute `r_rho(X) := min` over rotation `R ∈ SO(3)` and time-phase `phi ∈ S1` of `||rho · X(.) - R · X(. + phi)||_infty / scale(X)`.
@@ -275,13 +278,17 @@ python scripts/isotrophy_workbench.py sigma3-scan --source A --m3 1 \
   --sigma-tolerance 1e-5 --print-records
 ```
 
-Readback: `17` rows pass the true `sigma3`/`sigma3_inverse` gate:
+Readback under the corrected full-cyclic-group aggregator: `17` IC rows pass
+both true `sigma3`/`sigma3_inverse` generators:
 `O_{62}`, `O_{64}`, `O_{231}`, `O_{264}`, `O_{468}`, `O_{574}`, `O_{609}`,
 `O_{623}`, `O_{735}`, `O_{791}`, `O_{793}`, `O_{1034}`, `O_{1114}`,
 `O_{1265}`, `O_{1352}`, `O_{1488}`, `O_{1497}`. The old
 `sigma3_opposite_orientation` element remains available in the workbench as a
 named generator for follow-up orientation-class audits; it is no longer called
-`sigma3_inverse`.
+`sigma3_inverse`. The corrected workbench now records
+`sigma_group_residual_inf = max(sigma3_residual_inf, sigma3_inverse_residual_inf)`
+and sets `sigma_candidate` from that group residual, not from
+`sigma_best_residual_inf`.
 
 This is still not a `K_facet` result and not evidence for the theorem. It is a
 precondition gate plus a convention audit.
@@ -331,7 +338,7 @@ precondition gate plus a convention audit.
 |------------|--------------------------------------------------------------------------|
 | 2026-05-18 | Skeleton drafted. Prediction K_pred = #{C_i : S_i ≠ ∅} stated.           |
 | 2026-05-18 | Corrected Section 4 after supplement-format grounding: Li-Liao ansatz is the concrete beta-class facet `F_beta`, so raw K_pred is void and replaced by facet-conditioned K_facet. |
-| (next)     | Ingest supplementary A, run isotrophy detector on 21 choreographies.    |
+| 2026-05-19 | Full equal-mass precondition scan exposed the old opposite-orientation `sigma3_inverse` bug; corrected inverse + full-group aggregator gives 17 IC-row sigma candidates, with the 21 geometric-catalog comparison retracted pending a count-convention decision. |
 | (next)     | Ingest supplementary B, cluster into families, compute K_emp.            |
 | (next)     | Compare. Iterate.                                                        |
 

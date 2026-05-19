@@ -85,6 +85,11 @@ GENERATORS = {
     "sigma3_opposite_orientation": Generator(
         "sigma3_opposite_orientation", "choreography", PERMUTATIONS["cycle132"], 1.0 / 3.0, False, I3
     ),
+    # Inverse of the opposite-orientation element (cycle132, +T/3):
+    # its square is (cycle123, +2T/3); the two generate the full opposite Z3.
+    "sigma3_opposite_inverse": Generator(
+        "sigma3_opposite_inverse", "choreography", PERMUTATIONS["cycle123"], 2.0 / 3.0, False, I3
+    ),
     "alpha_I": Generator("alpha_I", "alpha", PERMUTATIONS["swap12"], 1.0 / 2.0, False, I3),
     "beta_I": Generator("beta_I", "beta", PERMUTATIONS["swap12"], 0.0, True, I3),
     "gamma_Z": Generator("gamma_Z", "gamma", PERMUTATIONS["swap12"], 1.0 / 2.0, False, Z_MIRROR),
@@ -383,6 +388,7 @@ def scan_record_from_residuals(
         sigma_best_generator = "sigma3_inverse"
         sigma_best_residual = sigma3_inverse_residual
         sigma_best_phase = float(sigma3_inverse["phase"])
+    sigma_group_residual = max(sigma3_residual, sigma3_inverse_residual)
 
     closure_scale = max(integrated.closure_position_inf, closure_floor)
     f_beta_residual = float(f_beta["residual_inf"])
@@ -404,7 +410,9 @@ def scan_record_from_residuals(
         "sigma_best_residual_inf": sigma_best_residual,
         "sigma_best_phase": sigma_best_phase,
         "sigma_best_to_closure": sigma_best_residual / closure_scale,
-        "sigma_candidate": sigma_best_residual <= sigma_tolerance,
+        "sigma_group_residual_inf": sigma_group_residual,
+        "sigma_group_to_closure": sigma_group_residual / closure_scale,
+        "sigma_candidate": sigma_group_residual <= sigma_tolerance,
         "F_beta_residual_inf": f_beta_residual,
         "F_beta_to_closure": f_beta_residual / closure_scale,
     }
