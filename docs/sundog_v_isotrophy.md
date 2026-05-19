@@ -191,7 +191,16 @@ and `K_emp` being unrelated after the facet conditioning is accounted for.
 
 ## 6. Check procedure (numerical)
 
-For each of the 21 choreographies:
+G.2 precondition scan:
+
+0. **Scan all `m3=1` supplementary-A rows first.** Run the sigma3 detector over
+   all 1,504 equal-mass rows at `rtol=atol=1e-12`, reporting
+   `sigma3_residual_inf`, `sigma3_inverse_residual_inf`, and
+   `closure_position_inf` side by side. The hard expectation is exactly 21
+   clear sigma candidates; if the count is not 21, stop and localize the bug to
+   integrator, gate, or permutation/shift convention before any daughter count.
+
+For each of the 21 sigma candidates:
 
 1. **Ingest** initial conditions and period from supplementary-A. The file uses a compact fixed ansatz, not full 18D state rows: expand `O_index(m3), z0, vx, vy, vz, T, stability` into the three positions and velocities before integrating. Filter the `m3=1` slice.
 2. **Discretize** X(t) on N samples per period (N ~ 10³ initially).
@@ -216,19 +225,30 @@ Executable harness:
 npm run isotrophy:parse
 npm run isotrophy:precondition-smoke
 npm run isotrophy:smoke
+npm run isotrophy:sigma3-scan:smoke
+npm run isotrophy:sigma3-scan
 ```
 
 Current smoke status (2026-05-18): `scripts/isotrophy_workbench.py` parses the
-live supplementary-A file, expands the compact ansatz, integrates selected
-rows with DOP853, and runs the same explicit-spatial-matrix residual gate for
-all generators. Parse smoke recovered 10,059 rows and 1,504 `m3=1` rows. The
-one-row precondition smoke runs `sigma3`, `sigma3_inverse`, `F_beta`, and
-`F_delta` through the same gate; the first shortest equal-mass row is not a
-choreography (`sigma3` residuals `~5.1e-1`) while `F_beta` lands at closure
-scale. The five-row structural smoke on the shortest equal-mass rows found
-`F_beta` residuals at integration-closure scale (`~1e-9` to `~1e-6`) and
-`F_delta` residuals clearly nonzero (`~4.5e-2` to `~2.8e-1`). This is a harness
-smoke only, not a `K_facet` result and not evidence for the theorem.
+live supplementary-A file, expands the compact ansatz, integrates selected rows
+with DOP853 at `rtol=atol=1e-12`, and runs the same explicit-spatial-matrix
+residual gate for all generators. Parse smoke recovered 10,059 rows and 1,504
+`m3=1` rows. The one-row precondition smoke runs `sigma3`, `sigma3_inverse`,
+`F_beta`, and `F_delta` through the same gate; the first shortest equal-mass row
+is not a choreography (`sigma3` residuals `~5.1e-1`) while `F_beta` lands at
+closure scale (`3.7e-10` vs same-row closure `1.1e-10`). The five-row
+structural smoke on the shortest equal-mass rows found `F_beta` residuals at
+same-row closure scale (`residual/closure ~0.97` to `~3.48`) and `F_delta`
+residuals clearly nonzero (`~4.5e-2` to `~2.8e-1`). The capped
+`isotrophy:sigma3-scan:smoke` scanned those five rows and found 0 sigma
+candidates, as expected for this generic shortest-period subset.
+
+The full G.2 scan has **not** run. Binding-resolution timing on one row with
+`N=1009`, phase grid `73`, and `rtol=atol=1e-12` took `7.65 s`; the full 1,504
+row scan is therefore a staged operator run, not an inline agent run. It should
+emit `results/isotrophy/m3eq1-sigma3-precondition/manifest.json` and
+`residuals.csv`, with the hard readback `sigma_candidate_count == 21`.
+This is still not a `K_facet` result and not evidence for the theorem.
 
 ---
 

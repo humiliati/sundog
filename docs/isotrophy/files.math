@@ -243,10 +243,11 @@ isotropyResidual[orbit_, g_] := Module[{Xperm, Xshift},
 
 (* Implementation notes -- to be expanded:
 
-   - Sampling: discretize X(t) on N points per period (start N = 1024).
+   - Sampling: discretize X(t) on N points per period. Low-budget smokes may
+     use N = 181 (prime); the G.2 sigma3 scan uses N = 1009 (prime).
    - Choose N coprime with the small denominators {2, 3} to avoid aliasing
-     false positives for alpha (period-2) and sigma3 (period-3). N = 1009
-     (prime) is convenient.
+     false positives for alpha (period-2) and sigma3 (period-3). Do not use
+     power-of-two sample counts for binding scans.
    - Gauge minimization:
        * SO(3): the inertia frame at t=0 is a SEED for the optimizer, never
          the answer. At the ansatz epoch the tensor is already diagonal,
@@ -264,8 +265,9 @@ isotropyResidual[orbit_, g_] := Module[{Xperm, Xshift},
          symmetry epoch and its argmin is a non-unique symmetric pair --
          degenerate exactly on the symmetry under test. Minimize phi over
          [0, T) directly.
-   - Tolerance: relative, against orbit scale. Start at 1e-4; tighten to
-     1e-6 once integration precision confirmed.
+   - Integration tolerance for the binding G.2 scan: rtol = atol = 1e-12.
+     Residuals must be reported next to closure_position_inf for the same row;
+     "at closure scale" is the receipt, not the raw residual alone.
 *)
 
 

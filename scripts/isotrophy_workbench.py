@@ -37,6 +37,12 @@ SUPPLEMENT_URLS = {
     "A": "https://numericaltank.sjtu.edu.cn/three-body/three-body/gif/supplementary-A.txt",
     "B": "https://numericaltank.sjtu.edu.cn/three-body/three-body/gif/supplementary-B.txt",
 }
+DEFAULT_RTOL = 1e-12
+DEFAULT_ATOL = 1e-12
+DEFAULT_MAX_STEP_FRACTION = 0.02
+DEFAULT_SIGMA_TOLERANCE = 1e-5
+DEFAULT_EXPECTED_SIGMA_COUNT = 21
+DEFAULT_CLOSURE_FLOOR = 1e-15
 
 FLOAT = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
 ROW_RE = re.compile(
@@ -301,6 +307,7 @@ def residual_for_generator(
         "det_rotation": float(np.linalg.det(rotation)),
         "closure_position_inf": integrated.closure_position_inf,
         "closure_velocity_inf": integrated.closure_velocity_inf,
+        "residual_to_closure": residual_inf / max(integrated.closure_position_inf, DEFAULT_CLOSURE_FLOOR),
         "inertia_degenerate": integrated.inertia_degenerate,
         "integration_seconds": integrated.elapsed_seconds,
         "n_samples": n_samples,
@@ -327,6 +334,51 @@ def write_outputs(out_dir: Path, summary: dict[str, object], records: list[dict[
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(records)
+
+
+def scan_record_from_residuals(
+    integrated: IntegratedOrbit,
+    sigma3: dict[str, object],
+    sigma3_inverse: dict[str, object],
+    f_beta: dict[str, object],
+    sigma_tolerance: float,
+    closure_floor: float,
+) -> dict[str, object]:
+    sigma3_residual = float(sigma3["residual_inf"])
+    sigma3_inverse_residual = float(sigma3_inverse["residual_inf"])
+    if sigma3_residual <= sigma3_inverse_residual:
+        sigma_best_generator = "sigma3"
+        sigma_best_residual = sigma3_residual
+        sigma_best_phase = float(sigma3["phase"])
+    else:
+        sigma_best_generator = "sigma3_inverse"
+        sigma_best_residual = sigma3_inverse_residual
+        sigma_best_phase = float(sigma3_inverse["phase"])
+
+    closure_scale = max(integrated.closure_position_inf, closure_floor)
+    f_beta_residual = float(f_beta["residual_inf"])
+    return {
+        "label": integrated.row.label,
+        "index": integrated.row.index,
+        "line_no": integrated.row.line_no,
+        "m3": integrated.row.m3,
+        "z0": integrated.row.z0,
+        "period": integrated.row.period,
+        "stability": integrated.row.stability,
+        "inertia_degenerate": integrated.inertia_degenerate,
+        "closure_position_inf": integrated.closure_position_inf,
+        "closure_velocity_inf": integrated.closure_velocity_inf,
+        "integration_seconds": integrated.elapsed_seconds,
+        "sigma3_residual_inf": sigma3_residual,
+        "sigma3_inverse_residual_inf": sigma3_inverse_residual,
+        "sigma_best_generator": sigma_best_generator,
+        "sigma_best_residual_inf": sigma_best_residual,
+        "sigma_best_phase": sigma_best_phase,
+        "sigma_best_to_closure": sigma_best_residual / closure_scale,
+        "sigma_candidate": sigma_best_residual <= sigma_tolerance,
+        "F_beta_residual_inf": f_beta_residual,
+        "F_beta_to_closure": f_beta_residual / closure_scale,
+    }
 
 
 def command_parse(args: argparse.Namespace) -> int:
@@ -374,6 +426,8 @@ def command_smoke(args: argparse.Namespace) -> int:
         "generators": generator_names,
         "n_samples": args.n_samples,
         "phase_grid": args.phase_grid,
+        "rtol": args.rtol,
+        "atol": args.atol,
         "elapsed_seconds": time.perf_counter() - started,
         "note": "Smoke only: residual magnitudes are not binding K_facet evidence.",
     }
@@ -385,6 +439,78 @@ def command_smoke(args: argparse.Namespace) -> int:
         writer.writerows(records)
     if args.out:
         write_outputs(Path(args.out), summary, records)
+    return 0
+
+
+def command_sigma3_scan(args: argparse.Namespace) -> int:
+    source = args.source.upper()
+    text = read_text(args.path or SUPPLEMENT_URLS[source])
+    rows = parse_rows(text, source)
+    selected = select_rows(rows, args.m3, args.limit, args.sort_period)
+    if not selected:
+        raise SystemExit("no rows selected")
+
+    started = time.perf_counter()
+    records: list[dict[str, object]] = []
+    for row_index, row in enumerate(selected, start=1):
+        integrated = integrate_orbit(row, args.rtol, args.atol, args.max_step_fraction)
+        sigma3 = residual_for_generator(integrated, GENERATORS["sigma3"], args.n_samples, args.phase_grid)
+        sigma3_inverse = residual_for_generator(
+            integrated,
+            GENERATORS["sigma3_inverse"],
+            args.n_samples,
+            args.phase_grid,
+        )
+        f_beta = residual_for_generator(integrated, GENERATORS["F_beta"], args.n_samples, args.phase_grid)
+        records.append(
+            scan_record_from_residuals(
+                integrated,
+                sigma3,
+                sigma3_inverse,
+                f_beta,
+                args.sigma_tolerance,
+                args.closure_floor,
+            )
+        )
+        if args.report_every and row_index % args.report_every == 0:
+            candidates = sum(1 for record in records if record["sigma_candidate"])
+            print(
+                f"[isotrophy] scanned {row_index}/{len(selected)} rows; "
+                f"sigma_candidates={candidates}",
+                file=sys.stderr,
+                flush=True,
+            )
+
+    sigma_candidates = [record for record in records if record["sigma_candidate"]]
+    expectation_met = len(sigma_candidates) == args.expected_sigma_count
+    summary: dict[str, object] = {
+        "mode": "sigma3_scan",
+        "source": source,
+        "rows_total": len(rows),
+        "rows_selected": len(selected),
+        "m3": args.m3,
+        "rtol": args.rtol,
+        "atol": args.atol,
+        "n_samples": args.n_samples,
+        "phase_grid": args.phase_grid,
+        "sigma_tolerance": args.sigma_tolerance,
+        "expected_sigma_count": args.expected_sigma_count,
+        "sigma_candidate_count": len(sigma_candidates),
+        "sigma_candidate_labels": [record["label"] for record in sigma_candidates],
+        "expectation_met": expectation_met,
+        "elapsed_seconds": time.perf_counter() - started,
+        "note": "G.2 scan: not a K_facet result or daughter-family count.",
+    }
+
+    print(json.dumps(summary, indent=2))
+    if args.print_records and records:
+        writer = csv.DictWriter(sys.stdout, fieldnames=list(records[0].keys()))
+        writer.writeheader()
+        writer.writerows(records)
+    if args.out:
+        write_outputs(Path(args.out), summary, records)
+    if args.strict_expected and not expectation_met:
+        return 2
     return 0
 
 
@@ -407,11 +533,32 @@ def build_parser() -> argparse.ArgumentParser:
     smoke.add_argument("--generators", default="sigma3,sigma3_inverse,F_beta,F_delta")
     smoke.add_argument("--n-samples", type=int, default=181)
     smoke.add_argument("--phase-grid", type=int, default=25)
-    smoke.add_argument("--rtol", type=float, default=1e-10)
-    smoke.add_argument("--atol", type=float, default=1e-12)
-    smoke.add_argument("--max-step-fraction", type=float, default=0.02)
+    smoke.add_argument("--rtol", type=float, default=DEFAULT_RTOL)
+    smoke.add_argument("--atol", type=float, default=DEFAULT_ATOL)
+    smoke.add_argument("--max-step-fraction", type=float, default=DEFAULT_MAX_STEP_FRACTION)
     smoke.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
     smoke.set_defaults(func=command_smoke)
+
+    scan = sub.add_parser("sigma3-scan", help="scan selected m3 rows for sigma3 precondition candidates")
+    scan.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="A")
+    scan.add_argument("--path", help="local supplementary file instead of the live URL")
+    scan.add_argument("--m3", type=float, default=1.0)
+    scan.add_argument("--limit", type=int, default=0)
+    scan.add_argument("--sort-period", action="store_true", default=True)
+    scan.add_argument("--no-sort-period", dest="sort_period", action="store_false")
+    scan.add_argument("--n-samples", type=int, default=1009)
+    scan.add_argument("--phase-grid", type=int, default=73)
+    scan.add_argument("--rtol", type=float, default=DEFAULT_RTOL)
+    scan.add_argument("--atol", type=float, default=DEFAULT_ATOL)
+    scan.add_argument("--max-step-fraction", type=float, default=DEFAULT_MAX_STEP_FRACTION)
+    scan.add_argument("--sigma-tolerance", type=float, default=DEFAULT_SIGMA_TOLERANCE)
+    scan.add_argument("--expected-sigma-count", type=int, default=DEFAULT_EXPECTED_SIGMA_COUNT)
+    scan.add_argument("--closure-floor", type=float, default=DEFAULT_CLOSURE_FLOOR)
+    scan.add_argument("--strict-expected", action="store_true")
+    scan.add_argument("--print-records", action="store_true")
+    scan.add_argument("--report-every", type=int, default=25)
+    scan.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
+    scan.set_defaults(func=command_sigma3_scan)
     return parser
 
 
