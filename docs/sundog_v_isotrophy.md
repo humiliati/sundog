@@ -196,11 +196,30 @@ G.2 precondition scan:
 0. **Scan all `m3=1` supplementary-A rows first.** Run the sigma3 detector over
    all 1,504 equal-mass rows at `rtol=atol=1e-12`, reporting
    `sigma3_residual_inf`, `sigma3_inverse_residual_inf`, and
-   `closure_position_inf` side by side. The hard expectation is exactly 21
-   clear sigma candidates; if the count is not 21, stop and localize the bug to
-   integrator, gate, or permutation/shift convention before any daughter count.
+   `closure_position_inf` side by side. This gate now has two separate jobs:
+   (a) confirm detector bimodality, and (b) establish the counting convention
+   before any daughter-family count.
 
-For each of the 21 sigma candidates:
+   The first full run completed on 2026-05-19 and should **not** be rerun for
+   this question. Its old harness defined `sigma3_inverse` as `(cycle132,+T/3)`,
+   which is the opposite cyclic labeling, not the inverse of
+   `(cycle123,+T/3)`. The true inverse is `(cycle132,+2T/3)`. The run therefore
+   found 25 rows under a minimum over two orientation classes, not a clean
+   catalog readback of the 21 geometric choreographies.
+
+   The run is still load-bearing as a detector receipt. In
+   `results/isotrophy/m3eq1-sigma3-precondition/residuals.csv`, all 25 accepted
+   rows land at closure scale (`sigma_best_residual_inf <= 2.77e-8`), while the
+   nearest rejected row has best residual `1.58e-2`; there is no middle band.
+   The old gate splits as 10 sigma3-only rows, 8 opposite-orientation-only rows,
+   and 7 rows accepted by both old tests. No exact duplicate groups appear under
+   `(period,z0,stability)`, so the opposite-labeling-pair hypothesis is not
+   confirmed by that key alone. A restricted rerun on the 25 old candidates
+   after fixing `sigma3_inverse` reduced the true-inverse gate to 17 candidates
+   in `298 s`. The remaining decision is whether G.2 counts IC rows,
+   canonical-label rows, or orientation-deduped geometric orbits.
+
+For each confirmed sigma candidate under the chosen convention:
 
 1. **Ingest** initial conditions and period from supplementary-A. The file uses a compact fixed ansatz, not full 18D state rows: expand `O_index(m3), z0, vx, vy, vz, T, stability` into the three positions and velocities before integrating. Filter the `m3=1` slice.
 2. **Discretize** X(t) on N samples per period (N ~ 10³ initially).
@@ -229,26 +248,43 @@ npm run isotrophy:sigma3-scan:smoke
 npm run isotrophy:sigma3-scan
 ```
 
-Current smoke status (2026-05-18): `scripts/isotrophy_workbench.py` parses the
-live supplementary-A file, expands the compact ansatz, integrates selected rows
-with DOP853 at `rtol=atol=1e-12`, and runs the same explicit-spatial-matrix
-residual gate for all generators. Parse smoke recovered 10,059 rows and 1,504
-`m3=1` rows. The one-row precondition smoke runs `sigma3`, `sigma3_inverse`,
-`F_beta`, and `F_delta` through the same gate; the first shortest equal-mass row
-is not a choreography (`sigma3` residuals `~5.1e-1`) while `F_beta` lands at
-closure scale (`3.7e-10` vs same-row closure `1.1e-10`). The five-row
-structural smoke on the shortest equal-mass rows found `F_beta` residuals at
-same-row closure scale (`residual/closure ~0.97` to `~3.48`) and `F_delta`
-residuals clearly nonzero (`~4.5e-2` to `~2.8e-1`). The capped
-`isotrophy:sigma3-scan:smoke` scanned those five rows and found 0 sigma
-candidates, as expected for this generic shortest-period subset.
+Current status (2026-05-19): `scripts/isotrophy_workbench.py` parses the live
+supplementary-A file, expands the compact ansatz, integrates selected rows with
+DOP853 at `rtol=atol=1e-12`, and runs the same explicit-spatial-matrix residual
+gate for all generators. Parse smoke recovered 10,059 rows and 1,504 `m3=1`
+rows. The one-row precondition smoke runs `sigma3`, the fixed true
+`sigma3_inverse`, `F_beta`, and `F_delta` through the same gate; the first
+shortest equal-mass row is not a choreography while `F_beta` lands at closure
+scale. The five-row structural smoke on the shortest equal-mass rows found
+`F_beta` residuals at same-row closure scale and `F_delta` residuals clearly
+nonzero. The capped `isotrophy:sigma3-scan:smoke` scanned those five rows and
+found 0 sigma candidates, as expected for this generic shortest-period subset.
 
-The full G.2 scan has **not** run. Binding-resolution timing on one row with
-`N=1009`, phase grid `73`, and `rtol=atol=1e-12` took `7.65 s`; the full 1,504
-row scan is therefore a staged operator run, not an inline agent run. It should
-emit `results/isotrophy/m3eq1-sigma3-precondition/manifest.json` and
-`residuals.csv`, with the hard readback `sigma_candidate_count == 21`.
-This is still not a `K_facet` result and not evidence for the theorem.
+The full G.2 scan has run once and cost `29461 s` (`~8.18 h`) on the local CPU
+machine. Do not repeat it until the row/orbit convention is settled and the
+expected count has been explicitly re-registered. The future fixed-inverse
+`npm run isotrophy:sigma3-scan` writes to
+`results/isotrophy/m3eq1-sigma3-precondition-fixed-inverse/` so the old
+orientation-bug receipt is not overwritten. For the immediate fix, the
+already-discovered 25 indices were rerun with the fixed inverse:
+
+```bash
+python scripts/isotrophy_workbench.py sigma3-scan --source A --m3 1 \
+  --indices 62,64,231,264,468,524,574,609,617,623,735,791,793,941,983,1034,1062,1084,1114,1172,1265,1352,1414,1488,1497 \
+  --n-samples 1009 --phase-grid 73 --rtol 1e-12 --atol 1e-12 \
+  --sigma-tolerance 1e-5 --print-records
+```
+
+Readback: `17` rows pass the true `sigma3`/`sigma3_inverse` gate:
+`O_{62}`, `O_{64}`, `O_{231}`, `O_{264}`, `O_{468}`, `O_{574}`, `O_{609}`,
+`O_{623}`, `O_{735}`, `O_{791}`, `O_{793}`, `O_{1034}`, `O_{1114}`,
+`O_{1265}`, `O_{1352}`, `O_{1488}`, `O_{1497}`. The old
+`sigma3_opposite_orientation` element remains available in the workbench as a
+named generator for follow-up orientation-class audits; it is no longer called
+`sigma3_inverse`.
+
+This is still not a `K_facet` result and not evidence for the theorem. It is a
+precondition gate plus a convention audit.
 
 ---
 

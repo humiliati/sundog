@@ -41,7 +41,7 @@ DEFAULT_RTOL = 1e-12
 DEFAULT_ATOL = 1e-12
 DEFAULT_MAX_STEP_FRACTION = 0.02
 DEFAULT_SIGMA_TOLERANCE = 1e-5
-DEFAULT_EXPECTED_SIGMA_COUNT = 21
+DEFAULT_EXPECTED_SIGMA_COUNT = None
 DEFAULT_CLOSURE_FLOOR = 1e-15
 
 FLOAT = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
@@ -78,8 +78,12 @@ class Generator:
 
 GENERATORS = {
     "sigma3": Generator("sigma3", "choreography", PERMUTATIONS["cycle123"], 1.0 / 3.0, False, I3),
+    # True inverse of (cycle123, +T/3): inverse permutation and -T/3 == +2T/3.
     "sigma3_inverse": Generator(
-        "sigma3_inverse", "choreography", PERMUTATIONS["cycle132"], 1.0 / 3.0, False, I3
+        "sigma3_inverse", "choreography", PERMUTATIONS["cycle132"], 2.0 / 3.0, False, I3
+    ),
+    "sigma3_opposite_orientation": Generator(
+        "sigma3_opposite_orientation", "choreography", PERMUTATIONS["cycle132"], 1.0 / 3.0, False, I3
     ),
     "alpha_I": Generator("alpha_I", "alpha", PERMUTATIONS["swap12"], 1.0 / 2.0, False, I3),
     "beta_I": Generator("beta_I", "beta", PERMUTATIONS["swap12"], 0.0, True, I3),
@@ -315,13 +319,38 @@ def residual_for_generator(
     }
 
 
-def select_rows(rows: Iterable[OrbitRow], m3: float | None, limit: int, sort_period: bool) -> list[OrbitRow]:
-    selected = [row for row in rows if m3 is None or abs(row.m3 - m3) < 5e-13]
+def select_rows(
+    rows: Iterable[OrbitRow],
+    m3: float | None,
+    limit: int,
+    sort_period: bool,
+    indices: set[int] | None = None,
+) -> list[OrbitRow]:
+    selected = [
+        row
+        for row in rows
+        if (m3 is None or abs(row.m3 - m3) < 5e-13) and (indices is None or row.index in indices)
+    ]
     if sort_period:
         selected.sort(key=lambda row: (row.period, row.index))
     if limit > 0:
         selected = selected[:limit]
     return selected
+
+
+def parse_indices(indices: str | None) -> set[int] | None:
+    if not indices:
+        return None
+    parsed: set[int] = set()
+    for part in indices.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        try:
+            parsed.add(int(part))
+        except ValueError as exc:
+            raise SystemExit(f"invalid orbit index {part!r} in --indices") from exc
+    return parsed
 
 
 def write_outputs(out_dir: Path, summary: dict[str, object], records: list[dict[str, object]]) -> None:
@@ -401,7 +430,7 @@ def command_smoke(args: argparse.Namespace) -> int:
     source = args.source.upper()
     text = read_text(args.path or SUPPLEMENT_URLS[source])
     rows = parse_rows(text, source)
-    selected = select_rows(rows, args.m3, args.limit, args.sort_period)
+    selected = select_rows(rows, args.m3, args.limit, args.sort_period, parse_indices(args.indices))
     if not selected:
         raise SystemExit("no rows selected")
 
@@ -446,7 +475,7 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
     source = args.source.upper()
     text = read_text(args.path or SUPPLEMENT_URLS[source])
     rows = parse_rows(text, source)
-    selected = select_rows(rows, args.m3, args.limit, args.sort_period)
+    selected = select_rows(rows, args.m3, args.limit, args.sort_period, parse_indices(args.indices))
     if not selected:
         raise SystemExit("no rows selected")
 
@@ -482,7 +511,9 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
             )
 
     sigma_candidates = [record for record in records if record["sigma_candidate"]]
-    expectation_met = len(sigma_candidates) == args.expected_sigma_count
+    expectation_met = (
+        None if args.expected_sigma_count is None else len(sigma_candidates) == args.expected_sigma_count
+    )
     summary: dict[str, object] = {
         "mode": "sigma3_scan",
         "source": source,
@@ -509,7 +540,7 @@ def command_sigma3_scan(args: argparse.Namespace) -> int:
         writer.writerows(records)
     if args.out:
         write_outputs(Path(args.out), summary, records)
-    if args.strict_expected and not expectation_met:
+    if args.strict_expected and expectation_met is not True:
         return 2
     return 0
 
@@ -528,6 +559,7 @@ def build_parser() -> argparse.ArgumentParser:
     smoke.add_argument("--path", help="local supplementary file instead of the live URL")
     smoke.add_argument("--m3", type=float, default=1.0)
     smoke.add_argument("--limit", type=int, default=1)
+    smoke.add_argument("--indices", help="comma-separated orbit indices to include before limit is applied")
     smoke.add_argument("--sort-period", action="store_true", default=True)
     smoke.add_argument("--no-sort-period", dest="sort_period", action="store_false")
     smoke.add_argument("--generators", default="sigma3,sigma3_inverse,F_beta,F_delta")
@@ -544,6 +576,7 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--path", help="local supplementary file instead of the live URL")
     scan.add_argument("--m3", type=float, default=1.0)
     scan.add_argument("--limit", type=int, default=0)
+    scan.add_argument("--indices", help="comma-separated orbit indices to include before limit is applied")
     scan.add_argument("--sort-period", action="store_true", default=True)
     scan.add_argument("--no-sort-period", dest="sort_period", action="store_false")
     scan.add_argument("--n-samples", type=int, default=1009)
