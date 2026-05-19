@@ -1,7 +1,7 @@
 # Sundog v. Isotrophy
 
 **Test:** Z₃ → Z₂ descent of equal-mass 3D choreographies into (m₁=m₂=1, m₃≠1) piano-trios.
-**Status:** G.2 precondition **RESOLVED** (21 strict single-curve = catalog 21). K_facet v0.2 K1 frozen and retired as equivariance-null; K2-K4 paused pending v0.3.
+**Status:** G.2 precondition **RESOLVED** (21 strict single-curve = catalog 21). K_facet v0.2 K1 frozen and retired as equivariance-null; v0.3a case split complete (0 endomorphism, 21 induced).
 **Owner:** sundog
 **Related:** `./isotrophy/files.math` — symbolic + numerical scratch.
 
@@ -542,9 +542,95 @@ The derivation is the next deliverable. It must specify:
 6. the closure-relative tolerance for deciding the `+1` kernel, reusing the
    G.2 ratio-to-floor discipline rather than an absolute threshold.
 
-Only after that derivation is written should any code integrate variational
-equations or freeze `K_facet_v0.3`. The frozen output would be the case split,
-21 per-choreography integers, and their sum, recorded before any
+### v0.3a case-split gate: `tau12_gauge`
+
+Before any monodromy or `K_facet_v0.3` freeze, split the 21 strict
+choreographies by whether the equal-mass transposition acts on the
+choreography's own gauge class.
+
+Keep three conditions separate:
+
+1. **Strict `alpha_I` (settled: none).**
+   `P12 C_i(t + T/2) = C_i(t)` with identity spatial rotation. K1/v0.2 found
+   zero of 21.
+2. **SO(3)-absorbed shadow (settled: demoted).**
+   The same fixed-half-period idea with a free SO(3) rotation; this is the
+   `beta_I` plus `Rpi` absorption artifact quarantined by K1.
+3. **Gauge-class transposition selector (new).**
+   Does there exist `R in SO(3)` and free phase `phi in S1` such that
+   `P12 C_i(t) = R C_i(t + phi)`? This is not a piano-trio test. It asks
+   whether `(12)` is an endomorphism of the choreography's geometric gauge
+   class, so the linearized twist can act on `T_{C_i}`. If not, the v0.3
+   formula must use the induced representation over the `S3` group orbit.
+
+The detector is a single new generator:
+
+```text
+tau12_gauge := ((12), free phi, no time reversal, identity spatial, SO(3) gauge-min)
+```
+
+It must use the same validated closure-relative residual gate as G.2:
+closure-tight at `k = 3` means endomorphism; `O(1)` residual means induced.
+The minimizer must remain SO(3), never O(3), because an improper-reflection
+collapse would falsely promote an induced case into the endomorphism bucket.
+If the 21 rows are not razor-bimodal, record a marginal third category and do
+not force-binarize.
+
+The receipt must persist the full cocycle for every choreography:
+
+```text
+label, tau12_case, residual_inf, residual_to_closure,
+phi, phi/T, phi/(T/2), rotation_angle_rad, R_i
+```
+
+The `R_i, phi_i` pair is part of the later `G_i` definition, not diagnostic
+clutter. The column `phi_i/(T/2)` is the Bragg/coherence cross-check: it is the
+candidate commensurability signal that may explain which endomorphism cases
+can carry a nontrivial `+1` block.
+
+**v0.3a receipt (2026-05-19, COMPLETE).** `npm run isotrophy:tau12:cases`
+ran the registered 21 strict G.2 indices with `rtol=atol=1e-12`,
+`n_samples=1009`, `phase_grid=73`, closure multiple `k=3`, and SO(3)
+Procrustes alignment only. Elapsed wall time: `120.61 s`. Receipt path:
+`results/isotrophy/k-facet-v03-tau12-case-split-21strict/`
+(gitignored/protected).
+
+Result: **0 endomorphism, 21 induced-representation cases, 0 marginal
+reviews.** No row was closure-tight: the best non-tight ratio was
+`2.815e7`, far above the `1e5` induced threshold. Therefore the current 21-row
+catalog has no choreography whose `(12)` transposition acts as an endomorphism
+of its own gauge class under the Condition-3 detector. The v0.3 derivation, if
+continued, must be the induced-representation formula for all 21 rows. The
+endomorphism kernel formula remains a general-case note, not the active formula
+for this catalog.
+
+| `C_i` | case | residual | residual / closure | `phi/T` | `phi/(T/2)` | `rot rad` |
+|---|---|---:|---:|---:|---:|---:|
+| `O_{62}` | induced | 1.296 | `8.508e8` | 0.612 | 1.225 | 2.957 |
+| `O_{64}` | induced | 0.872 | `7.239e8` | 0.881 | 1.762 | 1.381 |
+| `O_{231}` | induced | 0.915 | `2.073e8` | 0.521 | 1.043 | 3.118 |
+| `O_{264}` | induced | 0.917 | `1.714e8` | 0.489 | 0.979 | 2.439 |
+| `O_{468}` | induced | 0.996 | `1.229e8` | 0.326 | 0.651 | 1.529 |
+| `O_{524}` | induced | 0.876 | `7.624e7` | 0.469 | 0.938 | 1.365 |
+| `O_{574}` | induced | 0.999 | `1.332e8` | 0.834 | 1.669 | 2.700 |
+| `O_{609}` | induced | 0.841 | `5.754e7` | 0.155 | 0.309 | 2.815 |
+| `O_{617}` | induced | 1.041 | `1.139e8` | 0.841 | 1.681 | 2.747 |
+| `O_{623}` | induced | 0.940 | `9.463e7` | 0.052 | 0.105 | 2.385 |
+| `O_{735}` | induced | 0.878 | `6.627e7` | 0.175 | 0.350 | 1.517 |
+| `O_{793}` | induced | 0.892 | `6.981e7` | 0.494 | 0.988 | 2.133 |
+| `O_{941}` | induced | 0.875 | `5.257e7` | 0.237 | 0.474 | 1.269 |
+| `O_{1034}` | induced | 1.066 | `5.466e7` | 0.980 | 1.960 | 2.087 |
+| `O_{1062}` | induced | 1.002 | `6.350e7` | 0.382 | 0.765 | 2.372 |
+| `O_{1114}` | induced | 1.026 | `6.236e7` | 0.058 | 0.116 | 3.132 |
+| `O_{1172}` | induced | 0.920 | `3.488e7` | 0.854 | 1.709 | 1.431 |
+| `O_{1265}` | induced | 0.806 | `2.815e7` | 0.834 | 1.667 | 2.978 |
+| `O_{1414}` | induced | 0.839 | `2.962e7` | 0.157 | 0.314 | 3.104 |
+| `O_{1488}` | induced | 0.995 | `3.824e7` | 0.187 | 0.374 | 0.439 |
+| `O_{1497}` | induced | 0.922 | `3.016e7` | 0.935 | 1.871 | 1.696 |
+
+Only after the induced-representation derivation is written should any code
+integrate variational equations or freeze `K_facet_v0.3`. The frozen output
+would be the 21 per-choreography integers and their sum, recorded before any
 supplementary-B clustering.
 
 Rejected as primary:
@@ -607,7 +693,8 @@ Rejected as primary:
 | 2026-05-19 | **K1 COMPLETE.** `npm run isotrophy:kfacet:predict` froze primary strict `K_facet = 0` from the 21 strict G.2 rows. All 21 rows pass only `F_beta` strictly (`d_i=0` each; no `F_beta` failures). The SO(3)-gauged diagnostic is 21 because `beta_I` appears only with `Rpi` absorbed into free alignment, so it is not counted as the strict prediction. Receipt: `results/isotrophy/k-facet-prediction-21strict/`. |
 | 2026-05-19 | **v0.2 DISPOSITION.** K1 proved the static containment operator is structurally the equivariance-only null: `Z3` choreography symmetry does not generically contain the target transposition `Z2`, so `d_i=0` is forced by construction. K2-K4 are paused under v0.2; do not run the 273-row classification until a v0.3 branching/continuation `d_i` is derived and pre-registered. |
 | 2026-05-19 | **v0.3 DESIGN DECISION.** If isotrophy continues, primary `d_i` must be a monodromy/isotypic branching count computed from each `m3=1` choreography alone. Corrected foundation: `alpha_I` is not an isotropy of the parent orbit; define the twist as `G_i = rho((12)) o Phi_{T/2}` only where `(12)` acts as an endomorphism of the choreography, otherwise use an induced-representation formula over the `S3` group orbit. Full `m3` continuation is rejected as primary because it is circular with supplementary-B; Bragg/Floquet coherence is retained as a cross-check. |
-| (next)     | v0.3 derivation — specify the cheap `(12)`-up-to-gauge case-split classification, then write the `G_i` commutation proof, structural `(F_beta-even) cap (sigma3-trivial)` removal, neutral-mode quotient, `+1` multiplicity rule, and closure-relative tolerance before any monodromy code or supplementary-B classification. |
+| 2026-05-19 | **v0.3a CASE SPLIT COMPLETE.** `npm run isotrophy:tau12:cases` ran the locked Condition-3 detector on the 21 strict rows: 0 endomorphism, 21 induced-representation, 0 marginal review; best non-tight residual/closure = `2.815e7`. Receipt: `results/isotrophy/k-facet-v03-tau12-case-split-21strict/`. |
+| (next)     | v0.3 derivation — write the induced-representation formula over the `S3` group orbit, structural `(F_beta-even) cap (sigma3-trivial)` removal, neutral-mode quotient, `+1` multiplicity rule, and closure-relative tolerance before any monodromy code or supplementary-B classification. |
 
 ---
 
