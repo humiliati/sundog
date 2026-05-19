@@ -1,7 +1,7 @@
 # Sundog v. Isotrophy
 
 **Test:** Z₃ → Z₂ descent of equal-mass 3D choreographies into (m₁=m₂=1, m₃≠1) piano-trios.
-**Status:** G.2 precondition **RESOLVED** (21 strict single-curve = catalog 21). K_facet K1 prediction frozen; K2-K4 not yet run.
+**Status:** G.2 precondition **RESOLVED** (21 strict single-curve = catalog 21). K_facet v0.2 K1 frozen and retired as equivariance-null; K2-K4 paused pending v0.3.
 **Owner:** sundog
 **Related:** `./isotrophy/files.math` — symbolic + numerical scratch.
 
@@ -167,6 +167,17 @@ gauge. The algebra above pins the structural generator as `F_beta`, a concrete
 realization of the beta class. The numerical detector should verify that before
 reading any daughter count.
 
+**Post-K1 disposition.** This v0.2 static isotropy-containment operator is now
+retired as the equivariance-only null, not promoted as the sundog prediction.
+For a strict choreography seed, the genuine choreography symmetry is cyclic
+`<sigma3>` while the piano-trio target symmetry is a transposition-class `Z2`;
+generically `Z3` and that `Z2` intersect only in the identity. A static
+equal-mass scan for already-present transposition generators therefore forces
+`d_i = 0` for generic choreography seeds after quotienting the structural
+`F_beta`. K1 surfaced that degeneracy before the multi-hour K2-K4 path, which
+is the right failure mode. A non-tautological v0.3 must make `d_i` a
+branching/continuation functional, not a static containment count.
+
 **Seed (post-G.2).** The `C_i` are exactly the **21 strict single-curve
 choreographies** confirmed by G.2 (catalog-matched, identity inertial-frame
 rotation). The 4 rotating/relative choreographies are *not* catalog
@@ -262,8 +273,10 @@ For piano-trio family counting:
 7. **Cluster** piano-trios into families by continuation in m₃ (first-pass key per the K_facet SCOPE block: residual-type-mod-`<F_beta>` × invariant-continuation; free-group-word deferred).
 8. Count `K_emp` = # of distinct facet-visible families.
 
-Compare `K_facet` ↔ `K_emp`. **Authoritative procedure: the pre-registered
-K_facet SCOPE block below (K1–K4 + falsifier) supersedes this sketch.**
+Compare `K_facet` ↔ `K_emp`. **Disposition: the pre-registered v0.2 scope
+below superseded this sketch, then K1 retired it as the equivariance-only null.
+Do not run the K2-K4 branch from this sketch unless v0.3 re-registers a
+branching/continuation `d_i`.**
 
 Executable harness:
 
@@ -369,10 +382,13 @@ trustworthy. **G.2 passes; no residual discrepancy.** This is still not a
 
 ---
 
-## K_facet — SCOPE (pre-registered, 2026-05-19)
+## K_facet — v0.2 SCOPE (pre-registered, then retired, 2026-05-19)
 
-G.2 was the precondition; K_facet is the actual sundog test. Pre-registered so
-the prediction is frozen *before* the empirical count is seen.
+G.2 was the precondition; K_facet was the proposed sundog test. It was
+pre-registered so the prediction was frozen *before* the empirical count was
+seen. K1 did freeze it honestly, then showed the proposed operator collapses
+to the equivariance-only null. This section is retained as the receipt trail;
+do not run K2-K4 under this v0.2 scope.
 
 **Seed.** The 21 strict single-curve choreographies from G.2 (catalog-matched).
 Exclude the 4 rotating; track them only as a secondary, non-gating question.
@@ -424,20 +440,22 @@ as strict single-curve evidence.
 | `O_{1488}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
 | `O_{1497}` | `F_beta` | empty | 0 | `beta_I;F_beta` |
 
-**K2 — supplementary-B prerequisite.** Obtain a local supplementary-B mirror
+**K2 — supplementary-B prerequisite (PAUSED under v0.2).** Obtain a local supplementary-B mirror
 (upstream times out; the A mirror was localized for exactly this reason).
 Verify `parse --source B` reports the expected **273** piano-trio rows across
 `m3 = 0.1·n, n∈{1..20}` with the B-form `v3 = (-2 vx/m3, -2 vy/m3, 0)` ansatz.
-Do not proceed until row count and grid are confirmed.
+Do not proceed under v0.2; row count and grid verification only become useful
+again after a v0.3 branching functional is pre-registered.
 
-**K3 — classify (staged, multi-hour).** Same closure-relative + rotation-angle
+**K3 — classify (PAUSED under v0.2).** Same closure-relative + rotation-angle
 gate (the G.2-validated path), 6 generators, all 273 B rows, each flagged
 strict/rotating under the same single-inertial-curve convention G.2 fixed.
 Stage: smoke (5 rows) → restricted receipt → full. Full output:
 `results/isotrophy/k-facet-suppB-full/` (protected, never a receipt dir).
-Estimated ≈ 2–3 h at `rtol=atol=1e-12`; smoke-gate before the full sweep.
+Estimated ≈ 2–3 h at `rtol=atol=1e-12`; do not spend that compute against
+`K_facet = 0`, because it would only test the already-known equivariance null.
 
-**K4 — cluster → `K_emp`.** First-pass key:
+**K4 — cluster → `K_emp` (PAUSED under v0.2).** First-pass key:
 `(residual-type-mod-<F_beta>) × (continuation in m3 traced by conserved
 invariants E, |L|, period continuity across n=1..20)`. The free-group-word /
 braid label is **explicitly deferred** — the harness cannot compute it and
@@ -452,10 +470,13 @@ bifurcation across an `m3` critical value, (ii) chirality doubling
 facet conditioning is the kill condition. `273/21 ≈ 13` is a sampling-density
 diagnostic, never the prediction.
 
-With K1 complete, P1 is now the deliberately hard equality `K_emp == 0`.
-Any nonzero empirical piano-trio family count must therefore land in P2 through
-a named structured channel; it cannot be patched after the fact by silently
-promoting the SO(3)-gauged `beta_I` shadow into the strict prediction.
+With K1 complete, P1 would be the equality `K_emp == 0`. That is not a useful
+sundog theorem test; it is the equivariance-only null restated numerically.
+Therefore the v0.2 falsifier is retired before K2. Do not patch `d_i` after the
+fact to avoid zero. A v0.3 registration must derive a new `d_i` around the
+branching/Morse content: the number of `Z2`-isotropic piano-trio branches that
+bifurcate from each `Z3` choreography under `m3 -> 1 + epsilon`, with its
+negative stated before any supplementary-B count is run.
 
 ---
 
@@ -479,7 +500,7 @@ promoting the SO(3)-gauged `beta_I` shadow into the strict prediction.
 - **8.1 Lagrange vs figure-eight, formalized.** The persistence-vs-isolation diagnostic from the brainstorm: confirm the moduli-dimension criterion holds across all known equivariant 3-body families (Euler collinear, Lagrange equilateral, Broucke–Hadjidemetriou–Henon, Chenciner–Montgomery 8, the 695 planar, the 21 3D choreographies). Build a 2D table: (family, isotropy moduli dim, observed mass-range width).
 - **8.2 Higher-N generalization.** For N=4, S₄ has more subgroups; predict the analog descent multiplicities and check against the smaller-but-extant N=4 catalog (Chen et al.).
 - **8.3 Stability-as-coherence.** Among confirmed descended piano-trios, predict the *stable* subset using a Bragg-style integer matching between the Floquet exponents at ε=0 and the descended period ratio. Liao reports 1,996 / 10,059 ≈ 20% stable in 3D; sub-question: is the stable fraction among piano-trios systematically higher, lower, or equal?
-- **8.4 The mesa hook.** Once `K_facet = K_emp` is in hand (if it is), draft the mesa-analog: NN substrate hosts inner optimizers iff loss-landscape has a residual subgroup of the data-symmetry surviving the training perturbation. Make precise enough to be falsifiable on toy NN setups.
+- **8.4 The mesa hook.** Only revisit the mesa-analog if a v0.3 branching functional survives pre-registration: NN substrate hosts inner optimizers iff loss-landscape has a residual subgroup of the data-symmetry surviving the training perturbation. Make precise enough to be falsifiable on toy NN setups.
 - **8.5 Shape-sphere visualization.** Plot the 21 + 273 + 10k orbits on the 3D analog of Montgomery's shape sphere (the shape *space* for 3D triangles is the closed half-space ℝ³₊ with metric from the inertia tensor). Look for the predicted halo-angle clustering.
 
 ---
@@ -506,7 +527,8 @@ promoting the SO(3)-gauged `beta_I` shadow into the strict prediction.
 | 2026-05-19 | **G.2 RESOLVED.** Rotation-angle stratification: 25 SO(3)-gauged = 21 strict single-curve (= catalog 21; max strict rot `3.65e-8 rad`) + 4 rotating/relative (`O_{791,983,1084,1352}`, rot = `2π/3`). `(E,\|L\|)` → 25 singletons. Detector trustworthy; precondition passes, no residual discrepancy. |
 | 2026-05-19 | K_facet experiment pre-registered (§K_facet SCOPE): seed = 21 strict; freeze `K_facet` from the 6-generator classification on the 21 strict ICs (K1) before computing `K_emp` from supplementary-B's 273 (K2–K4); free-group-word deferred; P1/P2 falsifier registered. |
 | 2026-05-19 | **K1 COMPLETE.** `npm run isotrophy:kfacet:predict` froze primary strict `K_facet = 0` from the 21 strict G.2 rows. All 21 rows pass only `F_beta` strictly (`d_i=0` each; no `F_beta` failures). The SO(3)-gauged diagnostic is 21 because `beta_I` appears only with `Rpi` absorbed into free alignment, so it is not counted as the strict prediction. Receipt: `results/isotrophy/k-facet-prediction-21strict/`. |
-| (next)     | K2–K4 — supplementary-B mirror, classify, cluster, compute `K_emp`, compare. |
+| 2026-05-19 | **v0.2 DISPOSITION.** K1 proved the static containment operator is structurally the equivariance-only null: `Z3` choreography symmetry does not generically contain the target transposition `Z2`, so `d_i=0` is forced by construction. K2-K4 are paused under v0.2; do not run the 273-row classification until a v0.3 branching/continuation `d_i` is derived and pre-registered. |
+| (next)     | v0.3 — decide whether to re-derive `d_i` as a branching/Morse continuation count, or accept the isotrophy line as a clean negative. |
 
 ---
 

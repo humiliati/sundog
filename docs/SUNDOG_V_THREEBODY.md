@@ -796,14 +796,17 @@ four extra rows are distinct rotating orbits rather than duplicate listings.
 G.2 (the σ3 precondition) is now **resolved**: the 21 strict single-curve
 choreographies match the catalog's 21 exactly, and the 4 relative/rotating
 choreographies are a separate, non-gating category. The `K_facet`
-daughter-family experiment is **scoped and pre-registered** in the sidecar.
-K1 has now frozen the primary strict prediction from the six-generator
-classification of the 21 strict ICs: `K_facet = 0`. All 21 rows pass only the
-structural `F_beta` strictly; the SO(3)-gauged diagnostic is 21 because
-`beta_I` appears only with `Rpi` absorbed into free alignment, so it is not
-counted as the strict prediction. K2-K4 (supplementary-B mirror, classify,
-cluster, compute `K_emp`) are still not run. This remains not evidence for the
-theorem or for Phase 13-15.
+daughter-family experiment was scoped and pre-registered in the sidecar. K1
+froze the primary strict prediction from the six-generator classification of
+the 21 strict ICs: `K_facet = 0`. All 21 rows pass only the structural
+`F_beta` strictly; the SO(3)-gauged diagnostic is 21 because `beta_I` appears
+only with `Rpi` absorbed into free alignment, so it is not counted as the
+strict prediction. That is now dispositioned as a v0.2 spec failure, not a
+theorem result: the static containment operator is the equivariance-only null
+(`Z3` choreography symmetry does not generically contain the transposition
+`Z2` target). K2-K4 are paused until a v0.3 branching/continuation functional
+is derived and pre-registered, or the isotrophy line is accepted as a clean
+negative. This remains not evidence for the theorem or for Phase 13-15.
 
 ### Cross-Substrate Hand-Offs
 
