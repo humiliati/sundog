@@ -785,12 +785,14 @@ full-group `max(sigma3,sigma3_inverse)` gate, the current harness split is 14
 canonical candidates, 12 opposite-orientation candidates, and 25
 any-orientation IC rows. The old three canonical absolute-pass/closure-fail
 near misses are not global rejects; the symmetric opposite-orientation gate
-places them at closure scale. The hard-21 readback is retracted pending an
-orientation/geometric-orbit convention check against the catalog's isolated
-periodic-choreography convention. A zero-integration `(E, |L|)` invariant
-cluster on the 25 rows produced 25 singleton groups, so the simplest conserved
-invariant dedup does not close the 25-vs-21 gap. No `K_facet` computation or
-daughter-family count has been run.
+places them at closure scale. The hard-21 readback is now reconciled by the
+catalog's strict "single closed trajectory" convention: the SO(3)-gauged gate
+admits 25 rows, but the optimized alignment rotation angle separates 21 strict
+inertial single-curve choreographies from 4 rotating/relative choreographies
+with a nontrivial `120 deg` global rotation. A zero-integration `(E, |L|)`
+invariant cluster on the 25 rows produced 25 singleton groups, confirming the
+four extra rows are distinct rotating orbits rather than duplicate listings. No
+`K_facet` computation or daughter-family count has been run.
 
 ### Cross-Substrate Hand-Offs
 
