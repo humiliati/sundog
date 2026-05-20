@@ -12,8 +12,8 @@ Line |_| title || sum ||| wtf+sum+title-_i__e iff (I)__o__a__ q (I)
 0001 |A| law || no erase ||| pn (a)nd ppr
 0009 |B| ToC || Table of Contents ||| we really doing this?
 0027 |1| Setup & notation || Sundog Isotrophy Wire Maze Premise ||| 21 wires, symp to target, ez piano kill, questionable anti-symp order, and goal
-0040 |2| Piano Trio twist
-
+0040 |2| Piano twist G_i || Fiber operator
+0063 |3| M_i G_i τ-cancellation |
 
 
 
@@ -156,4 +156,173 @@ If (1)–(5) close cleanly, `K_facet_v0.3` is locked. The runner becomes mechani
 
 ---
 
-Want me to take a first pass at (1) — write out the Lie-algebraic verification of the F_β-mediated identification of `Φ_{T/2,i}` explicitly — as the next paper-only deliverable, since it's the single load-bearing closure that gates the rest?
+## 8. Codex review, 2026-05-20
+
+**Verdict:** keep this as the right draft shape, but do not freeze
+`K_facet_v0.3` or authorize monodromy code from it yet. The new direction is
+much stronger than v0.2 because it is no longer the static equivariance-null,
+and it correctly centers the anti-symplectic `F_beta` chain. But two items are
+currently blockers, not ordinary polish.
+
+### Blocker 1: the neutral quotient is degenerate as written
+
+The draft defines
+
+```text
+N_i := span{ ydot_i(0), J*grad H(y_i(0)) }.
+```
+
+In canonical Hamiltonian coordinates, `ydot = X_H = J*grad H`. Those two named
+vectors are the same vector, not the autonomous Hamiltonian two-plane. The
+forced neutral removal therefore removes only one written direction while
+claiming to remove the flow/energy block.
+
+Before code, replace this with a precise neutral construction. Acceptable
+routes:
+
+1. Work on a fixed-energy Poincare section and remove only the flow direction
+   by construction.
+2. Keep the full fiber but name the second neutral as the generalized
+   period/energy direction, e.g. a vector `u_E` satisfying the appropriate
+   `(M_i - I)u_E = c_i X_H(y_i(0))` relation, not `J*grad H`.
+3. If no clean generalized vector is available numerically, pre-register that
+   rows with a non-semisimple unit multiplier block are manual-review rows,
+   not silently counted.
+
+This is the same family of bug as the old "right quantity, wrong gate" issue:
+the formula names the thing we want, but the linear object currently written is
+not that thing.
+
+### Blocker 2: `G_i` is not yet a proven single-fiber endomorphism
+
+The draft correctly identifies verification point 1 as load-bearing, but the
+status should be stronger: section 3's commutation chain is provisional until
+the transport map is written with source and target fibers.
+
+As written, `Phi_{T/2,i} = Dphi_{T_i/2}(y_i(0))` maps
+`T_{y_i(0)}` to `T_{y_i(T_i/2)}`. It is not an endomorphism of
+`T_{y_i(0)}` by itself. Likewise,
+
+```text
+M_i * Phi_{T/2,i} = Phi_{T/2,i} * M_i
+```
+
+only makes sense after identifying `T_{y_i(T_i/2)}` back to `T_{y_i(0)}`.
+The autonomous-flow identity is really a square of maps between different
+fibers:
+
+```text
+Dphi_T(y_i(T/2)) * Dphi_{T/2}(y_i(0))
+  = Dphi_{T/2}(y_i(0)) * Dphi_T(y_i(0)).
+```
+
+Those are not the same statement unless the half-period transport has already
+been fixed. The review standard should be: write the operator as a typed
+composition through
+
+```text
+V_0 = T_{y_i(0)}Xi
+V_h = T_{y_i(T_i/2)}Xi
+V_partner,h = T_{alpha_I*y_i(0)}Xi
+```
+
+then compose the maps back to `V_0`. Only after that should we assert
+`[M_i, G_i]=0`.
+
+One more reason to be strict: if all factors are treated as same-fiber matrices,
+then `rho(F_beta) * rho(Rpi) * rho(tau)` algebraically collapses back toward
+the bare `(12)` action. That is either harmless bookkeeping or a sign that the
+transport is doing all the work. The derivation must say which.
+
+### Blocker 3: `G_i^2 = I` must be proved after the cocycle is chosen
+
+Loop-level `alpha_I^2 = e` is necessary, but it does not automatically prove
+that the chosen single-fiber representative squares to identity. A nontrivial
+transport cocycle can leave holonomy behind. After the typed transport in
+Blocker 2 is written, explicitly compute `G_i^2` on `K_i^{fib}`. If it equals
+`I`, the `K_i^+ + K_i^-` split is legitimate. If it equals a structural
+operator such as `F_beta` or a phase-shift remnant, the eigenspace split changes.
+
+### Blocker 4: structural subtraction should be a quotient, not an informal complement
+
+The intent is right: subtract only the structural continuation directions. The
+current notation
+
+```text
+K_i^{PT} := K_i^+ symplectic-complement B_i
+```
+
+is too loose. Until containment is proven, use
+
+```text
+B_i^+ := B_i cap K_i^+.
+```
+
+Then specify either:
+
+```text
+K_i^{PT} := K_i^+ / B_i^+
+```
+
+if this is a branch-count quotient, or the symplectic reduction
+
+```text
+K_i^{PT} := (B_i^+)^omega / B_i^+
+```
+
+if `B_i^+` is isotropic/coisotropic in the needed way. The phrase
+"symplectic-orthogonal complement" is not enough because anti-symplectic
+fixed sets are commonly Lagrangian-flavored; complements are not canonical
+unless the reduction structure is pinned.
+
+### Blocker 5: `1/2 * dim` is a candidate multiplicity, not yet a branch count
+
+The factor-of-two instinct is good, but the statement "one branch per
+symplectic pair" needs the crossing form / Lyapunov-Schmidt nondegeneracy
+condition. A `+1` multiplier pair gives a candidate direction. It becomes a
+counted branch only if the parameter derivative crosses the symmetry-breaking
+equation transversely and the Jordan/Krein structure is clean.
+
+Pre-registration-safe version:
+
+```text
+d_i_candidate = 1/2 * dim_R K_i^{PT}
+```
+
+Then define the branch-validity gate before any run:
+
+```text
+d_i = d_i_candidate only for semisimple +1 blocks with nonzero crossing form;
+otherwise row i is a manual-review / refined-rule row.
+```
+
+### Notation cleanup before canonical docs
+
+Use a typed spacetime-action notation for `F_beta`. The sentence
+`F_beta * y_i(s) = y_i(s) for all s` is easy to misread as a pointwise
+phase-space fixed condition. Safer:
+
+```text
+A_F y_i(-s) = y_i(s)
+```
+
+where `A_F` is the phase-space linear part of `F_beta`. That keeps the time
+reversal explicit and prevents a future implementer from dropping a minus sign.
+
+### Recommended next artifact
+
+Do not code yet. Write a one-page "typed transport lemma" with only maps and
+fibers:
+
+1. Define `A_F`, `A_tau`, `A_Rpi`, `P12`, and `X(t)=Dphi_t(y_i(0))`.
+2. State the reversible identities with domains and codomains.
+3. Construct the alpha-induced map on `V_0` through the partner fiber.
+4. Prove or refute `G_i^2=I`.
+5. Only then revisit `[M_i,G_i]=0`, `B_i^+`, and the multiplicity rule.
+
+If that lemma closes, the draft becomes a real v0.3 registration candidate.
+If it does not, the failure is valuable: it means the induced-representation
+functional still has hidden holonomy and should not be flattened into a
+single-fiber `d_i`.
+
+---
