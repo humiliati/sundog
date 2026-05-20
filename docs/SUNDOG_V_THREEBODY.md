@@ -804,9 +804,11 @@ only with `Rpi` absorbed into free alignment, so it is not counted as the
 strict prediction. That is now dispositioned as a v0.2 spec failure, not a
 theorem result: the static containment operator is the equivariance-only null
 (`Z3` choreography symmetry does not generically contain the transposition
-`Z2` target). The v0.3a `tau12_gauge` case-split receipt then found 0
-endomorphism cases and 21 induced-representation cases among the strict
-choreographies, so any continued v0.3 must derive the induced-representation
+`Z2` target). The v0.3a case split now covers both explicit spatial parity
+candidates, `tau12_I` and `tau12_Z`, with the SO(3) gauge kept proper. It found
+0 endomorphism cases and 21 induced-representation cases among the strict
+choreographies; the improper sibling won the residual for 6 rows but moved none
+near closure. Any continued v0.3 must therefore derive the induced-representation
 functional before monodromy code or supplementary-B clustering. K2-K4 remain
 paused, and this remains not evidence for the theorem or for Phase 13-15.
 
