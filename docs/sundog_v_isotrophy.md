@@ -1068,6 +1068,96 @@ Updated v0.3h-final posture:
    degeneracy / bimodality flag for `(partial_epsilon M_i)_E` or `Gamma_i`
    singular values.
 
+### v0.3i sentinel calibration pre-registration
+
+v0.3i is the smallest empirical calibration step for the rank-matrix gate. It
+does **not** freeze `K_facet_v0.3`, does **not** run the full 21, and does
+**not** compare against supplementary-B.
+
+Degeneracy flag hygiene:
+
+```text
+dE_perturbation_spectral_degeneracy_E
+  Basis-diagnostic flag for degeneracy in (partial_epsilon M_i)_E on the
+  E-isotypic sector. This affects per-block scalar diagnostics and any future
+  G2.6b canonicalizer, not the rank count.
+
+gamma_singular_bimodality_clean
+  Rank-gate flag for the singular values of Gamma_i. This is the count-relevant
+  ambiguity flag: marginal singular values near the floor mean the rank gate is
+  not clean.
+```
+
+Sentinel row choice is pre-registered:
+
+```text
+primary sentinel: O_62
+backup ladder:    O_264, O_468, O_574, ... in canonical-strict period order
+```
+
+`O_62` is chosen because it is the shortest-period strict choreography in the
+G.2 receipt and was closure-tight in both orientations. Short period minimizes
+integration-error accumulation, making it the least noisy calibration row. If
+`O_62` returns `c_i=0`, fall through the ladder until a row with `c_i>0` is
+found. If the full ladder returns `c_i=0`, then the v0.3 rank functional has
+collapsed to a structural negative on this catalog: `K_facet_v0.3=0` is forced,
+and this is dispositioned like v0.2, not treated as a calibration failure.
+
+Constants are fixed before the sentinel:
+
+```text
+k_gamma := 3
+k_int   := 10
+```
+
+`k_gamma=3` is carried from G.2's closure-multiple discipline. `k_int=10` is a
+defensible integrator-overhead upper bound for the variational integration and
+perturbation source. The sentinel verifies whether these constants produce a
+clean separator; it does not tune them.
+
+Bimodality falsifier:
+
+```text
+above gate: sigma_j > k_gamma * gamma_floor
+below gate: sigma_j < gamma_floor
+marginal:   gamma_floor <= sigma_j <= k_gamma * gamma_floor
+```
+
+The sentinel passes the calibration only if the marginal band is empty. If any
+sentinel singular value is marginal, v0.3i halts. The next work is a sharper
+integration-error analysis, not retuning `k_gamma` or `k_int` to the row.
+
+The only v0.3i empirical authorization, once this pre-registration is accepted,
+is one sentinel variational integration:
+
+```text
+row:        O_62, or the first c_i>0 row in the pre-registered ladder
+rtol/atol:  1e-12
+n_samples: 1009
+phase_grid: 73
+output:     results/isotrophy/k-facet-v03-sentinel-calibration-O62/
+```
+
+Output receipt:
+
+```text
+Gamma_i_matrix
+Gamma_i_singular_values
+gamma_floor_i
+gamma_singular_to_floor_i
+d_i
+dE_perturbation_spectral_degeneracy_E
+gamma_singular_bimodality_clean
+diagonal_gamma_i_k                 # diagnostic only
+branch_status_i_k                  # diagnostic only
+basis_convention
+gate_version = "v0.3i"
+```
+
+No additional rows, no supplementary-B, and no `K_facet_v0.3` freeze are
+authorized by v0.3i. If v0.3i passes, a separate v0.3j authorization may stage
+the full 21-row run and only then the supplementary-B comparison.
+
 Rejected as primary:
 
 - **Full continuation in `m3`:** too circular with supplementary-B. It can be a
@@ -1139,7 +1229,8 @@ Rejected as primary:
 | 2026-05-20 | **v0.3h RANK-MATRIX / G2.6 PREP.** The branch-validity object is now `Gamma_i`, the `c_i x c_i` crossing matrix on the `F_beta`-even standard sector, with `d_i=rank_floor(Gamma_i)` as the structural target. New gate G2.6: prove/test symplectic block-orthogonality of the `E` copies. If it holds, the scalar rule is the operating special case; if it fails, `Gamma_i` has off-diagonal symplectic/T contributions and full matrix rank is mandatory. Receipt schema must include the full matrix, singular values, rank, `gamma_floor`, and a `symplectic_block_orthogonal_E` flag from the E-isotypic omega-Gram matrix. |
 | 2026-05-20 | **v0.3h DRAFT REVIEW.** Rank-matrix formulation survives, but the proposed G2.6 closure via an `M_i+sigma3` Floquet basis is invalid on `K_i^{fib}` because `K_i^{fib}=ker(M_i-I)/N_i` and `M_i` is identity there. Cleaner result: `Gamma_i^T=0` for all entries if `(partial_epsilon M_i)_T` preserves `Fix(F_beta)`, because `Fix(F_beta)` is isotropic for anti-symplectic `F_beta`. Thus G2.6 is reframed as a basis-conditioning / scalar-interpretation diagnostic, not the proof of T-collapse. Anchor invariance should be stated as rank under congruence; `gamma_floor` remains proposed pending pre-registered sentinel calibration. |
 | 2026-05-20 | **v0.3h G2.6D DISPOSITION.** Operational basis question closes by not canonicalizing for the count: `d_i=rank_floor(Gamma_i)` is basis-invariant, while per-block diagonal gammas are basis-dependent diagnostics only. `Phi_{T/2}^C` as an involutive kernel canonicalizer (`G2.6b`) is retained as a paper-level follow-up, not a blocker. Locked shape: `Gamma_i^T=0` via anti-symplectic `Fix(F_beta)` isotropy; `Gamma_i=Gamma_i^E`; anchor changes act by congruence; `gamma_floor` formula survives but constants need pre-registered sentinel calibration. Remaining chores: cite G2.1/G2.2 and replace old Krein-in-`M_i` language with degeneracy/bimodality of `(partial_epsilon M_i)_E` or `Gamma_i` singular values. |
-| (next)     | Draft v0.3h-final from the G2.6d posture: prove operator-level `F_beta` preservation, state rank-only `Gamma_i`, record scalar diagnostics as basis-dependent, specify anchor congruence and `gamma_floor` sentinel calibration, and stage no empirical run until that calibration receipt is written. |
+| 2026-05-20 | **v0.3i SENTINEL CALIBRATION PRE-REGISTRATION.** Scope drafted for the first empirical step: one sentinel variational integration only, primary `O_62`, backup ladder in canonical-strict period order if `c_i=0`, constants fixed before the run (`k_gamma=3`, `k_int=10`), and a bimodality falsifier requiring no singular values in `[gamma_floor, k_gamma*gamma_floor]`. Receipt adds two separate flags: `dE_perturbation_spectral_degeneracy_E` for basis/diagnostic ambiguity, and `gamma_singular_bimodality_clean` for rank-gate ambiguity. No full 21, no supplementary-B, and no `K_facet_v0.3` freeze authorized. |
+| (next)     | Finalize v0.3i receipt/branch wording and only then run the single sentinel calibration if accepted. Passing v0.3i can lead to separate v0.3j full-21 authorization; failing v0.3i branches to sharper floor analysis or structural negative if the full ladder has `c_i=0`. |
 
 ---
 
