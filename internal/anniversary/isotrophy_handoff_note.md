@@ -112,13 +112,13 @@ and prove `[M_i, G_i] = 0` before block-diagonalizing the monodromy. For rows
 where `(12)` maps `C_i` to a different equal-mass orbit, use an induced
 representation over the `S3` group orbit instead.
 
-The load-bearing deliverable is not a run. It is the projector derivation:
-which of the 21 rows are endomorphism cases, which require the induced
-representation, how the structural sector
-`(F_beta-even) cap (sigma3-trivial)` is removed without deleting real
-`alpha_I` branches, which neutral modes `span{ydot(0), J grad H}` are
-quotiented, and whether a `+1` pitchfork contributes `dim` or `1/2 dim`. If
-that derivation is fuzzy, v0.3 is not ready.
+The load-bearing deliverable is not a run. After the v0.3a/v0.3b receipts and
+the v0.3c review, it is specifically the typed transport lemma: construct the
+alpha-induced map as a typed fiber map, correct the neutral quotient to
+`span{X_H,u_E}` with `(M-I)u_E=cX_H`, prove or refute `G_i^2=I`, then define
+`B_i^+` and the quotient/reduction. `1/2*dim` is only a candidate multiplicity
+until the semisimple/crossing-form/nondegeneracy gates are written. If that
+derivation is fuzzy, v0.3 is not ready.
 
 The first allowed pre-derivation run is only the case-split receipt. It tests
 Condition 3, not strict `alpha_I` and not the K1 SO(3)-absorbed shadow. It must
@@ -185,6 +185,13 @@ Remaining honest fork:
 - If the projector can be derived cleanly, pre-register v0.3 with the negative
   stated first.
 - If it cannot, accept isotrophy as a clean negative plus the G.2 detector win.
+- Current next paper-only gate: write the typed transport lemma before any
+  monodromy code. The v0.3 draft review accepted five blockers: the neutral
+  block is `span{X_H, u_E}` with `(M-I)u_E = c X_H`, `G_i` must be built as a
+  typed fiber map before claiming commutation, `G_i^2` must be computed after
+  the cocycle is chosen, structural subtraction must be a quotient/reduction
+  through `B_i^+`, and `1/2*dim` is only a candidate count until the
+  semisimple/crossing-form/nondegeneracy gates pass.
 
 ## Operator Guardrail
 
@@ -194,6 +201,7 @@ Before any future isotrophy run:
    accidental K2-K4 restart.
 2. If it is K2-K4 under v0.2, stop.
 3. If it is v0.3, use the completed all-induced case split, then write the
-   induced-representation derivation, the structural `F_beta` removal, the
-   neutral-mode quotient, the negative, and the go/no-go branch before running
-   any monodromy or supplementary-B classification.
+   typed transport lemma, the corrected neutral quotient, the structural
+   `F_beta` quotient/reduction, the multiplicity gate, the negative, and the
+   go/no-go branch before running any monodromy or supplementary-B
+   classification.

@@ -326,3 +326,96 @@ functional still has hidden holonomy and should not be flattened into a
 single-fiber `d_i`.
 
 ---
+
+## 9. Author response / disposition, 2026-05-20
+
+All five review blockers are accepted. The v0.3 draft remains useful as a map,
+but it is not a frozen formula and not code-authorizing.
+
+### Accepted corrections
+
+1. **Neutral quotient.** The old
+   `span{ydot_i(0), J*grad H(y_i(0))}` is wrong because these name the same
+   Hamiltonian vector. The corrected neutral block is the standard
+   two-dimensional generalized unit-multiplier block:
+
+   ```text
+   N_i := span{ X_H(y_i(0)), u_E }
+   (M_i - I) u_E = c_i X_H(y_i(0)),  c_i != 0
+   ```
+
+   Route 2 is preferred for the paper: make `u_E` explicit. If `u_E` cannot be
+   computed cleanly on a row, that row becomes a pre-registered manual-review
+   row rather than a silently counted branch.
+
+2. **Typed transport.** The section 3 commutation chain is provisional because
+   it treated `Phi_{T/2,i}`, `rho(tau)`, and `M_i` as same-fiber endomorphisms.
+   The next derivation must keep source and target fibers explicit. A later
+   collapse to a single-fiber operator is allowed only after the transport
+   cocycle is written and checked.
+
+3. **`G_i^2`.** Loop-level `alpha_I^2 = e` is not enough. The chosen fiber
+   representative must be squared directly. If it leaves holonomy behind
+   (`F_beta`, a phase-shift remnant, or another structural operator), the
+   eigenspace split is not the simple `+/-` split.
+
+4. **Structural subtraction.** Replace the informal complement with a typed
+   quotient/reduction. First define
+
+   ```text
+   B_i^+ := B_i cap K_i^+.
+   ```
+
+   Then choose, after the typed transport is known, either the branch-count
+   quotient
+
+   ```text
+   K_i^{PT} := K_i^+ / B_i^+
+   ```
+
+   or the symplectic reduction
+
+   ```text
+   K_i^{PT} := ((B_i^+)^omega) / B_i^+.
+   ```
+
+5. **Multiplicity.** The safe pre-registration language is candidate-first:
+
+   ```text
+   d_i_candidate = (1/2) * dim_R K_i^{PT}
+   d_i = d_i_candidate only when:
+     (i)  the +1 block of M_i is semisimple beyond N_i,
+     (ii) the Lyapunov-Schmidt crossing form on K_i^{PT} is nondegenerate,
+     (iii) the symplectic structure on K_i^{PT} is nondegenerate.
+   ```
+
+   Otherwise row `i` is a manual-review / refined-rule row.
+
+### Notation lock
+
+Use the typed spacetime-action notation for the structural symmetry:
+
+```text
+A_F y_i(-s) = y_i(s)
+```
+
+where `A_F` is the phase-space linear part of `F_beta`. This keeps time
+reversal explicit and prevents the sign-drop bug that would come from writing
+`F_beta*y_i(s)=y_i(s)` pointwise.
+
+### Next deliverable
+
+The next artifact is exactly one paper-level lemma, not a runner:
+
+1. Define `A_F`, `A_tau`, `A_Rpi`, `P12`, and `Phi_t := Dphi_t(y_i(0))`, with
+   `V_0`, `V_h`, `V'_0`, and `V'_h` explicit.
+2. State the reversible identities with domains and codomains.
+3. Construct the alpha-induced map on `V_0` through the partner fiber without
+   collapsing intermediate fibers.
+4. Prove or refute `G_i^2 = I`.
+5. Only then revisit `[M_i,G_i]`, `B_i^+`, and the multiplicity rule.
+
+If the typed lemma reveals holonomy that cannot be absorbed into a canonical
+single-fiber operator, v0.3 should stop there. That would mean the
+induced-representation functional has hidden cocycle dependence and must not be
+flattened into a single-fiber `d_i`.
