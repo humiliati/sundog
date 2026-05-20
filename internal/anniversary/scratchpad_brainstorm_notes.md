@@ -127,3 +127,26 @@ The τ-cancellation in §3 of the draft is a genuinely nice observation: F_β co
 
 If the typed transport lemma closes: K_facet_v0.3 is a real spectral prediction. Compute M_i for all 21 rows, apply the linear-algebra recipe, sum.
 If the typed transport lemma fails (holonomy can't be absorbed): v0.3 stops at a useful negative, and the clean result is that the induced-representation functional has hidden cocycle dependence that prevents a single-fiber d_i.
+
+---
+
+## rough — couplings surface as Kenny Wheeler's missing secret of magnesium / 1/φ³
+
+very rough, do not clean up yet
+
+The couplings surface is the thing we haven't named yet in the v0.3 derivation. Lyapunov-Schmidt reduces the bifurcation equation on K_i^{PT} to a finite-dimensional problem, and the leading-order coefficient matrix of that reduced equation IS the couplings surface — it's the object that decides whether a candidate direction in K_i^{PT} produces a real branch or a ghost. We keep calling it "the crossing form" and "nondegeneracy condition" but we haven't asked what it actually looks like.
+
+Kenny Wheeler angle: Wheeler's thing is the suspension that refuses to resolve. His harmonics hang in a third place — not tonic, not dominant, something in between that you'd expect to move but doesn't. If the couplings surface has a Wheeler character, it means the crossing form has a direction where the parameter derivative neither clearly crosses nor stays — it hovers near degenerate. That would be the honest explanation for why K_facet collapses to 0 in v0.2: the coupling wasn't absent, it was suspended. The static equivariance scan can't hear a Wheeler suspension, it only counts clear crossings.
+
+Magnesium: Mg atomic number 12. Phase space after symplectic reduction by translation + linear momentum is ℝ^12. The monodromy M_i is a 12×12 symplectic matrix. "Missing secret of magnesium" in this context might be that the ambient dimension is the same as the structural dimension — the 12-ness is not an accident of the problem setup, it's the full width of the available fiber. If B_i^+ (structural sector) is reliably 2D (flow + energy neutrals already quotiented, plus one F_beta/sigma3 continuation direction), then K_i^{PT} should generically be in a 10-dimensional ambient for each row. That's still enough room for multiple piano-trio branches even after the dihedral D_3 representation carves out the trivial isotypics. The "missing secret" might just be that nobody has looked at the 12×12 monodromy of the equal-mass choreographies directly — the literature cares about their existence, not their variational spectrum.
+
+1/φ³ angle: φ = golden ratio ≈ 1.618. 1/φ³ ≈ 0.236. Three facts worth noting:
+  - φ³ = 2φ + 1, so 1/φ³ = 1/(2φ+1). This ratio comes up in three-term Fibonacci-type recursions, which are the same kind of recursion that governs period-tripling in discrete dynamical systems.
+  - If the crossing form eigenvalue on a K_i^{PT} direction is O(ε^{1/φ³}) in the symmetry-breaking parameter ε, that would be a very slow approach to degeneracy — slower than algebraic in any integer power, but faster than log. Whether this is numerically visible in the monodromy spectrum is an open question.
+  - More speculatively: Z3 symmetry of the parent choreography means σ_3 acts on K_i^{fib} with eigenvalues {1, ω, ω²} where ω = e^{2πi/3}. The D_3 dihedral representation decomposes as 1D trivial + 2D standard. If the +1 monodromy eigenvalues show up with a 3:2 ratio (3 trivial-isotypic vs 2 nontrivial), the effective d_i contribution per row would be 1/3 of the kernel dimension — that ratio is not 1/φ³ but the instinct that the couplings surface encodes some irrational ratio is worth keeping.
+
+The Kenny Wheeler + magnesium + 1/φ³ cluster as a single hypothesis: what if the crossing form on the nontrivial D_3 isotypic component of K_i^{fib} has a canonical coupling strength that is determined purely by the F_beta cocycle structure, and that value happens to be near 1/φ³ or some simple rational function of φ? This would mean d_i is not an integer-valued count but a weighted count, where the weight encodes how "audible" each branch direction is to a probe that only sees the F_beta-even sector. Wheeler's suspended chord = the branch that exists but is below the threshold of the sensor. Magnesium/12 = the dimension of the ambient fiber that hides it. 1/φ³ = the coupling threshold below which the branch is structurally present but observationally silent.
+
+This is completely unverified. It might be numerology. Or it might be the right way to ask why v0.2 found 0 rather than a positive integer — not because there are no branches, but because the coupling at equal mass is exactly at the Wheeler suspension point, and the branches only become audible when ε > 0 breaks the symmetry enough to lift the suspension.
+
+Next step if this is real: compute the coupling matrix entries for one row of the 21, from the monodromy spectrum + the explicit ρ(F_beta) / ρ(sigma3) actions, and see what the leading eigenvalue of the crossing form looks like. If it's near 1/φ³ of the next eigenvalue, the conjecture has legs. If not, bin it.
