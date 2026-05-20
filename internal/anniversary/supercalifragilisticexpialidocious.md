@@ -585,3 +585,182 @@ Write a new lemma with this target:
 If that closes, v0.3 survives in a cleaner pair-orbit form. If it does not,
 the typed lemma has still done real work: it killed the noncanonical
 single-fiber `G_i` without pretending the replacement was free.
+
+---
+
+## 12. Pair-orbit / dihedral draft 2, received 2026-05-20
+
+Draft 2 narrows the v0.3 target to a representation problem:
+
+```text
+N_i        := span{ X_H(p_i), u_E },  (M_i - I)u_E = c_i X_H(p_i), c_i != 0
+K_i^{fib}  := ker(M_i - I) / N_i
+K_i^{fib} ~= a_i*T + b_i*S + c_i*E       # real D3 irreps
+d_i^{cand} := c_i                         # multiplicity of standard 2D irrep E
+```
+
+The draft chooses an `F_beta`-fixed anchor, avoids `M^{1/2}` language by using
+typed half-flows, and recasts `<sigma3,F_beta>` as a real `D3` representation.
+It also proposes three gates:
+
+```text
+G1: anchored operators satisfy F_beta sigma3 F_beta^{-1} = sigma3^{-1}
+G2: each E-block has the right nondegenerate symplectic / L-S crossing form
+G3: the neutral block N_i lies entirely in the trivial isotypic component
+```
+
+This is the best candidate shape so far, but it still needs review before
+registration.
+
+## 13. Codex review of pair-orbit / dihedral draft 2, 2026-05-20
+
+**Verdict:** the `D3` representation turn is the right mathematical target.
+The standard-irrep count `c_i` is a clean candidate, and it is a better object
+than either v0.2's static containment count or the noncanonical single-fiber
+`G_i`. But the draft still overclaims the alpha-fixed graph step. Do not lock
+or code.
+
+### Passes / improvements
+
+1. **F_beta anchor discipline improved.** Choosing an actual `F_beta` fixed
+   phase is the right repair for the earlier pointwise-fixedness mistake.
+2. **No matrix square root.** Replacing `M^{-1/2}` with typed half-flow is the
+   right correction. Keep that.
+3. **Dihedral structure is the right basis.** `F_beta` should conjugate
+   `sigma3` to `sigma3^{-1}` on the anchored representation, so `D3` irreps
+   are the natural language. This is the first version that names the right
+   representation-theoretic object.
+4. **Multiplicity as `c_i` is plausible.** In a real standard `D3` block, the
+   reflection-fixed line is one-dimensional. Counting standard blocks is a
+   defensible candidate, pending the crossing-form gate.
+
+### Blocker 1: alpha still does not define a based pair endomorphism
+
+The draft anchors pair loops at
+
+```text
+delta gamma_C(0) in V_0
+delta gamma_Y(0) in V_0'
+```
+
+but `alpha_I` sends the parent component at `t=0` to the shifted partner fiber
+`V_h'`, and sends the partner component to the shifted parent fiber `V_h`. The
+line
+
+```text
+v_C = P12 * Phi_{T/2}^Y * v_Y
+```
+
+therefore equates a vector in `V_0` with a vector in `V_h` unless a phase
+transport, shifted-loop convention, or free-loop quotient has already been
+chosen. This is the same base-phase issue as before, now inside the pair
+picture.
+
+Fix options:
+
+1. Define the pair as `(C_i, Y_i^h)` with the partner already half-shifted.
+2. Work on free loops modulo phase, then handle the flow neutral carefully.
+3. Add explicit phase transport from `V_h` to `V_0` and from `V_h'` to `V_0'`.
+
+Until one is chosen, the conclusion
+
+```text
+alpha-fixed pair-kernel = ker(M_i - I) / N_i
+```
+
+is not proved.
+
+### Blocker 2: the `P12 Phi^Y P12 Phi^C = M_i` calculation is mistyped
+
+The draft uses the equivariance relation for `Phi_{T/2}^Y`, but the typed
+composition must keep domains:
+
+```text
+Phi_{T/2}^Y : V_0' -> V_h'
+P12         : V_h' -> V_h
+```
+
+After applying `P12 Phi_{T/2}^Y P12 Phi_{T/2}^C`, the intermediate fiber is
+not automatically `V_0`. The algebra may reduce to `M_i` after choosing a
+based/free-loop convention, but the draft performs that reduction before the
+convention is specified.
+
+### Blocker 3: the `F_beta` fixed anchor must be certified per row
+
+The catalog ansatz strongly suggests the stored initial condition is an
+`F_beta` fixed epoch, and the previous `F_beta` receipt supports the structural
+claim. Still, the v0.3 registration should state the anchor rule:
+
+```text
+anchor p_i^F is accepted only when F_beta residual is closure-tight at phase 0
+or after an explicitly recorded phase shift to the nearest F_beta fixed epoch
+```
+
+If a row needs a phase shift, all `sigma3` and half-flow operators must be
+built from the shifted anchor. No silent use of the supplementary-A epoch.
+
+### Blocker 4: the partner anchor is fixed by a conjugate symmetry, not
+necessarily the same `F_beta`
+
+The partner `Y_i=(12)C_i` generally carries the conjugated reversing symmetry
+
+```text
+P12 F_beta P12^{-1}
+```
+
+not automatically the same `F_beta` operator in the parent frame. Draft 2 says
+`P12 p_i^F` is the partner's analog `F_beta` anchor by equivariance; that is
+probably right, but the operator should be named as the conjugate symmetry.
+This matters when deriving the pair alpha action and the `D3` relation.
+
+### Blocker 5: `N_i` in the trivial isotypic is plausible but not automatic
+
+`X_H` should sit in the trivial `D3` sector after anchoring. The generalized
+energy vector `u_E` is less automatic: generalized eigenvectors are not unique
+and can be shifted by kernel vectors. The registration needs a normalization
+rule for `u_E` that is `D3`-equivariant, or a proof that the quotient by
+`N_i` is independent of this choice.
+
+Gate G3 should therefore be strengthened:
+
+```text
+G3: choose or prove a D3-equivariant neutral quotient; otherwise row is manual-review
+```
+
+### Blocker 6: `d_i=c_i` is a candidate, not a branch count
+
+Counting standard real irreps is clean as a representation candidate. It is
+not yet a bifurcation count. The crossing-form / Lyapunov-Schmidt gate must
+decide whether each standard block yields one branch, two sign-related
+branches, or a ghost direction.
+
+Safe language:
+
+```text
+d_i_candidate := c_i
+d_i := d_i_candidate only after G1, G2, G3 and the crossing-form gate pass
+```
+
+### Scratchpad conjecture quarantine
+
+The brainstorm note `internal/anniversary/scratchpad_brainstorm_notes.md`
+contains the "couplings surface / Kenny Wheeler / magnesium / 1/phi^3"
+conjecture. Its rigorous version is: inspect the Lyapunov-Schmidt crossing form
+on the standard `D3` isotypic sector and see whether its spectrum has a
+recognizable coupling scale. This is not a premise of v0.3 and not part of
+`d_i`. It can become an exploratory diagnostic only after the branch candidate
+sector is defined.
+
+### Revised next gate
+
+Write the v0.3e lemma with four hard choices made explicitly:
+
+1. Choose the loop convention: shifted partner, free-loop quotient, or explicit
+   phase transport.
+2. Certify the `F_beta` anchor and partner conjugate anchor.
+3. Build the anchored `D3` representation on `K_i^{fib}` and prove G1.
+4. Define a `D3`-equivariant neutral quotient and prove G3.
+5. State `d_i_candidate=c_i`, with G2/crossing-form as the branch-validity
+   gate.
+
+Then, and only then, the variational runner becomes meaningful.

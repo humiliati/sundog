@@ -196,8 +196,14 @@ Remaining honest fork:
   real dihedral representation, not commuting projector masks; and the
   multiplicity factor is pending again because `A_F`-even sectors need not be
   symplectic.
-- Current next paper-only gate: write the pair-orbit / dihedral-representation
-  lemma before any monodromy code.
+- Pair-orbit / dihedral draft 2 is the best candidate shape so far:
+  `K_i^{fib}` decomposes into real `D3` irreps `a_i*T + b_i*S + c_i*E`, with
+  `d_i_candidate=c_i`. Still not locked. Remaining blockers: choose the
+  based/free/shifted loop convention, certify the `F_beta` and conjugate partner
+  anchors, fix the typed half-flow reduction, prove the neutral quotient is
+  `D3`-equivariant, and validate `c_i` through the crossing form.
+- Current next paper-only gate: write the v0.3e anchored `D3` lemma before any
+  monodromy code.
 
 ## Operator Guardrail
 
@@ -207,7 +213,7 @@ Before any future isotrophy run:
    accidental K2-K4 restart.
 2. If it is K2-K4 under v0.2, stop.
 3. If it is v0.3, use the completed all-induced case split, then write the
-   pair-orbit / dihedral-representation lemma, the corrected neutral quotient,
-   the structural `F_beta` quotient/reduction, the multiplicity gate, the
-   negative, and the go/no-go branch before running any monodromy or
+   v0.3e anchored `D3` lemma: loop convention, anchor certification, typed
+   half-flow, `D3`-equivariant neutral quotient, `d_i_candidate=c_i`, crossing
+   form gate, negative, and go/no-go branch before running any monodromy or
    supplementary-B classification.

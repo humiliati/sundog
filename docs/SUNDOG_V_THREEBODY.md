@@ -831,6 +831,14 @@ dihedral-representation lemma: fix the shifted-partner loop convention, correct
 `N_i`, derive the `<sigma3,F_beta>` real representation on `K_i^{fib}`, and
 only then state a multiplicity rule.
 
+The second pair-orbit draft makes that more concrete: the current candidate is
+an anchored real `D3=<sigma3,F_beta>` decomposition
+`K_i^{fib} ~= a_i*T + b_i*S + c_i*E`, with `d_i_candidate=c_i`. It is still
+paper-only. The blockers are now specific: choose the loop convention, certify
+the parent and conjugate partner anchors, make the neutral quotient
+`D3`-equivariant, and validate the standard-irrep count through the crossing
+form before any monodromy run.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

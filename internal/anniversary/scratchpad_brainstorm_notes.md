@@ -1,3 +1,13 @@
+## Status note, 2026-05-20
+
+This remains a rough scratchpad. The live formal gate has advanced to the
+v0.3e anchored `D3` lemma in `docs/sundog_v_isotrophy.md`: choose the loop
+convention, certify the `F_beta` and conjugate partner anchors, prove the
+`D3`-equivariant neutral quotient, and treat `d_i_candidate=c_i` as a candidate
+until the crossing-form gate passes. The "couplings surface / 1/phi^3" material
+below is quarantined as a future crossing-form diagnostic, not a premise of
+v0.3.
+
 shannon theorem
 
 boolean algebra information entropy h(x) vs sundog h(x)

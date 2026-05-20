@@ -759,6 +759,50 @@ phase transport), prove the alpha-fixed graph descends through `N_i`, derive
 the `<sigma3,F_beta>` real representation on `K_i^{fib}`, and only then define
 the branch candidate sector and multiplicity gate.
 
+### v0.3e pair-orbit / dihedral draft 2 review
+
+Draft 2 improves the object again: choose an actual `F_beta` fixed anchor,
+represent `<sigma3,F_beta>` as the real dihedral group `D3`, and make the
+candidate count the multiplicity `c_i` of the standard 2D real irrep in
+`K_i^{fib}`:
+
+```text
+K_i^{fib} ~= a_i*T + b_i*S + c_i*E
+d_i_candidate := c_i
+```
+
+This is the best candidate shape so far, but **not registered**. Review found
+six remaining blockers:
+
+1. Alpha still lands in shifted fibers (`V_h`, `V_h'`) under the based-loop
+   anchors, so the equality "alpha-fixed pair-kernel = `ker(M_i-I)/N_i`" is
+   not proved until the loop convention is chosen.
+2. The calculation reducing
+   `P12 Phi_{T/2}^Y P12 Phi_{T/2}^C` to `M_i` is mistyped unless the phase
+   transport/free-loop convention is explicit.
+3. The `F_beta` fixed anchor must be certified per row: either phase 0 is
+   closure-tight under `F_beta`, or the phase shift to the nearest `F_beta`
+   fixed epoch is recorded and all operators are built from it.
+4. The partner anchor is fixed by the conjugate symmetry
+   `P12 F_beta P12^{-1}`, not automatically by the same parent-frame
+   `F_beta`; name that operator in the pair proof.
+5. The neutral quotient must be `D3`-equivariant. `X_H` is plausibly trivial,
+   but the generalized energy vector `u_E` needs a normalization/proof so the
+   quotient is independent of its kernel ambiguity.
+6. `d_i_candidate=c_i` is a representation candidate, not yet a branch count;
+   it still needs G2/crossing-form validation.
+
+Scratchpad note: the "couplings surface / 1/phi^3" conjecture in
+`internal/anniversary/scratchpad_brainstorm_notes.md` should stay quarantined.
+Its rigorous version is only a future diagnostic on the Lyapunov-Schmidt
+crossing-form spectrum after the standard `D3` sector is defined; it is not a
+premise of v0.3.
+
+Revised next gate: choose the loop convention, certify the `F_beta` and
+conjugate partner anchors, build the anchored `D3` representation on
+`K_i^{fib}`, prove the `D3`-equivariant neutral quotient, and then state
+`d_i_candidate=c_i` with a crossing-form branch-validity gate.
+
 Only after the pair-orbit / dihedral-representation lemma and the
 candidate-count gates are written should any code integrate variational
 equations or freeze `K_facet_v0.3`. The frozen output would be the 21
@@ -830,7 +874,8 @@ Rejected as primary:
 | 2026-05-20 | **v0.3b F_beta PAIR-ID COMPLETE.** `npm run isotrophy:fbeta:pair-id` confirmed 21 singleton `(E, |L|)` groups, 0 inside-catalog bare-`(12)` partners, 21 catalog-asymmetric rows, and 21/21 F_beta-closure-tight rows (`F_beta_to_closure` range `0.283..0.804`). The receipt records `F_beta = ((12), tau-active, Rpi)` as a manifest-level structural cocycle: no per-row tau flag and no partner-orbit IVP. Receipt: `results/isotrophy/k-facet-v03-fbeta-pair-id-21strict/`. |
 | 2026-05-20 | **v0.3c DERIVATION REVIEW.** The loop-to-fiber draft was accepted as the right direction but not frozen. Blockers: neutral quotient must use `span{X_H,u_E}` with `(M-I)u_E=cX_H`; `G_i` must be built as a typed fiber map before claiming commutation; `G_i^2` must be computed after the cocycle is chosen; structural removal must be a quotient/reduction through `B_i^+`; and `1/2*dim` is only a candidate count until semisimple/crossing-form/nondegeneracy gates pass. No monodromy code authorized. |
 | 2026-05-20 | **v0.3d TYPED TRANSPORT RESPONSE REVIEW.** The typed lemma likely kills the canonical single-fiber `G_i` object and proposes a pair-orbit alpha-fixed kernel instead. Not locked. Blockers: `A_F` maps `t` to `-t` rather than fixing every point; alpha lands in the shifted partner fiber; `M^{-1/2}` should be replaced by typed half-flow; the alpha-fixed graph must descend through `N_i`; `<sigma3,F_beta>` must be treated as a real dihedral representation, not two commuting masks; and `1/2*dim` is pending again because `A_F`-even sectors are anti-symplectic fixed sectors. |
-| (next)     | Write the pair-orbit / dihedral-representation lemma: choose the loop convention, prove the alpha-fixed graph descends through the neutral quotient, derive the `<sigma3,F_beta>` representation on `K_i^{fib}`, then define the branch candidate sector and multiplicity gate. |
+| 2026-05-20 | **v0.3e PAIR-ORBIT / DIHEDRAL DRAFT 2 REVIEW.** Best candidate shape so far: anchored `D3=<sigma3,F_beta>` representation on `K_i^{fib}` and `d_i_candidate=c_i`, the multiplicity of the standard real 2D irrep. Not locked. Blockers: based-loop convention still unresolved; the half-flow reduction to `M_i` is mistyped without phase transport/free-loop convention; `F_beta` and conjugate partner anchors must be certified; neutral quotient must be `D3`-equivariant; and `c_i` needs crossing-form branch validation. |
+| (next)     | Write the v0.3e gate lemma: choose the loop convention, certify anchors, build the anchored `D3` representation on `K_i^{fib}`, prove the `D3`-equivariant neutral quotient, and state `d_i_candidate=c_i` with G2/crossing-form validity gates. |
 
 ---
 
