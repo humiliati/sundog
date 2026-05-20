@@ -823,6 +823,14 @@ structural subtraction must be a quotient/reduction through `B_i^+`, and
 pass. K2-K4 remain paused, and this remains not evidence for the theorem or for
 Phase 13-15.
 
+The first typed transport response likely kills the canonical single-fiber
+`G_i` and proposes a pair-orbit alpha-fixed kernel instead, but that replacement
+is also not locked. The next paper-only gate is now a pair-orbit /
+dihedral-representation lemma: fix the shifted-partner loop convention, correct
+`A_F` as a map from `t` to `-t`, prove the alpha-fixed graph descends through
+`N_i`, derive the `<sigma3,F_beta>` real representation on `K_i^{fib}`, and
+only then state a multiplicity rule.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
