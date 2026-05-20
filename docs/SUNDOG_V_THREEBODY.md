@@ -855,6 +855,16 @@ crossing matrix/rank gate instead of scalar per-block gammas, verify the
 reduced-coordinate `Delta H`, prove anchor independence, and define an empirical
 closure-relative `gamma_floor`.
 
+The v0.3h refinement makes the matrix formulation primary: `Gamma_i` is the
+`c_i x c_i` crossing matrix on the `F_beta`-even standard sector, and the
+structural target is `d_i=rank_floor(Gamma_i)`. This exposes a new G2.6 gate:
+symplectic block-orthogonality of the `E` copies. If the `E` blocks are
+orthogonal in the `omega`-Gram matrix, the scalar rule is the special case; if
+not, off-diagonal pairings can carry `T` contributions and the full matrix-rank
+gate is required. Receipt schema should include the full matrix, singular
+values, rank, `gamma_floor`, and a `symplectic_block_orthogonal_E` flag. This
+remains paper-only and is not authorization for monodromy code.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
