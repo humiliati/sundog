@@ -840,3 +840,74 @@ Updated next gate: v0.3f should address the five points in order:
 3. certify the parent and partner anchors;
 4. carry the neutral decomposition `N_C=T*u_E+S*X_H` through the `D3` quotient;
 5. reserve G2 crossing form as a per-row branch-validity check.
+
+## 15. v0.3g crossing-form / non-degeneracy gate, 2026-05-20
+
+The v0.3g draft is the right next paper gate: it moves the surviving candidate
+`d_i_candidate=c_i` through the branch-validity question instead of treating
+standard-irrep multiplicity as a branch count.
+
+The useful structural claim is:
+
+```text
+Delta H = partial_epsilon H |_{epsilon=0}
+Delta H = Delta H_T + Delta H_E
+Delta H has no S component because it is F_beta-even.
+```
+
+The consequence is also the right shape: the `D3`-symmetric `T` part should
+drive structural continuation, while the `E` component of the perturbation is
+the only part that can drive piano-trio branch creation from the standard
+sector.
+
+Do not lock the scalar per-block `gamma_i^(k)` form yet. The crossing form has
+to be defined on the neutral-quotiented, anchored `D3` standard sector first.
+If `c_i > 1`, the load-bearing object is likely a crossing matrix on the
+standard-irrep multiplicity space, not independent hand-picked scalar diagonal
+entries:
+
+```text
+Gamma_i : R^{c_i} -> R^{c_i}          # crossing form on the E-multiplicity space
+d_i     := rank_floor(Gamma_i)        # candidate locked only if the paper gate proves this rule
+```
+
+The scalar recipe `gamma_i^(k)` is a special case after one of two facts is
+proved: either `c_i=1`, or the crossing form has been diagonalized by a
+canonical `D3`-compatible basis and the off-diagonal E-copy mixing is shown not
+to change the branch count. Until then, the per-block receipt fields should be
+treated as a proposed readout, not as the definition of the gate.
+
+Additional blockers to record before code:
+
+1. **Reduced Hamiltonian convention.** The formula for `Delta H` must be checked
+   in the actual symplectic-reduced coordinates. If the center-of-mass or
+   momentum reduction depends on the mass parameter, `partial_epsilon H` can
+   pick up terms not visible in the unreduced shorthand.
+2. **Phase-space `F_beta` invariance.** The no-`S` claim must be verified as a
+   tangent / Hamiltonian-vector-field statement, not just as a configuration
+   function statement. Momentum convention and time-reversal signs matter.
+3. **Correct Floquet crossing form.** The expression should be the quotient
+   Floquet crossing form, likely involving the standard Hamiltonian pairing
+   with the induced monodromy variation, not an untyped
+   `omega(xi, partial_epsilon M xi)` written before neutral representatives are
+   chosen.
+4. **Schur collapse scope.** The `T` part vanishing on a Lagrangian
+   `F_beta`-fixed line is plausible, but it must be proved for the exact
+   quotient crossing form. It should not be imported from the informal scalar
+   expression.
+5. **E-copy mixing.** If `c_i>1`, the crossing form may have off-diagonal
+   terms between standard-irrep copies. The branch count should be a
+   matrix/rank statement unless a diagonal scalar rule is proved.
+6. **Anchor independence.** The two `F_beta` anchors should give the same
+   `Gamma_i` up to conjugacy, or the receipt must carry the anchor convention.
+7. **Gamma floor.** The floor must be empirical and closure-relative, derived
+   from reproducibility / step refinement or a symmetry-equivalent anchor check,
+   not inferred from `rtol`/`atol` alone.
+
+The scratchpad `1/phi^3` coupling conjecture remains quarantined. It can become
+a diagnostic only if the crossing matrix has near-zero or degenerate directions.
+
+Updated next gate: write v0.3g as a paper-only crossing-form definition on the
+`E` multiplicity space. Close the reduced-Hamiltonian, no-S, quotient-crossing,
+Schur-collapse, E-copy-mixing, anchor-independence, and floor gates before any
+monodromy code.

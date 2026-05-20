@@ -207,8 +207,14 @@ Remaining honest fork:
   `K_i^{fib*} ~= a_i*T + b_i*S + c_i*E` becomes
   `K_i^{fib} ~= (a_i-1)*T + (b_i-1)*S + c_i*E`, preserving the standard-irrep
   count `c_i`.
-- Current next paper-only gate: write the v0.3f anchored `D3` lemma before any
-  monodromy code.
+- Crossing-form gate review: the branch-validity gate should split the mass
+  perturbation as `Delta H=Delta H_T+Delta H_E`, with no sign-irrep component
+  because `Delta H` is `F_beta`-even. Do not freeze the scalar
+  `gamma_i^(k)` recipe yet. If `c_i>1`, the load-bearing object is likely a
+  quotient Floquet crossing matrix on the `E` multiplicity space, with a
+  closure-relative rank gate, not independent diagonal scalars until proved.
+- Current next paper-only gate: write v0.3g as a crossing-form definition on
+  the neutral-quotiented `E` multiplicity space before any monodromy code.
 
 ## Operator Guardrail
 
@@ -218,8 +224,10 @@ Before any future isotrophy run:
    accidental K2-K4 restart.
 2. If it is K2-K4 under v0.2, stop.
 3. If it is v0.3, use the completed all-induced case split, then write the
-   v0.3f anchored `D3` lemma: based-loop convention at `p_i^F`, anchor
-   certification, typed half-flow, neutral quotient
-   `N_C=T*u_E+S*X_H` with no `E` leakage, `d_i_candidate=c_i`, crossing-form
-   gate, negative, and go/no-go branch before running any monodromy or
-   supplementary-B classification.
+   anchored `D3` and v0.3g crossing-form gates: based-loop convention at
+   `p_i^F`, anchor certification, typed half-flow, neutral quotient
+   `N_C=T*u_E+S*X_H` with no `E` leakage, `d_i_candidate=c_i`, quotient
+   crossing form on the `E` multiplicity space, reduced-coordinate `Delta H`,
+   no-`S` proof, matrix/rank versus scalar-gamma decision, negative, and
+   go/no-go branch before running any monodromy or supplementary-B
+   classification.
