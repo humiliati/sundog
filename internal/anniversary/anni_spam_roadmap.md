@@ -264,8 +264,19 @@ overclaim variant; Option 4 is primary, Option 1 is the conservative A/B.
 Isotrophy follows the handoff Do-Not-Say verbatim (K_facet=0 != "no
 piano-trios"; the 4 relatives are outside the strict single-curve convention,
 not literature errors). v0.3 named as load-bearing-up-next without freezing or
-claiming it: the cheap case split is done (all-induced, both parities,
-2026-05-19/20); the written projector derivation is the gate.
+claiming it: the cheap case split is done (all-induced, both parities); the
+written projector derivation is the gate.
+Body below is the owner's voice rewrite (their explicit directive: "I hope I
+enshitified your direction enough that it's offensive"). Surgical-only edits:
+section labels normalized to 1/2/3/FORE/5/6/7/8 (FORE preserved as gag),
+[b]/&lt;i&gt; tags converted to Markdown bold/italic for LW rendering, one
+typo (failute→failure), one missing space (##The→## The), one tiny laymen
+bridge at the top of the isotrophy bullet, three small application bullets
+(Dungeon Gleaner / Money Bags / Ask Sundog) per the "more tiny application
+bits" ask. Slang / asides / parentheticals / personal voice preserved intact.
+Flagged-but-not-fixed (owner's call): "Milkyway impact driver" (Milwaukee?),
+"scholastic parrot" (stochastic?), single-tilde ~immunity / ~just cliff
+(strikethrough ~~..~~?).
 
 Title (primary):
 
@@ -277,82 +288,160 @@ Title (conservative A/B):
 
 Draft:
 
-> **1. The physical origin, no mythologizing.**
+> **1. Tail between my legs.**
 >
-> A year ago I posted a half-mathematical, half-feral note to this site about
-> shadows becoming signals. My background isn't ML; it is electrical and
-> automation work. The seed was a real job: an eighteen-foot pole I had to
-> align so a laser bloom landed where I couldn't directly see, with the only
-> usable signal being torque feedback through my hands and the way the bloom
-> moved when I twisted the rig. "Shadow becomes signal" started as muscle
-> memory, not a theorem. One year later I am still trying to turn that muscle
-> memory into something falsifiable instead of decorative. The strongest
-> correction I can make in public, on the same forum: Sundog is not an
-> outsider theorem of alignment. It is a traceability harness for
-> indirect-inference alignment, and most of the year was deleting words from
-> the original claim until what was left could actually be attacked.
+> Last year we made our second post to Less Wrong; a half-math, half-narrative
+> note about how I perceived shadows as signals while working in controls and
+> automation. Not machine learning. The seed came from a real job: we had to
+> suspend acoustic trapeze for hanging hvac equipment that serves a quantum
+> cloud. The tools we were using was primarily a telescoping 18 foot pole on
+> the end of a Milkyway impact driver and a plumb lazer. If you put the pole
+> over the lazer, you lost vision of your plumb dot painted on the ceiling.
+> But there was a clue from the driver bit on the end of the 18' pole, a
+> chrome plated socket driver that would scatter the lazer if the pole was
+> positioned at a comfy angle while still being marginally vertical (probably
+> about 22 degs). I got the *feel* for this procedure but then I had to
+> explain it to my non-native language speaking help. How could I explain to
+> them that when the alignment target was occluded by the task, they could
+> carry on target confidently? That was the premise you heard about from a
+> tutorial now digested and rewritten to a feral spiel attempting to describe
+> the epistemological reframe that I could *taste*. The way in which the
+> laser being passed over by the chrome driver would cause the light-painted
+> dot to move between visual phases appearing to be like an hourglass then an
+> arachnid then to a solid pair of halos then a narrowing halo. It was so
+> vivid in the imagination it seemed obvious to me that everyone else should
+> naturally track. The laborers immediately got it though, through the
+> language-barrier. The chatbot took a bit of thrashing to reveal the math
+> but H of X was tautologically solid and it really cleaned up gud.
 >
-> This post is deliberately not polished. A polished version would lie about
-> the epistemic state.
+> Since then we developed a vocabulary to approach this concept from a
+> software and computer science perspective. Sundog probably no longer an
+> outsider theorem of alignment but a traceability harness for
+> indirect-inference alignment, and most of the year was spent hiding from
+> my original claim, keeping my day job. While quietly testing utility in
+> client and pet-project software. That was until my lexical and technical
+> proficiency could prompt engineer (or brute force) my way out of being
+> haunted by the Solar optical halos all around me. This post-nut version of
+> malice thought: "what kind of maniac would deploy sketchy promotional
+> circuit based on the fact that he's either proven water is indeed wet, or
+> debunked Goodhart, without knowing the difference?" So what remains I hope
+> is available and legible for scrutiny and I invite the problems. ~(Bots
+> seem to loose their edge when you're on the verge of scientific discovery
+> so we're all just spit balling at this point. A scholastic parrot doesn't
+> *know* the "new" thing, amirite?)
 >
 > **2. The narrowed claim.**
 >
-> Not announcing a universal alignment theorem. The apparatus shape:
+> The apparatus seems universally applicable given enough environmental
+> "geometry" don't steal my patent:
 >
-> - the decisive state is hidden;
+> - the decisive state is hidden
 > - the world leaks structure via an indirect signal;
 > - the signal is transformed into a control-relevant signature;
 > - the system acts from the signature;
 > - the operating envelope and failure boundary are measured.
 >
-> The year-one question I will defend: when direct inspection is unavailable,
-> expensive, occluded, delayed, or deliberately withheld, is the trace enough
-> to act — and can we tell when it is not?
+> ## The defensible question:
 >
-> **3. What the repo actually contains (receipts with boundaries).**
+> When direct inspection is unavailable, expensive, or occluded, or delayed,
+> especially deliberately withheld, is the *trace* enough to make decisive
+> actions **and** can we perceive when it is not?
 >
-> - *Photometric mirror alignment (MuJoCo), no target-position access.*
->   Terminal accuracy is not detectably different from a target-aware
->   analytic baseline at n=30 (Mann–Whitney U=526, p=0.26). Being precise
->   because this is LessWrong and someone will do it for me otherwise: p=0.26
->   is absence of evidence of a difference, not evidence of equivalence. The
->   honest version is "not detectably different at n=30, ~16x slower to
->   acquire." The 16x is not a footnote; it may be the actual result. The
->   discipline rule for this project is that the 16x appears wherever the
->   parity is mentioned.
-> - *Geometry workbench (halos, tangent arcs, CZA cutoffs).* Separates
->   rendered primitives from anchored inverse routes; the only promoted
->   public inverse is the parhelion-offset handle on a strict three-photo
->   subset, and the previously-drawn -0.05·R22 parhelic-belt rule was
->   falsified (Spearman ρ ≈ 0.086) and retired across coupled surfaces.
-> - *Mesa-Trap empirical front.* Where we applied real selection pressure we
->   did not find immunity. We found a sharp behavioral cliff at
+> **3. What the public repo contains.**
+>
+> Receipts with boundaries. I started adulthood from a military PMCS
+> background, we do documents to justify documents to spec code to handoff
+> engineering to outsource to fiverr for documents about what didn't work.
+>
+> - Photometric Mirror Alignment (mujoco), the pole screw thing agent with no
+>   target position-access. Terminal accuracy is not detectably different
+>   from a target aware analytic baseline at n=30 (Mann-Whitney U=526,
+>   p=0.26). P=0.26 is the absence of evidence of a difference, not evidence
+>   of equivalence. The honest version is "not detectably different at n=30,
+>   ~16x slower to acquire." The 16x is not a footnote; it may be the actual
+>   result. The discipline rule for this project is that the 16x appears
+>   wherever the parity is mentioned.
+> - Geometry workbench (solar optical phenomena explained: halos, tangent
+>   arcs, CZA (halo smiley face over the sun or moon) cutoffs live).
+>   Separates rendered primitives from anchored inverse routes; the only
+>   promoted public inverse is the parhelion-offset handle on a strict
+>   three-photo subset, and the previously-drawn -0.05·R22 parhelic-belt
+>   rule was falsified (Spearman ρ ≈ 0.086) and retired across coupled
+>   surfaces. We think we're seeing the sundog hologram across neural
+>   networks, among other things (please send help).
+> - Mesa-Trap empirical front. Where we applied real selection pressure we
+>   did not find ~immunity. We found a sharp behavioral cliff at
 >   λ ≈ 0.95–0.97 and localized the basin-attractor: in a trained
 >   controller's 256-unit final hidden layer it is not one neuron, not a
->   handful of features, not any linear decomposition — it is an entangled
->   5-D subspace at net.7 (top-5 PCs ~ 97.4% across the cliff, both
->   directions). A *located boundary* in a tested Small/Medium MLP family,
->   in vitro. The λ-confound control that would tell us whether λ is a real
->   critical point or an optimizer artifact is still open; do not over-read
->   the cliff yet.
-> - *Isotrophy sidecar — a useful negative.* A σ₃ detector reconciled the
->   catalog: 21 strict single-curve equal-mass three-body choreographies
->   (13 canonical + 8 opposite), plus 4 relative/rotating ones cleanly split
->   off by a 2π/3 global rotation. 25 gauge-invariant vs the literature's 21,
->   explained. That part is a durable detector / literature-count win, not
->   theorem evidence. The proposed v0.2 daughter-count theorem test was then
->   retired at its cheap K1 precheck: under v0.2 it reduced to the
->   equivariance-only null (K_facet = 0; generically Z₃ ∩ Z₂ = {e}). I am
->   not going to patch d_i to dodge the zero. K_facet = 0 does not mean
->   "no piano-trios exist," and the 4 relatives are outside the strict
->   single-curve convention, not literature errors.
-> - *Application surfaces, called surfaces.* Three-Body near-escape pocket,
->   Balance, Pressure Mines, EyesOnly. Stress-test venues, not proofs; each
->   has named failure cells published before you ask.
-> - *Public docs + workbenches + pre-registered nulls + the start of a
->   coarse-graining proof roadmap.*
+>   handful of features, not any linear decomposition — **it is an entangled
+>   5 Dimensional subspace** at net.7 (top-5 PCs ~ 97.4% across the cliff,
+>   both directions). A *located boundary* in a tested Small/Medium MLP
+>   family, in vitro. The λ-confound control that would tell us whether λ
+>   is a real critical point or an optimizer artifact is still open; do not
+>   over-read the ~just cliff yet.
+> - Isotrophy sidecar for anniversary day — a useful negative. In plain
+>   terms first: this is where we asked whether Sundog's whole "read the
+>   hidden geometry off an indirect signal" move generalizes to the
+>   three-body problem's symmetries. If it does, the count of valid
+>   "choreographies" (orbits where all three bodies follow one shared closed
+>   curve) should be predictable from symmetry alone. If it collapses to
+>   plain group theory, *that* boundary deserves to be public — which is
+>   what happened. After spending a few weeks chewing on planar and
+>   three-body dynamics I was staged to run an experiment that would take 60
+>   days on my 2020 VR backpack style rig. When we packaged the thing to ask
+>   a resourced friend to fold it at their home, we found *Planar and
+>   three-dimensional periodic orbits for the Newtonian three-body problem*
+>   by Xiaoming Li and Shijun Liao. Instead of brute-forcing our eager grasp
+>   of the situation after thrashing on the three-body workbench, we found
+>   the professionals who had already discovered maintainable circuits from
+>   that one wire-maze toy from the doctor's office, and plotted it. A σ₃
+>   detector reconciled their catalog of piano chords (mujoco taught us how
+>   to intuitively couple with a harmonic series): 21 strict single-curve
+>   equal-mass three-body choreographies (13 canonical + 8 opposite), plus
+>   4 relative/rotating ones cleanly split off by a 2π/3 global rotation.
+>   25 gauge-invariant vs the literature's 21, explained. That part is a
+>   durable detector / literature-count win, not theorem evidence. The
+>   proposed v0.2 daughter-count theorem test was then retired at its cheap
+>   K1 precheck: under v0.2 it reduced to the equivariance-only null
+>   (K_facet = 0; generically Z₃ ∩ Z₂ = {e}). I am not going to patch d_i
+>   to dodge the zero. K_facet = 0 does not mean "no piano-trios exist,"
+>   and the 4 relatives are outside the strict single-curve convention, not
+>   literature errors.
+> - Application surfaces (smaller workbenches) focused on mimicking common
+>   A.i demo gimmicks and an ambitious wild hair after reading that one book
+>   about aliens.
+>   - Three-Body Solution, the near-escape pocket that feels rediculous to
+>     approach but the chatbots basically one-shotted this while we've been
+>     thrashing for months on the geometry math v pictures workbench.
+>   - Balance, the classic hold a spinning plate on a stick thing.
+>   - Minesweeper, our highest fidelity Sundog Vs Bayes side by side.
+>   - EyesOnly, a client project for a procedural roguelike videogame +
+>     tactical blue force tracker for ARG events that features a test
+>     harness to wrap api and run against the high score board and the
+>     sundogging manipulation agent that changes upcoming
+>     levels/cryptographic/landnav puzzles based on *percieved*
+>     player/agent progress.
+>   - Dungeon Gleaner, NPCs in a dungeon town drift between work, social,
+>     and errand spots by following the gradient of their own unmet needs.
+>     No scripted schedules, no behavior trees, no GOAP planner. Personality
+>     is per-archetype weighting on the same vocabulary of verbs. Reads
+>     organic from twenty feet away; cheap.
+>   - Money Bags, softbody terrain rig interpreted through graph telemetry —
+>     torsion, deformation, symmetry, recovery — instead of trying to "look
+>     at" the simulation. Telemetry as the design surface.
+>   - Ask Sundog, that little browser helper in the corner is a measured
+>     experiment too. 5,670 trace-conditioned trials across
+>     OpenAI/Anthropic/Meta builds with zero unsafe-accepts in the tested
+>     envelope. Mesa-adjacent, not solved alignment, bounded to that corpus
+>     and those models.
 >
-> **4. The load-bearing postulate we are actually chasing.**
+>   These are stress-test venues, not proofs; each has named failure cells
+>   published before you ask.
+>
+> Chatbot said I'm supposed to attach *Public docs + workbenches +
+> pre-registered nulls + the start of a coarse-graining proof roadmap* here.
+>
+> **FORE. The load-bearing postulate we are actually chasing.**
 >
 > The Coarse-Graining Postulate, now staged in its own roadmap. A controller
 > does not need to invert the world; it needs the signature to be a
@@ -361,52 +450,58 @@ Draft:
 > reading via the Shannon seed. Provable in toy LQG and finite-MDP cases
 > where both Φ and π* are known; the falsifier is explicit. A task where the
 > optimal policy is provably 𝓕_σ-measurable yet signature-only control
-> fails to reach Bayes-optimal cost on that set kills it; the converse on the
-> pushable-occluder boundary kills it too.
+> fails to reach Bayes-optimal cost on that set kills it; the converse on
+> the pushable-occluder boundary kills it too.
 >
 > Two corollaries I want to name as conjectures, not results:
 >
-> - Goodhart-immunity reframed as capacity-relative one-wayness of the reward
->   channel. The agent can only game what it can invert; "immunity" is a
->   relation between Φ and the agent's capacity class, not an attribute of
->   the agent. The Mesa cliff is *predicted* by this reading rather than
->   contradicting it — and it predicts the cliff location moves with
->   capacity. Falsifiable.
+> - Goodhart-immunity reframed as capacity-relative one-wayness of the
+>   reward channel. The agent can only game what it can invert; "immunity"
+>   is a relation between Φ and the agent's capacity class, not an
+>   attribute of the agent. The Mesa cliff is *predicted* by this reading
+>   rather than contradicting it — and it predicts the cliff location moves
+>   with capacity. Falsifiable.
 > - The 16x slowdown treated as a candidate conserved quantity rather than
 >   an embarrassment: (information withheld from the observation) × (excess
 >   acquisition time) ≥ const. Predicts the slowdown from the
->   dimensionality gap across substrates. If the ratio is not conserved, the
->   conjecture dies.
+>   dimensionality gap across substrates. If the ratio is not conserved,
+>   the conjecture dies.
 >
 > **5. What we got wrong, retired, or bounded this year.**
 >
-> - The v0.2 isotrophy daughter-count path is closed: K1 reduced to the
->   equivariance-only null, recorded as a negative, not patched. v0.3 is
->   load-bearing-up-next in principle, *not yet pre-registered or frozen*.
->   The corrected foundation no longer treats α_I = ((12), T/2) as if it
->   were already an orbit isotropy (that would repeat the v0.2 failure one
->   level up). For rows where (12) maps the choreography to itself up to
->   phase and spatial gauge, define G_i := ρ((12)) ∘ Φ_{T/2} and prove
->   [M_i, G_i] = 0 before block-diagonalizing the monodromy; for rows where
->   (12) maps it to a *different* equal-mass orbit, use an induced
->   representation over the S₃ group orbit. The cheap pre-derivation case
->   split has already run on both spatial parities (tau12_I and tau12_Z,
->   2026-05-19 / 2026-05-20). The answer is unambiguous: **0 endomorphism
->   cases, 21 induced-representation cases, 0 marginal**. So v0.3, if it
->   continues, is induced-representation-only across all 21 strict
->   choreographies. The actual load-bearing deliverable now is the *written
->   projector derivation*, not a run. If the derivation cannot be made
->   clean, the honest move is to accept isotrophy as a clean negative plus
->   the G.2 detector win and stop spending compute on the daughter-family
->   claim. That fork stays open.
-> - No universal claims. Applications are surfaces, not proofs.
-> - The previous LessWrong attempt got -9 and silence. I am not pretending
->   the reception was warm.
-> - The site still has rough edges; some endpoints external crawlers see as
->   dead. The recent IA cleanup pass closed the worst of those; not all.
+> Can tacking the Sundog apparatus onto the Chinese guys' pretty plots of
+> three celestial orbits give me the ez pk theorem proof I need to return to
+> my day job or put on a lab coat? The v0.2 isotrophy daughter-count path is
+> closed: K1 reduced to the equivariance-only null, recorded as a negative,
+> not patched. v0.3 is load-bearing-up-next in principle, *not yet
+> pre-registered or frozen*. The corrected foundation no longer treats
+> α_I = ((12), T/2) as if it were already an orbit isotropy (that would
+> repeat the v0.2 failure one level up). For rows where (12) maps the
+> choreography to itself up to phase and spatial gauge, define
+> G_i := ρ((12)) ∘ Φ_{T/2} and prove [M_i, G_i] = 0 before
+> block-diagonalizing the monodromy; for rows where (12) maps it to a
+> *different* equal-mass orbit, use an induced representation over the S₃
+> group orbit. The experiments cheap enough to run on my ancient REVIT VR
+> walking rig pre-derivation case split has already run on both spatial
+> parities (tau12_I and tau12_Z). The answer is unambiguous: **0
+> endomorphism cases, 21 induced-representation cases, 0 marginal**. So
+> v0.3, if it continues obsessively tonight BECAUSE WE'RE SOOO CLOSE, is
+> induced-representation-only across all 21 strict choreographies. The
+> actual load-bearing deliverable now is the *written projector derivation*,
+> not a run. If the derivation cannot be made clean, the honest move is to
+> accept isotrophy as a clean negative plus the G.2 detector win and stop
+> spending my precious tiny laptop fan ramp-up on the daughter-family
+> claim. That fork stays open.
 >
-> The failure boundary is the credential. We publish the places the trace
-> stops being enough.
+> I pinky swear no more universal claims unless I'm fundraising from
+> siblings.
+>
+> Applications are surfaces, not proofs. The previous LessWrong attempt got
+> -9 and silence. I am not pretending the reception was warm. This site
+> still has rough edges; some endpoints external crawlers see as dead. The
+> recent IA cleanup pass closed the worst of those; not all. The failure
+> boundary is the credential. We publish the places the traceability stops
+> being enough and seek the path of most resistance.
 >
 > **6. Why this might matter anyway.**
 >
@@ -414,9 +509,9 @@ Draft:
 > delayed, noisy, sensor-limited, or deliberately withheld from privileged
 > state. The conventional move is to demand more state; Sundog asks the
 > narrower question and tries to make the answer inspectable. There are
-> existing analogues that already do indirect alignment in narrow domains —
-> plate-solving polar alignment, for instance, hits the polar axis without a
-> direct line of sight to Polaris by recovering pointing from the field
+> existing analogues that already do indirect alignment in narrow domains;
+> plate-solving polar alignment, for instance, hits the polar axis without
+> a direct line of sight to Polaris by recovering pointing from the field
 > itself. I note that parallel without overstating it. It is the *kind* of
 > move; Sundog is asking whether the kind generalizes once you write the
 > boundary down.
@@ -424,8 +519,11 @@ Draft:
 > **7. Open invitation, falsificationist.**
 >
 > Year one of an apparatus, not year one of a finished result. The repo is
-> public because the only useful version survives contact with people trying
-> to break it. Specifically asking for:
+> public because the only useful version survives contact with people
+> trying to break it. I mean if it's a thing, like, a man's gotta eat too
+> though.
+>
+> Specifically asking for:
 >
 > - replications or tighter same-information baselines on the photometric
 >   and Mesa fronts (a Bayes-optimal same-information baseline is the
@@ -434,27 +532,29 @@ Draft:
 >   places where it might just be re-labeling "ill-posed inverse problems
 >   are hard";
 > - people who care about traceable evaluation harnesses under partial
->   observability.
+>   observability;
+> - folding at home? please help offload compute? I have a large capacity
+>   to brainstorm about things that kinda look like the thing in my dream.
 >
-> If the signature controller matches Bayes-optimal regret exactly where the
-> postulate predicts it should and diverges where it should not — that is
-> interesting. If it does not, that is also interesting and should be
-> written down.
+> If the signature controller matches Bayes-optimal regret exactly where
+> the postulate predicts it should and diverges where it should not — that
+> is interesting — can we say interesting? Ok cool, ya it's interesting.
+> If it does not, that is also interesting and should be written down.
 >
 > **Links.** Repo: https://github.com/humiliati/sundog · Site:
-> https://sundog.cc · Docs index: https://sundog.cc/docs/ · The original
-> 2025 post we are returning to:
-> https://www.lesswrong.com/posts/JrpnrdB4fv3AhEcrk/the-sundog-alignment-theorem-a-proposal-for-embodied
-> · Coarse-graining proof roadmap:
+> https://sundog.cc · Docs index: https://sundog.cc/docs/ ·
+> Coarse-graining proof roadmap:
 > https://sundog.cc/docs/COARSE_GRAINING_PROOF_ROADMAP.md
 >
 > **8. Closing.**
 >
-> We started with a shadow and a torque reading. We spent the year trying to
-> make the shadow legible enough to attack. The claim is modest: some
-> shadows are structured, some structures can be controlled from, and the
-> boundary can be measured. Everything else is still on the table to be
-> falsified.
+> We started with a shadow and a torque reading (oh ya the original mujoco
+> didn't even get torque and stuff the results were accidentally more
+> narrow than stated). We spent 7 months of the year trying to make the
+> shadow legible enough for ourselves to attack and when we did boy it
+> broke wide tf open. The claim is modest ;) some shadows are structured,
+> some structures can be controlled from, and the boundary can be measured.
+> Everything else is still on the table to be falsified.
 
 First reply:
 

@@ -148,6 +148,29 @@ closure. So v0.3, if continued, is induced-representation-only across all 21
 strict choreographies. The parity-union receipt is protected at
 `results/isotrophy/k-facet-v03-tau12-parity-union-21strict/`.
 
+F_beta pair-ID receipt: `npm run isotrophy:fbeta:pair-id` completed on
+2026-05-20 in `99.69 s` and confirmed the structural chain the new teammate
+flagged: the strict 21 are 21 singleton `(E, |L|)` groups; bare `(12)`
+preserves those invariants, but has **0** inside-catalog matches excluding the
+self row; the completed all-induced case split rules out the self row as a
+true endomorphism. Therefore all 21 strict rows are catalog-asymmetric under
+bare `(12)`. The same receipt confirms `F_beta` closure-tight for all 21 rows
+(`F_beta_to_closure` range `0.283..0.804`) and records the structural cocycle
+at the manifest level:
+
+```text
+F_beta = ((12), tau-active, Rpi)
+tau component = schema-constant active
+per-row tau flag = false
+partner-orbit IVP = false
+M_(12*C_i) = rho(Rpi) * M_i^-1 * rho(Rpi)^-1
+```
+
+This is a correction to the draft note2 language: no row-by-row missing-partner
+integration is required, and tau is not a row variable. Per-row variability
+belongs only to any additional gauge fit layered on top of the structural
+F_beta cocycle.
+
 Rejected as primary:
 
 - Full numerical continuation in `m3`. It is too circular with

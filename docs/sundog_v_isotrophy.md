@@ -1,7 +1,7 @@
 # Sundog v. Isotrophy
 
 **Test:** Z₃ → Z₂ descent of equal-mass 3D choreographies into (m₁=m₂=1, m₃≠1) piano-trios.
-**Status:** G.2 precondition **RESOLVED** (21 strict single-curve = catalog 21). K_facet v0.2 K1 frozen and retired as equivariance-null; v0.3a case split complete (0 endomorphism, 21 induced).
+**Status:** G.2 precondition **RESOLVED** (21 strict single-curve = catalog 21). K_facet v0.2 K1 frozen and retired as equivariance-null; v0.3a case split complete (0 endomorphism, 21 induced); v0.3b F_beta pair-ID/cocycle receipt complete.
 **Owner:** sundog
 **Related:** `./isotrophy/files.math` — symbolic + numerical scratch.
 
@@ -645,6 +645,43 @@ candidate set.
 | `O_{1488}` | induced | `tau12_Z` | -1 | `3.485e7` | `3.824e7` | `3.485e7` | 1.273 | 3.138 |
 | `O_{1497}` | induced | `tau12_I` | 1 | `3.016e7` | `3.016e7` | `3.219e7` | 1.871 | 1.696 |
 
+### v0.3b F_beta pair-ID and cocycle confirmation
+
+After the parity-union case split, a teammate flagged the remaining pair-ID
+chain: the 21 strict rows are singleton `(E, |L|)` groups, and bare `(12)` is a
+Hamiltonian symmetry, so the bare-swapped image of `C_i` can only match row
+`i` by those invariants. But v0.3a found `0` endomorphism cases under the full
+explicit parity union, so the self row is not a valid same-orbit partner.
+Therefore all 21 strict rows are catalog-asymmetric under bare `(12)`.
+
+**Receipt (2026-05-20, COMPLETE).** `npm run isotrophy:fbeta:pair-id` ran this
+confirmation on the 21 strict rows. Elapsed wall time: `99.69 s`. Receipt path:
+`results/isotrophy/k-facet-v03-fbeta-pair-id-21strict/`
+(gitignored/protected).
+
+Result: **21 singleton invariant groups, 0 inside-catalog matches excluding the
+self row, 21 catalog-asymmetric rows, 21 self-invariant matches, and 21/21
+`F_beta` closure-tight rows**. The `F_beta_to_closure` range was
+`0.283..0.804`, comfortably inside the `k=3` closure-relative gate. The receipt
+manifest records the structural cocycle as a schema constant:
+
+```text
+F_beta = ((12), tau-active, Rpi)
+tau component = schema-constant active
+per-row tau flag = false
+partner-orbit IVP = false
+M_(12*C_i) = rho(Rpi) * M_i^-1 * rho(Rpi)^-1
+```
+
+Operational consequence: do not implement a 21-row "missing partner"
+integration workflow for v0.3. The bare `(12)` partner's variational structure
+is obtained from the parent monodromy by linear F_beta conjugation. A single
+sentinel re-integration may be useful as a robustness cross-check later, but it
+is not the per-row prediction path. Likewise, tau is not a row-level boolean:
+F_beta is structural for all 21 rows, so tau is uniformly active at the schema
+level. Per-row variability belongs only to any additional `(R_i, phi_i)` gauge
+fit layered on top of the structural cocycle.
+
 Only after the induced-representation derivation is written should any code
 integrate variational equations or freeze `K_facet_v0.3`. The frozen output
 would be the 21 per-choreography integers and their sum, recorded before any
@@ -712,6 +749,7 @@ Rejected as primary:
 | 2026-05-19 | **v0.3 DESIGN DECISION.** If isotrophy continues, primary `d_i` must be a monodromy/isotypic branching count computed from each `m3=1` choreography alone. Corrected foundation: `alpha_I` is not an isotropy of the parent orbit; define the twist as `G_i = rho((12)) o Phi_{T/2}` only where `(12)` acts as an endomorphism of the choreography, otherwise use an induced-representation formula over the `S3` group orbit. Full `m3` continuation is rejected as primary because it is circular with supplementary-B; Bragg/Floquet coherence is retained as a cross-check. |
 | 2026-05-19 | **v0.3a PROPER-PARITY CASE SPLIT.** The first `tau12` receipt tested the proper spatial candidate only (`tau12_I`, then named `tau12_gauge`): 0 proper-endomorphism, 21 induced, 0 marginal review; best non-tight residual/closure = `2.815e7`. Receipt: `results/isotrophy/k-facet-v03-tau12-case-split-21strict/`. |
 | 2026-05-20 | **v0.3a PARITY-UNION CASE SPLIT COMPLETE.** `npm run isotrophy:tau12:cases` ran the locked `{tau12_I, tau12_Z}` detector on the 21 strict rows: 0 endomorphism, 21 induced-representation, 0 marginal review. `tau12_Z` won the residual for 6 rows but did not move any row near closure; best non-tight residual/closure remains `2.815e7`. Receipt: `results/isotrophy/k-facet-v03-tau12-parity-union-21strict/`. |
+| 2026-05-20 | **v0.3b F_beta PAIR-ID COMPLETE.** `npm run isotrophy:fbeta:pair-id` confirmed 21 singleton `(E, |L|)` groups, 0 inside-catalog bare-`(12)` partners, 21 catalog-asymmetric rows, and 21/21 F_beta-closure-tight rows (`F_beta_to_closure` range `0.283..0.804`). The receipt records `F_beta = ((12), tau-active, Rpi)` as a manifest-level structural cocycle: no per-row tau flag and no partner-orbit IVP. Receipt: `results/isotrophy/k-facet-v03-fbeta-pair-id-21strict/`. |
 | (next)     | v0.3 derivation — write the induced-representation formula over the `S3` group orbit, structural `(F_beta-even) cap (sigma3-trivial)` removal, neutral-mode quotient, `+1` multiplicity rule, and closure-relative tolerance before any monodromy code or supplementary-B classification. |
 
 ---

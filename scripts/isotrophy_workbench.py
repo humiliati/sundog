@@ -590,8 +590,7 @@ def kfacet_record_from_residuals(
     return record
 
 
-def invariant_record(row: OrbitRow) -> dict[str, object]:
-    masses, x, v = expand_initial_state(row, center_com=True)
+def conserved_invariant_values(masses: np.ndarray, x: np.ndarray, v: np.ndarray) -> dict[str, float]:
     kinetic = 0.5 * float(np.sum(masses * np.sum(v * v, axis=1)))
     potential = 0.0
     for i in range(3):
@@ -601,13 +600,6 @@ def invariant_record(row: OrbitRow) -> dict[str, object]:
     total_momentum = np.sum(masses[:, None] * v, axis=0)
     center_of_mass = np.average(x, axis=0, weights=masses)
     return {
-        "label": row.label,
-        "index": row.index,
-        "line_no": row.line_no,
-        "m3": row.m3,
-        "z0": row.z0,
-        "period": row.period,
-        "stability": row.stability,
         "energy": kinetic + potential,
         "kinetic_energy": kinetic,
         "potential_energy": potential,
@@ -618,6 +610,49 @@ def invariant_record(row: OrbitRow) -> dict[str, object]:
         "total_momentum_norm": float(np.linalg.norm(total_momentum)),
         "center_of_mass_norm": float(np.linalg.norm(center_of_mass)),
     }
+
+
+def invariant_record(row: OrbitRow) -> dict[str, object]:
+    masses, x, v = expand_initial_state(row, center_com=True)
+    values = conserved_invariant_values(masses, x, v)
+    return {
+        "label": row.label,
+        "index": row.index,
+        "line_no": row.line_no,
+        "m3": row.m3,
+        "z0": row.z0,
+        "period": row.period,
+        "stability": row.stability,
+        **values,
+    }
+
+
+def bare_permutation_invariants(row: OrbitRow, permutation: tuple[int, int, int]) -> dict[str, float]:
+    masses, x, v = expand_initial_state(row, center_com=True)
+    permuted_x = x[list(permutation)]
+    permuted_v = v[list(permutation)]
+    return conserved_invariant_values(masses, permuted_x, permuted_v)
+
+
+def invariant_pair_matches(
+    left: dict[str, object],
+    right: dict[str, object],
+    energy_abs_tol: float,
+    energy_rel_tol: float,
+    angular_abs_tol: float,
+    angular_rel_tol: float,
+) -> bool:
+    return math.isclose(
+        float(left["energy"]),
+        float(right["energy"]),
+        rel_tol=energy_rel_tol,
+        abs_tol=energy_abs_tol,
+    ) and math.isclose(
+        float(left["angular_momentum_norm"]),
+        float(right["angular_momentum_norm"]),
+        rel_tol=angular_rel_tol,
+        abs_tol=angular_abs_tol,
+    )
 
 
 def cluster_invariant_records(
@@ -1189,6 +1224,167 @@ def command_invariants(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_fbeta_pair_id(args: argparse.Namespace) -> int:
+    source = args.source.upper()
+    text = read_text(args.path or SUPPLEMENT_URLS[source])
+    rows = parse_rows(text, source)
+    requested_indices = parse_indices(args.indices)
+    selected = select_rows(rows, args.m3, args.limit, args.sort_period, requested_indices)
+    if not selected:
+        raise SystemExit("no rows selected")
+    if requested_indices is not None:
+        selected_indices = {row.index for row in selected}
+        missing_indices = sorted(requested_indices - selected_indices)
+        if missing_indices:
+            raise SystemExit(f"requested indices not found: {','.join(str(index) for index in missing_indices)}")
+
+    started = time.perf_counter()
+    invariant_records = [invariant_record(row) for row in selected]
+    invariant_by_index = {int(record["index"]): record for record in invariant_records}
+    invariant_groups = cluster_invariant_records(
+        invariant_records,
+        args.energy_abs_tol,
+        args.energy_rel_tol,
+        args.angular_abs_tol,
+        args.angular_rel_tol,
+    )
+
+    records: list[dict[str, object]] = []
+    for row_index, row in enumerate(selected, start=1):
+        base_invariants = invariant_by_index[row.index]
+        bare12_invariants = bare_permutation_invariants(row, PERMUTATIONS["swap12"])
+        catalog_partner_labels = [
+            str(candidate["label"])
+            for candidate in invariant_records
+            if int(candidate["index"]) != row.index
+            and invariant_pair_matches(
+                bare12_invariants,
+                candidate,
+                args.energy_abs_tol,
+                args.energy_rel_tol,
+                args.angular_abs_tol,
+                args.angular_rel_tol,
+            )
+        ]
+        self_invariant_match = invariant_pair_matches(
+            bare12_invariants,
+            base_invariants,
+            args.energy_abs_tol,
+            args.energy_rel_tol,
+            args.angular_abs_tol,
+            args.angular_rel_tol,
+        )
+
+        integrated = integrate_orbit(row, args.rtol, args.atol, args.max_step_fraction)
+        f_beta = residual_for_generator(integrated, GENERATORS["F_beta"], args.n_samples, args.phase_grid)
+        closure_scale = max(integrated.closure_position_inf, args.closure_floor)
+        f_beta_to_closure = float(f_beta["residual_inf"]) / closure_scale
+        records.append(
+            {
+                "label": row.label,
+                "index": row.index,
+                "line_no": row.line_no,
+                "m3": row.m3,
+                "period": row.period,
+                "stability": row.stability,
+                "energy": base_invariants["energy"],
+                "angular_momentum_norm": base_invariants["angular_momentum_norm"],
+                "bare12_energy": bare12_invariants["energy"],
+                "bare12_angular_momentum_norm": bare12_invariants["angular_momentum_norm"],
+                "bare12_self_energy_delta": float(bare12_invariants["energy"])
+                - float(base_invariants["energy"]),
+                "bare12_self_angular_momentum_norm_delta": float(bare12_invariants["angular_momentum_norm"])
+                - float(base_invariants["angular_momentum_norm"]),
+                "self_invariant_match": self_invariant_match,
+                "catalog_partner_count_excluding_self": len(catalog_partner_labels),
+                "catalog_partner_labels_excluding_self": ";".join(catalog_partner_labels),
+                "catalog_asymmetric": len(catalog_partner_labels) == 0,
+                "closure_position_inf": integrated.closure_position_inf,
+                "closure_velocity_inf": integrated.closure_velocity_inf,
+                "integration_seconds": integrated.elapsed_seconds,
+                "F_beta_residual_inf": f_beta["residual_inf"],
+                "F_beta_to_closure": f_beta_to_closure,
+                "F_beta_rotation_angle_rad": f_beta["rotation_angle_rad"],
+                "F_beta_rotation_matrix": f_beta["rotation_matrix"],
+                "F_beta_closure_tight": f_beta_to_closure <= args.sigma_closure_multiple,
+            }
+        )
+        if args.report_every and row_index % args.report_every == 0:
+            asymmetric = sum(1 for record in records if record["catalog_asymmetric"])
+            f_beta_tight = sum(1 for record in records if record["F_beta_closure_tight"])
+            print(
+                f"[isotrophy] F_beta pair-ID checked {row_index}/{len(selected)} rows; "
+                f"catalog_asymmetric={asymmetric}; F_beta_tight={f_beta_tight}",
+                file=sys.stderr,
+                flush=True,
+            )
+
+    partner_rows = [record for record in records if int(record["catalog_partner_count_excluding_self"]) > 0]
+    f_beta_failures = [record for record in records if not record["F_beta_closure_tight"]]
+    self_failures = [record for record in records if not record["self_invariant_match"]]
+    duplicate_groups = [group for group in invariant_groups if len(group) > 1]
+    strict_passed = (
+        not partner_rows
+        and not f_beta_failures
+        and not self_failures
+        and len(duplicate_groups) == 0
+        and len(records) == len(selected)
+    )
+    summary: dict[str, object] = {
+        "mode": "fbeta_pair_id_confirmation",
+        "source": source,
+        "rows_total": len(rows),
+        "rows_selected": len(selected),
+        "selected_labels": [row.label for row in selected],
+        "m3": args.m3,
+        "rtol": args.rtol,
+        "atol": args.atol,
+        "n_samples": args.n_samples,
+        "phase_grid": args.phase_grid,
+        "sigma_closure_multiple": args.sigma_closure_multiple,
+        "energy_abs_tol": args.energy_abs_tol,
+        "energy_rel_tol": args.energy_rel_tol,
+        "angular_abs_tol": args.angular_abs_tol,
+        "angular_rel_tol": args.angular_rel_tol,
+        "strict_catalog_invariant_group_count": len(invariant_groups),
+        "strict_catalog_singleton_group_count": sum(1 for group in invariant_groups if len(group) == 1),
+        "strict_catalog_duplicate_group_count": len(duplicate_groups),
+        "catalog_match_count_excluding_self": sum(
+            int(record["catalog_partner_count_excluding_self"]) for record in records
+        ),
+        "rows_with_catalog_partner_count": len(partner_rows),
+        "rows_with_catalog_partner_labels": [record["label"] for record in partner_rows],
+        "catalog_asymmetric_count": sum(1 for record in records if record["catalog_asymmetric"]),
+        "self_invariant_match_count": sum(1 for record in records if record["self_invariant_match"]),
+        "self_invariant_failure_labels": [record["label"] for record in self_failures],
+        "F_beta_closure_tight_count": sum(1 for record in records if record["F_beta_closure_tight"]),
+        "F_beta_failure_labels": [record["label"] for record in f_beta_failures],
+        "structural_cocycle": "F_beta = ((12), tau-active, Rpi)",
+        "tau_component": "schema-constant active",
+        "per_row_tau_flag": False,
+        "partner_orbit_ivp": False,
+        "partner_monodromy_relation": "M_(12*C_i) = rho(Rpi) * M_i^-1 * rho(Rpi)^-1",
+        "strict_passed": strict_passed,
+        "elapsed_seconds": time.perf_counter() - started,
+        "note": (
+            "Receipt-discipline confirmation for the F_beta chain. Bare (12) invariant matching has no "
+            "inside-catalog partner among the strict 21, while structural F_beta is closure-tight for each row. "
+            "This does not freeze K_facet_v0.3 and does not run partner-orbit IVPs."
+        ),
+    }
+
+    print(json.dumps(summary, indent=2))
+    if args.print_records and records:
+        writer = csv.DictWriter(sys.stdout, fieldnames=list(records[0].keys()))
+        writer.writeheader()
+        writer.writerows(records)
+    if args.out:
+        write_outputs(Path(args.out), summary, records)
+    if args.strict and not strict_passed:
+        return 2
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Sundog isotrophy workbench smoke harness")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -1310,6 +1506,38 @@ def build_parser() -> argparse.ArgumentParser:
     invariants.add_argument("--print-records", action="store_true")
     invariants.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
     invariants.set_defaults(func=command_invariants)
+
+    fbeta_pair = sub.add_parser(
+        "fbeta-pair-id",
+        help="confirm the v0.3 F_beta pair-ID chain on strict G.2 rows",
+    )
+    fbeta_pair.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="A")
+    fbeta_pair.add_argument("--path", help="local supplementary file instead of the live URL")
+    fbeta_pair.add_argument("--m3", type=float, default=1.0)
+    fbeta_pair.add_argument("--limit", type=int, default=0)
+    fbeta_pair.add_argument(
+        "--indices",
+        default=",".join(str(index) for index in DEFAULT_KFACET_STRICT_INDICES),
+        help="comma-separated strict G.2 orbit indices for F_beta pair-ID confirmation",
+    )
+    fbeta_pair.add_argument("--sort-period", action="store_true", default=False)
+    fbeta_pair.add_argument("--no-sort-period", dest="sort_period", action="store_false")
+    fbeta_pair.add_argument("--n-samples", type=int, default=1009)
+    fbeta_pair.add_argument("--phase-grid", type=int, default=73)
+    fbeta_pair.add_argument("--rtol", type=float, default=DEFAULT_RTOL)
+    fbeta_pair.add_argument("--atol", type=float, default=DEFAULT_ATOL)
+    fbeta_pair.add_argument("--max-step-fraction", type=float, default=DEFAULT_MAX_STEP_FRACTION)
+    fbeta_pair.add_argument("--sigma-closure-multiple", type=float, default=DEFAULT_SIGMA_CLOSURE_MULTIPLE)
+    fbeta_pair.add_argument("--closure-floor", type=float, default=DEFAULT_CLOSURE_FLOOR)
+    fbeta_pair.add_argument("--energy-abs-tol", type=float, default=1e-10)
+    fbeta_pair.add_argument("--energy-rel-tol", type=float, default=1e-10)
+    fbeta_pair.add_argument("--angular-abs-tol", type=float, default=1e-10)
+    fbeta_pair.add_argument("--angular-rel-tol", type=float, default=1e-10)
+    fbeta_pair.add_argument("--strict", action="store_true")
+    fbeta_pair.add_argument("--print-records", action="store_true")
+    fbeta_pair.add_argument("--report-every", type=int, default=7)
+    fbeta_pair.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
+    fbeta_pair.set_defaults(func=command_fbeta_pair_id)
     return parser
 
 
