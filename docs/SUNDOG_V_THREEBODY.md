@@ -845,6 +845,16 @@ wholly trivial block. The post-quotient representation is
 count `c_i` is preserved. This is still paper-only; loop convention, typed
 half-flow, anchor certification, G1, and G2 crossing-form remain gates.
 
+The v0.3g crossing-form review sharpens G2: the mass perturbation should split
+as `Delta H=Delta H_T+Delta H_E`, with no sign-irrep component because it is
+`F_beta`-even. The `T` component is expected to collapse out of the standard
+sector, leaving the `E` component as the branch-driving part. This is not yet a
+locked count. Before any monodromy run, the child spec must define the
+neutral-quotiented Floquet crossing form, decide whether `c_i>1` requires a
+crossing matrix/rank gate instead of scalar per-block gammas, verify the
+reduced-coordinate `Delta H`, prove anchor independence, and define an empirical
+closure-relative `gamma_floor`.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

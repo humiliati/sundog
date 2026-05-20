@@ -847,6 +847,60 @@ equations or freeze `K_facet_v0.3`. The frozen output would be the 21
 per-choreography candidate integers, manual-review flags if any gates fail, and
 their gated sum, recorded before any supplementary-B clustering.
 
+### v0.3g crossing-form / non-degeneracy gate
+
+The next branch-validity draft correctly moves from representation multiplicity
+to a crossing-form gate. The useful structural split is:
+
+```text
+Delta H := partial_epsilon H |_{epsilon=0}
+Delta H = Delta H_T + Delta H_E
+Delta H has no sign-irrep S component because it is F_beta-even.
+```
+
+`Delta H_T` is the fully `D3`-symmetric part. `Delta H_E` is the body-3
+singled-out part that breaks `sigma3`. The intended claim is that the `T`
+component drives only structural continuation, while piano-trio branch creation
+from the standard sector is controlled by the `E` component of the monodromy
+variation.
+
+This is **not locked** as a scalar per-block `gamma_i^(k)` rule. The crossing
+form must first be defined on the neutral-quotiented, anchored standard sector.
+When `c_i > 1`, the correct object is likely a crossing matrix on the
+standard-irrep multiplicity space:
+
+```text
+Gamma_i : R^{c_i} -> R^{c_i}
+d_i := rank_floor(Gamma_i)          # only if the paper gate proves this rule
+```
+
+The scalar readout `gamma_i^(k)` is a special case, valid only after proving
+that the chosen `E`-block basis diagonalizes the crossing form or that
+off-diagonal E-copy mixing does not change the branch count. Until then,
+`d_i_candidate=c_i` remains a representation candidate, and `d_i` remains
+unfrozen.
+
+Open v0.3g gates:
+
+1. Check the formula for `Delta H` in the actual symplectic-reduced coordinates;
+   mass-dependent reduction could add terms not visible in the unreduced
+   shorthand.
+2. Verify `Delta H` has no `S` component at the Hamiltonian-vector-field /
+   tangent-operator level, not only as a configuration-space symmetry claim.
+3. Define the correct quotient Floquet crossing form after the `T*u_E+S*X_H`
+   neutral block is removed.
+4. Prove the Schur-lemma collapse for that exact quotient crossing form.
+5. Handle E-copy mixing by a multiplicity-space matrix/rank rule, or prove why
+   scalar per-block gammas suffice.
+6. Prove anchor independence, or record the anchor convention in the receipt.
+7. Define `gamma_floor` empirically and closure-relatively through
+   reproducibility, step refinement, or a symmetry-equivalent anchor check. Do
+   not derive it from `rtol`/`atol` alone.
+
+The scratchpad `1/phi^3` coupling conjecture stays quarantined. It can be a
+diagnostic only if the crossing matrix shows near-zero or degenerate
+directions; it is not part of the registered prediction.
+
 Rejected as primary:
 
 - **Full continuation in `m3`:** too circular with supplementary-B. It can be a
@@ -914,7 +968,8 @@ Rejected as primary:
 | 2026-05-20 | **v0.3d TYPED TRANSPORT RESPONSE REVIEW.** The typed lemma likely kills the canonical single-fiber `G_i` object and proposes a pair-orbit alpha-fixed kernel instead. Not locked. Blockers: `A_F` maps `t` to `-t` rather than fixing every point; alpha lands in the shifted partner fiber; `M^{-1/2}` should be replaced by typed half-flow; the alpha-fixed graph must descend through `N_i`; `<sigma3,F_beta>` must be treated as a real dihedral representation, not two commuting masks; and `1/2*dim` is pending again because `A_F`-even sectors are anti-symplectic fixed sectors. |
 | 2026-05-20 | **v0.3e PAIR-ORBIT / DIHEDRAL DRAFT 2 REVIEW.** Best candidate shape so far: anchored `D3=<sigma3,F_beta>` representation on `K_i^{fib}` and `d_i_candidate=c_i`, the multiplicity of the standard real 2D irrep. Not locked. Blockers: based-loop convention still unresolved; the half-flow reduction to `M_i` is mistyped without phase transport/free-loop convention; `F_beta` and conjugate partner anchors must be certified; neutral quotient must be `D3`-equivariant; and `c_i` needs crossing-form branch validation. |
 | 2026-05-20 | **v0.3f NEUTRAL-BLOCK REFINEMENT.** The neutral quotient is `D3`-equivariant as `N_C = T*u_E + S*X_H`, not wholly trivial. Pre-quotient `K_i^{fib*} ~= a_i*T + b_i*S + c_i*E`; post-quotient `K_i^{fib} ~= (a_i-1)*T + (b_i-1)*S + c_i*E`. The standard-irrep count `c_i` is preserved, so `d_i_candidate=c_i` survives. Still not locked: loop convention, typed half-flow, anchor certification, G1, and G2 crossing-form remain paper gates. |
-| (next)     | Write the v0.3f gate lemma: declare the based-loop convention at `p_i^F`, type the half-flow composition, certify parent/conjugate partner anchors, carry `N_C=T*u_E+S*X_H` through the `D3` quotient with no `E` leakage, and reserve G2 crossing form as the per-row branch-validity gate. |
+| 2026-05-20 | **v0.3g CROSSING-FORM GATE REVIEW.** The branch-validity gate should use the mass-perturbation split `Delta H=Delta H_T+Delta H_E`, with no `S` component because `Delta H` is `F_beta`-even. Not locked. The scalar `gamma_i^(k)` recipe is premature when `c_i>1`; define the quotient Floquet crossing form on the standard-irrep multiplicity space first, likely as a matrix `Gamma_i` with a closure-relative rank gate. Open gates: reduced-coordinate `Delta H`, operator-level no-`S`, quotient crossing form, Schur collapse, E-copy mixing, anchor independence, and empirical `gamma_floor`. |
+| (next)     | Write the v0.3g paper gate: define the neutral-quotiented crossing form on the `E` multiplicity space, decide matrix/rank versus scalar gammas, verify the `Delta H` decomposition and Schur collapse, handle anchor independence and `gamma_floor`, and only then authorize monodromy code. |
 
 ---
 
