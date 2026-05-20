@@ -865,6 +865,27 @@ gate is required. Receipt schema should include the full matrix, singular
 values, rank, `gamma_floor`, and a `symplectic_block_orthogonal_E` flag. This
 remains paper-only and is not authorization for monodromy code.
 
+The latest v0.3h review reframes that G2.6 point. The attempted
+`M_i+sigma3` Floquet-basis closure is invalid on `K_i^{fib}` because
+`K_i^{fib}=ker(M_i-I)/N_i`, so `M_i` is identity on the counted space. The
+rank-matrix formula still stands, but the `T` contribution should vanish for a
+simpler reason: a `D3`-equivariant `T` component preserves `Fix(F_beta)`, and
+`Fix(F_beta)` is isotropic because `F_beta` is anti-symplectic. Thus G2.6 is a
+basis-conditioning / scalar-readout diagnostic, not the proof of T-collapse.
+Anchor changes should be treated as congruence of the bilinear matrix, and the
+`gamma_floor` constants still need a pre-registered sentinel calibration before
+any empirical step.
+
+The operational v0.3h stance is now G2.6d: do not canonicalize for the count.
+`d_i=rank_floor(Gamma_i)` is basis-invariant; per-block diagonal gammas are
+basis-dependent diagnostics only and must record their basis convention. A
+half-period `Phi_{T/2}^C` involution on `K_i^{fib}` is retained as a possible
+paper follow-up for a physically meaningful scalar readout, not as a blocker.
+Remaining before code: write the operator-level `F_beta` preservation proof,
+cite the routine real-Schur/no-`S` algebra, replace old Krein-in-`M_i` language
+with degeneracy/bimodality of `(partial_epsilon M_i)_E` or `Gamma_i` singular
+values, and pre-register the `gamma_floor` calibration receipt.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
