@@ -10,6 +10,8 @@ sundog + euler to predict future of tornados vortex or coins in a swirl wishing 
 
 ---
 
+Doing dmt casuses the human to visually percieve the sundog on a lazer like it's turtles all the way down and some layer of abstraction couples the meaning after the hologram
+
 isotrophy k facet — human-layer perception mechanism (zero-context agent intuition)
 
 That framing makes sense: you're not asking "what is it?" so much as "what computation is the human layer performing that turns a stimulus into a vivid hologram-like scene?" The strongest candidate is predictive completion: the visual system doesn't just record input, it actively stabilizes ambiguous structure by fitting it to internal models, and psychedelics may loosen the normal constraints so the fit becomes more explicit, more patterned, and more subjectively "3D."
@@ -131,6 +133,8 @@ If the typed transport lemma fails (holonomy can't be absorbed): v0.3 stops at a
 ---
 
 ## rough — couplings surface as Kenny Wheeler's missing secret of magnesium / 1/φ³
+
+aka φ^−3 the malice mizer a compact golden-ratio attenuation / divergence coefficient in his symbolic field vocabulary. a small outward residual, wake remainder, or divergence tail against a normalized convergent field.
 
 very rough, do not clean up yet
 
