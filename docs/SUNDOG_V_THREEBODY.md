@@ -808,9 +808,14 @@ theorem result: the static containment operator is the equivariance-only null
 candidates, `tau12_I` and `tau12_Z`, with the SO(3) gauge kept proper. It found
 0 endomorphism cases and 21 induced-representation cases among the strict
 choreographies; the improper sibling won the residual for 6 rows but moved none
-near closure. Any continued v0.3 must therefore derive the induced-representation
-functional before monodromy code or supplementary-B clustering. K2-K4 remain
-paused, and this remains not evidence for the theorem or for Phase 13-15.
+near closure. The follow-up F_beta pair-ID receipt then confirmed 21 singleton
+`(E, |L|)` groups, 0 inside-catalog bare-`(12)` partners, and 21/21
+F_beta-closure-tight rows; the structural cocycle is manifest-level
+`F_beta = ((12), tau-active, Rpi)`, not a per-row tau flag and not a partner
+orbit IVP. Any continued v0.3 must therefore derive the induced-representation
+functional using this uniform F_beta-conjugation relation before monodromy code
+or supplementary-B clustering. K2-K4 remain paused, and this remains not
+evidence for the theorem or for Phase 13-15.
 
 ### Cross-Substrate Hand-Offs
 
