@@ -724,11 +724,46 @@ constructing the alpha-induced map on `V_0`; and proving or refuting
 `G_i^2 = I`. If that lemma leaves non-canonical holonomy, v0.3 must not be
 flattened into a single-fiber `d_i`.
 
-Only after the typed transport lemma and the candidate-count gates are written
-should any code integrate variational equations or freeze `K_facet_v0.3`. The
-frozen output would be the 21 per-choreography candidate integers, manual-review
-flags if any gates fail, and their gated sum, recorded before any
-supplementary-B clustering.
+### v0.3d typed transport response: pair-orbit proposal, not locked
+
+The first typed transport lemma draft found that a canonical single-fiber
+`G_i` is probably the wrong object. Alpha sends a tangent loop at the parent
+choreography into a half-period-shifted partner loop, so any single-fiber
+operator on `V_0` requires an extra identification. Different identifications
+produce different candidate operators. The draft proposes replacing the
+single-fiber `G_i` filter with a pair-orbit alpha-fixed kernel and then
+counting an `A_F`-even, `sigma3`-nontrivial sector of `K_i^{fib}`.
+
+That proposal is **not registered**. Review found six blockers:
+
+1. `A_F y_i(-t)=y_i(t)` implies `A_F y_i(t)=y_i(-t)`, not pointwise
+   fixedness for every `t`; `A_F` is same-fiber only at fixed phases such as
+   `0` and `T/2`.
+2. The pair-orbit construction still needs a based-loop convention: alpha lands
+   at the shifted partner fiber `V_h'`, not automatically at `V_0'`.
+3. The `M_i^{-1/2}` / Maslov branch language should be replaced by the typed
+   half-flow `Dphi_{-T/2}`; the real ambiguity is the fiber identification, not
+   a necessary matrix-square-root choice.
+4. The alpha-fixed graph parameterization must be proved after quotienting the
+   Hamiltonian neutral block `N_i`.
+5. `F_beta` and `sigma3` should be handled as a real dihedral representation:
+   `F_beta` likely conjugates `sigma3` to `sigma3^{-1}`, so
+   `A_F-even cap sigma3-nontrivial` is not a pair of commuting masks unless
+   proven.
+6. Once the sector is `A_F`-even, the old symplectic `1/2*dim` argument no
+   longer transfers automatically; multiplicity is again pending.
+
+Revised next artifact: a pair-orbit / dihedral-representation lemma. It should
+choose the loop convention (shifted partner, free-loop quotient, or explicit
+phase transport), prove the alpha-fixed graph descends through `N_i`, derive
+the `<sigma3,F_beta>` real representation on `K_i^{fib}`, and only then define
+the branch candidate sector and multiplicity gate.
+
+Only after the pair-orbit / dihedral-representation lemma and the
+candidate-count gates are written should any code integrate variational
+equations or freeze `K_facet_v0.3`. The frozen output would be the 21
+per-choreography candidate integers, manual-review flags if any gates fail, and
+their gated sum, recorded before any supplementary-B clustering.
 
 Rejected as primary:
 
@@ -794,7 +829,8 @@ Rejected as primary:
 | 2026-05-20 | **v0.3a PARITY-UNION CASE SPLIT COMPLETE.** `npm run isotrophy:tau12:cases` ran the locked `{tau12_I, tau12_Z}` detector on the 21 strict rows: 0 endomorphism, 21 induced-representation, 0 marginal review. `tau12_Z` won the residual for 6 rows but did not move any row near closure; best non-tight residual/closure remains `2.815e7`. Receipt: `results/isotrophy/k-facet-v03-tau12-parity-union-21strict/`. |
 | 2026-05-20 | **v0.3b F_beta PAIR-ID COMPLETE.** `npm run isotrophy:fbeta:pair-id` confirmed 21 singleton `(E, |L|)` groups, 0 inside-catalog bare-`(12)` partners, 21 catalog-asymmetric rows, and 21/21 F_beta-closure-tight rows (`F_beta_to_closure` range `0.283..0.804`). The receipt records `F_beta = ((12), tau-active, Rpi)` as a manifest-level structural cocycle: no per-row tau flag and no partner-orbit IVP. Receipt: `results/isotrophy/k-facet-v03-fbeta-pair-id-21strict/`. |
 | 2026-05-20 | **v0.3c DERIVATION REVIEW.** The loop-to-fiber draft was accepted as the right direction but not frozen. Blockers: neutral quotient must use `span{X_H,u_E}` with `(M-I)u_E=cX_H`; `G_i` must be built as a typed fiber map before claiming commutation; `G_i^2` must be computed after the cocycle is chosen; structural removal must be a quotient/reduction through `B_i^+`; and `1/2*dim` is only a candidate count until semisimple/crossing-form/nondegeneracy gates pass. No monodromy code authorized. |
-| (next)     | Write the typed transport lemma: define the phase-space maps and fibers, state reversible identities with domains/codomains, construct the alpha-induced map on `V_0`, prove or refute `G_i^2=I`, then revisit `[M_i,G_i]`, `B_i^+`, and multiplicity. |
+| 2026-05-20 | **v0.3d TYPED TRANSPORT RESPONSE REVIEW.** The typed lemma likely kills the canonical single-fiber `G_i` object and proposes a pair-orbit alpha-fixed kernel instead. Not locked. Blockers: `A_F` maps `t` to `-t` rather than fixing every point; alpha lands in the shifted partner fiber; `M^{-1/2}` should be replaced by typed half-flow; the alpha-fixed graph must descend through `N_i`; `<sigma3,F_beta>` must be treated as a real dihedral representation, not two commuting masks; and `1/2*dim` is pending again because `A_F`-even sectors are anti-symplectic fixed sectors. |
+| (next)     | Write the pair-orbit / dihedral-representation lemma: choose the loop convention, prove the alpha-fixed graph descends through the neutral quotient, derive the `<sigma3,F_beta>` representation on `K_i^{fib}`, then define the branch candidate sector and multiplicity gate. |
 
 ---
 

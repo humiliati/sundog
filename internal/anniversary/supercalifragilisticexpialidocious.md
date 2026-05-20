@@ -419,3 +419,169 @@ If the typed lemma reveals holonomy that cannot be absorbed into a canonical
 single-fiber operator, v0.3 should stop there. That would mean the
 induced-representation functional has hidden cocycle dependence and must not be
 flattened into a single-fiber `d_i`.
+
+---
+
+## 10. Typed transport lemma draft / pair-orbit proposal, 2026-05-20
+
+New proposal received after the author response:
+
+- The typed transport attempt finds no canonical single-fiber alpha operator
+  `G_i` on `V_0`.
+- The old claims `[M_i,G_i]=0` and `G_i^2=I` are therefore artifacts of a
+  hidden cocycle choice.
+- The replacement object is the pair-orbit alpha-fixed kernel on the parent
+  choreography and its bare-`(12)` partner.
+- In that pair picture, alpha-fixed pairs are proposed to be parameterized by
+  the parent periodic kernel `K_i^{fib}` directly.
+- The proposed v0.3 count becomes an `A_F`-even, `sigma3`-nontrivial sector of
+  `K_i^{fib}`, after quotienting the structural
+  `A_F`-even / `sigma3`-trivial continuation sector.
+
+Proposed formula from the draft, **not locked**:
+
+```text
+N_i        := span{ X_H(p_i), u_E },  (M_i - I)u_E = c_i X_H(p_i), c_i != 0
+K_i^{fib}  := ker(M_i - I) / N_i
+B_i^+      := (A_F-even) cap (sigma3-trivial) cap K_i^{fib}
+K_i^{PT}   := ((A_F-even) cap K_i^{fib}) / B_i^+
+d_i^{cand} := (1/2) * dim_R K_i^{PT}
+```
+
+The draft explicitly asks for review before registration. Good instinct. The
+single-fiber `G_i` obstruction is real enough to take seriously, but the
+replacement pair-orbit formula is not yet safe.
+
+## 11. Codex review of typed transport lemma, 2026-05-20
+
+**Verdict:** this is a productive simplification, but not lockable. It likely
+found a real failure in the single-fiber `G_i` program. It has not yet proved
+the replacement count. The next version should be a pair-orbit / dihedral
+representation lemma, not monodromy code.
+
+### Blocker A: F_beta is not pointwise fixed along the whole curve
+
+The draft states:
+
+```text
+A_F y_i(-t) = y_i(t)
+therefore A_F y_i(t) = y_i(t) for all t.
+```
+
+The conclusion does not follow. Replacing `t` by `-t` gives
+
+```text
+A_F y_i(t) = y_i(-t).
+```
+
+So `A_F` maps the tangent fiber at `y_i(t)` to the tangent fiber at
+`y_i(-t)`. It is a same-fiber endomorphism only at symmetry phases such as
+`t=0` and `t=T/2` (modulo the period), not at every parent point. The base
+identity
+
+```text
+M_i A_F^{V_0} = A_F^{V_0} M_i^{-1}
+```
+
+can still be valid, but the draft must delete the "F_beta fixes every point"
+sentence. Otherwise a future implementation will silently use `A_F` at the
+wrong fiber.
+
+### Blocker B: the pair-orbit construction still has a base-phase issue
+
+The draft correctly notices that alpha sends a parent tangent loop to the
+partner orbit at the half-period shifted partner fiber `V_h'`, not `V_0'`.
+But section 6 then writes the pair space as if it were simply
+`T_{C_i}Lambda + T_{Y_i}Lambda`.
+
+That is not enough for based loops. Either:
+
+1. define the second component as the shifted partner `Y_i^h(t)=Y_i(t+T/2)`;
+2. work on unbased/free loops modulo phase; or
+3. add an explicit phase transport from `V_h'` to `V_0'`.
+
+Without one of those choices, the pair-orbit picture has merely moved the
+cocycle from `G_i` into the definition of the partner loop space. This is
+fixable, but it must be explicit.
+
+### Blocker C: the square-root ambiguity is overstated in the wrong place
+
+The `(C2)` calculation writes the half-step as `M_i^{-1/2}` and then flags a
+matrix-square-root / Maslov branch ambiguity. The actual orbit gives a typed
+map `Dphi_{-T/2}` directly. There is no numerical need to choose a square root
+of `M_i` if the half-period flow is integrated as a flow map.
+
+There may still be holonomy or Maslov-index content if one tries to represent
+the half-step purely as a matrix function of `M_i`, but the paper should not
+make that the primary ambiguity. The primary ambiguity is the choice of
+identification between based fibers, not a free-floating square-root branch.
+
+### Blocker D: alpha-fixed pair parameterization needs a proof after quotienting
+
+For a clean involution swapping two identical vector spaces, fixed pairs are
+graphs and are parameterized by one component. That part is plausible. Here the
+two components are phase-shifted loop fibers plus Hamiltonian neutral
+quotients. The draft needs to prove the graph parameterization descends through
+`N_i = span{X_H,u_E}` and respects the chosen based/free-loop convention.
+
+Until then, "alpha-fixed is automatic" is a strong candidate, not a theorem.
+
+### Blocker E: `A_F` and `sigma3` form a dihedral representation, not two
+commuting projectors
+
+This is probably the biggest replacement-formula issue. `F_beta` contains a
+transposition, so it should conjugate the 3-cycle to its inverse:
+
+```text
+A_F sigma3 A_F^{-1} = sigma3^{-1}
+```
+
+up to the time/spatial factors. That means `A_F` generally normalizes the
+`Z3` action rather than commuting with it. The trivial `sigma3` sector is
+stable, but the nontrivial `sigma3` sector is a real two-dimensional irrep
+where `A_F` acts as a reflection. So the phrase
+
+```text
+(A_F-even) cap (sigma3-nontrivial)
+```
+
+needs representation-theoretic precision. The right object is likely the
+nontrivial real isotypic component of the dihedral group generated by
+`sigma3` and `F_beta`, with `A_F` selecting a reflection-even line inside each
+real `Z3` block. Do not implement this as two commuting projector masks unless
+the commutation relation is proved.
+
+### Blocker F: the `1/2 * dim` candidate lost its symplectic proof
+
+The previous `1/2 * dim` argument depended on a symplectic `K_i^{PT}`. But
+`A_F` is anti-symplectic, and its fixed subspace is typically Lagrangian-like,
+not symplectic. After switching to `A_F`-even sectors, the old symplectic-pair
+argument no longer transfers automatically.
+
+So the safe draft language is:
+
+```text
+d_i_candidate = dim_R K_i^{PT}              # or 1/2 dim, pending derivation
+```
+
+with no factor frozen until the dihedral/fixed-sector Lyapunov-Schmidt
+reduction says which dimension counts branches.
+
+### Revised next artifact
+
+Write a new lemma with this target:
+
+1. Replace "F_beta fixes every point" with the typed identity
+   `A_F: V_t -> V_{-t}` and record the fixed phases separately.
+2. Choose the loop convention: shifted partner, free-loop quotient, or explicit
+   phase transport. No hidden based-loop identification.
+3. Prove the alpha-fixed pair graph descends through the neutral quotient.
+4. Derive the representation of `<sigma3,F_beta>` on `K_i^{fib}` as a real
+   dihedral representation.
+5. Define the branch candidate sector from that representation.
+6. Only then decide whether multiplicity is `dim`, `1/2 dim`, or a
+   crossing-form-gated refinement.
+
+If that closes, v0.3 survives in a cleaner pair-orbit form. If it does not,
+the typed lemma has still done real work: it killed the noncanonical
+single-fiber `G_i` without pretending the replacement was free.
