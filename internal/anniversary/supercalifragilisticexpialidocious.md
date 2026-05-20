@@ -911,3 +911,64 @@ Updated next gate: write v0.3g as a paper-only crossing-form definition on the
 `E` multiplicity space. Close the reduced-Hamiltonian, no-S, quotient-crossing,
 Schur-collapse, E-copy-mixing, anchor-independence, and floor gates before any
 monodromy code.
+
+## 16. v0.3h rank-matrix / G2.6 prep, 2026-05-20
+
+The matrix formulation is cleaner than the scalar one and should become the
+next paper deliverable. Instead of treating `gamma_i^(k)` as independent
+per-block scalars, define the crossing form on the `c_i`-dimensional
+`F_beta`-even standard sector:
+
+```text
+Gamma_i^(k,k') := omega(xi_k, (partial_epsilon M_i) xi_k')
+d_i            := rank_floor(Gamma_i)
+rank_floor     := #{ singular values of Gamma_i > k_gamma * gamma_floor }
+```
+
+This recovers the scalar rule only when `c_i=1`, or when a structural
+orthogonality / diagonalization result proves the matrix is block-diagonal in
+the chosen `E`-copy basis.
+
+New sub-gate:
+
+```text
+G2.6: symplectic block-orthogonality of the E-isotypic sector.
+```
+
+The v0.3g `T`-Schur collapse only handled diagonal entries:
+`omega(xi_k, xi_k)=0`. Off-diagonal entries
+`omega(xi_k, xi_k')` for `k != k'` can be nonzero unless the `E` copies are
+symplectically orthogonal. If G2.6 holds, the `T` component contributes zero to
+all of `Gamma_i`, and the scalar/block-diagonal formula becomes a justified
+operating special case. If G2.6 fails, `Gamma_i` has real off-diagonal
+structure and the full SVD/rank gate is mandatory.
+
+Consolidated gates after v0.3h:
+
+1. **G2.1:** operator-level `F_beta` invariance of `D(J grad Delta H)`.
+2. **G2.2:** real Schur for the `D3` standard rep, `End_D3(E)=R`.
+3. **G2.3:** E-copy mixing is absorbed into `Gamma_i`, not post-processed.
+4. **G2.4:** anchor independence of `Gamma_i`, or an explicit anchor convention.
+5. **G2.5:** closure-relative `gamma_floor`.
+6. **G2.6:** E-isotypic symplectic block-orthogonality.
+
+Receipt schema extension:
+
+```text
+Gamma_i_matrix
+Gamma_i_singular_values
+Gamma_i_rank_floor
+gamma_floor
+symplectic_block_orthogonal_E
+d_i = Gamma_i_rank_floor
+```
+
+The `symplectic_block_orthogonal_E` flag comes from the E-isotypic
+`omega`-Gram matrix. If true across all 21 rows, the scalar rule is empirically
+the operating regime. If false for any row, that row uses the full rank-matrix
+gate.
+
+The scratchpad coupling conjecture remains quarantined and is eligible only as
+a degeneracy diagnostic if `Gamma_i` has near-zero singular directions. No
+monodromy code is authorized until v0.3h is written as a paper lemma with G2.6,
+anchor independence, and the floor specified.

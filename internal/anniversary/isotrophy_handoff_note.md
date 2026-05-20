@@ -213,8 +213,15 @@ Remaining honest fork:
   `gamma_i^(k)` recipe yet. If `c_i>1`, the load-bearing object is likely a
   quotient Floquet crossing matrix on the `E` multiplicity space, with a
   closure-relative rank gate, not independent diagonal scalars until proved.
-- Current next paper-only gate: write v0.3g as a crossing-form definition on
-  the neutral-quotiented `E` multiplicity space before any monodromy code.
+- Rank-matrix refinement: v0.3h should formalize `Gamma_i` as the `c_i x c_i`
+  crossing matrix on the `F_beta`-even standard sector and expose G2.6:
+  symplectic block-orthogonality of the `E` copies. If G2.6 holds, the scalar
+  rule is the operating special case; if it fails, off-diagonal symplectic/T
+  terms make full SVD rank mandatory. Receipt schema must include the full
+  matrix, singular values, rank, `gamma_floor`, and an
+  `symplectic_block_orthogonal_E` flag.
+- Current next paper-only gate: write v0.3h as the rank-matrix + G2.6 lemma
+  before any monodromy code.
 
 ## Operator Guardrail
 
@@ -224,10 +231,11 @@ Before any future isotrophy run:
    accidental K2-K4 restart.
 2. If it is K2-K4 under v0.2, stop.
 3. If it is v0.3, use the completed all-induced case split, then write the
-   anchored `D3` and v0.3g crossing-form gates: based-loop convention at
+   anchored `D3` and v0.3h rank-matrix gates: based-loop convention at
    `p_i^F`, anchor certification, typed half-flow, neutral quotient
    `N_C=T*u_E+S*X_H` with no `E` leakage, `d_i_candidate=c_i`, quotient
    crossing form on the `E` multiplicity space, reduced-coordinate `Delta H`,
-   no-`S` proof, matrix/rank versus scalar-gamma decision, negative, and
-   go/no-go branch before running any monodromy or supplementary-B
-   classification.
+   no-`S` proof, full `Gamma_i` matrix/rank rule, G2.6
+   symplectic-block-orthogonality, anchor independence, `gamma_floor`,
+   negative, and go/no-go branch before running any monodromy or
+   supplementary-B classification.

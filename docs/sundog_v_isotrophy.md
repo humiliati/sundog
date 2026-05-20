@@ -901,6 +901,68 @@ The scratchpad `1/phi^3` coupling conjecture stays quarantined. It can be a
 diagnostic only if the crossing matrix shows near-zero or degenerate
 directions; it is not part of the registered prediction.
 
+### v0.3h rank-matrix / symplectic-block-orthogonality gate
+
+The matrix formulation is now the cleaner structural target for the
+branch-validity gate. Define `Gamma_i` on the `c_i`-dimensional
+`F_beta`-even line bundle inside the standard `E`-isotypic sector:
+
+```text
+Gamma_i^(k,k') := omega(xi_k, (partial_epsilon M_i) xi_k')
+d_i            := rank_floor(Gamma_i)
+rank_floor     := #{ singular values of Gamma_i > k_gamma * gamma_floor }
+```
+
+For `c_i=1`, this reduces to the scalar `gamma_i^(k)` rule. For `c_i>=2`,
+the full SVD rank is the object; a block-diagonal/scalar rule is a consequence
+only if an additional structural claim is proved.
+
+The new exposed gate is:
+
+```text
+G2.6: symplectic block-orthogonality of the E-isotypic sector.
+```
+
+The earlier `T`-component Schur-collapse argument proves diagonal vanishing:
+`omega(xi_k, xi_k)=0`. It does **not** automatically prove off-diagonal
+vanishing `omega(xi_k, xi_k')=0` for `k != k'`. If the natural
+`M_i`+`rho(sigma3)` decomposition splits the `E` copies into
+symplectically-orthogonal 2D blocks, the `T` component contributes zero to all
+of `Gamma_i`, and the scalar/block-diagonal rule becomes the operating
+special case. If cross-block symplectic pairing is nonzero, `Gamma_i` has a
+real off-diagonal `T` contribution and the matrix/rank gate is strictly
+necessary.
+
+Consolidated v0.3h gates:
+
+1. **G2.1:** verify operator-level `F_beta` invariance of
+   `D(J grad Delta H)` and the no-`S` claim.
+2. **G2.2:** cite / verify real Schur for the `D3` standard irrep
+   (`End_D3(E)=R`).
+3. **G2.3:** absorb E-copy mixing into the full `Gamma_i` matrix rather than
+   treating it as an afterthought.
+4. **G2.4:** prove anchor independence of `Gamma_i`, or record the anchor
+   convention.
+5. **G2.5:** define the closure-relative `gamma_floor`.
+6. **G2.6:** test/prove symplectic block-orthogonality of the `E` copies.
+
+Receipt schema extension:
+
+```text
+Gamma_i_matrix                 c_i x c_i
+Gamma_i_singular_values
+Gamma_i_rank_floor
+gamma_floor
+symplectic_block_orthogonal_E  true/false from the E-isotypic omega-Gram matrix
+d_i                            Gamma_i_rank_floor
+```
+
+If `symplectic_block_orthogonal_E=true` across all 21 rows, the scalar rule is
+empirically operating in the catalog regime. If false for any row, that row
+must use the full matrix/rank gate. Either way, no monodromy code is authorized
+until v0.3h specifies the matrix construction, G2.6, anchor independence, and
+the floor.
+
 Rejected as primary:
 
 - **Full continuation in `m3`:** too circular with supplementary-B. It can be a
@@ -969,7 +1031,8 @@ Rejected as primary:
 | 2026-05-20 | **v0.3e PAIR-ORBIT / DIHEDRAL DRAFT 2 REVIEW.** Best candidate shape so far: anchored `D3=<sigma3,F_beta>` representation on `K_i^{fib}` and `d_i_candidate=c_i`, the multiplicity of the standard real 2D irrep. Not locked. Blockers: based-loop convention still unresolved; the half-flow reduction to `M_i` is mistyped without phase transport/free-loop convention; `F_beta` and conjugate partner anchors must be certified; neutral quotient must be `D3`-equivariant; and `c_i` needs crossing-form branch validation. |
 | 2026-05-20 | **v0.3f NEUTRAL-BLOCK REFINEMENT.** The neutral quotient is `D3`-equivariant as `N_C = T*u_E + S*X_H`, not wholly trivial. Pre-quotient `K_i^{fib*} ~= a_i*T + b_i*S + c_i*E`; post-quotient `K_i^{fib} ~= (a_i-1)*T + (b_i-1)*S + c_i*E`. The standard-irrep count `c_i` is preserved, so `d_i_candidate=c_i` survives. Still not locked: loop convention, typed half-flow, anchor certification, G1, and G2 crossing-form remain paper gates. |
 | 2026-05-20 | **v0.3g CROSSING-FORM GATE REVIEW.** The branch-validity gate should use the mass-perturbation split `Delta H=Delta H_T+Delta H_E`, with no `S` component because `Delta H` is `F_beta`-even. Not locked. The scalar `gamma_i^(k)` recipe is premature when `c_i>1`; define the quotient Floquet crossing form on the standard-irrep multiplicity space first, likely as a matrix `Gamma_i` with a closure-relative rank gate. Open gates: reduced-coordinate `Delta H`, operator-level no-`S`, quotient crossing form, Schur collapse, E-copy mixing, anchor independence, and empirical `gamma_floor`. |
-| (next)     | Write the v0.3g paper gate: define the neutral-quotiented crossing form on the `E` multiplicity space, decide matrix/rank versus scalar gammas, verify the `Delta H` decomposition and Schur collapse, handle anchor independence and `gamma_floor`, and only then authorize monodromy code. |
+| 2026-05-20 | **v0.3h RANK-MATRIX / G2.6 PREP.** The branch-validity object is now `Gamma_i`, the `c_i x c_i` crossing matrix on the `F_beta`-even standard sector, with `d_i=rank_floor(Gamma_i)` as the structural target. New gate G2.6: prove/test symplectic block-orthogonality of the `E` copies. If it holds, the scalar rule is the operating special case; if it fails, `Gamma_i` has off-diagonal symplectic/T contributions and full matrix rank is mandatory. Receipt schema must include the full matrix, singular values, rank, `gamma_floor`, and a `symplectic_block_orthogonal_E` flag from the E-isotypic omega-Gram matrix. |
+| (next)     | Draft v0.3h as the rank-matrix + G2.6 lemma: formalize `Gamma_i`, prove/counter-prove E-block symplectic orthogonality, settle anchor independence and `gamma_floor`, and keep the scratchpad degeneracy track quarantined until empirical degeneracy appears. |
 
 ---
 
