@@ -220,8 +220,23 @@ Remaining honest fork:
   terms make full SVD rank mandatory. Receipt schema must include the full
   matrix, singular values, rank, `gamma_floor`, and an
   `symplectic_block_orthogonal_E` flag.
-- Current next paper-only gate: write v0.3h as the rank-matrix + G2.6 lemma
-  before any monodromy code.
+- v0.3h draft review: rank-matrix survives, but the proposed `M_i+sigma3`
+  Floquet-basis proof of G2.6 does not work on `K_i^{fib}` because
+  `K_i^{fib}=ker(M_i-I)/N_i`, so `M_i` is identity there. Cleaner T-collapse:
+  if `(partial_epsilon M_i)_T` preserves `Fix(F_beta)`, then
+  `Gamma_i^T=0` for every entry because `Fix(F_beta)` is isotropic under
+  anti-symplectic `F_beta`. G2.6 becomes a basis-conditioning / scalar-readout
+  diagnostic, not the theorem that makes T-collapse true.
+- G2.6d disposition: do not canonicalize for the count. `d_i=rank_floor(Gamma_i)`
+  is basis-invariant; per-block diagonal gammas are basis-dependent diagnostics
+  only and must carry the basis convention. Keep `Phi_{T/2}^C` as a possible
+  involutive kernel canonicalizer (`G2.6b`) for later paper exploration, not as
+  a blocker.
+- Current next paper-only gate: write v0.3h-final with `Gamma_i` as the
+  basis-invariant rank object, T-collapse from anti-symplectic fixed-space
+  isotropy, anchor-change congruence, scalar diagnostics explicitly
+  basis-dependent, and pre-registered `gamma_floor` calibration before any
+  monodromy code.
 
 ## Operator Guardrail
 
@@ -235,7 +250,9 @@ Before any future isotrophy run:
    `p_i^F`, anchor certification, typed half-flow, neutral quotient
    `N_C=T*u_E+S*X_H` with no `E` leakage, `d_i_candidate=c_i`, quotient
    crossing form on the `E` multiplicity space, reduced-coordinate `Delta H`,
-   no-`S` proof, full `Gamma_i` matrix/rank rule, G2.6
-   symplectic-block-orthogonality, anchor independence, `gamma_floor`,
-   negative, and go/no-go branch before running any monodromy or
-   supplementary-B classification.
+   no-`S` proof, full `Gamma_i` matrix/rank rule, T-collapse via
+   anti-symplectic `Fix(F_beta)` isotropy, G2.6 as conditioning diagnostic,
+   G2.6d rank-only count with scalar diagnostics basis-marked, optional
+   `Phi_{T/2}^C` canonicalizer deferred, anchor congruence, `gamma_floor`
+   calibration receipt, negative, and go/no-go branch before running any
+   monodromy or supplementary-B classification.

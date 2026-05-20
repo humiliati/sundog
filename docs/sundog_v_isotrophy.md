@@ -963,6 +963,111 @@ must use the full matrix/rank gate. Either way, no monodromy code is authorized
 until v0.3h specifies the matrix construction, G2.6, anchor independence, and
 the floor.
 
+### v0.3h draft review: rank survives, G2.6 reframed
+
+The v0.3h rank-matrix draft is accepted as the right structural object:
+
+```text
+Gamma_i^(k,k') := omega(xi_k, (partial_epsilon M_i) xi_k')
+d_i            := rank_floor(Gamma_i)
+```
+
+However, the proposed closure of G2.6 by an `M_i + sigma3` Floquet basis is not
+valid as written. `K_i^{fib}` is already the neutral-quotiented `+1` kernel
+`ker(M_i-I)/N_i`; on that space `M_i` acts as the identity. Therefore distinct
+`M_i` Floquet multipliers cannot canonically split the `E` copies inside
+`K_i^{fib}`. Any receipt field named `M_i_E_floquet_multipliers` must refer to
+the ambient E-isotypic variational spectrum, not to the kernel being counted.
+
+The good news is stronger than the attempted G2.6 proof. The off-diagonal
+`T`-component collapse follows from the anti-symplectic fixed-space argument:
+
+1. `(partial_epsilon M_i)_T` is `D3`-equivariant, hence commutes with
+   `F_beta`.
+2. If `xi_k'` is `F_beta`-even, then `(partial_epsilon M_i)_T xi_k'` is also
+   `F_beta`-even.
+3. The fixed subspace of an anti-symplectic involution is isotropic:
+   `omega(u,v)=0` for all `u,v in Fix(F_beta)`.
+
+Therefore:
+
+```text
+Gamma_i^T(k,k') = omega(xi_k, (partial_epsilon M_i)_T xi_k') = 0
+```
+
+for all `k,k'`, with no symplectic block-orthogonality assumption. This makes
+G2.1/operator-level `F_beta` preservation the load-bearing proof for
+`Gamma_i^T=0`.
+
+G2.6 should be reframed as a basis-conditioning / interpretability diagnostic,
+not as the theorem that makes T-collapse true. The rank of `Gamma_i` is
+invariant under any invertible change of basis on the `F_beta`-even standard
+multiplicity space. A block-orthogonal basis is useful for human interpretation
+and for scalar diagnostics, but the locked count is the SVD rank of the full
+matrix.
+
+Revised v0.3h receipt schema:
+
+```text
+Gamma_i_matrix
+Gamma_i_singular_values
+Gamma_i_rank_floor
+gamma_floor
+E_basis_conditioning
+omega_Gram_E_diagnostic
+symplectic_block_orthogonal_E   diagnostic only
+d_i = Gamma_i_rank_floor
+```
+
+G2.4 also needs a small wording correction: anchor switching acts by invertible
+transport on the basis, so the bilinear matrix changes by congruence, not
+necessarily similarity. Rank is invariant under congruence, so the count remains
+anchor-independent once the transport is typed.
+
+G2.5 remains proposed, not closed. The `gamma_floor_i` formula and constants
+`k_gamma`, `k_int` need a pre-registered sentinel calibration before any run.
+That calibration is the first empirical step, but it is not authorized until
+the paper gate specifies its receipt and branch conditions.
+
+Operational G2.6 disposition:
+
+```text
+G2.6d: do not canonicalize for the count.
+```
+
+The locked object is the rank of `Gamma_i`, which is basis-invariant on the
+`F_beta`-even standard multiplicity space. Per-block diagonal scalars
+`Gamma_i^(k,k)` are basis-dependent diagnostics only. The receipt may record
+them, but it must also record the basis convention used to compute them, and
+they do not enter `K_facet_v0.3`.
+
+Open G2.6 research follow-up:
+
+```text
+G2.6b: test whether Phi_{T/2}^C is an involutive canonicalizer on K_i^{fib}.
+```
+
+Since `(Phi_{T/2}^C)^2=M_i=I` on the kernel, the half-period map may carry a
+meaningful `+/-` split connected to the original `alpha_I` twist. This is a
+paper-level exploration only. It is not required for the rank count and should
+not block v0.3h-final.
+
+Updated v0.3h-final posture:
+
+1. `Gamma_i^T=0` entry-wise by `Fix(F_beta)` isotropy, once operator-level
+   `F_beta` preservation of `(partial_epsilon M_i)_T` is proved.
+2. `Gamma_i=Gamma_i^E` is the `c_i x c_i` bilinear form on
+   `F_beta`-even standard multiplicity space.
+3. `d_i=rank_floor(Gamma_i)` is the basis-invariant count.
+4. G2.4 anchor independence is rank invariance under congruence.
+5. G2.5 floor formula survives, but `k_gamma` / `k_int` require a
+   pre-registered sentinel calibration receipt before running.
+6. G2.6d closes the operational basis question: rank-only for the count,
+   scalar diagonals as diagnostics with basis convention recorded.
+7. Remaining paper chores: cite G2.1/G2.2 and replace the old Krein flag with a
+   degeneracy / bimodality flag for `(partial_epsilon M_i)_E` or `Gamma_i`
+   singular values.
+
 Rejected as primary:
 
 - **Full continuation in `m3`:** too circular with supplementary-B. It can be a
@@ -1032,7 +1137,9 @@ Rejected as primary:
 | 2026-05-20 | **v0.3f NEUTRAL-BLOCK REFINEMENT.** The neutral quotient is `D3`-equivariant as `N_C = T*u_E + S*X_H`, not wholly trivial. Pre-quotient `K_i^{fib*} ~= a_i*T + b_i*S + c_i*E`; post-quotient `K_i^{fib} ~= (a_i-1)*T + (b_i-1)*S + c_i*E`. The standard-irrep count `c_i` is preserved, so `d_i_candidate=c_i` survives. Still not locked: loop convention, typed half-flow, anchor certification, G1, and G2 crossing-form remain paper gates. |
 | 2026-05-20 | **v0.3g CROSSING-FORM GATE REVIEW.** The branch-validity gate should use the mass-perturbation split `Delta H=Delta H_T+Delta H_E`, with no `S` component because `Delta H` is `F_beta`-even. Not locked. The scalar `gamma_i^(k)` recipe is premature when `c_i>1`; define the quotient Floquet crossing form on the standard-irrep multiplicity space first, likely as a matrix `Gamma_i` with a closure-relative rank gate. Open gates: reduced-coordinate `Delta H`, operator-level no-`S`, quotient crossing form, Schur collapse, E-copy mixing, anchor independence, and empirical `gamma_floor`. |
 | 2026-05-20 | **v0.3h RANK-MATRIX / G2.6 PREP.** The branch-validity object is now `Gamma_i`, the `c_i x c_i` crossing matrix on the `F_beta`-even standard sector, with `d_i=rank_floor(Gamma_i)` as the structural target. New gate G2.6: prove/test symplectic block-orthogonality of the `E` copies. If it holds, the scalar rule is the operating special case; if it fails, `Gamma_i` has off-diagonal symplectic/T contributions and full matrix rank is mandatory. Receipt schema must include the full matrix, singular values, rank, `gamma_floor`, and a `symplectic_block_orthogonal_E` flag from the E-isotypic omega-Gram matrix. |
-| (next)     | Draft v0.3h as the rank-matrix + G2.6 lemma: formalize `Gamma_i`, prove/counter-prove E-block symplectic orthogonality, settle anchor independence and `gamma_floor`, and keep the scratchpad degeneracy track quarantined until empirical degeneracy appears. |
+| 2026-05-20 | **v0.3h DRAFT REVIEW.** Rank-matrix formulation survives, but the proposed G2.6 closure via an `M_i+sigma3` Floquet basis is invalid on `K_i^{fib}` because `K_i^{fib}=ker(M_i-I)/N_i` and `M_i` is identity there. Cleaner result: `Gamma_i^T=0` for all entries if `(partial_epsilon M_i)_T` preserves `Fix(F_beta)`, because `Fix(F_beta)` is isotropic for anti-symplectic `F_beta`. Thus G2.6 is reframed as a basis-conditioning / scalar-interpretation diagnostic, not the proof of T-collapse. Anchor invariance should be stated as rank under congruence; `gamma_floor` remains proposed pending pre-registered sentinel calibration. |
+| 2026-05-20 | **v0.3h G2.6D DISPOSITION.** Operational basis question closes by not canonicalizing for the count: `d_i=rank_floor(Gamma_i)` is basis-invariant, while per-block diagonal gammas are basis-dependent diagnostics only. `Phi_{T/2}^C` as an involutive kernel canonicalizer (`G2.6b`) is retained as a paper-level follow-up, not a blocker. Locked shape: `Gamma_i^T=0` via anti-symplectic `Fix(F_beta)` isotropy; `Gamma_i=Gamma_i^E`; anchor changes act by congruence; `gamma_floor` formula survives but constants need pre-registered sentinel calibration. Remaining chores: cite G2.1/G2.2 and replace old Krein-in-`M_i` language with degeneracy/bimodality of `(partial_epsilon M_i)_E` or `Gamma_i` singular values. |
+| (next)     | Draft v0.3h-final from the G2.6d posture: prove operator-level `F_beta` preservation, state rank-only `Gamma_i`, record scalar diagnostics as basis-dependent, specify anchor congruence and `gamma_floor` sentinel calibration, and stage no empirical run until that calibration receipt is written. |
 
 ---
 

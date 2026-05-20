@@ -972,3 +972,123 @@ The scratchpad coupling conjecture remains quarantined and is eligible only as
 a degeneracy diagnostic if `Gamma_i` has near-zero singular directions. No
 monodromy code is authorized until v0.3h is written as a paper lemma with G2.6,
 anchor independence, and the floor specified.
+
+## 17. v0.3h draft review: rank survives, G2.6 reframed, 2026-05-20
+
+The v0.3h draft's rank-matrix object survives:
+
+```text
+Gamma_i^(k,k') := omega(xi_k, (partial_epsilon M_i) xi_k')
+d_i            := rank_floor(Gamma_i)
+```
+
+But the proposed proof of G2.6 does not close as written. It diagonalizes
+`M_i` on the `E`-isotypic part of `K_i^{fib}`. That cannot be the canonical
+split, because:
+
+```text
+K_i^{fib} = ker(M_i - I) / N_i
+```
+
+so `M_i` acts as the identity on the space being counted. There are no distinct
+Floquet multipliers inside `K_i^{fib}` to choose an `M_i+sigma3` basis. If a
+receipt records `M_i_E_floquet_multipliers`, that field must refer to the
+ambient E-isotypic variational spectrum, not to the kernel/multiplicity space
+used for `Gamma_i`.
+
+The better proof is simpler and stronger. For the `T` component:
+
+1. `(partial_epsilon M_i)_T` is `D3`-equivariant, so it commutes with
+   `F_beta`.
+2. Therefore it maps `Fix(F_beta)` to itself.
+3. `F_beta` is anti-symplectic, so `Fix(F_beta)` is isotropic:
+   `omega(u,v)=0` for every pair of `F_beta`-fixed vectors.
+
+Thus:
+
+```text
+Gamma_i^T(k,k') = omega(xi_k, (partial_epsilon M_i)_T xi_k') = 0
+```
+
+for all `k,k'`, including off-diagonals, without any E-block
+symplectic-orthogonality assumption. This makes G2.1 the load-bearing proof:
+we must verify operator-level `F_beta` preservation for the `T` component.
+
+G2.6 should be reframed. It is not needed to make `Gamma_i^T` vanish. It is a
+basis-conditioning and scalar-interpretation diagnostic: if a chosen basis has
+orthogonal E blocks, the diagonal/scalar readouts are easier to explain; if it
+does not, the full SVD rank still gives the basis-invariant count.
+
+Anchor independence also needs one word fixed. A change of `F_beta` anchor
+transports the bilinear form by congruence, not necessarily similarity:
+
+```text
+Gamma_i -> S^T Gamma_i S
+```
+
+Rank is invariant under invertible congruence, so `d_i` remains anchor
+independent once the transport is typed.
+
+G2.5 is still not closed. The proposed `gamma_floor_i` is a good shape, but
+`k_gamma=3` and `k_int=10` need a pre-registered sentinel calibration receipt
+before any run. That calibration can be the first empirical step only after its
+negative/branch conditions are written.
+
+Updated v0.3h-final target:
+
+1. Prove operator-level `F_beta` preservation of `(partial_epsilon M_i)_T`.
+2. Use anti-symplectic fixed-space isotropy to prove `Gamma_i^T=0`.
+3. Define `Gamma_i` as a basis-invariant matrix/rank object on the
+   `F_beta`-even standard multiplicity space.
+4. Treat E-block orthogonality as diagnostic/conditioning, not as the lock.
+5. Correct anchor-independence to rank under congruence.
+6. Pre-register the `gamma_floor` sentinel calibration before any code.
+
+## 18. v0.3h G2.6d disposition, 2026-05-20
+
+The corrected operational stance is:
+
+```text
+G2.6d: do not canonicalize for the count.
+```
+
+`Gamma_i` is the binding object and its rank is invariant under basis changes
+on the `F_beta`-even standard multiplicity space. Therefore:
+
+```text
+d_i = rank_floor(Gamma_i)
+```
+
+is the count. The diagonal entries `Gamma_i^(k,k)` are basis-dependent scalar
+diagnostics. They can be recorded for debugging and human reading, but only with
+the basis convention in the manifest, and they do not enter `K_facet_v0.3`.
+
+The optional paper follow-up is:
+
+```text
+G2.6b: Phi_{T/2}^C as an involutive canonicalizer on K_i^{fib}.
+```
+
+Because `(Phi_{T/2}^C)^2=M_i=I` on the kernel, the half-period map could give a
+meaningful `+/-` split tied to `alpha_I`. This is the natural research follow-up
+for a physically meaningful per-block diagnostic, but it is not required for
+the rank count.
+
+Locked / nearly locked landscape:
+
+- `Gamma_i^T=0` entry-wise by anti-symplectic `Fix(F_beta)` isotropy, once
+  operator-level `F_beta` preservation of `(partial_epsilon M_i)_T` is written.
+- `Gamma_i=Gamma_i^E` as the `c_i x c_i` bilinear form on the
+  `F_beta`-even standard multiplicity space.
+- `d_i=rank_floor(Gamma_i)` as the basis-invariant count.
+- G2.4 anchor independence by rank under congruence.
+- G2.5 formula shape survives; constants `k_gamma` and `k_int` still require a
+  pre-registered sentinel calibration receipt before any run.
+
+Pending:
+
+- G2.1/G2.2 citation and operator-level write-up.
+- Replace the incorrect "Krein in `M_i`" flag with degeneracy / bimodality of
+  `(partial_epsilon M_i)_E` or `Gamma_i` singular values.
+- Write the sentinel calibration receipt with negative/branch conditions before
+  running it.
