@@ -232,11 +232,16 @@ Remaining honest fork:
   only and must carry the basis convention. Keep `Phi_{T/2}^C` as a possible
   involutive kernel canonicalizer (`G2.6b`) for later paper exploration, not as
   a blocker.
-- Current next paper-only gate: write v0.3h-final with `Gamma_i` as the
-  basis-invariant rank object, T-collapse from anti-symplectic fixed-space
-  isotropy, anchor-change congruence, scalar diagnostics explicitly
-  basis-dependent, and pre-registered `gamma_floor` calibration before any
-  monodromy code.
+- Sentinel pre-registration: v0.3i is the first empirical step, but only after
+  its receipt is accepted. Primary sentinel `O_62`; backup ladder in
+  canonical-strict period order if `c_i=0`; constants fixed at `k_gamma=3` and
+  `k_int=10`; marginal singular values in
+  `[gamma_floor, k_gamma*gamma_floor]` fail the calibration and halt tuning.
+  Receipt must separate `dE_perturbation_spectral_degeneracy_E` (basis /
+  diagnostic ambiguity) from `gamma_singular_bimodality_clean` (rank-gate
+  ambiguity). No full 21, no supplementary-B, no `K_facet_v0.3` freeze.
+- Current next gate: finalize v0.3i receipt/branch wording, then run only the
+  single sentinel calibration if accepted.
 
 ## Operator Guardrail
 
@@ -253,6 +258,7 @@ Before any future isotrophy run:
    no-`S` proof, full `Gamma_i` matrix/rank rule, T-collapse via
    anti-symplectic `Fix(F_beta)` isotropy, G2.6 as conditioning diagnostic,
    G2.6d rank-only count with scalar diagnostics basis-marked, optional
-   `Phi_{T/2}^C` canonicalizer deferred, anchor congruence, `gamma_floor`
-   calibration receipt, negative, and go/no-go branch before running any
-   monodromy or supplementary-B classification.
+   `Phi_{T/2}^C` canonicalizer deferred, anchor congruence, v0.3i sentinel
+   calibration receipt, two degeneracy flags, negative, and go/no-go branch
+   before running any monodromy or supplementary-B classification. The only
+   empirical authorization after v0.3i acceptance is the one sentinel row.

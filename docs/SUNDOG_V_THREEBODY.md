@@ -886,6 +886,16 @@ cite the routine real-Schur/no-`S` algebra, replace old Krein-in-`M_i` language
 with degeneracy/bimodality of `(partial_epsilon M_i)_E` or `Gamma_i` singular
 values, and pre-register the `gamma_floor` calibration receipt.
 
+The v0.3i calibration scope is now one sentinel row only. Primary sentinel is
+`O_62`; the backup ladder follows canonical-strict period order if `c_i=0`.
+Constants are fixed before the run (`k_gamma=3`, `k_int=10`), and the sentinel
+passes only if the `Gamma_i` singular values avoid the marginal band
+`[gamma_floor, k_gamma*gamma_floor]`. Receipt schema separates
+`dE_perturbation_spectral_degeneracy_E` (basis/scalar diagnostic ambiguity)
+from `gamma_singular_bimodality_clean` (rank-gate ambiguity). v0.3i does not
+authorize the full 21, supplementary-B, or freezing `K_facet_v0.3`; those would
+require a later v0.3j authorization.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

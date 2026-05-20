@@ -1092,3 +1092,86 @@ Pending:
   `(partial_epsilon M_i)_E` or `Gamma_i` singular values.
 - Write the sentinel calibration receipt with negative/branch conditions before
   running it.
+
+## 19. v0.3i sentinel calibration pre-registration, 2026-05-20
+
+The remaining concrete deliverable is a one-row calibration pre-registration.
+It is the smallest empirical move compatible with the rank-matrix posture.
+
+First, separate the two degeneracy flags that v0.3h had conflated:
+
+```text
+dE_perturbation_spectral_degeneracy_E
+  Degenerate spectrum of (partial_epsilon M_i)_E on the E-isotypic sector.
+  This is a basis-choice / scalar-diagnostic flag for G2.6b. It is not a count
+  ambiguity by itself.
+
+gamma_singular_bimodality_clean
+  Clean or marginal singular-value split for Gamma_i. This is the rank-gate
+  flag and therefore count-relevant.
+```
+
+Sentinel choice:
+
+```text
+primary: O_62
+backup:  O_264, O_468, O_574, ... in canonical-strict period order
+```
+
+Rationale: `O_62` is shortest-period among the strict rows and was
+bi-orientationally closure-tight in G.2, so it should minimize accumulation of
+variational integration error. If `O_62` returns `c_i=0`, step through the
+pre-registered ladder until the first `c_i>0` row. If the whole ladder returns
+`c_i=0`, disposition as structural negative: `K_facet_v0.3=0` is forced by the
+catalog, not by calibration failure.
+
+Constants, fixed before any sentinel:
+
+```text
+k_gamma = 3
+k_int   = 10
+```
+
+The sentinel verifies separator behavior; it does not tune either constant.
+
+Bimodality falsifier:
+
+```text
+above:    sigma_j > k_gamma * gamma_floor
+below:    sigma_j < gamma_floor
+marginal: gamma_floor <= sigma_j <= k_gamma * gamma_floor
+```
+
+If the marginal band is nonempty, v0.3i fails and halts. The successor work is a
+better floor/error analysis, not row-wise retuning.
+
+Authorized by v0.3i only after this receipt is accepted:
+
+```text
+one sentinel variational integration
+rtol = atol = 1e-12
+n_samples = 1009
+phase_grid = 73
+receipt dir = results/isotrophy/k-facet-v03-sentinel-calibration-O62/
+```
+
+Receipt schema:
+
+```text
+Gamma_i_matrix
+Gamma_i_singular_values
+gamma_floor_i
+gamma_singular_to_floor_i
+d_i
+dE_perturbation_spectral_degeneracy_E
+gamma_singular_bimodality_clean
+diagonal_gamma_i_k        # diagnostic only
+branch_status_i_k         # diagnostic only
+basis_convention
+gate_version = "v0.3i"
+```
+
+v0.3i does not authorize more rows, supplementary-B, or freezing
+`K_facet_v0.3`. A pass allows a separate v0.3j full-21 authorization. A fail is
+structured: marginal singular values mean floor analysis, while all-ladder
+`c_i=0` means a structural negative.
