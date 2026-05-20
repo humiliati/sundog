@@ -786,9 +786,10 @@ six remaining blockers:
 4. The partner anchor is fixed by the conjugate symmetry
    `P12 F_beta P12^{-1}`, not automatically by the same parent-frame
    `F_beta`; name that operator in the pair proof.
-5. The neutral quotient must be `D3`-equivariant. `X_H` is plausibly trivial,
-   but the generalized energy vector `u_E` needs a normalization/proof so the
-   quotient is independent of its kernel ambiguity.
+5. The neutral quotient must be `D3`-equivariant. The next refinement shows it
+   should split as `T*u_E + S*X_H`, not as a wholly trivial block; `u_E` still
+   needs a normalization/proof so the quotient is independent of its kernel
+   ambiguity.
 6. `d_i_candidate=c_i` is a representation candidate, not yet a branch count;
    it still needs G2/crossing-form validation.
 
@@ -800,8 +801,45 @@ premise of v0.3.
 
 Revised next gate: choose the loop convention, certify the `F_beta` and
 conjugate partner anchors, build the anchored `D3` representation on
-`K_i^{fib}`, prove the `D3`-equivariant neutral quotient, and then state
-`d_i_candidate=c_i` with a crossing-form branch-validity gate.
+`K_i^{fib}`, prove the `D3`-equivariant neutral quotient as
+`T*u_E + S*X_H` with no `E` leakage, and then state `d_i_candidate=c_i` with a
+crossing-form branch-validity gate.
+
+### v0.3f neutral-block refinement
+
+The neutral block does not sit in one trivial isotypic. At the `F_beta` fixed
+anchor:
+
+```text
+X_H(p_i^F):  sigma3=+1, F_beta=-1  -> sign irrep S
+u_E^C:       sigma3=+1, F_beta=+1  -> trivial irrep T   (with a normalization rule)
+```
+
+Therefore:
+
+```text
+pre-quotient:   K_i^{fib*} ~= a_i*T + b_i*S + c_i*E
+neutral block:  N_C ~= T*u_E^C + S*X_H
+post-quotient:  K_i^{fib}  ~= (a_i-1)*T + (b_i-1)*S + c_i*E
+```
+
+This sharpens G3 rather than changing the candidate count: the standard-irrep
+count `c_i` is preserved because neither neutral direction lies in an `E`
+block. The structural sector after quotient is `(a_i-1)*T`; `(b_i-1)*S` is a
+separate `F_beta`-odd, `sigma3`-trivial deformation sector excluded by the
+ansatz convention. `d_i_candidate=c_i` survives, pending G1/G2/G3 and the
+crossing-form gate.
+
+Updated v0.3f gate order:
+
+1. declare the based-loop convention at the `F_beta` fixed anchor `p_i^F`;
+2. type the half-flow composition explicitly, never `(Phi_{T/2})^2` without a
+   transport;
+3. certify parent and conjugate partner anchors, recording any discrete anchor
+   choice;
+4. carry `N_C = T*u_E + S*X_H` through the `D3` quotient and prove no `E`
+   leakage;
+5. reserve G2 crossing form as the per-row branch-validity check.
 
 Only after the pair-orbit / dihedral-representation lemma and the
 candidate-count gates are written should any code integrate variational
@@ -875,7 +913,8 @@ Rejected as primary:
 | 2026-05-20 | **v0.3c DERIVATION REVIEW.** The loop-to-fiber draft was accepted as the right direction but not frozen. Blockers: neutral quotient must use `span{X_H,u_E}` with `(M-I)u_E=cX_H`; `G_i` must be built as a typed fiber map before claiming commutation; `G_i^2` must be computed after the cocycle is chosen; structural removal must be a quotient/reduction through `B_i^+`; and `1/2*dim` is only a candidate count until semisimple/crossing-form/nondegeneracy gates pass. No monodromy code authorized. |
 | 2026-05-20 | **v0.3d TYPED TRANSPORT RESPONSE REVIEW.** The typed lemma likely kills the canonical single-fiber `G_i` object and proposes a pair-orbit alpha-fixed kernel instead. Not locked. Blockers: `A_F` maps `t` to `-t` rather than fixing every point; alpha lands in the shifted partner fiber; `M^{-1/2}` should be replaced by typed half-flow; the alpha-fixed graph must descend through `N_i`; `<sigma3,F_beta>` must be treated as a real dihedral representation, not two commuting masks; and `1/2*dim` is pending again because `A_F`-even sectors are anti-symplectic fixed sectors. |
 | 2026-05-20 | **v0.3e PAIR-ORBIT / DIHEDRAL DRAFT 2 REVIEW.** Best candidate shape so far: anchored `D3=<sigma3,F_beta>` representation on `K_i^{fib}` and `d_i_candidate=c_i`, the multiplicity of the standard real 2D irrep. Not locked. Blockers: based-loop convention still unresolved; the half-flow reduction to `M_i` is mistyped without phase transport/free-loop convention; `F_beta` and conjugate partner anchors must be certified; neutral quotient must be `D3`-equivariant; and `c_i` needs crossing-form branch validation. |
-| (next)     | Write the v0.3e gate lemma: choose the loop convention, certify anchors, build the anchored `D3` representation on `K_i^{fib}`, prove the `D3`-equivariant neutral quotient, and state `d_i_candidate=c_i` with G2/crossing-form validity gates. |
+| 2026-05-20 | **v0.3f NEUTRAL-BLOCK REFINEMENT.** The neutral quotient is `D3`-equivariant as `N_C = T*u_E + S*X_H`, not wholly trivial. Pre-quotient `K_i^{fib*} ~= a_i*T + b_i*S + c_i*E`; post-quotient `K_i^{fib} ~= (a_i-1)*T + (b_i-1)*S + c_i*E`. The standard-irrep count `c_i` is preserved, so `d_i_candidate=c_i` survives. Still not locked: loop convention, typed half-flow, anchor certification, G1, and G2 crossing-form remain paper gates. |
+| (next)     | Write the v0.3f gate lemma: declare the based-loop convention at `p_i^F`, type the half-flow composition, certify parent/conjugate partner anchors, carry `N_C=T*u_E+S*X_H` through the `D3` quotient with no `E` leakage, and reserve G2 crossing form as the per-row branch-validity gate. |
 
 ---
 
