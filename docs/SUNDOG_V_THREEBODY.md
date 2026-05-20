@@ -814,8 +814,14 @@ F_beta-closure-tight rows; the structural cocycle is manifest-level
 `F_beta = ((12), tau-active, Rpi)`, not a per-row tau flag and not a partner
 orbit IVP. Any continued v0.3 must therefore derive the induced-representation
 functional using this uniform F_beta-conjugation relation before monodromy code
-or supplementary-B clustering. K2-K4 remain paused, and this remains not
-evidence for the theorem or for Phase 13-15.
+or supplementary-B clustering. A follow-up derivation review accepted the
+loop-to-fiber direction but blocked code until a typed transport lemma is
+written: the neutral block must be `span{X_H,u_E}`, `G_i` must be constructed
+as an explicit fiber map, `G_i^2` must be computed after the cocycle is chosen,
+structural subtraction must be a quotient/reduction through `B_i^+`, and
+`1/2*dim` is only a candidate count until the semisimple/crossing-form gates
+pass. K2-K4 remain paused, and this remains not evidence for the theorem or for
+Phase 13-15.
 
 ### Cross-Substrate Hand-Offs
 

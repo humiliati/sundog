@@ -515,32 +515,34 @@ formula over the `S3` group orbit of `C_i`. The v0.3 formula cannot be frozen
 until the 21 rows are split into the endomorphism and induced-representation
 cases.
 
-Candidate endomorphism-case kernel to derive, not yet registered:
+Post-review status: the simple endomorphism-case kernel below is historical
+and **not** registered. v0.3a later found `0` endomorphism rows and 21
+induced-representation rows; v0.3c then found that even the induced formula
+cannot be flattened until the typed transport lemma closes. The current
+paper-only target is therefore:
 
 ```text
-M_i := monodromy matrix of choreography C_i at m3 = 1
-V_PT,i := ker(G_i - I)
-N_i := span{ ydot(0), J grad H(y(0)) }       # forced Hamiltonian neutral block
-B_i := (F_beta-even) cap (sigma3-trivial)    # structural facet continuation
-K_i := ker( (M_i - I) |_{V_PT,i / (N_i + B_i)} )
-d_i := multiplicity_rule(K_i)                # pending, likely half-dimension
-K_facet_v0.3 := sum_i d_i
+typed transport lemma first
+neutral block: N_i := span{ X_H(y_i(0)), u_E }, with (M_i - I)u_E = c_i X_H
+construct G_i as a typed fiber map before claiming [M_i,G_i]=0
+compute G_i^2 after the cocycle is chosen
+define B_i^+ := B_i cap K_i^+ before quotient/reduction
+d_i_candidate := (1/2) * dim_R K_i^{PT}, then gate by semisimplicity,
+                 crossing-form nondegeneracy, and symplectic nondegeneracy
 ```
 
 The derivation is the next deliverable. It must specify:
 
-1. `G_i = rho((12)) o Phi_{T/2}` and the proof or counter-proof of
-   `[M_i, G_i] = 0` for each case;
-2. the cheap `(12)`-up-to-gauge case split for the 21 strict choreographies:
-   endomorphism of `C_i` versus induced representation on the group orbit;
-3. why the structural removal is exactly
-   `(F_beta-even) cap (sigma3-trivial)`, not a blanket deletion of all
-   `F_beta`-even directions;
-4. the Hamiltonian neutral quotient `span{ydot(0), J grad H}`;
-5. the `+1` multiplicity rule, including whether a pitchfork branch contributes
-   `dim K_i` or `1/2 dim K_i`;
-6. the closure-relative tolerance for deciding the `+1` kernel, reusing the
-   G.2 ratio-to-floor discipline rather than an absolute threshold.
+1. the typed fibers and maps (`A_F`, `A_tau`, `A_Rpi`, `P12`, `Phi_t`,
+   `V_0`, `V_h`, `V'_0`, `V'_h`);
+2. reversible identities with domains and codomains;
+3. the alpha-induced map on `V_0` through the partner fiber;
+4. proof or refutation of `G_i^2 = I`;
+5. only then, the proof or counter-proof of `[M_i,G_i]=0`;
+6. the structural `B_i^+` quotient/reduction;
+7. the corrected Hamiltonian neutral quotient through `u_E`;
+8. the `+1` candidate multiplicity and manual-review gates, using
+   closure-relative tolerance rather than absolute thresholds.
 
 ### v0.3a case-split gate: `tau12_I ∪ tau12_Z`
 
@@ -682,9 +684,50 @@ F_beta is structural for all 21 rows, so tau is uniformly active at the schema
 level. Per-row variability belongs only to any additional `(R_i, phi_i)` gauge
 fit layered on top of the structural cocycle.
 
-Only after the induced-representation derivation is written should any code
-integrate variational equations or freeze `K_facet_v0.3`. The frozen output
-would be the 21 per-choreography integers and their sum, recorded before any
+### v0.3c derivation review: typed transport lemma gate
+
+A draft loop-to-fiber reduction and multiplicity-parity rule was reviewed on
+2026-05-20 and **not frozen**. The review accepted the direction but converted
+five points into no-code blockers:
+
+1. The neutral quotient must use the generalized Hamiltonian unit-multiplier
+   block, not `span{ydot, J*grad H}`. Preferred form:
+
+   ```text
+   N_i := span{ X_H(y_i(0)), u_E }
+   (M_i - I) u_E = c_i X_H(y_i(0)),  c_i != 0
+   ```
+
+2. The alpha-induced `G_i` must be constructed as a typed map between fibers
+   before asserting `[M_i,G_i]=0`; `Phi_{T/2}` is not a same-fiber endomorphism
+   until the transport cocycle is specified.
+3. `G_i^2 = I` must be computed from the chosen cocycle, not inherited only
+   from loop-level `alpha_I^2 = e`.
+4. Structural removal must be written through `B_i^+ := B_i cap K_i^+` and then
+   either a quotient `K_i^+ / B_i^+` or symplectic reduction
+   `((B_i^+)^omega) / B_i^+`, depending on the structure proven by the typed
+   lemma.
+5. `d_i_candidate = (1/2) * dim_R K_i^{PT}` is only a candidate branch count.
+   It becomes `d_i` only for rows whose `+1` block is semisimple beyond `N_i`,
+   whose Lyapunov-Schmidt crossing form is nondegenerate, and whose
+   `K_i^{PT}` symplectic structure is nondegenerate; otherwise the row is a
+   manual-review / refined-rule row.
+
+Notation lock for the next derivation: write the structural action as
+`A_F y_i(-s) = y_i(s)`, with `A_F` the phase-space linear part of `F_beta`, so
+time reversal stays explicit.
+
+The next artifact is a one-page typed transport lemma defining `A_F`, `A_tau`,
+`A_Rpi`, `P12`, `Phi_t := Dphi_t(y_i(0))`, and the fibers `V_0`, `V_h`,
+`V'_0`, `V'_h`; stating reversible identities with domains/codomains;
+constructing the alpha-induced map on `V_0`; and proving or refuting
+`G_i^2 = I`. If that lemma leaves non-canonical holonomy, v0.3 must not be
+flattened into a single-fiber `d_i`.
+
+Only after the typed transport lemma and the candidate-count gates are written
+should any code integrate variational equations or freeze `K_facet_v0.3`. The
+frozen output would be the 21 per-choreography candidate integers, manual-review
+flags if any gates fail, and their gated sum, recorded before any
 supplementary-B clustering.
 
 Rejected as primary:
@@ -750,7 +793,8 @@ Rejected as primary:
 | 2026-05-19 | **v0.3a PROPER-PARITY CASE SPLIT.** The first `tau12` receipt tested the proper spatial candidate only (`tau12_I`, then named `tau12_gauge`): 0 proper-endomorphism, 21 induced, 0 marginal review; best non-tight residual/closure = `2.815e7`. Receipt: `results/isotrophy/k-facet-v03-tau12-case-split-21strict/`. |
 | 2026-05-20 | **v0.3a PARITY-UNION CASE SPLIT COMPLETE.** `npm run isotrophy:tau12:cases` ran the locked `{tau12_I, tau12_Z}` detector on the 21 strict rows: 0 endomorphism, 21 induced-representation, 0 marginal review. `tau12_Z` won the residual for 6 rows but did not move any row near closure; best non-tight residual/closure remains `2.815e7`. Receipt: `results/isotrophy/k-facet-v03-tau12-parity-union-21strict/`. |
 | 2026-05-20 | **v0.3b F_beta PAIR-ID COMPLETE.** `npm run isotrophy:fbeta:pair-id` confirmed 21 singleton `(E, |L|)` groups, 0 inside-catalog bare-`(12)` partners, 21 catalog-asymmetric rows, and 21/21 F_beta-closure-tight rows (`F_beta_to_closure` range `0.283..0.804`). The receipt records `F_beta = ((12), tau-active, Rpi)` as a manifest-level structural cocycle: no per-row tau flag and no partner-orbit IVP. Receipt: `results/isotrophy/k-facet-v03-fbeta-pair-id-21strict/`. |
-| (next)     | v0.3 derivation — write the induced-representation formula over the `S3` group orbit, structural `(F_beta-even) cap (sigma3-trivial)` removal, neutral-mode quotient, `+1` multiplicity rule, and closure-relative tolerance before any monodromy code or supplementary-B classification. |
+| 2026-05-20 | **v0.3c DERIVATION REVIEW.** The loop-to-fiber draft was accepted as the right direction but not frozen. Blockers: neutral quotient must use `span{X_H,u_E}` with `(M-I)u_E=cX_H`; `G_i` must be built as a typed fiber map before claiming commutation; `G_i^2` must be computed after the cocycle is chosen; structural removal must be a quotient/reduction through `B_i^+`; and `1/2*dim` is only a candidate count until semisimple/crossing-form/nondegeneracy gates pass. No monodromy code authorized. |
+| (next)     | Write the typed transport lemma: define the phase-space maps and fibers, state reversible identities with domains/codomains, construct the alpha-induced map on `V_0`, prove or refute `G_i^2=I`, then revisit `[M_i,G_i]`, `B_i^+`, and multiplicity. |
 
 ---
 
