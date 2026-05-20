@@ -121,25 +121,32 @@ quotiented, and whether a `+1` pitchfork contributes `dim` or `1/2 dim`. If
 that derivation is fuzzy, v0.3 is not ready.
 
 The first allowed pre-derivation run is only the case-split receipt. It tests
-Condition 3, not strict `alpha_I` and not the K1 SO(3)-absorbed shadow:
+Condition 3, not strict `alpha_I` and not the K1 SO(3)-absorbed shadow. It must
+carry both explicit spatial parity candidates:
 
 ```text
-tau12_gauge := ((12), free phi, no time reversal, identity spatial, SO(3) gauge-min)
+tau12_I := ((12), free phi, no time reversal, spatial I, SO(3) gauge-min)
+tau12_Z := ((12), free phi, no time reversal, spatial Z, SO(3) gauge-min)
 ```
 
 For each of the 21 strict rows, persist `R_i`, `phi_i`, `phi_i/(T/2)`,
-closure-relative residual, and rotation angle. Closure-tight rows are
-endomorphism candidates; `O(1)` rows are induced-representation candidates. If
-the split is not bimodal, stop and write the marginal category before any
-monodromy work.
+spatial parity, closure-relative residual, and rotation angle. Closure-tight
+rows are endomorphism candidates; `O(1)` rows are induced-representation
+candidates. If the split is not bimodal, stop and write the marginal category
+before any monodromy work.
 
-Receipt: `npm run isotrophy:tau12:cases` completed on 2026-05-19 in `120.61 s`
-and found **0 endomorphism cases, 21 induced-representation cases, 0 marginal
-reviews**. The best non-tight residual was still `2.815e7` times closure. So
-v0.3, if continued, is not a mixed endomorphism/induced derivation for the
-current catalog; it is induced-representation-only across all 21 strict
-choreographies. The receipt is protected at
+Proper-parity receipt: the first `tau12_I`-only run completed on 2026-05-19 in
+`120.61 s` and found **0 proper-endomorphism cases, 21 induced-representation
+cases, 0 marginal reviews**. Receipt:
 `results/isotrophy/k-facet-v03-tau12-case-split-21strict/`.
+
+Parity-union receipt: `npm run isotrophy:tau12:cases` completed on 2026-05-20
+in `177.72 s` and found **0 endomorphism cases, 21 induced-representation
+cases, 0 marginal reviews** across `{tau12_I, tau12_Z}`. `tau12_Z` won the
+residual for 6 rows, but the best non-tight residual remained `2.815e7` times
+closure. So v0.3, if continued, is induced-representation-only across all 21
+strict choreographies. The parity-union receipt is protected at
+`results/isotrophy/k-facet-v03-tau12-parity-union-21strict/`.
 
 Rejected as primary:
 

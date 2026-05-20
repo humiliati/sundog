@@ -50,6 +50,7 @@ DEFAULT_IDENTITY_ROTATION_TOLERANCE = 1e-6
 DEFAULT_EXPECTED_SIGMA_COUNT = None
 DEFAULT_CLOSURE_FLOOR = 1e-15
 DEFAULT_KFACET_GENERATORS = ("alpha_I", "beta_I", "gamma_Z", "delta_Z", "F_beta", "F_delta")
+DEFAULT_TAU12_GENERATORS = ("tau12_I", "tau12_Z")
 DEFAULT_KFACET_STRICT_INDICES = (
     62,
     64,
@@ -120,6 +121,9 @@ GENERATORS = {
     "sigma3_opposite_inverse": Generator(
         "sigma3_opposite_inverse", "choreography", PERMUTATIONS["cycle123"], 2.0 / 3.0, False, I3
     ),
+    "tau12_I": Generator("tau12_I", "case_split", PERMUTATIONS["swap12"], 0.0, False, I3),
+    "tau12_Z": Generator("tau12_Z", "case_split", PERMUTATIONS["swap12"], 0.0, False, Z_MIRROR),
+    # Back-compat alias for the first proper-parity case-split receipt.
     "tau12_gauge": Generator("tau12_gauge", "case_split", PERMUTATIONS["swap12"], 0.0, False, I3),
     "alpha_I": Generator("alpha_I", "alpha", PERMUTATIONS["swap12"], 1.0 / 2.0, False, I3),
     "beta_I": Generator("beta_I", "beta", PERMUTATIONS["swap12"], 0.0, True, I3),
@@ -926,10 +930,26 @@ def command_kfacet_predict(args: argparse.Namespace) -> int:
     return 0
 
 
-def tau12_case_record(integrated: IntegratedOrbit, residual: dict[str, object], closure_floor: float) -> dict[str, object]:
-    phase = float(residual["phase"])
+def tau12_spatial_parity(generator_name: str) -> int:
+    if generator_name in {"tau12_I", "tau12_gauge"}:
+        return 1
+    if generator_name == "tau12_Z":
+        return -1
+    raise ValueError(f"not a tau12 case-split generator: {generator_name}")
+
+
+def tau12_case_record(
+    integrated: IntegratedOrbit,
+    residuals: dict[str, dict[str, object]],
+    generator_names: list[str],
+    closure_floor: float,
+) -> dict[str, object]:
     period = integrated.row.period
-    return {
+    closure_scale = max(integrated.closure_position_inf, closure_floor)
+    best_name = min(generator_names, key=lambda name: float(residuals[name]["residual_inf"]))
+    best = residuals[best_name]
+    phase = float(best["phase"])
+    record: dict[str, object] = {
         "label": integrated.row.label,
         "index": integrated.row.index,
         "line_no": integrated.row.line_no,
@@ -940,16 +960,30 @@ def tau12_case_record(integrated: IntegratedOrbit, residual: dict[str, object], 
         "closure_position_inf": integrated.closure_position_inf,
         "closure_velocity_inf": integrated.closure_velocity_inf,
         "integration_seconds": integrated.elapsed_seconds,
-        "tau12_residual_inf": float(residual["residual_inf"]),
-        "tau12_residual_rms": float(residual["residual_rms"]),
-        "tau12_to_closure": float(residual["residual_inf"]) / max(integrated.closure_position_inf, closure_floor),
+        "tau12_best_generator": best_name,
+        "tau12_spatial_parity": tau12_spatial_parity(best_name),
+        "tau12_residual_inf": float(best["residual_inf"]),
+        "tau12_residual_rms": float(best["residual_rms"]),
+        "tau12_to_closure": float(best["residual_inf"]) / closure_scale,
         "phi": phase,
         "phi_over_T": phase / period,
         "phi_over_half_T": phase / (0.5 * period),
-        "rotation_angle_rad": float(residual["rotation_angle_rad"]),
-        "det_rotation": float(residual["det_rotation"]),
-        "R_i": str(residual["rotation_matrix"]),
+        "rotation_angle_rad": float(best["rotation_angle_rad"]),
+        "det_rotation": float(best["det_rotation"]),
+        "R_i": str(best["rotation_matrix"]),
     }
+    for name in generator_names:
+        residual = residuals[name]
+        candidate_phase = float(residual["phase"])
+        record[f"{name}_residual_inf"] = float(residual["residual_inf"])
+        record[f"{name}_to_closure"] = float(residual["residual_inf"]) / closure_scale
+        record[f"{name}_phi"] = candidate_phase
+        record[f"{name}_phi_over_T"] = candidate_phase / period
+        record[f"{name}_phi_over_half_T"] = candidate_phase / (0.5 * period)
+        record[f"{name}_rotation_angle_rad"] = float(residual["rotation_angle_rad"])
+        record[f"{name}_det_rotation"] = float(residual["det_rotation"])
+        record[f"{name}_R_i"] = str(residual["rotation_matrix"])
+    return record
 
 
 def classify_tau12_records(
@@ -1011,13 +1045,20 @@ def command_tau12_cases(args: argparse.Namespace) -> int:
         missing_indices = sorted(requested_indices - selected_indices)
         if missing_indices:
             raise SystemExit(f"requested indices not found: {','.join(str(index) for index in missing_indices)}")
+    generator_names = parse_generator_names(args.generators)
+    not_tau12 = [name for name in generator_names if not name.startswith("tau12_")]
+    if not_tau12:
+        raise SystemExit(f"tau12-cases accepts only tau12_* generators: {', '.join(not_tau12)}")
 
     started = time.perf_counter()
     records: list[dict[str, object]] = []
     for row_index, row in enumerate(selected, start=1):
         integrated = integrate_orbit(row, args.rtol, args.atol, args.max_step_fraction)
-        residual = residual_for_generator(integrated, GENERATORS["tau12_gauge"], args.n_samples, args.phase_grid)
-        records.append(tau12_case_record(integrated, residual, args.closure_floor))
+        residuals = {
+            name: residual_for_generator(integrated, GENERATORS[name], args.n_samples, args.phase_grid)
+            for name in generator_names
+        }
+        records.append(tau12_case_record(integrated, residuals, generator_names, args.closure_floor))
         if args.report_every and row_index % args.report_every == 0:
             tight = sum(1 for record in records if float(record["tau12_to_closure"]) <= args.sigma_closure_multiple)
             print(
@@ -1047,11 +1088,31 @@ def command_tau12_cases(args: argparse.Namespace) -> int:
         "sigma_closure_multiple": args.sigma_closure_multiple,
         "induced_closure_multiple": args.induced_closure_multiple,
         "bimodal_gap_ratio_required": args.bimodal_gap_ratio,
-        "generator": "tau12_gauge",
-        "condition": "exists R in SO(3), free phi in S1: P12 C_i(t) = R C_i(t + phi)",
+        "generators": generator_names,
+        "condition": "exists S in {I,Z}, R in SO(3), free phi in S1: P12 S C_i(t) = R C_i(t + phi)",
+        "proper_endomorphism_count": sum(
+            1
+            for record in records
+            if record["tau12_case"] == "endomorphism" and int(record["tau12_spatial_parity"]) == 1
+        ),
+        "proper_endomorphism_labels": [
+            record["label"]
+            for record in records
+            if record["tau12_case"] == "endomorphism" and int(record["tau12_spatial_parity"]) == 1
+        ],
+        "improper_endomorphism_count": sum(
+            1
+            for record in records
+            if record["tau12_case"] == "endomorphism" and int(record["tau12_spatial_parity"]) == -1
+        ),
+        "improper_endomorphism_labels": [
+            record["label"]
+            for record in records
+            if record["tau12_case"] == "endomorphism" and int(record["tau12_spatial_parity"]) == -1
+        ],
         "elapsed_seconds": time.perf_counter() - started,
         "note": (
-            "v0.3 case-split gate only: endomorphism vs induced-representation selector. "
+            "v0.3 case-split gate only: endomorphism vs induced-representation selector over explicit spatial parity candidates. "
             "Not a K_facet value and not monodromy evidence."
         ),
         **case_summary,
@@ -1218,6 +1279,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     tau12.add_argument("--sort-period", action="store_true", default=False)
     tau12.add_argument("--no-sort-period", dest="sort_period", action="store_false")
+    tau12.add_argument("--generators", default=",".join(DEFAULT_TAU12_GENERATORS))
     tau12.add_argument("--n-samples", type=int, default=1009)
     tau12.add_argument("--phase-grid", type=int, default=73)
     tau12.add_argument("--rtol", type=float, default=DEFAULT_RTOL)

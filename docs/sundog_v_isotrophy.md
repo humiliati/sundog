@@ -542,7 +542,7 @@ The derivation is the next deliverable. It must specify:
 6. the closure-relative tolerance for deciding the `+1` kernel, reusing the
    G.2 ratio-to-floor discipline rather than an absolute threshold.
 
-### v0.3a case-split gate: `tau12_gauge`
+### v0.3a case-split gate: `tau12_I ∪ tau12_Z`
 
 Before any monodromy or `K_facet_v0.3` freeze, split the 21 strict
 choreographies by whether the equal-mass transposition acts on the
@@ -557,76 +557,93 @@ Keep three conditions separate:
    The same fixed-half-period idea with a free SO(3) rotation; this is the
    `beta_I` plus `Rpi` absorption artifact quarantined by K1.
 3. **Gauge-class transposition selector (new).**
-   Does there exist `R in SO(3)` and free phase `phi in S1` such that
-   `P12 C_i(t) = R C_i(t + phi)`? This is not a piano-trio test. It asks
+   Does there exist explicit spatial parity `S in {I, Z}`, proper rotation
+   `R in SO(3)`, and free phase `phi in S1` such that
+   `P12 S C_i(t) = R C_i(t + phi)`? This is not a piano-trio test. It asks
    whether `(12)` is an endomorphism of the choreography's geometric gauge
-   class, so the linearized twist can act on `T_{C_i}`. If not, the v0.3
-   formula must use the induced representation over the `S3` group orbit.
+   class through either the proper or improper O(3) parity class, while keeping
+   chirality explicit. If not, the v0.3 formula must use the induced
+   representation over the `S3` group orbit.
 
-The detector is a single new generator:
+The detector candidate set is:
 
 ```text
-tau12_gauge := ((12), free phi, no time reversal, identity spatial, SO(3) gauge-min)
+tau12_I := ((12), free phi, no time reversal, spatial I, SO(3) gauge-min)
+tau12_Z := ((12), free phi, no time reversal, spatial Z, SO(3) gauge-min)
 ```
 
-It must use the same validated closure-relative residual gate as G.2:
-closure-tight at `k = 3` means endomorphism; `O(1)` residual means induced.
-The minimizer must remain SO(3), never O(3), because an improper-reflection
-collapse would falsely promote an induced case into the endomorphism bucket.
-If the 21 rows are not razor-bimodal, record a marginal third category and do
-not force-binarize.
+`tau12_I` is the proper-parity candidate. `tau12_Z` is the improper-parity
+candidate. A separate `tau12_P` is redundant because `P = Rpi*Z` lives in the
+same improper O(3) coset as `Z`, and the free SO(3) minimizer can absorb the
+`Rpi` factor.
+
+The union must use the same validated closure-relative residual gate as G.2:
+closure-tight at `k = 3` under either candidate means endomorphism; `O(1)`
+under both means induced. The minimizer must remain SO(3), never O(3), because
+an improper-reflection collapse would erase the parity bit that later belongs
+inside the `G_i` cocycle. If the 21 rows are not razor-bimodal, record a
+marginal third category and do not force-binarize.
 
 The receipt must persist the full cocycle for every choreography:
 
 ```text
-label, tau12_case, residual_inf, residual_to_closure,
-phi, phi/T, phi/(T/2), rotation_angle_rad, R_i
+label, tau12_case, winning_candidate, spatial_parity,
+residual_inf, residual_to_closure, phi, phi/T, phi/(T/2),
+rotation_angle_rad, R_i
 ```
 
-The `R_i, phi_i` pair is part of the later `G_i` definition, not diagnostic
-clutter. The column `phi_i/(T/2)` is the Bragg/coherence cross-check: it is the
-candidate commensurability signal that may explain which endomorphism cases
-can carry a nontrivial `+1` block.
+The `spatial_parity, R_i, phi_i` triple is part of the later `G_i` definition,
+not diagnostic clutter. If an endomorphism appears through `tau12_Z`, the
+monodromy commutation proof must handle the improper spatial factor explicitly.
+The column `phi_i/(T/2)` is the Bragg/coherence cross-check: it is the
+candidate commensurability signal that may explain which endomorphism cases can
+carry a nontrivial `+1` block.
 
-**v0.3a receipt (2026-05-19, COMPLETE).** `npm run isotrophy:tau12:cases`
-ran the registered 21 strict G.2 indices with `rtol=atol=1e-12`,
-`n_samples=1009`, `phase_grid=73`, closure multiple `k=3`, and SO(3)
-Procrustes alignment only. Elapsed wall time: `120.61 s`. Receipt path:
+**Proper-parity receipt (2026-05-19, COMPLETE).** The first run tested only
+`tau12_I` under the name `tau12_gauge`. It remains a valid receipt for the
+proper O(3) parity class, not for the full case split. Result: **0 proper
+endomorphism, 21 proper-induced, 0 marginal review.** No row was closure-tight;
+the best non-tight ratio was `2.815e7`. Receipt path:
 `results/isotrophy/k-facet-v03-tau12-case-split-21strict/`
+(gitignored/protected). The union receipt below supersedes only the count
+decision, not this proper-parity receipt.
+
+**Parity-union receipt (2026-05-20, COMPLETE).** `npm run
+isotrophy:tau12:cases` ran the locked candidate set `{tau12_I, tau12_Z}` on the
+same 21 strict rows. Elapsed wall time: `177.72 s`. Receipt path:
+`results/isotrophy/k-facet-v03-tau12-parity-union-21strict/`
 (gitignored/protected).
 
 Result: **0 endomorphism, 21 induced-representation cases, 0 marginal
-reviews.** No row was closure-tight: the best non-tight ratio was
-`2.815e7`, far above the `1e5` induced threshold. Therefore the current 21-row
-catalog has no choreography whose `(12)` transposition acts as an endomorphism
-of its own gauge class under the Condition-3 detector. The v0.3 derivation, if
-continued, must be the induced-representation formula for all 21 rows. The
-endomorphism kernel formula remains a general-case note, not the active formula
-for this catalog.
+reviews** under the full explicit O(3) parity union. No row was closure-tight;
+the best non-tight ratio remains `2.815e7`. The improper sibling changed the
+best residual parity for 6 rows but did not move any row near the closure
+gate. Therefore "all-induced" is robust under the full parity-aware case-split
+candidate set.
 
-| `C_i` | case | residual | residual / closure | `phi/T` | `phi/(T/2)` | `rot rad` |
-|---|---|---:|---:|---:|---:|---:|
-| `O_{62}` | induced | 1.296 | `8.508e8` | 0.612 | 1.225 | 2.957 |
-| `O_{64}` | induced | 0.872 | `7.239e8` | 0.881 | 1.762 | 1.381 |
-| `O_{231}` | induced | 0.915 | `2.073e8` | 0.521 | 1.043 | 3.118 |
-| `O_{264}` | induced | 0.917 | `1.714e8` | 0.489 | 0.979 | 2.439 |
-| `O_{468}` | induced | 0.996 | `1.229e8` | 0.326 | 0.651 | 1.529 |
-| `O_{524}` | induced | 0.876 | `7.624e7` | 0.469 | 0.938 | 1.365 |
-| `O_{574}` | induced | 0.999 | `1.332e8` | 0.834 | 1.669 | 2.700 |
-| `O_{609}` | induced | 0.841 | `5.754e7` | 0.155 | 0.309 | 2.815 |
-| `O_{617}` | induced | 1.041 | `1.139e8` | 0.841 | 1.681 | 2.747 |
-| `O_{623}` | induced | 0.940 | `9.463e7` | 0.052 | 0.105 | 2.385 |
-| `O_{735}` | induced | 0.878 | `6.627e7` | 0.175 | 0.350 | 1.517 |
-| `O_{793}` | induced | 0.892 | `6.981e7` | 0.494 | 0.988 | 2.133 |
-| `O_{941}` | induced | 0.875 | `5.257e7` | 0.237 | 0.474 | 1.269 |
-| `O_{1034}` | induced | 1.066 | `5.466e7` | 0.980 | 1.960 | 2.087 |
-| `O_{1062}` | induced | 1.002 | `6.350e7` | 0.382 | 0.765 | 2.372 |
-| `O_{1114}` | induced | 1.026 | `6.236e7` | 0.058 | 0.116 | 3.132 |
-| `O_{1172}` | induced | 0.920 | `3.488e7` | 0.854 | 1.709 | 1.431 |
-| `O_{1265}` | induced | 0.806 | `2.815e7` | 0.834 | 1.667 | 2.978 |
-| `O_{1414}` | induced | 0.839 | `2.962e7` | 0.157 | 0.314 | 3.104 |
-| `O_{1488}` | induced | 0.995 | `3.824e7` | 0.187 | 0.374 | 0.439 |
-| `O_{1497}` | induced | 0.922 | `3.016e7` | 0.935 | 1.871 | 1.696 |
+| `C_i` | case | winner | parity | best/closure | I/closure | Z/closure | `phi/(T/2)` | `rot rad` |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| `O_{62}` | induced | `tau12_Z` | -1 | `8.488e8` | `8.508e8` | `8.488e8` | 1.307 | 2.045 |
+| `O_{64}` | induced | `tau12_I` | 1 | `7.239e8` | `7.239e8` | `7.687e8` | 1.762 | 1.381 |
+| `O_{231}` | induced | `tau12_I` | 1 | `2.073e8` | `2.073e8` | `2.079e8` | 1.043 | 3.118 |
+| `O_{264}` | induced | `tau12_I` | 1 | `1.714e8` | `1.714e8` | `1.737e8` | 0.979 | 2.439 |
+| `O_{468}` | induced | `tau12_Z` | -1 | `1.181e8` | `1.229e8` | `1.181e8` | 1.136 | 3.093 |
+| `O_{524}` | induced | `tau12_I` | 1 | `7.624e7` | `7.624e7` | `8.305e7` | 0.938 | 1.365 |
+| `O_{574}` | induced | `tau12_I` | 1 | `1.332e8` | `1.332e8` | `1.397e8` | 1.669 | 2.700 |
+| `O_{609}` | induced | `tau12_Z` | -1 | `5.710e7` | `5.754e7` | `5.710e7` | 0.309 | 3.077 |
+| `O_{617}` | induced | `tau12_I` | 1 | `1.139e8` | `1.139e8` | `1.154e8` | 1.681 | 2.747 |
+| `O_{623}` | induced | `tau12_I` | 1 | `9.463e7` | `9.463e7` | `9.671e7` | 0.105 | 2.385 |
+| `O_{735}` | induced | `tau12_I` | 1 | `6.627e7` | `6.627e7` | `6.694e7` | 0.350 | 1.517 |
+| `O_{793}` | induced | `tau12_I` | 1 | `6.981e7` | `6.981e7` | `7.592e7` | 0.988 | 2.133 |
+| `O_{941}` | induced | `tau12_I` | 1 | `5.257e7` | `5.257e7` | `5.673e7` | 0.474 | 1.269 |
+| `O_{1034}` | induced | `tau12_I` | 1 | `5.466e7` | `5.466e7` | `5.576e7` | 1.960 | 2.087 |
+| `O_{1062}` | induced | `tau12_I` | 1 | `6.350e7` | `6.350e7` | `6.581e7` | 0.765 | 2.372 |
+| `O_{1114}` | induced | `tau12_Z` | -1 | `5.805e7` | `6.236e7` | `5.805e7` | 0.374 | 1.369 |
+| `O_{1172}` | induced | `tau12_Z` | -1 | `3.400e7` | `3.488e7` | `3.400e7` | 1.701 | 3.132 |
+| `O_{1265}` | induced | `tau12_I` | 1 | `2.815e7` | `2.815e7` | `2.932e7` | 1.667 | 2.978 |
+| `O_{1414}` | induced | `tau12_I` | 1 | `2.962e7` | `2.962e7` | `3.140e7` | 0.314 | 3.104 |
+| `O_{1488}` | induced | `tau12_Z` | -1 | `3.485e7` | `3.824e7` | `3.485e7` | 1.273 | 3.138 |
+| `O_{1497}` | induced | `tau12_I` | 1 | `3.016e7` | `3.016e7` | `3.219e7` | 1.871 | 1.696 |
 
 Only after the induced-representation derivation is written should any code
 integrate variational equations or freeze `K_facet_v0.3`. The frozen output
@@ -693,7 +710,8 @@ Rejected as primary:
 | 2026-05-19 | **K1 COMPLETE.** `npm run isotrophy:kfacet:predict` froze primary strict `K_facet = 0` from the 21 strict G.2 rows. All 21 rows pass only `F_beta` strictly (`d_i=0` each; no `F_beta` failures). The SO(3)-gauged diagnostic is 21 because `beta_I` appears only with `Rpi` absorbed into free alignment, so it is not counted as the strict prediction. Receipt: `results/isotrophy/k-facet-prediction-21strict/`. |
 | 2026-05-19 | **v0.2 DISPOSITION.** K1 proved the static containment operator is structurally the equivariance-only null: `Z3` choreography symmetry does not generically contain the target transposition `Z2`, so `d_i=0` is forced by construction. K2-K4 are paused under v0.2; do not run the 273-row classification until a v0.3 branching/continuation `d_i` is derived and pre-registered. |
 | 2026-05-19 | **v0.3 DESIGN DECISION.** If isotrophy continues, primary `d_i` must be a monodromy/isotypic branching count computed from each `m3=1` choreography alone. Corrected foundation: `alpha_I` is not an isotropy of the parent orbit; define the twist as `G_i = rho((12)) o Phi_{T/2}` only where `(12)` acts as an endomorphism of the choreography, otherwise use an induced-representation formula over the `S3` group orbit. Full `m3` continuation is rejected as primary because it is circular with supplementary-B; Bragg/Floquet coherence is retained as a cross-check. |
-| 2026-05-19 | **v0.3a CASE SPLIT COMPLETE.** `npm run isotrophy:tau12:cases` ran the locked Condition-3 detector on the 21 strict rows: 0 endomorphism, 21 induced-representation, 0 marginal review; best non-tight residual/closure = `2.815e7`. Receipt: `results/isotrophy/k-facet-v03-tau12-case-split-21strict/`. |
+| 2026-05-19 | **v0.3a PROPER-PARITY CASE SPLIT.** The first `tau12` receipt tested the proper spatial candidate only (`tau12_I`, then named `tau12_gauge`): 0 proper-endomorphism, 21 induced, 0 marginal review; best non-tight residual/closure = `2.815e7`. Receipt: `results/isotrophy/k-facet-v03-tau12-case-split-21strict/`. |
+| 2026-05-20 | **v0.3a PARITY-UNION CASE SPLIT COMPLETE.** `npm run isotrophy:tau12:cases` ran the locked `{tau12_I, tau12_Z}` detector on the 21 strict rows: 0 endomorphism, 21 induced-representation, 0 marginal review. `tau12_Z` won the residual for 6 rows but did not move any row near closure; best non-tight residual/closure remains `2.815e7`. Receipt: `results/isotrophy/k-facet-v03-tau12-parity-union-21strict/`. |
 | (next)     | v0.3 derivation — write the induced-representation formula over the `S3` group orbit, structural `(F_beta-even) cap (sigma3-trivial)` removal, neutral-mode quotient, `+1` multiplicity rule, and closure-relative tolerance before any monodromy code or supplementary-B classification. |
 
 ---
