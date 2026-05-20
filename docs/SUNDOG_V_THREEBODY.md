@@ -839,6 +839,12 @@ the parent and conjugate partner anchors, make the neutral quotient
 `D3`-equivariant, and validate the standard-irrep count through the crossing
 form before any monodromy run.
 
+The neutral quotient has now been sharpened: it is `N_C=T*u_E+S*X_H`, not a
+wholly trivial block. The post-quotient representation is
+`K_i^{fib} ~= (a_i-1)*T + (b_i-1)*S + c_i*E`, so the candidate standard-irrep
+count `c_i` is preserved. This is still paper-only; loop convention, typed
+half-flow, anchor certification, G1, and G2 crossing-form remain gates.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

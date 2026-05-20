@@ -713,18 +713,20 @@ not automatically the same `F_beta` operator in the parent frame. Draft 2 says
 probably right, but the operator should be named as the conjugate symmetry.
 This matters when deriving the pair alpha action and the `D3` relation.
 
-### Blocker 5: `N_i` in the trivial isotypic is plausible but not automatic
+### Blocker 5: `N_i` must be decomposed as a `D3` subrepresentation
 
-`X_H` should sit in the trivial `D3` sector after anchoring. The generalized
-energy vector `u_E` is less automatic: generalized eigenvectors are not unique
-and can be shifted by kernel vectors. The registration needs a normalization
-rule for `u_E` that is `D3`-equivariant, or a proof that the quotient by
-`N_i` is independent of this choice.
+Superseded by v0.3f: `X_H` is not trivial. At an `F_beta` fixed anchor,
+`A_F X_H = -X_H`, so the flow direction lives in the sign irrep `S`. The
+generalized energy vector `u_E` should be normalized as the trivial line `T`.
+The registration still needs either a normalization rule for `u_E` that makes
+this canonical, or a proof that the quotient is independent of the remaining
+kernel ambiguity.
 
-Gate G3 should therefore be strengthened:
+Gate G3 should therefore be:
 
 ```text
-G3: choose or prove a D3-equivariant neutral quotient; otherwise row is manual-review
+G3: prove / normalize N_C = T*u_E + S*X_H as a D3 subrepresentation with no E leakage;
+    otherwise row is manual-review
 ```
 
 ### Blocker 6: `d_i=c_i` is a candidate, not a branch count
@@ -764,3 +766,77 @@ Write the v0.3e lemma with four hard choices made explicitly:
    gate.
 
 Then, and only then, the variational runner becomes meaningful.
+
+---
+
+## 14. v0.3f neutral-block refinement, 2026-05-20
+
+New finding: the neutral block is `D3`-equivariant, but it is not wholly
+trivial-isotypic. It splits canonically as one trivial line plus one sign line:
+
+```text
+N_C = T*u_E^C  +  S*X_H(p_i^F)
+```
+
+Reason:
+
+- `X_H(p_i^F)` is `sigma3`-invariant, but `F_beta` reverses the Hamiltonian
+  flow at the `F_beta` fixed anchor, so `A_F X_H = -X_H`. Therefore `X_H`
+  lives in the sign irrep `S`, not the trivial irrep `T`.
+- The canonical energy/Jordan partner `u_E^C` can be chosen
+  `sigma3`-invariant and `F_beta`-even, so it lives in the trivial irrep `T`.
+  This choice must still be written as a normalization rule, because Jordan
+  partners are only defined modulo kernel vectors.
+
+Pre-quotient:
+
+```text
+K_i^{fib*} ~= a_i*T + b_i*S + c_i*E
+```
+
+Post-neutral quotient:
+
+```text
+K_i^{fib} ~= (a_i-1)*T + (b_i-1)*S + c_i*E
+```
+
+So the standard-irrep count `c_i` is invariant under the corrected neutral
+quotient. That is the load-bearing payoff: the previous gate G3 should no
+longer say "prove `N_C` is trivial"; it should say:
+
+```text
+G3: prove / normalize the neutral quotient as T*u_E + S*X_H, and verify no
+    neutral direction leaks into E.
+```
+
+Consequences:
+
+- Structural sector after quotient is `(a_i-1)*T`, not `a_i*T`.
+- The sign sector `(b_i-1)*S` is a separate `F_beta`-odd, `sigma3`-trivial
+  deformation sector. It is not structural-T continuation and not a piano-trio
+  candidate under the ansatz convention.
+- `d_i_candidate = c_i` survives this correction.
+
+Still pending:
+
+1. **Loop convention / half-flow typing.** Keep based loops at the
+   `F_beta`-fix anchor and write
+   `Phi_T^C = Phi_{T/2}^{y_i(T/2)} o Phi_{T/2}^{y_i(0)}` with both halves
+   typed. Do not write `(Phi_{T/2})^2` without naming the transport.
+2. **Anchor certification.** Prove `(12)p_i^F` is fixed by the partner
+   conjugate anchor. Because `P12` commutes with `A_tau` and spatially uniform
+   `A_Rpi`, `[P12,A_F]=0`, so `A_F(P12 p_i^F)=P12 p_i^F`; still record the
+   discrete anchor choice in the receipt.
+3. **G1.** Prove the anchored `D3` relation
+   `F_beta sigma3 F_beta^{-1}=sigma3^{-1}` at the operator level.
+4. **G2.** Crossing-form / Lyapunov-Schmidt gate remains the branch-validity
+   gate. The scratchpad coupling conjecture stays quarantined as a possible
+   diagnostic after this sector exists.
+
+Updated next gate: v0.3f should address the five points in order:
+
+1. declare the based-loop convention at `p_i^F`;
+2. type the half-flow composition explicitly;
+3. certify the parent and partner anchors;
+4. carry the neutral decomposition `N_C=T*u_E+S*X_H` through the `D3` quotient;
+5. reserve G2 crossing form as a per-row branch-validity check.

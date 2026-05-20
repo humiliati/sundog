@@ -202,7 +202,12 @@ Remaining honest fork:
   based/free/shifted loop convention, certify the `F_beta` and conjugate partner
   anchors, fix the typed half-flow reduction, prove the neutral quotient is
   `D3`-equivariant, and validate `c_i` through the crossing form.
-- Current next paper-only gate: write the v0.3e anchored `D3` lemma before any
+- Neutral-block refinement: the quotient is `D3`-equivariant as
+  `N_C = T*u_E + S*X_H`, not wholly trivial. Thus
+  `K_i^{fib*} ~= a_i*T + b_i*S + c_i*E` becomes
+  `K_i^{fib} ~= (a_i-1)*T + (b_i-1)*S + c_i*E`, preserving the standard-irrep
+  count `c_i`.
+- Current next paper-only gate: write the v0.3f anchored `D3` lemma before any
   monodromy code.
 
 ## Operator Guardrail
@@ -213,7 +218,8 @@ Before any future isotrophy run:
    accidental K2-K4 restart.
 2. If it is K2-K4 under v0.2, stop.
 3. If it is v0.3, use the completed all-induced case split, then write the
-   v0.3e anchored `D3` lemma: loop convention, anchor certification, typed
-   half-flow, `D3`-equivariant neutral quotient, `d_i_candidate=c_i`, crossing
-   form gate, negative, and go/no-go branch before running any monodromy or
+   v0.3f anchored `D3` lemma: based-loop convention at `p_i^F`, anchor
+   certification, typed half-flow, neutral quotient
+   `N_C=T*u_E+S*X_H` with no `E` leakage, `d_i_candidate=c_i`, crossing-form
+   gate, negative, and go/no-go branch before running any monodromy or
    supplementary-B classification.
