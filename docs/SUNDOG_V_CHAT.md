@@ -24,6 +24,7 @@ Audience:
   guidance.
 
 Related docs:
+- `docs/SUNDOG_V_CHAT_V2.md` — product charter (sister doc; this doc governs *what is honest*, v2 governs *what gets shipped*).
 - `docs/SUNDOG_V_MESA.md`
 - `docs/STANDALONE_APP_ROADMAP.md`
 - `docs/APPLICATIONS.md`
