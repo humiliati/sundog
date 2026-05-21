@@ -390,7 +390,8 @@ def compute_partial_eps_monodromy(
     rtol: float,
     atol: float,
     max_step_fraction: float | None = None,
-) -> np.ndarray:
+    return_joint_baseline: bool = False,
+) -> np.ndarray | tuple[np.ndarray, np.ndarray]:
     """Compute dM_i/d epsilon for m3 = 1 + epsilon at the fixed m3=1 IC."""
     if abs(integrated.row.m3 - 1.0) > 1e-12:
         raise ValueError("partial-epsilon monodromy is defined only for the m3=1 sentinel row")
@@ -419,6 +420,7 @@ def compute_partial_eps_monodromy(
         partial_dot = np.concatenate([partial_v, jacobian @ partial_x + partial_jacobian @ delta_x])
         return np.concatenate([delta_dot, partial_dot])
 
+    joint_baseline_monodromy = np.zeros((18, 18), dtype=float)
     partial_monodromy = np.zeros((18, 18), dtype=float)
     for column in range(18):
         initial = np.zeros(36, dtype=float)
@@ -438,7 +440,10 @@ def compute_partial_eps_monodromy(
                 f"partial-epsilon variational integration failed for {integrated.row.label}, "
                 f"column {column}: {solution.message}"
             )
+        joint_baseline_monodromy[:, column] = solution.y[:18, -1]
         partial_monodromy[:, column] = solution.y[18:, -1]
+    if return_joint_baseline:
+        return partial_monodromy, joint_baseline_monodromy
     return partial_monodromy
 
 
@@ -496,11 +501,19 @@ def verify_partial_eps_via_finite_difference(
     atol: float,
     max_step_fraction: float,
     fd_floor: float,
+    reference_monodromy: np.ndarray | None = None,
+    joint_consistency_floor: float | None = None,
 ) -> tuple[dict[str, object], np.ndarray, np.ndarray]:
     """Cross-check closed-form dM/depsilon against a fixed-IC central difference."""
     if abs(integrated.row.m3 - 1.0) > 1e-12:
         raise ValueError("partial-epsilon finite-difference check is defined only for m3=1")
-    partial_monodromy = compute_partial_eps_monodromy(integrated, rtol, atol, max_step_fraction)
+    partial_monodromy, joint_baseline_monodromy = compute_partial_eps_monodromy(
+        integrated,
+        rtol,
+        atol,
+        max_step_fraction,
+        return_joint_baseline=True,
+    )
     masses_plus = np.array([1.0, 1.0, 1.0 + h], dtype=float)
     masses_minus = np.array([1.0, 1.0, 1.0 - h], dtype=float)
     m_plus = compute_monodromy_at_masses(
@@ -516,6 +529,22 @@ def verify_partial_eps_via_finite_difference(
     closed_form_inf = float(np.linalg.norm(partial_monodromy, ord=np.inf))
     finite_difference_inf = float(np.linalg.norm(finite_difference, ord=np.inf))
     scale = max(closed_form_inf, finite_difference_inf, fd_floor)
+    joint_consistency = {
+        "enabled": reference_monodromy is not None,
+        "floor": joint_consistency_floor,
+        "residual_inf": None,
+        "passed": None,
+    }
+    if reference_monodromy is not None:
+        floor = fd_floor if joint_consistency_floor is None else joint_consistency_floor
+        joint_residual_inf = float(np.linalg.norm(joint_baseline_monodromy - reference_monodromy, ord=np.inf))
+        joint_consistency = {
+            "enabled": True,
+            "floor": floor,
+            "residual_inf": joint_residual_inf,
+            "passed": joint_residual_inf <= floor,
+        }
+    finite_difference_passed = residual_inf <= fd_floor
     result = {
         "gate": "partial_epsilon_finite_difference",
         "enabled": True,
@@ -526,7 +555,9 @@ def verify_partial_eps_via_finite_difference(
         "closed_form_norm_inf": closed_form_inf,
         "finite_difference_norm_inf": finite_difference_inf,
         "relative_residual_inf": float(residual_inf / scale),
-        "passed": residual_inf <= fd_floor,
+        "finite_difference_passed": finite_difference_passed,
+        "joint_baseline_consistency": joint_consistency,
+        "passed": finite_difference_passed and joint_consistency.get("passed") is not False,
     }
     return result, partial_monodromy, finite_difference
 
@@ -1915,12 +1946,16 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
                     args.atol,
                     args.max_step_fraction,
                     args.fd_floor,
+                    reference_monodromy=monodromy,
+                    joint_consistency_floor=args.closure_floor,
                 )
             )
             print(
                 "[kfacet-sentinel] partial-epsilon gate "
                 f"{'PASS' if partial_eps_gate['passed'] else 'FAIL'} "
-                f"residual_inf={float(partial_eps_gate['residual_inf']):.3e}"
+                f"residual_inf={float(partial_eps_gate['residual_inf']):.3e} "
+                "joint_baseline_inf="
+                f"{float(partial_eps_gate['joint_baseline_consistency']['residual_inf']):.3e}"
             )
     else:
         print("[kfacet-sentinel] partial-epsilon gate SKIPPED (no --verify-partial-eps flag)")
