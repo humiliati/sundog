@@ -904,6 +904,16 @@ degeneracy vocab. The ansatz IC is the `F_beta` fixed anchor in closed form, so
 the runner does not search for anchors. Partner-orbit integration is a receipt
 sanity check only.
 
+The first 21-row v0.3h sweep calibrated the implementation floors before any
+full interpretation: `closure_floor=1e-8` split the kernel noise cluster on
+several rows, so the runner now uses `closure_floor=1e-7`; the
+joint-baseline gate now uses `1e-8` relative instead of `1e-9`. Only rows with
+clean D3/F_beta stabilization at that floor may treat `c_i=0` as structural.
+The clean rows so far (`O_62`, `O_64`, `O_231`) have
+`ker(M-I)=T(2)+S(5)+E(0)`, hence `d_i=0`. If the calibrated 21-row rerun keeps
+that profile, v0.3 Gamma is a catalog-level structural negative rather than a
+numerical failure.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

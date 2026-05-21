@@ -982,3 +982,27 @@ def verify_partial_eps_via_finite_difference(
 - **`compute_partial_eps_monodromy`** via joint 36-dim variational integration along the baseline orbit. Returns 18×18 `∂_ε M_i`. Same cost as M_i itself (per-column linear integration), so adds ~the same wall time as gate-1 + gate-2 combined.
 - **Finite-difference cross-check** at fixed m_3=1 IC (isolates flow ε-dependence from IC's ε-dependence). Expected residual ~ few × 1e-12 at h=1e-6 with rtol=1e-12. Gate floor set at 1e-9 (3 orders of slack); marginal residuals in `[1e-12, 1e-9]` indicate either numerical conditioning or a sign/index issue worth chasing.
 - **Sentinel command extension** via `--verify-partial-eps` flag. Default: skip the FD check (it's expensive — three monodromies' worth of work). When enabled: runs after gates 1 and 2 pass, halts if FD residual exceeds floor.
+## 21-row sweep disposition (2026-05-21)
+
+The first 21-row v0.3h sweep found that two gate floors in the draft were too
+tight for catalog-wide interpretation:
+
+- `closure_floor = 1e-8` split the noise-floor kernel cluster on multiple rows.
+  The observed last-kernel singular value was <= `7.5e-8`, while the first
+  non-kernel singular value was >= `5.7e-2`. The runner default is now
+  `closure_floor = 1e-7`, and the npm sentinel scripts pin `--closure-floor
+  1e-7`.
+- `joint_baseline_floor = 1e-9` rejected most of the catalog even though the
+  36D joint solver and standalone monodromy agreed at rtol-relative scale
+  (`jb_rel` median about `1.22e-9`, max about `4.63e-9`). The runner default is
+  now `joint_baseline_floor = 1e-8`, and the npm partial-eps/Gamma scripts pin
+  `--joint-baseline-floor 1e-8`.
+
+Receipt interpretation: `c_i=0` is structural only when the D3 action stabilizes
+the recovered kernel at the calibrated floor. Rows with large F_beta/kernel
+leakage are kernel-floor artifacts, not evidence about the standard sector. On
+the three clean rows from the sweep (`O_62`, `O_64`, `O_231`), the profile was
+`ker(M-I) = T(2) + S(5) + E(0)`, hence `c_i=0` and `d_i=0`. If that profile
+persists after rerunning all 21 with `closure_floor=1e-7`, the result is a
+catalog-level structural negative for this Gamma formulation rather than a
+numerical failure.
