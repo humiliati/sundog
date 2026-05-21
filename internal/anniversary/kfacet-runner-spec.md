@@ -1,6 +1,7 @@
+Draft V4 by Claude Code Opus 4.7 on max in the last 5% of a 1m context window
 
-Draft V1 by Claude Code Opus 4.7 on max the in last 25% of a 1m context window  
-
+Part 2 starts on line ~666
+ 
 Below are the additions for `scripts/isotrophy_workbench.py`. Each block is self-contained with a docstring tying to v0.3i / v0.3i-runner spec. The two gates are runnable independently of the sentinel integration via `--gates-only`.
 
 ---
@@ -656,3 +657,328 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
 - **Gate 3 (deterministic basis convention)**: K_fib basis is from SVD's right-singular vectors (deterministic up to sign/phase of eigenvectors). For Γ_i diagnostics later, the basis convention should be locked further (e.g., principal-axes ordering on the F_β-even subspace).
 - **Gate 4 (no SVD/eigenvalue vocabulary mixing)**: gates 1 & 2 only use SVD (for kernel and non-degeneracy). Γ_i rank gate will also use SVD. No eigenvalue-decomposition vocabulary in the count path.
 - **Gate 5 (1e-14 refinement A practical precision)**: not yet implemented; should log a warning when rtol < ~1e-13 that the integration is at machine-precision limit and singular-value comparisons may be unreliable. Add to the refinement-A branch when implemented.
+
+
+
+
+
+
+
+## PART 2
+
+
+Implementing the ∂_ε J + ∂_ε M_i + finite-difference verification slice. Three code blocks for the workbench plus the sentinel-command wiring and an npm script. Each block is self-contained with docstring.
+
+## Block 1 — Closed-form `∂_ε(∂a/∂q)` for m_3 perturbation
+
+```python
+# ----------------------------------------------------------------------------
+# Closed-form derivative of the acceleration Jacobian with respect to the
+# mass-perturbation parameter ε = m_3 − 1, at m_1 = m_2 = 1, m_3 = 1.
+#
+# Derivation (workbench (q, v) coordinates, G = 1):
+#   a_1 = (q_2 − q_1)/r_{12}³ + (1+ε)·(q_3 − q_1)/r_{13}³
+#   a_2 = (q_1 − q_2)/r_{12}³ + (1+ε)·(q_3 − q_2)/r_{23}³
+#   a_3 = (q_1 − q_3)/r_{13}³ + (q_2 − q_3)/r_{23}³           # ε-independent: m_3
+#                                                              # cancels in (q, v)
+#
+# With K(d) := I_3/|d|³ − 3·d·d^T/|d|⁵ ("Newtonian tidal block"):
+#   ∂_ε(∂a_1/∂q_1) = −K(d_{13});   ∂_ε(∂a_1/∂q_3) = +K(d_{13})
+#   ∂_ε(∂a_2/∂q_2) = −K(d_{23});   ∂_ε(∂a_2/∂q_3) = +K(d_{23})
+#   All other entries of ∂_ε(∂a/∂q) are zero.
+#
+# This embeds the v0.3g §1 finding (ΔH is F_β-invariant with no S-component) at
+# the Jacobian level: body 3's row is identically zero, and the (12)-symmetry
+# of the m_3-perturbation is visible in the row-1↔row-2, d_{13}↔d_{23} swap.
+# Restricted to m_1 = m_2 = 1; not valid for arbitrary mass perturbations.
+# ----------------------------------------------------------------------------
+
+def partial_eps_acceleration_jacobian(x: np.ndarray) -> np.ndarray:
+    """Closed-form ∂_ε(∂a/∂q) at ε = 0 for the m_3 = 1+ε perturbation, given
+    body positions x (shape (3, 3)). Returns 9×9 matrix in the (q_1, q_2, q_3)
+    block layout matching `acceleration_jacobian`."""
+    jac = np.zeros((9, 9), dtype=float)
+
+    def tidal_block(d: np.ndarray) -> np.ndarray:
+        r2 = float(np.dot(d, d))
+        r = math.sqrt(r2)
+        return np.eye(3) / (r2 * r) - 3.0 * np.outer(d, d) / (r2 * r2 * r)
+
+    d13 = x[2] - x[0]
+    K13 = tidal_block(d13)
+    d23 = x[2] - x[1]
+    K23 = tidal_block(d23)
+
+    # Body 1 row: -K13 in ∂q_1 column, +K13 in ∂q_3 column, 0 in ∂q_2 column
+    jac[0:3, 0:3] = -K13
+    jac[0:3, 6:9] = +K13
+    # Body 2 row: -K23 in ∂q_2 column, +K23 in ∂q_3 column, 0 in ∂q_1 column
+    jac[3:6, 3:6] = -K23
+    jac[3:6, 6:9] = +K23
+    # Body 3 row: all zero (m_3 cancels in body-3's (q, v)-form EOM)
+
+    return jac
+```
+
+## Block 2 — `compute_partial_eps_monodromy` via joint variational integration
+
+```python
+# ----------------------------------------------------------------------------
+# ∂_ε M_i via joint variational integration of (δy, ∂_ε δy) along C_i.
+#
+# The joint 36-dim system:
+#   δy_dot           = J(y(t)) · δy
+#   (∂_ε δy)_dot     = J(y(t)) · ∂_ε δy + ∂_ε J(y(t)) · δy
+# Initial conditions: δy(0) = e_k (basis vector), ∂_ε δy(0) = 0.
+# After period T_i: column k of ∂_ε M_i = ∂_ε δy(T_i).
+#
+# Both J and ∂_ε J are block-structured in the workbench's (q, v) coordinates:
+#   J          = [[ 0_9   ,  I_9 ],
+#                 [ ∂a/∂q ,  0_9 ]]
+#   ∂_ε J      = [[ 0_9                              ,  0_9 ],
+#                 [ ∂_ε(∂a/∂q)                       ,  0_9 ]]
+# so the q-rows of ∂_ε J contribute zero and only v-rows are affected by the
+# perturbation.
+# ----------------------------------------------------------------------------
+
+def compute_partial_eps_monodromy(
+    integrated: IntegratedOrbit,
+    rtol: float = 1e-12,
+    atol: float = 1e-12,
+) -> np.ndarray:
+    """Compute ∂_ε M_i (18×18) at ε = 0 for the m_3 perturbation, via joint
+    variational integration along the integrated baseline orbit."""
+    masses = integrated.row.masses
+    T_i = integrated.row.period
+
+    def joint_rhs(t: float, joint: np.ndarray) -> np.ndarray:
+        delta = joint[:18]
+        partial = joint[18:]
+
+        y_t = integrated.solution.sol(t)
+        x_t = y_t[:9].reshape(3, 3)
+
+        J_qv = acceleration_jacobian(x_t, masses)         # 9×9
+        dJ_qv = partial_eps_acceleration_jacobian(x_t)    # 9×9, m_3 = 1 case
+
+        delta_q = delta[:9]
+        delta_v = delta[9:]
+        delta_dot = np.concatenate([delta_v, J_qv @ delta_q])
+
+        partial_q = partial[:9]
+        partial_v = partial[9:]
+        # J · ∂_ε δy:
+        # (q-block): partial_v
+        # (v-block): J_qv @ partial_q
+        # ∂_ε J · δy contributes only to v-block: dJ_qv @ delta_q
+        partial_dot = np.concatenate(
+            [partial_v, J_qv @ partial_q + dJ_qv @ delta_q]
+        )
+
+        return np.concatenate([delta_dot, partial_dot])
+
+    dM = np.zeros((18, 18), dtype=float)
+    for k in range(18):
+        e_k = np.zeros(18, dtype=float)
+        e_k[k] = 1.0
+        joint_ic = np.concatenate([e_k, np.zeros(18, dtype=float)])
+        sol = solve_ivp(
+            joint_rhs,
+            (0.0, T_i),
+            joint_ic,
+            method="DOP853",
+            rtol=rtol,
+            atol=atol,
+        )
+        if not sol.success:
+            raise RuntimeError(
+                f"∂_ε M_i joint variational integration failed (column {k}): "
+                f"{sol.message}"
+            )
+        dM[:, k] = sol.y[18:, -1]
+    return dM
+```
+
+## Block 3 — Helper: monodromy at arbitrary masses (for FD)
+
+```python
+def compute_monodromy_at_masses(
+    y0: np.ndarray,
+    T: float,
+    masses: np.ndarray,
+    rtol: float = 1e-12,
+    atol: float = 1e-12,
+    max_step_fraction: float = 0.02,
+) -> np.ndarray:
+    """Compute the 18×18 monodromy at ε ≠ 0 by integrating from FIXED initial
+    condition y0 over period T with the given masses. Used by the finite-
+    difference cross-check of ∂_ε M_i. The IC is held fixed at the m_3 = 1
+    value to isolate the m_3-dependence of the FLOW from the IC's own m_3
+    dependence (which expand_initial_state otherwise carries via v_3)."""
+    max_step = T * max_step_fraction if max_step_fraction > 0 else np.inf
+
+    # First integrate the baseline at perturbed mass (NOT necessarily periodic).
+    baseline = solve_ivp(
+        rhs_factory(masses),
+        (0.0, T),
+        y0,
+        method="DOP853",
+        rtol=rtol,
+        atol=atol,
+        dense_output=True,
+        max_step=max_step,
+    )
+    if not baseline.success:
+        raise RuntimeError(f"perturbed-mass baseline integration failed: {baseline.message}")
+
+    # Variational integration per column.
+    def var_rhs(t: float, dy: np.ndarray) -> np.ndarray:
+        x_t = baseline.sol(t)[:9].reshape(3, 3)
+        dq = dy[:9]
+        dv = dy[9:]
+        return np.concatenate([dv, acceleration_jacobian(x_t, masses) @ dq])
+
+    M = np.zeros((18, 18), dtype=float)
+    for k in range(18):
+        e_k = np.zeros(18)
+        e_k[k] = 1.0
+        sol = solve_ivp(
+            var_rhs, (0.0, T), e_k,
+            method="DOP853", rtol=rtol, atol=atol,
+        )
+        if not sol.success:
+            raise RuntimeError(f"perturbed-mass variational integration failed (col {k}): {sol.message}")
+        M[:, k] = sol.y[:, -1]
+    return M
+```
+
+## Block 4 — Finite-difference cross-check
+
+```python
+# ----------------------------------------------------------------------------
+# Verification gate: ∂_ε M_i closed-form vs. finite-difference.
+#
+# At fixed IC y_i(0) (m_3 = 1 value), compute M_i(ε) at ε = ±h using the
+# perturbed-mass flow. Central finite difference:
+#       ∂_ε M_i ≈ (M(+h) − M(−h)) / (2h)
+# Compare to the closed-form result. Expected agreement:
+#   - h ≈ 1e-6:  truncation O(h²) ≈ 1e-12;
+#   - integrator at rtol=1e-12: ~1e-12 per column;
+#   - total residual norm ~ a few × 1e-12.
+#
+# A residual significantly above this (say > 1e-9) indicates either a bug in
+# `partial_eps_acceleration_jacobian` (sign/index error) or in the joint
+# variational integration (rhs construction). This is the "load-bearing line"
+# check before any sentinel run consumes ∂_ε M_i for Γ_i.
+# ----------------------------------------------------------------------------
+
+def verify_partial_eps_via_finite_difference(
+    integrated: IntegratedOrbit,
+    h: float = 1e-6,
+    rtol: float = 1e-12,
+    atol: float = 1e-12,
+    max_step_fraction: float = 0.02,
+    fd_floor: float = 1e-9,
+) -> dict[str, object]:
+    """Closed-form ∂_ε M_i vs. central FD. Returns a dict with the residual,
+    PASS/FAIL flag, and supporting numerics."""
+    # Closed-form via joint variational
+    dM_closed = compute_partial_eps_monodromy(integrated, rtol=rtol, atol=atol)
+
+    # FD: compute M at m_3 = 1±h with FIXED IC (m_3=1 value)
+    y0 = integrated.y0
+    T_i = integrated.row.period
+    masses_plus = np.array([1.0, 1.0, 1.0 + h], dtype=float)
+    masses_minus = np.array([1.0, 1.0, 1.0 - h], dtype=float)
+    M_plus = compute_monodromy_at_masses(
+        y0, T_i, masses_plus, rtol=rtol, atol=atol,
+        max_step_fraction=max_step_fraction,
+    )
+    M_minus = compute_monodromy_at_masses(
+        y0, T_i, masses_minus, rtol=rtol, atol=atol,
+        max_step_fraction=max_step_fraction,
+    )
+    dM_fd = (M_plus - M_minus) / (2.0 * h)
+
+    residual_inf = float(np.linalg.norm(dM_closed - dM_fd, ord=np.inf))
+    residual_fro = float(np.linalg.norm(dM_closed - dM_fd, ord="fro"))
+    closed_inf = float(np.linalg.norm(dM_closed, ord=np.inf))
+
+    return {
+        "gate": "partial_eps_finite_difference",
+        "h": h,
+        "fd_floor": fd_floor,
+        "residual_inf": residual_inf,
+        "residual_fro": residual_fro,
+        "closed_form_inf": closed_inf,
+        "relative_residual_inf": residual_inf / max(closed_inf, 1e-15),
+        "passed": residual_inf < fd_floor,
+    }
+```
+
+## Block 5 — Sentinel command wiring (additions to `command_kfacet_sentinel`)
+
+```python
+# In command_kfacet_sentinel, after gate 2 passes and before the
+# `--authorize-sentinel-run` halt:
+
+    # GATE 3 (∂_ε M_i finite-difference cross-check). Required before any
+    # downstream Γ_i computation depends on the closed-form ∂_ε M_i.
+    if args.verify_partial_eps:
+        print("[kfacet-sentinel] gate 3: ∂_ε M_i finite-difference cross-check...")
+        gate3_result = verify_partial_eps_via_finite_difference(
+            integrated,
+            h=args.fd_h,
+            rtol=args.rtol,
+            atol=args.atol,
+            max_step_fraction=args.max_step_fraction,
+            fd_floor=args.fd_floor,
+        )
+        print(
+            f"[kfacet-sentinel] gate 3 ({'PASS' if gate3_result['passed'] else 'FAIL'}): "
+            f"residual_inf = {gate3_result['residual_inf']:.3e} "
+            f"(floor = {gate3_result['fd_floor']:.0e}, "
+            f"relative = {gate3_result['relative_residual_inf']:.3e})"
+        )
+        if out_dir is not None:
+            gate_receipt["gate3_partial_eps_fd"] = gate3_result
+            gate_receipt["all_gates_passed"] = (
+                gate1_result["passed"]
+                and gate2_result["passed"]
+                and gate3_result["passed"]
+            )
+        if not gate3_result["passed"]:
+            print("[kfacet-sentinel] HALT: gate 3 failed; ∂_ε M_i not trustworthy.")
+            return 1
+    else:
+        print(
+            "[kfacet-sentinel] gate 3 SKIPPED (no --verify-partial-eps flag); "
+            "∂_ε M_i closed-form unchecked."
+        )
+
+# Argparse additions:
+    sentinel_cmd.add_argument(
+        "--verify-partial-eps",
+        action="store_true",
+        help="Run gate 3: FD cross-check of ∂_ε M_i closed form vs. finite difference",
+    )
+    sentinel_cmd.add_argument("--fd-h", type=float, default=1e-6)
+    sentinel_cmd.add_argument("--fd-floor", type=float, default=1e-9)
+```
+
+## Block 6 — npm script
+
+```json
+// In package.json, add alongside the existing kfacet-sentinel scripts:
+
+"isotrophy:kfacet:sentinel:verify-partial-eps": "python scripts/isotrophy_workbench.py kfacet-sentinel --source A --path docs/isotrophy/supplementary-A_periodic-3d_mirror.txt --m3 1 --sentinel-index 62 --rtol 1e-12 --atol 1e-12 --verify-partial-eps --fd-h 1e-6 --fd-floor 1e-9 --out results/isotrophy/k-facet-v03-sentinel-calibration-O62-partial-eps-verify",
+```
+
+---
+
+## What this slice delivers + expected behavior
+
+- **Closed-form `∂_ε J`** with the v0.3g algebraic structure baked in (body-3 row is identically zero; (12)-symmetry in body-1↔body-2 row pairing). The implementation embeds v0.3g §1 at the Jacobian level — if `∂_ε J` later shows nonzero entries in body-3's row, that's a bug; the closed form is structurally pure-1+pure-2.
+- **`compute_partial_eps_monodromy`** via joint 36-dim variational integration along the baseline orbit. Returns 18×18 `∂_ε M_i`. Same cost as M_i itself (per-column linear integration), so adds ~the same wall time as gate-1 + gate-2 combined.
+- **Finite-difference cross-check** at fixed m_3=1 IC (isolates flow ε-dependence from IC's ε-dependence). Expected residual ~ few × 1e-12 at h=1e-6 with rtol=1e-12. Gate floor set at 1e-9 (3 orders of slack); marginal residuals in `[1e-12, 1e-9]` indicate either numerical conditioning or a sign/index issue worth chasing.
+- **Sentinel command extension** via `--verify-partial-eps` flag. Default: skip the FD check (it's expensive — three monodromies' worth of work). When enabled: runs after gates 1 and 2 pass, halts if FD residual exceeds floor.
