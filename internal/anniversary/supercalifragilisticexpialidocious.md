@@ -1175,3 +1175,54 @@ v0.3i does not authorize more rows, supplementary-B, or freezing
 `K_facet_v0.3`. A pass allows a separate v0.3j full-21 authorization. A fail is
 structured: marginal singular values mean floor analysis, while all-ladder
 `c_i=0` means a structural negative.
+
+## 20. v0.3i-runner spec review, 2026-05-20
+
+The sentinel runner spec is accepted as a paper-only pre-implementation
+contract. It should implement one command:
+
+```text
+npm run isotrophy:kfacet:sentinel --indices 62 ... --out results/isotrophy/k-facet-v03-sentinel-calibration-O62
+```
+
+Scope is still exactly one sentinel row. Backup ladder is allowed only if the
+current sentinel returns `c_i=0`. Auto-refinement A is allowed only for a
+marginal singular-value outcome. No full-21 run, no supplementary-B comparison,
+and no `K_facet_v0.3` freeze.
+
+The ansatz anchor lemma is useful and should go into the runner notes:
+`p_i^F=y_i(0)` is in `Fix(A_F)` in closed form. The runner does not search for
+F_beta fixed points; the second fixed epoch is `y_i(T/2)` by reversibility.
+
+Runner shape:
+
+1. parse row and anchor at `p_i^F`;
+2. integrate orbit and `M_i`;
+3. optionally integrate the bare `(12)` partner as a sanity receipt for the
+   F_beta cocycle;
+4. integrate `partial_epsilon M_i`;
+5. compute `ker(M_i-I)`, quotient `N_C=T*u_E+S*X_H`, and form `K_i^{fib}`;
+6. build typed `rho(sigma3)` and closed-form `rho(F_beta)`;
+7. project `D3`, compute `c_i`, and build the `F_beta`-even standard basis;
+8. compute `Gamma_i`, SVD, `gamma_floor_i`, rank, and both degeneracy flags;
+9. write the protected receipt.
+
+Pre-implementation gates:
+
+- **Typed D3 products.** The projectors need `rho(F_beta sigma3^k)` with
+  explicit ordering. Once `rho(sigma3)` and `rho(F_beta)` are typed
+  endomorphisms on the anchor fiber, matrix products are fine, but the runner
+  must verify the `D3` relation instead of silently constructing private paths.
+- **Reduced symplectic form.** Verify the coordinate reduction preserves
+  canonical `omega`; otherwise store the reduced `J` used for `Gamma_i`.
+- **Basis convention.** The count is rank-invariant, but scalar diagnostics
+  need a deterministic basis convention in the receipt.
+- **SVD/eigen vocabulary.** `gamma_singular_bimodality_clean` uses singular
+  values of `Gamma_i`; `dE_perturbation_spectral_degeneracy_E` must explicitly
+  state whether it uses eigenvalues, Schur blocks, or singular values of
+  `(partial_epsilon M_i)_E`.
+- **Refinement A precision.** If `1e-14` is below practical integrator
+  precision, record a refinement failure rather than interpreting noise as
+  structure.
+
+This review clears the runner spec for implementation planning, not execution.

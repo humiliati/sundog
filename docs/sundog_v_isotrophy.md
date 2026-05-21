@@ -1158,6 +1158,77 @@ No additional rows, no supplementary-B, and no `K_facet_v0.3` freeze are
 authorized by v0.3i. If v0.3i passes, a separate v0.3j authorization may stage
 the full 21-row run and only then the supplementary-B comparison.
 
+### v0.3i-runner sentinel calibration spec review
+
+The runner spec is accepted as the next pre-implementation contract, still
+paper-only. The intended entry point is:
+
+```text
+npm run isotrophy:kfacet:sentinel
+  --source A
+  --path docs/isotrophy/supplementary-A_periodic-3d_mirror.txt
+  --indices 62
+  --rtol 1e-12 --atol 1e-12 --max-step-fraction 0.02
+  --n-samples 1009 --phase-grid 73
+  --k-gamma 3 --k-int 10
+  --bimodality-marginal-band-low 1 --bimodality-marginal-band-high 3
+  --refinement-A-rtol 1e-14
+  --out results/isotrophy/k-facet-v03-sentinel-calibration-O62
+```
+
+Scope remains one row only (`O_62`, or the pre-registered backup ladder if
+`c_i=0`). Auto-refinement A is allowed only for the sentinel and only after a
+marginal singular-value outcome. No other rows, supplementary-B comparison, or
+`K_facet_v0.3` freeze are authorized.
+
+Runner steps, in order:
+
+1. Parse the sentinel row from supplementary-A and anchor at `p_i^F=y_i(0)`.
+2. Integrate the orbit and the 12-column variational system to get `M_i`.
+3. Optionally integrate the bare `(12)` partner as a receipt sanity check for
+   the F_beta-derived cocycle; this is not a new theoretical dependency.
+4. Integrate the perturbation variational system to get `partial_epsilon M_i`.
+5. Build `ker(M_i-I)`, quotient `N_C=T*u_E+S*X_H`, and form `K_i^{fib}`.
+6. Build typed `rho(sigma3)` by body relabel plus back-flow by `T/3`, and
+   typed `rho(F_beta)` as the closed-form anti-symplectic involution.
+7. Project `K_i^{fib}` into `D3` isotypics, compute `c_i`, and if `c_i=0`
+   advance the backup ladder.
+8. Choose a deterministic basis for the `F_beta`-even standard multiplicity
+   space, compute `Gamma_i`, SVD, `gamma_floor_i`, rank, and the two flags.
+9. Write the protected receipt.
+
+Standalone anchor lemma: the ansatz IC is already in `Fix(A_F)`. Positions
+`q_1=(-1,0,0)`, `q_2=(1,0,0)`, `q_3=(0,0,z_0)` and velocities
+`v_1=(v_x,v_y,v_z)`, `v_2=(v_x,v_y,-v_z)`,
+`v_3=(-2v_x/m_3,-2v_y/m_3,0)` satisfy the closed-form `F_beta` fixed
+constraints. The second fixed epoch is `y_i(T_i/2)` by reversibility. The
+runner does not search for `F_beta` anchors.
+
+Implementation gates before code:
+
+1. **Typed D3 products.** The character projector formula is correct, but the
+   off-`sigma3` elements must be constructed with explicit ordering. Once
+   `rho(sigma3)` and `rho(F_beta)` are typed as endomorphisms on the anchor
+   fiber and descend to `K_i^{fib}`, products such as
+   `rho(F_beta sigma3^k)` may be matrix products; the runner must verify the
+   `D3` relation and ordering rather than silently invent private generators.
+2. **Reduced symplectic form.** Verify the center-of-mass / momentum reduction
+   used by the runner preserves the canonical `omega` used in `Gamma_i`. If the
+   implementation coordinates are not standard canonical coordinates, compute
+   and store the reduced `J` explicitly instead of assuming `[0 I; -I 0]`.
+3. **Deterministic basis convention.** Because G2.6d makes rank the count, the
+   basis only affects diagnostics. Still, the receipt must use a deterministic
+   QR/SVD/sign convention for the `F_beta`-even standard basis; avoid vague
+   "principal axes" language unless the operator defining those axes is named.
+4. **Spectral flag vocabulary.** Do not mix SVD and eigenvalue language:
+   `gamma_singular_bimodality_clean` uses singular values of `Gamma_i`;
+   `dE_perturbation_spectral_degeneracy_E` should name whether it is using
+   eigenvalues, Schur blocks, or singular values of `(partial_epsilon M_i)_E`.
+5. **Refinement A precision.** `rtol=atol=1e-14` may be near practical
+   double-precision limits. If the integrator cannot realize the tighter
+   target, record that as a refinement failure rather than treating it as a
+   mathematical marginal.
+
 Rejected as primary:
 
 - **Full continuation in `m3`:** too circular with supplementary-B. It can be a
@@ -1230,7 +1301,8 @@ Rejected as primary:
 | 2026-05-20 | **v0.3h DRAFT REVIEW.** Rank-matrix formulation survives, but the proposed G2.6 closure via an `M_i+sigma3` Floquet basis is invalid on `K_i^{fib}` because `K_i^{fib}=ker(M_i-I)/N_i` and `M_i` is identity there. Cleaner result: `Gamma_i^T=0` for all entries if `(partial_epsilon M_i)_T` preserves `Fix(F_beta)`, because `Fix(F_beta)` is isotropic for anti-symplectic `F_beta`. Thus G2.6 is reframed as a basis-conditioning / scalar-interpretation diagnostic, not the proof of T-collapse. Anchor invariance should be stated as rank under congruence; `gamma_floor` remains proposed pending pre-registered sentinel calibration. |
 | 2026-05-20 | **v0.3h G2.6D DISPOSITION.** Operational basis question closes by not canonicalizing for the count: `d_i=rank_floor(Gamma_i)` is basis-invariant, while per-block diagonal gammas are basis-dependent diagnostics only. `Phi_{T/2}^C` as an involutive kernel canonicalizer (`G2.6b`) is retained as a paper-level follow-up, not a blocker. Locked shape: `Gamma_i^T=0` via anti-symplectic `Fix(F_beta)` isotropy; `Gamma_i=Gamma_i^E`; anchor changes act by congruence; `gamma_floor` formula survives but constants need pre-registered sentinel calibration. Remaining chores: cite G2.1/G2.2 and replace old Krein-in-`M_i` language with degeneracy/bimodality of `(partial_epsilon M_i)_E` or `Gamma_i` singular values. |
 | 2026-05-20 | **v0.3i SENTINEL CALIBRATION PRE-REGISTRATION.** Scope drafted for the first empirical step: one sentinel variational integration only, primary `O_62`, backup ladder in canonical-strict period order if `c_i=0`, constants fixed before the run (`k_gamma=3`, `k_int=10`), and a bimodality falsifier requiring no singular values in `[gamma_floor, k_gamma*gamma_floor]`. Receipt adds two separate flags: `dE_perturbation_spectral_degeneracy_E` for basis/diagnostic ambiguity, and `gamma_singular_bimodality_clean` for rank-gate ambiguity. No full 21, no supplementary-B, and no `K_facet_v0.3` freeze authorized. |
-| (next)     | Finalize v0.3i receipt/branch wording and only then run the single sentinel calibration if accepted. Passing v0.3i can lead to separate v0.3j full-21 authorization; failing v0.3i branches to sharper floor analysis or structural negative if the full ladder has `c_i=0`. |
+| 2026-05-20 | **v0.3i-RUNNER SPEC REVIEW.** Sentinel runner contract accepted as paper-only pre-implementation: parse `O_62`, anchor at ansatz `p_i^F=y_i(0)` (closed-form `Fix(A_F)`), integrate orbit/variational `M_i`, compute `partial_epsilon M_i`, quotient `N_C`, build typed `rho(sigma3)` and `rho(F_beta)`, project `D3`, compute full `Gamma_i`, SVD/rank/floor, and write protected receipt. Pre-implementation gates: typed `D3` product ordering, explicit reduced symplectic form, deterministic basis convention, no SVD/eigenvalue vocabulary mixing, and refinement-A precision limits. Partner-orbit integration is receipt sanity only. |
+| (next)     | Implementation pass may scaffold `npm run isotrophy:kfacet:sentinel` exactly to the runner spec, but still only for the single sentinel scope. Do not run until the implementation has the typed `D3` products and reduced `omega` checks in place. |
 
 ---
 

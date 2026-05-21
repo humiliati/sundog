@@ -896,6 +896,14 @@ from `gamma_singular_bimodality_clean` (rank-gate ambiguity). v0.3i does not
 authorize the full 21, supplementary-B, or freezing `K_facet_v0.3`; those would
 require a later v0.3j authorization.
 
+The sentinel runner spec is now reviewed for implementation planning. It may
+scaffold `npm run isotrophy:kfacet:sentinel`, but should not execute until it
+has explicit typed `D3` product construction, a verified reduced symplectic form
+for `Gamma_i`, deterministic basis diagnostics, and separate SVD/eigen
+degeneracy vocab. The ansatz IC is the `F_beta` fixed anchor in closed form, so
+the runner does not search for anchors. Partner-orbit integration is a receipt
+sanity check only.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

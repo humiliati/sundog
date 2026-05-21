@@ -240,8 +240,13 @@ Remaining honest fork:
   Receipt must separate `dE_perturbation_spectral_degeneracy_E` (basis /
   diagnostic ambiguity) from `gamma_singular_bimodality_clean` (rank-gate
   ambiguity). No full 21, no supplementary-B, no `K_facet_v0.3` freeze.
-- Current next gate: finalize v0.3i receipt/branch wording, then run only the
-  single sentinel calibration if accepted.
+- Runner spec review: implementation may scaffold
+  `npm run isotrophy:kfacet:sentinel`, but only after it handles typed `D3`
+  product ordering, the reduced symplectic form used for `Gamma_i`, deterministic
+  basis diagnostics, and the separate SVD/eigen degeneracy vocab. Partner-orbit
+  integration is a receipt sanity check, not a new theoretical dependency.
+- Current next gate: implementation planning for the sentinel runner. Do not
+  execute until the typed `D3` products and reduced `omega` checks are present.
 
 ## Operator Guardrail
 
@@ -261,4 +266,5 @@ Before any future isotrophy run:
    `Phi_{T/2}^C` canonicalizer deferred, anchor congruence, v0.3i sentinel
    calibration receipt, two degeneracy flags, negative, and go/no-go branch
    before running any monodromy or supplementary-B classification. The only
-   empirical authorization after v0.3i acceptance is the one sentinel row.
+   empirical authorization after v0.3i acceptance is the one sentinel row, and
+   only after the runner's typed `D3` and reduced-`omega` prechecks exist.
