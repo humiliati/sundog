@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDFDFC"/>
+      <stop offset="100%" stop-color="#F5F4EE"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · ABOUT</text>
+
+  <!-- Headline -->
+  <text x="60" y="200" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">A traceability harness</text>
+  <text x="60" y="259" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">for indirect inference.</text>
+
+  <!-- Lede -->
+  <text x="60" y="366" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">Hidden-state control, route fidelity,</text>
+  <text x="60" y="398" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">and explicit failure boundaries.</text>
+
+  <!-- URL -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/about</text>
+
+  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  <g transform="translate(820,140)">
+  <text x="155" y="-12" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">EVIDENCE TIER LADDER</text>
+  <rect x="0" y="0" width="310" height="44" rx="6" fill="#F4C430" stroke="#C99517" stroke-width="1.8"/>
+  <text x="18" y="28" font-family="Verdana, Geneva, sans-serif" font-size="16" font-weight="700" fill="#1A3A52">Operating envelope</text>
+  <rect x="0" y="54" width="310" height="44" rx="6" fill="#2A5570" stroke="#1A3A52" stroke-width="1.8"/>
+  <text x="18" y="82" font-family="Verdana, Geneva, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">Research result</text>
+  <rect x="0" y="108" width="310" height="44" rx="6" fill="#FFFFFF" stroke="#9AA4AC" stroke-width="1.8"/>
+  <text x="18" y="136" font-family="Verdana, Geneva, sans-serif" font-size="16" font-weight="700" fill="#1A3A52">Instrumented prototype</text>
+  <rect x="0" y="162" width="310" height="44" rx="6" fill="#FFFFFF" stroke="#9AA4AC" stroke-width="1.8"/>
+  <text x="18" y="190" font-family="Verdana, Geneva, sans-serif" font-size="16" font-weight="700" fill="#1A3A52">Plausible</text>
+  <rect x="0" y="216" width="310" height="44" rx="6" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.8"/>
+  <text x="18" y="244" font-family="Verdana, Geneva, sans-serif" font-size="16" font-weight="700" fill="#1A3A52">Aspirational</text>
+  </g>
+
+  <!-- Bottom-right mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
+</svg>

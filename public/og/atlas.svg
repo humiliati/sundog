@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDFDFC"/>
+      <stop offset="100%" stop-color="#F5F4EE"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · ATLAS</text>
+
+  <!-- Headline -->
+  <text x="60" y="200" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">The geometry of</text>
+  <text x="60" y="259" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">a sun dog.</text>
+
+  <!-- Lede -->
+  <text x="60" y="366" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">Every named arc in a halo</text>
+  <text x="60" y="398" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">display, calibrated to photographs,</text>
+  <text x="60" y="430" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">with the math visible at every step.</text>
+
+  <!-- URL -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/sundog</text>
+
+  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  
+  <g transform="translate(880,305)">
+    <!-- 22 degree halo -->
+    <circle cx="0" cy="0" r="150" fill="none" stroke="#1A3A52" stroke-width="2.4" opacity="0.85"/>
+    <!-- 46 degree halo (faint, partial) -->
+    <circle cx="0" cy="0" r="220" fill="none" stroke="#1A3A52" stroke-width="1.2" opacity="0.32" stroke-dasharray="6 6"/>
+    <!-- parhelic circle (horizontal) -->
+    <line x1="-260" y1="0" x2="260" y2="0" stroke="#2A5570" stroke-width="1.5" opacity="0.55"/>
+    <!-- sun column (vertical light pillar) -->
+    <line x1="0" y1="-260" x2="0" y2="260" stroke="#C99517" stroke-width="1.5" opacity="0.4" stroke-dasharray="4 4"/>
+    <!-- Sun (compass rose / diamond) -->
+    <polygon points="0,-22 22,0 0,22 -22,0" fill="#F4C430" stroke="#C99517" stroke-width="2"/>
+    <!-- Parhelia (left and right of sun, outward-facing daggers) -->
+    <polygon points="-150,-10 -130,0 -150,10 -170,0" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>
+    <polygon points="150,-10 170,0 150,10 130,0" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>
+    <!-- Circumzenithal arc (smile, top) -->
+    <path d="M -130,-200 Q 0,-260 130,-200" fill="none" stroke="#C99517" stroke-width="2.4" opacity="0.85"/>
+  </g>
+  <text x="880" y="555" font-family="Verdana, Geneva, sans-serif" font-size="13" fill="#6A7680" text-anchor="middle">22° halo · parhelic circle · parhelia · CZA</text>
+
+
+  <!-- Bottom-right mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
+</svg>
