@@ -8,6 +8,8 @@ until the crossing-form gate passes. The "couplings surface / 1/phi^3" material
 below is quarantined as a future crossing-form diagnostic, not a premise of
 v0.3.
 
+swinging atwood machine
+
 shannon theorem
 
 boolean algebra information entropy h(x) vs sundog h(x)

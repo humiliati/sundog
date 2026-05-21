@@ -282,6 +282,288 @@ def integrate_orbit(row: OrbitRow, rtol: float, atol: float, max_step_fraction: 
     )
 
 
+def acceleration_jacobian(x: np.ndarray, masses: np.ndarray) -> np.ndarray:
+    """Return d(a_flat)/d(x_flat) for the Newtonian acceleration field."""
+    jacobian = np.zeros((9, 9), dtype=float)
+    for i in range(3):
+        for j in range(3):
+            if i == j:
+                continue
+            delta = x[j] - x[i]
+            r2 = float(np.dot(delta, delta))
+            r = math.sqrt(r2)
+            block = masses[j] * (np.eye(3) / (r2 * r) - 3.0 * np.outer(delta, delta) / (r2 * r2 * r))
+            jacobian[3 * i : 3 * i + 3, 3 * i : 3 * i + 3] -= block
+            jacobian[3 * i : 3 * i + 3, 3 * j : 3 * j + 3] += block
+    return jacobian
+
+
+def variational_rhs_factory(masses: np.ndarray, orbit_solution):
+    """Build the homogeneous variational RHS along an integrated orbit."""
+
+    def variational_rhs(t: float, delta_y: np.ndarray) -> np.ndarray:
+        y_t = orbit_solution.sol(t)
+        x_t = y_t[:9].reshape(3, 3)
+        delta_x = delta_y[:9]
+        delta_v = delta_y[9:]
+        return np.concatenate([delta_v, acceleration_jacobian(x_t, masses) @ delta_x])
+
+    return variational_rhs
+
+
+def compute_flow_jacobian(
+    integrated: IntegratedOrbit,
+    duration: float,
+    rtol: float,
+    atol: float,
+) -> np.ndarray:
+    """Compute Dphi_duration(y0) in the 18D position/velocity coordinates."""
+    if duration < -1e-14 or duration > integrated.row.period + 1e-14:
+        raise ValueError("compute_flow_jacobian expects duration within one nonnegative period")
+    variational_rhs = variational_rhs_factory(integrated.row.masses, integrated.solution)
+    flow = np.zeros((18, 18), dtype=float)
+    for column in range(18):
+        initial = np.zeros(18, dtype=float)
+        initial[column] = 1.0
+        solution = solve_ivp(
+            variational_rhs,
+            (0.0, duration),
+            initial,
+            method="DOP853",
+            rtol=rtol,
+            atol=atol,
+            dense_output=False,
+        )
+        if not solution.success:
+            raise RuntimeError(
+                f"variational integration failed for {integrated.row.label}, column {column}: {solution.message}"
+            )
+        flow[:, column] = solution.y[:, -1]
+    return flow
+
+
+def compute_monodromy(integrated: IntegratedOrbit, rtol: float, atol: float) -> np.ndarray:
+    """Compute M_i = Dphi_T(y0) for the v0.3i sentinel gates."""
+    return compute_flow_jacobian(integrated, integrated.row.period, rtol, atol)
+
+
+def body_permutation_matrix_18(perm: tuple[int, int, int]) -> np.ndarray:
+    """Lift a body relabel to the 18D position/velocity coordinates."""
+    block9 = np.zeros((9, 9), dtype=float)
+    for new_body, old_body in enumerate(perm):
+        for axis in range(3):
+            block9[3 * new_body + axis, 3 * old_body + axis] = 1.0
+    operator = np.zeros((18, 18), dtype=float)
+    operator[:9, :9] = block9
+    operator[9:, 9:] = block9
+    return operator
+
+
+def spatial_matrix_18(spatial: np.ndarray) -> np.ndarray:
+    """Lift a 3D spatial matrix to all bodies in position and velocity blocks."""
+    block9 = np.zeros((9, 9), dtype=float)
+    for body in range(3):
+        block9[3 * body : 3 * body + 3, 3 * body : 3 * body + 3] = spatial
+    operator = np.zeros((18, 18), dtype=float)
+    operator[:9, :9] = block9
+    operator[9:, 9:] = block9
+    return operator
+
+
+def time_reversal_matrix_18() -> np.ndarray:
+    """Lift time reversal to the 18D tangent coordinates: positions fixed, velocities negated."""
+    operator = np.eye(18)
+    operator[9:, 9:] *= -1.0
+    return operator
+
+
+def f_beta_action_v0() -> np.ndarray:
+    """Closed-form F_beta tangent action at the ansatz F_beta fixed anchor."""
+    return body_permutation_matrix_18(PERMUTATIONS["swap12"]) @ time_reversal_matrix_18() @ spatial_matrix_18(R_PI)
+
+
+def construct_sigma_action_v0(
+    integrated: IntegratedOrbit,
+    perm: tuple[int, int, int],
+    shift_fraction: float,
+    rtol: float,
+    atol: float,
+) -> np.ndarray:
+    """Construct a sigma-type D3 endomorphism on T_y0 by relabel plus period back-flow.
+
+    With the generator convention used by transform_positions, sigma sends
+    y(0) to P*y(-shift). For strict choreographies this is y(0), so the
+    tangent operator is P * Dphi_{T-shift}(y0).
+    """
+    period = integrated.row.period
+    duration = (period - shift_fraction * period) % period
+    if duration <= DEFAULT_CLOSURE_FLOOR:
+        flow = np.eye(18)
+    else:
+        flow = compute_flow_jacobian(integrated, duration, rtol, atol)
+    return body_permutation_matrix_18(perm) @ flow
+
+
+def construct_d3_elements_v0(integrated: IntegratedOrbit, rtol: float, atol: float) -> dict[str, np.ndarray]:
+    """Construct the six D3 tangent operators for the sentinel implementation gates."""
+    identity = np.eye(18)
+    sigma3 = construct_sigma_action_v0(integrated, PERMUTATIONS["cycle123"], 1.0 / 3.0, rtol, atol)
+    sigma3_sq = construct_sigma_action_v0(integrated, PERMUTATIONS["cycle132"], 2.0 / 3.0, rtol, atol)
+    f_beta = f_beta_action_v0()
+    return {
+        "e": identity,
+        "sigma3": sigma3,
+        "sigma3_sq": sigma3_sq,
+        "F_beta": f_beta,
+        "F_beta_sigma3": f_beta @ sigma3,
+        "F_beta_sigma3_sq": f_beta @ sigma3_sq,
+    }
+
+
+def verify_d3_relations(d3_ops: dict[str, np.ndarray], relation_floor: float) -> dict[str, object]:
+    """Verify the typed D3 relations before any sentinel Gamma_i computation."""
+    identity = np.eye(18)
+    sigma3 = d3_ops["sigma3"]
+    sigma3_sq = d3_ops["sigma3_sq"]
+    f_beta = d3_ops["F_beta"]
+    checks = {
+        "sigma3_cubed_minus_I": float(np.linalg.norm(sigma3 @ sigma3 @ sigma3 - identity, ord=np.inf)),
+        "sigma3_sq_consistency": float(np.linalg.norm(sigma3 @ sigma3 - sigma3_sq, ord=np.inf)),
+        "F_beta_squared_minus_I": float(np.linalg.norm(f_beta @ f_beta - identity, ord=np.inf)),
+        "dihedral_relation": float(np.linalg.norm(f_beta @ sigma3 @ f_beta - sigma3_sq, ord=np.inf)),
+        "F_beta_sigma3_squared_minus_I": float(np.linalg.norm((f_beta @ sigma3) @ (f_beta @ sigma3) - identity, ord=np.inf)),
+    }
+    return {
+        "gate": "D3_relations",
+        "floor": relation_floor,
+        "checks": checks,
+        "max_residual": max(checks.values()),
+        "passed": all(value < relation_floor for value in checks.values()),
+    }
+
+
+def canonical_omega_18(masses: np.ndarray) -> np.ndarray:
+    """Return the canonical symplectic form in (q, v) coordinates.
+
+    In velocity coordinates the canonical momentum is p_i=m_i v_i, so the
+    q/v symplectic matrix carries the mass matrix. For the equal-mass sentinel
+    this reduces to the usual J.
+    """
+    mass9 = np.zeros((9, 9), dtype=float)
+    for body, mass in enumerate(masses):
+        mass9[3 * body : 3 * body + 3, 3 * body : 3 * body + 3] = np.eye(3) * mass
+    return np.block([[np.zeros((9, 9)), mass9], [-mass9, np.zeros((9, 9))]])
+
+
+def vector_subspace_basis(vectors: np.ndarray, floor: float) -> np.ndarray:
+    """Return an orthonormal column basis for the span of input columns."""
+    if vectors.size == 0 or vectors.shape[1] == 0:
+        return np.zeros((vectors.shape[0], 0), dtype=float)
+    u, singular_values, _vh = np.linalg.svd(vectors, full_matrices=False)
+    rank = int(np.sum(singular_values > floor))
+    return u[:, :rank]
+
+
+def compute_neutral_basis(M_i: np.ndarray, integrated: IntegratedOrbit, floor: float) -> np.ndarray:
+    """Build the translation/boost/flow/Jordan neutral basis for the 18D gate quotient."""
+    neutral_columns: list[np.ndarray] = []
+    rhs = rhs_factory(integrated.row.masses)
+    x_h = rhs(0.0, integrated.y0)
+    neutral_columns.append(x_h)
+
+    for axis in range(3):
+        translation = np.zeros(18, dtype=float)
+        for body in range(3):
+            translation[3 * body + axis] = 1.0
+        neutral_columns.append(translation)
+
+    for axis in range(3):
+        boost = np.zeros(18, dtype=float)
+        for body in range(3):
+            boost[9 + 3 * body + axis] = 1.0
+        neutral_columns.append(boost)
+
+    identity = np.eye(18)
+    u_energy, *_ = np.linalg.lstsq(M_i - identity, x_h, rcond=None)
+    neutral_columns.append(u_energy)
+    return vector_subspace_basis(np.column_stack(neutral_columns), floor)
+
+
+def compute_k_fib_basis(
+    M_i: np.ndarray,
+    integrated: IntegratedOrbit,
+    closure_floor: float,
+) -> tuple[np.ndarray, dict[str, object]]:
+    """Compute a gate-level basis for K_i^fib = ker(M_i-I) modulo neutral directions."""
+    identity = np.eye(18)
+    _u, singular_values, vh = np.linalg.svd(M_i - identity)
+    kernel_mask = singular_values < closure_floor
+    kernel_basis = vh.T[:, kernel_mask]
+    neutral_basis = compute_neutral_basis(M_i, integrated, closure_floor)
+    if kernel_basis.shape[1] == 0:
+        return np.zeros((18, 0), dtype=float), {
+            "kernel_dim": 0,
+            "neutral_dim": int(neutral_basis.shape[1]),
+            "K_fib_dim": 0,
+            "kernel_singular_values": [float(value) for value in singular_values],
+        }
+
+    neutral_projector = neutral_basis @ neutral_basis.T if neutral_basis.shape[1] else np.zeros((18, 18))
+    quotient_raw = kernel_basis - neutral_projector @ kernel_basis
+    k_fib_basis = vector_subspace_basis(quotient_raw, closure_floor)
+    return k_fib_basis, {
+        "kernel_dim": int(kernel_basis.shape[1]),
+        "neutral_dim": int(neutral_basis.shape[1]),
+        "K_fib_dim": int(k_fib_basis.shape[1]),
+        "kernel_singular_values": [float(value) for value in singular_values],
+    }
+
+
+def verify_reduced_omega(
+    M_i: np.ndarray,
+    k_fib_basis: np.ndarray,
+    omega: np.ndarray,
+    nondegeneracy_floor: float,
+) -> dict[str, object]:
+    """Verify the omega matrix used by the sentinel gates and its K_i^fib restriction."""
+    checks: dict[str, float] = {
+        "omega_skew_residual": float(np.linalg.norm(omega + omega.T, ord=np.inf)),
+        "omega_rank": float(np.linalg.matrix_rank(omega)),
+        "M_i_symplectic_residual": float(np.linalg.norm(M_i.T @ omega @ M_i - omega, ord=np.inf)),
+    }
+    if k_fib_basis.shape[1] == 0:
+        return {
+            "gate": "reduced_omega",
+            "floor": nondegeneracy_floor,
+            "K_fib_dim": 0,
+            "checks": checks,
+            "passed": checks["omega_skew_residual"] < nondegeneracy_floor
+            and checks["M_i_symplectic_residual"] < nondegeneracy_floor,
+            "notes": "K_i^fib empty; restriction nondegeneracy is vacuous.",
+        }
+    omega_k = k_fib_basis.T @ omega @ k_fib_basis
+    restricted_singular_values = np.linalg.svd(omega_k, compute_uv=False)
+    checks.update(
+        {
+            "K_fib_omega_min_singular": float(restricted_singular_values.min()),
+            "K_fib_omega_max_singular": float(restricted_singular_values.max()),
+            "K_fib_omega_condition": float(
+                restricted_singular_values.max() / max(restricted_singular_values.min(), 1e-300)
+            ),
+        }
+    )
+    return {
+        "gate": "reduced_omega",
+        "floor": nondegeneracy_floor,
+        "K_fib_dim": int(k_fib_basis.shape[1]),
+        "checks": checks,
+        "omega_restriction_singular_values": [float(value) for value in restricted_singular_values],
+        "passed": checks["omega_skew_residual"] < nondegeneracy_floor
+        and checks["M_i_symplectic_residual"] < nondegeneracy_floor
+        and checks["K_fib_omega_min_singular"] > nondegeneracy_floor,
+    }
+
+
 def best_so3_rotation(source: np.ndarray, target: np.ndarray) -> np.ndarray:
     h = source.T @ target
     u, _s, vt = np.linalg.svd(h)
@@ -1385,6 +1667,89 @@ def command_fbeta_pair_id(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_kfacet_sentinel(args: argparse.Namespace) -> int:
+    """Run the v0.3i sentinel implementation gates without authorizing Gamma_i."""
+    source = args.source.upper()
+    text = read_text(args.path or SUPPLEMENT_URLS[source])
+    rows = parse_rows(text, source)
+    selected = select_rows(rows, args.m3, 0, False, {args.sentinel_index})
+    if not selected:
+        raise SystemExit(f"sentinel row O_{{{args.sentinel_index}}}({args.m3:g}) not in catalog")
+    row = selected[0]
+
+    print(f"[kfacet-sentinel] integrating {row.label} for gate scaffolding")
+    integrated = integrate_orbit(row, args.rtol, args.atol, args.max_step_fraction)
+    print(
+        "[kfacet-sentinel] orbit closure "
+        f"position={integrated.closure_position_inf:.3e} velocity={integrated.closure_velocity_inf:.3e}"
+    )
+
+    print("[kfacet-sentinel] computing M_i")
+    monodromy = compute_monodromy(integrated, args.rtol, args.atol)
+
+    print("[kfacet-sentinel] constructing typed D3 operators")
+    d3_ops = construct_d3_elements_v0(integrated, args.rtol, args.atol)
+    d3_gate = verify_d3_relations(d3_ops, args.relation_floor)
+    print(
+        "[kfacet-sentinel] D3 gate "
+        f"{'PASS' if d3_gate['passed'] else 'FAIL'} max={float(d3_gate['max_residual']):.3e}"
+    )
+
+    k_fib_basis, k_fib_summary = compute_k_fib_basis(monodromy, integrated, args.closure_floor)
+    omega = canonical_omega_18(integrated.row.masses)
+    omega_gate = verify_reduced_omega(monodromy, k_fib_basis, omega, args.nondegeneracy_floor)
+    print(
+        "[kfacet-sentinel] omega gate "
+        f"{'PASS' if omega_gate['passed'] else 'FAIL'} K_fib_dim={omega_gate['K_fib_dim']}"
+    )
+
+    all_gates_passed = bool(d3_gate["passed"] and omega_gate["passed"])
+    receipt = {
+        "mode": "kfacet_sentinel_gates",
+        "gate_version": "v0.3i-gates",
+        "row_index": row.index,
+        "label": row.label,
+        "m3": row.m3,
+        "period": row.period,
+        "rtol": args.rtol,
+        "atol": args.atol,
+        "max_step_fraction": args.max_step_fraction,
+        "closure_position_inf": integrated.closure_position_inf,
+        "closure_velocity_inf": integrated.closure_velocity_inf,
+        "integration_seconds": integrated.elapsed_seconds,
+        "M_i_norm_inf": float(np.linalg.norm(monodromy, ord=np.inf)),
+        "K_fib": k_fib_summary,
+        "D3_relations": d3_gate,
+        "reduced_omega": omega_gate,
+        "all_gates_passed": all_gates_passed,
+        "sentinel_scope": {
+            "full_gamma_run_authorized": False,
+            "full_21_authorized": False,
+            "supplementary_B_authorized": False,
+            "notes": "This command scaffolds v0.3i gates only; Gamma_i remains unimplemented.",
+        },
+    }
+
+    if args.out:
+        out_dir = Path(args.out)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "gate_receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+        np.save(out_dir / "M_i.npy", monodromy)
+        np.save(out_dir / "K_fib_basis.npy", k_fib_basis)
+        np.save(out_dir / "omega.npy", omega)
+        for name, operator in d3_ops.items():
+            np.save(out_dir / f"D3_{name}.npy", operator)
+
+    if not all_gates_passed:
+        print("[kfacet-sentinel] HALT: implementation gates failed; Gamma_i run remains blocked")
+        return 1
+    if args.authorize_sentinel_run:
+        print("[kfacet-sentinel] HALT: --authorize-sentinel-run requested, but Gamma_i is not implemented")
+        return 3
+    print("[kfacet-sentinel] gates passed; Gamma_i run remains unimplemented and unauthorised")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Sundog isotrophy workbench smoke harness")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -1538,6 +1903,24 @@ def build_parser() -> argparse.ArgumentParser:
     fbeta_pair.add_argument("--report-every", type=int, default=7)
     fbeta_pair.add_argument("--out", help="optional output directory for manifest.json and residuals.csv")
     fbeta_pair.set_defaults(func=command_fbeta_pair_id)
+
+    sentinel = sub.add_parser(
+        "kfacet-sentinel",
+        help="v0.3i sentinel calibration gate scaffold (D3 and omega checks only)",
+    )
+    sentinel.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="A")
+    sentinel.add_argument("--path", help="local supplementary file instead of the live URL")
+    sentinel.add_argument("--m3", type=float, default=1.0)
+    sentinel.add_argument("--sentinel-index", type=int, default=62)
+    sentinel.add_argument("--rtol", type=float, default=DEFAULT_RTOL)
+    sentinel.add_argument("--atol", type=float, default=DEFAULT_ATOL)
+    sentinel.add_argument("--max-step-fraction", type=float, default=DEFAULT_MAX_STEP_FRACTION)
+    sentinel.add_argument("--relation-floor", type=float, default=1e-8)
+    sentinel.add_argument("--closure-floor", type=float, default=1e-8)
+    sentinel.add_argument("--nondegeneracy-floor", type=float, default=1e-8)
+    sentinel.add_argument("--authorize-sentinel-run", action="store_true")
+    sentinel.add_argument("--out", help="optional output directory for gate receipt and matrices")
+    sentinel.set_defaults(func=command_kfacet_sentinel)
     return parser
 
 

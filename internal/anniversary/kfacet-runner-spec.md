@@ -1,0 +1,658 @@
+
+Draft V1 by Claude Code Opus 4.7 on max the in last 25% of a 1m context window  
+
+Below are the additions for `scripts/isotrophy_workbench.py`. Each block is self-contained with a docstring tying to v0.3i / v0.3i-runner spec. The two gates are runnable independently of the sentinel integration via `--gates-only`.
+
+---
+
+## Block 1 — Variational integration (foundation for M_i and ∂_ε M_i)
+
+```python
+# ----------------------------------------------------------------------------
+# Variational integration along a periodic orbit (v0.3i-runner §2 step 3).
+# Integrates δy' = D X_H(y(t)) · δy along C_i. Used to compute M_i (with zero
+# perturbation source) and ∂_ε M_i (with the m_3-perturbation source).
+# ----------------------------------------------------------------------------
+
+def acceleration_jacobian(x: np.ndarray, masses: np.ndarray) -> np.ndarray:
+    """Returns the 9x9 Jacobian d(a_flat)/d(x_flat) of the Newtonian
+    acceleration field at configuration x (shape (3,3)), with masses (3,)."""
+    jac = np.zeros((9, 9), dtype=float)
+    for i in range(3):
+        for j in range(3):
+            if i == j:
+                continue
+            delta = x[j] - x[i]
+            r2 = float(np.dot(delta, delta))
+            r = math.sqrt(r2)
+            # Block d(a_i)/d(x_k):
+            #   k = i:  -m_j * (I/r^3 - 3 outer(delta,delta)/r^5)
+            #   k = j:  +m_j * (I/r^3 - 3 outer(delta,delta)/r^5)
+            block = masses[j] * (
+                np.eye(3) / (r2 * r) - 3.0 * np.outer(delta, delta) / (r2 * r2 * r)
+            )
+            jac[3 * i : 3 * i + 3, 3 * i : 3 * i + 3] -= block
+            jac[3 * i : 3 * i + 3, 3 * j : 3 * j + 3] += block
+    return jac
+
+
+def variational_rhs_factory(masses: np.ndarray, orbit_sol):
+    """RHS for the variational equation δy' = D X_H(y(t)) · δy + source(t).
+    Returns a function taking (t, delta_y, source_at_t) and producing
+    delta_y_dot. The source is per-step (for ∂_ε M_i; zero for M_i)."""
+
+    def variational_rhs(t: float, delta_y: np.ndarray, source=None) -> np.ndarray:
+        y_t = orbit_sol.sol(t)
+        x_t = y_t[:9].reshape(3, 3)
+        delta_x = delta_y[:9]
+        delta_v = delta_y[9:]
+        jac = acceleration_jacobian(x_t, masses)
+        delta_x_dot = delta_v
+        delta_v_dot = jac @ delta_x
+        out = np.concatenate([delta_x_dot, delta_v_dot])
+        if source is not None:
+            out = out + source(t, y_t)
+        return out
+
+    return variational_rhs
+
+
+def compute_monodromy(
+    integrated: IntegratedOrbit,
+    rtol: float = 1e-12,
+    atol: float = 1e-12,
+) -> np.ndarray:
+    """Compute the 18x18 monodromy M_i = Dφ_{T_i}(y_i(0)) by integrating the
+    variational equation with 18 unit-vector initial conditions over one period."""
+    masses = integrated.row.masses
+    var_rhs = variational_rhs_factory(masses, integrated.solution)
+    T_i = integrated.row.period
+
+    M = np.zeros((18, 18), dtype=float)
+    for k in range(18):
+        e_k = np.zeros(18, dtype=float)
+        e_k[k] = 1.0
+        sol = solve_ivp(
+            lambda t, dy: var_rhs(t, dy, source=None),
+            (0.0, T_i),
+            e_k,
+            method="DOP853",
+            rtol=rtol,
+            atol=atol,
+            dense_output=False,
+        )
+        if not sol.success:
+            raise RuntimeError(f"M_i variational integration failed (column {k}): {sol.message}")
+        M[:, k] = sol.y[:, -1]
+    return M
+
+
+def perturbation_source_factory(masses: np.ndarray, perturbation_acc_jacobian):
+    """For ∂_ε M_i: returns source(t, y_t) = (0, ∂_ε(D X_H)(y_t) · δy_baseline(t)).
+    For the m_3 perturbation, perturbation_acc_jacobian is the derivative of the
+    acceleration field with respect to m_3 (evaluated at m_3 = 1)."""
+    # The baseline trajectory δy_baseline is zero for the M_i computation
+    # (variational delta from the unperturbed orbit). For ∂_ε M_i the source is
+    # the linearized perturbation at the BASELINE y_t.
+    # See v0.3i-runner §2 step 6.
+    def source(t, y_t):
+        x_t = y_t[:9].reshape(3, 3)
+        # Perturbation acceleration: ΔH gives extra a_i from body 3's mass change.
+        # ΔH = -(1/2)|p_3|² - G/r_{13} - G/r_{23} at m_1=m_2=m_3=1.
+        # ∂_ε(a_i) = derivative of acceleration on body i w.r.t. m_3.
+        # For body 1: ∂_ε(a_1) includes the -1/r_{13}^3 (x_3-x_1) term derivative.
+        # For body 3: ∂_ε(a_3) involves the kinetic term (1/m_3^2) factor.
+        # Concrete formulas: TODO -- compute closed-form, document derivation.
+        return np.zeros(18, dtype=float)  # PLACEHOLDER -- replace with closed form
+
+    return source
+
+
+def compute_partial_eps_monodromy(
+    integrated: IntegratedOrbit,
+    rtol: float = 1e-12,
+    atol: float = 1e-12,
+) -> np.ndarray:
+    """Compute ∂_ε M_i at ε = 0 via inhomogeneous variational integration with
+    the m_3-perturbation source term. Returns 18x18 matrix."""
+    masses = integrated.row.masses
+    perturbation_source = perturbation_source_factory(masses, None)  # TODO closed form
+    var_rhs = variational_rhs_factory(masses, integrated.solution)
+    T_i = integrated.row.period
+
+    dM = np.zeros((18, 18), dtype=float)
+    for k in range(18):
+        e_k = np.zeros(18, dtype=float)
+        e_k[k] = 1.0
+        sol = solve_ivp(
+            lambda t, dy: var_rhs(t, dy, source=perturbation_source),
+            (0.0, T_i),
+            np.zeros(18),  # ∂_ε δy(0) = 0
+            method="DOP853",
+            rtol=rtol,
+            atol=atol,
+            dense_output=False,
+        )
+        if not sol.success:
+            raise RuntimeError(f"∂_ε M_i integration failed (column {k}): {sol.message}")
+        dM[:, k] = sol.y[:, -1]
+    return dM
+```
+
+**Implementation note (this is a real load-bearing piece):** the closed-form for `perturbation_source` requires deriving `∂_ε X_H` at m_3 = 1 explicitly from `ΔH = -(1/2)|p_3|² - G/r_{13} - G/r_{23}`. The Hamiltonian vector field is `X_H = J · ∇H`; differentiating `H = T(p) + V(q)` w.r.t. `m_3` gives a specific update to the acceleration and (through `T(p) = Σ p_i²/(2m_i)`) to the position derivative. We've stubbed this; it's a closed-form derivation that should be done on paper first and then plugged in. Suggest making this a small standalone helper with its own unit test (verify against finite-difference of M_i across `m_3 = 1±h`).
+
+## Block 2 — Trivial neutral block + K_i^{fib}
+
+```python
+# ----------------------------------------------------------------------------
+# Neutral block N_C and reduced kernel K_i^{fib} (v0.3i-runner §2 steps 7-8).
+# Working in full 18-dim phase space, N_C is the 8-dim trivial neutral block:
+# - flow direction (X_H)
+# - energy Jordan partner (u_E)
+# - 3 translation directions (uniform x-shift per body)
+# - 3 momentum-boost Jordan partners
+# Quotienting these gives the "non-trivial" kernel K_i^{fib} where the v0.3
+# rep-theoretic content lives.
+# ----------------------------------------------------------------------------
+
+def compute_trivial_neutral_block(integrated: IntegratedOrbit) -> np.ndarray:
+    """Return 18x8 matrix whose columns are a basis of the trivial neutral
+    subspace of T_{y_i(0)}."""
+    masses = integrated.row.masses
+    _, x0, v0 = expand_initial_state(integrated.row, center_com=True)
+
+    # X_H direction: (v0, a0) at the IC
+    rhs = rhs_factory(masses)
+    X_H = rhs(0.0, integrated.y0)  # 18-dim
+
+    # Translation directions: δx_a = (e_a, e_a, e_a, 0, 0, 0) for a ∈ {x, y, z}
+    T_dirs = np.zeros((18, 3), dtype=float)
+    for axis in range(3):
+        for body in range(3):
+            T_dirs[3 * body + axis, axis] = 1.0
+    # δv = 0
+
+    # Momentum-boost directions: δv_a = (e_a, e_a, e_a) for each axis
+    B_dirs = np.zeros((18, 3), dtype=float)
+    for axis in range(3):
+        for body in range(3):
+            B_dirs[9 + 3 * body + axis, axis] = 1.0
+
+    # u_E (energy Jordan partner): solved from (M_i - I) u_E = c · X_H
+    # We solve this AFTER M_i is computed; for now, stub out.
+    u_E = np.zeros(18, dtype=float)  # PLACEHOLDER -- requires M_i
+
+    N_C = np.column_stack([X_H, T_dirs, B_dirs, u_E])
+    return N_C  # 18x8 (column 0: X_H, columns 1-3: T, 4-6: B, 7: u_E)
+
+
+def compute_K_fib_basis(
+    M_i: np.ndarray,
+    integrated: IntegratedOrbit,
+    closure_floor: float = 1e-8,
+) -> np.ndarray:
+    """Compute a basis of K_i^{fib} = ker(M_i - I) / N_C.
+
+    Strategy: SVD of (M_i - I) gives the kernel (right-singular vectors with
+    singular value < closure_floor). Then project out the N_C subspace
+    (Gram-Schmidt against the neutral block) to get K_i^{fib}."""
+    I_18 = np.eye(18)
+    U, S, Vh = np.linalg.svd(M_i - I_18)
+    # Kernel: columns of V corresponding to small singular values
+    kernel_mask = S < closure_floor
+    if not np.any(kernel_mask):
+        return np.zeros((18, 0))
+    # V is the right-singular basis; kernel is the last (rank-deficient) cols.
+    # In SVD ordering, smallest singular values come last.
+    kernel_cols = Vh.T[:, kernel_mask]
+
+    # Solve for u_E now that we have ker(M_i - I)
+    # (M_i - I) u_E = c · X_H => least-squares
+    rhs_func = rhs_factory(integrated.row.masses)
+    X_H = rhs_func(0.0, integrated.y0)
+    u_E_sol, _, _, _ = np.linalg.lstsq(M_i - I_18, X_H, rcond=None)
+    u_E = u_E_sol  # in 18-dim space
+
+    # Build full N_C (replace u_E placeholder)
+    N_C = compute_trivial_neutral_block(integrated)
+    N_C[:, -1] = u_E
+
+    # Orthogonalize K_i^{fib} basis against N_C via Gram-Schmidt projection
+    # Project kernel_cols orthogonal to span(N_C):
+    Q, _ = np.linalg.qr(N_C)
+    projector_to_N_C = Q @ Q.T
+    K_fib_raw = kernel_cols - projector_to_N_C @ kernel_cols
+    # Re-orthogonalize and drop near-zero columns
+    Q_K, R_K = np.linalg.qr(K_fib_raw)
+    nonzero = np.abs(np.diag(R_K)) > closure_floor
+    return Q_K[:, nonzero]
+```
+
+## Block 3 — Typed D_3 element construction (back-flow)
+
+```python
+# ----------------------------------------------------------------------------
+# Typed D_3 group element actions on T_{y_i(0)} (v0.3i-runner §2 steps 9-11).
+#
+# D_3 = ⟨σ_3, F_β⟩, six elements: e, σ_3, σ_3², F_β, F_β·σ_3, F_β·σ_3².
+# - F_β = (12)·τ·R_π is closed-form (no integration): F_β fixes y_i(0).
+# - σ_3 = ((123), T/3, +, I): σ_3·y_i(0) = y_i(T/3), so the V_0-endomorphism
+#   requires back-flow from y_i(T/3) to y_i(0) via the orbit's tangent flow.
+# - σ_3² similar with 2T/3.
+# - F_β·σ_3, F_β·σ_3²: compose by operator order (apply σ_3 first, then F_β).
+#
+# Convention: ρ(g) on T_{y_i(0)} is constructed so g·X = X at the orbit level
+# implies ρ(g) acts on tangent variations. For non-fixed-point elements, the
+# back-flow Dφ_{-shift}(σ_3·y_i(0)) brings the tangent fiber back to V_0.
+# ----------------------------------------------------------------------------
+
+# Phase-space lifts (acting on 18-dim state vectors)
+def body_permutation_matrix_18(perm: tuple[int, int, int]) -> np.ndarray:
+    """Lift body-relabel perm to an 18x18 block-diagonal matrix
+    (positions block + velocities block)."""
+    P9 = np.zeros((9, 9))
+    for new_body, old_body in enumerate(perm):
+        # New body `new_body` takes the position of old_body's
+        for axis in range(3):
+            P9[3 * new_body + axis, 3 * old_body + axis] = 1.0
+    P18 = np.zeros((18, 18))
+    P18[:9, :9] = P9
+    P18[9:, 9:] = P9
+    return P18
+
+
+def spatial_rotation_matrix_18(R_3x3: np.ndarray) -> np.ndarray:
+    """Lift a 3x3 spatial rotation to 18x18 (acting same on all bodies'
+    positions and velocities)."""
+    R_block = np.zeros((9, 9))
+    for body in range(3):
+        R_block[3 * body : 3 * body + 3, 3 * body : 3 * body + 3] = R_3x3
+    R18 = np.zeros((18, 18))
+    R18[:9, :9] = R_block
+    R18[9:, 9:] = R_block
+    return R18
+
+
+def time_reversal_matrix_18() -> np.ndarray:
+    """Lift τ to 18x18: flips momenta, preserves positions."""
+    A_tau = np.eye(18)
+    A_tau[9:, 9:] = -np.eye(9)
+    return A_tau
+
+
+def F_beta_action_V0() -> np.ndarray:
+    """Closed-form: A_F = P_{12} · A_τ · A_{R_π}, 18x18 anti-symplectic involution
+    on T_{y_i(0)}. F_β fixes y_i(0) for ansatz rows, so this is an endomorphism."""
+    P12 = body_permutation_matrix_18(PERMUTATIONS["swap12"])
+    R_pi_3 = R_PI  # diag(-1, -1, 1)
+    A_R_pi = spatial_rotation_matrix_18(R_pi_3)
+    A_tau = time_reversal_matrix_18()
+    return P12 @ A_tau @ A_R_pi
+
+
+def construct_sigma3_action_V0(
+    integrated: IntegratedOrbit,
+    cycle: tuple[int, int, int],
+    shift_fraction: float,
+    rtol: float = 1e-12,
+    atol: float = 1e-12,
+) -> np.ndarray:
+    """Construct ρ(σ_3^k) on T_{y_i(0)} via back-flow.
+
+    σ_3^k acts on the orbit by:
+        (σ_3^k · X)(t) = P_{cycle} · X(t - shift)
+    At t = 0: σ_3^k · y_i(0) = P_{cycle} · y_i(-shift) = P_{cycle} · y_i(T - shift)
+
+    To get the V_0 endomorphism, we need to back-flow from σ_3^k · y_i(0) to
+    y_i(0). The σ_3^k action sends tangent vectors at y_i(0) to tangent vectors
+    at σ_3^k · y_i(0); back-flow returns them to T_{y_i(0)}."""
+    T_i = integrated.row.period
+    P_cyc = body_permutation_matrix_18(cycle)
+    # σ_3^k · y_i(0) is at orbit time t' = T_i - shift_fraction * T_i (since the
+    # symmetry shifts the origin backward by shift). Equivalently, this point is
+    # y_i(shift_fraction * T_i) under appropriate relabel.
+
+    # The back-flow tangent map Dφ_{-shift_fraction * T_i}(σ_3^k · y_i(0)):
+    # equivalently, the inverse of Dφ_{shift_fraction * T_i}(y_i(0)).
+    # We compute Dφ_{shift_fraction * T_i}(y_i(0)) first.
+    var_rhs = variational_rhs_factory(integrated.row.masses, integrated.solution)
+    fwd_flow = np.zeros((18, 18))
+    target_t = shift_fraction * T_i
+    for k in range(18):
+        e_k = np.zeros(18)
+        e_k[k] = 1.0
+        sol = solve_ivp(
+            lambda t, dy: var_rhs(t, dy, source=None),
+            (0.0, target_t),
+            e_k,
+            method="DOP853",
+            rtol=rtol,
+            atol=atol,
+        )
+        fwd_flow[:, k] = sol.y[:, -1]
+    back_flow = np.linalg.inv(fwd_flow)
+
+    # ρ(σ_3^k) = back_flow · P_cyc
+    return back_flow @ P_cyc
+
+
+def construct_D3_elements_on_V0(
+    integrated: IntegratedOrbit,
+    rtol: float = 1e-12,
+    atol: float = 1e-12,
+) -> dict[str, np.ndarray]:
+    """Return a dict mapping each D_3 element name to its 18x18 V_0 endomorphism.
+    Elements: e, sigma_3, sigma_3_sq, F_beta, F_beta_sigma_3, F_beta_sigma_3_sq."""
+    e_op = np.eye(18)
+    sigma_3 = construct_sigma3_action_V0(
+        integrated, PERMUTATIONS["cycle123"], 1.0 / 3.0, rtol, atol
+    )
+    sigma_3_sq = construct_sigma3_action_V0(
+        integrated, PERMUTATIONS["cycle132"], 2.0 / 3.0, rtol, atol
+    )
+    F_beta = F_beta_action_V0()
+    F_beta_sigma_3 = F_beta @ sigma_3
+    F_beta_sigma_3_sq = F_beta @ sigma_3_sq
+    return {
+        "e": e_op,
+        "sigma_3": sigma_3,
+        "sigma_3_sq": sigma_3_sq,
+        "F_beta": F_beta,
+        "F_beta_sigma_3": F_beta_sigma_3,
+        "F_beta_sigma_3_sq": F_beta_sigma_3_sq,
+    }
+```
+
+## Block 4 — GATE 1: typed D_3 relation verification
+
+```python
+# ----------------------------------------------------------------------------
+# GATE 1 (v0.3i implementation gate 1): verify D_3 relations on V_0
+# constructed via back-flow. Required before any sentinel run.
+# Relations:
+#   - σ_3^3 = I
+#   - F_β^2 = I
+#   - F_β · σ_3 · F_β^{-1} = σ_3^{-1}    (the dihedral relation)
+#   - (F_β · σ_3)^2 = I                  (D_3 involution check)
+# Each check is closure-relative against the V_0 operator norm.
+# ----------------------------------------------------------------------------
+
+def verify_d3_relations(
+    d3_ops: dict[str, np.ndarray],
+    relation_floor: float = 1e-8,
+) -> dict[str, object]:
+    """Run the D_3 relation checks. Returns dict with per-relation residuals
+    and a top-level PASS/FAIL flag.
+
+    PASS: all residuals < relation_floor.
+    FAIL: any residual >= relation_floor (gate halts before sentinel run)."""
+    I_18 = np.eye(18)
+    sigma_3 = d3_ops["sigma_3"]
+    sigma_3_sq = d3_ops["sigma_3_sq"]
+    F_beta = d3_ops["F_beta"]
+
+    checks: dict[str, float] = {}
+
+    # sigma_3^3 = I
+    sigma_3_cubed = sigma_3 @ sigma_3 @ sigma_3
+    checks["sigma_3_cubed_minus_I"] = float(
+        np.linalg.norm(sigma_3_cubed - I_18, ord=np.inf)
+    )
+
+    # sigma_3 · sigma_3 = sigma_3_sq (consistency of back-flow construction)
+    checks["sigma_3_sq_consistency"] = float(
+        np.linalg.norm(sigma_3 @ sigma_3 - sigma_3_sq, ord=np.inf)
+    )
+
+    # F_beta^2 = I
+    F_beta_sq = F_beta @ F_beta
+    checks["F_beta_squared_minus_I"] = float(
+        np.linalg.norm(F_beta_sq - I_18, ord=np.inf)
+    )
+
+    # Dihedral relation: F_β · σ_3 · F_β = σ_3^{-1} = σ_3²
+    dihedral_lhs = F_beta @ sigma_3 @ F_beta
+    checks["dihedral_relation"] = float(
+        np.linalg.norm(dihedral_lhs - sigma_3_sq, ord=np.inf)
+    )
+
+    # Reflection check: (F_β · σ_3)^2 = I (any element of form F_β · σ_3^k is an involution)
+    fbeta_sigma3 = F_beta @ sigma_3
+    checks["F_beta_sigma_3_squared_minus_I"] = float(
+        np.linalg.norm(fbeta_sigma3 @ fbeta_sigma3 - I_18, ord=np.inf)
+    )
+
+    all_pass = all(v < relation_floor for v in checks.values())
+    return {
+        "gate": "D3_relations",
+        "floor": relation_floor,
+        "checks": checks,
+        "max_residual": max(checks.values()),
+        "passed": all_pass,
+    }
+```
+
+## Block 5 — GATE 2: explicit reduced symplectic form check
+
+```python
+# ----------------------------------------------------------------------------
+# GATE 2 (v0.3i implementation gate 2): verify the reduced symplectic form is
+# the canonical J on T_{y_i(0)} and that the restriction to K_i^{fib} is
+# non-degenerate. Required before any Γ_i computation.
+# ----------------------------------------------------------------------------
+
+J_18 = np.block([
+    [np.zeros((9, 9)), np.eye(9)],
+    [-np.eye(9), np.zeros((9, 9))],
+])  # canonical symplectic form on 18-dim (q_1..q_3, v_1..v_3) phase space
+
+
+def verify_reduced_omega(
+    M_i: np.ndarray,
+    K_fib_basis: np.ndarray,
+    omega: np.ndarray = J_18,
+    nondegeneracy_floor: float = 1e-8,
+) -> dict[str, object]:
+    """Verify: (i) omega is symplectic (omega^T = -omega, omega is full-rank);
+    (ii) M_i preserves omega (M_i^T omega M_i = omega) to closure;
+    (iii) omega restricted to K_i^{fib} is non-degenerate."""
+    checks: dict[str, float] = {}
+
+    # (i) Skew-symmetric:
+    checks["omega_skew_residual"] = float(
+        np.linalg.norm(omega + omega.T, ord=np.inf)
+    )
+    # (i) Full-rank (determinant nonzero):
+    checks["omega_log_abs_det"] = float(np.log10(abs(np.linalg.det(omega)) + 1e-300))
+
+    # (ii) M_i symplectic: M_i^T · omega · M_i = omega
+    sympl_residual = np.linalg.norm(M_i.T @ omega @ M_i - omega, ord=np.inf)
+    checks["M_i_symplectic_residual"] = float(sympl_residual)
+
+    # (iii) omega restricted to K_i^{fib}:
+    c_dim = K_fib_basis.shape[1]
+    if c_dim == 0:
+        checks["K_fib_omega_min_singular"] = float("nan")
+        passed = (
+            checks["omega_skew_residual"] < nondegeneracy_floor
+            and checks["M_i_symplectic_residual"] < nondegeneracy_floor
+        )
+        return {
+            "gate": "reduced_omega",
+            "floor": nondegeneracy_floor,
+            "K_fib_dim": 0,
+            "checks": checks,
+            "passed": passed,
+            "notes": "K_i^{fib} empty; omega restriction trivially non-degenerate.",
+        }
+
+    omega_K = K_fib_basis.T @ omega @ K_fib_basis  # c_dim × c_dim restriction
+    # Non-degeneracy: smallest singular value of omega_K
+    svals = np.linalg.svd(omega_K, compute_uv=False)
+    checks["K_fib_omega_min_singular"] = float(svals.min())
+    checks["K_fib_omega_max_singular"] = float(svals.max())
+    checks["K_fib_omega_condition"] = float(svals.max() / max(svals.min(), 1e-300))
+
+    passed = (
+        checks["omega_skew_residual"] < nondegeneracy_floor
+        and checks["M_i_symplectic_residual"] < nondegeneracy_floor
+        and checks["K_fib_omega_min_singular"] > nondegeneracy_floor
+    )
+    return {
+        "gate": "reduced_omega",
+        "floor": nondegeneracy_floor,
+        "K_fib_dim": int(c_dim),
+        "checks": checks,
+        "passed": passed,
+    }
+```
+
+## Block 6 — Sentinel subcommand (skeleton with gates wired)
+
+```python
+# ----------------------------------------------------------------------------
+# Sentinel command: implements v0.3i.
+# Default behavior: run gates only.
+# --authorize-sentinel-run: proceed to full Γ_i computation after gates pass.
+# --refinement-A: trigger tighter-rtol re-run on bimodality failure.
+# ----------------------------------------------------------------------------
+
+def command_kfacet_sentinel(args: argparse.Namespace) -> int:
+    text = read_text(args.path or SUPPLEMENT_URLS[args.source.upper()])
+    rows = parse_rows(text, args.source.upper())
+
+    # Select sentinel via --indices (default: O_62)
+    sentinel_idx = args.sentinel_index
+    selected = [r for r in rows if r.index == sentinel_idx and abs(r.m3 - args.m3) < 5e-13]
+    if not selected:
+        raise SystemExit(f"sentinel row O_{{{sentinel_idx}}}({args.m3}) not in catalog")
+    row = selected[0]
+
+    # Integrate baseline orbit
+    integrated = integrate_orbit(row, args.rtol, args.atol, args.max_step_fraction)
+    print(f"[kfacet-sentinel] integrated O_{{{sentinel_idx}}} in {integrated.elapsed_seconds:.2f}s; "
+          f"closure_pos_inf = {integrated.closure_position_inf:.3e}")
+
+    # Compute M_i (variational integration)
+    print("[kfacet-sentinel] computing M_i via variational integration...")
+    M_i = compute_monodromy(integrated, args.rtol, args.atol)
+
+    # Construct D_3 elements via back-flow
+    print("[kfacet-sentinel] constructing D_3 elements on V_0...")
+    d3_ops = construct_D3_elements_on_V0(integrated, args.rtol, args.atol)
+
+    # GATE 1: D_3 relations
+    print("[kfacet-sentinel] gate 1: D_3 relations...")
+    gate1_result = verify_d3_relations(d3_ops, relation_floor=args.relation_floor)
+    print(f"[kfacet-sentinel] gate 1 ({'PASS' if gate1_result['passed'] else 'FAIL'}): "
+          f"max residual = {gate1_result['max_residual']:.3e}")
+
+    # K_i^{fib} basis (needed for gate 2)
+    K_fib = compute_K_fib_basis(M_i, integrated, closure_floor=args.closure_floor)
+
+    # GATE 2: reduced omega
+    print("[kfacet-sentinel] gate 2: reduced omega non-degeneracy...")
+    gate2_result = verify_reduced_omega(
+        M_i, K_fib, omega=J_18, nondegeneracy_floor=args.nondegeneracy_floor
+    )
+    print(f"[kfacet-sentinel] gate 2 ({'PASS' if gate2_result['passed'] else 'FAIL'}): "
+          f"K_fib_dim = {gate2_result['K_fib_dim']}, "
+          f"min_singular = {gate2_result['checks'].get('K_fib_omega_min_singular', 'n/a')}")
+
+    # Write gate receipt
+    out_dir = Path(args.out) if args.out else None
+    if out_dir is not None:
+        out_dir.mkdir(parents=True, exist_ok=True)
+        gate_receipt = {
+            "row_index": sentinel_idx,
+            "gate1_d3_relations": gate1_result,
+            "gate2_reduced_omega": gate2_result,
+            "all_gates_passed": gate1_result["passed"] and gate2_result["passed"],
+            "M_i_norm_inf": float(np.linalg.norm(M_i, ord=np.inf)),
+            "K_fib_dim": int(K_fib.shape[1]),
+        }
+        (out_dir / "gate_receipt.json").write_text(
+            json.dumps(gate_receipt, indent=2) + "\n", encoding="utf-8"
+        )
+        np.save(out_dir / "M_i.npy", M_i)
+        np.save(out_dir / "K_fib_basis.npy", K_fib)
+
+    # Gate enforcement: halt before sentinel run unless authorized
+    if not (gate1_result["passed"] and gate2_result["passed"]):
+        print("[kfacet-sentinel] HALT: gates failed; sentinel run blocked.")
+        return 1
+
+    if not args.authorize_sentinel_run:
+        print("[kfacet-sentinel] gates passed; sentinel run requires "
+              "--authorize-sentinel-run flag. Halting.")
+        return 0
+
+    # ---- Proceed to full sentinel run ---- TODO
+    print("[kfacet-sentinel] sentinel run TODO: ∂_ε M_i + D_3 isotypic + Γ_i + SVD")
+    # ∂_ε M_i = compute_partial_eps_monodromy(integrated, args.rtol, args.atol)
+    # D_3 isotypic projectors on K_fib via character formula
+    # F_β-even-E subspace identification
+    # Γ_i computation (c_i × c_i matrix)
+    # SVD + rank gate + bimodality check
+    # If marginal: refinement A trigger
+    # Receipt write per v0.3i §5
+
+    return 0
+```
+
+## Block 7 — Argument parser + npm script
+
+```python
+# In build_parser():
+    sentinel_cmd = sub.add_parser(
+        "kfacet-sentinel",
+        help="v0.3i sentinel calibration: gates 1 & 2 + (optional) Γ_i run",
+    )
+    sentinel_cmd.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="A")
+    sentinel_cmd.add_argument("--path", help="local supplementary file")
+    sentinel_cmd.add_argument("--m3", type=float, default=1.0)
+    sentinel_cmd.add_argument("--sentinel-index", type=int, default=62,
+                              help="row index of sentinel orbit (default: 62)")
+    sentinel_cmd.add_argument("--rtol", type=float, default=1e-12)
+    sentinel_cmd.add_argument("--atol", type=float, default=1e-12)
+    sentinel_cmd.add_argument("--max-step-fraction", type=float, default=0.02)
+    sentinel_cmd.add_argument("--relation-floor", type=float, default=1e-8,
+                              help="gate 1 closure floor for D_3 relations")
+    sentinel_cmd.add_argument("--closure-floor", type=float, default=1e-8,
+                              help="kernel singular-value floor for ker(M_i - I)")
+    sentinel_cmd.add_argument("--nondegeneracy-floor", type=float, default=1e-8,
+                              help="gate 2 floor for omega non-degeneracy")
+    sentinel_cmd.add_argument("--authorize-sentinel-run", action="store_true",
+                              help="proceed past gates to full Γ_i computation")
+    sentinel_cmd.add_argument("--refinement-A", action="store_true",
+                              help="auto-trigger tighter-rtol re-run on bimodality failure")
+    sentinel_cmd.add_argument("--out", help="output directory for gate receipt + matrices")
+    sentinel_cmd.set_defaults(func=command_kfacet_sentinel)
+```
+
+```json
+// In package.json:
+"isotrophy:kfacet:sentinel:gates": "python scripts/isotrophy_workbench.py kfacet-sentinel --source A --path docs/isotrophy/supplementary-A_periodic-3d_mirror.txt --m3 1 --sentinel-index 62 --rtol 1e-12 --atol 1e-12 --out results/isotrophy/k-facet-v03-sentinel-calibration-O62-gates",
+"isotrophy:kfacet:sentinel:run": "python scripts/isotrophy_workbench.py kfacet-sentinel --source A --path docs/isotrophy/supplementary-A_periodic-3d_mirror.txt --m3 1 --sentinel-index 62 --rtol 1e-12 --atol 1e-12 --authorize-sentinel-run --refinement-A --out results/isotrophy/k-facet-v03-sentinel-calibration-O62",
+```
+
+---
+
+**What this implementation pass delivers:**
+- Full variational integration scaffolding (M_i computation via per-column variational IVP).
+- Typed D_3 element construction via explicit back-flow (no fiber-mixing shortcuts; σ_3 and σ_3² constructed independently and verified against each other for back-flow consistency).
+- Closed-form F_β endomorphism.
+- **Gate 1 fully implemented**: σ_3³ = I, F_β² = I, dihedral relation, reflection-element involution. Five residuals checked; PASS iff all under floor.
+- **Gate 2 fully implemented**: J_18 explicit, skew-symmetry, M_i symplectic preservation, K_i^{fib} non-degeneracy via SVD of restricted form.
+- Sentinel subcommand wired with gates-first / authorize-run flag enforcement.
+
+**What's stubbed (load-bearing):**
+- `perturbation_source_factory`: needs the closed-form `∂_ε X_H` at m_3 = 1 from `ΔH = -(1/2)|p_3|² - G/r_{13} - G/r_{23}`. paper doc it, then plug in. Unit-test against finite-difference of M_i.
+- The post-gates Γ_i computation (Block 6's TODO): D_3 character projectors on K_fib, F_β-even-E subspace, Γ_i = ξ^T J ∂_ε M_i ξ, SVD with closure-relative rank, bimodality flag, refinement A logic. All implementable mechanically once `∂_ε M_i` is in hand.
+
+**Self-checks on the 5 implementation gates:**
+- **Gate 1 (typed ρ(F_β σ_3^k) ordering / D_3 relation check)**: implemented in `verify_d3_relations`. ✓
+- **Gate 2 (explicit reduced symplectic form for Γ_i)**: implemented in `verify_reduced_omega`. ✓ Note: I'm using the full 18-dim J as the omega, with K_fib quotient handling the CoM reduction implicitly. If you want explicit 12-dim Jacobi-reduction, that's a separate piece worth adding.
+- **Gate 3 (deterministic basis convention)**: K_fib basis is from SVD's right-singular vectors (deterministic up to sign/phase of eigenvectors). For Γ_i diagnostics later, the basis convention should be locked further (e.g., principal-axes ordering on the F_β-even subspace).
+- **Gate 4 (no SVD/eigenvalue vocabulary mixing)**: gates 1 & 2 only use SVD (for kernel and non-degeneracy). Γ_i rank gate will also use SVD. No eigenvalue-decomposition vocabulary in the count path.
+- **Gate 5 (1e-14 refinement A practical precision)**: not yet implemented; should log a warning when rtol < ~1e-13 that the integration is at machine-precision limit and singular-value comparisons may be unreliable. Add to the refinement-A branch when implemented.
