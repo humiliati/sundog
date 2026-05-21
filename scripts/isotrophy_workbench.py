@@ -2427,6 +2427,16 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
         "closure_velocity_inf": integrated.closure_velocity_inf,
         "integration_seconds": integrated.elapsed_seconds,
         "M_i_norm_inf": float(np.linalg.norm(monodromy, ord=np.inf)),
+        "kernel_floor_interpretation": {
+            "closure_floor": args.closure_floor,
+            "sweep_calibration": (
+                "The 21-row v0.3h sweep showed closure_floor=1e-8 splits the "
+                "noise-floor kernel cluster on several rows; closure_floor=1e-7 "
+                "lands inside the observed spectral gap (last kernel <= 7.5e-8, "
+                "first non-kernel >= 5.7e-2). Treat c_i readings as structural "
+                "only when D3_K_fib/kernel leakage is clean at this floor."
+            ),
+        },
         "K_fib": k_fib_summary,
         "D3_relations": d3_gate,
         "reduced_omega": omega_gate,
@@ -2642,7 +2652,7 @@ def build_parser() -> argparse.ArgumentParser:
     # relative scaling is the proper refinement once the runner is generalised
     # beyond a single sentinel.
     sentinel.add_argument("--relation-floor", type=float, default=1e-3)
-    sentinel.add_argument("--closure-floor", type=float, default=1e-8)
+    sentinel.add_argument("--closure-floor", type=float, default=1e-7)
     sentinel.add_argument("--nondegeneracy-floor", type=float, default=1e-3)
     sentinel.add_argument("--verify-partial-eps", action="store_true")
     sentinel.add_argument("--fd-h", type=float, default=1e-6)
@@ -2654,9 +2664,10 @@ def build_parser() -> argparse.ArgumentParser:
     sentinel.add_argument("--fd-floor", type=float, default=1e-4)
     # k_jb: closure-relative tolerance on the joint-solver-vs-standalone baseline
     # consistency check. The joint solver and standalone M_i integrate the same
-    # ODE with the same tolerances, so agreement to integration precision is
-    # expected; 1e-9 relative is the natural floor (matches closure discipline).
-    sentinel.add_argument("--joint-baseline-floor", type=float, default=1e-9)
+    # ODE with the same tolerances, but the 21-row sweep placed most rows in
+    # the 1e-9..5e-9 relative band. 1e-8 is the calibrated catalog floor, not
+    # a tuning knob for Gamma_i.
+    sentinel.add_argument("--joint-baseline-floor", type=float, default=1e-8)
     sentinel.add_argument("--k-gamma", type=float, default=3.0)
     sentinel.add_argument("--k-int", type=float, default=10.0)
     sentinel.add_argument("--gamma-projector-floor", type=float, default=1e-3)

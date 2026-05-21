@@ -453,6 +453,16 @@
         </div>
     </section>
 
+    <!-- Strand index (sticky scroll-spy; pattern in sundog-theme.css) -->
+    <nav class="sd-strand-nav" aria-label="Sections on this page">
+        <div class="sd-strand-nav-inner">
+            <a class="sd-strand-link" href="#experiment">The Experiment</a>
+            <a class="sd-strand-link" href="#signatures">Signatures</a>
+            <a class="sd-strand-link" href="#isotrophy">Catalog Sidecar</a>
+        </div>
+    </nav>
+
+
     <!-- Interactive Controls -->
     <div class="controls-panel sd-control-panel">
         <h3>Simulation Controls</h3>
@@ -586,7 +596,7 @@
     </div>
 
     <!-- Experiment Description Section -->
-    <section class="experiment-section">
+    <section class="experiment-section" id="experiment">
         <h2>The Experiment</h2>
         <div class="experiment-content">
             <p>
@@ -630,7 +640,7 @@
     </section>
 
     <!-- Indirect Signatures Section -->
-    <section class="signatures-section">
+    <section class="signatures-section" id="signatures">
         <h2>Indirect Signatures</h2>
         <div class="signatures-grid">
             <div class="signature-card">
@@ -822,5 +832,6 @@
 
     <script type="module" src="/js/threebody-browser.mjs"></script>
     <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+    <script type="module" src="/js/sd-strand-nav.mjs"></script>
 </body>
 </html>
