@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Background: warm paper with a subtle wash -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDFDFC"/>
+      <stop offset="100%" stop-color="#F5F4EE"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Thin top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="#2A5570">
+    SUNDOG · CAP-SET WORKBENCH
+  </text>
+
+  <!-- Headline -->
+  <text x="60" y="180" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="700" fill="#1A3A52">
+    How many dots
+  </text>
+  <text x="60" y="248" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="700" fill="#1A3A52">
+    before three
+  </text>
+  <text x="60" y="316" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="700" fill="#1A3A52">
+    of them line up?
+  </text>
+
+  <!-- Lede -->
+  <text x="60" y="400" font-family="Verdana, Geneva, sans-serif" font-size="22" fill="#40505C">
+    An interactive primer for the polynomial-method
+  </text>
+  <text x="60" y="432" font-family="Verdana, Geneva, sans-serif" font-size="22" fill="#40505C">
+    breakthrough — the 2016 precedent for OpenAI's
+  </text>
+  <text x="60" y="464" font-family="Verdana, Geneva, sans-serif" font-size="22" fill="#40505C">
+    2026 unit-distance disproof.
+  </text>
+
+  <!-- URL footer -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">
+    sundog.cc/capset
+  </text>
+
+  <!-- Right side: F_3^3 visualization (3 layers, 3x3 each, side-by-side) -->
+  <!-- Frame -->
+  <g transform="translate(640, 130)">
+    <!-- Subtle frame -->
+    <rect x="-12" y="-12" width="500" height="360" rx="10" fill="#FFFFFF" stroke="#D6DBDF" stroke-width="2"/>
+
+    <!-- Layer caption -->
+    <text x="238" y="20" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">
+      F₃³ — three layers, 27 cells
+    </text>
+
+    <!-- Three layers side by side -->
+    <!-- Each layer: 3x3 cells, cell size 42, gap 6 -> layer width 42*3+6*2 = 138 -->
+    <!-- Spacing between layers: 30 -->
+    <!-- Total width: 138*3 + 30*2 = 474. Centered in 500 -> x offset = 13 -->
+
+    <!-- Picked indices (0..26) where coord = (x + 3*y + 9*z): a verified cap subset -->
+    <!-- We'll mark these gold. Indices chosen from the n=3 cap:
+         (0,0,0)=0, (0,0,2)=18, (0,1,0)=3, (0,2,2)=24, (1,0,2)=19,
+         (2,1,0)=5, (2,1,1)=14, (2,2,0)=8, (2,2,2)=26
+    -->
+    <!-- One "near-line" trio rendered red for visual tension:
+         pick three points that ALMOST form a line — actually let's pick a
+         demonstration line in F_3^3 that doesn't intersect the cap:
+         (0,0,0), (1,1,1), (2,2,2) all lie on a line. Mark them with a red
+         outline to show what "a forbidden line" looks like. (0,0,0)=0 IS
+         in our cap; (1,1,1)=13 isn't; (2,2,2)=26 IS in our cap.
+         Cleaner: render a separate red "what a violation would look like"
+         indicator using three connected cells: (0,0,0), (1,0,0), (2,0,0).
+         These are NOT in our cap (good — those would violate). Outline them
+         in red and draw a thin connector through them.
+    -->
+
+    <!-- Helper note for placement:
+         layer z = 0,1,2
+         within layer: col = x (0..2), row = y (0..2)
+         x_in_image = 13 + z*(138+30) + col*(42+6)
+         y_in_image = 30 + row*(42+6)
+    -->
+
+    <!-- LAYER z=0 -->
+    <g transform="translate(13, 30)">
+      <text x="69" y="-8" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#9AA4AC" text-anchor="middle">z=0</text>
+      <!-- 9 cells -->
+      <rect x="0"   y="0"   width="42" height="42" rx="4" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>  <!-- (0,0,0) picked -->
+      <rect x="48"  y="0"   width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>  <!-- (1,0,0) -->
+      <rect x="96"  y="0"   width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>  <!-- (2,0,0) -->
+      <rect x="0"   y="48"  width="42" height="42" rx="4" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>  <!-- (0,1,0) picked -->
+      <rect x="48"  y="48"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>  <!-- (1,1,0) -->
+      <rect x="96"  y="48"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>  <!-- (2,1,0) picked -->
+      <rect x="0"   y="96"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>  <!-- (0,2,0) -->
+      <rect x="48"  y="96"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>  <!-- (1,2,0) -->
+      <rect x="96"  y="96"  width="42" height="42" rx="4" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>  <!-- (2,2,0) picked -->
+      <!-- override (2,1,0) which is in cap -->
+      <rect x="96"  y="48"  width="42" height="42" rx="4" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>
+    </g>
+
+    <!-- LAYER z=1 -->
+    <g transform="translate(181, 30)">
+      <text x="69" y="-8" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#9AA4AC" text-anchor="middle">z=1</text>
+      <rect x="0"   y="0"   width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="48"  y="0"   width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="96"  y="0"   width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="0"   y="48"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="48"  y="48"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="96"  y="48"  width="42" height="42" rx="4" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>  <!-- (2,1,1) -->
+      <rect x="0"   y="96"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="48"  y="96"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="96"  y="96"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+    </g>
+
+    <!-- LAYER z=2 -->
+    <g transform="translate(349, 30)">
+      <text x="69" y="-8" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#9AA4AC" text-anchor="middle">z=2</text>
+      <rect x="0"   y="0"   width="42" height="42" rx="4" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>  <!-- (0,0,2) -->
+      <rect x="48"  y="0"   width="42" height="42" rx="4" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>  <!-- (1,0,2) -->
+      <rect x="96"  y="0"   width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="0"   y="48"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="48"  y="48"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="96"  y="48"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="0"   y="96"  width="42" height="42" rx="4" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>  <!-- (0,2,2) -->
+      <rect x="48"  y="96"  width="42" height="42" rx="4" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1"/>
+      <rect x="96"  y="96"  width="42" height="42" rx="4" fill="#F4C430" stroke="#C99517" stroke-width="1.5"/>  <!-- (2,2,2) -->
+    </g>
+
+    <!-- Annotate: a forbidden line. We pick (0,0,0), (1,0,0), (2,0,0) which lie on a line and would violate if all three were picked. Only (0,0,0) is in the cap; outline the other two faintly red and connect with a dashed line to suggest "this is what a violation would look like." -->
+    <!-- (0,0,0) is at layer 0 -> top-left cell. Layer 0 group is translated to (13,30). Cell (0,0) is at (0..42, 0..42) within the group. Center: (13+21, 30+21) = (34, 51). -->
+    <!-- (1,0,0) is at layer 0 top-row, col 1. (48..90, 0..42) within group. Center: (13+48+21, 30+21) = (82, 51). -->
+    <!-- (2,0,0) is at layer 0 top-row, col 2. Center: (13+96+21, 30+21) = (130, 51). -->
+    <line x1="34" y1="51" x2="130" y2="51" stroke="#D45A4A" stroke-width="2.5" stroke-dasharray="5 4" opacity="0.85"/>
+    <circle cx="82" cy="51" r="6" fill="none" stroke="#D45A4A" stroke-width="2" opacity="0.85"/>
+    <circle cx="130" cy="51" r="6" fill="none" stroke="#D45A4A" stroke-width="2" opacity="0.85"/>
+    <text x="82" y="172" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#9C2D21" text-anchor="middle" font-style="italic">a forbidden line</text>
+
+    <!-- Caption beneath grid -->
+    <text x="238" y="320" font-family="Verdana, Geneva, sans-serif" font-size="14" fill="#40505C" text-anchor="middle">
+      cap size 9 · trivial ceiling 27 · Ellenberg–Gijswijt ≈ 21
+    </text>
+  </g>
+
+  <!-- Bottom-right corner mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">
+    sundog.cc
+  </text>
+</svg>
