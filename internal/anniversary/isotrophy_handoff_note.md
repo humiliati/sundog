@@ -1,8 +1,11 @@
 # Isotrophy Handoff Note
 
-Status: current, 2026-05-19.
+Status: current, 2026-05-21.
 Audience: internal operators, anniversary promo team, future coding agents.
 Source docs: `docs/sundog_v_isotrophy.md`, `docs/SUNDOG_V_THREEBODY.md`.
+External context: OpenAI unit-distance announcement and proof notes,
+2026-05-20:
+`https://openai.com/index/model-disproves-discrete-geometry-conjecture/`.
 
 ## One-Line Read
 
@@ -55,6 +58,57 @@ So a static equal-mass containment scan for already-present transposition
 symmetry is forced to return `d_i = 0` after quotienting the structural
 `F_beta`. K1 caught that before the multi-hour K2-K4 sweep. That is a success
 of the process, not a result to route around.
+
+## Unit-Distance Lesson for Isotrophy
+
+Context: on 2026-05-20 OpenAI announced an AI-generated disproof of the
+longstanding Erdos planar unit-distance conjecture. The important analogy for
+this handoff is not "AI solved math, therefore Sundog is right." It is that a
+low-dimensional geometric count that looked governed by the visible planar
+construction was instead governed by a richer hidden algebraic structure, then
+projected back into the plane.
+
+That is exactly the caution isotrophy needs after K1.
+
+The v0.2 question asked whether the parent choreography already visibly
+contained the daughter `Z2` symmetry. It did not, and in hindsight that was the
+wrong level of description. The unit-distance result strengthens the v0.3
+instinct: do not look for the daughter count in static visible isotropy; look
+for it in the hidden variational / representation structure that projects into
+visible piano-trio families.
+
+Practical implications:
+
+- Keep the primary v0.3 prediction parent-local. Compute any proposed `d_i`
+  from the `m3=1` choreography alone, through the typed `D3` representation and
+  the `Gamma_i` rank gate, before looking at supplementary-B.
+- Treat quotient bookkeeping as load-bearing, not administrative. The analog
+  of class-group / projection losses here is the full sequence:
+  structural `F_beta`, all-induced case split, `D3` neutral quotient, SO(3)
+  gauge, chirality, anchor congruence, gamma floor, and catalog sampling
+  density. Any discrepancy must factor through a named channel or be accepted
+  as a negative.
+- Treat `K_facet=0`, `c_i=0`, or `rank_floor(Gamma_i)=0` as possible
+  structural negatives. Do not tune thresholds to escape zero. The right lesson
+  from unit-distance is "change the generative layer before the run," not
+  "patch the count after the run."
+- Add a cheap counterexample-search lane before expensive catalog work:
+  construct toy equivariant Hamiltonian or discrete symplectic systems where
+  static `Z3 cap Z2` containment is zero but induced branching is nonzero, and
+  also toys where a plausible `Gamma` rank predicts branches that continuation
+  does not realize. These are desk / smoke tests, not new public evidence.
+- Use models as adversarial construction scouts. Ask them to find hidden
+  generative structures and failure examples; keep the human/operator standard
+  as receipts, typed maps, pre-registered negatives, and no catalog comparison
+  until the prediction is frozen.
+
+Public translation, if needed:
+
+> The unit-distance result is a useful warning for the isotrophy sidecar:
+> visible geometric symmetry may be the wrong place to count. If the line
+> continues, the count must come from a pre-registered hidden branching
+> operator and then be compared to the visible catalog, not inferred from the
+> catalog after the fact.
 
 ## Public-Safe Language
 

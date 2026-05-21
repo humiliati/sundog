@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog Geometry gathers the public geometry workbenches: cap sets, halo geometry, h-of-x, and bounded apparatus notes for new discrete-geometry discoveries.">
+    <meta name="theme-color" content="#142b3a">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/geometry">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Sundog Geometry - Workbenches for Hidden Structure">
+    <meta property="og:description" content="A public geometry shelf for cap sets, halo geometry, h-of-x, and the bounded Sundog apparatus around new discrete-geometry discoveries.">
+    <meta property="og:url" content="https://sundog.cc/geometry">
+    <title>Sundog Geometry - Hidden Structure Workbenches</title>
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        main {
+            background:
+                radial-gradient(circle at 14% 8%, rgba(244, 196, 48, 0.16), transparent 24rem),
+                radial-gradient(circle at 82% 2%, rgba(103, 201, 166, 0.14), transparent 24rem),
+                linear-gradient(180deg, #f8fbfc 0%, #ffffff 28rem, #eef6f3 100%);
+        }
+
+        .geometry-hero,
+        .geometry-band,
+        .geometry-section {
+            width: min(1120px, calc(100vw - 3rem));
+            margin: 0 auto;
+        }
+
+        .geometry-hero {
+            min-height: calc(100vh - 70px);
+            display: grid;
+            grid-template-columns: minmax(0, 0.92fr) minmax(18rem, 0.78fr);
+            gap: clamp(1.4rem, 4vw, 3rem);
+            align-items: center;
+            padding: 5.5rem 0 3rem;
+        }
+
+        .eyebrow {
+            color: var(--primary-mid);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            line-height: 1.05;
+        }
+
+        h1 {
+            max-width: 760px;
+            font-size: clamp(2.4rem, 7vw, 5.1rem);
+            margin: 0 0 1.1rem;
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            margin: 0 0 0.8rem;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin: 0 0 0.55rem;
+        }
+
+        p {
+            color: #40505c;
+            line-height: 1.72;
+        }
+
+        .lede {
+            max-width: 760px;
+            font-size: 1.16rem;
+        }
+
+        .hero-actions,
+        .card-links,
+        .source-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .hero-actions {
+            margin-top: 1.6rem;
+        }
+
+        .button-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.7rem;
+            padding: 0.68rem 1rem;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: #ffffff;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .button-link.primary {
+            border-color: var(--primary-dark);
+            background: var(--primary-dark);
+            color: #ffffff;
+        }
+
+        .button-link:hover {
+            border-color: var(--accent-gold);
+            color: #a97700;
+        }
+
+        .button-link.primary:hover {
+            color: #ffffff;
+            background: #21485f;
+        }
+
+        .hero-visual {
+            position: relative;
+            min-height: 29rem;
+            border: 1px solid rgba(20, 43, 58, 0.16);
+            border-radius: 8px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 250, 240, 0.92)),
+                radial-gradient(circle at 76% 16%, rgba(103, 201, 166, 0.18), transparent 14rem);
+            box-shadow: var(--sd-shadow-soft);
+            overflow: hidden;
+        }
+
+        .hero-visual svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            min-height: 29rem;
+        }
+
+        .visual-caption {
+            position: absolute;
+            left: 1rem;
+            right: 1rem;
+            bottom: 1rem;
+            padding: 0.8rem;
+            border: 1px solid rgba(20, 43, 58, 0.12);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.88);
+            color: #40505c;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .geometry-band {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.8rem;
+            padding: 0 0 2rem;
+        }
+
+        .credit-pill {
+            min-height: 7rem;
+            padding: 1rem;
+            border: 1px solid rgba(20, 43, 58, 0.14);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.78);
+        }
+
+        .credit-pill strong {
+            display: block;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.45rem;
+            text-transform: uppercase;
+        }
+
+        .credit-pill a,
+        .geometry-section a {
+            color: var(--primary-dark);
+            font-weight: 800;
+            text-decoration-color: rgba(215, 169, 40, 0.64);
+            text-underline-offset: 0.18em;
+        }
+
+        .geometry-section {
+            padding: 2.3rem 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.82fr);
+            gap: 1.2rem;
+            align-items: stretch;
+            margin-top: 1.2rem;
+        }
+
+        .feature-copy,
+        .apparatus-board,
+        .demo-card,
+        .source-card {
+            border: 1px solid rgba(20, 43, 58, 0.14);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: var(--sd-shadow-soft);
+        }
+
+        .feature-copy {
+            padding: clamp(1.2rem, 3vw, 1.6rem);
+        }
+
+        .feature-copy p + p {
+            margin-top: 0.85rem;
+        }
+
+        .apparatus-board {
+            display: grid;
+            grid-template-rows: repeat(4, minmax(0, auto));
+            overflow: hidden;
+        }
+
+        .apparatus-row {
+            display: grid;
+            grid-template-columns: 8rem minmax(0, 1fr);
+            gap: 0.8rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(20, 43, 58, 0.1);
+        }
+
+        .apparatus-row:last-child {
+            border-bottom: 0;
+        }
+
+        .apparatus-row strong {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .apparatus-row span {
+            color: #40505c;
+            line-height: 1.62;
+        }
+
+        .capset-mini {
+            margin-top: 1.2rem;
+            display: grid;
+            grid-template-columns: repeat(9, minmax(0, 1fr));
+            gap: 0.24rem;
+            max-width: 23rem;
+        }
+
+        .mini-dot {
+            aspect-ratio: 1;
+            border: 1px solid rgba(20, 43, 58, 0.18);
+            border-radius: 3px;
+            background: #ffffff;
+        }
+
+        .mini-dot.on {
+            background: var(--accent-gold);
+            border-color: #c99517;
+        }
+
+        .mini-dot.warn {
+            background: #d45a4a;
+            border-color: #9c2d21;
+        }
+
+        .demo-grid,
+        .source-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 1.2rem;
+        }
+
+        .demo-card,
+        .source-card {
+            padding: 1.15rem;
+            display: grid;
+            gap: 0.75rem;
+            align-content: start;
+        }
+
+        .demo-status {
+            width: fit-content;
+            display: inline-flex;
+            align-items: center;
+            min-height: 1.75rem;
+            padding: 0.22rem 0.58rem;
+            border: 1px solid rgba(20, 43, 58, 0.16);
+            border-radius: 999px;
+            color: var(--primary-dark);
+            background: #eaf2f5;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+
+        .demo-status.live {
+            background: #fff4c7;
+            border-color: rgba(201, 149, 23, 0.45);
+        }
+
+        .demo-status.staged {
+            background: #edf7f2;
+            border-color: rgba(103, 201, 166, 0.45);
+        }
+
+        .demo-status.boundary {
+            background: #f7ebe9;
+            border-color: rgba(180, 69, 53, 0.32);
+        }
+
+        .source-card p {
+            font-size: 0.94rem;
+        }
+
+        .claim-note {
+            margin-top: 1.2rem;
+            padding: 1rem 1.15rem;
+            border: 1px solid rgba(180, 69, 53, 0.22);
+            border-left: 4px solid #b44535;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .claim-note strong {
+            color: var(--primary-dark);
+        }
+
+        @media (max-width: 920px) {
+            .geometry-hero,
+            .feature-grid,
+            .geometry-band {
+                grid-template-columns: 1fr;
+            }
+
+            .geometry-hero {
+                min-height: 0;
+                padding-top: 5rem;
+            }
+
+            .demo-grid,
+            .source-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 680px) {
+            .geometry-hero,
+            .geometry-band,
+            .geometry-section {
+                width: min(100vw - 2rem, 1120px);
+            }
+
+            .hero-visual,
+            .hero-visual svg {
+                min-height: 23rem;
+            }
+
+            .apparatus-row {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-grid,
+            .source-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/geometry" aria-current="page">Geometry</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="geometry-hero">
+            <div>
+                <p class="eyebrow">Sundog Geometry</p>
+                <h1>Dots, halos, and hidden machinery.</h1>
+                <p class="lede">
+                    This is the public shelf for geometry workbenches: small
+                    visual problems where the visible pattern is not the whole
+                    story. Cap sets are the live demo. The unit-distance
+                    disproof is the fresh external discovery. Sundog's role is
+                    the apparatus beside them: source credit, hidden structure,
+                    visible signature, and named boundaries.
+                </p>
+                <div class="hero-actions" aria-label="Primary actions">
+                    <a class="button-link primary" href="/capset">Open Capset Workbench</a>
+                    <a class="button-link" href="/sundog">Open Halo Atlas</a>
+                    <a class="button-link" href="/h-of-x">Open h-of-x</a>
+                </div>
+            </div>
+
+            <figure class="hero-visual" aria-label="Diagram of hidden structure projecting into visible geometry">
+                <svg viewBox="0 0 520 520" role="img" aria-labelledby="geometry-visual-title geometry-visual-desc">
+                    <title id="geometry-visual-title">Hidden structure projection diagram</title>
+                    <desc id="geometry-visual-desc">A dot grid, unit-distance graph, and halo arcs connected to a hidden structure rail.</desc>
+                    <defs>
+                        <linearGradient id="goldRail" x1="0" x2="1" y1="0" y2="1">
+                            <stop offset="0%" stop-color="#f4c430"/>
+                            <stop offset="100%" stop-color="#67c9a6"/>
+                        </linearGradient>
+                    </defs>
+                    <rect x="0" y="0" width="520" height="520" fill="#fffaf0"/>
+                    <path d="M66 420 C150 338 138 250 238 214 C330 181 360 103 462 78" fill="none" stroke="url(#goldRail)" stroke-width="9" stroke-linecap="round" opacity="0.5"/>
+                    <g transform="translate(55 80)">
+                        <text x="0" y="-24" fill="#142b3a" font-family="ui-monospace, Menlo, monospace" font-size="13" font-weight="800">visible dots</text>
+                        <g fill="#ffffff" stroke="#142b3a" stroke-opacity="0.22">
+                            <rect x="0" y="0" width="46" height="46" rx="3"/>
+                            <rect x="52" y="0" width="46" height="46" rx="3"/>
+                            <rect x="104" y="0" width="46" height="46" rx="3"/>
+                            <rect x="0" y="52" width="46" height="46" rx="3"/>
+                            <rect x="52" y="52" width="46" height="46" rx="3"/>
+                            <rect x="104" y="52" width="46" height="46" rx="3"/>
+                            <rect x="0" y="104" width="46" height="46" rx="3"/>
+                            <rect x="52" y="104" width="46" height="46" rx="3"/>
+                            <rect x="104" y="104" width="46" height="46" rx="3"/>
+                        </g>
+                        <circle cx="23" cy="23" r="8" fill="#f4c430"/>
+                        <circle cx="75" cy="75" r="8" fill="#f4c430"/>
+                        <circle cx="127" cy="127" r="8" fill="#d45a4a"/>
+                        <line x1="23" y1="23" x2="127" y2="127" stroke="#d45a4a" stroke-width="3" opacity="0.8"/>
+                    </g>
+                    <g transform="translate(310 70)">
+                        <text x="0" y="-24" fill="#142b3a" font-family="ui-monospace, Menlo, monospace" font-size="13" font-weight="800">unit edges</text>
+                        <circle cx="35" cy="20" r="6" fill="#142b3a"/>
+                        <circle cx="96" cy="20" r="6" fill="#142b3a"/>
+                        <circle cx="35" cy="81" r="6" fill="#142b3a"/>
+                        <circle cx="96" cy="81" r="6" fill="#142b3a"/>
+                        <circle cx="66" cy="142" r="6" fill="#142b3a"/>
+                        <path d="M35 20 L96 20 M35 20 L35 81 M96 20 L96 81 M35 81 L96 81 M35 81 L66 142 M96 81 L66 142" stroke="#67c9a6" stroke-width="3" opacity="0.78"/>
+                    </g>
+                    <g transform="translate(70 318)">
+                        <text x="0" y="-22" fill="#142b3a" font-family="ui-monospace, Menlo, monospace" font-size="13" font-weight="800">halo inverse</text>
+                        <circle cx="86" cy="76" r="64" fill="none" stroke="#142b3a" stroke-width="2" opacity="0.45"/>
+                        <circle cx="86" cy="76" r="31" fill="#f4c430" opacity="0.18" stroke="#f4c430" stroke-width="2"/>
+                        <path d="M22 76 Q86 24 150 76" fill="none" stroke="#67c9a6" stroke-width="6" stroke-linecap="round" opacity="0.78"/>
+                        <circle cx="18" cy="76" r="7" fill="#f4c430"/>
+                        <circle cx="154" cy="76" r="7" fill="#f4c430"/>
+                    </g>
+                    <g transform="translate(300 320)">
+                        <text x="0" y="-22" fill="#142b3a" font-family="ui-monospace, Menlo, monospace" font-size="13" font-weight="800">Sundog apparatus</text>
+                        <rect x="0" y="0" width="154" height="38" rx="4" fill="#142b3a"/>
+                        <rect x="0" y="52" width="154" height="38" rx="4" fill="#1f5365"/>
+                        <rect x="0" y="104" width="154" height="38" rx="4" fill="#b8653b"/>
+                        <text x="12" y="24" fill="#ffffff" font-family="ui-monospace, Menlo, monospace" font-size="12">hidden layer</text>
+                        <text x="12" y="76" fill="#ffffff" font-family="ui-monospace, Menlo, monospace" font-size="12">visible signature</text>
+                        <text x="12" y="128" fill="#ffffff" font-family="ui-monospace, Menlo, monospace" font-size="12">boundary</text>
+                    </g>
+                </svg>
+                <figcaption class="visual-caption">
+                    The common move: visible geometry is treated as a signature
+                    of a deeper construction, not as the whole explanation.
+                </figcaption>
+            </figure>
+        </section>
+
+        <section class="geometry-band" aria-label="Credit and boundary summary">
+            <div class="credit-pill">
+                <strong>Discovery credit</strong>
+                <p>
+                    The May 2026 unit-distance result is external work announced
+                    by OpenAI and checked by mathematicians. Sundog did not prove it.
+                </p>
+            </div>
+            <div class="credit-pill">
+                <strong>Cap-set credit</strong>
+                <p>
+                    The cap-set demo points to Croot-Lev-Pach and
+                    Ellenberg-Gijswijt's 2016 polynomial-method breakthrough.
+                </p>
+            </div>
+            <div class="credit-pill">
+                <strong>Sundog boundary</strong>
+                <p>
+                    The page is a primer and apparatus exhibit, not a claim that
+                    Sundog has solved a discrete-geometry problem.
+                </p>
+            </div>
+        </section>
+
+        <section class="geometry-section" id="capset">
+            <p class="eyebrow">Live demo</p>
+            <h2>Capset first: the normal-person version.</h2>
+            <p class="lede">
+                The cap-set problem is a good first stop because the rule is
+                tactile: place dots, avoid three-term lines. The shock is that
+                the winning idea was not more dot-gazing. It was a polynomial
+                method over a finite field.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-copy">
+                    <h3>What the demo shows</h3>
+                    <p>
+                        On `/capset`, a visitor can click points in F_3^n,
+                        watch forbidden triples light up, load small maximum
+                        cap sets, and compare the trivial 3^n ceiling with the
+                        Ellenberg-Gijswijt bound curve.
+                    </p>
+                    <p>
+                        The point is not to teach the full proof. It is to make
+                        the shape of the breakthrough feel concrete: the visible
+                        grid is easy, but the decisive structure lives elsewhere.
+                    </p>
+                    <div class="capset-mini" aria-label="Mini capset grid illustration">
+                        <span class="mini-dot on"></span><span class="mini-dot"></span><span class="mini-dot on"></span><span class="mini-dot"></span><span class="mini-dot on warn"></span><span class="mini-dot"></span><span class="mini-dot on"></span><span class="mini-dot"></span><span class="mini-dot"></span>
+                        <span class="mini-dot"></span><span class="mini-dot on"></span><span class="mini-dot"></span><span class="mini-dot on"></span><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-dot on"></span><span class="mini-dot"></span>
+                        <span class="mini-dot on"></span><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-dot on"></span><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-dot on"></span>
+                    </div>
+                    <div class="hero-actions">
+                        <a class="button-link primary" href="/capset">Open the demo</a>
+                        <a class="button-link" href="/docs/SUNDOG_V_CAPSET.md">Read the ledger</a>
+                    </div>
+                </div>
+
+                <div class="apparatus-board" aria-label="Sundog apparatus for capset">
+                    <div class="apparatus-row">
+                        <strong>Hidden</strong>
+                        <span>Finite-field algebra and polynomial constraints.</span>
+                    </div>
+                    <div class="apparatus-row">
+                        <strong>Visible</strong>
+                        <span>Dots, forbidden triples, and a bound curve a visitor can see.</span>
+                    </div>
+                    <div class="apparatus-row">
+                        <strong>Action</strong>
+                        <span>Use the workbench as a primer before reading the unit-distance discovery.</span>
+                    </div>
+                    <div class="apparatus-row">
+                        <strong>Boundary</strong>
+                        <span>Primer only. No Sundog-original cap-set proof or evaluator claim.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="geometry-section" id="apparatus">
+            <p class="eyebrow">The side-by-side apparatus</p>
+            <h2>What Sundog is allowed to add.</h2>
+            <p class="lede">
+                A new discovery does not become Sundog evidence just because it
+                rhymes with Sundog. The useful move is side-by-side: cite the
+                discovery, explain the visible problem, then show the apparatus
+                Sundog uses when it suspects a visible signature is downstream
+                of hidden structure.
+            </p>
+
+            <div class="demo-grid">
+                <article class="demo-card">
+                    <span class="demo-status live">External result</span>
+                    <h3>Unit-distance disproof</h3>
+                    <p>
+                        OpenAI announced an AI-produced disproof of Erdos's
+                        unit-distance conjecture in May 2026. The result uses
+                        algebraic number theory where planar intuition expected
+                        a lattice-like story.
+                    </p>
+                    <div class="card-links">
+                        <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">Announcement</a>
+                        <a href="https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-proof.pdf">Proof PDF</a>
+                    </div>
+                </article>
+
+                <article class="demo-card">
+                    <span class="demo-status staged">Sundog reading</span>
+                    <h3>Evidence-tier overlay</h3>
+                    <p>
+                        Planned exhibit: split the announcement into proved,
+                        externally verified, observational, editorial, and
+                        aspirational claims. The output is a bounded reading,
+                        not a counter-proof or endorsement shortcut.
+                    </p>
+                    <div class="card-links">
+                        <a href="/docs/SUNDOG_V_CAPSET.md">Capset ledger</a>
+                    </div>
+                </article>
+
+                <article class="demo-card">
+                    <span class="demo-status boundary">Falsifier first</span>
+                    <h3>Three-gate note</h3>
+                    <p>
+                        Planned note: classify the long stalemate as residual,
+                        coverage, or detection failure, then ask outside
+                        mathematicians whether that classification is coherent
+                        or just Sundog vocabulary pasted onto history.
+                    </p>
+                    <div class="card-links">
+                        <a href="/docs/SUNDOG_V_CAPSET.md">Candidate list</a>
+                    </div>
+                </article>
+            </div>
+
+            <div class="claim-note">
+                <p>
+                    <strong>Claim boundary:</strong> this geometry page can say
+                    that cap-set, halo geometry, and unit-distance have a shared
+                    educational shape: visible pattern, hidden construction,
+                    boundary-aware reading. It cannot say Sundog proved cap-set,
+                    solved unit-distance, or validated a general geometry theorem.
+                </p>
+            </div>
+        </section>
+
+        <section class="geometry-section" id="shelf">
+            <p class="eyebrow">Workbench shelf</p>
+            <h2>What belongs here next.</h2>
+            <p class="lede">
+                The geometry page is a container, not a single demo. Capset is
+                active now. The halo atlas and h-of-x are already public. The
+                AI-math apparatus rails are staged until their notes and review
+                paths earn a stronger public position.
+            </p>
+
+            <div class="demo-grid">
+                <article class="demo-card">
+                    <span class="demo-status live">Live</span>
+                    <h3>Capset</h3>
+                    <p>
+                        Clickable F_3^n primer for finite-field lines, small
+                        maximum caps, and the polynomial-method bound.
+                    </p>
+                    <div class="card-links"><a href="/capset">Open</a></div>
+                </article>
+
+                <article class="demo-card">
+                    <span class="demo-status live">Live</span>
+                    <h3>Halo Atlas</h3>
+                    <p>
+                        Atmospheric-optics atlas for parhelia and halo-family
+                        vocabulary, separated from the broader geometry shelf.
+                    </p>
+                    <div class="card-links"><a href="/sundog">Open</a></div>
+                </article>
+
+                <article class="demo-card">
+                    <span class="demo-status live">Live</span>
+                    <h3>h-of-x</h3>
+                    <p>
+                        A small inverse handle: recover eligible hidden sun
+                        altitude from photographed parhelion offset.
+                    </p>
+                    <div class="card-links"><a href="/h-of-x">Open</a></div>
+                </article>
+
+                <article class="demo-card">
+                    <span class="demo-status staged">Staged</span>
+                    <h3>Unit-distance overlay</h3>
+                    <p>
+                        Future side-by-side reading of the OpenAI result with
+                        citation rail, evidence tiers, and explicit boundaries.
+                    </p>
+                </article>
+
+                <article class="demo-card">
+                    <span class="demo-status staged">Staged</span>
+                    <h3>Substrate rhyme note</h3>
+                    <p>
+                        A careful note asking whether parhelion, cap-set, and
+                        unit-distance share structure or only a convenient slogan.
+                    </p>
+                    <div class="card-links"><a href="/docs/SUNDOG_V_CAPSET.md">Read staging</a></div>
+                </article>
+
+                <article class="demo-card">
+                    <span class="demo-status boundary">Internal gate</span>
+                    <h3>Isotrophy</h3>
+                    <p>
+                        Three-body symmetry descent remains a research sidecar.
+                        Its current lesson is process discipline: do not rescue
+                        a count after a cheap precheck collapses.
+                    </p>
+                    <div class="card-links"><a href="/docs/sundog_v_isotrophy.md">Read doc</a></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="geometry-section" id="sources">
+            <p class="eyebrow">Sources and credit</p>
+            <h2>Start with the originals.</h2>
+            <div class="source-grid">
+                <article class="source-card">
+                    <h3>OpenAI unit-distance article</h3>
+                    <p>Primary announcement for the May 2026 result and its context.</p>
+                    <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">Open source</a>
+                </article>
+                <article class="source-card">
+                    <h3>Unit-distance proof</h3>
+                    <p>The proof document linked from the announcement.</p>
+                    <a href="https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-proof.pdf">Open PDF</a>
+                </article>
+                <article class="source-card">
+                    <h3>Companion remarks</h3>
+                    <p>Mathematician commentary and context around the result.</p>
+                    <a href="https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-remarks.pdf">Open PDF</a>
+                </article>
+                <article class="source-card">
+                    <h3>Ellenberg-Gijswijt</h3>
+                    <p>Cap-set bound paper: large subsets of F_q^n with no three-term progressions.</p>
+                    <a href="https://arxiv.org/abs/1605.09223">Open arXiv</a>
+                </article>
+                <article class="source-card">
+                    <h3>Croot-Lev-Pach</h3>
+                    <p>The polynomial-method precursor on progression-free sets in Z_4^n.</p>
+                    <a href="https://arxiv.org/abs/1605.01506">Open arXiv</a>
+                </article>
+                <article class="source-card">
+                    <h3>Sundog capset ledger</h3>
+                    <p>Internal claim-boundary staging for this geometry shelf.</p>
+                    <a href="/docs/SUNDOG_V_CAPSET.md">Open ledger</a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="/alignment">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="/docs/README.md">Documentation</a> |
+            <a href="/docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
