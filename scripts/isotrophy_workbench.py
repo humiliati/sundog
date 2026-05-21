@@ -902,16 +902,20 @@ def compute_neutral_basis(M_i: np.ndarray, integrated: IntegratedOrbit, floor: f
     return vector_subspace_basis(np.column_stack(neutral_columns), floor)
 
 
+def compute_kernel_basis(M_i: np.ndarray, floor: float) -> tuple[np.ndarray, list[float]]:
+    """Return an orthonormal basis for ker(M_i-I) plus all singular values."""
+    identity = np.eye(M_i.shape[0])
+    _u, singular_values, vh = np.linalg.svd(M_i - identity)
+    return vh.T[:, singular_values < floor], [float(value) for value in singular_values]
+
+
 def compute_k_fib_basis(
     M_i: np.ndarray,
     integrated: IntegratedOrbit,
     closure_floor: float,
 ) -> tuple[np.ndarray, dict[str, object]]:
     """Compute a gate-level basis for K_i^fib = ker(M_i-I) modulo neutral directions."""
-    identity = np.eye(18)
-    _u, singular_values, vh = np.linalg.svd(M_i - identity)
-    kernel_mask = singular_values < closure_floor
-    kernel_basis = vh.T[:, kernel_mask]
+    kernel_basis, singular_values = compute_kernel_basis(M_i, closure_floor)
     neutral_basis = compute_neutral_basis(M_i, integrated, closure_floor)
     if kernel_basis.shape[1] == 0:
         return np.zeros((18, 0), dtype=float), {
@@ -1006,6 +1010,144 @@ def verify_reduced_omega(
             "isotypic decomposition is integrated into the runner."
         ),
     }
+
+
+def nullspace_basis(matrix: np.ndarray, floor: float) -> tuple[np.ndarray, list[float]]:
+    """Return a right-nullspace basis using an SVD floor."""
+    if matrix.shape[1] == 0:
+        return np.zeros((matrix.shape[1], 0), dtype=float), []
+    _u, singular_values, vh = np.linalg.svd(matrix, full_matrices=True)
+    rank = int(np.sum(singular_values > floor))
+    return vh.T[:, rank:], [float(value) for value in singular_values]
+
+
+def compute_gamma_rank_gate(
+    kernel_basis: np.ndarray,
+    d3_ops: dict[str, np.ndarray],
+    omega: np.ndarray,
+    partial_eps_monodromy: np.ndarray,
+    rtol: float,
+    k_gamma: float,
+    k_int: float,
+    projector_floor: float,
+) -> tuple[dict[str, object], np.ndarray, np.ndarray]:
+    """Compute the v0.3h Gamma_i rank gate on F_beta-even standard isotypic.
+
+    The D3 decomposition is performed on ker(M_i-I), not on an arbitrary
+    orthogonal complement of the neutral quotient. The v0.3 derivation places
+    the neutral block in T/S sectors, so the standard-E multiplicity c_i is
+    preserved by the quotient; doing the representation theory on the actual
+    kernel avoids a non-invariant complement choice.
+    """
+    k_dim = int(kernel_basis.shape[1])
+    if k_dim == 0:
+        result = {
+            "gate": "Gamma_i_rank",
+            "enabled": True,
+            "passed": True,
+            "kernel_dim": 0,
+            "D3_isotypic_dims": {"T": 0, "S": 0, "E": 0, "c_i": 0},
+            "d_i": 0,
+            "gamma_matrix": [],
+            "gamma_singular_values": [],
+            "gamma_floor": 0.0,
+            "gamma_singular_to_floor": [],
+            "gamma_rank_floor": 0,
+            "gamma_singular_bimodality_clean": True,
+            "notes": "K_i^fib is empty; Gamma_i is the empty matrix and d_i=0.",
+        }
+        return result, np.zeros((0, 0), dtype=float), np.zeros((18, 0), dtype=float)
+
+    identity_k = np.eye(k_dim)
+    ambient_projector = kernel_basis @ kernel_basis.T
+    ambient_identity = np.eye(kernel_basis.shape[0])
+    leakage = {
+        name: float(np.linalg.norm((ambient_identity - ambient_projector) @ operator @ kernel_basis, ord=np.inf))
+        for name, operator in d3_ops.items()
+    }
+    restricted = {name: kernel_basis.T @ operator @ kernel_basis for name, operator in d3_ops.items()}
+    sigma3 = restricted["sigma3"]
+    sigma3_sq = restricted["sigma3_sq"]
+    f_beta = restricted["F_beta"]
+    f_beta_sigma3 = restricted["F_beta_sigma3"]
+    f_beta_sigma3_sq = restricted["F_beta_sigma3_sq"]
+
+    projector_t = (identity_k + sigma3 + sigma3_sq + f_beta + f_beta_sigma3 + f_beta_sigma3_sq) / 6.0
+    projector_s = (identity_k + sigma3 + sigma3_sq - f_beta - f_beta_sigma3 - f_beta_sigma3_sq) / 6.0
+    projector_e = identity_k - projector_t - projector_s
+
+    t_basis_k = vector_subspace_basis(projector_t, projector_floor)
+    s_basis_k = vector_subspace_basis(projector_s, projector_floor)
+    e_basis_k = vector_subspace_basis(projector_e, projector_floor)
+    e_dim = int(e_basis_k.shape[1])
+    c_i = e_dim // 2
+    e_dim_even = e_dim % 2 == 0
+
+    if e_dim == 0:
+        gamma_matrix = np.zeros((0, 0), dtype=float)
+        xi_basis = np.zeros((18, 0), dtype=float)
+        singular_values: list[float] = []
+        gamma_floor = 0.0
+        gamma_rank = 0
+        bimodality_clean = True
+        f_even_dim = 0
+        f_even_singular_values: list[float] = []
+    else:
+        f_beta_e = e_basis_k.T @ f_beta @ e_basis_k
+        f_even_coords, f_even_singular_values = nullspace_basis(f_beta_e - np.eye(e_dim), projector_floor)
+        f_even_dim = int(f_even_coords.shape[1])
+        xi_basis = kernel_basis @ e_basis_k @ f_even_coords
+        xi_basis = vector_subspace_basis(xi_basis, projector_floor)
+        gamma_matrix = xi_basis.T @ omega @ partial_eps_monodromy @ xi_basis
+        singular_values = [float(value) for value in np.linalg.svd(gamma_matrix, compute_uv=False)]
+        partial_norm = float(np.linalg.norm(partial_eps_monodromy, ord=np.inf))
+        gamma_floor = float(k_int * max(partial_norm, 1.0) * rtol)
+        threshold = k_gamma * gamma_floor
+        gamma_rank = int(sum(value > threshold for value in singular_values))
+        bimodality_clean = all(not (gamma_floor <= value <= threshold) for value in singular_values)
+
+    gamma_singular_to_floor = [
+        float(value / max(gamma_floor, 1e-300)) for value in singular_values
+    ]
+    expected_f_even_dim = c_i if e_dim_even else None
+    passed = bool(e_dim_even and f_even_dim == c_i and bimodality_clean)
+    result = {
+        "gate": "Gamma_i_rank",
+        "enabled": True,
+        "gate_version": "v0.3h-rank-matrix",
+        "passed": passed,
+        "kernel_dim": k_dim,
+        "neutral_quotient_note": "Gamma_i decomposes ker(M_i-I); neutral T/S removal preserves the standard-E count.",
+        "D3_isotypic_dims": {
+            "T": int(t_basis_k.shape[1]),
+            "S": int(s_basis_k.shape[1]),
+            "E": e_dim,
+            "c_i": c_i,
+        },
+        "E_dim_even": e_dim_even,
+        "F_beta_even_E_dim": f_even_dim,
+        "F_beta_even_E_dim_expected": expected_f_even_dim,
+        "F_beta_even_E_null_singular_values": f_even_singular_values,
+        "D3_K_fib_leakage_inf": leakage,
+        "projector_floor": projector_floor,
+        "k_gamma": k_gamma,
+        "k_int": k_int,
+        "gamma_floor": gamma_floor,
+        "gamma_matrix": gamma_matrix.tolist(),
+        "gamma_diagonal": [float(gamma_matrix[i, i]) for i in range(gamma_matrix.shape[0])],
+        "gamma_singular_values": singular_values,
+        "gamma_singular_to_floor": gamma_singular_to_floor,
+        "gamma_rank_floor": gamma_rank,
+        "d_i": gamma_rank,
+        "gamma_singular_bimodality_clean": bimodality_clean,
+        "gamma_marginal_band": [gamma_floor, k_gamma * gamma_floor],
+        "dE_perturbation_spectral_degeneracy_E": None,
+        "notes": (
+            "d_i is the SVD rank of Gamma_i on the F_beta-even standard isotypic. "
+            "Diagonal entries are basis-dependent diagnostics only."
+        ),
+    }
+    return result, gamma_matrix, xi_basis
 
 
 def best_so3_rotation(source: np.ndarray, target: np.ndarray) -> np.ndarray:
@@ -2221,9 +2363,59 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
     all_gates_passed = bool(
         preliminary_gates_passed and (not args.verify_partial_eps or partial_eps_gate.get("passed") is True)
     )
+    gamma_gate: dict[str, object] = {
+        "gate": "Gamma_i_rank",
+        "enabled": False,
+        "skipped": True,
+        "reason": "run with --authorize-sentinel-run after --verify-partial-eps to compute Gamma_i",
+    }
+    gamma_matrix = None
+    gamma_xi_basis = None
+    if args.authorize_sentinel_run:
+        if not all_gates_passed:
+            gamma_gate = {
+                "gate": "Gamma_i_rank",
+                "enabled": True,
+                "skipped": True,
+                "passed": False,
+                "reason": "implementation gates failed before Gamma_i",
+            }
+        elif partial_eps_monodromy is None:
+            gamma_gate = {
+                "gate": "Gamma_i_rank",
+                "enabled": True,
+                "skipped": True,
+                "passed": False,
+                "reason": "--authorize-sentinel-run requires --verify-partial-eps so partial_epsilon M_i is trusted",
+            }
+            all_gates_passed = False
+        else:
+            print("[kfacet-sentinel] computing Gamma_i rank gate")
+            kernel_basis, _kernel_singular_values = compute_kernel_basis(monodromy, args.closure_floor)
+            gamma_gate, gamma_matrix, gamma_xi_basis = compute_gamma_rank_gate(
+                kernel_basis,
+                d3_ops,
+                omega,
+                partial_eps_monodromy,
+                args.rtol,
+                args.k_gamma,
+                args.k_int,
+                args.gamma_projector_floor,
+            )
+            print(
+                "[kfacet-sentinel] Gamma_i gate "
+                f"{'PASS' if gamma_gate['passed'] else 'FAIL'} "
+                f"c_i={gamma_gate['D3_isotypic_dims']['c_i']} "
+                f"d_i={gamma_gate['d_i']} "
+                f"singulars={gamma_gate['gamma_singular_values']}"
+            )
+            all_gates_passed = bool(all_gates_passed and gamma_gate["passed"])
+
     receipt = {
         "mode": "kfacet_sentinel_gates",
-        "gate_version": "v0.3i-partial-eps" if args.verify_partial_eps else "v0.3i-gates",
+        "gate_version": "v0.3h-gamma" if args.authorize_sentinel_run else (
+            "v0.3i-partial-eps" if args.verify_partial_eps else "v0.3i-gates"
+        ),
         "row_index": row.index,
         "label": row.label,
         "m3": row.m3,
@@ -2239,12 +2431,16 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
         "D3_relations": d3_gate,
         "reduced_omega": omega_gate,
         "partial_epsilon_finite_difference": partial_eps_gate,
+        "Gamma_i_rank": gamma_gate,
         "all_gates_passed": all_gates_passed,
         "sentinel_scope": {
-            "full_gamma_run_authorized": False,
+            "full_gamma_run_authorized": bool(args.authorize_sentinel_run),
             "full_21_authorized": False,
             "supplementary_B_authorized": False,
-            "notes": "This command scaffolds v0.3i gates only; Gamma_i remains unimplemented.",
+            "notes": (
+                "This command is sentinel-only. It never authorizes full-21 K_facet "
+                "or supplementary-B comparison."
+            ),
         },
     }
 
@@ -2260,14 +2456,17 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
         if partial_eps_monodromy is not None and partial_eps_finite_difference is not None:
             np.save(out_dir / "partial_eps_M_i.npy", partial_eps_monodromy)
             np.save(out_dir / "partial_eps_M_i_fd.npy", partial_eps_finite_difference)
+        if gamma_matrix is not None and gamma_xi_basis is not None:
+            np.save(out_dir / "Gamma_i.npy", gamma_matrix)
+            np.save(out_dir / "Gamma_xi_basis.npy", gamma_xi_basis)
 
     if not all_gates_passed:
         print("[kfacet-sentinel] HALT: implementation gates failed; Gamma_i run remains blocked")
         return 1
     if args.authorize_sentinel_run:
-        print("[kfacet-sentinel] HALT: --authorize-sentinel-run requested, but Gamma_i is not implemented")
-        return 3
-    print("[kfacet-sentinel] gates passed; Gamma_i run remains unimplemented and unauthorised")
+        print("[kfacet-sentinel] sentinel Gamma_i receipt complete; full-21 comparison remains unauthorised")
+        return 0
+    print("[kfacet-sentinel] gates passed; Gamma_i run remains unauthorised without --authorize-sentinel-run")
     return 0
 
 
@@ -2458,6 +2657,9 @@ def build_parser() -> argparse.ArgumentParser:
     # ODE with the same tolerances, so agreement to integration precision is
     # expected; 1e-9 relative is the natural floor (matches closure discipline).
     sentinel.add_argument("--joint-baseline-floor", type=float, default=1e-9)
+    sentinel.add_argument("--k-gamma", type=float, default=3.0)
+    sentinel.add_argument("--k-int", type=float, default=10.0)
+    sentinel.add_argument("--gamma-projector-floor", type=float, default=1e-3)
     sentinel.add_argument("--authorize-sentinel-run", action="store_true")
     sentinel.add_argument("--out", help="optional output directory for gate receipt and matrices")
     sentinel.set_defaults(func=command_kfacet_sentinel)
