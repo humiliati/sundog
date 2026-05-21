@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDFDFC"/>
+      <stop offset="100%" stop-color="#F5F4EE"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · PRESSURE MINES</text>
+
+  <!-- Headline -->
+  <text x="60" y="200" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">Pressure maps</text>
+  <text x="60" y="259" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">become decisions.</text>
+
+  <!-- Lede -->
+  <text x="60" y="366" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">A noisy pressure field buys safe</text>
+  <text x="60" y="398" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">progress inside a narrow mapped</text>
+  <text x="60" y="430" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">pocket — and fails cleanly past it.</text>
+
+  <!-- URL -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/mines</text>
+
+  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  
+  <g transform="translate(700,160)">
+    <text x="180" y="-15" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">PRESSURE FIELD · SAFE POCKET</text>
+    <!-- 6x6 grid, cell 50x50, gap 4 -->
+    <!-- Pressure shading: increases toward bottom-right -->
+    <rect x="0" y="0" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.05" stroke="#C99517" stroke-opacity="0.20" stroke-width="1.4"/>    <rect x="54" y="0" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.10" stroke="#C99517" stroke-opacity="0.26" stroke-width="1.4"/>    <rect x="108" y="0" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.15" stroke="#C99517" stroke-opacity="0.32" stroke-width="1.4"/>    <rect x="162" y="0" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.20" stroke="#C99517" stroke-opacity="0.38" stroke-width="1.4"/>    <rect x="216" y="0" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.25" stroke="#C99517" stroke-opacity="0.44" stroke-width="1.4"/>    <rect x="270" y="0" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.30" stroke="#C99517" stroke-opacity="0.50" stroke-width="1.4"/>    <rect x="0" y="54" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.10" stroke="#C99517" stroke-opacity="0.26" stroke-width="1.4"/>    <rect x="54" y="54" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.15" stroke="#C99517" stroke-opacity="0.32" stroke-width="1.4"/>    <rect x="108" y="54" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.20" stroke="#C99517" stroke-opacity="0.38" stroke-width="1.4"/>    <rect x="162" y="54" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.25" stroke="#C99517" stroke-opacity="0.44" stroke-width="1.4"/>    <rect x="216" y="54" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.30" stroke="#C99517" stroke-opacity="0.50" stroke-width="1.4"/>    <rect x="270" y="54" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.35" stroke="#C99517" stroke-opacity="0.56" stroke-width="1.4"/>    <rect x="0" y="108" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.15" stroke="#C99517" stroke-opacity="0.32" stroke-width="1.4"/>    <rect x="54" y="108" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.20" stroke="#C99517" stroke-opacity="0.38" stroke-width="1.4"/>    <rect x="108" y="108" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.25" stroke="#C99517" stroke-opacity="0.44" stroke-width="1.4"/>    <rect x="162" y="108" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.30" stroke="#C99517" stroke-opacity="0.50" stroke-width="1.4"/>    <rect x="216" y="108" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.35" stroke="#C99517" stroke-opacity="0.56" stroke-width="1.4"/>    <rect x="270" y="108" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.40" stroke="#C99517" stroke-opacity="0.62" stroke-width="1.4"/>    <rect x="0" y="162" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.20" stroke="#C99517" stroke-opacity="0.38" stroke-width="1.4"/>    <rect x="54" y="162" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.25" stroke="#C99517" stroke-opacity="0.44" stroke-width="1.4"/>    <rect x="108" y="162" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.30" stroke="#C99517" stroke-opacity="0.50" stroke-width="1.4"/>    <rect x="162" y="162" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.35" stroke="#C99517" stroke-opacity="0.56" stroke-width="1.4"/>    <rect x="216" y="162" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.40" stroke="#C99517" stroke-opacity="0.62" stroke-width="1.4"/>    <rect x="270" y="162" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.45" stroke="#C99517" stroke-opacity="0.68" stroke-width="1.4"/>    <rect x="0" y="216" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.25" stroke="#C99517" stroke-opacity="0.44" stroke-width="1.4"/>    <rect x="54" y="216" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.30" stroke="#C99517" stroke-opacity="0.50" stroke-width="1.4"/>    <rect x="108" y="216" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.35" stroke="#C99517" stroke-opacity="0.56" stroke-width="1.4"/>    <rect x="162" y="216" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.40" stroke="#C99517" stroke-opacity="0.62" stroke-width="1.4"/>    <rect x="216" y="216" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.45" stroke="#C99517" stroke-opacity="0.68" stroke-width="1.4"/>    <rect x="270" y="216" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.50" stroke="#C99517" stroke-opacity="0.74" stroke-width="1.4"/>    <rect x="0" y="270" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.30" stroke="#C99517" stroke-opacity="0.50" stroke-width="1.4"/>    <rect x="54" y="270" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.35" stroke="#C99517" stroke-opacity="0.56" stroke-width="1.4"/>    <rect x="108" y="270" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.40" stroke="#C99517" stroke-opacity="0.62" stroke-width="1.4"/>    <rect x="162" y="270" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.45" stroke="#C99517" stroke-opacity="0.68" stroke-width="1.4"/>    <rect x="216" y="270" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.50" stroke="#C99517" stroke-opacity="0.74" stroke-width="1.4"/>    <rect x="270" y="270" width="50" height="50" rx="3" fill="#F4C430" fill-opacity="0.55" stroke="#C99517" stroke-opacity="0.80" stroke-width="1.4"/>
+    <!-- revealed mine marker bottom-right -->
+    <circle cx="297" cy="297" r="14" fill="#D45A4A" stroke="#9C2D21" stroke-width="2"/>
+    <line x1="288" y1="288" x2="306" y2="306" stroke="#FFFFFF" stroke-width="2"/>
+    <line x1="306" y1="288" x2="288" y2="306" stroke="#FFFFFF" stroke-width="2"/>
+    <!-- safe pocket annotation top-left -->
+    <circle cx="25"  cy="25"  r="5" fill="#2E7D5A"/>
+    <text x="38" y="29" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#2E7D5A">safe</text>
+  </g>
+
+
+  <!-- Bottom-right mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
+</svg>
