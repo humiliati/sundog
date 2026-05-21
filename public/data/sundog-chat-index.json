@@ -203,6 +203,105 @@
       "text": "The halo vocabulary on /sundog is an atlas and literature guide, not a new Sundog result. The page renders a deliberate subset of named atmospheric-optics primitives and also catalogs families beyond the rendered set: Parry-family arcs, pyramidal or odd-radius halos, Lowitz arcs, antisolar features, and sub-horizon or circumhorizon features. Those names come from the atmospheric-optics literature and HaloSim/AtOptics references; several are named-only or not modeled by the current geometry layer. halo vocabulary academic halo vocabulary atmospheric optics vocabulary halo atlas vocabulary what halos does the atlas model what halos are not modeled named halo families parry family arcs sunvex parry pyramidal halos odd radius halos lowitz arcs antisolar features anthelic arcs subhorizon halos circumhorizon arc halos not rendered halos beyond the rendered set Do not imply Sundog discovered the halo vocabulary; it is standard atmospheric-optics terminology. Do not imply every named halo family is rendered, detected, or thoroughly described by the atlas. Treat named-only and not-modeled families as literature/catalogue coverage until the geometry, photo evidence, and documentation are completed. Keep atmospheric-optics atlas claims separate from the paper-grade photometric mirror-alignment result."
     },
     {
+      "id": "geometry_capset_unit_distance_boundary:1",
+      "routeId": "geometry_capset_unit_distance_boundary",
+      "doc": "geometry.html",
+      "href": "/geometry",
+      "section": "Claim boundary / Sources and credit",
+      "tier": "conceptual_lineage",
+      "disposition": "allow_with_boundary",
+      "freshness": "current_claim_map",
+      "supportStatus": "primary",
+      "boundaryTags": [
+        "Do not claim Sundog proved the cap-set theorem or the unit-distance result.",
+        "Do not treat the unit-distance result as evidence for the Sundog theorem.",
+        "Credit OpenAI and the proof authors for the unit-distance result, and Croot-Lev-Pach / Ellenberg-Gijswijt for cap-set.",
+        "Keep the geometry page at conceptual-lineage and apparatus-exhibit tier until a promoted Sundog-authored evaluator or note clears review."
+      ],
+      "questionPatterns": [
+        "geometry page",
+        "sundog geometry",
+        "capset",
+        "cap set",
+        "cap-set",
+        "unit distance",
+        "erdos unit distance",
+        "discrete geometry conjecture",
+        "openai math result",
+        "openai unit distance",
+        "polynomial method",
+        "ellenberg gijswijt",
+        "croot lev pach"
+      ],
+      "text": "The /geometry and /capset pages are public primers and apparatus exhibits, not Sundog-original math results. /capset is an interactive F_3^n workbench for the cap-set problem and the 2016 polynomial-method breakthrough; /geometry uses it beside the 2026 OpenAI unit-distance disproof to show a bounded pattern: visible geometry can be controlled by hidden algebraic structure. Sundog's contribution here is claim hygiene and apparatus framing, not a proof of cap-set, unit-distance, or a general geometry theorem. geometry page sundog geometry capset cap set cap-set unit distance erdos unit distance discrete geometry conjecture openai math result openai unit distance polynomial method ellenberg gijswijt croot lev pach Do not claim Sundog proved the cap-set theorem or the unit-distance result. Do not treat the unit-distance result as evidence for the Sundog theorem. Credit OpenAI and the proof authors for the unit-distance result, and Croot-Lev-Pach / Ellenberg-Gijswijt for cap-set. Keep the geometry page at conceptual-lineage and apparatus-exhibit tier until a promoted Sundog-authored evaluator or note clears review."
+    },
+    {
+      "id": "geometry_capset_unit_distance_boundary:2",
+      "routeId": "geometry_capset_unit_distance_boundary",
+      "doc": "capset.html",
+      "href": "/capset",
+      "section": "Cap-set interactive workbench / Inspection Trail",
+      "tier": "conceptual_lineage",
+      "disposition": "allow_with_boundary",
+      "freshness": "current_claim_map",
+      "supportStatus": "supporting",
+      "boundaryTags": [
+        "Do not claim Sundog proved the cap-set theorem or the unit-distance result.",
+        "Do not treat the unit-distance result as evidence for the Sundog theorem.",
+        "Credit OpenAI and the proof authors for the unit-distance result, and Croot-Lev-Pach / Ellenberg-Gijswijt for cap-set.",
+        "Keep the geometry page at conceptual-lineage and apparatus-exhibit tier until a promoted Sundog-authored evaluator or note clears review."
+      ],
+      "questionPatterns": [
+        "geometry page",
+        "sundog geometry",
+        "capset",
+        "cap set",
+        "cap-set",
+        "unit distance",
+        "erdos unit distance",
+        "discrete geometry conjecture",
+        "openai math result",
+        "openai unit distance",
+        "polynomial method",
+        "ellenberg gijswijt",
+        "croot lev pach"
+      ],
+      "text": "The /geometry and /capset pages are public primers and apparatus exhibits, not Sundog-original math results. /capset is an interactive F_3^n workbench for the cap-set problem and the 2016 polynomial-method breakthrough; /geometry uses it beside the 2026 OpenAI unit-distance disproof to show a bounded pattern: visible geometry can be controlled by hidden algebraic structure. Sundog's contribution here is claim hygiene and apparatus framing, not a proof of cap-set, unit-distance, or a general geometry theorem. geometry page sundog geometry capset cap set cap-set unit distance erdos unit distance discrete geometry conjecture openai math result openai unit distance polynomial method ellenberg gijswijt croot lev pach Do not claim Sundog proved the cap-set theorem or the unit-distance result. Do not treat the unit-distance result as evidence for the Sundog theorem. Credit OpenAI and the proof authors for the unit-distance result, and Croot-Lev-Pach / Ellenberg-Gijswijt for cap-set. Keep the geometry page at conceptual-lineage and apparatus-exhibit tier until a promoted Sundog-authored evaluator or note clears review."
+    },
+    {
+      "id": "geometry_capset_unit_distance_boundary:3",
+      "routeId": "geometry_capset_unit_distance_boundary",
+      "doc": "docs/SUNDOG_V_CAPSET.md",
+      "href": "/docs/SUNDOG_V_CAPSET.md",
+      "section": "Claim Boundary / Falsification Surface",
+      "tier": "conceptual_lineage",
+      "disposition": "allow_with_boundary",
+      "freshness": "current_boundary",
+      "supportStatus": "boundary",
+      "boundaryTags": [
+        "Do not claim Sundog proved the cap-set theorem or the unit-distance result.",
+        "Do not treat the unit-distance result as evidence for the Sundog theorem.",
+        "Credit OpenAI and the proof authors for the unit-distance result, and Croot-Lev-Pach / Ellenberg-Gijswijt for cap-set.",
+        "Keep the geometry page at conceptual-lineage and apparatus-exhibit tier until a promoted Sundog-authored evaluator or note clears review."
+      ],
+      "questionPatterns": [
+        "geometry page",
+        "sundog geometry",
+        "capset",
+        "cap set",
+        "cap-set",
+        "unit distance",
+        "erdos unit distance",
+        "discrete geometry conjecture",
+        "openai math result",
+        "openai unit distance",
+        "polynomial method",
+        "ellenberg gijswijt",
+        "croot lev pach"
+      ],
+      "text": "The /geometry and /capset pages are public primers and apparatus exhibits, not Sundog-original math results. /capset is an interactive F_3^n workbench for the cap-set problem and the 2016 polynomial-method breakthrough; /geometry uses it beside the 2026 OpenAI unit-distance disproof to show a bounded pattern: visible geometry can be controlled by hidden algebraic structure. Sundog's contribution here is claim hygiene and apparatus framing, not a proof of cap-set, unit-distance, or a general geometry theorem. geometry page sundog geometry capset cap set cap-set unit distance erdos unit distance discrete geometry conjecture openai math result openai unit distance polynomial method ellenberg gijswijt croot lev pach Do not claim Sundog proved the cap-set theorem or the unit-distance result. Do not treat the unit-distance result as evidence for the Sundog theorem. Credit OpenAI and the proof authors for the unit-distance result, and Croot-Lev-Pach / Ellenberg-Gijswijt for cap-set. Keep the geometry page at conceptual-lineage and apparatus-exhibit tier until a promoted Sundog-authored evaluator or note clears review."
+    },
+    {
       "id": "application_tier_summary:1",
       "routeId": "application_tier_summary",
       "doc": "docs/APPLICATIONS.md",

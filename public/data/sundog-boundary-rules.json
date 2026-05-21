@@ -46,6 +46,22 @@
       ]
     },
     {
+      "routeId": "geometry_capset_unit_distance_boundary",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "conceptual_lineage",
+      "boundaries": [
+        "Do not claim Sundog proved the cap-set theorem or the unit-distance result.",
+        "Do not treat the unit-distance result as evidence for the Sundog theorem.",
+        "Credit OpenAI and the proof authors for the unit-distance result, and Croot-Lev-Pach / Ellenberg-Gijswijt for cap-set.",
+        "Keep the geometry page at conceptual-lineage and apparatus-exhibit tier until a promoted Sundog-authored evaluator or note clears review."
+      ],
+      "supportDocs": [
+        "geometry.html",
+        "capset.html",
+        "docs/SUNDOG_V_CAPSET.md"
+      ]
+    },
+    {
       "routeId": "application_tier_summary",
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",

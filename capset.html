@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cap-set workbench: place dots in F_3^n, watch arithmetic-progression lines form, and see the polynomial-method bound that broke a 70-year stalemate. A companion lens for the 2026 unit-distance disproof.">
+    <meta name="theme-color" content="#1A3A52">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/capset">
+    <title>Cap-Set Workbench - Sundog</title>
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        main {
+            background:
+                radial-gradient(circle at 18% 8%, rgba(244, 196, 48, 0.12), transparent 22rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 36rem);
+        }
+
+        /* ---------- hero ---------- */
+        .capset-hero {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 7rem 2rem 2rem;
+        }
+
+        .capset-hero .eyebrow,
+        .capset-section .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .capset-hero h1 {
+            max-width: 880px;
+            margin: 1rem 0 1.25rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(2.1rem, 6.5vw, 4.4rem);
+            line-height: 1.04;
+            overflow-wrap: anywhere;
+        }
+
+        .capset-hero .lede {
+            max-width: 760px;
+            color: #40505C;
+            font-size: 1.15rem;
+            line-height: 1.75;
+            overflow-wrap: break-word;
+        }
+
+        .status-ribbon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.75rem;
+        }
+
+        .status-ribbon span {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 0.45rem 0.75rem;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        /* ---------- workbench ---------- */
+        .capset-section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem 2rem;
+        }
+
+        .workbench {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 1.25rem;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FFFFFF;
+            overflow: hidden;
+        }
+
+        .stage {
+            padding: 1.25rem;
+            background:
+                linear-gradient(180deg, #FDFDFC 0%, #F5F4EE 100%);
+            border-right: 1px solid var(--line);
+            min-height: 540px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .stage-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stage-head h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .stage-legend {
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            color: #6A7680;
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .legend-swatch {
+            width: 0.7rem;
+            height: 0.7rem;
+            border-radius: 2px;
+            border: 1px solid var(--line);
+            display: inline-block;
+        }
+
+        .swatch-empty { background: #FFFFFF; }
+        .swatch-picked { background: var(--accent-gold, #F4C430); border-color: #C99517; }
+        .swatch-line { background: #D45A4A; border-color: #9C2D21; }
+
+        /* the grid container */
+        #capset-grid {
+            flex: 1 1 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 0;
+            padding: 0.5rem;
+        }
+
+        .grid-wrap {
+            display: grid;
+            gap: 0.4rem;
+        }
+
+        .layer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.18rem;
+            padding: 0.32rem;
+            border-radius: 4px;
+            background: rgba(26, 58, 82, 0.04);
+            border: 1px solid rgba(26, 58, 82, 0.08);
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            border: 1px solid #CFD8DC;
+            background: #FFFFFF;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: transform 0.08s ease, background 0.12s ease, border-color 0.12s ease;
+            position: relative;
+        }
+
+        .cell:hover {
+            border-color: var(--primary-mid);
+            transform: translateY(-1px);
+        }
+
+        .cell.picked {
+            background: var(--accent-gold, #F4C430);
+            border-color: #C99517;
+            box-shadow: 0 1px 3px rgba(201, 149, 23, 0.4);
+        }
+
+        .cell.on-line {
+            background: #D45A4A;
+            border-color: #9C2D21;
+            box-shadow: 0 0 0 1px rgba(212, 90, 74, 0.45);
+        }
+
+        .cell.picked.on-line {
+            background: linear-gradient(135deg, #F4C430 0%, #D45A4A 100%);
+            border-color: #9C2D21;
+        }
+
+        /* size cells based on n; controlled via inline style on .grid-wrap */
+
+        /* ---------- controls ---------- */
+        .controls {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: #FFFFFF;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .control-label {
+            color: var(--primary-mid);
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .dim-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.3rem;
+        }
+
+        .dim-btn {
+            padding: 0.5rem 0.4rem;
+            border: 1px solid var(--line);
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.12s, color 0.12s, border-color 0.12s;
+        }
+
+        .dim-btn:hover { border-color: var(--primary-mid); }
+
+        .dim-btn.active {
+            background: var(--primary-dark);
+            color: #FFFFFF;
+            border-color: var(--primary-dark);
+        }
+
+        .action-btn {
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--line);
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: left;
+            transition: background 0.12s, border-color 0.12s;
+        }
+
+        .action-btn:hover {
+            background: #F0F4F6;
+            border-color: var(--primary-mid);
+        }
+
+        .action-btn.primary {
+            background: var(--primary-dark);
+            color: #FFFFFF;
+            border-color: var(--primary-dark);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--primary-mid, #2A5570);
+        }
+
+        /* readout */
+        .readout {
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 0.8rem 0.9rem;
+            background: #FAFBFC;
+            font-family: var(--sd-font-data);
+            font-size: 0.8rem;
+            color: var(--primary-dark);
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .readout .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .readout .num {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .readout .verdict {
+            margin-top: 0.4rem;
+            padding-top: 0.4rem;
+            border-top: 1px dashed var(--line);
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .verdict.ok { color: #2E7D5A; }
+        .verdict.bad { color: #B53A2C; }
+
+        /* ---------- bound chart ---------- */
+        .chart-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .chart-card h3 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem;
+        }
+
+        .chart-card p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.65;
+            margin-bottom: 0.9rem;
+        }
+
+        #bound-chart {
+            display: block;
+            width: 100%;
+            max-width: 720px;
+            height: 280px;
+            margin: 0 auto;
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 0.6rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            color: var(--primary-dark);
+        }
+
+        .chart-legend .dot {
+            display: inline-block;
+            width: 0.7rem;
+            height: 0.7rem;
+            border-radius: 999px;
+            margin-right: 0.35rem;
+            vertical-align: middle;
+        }
+
+        /* ---------- narrative cards ---------- */
+        .capset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+
+        .capset-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.25rem;
+        }
+
+        .capset-card h3 {
+            margin-bottom: 0.6rem;
+            color: var(--primary-dark);
+            font-size: 1rem;
+        }
+
+        .capset-card p {
+            color: #40505C;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .source-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .source-list a {
+            display: block;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+            color: var(--primary-mid);
+            text-decoration: none;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .source-list a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* ---------- responsive ---------- */
+        @media (max-width: 920px) {
+            .workbench {
+                grid-template-columns: 1fr;
+            }
+            .stage { border-right: none; border-bottom: 1px solid var(--line); }
+        }
+
+        @media (max-width: 760px) {
+            .capset-hero { padding: 5.5rem 1.25rem 1.5rem; }
+            .capset-section { padding: 1rem 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/geometry">Geometry</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="capset-hero">
+            <p class="eyebrow">Cap-Set Workbench</p>
+            <h1>How many dots before three of them line up?</h1>
+            <p class="lede">
+                Place dots in a tiny arithmetic universe. The rule: no three of your
+                dots can lie on a straight line. The question — open for seven
+                decades — was how many dots you could fit. In 2016 a six-page
+                argument using polynomials over a finite field cut the answer
+                dramatically. That kind of moment is now repeating in geometry,
+                and this is the cleanest place to feel why it matters.
+            </p>
+            <div class="status-ribbon" aria-label="Quick facts">
+                <span>Conjecture posed 1970s</span>
+                <span>Croot–Lev–Pach · 2016</span>
+                <span>Ellenberg–Gijswijt bound: 2.7551<sup>n</sup></span>
+                <span>Companion: unit-distance disproof · 2026</span>
+            </div>
+        </section>
+
+        <section class="capset-section" aria-label="Cap-set interactive workbench">
+            <div class="workbench">
+                <div class="stage">
+                    <div class="stage-head">
+                        <h2 id="stage-title">F<sub>3</sub><sup>3</sup> — the SET deck</h2>
+                        <div class="stage-legend" aria-label="Legend">
+                            <span class="legend-chip"><span class="legend-swatch swatch-empty"></span> empty</span>
+                            <span class="legend-chip"><span class="legend-swatch swatch-picked"></span> in your set</span>
+                            <span class="legend-chip"><span class="legend-swatch swatch-line"></span> on a forbidden line</span>
+                        </div>
+                    </div>
+                    <div id="capset-grid" role="grid" aria-label="Cap-set grid"></div>
+                </div>
+
+                <aside class="controls" aria-label="Controls and readout">
+                    <div class="control-group">
+                        <span class="control-label">Dimension n</span>
+                        <div class="dim-buttons" role="group" aria-label="Choose dimension">
+                            <button class="dim-btn" data-n="2">n=2 · 9 cells</button>
+                            <button class="dim-btn active" data-n="3">n=3 · 27</button>
+                            <button class="dim-btn" data-n="4">n=4 · 81</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <span class="control-label">Actions</span>
+                        <button class="action-btn primary" id="btn-greedy">Greedy fill</button>
+                        <button class="action-btn" id="btn-maxcap">Load a maximum cap</button>
+                        <button class="action-btn" id="btn-clear">Clear</button>
+                    </div>
+
+                    <div class="readout" aria-live="polite" aria-atomic="true">
+                        <div class="row"><span>Points placed</span><span class="num" id="r-count">0</span></div>
+                        <div class="row"><span>Lines violated</span><span class="num" id="r-lines">0</span></div>
+                        <div class="row"><span>Best known max for n</span><span class="num" id="r-best">9</span></div>
+                        <div class="row"><span>Trivial cap 3<sup>n</sup></span><span class="num" id="r-trivial">27</span></div>
+                        <div class="row"><span>Ellenberg–Gijswijt bound</span><span class="num" id="r-eg">~21</span></div>
+                        <div class="verdict ok" id="r-verdict">Cap set so far ✓</div>
+                    </div>
+
+                    <p style="font-size: 0.78rem; color: #6A7680; line-height: 1.5; margin: 0;">
+                        A <strong>line</strong> in F<sub>3</sub><sup>n</sup> is three points a, b, c with
+                        a+b+c ≡ 0 (mod 3) in every coordinate. Equivalently: three SET cards form a SET.
+                        Your set is a <strong>cap</strong> if no such triple is fully picked.
+                    </p>
+                </aside>
+            </div>
+
+            <div class="chart-card">
+                <h3>The bound that broke a stalemate</h3>
+                <p>
+                    For decades the best upper bound on a cap in F<sub>3</sub><sup>n</sup> sat near the
+                    trivial 3<sup>n</sup>, shaved only by logarithmic factors. In 2016, Croot–Lev–Pach
+                    and then Ellenberg–Gijswijt used a polynomial-rank argument — a few pages long —
+                    to cut the ceiling to roughly 2.7551<sup>n</sup>. The gap between the two curves
+                    below is what a single algebraic idea opened up.
+                </p>
+                <svg id="bound-chart" viewBox="0 0 720 280" role="img" aria-label="Cap-set bounds chart: trivial 3^n versus Ellenberg-Gijswijt 2.7551^n versus known maxes"></svg>
+                <div class="chart-legend">
+                    <span><span class="dot" style="background:#9AA4AC;"></span>Trivial 3<sup>n</sup></span>
+                    <span><span class="dot" style="background:#1A3A52;"></span>Ellenberg–Gijswijt ≤ c·2.7551<sup>n</sup></span>
+                    <span><span class="dot" style="background:#F4C430;"></span>Best known maxes</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="capset-section">
+            <p class="eyebrow">Why this rhymes with the unit-distance result</p>
+            <div class="capset-grid">
+                <div class="capset-card">
+                    <h3>Same shape of story</h3>
+                    <p>
+                        A combinatorial question that looks purely geometric or
+                        counting-flavored. Decades of progress in inches. Then a
+                        construction or bound borrowed from algebra — finite-field
+                        polynomials in 2016, algebraic number fields in 2026 — opens
+                        a door nobody knew was there.
+                    </p>
+                </div>
+                <div class="capset-card">
+                    <h3>Both leave room behind</h3>
+                    <p>
+                        Cap-set still has a gap: best known capsets grow faster than
+                        the lower bound would suggest, but slower than 2.7551<sup>n</sup>.
+                        The 2026 unit-distance disproof gives n<sup>1.014</sup>; the
+                        upper bound is still n<sup>4/3</sup>. Breakthroughs reopen
+                        problems more often than they close them.
+                    </p>
+                </div>
+                <div class="capset-card">
+                    <h3>The lesson for discrete geometry</h3>
+                    <p>
+                        Configurations that look like accidents of the integers — or
+                        of Gaussian integers, or of richer number fields — turn out
+                        to encode geometric content that "natural" lattice
+                        constructions miss. The cap-set breakthrough is the
+                        clearest precedent for what just happened with unit
+                        distances.
+                    </p>
+                </div>
+                <div class="capset-card">
+                    <h3>What to try in the workbench</h3>
+                    <p>
+                        Set n=3 and use "Load a maximum cap" — that's the 9-card
+                        SET-game maximum, which beats greedy heuristics. Bump to
+                        n=4: the max is 20, but greedy rarely finds it. The
+                        algebra knows things your eyes don't.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="capset-section">
+            <p class="eyebrow">Inspection Trail</p>
+            <div class="source-list">
+                <a href="docs/SUNDOG_V_CAPSET.md">Sundog · Capset Ledger (coupling to the unit-distance result)</a>
+                <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">OpenAI · Unit-distance disproof (2026)</a>
+                <a href="https://arxiv.org/abs/1605.01506">Croot–Lev–Pach (2016)</a>
+                <a href="https://arxiv.org/abs/1605.09223">Ellenberg–Gijswijt cap-set bound</a>
+                <a href="https://en.wikipedia.org/wiki/Cap_set">Cap set — overview</a>
+                <a href="https://en.wikipedia.org/wiki/Set_(card_game)">SET (card game) — the n=3 case</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script>
+    // ---------- Cap-set workbench logic ----------
+    (function () {
+        'use strict';
+
+        // Best-known max cap sizes in F_3^n (OEIS A090245).
+        const KNOWN_MAX = { 1: 2, 2: 4, 3: 9, 4: 20, 5: 45, 6: 112, 7: 236, 8: 496 };
+
+        // Ellenberg-Gijswijt upper bound coefficient (rounded for display).
+        // |A| <= 3 * (2.7551/3)^n * 3^n  ~  c * 2.7551^n, with a small constant.
+        const EG_BASE = 2.7551;
+
+        // State
+        let n = 3;
+        let total = 27;
+        let picked = new Set();       // Set of integer indices, 0..total-1
+        let allLines = [];            // Array of [i,j,k] triples (lines in F_3^n)
+        let cellEls = [];
+
+        // Convert integer index <-> coordinate vector in F_3^n
+        function idxToCoord(i) {
+            const c = new Array(n);
+            for (let k = 0; k < n; k++) {
+                c[k] = i % 3;
+                i = (i - c[k]) / 3;
+            }
+            return c;
+        }
+
+        function coordToIdx(c) {
+            let i = 0, mult = 1;
+            for (let k = 0; k < n; k++) {
+                i += c[k] * mult;
+                mult *= 3;
+            }
+            return i;
+        }
+
+        // Enumerate all lines in F_3^n: every pair (a,b) determines c = -a-b (mod 3).
+        // Each line {a,b,c} is counted 3 times this way, so dedupe by sorting.
+        function buildLines() {
+            const seen = new Set();
+            const lines = [];
+            for (let a = 0; a < total; a++) {
+                const ca = idxToCoord(a);
+                for (let b = a + 1; b < total; b++) {
+                    const cb = idxToCoord(b);
+                    const cc = new Array(n);
+                    for (let k = 0; k < n; k++) cc[k] = (6 - ca[k] - cb[k]) % 3;
+                    const c = coordToIdx(cc);
+                    if (c === a || c === b) continue; // shouldn't happen for distinct a,b in F_3
+                    const trip = [a, b, c].sort((x, y) => x - y);
+                    const key = trip.join(',');
+                    if (seen.has(key)) continue;
+                    seen.add(key);
+                    lines.push(trip);
+                }
+            }
+            return lines;
+        }
+
+        // Find every line fully contained in picked. Returns array of triples.
+        function violatedLines() {
+            const out = [];
+            for (const [a, b, c] of allLines) {
+                if (picked.has(a) && picked.has(b) && picked.has(c)) out.push([a, b, c]);
+            }
+            return out;
+        }
+
+        // ---------- DOM building ----------
+        function buildGrid() {
+            const root = document.getElementById('capset-grid');
+            root.innerHTML = '';
+            cellEls = new Array(total);
+
+            // Outer layout depends on n:
+            //   n=2: a single 3x3
+            //   n=3: 3 layers of 3x3 stacked vertically
+            //   n=4: 3x3 outer of (3x3 inner)
+            const wrap = document.createElement('div');
+            wrap.className = 'grid-wrap';
+
+            // Determine cell size for the page (CSS aspect-ratio handles square).
+            let layerSize;
+            if (n === 2) {
+                wrap.style.gridTemplateColumns = '1fr';
+                layerSize = 'min(340px, 60vw)';
+            } else if (n === 3) {
+                wrap.style.gridTemplateColumns = '1fr';
+                layerSize = 'min(280px, 56vw)';
+            } else {
+                wrap.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                layerSize = 'min(150px, 26vw)';
+            }
+
+            const makeLayer = (basePoint) => {
+                const layer = document.createElement('div');
+                layer.className = 'layer';
+                layer.style.width = layerSize;
+                for (let row = 0; row < 3; row++) {
+                    for (let col = 0; col < 3; col++) {
+                        const coord = basePoint.slice();
+                        coord[0] = col;
+                        coord[1] = row;
+                        const idx = coordToIdx(coord);
+                        const cell = document.createElement('button');
+                        cell.type = 'button';
+                        cell.className = 'cell';
+                        cell.dataset.idx = idx;
+                        cell.setAttribute('role', 'gridcell');
+                        cell.setAttribute('aria-label', 'Point ' + coord.join(','));
+                        cell.addEventListener('click', () => toggleCell(idx));
+                        layer.appendChild(cell);
+                        cellEls[idx] = cell;
+                    }
+                }
+                return layer;
+            };
+
+            if (n === 2) {
+                wrap.appendChild(makeLayer([0, 0]));
+            } else if (n === 3) {
+                for (let z = 0; z < 3; z++) {
+                    wrap.appendChild(makeLayer([0, 0, z]));
+                }
+            } else if (n === 4) {
+                // 3x3 outer (varying coords 2 and 3), each a 3x3 inner (coords 0 and 1)
+                for (let w = 0; w < 3; w++) {
+                    for (let z = 0; z < 3; z++) {
+                        wrap.appendChild(makeLayer([0, 0, z, w]));
+                    }
+                }
+            }
+
+            root.appendChild(wrap);
+        }
+
+        function repaint() {
+            // Reset classes
+            for (let i = 0; i < total; i++) {
+                if (!cellEls[i]) continue;
+                cellEls[i].classList.remove('picked', 'on-line');
+            }
+            for (const i of picked) {
+                if (cellEls[i]) cellEls[i].classList.add('picked');
+            }
+            const violated = violatedLines();
+            const onLineSet = new Set();
+            for (const trip of violated) for (const i of trip) onLineSet.add(i);
+            for (const i of onLineSet) {
+                if (cellEls[i]) cellEls[i].classList.add('on-line');
+            }
+
+            // Update readout
+            document.getElementById('r-count').textContent = picked.size;
+            document.getElementById('r-lines').textContent = violated.length;
+            document.getElementById('r-best').textContent = KNOWN_MAX[n];
+            const trivial = Math.pow(3, n);
+            document.getElementById('r-trivial').textContent = trivial;
+            const eg = Math.round(3 * Math.pow(EG_BASE, n));
+            // At small n the asymptotic c·2.7551^n display exceeds 3^n — honest
+            // but confusing for a workbench. Show "—" when it isn't yet tighter.
+            document.getElementById('r-eg').textContent = (eg < trivial) ? ('~' + eg) : '— (asymptotic)';
+            const verdictEl = document.getElementById('r-verdict');
+            if (violated.length === 0) {
+                verdictEl.textContent = picked.size === 0
+                    ? 'Empty (trivially a cap)'
+                    : 'Cap set so far ✓';
+                verdictEl.classList.remove('bad');
+                verdictEl.classList.add('ok');
+            } else {
+                verdictEl.textContent = 'Not a cap — ' + violated.length + ' line' + (violated.length === 1 ? '' : 's') + ' violated';
+                verdictEl.classList.remove('ok');
+                verdictEl.classList.add('bad');
+            }
+        }
+
+        function toggleCell(i) {
+            if (picked.has(i)) picked.delete(i);
+            else picked.add(i);
+            repaint();
+        }
+
+        function clearAll() {
+            picked.clear();
+            repaint();
+        }
+
+        function greedyFill() {
+            // Start from current selection; add points in shuffled order if they don't
+            // create a line with two existing picks.
+            const order = [];
+            for (let i = 0; i < total; i++) if (!picked.has(i)) order.push(i);
+            // Fisher-Yates
+            for (let k = order.length - 1; k > 0; k--) {
+                const j = Math.floor(Math.random() * (k + 1));
+                [order[k], order[j]] = [order[j], order[k]];
+            }
+            for (const candidate of order) {
+                let ok = true;
+                const ca = idxToCoord(candidate);
+                // For each existing point b, compute the third point c that would
+                // complete a line a+b+c=0 mod 3. If c is also picked, candidate would
+                // violate.
+                for (const b of picked) {
+                    const cb = idxToCoord(b);
+                    const cc = new Array(n);
+                    for (let k = 0; k < n; k++) cc[k] = (6 - ca[k] - cb[k]) % 3;
+                    const cIdx = coordToIdx(cc);
+                    if (cIdx === candidate || cIdx === b) continue;
+                    if (picked.has(cIdx)) { ok = false; break; }
+                }
+                if (ok) picked.add(candidate);
+            }
+            repaint();
+        }
+
+        // Maximum cap sets for small n, found by greedy search with restarts
+        // and verified violation-free against the line-detection rule.
+        const MAX_CAPS = {
+            2: [ // 4 points
+                [0, 0], [0, 1], [2, 0], [2, 1]
+            ],
+            3: [ // 9 points
+                [0, 0, 0], [0, 0, 2], [0, 1, 0], [0, 2, 2], [1, 0, 2],
+                [2, 1, 0], [2, 1, 1], [2, 2, 0], [2, 2, 2]
+            ],
+            4: [ // 20 points
+                [0,0,1,2],[0,1,0,0],[0,1,0,1],[0,1,1,0],[0,1,1,2],
+                [0,2,0,0],[0,2,0,2],[0,2,1,0],[0,2,2,2],[1,0,0,1],
+                [1,0,0,2],[1,0,1,2],[1,0,2,1],[1,1,0,0],[1,1,0,1],
+                [1,1,2,1],[1,1,2,2],[1,2,2,2],[2,0,2,1],[2,2,1,0]
+            ]
+        };
+
+        function loadMaxCap() {
+            picked.clear();
+            const cap = MAX_CAPS[n] || [];
+            for (const c of cap) picked.add(coordToIdx(c));
+            // For n=4 the hand-coded cap is heuristic; verify and patch greedily
+            // if it accidentally contains a line (won't, but defensive).
+            const violated = violatedLines();
+            if (violated.length > 0) {
+                console.warn('Preset cap had violations for n=' + n + '; falling back to greedy.');
+                picked.clear();
+                greedyFill();
+            }
+            repaint();
+        }
+
+        function setDimension(newN) {
+            n = newN;
+            total = Math.pow(3, n);
+            picked.clear();
+            allLines = buildLines();
+            buildGrid();
+            const titleEl = document.getElementById('stage-title');
+            const labels = {
+                2: 'F<sub>3</sub><sup>2</sup> — 9 cells, max cap = 4',
+                3: 'F<sub>3</sub><sup>3</sup> — 27 cells, the SET deck',
+                4: 'F<sub>3</sub><sup>4</sup> — 81 cells, max cap = 20'
+            };
+            titleEl.innerHTML = labels[n] || ('F<sub>3</sub><sup>' + n + '</sup>');
+            for (const btn of document.querySelectorAll('.dim-btn')) {
+                btn.classList.toggle('active', parseInt(btn.dataset.n, 10) === n);
+            }
+            repaint();
+        }
+
+        // ---------- Chart ----------
+        function drawChart() {
+            const svg = document.getElementById('bound-chart');
+            const W = 720, H = 280, padL = 50, padR = 20, padT = 18, padB = 38;
+            const plotW = W - padL - padR;
+            const plotH = H - padT - padB;
+
+            const nMin = 1, nMax = 8;
+            const valMax = Math.pow(3, nMax); // 6561
+            // log10 scale on y for readability
+            const yLog = (v) => padT + plotH * (1 - Math.log10(v) / Math.log10(valMax));
+            const xAt = (i) => padL + plotW * ((i - nMin) / (nMax - nMin));
+
+            const trivial = [], eg = [], best = [];
+            for (let i = nMin; i <= nMax; i++) {
+                trivial.push([i, Math.pow(3, i)]);
+                eg.push([i, 3 * Math.pow(EG_BASE, i)]);
+                best.push([i, KNOWN_MAX[i]]);
+            }
+
+            const pathFrom = (pts) => pts.map(([i, v], k) =>
+                (k === 0 ? 'M' : 'L') + xAt(i).toFixed(1) + ' ' + yLog(v).toFixed(1)
+            ).join(' ');
+
+            const parts = [];
+
+            // grid + axis labels (powers of 10)
+            const ticks = [1, 10, 100, 1000];
+            for (const t of ticks) {
+                if (t > valMax) break;
+                const y = yLog(t);
+                parts.push(
+                    '<line x1="' + padL + '" y1="' + y.toFixed(1) +
+                    '" x2="' + (W - padR) + '" y2="' + y.toFixed(1) +
+                    '" stroke="#E2E6E9" stroke-width="1" />'
+                );
+                parts.push(
+                    '<text x="' + (padL - 8) + '" y="' + (y + 4).toFixed(1) +
+                    '" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#6A7680">' + t + '</text>'
+                );
+            }
+            for (let i = nMin; i <= nMax; i++) {
+                parts.push(
+                    '<text x="' + xAt(i).toFixed(1) + '" y="' + (H - 16) +
+                    '" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#6A7680">n=' + i + '</text>'
+                );
+            }
+
+            parts.push('<path d="' + pathFrom(trivial) + '" fill="none" stroke="#9AA4AC" stroke-width="2" stroke-dasharray="4 4" />');
+            parts.push('<path d="' + pathFrom(eg) + '" fill="none" stroke="#1A3A52" stroke-width="2.4" />');
+            parts.push('<path d="' + pathFrom(best) + '" fill="none" stroke="#C99517" stroke-width="2" />');
+
+            // dots on best-known curve
+            for (const [i, v] of best) {
+                parts.push('<circle cx="' + xAt(i).toFixed(1) + '" cy="' + yLog(v).toFixed(1) + '" r="3" fill="#F4C430" stroke="#C99517" stroke-width="1" />');
+            }
+
+            // axis frame
+            parts.push('<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (H - padB) + '" stroke="#9AA4AC" stroke-width="1" />');
+            parts.push('<line x1="' + padL + '" y1="' + (H - padB) + '" x2="' + (W - padR) + '" y2="' + (H - padB) + '" stroke="#9AA4AC" stroke-width="1" />');
+
+            parts.push('<text x="' + (padL - 38) + '" y="' + (padT + plotH / 2) + '" transform="rotate(-90, ' + (padL - 38) + ', ' + (padT + plotH / 2) + ')" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#6A7680">size (log scale)</text>');
+
+            svg.innerHTML = parts.join('');
+        }
+
+        // ---------- Wire up ----------
+        function init() {
+            document.querySelectorAll('.dim-btn').forEach(btn => {
+                btn.addEventListener('click', () => setDimension(parseInt(btn.dataset.n, 10)));
+            });
+            document.getElementById('btn-greedy').addEventListener('click', greedyFill);
+            document.getElementById('btn-maxcap').addEventListener('click', loadMaxCap);
+            document.getElementById('btn-clear').addEventListener('click', clearAll);
+
+            setDimension(3);
+            drawChart();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
