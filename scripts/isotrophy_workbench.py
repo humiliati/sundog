@@ -571,11 +571,35 @@ def verify_partial_eps_via_finite_difference(
     rtol: float,
     atol: float,
     max_step_fraction: float,
-    fd_floor: float,
+    k_fd_relative: float,
     reference_monodromy: np.ndarray | None = None,
-    joint_consistency_floor: float | None = None,
+    k_joint_baseline_relative: float | None = None,
 ) -> tuple[dict[str, object], np.ndarray, np.ndarray]:
-    """Cross-check closed-form dM/depsilon against a fixed-IC central difference."""
+    """Cross-check closed-form dM/depsilon against a fixed-IC central difference.
+
+    Both sub-checks (finite-difference vs closed-form, and joint-solver baseline
+    vs standalone M_i) are CLOSURE-RELATIVE, matching the discipline already in
+    use for G.2 (`k_gamma`/`gamma_floor`), the sigma3 candidate gate
+    (`sigma_group_to_closure`), and the rotation-angle gate. Absolute floors
+    are wrong for the catalog because `||M_i||` ranges across orders of
+    magnitude (O_62: 1.6e+4, O_231: 7.6e+2, etc.) and `||partial_eps M_i||`
+    is amplified further by orbit-path sensitivity for unstable rows.
+
+    FD check passes iff
+        ||closed - FD||_inf / max(||closed||_inf, ||FD||_inf, 1e-300)
+            < k_fd_relative
+
+    Joint-baseline check passes iff
+        ||joint_baseline - reference_M_i||_inf / max(||reference_M_i||_inf, 1e-300)
+            < k_joint_baseline_relative
+
+    `k_fd_relative` and `k_joint_baseline_relative` are PRE-REGISTERED relative
+    tolerances (defensible upper bounds, not tuned to the sentinel). Defaults:
+    `k_fd_relative = 1e-4` absorbs O(h^2) FD truncation at h=1e-6, rtol=1e-12
+    on unstable orbits without admitting algorithmic divergence;
+    `k_joint_baseline_relative = 1e-9` matches rtol-relative integrator
+    precision between the 36-dim joint solver and the 18-dim standalone path.
+    """
     if abs(integrated.row.m3 - 1.0) > 1e-12:
         raise ValueError("partial-epsilon finite-difference check is defined only for m3=1")
     partial_monodromy, joint_baseline_monodromy = compute_partial_eps_monodromy(
@@ -599,33 +623,46 @@ def verify_partial_eps_via_finite_difference(
     residual_fro = float(np.linalg.norm(residual, ord="fro"))
     closed_form_inf = float(np.linalg.norm(partial_monodromy, ord=np.inf))
     finite_difference_inf = float(np.linalg.norm(finite_difference, ord=np.inf))
-    scale = max(closed_form_inf, finite_difference_inf, fd_floor)
-    joint_consistency = {
+    fd_scale = max(closed_form_inf, finite_difference_inf, 1e-300)
+    fd_relative_residual = float(residual_inf / fd_scale)
+    finite_difference_passed = fd_relative_residual < k_fd_relative
+
+    joint_consistency: dict[str, object] = {
         "enabled": reference_monodromy is not None,
-        "floor": joint_consistency_floor,
+        "k_relative": k_joint_baseline_relative,
+        "scale_used": "reference_monodromy_inf",
         "residual_inf": None,
+        "residual_relative": None,
+        "scale_inf": None,
         "passed": None,
     }
     if reference_monodromy is not None:
-        floor = fd_floor if joint_consistency_floor is None else joint_consistency_floor
+        k_jb = k_fd_relative if k_joint_baseline_relative is None else k_joint_baseline_relative
         joint_residual_inf = float(np.linalg.norm(joint_baseline_monodromy - reference_monodromy, ord=np.inf))
+        reference_inf = float(np.linalg.norm(reference_monodromy, ord=np.inf))
+        jb_scale = max(reference_inf, 1e-300)
+        jb_relative = float(joint_residual_inf / jb_scale)
         joint_consistency = {
             "enabled": True,
-            "floor": floor,
+            "k_relative": k_jb,
+            "scale_used": "reference_monodromy_inf",
+            "scale_inf": reference_inf,
             "residual_inf": joint_residual_inf,
-            "passed": joint_residual_inf <= floor,
+            "residual_relative": jb_relative,
+            "passed": jb_relative < k_jb,
         }
-    finite_difference_passed = residual_inf <= fd_floor
     result = {
         "gate": "partial_epsilon_finite_difference",
         "enabled": True,
         "h": h,
-        "fd_floor": fd_floor,
+        "k_fd_relative": k_fd_relative,
+        "fd_scale_used": "max(closed_form_inf, finite_difference_inf)",
         "residual_inf": residual_inf,
         "residual_fro": residual_fro,
+        "residual_relative": fd_relative_residual,
         "closed_form_norm_inf": closed_form_inf,
         "finite_difference_norm_inf": finite_difference_inf,
-        "relative_residual_inf": float(residual_inf / scale),
+        "fd_scale_inf": fd_scale,
         "finite_difference_passed": finite_difference_passed,
         "joint_baseline_consistency": joint_consistency,
         "passed": finite_difference_passed and joint_consistency.get("passed") is not False,
@@ -2165,15 +2202,18 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
                     args.max_step_fraction,
                     args.fd_floor,
                     reference_monodromy=monodromy,
-                    joint_consistency_floor=args.closure_floor,
+                    k_joint_baseline_relative=args.joint_baseline_floor,
                 )
             )
+            jb_rel = partial_eps_gate['joint_baseline_consistency'].get('residual_relative')
+            jb_rel_str = f"{float(jb_rel):.3e}" if jb_rel is not None else "n/a"
             print(
                 "[kfacet-sentinel] partial-epsilon gate "
                 f"{'PASS' if partial_eps_gate['passed'] else 'FAIL'} "
-                f"residual_inf={float(partial_eps_gate['residual_inf']):.3e} "
-                "joint_baseline_inf="
-                f"{float(partial_eps_gate['joint_baseline_consistency']['residual_inf']):.3e}"
+                f"FD_rel={float(partial_eps_gate['residual_relative']):.3e} "
+                f"(<{float(partial_eps_gate['k_fd_relative']):.0e}) "
+                f"jb_rel={jb_rel_str} "
+                f"residual_inf={float(partial_eps_gate['residual_inf']):.3e}"
             )
     else:
         print("[kfacet-sentinel] partial-epsilon gate SKIPPED (no --verify-partial-eps flag)")
@@ -2407,7 +2447,17 @@ def build_parser() -> argparse.ArgumentParser:
     sentinel.add_argument("--nondegeneracy-floor", type=float, default=1e-3)
     sentinel.add_argument("--verify-partial-eps", action="store_true")
     sentinel.add_argument("--fd-h", type=float, default=1e-6)
-    sentinel.add_argument("--fd-floor", type=float, default=1e-9)
+    # k_FD: closure-relative tolerance on (||closed - FD||_inf) / max(||closed||,||FD||).
+    # Default 1e-4 reflects that central-difference truncation is O(h^2) (h=1e-6
+    # gives ~1e-12 truncation) but unstable monodromy norms can amplify rtol=1e-12
+    # integration noise to ~1e-5 relative; 1e-4 leaves a margin without masking
+    # real structural failure. Replaces the prior absolute 1e-9 floor.
+    sentinel.add_argument("--fd-floor", type=float, default=1e-4)
+    # k_jb: closure-relative tolerance on the joint-solver-vs-standalone baseline
+    # consistency check. The joint solver and standalone M_i integrate the same
+    # ODE with the same tolerances, so agreement to integration precision is
+    # expected; 1e-9 relative is the natural floor (matches closure discipline).
+    sentinel.add_argument("--joint-baseline-floor", type=float, default=1e-9)
     sentinel.add_argument("--authorize-sentinel-run", action="store_true")
     sentinel.add_argument("--out", help="optional output directory for gate receipt and matrices")
     sentinel.set_defaults(func=command_kfacet_sentinel)

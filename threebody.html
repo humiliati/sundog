@@ -261,6 +261,164 @@
                 margin-right: 0;
             }
         }
+
+        /* === Isotrophy catalog sidecar === */
+        .isotrophy-section {
+            background: var(--bg-light, #F4F1E8);
+            padding: 4rem 2rem;
+        }
+        .isotrophy-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .isotrophy-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark, #1A3A52);
+        }
+        .iso-lede {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            color: #2c3e50;
+        }
+        .iso-knob-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+            align-items: stretch;
+        }
+        @media (max-width: 720px) {
+            .iso-knob-row { grid-template-columns: 1fr; }
+        }
+        .iso-knob {
+            background: #102a3f;
+            border: 1px solid rgba(244, 196, 48, 0.25);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            color: #dfe9ef;
+        }
+        .iso-knob label {
+            display: block;
+            font-family: var(--sd-font-data, ui-monospace, Menlo, Consolas, monospace);
+            font-size: 0.9rem;
+            color: var(--accent-gold, #f4c430);
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.02em;
+        }
+        .iso-knob input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-gold, #f4c430);
+        }
+        .iso-tau-readout {
+            margin-top: 0.6rem;
+            font-family: var(--sd-font-data, ui-monospace, Menlo, Consolas, monospace);
+            font-size: 1.05rem;
+        }
+        .iso-tau-label { color: rgba(223, 233, 239, 0.7); margin-right: 0.4rem; }
+        #iso-tau-value { color: var(--accent-gold, #f4c430); }
+        .iso-tau-scale {
+            display: flex;
+            justify-content: space-between;
+            font-family: ui-monospace, Menlo, Consolas, monospace;
+            font-size: 0.7rem;
+            color: rgba(223, 233, 239, 0.5);
+            margin-top: 0.3rem;
+        }
+        .iso-counters {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .iso-counter {
+            background: #102a3f;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            color: #dfe9ef;
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+        }
+        .iso-counter strong {
+            font-family: var(--sd-font-data, ui-monospace, Menlo, Consolas, monospace);
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .iso-counter-strict { border-left: 4px solid #f4c430; }
+        .iso-counter-strict strong { color: #f4c430; }
+        .iso-counter-relative { border-left: 4px solid #a98cff; }
+        .iso-counter-relative strong { color: #a98cff; }
+        .iso-counter span {
+            font-size: 0.85rem;
+            color: rgba(223, 233, 239, 0.75);
+        }
+        .iso-gallery {
+            background: #0c1c2b;
+            border-radius: 14px;
+            padding: 0.5rem;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .iso-gallery svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .iso-gallery-loading {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(223, 233, 239, 0.6);
+            font-family: ui-monospace, Menlo, Consolas, monospace;
+        }
+        .iso-cell {
+            transition: opacity 0.28s ease;
+        }
+        .iso-cell[data-strict-shown="false"] {
+            opacity: 0.18;
+        }
+        .iso-claim {
+            background: #F8F9FA;
+            border-left: 4px solid var(--accent-gold, #f4c430);
+            padding: 1.5rem 1.75rem;
+            border-radius: 0 8px 8px 0;
+            margin: 2rem 0;
+            color: #2c3e50;
+        }
+        .iso-claim h4 {
+            margin-bottom: 0.75rem;
+            color: var(--primary-dark, #1A3A52);
+        }
+        .iso-claim p {
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+        }
+        .iso-claim p:last-child { margin-bottom: 0; }
+        .iso-cite {
+            margin-top: 1rem;
+            font-size: 0.92rem;
+            color: #2c3e50;
+        }
+        .iso-cite summary {
+            cursor: pointer;
+            font-weight: 600;
+            padding: 0.5rem 0;
+            color: var(--primary-dark, #1A3A52);
+        }
+        .iso-cite ul {
+            margin: 0.75rem 0 0 1.5rem;
+            line-height: 1.7;
+        }
+        .iso-cite li { margin-bottom: 0.5rem; }
+        .iso-cite code {
+            font-family: ui-monospace, Menlo, Consolas, monospace;
+            background: rgba(26, 58, 82, 0.06);
+            padding: 0.05rem 0.35rem;
+            border-radius: 3px;
+            font-size: 0.88em;
+        }
     </style>
     <link rel="stylesheet" href="/css/sundog-theme.css">
 </head>
@@ -517,6 +675,70 @@
         </div>
     </section>
 
+    <!-- Isotrophy Catalog Sidecar -->
+    <section class="isotrophy-section" id="isotrophy">
+        <div class="isotrophy-content">
+            <h2>Catalog sidecar — 21 + 4 choreographies</h2>
+            <p class="iso-lede">
+                A separate strand of the three-body work asks a literature-count question, not a controller question. Li &amp; Liao (2025) report <strong>10,059</strong> three-dimensional periodic orbits of the general three-body problem; in the equal-mass slice they identify <strong>21 "choreographies"</strong> — orbits where all three bodies follow a single closed trajectory, the same wire. Our gauge-invariant σ₃ detector, run blind against their supplementary table, accepts <strong>25</strong>. The difference is one SO(3) rotation angle: 4 of the 25 are rotating relatives, where σ₃·X equals X up to a global 2π/3 turn per period. The slider below shows the separator collapsing the 25 to the catalog's 21.
+            </p>
+
+            <div class="iso-knob-row">
+                <div class="iso-knob">
+                    <label for="iso-threshold">SO(3) rotation-angle threshold τ</label>
+                    <input type="range" id="iso-threshold" min="-9" max="0.4" step="0.05" value="-6">
+                    <div class="iso-tau-readout">
+                        <span class="iso-tau-label">τ =</span>
+                        <code id="iso-tau-value">1.0 × 10⁻⁶ rad</code>
+                    </div>
+                    <div class="iso-tau-scale">
+                        <span>10⁻⁹</span>
+                        <span>10⁻⁶</span>
+                        <span>10⁻³</span>
+                        <span>1</span>
+                        <span>2π/3</span>
+                    </div>
+                </div>
+                <div class="iso-counters">
+                    <div class="iso-counter iso-counter-strict">
+                        <strong id="iso-strict-count">21</strong>
+                        <span>strict single-curve<br>(rotation &lt; τ)</span>
+                    </div>
+                    <div class="iso-counter iso-counter-relative">
+                        <strong id="iso-relative-count">4</strong>
+                        <span>relative, 2π/3 rotation<br>(rotation ≥ τ)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="iso-gallery" class="iso-gallery" aria-busy="true" aria-label="Bead-maze gallery of 25 three-body choreographies">
+                <p class="iso-gallery-loading">Loading bead-maze gallery…</p>
+            </div>
+
+            <div class="iso-claim">
+                <h4>What this is — and what it is not</h4>
+                <p>
+                    The σ₃ workbench recovered the 21 strict choreographies from the catalog and cleanly split off 4 rotating relatives. That is a detector and literature-count <em>reconciliation</em>: 25 gauge-invariant = 21 strict + 4 relative, separated by 8 orders of magnitude in the rotation-angle metric the gate already computes. The four relatives sit outside the catalog's "single closed inertial-frame trajectory" convention — they are not literature errors.
+                </p>
+                <p>
+                    It is <strong>not</strong> theorem evidence for Sundog. The v0.2 daughter-count test that would have used this catalog was retired at its cheap precheck (K1), when the prediction reduced to the equivariance-only null (K<sub>facet</sub> = 0). K<sub>facet</sub> = 0 does not mean "no piano-trios exist"; it means the proposed static operator could not distinguish the Sundog claim from generic equivariant bifurcation. A v0.3 derivation is in flight and remains paper-only.
+                </p>
+            </div>
+
+            <details class="iso-cite">
+                <summary>Sources and receipts</summary>
+                <ul>
+                    <li>X. Li and S. Liao, "Discovery of 10,059 new three-dimensional periodic orbits of general three-body problem," <a href="https://arxiv.org/abs/2508.08568">arXiv:2508.08568</a> (2025) — source catalog (supplementary-A: 10,059 orbits across m₃ = 0.1·n for 1 ≤ n ≤ 20; supplementary-B: 273 piano-trios).</li>
+                    <li>X. Li, X. Li, S. Liao, "One family of 13315 stable periodic orbits of non-hierarchical unequal-mass triple systems," <a href="https://arxiv.org/abs/2007.10184">arXiv:2007.10184</a> (2021) — the planar non-hierarchical-triples family whose stability map first read to us like a doctor's-office wire-bead toy.</li>
+                    <li><a href="https://numericaltank.sjtu.edu.cn/three-body/three-body.htm">numericaltank.sjtu.edu.cn/three-body</a> — the Li &amp; Liao project page with the full catalog and GIF galleries.</li>
+                    <li><a href="docs/sundog_v_isotrophy.md">docs/sundog_v_isotrophy.md</a> — the Sundog-vs-isotropy test plan, with the v0.2 retirement and v0.3 derivation log.</li>
+                    <li>Detector receipt driving the slider above: <code>results/isotrophy/m3eq1-sigma3-precondition-fixed-inverse-orientation-25/residuals.csv</code> (25 rows, with the rotation-angle column read into <code>data-rotation-rad</code> on each panel).</li>
+                    <li>Bead-maze renderer: <code>scripts/isotrophy_bead_maze.py</code> (integrates orbits via <code>isotrophy_workbench.py</code>); annotator: <code>scripts/isotrophy_bead_maze_annotate.py</code>.</li>
+                </ul>
+            </details>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <p>
@@ -534,6 +756,69 @@
             © 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
         </p>
     </footer>
+
+    <script>
+    // Isotrophy catalog sidecar: load the annotated bead-maze SVG and wire
+    // the rotation-angle threshold slider to filter strict-vs-relative panels.
+    // Data source: each <g class="iso-cell" data-rotation-rad="..."> in the
+    // SVG comes from results/.../residuals.csv via
+    // scripts/isotrophy_bead_maze_annotate.py. No physics runs at runtime.
+    (function () {
+        const galleryEl = document.getElementById('iso-gallery');
+        const slider = document.getElementById('iso-threshold');
+        const tauOut = document.getElementById('iso-tau-value');
+        const strictOut = document.getElementById('iso-strict-count');
+        const relOut = document.getElementById('iso-relative-count');
+        if (!galleryEl || !slider || !tauOut || !strictOut || !relOut) return;
+
+        const SUPERSCRIPT = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+        function sup(s) { return String(s).split('').map(c => SUPERSCRIPT[c] || c).join(''); }
+        function formatTau(tau) {
+            if (tau >= 1) return tau.toFixed(2) + ' rad';
+            const exp = Math.floor(Math.log10(tau));
+            const mant = tau / Math.pow(10, exp);
+            return mant.toFixed(1) + ' × 10' + sup(exp) + ' rad';
+        }
+
+        let cells = [];
+        function update() {
+            const tau = Math.pow(10, parseFloat(slider.value));
+            let strict = 0, relative = 0;
+            cells.forEach((cell) => {
+                const angle = parseFloat(cell.dataset.rotationRad);
+                if (angle < tau) {
+                    cell.setAttribute('data-strict-shown', 'true');
+                    strict++;
+                } else {
+                    cell.setAttribute('data-strict-shown', 'false');
+                    relative++;
+                }
+            });
+            tauOut.textContent = formatTau(tau);
+            strictOut.textContent = strict;
+            relOut.textContent = relative;
+        }
+
+        fetch('/media/isotrophy-bead-maze-annotated.svg', { cache: 'force-cache' })
+            .then((r) => {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.text();
+            })
+            .then((svgText) => {
+                galleryEl.innerHTML = svgText;
+                galleryEl.removeAttribute('aria-busy');
+                cells = Array.from(galleryEl.querySelectorAll('.iso-cell'));
+                if (cells.length !== 25) {
+                    console.warn('isotrophy gallery: expected 25 panels, got', cells.length);
+                }
+                slider.addEventListener('input', update);
+                update();
+            })
+            .catch((err) => {
+                galleryEl.innerHTML = '<p class="iso-gallery-loading">Could not load gallery (' + err.message + '). The annotated SVG lives at <code>public/media/isotrophy-bead-maze-annotated.svg</code>; rerun <code>npm run build</code> or <code>python scripts/isotrophy_bead_maze_annotate.py</code> to refresh it.</p>';
+            });
+    })();
+    </script>
 
     <script type="module" src="/js/threebody-browser.mjs"></script>
     <script type="module" src="/js/sundog-chat-widget.mjs"></script>
