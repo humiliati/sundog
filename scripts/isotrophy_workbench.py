@@ -298,6 +298,32 @@ def acceleration_jacobian(x: np.ndarray, masses: np.ndarray) -> np.ndarray:
     return jacobian
 
 
+def partial_eps_acceleration_jacobian(x: np.ndarray) -> np.ndarray:
+    """Return d/d epsilon of d(a_flat)/d(x_flat) at m3 = 1 + epsilon.
+
+    Coordinates are position/velocity coordinates, not canonical momenta. With
+    the IC held fixed, only bodies 1 and 2 feel the first-order m3 perturbation;
+    body 3's acceleration row is identically zero.
+    """
+    jacobian = np.zeros((9, 9), dtype=float)
+
+    def tidal_block(delta: np.ndarray) -> np.ndarray:
+        r2 = float(np.dot(delta, delta))
+        r = math.sqrt(r2)
+        return np.eye(3) / (r2 * r) - 3.0 * np.outer(delta, delta) / (r2 * r2 * r)
+
+    d13 = x[2] - x[0]
+    k13 = tidal_block(d13)
+    jacobian[0:3, 0:3] -= k13
+    jacobian[0:3, 6:9] += k13
+
+    d23 = x[2] - x[1]
+    k23 = tidal_block(d23)
+    jacobian[3:6, 3:6] -= k23
+    jacobian[3:6, 6:9] += k23
+    return jacobian
+
+
 def variational_rhs_factory(masses: np.ndarray, orbit_solution):
     """Build the homogeneous variational RHS along an integrated orbit."""
 
@@ -316,11 +342,17 @@ def compute_flow_jacobian(
     duration: float,
     rtol: float,
     atol: float,
+    max_step_fraction: float | None = None,
 ) -> np.ndarray:
     """Compute Dphi_duration(y0) in the 18D position/velocity coordinates."""
     if duration < -1e-14 or duration > integrated.row.period + 1e-14:
         raise ValueError("compute_flow_jacobian expects duration within one nonnegative period")
     variational_rhs = variational_rhs_factory(integrated.row.masses, integrated.solution)
+    max_step = (
+        integrated.row.period * max_step_fraction
+        if max_step_fraction is not None and max_step_fraction > 0
+        else np.inf
+    )
     flow = np.zeros((18, 18), dtype=float)
     for column in range(18):
         initial = np.zeros(18, dtype=float)
@@ -333,6 +365,7 @@ def compute_flow_jacobian(
             rtol=rtol,
             atol=atol,
             dense_output=False,
+            max_step=max_step,
         )
         if not solution.success:
             raise RuntimeError(
@@ -342,9 +375,160 @@ def compute_flow_jacobian(
     return flow
 
 
-def compute_monodromy(integrated: IntegratedOrbit, rtol: float, atol: float) -> np.ndarray:
+def compute_monodromy(
+    integrated: IntegratedOrbit,
+    rtol: float,
+    atol: float,
+    max_step_fraction: float | None = None,
+) -> np.ndarray:
     """Compute M_i = Dphi_T(y0) for the v0.3i sentinel gates."""
-    return compute_flow_jacobian(integrated, integrated.row.period, rtol, atol)
+    return compute_flow_jacobian(integrated, integrated.row.period, rtol, atol, max_step_fraction)
+
+
+def compute_partial_eps_monodromy(
+    integrated: IntegratedOrbit,
+    rtol: float,
+    atol: float,
+    max_step_fraction: float | None = None,
+) -> np.ndarray:
+    """Compute dM_i/d epsilon for m3 = 1 + epsilon at the fixed m3=1 IC."""
+    if abs(integrated.row.m3 - 1.0) > 1e-12:
+        raise ValueError("partial-epsilon monodromy is defined only for the m3=1 sentinel row")
+    max_step = (
+        integrated.row.period * max_step_fraction
+        if max_step_fraction is not None and max_step_fraction > 0
+        else np.inf
+    )
+    masses = integrated.row.masses
+    period = integrated.row.period
+
+    def joint_rhs(t: float, state: np.ndarray) -> np.ndarray:
+        baseline = integrated.solution.sol(t)
+        x_t = baseline[:9].reshape(3, 3)
+        jacobian = acceleration_jacobian(x_t, masses)
+        partial_jacobian = partial_eps_acceleration_jacobian(x_t)
+
+        delta = state[:18]
+        partial = state[18:]
+        delta_x = delta[:9]
+        delta_v = delta[9:]
+        partial_x = partial[:9]
+        partial_v = partial[9:]
+
+        delta_dot = np.concatenate([delta_v, jacobian @ delta_x])
+        partial_dot = np.concatenate([partial_v, jacobian @ partial_x + partial_jacobian @ delta_x])
+        return np.concatenate([delta_dot, partial_dot])
+
+    partial_monodromy = np.zeros((18, 18), dtype=float)
+    for column in range(18):
+        initial = np.zeros(36, dtype=float)
+        initial[column] = 1.0
+        solution = solve_ivp(
+            joint_rhs,
+            (0.0, period),
+            initial,
+            method="DOP853",
+            rtol=rtol,
+            atol=atol,
+            dense_output=False,
+            max_step=max_step,
+        )
+        if not solution.success:
+            raise RuntimeError(
+                f"partial-epsilon variational integration failed for {integrated.row.label}, "
+                f"column {column}: {solution.message}"
+            )
+        partial_monodromy[:, column] = solution.y[18:, -1]
+    return partial_monodromy
+
+
+def compute_monodromy_at_masses(
+    y0: np.ndarray,
+    period: float,
+    masses: np.ndarray,
+    rtol: float,
+    atol: float,
+    max_step_fraction: float,
+) -> np.ndarray:
+    """Compute a monodromy from a fixed IC while varying the RHS masses."""
+    max_step = period * max_step_fraction if max_step_fraction > 0 else np.inf
+    baseline = solve_ivp(
+        rhs_factory(masses),
+        (0.0, period),
+        y0,
+        method="DOP853",
+        rtol=rtol,
+        atol=atol,
+        dense_output=True,
+        max_step=max_step,
+    )
+    if not baseline.success:
+        raise RuntimeError(f"fixed-IC baseline integration failed for masses={masses.tolist()}: {baseline.message}")
+
+    variational_rhs = variational_rhs_factory(masses, baseline)
+    monodromy = np.zeros((18, 18), dtype=float)
+    for column in range(18):
+        initial = np.zeros(18, dtype=float)
+        initial[column] = 1.0
+        solution = solve_ivp(
+            variational_rhs,
+            (0.0, period),
+            initial,
+            method="DOP853",
+            rtol=rtol,
+            atol=atol,
+            dense_output=False,
+            max_step=max_step,
+        )
+        if not solution.success:
+            raise RuntimeError(
+                f"fixed-IC variational integration failed for masses={masses.tolist()}, "
+                f"column {column}: {solution.message}"
+            )
+        monodromy[:, column] = solution.y[:, -1]
+    return monodromy
+
+
+def verify_partial_eps_via_finite_difference(
+    integrated: IntegratedOrbit,
+    h: float,
+    rtol: float,
+    atol: float,
+    max_step_fraction: float,
+    fd_floor: float,
+) -> tuple[dict[str, object], np.ndarray, np.ndarray]:
+    """Cross-check closed-form dM/depsilon against a fixed-IC central difference."""
+    if abs(integrated.row.m3 - 1.0) > 1e-12:
+        raise ValueError("partial-epsilon finite-difference check is defined only for m3=1")
+    partial_monodromy = compute_partial_eps_monodromy(integrated, rtol, atol, max_step_fraction)
+    masses_plus = np.array([1.0, 1.0, 1.0 + h], dtype=float)
+    masses_minus = np.array([1.0, 1.0, 1.0 - h], dtype=float)
+    m_plus = compute_monodromy_at_masses(
+        integrated.y0, integrated.row.period, masses_plus, rtol, atol, max_step_fraction
+    )
+    m_minus = compute_monodromy_at_masses(
+        integrated.y0, integrated.row.period, masses_minus, rtol, atol, max_step_fraction
+    )
+    finite_difference = (m_plus - m_minus) / (2.0 * h)
+    residual = partial_monodromy - finite_difference
+    residual_inf = float(np.linalg.norm(residual, ord=np.inf))
+    residual_fro = float(np.linalg.norm(residual, ord="fro"))
+    closed_form_inf = float(np.linalg.norm(partial_monodromy, ord=np.inf))
+    finite_difference_inf = float(np.linalg.norm(finite_difference, ord=np.inf))
+    scale = max(closed_form_inf, finite_difference_inf, fd_floor)
+    result = {
+        "gate": "partial_epsilon_finite_difference",
+        "enabled": True,
+        "h": h,
+        "fd_floor": fd_floor,
+        "residual_inf": residual_inf,
+        "residual_fro": residual_fro,
+        "closed_form_norm_inf": closed_form_inf,
+        "finite_difference_norm_inf": finite_difference_inf,
+        "relative_residual_inf": float(residual_inf / scale),
+        "passed": residual_inf <= fd_floor,
+    }
+    return result, partial_monodromy, finite_difference
 
 
 def body_permutation_matrix_18(perm: tuple[int, int, int]) -> np.ndarray:
@@ -1685,7 +1869,7 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
     )
 
     print("[kfacet-sentinel] computing M_i")
-    monodromy = compute_monodromy(integrated, args.rtol, args.atol)
+    monodromy = compute_monodromy(integrated, args.rtol, args.atol, args.max_step_fraction)
 
     print("[kfacet-sentinel] constructing typed D3 operators")
     d3_ops = construct_d3_elements_v0(integrated, args.rtol, args.atol)
@@ -1703,10 +1887,50 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
         f"{'PASS' if omega_gate['passed'] else 'FAIL'} K_fib_dim={omega_gate['K_fib_dim']}"
     )
 
-    all_gates_passed = bool(d3_gate["passed"] and omega_gate["passed"])
+    preliminary_gates_passed = bool(d3_gate["passed"] and omega_gate["passed"])
+    partial_eps_gate: dict[str, object] = {
+        "gate": "partial_epsilon_finite_difference",
+        "enabled": False,
+        "skipped": True,
+        "reason": "run with --verify-partial-eps to enable the finite-difference cross-check",
+    }
+    partial_eps_monodromy = None
+    partial_eps_finite_difference = None
+    if args.verify_partial_eps:
+        if not preliminary_gates_passed:
+            partial_eps_gate = {
+                "gate": "partial_epsilon_finite_difference",
+                "enabled": True,
+                "skipped": True,
+                "reason": "D3/omega gate failed before partial-epsilon verification",
+                "passed": False,
+            }
+        else:
+            print("[kfacet-sentinel] verifying partial-epsilon monodromy by fixed-IC finite difference")
+            partial_eps_gate, partial_eps_monodromy, partial_eps_finite_difference = (
+                verify_partial_eps_via_finite_difference(
+                    integrated,
+                    args.fd_h,
+                    args.rtol,
+                    args.atol,
+                    args.max_step_fraction,
+                    args.fd_floor,
+                )
+            )
+            print(
+                "[kfacet-sentinel] partial-epsilon gate "
+                f"{'PASS' if partial_eps_gate['passed'] else 'FAIL'} "
+                f"residual_inf={float(partial_eps_gate['residual_inf']):.3e}"
+            )
+    else:
+        print("[kfacet-sentinel] partial-epsilon gate SKIPPED (no --verify-partial-eps flag)")
+
+    all_gates_passed = bool(
+        preliminary_gates_passed and (not args.verify_partial_eps or partial_eps_gate.get("passed") is True)
+    )
     receipt = {
         "mode": "kfacet_sentinel_gates",
-        "gate_version": "v0.3i-gates",
+        "gate_version": "v0.3i-partial-eps" if args.verify_partial_eps else "v0.3i-gates",
         "row_index": row.index,
         "label": row.label,
         "m3": row.m3,
@@ -1721,6 +1945,7 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
         "K_fib": k_fib_summary,
         "D3_relations": d3_gate,
         "reduced_omega": omega_gate,
+        "partial_epsilon_finite_difference": partial_eps_gate,
         "all_gates_passed": all_gates_passed,
         "sentinel_scope": {
             "full_gamma_run_authorized": False,
@@ -1739,6 +1964,9 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
         np.save(out_dir / "omega.npy", omega)
         for name, operator in d3_ops.items():
             np.save(out_dir / f"D3_{name}.npy", operator)
+        if partial_eps_monodromy is not None and partial_eps_finite_difference is not None:
+            np.save(out_dir / "partial_eps_M_i.npy", partial_eps_monodromy)
+            np.save(out_dir / "partial_eps_M_i_fd.npy", partial_eps_finite_difference)
 
     if not all_gates_passed:
         print("[kfacet-sentinel] HALT: implementation gates failed; Gamma_i run remains blocked")
@@ -1918,6 +2146,9 @@ def build_parser() -> argparse.ArgumentParser:
     sentinel.add_argument("--relation-floor", type=float, default=1e-8)
     sentinel.add_argument("--closure-floor", type=float, default=1e-8)
     sentinel.add_argument("--nondegeneracy-floor", type=float, default=1e-8)
+    sentinel.add_argument("--verify-partial-eps", action="store_true")
+    sentinel.add_argument("--fd-h", type=float, default=1e-6)
+    sentinel.add_argument("--fd-floor", type=float, default=1e-9)
     sentinel.add_argument("--authorize-sentinel-run", action="store_true")
     sentinel.add_argument("--out", help="optional output directory for gate receipt and matrices")
     sentinel.set_defaults(func=command_kfacet_sentinel)
