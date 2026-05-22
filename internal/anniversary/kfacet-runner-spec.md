@@ -1201,3 +1201,15 @@ admitting the bridge vector makes `sigma3` fail the order-3 relation at about
 2D standard `D3` irrep. Therefore O_617 sits structurally outside the v0.3h
 Gamma framing at this boundary. It is excluded from evidence rather than
 counted for or against the `Gamma_i` prediction.
+
+Upstream attribution (per the deep dive,
+`internal/anniversary/kfacet_v03h_o617_deep_dive.md`): the defective-D3 at
+this bridge is causally downstream of weak `sigma_3` catalog admission. O_617's
+`sigma_group_residual_inf` is `1.62e-1`, ranking 19 of 21 strict rows against
+a catalog median near `2e-8`. Its `F_beta` closure is catalog-normal (rank 4
+of 21). The constructed `rho(sigma_3)` therefore satisfies the order-3
+relation only approximately, and the projector machinery sees that
+approximation as a defective E(1) at `k_dim=8`. O_617 is excluded as an
+admission-edge row, not as counterevidence. The honest follow-up is a
+catalog-reconstruction question (tighter `sigma_3` admission tolerance), not
+a Gamma_i question.

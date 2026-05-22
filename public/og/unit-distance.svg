@@ -1,189 +1,68 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <!-- Background: warm paper with a subtle wash (same as capset; halo wash mirrored to top-right) -->
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#FDFDFC"/>
-      <stop offset="100%" stop-color="#F5F4EE"/>
-    </linearGradient>
-    <radialGradient id="halo" cx="0.82" cy="0.12" r="0.6">
-      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.12"/>
-      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
-    </radialGradient>
-    <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1A3A52"/>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.72"/><stop offset="100%" stop-color="#FFFAF0" stop-opacity="0.94"/></linearGradient>
+    <pattern id="ruled" x="0" y="0" width="1200" height="28" patternUnits="userSpaceOnUse"><line x1="0" y1="27" x2="1200" y2="27" stroke="#63A3DC" stroke-opacity="0.075" stroke-width="1"/></pattern>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6"><stop offset="0%" stop-color="#F4C430" stop-opacity="0.10"/><stop offset="100%" stop-color="#F4C430" stop-opacity="0"/></radialGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%"><feGaussianBlur in="SourceAlpha" stdDeviation="6"/><feOffset dx="0" dy="4"/><feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="630" fill="#FEFDFB"/>
+  <rect width="1200" height="630" fill="url(#paper)"/>
+  <rect width="1200" height="630" fill="url(#ruled)"/>
+  <rect x="90" y="0" width="2" height="630" fill="#FF6363" fill-opacity="0.12"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · UNIT-DISTANCE OVERLAY</text>
+  <text x="60" y="200" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">Reading OpenAI's</text>
+  <text x="60" y="259" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">2026 disproof.</text>
+  <text x="60" y="366" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">From a cyclic cubic field, through an</text>
+  <text x="60" y="398" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">unramified pro-3 tower, to a CM lattice</text>
+  <text x="60" y="430" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">projecting many unit-distance pairs.</text>
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/unit-distance</text>
+  
+  <g transform="translate(770, 120)">
+    <text x="180" y="-12" font-family="Verdana, sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">SUBSTRATE FLOW</text>
+
+    <!-- Tile 1: cyclic cubic field (yellow sticky) -->
+    <g transform="rotate(-2, 180, 60)">
+      <rect x="40" y="10" width="280" height="100" rx="3" fill="#FEF9C3" stroke="#C99517" stroke-width="1.2" filter="url(#cardShadow)"/>
+      <text x="180" y="36" font-family="Verdana, sans-serif" font-size="11" font-weight="700" fill="#6A7680" text-anchor="middle">CYCLIC CUBIC FIELD</text>
+      <text x="180" y="68" font-family="Georgia, serif" font-size="22" font-weight="700" fill="#1A3A52" text-anchor="middle" font-style="italic">number-theoretic seed</text>
+      <text x="180" y="92" font-family="Verdana, sans-serif" font-size="11" fill="#684811" text-anchor="middle" font-style="italic">starting algebraic ground</text>
+    </g>
+
+    <!-- Arrow down -->
+    <g transform="translate(170, 120)">
+      <line x1="10" y1="0" x2="10" y2="20" stroke="#1A3A52" stroke-width="2" marker-end="url(#arrowdown)"/>
+    </g>
+
+    <!-- Tile 2: pro-3 tower (blue sticky) -->
+    <g transform="rotate(1.5, 180, 195)">
+      <rect x="40" y="145" width="280" height="100" rx="3" fill="#DBEAFE" stroke="#2A5570" stroke-width="1.2" filter="url(#cardShadow)"/>
+      <text x="180" y="171" font-family="Verdana, sans-serif" font-size="11" font-weight="700" fill="#6A7680" text-anchor="middle">UNRAMIFIED PRO-3 TOWER</text>
+      <text x="180" y="203" font-family="Georgia, serif" font-size="22" font-weight="700" fill="#1A3A52" text-anchor="middle" font-style="italic">Golod-Shafarevich</text>
+      <text x="180" y="227" font-family="Verdana, sans-serif" font-size="11" fill="#1A3A52" text-anchor="middle" font-style="italic">infinite class-field stack</text>
+    </g>
+
+    <!-- Arrow down -->
+    <g transform="translate(170, 255)">
+      <line x1="10" y1="0" x2="10" y2="20" stroke="#1A3A52" stroke-width="2" marker-end="url(#arrowdown)"/>
+    </g>
+
+    <!-- Tile 3: CM lattice (pink sticky) -->
+    <g transform="rotate(-1, 180, 330)">
+      <rect x="40" y="280" width="280" height="100" rx="3" fill="#FCE7F3" stroke="#9C2D7A" stroke-width="1.2" filter="url(#cardShadow)"/>
+      <text x="180" y="306" font-family="Verdana, sans-serif" font-size="11" font-weight="700" fill="#6A7680" text-anchor="middle">CM LATTICE -&gt; R&#178;</text>
+      <text x="180" y="338" font-family="Georgia, serif" font-size="22" font-weight="700" fill="#1A3A52" text-anchor="middle" font-style="italic">n^1.014 pairs</text>
+      <text x="180" y="362" font-family="Verdana, sans-serif" font-size="11" fill="#9C2D7A" text-anchor="middle" font-style="italic">unit-distance lower bound</text>
+    </g>
+
+    <text x="180" y="410" font-family="Verdana, sans-serif" font-size="11" fill="#9AA4AC" text-anchor="middle" font-style="italic">after OpenAI 2026 - Sawin delta >= 0.014</text>
+  </g>
+  <defs>
+    <marker id="arrowdown" viewBox="0 0 10 10" refX="5" refY="9" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0,0 L 10,0 L 5,10 z" fill="#1A3A52"/>
     </marker>
   </defs>
-  <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect width="1200" height="630" fill="url(#halo)"/>
 
-  <!-- Thin top accent rule -->
-  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
-
-  <!-- Eyebrow -->
-  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="#2A5570">
-    SUNDOG · UNIT-DISTANCE OVERLAY
-  </text>
-
-  <!-- Headline -->
-  <text x="60" y="180" font-family="Georgia, 'Times New Roman', serif" font-size="60" font-weight="700" fill="#1A3A52">
-    The new pattern
-  </text>
-  <text x="60" y="244" font-family="Georgia, 'Times New Roman', serif" font-size="60" font-weight="700" fill="#1A3A52">
-    isn't a picture —
-  </text>
-  <text x="60" y="308" font-family="Georgia, 'Times New Roman', serif" font-size="60" font-weight="700" fill="#1A3A52">
-    it's a projection.
-  </text>
-
-  <!-- Lede -->
-  <text x="60" y="390" font-family="Verdana, Geneva, sans-serif" font-size="22" fill="#40505C">
-    A plain-English reading of OpenAI's 2026
-  </text>
-  <text x="60" y="422" font-family="Verdana, Geneva, sans-serif" font-size="22" fill="#40505C">
-    unit-distance disproof: from a cyclic cubic
-  </text>
-  <text x="60" y="454" font-family="Verdana, Geneva, sans-serif" font-size="22" fill="#40505C">
-    field down to ≥ n¹·⁰¹⁴ unit pairs in ℝ².
-  </text>
-
-  <!-- URL footer -->
-  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">
-    sundog.cc/unit-distance
-  </text>
-
-  <!-- Right-side visualization: algebraic-to-planar projection -->
-  <g transform="translate(640, 130)">
-    <!-- Frame -->
-    <rect x="-12" y="-12" width="500" height="360" rx="10" fill="#FFFFFF" stroke="#D6DBDF" stroke-width="2"/>
-
-    <!-- Caption -->
-    <text x="238" y="20" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">
-      ALGEBRAIC SUBSTRATE → PLANAR SHADOW
-    </text>
-
-    <!-- ─── Upper panel: polydisc with norm-one lattice points ─────────────── -->
-    <g transform="translate(0, 36)">
-      <text x="238" y="0" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#9AA4AC" text-anchor="middle">
-        K_j = F_j(i) · Minkowski lattice in ℂ^f · |z| = 1 in every coordinate
-      </text>
-
-      <!-- Polydisc (stylized as a single disc; high-dim is implied by caption) -->
-      <circle cx="238" cy="70" r="58" fill="#FAFAF6" stroke="#2A5570" stroke-width="1.6" opacity="0.75"/>
-      <!-- Inner unit-circle reference -->
-      <circle cx="238" cy="70" r="36" fill="none" stroke="#9AA4AC" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.7"/>
-
-      <!-- Lattice points: a scatter inside the polydisc, with the unit-norm ones on the inner circle highlighted gold -->
-      <!-- Inner-circle (norm-one) points: 8 points on the dashed unit circle -->
-      <g>
-        <circle cx="274.00" cy="70.00" r="4" fill="#F4C430" stroke="#C99517" stroke-width="1.2"/>
-        <circle cx="263.46" cy="95.46" r="4" fill="#F4C430" stroke="#C99517" stroke-width="1.2"/>
-        <circle cx="238.00" cy="106.00" r="4" fill="#F4C430" stroke="#C99517" stroke-width="1.2"/>
-        <circle cx="212.54" cy="95.46" r="4" fill="#F4C430" stroke="#C99517" stroke-width="1.2"/>
-        <circle cx="202.00" cy="70.00" r="4" fill="#F4C430" stroke="#C99517" stroke-width="1.2"/>
-        <circle cx="212.54" cy="44.54" r="4" fill="#F4C430" stroke="#C99517" stroke-width="1.2"/>
-        <circle cx="238.00" cy="34.00" r="4" fill="#F4C430" stroke="#C99517" stroke-width="1.2"/>
-        <circle cx="263.46" cy="44.54" r="4" fill="#F4C430" stroke="#C99517" stroke-width="1.2"/>
-      </g>
-      <!-- Off-circle lattice points (other elements of K_j; not norm-one) -->
-      <g fill="#1A3A52" opacity="0.55">
-        <circle cx="220" cy="58" r="2.4"/>
-        <circle cx="252" cy="82" r="2.4"/>
-        <circle cx="232" cy="92" r="2.4"/>
-        <circle cx="258" cy="60" r="2.4"/>
-        <circle cx="226" cy="80" r="2.4"/>
-        <circle cx="244" cy="56" r="2.4"/>
-      </g>
-
-      <!-- Side label -->
-      <text x="115" y="74" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#6A7680" text-anchor="end">
-        norm-one
-      </text>
-      <text x="115" y="89" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#6A7680" text-anchor="end">
-        u = α / c(α)
-      </text>
-
-      <!-- Right label -->
-      <text x="362" y="74" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#6A7680">
-        |σ(u)| = 1
-      </text>
-      <text x="362" y="89" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#6A7680">
-        every σ
-      </text>
-    </g>
-
-    <!-- ─── Projection arrow ────────────────────────────────────────────────── -->
-    <g transform="translate(238, 192)">
-      <line x1="0" y1="0" x2="0" y2="26" stroke="#1A3A52" stroke-width="2.2" marker-end="url(#arrowhead)"/>
-      <text x="12" y="18" font-family="Verdana, Geneva, sans-serif" font-size="12" font-style="italic" fill="#1A3A52">
-        project to first ℂ coord
-      </text>
-    </g>
-
-    <!-- ─── Lower panel: planar point set with unit-distance edges ──────────── -->
-    <g transform="translate(0, 232)">
-      <text x="238" y="0" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#9AA4AC" text-anchor="middle">
-        P_j ⊂ ℝ²  ·  ν(P_j) ≥ n_j^(1+δ),  δ ≈ 0.014  (Sawin)
-      </text>
-
-      <!-- Background plane -->
-      <rect x="50" y="14" width="376" height="92" rx="6" fill="#FAFAF6" stroke="#CFD8DC" stroke-width="1"/>
-
-      <!-- Planar scatter: 14 points (positions chosen so a few are at unit distance, where 'unit' = 48 px in this panel) -->
-      <!-- Highlighted unit-distance edges in gold -->
-      <g>
-        <!-- Pair 1: (96,40) - (144,40) horizontal unit -->
-        <line x1="96"  y1="40" x2="144" y2="40" stroke="#C99517" stroke-width="2.2"/>
-        <!-- Pair 2: (144,40) - (168,82) ~unit (sqrt(24^2+42^2)=48.3) -->
-        <line x1="144" y1="40" x2="168" y2="82" stroke="#C99517" stroke-width="2.2"/>
-        <!-- Pair 3: (220,52) - (268,52) horizontal unit -->
-        <line x1="220" y1="52" x2="268" y2="52" stroke="#C99517" stroke-width="2.2"/>
-        <!-- Pair 4: (268,52) - (316,52) horizontal unit -->
-        <line x1="268" y1="52" x2="316" y2="52" stroke="#C99517" stroke-width="2.2"/>
-        <!-- Pair 5: (316,52) - (340,94) ~unit -->
-        <line x1="316" y1="52" x2="340" y2="94" stroke="#C99517" stroke-width="2.2"/>
-        <!-- Pair 6: (220,52) - (244,94) ~unit -->
-        <line x1="220" y1="52" x2="244" y2="94" stroke="#C99517" stroke-width="2.2"/>
-        <!-- Pair 7: (244,94) - (292,94) horizontal unit -->
-        <line x1="244" y1="94" x2="292" y2="94" stroke="#C99517" stroke-width="2.2"/>
-        <!-- Pair 8: (292,94) - (340,94) horizontal unit -->
-        <line x1="292" y1="94" x2="340" y2="94" stroke="#C99517" stroke-width="2.2"/>
-      </g>
-
-      <!-- Points -->
-      <g fill="#1A3A52" stroke="#1A3A52" stroke-width="0.5">
-        <circle cx="96"  cy="40" r="3.6"/>
-        <circle cx="144" cy="40" r="3.6"/>
-        <circle cx="168" cy="82" r="3.6"/>
-        <circle cx="120" cy="84" r="3.6"/>
-        <circle cx="76"  cy="74" r="3.6"/>
-        <circle cx="220" cy="52" r="3.6"/>
-        <circle cx="268" cy="52" r="3.6"/>
-        <circle cx="316" cy="52" r="3.6"/>
-        <circle cx="244" cy="94" r="3.6"/>
-        <circle cx="292" cy="94" r="3.6"/>
-        <circle cx="340" cy="94" r="3.6"/>
-        <circle cx="384" cy="62" r="3.6"/>
-        <circle cx="396" cy="96" r="3.6"/>
-        <circle cx="200" cy="98" r="3.6"/>
-      </g>
-
-      <!-- Unit ruler -->
-      <g transform="translate(60, 116)">
-        <line x1="0" y1="0" x2="48" y2="0" stroke="#1A3A52" stroke-width="1.5"/>
-        <line x1="0" y1="-4" x2="0" y2="4" stroke="#1A3A52" stroke-width="1.5"/>
-        <line x1="48" y1="-4" x2="48" y2="4" stroke="#1A3A52" stroke-width="1.5"/>
-        <text x="24" y="-7" font-family="Verdana, Geneva, sans-serif" font-size="10" fill="#1A3A52" text-anchor="middle">= 1</text>
-      </g>
-
-      <!-- Caption -->
-      <text x="238" y="146" font-family="Verdana, Geneva, sans-serif" font-size="13" fill="#40505C" text-anchor="middle">
-        upper bound still O(n⁴ᐟ³) · 80-year conjecture refuted
-      </text>
-    </g>
-  </g>
-
-  <!-- Bottom-right corner mark -->
-  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">
-    sundog.cc
-  </text>
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
 </svg>

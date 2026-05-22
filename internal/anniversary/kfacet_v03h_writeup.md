@@ -1,108 +1,91 @@
-# K_facet v0.3h Audit Chain — Hand-Off Writeup
+# K_facet v0.3h Methodology + Result Handoff
 
 Status: current, 2026-05-22.
 Audience: collaborators, paper-side writers, future coding agents.
-Source docs: `docs/sundog_v_isotrophy.md`, `docs/SUNDOG_V_THREEBODY.md`,
-`internal/anniversary/kfacet-runner-spec.md`.
-Companion deep dive: `internal/anniversary/kfacet_v03h_o617_deep_dive.md`
-(structural anatomy of the one quarantined row).
-
-## One-Line Read
-
-The v0.3h K_facet `Gamma_i` rank-matrix prediction collapses to a structural
-zero on 20 of the 21 strict G.2 single-curve choreographies at `m_3=1` in
-Li-Liao supplementary-A, with the 21st row (`O_617`) sharply quarantined as
-a defective-D3 bridge case rather than buried as numerical noise. The result
-rests on a three-stage no-tunable audit chain whose receipts are reproducible
-from three npm scripts.
+Canonical sources: `internal/anniversary/kfacet-runner-spec.md`,
+`docs/sundog_v_isotrophy.md`, and `docs/SUNDOG_V_THREEBODY.md`.
 
 ## What v0.3h Tested
 
-v0.3 frames the K_facet branch-validity object as
-`Gamma_i = <xi, omega . d_eps M_i . xi'>` on the `F_beta`-even standard
-isotypic of `ker(M_i - I)`, with `d_i = rank_floor(Gamma_i)` as the
-structural count. v0.3h asked, for the 21 strict catalog rows: is `d_i = 0`
-by structure (no standard `D3` sector ever appears), by numerical accident
-(small but nonzero), or by ansatz failure (the row does not carry the
-representation)?
+v0.3h tested the catalog-level structural-zero hypothesis for `K_facet`.
+After the v0.2 containment count collapsed to the equivariance-null, the
+test was rebuilt around the rank-matrix `Gamma_i`: look inside
+`ker(M_i - I)` for an `F_beta`-even standard `D3` sector. If that sector is
+present, `Gamma_i` can carry a branch count. If it is absent, then
+`c_i = d_i = 0` by structure, not by tolerance or post-hoc pruning.
+
+The question for the 21 strict G.2 single-curve choreographies at `m_3 = 1`
+was therefore sharp: does any row contain a valid standard `D3` isotypic
+block, or is the v0.3h prediction structurally zero on the catalog?
 
 ## Audit Chain Methodology
 
-The chain ratchets one row at a time through three pre-registered gates,
-each with no per-row knobs and a closure-relative discipline matching G.2:
+The audit chain was deliberately receipt-first and closure-relative, matching
+the discipline that resolved G.2. It proceeded in three stages.
 
-1. **Sentinel gates** (`npm run isotrophy:kfacet:sentinel:gamma`). For each
-   row: integrate, build `M_i` and the typed `D3` operators, gate by
-   D3 relations + reduced `omega` + closed-form vs. finite-difference
-   `d_eps M_i` + leakage of D3 outside `ker(M_i - I)`. All four gates
-   closure-relative; the F_beta leakage gate is the load-bearing check
-   that prevents a non-D3-invariant kernel from counting as evidence.
-2. **Adaptive-floor reprocessor** (`npm run isotrophy:kfacet:reprocess-floor`).
-   No-integration receipt sweep over the sentinel's `.npy` artifacts. Picks
-   the smallest floor per row in a pre-registered ladder satisfying
-   simultaneously: D3 leakage `<= 1e-3`, gap ratio `<= 1e-3`, first-rejected
-   singular value `>= 1e-3`. The triple guard prevents both noise-band cuts
-   and bridge-band cuts.
-3. **Bridge audit** (`npm run isotrophy:kfacet:bridge-audit`). No-integration
-   triage for any row that the reprocessor cannot place in a clean spectral
-   gap. Tests each bridge singular vector for neutral-basis overlap, Jordan
-   chain alignment via `||(M-I)^2 v|| / ||(M-I) v||`, and defective-D3
-   signatures at the bridge-admitted kernel.
+First, the sentinel/Gamma runner built `M_i`, typed `D3` operators, reduced
+`omega`, and the closed-form `partial_eps M_i`, then gated D3 relations,
+leakage, and finite-difference consistency. Second, the adaptive-floor
+reprocessor reused the saved `.npy` artifacts, with no integration, and chose
+the smallest pre-registered floor satisfying all three guards: D3 leakage
+`<= 1e-3`, gap ratio `<= 1e-3`, and first-rejected singular value `>= 1e-3`.
+Third, the bridge audit examined any row not resolved by that floor rule,
+testing bridge vectors for neutral overlap, Jordan behavior, and defective
+D3 signatures.
 
-The five preregistered outcome categories — `no_bridge_present`,
-`all_neutral_overlap_explained`, `jordan_block_explained`,
-`defective_E_block_confirmed`, `jordan_suspected`,
-`unexplained_escalate_to_rtol` — discharge a row to one of three
-follow-ups (quotient refinement, Jordan-block accommodation, defective
-exclusion) or escalate to a tighter-rtol rerun.
+No row-specific knobs were introduced. Constants and outcome categories were
+registered in code/spec before interpretation, so each row either became a
+structural-zero receipt, a named refinement case, or an excluded defective
+case.
 
-## Result and Quarantine
+## Result And Quarantine
 
-Final manifest:
+Final result:
 
 ```text
-20 rows  no_bridge_present              ker(M-I) = T(2) + S(5 or 6) + E(0)
+20 rows  no_bridge_present              T(2) + S(5 or 6) + E(0)
  1 row   defective_E_block_confirmed    O_617
 ```
 
-Twenty rows read `c_i = d_i = 0` by structure: no standard D3 sector
-appears in any kernel. The single quarantined row `O_617` has its bridge
-singular value at `7.836e-4` cleanly diagnosed: neutral overlap `1.81e-4`
-(not neutral), Jordan chain drop `90.04` (norm *amplifies* under second
-application, opposite of a Jordan root), and at the bridge-admitted
-`k_dim = 8` the D3 representation itself is defective with isotypic
-`T(2) + S(6) + E(1)`, `P_E` marginal singular value `0.01475`, and
-`||sigma_3^3 - I||_inf = 3.96e-2`. The orbit does not carry `D3` at the
-bridge boundary, so it sits outside v0.3h `Gamma_i` evidence. It is
-excluded, not refuted: the defective-D3 fact is itself a structural
-finding, and the deep-dive companion note investigates whether it points
-to a near-symmetry-broken orbit or a catalog selection edge case.
+The load-bearing v0.3h catalog statement is:
+
+> v0.3h resolves the eligible strict catalog rows as structural zeros. The
+> sole quarantined row, O_617, is explained by weak sigma_3 catalog
+> inclusion rather than by a failure of the Gamma_i audit chain.
+
+For the 20 eligible rows the standard `D3` sector is empty, so
+`c_i = d_i = 0`. `O_617` is quarantined, not counted for or against the
+prediction. Its bridge singular value is `7.8359e-4`; neutral overlap is
+`1.81e-4`; the Jordan-chain test amplifies rather than drops (`90.04`).
+At the bridge-admitted kernel the representation reads `T(2) + S(6) + E(1)`,
+which is not a valid real standard `D3` block, and
+`||sigma3^3 - I||_inf = 3.96e-2` shows the order-3 relation fails at about
+4%. The companion deep dive (`kfacet_v03h_o617_deep_dive.md`) attributes
+this defective-D3 to weak sigma_3 catalog admission upstream: O_617's
+sigma_3 closure residual is `1.62e-1`, ranking 19 of 21 against a catalog
+median near `2e-8`. The defect therefore lives in the representation, not
+in the orbit's Gamma_i; the audit chain itself is intact.
 
 ## Reproducibility Surface
 
-Three subcommands of `scripts/isotrophy_workbench.py`, exposed as:
+Primary scripts:
 
 ```bash
-npm run isotrophy:kfacet:sentinel:gamma          # per-row sentinel + Gamma_i
-npm run isotrophy:kfacet:reprocess-floor          # adaptive-floor sweep
-npm run isotrophy:kfacet:bridge-audit             # bridge triage
+npm run isotrophy:kfacet:sentinel:gamma
+npm run isotrophy:kfacet:reprocess-floor
+npm run isotrophy:kfacet:bridge-audit
 ```
 
-Constants are pre-registered at module level
-(`ADAPTIVE_FLOOR_LADDER`, `ADAPTIVE_FLOOR_PROJECTOR_FLOOR`,
-`BRIDGE_AUDIT_LADDER`, `BRIDGE_NEUTRAL_OVERLAP_THRESHOLD`,
-`BRIDGE_JORDAN_CHAIN_THRESHOLD`, ...) with inline rationale comments.
-Receipt directories under `results/isotrophy/k-facet-v03-*` carry per-row
-JSON plus the `.npy` matrices (`M_i`, `D3_*`, `omega`, `Gamma_i`, etc.).
-Each subcommand's manifest aggregates outcome counts, suspicious rows,
-and (for the reprocessor) selected-floor histograms so a single grep
-suffices to confirm the catalog claim against a fresh receipt set.
+Key receipt directories:
 
-## Out of Scope
+```text
+results/isotrophy/k-facet-v03-sentinel-calibration-O62-gamma/
+results/isotrophy/k-facet-v03-sentinel-sweep-calibrated/
+results/isotrophy/k-facet-v03-sentinel-sweep-adaptive-floor-21/
+results/isotrophy/k-facet-v03-bridge-audit-21/
+```
 
-- `O_617` structural deep dive (see companion note).
-- Paper-side derivation of the `Gamma_i` rank gate or the closure-relative
-  discipline; this writeup describes the *audit chain*, not the underlying
-  representation theory.
-- Cross-`m_3` or supplementary-B verification. The discipline is portable;
-  the result is `m_3 = 1` only.
+Load-bearing constants include the adaptive floor ladder, projector/leakage
+floor `1e-3`, gap ratio `1e-3`, `k_gamma = 3`, and `k_int = 10`. The final
+claim should be cited as **20/21 structural zeros plus one quarantined O_617
+defective-D3 bridge**, not as a closed 21/21 theorem-facing result.
