@@ -940,6 +940,15 @@ value is `7.84e-4`, below the registered `1e-3` first-rejected guard; admitting
 that vector gives an odd `E(1)` residual rather than a clean real 2D standard
 block. O_617 is therefore a sub-investigation, not counted evidence.
 
+The bridge audit now closes that sub-investigation. With the bridge band made
+adaptive-floor-aware, the final audit split is `20 no_bridge_present / 1
+defective_E_block_confirmed`. `O_617` has negligible neutral overlap, its
+Jordan-chain norm amplifies (`drop = 90.04`), and admitting the bridge vector
+makes the D3 representation itself defective (`T(2)+S(6)+E(1)`, `P_E` marginal
+SV `0.01475`, `sigma3^3-I = 3.96e-2`). The row is outside the v0.3h Gamma
+framing at that boundary and remains excluded from evidence, not counted for or
+against the prediction.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
