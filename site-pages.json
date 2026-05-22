@@ -101,6 +101,11 @@
       "entry": "capset.html",
       "kind": "workbench",
       "publicLaunchIntent": "Public cap-set workbench: interactive F_3^n exploration framing the 2016 polynomial-method breakthrough as a precedent for the 2026 unit-distance disproof."
+    },
+    {
+      "entry": "unit-distance.html",
+      "kind": "workbench",
+      "publicLaunchIntent": "Public unit-distance overlay: plain-English read of OpenAI's 2026 disproof, from cyclic cubic field through unramified pro-3 tower to CM lattice projecting to many unit-distance pairs."
     }
   ]
 }

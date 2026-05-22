@@ -35,9 +35,10 @@ code, experiments, prior theorem materials, and application bridges.
   across workbenches without reinventing the audit shape.
 - [Application map](APPLICATIONS.md): how the operating-envelope workbenches
   and product systems relate to the theorem.
-- [Near-anniversary roadmap triage](ANNIVERSARY_ROADMAP_TRIAGE.md): low-risk
-  and high-value roadmap lanes to slide in before the 2026-05-19 anniversary
-  target.
+- [Near-anniversary roadmap triage](ANNIVERSARY_ROADMAP_TRIAGE.md):
+  *Historical (anniversary target 2026-05-19 is past).* Low-risk and
+  high-value roadmap lanes that were scoped for the anniversary window.
+  Retained for the record; not a primary entry point for new readers.
 - [Promo highlights](PROMO_HIGHLIGHTS.md): hooks, headlines, provocative
   statements, and future-facing language.
 - [Brand positioning](BRAND_POSITIONING.md): public lab posture after the
@@ -58,6 +59,22 @@ code, experiments, prior theorem materials, and application bridges.
 - [Sundog Chat roadmap](SUNDOG_V_CHAT.md): browser site-helper roadmap and
   substantiation for evidence-tier and claim-boundary preservation under prompt
   pressure, including the completed Phase 12 open-weight sweep.
+- [Sundog Geometry roadmap](SUNDOG_V_GEOMETRY.md): parhelion-derived
+  geometry workbench shelf — parametric halo render, parhelion-offset
+  inverse, calibration boundaries, and the path-to-promotion phases.
+- [Sundog Mesa roadmap](SUNDOG_V_MESA.md): mesa-optimization trap
+  empirical front; in-vitro operating envelope with sharp cliff at
+  λ ≈ 0.953 localized to a 5D basin at the actor's final hidden layer.
+- [Sundog Capset ledger](SUNDOG_V_CAPSET.md): staging ledger coupling
+  Sundog's apparatus to the 2026 OpenAI unit-distance disproof. Evaluator
+  front + substrate-analogue horizon; cap-set workbench is the one
+  current anchor.
+- [Sundog Gravity ledger](SUNDOG_V_GRAVITY.md): staging pattern for the
+  highest-ambition Goodhart-sidestep claim. Source of the candidate
+  template the other ledgers mirror.
+- [SEO and social-readiness roadmap](SEO_AND_SOCIAL_READINESS_ROADMAP.md):
+  per-page OG/Twitter/JSON-LD matrix, Phase 1 cleared 2026-05-21 across
+  thirteen Class A pages; Phase 2 staged.
 - [Sundog Gimmicks Ledger](SUNDOG_V_GIMMICKS.md): candidate game-native
   workbenches under evaluation before promotion to full roadmap documents.
 - [Third-party reuse ledger](THIRD_PARTY_REUSE.md): permissions and attribution
