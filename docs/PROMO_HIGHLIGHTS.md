@@ -134,6 +134,8 @@ substrate-rhyme.
 > parsimonious explanation we have is that the artifact is keeping the
 > relevant low-dim subspaces aligned in each model's residual stream.
 
+<!-- RATCHET: COMPANDER_PAPER_HOOK · §9b · replace the blockquote above with the post-publication-upgrade v2 line when mod's paper publishes · see internal/feedback/Human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md -->
+
 The line is doing three jobs at once:
 
 1. It treats the chat experiment's 0-unsafe-accepts-across-5,670-trials
