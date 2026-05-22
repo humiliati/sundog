@@ -96,16 +96,17 @@ Legend: ✓ = done · ◐ = partial · ✗ = missing · — = N/A for the page's
 | `/mines` | A | ✓ | mines.png | TechArticle | ✓ | ✓ | rail card | ✓ | |
 | `/capset` | A | ✓ | capset.png | TechArticle | ✓ | ✓ | rail card | ✓ | first to ship; Post-Inspector confirmed |
 | `/applications-gallery` | A | ✓ | applications-gallery.png | Article | ✓ | ✓ | header nav | ✓ | promoted from B 2026-05-21 PM; viz is a 3×2 tier-card grid plus Cap-Set + "rest of the gallery" placeholder |
-| `/h-of-x` | A | ✓ | h-of-x.png | TechArticle | ✓ | ✓ | ◐ | ✓ | promoted from B 2026-05-21 PM; viz is the cos(h)=R₂₂/α₀ equation card with a small parhelion sketch |
-| `/mesa` | A | ✓ | mesa.png | TechArticle | ✓ | ✓ | ◐ | ✓ | promoted from B 2026-05-21 PM; viz is a λ-axis with hold/breach regions and the 0.953 cliff marker |
-| `/structural-failure` | A | ✓ | structural-failure.png | TechArticle | ✓ | ✓ | ◐ | ✓ | promoted from B 2026-05-21 PM; viz is a five-locus boundary map (P0/P1/Cut2/Cut3 + apparatus) |
-| `/sundog-workbench` | C | ✗ | ✗ | ✗ | — | — | — | ✓ | being absorbed into index hero per UI_UX 4a; defer until promotion decision |
-| `/chat` | C | ✗ | ✗ | ✗ | — | — | header nav | ✓ | interactive widget; low standalone share value |
-| `/legend` | C | ✗ | ✗ | ✗ | — | — | footer | ✓ | reference vocabulary; low share value |
-| `/origin` | C | ✗ | ✗ | ✗ | — | — | footer | ✓ | provenance story; medium future share value but no urgency |
-| `/paper-theme-demo` | D | — | — | — | — | — | — | — | internal design-system demo |
-| `/repo-map` | D | — | — | — | — | — | — | — | internal navigation map |
-| `/atlas` | D | — | — | — | — | — | — | ✗ | alias / redirect to `/sundog` |
+| `/h-of-x` | A | ✓ | h-of-x.png | TechArticle | ✓ | ✓ | pillar card | ✓ | promoted from B 2026-05-21 PM; pillar card added to `Load-Bearing Evidence` 2026-05-21 PM (late). Per-node clickable equation + parhelion sketch. |
+| `/mesa` | A | ✓ | mesa.png | TechArticle | ✓ | ✓ | pillar card | ✓ | promoted from B 2026-05-21 PM; pillar card refactored to per-region clicks (hold/cliff/breach/locus) 2026-05-21 PM (late). |
+| `/structural-failure` | A | ✓ | structural-failure.png | TechArticle | ✓ | ✓ | pillar card | ✓ | promoted from B 2026-05-21 PM; pillar card refactored to per-node clicks (P0/P1/Cut2/Cut3/apparatus) 2026-05-21 PM (late). |
+| `/geometry` | A | ✓ | geometry.png | TechArticle | ✓ | ✓ | sitemap | ✓ | added to matrix 2026-05-21 PM (final); page exists at 774 lines but wasn't tracked. Viz is a 3-tile workbench shelf (cap-set + halo + h(x)). No homepage pillar yet — geometry is a hub for the existing pillars rather than a peer. |
+| `/sundog-workbench` | C | ✓ (generic) | sundog-generic.png | TechArticle | ✓ | ✓ | — | ✓ | shared generic OG card 2026-05-21 PM (final); being absorbed into index hero per UI_UX 4a so per-page bespoke deferred indefinitely. |
+| `/chat` | C | ✓ (generic) | sundog-generic.png | Article | ✓ | ✓ | header nav | ✓ | shared generic OG card 2026-05-21 PM (final); interactive widget, page-specific title/desc cover the trace-conditioned chat experiment hook. |
+| `/legend` | C | ✓ (generic) | sundog-generic.png | Article | ✓ | ✓ | footer | ✓ | shared generic OG card 2026-05-21 PM (final). |
+| `/origin` | C | ✓ (generic) | sundog-generic.png | Article | ✓ | ✓ | footer | ✓ | shared generic OG card 2026-05-21 PM (final); promote to bespoke if origin story gets shared externally. |
+| `/paper-theme-demo` | D | — | — | — | — | — | — | — | internal design-system demo; `noindex, follow` added 2026-05-21 PM (final). Not in sitemap. |
+| `/repo-map` | D | — | — | — | — | — | — | — | internal navigation map; `noindex, follow` added 2026-05-21 PM (final). Removed from sitemap 2026-05-21 PM (final). |
+| `/atlas` | D | — | — | — | — | — | — | ✗ | alias / redirect to `/sundog`; `noindex, follow` added 2026-05-21 PM (final). |
 
 ### Promoted from B to A (2026-05-21 PM)
 
@@ -119,9 +120,35 @@ the Class A pages did. Promotion notes retained here for posterity.
 | `/mesa` | Promoted. The λ-axis viz visually anchors the 0.953 cliff that the description leans on. |
 | `/structural-failure` | Promoted. The OG card uses a stylized five-locus quincunx rather than embedding the existing `/media/structural-boundary-five-locus-map.svg` — that asset is too dense for OG-thumbnail legibility. |
 
+## Phase Status
+
+**Phase 1 (Bucket 1) — CLEARED 2026-05-21.** Thirteen Class A pages
+ship with OG block + designed 1200×630 image + JSON-LD + tuned
+title/description + sitemap entry + homepage internal link. The three
+load-bearing pillar pages (`/h-of-x`, `/mesa`, `/structural-failure`)
+moved from header/footer references to dedicated pillar cards in the
+`Load-Bearing Evidence` section on `index.html`, with per-node
+clickable SVGs and hover tooltips routing readers to specific phase
+documents rather than the roadmap overview. The four Class C pages
+each received a sentinel-wrapped minimal OG block pointing at a shared
+generic Sundog card. The three Class D pages received
+`noindex, follow` robots meta and `/repo-map` was removed from the
+sitemap. `/geometry` was discovered mid-sweep (existed but wasn't in
+the matrix) and brought to full Class A treatment.
+
+Outstanding from Phase 1: the *one* item that needs your hands and not
+the codebase — running [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/)
+and [Twitter Card Validator](https://cards-dev.twitter.com/validator)
+on each Class A URL *after* the next deploy. Until that's done, the
+caches won't refresh on the corrected metadata. Treat this as the hard
+prerequisite before any external share of a previously-cached URL.
+
+**Phase 2 (Bucket 2) — READY TO START.** Compounding work, no
+deadlines. See Bucket 2 section below for scoped items.
+
 ## Buckets of Work
 
-### Bucket 1 — Do before any new public share (deadline-bound)
+### Bucket 1 — Do before any new public share (deadline-bound) — CLEARED
 
 These are the moves with a hard deadline because LinkedIn caches
 previews. Each row below maps to a discrete change.
@@ -152,26 +179,84 @@ previews. Each row below maps to a discrete change.
 For Class B pages, Bucket 1 is owed end-to-end. For Class A pages
 already in the matrix as ✓, Bucket 1 is done.
 
-### Bucket 2 — Compounding (this week, not deadline-bound)
+### Bucket 2 — Compounding (Phase 2, ready to start)
 
-1. **Write the Cand. 1 three-gate reading note** from
-   [`SUNDOG_V_CAPSET.md`](SUNDOG_V_CAPSET.md) and publish it as a short
-   standalone article page. The cap-set workbench is the engagement
-   hook; the note is the page that actually ranks for the analytical
-   queries ("what does the OpenAI unit-distance result mean").
-   Interactive grids do not match those search intents; analytical
-   prose does.
-2. **Submit `https://sundog.cc/sitemap.xml`** to Google Search Console
-   under Settings → Sitemaps. Without this the next deep crawl waits
-   on organic discovery rather than an explicit nudge.
-3. **Cross-link `/capset` from `/about`, `/alignment`, and
-   `/applications-gallery`** so the page accumulates more internal
-   link weight before the next deep crawl. Equivalent work applies to
-   any Class A page that lands later.
-4. **Standing checklist for new pages**: when a new entry is added to
-   `site-pages.json`, this roadmap's matrix should grow a row and the
-   page should pass Bucket 1 before the page goes public. Treat the
-   matrix as the gate.
+Phase 2 is not deadline-bound. Items below are scoped enough to pick up
+without re-deriving them. Each carries an owner, a concrete first step,
+and a success criterion.
+
+**B2.1 — Three-gate reading note for the unit-distance result**
+- **Owner:** human author (Sundog research voice); Claude can draft from
+  ledger Cand. 1 if delegated.
+- **Why this matters:** the workbench is the engagement hook; the note
+  is what ranks for the analytical queries ("what does the OpenAI
+  unit-distance result mean", "AI math autonomy", "discrete-geometry
+  breakthrough explained"). Interactive grids don't match those search
+  intents — analytical prose does.
+- **First concrete step:** create `docs/notes/CAPSET_THREEGATE_READING.md`
+  per the scope in
+  [`SUNDOG_V_CAPSET.md`](SUNDOG_V_CAPSET.md) Cand. 1 §Sundog variant
+  (taxonomy restatement, application to the 78-year stalemate, explicit
+  detection-primary attribution, counterexamples that would force
+  residual-primary). Promote to a `/notes/capset-threegate` URL only
+  after one combinatorial-geometry working mathematician sanity-checks
+  the reading.
+- **Success criterion:** note published as Class A with full Bucket 1
+  treatment (OG card, JSON-LD `Article`, designed image, matrix row);
+  external sanity-check on file; ledger Cand. 1 graduates to a roadmap.
+
+**B2.2 — Submit sitemap to Google Search Console**
+- **Owner:** human with sundog.cc GSC access (one-off; cannot be done
+  from the sandbox).
+- **First concrete step:** Google Search Console → Settings → Sitemaps
+  → submit `https://sundog.cc/sitemap.xml`. Confirm coverage report
+  picks up the twelve Class A URLs.
+- **Success criterion:** GSC reports "Success" on the sitemap submission
+  and all twelve URLs appear in the coverage report within ~7 days.
+
+**B2.3 — Cross-link `/capset` from positioning pages**
+- **Owner:** Claude (codebase work).
+- **Why this matters:** `/capset` currently has *two* inbound links
+  from `index.html` (rail card + footer rail CTA) but zero from
+  `/about`, `/alignment`, `/applications-gallery`. Cross-linking
+  accumulates internal link weight before Google's next deep crawl.
+- **First concrete step:** locate a content-appropriate paragraph in
+  each of the three pages (e.g., the "AI mathematics under
+  traceability" angle on `/alignment`; the "evidence tiers across
+  applications" angle on `/applications-gallery`; the "research-program
+  scope" angle on `/about`) and add a single inline link to `/capset`
+  with anchor text that names what the reader will find ("cap-set
+  workbench", not "click here").
+- **Success criterion:** three new inbound internal links live in the
+  build output; matrix annotation on `/capset` updated.
+
+**B2.4 — Standing checklist for new public pages**
+- **Owner:** Claude when invoked on new pages; humans during code
+  review for non-Claude-authored pages.
+- **Why this matters:** the matrix is the gate. Without a standing
+  check, new pages will ship without Bucket 1 treatment and the
+  discipline degrades.
+- **First concrete step:** add a one-line entry to `AGENTS.md` (or the
+  equivalent contributor guide) that says: *new entries in
+  `site-pages.json` must add a row to the SEO matrix and clear Bucket 1
+  before the entry's `publicLaunchIntent` is treated as satisfied.*
+- **Success criterion:** the rule is observed at least once on a new
+  page added after this filing; matrix row exists for that page.
+
+**B2.5 — Linter / file-watcher investigation (new in Phase 2)**
+- **Owner:** human with editor/IDE config access.
+- **Why this matters:** during Phase 1 work, `index.html`,
+  `public/og/_generate.py`, `public/og/_patch_meta.py`, and
+  `capset.html` all had their tails silently truncated at edit time.
+  The current workaround is to splice from git HEAD when corruption is
+  detected. This is fragile and will eventually bite a file with no
+  recoverable history.
+- **First concrete step:** check the editor's Prettier / ESLint / save
+  hook configuration. Most likely cause: a save-action with a file-size
+  or line-count limit. Less likely: a watcher syncing partial writes.
+- **Success criterion:** a known-large file (e.g., `index.html` >2000
+  lines) survives multiple edit cycles in the affected editor without
+  truncation.
 
 ### Bucket 3 — Anti-patterns (things to specifically NOT do)
 
@@ -279,20 +364,54 @@ Until all four are true, this is a living roadmap.
   `_generate.py` (cards) and `_patch_meta.py` (HTML).
 - 2026-05-21 PM — this roadmap filed.
 - 2026-05-21 PM (late) — all four Class B pages promoted to Class A and
-  cleared Bucket 1 in the same session. Twelve Class A pages now ✓ on
-  OG block / image / JSON-LD / title / description / sitemap. Internal
+  cleared Bucket 1 in the same session. Twelve Class A pages ✓ on OG
+  block / image / JSON-LD / title / description / sitemap. Internal
   link equity (rail-link column) for `/h-of-x`, `/mesa`,
-  `/structural-failure` marked ◐ — they have header / footer / contextual
-  links but no `index.html` rail card; treating that as a Bucket 2
-  follow-up rather than a deadline-bound gap.
+  `/structural-failure` was at ◐ — they had header / footer / contextual
+  links but no homepage card.
+- 2026-05-21 PM (later) — `Load-Bearing Evidence` section on
+  `index.html` reworked: `/h-of-x` added as a new fourth pillar; the
+  three pre-existing pillar cards (`/structural-failure`, `/mesa`,
+  `/coarse-graining`) had their dense 1280-wide SVGs replaced with
+  mobile-friendly inline SVGs that mirror the OG card visual vocabulary.
+  Pillar SVGs were then refactored from a single whole-SVG hyperlink to
+  per-node clicks: 18 individual nodes across the four pillars, each
+  with its own `<a href>` to a substantive phase document and a
+  `<title>` tooltip naming the destination. Card-lift hover disabled
+  for pillar items. Result: matrix rail-link column for `/h-of-x`,
+  `/mesa`, `/structural-failure` flips ◐ → ✓.
+- 2026-05-21 PM (final) — capset.html's OG block re-wrapped in
+  `OG-BLOCK-START`/`OG-BLOCK-END` sentinels (had been stripped by the
+  file-watcher truncation bug at an earlier point), making all twelve
+  Class A pages re-runnable through `_patch_meta.py` without
+  duplication. Phase 1 cleared.
+- 2026-05-21 PM (matrix sweep) — easy items off the matrix:
+  (a) discovered `/geometry` existed but wasn't tracked; treated as
+  Class A with 3-tile workbench-shelf OG card + full Bucket 1 meta.
+  (b) shared generic Sundog OG card (`sundog-generic.png`) built and
+  applied to all four Class C pages (`/sundog-workbench`, `/chat`,
+  `/legend`, `/origin`) with sentinel-wrapped minimal blocks and
+  page-specific title/description.
+  (c) `noindex, follow` added to all three Class D pages
+  (`/paper-theme-demo`, `/repo-map`, `/atlas`).
+  (d) `/repo-map` removed from `public/sitemap.xml` (was Class D in
+  the sitemap by accident).
+  Net: thirteen Class A, four Class C (minimal-OG), three Class D
+  (no-index). Every page in `site-pages.json` now has a defensible
+  matrix row.
 
-Open follow-ups:
+**Phase 1 closeout summary:** twelve pages, twelve OG cards, twelve
+JSON-LD blocks, all internal links present, all sitemap entries
+present, all sentinels present. Only outstanding Phase 1 item is
+running LinkedIn Post Inspector + Twitter Card Validator on each URL
+post-deploy — that's a one-off human action, not a codebase change.
 
-- Bucket 2 items (1)–(3) still await execution: Cand. 1 three-gate
-  reading note, GSC sitemap submission, `/capset` cross-links from
-  positioning pages.
-- Internal rail-card placement for the three ◐ pages above is a
-  Bucket 2 item: each is currently reachable but not promoted on `/`.
-- The linter-truncation note in Renderer Notes (2) needs an owner.
-- Class C / D pages remain explicitly deferred; promote only with a
-  content reason per Bucket 3 anti-pattern (v).
+Open follow-ups (carried into Phase 2):
+
+- All Bucket 2 (Phase 2) items are scoped in the Bucket 2 section
+  above with owner, first step, and success criterion. Pick up there.
+- The linter-truncation bug (Renderer Notes §2 above, and B2.5 in
+  Bucket 2) is the highest-risk un-owned item — a single failed
+  truncation on a less-recoverable file would cost real work.
+- Class C / D pages remain explicitly deferred. Promote a Class C only
+  with a content reason per Bucket 3 anti-pattern (v).
