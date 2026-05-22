@@ -124,6 +124,38 @@ does not act on irreducibly. The mechanism is:
 The honest label is therefore **structural bridge outside the valid D3
 representation**, not admission weakness.
 
+## WHY-Dive Addendum
+
+The follow-up WHY-dive refines the bridge diagnosis again. The bridge direction
+is not a loose quasi-kernel vector. It is a near-trivial-isotypic direction:
+
+```text
+Rayleigh lambda at v_bridge:         0.999999
+||(M-I)v|| / ||v||:                  7.84e-4
+sigma3 v projection onto v_bridge:   0.9998
+sigma3 v in k=8 fraction:            1.0000
+F_beta^2 v - v:                      0.0
+sigma3^3 v - v:                      7.06e-2
+```
+
+So `v_bridge` tries to live in the trivial `T` sector. `F_beta` fixes it
+cleanly, and `sigma3` sends it almost exactly back to itself, but with a
+sub-clean scalar drift. That drift accumulates over the three sigma3 actions
+and leaves `sigma3^3 v` outside the `1e-3` relation floor. The projector then
+cannot keep the direction in `T`; the bookkeeping residue appears as the
+defective odd `E(1)` block.
+
+The corrected WHY outcome is:
+
+```text
+bridge_approx_trivial_isotypic
+```
+
+This is still a quarantine. It is not a valid standard `D3` sector and not
+countable evidence for `Gamma_i`. But the causal label is now sharper:
+**O_617 sits at the edge of the trivial sector, not outside D3 in a featureless
+way.**
+
 ## Implications
 
 - The v0.3h catalog result remains: 20 clean structural zeros plus one named

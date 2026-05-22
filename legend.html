@@ -511,6 +511,82 @@
             </div>
         </section>
 
+        <section class="legend-section" aria-labelledby="kfacet-heading">
+            <div class="section-heading">
+                <h2 id="kfacet-heading">Three-Body &amp; K_facet Vocabulary</h2>
+                <p class="section-note">The terms used on <a href="/threebody">threebody</a> (catalog sidecar) and <a href="/isotrophy">isotrophy</a> (K_facet v0.3h audit chain). Hover-definition tooltips on those pages anchor to the entries below.</p>
+            </div>
+            <div class="phenomena-grid">
+                <article class="phenomenon-card" id="kfacet-choreography" data-status="method">
+                    <h3>Choreography</h3>
+                    <p>A periodic three-body orbit where all bodies share a single closed inertial-frame trajectory — the same wire — phased thirds of a period apart.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">single-curve</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-strict-vs-relative" data-status="method">
+                    <h3>Strict vs relative</h3>
+                    <p>A <em>strict</em> choreography returns to the same wire each period. A <em>relative</em> choreography returns rotated by 2π/3 in SO(3). The σ₃ detector splits 25 → 21 strict + 4 relative.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">SO(3) split</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-sigma3-detector" data-status="method">
+                    <h3>σ₃ detector</h3>
+                    <p>A gauge-invariant test that compares an orbit's third return to itself. Distinguishes strict-from-relative choreographies by rotation angle, blind to the catalog's labels.</p>
+                    <p><code>rotation-angle metric on σ₃·X vs X</code></p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">gauge-invariant</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-g2-catalog" data-status="method">
+                    <h3>G.2 catalog</h3>
+                    <p>Li &amp; Liao (2025) supplementary-A table of three-body periodic orbits at m₃ = 1. The 21 strict G.2 single-curve choreographies are the K_facet test's input set.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">m₃ = 1</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet" data-status="method">
+                    <h3>K_facet</h3>
+                    <p>A pre-registered structural-zero test on the strict G.2 catalog. For each row it asks whether the standard D₃ block is absent in the kernel by construction.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">pre-registered</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-structural-zero-receipt" data-status="method">
+                    <h3>Structural-zero receipt</h3>
+                    <p>The named artifact class. A row earns one when <code>c<sub>i</sub> = d<sub>i</sub> = 0</code> by construction — not by tolerance, not by post-hoc pruning. 20 of 21 rows returned receipts in v0.3h.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">artifact class</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-audit-chain" data-status="method">
+                    <h3>Audit chain</h3>
+                    <p>A receipt-first, closure-relative, three-stage pipeline: sentinel/Γ runner → adaptive-floor reprocessor → bridge audit. Constants and outcome categories are registered before interpretation.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">three-stage</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-adaptive-floor" data-status="method">
+                    <h3>Adaptive floor (three guards)</h3>
+                    <p>Stage 2 picks the smallest pre-registered floor satisfying all three: D₃ leakage ≤ 1e-3, gap ratio ≤ 1e-3, first-rejected singular value ≥ 1e-3. No row-specific knobs.</p>
+                    <p><code>floor ladder: 1e-8 → 1e-5</code></p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">three guards</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-d3-representation" data-status="method">
+                    <h3>D₃ representation</h3>
+                    <p>The standard real D₃ block is a structured T/S/E decomposition. A valid representation is what the audit chain looks for; an invalid one — e.g. <code>T(2) + S(6) + E(1)</code> with odd E — is what trips the bridge audit.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">T/S/E sectors</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-gamma-i" data-status="method">
+                    <h3>Γᵢ (Gamma_i)</h3>
+                    <p>The per-orbit audit operator. A Γᵢ failure would indicate an orbit-specific defect inside the chain. O_617 is <em>not</em> a Γᵢ failure — the defect is downstream, in the bridge representation.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">per-orbit</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-opposite-strict" data-status="method">
+                    <h3>Opposite-strict</h3>
+                    <p>A catalog row whose orientation is admitted by the opposite-strict admission test, with admission residual <code>1.01e-8</code> for O_617. The canonical residual <code>1.62e-1</code> is diagnostic-only for an opposite-strict row, never an admission residual.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">diagnostic-only canonical</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-bridge-direction" data-status="not-modeled">
+                    <h3>Bridge direction (defective-D3)</h3>
+                    <p>At the bridge-admitted kernel, O_617's representation is <em>not</em> a valid standard real D₃ block. The Jordan-chain test amplifies (<code>90.04</code>) and the order-3 relation fails (<code>‖σ₃³ − I‖<sub>∞</sub> = 3.96e-2</code>). The defect lives here, in the bridge representation — not in admission, not in the audit chain.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">O_617 location</span></div>
+                </article>
+                <article class="phenomenon-card" id="kfacet-quarantine" data-status="not-modeled">
+                    <h3>Named quarantine</h3>
+                    <p>A row held back from being counted for or against the prediction, with a specific representation-level reason given. O_617 is the sole quarantine in v0.3h. Naming the quarantine is the discipline — absorbing it into a clean number would not be.</p>
+                    <div class="status-line"><span class="mini-chip">term</span><span class="mini-chip">claim hygiene</span></div>
+                </article>
+            </div>
+        </section>
+
         <section class="legend-callout" aria-label="Project boundary">
             <p>
                 This legend is a map of current project status, not a claim that Sundog has solved every halo. Phase 14 fills the accounting matrix; Phase 15 is reserved for speculative or unphotographed halos that need math, brute-force ray tracing, atlas comparison, and HaloSim receipts before promotion.
@@ -519,6 +595,8 @@
                 <a href="/sundog#full-atlas">Open the live atlas</a>
                 <a href="/h-of-x">Open h-of-x math</a>
                 <a href="/alignment">Open the alignment primer</a>
+                <a href="/isotrophy">Open the Isotrophy K_facet page</a>
+                <a href="/threebody#isotrophy">Open the three-body catalog sidecar</a>
                 <a href="docs/calibration/HALO_PHENOMENA_ACCOUNTING.md">Read the Phase 14 matrix</a>
                 <a href="docs/SUNDOG_V_GEOMETRY.md">Read the geometry roadmap</a>
             </div>

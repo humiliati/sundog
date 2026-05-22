@@ -339,6 +339,44 @@
             max-width: 800px;
             color: #2c3e50;
         }
+        .iso-crossref {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            max-width: 820px;
+            margin: 0 0 2rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid rgba(244, 196, 48, 0.45);
+            border-left: 4px solid var(--accent-gold, #f4c430);
+            border-radius: 0 8px 8px 0;
+            background: rgba(244, 196, 48, 0.07);
+            color: #2c3e50;
+        }
+        .iso-crossref-arrow {
+            font-family: var(--sd-font-data, ui-monospace, Menlo, Consolas, monospace);
+            font-size: 1.5rem;
+            color: var(--accent-gold, #f4c430);
+            line-height: 1;
+            padding-top: 0.1rem;
+        }
+        .iso-crossref-kicker {
+            margin: 0 0 0.25rem;
+            font-family: var(--sd-font-data, ui-monospace, Menlo, Consolas, monospace);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: var(--primary-dark, #1A3A52);
+            text-transform: uppercase;
+        }
+        .iso-crossref-body {
+            margin: 0;
+            font-size: 0.98rem;
+            line-height: 1.6;
+        }
+        .iso-crossref-body a:not(.sd-def) {
+            color: var(--primary-dark, #1A3A52);
+            font-weight: 700;
+        }
         .iso-knob-row {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -477,6 +515,7 @@
         }
     </style>
     <link rel="stylesheet" href="/css/sundog-theme.css">
+    <link rel="stylesheet" href="/css/sundog-defs.css">
 </head>
 <body>
     <header class="site-header">
@@ -746,8 +785,21 @@
         <div class="isotrophy-content">
             <h2>Catalog sidecar — 21 + 4 choreographies</h2>
             <p class="iso-lede">
-                A separate strand of the three-body work asks a literature-count question, not a controller question. Li &amp; Liao (2025) report <strong>10,059</strong> three-dimensional periodic orbits of the general three-body problem; in the equal-mass slice they identify <strong>21 "choreographies"</strong> — orbits where all three bodies follow a single closed trajectory, the same wire. Our gauge-invariant σ₃ detector, run blind against their supplementary table, accepts <strong>25</strong>. The difference is one SO(3) rotation angle: 4 of the 25 are rotating relatives, where σ₃·X equals X up to a global 2π/3 turn per period. The slider below shows the separator collapsing the 25 to the catalog's 21.
+                A separate strand of the three-body work asks a literature-count question, not a controller question. Li &amp; Liao (2025) report <strong>10,059</strong> three-dimensional periodic orbits of the general three-body problem; in the equal-mass slice they identify <strong>21 "<a class="sd-def sd-def--dark" href="/legend#kfacet-choreography" data-def="A periodic three-body orbit where all bodies share a single closed inertial-frame trajectory — the same wire — phased thirds of a period apart.">choreographies</a>"</strong> — orbits where all three bodies follow a single closed trajectory, the same wire. Our gauge-invariant <a class="sd-def sd-def--dark" href="/legend#kfacet-sigma3-detector" data-def="A gauge-invariant test that compares an orbit's third return to itself. Distinguishes strict-from-relative choreographies by rotation angle, blind to the catalog's labels.">σ₃ detector</a>, run blind against their supplementary table, accepts <strong>25</strong>. The difference is one SO(3) rotation angle: 4 of the 25 are <a class="sd-def sd-def--dark" href="/legend#kfacet-strict-vs-relative" data-def-anchor="right" data-def="A strict choreography returns to the same wire each period. A relative choreography returns rotated by 2π/3 in SO(3). The σ₃ detector splits 25 → 21 strict + 4 relative.">rotating relatives</a>, where σ₃·X equals X up to a global 2π/3 turn per period. The slider below shows the separator collapsing the 25 to the catalog's 21.
             </p>
+
+            <aside class="iso-crossref" aria-label="Cross-reference to isotrophy">
+                <span class="iso-crossref-arrow" aria-hidden="true">→</span>
+                <div>
+                    <p class="iso-crossref-kicker">Continue down the audit chain</p>
+                    <p class="iso-crossref-body">
+                        These 21 strict rows are the input set for the
+                        <a href="/isotrophy">K_facet v0.3h verdict</a>:
+                        20 returned <a class="sd-def sd-def--dark" href="/legend#kfacet-structural-zero-receipt" data-def="A row earns one when c_i = d_i = 0 by construction — not by tolerance, not by post-hoc pruning. The named artifact class.">structural-zero receipts</a>;
+                        one (O_617) was held back as a <a class="sd-def sd-def--dark" href="/legend#kfacet-quarantine" data-def-anchor="right" data-def="A row held back from being counted for or against the prediction, with a specific representation-level reason given. O_617 is the sole quarantine in v0.3h.">named quarantine</a>.
+                    </p>
+                </div>
+            </aside>
 
             <div class="iso-knob-row">
                 <div class="iso-knob">
@@ -787,7 +839,7 @@
                     The σ₃ workbench recovered the 21 strict choreographies from the catalog and cleanly split off 4 rotating relatives. That is a detector and literature-count <em>reconciliation</em>: 25 gauge-invariant = 21 strict + 4 relative, separated by 8 orders of magnitude in the rotation-angle metric the gate already computes. The four relatives sit outside the catalog's "single closed inertial-frame trajectory" convention — they are not literature errors.
                 </p>
                 <p>
-                    It is <strong>not</strong> theorem evidence for Sundog. The v0.2 daughter-count test that would have used this catalog was retired at its cheap precheck (K1), when the prediction reduced to the equivariance-only null (K<sub>facet</sub> = 0). K<sub>facet</sub> = 0 does not mean "no piano-trios exist"; it means the proposed static operator could not distinguish the Sundog claim from generic equivariant bifurcation. A v0.3 derivation is in flight and remains paper-only.
+                    It is <strong>not</strong> theorem evidence for Sundog. The v0.2 daughter-count test that would have used this catalog was retired at its cheap precheck (K1), when the prediction reduced to the equivariance-only null (<a class="sd-def" href="/legend#kfacet" data-def="A pre-registered structural-zero test on the strict G.2 catalog. For each row it asks whether the standard D₃ block is absent in the kernel by construction.">K<sub>facet</sub></a> = 0). K<sub>facet</sub> = 0 does not mean "no piano-trios exist"; it means the proposed static operator could not distinguish the Sundog claim from generic equivariant bifurcation. A v0.3 derivation is in flight and remains paper-only — see the <a href="/isotrophy">v0.3h K_facet verdict</a> and its three-stage <a class="sd-def" href="/legend#kfacet-audit-chain" data-def-anchor="right" data-def="A receipt-first, closure-relative pipeline: sentinel/Γ runner → adaptive-floor reprocessor → bridge audit. Constants and outcome categories are registered before interpretation.">audit chain</a> for the next strand.
                 </p>
             </div>
 
@@ -816,7 +868,9 @@
             <a href="/origin">Origin</a> |
             <a href="docs/README.md">Documentation</a> |
             <a href="docs/threebody-writeup.md">Writeup: Steering by the Shadow of Chaos</a> |
-            <a href="docs/SUNDOG_V_THREEBODY.md">Three-Body Roadmap</a>
+            <a href="docs/SUNDOG_V_THREEBODY.md">Three-Body Roadmap</a> |
+            <a href="/isotrophy">Isotrophy K_facet v0.3h</a> |
+            <a href="/legend#kfacet">Legend (vocabulary)</a>
         </p>
         <p class="footer-copyright">
             © 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
@@ -827,49 +881,47 @@
     // Isotrophy catalog sidecar: load the annotated bead-maze SVG and wire
     // the rotation-angle threshold slider to filter strict-vs-relative panels.
     // Data source: each <g class="iso-cell" data-rotation-rad="..."> in the
-    // SVG comes from results/.../residuals.csv via
-    // scripts/isotrophy_bead_maze_annotate.py. No physics runs at runtime.
+    // annotated SVG carries its per-orbit rotation angle in radians,
+    // emitted at build time by scripts/isotrophy_bead_maze_annotate.py.
     (function () {
-        const galleryEl = document.getElementById('iso-gallery');
         const slider = document.getElementById('iso-threshold');
-        const tauOut = document.getElementById('iso-tau-value');
-        const strictOut = document.getElementById('iso-strict-count');
-        const relOut = document.getElementById('iso-relative-count');
-        if (!galleryEl || !slider || !tauOut || !strictOut || !relOut) return;
-
-        const SUPERSCRIPT = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
-        function sup(s) { return String(s).split('').map(c => SUPERSCRIPT[c] || c).join(''); }
-        function formatTau(tau) {
-            if (tau >= 1) return tau.toFixed(2) + ' rad';
-            const exp = Math.floor(Math.log10(tau));
-            const mant = tau / Math.pow(10, exp);
-            return mant.toFixed(1) + ' × 10' + sup(exp) + ' rad';
+        const tauReadout = document.getElementById('iso-tau-value');
+        const strictCounter = document.getElementById('iso-strict-count');
+        const relativeCounter = document.getElementById('iso-relative-count');
+        const galleryEl = document.getElementById('iso-gallery');
+        if (!slider || !tauReadout || !strictCounter || !relativeCounter || !galleryEl) {
+            return;
         }
+
+        const fmtTau = function (tau) {
+            if (tau === 0) return '0 rad';
+            const abs = Math.abs(tau);
+            if (abs >= 0.01) return tau.toFixed(3) + ' rad';
+            const exp = Math.floor(Math.log10(abs));
+            const mant = tau / Math.pow(10, exp);
+            return mant.toFixed(1) + ' × 10' + String(exp).replace('-', '⁻').replace(/\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[+d]) + ' rad';
+        };
 
         let cells = [];
-        function update() {
-            const tau = Math.pow(10, parseFloat(slider.value));
-            let strict = 0, relative = 0;
+        const update = function () {
+            const exp = parseFloat(slider.value);
+            const tau = Math.pow(10, exp);
+            tauReadout.textContent = fmtTau(tau);
+            let strict = 0;
+            let relative = 0;
             cells.forEach((cell) => {
-                const angle = parseFloat(cell.dataset.rotationRad);
-                if (angle < tau) {
-                    cell.setAttribute('data-strict-shown', 'true');
-                    strict++;
-                } else {
-                    cell.setAttribute('data-strict-shown', 'false');
-                    relative++;
-                }
+                const rot = parseFloat(cell.getAttribute('data-rotation-rad'));
+                if (!isFinite(rot)) return;
+                const isStrict = rot < tau;
+                cell.setAttribute('data-strict-shown', String(isStrict));
+                if (isStrict) strict += 1; else relative += 1;
             });
-            tauOut.textContent = formatTau(tau);
-            strictOut.textContent = strict;
-            relOut.textContent = relative;
-        }
+            strictCounter.textContent = String(strict);
+            relativeCounter.textContent = String(relative);
+        };
 
         fetch('/media/isotrophy-bead-maze-annotated.svg', { cache: 'force-cache' })
-            .then((r) => {
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.text();
-            })
+            .then((res) => res.ok ? res.text() : Promise.reject(new Error('HTTP ' + res.status)))
             .then((svgText) => {
                 galleryEl.innerHTML = svgText;
                 galleryEl.removeAttribute('aria-busy');
@@ -882,6 +934,7 @@
             })
             .catch((err) => {
                 galleryEl.innerHTML = '<p class="iso-gallery-loading">Could not load gallery (' + err.message + '). The annotated SVG lives at <code>public/media/isotrophy-bead-maze-annotated.svg</code>; rerun <code>npm run build</code> or <code>python scripts/isotrophy_bead_maze_annotate.py</code> to refresh it.</p>';
+                galleryEl.removeAttribute('aria-busy');
             });
     })();
     </script>
