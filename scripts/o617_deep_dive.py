@@ -6,8 +6,9 @@ the six probes converge on a clear answer, the diagnostic can later be
 promoted to a `kfacet-row-anatomy` subcommand of the workbench.
 
 The probes triangulate the question: does the defective D3 at the bridge come
-from (a) a localized geometric anomaly, (b) a structurally weaker sigma_3,
-(c) a near-bifurcation Floquet structure, or (d) none of the above?
+from (a) a localized geometric anomaly, (b) the bridge direction carrying a
+non-D3 representation, (c) a near-bifurcation Floquet structure, or
+(d) none of the above?
 """
 from __future__ import annotations
 
@@ -224,8 +225,12 @@ def probe_4_invariant_sensitivity(M_i, audit, row):
     }
 
 
+def _csv_bool(value):
+    return str(value).strip().lower() == "true"
+
+
 def probe_5_cross_row_sigma3_residuals():
-    """Pull σ_3 and F_β residuals from the sigma3-scan receipt for the 21 strict rows."""
+    """Pull orientation-aware sigma_3 admission residuals for the 21 strict rows."""
     strict_indices = set(W.DEFAULT_KFACET_STRICT_INDICES)
     rows_data = []
     with SIGMA3_CSV.open("r", encoding="utf-8") as f:
@@ -234,6 +239,31 @@ def probe_5_cross_row_sigma3_residuals():
             idx = int(row["index"])
             if idx not in strict_indices:
                 continue
+            canonical_strict = _csv_bool(row["sigma_strict_single_curve_candidate"])
+            opposite_strict = _csv_bool(row["sigma_opposite_strict_single_curve_candidate"])
+            if canonical_strict and not opposite_strict:
+                admission_orientation = "canonical"
+                admission_residual = float(row["sigma_group_residual_inf"])
+                admission_to_closure = float(row["sigma_group_to_closure"])
+            elif opposite_strict and not canonical_strict:
+                admission_orientation = "opposite"
+                admission_residual = float(row["sigma_opposite_group_residual_inf"])
+                admission_to_closure = float(row["sigma_opposite_group_to_closure"])
+            elif canonical_strict and opposite_strict:
+                canonical_residual = float(row["sigma_group_residual_inf"])
+                opposite_residual = float(row["sigma_opposite_group_residual_inf"])
+                if canonical_residual <= opposite_residual:
+                    admission_orientation = "canonical"
+                    admission_residual = canonical_residual
+                    admission_to_closure = float(row["sigma_group_to_closure"])
+                else:
+                    admission_orientation = "opposite"
+                    admission_residual = opposite_residual
+                    admission_to_closure = float(row["sigma_opposite_group_to_closure"])
+            else:
+                admission_orientation = "none"
+                admission_residual = float("nan")
+                admission_to_closure = float("nan")
             rows_data.append(
                 {
                     "index": idx,
@@ -242,24 +272,35 @@ def probe_5_cross_row_sigma3_residuals():
                     "sigma_group_residual_inf": float(row["sigma_group_residual_inf"]),
                     "sigma_group_to_closure": float(row["sigma_group_to_closure"]),
                     "sigma_group_rotation_angle_rad": float(row["sigma_group_rotation_angle_rad"]),
+                    "sigma_strict_single_curve_candidate": canonical_strict,
+                    "sigma_opposite_group_residual_inf": float(row["sigma_opposite_group_residual_inf"]),
+                    "sigma_opposite_group_to_closure": float(row["sigma_opposite_group_to_closure"]),
+                    "sigma_opposite_strict_single_curve_candidate": opposite_strict,
+                    "admission_orientation": admission_orientation,
+                    "admission_residual_inf": admission_residual,
+                    "admission_to_closure": admission_to_closure,
                     "F_beta_residual_inf": float(row["F_beta_residual_inf"]),
                     "F_beta_to_closure": float(row["F_beta_to_closure"]),
                 }
             )
-    rows_data.sort(key=lambda r: r["sigma_group_residual_inf"])
+    rows_data.sort(key=lambda r: r["admission_residual_inf"])
     o617 = next(r for r in rows_data if r["index"] == 617)
-    sigma_residuals = sorted(r["sigma_group_residual_inf"] for r in rows_data)
-    rank = sigma_residuals.index(o617["sigma_group_residual_inf"])
+    admission_residuals = sorted(r["admission_residual_inf"] for r in rows_data)
+    rank = admission_residuals.index(o617["admission_residual_inf"])
     fbeta_residuals = sorted(r["F_beta_residual_inf"] for r in rows_data)
     rank_fbeta = fbeta_residuals.index(o617["F_beta_residual_inf"])
+    canonical_count = sum(1 for r in rows_data if r["admission_orientation"] == "canonical")
+    opposite_count = sum(1 for r in rows_data if r["admission_orientation"] == "opposite")
     return {
         "rows_count": len(rows_data),
         "O_617": o617,
-        "rank_in_sigma_residual_sorted_asc": rank,
+        "canonical_strict_count": canonical_count,
+        "opposite_strict_count": opposite_count,
+        "rank_in_admission_residual_sorted_asc": rank,
         "rank_in_F_beta_residual_sorted_asc": rank_fbeta,
-        "min_sigma_residual": float(sigma_residuals[0]),
-        "max_sigma_residual": float(sigma_residuals[-1]),
-        "median_sigma_residual": float(sigma_residuals[len(sigma_residuals) // 2]),
+        "min_admission_residual": float(admission_residuals[0]),
+        "max_admission_residual": float(admission_residuals[-1]),
+        "median_admission_residual": float(admission_residuals[len(admission_residuals) // 2]),
         "min_F_beta_residual": float(fbeta_residuals[0]),
         "max_F_beta_residual": float(fbeta_residuals[-1]),
         "median_F_beta_residual": float(fbeta_residuals[len(fbeta_residuals) // 2]),
@@ -345,11 +386,14 @@ def main():
 
     p5 = results["probe_5_cross_row_sigma3_residuals"]
     o617 = p5["O_617"]
-    print("\n--- Probe 5: Cross-row sigma_3 and F_beta residuals (21 strict rows) ---")
-    print(f"  O_617 sigma_group_residual:   {o617['sigma_group_residual_inf']:.4e}")
-    print(f"  O_617 sigma_group_to_closure: {o617['sigma_group_to_closure']:.4e}  (smaller=tighter)")
-    print(f"  Catalog range sigma residual: [{p5['min_sigma_residual']:.2e}, {p5['max_sigma_residual']:.2e}]; median {p5['median_sigma_residual']:.2e}")
-    print(f"  O_617 rank in sigma residual (asc): {p5['rank_in_sigma_residual_sorted_asc']} of {p5['rows_count']}")
+    print("\n--- Probe 5: Cross-row orientation-aware sigma_3 and F_beta residuals (21 strict rows) ---")
+    print(f"  Strict split: canonical={p5['canonical_strict_count']}; opposite={p5['opposite_strict_count']}")
+    print(f"  O_617 admission orientation: {o617['admission_orientation']}")
+    print(f"  O_617 admission residual:   {o617['admission_residual_inf']:.4e}")
+    print(f"  O_617 admission to closure: {o617['admission_to_closure']:.4e}  (smaller=tighter)")
+    print(f"  O_617 canonical residual:   {o617['sigma_group_residual_inf']:.4e}  (diagnostic only for opposite rows)")
+    print(f"  Catalog range admission residual: [{p5['min_admission_residual']:.2e}, {p5['max_admission_residual']:.2e}]; median {p5['median_admission_residual']:.2e}")
+    print(f"  O_617 rank in admission residual (asc): {p5['rank_in_admission_residual_sorted_asc']} of {p5['rows_count']}")
     print(f"  O_617 F_beta_residual:   {o617['F_beta_residual_inf']:.4e}")
     print(f"  Catalog range F_beta residual: [{p5['min_F_beta_residual']:.2e}, {p5['max_F_beta_residual']:.2e}]; median {p5['median_F_beta_residual']:.2e}")
     print(f"  O_617 rank in F_beta residual (asc): {p5['rank_in_F_beta_residual_sorted_asc']} of {p5['rows_count']}")

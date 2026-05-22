@@ -99,6 +99,7 @@ Legend: ✓ = done · ◐ = partial · ✗ = missing · — = N/A for the page's
 | `/h-of-x` | A | ✓ | h-of-x.png | TechArticle | ✓ | ✓ | pillar card | ✓ | promoted from B 2026-05-21 PM; pillar card added to `Load-Bearing Evidence` 2026-05-21 PM (late). Per-node clickable equation + parhelion sketch. |
 | `/mesa` | A | ✓ | mesa.png | TechArticle | ✓ | ✓ | pillar card | ✓ | promoted from B 2026-05-21 PM; pillar card refactored to per-region clicks (hold/cliff/breach/locus) 2026-05-21 PM (late). |
 | `/structural-failure` | A | ✓ | structural-failure.png | TechArticle | ✓ | ✓ | pillar card | ✓ | promoted from B 2026-05-21 PM; pillar card refactored to per-node clicks (P0/P1/Cut2/Cut3/apparatus) 2026-05-21 PM (late). |
+| `/isotrophy` | A | ✓ | isotrophy.png | TechArticle | ✓ | ✓ | sitemap | ✓ | filed 2026-05-22 with full Class A treatment. Public-facing companion to `internal/anniversary/kfacet_v03h_writeup.md`. Viz is a 21-cell catalog grid (20 gold structural-zero receipts + 1 dashed-red quarantine for O_617). Sister ledger at [`SUNDOG_V_ISOTROPHY_KFACET.md`](SUNDOG_V_ISOTROPHY_KFACET.md). No homepage pillar yet — open follow-up. |
 | `/geometry` | A | ✓ | geometry.png | TechArticle | ✓ | ✓ | sitemap | ✓ | added to matrix 2026-05-21 PM (final); page exists at 774 lines but wasn't tracked. Viz is a 3-tile workbench shelf (cap-set + halo + h(x)). No homepage pillar yet — geometry is a hub for the existing pillars rather than a peer. |
 | `/sundog-workbench` | C | ✓ (generic) | sundog-generic.png | TechArticle | ✓ | ✓ | — | ✓ | shared generic OG card 2026-05-21 PM (final); being absorbed into index hero per UI_UX 4a so per-page bespoke deferred indefinitely. |
 | `/chat` | C | ✓ (generic) | sundog-generic.png | Article | ✓ | ✓ | header nav | ✓ | shared generic OG card 2026-05-21 PM (final); interactive widget, page-specific title/desc cover the trace-conditioned chat experiment hook. |
@@ -122,9 +123,9 @@ the Class A pages did. Promotion notes retained here for posterity.
 
 ## Phase Status
 
-**Phase 1 (Bucket 1) — CLEARED 2026-05-21.** Thirteen Class A pages
-ship with OG block + designed 1200×630 image + JSON-LD + tuned
-title/description + sitemap entry + homepage internal link. The three
+**Phase 1 (Bucket 1) — CLEARED 2026-05-21; one Class A page added 2026-05-22.**
+Fourteen Class A pages ship with OG block + designed 1200×630 image +
+JSON-LD + tuned title/description + sitemap entry + homepage internal link. The three
 load-bearing pillar pages (`/h-of-x`, `/mesa`, `/structural-failure`)
 moved from header/footer references to dedicated pillar cards in the
 `Load-Bearing Evidence` section on `index.html`, with per-node
@@ -407,6 +408,16 @@ Until all four are true, this is a living roadmap.
   Net: thirteen Class A, four Class C (minimal-OG), three Class D
   (no-index). Every page in `site-pages.json` now has a defensible
   matrix row.
+- 2026-05-22 — `/isotrophy` filed as a new Class A page. Public-facing
+  companion to `internal/anniversary/kfacet_v03h_writeup.md`: a static
+  narrative page rendering the 20/21 structural-zero verdict + 1 named
+  quarantine (O_617) with explicit "audit chain is intact; theorem-facing
+  result is not closed" boundary. Full Bucket 1 treatment landed (OG
+  card with paper-ruled aesthetic + 21-cell catalog grid + sticky-note
+  verdict tiles; JSON-LD TechArticle; sitemap entry; site-pages.json
+  manifest entry; sister ledger at
+  [`SUNDOG_V_ISOTROPHY_KFACET.md`](SUNDOG_V_ISOTROPHY_KFACET.md)). No
+  homepage pillar yet — open follow-up. Class A count: 14.
 
 **Phase 1 closeout summary:** thirteen Class A pages, thirteen OG cards, thirteen
 JSON-LD blocks, all internal links present, all sitemap entries

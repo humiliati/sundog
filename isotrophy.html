@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sundog Isotrophy K_facet v0.3h: 20 structural-zero receipts plus one named quarantine (O_617), with the defect located in a bridge direction outside the valid D3 representation. The audit chain is intact; the theorem-facing result is not closed.">
+    <meta name="keywords" content="K_facet, isotrophy, choreography, three-body, structural zero, audit chain, Sundog, claim hygiene, quarantine, Golod-Shafarevich">
+    <meta name="theme-color" content="#1A3A52">
+    <meta name="author" content="Sundog Research Lab">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/isotrophy">
+    <title>Isotrophy K_facet v0.3h — Sundog</title>
+
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="Isotrophy K_facet v0.3h — 20 structural zeros, 1 named quarantine">
+    <meta property="og:description" content="A three-stage audit chain on 21 strict G.2 single-curve choreographies. 20 returned structural-zero receipts; O_617 was quarantined for a bridge direction outside the valid D3 representation. The audit chain is intact.">
+    <meta property="og:image" content="https://sundog.cc/og/isotrophy.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Isotrophy K_facet card: a doctor's-office bead-maze with 20 gold beads on a sweeping wire (structural-zero receipts) and O_617 isolated on its own dashed-red side loop with a quarantine ring.">
+    <meta property="og:url" content="https://sundog.cc/isotrophy">
+    <meta property="article:published_time" content="2026-05-22T00:00:00Z">
+    <meta property="article:modified_time" content="2026-05-22T00:00:00Z">
+    <meta property="article:section" content="Research">
+    <meta property="article:tag" content="K_facet">
+    <meta property="article:tag" content="isotrophy">
+    <meta property="article:tag" content="three-body">
+    <meta property="article:tag" content="audit chain">
+    <meta property="article:tag" content="claim hygiene">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Isotrophy K_facet v0.3h — 20 structural zeros, 1 named quarantine">
+    <meta name="twitter:description" content="A three-stage audit chain on 21 strict G.2 single-curve choreographies. 20 returned structural-zero receipts; O_617 was quarantined.">
+    <meta name="twitter:image" content="https://sundog.cc/og/isotrophy.png">
+    <meta name="twitter:image:alt" content="Isotrophy K_facet card: a doctor's bead-maze with 20 gold beads (structural-zero receipts) and O_617 isolated on a side loop with a dashed-red quarantine ring.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Isotrophy K_facet v0.3h — 20 structural zeros, 1 named quarantine",
+      "description": "A pre-registered three-stage audit chain on 21 strict G.2 single-curve choreographies. 20 rows returned structural-zero receipts; one row (O_617) was quarantined for a bridge direction outside the valid D3 representation rather than an audit-chain failure.",
+      "image": "https://sundog.cc/og/isotrophy.png",
+      "datePublished": "2026-05-22",
+      "dateModified": "2026-05-22",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "author": {
+        "@type": "Organization",
+        "name": "Sundog Research Lab",
+        "url": "https://sundog.cc"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stellar Aqua LLC",
+        "url": "https://sundog.cc"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://sundog.cc/isotrophy"
+      },
+      "about": [
+        { "@type": "Thing", "name": "K_facet" },
+        { "@type": "Thing", "name": "Three-body choreographies" },
+        { "@type": "Thing", "name": "Structural-zero receipt" },
+        { "@type": "Thing", "name": "Audit chain" },
+        { "@type": "Thing", "name": "Claim hygiene" }
+      ],
+      "keywords": "K_facet, isotrophy, choreography, three-body, structural zero, audit chain, Sundog, claim hygiene, quarantine"
+    }
+    </script>
+    <!-- OG-BLOCK-END -->
+
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        main {
+            background:
+                radial-gradient(circle at 18% 8%, rgba(244, 196, 48, 0.12), transparent 22rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 36rem);
+        }
+
+        .iso-hero {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 7rem 2rem 2rem;
+        }
+
+        .iso-hero .eyebrow,
+        .iso-section .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .iso-hero h1 {
+            max-width: 920px;
+            margin: 1rem 0 1.25rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(2.1rem, 6.5vw, 4.4rem);
+            line-height: 1.04;
+            overflow-wrap: anywhere;
+        }
+
+        .iso-hero .lede {
+            max-width: 780px;
+            color: #40505C;
+            font-size: 1.15rem;
+            line-height: 1.75;
+            overflow-wrap: break-word;
+        }
+
+        .status-ribbon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.75rem;
+        }
+
+        .status-ribbon span {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 0.45rem 0.75rem;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .status-ribbon .pass {
+            border-color: rgba(46, 125, 90, 0.45);
+            background: rgba(46, 125, 90, 0.06);
+            color: #2E7D5A;
+        }
+        .status-ribbon .quarantine {
+            border-color: rgba(181, 58, 44, 0.45);
+            background: rgba(181, 58, 44, 0.06);
+            color: #B53A2C;
+        }
+
+        .iso-section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem 2rem;
+        }
+
+        .iso-card {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FFFFFF;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .iso-card h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.4rem;
+            margin: 0 0 0.75rem;
+        }
+
+        .iso-card p {
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 0.85rem;
+        }
+
+        .iso-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .iso-card code {
+            background: rgba(244, 196, 48, 0.12);
+            color: var(--primary-dark);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-family: var(--sd-font-data);
+            font-size: 0.95em;
+        }
+
+        .load-bearing-quote {
+            border-left: 4px solid var(--accent-gold, #F4C430);
+            padding: 0.85rem 1.25rem;
+            margin: 1rem 0;
+            background: rgba(244, 196, 48, 0.06);
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.15rem;
+            line-height: 1.55;
+        }
+
+        /* Grid showing 20 + 1 cells */
+        .audit-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.4rem;
+            margin: 1.25rem 0;
+            max-width: 560px;
+        }
+
+        .audit-cell {
+            aspect-ratio: 1;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .audit-cell.zero {
+            background: #F4C430;
+            border: 1px solid #C99517;
+            color: #1A3A52;
+        }
+
+        .audit-cell.quarantine {
+            background: #FFFFFF;
+            border: 1.5px dashed #D45A4A;
+            color: #B53A2C;
+        }
+
+        .audit-caption {
+            display: flex;
+            gap: 1.25rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            color: #6A7680;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .audit-caption .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .audit-caption .swatch {
+            width: 0.85rem;
+            height: 0.85rem;
+            border-radius: 2px;
+            display: inline-block;
+        }
+        .audit-caption .swatch.zero { background: #F4C430; border: 1px solid #C99517; }
+        .audit-caption .swatch.quarantine { background: #FFFFFF; border: 1.5px dashed #D45A4A; }
+
+        .stage-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stage-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 1rem 1.1rem;
+        }
+
+        .stage-card h3 {
+            color: var(--primary-dark);
+            font-size: 1rem;
+            margin: 0 0 0.4rem;
+        }
+
+        .stage-card .num {
+            display: inline-block;
+            background: var(--primary-dark);
+            color: #FFFFFF;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .stage-card p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        .not-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .not-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.1rem;
+        }
+
+        .not-card h3 {
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+            margin: 0 0 0.5rem;
+        }
+
+        .not-card h3::before {
+            content: "✗ ";
+            color: #B53A2C;
+            font-weight: 800;
+        }
+
+        .not-card p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .source-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .source-list a {
+            display: block;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+            color: var(--primary-mid);
+            text-decoration: none;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .source-list a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 760px) {
+            .iso-hero { padding: 5.5rem 1.25rem 1.5rem; }
+            .iso-section { padding: 1rem 1.25rem; }
+            .audit-grid { grid-template-columns: repeat(7, 1fr); max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="iso-hero">
+            <p class="eyebrow">Isotrophy · K_facet · v0.3h</p>
+            <h1>The audit chain catches itself working.</h1>
+            <p class="lede">
+                Twenty structural-zero receipts and one named quarantine. A
+                pre-registered three-stage audit chain ran 21 strict G.2
+                single-curve choreographies through the K_facet test. For 20
+                rows the standard D₃ sector is structurally absent — the
+                prediction is zero by construction, not by tolerance or
+                post-hoc pruning. The 21st row (O_617) was quarantined, not
+                failed: the deep dive locates the defect in a bridge direction
+                outside the valid D3 representation, not in the audit chain
+                itself.
+            </p>
+            <div class="status-ribbon" aria-label="v0.3h verdict">
+                <span>v0.3h · 2026-05-22</span>
+                <span class="pass">20 structural-zero receipts</span>
+                <span class="quarantine">1 named quarantine (O_617)</span>
+                <span>audit chain intact</span>
+                <span>theorem-facing result: not closed</span>
+            </div>
+        </section>
+
+        <section class="iso-section" aria-label="Result">
+            <div class="iso-card">
+                <p class="eyebrow">The Load-Bearing Statement</p>
+                <h2>20/21 structural zeros plus one quarantined O_617 defective-D₃ bridge.</h2>
+                <p>
+                    The phrasing matters. This is <strong>not</strong> a closed 21/21
+                    theorem-facing result, and any promo or external write-up that
+                    collapses the verdict to 21/21 silently retires the discipline
+                    that makes the result interesting.
+                </p>
+                <div class="load-bearing-quote">
+                    v0.3h resolves the eligible strict catalog rows as structural
+                    zeros. The sole quarantined row, O_617, is explained by weak
+                    σ₃ catalog inclusion rather than by a failure of the Γᵢ audit
+                    chain.
+                </div>
+                <div class="audit-grid" aria-label="21 catalog rows: 20 structural-zero plus 1 quarantine">
+                    <div class="audit-cell zero" title="row 01 · structural-zero receipt">01</div>
+                    <div class="audit-cell zero" title="row 02 · structural-zero receipt">02</div>
+                    <div class="audit-cell zero" title="row 03 · structural-zero receipt">03</div>
+                    <div class="audit-cell zero" title="row 04 · structural-zero receipt">04</div>
+                    <div class="audit-cell zero" title="row 05 · structural-zero receipt">05</div>
+                    <div class="audit-cell zero" title="row 06 · structural-zero receipt">06</div>
+                    <div class="audit-cell zero" title="row 07 · structural-zero receipt">07</div>
+                    <div class="audit-cell zero" title="row 08 · structural-zero receipt">08</div>
+                    <div class="audit-cell zero" title="row 09 · structural-zero receipt">09</div>
+                    <div class="audit-cell zero" title="row 10 · structural-zero receipt">10</div>
+                    <div class="audit-cell zero" title="row 11 · structural-zero receipt">11</div>
+                    <div class="audit-cell zero" title="row 12 · structural-zero receipt">12</div>
+                    <div class="audit-cell zero" title="row 13 · structural-zero receipt">13</div>
+                    <div class="audit-cell zero" title="row 14 · structural-zero receipt">14</div>
+                    <div class="audit-cell zero" title="row 15 · structural-zero receipt">15</div>
+                    <div class="audit-cell zero" title="row 16 · structural-zero receipt">16</div>
+                    <div class="audit-cell zero" title="row 17 · structural-zero receipt">17</div>
+                    <div class="audit-cell zero" title="row 18 · structural-zero receipt">18</div>
+                    <div class="audit-cell zero" title="row 19 · structural-zero receipt">19</div>
+                    <div class="audit-cell zero" title="row 20 · structural-zero receipt">20</div>
+                    <div class="audit-cell quarantine" title="O_617 · quarantined (defective-D3 bridge outside valid representation)">617</div>
+                </div>
+                <div class="audit-caption">
+                    <span class="chip"><span class="swatch zero"></span> structural-zero receipt · c<sub>i</sub> = d<sub>i</sub> = 0 by construction</span>
+                    <span class="chip"><span class="swatch quarantine"></span> quarantined · defective-D3 bridge outside valid representation</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="iso-section" aria-label="Audit chain">
+            <div class="iso-card">
+                <p class="eyebrow">The Audit Chain</p>
+                <h2>Receipt-first, closure-relative, three stages.</h2>
+                <p>
+                    The audit was deliberately constructed so that constants and
+                    outcome categories were registered in code and spec before
+                    interpretation. No row-specific knobs were introduced. Each row
+                    either became a structural-zero receipt, a named refinement
+                    case, or an excluded defective case.
+                </p>
+                <div class="stage-list">
+                    <div class="stage-card">
+                        <h3><span class="num">Stage 1</span> Sentinel / Γ runner</h3>
+                        <p>
+                            Built M<sub>i</sub>, typed D₃ operators, reduced ω, and
+                            the closed-form ∂<sub>ε</sub> M<sub>i</sub>; gated D₃
+                            relations, leakage, and finite-difference consistency.
+                        </p>
+                    </div>
+                    <div class="stage-card">
+                        <h3><span class="num">Stage 2</span> Adaptive-floor reprocessor</h3>
+                        <p>
+                            Reused saved <code>.npy</code> artifacts (no
+                            integration). Chose the smallest pre-registered floor
+                            satisfying three guards: D₃ leakage ≤ 1e-3, gap ratio
+                            ≤ 1e-3, and first-rejected singular value ≥ 1e-3.
+                        </p>
+                    </div>
+                    <div class="stage-card">
+                        <h3><span class="num">Stage 3</span> Bridge audit</h3>
+                        <p>
+                            Examined any row not resolved by the adaptive-floor
+                            rule. Tested bridge vectors for neutral overlap,
+                            Jordan behavior, and defective D₃ signatures.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="iso-section" aria-label="About O_617">
+            <div class="iso-card">
+                <p class="eyebrow">The Named Quarantine</p>
+                <h2>Why O_617 is held back, and where the defect actually lives.</h2>
+                <p>
+                    At the bridge-admitted kernel, O_617's representation reads
+                    <code>T(2) + S(6) + E(1)</code>, which is not a valid real
+                    standard D₃ block. The Jordan-chain test amplifies rather
+                    than drops (<code>90.04</code>) and the order-3 relation
+                    fails at about four percent
+                    (<code>‖σ₃³ − I‖<sub>∞</sub> = 3.96e-2</code>).
+                </p>
+                <p>
+                    The companion deep dive corrects the first attribution:
+                    O_617 is a clean opposite-strict catalog row with admission
+                    residual <code>1.01e-8</code>. The earlier
+                    <code>1.62e-1</code> value is the canonical residual and is
+                    diagnostic-only for this opposite-strict row. The defect
+                    therefore lives in the bridge representation, not in the
+                    orbit's Γ<sub>i</sub>. The audit chain itself is intact.
+                </p>
+                <p>
+                    O_617 is quarantined, not counted for or against the
+                    prediction. Naming the quarantine is the point: a
+                    discipline that absorbs out-of-scope cases into a clean
+                    number is not the discipline this audit was built around.
+                </p>
+            </div>
+        </section>
+
+        <section class="iso-section" aria-label="Boundaries">
+            <p class="eyebrow">Claim Boundary</p>
+            <div class="not-grid">
+                <div class="not-card">
+                    <h3>Not a closed 21/21 theorem-facing result.</h3>
+                    <p>
+                        The audit chain is intact. The theorem-facing result is
+                        not closed. These are different statements.
+                    </p>
+                </div>
+                <div class="not-card">
+                    <h3>Not a proof of Sundog.</h3>
+                    <p>
+                        Structural zeros at m₃ = 1 for the strict G.2 catalog
+                        are a specific, defensible, narrow result. They do not
+                        extend to a universal theorem of choreography
+                        isotropy.
+                    </p>
+                </div>
+                <div class="not-card">
+                    <h3>Not "we caught the edge case."</h3>
+                    <p>
+                        The O_617 quarantine is explained with a specific
+                        representation-level diagnosis at the bridge boundary,
+                        not marketed as proof of care. The deep dive runs six
+                        no-integration probes to triangulate the defect.
+                    </p>
+                </div>
+                <div class="not-card">
+                    <h3>Not a theorem of universal isotropy.</h3>
+                    <p>
+                        K_facet at m₃ = 1 is one slice. The wider isotrophy
+                        roadmap (descent from Z₃-choreographies into
+                        m₁ = m₂ piano-trios) remains the live, longer-running
+                        program.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="iso-section">
+            <p class="eyebrow">Inspection Trail</p>
+            <div class="source-list">
+                <a href="docs/SUNDOG_V_ISOTROPHY_KFACET.md">Sundog · K_facet v0.3h Ledger</a>
+                <a href="docs/sundog_v_isotrophy.md">Isotrophy Workbench Roadmap</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/internal/anniversary/kfacet_v03h_writeup.md">v0.3h methodology + result writeup (internal)</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/internal/anniversary/kfacet_v03h_o617_deep_dive.md">O_617 deep dive (internal)</a>
+                <a href="https://github.com/humiliati/sundog/blob/main/internal/anniversary/kfacet-runner-spec.md">Runner spec (internal)</a>
+                <a href="docs/SUNDOG_V_THREEBODY.md">Three-Body Roadmap</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
+            <a href="docs/presentation/claims-and-scope.md">Claims Policy</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>

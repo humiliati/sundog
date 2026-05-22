@@ -626,6 +626,102 @@
             </div>
         </section>
 
+        <section class="ud-section" aria-label="Substrate rhyme for the rest of us">
+            <p class="eyebrow">Substrate rhyme for the rest of us</p>
+            <h2>What this has to do with a chatbot under pressure.</h2>
+            <p>
+                The question that lands hardest from a non-mathematician
+                reader is the right question: <em>so what?</em> Two algebraic
+                shadows beating two decades-long discrete-geometry walls is
+                pretty, but where does the move show up in a system anyone
+                actually uses? The honest answer is the one a Reddit mod —
+                a Sōtō Zen practitioner and a computer scientist — gave us
+                back, sharper than we had been able to put it: a
+                conversational agent under partial observability is doing
+                the same move, badly, every time it stays on task. It is
+                trying to read its trajectory off something more stable
+                than the raw context drifting past.
+            </p>
+            <p>
+                The Zen-friendly version is <em>meditative object</em>: a
+                small structured thing the agent maintains and returns to,
+                rather than reasoning from the unbounded surface of its
+                conversation. The engineering-friendly version is
+                <em>a maintained artifact in the prompt</em> — a tool-call
+                ledger, a domain-model file, a checked structural object —
+                that the agent emits and re-reads each turn. Both names
+                point at the same thing: an algebraic shadow the agent can
+                touch directly, in lieu of a residual stream it cannot.
+            </p>
+            <div class="ud-grid">
+                <div class="ud-card">
+                    <h3>The body, in three places</h3>
+                    <p>
+                        Cap-set: dots in a finite-field grid. Unit-distance:
+                        dots in the plane. Chatbot: tokens of a
+                        conversation. Each is a combinatorial body that
+                        resists direct measurement for far longer than its
+                        statement deserves.
+                    </p>
+                </div>
+                <div class="ud-card">
+                    <h3>The shadow, in three places</h3>
+                    <p>
+                        Cap-set: polynomial degree over F<sub>3</sub>.
+                        Unit-distance: class-group pigeonhole inside a CM
+                        lattice. Chatbot: a maintained ledger or structured
+                        artifact whose presence in the prompt is correlated
+                        with the residual-stream geometry that shapes the
+                        next token.
+                    </p>
+                </div>
+                <div class="ud-card">
+                    <h3>The empirical anchor we have</h3>
+                    <p>
+                        <a href="/chat">Sundog's chat experiment</a>:
+                        zero unsafe-accepts across 5,670 adversarial trials
+                        spanning six model implementations across four
+                        training lineages — OpenAI, Anthropic, Llama at two
+                        sizes, Qwen, plus a deterministic compositor
+                        baseline. The ledger-packet artifact is the only
+                        thing held constant across stacks.
+                    </p>
+                </div>
+                <div class="ud-card">
+                    <h3>Why that result counts as evidence</h3>
+                    <p>
+                        If something generalises across that many lineages
+                        with no model access, something stack-invariant is
+                        happening. The most parsimonious explanation is
+                        that the artifact is keeping the relevant
+                        low-dimensional subspaces aligned in each model's
+                        residual stream — the same subspaces mechanistic-interpretability
+                        work has been mapping for years.
+                    </p>
+                </div>
+            </div>
+            <div class="claim-note">
+                <p>
+                    <strong>Claim boundary, again, because it matters here:</strong>
+                    this card-block is editorial. It is the move Sundog
+                    argues for, not a theorem it has proved. The
+                    0&nbsp;/&nbsp;5,670 chat result is empirical and lives
+                    at the "externally testable" tier. The mathematical
+                    proofs of cap-set and unit-distance are at the
+                    "proved" tier. The claim that the chatbot case is an
+                    instance of the same operator is at the "editorial /
+                    aspirational" tier, and it is published so it can be
+                    falsified — most concretely by mech-interp probe
+                    experiments that distinguish structured-artifact
+                    context from matched-length unstructured prose. If
+                    those probes show the residual-stream subspaces do
+                    not depend on artifact presence, the bridge between
+                    the math and the chatbot case is weaker than this
+                    page claims, and we want to know.
+                </p>
+            </div>
+        </section>
+
         <section class="ud-section" aria-label="Evidence tiers">
             <p class="eyebrow">Evidence-tier reading</p>
             <h2>What this overlay claims, and at what tier.</h2>
@@ -691,7 +787,10 @@
                         observability — read shadows as data, not as proxy.
                         This is Sundog's broader hypothesis. It is informed
                         by the proof but not entailed by it. Treated as a
-                        direction for work, not a conclusion.
+                        direction for work, not a conclusion. The chat
+                        experiment's 0&nbsp;/&nbsp;5,670 result, and the
+                        layperson substrate-rhyme section above, are the
+                        current public evidence on this tier.
                     </p>
                 </div>
             </div>
@@ -716,7 +815,9 @@
                 <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">OpenAI · Unit-distance disproof announcement (May 2026)</a>
                 <a href="https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-proof.pdf">OpenAI · Proof PDF (Planar Point Sets with Many Unit Distances)</a>
                 <a href="/capset">Sundog · Cap-set workbench (precedent for the substrate move)</a>
+                <a href="/chat">Sundog · Chat experiment (0 / 5,670 empirical anchor)</a>
                 <a href="docs/SUNDOG_V_CAPSET.md">Sundog · Capset ledger (coupling to the unit-distance result)</a>
+                <a href="docs/SUNDOG_V_CHAT.md">Sundog · Chat ledger (the artifact-and-stack-invariance experiment)</a>
                 <a href="https://en.wikipedia.org/wiki/Unit_distance_graph">Unit-distance graph — overview</a>
                 <a href="https://en.wikipedia.org/wiki/Golod%E2%80%93Shafarevich_theorem">Golod–Shafarevich theorem</a>
                 <a href="https://arxiv.org/abs/math/0006148">Hajir–Maire · Asymptotically good towers of global fields</a>

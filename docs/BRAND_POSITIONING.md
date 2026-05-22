@@ -118,6 +118,45 @@ Use "surfaces" rather than "proofs" when discussing those systems together.
 Each system shows where the idea can be made practical, but not every system
 carries the same evidence weight.
 
+### The Audit-Chain Discipline (2026-05-22 update)
+
+As of K_facet v0.3h, the discipline that runs through all of the above —
+pre-registered outcome categories, no row-specific knobs, named
+quarantines instead of post-hoc pruning — has a publishable
+mathematical receipt to point at, alongside the photometric controller
+and the chat experiment. The v0.3h audit chain ran 21 strict G.2
+single-curve choreographies and returned **20 structural-zero receipts
+plus one named quarantine (O_617)**, with the quarantine's defect
+located in a bridge direction outside the valid D3 representation rather
+than in the audit method itself. Writeup:
+`internal/anniversary/kfacet_v03h_writeup.md`.
+
+For brand purposes this matters because it is the first time the same
+discipline that gates Sundog's control workbenches and Ask Sundog's
+claim-boundary behavior has produced a result on theorem-adjacent
+mathematics. The brand can now point at three tiers of artifact that
+all share the same discipline shape:
+
+- **Photometric mirror alignment** — the paper-grade controlled
+  experiment.
+- **Trace-conditioned chat experiment** — claim-boundary preservation
+  under adversarial pressure (zero unsafe-accepts across 5,670 trials).
+- **K_facet v0.3h audit chain** — structural-zero receipts on
+  theorem-adjacent mathematics with one named quarantine.
+
+The load-bearing brand statement is *"the discipline produces named
+artifacts"* — not *"the discipline is right"*. The v0.3h quarantine is
+the load-bearing demonstration: a discipline that names its
+out-of-scope cases instead of absorbing them is the kind a reviewer
+should trust.
+
+When promo copy mentions the v0.3h result, **the 20/21 and the
+quarantine must appear in the same sentence**, and O_617 must be named.
+Anything that collapses to "Sundog's audit chain just delivered a 20/21
+result on choreography isotropy" silently retires the discipline that
+makes the result interesting.
+
+
 ## About Page Spine
 
 The About page should be the public identity layer before readers invent one.
