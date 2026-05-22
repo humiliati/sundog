@@ -176,6 +176,14 @@
             overflow: hidden;
         }
 
+        /* Per-node clickable SVGs replace the whole-SVG hyperlink for pillars.
+           Disable the shared .proof-item:hover card-lift for pillar items —
+           the whole card lifting on per-node hover is disorienting. Keep the
+           border/shadow change as the card-level hover affordance. */
+        .proof-item:has(svg.pillar-svg):hover {
+            transform: none;
+        }
+
         .proof-visual-link {
             display: flex;
             width: 100%;
@@ -191,11 +199,27 @@
             object-fit: contain;
         }
 
-        .proof-visual-link svg.pillar-svg {
+        svg.pillar-svg {
             display: block;
             width: 100%;
             height: auto;
             max-height: clamp(11rem, 24vw, 18rem);
+        }
+
+        /* Per-node SVG hyperlinks: pointer cursor, subtle brighten on hover,
+           accessible focus outline. Browsers render the <title> child as a
+           native tooltip on hover/focus. */
+        svg.pillar-svg a {
+            cursor: pointer;
+            outline: none;
+        }
+        svg.pillar-svg a:hover,
+        svg.pillar-svg a:focus {
+            filter: drop-shadow(0 1px 2px rgba(26, 58, 82, 0.25)) brightness(1.05);
+        }
+        svg.pillar-svg a:focus-visible > * {
+            stroke: var(--accent-gold, #F4C430);
+            stroke-width: 2.5;
         }
 
         .proof-intro {
@@ -1713,158 +1737,203 @@
                 <span class="proof-label pillar">Load-bearing pillar</span>
                 <h4>The First Equation</h4>
                 <div class="proof-placeholder pillar-viz">
-                    <a class="proof-visual-link" href="/h-of-x" aria-label="Open the h(x) math workbench">
-                        <svg class="pillar-svg" viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The equation cos(h) equals R sub 22 divided by alpha sub 0, framed as the promoted parhelion-offset inverse">
-                            <rect x="6" y="6" width="348" height="188" rx="8" fill="#FDFDFC" stroke="#CFD8DC" stroke-width="1.5"/>
-                            <text x="180" y="22" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">PROMOTED INVERSE</text>
+                    <svg class="pillar-svg" viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The equation cos(h) equals R sub 22 divided by alpha sub 0, framed as the promoted parhelion-offset inverse">
+                        <rect x="6" y="6" width="348" height="188" rx="8" fill="#FDFDFC" stroke="#CFD8DC" stroke-width="1.5"/>
+                        <text x="180" y="22" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">PROMOTED INVERSE</text>
+                        <a href="/h-of-x">
+                            <title>Open the interactive h(x) math workbench</title>
                             <text x="180" y="92" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#1A3A52" text-anchor="middle" font-style="italic">cos(h) = R₂₂ / α₀</text>
-                            <text x="180" y="128" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#40505C" text-anchor="middle" font-style="italic">h: sun altitude   ·   α₀: parhelion offset</text>
-                            <text x="180" y="156" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#9AA4AC" text-anchor="middle" font-style="italic">eligible on a strict 3-photo subset</text>
-                            <!-- small parhelion sketch -->
+                        </a>
+                        <text x="180" y="128" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#40505C" text-anchor="middle" font-style="italic">h: sun altitude   ·   α₀: parhelion offset</text>
+                        <text x="180" y="156" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#9AA4AC" text-anchor="middle" font-style="italic">eligible on a strict 3-photo subset</text>
+                        <!-- small parhelion sketch -->
+                        <a href="/sundog">
+                            <title>Open the visual Halo Atlas (parhelion in context)</title>
                             <g transform="translate(180,182)">
                                 <line x1="-50" y1="0" x2="50" y2="0" stroke="#9AA4AC" stroke-width="0.8"/>
                                 <polygon points="0,-7 7,0 0,7 -7,0" fill="#F4C430" stroke="#C99517" stroke-width="0.9"/>
                                 <polygon points="-38,-4 -32,0 -38,4 -44,0" fill="#F4C430" stroke="#C99517" stroke-width="0.7"/>
                                 <polygon points="38,-4 44,0 38,4 32,0" fill="#F4C430" stroke="#C99517" stroke-width="0.7"/>
                             </g>
-                        </svg>
-                    </a>
+                        </a>
+                    </svg>
                 </div>
                 <p>Parhelion offset gives sun altitude through the promoted inverse — with the eligibility boundary visible.</p>
                 <div class="proof-actions" aria-label="h(x) inspection links">
                     <a href="/h-of-x">Open math workbench &rarr;</a>
-                    <a href="docs/SUNDOG_V_GEOMETRY.md">Read geometry roadmap &rarr;</a>
+                    <a href="/sundog">Visual atlas &rarr;</a>
+                    <a href="docs/SUNDOG_V_GEOMETRY.md">Geometry roadmap &rarr;</a>
                 </div>
             </div>
             <div class="proof-item" id="structural-boundary-preview">
                 <span class="proof-label pillar">Load-bearing pillar</span>
                 <h4>Structural Failure Boundary Map</h4>
                 <div class="proof-placeholder pillar-viz">
-                    <a class="proof-visual-link" href="/structural-failure" aria-label="Open the structural failure boundary map">
-                        <svg class="pillar-svg" viewBox="0 0 380 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five-locus boundary map: P0 and P1 passed, Cut 2 separability, Cut 3 still held, with a central apparatus node">
-                            <text x="190" y="20" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">FIVE-LOCUS BOUNDARY MAP</text>
-                            <!-- Connecting lines -->
-                            <g stroke="#9AA4AC" stroke-width="0.9" stroke-dasharray="3 3">
-                                <line x1="70"  y1="80"  x2="310" y2="80"/>
-                                <line x1="70"  y1="240" x2="310" y2="240"/>
-                                <line x1="70"  y1="80"  x2="190" y2="160"/>
-                                <line x1="310" y1="80"  x2="190" y2="160"/>
-                                <line x1="70"  y1="240" x2="190" y2="160"/>
-                                <line x1="310" y1="240" x2="190" y2="160"/>
-                            </g>
-                            <!-- Center apparatus pill -->
+                    <svg class="pillar-svg" viewBox="0 0 380 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five-locus boundary map: P0 and P1 passed, Cut 2 separability, Cut 3 still held, with a central apparatus node. Each locus is a clickable link to its phase document.">
+                        <text x="190" y="20" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">FIVE-LOCUS BOUNDARY MAP</text>
+                        <!-- Connecting lines (decorative) -->
+                        <g stroke="#9AA4AC" stroke-width="0.9" stroke-dasharray="3 3">
+                            <line x1="70"  y1="80"  x2="310" y2="80"/>
+                            <line x1="70"  y1="240" x2="310" y2="240"/>
+                            <line x1="70"  y1="80"  x2="190" y2="160"/>
+                            <line x1="310" y1="80"  x2="190" y2="160"/>
+                            <line x1="70"  y1="240" x2="190" y2="160"/>
+                            <line x1="310" y1="240" x2="190" y2="160"/>
+                        </g>
+                        <!-- Center: apparatus node -->
+                        <a href="/structural-failure">
+                            <title>Open the structural-failure evidence page</title>
                             <rect x="140" y="142" width="100" height="36" rx="18" fill="#1A3A52" stroke="#0A1F2E" stroke-width="1.6"/>
                             <text x="190" y="165" font-family="Verdana, Geneva, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">apparatus</text>
-                            <!-- P0 -->
+                        </a>
+                        <!-- P0 (passed): pre-registration entry point -->
+                        <a href="docs/prereg/structural-failure-coincidence/README.md">
+                            <title>P0 · Pre-registration entry point (passed)</title>
                             <circle cx="70" cy="80" r="24" fill="#F4C430" stroke="#C99517" stroke-width="1.6"/>
                             <text x="70" y="84" font-family="Verdana, Geneva, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P0</text>
                             <text x="70" y="112" font-family="Verdana, Geneva, sans-serif" font-size="10" fill="#6A7680" text-anchor="middle">passed</text>
-                            <!-- P1 -->
+                        </a>
+                        <!-- P1 (passed): admission review -->
+                        <a href="docs/prereg/structural-failure-coincidence/P1_ADMISSION.md">
+                            <title>P1 · Admission review (passed)</title>
                             <circle cx="310" cy="80" r="24" fill="#F4C430" stroke="#C99517" stroke-width="1.6"/>
                             <text x="310" y="84" font-family="Verdana, Geneva, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P1</text>
                             <text x="310" y="112" font-family="Verdana, Geneva, sans-serif" font-size="10" fill="#6A7680" text-anchor="middle">passed</text>
-                            <!-- Cut 2 -->
+                        </a>
+                        <!-- Cut 2 (separability): Wave-4.2 disposition -->
+                        <a href="docs/prereg/structural-failure-coincidence/P2_CUT2_WAVE42_DISPOSITION.md">
+                            <title>Cut 2 · Wave-4.2 disposition, closed-form separability held</title>
                             <circle cx="70" cy="240" r="24" fill="#2A5570" stroke="#1A3A52" stroke-width="1.6"/>
                             <text x="70" y="244" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">Cut 2</text>
                             <text x="70" y="276" font-family="Verdana, Geneva, sans-serif" font-size="10" fill="#6A7680" text-anchor="middle">separability</text>
-                            <!-- Cut 3 -->
+                        </a>
+                        <!-- Cut 3 (held): admission check -->
+                        <a href="docs/prereg/structural-failure-coincidence/P2_CUT3_ADMISSION.md">
+                            <title>Cut 3 · Admission check (still open / held)</title>
                             <circle cx="310" cy="240" r="24" fill="#FFFFFF" stroke="#9AA4AC" stroke-width="1.6"/>
                             <text x="310" y="244" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" fill="#1A3A52" text-anchor="middle">Cut 3</text>
                             <text x="310" y="276" font-family="Verdana, Geneva, sans-serif" font-size="10" fill="#6A7680" text-anchor="middle">held</text>
-                        </svg>
-                    </a>
+                        </a>
+                    </svg>
                 </div>
-                <p>Pre-registered five-locus falsifier. P0 and P1 passed; Cut 2 separability held; Cut 3 still open.</p>
+                <p>Pre-registered five-locus falsifier. Click any node to open its phase document. P0/P1 passed; Cut 2 separability held; Cut 3 still open.</p>
                 <div class="proof-actions" aria-label="Structural failure inspection links">
-                    <a href="/structural-failure">Open boundary map &rarr;</a>
-                    <a href="docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md">Read frozen map &rarr;</a>
+                    <a href="/structural-failure">Boundary map page &rarr;</a>
+                    <a href="docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md">Frozen map &rarr;</a>
+                    <a href="docs/prereg/structural-failure-coincidence/README.md">Pre-registration &rarr;</a>
                 </div>
             </div>
             <div class="proof-item" id="mesa-evidence-preview">
                 <span class="proof-label pillar">Load-bearing pillar</span>
                 <h4>Mesa Optimization Envelope</h4>
                 <div class="proof-placeholder pillar-viz">
-                    <a class="proof-visual-link" href="/mesa" aria-label="Open the Mesa optimization envelope page">
-                        <svg class="pillar-svg" viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lambda axis showing a hold region in green from 0 to 0.953 and a breach region in red after 0.953">
-                            <text x="240" y="22" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">λ-AXIS · OPERATING ENVELOPE</text>
-                            <!-- Hold region -->
+                    <svg class="pillar-svg" viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lambda axis showing a hold region in green from 0 to 0.953 and a breach region in red after 0.953. Click a region to open its phase document.">
+                        <text x="240" y="22" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">λ-AXIS · OPERATING ENVELOPE</text>
+                        <!-- Axis baseline (decorative, not clickable) -->
+                        <line x1="20" y1="84" x2="460" y2="84" stroke="#1A3A52" stroke-width="1.6"/>
+                        <!-- Hold region: 22 audited policy cells, public chart data -->
+                        <a href="data/mesa-public-charts.json">
+                            <title>Hold region · 22 audited policy cells (Small/Medium chart data)</title>
                             <rect x="20" y="62" width="370" height="44" fill="#2E7D5A" fill-opacity="0.20" stroke="#2E7D5A" stroke-opacity="0.5" stroke-width="1"/>
-                            <!-- Cliff dashed line -->
-                            <line x1="390" y1="40" x2="390" y2="128" stroke="#D45A4A" stroke-width="2.4" stroke-dasharray="4 3"/>
-                            <!-- Breach region -->
-                            <rect x="390" y="62" width="70" height="44" fill="#D45A4A" fill-opacity="0.24" stroke="#D45A4A" stroke-opacity="0.55" stroke-width="1"/>
-                            <!-- Axis baseline -->
-                            <line x1="20" y1="84" x2="460" y2="84" stroke="#1A3A52" stroke-width="1.6"/>
-                            <!-- Region labels (above the band) -->
                             <text x="205" y="56" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="700" fill="#2E7D5A" text-anchor="middle">hold</text>
-                            <text x="425" y="56" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="700" fill="#B53A2C" text-anchor="middle">breach</text>
-                            <!-- Tick labels (below) -->
-                            <text x="20" y="146" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#1A3A52" text-anchor="middle">λ=0</text>
+                        </a>
+                        <!-- Cliff (the 0.953 boundary): Phase 6 lambda-control results -->
+                        <a href="docs/mesa/PHASE6_RESULTS.md">
+                            <title>Cliff at λ ≈ 0.953 · Phase 6 lambda-control results</title>
+                            <line x1="390" y1="40" x2="390" y2="128" stroke="#D45A4A" stroke-width="2.4" stroke-dasharray="4 3"/>
                             <text x="390" y="146" font-family="Verdana, Geneva, sans-serif" font-size="12" font-weight="700" fill="#D45A4A" text-anchor="middle">λ≈0.953</text>
-                            <text x="460" y="146" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#1A3A52" text-anchor="middle">λ=1</text>
-                            <!-- Mechanistic locus note -->
+                        </a>
+                        <!-- Breach region: Phase 7 v3 envelope extension to Large -->
+                        <a href="docs/mesa/PHASE7_V3_RESULTS.md">
+                            <title>Breach region · Phase 7 v3 envelope extension (Large)</title>
+                            <rect x="390" y="62" width="70" height="44" fill="#D45A4A" fill-opacity="0.24" stroke="#D45A4A" stroke-opacity="0.55" stroke-width="1"/>
+                            <text x="425" y="56" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="700" fill="#B53A2C" text-anchor="middle">breach</text>
+                        </a>
+                        <!-- Decorative tick labels (not clickable) -->
+                        <text x="20" y="146" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#1A3A52" text-anchor="middle">λ=0</text>
+                        <text x="460" y="146" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#1A3A52" text-anchor="middle">λ=1</text>
+                        <!-- Mechanistic locus label: Phase 6 v3.1 (entangled 5D subspace) -->
+                        <a href="docs/mesa/PHASE6_V31_RESULTS.md">
+                            <title>net.7 locus · Phase 6 v3.1 entangled 5D subspace</title>
                             <text x="240" y="180" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#40505C" text-anchor="middle">cliff localized to a 5D basin at net.7</text>
-                        </svg>
-                    </a>
+                        </a>
+                    </svg>
                 </div>
-                <p>In-vitro operating envelope: 22 audited policy cells, sharp cliff at λ ≈ 0.953. A Phase 7 v2/v3 sibling extends the map to Large; the Large subset is still bounded.</p>
+                <p>In-vitro operating envelope: 22 audited policy cells, sharp cliff at λ ≈ 0.953. Click a region of the axis to jump into its phase. A Phase 7 v2/v3 sibling extends the map to Large; the Large subset is still bounded.</p>
                 <div class="proof-actions" aria-label="Mesa evidence inspection links">
-                    <a href="/mesa">Open Mesa page &rarr;</a>
-                    <a href="data/mesa-public-charts.json">Inspect chart data &rarr;</a>
-                    <a href="docs/mesa/PHASE7_V3_RESULTS.md">Read Phase 7 v3 note &rarr;</a>
-                    <a href="docs/SUNDOG_V_MESA.md">Read Mesa notes &rarr;</a>
+                    <a href="/mesa">Mesa page &rarr;</a>
+                    <a href="data/mesa-public-charts.json">Chart data &rarr;</a>
+                    <a href="docs/mesa/PHASE6_RESULTS.md">Phase 6 cliff &rarr;</a>
+                    <a href="docs/mesa/PHASE7_V3_RESULTS.md">Phase 7 v3 envelope &rarr;</a>
+                    <a href="docs/SUNDOG_V_MESA.md">Mesa notes &rarr;</a>
                 </div>
             </div>
             <div class="proof-item" id="coarse-proof-preview">
                 <span class="proof-label pillar">Load-bearing pillar</span>
                 <h4>Coarse-Graining Proof Trunk</h4>
                 <div class="proof-placeholder pillar-viz">
-                    <a class="proof-visual-link" href="docs/COARSE_GRAINING_PROOF_ROADMAP.md" aria-label="Open the coarse-graining proof roadmap">
-                        <svg class="pillar-svg" viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coarse-graining proof status: Phases 0 through 3 closed positive in gold, Phase 4 open at Bayesian-floor gate, Phase 5 locked, Phase 6 staged">
-                            <text x="240" y="22" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">PROOF-TRUNK STATUS LADDER</text>
-                            <!-- 7 phase cells: indices 0..6, x = 20 + i*64, width 56, gap 8 -->
-                            <!-- Phase 0..3 closed positive (gold) -->
-                            <g>
-                                <rect x="20"  y="56" width="56" height="56" rx="6" fill="#F4C430" stroke="#C99517" stroke-width="1.6"/>
-                                <text x="48"  y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P0</text>
-                                <text x="48"  y="100" font-family="Verdana, sans-serif" font-size="9" fill="#684811" text-anchor="middle">closed</text>
-
-                                <rect x="84"  y="56" width="56" height="56" rx="6" fill="#F4C430" stroke="#C99517" stroke-width="1.6"/>
-                                <text x="112" y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P1</text>
-                                <text x="112" y="100" font-family="Verdana, sans-serif" font-size="9" fill="#684811" text-anchor="middle">closed</text>
-
-                                <rect x="148" y="56" width="56" height="56" rx="6" fill="#F4C430" stroke="#C99517" stroke-width="1.6"/>
-                                <text x="176" y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P2</text>
-                                <text x="176" y="100" font-family="Verdana, sans-serif" font-size="9" fill="#684811" text-anchor="middle">closed</text>
-
-                                <rect x="212" y="56" width="56" height="56" rx="6" fill="#F4C430" stroke="#C99517" stroke-width="1.6"/>
-                                <text x="240" y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P3</text>
-                                <text x="240" y="100" font-family="Verdana, sans-serif" font-size="9" fill="#684811" text-anchor="middle">closed</text>
-                            </g>
-                            <!-- Phase 4 open (white with dashed border) -->
+                    <svg class="pillar-svg" viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coarse-graining proof status ladder. Each phase cell is a clickable link to its proof document. Phases 0 through 3 closed positive in gold, Phase 4 open at Bayesian-floor gate, Phase 5 locked, Phase 6 staged.">
+                        <text x="240" y="22" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">PROOF-TRUNK STATUS LADDER</text>
+                        <!-- Phase 0: Postulate 1 Definitions (closed) -->
+                        <a href="docs/proof/POSTULATE1_DEFINITIONS.md">
+                            <title>P0 · Postulate 1 Definitions Lock (closed)</title>
+                            <rect x="20"  y="56" width="56" height="56" rx="6" fill="#F4C430" stroke="#C99517" stroke-width="1.6"/>
+                            <text x="48"  y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P0</text>
+                            <text x="48"  y="100" font-family="Verdana, sans-serif" font-size="9" fill="#684811" text-anchor="middle">closed</text>
+                        </a>
+                        <!-- Phase 1: LQG Proof Draft -->
+                        <a href="docs/proof/PHASE1_LQG.md">
+                            <title>P1 · Phase 1 LQG Proof Draft (closed)</title>
+                            <rect x="84"  y="56" width="56" height="56" rx="6" fill="#F4C430" stroke="#C99517" stroke-width="1.6"/>
+                            <text x="112" y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P1</text>
+                            <text x="112" y="100" font-family="Verdana, sans-serif" font-size="9" fill="#684811" text-anchor="middle">closed</text>
+                        </a>
+                        <!-- Phase 2: Finite-MDP Sufficiency -->
+                        <a href="docs/proof/PHASE2_MDP.md">
+                            <title>P2 · Phase 2 Finite-MDP Sufficiency Draft (closed)</title>
+                            <rect x="148" y="56" width="56" height="56" rx="6" fill="#F4C430" stroke="#C99517" stroke-width="1.6"/>
+                            <text x="176" y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P2</text>
+                            <text x="176" y="100" font-family="Verdana, sans-serif" font-size="9" fill="#684811" text-anchor="middle">closed</text>
+                        </a>
+                        <!-- Phase 3: Boundary Theorem -->
+                        <a href="docs/proof/PHASE3_BOUNDARY.md">
+                            <title>P3 · Phase 3 Boundary Theorem Draft (closed)</title>
+                            <rect x="212" y="56" width="56" height="56" rx="6" fill="#F4C430" stroke="#C99517" stroke-width="1.6"/>
+                            <text x="240" y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P3</text>
+                            <text x="240" y="100" font-family="Verdana, sans-serif" font-size="9" fill="#684811" text-anchor="middle">closed</text>
+                        </a>
+                        <!-- Phase 4: Bayesian-floor buildout (open gate) -->
+                        <a href="docs/proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md">
+                            <title>P4 · Phase 4 Bayesian-Floor Buildout (open — load-bearing gate)</title>
                             <rect x="276" y="56" width="56" height="56" rx="6" fill="#FFFFFF" stroke="#D45A4A" stroke-width="1.6" stroke-dasharray="3 2"/>
                             <text x="304" y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P4</text>
                             <text x="304" y="100" font-family="Verdana, sans-serif" font-size="9" fill="#B53A2C" text-anchor="middle">open</text>
-                            <!-- Phase 5 locked (gray) -->
+                        </a>
+                        <!-- Phase 5: locked, no doc yet (not clickable) -->
+                        <g>
+                            <title>P5 · locked (no public document yet)</title>
                             <rect x="340" y="56" width="56" height="56" rx="6" fill="#E2E6E9" stroke="#9AA4AC" stroke-width="1.6"/>
                             <text x="368" y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#6A7680" text-anchor="middle">P5</text>
                             <text x="368" y="100" font-family="Verdana, sans-serif" font-size="9" fill="#6A7680" text-anchor="middle">locked</text>
-                            <!-- Phase 6 staged (white with dashed border) -->
+                        </g>
+                        <!-- Phase 6: Lambda-Control Spec (staged) -->
+                        <a href="docs/proof/PHASE6_LAMBDA_CONTROL.md">
+                            <title>P6 · Phase 6 Lambda-Control Spec (staged)</title>
                             <rect x="404" y="56" width="56" height="56" rx="6" fill="#FFFFFF" stroke="#9AA4AC" stroke-width="1.6" stroke-dasharray="3 2"/>
                             <text x="432" y="83" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">P6</text>
                             <text x="432" y="100" font-family="Verdana, sans-serif" font-size="9" fill="#6A7680" text-anchor="middle">staged</text>
-                            <!-- Bayesian-floor gate annotation -->
-                            <line x1="304" y1="124" x2="304" y2="140" stroke="#D45A4A" stroke-width="1"/>
-                            <text x="240" y="160" font-family="Verdana, sans-serif" font-size="11" fill="#B53A2C" text-anchor="middle">Bayesian-floor gate</text>
-                            <text x="240" y="180" font-family="Verdana, sans-serif" font-size="11" fill="#40505C" text-anchor="middle">4 closed · 2 open · 1 locked</text>
-                        </svg>
-                    </a>
+                        </a>
+                        <!-- Decorative gate annotation -->
+                        <line x1="304" y1="124" x2="304" y2="140" stroke="#D45A4A" stroke-width="1"/>
+                        <text x="240" y="160" font-family="Verdana, sans-serif" font-size="11" fill="#B53A2C" text-anchor="middle">Bayesian-floor gate</text>
+                        <text x="240" y="180" font-family="Verdana, sans-serif" font-size="11" fill="#40505C" text-anchor="middle">4 closed · 2 open · 1 locked</text>
+                    </svg>
                 </div>
-                <p>Phases 0–3 closed positive; Phase 4 open at the Bayesian-floor gate; Phase 5 locked; Phase 6 staged.</p>
+                <p>Click any cell to open its phase document. Phases 0–3 closed positive; Phase 4 open at the Bayesian-floor gate; Phase 5 locked (no public doc); Phase 6 staged.</p>
                 <div class="proof-actions" aria-label="Coarse-graining proof inspection links">
-                    <a href="docs/COARSE_GRAINING_PROOF_ROADMAP.md">Read roadmap &rarr;</a>
-                    <a href="docs/proof/README.md">Proof artifacts &rarr;</a>
-                    <a href="docs/proof/PHASE4_THREEBODY.md">Phase 4 gate &rarr;</a>
+                    <a href="docs/proof/README.md">All phase artifacts &rarr;</a>
+                    <a href="docs/proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md">Phase 4 gate &rarr;</a>
+                    <a href="docs/COARSE_GRAINING_PROOF_ROADMAP.md">Roadmap overview &rarr;</a>
                 </div>
             </div>
         </div>
@@ -2258,8 +2327,5 @@
 
     <script type="module" src="/js/sundog-chat-widget.mjs"></script>
     <script type="module" src="/js/sd-strand-nav.mjs"></script>
-</body>
-</html>
-/script>
 </body>
 </html>
