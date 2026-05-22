@@ -90,6 +90,25 @@ ADAPTIVE_FLOOR_FIRST_REJECTED_THRESHOLD = 1e-3
 ADAPTIVE_FLOOR_SUSPICIOUS_THRESHOLD = 3e-6
 ADAPTIVE_FLOOR_VERSION = "v0.3h-adaptive-floor"
 
+# Pre-registered constants for the v0.3h bridge audit. The `kfacet-bridge-audit`
+# subcommand probes rows that the adaptive-floor reprocessor flagged as failed
+# due to a bridge singular value of (M_i - I) sitting in the forbidden band
+# (1e-7, 1e-3): above the noise/kernel band but below the projector-floor guard.
+# The audit is no-integration; it reuses existing M_i.npy + D3_*.npy and asks
+# whether the bridge SV is (a) a missed neutral/Hamiltonian direction,
+# (b) a Jordan-block root at eigenvalue 1, (c) a defective D3 standard block,
+# or (d) genuinely unexplained and worth escalating to a tighter-rtol rerun.
+# All thresholds are pre-registered; outcomes are deterministic; nothing tunable.
+BRIDGE_AUDIT_LADDER = (1e-8, 3e-8, 1e-7, 3e-7, 1e-6, 3e-6, 1e-5, 3e-5, 1e-4, 3e-4, 1e-3)
+BRIDGE_BAND_LOWER = 1e-7
+BRIDGE_BAND_UPPER = 1e-3
+BRIDGE_FIXED_FLOOR = 1e-3
+BRIDGE_NEUTRAL_OVERLAP_THRESHOLD = 1.0 - 1e-3
+BRIDGE_JORDAN_CHAIN_THRESHOLD = 1e-3
+BRIDGE_EIGENVALUE_NEAR_ONE_BAND = 1e-2
+BRIDGE_PROJECTOR_FLOOR = 1e-3
+BRIDGE_AUDIT_VERSION = "v0.3h-bridge-audit"
+
 FLOAT = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
 ROW_RE = re.compile(
     rf"O_\{{(?P<index>\d+)\}}\((?P<m3>{FLOAT})\)\s+"
@@ -2880,9 +2899,435 @@ def command_kfacet_reprocess_floor(args: argparse.Namespace) -> int:
         print(f"[kfacet-reprocess-floor] suspicious rows: {manifest['summary']['suspicious_rows']}")
     if manifest["summary"]["failed_rows"]:
         print(f"[kfacet-reprocess-floor] failed rows: {manifest['summary']['failed_rows']}")
-        return 1
+        if not args.allow_failed_rows:
+            return 1
+        print("[kfacet-reprocess-floor] continuing because --allow-failed-rows was set")
     if manifest["summary"]["standard_E_rows"]:
         print(f"[kfacet-reprocess-floor] standard-E rows require Gamma_i recompute: {manifest['summary']['standard_E_rows']}")
+    return 0
+
+
+def _bridge_ladder_floor_admitting(value: float) -> float | None:
+    """Smallest rung in BRIDGE_AUDIT_LADDER strictly greater than ``value``."""
+    for rung in BRIDGE_AUDIT_LADDER:
+        if value < rung:
+            return float(rung)
+    return None
+
+
+def _bridge_projector_readout(
+    kernel_basis: np.ndarray,
+    d3_ops: dict[str, np.ndarray],
+    floor: float,
+) -> dict[str, object]:
+    """Compute P_T/P_S/P_E spectra and D3 relation residuals on a kernel basis.
+
+    A clean isotypic projector has singular values clustered near {0, 1}; a
+    defective E block shows up as marginal P_E singular values in (1e-3, 0.999)
+    or an odd E dimension that cannot split into 2D standard irreps. The D3
+    relation residuals quantify whether the chosen kernel basis is a valid
+    representation of D3 -- if any relation residual is large, the projector
+    readout is itself untrustworthy.
+    """
+    k_dim = int(kernel_basis.shape[1])
+    if k_dim == 0:
+        return {
+            "floor": float(floor),
+            "k_dim": 0,
+            "D3_isotypic_dims": {"T": 0, "S": 0, "E": 0, "c_i": 0},
+            "P_T_singular_values": [],
+            "P_S_singular_values": [],
+            "P_E_singular_values": [],
+            "P_E_marginal_singular_values": [],
+            "D3_relation_residuals": {},
+            "defective_E_flagged": False,
+        }
+    identity_k = np.eye(k_dim)
+    restricted = {name: kernel_basis.T @ op @ kernel_basis for name, op in d3_ops.items()}
+    sigma3 = restricted["sigma3"]
+    sigma3_sq = restricted["sigma3_sq"]
+    f_beta = restricted["F_beta"]
+    f_beta_sigma3 = restricted["F_beta_sigma3"]
+    f_beta_sigma3_sq = restricted["F_beta_sigma3_sq"]
+
+    p_t = (identity_k + sigma3 + sigma3_sq + f_beta + f_beta_sigma3 + f_beta_sigma3_sq) / 6.0
+    p_s = (identity_k + sigma3 + sigma3_sq - f_beta - f_beta_sigma3 - f_beta_sigma3_sq) / 6.0
+    p_e = identity_k - p_t - p_s
+    p_t_svs = [float(value) for value in np.linalg.svd(p_t, compute_uv=False)]
+    p_s_svs = [float(value) for value in np.linalg.svd(p_s, compute_uv=False)]
+    p_e_svs = [float(value) for value in np.linalg.svd(p_e, compute_uv=False)]
+    t_basis = vector_subspace_basis(p_t, BRIDGE_PROJECTOR_FLOOR)
+    s_basis = vector_subspace_basis(p_s, BRIDGE_PROJECTOR_FLOOR)
+    e_basis = vector_subspace_basis(p_e, BRIDGE_PROJECTOR_FLOOR)
+    e_dim = int(e_basis.shape[1])
+    c_i = e_dim // 2
+
+    sigma3_cubed_residual = float(
+        np.linalg.norm(sigma3 @ sigma3 @ sigma3 - identity_k, ord=np.inf)
+    )
+    f_beta_squared_residual = float(np.linalg.norm(f_beta @ f_beta - identity_k, ord=np.inf))
+    # sigma3^{-1} == sigma3^2 on the kernel basis; check F_beta sigma3 F_beta == sigma3^{-1}.
+    f_beta_sigma3_f_beta_residual = float(
+        np.linalg.norm(f_beta @ sigma3 @ f_beta - sigma3_sq, ord=np.inf)
+    )
+
+    marginal_band = [s for s in p_e_svs if 1e-3 < s < (1.0 - 1e-3)]
+    defective_E_flagged = (e_dim % 2 != 0) or bool(marginal_band)
+    return {
+        "floor": float(floor),
+        "k_dim": k_dim,
+        "D3_isotypic_dims": {
+            "T": int(t_basis.shape[1]),
+            "S": int(s_basis.shape[1]),
+            "E": e_dim,
+            "c_i": c_i,
+        },
+        "P_T_singular_values": p_t_svs,
+        "P_S_singular_values": p_s_svs,
+        "P_E_singular_values": p_e_svs,
+        "P_E_marginal_singular_values": marginal_band,
+        "D3_relation_residuals": {
+            "sigma3_cubed_minus_I": sigma3_cubed_residual,
+            "F_beta_squared_minus_I": f_beta_squared_residual,
+            "F_beta_sigma3_F_beta_minus_sigma3_inv": f_beta_sigma3_f_beta_residual,
+        },
+        "defective_E_flagged": defective_E_flagged,
+    }
+
+
+def _bridge_outcome_notes(outcome: str) -> str:
+    notes_map = {
+        "no_bridge_present": (
+            "No singular values in the bridge band (1e-7, 1e-3); the row is "
+            "structurally clean and does not require a bridge audit."
+        ),
+        "all_neutral_overlap_explained": (
+            "All bridge vectors project into the neutral basis with overlap "
+            ">= 0.999. The bridge SVs are missed neutral/Hamiltonian "
+            "directions; v0.3h needs a neutral-quotient refinement, not "
+            "tighter integration."
+        ),
+        "jordan_block_explained": (
+            "At least one bridge vector has ||(M-I)^2 v|| / ||(M-I) v|| < 1e-3, "
+            "consistent with a Jordan-block root at eigenvalue 1. Bridge SV "
+            "is a generalized-kernel direction; v0.3h needs Jordan-block "
+            "accommodation."
+        ),
+        "defective_E_block_confirmed": (
+            "All bridge vectors produce defective E-block projector readouts "
+            "at both fixed and ladder bridge floors (odd-dim E or marginal "
+            "P_E singular values). This indicates a real defective D3 "
+            "representation at the bridge boundary, not a quotient or Jordan "
+            "artifact."
+        ),
+        "jordan_suspected": (
+            "Algebraic multiplicity near eigenvalue 1 exceeds geometric "
+            "multiplicity at the fixed bridge floor, but no bridge vector "
+            "aligns with the (M-I)^2 generalized-kernel chain. Treat as "
+            "suspected, not confirmed; schedule generalized-null alignment "
+            "work before tighter-rtol rerun."
+        ),
+        "unexplained_escalate_to_rtol": (
+            "Neither neutral overlap, Jordan chain, defective E block, nor "
+            "eigenvalue evidence aligns with the bridge vector. Escalate to "
+            "a tighter-rtol rerun to test whether the bridge SV is "
+            "rtol-dependent."
+        ),
+    }
+    return notes_map.get(outcome, "unrecognized outcome")
+
+
+def audit_bridge_for_row(
+    row_dir: Path,
+    catalog_row: OrbitRow,
+    d3_ops: dict[str, np.ndarray],
+    M_i: np.ndarray,
+) -> dict[str, object]:
+    """Run the no-integration bridge audit on a row's existing matrices."""
+    identity = np.eye(M_i.shape[0])
+    m_minus_i = M_i - identity
+    _u, singular_values, vh = np.linalg.svd(m_minus_i)
+    singular_values_desc = [float(value) for value in singular_values]
+
+    bridge_indices = [
+        i for i, s in enumerate(singular_values)
+        if BRIDGE_BAND_LOWER < s < BRIDGE_BAND_UPPER
+    ]
+
+    # Eigenvalue evidence near 1 (diagnostic, NOT the sole classifier per the
+    # signed-off tweak: ill-conditioned M_i can produce spurious near-1
+    # eigenvalues from np.linalg.eig; we keep this as a flag and gate the
+    # 'jordan_block_explained' outcome on SVD/generalized-null alignment.)
+    eigenvalues = np.linalg.eigvals(M_i)
+    near_one = []
+    for lam in eigenvalues:
+        if abs(lam - 1.0) < BRIDGE_EIGENVALUE_NEAR_ONE_BAND:
+            near_one.append({
+                "value_real": float(np.real(lam)),
+                "value_imag": float(np.imag(lam)),
+                "abs_minus_one": float(abs(lam - 1.0)),
+            })
+    algebraic_mult_near_one = len(near_one)
+
+    # Reconstruct y0 directly from the catalog row -- NO integration.
+    # Design note: this function accepts a `catalog_row` and recomputes y0
+    # from the Li-Liao ansatz. A future receipt schema may carry y0 directly;
+    # the call site can then bypass the catalog parse.
+    masses, x0_pos, v0 = expand_initial_state(catalog_row, center_com=True)
+    y0 = pack_state(x0_pos, v0)
+    stub = IntegratedOrbit(
+        row=catalog_row,
+        solution=None,
+        y0=y0,
+        elapsed_seconds=0.0,
+        closure_position_inf=0.0,
+        closure_velocity_inf=0.0,
+        inertia_degenerate=False,
+    )
+    neutral_basis = compute_neutral_basis(M_i, stub, BRIDGE_PROJECTOR_FLOOR)
+    p_neutral = neutral_basis @ neutral_basis.T if neutral_basis.size else np.zeros_like(M_i)
+
+    bridge_vectors_out: list[dict[str, object]] = []
+    for bridge_idx in bridge_indices:
+        sv = float(singular_values[bridge_idx])
+        v_bridge = vh[bridge_idx, :].astype(float)
+        norm_v = float(np.linalg.norm(v_bridge))
+        neutral_projected = p_neutral @ v_bridge
+        neutral_overlap = float(np.linalg.norm(neutral_projected) / max(norm_v, 1e-300))
+        # Jordan chain: applying (M-I) twice to a Jordan root drops the norm
+        # by another factor of |lambda - 1| ~ SV; for a generic non-Jordan
+        # vector the second application stays the same scale.
+        mv1 = m_minus_i @ v_bridge
+        mv2 = m_minus_i @ mv1
+        r1 = float(np.linalg.norm(mv1))
+        r2 = float(np.linalg.norm(mv2))
+        jordan_chain_drop = float(r2 / max(r1, 1e-300))
+
+        # Fixed bridge floor admits ALL SVs below 1e-3 (i.e., every bridge).
+        mask_fixed = singular_values < BRIDGE_FIXED_FLOOR
+        kernel_basis_fixed = vh.T[:, mask_fixed]
+        readout_fixed = _bridge_projector_readout(
+            kernel_basis_fixed, d3_ops, BRIDGE_FIXED_FLOOR
+        )
+        # Ladder bridge floor: smallest BRIDGE_AUDIT_LADDER rung > this SV.
+        ladder_floor = _bridge_ladder_floor_admitting(sv)
+        if ladder_floor is None:
+            readout_ladder: dict[str, object] = {
+                "floor_unavailable": True,
+                "note": "no rung in BRIDGE_AUDIT_LADDER admits this bridge SV",
+            }
+        else:
+            mask_ladder = singular_values < ladder_floor
+            kernel_basis_ladder = vh.T[:, mask_ladder]
+            readout_ladder = _bridge_projector_readout(
+                kernel_basis_ladder, d3_ops, ladder_floor
+            )
+
+        bridge_vectors_out.append({
+            "sv": sv,
+            "index_in_sv_array": int(bridge_idx),
+            "right_singular_vector": [float(value) for value in v_bridge],
+            "neutral_overlap": neutral_overlap,
+            "neutral_in": neutral_overlap >= BRIDGE_NEUTRAL_OVERLAP_THRESHOLD,
+            "jordan_chain_image_norm": r1,
+            "jordan_chain_image_squared_norm": r2,
+            "jordan_chain_drop": jordan_chain_drop,
+            "jordan_chain_in": jordan_chain_drop < BRIDGE_JORDAN_CHAIN_THRESHOLD,
+            "projector_readout_fixed_floor": readout_fixed,
+            "projector_readout_ladder_floor": readout_ladder,
+        })
+
+    geometric_mult_at_fixed = int(np.sum(singular_values < BRIDGE_FIXED_FLOOR))
+    jordan_defect = max(0, algebraic_mult_near_one - geometric_mult_at_fixed)
+
+    # Pre-registered outcome categorization. Per the signed-off tweak, the
+    # 'jordan_block_explained' branch REQUIRES bridge-vector chain alignment
+    # (jordan_chain_in), not just an eigenvalue defect; eigenvalue-only
+    # evidence downgrades to 'jordan_suspected'.
+    all_neutral = bool(bridge_vectors_out) and all(b["neutral_in"] for b in bridge_vectors_out)
+    some_jordan_chain = any(b["jordan_chain_in"] for b in bridge_vectors_out)
+    all_defective = bool(bridge_vectors_out) and all(
+        b["projector_readout_fixed_floor"].get("defective_E_flagged")
+        and b["projector_readout_ladder_floor"].get("defective_E_flagged")
+        for b in bridge_vectors_out
+    )
+    if not bridge_vectors_out:
+        outcome = "no_bridge_present"
+    elif all_neutral:
+        outcome = "all_neutral_overlap_explained"
+    elif some_jordan_chain:
+        outcome = "jordan_block_explained"
+    elif all_defective:
+        outcome = "defective_E_block_confirmed"
+    elif jordan_defect > 0:
+        outcome = "jordan_suspected"
+    else:
+        outcome = "unexplained_escalate_to_rtol"
+
+    return {
+        "mode": "kfacet_bridge_audit",
+        "audit_version": BRIDGE_AUDIT_VERSION,
+        "row_index": catalog_row.index,
+        "label": catalog_row.label,
+        "m3": catalog_row.m3,
+        "period": catalog_row.period,
+        "row_dir": str(row_dir),
+        "M_i_norm_inf": float(np.linalg.norm(M_i, ord=np.inf)),
+        "M_minus_I_singular_values_desc": singular_values_desc,
+        "bridge_band_lower": BRIDGE_BAND_LOWER,
+        "bridge_band_upper": BRIDGE_BAND_UPPER,
+        "fixed_bridge_floor": BRIDGE_FIXED_FLOOR,
+        "bridge_indices": bridge_indices,
+        "bridge_vectors": bridge_vectors_out,
+        "eigenvalues_near_one": near_one,
+        "algebraic_multiplicity_near_one": algebraic_mult_near_one,
+        "geometric_multiplicity_at_fixed_floor": geometric_mult_at_fixed,
+        "jordan_defect_diagnostic": jordan_defect,
+        "jordan_defect_note": (
+            "Diagnostic only. np.linalg.eig on an ill-conditioned M_i can "
+            "report spurious eigenvalues near 1; jordan_block_explained is "
+            "only reported when a bridge vector also passes the SVD-based "
+            "(M-I)^2 chain alignment test."
+        ),
+        "neutral_basis_dim": int(neutral_basis.shape[1]) if neutral_basis.size else 0,
+        "neutral_basis_floor": BRIDGE_PROJECTOR_FLOOR,
+        "outcome": outcome,
+        "interpretation_notes": _bridge_outcome_notes(outcome),
+    }
+
+
+def command_kfacet_bridge_audit(args: argparse.Namespace) -> int:
+    """Receipt-only bridge audit subcommand. Reuses existing M_i.npy + D3_*.npy."""
+    input_dir = Path(args.input_dir)
+    if not input_dir.is_dir():
+        raise SystemExit(f"input directory not found: {input_dir}")
+
+    # Decide which rows to audit. Explicit --rows wins; otherwise auto-target
+    # the manifest's failed_rows list (the structural-bridge candidates).
+    if args.rows:
+        wanted = {int(token.strip()) for token in args.rows.split(",") if token.strip()}
+    else:
+        manifest_path = input_dir / "manifest.json"
+        if manifest_path.is_file():
+            m = json.loads(manifest_path.read_text(encoding="utf-8"))
+            wanted = set(m.get("summary", {}).get("failed_rows", []))
+        else:
+            wanted = set()
+    if not wanted:
+        raise SystemExit(
+            "no rows to audit (pass --rows X,Y,... or ensure manifest.json "
+            "has failed_rows under summary)"
+        )
+
+    source = args.source.upper()
+    text = read_text(args.path or SUPPLEMENT_URLS[source])
+    catalog_rows = parse_rows(text, source)
+    catalog_by_index = {
+        r.index: r for r in catalog_rows if abs(r.m3 - args.m3) < 5e-13
+    }
+
+    out_dir = (
+        Path(args.out) if args.out else input_dir.parent / f"{input_dir.name}-bridge-audit"
+    )
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    d3_names = ("e", "sigma3", "sigma3_sq", "F_beta", "F_beta_sigma3", "F_beta_sigma3_sq")
+    per_row: list[dict[str, object]] = []
+    outcome_counts: dict[str, int] = {}
+    for row_index in sorted(wanted):
+        row_dir = input_dir / f"O{row_index}"
+        if not row_dir.is_dir():
+            print(f"[kfacet-bridge-audit] WARN: O_{row_index} subdir not found in {input_dir}")
+            continue
+        # Resolve M_i.npy + D3_*.npy. They live either in this dir directly
+        # (sentinel output) or in the source dir referenced by the adaptive
+        # reprocessor's receipt (when input_dir is a reprocessor output).
+        m_path = row_dir / "M_i.npy"
+        if m_path.is_file():
+            src_dir = row_dir
+        else:
+            ar_path = row_dir / "adaptive_floor_receipt.json"
+            if not ar_path.is_file():
+                print(f"[kfacet-bridge-audit] WARN: O_{row_index} has neither M_i.npy nor adaptive_floor_receipt.json")
+                continue
+            ar_receipt = json.loads(ar_path.read_text(encoding="utf-8"))
+            src_dir = Path(ar_receipt.get("row_dir", str(row_dir)))
+            m_path = src_dir / "M_i.npy"
+            if not m_path.is_file():
+                print(f"[kfacet-bridge-audit] WARN: O_{row_index} M_i.npy not found via adaptive receipt -> {src_dir}")
+                continue
+        M_i = np.load(m_path)
+        d3_ops: dict[str, np.ndarray] = {}
+        d3_missing = False
+        for name in d3_names:
+            op_path = src_dir / f"D3_{name}.npy"
+            if not op_path.is_file():
+                print(f"[kfacet-bridge-audit] WARN: O_{row_index} missing D3_{name}.npy at {src_dir}")
+                d3_missing = True
+                break
+            d3_ops[name] = np.load(op_path)
+        if d3_missing:
+            continue
+        catalog_row = catalog_by_index.get(row_index)
+        if catalog_row is None:
+            print(f"[kfacet-bridge-audit] WARN: O_{row_index} not in catalog at m3={args.m3}")
+            continue
+        print(f"[kfacet-bridge-audit] auditing {catalog_row.label}")
+        receipt = audit_bridge_for_row(row_dir, catalog_row, d3_ops, M_i)
+        per_row.append(receipt)
+        outcome = str(receipt["outcome"])
+        outcome_counts[outcome] = outcome_counts.get(outcome, 0) + 1
+        row_out_dir = out_dir / f"O{row_index}"
+        row_out_dir.mkdir(parents=True, exist_ok=True)
+        (row_out_dir / "bridge_audit_receipt.json").write_text(
+            json.dumps(receipt, indent=2) + "\n", encoding="utf-8"
+        )
+        print(
+            f"[kfacet-bridge-audit]   row={row_index} outcome={outcome} "
+            f"n_bridges={len(receipt['bridge_vectors'])} "
+            f"alg_mult_near_1={receipt['algebraic_multiplicity_near_one']} "
+            f"geom_mult_fixed_floor={receipt['geometric_multiplicity_at_fixed_floor']} "
+            f"jordan_defect_diag={receipt['jordan_defect_diagnostic']}"
+        )
+
+    manifest = {
+        "mode": "kfacet_bridge_audit_manifest",
+        "audit_version": BRIDGE_AUDIT_VERSION,
+        "input_dir": str(input_dir),
+        "out_dir": str(out_dir),
+        "fixed_bridge_floor": BRIDGE_FIXED_FLOOR,
+        "bridge_band": [BRIDGE_BAND_LOWER, BRIDGE_BAND_UPPER],
+        "neutral_overlap_threshold": BRIDGE_NEUTRAL_OVERLAP_THRESHOLD,
+        "jordan_chain_threshold": BRIDGE_JORDAN_CHAIN_THRESHOLD,
+        "eigenvalue_near_one_band": BRIDGE_EIGENVALUE_NEAR_ONE_BAND,
+        "projector_floor": BRIDGE_PROJECTOR_FLOOR,
+        "rows": [
+            {
+                "row_index": r["row_index"],
+                "outcome": r["outcome"],
+                "n_bridge_vectors": len(r["bridge_vectors"]),
+                "max_neutral_overlap": max(
+                    (b["neutral_overlap"] for b in r["bridge_vectors"]), default=None
+                ),
+                "min_jordan_chain_drop": min(
+                    (b["jordan_chain_drop"] for b in r["bridge_vectors"]), default=None
+                ),
+                "algebraic_multiplicity_near_one": r["algebraic_multiplicity_near_one"],
+                "geometric_multiplicity_at_fixed_floor": r["geometric_multiplicity_at_fixed_floor"],
+                "jordan_defect_diagnostic": r["jordan_defect_diagnostic"],
+            }
+            for r in per_row
+        ],
+        "summary": {
+            "total": len(per_row),
+            "outcome_counts": outcome_counts,
+        },
+    }
+    (out_dir / "manifest.json").write_text(
+        json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
+    )
+    print(f"[kfacet-bridge-audit] wrote {len(per_row)} row receipts and manifest under {out_dir}")
+    print(f"[kfacet-bridge-audit] outcomes: {outcome_counts}")
     return 0
 
 
@@ -3081,6 +3526,35 @@ def build_parser() -> argparse.ArgumentParser:
     sentinel.add_argument("--out", help="optional output directory for gate receipt and matrices")
     sentinel.set_defaults(func=command_kfacet_sentinel)
 
+    audit = sub.add_parser(
+        "kfacet-bridge-audit",
+        help=(
+            "v0.3h bridge audit: no-integration probe asking whether a "
+            "bridge singular value of (M_i - I) is a missed neutral "
+            "direction, a Jordan-block root, or a defective D3 standard block."
+        ),
+    )
+    audit.add_argument(
+        "--input-dir",
+        required=True,
+        help="adaptive-floor reprocessor output dir (or sentinel output dir).",
+    )
+    audit.add_argument(
+        "--rows",
+        help="comma-separated row indices to audit (default: failed_rows from manifest.json)",
+    )
+    audit.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="A")
+    audit.add_argument(
+        "--path",
+        help="local supplementary file instead of the live URL",
+    )
+    audit.add_argument("--m3", type=float, default=1.0)
+    audit.add_argument(
+        "--out",
+        help="optional output directory (default: {input_dir}-bridge-audit)",
+    )
+    audit.set_defaults(func=command_kfacet_bridge_audit)
+
     reprocess = sub.add_parser(
         "kfacet-reprocess-floor",
         help=(
@@ -3100,6 +3574,11 @@ def build_parser() -> argparse.ArgumentParser:
     reprocess.add_argument(
         "--out",
         help="optional output directory (default: {input_dir}-adaptive-floor)",
+    )
+    reprocess.add_argument(
+        "--allow-failed-rows",
+        action="store_true",
+        help="exit 0 while still recording failed rows in the manifest (used for bridge-case audits)",
     )
     reprocess.set_defaults(func=command_kfacet_reprocess_floor)
 

@@ -1103,7 +1103,7 @@ the selected adaptive-floor kernel. Command:
 npm run isotrophy:kfacet:reprocess-floor
 ```
 
-Receipt directory:
+Six-row receipt directory:
 `results/isotrophy/k-facet-v03-sentinel-sweep-leakgate-adaptive-floor/`.
 
 Outcome: all six rows resolve, no suspicious floors, no standard-E rows, and no
@@ -1124,3 +1124,37 @@ support the same structural read as the 16 clean rows: the F_beta-even standard
 D3 isotypic is empty, so `c_i=0` and `d_i=0` by structure. The adaptive-floor
 rule is the receipt discipline that makes that statement valid; without it,
 the five rows remain flagged.
+
+### Full 21-row adaptive-floor result
+
+The same no-integration reprocessor was then run over the calibrated 21-row
+sweep:
+
+```powershell
+npm run isotrophy:kfacet:reprocess-floor
+```
+
+Receipt directory:
+`results/isotrophy/k-facet-v03-sentinel-sweep-adaptive-floor-21/`.
+
+Outcome: **20/21 strict catalog rows are resolved structural zeros**. All 20
+resolved rows have no standard `D3` sector (`E=0`, `c_i=0`, no Gamma recompute).
+The resolved rows split only by the sign-sector count:
+
+- `T(2)+S(5)+E(0)` for 8 rows.
+- `T(2)+S(6)+E(0)` for 12 rows.
+
+`O_617` is the sole unresolved bridge row. It is not a D3-leakage failure:
+at `k_dim=7`, D3 leakage is clean (`max_D3_leakage_inf = 6.99e-7`) and the gap
+ratio is clean (`2.21e-5`). It fails only the absolute first-rejected-SV guard:
+the next singular value is `7.84e-4`, below the registered `1e-3` threshold.
+If that bridge vector is admitted anyway, the D3 leakage remains just under the
+projector floor, but the projector readout is not a clean standard block: it
+shows an odd one-dimensional E residual (`E(1)`), which is not countable as a
+real 2D standard irrep and not eligible for `Gamma_i`.
+
+Catalog interpretation: **v0.3h's load-bearing result is 20/21 structural zero
+plus one O_617 bridge sub-investigation**, not a closed 21/21 theorem-facing
+claim. The bridge investigation should decide whether O_617 is a near-kernel
+numerical artifact, a missing Jordan/neutral direction, or a genuine defective
+D3 block at the absolute floor boundary.

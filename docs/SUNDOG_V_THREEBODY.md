@@ -930,12 +930,15 @@ without touching the order-scale non-kernel gap. The next registered move is a
 no-integration adaptive-floor reprocessor, followed by a single O_1488
 confirmation rerun only if the reprocessor keeps `E=0`.
 
-That reprocessor now closes the conditional split without integration. The
-selected adaptive-floor kernels keep `E=0`: control `O_62` reads
-`T(2)+S(5)+E(0)`, while the five repaired rows read `T(2)+S(6)+E(0)`. The
-extra boundary vector is sign-sector, not standard-sector, so no row requires a
-Gamma rerun before the structural conclusion: under the registered adaptive
-floor rule, the strict catalog has no F_beta-even standard `D3` sector.
+The six-row reprocessor closes the original leakgate split without integration:
+the repaired rows read `T(2)+S(6)+E(0)`, so the added boundary vector is
+sign-sector, not standard-sector. The full calibrated 21-row reprocessor then
+gives the actual load-bearing v0.3h catalog result: **20/21 strict rows are
+structural zeros** (`E=0`, `c_i=d_i=0`). The remaining row, `O_617`, is a bridge
+case. Its D3 leakage and gap ratio are clean at `k_dim=7`, but its next singular
+value is `7.84e-4`, below the registered `1e-3` first-rejected guard; admitting
+that vector gives an odd `E(1)` residual rather than a clean real 2D standard
+block. O_617 is therefore a sub-investigation, not counted evidence.
 
 ### Cross-Substrate Hand-Offs
 
