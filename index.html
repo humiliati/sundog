@@ -1030,6 +1030,20 @@
             grid-template-columns: repeat(2, minmax(11rem, 14rem));
             justify-content: center;
             width: min(100%, 34rem);
+            /* Lift the CTA group ~5px so it doesn't crowd the
+               .hero-altitude-chip pinned at the hero's bottom. */
+            transform: translateY(-5px);
+        }
+        /* Mild translucency on hero CTAs so any residual overlap with the
+           altitude chip reads softly rather than as a hard cover. Hover
+           restores full opacity. */
+        .hero .cta-buttons .btn {
+            opacity: 0.92;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+        .hero .cta-buttons .btn:hover,
+        .hero .cta-buttons .btn:focus-visible {
+            opacity: 1;
         }
         /* Shared .cta-buttons .btn-primary spans 2 cols for the 4-col base
            grid; in the hero's 2-col grid that makes "Repo map" fill the row
@@ -2313,6 +2327,24 @@
             <a href="docs/README.md">Documentation</a> |
             <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
             <a href="docs/presentation/claims-and-scope.md">Claims Policy</a>
+        </p>
+        <p class="footer-note">
+            Media assets served from Cloudflare Workers
+        </p>
+        <p class="footer-copyright">
+            © 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/home-hero.mjs"></script>
+    <script type="module" src="/js/motion-rail.mjs"></script>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+    <script type="module" src="/js/sd-strand-nav.mjs"></script>
+</body>
+</html>
+</body>
+</html>
         </p>
         <p class="footer-note">
             Media assets served from Cloudflare Workers
