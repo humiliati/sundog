@@ -331,16 +331,151 @@ they have spoken to it themselves.
    to what probes can do, but possibly a sane behavioural counterpart.
    Offer to be a thinking partner on the experimental design.
 
+### 9f. `chat.html` — new follow-up card
+
+Paste as a new `<article class="followup-card">` inside the existing
+`followup-grid` (anchor at the end of the grid). Sits naturally next
+to "Cross-architecture replication," "Corpus-conflict sweep," and
+"Gate-rule negation lexicon" because it is the same shape — a
+specific named axis that the Phase 12 result now has empirical
+purchase on.
+
+```html
+<article class="followup-card">
+    <h3>Mechanistic substrate, when it is named</h3>
+    <p>
+        The 0&nbsp;/&nbsp;5,670 result is behavioural evidence of
+        <em>stack-invariance</em>: something the ledger artifact
+        does survives translation across six model implementations
+        and four training lineages with no model access on our
+        part. Recent (cite mod's paper) probe work finds that
+        autoregressive transformers act as <em>companders</em> on
+        the residual stream — compressing into a low-rank
+        intermediate where activations collapse into an orthogonal
+        pair of subspaces (categorical centroids ⊥ generator
+        algebras, with so(3) ranking first across many models).
+        Under that framing, "the artifact keeps the relevant
+        low-dim subspaces aligned" becomes specific: the artifact's
+        presence in the prompt should produce a stack-invariant
+        shift in the categorical-centroid / generator-algebra
+        decomposition at the bottleneck. A probe-level falsifier
+        of that hypothesis is the cleanest follow-up the
+        behavioural result has access to.
+    </p>
+</article>
+```
+
+### 9g. `docs/SUNDOG_V_CHAT.md` — new section 17
+
+Paste as a new top-level section after §16.5 (anchor sits there).
+
+```markdown
+## 17. Mechanistic Substrate Hypothesis (when the mech-interp citation lands)
+
+The §13 result is behavioural: a ledger-conditioned chat surface
+preserves claim boundaries across six model implementations and four
+training lineages, with no model access on our part. The natural
+question is *why*. Until 2026-05-22 the most defensible answer was
+the conservative one — "something in the residual-stream geometry is
+being held stable by the artifact's presence in the prompt, in
+roughly the way the mech-interp literature would predict." On
+2026-05-22 a probe-side researcher shared, in a public-but-niche
+thread, a not-yet-published finding that, when cited, sharpens this
+into a specific mechanistic hypothesis:
+
+- Autoregressive transformers act as **companders** on the effective
+  rank of the residual stream — compress to a low-rank intermediate,
+  compute there, expand back, decode logits.
+- The bottleneck residual activations collapse into a pair of
+  **orthogonal subspaces**: categorical centroids ⊥ generator
+  algebras.
+- The **so(3) rotational Lie algebra ranks first** among the
+  generator algebras across many models. The mod has not yet looked
+  at JEPA architectures and we treat that as the open cross-cut.
+
+Under that framing, the §13 stack-invariance result becomes evidence
+for a specific causal claim:
+
+> The ledger artifact's presence in the prompt produces a
+> stack-invariant shift in the categorical-centroid /
+> generator-algebra decomposition at the compander bottleneck,
+> sufficient to preserve claim-boundary behaviour across model
+> implementations.
+
+That is a *probe-level falsifier*. A measurement that probed
+matched prompts (with vs. without ledger packets) for shifts in the
+bottleneck-layer subspaces could either confirm or break this
+hypothesis directly, without going through behavioural pressure
+slates. We do not have the model access to run that probe. We do
+have the behavioural surface to coordinate with someone who does.
+
+Internal note on publication etiquette: the underlying probe
+finding is unpublished as of 2026-05-22. This section is staged in
+the ledger but the public chat-page upgrade waits on either the
+mod's paper publishing or explicit go-ahead. See
+`internal/feedback/Human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md`
+for the full provenance and §9–§11 of that file for the staged
+public-copy upgrades.
+```
+
+### 9h. `capset.html` — fourth card in the "rhymes" grid
+
+Paste as a new `<div class="capset-card">` after the existing four
+cards in the "Why this rhymes with the unit-distance result" grid
+(anchor sits at the end of the grid).
+
+```html
+<div class="capset-card">
+    <h3>Same operator, inside the model</h3>
+    <p>
+        Recent (cite mod's paper) probe work suggests transformers
+        themselves perform a version of this move at every forward
+        pass — compressing activations into a low-rank bottleneck
+        where a discrete <em>body</em> (categorical centroids) and
+        a continuous <em>shadow</em> (generator algebras, with
+        so(3) ranking first across many models) sit as orthogonal
+        subspaces. The cap-set proof and the unit-distance proof
+        are not just two mathematicians discovering the same trick.
+        They appear to be human articulations of the operation a
+        trained transformer is doing internally — read the body off
+        the algebraic shadow because the shadow has rigidity the
+        body lacks.
+    </p>
+</div>
+```
+
+### 9i. `geometry.html` — claim-note extension
+
+Append as a second `<p>` inside the existing `claim-note` div on the
+geometry page (anchor sits there).
+
+```html
+<p>
+    <strong>Mechanism, when it is named.</strong> Recent (cite
+    mod's paper) probe work on autoregressive transformers finds
+    the same body/shadow decomposition this curriculum points at
+    sitting natively in the residual stream — a compander
+    bottleneck where categorical centroids and generator algebras
+    occupy orthogonal subspaces. Under that framing, the cap-set,
+    halo geometry, unit-distance, and chat workbenches on this
+    shelf are not loosely analogous: they are four human-legible
+    instances of an operation the model itself is performing. The
+    page still cannot claim Sundog proved any of the underlying
+    theorems. It can now claim the curriculum has empirical
+    grounding in the geometry of trained models.
+</p>
+```
+
 ## 10. Publication-trigger gate
 
 - [ ] **When the mod's paper publishes (or they give explicit
-      go-ahead): lift §9a, §9b, §9c into the three public surfaces
-      named.** This is the high-priority follow-up. Until that gate
-      trips, the public copy stays at the more conservative
-      "low-dim subspaces in the residual stream" framing currently
-      shipped. Do not lift §9d (hypotheses) or §9e (questions held
-      in reserve) into public copy — those are for our use only,
-      unless the mod opens them up.
+      go-ahead): lift §9a, §9b, §9c, §9f, §9g, §9h, §9i into the
+      six public surfaces named.** Until that gate trips, the
+      public copy stays at the more conservative "low-dim subspaces
+      in the residual stream" framing currently shipped. Do not
+      lift §9d (hypotheses) or §9e (questions held in reserve) into
+      public copy — those are for our use only, unless the mod
+      opens them up.
 
 - [ ] **Cross-check the mod's preferred citation form** when the
       paper is up — author names, venue, arxiv identifier. The
@@ -350,6 +485,55 @@ they have spoken to it themselves.
 - [ ] **Send the mod a heads-up** when we lift the framing, so they
       know where it landed and can object to phrasing before
       anything propagates further.
+
+### 10a. Ratchet surface list (machine-readable)
+
+The six surfaces with `COMPANDER_PAPER_HOOK` anchors pre-positioned:
+
+| File | Anchor location | Draft block | What gets pasted |
+| --- | --- | --- | --- |
+| `unit-distance.html` | end of substrate-rhyme `ud-grid` | §9a | "The mechanism, when it is named" `ud-card` |
+| `unit-distance.html` | end of `source-list` in inspection-trail | §9c | citation entry for mod's paper |
+| `chat.html` | end of `followup-grid` in "What we are doing next" | §9f | "Mechanistic substrate, when it is named" `followup-card` |
+| `docs/SUNDOG_V_CHAT.md` | end of §16.5 | §9g | new top-level §17 |
+| `capset.html` | end of capset-grid in "Why this rhymes" | §9h | "Same operator, inside the model" `capset-card` |
+| `geometry.html` | inside the shelf `claim-note` div | §9i | second `<p>` extending the claim-boundary note |
+| `docs/PROMO_HIGHLIGHTS.md` | inline next to current stack-invariance line | §9b | replace blockquote with v2 line |
+
+### 10b. Deployment grep
+
+To find every anchor at trigger time:
+
+```sh
+grep -rn "COMPANDER_PAPER_HOOK" --include='*.html' --include='*.md' . \
+  | grep -v node_modules \
+  | grep -v '^./dist/'
+```
+
+Expected return: 7 lines (the 6 files above, with unit-distance.html
+showing twice — substrate-rhyme grid and inspection-trail). If the
+count is wrong, an anchor was deleted or duplicated and the surface
+list above needs reconciling before deployment.
+
+### 10c. Suggested deployment sequence
+
+When the gate trips:
+
+1. Fill the citation placeholder once in §9 (this file), then
+   propagate to the per-surface drafts. Single source of truth for
+   the citation form.
+2. Lift §9a + §9c into `unit-distance.html` first. That is the page
+   whose entire framing the mod's finding sharpens; if the
+   citation lands well there it carries the rest.
+3. Lift §9b into `PROMO_HIGHLIGHTS.md`. This is the quotable line
+   that future replies will pull from.
+4. Lift §9f into `chat.html` and §9g into `SUNDOG_V_CHAT.md` as a
+   matched pair (public surface + ledger doc, in that order).
+5. Lift §9h into `capset.html`. Lower priority because the page is
+   already mathematical, but it earns the fourth-rhyme card cleanly.
+6. Lift §9i into `geometry.html`. Last because it is curriculum-level
+   and depends on the rest being deployed first.
+7. Send the mod a heads-up message with links to all six surfaces.
 
 ## 11. Lesson for future mod-level engagements
 

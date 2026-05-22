@@ -2231,3 +2231,5 @@ When the elevator pitch, `sundog.html`, or any other coupled surface in
 The ratchet rule from &sect;13 carries over: report where the bound
 claim holds, where it fails, and do not let the public-copy surface
 promote any outcome past the route that supports it.
+
+<!-- RATCHET: COMPANDER_PAPER_HOOK · §9g · insert "17. Mechanistic substrate hypothesis (pending publication)" section here when mod's paper publishes · see internal/feedback/Human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md -->
