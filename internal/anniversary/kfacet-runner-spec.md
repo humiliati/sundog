@@ -1013,3 +1013,114 @@ Follow-up calibrated sweep: 21/21 rows pass the mechanical gates and read
 conditional until F_beta stabilization is explained. The runner must therefore
 treat D3/F_beta kernel stability as part of the Gamma pass condition, not as a
 silent diagnostic.
+
+## O_1488 leakage triage plan (2026-05-22)
+
+The leakage gate is mechanically doing the right thing: it prevents the five
+conditional rows from silently counting as structural zeros. The next question
+is why `F_beta` alone leaks while the cyclic `sigma3` family stays clean.
+
+A receipt-only probe on the existing `*.npy` artifacts changes the lead
+hypothesis. The five leaky rows each have one boundary singular vector just
+above the global `closure_floor=1e-7`. Excluding that vector leaves the recovered
+kernel non-invariant under `F_beta`; including it makes the `F_beta` leakage
+collapse to numerical floor while preserving the large gap to the first
+non-kernel singular value.
+
+| row | floor that failed | first floor that stabilizes `F_beta` | `k_dim` after stabilization | stabilized `F_beta` leak |
+| --- | ---: | ---: | ---: | ---: |
+| `O_524` | `1e-7` | `3e-7` | 8 | `1.04e-7` |
+| `O_623` | `1e-7` | `3e-7` | 8 | `1.02e-7` |
+| `O_793` | `1e-7` | `1e-6` | 8 | `1.98e-7` |
+| `O_1488` | `1e-7` | `3e-7` | 8 | `5.20e-8` |
+| `O_1497` | `1e-7` | `3e-7` | 8 | `8.50e-8` |
+
+Control row `O_62` stays `k_dim=7` and `F_beta`-clean for every tested floor
+from `1e-8` through `1e-5`, so this is not a blanket argument for raising the
+global floor. It is an adaptive-boundary issue in exactly the rows that the
+leakage gate caught.
+
+### Registered investigation sequence
+
+1. **Boundary-vector audit, no integration.** Reprocess the existing receipts
+   with a per-row floor ladder `{1e-7, 3e-7, 1e-6}`. For each row, choose the
+   smallest floor that satisfies all D3 kernel-stability leaks `<= 1e-3` and
+   still leaves an order-scale spectral gap to the next singular value. Record
+   the selected floor, `k_dim`, singular tail, and all D3 leaks.
+2. **Adaptive-floor rule draft.** If all five conditional rows stabilize under
+   the ladder without swallowing the first non-kernel singular value, draft a
+   pre-registered adaptive kernel-floor rule: `closure_floor_i` may rise only to
+   include a boundary cluster when doing so reduces D3 leakage below the
+   projector floor and the next singular value remains separated by a large
+   gap. This is a receipt rule, not a tuned result.
+3. **Gamma reinterpretation under the adaptive floor.** Recompute the D3
+   isotypic decomposition from the stabilized kernel. If `E=0` remains true on
+   all five, the catalog-level structural zero becomes 21/21 under an explicit
+   stability rule. If any row gains an `E` sector, compute the actual `Gamma_i`
+   rank for that row before drawing a theorem-facing conclusion.
+4. **Only if adaptive floor fails: cocycle branch.** Test third-orientation or
+   per-row cocycle variants (`F_beta` spatial/tau variants, inverse-permutation
+   composition, and pair-ID tau reconciliation). This branch is now secondary:
+   the existing receipts already show the leak vanishes when the boundary vector
+   is included.
+5. **Long rerun only after the no-integration reprocessor agrees.** A full
+   O_1488 rerun costs about 40-50 minutes at current tolerances. Stage it only
+   after the receipt reprocessor specifies the target floor and expected D3
+   leakage.
+
+Suggested long-run confirmation command, **not for inline agent execution**:
+
+```powershell
+python scripts/isotrophy_workbench.py kfacet-sentinel `
+  --source A `
+  --path docs/isotrophy/supplementary-A_periodic-3d_mirror.txt `
+  --m3 1 `
+  --sentinel-index 1488 `
+  --rtol 1e-12 `
+  --atol 1e-12 `
+  --closure-floor 3e-7 `
+  --verify-partial-eps `
+  --fd-h 1e-6 `
+  --fd-floor 1e-4 `
+  --joint-baseline-floor 1e-8 `
+  --authorize-sentinel-run `
+  --k-gamma 3 `
+  --k-int 10 `
+  --gamma-projector-floor 1e-3 `
+  --out results/isotrophy/k-facet-v03-O1488-adaptive-floor-confirm
+```
+
+Expected wall-clock: 40-50 minutes on this machine for `O_1488`. Decision:
+confirm whether the adaptive floor makes `O_1488` D3/F_beta-clean and whether
+the stabilized kernel still reads `E=0`, `c_i=0`, `d_i=0`.
+
+### Step 3 result: adaptive floor + isotypic decomposition
+
+The no-integration reprocessor now recomputes the D3 isotypic decomposition on
+the selected adaptive-floor kernel. Command:
+
+```powershell
+npm run isotrophy:kfacet:reprocess-floor
+```
+
+Receipt directory:
+`results/isotrophy/k-facet-v03-sentinel-sweep-leakgate-adaptive-floor/`.
+
+Outcome: all six rows resolve, no suspicious floors, no standard-E rows, and no
+Gamma recompute is required.
+
+| row | selected floor | k_dim | D3 isotypic dims | c_i | Gamma recompute |
+| --- | ---: | ---: | --- | ---: | --- |
+| `O_62` | `1e-8` | 7 | `T(2)+S(5)+E(0)` | 0 | no |
+| `O_524` | `3e-7` | 8 | `T(2)+S(6)+E(0)` | 0 | no |
+| `O_623` | `3e-7` | 8 | `T(2)+S(6)+E(0)` | 0 | no |
+| `O_793` | `1e-6` | 8 | `T(2)+S(6)+E(0)` | 0 | no |
+| `O_1488` | `3e-7` | 8 | `T(2)+S(6)+E(0)` | 0 | no |
+| `O_1497` | `3e-7` | 8 | `T(2)+S(6)+E(0)` | 0 | no |
+
+Interpretation: the boundary vector that repaired F_beta stability lands in the
+sign sector, not the standard sector. The five formerly conditional rows now
+support the same structural read as the 16 clean rows: the F_beta-even standard
+D3 isotypic is empty, so `c_i=0` and `d_i=0` by structure. The adaptive-floor
+rule is the receipt discipline that makes that statement valid; without it,
+the five rows remain flagged.
