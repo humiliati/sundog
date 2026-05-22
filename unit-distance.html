@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A plain-English overlay of OpenAI's 2026 unit-distance disproof of an Erdős conjecture, with substrate-rhyme to cap-set, evidence tiers, and explicit claim boundary.">
+    <meta name="keywords" content="unit distance, Erdős conjecture, OpenAI, AI mathematics, discrete geometry, Hajir-Maire, Golod-Shafarevich, Sawin, number field, CM lattice">
+    <meta name="theme-color" content="#1A3A52">
+    <meta name="author" content="Sundog Research Lab">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/unit-distance">
+    <title>Unit-Distance Overlay: Reading OpenAI's 2026 Disproof — Sundog</title>
+
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="Unit-Distance Overlay: Reading OpenAI's 2026 Disproof">
+    <meta property="og:description" content="The 2026 unit-distance disproof in plain English: from a cyclic cubic field, through an unramified pro-3 tower, to a CM lattice whose norm-one elements project to many unit-distance pairs in the plane.">
+    <meta property="og:image" content="https://sundog.cc/og/unit-distance.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Unit-distance overlay preview: a substrate-flow diagram from number field to planar point set.">
+    <meta property="og:url" content="https://sundog.cc/unit-distance">
+    <meta property="article:published_time" content="2026-05-22T00:00:00Z">
+    <meta property="article:modified_time" content="2026-05-22T00:00:00Z">
+    <meta property="article:section" content="Research">
+    <meta property="article:tag" content="unit distance problem">
+    <meta property="article:tag" content="Erdős">
+    <meta property="article:tag" content="OpenAI">
+    <meta property="article:tag" content="number field">
+    <meta property="article:tag" content="discrete geometry">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Unit-Distance Overlay: Reading OpenAI's 2026 Disproof">
+    <meta name="twitter:description" content="From cyclic cubic field to planar point set: a plain-English reading of the 2026 unit-distance disproof, with substrate-rhyme to cap-set.">
+    <meta name="twitter:image" content="https://sundog.cc/og/unit-distance.png">
+    <meta name="twitter:image:alt" content="Unit-distance overlay preview: a substrate-flow diagram from number field to planar point set.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Unit-Distance Overlay: Reading OpenAI's 2026 Disproof",
+      "description": "A plain-English overlay of OpenAI's 2026 unit-distance disproof of an Erdős conjecture, with substrate-rhyme to cap-set, evidence tiers, and explicit claim boundary.",
+      "image": "https://sundog.cc/og/unit-distance.png",
+      "datePublished": "2026-05-22",
+      "dateModified": "2026-05-22",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "author": {
+        "@type": "Organization",
+        "name": "Sundog Research Lab",
+        "url": "https://sundog.cc"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stellar Aqua LLC",
+        "url": "https://sundog.cc"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://sundog.cc/unit-distance"
+      },
+      "about": [
+        { "@type": "Thing", "name": "Erdős unit-distance problem" },
+        { "@type": "Thing", "name": "Discrete geometry" },
+        { "@type": "Thing", "name": "Number field" },
+        { "@type": "Thing", "name": "Golod-Shafarevich theorem" },
+        { "@type": "Thing", "name": "Hajir-Maire class-field tower" }
+      ],
+      "keywords": "unit distance problem, Erdős conjecture, OpenAI, AI mathematics, discrete geometry, Hajir-Maire, Golod-Shafarevich, Sawin, CM lattice"
+    }
+    </script>
+    <!-- OG-BLOCK-END -->
+
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        main {
+            background:
+                radial-gradient(circle at 82% 8%, rgba(244, 196, 48, 0.10), transparent 22rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 36rem);
+        }
+
+        .ud-hero {
+            padding: 6.5rem 2rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .ud-hero .eyebrow {
+            color: var(--primary-mid);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            margin: 0 0 0.5rem;
+        }
+
+        .ud-hero h1 {
+            font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+            color: var(--primary-dark);
+            margin: 0 0 1rem;
+            line-height: 1.18;
+        }
+
+        .ud-hero .lede {
+            font-size: 1.05rem;
+            color: #2C3A44;
+            line-height: 1.7;
+            max-width: 70ch;
+            margin: 0 0 1.25rem;
+        }
+
+        .status-ribbon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .status-ribbon span {
+            background: rgba(26, 58, 82, 0.06);
+            color: var(--primary-dark);
+            border: 1px solid rgba(26, 58, 82, 0.18);
+            padding: 0.32rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .ud-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+        }
+
+        .ud-section .eyebrow {
+            color: var(--primary-mid);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            margin: 0 0 0.5rem;
+        }
+
+        .ud-section h2 {
+            color: var(--primary-dark);
+            margin: 0 0 1rem;
+            font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+        }
+
+        .ud-section p {
+            color: #2C3A44;
+            line-height: 1.7;
+            font-size: 1rem;
+            max-width: 72ch;
+        }
+
+        .flow {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.65rem;
+            margin: 1.25rem 0 0;
+        }
+
+        .flow-step {
+            display: grid;
+            grid-template-columns: 2.25rem 1fr;
+            gap: 0.85rem;
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--primary-mid);
+            border-radius: 8px;
+            padding: 0.9rem 1rem;
+        }
+
+        .flow-step .num {
+            font-weight: 800;
+            color: var(--primary-mid);
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .flow-step h3 {
+            margin: 0 0 0.3rem;
+            color: var(--primary-dark);
+            font-size: 1rem;
+        }
+
+        .flow-step p {
+            margin: 0;
+            color: #40505C;
+            font-size: 0.94rem;
+            line-height: 1.6;
+            max-width: none;
+        }
+
+        .ud-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 0.85rem;
+            margin: 1.25rem 0 0;
+        }
+
+        .ud-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.1rem 1.15rem;
+        }
+
+        .ud-card h3 {
+            margin: 0 0 0.55rem;
+            color: var(--primary-dark);
+            font-size: 1rem;
+        }
+
+        .ud-card p {
+            color: #40505C;
+            font-size: 0.94rem;
+            line-height: 1.62;
+            max-width: none;
+            margin: 0;
+        }
+
+        .tier-row {
+            display: grid;
+            grid-template-columns: minmax(130px, 170px) 1fr;
+            gap: 0.85rem;
+            padding: 0.7rem 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .tier-row:first-of-type { border-top: none; }
+
+        .tier-label {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tier-dot {
+            display: inline-block;
+            width: 0.7rem;
+            height: 0.7rem;
+            border-radius: 50%;
+            background: #9AA4AC;
+        }
+
+        .tier-dot.proved { background: #2F855A; }
+        .tier-dot.verified { background: #1A3A52; }
+        .tier-dot.observed { background: #F4C430; }
+        .tier-dot.editorial { background: #8A7D5C; }
+        .tier-dot.aspirational { background: #B07A4A; }
+
+        .tier-row p {
+            margin: 0;
+            color: #40505C;
+            font-size: 0.94rem;
+            line-height: 1.62;
+            max-width: none;
+        }
+
+        .claim-note {
+            margin-top: 1.5rem;
+            background: rgba(244, 196, 48, 0.08);
+            border: 1px solid rgba(244, 196, 48, 0.45);
+            border-radius: 8px;
+            padding: 1rem 1.15rem;
+        }
+
+        .claim-note p {
+            margin: 0;
+            color: #2C3A44;
+            font-size: 0.94rem;
+            line-height: 1.65;
+            max-width: none;
+        }
+
+        .source-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .source-list a {
+            display: block;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+            color: var(--primary-mid);
+            text-decoration: none;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+            font-size: 0.94rem;
+        }
+
+        .source-list a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .schematic {
+            margin: 1.25rem 0 0;
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .schematic svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @media (max-width: 760px) {
+            .ud-hero { padding: 5.5rem 1.25rem 1.5rem; }
+            .ud-section { padding: 1.75rem 1.25rem; }
+            .tier-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/geometry">Geometry</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="ud-hero">
+            <p class="eyebrow">Unit-Distance Overlay</p>
+            <h1>What does the new construction actually look like?</h1>
+            <p class="lede">
+                In May 2026, OpenAI announced an AI-produced disproof of Erdős's
+                planar unit-distance conjecture. The conjecture said that
+                <em>n</em> points in the plane can determine at most
+                <em>n</em><sup>1+C/log&nbsp;log&nbsp;<em>n</em></sup> unit-distance
+                pairs. The new result builds, for infinitely many <em>n</em>,
+                point sets that beat that ceiling — at least <em>n</em><sup>1.014</sup>
+                unit pairs (Sawin's sharpening of the original δ&nbsp;&gt;&nbsp;0
+                statement). The upper bound is still <em>n</em><sup>4/3</sup>;
+                the gap is still wide open. This page is a plain-English overlay
+                of how the construction works, why the picture is not a
+                "17&nbsp;squares" arrangement, and where it rhymes with the
+                cap-set precedent.
+            </p>
+            <div class="status-ribbon" aria-label="Quick facts">
+                <span>Erdős conjecture · 1946</span>
+                <span>Spencer–Szemerédi–Trotter upper bound · 1984</span>
+                <span>OpenAI disproof · May 2026</span>
+                <span>Sawin refinement: ≥ <em>n</em><sup>1.014</sup></span>
+                <span>Upper bound still <em>n</em><sup>4/3</sup></span>
+            </div>
+        </section>
+
+        <section class="ud-section" aria-label="The problem">
+            <p class="eyebrow">The problem</p>
+            <h2>How many unit distances can <em>n</em> points have?</h2>
+            <p>
+                Put <em>n</em> points in the plane. Count the pairs at distance
+                exactly 1. Erdős asked in 1946 how big that count can be. The
+                classical lower bound is the square-grid construction: a
+                √<em>n</em>&nbsp;×&nbsp;√<em>n</em> integer grid has roughly
+                <em>n</em><sup>1+c/log&nbsp;log&nbsp;<em>n</em></sup>
+                unit pairs, using that many integers are sums of two squares in
+                many ways. Erdős conjectured that this is essentially the
+                ceiling — that you cannot do better than that mild
+                near-linear-in-<em>n</em> shape. The best upper bound, due to
+                Spencer–Szemerédi–Trotter in 1984, is
+                O(<em>n</em><sup>4/3</sup>); the gap between conjecture and
+                upper bound has stood for 80 years.
+            </p>
+            <p>
+                The 2026 result disproves the conjecture: for infinitely many
+                <em>n</em>, there exist <em>n</em>-point sets with at least
+                <em>n</em><sup>1.014</sup> unit pairs. The number 1.014 is the
+                value of 1&nbsp;+&nbsp;δ produced by Will Sawin's refinement of
+                the argument; the original OpenAI paper proves only that some
+                δ&nbsp;&gt;&nbsp;0 exists. The upper bound
+                O(<em>n</em><sup>4/3</sup>) is untouched.
+            </p>
+        </section>
+
+        <section class="ud-section" aria-label="Why no pretty dot pattern">
+            <p class="eyebrow">Why this isn't a "17 squares" picture</p>
+            <h2>The construction is algebraic, not pictorial.</h2>
+            <p>
+                The natural response to a discrete-geometry result is to ask
+                for the dot pattern. The honest answer here is that the
+                construction is not a clever arrangement of dots; it is a
+                projection of a high-dimensional lattice whose lattice points
+                inherit unit-distance structure from a number-field norm.
+                Eighty years of "arrange dots cleverly" produced only constant
+                factors past the square-grid baseline. The new result moves
+                the substrate: it stops searching for visible patterns in
+                ℝ<sup>2</sup> and instead searches in the arithmetic of
+                totally real number fields, then projects the answer down.
+            </p>
+        </section>
+
+        <section class="ud-section" aria-label="The construction step by step">
+            <p class="eyebrow">The construction in seven steps</p>
+            <h2>From a cyclic cubic field to a planar point set.</h2>
+            <p>
+                This is the cascade the proof builds, in plain English. Every
+                step removes a degree of freedom that pure planar reasoning
+                does not have access to.
+            </p>
+
+            <div class="flow" aria-label="Substrate flow">
+                <div class="flow-step">
+                    <div class="num">1</div>
+                    <div>
+                        <h3>Start with a small totally real field</h3>
+                        <p>
+                            Pick distinct primes
+                            <em>r</em><sub>1</sub>,&nbsp;…,&nbsp;<em>r</em><sub>ℓ</sub>
+                            with each <em>r</em><sub><em>i</em></sub>&nbsp;≡&nbsp;1&nbsp;(mod&nbsp;3).
+                            Each <em>r</em><sub><em>i</em></sub> gives a cyclic
+                            cubic subfield of the cyclotomic field
+                            ℚ(ζ<sub><em>r</em><sub><em>i</em></sub></sub>).
+                            The product character cuts out a single cyclic
+                            cubic field <em>F</em> at the bottom. <em>F</em>
+                            is totally real, does not contain ζ<sub>3</sub>,
+                            and has controlled root discriminant.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="num">2</div>
+                    <div>
+                        <h3>Build an infinite unramified pro-3 tower above it</h3>
+                        <p>
+                            Above <em>F</em>, consider the maximal everywhere-unramified
+                            extension whose Galois group is a pro-3 group.
+                            Shafarevich's relation-rank estimate combined with
+                            the Golod–Shafarevich inequality guarantees this
+                            tower is infinite. Crucially, because the tower is
+                            unramified, every layer
+                            <em>F</em><sub><em>j</em></sub> has the same root
+                            discriminant as <em>F</em>. That bounded root
+                            discriminant is the lever that controls everything
+                            downstream.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="num">3</div>
+                    <div>
+                        <h3>Prescribe a fixed set of split primes</h3>
+                        <p>
+                            Choose a finite set of rational primes
+                            <em>q</em><sub>1</sub>,&nbsp;…,&nbsp;<em>q</em><sub><em>t</em></sub>,
+                            each ≡&nbsp;1&nbsp;(mod&nbsp;4), arranged so that
+                            their Frobenius classes are trivial in the Frattini
+                            quotient. By Chebotarev they exist; by the Hajir–Maire
+                            tower-cutting trick, you can quotient the pro-3
+                            tower by these Frobenius elements and keep it
+                            infinite. The result is a single infinite tower in
+                            which every <em>q</em><sub><em>b</em></sub> splits
+                            completely at every level.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="num">4</div>
+                    <div>
+                        <h3>Adjoin <em>i</em> to get a CM field</h3>
+                        <p>
+                            Form <em>K</em><sub><em>j</em></sub> =
+                            <em>F</em><sub><em>j</em></sub>(<em>i</em>).
+                            Because every <em>q</em><sub><em>b</em></sub> is
+                            congruent to 1&nbsp;(mod&nbsp;4) and splits
+                            completely in <em>F</em><sub><em>j</em></sub>, it
+                            splits further in <em>K</em><sub><em>j</em></sub>
+                            into a conjugate pair of primes for each of its
+                            <em>f</em><sub><em>j</em></sub> degree-one factors.
+                            Complex conjugation on <em>K</em><sub><em>j</em></sub>
+                            is now playing the role that the nontrivial
+                            automorphism plays in the Gaussian integers.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="num">5</div>
+                    <div>
+                        <h3>Extract many norm-one elements via class-group pigeonhole</h3>
+                        <p>
+                            For each binary choice across the
+                            <em>m</em>&nbsp;=&nbsp;<em>tf</em><sub><em>j</em></sub>
+                            conjugate prime pairs, build an ideal
+                            <em>A</em><sub><em>ε</em></sub>. Since
+                            2<sup><em>m</em></sup> binary choices outnumber the
+                            class number of <em>K</em><sub><em>j</em></sub>,
+                            pigeonhole gives many ideals in the same ideal
+                            class. Dividing pairwise principal ideals
+                            <em>α</em><sub><em>ε</em></sub> by their conjugates
+                            yields a set <em>U</em><sub><em>j</em></sub> of
+                            elements <em>u</em>&nbsp;=&nbsp;<em>α</em>/<em>c</em>(<em>α</em>)
+                            with |σ(<em>u</em>)|&nbsp;=&nbsp;1 in every complex
+                            embedding σ.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="num">6</div>
+                    <div>
+                        <h3>Embed everything into ℂ<sup><em>f</em><sub><em>j</em></sub></sup></h3>
+                        <p>
+                            Send <em>K</em><sub><em>j</em></sub> into
+                            ℂ<sup><em>f</em><sub><em>j</em></sub></sup> via the
+                            Minkowski map — one chosen complex embedding per
+                            real place of <em>F</em><sub><em>j</em></sub>. The
+                            image of the ring of integers (scaled by 1/<em>Q</em><sup>2</sup>)
+                            is a lattice Λ<sub><em>j</em></sub>. Every
+                            <em>u</em>&nbsp;∈&nbsp;<em>U</em><sub><em>j</em></sub>
+                            lives in Λ<sub><em>j</em></sub> and has every
+                            coordinate of modulus exactly 1.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="num">7</div>
+                    <div>
+                        <h3>Window, project, and count</h3>
+                        <p>
+                            Intersect a random translate of Λ<sub><em>j</em></sub>
+                            with a product of discs of radius <em>R</em>.
+                            Project the resulting finite set onto a single
+                            complex coordinate — that is the planar point set
+                            <em>P</em><sub><em>j</em></sub>&nbsp;⊂&nbsp;ℝ<sup>2</sup>.
+                            Pairs whose lattice difference lies in
+                            <em>U</em><sub><em>j</em></sub> project to
+                            unit-distance pairs (the first coordinate has
+                            modulus 1). An averaging argument plus an
+                            archimedean packing bound gives, for some δ&nbsp;&gt;&nbsp;0
+                            fixed independent of <em>j</em>,
+                            ν(<em>P</em><sub><em>j</em></sub>)&nbsp;≥&nbsp;<em>n</em><sub><em>j</em></sub><sup>1+δ</sup>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ud-section" aria-label="Substrate rhyme with cap-set">
+            <p class="eyebrow">Substrate rhyme</p>
+            <h2>Where this echoes the cap-set breakthrough.</h2>
+            <p>
+                The cap-set proof of 2016 settled a 50-year discrete-geometry
+                question by encoding it as a polynomial-rank question and
+                counting the polynomial space. The 2026 unit-distance proof
+                settles an 80-year discrete-geometry question by encoding it
+                as a class-group pigeonhole inside a tower of unramified
+                number fields, then projecting. Both moves abandon the
+                obvious substrate — dots in finite-field grids, dots in the
+                plane — and read the body off an algebraic shadow.
+            </p>
+            <div class="ud-grid">
+                <div class="ud-card">
+                    <h3>Same shape of story</h3>
+                    <p>
+                        Decades of progress in inches. Then a borrowed
+                        algebraic tool — finite-field polynomials in 2016,
+                        algebraic number fields in 2026 — opens a door no one
+                        was looking at.
+                    </p>
+                </div>
+                <div class="ud-card">
+                    <h3>Same epistemic move</h3>
+                    <p>
+                        Don't reason about the body. Find a substrate where
+                        the question becomes rigid — polynomial degree, class
+                        number, root discriminant — and read the answer off
+                        the shadow. The body never gets touched directly.
+                    </p>
+                </div>
+                <div class="ud-card">
+                    <h3>Both leave room behind</h3>
+                    <p>
+                        Cap-set has a gap between best constructions and the
+                        2.7551<sup><em>n</em></sup> ceiling. Unit-distance now
+                        has a gap between <em>n</em><sup>1.014</sup> from
+                        below and <em>n</em><sup>4/3</sup> from above.
+                        Breakthroughs reopen problems more often than they
+                        close them.
+                    </p>
+                </div>
+                <div class="ud-card">
+                    <h3>Try the precedent</h3>
+                    <p>
+                        If the unit-distance construction feels abstract,
+                        <a href="/capset">the cap-set workbench</a> is the
+                        same epistemic move on a problem you can click on:
+                        place dots, watch forbidden lines, see the polynomial
+                        bound visualized.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="ud-section" aria-label="Evidence tiers">
+            <p class="eyebrow">Evidence-tier reading</p>
+            <h2>What this overlay claims, and at what tier.</h2>
+            <p>
+                The point of an evidence-tier overlay is to refuse the
+                shortcut where "exciting announcement" and "established
+                theorem" get the same paint. Below: the load-bearing claims
+                in the announcement and proof, sorted by how confident a
+                careful outside reader should be.
+            </p>
+
+            <div style="margin-top: 1rem;">
+                <div class="tier-row">
+                    <div class="tier-label"><span class="tier-dot proved"></span>Proved</div>
+                    <p>
+                        ν(<em>n</em>)&nbsp;≥&nbsp;<em>n</em><sup>1+δ</sup> for
+                        some absolute δ&nbsp;&gt;&nbsp;0 and infinitely many
+                        <em>n</em>. This is Theorem 1.1 of the OpenAI paper.
+                        The argument is a standard composition of Golod–Shafarevich,
+                        Hajir–Maire tower cutting, Chebotarev, Minkowski's
+                        class-number bound, and the explicit averaging /
+                        packing argument in Section 2.
+                    </p>
+                </div>
+                <div class="tier-row">
+                    <div class="tier-label"><span class="tier-dot verified"></span>Externally verified</div>
+                    <p>
+                        The proof has been examined and confirmed correct by
+                        external number-theory experts (per the paper's
+                        Statement on AI Use). Sawin's refinement giving
+                        δ&nbsp;≈&nbsp;0.014, and reported simplifications and
+                        strengthenings, are part of that external review.
+                    </p>
+                </div>
+                <div class="tier-row">
+                    <div class="tier-label"><span class="tier-dot observed"></span>Observational</div>
+                    <p>
+                        The construction is not a clever planar arrangement
+                        and cannot be drawn as a small motif. The
+                        unit-distance pairs arise from norm-one elements
+                        whose modulus-1 property holds in every complex
+                        embedding, not from local geometric near-coincidence.
+                        This is observable from the proof structure, not a
+                        separately argued claim.
+                    </p>
+                </div>
+                <div class="tier-row">
+                    <div class="tier-label"><span class="tier-dot editorial"></span>Editorial</div>
+                    <p>
+                        The 2026 result rhymes structurally with the
+                        2016 cap-set result: both abandon the obvious
+                        substrate and read the combinatorial body off an
+                        algebraic shadow. This is Sundog's reading of two
+                        breakthroughs as instances of one epistemic move, not
+                        a theorem about either.
+                    </p>
+                </div>
+                <div class="tier-row">
+                    <div class="tier-label"><span class="tier-dot aspirational"></span>Aspirational</div>
+                    <p>
+                        That the substrate move on display here is also the
+                        operating modality for agents under partial
+                        observability — read shadows as data, not as proxy.
+                        This is Sundog's broader hypothesis. It is informed
+                        by the proof but not entailed by it. Treated as a
+                        direction for work, not a conclusion.
+                    </p>
+                </div>
+            </div>
+
+            <div class="claim-note">
+                <p>
+                    <strong>Claim boundary.</strong> Sundog did not produce,
+                    verify, or extend the 2026 unit-distance result. This
+                    overlay is a reading of work by OpenAI and Will Sawin,
+                    written for a non-specialist who wants to know what the
+                    proof actually does without claiming the credit. The
+                    construction belongs to its authors; the substrate-rhyme
+                    framing is Sundog's, and is editorial.
+                </p>
+            </div>
+        </section>
+
+        <section class="ud-section" aria-label="Inspection trail">
+            <p class="eyebrow">Inspection trail</p>
+            <h2>Read the originals.</h2>
+            <div class="source-list">
+                <a href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">OpenAI · Unit-distance disproof announcement (May 2026)</a>
+                <a href="https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-proof.pdf">OpenAI · Proof PDF (Planar Point Sets with Many Unit Distances)</a>
+                <a href="/capset">Sundog · Cap-set workbench (precedent for the substrate move)</a>
+                <a href="docs/SUNDOG_V_CAPSET.md">Sundog · Capset ledger (coupling to the unit-distance result)</a>
+                <a href="https://en.wikipedia.org/wiki/Unit_distance_graph">Unit-distance graph — overview</a>
+                <a href="https://en.wikipedia.org/wiki/Golod%E2%80%93Shafarevich_theorem">Golod–Shafarevich theorem</a>
+                <a href="https://arxiv.org/abs/math/0006148">Hajir–Maire · Asymptotically good towers of global fields</a>
+                <a href="https://arxiv.org/abs/2010.10398">Hajir–Maire–Ramakrishna · Cutting towers of number fields</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/geometry">Geometry</a> |
+            <a href="/capset">Cap-set</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+</body>
+</html>
