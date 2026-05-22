@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDFDFC"/>
+      <stop offset="100%" stop-color="#F5F4EE"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · APPLICATIONS GALLERY</text>
+
+  <!-- Headline -->
+  <text x="60" y="200" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">Working systems</text>
+  <text x="60" y="259" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" fill="#1A3A52">from indirect signals.</text>
+
+  <!-- Lede -->
+  <text x="60" y="366" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">Every Sundog application,</text>
+  <text x="60" y="398" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">with its evidence tier</text>
+  <text x="60" y="430" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">and named failure boundary.</text>
+
+  <!-- URL -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/applications-gallery</text>
+
+  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  
+  <g transform="translate(770,140)">
+  <text x="190" y="-15" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">SYSTEM · TIER</text>
+  <rect x="0" y="0" width="120" height="74" rx="5" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.4"/>
+  <circle cx="13" cy="13" r="4.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <text x="13" y="39" font-family="Georgia, serif" font-size="13" font-weight="700" fill="#1A3A52">Balance</text>
+  <text x="13" y="57" font-family="Verdana, sans-serif" font-size="10" fill="#6A7680">Operating envelope</text>
+  <rect x="130" y="0" width="120" height="74" rx="5" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.4"/>
+  <circle cx="143" cy="13" r="4.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <text x="143" y="39" font-family="Georgia, serif" font-size="13" font-weight="700" fill="#1A3A52">Three-Body</text>
+  <text x="143" y="57" font-family="Verdana, sans-serif" font-size="10" fill="#6A7680">Operating envelope</text>
+  <rect x="260" y="0" width="120" height="74" rx="5" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.4"/>
+  <circle cx="273" cy="13" r="4.5" fill="#2A5570" stroke="#1A3A52" stroke-width="1"/>
+  <text x="273" y="39" font-family="Georgia, serif" font-size="13" font-weight="700" fill="#1A3A52">Photometric</text>
+  <text x="273" y="57" font-family="Verdana, sans-serif" font-size="10" fill="#6A7680">Research result</text>
+  <rect x="0" y="90" width="120" height="74" rx="5" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.4"/>
+  <circle cx="13" cy="103" r="4.5" fill="#F4C430" stroke="#C99517" stroke-width="1"/>
+  <text x="13" y="129" font-family="Georgia, serif" font-size="13" font-weight="700" fill="#1A3A52">Mines</text>
+  <text x="13" y="147" font-family="Verdana, sans-serif" font-size="10" fill="#6A7680">Operating envelope</text>
+  <rect x="130" y="90" width="120" height="74" rx="5" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.4"/>
+  <circle cx="143" cy="103" r="4.5" fill="#FFFFFF" stroke="#9AA4AC" stroke-width="1"/>
+  <text x="143" y="129" font-family="Georgia, serif" font-size="13" font-weight="700" fill="#1A3A52">EyesOnly</text>
+  <text x="143" y="147" font-family="Verdana, sans-serif" font-size="10" fill="#6A7680">Inst. prototype</text>
+  <rect x="260" y="90" width="120" height="74" rx="5" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.4"/>
+  <circle cx="273" cy="103" r="4.5" fill="#FFFFFF" stroke="#9AA4AC" stroke-width="1"/>
+  <text x="273" y="129" font-family="Georgia, serif" font-size="13" font-weight="700" fill="#1A3A52">Money Bags</text>
+  <text x="273" y="147" font-family="Verdana, sans-serif" font-size="10" fill="#6A7680">Product expression</text>
+  <rect x="0" y="180" width="120" height="74" rx="5" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.4"/>
+  <circle cx="13" cy="193" r="4.5" fill="#C99517" stroke="#9C7A12" stroke-width="1"/>
+  <text x="13" y="219" font-family="Georgia, serif" font-size="13" font-weight="700" fill="#1A3A52">Cap-Set</text>
+  <text x="13" y="237" font-family="Verdana, sans-serif" font-size="10" fill="#6A7680">Primer</text>
+  <rect x="130" y="180" width="250" height="74" rx="5" fill="#FAFBFC" stroke="#CFD8DC" stroke-width="1.4" stroke-dasharray="3 3"/>
+  <text x="255" y="222" font-family="Verdana, sans-serif" font-size="12" fill="#6A7680" font-style="italic" text-anchor="middle">…and the rest of the gallery.</text>
+  </g>
+
+
+  <!-- Bottom-right mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
+</svg>

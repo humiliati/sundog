@@ -1,0 +1,298 @@
+# Sundog SEO and Social-Readiness Roadmap
+
+Working hook:
+
+> A LinkedIn preview is a Sundog UI surface. It either honours the
+> claim-hygiene posture or it doesn't.
+
+Status: 2026-05-21. Filed in response to the OpenAI unit-distance
+disproof wave (`/capset` shipped same day) and the unsurfaced fact that
+most public pages had no OG metadata, no JSON-LD, and no shareable
+preview image. This roadmap tracks the per-page work needed to make
+every shareable URL render as a Sundog-discipline preview rather than a
+bare title-and-favicon fallback.
+
+This is a roadmap, not a marketing playbook. It does not say what to
+post; it says what each page needs to render correctly when *someone
+else* posts it.
+
+## Story Shape
+
+LinkedIn and the rest of the OG-consuming web cache previews
+aggressively — typically 7 days, sometimes longer. The cost of an
+unprepared first share is the cost of that share's preview being shown
+to everyone who sees it in feed for the following week. Anecdotally
+the engagement gap between a no-image preview and a designed
+`summary_large_image` preview is ~3×. The discipline gap is even
+larger: a Sundog page rendering as a bare text card reads as a casual
+project, not as a research lab.
+
+This work was triggered by the 2026-05-20 OpenAI unit-distance
+disproof. Within hours, `/capset` shipped with full OG metadata, a
+designed 1200×630 card, and a JSON-LD `TechArticle` schema. By the
+end of 2026-05-21, the seven other most-shareable pages (`/`, `/about`,
+`/alignment`, `/balance`, `/threebody`, `/mines`, `/sundog`) had
+matching treatments. This roadmap exists to (a) document the per-page
+state of that work, (b) finish what's left at a calmer pace, and (c)
+prevent the next wave from catching the site flat-footed.
+
+## Claim Boundary
+
+This roadmap does **not**:
+
+- prescribe content for any LinkedIn, Twitter/X, or Bluesky post;
+- promise traffic, engagement, or ranking outcomes;
+- license title or H1 changes that drift away from the
+  claim-hygiene language in
+  [`presentation/claims-and-scope.md`](presentation/claims-and-scope.md);
+- supersede [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) on
+  visual-language decisions — the OG card series inherits from the
+  paper-theme tokens documented there;
+- supersede [`SUNDOG_OUTREACH_PACKET.md`](SUNDOG_OUTREACH_PACKET.md)
+  on specialist-tier review channels — that is a different audience.
+
+What this roadmap *does* track:
+
+1. per-page presence of OG / Twitter / JSON-LD metadata,
+2. per-page existence of a designed 1200×630 preview image,
+3. per-page tuning of `<title>` and `<meta name="description">` for
+   search-intent fit (within claim-hygiene limits),
+4. internal-link equity from `/` and positioning pages,
+5. a small standing checklist for any new public-share-class page added
+   to `site-pages.json` after this filing.
+
+## Page Classes
+
+Public HTML pages on sundog.cc fall into four classes for this work.
+The class determines whether a page needs an OG card at all, and how
+much title/description tuning is permitted.
+
+| Class | Definition | OG treatment |
+| --- | --- | --- |
+| **A. Public-share** | Pages an external reader is likely to paste into LinkedIn or a slide. Home, positioning, workbenches with public claims, atlas. | Full OG block + designed 1200×630 image + JSON-LD. |
+| **B. Public-share, planned** | Pages with public-share value but not yet treated. Each entry below in this class has a named promotion gate. | Same target as Class A; tracked in this roadmap until done. |
+| **C. Defer** | Pages that are public but unlikely to drive standalone shares (reference pages, redirect-style pages, interactive widgets that read poorly out of context). | OG block with a generic Sundog card + minimal JSON-LD; no per-page designed image. |
+| **D. Internal-only** | Pages whose existence is operational, not promotional (design demos, repo navigation maps, aliases). | No OG metadata; `<meta name="robots" content="noindex">` recommended if discoverable. |
+
+A page can be promoted from Class C to Class A if its share value
+changes (e.g., gets featured in an external citation). The
+classification is editorial, not technical.
+
+## Readiness Matrix
+
+State as of 2026-05-21 PM. Read across each row; columns are listed
+under the legend below.
+
+Legend: ✓ = done · ◐ = partial · ✗ = missing · — = N/A for the page's class
+
+| Page | Class | OG block | OG image | JSON-LD | Title tuned | Desc tuned | Rail-linked | Sitemap | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `/` (index.html) | A | ✓ | home.png | WebSite | ✓ | ✓ | — (is rail) | ✓ | |
+| `/about` | A | ✓ | about.png | AboutPage | ✓ | ✓ | header nav | ✓ | |
+| `/alignment` | A | ✓ | alignment.png | Article | ✓ | ✓ | header nav | ✓ | |
+| `/sundog` | A | ✓ | atlas.png | TechArticle | ✓ | ✓ | header nav | ✓ | replaced legacy `p0.overlay.png` OG image |
+| `/balance` | A | ✓ | balance.png | TechArticle | ✓ | ✓ | rail card | ✓ | |
+| `/threebody` | A | ✓ | threebody.png | TechArticle | ✓ | ✓ | rail card | ✓ | |
+| `/mines` | A | ✓ | mines.png | TechArticle | ✓ | ✓ | rail card | ✓ | |
+| `/capset` | A | ✓ | capset.png | TechArticle | ✓ | ✓ | rail card | ✓ | first to ship; Post-Inspector confirmed |
+| `/applications-gallery` | A | ✓ | applications-gallery.png | Article | ✓ | ✓ | header nav | ✓ | promoted from B 2026-05-21 PM; viz is a 3×2 tier-card grid plus Cap-Set + "rest of the gallery" placeholder |
+| `/h-of-x` | A | ✓ | h-of-x.png | TechArticle | ✓ | ✓ | ◐ | ✓ | promoted from B 2026-05-21 PM; viz is the cos(h)=R₂₂/α₀ equation card with a small parhelion sketch |
+| `/mesa` | A | ✓ | mesa.png | TechArticle | ✓ | ✓ | ◐ | ✓ | promoted from B 2026-05-21 PM; viz is a λ-axis with hold/breach regions and the 0.953 cliff marker |
+| `/structural-failure` | A | ✓ | structural-failure.png | TechArticle | ✓ | ✓ | ◐ | ✓ | promoted from B 2026-05-21 PM; viz is a five-locus boundary map (P0/P1/Cut2/Cut3 + apparatus) |
+| `/sundog-workbench` | C | ✗ | ✗ | ✗ | — | — | — | ✓ | being absorbed into index hero per UI_UX 4a; defer until promotion decision |
+| `/chat` | C | ✗ | ✗ | ✗ | — | — | header nav | ✓ | interactive widget; low standalone share value |
+| `/legend` | C | ✗ | ✗ | ✗ | — | — | footer | ✓ | reference vocabulary; low share value |
+| `/origin` | C | ✗ | ✗ | ✗ | — | — | footer | ✓ | provenance story; medium future share value but no urgency |
+| `/paper-theme-demo` | D | — | — | — | — | — | — | — | internal design-system demo |
+| `/repo-map` | D | — | — | — | — | — | — | — | internal navigation map |
+| `/atlas` | D | — | — | — | — | — | — | ✗ | alias / redirect to `/sundog` |
+
+### Promoted from B to A (2026-05-21 PM)
+
+All four original Class B pages cleared Bucket 1 in the same session
+the Class A pages did. Promotion notes retained here for posterity.
+
+| Page | Promotion outcome |
+| --- | --- |
+| `/applications-gallery` | Promoted. Custom 6-card grid viz matches the page's role as "every working system and its evidence tier"; tier dots colour-match the existing applications-gallery card style. |
+| `/h-of-x` | Promoted ahead of full content-stability. If `SUNDOG_V_GEOMETRY.md` later shifts the page substantially, re-render the OG card and re-run Post Inspector. The equation viz is rendered as flat text (cairosvg mangles `baseline-shift` tspans), so the subscript on R₂₂ uses Unicode `₂₂` rather than SVG tspan markup. |
+| `/mesa` | Promoted. The λ-axis viz visually anchors the 0.953 cliff that the description leans on. |
+| `/structural-failure` | Promoted. The OG card uses a stylized five-locus quincunx rather than embedding the existing `/media/structural-boundary-five-locus-map.svg` — that asset is too dense for OG-thumbnail legibility. |
+
+## Buckets of Work
+
+### Bucket 1 — Do before any new public share (deadline-bound)
+
+These are the moves with a hard deadline because LinkedIn caches
+previews. Each row below maps to a discrete change.
+
+1. **Add OG + Twitter card meta tags** to the page, mirroring the
+   pattern in [`public/og/_patch_meta.py`](../public/og/_patch_meta.py)
+   (sentinel-wrapped, idempotent on re-runs).
+2. **Create a real `og:image`** at 1200×630, using
+   [`public/og/_generate.py`](../public/og/_generate.py)'s template.
+   Without an image the preview falls back to no-image card.
+3. **Tune the title and description**: title ≤ ~60 chars for Google
+   SERP, description ≤ ~155 chars. Include the actual searched terms
+   the page should answer. Stay within claim-hygiene limits — see
+   anti-pattern (i) below.
+4. **Add JSON-LD `Article` / `TechArticle` / `WebSite` / `AboutPage`**
+   schema. Less LinkedIn-relevant but helps Google rich results and
+   can pull in a "Published on" line.
+5. **Link the page from `index.html`'s research rail** if it's a
+   workbench, or from the header nav if it's positioning. Without an
+   inbound link from the homepage, the page has weak internal
+   link-equity and Google's deep crawl is slower.
+6. **Run [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/)
+   and [Twitter Card Validator](https://cards-dev.twitter.com/validator)**
+   on the deployed URL *before* the first external share. This forces
+   the cache to refresh on the corrected metadata. After this is done
+   once, the page is in steady-state.
+
+For Class B pages, Bucket 1 is owed end-to-end. For Class A pages
+already in the matrix as ✓, Bucket 1 is done.
+
+### Bucket 2 — Compounding (this week, not deadline-bound)
+
+1. **Write the Cand. 1 three-gate reading note** from
+   [`SUNDOG_V_CAPSET.md`](SUNDOG_V_CAPSET.md) and publish it as a short
+   standalone article page. The cap-set workbench is the engagement
+   hook; the note is the page that actually ranks for the analytical
+   queries ("what does the OpenAI unit-distance result mean").
+   Interactive grids do not match those search intents; analytical
+   prose does.
+2. **Submit `https://sundog.cc/sitemap.xml`** to Google Search Console
+   under Settings → Sitemaps. Without this the next deep crawl waits
+   on organic discovery rather than an explicit nudge.
+3. **Cross-link `/capset` from `/about`, `/alignment`, and
+   `/applications-gallery`** so the page accumulates more internal
+   link weight before the next deep crawl. Equivalent work applies to
+   any Class A page that lands later.
+4. **Standing checklist for new pages**: when a new entry is added to
+   `site-pages.json`, this roadmap's matrix should grow a row and the
+   page should pass Bucket 1 before the page goes public. Treat the
+   matrix as the gate.
+
+### Bucket 3 — Anti-patterns (things to specifically NOT do)
+
+These are not aesthetic preferences; each one has a Sundog-brand cost
+attached.
+
+i. **No clickbait titles or H1s.** "AI Just Solved an Unsolvable
+   Problem!" reads against Sundog's whole claim-hygiene posture —
+   the same posture
+   [`SUNDOG_V_CHAT.md`](SUNDOG_V_CHAT.md) defends in the chat widget,
+   the same posture the
+   [`SUNDOG_OUTREACH_PACKET.md`](SUNDOG_OUTREACH_PACKET.md) enforces
+   with specialist reviewers. A clickbait title is an unforced
+   inconsistency.
+
+ii. **No keyword stuffing the description.** One mention each of the
+    relevant search terms is enough. Description is for humans
+    deciding whether to click; the Google ranking signal from
+    description text is weak, and over-stuffing reads as low-quality.
+
+iii. **No public sharing before OG block + image are deployed and the
+     Post Inspector has been run.** LinkedIn caches the broken preview
+     for the cache window (typically 7 days). The cost of being early
+     is being shown a broken preview to everyone who sees the post in
+     feed for a week.
+
+iv. **No `og:image` reuse across pages with different content.** A
+    single generic Sundog card across `/balance` and `/threebody`
+    erases the per-page identity that makes the series scan-readable in
+    feed.
+
+v. **No promoting Class C pages to Class A without a content reason.**
+   Hooking `/legend` up with a designed OG card because it's "easy"
+   produces a card no one will share. Promotion follows share value,
+   not effort.
+
+## Renderer Notes
+
+Two pieces of infrastructure made this work tractable; future authors
+should be aware of both.
+
+1. **CairoSVG, not ImageMagick.** The system's ImageMagick was
+   compiled `--without-rsvg`, so its internal MSVG parser silently
+   ignores `stop-opacity` and `fill-opacity`. Gradients render at full
+   opacity. Use the `cairosvg`-based renderer in `_generate.py`.
+
+2. **Linter / file-watcher in `public/og/`.** Long Python files in
+   that directory have had their tails silently truncated mid-statement
+   during this work session. The current workaround is to run the
+   generator from `/tmp` by copying the script there first. If the
+   `public/og/` scripts become a permanent part of the build, they
+   should probably move to `scripts/` or `tools/` outside the path the
+   linter watches. Tracked as a follow-up; see
+   [Inspection Trail](#inspection-trail).
+
+## Promotion / Done Criteria
+
+The roadmap is "done" when:
+
+1. every Class A page row in the matrix is fully ✓ across OG block,
+   image, JSON-LD, title, description, rail-link, and sitemap;
+2. every Class B page has either been promoted into Class A and
+   completed Bucket 1, or has been re-classified to C with a recorded
+   reason;
+3. Bucket 2 item (4) — the standing checklist for new pages — has
+   been observed at least once on a new `site-pages.json` entry, so
+   the discipline is exercised, not just written down;
+4. Bucket 3 anti-patterns have been declared in
+   [`presentation/claims-and-scope.md`](presentation/claims-and-scope.md)
+   or `AGENTS.md` as standing rules, so future authors don't need to
+   re-derive them from this roadmap.
+
+Until all four are true, this is a living roadmap.
+
+## Cross-references
+
+- [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) — the OG
+  card series inherits its paper-theme tokens (`--sd-*`), serif
+  display type, and warm-paper background from the theme foundation.
+  A Migration Steps cross-reference pointer was added there pointing
+  back to this roadmap.
+- [`SUNDOG_V_CAPSET.md`](SUNDOG_V_CAPSET.md) — the cap-set ledger; its
+  Cand. 1 (three-gate reading note) is Bucket 2 item (1) of this
+  roadmap.
+- [`SUNDOG_V_GEOMETRY.md`](SUNDOG_V_GEOMETRY.md) — the geometry
+  roadmap; `/geometry.html` (forthcoming) will inherit the standing
+  checklist when it ships.
+- [`SUNDOG_OUTREACH_PACKET.md`](SUNDOG_OUTREACH_PACKET.md) — the
+  specialist-review-tier packet; different audience, different surface.
+  The two documents are complementary, not overlapping.
+- [`presentation/claims-and-scope.md`](presentation/claims-and-scope.md)
+  — the claim-hygiene reference; Bucket 3 anti-patterns derive from
+  the discipline this doc names.
+- [`public/og/_generate.py`](../public/og/_generate.py),
+  [`public/og/_patch_meta.py`](../public/og/_patch_meta.py) — the
+  current renderer and patcher. See Renderer Notes above.
+
+## Inspection Trail
+
+- 2026-05-20 — OpenAI unit-distance disproof published
+- 2026-05-21 AM — `/capset` shipped with full OG / Twitter / JSON-LD
+  and a designed `og:image` (initially ImageMagick-rendered with
+  broken gradient; later re-rendered through CairoSVG).
+- 2026-05-21 PM — Class A pages (7 additional) brought to parity via
+  `_generate.py` (cards) and `_patch_meta.py` (HTML).
+- 2026-05-21 PM — this roadmap filed.
+- 2026-05-21 PM (late) — all four Class B pages promoted to Class A and
+  cleared Bucket 1 in the same session. Twelve Class A pages now ✓ on
+  OG block / image / JSON-LD / title / description / sitemap. Internal
+  link equity (rail-link column) for `/h-of-x`, `/mesa`,
+  `/structural-failure` marked ◐ — they have header / footer / contextual
+  links but no `index.html` rail card; treating that as a Bucket 2
+  follow-up rather than a deadline-bound gap.
+
+Open follow-ups:
+
+- Bucket 2 items (1)–(3) still await execution: Cand. 1 three-gate
+  reading note, GSC sitemap submission, `/capset` cross-links from
+  positioning pages.
+- Internal rail-card placement for the three ◐ pages above is a
+  Bucket 2 item: each is currently reachable but not promoted on `/`.
+- The linter-truncation note in Renderer Notes (2) needs an owner.
+- Class C / D pages remain explicitly deferred; promote only with a
+  content reason per Bucket 3 anti-pattern (v).

@@ -511,6 +511,35 @@ asks.
    `--sd-font-data` (system mono). Handwritten token removed; production pages
    migrated off `'Courier New'` literals onto `var(--sd-font-data)` and off
    inline body-font duplicates onto the shared stylesheet.
+7. SEO and social-readiness work — per-page OG cards, Twitter card meta,
+   JSON-LD, and title/description tuning so every shareable URL renders
+   as a Sundog-discipline preview on LinkedIn, X, and Google SERP rather
+   than as a bare title-and-favicon fallback.
+
+   **Owned by:**
+   [`SEO_AND_SOCIAL_READINESS_ROADMAP.md`](SEO_AND_SOCIAL_READINESS_ROADMAP.md).
+   The OG card series inherits the paper-theme tokens (`--sd-*`), the
+   three-voice typography roster (display Georgia serif / body system
+   sans / data system mono), and the warm-paper background defined in
+   this document — sections above are the design source for the
+   per-page cards. The SEO roadmap's per-page matrix is the
+   authoritative status board for this work; this entry exists as a
+   pointer, not as a duplicate ledger.
+
+   **Renderer dependency:** ImageMagick on the sandbox build path was
+   compiled `--without-rsvg` and silently corrupts `stop-opacity` and
+   `fill-opacity`. The OG card generator at
+   [`public/og/_generate.py`](../public/og/_generate.py) routes through
+   CairoSVG instead — anyone touching the generator should preserve
+   that.
+
+   **Landed 2026-05-21:** twelve Class A pages shipped to parity —
+   the original eight (`/`, `/about`, `/alignment`, `/balance`,
+   `/threebody`, `/mines`, `/sundog`, `/capset`) plus the four pages
+   promoted from Class B the same day (`/applications-gallery`,
+   `/h-of-x`, `/mesa`, `/structural-failure`). Internal rail-card
+   placement for three of the late promotions remains a Bucket 2
+   follow-up.
 
 ## Guardrails
 

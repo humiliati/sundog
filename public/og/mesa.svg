@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDFDFC"/>
+      <stop offset="100%" stop-color="#F5F4EE"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Top accent rule -->
+  <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
+
+  <!-- Eyebrow -->
+  <text x="60" y="100" font-family="Verdana, Geneva, sans-serif" font-size="20" font-weight="700" fill="#2A5570" letter-spacing="3">SUNDOG · MESA-OPTIMIZATION TRAP</text>
+
+  <!-- Headline -->
+  <text x="60" y="220" font-family="Georgia, 'Times New Roman', serif" font-size="68" font-weight="700" fill="#1A3A52">A cliff at λ ≈ 0.953.</text>
+
+  <!-- Lede -->
+  <text x="60" y="340" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">In-vitro operating envelope for</text>
+  <text x="60" y="372" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">signature-driven control under</text>
+  <text x="60" y="404" font-family="Verdana, Geneva, sans-serif" font-size="22" font-weight="400" fill="#40505C">Goodhart-prone selection pressure.</text>
+
+  <!-- URL -->
+  <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/mesa</text>
+
+  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  
+  <g transform="translate(680,210)">
+    <text x="230" y="-15" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">λ-AXIS · OPERATING ENVELOPE</text>
+    <!-- Axis baseline -->
+    <line x1="0" y1="55" x2="460" y2="55" stroke="#1A3A52" stroke-width="2"/>
+    <!-- Hold region -->
+    <rect x="0" y="35" width="395" height="40" fill="#2E7D5A" fill-opacity="0.20" stroke="#2E7D5A" stroke-opacity="0.45" stroke-width="1"/>
+    <!-- Cliff dashed line -->
+    <line x1="395" y1="10" x2="395" y2="95" stroke="#D45A4A" stroke-width="2.4" stroke-dasharray="4 3"/>
+    <!-- Breach region -->
+    <rect x="395" y="35" width="65" height="40" fill="#D45A4A" fill-opacity="0.24" stroke="#D45A4A" stroke-opacity="0.55" stroke-width="1"/>
+    <!-- Region labels (above) -->
+    <text x="197" y="28" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" fill="#2E7D5A" text-anchor="middle">hold</text>
+    <text x="427" y="28" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" fill="#B53A2C" text-anchor="middle">breach</text>
+    <!-- Tick labels (below) -->
+    <text x="0" y="115" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#1A3A52" text-anchor="middle">λ=0</text>
+    <text x="395" y="115" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="700" fill="#D45A4A" text-anchor="middle">λ≈0.953</text>
+    <text x="460" y="115" font-family="Verdana, Geneva, sans-serif" font-size="12" fill="#1A3A52" text-anchor="middle">λ=1</text>
+    <!-- Mechanistic locus -->
+    <text x="230" y="155" font-family="Verdana, Geneva, sans-serif" font-size="13" fill="#40505C" text-anchor="middle">cliff localized to a 5D basin at net.7</text>
+  </g>
+
+
+  <!-- Bottom-right mark -->
+  <text x="1140" y="600" font-family="Verdana, Geneva, sans-serif" font-size="14" font-weight="700" letter-spacing="2" fill="#9AA4AC" text-anchor="end">sundog.cc</text>
+</svg>
