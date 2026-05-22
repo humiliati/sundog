@@ -3,34 +3,43 @@ the 21 strict G.2 rows. Asks one question: is O_617's near-T bridge direction
 unique in the catalog, or are there other rows whose kernel directions sit at
 the same structural edge?
 
-Method, all no-integration:
+Method, all no-integration (v2 -- isotypic-projector classifier):
   for each row in the 21 strict rows:
     1. Load M_i.npy and D3_*.npy from the sentinel-sweep-calibrated/O{idx}/.
-    2. Load the row's selected adaptive floor from the reprocessor manifest.
-    3. SVD (M_i - I); identify kernel band (sv < adaptive_floor), bridge band
-       (adaptive_floor <= sv < 1e-3), and non-kernel band (sv >= 1e-3).
-    4. For each direction v in kernel + bridge bands, compute:
-         alignment_sigma3 = <v, sigma_3 v> / ||v||^2
-         alignment_F_beta = <v, F_beta v> / ||v||^2
-         closure_sigma3 = ||sigma_3^3 v - v|| / ||v||
-         closure_F_beta = ||F_beta^2 v - v|| / ||v||
-         residual_M = ||M_i v - v|| / ||v||
-    5. Classify each direction:
-         clean_T:        |align_sigma3| >= 0.999 AND align_F_beta >= 0.999
-                         AND closure_sigma3 < 1e-3 AND closure_F_beta < 1e-3
-         clean_S:        |align_sigma3| >= 0.999 AND align_F_beta <= -0.999
-                         AND closure_sigma3 < 1e-3 AND closure_F_beta < 1e-3
-         e_rotation:     |align_sigma3| < 0.99  (sigma_3 rotates, not scales)
-         near_T_edge:    align_sigma3 >= 0.99 AND closure_sigma3 > 1e-3
-                         AND closure_F_beta < 1e-3  (the O_617 bridge pattern)
-         near_S_edge:    align_sigma3 >= 0.99 AND closure_sigma3 < 1e-3
-                         AND closure_F_beta > 1e-3
-         unclassified:   anything else.
-  6. Aggregate per row, then across the catalog.
+    2. SVD (M_i - I); take all directions with sv < NEAR_T_BRIDGE_BAND_UPPER
+       (1e-3) as the bridge-admitted kernel basis K. This includes the row's
+       structural kernel plus any bridge directions below the absolute guard.
+    3. Project D3 onto K: sigma_3_K = K^T sigma_3 K, etc.
+    4. Build the D3 character projectors (T, S, E) in K-coordinates and
+       extract orthonormal isotypic bases.
+    5. Lift each isotypic basis vector back to 18D, then compute:
+         alignment_sigma3 = <v, sigma_3 v>
+         alignment_F_beta = <v, F_beta v>
+         closure_sigma3 = ||sigma_3^3 v - v||
+         closure_F_beta = ||F_beta^2 v - v||
+    6. Classify each direction with respect to its projector-assigned isotype:
+         clean_T:        T direction with closures < 1e-3
+         clean_S:        S direction with closures < 1e-3
+         clean_E:        E direction with sigma_3 acting as 2D rotation
+         edge_T:         T direction with closure_sigma3 > 1e-3
+         edge_S:         S direction with closure_F_beta > 1e-3
+         edge_E_as_T:    E projector caught a T-like direction (O_617 bridge)
+         edge_E_as_S:    E projector caught an S-like direction
+         edge_E_other:   E direction not behaving as rotation, T, or S
+  7. Aggregate per row, then across the catalog.
+
+The isotypic-projector classifier replaces v1's per-SVD-vector approach.
+SVD basis vectors are generally mixtures of T and S; v1 saw most kernel
+directions as `unclassified` for that reason. v2 first projects onto
+isotypics (via the D3 character projector, matching the reprocessor's
+`compute_d3_isotypic_summary`) and only then asks per-direction questions.
+The v1 finding that `O_617` is uniquely `near_T_edge` is preserved as
+`edge_E_as_T` in the v2 schema: the bridge sits in an odd-dim E block
+that the projector caught but whose behavior is structurally T.
 
 Pre-registered question:
-  Is `O_617`'s bridge direction the only `near_T_edge` direction across the
-  21-row catalog? If yes, the WHY-dive's diagnosis is row-unique and
+  Is `O_617`'s bridge direction the only structural-edge direction across
+  the 21-row catalog? If yes, the WHY-dive's diagnosis is row-unique and
   promotable; if no, it is a class of bridges and the catalog has more
   structural edge cases.
 """

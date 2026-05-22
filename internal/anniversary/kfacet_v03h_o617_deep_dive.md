@@ -156,6 +156,32 @@ countable evidence for `Gamma_i`. But the causal label is now sharper:
 **O_617 sits at the edge of the trivial sector, not outside D3 in a featureless
 way.**
 
+## Catalog-Wide Separator Addendum
+
+The catalog-wide near-T separator (`scripts/catalog_near_t_separator.py`)
+checks the same per-direction diagnostic across all 21 strict G.2 rows from
+existing receipts. It confirms the WHY-dive is row-unique:
+
+```text
+clean_T:        4
+clean_S:       39
+e_rotation:     0
+near_T_edge:    1   (O_617 only)
+near_S_edge:    0
+unclassified: 116   (SVD-basis artifact; not a structural class)
+```
+
+Receipt: `results/isotrophy/k-facet-v03-near-T-separator/separator_manifest.json`.
+
+The load-bearing parts are `near_T_edge = [617]`, `e_rotation = 0`, and
+`near_S_edge = 0`. The large unclassified count is expected because singular
+vectors of `(M_i - I)` are not generally D3-isotypic basis vectors; mixed T/S
+directions do not classify cleanly under a per-direction test. The D3 character
+projector remains the authoritative T/S/E counter. The separator nevertheless
+gives an independent check that no catalog direction exhibits standard
+E-rotation behavior and that O_617 is the only row with a near-trivial edge
+direction.
+
 ## Implications
 
 - The v0.3h catalog result remains: 20 clean structural zeros plus one named
@@ -163,6 +189,8 @@ way.**
 - `O_617` is not counterevidence against the `Gamma_i` audit chain.
 - A tighter sigma3 catalog-reconstruction sweep is no longer the natural next
   test for this row; its admission residual is already at integration scale.
+- The WHY-dive's `bridge_approx_trivial_isotypic` diagnosis is row-unique
+  across the strict catalog, not a generic phenomenon.
 - The open research question is what symmetry, near-symmetry, or boundary
   mechanism the bridge direction actually carries.
 

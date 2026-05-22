@@ -1213,3 +1213,15 @@ is admitted the restricted representation fails `sigma3^3 = I` at about 4% and
 produces an odd `E(1)` residual. O_617 is excluded as a structural bridge
 outside the valid `D3` representation, not as counterevidence and not as a
 catalog-admission edge row.
+
+WHY-dive and separator refinement: the bridge is more specifically an
+approximate trivial-isotypic direction. `M_i` gives Rayleigh `lambda =
+0.999999`, `F_beta^2 v - v = 0`, and `sigma3 v` projects back onto
+`v_bridge` at `0.9998`, but the sigma3 scalar drift accumulates so
+`sigma3^3 v - v` remains above the relation floor. The receipt outcome is
+`bridge_approx_trivial_isotypic`. The catalog-wide near-T separator
+(`scripts/catalog_near_t_separator.py`,
+`results/isotrophy/k-facet-v03-near-T-separator/separator_manifest.json`)
+confirms this is unique: `near_T_edge = [617]`, `near_S_edge = []`, and
+`e_rotation_rows = []`. The 116 per-direction `unclassified` readings are an
+SVD-basis artifact, not a structural counter to the D3 projector's `E=0`.
