@@ -922,6 +922,21 @@ zeros, until their F_beta asymmetry is resolved. The runner now promotes D3
 kernel stability from diagnostic to Gamma pass condition so leaky rows cannot
 silently count as evidence.
 
+A receipt-only leakage triage on those five rows shifts the lead hypothesis
+from "third F_beta cocycle" to "adaptive kernel boundary." Each leaky row has
+one boundary singular vector just above `closure_floor=1e-7`; including it
+stabilizes F_beta (`O_524/O_623/O_1488/O_1497` at `3e-7`, `O_793` at `1e-6`)
+without touching the order-scale non-kernel gap. The next registered move is a
+no-integration adaptive-floor reprocessor, followed by a single O_1488
+confirmation rerun only if the reprocessor keeps `E=0`.
+
+That reprocessor now closes the conditional split without integration. The
+selected adaptive-floor kernels keep `E=0`: control `O_62` reads
+`T(2)+S(5)+E(0)`, while the five repaired rows read `T(2)+S(6)+E(0)`. The
+extra boundary vector is sign-sector, not standard-sector, so no row requires a
+Gamma rerun before the structural conclusion: under the registered adaptive
+floor rule, the strict catalog has no F_beta-even standard `D3` sector.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

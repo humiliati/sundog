@@ -75,6 +75,21 @@ DEFAULT_KFACET_STRICT_INDICES = (
     1497,
 )
 
+# Pre-registered constants for the v0.3h adaptive-floor reprocessor. The
+# `kfacet-reprocess-floor` subcommand reads existing sentinel receipts and
+# selects, per row, the smallest floor in the ladder that simultaneously
+# (a) drives every D3 operator's kernel leakage to <= 1e-3 and
+# (b) preserves an order-scale spectral gap at the kernel boundary.
+# Selection is deterministic; no per-row knobs. The upper rungs are
+# guardrails: a row that only stabilizes at >= 3e-6 is flagged suspicious
+# in the receipt even when it technically passes.
+ADAPTIVE_FLOOR_LADDER = (1e-8, 3e-8, 1e-7, 3e-7, 1e-6, 3e-6, 1e-5)
+ADAPTIVE_FLOOR_PROJECTOR_FLOOR = 1e-3
+ADAPTIVE_FLOOR_GAP_RATIO_THRESHOLD = 1e-3
+ADAPTIVE_FLOOR_FIRST_REJECTED_THRESHOLD = 1e-3
+ADAPTIVE_FLOOR_SUSPICIOUS_THRESHOLD = 3e-6
+ADAPTIVE_FLOOR_VERSION = "v0.3h-adaptive-floor"
+
 FLOAT = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
 ROW_RE = re.compile(
     rf"O_\{{(?P<index>\d+)\}}\((?P<m3>{FLOAT})\)\s+"
@@ -1158,6 +1173,77 @@ def compute_gamma_rank_gate(
         ),
     }
     return result, gamma_matrix, xi_basis
+
+
+def compute_d3_isotypic_summary(
+    kernel_basis: np.ndarray,
+    d3_ops: dict[str, np.ndarray],
+    projector_floor: float,
+) -> dict[str, object]:
+    """Compute D3 isotypic dimensions on a recovered kernel basis.
+
+    This is the no-integration counterpart of the projector block inside
+    compute_gamma_rank_gate. It records the structural payoff of an adaptive
+    kernel floor: whether the stabilized extra direction lands in T, S, or E.
+    """
+    k_dim = int(kernel_basis.shape[1])
+    if k_dim == 0:
+        return {
+            "kernel_dim": 0,
+            "D3_isotypic_dims": {"T": 0, "S": 0, "E": 0, "c_i": 0},
+            "E_dim_even": True,
+            "F_beta_even_E_dim": 0,
+            "F_beta_even_E_dim_expected": 0,
+            "F_beta_even_E_null_singular_values": [],
+            "requires_gamma_recompute": False,
+        }
+
+    identity_k = np.eye(k_dim)
+    restricted = {name: kernel_basis.T @ operator @ kernel_basis for name, operator in d3_ops.items()}
+    sigma3 = restricted["sigma3"]
+    sigma3_sq = restricted["sigma3_sq"]
+    f_beta = restricted["F_beta"]
+    f_beta_sigma3 = restricted["F_beta_sigma3"]
+    f_beta_sigma3_sq = restricted["F_beta_sigma3_sq"]
+
+    projector_t = (identity_k + sigma3 + sigma3_sq + f_beta + f_beta_sigma3 + f_beta_sigma3_sq) / 6.0
+    projector_s = (identity_k + sigma3 + sigma3_sq - f_beta - f_beta_sigma3 - f_beta_sigma3_sq) / 6.0
+    projector_e = identity_k - projector_t - projector_s
+
+    t_basis_k = vector_subspace_basis(projector_t, projector_floor)
+    s_basis_k = vector_subspace_basis(projector_s, projector_floor)
+    e_basis_k = vector_subspace_basis(projector_e, projector_floor)
+    e_dim = int(e_basis_k.shape[1])
+    c_i = e_dim // 2
+    e_dim_even = e_dim % 2 == 0
+
+    if e_dim == 0:
+        f_even_dim = 0
+        f_even_singular_values: list[float] = []
+    else:
+        f_beta_e = e_basis_k.T @ f_beta @ e_basis_k
+        f_even_coords, f_even_singular_values = nullspace_basis(f_beta_e - np.eye(e_dim), projector_floor)
+        f_even_dim = int(f_even_coords.shape[1])
+
+    return {
+        "kernel_dim": k_dim,
+        "D3_isotypic_dims": {
+            "T": int(t_basis_k.shape[1]),
+            "S": int(s_basis_k.shape[1]),
+            "E": e_dim,
+            "c_i": c_i,
+        },
+        "E_dim_even": e_dim_even,
+        "F_beta_even_E_dim": f_even_dim,
+        "F_beta_even_E_dim_expected": c_i if e_dim_even else None,
+        "F_beta_even_E_null_singular_values": f_even_singular_values,
+        "requires_gamma_recompute": bool(c_i > 0),
+        "notes": (
+            "No-integration D3 projector readout on the selected adaptive-floor "
+            "kernel. If c_i>0, the full Gamma_i rank must be recomputed before "
+            "the row can be interpreted."
+        ),
+    }
 
 
 def best_so3_rotation(source: np.ndarray, target: np.ndarray) -> np.ndarray:
@@ -2490,6 +2576,316 @@ def command_kfacet_sentinel(args: argparse.Namespace) -> int:
     return 0
 
 
+def reprocess_kernel_floor_for_row(
+    row_dir: Path,
+) -> dict[str, object]:
+    """Reprocess a sentinel receipt directory under the adaptive-floor ladder.
+
+    Inputs: a directory containing ``M_i.npy`` plus ``D3_*.npy`` matrices and
+    a ``gate_receipt.json`` from a prior sentinel run. No integration is
+    performed.
+
+    For each floor in the pre-registered ladder, this function recovers a
+    kernel basis from ``ker(M_i - I)`` at that floor, computes the D3
+    operator leakage outside the recovered kernel, and reports whether the
+    floor simultaneously satisfies:
+      * Leakage: every D3 operator leak <= ADAPTIVE_FLOOR_PROJECTOR_FLOOR.
+      * Gap ratio: max(kept SV) / min(rejected SV) <= ADAPTIVE_FLOOR_GAP_RATIO_THRESHOLD.
+      * First-rejected absolute: min(rejected SV) >= ADAPTIVE_FLOOR_FIRST_REJECTED_THRESHOLD.
+
+    The selected floor is the smallest in the ladder satisfying all three.
+    Floors at or above ADAPTIVE_FLOOR_SUSPICIOUS_THRESHOLD are flagged
+    suspicious even when they pass, so the receipt records suspicion as a
+    structured outcome rather than silently accepting the boundary.
+    """
+    m_path = row_dir / "M_i.npy"
+    receipt_path = row_dir / "gate_receipt.json"
+    if not m_path.is_file() or not receipt_path.is_file():
+        return {
+            "row_dir": str(row_dir),
+            "outcome": "missing_inputs",
+            "missing": [str(p) for p in (m_path, receipt_path) if not p.is_file()],
+        }
+    M_i = np.load(m_path)
+    base_receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    row_index = base_receipt.get("row_index")
+    label = base_receipt.get("label")
+    period = base_receipt.get("period")
+    m3 = base_receipt.get("m3")
+
+    d3_names = ("e", "sigma3", "sigma3_sq", "F_beta", "F_beta_sigma3", "F_beta_sigma3_sq")
+    d3_ops: dict[str, np.ndarray] = {}
+    for name in d3_names:
+        op_path = row_dir / f"D3_{name}.npy"
+        if not op_path.is_file():
+            return {
+                "row_dir": str(row_dir),
+                "row_index": row_index,
+                "outcome": "missing_inputs",
+                "missing": [str(op_path)],
+            }
+        d3_ops[name] = np.load(op_path)
+
+    identity = np.eye(M_i.shape[0])
+    _u, singular_values, vh = np.linalg.svd(M_i - identity)
+    singular_values_desc = [float(value) for value in singular_values]
+
+    ladder_results: list[dict[str, object]] = []
+    selected_floor: float | None = None
+    selected_entry: dict[str, object] | None = None
+    for floor in ADAPTIVE_FLOOR_LADDER:
+        mask = singular_values < floor
+        kept_indices = np.where(mask)[0]
+        rejected_indices = np.where(~mask)[0]
+        k_dim = int(kept_indices.size)
+        if kept_indices.size == 0:
+            last_kept_sv: float | None = None
+        else:
+            last_kept_sv = float(singular_values[kept_indices].max())
+        if rejected_indices.size == 0:
+            first_rejected_sv: float | None = None
+        else:
+            first_rejected_sv = float(singular_values[rejected_indices].min())
+        if last_kept_sv is None or first_rejected_sv is None or first_rejected_sv == 0.0:
+            gap_ratio: float | None = None
+        else:
+            gap_ratio = float(last_kept_sv / first_rejected_sv)
+        kernel_basis = vh.T[:, mask]
+        ambient_projector = kernel_basis @ kernel_basis.T if kernel_basis.size else np.zeros_like(M_i)
+        ambient_identity = np.eye(M_i.shape[0])
+        d3_leakage = {
+            name: float(np.linalg.norm((ambient_identity - ambient_projector) @ operator @ kernel_basis, ord=np.inf))
+            if kernel_basis.size
+            else 0.0
+            for name, operator in d3_ops.items()
+        }
+        max_leak = max(d3_leakage.values()) if d3_leakage else 0.0
+        satisfies_leak = max_leak <= ADAPTIVE_FLOOR_PROJECTOR_FLOOR and k_dim > 0
+        satisfies_gap_ratio = (
+            gap_ratio is not None and gap_ratio <= ADAPTIVE_FLOOR_GAP_RATIO_THRESHOLD
+        )
+        satisfies_first_rejected = (
+            first_rejected_sv is not None
+            and first_rejected_sv >= ADAPTIVE_FLOOR_FIRST_REJECTED_THRESHOLD
+        )
+        satisfies_all = bool(satisfies_leak and satisfies_gap_ratio and satisfies_first_rejected)
+        entry: dict[str, object] = {
+            "floor": float(floor),
+            "k_dim": k_dim,
+            "last_kept_sv": last_kept_sv,
+            "first_rejected_sv": first_rejected_sv,
+            "gap_ratio": gap_ratio,
+            "D3_leakage_inf": d3_leakage,
+            "max_D3_leakage_inf": max_leak,
+            "satisfies_leak": satisfies_leak,
+            "satisfies_gap_ratio": satisfies_gap_ratio,
+            "satisfies_first_rejected": satisfies_first_rejected,
+            "satisfies_all": satisfies_all,
+        }
+        ladder_results.append(entry)
+        if satisfies_all and selected_floor is None:
+            selected_floor = float(floor)
+            selected_entry = entry
+
+    if selected_entry is None:
+        outcome = "adaptive_floor_failed"
+        is_suspicious = False
+        selected_isotypic_summary: dict[str, object] | None = None
+    elif selected_floor is not None and selected_floor >= ADAPTIVE_FLOOR_SUSPICIOUS_THRESHOLD:
+        outcome = "adaptive_floor_suspicious"
+        is_suspicious = True
+        selected_mask = singular_values < selected_floor
+        selected_kernel_basis = vh.T[:, selected_mask]
+        selected_isotypic_summary = compute_d3_isotypic_summary(
+            selected_kernel_basis,
+            d3_ops,
+            ADAPTIVE_FLOOR_PROJECTOR_FLOOR,
+        )
+    else:
+        outcome = "adaptive_floor_resolved"
+        is_suspicious = False
+        selected_mask = singular_values < selected_floor
+        selected_kernel_basis = vh.T[:, selected_mask]
+        selected_isotypic_summary = compute_d3_isotypic_summary(
+            selected_kernel_basis,
+            d3_ops,
+            ADAPTIVE_FLOOR_PROJECTOR_FLOOR,
+        )
+
+    receipt: dict[str, object] = {
+        "mode": "kfacet_reprocess_floor",
+        "reprocessor_version": ADAPTIVE_FLOOR_VERSION,
+        "row_index": row_index,
+        "label": label,
+        "m3": m3,
+        "period": period,
+        "input_receipt": str(receipt_path),
+        "row_dir": str(row_dir),
+        "M_i_norm_inf": float(np.linalg.norm(M_i, ord=np.inf)),
+        "kernel_singular_values_desc": singular_values_desc,
+        "floor_ladder": [float(value) for value in ADAPTIVE_FLOOR_LADDER],
+        "projector_floor": ADAPTIVE_FLOOR_PROJECTOR_FLOOR,
+        "gap_ratio_threshold": ADAPTIVE_FLOOR_GAP_RATIO_THRESHOLD,
+        "first_rejected_threshold": ADAPTIVE_FLOOR_FIRST_REJECTED_THRESHOLD,
+        "suspicious_floor_threshold": ADAPTIVE_FLOOR_SUSPICIOUS_THRESHOLD,
+        "ladder_results": ladder_results,
+        "selected_floor": selected_floor,
+        "selected_k_dim": selected_entry["k_dim"] if selected_entry else None,
+        "selected_D3_leakage_inf": selected_entry["D3_leakage_inf"] if selected_entry else None,
+        "selected_max_D3_leakage_inf": selected_entry["max_D3_leakage_inf"] if selected_entry else None,
+        "selected_gap_ratio": selected_entry["gap_ratio"] if selected_entry else None,
+        "selected_first_rejected_sv": selected_entry["first_rejected_sv"] if selected_entry else None,
+        "selected_is_suspicious": is_suspicious,
+        "selected_D3_isotypic_summary": selected_isotypic_summary,
+        "selected_c_i": (
+            selected_isotypic_summary["D3_isotypic_dims"]["c_i"]
+            if selected_isotypic_summary
+            else None
+        ),
+        "selected_requires_gamma_recompute": (
+            selected_isotypic_summary["requires_gamma_recompute"]
+            if selected_isotypic_summary
+            else None
+        ),
+        "outcome": outcome,
+        "notes": (
+            "Pre-registered selection: smallest floor in the ladder with "
+            "max D3 leakage <= projector floor, gap ratio <= 1e-3, and first "
+            "rejected SV >= 1e-3. Suspicion is raised when the selected floor "
+            "is at or above 3e-6. D3 isotypic dimensions are recomputed on the "
+            "selected kernel to decide whether the adaptive boundary vector "
+            "lands in T/S or creates a standard E sector."
+        ),
+    }
+    return receipt
+
+
+def command_kfacet_reprocess_floor(args: argparse.Namespace) -> int:
+    """No-integration adaptive-floor reprocessor over existing sentinel receipts."""
+    input_dir = Path(args.input_dir)
+    if not input_dir.is_dir():
+        raise SystemExit(f"input directory not found: {input_dir}")
+
+    candidate_dirs: list[Path]
+    if args.indices:
+        wanted = {int(token.strip()) for token in args.indices.split(",") if token.strip()}
+        candidate_dirs = []
+        for child in sorted(input_dir.iterdir()):
+            if not child.is_dir() or not child.name.startswith("O"):
+                continue
+            try:
+                row_index = int(child.name[1:])
+            except ValueError:
+                continue
+            if row_index in wanted:
+                candidate_dirs.append(child)
+    else:
+        candidate_dirs = sorted(
+            child for child in input_dir.iterdir()
+            if child.is_dir() and child.name.startswith("O") and child.name[1:].isdigit()
+        )
+
+    if not candidate_dirs:
+        raise SystemExit(f"no O_x subdirectories found under {input_dir}")
+
+    out_dir = Path(args.out) if args.out else input_dir.parent / f"{input_dir.name}-adaptive-floor"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    per_row_receipts: list[dict[str, object]] = []
+    outcome_counts: dict[str, int] = {}
+    selected_floor_histogram: dict[str, int] = {}
+    for row_dir in candidate_dirs:
+        print(f"[kfacet-reprocess-floor] reprocessing {row_dir.name}")
+        receipt = reprocess_kernel_floor_for_row(row_dir)
+        per_row_receipts.append(receipt)
+        outcome = str(receipt.get("outcome"))
+        outcome_counts[outcome] = outcome_counts.get(outcome, 0) + 1
+        selected_floor = receipt.get("selected_floor")
+        if isinstance(selected_floor, float):
+            key = f"{selected_floor:.0e}"
+            selected_floor_histogram[key] = selected_floor_histogram.get(key, 0) + 1
+        row_out = out_dir / row_dir.name
+        row_out.mkdir(parents=True, exist_ok=True)
+        (row_out / "adaptive_floor_receipt.json").write_text(
+            json.dumps(receipt, indent=2) + "\n", encoding="utf-8"
+        )
+        max_leak = receipt.get("selected_max_D3_leakage_inf")
+        max_leak_str = f"{float(max_leak):.2e}" if isinstance(max_leak, (int, float)) else "n/a"
+        selected_floor_str = (
+            f"{float(selected_floor):.0e}" if isinstance(selected_floor, float) else "none"
+        )
+        print(
+            f"[kfacet-reprocess-floor]   row={receipt.get('row_index')} "
+            f"outcome={outcome} selected_floor={selected_floor_str} "
+            f"k_dim={receipt.get('selected_k_dim')} "
+            f"max_D3_leak={max_leak_str}"
+        )
+
+    manifest: dict[str, object] = {
+        "mode": "kfacet_reprocess_floor_manifest",
+        "reprocessor_version": ADAPTIVE_FLOOR_VERSION,
+        "input_dir": str(input_dir),
+        "out_dir": str(out_dir),
+        "floor_ladder": [float(value) for value in ADAPTIVE_FLOOR_LADDER],
+        "projector_floor": ADAPTIVE_FLOOR_PROJECTOR_FLOOR,
+        "gap_ratio_threshold": ADAPTIVE_FLOOR_GAP_RATIO_THRESHOLD,
+        "first_rejected_threshold": ADAPTIVE_FLOOR_FIRST_REJECTED_THRESHOLD,
+        "suspicious_floor_threshold": ADAPTIVE_FLOOR_SUSPICIOUS_THRESHOLD,
+        "rows": [
+            {
+                "row_index": receipt.get("row_index"),
+                "outcome": receipt.get("outcome"),
+                "selected_floor": receipt.get("selected_floor"),
+                "selected_k_dim": receipt.get("selected_k_dim"),
+                "selected_max_D3_leakage_inf": receipt.get("selected_max_D3_leakage_inf"),
+                "selected_gap_ratio": receipt.get("selected_gap_ratio"),
+                "selected_first_rejected_sv": receipt.get("selected_first_rejected_sv"),
+                "selected_is_suspicious": receipt.get("selected_is_suspicious"),
+                "selected_D3_isotypic_dims": (
+                    receipt.get("selected_D3_isotypic_summary", {}).get("D3_isotypic_dims")
+                    if isinstance(receipt.get("selected_D3_isotypic_summary"), dict)
+                    else None
+                ),
+                "selected_c_i": receipt.get("selected_c_i"),
+                "selected_requires_gamma_recompute": receipt.get("selected_requires_gamma_recompute"),
+            }
+            for receipt in per_row_receipts
+        ],
+        "summary": {
+            "total": len(per_row_receipts),
+            "outcome_counts": outcome_counts,
+            "selected_floor_histogram": selected_floor_histogram,
+            "suspicious_rows": [
+                r.get("row_index") for r in per_row_receipts if r.get("selected_is_suspicious")
+            ],
+            "failed_rows": [
+                r.get("row_index") for r in per_row_receipts if r.get("outcome") == "adaptive_floor_failed"
+            ],
+            "standard_E_rows": [
+                r.get("row_index") for r in per_row_receipts if (r.get("selected_c_i") or 0) > 0
+            ],
+            "structural_zero_rows": [
+                r.get("row_index")
+                for r in per_row_receipts
+                if r.get("outcome") == "adaptive_floor_resolved" and r.get("selected_c_i") == 0
+            ],
+        },
+    }
+    (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+    print(f"[kfacet-reprocess-floor] wrote {len(per_row_receipts)} row receipts and manifest under {out_dir}")
+    print(f"[kfacet-reprocess-floor] outcomes: {outcome_counts}")
+    print(f"[kfacet-reprocess-floor] selected floor histogram: {selected_floor_histogram}")
+    if manifest["summary"]["suspicious_rows"]:
+        print(f"[kfacet-reprocess-floor] suspicious rows: {manifest['summary']['suspicious_rows']}")
+    if manifest["summary"]["failed_rows"]:
+        print(f"[kfacet-reprocess-floor] failed rows: {manifest['summary']['failed_rows']}")
+        return 1
+    if manifest["summary"]["standard_E_rows"]:
+        print(f"[kfacet-reprocess-floor] standard-E rows require Gamma_i recompute: {manifest['summary']['standard_E_rows']}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Sundog isotrophy workbench smoke harness")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -2684,6 +3080,29 @@ def build_parser() -> argparse.ArgumentParser:
     sentinel.add_argument("--authorize-sentinel-run", action="store_true")
     sentinel.add_argument("--out", help="optional output directory for gate receipt and matrices")
     sentinel.set_defaults(func=command_kfacet_sentinel)
+
+    reprocess = sub.add_parser(
+        "kfacet-reprocess-floor",
+        help=(
+            "v0.3h adaptive-floor reprocessor: no-integration kernel/D3 leakage "
+            "sweep over existing sentinel receipts (M_i.npy + D3_*.npy)."
+        ),
+    )
+    reprocess.add_argument(
+        "--input-dir",
+        required=True,
+        help="directory containing O_*/ subdirectories with M_i.npy, D3_*.npy, gate_receipt.json",
+    )
+    reprocess.add_argument(
+        "--indices",
+        help="optional comma-separated row indices to restrict the sweep (default: all O_x dirs)",
+    )
+    reprocess.add_argument(
+        "--out",
+        help="optional output directory (default: {input_dir}-adaptive-floor)",
+    )
+    reprocess.set_defaults(func=command_kfacet_reprocess_floor)
+
     return parser
 
 
