@@ -1065,6 +1065,14 @@ def compute_gamma_rank_gate(
         name: float(np.linalg.norm((ambient_identity - ambient_projector) @ operator @ kernel_basis, ord=np.inf))
         for name, operator in d3_ops.items()
     }
+    max_leakage = max(leakage.values()) if leakage else 0.0
+    kernel_stability = {
+        "floor": projector_floor,
+        "max_leakage_inf": max_leakage,
+        "F_beta_leakage_inf": leakage.get("F_beta", 0.0),
+        "F_beta_passed": leakage.get("F_beta", 0.0) <= projector_floor,
+        "all_D3_passed": all(value <= projector_floor for value in leakage.values()),
+    }
     restricted = {name: kernel_basis.T @ operator @ kernel_basis for name, operator in d3_ops.items()}
     sigma3 = restricted["sigma3"]
     sigma3_sq = restricted["sigma3_sq"]
@@ -1110,7 +1118,7 @@ def compute_gamma_rank_gate(
         float(value / max(gamma_floor, 1e-300)) for value in singular_values
     ]
     expected_f_even_dim = c_i if e_dim_even else None
-    passed = bool(e_dim_even and f_even_dim == c_i and bimodality_clean)
+    passed = bool(e_dim_even and f_even_dim == c_i and bimodality_clean and kernel_stability["all_D3_passed"])
     result = {
         "gate": "Gamma_i_rank",
         "enabled": True,
@@ -1128,6 +1136,8 @@ def compute_gamma_rank_gate(
         "F_beta_even_E_dim": f_even_dim,
         "F_beta_even_E_dim_expected": expected_f_even_dim,
         "F_beta_even_E_null_singular_values": f_even_singular_values,
+        "D3_kernel_stability": kernel_stability,
+        "D3_kernel_leakage_inf": leakage,
         "D3_K_fib_leakage_inf": leakage,
         "projector_floor": projector_floor,
         "k_gamma": k_gamma,

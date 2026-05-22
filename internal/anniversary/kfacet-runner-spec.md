@@ -1006,3 +1006,10 @@ the three clean rows from the sweep (`O_62`, `O_64`, `O_231`), the profile was
 persists after rerunning all 21 with `closure_floor=1e-7`, the result is a
 catalog-level structural negative for this Gamma formulation rather than a
 numerical failure.
+
+Follow-up calibrated sweep: 21/21 rows pass the mechanical gates and read
+`E=0`, `c_i=0`, `d_i=0`, but five rows (`O_524`, `O_623`, `O_793`, `O_1488`,
+`O_1497`) have `F_beta` leakage above `1e-3`. Those five readings are
+conditional until F_beta stabilization is explained. The runner must therefore
+treat D3/F_beta kernel stability as part of the Gamma pass condition, not as a
+silent diagnostic.

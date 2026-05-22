@@ -914,6 +914,14 @@ The clean rows so far (`O_62`, `O_64`, `O_231`) have
 that profile, v0.3 Gamma is a catalog-level structural negative rather than a
 numerical failure.
 
+The calibrated 21-row rerun now has a sharper split: 21/21 rows pass the
+mechanical gates and all read `E=0`, `c_i=0`, `d_i=0`, but five rows
+(`O_524`, `O_623`, `O_793`, `O_1488`, `O_1497`) have `F_beta` leakage above the
+kernel-stability floor. Those five are conditional, not confirmed structural
+zeros, until their F_beta asymmetry is resolved. The runner now promotes D3
+kernel stability from diagnostic to Gamma pass condition so leaky rows cannot
+silently count as evidence.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
