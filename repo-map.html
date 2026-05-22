@@ -14,7 +14,7 @@
     <meta property="og:url" content="https://sundog.cc/repo-map">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Sundog Project Map">
-    <meta property="og:description" content="Choose the right Sundog inspection path: evidence, atlas, alignment, applications, chat, docs, and source.">
+    <meta property="og:description" content="Choose the right Sundog inspection path: evidence, atlas, alignment, applications, ledgers, chat, docs, and source.">
     <title>Sundog - Project Map</title>
     <style>
         * {
@@ -169,6 +169,7 @@
         .repo-lane[data-lane="atlas"] { --lane-color: var(--sd-signal); }
         .repo-lane[data-lane="alignment"] { --lane-color: var(--sd-violet); }
         .repo-lane[data-lane="apps"] { --lane-color: var(--sd-copper); }
+        .repo-lane[data-lane="ledgers"] { --lane-color: #7c5b3a; }
         .repo-lane[data-lane="chat"] { --lane-color: #b04535; }
         .repo-lane[data-lane="source"] { --lane-color: var(--sd-ink); }
 
@@ -200,6 +201,11 @@
             height: 2px;
             background: color-mix(in srgb, var(--lane-color), transparent 58%);
             pointer-events: none;
+        }
+
+        .node-stack {
+            display: grid;
+            gap: 0.9rem;
         }
 
         .map-node {
@@ -364,6 +370,7 @@
                     <div class="key-row"><span class="key-dot" style="--lane-color: var(--sd-signal);"></span><span>Atlas and geometry receipts</span></div>
                     <div class="key-row"><span class="key-dot" style="--lane-color: var(--sd-violet);"></span><span>Alignment and comparator language</span></div>
                     <div class="key-row"><span class="key-dot" style="--lane-color: var(--sd-copper);"></span><span>Applications and workbenches</span></div>
+                    <div class="key-row"><span class="key-dot" style="--lane-color: #7c5b3a;"></span><span>Sundog ledgers and audit chains</span></div>
                     <div class="key-row"><span class="key-dot" style="--lane-color: #b04535;"></span><span>Claim-boundary and chat experiments</span></div>
                     <div class="key-row"><span class="key-dot" style="--lane-color: var(--sd-ink);"></span><span>Source and operator context</span></div>
                 </div>
@@ -375,10 +382,15 @@
                         <h3>Evidence Spine</h3>
                         <p>Start here when the question is whether the public claim has receipts.</p>
                     </div>
-                    <div class="node-row">
-                        <a class="map-node" href="/structural-failure"><strong>Structural Failure</strong><span>Boundary-map falsifier for closed-form traceability.</span></a>
-                        <a class="map-node" href="/mesa"><strong>Mesa Envelope</strong><span>Capacity and signal-mixing results with caveats visible.</span></a>
-                        <a class="map-node" href="docs/COARSE_GRAINING_PROOF_ROADMAP.md"><strong>Proof Trunk</strong><span>Coarse-graining status gate and proof-roadmap ledger.</span></a>
+                    <div class="node-stack">
+                        <div class="node-row">
+                            <a class="map-node" href="/structural-failure"><strong>Structural Failure</strong><span>Boundary-map falsifier for closed-form traceability.</span></a>
+                            <a class="map-node" href="/mesa"><strong>Mesa Envelope</strong><span>Capacity and signal-mixing results with caveats visible.</span></a>
+                            <a class="map-node" href="/isotrophy"><strong>Isotrophy K_facet</strong><span>20 structural-zero receipts plus one named quarantine (O_617).</span></a>
+                        </div>
+                        <div class="node-row">
+                            <a class="map-node" href="docs/COARSE_GRAINING_PROOF_ROADMAP.md"><strong>Proof Trunk</strong><span>Coarse-graining status gate and proof-roadmap ledger.</span></a>
+                        </div>
                     </div>
                 </article>
 
@@ -387,11 +399,16 @@
                         <h3>Halo Atlas</h3>
                         <p>Use this lane for geometry, calibration, and halo vocabulary. Comparator definitions now live in the alignment lane.</p>
                     </div>
-                    <div class="node-row">
-                        <a class="map-node" href="/sundog"><strong>Visual Atlas</strong><span>The canonical halo geometry page and browser atlas.</span></a>
-                        <a class="map-node" href="/h-of-x"><strong>Math</strong><span>The h-of-x first-equation demo for the promoted parhelion inverse.</span></a>
-                        <a class="map-node" href="/legend"><strong>Legend</strong><span>Vocabulary ledger, distinct from the live atlas.</span></a>
-                        <a class="map-node" href="docs/prereg/structural-failure-coincidence/README.md"><strong>Pre-Registration</strong><span>The structural-failure coincidence falsifier.</span></a>
+                    <div class="node-stack">
+                        <div class="node-row">
+                            <a class="map-node" href="/sundog"><strong>Visual Atlas</strong><span>The canonical halo geometry page and browser atlas.</span></a>
+                            <a class="map-node" href="/h-of-x"><strong>Math</strong><span>The h-of-x first-equation demo for the promoted parhelion inverse.</span></a>
+                            <a class="map-node" href="/geometry"><strong>Geometry Shelf</strong><span>Cap-set primer, halo/h-of-x routing, bounded apparatus framing.</span></a>
+                        </div>
+                        <div class="node-row">
+                            <a class="map-node" href="/legend"><strong>Legend</strong><span>Vocabulary ledger, distinct from the live atlas.</span></a>
+                            <a class="map-node" href="docs/prereg/structural-failure-coincidence/README.md"><strong>Pre-Registration</strong><span>The structural-failure coincidence falsifier.</span></a>
+                        </div>
                     </div>
                 </article>
 
@@ -413,11 +430,44 @@
                         <h3>Applications</h3>
                         <p>Use this lane for workbenches. Treat tiers as part of the result.</p>
                     </div>
-                    <div class="node-row">
-                        <a class="map-node" href="/applications-gallery"><strong>Applications Gallery</strong><span>Public overview of surfaces and evidence tiers.</span></a>
-                        <a class="map-node" href="/balance"><strong>Balance</strong><span>Shadow-control operating-envelope workbench.</span></a>
-                        <a class="map-node" href="/threebody"><strong>Three-Body</strong><span>Local-field and hazard-envelope workbench.</span></a>
-                        <a class="map-node" href="/mines"><strong>Pressure Mines</strong><span>Hidden-minefield workbench under noisy pressure fields.</span></a>
+                    <div class="node-stack">
+                        <div class="node-row">
+                            <a class="map-node" href="/applications-gallery"><strong>Applications Gallery</strong><span>Public overview of surfaces and evidence tiers.</span></a>
+                            <a class="map-node" href="/balance"><strong>Balance</strong><span>Shadow-control operating-envelope workbench.</span></a>
+                            <a class="map-node" href="/threebody"><strong>Three-Body</strong><span>Local-field and hazard-envelope workbench.</span></a>
+                        </div>
+                        <div class="node-row">
+                            <a class="map-node" href="/mines"><strong>Pressure Mines</strong><span>Hidden-minefield workbench under noisy pressure fields.</span></a>
+                            <a class="map-node" href="/sundog-workbench"><strong>Sundog Workbench</strong><span>Tunable halo-route comparator surface.</span></a>
+                            <a class="map-node" href="/capset"><strong>Cap-Set</strong><span>Polynomial-method precedent for the 2026 unit-distance disproof.</span></a>
+                        </div>
+                        <div class="node-row">
+                            <a class="map-node" href="/unit-distance"><strong>Unit-Distance</strong><span>Plain-English read of OpenAI's 2026 unit-distance disproof.</span></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="repo-lane" data-lane="ledgers">
+                    <div class="lane-label">
+                        <h3>Sundog Ledgers</h3>
+                        <p>Use this lane for the audit-chain spines: each ledger pre-registers a falsification surface and tracks the route from claim to receipt. Ledgers stay distinct from roadmaps and from interactive workbenches.</p>
+                    </div>
+                    <div class="node-stack">
+                        <div class="node-row">
+                            <a class="map-node" href="docs/SUNDOG_V_GRAVITY.md"><strong>Gravity</strong><span>Outlandish public framing — "gravity for agents under partial observability."</span></a>
+                            <a class="map-node" href="docs/SUNDOG_V_MESA.md"><strong>Mesa</strong><span>Mesa-trap empirical front and Formal Separability appendix.</span></a>
+                            <a class="map-node" href="docs/SUNDOG_V_MESAV2.md"><strong>Mesa v2</strong><span>Future-integration spine sister to mesa-v1: 4 actionable phases.</span></a>
+                        </div>
+                        <div class="node-row">
+                            <a class="map-node" href="docs/SUNDOG_V_GEOMETRY.md"><strong>Geometry</strong><span>Deep research roadmap for the geometry workbench shelf.</span></a>
+                            <a class="map-node" href="docs/SUNDOG_V_PERCEPTION.md"><strong>Perception</strong><span>Atlas-as-instrument; smartphone-tier Phase 1.</span></a>
+                            <a class="map-node" href="docs/SUNDOG_V_CAPSET.md"><strong>Cap-Set</strong><span>Couples Sundog apparatus to OpenAI's unit-distance result.</span></a>
+                        </div>
+                        <div class="node-row">
+                            <a class="map-node" href="docs/SUNDOG_V_THREEBODY.md"><strong>Three-Body</strong><span>Operating-envelope roadmap for the three-body workbench.</span></a>
+                            <a class="map-node" href="docs/SUNDOG_V_ISOTROPHY_KFACET.md"><strong>Isotrophy K_facet</strong><span>v0.3h staging ledger — 20 structural zeros, one named quarantine.</span></a>
+                            <a class="map-node" href="docs/sundog_v_isotrophy.md"><strong>Isotrophy Roadmap</strong><span>Z3-choreography to Z2-piano-trio descent program.</span></a>
+                        </div>
                     </div>
                 </article>
 
@@ -436,12 +486,22 @@
                 <article class="repo-lane" data-lane="source">
                     <div class="lane-label">
                         <h3>Source</h3>
-                        <p>Use this lane when you need raw files, build context, or operator instructions.</p>
+                        <p>Use this lane when you need raw files, build context, operator instructions, or the brand/SEO playbook.</p>
                     </div>
-                    <div class="node-row">
-                        <a class="map-node" href="https://github.com/humiliati/sundog" target="_blank" rel="noopener noreferrer"><strong>GitHub</strong><span>Raw repository in a new tab.</span></a>
-                        <a class="map-node" href="docs/README.md"><strong>Docs README</strong><span>Human-readable index of public documentation.</span></a>
-                        <a class="map-node" href="https://github.com/humiliati/sundog/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer"><strong>AGENTS.md</strong><span>Local operator and agent workflow notes.</span></a>
+                    <div class="node-stack">
+                        <div class="node-row">
+                            <a class="map-node" href="https://github.com/humiliati/sundog" target="_blank" rel="noopener noreferrer"><strong>GitHub</strong><span>Raw repository in a new tab.</span></a>
+                            <a class="map-node" href="docs/README.md"><strong>Docs README</strong><span>Human-readable index of public documentation.</span></a>
+                            <a class="map-node" href="docs/presentation/claims-and-scope.md"><strong>Claims &amp; Scope</strong><span>Safe public language and evidence-tier boundaries.</span></a>
+                        </div>
+                        <div class="node-row">
+                            <a class="map-node" href="https://github.com/humiliati/sundog/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer"><strong>AGENTS.md</strong><span>Local operator and agent workflow notes.</span></a>
+                            <a class="map-node" href="docs/BRAND_POSITIONING.md"><strong>Brand Positioning</strong><span>Audit-chain discipline and three-tier artifact framing.</span></a>
+                            <a class="map-node" href="docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md"><strong>SEO Roadmap</strong><span>Per-page matrix, OG cards, and sitemap discipline.</span></a>
+                        </div>
+                        <div class="node-row">
+                            <a class="map-node" href="docs/UI_UX_THEME_FOUNDATION.md"><strong>UI/UX Foundation</strong><span>Theme tokens, paper-ruled aesthetic, design-system primer.</span></a>
+                        </div>
                     </div>
                 </article>
             </div>

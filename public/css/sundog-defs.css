@@ -1,0 +1,134 @@
+/* sundog-defs.css
+ * Inline hover-definition tooltips for Sundog vocabulary terms.
+ *
+ * Convention: wrap a term in <a class="sd-def" href="/legend#kfacet-..." data-def="...">term</a>.
+ * The anchor lets users click through to the canonical Legend entry; the
+ * data-def attribute drives a CSS-only popover on hover/focus. The
+ * fallback `title` attribute (when present) gives the slow native browser
+ * tooltip for screen-reader and no-CSS contexts.
+ *
+ * No JavaScript required. Both isotrophy.html and threebody.html load this
+ * file so the two pages share one definition surface.
+ */
+
+.sd-def {
+    position: relative;
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dashed currentColor;
+    padding-bottom: 0;
+    cursor: help;
+    transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.sd-def:hover,
+.sd-def:focus-visible {
+    color: var(--accent-gold, #F4C430);
+    border-bottom-color: var(--accent-gold, #F4C430);
+    outline: none;
+}
+
+/* The popover. CSS-only — appears on hover and on keyboard focus. */
+.sd-def[data-def]::after {
+    content: attr(data-def) " — click to open the Legend entry.";
+    position: absolute;
+    bottom: calc(100% + 0.55rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(0.25rem);
+    z-index: 50;
+
+    width: max-content;
+    max-width: min(320px, calc(100vw - 2rem));
+    padding: 0.65rem 0.85rem;
+    border: 1px solid rgba(244, 196, 48, 0.45);
+    border-radius: 6px;
+    background: #1A3A52;
+    color: #F8FBFC;
+
+    font-family: var(--sd-font-body, system-ui, sans-serif);
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
+    white-space: normal;
+    letter-spacing: 0;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    box-shadow: 0 10px 30px rgba(10, 25, 40, 0.32);
+
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+}
+
+/* Caret pointing down to the term. */
+.sd-def[data-def]::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 0.2rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(0.25rem);
+    z-index: 51;
+
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #1A3A52;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+}
+
+.sd-def:hover::after,
+.sd-def:focus-visible::after,
+.sd-def:hover::before,
+.sd-def:focus-visible::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Edge protection: anchor popovers near the left/right edges of their
+ * containing block so they don't run off screen on narrow viewports. The
+ * variants are opt-in — add data-def-anchor="left" or "right" when a
+ * term sits near a container edge. */
+.sd-def[data-def-anchor="left"]::after { left: 0; transform: translateX(0) translateY(0.25rem); }
+.sd-def[data-def-anchor="left"]:hover::after,
+.sd-def[data-def-anchor="left"]:focus-visible::after { transform: translateX(0) translateY(0); }
+.sd-def[data-def-anchor="left"]::before { left: 1rem; transform: translateX(0) translateY(0.25rem); }
+.sd-def[data-def-anchor="left"]:hover::before,
+.sd-def[data-def-anchor="left"]:focus-visible::before { transform: translateX(0) translateY(0); }
+
+.sd-def[data-def-anchor="right"]::after { left: auto; right: 0; transform: translateX(0) translateY(0.25rem); }
+.sd-def[data-def-anchor="right"]:hover::after,
+.sd-def[data-def-anchor="right"]:focus-visible::after { transform: translateX(0) translateY(0); }
+.sd-def[data-def-anchor="right"]::before { left: auto; right: 1rem; transform: translateX(0) translateY(0.25rem); }
+.sd-def[data-def-anchor="right"]:hover::before,
+.sd-def[data-def-anchor="right"]:focus-visible::before { transform: translateX(0) translateY(0); }
+
+/* On touch / coarse-pointer devices, the hover popover is hidden — users
+ * tap the link and read the entry on the Legend page itself. The dashed
+ * underline still signals "this term is defined elsewhere." */
+@media (hover: none) {
+    .sd-def[data-def]::after,
+    .sd-def[data-def]::before {
+        display: none;
+    }
+}
+
+/* When the term sits inside a dark surface (e.g. threebody.html catalog
+ * sidecar), invert the underline tint so it stays legible. Pages opt in
+ * by adding class="sd-def sd-def--dark". */
+.sd-def--dark {
+    color: var(--accent-gold, #F4C430);
+    border-bottom-color: rgba(244, 196, 48, 0.55);
+}
+
+.sd-def--dark:hover,
+.sd-def--dark:focus-visible {
+    color: #FFE08A;
+    border-bottom-color: #FFE08A;
+}

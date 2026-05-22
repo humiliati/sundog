@@ -77,6 +77,7 @@
     <!-- OG-BLOCK-END -->
 
     <link rel="stylesheet" href="/css/sundog-theme.css">
+    <link rel="stylesheet" href="/css/sundog-defs.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; }
 
@@ -198,6 +199,46 @@
             font-family: var(--sd-font-display);
             font-size: 1.15rem;
             line-height: 1.55;
+        }
+
+        .iso-crossref {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            max-width: 920px;
+            margin: 1.5rem 0 0;
+            padding: 0.9rem 1.15rem;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--primary-mid, #2C5F7F);
+            border-radius: 0 8px 8px 0;
+            background: #F8FBFC;
+            color: #40505C;
+        }
+        .iso-crossref-arrow {
+            font-family: var(--sd-font-data);
+            font-size: 1.4rem;
+            color: var(--primary-mid, #2C5F7F);
+            line-height: 1;
+            padding-top: 0.1rem;
+        }
+        .iso-crossref-kicker {
+            margin: 0 0 0.25rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+        }
+        .iso-crossref-body {
+            margin: 0;
+            font-size: 0.96rem;
+            line-height: 1.6;
+            color: #40505C;
+        }
+        .iso-crossref-body a:not(.sd-def) {
+            color: var(--primary-mid, #2C5F7F);
+            font-weight: 700;
         }
 
         /* Grid showing 20 + 1 cells */
@@ -382,13 +423,13 @@
             <p class="eyebrow">Isotrophy · K_facet · v0.3h</p>
             <h1>The audit chain catches itself working.</h1>
             <p class="lede">
-                Twenty structural-zero receipts and one named quarantine. A
-                pre-registered three-stage audit chain ran 21 strict G.2
-                single-curve choreographies through the K_facet test. For 20
-                rows the standard D₃ sector is structurally absent — the
+                Twenty <a class="sd-def" href="/legend#kfacet-structural-zero-receipt" data-def-anchor="left" data-def="A row earns one when c_i = d_i = 0 by construction — not by tolerance, not by post-hoc pruning. The named artifact class.">structural-zero receipts</a> and one <a class="sd-def" href="/legend#kfacet-quarantine" data-def="A row held back from being counted for or against the prediction, with a specific representation-level reason given. O_617 is the sole quarantine in v0.3h.">named quarantine</a>. A
+                pre-registered three-stage <a class="sd-def" href="/legend#kfacet-audit-chain" data-def="A receipt-first, closure-relative pipeline: sentinel/Γ runner → adaptive-floor reprocessor → bridge audit. Constants and outcome categories are registered before interpretation.">audit chain</a> ran 21 strict <a class="sd-def" href="/legend#kfacet-g2-catalog" data-def="Li & Liao (2025) supplementary-A table of three-body periodic orbits at m₃ = 1. The 21 strict G.2 single-curve choreographies are the K_facet test's input set.">G.2</a>
+                single-curve <a class="sd-def" href="/legend#kfacet-choreography" data-def="A periodic three-body orbit where all bodies share a single closed inertial-frame trajectory — the same wire — phased thirds of a period apart.">choreographies</a> through the <a class="sd-def" href="/legend#kfacet" data-def="A pre-registered structural-zero test on the strict G.2 catalog. For each row it asks whether the standard D₃ block is absent in the kernel by construction.">K_facet</a> test. For 20
+                rows the standard <a class="sd-def" href="/legend#kfacet-d3-representation" data-def="The standard real D₃ block is a structured T/S/E decomposition. A valid representation is what the audit chain looks for; an invalid one trips the bridge audit.">D₃</a> sector is structurally absent — the
                 prediction is zero by construction, not by tolerance or
                 post-hoc pruning. The 21st row (O_617) was quarantined, not
-                failed: the deep dive locates the defect in a bridge direction
+                failed: the deep dive locates the defect in a <a class="sd-def" href="/legend#kfacet-bridge-direction" data-def-anchor="right" data-def="At the bridge-admitted kernel, O_617's representation is not a valid standard real D₃ block (T(2)+S(6)+E(1) with odd E). The defect lives here — not in admission, not in the audit chain.">bridge direction</a>
                 outside the valid D3 representation, not in the audit chain
                 itself.
             </p>
@@ -399,6 +440,20 @@
                 <span>audit chain intact</span>
                 <span>theorem-facing result: not closed</span>
             </div>
+
+            <aside class="iso-crossref" aria-label="Where the 21 strict rows came from">
+                <span class="iso-crossref-arrow" aria-hidden="true">←</span>
+                <div>
+                    <p class="iso-crossref-kicker">Where the 21 came from</p>
+                    <p class="iso-crossref-body">
+                        The catalog sidecar on <a href="/threebody#isotrophy">three-body</a>
+                        runs the σ₃ detector blind against Li &amp; Liao's
+                        25 candidates and splits them into 21 strict + 4 relative
+                        choreographies. Those 21 strict rows are the input set
+                        the K_facet audit chain works through here.
+                    </p>
+                </div>
+            </aside>
         </section>
 
         <section class="iso-section" aria-label="Result">
@@ -412,10 +467,11 @@
                     that makes the result interesting.
                 </p>
                 <div class="load-bearing-quote">
-                    v0.3h resolves the eligible strict catalog rows as structural
-                    zeros. The sole quarantined row, O_617, is explained by weak
-                    σ₃ catalog inclusion rather than by a failure of the Γᵢ audit
-                    chain.
+                    v0.3h resolves 20 strict catalog rows as structural zeros.
+                    The sole quarantined row, O_617, is a clean <a class="sd-def" href="/legend#kfacet-opposite-strict" data-def="A catalog row whose orientation is admitted by the opposite-strict admission test (residual 1.01e-8 for O_617). The 1.62e-1 canonical residual is diagnostic-only — never an admission residual.">opposite-strict</a>
+                    row whose bridge direction sits outside the valid D₃
+                    representation; it is not a <a class="sd-def" href="/legend#kfacet-gamma-i" data-def-anchor="right" data-def="The per-orbit audit operator. A Γᵢ failure would indicate an orbit-specific defect inside the chain. O_617 is not a Γᵢ failure — the defect is downstream, in the bridge representation.">Γᵢ</a> audit-chain failure and not
+                    an admission weakness.
                 </div>
                 <div class="audit-grid" aria-label="21 catalog rows: 20 structural-zero plus 1 quarantine">
                     <div class="audit-cell zero" title="row 01 · structural-zero receipt">01</div>
@@ -468,7 +524,7 @@
                         </p>
                     </div>
                     <div class="stage-card">
-                        <h3><span class="num">Stage 2</span> Adaptive-floor reprocessor</h3>
+                        <h3><span class="num">Stage 2</span> <a class="sd-def" href="/legend#kfacet-adaptive-floor" data-def-anchor="left" data-def="Stage 2 picks the smallest pre-registered floor (1e-8 → 1e-5 ladder) satisfying all three guards. No row-specific knobs are introduced.">Adaptive-floor</a> reprocessor</h3>
                         <p>
                             Reused saved <code>.npy</code> artifacts (no
                             integration). Chose the smallest pre-registered floor
@@ -567,6 +623,8 @@
                 <a href="https://github.com/humiliati/sundog/blob/main/internal/anniversary/kfacet_v03h_o617_deep_dive.md">O_617 deep dive (internal)</a>
                 <a href="https://github.com/humiliati/sundog/blob/main/internal/anniversary/kfacet-runner-spec.md">Runner spec (internal)</a>
                 <a href="docs/SUNDOG_V_THREEBODY.md">Three-Body Roadmap</a>
+                <a href="/threebody#isotrophy">Three-body catalog sidecar (where the 21 strict rows came from)</a>
+                <a href="/legend#kfacet">Legend — K_facet vocabulary</a>
             </div>
         </section>
     </main>
