@@ -960,6 +960,13 @@ catalog rows as structural zeros; the sole quarantined row, O_617, is a clean
 opposite-strict row with a bridge direction outside the valid D3
 representation, not a Gamma_i failure and not an admission weakness.**
 
+A signed isotypic pass sharpens the O_617 label: the bridge is near the sign
+sector, not the trivial sector (`<v,F_beta v> = -0.9999997`, with
+`F_beta^2 v-v = 0`). The small `E(1)` readout is projector contamination from
+that near-S bridge under imperfect `sigma3` closure, not evidence for a valid
+standard block. A catalog-wide isotypic-edge separator finds this edge only on
+O_617; the other 20 rows remain clean `T/S` with no standard `E` direction.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

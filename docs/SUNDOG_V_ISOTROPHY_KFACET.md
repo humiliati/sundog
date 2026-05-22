@@ -79,6 +79,10 @@ discipline that makes the result interesting.
   opposite-strict with admission residual `1.01e-8`. The earlier `1.62e-1`
   figure was its canonical residual, diagnostic-only for an opposite-strict
   row.
+- **Not a near-trivial bridge.** The v2 signed isotypic check corrects the
+  label: O_617's bridge is near the sign sector (`<v,F_beta v> = -0.9999997`),
+  with a small `E` contamination residue from imperfect `sigma3` closure. The
+  catalog-wide separator finds no valid standard `E` direction in any row.
 - **Not the wider isotrophy program.** The broader Z3-to-Z2 piano-trio descent
   program remains live in [`sundog_v_isotrophy.md`](sundog_v_isotrophy.md).
 - **Not an interactive workbench.** The K_facet test is a one-shot audit on a
@@ -131,6 +135,8 @@ Standing rules:
 5. **No "21/21" framing.**
 6. **No weak-admission framing for O_617.** It is clean opposite-strict; the
    quarantine is a defective-D3 bridge at the kernel boundary.
+7. **No near-T framing for O_617.** Its bridge is near-S/sign-isotypic; the
+   apparent `E(1)` is a contamination residue, not a valid standard block.
 
 ## Cross-References
 
@@ -147,6 +153,8 @@ Standing rules:
 - 2026-05-22 - corrected O_617 attribution after orientation-aware admission
   residual check: opposite-strict admission residual `1.01e-8`, canonical
   residual `1.62e-1` diagnostic-only.
+- 2026-05-22 - corrected O_617 WHY-dive isotypic label after direct signed
+  check and v2 separator: near-S/sign-isotypic, not near-T/trivial.
 - 2026-05-22 - `/isotrophy` public-facing page filed at root.
 - 2026-05-22 - promo and brand notes filed.
 
