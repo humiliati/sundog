@@ -187,6 +187,65 @@ The workbench should avoid broader formulations. It does not claim that:
 The claim is about bounded usefulness inside a named operating envelope, not
 global mine inference.
 
+## Cap-Set Workbench (Primer, not Sundog-original)
+
+Workbench: [sundog.cc/capset](https://sundog.cc/capset).
+Ledger: [`SUNDOG_V_CAPSET.md`](SUNDOG_V_CAPSET.md).
+
+The cap-set workbench is intentionally different from the workbenches
+above. It is not a controlled-result surface or an operating-envelope
+study. It is a hands-on primer for the 2016 Croot–Lev–Pach /
+Ellenberg–Gijswijt polynomial-method bound on subsets of F₃ⁿ with no
+three points on a line, staged as the historical precedent for the
+2026 OpenAI unit-distance disproof of an Erdős conjecture.
+
+### What It Is
+
+- An interactive grid where the visitor places points in F₃² / F₃³ /
+  F₃⁴, watches forbidden three-on-a-line "lines" highlight in red, and
+  loads verified maximum caps.
+- A bound chart showing the trivial 3ⁿ ceiling, the Ellenberg–Gijswijt
+  3·2.7551ⁿ curve, and the known maxes between them.
+- A narrative card pair tying cap-set to the 2026 unit-distance
+  result as the cleanest historical precedent.
+
+### What It Is Not
+
+- **Not a Sundog-original mathematical claim.** No new bound on cap-set
+  size or unit-distance counts; no novel mathematics. The workbench is a
+  primer; the ledger is a staging document.
+- **Not an evaluator of the OpenAI proof itself.** The
+  [`SUNDOG_V_CAPSET.md`](SUNDOG_V_CAPSET.md) ledger stages an
+  *evaluator front* (apply Sundog's three-gate failure taxonomy to the
+  78-year stalemate) and a *substrate-analogue horizon* (parhelion-offset
+  ↔ cap-set ↔ unit-distance as three instances of "algebraic substrate
+  beats naïve geometric intuition") — both staged, neither defended.
+
+### Sundog Expression
+
+- **Hidden target:** the asymptotic exponent of cap-set growth (and, by
+  reference, of unit-distance growth).
+- **Indirect signal:** the visible point pattern under the
+  no-three-on-a-line constraint.
+- **Transformation:** the polynomial-method rank bound
+  (Ellenberg–Gijswijt) and the algebraic-number-field construction
+  (OpenAI 2026, unit-distance).
+- **Actionable output:** a primer page and a staging ledger; no policy
+  or control output.
+- **Failure boundary:** the workbench is a primer, not a Sundog-original
+  result; treating it as evidence for the Sundog Alignment Theorem is a
+  category error.
+
+### Claim Boundary
+
+The cap-set workbench is included in this Application Map because it
+shares Sundog's *discipline* (named falsifier, claim-tier separation,
+explicit out-of-scope statement) and because it surfaces the geometry
+hub linking the parhelion-offset workbench, the halo atlas, and the
+discrete-geometry program. It is *not* included as evidence for the
+load-bearing research claim, which remains the photometric mirror
+alignment experiment.
+
 ## EyesOnly / Gone Rogue
 
 Repository: [humiliati/EyesOnly](https://github.com/humiliati/EyesOnly)
