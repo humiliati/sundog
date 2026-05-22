@@ -94,7 +94,7 @@ Legend: ✓ = done · ◐ = partial · ✗ = missing · — = N/A for the page's
 | `/balance` | A | ✓ | balance.png | TechArticle | ✓ | ✓ | rail card | ✓ | |
 | `/threebody` | A | ✓ | threebody.png | TechArticle | ✓ | ✓ | rail card | ✓ | |
 | `/mines` | A | ✓ | mines.png | TechArticle | ✓ | ✓ | rail card | ✓ | |
-| `/capset` | A | ✓ | capset.png | TechArticle | ✓ | ✓ | rail card | ✓ | first to ship; Post-Inspector confirmed |
+| `/capset` | A | ✓ | capset.png | TechArticle | ✓ | ✓ | rail card + contextual links | ✓ | first to ship; Post-Inspector confirmed; B2.3 added links from `/about`, `/alignment`, and `/applications-gallery` 2026-05-22 |
 | `/applications-gallery` | A | ✓ | applications-gallery.png | Article | ✓ | ✓ | header nav | ✓ | promoted from B 2026-05-21 PM; viz is a 3×2 tier-card grid plus Cap-Set + "rest of the gallery" placeholder |
 | `/h-of-x` | A | ✓ | h-of-x.png | TechArticle | ✓ | ✓ | pillar card | ✓ | promoted from B 2026-05-21 PM; pillar card added to `Load-Bearing Evidence` 2026-05-21 PM (late). Per-node clickable equation + parhelion sketch. |
 | `/mesa` | A | ✓ | mesa.png | TechArticle | ✓ | ✓ | pillar card | ✓ | promoted from B 2026-05-21 PM; pillar card refactored to per-region clicks (hold/cliff/breach/locus) 2026-05-21 PM (late). |
@@ -210,13 +210,16 @@ and a success criterion.
   from the sandbox).
 - **First concrete step:** Google Search Console → Settings → Sitemaps
   → submit `https://sundog.cc/sitemap.xml`. Confirm coverage report
-  picks up the twelve Class A URLs.
+  picks up the thirteen Class A URLs.
 - **Success criterion:** GSC reports "Success" on the sitemap submission
-  and all twelve URLs appear in the coverage report within ~7 days.
+  and all thirteen Class A URLs appear in the coverage report within ~7 days.
 
-**B2.3 — Cross-link `/capset` from positioning pages**
+**B2.3 — Cross-link `/capset` from positioning pages** — completed 2026-05-22
 - **Owner:** Claude (codebase work).
-- **Why this matters:** `/capset` currently has *two* inbound links
+- **Status:** completed 2026-05-22. `/about`, `/alignment`, and
+  `/applications-gallery` each now carry one contextual inline link to
+  `/capset`.
+- **Why this matters:** `/capset` started Bucket 2 with *two* inbound links
   from `index.html` (rail card + footer rail CTA) but zero from
   `/about`, `/alignment`, `/applications-gallery`. Cross-linking
   accumulates internal link weight before Google's next deep crawl.
@@ -227,21 +230,25 @@ and a success criterion.
   scope" angle on `/about`) and add a single inline link to `/capset`
   with anchor text that names what the reader will find ("cap-set
   workbench", not "click here").
-- **Success criterion:** three new inbound internal links live in the
-  build output; matrix annotation on `/capset` updated.
+- **Success criterion:** met 2026-05-22. Three new inbound internal
+  links live in the build output; matrix annotation on `/capset`
+  updated.
 
-**B2.4 — Standing checklist for new public pages**
+**B2.4 — Standing checklist for new public pages** — rule added 2026-05-22
 - **Owner:** Claude when invoked on new pages; humans during code
   review for non-Claude-authored pages.
+- **Status:** standing rule added to `AGENTS.md` on 2026-05-22. Final
+  observation remains pending until the next new `site-pages.json` entry
+  exercises the rule.
 - **Why this matters:** the matrix is the gate. Without a standing
   check, new pages will ship without Bucket 1 treatment and the
   discipline degrades.
-- **First concrete step:** add a one-line entry to `AGENTS.md` (or the
-  equivalent contributor guide) that says: *new entries in
-  `site-pages.json` must add a row to the SEO matrix and clear Bucket 1
-  before the entry's `publicLaunchIntent` is treated as satisfied.*
-- **Success criterion:** the rule is observed at least once on a new
-  page added after this filing; matrix row exists for that page.
+- **First concrete step:** completed 2026-05-22. `AGENTS.md` now says
+  new entries in `site-pages.json` must update the SEO matrix and clear
+  Bucket 1 before `publicLaunchIntent` is treated as satisfied.
+- **Success criterion:** pending. The rule must be observed at least
+  once on a new page added after this filing; matrix row exists for
+  that page.
 
 **B2.5 — Linter / file-watcher investigation (new in Phase 2)**
 - **Owner:** human with editor/IDE config access.
@@ -342,8 +349,8 @@ Until all four are true, this is a living roadmap.
   Cand. 1 (three-gate reading note) is Bucket 2 item (1) of this
   roadmap.
 - [`SUNDOG_V_GEOMETRY.md`](SUNDOG_V_GEOMETRY.md) — the geometry
-  roadmap; `/geometry.html` (forthcoming) will inherit the standing
-  checklist when it ships.
+  roadmap; `/geometry.html` is now the Class A geometry hub, and future
+  geometry pages inherit the standing checklist.
 - [`SUNDOG_OUTREACH_PACKET.md`](SUNDOG_OUTREACH_PACKET.md) — the
   specialist-review-tier packet; different audience, different surface.
   The two documents are complementary, not overlapping.
@@ -364,7 +371,8 @@ Until all four are true, this is a living roadmap.
   `_generate.py` (cards) and `_patch_meta.py` (HTML).
 - 2026-05-21 PM — this roadmap filed.
 - 2026-05-21 PM (late) — all four Class B pages promoted to Class A and
-  cleared Bucket 1 in the same session. Twelve Class A pages ✓ on OG
+  cleared Bucket 1 in the same session. The then-current twelve Class A
+  pages ✓ on OG
   block / image / JSON-LD / title / description / sitemap. Internal
   link equity (rail-link column) for `/h-of-x`, `/mesa`,
   `/structural-failure` was at ◐ — they had header / footer / contextual
@@ -382,8 +390,8 @@ Until all four are true, this is a living roadmap.
   `/mesa`, `/structural-failure` flips ◐ → ✓.
 - 2026-05-21 PM (final) — capset.html's OG block re-wrapped in
   `OG-BLOCK-START`/`OG-BLOCK-END` sentinels (had been stripped by the
-  file-watcher truncation bug at an earlier point), making all twelve
-  Class A pages re-runnable through `_patch_meta.py` without
+  file-watcher truncation bug at an earlier point), making the
+  then-current twelve Class A pages re-runnable through `_patch_meta.py` without
   duplication. Phase 1 cleared.
 - 2026-05-21 PM (matrix sweep) — easy items off the matrix:
   (a) discovered `/geometry` existed but wasn't tracked; treated as
@@ -400,7 +408,7 @@ Until all four are true, this is a living roadmap.
   (no-index). Every page in `site-pages.json` now has a defensible
   matrix row.
 
-**Phase 1 closeout summary:** twelve pages, twelve OG cards, twelve
+**Phase 1 closeout summary:** thirteen Class A pages, thirteen OG cards, thirteen
 JSON-LD blocks, all internal links present, all sitemap entries
 present, all sentinels present. Only outstanding Phase 1 item is
 running LinkedIn Post Inspector + Twitter Card Validator on each URL
