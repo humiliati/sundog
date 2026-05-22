@@ -19,7 +19,10 @@ Outline** (the structural skeleton of the lab's first instrument),
 and the institutional artifacts that bridge the lab's current
 informal state to a target incorporated state (the **Founding
 Plan**, the **Fiscal Sponsor Memo**, the **Fiscal Sponsor Intake
-Form**, and the **Contributor Licence Agreement Template**).
+Form**, and the **Contributor Licence Agreement Template**). It
+also holds amendment and appendix scaffolds for the next Initiative
+revision: the **v0.3 Amendment Notes** and the **Multi-Agent Review
+Record**.
 
 These are working documents. They are versioned independently and
 governed by their own changelogs and the lab's
@@ -32,6 +35,8 @@ corrections-and-retractions discipline.
 | File | Version | Status | What it is |
 |------|---------|--------|------------|
 | [CONSCIUM_INITIATIVE_v0.2.md](./CONSCIUM_INITIATIVE_v0.2.md) | 0.2 | Public-comment draft | The normative framework. Seven principles + Deployment Patterns layer + meta-principle. Current. |
+| [CONSCIUM_INITIATIVE_v0.3_AMENDMENT_NOTES.md](./CONSCIUM_INITIATIVE_v0.3_AMENDMENT_NOTES.md) | 0.1 | Internal-facing draft | Working notes for v0.3. Drafts evaluator obligations under uncertainty and the agent-facing companion-document path. |
+| [CONSCIUM_MULTI_AGENT_REVIEW_RECORD_v0.1.md](./CONSCIUM_MULTI_AGENT_REVIEW_RECORD_v0.1.md) | 0.1 | Public-comment appendix scaffold | Record for AI-generated reviews of the founding documents. No legal or governance weight. |
 | [CONSCIUM_INITIATIVE_v0.1.md](./CONSCIUM_INITIATIVE_v0.1.md) | 0.1 | Historical snapshot | Superseded by v0.2. Preserved for the version trail. |
 | [SUNDOG_GOVERNANCE_POLICY_v0.1.md](./SUNDOG_GOVERNANCE_POLICY_v0.1.md) | 0.1 | Internal-facing draft | Operationalises §4 of the Initiative. Defines who tags, who reviews, how challenges work, who has final authority. |
 | [CONSCIUM_HARNESS_WHITEPAPER_OUTLINE.md](./CONSCIUM_HARNESS_WHITEPAPER_OUTLINE.md) | 0.2 (outline) | Internal-facing | Structural skeleton of the harness whitepaper. v0.1 harness scope: §2.1, §2.2, §2.3, §2.7. Evaluator-side proxy. |
@@ -76,6 +81,11 @@ for the IP-transition logic, then the **Contributor Licence
 Agreement Template** for the draft agreement shape. The template is
 not yet for signature.
 
+**Public commenter or AI-system reviewer.** Read the **Initiative
+v0.2**, then the **v0.3 Amendment Notes** for known amendment
+candidates, then the **Multi-Agent Review Record** if submitting or
+comparing an AI-generated review.
+
 **Prospective evaluation partner or AI developer interested in
 being evaluated.** Read the **Initiative v0.2** for the framework,
 then **§7 of the Founding Plan** for the pause-points that govern
@@ -96,6 +106,13 @@ The documents reference each other in the following relationships.
 - **Initiative v0.2** is the substantive normative framework. The
   Governance Policy, the Harness Outline, and the Founding Plan
   all derive from or implement parts of it.
+- **Initiative v0.3 Amendment Notes v0.1** preserve known amendment
+  candidates without silently changing v0.2. The main candidate is
+  an evaluator-obligations clause under uncertainty.
+- **Multi-Agent Review Record v0.1** is a transparency appendix
+  scaffold for AI-generated review inputs. It is linked to the
+  Initiative's meta-principle but carries no legal, governance, or
+  ratification force.
 - **Governance Policy v0.1** operationalises **Initiative §4**
   (the meta-principle that the framework applies to its
   publishers).
@@ -123,8 +140,12 @@ The documents reference each other in the following relationships.
   is at this status.
 - **Internal-facing draft.** Circulated within the founders'
   working group; not yet publicly distributed. The Governance
-  Policy and the Harness Outline are at this status because they
-  describe regimes the lab does not yet operate.
+  Policy, the Harness Outline, and the v0.3 Amendment Notes are at
+  this status because they describe regimes or revisions the lab
+  does not yet operate.
+- **Public-comment appendix scaffold.** A structured record that may
+  be published as an appendix to a public-comment draft. It records
+  inputs and boundaries; it is not an approval instrument.
 - **Internal.** Circulated to founders only. The Founding Plan
   and the two fiscal-sponsor documents are at this status.
 - **Internal template draft.** A scaffold for a future legal or
@@ -165,6 +186,23 @@ series.
 
 ---
 
+## Known v0.3 amendment candidates
+
+The following are not counted as missing artifacts. They are known
+candidate changes to the Initiative itself:
+
+- **Evaluator obligations under uncertainty** — add a short
+  *Normative* clause to v0.3 naming the asymmetry between evaluator
+  and evaluated system, without making a welfare claim.
+- **Multi-agent review record appendix** — collect three
+  frontier-agent reviews of the founding documents using the same
+  prompt and publish all responses with clear boundaries.
+- **Agent-facing considerations companion** — defer as a separate
+  document unless the founders decide v0.3 should ship it alongside
+  the shorter evaluator-obligations clause.
+
+---
+
 ## What is missing from this folder
 
 These artifacts have been identified as needed but are not yet
@@ -196,9 +234,12 @@ drafted. Tagged *Hypothesised*:
 - *Demonstrated*: each cross-reference relationship (verifiable
   by reading the referenced document).
 - *Normative*: the reading-order recommendations, the status
-  legend's definitions, and the versioning conditions.
+  legend's definitions, the versioning conditions, and the known
+  v0.3 amendment candidates.
 - *Hypothesised*: the list of missing artifacts in the section
-  above (status pending decision to draft).
+  above (status pending decision to draft), and the assumption that
+  the v0.3 candidates will be incorporated into a later Initiative
+  draft.
 - *Speculative*: nothing in this index.
 
 ---
