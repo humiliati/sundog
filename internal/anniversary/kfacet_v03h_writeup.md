@@ -47,24 +47,23 @@ Final result:
  1 row   defective_E_block_confirmed    O_617
 ```
 
-The load-bearing v0.3h catalog statement is:
+The load-bearing v0.3h catalog statement is: **20 of 21 strict rows are
+confirmed structural zeros** under the adaptive-floor discipline. For those
+rows the standard `D3` sector is empty, so `c_i = d_i = 0`.
 
-> v0.3h resolves the eligible strict catalog rows as structural zeros. The
-> sole quarantined row, O_617, is explained by weak sigma_3 catalog
-> inclusion rather than by a failure of the Gamma_i audit chain.
+`O_617` is quarantined, not counted for or against the prediction. Its bridge
+singular value is `7.8359e-4`; neutral overlap is `1.81e-4`; the Jordan-chain
+test amplifies rather than drops (`90.04`). At the bridge-admitted kernel the
+representation reads `T(2) + S(6) + E(1)`, which is not a valid real standard
+`D3` block, and `||sigma3^3 - I||_inf = 3.96e-2` shows the order-3 relation
+fails at about 4%.
 
-For the 20 eligible rows the standard `D3` sector is empty, so
-`c_i = d_i = 0`. `O_617` is quarantined, not counted for or against the
-prediction. Its bridge singular value is `7.8359e-4`; neutral overlap is
-`1.81e-4`; the Jordan-chain test amplifies rather than drops (`90.04`).
-At the bridge-admitted kernel the representation reads `T(2) + S(6) + E(1)`,
-which is not a valid real standard `D3` block, and
-`||sigma3^3 - I||_inf = 3.96e-2` shows the order-3 relation fails at about
-4%. The companion deep dive (`kfacet_v03h_o617_deep_dive.md`) attributes
-this defective-D3 to weak sigma_3 catalog admission upstream: O_617's
-sigma_3 closure residual is `1.62e-1`, ranking 19 of 21 against a catalog
-median near `2e-8`. The defect therefore lives in the representation, not
-in the orbit's Gamma_i; the audit chain itself is intact.
+Correction from the companion deep dive: `O_617` is a clean opposite-strict
+catalog row. Its admission residual is `1.01e-8`; the earlier `1.62e-1` value
+is the canonical residual and is not the admitting orientation. The quarantine
+therefore reflects a bridge direction outside the valid `D3` representation,
+not an admission weakness and not a failure of the `Gamma_i` audit
+chain.
 
 ## Reproducibility Surface
 

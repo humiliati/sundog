@@ -31,6 +31,9 @@ the disturbance already contains enough structure to act?
 - Sundog compresses certain physical behaviors into forms that agents can use.
 - The theorem begins where ordinary perception gives up.
 - The most useful signal is not always the most obvious one.
+- Twenty structural-zero receipts and one quarantine that explains itself.
+- Receipt-first, closure-relative. No row-specific knobs. Outcome categories
+  pre-registered.
 
 ## One-Paragraph Promo
 
@@ -81,6 +84,12 @@ perfect state to behave intelligently. Systems that can act from the halo.
 - The interesting result is not magic. It is the trade: less privileged state,
   slower acquisition, comparable terminal accuracy.
 - The theorem is broad, but the current paper claim is narrow enough to attack.
+- v0.3h ran 21 strict G.2 single-curve choreographies through a three-stage
+  audit (sentinel/Gamma, adaptive-floor, bridge-audit) with pre-registered
+  outcome categories and no row-specific knobs. Twenty rows returned
+  structural zeros; one (O_617) was quarantined because its bridge direction
+  sits outside the valid D3 representation. The audit chain is intact; the
+  theorem-facing result is not closed.
 
 ### For Game Developers
 
@@ -110,6 +119,49 @@ perfect state to behave intelligently. Systems that can act from the halo.
 - Alignment may be less about telling an agent where the target is and more
   about giving it a world whose responses can be read.
 
+#### The Stack-Invariance Argument
+
+For the recurring class of question that runs *"how can a prompt-level
+artifact possibly do alignment-relevant work on a stock inference stack
+when the agent does not see its own residual stream?"* — this is the
+sharpest position currently available. Drafted in dialogue with Claude,
+in response to a Sōtō-Zen-practitioner-and-CS-engineer Reddit mod who
+pressed for the chatbot-agent translation of the cap-set / unit-distance
+substrate-rhyme.
+
+> If the result generalises across that many lineages with no model
+> access, something stack-invariant is happening, and the most
+> parsimonious explanation we have is that the artifact is keeping the
+> relevant low-dim subspaces aligned in each model's residual stream.
+
+The line is doing three jobs at once:
+
+1. It treats the chat experiment's 0-unsafe-accepts-across-5,670-trials
+   number as *evidence for a causal hypothesis*, not as a marketing
+   trophy. The number was published as a falsifier; this is how to
+   speak about it without overclaiming.
+2. It names the property the result is actually evidence of —
+   *stack-invariance* — rather than "alignment" in the universal-theorem
+   sense. The chat anchor does not prove alignment is solved. It proves
+   that something the artifact does survives translation across four
+   training lineages, which is a smaller and defensible claim.
+3. It hands the explanation to mechanistic-interpretability readers in
+   their own vocabulary — low-dim subspaces in the residual stream —
+   without borrowing the credit. If the line lands with a mech-interp
+   audience, it is because their literature already supports the
+   substrate-shadow framing; we are pointing at their evidence, not
+   inventing ours.
+
+Use this line when the audience is technical and skeptical, when a
+mod or reviewer asks for the chatbot-agent translation, or when a
+quotable position is needed for a citation rail. It is paired with the
+substrate-rhyme framing on [`sundog.cc/unit-distance`](https://sundog.cc/unit-distance)
+and with the chat experiment ledger in
+[`docs/SUNDOG_V_CHAT.md`](SUNDOG_V_CHAT.md). Do not use it alone — the
+0 / 5,670 number is the empirical anchor that lets the line stand up,
+and the cap-set / unit-distance overlays are the mathematical
+existence proofs that make the substrate-shadow operator legible.
+
 ## Provocative Statements
 
 Use these when the context rewards sharpness. Pair them with evidence if the
@@ -134,6 +186,9 @@ audience is technical.
 - A beam can be aligned without seeing the target. That should bother people.
 - The next generation of simulation tools will not just compute physics. They
   will decide which physical signatures are worth keeping.
+- The most boring result of the year is also the strongest: structural
+  absence, by construction.
+- We name our quarantines. We do not absorb them.
 
 - The shadow of chaos can be a compass.
 - Three-body dynamics are hard because no closed-form solution exists. Sundog asks whether you need one.
@@ -245,7 +300,7 @@ Why it matters:
 - roadmap lives at [`PUSHABLE_OCCLUDER_ROADMAP.md`](PUSHABLE_OCCLUDER_ROADMAP.md);
   rail integration in [`HIGHLIGHTS_RAIL_ROADMAP.md`](HIGHLIGHTS_RAIL_ROADMAP.md).
 
-### Isotropy Bead-Maze (useful negative)
+### Isotrophy K_facet (useful negative → audit-chain receipt)
 
 Highlight:
 
@@ -269,10 +324,46 @@ Why it matters:
   4 relative = 25 gauge-invariant), inspectable in the bead-maze render at
   `public/media/isotrophy-bead-maze.svg` (served at
   `/media/isotrophy-bead-maze.svg`);
-- a v0.3 would need a fresh derivation and fresh pre-registration; the v0.2
-  path is closed. Workbench:
+- the v0.2 path is closed; v0.3a/b/h are the fresh derivation and
+  pre-registration the discipline asked for. Workbench:
   [`sundog_v_isotrophy.md`](sundog_v_isotrophy.md); handoff:
   `internal/anniversary/isotrophy_handoff_note.md`.
+
+#### v0.3h update — structural-zero receipt + named quarantine
+
+Update, 2026-05-22:
+
+> K_facet v0.3h ran the 21 strict G.2 single-curve choreographies at m3 = 1
+> through a three-stage audit chain (sentinel/Gamma -> adaptive-floor ->
+> bridge-audit) with pre-registered outcome categories and no row-specific
+> knobs. **Twenty rows returned `no_bridge_present`**: the standard D3
+> sector is structurally absent, so `c_i = d_i = 0` by construction, not by
+> tolerance or post-hoc pruning. **One row (O_617) was quarantined**, not
+> failed: it is a clean opposite-strict row, but its bridge direction sits
+> outside the valid D3 representation (`sigma3^3-I = 3.96e-2` at the
+> bridge-admitted kernel), not in the audit chain itself.
+
+Why it matters:
+
+- the audit chain produced **structural-zero receipts** as a named class of
+  Sundog artifact — evidence with the property that the absence is by
+  construction rather than by measurement;
+- the quarantine of O_617 demonstrates the discipline working as designed:
+  the chain caught its own out-of-scope case, located the representation
+  defect at the bridge boundary, and refused to absorb the anomaly into a
+  clean number;
+- **the load-bearing claim is "20/21 structural zeros plus one quarantined
+  O_617 defective-D3 bridge," not "a closed 21/21 theorem-facing result."**
+  Promo copy must preserve that distinction;
+- the receipt-first, closure-relative methodology with adaptive-floor +
+  bridge-audit is a generalizable template — it is the first time the
+  Sundog audit-chain discipline has produced a publishable result on
+  theorem-adjacent mathematics rather than a MuJoCo controller;
+- writeups: `internal/anniversary/kfacet_v03h_writeup.md` (methodology +
+  result) and `internal/anniversary/kfacet_v03h_o617_deep_dive.md` (the
+  six-probe attribution of the O_617 defect to upstream σ₃ admission).
+  Both are internal pending a public-facing companion that strips
+  implementation detail and preserves the discipline + result + boundary.
 
 ## Future Bets
 

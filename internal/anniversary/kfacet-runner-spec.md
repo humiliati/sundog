@@ -1202,14 +1202,14 @@ admitting the bridge vector makes `sigma3` fail the order-3 relation at about
 Gamma framing at this boundary. It is excluded from evidence rather than
 counted for or against the `Gamma_i` prediction.
 
-Upstream attribution (per the deep dive,
+Corrected attribution (per the deep dive,
 `internal/anniversary/kfacet_v03h_o617_deep_dive.md`): the defective-D3 at
-this bridge is causally downstream of weak `sigma_3` catalog admission. O_617's
-`sigma_group_residual_inf` is `1.62e-1`, ranking 19 of 21 strict rows against
-a catalog median near `2e-8`. Its `F_beta` closure is catalog-normal (rank 4
-of 21). The constructed `rho(sigma_3)` therefore satisfies the order-3
-relation only approximately, and the projector machinery sees that
-approximation as a defective E(1) at `k_dim=8`. O_617 is excluded as an
-admission-edge row, not as counterevidence. The honest follow-up is a
-catalog-reconstruction question (tighter `sigma_3` admission tolerance), not
-a Gamma_i question.
+this bridge is **not** downstream of catalog-admission weakness. O_617 is a
+clean opposite-strict row: its admitting opposite-orientation residual is
+`1.01e-8` (`to_closure = 1.105`). The earlier `1.62e-1` number is the canonical
+residual, which is diagnostic-only for an opposite-strict row. The bridge
+vector is physically valid and tangent to the `(E, |L|)` level set, but when it
+is admitted the restricted representation fails `sigma3^3 = I` at about 4% and
+produces an odd `E(1)` residual. O_617 is excluded as a structural bridge
+outside the valid `D3` representation, not as counterevidence and not as a
+catalog-admission edge row.

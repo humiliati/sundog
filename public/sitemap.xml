@@ -13,7 +13,8 @@
 
   lastmod = date of last significant content or meta change. The 2026-05-21
   bump reflects the Phase 1 SEO sweep that added OG blocks, designed
-  preview images, and JSON-LD to every Class A page in one pass.
+  preview images, and JSON-LD to every Class A page in one pass. The
+  2026-05-22 bumps are unit-distance and isotrophy landings.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Class A: home and positioning -->
@@ -36,6 +37,7 @@
   <!-- Class A: research artifacts -->
   <url><loc>https://sundog.cc/mesa</loc><lastmod>2026-05-21</lastmod></url>
   <url><loc>https://sundog.cc/structural-failure</loc><lastmod>2026-05-21</lastmod></url>
+  <url><loc>https://sundog.cc/isotrophy</loc><lastmod>2026-05-22</lastmod></url>
   <url><loc>https://sundog.cc/applications-gallery</loc><lastmod>2026-05-21</lastmod></url>
 
   <!-- Class C: deferred, minimal OG (shared generic preview image) -->

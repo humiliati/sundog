@@ -1,6 +1,6 @@
-# O_617 Bridge Sub-Investigation — Deep Dive
+# O_617 Bridge Sub-Investigation - Deep Dive
 
-Status: current, 2026-05-22.
+Status: current, corrected 2026-05-22.
 Audience: collaborators, paper-side writers, future coding agents.
 Companion: `internal/anniversary/kfacet_v03h_writeup.md`.
 Receipt: `results/isotrophy/k-facet-v03-O617-deep-dive/deep_dive_receipt.json`.
@@ -8,197 +8,134 @@ Tooling: `scripts/o617_deep_dive.py` (one-shot, no integration).
 
 ## One-Line Read
 
-> v0.3h resolves the eligible strict catalog rows as structural zeros.
-> The sole quarantined row, O_617, is explained by weak sigma_3 catalog
-> inclusion rather than by a failure of the Gamma_i audit chain.
+> `O_617` is a clean opposite-strict catalog row. Its quarantine is not caused
+> by an admission weakness; it is caused by a real bridge direction
+> that falls outside the orbit's valid `D3` representation at the admitted
+> kernel boundary.
 
-Concretely: `O_617`'s sigma_3 closure residual sits at `1.62e-1`, the
-third-worst of the 21 strict rows, against a catalog median near `2e-8`.
-The defective D3 representation that the bridge audit flagged is the
-downstream consequence of this weak sigma_3 closure, not a near-bifurcation
-Floquet anomaly, not a Jordan block, and not a missed neutral direction.
+This corrects the first deep-dive attribution. Sorting by canonical sigma3
+residual made every opposite-strict row look weak. The orientation-aware
+admission residual for `O_617` is `1.01e-8` (`to_closure = 1.105`), which is
+catalog-normal. The old `1.62e-1` value is the canonical residual and is only a
+diagnostic for an opposite-strict row; it is not the row's admission residual.
 
-## What the Six Probes Found
+The bridge audit still stands: at `k_dim = 8`, admitting the bridge vector
+makes the restricted representation defective (`sigma3^3 - I ~= 3.96e-2` and
+an odd `E(1)` residual). The cause is not upstream catalog admission. It is a
+structural boundary direction that the row's `D3` action does not carry as a
+valid real standard irrep.
 
-The deep dive ran six pre-registered no-integration probes against the
-existing `M_i.npy`, `D3_*.npy`, bridge audit receipt, and sigma3-scan
-receipts. Each probe answered a specific question; together they
-triangulate the cause of O_617's defective-D3 disposition.
+## Probe Summary
 
-### Probe 1 — geometric anatomy of v_bridge
+### Probe 1 - Geometric Anatomy Of `v_bridge`
 
-The bridge singular vector decomposes into:
+The bridge singular vector has mixed `(12)` parity:
 
 ```text
-Per-body position norms: [0.316, 0.316, 0.611]
-Per-body velocity norms: [0.459, 0.459, 0.076]
-Per-axis position norms: [0.426, 0.615, 0.113]   # y-axis dominates
-Per-axis velocity norms: [0.271, 0.588, 0.094]   # y-axis dominates
 (12)-symmetric  position norm: 7.48e-1
 (12)-antisym.   position norm: 1.13e-1
 (12)-symmetric  velocity norm: 9.36e-2
 (12)-antisym.   velocity norm: 6.47e-1
 ```
 
-`v_bridge` is mixed-parity under body swap `(12)`: predominantly
-symmetric in positions but predominantly antisymmetric in velocities.
-Body 3 dominates positions while bodies 1 and 2 dominate velocities.
-This mixed parity does not fit cleanly into the D3 isotypic decomposition,
-which assumes consistent parity under `F_beta = (12) x R_pi x tau`.
+It is mostly symmetric in positions and antisymmetric in velocities. That
+mixed parity is a warning sign for the `D3` projection, which expects coherent
+behavior under `F_beta = (12) x R_pi x tau`.
 
-### Probe 2 — sigma_3^3 closure decomposition
-
-Decomposing `||sigma_3^3 - I||_inf` by kernel floor:
+### Probe 2 - `sigma3^3` Closure At Kernel Floors
 
 ```text
-Ambient (full 18D):      2.376e+03
-On k=7 kernel (floors 1e-7..1e-4): 1.181e-5  (clean)
-On k=8 kernel (floor 1e-3, admits bridge): 4.07e-2  (4%)
-Cross terms kernel<->complement: ~1.79e+3  (huge)
+On k=7 kernel: 1.181e-5  (clean)
+On k=8 kernel: 4.07e-2   (defective bridge admitted)
 ```
 
-Three observations land:
+The unambiguous k=7 kernel is clean. The order-3 failure appears only when the
+bridge vector is admitted into the kernel.
 
-1. The k=7 in-kernel residual is at integration noise (1.18e-5), so the
-   sigma_3 representation is clean on the *unambiguous* kernel
-   (excluding the bridge).
-2. Admitting the bridge into k=8 raises the in-kernel sigma_3^3 residual
-   to 4%, three orders of magnitude above noise. The bridge vector is
-   the direction that breaks sigma_3 closure on the kernel.
-3. The kernel-complement cross terms under sigma_3^3 are 1.79e+3,
-   indicating that sigma_3^3 mixes the recovered kernel basis with
-   the structural non-kernel substantially. This is expected
-   numerically for an unstable orbit with rtol-scale residual
-   eigenvectors, but the magnitude here means the kernel basis is not
-   a clean sigma_3-invariant subspace at this rtol.
-
-### Probe 3 — monodromy spectrum
+### Probe 3 - Monodromy Spectrum
 
 ```text
-Eigenvalue |.| range:           [0.8125, 1.2307]
-On unit circle (||.| - 1| < 1e-2):  16 of 18
-Near +1 (|.- 1| < 1e-2):            12 of 18
-Real Schur 1x1 blocks:               8
-Complex Schur 2x2 blocks:            5
-Matrix condition number:             6.6e+05
+Eigenvalue |.| range:              [0.8125, 1.2307]
+Near unit circle (||.| - 1|<1e-2): 16 of 18
+Near +1 (|lambda-1|<1e-2):         12 of 18
 ```
 
-The eigenvalue range `[0.81, 1.23]` forms reciprocal pairs as expected
-for a symplectic monodromy. Two off-unit-circle eigenvalues bound the
-unstable manifold; the other 16 are marginal/elliptic on or near the
-unit circle. Twelve sit within `1e-2` of `+1` -- consistent with the
-algebraic-near-1 multiplicity flagged in the bridge audit, but the
-SVD-based geometric multiplicity at the fixed bridge floor was only
-8, hence the audit's `jordan_defect_diagnostic = 4` (now contextually
-explained: marginally-elliptic eigenvalues, not a Jordan defect).
+The spectrum is marginal/elliptic with reciprocal pairing as expected for a
+symplectic monodromy. The bridge is not explained by a visible Jordan defect.
 
-### Probe 4 — (E, |L|) sensitivity along v_bridge
+### Probe 4 - Constraint Tangency
 
 ```text
-cos(v_bridge, grad H)     = 4.02e-10
-cos(v_bridge, grad |L|)   = -2.26e-09
-H(y0) = -1.222719,   |L|(y0) = 3.185e-1
+cos(v_bridge, grad H)   = 4.02e-10
+cos(v_bridge, grad |L|) = -2.26e-9
 ```
 
-`v_bridge` is essentially exactly tangent to the (E, |L|) level set.
-This is **important**: it rules out an interpretation where the bridge
-is a numerical artifact violating conservation. The bridge direction
-is a physically valid infinitesimal perturbation that preserves both
-energy and angular momentum to integration precision. It is a real
-direction in the constraint manifold of the orbit.
+The bridge vector is tangent to the `(E, |L|)` level set. It is physically
+valid as an infinitesimal direction; the defect lives in the representation,
+not in a conservation-law violation.
 
-### Probe 5 — cross-row sigma_3 comparison (the smoking gun)
+### Probe 5 - Orientation-Aware Sigma3 Admission
 
-Pulling sigma_3-scan residuals from
-`results/isotrophy/m3eq1-sigma3-precondition-fixed-inverse-orientation-25/`
-for all 21 strict rows:
+The strict-21 receipt splits as:
 
 ```text
-O_617 sigma_group_residual:      1.62e-1
-O_617 sigma_group_to_closure:    1.77e+7   (huge; smaller = tighter)
-Catalog range sigma residual:    [1.4e-9, 2.1e-1]
-Catalog median sigma residual:   2.2e-8
-O_617 rank in sigma residual (asc): 19 of 21  (3rd worst)
-
-O_617 F_beta_residual:           3.4e-9
-Catalog range F_beta residual:   [8.6e-10, 1.1e-8]
-Catalog median F_beta residual:  4.5e-9
-O_617 rank in F_beta residual (asc): 4 of 21  (clean)
+13 canonical-strict rows
+ 8 opposite-strict rows
 ```
 
-This is the headline. O_617's sigma_3 closure is six orders of magnitude
-worse than catalog median, sitting near the worst three rows. Its
-`sigma_group_to_closure` ratio (`1.77e+7`) is far outside the
-catalog-typical neighborhood. By contrast, its `F_beta` closure is
-catalog-normal (rank 4 of 21, near the best).
-
-**O_617 sits at the catalog selection edge for sigma_3.** It is admitted
-into supplementary-A's strict 21 only because the sigma_3 detector
-tolerance was lax enough to include it. A tighter tolerance might
-demote it from the strict list.
-
-### Probe 6 — catalog metadata
+`O_617` is opposite-strict:
 
 ```text
-Label:    O_{617}(1)
-Stability: U   (unstable)
+O_617 admission orientation: opposite
+O_617 admission residual:    1.010e-8
+O_617 admission to closure:  1.105
+O_617 canonical residual:    1.616e-1   (diagnostic only)
+```
+
+This is the correction. The row is not weakly admitted. It belongs normally to
+the opposite-orientation strict catalog.
+
+### Probe 6 - Catalog Metadata
+
+```text
+Label:     O_{617}(1)
+Stability: U
 Period:    129.276643
 z0=0.250595, vx=0.318838, vy=0.551458, vz=0.000723
-inertia_degenerate_candidate: False
 ```
 
-Standard unstable choreography in the m_3=1 slice; no near-degenerate
-inertia structure.
+Standard unstable row in the `m_3 = 1` slice; no inertia-degeneracy flag.
 
 ## Synthesis
 
-The defective D3 at O_617's bridge boundary is a **downstream effect of
-weak sigma_3 closure**, not a structural pathology of the orbit itself.
-The mechanism:
+`O_617` is a clean opposite-strict choreography whose bridge-admitted kernel
+contains a real near-kernel direction that the orbit's `D3` representation
+does not act on irreducibly. The mechanism is:
 
-1. The sigma_3-scan admitted O_617 with closure residual `1.62e-1`.
-2. The constructed `rho(sigma_3)` matrix therefore satisfies
-   `rho(sigma_3)^3 = rho_id` (i.e. `M_i`) only approximately, to about
-   4% relative on the k=8 bridge-admitted kernel.
-3. When the projector machinery tries to decompose `ker(M_i - I)` at
-   k_dim=8 under this approximate D3 representation, the standard
-   isotypic projector cannot produce a real 2D `E` block. The fragment
-   it captures appears as an odd-dim `E(1)` with one marginal `P_E`
-   singular value at `0.0147`.
-4. The bridge audit correctly classifies this as
-   `defective_E_block_confirmed` and excludes O_617 from v0.3h evidence.
+1. The row is admitted normally under the opposite sigma3 orientation.
+2. At the adaptive floor, `k_dim = 7` is clean and gives no standard sector.
+3. The bridge singular value (`7.8359e-4`) is physically meaningful and
+   tangent to the conserved-invariant surface.
+4. Admitting that vector at `k_dim = 8` breaks the restricted order-3 relation
+   at about 4% and yields `T(2)+S(6)+E(1)`.
+5. `E(1)` is not a valid real standard `D3` block, so the bridge audit
+   correctly classifies the row as `defective_E_block_confirmed`.
 
-The bridge singular vector is itself a real physical direction (probe
-4: tangent to constraints; probe 1: structured mixed-parity under
-`(12)`), so the defect lies in the *representation*, not the orbit.
-
-This is a **catalog selection-edge phenomenon**. v0.3h's discipline is
-robust to it: the defective row is not silently counted as evidence,
-and the structural-zero claim survives intact on the 20 other rows.
+The honest label is therefore **structural bridge outside the valid D3
+representation**, not admission weakness.
 
 ## Implications
 
-- **No tighter-rtol rerun needed.** Probe 3 shows the spectrum is
-  marginal/elliptic, not near a true Jordan defect; tighter integration
-  would not change the sigma_3 closure residual at the catalog selection
-  edge.
-- **Quotient refinement not indicated.** Probe 4 shows the bridge vector
-  is invariant-conserving; it is not a missed neutral direction.
-- **Possible future move: tighter sigma_3 catalog tolerance.** Re-running
-  the sigma_3-scan with a residual tolerance below `1e-2` would likely
-  remove O_617 from the strict catalog entirely. That is a catalog
-  reconstruction question, not a v0.3h evidence question, and is left
-  to a follow-up.
-- **Paper-side framing.** The strict-21 catalog should be characterized
-  not as a hard list but as a list whose admission residuals vary by
-  six orders of magnitude in sigma_3 closure. O_617's defective-D3 at
-  the bridge is the visible consequence of this internal variation.
-  The v0.3h structural-zero claim holds on `20 of 21 rows whose
-  sigma_3 closure is at integration precision`.
+- The v0.3h catalog result remains: 20 clean structural zeros plus one named
+  quarantine.
+- `O_617` is not counterevidence against the `Gamma_i` audit chain.
+- A tighter sigma3 catalog-reconstruction sweep is no longer the natural next
+  test for this row; its admission residual is already at integration scale.
+- The open research question is what symmetry, near-symmetry, or boundary
+  mechanism the bridge direction actually carries.
 
-## Out of Scope
+## Out Of Scope
 
-- Re-running the sigma_3-scan at tighter tolerance.
-- Investigating whether other catalog rows would be reclassified under
-  a tightened admission rule.
+- Promoting this script to a general `kfacet-row-anatomy` subcommand.
 - Extending the bridge audit to non-strict rows or supplementary-B.
+- Naming the bridge mechanism beyond the present defective-D3 diagnosis.
