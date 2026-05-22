@@ -26,8 +26,8 @@ Outcome hierarchy (pre-registered, deterministic):
                                    respect D3, but the full k=8 kernel
                                    does not under that same pair. Records
                                    the local rescue without promoting it.
-  bridge_approx_trivial_isotypic -- v_bridge is an approximate lambda=1
-                                   Floquet direction, F_beta closes cleanly,
+  bridge_approx_sign_isotypic    -- v_bridge is an approximate lambda=1
+                                   Floquet direction, F_beta acts as -I,
                                    and sigma_3 keeps it nearly on itself, but
                                    the scalar sigma_3 drift is above the D3
                                    relation floor.
@@ -61,7 +61,8 @@ WHY_DIVE_BRIDGE_RELATION_FLOOR = 1e-3   # relative residual on v_bridge
 WHY_DIVE_KERNEL_RELATION_FLOOR = 1e-3   # max-norm residual on k=8 kernel
 WHY_DIVE_EIGEN_RESIDUAL_FLOOR = 1e-3    # eigenvector match quality
 WHY_DIVE_LAMBDA_NEAR_ONE_BAND = 1e-2    # |lambda - 1|
-WHY_DIVE_TRIVIAL_ALIGNMENT_FLOOR = 0.99  # <v,sigma3 v>/norms, near-T test
+WHY_DIVE_SIGMA3_ALIGNMENT_FLOOR = 0.99   # <v,sigma3 v>/norms, near-isotypic test
+WHY_DIVE_FBETA_SIGN_FLOOR = -0.99        # <v,F_beta v>/norms, near-S test
 WHY_DIVE_BRIDGE_FLOOR = 1e-3            # cut for k=8 (admits bridge)
 WHY_DIVE_KERNEL7_FLOOR = 1e-7           # cut for k=7 (excludes bridge)
 
@@ -176,6 +177,9 @@ def probe_c3_f_beta_action(M_i, f_beta_saved, v_bridge, k7, k8):
     in_k8 = float(np.linalg.norm(P_k8 @ fv) / v_norm)
     # F_beta^2 should be identity; compute the bridge-local residual.
     f_sq_minus_v_relative = float(np.linalg.norm(f_sq_v - v_bridge) / max(np.linalg.norm(v_bridge), 1e-300))
+    signed_alignment = float(
+        np.dot(v_bridge, fv) / max(np.linalg.norm(v_bridge) * np.linalg.norm(fv), 1e-300)
+    )
     # (12)-parity decomposition of F_beta v_bridge
     fv_pos = fv[:9].reshape(3, 3)
     fv_vel = fv[9:].reshape(3, 3)
@@ -187,6 +191,9 @@ def probe_c3_f_beta_action(M_i, f_beta_saved, v_bridge, k7, k8):
     return {
         "F_beta_v_in_k7": in_k7,
         "F_beta_v_in_k8": in_k8,
+        "F_beta_signed_alignment": signed_alignment,
+        "F_beta_plus_residual_relative": float(np.linalg.norm(fv - v_bridge) / max(np.linalg.norm(v_bridge), 1e-300)),
+        "F_beta_minus_residual_relative": float(np.linalg.norm(fv + v_bridge) / max(np.linalg.norm(v_bridge), 1e-300)),
         "F_beta_squared_minus_v_relative": f_sq_minus_v_relative,
         "F_beta_v_12sym_position_norm": float(np.linalg.norm(sym_pos)),
         "F_beta_v_12antisym_position_norm": float(np.linalg.norm(asym_pos)),
@@ -327,15 +334,16 @@ def classify_outcome(c1_result, c2_result, c3_result, c4_result):
     if c4_result["any_bridge_only_pass"]:
         return "bridge_frame_partial"
     c2_cat = c2_result["category"]
-    approx_trivial = (
+    approx_sign = (
         c2_cat == "approx_eigenvector_near_one"
-        and c1_result["s3_v_decomp"]["in_bridge"] >= WHY_DIVE_TRIVIAL_ALIGNMENT_FLOOR
+        and c1_result["s3_v_decomp"]["in_bridge"] >= WHY_DIVE_SIGMA3_ALIGNMENT_FLOOR
+        and c3_result["F_beta_signed_alignment"] <= WHY_DIVE_FBETA_SIGN_FLOOR
         and c3_result["F_beta_squared_minus_v_relative"] <= WHY_DIVE_BRIDGE_RELATION_FLOOR
         and not c4_result["any_full_pass"]
         and not c4_result["any_bridge_only_pass"]
     )
-    if approx_trivial:
-        return "bridge_approx_trivial_isotypic"
+    if approx_sign:
+        return "bridge_approx_sign_isotypic"
     if c2_cat == "approx_eigenvector_near_one":
         # Bridge respects M_i and is near-eigenvector but no D3 frame works.
         return "bridge_is_quasi_kernel"
@@ -360,12 +368,13 @@ def outcome_notes(outcome):
             "kernel; this is structurally interesting but not a representation "
             "fix. v_bridge carries a different irrep than the rest of the kernel."
         ),
-        "bridge_approx_trivial_isotypic": (
+        "bridge_approx_sign_isotypic": (
             "v_bridge is an approximate lambda=1 Floquet direction and nearly "
-            "trivial under D3: F_beta closes exactly and sigma_3 maps it almost "
-            "back to itself. The remaining sigma_3 scalar drift is above the "
-            "relation floor, so the D3 projector cannot keep the direction in "
-            "T and reports a defective E(1) bridge."
+            "sign-isotypic under D3: F_beta acts as -I, F_beta^2 closes exactly, "
+            "and sigma_3 maps it almost back to itself. The remaining sigma_3 "
+            "scalar drift is above the relation floor, so the D3 projector "
+            "cannot keep the direction cleanly in S and reports a contaminated "
+            "edge block."
         ),
         "bridge_is_quasi_kernel": (
             "v_bridge is a small-SV direction of (M_i - I), but not aligned "
@@ -418,7 +427,8 @@ def main():
             "kernel_relation_floor": WHY_DIVE_KERNEL_RELATION_FLOOR,
             "eigen_residual_floor": WHY_DIVE_EIGEN_RESIDUAL_FLOOR,
             "lambda_near_one_band": WHY_DIVE_LAMBDA_NEAR_ONE_BAND,
-            "trivial_alignment_floor": WHY_DIVE_TRIVIAL_ALIGNMENT_FLOOR,
+            "sigma3_alignment_floor": WHY_DIVE_SIGMA3_ALIGNMENT_FLOOR,
+            "F_beta_sign_floor": WHY_DIVE_FBETA_SIGN_FLOOR,
         },
         "C1_sigma3_action_on_bridge": c1,
         "C2_eigenvalue_match": c2,
@@ -463,6 +473,9 @@ def main():
     print("--- C3: F_beta action on v_bridge ---")
     print(f"  F_beta v in k7 fraction: {c3['F_beta_v_in_k7']:.4f}")
     print(f"  F_beta v in k8 fraction: {c3['F_beta_v_in_k8']:.4f}")
+    print(f"  <v,F_beta v> / norms: {c3['F_beta_signed_alignment']:.4f}")
+    print(f"  ||F_beta v - v|| / ||v||: {c3['F_beta_plus_residual_relative']:.3e}")
+    print(f"  ||F_beta v + v|| / ||v||: {c3['F_beta_minus_residual_relative']:.3e}")
     print(f"  ||F_beta^2 v - v|| / ||v||: {c3['F_beta_squared_minus_v_relative']:.3e}")
     print(f"  F_beta v parity: sym_pos={c3['F_beta_v_12sym_position_norm']:.3e}, "
           f"asym_pos={c3['F_beta_v_12antisym_position_norm']:.3e}, "

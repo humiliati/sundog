@@ -127,60 +127,66 @@ representation**, not admission weakness.
 ## WHY-Dive Addendum
 
 The follow-up WHY-dive refines the bridge diagnosis again. The bridge direction
-is not a loose quasi-kernel vector. It is a near-trivial-isotypic direction:
+is not a loose quasi-kernel vector. It is a near-sign-isotypic direction:
 
 ```text
 Rayleigh lambda at v_bridge:         0.999999
 ||(M-I)v|| / ||v||:                  7.84e-4
 sigma3 v projection onto v_bridge:   0.9998
 sigma3 v in k=8 fraction:            1.0000
+<v, F_beta v>:                       -0.9999997
+||F_beta v + v|| / ||v||:            7.79e-4
 F_beta^2 v - v:                      0.0
 sigma3^3 v - v:                      7.06e-2
 ```
 
-So `v_bridge` tries to live in the trivial `T` sector. `F_beta` fixes it
-cleanly, and `sigma3` sends it almost exactly back to itself, but with a
+So `v_bridge` tries to live in the sign `S` sector, not the trivial `T`
+sector. `F_beta` acts as `-I` on the bridge direction, `F_beta^2` closes
+exactly, and `sigma3` sends it almost exactly back to itself, but with a
 sub-clean scalar drift. That drift accumulates over the three sigma3 actions
-and leaves `sigma3^3 v` outside the `1e-3` relation floor. The projector then
-cannot keep the direction in `T`; the bookkeeping residue appears as the
-defective odd `E(1)` block.
+and leaves `sigma3^3 v` outside the `1e-3` relation floor. The character
+projector cannot keep the approximate direction purely in `S`; the
+bookkeeping residue appears as the defective odd `E(1)` block.
 
 The corrected WHY outcome is:
 
 ```text
-bridge_approx_trivial_isotypic
+bridge_approx_sign_isotypic
 ```
 
 This is still a quarantine. It is not a valid standard `D3` sector and not
 countable evidence for `Gamma_i`. But the causal label is now sharper:
-**O_617 sits at the edge of the trivial sector, not outside D3 in a featureless
+**O_617 sits at the edge of the sign sector, not outside D3 in a featureless
 way.**
 
 ## Catalog-Wide Separator Addendum
 
-The catalog-wide near-T separator (`scripts/catalog_near_t_separator.py`)
-checks the same per-direction diagnostic across all 21 strict G.2 rows from
+The catalog-wide isotypic-edge separator (`scripts/catalog_near_t_separator.py`)
+checks the same signed isotypic diagnostic across all 21 strict G.2 rows from
 existing receipts. It confirms the WHY-dive is row-unique:
 
 ```text
-clean_T:        4
-clean_S:       39
-e_rotation:     0
-near_T_edge:    1   (O_617 only)
-near_S_edge:    0
-unclassified: 116   (SVD-basis artifact; not a structural class)
+clean_T:        42
+clean_S:       116
+clean_E:         0
+edge_T:          0
+edge_S:          2   (O_617 bridge contamination)
+edge_E_as_T:     0
+edge_E_as_S:     0
+edge_E_other:    1   (O_617 bridge contamination)
 ```
 
 Receipt: `results/isotrophy/k-facet-v03-near-T-separator/separator_manifest.json`.
 
-The load-bearing parts are `near_T_edge = [617]`, `e_rotation = 0`, and
-`near_S_edge = 0`. The large unclassified count is expected because singular
-vectors of `(M_i - I)` are not generally D3-isotypic basis vectors; mixed T/S
-directions do not classify cleanly under a per-direction test. The D3 character
-projector remains the authoritative T/S/E counter. The separator nevertheless
-gives an independent check that no catalog direction exhibits standard
-E-rotation behavior and that O_617 is the only row with a near-trivial edge
-direction.
+The load-bearing parts are `edge_S_rows = [617]`, `edge_E_other_rows = [617]`,
+and `clean_E_rows = []`. All 20 other rows are pure clean `T(2)+S(5 or 6)`
+with no edge class of any kind. The `O_617` projector readout overcounts one
+physical bridge direction (`T+S+E = 9` while `k_dim = 8`) because the
+underlying group action on the bridge-admitted kernel is only approximate:
+the bridge is caught mostly by `S` (near `F_beta = -I`) and weakly by
+`E` as contamination. The separator nevertheless gives an independent check
+that no catalog direction exhibits standard `E`-rotation behavior and that
+`O_617` is the only row with a structural edge direction.
 
 ## Implications
 
@@ -189,7 +195,7 @@ direction.
 - `O_617` is not counterevidence against the `Gamma_i` audit chain.
 - A tighter sigma3 catalog-reconstruction sweep is no longer the natural next
   test for this row; its admission residual is already at integration scale.
-- The WHY-dive's `bridge_approx_trivial_isotypic` diagnosis is row-unique
+- The WHY-dive's `bridge_approx_sign_isotypic` diagnosis is row-unique
   across the strict catalog, not a generic phenomenon.
 - The open research question is what symmetry, near-symmetry, or boundary
   mechanism the bridge direction actually carries.
