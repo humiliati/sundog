@@ -2998,8 +2998,9 @@ def _bridge_projector_readout(
 def _bridge_outcome_notes(outcome: str) -> str:
     notes_map = {
         "no_bridge_present": (
-            "No singular values in the bridge band (1e-7, 1e-3); the row is "
-            "structurally clean and does not require a bridge audit."
+            "No singular values remain in the unresolved bridge band after "
+            "respecting the row's adaptive floor. The row is structurally "
+            "clean and does not require a bridge audit."
         ),
         "all_neutral_overlap_explained": (
             "All bridge vectors project into the neutral basis with overlap "
@@ -3042,6 +3043,7 @@ def audit_bridge_for_row(
     catalog_row: OrbitRow,
     d3_ops: dict[str, np.ndarray],
     M_i: np.ndarray,
+    adaptive_receipt: dict[str, object] | None = None,
 ) -> dict[str, object]:
     """Run the no-integration bridge audit on a row's existing matrices."""
     identity = np.eye(M_i.shape[0])
@@ -3049,9 +3051,21 @@ def audit_bridge_for_row(
     _u, singular_values, vh = np.linalg.svd(m_minus_i)
     singular_values_desc = [float(value) for value in singular_values]
 
+    adaptive_selected_floor: float | None = None
+    adaptive_outcome: str | None = None
+    if adaptive_receipt is not None:
+        adaptive_outcome_raw = adaptive_receipt.get("outcome")
+        adaptive_outcome = str(adaptive_outcome_raw) if adaptive_outcome_raw is not None else None
+        maybe_floor = adaptive_receipt.get("selected_floor")
+        if isinstance(maybe_floor, (int, float)):
+            adaptive_selected_floor = float(maybe_floor)
+    effective_bridge_lower = max(
+        BRIDGE_BAND_LOWER,
+        adaptive_selected_floor if adaptive_selected_floor is not None else BRIDGE_BAND_LOWER,
+    )
     bridge_indices = [
         i for i, s in enumerate(singular_values)
-        if BRIDGE_BAND_LOWER < s < BRIDGE_BAND_UPPER
+        if effective_bridge_lower < s < BRIDGE_BAND_UPPER
     ]
 
     # Eigenvalue evidence near 1 (diagnostic, NOT the sole classifier per the
@@ -3175,7 +3189,10 @@ def audit_bridge_for_row(
         "M_i_norm_inf": float(np.linalg.norm(M_i, ord=np.inf)),
         "M_minus_I_singular_values_desc": singular_values_desc,
         "bridge_band_lower": BRIDGE_BAND_LOWER,
+        "bridge_band_lower_effective": effective_bridge_lower,
         "bridge_band_upper": BRIDGE_BAND_UPPER,
+        "adaptive_floor_outcome": adaptive_outcome,
+        "adaptive_selected_floor": adaptive_selected_floor,
         "fixed_bridge_floor": BRIDGE_FIXED_FLOOR,
         "bridge_indices": bridge_indices,
         "bridge_vectors": bridge_vectors_out,
@@ -3243,6 +3260,7 @@ def command_kfacet_bridge_audit(args: argparse.Namespace) -> int:
         # (sentinel output) or in the source dir referenced by the adaptive
         # reprocessor's receipt (when input_dir is a reprocessor output).
         m_path = row_dir / "M_i.npy"
+        ar_receipt: dict[str, object] | None = None
         if m_path.is_file():
             src_dir = row_dir
         else:
@@ -3273,7 +3291,7 @@ def command_kfacet_bridge_audit(args: argparse.Namespace) -> int:
             print(f"[kfacet-bridge-audit] WARN: O_{row_index} not in catalog at m3={args.m3}")
             continue
         print(f"[kfacet-bridge-audit] auditing {catalog_row.label}")
-        receipt = audit_bridge_for_row(row_dir, catalog_row, d3_ops, M_i)
+        receipt = audit_bridge_for_row(row_dir, catalog_row, d3_ops, M_i, ar_receipt)
         per_row.append(receipt)
         outcome = str(receipt["outcome"])
         outcome_counts[outcome] = outcome_counts.get(outcome, 0) + 1
@@ -3306,6 +3324,8 @@ def command_kfacet_bridge_audit(args: argparse.Namespace) -> int:
                 "row_index": r["row_index"],
                 "outcome": r["outcome"],
                 "n_bridge_vectors": len(r["bridge_vectors"]),
+                "adaptive_selected_floor": r.get("adaptive_selected_floor"),
+                "bridge_band_lower_effective": r.get("bridge_band_lower_effective"),
                 "max_neutral_overlap": max(
                     (b["neutral_overlap"] for b in r["bridge_vectors"]), default=None
                 ),

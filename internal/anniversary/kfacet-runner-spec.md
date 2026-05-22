@@ -1153,8 +1153,51 @@ projector floor, but the projector readout is not a clean standard block: it
 shows an odd one-dimensional E residual (`E(1)`), which is not countable as a
 real 2D standard irrep and not eligible for `Gamma_i`.
 
-Catalog interpretation: **v0.3h's load-bearing result is 20/21 structural zero
-plus one O_617 bridge sub-investigation**, not a closed 21/21 theorem-facing
-claim. The bridge investigation should decide whether O_617 is a near-kernel
-numerical artifact, a missing Jordan/neutral direction, or a genuine defective
-D3 block at the absolute floor boundary.
+Catalog interpretation at this stage: **v0.3h's load-bearing result is 20/21
+structural zero plus one O_617 bridge sub-investigation**, not a closed 21/21
+theorem-facing claim. The bridge audit below resolves the sub-investigation as
+a defective D3 bridge block, not as countable evidence.
+
+### Bridge audit disposition
+
+The bridge audit is now discoverable as:
+
+```powershell
+npm run isotrophy:kfacet:bridge-audit
+```
+
+Receipt directory: `results/isotrophy/k-facet-v03-bridge-audit-21/`.
+
+The audit respects the adaptive floor per row: a singular value already admitted
+by the adaptive-floor reprocessor is not audited again as an unresolved bridge.
+That changes the 21-row bridge-audit manifest from the preliminary
+`15 no_bridge / 5 jordan_suspected / 1 defective_E` picture to the final,
+receipt-disciplined split:
+
+```text
+no_bridge_present:             20 rows
+defective_E_block_confirmed:    1 row  (O_617)
+```
+
+For `O_617`, the bridge vector is sharply diagnosed:
+
+```text
+bridge_sv                 = 7.8359e-4
+neutral_overlap           = 1.81e-4
+||(M-I)v||                = 7.836e-4
+||(M-I)^2 v||             = 7.056e-2
+jordan_chain_drop         = 90.04
+
+k_dim=8 readout:
+  D3 isotypic dims        = T(2)+S(6)+E(1)
+  P_E marginal SV         = 0.01475
+  sigma3^3 - I residual   = 3.96e-2
+  F_beta sigma3 F_beta - sigma3^-1 residual = 8.95e-5
+```
+
+Disposition: O_617 is not neutral-overlap explained and not Jordan explained;
+admitting the bridge vector makes `sigma3` fail the order-3 relation at about
+4% and produces an odd one-dimensional E residual, which is not a valid real
+2D standard `D3` irrep. Therefore O_617 sits structurally outside the v0.3h
+Gamma framing at this boundary. It is excluded from evidence rather than
+counted for or against the `Gamma_i` prediction.
