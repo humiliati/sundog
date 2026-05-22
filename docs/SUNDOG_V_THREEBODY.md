@@ -949,6 +949,18 @@ SV `0.01475`, `sigma3^3-I = 3.96e-2`). The row is outside the v0.3h Gamma
 framing at that boundary and remains excluded from evidence, not counted for or
 against the prediction.
 
+The deep-dive companion (`internal/anniversary/kfacet_v03h_o617_deep_dive.md`)
+locates the upstream cause: `O_617`'s `sigma_3` catalog closure residual is
+`1.62e-1`, ranking 19 of 21 strict rows against a catalog median near `2e-8`,
+while its `F_beta` closure is catalog-normal. The bridge vector is exactly
+tangent to the `(E, |L|)` level set (cosines `~1e-10`), so the defect lives in
+the representation rather than in the orbit. The headline therefore reads:
+**v0.3h resolves the eligible strict catalog rows as structural zeros; the sole
+quarantined row, O_617, is explained by weak sigma_3 catalog inclusion rather
+than by a failure of the Gamma_i audit chain.** Honest follow-up is a
+catalog-reconstruction question (tighter `sigma_3` admission tolerance), not a
+v0.3h evidence question.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

@@ -1,18 +1,39 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#FDFDFC"/>
-      <stop offset="100%" stop-color="#F5F4EE"/>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#FFFAF0" stop-opacity="0.94"/>
     </linearGradient>
+    <pattern id="ruled" x="0" y="0" width="1200" height="28" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="27" x2="1200" y2="27" stroke="#63A3DC" stroke-opacity="0.075" stroke-width="1"/>
+    </pattern>
     <radialGradient id="halo" cx="0.18" cy="0.12" r="0.6">
-      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.12"/>
+      <stop offset="0%" stop-color="#F4C430" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#F4C430" stop-opacity="0"/>
     </radialGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Base paper layer: warm cream -->
+  <rect width="1200" height="630" fill="#FEFDFB"/>
+  <!-- Paper-white-to-warm vertical gradient overlay -->
+  <rect width="1200" height="630" fill="url(#paper)"/>
+  <!-- Horizontal ruled lines -->
+  <rect width="1200" height="630" fill="url(#ruled)"/>
+  <!-- Red vertical margin (about 90px from left, like a legal pad) -->
+  <rect x="90" y="0" width="2" height="630" fill="#FF6363" fill-opacity="0.12"/>
+  <!-- Top-left warm halo wash for depth -->
   <rect width="1200" height="630" fill="url(#halo)"/>
 
-  <!-- Top accent rule -->
+  <!-- Top accent rule (brass) -->
   <rect x="60" y="60" width="80" height="3" fill="#C99517"/>
 
   <!-- Eyebrow -->
@@ -30,7 +51,7 @@
   <!-- URL -->
   <text x="60" y="560" font-family="Courier New, Courier, monospace" font-size="22" font-weight="700" fill="#1A3A52">sundog.cc/sundog</text>
 
-  <!-- Per-page visualization (right side, ~620 to ~1140) -->
+  <!-- Per-page visualization (right side) -->
   
   <g transform="translate(880,305)">
     <!-- 22 degree halo -->
