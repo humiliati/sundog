@@ -1,6 +1,15 @@
 # v0.4a Domain Map Pre-Registration
 
-Status: pre-registered, not yet run. 2026-05-22.
+Status: **VERDICT LANDED 2026-05-22**.
+The pre-registered two-pass sweep executed 22:21:48 -> 02:46:24 (~4 h 25 min)
+against the registration below. Final verdict: **outcome_A_all_Z2_clean**
+(273/273 rows in `Z2_clean` after Pass 2; `marginal_Z2 / smaller_symmetry /
+undefined` all empty). Pass 2 rescued 24 rows from provisional
+`smaller_symmetry` to `Z2_clean`, confirming the O_434 gauge-artifact
+pre-mortem and validating the two-pass design. The v0.4 body is now
+locked as **"supplementary-B piano-trio orbit as primary Z_2 object;
+domain: all 273 rows"** (no longer "Z_2-or-smaller"). See the
+**Verdict (Landed)** section below.
 Audience: operator who executes the staged sweep; v0.4b paper-side writer;
 future coding agents.
 Companions:
@@ -26,6 +35,118 @@ truth. v0.4a is **not a mechanism test**; it audits the projection's
 well-definedness so that v0.4b's mechanism prediction (m_3 / stability
 stratification, registered separately) can be compared against an
 honest classifier rather than against a self-referential audit.
+
+## Verdict (Landed, 2026-05-22)
+
+The pre-registered two-pass sweep ran against this registration. Headline:
+
+```text
+v0.4a verdict:
+  Well-definedness PASS.
+  273/273 supplementary-B piano-trios classify as Z2_clean after the
+  pre-registered two-pass gauge protocol.
+  marginal_Z2 = 0, smaller_symmetry = 0, undefined = 0.
+  Pass 2 rescued 24 rows, confirming the O_434 gauge-artifact pre-mortem
+  and validating the two-pass classifier.
+```
+
+Provisional Pass 1 classification (default tolerances, all 273 rows):
+
+```text
+Z2_clean:         249
+marginal_Z2:        0
+smaller_symmetry:  24
+undefined:          0
+```
+
+Pass 2 (tight tolerances, 24 reruns): all 24 reclassifications were
+`smaller_symmetry -> Z2_clean`. No row remained in any non-clean band.
+
+Final classification (per-row provenance recorded):
+
+```text
+Z2_clean:         273   <-- 100% of catalog
+marginal_Z2:        0
+smaller_symmetry:   0
+undefined:          0
+
+pass2_invoked:           24
+pass2_reclassification:  24   <-- all 24 rescued cleanly
+```
+
+### Pass 2 reclassification details
+
+24 rows rescued, with original/tight `F_beta` residuals:
+
+```text
+                                  original (Pass 1)    tight (Pass 2)    rescue ratio
+m_3 = 0.4:
+  O_434(0.4) T=200.66 S            2.525e-01            1.060e-07         4.20e-07
+m_3 = 1.4:
+  O_191(1.4) T=189.96 U            1.111e-01            3.718e-07         3.35e-06
+  O_202(1.4) T=195.43 U            9.474e-02            2.316e-07         2.44e-06
+  O_203(1.4) T=195.58 U            1.177e-01            3.400e-07         2.89e-06
+  O_210(1.4) T=201.26 U            1.125e-01            2.246e-07         2.00e-06
+m_3 = 1.5: 8 rows                  9.10e-02 .. 1.66e-01  1.07e-07 .. 4.59e-07
+m_3 = 1.6: 7 rows                  9.04e-02 .. 1.50e-01  2.39e-07 .. 7.14e-07
+m_3 = 1.7: 4 rows                  1.50e-01 .. 1.99e-01  1.06e-07 .. 3.30e-07
+
+Period range of rescues:  T in [172.82, 201.82]   (all long-period)
+Stability split:          12 S + 12 U             (no correlation with stability)
+Rescue ratios:            4.2e-7 to 6.8e-6        (6-7 orders of magnitude)
+```
+
+### Methodology rule worth carrying forward
+
+The 24-row rescue is not noise -- it is the validation of the two-pass
+design and an empirically-identified domain of fragility:
+
+```text
+Long-period rows, especially T >= ~170 and m_3 in {1.4, 1.5, 1.6, 1.7},
+stress the coarse SO(3) gauge minimizer. The default
+identity_rotation_tolerance = 1e-6 and phase_grid = 73 will misclassify
+~8-9% of a piano-trio catalog spanning T up to ~200.
+
+Default gauge is a screening pass, not a final classifier.
+
+For any future audit chain that needs gauge-minimized residuals on
+long-period orbits at varied m_3, treat tight tolerances
+(identity_rotation_tolerance = 1e-9, phase_grid = 361) as the working
+classifier, with default tolerances reserved as the cheap screening
+pre-filter.
+```
+
+### v0.4 body locked
+
+The verdict simplifies the v0.4 design:
+
+```text
+v0.4 body (locked, 2026-05-22):
+  supplementary-B piano-trio orbit as primary Z_2 object.
+  domain: all 273 rows.
+  smaller_symmetry / undefined bands: empty, verified.
+  outlier lane: stays in the receipt vocabulary as a four-band
+                classifier slot, but no rows currently populate it.
+```
+
+### Subsequent action
+
+Per the pre-registered Outcome A action: **stage v0.4b mechanism test
+against the clean table**. The v0.4b registration is a separate
+deliverable; see "Sequencing After v0.4a" below for the locked
+observable target.
+
+### Receipts
+
+```text
+results/isotrophy/k-facet-v04a-domain-map/manifest.json
+results/isotrophy/k-facet-v04a-domain-map/pass1/aggregator_manifest.json
+results/isotrophy/k-facet-v04a-domain-map/pass1/flagged_for_pass2.csv
+results/isotrophy/k-facet-v04a-domain-map/pass1/m3eq{0.4..1.9}/
+  {manifest.json, residuals.csv}
+results/isotrophy/k-facet-v04a-domain-map/pass2/m3eq{0.4, 1.4, 1.5, 1.6, 1.7}/
+  O{idx}/{manifest.json, residuals.csv}
+```
 
 ## What's Being Tested
 
