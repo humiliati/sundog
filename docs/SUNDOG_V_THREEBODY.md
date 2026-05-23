@@ -1000,6 +1000,14 @@ tracked explicitly and paper-side design before any runner code. Receipts:
 `results/isotrophy/k-facet-v03-gamma-crossm3/`,
 `results/isotrophy/k-facet-v03-piano-symmetry-probe/`.
 
+Follow-on: v0.4a treats supplementary-B piano-trios as primary `Z_2`
+objects and pre-registers a two-pass gauge domain map over all 273 rows;
+see [`../internal/anniversary/kfacet_v04a_domain_map_preregistration.md`](../internal/anniversary/kfacet_v04a_domain_map_preregistration.md).
+The O_434 anatomy probe (verdict `gauge_artifact`; receipt at
+`results/isotrophy/k-facet-v04a0-o434-anatomy/`) found that the default
+`sigma_3-scan` tolerances misclassified O_434 by six orders of magnitude;
+the two-pass classifier encodes that lesson.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

@@ -86,6 +86,47 @@
             max-width: 1120px;
             margin: 0 auto;
             padding: 7rem 2rem 4rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(160px, 0.28fr);
+            gap: 2.5rem;
+            align-items: end;
+        }
+
+        @media (max-width: 720px) {
+            .page-hero {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        .origin-avatar {
+            margin: 0;
+            justify-self: end;
+            align-self: end;
+            max-width: 220px;
+        }
+
+        .origin-avatar img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--line);
+            box-shadow: 0 14px 32px rgba(12, 31, 46, 0.10);
+        }
+
+        .origin-avatar figcaption {
+            color: #6A7680;
+            font-family: var(--sd-font-data);
+            font-size: 0.7rem;
+            line-height: 1.45;
+            margin-top: 0.55rem;
+        }
+
+        .origin-avatar figcaption strong {
+            color: var(--primary-dark);
+            font-weight: 800;
         }
 
         .eyebrow {
@@ -379,11 +420,20 @@
 
     <main>
         <section class="page-hero">
-            <p class="eyebrow">Origin</p>
-            <h1>The theorem began as a practical alignment problem.</h1>
-            <p class="lede">
-                Sundog emerged while aligning acoustic ceiling anchors for suspended HVAC equipment above a quantum computing environment. A laser, a fastener head, and an occluded line of sight turned a field procedure into a mathematical question.
-            </p>
+            <div>
+                <p class="eyebrow">Origin</p>
+                <h1>The theorem began as a practical alignment problem.</h1>
+                <p class="lede">
+                    Sundog emerged while aligning acoustic ceiling anchors for suspended HVAC equipment above a quantum computing environment. A laser, a fastener head, and an occluded line of sight turned a field procedure into a mathematical question.
+                </p>
+            </div>
+            <figure class="origin-avatar" aria-label="Lead researcher's Gaia Online avatar">
+                <img src="/media/avatar-gaia-thumb.png" width="200" height="250" alt="Steampunk-styled illustrated avatar with a top hat, dark coat, and an open tome; the lead researcher's persona on Gaia Online." loading="lazy">
+                <figcaption>
+                    <strong>Lead researcher &middot; persona</strong><br>
+                    Gaia Online avatar, used here per Gaia&rsquo;s personal-projects permission ("Gaians are allowed to use avatars images in personal projects&hellip;"). Not for monetized merch; per the Gaia reply, commissioned art is required for products.
+                </figcaption>
+            </figure>
         </section>
 
         <section class="content">
@@ -604,7 +654,6 @@
                                 <span class="meta">Eliezer Yudkowsky &middot; TIME &middot; March 2023</span>
                             </a>
                         </li>
-                        <li>
                             <a href="https://futureoflife.org/open-letter/pause-giant-ai-experiments/" rel="noopener">
                                 Pause Giant AI Experiments: An Open Letter
                                 <span class="meta">Future of Life Institute &middot; March 2023</span>

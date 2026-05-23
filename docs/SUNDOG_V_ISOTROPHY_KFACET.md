@@ -190,3 +190,10 @@ Open follow-ups:
 - `O_434(0.4)` row anatomy: this supp-B sentinel broke both `sigma_3`
   AND `F_beta` closure (the other 6 broke `sigma_3` only). Possibly a
   sub-`Z_2` symmetry class; cheap row-anatomy probe candidate.
+- v0.4a is pre-registered. Follow-on: v0.4a treats supplementary-B
+  piano-trios as primary `Z_2` objects and pre-registers a two-pass
+  gauge domain map over all 273 rows; see
+  [`../internal/anniversary/kfacet_v04a_domain_map_preregistration.md`](../internal/anniversary/kfacet_v04a_domain_map_preregistration.md).
+  O_434 was resolved as `gauge_artifact` (default-tolerance
+  misclassification rescued by tight rerun; receipt at
+  `results/isotrophy/k-facet-v04a0-o434-anatomy/`).

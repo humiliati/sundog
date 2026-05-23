@@ -142,6 +142,75 @@
             background: rgba(255, 255, 255, 0.045);
         }
 
+        .legend-anchors {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 720px) {
+            .legend-anchors { grid-template-columns: 1fr; }
+        }
+
+        .legend-anchor {
+            margin: 0;
+            border: 1px solid var(--legend-border);
+            border-radius: 8px;
+            background: #102334;
+            overflow: hidden;
+        }
+
+        .legend-anchor a {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+            cursor: zoom-in;
+        }
+
+        .legend-anchor img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 11;
+            object-fit: cover;
+            transition: transform 0.35s ease;
+        }
+
+        .legend-anchor a:hover img,
+        .legend-anchor a:focus-visible img {
+            transform: scale(1.03);
+        }
+
+        .legend-anchor a:focus-visible {
+            outline: 2px solid var(--legend-gold);
+            outline-offset: 2px;
+        }
+
+        .legend-anchor figcaption {
+            padding: 0.65rem 0.8rem;
+            color: var(--legend-muted);
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            line-height: 1.45;
+        }
+
+        .legend-anchor figcaption strong {
+            display: block;
+            color: rgba(248, 250, 255, 0.94);
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+
+        .legend-anchor figcaption .zoom-hint {
+            display: block;
+            margin-top: 0.3rem;
+            color: rgba(248, 250, 255, 0.5);
+        }
+
         .status-chip {
             display: inline-flex;
             align-items: center;
@@ -360,6 +429,39 @@
             <span class="status-chip" data-status="optional"><span class="status-dot"></span>rendered optional</span>
             <span class="status-chip" data-status="named"><span class="status-dot"></span>named only</span>
             <span class="status-chip" data-status="not-modeled"><span class="status-dot"></span>not modeled</span>
+        </div>
+
+        <div class="legend-anchors" aria-label="Anchor visuals for the vocabulary below">
+            <figure class="legend-anchor">
+                <a href="/media/elevator-sundog-photo.jpg" target="_blank" rel="noopener" aria-label="Open full-resolution sundog photograph in a new tab">
+                    <img src="/media/elevator-sundog-photo-thumb.jpg" width="480" height="560" alt="Real-world sundog photograph: full 22 degree halo arcs through a snow-laden conifer forest with a bright parhelion glint at center." loading="lazy">
+                    <figcaption>
+                        <strong>The thing itself</strong>
+                        A real sundog: full 22&deg; halo, bright parhelion glint, forest silhouette.
+                        <span class="zoom-hint">click to enlarge</span>
+                    </figcaption>
+                </a>
+            </figure>
+            <figure class="legend-anchor">
+                <a href="/media/elevator-halosim-tangent-full.jpg" target="_blank" rel="noopener" aria-label="Open full-resolution HaloSim cross-cut render in a new tab">
+                    <img src="/media/elevator-halosim-tangent-thumb.jpg" width="480" height="270" alt="HaloSim cross-cut render at 25,000 monorays showing the full halo architecture with sun at 18.6 degrees altitude." loading="lazy">
+                    <figcaption>
+                        <strong>Idealized cross-cut</strong>
+                        HaloSim at 25,000 monorays: 22&deg; halo, parhelia, parhelic circle, tangent arcs. Sun at 18.6&deg;.
+                        <span class="zoom-hint">click to enlarge</span>
+                    </figcaption>
+                </a>
+            </figure>
+            <figure class="legend-anchor">
+                <a href="/media/halo-display-6-2-tape.jpg" target="_blank" rel="noopener" aria-label="Open full-resolution scan of Tape, Atmospheric Halos, chapter 6, figure 6-3, in a new tab">
+                    <img src="/media/halo-display-6-2-tape-thumb.jpg" width="480" height="643" alt="Scan of page 60 of Atmospheric Halos by Walter Tape: display 6-2 from Barrow, Alaska, May 8 1979, showing bright lower tangent arc plus upper tangent arc, Parry arc, 22 degree and 46 degree halos, parhelic circle, faint parhelion." loading="lazy">
+                    <figcaption>
+                        <strong>Primary source</strong>
+                        Display 6-2 (Barrow, Alaska, 1979). Tape, <em>Atmospheric Halos</em> (AGU 1994), ch. 6, fig. 6-3. Photograph by Takeshi Ohtake.
+                        <span class="zoom-hint">click to enlarge</span>
+                    </figcaption>
+                </a>
+            </figure>
         </div>
 
         <section class="legend-section" aria-labelledby="rendered-heading">
