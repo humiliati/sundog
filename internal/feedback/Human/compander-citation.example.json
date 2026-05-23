@@ -1,0 +1,14 @@
+{
+  "title": "Replace with the public paper title",
+  "authors": [
+    "Replace with author list in preferred order"
+  ],
+  "venue": "Replace with venue, preprint server, or repository",
+  "year": 2026,
+  "url": "https://example.invalid/replace-with-public-citation",
+  "preferredShortCite": "Author et al. 2026",
+  "permissionBasis": "published",
+  "checkedBy": "Replace with reviewer initials",
+  "checkedAt": "YYYY-MM-DD",
+  "goAheadNote": ""
+}

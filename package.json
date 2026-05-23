@@ -21,6 +21,7 @@
     "chat:eval:phase3:adversarial": "npm run chat:index && node chat/eval/score_phase3_drafts.mjs --slate adversarial",
     "chat:eval:phase3:differential": "npm run chat:index && node chat/eval/score_phase3_drafts.mjs --slate differential",
     "chat:eval:phase4": "node chat/eval/score_phase4_probe_slate.mjs",
+    "citation:compander:rollout": "node scripts/rollout-compander-citation.mjs",
     "photometric:public-media": "node scripts/build-photometric-core-media.mjs",
     "balance:public-data": "node scripts/build-balance-public-data.mjs",
     "mines:public-data": "node scripts/build-mines-public-data.mjs",
