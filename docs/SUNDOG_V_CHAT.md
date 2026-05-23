@@ -2354,7 +2354,75 @@ Before the chat-library rewrite:
 4. Confirm the audit-chain triple (structural-failure, mesa, isotrophy)
    is recognized as a coordinated artifact class in answers about
    evidence tiers — not as three unrelated pages.
- to `/isotrophy#load-bearing-statement`).
-4. Confirm the audit-chain triple (structural-failure, mesa, isotrophy)
-   is recognized as a coordinated artifact class in answers about
-   evidence tiers — not as three unrelated pages.
+
+## §18. Chat Refresh Lock (2026-05-22)
+
+End-of-day lock. The site has moved faster than the v1 Ask Sundog
+claim map, so the honest state is a frozen refresh checkpoint rather
+than a shipped v2 surface.
+
+### §18.1 What is locked
+
+- `chat:eval:static` passes: 130 prompts, 130 strict, 0 lenient,
+  0 routing failures.
+- The claim map includes first-pass routes for:
+  `halo_atlas_vocabulary_status` and `isotrophy_k_facet_v03h`.
+- `docs/SUNDOG_V_CHAT_V2.md` exists as a product-polish charter. It
+  does not replace the v1 honesty roadmap.
+- Phase 12 remains a valid historical measurement of the then-current
+  claim map and prompt slates. It is not evidence that every later
+  public-copy ratchet is already covered by Ask Sundog.
+
+### §18.2 Known gaps carried into the next session
+
+1. `mesa_roadmap_status` is stale relative to the public `mesa.html`
+   and `index.html` copy, which now carry stronger earned language
+   about the lambda cliff, Large-tier v3, bootstrap collapse, and
+   the 5D `net.7` locus.
+2. "What does Sundog not claim?" currently routes through the generic
+   unsupported-claim refusal. That is safe, but semantically clumsy;
+   split a dedicated `negative_scope_summary` route before treating the
+   widget as polished.
+3. The environment-conflict slate is still missing. It should quote
+   live site copy back at Ask Sundog and verify that the widget follows
+   the claim map when the surrounding page is louder.
+4. The unrelated dirty public-data locks must be preserved, not
+   overwritten during chat refresh work:
+   `public/data/balance-phase16-claim-lock.json` and
+   `public/data/mines-phase13-bayes-floor.json`.
+
+### §18.3 Freeze rule
+
+Until the gaps above are resolved, treat Ask Sundog as beta / corpus
+refresh in progress. Do not promote v2 as the polished public answer
+surface. Do not revert recent public-copy ratchets by default; either
+add bounded routes/tests that make the widget honest against the new
+surface, or soften page copy where the claim is not earned.
+
+The next session starts with:
+
+1. Refresh `mesa_roadmap_status` into bounded Mesa result routes.
+2. Split `negative_scope_summary` out of
+   `unsupported_alignment_overclaim`.
+3. Author the environment-conflict prompt slate.
+4. Rerun static, Phase 3, adversarial, differential, Phase 4, and
+   build before lifting the beta label.
+
+### §18.4 Citation-day staging
+
+The pending mechanistic-substrate / compander ratchet remains gated on
+the external citation or explicit permission. It is not part of the
+current beta widget refresh and must not be lifted into public copy
+early.
+
+The private rollout plan lives in
+`internal/feedback/human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md`
+§10d. The intended citation-day shape is one Node/npm command that
+fills the citation metadata, patches the staged surfaces, adds or
+verifies Ask Sundog route coverage, writes a rollout manifest, and then
+hands off to the normal chat eval + build gate.
+
+Ordering rule: the widget refresh comes first. If the citation lands
+while Ask Sundog is still stale, the citation rollout must also close
+the stale routes, malformed embeds, `negative_scope_summary`, and
+environment-conflict slate before deployment.

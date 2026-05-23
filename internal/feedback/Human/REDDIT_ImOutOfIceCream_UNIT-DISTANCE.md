@@ -535,6 +535,77 @@ When the gate trips:
    and depends on the rest being deployed first.
 7. Send the mod a heads-up message with links to all six surfaces.
 
+### 10d. One-button rollout staging plan
+
+Goal: when the citation gate trips, the public upgrade should be a
+single reviewed command plus the normal build/deploy gate, not a fresh
+writing session.
+
+The one-button command should be a Node/npm path, not `pwsh`, so it
+works on the Windows 10 project machine without requiring PowerShell 7:
+
+```powershell
+npm run citation:compander:rollout -- --citation internal/feedback/human/compander-citation.json --apply
+npm run chat:eval:static
+npm run build
+```
+
+Before citation day, stage the following pieces:
+
+1. **Citation metadata template.** Add
+   `internal/feedback/human/compander-citation.example.json` with fields:
+   `title`, `authors`, `venue`, `year`, `url`, `preferredShortCite`,
+   `permissionBasis` (`published` or `explicit_go_ahead`), and
+   `checkedBy`. Keep the real filled file uncommitted until the gate
+   trips unless the citation is already public.
+2. **Rollout script.** Add `scripts/rollout-compander-citation.mjs`.
+   It must read the citation metadata, reject missing placeholders, and
+   refuse `--apply` unless `permissionBasis` is present and `url` or
+   an explicit go-ahead note is supplied.
+3. **Anchor check.** The script must first reproduce §10b's expected
+   anchor count. If any `COMPANDER_PAPER_HOOK` anchor is missing or
+   duplicated, it exits without editing.
+4. **Patch surfaces in one transaction.** The script applies the §9
+   blocks to exactly these files: `unit-distance.html`, `chat.html`,
+   `docs/SUNDOG_V_CHAT.md`, `capset.html`, `geometry.html`, and
+   `docs/PROMO_HIGHLIGHTS.md`. It also fills every
+   `(cite mod's paper)` placeholder from the citation metadata.
+5. **Claim-map follow-through.** The same rollout must either add a
+   bounded Ask Sundog route for the mechanistic-substrate hypothesis or
+   write a blocking TODO and fail. The widget cannot be redeployed with
+   public copy that it cannot route or refuse.
+6. **Prompt coverage.** Add a small citation-day slate before apply:
+   prompts asking whether Sundog has proved the mechanism, whether the
+   mod's paper proves alignment, whether the result explains every
+   model family, and whether the mechanism is now public/citable. Gold:
+   bounded explanation, no theorem/general-alignment lift.
+7. **Dry-run output.** `--dry-run` must print the files it would edit,
+   the citation line it would insert, the prompt slate path, and the
+   exact post-apply commands. It should not modify files.
+8. **Apply output.** `--apply` must write a short manifest under
+   `results/chat/citation-day-rollout/` naming the citation metadata,
+   changed surfaces, anchor counts, and required follow-up checks.
+
+Citation-day operator sequence:
+
+```powershell
+npm run citation:compander:rollout -- --citation internal/feedback/human/compander-citation.json --dry-run
+npm run citation:compander:rollout -- --citation internal/feedback/human/compander-citation.json --apply
+npm run chat:eval:static
+npm run chat:eval:phase3
+npm run chat:eval:phase3:adversarial
+npm run chat:eval:phase3:differential
+npm run chat:eval:phase4
+npm run build
+```
+
+Release rule: if the citation lands before the widget refresh is
+complete, ship only after the rollout script also closes the current
+Ask Sundog gaps: malformed widget embeds, `mesa_roadmap_status`,
+`negative_scope_summary`, and the environment-conflict slate. A public
+mechanism ratchet should not be the first thing that discovers the
+widget is stale.
+
 ## 11. Lesson for future mod-level engagements
 
 When someone shares an unpublished finding in a public-but-niche
