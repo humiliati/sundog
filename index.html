@@ -1333,6 +1333,30 @@
             margin-bottom: 0;
         }
 
+        .elevator-pitch-hypothesis {
+            clear: both;
+            margin-top: 1.35rem;
+            padding: 1rem 1.1rem;
+            border: 1px solid rgba(125, 162, 184, 0.26);
+            border-left: 4px solid var(--primary-mid);
+            border-radius: 6px;
+            background: rgba(248, 251, 252, 0.78);
+        }
+
+        .elevator-pitch-hypothesis h3 {
+            margin: 0 0 0.45rem;
+            color: var(--primary-dark);
+            font-size: 1rem;
+            letter-spacing: 0;
+        }
+
+        .elevator-pitch-hypothesis p {
+            margin: 0;
+            color: #2C3E4A;
+            font-size: 0.98rem;
+            line-height: 1.65;
+        }
+
         .elevator-pitch-body code {
             font-family: var(--sd-font-data);
             font-size: 0.92em;
@@ -1509,15 +1533,15 @@
             </svg>
         </div>
         <div class="hero-content">
-            <p class="eyebrow">Sundog Research Lab</p>
-            <h1>Math draws the sky.</h1>
-            <p class="tagline">Halo alignment.</p>
+            <p class="eyebrow">Research lab for traceable projections</p>
+            <h1>Sundog</h1>
+            <p class="tagline">Read the shadow. Test the boundary.</p>
             <p class="value-prop">
-                Explore the <a href="/h-of-x">h(x) geometry</a> behind solar halos, then follow the same traceability discipline into robotic control, agents, and workbenches.
+                Solar halos are the front door: visible projections of hidden geometry. Sundog carries that discipline into control, agents, and AI traceability: publish the trace, publish the boundary.
             </p>
             <div class="cta-buttons">
-                <a href="/repo-map" class="btn btn-primary">Repo map</a>
-                <a href="https://github.com/humiliati/sundog" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="/repo-map" class="btn btn-primary">Start with the map</a>
+                <a href="/chat" class="btn btn-secondary">Read the trace result</a>
             </div>
         </div>
         <p class="hero-altitude-chip" data-hero-altitude-readout>
@@ -1566,23 +1590,28 @@
          attribute names the controlling roadmap; remove the attribute
          and tighten the prose back when the roadmap's re-audit gate
          clears.
+
+         v1.2, 2026-05-23: cross-substrate vocabulary refresh. Keeps
+         "shadow" as the layperson image, introduces "projection" as the
+         precise operator, and adds a bounded future-facing AI
+         traceability hypothesis.
     -->
     <section
         class="elevator-pitch-section"
         id="elevator-pitch"
         aria-labelledby="elevator-pitch-title"
-        data-version="v1.1-restored"
-        data-revised="2026-05-17"
+        data-version="v1.2-projection"
+        data-revised="2026-05-23"
         data-audit-hedge="phase10-attack-roadmap"
     >
         <div class="elevator-pitch-layout">
             <div class="elevator-pitch-shell">
                 <p class="eyebrow">
                     Elevator Pitch
-                    <span class="elevator-pitch-stamp">Restored draft &middot; v1.1 &middot; 2026-05-17 &middot; audit-hedged</span>
+                    <span class="elevator-pitch-stamp">Living draft &middot; v1.2 &middot; 2026-05-23 &middot; audit-hedged</span>
                 </p>
                 <h2 id="elevator-pitch-title" class="elevator-pitch-headline">
-                    Field-not-reward, in plain language.
+                    Read the shadow, test the boundary.
                 </h2>
                 <div class="elevator-pitch-body">
                     <figure class="elevator-pitch-thumb elevator-pitch-thumb--photo">
@@ -1592,7 +1621,7 @@
                         </a>
                     </figure>
                     <p>
-                        A <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog: a bright spot beside the sun, also called a parhelion">sundog</a> is an optical phenomenon beside the sun, formed when ice crystals in the atmosphere deflect light by <a class="glossary-link" href="/legend#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degrees: the common halo radius used as the atlas scale reference">22&deg;</a> and concentrate it into a small set of geometrically determined spots, arcs, and rings. The sky doesn&rsquo;t pick where these features land; their positions fall out deterministically from sun altitude and crystal orientation. Several of the halo system&rsquo;s visible arcs &mdash; <a class="glossary-link" href="/legend#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="circumzenithal arc: the high smile-shaped arc above the sun">circumzenithal</a>, <a class="glossary-link" href="/legend#phenomenon-circumhorizon-arc" data-definition="A high-sun plate-crystal arc sometimes called a fire rainbow. It is outside the current sundog-facing regime." aria-label="circumhorizon arc: a high-sun plate-crystal arc outside the current sundog-facing regime">circumhorizon</a>, <a class="glossary-link" href="/legend#phenomenon-upper-tangent-arc" data-definition="A column-crystal arc near the 22 degree halo. The upper and lower tangent arcs merge into the circumscribed halo above roughly 29 degrees sun altitude." aria-label="tangent arc: a column-crystal arc near the 22 degree halo">tangent</a> &mdash; are partial traces of complete figures in the theory, with the visible portion fixed by sun&ndash;observer geometry.
+                        A <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog: a bright spot beside the sun, also called a parhelion">sundog</a> is a good first picture because the sky makes the idea visible. Ice crystals near the sun throw a partial pattern into view: a <a class="glossary-link" href="/legend#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degrees: the common halo radius used as the atlas scale reference">22&deg;</a> ring, parhelia, tangent arcs, and other fragments of a larger geometry. You do not see every crystal or every ray. You see a readable projection of the hidden setup. The trick is not to treat the projection as magic, or as the whole truth; it is to ask what hidden state it reliably lets you infer.
                     </p>
                     <figure class="elevator-pitch-thumb elevator-pitch-thumb--halosim">
                         <a href="/media/elevator-halosim-tangent-full.jpg" target="_blank" rel="noopener" aria-label="Open full-resolution HaloSim cross-cut render in a new tab">
@@ -1601,14 +1630,17 @@
                         </a>
                     </figure>
                     <p>
-                        A <a class="glossary-link" href="/mesa" data-definition="Here, a mesa neuron is a unit inside a trained policy network studied for whether internal optimization appears under selection pressure." aria-label="mesa neuron: a unit inside a trained policy network studied for internal optimization behavior">mesa neuron</a>, by contrast, is a unit inside a trained reinforcement-learning agent&rsquo;s network &mdash; in our case, one of 256 in the final hidden layer of a controller trained to track an indirect environmental signal rather than a direct reward. When we ran capacity and selection-pressure experiments on these agents, we found that <a class="glossary-link" href="/mesa" data-definition="Mesa-optimization is the failure mode where a learned policy develops internal optimization targets that diverge from its training signal." aria-label="mesa-optimization: a failure mode where a learned policy develops internal optimization targets that diverge from training">mesa-optimization</a> &mdash; the failure mode in which a learned policy develops internal optimization targets that diverge from its training signal &mdash; localizes causally to an entangled <a class="glossary-link" href="docs/SUNDOG_V_MESA.md" data-definition="A compact activation subspace found in the tested Mesa policy layer; it is not claimed as a universal neural law." aria-label="5-dimensional subspace: a compact activation subspace found in the tested Mesa policy layer">5-dimensional subspace</a> at that layer. In the architecture and capacity regime we tested, that subspace is not recoverable by any single neuron, any handful of features, or any linear decomposition we ran.
+                        Sundog asks whether that move generalizes: when the full system is too large, too hidden, or too expensive to inspect directly, can a smaller shadow carry enough structure to act from? In the <a class="glossary-link" href="/mesa" data-definition="Here, a mesa neuron is a unit inside a trained policy network studied for whether internal optimization appears under selection pressure." aria-label="mesa neuron: a unit inside a trained policy network studied for internal optimization behavior">mesa</a> work, the hidden body is a trained policy network under selection pressure; the readable shadow is an entangled <a class="glossary-link" href="docs/SUNDOG_V_MESA.md" data-definition="A compact activation subspace found in the tested Mesa policy layer; it is not claimed as a universal neural law." aria-label="5-dimensional subspace: a compact activation subspace found in the tested Mesa policy layer">5-dimensional subspace</a> at <a class="glossary-link" href="docs/SUNDOG_V_MESA.md" data-definition="The final hidden layer named in the Mesa experiments, where the tested 5D subspace was localized." aria-label="net.7: the final hidden layer named in the Mesa experiments"><code>net.7</code></a>. In the three-body workbench, the body is the full simulated state; the shadow is a local acceleration and tidal proxy that only helps inside a mapped near-escape pocket. In the chat experiment, the body is the model&rsquo;s whole answer process; the shadow is a trace packet that says what claim class, source, boundary, and refusal rule the answer must preserve.
                     </p>
                     <p>
-                        Here&rsquo;s why the coincidence matters. In both substrates we found the same structural object: a small-dimensional, holistically-read, asymmetric-under-inversion field whose visible signatures fall out as consequences of hidden state rather than as targets in their own right. The atmosphere produces the halo system from sun altitude and ice geometry; the trained network produces basin-attractor behavior from a 5D subspace at <a class="glossary-link" href="docs/SUNDOG_V_MESA.md" data-definition="The final hidden layer named in the Mesa experiments, where the tested 5D subspace was localized." aria-label="net.7: the final hidden layer named in the Mesa experiments"><code>net.7</code></a>. Finding that same shape on both sides of the substrate divide is a candidate empirical hint &mdash; the geometry side of the crossover is currently under audit-driven re-derivation per the <a href="docs/PHASE10_ATTACK_ROADMAP.md">Phase 10 Attack Roadmap</a>, and the strength of the substrate-coincidence claim is on hold until that re-audit clears &mdash; that <a class="glossary-link" href="docs/SUNDOG_V_MESA.md" data-definition="The project thesis that useful alignment can sometimes come from coupling to environmental structure rather than optimizing a scalar reward." aria-label="field-not-reward: coupling to environmental structure rather than optimizing a scalar reward">&ldquo;field-not-reward,&rdquo;</a> our claim that agents can be aligned by coupling to environmental structure rather than by optimizing a scalar objective, is describing a real category of object in the world rather than a rhetorical move.
+                        The precise word for this is <em>projection</em>: a lower-dimensional readout of a larger object. The plain-English image is body and shadow. The shadow has less information than the body, but sometimes it is more rigid, more testable, and more useful. That is the common shape across the solar halo, cap-set and unit-distance explainers, mesa activations, three-body control, and Ask Sundog&rsquo;s visible trace. The live claim is still bounded: each projection has its own failure map, and the geometry side of the crossover remains audit-hedged while the re-derivation work clears. The point is not &ldquo;one weird trick works everywhere.&rdquo; The point is: publish the projection, publish where it breaks, and do not upgrade the claim past the test.
                     </p>
-                    <p>
-                        If the geometry holds up across enough independent substrates, the implication is large: the engineering surface for alignment looks more like coupling-to-environmental-structure than like optimizing-a-scalar, and the agent, robot, and game engineering that follow from that distinction are different, more economical, and more traceable.
-                    </p>
+                    <div class="elevator-pitch-hypothesis">
+                        <h3>Where this points for safer AI</h3>
+                        <p>
+                            The future-facing hypothesis is accountability through traceable projections: AI systems should expose enough provenance, uncertainty, refusal, and audit trail that outside people can reconstruct what was claimed, sourced, refused, or escalated. That does not certify a system as safe, conscious, or aligned. It makes the system more evaluable. Sundog&rsquo;s bridge from the solar hologram to safer AI is this posture: act from indirect traces when direct sight is unavailable, then make the trace visible enough that others can challenge it.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
