@@ -65,6 +65,32 @@ therefore reflects a bridge direction outside the valid `D3` representation,
 not an admission weakness and not a failure of the `Gamma_i` audit
 chain.
 
+## Freeze + Supplementary-B Comparison
+
+The follow-on freeze is now explicit. The resolved v0.3h `Gamma_i` mechanism
+predicts zero piano-trio daughters from the strict G.2 seeds:
+
+```text
+20 resolved structural-zero rows: sum d_i = 0
+O_617: quarantined, excluded from evidence
+K_facet_v0.3h(resolved Gamma mechanism) = 0
+```
+
+Supplementary-B parses as a nonempty piano-trio catalog:
+
+```text
+supplementary-B rows: 273
+m3 = 1 rows:          38
+m3 != 1 rows:        235
+stability:            97 S, 176 U
+```
+
+This closes v0.3 as a **structural-null mechanism** against supplementary-B:
+the audit chain measured a real prediction, and that prediction does not
+explain the published piano-trio rows. This does not mean "no piano-trios";
+it means the v0.3h `Gamma_i` standard-sector mechanism contributes zero
+resolved daughters.
+
 ## Reproducibility Surface
 
 Primary scripts:
@@ -82,9 +108,27 @@ results/isotrophy/k-facet-v03-sentinel-calibration-O62-gamma/
 results/isotrophy/k-facet-v03-sentinel-sweep-calibrated/
 results/isotrophy/k-facet-v03-sentinel-sweep-adaptive-floor-21/
 results/isotrophy/k-facet-v03-bridge-audit-21/
+results/isotrophy/k-facet-v03-freeze-supplementary-b-comparison/
 ```
 
 Load-bearing constants include the adaptive floor ladder, projector/leakage
 floor `1e-3`, gap ratio `1e-3`, `k_gamma = 3`, and `k_int = 10`. The final
 claim should be cited as **20/21 structural zeros plus one quarantined O_617
 defective-D3 bridge**, not as a closed 21/21 theorem-facing result.
+
+## Open Polish Item (Run-Friendly)
+
+A ~10-hour tooling-polish initiation is registered in
+[`../../docs/TODO.md`](../../docs/TODO.md) under
+**Onboarding / Polish (Run-Friendly) -> V0.3h K_facet Tooling Polish**.
+It promotes the three one-shot diagnostic scripts
+(`scripts/o617_deep_dive.py`, `scripts/o617_why_dive.py`,
+`scripts/catalog_near_t_separator.py`) to discoverable workbench
+subcommands with `--row` parameters and npm entries, fixes the
+projector double-counting artifact in the catalog separator via
+simultaneous (sigma_3, F_beta) eigendecomposition, and bakes the
+"always signed inner products" lesson from the (II) round into a shared
+helper. The polish does **not** alter the load-bearing v0.3h evidence.
+The TODO entry includes the full paper trail (this writeup, the
+deep dive, the spec, the public mirrors, and the workbench script) as
+its table of contents.

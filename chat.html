@@ -495,6 +495,96 @@
                 padding-top: clamp(3.5rem, 7vw, 5rem);
             }
         }
+
+        /* Fellowship invite — soft pivot off the claim-boundary ledger */
+        .fellowship-invite {
+            width: min(1120px, calc(100vw - 3rem));
+            margin: 0 auto clamp(3rem, 6vw, 4.5rem);
+            padding: clamp(1.6rem, 3.4vw, 2.2rem) clamp(1.6rem, 3.4vw, 2.4rem);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.1rem 1.6rem;
+            border: 1px solid var(--line);
+            border-left: 4px solid #5865F2; /* Discord blurple */
+            border-radius: 6px;
+            background:
+                linear-gradient(135deg, rgba(88, 101, 242, 0.06), rgba(88, 101, 242, 0.00) 60%),
+                #FFFFFF;
+        }
+
+        .fellowship-invite .fellowship-copy {
+            flex: 1 1 18rem;
+            min-width: 0;
+        }
+
+        .fellowship-invite .eyebrow {
+            color: #4752C4;
+            margin-bottom: 0.35rem;
+        }
+
+        .fellowship-invite p.fellowship-line {
+            color: var(--primary-dark);
+            font-size: clamp(1.05rem, 1.9vw, 1.22rem);
+            line-height: 1.5;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .fellowship-invite .fellowship-sub {
+            margin-top: 0.4rem;
+            color: #5A6772;
+            font-size: 0.94rem;
+            line-height: 1.55;
+        }
+
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.78rem 1.15rem;
+            border-radius: 6px;
+            background: #5865F2;
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 1rem;
+            line-height: 1;
+            letter-spacing: 0.01em;
+            text-decoration: none;
+            box-shadow: 0 8px 18px rgba(88, 101, 242, 0.28);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .discord-btn:hover,
+        .discord-btn:focus-visible {
+            background: #4752C4;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(71, 82, 196, 0.34);
+            outline: none;
+        }
+
+        .discord-btn svg {
+            flex: 0 0 auto;
+            width: 22px;
+            height: 22px;
+        }
+
+        .discord-btn .discord-btn-url {
+            font-family: var(--sd-font-data, "IBM Plex Mono", ui-monospace, monospace);
+            font-size: 0.92rem;
+            opacity: 0.92;
+        }
+
+        @media (max-width: 520px) {
+            .fellowship-invite {
+                align-items: stretch;
+            }
+            .discord-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
     <link rel="stylesheet" href="/css/sundog-theme.css">
 </head>
@@ -536,6 +626,13 @@
                 <p class="eyebrow">Lead framing</p>
                 <p>
                     Zero unsafe-accepts across <strong>5,670 trials</strong> spanning <strong>six distinct model implementations across four training lineages</strong> (deterministic compositor + <code>gpt-4o-mini</code> + <code>claude-haiku-4-5</code> + <code>llama-3.3-70b-versatile</code> + <code>llama-3.1-8b-instant</code> + <code>qwen/qwen3-32b</code>), three retrieval depths, three prompt-type slates plus a hand-authored 22-prompt falsification slate. The Phase 5d Claude intervention battery additionally shows the trace is <strong>causally load-bearing</strong> on a strong hosted model — 268 trace-driven drifts were caught by the gate before becoming unsafe-accepts. The 100 percentage-point gap between trace-conditioned and prompt-engineered baselines at severe pressure remains the headline <strong>experimental result</strong>.
+                </p>
+            </article>
+
+            <article class="lead-framing" aria-label="Surfaces in scope">
+                <p class="eyebrow">Surfaces in scope</p>
+                <p>
+                    The chat is the third tier in Sundog's audit-chain discipline (alongside the photometric controller and the K_facet v0.3h verdict). It is allowed to answer only when its response can name the controlling document, evidence tier, and active boundary. Current public surfaces it routes to: the photometric core, the three audit-chain artifacts (<a href="/structural-failure">structural-failure boundary map</a>, <a href="/mesa">mesa-trap envelope</a>, <a href="/isotrophy">K_facet v0.3h verdict</a>), the operating-envelope workbenches (<a href="/balance">Balance</a>, <a href="/threebody">Three-Body</a>, <a href="/mines">Pressure Mines</a>), the geometry shelf (<a href="/h-of-x">h(x)</a>, <a href="/sundog">visual atlas</a>, <a href="/geometry">geometry hub</a>, <a href="/capset">cap-set primer</a>, <a href="/unit-distance">unit-distance overlay</a>), and the canonical claim-boundary docs (<a href="docs/presentation/claims-and-scope.md">Claims &amp; Scope</a>, <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a>). Anything outside this set is refused with a boundary and a next-link.
                 </p>
             </article>
 
@@ -773,13 +870,26 @@
                                 Four of the seven hosted-adversarial flips were gate-brittleness around English negation idioms ("currently pending", "is categorized as", "part of a roadmap") not yet in the gate's <code>hasNearbyNegation</code> set. These are not unsafe-accepts — they are safe-rejects. Mopping them up tightens the false-rejection rate without affecting the safety floor.
                             </p>
                         </article>
-                        <!-- RATCHET: COMPANDER_PAPER_HOOK · §9f · insert "Mechanistic substrate, when it is named" followup-card here when mod's paper publishes · see internal/feedback/Human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md -->
                     </div>
-                    <p class="closing-invite">
-                        We welcome attempts to falsify the result: new prompt slates, different corpora, different vendors, and independent reruns are exactly the pressure this claim should face. File an issue, fork the repo, or run the harness with your own probes. The experiment gets stronger when someone outside the team examines it.
-                    </p>
                 </div>
             </section>
+
+            <aside class="fellowship-invite" aria-label="Community Discord">
+                <div class="fellowship-copy">
+                    <p class="eyebrow">Off the claim ledger</p>
+                    <p class="fellowship-line">Were you looking to fellowship? Visit disco:</p>
+                    <p class="fellowship-sub">
+                        The lab's Discord is half casual ML hangout, half active research channels. Public from day one — drop in, lurk, or jump into <code>#paper-club</code>.
+                    </p>
+                </div>
+                <a class="discord-btn" href="https://discord.gg/FB3EYXqSN" target="_blank" rel="noopener noreferrer" aria-label="Open the Sundog Research Lab Discord">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                        <path d="M20.317 4.369A19.791 19.791 0 0 0 16.558 3a14.43 14.43 0 0 0-.643 1.317 18.27 18.27 0 0 0-5.487 0A12.51 12.51 0 0 0 9.785 3a19.736 19.736 0 0 0-3.762 1.369C2.557 9.046 1.61 13.58 2.085 18.058a19.9 19.9 0 0 0 6.073 3.058 14.51 14.51 0 0 0 1.226-1.994 12.94 12.94 0 0 1-1.932-.918c.162-.118.32-.241.474-.367a14.18 14.18 0 0 0 12.148 0c.156.126.314.249.474.367-.616.367-1.263.674-1.934.92.36.692.77 1.357 1.226 1.992a19.876 19.876 0 0 0 6.075-3.058c.554-5.224-.945-9.71-3.948-13.689zM9.345 15.339c-1.207 0-2.197-1.103-2.197-2.456 0-1.353.968-2.456 2.197-2.456 1.229 0 2.218 1.103 2.197 2.456 0 1.353-.968 2.456-2.197 2.456zm5.31 0c-1.207 0-2.197-1.103-2.197-2.456 0-1.353.968-2.456 2.197-2.456 1.229 0 2.218 1.103 2.197 2.456 0 1.353-.968 2.456-2.197 2.456z"/>
+                    </svg>
+                    <span>Join Discord</span>
+                    <span class="discord-btn-url">discord.gg/FB3EYXqSN</span>
+                </a>
+            </aside>
         </section>
     </main>
 
@@ -789,13 +899,15 @@
         </p>
         <p class="footer-links">
             <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="https://discord.gg/FB3EYXqSN" target="_blank" rel="noopener noreferrer">Discord</a> |
             <a href="/origin">Origin</a> |
             <a href="/applications-gallery">Applications Gallery</a> |
             <a href="docs/README.md">Documentation</a> |
             <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
             <a href="docs/presentation/claims-and-scope.md">Claims Policy</a> |
             <a href="docs/SUNDOG_V_CHAT.md">Chat Roadmap</a>
-        </        <p class="footer-copyright">
+        </p>
+        <p class="footer-copyright">
             &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC. Source MIT-licensed.
         </p>
     </footer>

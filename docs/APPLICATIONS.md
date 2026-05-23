@@ -187,6 +187,82 @@ The workbench should avoid broader formulations. It does not claim that:
 The claim is about bounded usefulness inside a named operating envelope, not
 global mine inference.
 
+## Isotrophy K_facet v0.3h Verdict
+
+Local page: [`/isotrophy`](../isotrophy)
+
+Ledger: [`SUNDOG_V_ISOTROPHY_KFACET.md`](SUNDOG_V_ISOTROPHY_KFACET.md)
+
+Roadmap: [`docs/sundog_v_isotrophy.md`](sundog_v_isotrophy.md)
+
+The Isotrophy K_facet verdict is the third audit-chain artifact in the
+public ledger (alongside the structural-failure boundary map and the
+mesa-trap operating envelope). It is theorem-adjacent work, not a
+controlled experiment in the photometric-controller sense.
+
+### Sundog Expression
+
+v0.3h ran a pre-registered three-stage audit chain (sentinel/Γ runner →
+adaptive-floor reprocessor → bridge audit) over the 21 strict G.2
+single-curve choreographies at m₃ = 1, drawn from the Li &amp; Liao (2025)
+catalog.
+
+The promoted load-bearing statement is verbatim across nine surfaces:
+
+> v0.3h resolves 20 strict catalog rows as structural zeros. The sole
+> quarantined row, O_617, is a clean opposite-strict row whose bridge
+> direction sits outside the valid D₃ representation; it is not a Γᵢ
+> audit-chain failure and not an admission weakness.
+
+Compact form: **"20/21 structural zeros plus one quarantined O_617
+defective-D3 bridge — not a closed 21/21 theorem-facing result."**
+
+### Evidence Shape
+
+**Evidence tier:** Theorem-adjacent audit-chain receipt
+
+20 of 21 rows returned **structural-zero receipts** — a named artifact
+class where `c_i = d_i = 0` by construction (not by tolerance, not by
+post-hoc pruning). The 21st row (O_617) is a **named quarantine**: the
+bridge vector is physically valid and tangent to the `(E, |L|)` level
+set, but admitting it produces an invalid odd `E(1)` residual and
+`‖σ₃³ − I‖<sub>∞</sub> = 3.96e-2` at the bridge-admitted kernel. The
+defect lives in the representation at that boundary, not in the Γᵢ audit
+chain.
+
+### Sundog Signal Separation
+
+- **Hidden target:** whether the standard D₃ block is structurally
+  absent in `ker(M_i − I)` for each strict G.2 row at m₃ = 1.
+- **Indirect signal:** the kernel singular-value ladder + D₃ projector
+  leakage + gap ratio at each adaptive-floor candidate.
+- **Transformation:** a closure-relative three-stage chain that
+  registers constants and outcome categories before row interpretation
+  and picks the smallest pre-registered floor satisfying three guards
+  (D₃ leakage ≤ 1e-3, gap ratio ≤ 1e-3, first-rejected SV ≥ 1e-3).
+- **Actionable output:** a structural-zero receipt per row, or a named
+  quarantine with a specific representation-level diagnosis. No row
+  silently absorbs into "21/21."
+
+### Claim Boundary
+
+The workbench-equivalent for K_facet v0.3h is a static narrative at
+`/isotrophy`, not an interactive surface. The verdict should avoid
+broader formulations. It does not claim that:
+
+- "K_facet v0.3h closes the isotropy theorem." (the audit chain is
+  intact; the theorem-facing result is not closed)
+- "O_617 was a weak-admission failure." (Standing Rule 6: O_617 is a
+  clean opposite-strict row with admission residual 1.01e-8; the defect
+  lives in the bridge representation, not in admission and not in the
+  Γᵢ audit chain)
+- "v0.3h proves choreography isotropy." (it resolves 20 strict G.2 rows
+  as structural zeros at m₃ = 1 — a specific, defensible, narrow finding,
+  not a universal theorem)
+- "21/21 receipts." (Standing Rule 5: it is 20/21 plus one named
+  quarantine; collapsing to 21/21 silently retires the discipline that
+  makes the result interesting)
+
 ## Cap-Set Workbench (Primer, not Sundog-original)
 
 Workbench: [sundog.cc/capset](https://sundog.cc/capset).
@@ -876,7 +952,6 @@ designed to interpret have not yet run.
 | Three-body dynamics | Planar restricted dynamics | Local tidal-tensor proxy, acceleration magnitude, and separated privileged diagnostics | Guarded TRACK control over a sensor-motivated instability signature | High-velocity near-escape operating pocket with mapped low-velocity and equal-mass harms |
 | Sundog Balance | Embodied control | Cast-shadow centroid, length, residual, and velocity under controlled light geometry | SCAN/SEEK/TRACK shadow-residual control with confidence gating and separated privileged diagnostics | Bounded cart force maintaining upright balance inside a mapped lighting and delay envelope, with overhead-light and high-delay degradation boundaries |
 | EyesOnly / Gone Rogue | Procedural agent play | Floor, biome, HP, alert, inventory, gate, and combat state from `GoneRogue.headless.getState` | Perception compression plus axis-selected stop-conditioned batches through Playwright | Seedable, policy-pluggable JSONL runs ready for matched-seed comparison studies and future LAGM feeder data |
-| Dungeon Gleaner | Procedural NPC behavior | Unmet-verb gradient over satisfier nodes | Need decay, inverse-distance scoring, linger gates, and noise | Emergent NPC idle orbits without scripted plans |
 | Money Bags | Softbody terrain physics | Spring graph, contact, deformation, torque, centroid motion | Graph metrics and playtest telemetry; pre-registered falsification apparatus around the rotation-permissiveness bias axis | Interpretable rig state, recovery analysis, and a falsifiable hypothesis with verdict template committed before captures |
 
 ## Broadcast-Aligned Summary

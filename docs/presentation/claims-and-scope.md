@@ -36,11 +36,32 @@ These claims are defensible with current evidence:
 - The three-body workbench demonstrates a bounded operating-envelope result: in the tested planar restricted setup, guarded accelerometer-proxy TRACK control improves survival over passive and naive local baselines inside a high-velocity near-escape pocket, while lower-velocity and equal-mass cells remain known harm boundaries.
 - The Balance workbench demonstrates a bounded operating-envelope result: in the tested browser cart-pole setup, a shadow-derived controller beats naive shadow-centering inside the diagnostic-positive envelope, while overhead-light and high-delay cells remain degradation boundaries.
 - The Pressure Mines workbench demonstrates a bounded operating-envelope result: in the named density 0.16 / pressure-noise 2.0 / dropout 0.2 pocket, pressure-derived Sundog variants improve budget-adjusted safe-tile progress over naive pressure before mine trigger, while a paired density 0.22 / pressure-noise 1.0 / dropout 0.35 region is published as a failure case.
+- The K_facet v0.3h verdict resolves 20 strict catalog rows as structural zeros on the strict G.2 single-curve choreographies at m₃ = 1. One row (O_617) is held back as a named quarantine — a clean opposite-strict row whose bridge direction sits outside the valid D₃ representation. Audit chain intact; theorem-facing result is not closed.
+- The geometry workbench shelf hosts the cap-set primer (1980s–2016 polynomial-method precedent) and the unit-distance overlay (a plain-English read of OpenAI's 2026 disproof). These are outside-result explainers, not Sundog evidence claims.
 
 ### Research Status
 - We are continuing to formalize the math and collect examples.
 - The theorem is broad, but the current paper claim is narrow enough to attack.
-- The paper-grade defensible result is the photometric alignment experiment; the broader theorem remains a research program now supported by bounded operating-envelope studies and application prototypes.
+- The paper-grade defensible result is the photometric alignment experiment; the broader theorem remains a research program now supported by three audit-chain receipts (structural-failure boundary map, mesa-trap operating envelope, K_facet v0.3h verdict), bounded operating-envelope studies, and application prototypes.
+
+## The Audit-Chain Discipline
+
+Sundog publishes a named class of artifact called the **structural-zero receipt** (and its siblings: named quarantine, closed-form separability, bounded operating envelope). Each receipt comes from a pre-registered audit chain — constants and outcome categories registered in code and spec before any row is interpreted — so the failure modes are visible before the result is.
+
+There are three artifacts in the public ledger:
+
+- **Structural-failure boundary map** (`/structural-failure`) — pre-registered five-locus falsifier for closed-form traceability. P0/P1 passed; Cut 2 closed-form separability held; Cut 3 still open.
+- **Mesa-trap operating envelope** (`/mesa`) — in-vitro cliff at λ ≈ 0.953 on 22 audited policy cells; mechanistic 5D locus at `net.7`. Phase 7 v3 extends the map to Large; the Large subset is still bounded.
+- **K_facet v0.3h verdict** (`/isotrophy`) — 20 of 21 strict G.2 single-curve choreographies returned structural-zero receipts at m₃ = 1; one row (O_617) was held back as a named quarantine for a bridge direction outside the valid D₃ representation. Audit chain intact; theorem-facing result is not closed.
+
+Safe public language for any of these artifacts:
+
+- Name the artifact class (structural-zero receipt, named quarantine).
+- Name the falsification surface (the pre-registered guard set or boundary map).
+- Name the quarantine separately from the prediction it would have affected.
+- Refuse to absorb out-of-scope rows into a single number; refuse to collapse 20/21 into "21/21."
+
+The discipline is the load-bearing claim. The K_facet v0.3h ledger (`docs/SUNDOG_V_ISOTROPHY_KFACET.md`) lists six standing rules; the most load-bearing two for public copy are Standing Rule 5 (no "21/21" framing) and Standing Rule 6 (no weak-admission framing for O_617).
 
 ## Risky Claims
 
@@ -64,6 +85,9 @@ These claims are defensible with current evidence:
   above a measured selection-pressure threshold, while remaining protected
   below it — see §The Gravity Frame → Earned envelope language)
 - ❌ "Sundog is robust under hostile environments." (no adversarial benchmark has run)
+- ❌ "K_facet v0.3h closes the isotropy theorem." (the audit chain is intact; the theorem-facing result is not closed — Standing Rule 5: never collapse the 20/21 verdict to "21/21")
+- ❌ "O_617 was a weak-admission failure." (Standing Rule 6: O_617 is a clean opposite-strict row with admission residual 1.01e-8; the defect lives in the bridge representation outside the valid D₃ representation, not in admission and not in the Γᵢ audit chain)
+- ❌ "v0.3h proves choreography isotropy." (it resolves 20 strict G.2 rows as structural zeros at m₃ = 1 — a specific, defensible, narrow finding, not a universal theorem)
 
 ### Overpromising on Applications
 - ❌ "EyesOnly proves the theorem for procedural games." (needs formal study)

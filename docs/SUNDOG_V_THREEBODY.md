@@ -967,6 +967,14 @@ that near-S bridge under imperfect `sigma3` closure, not evidence for a valid
 standard block. A catalog-wide isotypic-edge separator finds this edge only on
 O_617; the other 20 rows remain clean `T/S` with no standard `E` direction.
 
+The freeze-and-compare pass closes v0.3 as a structural-null mechanism. The
+resolved `Gamma_i` prediction is `K_facet_v0.3h = 0` (20 structural-zero rows,
+with O_617 quarantined and not counted). The local supplementary-B mirror
+parses as 273 piano-trio rows (38 at `m3=1`, 235 off the equal-mass slice), so
+v0.3h does not explain the published piano-trio catalog. This is a negative
+about the proposed standard-sector mechanism, not a claim that piano-trios do
+not exist.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
