@@ -114,16 +114,38 @@
         "this website",
         "this site",
         "elevator pitch",
+        "projection",
+        "body and shadow",
+        "body shadow",
+        "read the shadow",
+        "solar hologram",
+        "traceable projections",
+        "traceability posture",
+        "accountability posture",
+        "safer ai",
+        "conscium",
+        "claim restraint",
+        "audit trail",
         "why should i care",
         "what problem are you solving"
       ],
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
-      "answerTemplate": "Sundog is a research program around hidden-state control through indirect signatures: a system receives a limited signal, runs a transformation into control-relevant form, and takes action from transformed signal rather than from full world-state access. Public copy should keep framework language bounded around the narrow claim; controlled evidence remains narrower than the framework language.",
+      "answerTemplate": "Sundog is a research program around hidden-state control through indirect signatures: a system receives a limited signal, runs a transformation into control-relevant form, and takes action from transformed signal rather than from full world-state access. The refined public vocabulary calls the move a projection: a lower-dimensional shadow that can sometimes make a larger hidden body more tractable. That framing connects the solar-halo picture, mesa and three-body workbenches, and Ask Sundog's visible trace. Keep framework language bounded around the narrow claim; controlled evidence remains narrower than the framework language. The safer-AI posture is evaluability: make provenance, uncertainty, refusal, and audit trail visible enough to evaluate; do not claim certification, solved alignment, or universal safety.",
       "support": [
         {
           "doc": "docs/APPLICATIONS.md",
           "section": "Shared Pattern",
+          "status": "supporting"
+        },
+        {
+          "doc": "docs/threebody/CROSS_SUBSTRATE_NOTES.md",
+          "section": "Top-Level Machinery Vocabulary",
+          "status": "supporting"
+        },
+        {
+          "doc": "docs/501c3/CONSCIUM_INITIATIVE_v0.3.md",
+          "section": "Principles",
           "status": "supporting"
         },
         {
@@ -135,6 +157,8 @@
       "boundaries": [
         "Keep the framework separate from the paper-grade photometric result.",
         "Use 'research program' or 'framework' for broad language.",
+        "Frame projection/body-shadow language as cross-substrate vocabulary, not as a universal theorem.",
+        "Frame traceability and accountability as evaluability, not certification.",
         "Avoid 'new law of nature', 'general theorem proven', or 'works in all domains'."
       ],
       "nextAction": {
