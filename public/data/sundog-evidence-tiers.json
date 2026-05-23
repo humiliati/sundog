@@ -41,6 +41,11 @@
       "id": "navigation",
       "label": "Navigation",
       "meaning": "Wayfinding pointer to documents or pages, not an evidence claim. Used by non-claim routes such as inspect_data."
+    },
+    {
+      "id": "audit_chain_receipt",
+      "label": "Audit-Chain Receipt",
+      "meaning": "A named outcome from a pre-registered audit chain — structural-zero receipt, named quarantine, closed-form separability, or bounded operating envelope. Constants and outcome categories registered before row interpretation. Theorem-adjacent, not theorem-closing. Examples: structural-failure boundary map, mesa-trap envelope, K_facet v0.3h verdict."
     }
   ]
 }

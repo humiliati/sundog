@@ -53,6 +53,11 @@
       "id": "navigation",
       "label": "Navigation",
       "meaning": "Wayfinding pointer to documents or pages, not an evidence claim. Used by non-claim routes such as inspect_data."
+    },
+    {
+      "id": "audit_chain_receipt",
+      "label": "Audit-Chain Receipt",
+      "meaning": "A named outcome from a pre-registered audit chain — structural-zero receipt, named quarantine, closed-form separability, or bounded operating envelope. Constants and outcome categories registered before row interpretation. Theorem-adjacent, not theorem-closing. Examples: structural-failure boundary map, mesa-trap envelope, K_facet v0.3h verdict."
     }
   ],
   "claims": [
@@ -231,6 +236,65 @@
       "nextAction": {
         "label": "Open geometry page",
         "href": "/geometry"
+      }
+    },
+    {
+      "id": "isotrophy_k_facet_v03h",
+      "questionPatterns": [
+        "isotrophy",
+        "k_facet",
+        "kfacet",
+        "k facet",
+        "v0.3h",
+        "structural zero",
+        "structural-zero receipt",
+        "named quarantine",
+        "O_617",
+        "o617",
+        "choreography",
+        "G.2 catalog",
+        "Li Liao catalog",
+        "21 strict",
+        "20 of 21",
+        "20/21",
+        "audit chain",
+        "Sundog audit chain",
+        "did sundog prove isotropy",
+        "did sundog prove the choreography theorem",
+        "what is K_facet",
+        "what is a structural-zero receipt"
+      ],
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "answerTemplate": "K_facet v0.3h is the third audit-chain artifact in the public ledger (alongside the structural-failure boundary map and the mesa-trap envelope). v0.3h resolves 20 strict G.2 catalog rows as structural zeros at m_3 = 1. The sole quarantined row, O_617, is a clean opposite-strict row whose bridge direction sits outside the valid D_3 representation; it is not a Gamma_i audit-chain failure and not an admission weakness. Compact form: 20/21 structural zeros plus one quarantined O_617 defective-D3 bridge — not a closed 21/21 theorem-facing result. The audit chain is intact; the theorem-facing result is not closed.",
+      "support": [
+        {
+          "doc": "isotrophy.html",
+          "section": "The Load-Bearing Statement / Audit Chain / Named Quarantine",
+          "status": "primary"
+        },
+        {
+          "doc": "docs/SUNDOG_V_ISOTROPHY_KFACET.md",
+          "section": "Load-bearing statement / Standing rules / Falsification surface",
+          "status": "ledger"
+        },
+        {
+          "doc": "legend.html",
+          "section": "Three-Body & K_facet Vocabulary",
+          "status": "vocabulary"
+        }
+      ],
+      "boundaries": [
+        "STANDING RULE 5: Never say 21/21 as a positive outcome. The verdict is 20/21 plus one named quarantine.",
+        "STANDING RULE 6: Never frame O_617 as a weak-admission failure. O_617 is a clean opposite-strict row with admission residual 1.01e-8; the 1.62e-1 canonical residual is diagnostic-only.",
+        "The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain.",
+        "Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed.",
+        "Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem.",
+        "Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
+      ],
+      "nextAction": {
+        "label": "Open the Isotrophy K_facet page",
+        "href": "/isotrophy"
       }
     },
     {

@@ -366,6 +366,268 @@ A living repo map could become a useful human and agent navigation surface, but
 it should not sit on top of the hero until it is accurate enough to route a
 visitor to evidence tiers, not just folders.
 
+## v0.3 Cross-m_3 Sentinel (II)
+
+### V0.3 Gamma cross-m_3 sentinel sweep (~3-4 hours staged compute)
+
+Sources:
+[`../internal/anniversary/kfacet_v03_gamma_crossm3_preregistration.md`](../internal/anniversary/kfacet_v03_gamma_crossm3_preregistration.md),
+[`../internal/anniversary/kfacet_v03_freeze_b_comparison.md`](../internal/anniversary/kfacet_v03_freeze_b_comparison.md),
+[`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md).
+
+Status: `compute-blocked`, pre-registered. Sentinel sweep is staged as
+operator command; do not run inline.
+
+Current state:
+
+- `alpha` closed the strict-G.2 m_3 = 1 cell of a **2 x 2 design** as
+  structural null: zero daughters predicted from 20 resolved strict-G.2
+  rows against 273 observed piano-trios. II tests the remaining two
+  testable cells.
+- The 2 x 2 has rows `(m_3 = 1, m_3 != 1)` and columns
+  `(strict G.2 family, piano-trio family)`. Strict G.2 is only defined
+  at m_3 = 1; the off-equal-mass strict-G.2 cell is empty by
+  construction.
+- The two slices answer two structurally separate questions:
+  - **Q1 (m_3 axis):** does `Gamma` wake up where supp-B is densest?
+    m_3 = 0.4 carries 55 of 273 rows.
+  - **Q2 (family axis):** do piano-trio orbits carry the standard-E
+    signal even though strict-G.2 seeds did not? The 38 supp-B rows
+    at m_3 = 1 are entirely disjoint from the strict G.2 21 indices.
+- Pre-registration freezes the sentinel subset (4 rows at m_3 = 0.4,
+  3 rows at supp-B m_3 = 1.0), the per-axis outcome alphabet, and
+  the joint verdict table over `(Q1, Q2)` before any run. The four
+  main cases are
+  `(A,A) = everywhere null`,
+  `(A,B) = family-dependent`,
+  `(B,A) = m_3-dependent`,
+  `(B,B) = G.2 corner is unique`.
+
+Blocker:
+
+Each sentinel row takes 20-45 minutes wall-clock at rtol=1e-12. Seven
+sentinels total = ~3-4 hours of staged compute. Above the inline
+~10-minute rule.
+
+Next actions:
+
+1. Operator verifies parse: `npm run isotrophy:parse:b` returns 273
+   rows; sentinel indices match the pre-registration tables.
+2. Operator runs the 7 sentinel commands listed in the pre-registration
+   (4 at m_3=0.4 + 3 at supp-B m_3=1.0). Each is staged separately.
+3. Operator runs the reprocessor and bridge-audit commands over the
+   sentinel receipts.
+4. Read the per-axis outcomes `(Q1, Q2)` against the pre-registered
+   alphabet `{A null, B signal, C quarantine, D gate-pathology}`.
+   Resolve any C / D outcomes via per-row WHY-dive / runner diagnosis
+   so the joint verdict reads over `(Q1, Q2) in {A, B}`. Then branch
+   on the joint verdict:
+   - `(A, A)` everywhere null -> stage full 55-row m_3 = 0.4 sweep as
+     a follow-on operator command; if also null, write the v0.3
+     epilogue.
+   - `(A, B)` family-dependent -> halt; open family-axis review
+     (piano-trios vs strict G.2).
+   - `(B, A)` m_3-dependent -> halt; open m_3-axis review (F_beta
+     cocycle off equal mass).
+   - `(B, B)` G.2 corner is unique -> halt; open joint review (alpha
+     verdict may be a rigidity artifact of the strict G.2 m_3 = 1
+     cell).
+
+Stop condition:
+
+If sentinels surface a positive standard-E sector at any m_3, do not
+extend to full slices before the redesign review lands. The alpha
+verdict on m_3=1 strict-G.2 stands either way.
+
+## Onboarding / Polish (Run-Friendly)
+
+### V0.3h K_facet Tooling Polish (~10-hour initiation)
+
+Sources (paper trail / table of contents):
+
+1. [`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md)
+   — Methodology + result hand-off. **Start here.** Sets the audit chain
+   (sentinel → adaptive-floor reprocessor → bridge audit) and the
+   load-bearing result: `20 of 21 m_3=1 strict G.2 rows are structural
+   zeros; O_617 is the single quarantined row`.
+2. [`../internal/anniversary/kfacet_v03h_o617_deep_dive.md`](../internal/anniversary/kfacet_v03h_o617_deep_dive.md)
+   — The quarantined-row companion. Reads the six-probe deep dive plus
+   the WHY-dive addendum that landed `bridge_approx_sign_isotypic` as
+   the corrected disposition.
+3. [`../internal/anniversary/kfacet-runner-spec.md`](../internal/anniversary/kfacet-runner-spec.md)
+   — Full runner spec. Includes the adaptive-floor algorithm, the bridge
+   audit outcome categories, and the disposition for O_617. Long; use the
+   table-of-contents at the top to navigate.
+4. [`sundog_v_isotrophy.md`](sundog_v_isotrophy.md)
+   log lines 1305-1310 — Dated v0.3h log entries. Each line is one round
+   of the audit chain ratcheting.
+5. [`SUNDOG_V_THREEBODY.md`](SUNDOG_V_THREEBODY.md)
+   bridge-audit section around line 933 — Parent-spine mirror of the
+   same closure.
+6. [`../scripts/isotrophy_workbench.py`](../scripts/isotrophy_workbench.py)
+   — Workbench with three landed subcommands (`kfacet-sentinel`,
+   `kfacet-reprocess-floor`, `kfacet-bridge-audit`) plus the pre-registered
+   constants (`ADAPTIVE_FLOOR_*`, `BRIDGE_*`).
+7. [`../scripts/o617_deep_dive.py`](../scripts/o617_deep_dive.py),
+   [`../scripts/o617_why_dive.py`](../scripts/o617_why_dive.py),
+   [`../scripts/catalog_near_t_separator.py`](../scripts/catalog_near_t_separator.py)
+   — Three one-shot diagnostic scripts. These are the candidates for
+   promotion in this polish item.
+
+Status: `deferred`, polish-ready. ~10-hour budget. No compute lock; all
+diagnostic scripts run in seconds against existing receipts under
+`results/isotrophy/k-facet-v03-*/`.
+
+Current state:
+
+- The v0.3h audit chain is **closed** for `m_3=1`. Three workbench
+  subcommands + three one-shot Python scripts produce the load-bearing
+  result with deterministic, pre-registered classifications.
+- Diagnostic scripts (`o617_deep_dive.py`, `o617_why_dive.py`,
+  `catalog_near_t_separator.py`) are functional one-shots but
+  hardcoded to `O_617` (deep-dive and why-dive) or to the full 21-row
+  catalog (separator). They are not discoverable via `npm run`.
+- The catalog separator has a known projector double-counting artifact
+  (T + S + E exceeds kernel dim by 1 for `O_617`) that should be fixed
+  by switching from character projectors to simultaneous (sigma_3,
+  F_beta) joint eigendecomposition.
+- The interpretive lesson from the (II) round (always compute signed
+  `<v, F_beta v>`, never just parity magnitudes) is currently a comment
+  in the WHY-dive script; it should be hoisted into a workbench helper
+  used by all three diagnostics.
+
+Verify-the-picture step (1 hour budget):
+
+1. Run `npm run isotrophy:kfacet:sentinel:gamma` on `O_62` (control) and
+   inspect `gate_receipt.json`. Expect all gates PASS, `c_i = d_i = 0`,
+   `T(2)+S(5)+E(0)`.
+2. Run `npm run isotrophy:kfacet:reprocess-floor`. Manifest summary
+   should report `21/21 resolved or recorded` with no suspicious rows.
+3. Run `npm run isotrophy:kfacet:bridge-audit`. Manifest should report
+   `20 no_bridge_present + 1 defective_E_block_confirmed (O_617)`.
+4. Run `python scripts/o617_deep_dive.py`. Six probes; expect
+   `near_T_edge=[617]` and `e_rotation=0` per the existing receipt.
+5. Run `python scripts/o617_why_dive.py`. Expect outcome
+   `bridge_approx_sign_isotypic` (the corrected label after the
+   isotypic-projector check).
+6. Run `python scripts/catalog_near_t_separator.py`. Expect
+   `edge_E_other=[617]` only; all 20 other rows pure `clean_T(2) +
+   clean_S(5 or 6)`.
+
+If any of (1)-(6) drift from the recorded receipts, stop and consult
+[`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md)
+before continuing.
+
+Polish items:
+
+1. **Generalize `o617_deep_dive.py` to a workbench subcommand**
+   (~2 hours).
+   - Add `kfacet-row-anatomy --row INDEX [--source A --m3 1.0]`.
+   - Make all six probes accept an arbitrary row, not just `O_617`.
+   - Receipt path: `results/isotrophy/k-facet-v03-row-anatomy/O{idx}/`.
+   - npm: `isotrophy:kfacet:row-anatomy -- --row 617`.
+   - Smoke: run on `O_62` (control) and `O_617` (quarantined); both
+     should produce structured receipts without errors.
+2. **Generalize `o617_why_dive.py` to a workbench subcommand**
+   (~2 hours).
+   - Add `kfacet-why-dive --row INDEX`.
+   - Keep the corrected outcome hierarchy:
+     `bridge_in_wrong_frame`, `bridge_frame_partial`,
+     `bridge_approx_sign_isotypic`, `bridge_approx_trivial_isotypic`,
+     `bridge_is_quasi_kernel`,
+     `bridge_eigenvector_off_unit_circle`, `bridge_genuinely_non_D3`.
+   - Include direct signed `<v, sigma_3 v>` and `<v, F_beta v>` in the
+     C1/C3 receipts (the interpretive-error fix from the (II) round).
+   - npm: `isotrophy:kfacet:why-dive -- --row 617`.
+3. **Generalize the catalog separator and fix the projector
+   double-counting** (~3 hours).
+   - Add `kfacet-near-T-separator [--rows IDX,IDX,...]`.
+   - Replace the character-projector decomposition with a
+     simultaneous-eigenvector decomposition of `(sigma_3, F_beta)` on
+     the kernel (joint diagonalization). T = (lambda_s3=+1,
+     lambda_fb=+1) eigenspace, S = (+1, -1), E = (omega, omega^2) pair.
+     This fixes the `T + S + E = 9` vs `kernel_dim = 8` artifact for
+     `O_617`.
+   - Keep the existing classification thresholds (alignment 0.99,
+     closure 1e-3) intact.
+   - npm: `isotrophy:kfacet:near-T-separator`.
+4. **Add a shared workbench helper `compute_d3_alignments`**
+   (~30 minutes). Encapsulate the "always signed inner product" lesson:
+   given a direction `v`, return `<v, sigma_3 v>` and `<v, F_beta v>`
+   (signed). Use this helper from the three new subcommands; this is
+   the codified version of the interpretive lesson the (II) round
+   surfaced.
+5. **Smoke tests** (~1 hour). One small `scripts/test_kfacet_diagnostics.py`
+   or pytest module that runs each new subcommand on `O_62` and `O_617`,
+   asserts on a few headline fields (outcome name, isotypic dims,
+   bridge alignment sign), and emits a pass/fail summary. Wire it under
+   `npm run isotrophy:kfacet:diagnostics:test`.
+6. **Doc updates** (~1 hour).
+   - In
+     [`../internal/anniversary/kfacet_v03h_o617_deep_dive.md`](../internal/anniversary/kfacet_v03h_o617_deep_dive.md)
+     and
+     [`../internal/anniversary/kfacet-runner-spec.md`](../internal/anniversary/kfacet-runner-spec.md),
+     replace the `python scripts/o617_*.py` references with the new
+     `npm run isotrophy:kfacet:*` commands and `--row` parameterization.
+   - Add a one-line note in
+     [`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md)
+     pointing at the new row-anatomy / why-dive subcommands.
+7. **Buffer / unblocking room** (~30 minutes). Reserved for friction
+   on argparse, receipt-schema drift, or the joint eigendecomposition
+   subtleties.
+
+Acceptance criteria:
+
+- All three new npm scripts run cleanly on `O_62` and `O_617` and emit
+  versioned receipts under `results/isotrophy/k-facet-v03-*/`.
+- The `kfacet-near-T-separator` no longer over-counts: `T + S + E ==
+  kernel_dim` exactly for every row, including `O_617`.
+- The `kfacet-why-dive` receipt records signed
+  `<v, sigma_3 v>` and `<v, F_beta v>` explicitly. The outcome label
+  is `bridge_approx_sign_isotypic` on `O_617`.
+- `npm run isotrophy:kfacet:diagnostics:test` passes locally; receipts
+  archived for the audit trail.
+- Documentation references the new npm-script entry points; the
+  one-shot scripts can be marked deprecated but remain runnable.
+
+Known issues / interpretive guardrails:
+
+- **Signed-vs-magnitude trap**: the original WHY-dive inferred
+  `F_beta v approx +v` from parity-magnitude inspection of
+  `F_beta v_bridge`. The actual signed alignment is `-0.9999970`.
+  Always use signed inner products for representation-theoretic
+  classification; magnitudes alone discard the irrep label.
+- **Catalog-admission orientation**: `O_617` is admitted to the strict-21
+  catalog via the *opposite* sigma_3 orientation (residual `1.01e-8`,
+  catalog-normal). It is not a weak-admission row. The defective E(1)
+  bridge is a structural property of the orbit at this kernel boundary,
+  not a tolerance artifact.
+- **The 20/21 firewall**: the polish work does **not** touch the
+  load-bearing v0.3h evidence claim. The new subcommands are
+  reproductions of existing one-shot scripts with `--row` parameters
+  and one methodology fix (joint eigendecomposition instead of
+  character projectors). The 20-row structural-zero result and the
+  O_617 quarantine should be byte-identical across the rerun.
+
+Out of scope for this polish round:
+
+- Cross-`m_3` or supplementary-B verification.
+- Catalog-admission tightening (already settled as unnecessary; `O_617`
+  is not a weak-admission row).
+- Paper-side write of the audit chain (see
+  [`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md)
+  for the existing methodology hand-off; a paper draft would be a
+  separate deferred item).
+- Advancing to v0.4 / induced-rep `d_i` derivation.
+
+Exit deliverable: a single PR (or its equivalent) that adds three new
+workbench subcommands, three new npm scripts, one shared
+`compute_d3_alignments` helper, one smoke-test module, and the doc
+updates listed above. Reviewer should be able to verify the exit
+deliverable by running `npm run isotrophy:kfacet:diagnostics:test` and
+inspecting the new manifest under
+`results/isotrophy/k-facet-v03-row-anatomy/`.
+
 ## Quick Re-Inventory Commands
 
 Use these when this TODO starts to feel stale:

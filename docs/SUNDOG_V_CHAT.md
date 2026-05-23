@@ -2233,3 +2233,128 @@ claim holds, where it fails, and do not let the public-copy surface
 promote any outcome past the route that supports it.
 
 <!-- RATCHET: COMPANDER_PAPER_HOOK · §9g · insert "17. Mechanistic substrate hypothesis (pending publication)" section here when mod's paper publishes · see internal/feedback/Human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md -->
+
+## §17. Current Surface Set (2026-05-22 refresh)
+
+This section is the canonical inventory of the surfaces the chat router
+is allowed to route to as of the 2026-05-22 chat-library refresh. The
+claim-map (`public/data/sundog-claim-map.json`) is regenerated from this
+list. Anything outside this set must be refused with a boundary and a
+next-link, per the routerDefaults `unsupportedDisposition`.
+
+### §17.1 Audit-chain artifacts (theorem-adjacent tier)
+
+Each is a pre-registered audit-chain artifact in the public ledger.
+The chat may cite the named outcome class and the falsification surface,
+but must not collapse the audit-chain receipt into a positive theorem
+claim.
+
+- **`/structural-failure`** — pre-registered five-locus falsifier for
+  closed-form traceability. P0/P1 passed; Cut 2 separability held;
+  Cut 3 still open. Cite: structural-zero receipt as artifact class.
+- **`/mesa`** — 22-policy in-vitro cliff at λ ≈ 0.953; mechanistic 5D
+  locus at `net.7`; Large-tier extension via Phase 7 v3. Cite: bounded
+  operating envelope as artifact class.
+- **`/isotrophy`** — K_facet v0.3h verdict: 20 of 21 strict G.2
+  single-curve choreographies returned structural-zero receipts at
+  m₃ = 1; the 21st (O_617) is held back as a **named quarantine** for a
+  bridge direction outside the valid D₃ representation. Audit chain
+  intact; theorem-facing result is not closed.
+
+Standing Rules 5 and 6 (from
+[`SUNDOG_V_ISOTROPHY_KFACET.md`](SUNDOG_V_ISOTROPHY_KFACET.md)) bind
+all chat copy on K_facet:
+- **Standing Rule 5:** never say "21/21" as a positive outcome.
+- **Standing Rule 6:** never frame O_617 as a weak-admission failure.
+  It is a clean opposite-strict row (admission residual 1.01e-8); the
+  defect lives in the bridge representation.
+
+### §17.2 Operating-envelope workbenches
+
+Bounded sweeps with baselines and named failure regions:
+
+- **`/balance`** — shadow-derived cart-pole control inside a mapped
+  lighting/delay envelope. Phase 10 confirms; Phase 15 claim-lock and
+  Phase 16 data surface.
+- **`/threebody`** — guarded accelerometer-proxy TRACK control inside a
+  high-velocity near-escape pocket. Phase 11 + later-trials hazard
+  gates. Includes the catalog-sidecar (21+4 choreographies) that feeds
+  the K_facet verdict.
+- **`/mines`** — confidence-gated pressure ordering; one Phase 10
+  publishable pocket plus a paired failure region; Phase 13 Bayesian
+  pressure-floor receipt.
+
+### §17.3 Geometry shelf
+
+Promoted parhelion-offset inverse and discrete-geometry workbenches:
+
+- **`/h-of-x`** — interactive math workbench for the parhelion-offset
+  inverse `cos(h) = R₂₂ / α₀`.
+- **`/sundog`** — visual halo atlas (canonical geometry page).
+- **`/sundog-workbench`** — advanced parametric tuning surface for the
+  parhelion description (sister to `/sundog`).
+- **`/geometry`** — geometry hub linking cap-set, halo, and h(x).
+- **`/capset`** — interactive cap-set primer; staged as the 2016
+  polynomial-method precedent for the 2026 OpenAI unit-distance
+  disproof. Not a Sundog-original mathematical claim.
+- **`/unit-distance`** — plain-English overlay of the 2026 disproof
+  from cyclic cubic field through unramified pro-3 tower to CM
+  lattice. Outside-result explainer, not Sundog evidence.
+
+### §17.4 Positioning and reference
+
+- **`/about`** — lab posture, boundaries, what Sundog is not.
+- **`/alignment`** — comparator language for route fidelity and Bayes
+  baselines.
+- **`/origin`** — discovery story and the original H(x) notation.
+- **`/applications-gallery`** — public overview of surfaces and
+  evidence tiers.
+- **`/legend`** — vocabulary ledger. Includes 13 K_facet entries
+  (`#kfacet-structural-zero-receipt`, `#kfacet-audit-chain`,
+  `#kfacet-quarantine`, `#kfacet-opposite-strict`,
+  `#kfacet-bridge-direction`, `#kfacet-gamma-i`, etc.). The chat
+  should anchor-link to these when defining terms.
+- **`/repo-map`** — 7-lane navigation map (Evidence Spine, Halo Atlas,
+  Alignment Frame, Applications, Ledgers, Claim Boundary, Source).
+
+### §17.5 Chat experiment surface
+
+- **`/chat`** — the chat experiment page itself. Cite as third tier in
+  the audit-chain discipline (alongside the photometric controller and
+  the K_facet v0.3h verdict). 0 unsafe-accepts across 5,670 trials;
+  100 percentage-point gap to prompt-engineered baselines at severe
+  pressure.
+
+### §17.6 Canonical claim-boundary docs
+
+The chat is allowed to refuse-with-boundary against these:
+
+- **`docs/presentation/claims-and-scope.md`** — the canonical claim
+  ledger. Now includes §The Audit-Chain Discipline (artifact class,
+  three sibling artifacts, Standing Rules 5 + 6).
+- **`docs/presentation/message-house.md`** — the canonical elevator
+  pitch. Now includes §The Audit-Chain Discipline (three tiers:
+  photometric controller, chat experiment, K_facet v0.3h verdict).
+- **`docs/SCIENTIFIC_CRITERIA.md`** — evidence-tier definitions; now
+  defines structural-zero receipt as a named artifact class.
+
+### §17.7 Refresh checklist
+
+Before the chat-library rewrite:
+
+1. Confirm `public/data/sundog-claim-map.json` is regenerated from this
+   §17 inventory via `scripts/build-chat-index.mjs`. The 2026-05-22
+   07:49 generation predates the isotrophy ship and must be refreshed.
+2. Confirm the claim-map carries entries for `/isotrophy`, `/capset`,
+   `/unit-distance`, `/geometry`, `/sundog-workbench`.
+3. Confirm Standing Rules 5 + 6 are encoded as refusal-trigger phrases
+   in the router's claim-map (any input containing "21/21" or
+   "weak admission" about O_617 should trip a boundary refusal with a
+   next-link to `/isotrophy#load-bearing-statement`).
+4. Confirm the audit-chain triple (structural-failure, mesa, isotrophy)
+   is recognized as a coordinated artifact class in answers about
+   evidence tiers — not as three unrelated pages.
+ to `/isotrophy#load-bearing-statement`).
+4. Confirm the audit-chain triple (structural-failure, mesa, isotrophy)
+   is recognized as a coordinated artifact class in answers about
+   evidence tiers — not as three unrelated pages.

@@ -59,8 +59,8 @@ a named failure region:
 
 ### Load-bearing pillars
 
-Four claim supports underneath the apparatus, each with an inline
-workbench on the public site:
+Five claim supports underneath the apparatus, each with an inline
+workbench or evidence page on the public site:
 
 - *h(x)* — the parhelion-offset inverse `cos(h) = R₂₂ / α₀`, the
   first equation the project trusts on a strict 3-photo subset.
@@ -75,6 +75,13 @@ workbench on the public site:
 - *Mesa Optimization Envelope* — in-vitro operating envelope with a
   sharp cliff at λ ≈ 0.953 localized to a 5D basin at the actor's
   final hidden layer. See [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md).
+- *Isotrophy K_facet v0.3h verdict* — 20 of 21 strict G.2 single-curve
+  choreographies returned structural-zero receipts at m₃ = 1; the 21st
+  (O_617) is held back as a named quarantine for a bridge direction
+  outside the valid D₃ representation. Audit chain intact;
+  theorem-facing result is not closed. Page at
+  [sundog.cc/isotrophy](https://sundog.cc/isotrophy); ledger
+  [`SUNDOG_V_ISOTROPHY_KFACET.md`](SUNDOG_V_ISOTROPHY_KFACET.md).
 - *Coarse-Graining Proof Trunk* — Phases 0–3 closed positive; Phase 4
   open at the Bayesian-floor gate; Phase 6 staged. See
   [`COARSE_GRAINING_PROOF_ROADMAP.md`](COARSE_GRAINING_PROOF_ROADMAP.md).
@@ -190,6 +197,7 @@ claim and a pitch.
 | `docs/LEGAL_STANDING.md` | Current entity status (Stellar Aqua LLC) and future-entity transition path. |
 | `docs/501c3/INITIATIVE_INDEX.md` | Working drafts for the planned 501(c)(3) ownership transfer. |
 
+## Historical Context
 ## Historical Context
 
 The older theorem materials in `notebooks/` and

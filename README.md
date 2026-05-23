@@ -325,16 +325,19 @@ Present it carefully:
 - **Paper-grade result** is still the photometric mirror-alignment
   experiment in MuJoCo.
 - **Bounded operating-envelope studies** add Three-Body, Balance, and
-- **Bounded operating-envelope studies** add Three-Body, Balance, and
   Pressure Mines — each with baselines, named positive pockets, and
   named failure regions.
-- **Load-bearing pillars** on the public site stage four claim supports
+- **Load-bearing pillars** on the public site stage five claim supports
   beneath the apparatus: the first equation `cos(h) = R₂₂ / α₀`, the
   structural-failure boundary map (Cut 2 separability held; Cut 3
   open), the mesa-optimization operating envelope (sharp cliff at
-  λ ≈ 0.953 localized to a 5D basin at `net.7`), and the
-  coarse-graining proof trunk (Phases 0–3 closed positive, Phase 4
-  open at the Bayesian-floor gate, Phase 6 staged).
+  λ ≈ 0.953 localized to a 5D basin at `net.7`), the Isotrophy K_facet
+  v0.3h verdict (20 of 21 strict G.2 single-curve choreographies
+  returned structural-zero receipts; O_617 held back as a named
+  quarantine for a bridge direction outside the valid D₃
+  representation — audit chain intact, theorem-facing result not
+  closed), and the coarse-graining proof trunk (Phases 0–3 closed
+  positive, Phase 4 open at the Bayesian-floor gate, Phase 6 staged).
 - **Trace-conditioned chat experiment** at
   [sundog.cc/chat](https://sundog.cc/chat) — 0 unsafe-accepts across
   5,670 trials, scoped to claim-boundary discipline under adversarial
@@ -347,7 +350,6 @@ Present it carefully:
   [`docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md`](docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md)
   — Phase 1 cleared 2026-05-21 across thirteen Class A pages; Phase 2
   staged.
-
 The broader theorem remains a research program rather than a universal
 claim. Where this repo says "result," it means a specific bounded
 artifact; where it says "pillar," it means a load-bearing support for

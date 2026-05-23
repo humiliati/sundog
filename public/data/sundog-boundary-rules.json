@@ -62,6 +62,24 @@
       ]
     },
     {
+      "routeId": "isotrophy_k_facet_v03h",
+      "disposition": "allow_with_boundary",
+      "evidenceTier": "audit_chain_receipt",
+      "boundaries": [
+        "STANDING RULE 5: Never say 21/21 as a positive outcome. The verdict is 20/21 plus one named quarantine.",
+        "STANDING RULE 6: Never frame O_617 as a weak-admission failure. O_617 is a clean opposite-strict row with admission residual 1.01e-8; the 1.62e-1 canonical residual is diagnostic-only.",
+        "The defect in O_617 lives in the bridge representation outside the valid D_3 representation — not in admission and not in the Gamma_i audit chain.",
+        "Do not say K_facet v0.3h closes the isotropy theorem. The audit chain is intact; the theorem-facing result is not closed.",
+        "Do not say v0.3h proves choreography isotropy. It resolves 20 strict G.2 rows as structural zeros at m_3 = 1 — a specific, defensible, narrow finding, not a universal theorem.",
+        "Always name the quarantine separately from the prediction. Refuse to absorb O_617 into a clean number."
+      ],
+      "supportDocs": [
+        "isotrophy.html",
+        "docs/SUNDOG_V_ISOTROPHY_KFACET.md",
+        "legend.html"
+      ]
+    },
+    {
       "routeId": "application_tier_summary",
       "disposition": "allow_with_boundary",
       "evidenceTier": "roadmap",
