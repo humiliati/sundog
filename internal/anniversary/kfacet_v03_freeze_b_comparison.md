@@ -111,6 +111,12 @@ The careful synthesis is now:
 `F_beta` closure too (residual 0.25), suggesting an even smaller
 symmetry class than the other six piano-trio sentinels.
 
+Follow-on: v0.4a treats supplementary-B piano-trios as primary `Z_2`
+objects and pre-registers a two-pass gauge domain map over all 273 rows;
+see `kfacet_v04a_domain_map_preregistration.md`. The O_434 anatomy probe
+that motivates the two-pass design is recorded at
+`results/isotrophy/k-facet-v04a0-o434-anatomy/anatomy_receipt.json`.
+
 ## Reproducibility Surface
 
 Inventory command:

@@ -185,6 +185,10 @@ Companion docs:
   + (Q1.D, Q2.D) verdict.
 - `kfacet_v03h_o617_deep_dive.md` -- quarantined-row companion.
 
+Follow-on: v0.4a treats supplementary-B piano-trios as primary `Z_2`
+objects and pre-registers a two-pass gauge domain map over all 273 rows;
+see `internal/anniversary/kfacet_v04a_domain_map_preregistration.md`.
+
 ## Open Polish Item (Run-Friendly)
 
 A ~10-hour tooling-polish initiation is registered in

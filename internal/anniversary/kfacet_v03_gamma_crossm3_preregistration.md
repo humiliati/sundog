@@ -137,6 +137,10 @@ epilogue chapter recording the domain-of-applicability finding. Open a
 v0.4 question on `Z_2`-symmetric mechanisms; this is a fresh chapter and
 should be designed paper-side before any new audit chain is built.
 
+Follow-on: v0.4a treats supplementary-B piano-trios as primary `Z_2`
+objects and pre-registers a two-pass gauge domain map over all 273 rows;
+see `kfacet_v04a_domain_map_preregistration.md`.
+
 ### Receipts
 
 ```text
