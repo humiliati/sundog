@@ -975,6 +975,31 @@ v0.3h does not explain the published piano-trio catalog. This is a negative
 about the proposed standard-sector mechanism, not a claim that piano-trios do
 not exist.
 
+The II cross-`m_3` sentinel sweep (`internal/anniversary/kfacet_v03_gamma_crossm3_preregistration.md`)
+extended the audit chain to seven supplementary-B sentinels (4 at `m_3=0.4`,
+3 at `m_3=1.0`). All seven halted at the runner-stage `D3` gate with
+kernel-projected residuals `10^3..10^5`, six to eight orders above the
+`1e-3` floor: joint verdict **(Q1.D, Q2.D) = gate pathology on both axes**.
+A targeted `sigma_3-scan` on the same seven rows resolved the cause:
+piano-trio orbits have catalog-style `sigma_3` closure residuals at
+`~0.7` (orbit scale), 7-9 orders above the strict G.2 admission criterion,
+while 6 of 7 carry `F_beta` closure cleanly at `~1e-8`. Zero of seven rows
+satisfy any `sigma_3` admission flavor.
+
+**Supplementary-B piano-trio sentinels sit in `Z_2`-or-smaller symmetry
+classes, not `D_3`**. Six of seven tested rows carry the `(12)`-swap symmetry;
+outlier `O_434(0.4)` also breaks `F_beta` closure and is flagged as a
+sub-investigation. The v0.3 `Gamma_i` mechanism is `D_3`-equivariant by
+construction and therefore structurally inapplicable to this catalog. The
+(predicted 0, observed 273) mismatch is a **domain-of-applicability finding**:
+v0.3 cannot predict piano-trios because they do not carry the assumed symmetry.
+The mechanism is intact within its domain (strict G.2); the daughter catalog
+lives in a different symmetry class. The v0.3 chapter closes; the v0.4 chapter
+opens on `Z_2`-equivariant mechanism candidates, with smaller-symmetry outliers
+tracked explicitly and paper-side design before any runner code. Receipts:
+`results/isotrophy/k-facet-v03-gamma-crossm3/`,
+`results/isotrophy/k-facet-v03-piano-symmetry-probe/`.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at

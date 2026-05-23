@@ -1227,15 +1227,10 @@
         }
 
         .elevator-pitch-layout {
-            display: grid;
-            grid-template-columns: minmax(7.5rem, 0.18fr) minmax(0, 1fr) minmax(7.5rem, 0.18fr);
-            gap: 1rem;
-            align-items: center;
+            display: block;
         }
 
         .elevator-pitch-shell {
-            grid-column: 2;
-            grid-row: 1;
             background: #FFFFFF;
             border: 1px solid var(--line);
             border-left: 4px solid var(--accent-gold);
@@ -1243,50 +1238,80 @@
             padding: clamp(1.8rem, 3.2vw, 2.6rem) clamp(1.6rem, 3vw, 2.4rem);
         }
 
-        .elevator-pitch-art {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .elevator-pitch-art-left {
-            grid-column: 1;
-            grid-row: 1;
-        }
-
-        .elevator-pitch-art-right {
-            grid-column: 3;
-            grid-row: 1;
-        }
-
-        .elevator-pitch-art figure {
-            margin: 0;
-            overflow: hidden;
+        /* Inline floated thumbnails inside the pitch body. Text wraps around them. */
+        .elevator-pitch-thumb {
+            margin: 0.3rem 0 0.85rem;
             border: 1px solid rgba(12, 31, 46, 0.16);
             border-radius: 8px;
             background: #102334;
+            overflow: hidden;
             box-shadow: 0 14px 32px rgba(12, 31, 46, 0.12);
+            max-width: 100%;
         }
 
-        .elevator-pitch-art img {
+        .elevator-pitch-thumb--photo {
+            float: right;
+            width: clamp(180px, 26%, 240px);
+            margin-left: 1.2rem;
+            shape-outside: inset(0 round 8px);
+        }
+
+        .elevator-pitch-thumb--halosim {
+            float: left;
+            width: clamp(220px, 32%, 300px);
+            margin-right: 1.2rem;
+            shape-outside: inset(0 round 8px);
+        }
+
+        .elevator-pitch-thumb a {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+            cursor: zoom-in;
+        }
+
+        .elevator-pitch-thumb img {
             display: block;
             width: 100%;
-            aspect-ratio: 4 / 5;
-            object-fit: cover;
+            height: auto;
+            transition: transform 0.35s ease;
         }
 
-        .elevator-pitch-art-left img {
-            object-position: 66% center;
+        .elevator-pitch-thumb a:hover img,
+        .elevator-pitch-thumb a:focus-visible img {
+            transform: scale(1.03);
         }
 
-        .elevator-pitch-art figcaption {
+        .elevator-pitch-thumb a:focus-visible {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        .elevator-pitch-thumb figcaption {
             color: rgba(245, 245, 245, 0.82);
             font-family: var(--sd-font-data);
             font-size: 0.64rem;
             font-weight: 800;
             letter-spacing: 0.08em;
             line-height: 1.35;
-            padding: 0.55rem 0.65rem;
+            padding: 0.5rem 0.65rem;
             text-transform: uppercase;
+        }
+
+        .elevator-pitch-thumb figcaption .zoom-hint {
+            display: block;
+            margin-top: 0.2rem;
+            color: rgba(245, 245, 245, 0.55);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: none;
+        }
+
+        /* Clear floats at the end of the body so the section closes cleanly. */
+        .elevator-pitch-body::after {
+            content: "";
+            display: block;
+            clear: both;
         }
 
         .elevator-pitch-headline {
@@ -1368,30 +1393,15 @@
         }
 
         @media (max-width: 900px) {
-            .elevator-pitch-layout {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+            /* At medium widths, narrow the thumbs slightly so wrapped text still has room. */
+            .elevator-pitch-thumb--photo {
+                width: clamp(160px, 30%, 210px);
+                margin-left: 1rem;
             }
 
-            .elevator-pitch-shell {
-                grid-column: 1 / -1;
-                grid-row: auto;
-            }
-
-            .elevator-pitch-art-left,
-            .elevator-pitch-art-right {
-                grid-row: auto;
-            }
-
-            .elevator-pitch-art-left {
-                grid-column: 1;
-            }
-
-            .elevator-pitch-art-right {
-                grid-column: 2;
-            }
-
-            .elevator-pitch-art img {
-                aspect-ratio: 16 / 11;
+            .elevator-pitch-thumb--halosim {
+                width: clamp(200px, 36%, 260px);
+                margin-right: 1rem;
             }
         }
 
@@ -1405,16 +1415,20 @@
             }
         }
 
+        @media (max-width: 560px) {
+            /* On phones, stop floating: stack thumbs full-width above the paragraph
+               they introduce. Reads vertically instead of squeezing text. */
+            .elevator-pitch-thumb--photo,
+            .elevator-pitch-thumb--halosim {
+                float: none;
+                width: 100%;
+                max-width: 360px;
+                margin: 0.5rem auto 1.25rem;
+                shape-outside: none;
+            }
+        }
+
         @media (max-width: 430px) {
-            .elevator-pitch-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .elevator-pitch-art-left,
-            .elevator-pitch-art-right {
-                grid-column: 1;
-            }
-
             .glossary-link::after {
                 display: none;
             }
@@ -1571,9 +1585,21 @@
                     Field-not-reward, in plain language.
                 </h2>
                 <div class="elevator-pitch-body">
+                    <figure class="elevator-pitch-thumb elevator-pitch-thumb--photo">
+                        <a href="/media/elevator-sundog-photo.jpg" target="_blank" rel="noopener" aria-label="Open full-resolution sundog photograph in a new tab">
+                            <img src="/media/elevator-sundog-photo-thumb.jpg" width="480" height="560" alt="Real-world sundog photograph: a full 22 degree halo arcs through a snow-laden conifer forest with a bright parhelion glint at center." loading="lazy">
+                            <figcaption>Real sundog &middot; full 22&deg; halo &middot; parhelion glint <span class="zoom-hint">click to enlarge</span></figcaption>
+                        </a>
+                    </figure>
                     <p>
                         A <a class="glossary-link" href="/legend#phenomenon-parhelion" data-definition="A bright spot beside the sun, also called a parhelion. Its offset can recover sun altitude when the anchors are eligible." aria-label="sundog: a bright spot beside the sun, also called a parhelion">sundog</a> is an optical phenomenon beside the sun, formed when ice crystals in the atmosphere deflect light by <a class="glossary-link" href="/legend#phenomenon-22-degree-halo" data-definition="The common ring around the sun. Sundog uses it as the scale reference for the atlas." aria-label="22 degrees: the common halo radius used as the atlas scale reference">22&deg;</a> and concentrate it into a small set of geometrically determined spots, arcs, and rings. The sky doesn&rsquo;t pick where these features land; their positions fall out deterministically from sun altitude and crystal orientation. Several of the halo system&rsquo;s visible arcs &mdash; <a class="glossary-link" href="/legend#phenomenon-circumzenithal-arc" data-definition="The high smile-shaped arc above the sun. Its visibility is gated by observer geometry." aria-label="circumzenithal arc: the high smile-shaped arc above the sun">circumzenithal</a>, <a class="glossary-link" href="/legend#phenomenon-circumhorizon-arc" data-definition="A high-sun plate-crystal arc sometimes called a fire rainbow. It is outside the current sundog-facing regime." aria-label="circumhorizon arc: a high-sun plate-crystal arc outside the current sundog-facing regime">circumhorizon</a>, <a class="glossary-link" href="/legend#phenomenon-upper-tangent-arc" data-definition="A column-crystal arc near the 22 degree halo. The upper and lower tangent arcs merge into the circumscribed halo above roughly 29 degrees sun altitude." aria-label="tangent arc: a column-crystal arc near the 22 degree halo">tangent</a> &mdash; are partial traces of complete figures in the theory, with the visible portion fixed by sun&ndash;observer geometry.
                     </p>
+                    <figure class="elevator-pitch-thumb elevator-pitch-thumb--halosim">
+                        <a href="/media/elevator-halosim-tangent-full.jpg" target="_blank" rel="noopener" aria-label="Open full-resolution HaloSim cross-cut render in a new tab">
+                            <img src="/media/elevator-halosim-tangent-thumb.jpg" width="480" height="270" alt="HaloSim cross-cut render at 25,000 monorays showing the full halo architecture: 22 degree halo, both parhelia, parhelic circle, and upper and lower tangent arcs, with the sun at 18.6 degrees altitude." loading="lazy">
+                            <figcaption>HaloSim cross-cut &middot; 25,000 monorays &middot; sun at 18.6&deg; <span class="zoom-hint">click to enlarge</span></figcaption>
+                        </a>
+                    </figure>
                     <p>
                         A <a class="glossary-link" href="/mesa" data-definition="Here, a mesa neuron is a unit inside a trained policy network studied for whether internal optimization appears under selection pressure." aria-label="mesa neuron: a unit inside a trained policy network studied for internal optimization behavior">mesa neuron</a>, by contrast, is a unit inside a trained reinforcement-learning agent&rsquo;s network &mdash; in our case, one of 256 in the final hidden layer of a controller trained to track an indirect environmental signal rather than a direct reward. When we ran capacity and selection-pressure experiments on these agents, we found that <a class="glossary-link" href="/mesa" data-definition="Mesa-optimization is the failure mode where a learned policy develops internal optimization targets that diverge from its training signal." aria-label="mesa-optimization: a failure mode where a learned policy develops internal optimization targets that diverge from training">mesa-optimization</a> &mdash; the failure mode in which a learned policy develops internal optimization targets that diverge from its training signal &mdash; localizes causally to an entangled <a class="glossary-link" href="docs/SUNDOG_V_MESA.md" data-definition="A compact activation subspace found in the tested Mesa policy layer; it is not claimed as a universal neural law." aria-label="5-dimensional subspace: a compact activation subspace found in the tested Mesa policy layer">5-dimensional subspace</a> at that layer. In the architecture and capacity regime we tested, that subspace is not recoverable by any single neuron, any handful of features, or any linear decomposition we ran.
                     </p>
@@ -1585,18 +1611,6 @@
                     </p>
                 </div>
             </div>
-            <aside class="elevator-pitch-art elevator-pitch-art-left" aria-label="HaloSim visual receipts">
-                <figure>
-                    <img src="/media/elevator-halosim-cza.png" alt="HaloSim receipt showing the high circumzenithal arc above the sun.">
-                    <figcaption>HaloSim CZA receipt</figcaption>
-                </figure>
-            </aside>
-            <aside class="elevator-pitch-art elevator-pitch-art-right" aria-label="HaloSim visual receipts">
-                <figure>
-                    <img src="/media/elevator-halosim-parhelia.png" alt="HaloSim receipt showing parhelia on either side of the sun.">
-                    <figcaption>HaloSim parhelia receipt</figcaption>
-                </figure>
-            </aside>
         </div>
     </section>
 

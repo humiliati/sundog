@@ -163,6 +163,20 @@ Standing rules:
   check and v2 separator: near-S/sign-isotypic, not near-T/trivial.
 - 2026-05-22 - froze v0.3h against supplementary-B: resolved `Gamma_i`
   mechanism predicts 0 daughters; supplementary-B parses as 273 rows.
+- 2026-05-22 - II cross-m_3 sentinel sweep on supplementary-B (4 rows
+  at m_3=0.4 + 3 rows at m_3=1.0 supp-B). Joint verdict (Q1.D, Q2.D):
+  gate pathology on both axes at the runner stage.
+- 2026-05-22 - targeted `sigma_3-scan` symmetry probe on the same 7
+  rows established the cause: all seven sentinels fail `sigma_3` cycle
+  closure (residuals at orbit scale `~0.7`, 7-9 orders above the strict
+  G.2 admission criterion). Six of seven carry `F_beta = (12)` closure
+  at integration precision; `O_434(0.4)` is the smaller-symmetry outlier.
+  0 of 7 rows pass any `sigma_3` strict criterion.
+- 2026-05-22 - v0.3 epilogue closed: the (predicted 0, observed 273)
+  mismatch is a **domain-of-applicability** finding, not a
+  within-domain falsification. The supp-B sentinels are `Z_2`-or-smaller,
+  not `D_3`; the v0.3 `Gamma_i` mechanism is `D_3`-equivariant by
+  construction and structurally inapplicable to this catalog.
 - 2026-05-22 - `/isotrophy` public-facing page filed at root.
 - 2026-05-22 - promo and brand notes filed.
 
@@ -170,4 +184,9 @@ Open follow-ups:
 
 - SEO readiness matrix treatment for `/isotrophy`.
 - Homepage pillar or rail card for `/isotrophy`.
-- A public-facing v0.4 plan, if any.
+- A public-facing v0.4 plan: design candidate `Z_2 = (12)`-equivariant
+  mechanisms for piano-trio prediction. Paper-side representation theory
+  before any new audit-chain or runner code.
+- `O_434(0.4)` row anatomy: this supp-B sentinel broke both `sigma_3`
+  AND `F_beta` closure (the other 6 broke `sigma_3` only). Possibly a
+  sub-`Z_2` symmetry class; cheap row-anatomy probe candidate.

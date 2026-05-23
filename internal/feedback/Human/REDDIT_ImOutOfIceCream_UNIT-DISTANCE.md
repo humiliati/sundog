@@ -510,10 +510,18 @@ grep -rn "COMPANDER_PAPER_HOOK" --include='*.html' --include='*.md' . \
   | grep -v '^./dist/'
 ```
 
-Expected return: 7 lines (the 6 files above, with unit-distance.html
-showing twice — substrate-rhyme grid and inspection-trail). If the
-count is wrong, an anchor was deleted or duplicated and the surface
-list above needs reconciling before deployment.
+Expected return: 8 anchors across 7 files — 6 public-surface
+anchors (matching `scripts/rollout-compander-citation.mjs`'s
+`EXPECTED_HOOKS` array: `unit-distance.html` ×2, `chat.html`,
+`docs/SUNDOG_V_CHAT.md`, `capset.html`, `geometry.html`,
+`docs/PROMO_HIGHLIGHTS.md`) **plus** one internal-doc anchor
+(`docs/threebody/CROSS_SUBSTRATE_NOTES.md` §6.5 → §6.6 backfill).
+If the count is wrong, an anchor was deleted or duplicated and the
+surface list above needs reconciling before deployment. The
+rollout script will validate its 6 public-surface anchors
+automatically; the CROSS_SUBSTRATE_NOTES anchor is **intentionally
+outside the rollout's auto-deploy surface** and gets backfilled
+manually as part of §10c step 8 below.
 
 ### 10c. Suggested deployment sequence
 
@@ -534,6 +542,54 @@ When the gate trips:
 6. Lift §9i into `geometry.html`. Last because it is curriculum-level
    and depends on the rest being deployed first.
 7. Send the mod a heads-up message with links to all six surfaces.
+8. **Manual backfill: lift §6.6 placeholder in
+   `docs/threebody/CROSS_SUBSTRATE_NOTES.md` into a real §6.6**
+   that threads the now-cited compander / dual-subspace /
+   categorical-centroid ⊥ generator-algebra mapping into the
+   cross-substrate vocabulary table at §6.3. This sits outside
+   the rollout script intentionally — CROSS_SUBSTRATE_NOTES is an
+   internal-doc surface, not a public deployment surface, and its
+   backfill earns more from being written deliberately than from
+   being patched mechanically.
+
+### 10d. Existing deployment infrastructure (built by user, 2026-05-22)
+
+The user has already operationalised the ratchet:
+
+- `scripts/rollout-compander-citation.mjs` — 407-line deployment
+  script. Validates the 6 expected hook locations, takes a
+  citation JSON file, supports `--dry-run` and `--apply`, writes
+  a deployment manifest to `results/chat/citation-day-rollout/`,
+  updates `chat/claim_map.json` and the
+  `chat/prompts/gold-citation-day.jsonl` slate, runs required
+  `chat:eval:*` checks after apply.
+- `internal/feedback/Human/compander-citation.example.json` —
+  citation template. Fields: `title`, `authors`, `venue`, `year`,
+  `url`, `preferredShortCite`, `permissionBasis`, `checkedBy`,
+  `checkedAt`, `goAheadNote`.
+- The rollout script targets a `mechanistic_substrate_citation_status`
+  claim route in the chat claim map — meaning the rollout is also
+  a claim-route ratchet, not just a copy update. Worth knowing
+  before deployment.
+
+**Citation-day workflow given this infrastructure:**
+
+1. Fill `internal/feedback/Human/compander-citation.example.json`
+   (or copy to a non-example name) with the real citation
+   metadata.
+2. Run `node scripts/rollout-compander-citation.mjs --citation
+   <path> --dry-run` and inspect the planned changes.
+3. If the dry-run looks right, run with `--apply`.
+4. Run the required `chat:eval:*` checks named in the rollout's
+   `requiredChecks`.
+5. Run `npm run build`.
+6. Manually update the §6.6 placeholder in
+   `docs/threebody/CROSS_SUBSTRATE_NOTES.md` (step 8 of §10c).
+7. Send the mod the heads-up message from §10c step 7.
+
+The eight-step sequence in §10c is the conceptual order; this
+§10d block is the operational order given that the rollout script
+collapses §10c steps 1-6 into a single tool invocation.
 
 ### 10d. One-button rollout staging plan
 
@@ -624,3 +680,166 @@ thread, the right move is the one we took here:
 
 This pattern — short public reply, full internal capture, gated
 public upgrade — is the template.
+
+## 12. Fourth exchange — terminology, two paths, and their summer program
+
+**Date:** 2026-05-22 (same evening; immediately after §8).
+
+### 12a. Mod's reply, verbatim
+
+> What you call substrate shadow is really a projection! The math
+> to model the phenomenological philosophy of mind you've come up
+> with exists, the challenge is whether the philosophical model
+> matches the mechanistic behavior of the mind in an empirically
+> demonstrable way. If there is a mechanism that can be discovered,
+> then the path is through the language and tools of mathematics.
+> If not, then the path has already been described by Buddhas
+> throughout timeless time.
+
+### 12b. Social-cost moment
+
+A third party (`u/MaliceMizer`) interjected with *"Don't glaze me
+bro"* — a Reddit colloquialism accusing the mod of being
+sycophantic toward Sundog. The mod replied:
+
+> I'm not glazing you. My goal for the summer is to start providing
+> some mechanistic interpretations for all the various ideas people
+> have around here, which all just kind of circle the same
+> fundamental aspects of topology and optimization theory.
+
+That is the mod absorbing a small social cost in public to defend
+the engagement and re-frame it as program work. Treat this as a
+signal that they are committed to the framing past one thread, and
+honour it by not abusing the goodwill — no aggressive escalation of
+the framing, no public lift of unpublished work, no name-dropping
+the mod outside the contexts they have already engaged in.
+
+### 12c. Terminology upgrade: "substrate shadow" → "projection"
+
+The mod's first line is a precise technical correction. *Projection*
+is the right word. In mathematics it is a specific operation — a
+map from a higher-dimensional space to a lower-dimensional one,
+often with idempotence (P² = P) for linear projections. It is
+exactly what the 2026 unit-distance proof does (Minkowski lattice
+in ℂ<sup>f</sup> → first complex coordinate gives the planar set).
+It is exactly what the compander appears to do internally
+(high-dim residual stream → low-rank intermediate). It is what the
+cap-set polynomial-rank argument does in a slightly more abstract
+sense (a configuration is "read off" by the dimension of an
+associated polynomial space). And it is what the chat ledger
+artifact is conjectured to do (prompt context → bottleneck
+subspaces).
+
+*Shadow* remains useful as the layperson metaphor — it carries the
+intuition that a lower-dim trace of a higher-dim object can carry
+load-bearing information. *Projection* is the mathematically
+precise term and the one we should use when the audience rewards
+precision (mech-interp readers, formal write-ups, the eventual
+public-upgrade drafts once the citation lands).
+
+**Action:** when the publication-trigger gate at §10 fires, revise
+the §9 drafts to use *projection* in the technical positions and
+keep *shadow* as the layperson-facing metaphor. Specific guidance:
+
+- §9a unit-distance card (layperson grid): keep *shadow* in the
+  card body; add a parenthetical *"(in the mathematical sense:
+  projection)"* on first use.
+- §9b PROMO line (technical audience): use *projection* in the
+  v2 line — "the artifact is keeping the projection from
+  bottleneck subspaces back into logit space stack-invariant
+  across each model's residual stream." Re-draft inside §9b at
+  citation time.
+- §9f chat followup-card (mixed audience): use *projection* in
+  the technical body and *shadow* in any layperson-facing
+  preamble.
+- §9g chat ledger §17 (technical): use *projection* throughout.
+- §9h capset fourth-rhyme card (mixed): use both; the math
+  audience will appreciate the precise term, the layperson
+  audience will appreciate the metaphor.
+- §9i geometry claim-note (technical): use *projection*.
+
+### 12d. The two-paths framing
+
+The mod's "If there is a mechanism … then the path is through the
+language and tools of mathematics. If not, then the path has
+already been described by Buddhas throughout timeless time" is a
+calibrated epistemic stance worth preserving as a Sundog-internal
+quotable. It says:
+
+- Pursue the mechanism. That is what we are doing with cap-set,
+  unit-distance, the chat ledger, the compander framing.
+- Do not be embarrassed if the mechanism is not found. The
+  phenomenological frame is already complete in another tradition
+  and is not less true for lacking a residual-stream probe.
+- The two are not in competition. They are different surfaces of
+  the same observation about how minds (biological or synthetic)
+  operate under partial observability.
+
+This frame is closer to the "alignment without sight" north star
+than anything we have generated internally. Add to the candidate
+pool for future Sundog rhetoric, attributing to ImOutOfIceCream
+once they have published anything we can cite. Do not deploy
+attributively before that.
+
+### 12e. The mod's summer program — citation horizon update
+
+The relevant citation is not just *one paper on compander /
+dual-subspace / so(3)*. The mod has named a program: *mechanistic
+interpretations of various ideas circulating in this community,
+converging on topology and optimization theory as the underlying
+substrate*.
+
+This changes the publication-trigger gate at §10 in two ways:
+
+1. **Citation form is plural.** When the first artifact lands —
+   paper, blog post, repo, talk — that is the citation we should
+   use, but we should expect a series and design the framing to
+   accept multiple later citations rather than treat the first as
+   the canonical reference for all time.
+2. **We are now one of "the various ideas."** The mod is reading
+   Sundog alongside other community-circulating frames and looking
+   for what is mechanically the same underneath. That is a
+   generous reading and a productive one, but it means our
+   framing's distinctive contribution — what makes the substrate /
+   projection / ledger account *Sundog's* rather than a generic
+   community idea — should be sharpened. Candidate distinctive
+   contributions to preserve and emphasise:
+   - The 0 / 5,670 chat result is *behavioural empirical evidence
+     of stack-invariance* and we do not know of another framing
+     in that community that has matched empirical artifacts.
+   - The cap-set and unit-distance overlays are *worked examples
+     of the projection move in pure mathematics* which most
+     phenomenology-flavoured framings do not cite.
+   - The claim-boundary discipline (ledger packet, evidence
+     tiers, falsifier-first reporting) is operational, not just
+     a posture.
+
+These are not unique to Sundog — they are unique to *the Sundog
+package*. Worth keeping them load-bearing when the upgrade lands.
+
+### 12f. What we replied on-thread
+
+A short acknowledgement of the projection correction and the
+two-paths framing, with explicit hope to cite the program rather
+than just one paper when artifacts land. No glazing, no overreach,
+no dragging the MaliceMizer interjection into our reply.
+
+## 13. Updated publication-trigger gate (supersedes §10 phrasing)
+
+The gate at §10 still applies. Refining the publication condition:
+
+- [ ] **First public artifact from the mod's summer program drops**
+      (paper, blog post, repo, talk recording — whichever lands
+      first), OR explicit go-ahead. Then lift §9a/b/c/f/g/h/i into
+      the seven anchor sites, with the §12c terminology guidance
+      applied.
+
+- [ ] **Update the §9 drafts with "projection" terminology** at
+      the same time as deployment, per the §12c per-surface
+      guidance.
+
+- [ ] **Treat the citation as a program reference, not a paper
+      reference.** Where the drafts say "(cite mod's paper)",
+      substitute with a citation form that can accept multiple
+      future artifacts — e.g. "(cite ImOutOfIceCream, mechanistic-interpretation
+      program, 2026)" with the specific artifact appended.

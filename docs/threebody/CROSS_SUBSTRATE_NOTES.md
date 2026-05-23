@@ -5,6 +5,20 @@ Threebody work. It is not evidence by itself. It is a design guardrail for
 turning "Sundog works across substrates" into testable phase specs instead of
 theme-matching.
 
+> **Doc-evolution note (2026-05-22).** Sections 1-5 are the original
+> Threebody-scoped transfer notes (Mesa -> Geometry -> Threebody, the
+> direction the cross-pollination first ran). Sections 6-7 are an
+> expansion: now that the cap-set / unit-distance / chat / mesa-interp
+> conversation has converged on shared top-level vocabulary, this doc
+> is the right "catch can" for cross-substrate generalizations that
+> apply to more than Threebody alone. If the catch-can use ratchets
+> past two more substrates, consider relocating from
+> `docs/threebody/` to `docs/CROSS_SUBSTRATE_NOTES.md` so the path
+> matches the scope; for now the existing imports from other docs
+> keep us here. The full provenance trail for §§6-7's vocabulary
+> lives in
+> `internal/feedback/Human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md`.
+
 ## 1. What Transfers
 
 Mesa and Geometry both converged on field-shaped structure:
@@ -154,3 +168,211 @@ Follow the Mesa pattern:
 The parent roadmap should summarize decisions and link out. It should not carry
 every command, threshold, result table, and readback template once a phase has
 graduated to implementation.
+
+## 6. Top-Level Machinery Vocabulary
+
+The Mesa -> Geometry crossover, the cap-set / unit-distance overlay
+work, and the chat-experiment stack-invariance result are all
+instances of one operation. Until 2026-05-22 we did not have a
+precise enough name for it. We do now.
+
+### 6.1 The precise term: projection
+
+What we have been calling **substrate shadow** is, in mathematical
+language, a **projection**: a map from a higher-dimensional space to
+a lower-dimensional one, often (for linear projections) idempotent
+(P^2 = P). The 2026 unit-distance proof literally projects the
+Minkowski lattice in C^f down to one complex coordinate. The 2016
+cap-set polynomial-rank argument "reads off" a configuration by the
+dimension of an associated polynomial space — a projection in the
+operator sense. The chat-ledger artifact is conjectured to project
+prompt context into the bottleneck subspaces of the model's residual
+stream. The Mesa `net.7` `5D` subspace is what the controller's
+hidden state has been projected into, and the projection has
+rigidity the constituent SAE features / neurons / PCs lack.
+
+*Shadow* remains useful as the layperson metaphor. *Projection* is
+the precise term and the one we should use when the audience rewards
+precision — formal write-ups, mech-interp readers, cross-substrate
+generalizations, and (notably) the isotrophy red-team specs.
+
+### 6.2 The body/shadow decomposition
+
+Every substrate where this operation has shown up admits a
+body/shadow decomposition:
+
+- The **body** is the high-dimensional object resisting direct
+  measurement: dots in F_3^n, dots in R^2, a controller hidden
+  state, tokens of a conversation, an `S3` symmetry orbit.
+- The **shadow** is the lower-dimensional projection that is
+  *more* tractable than the body even though it contains less
+  information: a polynomial-rank count, a CM-lattice projection,
+  a `5D` entangled subspace, a ledger packet, the residual `Z2`
+  generators that survive the `S3 -> Z2` mass perturbation.
+
+The shadow has rigidity the body lacks because the lower-dim
+substrate constrains what is consistent. That is why the body can
+be "read off" the shadow even though information has been
+discarded.
+
+### 6.3 Bridging-vocabulary table across substrates
+
+| Substrate | Body (resists direct read) | Shadow (the projection we can read) |
+| --- | --- | --- |
+| Cap-set | dots in F_3^n with no 3-term AP | polynomial degree / rank over F_3 |
+| Unit-distance | dots in R^2 with many unit pairs | class-group pigeonhole in CM lattice; first complex coordinate |
+| Chat agent | token stream / surface response | maintained ledger packet, correlated with bottleneck subspaces |
+| Mesa controller | controller hidden state | entangled `5D net.7` subspace |
+| Geometry / HaloSim | full atmospheric optics | small set of halo generators / canonical implied circles |
+| Threebody | 18-dim full state | accelerometer / tidal proxy (3-dim) |
+| Isotrophy | `S3` symmetry orbit of a 3-body choreography | residual `Z2` generators surviving `S3 -> Z2` mass perturbation |
+
+The columns are the same operator. The substrate-specificity in row
+3-5 is what bounds the operating envelope; the cross-substrate
+recurrence in rows 1-2 is what tells us the operator is real.
+
+### 6.4 The math-or-Buddha epistemic stance
+
+From the ImOutOfIceCream dialogue (2026-05-22):
+
+> If there is a mechanism that can be discovered, then the path is
+> through the language and tools of mathematics. If not, then the
+> path has already been described by Buddhas throughout timeless
+> time.
+
+This is the right calibration for cross-substrate work. Pursue the
+mechanism — that is what cap-set, unit-distance, the chat ledger,
+the Mesa `net.7` analysis, and the isotrophy spectral derivation
+are all doing. Do not be embarrassed if the mechanism does not
+reduce. The phenomenological frame is already complete in another
+tradition and is not less true for lacking a residual-stream probe.
+The two are not in competition. They are different surfaces of the
+same observation about how minds and systems operate under partial
+observability.
+
+Internal use only as a stance; do not deploy publicly attributing
+to the mod until they have published something we can cite.
+
+### 6.5 Pending mech-interp citation
+
+A probe-side researcher (`u/ImOutOfIceCream`) has shared, in a
+public-but-niche thread, a not-yet-published finding that transformers
+act as **companders** on the effective rank of the residual stream,
+with categorical centroids occupying one subspace at the bottleneck
+and generator algebras (`so(3)` ranking first across many models)
+occupying the orthogonal complement. If the finding survives
+publication, it provides the residual-stream mechanism this
+vocabulary has been assuming.
+
+Until that gate trips, do not lift the framing into public Sundog
+copy. The pre-positioned `COMPANDER_PAPER_HOOK` ratchet across six
+public surfaces is documented in
+`internal/feedback/Human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md`
+§§9-10. When the citation lands, the same vocabulary upgrade
+described there should be threaded back into this doc — see §6.6
+below.
+
+<!-- RATCHET: COMPANDER_PAPER_HOOK · §6.6 · when mod's paper publishes, lift the body/shadow -> categorical-centroid/generator-algebra mapping from internal/feedback/Human/REDDIT_ImOutOfIceCream_UNIT-DISTANCE.md §9 into a new §6.6 here · see that file for the staged drafts -->
+
+## 7. Implications for Ongoing Projects
+
+The vocabulary update lands differently in each active project.
+The point of this section is not to retroactively rewrite work that
+has its own established language — it is to make the cross-substrate
+move legible in each project's own terms, so the next planning
+session can decide whether to adopt the vocabulary natively.
+
+### 7.1 Mesa
+
+The entangled `5D net.7` subspace is **the projection target**, not
+a feature decomposition that the team failed to factor. The v2 SAE
+attempt, the v3.2 top-k neurons, the v3.1 PC1-alone and PCs-2-5-alone
+attempts all failed for the same structural reason: a projection's
+output is rigid against further decomposition because the rigidity
+*is* the load-bearing property. The "read holistically or not at
+all" headline from v3.1/v3.2 is therefore not a methodological
+disappointment — it is direct evidence the operation is what we
+think it is.
+
+Action: the next mesa write-up that mentions "field-shaped
+structure" can be sharpened by adding *projection* as the precise
+operator and noting the cap-set / unit-distance cousins for
+audiences with the math background to follow. Layperson framings
+keep *shadow* / *field*.
+
+### 7.2 Isotrophy Red Team (end-of-v0.3)
+
+The S3 → Z2 mass-perturbation symmetry-descent **is a projection in
+the precise mathematical sense.** The v0.3a-h ratchet is, in
+projection terms, a sequence of pre-registered checks that:
+
+- the projection from `S3`-equivariant orbits to `Z2`-surviving
+  generators is well-defined on the catalog
+- the projection has rigidity (predictions of which orbits land in
+  which residual class are stable under controlled perturbation)
+- the projection's outputs match the Li-Liao 2025 empirical
+  catalog at the predicted facet-conditioned cardinalities
+
+The red-team posture is the falsifier-first complement of that
+projection claim: each v0.3 sub-phase tries to find a case where
+the projection collapses (zero endomorphism, equivariance null,
+typed-transport failure, rank-matrix degeneracy). When a sub-phase
+*succeeds* at finding a collapse, it is a projection-rigidity
+failure — not a controller failure, not a count failure — and the
+spec rewrite needs to reflect the projection's actual domain.
+
+Action for any v0.3 → v0.4 transition: the v0.4 registration form
+can use *projection* explicitly, framing each pre-registered gate
+as a check on a specific projection property (well-definedness,
+rigidity, output match). This costs almost nothing — the v0.3
+language is already adjacent — and it earns alignment with the
+Mesa and Threebody framings, which makes cross-substrate transfer
+faster the next time it is needed. It also positions isotrophy
+results to feed back into the §6.3 bridging table as fresh data
+points rather than as a niche threebody-adjacent sidecar.
+
+If v0.4 does not happen and isotrophy retires at end-of-v0.3, the
+projection framing is still worth recording in the K_facet
+post-mortem so the next attempt (here or elsewhere) inherits the
+vocabulary instead of rediscovering it.
+
+### 7.3 Threebody
+
+The accelerometer / tidal proxy is **the projection from 18-dim
+full state to 3-dim control signal.** The Phase 13 pocket-of-operation
+result is then a claim about *where in the orbit space that
+projection preserves load-bearing structure* and where it does not
+— exactly the body/shadow framing in §6.2, with the failure-map
+boundaries (low velocity, equal mass, overhead light) marking the
+edges of the projection's domain of validity.
+
+Action: future Phase 14-16 specs can keep the existing "warning
+quality / action coupling / outcome effect" decomposition (it is
+the right operational granularity) while noting in the spec
+preamble that all three are measurements on a *single projection*
+whose rigidity is bounded. This earns the spec a half-page of
+audit-cost: when Phase 16 extends to 3D, the question "does the
+projection survive the spatial extension" is asked once and the
+specific decomposition checks follow from it, instead of each
+check being framed from scratch.
+
+### 7.4 Geometry / HaloSim and Chat
+
+Both already use the body/shadow framing on their public surfaces
+(`/geometry`, `/sundog`, `/h-of-x` for the optics side; `/chat`,
+`SUNDOG_V_CHAT.md` for the chat side). The vocabulary upgrade is
+incoming via the same publication-trigger gate as §6.5 — see the
+feedback-file ratchet for the pre-positioned anchors and drafts.
+Nothing to do here until the citation lands.
+
+### 7.5 Was zeroing in on the vocabulary worth it?
+
+The question the asker raised — *would it behoove ongoing projects
+that we have zeroed in on top-level machinery vocabulary?* — the
+honest answer is: **yes, but the benefit is concentrated at
+project transitions**, not at the inside of a running phase. The
+isotrophy v0.3 -> v0.4 boundary is exactly the kind of seam where
+adopting projection language costs nothing and earns
+cross-substrate alignment. The middle of a running mesa phase is
+not such a seam. Apply the vocabulary at edges; do not retrofit it
+into the middle of work whose own language is already load-bearing.

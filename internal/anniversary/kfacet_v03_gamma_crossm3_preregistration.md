@@ -1,6 +1,15 @@
 # v0.3 Cross-m_3 Sentinel Pre-Registration (II)
 
-Status: pre-registered, not yet run. 2026-05-22.
+Status: **VERDICT LANDED, 2026-05-22**.
+The sentinel sweep executed against this pre-registration on 2026-05-22
+(`17:17:40 - 20:40:58 UTC-7`, ~3h 23min). Joint verdict: **(Q1.D, Q2.D) =
+gate pathology on both axes**, resolved by the sigma_3 symmetry probe
+into a **domain-of-applicability finding**: all tested supplementary-B
+piano-trios fail the `sigma_3` cycle; six of seven carry `F_beta = (12)`-swap
+symmetry, while `O_434(0.4)` is smaller-symmetry. The tested set is therefore
+`Z_2`-or-smaller, not `D_3`. The v0.3 `Gamma_i` mechanism is therefore
+structurally inapplicable to this catalog. See the **Verdict (Landed)**
+section below.
 Audience: operator who executes the staged sentinel runs; future paper-side writer.
 Companion: `kfacet_v03_freeze_b_comparison.md` (the alpha structural-null verdict
 that motivates II). Methodology hand-off: `kfacet_v03h_writeup.md`.
@@ -31,6 +40,115 @@ The two slices answer two structurally separate questions:
 **No full-slice run is authorized inline**; the sentinel sweep is staged
 as an operator command. Verdict is read as a 2 x 2 joint outcome over
 (Q1, Q2), not as a single bundled pass/fail.
+
+## Verdict (Landed, 2026-05-22)
+
+The seven sentinels ran against this pre-registration on 2026-05-22. All
+seven halted at the runner-stage `D3` gate with kernel-projected residuals
+6 -- 8 orders above the `1e-3` relation floor:
+
+```text
+Row          period   kernel-projected D3 residual    omega gate
+O_50(0.4)   105.33    5.05e+04                        FAIL
+O_62(0.4)   110.39    1.22e+05                        FAIL
+O_67(0.4)   111.25    1.27e+05                        FAIL
+O_434(0.4)  200.66    5.92e+04                        FAIL
+O_242(1.0)   84.10    1.74e+04                        FAIL
+O_282(1.0)   92.06    6.15e+03                        FAIL
+O_284(1.0)   92.20    1.79e+04                        FAIL
+
+D3 relation floor:        1e-3
+sweep wall time:          ~3h 23min  (17:17:40 - 20:40:58)
+```
+
+Per-axis outcomes:
+
+```text
+Q1 (m_3 = 0.4):       Q1.D  (gate pathology, 4 of 4)
+Q2 (m_3 = 1 supp-B):  Q2.D  (gate pathology, 3 of 3)
+Joint verdict:        (Q1.D, Q2.D)
+```
+
+The pre-registered D-outcome action was to **diagnose at the runner
+level**. A targeted `sigma_3-scan` (`isotrophy:sigma3-scan` against
+supp-B) on the same seven rows produced the structural diagnosis at the
+catalog-closure level, separate from the variational-kernel `D3` gate:
+
+```text
+sigma_3 closure residuals (after SO(3) gauge minimization):
+
+  Strict G.2 21 (m_3 = 1):     ~1e-9 to 3e-8    catalog admission residuals
+  Piano-trio sentinels:         0.60 to 0.79     orbit-scale; ~7-9 orders above
+
+  sigma_any_strict_single_curve_candidate_count: 0 / 7 piano-trio rows
+
+F_beta closure residuals:
+  Strict G.2 21:                ~1e-9
+  Piano-trio sentinels (6/7):   8e-9 to 4e-8    clean, comparable to G.2
+  Outlier O_434(0.4):           0.25            also broken
+```
+
+**Resolved verdict: domain-of-applicability mismatch.**
+Supplementary-B piano-trio orbits carry the `F_beta = (12)`-swap symmetry
+at integration precision (6 of 7 sentinels), but **do NOT carry the
+`sigma_3 = (123)`-cycle symmetry at any phase or any spatial rotation**.
+They sit in `Z_2`, not `D_3`.
+
+The v0.3 `Gamma_i` mechanism is defined on `D_3`-symmetric orbits and is
+therefore **structurally inapplicable to the piano-trio catalog**. The
+sentinel gate failures are not subtle drifts -- they are the runner
+detecting that its precondition (orbit is `D_3`-symmetric to integration
+precision) is violated by 7 -- 9 orders of magnitude.
+
+`O_434(0.4)` is flagged as a separate sub-investigation: it breaks
+`F_beta` closure too (residual 0.25), suggesting an even smaller
+symmetry class than the other six piano-trio sentinels.
+
+### Implication for the v0.3 alpha verdict
+
+The `alpha` verdict (`K_facet_v0.3h = 0` on the resolved m_3 = 1 strict
+G.2 rows) **stands and is sharpened**:
+
+```text
+v0.3 Gamma mechanism:
+  - Defined: rank gate on F_beta-even standard D_3 isotypic of ker(M_i - I)
+  - Domain of applicability: D_3-symmetric orbits (the strict G.2 21)
+  - Empirical result on domain: 20 of 21 structural zero; 1 quarantined (O_617)
+  - Predicted daughter count: 0
+
+Supplementary-B catalog:
+  - 273 piano-trio orbits at varied m_3
+  - Sentinel symmetry class verified: Z_2 for 6 of 7, smaller for O_434;
+    NOT D_3
+  - Lies outside the v0.3 prediction's domain of applicability
+
+Mechanism vs catalog:
+  Predicted-vs-observed (0 vs 273) is a domain-of-applicability mismatch,
+  not a falsification of v0.3 within its domain. Any v0.4 prediction of
+  piano-trios must start from the Z_2 symmetry class, not D_3, and explicitly
+  track smaller-symmetry outliers.
+```
+
+### Subsequent action
+
+Per the pre-registration's `(Q1.D, Q2.D)` action: HALT the cross-m_3
+extension; do not stage the full 55-row `m_3 = 0.4` sweep. Open the v0.3
+epilogue chapter recording the domain-of-applicability finding. Open a
+v0.4 question on `Z_2`-symmetric mechanisms; this is a fresh chapter and
+should be designed paper-side before any new audit chain is built.
+
+### Receipts
+
+```text
+results/isotrophy/k-facet-v03-gamma-crossm3/m3eq0.4/O{50,62,67,434}/gate_receipt.json
+results/isotrophy/k-facet-v03-gamma-crossm3/m3eq1.0-suppB/O{242,282,284}/gate_receipt.json
+results/isotrophy/k-facet-v03-gamma-crossm3/m3eq0.4-adaptive-floor/manifest.json
+results/isotrophy/k-facet-v03-gamma-crossm3/m3eq1.0-suppB-adaptive-floor/manifest.json
+results/isotrophy/k-facet-v03-gamma-crossm3/m3eq0.4-bridge-audit/manifest.json
+results/isotrophy/k-facet-v03-gamma-crossm3/m3eq1.0-suppB-bridge-audit/manifest.json
+results/isotrophy/k-facet-v03-piano-symmetry-probe/m3eq0.4/{manifest.json, residuals.csv}
+results/isotrophy/k-facet-v03-piano-symmetry-probe/m3eq1.0-suppB/{manifest.json, residuals.csv}
+```
 
 ## What's Being Tested
 

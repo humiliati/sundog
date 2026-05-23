@@ -116,6 +116,75 @@ floor `1e-3`, gap ratio `1e-3`, `k_gamma = 3`, and `k_int = 10`. The final
 claim should be cited as **20/21 structural zeros plus one quarantined O_617
 defective-D3 bridge**, not as a closed 21/21 theorem-facing result.
 
+## v0.3 Epilogue (closed, 2026-05-22)
+
+The `alpha` freeze + supplementary-B comparison ran on 2026-05-22 and the
+II cross-m_3 sentinel sweep + symmetry probe followed on the same day.
+The combined verdict closes v0.3 as a **domain-of-applicability finding**,
+not a within-domain falsification:
+
+```text
+v0.3 Gamma_i mechanism:
+  - Defined: rank gate on F_beta-even standard D_3 isotypic of
+    ker(M_i - I).
+  - Domain of applicability: D_3-symmetric orbits.
+  - Verified domain: the 21 strict G.2 single-curve choreographies at
+    m_3 = 1 (catalog A).
+  - Empirical result on domain: 20 of 21 structural zero; 1 quarantined
+    row (O_617) with the `bridge_approx_sign_isotypic` diagnosis.
+  - Predicted daughter count from G.2 strict 21: 0.
+
+Supplementary-B catalog:
+  - 273 piano-trio orbits at varied m_3.
+  - Symmetry class verified by sigma_3-scan + cross-m_3 sentinel:
+    all seven tested rows are NOT sigma_3-symmetric (residual ~0.7,
+    7--9 orders above catalog-strict); six of seven are F_beta =
+    (12)-swap symmetric (residual ~1e-8, comparable to strict G.2);
+    O_434(0.4) also breaks F_beta. Symmetry class is Z_2-or-smaller,
+    not D_3.
+  - Lies outside the v0.3 prediction's domain of applicability.
+
+Comparison verdict:
+  Predicted 0 daughters from G.2 strict (verified). Observed 273
+  piano-trios (verified). The mismatch is a **domain-of-applicability**
+  finding: v0.3 cannot predict piano-trios by construction because they
+  do not carry the assumed symmetry. The audit chain is intact; the
+  prediction is intact; the catalog is in a different symmetry class.
+```
+
+The publishable v0.3 result is therefore:
+
+> v0.3's Gamma_i rank gate predicts zero daughter piano-trios from the
+> 21 strict G.2 D_3-symmetric choreographies at m_3 = 1, with 20 of 21
+> structural-zero on the domain and the 21st (`O_617`) quarantined with
+> a precise causal diagnosis (`bridge_approx_sign_isotypic`).
+> Supplementary-B's piano-trio sentinels are empirically Z_2-or-smaller,
+> not D_3; the predicted-vs-observed mismatch reflects
+> domain-of-applicability, not within-domain falsification.
+
+Sub-investigation candidates carried forward, not blocking the
+epilogue:
+
+- `O_617` (m_3 = 1 strict G.2): defective-D3 boundary, see
+  `kfacet_v03h_o617_deep_dive.md`.
+- `O_434(0.4)` (supp-B): breaks both `sigma_3` and `F_beta` closure;
+  possibly a sub-Z_2 symmetry class. Cheap row-anatomy probe candidate.
+- Typed transport lemma (III): paper-side rigor; deferred since v0.3c,
+  no longer blocking the empirical close.
+
+The next chapter is **v0.4**: design a candidate Z_2-equivariant
+mechanism (or an a-symmetric one) for piano-trio prediction. This is
+fresh paper-side work; do not scaffold runner code until the
+representation theory closes on Z_2.
+
+Companion docs:
+
+- `kfacet_v03_freeze_b_comparison.md` -- alpha freeze + domain
+  addendum.
+- `kfacet_v03_gamma_crossm3_preregistration.md` -- II pre-registration
+  + (Q1.D, Q2.D) verdict.
+- `kfacet_v03h_o617_deep_dive.md` -- quarantined-row companion.
+
 ## Open Polish Item (Run-Friendly)
 
 A ~10-hour tooling-polish initiation is registered in

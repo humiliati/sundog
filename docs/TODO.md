@@ -375,8 +375,17 @@ Sources:
 [`../internal/anniversary/kfacet_v03_freeze_b_comparison.md`](../internal/anniversary/kfacet_v03_freeze_b_comparison.md),
 [`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md).
 
-Status: `compute-blocked`, pre-registered. Sentinel sweep is staged as
-operator command; do not run inline.
+Status: **VERDICT LANDED 2026-05-22**. Sentinel sweep executed against
+the pre-registration; joint verdict `(Q1.D, Q2.D) = gate pathology on
+both axes`. Resolved by the targeted `sigma_3-scan` symmetry probe:
+all seven supp-B sentinels fail `sigma_3`; six of seven sit in
+`Z_2 = (12)`-swap, while `O_434(0.4)` is smaller-symmetry. v0.3
+`Gamma_i` is `D_3`-equivariant by construction and structurally
+inapplicable to this catalog. **Domain-of-applicability finding**, not
+within-domain falsification. v0.3 epilogue closed; v0.4 chapter opens
+on `Z_2`-equivariant mechanisms (paper-side design first, no runner
+code until representation theory closes; smaller-symmetry outliers
+tracked explicitly).
 
 Current state:
 
@@ -438,6 +447,78 @@ Stop condition:
 If sentinels surface a positive standard-E sector at any m_3, do not
 extend to full slices before the redesign review lands. The alpha
 verdict on m_3=1 strict-G.2 stands either way.
+
+## v0.4a Domain Map (next staged sweep)
+
+### V0.4a Z_2 domain map for supplementary-B (~85-120 min staged)
+
+Sources:
+[`../internal/anniversary/kfacet_v04a_domain_map_preregistration.md`](../internal/anniversary/kfacet_v04a_domain_map_preregistration.md),
+[`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md),
+[`../internal/anniversary/kfacet_v03_gamma_crossm3_preregistration.md`](../internal/anniversary/kfacet_v03_gamma_crossm3_preregistration.md),
+[`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+§7.2 (projection-language framing for the v0.3 -> v0.4 transition).
+
+Status: `compute-blocked`, pre-registered.
+
+Current state:
+
+- v0.3 closed as a domain-of-applicability finding: the v0.3 `Gamma_i`
+  mechanism is `D_3`-equivariant; supp-B piano-trios sit in `Z_2`, not
+  `D_3`. v0.4 opens on the supp-B body treated as a primary `Z_2`
+  object (not a daughter of strict G.2).
+- The O_434 anatomy probe (`results/isotrophy/k-facet-v04a0-o434-anatomy/`)
+  found that the default sigma_3-scan tolerances misclassified one
+  sentinel row by six orders of magnitude. Tighter SO(3) gauge
+  minimization (`identity_rotation_tolerance = 1e-9`,
+  `phase_grid = 361`) drops the residual from `0.252` to `1.06e-07`.
+  The lesson is encoded as a **two-pass gauge classifier** in the
+  v0.4a pre-registration.
+- v0.4 closes as a one-track Z_2-primary design. The outlier lane
+  stays as a four-band classifier receipt category
+  (`Z2_clean / marginal_Z2 / smaller_symmetry / undefined`) but no
+  smaller-symmetry rows are currently confirmed; the band is
+  empty-allowed under the pre-registration.
+
+Blocker:
+
+The full 273-row sweep at default tolerances is `~17 sec / row * 273 ~=
+77 min`. Pass 2 tight rerun on flagged rows adds `~85 sec * N_flagged`
+(estimated 5-30 rows). Total budget `~85-120 min`, above the inline
+~10-minute rule.
+
+Next actions:
+
+1. Operator verifies parse: `npm run isotrophy:parse:b` returns 273
+   rows with the per-m_3 counts in the pre-registration's scope table.
+2. Operator runs Pass 1 (15 commands, one per m_3 value, default
+   tolerances) staged sequentially. See the pre-registration for the
+   PowerShell block.
+3. Operator runs the aggregator script (write at implementation time;
+   schema in the pre-registration's **Aggregator schema** section) to
+   identify rows whose Pass 1 classification is not `Z2_clean`.
+4. Operator runs Pass 2 (one command per flagged row, tight tolerances)
+   staged sequentially.
+5. Operator re-runs the aggregator with Pass 2 overrides to emit the
+   final `manifest.json` carrying
+   `table[m_3][stability][class]` plus per-row provenance.
+6. Read the verdict against the three pre-registered outcomes A, B, C
+   in the pre-registration. Branch into:
+   - **A** (all 273 land in `Z2_clean` after Pass 2) -> stage v0.4b
+     mechanism test against the clean table.
+   - **B** (`marginal_Z2` populated but `smaller_symmetry / undefined`
+     empty) -> v0.4b must explain the marginal-vs-clean split.
+   - **C** (`smaller_symmetry` and/or `undefined` populated after Pass 2)
+     -> revise v0.4b to treat those rows as a separate theoretical
+     concern; possibly pause scaling pending row-anatomy on the
+     non-Z2 cases.
+
+Stop condition:
+
+If Pass 2 determinism fails (a row classified inconsistently across
+re-runs at identical tolerances), pause the v0.4a verdict and open a
+methodology review on the gauge minimizer. The two-pass classifier's
+no-per-row-knobs guarantee depends on Pass 2 being deterministic.
 
 ## Onboarding / Polish (Run-Friendly)
 
