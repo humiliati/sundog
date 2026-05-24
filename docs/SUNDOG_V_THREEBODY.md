@@ -1008,6 +1008,26 @@ The O_434 anatomy probe (verdict `gauge_artifact`; receipt at
 `sigma_3-scan` tolerances misclassified O_434 by six orders of magnitude;
 the two-pass classifier encodes that lesson.
 
+**Update 2026-05-23:** v0.4 has closed as a publishable structural-negative.
+v0.4a landed `outcome_A_all_Z2_clean` (273/273 supp-B rows in `Z2_clean`
+after the two-pass classifier, 24 rescued by Pass 2). v0.4b registered two
+Z_2-shadow stability predictors: `gamma_3` (tangent-isotypic) **retired
+pre-sweep** with verdict `form_precondition_failed` after a sanity probe
+showed `F_beta` does not preserve `K_fib` on supp-B (leakage 0.10..0.77
+across 7 rows; cocycle typed `(I, 0)` so no transport rescue); the
+replacement `gamma_3'_orbit_pass2` (predict S iff Pass 2 rescue required)
+**falsified** at `chi^2 = 1202.32` vs critical `26.22` (chi-squared(12),
+p=0.01), with rule accuracy 63.74% slightly below the always-U 64.47%.
+**Stability information on this catalog is not carried by the Z_2 shadow**
+at either tangent-isotypic or orbit-gauge-rigidity granularity. v0.5 opens
+with a **branch-shadow audit** (registered, not yet computed): catalog-only
+4-bit hash on `(m_3<1, z_0<0.3, |v_z|<1e-6, m_3 z_0^2<2)` with deterministic
+constant-bit retirement (`|v_z|<1e-6` and `m_3 z_0^2<2` are constant on
+supp-B; both retired). Active signature `(b1, b2)` gives 4 occupied buckets;
+chi-squared independence vs S/U at `df = 3`, critical `11.34` (p=0.01).
+v0.5a is an AUDIT, not a predictor; v0.5b registers only if v0.5a passes.
+See `kfacet_v04_writeup.md` and `kfacet_v05a_branch_map_form.md`.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
