@@ -1,15 +1,24 @@
 # v0.6 Mechanism Preregistration: Conserved-Quantity (E, |L|) Stratification
 
 Status: **PARENT REGISTERED 2026-05-23**. v0.6a child verdict landed
-2026-05-23: the univariate energy-quartile audit passed the registered
-chi-squared threshold but triggered the alignment warning
-(`energy_quartile_passes_audit_alignment_warning`; see
-`kfacet_v06a_energy_quartile_audit_form.md`). v0.6b form-lock author
-pending with an alignment-breaking partition. This document locks the
-v0.6 body / projection / observable and the non-circularity discipline. Form locks
-for v0.6a (audit) and v0.6b (held-out predictor) are separately
-registered children that pin specific binning, df, and falsifier
-choices.
+2026-05-23: `energy_quartile_passes_audit_alignment_warning` (chi^2 =
+33.70 vs 11.34, alignment = 0.956 > 0.8; see
+`kfacet_v06a_energy_quartile_audit_form.md`). **v0.6b child verdict
+landed 2026-05-24**: `within_branch_energy_fails_audit` at chi^2 =
+6.90, permutation p = 0.029 (the sparse-cell fallback fired because
+min_expected = 2.66 < 5; permutation test with seed 20260523 and
+n_permutations = 10000 was used). |L| sidecar likewise below the
+loud-signal threshold (chi^2 = 4.46, permutation p = 0.074). See
+`kfacet_v06b_within_branch_energy_audit_form.md`. The within-branch
+test shows the v0.6a in-sample positive was dominated by branch-shadow
+content; the energy shadow does not carry stability information
+beyond the v0.5a branch hash on supp-B. v0.6c (held-out predictor)
+is NOT licensed under this form lock chain; the chapter is positioned
+to close on a clean conditional-independence result. This document
+locks the v0.6 body / projection / observable and the non-circularity
+discipline. Form locks for v0.6a (audit) and v0.6b (within-branch
+audit) are separately registered children that pin specific binning,
+df, and falsifier choices.
 
 Audience: v0.6a/v0.6b form-lock author; paper-side reviewer of the
 v0.5 -> v0.6 transition.
@@ -367,6 +376,8 @@ registered with explicit binning constants.
 - `kfacet_v05a_branch_map_form.md` -- v0.5a audit (catalog-coordinate ancestor).
 - `kfacet_v05b_branch_predictor_form.md` -- v0.5b held-out predictor (inheritance source).
 - `kfacet_v04_writeup.md` -- v0.4 structural-negative chapter close.
+- `kfacet_v06b_within_branch_energy_audit_form.md` -- v0.6b
+  alignment-breaking within-branch audit (alignment-warning child).
 - v0.3 cross-m_3 receipts / invariant implementation -- E, |L|
   sentinel sanity-check provenance.
 
@@ -375,8 +386,14 @@ registered with explicit binning constants.
 Parent registration locked. v0.6a verdict landed
 (`kfacet_v06a_energy_quartile_audit_form.md`): `chi^2_E = 33.703158`
 versus critical `11.34`, `p = 2.29e-7`, but
-`alignment_tightness_scalar_E = 0.955882 > 0.8`. The |L| sidecar is
-also loud (`chi^2_|L| = 28.954252`, report-only) and similarly aligned
-(`0.956522`). v0.6b form lock remains pending and must use an
-alignment-breaking partition rather than inheriting the default
-leave-one-m_3-bin-out path.
+`alignment_tightness_scalar_E = 0.955882 > 0.8`. The |L| sidecar was
+loud (`chi^2_|L| = 28.954252`, report-only) and similarly aligned
+(`0.956522`). v0.6b verdict landed 2026-05-24
+(`kfacet_v06b_within_branch_energy_audit_form.md`):
+`within_branch_energy_fails_audit` at `chi^2 = 6.904`, permutation
+`p = 0.029` (sparse-cell fallback fired with `min_expected = 2.655`).
+|L| sidecar likewise fell short of the loud-signal threshold
+(`chi^2 = 4.465`, permutation `p = 0.074`, report-only). v0.6c
+(held-out predictor) is NOT licensed; the energy-shadow sub-question
+closes as a conditional-independence result. v0.6 chapter is
+positioned for chapter-close writeup.

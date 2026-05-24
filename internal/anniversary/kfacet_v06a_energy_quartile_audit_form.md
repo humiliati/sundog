@@ -536,6 +536,13 @@ If v0.6a fails (chi^2 <= 11.34):
 ## Doc Trail
 
 - `kfacet_v06_mechanism_preregistration.md` -- parent registration.
+- `kfacet_v06b_within_branch_energy_audit_form.md` -- v0.6b
+  alignment-breaking child (within-branch audit on the v0.5a
+  (m_3<1, z_0<0.3) stratum, licensed by this form's
+  `energy_quartile_passes_audit_alignment_warning` verdict).
+  **Verdict landed 2026-05-24: `within_branch_energy_fails_audit`**
+  (chi^2 = 6.90, permutation p = 0.029); confirms the v0.6a alignment
+  warning was load-bearing.
 - `kfacet_v05_writeup.md` -- v0.5 chapter close (predecessor).
 - `kfacet_v05a_branch_map_form.md` -- v0.5a audit pattern (form template).
 - v0.3 cross-m_3 receipts / invariant implementation -- E, |L|
@@ -545,4 +552,9 @@ If v0.6a fails (chi^2 <= 11.34):
 
 Audit floor, not predictor. Univariate energy quartile, df = 3, critical
 11.34. |L| quartile sidecar report-only. Alignment-tightness scalar
-guards against v0.5b's bin-locality failure mode.
+guards against v0.5b's bin-locality failure mode. Verdict landed
+2026-05-23 as `energy_quartile_passes_audit_alignment_warning`,
+licensing v0.6b as an alignment-breaking within-branch audit. v0.6b
+landed 2026-05-24 as `within_branch_energy_fails_audit`, confirming
+the alignment warning was load-bearing: the v0.6a in-sample chi^2 was
+dominated by branch-shadow content.

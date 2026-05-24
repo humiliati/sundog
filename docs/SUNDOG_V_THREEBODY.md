@@ -1096,6 +1096,65 @@ alignment-breaking re-registration, not as the default leave-one-m_3
 predictor. Receipt:
 `results/isotrophy/k-facet-v06a-energy-quartile-audit/manifest.json`.
 
+**v0.6b form lock registered 2026-05-23:** alignment-breaking
+within-branch audit on the v0.5a `(m_3 < 1, z_0 < 0.3)` stratum
+(113 rows / 63 S / 50 U). Locked shape: `Q_E` under v0.6a's GLOBAL
+supp-B quartile cutpoints (no re-binning within branch), n_occupied
+x 2 contingency, pre-registered sparse-cell fallback (asymptotic
+chi-squared if min expected cell >= 5, exact permutation test with
+seed `20260523` and `n_permutations = 10000` if any expected cell
+< 5, `within_branch_energy_inconclusive_sparse` verdict if any
+occupied bin has < 2 rows). Within-branch `Q_|L|` audit emitted as
+report-only sidecar. Form lock at
+`internal/anniversary/kfacet_v06b_within_branch_energy_audit_form.md`.
+
+**v0.6b verdict landed 2026-05-24:** `within_branch_energy_fails_audit`
+at `chi^2 = 6.904`, permutation `p = 0.0292` (sparse-cell fallback
+fired because `min_expected = 2.655 < 5`). Within-branch Q_E
+contingency: Q1 empty (Q1 entirely outside stratum), Q2 N=6 (33% S),
+Q3 N=42 (43% S), Q4 N=65 (66% S). The within-branch direction is
+monotone in the same direction as v0.6a's catalog-wide finding, but
+permutation p = 0.029 doesn't clear the registered p <= 0.01 floor.
+Within-branch Q_E x m_3 joint diagnostic shows Q_E is essentially a
+1-to-1 label for m_3 sub-bin within the stratum (Q4 = m_3 in {0.4,
+0.5} with 52 of 65 at m_3 = 0.4). |L| sidecar likewise short of
+loud-signal threshold (`chi^2 = 4.465`, permutation `p = 0.0741`).
+v0.6c (held-out predictor) is NOT licensed. **v0.6 chapter closed
+2026-05-24** as the third distinct chapter-close type: a
+**conditional-independence close** (distinct from v0.4
+structural-negative and v0.5 projection-limit). Joint v0.4 + v0.5 +
+v0.6 envelope: three sequential pre-registered low-dimensional
+projections of the supp-B body — Z_2 symmetry shadow, 2-bit catalog
+branch shadow, and continuous conserved-quantity shadow — none
+carries held-out or branch-conditional stability information on this
+catalog. Stability on supp-B is bin-local to the m_3 = 0.4 cluster;
+no catalog-coordinate or symmetry-shadow projection tested so far
+lifts that locality to a generalizable mechanism. Chapter close at
+`internal/anniversary/kfacet_v06_writeup.md`. Receipt:
+`results/isotrophy/k-facet-v06b-within-branch-energy/manifest.json`.
+
+**v0.7 parent registered 2026-05-24** with the **gamma_1
+direction-of-instability** family (codex direction). Parent
+registration at `internal/anniversary/kfacet_v07_mechanism_preregistration.md`.
+The chosen projection LEAVES catalog-coordinate space entirely:
+per-row monodromy M_i (derivable from v0.4a receipts) is decomposed
+into its Floquet eigenstructure, and the eigenvector direction of a
+pre-registered eigenvalue choice is projected onto a pre-registered
+geometric reference frame. The parent registration explicitly
+identifies three circularity risks (eigenvalue-choice,
+well-definedness, feature-extraction) and locks the discipline that
+all three must be addressed in the v0.7a form lock with an explicit
+non-circularity argument. Candidate operational definitions D1-D5
+and audit forms A-D are sketched; one of each will be locked in the
+v0.7a child form lock. v0.4b disallowed-feature inheritance is
+re-asserted (no Floquet-magnitude, no K_fib tangent decomposition);
+v0.5 audit-then-predictor + asymmetric McNemar+delta inheritance and
+v0.6 alignment-tightness guard + sparse-cell fallback tree
+inheritance are all locked. v0.7a (form lock) and v0.7b (held-out
+predictor, conditional on v0.7a passing) are pending child
+registrations. No audit verdict licensed until v0.7a is separately
+registered.
+
 ### Cross-Substrate Hand-Offs
 
 The Threebody project now has a Mesa/Geometry-style crossover note at
