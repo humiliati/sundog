@@ -1,6 +1,9 @@
 # v0.4b Mechanism Predictor Pre-Registration
 
-Status: pre-registered, not yet run. 2026-05-22.
+Status: **retired before full sweep**, 2026-05-23. Pre-registered on
+2026-05-22; the `gamma_3` threshold-rule baseline was retired when the
+smoke/cross-m3 sanity rows showed its tangent-isotypic precondition is not
+met on supplementary-B.
 Audience: operator who executes the staged sweep; future paper-side writer;
 v0.4c comparison reader.
 Companions:
@@ -11,7 +14,81 @@ Companions:
 - `kfacet_v03h_writeup.md` (v0.3 closure + projection-language framing).
 - `docs/threebody/CROSS_SUBSTRATE_NOTES.md` §6-§7 (projection vocabulary).
 
-## One-Line Read
+## Retirement (Landed, 2026-05-23)
+
+Verdict: `form_precondition_failed`.
+
+The registered `gamma_3` baseline depended on an isotypic split of
+`K_fib = ker(M_i - I) / N_C` under the closed-form at-anchor `F_beta`
+operator. A seven-row sanity surface found systematic leakage out of `K_fib`
+instead:
+
+```text
+row         m_3  period  stab  k_dim  K_fib_dim  even+odd  over  F_beta_leak
+O_50       0.4  105.33  S       6       6          9       +3    0.7723
+O_62       0.4  110.39  U       6       6          8       +2    0.4481
+O_67       0.4  111.25  U       6       6          9       +3    0.3510
+O_434      0.4  200.66  S       4       4          5       +1    0.1034
+O_242      1.0   84.10  U       3       3          6       +3    0.5273
+O_282      1.0   92.06  U       6       5          6       +1    0.3212
+O_284      1.0   92.20  U       6       5          7       +2    0.5716
+```
+
+The median `F_beta_leakage_inf` is approximately `0.45`, far above the
+`1e-3` projector floor. The naive projectors `(I +/- F_beta_K)/2` also
+overcount `K_fib` by `+1` to `+3` directions on every row, confirming that
+the split is not a valid isotypic decomposition.
+
+This retires the threshold-rule baseline **before** the staged 273-row sweep.
+The historical run commands below are retained as the original registration
+surface, but they are no longer authorized for the retired baseline.
+
+## v0.4b Sub-Result: Orbit Symmetry vs Tangent Symmetry Gap
+
+The sanity surface exposes a new structural distinction:
+
+```text
+v0.4a domain map:
+  F_beta is an orbit-level symmetry of all 273 supplementary-B piano-trios
+  under the two-pass gauge classifier.
+
+v0.4b sanity surface:
+  F_beta is not, as implemented by the at-anchor operator used here, a
+  tangent-level symmetry of K_fib on any of the seven tested piano-trio rows.
+```
+
+This gap is independent of the retired threshold rule. It says the `Z_2`
+ansatz is clean at orbit level, but its tangent realization on
+`ker(M_i - I) / N_C` is not the same object that was available in v0.3h's
+strict `D_3` choreography setting. A follow-on `gamma_3'` must first define a
+projection target that is actually invariant under the relevant `F_beta`
+action.
+
+Deferred `gamma_3'` design candidates:
+
+```text
+gamma_3'_anticomm:
+  Replace P_+/- on K_fib with a construction based on an operator that
+  commutes with F_beta under F_beta M F_beta = M^-1, e.g.
+  (M_i + M_i^-1)/2 restricted to the appropriate near-kernel structure.
+
+gamma_3'_full_kernel:
+  Test whether raw ker(M_i - I), before the neutral quotient, is preserved
+  better than K_fib. Requires its own precondition sanity check.
+
+gamma_3'_orbit_features:
+  Step back from tangent isotypics and use orbit-level Z_2 invariants from
+  the v0.4a domain map plus non-spectral row features. Loses the tangent
+  representation-theory framing but keeps non-circularity.
+```
+
+No `gamma_3'` is registered here. The next paper-side step is to choose and
+pre-register one replacement object before any new catalog-wide compute.
+
+## Historical One-Line Read (Superseded by Retirement)
+
+The following sections preserve the pre-registered form as originally filed.
+They are not launch authorization after the 2026-05-23 retirement above.
 
 With the v0.4a verdict locking all 273 supplementary-B piano-trios into
 the `Z2_clean` domain, v0.4b asks the **next non-circular question**:
@@ -282,6 +359,11 @@ Above the inline ~10-minute rule. Stage as operator-driven sweep.
 
 ## PowerShell Run Commands (Staged)
 
+**Retirement note (2026-05-23): do not run these commands for the retired
+threshold-rule baseline.** They are retained to document the original compute
+surface. A follow-on `gamma_3'` must issue a new staged command block after its
+projection target and precondition checks are registered.
+
 ```powershell
 # v0.4b primary sweep: M_i + Z_2 isotypic decomposition for all 273 supp-B rows
 $m3_values = @("0.4","0.5","0.6","0.7","0.8","0.9","1.0","1.1","1.2","1.3","1.4","1.5","1.6","1.7","1.9")
@@ -346,7 +428,11 @@ v04b_aggregator:
     gamma_1_sidecar_attribution.csv (non-gating)
 ```
 
-## Sequencing After v0.4b
+## Historical Sequencing After v0.4b (Superseded)
+
+This sequencing block is retained from the original registration. After the
+2026-05-23 retirement, the active next step is `gamma_3'` design, not this
+sweep.
 
 ```text
 v0.4a (DONE):  domain map; 273/273 Z2_clean.
@@ -393,6 +479,9 @@ then the pre-registration is re-issued. The verdict is not read against
 a pre-registration that itself is invalidated.
 
 ## How To Verify This Pre-Registration Is Still Current
+
+This section is historical after the 2026-05-23 retirement. It verifies the
+original registration trail, not launch authorization.
 
 1. Re-parse supp-B: `npm run isotrophy:parse:b` returns 273 rows;
    per-m_3 counts match the observed table above.

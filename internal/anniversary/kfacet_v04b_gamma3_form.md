@@ -1,10 +1,59 @@
 # v0.4b gamma_3 Functional Form Lock
 
-Status: locked paper-side, 2026-05-22. Threshold-rule baseline signed off
-by Codex.
+Status: **retired before full sweep**, 2026-05-23. Locked paper-side on
+2026-05-22, then retired when the smoke/cross-m3 sanity rows showed the
+form's tangent-isotypic precondition is not met on supplementary-B.
 Audience: v0.4b implementation; v0.4c reader of the verdict.
 Companion: `kfacet_v04b_mechanism_preregistration.md` (the registration
 this form lock binds to).
+
+## Retirement (Landed, 2026-05-23)
+
+Verdict: `form_precondition_failed`.
+
+The locked threshold rule required `F_beta` to act as an endomorphism of the
+neutral-quotiented kernel `K_fib`, so that `(I +/- F_beta_K)/2` were genuine
+isotypic projectors. The first distinct seven-row sanity surface contradicted
+that precondition uniformly: `F_beta` is an orbit-level symmetry of the tested
+supplementary-B piano-trios, but it leaks out of `K_fib` at order `1e-1`.
+
+```text
+row         m_3  period  stab  k_dim  K_fib_dim  even+odd  over  F_beta_leak
+O_50       0.4  105.33  S       6       6          9       +3    0.7723
+O_62       0.4  110.39  U       6       6          8       +2    0.4481
+O_67       0.4  111.25  U       6       6          9       +3    0.3510
+O_434      0.4  200.66  S       4       4          5       +1    0.1034
+O_242      1.0   84.10  U       3       3          6       +3    0.5273
+O_282      1.0   92.06  U       6       5          6       +1    0.3212
+O_284      1.0   92.20  U       6       5          7       +2    0.5716
+```
+
+Summary:
+
+```text
+rows with F_beta leakage out of K_fib:  7 / 7
+median F_beta_leakage_inf:             0.45
+projector overcount:                   +1 to +3 directions on every row
+projector floor originally expected:   1e-3
+```
+
+This is not a numerical-floor nuisance. The leakage is six orders above the
+projector floor and appears across both tested masses and both stability
+classes. Therefore the quantities named `F_beta_even_dim` and
+`F_beta_odd_dim` in this document are not well-defined isotypic dimensions on
+supplementary-B `K_fib`. The threshold rule is retired before the 273-row
+sweep and must not be read as a failed chi-squared predictor.
+
+Structural sub-result preserved for v0.4b':
+
+```text
+v0.4a:  F_beta is an orbit-level symmetry of supplementary-B piano-trios.
+v0.4b:  F_beta is not, under the at-anchor operator used here, a
+        tangent-level symmetry of K_fib on the tested supplementary-B rows.
+```
+
+That orbit/tangent gap is the live mechanism question for any `gamma_3'`
+re-registration.
 
 ## The Locked Form
 
@@ -182,4 +231,9 @@ F_beta_odd_dim)` pair has been computed for the 273 supplementary-B
 rows. Any change to the form after the per-row receipts exist is a
 re-registration, not a refinement of the locked rule.
 
-Implementation may proceed against this form lock.
+Implementation **must not proceed** against this form lock. The seven-row
+sanity surface above retired the form before the full 273-row sweep by
+showing that its `K_fib` isotypic-projector precondition is not satisfied.
+Any follow-on predictor must be registered as `gamma_3'` or another
+separately named form, with an explicit replacement for the failed
+`F_beta`-on-`K_fib` projector step.

@@ -378,14 +378,15 @@ Sources:
 Status: **VERDICT LANDED 2026-05-22**. Sentinel sweep executed against
 the pre-registration; joint verdict `(Q1.D, Q2.D) = gate pathology on
 both axes`. Resolved by the targeted `sigma_3-scan` symmetry probe:
-all seven supp-B sentinels fail `sigma_3`; six of seven sit in
-`Z_2 = (12)`-swap, while `O_434(0.4)` is smaller-symmetry. v0.3
-`Gamma_i` is `D_3`-equivariant by construction and structurally
+all seven supp-B sentinels fail `sigma_3`; the initial coarse-gauge
+read placed six of seven in `Z_2 = (12)`-swap and flagged `O_434(0.4)`
+as smaller-symmetry, but v0.4a0 later showed `O_434` was a gauge
+artifact and v0.4a classified all 273 supp-B rows as `Z2_clean`.
+v0.3 `Gamma_i` is `D_3`-equivariant by construction and structurally
 inapplicable to this catalog. **Domain-of-applicability finding**, not
 within-domain falsification. v0.3 epilogue closed; v0.4 chapter opens
 on `Z_2`-equivariant mechanisms (paper-side design first, no runner
-code until representation theory closes; smaller-symmetry outliers
-tracked explicitly).
+code until representation theory closes).
 
 Current state:
 
@@ -487,7 +488,7 @@ results/isotrophy/k-facet-v04a-domain-map/pass2/m3eq{0.4, 1.4, 1.5, 1.6, 1.7}/O{
 
 ## v0.4b Mechanism Predictor (next staged work)
 
-### V0.4b gamma_3 non-circular structural predictor (~2 hours staged compute + paper-side form lock)
+### V0.4b gamma_3 non-circular structural predictor (baseline retired; gamma_3' pending)
 
 Sources:
 [`../internal/anniversary/kfacet_v04b_mechanism_preregistration.md`](../internal/anniversary/kfacet_v04b_mechanism_preregistration.md),
@@ -496,67 +497,70 @@ Sources:
 [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
 §7.2 (projection-language framing).
 
-Status: **gamma_3 form locked (2026-05-22)**, then `compute-blocked`,
-pre-registered. Threshold-rule baseline is filed at
-`internal/anniversary/kfacet_v04b_gamma3_form.md`; zero free parameters;
-chi-squared df = 12; critical value `26.22` at `p = 0.01`.
+Status: **gamma_3 threshold-rule baseline retired before full sweep
+(2026-05-23)**. The form was locked on 2026-05-22, then a seven-row
+smoke/cross-m3 sanity surface showed the form's precondition fails:
+`F_beta` does not preserve `K_fib` on tested supplementary-B rows.
+Recorded in `internal/anniversary/kfacet_v04b_gamma3_form.md` and
+`internal/anniversary/kfacet_v04b_mechanism_preregistration.md` as
+`form_precondition_failed`.
 
 Current state:
 
 - v0.4a closed with verdict `outcome_A_all_Z2_clean`. The 273 supp-B
   piano-trio rows uniformly carry `Z_2 = (12)`-swap symmetry after the
   pre-registered two-pass gauge classifier.
-- v0.4b primary predictor is `gamma_3`: a non-circular structural
-  predictor of per-m_3 stability distribution from Z_2 tangent-structure
-  invariants. Allowed features: kernel/isotypic dim counts,
-  bridge-band counts, F_beta leakage, neutral-sector conditioning.
-  Disallowed: anything function-of-M_i-eigenvalues or
-  off-unit-circle Floquet indicators.
-- `gamma_1` (F_beta block Floquet attribution) is registered as a
-  **non-gating sidecar** that reuses M_i computed for gamma_3. It
-  attributes instability to F_beta-even or F_beta-odd blocks once
-  M_i exists.
-- Pre-registered no-variation retirement clause: if gamma_3's allowed
-  features are nearly-constant across the 273 rows
-  (`coefficient_of_variation < 0.01`), v0.4b retires as
-  `retired_no_variation` rather than over-fitting. Clean
-  projection-limit result.
-- Falsifier: single full-table likelihood-ratio test over the 12
-  m_3 bins with `N >= 5`; `p < 0.01` falsifies gamma_3. Per-bin
-  binomial residuals are non-gating diagnostics.
+- v0.4b found a new structural gap: v0.4a proves `F_beta` is an
+  orbit-level symmetry of supplementary-B piano-trios, but the
+  at-anchor `F_beta` operator used by the locked form is **not** a
+  tangent-level symmetry of `K_fib = ker(M_i - I) / N_C` on the tested
+  rows.
+- Seven distinct sanity rows all show `F_beta` leakage out of `K_fib`
+  at order `1e-1` (median approximately `0.45`) and projector overcount
+  of `+1` to `+3` directions. The naive `(I +/- F_beta_K)/2`
+  projectors are therefore not valid isotypic projectors on supp-B
+  `K_fib`.
+- The locked threshold rule `predict S iff F_beta_even_dim >=
+  F_beta_odd_dim` is retired **before** the 273-row sweep. It is not a
+  failed chi-squared result; the precondition failed first.
+- `gamma_3'` re-registration is pending. Candidate replacement lanes:
+  an `F_beta`-commuting construction based on `(M_i + M_i^-1)/2`, a
+  raw-kernel precondition check, or an orbit-feature predictor that
+  steps back from tangent isotypics.
 
 Blocker (in order):
 
-1. ~~**Paper-side** gamma_3 form lock~~ -- DONE 2026-05-22. Threshold-rule
-   baseline locked at
+1. ~~**Paper-side** gamma_3 form lock~~ -- DONE 2026-05-22, then
+   RETIRED 2026-05-23. Threshold-rule baseline locked at
    [`../internal/anniversary/kfacet_v04b_gamma3_form.md`](../internal/anniversary/kfacet_v04b_gamma3_form.md):
    `predict S iff F_beta_even_dim >= F_beta_odd_dim`. Zero free
    parameters. Chi-squared df = 12, critical value `26.22` at
-   `p = 0.01`.
-2. **Implementation**: a new `kfacet-row-z2-sweep` workbench subcommand
-   per the pre-registration's "Aggregator + sweep-command schema". Computes
-   M_i + gamma_3 features per row; saves M_i.npy for sidecar reuse.
-3. **Compute**: 273 rows * ~25 sec average = ~2 hours staged. Above
-   the inline ~10-minute rule.
+   `p = 0.01`. Retired because `F_beta` does not preserve `K_fib` on
+   the sanity rows.
+2. **Paper-side**: choose and pre-register a replacement `gamma_3'`
+   projection target. No full-catalog compute is authorized until the
+   replacement object's precondition is checked.
+3. **Implementation/compute**: deferred. The original 273-row
+   `kfacet-row-z2-sweep` plan is historical only and should not be run
+   for the retired baseline.
 
 Next actions:
 
-1. ~~Lock gamma_3 form paper-side.~~ DONE.
-2. Implement the `kfacet-row-z2-sweep` subcommand per the schema.
-3. Implement `v04b_aggregator.py` per the schema.
-4. Run the 15-command per-m_3 sweep.
-5. Run aggregator to emit manifest with verdict in
-   `{pass, fail, retired_no_variation}`, per_row_table.csv,
-   per_m3_table.csv, gamma_1 sidecar attribution.
-6. Read verdict; branch to paper-side write-up per the
-   pre-registration's "Sequencing After v0.4b" block.
+1. ~~Lock gamma_3 form paper-side.~~ DONE, then retired by
+   `form_precondition_failed`.
+2. Write the `gamma_3'` design note: choose among the `anticomm`,
+   `full_kernel`, and `orbit_features` replacement lanes, or name a
+   fourth.
+3. Pre-register a small precondition sanity surface for the chosen
+   replacement object before any 273-row sweep.
+4. Only after the precondition passes, stage implementation and compute
+   for the replacement form.
 
 Stop condition:
 
-If implementation reveals that an "allowed" feature is structurally
-equivalent to a forbidden feature (e.g., bridge_band_count is shown to
-be one-to-one with off-unit-circle pair count), the pre-registration
-is re-issued before reading any verdict.
+If a proposed `gamma_3'` still requires an isotypic decomposition on a
+subspace not preserved by the relevant `F_beta` action, retire it at the
+precondition stage rather than launching a catalog sweep.
 
 ## Onboarding / Polish (Run-Friendly)
 

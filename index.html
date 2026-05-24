@@ -1185,8 +1185,69 @@
             border-bottom-color: var(--primary-dark);
         }
 
+        .forest-coda {
+            width: min(1120px, calc(100vw - 3rem));
+            margin: 0 auto;
+            padding: clamp(2.5rem, 5vw, 4.25rem) 0;
+        }
+
+        .forest-coda-inner {
+            display: grid;
+            grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr);
+            gap: clamp(1.5rem, 4vw, 3rem);
+            align-items: center;
+        }
+
+        .forest-coda figure {
+            margin: 0;
+        }
+
+        .forest-coda img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid rgba(26, 58, 82, 0.14);
+            box-shadow: 0 18px 38px rgba(26, 58, 82, 0.14);
+        }
+
+        .forest-coda figcaption {
+            margin-top: 0.55rem;
+            color: #6A7680;
+            font-size: 0.78rem;
+            font-family: var(--sd-font-data, ui-monospace, monospace);
+        }
+
+        .forest-coda .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .forest-coda h2 {
+            color: var(--primary-dark);
+            font-size: clamp(1.75rem, 3vw, 2.55rem);
+            line-height: 1.14;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .forest-coda p {
+            color: #40505C;
+            font-size: 1.04rem;
+            line-height: 1.75;
+            max-width: 58ch;
+        }
+
         @media (max-width: 760px) {
             .chat-experiment-teaser .teaser-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .forest-coda-inner {
                 grid-template-columns: 1fr;
             }
         }
@@ -1790,7 +1851,7 @@
                         </a>
                     </svg>
                 </div>
-                <p>Parhelion offset gives sun altitude through the promoted inverse — with the eligibility boundary visible.</p>
+                <p>Parhelion offset gives sun altitude through the promoted inverse — with the eligibility boundary visible. Plainly: it is like reading time from a shadow, but only after proving the shadow comes from the right kind of clock.</p>
                 <div class="proof-actions" aria-label="h(x) inspection links">
                     <a href="/h-of-x">Open math workbench &rarr;</a>
                     <a href="/sundog">Visual atlas &rarr;</a>
@@ -1848,7 +1909,7 @@
                         </a>
                     </svg>
                 </div>
-                <p>Pre-registered five-locus falsifier. Click any node to open its phase document. P0/P1 passed; Cut 2 separability held; Cut 3 still open.</p>
+                <p>Pre-registered five-locus falsifier. Like inspecting a bridge at named stress points before calling it safe, the map shows which breaks were tested, which held, and which remain open.</p>
                 <div class="proof-actions" aria-label="Structural failure inspection links">
                     <a href="/structural-failure">Boundary map page &rarr;</a>
                     <a href="docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md">Frozen map &rarr;</a>
@@ -1891,7 +1952,7 @@
                         </a>
                     </svg>
                 </div>
-                <p>In-vitro operating envelope: 22 audited policy cells, sharp cliff at λ ≈ 0.953. Click a region of the axis to jump into its phase. A Phase 7 v2/v3 sibling extends the map to Large; the Large subset is still bounded.</p>
+                <p>In-vitro operating envelope: 22 audited policy cells, sharp cliff at λ ≈ 0.953. In lay terms, it is a warning dial: the policy behaves inside the tested green range and breaks past the marked edge.</p>
                 <div class="proof-actions" aria-label="Mesa evidence inspection links">
                     <a href="/mesa">Mesa page &rarr;</a>
                     <a href="data/mesa-public-charts.json">Chart data &rarr;</a>
@@ -1961,7 +2022,7 @@
                         </a>
                     </svg>
                 </div>
-                <p>20 of 21 strict G.2 single-curve choreographies returned structural-zero receipts; O_617 was quarantined for a bridge direction outside the valid D₃ representation. Audit chain intact; theorem-facing result is not closed.</p>
+                <p>20 of 21 strict G.2 single-curve choreographies returned structural-zero receipts; O_617 was quarantined for a bridge direction outside the valid D₃ representation. Think of it as sorting beads on a wire: one bead did not belong on the same wire, so it is named instead of hidden.</p>
                 <div class="proof-actions" aria-label="Isotrophy inspection links">
                     <a href="/isotrophy">Isotrophy page &rarr;</a>
                     <a href="docs/SUNDOG_V_ISOTROPHY_KFACET.md">Ledger &rarr;</a>
@@ -2030,7 +2091,7 @@
                         <text x="240" y="180" font-family="Verdana, sans-serif" font-size="11" fill="#40505C" text-anchor="middle">4 closed · 2 open · 1 locked</text>
                     </svg>
                 </div>
-                <p>Click any cell to open its phase document. Phases 0–3 closed positive; Phase 4 open at the Bayesian-floor gate; Phase 5 locked (no public doc); Phase 6 staged.</p>
+                <p>Click any cell to open its phase document. Like a construction checklist, the trunk shows which proof pieces are locked in, which are gated, and which are not yet public evidence.</p>
                 <div class="proof-actions" aria-label="Coarse-graining proof inspection links">
                     <a href="docs/proof/README.md">All phase artifacts &rarr;</a>
                     <a href="docs/proof/PHASE4_BAYESIAN_FLOOR_BUILDOUT.md">Phase 4 gate &rarr;</a>
@@ -2041,47 +2102,47 @@
                 <span class="proof-label">Core result metric</span>
                 <h4>Terminal Target Intensity</h4>
                 <div class="proof-placeholder pillar-viz">
-                    <svg class="pillar-svg" viewBox="0 0 480 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart of terminal target intensity for photometric, target-aware oracle, noisy oracle, and random conditions. Each bar is a clickable link to the data file with the exact value in a tooltip.">
+                    <svg class="pillar-svg" viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart of terminal target intensity for photometric, target-aware oracle, noisy oracle, and random conditions. Each bar is a clickable link to the data file with the exact value in a tooltip.">
                     <text x="240" y="22" font-family="Verdana, Geneva, sans-serif" font-size="11" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">TERMINAL INTENSITY · n=30 EACH</text>
                     <!-- Y axis baseline -->
-                    <line x1="55" y1="200" x2="455" y2="200" stroke="#1A3A52" stroke-width="1.4"/>
+                    <line x1="55" y1="215" x2="455" y2="215" stroke="#1A3A52" stroke-width="1.4"/>
                     <!-- Y axis ticks -->
-                    <text x="48" y="204" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#6A7680" text-anchor="end">0</text>
-                    <text x="48" y="114" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#6A7680" text-anchor="end">0.5</text>
-                    <text x="48" y="34" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#6A7680" text-anchor="end">1.0</text>
-                    <line x1="55" y1="110" x2="455" y2="110" stroke="#E2E6E9" stroke-width="0.6"/>
-                    <line x1="55" y1="30" x2="455" y2="30" stroke="#E2E6E9" stroke-width="0.6"/>
-                    <!-- Photometric: 0.945 -> height 170, top y = 30 -->
+                    <text x="48" y="219" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#6A7680" text-anchor="end">0</text>
+                    <text x="48" y="137" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#6A7680" text-anchor="end">0.5</text>
+                    <text x="48" y="57" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#6A7680" text-anchor="end">1.0</text>
+                    <line x1="55" y1="133" x2="455" y2="133" stroke="#E2E6E9" stroke-width="0.6"/>
+                    <line x1="55" y1="52" x2="455" y2="52" stroke="#E2E6E9" stroke-width="0.6"/>
+                    <!-- Photometric: 0.945 -> height 161, top y = 54 -->
                     <a href="data/photometric-core-metrics.json">
                         <title>Photometric · 0.945 mean (95% CI [0.936, 0.954]) · n=30 — the indirect-signal result</title>
-                        <rect x="70" y="30" width="60" height="170" rx="3" fill="#F4C430" stroke="#C99517" stroke-width="1.4"/>
-                        <text x="100" y="22" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#1A3A52" text-anchor="middle">0.945</text>
-                        <text x="100" y="220" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">Photometric</text>
+                        <rect x="70" y="54" width="60" height="161" rx="3" fill="#F4C430" stroke="#C99517" stroke-width="1.4"/>
+                        <text x="100" y="48" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#1A3A52" text-anchor="middle">0.945</text>
+                        <text x="100" y="240" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">Photometric</text>
                     </a>
-                    <!-- Target-aware oracle: 0.936 -> height 168, top y = 32 -->
+                    <!-- Target-aware oracle: 0.936 -> height 159, top y = 56 -->
                     <a href="data/photometric-core-metrics.json">
                         <title>Target-aware oracle · 0.936 mean · n=30 — direct privileged-target baseline</title>
-                        <rect x="170" y="32" width="60" height="168" rx="3" fill="#2A5570" stroke="#1A3A52" stroke-width="1.4"/>
-                        <text x="200" y="22" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">0.936</text>
-                        <text x="200" y="220" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">Oracle</text>
+                        <rect x="170" y="56" width="60" height="159" rx="3" fill="#2A5570" stroke="#1A3A52" stroke-width="1.4"/>
+                        <text x="200" y="50" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#1A3A52" text-anchor="middle">0.936</text>
+                        <text x="200" y="240" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">Oracle</text>
                     </a>
-                    <!-- Noisy oracle: 0.911 -> height 164, top y = 36 -->
+                    <!-- Noisy oracle: 0.911 -> height 155, top y = 60 -->
                     <a href="data/photometric-core-metrics.json">
                         <title>Noisy oracle · 0.911 mean · n=30 — privileged baseline with sensor noise</title>
-                        <rect x="270" y="36" width="60" height="164" rx="3" fill="#2A5570" stroke="#1A3A52" stroke-width="1.4" opacity="0.78"/>
-                        <text x="300" y="26" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#1A3A52" text-anchor="middle">0.911</text>
-                        <text x="300" y="220" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">Noisy</text>
+                        <rect x="270" y="60" width="60" height="155" rx="3" fill="#2A5570" stroke="#1A3A52" stroke-width="1.4" opacity="0.78"/>
+                        <text x="300" y="54" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#1A3A52" text-anchor="middle">0.911</text>
+                        <text x="300" y="240" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">Noisy</text>
                     </a>
                     <!-- Random: ~0 -> render as a tiny stub bar at baseline -->
                     <a href="data/photometric-core-metrics.json">
                         <title>Random · effectively 0 · n=30 — negative control, no targeting signal</title>
-                        <rect x="370" y="195" width="60" height="5" rx="1" fill="#9AA4AC" stroke="#6A7680" stroke-width="1"/>
-                        <text x="400" y="190" font-family="Georgia, serif" font-size="13" fill="#6A7680" text-anchor="middle" font-style="italic">~0</text>
-                        <text x="400" y="220" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">Random</text>
+                        <rect x="370" y="210" width="60" height="5" rx="1" fill="#9AA4AC" stroke="#6A7680" stroke-width="1"/>
+                        <text x="400" y="205" font-family="Georgia, serif" font-size="13" fill="#6A7680" text-anchor="middle" font-style="italic">~0</text>
+                        <text x="400" y="240" font-family="Verdana, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">Random</text>
                     </a>
                     </svg>
                 </div>
-                <p>No terminal-intensity difference detected at n=30 between photometric and the privileged-target oracles.</p>
+                <p>No terminal-intensity difference detected at n=30 between photometric and the privileged-target oracles. Plainly: the controller using only indirect light ended about as close to the target as the controllers allowed to see the target.</p>
                 <div class="proof-actions" aria-label="Terminal intensity inspection links">
                     <a href="data/photometric-core-metrics.json">Chart data &rarr;</a>
                     <a href="docs/RESEARCHER_GUIDE.md">Evidence guide &rarr;</a>
@@ -2130,7 +2191,7 @@
                     </a>
                     </svg>
                 </div>
-                <p>Indirect feedback costs roughly 16× slower acquisition than the privileged-target oracle; random control never converges.</p>
+                <p>Indirect feedback costs roughly 16× slower acquisition than the privileged-target oracle; random control never converges. The simple takeaway: indirect sight can work, but in this setup it pays for that discipline with time.</p>
                 <div class="proof-actions" aria-label="Convergence-time inspection links">
                     <a href="data/photometric-core-metrics.json">Chart data &rarr;</a>
                     <a href="docs/RESEARCHER_GUIDE.md">Evidence guide &rarr;</a>
@@ -2454,6 +2515,22 @@
                     The site helper in the corner is a measured experiment. Under stacked adversarial pressure, prompt-engineered boundary baselines accepted 0 of 13 unsafe drafts while the trace-conditioned architecture accepted 13 of 13 safely. The result has since been verified across <strong>six model implementations across four training lineages</strong> (deterministic compositor + OpenAI + Anthropic + Meta Llama at two sizes + Alibaba Qwen) and an eight-intervention causal battery — zero unsafe-accepts across 5,670 trials. Bounded scope; open questions named.
                 </p>
                 <a href="/chat" class="teaser-cta">Read the experiment →</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="forest-coda" aria-labelledby="forest-coda-title">
+        <div class="forest-coda-inner">
+            <figure>
+                <img src="/media/whole-forest-drip-branch.png" width="960" height="380" alt="A clear water drop on a branch reflecting a forest and blue sky." loading="lazy">
+                <figcaption>The whole forest, carried by a small trace.</figcaption>
+            </figure>
+            <div>
+                <p class="eyebrow">Small Signal, Larger World</p>
+                <h2 id="forest-coda-title">A quiet picture of the hypothesis.</h2>
+                <p>
+                    Sundog keeps returning to the same posture: an indirect signal is not a leftover if you can name what made it, how it was transformed, and where the inference stops. A drop can hold a forest; a halo can hold geometry; a trace can hold enough structure to act carefully.
+                </p>
             </div>
         </div>
     </section>
