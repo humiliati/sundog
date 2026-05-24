@@ -485,6 +485,79 @@ results/isotrophy/k-facet-v04a-domain-map/pass1/{aggregator_manifest, flagged_fo
 results/isotrophy/k-facet-v04a-domain-map/pass2/m3eq{0.4, 1.4, 1.5, 1.6, 1.7}/O{idx}/
 ```
 
+## v0.4b Mechanism Predictor (next staged work)
+
+### V0.4b gamma_3 non-circular structural predictor (~2 hours staged compute + paper-side form lock)
+
+Sources:
+[`../internal/anniversary/kfacet_v04b_mechanism_preregistration.md`](../internal/anniversary/kfacet_v04b_mechanism_preregistration.md),
+[`../internal/anniversary/kfacet_v04a_domain_map_preregistration.md`](../internal/anniversary/kfacet_v04a_domain_map_preregistration.md)
+(domain locked: 273/273 Z2_clean),
+[`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
+§7.2 (projection-language framing).
+
+Status: **gamma_3 form locked (2026-05-22)**, then `compute-blocked`,
+pre-registered. Threshold-rule baseline is filed at
+`internal/anniversary/kfacet_v04b_gamma3_form.md`; zero free parameters;
+chi-squared df = 12; critical value `26.22` at `p = 0.01`.
+
+Current state:
+
+- v0.4a closed with verdict `outcome_A_all_Z2_clean`. The 273 supp-B
+  piano-trio rows uniformly carry `Z_2 = (12)`-swap symmetry after the
+  pre-registered two-pass gauge classifier.
+- v0.4b primary predictor is `gamma_3`: a non-circular structural
+  predictor of per-m_3 stability distribution from Z_2 tangent-structure
+  invariants. Allowed features: kernel/isotypic dim counts,
+  bridge-band counts, F_beta leakage, neutral-sector conditioning.
+  Disallowed: anything function-of-M_i-eigenvalues or
+  off-unit-circle Floquet indicators.
+- `gamma_1` (F_beta block Floquet attribution) is registered as a
+  **non-gating sidecar** that reuses M_i computed for gamma_3. It
+  attributes instability to F_beta-even or F_beta-odd blocks once
+  M_i exists.
+- Pre-registered no-variation retirement clause: if gamma_3's allowed
+  features are nearly-constant across the 273 rows
+  (`coefficient_of_variation < 0.01`), v0.4b retires as
+  `retired_no_variation` rather than over-fitting. Clean
+  projection-limit result.
+- Falsifier: single full-table likelihood-ratio test over the 12
+  m_3 bins with `N >= 5`; `p < 0.01` falsifies gamma_3. Per-bin
+  binomial residuals are non-gating diagnostics.
+
+Blocker (in order):
+
+1. ~~**Paper-side** gamma_3 form lock~~ -- DONE 2026-05-22. Threshold-rule
+   baseline locked at
+   [`../internal/anniversary/kfacet_v04b_gamma3_form.md`](../internal/anniversary/kfacet_v04b_gamma3_form.md):
+   `predict S iff F_beta_even_dim >= F_beta_odd_dim`. Zero free
+   parameters. Chi-squared df = 12, critical value `26.22` at
+   `p = 0.01`.
+2. **Implementation**: a new `kfacet-row-z2-sweep` workbench subcommand
+   per the pre-registration's "Aggregator + sweep-command schema". Computes
+   M_i + gamma_3 features per row; saves M_i.npy for sidecar reuse.
+3. **Compute**: 273 rows * ~25 sec average = ~2 hours staged. Above
+   the inline ~10-minute rule.
+
+Next actions:
+
+1. ~~Lock gamma_3 form paper-side.~~ DONE.
+2. Implement the `kfacet-row-z2-sweep` subcommand per the schema.
+3. Implement `v04b_aggregator.py` per the schema.
+4. Run the 15-command per-m_3 sweep.
+5. Run aggregator to emit manifest with verdict in
+   `{pass, fail, retired_no_variation}`, per_row_table.csv,
+   per_m3_table.csv, gamma_1 sidecar attribution.
+6. Read verdict; branch to paper-side write-up per the
+   pre-registration's "Sequencing After v0.4b" block.
+
+Stop condition:
+
+If implementation reveals that an "allowed" feature is structurally
+equivalent to a forbidden feature (e.g., bridge_band_count is shown to
+be one-to-one with off-unit-circle pair count), the pre-registration
+is re-issued before reading any verdict.
+
 ## Onboarding / Polish (Run-Friendly)
 
 ### V0.3h K_facet Tooling Polish (~10-hour initiation)

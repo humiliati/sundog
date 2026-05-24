@@ -3351,6 +3351,177 @@ def command_kfacet_bridge_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+# v0.4b row-z2-sweep: per-row M_i + Z_2 isotypic dim extraction + threshold rule
+# Implementation guardrails (signed off by Codex, see
+# internal/anniversary/kfacet_v04b_gamma3_form.md):
+#  - Compute F_beta_even_dim / F_beta_odd_dim on K_fib (neutral-quotiented).
+#  - Record projection_target = "K_fib" explicitly in every receipt.
+#  - Store full pre-rule feature set so the aggregator is brutally dumb.
+V04B_VERSION = "v0.4b-row-z2-sweep"
+V04B_DEFAULT_CLOSURE_FLOOR = 1e-7
+V04B_PROJECTOR_FLOOR = 1e-3
+V04B_BRIDGE_BAND_LOWER = 1e-7
+V04B_BRIDGE_BAND_UPPER = 1e-3
+
+
+def _v04b_isotypic_dim(projector: np.ndarray, floor: float) -> int:
+    """Count orthonormal columns of a projector with singular value above floor."""
+    if projector.size == 0:
+        return 0
+    _u, sv, _vh = np.linalg.svd(projector, full_matrices=False)
+    return int(np.sum(sv > floor))
+
+
+def _v04b_threshold_rule(f_beta_even_dim: int, f_beta_odd_dim: int) -> str:
+    """Pre-registered threshold rule: predict S iff even_dim >= odd_dim."""
+    return "S" if f_beta_even_dim >= f_beta_odd_dim else "U"
+
+
+def command_kfacet_row_z2_sweep(args: argparse.Namespace) -> int:
+    """v0.4b per-row Z_2 isotypic-dim extraction + threshold-rule prediction.
+
+    For each selected row: integrate, compute M_i, neutral basis, K_fib;
+    project F_beta onto K_fib and count F_beta-even / F_beta-odd dims; apply
+    the locked threshold rule; record full pre-rule feature set and the
+    prediction. Aggregator reads these receipts via v04b_aggregator.py.
+    """
+    source = args.source.upper()
+    text = read_text(args.path or SUPPLEMENT_URLS[source])
+    rows_all = parse_rows(text, source)
+    if args.indices:
+        wanted = {int(token.strip()) for token in args.indices.split(",") if token.strip()}
+        selected = [r for r in rows_all if r.index in wanted and abs(r.m3 - args.m3) < 5e-13]
+    else:
+        selected = [r for r in rows_all if abs(r.m3 - args.m3) < 5e-13]
+    if args.limit > 0:
+        selected = selected[: args.limit]
+    if not selected:
+        raise SystemExit(f"no rows selected for source={source} m3={args.m3} indices={args.indices}")
+
+    out_dir = Path(args.out) if args.out else None
+    if out_dir is not None:
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+    closure_floor = float(args.closure_floor)
+    projector_floor = float(args.projector_floor)
+    f_beta = f_beta_action_v0()
+    rows_results: list[dict[str, object]] = []
+    print(
+        f"[kfacet-row-z2-sweep] source={source} m3={args.m3} n_rows={len(selected)} "
+        f"closure_floor={closure_floor:.0e} projector_floor={projector_floor:.0e}"
+    )
+    for row in selected:
+        integrated = integrate_orbit(row, args.rtol, args.atol, args.max_step_fraction)
+        M_i = compute_monodromy(integrated, args.rtol, args.atol, args.max_step_fraction)
+        # Raw kernel dims
+        identity = np.eye(18)
+        _u, svs_M, _vh = np.linalg.svd(M_i - identity)
+        kernel_dim = int(np.sum(svs_M < closure_floor))
+        bridge_band_count = int(np.sum(
+            (svs_M > V04B_BRIDGE_BAND_LOWER) & (svs_M < V04B_BRIDGE_BAND_UPPER)
+        ))
+        # Neutral basis + K_fib (the registered projection target)
+        neutral_basis = compute_neutral_basis(M_i, integrated, closure_floor)
+        k_fib_basis, k_fib_summary = compute_k_fib_basis(M_i, integrated, closure_floor)
+        neutral_dim = int(neutral_basis.shape[1])
+        k_fib_dim = int(k_fib_basis.shape[1])
+        # F_beta leakage outside K_fib (diagnostic)
+        if k_fib_dim > 0:
+            P_kfib = k_fib_basis @ k_fib_basis.T
+            f_beta_leakage = float(
+                np.linalg.norm((np.eye(18) - P_kfib) @ f_beta @ k_fib_basis, ord=np.inf)
+            )
+        else:
+            f_beta_leakage = 0.0
+        # F_beta isotypic dims on K_fib
+        if k_fib_dim > 0:
+            identity_k = np.eye(k_fib_dim)
+            f_beta_k = k_fib_basis.T @ f_beta @ k_fib_basis
+            p_plus = (identity_k + f_beta_k) / 2.0
+            p_minus = (identity_k - f_beta_k) / 2.0
+            f_beta_even_dim = _v04b_isotypic_dim(p_plus, projector_floor)
+            f_beta_odd_dim = _v04b_isotypic_dim(p_minus, projector_floor)
+        else:
+            f_beta_even_dim = 0
+            f_beta_odd_dim = 0
+        # Neutral-sector conditioning: how well does neutral_basis stay
+        # F_beta-invariant? large value flags structural concern with the
+        # quotient. Diagnostic only; not used by the rule.
+        if neutral_dim > 0:
+            P_neut = neutral_basis @ neutral_basis.T
+            neutral_sector_conditioning = float(
+                np.linalg.norm((np.eye(18) - P_neut) @ f_beta @ neutral_basis, ord=np.inf)
+            )
+        else:
+            neutral_sector_conditioning = 0.0
+        # Apply locked threshold rule
+        prediction = _v04b_threshold_rule(f_beta_even_dim, f_beta_odd_dim)
+        prediction_correct = (prediction == row.stability)
+        row_receipt = {
+            "mode": "kfacet_row_z2_sweep",
+            "version": V04B_VERSION,
+            "projection_target": "K_fib",
+            "row_index": row.index,
+            "label": row.label,
+            "m3": row.m3,
+            "z0": row.z0,
+            "period": row.period,
+            "stability": row.stability,
+            "closure_floor": closure_floor,
+            "projector_floor": projector_floor,
+            "kernel_dim": kernel_dim,
+            "neutral_dim": neutral_dim,
+            "K_fib_dim": k_fib_dim,
+            "F_beta_even_dim": f_beta_even_dim,
+            "F_beta_odd_dim": f_beta_odd_dim,
+            "bridge_band_count": bridge_band_count,
+            "F_beta_leakage_inf": f_beta_leakage,
+            "neutral_sector_conditioning": neutral_sector_conditioning,
+            "K_fib_summary": k_fib_summary,
+            "gamma3_prediction": prediction,
+            "observed_stability": row.stability,
+            "gamma3_prediction_correct": prediction_correct,
+            "integration_seconds": integrated.elapsed_seconds,
+            "closure_position_inf": integrated.closure_position_inf,
+            "closure_velocity_inf": integrated.closure_velocity_inf,
+            "M_i_norm_inf": float(np.linalg.norm(M_i, ord=np.inf)),
+        }
+        rows_results.append(row_receipt)
+        print(
+            f"[kfacet-row-z2-sweep] O_{row.index}({row.m3}): "
+            f"K_fib_dim={k_fib_dim} F_beta_even={f_beta_even_dim} "
+            f"F_beta_odd={f_beta_odd_dim} predict={prediction} "
+            f"observed={row.stability} correct={prediction_correct}"
+        )
+        if out_dir is not None:
+            row_out = out_dir / f"O{row.index}"
+            row_out.mkdir(parents=True, exist_ok=True)
+            (row_out / "row_z2_receipt.json").write_text(
+                json.dumps(row_receipt, indent=2) + "\n", encoding="utf-8"
+            )
+            np.save(row_out / "M_i.npy", M_i)
+            np.save(row_out / "F_beta.npy", f_beta)
+
+    if out_dir is not None:
+        manifest = {
+            "mode": "kfacet_row_z2_sweep_manifest",
+            "version": V04B_VERSION,
+            "source": source,
+            "m3": args.m3,
+            "indices_arg": args.indices,
+            "limit_arg": args.limit,
+            "closure_floor": closure_floor,
+            "projector_floor": projector_floor,
+            "row_count": len(rows_results),
+            "rows": rows_results,
+        }
+        (out_dir / "manifest.json").write_text(
+            json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
+        )
+        print(f"[kfacet-row-z2-sweep] wrote {len(rows_results)} row receipts under {out_dir}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Sundog isotrophy workbench smoke harness")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -3601,6 +3772,29 @@ def build_parser() -> argparse.ArgumentParser:
         help="exit 0 while still recording failed rows in the manifest (used for bridge-case audits)",
     )
     reprocess.set_defaults(func=command_kfacet_reprocess_floor)
+
+    z2_sweep = sub.add_parser(
+        "kfacet-row-z2-sweep",
+        help=(
+            "v0.4b per-row Z_2 isotypic-dim extraction + threshold-rule "
+            "prediction. Computes M_i, K_fib, F_beta-even/odd dims, and "
+            "the locked gamma_3 threshold-rule prediction (predict S iff "
+            "F_beta_even_dim >= F_beta_odd_dim). See "
+            "internal/anniversary/kfacet_v04b_gamma3_form.md for the form lock."
+        ),
+    )
+    z2_sweep.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="B")
+    z2_sweep.add_argument("--path", help="local supplementary file instead of the live URL")
+    z2_sweep.add_argument("--m3", type=float, required=True)
+    z2_sweep.add_argument("--indices", help="optional comma-separated row indices")
+    z2_sweep.add_argument("--limit", type=int, default=0)
+    z2_sweep.add_argument("--rtol", type=float, default=DEFAULT_RTOL)
+    z2_sweep.add_argument("--atol", type=float, default=DEFAULT_ATOL)
+    z2_sweep.add_argument("--max-step-fraction", type=float, default=DEFAULT_MAX_STEP_FRACTION)
+    z2_sweep.add_argument("--closure-floor", type=float, default=V04B_DEFAULT_CLOSURE_FLOOR)
+    z2_sweep.add_argument("--projector-floor", type=float, default=V04B_PROJECTOR_FLOOR)
+    z2_sweep.add_argument("--out", help="output directory for per-row receipts and M_i.npy")
+    z2_sweep.set_defaults(func=command_kfacet_row_z2_sweep)
 
     return parser
 
