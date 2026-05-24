@@ -1,6 +1,8 @@
 # v0.5a Branch-Map Audit Registration (Branch-Shadow Audit)
 
-Status: **REGISTERED 2026-05-23** (not yet computed).
+Status: **VERDICT LANDED 2026-05-23**. Registered and computed against the
+v0.4a manifest. Verdict: `branch_hash_passes_audit` with `chi^2 = 34.986`
+vs critical `11.34` (`df = 3`, p ~= `1.23e-7`).
 Audience: v0.5a runner; v0.5b reader of the verdict; paper-side reviewer of
 the projection-limit framing.
 Companion: `kfacet_v04_writeup.md` (chapter close that opened v0.5),
@@ -8,6 +10,47 @@ Companion: `kfacet_v04_writeup.md` (chapter close that opened v0.5),
 provenance), `kfacet_v04a_domain_map_preregistration.md` (catalog source).
 Frame: v0.5 stops asking what symmetry the row has and starts asking which
 branch the row belongs to.
+
+## Verdict (Landed, 2026-05-23)
+
+The locked branch hash passes the audit:
+
+```text
+total rows:       273
+observed S/U:     97 S / 176 U
+active bits:      (m_3 < 1, z_0 < 0.3)
+occupied buckets: 4
+df:               3
+chi^2:            34.986253
+critical:         11.34   (chi-squared(3), p = 0.01)
+p-value:          1.23e-7
+verdict:          branch_hash_passes_audit
+```
+
+4x2 contingency table:
+
+```text
+branch_label                  N    S    U    S_fraction  chi2_contrib
+m_3 >= 1, z_0 >= 0.3          87   18   69   0.2069       8.366
+m_3 >= 1, z_0 <  0.3          17    5   12   0.2941       0.278
+m_3 <  1, z_0 >= 0.3          56   11   45   0.1964       6.171
+m_3 <  1, z_0 <  0.3         113   63   50   0.5575      20.171
+```
+
+Structural reading:
+
+> The catalog-only branch shadow `(m_3 < 1, z_0 < 0.3)` carries stability
+> information on supp-B. This is not yet a predictor; it is the v0.5a audit
+> pass that licenses a separate v0.5b held-out prediction registration.
+
+Receipts:
+
+```text
+results/isotrophy/k-facet-v05a-branch-map/manifest.json
+results/isotrophy/k-facet-v05a-branch-map/contingency_table.csv
+results/isotrophy/k-facet-v05a-branch-map/per_row_table.csv
+scripts/v05a_branch_map_audit.py
+```
 
 ## What v0.5a Is
 
@@ -93,10 +136,10 @@ verdicts (deterministic):
 ## Interpretation
 
 > *The branch hash is a coarse low-dimensional shadow of catalog parameters
-> (m_3, z_0) only. The audit asks whether ANY such shadow stratifies the
-> supp-B catalog's S/U distribution. A pass means the body's stability
-> structure is partly visible in branch coordinates; a fail joins the
-> v0.4 Z_2-shadow result as a second projection-limit negative.*
+> (m_3, z_0) only. The audit asks whether this pre-registered shadow
+> stratifies the supp-B catalog's S/U distribution. A pass means the body's
+> stability structure is partly visible in these branch coordinates; a fail
+> joins the v0.4 Z_2-shadow result as another projection-limit negative.*
 
 ## Non-Circularity Audit
 
@@ -112,8 +155,9 @@ geometry only (v_z is initial velocity; m_3 * z_0^2 is a dimensionful
 geometric quantity).
 
 The S/U label is supplied as the independent test column.
-Predicting branch from catalog is information-disjoint from stability
-labeling: the predictor uses no stability information.
+Assigning branch from catalog is information-disjoint from stability
+labeling: the audit uses no stability information to construct the branch
+hash.
 
 This is the same non-circularity provenance as gamma_3'_orbit_pass2.
 ```
@@ -207,8 +251,8 @@ The expected published statement, regardless of outcome:
 ## Why v0.5a Is An Audit, Not A Predictor
 
 A 4-bucket signature on 273 rows is too coarse to be honestly called a
-predictor on this catalog. It tests the **projection limit**: does ANY
-low-dimensional shadow of the supp-B body carry stability information?
+predictor on this catalog. It tests the **projection limit**: does this
+pre-registered low-dimensional branch shadow carry stability information?
 
 ```text
 v0.4a  domain-shadow audit:    well-defined (PASS) but not predictive

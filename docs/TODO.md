@@ -587,13 +587,16 @@ precondition stage rather than launching a catalog sweep.
 
 ### V0.5a branch-shadow audit (chi-squared independence on the active branch hash)
 
-Status: **registered 2026-05-23**, audit not yet computed.
+Status: **VERDICT LANDED 2026-05-23**. The 4x2 branch-shadow audit passes:
+`chi^2 = 34.986` vs critical `11.34` (`df = 3`, p ~= `1.23e-7`).
+Receipt:
+`results/isotrophy/k-facet-v05a-branch-map/manifest.json`.
 
 Frame: stop asking what symmetry the row has, start asking which branch
 the row belongs to. v0.5a is an AUDIT (chi-squared independence of a
 branch hash against S/U), NOT a predictor. A pass licenses v0.5b
 registration as a true predictor with held-out test; a fail joins
-v0.4 as a second projection-limit negative and the chain moves to the
+v0.4 as another projection-limit negative and the chain moves to the
 next mechanism family.
 
 Locked form
@@ -619,16 +622,27 @@ Catalog-only input; no new dynamical compute is required. The audit
 runs against the v0.4a manifest at
 `results/isotrophy/k-facet-v04a-domain-map/manifest.json`.
 
+4x2 result:
+
+```text
+branch_label                  N    S    U    S_fraction
+m_3 >= 1, z_0 >= 0.3          87   18   69   0.2069
+m_3 >= 1, z_0 <  0.3          17    5   12   0.2941
+m_3 <  1, z_0 >= 0.3          56   11   45   0.1964
+m_3 <  1, z_0 <  0.3         113   63   50   0.5575
+```
+
 Next actions:
 
-1. Implement the audit aggregator (catalog-only, ~minutes of compute).
-2. Run the audit blind.
-3. Land the verdict. Receipts at
-   `results/isotrophy/k-facet-v05a-branch-map/manifest.json`.
-4. If `branch_hash_passes_audit`: register v0.5b paper-side with
-   held-out m_3 bins or leave-one-branch-out CV. If
-   `branch_hash_fails_audit`: record as the third structural-negative
-   and propose the next mechanism family.
+1. ~~Implement the audit aggregator.~~ DONE:
+   [`../scripts/v05a_branch_map_audit.py`](../scripts/v05a_branch_map_audit.py).
+2. ~~Run the audit blind.~~ DONE. Verdict:
+   `branch_hash_passes_audit`.
+3. ~~Land the verdict.~~ DONE in
+   [`../internal/anniversary/kfacet_v05a_branch_map_form.md`](../internal/anniversary/kfacet_v05a_branch_map_form.md).
+4. Register v0.5b paper-side with held-out m_3 bins or
+   leave-one-branch-out CV. No predictor claim is licensed until v0.5b
+   is separately registered and tested.
 
 Stop condition:
 
