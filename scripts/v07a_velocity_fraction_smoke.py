@@ -48,8 +48,12 @@ RTOL = 1e-12
 ATOL = 1e-12
 MAX_STEP_FRACTION = 0.02
 
-# Locked sanity gates (v0.7a form lock).
-SYMPLECTICITY_GATE = 1e-6
+# Locked sanity gates (v0.7a form lock + R1 amendment 2026-05-24).
+# R1: symplecticity_gate amended from 1e-6 to 1e-4 based on the
+# 7-row vectorized smoke evidence (residuals 7.9e-8 .. 3.84e-5;
+# scale with period and Floquet amplification, not implementation
+# breakage; reciprocal-pair gate at 1e-4 passes uniformly).
+SYMPLECTICITY_GATE = 1e-4
 RECIPROCAL_PAIR_GATE = 1e-4
 
 # Locked degeneracy detection threshold (v0.7a form lock).

@@ -6,10 +6,17 @@
 **Companion to:** `SUNDOG_IP_STRATEGY_MEMO_v0.1.md` (§4 surfaces);
 `docs/501c3/HALO_HARNESS_WHITEPAPER_OUTLINE.md` (§4 architecture).
 **Governance:** Subject to `SUNDOG_GOVERNANCE_POLICY_v0.1` §3 claim-tagging.
-**Publication path note:** This file lives at the **repository root** and
-is deliberately *not* under `docs/`, so it does not ship to `dist/` via
-`copy-site-docs.mjs`. Move into `docs/501c3/` only after a decision on
-publication disposition.
+**Publication path note:** This file lives in `docs/501c3/` and **will
+ship to `dist/` via `copy-site-docs.mjs`** on next build. The move from
+the repository root to `docs/501c3/` was performed for housekeeping
+consistency with sibling 501(c)(3) drafts (founder action,
+2026-05-24). The "Internal-facing working draft" status above remains
+the operative disclosure posture: this document is published in the
+sense that the static site ships it, but it is **not** ratified, not
+counsel-reviewed, and not yet binding on any entity. Read as a working
+draft, not as a final position. Per the Governance Policy §9
+corrections-and-retractions discipline, any subsequent substantive
+change is recorded by amendment, not silent edit.
 
 ---
 
