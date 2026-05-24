@@ -221,6 +221,15 @@ Three candidate v0.5 directions, all paper-side first:
 Codex direction will decide which path opens. No runner work proceeds
 until the v0.5 mechanism family is registered paper-side.
 
+**Update 2026-05-23:** v0.5 has opened with a **branch-shadow audit**
+registration — paper-side first, runner deferred to a passing audit. The
+v0.5a form lock retires the Z_2 framing in favor of a catalog-only
+branch-hash on `(m_3, z_0)` and tests `chi-squared` independence of the
+hash against stability. See
+`kfacet_v05a_branch_map_form.md`. v0.5a is explicitly an AUDIT, not a
+predictor; v0.5b is reserved for a separately registered predictor only
+if v0.5a passes.
+
 ## Doc Trail
 
 - `kfacet_v04a_domain_map_preregistration.md` -- two-pass classifier
@@ -230,6 +239,7 @@ until the v0.5 mechanism family is registered paper-side.
 - `kfacet_v04b_gamma3_form.md` -- tangent-isotypic baseline, retired.
 - `kfacet_v04b_gamma3prime_form.md` -- orbit-pass2 baseline, falsified.
 - `kfacet_v04b_mechanism_preregistration.md` -- parent registration.
+- `kfacet_v05a_branch_map_form.md` -- v0.5a branch-shadow audit (opens v0.5).
 - `kfacet_v03h_writeup.md` -- v0.3 chapter close (companion).
 - `kfacet_v03_freeze_b_comparison.md`,
   `kfacet_v03_gamma_crossm3_preregistration.md` -- the v0.3 alpha and

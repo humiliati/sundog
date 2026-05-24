@@ -569,18 +569,72 @@ Next actions:
 4. ~~Land the chapter close.~~ DONE 2026-05-23. v0.4 epilogue
    writeup at
    [`../internal/anniversary/kfacet_v04_writeup.md`](../internal/anniversary/kfacet_v04_writeup.md).
-5. **Paper-side v0.5 direction (open).** Three candidates: richer-symmetry
-   projection (E, |L| stratification), bifurcation-track projection
-   (m_3-axis stability transitions), or close-without-v0.5 (retire
-   isotrophy program at end-of-v0.4 with publishable methodology + two
-   structural-negative results). No runner work until codex direction
-   chooses.
+5. ~~**Paper-side v0.5 direction (open).**~~ DONE 2026-05-23. v0.5
+   opens as a **branch-shadow audit**: catalog-only branch hash on
+   `(m_3, z_0)` indicator bits, chi-squared independence vs S/U at
+   `df = occupied_branch_count - 1`. Frame: stop asking what symmetry
+   the row has, start asking which branch the row belongs to. See
+   [`../internal/anniversary/kfacet_v05a_branch_map_form.md`](../internal/anniversary/kfacet_v05a_branch_map_form.md).
+   See the v0.5a section below for the runner state.
 
 Stop condition:
 
 If a proposed `gamma_3'` still requires an isotypic decomposition on a
 subspace not preserved by the relevant `F_beta` action, retire it at the
 precondition stage rather than launching a catalog sweep.
+
+## v0.5a Branch-Shadow Audit (registered)
+
+### V0.5a branch-shadow audit (chi-squared independence on the active branch hash)
+
+Status: **registered 2026-05-23**, audit not yet computed.
+
+Frame: stop asking what symmetry the row has, start asking which branch
+the row belongs to. v0.5a is an AUDIT (chi-squared independence of a
+branch hash against S/U), NOT a predictor. A pass licenses v0.5b
+registration as a true predictor with held-out test; a fail joins
+v0.4 as a second projection-limit negative and the chain moves to the
+next mechanism family.
+
+Locked form
+(`internal/anniversary/kfacet_v05a_branch_map_form.md`):
+
+```text
+4-bit candidate signature, with deterministic constant-bit retirement:
+  b1 = (m_3 < 1)              ACTIVE  (169 / 273 true on supp-B)
+  b2 = (z_0 < 0.3)            ACTIVE  (130 / 273 true on supp-B)
+  b3 = (abs(v_z) < 1e-6)      RETIRED (constant FALSE on supp-B)
+  b4 = (m_3 * z_0^2 < 2)      RETIRED (constant TRUE  on supp-B)
+
+active signature on supp-B: (b1, b2)
+occupied buckets: 4
+df = occupied_branch_count - 1 = 3
+critical: chi-squared(3) at p = 0.01 = 11.34
+verdicts:
+  chi^2 >  11.34: branch_hash_passes_audit
+  chi^2 <= 11.34: branch_hash_fails_audit
+```
+
+Catalog-only input; no new dynamical compute is required. The audit
+runs against the v0.4a manifest at
+`results/isotrophy/k-facet-v04a-domain-map/manifest.json`.
+
+Next actions:
+
+1. Implement the audit aggregator (catalog-only, ~minutes of compute).
+2. Run the audit blind.
+3. Land the verdict. Receipts at
+   `results/isotrophy/k-facet-v05a-branch-map/manifest.json`.
+4. If `branch_hash_passes_audit`: register v0.5b paper-side with
+   held-out m_3 bins or leave-one-branch-out CV. If
+   `branch_hash_fails_audit`: record as the third structural-negative
+   and propose the next mechanism family.
+
+Stop condition:
+
+Any post-audit narrowing of the active signature, threshold change, or
+df-formula change is a **re-registration**, not a refinement. The
+audit form is locked.
 
 ## Onboarding / Polish (Run-Friendly)
 
