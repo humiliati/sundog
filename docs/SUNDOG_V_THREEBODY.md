@@ -1045,10 +1045,56 @@ descriptive catalog partition, not a predictive mechanism. Combined with
 v0.4 negatives (Z_2 tangent precondition failed; Z_2 orbit-gauge-rigidity
 chi^2 = 1202), stability information on supp-B is NOT carried by either
 the Z_2 projection or the catalog-coordinate branch shadow at the tested
-granularities. v0.5c (continuous-feature promotion) and v0.5 chapter close
-are both live options; runner work blocked until paper-side direction
-picks one. See `kfacet_v04_writeup.md`, `kfacet_v05a_branch_map_form.md`,
-and `kfacet_v05b_branch_predictor_form.md`.
+granularities. **v0.5 chapter closed 2026-05-23** as the first
+**projection-limit** chapter in the isotrophy program; chapter close at
+`internal/anniversary/kfacet_v05_writeup.md`. Three sub-results carry
+forward to v0.6: bin-locality of the m_3 = 0.4 stable cluster on supp-B;
+audit-vs-predictor asymmetry as a methodological finding; the joint
+v0.4+v0.5 projection-limit envelope on the supp-B catalog.
+
+**v0.6 parent registered 2026-05-23** with the **conserved-quantity
+(E, |L|) stratification** family. Parent registration at
+`internal/anniversary/kfacet_v06_mechanism_preregistration.md`. The
+chosen projection is strictly richer than v0.5's 2-bit branch hash
+(continuous orbit-level invariants vs. catalog-coordinate indicator
+bits) while remaining catalog-derivable (per-row E and |L| computed
+in seconds from published initial conditions and the three-body
+Hamiltonian; no orbit integration). Operational definitions and
+non-circularity provenance locked; v0.4/v0.5 disallowed-feature list
+inherited; v0.5 audit-then-predictor + asymmetric McNemar + delta
+falsifier discipline inherited.
+
+**v0.6a form lock registered 2026-05-23** (audit form A, univariate
+energy quartiles). Locked shape: 4-bin quartile contingency on E with
+chi-squared(3) at p = 0.01 (critical 11.34); |L| quartile sidecar
+report-only; pre-registered alignment-tightness scalar guards
+against inheriting v0.5b's bin-locality failure mode (if max Q_E bin
+alignment with v0.5a branch_label > 0.8, v0.6b's partition must be
+re-registered before any held-out compute). v0.6a form lock at
+`internal/anniversary/kfacet_v06a_energy_quartile_audit_form.md`.
+Next runner action: per-row E/|L| computation against the supp-B
+parser output, sanity-check against the 7 v0.3 cross-m_3 sentinel
+rows (per-row residual < 1e-6), bound-orbit check (E < 0 for all
+273), then implement and run `scripts/v06a_energy_quartile_audit.py`.
+See `kfacet_v04_writeup.md`, `kfacet_v05_writeup.md`,
+`kfacet_v05a_branch_map_form.md`,
+`kfacet_v05b_branch_predictor_form.md`,
+`kfacet_v06_mechanism_preregistration.md`, and
+`kfacet_v06a_energy_quartile_audit_form.md`.
+
+**v0.6a verdict landed 2026-05-23:** the energy-quartile audit passes
+but with the registered alignment warning. Sanity and bound gates pass
+(`max |Delta E| = 0`, `max |Delta |L|| = 0`, all 273 rows have
+`E < 0`). Primary result: `chi^2_E = 33.703158` vs critical `11.34`
+(df=3, `p = 2.29e-7`), but `alignment_tightness_scalar_E = 0.955882`
+exceeds the 0.8 warning threshold. The |L| sidecar is also loud
+(`chi^2_|L| = 28.954252`, report-only) and similarly aligned
+(`0.956522`). Interpretation: conserved quantities do stratify S/U
+in-sample, but this first signal is tightly entangled with the v0.5a
+branch shadow. v0.6b may therefore proceed only as an
+alignment-breaking re-registration, not as the default leave-one-m_3
+predictor. Receipt:
+`results/isotrophy/k-facet-v06a-energy-quartile-audit/manifest.json`.
 
 ### Cross-Substrate Hand-Offs
 

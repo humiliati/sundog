@@ -266,7 +266,9 @@ limit.
 - `kfacet_v04b_gamma3prime_form.md` -- orbit-pass2 baseline, falsified.
 - `kfacet_v04b_mechanism_preregistration.md` -- parent registration.
 - `kfacet_v05a_branch_map_form.md` -- v0.5a branch-shadow audit (opens v0.5).
-- `kfacet_v03h_writeup.md` -- v0.3 chapter close (companion).
+- `kfacet_v05b_branch_predictor_form.md` -- v0.5b held-out predictor.
+- `kfacet_v05_writeup.md` -- v0.5 chapter close (projection-limit; companion).
+- `kfacet_v03h_writeup.md` -- v0.3 chapter close (grand-companion).
 - `kfacet_v03_freeze_b_comparison.md`,
   `kfacet_v03_gamma_crossm3_preregistration.md` -- the v0.3 alpha and
   II registrations that opened v0.4.
