@@ -332,3 +332,102 @@ After the full lock finishes, update [`PHASE15_RESULTS.md`](PHASE15_RESULTS.md) 
 - favorable-pocket read and boundary read
 - pre-registered branch taken
 - claim wording to preserve, strengthen, narrow, or retract
+
+## 7. Sharded execution (procedural amendment, 2026-05-16)
+
+The locked slate, modes, seeds, receipts, and §5 branches are unchanged. This
+section pins HOW the §3 12,960-trial full lock executes when it is run as
+overnight-fittable shards rather than as a single ~75 h run. The aggregate
+scientific result must be **byte-identical** (on aggregate CSVs) to what a
+single-run full lock would produce; any deviation voids the sharded run.
+
+**Shard axes (two stay full inside every shard so aggregates match single-run
+exactly):**
+
+- **Timesteps stay full.** `makeRichardsonOrderRows` groups all 5 ladder
+  timesteps for each `(regime, massRatio, radiusScale, velocityScale, seed)`
+  cell-seed; sharding by timestep would break the 4-point order fit.
+- **Seeds stay full.** The `hazard_quantile` guard freeze
+  (`deriveGuardThresholds`) is computed per `(case, regime)` from THAT case's
+  `off` seeds; sharding by seed would change the per-case threshold and
+  perturb every non-passive trial in that case.
+
+That leaves `mass-ratio (3) × radiusScale (3) × velocityScale (4) = 36`
+shardable cell-groups. **Pinned shard partition: `mass-ratio × velocityScale`
+= 12 shards.**
+
+**Per-shard arithmetic (reconciles to §3 full-lock totals):**
+
+- Each shard: 1 mass × 5 timesteps × 3 radii × 1 velocity = **15 cases** × 9
+  modes × 8 seeds = **1,080 trials** (~6 h linear from the §3 smoke rate).
+- Paired non-passive rows per shard: 15 × 8 × 8 = **960**. Envelope rows per
+  shard: 15 × 8 = **120**. Best-cells per shard: **15**.
+- Merged totals: 12 × 1,080 = **12,960 trials** ✓ (matches §3);
+  12 × 960 = **11,520 paired** ✓; 12 × 120 = **1,440 envelope rows** ✓;
+  12 × 15 = **180 best-cells** ✓.
+
+**Per-shard command shape (existing harness, two flags narrowed):**
+
+```bash
+node scripts/threebody-operating-envelope.mjs \
+  --phase phase15-forward-oracle-precision-shard-mu<X>-v<Y> \
+  --out results/threebody/phase15-shard-mu<X>-v<Y> \
+  --regimes near_escape \
+  --modes off,naive,track_sensor_accel_guarded,track_sensor_accel_signal_shuffle,track_sensor_accel_action_shuffle,track_sensor_accel_signal_delay,track_sensor_accel_sign_flip,oracle,forward_oracle_strict \
+  --mass-ratios <X> --velocity-scales <Y> \
+  --timesteps 0.004,0.006,0.008,0.01,0.012 \
+  --radius-scales 1.025,1.05,1.075 --thrust-limits 0.4 \
+  --sensor-noise-sweep 0 --track-guard-mode hazard_quantile \
+  --track-guard-quantile 0.75 --track-guard-min-radius-sweep 1.15 \
+  --track-guard-max-local-acceleration-sweep 2.5 \
+  --track-guard-max-tidal-magnitude-sweep 35 \
+  --seeds 8 --duration 16 --sensor-audit-every 240 \
+  --track-action-coupling 1 --precision-receipts 1
+```
+
+with `<X> ∈ {0.01, 0.3, 1}` and `<Y> ∈ {0.95, 1.05, 1.1, 1.15}` giving the 12
+shard combinations. Mass and velocity in `--out`/`--phase` follow the
+harness's `replaceAll(".", "p")` convention (e.g. `mu0p3-v1p1`).
+
+**Merge step.** New `npm run threebody:phase15:merge` reads all 12 per-shard
+manifests + trial JSONLs and runs the existing
+`makePairedRows → summarizeRows → makeBestByCellRows → makeCellMatrixRows →
+makeRichardsonOrderRows` pipeline on the union, then writes the unified
+`results/threebody/phase15-forward-oracle-precision-lock/` aggregate CSVs as
+if a single-run full lock had produced them. Per-shard trial JSONLs remain in
+their own dirs; the merged dir contains the unified aggregate CSVs + a
+unified manifest summary that names the 12 per-shard sources. This is an
+**additive refactor** of existing aggregation functions (export from
+`threebody-operating-envelope.mjs`, call from a new
+`scripts/threebody-phase15-merge.mjs`); no per-trial code path changes, so
+the hard-void gates `npm run threebody:phase13` / `phase14` must continue to
+reproduce bit-for-bit after the refactor.
+
+**Shard-equivalence pre-registration gate (binding, blocks any full-lock
+shard).** Before any overnight full-lock shard runs, the sharded+merged
+pipeline must produce **byte-identical aggregate CSVs** to the
+already-locked single-run widened smoke
+(`results/threebody/phase15-forward-oracle-precision-smoke/`, `T_window=2.4`,
+favorable-pocket median p=4.30985, recorded 2026-05-16 in
+`PHASE15_RESULTS.md`). Procedure: re-run the 360-trial widened smoke as 2
+shards split by velocity (`v=0.95` and `v=1.1`, each keeping all 5 timesteps
++ both radii + both seeds + all 9 modes intact = 180 trials per shard), merge
+with `threebody:phase15:merge`, and diff every aggregate CSV against the
+single-run smoke aggregates. The following must compare **byte-identical**:
+
+`aggregate-envelope.csv`, `candidate-envelope.csv`, `paired.csv`,
+`trial-outcomes.csv`, `envelope-map.csv`, `best-by-cell.csv`,
+`cell-class-map.csv`, `cell-delta-map.csv`, `cell-warning-quality-map.csv`,
+`cell-precision-map.csv`, `richardson-order-map.csv`.
+
+`manifest.json` is **not** required to match (per-trial timestamps and
+process metadata differ legitimately across shard processes). If any of the
+listed aggregate CSVs differs, the sharded pipeline is **void** for the full
+lock; sharding may not proceed until the equivalence gate passes
+byte-identical.
+
+**Scope of this amendment.** Procedural — HOW the locked slate executes.
+§1–§6 are unchanged. The unified merged aggregates feed the same §5
+Pass/Partial/Fail interpretation as a single-run would. The hard-void gates
+remain `npm run threebody:phase13` / `phase14` and must reproduce
+bit-for-bit after the merge-supporting harness refactor.
