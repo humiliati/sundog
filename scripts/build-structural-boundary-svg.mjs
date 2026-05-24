@@ -129,12 +129,47 @@ function textLines(text, maxChars) {
   return wrapText(text, maxChars).length;
 }
 
-function pill({ x, y, label, fill, stroke, text, width = null }) {
+function dataAttributes(attributes = {}) {
+  return Object.entries(attributes)
+    .filter(([, value]) => value !== undefined && value !== null && value !== "")
+    .map(([key, value]) => {
+      const attributeName = key.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
+      return ` data-${attributeName}="${escapeXml(value)}"`;
+    })
+    .join("");
+}
+
+function pill({
+  x,
+  y,
+  label,
+  fill,
+  stroke,
+  text,
+  width = null,
+  title = "",
+  className = "",
+  data = {},
+}) {
   const labelWidth = width ?? Math.max(80, label.length * 7.2 + 28);
-  return `<g>
+  const classAttribute = className ? ` class="${escapeXml(className)}"` : "";
+  return `<g${classAttribute}${dataAttributes(data)}>
+    ${title ? `<title>${escapeXml(title)}</title>` : ""}
     <rect x="${x}" y="${y}" width="${labelWidth}" height="28" rx="8" fill="${fill}" stroke="${stroke}" stroke-width="1"/>
     <text x="${x + 14}" y="${y + 18}" fill="${text}" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">${escapeXml(label.toUpperCase())}</text>
   </g>`;
+}
+
+function statusChipLabel(item) {
+  const shortLabels = {
+    p0: "P0 map: pass",
+    p1: "P1: pass",
+    "p2-first-cut": "P2 first cut: reclassified",
+    cut2: "Cut 2: separability",
+    cut3: "Cut 3: hold",
+    h0: "H0 calibration: open",
+  };
+  return shortLabels[item.id] ?? `${item.label}: ${item.status}`;
 }
 
 function statusChips(statusLadder, x, y, maxWidth) {
@@ -144,13 +179,31 @@ function statusChips(statusLadder, x, y, maxWidth) {
 
   for (const item of statusLadder) {
     const palette = statusPalette[item.status] ?? statusPalette.open;
-    const label = `${item.label}: ${item.status}`;
+    const fullLabel = `${item.label}: ${item.status}`;
+    const label = statusChipLabel(item);
     const width = Math.min(260, Math.max(112, label.length * 6.8 + 26));
     if (cursorX + width > x + maxWidth) {
       cursorX = x;
       cursorY += 36;
     }
-    chips.push(pill({ x: cursorX, y: cursorY, label, width, ...palette }));
+    chips.push(
+      pill({
+        x: cursorX,
+        y: cursorY,
+        label,
+        width,
+        title: item.publicLabel ? `${fullLabel}. ${item.publicLabel}` : fullLabel,
+        className: "status-chip",
+        data: {
+          id: item.id,
+          label: item.label,
+          status: item.status,
+          publicLabel: item.publicLabel,
+          source: item.source,
+        },
+        ...palette,
+      }),
+    );
     cursorX += width + 10;
   }
 
@@ -195,7 +248,14 @@ function buildSvg(data) {
     const palette = classPalette[locus.visualClass] ?? classPalette.admissibility;
     const y = rowY;
 
-    rows.push(`<g>
+    rows.push(`<g class="boundary-row"${dataAttributes({
+      id: locus.id,
+      title: locus.title,
+      status: locus.displayStatus,
+      visualClass: locus.visualClass,
+      handle: locus.handle,
+    })}>
+      <title>${escapeXml(`${locus.id}: ${locus.title} - ${locus.displayStatus}`)}</title>
       <rect x="${margin}" y="${y}" width="${contentWidth}" height="${rowHeight}" rx="8" fill="${colors.panel}" stroke="${colors.line}" stroke-width="1"/>
       <rect x="${margin}" y="${y}" width="8" height="${rowHeight}" rx="4" fill="${palette.stroke}"/>
       ${colRects
@@ -214,6 +274,12 @@ function buildSvg(data) {
         fill: palette.pillFill,
         stroke: palette.stroke,
         text: palette.text,
+        title: `${locus.id}: ${locus.title} - ${locus.displayStatus}`,
+        className: "locus-status-chip",
+        data: {
+          id: locus.id,
+          status: locus.displayStatus,
+        },
       })}
       ${textBlock({
         text: locus.title,

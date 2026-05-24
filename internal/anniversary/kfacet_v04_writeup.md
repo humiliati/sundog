@@ -222,20 +222,39 @@ Codex direction will decide which path opens. No runner work proceeds
 until the v0.5 mechanism family is registered paper-side.
 
 **Update 2026-05-23:** v0.5 has opened with a **branch-shadow audit**
-that has now LANDED with verdict `branch_hash_passes_audit`. The
-catalog-only branch hash on `(m_3 < 1, z_0 < 0.3)` carries stability
-information on supp-B: `chi^2 = 34.986` vs critical `11.34`
-(`chi-squared(3)`, p ~= `1.23e-7`). The audit-dominant bucket is
-`(m_3 < 1, z_0 < 0.3)` with 113 rows at 55.75% stable (catalog mean
-35.5%); the other three buckets sit at 20-29%. This is the first
-positive catalog-level signal in the isotrophy program — the v0.4
-Z_2-shadow negatives plus the v0.5a branch-shadow pass together say
-the body's stability structure is visible in catalog-coordinate
-branch shadow but NOT in Z_2 tangent or orbit-gauge-rigidity shadows.
-See `kfacet_v05a_branch_map_form.md`. v0.5a is explicitly an AUDIT,
-not a predictor; the pass licenses v0.5b — a separately registered
-predictor with held-out test (e.g., leave-one-m_3-bin-out or held-out
-catalog half).
+that LANDED with verdict `branch_hash_passes_audit`. The catalog-only
+branch hash on `(m_3 < 1, z_0 < 0.3)` carries stability information on
+supp-B: `chi^2 = 34.986` vs critical `11.34` (`chi-squared(3)`,
+p ~= `1.23e-7`). The audit-dominant bucket is `(m_3 < 1, z_0 < 0.3)`
+with 113 rows at 55.75% stable (catalog mean 35.5%); the other three
+buckets sit at 20-29%. See `kfacet_v05a_branch_map_form.md`.
+
+**v0.5b LANDED 2026-05-23 (predictor fails held-out).** The
+leave-one-m_3-bin-out fold-trained branch-majority predictor was
+tested against the always-U baseline on the 263-row gating subset
+(12 bins with N >= 5). Verdict: **`branch_predictor_fails_heldout`**.
+Model accuracy `0.6198` vs always-U `0.6388`; accuracy delta `-0.019`
+(predictor LOSES to always-U). McNemar discordance `win=28, loss=33`,
+`n_disc=61`, `p=1.0`. The load-bearing fold is m_3 = 0.4 (as
+pre-mortem flagged): when held out, the low-mass/low-z_0 branch trains
+as U on the residual five `m_3 < 1` bins (`28 S / 33 U`), so the
+predictor cannot capture the m_3 = 0.4 stable cluster on its own
+held-out fold. In other low-mass folds, the branch predicts S but
+wins and false positives cancel.
+
+**Joint v0.5 reading.** The catalog branch shadow is associated with
+stability in-sample (`chi^2 = 34.99`, p ~= `1.23e-7`) but does not
+predict held-out stability across mass bins (`accuracy_delta = -0.019`).
+This is a clean **projection-limit result**: the branch hash describes
+the supp-B distribution but does not lift to a mechanism. Combined
+with v0.4: stability on this catalog is not in the Z_2 shadow at
+either tangent or orbit-gauge-rigidity granularity AND is not
+out-of-sample predictable from the catalog-coordinate branch shadow.
+The branch hash is a descriptive catalog partition, not a predictive
+mechanism. v0.5c remains open if a continuous feature (with explicit
+`T_kepler` / `mu_eff` references) is to be promoted; otherwise the
+v0.5 chapter closes as an audit-passes-predictor-fails projection
+limit.
 
 ## Doc Trail
 

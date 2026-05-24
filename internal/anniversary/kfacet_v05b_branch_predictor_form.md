@@ -1,8 +1,9 @@
 # v0.5b Branch-Predictor Registration (Held-Out)
 
-Status: **DRAFT FOR SIGN-OFF 2026-05-23**. No compute has been run under
-this form. This document registers the first true predictor after the v0.5a
-branch-shadow audit passed.
+Status: **VERDICT LANDED 2026-05-23**. The held-out predictor fails:
+`accuracy_model = 0.6198` vs always-`U` `0.6388`, with McNemar
+`win = 28`, `loss = 33`, `p = 1.0`. Verdict:
+`branch_predictor_fails_heldout`.
 
 Audience: v0.5b runner; paper-side reviewer of the v0.5 transition from
 audit to prediction.
@@ -19,7 +20,69 @@ Frame: v0.5a showed that the branch shadow `(m_3 < 1, z_0 < 0.3)` carries
 stability information. v0.5b asks whether that shadow predicts held-out
 stability better than the catalog-skew baseline.
 
-## Four Decisions Locked By This Draft
+## Verdict (Landed, 2026-05-23)
+
+The primary leave-one-`m_3`-bin-out gate fails:
+
+```text
+gating rows:       263
+gating S/U:        95 S / 168 U
+model accuracy:    0.619772
+always-U accuracy: 0.638783
+accuracy delta:   -0.019011
+
+McNemar:
+  win:             28
+  loss:            33
+  n_discordant:    61
+  p-value:         1.0  [win <= loss short-circuit]
+
+verdict:           branch_predictor_fails_heldout
+```
+
+Structural reading:
+
+> v0.5a's branch hash stratifies stability in-sample, but the branch-majority
+> predictor does not generalize across held-out mass bins. The branch shadow
+> is a descriptive catalog partition, not a mass-bin-held-out predictive
+> mechanism under this first registered rule.
+
+The fold table localizes the failure. The `m_3 = 0.4` bin is the dominant
+stable fold (`35 S / 20 U`). When it is held out, the remaining low-mass,
+low-`z_0` rows train that branch as `U` (`28 S / 33 U`), so the model misses
+the large `m_3 = 0.4` stable block. In the other low-mass folds, the same
+branch trains as `S`, but the stable-row wins and unstable-row false positives
+nearly cancel (`28` wins vs `33` losses pooled).
+
+Sidecars:
+
+```text
+single-rule sidecar:
+  rule:        predict S iff (m_3 < 1 and z_0 < 0.3)
+  accuracy:    0.688213 vs always-U 0.638783
+  McNemar:     win = 63, loss = 50, p = 0.129431
+  verdict:     fails sidecar threshold
+
+random-half sidecar:
+  seed:        20260523
+  accuracy:    0.688213 vs always-U 0.638783
+  McNemar:     win = 63, loss = 50, p = 0.129431
+  verdict:     fails sidecar threshold
+```
+
+Receipt paths:
+
+```text
+results/isotrophy/k-facet-v05b-branch-predictor/manifest.json
+results/isotrophy/k-facet-v05b-branch-predictor/per_fold_table.csv
+results/isotrophy/k-facet-v05b-branch-predictor/per_row_predictions.csv
+results/isotrophy/k-facet-v05b-branch-predictor/branch_training_table.csv
+results/isotrophy/k-facet-v05b-branch-predictor/sidecar_single_rule.csv
+results/isotrophy/k-facet-v05b-branch-predictor/sidecar_random_half.csv
+scripts/v05b_branch_predictor.py
+```
+
+## Four Decisions Locked By This Form
 
 1. **Held-out partition**: leave-one-`m_3`-bin-out is the primary gate.
    The gating folds are the 12 `m_3` bins with `N >= 5`. This respects the

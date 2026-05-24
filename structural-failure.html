@@ -143,6 +143,137 @@
             padding: 2rem;
         }
 
+        .lockon-panel {
+            display: grid;
+            grid-template-columns: minmax(0, 0.94fr) minmax(280px, 1.06fr);
+            gap: clamp(1.25rem, 4vw, 3rem);
+            align-items: center;
+            border-block: 1px solid var(--line);
+            padding-block: clamp(1.25rem, 4vw, 2.25rem);
+        }
+
+        .lockon-copy h2 {
+            margin: 0.8rem 0 0.9rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(1.55rem, 4vw, 2.6rem);
+            line-height: 1.08;
+            text-align: left;
+        }
+
+        .lockon-copy p {
+            max-width: 620px;
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.75;
+        }
+
+        .lockon-copy strong {
+            color: var(--primary-dark);
+        }
+
+        .lockon-demo {
+            min-height: 260px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background:
+                linear-gradient(90deg, rgba(220, 230, 236, 0.55) 1px, transparent 1px),
+                linear-gradient(180deg, rgba(220, 230, 236, 0.55) 1px, transparent 1px),
+                #FFFFFF;
+            background-size: 34px 34px;
+            overflow: hidden;
+        }
+
+        .lockon-demo svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            min-height: 260px;
+        }
+
+        .floater-path {
+            fill: none;
+            stroke: #C9972F;
+            stroke-width: 7;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            opacity: 0.82;
+            animation: floaterDrift 5.6s ease-in-out infinite alternate;
+        }
+
+        .eligible-path {
+            fill: none;
+            stroke: #3D7A5A;
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-dasharray: 10 12;
+        }
+
+        .reticle {
+            transform-origin: center;
+            animation: reticleSearch 5.6s ease-in-out infinite alternate;
+        }
+
+        .reticle-ring {
+            fill: rgba(255, 255, 255, 0.74);
+            stroke: #173348;
+            stroke-width: 2;
+        }
+
+        .reticle-line {
+            stroke: #173348;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        .lock-label {
+            fill: #173348;
+            font-family: var(--sd-font-data);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .lock-note {
+            fill: #40505C;
+            font-family: var(--sd-font-ui);
+            font-size: 13px;
+            letter-spacing: 0;
+        }
+
+        @keyframes floaterDrift {
+            from {
+                transform: translate(0, 0) rotate(-1deg);
+            }
+
+            to {
+                transform: translate(18px, -11px) rotate(2deg);
+            }
+        }
+
+        @keyframes reticleSearch {
+            0%,
+            28% {
+                transform: translate(0, 0);
+            }
+
+            48%,
+            70% {
+                transform: translate(72px, -20px);
+            }
+
+            100% {
+                transform: translate(128px, 10px);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .floater-path,
+            .reticle {
+                animation: none;
+            }
+        }
+
         .boundary-figure {
             border: 1px solid var(--line);
             border-radius: 8px;
@@ -222,6 +353,10 @@
                 padding: 1.25rem;
             }
 
+            .lockon-panel {
+                grid-template-columns: 1fr;
+            }
+
             .boundary-figure {
                 margin-inline: -0.25rem;
             }
@@ -259,6 +394,45 @@
                 <span>P2 first cut vacuous</span>
                 <span>Cut 2 regime-separability</span>
                 <span>Rendered Cut 3 held</span>
+            </div>
+        </section>
+
+        <section class="boundary-section" aria-labelledby="lockon-title">
+            <div class="lockon-panel">
+                <div class="lockon-copy">
+                    <p class="eyebrow">Failure Boundary Intuition</p>
+                    <h2 id="lockon-title">The honest move is knowing when the trace stops locking on.</h2>
+                    <p>
+                        Think of the structure like a drifting floater in your eye:
+                        it can be real, but the moment you try to pin it down it
+                        slides out from under the reticle. A disciplined trace does
+                        not keep reporting a crisp position after that. It says
+                        <strong>eligible</strong>, <strong>abstain</strong>, or
+                        <strong>switch handles</strong> at the boundary.
+                    </p>
+                </div>
+                <div class="lockon-demo" aria-hidden="true">
+                    <svg viewBox="0 0 560 300" role="img">
+                        <path class="eligible-path" d="M70 205 C130 132 182 118 245 154 C296 183 323 113 374 104 C418 97 456 129 494 86"/>
+                        <path class="floater-path" d="M74 209 C133 133 181 120 244 158 C303 194 328 116 377 108 C420 100 457 131 498 88"/>
+                        <g class="reticle">
+                            <circle class="reticle-ring" cx="184" cy="148" r="42"/>
+                            <line class="reticle-line" x1="184" y1="96" x2="184" y2="119"/>
+                            <line class="reticle-line" x1="184" y1="177" x2="184" y2="200"/>
+                            <line class="reticle-line" x1="132" y1="148" x2="155" y2="148"/>
+                            <line class="reticle-line" x1="213" y1="148" x2="236" y2="148"/>
+                        </g>
+                        <circle cx="118" cy="176" r="6" fill="#3D7A5A"/>
+                        <circle cx="282" cy="168" r="6" fill="#B8831E"/>
+                        <circle cx="428" cy="106" r="6" fill="#A85043"/>
+                        <text class="lock-label" x="82" y="235">ELIGIBLE</text>
+                        <text class="lock-note" x="82" y="254">route can carry evidence</text>
+                        <text class="lock-label" x="244" y="235">ABSTAIN</text>
+                        <text class="lock-note" x="244" y="254">low leverage, ambiguous</text>
+                        <text class="lock-label" x="402" y="235">SWITCH</text>
+                        <text class="lock-note" x="402" y="254">new handle needed</text>
+                    </svg>
+                </div>
             </div>
         </section>
 
