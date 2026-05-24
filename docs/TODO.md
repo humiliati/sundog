@@ -890,15 +890,18 @@ explicitly justified coarser bins (e.g., median-split with df=1) --
 NOT a post-hoc loosening of v0.6b. v0.6b's sparse-cell fallback
 discipline is permanent.
 
-## v0.7 gamma_1 Direction-of-Instability (parent registered)
+## v0.7 gamma_1 Direction-of-Instability (parent + v0.7a registered)
 
 ### V0.7 gamma_1 direction-of-instability mechanism family
 
-Status: **PARENT REGISTERED 2026-05-24**. Parent registration:
+Status: **PARENT REGISTERED 2026-05-24; v0.7a FORM LOCK REGISTERED
+2026-05-24**. Parent registration:
 [`../internal/anniversary/kfacet_v07_mechanism_preregistration.md`](../internal/anniversary/kfacet_v07_mechanism_preregistration.md).
-v0.7a (form lock with explicit operational definition + audit form
-+ non-circularity argument) and v0.7b (held-out predictor, conditional
-on v0.7a passing) are pending child registrations.
+**v0.7a form lock**: D5 + B (velocity-fraction quartile audit) with
+D1 + A direction-projection quartile as named report-only sidecar.
+Form lock:
+[`../internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md`](../internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md).
+v0.7b (held-out predictor) is pending v0.7a's verdict.
 
 Frame: v0.4 ruled out the Z_2 shadow. v0.5 ruled out the 2-bit catalog
 branch shadow. v0.6 ruled out the (E, |L|) catalog-coordinate shadow
@@ -950,34 +953,106 @@ deterministic tie-break for S-row eigenvalue degeneracy, a reference
 frame for the geometric projection, an alignment-tightness guard
 against the v0.5a branch label, and the sparse-cell fallback tree.
 
+v0.7a locked shape:
+
+```text
+operational definition:  D5 velocity-fraction direction property.
+gamma_1 selection:       largest-real-part Floquet eigenvalue's
+                         eigenvector (D1's selection rule used only to
+                         disambiguate; feature is independent of which
+                         eigenvalue is picked).
+tie-break cascade:       within degenerate eigenspace, maximal projection
+                         onto velocity subspace; then smallest |Im(lambda)|;
+                         then smallest positive argument; then lex sign.
+reference frame:         center-of-mass reduced frame with mass-weighted
+                         norm (body-3 mass variation does not fake a
+                         direction effect).
+feature:                 vf(row) = ||delta_v||^2 /
+                                   (||delta_q||^2 + ||delta_v||^2)
+                         after CoM reduction and mass-weighted norm.
+
+audit form:              B = quartile audit of vf vs S/U.
+binning:                 supp-B quartiles via numpy.quantile,
+                         linear interpolation; right-closed lower bins.
+contingency:             4 x 2 (Q_vf, S/U), df = 3.
+critical:                11.34 at p = 0.01 (chi-squared(3)).
+
+alignment guard:         max over Q_vf of fraction-in-any-single-
+                         v0.5a-branch_label, threshold 0.8 (warning),
+                         0.95 (severe).
+
+sparse-cell fallback:    v0.6b inheritance verbatim
+                         (seed = 20260523, n_permutations = 10000).
+
+constant-feature
+retirement threshold:    sd(vf) < 0.01.
+
+verdicts:
+  velocity_fraction_passes_audit                        |
+  velocity_fraction_passes_audit_alignment_warning      |
+  velocity_fraction_passes_audit_severe_alignment       |
+  velocity_fraction_fails_audit                         |
+  velocity_fraction_inconclusive_sparse                 |
+  velocity_fraction_retired_near_constant               |
+  velocity_fraction_blocked_sanity                      |
+  velocity_fraction_blocked_circularity_audit.
+
+named sidecar (D1 + A):  gamma_1 z-projection magnitude under CoM
+                         frame, quartile-binned. Report-only; a loud
+                         sidecar would require a fresh circularity
+                         audit, NOT a refinement of v0.7a.
+
+locked non-circularity sentence (paper-side):
+  "v0.7a uses Floquet eigenvectors only as geometric directions; it
+  does not use eigenvalue magnitude, spectral radius, unit-circle
+  status, unstable-pair count, or any threshold that defines the
+  published S/U label. The tested scalar is a phase-space composition
+  ratio of the selected direction, not the growth rate of that
+  direction."
+```
+
 Next actions:
 
-1. v0.7a form lock: pick one of D1-D5 + one of A-D + tie-break +
-   reference frame, lock paper-side with explicit non-circularity
-   argument.
-2. Per-row gamma_1 computation as a pre-audit diagnostic (no audit
-   verdict yet). Sanity-check eigenvector direction stability across
-   v0.4a Pass 1 vs Pass 2 tolerances on the 24 Pass 2-rescued rows.
-3. Constant-feature retirement check: if gamma_1 has insufficient
-   per-row variation, the audit cannot run.
-4. Run v0.7a audit blind; land verdict.
-5. Conditional on v0.7a passing CLEAN (no alignment warning):
+1. Implement `scripts/v07a_velocity_fraction_audit.py`:
+   - Per-row variational integration of the 18-dimensional tangent
+     system over one period (new compute; was not in v0.4a's emitted
+     scalars).
+   - Symplecticity sanity gate (M_i^T J M_i - J in tolerance 1e-6).
+   - Reciprocal-pair sanity gate (Floquet eigenvalue pairing within
+     1e-4).
+   - gamma_1 extraction under the locked selection rule and tie-break
+     cascade.
+   - Velocity-fraction computation under CoM reduction + mass-weighted
+     norm.
+   - Constant-feature retirement check (sd(vf) < 0.01).
+   - Quartile binning + chi-squared + alignment-tightness guard +
+     sparse-cell fallback.
+   - D1 + A sidecar emitted under the same selection rule, different
+     feature.
+   - Receipt at
+     `results/isotrophy/k-facet-v07a-velocity-fraction-audit/manifest.json`.
+2. Run v0.7a blind; land verdict.
+3. Conditional on `velocity_fraction_passes_audit` (clean):
    register v0.7b with default leave-one-m_3-bin-out partition.
-   Conditional on v0.7a passing with alignment warning:
-   register v0.7b with alignment-breaking partition (mirroring v0.6b's
-   within-branch approach).
-   Conditional on v0.7a failing: close the gamma_1 direction
-   sub-question; v0.7c may register an alternative operational
-   definition (different D from the candidate list) as a fresh form
-   lock.
+   Conditional on `..._alignment_warning` or `..._severe_alignment`:
+   register v0.7b with alignment-breaking partition (within-branch
+   mirroring v0.6b).
+   Conditional on `..._fails_audit`:
+   close the velocity-fraction sub-question; the D1+A sidecar's
+   chi-squared is informational only; v0.7c may register a fresh
+   form lock with a different D + A combination after a circularity
+   re-audit.
+   Conditional on `..._inconclusive_sparse` or
+   `..._retired_near_constant` or `..._blocked_*`:
+   inspect and re-register as appropriate.
 
 Stop condition:
 
-If the v0.7a operational definition cannot be argued non-circular,
-the form lock is rejected pre-compute and the v0.7 chapter closes
-immediately. The non-circularity audit is load-bearing; circularity
-through eigenvalue-magnitude or definedness-conditioning is the
-single largest design risk.
+If the v0.7a runner cannot maintain the locked non-circularity
+discipline at compute time (e.g., the tie-break cascade requires
+inspecting eigenvalue magnitude in some unforeseen way), abort with
+`velocity_fraction_blocked_circularity_audit`. No compute verdict is
+licensed.
 
 ## Onboarding / Polish (Run-Friendly)
 

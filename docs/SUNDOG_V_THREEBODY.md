@@ -1137,23 +1137,42 @@ lifts that locality to a generalizable mechanism. Chapter close at
 direction-of-instability** family (codex direction). Parent
 registration at `internal/anniversary/kfacet_v07_mechanism_preregistration.md`.
 The chosen projection LEAVES catalog-coordinate space entirely:
-per-row monodromy M_i (derivable from v0.4a receipts) is decomposed
-into its Floquet eigenstructure, and the eigenvector direction of a
-pre-registered eigenvalue choice is projected onto a pre-registered
-geometric reference frame. The parent registration explicitly
-identifies three circularity risks (eigenvalue-choice,
-well-definedness, feature-extraction) and locks the discipline that
-all three must be addressed in the v0.7a form lock with an explicit
-non-circularity argument. Candidate operational definitions D1-D5
-and audit forms A-D are sketched; one of each will be locked in the
-v0.7a child form lock. v0.4b disallowed-feature inheritance is
-re-asserted (no Floquet-magnitude, no K_fib tangent decomposition);
-v0.5 audit-then-predictor + asymmetric McNemar+delta inheritance and
-v0.6 alignment-tightness guard + sparse-cell fallback tree
-inheritance are all locked. v0.7a (form lock) and v0.7b (held-out
-predictor, conditional on v0.7a passing) are pending child
-registrations. No audit verdict licensed until v0.7a is separately
-registered.
+per-row monodromy M_i is decomposed into its Floquet eigenstructure,
+and the eigenvector direction of a pre-registered eigenvalue choice
+is projected onto a pre-registered geometric reference frame. The
+parent registration explicitly identifies three circularity risks
+(eigenvalue-choice, well-definedness, feature-extraction) and locks
+the discipline that all three must be addressed in the v0.7a form
+lock with an explicit non-circularity argument. v0.4b
+disallowed-feature inheritance is re-asserted (no Floquet-magnitude,
+no K_fib tangent decomposition); v0.5 audit-then-predictor +
+asymmetric McNemar+delta inheritance and v0.6 alignment-tightness
+guard + sparse-cell fallback tree inheritance are all locked.
+
+**v0.7a form lock registered 2026-05-24** (D5 + B; velocity-fraction
+quartile audit). Codex picked D5 over D1 on the rationale that
+eigenvalue ordering is too close to the S/U definition; D5
+minimizes the tie-break surface and uses Floquet eigenvectors only
+as geometric directions. D1 + A is preserved as a named report-only
+sidecar. Locked shape: `gamma_1` = right eigenvector of the
+largest-real-part eigenvalue with a deterministic 4-step tie-break
+cascade for degenerate eigenspaces; reference frame = center-of-mass
+reduced with mass-weighted norm; feature =
+`vf = ||delta_v||^2 / (||delta_q||^2 + ||delta_v||^2)`; binning =
+supp-B quartiles, 4 x 2 contingency, df = 3, critical 11.34;
+alignment-tightness threshold 0.8 / 0.95; v0.6b sparse-cell fallback
+inheritance verbatim (seed 20260523, n_permutations = 10000);
+constant-feature retirement at sd(vf) < 0.01. Locked non-circularity
+sentence: *"v0.7a uses Floquet eigenvectors only as geometric
+directions; it does not use eigenvalue magnitude, spectral radius,
+unit-circle status, unstable-pair count, or any threshold that
+defines the published S/U label. The tested scalar is a phase-space
+composition ratio of the selected direction, not the growth rate of
+that direction."* Form lock at
+`internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md`.
+Implementation pending: `scripts/v07a_velocity_fraction_audit.py`
+(new compute: per-row variational integration of the 18-dimensional
+tangent system over one period; minutes total).
 
 ### Cross-Substrate Hand-Offs
 
