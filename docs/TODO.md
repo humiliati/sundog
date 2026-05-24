@@ -725,19 +725,23 @@ set that failed v0.5b held-out, retire it at the registration stage
 rather than launching a sweep. v0.5b's pre-registered asymmetric
 falsifier (McNemar p AND positive delta) is the inheritance discipline.
 
-## v0.6 Conserved-Quantity (E, |L|) Stratification (parent + v0.6a verdict landed)
+## v0.6 Conserved-Quantity (E, |L|) Stratification (parent + v0.6a + v0.6b verdicts landed)
 
 ### V0.6 conserved-quantity (E, |L|) mechanism family
 
 Status: **PARENT REGISTERED 2026-05-23; v0.6a VERDICT LANDED
-2026-05-23**. Parent registration:
+2026-05-23; v0.6b VERDICT LANDED 2026-05-24**. Parent registration:
 [`../internal/anniversary/kfacet_v06_mechanism_preregistration.md`](../internal/anniversary/kfacet_v06_mechanism_preregistration.md).
-**v0.6a verdict**: `energy_quartile_passes_audit_alignment_warning`.
-Univariate energy quartiles pass the registered chi-squared gate but
-trip the alignment guard. Form/verdict:
+**v0.6a verdict**: `energy_quartile_passes_audit_alignment_warning`
+(chi^2 = 33.70 vs 11.34, alignment = 0.956). Form/verdict:
 [`../internal/anniversary/kfacet_v06a_energy_quartile_audit_form.md`](../internal/anniversary/kfacet_v06a_energy_quartile_audit_form.md).
-v0.6b (held-out predictor form lock) is pending an alignment-breaking
-partition design.
+**v0.6b verdict**: `within_branch_energy_fails_audit` (chi^2 = 6.90,
+permutation p = 0.029; sparse-cell fallback fired with min_expected =
+2.66; |L| sidecar at permutation p = 0.074 also below loud-signal
+threshold). Form/verdict:
+[`../internal/anniversary/kfacet_v06b_within_branch_energy_audit_form.md`](../internal/anniversary/kfacet_v06b_within_branch_energy_audit_form.md).
+v0.6c (held-out predictor) is NOT licensed; v0.6 chapter is positioned
+for chapter-close writeup as a clean conditional-independence result.
 
 Frame: v0.4 ruled out the Z_2 shadow as a stability projector.
 v0.5 ruled out the 2-bit catalog branch shadow as a held-out
@@ -816,20 +820,164 @@ Completed actions:
    stability)` table emitted.
 5. v0.6a verdict landed.
 
-Next action:
+v0.6b result:
 
-1. Register v0.6b paper-side with an alignment-breaking held-out
-   partition, then decide whether the |L| sidecar warrants a separate
-   future form lock after the E predictor question is settled.
+```text
+receipt:           results/isotrophy/k-facet-v06b-within-branch-energy/manifest.json
+stratum:           113 rows  (63 S / 50 U)
+sanity:            PASS  (N, S, U match locked counts)
+
+within-branch Q_E contingency:
+  Q1:  N=0   (Q1 entirely outside stratum -- tightest catalog
+              orbits all sit in other branches)
+  Q2:  N=6   S=2,  U=4   S_frac=0.333
+  Q3:  N=42  S=18, U=24  S_frac=0.429
+  Q4:  N=65  S=43, U=22  S_frac=0.662
+
+within-branch Q_E x m_3:
+  Q4 = m_3 in {0.4, 0.5}   (52 of 65 are m_3 = 0.4)
+  Q3 = m_3 in {0.5, 0.6, 0.7, 0.8}
+  Q2 = m_3 in {0.8, 0.9}
+  -- Q_E is essentially a label for m_3 sub-bin inside the stratum.
+
+E primary:    chi^2 = 6.904228
+              fallback fired (min_expected = 2.655 < 5);
+              permutation test seed = 20260523, n_permutations = 10000;
+              permutation p = 0.0292
+verdict:      within_branch_energy_fails_audit   (p > 0.01)
+
+|L| sidecar:  chi^2 = 4.464524
+              permutation p = 0.0741
+              report-only; does NOT meet the loud-signal threshold
+              (p <= 0.01) for a fresh v0.6c |L| form lock.
+```
+
+Interpretation: the within-branch direction is monotone in the same
+direction as the catalog-wide v0.6a finding (Q2: 33% S, Q3: 43% S,
+Q4: 66% S), but the permutation p = 0.029 does not clear the
+pre-registered p <= 0.01 floor. The v0.6a in-sample chi-squared was
+dominated by branch-shadow content; energy quartile is essentially a
+1-to-1 label for m_3 sub-bin within the stratum, and the residual
+within-branch stratification is below the gating floor. The
+energy-shadow-as-mechanism sub-question closes; the |L| sidecar at
+p = 0.074 does NOT trigger a fresh form lock either.
+
+Completed actions:
+
+1. ~~Implement `scripts/v06b_within_branch_energy_audit.py`.~~ DONE
+   2026-05-24.
+2. ~~Run the v0.6b audit blind; land verdict.~~ DONE 2026-05-24.
+
+Next actions:
+
+1. ~~Author the v0.6 chapter close writeup.~~ DONE 2026-05-24. v0.6
+   epilogue at
+   [`../internal/anniversary/kfacet_v06_writeup.md`](../internal/anniversary/kfacet_v06_writeup.md).
+   Chapter type: **conditional-independence close** (distinct from
+   v0.4 structural-negative and v0.5 projection-limit).
+2. ~~**Paper-side v0.7 direction (open).**~~ DONE 2026-05-24. v0.7
+   opens with the **gamma_1 direction-of-instability** family. Parent
+   registration at
+   [`../internal/anniversary/kfacet_v07_mechanism_preregistration.md`](../internal/anniversary/kfacet_v07_mechanism_preregistration.md).
+   See the v0.7 section below for the runner state.
 
 Stop condition:
 
-If the per-row (E, |L|) bins on supp-B align tightly with the v0.5b
-(m_3, z_0) buckets, the leave-one-m_3-bin-out partition inherits the
-v0.5b bin-locality risk. The v0.6a form lock pre-registers the
-alignment-tightness scalar (`max over Q_E of fraction in any single
-branch_label bucket`); if it exceeds 0.8, v0.6b's partition must be
-re-registered before any held-out compute.
+If the within-branch chi-squared has a permutation p > 0.01 but the
+residual structure suggests a coarser binning would pass, the
+pre-registered re-registration path is a fresh form lock with
+explicitly justified coarser bins (e.g., median-split with df=1) --
+NOT a post-hoc loosening of v0.6b. v0.6b's sparse-cell fallback
+discipline is permanent.
+
+## v0.7 gamma_1 Direction-of-Instability (parent registered)
+
+### V0.7 gamma_1 direction-of-instability mechanism family
+
+Status: **PARENT REGISTERED 2026-05-24**. Parent registration:
+[`../internal/anniversary/kfacet_v07_mechanism_preregistration.md`](../internal/anniversary/kfacet_v07_mechanism_preregistration.md).
+v0.7a (form lock with explicit operational definition + audit form
++ non-circularity argument) and v0.7b (held-out predictor, conditional
+on v0.7a passing) are pending child registrations.
+
+Frame: v0.4 ruled out the Z_2 shadow. v0.5 ruled out the 2-bit catalog
+branch shadow. v0.6 ruled out the (E, |L|) catalog-coordinate shadow
+beyond branch labeling. **v0.7 leaves catalog-coordinate space**: it
+asks whether the row's per-orbit monodromy operator has a geometric
+structure (specifically the DIRECTION of its largest-real-part Floquet
+eigenvector, projected onto a pre-registered geometric reference frame)
+that stratifies stability.
+
+Locked parent shape:
+
+```text
+Body:        supp-B piano-trio orbit as primary orbit-dynamics object
+             (273 rows, M_i derivable from v0.4a receipt).
+Projection:  row -> gamma_1(row), the eigenvector DIRECTION in phase
+             space of the row's largest-real-part Floquet eigenvalue,
+             projected onto a pre-registered geometric reference frame.
+Observable:  per-row gamma_1 direction feature joined with S/U.
+Compute:     monodromy + eigenstructure already in v0.4a; feature
+             extraction is seconds per row.
+Discipline:  inherits v0.5 (audit-then-predictor, asymmetric McNemar
+             + delta falsifier) and v0.6 (alignment-tightness guard,
+             sparse-cell fallback tree).
+```
+
+Candidate operational definitions (one to be locked by v0.7a):
+
+```text
+D1. Largest-real-part eigenvalue's eigenvector.
+D2. Largest-magnitude eigenvalue's eigenvector.
+D3. Restricted to "well-defined" rows; companion sidecar for ill-defined.
+D4. Z_2-isotypic phase-space split of gamma_1 (even/odd fraction).
+D5. Phase-space angle decomposition (velocity vs spatial component
+    ratio).
+```
+
+Candidate audit forms (one to be locked by v0.7a):
+
+```text
+A. Direction-projection quartile audit.
+B. Velocity-fraction quartile audit.
+C. Z_2 isotypic-fraction quartile audit.
+D. Direction-angle binary audit (df = 1, critical 6.63).
+```
+
+The v0.7a form lock must address three explicit circularity risks
+(eigenvalue-choice, well-definedness, feature-extraction) and lock a
+deterministic tie-break for S-row eigenvalue degeneracy, a reference
+frame for the geometric projection, an alignment-tightness guard
+against the v0.5a branch label, and the sparse-cell fallback tree.
+
+Next actions:
+
+1. v0.7a form lock: pick one of D1-D5 + one of A-D + tie-break +
+   reference frame, lock paper-side with explicit non-circularity
+   argument.
+2. Per-row gamma_1 computation as a pre-audit diagnostic (no audit
+   verdict yet). Sanity-check eigenvector direction stability across
+   v0.4a Pass 1 vs Pass 2 tolerances on the 24 Pass 2-rescued rows.
+3. Constant-feature retirement check: if gamma_1 has insufficient
+   per-row variation, the audit cannot run.
+4. Run v0.7a audit blind; land verdict.
+5. Conditional on v0.7a passing CLEAN (no alignment warning):
+   register v0.7b with default leave-one-m_3-bin-out partition.
+   Conditional on v0.7a passing with alignment warning:
+   register v0.7b with alignment-breaking partition (mirroring v0.6b's
+   within-branch approach).
+   Conditional on v0.7a failing: close the gamma_1 direction
+   sub-question; v0.7c may register an alternative operational
+   definition (different D from the candidate list) as a fresh form
+   lock.
+
+Stop condition:
+
+If the v0.7a operational definition cannot be argued non-circular,
+the form lock is rejected pre-compute and the v0.7 chapter closes
+immediately. The non-circularity audit is load-bearing; circularity
+through eigenvalue-magnitude or definedness-conditioning is the
+single largest design risk.
 
 ## Onboarding / Polish (Run-Friendly)
 
