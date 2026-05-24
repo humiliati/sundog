@@ -146,7 +146,7 @@ function csvValue(value) {
   return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 }
 
-function rowsToCsv(rows, explicitColumns = null) {
+export function rowsToCsv(rows, explicitColumns = null) {
   const columns = explicitColumns ?? [...new Set(rows.flatMap((row) => Object.keys(row)))];
   const lines = [columns.join(",")];
   for (const row of rows) lines.push(columns.map((column) => csvValue(row[column])).join(","));
@@ -392,7 +392,7 @@ function makeTrialConfig(args, envelopeCase, seed, regime, mode, guardThresholds
   });
 }
 
-function makePairedRows(trials) {
+export function makePairedRows(trials) {
   const byKey = new Map();
   for (const trial of trials) {
     byKey.set(`${trial.caseId}\t${trial.regime}\t${trial.seed}\t${trial.controllerMode}`, trial);
@@ -492,7 +492,7 @@ function makePairedRows(trials) {
   ));
 }
 
-function makeTrialOutcomeRows(pairedRows) {
+export function makeTrialOutcomeRows(pairedRows) {
   return pairedRows.map((row) => ({
     seed: row.seed,
     regime: row.regime,
@@ -584,7 +584,7 @@ function mostCommon(values) {
   return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] ?? null;
 }
 
-function summarizeRows(rows, args, includeRegime = true) {
+export function summarizeRows(rows, args, includeRegime = true) {
   const groups = new Map();
   for (const row of rows) {
     const key = [
@@ -718,7 +718,7 @@ function summarizeRows(rows, args, includeRegime = true) {
   ));
 }
 
-function makeBestByCellRows(envelopeRows) {
+export function makeBestByCellRows(envelopeRows) {
   const groups = new Map();
   for (const row of envelopeRows) {
     const key = `${row.regime}\t${row.massRatio}\t${row.timestep}\t${row.radiusScale}\t${row.velocityScale}`;
@@ -768,7 +768,7 @@ function velocityColumn(value) {
   return `v_${String(value).replace(".", "p")}`;
 }
 
-function makeCellMatrixRows(bestByCellRows, valueKey) {
+export function makeCellMatrixRows(bestByCellRows, valueKey) {
   const velocities = [...new Set(bestByCellRows.map((row) => row.velocityScale))].sort((a, b) => a - b);
   const groups = new Map();
   for (const row of bestByCellRows) {
@@ -815,7 +815,7 @@ function precisionBaselineKey(row) {
   ].join("\t");
 }
 
-function makePrecisionMapRows(envelopeRows) {
+export function makePrecisionMapRows(envelopeRows) {
   const baselineRows = new Map();
   for (const row of envelopeRows) {
     if (row.timestep === 0.004) baselineRows.set(precisionBaselineKey(row), row);
@@ -1020,7 +1020,7 @@ function richardsonOrderForGroup(group, tWindow) {
   };
 }
 
-function makeRichardsonOrderRows(trials) {
+export function makeRichardsonOrderRows(trials) {
   const groups = new Map();
   for (const trial of trials) {
     if (trial.controllerMode !== "off") continue;
@@ -1075,6 +1075,28 @@ function makeRichardsonOrderRows(trials) {
     || a.velocityScale - b.velocityScale
     || a.seed - b.seed
   ));
+}
+
+export function makeWarningQualityRows(envelopeRows, useOracleHazard = false) {
+  const warningGroups = new Map();
+  for (const row of envelopeRows) {
+    const key = `${row.regime}\t${row.massRatio}\t${row.timestep}\t${row.radiusScale}\t${row.velocityScale}`;
+    if (!warningGroups.has(key)) warningGroups.set(key, []);
+    warningGroups.get(key).push(row);
+  }
+  return Array.from(warningGroups.entries()).map(([key, rows]) => {
+    const [regime, massRatioText, timestepText, radiusScaleText, velocityScaleText] = key.split("\t");
+    return {
+      regime,
+      massRatio: Number.parseFloat(massRatioText),
+      timestep: Number.parseFloat(timestepText),
+      radiusScale: Number.parseFloat(radiusScaleText),
+      velocityScale: Number.parseFloat(velocityScaleText),
+      meanPassiveWarningAuroc: useOracleHazard
+        ? roundMetric(mean(rows.map((row) => row.meanPassiveOracleHazardAuroc)))
+        : roundMetric(mean(rows.map((row) => row.meanPassiveTidalMagnitudeAuroc))),
+    };
+  });
 }
 
 async function main() {
@@ -1182,25 +1204,7 @@ async function main() {
 
   let cellWarningQualityMapRows = null;
   if (args.trackActionCoupling || args.precisionReceipts) {
-    const warningGroups = new Map();
-    for (const row of envelopeRows) {
-      const key = `${row.regime}\t${row.massRatio}\t${row.timestep}\t${row.radiusScale}\t${row.velocityScale}`;
-      if (!warningGroups.has(key)) warningGroups.set(key, []);
-      warningGroups.get(key).push(row);
-    }
-    const warningRows = Array.from(warningGroups.entries()).map(([key, rows]) => {
-      const [regime, massRatioText, timestepText, radiusScaleText, velocityScaleText] = key.split("\t");
-      return {
-        regime,
-        massRatio: Number.parseFloat(massRatioText),
-        timestep: Number.parseFloat(timestepText),
-        radiusScale: Number.parseFloat(radiusScaleText),
-        velocityScale: Number.parseFloat(velocityScaleText),
-        meanPassiveWarningAuroc: args.precisionReceipts
-          ? roundMetric(mean(rows.map((row) => row.meanPassiveOracleHazardAuroc)))
-          : roundMetric(mean(rows.map((row) => row.meanPassiveTidalMagnitudeAuroc))),
-      };
-    });
+    const warningRows = makeWarningQualityRows(envelopeRows, args.precisionReceipts);
     cellWarningQualityMapRows = makeCellMatrixRows(warningRows, "meanPassiveWarningAuroc");
   }
 
@@ -1227,6 +1231,22 @@ async function main() {
     "utf8",
   );
 
+  if (args.precisionReceipts) {
+    // Per-shard reconstruction source for threebody:phase15:merge — minus eventHistory
+    // (large, redundant: its outputs are already in summary), keeps summary +
+    // sensorAudit + earlyTrajectory so the merge can rerun the existing
+    // aggregation pipeline on the union of shard trials.
+    const trialsMinimalLines = trials.map((row) => {
+      const { eventHistory, ...rest } = row;
+      return JSON.stringify(rest);
+    }).join("\n");
+    await writeFile(
+      path.join(outDir, "trials-minimal.jsonl"),
+      trialsMinimalLines.length > 0 ? `${trialsMinimalLines}\n` : "",
+      "utf8",
+    );
+  }
+
   const outcomeCounts = manifest.trials.reduce((counts, trial) => {
     counts[trial.summary.terminalOutcome] = (counts[trial.summary.terminalOutcome] ?? 0) + 1;
     return counts;
@@ -1236,6 +1256,7 @@ async function main() {
   console.log(`[threebody] wrote trial-outcomes.csv, paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv`);
   if (cellPrecisionMapRows) console.log("[threebody] wrote cell-precision-map.csv");
   if (richardsonOrderRows) console.log("[threebody] wrote richardson-order-map.csv");
+  if (args.precisionReceipts) console.log("[threebody] wrote trials-minimal.jsonl");
   console.log(`[threebody] candidate envelope rows ${candidateRows.length}/${envelopeRows.length}`);
   console.log(`[threebody] outcomes ${JSON.stringify(outcomeCounts)}`);
 }
