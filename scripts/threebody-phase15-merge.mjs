@@ -35,6 +35,7 @@ function parseArgs(argv) {
   const args = {
     shardsDir: "results/threebody",
     shardPattern: /^phase15-shard-mu[0-9p.]+-v[0-9p.]+$/,
+    shardDirs: null, // if set, overrides the glob and uses these dirs exactly
     out: "results/threebody/phase15-forward-oracle-precision-lock",
     strict: true, // error on duplicate trial ids or arg mismatches across shards
   };
@@ -43,6 +44,10 @@ function parseArgs(argv) {
     const value = argv[i + 1];
     if (!flag.startsWith("--")) continue;
     if (flag === "--shards-dir") { args.shardsDir = value; i += 1; }
+    else if (flag === "--shard-dirs") {
+      args.shardDirs = value.split(",").map((s) => s.trim()).filter(Boolean);
+      i += 1;
+    }
     else if (flag === "--out") { args.out = value; i += 1; }
     else if (flag === "--no-strict") { args.strict = false; }
     else throw new Error(`Unknown flag: ${flag}`);
@@ -85,6 +90,9 @@ function assertConsistentArgs(shards) {
   // design). Any other axis differing would corrupt the merge.
   if (shards.length === 0) return;
   const ref = shards[0].manifest.args;
+  // NOTE: massRatios and velocityScales are intentionally EXCLUDED from this
+  // consistency check — they are the per-shard partition axes (each shard has
+  // a different value on those axes by design). All OTHER axes must match.
   const keysToCheck = [
     "regimes", "modes", "duration", "timesteps", "radiusScales",
     "thrustLimits", "sensorNoiseSweep", "trackGuardMode",
@@ -124,9 +132,22 @@ async function main() {
   const outDir = path.resolve(repoRoot, args.out);
   await mkdir(outDir, { recursive: true });
 
-  const shardDirs = await findShardDirs(args.shardsDir, args.shardPattern);
+  let shardDirs;
+  if (args.shardDirs) {
+    // Explicit list overrides the glob (used by the equivalence gate to merge
+    // smoke-shard dirs whose names don't fit the full-lock pattern).
+    shardDirs = args.shardDirs.map((d) => path.resolve(repoRoot, d));
+    for (const d of shardDirs) {
+      const s = await stat(d).catch(() => null);
+      if (!s || !s.isDirectory()) throw new Error(`--shard-dirs entry is not a directory: ${d}`);
+    }
+  } else {
+    shardDirs = await findShardDirs(args.shardsDir, args.shardPattern);
+  }
   if (shardDirs.length === 0) {
-    throw new Error(`No shard dirs matched ${args.shardPattern} under ${args.shardsDir}`);
+    throw new Error(args.shardDirs
+      ? "--shard-dirs was empty"
+      : `No shard dirs matched ${args.shardPattern} under ${args.shardsDir}`);
   }
   console.log(`[merge] found ${shardDirs.length} shard dir(s):`);
   for (const d of shardDirs) console.log(`[merge]   - ${path.relative(repoRoot, d)}`);
