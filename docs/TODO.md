@@ -706,9 +706,130 @@ Next actions:
    DONE 2026-05-23.
 3. ~~Run the seconds-scale held-out predictor and land the receipt at
    `results/isotrophy/k-facet-v05b-branch-predictor/`.~~ DONE 2026-05-23.
-4. Decide whether v0.5c promotes the single-rule sidecar as a separately
-   registered descriptive classifier, or moves to continuous features with
-   `T_kepler` and `mu_eff` pinned first.
+4. ~~Land the chapter close.~~ DONE 2026-05-23. v0.5 epilogue writeup
+   at [`../internal/anniversary/kfacet_v05_writeup.md`](../internal/anniversary/kfacet_v05_writeup.md).
+   Chapter type: **projection-limit (audit-passes-predictor-fails)**.
+   The v0.5a in-sample positive (chi^2 = 34.99) and v0.5b held-out
+   negative (accuracy_delta = -0.019) together constrain the branch
+   shadow as descriptive, not predictive.
+5. ~~**Paper-side v0.6 direction (open).**~~ DONE 2026-05-23. v0.6
+   opens with the **conserved-quantity (E, |L|) stratification**
+   family. Parent registration at
+   [`../internal/anniversary/kfacet_v06_mechanism_preregistration.md`](../internal/anniversary/kfacet_v06_mechanism_preregistration.md).
+   See the v0.6 section below for the next-action queue.
+
+Stop condition:
+
+If a proposed v0.6 mechanism requires re-using the same active feature
+set that failed v0.5b held-out, retire it at the registration stage
+rather than launching a sweep. v0.5b's pre-registered asymmetric
+falsifier (McNemar p AND positive delta) is the inheritance discipline.
+
+## v0.6 Conserved-Quantity (E, |L|) Stratification (parent + v0.6a verdict landed)
+
+### V0.6 conserved-quantity (E, |L|) mechanism family
+
+Status: **PARENT REGISTERED 2026-05-23; v0.6a VERDICT LANDED
+2026-05-23**. Parent registration:
+[`../internal/anniversary/kfacet_v06_mechanism_preregistration.md`](../internal/anniversary/kfacet_v06_mechanism_preregistration.md).
+**v0.6a verdict**: `energy_quartile_passes_audit_alignment_warning`.
+Univariate energy quartiles pass the registered chi-squared gate but
+trip the alignment guard. Form/verdict:
+[`../internal/anniversary/kfacet_v06a_energy_quartile_audit_form.md`](../internal/anniversary/kfacet_v06a_energy_quartile_audit_form.md).
+v0.6b (held-out predictor form lock) is pending an alignment-breaking
+partition design.
+
+Frame: v0.4 ruled out the Z_2 shadow as a stability projector.
+v0.5 ruled out the 2-bit catalog branch shadow as a held-out
+predictor. v0.6 asks whether a higher-dimensional catalog-coordinate
+projection — orbit-level conserved quantities `(E, |L|)` —
+carries held-out stability.
+
+Locked parent shape:
+
+```text
+Body:        supp-B piano-trio orbit as primary conserved-quantity
+             object (273 rows, Z2_clean per v0.4a).
+Projection:  row -> (E(row), |L|(row)) computed from initial
+             conditions and the three-body Hamiltonian.
+Observable:  per-row (E, |L|) joined with S/U stability label,
+             binned into a pre-registered (n_E x n_L) contingency.
+Compute:     catalog-only, seconds (no orbit integration required).
+Discipline:  inherits v0.5 (audit-then-predictor, asymmetric
+             McNemar+delta falsifier, leave-one-m_3-bin-out partition
+             default, conservative tie rule, constant-feature
+             retirement).
+```
+
+v0.6a locked shape:
+
+```text
+primary feature:    E(row) = total energy at IC, computed from
+                    (m_1, m_2, m_3, r_i, v_i) and Hamiltonian.
+binning:            quartiles over supp-B's 273-row E distribution.
+quantile method:    numpy.quantile(E, [0.25, 0.50, 0.75], method='linear').
+contingency:        4 x 2 over (Q_E, S/U), df = 3.
+critical:           11.34 at p = 0.01.
+verdicts:           energy_quartile_passes_audit (chi^2 > 11.34) |
+                    energy_quartile_passes_audit_alignment_warning
+                      (chi^2 > 11.34 AND max-bin-alignment > 0.8) |
+                    energy_quartile_fails_audit (chi^2 <= 11.34).
+sidecar:            |L| quartile chi-squared under same shape,
+                    REPORT-ONLY (no verdict claim).
+alignment guard:    receipt MUST report
+                    max over Q_E of (fraction in any single
+                    v0.5a branch_label bucket).
+```
+
+v0.6a result:
+
+```text
+receipt:       results/isotrophy/k-facet-v06a-energy-quartile-audit/manifest.json
+sanity:        PASS  (max |Delta E| = 0, max |Delta |L|| = 0)
+bound check:   PASS  (E < 0 for all 273 rows)
+
+E audit:       chi^2 = 33.703158, p = 2.29e-7, critical = 11.34
+alignment_E:  0.955882  (> 0.8 warning threshold)
+verdict:      energy_quartile_passes_audit_alignment_warning
+
+|L| sidecar:   chi^2 = 28.954252, p = 2.29e-6, report-only
+alignment_|L|: 0.956522
+```
+
+Interpretation: E quartiles carry strong in-sample S/U signal, but the
+registered alignment scalar says the signal is tightly entangled with
+the v0.5a `(m_3, z_0)` branch shadow. v0.6b must therefore be
+registered with an alignment-breaking partition (for example
+leave-one-E-quartile-out, or a constant-m_3 subcatalog design), not the
+default leave-one-m_3-bin-out partition.
+
+Completed actions:
+
+1. Per-row E and |L| computation implemented in
+   `scripts/v06a_energy_quartile_audit.py`.
+2. Sanity check passed. The receipt records that local cross_m_3
+   receipts do not carry scalar E/|L| fields, so the parity reference
+   is the pre-existing v0.3 `scripts.isotrophy_workbench`
+   invariant implementation.
+3. Bound-orbit check passed.
+4. Per-row `(label, m_3, z_0, E, |L|, Q_E, Q_|L|, branch_label,
+   stability)` table emitted.
+5. v0.6a verdict landed.
+
+Next action:
+
+1. Register v0.6b paper-side with an alignment-breaking held-out
+   partition, then decide whether the |L| sidecar warrants a separate
+   future form lock after the E predictor question is settled.
+
+Stop condition:
+
+If the per-row (E, |L|) bins on supp-B align tightly with the v0.5b
+(m_3, z_0) buckets, the leave-one-m_3-bin-out partition inherits the
+v0.5b bin-locality risk. The v0.6a form lock pre-registers the
+alignment-tightness scalar (`max over Q_E of fraction in any single
+branch_label bucket`); if it exceeds 0.8, v0.6b's partition must be
+re-registered before any held-out compute.
 
 ## Onboarding / Polish (Run-Friendly)
 

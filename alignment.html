@@ -153,6 +153,128 @@
             line-height: 1.55;
         }
 
+        .lane-strip {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .lane-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 0.85rem;
+        }
+
+        .lane-card--bayes {
+            border-color: rgba(31, 122, 140, 0.34);
+            background: linear-gradient(135deg, rgba(31, 122, 140, 0.08), #FFFFFF 58%);
+        }
+
+        .lane-card--sundog {
+            border-color: rgba(201, 151, 47, 0.42);
+            background: linear-gradient(135deg, rgba(201, 151, 47, 0.12), #FFFFFF 58%);
+        }
+
+        .lane-card--hybrid {
+            border-color: rgba(61, 122, 90, 0.28);
+            background: linear-gradient(90deg, rgba(31, 122, 140, 0.08), rgba(201, 151, 47, 0.11));
+        }
+
+        .lane-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.38rem;
+            width: fit-content;
+            border: 1px solid currentColor;
+            border-radius: 999px;
+            padding: 0.32rem 0.55rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .lane-pill::before {
+            content: "";
+            width: 0.45rem;
+            height: 0.45rem;
+            border-radius: 999px;
+            background: currentColor;
+        }
+
+        .lane-pill--bayes {
+            color: #1F6678;
+            background: rgba(31, 122, 140, 0.08);
+        }
+
+        .lane-pill--trace {
+            color: #9A6D13;
+            background: rgba(201, 151, 47, 0.12);
+        }
+
+        .lane-pill--hybrid {
+            color: #2B6E54;
+            background: rgba(61, 122, 90, 0.1);
+        }
+
+        .lane-graphic {
+            display: grid;
+            grid-template-columns: 4.9rem minmax(0, 1fr);
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .lane-graphic svg {
+            display: block;
+            width: 4.9rem;
+            height: 4.9rem;
+        }
+
+        .lane-graphic strong {
+            display: block;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            margin: 0.55rem 0 0.34rem;
+            text-transform: uppercase;
+        }
+
+        .lane-graphic span,
+        .lane-card--hybrid span {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.48;
+        }
+
+        .posterior-cell {
+            stroke: #FFFFFF;
+            stroke-width: 2;
+        }
+
+        .trace-line {
+            fill: none;
+            stroke: #C9972F;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 5;
+        }
+
+        .trace-ghost {
+            fill: none;
+            stroke: #3D7A5A;
+            stroke-dasharray: 5 7;
+            stroke-linecap: round;
+            stroke-width: 3;
+        }
+
+        .hybrid-note {
+            display: grid;
+            gap: 0.45rem;
+        }
+
         .content {
             width: min(1120px, calc(100vw - 3rem));
             margin: 0 auto;
@@ -266,6 +388,16 @@
             padding: 1.1rem;
         }
 
+        .formula-card--bayes {
+            border-color: rgba(106, 184, 203, 0.44);
+            background: linear-gradient(145deg, #102B3B, #14384C);
+        }
+
+        .formula-card--sundog {
+            border-color: rgba(230, 190, 76, 0.52);
+            background: linear-gradient(145deg, #102B3B, #1A3A36);
+        }
+
         .formula-card h3 {
             color: #FFFFFF;
             font-size: 1rem;
@@ -286,6 +418,51 @@
             font-size: 0.95rem;
             line-height: 1.62;
             margin: 0;
+        }
+
+        .formula-visual {
+            min-height: 7.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            margin: 0.85rem 0;
+            overflow: hidden;
+        }
+
+        .formula-visual svg {
+            display: block;
+            width: 100%;
+            height: 7.2rem;
+        }
+
+        .translation-strip {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.85rem;
+            margin: 1.35rem 0;
+        }
+
+        .translation-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 0.95rem;
+        }
+
+        .translation-card strong {
+            display: block;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            letter-spacing: 0.07em;
+            margin: 0.45rem 0 0.35rem;
+            text-transform: uppercase;
+        }
+
+        .translation-card span {
+            color: #40505C;
+            font-size: 0.93rem;
+            line-height: 1.52;
         }
 
         .side-by-side {
@@ -541,6 +718,7 @@
             .method-grid,
             .result-grid,
             .formula-pair,
+            .translation-strip,
             .side-by-side,
             .inspection-grid {
                 grid-template-columns: 1fr;
@@ -597,17 +775,49 @@
             </div>
             <aside class="quick-card" aria-label="Short distinction between Bayes and Sundog">
                 <h2>The short distinction</h2>
-                <div class="quick-row">
-                    <strong>Bayes</strong>
-                    <span>Evidence becomes belief, then action follows from the posterior.</span>
-                </div>
-                <div class="quick-row">
-                    <strong>Sundog</strong>
-                    <span>Action perturbs the world, the response changes, and control follows the trace.</span>
-                </div>
-                <div class="quick-row">
-                    <strong>Hybrid</strong>
-                    <span>Use belief to manage ambiguity, and response control where the field is locally readable.</span>
+                <div class="lane-strip">
+                    <div class="lane-card lane-card--bayes">
+                        <div class="lane-graphic">
+                            <svg viewBox="0 0 96 96" aria-hidden="true">
+                                <rect x="13" y="13" width="70" height="70" rx="10" fill="#E8F3F6" stroke="#1F6678" stroke-width="2"/>
+                                <rect class="posterior-cell" x="22" y="22" width="16" height="16" fill="#BFE1E8"/>
+                                <rect class="posterior-cell" x="40" y="22" width="16" height="16" fill="#6AB8CB"/>
+                                <rect class="posterior-cell" x="58" y="22" width="16" height="16" fill="#2F8094"/>
+                                <rect class="posterior-cell" x="22" y="40" width="16" height="16" fill="#D9EEF2"/>
+                                <rect class="posterior-cell" x="40" y="40" width="16" height="16" fill="#1F6678"/>
+                                <rect class="posterior-cell" x="58" y="40" width="16" height="16" fill="#86C8D5"/>
+                                <rect class="posterior-cell" x="22" y="58" width="16" height="16" fill="#F0F8FA"/>
+                                <rect class="posterior-cell" x="40" y="58" width="16" height="16" fill="#BFE1E8"/>
+                                <rect class="posterior-cell" x="58" y="58" width="16" height="16" fill="#D9EEF2"/>
+                            </svg>
+                            <div>
+                                <span class="lane-pill lane-pill--bayes">Belief lane</span>
+                                <strong>Bayes</strong>
+                                <span>Evidence becomes a probability map of the hidden world.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lane-card lane-card--sundog">
+                        <div class="lane-graphic">
+                            <svg viewBox="0 0 96 96" aria-hidden="true">
+                                <rect x="13" y="13" width="70" height="70" rx="10" fill="#FFF8E4" stroke="#C9972F" stroke-width="2"/>
+                                <path class="trace-ghost" d="M22 66 C34 44 47 52 58 35 C66 24 72 29 77 20"/>
+                                <path class="trace-line" d="M21 69 C34 47 47 55 59 38 C67 26 73 30 78 22"/>
+                                <circle cx="32" cy="51" r="5" fill="#3D7A5A"/>
+                                <circle cx="59" cy="38" r="5" fill="#C9972F"/>
+                                <path d="M75 18 L82 20 L78 27" fill="none" stroke="#173348" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div>
+                                <span class="lane-pill lane-pill--trace">Trace lane</span>
+                                <strong>Sundog</strong>
+                                <span>Action perturbs the world, then follows the response trace.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lane-card lane-card--hybrid hybrid-note">
+                        <span class="lane-pill lane-pill--hybrid">Hybrid</span>
+                        <span>Use belief to manage ambiguity, and response control where the field is locally readable.</span>
+                    </div>
                 </div>
             </aside>
         </section>
@@ -707,15 +917,65 @@
                         The fair head-to-head is not "Bayes gets the world and Sundog gets shadows." A fair Bayesian baseline receives the same partial observations, then maintains a <dfn class="gloss-term" tabindex="0" data-gloss="A probability distribution over hidden causes after the current evidence is observed.">posterior</dfn> over hidden state. Sundog receives the same observations, then acts from the local response field.
                     </p>
                     <div class="formula-pair">
-                        <div class="formula-card">
+                        <div class="formula-card formula-card--bayes">
                             <h3>Bayes</h3>
+                            <span class="lane-pill lane-pill--bayes">Belief lane</span>
+                            <div class="formula-visual" aria-hidden="true">
+                                <svg viewBox="0 0 360 128">
+                                    <rect x="20" y="24" width="28" height="28" rx="4" fill="#D9EEF2"/>
+                                    <rect x="54" y="24" width="28" height="28" rx="4" fill="#A7D6E0"/>
+                                    <rect x="88" y="24" width="28" height="28" rx="4" fill="#4D9AAE"/>
+                                    <rect x="122" y="24" width="28" height="28" rx="4" fill="#1F6678"/>
+                                    <rect x="20" y="58" width="28" height="28" rx="4" fill="#EFF8FA"/>
+                                    <rect x="54" y="58" width="28" height="28" rx="4" fill="#C7E5EB"/>
+                                    <rect x="88" y="58" width="28" height="28" rx="4" fill="#77BECE"/>
+                                    <rect x="122" y="58" width="28" height="28" rx="4" fill="#2F8094"/>
+                                    <rect x="20" y="92" width="28" height="16" rx="4" fill="#F6FBFC"/>
+                                    <rect x="54" y="92" width="28" height="16" rx="4" fill="#E3F2F5"/>
+                                    <rect x="88" y="92" width="28" height="16" rx="4" fill="#C7E5EB"/>
+                                    <rect x="122" y="92" width="28" height="16" rx="4" fill="#A7D6E0"/>
+                                    <line x1="178" y1="40" x2="320" y2="40" stroke="#7FD3E4" stroke-width="8" stroke-linecap="round"/>
+                                    <line x1="178" y1="68" x2="284" y2="68" stroke="#A7D6E0" stroke-width="8" stroke-linecap="round"/>
+                                    <line x1="178" y1="96" x2="230" y2="96" stroke="#D9EEF2" stroke-width="8" stroke-linecap="round"/>
+                                    <circle cx="320" cy="40" r="6" fill="#FFE8A6"/>
+                                </svg>
+                            </div>
                             <code>P(hidden world | signal) ~= likelihood * prior</code>
                             <p>Where is the hidden thing, probably? A <dfn class="gloss-term" tabindex="0" data-gloss="A Bayesian filter represented by weighted sampled hypotheses instead of one closed-form equation.">particle Bayes</dfn> lane answers by carrying many weighted guesses.</p>
                         </div>
-                        <div class="formula-card">
+                        <div class="formula-card formula-card--sundog">
                             <h3>Sundog</h3>
+                            <span class="lane-pill lane-pill--trace">Trace lane</span>
+                            <div class="formula-visual" aria-hidden="true">
+                                <svg viewBox="0 0 360 128">
+                                    <path d="M24 92 C70 36 114 84 154 50 C194 16 222 60 258 42 C284 29 306 33 332 20" fill="none" stroke="rgba(255, 232, 166, 0.28)" stroke-width="14" stroke-linecap="round"/>
+                                    <path d="M24 92 C70 36 114 84 154 50 C194 16 222 60 258 42 C284 29 306 33 332 20" fill="none" stroke="#FFE8A6" stroke-width="5" stroke-linecap="round"/>
+                                    <circle cx="72" cy="42" r="8" fill="#3D7A5A"/>
+                                    <circle cx="154" cy="50" r="8" fill="#C9972F"/>
+                                    <circle cx="258" cy="42" r="8" fill="#3D7A5A"/>
+                                    <path d="M315 19 L335 20 L322 36" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <line x1="35" y1="108" x2="325" y2="108" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+                                </svg>
+                            </div>
                             <code>response coupling ~= change in signal / action</code>
                             <p>Which action makes the trace improve?</p>
+                        </div>
+                    </div>
+                    <div class="translation-strip" aria-label="Bayes, Sundog, and ledger translation">
+                        <div class="translation-card">
+                            <span class="lane-pill lane-pill--bayes">Bayes</span>
+                            <strong>Forecast map</strong>
+                            <span>Which hidden cause is most likely after the evidence?</span>
+                        </div>
+                        <div class="translation-card">
+                            <span class="lane-pill lane-pill--trace">Sundog</span>
+                            <strong>Steering trace</strong>
+                            <span>Which action makes the admitted signal improve?</span>
+                        </div>
+                        <div class="translation-card">
+                            <span class="lane-pill lane-pill--hybrid">Ledger</span>
+                            <strong>Claim hygiene</strong>
+                            <span>Which public sentence is actually licensed?</span>
                         </div>
                     </div>
                     <p>
@@ -735,6 +995,7 @@
                     </p>
                     <div class="side-by-side" aria-label="Pressure Mines Bayes and Sundog side-by-side analysis">
                         <div class="side-column">
+                            <span class="lane-pill lane-pill--trace">Trace lane</span>
                             <h3>Sundog lane</h3>
                             <p>
                                 Phase 10 keeps the public claim local: in the confirmed pocket, <code>sundog_minimal</code> improved budget-adjusted safe-tile progress by +7.21875 versus <code>naive_pressure</code>, and <code>sundog_lean</code> also cleared the gate at +6.3125.
@@ -744,6 +1005,7 @@
                             </p>
                         </div>
                         <div class="side-column">
+                            <span class="lane-pill lane-pill--bayes">Belief lane</span>
                             <h3>Bayes lane</h3>
                             <p>
                                 The Phase 12 all-cell reducer ran 14,720 same-field trials across 46 Phase 10 cells. <code>bayes_frontier_pressure</code> had zero negative mean-regret cells versus <code>naive_pressure</code> and <code>sundog_minimal</code>.
@@ -753,6 +1015,7 @@
                             </p>
                         </div>
                         <div class="side-column">
+                            <span class="lane-pill lane-pill--hybrid">Ledger</span>
                             <h3>Allowed read</h3>
                             <p>
                                 Bayes prevents the Mines result from resting on a weak naive comparator, but it does not make the stronger claim that Sundog beats posterior inference.
