@@ -1020,13 +1020,21 @@ replacement `gamma_3'_orbit_pass2` (predict S iff Pass 2 rescue required)
 p=0.01), with rule accuracy 63.74% slightly below the always-U 64.47%.
 **Stability information on this catalog is not carried by the Z_2 shadow**
 at either tangent-isotypic or orbit-gauge-rigidity granularity. v0.5 opens
-with a **branch-shadow audit** (registered, not yet computed): catalog-only
-4-bit hash on `(m_3<1, z_0<0.3, |v_z|<1e-6, m_3 z_0^2<2)` with deterministic
-constant-bit retirement (`|v_z|<1e-6` and `m_3 z_0^2<2` are constant on
-supp-B; both retired). Active signature `(b1, b2)` gives 4 occupied buckets;
-chi-squared independence vs S/U at `df = 3`, critical `11.34` (p=0.01).
-v0.5a is an AUDIT, not a predictor; v0.5b registers only if v0.5a passes.
-See `kfacet_v04_writeup.md` and `kfacet_v05a_branch_map_form.md`.
+with a **branch-shadow audit**: catalog-only 4-bit hash on
+`(m_3<1, z_0<0.3, |v_z|<1e-6, m_3 z_0^2<2)` with deterministic constant-bit
+retirement (`|v_z|<1e-6` and `m_3 z_0^2<2` are constant on supp-B; both
+retired). Active signature `(b1, b2)` gives 4 occupied buckets; chi-squared
+independence vs S/U at `df = 3`, critical `11.34` (p=0.01). **Verdict
+landed: `branch_hash_passes_audit` at `chi^2 = 34.986`** vs critical 11.34
+(p ~= `1.23e-7`, 3.1x threshold). The audit-dominant bucket is `(m_3<1,
+z_0<0.3)` with 113 rows / 55.75% S vs the catalog mean 35.53% (chi^2
+contribution 20.17 of 34.99); the other three buckets sit at 20-29% S. So
+the body's stability structure is visible in the catalog-coordinate branch
+shadow but NOT in the Z_2 projection at either tangent or
+orbit-gauge-rigidity granularity. v0.5a is an AUDIT, not a predictor; the
+pass licenses v0.5b — a separately registered held-out predictor
+(leave-one-m_3-bin-out or held-out catalog half). See
+`kfacet_v04_writeup.md` and `kfacet_v05a_branch_map_form.md`.
 
 ### Cross-Substrate Hand-Offs
 

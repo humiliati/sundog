@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-24T03:46:39.566Z",
+  "generatedAt": "2026-05-24T04:51:08.219Z",
   "purpose": "Public Balance Phase 16 data surface. Generated from Phase 10 operating-envelope receipts and Phase 15 Bayesian-floor claim-lock receipts; do not hand-edit.",
   "sourcePaths": {
     "phase10Manifest": "results/balance/phase10-envelope/manifest.json",
