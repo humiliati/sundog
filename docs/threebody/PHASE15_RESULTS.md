@@ -233,6 +233,23 @@ gate runs.
 | --- | ---: | ---: | ---: | ---: | --- |
 | *to be filled per shard as each completes; per-shard commit discipline so any night's data is preserved as it lands* ||||||
 
+### Concurrency policy (operator pin, 2026-05-16)
+
+Binding operational guardrails for this machine, this first full lock:
+
+- **Initial concurrency: 2 concurrent shards per overnight.**
+- **Promotion to 3 concurrent: allowed only after the first 2-shard overnight
+  delivers all of (a) stable per-shard wall-clock (each shard ≈ 6 h within
+  a reasonable variance band), (b) per-shard aggregate CSVs emitted clean,
+  (c) no stalls (no hung process; every scheduled trial accounted for in the
+  shard's manifest), (d) no thermal or interactive UI pain.** Promotion is
+  the operator's call; it is recorded in the Shard run log when first
+  exercised.
+- **Hard cap: never run 4 concurrent shards on this machine during this
+  first full lock**, regardless of how well 3 performs. Revisit only after
+  the first sharded full lock completes and the box's behavior under 3 is
+  characterized.
+
 ### Authoritative pending sequence (supersedes the earlier list)
 
 1. Implement the post-lock merge code (additive: refactor aggregation
@@ -243,9 +260,10 @@ gate runs.
    both must reproduce bit-for-bit (the refactor is exports-only, so the
    hard-void gates must still pass).
 2. Run the shard-equivalence gate (above); byte-identical or void.
-3. On gate pass: schedule the 12 overnight shards (operator chooses
-   concurrency per night by hardware; per-shard commit of the run-log row
-   when each completes).
+3. On gate pass: schedule the 12 overnight shards per the **Concurrency
+   policy** above (initial 2; promotion to 3 only after the first 2-shard
+   overnight clears the listed conditions; never 4 for this first full
+   lock). Per-shard commit of the run-log row when each completes.
 4. After all 12 shards complete: `npm run threebody:phase15:merge` → unified
    aggregate CSVs in `phase15-forward-oracle-precision-lock/`.
 5. Operator §5/§6 readback + Pass/Partial/Fail sign-off.
