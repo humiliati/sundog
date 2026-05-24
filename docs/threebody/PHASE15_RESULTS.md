@@ -197,3 +197,58 @@ The full lock (`npm run threebody:phase15`) remains **not run**, pending:
 (1) re-run of both hard-void gates after the Richardson code change,
 (2) re-run of the widened smoke, (3) the locked `T_window` recorded above,
 (4) operator readback sign-off.
+
+*(Note: items (1)–(3) above were completed by the 2026-05-16 post-Richardson
+chain; superseded by the authoritative pending list below.)*
+
+## Sharded execution plan (2026-05-16 amendment, lock-reviewed)
+
+Per `PHASE15_SPEC.md` §7 (procedural amendment), the 12,960-trial full lock
+executes as 12 overnight-fittable shards by `mass-ratio × velocityScale`.
+Each shard keeps all 5 timesteps + 3 radii + 8 seeds + 9 modes intact = 15
+cases × 1,080 trials × ~6 h, written to
+`results/threebody/phase15-shard-mu<X>-v<Y>/`. A new
+`npm run threebody:phase15:merge` produces the unified
+`results/threebody/phase15-forward-oracle-precision-lock/` aggregate CSVs from
+the per-shard manifests + trial JSONLs. Per-shard arithmetic reconciles to
+the locked §3 totals: 12 × 1,080 = 12,960 ✓; 12 × 960 = 11,520 paired ✓;
+12 × 120 = 1,440 envelope ✓; 12 × 15 = 180 best-cells ✓.
+
+### Shard-equivalence gate (pending, blocking before any full-lock shard)
+
+Re-run the locked widened smoke as 2 shards (`v=0.95` and `v=1.1`, each
+180 trials) → `npm run threebody:phase15:merge` → diff aggregate CSVs against
+the on-disk single-run smoke at
+`results/threebody/phase15-forward-oracle-precision-smoke/`. Byte-identical
+required on: `aggregate-envelope.csv`, `candidate-envelope.csv`, `paired.csv`,
+`trial-outcomes.csv`, `envelope-map.csv`, `best-by-cell.csv`,
+`cell-class-map.csv`, `cell-delta-map.csv`, `cell-warning-quality-map.csv`,
+`cell-precision-map.csv`, `richardson-order-map.csv`. `manifest.json` may
+legitimately differ (per-process timestamps). To be recorded here when the
+gate runs.
+
+### Shard run log (pending, per-shard append on completion)
+
+| shard | `mass-ratio` | `velocityScale` | trials | wall-clock | status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| *to be filled per shard as each completes; per-shard commit discipline so any night's data is preserved as it lands* ||||||
+
+### Authoritative pending sequence (supersedes the earlier list)
+
+1. Implement the post-lock merge code (additive: refactor aggregation
+   exports in `threebody-operating-envelope.mjs`, new
+   `scripts/threebody-phase15-merge.mjs`, new
+   `npm run threebody:phase15:merge`). Verification: re-run `npm run
+   threebody:phase13` and `npm run threebody:phase14` after the refactor;
+   both must reproduce bit-for-bit (the refactor is exports-only, so the
+   hard-void gates must still pass).
+2. Run the shard-equivalence gate (above); byte-identical or void.
+3. On gate pass: schedule the 12 overnight shards (operator chooses
+   concurrency per night by hardware; per-shard commit of the run-log row
+   when each completes).
+4. After all 12 shards complete: `npm run threebody:phase15:merge` → unified
+   aggregate CSVs in `phase15-forward-oracle-precision-lock/`.
+5. Operator §5/§6 readback + Pass/Partial/Fail sign-off.
+
+The full lock remains operator-gated throughout. This amendment is
+procedural; §1–§6 (slate, modes, seeds, receipts, branches) are unchanged.
