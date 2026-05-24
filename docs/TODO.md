@@ -466,7 +466,7 @@ Methodology rule recorded: long-period rows (T >= ~170) at m_3 in
 {1.4, 1.5, 1.6, 1.7} stress the coarse SO(3) gauge minimizer; treat
 default tolerances as a screening pass, not a final classifier.
 
-Next: **v0.4b mechanism predictor** (separate registration; see the
+Next: **v0.4b mechanism predictor** (closed structural-negative; see the
 section below).
 
 ### V0.4a pre-registration reference
@@ -486,24 +486,33 @@ results/isotrophy/k-facet-v04a-domain-map/pass1/{aggregator_manifest, flagged_fo
 results/isotrophy/k-facet-v04a-domain-map/pass2/m3eq{0.4, 1.4, 1.5, 1.6, 1.7}/O{idx}/
 ```
 
-## v0.4b Mechanism Predictor (next staged work)
+## v0.4b Mechanism Predictor (chapter closed)
 
-### V0.4b gamma_3 non-circular structural predictor (baseline retired; gamma_3' pending)
+### V0.4b gamma_3 / gamma_3' non-circular structural predictors (closed structural-negative)
 
 Sources:
 [`../internal/anniversary/kfacet_v04b_mechanism_preregistration.md`](../internal/anniversary/kfacet_v04b_mechanism_preregistration.md),
 [`../internal/anniversary/kfacet_v04a_domain_map_preregistration.md`](../internal/anniversary/kfacet_v04a_domain_map_preregistration.md)
 (domain locked: 273/273 Z2_clean),
+[`../internal/anniversary/kfacet_v04b_gamma3prime_form.md`](../internal/anniversary/kfacet_v04b_gamma3prime_form.md),
+[`../internal/anniversary/kfacet_v04_writeup.md`](../internal/anniversary/kfacet_v04_writeup.md),
 [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
 §7.2 (projection-language framing).
 
-Status: **gamma_3 threshold-rule baseline retired before full sweep
-(2026-05-23)**. The form was locked on 2026-05-22, then a seven-row
-smoke/cross-m3 sanity surface showed the form's precondition fails:
-`F_beta` does not preserve `K_fib` on tested supplementary-B rows.
-Recorded in `internal/anniversary/kfacet_v04b_gamma3_form.md` and
-`internal/anniversary/kfacet_v04b_mechanism_preregistration.md` as
-`form_precondition_failed`.
+Status: **CHAPTER CLOSED 2026-05-23, structural-negative**. Both
+registered Z_2-shadow predictors failed their pre-registered falsifiers
+without committing the compute-blocked 2-hour sweep. `gamma_3`
+(tangent-isotypic) retired pre-sweep when the 7-row sanity probe found
+`F_beta` does not preserve `K_fib` on supp-B (verdict
+`form_precondition_failed`). `gamma_3'_orbit_pass2` (orbit
+gauge-rigidity) registered and immediately tested against the v0.4a
+manifest (no new compute); falsified by `chi^2 = 1202.32` vs critical
+`26.22` (46x threshold). Rule accuracy 63.74% lies slightly below the
+always-U baseline 64.47%. Stability is statistically independent of the
+Z_2 shadow at both tested granularities. Full chapter close at
+[`../internal/anniversary/kfacet_v04_writeup.md`](../internal/anniversary/kfacet_v04_writeup.md);
+gamma_3'_orbit_pass2 verdict receipt at
+`results/isotrophy/k-facet-v04b-gamma3prime-orbit-pass2/manifest.json`.
 
 Current state:
 
@@ -523,12 +532,13 @@ Current state:
 - The locked threshold rule `predict S iff F_beta_even_dim >=
   F_beta_odd_dim` is retired **before** the 273-row sweep. It is not a
   failed chi-squared result; the precondition failed first.
-- `gamma_3'` re-registration is pending. Candidate replacement lanes:
-  an `F_beta`-commuting construction based on `(M_i + M_i^-1)/2`, a
-  raw-kernel precondition check, or an orbit-feature predictor that
-  steps back from tangent isotypics.
+- `gamma_3'` replacement selected the orbit-feature lane:
+  `gamma_3'_orbit_pass2`, predicting S iff the row required Pass 2
+  rescue in the v0.4a two-pass gauge classifier. It was tested inline
+  from the v0.4a manifest and falsified (`chi^2 = 1202.32` vs
+  `critical = 26.22`; accuracy 63.74%, below always-U 64.47%).
 
-Blocker (in order):
+Closed blockers:
 
 1. ~~**Paper-side** gamma_3 form lock~~ -- DONE 2026-05-22, then
    RETIRED 2026-05-23. Threshold-rule baseline locked at
@@ -537,24 +547,34 @@ Blocker (in order):
    parameters. Chi-squared df = 12, critical value `26.22` at
    `p = 0.01`. Retired because `F_beta` does not preserve `K_fib` on
    the sanity rows.
-2. **Paper-side**: choose and pre-register a replacement `gamma_3'`
-   projection target. No full-catalog compute is authorized until the
-   replacement object's precondition is checked.
-3. **Implementation/compute**: deferred. The original 273-row
+2. ~~**Paper-side**: choose and pre-register a replacement `gamma_3'`
+   projection target.~~ DONE 2026-05-23. The `orbit_features` lane was
+   selected after the cocycle-rescue probe returned identity cocycles.
+3. ~~**Implementation/compute**: deferred.~~ The original 273-row
    `kfacet-row-z2-sweep` plan is historical only and should not be run
-   for the retired baseline.
+   for the retired baseline; the selected `gamma_3'_orbit_pass2` verdict
+   used the existing v0.4a manifest with no new compute.
 
 Next actions:
 
-1. ~~Lock gamma_3 form paper-side.~~ DONE, then retired by
-   `form_precondition_failed`.
-2. Write the `gamma_3'` design note: choose among the `anticomm`,
-   `full_kernel`, and `orbit_features` replacement lanes, or name a
-   fourth.
-3. Pre-register a small precondition sanity surface for the chosen
-   replacement object before any 273-row sweep.
-4. Only after the precondition passes, stage implementation and compute
-   for the replacement form.
+1. ~~Lock gamma_3 form paper-side.~~ DONE 2026-05-22, retired
+   2026-05-23 by `form_precondition_failed`.
+2. ~~Choose replacement lane.~~ DONE 2026-05-23. The cocycle-rescue probe
+   surfaced `(R_i, phi_i) = (I, 0)` uniformly, ruling out
+   `anticomm`-style lanes. `orbit_features` selected; baseline locked at
+   `gamma_3'_orbit_pass2` (predict S iff Pass 2 rescue required).
+3. ~~Run the verdict.~~ DONE 2026-05-23, inline from the v0.4a manifest
+   (no new compute). Verdict: **falsifies_baseline_orbit_pass2_rule** at
+   `chi^2 = 1202.32` vs `critical = 26.22`.
+4. ~~Land the chapter close.~~ DONE 2026-05-23. v0.4 epilogue
+   writeup at
+   [`../internal/anniversary/kfacet_v04_writeup.md`](../internal/anniversary/kfacet_v04_writeup.md).
+5. **Paper-side v0.5 direction (open).** Three candidates: richer-symmetry
+   projection (E, |L| stratification), bifurcation-track projection
+   (m_3-axis stability transitions), or close-without-v0.5 (retire
+   isotrophy program at end-of-v0.4 with publishable methodology + two
+   structural-negative results). No runner work until codex direction
+   chooses.
 
 Stop condition:
 
