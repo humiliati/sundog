@@ -12,36 +12,43 @@
   <text x="72" y="78" fill="#C9972F" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" letter-spacing="0">PRE-REGISTERED FALSIFIER</text>
   <text x="72" y="121" fill="#173348" font-family="Georgia, 'Times New Roman', serif" font-size="34" font-weight="700" letter-spacing="0">The falsifier before the agent</text>
   <text x="72" y="153" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="17" font-weight="400" letter-spacing="0"><tspan x="72" dy="0">A traceable system should fail where the closed-form inverse loses</tspan><tspan x="72" dy="23">identifiability.</tspan></text>
-  <g>
-    <rect x="48" y="174" width="168.79999999999998" height="28" rx="8" fill="#E8F2ED" stroke="#3D7A5A" stroke-width="1"/>
-    <text x="62" y="192" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">P0 BOUNDARY MAP: PASS</text>
+  <g class="status-chip" data-id="p0" data-label="P0 boundary map" data-status="pass" data-public-label="Frozen falsifier written" data-source="docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md">
+    <title>P0 boundary map: pass. Frozen falsifier written</title>
+    <rect x="48" y="174" width="112" height="28" rx="8" fill="#E8F2ED" stroke="#3D7A5A" stroke-width="1"/>
+    <text x="62" y="192" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">P0 MAP: PASS</text>
   </g>
-<g>
-    <rect x="226.79999999999998" y="174" width="148.39999999999998" height="28" rx="8" fill="#E8F2ED" stroke="#3D7A5A" stroke-width="1"/>
-    <text x="240.79999999999998" y="192" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">P1 ADMISSION: PASS</text>
+<g class="status-chip" data-id="p1" data-label="P1 admission" data-status="pass" data-public-label="Boundary map admitted as testable apparatus" data-source="docs/prereg/structural-failure-coincidence/P1_ADMISSION.md">
+    <title>P1 admission: pass. Boundary map admitted as testable apparatus</title>
+    <rect x="170" y="174" width="112" height="28" rx="8" fill="#E8F2ED" stroke="#3D7A5A" stroke-width="1"/>
+    <text x="184" y="192" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">P1: PASS</text>
   </g>
-<g>
-    <rect x="385.19999999999993" y="174" width="202.79999999999998" height="28" rx="8" fill="#FFF4D6" stroke="#B8831E" stroke-width="1"/>
-    <text x="399.19999999999993" y="192" fill="#684811" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">P2 FIRST CUT: RECLASSIFIED</text>
+<g class="status-chip" data-id="p2-first-cut" data-label="P2 first cut" data-status="reclassified" data-public-label="Machinery live; route test vacuous" data-source="docs/prereg/structural-failure-coincidence/P2_RESULTS.md">
+    <title>P2 first cut: reclassified. Machinery live; route test vacuous</title>
+    <rect x="292" y="174" width="202.79999999999998" height="28" rx="8" fill="#FFF4D6" stroke="#B8831E" stroke-width="1"/>
+    <text x="306" y="192" fill="#684811" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">P2 FIRST CUT: RECLASSIFIED</text>
   </g>
-<g>
-    <rect x="597.9999999999999" y="174" width="260" height="28" rx="8" fill="#EAF1FA" stroke="#1A3A52" stroke-width="1"/>
-    <text x="611.9999999999999" y="192" fill="#1A3A52" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">CUT 2 CLOSED-FORM LINE: REGIME-SEPARABILITY</text>
+<g class="status-chip" data-id="cut2" data-label="Cut 2 closed-form line" data-status="regime-separability" data-public-label="Closed-form correlate cannot compete where the route is eligible" data-source="docs/prereg/structural-failure-coincidence/P2_CUT2_WAVE42_DISPOSITION.md">
+    <title>Cut 2 closed-form line: regime-separability. Closed-form correlate cannot compete where the route is eligible</title>
+    <rect x="504.79999999999995" y="174" width="155.2" height="28" rx="8" fill="#EAF1FA" stroke="#1A3A52" stroke-width="1"/>
+    <text x="518.8" y="192" fill="#1A3A52" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">CUT 2: SEPARABILITY</text>
   </g>
-<g>
-    <rect x="867.9999999999999" y="174" width="236.79999999999998" height="28" rx="8" fill="#F8E7E3" stroke="#A85043" stroke-width="1"/>
-    <text x="881.9999999999999" y="192" fill="#6B3029" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">CUT 3 RENDERED ESCALATION: HOLD</text>
+<g class="status-chip" data-id="cut3" data-label="Cut 3 rendered escalation" data-status="hold" data-public-label="Spec opened; execution held on H0/corpus/admission artifacts" data-source="docs/prereg/structural-failure-coincidence/P2_CUT3_ADMISSION.md">
+    <title>Cut 3 rendered escalation: hold. Spec opened; execution held on H0/corpus/admission artifacts</title>
+    <rect x="670" y="174" width="112" height="28" rx="8" fill="#F8E7E3" stroke="#A85043" stroke-width="1"/>
+    <text x="684" y="192" fill="#6B3029" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">CUT 3: HOLD</text>
   </g>
-<g>
-    <rect x="48" y="210" width="216.4" height="28" rx="8" fill="#EDF2F7" stroke="#64748B" stroke-width="1"/>
-    <text x="62" y="228" fill="#37465A" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">H0 ANGULAR CALIBRATION: OPEN</text>
+<g class="status-chip" data-id="h0" data-label="H0 angular calibration" data-status="open" data-public-label="Checker design exists; real-frame negative side remains open" data-source="docs/prereg/structural-failure-coincidence/P2_CUT3_H0_CALIBRATION.md">
+    <title>H0 angular calibration: open. Checker design exists; real-frame negative side remains open</title>
+    <rect x="792" y="174" width="162" height="28" rx="8" fill="#EDF2F7" stroke="#64748B" stroke-width="1"/>
+    <text x="806" y="192" fill="#37465A" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">H0 CALIBRATION: OPEN</text>
   </g>
   <rect x="48" y="252" width="1184" height="42" rx="8" fill="#1A3A52"/>
   <text x="66" y="279" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" letter-spacing="0">HANDLE</text>
 <text x="320" y="279" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" letter-spacing="0">ELIGIBLE WINDOW</text>
 <text x="608" y="279" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" letter-spacing="0">MUST BREAK</text>
 <text x="956" y="279" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" letter-spacing="0">CORRELATE TELL</text>
-  <g>
+  <g class="boundary-row" data-id="L1" data-title="Parhelion offset route" data-status="eligible with abstain band" data-visual-class="eligible-abstain" data-handle="offset = R22 / cos(h)">
+      <title>L1: Parhelion offset route - eligible with abstain band</title>
       <rect x="48" y="294" width="1184" height="158" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
       <rect x="48" y="294" width="8" height="158" rx="4" fill="#3D7A5A"/>
       <line x1="309" y1="312" x2="309" y2="434" stroke="#DCE6EC" stroke-width="1"/>
@@ -49,7 +56,8 @@
 <line x1="973" y1="312" x2="973" y2="434" stroke="#DCE6EC" stroke-width="1"/>
       <circle cx="82" cy="328" r="17" fill="#E8F2ED" stroke="#3D7A5A" stroke-width="1.5"/>
       <text x="72" y="334" fill="#214B36" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="800" letter-spacing="0">L1</text>
-      <g>
+      <g class="locus-status-chip" data-id="L1" data-status="eligible with abstain band">
+    <title>L1: Parhelion offset route - eligible with abstain band</title>
     <rect x="111" y="312" width="215.20000000000002" height="28" rx="8" fill="#D9EBE1" stroke="#3D7A5A" stroke-width="1"/>
     <text x="125" y="330" fill="#214B36" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">ELIGIBLE WITH ABSTAIN BAND</text>
   </g>
@@ -59,7 +67,8 @@
       <text x="608" y="330" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" letter-spacing="0"><tspan x="608" dy="0">Low-h low leverage, parhelion-derived-R22</tspan><tspan x="608" dy="18">tautology, and p26 invalid rows must be</tspan><tspan x="608" dy="18">reported as low leverage or ineligible, not</tspan><tspan x="608" dy="18">independent inverse evidence.</tspan></text>
       <text x="956" y="330" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" letter-spacing="0"><tspan x="956" dy="0">Smooth confident altitude estimates</tspan><tspan x="956" dy="18">continue across low-leverage,</tspan><tspan x="956" dy="18">tautological, or invalid rows.</tspan></text>
     </g>
-<g>
+<g class="boundary-row" data-id="L2" data-title="CZA visibility cutoff" data-status="cutoff" data-visual-class="cutoff" data-handle="circumzenithal-arc visibility route">
+      <title>L2: CZA visibility cutoff - cutoff</title>
       <rect x="48" y="462" width="1184" height="134" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
       <rect x="48" y="462" width="8" height="134" rx="4" fill="#B8831E"/>
       <line x1="309" y1="480" x2="309" y2="578" stroke="#DCE6EC" stroke-width="1"/>
@@ -67,7 +76,8 @@
 <line x1="973" y1="480" x2="973" y2="578" stroke="#DCE6EC" stroke-width="1"/>
       <circle cx="82" cy="496" r="17" fill="#FFF4D6" stroke="#B8831E" stroke-width="1.5"/>
       <text x="72" y="502" fill="#684811" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="800" letter-spacing="0">L2</text>
-      <g>
+      <g class="locus-status-chip" data-id="L2" data-status="cutoff">
+    <title>L2: CZA visibility cutoff - cutoff</title>
     <rect x="111" y="480" width="80" height="28" rx="8" fill="#F8E5AF" stroke="#B8831E" stroke-width="1"/>
     <text x="125" y="498" fill="#684811" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">CUTOFF</text>
   </g>
@@ -77,7 +87,8 @@
       <text x="608" y="498" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" letter-spacing="0"><tspan x="608" dy="0">Above 32 deg a CZA-dependent route must</tspan><tspan x="608" dy="18">fail, abstain, or switch handles.</tspan></text>
       <text x="956" y="498" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" letter-spacing="0"><tspan x="956" dy="0">Altitude estimates continue through</tspan><tspan x="956" dy="18">the cutoff because other image</tspan><tspan x="956" dy="18">features still correlate with h.</tspan></text>
     </g>
-<g>
+<g class="boundary-row" data-id="L3" data-title="Tangent arc merge" data-status="merge" data-visual-class="merge" data-handle="upper-tangent locus route">
+      <title>L3: Tangent arc merge - merge</title>
       <rect x="48" y="606" width="1184" height="134" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
       <rect x="48" y="606" width="8" height="134" rx="4" fill="#B8831E"/>
       <line x1="309" y1="624" x2="309" y2="722" stroke="#DCE6EC" stroke-width="1"/>
@@ -85,7 +96,8 @@
 <line x1="973" y1="624" x2="973" y2="722" stroke="#DCE6EC" stroke-width="1"/>
       <circle cx="82" cy="640" r="17" fill="#FFF4D6" stroke="#B8831E" stroke-width="1.5"/>
       <text x="72" y="646" fill="#684811" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="800" letter-spacing="0">L3</text>
-      <g>
+      <g class="locus-status-chip" data-id="L3" data-status="merge">
+    <title>L3: Tangent arc merge - merge</title>
     <rect x="111" y="624" width="80" height="28" rx="8" fill="#F8E5AF" stroke="#B8831E" stroke-width="1"/>
     <text x="125" y="642" fill="#684811" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">MERGE</text>
   </g>
@@ -95,7 +107,8 @@
       <text x="608" y="642" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" letter-spacing="0"><tspan x="608" dy="0">At h &gt;= 29 deg tangentArcLocus returns null</tspan><tspan x="608" dy="18">because the tangent arcs have merged into</tspan><tspan x="608" dy="18">the circumscribed-halo regime.</tspan></text>
       <text x="956" y="642" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" letter-spacing="0"><tspan x="956" dy="0">A tangent-like estimate remains</tspan><tspan x="956" dy="18">continuous through the singularity.</tspan></text>
     </g>
-<g>
+<g class="boundary-row" data-id="L4" data-title="Supralateral route" data-status="permanent fail" data-visual-class="permanent-fail" data-handle="supralateral angular-position candidate">
+      <title>L4: Supralateral route - permanent fail</title>
       <rect x="48" y="750" width="1184" height="134" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
       <rect x="48" y="750" width="8" height="134" rx="4" fill="#A85043"/>
       <line x1="309" y1="768" x2="309" y2="866" stroke="#DCE6EC" stroke-width="1"/>
@@ -103,7 +116,8 @@
 <line x1="973" y1="768" x2="973" y2="866" stroke="#DCE6EC" stroke-width="1"/>
       <circle cx="82" cy="784" r="17" fill="#F8E7E3" stroke="#A85043" stroke-width="1.5"/>
       <text x="72" y="790" fill="#6B3029" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="800" letter-spacing="0">L4</text>
-      <g>
+      <g class="locus-status-chip" data-id="L4" data-status="permanent fail">
+    <title>L4: Supralateral route - permanent fail</title>
     <rect x="111" y="768" width="128.8" height="28" rx="8" fill="#F1D4CF" stroke="#A85043" stroke-width="1"/>
     <text x="125" y="786" fill="#6B3029" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">PERMANENT FAIL</text>
   </g>
@@ -113,7 +127,8 @@
       <text x="608" y="786" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" letter-spacing="0"><tspan x="608" dy="0">All altitudes: the handle fails the</tspan><tspan x="608" dy="18">structural-discrimination gate, with only</tspan><tspan x="608" dy="18">about 0.5 deg spread over h = 0-22 deg.</tspan></text>
       <text x="956" y="786" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" letter-spacing="0"><tspan x="956" dy="0">Brightness, crop position, or</tspan><tspan x="956" dy="18">co-occurring arcs are treated as if</tspan><tspan x="956" dy="18">they were a usable altitude channel.</tspan></text>
     </g>
-<g>
+<g class="boundary-row" data-id="L5" data-title="Rendered is not anchored" data-status="admissibility rule" data-visual-class="admissibility" data-handle="evidence-admissibility boundary">
+      <title>L5: Rendered is not anchored - admissibility rule</title>
       <rect x="48" y="894" width="1184" height="134" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
       <rect x="48" y="894" width="8" height="134" rx="4" fill="#64748B"/>
       <line x1="309" y1="912" x2="309" y2="1010" stroke="#DCE6EC" stroke-width="1"/>
@@ -121,7 +136,8 @@
 <line x1="973" y1="912" x2="973" y2="1010" stroke="#DCE6EC" stroke-width="1"/>
       <circle cx="82" cy="928" r="17" fill="#EDF2F7" stroke="#64748B" stroke-width="1.5"/>
       <text x="72" y="934" fill="#37465A" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="800" letter-spacing="0">L5</text>
-      <g>
+      <g class="locus-status-chip" data-id="L5" data-status="admissibility rule">
+    <title>L5: Rendered is not anchored - admissibility rule</title>
     <rect x="111" y="912" width="157.6" height="28" rx="8" fill="#DCE4EC" stroke="#64748B" stroke-width="1"/>
     <text x="125" y="930" fill="#37465A" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">ADMISSIBILITY RULE</text>
   </g>

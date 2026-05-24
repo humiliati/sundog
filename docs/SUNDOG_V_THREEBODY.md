@@ -1024,17 +1024,31 @@ with a **branch-shadow audit**: catalog-only 4-bit hash on
 `(m_3<1, z_0<0.3, |v_z|<1e-6, m_3 z_0^2<2)` with deterministic constant-bit
 retirement (`|v_z|<1e-6` and `m_3 z_0^2<2` are constant on supp-B; both
 retired). Active signature `(b1, b2)` gives 4 occupied buckets; chi-squared
-independence vs S/U at `df = 3`, critical `11.34` (p=0.01). **Verdict
-landed: `branch_hash_passes_audit` at `chi^2 = 34.986`** vs critical 11.34
-(p ~= `1.23e-7`, 3.1x threshold). The audit-dominant bucket is `(m_3<1,
-z_0<0.3)` with 113 rows / 55.75% S vs the catalog mean 35.53% (chi^2
-contribution 20.17 of 34.99); the other three buckets sit at 20-29% S. So
-the body's stability structure is visible in the catalog-coordinate branch
-shadow but NOT in the Z_2 projection at either tangent or
-orbit-gauge-rigidity granularity. v0.5a is an AUDIT, not a predictor; the
-pass licenses v0.5b — a separately registered held-out predictor
-(leave-one-m_3-bin-out or held-out catalog half). See
-`kfacet_v04_writeup.md` and `kfacet_v05a_branch_map_form.md`.
+independence vs S/U at `df = 3`, critical `11.34` (p=0.01). **v0.5a
+verdict landed: `branch_hash_passes_audit` at `chi^2 = 34.986`** vs critical
+11.34 (p ~= `1.23e-7`, 3.1x threshold). The audit-dominant bucket is
+`(m_3<1, z_0<0.3)` with 113 rows / 55.75% S vs the catalog mean 35.53%
+(chi^2 contribution 20.17 of 34.99); the other three buckets sit at
+20-29% S. v0.5a is an AUDIT, not a predictor. **v0.5b verdict landed
+2026-05-23: `branch_predictor_fails_heldout`.** Leave-one-m_3-bin-out
+fold-trained branch-majority on `(b1, b2)` over the 263-row gating
+subset returned model accuracy `0.6198` vs always-U `0.6388`, accuracy
+delta `-0.019` (predictor LOSES), McNemar win=28 / loss=33 / p=1.0.
+The load-bearing fold is m_3 = 0.4 (55 rows / 35 S, the catalog's most-stable
+bin): held out, the residual five `m_3 < 1` bins flip the
+`(m_3 < 1, z_0 < 0.3)` bucket to a U majority, so the predictor cannot
+capture the m_3 = 0.4 stable cluster on its own held-out fold. **Joint
+v0.5 reading:** the branch shadow is in-sample associated with stability
+(v0.5a chi^2 = 34.99) but does not generalize across held-out mass bins
+(v0.5b delta = -0.019). Clean projection-limit: the branch hash is a
+descriptive catalog partition, not a predictive mechanism. Combined with
+v0.4 negatives (Z_2 tangent precondition failed; Z_2 orbit-gauge-rigidity
+chi^2 = 1202), stability information on supp-B is NOT carried by either
+the Z_2 projection or the catalog-coordinate branch shadow at the tested
+granularities. v0.5c (continuous-feature promotion) and v0.5 chapter close
+are both live options; runner work blocked until paper-side direction
+picks one. See `kfacet_v04_writeup.md`, `kfacet_v05a_branch_map_form.md`,
+and `kfacet_v05b_branch_predictor_form.md`.
 
 ### Cross-Substrate Hand-Offs
 

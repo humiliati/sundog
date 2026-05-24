@@ -650,15 +650,20 @@ Any post-audit narrowing of the active signature, threshold change, or
 df-formula change is a **re-registration**, not a refinement. The
 audit form is locked.
 
-## v0.5b Branch Predictor (held-out draft)
+## v0.5b Branch Predictor (held-out verdict)
 
 ### V0.5b branch-shadow predictor (leave-one-m_3-bin-out)
 
-Status: **DRAFTED FOR SIGN-OFF 2026-05-23**. Paper-side form:
+Status: **VERDICT LANDED 2026-05-23**. Paper-side form:
 [`../internal/anniversary/kfacet_v05b_branch_predictor_form.md`](../internal/anniversary/kfacet_v05b_branch_predictor_form.md).
-No compute has been run under this form.
+Receipt:
+`results/isotrophy/k-facet-v05b-branch-predictor/manifest.json`.
 
-Locked draft shape:
+Verdict: **branch_predictor_fails_heldout**. The v0.5a branch hash
+stratifies S/U in-sample, but the fold-trained branch-majority predictor
+does not beat always-`U` under leave-one-`m_3`-bin-out.
+
+Locked form:
 
 ```text
 primary partition:  leave-one-m_3-bin-out over the 12 bins with N >= 5
@@ -670,6 +675,23 @@ pass threshold:     p <= 0.01 AND positive accuracy delta
 continuous fields:  diagnostic-only; reserved for v0.5c
 ```
 
+Primary result:
+
+```text
+gate rows:       263  (95 S / 168 U)
+model accuracy:  0.619772
+always-U acc:    0.638783
+accuracy delta: -0.019011
+McNemar:         win = 28, loss = 33, n_disc = 61, p = 1.0
+verdict:         branch_predictor_fails_heldout
+```
+
+Reading: `m_3 = 0.4` was the load-bearing fold. Holding it out flips the
+low-mass/low-`z_0` branch training direction to `U` (`28 S / 33 U`),
+missing the large stable `0.4` block. In the remaining low-mass folds,
+the same branch usually predicts `S`, but its held-out wins and losses
+nearly cancel.
+
 The random catalog-half split and the single rule `predict S iff
 (m_3 < 1 and z_0 < 0.3)` are registered only as sidecars. The primary
 gate respects the mass-bin structure rather than mixing same-`m_3`
@@ -677,13 +699,16 @@ rows across train and test.
 
 Next actions:
 
-1. Sign off or revise the held-out predictor form before any runner is
-   executed.
-2. Implement `scripts/v05b_branch_predictor.py` against
-   `results/isotrophy/k-facet-v05a-branch-map/per_row_table.csv`.
-3. Run the seconds-scale held-out predictor and land the receipt at
-   `results/isotrophy/k-facet-v05b-branch-predictor/`.
-4. Update this section with the verdict.
+1. ~~Sign off or revise the held-out predictor form before any runner is
+   executed.~~ DONE 2026-05-23.
+2. ~~Implement `scripts/v05b_branch_predictor.py` against
+   `results/isotrophy/k-facet-v05a-branch-map/per_row_table.csv`.~~
+   DONE 2026-05-23.
+3. ~~Run the seconds-scale held-out predictor and land the receipt at
+   `results/isotrophy/k-facet-v05b-branch-predictor/`.~~ DONE 2026-05-23.
+4. Decide whether v0.5c promotes the single-rule sidecar as a separately
+   registered descriptive classifier, or moves to continuous features with
+   `T_kepler` and `mu_eff` pinned first.
 
 ## Onboarding / Polish (Run-Friendly)
 
