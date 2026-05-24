@@ -1,10 +1,15 @@
 # v0.7 Mechanism Preregistration: gamma_1 Direction-of-Instability
 
-Status: **REGISTERED 2026-05-24** (parent; no compute yet). This document
-locks the v0.7 body / projection / observable and the non-circularity
-discipline. Form locks for v0.7a (audit) and v0.7b (held-out predictor,
-conditional on v0.7a passing) will be separately registered children
-that pin specific operational definitions, binning, df, and falsifier
+Status: **REGISTERED 2026-05-24** (parent; no compute yet).
+**v0.7a child form locked 2026-05-24** as D5 + B (velocity-fraction
+quartile audit), with D1 + A direction-projection quartile as a
+named report-only sidecar. See
+`kfacet_v07a_velocity_fraction_audit_form.md`. v0.7b form-lock author
+pending (conditional on v0.7a passing). This document locks the v0.7
+body / projection / observable and the non-circularity discipline.
+Form locks for v0.7a (audit) and v0.7b (held-out predictor,
+conditional on v0.7a passing) are separately registered children that
+pin specific operational definitions, binning, df, and falsifier
 choices.
 
 Audience: v0.7a/v0.7b form-lock author; paper-side reviewer of the
@@ -451,6 +456,9 @@ registered with:
 
 ## Doc Trail
 
+- `kfacet_v07a_velocity_fraction_audit_form.md` -- v0.7a child form
+  lock (D5 + B; velocity-fraction quartile audit; D1 + A direction-
+  projection sidecar report-only).
 - `kfacet_v06_writeup.md` -- v0.6 conditional-independence chapter close
   (opens v0.7).
 - `kfacet_v06a_energy_quartile_audit_form.md` -- v0.6a catalog audit
@@ -467,7 +475,9 @@ registered with:
 
 ---
 
-Parent registration locked. v0.7a (operational definition + audit
-form) and v0.7b (held-out predictor) form locks pending. The
-non-circularity audit is the load-bearing design problem before any
-compute.
+Parent registration locked. v0.7a child form lock landed 2026-05-24
+(`kfacet_v07a_velocity_fraction_audit_form.md`): D5 + B
+(velocity-fraction quartile audit) is primary with the locked
+non-circularity sentence; D1 + A (direction-projection quartile) is
+the named report-only sidecar. v0.7b form lock pending, conditional
+on v0.7a's verdict.

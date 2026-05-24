@@ -313,17 +313,23 @@ bin-locality to a generalizable mechanism.
 mechanism. This required a careful non-circularity audit because
 v0.4b explicitly disallowed Floquet-derived features for stability
 circularity reasons. **Parent registration landed 2026-05-24**
-at `kfacet_v07_mechanism_preregistration.md`. The parent locks body /
-projection / observable, sketches five candidate operational
-definitions (D1-D5: largest-real-part eigenvector, largest-magnitude
-eigenvector, defined-only-when-unambiguous with definedness guard,
-Z_2 isotypic fraction, velocity-fraction), explicitly identifies
-three circularity risks (eigenvalue-choice, well-definedness,
-feature-extraction), and inherits all v0.5/v0.6 discipline including
-the alignment-tightness guard against the v0.5a branch label and the
-sparse-cell fallback tree. v0.7a (form lock with explicit operational
-definition + audit form + tie-break + reference frame) is pending.
-No runner work until v0.7a is separately registered.
+at `kfacet_v07_mechanism_preregistration.md`; **v0.7a child form
+lock landed 2026-05-24** at
+`kfacet_v07a_velocity_fraction_audit_form.md`. The parent locks
+body / projection / observable, sketches five candidate operational
+definitions (D1-D5), explicitly identifies three circularity risks,
+and inherits all v0.5/v0.6 discipline. The v0.7a form lock picked
+**D5 + B** (velocity-fraction quartile audit) over D1 + A because
+D5 minimizes the tie-break surface and avoids using eigenvalue
+ordering as the feature-selection mechanism; D1 + A is preserved as
+a named report-only sidecar. The locked non-circularity sentence:
+*"v0.7a uses Floquet eigenvectors only as geometric directions; it
+does not use eigenvalue magnitude, spectral radius, unit-circle
+status, unstable-pair count, or any threshold that defines the
+published S/U label. The tested scalar is a phase-space composition
+ratio of the selected direction, not the growth rate of that
+direction."* v0.7a runner pending implementation
+(`scripts/v07a_velocity_fraction_audit.py`).
 
 ## Doc Trail
 
