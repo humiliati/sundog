@@ -30,9 +30,11 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scipy.integrate import solve_ivp  # type: ignore
+
 from scripts.isotrophy_workbench import (  # type: ignore
+    acceleration_jacobian,
     canonical_omega_18,
-    compute_monodromy,
     integrate_orbit,
     parse_rows,
     read_text,
@@ -66,6 +68,57 @@ SENTINELS = [
 
 FULL_CATALOG_ROW_COUNT = 273
 INLINE_RUNTIME_BUDGET_SECONDS = 600  # ~10-minute repo rule
+
+
+def compute_monodromy_vectorized(integrated, rtol: float, atol: float, max_step_fraction: float) -> np.ndarray:
+    """Compute M_i = Dphi_T(y0) via a single 324-dim solve_ivp call.
+
+    Replaces the workbench's column-by-column compute_monodromy() with the
+    matrix-form variational equation dY/dt = J(t) Y, Y(0) = I_18. The
+    DOP853 step adapter sees all 324 state components jointly, so the step
+    sequence is shared across all 18 columns instead of being computed 18
+    times independently. Numerically equivalent to the column-by-column
+    version under per-element error control, but ~10-20x faster at tight
+    tolerances.
+
+    This is a neutral helper: it uses only acceleration_jacobian (the
+    Newtonian Jacobian field) and the orbit's dense output. It does NOT
+    touch K_fib, the F_beta decomposition, the D3/Z2 isotypic split, or
+    any stability-derived filtering. The disallowed-feature audit
+    inherited from v0.4b is preserved.
+    """
+    period = integrated.row.period
+    masses = integrated.row.masses
+    orbit_solution = integrated.solution
+    max_step = period * max_step_fraction if max_step_fraction > 0 else np.inf
+
+    def matrix_rhs(t: float, Y_flat: np.ndarray) -> np.ndarray:
+        Y = Y_flat.reshape(18, 18)
+        y_t = orbit_solution.sol(t)
+        x_t = y_t[:9].reshape(3, 3)
+        J = acceleration_jacobian(x_t, masses)
+        dY = np.empty((18, 18), dtype=float)
+        dY[:9, :] = Y[9:, :]
+        dY[9:, :] = J @ Y[:9, :]
+        return dY.ravel()
+
+    Y0 = np.eye(18, dtype=float).ravel()
+    solution = solve_ivp(
+        matrix_rhs,
+        (0.0, period),
+        Y0,
+        method="DOP853",
+        rtol=rtol,
+        atol=atol,
+        dense_output=False,
+        max_step=max_step,
+    )
+    if not solution.success:
+        raise RuntimeError(
+            f"vectorized variational integration failed for {integrated.row.label}: "
+            f"{solution.message}"
+        )
+    return solution.y[:, -1].reshape(18, 18)
 
 
 def relpath(path: Path) -> str:
@@ -244,7 +297,7 @@ def smoke_one_row(row, omega) -> dict:
     orbit_seconds = time.perf_counter() - started
 
     monodromy_start = time.perf_counter()
-    M_i = compute_monodromy(integrated, rtol=RTOL, atol=ATOL, max_step_fraction=MAX_STEP_FRACTION)
+    M_i = compute_monodromy_vectorized(integrated, rtol=RTOL, atol=ATOL, max_step_fraction=MAX_STEP_FRACTION)
     monodromy_seconds = time.perf_counter() - monodromy_start
 
     symp_residual = symplecticity_residual(M_i, omega)
@@ -320,7 +373,8 @@ def main() -> None:
             f"vf={record['velocity_fraction']:.4f}  "
             f"max_re={record['max_eigenvalue_real_part']:.4f}  "
             f"deg={record['degenerate_eigenvalue_count']}  "
-            f"step={record['cascade_step_used']}"
+            f"step={record['cascade_step_used']}",
+            flush=True,
         )
 
     total = sum(r["total_seconds"] for r in smoke_records)
