@@ -2,7 +2,7 @@
 
 **Version:** 0.1 (draft for public comment)
 **Publisher:** Sundog Research Lab
-**Status:** Internal governance — operationalises §4 of *The Conscium
+**Status:** Internal governance — operationalises §4 of *The Halo
 Initiative* v0.2.
 **Date:** 2026-05-21
 
@@ -10,7 +10,7 @@ Initiative* v0.2.
 
 ## 1. Purpose
 
-The Conscium Initiative requires that organisations publishing under
+The Halo Initiative requires that organisations publishing under
 its framework apply claim-tagging to their own statements. This policy
 operationalises that requirement for Sundog Research Lab. It defines
 who tags claims, who reviews them, who may challenge a tag, how
@@ -258,7 +258,7 @@ notes. A v1.0 release will follow at least one full publication cycle
 exercising every procedure in this policy, and a public-comment
 period of no less than 30 days on the preceding draft.
 
-The policy versions independently of the Conscium Initiative and of
+The policy versions independently of the Halo Initiative and of
 the traceability harness.
 
 ---

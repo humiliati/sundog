@@ -11,10 +11,10 @@ per the *Sundog Research Lab Governance and Claims-Review Policy*.
 
 `docs/501c3/` holds the working documents for forming Sundog
 Research Lab as a US public-interest research entity: the
-**Conscium Initiative** (the framework the lab develops and
+**Halo Initiative** (the framework the lab develops and
 publishes), the **Governance and Claims-Review Policy** (the
 internal regime that operationalises the framework's
-meta-principle), the **Conscium Traceability Harness Whitepaper
+meta-principle), the **Halo Traceability Harness Whitepaper
 Outline** (the structural skeleton of the lab's first instrument),
 and the institutional artifacts that bridge the lab's current
 informal state to a target incorporated state (the **Founding
@@ -34,12 +34,12 @@ corrections-and-retractions discipline.
 
 | File | Version | Status | What it is |
 |------|---------|--------|------------|
-| [CONSCIUM_INITIATIVE_v0.2.md](./CONSCIUM_INITIATIVE_v0.2.md) | 0.2 | Public-comment draft | The normative framework. Seven principles + Deployment Patterns layer + meta-principle. Current. |
-| [CONSCIUM_INITIATIVE_v0.3_AMENDMENT_NOTES.md](./CONSCIUM_INITIATIVE_v0.3_AMENDMENT_NOTES.md) | 0.1 | Internal-facing draft | Working notes for v0.3. Drafts evaluator obligations under uncertainty and the agent-facing companion-document path. |
-| [CONSCIUM_MULTI_AGENT_REVIEW_RECORD_v0.1.md](./CONSCIUM_MULTI_AGENT_REVIEW_RECORD_v0.1.md) | 0.1 | Public-comment appendix scaffold | Record for AI-generated reviews of the founding documents. No legal or governance weight. |
-| [CONSCIUM_INITIATIVE_v0.1.md](./CONSCIUM_INITIATIVE_v0.1.md) | 0.1 | Historical snapshot | Superseded by v0.2. Preserved for the version trail. |
+| [Halo_INITIATIVE_v0.2.md](./Halo_INITIATIVE_v0.2.md) | 0.2 | Public-comment draft | The normative framework. Seven principles + Deployment Patterns layer + meta-principle. Current. |
+| [Halo_INITIATIVE_v0.3_AMENDMENT_NOTES.md](./Halo_INITIATIVE_v0.3_AMENDMENT_NOTES.md) | 0.1 | Internal-facing draft | Working notes for v0.3. Drafts evaluator obligations under uncertainty and the agent-facing companion-document path. |
+| [Halo_MULTI_AGENT_REVIEW_RECORD_v0.1.md](./Halo_MULTI_AGENT_REVIEW_RECORD_v0.1.md) | 0.1 | Public-comment appendix scaffold | Record for AI-generated reviews of the founding documents. No legal or governance weight. |
+| [Halo_INITIATIVE_v0.1.md](./Halo_INITIATIVE_v0.1.md) | 0.1 | Historical snapshot | Superseded by v0.2. Preserved for the version trail. |
 | [SUNDOG_GOVERNANCE_POLICY_v0.1.md](./SUNDOG_GOVERNANCE_POLICY_v0.1.md) | 0.1 | Internal-facing draft | Operationalises §4 of the Initiative. Defines who tags, who reviews, how challenges work, who has final authority. |
-| [CONSCIUM_HARNESS_WHITEPAPER_OUTLINE.md](./CONSCIUM_HARNESS_WHITEPAPER_OUTLINE.md) | 0.2 (outline) | Internal-facing | Structural skeleton of the harness whitepaper. v0.1 harness scope: §2.1, §2.2, §2.3, §2.7. Evaluator-side proxy. |
+| [Halo_HARNESS_WHITEPAPER_OUTLINE.md](./Halo_HARNESS_WHITEPAPER_OUTLINE.md) | 0.2 (outline) | Internal-facing | Structural skeleton of the harness whitepaper. v0.1 harness scope: §2.1, §2.2, §2.3, §2.7. Evaluator-side proxy. |
 | [SUNDOG_FOUNDING_PLAN_v0.1.md](./SUNDOG_FOUNDING_PLAN_v0.1.md) | 0.1 | Internal | Bridges current informal state to target incorporated state. Interim governance + pause-points + 18-month timeline. |
 | [SUNDOG_CONTRIBUTOR_LICENCE_AGREEMENT_TEMPLATE_v0.1.md](./SUNDOG_CONTRIBUTOR_LICENCE_AGREEMENT_TEMPLATE_v0.1.md) | 0.1 | Internal template draft | CLA scaffold for current and future contributors. Implements Founding Plan §8 and §9 after counsel/founder approval. |
 | [SUNDOG_FISCAL_SPONSOR_MEMO_v0.1.md](./SUNDOG_FISCAL_SPONSOR_MEMO_v0.1.md) | 0.1 | Internal | Scopes the fiscal-sponsor decision. Four candidates evaluated. |

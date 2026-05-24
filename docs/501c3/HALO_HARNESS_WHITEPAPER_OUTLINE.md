@@ -1,8 +1,8 @@
-# The Conscium Traceability Harness — Whitepaper Outline
+# The Halo Traceability Harness — Whitepaper Outline
 
 **Version:** 0.2 (outline; not yet a draft)
 **Publisher:** Sundog Research Lab (provisional name)
-**Companion to:** *The Conscium Initiative v0.2*,
+**Companion to:** *The Halo Initiative v0.4*,
 *Sundog Research Lab Governance and Claims-Review Policy v0.1*
 **Date:** 2026-05-21
 
@@ -76,7 +76,7 @@ claim-tagging discipline before the abstract.
 
 **Contents.**
 
-- Title: *The Conscium Traceability Harness: An Observational Instrument for AI Claim Discipline*
+- Title: *The Halo Traceability Harness: An Observational Instrument for AI Claim Discipline*
 - Subtitle (working): *Audit Trail and Provenance as a Practical Layer for AI Accountability*
 - Authors: Sundog Research Lab.
 - Version, date, status.
@@ -119,7 +119,7 @@ instruments, what it does not, and what evidence the paper offers.
 
 **Notes for drafter.** The abstract is the first place the average
 reader will form a mental model of the harness. Pick one sentence
-and hold it line-by-line through revision: *"The v0.1 Conscium
+and hold it line-by-line through revision: *"The v0.1 Halo
 Traceability Harness is an evaluator-side proxy that captures, tags,
 stores, and reports on four observable surfaces of deployed AI
 systems: provenance, audit trail, uncertainty disclosure, and
@@ -219,12 +219,12 @@ Initiative's principle numbering.
 
 **v0.1 scope statement (reproduce verbatim in the prose):**
 
-> The v0.1 Conscium Traceability Harness is an evaluator-side proxy
+> The v0.1 Halo Traceability Harness is an evaluator-side proxy
 > for measuring four observable surfaces of deployed AI systems:
 > provenance, audit trail, uncertainty disclosure, and refusal
 > boundaries. It does not claim to evaluate internal reasoning
 > faithfulness, general safety, model capability, or full
-> compliance with every Conscium principle. Claim restraint,
+> compliance with every Halo principle. Claim restraint,
 > reasoning-claim integrity, and general reproducibility checks
 > are retained as roadmap items for v0.2, with any partial signals
 > reported as exploratory rather than scored.

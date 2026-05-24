@@ -3,8 +3,8 @@
 **Version:** 0.1 (working document, internal-facing)
 **Publisher:** Founding members of Sundog Research Lab
 **Companion to:** *Sundog Research Lab Governance and Claims-Review
-Policy v0.1*, *The Conscium Initiative v0.2*,
-*Conscium Traceability Harness Whitepaper Outline v0.2*
+Policy v0.1*, *The Halo Initiative v0.2*,
+*Halo Traceability Harness Whitepaper Outline v0.2*
 **Date:** 2026-05-21
 **Status:** Internal — subject to claim-tagging per the Governance
 and Claims-Review Policy.
@@ -57,7 +57,7 @@ The following is true on the date of this draft.
   the geometry workbench, the sundog.html public page and the
   Cloudflare Pages deploy, and the Mujoco / mesa / mines /
   three-body strands documented under `docs/`.
-- The lab has draft published documents: the Conscium Initiative
+- The lab has draft published documents: the Halo Initiative
   (v0.1, v0.2), the Governance and Claims-Review Policy (v0.1),
   the harness whitepaper outline (v0.1, v0.2).
 - The lab has published no Traceability Evaluation Reports, no
@@ -105,7 +105,7 @@ assets of the lab at incorporation.
 | Evaluation-engagement agreement       | None           | Template drafted before any paid engagement |
 | Contributor agreements (CLAs)         | None           | All current contributors sign before incorporation; new contributors sign on first contribution |
 | IP assignment of Sundog artifacts     | Individually held | Assignment agreements signed at incorporation |
-| Trademark and name clearance          | None           | "Conscium" and "Sundog" reviewed before v1.0 of the Initiative |
+| Trademark and name clearance          | None           | "Halo" and "Sundog" reviewed before v1.0 of the Initiative |
 
 Each closure mechanism is mapped to a milestone in §6.
 
@@ -122,7 +122,7 @@ description, and the policy clause it implements when in effect.
 | Interim research director     | Authority over high-stakes publications during the interim period.          | §4            |
 | Interim claims reviewer       | Reviews tags on publications; rotates among founding members.               | §4            |
 | Project lead, Sundog projects | Continuation of halo-rendering and geometry-workbench work.                 | (lab project) |
-| Project lead, Initiative      | Stewardship of the Conscium Initiative document and the public comment.    | (lab project) |
+| Project lead, Initiative      | Stewardship of the Halo Initiative document and the public comment.    | (lab project) |
 | Project lead, harness         | Stewardship of the harness whitepaper and the v0.1 implementation.          | (lab project) |
 | Incorporation lead            | Drives fiscal-sponsor selection and the eventual 501(c)(3) filing.          | (this plan)   |
 | Secretary                     | Maintains the claims log, the founders' file, the IP register.              | §5, §9, §10   |
@@ -195,7 +195,7 @@ otherwise noted.
 | 3      | Fiscal sponsorship in place. First grant applications drafted.                          |
 | 3–6    | Recruit two independent board members in preparation for direct incorporation.          |
 | 6      | Articles of incorporation and bylaws drafted. First Traceability Evaluation Report exercise begins under interim governance — see §7 for the publication pause-point. |
-| 6–9    | 501(c)(3) application submitted. Trademark and name clearance completed for "Sundog" and "Conscium".|
+| 6–9    | 501(c)(3) application submitted. Trademark and name clearance completed for "Sundog" and "Halo".|
 | 9      | Independent board majority in place. Interim research director ratified or replaced by board.       |
 | 12     | Target: IRS 501(c)(3) determination. Sundog project IP formally assigned to the lab.    |
 | 12–18  | First Traceability Evaluation Report published if pause-points in §7 are met. Initiative v1.0 path opens.|
@@ -274,7 +274,7 @@ does not claim institutional ownership in publications.
   [CLA template v0.1](./SUNDOG_CONTRIBUTOR_LICENCE_AGREEMENT_TEMPLATE_v0.1.md),
   not operative until counsel review, founder approval, and selection
   of the actual legal counterparty.
-- **Document licensing.** The Conscium Initiative, the Governance
+- **Document licensing.** The Halo Initiative, the Governance
   and Claims-Review Policy, and the harness whitepaper are
   released under a permissive open licence to be selected
   (candidate: **CC BY 4.0**, tagged *Hypothesised* pending
@@ -283,7 +283,7 @@ does not claim institutional ownership in publications.
 - **Code licensing.** Harness code and Sundog project code are
   released under a permissive open-source licence (candidate:
   **Apache-2.0**, tagged *Hypothesised*).
-- **Trademark.** "Sundog Research Lab" and "Conscium" usage is
+- **Trademark.** "Sundog Research Lab" and "Halo" usage is
   reviewed for trademark conflict before v1.0 of the Initiative
   per the §10 condition.
 
@@ -324,7 +324,7 @@ The plan's substantive claims carry the following tags:
   Sundog-as-separate; the priority order of the funding theory.
   These are values judgments.
 - *Hypothesised*: every milestone in §6; the licence choices in
-  §9; the assumption that "Sundog" and "Conscium" survive name
+  §9; the assumption that "Sundog" and "Halo" survive name
   clearance.
 - *Speculative*: that v1.0 of this plan is reached within 18
   months.

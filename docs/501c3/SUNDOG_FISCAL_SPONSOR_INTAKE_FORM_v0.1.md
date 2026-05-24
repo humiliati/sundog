@@ -36,7 +36,7 @@ detail.
 > materials that help researchers, developers, and public-interest
 > organisations evaluate whether AI systems conform to the
 > voluntary principles set out in our published framework, *The
-> Conscium Initiative*. The lab plans to operate under fiscal
+> Halo Initiative*. The lab plans to operate under fiscal
 > sponsorship for the first 6–12 months and to transition to a
 > direct US 501(c)(3) thereafter. We are evaluating potential
 > sponsors and would value your responses to the questions below.
@@ -61,7 +61,7 @@ naming, jurisdiction, or timeline changes.
    restrictions on naming specific commercial deployments?
 
 2. **Open-publication compatibility.** The lab publishes its
-   framework documents (the Conscium Initiative, the Governance
+   framework documents (the Halo Initiative, the Governance
    and Claims-Review Policy, the harness whitepaper) under a
    permissive open licence (working assumption: CC BY 4.0 for
    documents, Apache-2.0 for code). Are there any restrictions
