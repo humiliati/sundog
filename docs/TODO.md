@@ -650,6 +650,41 @@ Any post-audit narrowing of the active signature, threshold change, or
 df-formula change is a **re-registration**, not a refinement. The
 audit form is locked.
 
+## v0.5b Branch Predictor (held-out draft)
+
+### V0.5b branch-shadow predictor (leave-one-m_3-bin-out)
+
+Status: **DRAFTED FOR SIGN-OFF 2026-05-23**. Paper-side form:
+[`../internal/anniversary/kfacet_v05b_branch_predictor_form.md`](../internal/anniversary/kfacet_v05b_branch_predictor_form.md).
+No compute has been run under this form.
+
+Locked draft shape:
+
+```text
+primary partition:  leave-one-m_3-bin-out over the 12 bins with N >= 5
+predictor form:     fold-trained branch-majority on active (m_3 < 1, z_0 < 0.3)
+tie rule:           predict U
+baseline:           always-U
+primary gate:       one-sided exact McNemar/binomial test on discordant rows
+pass threshold:     p <= 0.01 AND positive accuracy delta
+continuous fields:  diagnostic-only; reserved for v0.5c
+```
+
+The random catalog-half split and the single rule `predict S iff
+(m_3 < 1 and z_0 < 0.3)` are registered only as sidecars. The primary
+gate respects the mass-bin structure rather than mixing same-`m_3`
+rows across train and test.
+
+Next actions:
+
+1. Sign off or revise the held-out predictor form before any runner is
+   executed.
+2. Implement `scripts/v05b_branch_predictor.py` against
+   `results/isotrophy/k-facet-v05a-branch-map/per_row_table.csv`.
+3. Run the seconds-scale held-out predictor and land the receipt at
+   `results/isotrophy/k-facet-v05b-branch-predictor/`.
+4. Update this section with the verdict.
+
 ## Onboarding / Polish (Run-Friendly)
 
 ### V0.3h K_facet Tooling Polish (~10-hour initiation)
