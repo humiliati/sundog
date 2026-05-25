@@ -1,0 +1,7 @@
+[threebody] wrote 180 phase15-smoke-shard-mu1-v0p95 trials to results\threebody\phase15-smoke-shard-mu1-v0p95
+[threebody] wrote trial-outcomes.csv, paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv
+[threebody] wrote cell-precision-map.csv
+[threebody] wrote richardson-order-map.csv
+[threebody] wrote trials-minimal.jsonl
+[threebody] candidate envelope rows 0/80
+[threebody] outcomes {"bounded":83,"escape":60,"close_approach":37}

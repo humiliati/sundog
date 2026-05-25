@@ -1,0 +1,8 @@
+
+> sundog-site@0.1.0 threebody:phase13
+> node scripts/threebody-operating-envelope.mjs --phase phase13-long-horizon-lock --out results/threebody/phase13-long-horizon-lock --regimes near_escape --modes off,naive,track_sensor_accel_guarded,oracle --mass-ratios 0.01,0.3,1 --timesteps 0.008,0.01,0.012 --radius-scales 1.025,1.05,1.075 --velocity-scales 0.95,1.05,1.1,1.15 --thrust-limits 0.4 --sensor-noise-sweep 0 --track-guard-mode hazard_quantile --track-guard-quantile 0.75 --track-guard-min-radius-sweep 1.15 --track-guard-max-local-acceleration-sweep 2.5 --track-guard-max-tidal-magnitude-sweep 35 --seeds 8 --duration 16 --sensor-audit-every 240
+
+[threebody] wrote 3456 phase13-long-horizon-lock trials to results\threebody\phase13-long-horizon-lock
+[threebody] wrote trial-outcomes.csv, paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv
+[threebody] candidate envelope rows 88/324
+[threebody] outcomes {"escape":2030,"close_approach":272,"bounded":1154}

@@ -70,7 +70,10 @@ DEFAULT_V05A_PER_ROW = ROOT / "results/isotrophy/k-facet-v05a-branch-map/per_row
 DEFAULT_OUT = ROOT / "results/isotrophy/k-facet-v07a-velocity-fraction-audit"
 
 FORM_LOCK = "internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md"
-VERSION = "v0.7a-velocity-fraction-audit-r1"
+VERSION = "v0.7a-velocity-fraction-audit-r1-r2a-r2c"
+
+# R2.A locked attrition threshold (2026-05-24).
+INTEGRATION_BLOCKED_ATTRITION_THRESHOLD_FRACTION = 0.05  # 5% of catalog
 
 # Locked precision (v0.7a form lock).
 RTOL = 1e-12
@@ -516,13 +519,92 @@ def feature_audit(rows, quartile_key, branch_key="branch_label"):
 
 
 def per_row_pipeline(row, omega) -> dict:
+    """Run the full v0.7a per-row pipeline.
+
+    Per R2.A amendment: catches RuntimeError from integrate_orbit or
+    compute_monodromy_vectorized and returns an integration_blocked
+    record instead of propagating.
+    """
     masses = row.masses
     started = time.perf_counter()
-    integrated = integrate_orbit(row, rtol=RTOL, atol=ATOL, max_step_fraction=MAX_STEP_FRACTION)
+    identity = {
+        "label": row.label,
+        "index": int(row.index),
+        "m3": float(row.m3),
+        "m3_key": f"{row.m3:.1f}",
+        "z0": float(row.z0),
+        "period": float(row.period),
+        "stability": row.stability,
+    }
+
+    try:
+        integrated = integrate_orbit(row, rtol=RTOL, atol=ATOL, max_step_fraction=MAX_STEP_FRACTION)
+    except Exception as exc:  # noqa: BLE001
+        total_seconds = time.perf_counter() - started
+        return {
+            **identity,
+            "integration_blocked": True,
+            "integration_error_stage": "integrate_orbit",
+            "integration_error_message": f"{type(exc).__name__}: {exc}",
+            "orbit_integration_seconds": total_seconds,
+            "monodromy_integration_seconds": 0.0,
+            "total_seconds": total_seconds,
+            "symplecticity_residual": None,
+            "symplecticity_status": "integration_blocked",
+            "reciprocal_pair_residual": None,
+            "reciprocal_pair_status": "integration_blocked",
+            "max_eigenvalue_real_part": None,
+            "representative_eigenvalue_real": None,
+            "representative_eigenvalue_imag": None,
+            "representative_eigenvalue_modulus": None,
+            "degenerate_eigenvalue_count": None,
+            "eigenspace_dim_used": None,
+            "cascade_step_used": "integration_blocked",
+            "velocity_fraction": None,
+            "z_fraction": None,
+            "norm_q_sq": None,
+            "norm_v_sq": None,
+            "norm_z_q_sq": None,
+            "norm_z_v_sq": None,
+            "com_position_offset": None,
+            "com_velocity_offset": None,
+        }
     orbit_seconds = time.perf_counter() - started
 
     monodromy_start = time.perf_counter()
-    M_i = compute_monodromy_vectorized(integrated, rtol=RTOL, atol=ATOL, max_step_fraction=MAX_STEP_FRACTION)
+    try:
+        M_i = compute_monodromy_vectorized(integrated, rtol=RTOL, atol=ATOL, max_step_fraction=MAX_STEP_FRACTION)
+    except Exception as exc:  # noqa: BLE001
+        monodromy_seconds = time.perf_counter() - monodromy_start
+        total_seconds = time.perf_counter() - started
+        return {
+            **identity,
+            "integration_blocked": True,
+            "integration_error_stage": "compute_monodromy_vectorized",
+            "integration_error_message": f"{type(exc).__name__}: {exc}",
+            "orbit_integration_seconds": orbit_seconds,
+            "monodromy_integration_seconds": monodromy_seconds,
+            "total_seconds": total_seconds,
+            "symplecticity_residual": None,
+            "symplecticity_status": "integration_blocked",
+            "reciprocal_pair_residual": None,
+            "reciprocal_pair_status": "integration_blocked",
+            "max_eigenvalue_real_part": None,
+            "representative_eigenvalue_real": None,
+            "representative_eigenvalue_imag": None,
+            "representative_eigenvalue_modulus": None,
+            "degenerate_eigenvalue_count": None,
+            "eigenspace_dim_used": None,
+            "cascade_step_used": "integration_blocked",
+            "velocity_fraction": None,
+            "z_fraction": None,
+            "norm_q_sq": None,
+            "norm_v_sq": None,
+            "norm_z_q_sq": None,
+            "norm_z_v_sq": None,
+            "com_position_offset": None,
+            "com_velocity_offset": None,
+        }
     monodromy_seconds = time.perf_counter() - monodromy_start
 
     symp_residual = symplecticity_residual(M_i, omega)
@@ -538,13 +620,10 @@ def per_row_pipeline(row, omega) -> dict:
     total_seconds = time.perf_counter() - started
 
     return {
-        "label": row.label,
-        "index": int(row.index),
-        "m3": float(row.m3),
-        "m3_key": f"{row.m3:.1f}",
-        "z0": float(row.z0),
-        "period": float(row.period),
-        "stability": row.stability,
+        **identity,
+        "integration_blocked": False,
+        "integration_error_stage": None,
+        "integration_error_message": None,
         "orbit_integration_seconds": orbit_seconds,
         "monodromy_integration_seconds": monodromy_seconds,
         "total_seconds": total_seconds,
@@ -597,6 +676,62 @@ def build_cross_table(rows, row_key, col_key):
     return table
 
 
+PER_ROW_FIELDS = [
+    "label", "index", "m3", "m3_key", "z0", "period", "stability", "branch_label",
+    "integration_blocked", "integration_error_stage", "integration_error_message",
+    "velocity_fraction", "z_fraction",
+    "norm_q_sq", "norm_v_sq", "norm_z_q_sq", "norm_z_v_sq",
+    "Q_vf", "Q_z",
+    "max_eigenvalue_real_part",
+    "representative_eigenvalue_real", "representative_eigenvalue_imag", "representative_eigenvalue_modulus",
+    "degenerate_eigenvalue_count", "eigenspace_dim_used", "cascade_step_used",
+    "symplecticity_residual", "symplecticity_status",
+    "reciprocal_pair_residual", "reciprocal_pair_status",
+    "orbit_integration_seconds", "monodromy_integration_seconds", "total_seconds",
+    "com_position_offset", "com_velocity_offset",
+]
+
+
+def load_existing_per_row_table(path: Path) -> dict[tuple[str, int], dict]:
+    """R2.C resume mode: load existing per_row_table.csv into a dict
+    keyed by (m3_key, index)."""
+    if not path.exists():
+        return {}
+    existing: dict[tuple[str, int], dict] = {}
+    with path.open("r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        for raw in reader:
+            key = (raw["m3_key"], int(raw["index"]))
+            # Reconstruct typed record from CSV strings.
+            rec = dict(raw)
+            for k in ("m3", "z0", "period",
+                      "velocity_fraction", "z_fraction",
+                      "norm_q_sq", "norm_v_sq", "norm_z_q_sq", "norm_z_v_sq",
+                      "max_eigenvalue_real_part",
+                      "representative_eigenvalue_real", "representative_eigenvalue_imag",
+                      "representative_eigenvalue_modulus",
+                      "symplecticity_residual", "reciprocal_pair_residual",
+                      "orbit_integration_seconds", "monodromy_integration_seconds",
+                      "total_seconds", "com_position_offset", "com_velocity_offset"):
+                v = rec.get(k, "")
+                rec[k] = None if v in ("", "None", "null", "NaN", "nan") else float(v)
+            for k in ("index", "degenerate_eigenvalue_count", "eigenspace_dim_used", "Q_vf", "Q_z"):
+                v = rec.get(k, "")
+                rec[k] = None if v in ("", "None", "null") else int(v)
+            rec["integration_blocked"] = parse_bool(rec.get("integration_blocked", "False")) if rec.get("integration_blocked") not in ("", None) else False
+            existing[key] = rec
+    return existing
+
+
+def append_per_row(path: Path, record: dict, write_header: bool) -> None:
+    mode = "w" if write_header else "a"
+    with path.open(mode, encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=PER_ROW_FIELDS, extrasaction="ignore")
+        if write_header:
+            writer.writeheader()
+        writer.writerow(record)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
@@ -605,20 +740,71 @@ def main() -> None:
     args = parser.parse_args()
 
     args.out.mkdir(parents=True, exist_ok=True)
+    per_row_csv_path = args.out / "per_row_table.csv"
+
     catalog_rows = parse_rows(read_text(str(args.catalog)), source="B")
     branch_labels = load_v05a_branch_labels(args.v05a_per_row)
 
+    # R2.C: resume mode.
+    existing = load_existing_per_row_table(per_row_csv_path)
+    print(f"[v07a] resume: {len(existing)} rows already on disk at {per_row_csv_path}", flush=True)
+
     per_row_records: list[dict] = []
     sanity_failures: list[dict] = []
+    integration_blocked_rows: list[dict] = []
     started_total = time.perf_counter()
+    write_header = not per_row_csv_path.exists() or per_row_csv_path.stat().st_size == 0
+
     for idx_row, row in enumerate(catalog_rows, start=1):
+        m3_key = f"{row.m3:.1f}"
+        key = (m3_key, int(row.index))
+
+        if key in existing:
+            record = existing[key]
+            per_row_records.append(record)
+            blocked = bool(record.get("integration_blocked"))
+            if blocked:
+                integration_blocked_rows.append({
+                    "label": record["label"],
+                    "integration_error_stage": record.get("integration_error_stage"),
+                    "integration_error_message": record.get("integration_error_message"),
+                })
+            elif record.get("symplecticity_status") == "fail" or record.get("reciprocal_pair_status") == "fail":
+                sanity_failures.append({
+                    "label": record["label"],
+                    "symp_status": record["symplecticity_status"],
+                    "symp_residual": record["symplecticity_residual"],
+                    "recip_status": record["reciprocal_pair_status"],
+                    "recip_residual": record["reciprocal_pair_residual"],
+                })
+            elapsed = time.perf_counter() - started_total
+            print(
+                f"[{idx_row:3d}/{len(catalog_rows)}] {record['label']:20s} (resumed; "
+                f"blocked={blocked}; vf={record.get('velocity_fraction')}; "
+                f"elapsed {elapsed:.0f}s)",
+                flush=True,
+            )
+            continue
+
         omega = canonical_omega_18(row.masses)
         record = per_row_pipeline(row, omega)
-        # Attach v0.5a branch_label.
-        key = (record["m3_key"], record["index"])
         record["branch_label"] = branch_labels.get(key, "UNKNOWN")
+        # Q_vf and Q_z are computed AFTER all rows are gathered; placeholder here.
+        record["Q_vf"] = None
+        record["Q_z"] = None
+
         per_row_records.append(record)
-        if record["symplecticity_status"] == "fail" or record["reciprocal_pair_status"] == "fail":
+        # R2.C: append immediately.
+        append_per_row(per_row_csv_path, record, write_header=write_header)
+        write_header = False
+
+        if record.get("integration_blocked"):
+            integration_blocked_rows.append({
+                "label": record["label"],
+                "integration_error_stage": record.get("integration_error_stage"),
+                "integration_error_message": record.get("integration_error_message"),
+            })
+        elif record.get("symplecticity_status") == "fail" or record.get("reciprocal_pair_status") == "fail":
             sanity_failures.append({
                 "label": record["label"],
                 "symp_status": record["symplecticity_status"],
@@ -626,45 +812,67 @@ def main() -> None:
                 "recip_status": record["reciprocal_pair_status"],
                 "recip_residual": record["reciprocal_pair_residual"],
             })
+
         elapsed = time.perf_counter() - started_total
-        print(
-            f"[{idx_row:3d}/{len(catalog_rows)}] {record['label']:20s} "
-            f"stab={record['stability']} "
-            f"T={record['total_seconds']:6.2f}s "
-            f"symp={record['symplecticity_residual']:.2e} "
-            f"recip={record['reciprocal_pair_residual']:.2e} "
-            f"vf={record['velocity_fraction']:.4f}  "
-            f"z={record['z_fraction']:.4f}  "
-            f"max_re={record['max_eigenvalue_real_part']:.3g}  "
-            f"deg={record['degenerate_eigenvalue_count']}  "
-            f"step={record['cascade_step_used']}  "
-            f"(elapsed {elapsed:.0f}s)",
-            flush=True,
-        )
+        if record.get("integration_blocked"):
+            print(
+                f"[{idx_row:3d}/{len(catalog_rows)}] {record['label']:20s} "
+                f"INTEGRATION_BLOCKED stage={record.get('integration_error_stage')} "
+                f"msg={record.get('integration_error_message')!r} "
+                f"(elapsed {elapsed:.0f}s)",
+                flush=True,
+            )
+        else:
+            print(
+                f"[{idx_row:3d}/{len(catalog_rows)}] {record['label']:20s} "
+                f"stab={record['stability']} "
+                f"T={record['total_seconds']:6.2f}s "
+                f"symp={record['symplecticity_residual']:.2e} "
+                f"recip={record['reciprocal_pair_residual']:.2e} "
+                f"vf={record['velocity_fraction']:.4f}  "
+                f"z={record['z_fraction']:.4f}  "
+                f"max_re={record['max_eigenvalue_real_part']:.3g}  "
+                f"deg={record['degenerate_eigenvalue_count']}  "
+                f"step={record['cascade_step_used']}  "
+                f"(elapsed {elapsed:.0f}s)",
+                flush=True,
+            )
 
     total_runtime = time.perf_counter() - started_total
     sanity_blocked = bool(sanity_failures)
 
-    # Constant-feature retirement check.
-    vf_values = [r["velocity_fraction"] for r in per_row_records]
-    vf_sd = float(np.std(vf_values, ddof=1))
+    # R2.A: separate blocked rows from analyzable rows.
+    analyzable_records = [r for r in per_row_records if not r.get("integration_blocked")]
+    integration_blocked_count = len(integration_blocked_rows)
+    attrition_threshold_count = math.ceil(INTEGRATION_BLOCKED_ATTRITION_THRESHOLD_FRACTION * len(per_row_records))
+    integration_blocked_attrition = integration_blocked_count > attrition_threshold_count
+
+    # Constant-feature retirement check on analyzable rows only.
+    vf_values = [r["velocity_fraction"] for r in analyzable_records]
+    if vf_values and len(vf_values) >= 2:
+        vf_sd = float(np.std(vf_values, ddof=1))
+    else:
+        vf_sd = 0.0
     constant_feature_retired = vf_sd < CONSTANT_FEATURE_SD_THRESHOLD
 
-    if sanity_blocked:
+    if integration_blocked_attrition:
+        verdict = "velocity_fraction_blocked_integration_attrition"
+    elif sanity_blocked:
         verdict = "velocity_fraction_blocked_sanity"
     elif constant_feature_retired:
         verdict = "velocity_fraction_retired_near_constant"
     else:
-        # Quartile binning + chi-squared + alignment for vf and z_fraction.
+        # Quartile binning + chi-squared + alignment for vf and z_fraction
+        # on analyzable rows only.
         vf_cutpoints = quantile_cutpoints(vf_values)
-        z_values = [r["z_fraction"] for r in per_row_records]
+        z_values = [r["z_fraction"] for r in analyzable_records]
         z_cutpoints = quantile_cutpoints(z_values)
-        for r in per_row_records:
+        for r in analyzable_records:
             r["Q_vf"] = assign_quartile(r["velocity_fraction"], vf_cutpoints)
             r["Q_z"] = assign_quartile(r["z_fraction"], z_cutpoints)
 
-        primary_audit = feature_audit(per_row_records, "Q_vf")
-        sidecar_audit = feature_audit(per_row_records, "Q_z")
+        primary_audit = feature_audit(analyzable_records, "Q_vf")
+        sidecar_audit = feature_audit(analyzable_records, "Q_z")
 
         alignment_E = primary_audit["alignment_tightness_scalar"]
         if primary_audit["verdict_decision"] == "pass":
@@ -680,6 +888,12 @@ def main() -> None:
             verdict = "velocity_fraction_inconclusive_sparse"
         else:
             verdict = "velocity_fraction_unknown"
+
+    audit_active = (
+        not integration_blocked_attrition
+        and not sanity_blocked
+        and not constant_feature_retired
+    )
 
     result: dict = {
         "mode": "v0.7a-velocity-fraction-audit",
@@ -705,8 +919,17 @@ def main() -> None:
         "constant_feature_sd_threshold": CONSTANT_FEATURE_SD_THRESHOLD,
         "quantile_method": f"numpy_quantile_{QUANTILE_METHOD}",
         "row_count": len(per_row_records),
+        "analyzable_row_count": len(analyzable_records),
+        "integration_blocked_count": integration_blocked_count,
+        "integration_blocked_attrition_threshold_fraction": INTEGRATION_BLOCKED_ATTRITION_THRESHOLD_FRACTION,
+        "integration_blocked_attrition_threshold_count": attrition_threshold_count,
+        "integration_blocked_attrition_fired": integration_blocked_attrition,
+        "integration_blocked_rows": integration_blocked_rows,
+        "integration_blocked_r2a_amendment_note": "v0.7a-r2.a amendment 2026-05-24: rows where compute_monodromy_vectorized raises are caught and excluded from the chi-squared catalog; attrition gate at 5% of catalog (= 14 rows).",
         "S_count": sum(1 for r in per_row_records if r["stability"] == "S"),
         "U_count": sum(1 for r in per_row_records if r["stability"] == "U"),
+        "analyzable_S_count": sum(1 for r in analyzable_records if r["stability"] == "S"),
+        "analyzable_U_count": sum(1 for r in analyzable_records if r["stability"] == "U"),
         "vf_sd": vf_sd,
         "constant_feature_retired": constant_feature_retired,
         "sanity_failures": sanity_failures,
@@ -715,35 +938,21 @@ def main() -> None:
         "verdict": verdict,
     }
 
-    if not sanity_blocked and not constant_feature_retired:
+    if audit_active:
         result["cutpoints_vf"] = vf_cutpoints
         result["cutpoints_z"] = z_cutpoints
-        # Strip the gamma_1 vector reference (we don't carry it in per-row).
         result["primary_audit_vf"] = {k: v for k, v in primary_audit.items()}
         result["sidecar_audit_z"] = {k: v for k, v in sidecar_audit.items()}
-        # Diagnostic cross-tables.
-        result["diagnostic_Q_vf_x_branch"] = build_cross_table(per_row_records, "Q_vf", "branch_label")
-        result["diagnostic_Q_vf_x_m3"] = build_cross_table(per_row_records, "Q_vf", "m3_key")
-        result["diagnostic_Q_z_x_branch"] = build_cross_table(per_row_records, "Q_z", "branch_label")
+        result["diagnostic_Q_vf_x_branch"] = build_cross_table(analyzable_records, "Q_vf", "branch_label")
+        result["diagnostic_Q_vf_x_m3"] = build_cross_table(analyzable_records, "Q_vf", "m3_key")
+        result["diagnostic_Q_z_x_branch"] = build_cross_table(analyzable_records, "Q_z", "branch_label")
 
     (args.out / "manifest.json").write_text(json.dumps(result, indent=2, default=str) + "\n", encoding="utf-8")
 
-    per_row_fields = [
-        "label", "index", "m3", "m3_key", "z0", "period", "stability", "branch_label",
-        "velocity_fraction", "z_fraction",
-        "norm_q_sq", "norm_v_sq", "norm_z_q_sq", "norm_z_v_sq",
-        "Q_vf", "Q_z",
-        "max_eigenvalue_real_part",
-        "representative_eigenvalue_real", "representative_eigenvalue_imag", "representative_eigenvalue_modulus",
-        "degenerate_eigenvalue_count", "eigenspace_dim_used", "cascade_step_used",
-        "symplecticity_residual", "symplecticity_status",
-        "reciprocal_pair_residual", "reciprocal_pair_status",
-        "orbit_integration_seconds", "monodromy_integration_seconds", "total_seconds",
-        "com_position_offset", "com_velocity_offset",
-    ]
-    write_csv(args.out / "per_row_table.csv", per_row_records, per_row_fields)
+    # Final per_row_table.csv overwrite to capture computed Q_vf / Q_z.
+    write_csv(per_row_csv_path, per_row_records, PER_ROW_FIELDS)
 
-    if not sanity_blocked and not constant_feature_retired:
+    if audit_active:
         contingency_fields = [
             "quartile", "N", "S", "U", "S_fraction", "expected_S", "expected_U", "chi2_contribution", "occupied",
         ]
@@ -756,9 +965,11 @@ def main() -> None:
     print()
     print(f"[v07a] verdict: {verdict}")
     print(f"[v07a] rows: {len(per_row_records)}  S={result['S_count']} U={result['U_count']}")
+    print(f"[v07a] analyzable: {len(analyzable_records)}  blocked: {integration_blocked_count}  "
+          f"(attrition threshold {attrition_threshold_count}; fired={integration_blocked_attrition})")
     print(f"[v07a] sanity_blocked={sanity_blocked}  constant_retired={constant_feature_retired}")
     print(f"[v07a] vf_sd={vf_sd:.4f}  threshold={CONSTANT_FEATURE_SD_THRESHOLD}")
-    if not sanity_blocked and not constant_feature_retired:
+    if audit_active:
         pa = primary_audit
         sa = sidecar_audit
         print(f"[v07a] primary vf: chi^2={pa['chi_squared']:.6f}  branch={pa['test_branch_taken']}  "
