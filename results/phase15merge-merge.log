@@ -1,0 +1,12 @@
+
+> sundog-site@0.1.0 threebody:phase15:merge
+> node scripts/threebody-phase15-merge.mjs --shard-dirs results/threebody/phase15-smoke-shard-mu1-v0p95,results/threebody/phase15-smoke-shard-mu1-v1p1 --out results/threebody/phase15-smoke-merged
+
+[threebody] Unknown flag: --shard-dirs
+[merge] found 2 shard dir(s):
+[merge]   - results\threebody\phase15-smoke-shard-mu1-v0p95
+[merge]   - results\threebody\phase15-smoke-shard-mu1-v1p1
+[merge] unified trial count: 360
+[merge] wrote unified aggregates to results\threebody\phase15-smoke-merged
+[merge] unified candidate envelope rows 12/160
+[merge] unified outcomes {"bounded":151,"escape":166,"close_approach":43}

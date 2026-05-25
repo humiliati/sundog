@@ -1,6 +1,6 @@
 # v0.7a Velocity-Fraction Audit Form Lock (D5 + B)
 
-Status: **REGISTERED 2026-05-24 + AMENDED R1 2026-05-24**.
+Status: **REGISTERED 2026-05-24 + AMENDED R1 + AMENDED R2.A 2026-05-24**.
 This document locks the v0.7a univariate-velocity-fraction chi-squared
 audit form under the parent registration's candidate slots **D5**
 (velocity-fraction direction property) and **B** (velocity-fraction
@@ -12,6 +12,16 @@ sidecar** and emits no independent verdict.
 relaxed from 1e-6 to 1e-4** based on the 7-row vectorized smoke
 evidence. See the "Amendment R1: Sanity-Gate Threshold" section
 below for the locked amendment text and justification.
+
+**Amendment R2.A (2026-05-24): per-row integration-failure fallback
+discipline** added after the full-catalog runner crashed at row 76
+(O_194 at m_3=0.5) with `Required step size is less than spacing
+between numbers` inside `compute_monodromy_vectorized`. Rows where
+the variational integrator raises are caught, marked
+`integration_blocked`, excluded from the chi-squared catalog and
+alignment denominator, and counted against a 5%-of-catalog attrition
+threshold. See the "Amendment R2.A: Per-Row Integration-Failure
+Fallback" section below.
 
 Audience: v0.7a runner; v0.7b form-lock author (conditional on v0.7a
 passing); paper-side reviewer of the v0.6 -> v0.7 transition.
@@ -119,6 +129,109 @@ firewall (locked permanently):
 This amendment is locked before the amended-gate smoke is re-run.
 Any subsequent change to either gate after the audit verdict lands
 is a re-registration, not a refinement.
+
+## Amendment R2.A: Per-Row Integration-Failure Fallback (Locked 2026-05-24)
+
+The v0.7a R1-amended full-catalog runner crashed at row 76 of 273
+(O_194 at m_3=0.5) with:
+
+```text
+RuntimeError: vectorized variational integration failed for
+              O_{194}(0.5): Required step size is less than spacing
+              between numbers.
+```
+
+This is a pre-sanity numerical-precision failure inside scipy's
+DOP853 step adapter on the matrix variational equation. The base
+`integrate_orbit` succeeded; `compute_monodromy_vectorized` could
+not find a feasible step at `rtol = atol = 1e-12`. It is NOT a
+symplecticity or reciprocal-pair sanity-gate violation -- the
+sanity gates never get to evaluate because M_i is never produced.
+
+The pre-locked form lock anticipated symplecticity / reciprocal-pair
+failures but did not anticipate pre-sanity integrator failures.
+R2.A pre-registers the row-level fallback discipline.
+
+```text
+v0.7a-r2.a per-row integration-failure fallback:
+
+trigger:
+  any RuntimeError raised from compute_monodromy_vectorized for a
+  given row (typically "Required step size is less than spacing
+  between numbers", but any IVP failure mode).
+
+per-row marking:
+  the row is recorded on per_row_table.csv with:
+    - row identity preserved (label, index, m3, z0, period, stability,
+      branch_label),
+    - symplecticity_status     = "integration_blocked",
+    - reciprocal_pair_status   = "integration_blocked",
+    - velocity_fraction        = null / NaN,
+    - z_fraction               = null / NaN,
+    - Q_vf, Q_z                = null,
+    - all gamma_1 fields       = null,
+    - integration_error_message  = the exception message,
+    - integration_blocked      = True.
+
+chi-squared denominator:
+  blocked rows are EXCLUDED from the chi-squared catalog (the 273
+  reduces to (273 - integration_blocked_count)) and from the
+  alignment-tightness denominator. Quartile cutpoints are computed
+  on the non-blocked subset only.
+
+attrition threshold (locked):
+  if integration_blocked_count > 5% of catalog
+  (= ceil(0.05 * 273) = 14 rows for supp-B):
+    verdict = velocity_fraction_blocked_integration_attrition.
+    No chi-squared verdict is licensed; the catalog is too
+    integration-attrited for the audit to run honestly.
+  else:
+    audit proceeds on (273 - integration_blocked_count) rows.
+
+firewall (re-asserted permanently):
+  integrator error messages and blocked-row status are QC/provenance
+  only. They do NOT enter the velocity-fraction feature, the binning,
+  the chi-squared statistic, the alignment-tightness scalar, or the
+  verdict (beyond the attrition gate above).
+```
+
+R2.A is locked before the runner is re-run from scratch with the
+R2.A behavior built in. Any future change to the trigger condition,
+per-row marking, denominator handling, attrition threshold, or
+firewall is a re-registration, not a refinement.
+
+## Engineering Note: R2.C Append-Per-Row Discipline (Locked 2026-05-24)
+
+Companion to R2.A. Not a form-lock amendment (does not change any
+feature, binning, df, or verdict), but a runner-engineering
+discipline that v0.7a operations are committed to:
+
+```text
+v0.7a-r2.c append-per-row + resume:
+
+per-row append:
+  the runner writes each completed row's record to per_row_table.csv
+  immediately after the row is processed (or marked
+  integration_blocked). A crash mid-run preserves all rows
+  completed before the crash on disk.
+
+resume mode:
+  on startup, the runner reads any existing per_row_table.csv at the
+  output path and skips re-processing rows already present.
+  Completion-by-identity (label, index) is the match key. This
+  guarantees that compute already spent on rows 1..k is not lost
+  if the runner restarts.
+
+separate amendment to manifest emission:
+  the manifest.json is still written at the END of the run (after
+  all rows are processed or marked blocked) as the audit verdict
+  finalization. A crash before manifest emission means re-running
+  with resume mode produces the manifest on the next clean
+  completion.
+```
+
+R2.C is engineering; it does not change v0.7a's substantive
+verdict shape. It is recorded here for transparency.
 
 ## What v0.7a Is
 
