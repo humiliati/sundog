@@ -197,7 +197,9 @@ induction in the registered classical vacuum domain.
 
 ## Supporting Checks
 
-The hand exterior-calculus derivation above is decisive. A tiny SymPy or Python
-spot-check on a smooth source-free plane wave, or on any `C^2` compact-patch
-test potential, may confirm signs and the finite-stencil scaling. No SymPy
-notebook is required for the algebraic receipt itself.
+The hand exterior-calculus derivation above is decisive. Phase 4 now records
+the supporting spot-checks in
+[`FARADAY_PHASE4_VERIFICATION.md`](FARADAY_PHASE4_VERIFICATION.md), including a
+smooth source-free plane wave, finite-stencil scaling, a nonlocal projection
+falsifier, an artificial monopole quarantine, and a gauge-invariance check. No
+SymPy notebook is required for the algebraic receipt itself.

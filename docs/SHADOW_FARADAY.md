@@ -5,9 +5,11 @@ Working hook:
 > If the shadow projection is honest, Faraday's loop closes without borrowing
 > the global potential. If it does not close, the leftover term gets a name.
 
-Status: 2026-05-25, Phases 1-3 signed off. Phase 3 landed Branch A
-(clean structural zero) in [`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md).
-Phase 4 verification and falsification battery are not yet run.
+Status: 2026-05-25, Phases 1-4 signed off. Phase 3 landed Branch A
+(clean structural zero) in [`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md);
+Phase 4 verification/falsification passed 5/5 in
+[`FARADAY_PHASE4_VERIFICATION.md`](FARADAY_PHASE4_VERIFICATION.md). Phase 5
+chapter close is not yet written.
 
 This ledger is the working receipt surface for
 [`SUNDOG_V_FARADAY.md`](SUNDOG_V_FARADAY.md). The roadmap stays the narrative
@@ -21,12 +23,13 @@ The current claim is only:
 
 > A pre-registered algebraic test has been opened for whether local,
 > gauge-invariant shadow data is sufficient to recover Faraday induction in the
-> classical vacuum case, or else produce a named residual.
+> classical vacuum case, or else produce a named residual. On the registered
+> classical vacuum domain, Phase 3 lands Branch A and Phase 4 support checks
+> pass.
 
-This ledger does not claim that the test passes. It does not derive Maxwell's
-equations. It does not address quantum electrodynamics, plasma, curved-spacetime
-global topology, or source-bearing domains except as named future extensions or
-quarantines.
+This ledger does not derive Maxwell's equations. It does not address quantum
+electrodynamics, plasma, curved-spacetime global topology, or source-bearing
+domains except as named future extensions or quarantines.
 
 ## Phase 1 Exit Contract
 
@@ -681,9 +684,41 @@ Result summary:
 
 Claim boundary:
 
-This closes Phase 3 only. It does not yet complete the Phase 4 symbolic
-verification / falsification battery, the Phase 5 chapter close, or the
-Bucket 1 public-share readiness work for `/faraday`.
+This closes Phase 3 only. Phase 4 is recorded below as a supporting
+verification / falsification receipt. Phase 5 chapter close and Bucket 1
+public-share readiness work for `/faraday` are still owed.
+
+## Phase 4 Result
+
+Phase 4 receipt:
+[`FARADAY_PHASE4_VERIFICATION.md`](FARADAY_PHASE4_VERIFICATION.md).
+
+Support command:
+
+```powershell
+npm run faraday:phase4
+```
+
+Support artifacts:
+
+- `scripts/faraday-phase4-battery.mjs`
+- `results/faraday/phase4-battery/manifest.json`
+- `results/faraday/phase4-battery/cases.csv`
+- `results/faraday/phase4-battery/finite-stencil.csv`
+
+Disposition: **pass - 5/5 predicates satisfied**.
+
+Phase 4 confirms the required clean-domain cases and falsifiers:
+
+- Uniform constant `B`: `maxFaradayResidual=0`, `I1=12.5`, `I2=0`.
+- Source-free plane wave: `maxFaradayResidual=0`, `I1=0`, `I2=0`.
+- Nonlocal projection falsifier: residual `0.787734891504`, as expected.
+- Artificial monopole quarantine: `dF_xyz=3`, as expected.
+- Gauge-after-projection check: finite plaquette holonomy delta `0`.
+
+Phase 4 does not create a new branch. It supports the Phase 3 Branch A receipt
+on the registered clean domain and demonstrates that the pre-registered
+quarantine/falsifier hooks actually trip outside that domain.
 
 ### Roadmap Open Questions Resolved
 
@@ -725,3 +760,8 @@ The original roadmap questions are resolved as follows.
   [`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md), with
   proof-hygiene corrections to the form-degree Stokes statement and
   finite-stencil scaling. Branch A selected for the registered clean domain.
+- 2026-05-25 - Phase 4 verification/falsification battery landed in
+  [`FARADAY_PHASE4_VERIFICATION.md`](FARADAY_PHASE4_VERIFICATION.md). The
+  support command `npm run faraday:phase4` passed 5/5 predicates, including
+  constant `B`, source-free plane wave, nonlocal projection residual,
+  artificial monopole quarantine, and finite-plaquette gauge invariance.

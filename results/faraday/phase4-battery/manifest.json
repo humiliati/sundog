@@ -1,0 +1,24 @@
+{
+  "schema": "sundog.faraday.phase4-battery.v1",
+  "generatedAt": "2026-05-25T19:33:55.028Z",
+  "phase": "phase4-verification-battery",
+  "script": "scripts/faraday-phase4-battery.mjs",
+  "out": "results/faraday/phase4-battery",
+  "tolerance": 1e-9,
+  "residualFloor": 0.001,
+  "sample": {
+    "t": 0.37,
+    "x": -0.21,
+    "y": 0.13,
+    "z": 0.19
+  },
+  "planeWave": {
+    "amplitude": 1.2,
+    "waveNumber": 1.7
+  },
+  "checked": 5,
+  "passed": 5,
+  "failed": 0,
+  "status": "pass",
+  "phase4Disposition": "Phase 4 verification/falsification battery satisfied; Branch A remains supported on the registered clean domain."
+}
