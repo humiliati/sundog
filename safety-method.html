@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SKETCH — three load-bearing translations from the Shadow Faraday Branch A receipt to AI behavioral guarantees: local gauge-invariant readout, structural zero, named quarantine. A method-essay bridge, not a derivation.">
+    <meta name="keywords" content="AI safety, shadow projection, gauge invariance, structural zero, named quarantine, method essay, Sundog, claim hygiene, interpretability, behavioral verification">
+    <meta name="theme-color" content="#1A3A52">
+    <meta name="author" content="Sundog Research Lab">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/safety-method">
+    <title>Shadow Method as Safety Template — Sundog</title>
+
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="Shadow Method as Safety Template — Sundog">
+    <meta property="og:description" content="Three load-bearing translations from the Shadow Faraday Branch A receipt to AI behavioral guarantees. A method-essay bridge, marked sketch until polished.">
+    <meta property="og:image" content="https://sundog.cc/og/sundog-generic.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Sundog generic share card. A bespoke safety-method card is owed in Bucket 1 before external promotion.">
+    <meta property="og:url" content="https://sundog.cc/safety-method">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Shadow Method as Safety Template — Sundog">
+    <meta name="twitter:description" content="From shadow Faraday's Branch A to three AI-safety translations: local readout, structural zero, named quarantine.">
+    <meta name="twitter:image" content="https://sundog.cc/og/sundog-generic.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Shadow Method as Safety Template",
+      "description": "A method-essay bridge from the Shadow Faraday Branch A receipt to three load-bearing translations for AI behavioral guarantees: local gauge-invariant readout, structural zero, and named quarantine.",
+      "image": "https://sundog.cc/og/sundog-generic.png",
+      "datePublished": "2026-05-25",
+      "dateModified": "2026-05-25",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "author": {
+        "@type": "Organization",
+        "name": "Sundog Research Lab",
+        "url": "https://sundog.cc"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stellar Aqua LLC",
+        "url": "https://sundog.cc"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://sundog.cc/safety-method"
+      },
+      "about": [
+        { "@type": "Thing", "name": "AI safety" },
+        { "@type": "Thing", "name": "Shadow projection" },
+        { "@type": "Thing", "name": "Structural zero" },
+        { "@type": "Thing", "name": "Named quarantine" },
+        { "@type": "Thing", "name": "Gauge invariance" }
+      ]
+    }
+    </script>
+    <!-- OG-BLOCK-END -->
+
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <link rel="stylesheet" href="/css/sundog-defs.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        main {
+            background:
+                radial-gradient(circle at 18% 8%, rgba(244, 196, 48, 0.10), transparent 22rem),
+                radial-gradient(circle at 82% 92%, rgba(44, 95, 127, 0.08), transparent 28rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 36rem);
+        }
+
+        .sketch-banner {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(44, 95, 127, 0.05);
+            border-bottom: 1px solid rgba(44, 95, 127, 0.3);
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-align: center;
+            padding: 0.55rem 1rem;
+        }
+        .sketch-banner strong { color: var(--primary-mid); font-weight: 800; }
+
+        .sm-hero {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 4.5rem 2rem 2rem;
+        }
+        .sm-hero .eyebrow,
+        .sm-section .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+        .sm-hero h1 {
+            max-width: 920px;
+            margin: 1rem 0 1.25rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(2rem, 6vw, 4.1rem);
+            line-height: 1.06;
+            overflow-wrap: anywhere;
+        }
+        .sm-hero .lede {
+            max-width: 780px;
+            color: #40505C;
+            font-size: 1.15rem;
+            line-height: 1.75;
+        }
+
+        .status-ribbon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.75rem;
+        }
+        .status-ribbon span {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 0.45rem 0.75rem;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+        .status-ribbon .sketch {
+            border-color: rgba(44, 95, 127, 0.45);
+            background: rgba(44, 95, 127, 0.06);
+            color: var(--primary-mid);
+        }
+        .status-ribbon .anchor {
+            border-color: rgba(46, 125, 90, 0.45);
+            background: rgba(46, 125, 90, 0.06);
+            color: #2E7D5A;
+        }
+
+        .sm-section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem 2rem;
+        }
+
+        .sm-card {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FFFFFF;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .sm-card h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.4rem;
+            margin: 0 0 0.75rem;
+        }
+        .sm-card p {
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 0.85rem;
+        }
+        .sm-card p:last-child { margin-bottom: 0; }
+        .sm-card code {
+            background: rgba(244, 196, 48, 0.12);
+            color: var(--primary-dark);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-family: var(--sd-font-data);
+            font-size: 0.95em;
+        }
+        .sm-card em.term {
+            color: var(--primary-mid);
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        .claim-card {
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--primary-mid);
+            border-radius: 10px;
+            background: #FFFFFF;
+            padding: 1.5rem 1.5rem 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .claim-card .claim-num {
+            display: inline-block;
+            background: var(--primary-dark);
+            color: #FFFFFF;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 0.2rem 0.55rem;
+            border-radius: 3px;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+            letter-spacing: 0.05em;
+        }
+        .claim-card h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.45rem;
+            margin: 0 0 0.85rem;
+            line-height: 1.25;
+        }
+        .claim-card p {
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 0.85rem;
+        }
+        .claim-card p:last-child { margin-bottom: 0; }
+
+        .panel-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        @media (max-width: 760px) { .panel-row { grid-template-columns: 1fr; } }
+
+        .panel {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1rem 1.15rem;
+            background: rgba(255, 255, 255, 0.6);
+        }
+        .panel h4 {
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #6A7680;
+            margin: 0 0 0.5rem;
+        }
+        .panel.em h4 { color: var(--primary-mid); }
+        .panel.ai h4 { color: #B53A2C; }
+        .panel.em { border-color: rgba(44, 95, 127, 0.35); }
+        .panel.ai { border-color: rgba(181, 58, 44, 0.35); }
+        .panel p {
+            color: #40505C;
+            font-size: 0.96rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .bridge-arrow {
+            text-align: center;
+            margin: 0.5rem 0 1rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #6A7680;
+        }
+        .bridge-arrow::before, .bridge-arrow::after {
+            content: " — ";
+            color: #B5C0C8;
+        }
+
+        .not-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .not-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.1rem;
+        }
+        .not-card h3 {
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+            margin: 0 0 0.5rem;
+        }
+        .not-card h3::before {
+            content: "✗ ";
+            color: #B53A2C;
+            font-weight: 800;
+        }
+        .not-card p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .test-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .test-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(244, 196, 48, 0.04);
+            padding: 1.1rem;
+        }
+        .test-card h3 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.05rem;
+            margin: 0 0 0.4rem;
+        }
+        .test-card .verdict {
+            display: inline-block;
+            font-family: var(--sd-font-data);
+            font-size: 0.7rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.18rem 0.55rem;
+            border-radius: 3px;
+            margin-bottom: 0.55rem;
+            background: rgba(244, 196, 48, 0.18);
+            color: #8F6F12;
+        }
+        .test-card p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .source-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .source-list a {
+            display: block;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+            color: var(--primary-mid);
+            text-decoration: none;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+        .source-list a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .load-bearing-quote {
+            border-left: 4px solid var(--accent-gold, #F4C430);
+            padding: 0.85rem 1.25rem;
+            margin: 1rem 0;
+            background: rgba(244, 196, 48, 0.06);
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.15rem;
+            line-height: 1.55;
+        }
+
+        @media (max-width: 760px) {
+            .sm-hero { padding: 3.5rem 1.25rem 1.25rem; }
+            .sm-section { padding: 1rem 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="sketch-banner" role="status">
+        <strong>SKETCH</strong> · interpretation, not derivation · Class B
+        candidate, Bucket 1 owed before external share
+    </div>
+
+    <main>
+        <section class="sm-hero">
+            <p class="eyebrow">Method Essay · Shadow Bridge · v0.1</p>
+            <h1>If local shadows recover Faraday, what do they recover for AI?</h1>
+            <p class="lede">
+                The <a href="/faraday">Shadow Faraday experiment</a> landed
+                <strong>Branch A</strong>: local, gauge-invariant
+                <em>shadow data</em> suffices to close Faraday's law on the
+                registered classical-vacuum domain, without reconstructing
+                the electromagnetic potential globally. This essay is the
+                translation. It does not derive any new physics and does not
+                prove any new theorem about AI. It claims that the same
+                three properties that made Branch A earnable in EM —
+                <strong>local gauge-invariant readout</strong>,
+                <strong>structural zero</strong>, and
+                <strong>named quarantine</strong> — are also the properties
+                that distinguish robust AI behavioral guarantees from
+                empirical tolerance tests. The Faraday receipt is the
+                worked example; AI safety is the territory the example
+                points at.
+            </p>
+            <div class="status-ribbon" aria-label="Status">
+                <span class="sketch">SKETCH · interpretation, not derivation</span>
+                <span class="anchor">Faraday Branch A is the load-bearing example</span>
+                <span>Class B candidate · Bucket 1 owed</span>
+                <span>three translations, three falsifiable next experiments</span>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             THE GAP
+             ============================================================ -->
+        <section class="sm-section" aria-label="The gap this essay addresses">
+            <div class="sm-card">
+                <p class="eyebrow">The Gap</p>
+                <h2>Why an essay between the receipt and the headline claim.</h2>
+                <p>
+                    Sundog's stack of experiments — atlas, three-body,
+                    Isotrophy K_facet, mesa, structural-failure, capset,
+                    Faraday — is a trail of receipts. Each one is honest
+                    about what it does and does not show. None of them, on
+                    its own, makes a public-facing claim about AI safety:
+                    that would betray the rigor that earns the receipts in
+                    the first place.
+                </p>
+                <p>
+                    But the receipts are the wrong size for a curious
+                    electrical engineer or a working alignment researcher
+                    to extrapolate from. The Faraday page proves Branch A;
+                    it does not explain why Branch A matters outside
+                    electrodynamics. That gap is what this essay tries to
+                    close — once, in one place — by writing the translation
+                    down.
+                </p>
+                <div class="load-bearing-quote">
+                    The receipts are not the safety claim. The receipts are
+                    the proof that the safety claim's <em class="term">method</em>
+                    is honest.
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             CLAIM 1
+             ============================================================ -->
+        <section class="sm-section" aria-label="Translation 1: local gauge-invariant readout">
+            <div class="claim-card">
+                <h2><span class="claim-num">01</span> Local, gauge-invariant readout, no global reconstruction.</h2>
+                <p>
+                    The shadow operator <code>P_shadow</code> reads a
+                    gauge-invariant scalar from a small stencil of the
+                    electromagnetic potential. It never asks for a globally
+                    consistent choice of <code>A</code>. The readout is
+                    <em class="term">local by construction</em>
+                    (four edges of one plaquette) and
+                    <em class="term">gauge-invariant by Stokes</em>
+                    (the holonomy of an exact form vanishes on every
+                    closed loop).
+                </p>
+                <div class="panel-row">
+                    <div class="panel em">
+                        <h4>In Faraday (Branch A)</h4>
+                        <p>
+                            The plaquette holonomy
+                            <code>∮ A</code> on a coordinate square equals
+                            the flux <code>∫ F</code> through it. The
+                            potential <code>A</code> is never reconstructed
+                            globally; only its line integral on one closed
+                            loop appears. Gauge invariance is exact, not
+                            approximate.
+                        </p>
+                    </div>
+                    <div class="panel ai">
+                        <h4>Translated to AI behavior</h4>
+                        <p>
+                            A behavioral verifier reads from a small
+                            stencil of the agent's trajectory or output,
+                            and does not require reconstructing the
+                            agent's full latent world-model. Two agents
+                            whose internals differ by an
+                            <em class="term">irrelevant reparameterisation</em>
+                            (the AI analog of a gauge) produce the same
+                            verdict.
+                        </p>
+                    </div>
+                </div>
+                <p class="bridge-arrow">the load-bearing rhyme: locality + invariance, not depth of inspection</p>
+                <p>
+                    Most current alignment tooling either inspects the
+                    full model (mechanistic interpretability) or treats
+                    the model as a black box (behavioral evals). The
+                    shadow position is between: <em>small stencil, exact
+                    invariance</em>. It is the position that earned
+                    Branch A in EM. Whether the same position is reachable
+                    for any nontrivial AI behavior is an open empirical
+                    question, not a Sundog claim.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             CLAIM 2
+             ============================================================ -->
+        <section class="sm-section" aria-label="Translation 2: structural zero">
+            <div class="claim-card">
+                <h2><span class="claim-num">02</span> Structural zero, not tolerance threshold.</h2>
+                <p>
+                    The Phase 3 derivation gives
+                    <code>R_F^0(S) = 0</code> by an
+                    <em class="term">algebraic identity</em>:
+                    <code>dF = d(dA) = 0</code>. The zero is not a number
+                    below a tolerance. It is a structural consequence of
+                    the operator's typing. A reader does not have to trust
+                    a threshold; the residual is zero by construction.
+                </p>
+                <div class="panel-row">
+                    <div class="panel em">
+                        <h4>In Faraday (Branch A)</h4>
+                        <p>
+                            The closure residual evaluates to an
+                            algebraic zero. The Phase 4 battery's
+                            <code>tolerance = 1e-9</code> is a
+                            sanity-check floor for the supporting
+                            numerical spot-checks, not the standard the
+                            Branch A claim is held to.
+                        </p>
+                    </div>
+                    <div class="panel ai">
+                        <h4>Translated to AI behavior</h4>
+                        <p>
+                            Behavioral guarantees that come from the
+                            architecture (a constraint the model
+                            <em>cannot</em> violate) versus guarantees
+                            that come from empirical testing (a constraint
+                            the model has not been observed to violate at
+                            scale). The first is a structural zero; the
+                            second is a tolerance threshold.
+                        </p>
+                    </div>
+                </div>
+                <p class="bridge-arrow">the load-bearing rhyme: identity, not benchmark</p>
+                <p>
+                    Most public AI-safety work today is tolerance-based:
+                    test on 10,000 prompts, report no observed violation,
+                    publish. The shadow apparatus offers a different
+                    target — <em>show the violation is ruled out by the
+                    operator's structure</em> — and registers in advance
+                    what would count as a structural failure versus a
+                    tolerance failure. Reaching that target for any
+                    nontrivial AI behavior is hard. This essay does not
+                    claim it has been done. It claims that the distinction
+                    is real and worth drawing.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             CLAIM 3
+             ============================================================ -->
+        <section class="sm-section" aria-label="Translation 3: named quarantine">
+            <div class="claim-card">
+                <h2><span class="claim-num">03</span> Named quarantine, pre-registered before the algebra.</h2>
+                <p>
+                    Phase 2 enumerated five failure modes before Phase 3
+                    began: <em>regularity</em>, <em>topology</em>,
+                    <em>monopole</em>, <em>operator-stencil commutator</em>,
+                    and <em>motional EMF</em>. Each is paired with the
+                    branch it would force (B-quarantine or
+                    C-bounded-failure). When the Phase 4 monopole probe
+                    tripped, it tripped a hook that already had a name and
+                    a verdict.
+                </p>
+                <div class="panel-row">
+                    <div class="panel em">
+                        <h4>In Faraday (Branch A)</h4>
+                        <p>
+                            The five quarantine hooks are not edge cases
+                            discovered after the fact. They were filed in
+                            the ledger before the derivation ran, so any
+                            surprise in Phase 3 had to land in a
+                            pre-registered category. No mid-experiment
+                            invention of new failure classes.
+                        </p>
+                    </div>
+                    <div class="panel ai">
+                        <h4>Translated to AI behavior</h4>
+                        <p>
+                            A pre-mortem for behavioral failure: name the
+                            kinds of inputs, conditions, or
+                            mode-shifts under which the behavioral
+                            guarantee is expected to fail, <em>and the
+                            specific way it fails</em>, before training
+                            or evaluation. A surprise that has no
+                            pre-registered class is a class-C result —
+                            the prior is updated, the scope is corrected.
+                        </p>
+                    </div>
+                </div>
+                <p class="bridge-arrow">the load-bearing rhyme: pre-registered failure beats post-hoc explanation</p>
+                <p>
+                    This is the cheapest translation to start practising
+                    in AI work today, and the one most often elided.
+                    A safety case that names its
+                    Aharonov-Bohm analog, its monopole analog, and its
+                    moving-boundary analog before the model is trained is
+                    a different artifact than a safety case that explains
+                    each observed failure as it appears.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             WHAT THIS IS NOT
+             ============================================================ -->
+        <section class="sm-section" aria-label="Claim boundary">
+            <p class="eyebrow">Claim Boundary</p>
+            <div class="not-grid">
+                <div class="not-card">
+                    <h3>Not a proof of AI safety.</h3>
+                    <p>
+                        The Faraday receipt is a proof. This essay is a
+                        translation of the receipt's <em>method</em> into
+                        AI-safety language. The translation has not been
+                        run against a single nontrivial AI system, and
+                        until it is, it is a hypothesis.
+                    </p>
+                </div>
+                <div class="not-card">
+                    <h3>Not a theory of interpretability.</h3>
+                    <p>
+                        Mechanistic interpretability inspects model
+                        internals; behavioral evals inspect outputs.
+                        The shadow position is between, with explicit
+                        locality and exact invariance. It is a different
+                        target, not a refutation of the others.
+                    </p>
+                </div>
+                <div class="not-card">
+                    <h3>Not a recipe.</h3>
+                    <p>
+                        There is no method here for building a structural
+                        zero in any specific AI system. The three claims
+                        are <em>what to aim at</em>, not <em>how to
+                        achieve it</em>. The how is what the next
+                        experiments would test.
+                    </p>
+                </div>
+                <div class="not-card">
+                    <h3>Not yet load-bearing in promotion.</h3>
+                    <p>
+                        This page is Class B candidate: it carries full
+                        OG/JSON-LD metadata so it is share-ready in
+                        structure, but a bespoke <code>og:image</code>,
+                        inbound link from the homepage, and a
+                        Post-Inspector pass are owed before
+                        <code>/safety-method</code> is treated as
+                        share-ready.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             WHAT WOULD TEST THIS
+             ============================================================ -->
+        <section class="sm-section" aria-label="What would falsify or strengthen the translation">
+            <div class="sm-card">
+                <p class="eyebrow">What Would Test The Translation</p>
+                <h2>Three pre-registered next experiments.</h2>
+                <p>
+                    A bridge essay that cannot be falsified is not a
+                    bridge. The three claims above are each falsifiable.
+                    The cheapest experiments that would either strengthen
+                    or kill the translation are listed below. None has
+                    been run.
+                </p>
+                <div class="test-list">
+                    <div class="test-card">
+                        <span class="verdict">tests claim 01</span>
+                        <h3>Shadow verifier on a toy policy.</h3>
+                        <p>
+                            Pick a small RL or sequence policy where the
+                            "local stencil" can be a sliding window of
+                            actions, and ask whether a constraint
+                            (e.g., a safety property defined on
+                            short windows) can be checked with a
+                            stencil-only operator that is invariant
+                            under a registered equivalence. The
+                            falsifier: any policy where the constraint
+                            requires unbounded lookback.
+                        </p>
+                    </div>
+                    <div class="test-card">
+                        <span class="verdict">tests claim 02</span>
+                        <h3>Structural vs tolerance audit.</h3>
+                        <p>
+                            Take an existing alignment evaluation and
+                            classify each predicate as
+                            <em>structural-by-construction</em> or
+                            <em>tolerance-by-empirical-floor</em>. The
+                            falsifier: an evaluation where every
+                            predicate is structural — in which case the
+                            distinction adds no information.
+                        </p>
+                    </div>
+                    <div class="test-card">
+                        <span class="verdict">tests claim 03</span>
+                        <h3>Pre-mortem catalog for one behavioral claim.</h3>
+                        <p>
+                            Pick a single behavioral property of one
+                            model (e.g., refusal under a specific prompt
+                            class) and write the five-to-seven named
+                            failure classes <em>before</em> running any
+                            evaluation. The falsifier: the post-hoc
+                            failure does not land in any pre-registered
+                            class, demonstrating that the categories
+                            were not load-bearing.
+                        </p>
+                    </div>
+                </div>
+                <p>
+                    Each is roughly the same shape as the Shadow Faraday
+                    experiment: small, pre-registered, receipt-driven,
+                    designed to ship the result regardless of which
+                    branch it lands on.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             SOURCES
+             ============================================================ -->
+        <section class="sm-section">
+            <p class="eyebrow">Inspection Trail</p>
+            <div class="source-list">
+                <a href="/faraday">Shadow Faraday Zero-Out — the worked example anchoring this essay</a>
+                <a href="docs/SHADOW_FARADAY.md#phase-5-chapter-close">Phase 5 Chapter Close · receipts catalog, limitations, extensions, fidelity audit</a>
+                <a href="docs/SUNDOG_V_FARADAY.md">Shadow Faraday roadmap v0.1</a>
+                <a href="/alignment">Alignment workbench — Bayes comparator and tolerance-vs-structural framing</a>
+                <a href="/isotrophy">Isotrophy K_facet v0.3h — precedent for the named-quarantine discipline</a>
+                <a href="/threebody">Three-body workbench — local-probe pattern lineage</a>
+                <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a>
+                <a href="docs/presentation/claims-and-scope.md">Claims and Scope Policy</a>
+                <a href="https://github.com/humiliati/sundog">Sundog repository on GitHub</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
+            <a href="docs/presentation/claims-and-scope.md">Claims Policy</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
