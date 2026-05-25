@@ -1,6 +1,6 @@
 # Shadow Faraday Zero-Out: Minimal Experiment Roadmap (v0.1)
 
-**Status**: Draft for review & pre-registration  
+**Status**: Phase 4 complete; Phase 5 chapter close pending
 **Owner**: Sundog Research Lab (Humiliati + collaborators)  
 **Goal**: Test whether the Sundog shadow physics framework (local gauge-invariant observables, σ₃-style detectors, tidal proxies) algebraically "zeroes out" on classical electromagnetism — specifically, whether local shadow projections are sufficient to recover Faraday's law of induction and the Lorentz invariants of the electromagnetic field tensor without global state reconstruction.  
 **Style**: Low-compute, pre-registered, receipt-driven, falsification-first. Mirrors isotrophy v0.3 / three-body controller discipline.  
@@ -195,8 +195,8 @@
 
 ---
 
-**Next step**: Run Phase 4 symbolic verification and minimal falsification
-battery against the Branch A Phase 3 receipt.
+**Next step**: Write Phase 5 chapter close, limitations/handoff summary, and
+final derivation-chain fidelity audit.
 
 **Progress note (2026-05-25)**: Phase 1 is now opened in
 [`SHADOW_FARADAY.md`](SHADOW_FARADAY.md) with the first symbol table,
@@ -224,9 +224,17 @@ target.
 [`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md), with
 proof-hygiene corrections to the form-degree Stokes statement and
 finite-stencil scaling. The registered clean-domain residuals all land as
-structural zeros, so the Phase 3 branch is **A - clean structural zero**. Phase
-4 verification / falsification remains owed before chapter close or external
-sharing.
+structural zeros, so the Phase 3 branch is **A - clean structural zero**. At
+this checkpoint, Phase 4 verification / falsification was still owed before
+chapter close or external sharing.
+
+**Progress note (2026-05-25, Phase 4 landed)**: Phase 4 verification and
+minimal falsification landed in
+[`FARADAY_PHASE4_VERIFICATION.md`](FARADAY_PHASE4_VERIFICATION.md), with
+support artifacts from `npm run faraday:phase4`. The battery passed 5/5:
+constant `B`, source-free plane wave, nonlocal projection residual, artificial
+monopole quarantine, and finite-plaquette gauge invariance. Phase 5 chapter
+close remains owed before external sharing.
 
 This keeps the Sundog standard: traceable, falsifiable, receipt-driven, and public. The final artifact is both a mathematical result **and** a clean public page that demonstrates the method. 
 
