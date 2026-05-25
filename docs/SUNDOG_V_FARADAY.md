@@ -216,6 +216,13 @@ gate plus finite-stencil locality receipt; no Floquet/twist enrichment in
 Phase 3; two-tier operator retained with roles locked. The Phase 3 zero-out is
 still uncomputed.
 
+**Progress note (2026-05-25, takeoff)**: Phase 3 is cleared for takeoff in
+[`SHADOW_FARADAY.md`](SHADOW_FARADAY.md) ▸ "Phase 3: Takeoff Gate". The gate
+locks allowed inputs, forbidden shortcuts, derivation work order, exact success
+predicate, closure residual table, landing branches, and the dedicated receipt
+file [`SHADOW_FARADAY_PHASE3_DERIVATION.md`](SHADOW_FARADAY_PHASE3_DERIVATION.md).
+The Phase 3 zero-out is still uncomputed.
+
 This keeps the Sundog standard: traceable, falsifiable, receipt-driven, and public. The final artifact is both a mathematical result **and** a clean public page that demonstrates the method. 
 
 Ready when you are.
