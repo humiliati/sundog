@@ -890,22 +890,106 @@ explicitly justified coarser bins (e.g., median-split with df=1) --
 NOT a post-hoc loosening of v0.6b. v0.6b's sparse-cell fallback
 discipline is permanent.
 
-## v0.7 gamma_1 Direction-of-Instability (parent + v0.7a verdict landed)
+## v0.7 gamma_1 Direction-of-Instability (chapter closed, qualified-positive)
 
 ### V0.7 gamma_1 direction-of-instability mechanism family
 
-Status: **PARENT REGISTERED 2026-05-24; v0.7a VERDICT LANDED
-2026-05-24**. Parent registration:
+Status: **CHAPTER CLOSED 2026-05-24, qualified-positive on restricted
+domain.** Parent registration:
 [`../internal/anniversary/kfacet_v07_mechanism_preregistration.md`](../internal/anniversary/kfacet_v07_mechanism_preregistration.md).
-**v0.7a verdict**: `velocity_fraction_blocked_integration_attrition`
-at `integration_blocked_count = 23` (8.42% of catalog, above the
-pre-registered 5%/14-row attrition threshold). Form lock + verdict:
+Chapter close:
+[`../internal/anniversary/kfacet_v07_writeup.md`](../internal/anniversary/kfacet_v07_writeup.md).
+
+**v0.7a catalog-wide verdict**:
+`velocity_fraction_blocked_integration_attrition` at
+`integration_blocked_count = 23` (8.42% of catalog > 5% threshold).
+Two amendments applied: R1 (symplecticity gate 1e-6 -> 1e-4) and
+R2.A (per-row integration-failure fallback). Form lock + verdict:
 [`../internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md`](../internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md).
-Two amendments applied during the run: R1 (symplecticity gate
-1e-6 -> 1e-4 from 7-row smoke evidence) and R2.A (per-row
-integration-failure fallback at 5% attrition threshold from the
-crashed-runner evidence). v0.7b (held-out predictor) is NOT licensed
-under the attrition verdict; no chi-squared verdict produced.
+
+**v0.7a' restricted-scope confirmation verdict**:
+`velocity_fraction_restricted_passes_audit` [PASS] at `chi^2 = 16.43`
+(critical 11.34, df=3, p = 9.3e-4) on the 250 analyzable rows, with
+alignment-tightness 0.698 against the v0.5a branch hash (below the
+0.8 warning floor). Non-monotone U-shape signature: Q1 (gamma_1
+mostly positional) 49% S, Q2 (mixed) 18% S, Q3 29% S, Q4 (gamma_1
+mostly velocity) 43% S. Form lock + verdict:
+[`../internal/anniversary/kfacet_v07a_prime_restricted_scope_form.md`](../internal/anniversary/kfacet_v07a_prime_restricted_scope_form.md).
+
+The Floquet velocity-fraction direction shadow is the **first**
+low-dimensional projection in the v0.4 / v0.5 / v0.6 / v0.7 envelope
+to produce a non-branch-aligned positive signal at p < 0.01 on the
+analyzable sub-catalog. Catalog-wide generalizability is limited by
+the integration-attrition.
+
+## v0.8 Floquet Direction-Purity (parent registered)
+
+### V0.8 Floquet direction-purity mechanism family
+
+Status: **PARENT REGISTERED 2026-05-24**. Parent registration:
+[`../internal/anniversary/kfacet_v08_mechanism_preregistration.md`](../internal/anniversary/kfacet_v08_mechanism_preregistration.md).
+v0.8a (audit) and v0.8b (held-out predictor) are pending child
+registrations.
+
+Frame: v0.7a' produced a non-monotone U-shaped signal (direction-
+purity correlates with stability; mixed directions correlate with
+instability). v0.8 promotes purity = `abs(vf - 0.5)` to the primary
+operational quantity and asks whether it predicts S/U **held-out**
+on the 250-row analyzable subset.
+
+Locked parent shape:
+
+```text
+Body:         the 250-row analyzable supp-B subset from v0.7a
+              (rows where compute_monodromy_vectorized completed).
+              Attrition carried as a permanent domain restriction.
+Projection:   row -> purity(row) = abs(vf(row) - 0.5)
+              inheriting v0.7a's vf operational definition (gamma_1
+              selection rule, tie-break cascade, CoM reduction,
+              mass-weighted norm).
+Observable:   per-row (purity, S/U) on 250 rows joined with v0.5a
+              branch_label for alignment-tightness diagnostics.
+Discipline:   inherits v0.5/v0.6/v0.7 (audit-then-predictor,
+              asymmetric McNemar+delta predictor falsifier,
+              alignment-tightness guard, sparse-cell fallback,
+              conservative tie rule, constant-feature retirement).
+Non-circ:     re-asserts v0.7a's locked sentence on Floquet
+              eigenvectors used as geometric directions only.
+```
+
+Candidate v0.8a audit forms:
+
+```text
+A. Purity-quartile audit (4-bin chi-squared, df=3, critical 11.34).
+B. Monotone purity-threshold predictor (2-bin chi-squared, df=1,
+   critical 6.63, with pre-registered direction).
+C. Continuous Spearman rank correlation between purity and S.
+D. Two-bin median-split audit with binomial-tail fallback.
+```
+
+Next actions:
+
+1. Pick v0.8a form (A/B/C/D); lock paper-side.
+2. Implement `scripts/v08a_purity_audit.py`. Seconds runtime; reads
+   v0.7a per_row_table.csv, computes purity, applies the locked
+   audit form.
+3. Run blind; land verdict at
+   `results/isotrophy/k-facet-v08a-purity-audit/manifest.json`.
+4. Conditional on v0.8a passing CLEAN (alignment <= 0.8):
+   register v0.8b with default leave-one-m_3-bin-out partition on
+   the 250 analyzable rows.
+   Conditional on v0.8a passing with alignment warning:
+   register v0.8b with alignment-breaking partition.
+   Conditional on v0.8a failing: close the purity sub-question;
+   the U-shape signature may license a non-purity feature
+   re-registration as v0.8a'.
+
+Stop condition:
+
+If any v0.8a/v0.8b form re-uses vf as the primary feature, the v0.7
+chapter close is invalidated (would conflate v0.7 positive with v0.8
+mechanism test). v0.8 must use purity = `abs(vf - 0.5)`; using vf
+directly is a discipline violation.
 
 Frame: v0.4 ruled out the Z_2 shadow. v0.5 ruled out the 2-bit catalog
 branch shadow. v0.6 ruled out the (E, |L|) catalog-coordinate shadow

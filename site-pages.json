@@ -111,6 +111,11 @@
       "entry": "isotrophy.html",
       "kind": "evidence-page",
       "publicLaunchIntent": "Public Isotrophy K_facet v0.3h verdict: 20 structural-zero receipts plus one named quarantine (O_617) from a pre-registered three-stage audit chain on the strict G.2 single-curve catalog. Audit chain intact; theorem-facing result not closed."
+    },
+    {
+      "entry": "faraday.html",
+      "kind": "draft",
+      "publicLaunchIntent": "DRAFT staging page for the Shadow Faraday Zero-Out roadmap (docs/SUNDOG_V_FARADAY.md, v0.1). Carries noindex,nofollow and a visible DRAFT banner. Not a launch-ready public-share page: Bucket 1 of the SEO & social-readiness roadmap (designed 1200x630 og:image, full JSON-LD TechArticle, tuned title/description, internal link from index.html, validator pass) is owed before this URL may be shared externally, and the Phase 3 zero-out result has not yet been computed. Treated as Class D (internal-only) in the SEO matrix until promoted."
     }
   ]
 }

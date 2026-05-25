@@ -1,18 +1,19 @@
 # v0.7 Mechanism Preregistration: gamma_1 Direction-of-Instability
 
-Status: **REGISTERED 2026-05-24**. v0.7a child verdict landed
-2026-05-24: `velocity_fraction_blocked_integration_attrition` at
-`integration_blocked_count = 23` (8.42% of catalog, above the
-pre-registered 5%/14-row attrition threshold). The audit is
-**integration-attrited at the locked variational precision**
-(rtol = atol = 1e-12), not feature-falsified. See
-`kfacet_v07a_velocity_fraction_audit_form.md` for the full verdict
-text. v0.7b (held-out predictor) is NOT licensed under the attrition
-verdict; no chi-squared verdict was produced. This document locks
-the v0.7 body / projection / observable and the non-circularity
-discipline. Form locks for v0.7a (audit) and v0.7b (held-out
-predictor) are separately registered children that pin specific
-operational definitions, binning, df, and falsifier choices.
+Status: **REGISTERED 2026-05-24. v0.7 CHAPTER CLOSED 2026-05-24
+as qualified-positive on restricted domain.** v0.7a child verdict
+landed 2026-05-24: `velocity_fraction_blocked_integration_attrition`
+at integration_blocked_count = 23 (8.42% of catalog). v0.7a'
+restricted-scope confirmation audit landed PASS at chi^2 = 16.43
+(p = 9.3e-4) with alignment 0.698 against the v0.5a branch hash on
+the 250 analyzable rows. The Floquet velocity-fraction direction
+shadow is the first low-dimensional projection in the
+v0.4/v0.5/v0.6/v0.7 envelope to produce a non-branch-aligned
+positive signal. Chapter close at `kfacet_v07_writeup.md`. **v0.8
+opens** on Floquet direction-purity at
+`kfacet_v08_mechanism_preregistration.md`. This document locks the
+v0.7 body / projection / observable and the non-circularity
+discipline.
 
 Audience: v0.7a/v0.7b form-lock author; paper-side reviewer of the
 v0.6 -> v0.7 transition (catalog-coordinate close + orbit-dynamics open).
