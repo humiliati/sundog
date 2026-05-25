@@ -1261,7 +1261,15 @@ async function main() {
   console.log(`[threebody] outcomes ${JSON.stringify(outcomeCounts)}`);
 }
 
-main().catch((error) => {
-  console.error(`[threebody] ${error.message}`);
-  process.exitCode = 1;
-});
+// Only run main() when this file is the entry script, not when imported as
+// a module (e.g., by scripts/threebody-phase15-merge.mjs, which re-uses the
+// exported aggregation functions). Without this guard, importing the harness
+// also runs main(), which parses the importer's argv and may exit non-zero
+// on unknown flags — that previously poisoned the merge process's exit code
+// even when the merge itself succeeded.
+if (process.argv[1] && process.argv[1].endsWith("threebody-operating-envelope.mjs")) {
+  main().catch((error) => {
+    console.error(`[threebody] ${error.message}`);
+    process.exitCode = 1;
+  });
+}
