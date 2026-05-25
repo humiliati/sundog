@@ -190,6 +190,23 @@
 
 **Next step**: Review this roadmap → sign off on pre-reg predicates for Phase 3 → begin Phase 1 symbol table.
 
+**Progress note (2026-05-25)**: Phase 1 is now opened in
+[`SHADOW_FARADAY.md`](SHADOW_FARADAY.md) with the first symbol table,
+assumption ledger, primitive mapping, and pre-registered outcome branches. The
+Phase 3 zero-out result is still uncomputed.
+
+**Progress note (2026-05-25, later)**: Phase 2 is now opened in
+[`SHADOW_FARADAY.md`](SHADOW_FARADAY.md) ▸ "Phase 2: Local Shadow Projection
+Operator". `P_shadow` is candidate-defined as the plaquette-holonomy operator
+on `A` in two tiers (finite-stencil `oint A` and point-limit `F_{mu nu}`), with
+an explicit locality receipt, a gauge-invariance proof under
+`A -> A + d lambda` (via Stokes on a closed loop), an admissibility rule for
+`(S, partial S)` pairs, and five named quarantine hooks (regularity, topology,
+monopole, operator-stencil commutator, motional EMF). Phase 2 stays **open**
+pending sign-off on four registered Open Questions (stencil shape, finite vs.
+point limit, Floquet/twist enrichment, two-tier vs. one-tier). The Phase 3
+zero-out is still uncomputed.
+
 This keeps the Sundog standard: traceable, falsifiable, receipt-driven, and public. The final artifact is both a mathematical result **and** a clean public page that demonstrates the method. 
 
 Ready when you are.

@@ -1204,13 +1204,43 @@ registration at `internal/anniversary/kfacet_v08_mechanism_preregistration.md`.
 Body: the 250 analyzable supp-B rows from v0.7a (attrition carried
 as permanent domain restriction). Projection: `purity = abs(vf - 0.5)`,
 a monotone deterministic transform of v0.7a's velocity-fraction
-inheriting all v0.7a non-circularity provenance. Primary question:
-does direction-purity predict S/U held-out inside the analyzable
-subset? Inheritance: full v0.5/v0.6/v0.7 discipline. Candidate v0.8a
-audit forms A-D (purity-quartile, monotone purity-threshold, Spearman
-correlation, median-split); candidate v0.8b predictor forms E-G.
-v0.8a (audit form lock) and v0.8b (held-out predictor) are pending
-child registrations.
+inheriting all v0.7a non-circularity provenance.
+
+**v0.8a form lock + verdict landed 2026-05-24 (FAIL):** Codex picked
+candidate A (purity-quartile audit). Form lock at
+`internal/anniversary/kfacet_v08a_purity_quartile_audit_form.md`;
+runner at `scripts/v08a_purity_audit.py`. Verdict:
+`purity_quartile_fails_audit` at `chi^2 = 4.94, p = 0.176, alignment
+0.587`. The diagnostic purity_signed contingency reproduces v0.7a's
+`chi^2 = 16.43` exactly (linear transform; quartile ordering
+preserved). Asymmetry diagnostic `|S(Q1_signed) - S(Q4_signed)| =
+0.064` BELOW the 0.2 flag threshold -- the S-fractions at the two
+pure ends are similar. The asymmetry that breaks the purity
+transform is in **catalog row density** (184/250 rows below vf =
+0.5; max vf = 0.87), NOT S-fraction. **The v0.7a' chi^2 = 16.43
+signal IS real and not branch-aligned, but lives in the SIGNED
+direction of vf, not in unsigned distance from 0.5.** v0.8b
+(held-out predictor) is NOT licensed under the fails verdict.
+
+**v0.8 chapter closed 2026-05-24** as a structural-negative on
+direction-purity; chapter close at
+`internal/anniversary/kfacet_v08_writeup.md`. Six chapter-close
+types in the envelope so far. v0.7a's chi^2 = 16.43 remains the
+load-bearing positive; v0.8a confirmed it is signed not symmetric.
+
+**v0.9 parent registered 2026-05-24** on the signed Floquet
+direction-composition mechanism at
+`internal/anniversary/kfacet_v09_mechanism_preregistration.md`,
+with a new permanent **anti-circular framing discipline**: any
+v0.9 child form lock that tests vf-ordering vs S/U on the v0.7a'
+analyzable subset via chi^2 of independence reproduces v0.7a' by
+linear-transform invariance. To be honest, v0.9a must break at
+least one of (feature derivation, test statistic, evaluation
+domain). Candidates A (ordered quartile) and B (binary
+vf<0.5 threshold) are REJECTED pre-compute. Live candidates: C
+(three-zone audit with physically-motivated cutpoints) and D
+(ordinal trend + nonmonotonicity test, e.g., Jonckheere-Terpstra).
+D is the cleanest non-circular path. v0.9a form lock pending.
 
 ### Cross-Substrate Hand-Offs
 

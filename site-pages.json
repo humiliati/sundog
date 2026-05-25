@@ -115,7 +115,7 @@
     {
       "entry": "faraday.html",
       "kind": "draft",
-      "publicLaunchIntent": "DRAFT staging page for the Shadow Faraday Zero-Out roadmap (docs/SUNDOG_V_FARADAY.md, v0.1). Carries noindex,nofollow and a visible DRAFT banner. Not a launch-ready public-share page: Bucket 1 of the SEO & social-readiness roadmap (designed 1200x630 og:image, full JSON-LD TechArticle, tuned title/description, internal link from index.html, validator pass) is owed before this URL may be shared externally, and the Phase 3 zero-out result has not yet been computed. Treated as Class D (internal-only) in the SEO matrix until promoted."
+      "publicLaunchIntent": "DRAFT staging page for the Shadow Faraday Zero-Out roadmap (docs/SUNDOG_V_FARADAY.md, v0.1) and the Phase 1 + Phase 2 ledger (docs/SHADOW_FARADAY.md). Carries noindex,nofollow and a visible DRAFT banner. Not a launch-ready public-share page: Bucket 1 of the SEO & social-readiness roadmap (designed 1200x630 og:image, full JSON-LD TechArticle, tuned title/description, internal link from index.html, validator pass) is owed before this URL may be shared externally, and the Phase 3 zero-out result has not yet been computed. Treated as Class D (internal-only) in the SEO matrix until promoted."
     }
   ]
 }

@@ -922,14 +922,24 @@ to produce a non-branch-aligned positive signal at p < 0.01 on the
 analyzable sub-catalog. Catalog-wide generalizability is limited by
 the integration-attrition.
 
-## v0.8 Floquet Direction-Purity (parent registered)
+## v0.8 Floquet Direction-Purity (parent + v0.8a verdict landed)
 
 ### V0.8 Floquet direction-purity mechanism family
 
-Status: **PARENT REGISTERED 2026-05-24**. Parent registration:
+Status: **PARENT REGISTERED 2026-05-24; v0.8a VERDICT LANDED
+2026-05-24 (FAIL).** Parent registration:
 [`../internal/anniversary/kfacet_v08_mechanism_preregistration.md`](../internal/anniversary/kfacet_v08_mechanism_preregistration.md).
-v0.8a (audit) and v0.8b (held-out predictor) are pending child
-registrations.
+**v0.8a verdict**: `purity_quartile_fails_audit` at `chi^2 = 4.94`,
+`p = 0.176` (df=3, critical 11.34). Form lock + verdict:
+[`../internal/anniversary/kfacet_v08a_purity_quartile_audit_form.md`](../internal/anniversary/kfacet_v08a_purity_quartile_audit_form.md).
+The unsigned purity transform `abs(vf - 0.5)` does NOT capture the
+v0.7a' positive at the registered floor; the diagnostic
+purity_signed contingency reproduces v0.7a's `chi^2 = 16.43`
+exactly, confirming the signal lives in the **signed** direction.
+The failure is explained by the vf distribution's density asymmetry
+(184/250 rows below vf = 0.5; max vf = 0.87 -- the "vf near 1" pure
+end is structurally under-populated). v0.8b (held-out predictor) is
+NOT licensed under the fails verdict.
 
 Frame: v0.7a' produced a non-monotone U-shaped signal (direction-
 purity correlates with stability; mixed directions correlate with
@@ -957,39 +967,114 @@ Non-circ:     re-asserts v0.7a's locked sentence on Floquet
               eigenvectors used as geometric directions only.
 ```
 
-Candidate v0.8a audit forms:
+Completed actions:
+
+1. ~~Pick v0.8a form.~~ DONE 2026-05-24. Locked A (purity-quartile
+   audit).
+2. ~~Implement `scripts/v08a_purity_audit.py`.~~ DONE 2026-05-24.
+3. ~~Run blind; land verdict.~~ DONE 2026-05-24. Verdict:
+   `purity_quartile_fails_audit`.
+
+Result interpretation:
 
 ```text
-A. Purity-quartile audit (4-bin chi-squared, df=3, critical 11.34).
-B. Monotone purity-threshold predictor (2-bin chi-squared, df=1,
-   critical 6.63, with pre-registered direction).
-C. Continuous Spearman rank correlation between purity and S.
-D. Two-bin median-split audit with binomial-tail fallback.
+v0.8a purity quartile contingency:
+  Q1  N=63  S=21  U=42  33.3% S  (vf ~ 0.44-0.56, mid)
+  Q2  N=62  S=18  U=44  29.0% S
+  Q3  N=62  S=19  U=43  30.6% S
+  Q4  N=63  S=29  U=34  46.0% S  (vf far from 0.5, high purity)
+                                  -----
+                          chi^2 =  4.94  (p = 0.176)
+
+v0.8a diagnostic purity_signed contingency
+  (reproduces v0.7a' exactly since linear transform of vf):
+  chi^2 = 16.43
+
+asymmetry: |S(Q1_signed) - S(Q4_signed)| = 0.064 (< 0.2 flag)
+asymmetric_u_shape_flag: False
+
+vf distribution:
+  vf < 0.5: 184 / 250 (73.6%)
+  vf > 0.5:  66 / 250 (26.4%)
+  vf max:    0.8653  (no rows near vf = 1)
+```
+
+The U-shape signal IS real (purity_signed reproduces v0.7a's
+chi^2 = 16.43) but is **NOT captured by unsigned direction-purity**.
+The signal lives in the signed vf direction. Density asymmetry of
+the vf distribution (74% below 0.5) violates the purity transform's
+symmetry assumption.
+
+Next action: ~~paper-side direction call.~~ DONE 2026-05-24. v0.8
+chapter closed as structural-negative on direction-purity (chapter
+close at
+[`../internal/anniversary/kfacet_v08_writeup.md`](../internal/anniversary/kfacet_v08_writeup.md));
+v0.9 opened on signed Floquet direction-composition with explicit
+anti-circular framing.
+
+## v0.9 Signed Floquet Direction-Composition (parent registered)
+
+### V0.9 signed Floquet direction-composition mechanism family
+
+Status: **PARENT REGISTERED 2026-05-24**. Parent registration:
+[`../internal/anniversary/kfacet_v09_mechanism_preregistration.md`](../internal/anniversary/kfacet_v09_mechanism_preregistration.md).
+v0.9a (audit) is pending child registration.
+
+Frame: v0.7a' produced chi^2 = 16.43 (p = 9.3e-4) on vf quartiles
+vs S/U. v0.8a tested unsigned purity = `abs(vf - 0.5)` and failed;
+the v0.8a diagnostic confirmed the signal is signed. v0.9 promotes
+signed direction-composition (raw vf without folding) and asks
+**what specific pattern in vf vs S/U is testable beyond v0.7a's
+chi^2 of independence**.
+
+**Anti-circular framing discipline (load-bearing, locked by parent):**
+
+Any v0.9a form that:
+1. Uses vf-ordering as feature, AND
+2. Uses chi^2 of independence as test statistic, AND
+3. Tests on the v0.7a 250-row analyzable subset
+
+**reproduces v0.7a's chi^2 = 16.43 by linear-transform invariance**
+and is REJECTED PRE-COMPUTE. To be honest, v0.9a must break at
+least one of (feature derivation, test statistic, evaluation
+domain).
+
+Candidate v0.9a forms:
+
+```text
+A. Ordered quartile audit.          REJECTED (re-test of v0.7a').
+B. Binary vf < 0.5 threshold.        REJECTED (binary collapse).
+C. Three-zone audit with PHYSICAL
+   cutpoints (not v0.7a' quartiles). LIVE (cutpoint motivation
+                                          required).
+D. Ordinal trend + nonmonotonicity
+   test (e.g., Jonckheere-Terpstra). LIVE (cleanest, tests
+                                           hypothesis-specific
+                                           pattern not chi^2 of
+                                           independence).
 ```
 
 Next actions:
 
-1. Pick v0.8a form (A/B/C/D); lock paper-side.
-2. Implement `scripts/v08a_purity_audit.py`. Seconds runtime; reads
-   v0.7a per_row_table.csv, computes purity, applies the locked
-   audit form.
+1. Pick v0.9a form between C (physical-zone) or D (trend test).
+   Lock paper-side with explicit non-circularity argument
+   (which of feature/statistic/domain is broken).
+2. Implement `scripts/v09a_*_audit.py`. Seconds runtime; reads
+   v0.7a per_row_table.csv.
 3. Run blind; land verdict at
-   `results/isotrophy/k-facet-v08a-purity-audit/manifest.json`.
-4. Conditional on v0.8a passing CLEAN (alignment <= 0.8):
-   register v0.8b with default leave-one-m_3-bin-out partition on
-   the 250 analyzable rows.
-   Conditional on v0.8a passing with alignment warning:
-   register v0.8b with alignment-breaking partition.
-   Conditional on v0.8a failing: close the purity sub-question;
-   the U-shape signature may license a non-purity feature
-   re-registration as v0.8a'.
+   `results/isotrophy/k-facet-v09a-*/manifest.json`.
+4. Conditional on v0.9a passing CLEAN: register v0.9b with
+   held-out predictor (default leave-one-m_3-bin-out on 250 rows).
+   Conditional on v0.9a failing: close v0.9 chapter on the
+   specific pattern hypothesis; user weighs bandwidth tradeoff
+   against Phase 15+.
 
 Stop condition:
 
-If any v0.8a/v0.8b form re-uses vf as the primary feature, the v0.7
-chapter close is invalidated (would conflate v0.7 positive with v0.8
-mechanism test). v0.8 must use purity = `abs(vf - 0.5)`; using vf
-directly is a discipline violation.
+If a v0.9a form lock does NOT break at least one of (feature
+derivation, test statistic, evaluation domain), it is REJECTED
+pre-compute. Forms A and B from the candidate list are already
+ruled out by the parent registration's anti-circular discipline.
 
 Frame: v0.4 ruled out the Z_2 shadow. v0.5 ruled out the 2-bit catalog
 branch shadow. v0.6 ruled out the (E, |L|) catalog-coordinate shadow
