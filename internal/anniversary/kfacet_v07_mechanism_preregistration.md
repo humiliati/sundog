@@ -1,16 +1,18 @@
 # v0.7 Mechanism Preregistration: gamma_1 Direction-of-Instability
 
-Status: **REGISTERED 2026-05-24** (parent; no compute yet).
-**v0.7a child form locked 2026-05-24** as D5 + B (velocity-fraction
-quartile audit), with D1 + A direction-projection quartile as a
-named report-only sidecar. See
-`kfacet_v07a_velocity_fraction_audit_form.md`. v0.7b form-lock author
-pending (conditional on v0.7a passing). This document locks the v0.7
-body / projection / observable and the non-circularity discipline.
-Form locks for v0.7a (audit) and v0.7b (held-out predictor,
-conditional on v0.7a passing) are separately registered children that
-pin specific operational definitions, binning, df, and falsifier
-choices.
+Status: **REGISTERED 2026-05-24**. v0.7a child verdict landed
+2026-05-24: `velocity_fraction_blocked_integration_attrition` at
+`integration_blocked_count = 23` (8.42% of catalog, above the
+pre-registered 5%/14-row attrition threshold). The audit is
+**integration-attrited at the locked variational precision**
+(rtol = atol = 1e-12), not feature-falsified. See
+`kfacet_v07a_velocity_fraction_audit_form.md` for the full verdict
+text. v0.7b (held-out predictor) is NOT licensed under the attrition
+verdict; no chi-squared verdict was produced. This document locks
+the v0.7 body / projection / observable and the non-circularity
+discipline. Form locks for v0.7a (audit) and v0.7b (held-out
+predictor) are separately registered children that pin specific
+operational definitions, binning, df, and falsifier choices.
 
 Audience: v0.7a/v0.7b form-lock author; paper-side reviewer of the
 v0.6 -> v0.7 transition (catalog-coordinate close + orbit-dynamics open).
@@ -475,9 +477,14 @@ registered with:
 
 ---
 
-Parent registration locked. v0.7a child form lock landed 2026-05-24
-(`kfacet_v07a_velocity_fraction_audit_form.md`): D5 + B
-(velocity-fraction quartile audit) is primary with the locked
-non-circularity sentence; D1 + A (direction-projection quartile) is
-the named report-only sidecar. v0.7b form lock pending, conditional
-on v0.7a's verdict.
+Parent registration locked. v0.7a child form lock + verdict landed
+2026-05-24 (`kfacet_v07a_velocity_fraction_audit_form.md`): D5 + B
+(velocity-fraction quartile audit) was locked with the
+non-circularity sentence; D1 + A (direction-projection quartile) was
+the named report-only sidecar; R1 amendment relaxed symplecticity
+gate to 1e-4; R2.A amendment added per-row integration-failure
+fallback with 5% attrition gate. **Verdict:
+`velocity_fraction_blocked_integration_attrition`** at
+`integration_blocked_count = 23` (8.42% > 5% threshold). The audit
+is integration-attrited at variational precision 1e-12, not
+feature-falsified. v0.7b is not licensed; no chi-squared verdict.

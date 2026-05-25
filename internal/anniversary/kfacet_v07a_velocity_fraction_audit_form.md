@@ -1,27 +1,133 @@
 # v0.7a Velocity-Fraction Audit Form Lock (D5 + B)
 
-Status: **REGISTERED 2026-05-24 + AMENDED R1 + AMENDED R2.A 2026-05-24**.
+Status: **VERDICT LANDED 2026-05-24 (R1 + R2.A amendments applied)**.
+Verdict: **`velocity_fraction_blocked_integration_attrition`**
+at `integration_blocked_count = 23` (8.42% of catalog, above the
+pre-registered 5%/14-row threshold). Of the 250 analyzable rows, an
+additional 11 failed the R1-amended symplecticity / reciprocal-pair
+gates. The catalog cannot be evaluated at the locked variational
+precision (`rtol = atol = 1e-12`); the audit is integration-attrited,
+not feature-falsified. See the "Verdict (Landed)" section below.
+
 This document locks the v0.7a univariate-velocity-fraction chi-squared
 audit form under the parent registration's candidate slots **D5**
 (velocity-fraction direction property) and **B** (velocity-fraction
 quartile audit). The D1 + A audit (largest-real-part eigenvector
 direction-projection quartile) is registered as a **report-only named
-sidecar** and emits no independent verdict.
+sidecar** and emits no independent verdict (also not licensed under
+the attrition verdict).
 
 **Amendment R1 (2026-05-24): symplecticity sanity-gate threshold
 relaxed from 1e-6 to 1e-4** based on the 7-row vectorized smoke
 evidence. See the "Amendment R1: Sanity-Gate Threshold" section
-below for the locked amendment text and justification.
+below.
 
 **Amendment R2.A (2026-05-24): per-row integration-failure fallback
 discipline** added after the full-catalog runner crashed at row 76
-(O_194 at m_3=0.5) with `Required step size is less than spacing
-between numbers` inside `compute_monodromy_vectorized`. Rows where
-the variational integrator raises are caught, marked
-`integration_blocked`, excluded from the chi-squared catalog and
-alignment denominator, and counted against a 5%-of-catalog attrition
-threshold. See the "Amendment R2.A: Per-Row Integration-Failure
-Fallback" section below.
+(O_194 at m_3=0.5). See the "Amendment R2.A: Per-Row Integration-
+Failure Fallback" section below.
+
+## Verdict (Landed, 2026-05-24)
+
+Receipt:
+`results/isotrophy/k-facet-v07a-velocity-fraction-audit/manifest.json`.
+
+The R1-amended runner ran through all 273 supp-B rows over ~4.5 hours
+under the R2.A try-catch and R2.C append-per-row disciplines. Result:
+
+```text
+verdict:                  velocity_fraction_blocked_integration_attrition
+total catalog rows:                  273
+S / U (catalog):                      97 / 176
+analyzable rows:                     250
+integration_blocked_count:            23
+attrition_threshold_count:            14   (5% of 273, ceiling)
+attrition_fired:                      True  (23 > 14)
+sanity_gate_failures
+  (analyzable rows with
+   symp > 1e-4 or recip > 1e-4):      11
+total data-integrity issues:          34 / 273 = 12.5%
+
+constant_feature_retirement check:
+  vf_sd (over analyzable rows):       0.1444
+  threshold:                          0.01
+  retired:                            False
+                                      (vf has real variation, but the
+                                       audit is not licensed to read it)
+total runtime:                        266.9 min  (~4.5 h)
+```
+
+Integration-blocked rows by m_3:
+
+```text
+m_3       blocked count   labels
+0.5             1         O_{194}
+0.9             4         O_{796}, O_{1008}, O_{1079}, O_{1194}
+1.0             3         O_{1153}, O_{1200}, O_{1362}
+1.5             4         O_{152}, O_{166}, O_{175}, O_{187}
+1.6             6         O_{255}, O_{258}, O_{315}, O_{317}, O_{324}, O_{327}
+1.7             5         O_{178}, O_{185}, O_{188}, O_{231}, O_{246}
+                ---
+                23
+```
+
+All 23 blocks fired in `compute_monodromy_vectorized` with
+`Required step size is less than spacing between numbers`. The base
+`integrate_orbit` succeeded for every row; the failure is the matrix
+variational equation `dY/dt = J(t) Y` along the integrated orbit at
+`rtol = atol = 1e-12`.
+
+Sanity-gate failures (the 11 analyzable rows where symp or recip
+exceeded the R1 1e-4 threshold) cluster at m_3 in {0.6, 0.7, 1.0,
+1.1, 1.4, 1.6}. Worst symplecticity residual was O_321(1.6) at
+1.12e-3 (11x the gate). Worst reciprocal-pair residual was
+O_642(1.0) at 9.17e-3 (90x the gate).
+
+**Structural reading:**
+
+> The orbits where the variational equation is most numerically
+> challenging — long-period high-m_3 rows in the 1.4..1.7 cluster
+> and a tail at m_3 = 0.9..1.0 — cluster precisely in the regime
+> v0.4a's two-pass classifier was built to handle (Pass 2 tight
+> tolerances at identity_rotation_tolerance = 1e-9, phase_grid =
+> 361). At v0.7a's variational precision rtol = atol = 1e-12, the
+> DOP853 step adapter cannot find a feasible step for the
+> 324-dimensional matrix variational equation along these orbits.
+> The audit is NOT feature-falsified; it is INTEGRATION-ATTRITED at
+> the locked precision. The catalog cannot be evaluated honestly
+> under this precision configuration.
+
+**Joint v0.4 + v0.5 + v0.6 + v0.7 envelope (the publishable
+multi-chapter statement):**
+
+> Four sequential pre-registered projections of the supp-B body —
+> the Z_2 symmetry shadow (tangent-isotypic and orbit-gauge-rigidity,
+> v0.4), the 2-bit catalog branch shadow (v0.5), the continuous
+> orbit-level conserved-quantity shadow E and |L| (v0.6), and the
+> orbit-dynamics gamma_1 direction shadow (v0.7a velocity-fraction) --
+> have produced three distinct chapter-close types: structural-
+> negative (v0.4), projection-limit (v0.5), conditional-independence
+> (v0.6), AND a fourth methodological close type, integration-
+> attrition (v0.7), where the audit cannot honestly run on this
+> catalog at the registered precision because the variational
+> equation along the most-challenging orbits fails DOP853 step
+> control.
+
+**Receipts:**
+
+```text
+internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md  (this document)
+results/isotrophy/k-facet-v07a-velocity-fraction-audit/manifest.json
+results/isotrophy/k-facet-v07a-velocity-fraction-audit/per_row_table.csv
+results/isotrophy/k-facet-v07a-velocity-fraction-audit/smoke/smoke_manifest.json
+results/isotrophy/k-facet-v07a-velocity-fraction-audit/smoke/smoke_per_row_table.csv
+scripts/v07a_velocity_fraction_smoke.py
+scripts/v07a_velocity_fraction_audit.py
+```
+
+No chi-squared verdict is licensed under this audit run. The D1+A
+sidecar (z-fraction quartile) is also not evaluated; the same
+catalog-integrity issue applies.
 
 Audience: v0.7a runner; v0.7b form-lock author (conditional on v0.7a
 passing); paper-side reviewer of the v0.6 -> v0.7 transition.

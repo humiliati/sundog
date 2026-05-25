@@ -890,18 +890,22 @@ explicitly justified coarser bins (e.g., median-split with df=1) --
 NOT a post-hoc loosening of v0.6b. v0.6b's sparse-cell fallback
 discipline is permanent.
 
-## v0.7 gamma_1 Direction-of-Instability (parent + v0.7a registered)
+## v0.7 gamma_1 Direction-of-Instability (parent + v0.7a verdict landed)
 
 ### V0.7 gamma_1 direction-of-instability mechanism family
 
-Status: **PARENT REGISTERED 2026-05-24; v0.7a FORM LOCK REGISTERED
+Status: **PARENT REGISTERED 2026-05-24; v0.7a VERDICT LANDED
 2026-05-24**. Parent registration:
 [`../internal/anniversary/kfacet_v07_mechanism_preregistration.md`](../internal/anniversary/kfacet_v07_mechanism_preregistration.md).
-**v0.7a form lock**: D5 + B (velocity-fraction quartile audit) with
-D1 + A direction-projection quartile as named report-only sidecar.
-Form lock:
+**v0.7a verdict**: `velocity_fraction_blocked_integration_attrition`
+at `integration_blocked_count = 23` (8.42% of catalog, above the
+pre-registered 5%/14-row attrition threshold). Form lock + verdict:
 [`../internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md`](../internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md).
-v0.7b (held-out predictor) is pending v0.7a's verdict.
+Two amendments applied during the run: R1 (symplecticity gate
+1e-6 -> 1e-4 from 7-row smoke evidence) and R2.A (per-row
+integration-failure fallback at 5% attrition threshold from the
+crashed-runner evidence). v0.7b (held-out predictor) is NOT licensed
+under the attrition verdict; no chi-squared verdict produced.
 
 Frame: v0.4 ruled out the Z_2 shadow. v0.5 ruled out the 2-bit catalog
 branch shadow. v0.6 ruled out the (E, |L|) catalog-coordinate shadow
@@ -953,7 +957,37 @@ deterministic tie-break for S-row eigenvalue degeneracy, a reference
 frame for the geometric projection, an alignment-tightness guard
 against the v0.5a branch label, and the sparse-cell fallback tree.
 
-v0.7a locked shape:
+v0.7a result:
+
+```text
+receipt:       results/isotrophy/k-facet-v07a-velocity-fraction-audit/manifest.json
+verdict:       velocity_fraction_blocked_integration_attrition
+
+total rows:               273  (S=97 / U=176)
+analyzable:               250
+integration_blocked:       23  (8.42%)
+attrition threshold:       14  (5% of 273)
+attrition fired:           True
+
+sanity-gate failures
+  (analyzable but symp>1e-4 or recip>1e-4):  11
+total data-integrity issues:  34 / 273 = 12.5%
+
+vf_sd:        0.144  (would have passed constant-feature retirement at 0.01,
+                      but no chi-squared verdict is licensed under the
+                      attrition gate)
+
+runtime:      266.9 min (~4.5 h)
+```
+
+Blocked rows cluster at long-period high-m_3 (the same regime
+v0.4a's two-pass classifier was built to handle). At v0.7a's
+variational precision rtol = atol = 1e-12, the DOP853 step adapter
+cannot find feasible steps for the matrix variational equation
+along the most-challenging orbits. The audit is integration-attrited,
+NOT feature-falsified.
+
+v0.7a locked shape (pre-verdict):
 
 ```text
 operational definition:  D5 velocity-fraction direction property.
@@ -1011,7 +1045,25 @@ locked non-circularity sentence (paper-side):
   direction."
 ```
 
-Next actions:
+Completed actions (during the v0.7a run):
+
+1. ~~Implement `scripts/v07a_velocity_fraction_smoke.py` and run 7-row
+   sentinel smoke.~~ DONE 2026-05-24. Initial smoke showed integrator
+   was column-by-column slow; user signed off on vectorized
+   `compute_monodromy` helper. Subsequent vectorized smoke + R1
+   amendment showed 7/7 sentinels pass at 1e-4 symplecticity gate.
+2. ~~First full-catalog run crashed at row 76 (O_194 at m_3=0.5)
+   with "Required step size is less than spacing between numbers"
+   inside `compute_monodromy_vectorized`.~~ User signed off on R2.A
+   per-row integration-failure fallback + R2.C append-per-row resume.
+3. ~~Implement `scripts/v07a_velocity_fraction_audit.py` with R2.A
+   try/catch + R2.C append-per-row + resume mode.~~ DONE 2026-05-24.
+4. ~~Re-run full audit blind under amendments.~~ DONE 2026-05-24,
+   ~4.5 hours runtime, 23 integration-blocked rows, attrition fired.
+
+Next action:
+
+Pre-mortem flagged action items if the run hadn't completed cleanly:
 
 1. Implement `scripts/v07a_velocity_fraction_audit.py`:
    - Per-row variational integration of the 18-dimensional tangent
