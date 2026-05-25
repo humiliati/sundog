@@ -5,7 +5,7 @@ Working hook:
 > If the shadow projection is honest, Faraday's loop closes without borrowing
 > the global potential. If it does not close, the leftover term gets a name.
 
-Status: 2026-05-25, Phases 1-2 opened and Phase 2 sign-off decisions recorded.
+Status: 2026-05-25, Phases 1-2 signed off and Phase 3 cleared for takeoff.
 This is not a result note. The Phase 3 zero-out has not been computed.
 
 This ledger is the working receipt surface for
@@ -520,6 +520,147 @@ Phase 3 unless Phase 2 is re-opened with a dated amendment.
 Net sign-off: Phase 3 may begin with `P_shadow` as the two-tier coordinate
 plaquette-holonomy operator.
 
+## Phase 3: Takeoff Gate
+
+Phase 3 is cleared to begin from the locked Phase 1/2 ledger. This section is
+the preflight checklist: it says what the derivation may use, what it may not
+use, what must be shown, and how the result lands.
+
+### Locked Inputs
+
+Phase 3 may use only these registered inputs:
+
+1. `A_mu = (-Phi, A_x, A_y, A_z)` and
+   `F_{mu nu} = partial_mu A_nu - partial_nu A_mu`.
+2. The sign convention `F_{0i} = -E_i`, `F_{ij} = epsilon_{ijk} B_k`.
+3. The smooth, source-free, contractible, static-surface domain from the
+   Assumption Ledger and Admissibility Rule.
+4. The two-tier coordinate plaquette operator:
+
+   ```text
+   P_shadow^stencil[A]_{mu nu}(x, epsilon) = oint_{partial omega_{mu nu}} A
+   P_shadow^point[A]_{mu nu}(x) = F_{mu nu}(x)
+   ```
+
+5. Exterior calculus identities for smooth forms: linearity, Stokes' theorem,
+   and `d(dA) = 0`.
+6. The Lorentz-invariant definitions:
+
+   ```text
+   I_1 = F_{mu nu} F^{mu nu}
+   I_2 = F_{mu nu} tilde F^{mu nu}
+   ```
+
+### Forbidden Shortcuts
+
+Phase 3 must not:
+
+1. Invoke Faraday's law (`curl E + partial_t B = 0`) as a premise.
+2. Invoke the full Maxwell system as a premise.
+3. Change the sign convention, admissibility rule, or branch taxonomy.
+4. Add a new quarantine class after seeing the algebra.
+5. Use a global reconstruction of `A` beyond the single-plaquette holonomy and
+   registered point-limit relation.
+6. Use a sourced, singular, topological, or moving-surface case as clean-domain
+   evidence.
+
+Any need for one of these moves re-opens Phase 1 or Phase 2 before Phase 3 may
+continue.
+
+### Derivation Work Order
+
+The Phase 3 receipt should proceed in this order:
+
+1. **Point-limit reduction:** replace `P_shadow^point[A]` with `F` and then
+   with `(E, B)` using the locked sign convention. This is the only permitted
+   bridge from shadow data to fields.
+2. **Homogeneous identity:** compute `dF = d(dA)` and reduce it to zero by
+   antisymmetry of mixed partials / nilpotence of `d`.
+3. **Faraday component extraction:** extract the spatial three-index component
+   of `dF = 0` and show it is exactly
+
+   ```text
+   curl E + partial_t B = 0
+   ```
+
+   under the locked sign convention.
+4. **Integral closure:** apply Stokes to every registered surface-loop pair:
+
+   ```text
+   R_F^0(S) =
+     oint_{partial S} P_shadow^point(E) dot dl
+     + d/dt int_S P_shadow^point(B) dot dA
+   ```
+
+   and show `R_F^0(S) = 0`.
+5. **Finite-stencil receipt:** record the finite-stencil readout
+   `R_F^epsilon(S)` and its truncation class. The clean-domain gate is passed
+   only by the registered limit `lim_{epsilon -> 0+} R_F^epsilon(S) = 0`.
+6. **Invariant receipt:** show that `I_1` and `I_2` computed from
+   `P_shadow^point[A] = F` match the Phase 1 invariant definitions and are
+   independent of `A -> A + d lambda`.
+7. **Landing classification:** choose exactly one of Branch A/B/C below and
+   write the reason in the closure residual table.
+
+### Exact Success Predicate
+
+Phase 3 earns Branch A only if all of these are true on the registered clean
+domain:
+
+```text
+For every registered surface-loop pair S:
+  R_F^0(S) == 0
+
+For every admitted point x:
+  (I_1, I_2)_from_shadow(x) == (I_1, I_2)_from_F(x)
+
+For every smooth lambda:
+  both predicates are unchanged by A -> A + d lambda
+```
+
+If the finite-stencil residual is nonzero only at fixed `epsilon` and vanishes
+in the registered point limit, that is a discretisation receipt, not a failure.
+If any residual survives the registered limit in the clean domain, Branch A is
+not earned.
+
+### Closure Residual Table Template
+
+Phase 3 must fill this table before any public summary changes.
+
+| Receipt | Registered expression | Expected clean-domain value | Observed algebraic value | Branch impact |
+| --- | --- | --- | --- | --- |
+| Point-limit Faraday residual | `R_F^0(S)` | `0` | pending | pending |
+| Finite-stencil residual | `R_F^epsilon(S)` | `O(epsilon)` or named truncation before limit; `0` after limit | pending | pending |
+| Gauge invariance | `delta_lambda R_F^0(S)` | `0` | pending | pending |
+| Lorentz invariant 1 | `I_1_from_shadow - I_1_from_F` | `0` | pending | pending |
+| Lorentz invariant 2 | `I_2_from_shadow - I_2_from_F` | `0` | pending | pending |
+
+### Landing Branches
+
+Phase 3 must land in exactly one branch:
+
+- **Branch A - clean structural zero:** all success predicates above are exact
+  algebraic zeros on the registered clean domain.
+- **Branch B - named quarantine:** a nonzero term appears only in a
+  pre-registered non-clean case or one of the five named quarantine hooks.
+- **Branch C - bounded failure:** a global-reconstruction, gauge-choice,
+  nonlocal, or unregistered residual survives inside the clean domain.
+
+### Phase 3 Receipt File
+
+The derivation may be appended below this section, but the preferred receipt is
+a dedicated file:
+
+```text
+docs/SHADOW_FARADAY_PHASE3_DERIVATION.md
+```
+
+That file should include the hand/exterior-calculus derivation first. Any SymPy
+or tiny Python sign check belongs in a clearly marked supporting appendix and
+does not decide the branch.
+
+Takeoff disposition: **clear**. Phase 3 may begin.
+
 ### Roadmap Open Questions Resolved
 
 The original roadmap questions are resolved as follows.
@@ -553,3 +694,6 @@ The original roadmap questions are resolved as follows.
 - 2026-05-25 - Phase 2 sign-off decisions recorded: coordinate plaquettes,
   point-limit gate plus finite-stencil locality receipt, bare plaquette only in
   Phase 3, and two-tier operator retained with roles locked.
+- 2026-05-25 - Phase 3 takeoff gate recorded: locked inputs, forbidden
+  shortcuts, derivation work order, exact success predicate, residual table
+  template, landing branches, and receipt-file target.
