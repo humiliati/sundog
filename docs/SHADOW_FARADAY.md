@@ -5,8 +5,9 @@ Working hook:
 > If the shadow projection is honest, Faraday's loop closes without borrowing
 > the global potential. If it does not close, the leftover term gets a name.
 
-Status: 2026-05-25, Phases 1-2 signed off and Phase 3 cleared for takeoff.
-This is not a result note. The Phase 3 zero-out has not been computed.
+Status: 2026-05-25, Phases 1-3 signed off. Phase 3 landed Branch A
+(clean structural zero) in [`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md).
+Phase 4 verification and falsification battery are not yet run.
 
 This ledger is the working receipt surface for
 [`SUNDOG_V_FARADAY.md`](SUNDOG_V_FARADAY.md). The roadmap stays the narrative
@@ -652,7 +653,7 @@ The derivation may be appended below this section, but the preferred receipt is
 a dedicated file:
 
 ```text
-docs/SHADOW_FARADAY_PHASE3_DERIVATION.md
+docs/FARADAY_PHASE3_DERIVATIONS.md
 ```
 
 That file should include the hand/exterior-calculus derivation first. Any SymPy
@@ -660,6 +661,29 @@ or tiny Python sign check belongs in a clearly marked supporting appendix and
 does not decide the branch.
 
 Takeoff disposition: **clear**. Phase 3 may begin.
+
+## Phase 3 Result
+
+Phase 3 receipt:
+[`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md).
+
+Disposition: **Branch A - clean structural zero** on the registered classical
+vacuum domain.
+
+Result summary:
+
+- `R_F^0(S) = 0` for every registered static surface-loop pair.
+- `R_F^epsilon(S) = O(epsilon)` before the registered point limit and `0` after
+  the limit.
+- `delta_lambda R_F^0(S) = 0`.
+- `I_1_from_shadow - I_1_from_F = 0`.
+- `I_2_from_shadow - I_2_from_F = 0`.
+
+Claim boundary:
+
+This closes Phase 3 only. It does not yet complete the Phase 4 symbolic
+verification / falsification battery, the Phase 5 chapter close, or the
+Bucket 1 public-share readiness work for `/faraday`.
 
 ### Roadmap Open Questions Resolved
 
@@ -697,3 +721,7 @@ The original roadmap questions are resolved as follows.
 - 2026-05-25 - Phase 3 takeoff gate recorded: locked inputs, forbidden
   shortcuts, derivation work order, exact success predicate, residual table
   template, landing branches, and receipt-file target.
+- 2026-05-25 - Phase 3 receipt landed in
+  [`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md), with
+  proof-hygiene corrections to the form-degree Stokes statement and
+  finite-stencil scaling. Branch A selected for the registered clean domain.

@@ -195,13 +195,12 @@
 
 ---
 
-**Next step**: Begin Phase 3 zero-out derivation from the signed Phase 1/2
-ledger without changing the operator, admissibility rule, or branch taxonomy.
+**Next step**: Run Phase 4 symbolic verification and minimal falsification
+battery against the Branch A Phase 3 receipt.
 
 **Progress note (2026-05-25)**: Phase 1 is now opened in
 [`SHADOW_FARADAY.md`](SHADOW_FARADAY.md) with the first symbol table,
-assumption ledger, primitive mapping, and pre-registered outcome branches. The
-Phase 3 zero-out result is still uncomputed.
+assumption ledger, primitive mapping, and pre-registered outcome branches.
 
 **Progress note (2026-05-25, later)**: Phase 2 is now opened in
 [`SHADOW_FARADAY.md`](SHADOW_FARADAY.md) ▸ "Phase 2: Local Shadow Projection
@@ -213,15 +212,21 @@ an explicit locality receipt, a gauge-invariance proof under
 monopole, operator-stencil commutator, motional EMF). The four Phase 2 open
 questions are now resolved in the ledger: coordinate plaquettes; point-limit
 gate plus finite-stencil locality receipt; no Floquet/twist enrichment in
-Phase 3; two-tier operator retained with roles locked. The Phase 3 zero-out is
-still uncomputed.
+Phase 3; two-tier operator retained with roles locked.
 
 **Progress note (2026-05-25, takeoff)**: Phase 3 is cleared for takeoff in
 [`SHADOW_FARADAY.md`](SHADOW_FARADAY.md) ▸ "Phase 3: Takeoff Gate". The gate
 locks allowed inputs, forbidden shortcuts, derivation work order, exact success
 predicate, closure residual table, landing branches, and the dedicated receipt
-file [`SHADOW_FARADAY_PHASE3_DERIVATION.md`](SHADOW_FARADAY_PHASE3_DERIVATION.md).
-The Phase 3 zero-out is still uncomputed.
+target.
+
+**Progress note (2026-05-25, Phase 3 landed)**: Phase 3 receipt landed in
+[`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md), with
+proof-hygiene corrections to the form-degree Stokes statement and
+finite-stencil scaling. The registered clean-domain residuals all land as
+structural zeros, so the Phase 3 branch is **A - clean structural zero**. Phase
+4 verification / falsification remains owed before chapter close or external
+sharing.
 
 This keeps the Sundog standard: traceable, falsifiable, receipt-driven, and public. The final artifact is both a mathematical result **and** a clean public page that demonstrates the method. 
 
