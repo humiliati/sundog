@@ -1173,21 +1173,44 @@ QC/provenance only.
 `integration_blocked_count = 23` (8.42% of catalog, above the
 pre-registered 5%/14-row attrition threshold). 250 analyzable
 rows + 11 additional sanity-gate failures = 12.5% data-integrity
-issues. Blocked rows cluster at long-period high-m_3 (m_3 = 1.5: 4
-blocked; 1.6: 6 blocked; 1.7: 5 blocked), the same regime v0.4a's
-two-pass classifier was built to handle. At v0.7a's variational
-precision rtol = atol = 1e-12, the DOP853 step adapter cannot find
-feasible steps for the matrix variational equation along these
-orbits. **The audit is integration-attrited at the locked precision,
-NOT feature-falsified.** No chi-squared verdict is licensed; the
-D1+A z-fraction sidecar is also not evaluated. v0.7b (held-out
-predictor) is NOT licensed under the attrition verdict. The
-four-chapter envelope v0.4 + v0.5 + v0.6 + v0.7 now has four
-distinct chapter-close types: structural-negative, projection-limit,
-conditional-independence, and integration-attrition. Receipts:
+issues. Blocked rows cluster at long-period high-m_3, the same
+regime v0.4a's two-pass classifier was built to handle. The audit
+is integration-attrited at the locked variational precision, NOT
+feature-falsified. No catalog-wide chi-squared verdict is licensed.
+
+**v0.7a' restricted-scope confirmation landed 2026-05-24 [PASS]:**
+Pre-registered minimum-scoped audit on the 250 analyzable rows with
+explicit Pass / Partial / Fail criteria tied to the v0.5a branch
+hash. Verdict: `velocity_fraction_restricted_passes_audit` at
+`chi^2 = 16.425` (df=3, critical 11.34, `p = 9.3e-4`) with
+`alignment_tightness = 0.698 < 0.8`. Non-monotone U-shape signature:
+Q1 (gamma_1 mostly positional) 49.2% S, Q2 (mixed) 17.7% S, Q3
+29.0% S, Q4 (gamma_1 mostly velocity) 42.9% S. Direction-purity, not
+branch label, stratifies stability on the analyzable sub-catalog.
+This is the **first** non-branch-aligned positive in the four-chapter
+v0.4/v0.5/v0.6/v0.7 envelope. **v0.7 chapter closed 2026-05-24 as
+qualified-positive on restricted domain** -- a fourth distinct
+chapter-close type. Chapter close at
+`internal/anniversary/kfacet_v07_writeup.md`. Receipts:
 `results/isotrophy/k-facet-v07a-velocity-fraction-audit/manifest.json`,
+`results/isotrophy/k-facet-v07a-prime-restricted-scope/manifest.json`,
 `scripts/v07a_velocity_fraction_smoke.py`,
-`scripts/v07a_velocity_fraction_audit.py`.
+`scripts/v07a_velocity_fraction_audit.py`,
+`scripts/v07a_prime_restricted_scope_audit.py`.
+
+**v0.8 parent registered 2026-05-24** on the Floquet direction-purity
+mechanism (codex direction following the v0.7a' U-shape). Parent
+registration at `internal/anniversary/kfacet_v08_mechanism_preregistration.md`.
+Body: the 250 analyzable supp-B rows from v0.7a (attrition carried
+as permanent domain restriction). Projection: `purity = abs(vf - 0.5)`,
+a monotone deterministic transform of v0.7a's velocity-fraction
+inheriting all v0.7a non-circularity provenance. Primary question:
+does direction-purity predict S/U held-out inside the analyzable
+subset? Inheritance: full v0.5/v0.6/v0.7 discipline. Candidate v0.8a
+audit forms A-D (purity-quartile, monotone purity-threshold, Spearman
+correlation, median-split); candidate v0.8b predictor forms E-G.
+v0.8a (audit form lock) and v0.8b (held-out predictor) are pending
+child registrations.
 
 ### Cross-Substrate Hand-Offs
 

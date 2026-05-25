@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DRAFT — Shadow Faraday Zero-Out: a pre-registered minimal experiment testing whether local, gauge-invariant shadow projections recover Faraday's law of induction without global field reconstruction. Pre-Phase-1 staging page.">
+    <meta name="keywords" content="Faraday's law, shadow projection, gauge invariance, electromagnetic, Lorentz invariant, structural zero, pre-registered, Sundog, claim hygiene">
+    <meta name="theme-color" content="#1A3A52">
+    <meta name="author" content="Sundog Research Lab">
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href="https://sundog.cc/faraday">
+    <title>Shadow Faraday Zero-Out (DRAFT) — Sundog</title>
+
+    <!-- OG-BLOCK-START (managed by public/og/_patch_meta.py) -->
+    <!--
+      Intentionally minimal OG block while this page is a DRAFT.
+      Bucket 1 (designed 1200x630 og:image, tuned title/description,
+      JSON-LD TechArticle, internal link from index.html, validator
+      pass) is owed before any external share. See
+      docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md and
+      docs/SUNDOG_V_FARADAY.md ▸ Phase 6.
+    -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sundog">
+    <meta property="og:title" content="Shadow Faraday Zero-Out (DRAFT) — Sundog">
+    <meta property="og:description" content="Pre-registered minimal experiment: do local shadows recover Faraday induction? Draft staging page; result not yet computed.">
+    <meta property="og:url" content="https://sundog.cc/faraday">
+    <!-- OG-BLOCK-END -->
+
+    <link rel="stylesheet" href="/css/sundog-theme.css">
+    <link rel="stylesheet" href="/css/sundog-defs.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        main {
+            background:
+                radial-gradient(circle at 18% 8%, rgba(244, 196, 48, 0.10), transparent 22rem),
+                radial-gradient(circle at 82% 92%, rgba(44, 95, 127, 0.08), transparent 28rem),
+                linear-gradient(180deg, #F8FBFC 0%, #FFFFFF 36rem);
+        }
+
+        /* ============================================================
+           Draft banner — load-bearing claim-hygiene signal
+           ============================================================ */
+        .draft-banner {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: repeating-linear-gradient(
+                135deg,
+                rgba(244, 196, 48, 0.12) 0 12px,
+                rgba(244, 196, 48, 0.06) 12px 24px
+            );
+            border-bottom: 1px solid rgba(244, 196, 48, 0.45);
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-align: center;
+            padding: 0.55rem 1rem;
+        }
+        .draft-banner strong { color: #B53A2C; font-weight: 800; }
+
+        /* ============================================================
+           Hero
+           ============================================================ */
+        .far-hero {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 4.5rem 2rem 2rem;
+        }
+
+        .far-hero .eyebrow,
+        .far-section .eyebrow {
+            color: var(--primary-mid);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .far-hero h1 {
+            max-width: 920px;
+            margin: 1rem 0 1.25rem;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: clamp(2.1rem, 6.5vw, 4.4rem);
+            line-height: 1.04;
+            overflow-wrap: anywhere;
+        }
+
+        .far-hero .lede {
+            max-width: 780px;
+            color: #40505C;
+            font-size: 1.15rem;
+            line-height: 1.75;
+            overflow-wrap: break-word;
+        }
+
+        .status-ribbon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.75rem;
+        }
+        .status-ribbon span {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 0.45rem 0.75rem;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+        .status-ribbon .draft {
+            border-color: rgba(181, 58, 44, 0.45);
+            background: rgba(181, 58, 44, 0.06);
+            color: #B53A2C;
+        }
+        .status-ribbon .prereg {
+            border-color: rgba(44, 95, 127, 0.45);
+            background: rgba(44, 95, 127, 0.06);
+            color: var(--primary-mid);
+        }
+        .status-ribbon .pass {
+            border-color: rgba(46, 125, 90, 0.45);
+            background: rgba(46, 125, 90, 0.06);
+            color: #2E7D5A;
+        }
+
+        /* ============================================================
+           The spectacle — hero SVG
+           ============================================================ */
+        .spectacle-frame {
+            margin: 2rem 0 0;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background:
+              radial-gradient(circle at 18% 12%, rgba(120, 90, 240, 0.06), transparent 55%),
+              radial-gradient(circle at 82% 88%, rgba(220, 110, 60, 0.05), transparent 55%),
+              #FFFFFF;
+            padding: 1.25rem 1.25rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .spectacle-frame::before {
+            content: "";
+            position: absolute; inset: 0;
+            background-image:
+              linear-gradient(rgba(44, 95, 127, 0.06) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(44, 95, 127, 0.06) 1px, transparent 1px);
+            background-size: 28px 28px;
+            opacity: 0.7;
+            pointer-events: none;
+            mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.85), rgba(0,0,0,0.10));
+        }
+        .spectacle-frame > * { position: relative; }
+        .spectacle-cap {
+            display: flex; justify-content: space-between; align-items: baseline;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #6A7680;
+            margin-bottom: 0.5rem;
+        }
+        .spectacle-cap .lhs { color: var(--primary-mid); font-weight: 700; }
+        .spectacle-cap .rhs { color: #B53A2C; font-weight: 700; }
+
+        .spectacle-svg { width: 100%; height: auto; display: block; }
+        .spectacle-verdict {
+            margin-top: 0.75rem;
+            text-align: center;
+            font-family: var(--sd-font-data);
+            font-size: 0.74rem;
+            color: #6A7680;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* ============================================================
+           Generic content frame
+           ============================================================ */
+        .far-section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem 2rem;
+        }
+
+        .far-card {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #FFFFFF;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .far-card h2 {
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.4rem;
+            margin: 0 0 0.75rem;
+        }
+        .far-card p {
+            color: #40505C;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 0.85rem;
+        }
+        .far-card p:last-child { margin-bottom: 0; }
+        .far-card code {
+            background: rgba(244, 196, 48, 0.12);
+            color: var(--primary-dark);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-family: var(--sd-font-data);
+            font-size: 0.95em;
+        }
+
+        .load-bearing-quote {
+            border-left: 4px solid var(--accent-gold, #F4C430);
+            padding: 0.85rem 1.25rem;
+            margin: 1rem 0;
+            background: rgba(244, 196, 48, 0.06);
+            color: var(--primary-dark);
+            font-family: var(--sd-font-display);
+            font-size: 1.15rem;
+            line-height: 1.55;
+        }
+
+        /* ============================================================
+           The Object — Faraday tensor matrix display
+           ============================================================ */
+        .object-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 1.5rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        @media (max-width: 760px) {
+            .object-grid { grid-template-columns: 1fr; }
+        }
+
+        .tensor-matrix {
+            font-family: var(--sd-font-display);
+            font-style: italic;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            position: relative;
+        }
+        .tensor-matrix .label {
+            font-style: normal;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .tensor-matrix table {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        .tensor-matrix td {
+            padding: 0.4rem 0.75rem;
+            min-width: 2.2rem;
+            font-size: 1rem;
+        }
+        .tensor-matrix .bracket-l, .tensor-matrix .bracket-r {
+            position: absolute;
+            top: 2.2rem; bottom: 1.2rem;
+            width: 0.55rem;
+            border: 2px solid var(--primary-dark);
+        }
+        .tensor-matrix .bracket-l { left: 0; border-right: none; }
+        .tensor-matrix .bracket-r { right: 0; border-left: none; }
+        .tensor-matrix .zero { color: #99A3AB; }
+        .tensor-matrix .e { color: #B53A2C; font-weight: 700; }
+        .tensor-matrix .b { color: var(--primary-mid); font-weight: 700; }
+        .tensor-matrix .defn {
+            font-style: normal;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            color: #6A7680;
+            margin-top: 0.6rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .invariants {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .invariant-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+            background: rgba(255, 255, 255, 0.6);
+        }
+        .invariant-card h4 {
+            margin: 0 0 0.45rem;
+            font-family: var(--sd-font-data);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #6A7680;
+            font-weight: 700;
+        }
+        .invariant-card .eq {
+            font-family: var(--sd-font-display);
+            font-size: 1.15rem;
+            text-align: center;
+            color: var(--primary-dark);
+        }
+
+        /* ============================================================
+           Falsification battery
+           ============================================================ */
+        .battery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .falsifier {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1.1rem;
+            background: #FFFFFF;
+            text-align: center;
+        }
+        .falsifier .glyph {
+            font-family: var(--sd-font-display);
+            font-size: 1.8rem;
+            margin-bottom: 0.4rem;
+            line-height: 1;
+        }
+        .falsifier.warn .glyph { color: #B53A2C; }
+        .falsifier.invariant .glyph { color: #2E7D5A; }
+        .falsifier h3 {
+            color: var(--primary-dark);
+            font-size: 0.98rem;
+            margin: 0 0 0.35rem;
+        }
+        .falsifier p {
+            color: #40505C;
+            font-size: 0.86rem;
+            line-height: 1.55;
+            margin: 0 0 0.6rem;
+        }
+        .falsifier .expect {
+            display: inline-block;
+            font-family: var(--sd-font-data);
+            font-size: 0.66rem;
+            letter-spacing: 0.06em;
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+        }
+        .falsifier.warn .expect {
+            background: rgba(181, 58, 44, 0.08); color: #B53A2C;
+        }
+        .falsifier.invariant .expect {
+            background: rgba(46, 125, 90, 0.08); color: #2E7D5A;
+        }
+
+        /* ============================================================
+           Pipeline ribbon
+           ============================================================ */
+        .pipeline-frame {
+            margin-top: 1rem;
+            padding: 0.5rem 0;
+            overflow-x: auto;
+        }
+        .pipeline-svg { width: 100%; min-width: 620px; height: auto; }
+
+        /* ============================================================
+           Outcome tree
+           ============================================================ */
+        .outcomes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .outcome {
+            border-radius: 10px;
+            padding: 1.1rem 1.15rem;
+            border: 1px solid var(--line);
+        }
+        .outcome.zero-out {
+            border-color: rgba(46, 125, 90, 0.45);
+            background: rgba(46, 125, 90, 0.04);
+        }
+        .outcome.quarantine {
+            border-color: rgba(244, 196, 48, 0.55);
+            background: rgba(244, 196, 48, 0.05);
+        }
+        .outcome.bounded {
+            border-color: rgba(181, 58, 44, 0.45);
+            background: rgba(181, 58, 44, 0.04);
+        }
+        .outcome h3 {
+            color: var(--primary-dark);
+            font-size: 0.98rem;
+            margin: 0 0 0.4rem;
+        }
+        .outcome .pill {
+            display: inline-block;
+            font-family: var(--sd-font-data);
+            font-size: 0.66rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.18rem 0.55rem;
+            border-radius: 999px;
+            margin-bottom: 0.5rem;
+            color: #FFFFFF;
+            font-weight: 700;
+        }
+        .outcome.zero-out .pill { background: #2E7D5A; }
+        .outcome.quarantine .pill { background: #B8961E; }
+        .outcome.bounded .pill { background: #B53A2C; }
+        .outcome p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ============================================================
+           Claim-boundary not-grid (mirrors isotrophy.html)
+           ============================================================ */
+        .not-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .not-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1.1rem;
+        }
+        .not-card h3 {
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+            margin: 0 0 0.5rem;
+        }
+        .not-card h3::before {
+            content: "✗ ";
+            color: #B53A2C;
+            font-weight: 800;
+        }
+        .not-card p {
+            color: #40505C;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ============================================================
+           Inspection trail
+           ============================================================ */
+        .source-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .source-list a {
+            display: block;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 1rem;
+            color: var(--primary-mid);
+            text-decoration: none;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+        .source-list a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+           Animations (subtle — same as the widget but slowed)
+           ============================================================ */
+        @keyframes drift {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(40px); }
+        }
+        @keyframes pulse-loop {
+            0%, 100% { stroke-opacity: 0.55; }
+            50% { stroke-opacity: 1; }
+        }
+        @keyframes dash-flow {
+            to { stroke-dashoffset: -40; }
+        }
+        .field-line { animation: drift 8s linear infinite alternate; }
+        .loop-circle { animation: pulse-loop 4s ease-in-out infinite; }
+        .flux-arrow { animation: dash-flow 2.2s linear infinite; }
+        @media (prefers-reduced-motion: reduce) {
+            .field-line, .loop-circle, .flux-arrow { animation: none; }
+        }
+
+        @media (max-width: 760px) {
+            .far-hero { padding: 3.5rem 1.25rem 1.25rem; }
+            .far-section { padding: 1rem 1.25rem; }
+            .spectacle-frame { padding: 1rem 0.75rem 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="/" class="site-brand">Sundog</a>
+            <div class="site-links">
+                <a href="/about">About</a>
+                <a href="/sundog">Atlas</a>
+                <a href="/applications-gallery">Applications</a>
+                <a href="/alignment">Align</a>
+                <a href="/chat">Chat</a>
+                <a href="docs/">Docs</a>
+                <a href="https://github.com/humiliati/sundog">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="draft-banner" role="status">
+        <strong>DRAFT</strong> · pre-Phase-1 staging page for the
+        Shadow Faraday Zero-Out roadmap · <code>noindex</code> until
+        Phase 3 lands and Bucket 1 clears
+    </div>
+
+    <main>
+        <!-- ============================================================
+             HERO
+             ============================================================ -->
+        <section class="far-hero">
+            <p class="eyebrow">Shadow Faraday Zero-Out · v0.1 · pre-registered</p>
+            <h1>Do local shadows recover Faraday induction?</h1>
+            <p class="lede">
+                A minimal, falsification-first experiment. We define a local,
+                gauge-invariant <em>shadow projection</em> 𝒫<sub>shadow</sub>
+                and ask whether it is sufficient to close Faraday's law of
+                induction algebraically — without reconstructing the
+                electromagnetic potential <em>A<sub>μ</sub></em> globally.
+                The result lands in one of three pre-registered zones:
+                <strong>clean structural zero</strong>,
+                <strong>named quarantine</strong>, or
+                <strong>bounded failure</strong>. All three ship a receipt.
+            </p>
+
+            <div class="status-ribbon" aria-label="Status">
+                <span class="draft">DRAFT · pre-Phase-1</span>
+                <span class="prereg">pre-registered predicate</span>
+                <span>algebraic only · no MuJoCo · no ML</span>
+                <span>classical vacuum EM</span>
+                <span>5–7 focused days · planned</span>
+            </div>
+
+            <!-- ============================================================
+                 THE SPECTACLE — hero SVG
+                 ============================================================ -->
+            <figure class="spectacle-frame" aria-label="The spectacle: closing the Faraday loop integral with shadow data alone">
+                <div class="spectacle-cap">
+                    <span class="lhs">𝐁 — magnetic field (cool)</span>
+                    <span>· 𝒫<sub>shadow</sub> — local projection ·</span>
+                    <span class="rhs">𝐄 — electric field (warm)</span>
+                </div>
+
+                <svg class="spectacle-svg" viewBox="0 0 720 280"
+                     xmlns="http://www.w3.org/2000/svg"
+                     role="img"
+                     aria-labelledby="spectacle-title spectacle-desc">
+                    <title id="spectacle-title">Closing Faraday induction with shadow data alone.</title>
+                    <desc id="spectacle-desc">A flux surface threaded by magnetic-field arrows is encircled by an electric-field loop. The Faraday integral expression to its right has the shadow projection operator applied to both E and B. The pre-registered predicate evaluates to a large green zero, captioned "structural or named."</desc>
+
+                    <defs>
+                        <marker id="far-bArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" fill="#2C5F7F"/>
+                        </marker>
+                        <marker id="far-eArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" fill="#B53A2C"/>
+                        </marker>
+                        <radialGradient id="far-fluxGrad" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="rgba(44,95,127,0.20)"/>
+                            <stop offset="100%" stop-color="rgba(44,95,127,0)"/>
+                        </radialGradient>
+                        <radialGradient id="far-zeroGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="rgba(46,125,90,0.22)"/>
+                            <stop offset="100%" stop-color="rgba(46,125,90,0)"/>
+                        </radialGradient>
+                    </defs>
+
+                    <!-- left: the loop + flux -->
+                    <g transform="translate(20,20)">
+                        <text x="0" y="-2" font-size="11"
+                              font-family="ui-monospace, Menlo, Consolas, monospace"
+                              fill="#6A7680">spanned surface · Σ</text>
+
+                        <ellipse cx="125" cy="125" rx="110" ry="85"
+                                 fill="url(#far-fluxGrad)"
+                                 stroke="rgba(44,95,127,0.45)"
+                                 stroke-width="1.2" stroke-dasharray="3 4"/>
+
+                        <!-- B field arrows piercing surface -->
+                        <g stroke="#2C5F7F" stroke-width="1.6" fill="#2C5F7F"
+                           class="flux-arrow" stroke-dasharray="4 36"
+                           stroke-dashoffset="0">
+                            <line x1="80" y1="80" x2="80" y2="170" marker-end="url(#far-bArr)"/>
+                            <line x1="125" y1="55" x2="125" y2="195" marker-end="url(#far-bArr)"/>
+                            <line x1="170" y1="80" x2="170" y2="170" marker-end="url(#far-bArr)"/>
+                            <line x1="100" y1="105" x2="100" y2="145" marker-end="url(#far-bArr)"/>
+                            <line x1="150" y1="105" x2="150" y2="145" marker-end="url(#far-bArr)"/>
+                        </g>
+                        <text x="125" y="50" text-anchor="middle"
+                              font-size="14" font-family="Georgia, serif"
+                              font-style="italic" fill="#2C5F7F"
+                              font-weight="700">𝐁(t)</text>
+
+                        <!-- E loop -->
+                        <ellipse cx="125" cy="125" rx="120" ry="98"
+                                 fill="none" stroke="#B53A2C"
+                                 stroke-width="2.2" class="loop-circle"/>
+
+                        <!-- direction arrows on loop -->
+                        <g fill="#B53A2C" stroke="#B53A2C">
+                            <polygon points="245,120 238,114 238,126"/>
+                            <polygon points="5,130 12,124 12,136"
+                                     transform="rotate(180 8.5 130)"/>
+                            <polygon points="123,28 117,34 129,34"/>
+                            <polygon points="123,222 117,216 129,216"
+                                     transform="rotate(180 123 219)"/>
+                        </g>
+                        <text x="125" y="18" text-anchor="middle"
+                              font-size="13" font-family="Georgia, serif"
+                              font-style="italic" fill="#B53A2C"
+                              font-weight="700">∂Σ</text>
+                        <text x="258" y="128" font-size="14"
+                              font-family="Georgia, serif" font-style="italic"
+                              fill="#B53A2C" font-weight="700">𝐄</text>
+                    </g>
+
+                    <!-- middle: the equation -->
+                    <g transform="translate(340,50)">
+                        <text x="0" y="0" font-family="Georgia, serif"
+                              font-size="18" fill="#1A3A52">
+                            <tspan font-style="italic">∮</tspan><tspan dy="-6" font-size="11" fill="#7A5BD0">∂Σ</tspan>
+                            <tspan dy="6">&#160;</tspan>
+                            <tspan fill="#7A5BD0" font-weight="700">𝒫</tspan><tspan dy="3" font-size="10" fill="#7A5BD0">shadow</tspan>
+                            <tspan dy="-3">(</tspan>
+                            <tspan fill="#B53A2C" font-weight="700">𝐄</tspan>
+                            <tspan>)·</tspan>
+                            <tspan font-weight="700">d𝓁</tspan>
+                        </text>
+
+                        <text x="0" y="45" font-family="Georgia, serif"
+                              font-size="22" fill="#1A3A52">+</text>
+
+                        <text x="0" y="85" font-family="Georgia, serif"
+                              font-size="18" fill="#1A3A52">
+                            <tspan font-style="italic">d</tspan>
+                            <tspan>/</tspan>
+                            <tspan font-style="italic">dt</tspan>
+                            <tspan>&#160;</tspan>
+                            <tspan font-style="italic">∫</tspan><tspan dy="-6" font-size="11" fill="#7A5BD0">Σ</tspan>
+                            <tspan dy="6">&#160;</tspan>
+                            <tspan fill="#7A5BD0" font-weight="700">𝒫</tspan><tspan dy="3" font-size="10" fill="#7A5BD0">shadow</tspan>
+                            <tspan dy="-3">(</tspan>
+                            <tspan fill="#2C5F7F" font-weight="700">𝐁</tspan>
+                            <tspan>)·</tspan>
+                            <tspan font-weight="700">d𝐀</tspan>
+                        </text>
+
+                        <line x1="0" y1="115" x2="270" y2="115"
+                              stroke="rgba(106,118,128,0.4)"/>
+
+                        <text x="0" y="138"
+                              font-family="ui-monospace, Menlo, Consolas, monospace"
+                              font-size="10" fill="#6A7680">PRE-REG SUCCESS PREDICATE →</text>
+                    </g>
+
+                    <!-- right: the zero -->
+                    <g transform="translate(570,150)">
+                        <circle cx="55" cy="0" r="80" fill="url(#far-zeroGlow)"/>
+                        <text x="55" y="22" text-anchor="middle"
+                              font-family="Georgia, serif" font-size="84"
+                              font-weight="700" fill="#2E7D5A"
+                              letter-spacing="-0.02em">0</text>
+                        <text x="118" y="-22" font-family="Georgia, serif"
+                              font-style="italic" font-size="22" fill="#6A7680">?</text>
+                        <text x="55" y="58" text-anchor="middle"
+                              font-family="ui-monospace, Menlo, Consolas, monospace"
+                              font-size="9" fill="#40505C"
+                              letter-spacing="0.08em">STRUCTURAL · OR · NAMED</text>
+                    </g>
+
+                    <!-- ambient field-line wisps -->
+                    <g stroke="rgba(44,95,127,0.18)" fill="none"
+                       stroke-width="0.9" class="field-line">
+                        <path d="M-20 22 Q 100 32 280 22 T 600 22"/>
+                        <path d="M-20 258 Q 110 268 280 258 T 600 258"/>
+                    </g>
+                </svg>
+
+                <figcaption class="spectacle-verdict">
+                    Equals zero · or names its residual · either outcome ships a receipt.
+                </figcaption>
+            </figure>
+        </section>
+
+        <!-- ============================================================
+             LOAD-BEARING STATEMENT
+             ============================================================ -->
+        <section class="far-section" aria-label="Pre-registered claim">
+            <div class="far-card">
+                <p class="eyebrow">The Pre-Registered Claim</p>
+                <h2>One algebraic question, three landing zones, all of them publishable.</h2>
+                <p>
+                    The Sundog method is allergic to ambiguity, not to negative
+                    results. We register the predicate before the algebra runs,
+                    then publish whichever of <em>structural zero</em>,
+                    <em>named quarantine</em>, or <em>bounded failure</em> falls
+                    out. Faraday is the calibration object: too well-understood
+                    to fudge, too foundational to ignore.
+                </p>
+                <div class="load-bearing-quote">
+                    If 𝒫<sub>shadow</sub> is the right object, Faraday induction
+                    closes <em>locally</em> — no global gauge fix, no field
+                    reconstruction at infinity, just the loop and the flux.
+                </div>
+                <p>
+                    This page is a <strong>draft staging surface</strong>:
+                    the spectacle above shows the experimental apparatus and
+                    the pre-registered predicate; the receipts populate it as
+                    Phases&nbsp;1–5 of the roadmap land. The result is
+                    <em>not yet computed</em>.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             THE OBJECT — Faraday tensor
+             ============================================================ -->
+        <section class="far-section" aria-label="The Faraday tensor and its invariants">
+            <div class="far-card">
+                <p class="eyebrow">The Object · I</p>
+                <h2>Antisymmetric, two scalars, gauge-invariant.</h2>
+                <p>
+                    All of classical electromagnetism, including Faraday's law,
+                    Gauss's law for magnetism, and Lorentz invariance under boosts,
+                    compresses into a single 4×4 antisymmetric tensor
+                    <em>F<sub>μν</sub> = ∂<sub>μ</sub>A<sub>ν</sub> − ∂<sub>ν</sub>A<sub>μ</sub></em>
+                    and exactly two Lorentz scalars. The shadow apparatus
+                    must respect the same symmetries.
+                </p>
+
+                <div class="object-grid">
+                    <div class="tensor-matrix" aria-label="Faraday tensor F mu nu as a 4 by 4 antisymmetric matrix with electric and magnetic field components">
+                        <div class="label">F<sub>μν</sub>&#160;=</div>
+                        <div class="bracket-l"></div>
+                        <table>
+                            <tr>
+                                <td class="zero">0</td>
+                                <td class="e">E<sub>x</sub>/c</td>
+                                <td class="e">E<sub>y</sub>/c</td>
+                                <td class="e">E<sub>z</sub>/c</td>
+                            </tr>
+                            <tr>
+                                <td class="e">−E<sub>x</sub>/c</td>
+                                <td class="zero">0</td>
+                                <td class="b">−B<sub>z</sub></td>
+                                <td class="b">B<sub>y</sub></td>
+                            </tr>
+                            <tr>
+                                <td class="e">−E<sub>y</sub>/c</td>
+                                <td class="b">B<sub>z</sub></td>
+                                <td class="zero">0</td>
+                                <td class="b">−B<sub>x</sub></td>
+                            </tr>
+                            <tr>
+                                <td class="e">−E<sub>z</sub>/c</td>
+                                <td class="b">−B<sub>y</sub></td>
+                                <td class="b">B<sub>x</sub></td>
+                                <td class="zero">0</td>
+                            </tr>
+                        </table>
+                        <div class="bracket-r"></div>
+                        <div class="defn">F<sub>μν</sub> = ∂<sub>μ</sub>A<sub>ν</sub> − ∂<sub>ν</sub>A<sub>μ</sub></div>
+                    </div>
+
+                    <div class="invariants">
+                        <div class="invariant-card">
+                            <h4>Invariant I · scalar density</h4>
+                            <div class="eq">F<sub>μν</sub>F<sup>μν</sup> = 2(<em>B</em>² − <em>E</em>²/<em>c</em>²)</div>
+                        </div>
+                        <div class="invariant-card">
+                            <h4>Invariant II · pseudoscalar · CP-odd</h4>
+                            <div class="eq">F<sub>μν</sub>F̃<sup>μν</sup> = −4&#160;<em>𝐄·𝐁</em>/<em>c</em></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             THE APPARATUS — P_shadow
+             ============================================================ -->
+        <section class="far-section" aria-label="The shadow projection operator">
+            <div class="far-card">
+                <p class="eyebrow">The Apparatus · II</p>
+                <h2>𝒫<sub>shadow</sub> is, by construction, local.</h2>
+                <p>
+                    The operator extracts gauge-invariant differences from a
+                    small stencil around a point in spacetime. It does not, at
+                    any step, require a globally consistent choice of
+                    <em>A<sub>μ</sub></em>. The pre-registered audit predicate is
+                    deceptively simple, and load-bearing:
+                </p>
+                <div class="load-bearing-quote" style="text-align: center; font-size: 1.4rem;">
+                    𝒫<sub>shadow</sub>(<em>A</em> + d<em>λ</em>) ≡ 𝒫<sub>shadow</sub>(<em>A</em>)
+                </div>
+                <p>
+                    If the residual is non-zero, that residual is logged
+                    explicitly — it becomes the first <em>named quarantine</em>
+                    line of the experiment rather than a hidden assumption.
+                    The minimal locality radius / stencil shape is itself a
+                    Phase&nbsp;2 receipt, not a free knob.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             THE BATTERY — falsifiers
+             ============================================================ -->
+        <section class="far-section" aria-label="The falsification battery">
+            <div class="far-card">
+                <p class="eyebrow">The Battery · III</p>
+                <h2>Three falsifiers, pre-committed.</h2>
+                <p>
+                    Each falsifier is designed to break the claim in a
+                    pre-named way. Anything else — any unexpected residual,
+                    any silent failure — is the receipt worth writing down.
+                    These are registered <em>before</em> Phase&nbsp;3 algebra
+                    runs.
+                </p>
+                <div class="battery-grid">
+                    <div class="falsifier warn">
+                        <div class="glyph">⌖</div>
+                        <h3>Non-local probe</h3>
+                        <p>Deliberately widen the stencil beyond the locality radius.</p>
+                        <span class="expect">expect: residual</span>
+                    </div>
+                    <div class="falsifier warn">
+                        <div class="glyph">⊕</div>
+                        <h3>Artificial monopole</h3>
+                        <p>Inject a source term forbidden by the source-free assumption.</p>
+                        <span class="expect">expect: failure mode</span>
+                    </div>
+                    <div class="falsifier invariant">
+                        <div class="glyph">↻</div>
+                        <h3>Gauge after projection</h3>
+                        <p>Apply <em>A → A + dλ</em> after 𝒫<sub>shadow</sub> has run.</p>
+                        <span class="expect">expect: invariant</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             THE PIPELINE — six phases
+             ============================================================ -->
+        <section class="far-section" aria-label="The six-phase pipeline">
+            <div class="far-card">
+                <p class="eyebrow">The Pipeline · IV</p>
+                <h2>Symbol table → public page · six phases · each gated on a signed receipt.</h2>
+                <p>
+                    Same discipline as Isotrophy v0.3 and the three-body
+                    controller: each phase exits when its receipt is signed off,
+                    not when it feels done. Phase&nbsp;3 — the core zero-out — is
+                    the load-bearing algebra; everything before it is
+                    notation, everything after is dissemination.
+                </p>
+
+                <div class="pipeline-frame">
+                    <svg class="pipeline-svg" viewBox="0 0 700 110"
+                         xmlns="http://www.w3.org/2000/svg"
+                         role="img"
+                         aria-label="Six-phase pipeline: 1 foundations, 2 shadow operator, 3 core zero-out, 4 verification battery, 5 chapter close, 6 public page">
+                        <defs>
+                            <linearGradient id="far-ribbon" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="rgba(122, 91, 208, 0.18)"/>
+                                <stop offset="50%" stop-color="rgba(46, 125, 90, 0.18)"/>
+                                <stop offset="100%" stop-color="rgba(244, 196, 48, 0.22)"/>
+                            </linearGradient>
+                        </defs>
+
+                        <rect x="10" y="40" width="680" height="24" rx="12"
+                              fill="url(#far-ribbon)"
+                              stroke="rgba(106,118,128,0.4)" stroke-width="0.8"/>
+
+                        <g font-family="ui-monospace, Menlo, Consolas, monospace"
+                           font-size="10" text-anchor="middle">
+                            <g transform="translate(65,52)">
+                                <circle r="13" fill="#FFFFFF" stroke="#7A5BD0" stroke-width="1.6"/>
+                                <text y="3.5" font-weight="700" fill="#5A45A0">1</text>
+                                <text y="-22" fill="#1A3A52" font-family="Georgia, serif" font-size="11" font-style="italic">foundations</text>
+                                <text y="34" fill="#6A7680" font-size="9">symbol &amp; map</text>
+                            </g>
+                            <g transform="translate(185,52)">
+                                <circle r="13" fill="#FFFFFF" stroke="#7A5BD0" stroke-width="1.6"/>
+                                <text y="3.5" font-weight="700" fill="#5A45A0">2</text>
+                                <text y="-22" fill="#1A3A52" font-family="Georgia, serif" font-size="11" font-style="italic">𝒫_shadow</text>
+                                <text y="34" fill="#6A7680" font-size="9">operator + gauge audit</text>
+                            </g>
+                            <g transform="translate(310,52)">
+                                <circle r="15" fill="#FFFFFF" stroke="#2E7D5A" stroke-width="2"/>
+                                <text y="3.5" font-weight="800" fill="#2E7D5A">3</text>
+                                <text y="-24" fill="#1A3A52" font-family="Georgia, serif" font-size="12" font-style="italic" font-weight="700">zero-out ★</text>
+                                <text y="36" fill="#6A7680" font-size="9">core derivation</text>
+                            </g>
+                            <g transform="translate(435,52)">
+                                <circle r="13" fill="#FFFFFF" stroke="#2E7D5A" stroke-width="1.6"/>
+                                <text y="3.5" font-weight="700" fill="#2E7D5A">4</text>
+                                <text y="-22" fill="#1A3A52" font-family="Georgia, serif" font-size="11" font-style="italic">battery</text>
+                                <text y="34" fill="#6A7680" font-size="9">SymPy + 3 falsifiers</text>
+                            </g>
+                            <g transform="translate(555,52)">
+                                <circle r="13" fill="#FFFFFF" stroke="#B8961E" stroke-width="1.6"/>
+                                <text y="3.5" font-weight="700" fill="#8F6F12">5</text>
+                                <text y="-22" fill="#1A3A52" font-family="Georgia, serif" font-size="11" font-style="italic">chapter close</text>
+                                <text y="34" fill="#6A7680" font-size="9">receipts + handoff</text>
+                            </g>
+                            <g transform="translate(660,52)">
+                                <circle r="13" fill="#FFFFFF" stroke="#B8961E" stroke-width="1.6"/>
+                                <text y="3.5" font-weight="700" fill="#8F6F12">6</text>
+                                <text y="-22" fill="#1A3A52" font-family="Georgia, serif" font-size="11" font-style="italic">faraday.html</text>
+                                <text y="34" fill="#6A7680" font-size="9">public page</text>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             THE OUTCOMES — three landing zones
+             ============================================================ -->
+        <section class="far-section" aria-label="The three pre-registered outcome zones">
+            <div class="far-card">
+                <p class="eyebrow">The Outcomes · V</p>
+                <h2>Three landing zones. All of them ship.</h2>
+                <p>
+                    Pre-registered framing turns every possible Phase&nbsp;3
+                    result into a public receipt. The discipline is the same
+                    one that produced Isotrophy K_facet v0.3h's
+                    <em>20 structural zeros + 1 named quarantine</em>: name
+                    the success predicate before the algebra runs; if the
+                    result is a partial, the partial is the artifact.
+                </p>
+                <div class="outcomes-grid">
+                    <div class="outcome zero-out">
+                        <span class="pill">A · clean zero</span>
+                        <h3>Structural identity</h3>
+                        <p>
+                            Shadow projection is sufficient; Faraday induction
+                            closes locally with no residual. The strongest
+                            claim — and the most demanding receipt.
+                        </p>
+                    </div>
+                    <div class="outcome quarantine">
+                        <span class="pill">B · named quarantine</span>
+                        <h3>Topological / boundary term</h3>
+                        <p>
+                            One precisely-named survivor — boundary at
+                            infinity, Aharonov–Bohm phase, or a documented
+                            global obstruction. Closure is conditional; the
+                            failure is articulate.
+                        </p>
+                    </div>
+                    <div class="outcome bounded">
+                        <span class="pill">C · bounded failure</span>
+                        <h3>Reconstruction survives</h3>
+                        <p>
+                            Shadow projection is insufficient at order X.
+                            The bound is publishable, the prior is updated,
+                            the scope is corrected.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             CLAIM BOUNDARY
+             ============================================================ -->
+        <section class="far-section" aria-label="Claim boundary">
+            <p class="eyebrow">Claim Boundary</p>
+            <div class="not-grid">
+                <div class="not-card">
+                    <h3>Not a result.</h3>
+                    <p>
+                        This is a staging page for a pre-registered
+                        experiment. Phase 3 has not yet been run. Anyone
+                        treating the spectacle as a derivation is reading
+                        the apparatus, not the conclusion.
+                    </p>
+                </div>
+                <div class="not-card">
+                    <h3>Not a derivation of Maxwell's equations.</h3>
+                    <p>
+                        The pre-reg asks one specific question — does a
+                        local shadow projection suffice for the integral
+                        form of Faraday's law in the classical vacuum
+                        case? — not whether the full Maxwell system
+                        re-derives from shadow primitives.
+                    </p>
+                </div>
+                <div class="not-card">
+                    <h3>Not a claim about quantum EM.</h3>
+                    <p>
+                        Scope is explicit: classical vacuum, flat
+                        spacetime or local inertial frame, source-free in
+                        the first pass. Extensions to sourced, curved, or
+                        quantum cases are suggested next steps, not part
+                        of this experiment.
+                    </p>
+                </div>
+                <div class="not-card">
+                    <h3>Not for external share yet.</h3>
+                    <p>
+                        Bucket 1 of the SEO &amp; social-readiness
+                        roadmap (designed 1200×630 og:image, JSON-LD
+                        TechArticle, internal link from
+                        <code>index.html</code>, validator pass) is owed
+                        before the LinkedIn cache is allowed to see this
+                        URL.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             INSPECTION TRAIL
+             ============================================================ -->
+        <section class="far-section">
+            <p class="eyebrow">Inspection Trail</p>
+            <div class="source-list">
+                <a href="docs/SUNDOG_V_FARADAY.md">Sundog · Shadow Faraday Zero-Out Roadmap v0.1</a>
+                <a href="/isotrophy">Isotrophy K_facet v0.3h — precedent for the receipt discipline</a>
+                <a href="/threebody">Three-Body Workbench — where the local-probe pattern was forged</a>
+                <a href="/legend">Sundog Legend — shared vocabulary (σ₃, gauge cocycle, audit chain)</a>
+                <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a>
+                <a href="docs/presentation/claims-and-scope.md">Claims and Scope Policy</a>
+                <a href="https://github.com/humiliati/sundog">Sundog repository on GitHub</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
+        </p>
+        <p class="footer-links">
+            <a href="https://github.com/humiliati/sundog">GitHub</a> |
+            <a href="/origin">Origin</a> |
+            <a href="/applications-gallery">Applications Gallery</a> |
+            <a href="docs/README.md">Documentation</a> |
+            <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
+            <a href="docs/presentation/claims-and-scope.md">Claims Policy</a>
+        </p>
+        <p class="footer-copyright">
+            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
+        </p>
+    </footer>
+
+    <script type="module" src="/js/sundog-chat-widget.mjs"></script>
+</body>
+</html>
