@@ -1,11 +1,23 @@
 # v0.8 Mechanism Preregistration: Floquet Direction-Purity
 
-Status: **REGISTERED 2026-05-24** (parent; no compute yet). This document
-locks the v0.8 body / projection / observable and the non-circularity
-discipline. Form locks for v0.8a (audit: purity-binned audit or monotone
-purity predictor) and v0.8b (held-out predictor with attrition carried as
-domain restriction) are separately registered children that pin specific
-binning, df, falsifier, and held-out partition choices.
+Status: **REGISTERED 2026-05-24. v0.8a child verdict landed
+2026-05-24: `purity_quartile_fails_audit`** at chi^2 = 4.94 (p =
+0.176, alignment 0.587, sd(purity) = 0.096). The unsigned purity
+transform `abs(vf - 0.5)` does NOT capture the v0.7a' positive at
+the registered floor; the v0.7a' signal lives in the **signed**
+direction (diagnostic purity_signed contingency reproduces
+chi^2 = 16.43 exactly). The failure is explained by the vf
+distribution's density asymmetry (184/250 rows below vf = 0.5;
+max vf = 0.87, no rows near vf = 1) -- the purity symmetry
+assumption is violated by the catalog's actual distribution.
+v0.8b (held-out predictor) is NOT licensed under the fails
+verdict. See `kfacet_v08a_purity_quartile_audit_form.md`.
+
+This document locks the v0.8 body / projection / observable and the
+non-circularity discipline. Form locks for v0.8a (audit: purity-binned
+audit or monotone purity predictor) and v0.8b (held-out predictor
+with attrition carried as domain restriction) are separately
+registered children.
 
 Audience: v0.8a/v0.8b form-lock author; paper-side reviewer of the
 v0.7 -> v0.8 transition (qualified-positive close + direction-purity

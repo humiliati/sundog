@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DRAFT — Shadow Faraday Zero-Out: a pre-registered minimal experiment testing whether local, gauge-invariant shadow projections recover Faraday's law of induction without global field reconstruction. Pre-Phase-1 staging page.">
+    <meta name="description" content="DRAFT — Shadow Faraday Zero-Out: a pre-registered minimal experiment testing whether local, gauge-invariant shadow projections recover Faraday's law of induction without global field reconstruction. Phases 1–2 opened (𝒫_shadow candidate-defined as the plaquette holonomy); Phase 3 result not computed.">
     <meta name="keywords" content="Faraday's law, shadow projection, gauge invariance, electromagnetic, Lorentz invariant, structural zero, pre-registered, Sundog, claim hygiene">
     <meta name="theme-color" content="#1A3A52">
     <meta name="author" content="Sundog Research Lab">
@@ -22,7 +22,8 @@
       JSON-LD TechArticle, internal link from index.html, validator
       pass) is owed before any external share. See
       docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md and
-      docs/SUNDOG_V_FARADAY.md ▸ Phase 6.
+      docs/SUNDOG_V_FARADAY.md ▸ Phase 6. Phase 1 receipts now live in
+      docs/SHADOW_FARADAY.md.
     -->
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Sundog">
@@ -530,7 +531,7 @@
     </header>
 
     <div class="draft-banner" role="status">
-        <strong>DRAFT</strong> · pre-Phase-1 staging page for the
+        <strong>DRAFT</strong> · Phases 1–2 opened for the
         Shadow Faraday Zero-Out roadmap · <code>noindex</code> until
         Phase 3 lands and Bucket 1 clears
     </div>
@@ -555,11 +556,12 @@
             </p>
 
             <div class="status-ribbon" aria-label="Status">
-                <span class="draft">DRAFT · pre-Phase-1</span>
+                <span class="draft">DRAFT · Phases 1–2 open</span>
                 <span class="prereg">pre-registered predicate</span>
+                <span>𝒫<sub>shadow</sub> candidate-defined</span>
+                <span>gauge invariance audited on registered domain</span>
                 <span>algebraic only · no MuJoCo · no ML</span>
                 <span>classical vacuum EM</span>
-                <span>5–7 focused days · planned</span>
             </div>
 
             <!-- ============================================================
@@ -813,23 +815,58 @@
         <section class="far-section" aria-label="The shadow projection operator">
             <div class="far-card">
                 <p class="eyebrow">The Apparatus · II</p>
-                <h2>𝒫<sub>shadow</sub> is, by construction, local.</h2>
+                <h2>𝒫<sub>shadow</sub> is the plaquette holonomy on <em>A</em>.</h2>
                 <p>
-                    The operator extracts gauge-invariant differences from a
-                    small stencil around a point in spacetime. It does not, at
-                    any step, require a globally consistent choice of
-                    <em>A<sub>μ</sub></em>. The pre-registered audit predicate is
-                    deceptively simple, and load-bearing:
+                    Phase 2 fixes the operator. For a point <em>x</em>, a
+                    coordinate plaquette
+                    <em>ω<sub>μν</sub>(x, ε)</em> of edge <em>ε</em>, and the
+                    closed boundary loop <em>∂ω</em>, the finite-stencil
+                    operator is the Wilson-loop-style line integral of the
+                    potential one-form:
+                </p>
+                <div class="load-bearing-quote" style="text-align: center; font-size: 1.25rem;">
+                    𝒫<sub>shadow</sub><sup>stencil</sup>[<em>A</em>]<sub>μν</sub>(<em>x, ε</em>)
+                    &#160;:=&#160;
+                    ∮<sub>∂ω<sub>μν</sub>(x, ε)</sub> <em>A</em>
+                    &#160;=&#160;
+                    ∫<sub>ω</sub> <em>F</em>
+                    &#160;=&#160;
+                    <em>ε</em>² · <em>F<sub>μν</sub></em>(<em>x</em>) + O(<em>ε</em>³)
+                </div>
+                <p>
+                    Stokes' theorem turns the line integral of <em>A</em> on
+                    the closed loop into the surface integral of <em>F</em>
+                    on the plaquette — and <em>F</em> is gauge-invariant by
+                    construction. The operator never inspects a globally
+                    consistent <em>A<sub>μ</sub></em>: it reads <em>A</em>
+                    only on the four edges of one plaquette.
+                </p>
+                <p>
+                    The pre-registered audit predicate is deceptively simple,
+                    and load-bearing:
                 </p>
                 <div class="load-bearing-quote" style="text-align: center; font-size: 1.4rem;">
                     𝒫<sub>shadow</sub>(<em>A</em> + d<em>λ</em>) ≡ 𝒫<sub>shadow</sub>(<em>A</em>)
                 </div>
                 <p>
-                    If the residual is non-zero, that residual is logged
-                    explicitly — it becomes the first <em>named quarantine</em>
-                    line of the experiment rather than a hidden assumption.
-                    The minimal locality radius / stencil shape is itself a
-                    Phase&nbsp;2 receipt, not a free knob.
+                    The proof on the registered domain is a single line:
+                    ∮<sub>∂ω</sub> d<em>λ</em> = 0 for any closed loop
+                    <em>∂ω</em> with smooth <em>λ</em>, so the gauge term
+                    drops out of the holonomy by Stokes. The audit
+                    <em>fails by name</em> outside that domain: five
+                    quarantine hooks — regularity, topology, monopole,
+                    operator-stencil commutator, motional EMF — are
+                    enumerated in the Phase 2 receipt before any Phase 3
+                    algebra runs.
+                </p>
+                <p style="font-family: var(--sd-font-data); font-size: 0.82rem; color: #6A7680;">
+                    Phase 2 receipt:
+                    <a href="docs/SHADOW_FARADAY.md">docs/SHADOW_FARADAY.md
+                    ▸ Phase 2: Local Shadow Projection Operator</a>.
+                    Four Open Questions are registered there for sign-off
+                    before Phase 3 begins (stencil shape, finite vs.
+                    point-limit, Floquet/twist enrichment, one-tier vs.
+                    two-tier).
                 </p>
             </div>
         </section>
@@ -1050,6 +1087,7 @@
         <section class="far-section">
             <p class="eyebrow">Inspection Trail</p>
             <div class="source-list">
+                <a href="docs/SHADOW_FARADAY.md">Shadow Faraday Phase 1 Ledger</a>
                 <a href="docs/SUNDOG_V_FARADAY.md">Sundog · Shadow Faraday Zero-Out Roadmap v0.1</a>
                 <a href="/isotrophy">Isotrophy K_facet v0.3h — precedent for the receipt discipline</a>
                 <a href="/threebody">Three-Body Workbench — where the local-probe pattern was forged</a>
