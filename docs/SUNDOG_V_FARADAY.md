@@ -93,9 +93,10 @@
 
 **Tasks**:
 - Hand or SymPy verification on:
-  - Uniform constant B field (trivial pass)
-  - Infinite solenoid (time-varying current)
-  - Simple oscillating dipole or plane wave (if algebra stays tractable)
+  - Uniform constant B field (trivial control)
+  - Smooth source-free plane wave (nontrivial clean-domain pass candidate)
+  - Optional: infinite solenoid or simple oscillating dipole only as a named
+    quarantine / sourced-domain extension, not as a required clean-domain pass
 - Design 2–3 minimal falsifiers:
   1. Deliberately non-local projection → should produce residual
   2. Add artificial monopole or source term → expected failure mode
@@ -179,16 +180,23 @@
 
 ---
 
-## Open Questions for Review (before Phase 1 kickoff)
+## Review Questions Resolved (2026-05-25)
 
-1. Prefer `faraday.html` (specific, high-signal) or `shadow.html` (broader metaphor page that could host this + future shadow work)?
-2. Any must-include examples in Phase 4 verification battery?
-3. Should we keep the experiment strictly source-free, or allow a minimal sourced case in Phase 3/4?
-4. Desired level of SymPy automation vs. hand derivation for receipts?
+1. Canonical page stays `faraday.html`; a broader `shadow.html` umbrella is
+   deferred until there is more than one shadow-substrate result.
+2. Phase 4 must include uniform constant `B`, a smooth source-free plane wave,
+   and an artificial monopole/source insertion falsifier. The time-varying
+   solenoid is optional and quarantine-facing.
+3. Phase 3 remains strictly source-free and contractible. Minimal sourced or
+   topological cases are allowed only in Phase 4 as quarantine demonstrations.
+4. Hand / exterior-calculus derivation is authoritative. SymPy or tiny Python
+   checks may verify signs and examples, but cannot replace the algebraic
+   receipt or add new outcome branches.
 
 ---
 
-**Next step**: Review this roadmap → sign off on pre-reg predicates for Phase 3 → begin Phase 1 symbol table.
+**Next step**: Begin Phase 3 zero-out derivation from the signed Phase 1/2
+ledger without changing the operator, admissibility rule, or branch taxonomy.
 
 **Progress note (2026-05-25)**: Phase 1 is now opened in
 [`SHADOW_FARADAY.md`](SHADOW_FARADAY.md) with the first symbol table,
@@ -202,10 +210,11 @@ on `A` in two tiers (finite-stencil `oint A` and point-limit `F_{mu nu}`), with
 an explicit locality receipt, a gauge-invariance proof under
 `A -> A + d lambda` (via Stokes on a closed loop), an admissibility rule for
 `(S, partial S)` pairs, and five named quarantine hooks (regularity, topology,
-monopole, operator-stencil commutator, motional EMF). Phase 2 stays **open**
-pending sign-off on four registered Open Questions (stencil shape, finite vs.
-point limit, Floquet/twist enrichment, two-tier vs. one-tier). The Phase 3
-zero-out is still uncomputed.
+monopole, operator-stencil commutator, motional EMF). The four Phase 2 open
+questions are now resolved in the ledger: coordinate plaquettes; point-limit
+gate plus finite-stencil locality receipt; no Floquet/twist enrichment in
+Phase 3; two-tier operator retained with roles locked. The Phase 3 zero-out is
+still uncomputed.
 
 This keeps the Sundog standard: traceable, falsifiable, receipt-driven, and public. The final artifact is both a mathematical result **and** a clean public page that demonstrates the method. 
 

@@ -1,7 +1,19 @@
 # v0.9 Mechanism Preregistration: Signed Floquet Direction-Composition
 
-Status: **REGISTERED 2026-05-24** (parent; no compute yet). This document
-locks the v0.9 body / projection / observable and the
+Status: **REGISTERED 2026-05-24. v0.9a child verdict landed
+2026-05-24: `signed_vf_three_zone_fails_audit_chi2`** at chi^2 =
+7.42 vs critical 9.21 (df=2, p = 0.0245). The U-shape pattern check
+also fails (mixed > positional). Substantive finding: the v0.7a'
+U-shape was a quartile-boundary artifact at vf ~ 0.297; under
+physical cutpoint at vf = 0.25 the pattern is monotone-increasing
+(positional 11% S < mixed 34% S < velocity-heavy 44% S), but the
+3 x 2 chi^2 does not reach the p = 0.01 floor. The v0.7a' chi^2 =
+16.43 positive is NOT invalidated; the U-shape MECHANISM hypothesis
+is. See `kfacet_v09a_signed_vf_three_zone_form.md` for the full
+verdict. v0.9b (held-out predictor) is NOT licensed under the
+fails verdict.
+
+This document locks the v0.9 body / projection / observable and the
 **anti-circular framing discipline** for any future child form lock
 that tests vf-ordering hypotheses after v0.7a' already produced a
 chi^2 = 16.43 positive on a vf-ordering chi-squared of independence.

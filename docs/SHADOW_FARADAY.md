@@ -5,8 +5,8 @@ Working hook:
 > If the shadow projection is honest, Faraday's loop closes without borrowing
 > the global potential. If it does not close, the leftover term gets a name.
 
-Status: 2026-05-25, Phase 1 opened. This is not a result note. The Phase 3
-zero-out has not been computed.
+Status: 2026-05-25, Phases 1-2 opened and Phase 2 sign-off decisions recorded.
+This is not a result note. The Phase 3 zero-out has not been computed.
 
 This ledger is the working receipt surface for
 [`SUNDOG_V_FARADAY.md`](SUNDOG_V_FARADAY.md). The roadmap stays the narrative
@@ -39,8 +39,9 @@ Phase 1 exits only when these four items are stable enough for Phase 2 to define
 4. Phase 3 outcome branches are pre-registered before any zero-out derivation is
    interpreted.
 
-Current disposition: **open**. The table below is the first lock candidate, not
-yet a signed final.
+Current disposition: **signed off for Phase 2 use**. Re-open Phase 1 only if
+the sign convention, assumption ledger, mapping table, or Phase 3 outcome
+branches need to change.
 
 ## Coordinate And Sign Convention Candidate
 
@@ -253,7 +254,8 @@ adding new physics:
 5. Quarantine hooks: the residual classes the operator can flag *before*
    Phase 3 are enumerated.
 
-Current disposition: **open**. The definition below is the first lock candidate.
+Current disposition: **signed off for Phase 3 setup**. The definition below is
+the registered Phase 2 operator unless a dated amendment re-opens Phase 2.
 
 ### Operator Definition Candidate
 
@@ -484,28 +486,58 @@ If Phase 3 needs to add a new admissibility clause or quarantine class, Phase 2
 must be re-opened with a dated amendment block (this is the Sundog precedent
 for Echo's appended-addendum handoff pattern).
 
-### Open Questions For Phase 2 Sign-Off
+### Phase 2 Sign-Off Decisions
 
-1. **Stencil shape.** Coordinate plaquette is the cheapest choice. A more
-   symmetric option is a small geodesic disc with boundary parametrised by arc
-   length. Does the Phase 3 derivation prefer the coordinate shape (Stokes is
-   trivial) or the geodesic shape (Lorentz-covariant by inspection)?
-2. **Finite vs. point limit.** Phase 3 needs the integral form. Should
-   `R_F(S)` be defined on `P_shadow^stencil` at fixed `epsilon` (no limit) and
-   the `epsilon -> 0+` limit be taken only at the end, or should the limit be
-   taken inside `R_F(S)`? The first is cleaner for a finite-stencil
-   discretisation receipt; the second is cleaner for continuum algebra.
-3. **Floquet / twist enrichment.** The roadmap floated optional Floquet
-   averaging or twist-operator robustness from K_facet v0.3. The current
-   candidate is purely the bare plaquette holonomy. Should the audit register
-   an *averaged* `P_shadow` over a small family of rotated plaquettes as a
-   robustness variant, or defer this to a Phase 4 falsifier?
-4. **Two-tier or one-tier.** The two-tier (stencil + point-limit) definition
-   is more honest about what holds on `C^1` vs. `C^2` data. Phase 3 may only
-   need one tier. Collapse to one before Phase 3 begins, or carry both?
+These decisions answer the four Phase 2 open questions and are binding for
+Phase 3 unless Phase 2 is re-opened with a dated amendment.
 
-These are recorded so that Phase 3 cannot silently choose a different
-operator under the same name.
+1. **Stencil shape: use coordinate plaquettes.** Phase 3 stays in the local
+   flat or locally inertial chart registered in Phase 1. Coordinate plaquettes
+   make Stokes' theorem and edge cancellation explicit. A geodesic-disc version
+   is deferred to a later curved-spacetime extension or robustness appendix; it
+   is not part of the first-pass operator.
+2. **Finite vs. point limit: keep two named readouts.** The Phase 3 gate is the
+   continuum readout
+
+   ```text
+   R_F^0(S) := lim_{epsilon -> 0+} R_F^epsilon(S)
+   ```
+
+   using `P_shadow^point = F`. The finite-stencil readout `R_F^epsilon(S)` is
+   retained as a locality/discretisation receipt and must take the
+   `epsilon -> 0+` limit at the end. A fixed-`epsilon` truncation term is not a
+   clean-domain failure unless it survives the registered limit.
+3. **Floquet / twist enrichment: defer.** The Phase 3 operator is the bare
+   plaquette holonomy only. Averaging over rotated plaquettes, Floquet-style
+   robustness, or twist-operator enrichment may be used later as a Phase 4
+   falsifier or robustness variant, but it cannot rescue or alter the Phase 3
+   result.
+4. **Two-tier operator: carry both, with roles locked.** `P_shadow^point` is the
+   mathematical object used for the algebraic zero-out. `P_shadow^stencil` is
+   the locality receipt showing how the point object is obtained without a
+   global reconstruction of `A`. Public claims must not blur the two.
+
+Net sign-off: Phase 3 may begin with `P_shadow` as the two-tier coordinate
+plaquette-holonomy operator.
+
+### Roadmap Open Questions Resolved
+
+The original roadmap questions are resolved as follows.
+
+1. **Page name:** keep `faraday.html` as the canonical public page. A broader
+   `shadow.html` umbrella can come later only after there is more than one
+   shadow-substrate result to host.
+2. **Phase 4 must-include examples:** use three required cases:
+   uniform constant `B` as the trivial control; a smooth source-free plane wave
+   as the nontrivial clean-domain pass candidate; and an artificial monopole or
+   source insertion as the named-failure falsifier. The time-varying solenoid
+   becomes an optional quarantine/topology case, not a required clean pass.
+3. **Sourced cases:** Phase 3 remains strictly source-free and contractible.
+   Phase 4 may include a minimal sourced or topological case only to demonstrate
+   the quarantine machinery.
+4. **Hand vs. SymPy receipts:** the hand/exterior-calculus derivation is
+   authoritative. SymPy or a tiny Python spot-check may verify signs and example
+   cases, but it cannot replace the algebraic proof or introduce new branches.
 
 ## Inspection Trail
 
@@ -517,5 +549,7 @@ operator under the same name.
   outcome-branch candidates.
 - 2026-05-25 - Phase 2 candidate definition of `P_shadow` filed here as the
   plaquette-holonomy two-tier operator, with locality receipt, gauge-invariance
-  audit, admissibility rule, and five named quarantine hooks. Phase 2 stays
-  **open** pending sign-off on the four Open Questions above.
+  audit, admissibility rule, and five named quarantine hooks.
+- 2026-05-25 - Phase 2 sign-off decisions recorded: coordinate plaquettes,
+  point-limit gate plus finite-stencil locality receipt, bare plaquette only in
+  Phase 3, and two-tier operator retained with roles locked.
