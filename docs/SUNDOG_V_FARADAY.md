@@ -1,6 +1,6 @@
 # Shadow Faraday Zero-Out: Minimal Experiment Roadmap (v0.1)
 
-**Status**: Phase 4 complete; Phase 5 chapter close pending
+**Status**: Phase 6 local site readiness complete; post-deploy validator pass pending
 **Owner**: Sundog Research Lab (Humiliati + collaborators)  
 **Goal**: Test whether the Sundog shadow physics framework (local gauge-invariant observables, σ₃-style detectors, tidal proxies) algebraically "zeroes out" on classical electromagnetism — specifically, whether local shadow projections are sufficient to recover Faraday's law of induction and the Lorentz invariants of the electromagnetic field tensor without global state reconstruction.  
 **Style**: Low-compute, pre-registered, receipt-driven, falsification-first. Mirrors isotrophy v0.3 / three-body controller discipline.  
@@ -195,8 +195,10 @@
 
 ---
 
-**Next step**: Write Phase 5 chapter close, limitations/handoff summary, and
-final derivation-chain fidelity audit.
+**Next step**: Deploy and record the post-deploy LinkedIn/Twitter validator
+pass for `https://sundog.cc/faraday`. Local Phase 6 / Bucket 1 artifacts are
+now present: designed `1200x630` `og:image`, JSON-LD `TechArticle`, tuned
+title/description, inbound link from `index.html`, and sitemap entry.
 
 **Progress note (2026-05-25)**: Phase 1 is now opened in
 [`SHADOW_FARADAY.md`](SHADOW_FARADAY.md) with the first symbol table,
@@ -233,8 +235,28 @@ minimal falsification landed in
 [`FARADAY_PHASE4_VERIFICATION.md`](FARADAY_PHASE4_VERIFICATION.md), with
 support artifacts from `npm run faraday:phase4`. The battery passed 5/5:
 constant `B`, source-free plane wave, nonlocal projection residual, artificial
-monopole quarantine, and finite-plaquette gauge invariance. Phase 5 chapter
-close remains owed before external sharing.
+monopole quarantine, and finite-plaquette gauge invariance.
+
+**Progress note (2026-05-25, Phase 5 closed)**: Phase 5 chapter close is now
+recorded in [`SHADOW_FARADAY.md`](SHADOW_FARADAY.md) ▸ "Phase 5: Chapter
+Close". The experiment lands **Branch A — clean structural zero** on the
+registered classical-vacuum domain. The chapter close carries a full receipts
+catalog, the consolidated closure-residual summary, seven explicit scope
+limitations (sourced EM, non-contractible topology, distributional fields,
+curved spacetime, quantum EM, plasma, moving surfaces), six suggested next
+minimal extensions, and a fidelity audit that independently hand-verifies the
+Phase 4 nonlocal-falsifier residual to twelve digits and the finite-stencil
+leading O(epsilon) coefficient. Four soft hygiene notes are recorded
+transparently with no Branch-A impact. The experiment chapter is **closed**;
+only Phase 6 (page promotion / Bucket 1 readiness) remained for `/faraday` at
+this checkpoint.
+
+**Progress note (2026-05-25, Phase 6 local readiness)**: `/faraday` now has
+full local site-readiness treatment: `public/og/faraday.png` (1200×630),
+OG/Twitter metadata, JSON-LD `TechArticle`, tuned title/description, a homepage
+pillar link, `site-pages.json` promotion to `evidence-page`, and
+`public/sitemap.xml` coverage. The only remaining external action is the
+post-deploy social validator pass.
 
 This keeps the Sundog standard: traceable, falsifiable, receipt-driven, and public. The final artifact is both a mathematical result **and** a clean public page that demonstrates the method. 
 

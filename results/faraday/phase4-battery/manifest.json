@@ -1,6 +1,6 @@
 {
   "schema": "sundog.faraday.phase4-battery.v1",
-  "generatedAt": "2026-05-25T19:33:55.028Z",
+  "generatedAt": "2026-05-25T19:51:15.894Z",
   "phase": "phase4-verification-battery",
   "script": "scripts/faraday-phase4-battery.mjs",
   "out": "results/faraday/phase4-battery",

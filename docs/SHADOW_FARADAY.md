@@ -5,11 +5,13 @@ Working hook:
 > If the shadow projection is honest, Faraday's loop closes without borrowing
 > the global potential. If it does not close, the leftover term gets a name.
 
-Status: 2026-05-25, Phases 1-4 signed off. Phase 3 landed Branch A
+Status: 2026-05-25, Phases 1-6 local readiness signed off. Phase 3 landed Branch A
 (clean structural zero) in [`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md);
 Phase 4 verification/falsification passed 5/5 in
 [`FARADAY_PHASE4_VERIFICATION.md`](FARADAY_PHASE4_VERIFICATION.md). Phase 5
-chapter close is not yet written.
+chapter close is signed, and Phase 6 local site-readiness artifacts are in
+place. The only remaining external action is the post-deploy social validator
+pass.
 
 This ledger is the working receipt surface for
 [`SUNDOG_V_FARADAY.md`](SUNDOG_V_FARADAY.md). The roadmap stays the narrative
@@ -684,9 +686,8 @@ Result summary:
 
 Claim boundary:
 
-This closes Phase 3 only. Phase 4 is recorded below as a supporting
-verification / falsification receipt. Phase 5 chapter close and Bucket 1
-public-share readiness work for `/faraday` are still owed.
+This closed Phase 3 only at the time it landed. Phase 4, Phase 5, and local
+Bucket 1 site-readiness are now recorded below as later receipts.
 
 ## Phase 4 Result
 
@@ -739,29 +740,251 @@ The original roadmap questions are resolved as follows.
    authoritative. SymPy or a tiny Python spot-check may verify signs and example
    cases, but it cannot replace the algebraic proof or introduce new branches.
 
+## Phase 5: Chapter Close
+
+Phase 5 opened 2026-05-25 after Phases 3 and 4 landed. This section is the
+chapter-close note for the Shadow Faraday experiment: it does not introduce
+new physics, recompute the derivation, or change the branch. It rolls up the
+receipts, fixes the outcome statement, names the limitations, lists the
+extensions Phase 3 explicitly did not address, and runs a fidelity audit
+over the Phase 1 -> Phase 4 chain.
+
+### Outcome
+
+The Shadow Faraday Zero-Out experiment lands in **Branch A - clean
+structural zero** on the registered classical-vacuum domain.
+
+The allowed public phrasing from the Phase 1 outcome ledger is now earned:
+
+> Local shadow data suffices for Faraday induction in the registered
+> classical vacuum domain.
+
+Three things make that sentence honest rather than oversold. First, the
+registered domain is narrow: smooth `A`, contractible `U`, source-free,
+static surface-loop pair. Second, the operator is local in the stencil
+sense and gauge-invariant by construction, not by appeal to a global
+reconstruction. Third, every alternative outcome was named in advance:
+five quarantine hooks (regularity, topology, monopole, operator-stencil
+commutator, motional EMF), each paired with the branch it would force.
+
+### Receipts Catalog
+
+| Phase | Receipt | Disposition |
+| --- | --- | --- |
+| 1 | This document, sections "Coordinate And Sign Convention Candidate" through "Phase 3 Branches Pre-Registered Before Derivation" | Signed; mostly-plus metric, `c = 1`, `F_{0i} = -E_i`, `F_{ij} = epsilon_{ijk} B_k`. |
+| 2 | This document, "Phase 2: Local Shadow Projection Operator" section through "Phase 2 Sign-Off Decisions" | Signed; `P_shadow` = two-tier coordinate plaquette holonomy, with locality receipt, gauge-invariance audit, admissibility rule, and five named quarantine hooks. |
+| 3 | [`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md) | Branch A on the registered clean domain. All five closure-residual table entries are exact algebraic zeros. |
+| 4 | [`FARADAY_PHASE4_VERIFICATION.md`](FARADAY_PHASE4_VERIFICATION.md) + `scripts/faraday-phase4-battery.mjs` + `results/faraday/phase4-battery/{manifest.json,cases.csv,finite-stencil.csv}` | 5/5 predicates passed via `npm run faraday:phase4`. Falsifier hooks trip when expected; clean-domain checks return structural zeros. |
+
+The Branch A claim is carried by the Phase 3 hand exterior-calculus
+derivation. Phase 4 is supporting evidence, not the proof.
+
+### Closure Residual Summary
+
+The five Phase 3 residual entries, plus the locality boundary and quarantine
+machinery, with the supporting Phase 4 evidence:
+
+- **Point-limit Faraday residual `R_F^0(S)`.** Phase 3 algebra: `0`. Phase 4
+  support: constant `B` and source-free plane wave both pass at the
+  registered sample point. Final disposition: closed at `0`.
+- **Finite-stencil residual `R_F^epsilon(S)`.** Phase 3 algebra: `O(epsilon)`
+  before the registered point limit and `0` after. Phase 4 support:
+  plane-wave normalized-holonomy error decreases with `epsilon` and the
+  `error / epsilon` column converges to the corner-anchored Taylor
+  coefficient. Final disposition: closed at `0` in the registered limit.
+- **Gauge invariance `delta_lambda R_F^0(S)`.** Phase 3 algebra: `0` by
+  `oint d lambda = 0`. Phase 4 support: finite-plaquette gauge delta `0`
+  for `lambda = 0.31 t x - 0.17 y z + 0.07 x z`. Final disposition: closed
+  at `0`.
+- **Lorentz invariant 1 reconstruction.** Phase 3 algebra: `0` exactly.
+  Phase 4 support: constant `B` reproduces `I1 = 12.5`; plane wave
+  reproduces `I1 = 0`. Final disposition: closed at `0`.
+- **Lorentz invariant 2 reconstruction.** Phase 3 algebra: `0` exactly.
+  Phase 4 support: constant `B` and plane wave both reproduce `I2 = 0`.
+  Final disposition: closed at `0`.
+- **Locality boundary.** Phase 3 algebra: nonlocal probe forbidden by
+  construction. Phase 4 support: nonlocal projection deliberately violates
+  the rule and returns `0.787734891504`. Locality is load-bearing, not
+  decorative.
+- **Quarantine machinery.** Phase 3 algebra: five named hooks registered
+  before Phase 3. Phase 4 support: artificial monopole insertion trips
+  `dF_xyz = 3`. Branch B machinery demonstrated to fire outside the clean
+  domain.
+
+### Limitations And Scope
+
+The Branch A claim closes on the registered domain. It does not extend to:
+
+1. **Sourced electromagnetism.** Phase 3 assumed source-free. A clean-domain
+   claim under nonzero charge/current density is not earned by this work.
+   The integral-form residual `R_F^0(S)` is still well-defined with sources,
+   but the algebraic structural zero would need a separate experiment.
+2. **Topology beyond contractible patches.** Non-contractible loops
+   (Aharonov-Bohm setups, magnetic monopoles, solenoids that thread the
+   surface) trip the registered topology quarantine. Branch A does not
+   cover them.
+3. **Distributional or singular fields.** `A` was assumed smooth enough for
+   Stokes theorem and the `epsilon -> 0+` limit. Delta-string sources,
+   shock fronts, and distributional fields are quarantined out.
+4. **Curved spacetime.** Phase 3 used a flat or locally-inertial chart. A
+   geodesic-disc variant of the operator is on the deferred list and would
+   need its own takeoff gate.
+5. **Quantum electrodynamics.** Classical fields only. The plaquette
+   holonomy is suggestive of lattice gauge theory but Phase 3 did not
+   pursue the Wilson-loop / lattice QED reading.
+6. **Plasma and matter coupling.** Free vacuum case only. Polarisation and
+   magnetisation are not modelled.
+7. **Moving or deforming surfaces.** Phase 2 admissibility rule fixed `S`
+   static in the working frame. Reynolds-transport (motional EMF) terms
+   are outside the clean-domain claim.
+
+Phase 4 demonstrated machinery for (1) and (2) via the monopole insertion
+and the nonlocal probe. Phase 4 did not exhibit a worked example for
+(3)-(7); those would be future quarantine receipts, not Branch A failures.
+
+### Suggested Next Minimal Extensions
+
+The roadmap explicitly invited a "suggested next minimal extensions" list.
+Each item below is a self-contained next experiment with the same
+receipt-driven posture as this one. None is required for the present
+chapter close.
+
+1. **Sourced Branch B receipt.** A minimal sourced patch with smooth
+   charge density and `J_mu` registered in the assumption ledger. Expected
+   landing: a named nonzero `R_F^0(S)` term equal to the displacement
+   current / Ampere-Maxwell complement, not a Branch C failure. Completes
+   the Maxwell story along the same shadow line.
+2. **Aharonov-Bohm topology receipt.** A solenoid threading a
+   non-contractible loop, evaluated against the registered topology
+   quarantine. Expected landing: Branch B with the AB phase as the named
+   survivor.
+3. **Curved-spacetime takeoff.** A geodesic-disc variant of
+   `P_shadow^stencil` on a locally-inertial chart with nonzero Riemann
+   tensor. Phase 2 already deferred this; the takeoff gate would need a
+   new admissibility rule.
+4. **Lattice / Wilson-loop bridge.** Re-cast `P_shadow^stencil` explicitly
+   as a U(1) Wilson plaquette and translate Phase 3 into the lattice gauge
+   theory dictionary. Translation, not a new experiment; may produce a
+   one-page primer rather than a full ledger.
+5. **Floquet / twist robustness.** The Phase 2 sign-off deferred this; it
+   would now run as a Phase 4-style robustness variant against the
+   existing Branch A receipt.
+6. **Shadow-substrate catalog.** If a second shadow-substrate experiment
+   lands (shadow Gauss law, shadow Stokes theorem in 3D fluids), start a
+   catalog under `docs/shadow/` with one row per substrate. Until there
+   is a second row, there is no catalog to build; the roadmap
+   gauge-cocycle catalog hint stays deferred.
+
+### Fidelity Audit
+
+A fidelity pass over the Phase 1 -> Phase 4 chain, recording what holds
+and what is soft.
+
+**What holds.**
+
+- The Phase 1 sign convention is consistent across the ledger, the
+  Phase 3 receipt, the Phase 4 support script, and `faraday.html`. No
+  sign drift.
+- Phase 3 invokes only the six Locked Inputs from the takeoff gate.
+  None of the six Forbidden Shortcuts appears (Faraday law is derived,
+  not assumed; no global `A`; no new quarantine class).
+- The Phase 4 nonlocal-falsifier residual hand-verifies to twelve digits
+  against an independent computation:
+  `k A (sin(k(z-t)) - sin(k(z+delta-t))) = -0.787734891504`
+  at the registered sample.
+- The Phase 4 finite-stencil normalized error converges with `epsilon`
+  to the corner-anchored Taylor-expansion leading coefficient
+  `(partial_x F_xz + partial_z F_xz) / 2 = k A sin(k(z-t)) / 2`. At the
+  registered sample this magnitude is `0.307272`. The Phase 4 table
+  `error / epsilon` column converges toward that value from below,
+  exactly as theory predicts.
+- The receipt files cross-link consistently. `SHADOW_FARADAY.md`,
+  `FARADAY_PHASE3_DERIVATIONS.md`, `FARADAY_PHASE4_VERIFICATION.md`,
+  and `faraday.html` all carry the same outcome statement.
+
+**Soft spots, recorded transparently.**
+
+- *Constant-`B` control asserts rather than tests.* In the Phase 4
+  support script, the constant-`B` case has `maxFaradayResidual = 0`
+  hardcoded rather than computed from `curl(0) + partial_t (const)`.
+  The answer is correct (the case is algebraically trivial), but the
+  case is a sign / invariant control, not an algorithmic check.
+- *"maxFaradayResidual" is single-point on the plane wave.* The
+  registered domain claim is everywhere; the support script evaluates
+  one sample point and labels it `max`. The single-point check is
+  sufficient by smoothness on a free plane wave, but the label is
+  slightly loose. Reads cleaner as `samplePointFaradayResidual` in any
+  future battery.
+- *Finite-stencil `error / epsilon` converges to about `0.307`, not to
+  zero.* This is the leading O(epsilon) coefficient by design and
+  matches theory, but a reader skimming the table may expect the ratio
+  to go to zero. A one-line annotation ("ratios converge to the leading
+  O(epsilon) coefficient, not to zero") would pre-empt the misread.
+- *Corner-anchored vs centered plaquette.* Phase 2 sign-off picked
+  coordinate plaquettes; the implementation uses corner-anchored
+  squares. A centered plaquette would change the leading scaling from
+  O(epsilon) to O(epsilon^2). Worth a one-line callout in the Phase 4
+  finite-stencil receipt for future readers.
+
+None of these soft spots changes the Branch A landing. They are filed
+here so a future audit pass starts from full transparency.
+
+### Chapter-Close Disposition
+
+Phase 5 exits **closed**.
+
+- Phase 1, Phase 2, Phase 3, and Phase 4 receipts are signed and
+  cross-linked.
+- The Branch A outcome is recorded with explicit scope, named
+  limitations, and a registered extension menu.
+- The fidelity audit is on the record with no Branch-A-blocking issues.
+- The roadmap gauge-cocycle catalog hint stays deferred until a second
+  shadow-substrate experiment lands.
+
+Phase 6 local page readiness is now in place. Designed `1200x630` `og:image`,
+JSON-LD `TechArticle`, tuned title and description, an inbound link from
+`index.html`, `site-pages.json` promotion, and a sitemap entry have all landed.
+The chapter is closed and the local site artifact is promoted. The remaining
+external action is a post-deploy LinkedIn/Twitter validator pass.
+
 ## Inspection Trail
 
 - 2026-05-25 - `faraday.html` filed as a noindex draft staging page.
 - 2026-05-25 - `site-pages.json` and
   [`SEO_AND_SOCIAL_READINESS_ROADMAP.md`](SEO_AND_SOCIAL_READINESS_ROADMAP.md)
-  keep `/faraday` Class D until Phase 3 result and Bucket 1 readiness exist.
-- 2026-05-25 - Phase 1 ledger opened here with symbol, assumption, mapping, and
-  outcome-branch candidates.
-- 2026-05-25 - Phase 2 candidate definition of `P_shadow` filed here as the
-  plaquette-holonomy two-tier operator, with locality receipt, gauge-invariance
-  audit, admissibility rule, and five named quarantine hooks.
-- 2026-05-25 - Phase 2 sign-off decisions recorded: coordinate plaquettes,
-  point-limit gate plus finite-stencil locality receipt, bare plaquette only in
-  Phase 3, and two-tier operator retained with roles locked.
+  keep `/faraday` Class D until Phase 3 result and Bucket 1 readiness
+  exist.
+- 2026-05-25 - Phase 1 ledger opened with symbol, assumption, mapping,
+  and outcome-branch candidates.
+- 2026-05-25 - Phase 2 candidate definition of `P_shadow` filed as the
+  plaquette-holonomy two-tier operator, with locality receipt,
+  gauge-invariance audit, admissibility rule, and five named quarantine
+  hooks.
+- 2026-05-25 - Phase 2 sign-off decisions recorded: coordinate
+  plaquettes, point-limit gate plus finite-stencil locality receipt,
+  bare plaquette only in Phase 3, and two-tier operator retained with
+  roles locked.
 - 2026-05-25 - Phase 3 takeoff gate recorded: locked inputs, forbidden
-  shortcuts, derivation work order, exact success predicate, residual table
-  template, landing branches, and receipt-file target.
+  shortcuts, derivation work order, exact success predicate, residual
+  table template, landing branches, and receipt-file target.
 - 2026-05-25 - Phase 3 receipt landed in
-  [`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md), with
-  proof-hygiene corrections to the form-degree Stokes statement and
-  finite-stencil scaling. Branch A selected for the registered clean domain.
+  [`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md),
+  with proof-hygiene corrections to the form-degree Stokes statement
+  and finite-stencil scaling. Branch A selected for the registered
+  clean domain.
 - 2026-05-25 - Phase 4 verification/falsification battery landed in
-  [`FARADAY_PHASE4_VERIFICATION.md`](FARADAY_PHASE4_VERIFICATION.md). The
-  support command `npm run faraday:phase4` passed 5/5 predicates, including
-  constant `B`, source-free plane wave, nonlocal projection residual,
-  artificial monopole quarantine, and finite-plaquette gauge invariance.
+  [`FARADAY_PHASE4_VERIFICATION.md`](FARADAY_PHASE4_VERIFICATION.md).
+  The support command `npm run faraday:phase4` passed 5/5 predicates.
+- 2026-05-25 - Phase 5 chapter-close section recorded above. Outcome:
+  Branch A on the registered classical-vacuum domain. Receipts
+  catalog, closure-residual summary, limitations and scope, six
+  suggested next minimal extensions, and a fidelity audit (including
+  independent hand-verification of the Phase 4 nonlocal-falsifier
+  residual to twelve digits) are on the record. Four soft hygiene
+  notes recorded transparently with no Branch-A impact. The
+  experiment chapter is **closed**.
+- 2026-05-25 - Phase 6 local site-readiness artifacts landed for `/faraday`:
+  `public/og/faraday.png`, full OG/Twitter metadata, JSON-LD `TechArticle`,
+  homepage pillar link, `site-pages.json` evidence-page promotion, and
+  `public/sitemap.xml` coverage. This supersedes the earlier noindex/Class D
+  staging state. Post-deploy validator pass remains external.

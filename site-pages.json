@@ -114,8 +114,8 @@
     },
     {
       "entry": "faraday.html",
-      "kind": "draft",
-      "publicLaunchIntent": "DRAFT staging page for the Shadow Faraday Zero-Out roadmap (docs/SUNDOG_V_FARADAY.md, v0.1), Phase 1-4 ledger (docs/SHADOW_FARADAY.md), Branch A Phase 3 receipt (docs/FARADAY_PHASE3_DERIVATIONS.md), and Phase 4 verification/falsification receipt (docs/FARADAY_PHASE4_VERIFICATION.md). Carries noindex,nofollow and a visible DRAFT banner. Not a launch-ready public-share page: Phase 5 chapter close and Bucket 1 of the SEO & social-readiness roadmap (designed 1200x630 og:image, full JSON-LD TechArticle, tuned title/description, internal link from index.html, validator pass) are owed before this URL may be shared externally. Treated as Class D (internal-only) in the SEO matrix until promoted."
+      "kind": "evidence-page",
+      "publicLaunchIntent": "Public Shadow Faraday Zero-Out evidence page. Experiment chapter is closed: Phases 1-5 receipts cross-linked at docs/SHADOW_FARADAY.md (with Branch A Phase 3 in docs/FARADAY_PHASE3_DERIVATIONS.md, 5/5 Phase 4 battery in docs/FARADAY_PHASE4_VERIFICATION.md via npm run faraday:phase4, and Phase 5 chapter close at docs/SHADOW_FARADAY.md#phase-5-chapter-close with receipts catalog, scope limitations, extension menu, and fidelity audit). Bucket 1 local artifacts are present: designed 1200x630 og:image at public/og/faraday.png, full OG/Twitter metadata, JSON-LD TechArticle, sitemap entry, and index.html internal link. Post-deploy LinkedIn/Twitter validator pass remains to record after deployment."
     }
   ]
 }

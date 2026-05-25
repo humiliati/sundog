@@ -263,6 +263,37 @@ def viz_mines_grid() -> str:
 """
 
 
+def viz_faraday_loop() -> str:
+    """Faraday loop closure: flux surface, electric loop, and receipt stack."""
+    return """
+  <g transform="translate(700,135)">
+    <text x="190" y="-15" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">LOCAL LOOP CLOSURE</text>
+    <ellipse cx="150" cy="155" rx="122" ry="82" fill="#2A5570" fill-opacity="0.08" stroke="#2A5570" stroke-width="2" stroke-dasharray="5 5"/>
+    <ellipse cx="150" cy="155" rx="145" ry="105" fill="none" stroke="#B53A2C" stroke-width="3"/>
+    <polygon points="295,151 282,143 282,159" fill="#B53A2C"/>
+    <polygon points="8,159 21,151 21,167" fill="#B53A2C"/>
+
+    <g stroke="#2A5570" stroke-width="2.4" fill="#2A5570">
+      <line x1="95" y1="95" x2="95" y2="210"/>
+      <polygon points="95,220 88,205 102,205"/>
+      <line x1="150" y1="75" x2="150" y2="235"/>
+      <polygon points="150,245 143,230 157,230"/>
+      <line x1="205" y1="95" x2="205" y2="210"/>
+      <polygon points="205,220 198,205 212,205"/>
+    </g>
+
+    <text x="150" y="48" font-family="Georgia, serif" font-size="28" font-weight="700" font-style="italic" fill="#2A5570" text-anchor="middle">B(t)</text>
+    <text x="320" y="165" font-family="Georgia, serif" font-size="28" font-weight="700" font-style="italic" fill="#B53A2C">E</text>
+
+    <g transform="translate(250,265)">
+      <rect x="0" y="0" width="185" height="76" rx="8" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.4"/>
+      <text x="18" y="28" font-family="Courier New, Courier, monospace" font-size="16" font-weight="700" fill="#2E7D5A">Branch A</text>
+      <text x="18" y="52" font-family="Courier New, Courier, monospace" font-size="14" fill="#1A3A52">Phase 4: 5/5</text>
+    </g>
+  </g>
+"""
+
+
 # ---------- Card configs ----------
 
 CARDS = {
@@ -348,6 +379,18 @@ CARDS = {
         "url": "sundog.cc/sundog",
         "viz": viz_halo_atlas,
     },
+    "faraday": {
+        "filename": "faraday.png",
+        "eyebrow": "SUNDOG · FARADAY RECEIPT",
+        "headline": ["Local shadows", "close the loop."],
+        "lede": [
+            "Branch A on the registered",
+            "classical-vacuum domain.",
+            "Five-phase receipt chain closed.",
+        ],
+        "url": "sundog.cc/faraday",
+        "viz": viz_faraday_loop,
+    },
 }
 
 
@@ -362,17 +405,34 @@ def render(name: str) -> pathlib.Path:
     )
     svg_path = OUT_DIR / cfg["filename"].replace(".png", ".svg")
     png_path = OUT_DIR / cfg["filename"]
-    svg_path.write_text(svg)
+    svg_path.write_text(svg, encoding="utf-8")
     # CairoSVG rasterize (ImageMagick was compiled --without-rsvg, so its
     # internal MSVG parser fails on stop-opacity / fill-opacity, producing
-    # solid-colour backgrounds. CairoSVG is a real SVG renderer.)
-    import cairosvg
-    cairosvg.svg2png(
-        bytestring=svg.encode("utf-8"),
-        write_to=str(png_path),
-        output_width=1200,
-        output_height=630,
-    )
+    # solid-colour backgrounds. If CairoSVG is absent, fall back to the repo's
+    # local sharp install.
+    try:
+        import cairosvg
+        cairosvg.svg2png(
+            bytestring=svg.encode("utf-8"),
+            write_to=str(png_path),
+            output_width=1200,
+            output_height=630,
+        )
+    except ModuleNotFoundError:
+        subprocess.run(
+            [
+                "node",
+                "-e",
+                (
+                    "const sharp=require('sharp');"
+                    "sharp(process.argv[1]).resize(1200,630).png().toFile(process.argv[2])"
+                    ".catch(e=>{console.error(e);process.exit(1)})"
+                ),
+                str(svg_path),
+                str(png_path),
+            ],
+            check=True,
+        )
     return png_path
 
 
@@ -380,4 +440,13 @@ def main(argv: list[str]) -> int:
     names = argv[1:] if len(argv) > 1 else list(CARDS.keys())
     for n in names:
         if n not in CARDS:
-            print(f"skip: unknown card '{n}'", file
+            print(f"skip: unknown card '{n}'", file=sys.stderr)
+            continue
+        path = render(n)
+        size = path.stat().st_size
+        print(f"  rendered {n:<10} -> {path.name} ({size//1024} KB)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv))

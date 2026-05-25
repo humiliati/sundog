@@ -186,6 +186,6 @@ by Phase 3.
 Phase 4 exits **pass**. The verification/falsification battery is complete,
 and Branch A remains supported on the registered classical vacuum domain.
 
-This does not close the chapter. Phase 5 still owes the chapter-close note,
-limitations/handoff summary, and final fidelity audit before `/faraday` can
-move toward public-share readiness.
+This did not close the chapter by itself. The Phase 5 chapter-close note,
+limitations/handoff summary, and final fidelity audit are now recorded in
+[`SHADOW_FARADAY.md#phase-5-chapter-close`](SHADOW_FARADAY.md#phase-5-chapter-close).
