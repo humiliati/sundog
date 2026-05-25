@@ -227,11 +227,27 @@ required on: `aggregate-envelope.csv`, `candidate-envelope.csv`, `paired.csv`,
 legitimately differ (per-process timestamps). To be recorded here when the
 gate runs.
 
-### Shard run log (pending, per-shard append on completion)
+### Shard run log (per-shard append on completion)
 
 | shard | `mass-ratio` | `velocityScale` | trials | wall-clock | status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| *to be filled per shard as each completes; per-shard commit discipline so any night's data is preserved as it lands* ||||||
+| 1 / 12 | 1 | 1.1 | 1,080 | 5 h 16.8 min | PASS — overnight 1, 2-concurrent w/ v=0.95 |
+| 2 / 12 | 1 | 0.95 | 1,080 | 5 h 37.4 min | PASS — overnight 1, 2-concurrent w/ v=1.1 (boundary cell, ~20 min slower) |
+
+**Overnight 1 (2026-05-25):** launched 2026-05-25T06:35:50Z; both shards
+started within 10 ms of each other (concurrent launch confirmed). All 14
+per-shard outputs emitted on both (paired/trial-outcomes/aggregate/
+envelope-map/best-by-cell/cell-class-map/cell-delta-map/candidate-envelope/
+cell-warning-quality-map/cell-precision-map/richardson-order-map/manifest/
+trials-minimal.jsonl + trials/). Trial counts 1,080/1,080 on both — no
+stalls. 2-concurrent wall-clock = max(316.8, 337.4) = **5 h 37.4 min** vs
+estimated ~10 h 54 min sequential → **1.94× speedup** (better than the
+smoke's 1.74×; smoke had more cell-cost asymmetry per-shard).
+
+**Concurrency-3 promotion status:** conditions (a) stable wall-clock,
+(b) clean per-shard CSVs, (c) no stalls — **cleared**. Condition (d) no
+thermal/interactive-UI pain — **pending operator confirmation** before
+promotion. Remains at 2 concurrent until then.
 
 ### Concurrency policy (operator pin, 2026-05-16)
 
