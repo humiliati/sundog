@@ -1154,25 +1154,40 @@ quartile audit). Codex picked D5 over D1 on the rationale that
 eigenvalue ordering is too close to the S/U definition; D5
 minimizes the tie-break surface and uses Floquet eigenvectors only
 as geometric directions. D1 + A is preserved as a named report-only
-sidecar. Locked shape: `gamma_1` = right eigenvector of the
-largest-real-part eigenvalue with a deterministic 4-step tie-break
-cascade for degenerate eigenspaces; reference frame = center-of-mass
-reduced with mass-weighted norm; feature =
-`vf = ||delta_v||^2 / (||delta_q||^2 + ||delta_v||^2)`; binning =
-supp-B quartiles, 4 x 2 contingency, df = 3, critical 11.34;
-alignment-tightness threshold 0.8 / 0.95; v0.6b sparse-cell fallback
-inheritance verbatim (seed 20260523, n_permutations = 10000);
-constant-feature retirement at sd(vf) < 0.01. Locked non-circularity
-sentence: *"v0.7a uses Floquet eigenvectors only as geometric
-directions; it does not use eigenvalue magnitude, spectral radius,
-unit-circle status, unstable-pair count, or any threshold that
-defines the published S/U label. The tested scalar is a phase-space
-composition ratio of the selected direction, not the growth rate of
-that direction."* Form lock at
-`internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md`.
-Implementation pending: `scripts/v07a_velocity_fraction_audit.py`
-(new compute: per-row variational integration of the 18-dimensional
-tangent system over one period; minutes total).
+sidecar.
+
+**Two amendments locked during the v0.7a run** (each with empirical
+evidence): R1 amended the symplecticity sanity gate from 1e-6 to
+1e-4 after the 7-row vectorized smoke showed residuals scaled with
+period / Floquet amplification rather than implementation breakage;
+R2.A added a per-row integration-failure fallback (catch, mark
+`integration_blocked`, exclude from chi-squared denominator, with a
+5%-of-catalog attrition threshold) after the first full runner
+crashed at row 76 (O_194 at m_3=0.5) inside the variational
+integrator. R2.C engineering note locked append-per-row + resume
+mode. Firewall re-asserted: residuals and blocked-row status are
+QC/provenance only.
+
+**v0.7a verdict landed 2026-05-24:**
+`velocity_fraction_blocked_integration_attrition` at
+`integration_blocked_count = 23` (8.42% of catalog, above the
+pre-registered 5%/14-row attrition threshold). 250 analyzable
+rows + 11 additional sanity-gate failures = 12.5% data-integrity
+issues. Blocked rows cluster at long-period high-m_3 (m_3 = 1.5: 4
+blocked; 1.6: 6 blocked; 1.7: 5 blocked), the same regime v0.4a's
+two-pass classifier was built to handle. At v0.7a's variational
+precision rtol = atol = 1e-12, the DOP853 step adapter cannot find
+feasible steps for the matrix variational equation along these
+orbits. **The audit is integration-attrited at the locked precision,
+NOT feature-falsified.** No chi-squared verdict is licensed; the
+D1+A z-fraction sidecar is also not evaluated. v0.7b (held-out
+predictor) is NOT licensed under the attrition verdict. The
+four-chapter envelope v0.4 + v0.5 + v0.6 + v0.7 now has four
+distinct chapter-close types: structural-negative, projection-limit,
+conditional-independence, and integration-attrition. Receipts:
+`results/isotrophy/k-facet-v07a-velocity-fraction-audit/manifest.json`,
+`scripts/v07a_velocity_fraction_smoke.py`,
+`scripts/v07a_velocity_fraction_audit.py`.
 
 ### Cross-Substrate Hand-Offs
 
