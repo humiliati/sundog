@@ -1012,13 +1012,25 @@ close at
 v0.9 opened on signed Floquet direction-composition with explicit
 anti-circular framing.
 
-## v0.9 Signed Floquet Direction-Composition (parent registered)
+## v0.9 Signed Floquet Direction-Composition (parent + v0.9a verdict landed)
 
 ### V0.9 signed Floquet direction-composition mechanism family
 
-Status: **PARENT REGISTERED 2026-05-24**. Parent registration:
+Status: **PARENT REGISTERED 2026-05-24; v0.9a VERDICT LANDED
+2026-05-24 (FAIL on both chi^2 and U-shape pattern; substantively
+informative).** Parent registration:
 [`../internal/anniversary/kfacet_v09_mechanism_preregistration.md`](../internal/anniversary/kfacet_v09_mechanism_preregistration.md).
-v0.9a (audit) is pending child registration.
+**v0.9a verdict**: `signed_vf_three_zone_fails_audit_chi2` at
+chi^2 = 7.42 vs critical 9.21 (df=2, p = 0.0245). Form lock + verdict:
+[`../internal/anniversary/kfacet_v09a_signed_vf_three_zone_form.md`](../internal/anniversary/kfacet_v09a_signed_vf_three_zone_form.md).
+The U-shape pattern check ALSO fails (mixed > positional, not
+< positional). Substantive read: **the v0.7a' U-shape was a
+quartile-boundary artifact at vf ~ 0.297**; under physical cutpoint
+at vf = 0.25 the pattern is **monotone-increasing** (positional
+11% S, mixed 34% S, velocity-heavy 44% S) but does not reach the
+chi-squared floor. The v0.7a' chi^2 = 16.43 catalog-coordinate
+positive remains valid; the U-shape MECHANISM hypothesis is
+invalidated. v0.9b is NOT licensed.
 
 Frame: v0.7a' produced chi^2 = 16.43 (p = 9.3e-4) on vf quartiles
 vs S/U. v0.8a tested unsigned purity = `abs(vf - 0.5)` and failed;
@@ -1054,27 +1066,125 @@ D. Ordinal trend + nonmonotonicity
                                            independence).
 ```
 
-Next actions:
+Completed actions:
 
-1. Pick v0.9a form between C (physical-zone) or D (trend test).
-   Lock paper-side with explicit non-circularity argument
-   (which of feature/statistic/domain is broken).
-2. Implement `scripts/v09a_*_audit.py`. Seconds runtime; reads
-   v0.7a per_row_table.csv.
-3. Run blind; land verdict at
-   `results/isotrophy/k-facet-v09a-*/manifest.json`.
-4. Conditional on v0.9a passing CLEAN: register v0.9b with
-   held-out predictor (default leave-one-m_3-bin-out on 250 rows).
-   Conditional on v0.9a failing: close v0.9 chapter on the
-   specific pattern hypothesis; user weighs bandwidth tradeoff
-   against Phase 15+.
+1. ~~Pick v0.9a form.~~ DONE 2026-05-24. Locked C with physical
+   cutpoints {0.25, 0.50} (positional-dominant / mixed /
+   velocity-heavy). Anti-circular discipline: two of three
+   conditions broken (feature derivation via physical cutpoints,
+   test derivation via pattern-specific verdict tree).
+2. ~~Implement `scripts/v09a_signed_vf_three_zone_audit.py`.~~ DONE.
+3. ~~Run blind; land verdict.~~ DONE.
+
+Result:
+
+```text
+verdict:  signed_vf_three_zone_fails_audit_chi2
+chi^2:    7.42  vs critical 9.21 (df=2, p=0.01)
+p_value:  0.0245
+alignment_tightness:  0.5697
+
+three-zone contingency:
+  positional-dominant (vf < 0.25):  N=19   S_frac=0.1053
+  mixed (0.25 <= vf < 0.50):        N=165  S_frac=0.3394
+  velocity-heavy (vf >= 0.50):      N=66   S_frac=0.4394
+
+U-shape pattern check:
+  mixed < positional?   FALSE  (0.34 > 0.11)
+  mixed < velocity?     TRUE   (0.34 < 0.44)
+  u_shape_confirmed?    FALSE
+```
+
+Substantive interpretation: the v0.7a' U-shape was a quartile-
+boundary artifact at vf ~ 0.297. Under physical cutpoint vf = 0.25,
+the positional-dominant zone shrinks from 63 to 19 rows and its
+S-fraction collapses from 49% to 11%. The actual physical pattern
+is **monotone-increasing** in vf: positional < mixed < velocity-
+heavy. The v0.7a' chi^2 = 16.43 catalog-coordinate result remains
+valid; the U-shape MECHANISM hypothesis is invalidated.
+
+Next action: ~~paper-side direction call.~~ DONE 2026-05-24. v0.9
+chapter closed; isotrophy program paused at end-of-v0.9. Chapter
+close at
+[`../internal/anniversary/kfacet_v09_writeup.md`](../internal/anniversary/kfacet_v09_writeup.md);
+program pause at
+[`../internal/anniversary/kfacet_isotrophy_program_pause.md`](../internal/anniversary/kfacet_isotrophy_program_pause.md).
+
+## Isotrophy Program PAUSED (2026-05-24)
+
+The K_facet isotrophy program paused at end-of-v0.9 after seven
+sequential pre-registered chapters with seven distinct chapter-close
+types. Load-bearing substantive finding: v0.7a' chi^2 = 16.43
+positive on the 250-row analyzable subset (branch-independent at
+alignment 0.70). Load-bearing meta-finding: under physical zones,
+the actual pattern is monotone-increasing in vf (positional 11% S,
+mixed 34% S, velocity-heavy 44% S); but chi-squared on three zones
+(7.42) does not pass p = 0.01.
+
+Program pause document:
+[`../internal/anniversary/kfacet_isotrophy_program_pause.md`](../internal/anniversary/kfacet_isotrophy_program_pause.md).
+
+Bandwidth redirects to three-body Phase 15+ (survival pocket) and
+the coarse-graining proof trunk per the original direction call.
+
+### Lab Initiate Reopening Avenues (waste compute on)
+
+Eight concrete reopening directions for any lab initiate with
+bandwidth to spare. Full descriptions, hypotheses, implementation
+sketches, and non-circularity arguments at
+[`../internal/anniversary/kfacet_isotrophy_program_pause.md`](../internal/anniversary/kfacet_isotrophy_program_pause.md).
+
+```text
+1. Jonckheere-Terpstra trend test on v0.9a three-zone data
+   (LOW EFFORT, HIGH SUBSTANCE). Tests the monotone-increasing
+   pattern directly; J-T has more power than chi^2 for ordered
+   alternatives. Non-circular by breaking test-statistic condition.
+
+2. v0.7a' held-out predictor on the 250 analyzable rows
+   (LOW-MEDIUM EFFORT). Re-register v0.7b on the restricted
+   scope; leave-one-m_3-bin-out + asymmetric McNemar + positive-
+   delta gate.
+
+3. v0.7a relaxed-precision re-run at rtol = atol = 1e-10
+   (MEDIUM-HIGH EFFORT). Attempts to clear the 23 attrited rows
+   and recover catalog-wide v0.7a claims.
+
+4. m_3 = 0.4 sub-catalog targeted mechanism investigation
+   (MEDIUM EFFORT, HIGH SUBSTANCE). The m_3 = 0.4 cluster has
+   been the load-bearing positive throughout; a within-bin
+   audit may reveal substrate-specific structure.
+
+5. Joint (vf, Q_E) audit on the 250 analyzable rows
+   (MEDIUM EFFORT). Cochran-Mantel-Haenszel-style stratified
+   test of Q_vf perp S/U given Q_E.
+
+6. Cross-substrate transfer test (HIGH EFFORT). Apply the v0.7a
+   velocity-fraction mechanism to a different three-body sub-
+   catalog (mesa analog, free-fall, choreography) to test
+   substrate-specificity.
+
+7. Action-angle / KAM-style decomposition (HIGH EFFORT,
+   THEORETICAL). Per-row action-angle variables stratify by
+   integrability proximity; KAM-stable orbits are predicted
+   stable.
+
+8. Full-catalog audit at rtol = atol = 1e-10 with v0.7a R2.A
+   discipline (alternative to avenue 3 if precision relaxation
+   is sufficient to clear attrition).
+```
+
+All eight avenues respect the locked methodology surface AND the
+anti-circular framing discipline. Reopening the program at any
+of these is invited; mechanism-laundering (silently re-testing
+v0.7a' under different labels) is not.
 
 Stop condition:
 
-If a v0.9a form lock does NOT break at least one of (feature
-derivation, test statistic, evaluation domain), it is REJECTED
-pre-compute. Forms A and B from the candidate list are already
-ruled out by the parent registration's anti-circular discipline.
+If a lab initiate's reopening avenue runs and produces a clean
+verdict (pass, fail, or sparse-inconclusive) under the locked
+discipline, the program may UNPAUSE at that point and the chain
+extends. Until then, the isotrophy section is closed for active
+investigation.
 
 Frame: v0.4 ruled out the Z_2 shadow. v0.5 ruled out the 2-bit catalog
 branch shadow. v0.6 ruled out the (E, |L|) catalog-coordinate shadow

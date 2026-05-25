@@ -1234,13 +1234,43 @@ direction-composition mechanism at
 with a new permanent **anti-circular framing discipline**: any
 v0.9 child form lock that tests vf-ordering vs S/U on the v0.7a'
 analyzable subset via chi^2 of independence reproduces v0.7a' by
-linear-transform invariance. To be honest, v0.9a must break at
-least one of (feature derivation, test statistic, evaluation
-domain). Candidates A (ordered quartile) and B (binary
-vf<0.5 threshold) are REJECTED pre-compute. Live candidates: C
-(three-zone audit with physically-motivated cutpoints) and D
-(ordinal trend + nonmonotonicity test, e.g., Jonckheere-Terpstra).
-D is the cleanest non-circular path. v0.9a form lock pending.
+linear-transform invariance.
+
+**v0.9a form lock + verdict landed 2026-05-24:** Codex picked
+candidate C (three-zone audit with physical cutpoints
+{0.25, 0.50}). Verdict:
+`signed_vf_three_zone_fails_audit_chi2` at `chi^2 = 7.42` vs
+critical 9.21 (df=2, p = 0.0245). Substantive interpretation:
+the v0.7a' U-shape was a quartile-boundary artifact at vf ~ 0.297;
+under physical cutpoint vf = 0.25, the positional-dominant zone
+shrinks from 63 to 19 rows and its S-fraction collapses from 49%
+to 10.5%. The actual physical pattern is **monotone-increasing
+in vf**, but chi^2 does not reach the p = 0.01 floor.
+
+**v0.9 chapter closed 2026-05-24** as a structural-negative on the
+U-shape mechanism hypothesis with the monotone-increasing meta-
+finding preserved. Chapter close at
+`internal/anniversary/kfacet_v09_writeup.md`.
+
+**Isotrophy program PAUSED 2026-05-24 at end-of-v0.9.** Pause
+document at `internal/anniversary/kfacet_isotrophy_program_pause.md`.
+Seven sequential pre-registered chapters; seven distinct chapter-
+close types; one load-bearing substantive positive (v0.7a' chi^2 =
+16.43, branch-independent, signed-direction); one comprehensive
+methodology surface (closure-relative discipline, two-pass
+classifier, audit-then-predictor, asymmetric falsifier, alignment-
+tightness guard, sparse-cell fallback, non-circularity sentence
+template for Floquet features, per-row integration-failure
+fallback, append-per-row resume, anti-circular framing for
+sequential audits). **Eight concrete reopening avenues** recorded
+for lab initiates: Jonckheere-Terpstra trend test on v0.9a;
+held-out v0.7b on the 250 analyzable rows; v0.7a relaxed-precision
+re-run; m_3 = 0.4 sub-catalog targeted investigation; joint
+(vf, Q_E) audit; cross-substrate transfer; action-angle / KAM
+decomposition; full-catalog audit at rtol = 1e-10. The program
+PAUSES, it does not RETIRE -- reopening is invited under the
+locked discipline. Bandwidth redirects to three-body Phase 15+
+per the original direction call.
 
 ### Cross-Substrate Hand-Offs
 
