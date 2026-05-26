@@ -294,6 +294,53 @@ def viz_faraday_loop() -> str:
 """
 
 
+def viz_safety_method_bridge() -> str:
+    """Method bridge: Branch A receipt into the three safety hooks."""
+    return """
+  <g transform="translate(620,120)">
+    <text x="220" y="-12" font-family="Verdana, Geneva, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#6A7680" text-anchor="middle">RECEIPT · BRIDGE · HOOKS</text>
+
+    <rect x="0" y="36" width="150" height="150" rx="8" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.5"/>
+    <text x="75" y="66" font-family="Courier New, Courier, monospace" font-size="14" font-weight="700" fill="#2E7D5A" text-anchor="middle">Branch A</text>
+    <ellipse cx="75" cy="116" rx="54" ry="34" fill="#2A5570" fill-opacity="0.08" stroke="#2A5570" stroke-width="2"/>
+    <ellipse cx="75" cy="116" rx="66" ry="48" fill="none" stroke="#B53A2C" stroke-width="2.5"/>
+    <polygon points="143,114 132,108 132,120" fill="#B53A2C"/>
+    <text x="75" y="170" font-family="Verdana, Geneva, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">Faraday receipt</text>
+
+    <path d="M158,111 H208" stroke="#C99517" stroke-width="2.5" marker-end="url(#arrowgold)"/>
+
+    <g transform="translate(220,62)">
+      <circle cx="55" cy="55" r="48" fill="#FFFFFF" stroke="#C99517" stroke-width="2"/>
+      <text x="55" y="52" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#1A3A52" text-anchor="middle">P</text>
+      <text x="55" y="75" font-family="Verdana, Geneva, sans-serif" font-size="11" fill="#6A7680" text-anchor="middle">shadow</text>
+    </g>
+
+    <path d="M330,111 H382" stroke="#C99517" stroke-width="2.5" marker-end="url(#arrowgold)"/>
+
+    <g transform="translate(390,36)">
+      <rect x="0" y="0" width="168" height="150" rx="8" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.5"/>
+      <rect x="18" y="24" width="132" height="26" rx="4" fill="#EAF3F8" stroke="#9BB4C5"/>
+      <text x="84" y="42" font-family="Verdana, Geneva, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">local readout</text>
+      <rect x="18" y="62" width="132" height="26" rx="4" fill="#FFF7D7" stroke="#C99517"/>
+      <text x="84" y="80" font-family="Verdana, Geneva, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">structural zero</text>
+      <rect x="18" y="100" width="132" height="26" rx="4" fill="#FBEDEA" stroke="#D9A19A"/>
+      <text x="84" y="118" font-family="Verdana, Geneva, sans-serif" font-size="12" font-weight="700" fill="#1A3A52" text-anchor="middle">named quarantine</text>
+    </g>
+
+    <g transform="translate(20,230)">
+      <rect x="0" y="0" width="520" height="78" rx="8" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.4"/>
+      <text x="22" y="30" font-family="Verdana, Geneva, sans-serif" font-size="15" font-weight="700" fill="#1A3A52">good-faith hook staged</text>
+      <text x="22" y="56" font-family="Verdana, Geneva, sans-serif" font-size="13" fill="#40505C">credit waits for citation; claims wait for falsifiers</text>
+    </g>
+  </g>
+  <defs>
+    <marker id="arrowgold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0,0 L 10,5 L 0,10 z" fill="#C99517"/>
+    </marker>
+  </defs>
+"""
+
+
 # ---------- Card configs ----------
 
 CARDS = {
@@ -390,6 +437,18 @@ CARDS = {
         ],
         "url": "sundog.cc/faraday",
         "viz": viz_faraday_loop,
+    },
+    "safety-method": {
+        "filename": "safety-method.png",
+        "eyebrow": "SUNDOG · SAFETY METHOD",
+        "headline": ["Shadow method", "as safety template."],
+        "lede": [
+            "Faraday Branch A becomes",
+            "three falsifiable AI-safety",
+            "translation hooks.",
+        ],
+        "url": "sundog.cc/safety-method",
+        "viz": viz_safety_method_bridge,
     },
 }
 

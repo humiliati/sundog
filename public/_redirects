@@ -5,6 +5,7 @@
 /balance.html /balance 301
 /chat.html /chat 301
 /capset.html /capset 301
+/faraday.html /faraday 301
 /geometry.html /geometry 301
 /h-of-x.html /h-of-x 301
 /legend.html /legend 301
@@ -12,6 +13,7 @@
 /mines.html /mines 301
 /origin.html /origin 301
 /repo-map.html /repo-map 301
+/safety-method.html /safety-method 301
 /paper-theme-demo.html /paper-theme-demo 301
 /phase3-tests.html /phase3-tests 301
 /structural-failure.html /structural-failure 301

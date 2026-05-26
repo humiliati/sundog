@@ -589,14 +589,19 @@
             <h1>Do local shadows recover Faraday induction?</h1>
             <p class="lede">
                 A minimal, falsification-first experiment. We define a local,
-                gauge-invariant <em>shadow projection</em> 𝒫<sub>shadow</sub>
-                and ask whether it is sufficient to close Faraday's law of
-                induction algebraically — without reconstructing the
-                electromagnetic potential <em>A<sub>μ</sub></em> globally.
-                The result lands in one of three pre-registered zones:
-                <strong>clean structural zero</strong>,
-                <strong>named quarantine</strong>, or
-                <strong>bounded failure</strong>. All three ship a receipt.
+                <a class="sd-def" href="/legend#gauge-invariance-shadow" data-def="The readout is unchanged under A → A + dλ by algebraic identity, not by approximate cancellation. In EM that follows from ∮ dλ = 0.">gauge-invariant</a>
+                <a class="sd-def" href="/legend#shadow-projection" data-def="A local, gauge-invariant readout that extracts an algebraic quantity from a small spacetime stencil without reconstructing a globally consistent potential.">shadow projection</a>
+                𝒫<sub>shadow</sub> and ask whether it is sufficient to
+                close Faraday's law of induction algebraically — without
+                reconstructing the electromagnetic potential
+                <em>A<sub>μ</sub></em> globally. The result lands in one of
+                three pre-registered zones:
+                <a class="sd-def" href="/legend#branch-a" data-def="All registered clean-domain residuals evaluate to exact algebraic zeros. The strongest landing — and the most demanding receipt. Faraday earned this.">clean structural zero</a>,
+                <a class="sd-def" href="/legend#branch-b" data-def="One precisely-named survivor — boundary at infinity, Aharonov–Bohm phase, monopole insertion, a registered topological obstruction. Closure is conditional; the failure is articulate.">named quarantine</a>, or
+                <a class="sd-def" href="/legend#branch-c" data-def="A surviving global-reconstruction, gauge-choice, nonlocal, or unregistered residual inside the registered clean domain. The bound is publishable; the prior is updated.">bounded failure</a>.
+                All three ship a receipt. For the AI-safety translation of
+                this same apparatus, see
+                <a href="/safety-method">the shadow-method bridge essay</a>.
             </p>
 
             <div class="status-ribbon" aria-label="Status">
@@ -860,14 +865,18 @@
         <section class="far-section" aria-label="The shadow projection operator">
             <div class="far-card">
                 <p class="eyebrow">The Apparatus · II</p>
-                <h2>𝒫<sub>shadow</sub> is the plaquette holonomy on <em>A</em>.</h2>
+                <h2>𝒫<sub>shadow</sub> is the
+                    <a class="sd-def" href="/legend#plaquette-holonomy" data-def="The Shadow Faraday realisation of P_shadow: the line integral ∮ A around the boundary of a coordinate plaquette. By Stokes it equals the flux ∫ F.">plaquette holonomy</a>
+                    on <em>A</em>.</h2>
                 <p>
-                    Phase 2 fixes the operator. For a point <em>x</em>, a
-                    coordinate plaquette
-                    <em>ω<sub>μν</sub>(x, ε)</em> of edge <em>ε</em>, and the
-                    closed boundary loop <em>∂ω</em>, the finite-stencil
-                    operator is the Wilson-loop-style line integral of the
-                    potential one-form:
+                    Phase 2 fixes the operator as a
+                    <a class="sd-def" href="/legend#two-tier-operator" data-def="P_shadow^point is the algebraic zero-out object (equal to F_μν in the smooth limit); P_shadow^stencil is the locality receipt. Public claims must not blur the two.">two-tier</a>
+                    coordinate plaquette holonomy. For a point <em>x</em>,
+                    a coordinate plaquette
+                    <em>ω<sub>μν</sub>(x, ε)</em> of edge <em>ε</em>, and
+                    the closed boundary loop <em>∂ω</em>, the
+                    finite-stencil operator is the Wilson-loop-style line
+                    integral of the potential one-form:
                 </p>
                 <div class="load-bearing-quote" style="text-align: center; font-size: 1.25rem;">
                     𝒫<sub>shadow</sub><sup>stencil</sup>[<em>A</em>]<sub>μν</sub>(<em>x, ε</em>)
@@ -899,10 +908,15 @@
                     <em>∂ω</em> with smooth <em>λ</em>, so the gauge term
                     drops out of the holonomy by Stokes. The audit
                     <em>fails by name</em> outside that domain: five
-                    quarantine hooks — regularity, topology, monopole,
-                    operator-stencil commutator, motional EMF — are
-                    enumerated in the Phase 2 receipt before any Phase 3
-                    algebra runs.
+                    <a class="sd-def" href="/legend#named-quarantine" data-def="A pre-registered failure class paired with the branch it forces. Phase 2 ledger names five for Shadow Faraday: regularity, topology, monopole, operator-stencil commutator, motional EMF.">quarantine hooks</a> —
+                    regularity, topology, monopole, operator-stencil
+                    commutator, motional EMF — are enumerated in the
+                    Phase 2 receipt before any Phase 3 algebra runs. The
+                    discipline lineage is
+                    <a href="/isotrophy">Isotrophy K_facet v0.3h</a>,
+                    whose audit chain landed 20 structural-zero receipts
+                    and the named O_617 quarantine on exactly this
+                    pre-registration pattern.
                 </p>
                 <p style="font-family: var(--sd-font-data); font-size: 0.82rem; color: #6A7680;">
                     Phase 2 receipt:
@@ -1089,60 +1103,48 @@
                 <div class="not-card">
                     <h3>Not a universal result.</h3>
                     <p>
-                        The experiment chapter is closed (Phases 1–5 signed
-                        off, Branch A on the registered classical-vacuum
-                        domain), but the claim remains scoped to smooth,
-                        source-free, contractible patches and registered
-                        static surface-loop pairs.
+                        The experiment closed Branch A on the registered
+                        classical-vacuum domain. Extensions to sourced EM,
+                        non-contractible topology, distributional fields,
+                        curved spacetime, quantum EM, plasma, and moving
+                        surfaces are named limitations, not silent claims.
                     </p>
                 </div>
                 <div class="not-card">
-                    <h3>Not a derivation of Maxwell's equations.</h3>
+                    <h3>Not a derivation of Maxwell.</h3>
                     <p>
-                        The pre-reg asks one specific question — does a
+                        Phase 3 asks one specific question &mdash; does a
                         local shadow projection suffice for the integral
                         form of Faraday's law in the classical vacuum
-                        case? — not whether the full Maxwell system
+                        case? &mdash; not whether the full Maxwell system
                         re-derives from shadow primitives.
                     </p>
                 </div>
                 <div class="not-card">
-                    <h3>Not a claim about quantum EM.</h3>
+                    <h3>Not a claim about AI.</h3>
                     <p>
-                        Scope is explicit: classical vacuum, flat
-                        spacetime or local inertial frame, source-free in
-                        the first pass. Extensions to sourced, curved, or
-                        quantum cases are suggested next steps, not part
-                        of this experiment.
-                    </p>
-                </div>
-                <div class="not-card">
-                    <h3>Not a validator receipt.</h3>
-                    <p>
-                        The page carries the local Bucket 1 artifacts:
-                        designed 1200×630 <code>og:image</code>, JSON-LD
-                        <code>TechArticle</code>, internal link, and sitemap
-                        entry. A post-deploy LinkedIn/Twitter validator pass
-                        still has to be recorded after deployment.
+                        For the AI-safety translation of the same
+                        apparatus, see the dedicated bridge essay at
+                        <a href="/safety-method">/safety-method</a>,
+                        marked SKETCH and load-bearing on this Branch A
+                        receipt as its worked example.
                     </p>
                 </div>
             </div>
         </section>
 
-        <!-- ============================================================
-             INSPECTION TRAIL
-             ============================================================ -->
         <section class="far-section">
             <p class="eyebrow">Inspection Trail</p>
             <div class="source-list">
-                <a href="docs/SUNDOG_V_FARADAY.md">Sundog · Shadow Faraday Zero-Out Roadmap v0.1</a>
-                <a href="docs/SHADOW_FARADAY.md">Phase 1–5 Ledger · 𝒫<sub>shadow</sub>, Branch A, battery index, and chapter close</a>
-                <a href="docs/SHADOW_FARADAY.md#phase-5-chapter-close">Phase 5 Chapter Close · receipts catalog, limitations, extensions, fidelity audit</a>
-                <a href="docs/FARADAY_PHASE3_DERIVATIONS.md">Phase 3 Derivation Receipt · Branch A structural zero</a>
-                <a href="docs/FARADAY_PHASE4_VERIFICATION.md">Phase 4 Verification Receipt · 5/5 support battery</a>
-                <a href="/isotrophy">Isotrophy K_facet v0.3h — precedent for the receipt discipline</a>
-                <a href="/threebody">Three-Body Workbench — where the local-probe pattern was forged</a>
-                <a href="/legend">Sundog Legend — shared vocabulary (σ₃, gauge cocycle, audit chain)</a>
+                <a href="docs/SUNDOG_V_FARADAY.md">Sundog &middot; Shadow Faraday Zero-Out Roadmap v0.1</a>
+                <a href="docs/SHADOW_FARADAY.md">Phase 1&ndash;5 Ledger &middot; receipts catalog, chapter close</a>
+                <a href="docs/SHADOW_FARADAY.md#phase-5-chapter-close">Phase 5 Chapter Close &middot; limitations, extensions, fidelity audit</a>
+                <a href="docs/FARADAY_PHASE3_DERIVATIONS.md">Phase 3 Derivation Receipt &middot; Branch A structural zero</a>
+                <a href="docs/FARADAY_PHASE4_VERIFICATION.md">Phase 4 Verification Receipt &middot; 5/5 support battery</a>
+                <a href="/safety-method">Safety-method bridge essay &middot; the AI-safety translation</a>
+                <a href="/isotrophy">Isotrophy K_facet v0.3h &middot; precedent for the receipt discipline</a>
+                <a href="/threebody">Three-Body Workbench &middot; where the local-probe pattern was forged</a>
+                <a href="/legend#shadow-faraday-heading">Sundog Legend &middot; Shadow Faraday vocabulary cluster</a>
                 <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a>
                 <a href="docs/presentation/claims-and-scope.md">Claims and Scope Policy</a>
                 <a href="https://github.com/humiliati/sundog">Sundog repository on GitHub</a>
@@ -1151,9 +1153,7 @@
     </main>
 
     <footer>
-        <p>
-            The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a>
-        </p>
+        <p>The Sundog Project - <a href="docs/presentation/message-house.md">Alignment Without Sight</a></p>
         <p class="footer-links">
             <a href="https://github.com/humiliati/sundog">GitHub</a> |
             <a href="/origin">Origin</a> |
@@ -1162,9 +1162,7 @@
             <a href="docs/SCIENTIFIC_CRITERIA.md">Scientific Criteria</a> |
             <a href="docs/presentation/claims-and-scope.md">Claims Policy</a>
         </p>
-        <p class="footer-copyright">
-            &copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
-        </p>
+        <p class="footer-copyright">&copy; 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.</p>
     </footer>
 
     <script type="module" src="/js/sundog-chat-widget.mjs"></script>
