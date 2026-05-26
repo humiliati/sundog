@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Pressure Mines rail poster</title>
+  <desc id="desc">A pressure-shaded mines grid with a safe pocket, revealed path, and named failure edge.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07151f"/>
+      <stop offset="0.5" stop-color="#133149"/>
+      <stop offset="1" stop-color="#0b1720"/>
+    </linearGradient>
+    <radialGradient id="pressure" cx="0.62" cy="0.45" r="0.58">
+      <stop offset="0" stop-color="#f4c430" stop-opacity="0.34"/>
+      <stop offset="0.48" stop-color="#b8653b" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#67c9a6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#pressure)"/>
+  <g opacity="0.22" stroke="#dcebf0" stroke-width="1">
+    <path d="M0 96H1200M0 192H1200M0 288H1200M0 384H1200M0 480H1200"/>
+    <path d="M120 0V630M240 0V630M360 0V630M480 0V630M600 0V630M720 0V630M840 0V630M960 0V630M1080 0V630"/>
+  </g>
+
+  <g transform="translate(92 82)">
+    <text x="0" y="0" fill="#f4c430" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" font-weight="800" letter-spacing="5">PRESSURE MINES</text>
+    <text x="0" y="40" fill="#e9f1f4" font-family="Arial, sans-serif" font-size="24">pressure maps become decisions</text>
+  </g>
+
+  <g transform="translate(312 128)">
+    <rect x="-20" y="-20" width="500" height="410" rx="18" fill="#08141e" fill-opacity="0.64" stroke="#f4c430" stroke-opacity="0.28"/>
+    <g stroke="#dcebf0" stroke-opacity="0.2" stroke-width="2">
+      <path d="M0 0H420M0 60H420M0 120H420M0 180H420M0 240H420M0 300H420M0 360H420"/>
+      <path d="M0 0V360M60 0V360M120 0V360M180 0V360M240 0V360M300 0V360M360 0V360M420 0V360"/>
+    </g>
+    <g>
+      <rect x="2" y="2" width="56" height="56" rx="6" fill="#174636"/>
+      <rect x="62" y="2" width="56" height="56" rx="6" fill="#244c37"/>
+      <rect x="122" y="2" width="56" height="56" rx="6" fill="#6a5b26"/>
+      <rect x="182" y="2" width="56" height="56" rx="6" fill="#735625"/>
+      <rect x="242" y="2" width="56" height="56" rx="6" fill="#425132"/>
+      <rect x="302" y="2" width="56" height="56" rx="6" fill="#9a6d23"/>
+      <rect x="362" y="2" width="56" height="56" rx="6" fill="#78482c"/>
+
+      <rect x="2" y="62" width="56" height="56" rx="6" fill="#1f543d"/>
+      <rect x="62" y="62" width="56" height="56" rx="6" fill="#356343"/>
+      <rect x="122" y="62" width="56" height="56" rx="6" fill="#7a6a2e"/>
+      <rect x="182" y="62" width="56" height="56" rx="6" fill="#9d7427"/>
+      <rect x="242" y="62" width="56" height="56" rx="6" fill="#4a5e38"/>
+      <rect x="302" y="62" width="56" height="56" rx="6" fill="#83642c"/>
+      <rect x="362" y="62" width="56" height="56" rx="6" fill="#2f6047"/>
+
+      <rect x="2" y="122" width="56" height="56" rx="6" fill="#6f6d2c"/>
+      <rect x="62" y="122" width="56" height="56" rx="6" fill="#285d42"/>
+      <rect x="122" y="122" width="56" height="56" rx="6" fill="#2f684a"/>
+      <rect x="182" y="122" width="56" height="56" rx="6" fill="#c99517"/>
+      <rect x="242" y="122" width="56" height="56" rx="6" fill="#d7a928"/>
+      <rect x="302" y="122" width="56" height="56" rx="6" fill="#706529"/>
+      <rect x="362" y="122" width="56" height="56" rx="6" fill="#80412f"/>
+
+      <rect x="2" y="182" width="56" height="56" rx="6" fill="#8a722b"/>
+      <rect x="62" y="182" width="56" height="56" rx="6" fill="#316746"/>
+      <rect x="122" y="182" width="56" height="56" rx="6" fill="#67c9a6"/>
+      <rect x="182" y="182" width="56" height="56" rx="6" fill="#67c9a6"/>
+      <rect x="242" y="182" width="56" height="56" rx="6" fill="#9a7a2b"/>
+      <rect x="302" y="182" width="56" height="56" rx="6" fill="#b8653b"/>
+      <rect x="362" y="182" width="56" height="56" rx="6" fill="#8b3b31"/>
+
+      <rect x="2" y="242" width="56" height="56" rx="6" fill="#7c662d"/>
+      <rect x="62" y="242" width="56" height="56" rx="6" fill="#496b3d"/>
+      <rect x="122" y="242" width="56" height="56" rx="6" fill="#335f43"/>
+      <rect x="182" y="242" width="56" height="56" rx="6" fill="#8c742b"/>
+      <rect x="242" y="242" width="56" height="56" rx="6" fill="#b8653b"/>
+      <rect x="302" y="242" width="56" height="56" rx="6" fill="#b04535"/>
+      <rect x="362" y="242" width="56" height="56" rx="6" fill="#6e2d2a"/>
+
+      <rect x="2" y="302" width="56" height="56" rx="6" fill="#2f6047"/>
+      <rect x="62" y="302" width="56" height="56" rx="6" fill="#6b6a2c"/>
+      <rect x="122" y="302" width="56" height="56" rx="6" fill="#8a6f2a"/>
+      <rect x="182" y="302" width="56" height="56" rx="6" fill="#9c5332"/>
+      <rect x="242" y="302" width="56" height="56" rx="6" fill="#b04535"/>
+      <rect x="302" y="302" width="56" height="56" rx="6" fill="#8c332d"/>
+      <rect x="362" y="302" width="56" height="56" rx="6" fill="#2f6047"/>
+    </g>
+    <path d="M90 210 C136 196 155 207 182 210 C208 214 224 190 266 176" fill="none" stroke="#f8fbfc" stroke-opacity="0.9" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="150" cy="210" r="22" fill="#67c9a6" filter="url(#glow)"/>
+    <circle cx="150" cy="210" r="10" fill="#f8fbfc"/>
+    <g transform="translate(330 330)">
+      <circle cx="0" cy="0" r="23" fill="#b04535" stroke="#ffb4a6" stroke-width="4"/>
+      <path d="M-12-12 12 12M12-12-12 12" stroke="#fffaf0" stroke-width="5" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <g transform="translate(825 370)">
+    <rect x="0" y="0" width="270" height="104" rx="10" fill="#08141e" fill-opacity="0.76" stroke="#67c9a6" stroke-opacity="0.45"/>
+    <text x="24" y="36" fill="#67c9a6" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18" font-weight="800">CONFIRMED POCKET</text>
+    <text x="24" y="66" fill="#dcebf0" font-family="Arial, sans-serif" font-size="17">safe progress before failure</text>
+  </g>
+</svg>
