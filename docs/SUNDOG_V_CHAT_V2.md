@@ -296,9 +296,10 @@ when all ten land.
 Once v1.0 ships, the product earns the right to incremental work on
 top. Candidate items, in rough priority order:
 
-- **Open-source license + contribution guide.** The repo is already
-  public; a polished CONTRIBUTING.md and a clearer LICENSE notice
-  remove a friction point for outside contributors.
+- **Rights notice + contribution intake.** The repo is already
+  public for inspection; a polished CONTRIBUTING.md, clearer rights
+  notice, and assignment/CLA path remove a friction point for outside
+  contributors without implying an open-source grant.
 - **Embedded mode.** A version of the widget any external site can
   drop in to query a Sundog-flavored corpus of its own. Bigger
   product surface; probably v1.2 or later.
@@ -488,9 +489,11 @@ the widget surface. The privacy posture is visible from the trace
 drawer ("This conversation is not stored.") and from a short
 `/privacy` page reachable from the launcher footer.
 
-**Open source.** The repo is already public. v1.0 ships with a
-clearer LICENSE notice, a CONTRIBUTING.md, and a README pass on the
-top-level repo so a visitor lands on a comprehensible front page.
+**Inspectable, rights-reserved source.** The repo is already public
+for inspection. v1.0 ships with a clearer rights notice, a
+CONTRIBUTING.md, and a README pass on the top-level repo so a visitor
+lands on a comprehensible front page without mistaking visibility for
+a reuse license.
 
 **Inspectable claims.** The bounded research claim (§4 above), the
 "what this does not show" callout, the downloadable probe report, and

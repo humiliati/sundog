@@ -4,7 +4,10 @@
 
 ---
 
-This roadmap formalizes the brand, copyright, and entity-formation plan for Sundog Research Lab. It progresses from immediate legal hygiene (Phase 0) through formal registration (Phase 1) to eventual entity independence (Phase 2).
+This roadmap formalizes the guarded brand, copyright, patent/trademark, and
+entity-option plan for Sundog Research Lab. It progresses from immediate rights
+hygiene through formal registrations, optional nonprofit formation, licensing,
+or asset transfer depending on the strongest external path.
 
 For public voice, Mythos stress-test lessons, and the About-page brand spine,
 see [`BRAND_POSITIONING.md`](BRAND_POSITIONING.md). This document remains the
@@ -16,22 +19,26 @@ legal/IP execution roadmap.
 
 The repository now has:
 - ✅ COPYRIGHT.md inventory of all copyrightable works (8 buckets)
-- ✅ LICENSE file (MIT with Stellar Aqua LLC copyright holder)
+- ✅ LICENSE file converted to a Stellar Aqua rights notice
 - ✅ Footer copyright notices across public HTML pages
 - ✅ About page establishing Sundog Research Lab's public research posture and current Stellar Aqua LLC sponsorship structure
 - ✅ Brand positioning note separating the Mythos stress-test lesson from the legal/IP roadmap
-- ✅ Gemini benchmark filed as second brand stress test, with crawler/redirect debugging topics recorded in `BRAND_POSITIONING.md`
+- ✅ Gemini model-feedback stress-test lesson summarized in `BRAND_POSITIONING.md`, with crawler/redirect debugging topics recorded there
 - ✅ Updated navigation with About page as primary identity page
 - ✅ Copyright headers on README.md and major documentation files
-- ✅ Package.json metadata (author, license, description)
+- ✅ Package.json metadata (author, rights-reserved package posture, description)
 
-**Firewall established:** Sundog Research Lab exists as public-facing research program identity, distinct from Stellar Aqua's operating company liability, while Stellar Aqua retains current copyright ownership and sponsor role.
+**Firewall established:** Sundog Research Lab exists as public-facing research
+program identity, distinct from Stellar Aqua's operating company liability,
+while Stellar Aqua retains current copyright ownership, sponsor role, and
+strategic options for licensing, nonprofit transfer, patent filing, or sale.
 
 ---
 
 ## Phase 0: Legal Hygiene and Documentation
 
-**Objective:** Ensure all existing IP is documented, assigned, and protected with minimal formality before external engagement.
+**Objective:** Ensure existing IP is documented, assigned, guarded, and ready
+for counsel/partner review before external engagement.
 
 **Timeline:** Immediate (0-2 months)
 
@@ -88,7 +95,8 @@ The repository now has:
 
 **Tasks:**
 - [x] Document all third-party code, libraries, and dependencies
-- [x] Verify license compatibility with MIT
+- [x] Verify third-party obligations and compatibility with the current
+  rights-reserved publication posture
 - [x] Maintain reuse ledger for MuJoCo, RK4 implementations, etc.
 
 **Deliverable:** Already exists at `docs/site/THIRD_PARTY_REUSE.md`
@@ -113,9 +121,10 @@ The repository now has:
 
 ---
 
-## Phase 1: Formal Registration and Protection
+## Phase 1: Formal Registration, Patent Triage, and Protection
 
-**Objective:** Register copyrights and trademarks to establish public record and legal standing.
+**Objective:** Register copyrightable works, evaluate marks, and triage patent
+or trade-secret candidates before broad technical disclosure.
 
 **Timeline:** 2-12 months from Phase 0 completion
 

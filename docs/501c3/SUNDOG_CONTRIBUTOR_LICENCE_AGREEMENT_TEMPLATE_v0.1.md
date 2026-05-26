@@ -28,9 +28,12 @@ The intent of this template is narrow:
   archive, sublicense, and relicense accepted contributions;
 - cover code, documentation, media, data compilations, website text,
   evaluation materials, and research artifacts in one instrument;
-- preserve an open public licensing floor for accepted contributions;
-- allow the agreement and its benefits to move to a fiscal sponsor or
-  incorporated 501(c)(3) successor.
+- preserve stewardship optionality for accepted contributions,
+  including nonprofit, commercial, patent, publication, archive,
+  acquisition, and successor-entity paths;
+- allow the agreement and its benefits to move to a fiscal sponsor,
+  incorporated 501(c)(3) successor, IP holding entity, buyer, or
+  other approved successor.
 
 Before circulating for signature, replace every bracketed field and
 delete this section or move it into an internal execution memo.
@@ -113,32 +116,31 @@ perform, publish, distribute, archive, preserve, sublicense, and
 otherwise exploit the Contribution as part of the Materials or any
 successor version of the Materials.
 
-This licence includes the right to sublicense through open-source,
-open-content, documentation, website, repository, package-distribution,
-archive, publication, fiscal-sponsor, and successor-lab channels.
+This licence includes the right to sublicense through controlled
+documentation, website, repository, package-distribution, archive,
+publication, fiscal-sponsor, successor-lab, partner, commercial,
+patent, acquisition, and other successor channels.
 
-## 5. Outbound licensing commitment
+## 5. Outbound licensing options
 
 The Project Steward may distribute accepted Contributions under:
 
 - the licence that applies to the Materials when the Contribution is
   Submitted;
 - any licence later adopted for the relevant Materials by the Project
-  Steward, fiscal sponsor, or Successor Lab, if the licence is an
-  Open Source Initiative-approved open-source licence for software or
-  a Creative Commons licence for non-software materials;
-- MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, CC BY 4.0, or CC0, as
-  appropriate to the type of Contribution;
-- a later version of any listed licence, if that licence permits later
-  versions or the governing body approves the version change.
+  Steward, fiscal sponsor, Successor Lab, IP holding entity, buyer, or
+  other approved successor;
+- a document-scoped open-content, open-source, research, archive,
+  publication, partner, commercial, nonprofit, or private license
+  chosen later by the authorized steward;
+- a later version or replacement of any adopted license, if the
+  governing body or successor approves the version change.
 
-The Project Steward may not take an accepted Contribution that was
-published under an open public licence and make the only available
-public copy proprietary. This clause does not prevent the Project
-Steward or Successor Lab from entering into evaluation, publication,
-grant, hosting, archive, or distribution agreements that are needed to
-operate the project, provided that the public licensing floor above is
-preserved.
+This template does not itself create an open-source, open-content,
+commercial, patent, trademark, hosting, training-data, or derivative
+license for the public. Outbound rights become effective only through
+the operative repository license, a signed agreement, a publication
+release, or another authorized written decision.
 
 ## 6. Patent license
 
@@ -162,7 +164,7 @@ Contribution as needed for the Project Steward and permitted
 successors to exercise the rights granted in this Agreement. Where a
 waiver is not allowed, the Contributor agrees not to assert those
 rights against the Project Steward, permitted successors, downstream
-licensees, or users acting consistently with the public licences for
+licensees, or users acting consistently with the authorized terms for
 the Materials.
 
 ## 8. Contributor confirmations

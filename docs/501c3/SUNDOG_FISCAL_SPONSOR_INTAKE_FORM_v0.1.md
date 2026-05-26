@@ -60,12 +60,13 @@ naming, jurisdiction, or timeline changes.
    in-scope for sponsorship under your policies? Are there
    restrictions on naming specific commercial deployments?
 
-2. **Open-publication compatibility.** The lab publishes its
-   framework documents (the Halo Initiative, the Governance
-   and Claims-Review Policy, the harness whitepaper) under a
-   permissive open licence (working assumption: CC BY 4.0 for
-   documents, Apache-2.0 for code). Are there any restrictions
-   on the lab's choice of licence under your sponsorship?
+2. **Publication and licensing compatibility.** The lab currently
+   treats framework documents, harness code, website materials, and
+   research artifacts as rights-reserved unless a later written
+   decision selects a document-scoped public, partner, archive,
+   publication, nonprofit, commercial, or successor-entity license.
+   Are there any restrictions on preserving that optionality under
+   your sponsorship?
 
 3. **Pre-publication review.** Does sponsorship require any
    pre-publication review by the sponsor, by a sponsor-side

@@ -275,14 +275,15 @@ does not claim institutional ownership in publications.
   not operative until counsel review, founder approval, and selection
   of the actual legal counterparty.
 - **Document licensing.** The Halo Initiative, the Governance
-  and Claims-Review Policy, and the harness whitepaper are
-  released under a permissive open licence to be selected
-  (candidate: **CC BY 4.0**, tagged *Hypothesised* pending
-  founders' decision). The licence is stated in each document's
-  front matter from v0.3 onward.
-- **Code licensing.** Harness code and Sundog project code are
-  released under a permissive open-source licence (candidate:
-  **Apache-2.0**, tagged *Hypothesised*).
+  and Claims-Review Policy, and the harness whitepaper remain
+  rights-reserved unless a later signed governance decision selects
+  a specific public, partner, archive, or publication license. Any
+  open-content release is optional, explicit, and document-scoped.
+- **Code licensing.** Harness code and Sundog project code remain
+  rights-reserved unless a later signed governance decision selects
+  a specific open-source, partner, commercial, nonprofit, or
+  successor-entity license. Public repository access is not itself a
+  reuse grant.
 - **Trademark.** "Sundog Research Lab" and "Halo" usage is
   reviewed for trademark conflict before v1.0 of the Initiative
   per the §10 condition.
@@ -323,8 +324,8 @@ The plan's substantive claims carry the following tags:
   direct-incorporation-first; the choice of Sundog-as-asset over
   Sundog-as-separate; the priority order of the funding theory.
   These are values judgments.
-- *Hypothesised*: every milestone in §6; the licence choices in
-  §9; the assumption that "Sundog" and "Halo" survive name
+- *Hypothesised*: every milestone in §6; any future outbound license
+  choices in §9; the assumption that "Sundog" and "Halo" survive name
   clearance.
 - *Speculative*: that v1.0 of this plan is reached within 18
   months.

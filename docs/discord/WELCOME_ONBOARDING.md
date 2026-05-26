@@ -262,7 +262,10 @@ attempts (and your failures) to `#blue-team`.
 **Break something.** `#red-team` is for finding holes in our claims.
 Strong adversarial reads are valued, not punished.
 
-**Contribute code or docs.** The repo is MIT-licensed. Open a PR.
+**Contribute code or docs.** The repo is available for inspection, but rights
+are reserved by Stellar Aqua LLC unless a file clearly states otherwise. Open a
+PR only when the contribution can be handled under the current contributor/IP
+intake rules.
 For anything substantive, expect a future CLA (template is in
 `docs/501c3/`); we'll let you know when it goes live.
 

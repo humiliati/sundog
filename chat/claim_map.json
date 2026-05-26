@@ -817,11 +817,11 @@
       ],
       "disposition": "allow",
       "evidenceTier": "navigation",
-      "answerTemplate": "Sundog-authored source and associated documentation are published under the MIT License. The repository is https://github.com/humiliati/sundog. Until a paper DOI exists, cite the repository as: Stellar Aqua LLC. (2026). Sundog: Alignment Without Sight [Software and research repository]. GitHub. https://github.com/humiliati/sundog. For legal terms and third-party notices, read the license files directly; Ask Sundog does not interpret license compliance.",
+      "answerTemplate": "Sundog-authored source, documentation, data compilations, and public research artifacts are controlled by Stellar Aqua LLC unless a file clearly states otherwise. The current repository posture is rights-reserved and inspection-oriented; no open-source, patent, trademark, commercial, hosting, training-data, or derivative-work permission is implied by public availability. Until a paper DOI exists, cite the repository as: Stellar Aqua LLC. (2026). Sundog: Alignment Without Sight [Software and research repository]. GitHub. https://github.com/humiliati/sundog. For legal terms and third-party notices, read the LICENSE and COPYRIGHT files directly; Ask Sundog does not interpret license compliance.",
       "support": [
         {
           "doc": "LICENSE",
-          "section": "MIT License",
+          "section": "Sundog Rights Notice",
           "status": "primary"
         },
         {
@@ -836,7 +836,7 @@
         }
       ],
       "boundaries": [
-        "State the license accurately; do not paraphrase license terms.",
+        "State the rights posture accurately; do not paraphrase legal terms beyond the controlled answer.",
         "Do not answer license-compliance questions; refer to LICENSE.",
         "Do not override third-party notices or licenses.",
         "Do not imply a peer-reviewed paper or DOI exists before publication."

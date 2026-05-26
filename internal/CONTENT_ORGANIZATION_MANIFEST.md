@@ -141,15 +141,32 @@ placeholders. Public Cloudflare credential notes now describe a local non-repo
 credential store instead of naming private files, and the Cloudflare helpers use
 env-configurable credential paths rather than source-coded private filenames.
 
+### Pass 8 - Feedback/Benchmark Quarantine
+
+Canonical location:
+
+- `internal/feedback/model/`
+
+Moved raw model-feedback benchmark/stress-test reports out of public `docs/**`
+and into the internal feedback quarantine:
+
+- `docs/brand/Mythos-Benchmark.md` ->
+  `internal/feedback/model/Mythos-Benchmark.md`
+- `docs/brand/gemini-benchmark.md` ->
+  `internal/feedback/model/gemini-benchmark.md`
+
+Public root and brand paths now carry retirement stubs only. They preserve old
+links without shipping the raw model reports. Public brand docs retain summary
+lessons in `docs/brand/BRAND_POSITIONING.md`.
+
 ## Current Audit Notes
 
 - The old `internal/anniversary/` catch-all has been split. Any future
   references should target the internal lane directly.
 - `SCIENTIFIC_CRITERIA.md` needed a refresh after Faraday and `/safety-method`;
   that refresh belongs to the check pass, not a new folder migration.
-- The brand and benchmark documents are still public, now under `docs/brand/`.
-  A later pass can decide whether some of that material belongs under
-  `internal/feedback/` instead.
+- Raw model-feedback benchmark reports are internal-only. Public docs should
+  summarize lessons, not republish the raw reports.
 
 ## Next-Pass Candidates
 
@@ -158,10 +175,8 @@ env-configurable credential paths rather than source-coded private filenames.
 Likely target shape:
 
 - `internal/feedback/Human/` - current human critique and Reddit feedback.
-- `internal/feedback/model/` - possible future private home for the public
-  stress-test reports now living at `docs/brand/Mythos-Benchmark.md` and
-  `docs/brand/gemini-benchmark.md`, if those reports should stop shipping with
-  `docs/**`.
+- `internal/feedback/model/` - quarantined model-generated readings and
+  stress-test reports.
 - `internal/feedback/README.md` - orientation over human/model critique,
   accepted changes, and rejected or quarantined interpretations.
 

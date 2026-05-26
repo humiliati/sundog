@@ -1,7 +1,8 @@
 # Brand Documents
 
-Public brand, identity, legal-standing, and outside-model stress-test notes live
-here.
+Public brand, identity, and legal-standing notes live here. Raw model-feedback
+stress-test reports are quarantined internally; this folder preserves only the
+public lessons and posture.
 
 - [Brand positioning](BRAND_POSITIONING.md): public lab posture, Mythos/Gemini
   lessons, and claim-boundary language.
@@ -9,9 +10,4 @@ here.
   future entity-formation plan.
 - [Legal standing](LEGAL_STANDING.md): current ownership and sponsorship
   structure.
-- [Mythos benchmark](Mythos-Benchmark.md): preserved outside-model conflation
-  report and maintainer response.
-- [Gemini benchmark](gemini-benchmark.md): outside Gemini read on site
-  legibility, access ambiguity, and posture risks.
-
 Older root-level public paths are compatibility pointers only.

@@ -260,7 +260,7 @@
       "disposition": "allow",
       "evidenceTier": "navigation",
       "boundaries": [
-        "State the license accurately; do not paraphrase license terms.",
+        "State the rights posture accurately; do not paraphrase legal terms beyond the controlled answer.",
         "Do not answer license-compliance questions; refer to LICENSE.",
         "Do not override third-party notices or licenses.",
         "Do not imply a peer-reviewed paper or DOI exists before publication."

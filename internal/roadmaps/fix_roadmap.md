@@ -921,9 +921,9 @@ Clearance pass, 2026-05-17:
 - Rechecked the high-risk homepage coherence markers: no standalone static hero
   guide remains, the glossary-linked v1.1 elevator pitch is present, and the
   load-bearing evidence section precedes the applications rail.
-- Added `docs/brand/gemini-benchmark.md` to the public docs inspection path
-  (`docs/index.html`) and docs README so the new brand stress test is filed
-  beside the Mythos benchmark.
+- Filed the Gemini model-feedback stress test beside the Mythos report. Those
+  raw reports have since moved to `internal/feedback/model/`, with only public
+  summary lessons retained in `docs/brand/BRAND_POSITIONING.md`.
 - Remaining launch-sensitive item in this cluster is Ask Sundog prompt/data
   alignment. Treat that as an isolated experiment-preserving pass, not as a
   casual copy rewrite.

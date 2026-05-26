@@ -1,6 +1,7 @@
-# Document Moved
+# Retired Public Document
 
-This compatibility pointer is kept so older public links to `docs/Mythos-Benchmark.md` do
-not break.
+This path used to point to a public model-feedback stress-test report. The raw
+report has been moved to the internal feedback quarantine and is no longer part
+of the public documentation set.
 
-Canonical location: [docs/brand/Mythos-Benchmark.md](brand/Mythos-Benchmark.md)
+Public summary lessons remain in [Brand positioning](brand/BRAND_POSITIONING.md).

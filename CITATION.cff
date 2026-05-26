@@ -7,6 +7,6 @@ authors:
 abstract: "Sundog Research Lab website and research repository for hidden-state control through indirect signatures."
 date-released: 2026-05-12
 version: "0.1.0"
-license: MIT
+license: LicenseRef-Stellar-Aqua-All-Rights-Reserved
 repository-code: "https://github.com/humiliati/sundog"
 url: "https://sundog.cc"

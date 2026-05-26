@@ -1,32 +1,34 @@
 # Sundog
 
-**Copyright © 2026 Stellar Aqua LLC. Licensed under the MIT License.**
+**Copyright © 2026 Stellar Aqua LLC. All rights reserved.**
 
 Sundog Research Lab is an independent applied research program sponsored by Stellar Aqua LLC.
 
-Sundog-authored source and associated documentation are published under the
-[MIT License](LICENSE). For citation metadata, see [CITATION.cff](CITATION.cff).
+Sundog-authored source, documentation, data compilations, visual materials, and
+research artifacts are controlled by Stellar Aqua LLC unless a file clearly
+states otherwise. The current repository posture is rights-reserved and
+inspection-oriented: no patent, trademark, commercial, training-data, hosting,
+or derivative-work permission is implied by public availability. Read
+[LICENSE](LICENSE) for the operative rights notice and [CITATION.cff](CITATION.cff)
+for citation metadata.
 
-### Pending ownership transfer to a public-interest entity
+### Strategic ownership posture
 
-The lab is in process of forming a US public-interest research entity
-(501(c)(3) target). The working plan is for copyright and stewardship of
-Sundog-authored material to transfer from Stellar Aqua LLC to the new
-nonprofit once that entity is incorporated, a board with an independent
-majority is seated, and a fiscal-sponsor or direct-incorporation path
-has been chosen. The MIT licence on existing material is not affected by
-the transfer.
+Stellar Aqua LLC currently holds the Sundog-authored copyrightable material and
+controls the public research program posture. Future stewardship remains open:
+Sundog may stay under Stellar Aqua, move into a public-interest or 501(c)(3)
+structure, file patent and trademark applications, license selected rights,
+form a dedicated entity, or transfer/sell assets if that is the best path for
+the work.
 
-The formation plan, governance policy, fiscal-sponsor evaluation,
-contributor licence template, and the *Conscium Initiative* framework
-the lab develops and publishes are working drafts in
+The formation plan, governance policy, fiscal-sponsor evaluation, contributor
+licence template, and the *Conscium Initiative* framework the lab develops and
+publishes are working drafts in
 [`docs/501c3/`](docs/501c3/) — start with the
 [Initiative Index](docs/501c3/INITIATIVE_INDEX.md). **Nothing in that
-folder is yet legally operative.** The transfer is the *goal* of the
-plan, not a current fact, and outside contributors should treat the
-governance and claims-review policy as a description of the regime the
-founders are committed to building, not a regime that already binds the
-lab today.
+folder is yet legally operative.** Those drafts describe one possible public-
+interest path, not a current transfer, public dedication, or irrevocable
+licensing commitment.
 
 If you are a potential collaborator, sponsor, fiscal-sponsor candidate,
 or contributor who needs the entity's legal status today,
