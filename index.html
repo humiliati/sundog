@@ -760,6 +760,13 @@
             transform: rotate(-24deg);
         }
 
+        .motion-visual-balance.has-poster .motion-card-poster,
+        .motion-visual-mines.has-poster .motion-card-poster {
+            object-fit: cover;
+            object-position: center;
+            filter: contrast(1.08) saturate(1.1);
+        }
+
         .motion-visual-threebody.has-poster .motion-card-poster {
             object-fit: cover;
             object-position: 66% 46%;
@@ -2269,7 +2276,7 @@
                     data-description="Shadow balance, mapped to the edge."
                     data-href="/balance"
                     data-evidence-href="docs/sundog_v_balance.md"
-                    data-poster="/media/balance-phase10-rail-poster.jpg"
+                    data-poster="/media/balance-rail-poster.svg"
                     data-media=""
                     data-media-format=""
                     data-status="Operating envelope"
@@ -2279,7 +2286,7 @@
                 >
                     <a class="motion-card-link" href="/balance">
                         <div class="motion-card-visual motion-visual-balance has-poster" aria-hidden="true">
-                            <img class="motion-card-poster" src="/media/balance-phase10-rail-poster.jpg" alt="" loading="lazy">
+                            <img class="motion-card-poster" src="/media/balance-rail-poster.svg" alt="" loading="lazy">
                         </div>
                         <div class="motion-card-copy">
                             <span class="motion-card-status">Operating envelope</span>
@@ -2352,7 +2359,7 @@
                     data-description="Pressure maps become decisions."
                     data-href="/mines"
                     data-evidence-href="docs/sundog_v_minesweeper.md"
-                    data-poster=""
+                    data-poster="/media/mines-rail-poster.svg"
                     data-media=""
                     data-media-format=""
                     data-status="Operating-Envelope Study"
@@ -2361,8 +2368,8 @@
                     data-stamp-source="docs/sundog_v_minesweeper.md"
                 >
                     <a class="motion-card-link" href="/mines">
-                        <div class="motion-card-visual motion-visual-mines" aria-hidden="true">
-                            <span class="motion-gridmark"></span>
+                        <div class="motion-card-visual motion-visual-mines has-poster" aria-hidden="true">
+                            <img class="motion-card-poster" src="/media/mines-rail-poster.svg" alt="" loading="lazy">
                         </div>
                         <div class="motion-card-copy">
                             <span class="motion-card-status">Operating-Envelope Study</span>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Sundog Balance rail poster</title>
+  <desc id="desc">A focused cart-pole rail scene with a cast shadow and operating-envelope markers.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#092032"/>
+      <stop offset="0.58" stop-color="#12334a"/>
+      <stop offset="1" stop-color="#07151f"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8ed0a6" stop-opacity="0"/>
+      <stop offset="0.18" stop-color="#8ed0a6" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#f4c430" stop-opacity="0.72"/>
+      <stop offset="0.82" stop-color="#8ed0a6" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#8ed0a6" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.52" cy="0.55" r="0.42">
+      <stop offset="0" stop-color="#f4c430" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#f4c430" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g opacity="0.22" stroke="#f4c430" stroke-width="1">
+    <path d="M0 520H1200M0 460H1200M0 400H1200M0 340H1200"/>
+    <path d="M90 630 430 210M250 630 540 210M410 630 650 210M570 630 760 210M730 630 870 210M890 630 980 210M1050 630 1090 210"/>
+  </g>
+
+  <g transform="translate(95 88)">
+    <text x="0" y="0" fill="#f4c430" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" font-weight="800" letter-spacing="5">SUNDOG BALANCE</text>
+    <text x="0" y="40" fill="#e9f1f4" font-family="Arial, sans-serif" font-size="24">shadow-derived cart-pole control</text>
+  </g>
+
+  <g transform="translate(155 445)">
+    <line x1="0" y1="0" x2="890" y2="0" stroke="url(#floor)" stroke-width="8" stroke-linecap="round"/>
+    <line x1="80" y1="-45" x2="80" y2="45" stroke="#d7a928" stroke-opacity="0.75" stroke-width="4"/>
+    <line x1="812" y1="-45" x2="812" y2="45" stroke="#d7a928" stroke-opacity="0.75" stroke-width="4"/>
+    <path d="M360 42 C455 24 544 24 652 42" stroke="#07151f" stroke-opacity="0.72" stroke-width="18" stroke-linecap="round" filter="url(#soft)"/>
+    <rect x="444" y="-70" width="116" height="70" rx="14" fill="#fffaf0" stroke="#f4c430" stroke-width="6"/>
+    <circle cx="472" cy="6" r="18" fill="#07151f"/>
+    <circle cx="534" cy="6" r="18" fill="#07151f"/>
+    <line x1="502" y1="-70" x2="440" y2="-285" stroke="#f4c430" stroke-width="15" stroke-linecap="round"/>
+    <line x1="502" y1="-70" x2="590" y2="-210" stroke="#dcebf0" stroke-opacity="0.35" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="440" cy="-285" r="20" fill="#f8fbfc"/>
+    <line x1="592" y1="-222" x2="592" y2="-50" stroke="#9bb4c5" stroke-opacity="0.74" stroke-width="13" stroke-linecap="round"/>
+    <path d="M440 -285 592 -222 M502 -70 592 -50" stroke="#dcebf0" stroke-dasharray="9 9" stroke-opacity="0.48" stroke-width="3"/>
+  </g>
+
+  <g transform="translate(820 94)">
+    <rect x="0" y="0" width="240" height="84" rx="10" fill="#08141e" fill-opacity="0.72" stroke="#f4c430" stroke-opacity="0.4"/>
+    <text x="22" y="34" fill="#f4c430" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="17" font-weight="800">OPERATING ENVELOPE</text>
+    <text x="22" y="61" fill="#dcebf0" font-family="Arial, sans-serif" font-size="16">boundary stays visible</text>
+  </g>
+</svg>
