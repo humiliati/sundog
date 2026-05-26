@@ -657,7 +657,7 @@ language across the program, and ship a public artifact.
 
 Immediate work:
 
-- Update `docs/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa
+- Update `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim with the earned mesa
   result, replacing speculative language with the strongest claim actually
   earned by Phase 7.
 - Update `docs/presentation/claims-and-scope.md` §The Gravity Frame and
@@ -677,7 +677,7 @@ program's public-facing surfaces.
 
 **Upstream doc cascade complete.**
 
-- `docs/PROMO_HIGHLIGHTS.md` §The Gravity Claim now stacks three earned
+- `docs/promo/PROMO_HIGHLIGHTS.md` §The Gravity Claim now stacks three earned
   sub-sections after the named-claim and Goodhart-sidestep rhetoric:
   *The empirical anchor (Phase 5 v4)* with the `λ ≈ 0.952588` cliff and
   the `1 − λ = 0.048` policy quotable, *The mechanical anchor

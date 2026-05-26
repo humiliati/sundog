@@ -5,7 +5,7 @@ import { jsonResponse, errorResponse, withCors, handleOptions } from "./_lib.js"
  *
  * Returns the photo-data policy as JSON (clients embed it inline before
  * showing the consent checkbox) and also serves the human-readable
- * Markdown via /docs/PHOTO_DATA_POLICY.md (separate static asset).
+ * Markdown via /docs/site/PHOTO_DATA_POLICY.md (separate static asset).
  *
  * Keeping the policy text in JSON form here lets the upload widget show the
  * consent dialog without a separate fetch round-trip to the Markdown file.

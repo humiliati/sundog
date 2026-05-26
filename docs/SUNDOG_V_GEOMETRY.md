@@ -87,7 +87,7 @@ document — see Cross-references.*
   [`SUNDOG_OVERLAY_PROTOCOL.md`](SUNDOG_OVERLAY_PROTOCOL.md) ·
   [`SUNDOG_V_PERCEPTION.md`](SUNDOG_V_PERCEPTION.md) ·
   [`SUNDOG_V_CHAT.md`](SUNDOG_V_CHAT.md) ·
-  [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) — companion
+  [`UI_UX_THEME_FOUNDATION.md`](site/UI_UX_THEME_FOUNDATION.md) — companion
   docs; full descriptions in **Related Documents** below.
 
 *[nice-to-have #14]*
@@ -99,7 +99,7 @@ human-tunable face of a broader **Sundog Generator** whose programmatic
 face and proof methodology are split into companion docs. Authority is
 distributed so no document trampolines another's decisions.
 
-- [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) — the site-wide
+- [`UI_UX_THEME_FOUNDATION.md`](site/UI_UX_THEME_FOUNDATION.md) — the site-wide
   visual frame. Owns: theme tokens (`--sd-*`), shared-stylesheet layer
   organisation, the cross-cutting **4a/4b/4c** split that places this
   workbench beside Threebody and Balance, and Migration Steps 1–6 that
@@ -118,7 +118,7 @@ distributed so no document trampolines another's decisions.
 - [`SUNDOG_OVERLAY_PROTOCOL.md`](SUNDOG_OVERLAY_PROTOCOL.md) — the
   photo-overlay test methodology (Mode 2 procedure). Phase 2 calibration
   items below cite the overlay protocol as their gating procedure.
-- [`ICON_ASSETS.md`](ICON_ASSETS.md) — the current favicon/app-icon
+- [`ICON_ASSETS.md`](site/ICON_ASSETS.md) — the current favicon/app-icon
   source list and regeneration notes. Phase 11 below expands that into a
   design-team toolkit for a characterized Sundog logo and animation set.
 - [`SUNDOG_V_THREEBODY.md`](SUNDOG_V_THREEBODY.md) and
@@ -1227,7 +1227,7 @@ Deliverables:
     token returned to the user at submission time.
   - Rate limit: 5 uploads / IP / hour via Workers KV.
 - **Privacy + policy**
-  - Page section linking to a `PHOTO_DATA_POLICY.md` doc that states
+  - Page section linking to a `site/PHOTO_DATA_POLICY.md` doc that states
     what we collect (image, JSON pose, anonymous timestamp, IP-derived
     country), what we use it for (improving the atlas model and
     illustrations), retention period (12 months unless aggregated into
@@ -1352,7 +1352,7 @@ Deliverables:
     secondary navigation row.
   - Old `#parhelion-canvas` decommissioned; any references in the brand
     or icon docs updated.
-- **Wikipedia / SEO outreach packet** — [`docs/SUNDOG_OUTREACH_PACKET.md`](SUNDOG_OUTREACH_PACKET.md) ✓ landed 2026-05-12.
+- **Wikipedia / SEO outreach packet** — [`docs/promo/SUNDOG_OUTREACH_PACKET.md`](promo/SUNDOG_OUTREACH_PACKET.md) ✓ landed 2026-05-12.
   - One-page math summary: the seven atlas formulas with
     Greenler / Tape / Cowley citations.
   - Claim license: every formula is cited; original contributions are
@@ -1691,7 +1691,7 @@ calibrated parhelion grammar.
 
 Deliverables:
 
-- `docs/ICON_ASSETS.md` expanded into a design brief: source SVG anatomy,
+- `docs/site/ICON_ASSETS.md` expanded into a design brief: source SVG anatomy,
   allowed simplifications, protected geometry, color tokens, small-size
   rules, and animation states.
 - A design-team toolset folder or script set that can export at least:

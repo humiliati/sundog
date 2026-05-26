@@ -1,7 +1,7 @@
 """v0.5b held-out branch predictor.
 
 Implements the signed-off registration in
-`internal/anniversary/kfacet_v05b_branch_predictor_form.md`.
+`docs/isotrophy/kfacet/kfacet_v05b_branch_predictor_form.md`.
 
 The runner uses only the v0.5a per-row branch table. It performs no
 integration, no tangent-space computation, and no feature search.
@@ -21,7 +21,7 @@ DEFAULT_INPUT = ROOT / "results/isotrophy/k-facet-v05a-branch-map/per_row_table.
 DEFAULT_MANIFEST = ROOT / "results/isotrophy/k-facet-v05a-branch-map/manifest.json"
 DEFAULT_OUT = ROOT / "results/isotrophy/k-facet-v05b-branch-predictor"
 
-FORM_LOCK = "internal/anniversary/kfacet_v05b_branch_predictor_form.md"
+FORM_LOCK = "docs/isotrophy/kfacet/kfacet_v05b_branch_predictor_form.md"
 VERSION = "v0.5b-branch-predictor-heldout"
 
 GATING_M3 = ["0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.5", "1.6", "1.7"]

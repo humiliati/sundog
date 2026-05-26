@@ -61,7 +61,7 @@ Safe public language for any of these artifacts:
 - Name the quarantine separately from the prediction it would have affected.
 - Refuse to absorb out-of-scope rows into a single number; refuse to collapse 20/21 into "21/21."
 
-The discipline is the load-bearing claim. The K_facet v0.3h ledger (`docs/SUNDOG_V_ISOTROPHY_KFACET.md`) lists six standing rules; the most load-bearing two for public copy are Standing Rule 5 (no "21/21" framing) and Standing Rule 6 (no weak-admission framing for O_617).
+The discipline is the load-bearing claim. The K_facet v0.3h ledger (`docs/isotrophy/SUNDOG_V_ISOTROPHY_KFACET.md`) lists six standing rules; the most load-bearing two for public copy are Standing Rule 5 (no "21/21" framing) and Standing Rule 6 (no weak-admission framing for O_617).
 
 ## Risky Claims
 
@@ -285,7 +285,7 @@ expensively rather than dismissed cheaply.
 - Manifesto sections, broadcast hooks, pitch decks, and conference openings
   may use the gravity language *if* they also carry the boundary text and
   link to [`SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md) and
-  [`PROMO_HIGHLIGHTS.md`](../PROMO_HIGHLIGHTS.md) §The Gravity Claim.
+  [`PROMO_HIGHLIGHTS.md`](../promo/PROMO_HIGHLIGHTS.md) §The Gravity Claim.
 - The three-body workbench is the audience-conceptualizable wedge for the
   frame. Public communication should lead with the three-body controller
   watching real gravity from indirect state, then expand the metaphor to

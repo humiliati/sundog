@@ -2,8 +2,8 @@
 threshold-rule baseline, and emit the verdict against the pre-registered
 chi-squared(12) falsifier.
 
-Form-lock reference: internal/anniversary/kfacet_v04b_gamma3_form.md.
-Pre-registration: internal/anniversary/kfacet_v04b_mechanism_preregistration.md.
+Form-lock reference: docs/isotrophy/kfacet/kfacet_v04b_gamma3_form.md.
+Pre-registration: docs/isotrophy/kfacet/kfacet_v04b_mechanism_preregistration.md.
 
 Verdict outcomes:
   pass                  -- chi-squared test stat <= 26.22 at chi-squared(12).
@@ -138,7 +138,7 @@ def aggregate(rows: list[dict]) -> dict:
     return {
         "mode": "kfacet_v04b_aggregator",
         "version": V04B_VERSION,
-        "form_lock": "internal/anniversary/kfacet_v04b_gamma3_form.md",
+        "form_lock": "docs/isotrophy/kfacet/kfacet_v04b_gamma3_form.md",
         "thresholds": {
             "chi2_critical": V04B_CHI2_CRITICAL,
             "chi2_df": V04B_CHI2_DF,

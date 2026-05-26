@@ -1,12 +1,6 @@
-# Shadow Faraday Phase 3 Receipt Pointer
+# Document Moved
 
-Status: superseded 2026-05-25.
+This compatibility pointer is kept so older public links to `docs/SHADOW_FARADAY_PHASE3_DERIVATION.md` do
+not break.
 
-The active Phase 3 derivation receipt lives at
-[`FARADAY_PHASE3_DERIVATIONS.md`](FARADAY_PHASE3_DERIVATIONS.md).
-
-Branch: **A - clean structural zero** on the registered classical vacuum
-domain.
-
-This pointer remains only so older references to
-`SHADOW_FARADAY_PHASE3_DERIVATION.md` do not imply a second receipt surface.
+Canonical location: [docs/faraday/SHADOW_FARADAY_PHASE3_DERIVATION.md](faraday/SHADOW_FARADAY_PHASE3_DERIVATION.md)

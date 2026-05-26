@@ -53,7 +53,7 @@ duration, laser height, and joint limits.
 **Negative result included.** The joint-limit sweep documents a failure mode
 instead of hiding it.
 
-**Named-artifact classes for theorem-adjacent work.** Three audit-chain
+**Named-artifact classes for theorem-adjacent work.** Several audit-chain
 artifacts are now in the public ledger and each names its falsification
 surface before result interpretation:
 
@@ -68,6 +68,17 @@ surface before result interpretation:
   m₃ = 1; the 21st (O_617) is held back as a named quarantine for a
   bridge direction outside the valid D₃ representation. Audit chain
   intact; theorem-facing result is not closed.
+- **Shadow Faraday Branch A receipt** (`/faraday`) - a pre-registered
+  classical-vacuum test where local, gauge-invariant shadow data is sufficient
+  to close the Faraday residual in the registered domain. Phase 3 lands the
+  algebraic Branch A structural zero and Phase 4 support checks pass 5/5.
+  Source-bearing, topological, plasma, QED, and curved-spacetime extensions
+  remain outside the closed claim and are routed to the Phase 7 boundary audit.
+- **Shadow Method safety-template sketch** (`/safety-method`) - a method essay
+  that translates the Faraday receipt into three AI-safety questions: local
+  readout, structural zero, and named quarantine. It is public and useful, but
+  it is explicitly a sketch/bridge, not a proof of AI safety or a new Faraday
+  derivation.
 
 The structural-zero receipt is a named, defensible artifact class — not a
 tolerance gate. A row earns one when `c_i = d_i = 0` by construction.
@@ -145,6 +156,10 @@ Avoid saying:
 - "21/21 receipts" (it is 20/21 plus one named quarantine);
 - "O_617 was a weak-admission failure" (it is a clean opposite-strict row;
   the defect lives in the bridge representation outside the valid D₃
-  representation).
+  representation);
+- "Faraday Branch A proves AI safety" (it is a closed classical-vacuum
+  electromagnetic receipt);
+- "`/safety-method` is a proof" (it is a marked sketch that imports the
+  Faraday receipt as a worked example).
 
 The cleanest academic version is modest and therefore harder to dismiss.

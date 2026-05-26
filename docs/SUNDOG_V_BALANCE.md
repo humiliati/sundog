@@ -143,7 +143,7 @@ Target composition:
 
 Cross-document visual target: the evidence workbench stays a readable
 cart-pole simulation first. The future expressive skin is governed by
-[`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) section 4c: the
+[`UI_UX_THEME_FOUNDATION.md`](site/UI_UX_THEME_FOUNDATION.md) section 4c: the
 "toyful" Paper Mario / 2.5D indie-game balance canvas. That visual pass may add
 layered parallax paper planes, pixel-art cart and pole sprites, soft shadows,
 motion lines, sparkles, squash/anticipation, and a warmer palette. It must not
@@ -155,7 +155,7 @@ implementation reference for this workbench. Per the project-owner note from the
 LinkedIn agreement, Sundog may borrow heavily from Lounas for the Balance visual
 background and for a BoxForge/CSS arm template derived from that robotics style.
 Keep borrowed pieces traceable and credited in
-[`THIRD_PARTY_REUSE.md`](THIRD_PARTY_REUSE.md).
+[`THIRD_PARTY_REUSE.md`](site/THIRD_PARTY_REUSE.md).
 
 Implementation preference:
 
@@ -532,7 +532,7 @@ Phase 5 is considered complete and Phase 6 unblocks.
 Goal: create the public browser workbench shell early.
 
 *Pre-condition before any borrowed asset lands: confirm the Lounas credit
-clause in `<sundog>/docs/THIRD_PARTY_REUSE.md` is current and matches the
+clause in `<sundog>/docs/site/THIRD_PARTY_REUSE.md` is current and matches the
 LinkedIn agreement scope. Borrowing visual assets without that ledger
 updated is the kind of audit-trail gap the program has committed to
 avoiding. Update the ledger first, borrow second.*
@@ -890,7 +890,7 @@ Deliverables:
   those slots present so later `.webm`/MP4/`.ogv`/`.gif` exports do not require
   a markup rewrite.
 - Cross-reference
-  [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) section 4c before
+  [`UI_UX_THEME_FOUNDATION.md`](site/UI_UX_THEME_FOUNDATION.md) section 4c before
   recording the Balance media and section 4d before implementing the rail. If
   Phase 12.5 has landed, the Balance card should use the toyful sprite skin
   while linking to raw replay evidence. If the skin has not landed, the Balance
@@ -997,7 +997,7 @@ against — beating humans is not evidence of correctness).
 ### Phase 12.5 - Toyful Animated Sprite Skin
 
 Goal: implement the section-4c visual promise from
-[`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) without changing the
+[`UI_UX_THEME_FOUNDATION.md`](site/UI_UX_THEME_FOUNDATION.md) without changing the
 research surface. This is the last-layer polish pass that makes the workbench
 feel like a living toy while keeping the theoremic read intact: hidden body,
 visible shadow, recoverable envelope, clean failure boundary.
@@ -1014,7 +1014,7 @@ Deliverables:
 - State machine shared across diagnostic, human-vs-agent, and promo contexts:
   idle, push-left, push-right, wobble, recover, stabilize, fall.
 - Layered paper/parallax background inspired by the approved Lounas reuse
-  direction, documented in [`THIRD_PARTY_REUSE.md`](THIRD_PARTY_REUSE.md)
+  direction, documented in [`THIRD_PARTY_REUSE.md`](site/THIRD_PARTY_REUSE.md)
   when concrete borrowed motifs land.
 - `prefers-reduced-motion` fallback and a raw diagnostic skin toggle. Reduced
   motion preserves state changes through color, pose, and line weight rather

@@ -1,7 +1,7 @@
 """v0.7a velocity-fraction audit -- 7-row sentinel smoke.
 
 Implements the smoke pass of the form locked in
-`internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md`.
+`docs/isotrophy/kfacet/kfacet_v07a_velocity_fraction_audit_form.md`.
 
 Computes per-row monodromy via the workbench's variational integrator at
 the v0.7a-locked precision (rtol = atol = 1e-12, max_step_fraction = 0.02),
@@ -391,7 +391,7 @@ def main() -> None:
 
     summary = {
         "mode": "v0.7a-velocity-fraction-smoke",
-        "form_lock": "internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md",
+        "form_lock": "docs/isotrophy/kfacet/kfacet_v07a_velocity_fraction_audit_form.md",
         "smoke_input_catalog": relpath(args.catalog),
         "smoke_sentinel_rows": [{"m3": m3, "index": idx} for m3, idx in SENTINELS],
         "smoke_record_count": len(smoke_records),

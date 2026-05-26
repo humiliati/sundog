@@ -285,8 +285,8 @@
     {
       "id": "halo_atlas_vocabulary_status:2",
       "routeId": "halo_atlas_vocabulary_status",
-      "doc": "docs/WEBSITE_DEVELOPMENT.md",
-      "href": "/docs/WEBSITE_DEVELOPMENT.md",
+      "doc": "docs/site/WEBSITE_DEVELOPMENT.md",
+      "href": "/docs/site/WEBSITE_DEVELOPMENT.md",
       "section": "Ask Sundog / Claim-boundary checks before publishing",
       "tier": "conceptual_lineage",
       "disposition": "allow_with_boundary",
@@ -466,8 +466,8 @@
     {
       "id": "isotrophy_k_facet_v03h:2",
       "routeId": "isotrophy_k_facet_v03h",
-      "doc": "docs/SUNDOG_V_ISOTROPHY_KFACET.md",
-      "href": "/docs/SUNDOG_V_ISOTROPHY_KFACET.md",
+      "doc": "docs/isotrophy/SUNDOG_V_ISOTROPHY_KFACET.md",
+      "href": "/docs/isotrophy/SUNDOG_V_ISOTROPHY_KFACET.md",
       "section": "Load-bearing statement / Standing rules / Falsification surface",
       "tier": "audit_chain_receipt",
       "disposition": "allow_with_boundary",

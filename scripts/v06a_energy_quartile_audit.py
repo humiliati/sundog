@@ -1,7 +1,7 @@
 """v0.6a energy-quartile audit.
 
 Implements the form locked in
-`internal/anniversary/kfacet_v06a_energy_quartile_audit_form.md`.
+`docs/isotrophy/kfacet/kfacet_v06a_energy_quartile_audit_form.md`.
 
 The runner is catalog-only: it parses the published supplementary-B initial
 conditions, joins v0.4a/v0.5a receipt metadata, computes E and |L| at the
@@ -28,7 +28,7 @@ DEFAULT_V05A_TABLE = ROOT / "results/isotrophy/k-facet-v05a-branch-map/per_row_t
 DEFAULT_CATALOG = ROOT / "docs/isotrophy/supplementary-B_piano-init-condit-3d.txt"
 DEFAULT_OUT = ROOT / "results/isotrophy/k-facet-v06a-energy-quartile-audit"
 
-FORM_LOCK = "internal/anniversary/kfacet_v06a_energy_quartile_audit_form.md"
+FORM_LOCK = "docs/isotrophy/kfacet/kfacet_v06a_energy_quartile_audit_form.md"
 VERSION = "v0.6a-energy-quartile-audit"
 
 CHI2_CRITICAL = 11.34

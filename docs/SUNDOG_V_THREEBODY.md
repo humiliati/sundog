@@ -764,7 +764,7 @@ the current planar controller envelope.
 
 Sidecar artifacts:
 
-- [`docs/sundog_v_isotrophy.md`](sundog_v_isotrophy.md)
+- [`docs/isotrophy/sundog_v_isotrophy.md`](sundog_v_isotrophy.md)
 - [`docs/isotrophy/files.math`](isotrophy/files.math)
 
 The sidecar asks whether the residual spacetime `Z2` structure visible through
@@ -949,7 +949,7 @@ SV `0.01475`, `sigma3^3-I = 3.96e-2`). The row is outside the v0.3h Gamma
 framing at that boundary and remains excluded from evidence, not counted for or
 against the prediction.
 
-The deep-dive companion (`internal/anniversary/kfacet_v03h_o617_deep_dive.md`)
+The deep-dive companion (`docs/isotrophy/kfacet/kfacet_v03h_o617_deep_dive.md`)
 corrects the first attribution: `O_617` is a clean opposite-strict catalog row,
 with admitting residual `1.01e-8` (`to_closure = 1.105`). The earlier
 `1.62e-1` number is the canonical residual and is diagnostic-only for an
@@ -975,7 +975,7 @@ v0.3h does not explain the published piano-trio catalog. This is a negative
 about the proposed standard-sector mechanism, not a claim that piano-trios do
 not exist.
 
-The II cross-`m_3` sentinel sweep (`internal/anniversary/kfacet_v03_gamma_crossm3_preregistration.md`)
+The II cross-`m_3` sentinel sweep (`docs/isotrophy/kfacet/kfacet_v03_gamma_crossm3_preregistration.md`)
 extended the audit chain to seven supplementary-B sentinels (4 at `m_3=0.4`,
 3 at `m_3=1.0`). All seven halted at the runner-stage `D3` gate with
 kernel-projected residuals `10^3..10^5`, six to eight orders above the
@@ -1002,7 +1002,7 @@ tracked explicitly and paper-side design before any runner code. Receipts:
 
 Follow-on: v0.4a treats supplementary-B piano-trios as primary `Z_2`
 objects and pre-registers a two-pass gauge domain map over all 273 rows;
-see [`../internal/anniversary/kfacet_v04a_domain_map_preregistration.md`](../internal/anniversary/kfacet_v04a_domain_map_preregistration.md).
+see [`../docs/isotrophy/kfacet/kfacet_v04a_domain_map_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v04a_domain_map_preregistration.md).
 The O_434 anatomy probe (verdict `gauge_artifact`; receipt at
 `results/isotrophy/k-facet-v04a0-o434-anatomy/`) found that the default
 `sigma_3-scan` tolerances misclassified O_434 by six orders of magnitude;
@@ -1047,14 +1047,14 @@ chi^2 = 1202), stability information on supp-B is NOT carried by either
 the Z_2 projection or the catalog-coordinate branch shadow at the tested
 granularities. **v0.5 chapter closed 2026-05-23** as the first
 **projection-limit** chapter in the isotrophy program; chapter close at
-`internal/anniversary/kfacet_v05_writeup.md`. Three sub-results carry
+`docs/isotrophy/kfacet/kfacet_v05_writeup.md`. Three sub-results carry
 forward to v0.6: bin-locality of the m_3 = 0.4 stable cluster on supp-B;
 audit-vs-predictor asymmetry as a methodological finding; the joint
 v0.4+v0.5 projection-limit envelope on the supp-B catalog.
 
 **v0.6 parent registered 2026-05-23** with the **conserved-quantity
 (E, |L|) stratification** family. Parent registration at
-`internal/anniversary/kfacet_v06_mechanism_preregistration.md`. The
+`docs/isotrophy/kfacet/kfacet_v06_mechanism_preregistration.md`. The
 chosen projection is strictly richer than v0.5's 2-bit branch hash
 (continuous orbit-level invariants vs. catalog-coordinate indicator
 bits) while remaining catalog-derivable (per-row E and |L| computed
@@ -1071,7 +1071,7 @@ report-only; pre-registered alignment-tightness scalar guards
 against inheriting v0.5b's bin-locality failure mode (if max Q_E bin
 alignment with v0.5a branch_label > 0.8, v0.6b's partition must be
 re-registered before any held-out compute). v0.6a form lock at
-`internal/anniversary/kfacet_v06a_energy_quartile_audit_form.md`.
+`docs/isotrophy/kfacet/kfacet_v06a_energy_quartile_audit_form.md`.
 Next runner action: per-row E/|L| computation against the supp-B
 parser output, sanity-check against the 7 v0.3 cross-m_3 sentinel
 rows (per-row residual < 1e-6), bound-orbit check (E < 0 for all
@@ -1106,7 +1106,7 @@ seed `20260523` and `n_permutations = 10000` if any expected cell
 < 5, `within_branch_energy_inconclusive_sparse` verdict if any
 occupied bin has < 2 rows). Within-branch `Q_|L|` audit emitted as
 report-only sidecar. Form lock at
-`internal/anniversary/kfacet_v06b_within_branch_energy_audit_form.md`.
+`docs/isotrophy/kfacet/kfacet_v06b_within_branch_energy_audit_form.md`.
 
 **v0.6b verdict landed 2026-05-24:** `within_branch_energy_fails_audit`
 at `chi^2 = 6.904`, permutation `p = 0.0292` (sparse-cell fallback
@@ -1130,12 +1130,12 @@ carries held-out or branch-conditional stability information on this
 catalog. Stability on supp-B is bin-local to the m_3 = 0.4 cluster;
 no catalog-coordinate or symmetry-shadow projection tested so far
 lifts that locality to a generalizable mechanism. Chapter close at
-`internal/anniversary/kfacet_v06_writeup.md`. Receipt:
+`docs/isotrophy/kfacet/kfacet_v06_writeup.md`. Receipt:
 `results/isotrophy/k-facet-v06b-within-branch-energy/manifest.json`.
 
 **v0.7 parent registered 2026-05-24** with the **gamma_1
 direction-of-instability** family (codex direction). Parent
-registration at `internal/anniversary/kfacet_v07_mechanism_preregistration.md`.
+registration at `docs/isotrophy/kfacet/kfacet_v07_mechanism_preregistration.md`.
 The chosen projection LEAVES catalog-coordinate space entirely:
 per-row monodromy M_i is decomposed into its Floquet eigenstructure,
 and the eigenvector direction of a pre-registered eigenvalue choice
@@ -1191,7 +1191,7 @@ This is the **first** non-branch-aligned positive in the four-chapter
 v0.4/v0.5/v0.6/v0.7 envelope. **v0.7 chapter closed 2026-05-24 as
 qualified-positive on restricted domain** -- a fourth distinct
 chapter-close type. Chapter close at
-`internal/anniversary/kfacet_v07_writeup.md`. Receipts:
+`docs/isotrophy/kfacet/kfacet_v07_writeup.md`. Receipts:
 `results/isotrophy/k-facet-v07a-velocity-fraction-audit/manifest.json`,
 `results/isotrophy/k-facet-v07a-prime-restricted-scope/manifest.json`,
 `scripts/v07a_velocity_fraction_smoke.py`,
@@ -1200,7 +1200,7 @@ chapter-close type. Chapter close at
 
 **v0.8 parent registered 2026-05-24** on the Floquet direction-purity
 mechanism (codex direction following the v0.7a' U-shape). Parent
-registration at `internal/anniversary/kfacet_v08_mechanism_preregistration.md`.
+registration at `docs/isotrophy/kfacet/kfacet_v08_mechanism_preregistration.md`.
 Body: the 250 analyzable supp-B rows from v0.7a (attrition carried
 as permanent domain restriction). Projection: `purity = abs(vf - 0.5)`,
 a monotone deterministic transform of v0.7a's velocity-fraction
@@ -1208,7 +1208,7 @@ inheriting all v0.7a non-circularity provenance.
 
 **v0.8a form lock + verdict landed 2026-05-24 (FAIL):** Codex picked
 candidate A (purity-quartile audit). Form lock at
-`internal/anniversary/kfacet_v08a_purity_quartile_audit_form.md`;
+`docs/isotrophy/kfacet/kfacet_v08a_purity_quartile_audit_form.md`;
 runner at `scripts/v08a_purity_audit.py`. Verdict:
 `purity_quartile_fails_audit` at `chi^2 = 4.94, p = 0.176, alignment
 0.587`. The diagnostic purity_signed contingency reproduces v0.7a's
@@ -1224,13 +1224,13 @@ direction of vf, not in unsigned distance from 0.5.** v0.8b
 
 **v0.8 chapter closed 2026-05-24** as a structural-negative on
 direction-purity; chapter close at
-`internal/anniversary/kfacet_v08_writeup.md`. Six chapter-close
+`docs/isotrophy/kfacet/kfacet_v08_writeup.md`. Six chapter-close
 types in the envelope so far. v0.7a's chi^2 = 16.43 remains the
 load-bearing positive; v0.8a confirmed it is signed not symmetric.
 
 **v0.9 parent registered 2026-05-24** on the signed Floquet
 direction-composition mechanism at
-`internal/anniversary/kfacet_v09_mechanism_preregistration.md`,
+`docs/isotrophy/kfacet/kfacet_v09_mechanism_preregistration.md`,
 with a new permanent **anti-circular framing discipline**: any
 v0.9 child form lock that tests vf-ordering vs S/U on the v0.7a'
 analyzable subset via chi^2 of independence reproduces v0.7a' by
@@ -1250,10 +1250,10 @@ in vf**, but chi^2 does not reach the p = 0.01 floor.
 **v0.9 chapter closed 2026-05-24** as a structural-negative on the
 U-shape mechanism hypothesis with the monotone-increasing meta-
 finding preserved. Chapter close at
-`internal/anniversary/kfacet_v09_writeup.md`.
+`docs/isotrophy/kfacet/kfacet_v09_writeup.md`.
 
 **Isotrophy program PAUSED 2026-05-24 at end-of-v0.9.** Pause
-document at `internal/anniversary/kfacet_isotrophy_program_pause.md`.
+document at `docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md`.
 Seven sequential pre-registered chapters; seven distinct chapter-
 close types; one load-bearing substantive positive (v0.7a' chi^2 =
 16.43, branch-independent, signed-direction); one comprehensive

@@ -193,8 +193,8 @@ claim and a pitch.
 | File | Why it matters |
 | --- | --- |
 | `docs/APPLICATIONS.md` | Application map; per-workbench claim boundaries; cap-set "out-of-scope" statement. |
-| `docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md` | Per-page OG/JSON-LD/sitemap matrix; Phase 1 cleared 2026-05-21. |
-| `docs/LEGAL_STANDING.md` | Current entity status (Stellar Aqua LLC) and future-entity transition path. |
+| `docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md` | Per-page OG/JSON-LD/sitemap matrix; Phase 1 cleared 2026-05-21. |
+| `docs/brand/LEGAL_STANDING.md` | Current entity status (Stellar Aqua LLC) and future-entity transition path. |
 | `docs/501c3/INITIATIVE_INDEX.md` | Working drafts for the planned 501(c)(3) ownership transfer. |
 
 ## Historical Context

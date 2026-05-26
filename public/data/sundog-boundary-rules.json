@@ -46,7 +46,7 @@
       ],
       "supportDocs": [
         "sundog.html",
-        "docs/WEBSITE_DEVELOPMENT.md"
+        "docs/site/WEBSITE_DEVELOPMENT.md"
       ]
     },
     {
@@ -79,7 +79,7 @@
       ],
       "supportDocs": [
         "isotrophy.html",
-        "docs/SUNDOG_V_ISOTROPHY_KFACET.md",
+        "docs/isotrophy/SUNDOG_V_ISOTROPHY_KFACET.md",
         "legend.html"
       ]
     },

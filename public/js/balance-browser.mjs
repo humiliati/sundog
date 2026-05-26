@@ -663,7 +663,7 @@ function drawBackground() {
   ctx.fillRect(0, 0, cssWidth, cssHeight);
 
   // Robotics balance motif derived with permission from the Lounas portfolio
-  // reference. See docs/THIRD_PARTY_REUSE.md for the reuse ledger.
+  // reference. See docs/site/THIRD_PARTY_REUSE.md for the reuse ledger.
   const cx = cssWidth * 0.18;
   const cy = cssHeight * 0.26;
   ctx.save();

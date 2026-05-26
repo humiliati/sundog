@@ -39,12 +39,18 @@ code, experiments, prior theorem materials, and application bridges.
   *Historical (anniversary target 2026-05-19 is past).* Low-risk and
   high-value roadmap lanes that were scoped for the anniversary window.
   Retained for the record; not a primary entry point for new readers.
-- [Promo highlights](PROMO_HIGHLIGHTS.md): hooks, headlines, provocative
+- [Promo folder](promo/README.md): promo highlights, outreach packet, and
+  public-copy handoff material.
+- [Brand folder](brand/README.md): public posture, brand/IP, legal standing,
+  and external model stress-test reports.
+- [Site folder](site/README.md): website development, SEO/social readiness,
+  UI/UX theme, assets, and policy ledgers.
+- [Promo highlights](promo/PROMO_HIGHLIGHTS.md): hooks, headlines, provocative
   statements, and future-facing language.
-- [Brand positioning](BRAND_POSITIONING.md): public lab posture after the
+- [Brand positioning](brand/BRAND_POSITIONING.md): public lab posture after the
   Mythos stress test, including the About-page spine and what-not-to-claim
   boundaries.
-- [Gemini benchmark](gemini-benchmark.md): external Gemini read on site
+- [Gemini benchmark](brand/gemini-benchmark.md): external Gemini read on site
   legibility, access ambiguity, and anniversary posture risks.
 - [Standalone app roadmap](STANDALONE_APP_ROADMAP.md): plan for a no/low
   dependency `.html`, `.exe`, and eventual `.apk` observer app.
@@ -52,6 +58,12 @@ code, experiments, prior theorem materials, and application bridges.
   workbench for guarded local control in a near-escape dynamical pocket.
 - [Three-Body Phase 11 summary](THREEBODY_PHASE11_SUMMARY.md): compact result
   readout for guard quantiles, outside-pocket expansion, and comparison slate.
+- [Isotrophy folder](isotrophy/README.md): public K_facet ledger, full
+  isotrophy roadmap, supplementary mirrors, and permanent K_facet appendix
+  set after the v0.3-v0.9 pause.
+- [Shadow Faraday folder](faraday/README.md): closed Phase 1-6 Faraday receipt
+  chain, Phase 3 derivations, Phase 4 verification battery, and Phase 7
+  source/topology boundary-audit spec.
 - [Sundog Balance roadmap](sundog_v_balance.md): confirmed cart-pole
   operating-envelope workbench for balancing from a shadow-derived signal.
 - [Sundog Pressure Mines roadmap](sundog_v_minesweeper.md): Phase 11
@@ -72,16 +84,16 @@ code, experiments, prior theorem materials, and application bridges.
 - [Sundog Gravity ledger](SUNDOG_V_GRAVITY.md): staging pattern for the
   highest-ambition Goodhart-sidestep claim. Source of the candidate
   template the other ledgers mirror.
-- [SEO and social-readiness roadmap](SEO_AND_SOCIAL_READINESS_ROADMAP.md):
+- [SEO and social-readiness roadmap](site/SEO_AND_SOCIAL_READINESS_ROADMAP.md):
   per-page OG/Twitter/JSON-LD matrix, Phase 1 cleared 2026-05-21 across
   thirteen Class A pages; Phase 2 staged.
 - [Sundog Gimmicks Ledger](SUNDOG_V_GIMMICKS.md): candidate game-native
   workbenches under evaluation before promotion to full roadmap documents.
-- [Third-party reuse ledger](THIRD_PARTY_REUSE.md): permissions and attribution
+- [Third-party reuse ledger](site/THIRD_PARTY_REUSE.md): permissions and attribution
   notes for borrowed design, code, and asset references.
-- [Brand and IP roadmap](BRAND_ROADMAP.md): legal hygiene, registration, and
+- [Brand and IP roadmap](brand/BRAND_ROADMAP.md): legal hygiene, registration, and
   future entity formation plan.
-- [Legal standing](LEGAL_STANDING.md): summary of the legal standing pass and
+- [Legal standing](brand/LEGAL_STANDING.md): summary of the legal standing pass and
   current ownership structure.
 - [Paper draft](PAPER_v1_draft.md): current academic paper draft.
 - [Paper outline](PAPER_OUTLINE_v0.md): venue framing, reviewer risks, and
@@ -94,11 +106,11 @@ code, experiments, prior theorem materials, and application bridges.
 - [Runners](runners.md): Gone Rogue / EyesOnly runner integration.
 - [Phase-2 blocks design](PHASE2_BLOCKS_DESIGN.md): occlusion and block-based
   follow-up experiment design.
-- [Icon assets](ICON_ASSETS.md): favicon, app icon, manifest, and HTML tags for
+- [Icon assets](site/ICON_ASSETS.md): favicon, app icon, manifest, and HTML tags for
   `sundog.cc`.
-- [Logo animation toolkit](LOGO_ANIMATION_TOOLKIT.md): Phase 11 characterized
+- [Logo animation toolkit](site/LOGO_ANIMATION_TOOLKIT.md): Phase 11 characterized
   Sundog mark assets, protected layers, and motion rules.
-- [Website development](WEBSITE_DEVELOPMENT.md): how to edit root HTML pages,
+- [Website development](site/WEBSITE_DEVELOPMENT.md): how to edit root HTML pages,
   link docs, build `dist/`, and deploy through Cloudflare Pages.
 - [Chat claim map](../chat/claim_map.json): Phase 0 claim classes, source
   boundaries, evidence tiers, answer templates, and refusal rules for the

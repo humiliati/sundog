@@ -1,6 +1,6 @@
 > Productised in two follow-up roadmaps as of 2026-05-12:
 >
-> - [`HIGHLIGHTS_RAIL_ROADMAP.md`](HIGHLIGHTS_RAIL_ROADMAP.md) — the
+> - [`HIGHLIGHTS_RAIL_ROADMAP.md`](site/HIGHLIGHTS_RAIL_ROADMAP.md) — the
 >   slide-rail rebuild around the stamp vocabulary proposed below.
 > - [`PUSHABLE_OCCLUDER_ROADMAP.md`](PUSHABLE_OCCLUDER_ROADMAP.md) —
 >   the falsification application that earns the rail's first

@@ -1,4 +1,4 @@
-"""Executable smoke workbench for docs/sundog_v_isotrophy.md.
+"""Executable smoke workbench for docs/isotrophy/sundog_v_isotrophy.md.
 
 This is deliberately a small harness, not the full K_facet experiment. It
 parses the Li-Liao compact supplementary ansatz, integrates selected rows with
@@ -3353,7 +3353,7 @@ def command_kfacet_bridge_audit(args: argparse.Namespace) -> int:
 
 # v0.4b row-z2-sweep: per-row M_i + Z_2 isotypic dim extraction + threshold rule
 # Implementation guardrails (signed off by Codex, see
-# internal/anniversary/kfacet_v04b_gamma3_form.md):
+# docs/isotrophy/kfacet/kfacet_v04b_gamma3_form.md):
 #  - Compute F_beta_even_dim / F_beta_odd_dim on K_fib (neutral-quotiented).
 #  - Record projection_target = "K_fib" explicitly in every receipt.
 #  - Store full pre-rule feature set so the aggregator is brutally dumb.
@@ -3780,7 +3780,7 @@ def build_parser() -> argparse.ArgumentParser:
             "prediction. Computes M_i, K_fib, F_beta-even/odd dims, and "
             "the locked gamma_3 threshold-rule prediction (predict S iff "
             "F_beta_even_dim >= F_beta_odd_dim). See "
-            "internal/anniversary/kfacet_v04b_gamma3_form.md for the form lock."
+            "docs/isotrophy/kfacet/kfacet_v04b_gamma3_form.md for the form lock."
         ),
     )
     z2_sweep.add_argument("--source", choices=sorted(SUPPLEMENT_URLS), default="B")

@@ -13,7 +13,7 @@ Short version:
 
 Status: Phases 0–12 landed in full (2026-05-13). The strong-ratchet §13 result spans **six distinct model implementations across four training lineages** (deterministic compositor + `gpt-4o-mini` + `claude-haiku-4-5` + `llama-3.3-70b-versatile` + `llama-3.1-8b-instant` + `qwen/qwen3-32b`), three retrieval depths, three prompt-type slates plus a 22-prompt falsification slate, eight trace-field ablations × two hosted vendors, three corpus-conflict mutations. **Total: 5,670 trials, 0 unsafe-accepts.** The Phase 12 open-weight cross-architecture sweep is **complete** — the Phase 12b throttled local-run driver replaced the broken paid-tier waitlist with a ~50-minute ratelimit-respecting PowerShell sweep. No Phase 12 measurement thread remains load-bearing for the public §13 claim.
 
-Current integrity status (2026-05-14): public-copy governance is active again. `sundog.html` now carries an expanded academic halo-vocabulary atlas, including named halo families that are not yet separately rendered, detected, or fully described by the current geometry layer. Several deploys also landed without the chat-check gate described in `docs/WEBSITE_DEVELOPMENT.md`. The immediate chat task is therefore not another §13 ratchet; it is claim-map alignment: Ask Sundog must route the new vocabulary honestly as literature/catalogue coverage, not as a new Sundog result or complete modeling claim.
+Current integrity status (2026-05-14): public-copy governance is active again. `sundog.html` now carries an expanded academic halo-vocabulary atlas, including named halo families that are not yet separately rendered, detected, or fully described by the current geometry layer. Several deploys also landed without the chat-check gate described in `docs/site/WEBSITE_DEVELOPMENT.md`. The immediate chat task is therefore not another §13 ratchet; it is claim-map alignment: Ask Sundog must route the new vocabulary honestly as literature/catalogue coverage, not as a new Sundog result or complete modeling claim.
 
 Audience:
 - Sundog research maintainers.
@@ -246,8 +246,8 @@ Applications:
 - docs/runners.md
 
 Presentation / boundary:
-- docs/PROMO_HIGHLIGHTS.md
-- docs/BRAND_POSITIONING.md
+- docs/promo/PROMO_HIGHLIGHTS.md
+- docs/brand/BRAND_POSITIONING.md
 - docs/presentation/claims-and-scope.md
 
 Each section gets a claim tier:
@@ -2091,14 +2091,14 @@ This section tracks public-copy surfaces that are coupled to
 
 - **Homepage elevator pitch** &mdash; `index.html#elevator-pitch`
   - Living draft, versioned via `data-version` and `data-revised`.
-  - Update protocol lives in `docs/WEBSITE_DEVELOPMENT.md` &rarr;
+  - Update protocol lives in `docs/site/WEBSITE_DEVELOPMENT.md` &rarr;
     "Elevator Pitch (Living Section)".
   - Densest claim surface on the public site: in four paragraphs it
     touches the halo system, mesa-optimization findings, the 5D
     subspace at `net.7`, the field-not-reward thesis, and the
     substrate-coincidence argument.
 
-Other surfaces (`docs/BRAND_POSITIONING.md`,
+Other surfaces (`docs/brand/BRAND_POSITIONING.md`,
 `docs/presentation/message-house.md`,
 `docs/presentation/claims-and-scope.md`) are already governed by the
 existing claim-map routes. Add new entries here when a public surface

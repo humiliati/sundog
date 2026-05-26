@@ -1,7 +1,7 @@
 """v0.7a' minimal-scoped restricted-scope audit.
 
 Implements the form locked in
-`internal/anniversary/kfacet_v07a_prime_restricted_scope_form.md`.
+`docs/isotrophy/kfacet/kfacet_v07a_prime_restricted_scope_form.md`.
 
 Reads the v0.7a per_row_table.csv, filters to the 250 analyzable rows
 (integration_blocked == False), re-quartile-bins velocity_fraction and
@@ -30,7 +30,7 @@ if str(ROOT) not in sys.path:
 DEFAULT_V07A_PER_ROW = ROOT / "results/isotrophy/k-facet-v07a-velocity-fraction-audit/per_row_table.csv"
 DEFAULT_OUT = ROOT / "results/isotrophy/k-facet-v07a-prime-restricted-scope"
 
-FORM_LOCK = "internal/anniversary/kfacet_v07a_prime_restricted_scope_form.md"
+FORM_LOCK = "docs/isotrophy/kfacet/kfacet_v07a_prime_restricted_scope_form.md"
 VERSION = "v0.7a-prime-restricted-scope-audit"
 
 # Inherited from v0.7a + v0.6 lineage.

@@ -421,7 +421,7 @@ anything.
 
 `chat.html` exists and shipped Phase 8c. v2 polishes it into the
 non-profit deliverable's flagship page. The existing UI/UX foundation
-(`docs/UI_UX_THEME_FOUNDATION.md`) constrains design choices. The
+(`docs/site/UI_UX_THEME_FOUNDATION.md`) constrains design choices. The
 work is layout, hierarchy, and prose tightening — not invention.
 
 This ticket is ship criterion #6 above, broken out here so a polisher
@@ -592,9 +592,9 @@ already been laid out.
 
 - [`SUNDOG_V_CHAT.md`](SUNDOG_V_CHAT.md) — research roadmap, Phases
   0–12, eval discipline, claim ratchet, coupled-surfaces integrity.
-- [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) — the
+- [`UI_UX_THEME_FOUNDATION.md`](site/UI_UX_THEME_FOUNDATION.md) — the
   design constraints any polishing ticket inherits.
-- [`WEBSITE_DEVELOPMENT.md`](WEBSITE_DEVELOPMENT.md) — the deploy
+- [`WEBSITE_DEVELOPMENT.md`](site/WEBSITE_DEVELOPMENT.md) — the deploy
   protocol and chat-check gate that any v2 change must clear.
 - [`presentation/claims-and-scope.md`](presentation/claims-and-scope.md)
   — canonical bounded-claim language; v2 product copy must not

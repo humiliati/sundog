@@ -12,7 +12,7 @@ const EXPECTED_HOOKS = [
   { file: path.join("docs", "SUNDOG_V_CHAT.md"), count: 1 },
   { file: "capset.html", count: 1 },
   { file: "geometry.html", count: 1 },
-  { file: path.join("docs", "PROMO_HIGHLIGHTS.md"), count: 1 },
+  { file: path.join("docs", "promo", "PROMO_HIGHLIGHTS.md"), count: 1 },
   { file: "safety-method.html", count: 1 }
 ];
 
@@ -279,8 +279,8 @@ stack-invariance explanation weakens.
 </p>`, 16)
     },
     {
-      file: path.join("docs", "PROMO_HIGHLIGHTS.md"),
-      anchor: findHook(path.join("docs", "PROMO_HIGHLIGHTS.md"), "§9b"),
+      file: path.join("docs", "promo", "PROMO_HIGHLIGHTS.md"),
+      anchor: findHook(path.join("docs", "promo", "PROMO_HIGHLIGHTS.md"), "§9b"),
       content: `<!-- RATCHET APPLIED: COMPANDER_PAPER_HOOK §9b via ${shortCite} -->`
     },
     {

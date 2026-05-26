@@ -30,7 +30,7 @@ lab today.
 
 If you are a potential collaborator, sponsor, fiscal-sponsor candidate,
 or contributor who needs the entity's legal status today,
-[`docs/LEGAL_STANDING.md`](docs/LEGAL_STANDING.md) is the current
+[`docs/brand/LEGAL_STANDING.md`](docs/brand/LEGAL_STANDING.md) is the current
 factual ground; [`docs/501c3/SUNDOG_FOUNDING_PLAN_v0.1.md`](docs/501c3/SUNDOG_FOUNDING_PLAN_v0.1.md)
 is the bridge document between current state and target state.
 
@@ -153,9 +153,9 @@ Sorted by reviewer landing intent.
 
 - [Documentation index](docs/README.md) — local map of all research-facing
   docs.
-- [Website development guide](docs/WEBSITE_DEVELOPMENT.md) — editing the
+- [Website development guide](docs/site/WEBSITE_DEVELOPMENT.md) — editing the
   public site, deploying through Cloudflare Pages.
-- [`docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md`](docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md)
+- [`docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md`](docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md)
   — per-page OG/Twitter/JSON-LD matrix and Bucket 2 follow-ups.
 - [Paper outline and review notes](docs/PAPER_OUTLINE_v0.md) — venue
   framing, reviewer risks, stress-test interpretation.
@@ -253,7 +253,7 @@ Cloudflare Pages is configured for the `sundog` project, production branch
 domain `sundog.cc`. The deploy helper reads local scoped Cloudflare material
 from `C:\Users\hughe\syek.c`; keep that file outside the repo.
 
-See [Website development](docs/WEBSITE_DEVELOPMENT.md) before adding public
+See [Website development](docs/site/WEBSITE_DEVELOPMENT.md) before adding public
 pages or changing deployment behavior.
 
 ## Related Sundog Applications
@@ -347,7 +347,7 @@ Present it carefully:
   apparatus as an evaluator for AI-produced mathematics, with the
   cap-set workbench as the one current anchor.
 - **Social-readiness state** tracked in
-  [`docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md`](docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md)
+  [`docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md`](docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md)
   — Phase 1 cleared 2026-05-21 across thirteen Class A pages; Phase 2
   staged.
 The broader theorem remains a research program rather than a universal

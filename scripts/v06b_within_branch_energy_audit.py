@@ -1,7 +1,7 @@
 """v0.6b within-branch energy audit (alignment-breaking).
 
 Implements the form locked in
-`internal/anniversary/kfacet_v06b_within_branch_energy_audit_form.md`.
+`docs/isotrophy/kfacet/kfacet_v06b_within_branch_energy_audit_form.md`.
 
 Stratum: v0.5a (m_3 < 1, z_0 < 0.3) branch only (113 rows). Q_E and Q_|L|
 are read from the v0.6a receipt (no re-binning within branch). Tests
@@ -36,7 +36,7 @@ DEFAULT_V06A_MANIFEST = ROOT / "results/isotrophy/k-facet-v06a-energy-quartile-a
 DEFAULT_V06A_PER_ROW = ROOT / "results/isotrophy/k-facet-v06a-energy-quartile-audit/per_row_table.csv"
 DEFAULT_OUT = ROOT / "results/isotrophy/k-facet-v06b-within-branch-energy"
 
-FORM_LOCK = "internal/anniversary/kfacet_v06b_within_branch_energy_audit_form.md"
+FORM_LOCK = "docs/isotrophy/kfacet/kfacet_v06b_within_branch_energy_audit_form.md"
 VERSION = "v0.6b-within-branch-energy-audit"
 
 STRATUM_BRANCH_LABEL = "m3_lt_1__z0_lt_0p3"
