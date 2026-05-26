@@ -1,0 +1,11 @@
+[shard mu1-v1p05] mass-ratio=1 velocity-scale=1.05
+[shard mu1-v1p05] out: results/threebody/phase15-shard-mu1-v1p05
+[shard mu1-v1p05] expected: 15 cases × 9 modes × 8 seeds = 1,080 trials (~6 h)
+[shard mu1-v1p05] starting at 2026-05-26T05:02:45.753Z
+[threebody] wrote 1080 phase15-forward-oracle-precision-shard-mu1-v1p05 trials to results\threebody\phase15-shard-mu1-v1p05
+[threebody] wrote trial-outcomes.csv, paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv
+[threebody] wrote cell-precision-map.csv
+[threebody] wrote richardson-order-map.csv
+[threebody] wrote trials-minimal.jsonl
+[threebody] candidate envelope rows 16/120
+[threebody] outcomes {"bounded":405,"escape":621,"close_approach":54}
