@@ -1945,16 +1945,50 @@
             }, 2600);
         };
 
+        const boxFromParts = function (parts) {
+            const boxes = [];
+            parts.forEach((part) => {
+                if (typeof part.getBBox !== 'function') return;
+                try {
+                    const box = part.getBBox();
+                    if (
+                        Number.isFinite(box.x) &&
+                        Number.isFinite(box.y) &&
+                        Number.isFinite(box.width) &&
+                        Number.isFinite(box.height) &&
+                        box.width > 0 &&
+                        box.height > 0
+                    ) {
+                        boxes.push(box);
+                    }
+                } catch (err) {
+                    // Some SVG engines refuse getBBox on detached/hidden nodes.
+                }
+            });
+            if (!boxes.length) return null;
+            const minX = Math.min(...boxes.map((box) => box.x));
+            const minY = Math.min(...boxes.map((box) => box.y));
+            const maxX = Math.max(...boxes.map((box) => box.x + box.width));
+            const maxY = Math.max(...boxes.map((box) => box.y + box.height));
+            return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
+        };
+
         const makeSelectedSvg = function (cell, options) {
-            const opts = Object.assign({ animated: true, compact: false }, options || {});
+            const opts = Object.assign({ animated: true, compact: false, focusWire: false }, options || {});
             const panelRect = cell.querySelector('rect[rx="14"]') || cell.querySelector('rect');
-            const x = Number(panelRect && panelRect.getAttribute('x')) || 0;
-            const y = Number(panelRect && panelRect.getAttribute('y')) || 0;
-            const w = Number(panelRect && panelRect.getAttribute('width')) || 320;
-            const h = Number(panelRect && panelRect.getAttribute('height')) || 260;
-            const pad = opts.compact ? 10 : 18;
+            const wireBox = (opts.compact || opts.focusWire)
+                ? boxFromParts(cell.querySelectorAll('path, circle'))
+                : null;
+            const x = wireBox ? wireBox.x : (Number(panelRect && panelRect.getAttribute('x')) || 0);
+            const y = wireBox ? wireBox.y : (Number(panelRect && panelRect.getAttribute('y')) || 0);
+            const w = wireBox ? wireBox.width : (Number(panelRect && panelRect.getAttribute('width')) || 320);
+            const h = wireBox ? wireBox.height : (Number(panelRect && panelRect.getAttribute('height')) || 260);
+            const pad = wireBox ? (opts.compact ? 14 : 22) : (opts.compact ? 10 : 18);
             const svg = document.createElementNS(svgNs, 'svg');
+            const instanceClass = 'iso-orbit-instance-' + Math.random().toString(36).slice(2);
+            const scope = '.' + instanceClass + ' ';
             svg.setAttribute('xmlns', svgNs);
+            svg.classList.add(instanceClass);
             svg.setAttribute('viewBox', [x - pad, y - pad, w + pad * 2, h + pad * 2].join(' '));
             svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
             svg.setAttribute('role', 'img');
@@ -1963,13 +1997,42 @@
             const style = document.createElementNS(svgNs, 'style');
             style.textContent = opts.animated
                 ? [
-                    '@keyframes isoTraceDraw{to{stroke-dashoffset:0}}',
-                    '@keyframes isoPulse{from{transform:scale(0.9);opacity:0.78}to{transform:scale(1.16);opacity:1}}',
-                    '.iso-wire-copy path{stroke-dasharray:1;stroke-dashoffset:1;animation:isoTraceDraw 1.1s ease-out forwards}',
-                    '.iso-wire-copy circle{animation:isoPulse 1.15s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}',
-                    '.iso-motion-body{filter:drop-shadow(0 0 5px rgba(255,255,255,0.35))}'
+                    '@keyframes isoTraceSweep{0%{stroke-dashoffset:1;stroke-opacity:0}8%{stroke-opacity:.88}42%{stroke-opacity:.7}68%{stroke-opacity:.16}100%{stroke-dashoffset:-.22;stroke-opacity:0}}',
+                    '@keyframes isoTraceGlow{0%{stroke-dashoffset:1;stroke-opacity:0}10%{stroke-opacity:.22}58%{stroke-opacity:.16}100%{stroke-dashoffset:-.22;stroke-opacity:0}}',
+                    '@keyframes isoPulse{from{transform:scale(0.96);opacity:0.7}to{transform:scale(1.06);opacity:0.92}}',
+                    scope + '.iso-wire-copy path{animation:none;stroke-opacity:.1}',
+                    scope + '.iso-wire-copy circle{animation:none;opacity:.28;transform-box:fill-box;transform-origin:center}',
+                    scope + '.iso-trace-copy path{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:.13 .87;stroke-dashoffset:1;animation:isoTraceSweep 20s linear infinite}',
+                    scope + '.iso-trace-copy path:nth-of-type(1){animation-name:isoTraceGlow}',
+                    scope + '.iso-motion-body{filter:drop-shadow(0 0 4px rgba(255,255,255,0.32));opacity:.92}'
                 ].join('')
-                : '.iso-wire-copy path,.iso-wire-copy circle{animation:none}';
+                : scope + '.iso-wire-copy path,' + scope + '.iso-wire-copy circle{animation:none}';
+            if (wireBox) {
+                const basePathStyles = opts.animated
+                    ? [
+                        scope + '.iso-wire-copy path:nth-of-type(1){stroke:#b97812;stroke-width:3.2;stroke-opacity:.07}',
+                        scope + '.iso-wire-copy path:nth-of-type(2){stroke:#f4c430;stroke-width:1.2;stroke-opacity:.12}',
+                        scope + '.iso-trace-copy path:nth-of-type(1){stroke:#b97812;stroke-width:7;stroke-opacity:.2}',
+                        scope + '.iso-trace-copy path:nth-of-type(2){stroke:#f4c430;stroke-width:3;stroke-opacity:.9}'
+                    ]
+                    : [
+                        scope + '.iso-wire-copy path:nth-of-type(1){stroke:#b97812;stroke-width:7.2;stroke-opacity:.55}',
+                        scope + '.iso-wire-copy path:nth-of-type(2){stroke:#f4c430;stroke-width:3.2;stroke-opacity:.96}'
+                    ];
+                style.textContent += [
+                    scope + '.iso-wire-copy text{display:none}',
+                    scope + '.iso-trace-copy text{display:none}',
+                    scope + '.iso-wire-copy path{stroke-linecap:round;stroke-linejoin:round}',
+                    scope + '.iso-trace-copy path{stroke-linecap:round;stroke-linejoin:round}',
+                    ...basePathStyles,
+                    opts.animated
+                        ? scope + '.iso-wire-copy circle{r:5.8;stroke-width:1;opacity:.26;animation:none}'
+                        : scope + '.iso-wire-copy circle{r:7.2;stroke-width:1.2}'
+                ].join('');
+                if (opts.compact) {
+                    style.textContent += scope + '.iso-wire-copy path{stroke-dasharray:none!important;stroke-dashoffset:0!important;animation:none!important}';
+                }
+            }
             svg.appendChild(style);
 
             const clone = cell.cloneNode(true);
@@ -1978,19 +2041,32 @@
             clone.removeAttribute('role');
             clone.removeAttribute('aria-label');
             clone.removeAttribute('data-strict-shown');
-            clone.querySelectorAll('path').forEach((path) => path.setAttribute('pathLength', '1'));
+            clone.querySelectorAll('style').forEach((part) => part.remove());
             svg.appendChild(clone);
+            let motionPath = null;
             if (opts.animated) {
-                const paths = clone.querySelectorAll('path');
-                const motionPath = paths[1] || paths[0];
+                const traceClone = cell.cloneNode(true);
+                traceClone.classList.add('iso-trace-copy');
+                traceClone.removeAttribute('tabindex');
+                traceClone.removeAttribute('role');
+                traceClone.removeAttribute('aria-label');
+                traceClone.removeAttribute('data-strict-shown');
+                traceClone.querySelectorAll('style').forEach((part) => part.remove());
+                traceClone.querySelectorAll('rect,text,circle').forEach((part) => part.remove());
+                traceClone.querySelectorAll('path').forEach((path) => path.setAttribute('pathLength', '1'));
+                svg.appendChild(traceClone);
+                const paths = traceClone.querySelectorAll('path');
+                motionPath = paths[1] || paths[0];
+            }
+            if (opts.animated) {
                 if (motionPath) {
                     const label = (cell.getAttribute('data-label') || 'orbit').replace(/[^a-zA-Z0-9_-]/g, '-');
                     const pathId = 'iso-motion-path-' + label + '-' + Math.random().toString(36).slice(2);
                     motionPath.setAttribute('id', pathId);
                     [
                         { fill: '#ffd76b', begin: '0s' },
-                        { fill: '#ff7a45', begin: '-3s' },
-                        { fill: '#79bde8', begin: '-6s' }
+                        { fill: '#ff7a45', begin: '-8s' },
+                        { fill: '#79bde8', begin: '-16s' }
                     ].forEach((body) => {
                         const circle = document.createElementNS(svgNs, 'circle');
                         circle.setAttribute('r', opts.compact ? '5' : '7');
@@ -1999,10 +2075,10 @@
                         circle.setAttribute('stroke-width', opts.compact ? '1' : '1.4');
                         circle.setAttribute('class', 'iso-motion-body');
                         const motion = document.createElementNS(svgNs, 'animateMotion');
-                        motion.setAttribute('dur', '9s');
+                        motion.setAttribute('dur', '24s');
                         motion.setAttribute('begin', body.begin);
+                        motion.setAttribute('calcMode', 'paced');
                         motion.setAttribute('repeatCount', 'indefinite');
-                        motion.setAttribute('rotate', 'auto');
                         const mpath = document.createElementNS(svgNs, 'mpath');
                         mpath.setAttribute('href', '#' + pathId);
                         motion.appendChild(mpath);
@@ -2028,7 +2104,7 @@
             stageFidelity.setAttribute('data-fidelity', meta.fidelity);
             const index = Math.max(0, cells.indexOf(cell));
             stageCount.textContent = String(index + 1) + ' / ' + String(cells.length || 25);
-            stageVisual.replaceChildren(makeSelectedSvg(cell, { animated: true }));
+            stageVisual.replaceChildren(makeSelectedSvg(cell, { animated: true, focusWire: true }));
             stageVisual.setAttribute('aria-label', 'Open inspector for ' + meta.label);
             railTrack?.querySelectorAll('.iso-rail-card').forEach((card) => {
                 const isActive = card.getAttribute('data-label') === meta.label;
@@ -2067,7 +2143,7 @@
         const fillCompareSide = function (cell, visual, title, metaEl, label) {
             if (!cell || !visual || !title || !metaEl) return;
             const meta = metaFor(cell);
-            visual.replaceChildren(makeSelectedSvg(cell, { animated: false }));
+            visual.replaceChildren(makeSelectedSvg(cell, { animated: false, focusWire: true }));
             title.textContent = label + ': ' + meta.label;
             metaEl.textContent = meta.status + ' · rotation ' + fmtRad(meta.rotation) + ' · period ' + Number(meta.period).toFixed(3);
         };
