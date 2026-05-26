@@ -233,6 +233,9 @@ gate runs.
 | --- | ---: | ---: | ---: | ---: | --- |
 | 1 / 12 | 1 | 1.1 | 1,080 | 5 h 16.8 min | PASS — overnight 1, 2-concurrent w/ v=0.95 |
 | 2 / 12 | 1 | 0.95 | 1,080 | 5 h 37.4 min | PASS — overnight 1, 2-concurrent w/ v=1.1 (boundary cell, ~20 min slower) |
+| 3 / 12 | 1 | 1.05 | 1,080 | 7 h 9.7 min | PASS — overnight 2, 3-concurrent (cand 16/120) |
+| 4 / 12 | 1 | 1.15 | 1,080 | 6 h 8.6 min | PASS — overnight 2, 3-concurrent (cand 31/120) |
+| 5 / 12 | 0.3 | 0.95 | 1,080 | 7 h 0.0 min | PASS — overnight 2, 3-concurrent (cand 34/120; mu=0.3 boundary is NOT a failure cell, contrast with mu=1·v=0.95 which had 0/120) |
 
 **Overnight 1 (2026-05-25):** launched 2026-05-25T06:35:50Z; both shards
 started within 10 ms of each other (concurrent launch confirmed). All 14
@@ -244,10 +247,26 @@ stalls. 2-concurrent wall-clock = max(316.8, 337.4) = **5 h 37.4 min** vs
 estimated ~10 h 54 min sequential → **1.94× speedup** (better than the
 smoke's 1.74×; smoke had more cell-cost asymmetry per-shard).
 
-**Concurrency-3 promotion status:** conditions (a) stable wall-clock,
-(b) clean per-shard CSVs, (c) no stalls — **cleared**. Condition (d) no
-thermal/interactive-UI pain — **pending operator confirmation** before
-promotion. Remains at 2 concurrent until then.
+**Overnight 2 (2026-05-26, first 3-concurrent):** launched
+2026-05-26T05:02:45Z; all three shards started within 2 ms of each other.
+All 14 per-shard outputs emitted on each; trial counts 1,080/1,080 across
+the board — no stalls. Group wall = max(429.7, 368.6, 420.0) =
+**7 h 9.7 min** vs sequential estimate 20 h 18.3 min → **2.84× speedup**
+(close to ideal 3×). Per-shard wall is higher than at 2-concurrent (more
+contention per process), but aggregate throughput is up: 7.54 trials/min at
+3-concurrent vs 6.40 at 2-concurrent.
+
+**Observational read (context only — §5 verdict on the full merge):** the
+mu=0.3·v=0.95 shard produced **34/120 candidate rows**, contrasting sharply
+with the mu=1·v=0.95 shard from overnight 1 which had **0/120**. This is
+consistent with the Phase 13 finding that the boundary failure is
+*equal-mass-specific* (all 5 Phase 13 negative best cells were at mu=1,
+v=0.95) rather than a generic low-velocity issue. Mass-ratio is doing real
+work at the boundary. Reading is provisional and does not pre-judge the
+§5 Pass/Partial/Fail verdict, which awaits the full 12-shard merge.
+
+**Concurrency-3 promotion status:** all four conditions cleared — exercised
+overnight 2 with no thermal/UI pain. Stays at 3 (never 4).
 
 ### Concurrency policy (operator pin, 2026-05-16)
 
