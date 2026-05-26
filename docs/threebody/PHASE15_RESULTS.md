@@ -236,6 +236,8 @@ gate runs.
 | 3 / 12 | 1 | 1.05 | 1,080 | 7 h 9.7 min | PASS — overnight 2, 3-concurrent (cand 16/120) |
 | 4 / 12 | 1 | 1.15 | 1,080 | 6 h 8.6 min | PASS — overnight 2, 3-concurrent (cand 31/120) |
 | 5 / 12 | 0.3 | 0.95 | 1,080 | 7 h 0.0 min | PASS — overnight 2, 3-concurrent (cand 34/120; mu=0.3 boundary is NOT a failure cell, contrast with mu=1·v=0.95 which had 0/120) |
+| 6 / 12 | 0.3 | 1.1 | 1,080 | 5 h 40.5 min | PASS — batch 3 (mid-day), 2-concurrent w/ mu=0.01·v=1.1 (cand 14/120) |
+| 7 / 12 | 0.01 | 1.1 | 1,080 | 4 h 15.1 min | PASS — batch 3 (mid-day), 2-concurrent w/ mu=0.3·v=1.1 (cand 15/120; ~85 min faster — smaller-mass cells terminate earlier) |
 
 **Overnight 1 (2026-05-25):** launched 2026-05-25T06:35:50Z; both shards
 started within 10 ms of each other (concurrent launch confirmed). All 14
@@ -267,6 +269,22 @@ work at the boundary. Reading is provisional and does not pre-judge the
 
 **Concurrency-3 promotion status:** all four conditions cleared — exercised
 overnight 2 with no thermal/UI pain. Stays at 3 (never 4).
+
+**Batch 3 (2026-05-26, mid-day 2-concurrent):** launched 2026-05-26T17:18:20Z;
+both shards started within ~70 ms of each other. All 14 per-shard outputs
+emitted on both; trial counts 1,080/1,080 across — no stalls. Group wall =
+max(340.5, 255.1) = **5 h 40.5 min** vs sequential estimate 9 h 55.6 min
+→ **1.75× speedup** at 2-concurrent (mu=0.01 finished ~85 min before mu=0.3,
+so the last ~85 min was effectively solo mu=0.3 — that reduces the
+concurrency benefit during the tail; at 2-concurrent the wall is always
+bounded by the slower shard).
+
+**Operational observation across the mu axis at v=1.1** (context for
+concurrency planning — not science): mu=1 = 5 h 16.8 min (overnight 1,
+2-concurrent), mu=0.3 = 5 h 40.5 min (batch 3, 2-concurrent), mu=0.01 = 4 h
+15.1 min (batch 3, 2-concurrent). Per-cell cost is **non-monotonic in mu** —
+mu=0.3 was slowest, mu=0.01 noticeably fastest. Pairing one mu=0.01 with one
+heavier-mu shard balances wall in remaining nights.
 
 ### Concurrency policy (operator pin, 2026-05-16)
 
