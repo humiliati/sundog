@@ -76,10 +76,14 @@
             padding: 0;
         }
 
+        body {
+            overflow-x: hidden;
+        }
+
         .page-hero {
             max-width: 1120px;
             margin: 0 auto;
-            padding: 7rem 2rem 3rem;
+            padding: 4.4rem 2rem 1.5rem;
         }
 
         .eyebrow {
@@ -92,18 +96,79 @@
         }
 
         h1 {
-            max-width: 880px;
+            max-width: 820px;
             color: var(--primary-dark);
-            font-size: clamp(2.5rem, 7vw, 5.25rem);
-            line-height: 0.98;
-            margin-bottom: 1.5rem;
+            font-size: clamp(2.4rem, 5.7vw, 4.35rem);
+            line-height: 1;
+            margin-bottom: 1.1rem;
         }
 
         .lede {
             max-width: 780px;
             color: #40505C;
+            font-size: 1.12rem;
+            line-height: 1.62;
+            margin-bottom: 0.9rem;
+        }
+
+        .route-strip {
+            max-width: 1120px;
+            margin: 0 auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .route-strip-inner {
+            display: grid;
+            grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+            gap: 1rem;
+            align-items: center;
+            border: 1px solid rgba(20, 43, 58, 0.16);
+            border-radius: 8px;
+            background:
+                linear-gradient(135deg, rgba(255, 250, 240, 0.9), rgba(248, 251, 252, 0.96)),
+                radial-gradient(circle at 100% 0%, rgba(244, 196, 48, 0.16), transparent 16rem);
+            padding: 1rem;
+        }
+
+        .route-strip h2 {
+            color: var(--primary-dark);
             font-size: 1.25rem;
-            line-height: 1.8;
+            line-height: 1.15;
+        }
+
+        .route-strip p {
+            color: #40505C;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            margin-top: 0.3rem;
+        }
+
+        .quick-routes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            justify-content: flex-end;
+        }
+
+        .quick-routes a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 2.35rem;
+            padding: 0.45rem 0.75rem;
+            border: 1px solid rgba(20, 43, 58, 0.18);
+            border-radius: 999px;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            font-size: 0.84rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .quick-routes a:hover,
+        .quick-routes a:focus-visible {
+            border-color: var(--accent-gold);
+            color: #8A650E;
+            outline: none;
         }
 
         .content {
@@ -121,15 +186,41 @@
         .app-card {
             background: var(--bg-light);
             border: 1px solid var(--line);
+            border-top: 4px solid rgba(115, 150, 168, 0.45);
             border-radius: 8px;
             padding: 1.5rem;
             display: grid;
             gap: 1rem;
         }
 
+        .app-card[data-tier="research"] {
+            border-top-color: #67C9A6;
+        }
+
+        .app-card[data-tier="envelope"] {
+            border-top-color: var(--accent-gold);
+        }
+
+        .app-card[data-tier="prototype"] {
+            border-top-color: #6C6A9F;
+        }
+
+        .app-card[data-tier="product"] {
+            border-top-color: #B8653B;
+        }
+
+        .card-head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
         .app-card h2 {
             color: var(--primary-dark);
             font-size: 1.45rem;
+            line-height: 1.15;
         }
 
         .tier {
@@ -167,16 +258,39 @@
             display: flex;
             gap: 0.85rem;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .app-links a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 2.15rem;
+            padding: 0.38rem 0.62rem;
+            border: 1px solid rgba(20, 43, 58, 0.16);
+            border-radius: 999px;
+            background: #FFFFFF;
             color: var(--primary-dark);
+            font-size: 0.85rem;
             font-weight: 800;
             text-decoration: none;
         }
 
-        .app-links a:hover {
+        .app-links a:hover,
+        .app-links a:focus-visible {
+            border-color: var(--accent-gold);
             color: #A97700;
+            outline: none;
+        }
+
+        .app-links a.primary-route {
+            border-color: rgba(244, 196, 48, 0.56);
+            background: rgba(244, 196, 48, 0.14);
+        }
+
+        .app-links a.external-route::after {
+            content: "\2197";
+            margin-left: 0.35rem;
+            font-size: 0.86em;
         }
 
         .commercial-section {
@@ -260,8 +374,69 @@
         /* Page-local: footer styling lives in sundog-theme.css */
 
         @media (max-width: 760px) {
+            .applications-gallery-page .site-header {
+                position: sticky;
+                top: 0;
+            }
+
+            .applications-gallery-page .site-nav {
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 0.62rem 1rem;
+            }
+
+            .applications-gallery-page .site-brand {
+                font-size: 0.82rem;
+            }
+
+            .applications-gallery-page .site-links {
+                flex: 1 1 auto;
+                width: auto;
+                min-width: 0;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                gap: 0.75rem;
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+
+            .applications-gallery-page .site-links::-webkit-scrollbar {
+                display: none;
+            }
+
+            .applications-gallery-page .site-links a {
+                font-size: 0.78rem;
+            }
+
             .page-hero {
-                padding: 5rem 1.5rem 3rem;
+                padding: 1.65rem 1.25rem 1rem;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 10vw, 2.58rem);
+                line-height: 1.02;
+            }
+
+            .lede {
+                font-size: 0.98rem;
+                line-height: 1.58;
+            }
+
+            .route-strip {
+                padding: 0 1.25rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .route-strip-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-routes {
+                justify-content: flex-start;
             }
 
             .content {
@@ -272,6 +447,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .app-card {
+                padding: 1.1rem;
+            }
+
             .commercial-grid {
                 grid-template-columns: 1fr;
             }
@@ -279,7 +458,7 @@
     </style>
     <link rel="stylesheet" href="/css/sundog-theme.css">
 </head>
-<body>
+<body class="applications-gallery-page">
     <header class="site-header">
         <nav class="site-nav" aria-label="Primary navigation">
             <a href="/" class="site-brand">Sundog</a>
@@ -307,11 +486,28 @@
             </p>
         </section>
 
+        <section class="route-strip" aria-label="Quick routes through the application gallery">
+            <div class="route-strip-inner">
+                <div>
+                    <h2>Start with a live surface.</h2>
+                    <p>Workbench pages carry evidence; external routes carry playable or product-facing builds.</p>
+                </div>
+                <nav class="quick-routes" aria-label="Application quick routes">
+                    <a href="/balance">Balance workbench</a>
+                    <a href="/mines">Pressure Mines</a>
+                    <a href="https://eyesonly.cc/" target="_blank" rel="noopener noreferrer">EyesOnly live</a>
+                    <a href="https://itch.io/jam/dcjam2026/rate/4448860" target="_blank" rel="noopener noreferrer">Dungeon Gleaner jam</a>
+                </nav>
+            </div>
+        </section>
+
         <section class="content">
             <div class="gallery-grid">
-                <article class="app-card" id="photometric-alignment">
-                    <span class="tier">Research Result</span>
-                    <h2>Photometric Mirror Alignment</h2>
+                <article class="app-card" id="photometric-alignment" data-tier="research">
+                    <div class="card-head">
+                        <h2>Photometric Mirror Alignment</h2>
+                        <span class="tier">Research Result</span>
+                    </div>
                     <div class="signal-list">
                         <p><strong>Indirect signal:</strong> sparse detector intensity and proprioception.</p>
                         <p><strong>Transformation:</strong> scan, seek, and track the photometric response.</p>
@@ -324,9 +520,11 @@
                     </div>
                 </article>
 
-                <article class="app-card" id="threebody-experiment">
-                    <span class="tier">Operating-Envelope Study</span>
-                    <h2>Three-Body Dynamics</h2>
+                <article class="app-card" id="threebody-experiment" data-tier="envelope">
+                    <div class="card-head">
+                        <h2>Three-Body Dynamics</h2>
+                        <span class="tier">Operating-Envelope Study</span>
+                    </div>
                     <div class="signal-list">
                         <p><strong>Indirect signal:</strong> local tidal-tensor proxy, acceleration magnitude, and privileged diagnostics kept separate for audit.</p>
                         <p><strong>Transformation:</strong> guarded TRACK control over a sensor-motivated instability signature.</p>
@@ -334,15 +532,17 @@
                     </div>
                     <p class="stub-note">Status: During our <a href="docs/THREEBODY_PHASE11_SUMMARY.md">later trials</a>, the guarded accelerometer-proxy TRACK controller improved survival over passive and naive local baselines in the tested high-velocity near-escape pocket; lower velocity and equal-mass boundary cells still expose controller harms.</p>
                     <div class="app-links">
-                        <a href="/threebody">Launch Experiment</a>
+                        <a class="primary-route" href="/threebody">Launch Experiment</a>
                         <a href="docs/THREEBODY_PHASE11_SUMMARY.md">Later Trials Summary</a>
                         <a href="docs/SUNDOG_V_THREEBODY.md">Research Roadmap</a>
                     </div>
                 </article>
 
-                <article class="app-card" id="balance-workbench">
-                    <span class="tier">Operating-Envelope Study</span>
-                    <h2>Sundog Balance</h2>
+                <article class="app-card" id="balance-workbench" data-tier="envelope">
+                    <div class="card-head">
+                        <h2>Sundog Balance</h2>
+                        <span class="tier">Operating-Envelope Study</span>
+                    </div>
                     <div class="signal-list">
                         <p><strong>Indirect signal:</strong> cart-pole cast-shadow centroid, length, residual, and velocity under controlled light geometry.</p>
                         <p><strong>Transformation:</strong> SCAN/SEEK/TRACK shadow-residual control with confidence gating and separated privileged diagnostics.</p>
@@ -350,15 +550,17 @@
                     </div>
                     <p class="stub-note">Status: Phase 10 CONFIRM. P1 held on 28/28 diagnostic-positive cells; P2a hard failure-boundary violations were zero; P2b overhead-light all-fail margins are reported only; P4 passed the repaired dual-ceiling oracle check.</p>
                     <div class="app-links">
-                        <a href="/balance">Launch Workbench</a>
+                        <a class="primary-route" href="/balance">Launch Workbench</a>
                         <a href="docs/sundog_v_balance.md">Balance Roadmap</a>
                         <a href="docs/APPLICATIONS.md#sundog-balance-workbench">Application Notes</a>
                     </div>
                 </article>
 
-                <article class="app-card" id="pressure-mines">
-                    <span class="tier">Operating-Envelope Study</span>
-                    <h2>Sundog Pressure Mines</h2>
+                <article class="app-card" id="pressure-mines" data-tier="envelope">
+                    <div class="card-head">
+                        <h2>Sundog Pressure Mines</h2>
+                        <span class="tier">Operating-Envelope Study</span>
+                    </div>
                     <div class="signal-list">
                         <p><strong>Indirect signal:</strong> noisy pressure values, local field gradients, and bounded scan returns rather than exact mine adjacency counts.</p>
                         <p><strong>Transformation:</strong> confidence-gated pressure ordering and conservative threshold flagging, with scan, gradient, and action-history channels kept visible as harmful lineage.</p>
@@ -366,15 +568,17 @@
                     </div>
                     <p class="stub-note">Status: Confirmed pocket; during our <a href="docs/sundog_v_minesweeper.md">later trials</a>, the public surface closed around a narrow claim: density 0.16, pressure noise 2.0, dropout 0.2 improves safe-tile progress before mine trigger, and the workbench opens on the paired failure region first.</p>
                     <div class="app-links">
-                        <a href="/mines">View Workbench</a>
+                        <a class="primary-route" href="/mines">View Workbench</a>
                         <a href="docs/sundog_v_minesweeper.md">Roadmap</a>
                         <a href="docs/APPLICATIONS.md#sundog-pressure-mines-workbench">Application Notes</a>
                     </div>
                 </article>
 
-                <article class="app-card" id="eyesonly-gone-rogue">
-                    <span class="tier">Instrumented Prototype</span>
-                    <h2>EyesOnly / Gone Rogue</h2>
+                <article class="app-card" id="eyesonly-gone-rogue" data-tier="prototype">
+                    <div class="card-head">
+                        <h2>EyesOnly / Gone Rogue</h2>
+                        <span class="tier">Instrumented Prototype</span>
+                    </div>
                     <div class="signal-list">
                         <p><strong>Indirect signal:</strong> floor, biome, HP, alert, inventory, gates, and combat state from <code>GoneRogue.headless</code>.</p>
                         <p><strong>Transformation:</strong> perception compression, axis selection, and stop-conditioned action batches through Playwright.</p>
@@ -382,15 +586,18 @@
                     </div>
                     <p class="stub-note">Needs: matched-seed multi-policy study, compressed-perception ablation, volatility sweep, and behavior clips.</p>
                     <div class="app-links">
+                        <a class="primary-route external-route" href="https://eyesonly.cc/" target="_blank" rel="noopener noreferrer">Open EyesOnly</a>
                         <a href="docs/APPLICATIONS.md#eyesonly--gone-rogue">Application Notes</a>
                         <a href="docs/runners.md">Runner Docs</a>
                         <a href="docs/applications/EYES_ONLY_DETAILED.md">Detailed Scaffold</a>
                     </div>
                 </article>
 
-                <article class="app-card" id="dungeon-gleaner">
-                    <span class="tier">Product Expression</span>
-                    <h2>Dungeon Gleaner</h2>
+                <article class="app-card" id="dungeon-gleaner" data-tier="product">
+                    <div class="card-head">
+                        <h2>Dungeon Gleaner</h2>
+                        <span class="tier">Product Expression</span>
+                    </div>
                     <div class="signal-list">
                         <p><strong>Indirect signal:</strong> each NPC carries unmet needs (work, socializing, errands, rest) that grow over time. Places in the dungeon — bonfires, posts, shops, benches — satisfy specific needs. The signal at any tile is the sum of how strongly the NPC's unmet needs are pulled toward nearby satisfiers.</p>
                         <p><strong>Transformation:</strong> per tick, every reachable place is scored by combined need × proximity, with a brief pause-on-arrival and a tiny noise term to break ties. The NPC takes one greedy step toward the strongest pull.</p>
@@ -398,13 +605,16 @@
                     </div>
                     <p class="stub-note">Needs: orbit telemetry capture, side-by-side comparison against a hand-authored planner, and a tuning-sensitivity sweep.</p>
                     <div class="app-links">
+                        <a class="primary-route external-route" href="https://itch.io/jam/dcjam2026/rate/4448860" target="_blank" rel="noopener noreferrer">Game jam entry</a>
                         <a href="docs/APPLICATIONS.md#dungeon-gleaner--dcgamejam2026">Application Notes</a>
                     </div>
                 </article>
 
-                <article class="app-card" id="money-bags">
-                    <span class="tier">Instrumented Prototype</span>
-                    <h2>Money Bags</h2>
+                <article class="app-card" id="money-bags" data-tier="prototype">
+                    <div class="card-head">
+                        <h2>Money Bags</h2>
+                        <span class="tier">Instrumented Prototype</span>
+                    </div>
                     <div class="signal-list">
                         <p><strong>Indirect signal:</strong> spring graph motion, contact, deformation, torsion, and recovery.</p>
                         <p><strong>Transformation:</strong> graph metrics over frame-by-frame softbody telemetry.</p>
