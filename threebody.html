@@ -1999,12 +1999,14 @@
                 ? [
                     '@keyframes isoTraceSweep{0%{stroke-dashoffset:1;stroke-opacity:0}8%{stroke-opacity:.88}42%{stroke-opacity:.7}68%{stroke-opacity:.16}100%{stroke-dashoffset:-.22;stroke-opacity:0}}',
                     '@keyframes isoTraceGlow{0%{stroke-dashoffset:1;stroke-opacity:0}10%{stroke-opacity:.22}58%{stroke-opacity:.16}100%{stroke-dashoffset:-.22;stroke-opacity:0}}',
+                    '@keyframes isoBodyTail{0%{stroke-dashoffset:1}100%{stroke-dashoffset:0}}',
                     '@keyframes isoPulse{from{transform:scale(0.96);opacity:0.7}to{transform:scale(1.06);opacity:0.92}}',
                     scope + '.iso-wire-copy path{animation:none;stroke-opacity:.1}',
                     scope + '.iso-wire-copy circle{animation:none;opacity:.28;transform-box:fill-box;transform-origin:center}',
                     scope + '.iso-trace-copy path{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:.13 .87;stroke-dashoffset:1;animation:isoTraceSweep 20s linear infinite}',
                     scope + '.iso-trace-copy path:nth-of-type(1){animation-name:isoTraceGlow}',
-                    scope + '.iso-motion-body{filter:drop-shadow(0 0 4px rgba(255,255,255,0.32));opacity:.92}'
+                    scope + '.iso-body-tail{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:.1 .9;stroke-dashoffset:1;animation:isoBodyTail 48s linear infinite;mix-blend-mode:screen;pointer-events:none}',
+                    scope + '.iso-motion-body{filter:drop-shadow(0 0 3px rgba(255,255,255,0.26));opacity:.82;shape-rendering:geometricPrecision}'
                 ].join('')
                 : scope + '.iso-wire-copy path,' + scope + '.iso-wire-copy circle{animation:none}';
             if (wireBox) {
@@ -2043,7 +2045,8 @@
             clone.removeAttribute('data-strict-shown');
             clone.querySelectorAll('style').forEach((part) => part.remove());
             svg.appendChild(clone);
-            let motionPath = null;
+            const motionPaths = clone.querySelectorAll('path');
+            let motionPath = motionPaths[1] || motionPaths[0] || null;
             if (opts.animated) {
                 const traceClone = cell.cloneNode(true);
                 traceClone.classList.add('iso-trace-copy');
@@ -2055,8 +2058,6 @@
                 traceClone.querySelectorAll('rect,text,circle').forEach((part) => part.remove());
                 traceClone.querySelectorAll('path').forEach((path) => path.setAttribute('pathLength', '1'));
                 svg.appendChild(traceClone);
-                const paths = traceClone.querySelectorAll('path');
-                motionPath = paths[1] || paths[0];
             }
             if (opts.animated) {
                 if (motionPath) {
@@ -2064,18 +2065,29 @@
                     const pathId = 'iso-motion-path-' + label + '-' + Math.random().toString(36).slice(2);
                     motionPath.setAttribute('id', pathId);
                     [
-                        { fill: '#ffd76b', begin: '0s' },
-                        { fill: '#ff7a45', begin: '-8s' },
-                        { fill: '#79bde8', begin: '-16s' }
+                        { fill: '#ffd76b', tail: '#ffe7a3', begin: '0s' },
+                        { fill: '#ff7a45', tail: '#ff9fbd', begin: '-16s' },
+                        { fill: '#79bde8', tail: '#a8ddff', begin: '-32s' }
                     ].forEach((body) => {
+                        const tail = motionPath.cloneNode(false);
+                        tail.removeAttribute('id');
+                        tail.removeAttribute('stroke-opacity');
+                        tail.setAttribute('pathLength', '1');
+                        tail.setAttribute('class', 'iso-body-tail');
+                        tail.setAttribute('stroke', body.tail);
+                        tail.setAttribute('stroke-width', opts.compact ? '2.2' : '3.4');
+                        tail.setAttribute('stroke-opacity', '0.62');
+                        tail.style.animationDelay = body.begin;
+                        svg.appendChild(tail);
+
                         const circle = document.createElementNS(svgNs, 'circle');
-                        circle.setAttribute('r', opts.compact ? '5' : '7');
+                        circle.setAttribute('r', opts.compact ? '5' : '6.2');
                         circle.setAttribute('fill', body.fill);
                         circle.setAttribute('stroke', '#0c1c2b');
                         circle.setAttribute('stroke-width', opts.compact ? '1' : '1.4');
                         circle.setAttribute('class', 'iso-motion-body');
                         const motion = document.createElementNS(svgNs, 'animateMotion');
-                        motion.setAttribute('dur', '24s');
+                        motion.setAttribute('dur', '48s');
                         motion.setAttribute('begin', body.begin);
                         motion.setAttribute('calcMode', 'paced');
                         motion.setAttribute('repeatCount', 'indefinite');
