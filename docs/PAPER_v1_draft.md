@@ -242,7 +242,7 @@ threshold on 4/30 seeds (13%). Photometric and DOA-direct never fail.
 
 ### 4.4 Convergence trajectories
 
-![Convergence curves](C:\Users\hughe\Dev\sundog\results\analysis\convergence_curves.png)
+![Convergence curves](../results/analysis/convergence_curves.png)
 
 Two intensity bumps near steps 30 and 175 mark the Lissajous trajectory
 crossing the optimum during SCAN — the frequency ratio gives a beat that
@@ -266,7 +266,7 @@ the unperturbed observation.
 | 0.10       | 0.894       | 0.936      | 0.911     |
 | 0.20       | 0.898       | 0.936      | 0.911     |
 
-![Detector noise sweep](C:\Users\hughe\Dev\sundog\results\stress_tests\detector_noise\stress_curve.png)
+![Detector noise sweep](../results/stress_tests/detector_noise/stress_curve.png)
 
 DOA baselines are flat (they don't read intensities). Photometric loses
 ~5 points by $\sigma_n = 0.20$. The 0.10–0.20 plateau is consistent
@@ -283,7 +283,7 @@ locks onto, so additional noise no longer biases the argmax.
 | 0.25         | 0.978       | 0.976      | 0.967     |
 | 0.40         | 0.990       | 0.991      | 0.987     |
 
-![Beam sigma sweep](C:\Users\hughe\Dev\sundog\results\stress_tests\beam_sigma\stress_curve.png)
+![Beam sigma sweep](../results/stress_tests/beam_sigma/stress_curve.png)
 
 The photometric–DOA-direct gap widens in photometric's favour at the
 sharp end ($+0.044$ at $\sigma = 0.05$ vs. $+0.009$ at baseline). At
@@ -302,7 +302,7 @@ at 10 s.
 | 8.0                   | 0.766       | 0.936 / 0.911  |
 | 16.0                  | 0.349       | 0.936 / 0.911  |
 
-![Scan duration sweep](C:\Users\hughe\Dev\sundog\results\stress_tests\scan_duration\stress_curve.png)
+![Scan duration sweep](../results/stress_tests/scan_duration/stress_curve.png)
 
 Inverted-U with peak at 4 s. Below 4 s SCAN under-samples; above 4 s
 TRACK has insufficient remaining time (variance balloons to $\sigma =
@@ -318,7 +318,7 @@ TRACK has insufficient remaining time (variance balloons to $\sigma =
 | 3.0          | 0.965       | 0.963      | 0.926     |
 | 3.5          | 0.977       | 0.977      | 0.942     |
 
-![Laser height sweep](C:\Users\hughe\Dev\sundog\results\stress_tests\laser_height\stress_curve.png)
+![Laser height sweep](../results/stress_tests/laser_height/stress_curve.png)
 
 Photometric and DOA-direct track each other within ~1%. Lower laser
 heights make geometry harder for both because reflection angles to the
@@ -335,7 +335,7 @@ $\min(\theta_{\max} - 0.05, 1.45)$, holding 0.05 rad inside the limit.
 | 1.2                   | 0.956       | 0.926      | 0.684     |
 | 1.5                   | 0.945       | 0.936      | 0.911     |
 
-![Joint limit sweep](C:\Users\hughe\Dev\sundog\results\stress_tests\joint_limit\stress_curve.png)
+![Joint limit sweep](../results/stress_tests/joint_limit/stress_curve.png)
 
 This is the boundary the paper should own. At $\theta_{\max} \in
 \{1.5, 1.2\}$ photometric matches or fractionally beats DOA-direct,

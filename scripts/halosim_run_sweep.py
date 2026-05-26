@@ -6,7 +6,7 @@ Runs entirely on the local machine (NOT through the agent/MCP), so a
 The operator brings HaloSim to the foreground, then launches this once.
 
 Per frame, the proven HS-0/HS-1 primitive:
-  1. copy the frame's .sim over C:\\Users\\hughe\\Startup.sim
+  1. copy the frame's .sim over %USERPROFILE%\\Startup.sim
   2. click Reset  (reloads Startup.sim)         -- fixed coords
   3. click Start  (renders)                      -- fixed coords
   4. POLL autosave.bmp mtime until it advances and the size is stable
@@ -36,9 +36,9 @@ import argparse, json, shutil, sys, time
 from datetime import datetime
 from pathlib import Path
 
-AUTOSAVE = Path(r"C:\Users\hughe\autosave.bmp")
-STARTUP = Path(r"C:\Users\hughe\Startup.sim")
-HOME = Path(r"C:\Users\hughe")
+HOME = Path.home()
+AUTOSAVE = HOME / "autosave.bmp"
+STARTUP = HOME / "Startup.sim"
 REPO = Path(__file__).resolve().parents[1]
 DEFAULT_OUT = REPO / "docs/calibration/halosim_outputs/_staging"
 CONFIG = Path(__file__).resolve().parent / "halosim_sweep_config.json"

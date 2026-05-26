@@ -251,7 +251,8 @@ npm run deploy
 Cloudflare Pages is configured for the `sundog` project, production branch
 `main`, build command `npm run build`, output directory `dist`, and custom
 domain `sundog.cc`. The deploy helper reads local scoped Cloudflare material
-from `C:\Users\hughe\syek.c`; keep that file outside the repo.
+from the operator's non-repo credential store, configurable with
+`SUNDOG_CLOUDFLARE_ENV_FILE`; keep credentials outside the repo.
 
 See [Website development](docs/site/WEBSITE_DEVELOPMENT.md) before adding public
 pages or changing deployment behavior.

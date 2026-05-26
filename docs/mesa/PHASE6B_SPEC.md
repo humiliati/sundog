@@ -489,7 +489,7 @@ The v1.1 canonical commands as actually executed (wall-clock
 measured, not estimated):
 
 ```powershell
-# repo root: C:\Users\hughe\Dev\sundog
+# repo root: <repo-root>
 
 # SMOKE — Large cliff pair, single layer net.9, 8 seeds.
 # Measured wall-clock 2026-05-18: ~15 seconds.

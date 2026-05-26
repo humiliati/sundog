@@ -36,7 +36,7 @@ To disable blocks 3 + 4 in HaloSim's Control Panel: either set their "weight" to
 7. Render. Wait for it to complete (4-6M rays takes longer than 25K but should still finish in a few minutes).
 8. Save as `halosim_tangent_p2_h18.6_columnonly_4.5mr.bmp` (or `.png` if HaloSim supports it) into:
    ```
-   C:\Users\hughe\Dev\sundog\docs\calibration\halosim_outputs\
+   docs\calibration\halosim_outputs\
    ```
 
 Optional but recommended: do BOTH a b&w version (matching the h=0° calibration style) and a colored version. The b&w gives cleanest arc geometry; the color confirms the scene matches what HaloSim's standard rendering shows.

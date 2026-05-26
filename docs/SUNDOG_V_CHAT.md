@@ -1809,7 +1809,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interve
 
 Doable in a long afternoon. The driver's `-SkipDone` flag makes the run resumable across multiple sessions if needed.
 
-**Run command (from `C:\Users\hughe\Dev\sundog`):**
+**Run command (from repo root):**
 
 ```powershell
 # Preview the plan + show baseline health
@@ -1864,7 +1864,7 @@ Daily caps to watch:
 | Plus falsification (3 models × 22 prompts) | 66 | — | ~12 min |
 | Plus full intervention battery (3 models × 8 × 75) | 1,800 | — | ~5–6 hours |
 
-**Run command (from `C:\Users\hughe\Dev\sundog`):**
+**Run command (from repo root):**
 
 ```powershell
 # Default plan: 3 models × differential + adversarial, ~50 minutes
@@ -1881,7 +1881,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.p
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1 -DryRun
 ```
 
-Use `powershell.exe`, not `pwsh`, on the Windows 10 project machine unless PowerShell 7 has been installed explicitly. `-DryRun` prints the plan and exits without loading the Groq key or making hosted calls. Non-dry runs read the Groq key from `C:\Users\hughe\Dev\syek.corg.txt` and verify it before the first call. Each step's outcome lands in `results/chat/phase5-hosted/<slate>/groq-<model>/draft-outcomes.{csv,json}` and `summary.json`. The driver log at `results/chat/phase12-groq-driver-log.jsonl` records one line per step with timing + outcome counts so a multi-hour run is recoverable and inspectable mid-stream.
+Use `powershell.exe`, not `pwsh`, on the Windows 10 project machine unless PowerShell 7 has been installed explicitly. `-DryRun` prints the plan and exits without loading the Groq key or making hosted calls. Non-dry runs read the Groq key from the operator's local non-repo credential store and verify it before the first call. Each step's outcome lands in `results/chat/phase5-hosted/<slate>/groq-<model>/draft-outcomes.{csv,json}` and `summary.json`. The driver log at `results/chat/phase12-groq-driver-log.jsonl` records one line per step with timing + outcome counts so a multi-hour run is recoverable and inspectable mid-stream.
 
 **Completion note:** the local sweep completed successfully and the Phase 12
 section above now carries the final numbers: 225 open-weight drafts, 210

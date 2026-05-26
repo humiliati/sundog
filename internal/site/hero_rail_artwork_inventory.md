@@ -95,7 +95,7 @@ Source folder: `assets/images/`.
 
 | source image | rail use |
 | --- | --- |
-| `C:\Users\hughe\Dev\Money Bags\Money Bags\playtest\2026-04-30_130419_03_gmtk_2024_port_v_tumble__Foxtrot_Slope45__hf74276c8\plot_4up.png` | Promoted to `public/media/money-bags-rail-poster.png`. |
+| `../Money Bags/Money Bags/playtest/2026-04-30_130419_03_gmtk_2024_port_v_tumble__Foxtrot_Slope45__hf74276c8/plot_4up.png` | Promoted to `public/media/money-bags-rail-poster.png`. |
 
 ## Logo State
 

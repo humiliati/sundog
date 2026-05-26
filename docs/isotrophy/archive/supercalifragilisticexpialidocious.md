@@ -745,7 +745,7 @@ d_i := d_i_candidate only after G1, G2, G3 and the crossing-form gate pass
 
 ### Scratchpad conjecture quarantine
 
-The brainstorm note `internal/anniversary/scratchpad_brainstorm_notes.md`
+The brainstorm note `internal/quarantine/scratchpad_brainstorm_notes.md`
 contains the "couplings surface / Kenny Wheeler / magnesium / 1/phi^3"
 conjecture. Its rigorous version is: inspect the Lyapunov-Schmidt crossing form
 on the standard `D3` isotypic sector and see whether its spectrum has a

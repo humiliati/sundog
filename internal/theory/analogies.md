@@ -34,7 +34,7 @@ Goodhart-immunity claim are the same artifact seen twice.
   inside.
 - **Breaks when:** the agent can move the gnomon. The immunity is a property of
   the **channel**, not a virtue of the agent — this is exactly the wound in
-  [`attack_vectors.md`](attack_vectors.md) ▸ "Goodhart success story": where we
+  [`attack_vectors.md`](../feedback/quarantine/attack_vectors.md) ▸ "Goodhart success story": where we
   applied real selection pressure (Mesa), the channel was movable and it broke
   at λ≈0.953.
 - **Anniversary line (cleared, with boundary text):** *humanity has trusted
@@ -121,7 +121,7 @@ appears only *after* a preparatory action.
 
 ### 7. The Seven Bridges of Königsberg — *why 5D is irreducible* (speculative)
 
-Seed from `scratchpad_brainstorm_notes.md`. Euler did not measure the bridges;
+Seed from `../quarantine/scratchpad_brainstorm_notes.md`. Euler did not measure the bridges;
 he showed a global traversal is impossible from a *topological invariant* (node
 parities), not from any local edge property. Map: the "is the λ-cliff
 decomposable into independent neurons" question (Mesa Phase 6 v3.2/v3.3: no
@@ -139,7 +139,7 @@ not a failure of the probe.
 
 ### 8. The wishing-well coin / a tornado's core — *forward-rich vortices* (speculative)
 
-Seed from `scratchpad_brainstorm_notes.md` ("sundog + Euler … tornados, vortex,
+Seed from `../quarantine/scratchpad_brainstorm_notes.md` ("sundog + Euler … tornados, vortex,
 coins in a swirl wishing well"). A coin spiraling down a well, or a vortex core,
 is high-D microdynamics whose *observable* (the spiral envelope, the funnel) is a
 low-D signature. Euler's fluid equations are forward-rich; recovering the full
@@ -156,7 +156,7 @@ field from the envelope is the narrow inverse.
 - **Disposition:** candidate substrate only. Do **not** spin a `bayes_v_sundog`
   track for it — per scratchpad, the Bayesian element is a *baseline inside each
   existing workbench*, not a new document. See
-  [`attack_vectors.md`](attack_vectors.md) ▸ "Standing defense: Bayesian floor".
+  [`attack_vectors.md`](../feedback/quarantine/attack_vectors.md) ▸ "Standing defense: Bayesian floor".
 
 ---
 
@@ -164,7 +164,7 @@ field from the envelope is the narrow inverse.
 
 - Formal program: [`postulations.md`](postulations.md) (Postulate 1 is the
   thermometer made rigorous; 4 is Königsberg; 5/6 the wishing-well and `H(x)`).
-- Adversary: [`attack_vectors.md`](attack_vectors.md) — every "breaks when" above
+- Adversary: [`attack_vectors.md`](../feedback/quarantine/attack_vectors.md) — every "breaks when" above
   is someone's attack; the strongest is the sundial's movable gnomon.
 - Proof path: [`../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
 - Scope discipline: `../../docs/SCIENTIFIC_CRITERIA.md`, `../../docs/presentation/claims-and-scope.md`

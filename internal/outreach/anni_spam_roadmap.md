@@ -5,7 +5,8 @@ Internal rollout packet for the Sundog Year 1 public re-entry.
 Status: draft, 2026-05-16.
 Anniversary target: 2026-05-19.
 Source statement: [`first_public_statement.md`](first_public_statement.md).
-Recent theorem-path handoff: [`isotrophy_handoff_note.md`](isotrophy_handoff_note.md).
+Recent theorem-path handoff:
+[`isotrophy_handoff_note.md`](../../docs/isotrophy/archive/isotrophy_handoff_note.md).
 
 ## Rollout Principle
 
@@ -774,7 +775,7 @@ Required lower-third / pinned comment:
 - [ ] LessWrong post links the structural-failure-coincidence prereg.
 - [ ] 4chan /sci post asks for attacks, not validation.
 - [ ] YouTube pinned comment includes boundary text.
-- [ ] After posting, collect critiques into `internal/anniversary/attack_vectors.md`.
+- [ ] After posting, collect critiques into `internal/feedback/quarantine/attack_vectors.md`.
 
 ## Response Bank
 

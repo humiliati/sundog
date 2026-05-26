@@ -583,7 +583,7 @@ Do not run Candidate 1 from an agent pass if the expected wall time exceeds
 30 minutes. Stage these commands for an operator PowerShell instead.
 
 ```powershell
-Set-Location C:\Users\hughe\Dev\sundog
+Set-Location <repo-root>
 $env:PYTHONUNBUFFERED = "1"
 New-Item -ItemType Directory -Force results\mesa\phase5-v3-logs | Out-Null
 ```
@@ -681,7 +681,7 @@ Do not run these from an agent pass if expected wall time exceeds 30 minutes.
 Stage these commands for an operator PowerShell:
 
 ```powershell
-Set-Location C:\Users\hughe\Dev\sundog
+Set-Location <repo-root>
 $env:PYTHONUNBUFFERED = "1"
 New-Item -ItemType Directory -Force results\mesa\phase5-v4-logs | Out-Null
 

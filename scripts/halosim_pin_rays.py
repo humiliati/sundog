@@ -23,7 +23,7 @@ anchor T, per the gen_frames decode):
 CRLF / latin-1, trailing blank line; bytes preserved outside the one token.
 
 Usage:
-    python scripts/halosim_pin_rays.py --src "C:/Users/hughe/Lowitz arcs.sim" \
+    python scripts/halosim_pin_rays.py --src "<HaloSim home>/Lowitz arcs.sim" \
         --out docs/calibration/halosim_outputs/phase14e_frames/lowitz.sim \
         --rays 1000000
 """
@@ -94,7 +94,7 @@ def main() -> int:
     tpl_rays = rl[1]
 
     out = Path(a.out)
-    if out.resolve().parent == Path("C:/Users/hughe").resolve():
+    if out.resolve().parent == Path.home().resolve():
         raise SystemExit("ERROR: refusing to write into the HaloSim home directory")
     out.parent.mkdir(parents=True, exist_ok=True)
 

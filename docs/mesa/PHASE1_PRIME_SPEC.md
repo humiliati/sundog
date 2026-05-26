@@ -481,7 +481,7 @@ This matches the MESAv2 estimate.
 Build-time and run-time:
 
 ```powershell
-# repo root: C:\Users\hughe\Dev\sundog
+# repo root: <repo-root>
 
 # RUN-TIME (additive to existing v1 invocations): once the
 # manifest emitter lands in scripts/mesa-harness.mjs, every

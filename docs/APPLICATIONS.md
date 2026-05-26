@@ -326,8 +326,7 @@ alignment experiment.
 
 Repository: [humiliati/EyesOnly](https://github.com/humiliati/EyesOnly)
 
-Local sibling path on the maintainer machine:
-`C:\Users\hughe\Dev\EyesOnly`
+Local sibling checkout: `../EyesOnly`
 
 Detailed scaffold:
 [`docs/applications/EYES_ONLY_DETAILED.md`](applications/EYES_ONLY_DETAILED.md)
@@ -486,8 +485,7 @@ run yet; the playtest agent is UX automation; LAGM is forward-looking design.
 
 Repository: [humiliati/DCgamejam2026](https://github.com/humiliati/DCgamejam2026)
 
-Local sibling path on the maintainer machine:
-`C:\Users\hughe\Dev\Dungeon Gleaner Main`
+Local sibling checkout: `../Dungeon Gleaner Main`
 
 ### Sundog Expression
 
@@ -583,8 +581,7 @@ above exists.
 
 Repository: [humiliati/Money-Bags](https://github.com/humiliati/Money-Bags)
 
-Local sibling path on the maintainer machine:
-`C:\Users\hughe\Dev\Money Bags\Money Bags`
+Local sibling checkout: `../Money Bags/Money Bags`
 
 ### Sundog Expression
 

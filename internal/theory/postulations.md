@@ -37,7 +37,7 @@ year without naming.
   `π*(x) = g(Φ(x))` a.e. for some `g`. This is **Blackwell sufficiency** of the
   signature *for the control objective*, not for state estimation, and it has a
   rate-distortion reading (the Shannon seed in
-  `scratchpad_brainstorm_notes.md`): `Φ` is the minimal sufficient quantizer such
+  `../quarantine/scratchpad_brainstorm_notes.md`): `Φ` is the minimal sufficient quantizer such
   that distortion in *action* — not in *reconstruction* — is zero. Provable for
   LQG/linear-Gaussian and for finite MDPs by a sufficiency argument; the open
   work is the nonlinear/learned case.
@@ -52,7 +52,7 @@ year without naming.
   control-relevant bit is *not* `𝓕_σ`-measurable yet Sundog still solves it
   (boundary wrong).
 - **Why it is the one to chase.** It converts the deepest attack
-  ([`attack_vectors.md`](attack_vectors.md) ▸ #1, "you rediscovered ill-posed
+  ([`attack_vectors.md`](../feedback/quarantine/attack_vectors.md) ▸ #1, "you rediscovered ill-posed
   inverse problems") from a concession into a research program: the
   cross-substrate sameness becomes a *shared operator* (`Φ` is a coarse-graining
   in all three substrates), not a shared adjective. It also *predicts* the
@@ -81,9 +81,9 @@ year without naming.
   a hope.
 - **Falsifier.** The cliff does not move with capacity (then λ is not
   invertibility, and Postulate 2 is dead — and Mesa is probably the
-  optimizer-confound of [`attack_vectors.md`](attack_vectors.md) ▸ #4).
+  optimizer-confound of [`attack_vectors.md`](../feedback/quarantine/attack_vectors.md) ▸ #4).
 - **Payoff.** The cliff stops being the project's worst contradiction
-  ([`attack_vectors.md`](attack_vectors.md) ▸ #2) and becomes a *prediction of
+  ([`attack_vectors.md`](../feedback/quarantine/attack_vectors.md) ▸ #2) and becomes a *prediction of
   the theory*. That reframing is free and is owed before 2026-05-19.
 
 ## 3. The 16× is a conservation law — *a Sundog uncertainty principle*
@@ -98,7 +98,7 @@ year without naming.
   observation channels. This is the rate-distortion / data-processing reading of
   Postulate 1 (Shannon seed): you cannot beat the channel; the time cost is the
   Lagrange dual of the discarded bits. The **Bayesian floor** standing defense
-  ([`attack_vectors.md`](attack_vectors.md) ▸ "Bayesian floor") is the empirical
+  ([`attack_vectors.md`](../feedback/quarantine/attack_vectors.md) ▸ "Bayesian floor") is the empirical
   handle — the Bayes-optimal estimator pays the *same* dual, so the Sundog↔Bayes
   gap, not the Sundog↔oracle gap, is the conserved quantity to measure.
 - **Test.** Predict the slowdown for three substrates *from their
@@ -190,17 +190,17 @@ Dependency order:
    corollaries that only mean something once 1 has a measured substrate; 2 and 4
    are independently testable now.
 2. **Free before 2026-05-19:** the Postulate 2 reframing (cliff = predicted
-   boundary, not contradiction) — answers [`attack_vectors.md`](attack_vectors.md)
+   boundary, not contradiction) — answers [`attack_vectors.md`](../feedback/quarantine/attack_vectors.md)
    ▸ #2 at zero cost.
 3. **Gating control (not optional):** the λ-confound experiment
-   ([`attack_vectors.md`](attack_vectors.md) ▸ #4) must clear before the cliff is
+   ([`attack_vectors.md`](../feedback/quarantine/attack_vectors.md) ▸ #4) must clear before the cliff is
    cited in any anniversary surface or Postulates 2/4 rest on sand.
 4. **Cross-cutting measurement:** the Bayesian floor goes into every workbench's
    baseline slate (no new doc — `scratchpad` directive), and is the empirical
    handle for Postulates 1 and 3.
 
 Deferred by owner until these brainstorm docs are massaged and staged: the
-publication-gating wording fixes ([`fix_roadmap.md`](fix_roadmap.md) — the
+publication-gating wording fixes ([`fix_roadmap.md`](../roadmaps/fix_roadmap.md) — the
 "unsexy fixes," including the equivalence-test reword and the oracle-leakage
 re-audit).
 
@@ -208,7 +208,7 @@ re-audit).
 
 - Where these came from: [`analogies.md`](analogies.md) (3→Post.1, 7→Post.4,
   8→Post.5, the founding-`H` thread→Post.6).
-- What they answer: [`attack_vectors.md`](attack_vectors.md) (Post.1→#1,
+- What they answer: [`attack_vectors.md`](../feedback/quarantine/attack_vectors.md) (Post.1→#1,
   Post.2→#2, Post.3→#3).
 - Scope discipline: `../../docs/SCIENTIFIC_CRITERIA.md`,
   `../../docs/presentation/claims-and-scope.md`,

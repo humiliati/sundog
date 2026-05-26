@@ -8,7 +8,7 @@
 >
 > **Status (2026-05-16):** staging, internal. Two attacks (#3 framing, #4 cliff
 > confound) are publication-gating for the anniversary push and route to
-> [`fix_roadmap.md`](fix_roadmap.md) (the unsexy fixes, deferred by owner until
+> [`../../roadmaps/fix_roadmap.md`](../../roadmaps/fix_roadmap.md) (the unsexy fixes, deferred by owner until
 > the brainstorm docs are massaged). Voice de-chatted; sharpness retained.
 
 ## The deepest one first
@@ -28,7 +28,7 @@ noticing that many things fall and announcing gravity.
 - **Defense (real, but unbuilt):** a *shared mechanism*, not a shared adjective.
   Postulate 1 (coarse-graining / sufficient-statistic-for-control) is precisely
   the claim that the same operator appears in all three. The defense exists only
-  once the [proof roadmap](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md) lands a substrate
+  once the [proof roadmap](../../../docs/COARSE_GRAINING_PROOF_ROADMAP.md) lands a substrate
   with the *measured* sufficient statistic, not the eyeballed asymmetry. Until
   then this attack is correct and must be conceded in those words.
 
@@ -65,7 +65,7 @@ thing that matters in deployment.
 
 - **Cost if unaddressed:** a reviewer kills the headline sentence on contact;
   it is the single most public claim.
-- **Defense (two moves, both owed to [`fix_roadmap.md`](fix_roadmap.md)):**
+- **Defense (two moves, both owed to [`../../roadmaps/fix_roadmap.md`](../../roadmaps/fix_roadmap.md)):**
   (a) replace "statistically indistinguishable" with a TOST / equivalence test
   against a *pre-registered* margin, or reword to "not detectably different at
   n=30," which is honest and harder to dismiss;
@@ -115,7 +115,7 @@ most internally wounded.
   in place across coupled surfaces (`PHASE10_ATTACK_ROADMAP.md`,
   `PHASE10_OPTICAL_REAUDIT_MEMO.md`). The remaining gap is cosmetic-but-loud:
   the atlas should not *render* a rule it has falsified. Routes to
-  [`fix_roadmap.md`](fix_roadmap.md) (deferred), flagged here so it is not lost.
+  [`../../roadmaps/fix_roadmap.md`](../../roadmaps/fix_roadmap.md) (deferred), flagged here so it is not lost.
 
 ### 6. Garden of forking paths
 
@@ -136,7 +136,7 @@ claims are the survivors of an adaptively pruned search.
 
 ## Standing defense: the Bayesian floor
 
-Per `scratchpad_brainstorm_notes.md`: **do not** open a `bayes_v_sundog.md`
+Per `../../quarantine/scratchpad_brainstorm_notes.md`: **do not** open a `bayes_v_sundog.md`
 track. Instead, every Sundog workbench (core, threebody, balance, mines, and any
 future substrate such as the wishing-well/vortex candidate) should carry a
 **Bayesian-optimal control baseline** alongside the existing oracle and random
@@ -154,7 +154,7 @@ Why this is the right answer to #3 and #6 at once:
   conservation law.
 - It is a measurement commitment, not a new doc — it slots into each existing
   roadmap's baseline slate. Tracked as a cross-cutting control in
-  [`../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
+  [`../../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
 
 ---
 
@@ -162,19 +162,19 @@ Why this is the right answer to #3 and #6 at once:
 
 | # | Attack | Class | Routes to |
 |---|---|---|---|
-| 3 | 16× / equivalence wording | Publication-gating, cheap | `fix_roadmap.md` (deferred) |
+| 3 | 16× / equivalence wording | Publication-gating, cheap | `../../roadmaps/fix_roadmap.md` (deferred) |
 | 4 | λ confound | Publication-gating, one experiment | proof roadmap (gating control) |
-| 2 | Goodhart success story | Framing, free, do before 5/19 | `postulations.md` ▸ Post. 2 |
-| 5 | Atlas draws falsified rule | Cosmetic-loud | `fix_roadmap.md` (deferred) |
+| 2 | Goodhart success story | Framing, free, do before 5/19 | `../../theory/postulations.md` ▸ Post. 2 |
+| 5 | Atlas draws falsified rule | Cosmetic-loud | `../../roadmaps/fix_roadmap.md` (deferred) |
 | 1 | "Inverse problems are hard" | Deep; defended only by Post. 1 | proof roadmap |
 | 6 | Forking paths | Meta; conceded honestly | `../../docs/SCIENTIFIC_CRITERIA.md` |
 
 **Cross-references**
 
-- The "breaks when" lines in [`analogies.md`](analogies.md) are the seeds of
+- The "breaks when" lines in [`analogies.md`](../../theory/analogies.md) are the seeds of
   attacks 1, 2, and 5.
 - Defenses 1–4 are not arguments; they are work items in
-  [`postulations.md`](postulations.md) and
-  [`../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
+  [`../../theory/postulations.md`](../../theory/postulations.md) and
+  [`../../../docs/COARSE_GRAINING_PROOF_ROADMAP.md`](../../../docs/COARSE_GRAINING_PROOF_ROADMAP.md).
 - Scope guardrails: `../../docs/SCIENTIFIC_CRITERIA.md`,
   `../../docs/presentation/claims-and-scope.md`.

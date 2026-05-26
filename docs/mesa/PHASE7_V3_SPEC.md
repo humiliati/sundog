@@ -242,7 +242,7 @@ added if the manifest schema needs a v3 marker.
 Six commands, one per policy. Smoke first (`--seeds 8`), then full.
 
 ```powershell
-# repo root: C:\Users\hughe\Dev\sundog
+# repo root: <repo-root>
 
 # smoke (one policy, 8 seeds; ~90 seconds)
 node scripts/mesa-intervention-battery.mjs `

@@ -508,13 +508,9 @@ Deploy the current local build with:
 npm run deploy
 ```
 
-The deploy helper loads the scoped Pages token from:
-
-```text
-C:\Users\hughe\syek.c
-```
-
-Keep that file outside the repo and do not print or commit token values.
+The deploy helper loads the scoped Pages token from the operator's local
+non-repo credential store, configurable with `SUNDOG_CLOUDFLARE_ENV_FILE`. Keep
+credential files outside the repo and do not print or commit token values.
 
 ## Before Publishing
 

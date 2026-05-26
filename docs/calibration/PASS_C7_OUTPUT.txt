@@ -24,7 +24,7 @@ same sun altitude).
 PROCEDURE
 ---------
 1. Acquired HaloSim3.61 (Cowley & Schroeder, atoptics.co.uk;
-   installed at C:\Users\hughe\HalSim361.exe).
+   installed at %USERPROFILE%\HalSim361.exe).
 2. Used h=0° clean-halo calibration renders (with multi-block
    simulation) to LOCK pixel-to-degree scale via the 22° halo radius.
    Calibration files: docs/calibration/halosim_outputs/

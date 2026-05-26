@@ -115,7 +115,7 @@ carried only by their source docs:
 | Core photometric comparison, seed count, and acquisition-time cost | [`README.md`](../../README.md), [`PAPER_v1_draft.md`](../PAPER_v1_draft.md) |
 | Mesa cliff and `net.7`/5D mechanism language | [`presentation/claims-and-scope.md`](../presentation/claims-and-scope.md), [`SUNDOG_V_GRAVITY.md`](../SUNDOG_V_GRAVITY.md), [`SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md) |
 | Geometry parhelic-belt residual disposition | [`calibration/PHASE10_BELT_Y_RESULTS.md`](../calibration/PHASE10_BELT_Y_RESULTS.md), [`calibration/RICH_DISPLAY_OVERLAY_NOTES.md`](../calibration/RICH_DISPLAY_OVERLAY_NOTES.md) |
-| Postulate ordering, capacity-relative framing, and `H(x)` toy check | [`internal/anniversary/postulations.md`](../../internal/anniversary/postulations.md), [`internal/anniversary/attack_vectors.md`](../../internal/anniversary/attack_vectors.md), [`internal/anniversary/analogies.md`](../../internal/anniversary/analogies.md) |
+| Postulate ordering, capacity-relative framing, and `H(x)` toy check | [`internal/theory/postulations.md`](../../internal/theory/postulations.md), [`internal/feedback/quarantine/attack_vectors.md`](../../internal/feedback/quarantine/attack_vectors.md), [`internal/theory/analogies.md`](../../internal/theory/analogies.md) |
 
 Phase docs may quote those values, but must quote them from the source ledger
 and may not re-derive or round them into a different gate.

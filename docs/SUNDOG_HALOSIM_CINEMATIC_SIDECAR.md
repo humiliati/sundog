@@ -24,7 +24,7 @@ HaloSim measurement procedure this sidecar reuses is
 
 Grounded in the actual install, not assumption:
 
-- **HaloSim has no CLI.** `C:\Users\hughe\HalSim361.exe` is a 2004 VB6
+- **HaloSim has no CLI.** `%USERPROFILE%\HalSim361.exe` is a 2004 VB6
   GUI app. There is no documented headless/batch flag. Every render in
   `docs/calibration/halosim_outputs/` to date was produced by manual GUI
   operation.
@@ -112,7 +112,7 @@ HaloSim beauty layer; HS-4/HS-5/HS-6 still apply to the atlas raster).
 corpus `README.txt`/`h2.txt`: "double-click HALOSIM3.EXE" is the only
 documented launch path).** Fully-automated zero-dialog loop:
 
-1. **Write `C:\Users\hughe\Startup.sim`** with the target frame's `.sim`
+1. **Write `%USERPROFILE%\Startup.sim`** with the target frame's `.sim`
    (plain file copy — scriptable, no GUI). `Startup.sim` is HaloSim's
    special auto-loaded preference file (`h7.txt` §D: "automatically
    loaded when HALOSIM starts or the Reset button is clicked").
@@ -121,7 +121,7 @@ documented launch path).** Fully-automated zero-dialog loop:
 3. Click **Start**. Two fixed-position clicks per frame
    (Reset ≈ (99,282), Start ≈ (218,279) at the observed window pose);
    no file dialogs.
-4. **Harvest `C:\Users\hughe\autosave.bmp`** — written automatically on
+4. **Harvest `%USERPROFILE%\autosave.bmp`** — written automatically on
    completion because Tools→Options ▸ *Autosave simulation* is enabled
    (`h6.txt` §B). Overwritten each run, so the runner copies/renames it
    before the next Start.

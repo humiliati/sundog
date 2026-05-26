@@ -1,7 +1,6 @@
 import { appendFile, readFile } from "node:fs/promises";
-import { cloudflareRequest } from "./cloudflare-auth.mjs";
+import { cloudflareRequest, localCredentialPath } from "./cloudflare-auth.mjs";
 
-const localKeyPath = "C:\\Users\\hughe\\syek.c";
 const zoneName = "sundog.cc";
 
 function ok(result) {
@@ -28,14 +27,14 @@ function requirePermission(groups, name, scope) {
 }
 
 async function appendSecretBlock(lines) {
-  const existing = await readFile(localKeyPath, "utf8").catch(() => "");
+  const existing = await readFile(localCredentialPath, "utf8").catch(() => "");
   const next = lines.filter(([key]) => !existing.includes(`${key}=`));
 
   if (next.length === 0) {
     return;
   }
 
-  await appendFile(localKeyPath, [
+  await appendFile(localCredentialPath, [
     "",
     "# Scoped Cloudflare API tokens. Token values are shown once by Cloudflare.",
     ...next.map(([key, value]) => `${key}=${value}`),
@@ -173,7 +172,7 @@ const specs = [
   },
 ];
 
-const existingSecrets = await readFile(localKeyPath, "utf8").catch(() => "");
+const existingSecrets = await readFile(localCredentialPath, "utf8").catch(() => "");
 const localEnv = readLocalEnv(existingSecrets);
 const created = [];
 const updated = [];
@@ -205,4 +204,4 @@ for (const spec of specs) {
   }
 }
 
-console.log(`Scoped token bootstrap complete. Created ${created.length} token(s), updated ${updated.length} token policy set(s). Values were written only to ${localKeyPath}.`);
+console.log(`Scoped token bootstrap complete. Created ${created.length} token(s), updated ${updated.length} token policy set(s). Values were written only to the configured credential file.`);

@@ -102,11 +102,49 @@ Promo:
 - `docs/promo/PROMO_HIGHLIGHTS.md`
 - `docs/promo/SUNDOG_OUTREACH_PACKET.md`
 
+### Pass 6 - Internal Anniversary Split
+
+Canonical locations:
+
+- `internal/theory/`
+- `internal/feedback/quarantine/`
+- `internal/outreach/`
+- `internal/roadmaps/`
+- `internal/site/`
+- `internal/quarantine/`
+
+Moved the remaining `internal/anniversary/` catch-all files into internal lanes.
+Feedback/critique material stays quarantined and is not promoted to public
+`docs/**`.
+
+Moves:
+
+- `internal/anniversary/postulations.md` -> `internal/theory/postulations.md`
+- `internal/anniversary/analogies.md` -> `internal/theory/analogies.md`
+- `internal/anniversary/attack_vectors.md` ->
+  `internal/feedback/quarantine/attack_vectors.md`
+- `internal/anniversary/fix_roadmap.md` -> `internal/roadmaps/fix_roadmap.md`
+- `internal/anniversary/anni_spam_roadmap.md` ->
+  `internal/outreach/anni_spam_roadmap.md`
+- `internal/anniversary/first_public_statement.md` ->
+  `internal/outreach/first_public_statement.md`
+- `internal/anniversary/hero_rail_artwork_inventory.md` ->
+  `internal/site/hero_rail_artwork_inventory.md`
+- `internal/anniversary/scratchpad_brainstorm_notes.md` ->
+  `internal/quarantine/scratchpad_brainstorm_notes.md`
+
+### Pass 7 - Privacy Path Sweep
+
+Removed user-specific absolute paths from tracked docs/runbooks/scripts and
+replaced repo-root examples with repo-relative wording, `%USERPROFILE%`, or
+placeholders. Public Cloudflare credential notes now describe a local non-repo
+credential store instead of naming private files, and the Cloudflare helpers use
+env-configurable credential paths rather than source-coded private filenames.
+
 ## Current Audit Notes
 
-- Remaining `internal/anniversary` references in public docs are not left over
-  from the Faraday/Isotrophy move. They point at the older postulation,
-  analogy, attack-vector, fix-roadmap, and anniversary planning layer.
+- The old `internal/anniversary/` catch-all has been split. Any future
+  references should target the internal lane directly.
 - `SCIENTIFIC_CRITERIA.md` needed a refresh after Faraday and `/safety-method`;
   that refresh belongs to the check pass, not a new folder migration.
 - The brand and benchmark documents are still public, now under `docs/brand/`.
@@ -141,17 +179,6 @@ Likely split:
 Candidate files have been moved into the public category folders. The remaining
 decision is whether any of the public category docs should instead become
 internal-only.
-
-### Anniversary Catch-All
-
-Likely split:
-
-- `internal/theory/` for `postulations.md` and `analogies.md`.
-- `internal/feedback/` for `attack_vectors.md`.
-- `internal/roadmaps/` or `internal/outreach/` for `fix_roadmap.md`,
-  `anni_spam_roadmap.md`, and `first_public_statement.md`.
-- Keep `scratchpad_brainstorm_notes.md` quarantined unless a specific public
-  artifact is extracted from it.
 
 ### Root Docs Category Folders
 

@@ -345,7 +345,7 @@ not satisfy the Bayesian-floor entry condition. Run only by an operator/runner
 when rate measurement is needed.
 
 ```powershell
-Set-Location C:\Users\hughe\Dev\sundog
+Set-Location <repo-root>
 $outRoot = "results\proof\phase4"
 New-Item -ItemType Directory -Force "$outRoot\_probe-envelope" | Out-Null
 

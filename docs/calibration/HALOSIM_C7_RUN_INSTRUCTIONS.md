@@ -13,17 +13,17 @@ The Pass C7 question is: **what opening angle do the wings make?** That's the ca
 
 ## What you do
 
-1. **Launch HaloSim** — double-click `C:\Users\hughe\HalSim361.exe`.
-2. **Load the baseline simulation:** `File → Open` (or equivalent), choose `C:\Users\hughe\Circumscribed halo.sim`. The bundled description says: *"When the sun is lower, the circumscribed halo 'splits' into upper and lower tangent arcs. Try simulations at other solar elevations."* That's exactly what we want — drop the sun, get tangent arcs.
+1. **Launch HaloSim** — double-click `%USERPROFILE%\HalSim361.exe`.
+2. **Load the baseline simulation:** `File → Open` (or equivalent), choose `%USERPROFILE%\Circumscribed halo.sim`. The bundled description says: *"When the sun is lower, the circumscribed halo 'splits' into upper and lower tangent arcs. Try simulations at other solar elevations."* That's exactly what we want — drop the sun, get tangent arcs.
 3. **Change the sun elevation to 18.6°.** The control is probably labeled "Sun elevation" or "Sun altitude" in the parameters panel. The default in this `.sim` file is 45°; we want 18.6°.
 4. **Render the simulation** — click Run / Simulate / Render (whatever HaloSim calls its render button). Wait for the dot-density to build up enough that the upper tangent arc is clearly visible.
 5. **Save the output image** — `File → Save image as` (or screenshot). Save as PNG to:
    ```
-   C:\Users\hughe\Dev\sundog\docs\calibration\halosim_outputs\halosim_tangent_p2_h18.6.png
+   docs\calibration\halosim_outputs\halosim_tangent_p2_h18.6.png
    ```
 6. **Change sun elevation to 6.83°**, re-render, save as:
    ```
-   C:\Users\hughe\Dev\sundog\docs\calibration\halosim_outputs\halosim_tangent_p13_h6.83.png
+   docs\calibration\halosim_outputs\halosim_tangent_p13_h6.83.png
    ```
 
 That's it. Drop me a line when both PNGs are on disk and I'll pick up from there (measurement of the opening angle θ at each altitude).

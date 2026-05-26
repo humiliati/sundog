@@ -4,7 +4,7 @@ Internal readiness checklist for the Sundog Year 1 public statement.
 
 Status: active, 2026-05-16.
 Target publication date: 2026-05-19.
-Companion packet: [`anni_spam_roadmap.md`](anni_spam_roadmap.md).
+Companion packet: [`../outreach/anni_spam_roadmap.md`](../outreach/anni_spam_roadmap.md).
 
 ## Purpose
 
@@ -59,8 +59,8 @@ Steps:
 Checks:
 
 ```powershell
-rg -n "statistically indistinguishable|indistinguishable|matches the oracle|reaches the same terminal|equality with cost|matching oracle baseline accuracy" index.html about.html docs\presentation\claims-and-scope.md docs\SCIENTIFIC_CRITERIA.md docs\PAPER_v1_draft.md internal\anniversary
-rg -n "terminal accuracy|terminal-intensity|16x|16×|oracle" index.html about.html docs\presentation\claims-and-scope.md docs\SCIENTIFIC_CRITERIA.md docs\PAPER_v1_draft.md internal\anniversary
+rg -n "statistically indistinguishable|indistinguishable|matches the oracle|reaches the same terminal|equality with cost|matching oracle baseline accuracy" index.html about.html docs\presentation\claims-and-scope.md docs\SCIENTIFIC_CRITERIA.md docs\PAPER_v1_draft.md internal
+rg -n "terminal accuracy|terminal-intensity|16x|16×|oracle" index.html about.html docs\presentation\claims-and-scope.md docs\SCIENTIFIC_CRITERIA.md docs\PAPER_v1_draft.md internal
 ```
 
 Exit:
@@ -194,7 +194,7 @@ Steps:
 Checks:
 
 ```powershell
-rg -n "sidesteps Goodhart|cannot be reward-hacked|Goodhart immunity|universal immunity|gravity.*proof|law" mesa.html docs\presentation\claims-and-scope.md docs\SUNDOG_V_MESA.md docs\COARSE_GRAINING_PROOF_ROADMAP.md internal\anniversary
+rg -n "sidesteps Goodhart|cannot be reward-hacked|Goodhart immunity|universal immunity|gravity.*proof|law" mesa.html docs\presentation\claims-and-scope.md docs\SUNDOG_V_MESA.md docs\COARSE_GRAINING_PROOF_ROADMAP.md internal
 ```
 
 Exit:
@@ -493,7 +493,7 @@ Scope:
 - `public/icons/`
 - `docs/site/ICON_ASSETS.md`
 - `docs/site/LOGO_ANIMATION_TOOLKIT.md`
-- [`hero_rail_artwork_inventory.md`](hero_rail_artwork_inventory.md)
+- [`hero_rail_artwork_inventory.md`](../site/hero_rail_artwork_inventory.md)
 
 Steps:
 
@@ -1006,7 +1006,7 @@ Steps:
 Checks:
 
 ```powershell
-rg -n "Bayesian floor|Bayes-optimal|information baseline" docs internal\anniversary
+rg -n "Bayesian floor|Bayes-optimal|information baseline" docs internal
 ```
 
 Exit:
@@ -1025,7 +1025,7 @@ comment-section fog.
 
 Steps:
 
-1. Create a post-launch addendum in [`attack_vectors.md`](attack_vectors.md).
+1. Create a post-launch addendum in [`../feedback/quarantine/attack_vectors.md`](../feedback/quarantine/attack_vectors.md).
 2. For each serious critique, record:
 
    - source/channel;
@@ -1050,7 +1050,7 @@ Checks:
 
 Exit:
 
-- Within 72 hours of launch, `attack_vectors.md` has a post-launch addendum
+- Within 72 hours of launch, `../feedback/quarantine/attack_vectors.md` has a post-launch addendum
   and at least one next-action owner per serious critique.
 
 ## Quick Search List
@@ -1070,8 +1070,8 @@ The public statement may ship when:
 - [x] P0.2 oracle-leakage receipt exists or the claim is demoted.
 - [x] P0.3 Mesa cliff language is bounded.
 - [x] P0.4 geometry rendered-vs-anchored distinction is visible.
-- [x] `first_public_statement.md` passes the public guardrails in
-      `anni_spam_roadmap.md`.
+- [x] `../outreach/first_public_statement.md` passes the public guardrails in
+      `../outreach/anni_spam_roadmap.md`.
 
 The broader social rollout may continue while P1/P2 work proceeds, as long as
 posts keep linking to the boundary language.

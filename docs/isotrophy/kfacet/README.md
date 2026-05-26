@@ -1,7 +1,7 @@
 # K_facet Appendix Index
 
 This folder contains the permanent K_facet appendix set that previously lived
-under `internal/anniversary/`.
+under the internal anniversary catch-all.
 
 ## Primary Receipts
 

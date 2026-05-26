@@ -24,7 +24,7 @@ Files are CRLF / latin-1 with a trailing blank line; this tool preserves
 bytes exactly outside the targeted numeric tokens.
 
 Usage:
-    python scripts/halosim_gen_frames.py --template "C:/Users/hughe/46halo.sim" \
+    python scripts/halosim_gen_frames.py --template "<HaloSim home>/46halo.sim" \
         --out docs/calibration/halosim_outputs/hs_frames \
         --start 0 --stop 60 --step 2 --rays 300000 [--levels 256] [--dry-run]
 """
@@ -112,7 +112,7 @@ def main() -> int:
 
     out = Path(a.out)
     # Safety: never write into the HaloSim asset library / user home.
-    if out.resolve() == Path("C:/Users/hughe").resolve():
+    if out.resolve() == Path.home().resolve():
         raise SystemExit("ERROR: refusing to write frames into the HaloSim home directory")
     if not a.dry_run:
         out.mkdir(parents=True, exist_ok=True)
