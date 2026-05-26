@@ -75,6 +75,7 @@ function initMotionRail() {
   }
 
   applyVerdictStamps(cards);
+  primeRailPosters(cards);
 
   const state = {
     rail,
@@ -137,6 +138,21 @@ function initMotionRail() {
     state.timer = window.setTimeout(() => startClipPhase(state), 320);
     state.phase = "clip";
     setRailState(state, "cycling");
+  }
+}
+
+function primeRailPosters(cards) {
+  for (const card of cards) {
+    for (const img of card.querySelectorAll(".motion-card-poster")) {
+      img.loading = "eager";
+      img.decoding = "async";
+      img.setAttribute("fetchpriority", "low");
+      if (typeof img.decode === "function") {
+        img.decode().catch(() => {
+          // Decode is a paint hint only; the image element still owns fallback rendering.
+        });
+      }
+    }
   }
 }
 
