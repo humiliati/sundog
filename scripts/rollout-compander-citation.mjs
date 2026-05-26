@@ -12,7 +12,8 @@ const EXPECTED_HOOKS = [
   { file: path.join("docs", "SUNDOG_V_CHAT.md"), count: 1 },
   { file: "capset.html", count: 1 },
   { file: "geometry.html", count: 1 },
-  { file: path.join("docs", "PROMO_HIGHLIGHTS.md"), count: 1 }
+  { file: path.join("docs", "PROMO_HIGHLIGHTS.md"), count: 1 },
+  { file: "safety-method.html", count: 1 }
 ];
 
 const PROMPT_SLATE = path.join("chat", "prompts", "gold-citation-day.jsonl");
@@ -281,6 +282,32 @@ stack-invariance explanation weakens.
       file: path.join("docs", "PROMO_HIGHLIGHTS.md"),
       anchor: findHook(path.join("docs", "PROMO_HIGHLIGHTS.md"), "§9b"),
       content: `<!-- RATCHET APPLIED: COMPANDER_PAPER_HOOK §9b via ${shortCite} -->`
+    },
+    {
+      file: "safety-method.html",
+      anchor: findHook("safety-method.html", "§9j"),
+      content: indent(`
+<div class="sm-card" data-citation-card="compander">
+    <p class="eyebrow">Same Operator, Named</p>
+    <h2>The compander citation has landed.</h2>
+    <p>
+        Recent ${cite} probe work on autoregressive transformer
+        residual streams gives the body/shadow decomposition above
+        a public mechanistic citation: bottleneck layers act as
+        companders, residual activations collapse into orthogonal
+        categorical-centroid and generator-algebra subspaces, and
+        so(3) ranks first among the measured generators across many
+        models. The result does not prove the three Sundog
+        translations above. It supplies them with a public mechanism
+        in the same vocabulary they were written in, and turns the
+        previous &ldquo;Convergent Ground&rdquo; card from
+        territory-description into a falsifiable probe-level
+        hypothesis.
+    </p>
+    <p>
+        See: <a href="${citationHref}">${citationText}</a>.
+    </p>
+</div>`, 12)
     }
   ];
 }
