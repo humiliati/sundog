@@ -164,7 +164,7 @@ Artifacts required by the roadmap are present:
 2. explicit scope guard for preparatory-action tasks;
 3. pushable-occluder theorem-predicted boundary statement, cross-filed in
    [`PHASE2_BLOCKS_DESIGN.md`](../PHASE2_BLOCKS_DESIGN.md) and the river-and-dam
-   entry of [`analogies.md`](../../internal/anniversary/analogies.md);
+   entry of [`analogies.md`](../../internal/theory/analogies.md);
 4. disposition branch for flat-controller success.
 
 Reviewer pass: **complete, 2026-05-16.** The contrapositive proof, the scope

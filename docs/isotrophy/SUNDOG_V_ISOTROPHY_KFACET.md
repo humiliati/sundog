@@ -154,8 +154,8 @@ Standing rules:
 
 ## Inspection Trail
 
-- 2026-05-22 - v0.3h writeup and O_617 deep dive shipped to
-  `internal/anniversary/`.
+- 2026-05-22 - v0.3h writeup and O_617 deep dive shipped to the internal
+  anniversary catch-all before the docs cleanup.
 - 2026-05-22 - corrected O_617 attribution after orientation-aware admission
   residual check: opposite-strict admission residual `1.01e-8`, canonical
   residual `1.62e-1` diagnostic-only.

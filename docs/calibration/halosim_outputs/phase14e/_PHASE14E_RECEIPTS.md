@@ -14,7 +14,7 @@ local HaloSim library reproduces the phenomenon. Receipts for
 
 ## Method
 
-- **Rays-only pin.** Each library `.sim` at `C:\Users\hughe\` was copied
+- **Rays-only pin.** Each library `.sim` at `%USERPROFILE%\` was copied
   through [`scripts/halosim_pin_rays.py`](../../../../scripts/halosim_pin_rays.py)
   into [`../phase14e_frames/`](../phase14e_frames), which edits **only** the
   T-3 ray-count token (300k–400k → **1,000,000**) and preserves every other

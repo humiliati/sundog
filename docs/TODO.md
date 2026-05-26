@@ -159,7 +159,7 @@ Next actions:
 Sources:
 [`mesa/PHASE7_V2_RESULTS.md`](mesa/PHASE7_V2_RESULTS.md),
 [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md),
-[`../internal/anniversary/fix_roadmap.md`](../internal/anniversary/fix_roadmap.md).
+[`../internal/roadmaps/fix_roadmap.md`](../internal/roadmaps/fix_roadmap.md).
 
 Status: `design-blocked`, active.
 
@@ -220,7 +220,7 @@ Next actions:
 Sources:
 [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md),
 [`../alignment.html`](../alignment.html),
-[`../internal/anniversary/attack_vectors.md`](../internal/anniversary/attack_vectors.md).
+[`../internal/feedback/quarantine/attack_vectors.md`](../internal/feedback/quarantine/attack_vectors.md).
 
 Status: `design-blocked`, cross-cutting.
 
@@ -295,9 +295,9 @@ Next actions:
 ### 9. Anniversary Rollout Aftercare
 
 Sources:
-[`../internal/anniversary/anni_spam_roadmap.md`](../internal/anniversary/anni_spam_roadmap.md),
-[`../internal/anniversary/first_public_statement.md`](../internal/anniversary/first_public_statement.md),
-[`../internal/anniversary/attack_vectors.md`](../internal/anniversary/attack_vectors.md),
+[`../internal/outreach/anni_spam_roadmap.md`](../internal/outreach/anni_spam_roadmap.md),
+[`../internal/outreach/first_public_statement.md`](../internal/outreach/first_public_statement.md),
+[`../internal/feedback/quarantine/attack_vectors.md`](../internal/feedback/quarantine/attack_vectors.md),
 [`ANNIVERSARY_ROADMAP_TRIAGE.md`](ANNIVERSARY_ROADMAP_TRIAGE.md).
 
 Status: `public-surface`, active after posting.
@@ -309,7 +309,7 @@ feedback is already pointing at comprehension and commercial-value questions.
 
 Next actions:
 
-1. Collect serious objections into `internal/anniversary/attack_vectors.md`.
+1. Collect serious objections into `internal/feedback/quarantine/attack_vectors.md`.
 2. Record recurring plain-language failures separately from technical objections.
 3. Keep every broad public post attached to the failure-boundary sentence.
 4. Add a young-reader/plain-language path only after the main copy stops
@@ -347,7 +347,7 @@ Next actions:
 
 ### Vortex / Wishing-Well Toy
 
-Source: [`../internal/anniversary/postulations.md`](../internal/anniversary/postulations.md).
+Source: [`../internal/theory/postulations.md`](../internal/theory/postulations.md).
 
 Status: `deferred`.
 

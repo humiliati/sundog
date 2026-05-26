@@ -6,9 +6,9 @@ does not supersede any existing roadmap, pre-registration, or long-run rule.
 
 Sources:
 
-- [`internal/anniversary/postulations.md`](../internal/anniversary/postulations.md)
-- [`internal/anniversary/attack_vectors.md`](../internal/anniversary/attack_vectors.md)
-- [`internal/anniversary/fix_roadmap.md`](../internal/anniversary/fix_roadmap.md)
+- [`internal/theory/postulations.md`](../internal/theory/postulations.md)
+- [`internal/feedback/quarantine/attack_vectors.md`](../internal/feedback/quarantine/attack_vectors.md)
+- [`internal/roadmaps/fix_roadmap.md`](../internal/roadmaps/fix_roadmap.md)
 - [`SUNDOG_V_PATH.md`](SUNDOG_V_PATH.md)
 - [`SUNDOG_V_BAYES.md`](SUNDOG_V_BAYES.md)
 - [`BAYESIAN_FLOOR_PROFILE_TEMPLATE.md`](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md)

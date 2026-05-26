@@ -26,13 +26,15 @@
 # the log; if it exceeds budget, the operator can resume the next day
 # with -SkipDone.
 #
-# Usage (from C:\Users\hughe\Dev\sundog):
+# Usage from repo root:
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -Models llama-3.1-8b-instant
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -Slates differential
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -SkipDone
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -RerunErrored -DelayMultiplier 2
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-interventions.ps1 -DryRun
+#
+# Key source: $env:GROQ_API_KEY, or $env:GROQ_API_KEY_FILE / -KeyFile.
 #
 # Log: results/chat/phase12c-groq-interventions-log.jsonl
 
@@ -42,8 +44,8 @@ param(
     [string[]] $Interventions = @("boundary_removed", "boundary_swapped", "evidence_tier_upgraded",
                                   "support_removed", "support_reordered", "route_swapped",
                                   "refusal_downgraded", "retrieval_conflict_injected"),
-    [string]   $KeyFile = "C:\Users\hughe\Dev\syek.corg.txt",
-    [string]   $RepoRoot = "C:\Users\hughe\Dev\sundog",
+    [string]   $RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path,
+    [string]   $KeyFile = $env:GROQ_API_KEY_FILE,
     [double]   $DelayMultiplier = 1.0,
     [switch]   $SkipDone,
     [switch]   $RerunErrored,
@@ -193,18 +195,26 @@ if ($DryRun) {
 }
 
 # Load key.
-if (-not (Test-Path $KeyFile)) {
-    Write-Error "Key file not found at $KeyFile. Aborting."
-    exit 1
+if ($env:GROQ_API_KEY) {
+    Write-Host ("Using Groq key from GROQ_API_KEY (length={0})." -f $env:GROQ_API_KEY.Length) -ForegroundColor DarkGray
+} else {
+    if (-not $KeyFile) {
+        Write-Error "Set GROQ_API_KEY, set GROQ_API_KEY_FILE, or pass -KeyFile. Aborting."
+        exit 1
+    }
+    if (-not (Test-Path $KeyFile)) {
+        Write-Error "Key file not found at $KeyFile. Aborting."
+        exit 1
+    }
+    $keyContents = Get-Content -Raw -Path $KeyFile
+    $keyMatch = [regex]::Match($keyContents, "gsk_[A-Za-z0-9_-]+")
+    if (-not $keyMatch.Success) {
+        Write-Error "No gsk_... key found in $KeyFile. Aborting."
+        exit 1
+    }
+    $env:GROQ_API_KEY = $keyMatch.Value
+    Write-Host ("Loaded Groq key from configured key file (length={0})." -f $keyMatch.Value.Length) -ForegroundColor DarkGray
 }
-$keyContents = Get-Content -Raw -Path $KeyFile
-$keyMatch = [regex]::Match($keyContents, "gsk_[A-Za-z0-9_-]+")
-if (-not $keyMatch.Success) {
-    Write-Error "No gsk_... key found in $KeyFile. Aborting."
-    exit 1
-}
-$env:GROQ_API_KEY = $keyMatch.Value
-Write-Host ("Loaded Groq key (length={0}) from {1}" -f $keyMatch.Value.Length, $KeyFile) -ForegroundColor DarkGray
 
 # Log file.
 $LogPath = Join-Path $RepoRoot "results/chat/phase12c-groq-interventions-log.jsonl"

@@ -150,7 +150,7 @@ probe on the local CPU box. If it exceeds ~10 minutes, stop and stage to a
 longer runner.
 
 ```powershell
-Set-Location C:\Users\hughe\Dev\sundog
+Set-Location <repo-root>
 $env:PYTHONUNBUFFERED = "1"
 $outRoot = "results\proof\phase6"
 New-Item -ItemType Directory -Force "$outRoot\logs" | Out-Null
@@ -190,7 +190,7 @@ agent pass. The labels are unique and the loop skips completed artifacts, so the
 run is resume-safe.
 
 ```powershell
-Set-Location C:\Users\hughe\Dev\sundog
+Set-Location <repo-root>
 $env:PYTHONUNBUFFERED = "1"
 $outRoot = "results\proof\phase6"
 New-Item -ItemType Directory -Force "$outRoot\logs" | Out-Null
@@ -279,4 +279,3 @@ Spec status: **staged, 2026-05-16.** The no-op and reward-rescale definitions,
 acceptance gates, capped-probe discipline, full-lock commands, read-back paths,
 and branch table are fixed before empirical execution. The trainer flags needed
 to run the controls are present with default-preserving semantics.
-

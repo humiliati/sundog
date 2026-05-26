@@ -703,7 +703,7 @@ runnable yet** and must not be used as a proof command until BF-0 through BF-3
 exist.
 
 ```powershell
-Set-Location C:\Users\hughe\Dev\sundog
+Set-Location <repo-root>
 $outRoot = "results\proof\phase4"
 New-Item -ItemType Directory -Force "$outRoot\bayes-floor-smoke" | Out-Null
 

@@ -1,12 +1,11 @@
 import { appendFile, readFile, writeFile } from "node:fs/promises";
-import { cloudflareRequest } from "./cloudflare-auth.mjs";
+import { cloudflareRequest, localCredentialPath } from "./cloudflare-auth.mjs";
 
 const projectName = "sundog";
 const zoneName = "sundog.cc";
 const repoOwner = "humiliati";
 const repoName = "sundog";
 const productionBranch = "main";
-const localKeyPath = "C:\\Users\\hughe\\syek.c";
 
 function ok(result) {
   return result.response.ok && result.body.success !== false;
@@ -44,9 +43,9 @@ async function githubRepoMetadata() {
 async function ensureLocalKeyFile(entries) {
   let existing = "";
   try {
-    existing = await readFile(localKeyPath, "utf8");
+    existing = await readFile(localCredentialPath, "utf8");
   } catch {
-    await writeFile(localKeyPath, [
+    await writeFile(localCredentialPath, [
       "# Local Sundog Cloudflare material.",
       "# Keep this file outside the repo. Do not commit or print token values.",
       "",
@@ -62,7 +61,7 @@ async function ensureLocalKeyFile(entries) {
   }
 
   if (nextLines.length > 0) {
-    await appendFile(localKeyPath, `${nextLines.join("\n")}\n`);
+    await appendFile(localCredentialPath, `${nextLines.join("\n")}\n`);
   }
 }
 
@@ -140,4 +139,4 @@ console.log(`Production branch: ${project.production_branch}`);
 console.log(`Build command: ${project.build_config?.build_command ?? "(unset)"}`);
 console.log(`Output directory: ${project.build_config?.destination_dir ?? "(unset)"}`);
 console.log(`Source: ${project.source?.type ?? "(none)"}`);
-console.log(`Local key file updated: ${localKeyPath}`);
+console.log(`Configured credential file updated: ${localCredentialPath}`);

@@ -23,7 +23,7 @@ tokens and components without forcing a high-risk rewrite of every page at once.
 Local repo:
 
 ```text
-C:\Users\hughe\Dev\EyesOnly
+../EyesOnly
 ```
 
 Relevant sources:
@@ -53,7 +53,7 @@ Takeaways for Sundog:
 Local repo:
 
 ```text
-C:\Users\hughe\Dev\Dungeon Gleaner Main
+../Dungeon Gleaner Main
 ```
 
 Relevant sources:
@@ -1207,9 +1207,9 @@ body[data-theme="desk"],
 
 ### References
 
-- EyesOnly CSS themes: `C:\Users\hughe\Dev\EyesOnly\public\css\themes.css`
-- EyesOnly portfolio direction: `C:\Users\hughe\Dev\EyesOnly\docs\PORTFOLIO_TRANSITION_ROADMAP.md`
-- EyesOnly hybrid layout spec: `C:\Users\hughe\Dev\EyesOnly\docs\HYBRID-LAYOUT-SPEC.md`
+- EyesOnly CSS themes: `../EyesOnly/public/css/themes.css`
+- EyesOnly portfolio direction: `../EyesOnly/docs/PORTFOLIO_TRANSITION_ROADMAP.md`
+- EyesOnly hybrid layout spec: `../EyesOnly/docs/HYBRID-LAYOUT-SPEC.md`
 - Inspiration: flapsandseals.com (booking/partners pages)
 - BoxForge primitives: Dungeon Gleaner `docs/BOXFORGE_README.md`
 

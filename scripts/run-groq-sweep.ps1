@@ -5,12 +5,14 @@
 # PowerShell 5.1 compatible because the project machine may not have PowerShell
 # 7 (`pwsh`) installed.
 #
-# Usage from repo root C:\Users\hughe\Dev\sundog:
+# Usage from repo root:
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1 -Models llama-3.3-70b-versatile
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1 -Slates differential
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1 -SkipDone
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\run-groq-sweep.ps1 -DryRun
+#
+# Key source: $env:GROQ_API_KEY, or $env:GROQ_API_KEY_FILE / -KeyFile.
 #
 # Resume after kill: re-run with -SkipDone. The script checks
 # results/chat/phase5-hosted/<slate>/groq-<model>/summary.json.
@@ -21,8 +23,8 @@
 param(
     [string[]] $Models = @("llama-3.3-70b-versatile", "llama-3.1-8b-instant", "qwen/qwen3-32b"),
     [string[]] $Slates = @("differential", "adversarial"),
-    [string]   $KeyFile = "C:\Users\hughe\Dev\syek.corg.txt",
-    [string]   $RepoRoot = "C:\Users\hughe\Dev\sundog",
+    [string]   $RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path,
+    [string]   $KeyFile = $env:GROQ_API_KEY_FILE,
     [switch]   $SkipDone,
     [switch]   $DryRun,
     [switch]   $RunFalsification
@@ -133,19 +135,27 @@ if ($DryRun) {
     exit 0
 }
 
-if (-not (Test-Path $KeyFile)) {
-    Write-Error "Key file not found at $KeyFile. Aborting."
-    exit 1
-}
+if ($env:GROQ_API_KEY) {
+    Write-Host "Using Groq key from GROQ_API_KEY (length=$($env:GROQ_API_KEY.Length))." -ForegroundColor DarkGray
+} else {
+    if (-not $KeyFile) {
+        Write-Error "Set GROQ_API_KEY, set GROQ_API_KEY_FILE, or pass -KeyFile. Aborting."
+        exit 1
+    }
+    if (-not (Test-Path $KeyFile)) {
+        Write-Error "Key file not found at $KeyFile. Aborting."
+        exit 1
+    }
 
-$keyContents = Get-Content -Raw -Path $KeyFile
-$keyMatch = [regex]::Match($keyContents, "gsk_[A-Za-z0-9_-]+")
-if (-not $keyMatch.Success) {
-    Write-Error "No gsk_... key found in $KeyFile. Aborting."
-    exit 1
+    $keyContents = Get-Content -Raw -Path $KeyFile
+    $keyMatch = [regex]::Match($keyContents, "gsk_[A-Za-z0-9_-]+")
+    if (-not $keyMatch.Success) {
+        Write-Error "No gsk_... key found in $KeyFile. Aborting."
+        exit 1
+    }
+    $env:GROQ_API_KEY = $keyMatch.Value
+    Write-Host "Loaded Groq key from configured key file (length=$($keyMatch.Value.Length))." -ForegroundColor DarkGray
 }
-$env:GROQ_API_KEY = $keyMatch.Value
-Write-Host "Loaded Groq key (length=$($keyMatch.Value.Length)) from $KeyFile" -ForegroundColor DarkGray
 
 $globalStart = Get-Date
 $stepIdx = 0

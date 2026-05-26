@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
+import { localCredentialPath } from "./cloudflare-auth.mjs";
 
-const localKeyPath = "C:\\Users\\hughe\\syek.c";
 const tokenKey = "CLOUDFLARE_TOKEN_SUNDOG_PAGES_DEPLOY";
 
 async function readLocalEnv(path) {
@@ -18,11 +18,11 @@ async function readLocalEnv(path) {
   return env;
 }
 
-const localEnv = await readLocalEnv(localKeyPath);
+const localEnv = await readLocalEnv(localCredentialPath);
 const token = (process.env.CLOUDFLARE_API_TOKEN || localEnv[tokenKey] || "").trim();
 
 if (!token) {
-  console.error(`No Pages deploy token found. Set CLOUDFLARE_API_TOKEN or add ${tokenKey} to ${localKeyPath}.`);
+  console.error(`No Pages deploy token found. Set CLOUDFLARE_API_TOKEN or add ${tokenKey} to the configured credential file.`);
   process.exit(1);
 }
 

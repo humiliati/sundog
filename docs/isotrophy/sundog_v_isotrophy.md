@@ -794,7 +794,7 @@ six remaining blockers:
    it still needs G2/crossing-form validation.
 
 Scratchpad note: the "couplings surface / 1/phi^3" conjecture in
-`internal/anniversary/scratchpad_brainstorm_notes.md` should stay quarantined.
+`internal/quarantine/scratchpad_brainstorm_notes.md` should stay quarantined.
 Its rigorous version is only a future diagnostic on the Lyapunov-Schmidt
 crossing-form spectrum after the standard `D3` sector is defined; it is not a
 premise of v0.3.

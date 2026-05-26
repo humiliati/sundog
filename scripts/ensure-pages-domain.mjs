@@ -1,9 +1,8 @@
 import { appendFile, readFile } from "node:fs/promises";
-import { cloudflareRequest } from "./cloudflare-auth.mjs";
+import { cloudflareRequest, localCredentialPath } from "./cloudflare-auth.mjs";
 
 const projectName = "sundog";
 const domainName = "sundog.cc";
-const localKeyPath = "C:\\Users\\hughe\\syek.c";
 
 function ok(result) {
   return result.response.ok && result.body.success !== false;
@@ -27,7 +26,7 @@ function summarizeDomain(domain) {
 }
 
 async function appendLocalEntries(entries) {
-  const existing = await readFile(localKeyPath, "utf8").catch(() => "");
+  const existing = await readFile(localCredentialPath, "utf8").catch(() => "");
   const lines = [];
 
   for (const [key, value] of Object.entries(entries)) {
@@ -37,7 +36,7 @@ async function appendLocalEntries(entries) {
   }
 
   if (lines.length > 0) {
-    await appendFile(localKeyPath, [
+    await appendFile(localCredentialPath, [
       "",
       "# Cloudflare Pages custom domain metadata.",
       ...lines,

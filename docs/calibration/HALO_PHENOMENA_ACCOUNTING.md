@@ -77,7 +77,7 @@ This ledger is organized into three lenses, matching the Phase 14 directive:
   [`AH-CH10/`](AH-CH10) (pyramidal / odd-radius).
 - **Tape SAX** — *Halos: A Search for Angle X*, on-disk chapter scan:
   [`AH-SAX-CH11/`](AH-SAX-CH11).
-- **HaloSim `.sim`** — bundled recipe library at `C:\Users\hughe\*.sim`
+- **HaloSim `.sim`** — bundled recipe library at `%USERPROFILE%\*.sim`
   (cited by file name; the recipe's description block states the ray path).
 - **Receipts** — [`PASS_C7_OUTPUT.txt`](PASS_C7_OUTPUT.txt),
   [`HALOSIM_VALIDATION_PROTOCOL.md`](HALOSIM_VALIDATION_PROTOCOL.md).

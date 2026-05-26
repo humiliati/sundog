@@ -678,7 +678,7 @@ probe-2 is read and a branch is selected in writing
 
 #### Staged commands (exceed the ~10-min inline-run threshold - run by operator)
 
-Module invocation from repo root `C:\Users\hughe\Dev\sundog` (the
+Module invocation from repo root (the
 `-m` form is required - `training` is a package; `python
 training/mesa/train_ppo.py` fails with `ModuleNotFoundError`).
 

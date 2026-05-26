@@ -47,8 +47,8 @@ computational rather than closed-form.
 
 HaloSim3 (Cowley & Schroeder 2004) is a Monte Carlo ray-tracer for
 atmospheric halos. The project's installation lives at
-`C:\Users\hughe\HalSim361.exe` with the full asset library at
-`C:\Users\hughe\`. Inventory:
+`%USERPROFILE%\HalSim361.exe` with the full asset library at
+`%USERPROFILE%\`. Inventory:
 
 | asset class | count | what it gives the protocol |
 | --- | ---: | --- |

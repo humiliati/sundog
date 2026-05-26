@@ -23,7 +23,7 @@ inherited verbatim. CRLF / latin-1; bytes preserved outside the three
 edited lines (integrity-checked, aborts otherwise).
 
 Usage:
-    python scripts/halosim_filter_frames.py --src "C:/Users/hughe/Pyramidal 20-35d halos.sim" \
+    python scripts/halosim_filter_frames.py --src "<HaloSim home>/Pyramidal 20-35d halos.sim" \
         --out <dir> --entrance 3 --exit 26 --rays 4000000 --tag w9
 """
 from __future__ import annotations
@@ -97,7 +97,7 @@ def main() -> int:
         )
 
     out = Path(a.out)
-    if out.resolve() == Path("C:/Users/hughe").resolve():
+    if out.resolve() == Path.home().resolve():
         raise SystemExit("ERROR: refusing to write into the HaloSim home directory")
     out.mkdir(parents=True, exist_ok=True)
 

@@ -144,7 +144,7 @@ distributed so no document trampolines another's decisions.
   snapshots the locked default; future poses (`low-altitude`, `cza-heavy`,
   `nine-halo-eye`, `rich-display-vocabulary`) ship as Phase 8 and Phase
   10 land.
-- BoxForge tools library: `C:\Users\hughe\Dev\Dungeon Gleaner Main\tools`,
+- BoxForge tools library: sibling checkout `../Dungeon Gleaner Main/tools`,
   agent-accessible. `boxforge.html` and `orb-component.html` are reference
   primitives for the Phase 6 selective 3D handoff. The animation phase
   vocabulary (idle / hover / active / handoff·settle) used in Phases 4–6
@@ -613,7 +613,7 @@ independently.
   for the Bravais-Clarke pyramidal crystal (9°/18°/22°/28°/35°/46° halo
   radii from specific wedge configurations).
 - **HaloSim3** (Cowley, L. & Schroeder, M. 2004). The standard Monte Carlo
-  halo simulator. Installed at `C:\Users\hughe\HalSim361.exe` with the full
+  halo simulator. Installed at `%USERPROFILE%\HalSim361.exe` with the full
   asset library (40 orientation `.xng` files, 6 crystal shape `.xsh` files,
   `Water-Ice.xmt` material file, 38 canonical simulation `.sim` files
   including named historical displays such as Parry 1820 and St Petersburg

@@ -1,11 +1,20 @@
 import { readFile } from "node:fs/promises";
+import { homedir } from "node:os";
+import { join } from "node:path";
 
-export const globalKeyPath = "C:\\Users\\hughe\\yek eralfduolc.txt";
+export const localCredentialPath =
+  process.env.SUNDOG_CLOUDFLARE_ENV_FILE?.trim() ||
+  join(homedir(), ".sundog-cloudflare.env");
+export const legacyCredentialPath = process.env.SUNDOG_CLOUDFLARE_LEGACY_KEY_FILE?.trim() || "";
 export const apiBase = "https://api.cloudflare.com/client/v4";
 
 export async function readLegacyCredentialFile() {
+  if (!legacyCredentialPath) {
+    return {};
+  }
+
   try {
-    const text = await readFile(globalKeyPath, "utf8");
+    const text = await readFile(legacyCredentialPath, "utf8");
     const lines = text
       .split(/\r?\n/)
       .map((line) => line.trim())
