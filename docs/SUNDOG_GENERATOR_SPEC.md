@@ -34,7 +34,7 @@ not a research artifact in tension with whichever LLM is hosting it).
   generator; the spec is the programmatic face.
 - [`SUNDOG_OVERLAY_PROTOCOL.md`](SUNDOG_OVERLAY_PROTOCOL.md) — the
   photo-overlay test methodology. Mode two of the generator depends on it.
-- [`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md) — the
+- [`UI_UX_THEME_FOUNDATION.md`](site/UI_UX_THEME_FOUNDATION.md) — the
   site-wide visual frame. Owns theme-token reservation; any new tokens the
   generator introduces go via `sundog-theme.css`.
 - `public/poses/*.json` — the named-pose library. The canonical pose is

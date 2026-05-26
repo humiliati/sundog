@@ -282,7 +282,7 @@ export function mountPhotoUpload(rootEl) {
             </label>
             <p class="upload-share-policy">
               EXIF stripped before upload. You receive a deletion token at submission time.
-              <a href="/docs/PHOTO_DATA_POLICY.md">Read the policy</a>.
+              <a href="/docs/site/PHOTO_DATA_POLICY.md">Read the policy</a>.
             </p>
             <div class="upload-share-actions" hidden id="upload-share-actions">
               <button type="button" id="upload-share-submit">Submit to project</button>

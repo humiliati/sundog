@@ -193,7 +193,7 @@ Local page: [`/isotrophy`](../isotrophy)
 
 Ledger: [`SUNDOG_V_ISOTROPHY_KFACET.md`](SUNDOG_V_ISOTROPHY_KFACET.md)
 
-Roadmap: [`docs/sundog_v_isotrophy.md`](sundog_v_isotrophy.md)
+Roadmap: [`docs/isotrophy/sundog_v_isotrophy.md`](sundog_v_isotrophy.md)
 
 The Isotrophy K_facet verdict is the third audit-chain artifact in the
 public ledger (alongside the structural-failure boundary map and the

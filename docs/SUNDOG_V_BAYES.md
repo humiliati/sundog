@@ -2149,7 +2149,7 @@ Immediate work after the Pressure Mines applied lane:
   Do not publish a decorative Bayes page before Phase 1/2 receipts exist.
 - Add a public rail card only if Round 3 or Phase 5 includes a real failure
   boundary.
-- Update `docs/PROMO_HIGHLIGHTS.md` with a cautious comparison paragraph.
+- Update `docs/promo/PROMO_HIGHLIGHTS.md` with a cautious comparison paragraph.
 - Update `docs/SCIENTIFIC_CRITERIA.md` if the comparison introduces a stronger
   target-unaware baseline for the core photometric claim.
 

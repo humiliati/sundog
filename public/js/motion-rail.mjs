@@ -1,6 +1,6 @@
 /* Highlights motion rail — Slice 1B: stamp-cued auto-cycle.
  *
- * Per-card lifecycle (see docs/HIGHLIGHTS_RAIL_ROADMAP.md):
+ * Per-card lifecycle (see docs/site/HIGHLIGHTS_RAIL_ROADMAP.md):
  *
  *   centre → clip plays → arm stamp → dwell → advance
  *

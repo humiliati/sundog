@@ -13,7 +13,7 @@ Two modes:
                   provenance, plus the table[m_3][stability][class].
 
 All thresholds are pre-registered in
-`internal/anniversary/kfacet_v04a_domain_map_preregistration.md`.
+`docs/isotrophy/kfacet/kfacet_v04a_domain_map_preregistration.md`.
 """
 from __future__ import annotations
 

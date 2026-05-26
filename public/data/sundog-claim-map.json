@@ -198,7 +198,7 @@
           "status": "primary"
         },
         {
-          "doc": "docs/WEBSITE_DEVELOPMENT.md",
+          "doc": "docs/site/WEBSITE_DEVELOPMENT.md",
           "section": "Ask Sundog / Claim-boundary checks before publishing",
           "status": "boundary"
         }
@@ -298,7 +298,7 @@
           "status": "primary"
         },
         {
-          "doc": "docs/SUNDOG_V_ISOTROPHY_KFACET.md",
+          "doc": "docs/isotrophy/SUNDOG_V_ISOTROPHY_KFACET.md",
           "section": "Load-bearing statement / Standing rules / Falsification surface",
           "status": "ledger"
         },

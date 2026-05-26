@@ -26,7 +26,7 @@ Load-bearing status:
   specialist-tier handoff, rewritten and cleared for external specialist use.
 - [`PHASE11_OUTREACH_BRIEF.md`](PHASE11_OUTREACH_BRIEF.md) - Phase 11
   audience order, deployment methodology, and outreach posture.
-- [`../SUNDOG_OUTREACH_PACKET.md`](../SUNDOG_OUTREACH_PACKET.md) - shared
+- [`../SUNDOG_OUTREACH_PACKET.md`](../promo/SUNDOG_OUTREACH_PACKET.md) - shared
   outreach packet for science-communications and Wikipedia-adjacent tiers.
 - [`../PHASE10_ATTACK_ROADMAP.md`](../PHASE10_ATTACK_ROADMAP.md) -
   campaign-provenance source. Required for Persona A claim-verification:
@@ -73,7 +73,7 @@ packet as a halo specialist on a 30-minute time budget.
 Primary surfaces:
 
 - [`PHASE10_OPTICAL_AUDIT_HANDOFF.md`](PHASE10_OPTICAL_AUDIT_HANDOFF.md)
-- [`../SUNDOG_OUTREACH_PACKET.md`](../SUNDOG_OUTREACH_PACKET.md)
+- [`../SUNDOG_OUTREACH_PACKET.md`](../promo/SUNDOG_OUTREACH_PACKET.md)
 - [`PHASE10_OPTICAL_REAUDIT_MEMO.md`](PHASE10_OPTICAL_REAUDIT_MEMO.md)
 
 Surface:
@@ -103,7 +103,7 @@ and worth linking.
 Primary surfaces:
 
 - [`PHASE11_OUTREACH_BRIEF.md`](PHASE11_OUTREACH_BRIEF.md)
-- [`../SUNDOG_OUTREACH_PACKET.md`](../SUNDOG_OUTREACH_PACKET.md)
+- [`../SUNDOG_OUTREACH_PACKET.md`](../promo/SUNDOG_OUTREACH_PACKET.md)
 - live workbench: `https://sundog.cc/sundog.html`
 
 Surface:
@@ -131,7 +131,7 @@ external-link reviewer applying conservative Wikipedia-style discipline.
 
 Primary surfaces:
 
-- [`../SUNDOG_OUTREACH_PACKET.md`](../SUNDOG_OUTREACH_PACKET.md), especially
+- [`../SUNDOG_OUTREACH_PACKET.md`](../promo/SUNDOG_OUTREACH_PACKET.md), especially
   section 4;
 - live workbench: `https://sundog.cc/sundog.html`;
 - current literature attribution in the packet and geometry roadmap.
@@ -222,7 +222,7 @@ The consolidator must re-check every proposed change against:
 - `scripts/overlay_calibrate.py` for overlay behavior;
 - [`PHASE10_OPTICAL_REAUDIT_MEMO.md`](PHASE10_OPTICAL_REAUDIT_MEMO.md) for the
   route taxonomy;
-- [`../SUNDOG_OUTREACH_PACKET.md`](../SUNDOG_OUTREACH_PACKET.md) for the current
+- [`../SUNDOG_OUTREACH_PACKET.md`](../promo/SUNDOG_OUTREACH_PACKET.md) for the current
   public/editorial surface;
 - [`PHASE10_OPTICAL_AUDIT_HANDOFF.md`](PHASE10_OPTICAL_AUDIT_HANDOFF.md) for
   specialist-facing claims.

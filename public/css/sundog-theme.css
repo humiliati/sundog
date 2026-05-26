@@ -77,7 +77,7 @@ body[data-sundog-theme="halo"] {
   --sd-manila-dark: #e8d5b7;
   --sd-manila-border: rgba(139, 90, 43, 0.2);
 
-  /* Verdict-stamp palette (see docs/HIGHLIGHTS_RAIL_ROADMAP.md). Each value
+  /* Verdict-stamp palette (see docs/site/HIGHLIGHTS_RAIL_ROADMAP.md). Each value
      names the *ink colour* of the rubber-stamp rectangle and its text;
      mix-blend-mode: multiply on the stamp lets the paper texture show
      through. Add new verdicts here, not in page-local CSS. */
@@ -1412,7 +1412,7 @@ section p {
    Rubber-stamp paper ink-bleed verdicts attached to .motion-card elements
    on the highlights slide rail. Each card carries data-stamp="..." and
    data-stamp-meaning="..." per the contract in
-   docs/HIGHLIGHTS_RAIL_ROADMAP.md.
+   docs/site/HIGHLIGHTS_RAIL_ROADMAP.md.
 
    This base class is intentionally minimal for Slice 1A — it defines
    structure, typography, and the per-verdict ink colours. The ink-bleed

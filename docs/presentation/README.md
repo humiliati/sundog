@@ -103,6 +103,6 @@ This folder currently contains Phase 1 foundation materials. The next parallel s
 
 ## Related Documentation
 
-- [PROMO_HIGHLIGHTS.md](../PROMO_HIGHLIGHTS.md) — Hooks, headlines, provocative statements for broadcasts
+- [PROMO_HIGHLIGHTS.md](../promo/PROMO_HIGHLIGHTS.md) — Hooks, headlines, provocative statements for broadcasts
 - [APPLICATIONS.md](../APPLICATIONS.md) — EyesOnly, Dungeon Gleaner, Money Bags technical descriptions
 - [RESEARCHER_GUIDE.md](../RESEARCHER_GUIDE.md) — Technical entry point for reviewers

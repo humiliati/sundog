@@ -707,7 +707,7 @@ Phase 6 v1 complete when:
   [`PHASE5_SPEC.md`](PHASE5_SPEC.md),
   [`PHASE5_RESULTS.md`](PHASE5_RESULTS.md).
 - **Roadmap**: [`../SUNDOG_V_MESA.md`](../SUNDOG_V_MESA.md).
-- **Promo / claim language**: [`../PROMO_HIGHLIGHTS.md`](../PROMO_HIGHLIGHTS.md)
+- **Promo / claim language**: [`../PROMO_HIGHLIGHTS.md`](../promo/PROMO_HIGHLIGHTS.md)
   §The Gravity Claim → §The empirical anchor (Phase 5 v4).
 
 ## 12. What Phase 7 Inherits

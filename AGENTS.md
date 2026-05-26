@@ -17,7 +17,7 @@ Sundog website at `sundog.cc`.
 ## Website SEO and Social Readiness
 
 - New entries in `site-pages.json` must add or update the matching row in
-  `docs/SEO_AND_SOCIAL_READINESS_ROADMAP.md` and clear Bucket 1 before the
+  `docs/site/SEO_AND_SOCIAL_READINESS_ROADMAP.md` and clear Bucket 1 before the
   entry's `publicLaunchIntent` is treated as satisfied. For Class A/B
   public-share pages, that means OG/Twitter metadata, a designed 1200x630
   `og:image`, JSON-LD, tuned title/description, an internal link path, sitemap

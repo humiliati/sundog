@@ -474,7 +474,7 @@ Deliverables:
 - short glossary;
 - theorem animation;
 - application futures section;
-- copy pass using `docs/PROMO_HIGHLIGHTS.md`;
+- copy pass using `docs/promo/PROMO_HIGHLIGHTS.md`;
 - research boundary copy using `docs/SCIENTIFIC_CRITERIA.md`.
 
 Exit criteria:

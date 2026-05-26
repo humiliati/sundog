@@ -1,7 +1,7 @@
 """Bead-maze render of the detector-recovered three-body choreographies.
 
 Honest-provenance anniversary visual. Framing follows
-`internal/anniversary/isotrophy_handoff_note.md` (2026-05-19), which
+`docs/isotrophy/archive/isotrophy_handoff_note.md` (2026-05-19), which
 supersedes the earlier "open bet" framing:
 
   * G.2 is a real, durable DETECTOR + LITERATURE-COUNT win, not theorem
@@ -254,7 +254,7 @@ def main() -> int:
         "null (K_facet=0). K_facet=0 does NOT mean no piano-trios; the 4 "
         "relatives are outside the strict single-curve convention, not "
         "literature mistakes. See "
-        "internal/anniversary/isotrophy_handoff_note.md.</metadata>",
+        "docs/isotrophy/archive/isotrophy_handoff_note.md.</metadata>",
         f'<rect width="{W:.0f}" height="{H:.0f}" fill="{PALETTE["ink"]}"/>',
         f'<rect x="14" y="14" width="{W - 28:.0f}" height="{H - 28:.0f}" '
         f'rx="20" fill="{PALETTE["board"]}" stroke="{PALETTE["frame_strict"]}" '

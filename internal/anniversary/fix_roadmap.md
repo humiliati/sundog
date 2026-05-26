@@ -491,8 +491,8 @@ Scope:
 - `public/favicon.*`
 - `public/apple-touch-icon.png`
 - `public/icons/`
-- `docs/ICON_ASSETS.md`
-- `docs/LOGO_ANIMATION_TOOLKIT.md`
+- `docs/site/ICON_ASSETS.md`
+- `docs/site/LOGO_ANIMATION_TOOLKIT.md`
 - [`hero_rail_artwork_inventory.md`](hero_rail_artwork_inventory.md)
 
 Steps:
@@ -557,8 +557,8 @@ Scope:
 - `index.html`
 - `public/css/sundog-theme.css`
 - `public/media/`
-- `docs/WEBSITE_DEVELOPMENT.md`
-- `docs/UI_UX_THEME_FOUNDATION.md`
+- `docs/site/WEBSITE_DEVELOPMENT.md`
+- `docs/site/UI_UX_THEME_FOUNDATION.md`
 - `docs/SUNDOG_V_MESA.md`
 - `docs/prereg/structural-failure-coincidence/BOUNDARY_MAP.md`
 - `docs/COARSE_GRAINING_PROOF_ROADMAP.md`
@@ -657,7 +657,7 @@ Scope:
 - `index.html`
 - `legend.html`
 - `sundog.html`
-- `docs/WEBSITE_DEVELOPMENT.md`
+- `docs/site/WEBSITE_DEVELOPMENT.md`
 - `public/media/`
 - `public/data/`
 - `docs/calibration/33.webp`
@@ -921,7 +921,7 @@ Clearance pass, 2026-05-17:
 - Rechecked the high-risk homepage coherence markers: no standalone static hero
   guide remains, the glossary-linked v1.1 elevator pitch is present, and the
   load-bearing evidence section precedes the applications rail.
-- Added `docs/gemini-benchmark.md` to the public docs inspection path
+- Added `docs/brand/gemini-benchmark.md` to the public docs inspection path
   (`docs/index.html`) and docs README so the new brand stress test is filed
   beside the Mythos benchmark.
 - Remaining launch-sensitive item in this cluster is Ask Sundog prompt/data

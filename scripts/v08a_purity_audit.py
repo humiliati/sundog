@@ -1,7 +1,7 @@
 """v0.8a Floquet direction-purity quartile audit.
 
 Implements the form locked in
-`internal/anniversary/kfacet_v08a_purity_quartile_audit_form.md`.
+`docs/isotrophy/kfacet/kfacet_v08a_purity_quartile_audit_form.md`.
 
 Reads v0.7a per_row_table.csv, filters to the 250 analyzable rows
 (integration_blocked == False), computes
@@ -33,7 +33,7 @@ if str(ROOT) not in sys.path:
 DEFAULT_V07A_PER_ROW = ROOT / "results/isotrophy/k-facet-v07a-velocity-fraction-audit/per_row_table.csv"
 DEFAULT_OUT = ROOT / "results/isotrophy/k-facet-v08a-purity-audit"
 
-FORM_LOCK = "internal/anniversary/kfacet_v08a_purity_quartile_audit_form.md"
+FORM_LOCK = "docs/isotrophy/kfacet/kfacet_v08a_purity_quartile_audit_form.md"
 VERSION = "v0.8a-purity-quartile-audit"
 
 # Locked thresholds (inherited from v0.6/v0.7).

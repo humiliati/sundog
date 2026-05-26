@@ -122,7 +122,7 @@ Proceed to the specialist handoff rewrite and public-framing ratchet:
    of pre-audit hedge mode and replace old residual/failure tables.
 3. Keep `index.html` and `chat/claim_map.json` conservative until the public
    claim copy is explicitly approved against this memo.
-4. Check `docs/PROMO_HIGHLIGHTS.md` for stale "all four eligible" tangent
+4. Check `docs/promo/PROMO_HIGHLIGHTS.md` for stale "all four eligible" tangent
    wording before any external reuse.
 
 ## Post-C2 Addendum *(2026-05-14)*

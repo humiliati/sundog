@@ -457,7 +457,7 @@ Deliverables (verdict-conditional):
   `PHASE4_RESULTS.md` (and Phase 5 / Phase 6 results when applicable).
 - Update `docs/presentation/claims-and-scope.md` §Unsupported Universal
   Claims if any Phase 4–6 result reframes what is and is not earned.
-- Update `docs/PROMO_HIGHLIGHTS.md` if and only if Phase 4 (or later)
+- Update `docs/promo/PROMO_HIGHLIGHTS.md` if and only if Phase 4 (or later)
   earned-language survives the discipline review.
 - Update `docs/SUNDOG_V_GEOMETRY.md` §What the atlas does NOT yet
   model: move any item that has now been instrumented to a separate

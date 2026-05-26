@@ -114,7 +114,7 @@ substitute anchors, or score off-ruler features to force a result.
 
 Sources:
 [`SUNDOG_V_CHAT.md`](SUNDOG_V_CHAT.md),
-[`WEBSITE_DEVELOPMENT.md`](WEBSITE_DEVELOPMENT.md),
+[`WEBSITE_DEVELOPMENT.md`](site/WEBSITE_DEVELOPMENT.md),
 [`../chat/contents.json`](../chat/contents.json),
 [`../chat/claim_map.json`](../chat/claim_map.json).
 
@@ -266,8 +266,8 @@ Next actions:
 
 Sources:
 [`../applications-gallery.html`](../applications-gallery.html),
-[`UI_UX_THEME_FOUNDATION.md`](UI_UX_THEME_FOUNDATION.md),
-[`WEBSITE_DEVELOPMENT.md`](WEBSITE_DEVELOPMENT.md).
+[`UI_UX_THEME_FOUNDATION.md`](site/UI_UX_THEME_FOUNDATION.md),
+[`WEBSITE_DEVELOPMENT.md`](site/WEBSITE_DEVELOPMENT.md).
 
 Status: `public-surface`, active.
 
@@ -318,7 +318,7 @@ Next actions:
 ### 10. Canonical Routes / Deploy Verification
 
 Sources:
-[`WEBSITE_DEVELOPMENT.md`](WEBSITE_DEVELOPMENT.md),
+[`WEBSITE_DEVELOPMENT.md`](site/WEBSITE_DEVELOPMENT.md),
 [`../public/_redirects`](../public/_redirects),
 [`../scripts/check-public-routes.mjs`](../scripts/check-public-routes.mjs).
 
@@ -371,9 +371,9 @@ visitor to evidence tiers, not just folders.
 ### V0.3 Gamma cross-m_3 sentinel sweep (~3-4 hours staged compute)
 
 Sources:
-[`../internal/anniversary/kfacet_v03_gamma_crossm3_preregistration.md`](../internal/anniversary/kfacet_v03_gamma_crossm3_preregistration.md),
-[`../internal/anniversary/kfacet_v03_freeze_b_comparison.md`](../internal/anniversary/kfacet_v03_freeze_b_comparison.md),
-[`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md).
+[`../docs/isotrophy/kfacet/kfacet_v03_gamma_crossm3_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v03_gamma_crossm3_preregistration.md),
+[`../docs/isotrophy/kfacet/kfacet_v03_freeze_b_comparison.md`](../docs/isotrophy/kfacet/kfacet_v03_freeze_b_comparison.md),
+[`../docs/isotrophy/kfacet/kfacet_v03h_writeup.md`](../docs/isotrophy/kfacet/kfacet_v03h_writeup.md).
 
 Status: **VERDICT LANDED 2026-05-22**. Sentinel sweep executed against
 the pre-registration; joint verdict `(Q1.D, Q2.D) = gate pathology on
@@ -472,7 +472,7 @@ section below).
 ### V0.4a pre-registration reference
 
 Sources:
-[`../internal/anniversary/kfacet_v04a_domain_map_preregistration.md`](../internal/anniversary/kfacet_v04a_domain_map_preregistration.md)
+[`../docs/isotrophy/kfacet/kfacet_v04a_domain_map_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v04a_domain_map_preregistration.md)
 (includes the Verdict (Landed, 2026-05-22) section with per-row
 provenance and the Pass 2 rescue table),
 [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
@@ -491,11 +491,11 @@ results/isotrophy/k-facet-v04a-domain-map/pass2/m3eq{0.4, 1.4, 1.5, 1.6, 1.7}/O{
 ### V0.4b gamma_3 / gamma_3' non-circular structural predictors (closed structural-negative)
 
 Sources:
-[`../internal/anniversary/kfacet_v04b_mechanism_preregistration.md`](../internal/anniversary/kfacet_v04b_mechanism_preregistration.md),
-[`../internal/anniversary/kfacet_v04a_domain_map_preregistration.md`](../internal/anniversary/kfacet_v04a_domain_map_preregistration.md)
+[`../docs/isotrophy/kfacet/kfacet_v04b_mechanism_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v04b_mechanism_preregistration.md),
+[`../docs/isotrophy/kfacet/kfacet_v04a_domain_map_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v04a_domain_map_preregistration.md)
 (domain locked: 273/273 Z2_clean),
-[`../internal/anniversary/kfacet_v04b_gamma3prime_form.md`](../internal/anniversary/kfacet_v04b_gamma3prime_form.md),
-[`../internal/anniversary/kfacet_v04_writeup.md`](../internal/anniversary/kfacet_v04_writeup.md),
+[`../docs/isotrophy/kfacet/kfacet_v04b_gamma3prime_form.md`](../docs/isotrophy/kfacet/kfacet_v04b_gamma3prime_form.md),
+[`../docs/isotrophy/kfacet/kfacet_v04_writeup.md`](../docs/isotrophy/kfacet/kfacet_v04_writeup.md),
 [`threebody/CROSS_SUBSTRATE_NOTES.md`](threebody/CROSS_SUBSTRATE_NOTES.md)
 §7.2 (projection-language framing).
 
@@ -510,7 +510,7 @@ manifest (no new compute); falsified by `chi^2 = 1202.32` vs critical
 `26.22` (46x threshold). Rule accuracy 63.74% lies slightly below the
 always-U baseline 64.47%. Stability is statistically independent of the
 Z_2 shadow at both tested granularities. Full chapter close at
-[`../internal/anniversary/kfacet_v04_writeup.md`](../internal/anniversary/kfacet_v04_writeup.md);
+[`../docs/isotrophy/kfacet/kfacet_v04_writeup.md`](../docs/isotrophy/kfacet/kfacet_v04_writeup.md);
 gamma_3'_orbit_pass2 verdict receipt at
 `results/isotrophy/k-facet-v04b-gamma3prime-orbit-pass2/manifest.json`.
 
@@ -542,7 +542,7 @@ Closed blockers:
 
 1. ~~**Paper-side** gamma_3 form lock~~ -- DONE 2026-05-22, then
    RETIRED 2026-05-23. Threshold-rule baseline locked at
-   [`../internal/anniversary/kfacet_v04b_gamma3_form.md`](../internal/anniversary/kfacet_v04b_gamma3_form.md):
+   [`../docs/isotrophy/kfacet/kfacet_v04b_gamma3_form.md`](../docs/isotrophy/kfacet/kfacet_v04b_gamma3_form.md):
    `predict S iff F_beta_even_dim >= F_beta_odd_dim`. Zero free
    parameters. Chi-squared df = 12, critical value `26.22` at
    `p = 0.01`. Retired because `F_beta` does not preserve `K_fib` on
@@ -568,13 +568,13 @@ Next actions:
    `chi^2 = 1202.32` vs `critical = 26.22`.
 4. ~~Land the chapter close.~~ DONE 2026-05-23. v0.4 epilogue
    writeup at
-   [`../internal/anniversary/kfacet_v04_writeup.md`](../internal/anniversary/kfacet_v04_writeup.md).
+   [`../docs/isotrophy/kfacet/kfacet_v04_writeup.md`](../docs/isotrophy/kfacet/kfacet_v04_writeup.md).
 5. ~~**Paper-side v0.5 direction (open).**~~ DONE 2026-05-23. v0.5
    opens as a **branch-shadow audit**: catalog-only branch hash on
    `(m_3, z_0)` indicator bits, chi-squared independence vs S/U at
    `df = occupied_branch_count - 1`. Frame: stop asking what symmetry
    the row has, start asking which branch the row belongs to. See
-   [`../internal/anniversary/kfacet_v05a_branch_map_form.md`](../internal/anniversary/kfacet_v05a_branch_map_form.md).
+   [`../docs/isotrophy/kfacet/kfacet_v05a_branch_map_form.md`](../docs/isotrophy/kfacet/kfacet_v05a_branch_map_form.md).
    See the v0.5a section below for the runner state.
 
 Stop condition:
@@ -600,7 +600,7 @@ v0.4 as another projection-limit negative and the chain moves to the
 next mechanism family.
 
 Locked form
-(`internal/anniversary/kfacet_v05a_branch_map_form.md`):
+(`docs/isotrophy/kfacet/kfacet_v05a_branch_map_form.md`):
 
 ```text
 4-bit candidate signature, with deterministic constant-bit retirement:
@@ -639,7 +639,7 @@ Next actions:
 2. ~~Run the audit blind.~~ DONE. Verdict:
    `branch_hash_passes_audit`.
 3. ~~Land the verdict.~~ DONE in
-   [`../internal/anniversary/kfacet_v05a_branch_map_form.md`](../internal/anniversary/kfacet_v05a_branch_map_form.md).
+   [`../docs/isotrophy/kfacet/kfacet_v05a_branch_map_form.md`](../docs/isotrophy/kfacet/kfacet_v05a_branch_map_form.md).
 4. Register v0.5b paper-side with held-out m_3 bins or
    leave-one-branch-out CV. No predictor claim is licensed until v0.5b
    is separately registered and tested.
@@ -655,7 +655,7 @@ audit form is locked.
 ### V0.5b branch-shadow predictor (leave-one-m_3-bin-out)
 
 Status: **VERDICT LANDED 2026-05-23**. Paper-side form:
-[`../internal/anniversary/kfacet_v05b_branch_predictor_form.md`](../internal/anniversary/kfacet_v05b_branch_predictor_form.md).
+[`../docs/isotrophy/kfacet/kfacet_v05b_branch_predictor_form.md`](../docs/isotrophy/kfacet/kfacet_v05b_branch_predictor_form.md).
 Receipt:
 `results/isotrophy/k-facet-v05b-branch-predictor/manifest.json`.
 
@@ -707,7 +707,7 @@ Next actions:
 3. ~~Run the seconds-scale held-out predictor and land the receipt at
    `results/isotrophy/k-facet-v05b-branch-predictor/`.~~ DONE 2026-05-23.
 4. ~~Land the chapter close.~~ DONE 2026-05-23. v0.5 epilogue writeup
-   at [`../internal/anniversary/kfacet_v05_writeup.md`](../internal/anniversary/kfacet_v05_writeup.md).
+   at [`../docs/isotrophy/kfacet/kfacet_v05_writeup.md`](../docs/isotrophy/kfacet/kfacet_v05_writeup.md).
    Chapter type: **projection-limit (audit-passes-predictor-fails)**.
    The v0.5a in-sample positive (chi^2 = 34.99) and v0.5b held-out
    negative (accuracy_delta = -0.019) together constrain the branch
@@ -715,7 +715,7 @@ Next actions:
 5. ~~**Paper-side v0.6 direction (open).**~~ DONE 2026-05-23. v0.6
    opens with the **conserved-quantity (E, |L|) stratification**
    family. Parent registration at
-   [`../internal/anniversary/kfacet_v06_mechanism_preregistration.md`](../internal/anniversary/kfacet_v06_mechanism_preregistration.md).
+   [`../docs/isotrophy/kfacet/kfacet_v06_mechanism_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v06_mechanism_preregistration.md).
    See the v0.6 section below for the next-action queue.
 
 Stop condition:
@@ -731,15 +731,15 @@ falsifier (McNemar p AND positive delta) is the inheritance discipline.
 
 Status: **PARENT REGISTERED 2026-05-23; v0.6a VERDICT LANDED
 2026-05-23; v0.6b VERDICT LANDED 2026-05-24**. Parent registration:
-[`../internal/anniversary/kfacet_v06_mechanism_preregistration.md`](../internal/anniversary/kfacet_v06_mechanism_preregistration.md).
+[`../docs/isotrophy/kfacet/kfacet_v06_mechanism_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v06_mechanism_preregistration.md).
 **v0.6a verdict**: `energy_quartile_passes_audit_alignment_warning`
 (chi^2 = 33.70 vs 11.34, alignment = 0.956). Form/verdict:
-[`../internal/anniversary/kfacet_v06a_energy_quartile_audit_form.md`](../internal/anniversary/kfacet_v06a_energy_quartile_audit_form.md).
+[`../docs/isotrophy/kfacet/kfacet_v06a_energy_quartile_audit_form.md`](../docs/isotrophy/kfacet/kfacet_v06a_energy_quartile_audit_form.md).
 **v0.6b verdict**: `within_branch_energy_fails_audit` (chi^2 = 6.90,
 permutation p = 0.029; sparse-cell fallback fired with min_expected =
 2.66; |L| sidecar at permutation p = 0.074 also below loud-signal
 threshold). Form/verdict:
-[`../internal/anniversary/kfacet_v06b_within_branch_energy_audit_form.md`](../internal/anniversary/kfacet_v06b_within_branch_energy_audit_form.md).
+[`../docs/isotrophy/kfacet/kfacet_v06b_within_branch_energy_audit_form.md`](../docs/isotrophy/kfacet/kfacet_v06b_within_branch_energy_audit_form.md).
 v0.6c (held-out predictor) is NOT licensed; v0.6 chapter is positioned
 for chapter-close writeup as a clean conditional-independence result.
 
@@ -872,13 +872,13 @@ Next actions:
 
 1. ~~Author the v0.6 chapter close writeup.~~ DONE 2026-05-24. v0.6
    epilogue at
-   [`../internal/anniversary/kfacet_v06_writeup.md`](../internal/anniversary/kfacet_v06_writeup.md).
+   [`../docs/isotrophy/kfacet/kfacet_v06_writeup.md`](../docs/isotrophy/kfacet/kfacet_v06_writeup.md).
    Chapter type: **conditional-independence close** (distinct from
    v0.4 structural-negative and v0.5 projection-limit).
 2. ~~**Paper-side v0.7 direction (open).**~~ DONE 2026-05-24. v0.7
    opens with the **gamma_1 direction-of-instability** family. Parent
    registration at
-   [`../internal/anniversary/kfacet_v07_mechanism_preregistration.md`](../internal/anniversary/kfacet_v07_mechanism_preregistration.md).
+   [`../docs/isotrophy/kfacet/kfacet_v07_mechanism_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v07_mechanism_preregistration.md).
    See the v0.7 section below for the runner state.
 
 Stop condition:
@@ -896,16 +896,16 @@ discipline is permanent.
 
 Status: **CHAPTER CLOSED 2026-05-24, qualified-positive on restricted
 domain.** Parent registration:
-[`../internal/anniversary/kfacet_v07_mechanism_preregistration.md`](../internal/anniversary/kfacet_v07_mechanism_preregistration.md).
+[`../docs/isotrophy/kfacet/kfacet_v07_mechanism_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v07_mechanism_preregistration.md).
 Chapter close:
-[`../internal/anniversary/kfacet_v07_writeup.md`](../internal/anniversary/kfacet_v07_writeup.md).
+[`../docs/isotrophy/kfacet/kfacet_v07_writeup.md`](../docs/isotrophy/kfacet/kfacet_v07_writeup.md).
 
 **v0.7a catalog-wide verdict**:
 `velocity_fraction_blocked_integration_attrition` at
 `integration_blocked_count = 23` (8.42% of catalog > 5% threshold).
 Two amendments applied: R1 (symplecticity gate 1e-6 -> 1e-4) and
 R2.A (per-row integration-failure fallback). Form lock + verdict:
-[`../internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md`](../internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md).
+[`../docs/isotrophy/kfacet/kfacet_v07a_velocity_fraction_audit_form.md`](../docs/isotrophy/kfacet/kfacet_v07a_velocity_fraction_audit_form.md).
 
 **v0.7a' restricted-scope confirmation verdict**:
 `velocity_fraction_restricted_passes_audit` [PASS] at `chi^2 = 16.43`
@@ -914,7 +914,7 @@ alignment-tightness 0.698 against the v0.5a branch hash (below the
 0.8 warning floor). Non-monotone U-shape signature: Q1 (gamma_1
 mostly positional) 49% S, Q2 (mixed) 18% S, Q3 29% S, Q4 (gamma_1
 mostly velocity) 43% S. Form lock + verdict:
-[`../internal/anniversary/kfacet_v07a_prime_restricted_scope_form.md`](../internal/anniversary/kfacet_v07a_prime_restricted_scope_form.md).
+[`../docs/isotrophy/kfacet/kfacet_v07a_prime_restricted_scope_form.md`](../docs/isotrophy/kfacet/kfacet_v07a_prime_restricted_scope_form.md).
 
 The Floquet velocity-fraction direction shadow is the **first**
 low-dimensional projection in the v0.4 / v0.5 / v0.6 / v0.7 envelope
@@ -928,10 +928,10 @@ the integration-attrition.
 
 Status: **PARENT REGISTERED 2026-05-24; v0.8a VERDICT LANDED
 2026-05-24 (FAIL).** Parent registration:
-[`../internal/anniversary/kfacet_v08_mechanism_preregistration.md`](../internal/anniversary/kfacet_v08_mechanism_preregistration.md).
+[`../docs/isotrophy/kfacet/kfacet_v08_mechanism_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v08_mechanism_preregistration.md).
 **v0.8a verdict**: `purity_quartile_fails_audit` at `chi^2 = 4.94`,
 `p = 0.176` (df=3, critical 11.34). Form lock + verdict:
-[`../internal/anniversary/kfacet_v08a_purity_quartile_audit_form.md`](../internal/anniversary/kfacet_v08a_purity_quartile_audit_form.md).
+[`../docs/isotrophy/kfacet/kfacet_v08a_purity_quartile_audit_form.md`](../docs/isotrophy/kfacet/kfacet_v08a_purity_quartile_audit_form.md).
 The unsigned purity transform `abs(vf - 0.5)` does NOT capture the
 v0.7a' positive at the registered floor; the diagnostic
 purity_signed contingency reproduces v0.7a's `chi^2 = 16.43`
@@ -1008,7 +1008,7 @@ symmetry assumption.
 Next action: ~~paper-side direction call.~~ DONE 2026-05-24. v0.8
 chapter closed as structural-negative on direction-purity (chapter
 close at
-[`../internal/anniversary/kfacet_v08_writeup.md`](../internal/anniversary/kfacet_v08_writeup.md));
+[`../docs/isotrophy/kfacet/kfacet_v08_writeup.md`](../docs/isotrophy/kfacet/kfacet_v08_writeup.md));
 v0.9 opened on signed Floquet direction-composition with explicit
 anti-circular framing.
 
@@ -1019,10 +1019,10 @@ anti-circular framing.
 Status: **PARENT REGISTERED 2026-05-24; v0.9a VERDICT LANDED
 2026-05-24 (FAIL on both chi^2 and U-shape pattern; substantively
 informative).** Parent registration:
-[`../internal/anniversary/kfacet_v09_mechanism_preregistration.md`](../internal/anniversary/kfacet_v09_mechanism_preregistration.md).
+[`../docs/isotrophy/kfacet/kfacet_v09_mechanism_preregistration.md`](../docs/isotrophy/kfacet/kfacet_v09_mechanism_preregistration.md).
 **v0.9a verdict**: `signed_vf_three_zone_fails_audit_chi2` at
 chi^2 = 7.42 vs critical 9.21 (df=2, p = 0.0245). Form lock + verdict:
-[`../internal/anniversary/kfacet_v09a_signed_vf_three_zone_form.md`](../internal/anniversary/kfacet_v09a_signed_vf_three_zone_form.md).
+[`../docs/isotrophy/kfacet/kfacet_v09a_signed_vf_three_zone_form.md`](../docs/isotrophy/kfacet/kfacet_v09a_signed_vf_three_zone_form.md).
 The U-shape pattern check ALSO fails (mixed > positional, not
 < positional). Substantive read: **the v0.7a' U-shape was a
 quartile-boundary artifact at vf ~ 0.297**; under physical cutpoint
@@ -1106,9 +1106,9 @@ valid; the U-shape MECHANISM hypothesis is invalidated.
 Next action: ~~paper-side direction call.~~ DONE 2026-05-24. v0.9
 chapter closed; isotrophy program paused at end-of-v0.9. Chapter
 close at
-[`../internal/anniversary/kfacet_v09_writeup.md`](../internal/anniversary/kfacet_v09_writeup.md);
+[`../docs/isotrophy/kfacet/kfacet_v09_writeup.md`](../docs/isotrophy/kfacet/kfacet_v09_writeup.md);
 program pause at
-[`../internal/anniversary/kfacet_isotrophy_program_pause.md`](../internal/anniversary/kfacet_isotrophy_program_pause.md).
+[`../docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md`](../docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md).
 
 ## Isotrophy Program PAUSED (2026-05-24)
 
@@ -1122,7 +1122,7 @@ mixed 34% S, velocity-heavy 44% S); but chi-squared on three zones
 (7.42) does not pass p = 0.01.
 
 Program pause document:
-[`../internal/anniversary/kfacet_isotrophy_program_pause.md`](../internal/anniversary/kfacet_isotrophy_program_pause.md).
+[`../docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md`](../docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md).
 
 Bandwidth redirects to three-body Phase 15+ (survival pocket) and
 the coarse-graining proof trunk per the original direction call.
@@ -1132,7 +1132,7 @@ the coarse-graining proof trunk per the original direction call.
 Eight concrete reopening directions for any lab initiate with
 bandwidth to spare. Full descriptions, hypotheses, implementation
 sketches, and non-circularity arguments at
-[`../internal/anniversary/kfacet_isotrophy_program_pause.md`](../internal/anniversary/kfacet_isotrophy_program_pause.md).
+[`../docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md`](../docs/isotrophy/kfacet/kfacet_isotrophy_program_pause.md).
 
 ```text
 1. Jonckheere-Terpstra trend test on v0.9a three-zone data
@@ -1391,16 +1391,16 @@ licensed.
 
 Sources (paper trail / table of contents):
 
-1. [`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md)
+1. [`../docs/isotrophy/kfacet/kfacet_v03h_writeup.md`](../docs/isotrophy/kfacet/kfacet_v03h_writeup.md)
    — Methodology + result hand-off. **Start here.** Sets the audit chain
    (sentinel → adaptive-floor reprocessor → bridge audit) and the
    load-bearing result: `20 of 21 m_3=1 strict G.2 rows are structural
    zeros; O_617 is the single quarantined row`.
-2. [`../internal/anniversary/kfacet_v03h_o617_deep_dive.md`](../internal/anniversary/kfacet_v03h_o617_deep_dive.md)
+2. [`../docs/isotrophy/kfacet/kfacet_v03h_o617_deep_dive.md`](../docs/isotrophy/kfacet/kfacet_v03h_o617_deep_dive.md)
    — The quarantined-row companion. Reads the six-probe deep dive plus
    the WHY-dive addendum that landed `bridge_approx_sign_isotypic` as
    the corrected disposition.
-3. [`../internal/anniversary/kfacet-runner-spec.md`](../internal/anniversary/kfacet-runner-spec.md)
+3. [`../docs/isotrophy/kfacet/kfacet-runner-spec.md`](../docs/isotrophy/kfacet/kfacet-runner-spec.md)
    — Full runner spec. Includes the adaptive-floor algorithm, the bridge
    audit outcome categories, and the disposition for O_617. Long; use the
    table-of-contents at the top to navigate.
@@ -1461,7 +1461,7 @@ Verify-the-picture step (1 hour budget):
    clean_S(5 or 6)`.
 
 If any of (1)-(6) drift from the recorded receipts, stop and consult
-[`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md)
+[`../docs/isotrophy/kfacet/kfacet_v03h_writeup.md`](../docs/isotrophy/kfacet/kfacet_v03h_writeup.md)
 before continuing.
 
 Polish items:
@@ -1510,13 +1510,13 @@ Polish items:
    `npm run isotrophy:kfacet:diagnostics:test`.
 6. **Doc updates** (~1 hour).
    - In
-     [`../internal/anniversary/kfacet_v03h_o617_deep_dive.md`](../internal/anniversary/kfacet_v03h_o617_deep_dive.md)
+     [`../docs/isotrophy/kfacet/kfacet_v03h_o617_deep_dive.md`](../docs/isotrophy/kfacet/kfacet_v03h_o617_deep_dive.md)
      and
-     [`../internal/anniversary/kfacet-runner-spec.md`](../internal/anniversary/kfacet-runner-spec.md),
+     [`../docs/isotrophy/kfacet/kfacet-runner-spec.md`](../docs/isotrophy/kfacet/kfacet-runner-spec.md),
      replace the `python scripts/o617_*.py` references with the new
      `npm run isotrophy:kfacet:*` commands and `--row` parameterization.
    - Add a one-line note in
-     [`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md)
+     [`../docs/isotrophy/kfacet/kfacet_v03h_writeup.md`](../docs/isotrophy/kfacet/kfacet_v03h_writeup.md)
      pointing at the new row-anatomy / why-dive subcommands.
 7. **Buffer / unblocking room** (~30 minutes). Reserved for friction
    on argparse, receipt-schema drift, or the joint eigendecomposition
@@ -1561,7 +1561,7 @@ Out of scope for this polish round:
 - Catalog-admission tightening (already settled as unnecessary; `O_617`
   is not a weak-admission row).
 - Paper-side write of the audit chain (see
-  [`../internal/anniversary/kfacet_v03h_writeup.md`](../internal/anniversary/kfacet_v03h_writeup.md)
+  [`../docs/isotrophy/kfacet/kfacet_v03h_writeup.md`](../docs/isotrophy/kfacet/kfacet_v03h_writeup.md)
   for the existing methodology hand-off; a paper draft would be a
   separate deferred item).
 - Advancing to v0.4 / induced-rep `d_i` derivation.

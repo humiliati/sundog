@@ -2,7 +2,7 @@
 
 Reads the v0.4a domain-map manifest, supplements catalog-only velocity
 diagnostics from supplementary-B, applies the locked branch hash in
-`internal/anniversary/kfacet_v05a_branch_map_form.md`, and emits the 4x2
+`docs/isotrophy/kfacet/kfacet_v05a_branch_map_form.md`, and emits the 4x2
 branch_label x stability contingency receipt.
 
 No dynamical compute is performed.
@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_MANIFEST = ROOT / "results/isotrophy/k-facet-v04a-domain-map/manifest.json"
 DEFAULT_CATALOG = ROOT / "docs/isotrophy/supplementary-B_piano-init-condit-3d.txt"
 DEFAULT_OUT = ROOT / "results/isotrophy/k-facet-v05a-branch-map"
-FORM_LOCK = "internal/anniversary/kfacet_v05a_branch_map_form.md"
+FORM_LOCK = "docs/isotrophy/kfacet/kfacet_v05a_branch_map_form.md"
 
 VERSION = "v0.5a-branch-map-audit"
 CHI2_CRITICAL = 11.34  # chi-squared(3), p=0.01

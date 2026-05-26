@@ -1,7 +1,7 @@
 """v0.7a velocity-fraction audit -- full 273-row supp-B audit.
 
 Implements the form locked in
-`internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md`
+`docs/isotrophy/kfacet/kfacet_v07a_velocity_fraction_audit_form.md`
 with the R1 sanity-gate amendment (symplecticity_gate = 1e-4).
 
 Pipeline per row (catalog-only feature extraction; new compute is
@@ -69,7 +69,7 @@ DEFAULT_CATALOG = ROOT / "docs/isotrophy/supplementary-B_piano-init-condit-3d.tx
 DEFAULT_V05A_PER_ROW = ROOT / "results/isotrophy/k-facet-v05a-branch-map/per_row_table.csv"
 DEFAULT_OUT = ROOT / "results/isotrophy/k-facet-v07a-velocity-fraction-audit"
 
-FORM_LOCK = "internal/anniversary/kfacet_v07a_velocity_fraction_audit_form.md"
+FORM_LOCK = "docs/isotrophy/kfacet/kfacet_v07a_velocity_fraction_audit_form.md"
 VERSION = "v0.7a-velocity-fraction-audit-r1-r2a-r2c"
 
 # R2.A locked attrition threshold (2026-05-24).

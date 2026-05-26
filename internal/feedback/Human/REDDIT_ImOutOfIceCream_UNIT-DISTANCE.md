@@ -95,7 +95,7 @@ The drafted reply does four things in order:
    citation rail on `/unit-distance`.
 
 Full reply draft preserved in the live thread; the load-bearing line
-captured separately in `docs/PROMO_HIGHLIGHTS.md` under "For AI / Agent
+captured separately in `docs/promo/PROMO_HIGHLIGHTS.md` under "For AI / Agent
 Builders → The Stack-Invariance Argument."
 
 ## 4. Sharpest position to preserve
@@ -498,7 +498,7 @@ The six surfaces with `COMPANDER_PAPER_HOOK` anchors pre-positioned:
 | `docs/SUNDOG_V_CHAT.md` | end of §16.5 | §9g | new top-level §17 |
 | `capset.html` | end of capset-grid in "Why this rhymes" | §9h | "Same operator, inside the model" `capset-card` |
 | `geometry.html` | inside the shelf `claim-note` div | §9i | second `<p>` extending the claim-boundary note |
-| `docs/PROMO_HIGHLIGHTS.md` | inline next to current stack-invariance line | §9b | replace blockquote with v2 line |
+| `docs/promo/PROMO_HIGHLIGHTS.md` | inline next to current stack-invariance line | §9b | replace blockquote with v2 line |
 
 ### 10b. Deployment grep
 
@@ -514,7 +514,7 @@ Expected return: 8 anchors across 7 files — 6 public-surface
 anchors (matching `scripts/rollout-compander-citation.mjs`'s
 `EXPECTED_HOOKS` array: `unit-distance.html` ×2, `chat.html`,
 `docs/SUNDOG_V_CHAT.md`, `capset.html`, `geometry.html`,
-`docs/PROMO_HIGHLIGHTS.md`) **plus** one internal-doc anchor
+`docs/promo/PROMO_HIGHLIGHTS.md`) **plus** one internal-doc anchor
 (`docs/threebody/CROSS_SUBSTRATE_NOTES.md` §6.5 → §6.6 backfill).
 If the count is wrong, an anchor was deleted or duplicated and the
 surface list above needs reconciling before deployment. The
@@ -624,7 +624,7 @@ Before citation day, stage the following pieces:
 4. **Patch surfaces in one transaction.** The script applies the §9
    blocks to exactly these files: `unit-distance.html`, `chat.html`,
    `docs/SUNDOG_V_CHAT.md`, `capset.html`, `geometry.html`, and
-   `docs/PROMO_HIGHLIGHTS.md`. It also fills every
+   `docs/promo/PROMO_HIGHLIGHTS.md`. It also fills every
    `(cite mod's paper)` placeholder from the citation metadata.
 5. **Claim-map follow-through.** The same rollout must either add a
    bounded Ask Sundog route for the mechanistic-substrate hypothesis or

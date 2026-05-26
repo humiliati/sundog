@@ -30,7 +30,7 @@
       "description": "Dense public-copy surface for the optical atlas. Its expanded academic halo vocabulary includes rendered primitives plus named-only / not-modeled halo families; Ask Sundog must route this as bounded literature/catalogue coverage."
     },
     {
-      "path": "docs/WEBSITE_DEVELOPMENT.md",
+      "path": "docs/site/WEBSITE_DEVELOPMENT.md",
       "kind": "publish_discipline",
       "status": "active_gate",
       "phase": "post-12",

@@ -29,7 +29,7 @@ Owner cross-references:
   experimental design (Options A / B / C). This roadmap builds **Option
   B (pushable block as auxiliary action)** as the falsification slate;
   Option A is retained as a control, Option C is out of scope.
-- [`HIGHLIGHTS_RAIL_ROADMAP.md`](HIGHLIGHTS_RAIL_ROADMAP.md) — the
+- [`HIGHLIGHTS_RAIL_ROADMAP.md`](site/HIGHLIGHTS_RAIL_ROADMAP.md) — the
   consumer of this work. The rail's first `BOUNDARY FOUND` card is
   blocked on Phase 2 of this roadmap.
 - [`PAPER_OUTLINE_v0.md`](PAPER_OUTLINE_v0.md) and

@@ -1,7 +1,7 @@
 """v0.9a signed Floquet vf three-zone audit.
 
 Implements the form locked in
-`internal/anniversary/kfacet_v09a_signed_vf_three_zone_form.md`.
+`docs/isotrophy/kfacet/kfacet_v09a_signed_vf_three_zone_form.md`.
 
 Reads v0.7a per_row_table.csv, filters to the 250 analyzable rows
 (integration_blocked == False), bins vf into three physical zones at
@@ -40,7 +40,7 @@ if str(ROOT) not in sys.path:
 DEFAULT_V07A_PER_ROW = ROOT / "results/isotrophy/k-facet-v07a-velocity-fraction-audit/per_row_table.csv"
 DEFAULT_OUT = ROOT / "results/isotrophy/k-facet-v09a-signed-vf-three-zone"
 
-FORM_LOCK = "internal/anniversary/kfacet_v09a_signed_vf_three_zone_form.md"
+FORM_LOCK = "docs/isotrophy/kfacet/kfacet_v09a_signed_vf_three_zone_form.md"
 VERSION = "v0.9a-signed-vf-three-zone-audit"
 
 # Locked physical cutpoints.

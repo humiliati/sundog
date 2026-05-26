@@ -52,7 +52,7 @@ optical content is unambiguous and well-cited. Initial corpus:
   Troels Nielsen / DR.
 - **`triple-cza-stack.jpg`** — multi-arc event with stacked CZAs and
   visible parhelic curve. Source pending citation in
-  `THIRD_PARTY_REUSE.md`.
+  `site/THIRD_PARTY_REUSE.md`.
 - **`docs/calibration/1.Photometeor-jeff-mod_marked_red.jpg`** —
   vocabulary reference for rich-display labels: suncave Parry, Parry
   supralateral, upper tangent, and infralateral arcs. This is the annotated
