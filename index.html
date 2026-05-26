@@ -760,6 +760,12 @@
             transform: rotate(-24deg);
         }
 
+        .motion-visual-threebody.has-poster .motion-card-poster {
+            object-fit: cover;
+            object-position: 66% 46%;
+            filter: contrast(1.06) saturate(1.08);
+        }
+
         .motion-visual-mines {
             background:
                 radial-gradient(circle at 28% 34%, rgba(244, 196, 48, 0.26), transparent 13%),
@@ -2290,7 +2296,7 @@
                     data-description="Local acceleration, guarded escape."
                     data-href="/threebody"
                     data-evidence-href="docs/SUNDOG_V_THREEBODY.md"
-                    data-poster=""
+                    data-poster="/media/isotrophy-bead-maze.svg"
                     data-media=""
                     data-media-format=""
                     data-status="Operating envelope"
@@ -2299,7 +2305,8 @@
                     data-stamp-source="docs/SUNDOG_V_THREEBODY.md"
                 >
                     <a class="motion-card-link" href="/threebody">
-                        <div class="motion-card-visual motion-visual-threebody" aria-hidden="true">
+                        <div class="motion-card-visual motion-visual-threebody has-poster" aria-hidden="true">
+                            <img class="motion-card-poster" src="/media/isotrophy-bead-maze.svg" alt="" loading="eager" decoding="async">
                             <span class="motion-orbit"></span>
                         </div>
                         <div class="motion-card-copy">
