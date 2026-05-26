@@ -266,6 +266,13 @@ Binding operational guardrails for this machine, this first full lock:
   the first sharded full lock completes and the box's behavior under 3 is
   characterized.
 
+**Promotion to 3 exercised 2026-05-26 (operator):** overnight 1 (2-shard)
+ran fine on this machine *alongside* an unrelated experiment from a different
+workstream, putting effective 3-process load on the box with no thermal or
+interactive-UI pain observed. That satisfies condition (d) observationally.
+3-concurrent is permitted from overnight 2 forward; the no-4 hard cap still
+stands.
+
 ### Authoritative pending sequence (supersedes the earlier list)
 
 1. Implement the post-lock merge code (additive: refactor aggregation
