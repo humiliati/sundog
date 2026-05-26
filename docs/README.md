@@ -1,9 +1,11 @@
 # Sundog Documentation
 
-**Copyright © 2026 Stellar Aqua LLC. Licensed under the MIT License.**
+**Copyright © 2026 Stellar Aqua LLC. All rights reserved.**
 
-Sundog-authored source and associated documentation are published under the root
-[`LICENSE`](../LICENSE). Citation metadata lives in [`CITATION.cff`](../CITATION.cff).
+Sundog-authored source, documentation, visual materials, and data compilations
+are controlled by Stellar Aqua LLC unless a file clearly states otherwise. The
+root [`LICENSE`](../LICENSE) is a rights notice, not a public open-source grant.
+Citation metadata lives in [`CITATION.cff`](../CITATION.cff).
 
 ---
 
@@ -42,7 +44,7 @@ code, experiments, prior theorem materials, and application bridges.
 - [Promo folder](promo/README.md): promo highlights, outreach packet, and
   public-copy handoff material.
 - [Brand folder](brand/README.md): public posture, brand/IP, legal standing,
-  and external model stress-test reports.
+  and summary lessons from quarantined model-feedback reports.
 - [Site folder](site/README.md): website development, SEO/social readiness,
   UI/UX theme, assets, and policy ledgers.
 - [Promo highlights](promo/PROMO_HIGHLIGHTS.md): hooks, headlines, provocative
@@ -50,8 +52,6 @@ code, experiments, prior theorem materials, and application bridges.
 - [Brand positioning](brand/BRAND_POSITIONING.md): public lab posture after the
   Mythos stress test, including the About-page spine and what-not-to-claim
   boundaries.
-- [Gemini benchmark](brand/gemini-benchmark.md): external Gemini read on site
-  legibility, access ambiguity, and anniversary posture risks.
 - [Standalone app roadmap](STANDALONE_APP_ROADMAP.md): plan for a no/low
   dependency `.html`, `.exe`, and eventual `.apk` observer app.
 - [Three-Body roadmap](SUNDOG_V_THREEBODY.md): Phase 11 operating-envelope

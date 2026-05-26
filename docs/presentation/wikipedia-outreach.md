@@ -32,7 +32,7 @@ Article: [Sun dog](https://en.wikipedia.org/wiki/Sun_dog) · Talk: [Talk:Sun_dog
 - An *interactive* (rather than textual) walkthrough of arc assembly
 - A single-frame schematic that places parhelia, 22° halo, and tangent arcs in one labeled diagram (the four article images are photographs, not schematics)
 - Equation-to-arc correspondence shown visually
-- Open-source educational implementation
+- Publicly inspectable educational implementation with rights reserved
 
 ## Our Contribution
 
@@ -53,9 +53,9 @@ Article: [Sun dog](https://en.wikipedia.org/wiki/Sun_dog) · Talk: [Talk:Sun_dog
    - Demonstrates why parhelia appear at specific angles
    - Makes abstract concepts visually concrete
 
-3. **Open Source Implementation**
-   - Code is publicly available at https://github.com/humiliati/sundog
-   - Can be embedded or adapted for educational use
+3. **Inspectable Implementation**
+   - Code is publicly visible at https://github.com/humiliati/sundog
+   - Embedding, adaptation, or reuse requires an explicit license or agreement
    - Self-contained HTML/JavaScript requiring no external dependencies
 
 ## Proposed Wikipedia Enhancements
@@ -86,7 +86,7 @@ Proposed thumbnail wikitext (matches existing image syntax in the section):
 [[File:Parhelion_schematic_with_deflection_equation.svg|thumb|upright=1.2|Schematic of a sun dog: parhelia (P) sit on the 22° halo at the same elevation as the Sun, with deflection D(α) = 40° − 2·[arcsin(n·sin α) − α] for ice (n = 1.31).]]
 ```
 
-License: CC-BY-SA 4.0 or CC0. Source SVG should be derivable from the same equations the hero uses, so we can publish provenance ("rendered from the open-source Sundog hero canvas — github.com/humiliati/sundog").
+License: CC-BY-SA 4.0 or CC0 only for a purpose-built Wikimedia upload after explicit release approval. Source SVG should be derivable from the same equations the hero uses, so we can publish provenance ("rendered from the Sundog hero canvas — github.com/humiliati/sundog").
 
 ## Insertion Targets — Live Article Anchors
 
@@ -161,7 +161,7 @@ The article also has `See_also`, `Further_reading`, and `References`, but none a
 1. **Wikimedia Commons Upload**
    - Create high-quality static diagrams
    - Generate animated GIF sequences
-   - Ensure proper licensing (CC-BY-SA or CC0)
+   - Ensure explicit licensing for the upload only (CC-BY-SA or CC0)
    - Provide detailed descriptions
 
 2. **Integration with Article**
@@ -183,7 +183,7 @@ The article also has `See_also`, `Further_reading`, and `References`, but none a
 - **Educational value**: Focus on helping people understand parhelion formation
 - **Accessibility**: Makes complex physics more understandable
 - **Accuracy**: Based on established atmospheric optics equations
-- **Open source**: Freely available for educational use
+- **Inspectable**: Publicly viewable for educational review; reuse requires explicit permission
 
 ### Wikipedia Policies to Follow
 
@@ -215,7 +215,7 @@ The article also has `See_also`, `Further_reading`, and `References`, but none a
 
 I'd like to propose adding a single entry to the External links section.
 
-The resource ([https://sundog.cc sundog.cc]) is an open-source canvas-based
+The resource ([https://sundog.cc sundog.cc]) is a publicly inspectable canvas-based
 visualization that animates the assembly of a sun-dog halo system step by step:
 left and right parhelia, upper and lower tangent arcs, the 22° halo, and the
 46° outer halo, with the governing equation shown alongside each step. The
@@ -228,8 +228,9 @@ In tone and scope it's closest to the atoptics.org.uk pages already linked
 from External links.
 
 '''Disclosure''': I contributed to developing this visualization. The code
-is open source (MIT) at https://github.com/humiliati/sundog and the page
-itself contains no advertising or paywall.
+is available for inspection at https://github.com/humiliati/sundog. Public
+inspection does not imply a reuse license, and the page itself contains no
+advertising or paywall.
 
 '''Proposed addition''' (External_links section, matching existing entry style):
 
@@ -361,7 +362,7 @@ of a planar restricted three-body system with:
 As a standalone educational tool demonstrating three-body dynamics, the
 visualization could potentially be added to the External links section of the
 Three-body problem article, under the same reasoning as the parhelion case:
-it makes abstract dynamics visually concrete and is open source.
+it makes abstract dynamics visually concrete and inspectable.
 
 **However**, note important differences from the parhelion case:
 
@@ -392,7 +393,7 @@ component only:
 **Disclosure language for Talk page:**
 
 > I contributed to the Sundog Project, which produced this visualization.
-> The code is open source (MIT) at https://github.com/humiliati/sundog.
+> The source is available for inspection at https://github.com/humiliati/sundog.
 > I am proposing only the interactive dynamics visualization as an educational
 > resource; the research program built on top of it is not peer-reviewed and
 > I am not proposing to include any of its results in the article.

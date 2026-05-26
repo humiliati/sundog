@@ -1,186 +1,177 @@
-# Legal Standing Documentation
+# Legal Standing and Rights Posture
 
 **Copyright © 2026 Stellar Aqua LLC. All rights reserved.**
 
 ---
 
-This document summarizes the legal standing formalization implemented across the Sundog repository.
+This document summarizes the current legal and IP posture for the Sundog
+repository and public website. It is a factual project record, not legal advice.
 
-## What Was Done
+## Current Position
 
-### 1. Copyright Inventory and Documentation
+Sundog Research Lab is a public-facing applied research program sponsored by
+Stellar Aqua LLC. Stellar Aqua LLC currently owns or controls the Sundog-authored
+copyrightable materials unless a file clearly states otherwise.
+
+The current repository posture is guarded:
+
+- Copyright © 2026 Stellar Aqua LLC. All rights reserved.
+- The root `LICENSE` file is a rights notice, not a new open-source grant.
+- No patent, trademark, commercial, hosting, training-data, or derivative-work
+  permission is implied by public availability.
+- Third-party dependencies and materials remain governed by their own notices.
+- Historical copies may have carried an earlier MIT notice; those copies are
+  governed by the notice that accompanied them. The present repository snapshot
+  does not grant a new MIT license.
+
+## What Was Established
+
+### 1. Copyright Inventory
 
 **File:** `COPYRIGHT.md`
 
-A comprehensive copyright inventory document was created that:
-- Catalogs all copyrightable works into 8 buckets (website text, documentation, source code, visual assets, videos, application writeups, experimental results, contractor works)
-- Clarifies what copyright does and does NOT protect (theorems, methods, algorithms, brand names are not protected by copyright)
-- Establishes contractor requirements: written IP assignment agreements required BEFORE work begins
-- Documents the future entity transition path
+The copyright inventory:
 
-### 2. License File
+- Catalogs copyrightable works across website copy, documentation, source code,
+  visual assets, media, application writeups, experimental data, and contractor
+  work.
+- Names Stellar Aqua LLC as the current owner/controller for Sundog-authored
+  materials.
+- Separates copyright from patent, trademark, trade-secret, and contract rights.
+- Establishes contractor and contributor assignment requirements.
+- Keeps future entity transfer options open.
+
+### 2. Rights Notice
 
 **File:** `LICENSE`
 
-MIT License with:
-- Copyright holder: Stellar Aqua LLC
-- Standard MIT permissions for use, modification, distribution
-- Sponsorship statement included
+The current root rights notice:
 
-### 3. Website Footer Updates
+- Reserves rights to Stellar Aqua LLC.
+- States that repository access does not create an implied license.
+- Reserves patent, trademark, trade-secret, data, and commercial rights.
+- Preserves third-party notices.
+- Acknowledges that earlier public copies may have carried an earlier MIT
+  notice without making a new MIT grant for the current snapshot.
+
+### 3. Website Footer
 
 **Files:** public root HTML pages and the browsable docs index.
 
-All public-facing HTML pages now include the recommended copyright notice:
+Recommended public footer:
 
-```
-© 2026 Stellar Aqua LLC. Sundog Research Lab is an independent applied
-research program sponsored by Stellar Aqua LLC.
+```text
+© 2026 Stellar Aqua LLC. All rights reserved. Sundog Research Lab is an
+independent applied research program sponsored by Stellar Aqua LLC.
 ```
 
-### 4. About Page Creation
+### 4. Public Identity Page
 
 **File:** `about.html`
 
-The About page carries the Sundog Research Lab framing that:
-- Positions Sundog as an independent applied research lab for systems that act without full sight
-- Explains the field origin and practical sponsor relationship
-- Details research posture and evidence tiers
-- Clarifies what Sundog does NOT claim, including SunDog: Frozen Legacy, crypto, and universal-proof confusion
-- Includes information about Stellar Aqua LLC as current sponsor and copyright holder
+The About page carries the current Sundog Research Lab framing:
 
-### 5. Navigation Updates
+- Independent applied research program for systems that act without full sight.
+- Sponsored by Stellar Aqua LLC.
+- Evidence-tiered research posture, not universal theorem posture.
+- Explicit disambiguation from SunDog: Frozen Legacy, crypto projects, and
+  unrelated Sundog entities.
 
-**Files:** All HTML files
+### 5. Package and Citation Metadata
 
-Navigation menus updated to include About page as first link after Home/brand, establishing it as primary identity page while Origin becomes a historical/discovery story.
+**Files:** `package.json`, `package-lock.json`, `CITATION.cff`
 
-### 6. Repository Documentation
+The package metadata now uses `UNLICENSED` for the root private site package.
+Citation metadata identifies Stellar Aqua LLC and points to the repository and
+website without making an open-source license claim.
 
-**Files:** `README.md`, `docs/README.md`
+## Why This Posture Exists
 
-Copyright headers added to main repository documentation files.
+### Value Preservation
 
-### 7. Package Metadata
+The repository contains research expression, public copy, evaluation harnesses,
+data surfaces, visual systems, and potential patent/trademark candidates. Public
+readability should not be mistaken for a grant to commercialize, scrape, host,
+train on, or repackage those assets.
 
-**File:** `package.json`
+### Entity Flexibility
 
-Updated with:
-- Description including Sundog Research Lab and Stellar Aqua sponsorship
-- Author: Stellar Aqua LLC
-- License: MIT
-- Repository and homepage URLs
+Stellar Aqua LLC may, depending on the next serious external response, choose to
+keep Sundog as a sponsored program, form a dedicated LLC, pursue a 501(c)(3) or
+fiscal-sponsor path, file patent or trademark applications, license selected
+rights, or sell/transfer assets.
 
-## What This Solves
+### Claim Discipline
 
-### Entity Risk Firewall
+The guarded posture complements the scientific posture: public claims remain
+bounded, but the underlying materials are treated as valuable IP.
 
-The primary goal was to create separation between:
-- **Stellar Aqua LLC**: Operating company with installation liability, vendor disputes, employment issues, tax issues
-- **Sundog Research Lab**: Independent research program with theorem, research IP, brand identity
+## Patent and Trademark Direction
 
-This structure allows for future entity formation (Sundog Research Lab LLC, nonprofit, or IP holding entity) without pretending that separation already exists.
+Potentially protectable areas are under evaluation, including:
 
-### Academic Credibility
+- Shadow/indirect-signal control apparatus and workbench mechanisms.
+- Trace-conditioned claim-boundary and safety-gating systems.
+- Photometric, pressure-field, structural-boundary, and hidden-state evaluation
+  harnesses.
+- Sundog Research Lab marks, visual identity, names, and page identities.
 
-The "independent applied research program sponsored by Stellar Aqua LLC" framing:
-- Acknowledges the controls company origin honestly
-- Positions it as an advantage (field procedure, not ivory-tower abstraction)
-- Maintains research discipline through evidence tiers
-- Avoids pretending to be a university lab or pure software company
+Use guarded language such as "IP rights reserved" or "patent filing candidate"
+where appropriate. Do not use "patent pending" unless a patent application has
+actually been filed and that language has been approved by the owner.
 
-### Copyright Clarity
+## Recommended Next Steps
 
-The COPYRIGHT.md inventory provides:
-- Clear ownership records for copyright registration
-- Contractor work requirements to prevent IP ownership gaps
-- Documentation for future entity transition and IP assignment
+### 1. Counsel Review
 
-## Next Steps Recommended
+Have an attorney review the root rights notice, historical MIT-transition
+language, publication strategy, and patent/trademark posture before major
+partner calls.
 
-### 1. Copyright Registration (Priority)
+### 2. Copyright Registration
 
-Register works with the U.S. Copyright Office in batches:
+Register works in batches when the scope is stable:
 
-**Batch 1: Core Research Materials**
-- Website text and copy as literary work
-- Documentation (papers, guides, roadmaps) as literary work
-- **Use eCO online registration:** https://www.copyright.gov/eco/
+- Core website and documentation as literary works.
+- Source code as computer programs.
+- Visual systems, diagrams, and generated public media as visual works.
 
-**Batch 2: Software**
-- Source code as computer program
-- Submit deposit copy of key modules
+### 3. Trademark Search and Filing
 
-**Batch 3: Visual Works**
-- Generated plots and charts
-- Diagrams and illustrations
-- Final logo/visual marks when created
+Search and evaluate:
 
-Cost: ~$65 per registration
-Timeline: 3-8 months for processing
-Benefit: Public record, required before filing infringement suit for U.S. works
-
-### 2. Trademark Search and Filing
-
-**Search first:**
 - "Sundog Research Lab"
-- "Sundog Alignment Theorem" (may be descriptive)
-- Visual marks/logos
+- "Alignment Without Sight"
+- "Ask Sundog"
+- Page/product names and visual marks
 
-**File if clear:**
-- Use USPTO's Trademark Electronic Application System (TEAS)
-- Cost: $250-$350 per class
-- Timeline: 6-12 months
+### 4. Patent Triage
 
-### 3. Contractor Agreement Template
+Before broad technical publication or partner disclosure, decide which apparatus
+or method surfaces need provisional filing, defensive publication, or trade-
+secret treatment.
 
-Create a standard agreement for all contractor/freelancer work that includes:
-- Work-for-hire language where applicable
-- Explicit copyright assignment to Stellar Aqua LLC
-- Derivative rights assignment
-- Confidentiality provisions
-- Payment tied to deliverables and IP assignment
+### 5. Contractor and Contributor Agreements
 
-**DO NOT use generic contracts without IP assignment language.**
+Create or update:
 
-### 4. IP Assignment Paper Trail
+- Contractor agreement template
+- IP assignment ledger
+- Contributor agreement or PR intake requirement
+- Confidentiality language for non-public materials
 
-For any work already commissioned:
-- Document what was paid for and when
-- Obtain retroactive IP assignment if missing
-- Create a ledger of contractor works and assignment status
+### 6. Future Entity Decision
 
-### 5. Future Entity Formation
+When there is enough signal from funders, partners, buyers, counsel, or
+institutional sponsors, choose the entity path and document the transfer or
+license-back terms.
 
-When justified (serious external momentum, funding, partnerships):
+## Contact
 
-1. Form appropriate entity (LLC, nonprofit, foundation)
-2. Draft IP assignment agreement from Stellar Aqua LLC to new entity
-3. Transfer copyrights, trademarks, domain names
-4. Stellar Aqua retains sponsor credit and appropriate license-back
-5. Update all materials to reflect new ownership
-
-### 6. Site Metadata (Already Done)
-
-✓ Footer with copyright notice
-✓ About page with entity relationships
-✓ LICENSE file
-✓ COPYRIGHT.md inventory
-✓ Package.json metadata
-
-## Contact for IP Questions
-
-For copyright, trademark, licensing, or IP assignment questions regarding Sundog materials, contact Stellar Aqua LLC through the repository maintainer.
+For copyright, trademark, licensing, acquisition, patent, or IP assignment
+questions regarding Sundog materials, contact Stellar Aqua LLC through the
+repository maintainer.
 
 ---
 
-## References
-
-- [U.S. Copyright Office](https://www.copyright.gov/)
-- [Copyright Registration Portal (eCO)](https://www.copyright.gov/eco/)
-- [USPTO Trademark Search](https://www.uspto.gov/trademarks/search)
-- [TEAS Trademark Application](https://www.uspto.gov/trademarks/apply)
-
----
-
-**Last Updated:** May 11, 2026
+**Last Updated:** May 26, 2026

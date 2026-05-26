@@ -1,26 +1,32 @@
-MIT License
+Sundog Rights Notice
 
-Copyright (c) 2026 Stellar Aqua LLC
+Copyright (c) 2026 Stellar Aqua LLC. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+The Sundog Research Lab website, source code, documentation, experiments,
+visual materials, data compilations, and related research artifacts in this
+repository are owned or controlled by Stellar Aqua LLC unless a file clearly
+states otherwise.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+No permission is granted to copy, modify, distribute, sublicense, sell, host,
+commercialize, train on, or create derivative works from this repository except
+where an explicit written license or written agreement says so. Viewing the
+public repository or website does not create an implied license.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+No patent license, trademark license, trade-secret waiver, database right,
+publicity right, or other non-copyright permission is granted. Research
+methods, apparatus designs, evaluation harnesses, control procedures, brand
+assets, names, marks, and unpublished operational details are reserved.
 
----
+Third-party dependencies, assets, excerpts, and notices remain governed by
+their own license terms and notices. This rights notice does not override those
+third-party terms.
 
-Sundog Research Lab is an independent applied research program sponsored by
-Stellar Aqua LLC.
+Historical public copies of Sundog material may have been distributed under an
+earlier MIT license notice. Any rights already granted for those specific
+copies are governed by the notice that accompanied those copies. This file
+states the current repository posture and does not grant a new MIT license for
+the present repository snapshot.
+
+Commercial licensing, acquisition, research partnership, nonprofit transfer,
+patent, and trademark questions should be directed to Stellar Aqua LLC through
+the repository maintainer.

@@ -1,6 +1,7 @@
 ## A. Preface V0.9
  legal disclaimer 
-	MIT licence or Property of Stellar Aqua unless Stellar Aqua is being sued for improper toilet installation in which case it's property of Sundog Research Lab whichever makes the most sense at the time.
+	Copyright © 2026 Stellar Aqua LLC. All rights reserved. Historical joke
+	licensing language removed during the rights-posture cleanup.
  dont try this at home.
 This is the paper-only deliverable — ready for review before any code or registration. We've tried to be honest about where we're confident vs. where the load-bearing detail still needs work (Section 7 enumerates the five open verification points). 
 

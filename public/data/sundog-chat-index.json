@@ -1341,13 +1341,13 @@
       "routeId": "licensing_and_attribution",
       "doc": "LICENSE",
       "href": "/LICENSE",
-      "section": "MIT License",
+      "section": "Sundog Rights Notice",
       "tier": "navigation",
       "disposition": "allow",
       "freshness": "current_claim_map",
       "supportStatus": "primary",
       "boundaryTags": [
-        "State the license accurately; do not paraphrase license terms.",
+        "State the rights posture accurately; do not paraphrase legal terms beyond the controlled answer.",
         "Do not answer license-compliance questions; refer to LICENSE.",
         "Do not override third-party notices or licenses.",
         "Do not imply a peer-reviewed paper or DOI exists before publication."
@@ -1368,7 +1368,7 @@
         "citation",
         "is the code"
       ],
-      "text": "Sundog-authored source and associated documentation are published under the MIT License. The repository is https://github.com/humiliati/sundog. Until a paper DOI exists, cite the repository as: Stellar Aqua LLC. (2026). Sundog: Alignment Without Sight [Software and research repository]. GitHub. https://github.com/humiliati/sundog. For legal terms and third-party notices, read the license files directly; Ask Sundog does not interpret license compliance. is the code open source open source what license is this under what license license is this license can i download download sundog run it myself how do i cite how to cite cite sundog citation is the code State the license accurately; do not paraphrase license terms. Do not answer license-compliance questions; refer to LICENSE. Do not override third-party notices or licenses. Do not imply a peer-reviewed paper or DOI exists before publication."
+      "text": "Sundog-authored source, documentation, data compilations, and public research artifacts are controlled by Stellar Aqua LLC unless a file clearly states otherwise. The current repository posture is rights-reserved and inspection-oriented; no open-source, patent, trademark, commercial, hosting, training-data, or derivative-work permission is implied by public availability. Until a paper DOI exists, cite the repository as: Stellar Aqua LLC. (2026). Sundog: Alignment Without Sight [Software and research repository]. GitHub. https://github.com/humiliati/sundog. For legal terms and third-party notices, read the LICENSE and COPYRIGHT files directly; Ask Sundog does not interpret license compliance. is the code open source open source what license is this under what license license is this license can i download download sundog run it myself how do i cite how to cite cite sundog citation is the code State the rights posture accurately; do not paraphrase legal terms beyond the controlled answer. Do not answer license-compliance questions; refer to LICENSE. Do not override third-party notices or licenses. Do not imply a peer-reviewed paper or DOI exists before publication."
     },
     {
       "id": "licensing_and_attribution:2",
@@ -1381,7 +1381,7 @@
       "freshness": "current_claim_map",
       "supportStatus": "primary",
       "boundaryTags": [
-        "State the license accurately; do not paraphrase license terms.",
+        "State the rights posture accurately; do not paraphrase legal terms beyond the controlled answer.",
         "Do not answer license-compliance questions; refer to LICENSE.",
         "Do not override third-party notices or licenses.",
         "Do not imply a peer-reviewed paper or DOI exists before publication."
@@ -1402,7 +1402,7 @@
         "citation",
         "is the code"
       ],
-      "text": "Sundog-authored source and associated documentation are published under the MIT License. The repository is https://github.com/humiliati/sundog. Until a paper DOI exists, cite the repository as: Stellar Aqua LLC. (2026). Sundog: Alignment Without Sight [Software and research repository]. GitHub. https://github.com/humiliati/sundog. For legal terms and third-party notices, read the license files directly; Ask Sundog does not interpret license compliance. is the code open source open source what license is this under what license license is this license can i download download sundog run it myself how do i cite how to cite cite sundog citation is the code State the license accurately; do not paraphrase license terms. Do not answer license-compliance questions; refer to LICENSE. Do not override third-party notices or licenses. Do not imply a peer-reviewed paper or DOI exists before publication."
+      "text": "Sundog-authored source, documentation, data compilations, and public research artifacts are controlled by Stellar Aqua LLC unless a file clearly states otherwise. The current repository posture is rights-reserved and inspection-oriented; no open-source, patent, trademark, commercial, hosting, training-data, or derivative-work permission is implied by public availability. Until a paper DOI exists, cite the repository as: Stellar Aqua LLC. (2026). Sundog: Alignment Without Sight [Software and research repository]. GitHub. https://github.com/humiliati/sundog. For legal terms and third-party notices, read the LICENSE and COPYRIGHT files directly; Ask Sundog does not interpret license compliance. is the code open source open source what license is this under what license license is this license can i download download sundog run it myself how do i cite how to cite cite sundog citation is the code State the rights posture accurately; do not paraphrase legal terms beyond the controlled answer. Do not answer license-compliance questions; refer to LICENSE. Do not override third-party notices or licenses. Do not imply a peer-reviewed paper or DOI exists before publication."
     },
     {
       "id": "licensing_and_attribution:3",
@@ -1415,7 +1415,7 @@
       "freshness": "current_claim_map",
       "supportStatus": "supporting",
       "boundaryTags": [
-        "State the license accurately; do not paraphrase license terms.",
+        "State the rights posture accurately; do not paraphrase legal terms beyond the controlled answer.",
         "Do not answer license-compliance questions; refer to LICENSE.",
         "Do not override third-party notices or licenses.",
         "Do not imply a peer-reviewed paper or DOI exists before publication."
@@ -1436,7 +1436,7 @@
         "citation",
         "is the code"
       ],
-      "text": "Sundog-authored source and associated documentation are published under the MIT License. The repository is https://github.com/humiliati/sundog. Until a paper DOI exists, cite the repository as: Stellar Aqua LLC. (2026). Sundog: Alignment Without Sight [Software and research repository]. GitHub. https://github.com/humiliati/sundog. For legal terms and third-party notices, read the license files directly; Ask Sundog does not interpret license compliance. is the code open source open source what license is this under what license license is this license can i download download sundog run it myself how do i cite how to cite cite sundog citation is the code State the license accurately; do not paraphrase license terms. Do not answer license-compliance questions; refer to LICENSE. Do not override third-party notices or licenses. Do not imply a peer-reviewed paper or DOI exists before publication."
+      "text": "Sundog-authored source, documentation, data compilations, and public research artifacts are controlled by Stellar Aqua LLC unless a file clearly states otherwise. The current repository posture is rights-reserved and inspection-oriented; no open-source, patent, trademark, commercial, hosting, training-data, or derivative-work permission is implied by public availability. Until a paper DOI exists, cite the repository as: Stellar Aqua LLC. (2026). Sundog: Alignment Without Sight [Software and research repository]. GitHub. https://github.com/humiliati/sundog. For legal terms and third-party notices, read the LICENSE and COPYRIGHT files directly; Ask Sundog does not interpret license compliance. is the code open source open source what license is this under what license license is this license can i download download sundog run it myself how do i cite how to cite cite sundog citation is the code State the rights posture accurately; do not paraphrase legal terms beyond the controlled answer. Do not answer license-compliance questions; refer to LICENSE. Do not override third-party notices or licenses. Do not imply a peer-reviewed paper or DOI exists before publication."
     },
     {
       "id": "subjective_question_refusal:1",

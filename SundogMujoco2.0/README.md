@@ -191,6 +191,11 @@ If you use this work, please cite:
 }
 ```
 
-## License
+## Rights
 
-MIT License
+Copyright (c) 2026 Stellar Aqua LLC. All rights reserved.
+
+This historical prototype is included for repository inspection only unless a
+file or signed agreement states otherwise. Public availability does not grant a
+new MIT license, patent license, trademark license, commercial license, hosting
+license, training-data license, or derivative-work license.

@@ -3,7 +3,8 @@
 **Copyright (c) 2026 Stellar Aqua LLC. All rights reserved.**
 
 This document records the public brand posture for Sundog Research Lab after
-the Mythos stress test. It complements the legal and IP roadmap in
+the Mythos and Gemini model-feedback stress tests. It complements the legal and
+IP roadmap in
 [`BRAND_ROADMAP.md`](BRAND_ROADMAP.md).
 
 ## Top-View Positioning
@@ -45,13 +46,12 @@ The correction is load-bearing:
   narrow claims, inspectable workbenches, explicit failure boundaries, and
   practical systems that act from partial signals.
 
-## Gemini Benchmark Lesson
+## Gemini Stress-Test Lesson
 
-The Gemini benchmark in [`gemini-benchmark.md`](gemini-benchmark.md) should be
-treated as the second public-legibility stress test. It is less confused than
-Mythos about Atari / p-system lineage, but it still overweights the early
-"Sundog Alignment Theorem" surface and the wider web namespace around
-Sundog.
+The quarantined Gemini model-feedback report should be treated as the second
+public-legibility stress test. It is less confused than Mythos about Atari /
+p-system lineage, but it still overweights the early "Sundog Alignment Theorem"
+surface and the wider web namespace around Sundog.
 
 What it got usefully right:
 
@@ -91,7 +91,7 @@ Brand correction:
   legible, while using its infrastructure and overclaim errors as the next
   cleanup queue.
 
-Debugging topics raised by this benchmark:
+Debugging topics raised by this stress test:
 
 - Canonical URL policy: decide whether public links and sitemap entries should
   use `.html` URLs or Cloudflare Pages extensionless URLs.

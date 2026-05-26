@@ -438,7 +438,7 @@ Design should be tested in these contexts:
 - Scientific journal branding
 - Research institution logos
 - Tech company identities (focused, serious)
-- Open source project branding
+- Guarded public-research project branding
 
 ---
 

@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Sundog Research Lab website and research repository - an independent applied research program sponsored by Stellar Aqua LLC",
   "author": "Stellar Aqua LLC",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "repository": {
     "type": "git",
     "url": "https://github.com/humiliati/sundog"
