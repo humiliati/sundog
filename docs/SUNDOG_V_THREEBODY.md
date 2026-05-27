@@ -732,8 +732,7 @@ warning-quality readout.
 Implementation-grade spec and result note:
 
 - [`docs/threebody/PHASE15_SPEC.md`](threebody/PHASE15_SPEC.md)
-- [`docs/threebody/PHASE15_RESULTS.md`](threebody/PHASE15_RESULTS.md) (pending
-  amended Richardson smoke and the full lock)
+- [`docs/threebody/PHASE15_RESULTS.md`](threebody/PHASE15_RESULTS.md)
 
 Commands:
 
@@ -749,12 +748,43 @@ the Phase 14 agreement metric failed. Pre-registered negative: a positive
 outcome envelope without privileged one-step counterfactual hazard improvement
 does not support a causal-control claim.
 
-Status: spec pre-registered and lock-reviewed 2026-05-15; precision gate amended
-and lock-reviewed to early-window Richardson cross-timestep trajectory order.
-Additive core and harness implementation is in place, including the Richardson
-sampler and `richardson-order-map.csv`; Phase 13/14 hard-void gate reruns and
-the amended Phase 15 smoke are pending. Smoke must stop for `T_window` and
-order-coverage readback before the full lock starts.
+Status: complete as of 2026-05-27. Formal branch: **Fail-Magnitude**. The
+guarded TRACK survival envelope is stable across `dt=0.004-0.012`, the
+Richardson precision receipt passes cleanly (`p=4.313`), and ablations collapse
+or invert in the favorable pocket. Phase 15 does **not** pass the mechanism
+upgrade because the privileged one-step counterfactual is positive but below
+the pinned `+0.20` magnitude bar and oracle-hazard AUROC is decidably below
+`0.70`.
+
+### Phase 15B - Counterfactual Normalizer Audit
+
+Goal: diagnose whether Phase 15's one-step counterfactual magnitude miss was
+partly a measurement artifact from the `1e-9` denominator floor in cells where
+the privileged oracle and no-op one-step states nearly coincide.
+
+Implementation-grade spec and result note:
+
+- [`docs/threebody/PHASE15B_SPEC.md`](threebody/PHASE15B_SPEC.md)
+- [`docs/threebody/PHASE15B_RESULTS.md`](threebody/PHASE15B_RESULTS.md)
+
+Commands:
+
+```bash
+npm run threebody:phase15b:normalizer-smoke
+npm run threebody:phase15b:normalizer
+```
+
+Exit criterion: the project can say whether denominator-floor collapse is a
+material explanation for the Phase 15 Fail-Magnitude read, including in
+non-candidate cells. This phase is diagnostic only: it does not revise the
+Phase 15 verdict, retune the controller, or upgrade the earned claim. A positive
+result points to a separately locked multi-step counterfactual; a negative
+result shifts attention to horizon locality or the hazard score itself.
+
+Status: spec created 2026-05-27; additive audit receipts are implemented behind
+`--counterfactual-audit`. Six-trial smoke passed as a column-flow check and
+showed total denominator-floor exposure in the TRACK/delay/shuffle rows of the
+smoke cell; the 1,728-trial lock is staged, not run.
 
 ### 3D Catalog / Isotrophy Sidecar
 

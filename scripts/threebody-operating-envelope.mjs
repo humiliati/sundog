@@ -46,6 +46,7 @@ function parseArgs(argv) {
     trackGuardMaxTidalMagnitudeSweep: [35],
     candidateMaxWorsenedRate: 0.1,
     candidateMinSurvivalDelta: 0.001,
+    counterfactualNormalizerFloor: 1e-9,
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -85,6 +86,8 @@ function parseArgs(argv) {
     else if (flag === "--candidate-min-survival-delta") args.candidateMinSurvivalDelta = Number.parseFloat(value);
     else if (flag === "--track-action-coupling") args.trackActionCoupling = !["0", "false", "no"].includes(String(value).toLowerCase());
     else if (flag === "--precision-receipts") args.precisionReceipts = !["0", "false", "no"].includes(String(value).toLowerCase());
+    else if (flag === "--counterfactual-audit") args.counterfactualAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
+    else if (flag === "--counterfactual-normalizer-floor") args.counterfactualNormalizerFloor = Number.parseFloat(value);
     else throw new Error(`Unknown flag: ${flag}`);
   }
 
@@ -93,6 +96,9 @@ function parseArgs(argv) {
   if (!Number.isInteger(args.logEvery) || args.logEvery < 1) throw new Error("--log-every must be a positive integer");
   if (!Number.isInteger(args.sensorAuditEvery) || args.sensorAuditEvery < 1) {
     throw new Error("--sensor-audit-every must be a positive integer");
+  }
+  if (!Number.isFinite(args.counterfactualNormalizerFloor) || args.counterfactualNormalizerFloor <= 0) {
+    throw new Error("--counterfactual-normalizer-floor must be positive");
   }
   for (const [name, values] of [
     ["--mass-ratios", args.massRatios],
@@ -388,6 +394,8 @@ function makeTrialConfig(args, envelopeCase, seed, regime, mode, guardThresholds
     trackGuardMaxTidalMagnitude: thresholds.trackGuardMaxTidalMagnitude,
     trackActionCoupling: args.trackActionCoupling ?? false,
     precisionReceipts: args.precisionReceipts ?? false,
+    counterfactualAudit: args.counterfactualAudit ?? false,
+    counterfactualNormalizerFloor: args.counterfactualNormalizerFloor,
     initialParticle: scaleInitialParticle(baseParticle, envelopeCase.radiusScale, envelopeCase.velocityScale),
   });
 }
@@ -445,6 +453,22 @@ export function makePairedRows(trials) {
           counterfactualMeanEffect: trial.summary.counterfactualMeanEffect,
           counterfactualPositiveRate: trial.summary.counterfactualPositiveRate,
           meanGapToOracle: trial.summary.meanGapToOracle,
+          ...(trial.summary.counterfactualNormalizerFloorHits !== undefined
+            ? {
+              counterfactualMeanEffectVsNoop: trial.summary.counterfactualMeanEffectVsNoop,
+              counterfactualMeanAbsEffectVsNoop: trial.summary.counterfactualMeanAbsEffectVsNoop,
+              counterfactualMeanRawNormalizer: trial.summary.counterfactualMeanRawNormalizer,
+              counterfactualMinRawNormalizer: trial.summary.counterfactualMinRawNormalizer,
+              counterfactualNormalizerFloor: trial.summary.counterfactualNormalizerFloor,
+              counterfactualNormalizerFloorHits: trial.summary.counterfactualNormalizerFloorHits,
+              counterfactualNormalizerFloorRate: trial.summary.counterfactualNormalizerFloorRate,
+              counterfactualFloorMeanEffectVsNoop: trial.summary.counterfactualFloorMeanEffectVsNoop,
+              counterfactualFloorPositiveRate: trial.summary.counterfactualFloorPositiveRate,
+              counterfactualFloorMeanScore: trial.summary.counterfactualFloorMeanScore,
+              counterfactualNonFloorEligibleSteps: trial.summary.counterfactualNonFloorEligibleSteps,
+              counterfactualNonFloorMeanScore: trial.summary.counterfactualNonFloorMeanScore,
+            }
+            : {}),
         }
         : {}),
       ...(trial.summary.finalRelEnergyDrift !== undefined
@@ -539,6 +563,22 @@ export function makeTrialOutcomeRows(pairedRows) {
         counterfactual_mean_effect: row.counterfactualMeanEffect,
         counterfactual_positive_rate: row.counterfactualPositiveRate,
         mean_gap_to_oracle: row.meanGapToOracle,
+        ...(row.counterfactualNormalizerFloorHits !== undefined
+          ? {
+            counterfactual_mean_effect_vs_noop: row.counterfactualMeanEffectVsNoop,
+            counterfactual_mean_abs_effect_vs_noop: row.counterfactualMeanAbsEffectVsNoop,
+            counterfactual_mean_raw_normalizer: row.counterfactualMeanRawNormalizer,
+            counterfactual_min_raw_normalizer: row.counterfactualMinRawNormalizer,
+            counterfactual_normalizer_floor: row.counterfactualNormalizerFloor,
+            counterfactual_normalizer_floor_hits: row.counterfactualNormalizerFloorHits,
+            counterfactual_normalizer_floor_rate: row.counterfactualNormalizerFloorRate,
+            counterfactual_floor_mean_effect_vs_noop: row.counterfactualFloorMeanEffectVsNoop,
+            counterfactual_floor_positive_rate: row.counterfactualFloorPositiveRate,
+            counterfactual_floor_mean_score: row.counterfactualFloorMeanScore,
+            counterfactual_non_floor_eligible_steps: row.counterfactualNonFloorEligibleSteps,
+            counterfactual_non_floor_mean_score: row.counterfactualNonFloorMeanScore,
+          }
+          : {}),
       }
       : {}),
     ...(row.finalRelEnergyDrift !== undefined
@@ -677,6 +717,35 @@ export function summarizeRows(rows, args, includeRegime = true) {
           meanCounterfactualPositiveRate: roundMetric(mean(group.map((row) => row.counterfactualPositiveRate))),
           meanGapToOracle: roundMetric(mean(group.map((row) => row.meanGapToOracle))),
           totalCounterfactualEligibleSteps: group.reduce((sum, row) => sum + (row.counterfactualEligibleSteps ?? 0), 0),
+          ...(group.some((row) => row.counterfactualNormalizerFloorHits !== undefined)
+            ? {
+              meanCounterfactualMeanEffectVsNoop: roundMetric(mean(group.map((row) => row.counterfactualMeanEffectVsNoop)), 12),
+              meanCounterfactualMeanAbsEffectVsNoop: roundMetric(mean(group.map((row) => row.counterfactualMeanAbsEffectVsNoop)), 12),
+              meanCounterfactualMeanRawNormalizer: roundMetric(mean(group.map((row) => row.counterfactualMeanRawNormalizer)), 12),
+              minCounterfactualRawNormalizer: roundMetric(
+                Math.min(...group
+                  .map((row) => row.counterfactualMinRawNormalizer)
+                  .filter((value) => Number.isFinite(value))),
+                12,
+              ),
+              totalCounterfactualNormalizerFloorHits: group.reduce(
+                (sum, row) => sum + (row.counterfactualNormalizerFloorHits ?? 0),
+                0,
+              ),
+              meanCounterfactualNormalizerFloorRate: roundMetric(mean(group.map((row) => row.counterfactualNormalizerFloorRate))),
+              meanCounterfactualFloorMeanEffectVsNoop: roundMetric(
+                mean(group.map((row) => row.counterfactualFloorMeanEffectVsNoop)),
+                12,
+              ),
+              meanCounterfactualFloorPositiveRate: roundMetric(mean(group.map((row) => row.counterfactualFloorPositiveRate))),
+              meanCounterfactualFloorMeanScore: roundMetric(mean(group.map((row) => row.counterfactualFloorMeanScore))),
+              totalCounterfactualNonFloorEligibleSteps: group.reduce(
+                (sum, row) => sum + (row.counterfactualNonFloorEligibleSteps ?? 0),
+                0,
+              ),
+              meanCounterfactualNonFloorMeanScore: roundMetric(mean(group.map((row) => row.counterfactualNonFloorMeanScore))),
+            }
+            : {}),
         }
         : {}),
       ...(group.some((row) => row.finalRelEnergyDrift !== undefined)
