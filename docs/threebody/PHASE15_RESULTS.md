@@ -580,3 +580,7 @@ mechanism-resolution experiment should include: per-cell distributions of
 diagnostics, and multi-step counterfactual horizons. A per-cell normalizer audit
 (how often does the oracle yardstick collapse to the 1e-9 floor, and in which
 cells?) is the first instrument to validate before extending the horizon.
+
+Follow-up opened as [`PHASE15B_SPEC.md`](PHASE15B_SPEC.md): counterfactual
+normalizer audit, diagnostic only, with no revision to the Phase 15 formal
+verdict.

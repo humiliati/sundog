@@ -25,6 +25,8 @@ export const DEFAULT_THREEBODY_CONFIG = Object.freeze({
   trackGuardMaxLocalAcceleration: 2.5,
   trackGuardMaxTidalMagnitude: 35,
   precisionReceipts: false,
+  counterfactualAudit: false,
+  counterfactualNormalizerFloor: 1e-9,
   logEvery: 10,
 });
 
@@ -814,10 +816,17 @@ function computeCounterfactualReceipt(state, thrust, config, oracleStrictThrust)
   const actualEnergy = computeSignatures(actualState, config).energy;
   const oracleEnergy = computeSignatures(oracleState, config).energy;
   const effectVsNoop = noopEnergy - actualEnergy;
-  const normalizer = Math.max(Math.abs(noopEnergy - oracleEnergy), 1e-9);
+  const rawNormalizer = Math.abs(noopEnergy - oracleEnergy);
+  const floor = config.counterfactualNormalizerFloor ?? 1e-9;
+  const normalizer = Math.max(rawNormalizer, floor);
   return {
     score: clamp(effectVsNoop / normalizer, -1, 1),
     gapToOracle: actualEnergy - oracleEnergy,
+    effectVsNoop,
+    absEffectVsNoop: Math.abs(effectVsNoop),
+    rawNormalizer,
+    normalizer,
+    normalizerFloored: rawNormalizer < floor,
   };
 }
 
@@ -1169,6 +1178,16 @@ export function runTrial(config = {}) {
   let cfPositive = 0;
   let cfSignedSum = 0;
   let cfGapSum = 0;
+  let cfEffectVsNoopSum = 0;
+  let cfAbsEffectVsNoopSum = 0;
+  let cfRawNormalizerSum = 0;
+  let cfMinRawNormalizer = Infinity;
+  let cfNormalizerFloorHits = 0;
+  let cfFloorEffectVsNoopSum = 0;
+  let cfFloorPositive = 0;
+  let cfFloorScoreSum = 0;
+  let cfNonFloorEligible = 0;
+  let cfNonFloorScoreSum = 0;
 
   for (let step = 0; step <= steps; step += 1) {
     const time = step * cfg.dt;
@@ -1196,6 +1215,21 @@ export function runTrial(config = {}) {
         if (counterfactual.score > 0) cfPositive += 1;
         cfSignedSum += counterfactual.score;
         cfGapSum += counterfactual.gapToOracle;
+        if (cfg.counterfactualAudit) {
+          cfEffectVsNoopSum += counterfactual.effectVsNoop;
+          cfAbsEffectVsNoopSum += counterfactual.absEffectVsNoop;
+          cfRawNormalizerSum += counterfactual.rawNormalizer;
+          cfMinRawNormalizer = Math.min(cfMinRawNormalizer, counterfactual.rawNormalizer);
+          if (counterfactual.normalizerFloored) {
+            cfNormalizerFloorHits += 1;
+            cfFloorEffectVsNoopSum += counterfactual.effectVsNoop;
+            cfFloorScoreSum += counterfactual.score;
+            if (counterfactual.effectVsNoop > 0) cfFloorPositive += 1;
+          } else {
+            cfNonFloorEligible += 1;
+            cfNonFloorScoreSum += counterfactual.score;
+          }
+        }
       }
     }
     if (cfg.trackActionCoupling) {
@@ -1347,6 +1381,30 @@ export function runTrial(config = {}) {
           counterfactualMeanEffect: cfEligible > 0 ? roundNumber(cfSignedSum / cfEligible, 6) : null,
           counterfactualPositiveRate: cfEligible > 0 ? roundNumber(cfPositive / cfEligible, 6) : null,
           meanGapToOracle: cfEligible > 0 ? roundNumber(cfGapSum / cfEligible, 8) : null,
+          ...(cfg.counterfactualAudit
+            ? {
+              counterfactualMeanEffectVsNoop: cfEligible > 0 ? roundNumber(cfEffectVsNoopSum / cfEligible, 12) : null,
+              counterfactualMeanAbsEffectVsNoop: cfEligible > 0 ? roundNumber(cfAbsEffectVsNoopSum / cfEligible, 12) : null,
+              counterfactualMeanRawNormalizer: cfEligible > 0 ? roundNumber(cfRawNormalizerSum / cfEligible, 12) : null,
+              counterfactualMinRawNormalizer: cfEligible > 0 ? roundNumber(cfMinRawNormalizer, 12) : null,
+              counterfactualNormalizerFloor: cfg.counterfactualNormalizerFloor,
+              counterfactualNormalizerFloorHits: cfNormalizerFloorHits,
+              counterfactualNormalizerFloorRate: cfEligible > 0 ? roundNumber(cfNormalizerFloorHits / cfEligible, 6) : null,
+              counterfactualFloorMeanEffectVsNoop: cfNormalizerFloorHits > 0
+                ? roundNumber(cfFloorEffectVsNoopSum / cfNormalizerFloorHits, 12)
+                : null,
+              counterfactualFloorPositiveRate: cfNormalizerFloorHits > 0
+                ? roundNumber(cfFloorPositive / cfNormalizerFloorHits, 6)
+                : null,
+              counterfactualFloorMeanScore: cfNormalizerFloorHits > 0
+                ? roundNumber(cfFloorScoreSum / cfNormalizerFloorHits, 6)
+                : null,
+              counterfactualNonFloorEligibleSteps: cfNonFloorEligible,
+              counterfactualNonFloorMeanScore: cfNonFloorEligible > 0
+                ? roundNumber(cfNonFloorScoreSum / cfNonFloorEligible, 6)
+                : null,
+            }
+            : {}),
         }
         : {}),
       ...(cfg.trackActionCoupling
