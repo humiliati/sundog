@@ -240,6 +240,9 @@ gate runs.
 | 7 / 12 | 0.01 | 1.1 | 1,080 | 4 h 15.1 min | PASS — batch 3 (mid-day), 2-concurrent w/ mu=0.3·v=1.1 (cand 15/120; ~85 min faster — smaller-mass cells terminate earlier) |
 | 8 / 12 | 0.3 | 1.05 | 1,080 | 5 h 45.6 min | PASS — batch 4 (evening), 2-concurrent w/ mu=0.3·v=1.15 (cand 25/120) |
 | 9 / 12 | 0.3 | 1.15 | 1,080 | 5 h 24.1 min | PASS — batch 4 (evening), 2-concurrent w/ mu=0.3·v=1.05 (cand 26/120) |
+| 10 / 12 | 0.01 | 0.95 | 1,080 | 5 h 24.5 min | PASS — batch 5 (overnight), 3-concurrent (cand 12/120; boundary cell, slowest of the three) |
+| 11 / 12 | 0.01 | 1.05 | 1,080 | 5 h 10.7 min | PASS — batch 5 (overnight), 3-concurrent (cand 18/120) |
+| 12 / 12 | 0.01 | 1.15 | 1,080 | 3 h 51.8 min | PASS — batch 5 (overnight), 3-concurrent (cand 16/120; fastest shard — 87% escape, ~34 min faster than v=1.05) |
 
 **Overnight 1 (2026-05-25):** launched 2026-05-25T06:35:50Z; both shards
 started within 10 ms of each other (concurrent launch confirmed). All 14
@@ -298,6 +301,22 @@ explain the gap (v=1.05 bounded 258 / escape 705 / close 117 vs v=1.15
 bounded 171 / escape 830 / close 79 — more bounded trials run longer).
 Closes the mu=0.3 row.
 
+**Batch 5 (2026-05-27, overnight 3-concurrent):** launched 2026-05-27T09:40:07Z;
+all three shards started within ~16 ms. All 14 per-shard outputs emitted on
+each; trial counts 1,080/1,080/1,080 — no stalls. Group wall =
+max(324.5, 310.7, 231.8) = **5 h 24.5 min** vs sequential estimate 14 h 27 min
+→ **2.67× speedup**. v=1.15 finished ~1 h 32.7 min before v=0.95 (87% escape
+rate at v=1.15 vs 76% at v=0.95 — high-escape cells terminate fast). Closes
+the mu=0.01 row. **All 12 shards complete.**
+
+**Cross-velocity observation at mu=0.01** (context, not science): v=0.95 = 5 h
+24.5 min (batch 5, 3-concurrent), v=1.05 = 5 h 10.7 min (batch 5,
+3-concurrent), v=1.1 = 4 h 15.1 min (batch 3, 2-concurrent), v=1.15 = 3 h
+51.8 min (batch 5, 3-concurrent). Strong monotonic trend — fastest at highest
+velocity (more escape-dominant cells). The v=1.1 figure is at 2-concurrent so
+less contention overhead; adjusted for that, the monotonic trend holds. mu=0.01
+cells are consistently faster than mu=0.3 / mu=1 across the velocity axis.
+
 **Cross-velocity observation at mu=0.3** (context, not science): v=0.95 = 7 h
 0.0 min (overnight 2, 3-concurrent), v=1.05 = 5 h 45.6 min (batch 4,
 2-concurrent), v=1.1 = 5 h 40.5 min (batch 3, 2-concurrent), v=1.15 = 5 h
@@ -350,3 +369,36 @@ stands.
 
 The full lock remains operator-gated throughout. This amendment is
 procedural; §1–§6 (slate, modes, seeds, receipts, branches) are unchanged.
+
+## Full-lock execution receipt (2026-05-27)
+
+All 12 shards complete. `npm run threebody:phase15:merge` run 2026-05-27;
+all 12 shard dirs auto-discovered and merged.
+
+- **Unified trial count: 12,960** — matches locked §3 total (12 × 1,080) ✓
+- **Unified candidate envelope rows: 235 / 1,440**
+- **Unified outcomes:** escape 9,131 / bounded 2,759 / close_approach 1,070
+- **Output:** `results/threebody/phase15-forward-oracle-precision-lock/`
+  — all 11 binding aggregate CSVs present:
+  `aggregate-envelope.csv`, `candidate-envelope.csv`, `paired.csv`,
+  `trial-outcomes.csv`, `envelope-map.csv`, `best-by-cell.csv`,
+  `cell-class-map.csv`, `cell-delta-map.csv`, `cell-warning-quality-map.csv`,
+  `cell-precision-map.csv`, `richardson-order-map.csv`, plus
+  `manifest-summary.json`.
+
+**Total sharded execution wall (all 5 batches, operator-paced):**
+- Overnight 1 (2-concurrent): 5 h 37.4 min (2 shards)
+- Overnight 2 (3-concurrent): 7 h 9.7 min (3 shards)
+- Batch 3 mid-day (2-concurrent): 5 h 40.5 min (2 shards)
+- Batch 4 evening (2-concurrent): 5 h 45.6 min (2 shards)
+- Batch 5 overnight (3-concurrent): 5 h 24.5 min (3 shards)
+- **Total elapsed wall (sequential batches): ≈29 h 37.7 min** over 5 sessions
+
+Sequential single-run estimate (sum of all per-shard walls):
+324.5+310.7+231.8+337.0+316.8+420.0+368.6+429.7+316.8+345.6+324.1+255.1
+= **3,980.7 min ≈ 66 h 20.7 min**. Sharded concurrency reduced effective
+wall to ≈29.6 h (2.24× overall; individual batch speedups 1.94× – 2.84×).
+
+The data is in hand. **Operator §5/§6 readback is unblocked.** The
+Pass/Partial/Fail verdict per `PHASE15_SPEC.md` §5 awaits operator
+sign-off and is not rendered here.
