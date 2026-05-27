@@ -543,8 +543,40 @@ inverted ablation arms produce 0 favorable-pocket candidates; signal_delay
 produces negative counterfactual (correct direction, wrong magnitude); the
 envelope survives finer dt cleanly.
 
-**Pending operator sign-off:** which §5 branch to formally record (Fail on
-pinned-bar miss, or operator-assessed Partial given the specific character of
-the misses), what claim wording to preserve vs narrow, and whether to annotate
-the signal_delay mechanism finding (timing-sensitive but signal-precision
-insufficient at this bar).
+### §5 Verdict (operator sign-off, 2026-05-27)
+
+**Formal branch: Fail.**
+**Subclassification: Fail-Magnitude** — not Fail-Precision (Richardson and
+candidate-fraction stability both pass), not Fail-Envelope (envelope is
+dt-stable, no collapse), not the pre-registered negative (counterfactual
+direction is positive).
+
+**Retracted:** "Phase 15 closes the mechanism question" / "privileged
+counterfactual passes."
+
+**Preserved claim:**
+
+> Guarded TRACK robustly improves survival in the mapped high-velocity pocket
+> through the 16-second horizon, stable across dt=0.004–0.012; ablations
+> collapse or invert, showing timing/signal sensitivity. However, Phase 15 does
+> not pass the pre-registered precision-lock mechanism upgrade because the
+> privileged one-step counterfactual is positive but below the +0.20 magnitude
+> bar, and oracle-hazard AUROC is decidably below 0.70.
+
+Result is **stronger than Phase 14** on numerical robustness (dt-stable
+envelope, clean RK4 O(dt⁴) trajectory precision, ablations absent from the
+favorable pocket at every dt) but **weaker than a Phase 15 "mechanism locked"
+claim**.
+
+**Next phase:** do not retune Phase 15. Pre-register a mechanism-resolution
+pass. The key question is why survival is large (+0.80 survival delta at
+dt=0.004) while the one-step energy counterfactual is small (+0.063). The
+signal_delay arm is the diagnostic tell: it buys survival (+0.162) while
+scoring negative per-step counterfactual (−0.175), suggesting the one-step
+energy yardstick may be too local — the controller may be winning through
+trajectory steering that only registers after several steps. The
+mechanism-resolution experiment should include: per-cell distributions of
+`counterfactualMeanEffect` and eligible-step counts, normalizer-scale
+diagnostics, and multi-step counterfactual horizons. A per-cell normalizer audit
+(how often does the oracle yardstick collapse to the 1e-9 floor, and in which
+cells?) is the first instrument to validate before extending the horizon.
