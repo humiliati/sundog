@@ -238,6 +238,8 @@ gate runs.
 | 5 / 12 | 0.3 | 0.95 | 1,080 | 7 h 0.0 min | PASS — overnight 2, 3-concurrent (cand 34/120; mu=0.3 boundary is NOT a failure cell, contrast with mu=1·v=0.95 which had 0/120) |
 | 6 / 12 | 0.3 | 1.1 | 1,080 | 5 h 40.5 min | PASS — batch 3 (mid-day), 2-concurrent w/ mu=0.01·v=1.1 (cand 14/120) |
 | 7 / 12 | 0.01 | 1.1 | 1,080 | 4 h 15.1 min | PASS — batch 3 (mid-day), 2-concurrent w/ mu=0.3·v=1.1 (cand 15/120; ~85 min faster — smaller-mass cells terminate earlier) |
+| 8 / 12 | 0.3 | 1.05 | 1,080 | 5 h 45.6 min | PASS — batch 4 (evening), 2-concurrent w/ mu=0.3·v=1.15 (cand 25/120) |
+| 9 / 12 | 0.3 | 1.15 | 1,080 | 5 h 24.1 min | PASS — batch 4 (evening), 2-concurrent w/ mu=0.3·v=1.05 (cand 26/120) |
 
 **Overnight 1 (2026-05-25):** launched 2026-05-25T06:35:50Z; both shards
 started within 10 ms of each other (concurrent launch confirmed). All 14
@@ -285,6 +287,24 @@ concurrency planning — not science): mu=1 = 5 h 16.8 min (overnight 1,
 15.1 min (batch 3, 2-concurrent). Per-cell cost is **non-monotonic in mu** —
 mu=0.3 was slowest, mu=0.01 noticeably fastest. Pairing one mu=0.01 with one
 heavier-mu shard balances wall in remaining nights.
+
+**Batch 4 (2026-05-26, evening 2-concurrent):** launched 2026-05-27T01:11:54Z;
+both shards started within ~1 ms of each other. All 14 per-shard outputs
+emitted on both; trial counts 1,080/1,080 across — no stalls. Group wall =
+max(345.6, 324.1) = **5 h 45.6 min** vs sequential estimate 11 h 9.7 min
+→ **1.94× speedup** at 2-concurrent (matches overnight 1's 1.94× — same-mu
+pair, wall-clock balanced). v=1.15 finished ~21.5 min before v=1.05; outcomes
+explain the gap (v=1.05 bounded 258 / escape 705 / close 117 vs v=1.15
+bounded 171 / escape 830 / close 79 — more bounded trials run longer).
+Closes the mu=0.3 row.
+
+**Cross-velocity observation at mu=0.3** (context, not science): v=0.95 = 7 h
+0.0 min (overnight 2, 3-concurrent), v=1.05 = 5 h 45.6 min (batch 4,
+2-concurrent), v=1.1 = 5 h 40.5 min (batch 3, 2-concurrent), v=1.15 = 5 h
+24.1 min (batch 4, 2-concurrent). Slowest at the boundary v=0.95 (more
+bounded trials run longer), trending faster as velocity increases. The
+overnight-2 v=0.95 figure mixes the cell cost with 3-concurrent contention,
+so the boundary-vs-favorable gap is real but its magnitude is confounded.
 
 ### Concurrency policy (operator pin, 2026-05-16)
 
