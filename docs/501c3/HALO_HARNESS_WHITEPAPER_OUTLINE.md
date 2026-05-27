@@ -317,7 +317,7 @@ Traceability Evaluation Report
 
 - **Prompt set.** Curated, versioned, with category labels.
 - **Evaluator-side proxy.** Sends prompts to the deployment under
-  evaluation through documented public interfaces. Captures
+  evaluation through documented input interfaces. Captures
   responses verbatim. Does not modify the deployment.
 - **Tagger.** Applies provenance, uncertainty, and refusal
   markers. May be rule-based, classifier-based, or hybrid —

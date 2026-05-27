@@ -96,8 +96,8 @@ flowchart TB
 | Component | Role | Inputs | Outputs |
 |-----------|------|--------|---------|
 | **Prompt Set Module** | Curates and serves a versioned prompt corpus with category labels (answerable / ambiguous / out-of-corpus / adversarial / citation-trap). | None (configuration only) | `prompt_record` |
-| **Evaluator-Side Proxy** | Issues prompts via the deployment's public interface, captures responses verbatim, performs no modification of the deployment. | `prompt_record` | `capture_record` |
-| **Deployment Under Evaluation** | EXTERNAL to the apparatus boundary. Treated as a black box accessed only via documented public interfaces. | serialized prompt | verbatim response |
+| **Evaluator-Side Proxy** | Issues prompts via the deployment's documented input interface, captures responses verbatim, performs no modification of the deployment. | `prompt_record` | `capture_record` |
+| **Deployment Under Evaluation** | EXTERNAL to the apparatus boundary. Treated as a black box accessed only via documented input interfaces. | serialized prompt | verbatim response |
 | **Tagger** | Applies the four-surface marker schema (per-claim provenance tags; uncertainty markers; refusal classification) to each capture. Implementation may be rule-based, classifier-based, or hybrid; output schema is invariant across implementations. | `capture_record` | `tagged_interaction_record` |
 | **Audit Store** | Persists every `tagged_interaction_record` against a published schema, indexed by `evaluation_run_id`, with retention and reconstruction guarantees specified in §5.2 of the harness outline. | `tagged_interaction_record` | queryable record set |
 | **Scoring Module** | Reduces an evaluation run's record set to a principle-indexed metric set keyed to Initiative §2.1 / §2.2 / §2.3 / §2.7, with status-matrix marking (Instrumented / Deferred / Paper-level-only). | record set | `principle_metric_set` |
@@ -155,11 +155,12 @@ matrix*, which is structurally a different artifact.
 The non-obviousness lies in the system property: the deployment never
 has to cooperate (no instrumentation, no SDK install, no log access);
 the apparatus produces structured, principle-indexed, independently
-reproducible records purely from the deployment's public interface.
-The combination of (i) read-only public-interface capture, (ii) the
+reproducible records purely from the deployment's documented input interface.
+The combination of (i) documented-interface capture, (ii) the
 Tagger's four-surface schema, (iii) the Scorer's principle-indexed
 reduction, and (iv) a stable Audit Store schema enabling independent
-replay against the same model checkpoint, is the method claim
+reconstruction from persisted records and repeat evaluation when the
+stated deployment version remains accessible, is the method claim
 candidate.
 
 Claim A and Claim B can plausibly stand independently (Tagger and

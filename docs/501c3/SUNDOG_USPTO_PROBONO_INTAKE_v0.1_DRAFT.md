@@ -233,7 +233,7 @@ paragraphs. Suggested prose (parameterise as needed):
 My invention is a method and apparatus for traceable AI evaluation
 under partial deployment cooperation. The apparatus is an
 evaluator-side proxy that captures interactions with a deployed AI
-system through that deployment's public interface, applies a
+system through that deployment's documented input interface, applies a
 structured tagger that produces per-claim provenance, uncertainty,
 and refusal markers against a stable output schema, stores the
 tagged interactions in a queryable audit store, and reduces an

@@ -5,11 +5,11 @@ Confidential attorney review draft. Not for public distribution.
 Prepared by: Jeffery Hughes
 Date: May 26 2026
 Current owner/controller: Stellar Aqua LLC, subject to counsel review
-Inventor candidates: Jeffery Wade Hughes Jr
+Inventor candidates: Jeffery Wade Hughes Jr.
 
 ## 1. One-Paragraph Summary
 
-This invention is a method and apparatus for evaluating deployed AI systems through an evaluator-side proxy. The apparatus captures prompt/response interactions through public interfaces, decomposes responses into claim-level records, tags each claim for provenance, uncertainty, refusal/boundary behavior, and evidence status, stores the resulting records in an audit ledger, and reduces the run to a structured traceability report.
+This invention is a method and apparatus for evaluating deployed AI systems through an evaluator-side proxy. The apparatus captures prompt/response interactions through documented input interfaces, decomposes responses into claim-level records, tags each claim for provenance, uncertainty, refusal/boundary behavior, and evidence status, stores the resulting records in an audit ledger, and reduces the run to a structured traceability report.
 
 ## 2. Problem Being Solved
 
@@ -31,7 +31,7 @@ The apparatus contains:
 ## 4. Data Flow
 
 Prompt record ->
-public-interface query ->
+documented-interface query ->
 verbatim response capture ->
 claim segmentation ->
 per-claim tags ->
@@ -110,7 +110,7 @@ The apparatus improves AI evaluation by converting unstructured model behavior i
 ### Embodiment B: General Halo Harness
 - arbitrary deployed model
 - curated corpus
-- public-interface capture
+- documented-interface capture
 - tagger/store/scorer/report architecture
 
 ### Embodiment C: Future Partner Evaluation
@@ -124,7 +124,28 @@ The apparatus improves AI evaluation by converting unstructured model behavior i
 - claim_map.json
 - generated chat index
 - eval scripts
-- probe results: [insert exact trial counts and paths]
+- probe result headline: 5,670 trials, 0 unsafe-accepts across six model
+  implementations and four training lineages, as summarized in
+  `docs/SUNDOG_V_CHAT.md`
+- primary result write-up: `docs/SUNDOG_V_CHAT.md`
+- public Ask Sundog page: `chat.html`
+- static claim map and routing corpus: `chat/claim_map.json`
+- generated public chat indexes: `public/data/sundog-claim-map.json` and
+  `public/data/sundog-chat-index.json`
+- evaluation scripts:
+  - `chat/eval/score_static_router.mjs`
+  - `chat/eval/score_phase3_drafts.mjs`
+  - `chat/eval/score_phase4_probe_slate.mjs`
+  - `chat/eval/run_hosted_drafts.mjs`
+  - `chat/eval/run_phase5_interventions.mjs`
+- result artifacts:
+  - `results/chat/phase1-static-router/summary.json`
+  - `results/chat/phase3-draft-gate/summary.json`
+  - `results/chat/phase3-adversarial-draft-gate/summary.json`
+  - `results/chat/phase3-differential-draft-gate/summary.json`
+  - `results/chat/phase5-hosted/**/summary.json`
+  - `results/chat/interventions/**/summary.json`
+  - `results/chat/phase12-groq-driver-log.jsonl`
 - docs/501c3 apparatus graphs
 - public/legal posture documents
 
@@ -161,15 +182,25 @@ Known products/papers to search:
 
 ## 12. Public Disclosures
 
-List every possible disclosure with exact dates:
-- GitHub repository public availability
-- sundog.cc pages
-- Reddit posts
-- d2jsp post
-- outreach packets
-- emails or pitch decks
-- public demos
-- conversations with companies, if not under NDA
+Draft disclosure timeline for counsel verification:
+
+- **2025-05-26:** d2jsp forum post, "The Sundog Alignment Theorem"
+  (`https://forums.d2jsp.org/topic.php?f=90&t=106340870&v=1`), listed
+  on `origin.html` as a contemporaneous discovery artifact. Counsel should
+  determine whether this disclosed any material that could be considered
+  enabling for the present harness. This date is urgent because it is at or
+  near a one-year anniversary as of this memo date.
+- **2025-05-28:** preliminary e-print record referenced on `origin.html`;
+  exact URL/content pending founder review.
+- **GitHub repository public availability:** exact first-public date and
+  relevant commits/releases to verify from GitHub.
+- **sundog.cc public pages:** exact deployment dates for `chat.html`,
+  `origin.html`, `docs/SUNDOG_V_CHAT.md`, and `docs/501c3/*` to verify
+  from deployment history.
+- **Reddit / outreach / promo:** exact posts, packets, and email/pitch-deck
+  sends to inventory before filing.
+- **Company or partner conversations:** identify which were under NDA, if any,
+  and which disclosed implementation-level details.
 
 For each:
 - date
@@ -179,18 +210,23 @@ For each:
 
 ## 13. Inventorship Notes
 
-Who conceived:
-- evaluator-side proxy
-- claim-level schema
-- boundary classifier
-- report structure
-- audit ledger
-- probe/eval design
+Founder-inventor conception candidates to review:
+
+- evaluator-side proxy and no-internal-state / documented-interface boundary
+- claim-level schema and invariant schema-emitter concept
+- boundary classifier and observable-refusal discipline
+- principle-indexed report structure
+- audit ledger / replayable record architecture
+- adversarial probe and intervention slate design
 
 AI tool use:
-- identify where AI assisted drafting, coding, summarizing, or implementation
-- identify the human conception decisions
-- preserve prompts/handoffs if useful
+- AI systems assisted with drafting, code generation, summarization, diagram
+  preparation, and editorial review.
+- Founder should preserve prompts, handoffs, and review notes that show the
+  human conception decisions, especially for the evaluator-side proxy,
+  invariant schema, principle-indexed scoring, and refusal-boundary apparatus.
+- Counsel should decide what, if anything, belongs in the filing record versus
+  the private inventorship file.
 
 ## 14. Ownership / Assignment
 
@@ -217,9 +253,17 @@ Not legal claims, just technical claim candidates:
 - **Apparatus diagrams (drafted):** `docs/501c3/figures/HALO_HARNESS_PATENT_FIGURES_v0.1.pdf` (4 figures, see §4 above).
 - **Reference-numeral legend:** `docs/501c3/figures/REFERENCE_NUMERAL_LEGEND.md`.
 - **§ 1.84 self-audit:** `docs/501c3/figures/USPTO_COMPLIANCE_NOTES.md`.
-- claim schema examples (to attach)
-- eval result tables (to attach)
-- screenshots (to attach)
-- source file paths (to attach)
-- public-disclosure timeline (to draft)
-- related-work notes (to draft)
+- **Claim schema examples:** `chat/claim_map.json`,
+  `public/data/sundog-claim-map.json`, and representative rows from
+  `results/chat/**/summary.json`.
+- **Eval result tables:** `docs/SUNDOG_V_CHAT.md` and the `results/chat/`
+  summaries listed in §9.
+- **Screenshots:** `chat.html`, trace drawer, and any counsel-selected public
+  report rendering.
+- **Source file paths:** `chat/`, `public/js/sundog-chat-router.mjs`,
+  `public/js/sundog-chat-widget.mjs`, `scripts/build-chat-index.mjs`, and
+  the `chat/eval/` scripts listed in §9.
+- **Public-disclosure timeline:** draft in §12; founder/counsel to verify
+  exact dates and enabling content.
+- **Related-work notes:** known-product list in §11 plus any counsel-directed
+  patent database search results.
