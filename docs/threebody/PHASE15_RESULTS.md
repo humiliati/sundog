@@ -402,3 +402,149 @@ wall to ≈29.6 h (2.24× overall; individual batch speedups 1.94× – 2.84×).
 The data is in hand. **Operator §5/§6 readback is unblocked.** The
 Pass/Partial/Fail verdict per `PHASE15_SPEC.md` §5 awaits operator
 sign-off and is not rendered here.
+
+## §5/§6 Full-Lock Readback (2026-05-27)
+
+All numbers from `results/threebody/phase15-forward-oracle-precision-lock/`.
+Hard-void gates confirmed bit-for-bit in the 2026-05-16 post-Richardson chain
+(recorded above). Favorable pocket = `velocityScale ≥ 1.05` (27 cells per dt,
+3 mass-ratios × 3 radii × 3 velocities). Total 12,960 trials.
+
+### Precision receipt — Richardson (§4/§5 primary gate)
+
+| metric | value | threshold | status |
+|---|---|---|---|
+| favorable-pocket median fitted order | **p = 4.313** | ≥ 3.0 | ✓ PASS |
+| favorable defined coverage | 196 / 216 = 90.7% | ≥ 2/3 | ✓ decidable |
+| favorableDecidable flag | true | — | ✓ |
+| fittedOrder range (all defined rows) | [4.258, 4.423] | — | inside [3,5] ✓ |
+| T_window (locked) | 2.4 | — | matches smoke |
+
+### Precision receipt — Candidate-fraction stability
+
+| dt | candidates / 27 favorable cells | fraction |
+|---|---|---|
+| 0.004 | 24 / 27 | 0.889 |
+| 0.006 | 24 / 27 | 0.889 |
+| 0.008 | 23 / 27 | 0.852 |
+| 0.01 | 24 / 27 | 0.889 |
+| 0.012 | 24 / 27 | 0.889 |
+
+**Δ(dt=0.004 vs dt=0.01) = 0.000** (threshold ≤ 0.10 → ✓ PASS). Candidate
+fraction is rock-stable across the ladder; the envelope does not narrow at
+finer dt. All three ablation-failure arms (`signal_shuffle`, `action_shuffle`,
+`sign_flip`) have **0/27 candidate cells at every dt** — they produce no
+favorable-pocket survival improvement at any timestep.
+
+### Per-arm × per-dt outcome table (favorable pocket v≥1.05, N=27 cells per dt)
+
+Columns show `candidate_count / 27` at each dt.
+
+| mode | 0.004 | 0.006 | 0.008 | 0.01 | 0.012 | mean surv Δ (dt=0.004) |
+|---|---|---|---|---|---|---|
+| `track_sensor_accel_guarded` | 24/27 | 24/27 | 23/27 | 24/27 | 24/27 | **+0.801** (27/27 pos) |
+| `track_sensor_accel_signal_delay` | 12/27 | 12/27 | 12/27 | 12/27 | 12/27 | +0.162 (15/27 pos) |
+| `track_sensor_accel_signal_shuffle` | 0/27 | 0/27 | 0/27 | 0/27 | 0/27 | −0.097 (0/27 pos) |
+| `track_sensor_accel_action_shuffle` | 0/27 | 0/27 | 0/27 | 0/27 | 0/27 | −0.102 (0/27 pos) |
+| `track_sensor_accel_sign_flip` | 0/27 | 0/27 | 0/27 | 0/27 | 0/27 | −0.120 (0/27 pos) |
+| `oracle` | 0/27 | 0/27 | 1/27 | 7/27 | 0/27 | −0.014 |
+| `forward_oracle_strict` | 1/27 | 1/27 | 0/27 | 0/27 | 0/27 | −0.014 |
+| `naive` | 0/27 | 0/27 | 0/27 | 0/27 | 0/27 | −0.130 |
+
+Boundary read (v=0.95): track has **10/45** candidate rows (5 dt × 9 cells
+= 45); signal_shuffle 4/45, action_shuffle 5/45, signal_delay 20/45 — consistent
+with the equal-mass-specific mechanism pattern from Phase 13.
+
+### Per-step counterfactual table (favorable-pocket candidate rows)
+
+Metric: `counterfactualMeanEffect` = mean normalized (H(noop)−H(actual)) /
+normalizer over eligible steps; candidate rows only (normalizer meaningful).
+Reference: Phase 14 pinned bars intact ≥+0.20; each ablation ≤+0.05;
+sign_flip ≤−0.10; intact-vs-each-shuffled gap ≥+0.15.
+
+| mode | n (candidate rows) | mean effect | threshold | status |
+|---|---|---|---|---|
+| `track_sensor_accel_guarded` | 119 | **+0.0626** | ≥ +0.20 | ❌ MISS |
+| `track_sensor_accel_signal_delay` | 60 | **−0.175** | ≤ +0.05 | ✓ |
+| `track_sensor_accel_signal_shuffle` | 0 (fav. pocket) | — | ≤ +0.05 | ✓ (absent) |
+| `track_sensor_accel_action_shuffle` | 0 (fav. pocket) | — | ≤ +0.05 | ✓ (absent) |
+| `track_sensor_accel_sign_flip` | 0 (any velocity) | — | ≤ −0.10 | ✓ (absent) |
+
+Gap checks (intact vs each):
+- vs `signal_delay`: +0.0626 − (−0.175) = **+0.238** ≥ +0.15 ✓
+- vs `signal_shuffle` / `action_shuffle`: no favorable-pocket candidate rows → track
+  uncontested in the favorable pocket (effective gap ≫ 0.15)
+- vs `sign_flip`: no candidate rows at any velocity
+
+The intact arm is positive (+0.0626 > 0, so **not** the pre-registered
+negative ≤0 trigger). At the finest timestep (dt=0.004): track candidate-cell
+mean = **+0.1058** (22/24 cells positive) — stronger signal at finer dt, but
+still below the +0.20 bar. **The +0.20 intact threshold is missed.**
+
+Note: signal_delay produces 44% candidate cells with positive survival delta but
+NEGATIVE per-step counterfactual (−0.175) — the delayed-signal arm improves
+survival through thrust direction alone, not through the energy-sensing signal,
+confirming that timing/signal precision is load-bearing.
+
+### Warning quality — oracleHazardAuroc
+
+Computed from `off` (passive) trials; scores `energy` channel; label positive
+iff `forward_oracle_strict` rollout flags hazard; reported from
+`meanPassiveOracleHazardAuroc` on active-mode rows (shared cell-level property).
+
+| metric | value | threshold | status |
+|---|---|---|---|
+| mean oracleHazardAuroc (favorable pocket) | **0.683** | ≥ 0.70 | ❌ MISS |
+| coverage (cells with samples > 0) | 135 / 135 = 100% | ≥ 2/3 | ✓ decidable |
+| cells ≥ 0.70 | 58 / 135 = 43% | — | — |
+| range | [0.313, 1.000] | — | — |
+| mean sample count / cell | 4.58 samples, 1.00 positive | — | (sparse) |
+
+Warning quality is **decidable** (all cells defined) but below the 0.70
+threshold. Sample counts are sparse (≈4.6 samples per cell mean) — the AUROC
+estimates are low-precision. Miss is narrow: **0.683 vs 0.70 (~2.5% relative)**.
+
+### Demoted energy diagnostics (non-gating, reported only)
+
+Structural restricted-model non-conservation + close-encounter softening;
+dt-insensitive by construction; not an RK4-order signal:
+- mean passive `finalRelEnergyDrift` (favorable pocket): ~0.0087 (flat across ladder)
+- No pass/fail weight (per the §4 amendment and §5 spec text).
+
+### §5 Branch analysis
+
+Pre-registered criteria against observed data:
+
+| criterion | observed | threshold | pass? |
+|---|---|---|---|
+| Richardson decidable | yes (90.7% coverage) | ≥ 2/3 | ✓ |
+| Richardson favorable median p | 4.313 | ≥ 3.0 | ✓ |
+| Candidate fraction Δ(0.004 vs 0.01) | 0.000 | ≤ 0.10 | ✓ |
+| Intact counterfactual | +0.0626 | ≥ +0.20 | ❌ |
+| Ablation counterfactuals (3 arms) | −0.175 / absent / absent | ≤ +0.05 each | ✓ |
+| sign_flip counterfactual | absent | ≤ −0.10 | ✓ (absent) |
+| Intact-vs-ablation gaps | 0.238 / absent / absent | ≥ 0.15 each | ✓ (signal_delay only decidable) |
+| oracleHazardAuroc mean | 0.683 | ≥ 0.70 | ❌ |
+| Warning quality decidable | yes (100% defined) | ≥ 2/3 cells | ✓ |
+
+**By the §5 branching logic:** Pass requires all criteria — two miss. Partial
+is triggered by Richardson undecidable, candidate-fraction drift > 0.10, OR
+warning-quality undecidable — none apply (misses are threshold misses, not
+undecidability). Fail is triggered when "the per-step counterfactual fails to
+separate intact control from the shuffled/mistimed arms by the pinned margin"
+— the intact +0.20 bar misses.
+
+**Reading against the spec:** the §5 Fail narrative ("claim narrowed to the
+original 0.008–0.012 coarse-timestep regime only") does not cleanly fit because
+the candidate envelope is dt-stable (no narrowing at finer dt). The actual
+failure is one of **magnitude** (intact +0.06 vs +0.20 bar; warning 0.683 vs
+0.70), not of directional separation or envelope stability. All three mis-timed /
+inverted ablation arms produce 0 favorable-pocket candidates; signal_delay
+produces negative counterfactual (correct direction, wrong magnitude); the
+envelope survives finer dt cleanly.
+
+**Pending operator sign-off:** which §5 branch to formally record (Fail on
+pinned-bar miss, or operator-assessed Partial given the specific character of
+the misses), what claim wording to preserve vs narrow, and whether to annotate
+the signal_delay mechanism finding (timing-sensitive but signal-precision
+insufficient at this bar).
