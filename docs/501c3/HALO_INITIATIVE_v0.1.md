@@ -172,8 +172,9 @@ or escalated.
 **Observable requirements.**
 - Logs include prompt, response, provenance tags, and any uncertainty,
   refusal, and escalation markers.
-- Logs are retained in a form that supports independent replay against
-  the same model version under stated conditions.
+- Logs are retained in a form that supports reconstruction from
+  persisted records and repeat evaluation when the stated model version
+  remains accessible under stated conditions.
 - Logs are accessible to the deploying party and, under defined
   consent, to evaluators.
 

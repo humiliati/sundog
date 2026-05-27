@@ -82,7 +82,7 @@ flowchart TB
     R["Report Renderer<br/>Traceability Evaluation Report"]
 
     PS -->|"E1: prompt_record"| P
-    P -->|"E2: serialized prompt via public API"| D
+    P -->|"E2: serialized prompt via documented input interface"| D
     D -->|"E3: verbatim response"| P
     P -->|"E4: capture record"| T
     T -->|"E5: tagged interaction record"| AS
@@ -101,14 +101,14 @@ flowchart TB
 | **Tagger** | Applies the four-surface marker schema (per-claim provenance tags; uncertainty markers; refusal classification) to each capture. Implementation may be rule-based, classifier-based, or hybrid; output schema is invariant across implementations. | `capture_record` | `tagged_interaction_record` |
 | **Audit Store** | Persists every `tagged_interaction_record` against a published schema, indexed by `evaluation_run_id`, with retention and reconstruction guarantees specified in §5.2 of the harness outline. | `tagged_interaction_record` | queryable record set |
 | **Scoring Module** | Reduces an evaluation run's record set to a principle-indexed metric set keyed to Initiative §2.1 / §2.2 / §2.3 / §2.7, with status-matrix marking (Instrumented / Deferred / Paper-level-only). | record set | `principle_metric_set` |
-| **Report Renderer** | Emits the Traceability Evaluation Report in the published Appendix-D format. | `principle_metric_set` | rendered Report |
+| **Report Renderer** | Emits the Traceability Evaluation Report in a structured report format. | `principle_metric_set` | rendered Report |
 
 ### 2.3 Named edges with data structures
 
 | Edge | From → To | Carried structure |
 |------|-----------|-------------------|
 | **E1** | PromptSet → Proxy | `{prompt_id, prompt_text, category_label, expected_behaviour_class}` |
-| **E2** | Proxy → Deployment | serialized prompt over public API (HTTP, gRPC, etc.) |
+| **E2** | Proxy → Deployment | serialized prompt over documented input interface (HTTP, gRPC, etc.) |
 | **E3** | Deployment → Proxy | verbatim response (text + any returned metadata) |
 | **E4** | Proxy → Tagger | `{prompt_record, response_record, model_version, configuration, capture_timestamp}` |
 | **E5** | Tagger → AuditStore | E4 fields PLUS `{per_claim_provenance_tags[], uncertainty_markers[], refusal_classification, tagger_version, tagger_confidence_per_decision}` |

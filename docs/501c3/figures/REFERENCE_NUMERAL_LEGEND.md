@@ -62,7 +62,7 @@ applied uniformly across all figures.
 | Numeral | Edge | Carried structure |
 |--------|------|-------------------|
 | 202 | E1 — PromptSet to Proxy | `prompt_record` |
-| 204 | E2 — Proxy to Deployment | serialized prompt via public API |
+| 204 | E2 — Proxy to Deployment | serialized prompt via documented input interface |
 | 206 | E3 — Deployment to Proxy | verbatim response |
 | 208 | E4 — Proxy to Tagger | `capture_record` |
 | 210 | E5 — Tagger to AuditStore | `tagged_interaction_record` |

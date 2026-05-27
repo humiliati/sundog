@@ -74,7 +74,7 @@
 
   <!-- S2: 104 -> 106 serialized prompt (204) - crosses boundary -->
   <line x1="178" y1="240" x2="558" y2="240" stroke="#000" stroke-width="1.4" marker-end="url(#arr4)"/>
-  <text x="368" y="234" font-size="9" text-anchor="middle" fill="#000" stroke="none">S2:  204  serialized prompt via public API  (E2)  —  CROSSES BOUNDARY 101</text>
+  <text x="368" y="234" font-size="9" text-anchor="middle" fill="#000" stroke="none">S2:  204  serialized prompt via documented input interface  (E2)  —  CROSSES BOUNDARY 101</text>
 
   <!-- S3: 106 -> 104 verbatim response (206) -->
   <line x1="560" y1="278" x2="180" y2="278" stroke="#000" stroke-width="1.4" marker-end="url(#arr4)"/>
@@ -115,9 +115,9 @@
   <text x="578" y="622" font-size="11" font-weight="bold" fill="#000" stroke="none">116</text>
 
   <!-- Footnote explaining why method claim sits on this graph -->
-  <text x="40" y="735" font-size="9" font-style="italic" fill="#000" stroke="none">All steps S1-S8 are performed by the apparatus 100. Deployment 106 lies outside 101 and contributes only verbatim public-API responses.</text>
+  <text x="40" y="735" font-size="9" font-style="italic" fill="#000" stroke="none">All steps S1-S8 are performed by apparatus 100. Deployment 106 lies outside 101 and contributes only documented-interface responses.</text>
   <text x="40" y="748" font-size="9" font-style="italic" fill="#000" stroke="none">No SDK install, log access, weight access, or instrumentation hook on 106 is required at any step.</text>
-  <text x="40" y="761" font-size="9" font-style="italic" fill="#000" stroke="none">Audit Store 110 retains every tagged_interaction_record for independent replay against the same model checkpoint.</text>
+  <text x="40" y="761" font-size="9" font-style="italic" fill="#000" stroke="none">Audit Store 110 retains tagged_interaction_records for reconstruction and repeat evaluation when version-accessible.</text>
 
   <text x="562" y="780" font-size="9" font-style="italic" text-anchor="end" fill="#000" stroke="none">Sheet 4 of 4</text>
 
