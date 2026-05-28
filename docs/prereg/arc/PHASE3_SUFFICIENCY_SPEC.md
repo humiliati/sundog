@@ -4443,6 +4443,34 @@ binding receipt is:
 > "Phase 3A has filed a stochastic per-task learner spec. No Branch A
 > receipt exists yet, and no sufficiency claim is admitted."
 
+### 2026-05-28 (PT) -- Codex (GPT-5) -- Phase 3A Metric Semantics And Quarantine Wiring Bugfix
+
+Justification: post-freeze runner review found two metric-semantics defects and
+one quarantine-wiring gap before any binding Branch A receipt:
+
+- `pixel_accuracy` gave overlap partial credit when predicted and target shapes
+  differed, but the inherited Pass C rule states that pixel accuracy is `0`
+  when shapes differ.
+- aggregate columns named `shape_exact_slot1_rate` and
+  `pixel_accuracy_best_mean` mixed any-slot shape and slot-1 pixel values,
+  respectively.
+- the primary quarantine assignment path did not make all pre-registered
+  Branch A labels reachable from the runner.
+
+Implementation impact: `docs/prereg/arc/phase3a_per_task_coord_mlp.py` is
+patched so pixel accuracy returns `0` on shape mismatch, slot-1 aggregate
+columns use slot-1 values, and `pixel_accuracy_best_mean` uses the best pixel
+accuracy across the two emitted slots. The patch also carries
+`predicted_boundary` through `per_instance.csv` so per-task summaries can retain
+the registered boundary label. Quarantine assignment now computes conditioning
+train exact rate, representation-level signature collisions, strict-signature
+color-quotient failures, and selected-seed stochastic instability so all
+pre-registered Branch A labels are represented in executable logic.
+
+Verdict impact: no Branch A receipt exists yet, so no verdict changes. The
+runner remains admitted only under the capped-probe-first rule from the Branch
+A Tooling Freeze-Marker amendment above.
+
 That language remains accurate after this freeze-marker commit; the
 spec is filed AND the tooling is admitted, but neither a probe-grade
 timing receipt nor a binding receipt exists yet.
