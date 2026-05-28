@@ -388,3 +388,17 @@ Current reflection status:
 
 Any Branch D move requires its own pre-registered spec, arena gate, learner or
 framing contract, receipt path, and public-language constraints.
+
+## Branch D Spec-Filed Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+Branch D has now started in `PHASE3D_DIFFERENT_FRAMING_SPEC.md`. The filed
+contract is `structured_edit_residual_v1`: model the output as an
+input-derived baseline canvas plus a residual edit mask and edit colors. The
+spec preserves the full-grid-control discipline by requiring `raw_grid_edit` to
+open a non-baseline arena before any `signature_palette_edit` sufficiency
+comparison.
+
+This addendum does not admit execution. Branch D remains in execution hold until
+runner tooling and a freeze-marker amendment are filed.

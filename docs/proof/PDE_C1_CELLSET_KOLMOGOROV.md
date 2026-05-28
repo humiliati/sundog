@@ -287,6 +287,14 @@ disintegration branch remains admissible at review.
   side: only flags fibers with substantial proxy-action disagreement.
 - **Coverage gate.** `S_pos = 0.50`. The verdict is interpreted only if
   at least half of the occupied bins have `n(b) >= n_min`.
+- **Vacuity gate.** `delta_proxy_min = 0.01`. The verdict is interpreted
+  only if the global `damp_fraction` lies in `[0.01, 0.99]`. Outside this
+  band the proxy selector is essentially constant on the entire sampled
+  support, every fiber is trivially action-consistent, and the strictness
+  predicate has no discriminative content — see
+  [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) section 5
+  vacuity-gate step. Outcomes outside the band file `DEFERRED_VACUITY`,
+  not a strictness positive.
 - **Action tie-break.** Prefer `no_op` (do not damp unless damping is the
   strict majority). Safety-conservative; matches the cell-set v0 § 3
   framing of `damp_low_band` as an intervention triggered only when
@@ -313,6 +321,8 @@ discipline.
   is **not** redefined here; this patch inherits it unchanged.
 - `K = 4`, `N = 16`, `G = 100`, `k_f = 4` from sections 1–2 are inherited
   unchanged.
+- `delta_proxy_min = 0.01` is the v0 default for the protocol's vacuity
+  gate; it is pre-registered here, not after lock execution.
 
 No locked figure from sections 1–6 is re-stated at a different value in
 this patch.
@@ -461,6 +471,63 @@ strictness-witness positive at this cell.
 - The pre-registered negative remains unadjudicated: it can be triggered
   (`PDE-C1-NEG-A` or `PDE-C1-NEG-B`), refuted, or left open by a future
   numerical run.
+
+## Lock Execution Disposition (2026-05-28)
+
+The v0 lock cell was executed on 2026-05-28 via
+[`scripts/pde_c1_kolmogorov_cell.py`](../../scripts/pde_c1_kolmogorov_cell.py)
+with the section 7 patch values. Receipt and manifest are at
+`results/proof/c1-kolmogorov-v0-lock/`. The harness completed in
+1464 seconds (~24 min) with `steps_per_second ≈ 1776` and produced a
+procedural `STRICTNESS_WITNESS_POSITIVE` under the verdict rule as
+written *before* the 2026-05-28 vacuity-gate amendment to the fiber
+protocol.
+
+### Honest reading
+
+- `damp_fraction = 0`: zero of 50,000 sample windows crossed
+  `E_max = 0.09765` in the look-ahead horizon.
+- `sample_energy_max = 0.09761 < e_max = 0.09765`: the post-burn-in
+  trajectory never reached the burn-in 95th percentile.
+- `burnin_energy_max - burnin_energy_min = 0.0002` (~0.2% of the mean):
+  the burn-in trajectory itself sits in a deeply relaxational regime
+  near the linearly stable laminar Kolmogorov solution at `G = 100`,
+  `k_f = 4`.
+- Bin distribution: 70% of samples (34,883 / 50,000) fall in a single
+  fiber bin; the next-largest holds 13% (6,310). The attractor is
+  concentrated near a fixed point.
+
+### Disposition under the amended verdict rule
+
+The fiber-protocol vacuity gate added 2026-05-28 (`delta_proxy_min =
+0.01`) re-reads this receipt as `DEFERRED_VACUITY`: the proxy selector
+is essentially constant on the sampled support, so the strictness
+predicate has no discriminative content. No verdict is filed against
+the v0 cell on this lock. The procedural `STRICTNESS_WITNESS_POSITIVE`
+in the harness output predates the amendment and is **superseded**;
+it is not promoted into the ledger as a positive.
+
+### Why this is not `PDE-C1-NEG-B`
+
+`PDE-C1-NEG-B` covers post-hoc retuning of pinned parameters in
+response to seeing an aggregation. The amended verdict rule is a
+methodology amendment that closes a logical-completeness gap in the
+protocol (a constant proxy can never separate fibers); it does not
+relax a pinned parameter to flip the receipt's interpretation. The
+new `delta_proxy_min = 0.01` is pre-registered for **all future v0+
+runs**, including any v0 re-run, and is not tuned against the
+specific damp_fraction observed here.
+
+### Bridge to v1
+
+The v0 cell is non-discriminative because 2D Kolmogorov flow at
+`G = 100`, `k_f = 4` is linearly stable. A cell-set v1 instance at
+`k_f = 2` (lower forcing-mode stability threshold, supercritical at
+the same Grashof number) is staged at
+[`PDE_C1_CELLSET_KOLMOGOROV_v1.md`](PDE_C1_CELLSET_KOLMOGOROV_v1.md);
+the harness exposes it as the `lock_v1` preset. v0 remains filed as
+a desk-auditable cell with an executed-and-deferred lock receipt;
+v1 is the discriminative-regime sibling, not a retune of v0.
 
 ## Status
 

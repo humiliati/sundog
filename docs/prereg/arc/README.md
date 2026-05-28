@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3A BRANCH A BINDING RECEIPT FILED -- `branch_a_full_grid_floor`; BRANCH D OPEN**.
+Status: **Phase 3D STRUCTURED EDIT RESIDUAL SPEC FILED; EXECUTION HOLD**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -84,6 +84,15 @@ distributions and two learner families (transformer, per-task coordinate
 MLP). The remaining admissible Phase 3 reopen path is
 PHASE3_5_REFLECTION Branch D (different framing). A future Branch D would
 need its own pre-registered spec, arena gate, and learner contract.
+
+Branch D is now filed at
+[`PHASE3D_DIFFERENT_FRAMING_SPEC.md`](PHASE3D_DIFFERENT_FRAMING_SPEC.md).
+It registers `structured_edit_residual_v1`, which models each output as an
+input-derived baseline canvas plus a residual edit mask and edit colors. The
+matched full-grid edit arm `raw_grid_edit` must open the non-baseline edit
+arena before any `signature_palette_edit` sufficiency comparison is licensed.
+Status: spec only; execution hold pending runner/wrapper/npm wiring,
+leak-check coverage, result ignore path, and freeze-marker amendment.
 
 ## Official Anchors
 
@@ -190,6 +199,12 @@ Checked **2026-05-28** against:
   unchanged across 6 distinct gitCommits / 2 distinct runner SHAs;
   `mixedCommitsAudit` recorded in the merged manifest). No
   signature_palette vs. raw_grid sufficiency comparison licensed.
+- [`PHASE3D_DIFFERENT_FRAMING_SPEC.md`](PHASE3D_DIFFERENT_FRAMING_SPEC.md)
+  -- Branch D structured edit/residual framing spec. It freezes
+  `structured_edit_residual_v1`, with `raw_grid_edit`,
+  `signature_palette_edit`, `signature_only_edit`, and `metadata_only_edit`
+  arms, a conditioning-selected baseline family, edit-mask/edit-color residual
+  learners, and a non-baseline arena gate. Status: spec only; execution hold.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,

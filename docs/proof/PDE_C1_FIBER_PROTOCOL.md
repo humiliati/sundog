@@ -76,6 +76,7 @@ It claims only a runnable predicate structure:
 | `\hat{pi}_bin(b)` | Majority proxy action in bin `b` over states with `n(b) >= n_min`. |
 | `delta_action` | Pre-registered minority-fraction threshold; a bin with minority fraction above this is flagged as fiber-incompatible. |
 | `S_pos` | Pre-registered minimum fraction of evaluated bins required before the verdict is interpreted (coverage gate). |
+| `delta_proxy_min` | Pre-registered lower bound on the proxy-action discrimination floor; if the global `damp_fraction` is outside `[delta_proxy_min, 1 - delta_proxy_min]`, the proxy is essentially constant and the predicate is non-discriminative (vacuity gate). |
 | `N_sample` | Pre-registered number of post-burn-in samples drawn from `mu_SRB`. |
 
 All symbols above are parameter **slots**. Their values are pinned in
@@ -183,17 +184,29 @@ Pre-registered, in this order:
 7. **Coverage gate.** Let `S_eval = |{ b : n(b) >= n_min }| /
    |{ b : n(b) >= 1 }|`. If `S_eval < S_pos`, the result is **deferred**
    for insufficient coverage; record and stop without verdict.
-8. **Verdict.**
+8. **Vacuity gate.** Compute the global proxy-action distribution:
+   `damp_fraction = (sum over samples of [\hat{pi}(u) == damp_low_band])
+   / N_sample`. If
+   `damp_fraction < delta_proxy_min` or
+   `damp_fraction > 1 - delta_proxy_min`,
+   the proxy selector is essentially constant on the entire sampled
+   support: every fiber is trivially action-consistent and the
+   strictness predicate has no discriminative content. Record as
+   **`DEFERRED_VACUITY`** and stop without verdict.
+9. **Verdict.**
    - If any evaluated bin has `m(b) > delta_action`, **file
-     `PDE-C1-NEG`** at this cell.
+     `PDE-C1-NEG-A`** at this cell.
    - Otherwise, the cell is a **strictness-witness positive**: under
      the proxy `\hat{pi}` and the registered binning, the fiber
-     criterion holds on the evaluated coverage.
+     criterion holds on the evaluated coverage *and* the proxy
+     selector exhibits non-trivial action discrimination on the
+     sampled support.
 
-The "deferred" branch in step 7 is structurally distinct from the
-filed-negative and filed-positive branches: it is the protocol's
-named way of refusing to interpret an under-sampled adjudication
-attempt, and it does **not** count as a positive.
+Both deferral branches in steps 7 and 8 are structurally distinct from
+the filed-negative and filed-positive branches: they are the protocol's
+named ways of refusing to interpret an under-sampled or
+non-discriminative adjudication attempt, and they do **not** count as a
+positive.
 
 ## 6. Support-Level Certificate (Bridge)
 
@@ -223,9 +236,9 @@ The protocol commits to the following non-negotiable order of
 operations, per the spec self-consistency rule
 ([`../SCIENTIFIC_CRITERIA.md`](../SCIENTIFIC_CRITERIA.md)):
 
-- `epsilon_K`, `h_K`, `n_min`, `delta_action`, `S_pos`, `N_sample`,
-  burn-in length, integration step, action tie-break order, lattice
-  bounding box, lattice alignment are pinned **before** step 3
+- `epsilon_K`, `h_K`, `n_min`, `delta_action`, `S_pos`, `delta_proxy_min`,
+  `N_sample`, burn-in length, integration step, action tie-break order,
+  lattice bounding box, lattice alignment are pinned **before** step 3
   (sampling).
 - Re-tuning any parameter after step 6 (aggregation) and re-running
   steps 7–8 counts as filing `PDE-C1-NEG-B` (cell-set drift /
@@ -245,6 +258,18 @@ The deferred-insufficient-coverage branch (step 7 of section 5) is
 re-running, with all other parameters held, is admissible iff the
 increase is pre-registered as a fall-back path before sampling.
 
+The deferred-vacuity branch (step 8 of section 5) is also **not**
+`PDE-C1-NEG-B`. It indicates the cell is in a non-discriminative
+regime — the proxy selector is constant on `mu_SRB`-support so the
+strictness predicate has no operational content. **No fall-back is
+admissible to escape a vacuity deferral on the same cell.** Relaxing
+`delta_proxy_min` post hoc to re-interpret a constant-proxy run as a
+strictness-witness positive files `PDE-C1-NEG-B` (the predicate was
+moved, not the data). Re-pinning to a discriminative regime
+(higher `G`, different `k_f`, alternative forcing) requires a *new
+cell-set instance* (e.g. v1), filed as a separate artifact rather
+than as a retune of the original cell.
+
 ## 8. What This Protocol Closes And Does Not Close
 
 **Closes:**
@@ -256,6 +281,11 @@ increase is pre-registered as a fall-back path before sampling.
   explicitly as a proxy with a pinned substitution procedure under
   reviewer redefinition. The cost-of-damping branch remains
   admissible but is not required for adjudication.
+- **Verdict-rule completeness gap (added 2026-05-28).** Section 5's
+  vacuity gate distinguishes a constant-proxy run from a
+  fiber-coherent run. Without it, a cell whose objective is trivially
+  satisfied by a single action would file a vacuous strictness-witness
+  positive.
 
 **Bridges (named, not closed here):**
 

@@ -48,6 +48,7 @@ class RunConfig:
     n_min: int
     delta_action: float
     s_pos: float
+    delta_proxy_min: float
     random_seed: int
     integrator: str
     signature_dimension: int
@@ -56,7 +57,11 @@ class RunConfig:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--preset", choices=["smoke", "lock", "fallback"], default="smoke")
+    parser.add_argument(
+        "--preset",
+        choices=["smoke", "lock", "fallback", "lock_v1", "fallback_v1"],
+        default="smoke",
+    )
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--write-samples", action="store_true", help="Write per-sample rows even for large runs.")
     parser.add_argument("--self-test", action="store_true", help="Run a tiny deterministic self-test and exit.")
@@ -73,11 +78,13 @@ def parse_args() -> argparse.Namespace:
 
 
 def build_config(args: argparse.Namespace) -> RunConfig:
-    # Cell-set v0 pinned values.
+    # Cell-set v0 / v1 pinned values. Cell-set v0 uses k_f = 4 (laminar at G=100,
+    # used to commission the harness and surface the vacuity gate). Cell-set v1
+    # re-pins k_f = 2 to enter the supercritical Kolmogorov-flow regime where
+    # the safety trigger is expected to exercise non-trivially.
     grid_size = 32
     n_modes = 16
     k_signature = 4
-    kf = 4
     forcing_amplitude = 1.0
     grashof = 100.0
     # Dimensionless normalization: G = forcing_amplitude / nu^2.
@@ -88,14 +95,25 @@ def build_config(args: argparse.Namespace) -> RunConfig:
     n_min = 30
     delta_action = 0.10
     s_pos = 0.50
+    delta_proxy_min = 0.01
     random_seed = 20260528
 
     if args.preset == "lock":
         burnin_steps = 100_000
         sample_count = 50_000
+        kf = 4
     elif args.preset == "fallback":
         burnin_steps = 100_000
         sample_count = 200_000
+        kf = 4
+    elif args.preset == "lock_v1":
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+    elif args.preset == "fallback_v1":
+        burnin_steps = 100_000
+        sample_count = 200_000
+        kf = 2
     else:
         # Smoke is intentionally not the registered cell. It exists to validate
         # the integrator, binning, and receipt plumbing under the repo's
@@ -104,6 +122,7 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         sample_count = 200
         sample_interval_steps = 10
         lookahead_steps = 100
+        kf = 4
 
     overrides = {
         "sample_count": args.sample_count,
@@ -140,6 +159,7 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         n_min=n_min,
         delta_action=delta_action,
         s_pos=s_pos,
+        delta_proxy_min=delta_proxy_min,
         random_seed=random_seed,
         integrator="pseudo_spectral_vorticity_semi_implicit_euler",
         signature_dimension=2 * k_signature * k_signature,
@@ -397,13 +417,23 @@ def summarize(bin_rows: list[dict], cfg: RunConfig) -> dict:
     no_op = sum(int(row["no_op_count"]) for row in bin_rows)
     damp = sum(int(row["damp_low_band_count"]) for row in bin_rows)
 
-    if cfg.preset != "lock" and cfg.preset != "fallback":
+    verdict_bearing_presets = {"lock", "fallback", "lock_v1", "fallback_v1"}
+    damp_fraction = damp / max(1, no_op + damp)
+    proxy_constant = (
+        damp_fraction < cfg.delta_proxy_min
+        or damp_fraction > 1.0 - cfg.delta_proxy_min
+    )
+    if cfg.preset not in verdict_bearing_presets:
         verdict = "SMOKE_ONLY"
         verdict_label = ""
         interpretable = False
     elif s_eval < cfg.s_pos:
         verdict = "DEFERRED_COVERAGE"
         verdict_label = ""
+        interpretable = False
+    elif proxy_constant:
+        verdict = "DEFERRED_VACUITY"
+        verdict_label = "proxy_selector_constant_on_sampled_support"
         interpretable = False
     elif incompatible:
         verdict = "PDE-C1-NEG-A"
@@ -489,10 +519,18 @@ def write_receipt(path: Path, manifest: dict) -> None:
         lines.append("Smoke-only run; no C1 negative or positive may be filed from this receipt.")
     elif r["verdict"] == "DEFERRED_COVERAGE":
         lines.append("Coverage gate deferred; the pre-registered fallback is one `N_sample = 200000` rerun.")
+    elif r["verdict"] == "DEFERRED_VACUITY":
+        lines.append(
+            "Proxy selector is essentially constant on the sampled support "
+            "(damp_fraction outside `[delta_proxy_min, 1 - delta_proxy_min]`); the "
+            "strictness predicate has no discriminative content. No verdict filed. "
+            "No fall-back is admissible on this cell; re-pinning to a discriminative "
+            "regime requires a new cell-set instance (e.g. v1)."
+        )
     elif r["verdict"] == "PDE-C1-NEG-A":
         lines.append("Fiber-incompatible evaluated bin found; file `PDE-C1-NEG-A` for this cell.")
     else:
-        lines.append("No evaluated bin crossed `delta_action`; file strictness-witness positive under the proxy.")
+        lines.append("No evaluated bin crossed `delta_action` and the proxy exhibited non-trivial action discrimination; file strictness-witness positive under the proxy.")
     lines.extend(["", "## Files", "", "- `manifest.json`", "- `bin-summary.csv`"])
     if c["sample_count"] <= 5_000:
         lines.append("- `sample-actions.csv`")
