@@ -128,6 +128,80 @@ sidecar level (e.g. a different `J` not based on low-band energy).
 - Criterion (c) named external PDE reviewer.
 - Attractor-support twin-state certificate.
 
+## Lock Execution Disposition (2026-05-28)
+
+The v2 lock cell was executed on 2026-05-28 via
+[`../../scripts/pde_c1_kolmogorov_cell.py`](../../scripts/pde_c1_kolmogorov_cell.py)
+with `--preset lock_v2`. Receipt and manifest at
+`results/proof/c1-kolmogorov-v2-lock/`. The harness completed in
+1336 seconds (~22 min) with `steps_per_second ≈ 1946` and reported a
+procedural `DEFERRED_COVERAGE` verdict.
+
+### Energy conservation broken — partial success
+
+The v1 disposition's diagnosis was correct: tripling Grashof broke the
+energy-conserved attractor.
+
+- `burnin_energy_min / max / mean = 0.79 / 4.69 / 1.13`. Burn-in spans
+  a 5.9× range — substantive chaotic excursions, not just transients.
+- `sample_energy_min / max / mean = 0.78 / 1.52 / 0.89`. Post-burn-in
+  itself has a ~95%-of-mean energy spread, qualitatively different
+  from v1's 13-decimal-locked constant.
+- `damp_low_band_count = 430`, `no_op_count = 49,570`. The safety
+  trigger actually fires — 430 of 50,000 sample windows cross
+  `E_max = 1.40`. `damp_fraction = 0.0086` is structurally non-zero.
+- The structural-vacuity precedence rule correctly does **not** fire.
+
+### Two new failure modes
+
+But v2 surfaces two issues v1 didn't reach:
+
+1. **Coverage collapse.** `occupied_bin_count = 45,103`,
+   `evaluated_bin_count = 0`, `S_eval = 0`. With 50,000 samples spread
+   across 45,103 bins, the average bin has ~1.1 samples; no bin
+   reaches `n_min = 30`. The pre-registered binning resolution at
+   `h_K ≈ 0.0148` is too fine for the attractor extent in 32-dim
+   signature space — the curse of dimensionality, not a methodological
+   bug.
+2. **Near-vacuity.** `damp_fraction = 0.0086 < delta_proxy_min = 0.01`.
+   Even if coverage cleared, the statistical vacuity gate would fire
+   (`DEFERRED_VACUITY` for proxy near-constancy on the sampled
+   support). The safety predicate is barely discriminative.
+
+### Disposition
+
+The procedural verdict `DEFERRED_COVERAGE` is honest at face value. The
+pre-registered fall-back (`N_sample = 200,000`) would give ~4.4
+samples/bin on average — still well below `n_min = 30` for most bins
+— so it would almost certainly defer again. The deeper diagnosis is
+that v2's regime is *too* discriminative-by-binning: the attractor
+spreads across more of signature space than the fixed `h_K` can
+resolve at 50k–200k samples.
+
+This is not a `PDE-C1-NEG-B` retune candidate. The cell-set v0/v1/v2
+binning prescription `h_K = ε_K / √d_K` adapts to `E_max` but not to
+attractor *extent*; the prescription is what it is. A coverage
+failure on a high-dimensional attractor is an honest receipt under
+the pinned methodology.
+
+### Bridge to v3
+
+v0 was sub-critical (laminar). v1 was super-critical but
+energy-conserved. v2 broke conservation but landed in a curse-of-
+dimensionality coverage regime. **v3 backs off the Grashof number
+to `G = 200`** — between v1's invariant set and v2's high-dimensional
+chaos — looking for the sweet spot where the attractor is
+discriminative *and* bin-resolvable at the pre-registered budget.
+Staged at
+[`PDE_C1_CELLSET_KOLMOGOROV_v3.md`](PDE_C1_CELLSET_KOLMOGOROV_v3.md);
+harness exposes `--preset lock_v3`.
+
+If v3 also fails for coverage or near-vacuity, the natural next move
+is **not** another G knob — it is to consider a methodology
+amendment that lets `h_K` adapt to attractor extent (or a smaller K
+that reduces the signature space dimensionally). Both are
+substantive changes warranting their own sign-off.
+
 ## 6. Status
 
 - **Drafted.** 2026-05-28.
@@ -135,8 +209,12 @@ sidecar level (e.g. a different `J` not based on low-band energy).
   audit the regime change without running code.
 - **Unreviewed.** No external PDE reviewer has signed off on the
   `G = 300` choice as a faithful symmetry-breaking instance.
-- **Unrun.** The `lock_v2` preset is present in the harness; no
-  execution has been attempted.
+- **Executed.** v2 lock ran 2026-05-28 in 1336 sec (~22 min); receipt
+  at `results/proof/c1-kolmogorov-v2-lock/`.
+- **Disposition.** Procedural `DEFERRED_COVERAGE` recorded honestly;
+  diagnosis is two-fold (coverage collapse + near-vacuity on
+  high-dimensional chaos). v3 at `G = 200` is the next cell-set
+  instance to test the discriminative-and-resolvable hypothesis.
 
 ## 7. Cross-references
 

@@ -67,6 +67,8 @@ def parse_args() -> argparse.Namespace:
             "fallback_v1",
             "lock_v2",
             "fallback_v2",
+            "lock_v3",
+            "fallback_v3",
         ],
         default="smoke",
     )
@@ -132,6 +134,16 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         sample_count = 200_000
         kf = 2
         grashof = 300.0
+    elif args.preset == "lock_v3":
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 200.0
+    elif args.preset == "fallback_v3":
+        burnin_steps = 100_000
+        sample_count = 200_000
+        kf = 2
+        grashof = 200.0
     else:
         # Smoke is intentionally not the registered cell. It exists to validate
         # the integrator, binning, and receipt plumbing under the repo's
@@ -446,6 +458,8 @@ def summarize(bin_rows: list[dict], cfg: RunConfig) -> dict:
         "fallback_v1",
         "lock_v2",
         "fallback_v2",
+        "lock_v3",
+        "fallback_v3",
     }
     damp_fraction = damp / max(1, no_op + damp)
     proxy_constant = (
