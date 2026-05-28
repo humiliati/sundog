@@ -2921,3 +2921,126 @@ Still forbidden:
 - any statement that the three existing Phase 3 receipts prove or disprove
   signature sufficiency;
 - any Branch A/B/C claim before `branch_adjudication.md` is filed and hashed.
+
+### 2026-05-28 -- Blackwell Runner Backend Freeze
+
+Author: Codex, from operator-provided minimal-friction setup.
+
+Justification: the Blackwell unpause spec reserved the learner family and
+command shape but did not choose the concrete training backend. This amendment
+freezes the hybrid implementation path: Python/PyTorch owns the actual model
+and receipt generation; Node remains a thin npm-compatible orchestration shell.
+
+Verdict impact: runner scaffolding is admitted for smoke/probe work only. This
+amendment does not admit a full training receipt, does not change the three
+filed deterministic-low-capacity verdicts, and does not permit Branch A/B/C
+language before the Python runner emits and hashes `branch_adjudication.md`.
+
+#### Files And Commands
+
+Primary implementation:
+
+```text
+docs/prereg/arc/phase3_decoder.py
+```
+
+Thin npm wrapper:
+
+```text
+scripts/arc-phase3-blackwell-sufficiency-v1.mjs
+```
+
+Reserved command:
+
+```powershell
+npm run arc:phase3:blackwell:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-blackwell-sufficiency-v1
+```
+
+The wrapper invokes `python` by default. Operators may set `SUNDOG_PYTHON` to a
+specific interpreter path without changing the receipt command semantics; the
+Python runner records `sys.executable`, Python version, Torch version, and
+platform in `manifest.json`.
+
+#### Exact Backend And Model Spec
+
+The admitted backend is local CPU PyTorch. The first supported local runtime
+observed before this amendment was:
+
+```text
+Python 3.14.4
+torch 2.11.0+cpu
+```
+
+The runner must record the actual runtime in every manifest; matching these
+versions is not required for a smoke/probe receipt, but any full receipt must
+name version differences in its freeze-marker note.
+
+Frozen model and training details:
+
+| field | value |
+| --- | --- |
+| learner version | `blackwell_task_decoder_v1` |
+| backend | Python/PyTorch, CPU |
+| layers | `2` transformer encoder layers |
+| `d_model` | `128` |
+| attention heads | `4` |
+| feed-forward width | `256` |
+| dropout | `0.10` |
+| token order | repeated `demo_input`, `demo_output`, then `query_input`; pad to `11` tokens |
+| token types | `demo_input`, `demo_output`, `query_input`, `pad` |
+| output heads | height class `1..30`, width class `1..30`, `30x30x10` color logits |
+| loss | cell cross entropy inside target shape + `0.25` height CE + `0.25` width CE |
+| optimizer | AdamW |
+| AdamW betas | `(0.9, 0.999)` |
+| AdamW eps | `1e-8` |
+| weight decay | `0.0001` |
+| learning rate | `0.0003` |
+| learning-rate schedule | constant |
+| batch size | `16` |
+| max epochs | `400` for full run |
+| early stop | patience `40` epochs |
+| seed slate | `20260528`, `20260529`, `20260530`, `20260531`, `20260601` |
+| weight init | Xavier-uniform linear weights, zero linear biases, normal embedding weights `mean=0,std=0.02`, unit LayerNorm weights, zero LayerNorm biases |
+| determinism | Python RNG and Torch RNG seeded; Torch deterministic algorithms requested with warn-only behavior; Torch threads set to `1` |
+| top-2 rule | top cell-logit grid, plus a deterministic single-cell margin-flip candidate |
+
+For grid-scorable arms, validation early stopping ranks by validation
+`grid_exact_any_slot`, with validation loss as tie-break. For
+`signature_only` and `metadata_only`, where Pass A does not admit direct
+exact-grid scoring, validation ranks by `rep_exact_any_slot`, with validation
+loss as tie-break. This is a backend operationalization of the earlier
+Pass C rule, not a new verdict metric.
+
+#### Receipt Surface
+
+The Python runner must emit the artifacts already required by the Blackwell
+unpause spec and additionally emits the operator-requested umbrella receipt:
+
+```text
+phase3_receipt.json
+```
+
+`phase3_receipt.json` contains the manifest, selected-seed ranking, score
+rows, per-task rows, residual payloads, and the branch decision. The markdown
+summary remains:
+
+```text
+branch_adjudication.md
+```
+
+The first admitted uses are:
+
+```powershell
+npm run arc:phase3:blackwell:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-blackwell-sufficiency-v1 --dry-run --allow-dirty
+```
+
+and a capped timing probe:
+
+```powershell
+npm run arc:phase3:blackwell:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-blackwell-sufficiency-v1-probe --probe-only --probe-epochs 5 --allow-dirty
+```
+
+If the probe extrapolates the full five-seed run above the repo's ten-minute
+rule, the full command must be staged for the operator instead of run inline,
+with measured seconds/epoch and projected wall clock recorded in the next
+receipt note.
