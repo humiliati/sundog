@@ -80,6 +80,8 @@ code, experiments, prior theorem materials, and application bridges.
 - [Sundog vs. P-vs-NP roadmap](SUNDOG_V_P_V_NP.md): bounded
   alignment-verification bridge asking whether compact signatures can verify
   safe operating envelopes more cheaply than safe policies can be found.
+- [P-vs-NP lit-pass memo](P_V_NP_LITPASS_MEMO.md): citation spine and
+  prior-art gap map for promise-bounded verifier scaffolding.
 - [Sundog Capset ledger](SUNDOG_V_CAPSET.md): staging ledger coupling
   Sundog's apparatus to the 2026 OpenAI unit-distance disproof. Evaluator
   front + substrate-analogue horizon; cap-set workbench is the one

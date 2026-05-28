@@ -386,15 +386,20 @@ and filed `compact_full_grid_control_floor`, also with zero exact matches.
 Compact-7 is qualitatively distinct because shape exact reached `1.000` while
 palette exact remained `0.000`; per-instance residuals show dominant-background
 predictions with at most two slot-1 colors even when targets use 3--9 colors.
-That failure is named **dominant-color mode collapse**. With V1, V2, and
-compact-7 all floored, Branch B is closed for this learner family. The remaining
-Phase 3 reopen paths are Branch A, a stochastic per-task learner, or Branch D,
-a different framing such as structured edit or residual prediction. Branch A
-spec work is now filed as `per_task_coord_mlp_v1`: a stochastic per-instance
-coordinate MLP trained from scratch on each held-out instance's conditioning
-demonstrations, with the raw-grid arm required to open the arena before any
-signature sufficiency comparison. Execution remains held until runner wiring
-and a freeze-marker amendment are committed.
+That failure is named **dominant-color mode collapse**. Branch A then filed
+`per_task_coord_mlp_v1`, a stochastic per-instance coordinate MLP trained from
+scratch on each held-out instance's conditioning demonstrations. Its 20-shard
+binding receipt returned **`branch_a_full_grid_floor`**: `raw_grid_per_task`
+scored zero exact tasks on both held-out lanes, so no
+`signature_palette_per_task` vs. `raw_grid_per_task` sufficiency comparison is
+licensed. The failure character is **conditioning starvation +
+shape-generalisation failure**, distinct from V1/V2's noise-dominated failure
+and compact-7's dominant-color mode collapse. Four full-grid-control receipts
+(V1, V2, compact-7, Phase 3A) now agree on the held-out exact-grid floor across
+two task distributions and two learner families. Branches A, B, and C are closed
+in their filed learner families; Branch D, a different framing such as structured
+edit or residual prediction, is the only remaining admissible Phase 3 reopen
+path.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 
