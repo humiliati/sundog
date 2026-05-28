@@ -20,6 +20,12 @@ Bridge scoping:
 - [`REPRESENTATION_BRIDGE_NOTES.md`](REPRESENTATION_BRIDGE_NOTES.md) -
   resolves the v0.3h-D3 vs Riemann-Z₂ admissibility question for Probe 01.
 
+Front-A reading:
+
+- [`FRONT_A_FUNCTIONAL_EQUATION_READING.md`](FRONT_A_FUNCTIONAL_EQUATION_READING.md)
+  - draft reading note on functional-equation reflection as a receipt scaffold
+  for smoothed explicit formulae.
+
 Probe specs:
 
 - [`PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md`](PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md)
@@ -48,5 +54,6 @@ Current state:
 - Lit-pass filed: 2026-05-28.
 - Bridge admission (Path (i) Z₂-descent) selected: 2026-05-28.
 - Probe 01 v1 Path (i) receipt filed: 2026-05-28.
+- Front-A functional-equation reading note drafted: 2026-05-28.
 - Front A is design-admitted under reduced apparatus (Z₂-descent).
 - Front B is horizon only.

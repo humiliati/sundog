@@ -25,6 +25,8 @@ Status: drafting. Lit-pass and bridge scoping landed 2026-05-28; see
 [`riemann/REPRESENTATION_BRIDGE_NOTES.md`](riemann/REPRESENTATION_BRIDGE_NOTES.md).
 Probe 01 v1 has one Path (i) parity-decomposition receipt filed at
 [`riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md).
+The first Front-A reading note is drafted at
+[`riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md`](riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md).
 
 ## Claim Boundary
 
@@ -230,7 +232,8 @@ Probe spec:
   different physical / algebraic categories with no published coupling; risk
   of producing a Front-A miscalibration receipt is high. Hold until Probe 01
   + bridge notes land and reconsider whether to void or replace with a
-  cleaner Front-A reading note.
+  cleaner Front-A reading note. First replacement draft filed at
+  [`riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md`](riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md).
 - **External review path:** would require both an n-body dynamicist (Simó /
   Moeckel / Chenciner tradition) and an analytic number theorist; cross-domain
   review is itself a cost flag.
@@ -347,6 +350,9 @@ These remain horizon until receipts exist.
 - [`docs/riemann/REPRESENTATION_BRIDGE_NOTES.md`](riemann/REPRESENTATION_BRIDGE_NOTES.md)
   - bridge scoping resolving the v0.3h-D3 vs Riemann-Z₂ admissibility question
   for Probe 01.
+- [`docs/riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md`](riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md)
+  - draft Front-A reading note: functional-equation reflection as a receipt
+  scaffold for smoothed explicit formulae.
 - [`docs/prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md)
   - initial domain and admission lock.
 - [`docs/riemann/PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md`](riemann/PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md)

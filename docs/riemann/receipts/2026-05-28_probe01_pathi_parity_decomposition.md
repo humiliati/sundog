@@ -63,10 +63,28 @@ parity-decomposition receipt but not a v0.3h structural-zero receipt.
 | Pairs analyzed | `N - 1` | `4999` | pass |
 | Mean unfolded spacing | report-only | `1.0000184725911547` | report |
 | Median unfolded spacing | report-only | `0.9604449773098614` | report |
-| Max reflection residual | <= `1e-12` | `0` | pass |
-| RMS spacing sign-component | <= `1e-12` | `0` | pass |
+| Max reflection residual | <= `1e-12` | `0` | pass; identity-zero by construction |
+| RMS spacing sign-component | <= `1e-12` | `0` | pass; identity-zero by construction |
 | RMS signed-height component | report-only | `0.6097931805142922` | report |
 | Quarantine count | `0` for clean run | `0` | pass |
+
+## v1.1 Audit Clarification
+
+The two zero-valued residual rows above are not empirical near-zero
+measurements. They are identity-zero by construction under the registered Path
+(i) feature map.
+
+For each consecutive pair `(gamma_i, gamma_{i+1})`, the mirrored pair
+`(-gamma_{i+1}, -gamma_i)` has the same gap and the same absolute center.
+Because the unfolding density in the runner is a function of `|center|`, the
+reflected unfolded spacing equals the original unfolded spacing algebraically.
+Thus `reflection_residual = |x - x| = 0` and the spacing sign-component is also
+zero term-by-term. The only nonzero odd-sector content in this run is
+`heightOdd = center / maxHeight`, i.e. the signed height coordinate itself.
+
+This tightens the verdict: Probe 01 v1 is a clean documented null /
+vacuity-boundary receipt for `(gap, |center|)` features under Path (i), not an
+empirical discovery of a hidden parity law.
 
 ## Falsifier Disposition
 
@@ -81,7 +99,8 @@ parity-decomposition receipt but not a v0.3h structural-zero receipt.
 
 ## Verdict
 
-Bounded positive receipt under Path (i): parity-decomposition receipt.
+Bounded receipt under Path (i): parity-decomposition receipt with an
+identity-zero / vacuity-boundary clarification.
 
 Spacing-derived features are reflection-even inside the registered window. The
 nonzero sign sector is only the signed-height carrier created by including
