@@ -64,6 +64,19 @@ List files and hashes:
 | Coverage rate | | | |
 | Margin slack | | | |
 
+## Certificate Integrity
+
+Use this block when the slate includes source-bound certificate fields.
+
+| Check | Registered behavior | Observed value | Pass/fail/quarantine |
+| --- | --- | --- | --- |
+| Missing trace commitment | quarantine | | |
+| Duplicated trace id | quarantine | | |
+| Source hash mismatch | quarantine | | |
+| Derived-field hash mismatch | quarantine | | |
+| Stale transform version | quarantine | | |
+| Field-only analytical edit | quarantine | | |
+
 ## Calibration Insulation
 
 | Check | Result | Notes |
