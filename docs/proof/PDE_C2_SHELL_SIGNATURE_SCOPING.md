@@ -1,0 +1,360 @@
+# PDE C2 — Shell-Model Signature Detector Scoping
+
+> Proof-track scoping document for the PDE-substrate empirical leg of
+> [`COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md)
+> Phase 4 (sibling to the three-body measured leg, not a replacement).
+> Status: drafted, unreviewed, unrun, 2026-05-28. Commissioned from
+> [`SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md) Candidate 2.
+> This document pins research object, model commitments, channel
+> taxonomy, baselines, task, two-sided negative, and promotion path.
+> It does **not** instantiate a cell set; the cell-set v0 is a deferred
+> follow-up artifact, in parallel to the C1 staging
+> ([`PDE_DETERMINING_MODES_POSTULATE1.md`](PDE_DETERMINING_MODES_POSTULATE1.md)
+> → [`PDE_C1_CELLSET_KOLMOGOROV.md`](PDE_C1_CELLSET_KOLMOGOROV.md)).
+
+## Entry And Gate
+
+This scoping enters from the Navier–Stokes ledger's Front B:
+
+> A Sundog-style signature derived from shell-model trajectories
+> detects imminent intermittent bursts inside a pre-registered
+> operating envelope, with regret → 0 against an oracle baseline and
+> bounded-away-from-zero outside the envelope (matched-seed).
+
+The pre-registered negative is **two-sided** and quoted verbatim from
+[`SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md) Candidate 2:
+
+> (a) If the signature detector's burst-detection lead-time and
+> false-positive rate are not strictly inside the Pareto frontier of
+> the matched-budget baselines on the pre-registered cell set,
+> signatures are vacuous on shell models — record and stop.
+> (b) If signatures match baselines on the registered cell set but
+> the cell set was the entire span, the result is over-fit to the
+> data — record as Front-B vacuity.
+
+Negative-receipt labels: `PDE-C2-NEG-A` for (a), `PDE-C2-NEG-B` for
+(b). These are introduced here so a future numerical run files them
+under the same label the ledger expects.
+
+## Claim Boundary
+
+This scoping does **not** claim:
+
+- a solution to the Navier–Stokes Millennium problem;
+- that shell models reproduce NSE blow-up structure;
+- that path signatures outperform DMD, critical-slowing-down,
+  lacunarity, or Rényi-entropy detectors on any cell — that is the
+  experimental question, not the position;
+- that hidden self-similarity coordinates are a Sundog invention —
+  they are due to Mailybaev 2022
+  ([arxiv 2201.04005](https://arxiv.org/abs/2201.04005));
+- that a shell-model positive result would extend to full
+  2D-perturbed or 3D small-data NSE without further work — Front-B
+  reach is named in the ledger as a separate failure mode.
+
+It claims only a pin on the empirical question and the
+audit surface that will adjudicate it:
+
+1. shell models supply a laptop-tractable substrate where
+   intermittency rhymes with NSE near-singular dynamics;
+2. a signature detector on registered channels has a well-posed
+   matched-budget comparison against four off-the-shelf baselines;
+3. the comparison either lands strictly inside the Pareto frontier,
+   fails as (a), or fails as (b).
+
+All literature citations live in
+[`../NAVIERSTOKES_LITPASS_MEMO.md`](../NAVIERSTOKES_LITPASS_MEMO.md);
+this scoping references them by pointer.
+
+## Research Object
+
+> Let `u_n(t) ∈ C` for `n = 1, ..., N_shells` be Sabra shell-model
+> amplitudes on a geometric wavenumber ladder `k_n = k_0 λ^n` with
+> viscosity `ν`, deterministic large-scale forcing on shell 1, and
+> standard nonlinear coupling. Let `Φ_S : { trajectory history } →
+> R^d` be a path-signature feature derived from a fixed channel set
+> of the trajectory (channel set defined below). The pre-registered
+> binary task `J_burst`: at each query time `t`, predict whether an
+> intermittent burst occurs in the window `(t, t + τ_burst]`, where
+> a burst is defined as `max_n |u_n(s)|² > E_burst` for some
+> `s ∈ (t, t + τ_burst]`. Compare a `Φ_S`-based detector against
+> matched-budget DMD, critical-slowing-down, recurrence lacunarity,
+> and Rényi-entropy detectors on a pre-registered cell set, with
+> matched-seed evaluation, on the Pareto frontier of lead-time vs.
+> false-positive rate.
+
+The exact values of `N_shells`, `λ`, `ν`, `τ_burst`, `E_burst`, and
+the signature truncation depth are **deferred to the cell-set v0**
+in parallel with the C1 staging
+([`PDE_C1_CELLSET_KOLMOGOROV.md`](PDE_C1_CELLSET_KOLMOGOROV.md)). The
+scoping pins their *roles* in the predicate, not their values.
+
+## Local Symbols
+
+| Symbol | Definition |
+| --- | --- |
+| `u_n(t)` | Sabra shell-model amplitude at shell `n` and time `t`. |
+| `N_shells` | Number of shells in the truncation. Pinned in cell-set v0. |
+| `k_n = k_0 λ^n` | Geometric wavenumber ladder; canonical `λ = 2`. |
+| `T_n(t)` | Inter-shell energy transfer at shell `n`. |
+| `χ_n(t)` | Hidden self-similarity coordinate at shell `n` per [arxiv 2201.04005](https://arxiv.org/abs/2201.04005). |
+| `Φ_S` | Signature map from a trajectory window to `R^d`; truncation depth `D` pinned in cell-set v0. |
+| `F_S` | σ-algebra generated by `Φ_S` (parallel to `F_K` of C1). |
+| `J_burst` | Pre-registered binary burst-prediction objective at horizon `τ_burst`. |
+| `E_burst` | Pre-registered exceedance threshold on `max_n |u_n|²`. Pinned in cell-set v0. |
+| `τ_burst` | Pre-registered look-ahead horizon. Pinned in cell-set v0. |
+| `B(t)` | Ground-truth binary burst indicator at time `t` (computed from the simulation). |
+
+## Model Commitments
+
+**Sabra primary; GOY cross-check.** The headline cells run on the
+Sabra shell model (Mailybaev tradition; cleaner statistical
+properties; recent hidden-self-similarity literature is Sabra-anchored).
+A *robustness subset* of the headline cells re-runs on the GOY shell
+model with the same channel set and the same baseline configuration,
+to guard against the "works on this specific model" critique. The GOY
+cross-check is not required to land at the same Pareto position; it
+is required to land on the same *side* of the pre-registered negative.
+
+Both models are simulated under standard published numerical schemes
+(reviewer-checkable; the schemes are not Sundog-original). All concrete
+numerics (`N_shells`, `λ`, `ν`, forcing amplitude, integration step,
+warm-up time) are pinned in the cell-set v0.
+
+## Channel Taxonomy
+
+**Tiered channel set, minimal headline, ablate up.** The headline
+detector is reported on the minimal channel set; richer channel sets
+are reported as explicit ablation cells.
+
+**Tier 0 (headline).** Shell-wise log-energy:
+`c⁰_n(t) = log(|u_n(t)|² + ε)` for `n = 1, ..., N_shells`.
+
+**Tier 1 (ablation A).** Tier 0 + inter-shell energy transfers
+`T_n(t)`.
+
+**Tier 2 (ablation B).** Tier 1 + hidden self-similarity coordinates
+`χ_n(t)` per Mailybaev 2022.
+
+The signature `Φ_S` is computed on the chosen tier's channel vector
+over a rolling trajectory window of fixed length (window length and
+sampling rate pinned in cell-set v0). Signature truncation depth `D`
+is pinned per tier in the v0; matched-budget rules below enforce that
+deeper signatures do not get a free parameter-count advantage.
+
+Each tier produces a separate ablation result. The headline claim is
+Tier 0; Tier 1 and Tier 2 are interpretation cells, not headline.
+
+## Baselines (Matched Budget)
+
+Four off-the-shelf regime-transition / precursor-detection methods,
+each in their canonical form (citations in
+[`../NAVIERSTOKES_LITPASS_MEMO.md`](../NAVIERSTOKES_LITPASS_MEMO.md)
+Bonus Competitor track):
+
+1. **DMD / Koopman.** Spectral mode decomposition on the same
+   trajectory window the signature uses.
+2. **Critical slowing down.** Variance and autocorrelation of a
+   pre-registered scalar (default: total energy `Σ_n |u_n|²`).
+3. **Recurrence lacunarity.** Recurrence-plot-derived multiscale
+   measure.
+4. **Rényi entropy.** Order-q entropy of a coarse-grained trajectory
+   embedding.
+
+**Matched-budget rule.** Each baseline gets:
+
+- the *same* trajectory data and matched-seed train/val/test splits as
+  the signature detector;
+- a hyperparameter search of *equal* compute budget (wall-clock or
+  trial count, pinned in cell-set v0);
+- a trainable parameter count *not strictly less than* the signature
+  detector's at the chosen tier.
+
+The matched-budget rule is enforced *before* any held-out evaluation,
+not after. A baseline that under-performs at smaller parameter count
+does not "lose" — the budget is normalised first.
+
+## Task Definition
+
+**Objective `J_burst`.** Binary classification: predict
+`B̂(t) ∈ {0, 1}` where `B(t) = 1` iff
+`max_n |u_n(s)|² > E_burst` for some `s ∈ (t, t + τ_burst]`.
+
+**Evaluation surface.** The Pareto frontier of *lead-time* and
+*false-positive rate*:
+
+- **Lead-time.** Mean of `(s* − t)` over true positives, where `s*` is
+  the first `s ∈ (t, t + τ_burst]` with `|u_n|² > E_burst`.
+- **False-positive rate.** Fraction of `B(t) = 0` query times where
+  `B̂(t) = 1`.
+
+A detector strictly *inside* the matched-budget Pareto frontier of
+the four baselines wins the comparison. A detector on the frontier
+ties; outside the frontier loses, filing `PDE-C2-NEG-A`.
+
+The decision threshold (operating point) is pinned in the cell-set v0
+*before* held-out evaluation. Sliding the operating point post hoc
+counts as filing `PDE-C2-NEG-B`.
+
+## Pre-Registered Cell Set (Sketch — v0 Pending)
+
+The cell-set v0 follow-up artifact will pin:
+
+1. **Headline cell.** `N_shells`, `λ`, `ν`, forcing amplitude,
+   `τ_burst`, `E_burst`, sampling rate, window length, train/val/test
+   split (matched-seed), operating point.
+2. **Tier ablation cells.** One cell each for Tier 0 (headline),
+   Tier 1, Tier 2.
+3. **Held-out Re extrapolation cell.** A `ν`-shifted variant the
+   detectors are *not* trained on, audited to detect overfitting that
+   would file `PDE-C2-NEG-B`.
+4. **GOY cross-check cells.** Sabra Tier 0 headline cell re-run on
+   the GOY shell model with the same channel set and matched budget.
+5. **Operating envelope cells.** A small grid of `(ν, forcing
+   amplitude)` cells inside and outside the envelope on which the
+   detector is meant to be informative. Outside the envelope, regret
+   must be bounded away from zero (Coarse-Graining Phase 4 idiom).
+6. **Compute budget per cell.** Hyperparameter-search trial count and
+   wall-clock cap per baseline.
+
+Cells are *pre-registered before any held-out evaluation is
+interpreted*. Adding cells post hoc that move the verdict counts as
+`PDE-C2-NEG-B`. Removing cells post hoc that move the verdict counts
+as `PDE-C2-NEG-B`.
+
+## Pre-Registered Negative (Verbatim, Two-Sided)
+
+> (a) If the signature detector's burst-detection lead-time and
+> false-positive rate are not strictly inside the Pareto frontier of
+> the matched-budget baselines on the pre-registered cell set,
+> signatures are vacuous on shell models — record and stop.
+> (b) If signatures match baselines on the registered cell set but
+> the cell set was the entire span, the result is over-fit to the
+> data — record as Front-B vacuity.
+
+**File label.** `PDE-C2-NEG-A` for (a), `PDE-C2-NEG-B` for (b). Both
+labels are filed in the ledger and in the cell-set v0 results once
+adjudicated.
+
+**Re-framing rule (inherited from the C1 sidecar).** If
+[`PDE_DETERMINING_MODES_POSTULATE1.md`](PDE_DETERMINING_MODES_POSTULATE1.md)
+returns `PDE-C1-NEG`, the C2 run may still proceed as a
+*turbulence-signature detector* workbench, but its results may **not**
+be framed as evidence for a determining-modes / Postulate-1 coupling.
+This is the standing constraint from the C1 sidecar's
+"Equivalence / Named-Negative Regimes" section.
+
+## Promotion Path
+
+C2 leaves the ledger when **all four** ledger promotion criteria hold:
+
+- **(a) Front-B vacuity rebuttal.** Either the matched-budget
+  comparison lands strictly inside the Pareto frontier on the
+  pre-registered cell set, or the result is filed as a clean
+  `PDE-C2-NEG-A` / `PDE-C2-NEG-B` (a clean negative also closes the
+  candidate, just on the other side of the ledger).
+- **(b) Runnable Phase-0 deliverable.** The cell-set v0 artifact is
+  filed and desk-auditable; the runnable script for one headline cell
+  exists and reproduces on a reviewer's machine.
+- **(c) External review path.** A practicing shell-model researcher
+  (Mailybaev / Biferale / Frisch tradition) is named at promotion and
+  has confirmed the model setup, channel set, baseline choices, and
+  matched-budget rule are not Sundog-favouring.
+- **(d) Pre-registered failure boundary.** Closed by the cell-set v0
+  with the two-sided negative quoted above.
+
+Order of operations:
+
+1. **This scoping** (closes part of (a) at the position level, names
+   (c) lineage).
+2. **Cell-set v0 follow-up** (closes (d); supplies concrete numerics
+   for (b)).
+3. **Desk audit** (reviewer reads scoping + cell-set v0; rejects,
+   amends, or signs off).
+4. **Numerical run** (executes baselines and the signature detector
+   on the registered cells; adjudicates the negative).
+5. **Promotion or named-negative filing.**
+
+No numerical run is interpreted as a verdict before step 3 lands.
+
+## Cross-File Consequences
+
+If this scoping plus the eventual cell-set v0 plus the numerical run
+lands a clean positive:
+
+- update [`COARSE_GRAINING_PROOF_ROADMAP.md`](../COARSE_GRAINING_PROOF_ROADMAP.md)
+  Phase 4 with a PDE-substrate sibling result (parallel to the
+  three-body measured leg), pending external review;
+- update [`SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md)
+  Promotions with Candidate 2 as a reviewed Front-B result;
+- decide whether Candidate 3 (PINN diagnostic head) is now unblocked
+  and whether Candidate 4 (full PDE signatures) should be reopened.
+
+If this scoping plus the eventual cell-set v0 plus the numerical run
+lands `PDE-C2-NEG-A` or `PDE-C2-NEG-B`:
+
+- file the named negative in the Navier–Stokes ledger;
+- do not deploy a public shell-model signature workbench;
+- do not use the shell-model result as evidence for Front-B reach;
+- treat Candidate 4 as deferred indefinitely (the cheaper sibling
+  already failed; the more expensive one inherits no head start).
+
+## External Review Path
+
+Promotion requires a practicing shell-model researcher familiar with
+intermittency, hidden self-similarity, instanton importance sampling,
+or shell-model machine-learning closures to confirm:
+
+1. the Sabra primary + GOY cross-check commitment is faithful to the
+   community's robustness expectations;
+2. the channel taxonomy is not Sundog-favouring (Tier 0 minimal,
+   Tier 1/2 explicit ablations);
+3. the matched-budget rule is enforced before evaluation, not after;
+4. the cell set (once v0 lands) is a faithful operating-envelope
+   pre-registration, not a curated favourable slice.
+
+Until that review is complete, the artifact status is **drafted
+scoping**.
+
+## Exit Status
+
+- **Drafted.** 2026-05-28.
+- **Desk-auditable at the scoping level.** A reviewer can read this
+  file end-to-end and audit the *position*, the *predicate shape*,
+  and the *negative-receipt structure* without running code.
+- **Unreviewed.** No external shell-model reviewer has signed off.
+- **Cell-set v0 deferred.** All concrete numerics (`N_shells`, `λ`,
+  `ν`, `τ_burst`, `E_burst`, signature truncation depth `D`, sampling
+  rate, window length, operating point, hyperparameter-search budget)
+  remain to be pinned in the v0 follow-up.
+- **Unrun.** No numerical execution of the baseline or signature
+  detector has been attempted.
+
+Promotion status: **blocked.** This scoping closes part of criterion
+(a) at the position level and names the lineage for criterion (c).
+Criterion (b) is partially staged (the runnable surface is named but
+not pinned); criterion (d) waits on the cell-set v0.
+
+## Cross-references
+
+- [`PDE_DETERMINING_MODES_POSTULATE1.md`](PDE_DETERMINING_MODES_POSTULATE1.md)
+  — the C1 sidecar. Its "Equivalence / Named-Negative Regimes" section
+  imposes the re-framing rule on C2 if C1 returns `PDE-C1-NEG`.
+- [`PDE_C1_CELLSET_KOLMOGOROV.md`](PDE_C1_CELLSET_KOLMOGOROV.md) —
+  the C1 cell-set v0. This file's structure is mirrored by the
+  forthcoming C2 cell-set v0 (cell taxonomy, deferred numerics,
+  desk-auditable status).
+- [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) — the three-body
+  measured-substrate leg of Postulate 1 Phase 4. C2 is its PDE
+  sibling, not its replacement.
+- [`../SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md) —
+  the ledger. Candidate 2 entry defines the promotion criteria and
+  the two-sided negative this scoping pins.
+- [`../NAVIERSTOKES_LITPASS_MEMO.md`](../NAVIERSTOKES_LITPASS_MEMO.md)
+  — the lit-pass record. All baseline citations and the
+  hidden-self-similarity / instanton importance sampling references
+  live there.
+- [`../SUNDOG_V_THREEBODY.md`](../SUNDOG_V_THREEBODY.md) — sibling
+  empirical workbench in a different substrate. The shape of the
+  hidden / indirect / transformation / output predicate is shared;
+  the substrate is not.
