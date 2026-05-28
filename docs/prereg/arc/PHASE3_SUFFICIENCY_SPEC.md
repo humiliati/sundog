@@ -2022,3 +2022,192 @@ Still forbidden, unchanged:
   claim from this receipt;
 - describing either Phase 3 receipt as evidence on the public-evaluation split
   or as an ARC solve.
+
+### 2026-05-28 -- `candidate_combinator_v1` Next-Learner Admission
+
+Author: Claude (Opus 4.7).
+
+Justification: the first two Phase 3 receipts both verdicted task hardness /
+decoder failure. The first learner (`nn_output_transfer_v1`) was bounded to
+emitting conditioning outputs verbatim; the second (`nn_delta_transfer_v1`)
+added a same-shape cell-overlay primitive and produced one active LODO
+`k>=3` raw-grid exact hit (`1acc24af` query 3) but coverage stayed at
+`0.99`. `candidate_combinator_v1` is the third admitted learner: it stays
+deterministic and bounded but materially widens the candidate pool through
+D4 variants, per-pair fitted color maps, and cross-pair cell unions of
+conditioning outputs. This tests whether enriched deterministic synthesis
+crosses the coverage floor without touching the Pass A representation arms
+or any Pass B-D contract.
+
+Verdict impact: execution is admitted only for a separate
+`candidate_combinator_v1` receipt after this amendment and its runner are
+committed together as the learner freeze marker. The binding
+`nn_output_transfer_v1` and `nn_delta_transfer_v1` receipts remain
+unchanged and may not be overwritten. This amendment admits no
+public-evaluation grid inspection, Kaggle work, or public sufficiency claim
+before the third receipt is filed and interpreted.
+
+#### Frozen Learner Family
+
+The selected learner family is exactly:
+
+```
+candidate_combinator_v1
+```
+
+The learner has no fitted parameters, optimizer, epoch loop, minibatches,
+regularization, learned cross-task weights, or early stopping. It is
+deterministic except for the existing hash tie-breaker, which remains
+deterministic from the master seed. The default master seed remains
+`20260528`. The seed namespace for this learner is
+`arc-p3-candidate-combinator-v1`.
+
+The tie-break hash is derived from:
+
+```
+(master_seed, task_id, lane, query_index, arm:candidate_kind, source_pair_index)
+```
+
+The same SHA-256-of-namespace + first-eight-bytes-as-big-endian-uint64
+construction as Pass C and the second learner; only the namespace string
+differs. No learned parameters or random samples are shared across tasks.
+
+#### Candidate Construction
+
+For each LODO or public-training test instance and each representation arm:
+
+1. Represent the query input and every conditioning input under the arm's
+   frozen Pass A serialization.
+2. Score every conditioning pair by the existing arm-specific input
+   distance from Pass C.
+3. For every conditioning pair `(input_i, output_i)`, emit the following
+   candidates in this order:
+
+   | candidate_kind | rank | emit condition | construction |
+   | --- | ---: | --- | --- |
+   | `colormap_fit` | `0` | `input_i` and `output_i` share shape AND a bijective color map `M : color -> color` exists with `M(input_i[y][x]) = output_i[y][x]` for every cell | apply `M` to `query_input` (colors not in `M`'s domain pass through unchanged); emit the resulting grid |
+   | `d4_rot90` | `1` | always | `rot90(output_i)` |
+   | `d4_rot180` | `2` | always | `rot180(output_i)` |
+   | `d4_rot270` | `3` | always | `rot270(output_i)` |
+   | `d4_reflect_h` | `4` | always | `reflectHorizontal(output_i)` |
+   | `d4_reflect_v` | `5` | always | `reflectVertical(output_i)` |
+   | `d4_transpose` | `6` | always | `transpose(output_i)` |
+   | `d4_anti_transpose` | `7` | always | `antiTranspose(output_i)` |
+   | `cell_union_<j>` | `8 + j` | `j != i`; `output_i` and `output_j` share shape | for every cell `(y, x)`: emit `output_i[y][x]` if non-zero, else `output_j[y][x]` |
+   | `output_copy` | `100` | always | clone of `output_i` (preserves the `nn_output_transfer_v1` fallback so coverage cannot regress) |
+
+   `j` indexes other conditioning pairs by their original train-pair index.
+   `d4_id` is not emitted as a separate candidate because it equals
+   `output_copy`. The D4 transforms reuse the same orientation set named in
+   Pass A and the existing core.
+
+4. Represent each emitted candidate grid under the same arm. For
+   `signature_palette`, the candidate grid is still decoded through the
+   already frozen `top_left_palette_orbit_v1` decoder; no orbit-selection
+   rule is changed here.
+
+5. Sort candidates by, in order:
+
+   - ascending input distance from query input to the candidate's source
+     conditioning pair input;
+   - ascending `candidate_kind` rank from the table above;
+   - deterministic tie-break hash with the new namespace;
+   - ascending `source_pair_index` (`i`);
+   - lexical `candidate_kind` string, as a final unreachable guard.
+
+6. Deduplicate candidates using the existing arm-specific candidate
+   identity rule from Pass C; keep the first occurrence under the sort.
+   Then emit no more than the top two ordered candidates per Pass B.
+
+`candidate_pool_size` reports the pre-dedup generated candidate count;
+`candidate_pool_size_unique` remains the post-dedup support size.
+
+For `k = 2` tasks the cross-pair `cell_union` slot enumerates at most one
+partner pair; for `k = 5` it enumerates four. With `k = 3`, the maximum
+generated pool per arm per instance is `3 * (1 + 7 + 2 + 1) = 33`
+candidates before dedup.
+
+#### Metrics, Floors, And Failure Labels
+
+All Pass C metric columns, comparison hierarchy, verdict thresholds,
+failure label definitions, and failure-label precedence are unchanged. The
+existing LODO-rerun Phase 0 oracle floors remain in the score table.
+Because `output_copy` is always present, coverage can only expand relative
+to the first learner under the same candidate identity rule; coverage may
+also expand relative to the second learner because the cross-pair
+`cell_union` primitive can match held-out outputs that neither
+`output_copy` alone nor `delta_overlay` alone produces. If the target is
+still outside the generated candidate pool after all six primitive
+families fire, the failure label remains `coverage`.
+
+The `k=2` handling, color-role quarantine list, discrimination-floor
+report, two-prediction discipline, and public-training test lane are
+unchanged. The discrimination CSV is again expected to be byte-identical
+to the first two receipts because discrimination is purely a function of
+the data and the register.
+
+#### Receipt Path And Commands
+
+The new receipt directory is:
+
+```
+results/arc/phase3-sufficiency-candidate_combinator_v1/
+```
+
+This directory must be added to `.gitignore` in the freeze-marker commit
+for this learner, alongside the already-ignored
+`results/arc/phase3-sufficiency/` and
+`results/arc/phase3-sufficiency-nn_delta_transfer_v1/`.
+
+The admitted runner files are:
+
+```
+scripts/arc-phase3-candidate_combinator_v1-lodo.mjs
+scripts/arc-phase3-candidate_combinator_v1-pttest.mjs
+scripts/arc-phase3-candidate_combinator_v1-sufficiency.mjs
+scripts/lib/arc-phase3-candidate_combinator_v1-core.mjs
+```
+
+The admitted npm scripts are:
+
+```
+"arc:phase3:candidate_combinator_v1:lodo"
+"arc:phase3:candidate_combinator_v1:pttest"
+"arc:phase3:candidate_combinator_v1:sufficiency"
+```
+
+The exact third-receipt command is:
+
+```powershell
+npm run arc:phase3:candidate_combinator_v1:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-sufficiency-candidate_combinator_v1
+```
+
+The pttest runner requires `--lodo-manifest` when run standalone and
+asserts that `featureSchemaVersion`, `protocolVersion`,
+`receiptSchemaVersion`, and `learnerVersion` match the frozen LODO
+manifest for this learner. The leak-check allowlist must be extended to
+include the lane runners' refuse-to-read guard literals, mirroring the
+nn_delta_transfer_v1 freeze commit.
+
+#### Public-Language Drafts
+
+The five Pass D public-language buckets are adopted unchanged for this
+learner's future verdict, with one additional required disclosure for any
+public copy citing `candidate_combinator_v1`:
+
+> "The third Phase 3 learner (`candidate_combinator_v1`) is still a
+> deliberately low-capacity nearest-neighbor learner. It generates
+> candidates only from frozen deterministic primitives applied to
+> conditioning outputs (D4 variants, per-pair fitted color maps,
+> cross-pair cell unions, and the original output-copy fallback) and
+> cannot synthesize candidates that require relational reasoning across
+> multiple input-output pairs, programmatic composition, or learned
+> representations. Failures on those task classes remain learner-class
+> limits unless the receipt shows otherwise."
+
+No public copy may combine the first, second, and third receipts into a
+sufficiency claim unless one of the receipts satisfies the already frozen
+Pass C support gate. Receipts may be cited together to characterize the
+deterministic-learner family's joint coverage of the registered subset;
+the framing must remain "learner-class characterization", not a
+sufficiency claim about the representation arms.
