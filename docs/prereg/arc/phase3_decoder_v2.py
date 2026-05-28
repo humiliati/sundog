@@ -11,10 +11,17 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import sys
 import time
 from pathlib import Path
 from typing import Any
+
+# Set CuBLAS workspace config before torch is imported so
+# torch.use_deterministic_algorithms(True) in phase3_decoder.set_global_determinism
+# is compliant with CUDA >= 10.2 cuBLAS without requiring the operator to set
+# the environment variable manually. CPU-only invocations are unaffected.
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 
 import torch
 
@@ -63,7 +70,7 @@ def main() -> int:
     data_dir = Path(args.data_dir).resolve()
     register_path = Path(args.register).resolve()
     p3.assert_training_data_dir(data_dir)
-    tasks, register_hash, data_hash = load_public_training_tasks(data_dir, register_path, args.limit_aux_tasks)
+    tasks, register_hash, data_hash, exclusion_summary = load_public_training_tasks(data_dir, register_path, args.limit_aux_tasks)
     split_rows = p3.build_split_rows([task for task in tasks if task.task_id in p3.expected_split_by_task()])
     write_split_with_aux(out_dir / "split.csv", tasks, split_rows)
 
@@ -96,6 +103,7 @@ def main() -> int:
         test_lodo_count=len(test_lodo_instances),
         pttest_count=len(pttest_instances),
     )
+    manifest["auxExclusions"] = exclusion_summary
 
     if args.dry_run:
         manifest["mode"] = "dry_run"
@@ -393,7 +401,7 @@ def patch_v1_globals() -> None:
     p3.MODEL_SPEC.update(MODEL_SPEC_V2)
 
 
-def load_public_training_tasks(data_dir: Path, register_path: Path, limit_aux_tasks: int) -> tuple[list[p3.Task], str, str]:
+def load_public_training_tasks(data_dir: Path, register_path: Path, limit_aux_tasks: int) -> tuple[list[p3.Task], str, str, dict[str, Any]]:
     registered, register_hash, _ = p3.load_tasks(data_dir, register_path)
     registered_by_id = {task.task_id: task for task in registered}
     split_by_id = p3.expected_split_by_task()
@@ -401,6 +409,8 @@ def load_public_training_tasks(data_dir: Path, register_path: Path, limit_aux_ta
     tasks: list[p3.Task] = []
     file_hashes = []
     aux_count = 0
+    aux_excluded_token_cap = 0
+    aux_excluded_token_cap_ids: list[str] = []
     for path in sorted((data_dir / "training").glob("*.json")):
         task_id = path.stem
         raw = path.read_text(encoding="utf-8-sig")
@@ -411,6 +421,16 @@ def load_public_training_tasks(data_dir: Path, register_path: Path, limit_aux_ta
             tasks.append(task)
             continue
         if task_id in heldout:
+            continue
+        # Aux tasks with more than MAX_DEMOS train pairs would generate LODO or
+        # pttest instances whose conditioning-plus-query length exceeds the shared
+        # encoder's MAX_TOKENS (MAX_DEMOS * 2 + 1 = 11) and trigger
+        # `make_record` to raise. The V2 frozen model spec pins MAX_DEMOS = 5
+        # (inherited from phase3_decoder.py), so the cap is structural for this
+        # learner. Skip the task and record the exclusion in the manifest.
+        if len(parsed["train"]) > p3.MAX_DEMOS:
+            aux_excluded_token_cap += 1
+            aux_excluded_token_cap_ids.append(task_id)
             continue
         if limit_aux_tasks and aux_count >= limit_aux_tasks:
             continue
@@ -424,7 +444,12 @@ def load_public_training_tasks(data_dir: Path, register_path: Path, limit_aux_ta
             test=[{"index": i, "input": pair["input"], "output": pair.get("output")} for i, pair in enumerate(parsed["test"])],
             split="train",
         ))
-    return tasks, register_hash, p3.sha256_text(json.dumps(file_hashes, sort_keys=True, separators=(",", ":")))
+    exclusion_summary = {
+        "aux_excluded_token_cap": aux_excluded_token_cap,
+        "aux_excluded_token_cap_ids": aux_excluded_token_cap_ids,
+        "max_demos": p3.MAX_DEMOS,
+    }
+    return tasks, register_hash, p3.sha256_text(json.dumps(file_hashes, sort_keys=True, separators=(",", ":"))), exclusion_summary
 
 
 def build_pttest_if_available(tasks: list[p3.Task], lane: str) -> list[p3.Instance]:

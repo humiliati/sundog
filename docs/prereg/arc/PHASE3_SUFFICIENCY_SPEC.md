@@ -3836,3 +3836,141 @@ unchanged to a sharded binding receipt. Any external citation of a
 sharded V2 receipt should note `shardedRun = true` and the
 `shardSources` list from the merged manifest if reproducibility
 discussion is part of the citation.
+
+### 2026-05-28 -- Raw-Grid Gate V2 Latent Bug Fix + CUDA Determinism Env
+
+Author: Claude (Opus 4.7).
+
+Justification: a pre-binding probe with no `--limit-aux-tasks` cap (the
+shape the staged full command at the prior probe-and-staging amendment
+would have used) crashed in `phase3_decoder.make_record` with
+`ValueError: train_lodo:253bf280:0 exceeds max token count`. The frozen
+model spec sets `MAX_DEMOS = 5`, which gives `MAX_TOKENS = MAX_DEMOS * 2
++ 1 = 11`. Any aux task with more than 5 train pairs generates either a
+LODO instance (k-1 conditioning + query = 2k-1 tokens; fails for k > 6)
+or a `train_pttest` instance (k conditioning + query = 2k+1 tokens;
+fails for k > 5) that exceeds `MAX_TOKENS`. The capped 24-aux timing
+probe missed this by alphabetical luck; the staged ~11.5 h serial full
+command would have crashed mid-run.
+
+Separately, the V2 runner invokes
+`phase3_decoder.set_global_determinism(...)` which calls
+`torch.use_deterministic_algorithms(True, warn_only=True)`. On CUDA >=
+10.2 this requires `CUBLAS_WORKSPACE_CONFIG=:4096:8` (or `:16:8`) to be
+set as an environment variable before cuBLAS handles are created; the
+first GPU full-aux probe attempt crashed with
+`STATUS_STACK_BUFFER_OVERRUN` until the env var was set explicitly.
+
+This amendment lands two coupled changes in
+`docs/prereg/arc/phase3_decoder_v2.py`:
+
+1. `load_public_training_tasks` now skips aux tasks with
+   `len(parsed["train"]) > p3.MAX_DEMOS` and records the exclusion in
+   the manifest as `auxExclusions = {aux_excluded_token_cap,
+   aux_excluded_token_cap_ids, max_demos}`.
+2. `os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")` runs
+   before `import torch` so the V2 runner is CUDA-determinism compliant
+   without operator action. CPU-only invocations are unaffected.
+
+The 36 registered tasks all have `k <= 5` per `P0_TASK_REGISTER.csv` so
+no registered task is excluded. The exclusion is aux-only.
+
+Verdict impact: no binding V2 receipt has been issued; nothing is voided
+or superseded by the fix. The prior probe-and-staging amendment's
+staged 11.5 h serial command would have crashed; this fix supersedes
+that staging in favor of the launch posture below.
+
+#### Excluded Aux Tasks (29 of 1000)
+
+The first dry-run with the fix in place reported
+`aux_excluded_token_cap = 29` and listed all 29 IDs in
+`manifest.auxExclusions.aux_excluded_token_cap_ids`. Sample (first 5,
+alphabetical): `239be575`, `253bf280`, `2685904e`, `27a28665`,
+`281123b4`. The full list is reproducible by re-running any V2
+dry-run after this fix is committed.
+
+The effective V2 data policy is therefore:
+
+> All ARC public-training tasks **except**
+> (a) the 36 registered Phase 0 tasks' frozen validation/test split
+> (already excluded) **and**
+> (b) the 29 aux tasks with more than `MAX_DEMOS = 5` train pairs.
+
+This narrows the original V2 admission's "all ARC public-training
+tasks except the frozen validation/test register tasks" by 29 tasks
+(2.9% of the corpus). The narrowing is structural for the frozen
+`MAX_DEMOS = 5` model spec; a future V3 with a wider encoder could
+admit those 29 tasks.
+
+#### Revised Wall-Clock Estimate
+
+Probe-grade timings post-fix (probe-only, 2 epochs, all 971 admitted
+tasks):
+
+| device | per-shard 2-epoch wall | per-epoch | full-run per-shard (120 epochs) |
+| --- | ---: | ---: | ---: |
+| CPU (i7-7820HK, 4 cores) | ~3.8 min (extrapolated) | ~115 s | ~3.83 h |
+| CUDA (GTX 1080, py3.12, torch 2.5.1+cu121) | 107.2 s | ~53.6 s | ~1.79 h |
+
+Estimated full-run wall clocks (3 seeds):
+
+| protocol | wall |
+| --- | ---: |
+| CPU serial (staged in prior amendment) | ~11.5 h |
+| CPU 3-parallel naive (default threads, 4 cores) | ~10-11 h (no win) |
+| CPU 3-parallel with `OMP_NUM_THREADS=2` | ~7.6 h |
+| GPU serial (`--device cuda`) | ~5.4 h |
+| **GPU 3-parallel sharded (`--device cuda`)** | **~2-2.5 h** |
+
+The GPU 3-parallel sharded path is the admitted launch posture given
+the GTX 1080 + py3.12 + torch 2.5.1+cu121 setup is in place. The
+shard+merge protocol amendment above pins the per-shard / merge CLI
+surface and the shard-equivalence guarantee; both apply unchanged on
+CUDA. cuDNN determinism is preserved by the auto-set
+`CUBLAS_WORKSPACE_CONFIG` and the existing
+`torch.use_deterministic_algorithms(True, warn_only=True)` call.
+
+#### Launch Posture For The First V2 Binding Receipt
+
+Pre-launch checklist:
+
+1. This amendment + the corresponding `phase3_decoder_v2.py` edits are
+   committed (freeze-marker commit). The shard+merge protocol
+   amendment above is already committed.
+2. `SUNDOG_PYTHON` points at the Python 3.12 interpreter with
+   `torch==2.5.1+cu121` installed (verified by
+   `torch.cuda.is_available() == True` and
+   `torch.cuda.get_device_name(0) == "NVIDIA GeForce GTX 1080"`).
+3. Worktree is clean (no `--allow-dirty`).
+
+Launch (three parallel background shards, each ~1.9 h on GPU):
+
+```powershell
+$env:SUNDOG_PYTHON = "C:\Users\hughe\AppData\Local\Programs\Python\Python312\python.exe"
+foreach ($seed in 20260528, 20260529, 20260530) {
+    Start-Process -NoNewWindow `
+        -RedirectStandardOutput "results/arc/phase3-rawgrid-gate-v2-shard-$seed.log" `
+        -RedirectStandardError "results/arc/phase3-rawgrid-gate-v2-shard-$seed.err" `
+        -FilePath "npm" -ArgumentList @(
+            "run", "arc:phase3:rawgrid-gate-v2:shard", "--",
+            "$seed",
+            "--data-dir", "$env:USERPROFILE\Datasets\ARC-AGI-2\data",
+            "--register", "docs/prereg/arc/P0_TASK_REGISTER.csv",
+            "--out", "results/arc/phase3-rawgrid-gate-v2-shard-$seed",
+            "--device", "cuda"
+        )
+}
+```
+
+Merge (after all three shards complete):
+
+```powershell
+npm run arc:phase3:rawgrid-gate-v2:merge -- `
+    --shard-dirs results/arc/phase3-rawgrid-gate-v2-shard-20260528,results/arc/phase3-rawgrid-gate-v2-shard-20260529,results/arc/phase3-rawgrid-gate-v2-shard-20260530 `
+    --out results/arc/phase3-rawgrid-gate-v2
+```
+
+Resume rules from the shard+merge protocol amendment apply unchanged:
+each shard is independently resume-unsafe; if one fails, delete its
+output directory and re-run that shard alone, then merge when all
+three are present.
