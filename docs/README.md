@@ -77,6 +77,9 @@ code, experiments, prior theorem materials, and application bridges.
 - [Sundog Mesa roadmap](SUNDOG_V_MESA.md): mesa-optimization trap
   empirical front; in-vitro operating envelope with sharp cliff at
   λ ≈ 0.953 localized to a 5D basin at the actor's final hidden layer.
+- [Sundog vs. P-vs-NP roadmap](SUNDOG_V_P_V_NP.md): bounded
+  alignment-verification bridge asking whether compact signatures can verify
+  safe operating envelopes more cheaply than safe policies can be found.
 - [Sundog Capset ledger](SUNDOG_V_CAPSET.md): staging ledger coupling
   Sundog's apparatus to the 2026 OpenAI unit-distance disproof. Evaluator
   front + substrate-analogue horizon; cap-set workbench is the one
