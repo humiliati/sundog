@@ -26,6 +26,7 @@ export const DEFAULT_THREEBODY_CONFIG = Object.freeze({
   trackGuardMaxTidalMagnitude: 35,
   precisionReceipts: false,
   counterfactualAudit: false,
+  multiStepAudit: false,
   counterfactualNormalizerFloor: 1e-9,
   logEvery: 10,
 });
@@ -830,6 +831,45 @@ function computeCounterfactualReceipt(state, thrust, config, oracleStrictThrust)
   };
 }
 
+const MS_AUDIT_HORIZONS = [4, 8, 16, 32];
+
+function computeMultiStepCounterfactualHorizon(state, thrust, oracleStrictThrust, cfg) {
+  // Three-arm N-step rollout per eligible step (Phase 15C).
+  // actual: thrust at step 1, then thrust for steps 2..N
+  // noop:   [0,0] at step 1, then thrust for steps 2..N
+  // oracle: oracleStrictThrust at step 1, then thrust for steps 2..N
+  const floor = cfg.counterfactualNormalizerFloor ?? 1e-9;
+  const hSet = new Set(MS_AUDIT_HORIZONS);
+  const actualEnergies = {};
+  const noopEnergies = {};
+  const oracleEnergies = {};
+  let actualState = state;
+  let noopState = state;
+  let oracleState = state;
+  for (let i = 1; i <= 32; i++) {
+    const noopThrust = i === 1 ? [0, 0] : thrust;
+    const oThrust = i === 1 ? oracleStrictThrust : thrust;
+    actualState = integrateStep(actualState, cfg.dt, cfg, thrust);
+    noopState   = integrateStep(noopState,   cfg.dt, cfg, noopThrust);
+    oracleState = integrateStep(oracleState, cfg.dt, cfg, oThrust);
+    if (hSet.has(i)) {
+      actualEnergies[i] = computeSignatures(actualState, cfg).energy;
+      noopEnergies[i]   = computeSignatures(noopState,   cfg).energy;
+      oracleEnergies[i] = computeSignatures(oracleState, cfg).energy;
+    }
+  }
+  const results = {};
+  for (const N of MS_AUDIT_HORIZONS) {
+    const rawDiff = noopEnergies[N] - actualEnergies[N]; // positive = actual reduces energy vs noop
+    const rawNorm = Math.abs(noopEnergies[N] - oracleEnergies[N]);
+    const normalizer = Math.max(rawNorm, floor);
+    const score = clamp(rawDiff / normalizer, -1, 1);
+    const floored = rawNorm < floor;
+    results[N] = { rawDiff, rawNorm, score, positive: rawDiff > 0, floored };
+  }
+  return results;
+}
+
 export function computeControlThrust(state, controllerState = {}, config = {}) {
   const cfg = normalizeConfig(config);
   const mode = cfg.controllerMode;
@@ -1188,6 +1228,17 @@ export function runTrial(config = {}) {
   let cfFloorScoreSum = 0;
   let cfNonFloorEligible = 0;
   let cfNonFloorScoreSum = 0;
+  // Phase 15C multi-step audit accumulators (one entry per horizon in MS_AUDIT_HORIZONS)
+  const msEffectSum        = [0, 0, 0, 0];
+  const msAbsEffectSum     = [0, 0, 0, 0];
+  const msPositive         = [0, 0, 0, 0];
+  const msRawNormSum       = [0, 0, 0, 0];
+  const msFloorHits        = [0, 0, 0, 0];
+  const msFloorPositive    = [0, 0, 0, 0];
+  const msScoreSum         = [0, 0, 0, 0];
+  const msNonFloorEligible = [0, 0, 0, 0];
+  const msNonFloorScoreSum = [0, 0, 0, 0];
+  let msEligible = 0;
 
   for (let step = 0; step <= steps; step += 1) {
     const time = step * cfg.dt;
@@ -1228,6 +1279,28 @@ export function runTrial(config = {}) {
           } else {
             cfNonFloorEligible += 1;
             cfNonFloorScoreSum += counterfactual.score;
+          }
+        }
+        if (cfg.multiStepAudit) {
+          const msResult = computeMultiStepCounterfactualHorizon(
+            state, thrust, oracleStrictThrust, cfg,
+          );
+          msEligible += 1;
+          for (let hi = 0; hi < MS_AUDIT_HORIZONS.length; hi += 1) {
+            const N = MS_AUDIT_HORIZONS[hi];
+            const r = msResult[N];
+            msEffectSum[hi]     += r.rawDiff;
+            msAbsEffectSum[hi]  += Math.abs(r.rawDiff);
+            if (r.positive) msPositive[hi] += 1;
+            msRawNormSum[hi]    += r.rawNorm;
+            msScoreSum[hi]      += r.score;
+            if (r.floored) {
+              msFloorHits[hi] += 1;
+              if (r.positive) msFloorPositive[hi] += 1;
+            } else {
+              msNonFloorEligible[hi] += 1;
+              msNonFloorScoreSum[hi] += r.score;
+            }
           }
         }
       }
@@ -1404,6 +1477,19 @@ export function runTrial(config = {}) {
                 ? roundNumber(cfNonFloorScoreSum / cfNonFloorEligible, 6)
                 : null,
             }
+            : {}),
+          ...(cfg.multiStepAudit
+            ? Object.fromEntries(MS_AUDIT_HORIZONS.flatMap((N, hi) => [
+              [`counterfactualH${N}EligibleSteps`, msEligible],
+              [`counterfactualH${N}MeanEffectVsNoop`, msEligible > 0 ? roundNumber(msEffectSum[hi] / msEligible, 12) : null],
+              [`counterfactualH${N}MeanAbsEffectVsNoop`, msEligible > 0 ? roundNumber(msAbsEffectSum[hi] / msEligible, 12) : null],
+              [`counterfactualH${N}PositiveRate`, msEligible > 0 ? roundNumber(msPositive[hi] / msEligible, 6) : null],
+              [`counterfactualH${N}MeanRawNormalizer`, msEligible > 0 ? roundNumber(msRawNormSum[hi] / msEligible, 12) : null],
+              [`counterfactualH${N}NormalizerFloorRate`, msEligible > 0 ? roundNumber(msFloorHits[hi] / msEligible, 6) : null],
+              [`counterfactualH${N}MeanScore`, msEligible > 0 ? roundNumber(msScoreSum[hi] / msEligible, 6) : null],
+              [`counterfactualH${N}FloorPositiveRate`, msFloorHits[hi] > 0 ? roundNumber(msFloorPositive[hi] / msFloorHits[hi], 6) : null],
+              [`counterfactualH${N}NonFloorMeanScore`, msNonFloorEligible[hi] > 0 ? roundNumber(msNonFloorScoreSum[hi] / msNonFloorEligible[hi], 6) : null],
+            ]))
             : {}),
         }
         : {}),
