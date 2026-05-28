@@ -210,9 +210,12 @@ controlled surrogate where the objective is lower-dimensional than the state.
 
 ### Low-Band Safety Trigger
 
-Let `P_K u` be a low-band projection with `K < m_det`, where `m_det` is a mode
-count known or hypothesized to be sufficient for state reconstruction under the
-chosen regime. Define a binary or small-action objective:
+Let `P_K u` be a low-band projection that is lower-dimensional than a
+state-reconstructive reference observation `P_{m_det}` and has an independent
+non-injectivity witness on the admitted state domain. The witness cannot be the
+inequality `K < m_det` alone: an upper determining-mode bound proves
+sufficiency for the larger observation, not insufficiency for the smaller one.
+Define a binary or small-action objective:
 
 ```text
 J = keep low-band energy / enstrophy proxy inside a registered safe envelope

@@ -45,10 +45,12 @@ Commissioned but **not promoted**: Candidate 1 is drafted at
 [`proof/PDE_DETERMINING_MODES_POSTULATE1.md`](proof/PDE_DETERMINING_MODES_POSTULATE1.md),
 with a desk-auditable cell-set v0 instance at
 [`proof/PDE_C1_CELLSET_KOLMOGOROV.md`](proof/PDE_C1_CELLSET_KOLMOGOROV.md).
-Promotion criterion (d) is now closed (pre-registered failure boundary fixed);
-criterion (b) is partially closed (runnable Phase-0 procedure defined, not
-yet executed); criteria (a) Front-A vacuity rebuttal and (c) external PDE
-reviewer remain open.
+The v0 comparator has been tightened: the state-insufficiency side now rests on
+finite-Galerkin non-injectivity, while the determining-mode literature supplies
+only the state-reconstructive reference ceiling. Promotion criterion (d) is
+staged but still needs the continuous-fiber / tolerance protocol; criterion (b)
+is partially closed (procedure defined, not executed); criteria (a) Front-A
+vacuity rebuttal and (c) external PDE reviewer remain open.
 
 Candidate 2 has also been commissioned at the scoping level:
 [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)
