@@ -1,0 +1,31 @@
+name: ARC Phase 0 Discipline
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/prereg/arc/**'
+      - 'scripts/arc-*'
+      - 'tests/arc-baselines/**'
+      - 'package.json'
+      - '.githooks/**'
+      - '.github/workflows/arc-discipline.yml'
+  pull_request:
+    paths:
+      - 'docs/prereg/arc/**'
+      - 'scripts/arc-*'
+      - 'tests/arc-baselines/**'
+      - 'package.json'
+      - '.githooks/**'
+      - '.github/workflows/arc-discipline.yml'
+
+jobs:
+  leak-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: ARC Phase 0 leak check
+        run: node scripts/arc-phase0-leak-check.mjs

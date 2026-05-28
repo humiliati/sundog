@@ -226,3 +226,37 @@ floor that any Sundog-specific result must clear.
 
 Public-evaluation discipline (no manual grid inspection, no Kaggle prep)
 remains in force until Phase 6.
+
+**2026-05-28 (PT) -- Claude (Opus 4.7).** Discipline hardening (no verdict
+change). Following the ADMIT amendment above, the operational tooling that
+enforces the public-evaluation and Kaggle restrictions was hardened so that
+the discipline rules are checked by code, not only documented:
+
+- `scripts/arc-phase0-inventory.mjs` now requires *two* flags to emit
+  evaluation test outputs: `--include-evaluation-test-output` AND
+  `--authorize-evaluation-leak`. The `--out` path must end in
+  `_PRIVILEGED_AUDIT`; the manifest emits `privilegedAudit: true` and a
+  banner `evaluationPolicy`. This formalises the "evaluation-output
+  override for a final post-freeze audit" provision in the Data Source and
+  Split Policy section above into a runtime gate.
+- `scripts/arc-phase0-leak-check.mjs` (new) audits five invariants on every
+  invocation: default inventory manifest is non-privileged; register has no
+  `split=evaluation` rows and every `split=evaluation-blind` row carries
+  `manual_inspection=no`; baseline predictions are a subset of registered
+  training task IDs; no Kaggle scaffolding (kaggle.json, non-empty .ipynb)
+  exists under `scripts/`, `docs/`, `tests/`, `notebooks/`; non-allowlisted
+  ARC scripts (anything other than the inventory and leak-check themselves)
+  contain no `evaluation` literal.
+- `.githooks/pre-commit` runs the leak check before every commit, installed
+  by `scripts/setup-githooks.mjs` via the npm `prepare` script.
+- `.github/workflows/arc-discipline.yml` runs the leak check on push and PR
+  for changes touching ARC paths.
+- [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) is filed as a stub
+  pattern for the first Phase 1+ amendment that adds evaluation-blind
+  register rows, so the rule shape is preregistered before any concrete
+  selection.
+
+Verdict impact: none. The ADMIT verdict above continues to govern. This
+amendment is a tooling tightening, not a scope or floor change. Future
+amendments may add or modify these tools, but the verdict logic and
+preregistered constraints in the body above remain unchanged.

@@ -12,7 +12,25 @@ if (args.help || !args.dataDir) {
 const dataDir = resolve(args.dataDir);
 const requestedSplit = args.split ?? "all";
 const includeEvaluationTestOutput = Boolean(args.includeEvaluationTestOutput);
+const authorizeEvaluationLeak = Boolean(args.authorizeEvaluationLeak);
 const outDir = args.out ? resolve(args.out) : null;
+
+if (includeEvaluationTestOutput && !authorizeEvaluationLeak) {
+  fail([
+    "--include-evaluation-test-output requires the second flag --authorize-evaluation-leak.",
+    "Per docs/prereg/arc/PHASE0_TASK_SUBSET_SPEC.md, emitting evaluation test outputs is reserved",
+    "for a final post-freeze audit. Both flags must be set together to prevent accidental leaks."
+  ].join("\n"));
+}
+
+if (includeEvaluationTestOutput && authorizeEvaluationLeak) {
+  if (!outDir) {
+    fail("Privileged audit run requires --out pointing at a path ending in _PRIVILEGED_AUDIT (e.g. results/arc/phase0-inventory_PRIVILEGED_AUDIT).");
+  }
+  if (!outDir.endsWith("_PRIVILEGED_AUDIT")) {
+    fail(`Privileged audit run must write to a path ending in _PRIVILEGED_AUDIT, refusing to write to ${outDir}. This stops the leaked artifact from overwriting the non-privileged inventory.`);
+  }
+}
 
 const splitNames = requestedSplit === "all" ? ["training", "evaluation"] : [requestedSplit];
 const rows = [];
@@ -51,8 +69,10 @@ const manifest = {
   dataDir,
   requestedSplit,
   includeEvaluationTestOutput,
+  authorizeEvaluationLeak,
+  privilegedAudit: includeEvaluationTestOutput && authorizeEvaluationLeak,
   evaluationPolicy: includeEvaluationTestOutput
-    ? "evaluation test-output metadata included by explicit override"
+    ? "PRIVILEGED AUDIT: evaluation test-output metadata included by explicit double-flag override; this artifact must not be referenced by any non-audit Phase 0/1 verdict"
     : "evaluation test outputs omitted from emitted metadata",
   summary,
   sourceFingerprint: sha256(JSON.stringify(sourceFiles))
@@ -88,6 +108,8 @@ function parseArgs(argv) {
       parsed.split = argv[++i];
     } else if (arg === "--include-evaluation-test-output") {
       parsed.includeEvaluationTestOutput = true;
+    } else if (arg === "--authorize-evaluation-leak") {
+      parsed.authorizeEvaluationLeak = true;
     } else {
       fail(`Unknown argument: ${arg}`);
     }
@@ -102,6 +124,10 @@ function printUsage() {
 Options:
   --split training|evaluation|all       Split to inventory. Default: all.
   --include-evaluation-test-output      Emit evaluation test-output metadata.
+                                        Requires --authorize-evaluation-leak.
+  --authorize-evaluation-leak           Second-key acknowledgement for the
+                                        above. Also forces --out to a path
+                                        ending in _PRIVILEGED_AUDIT.
   --help                                Show this help.
 
 Example:
