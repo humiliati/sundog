@@ -19,6 +19,9 @@ Phase specs:
 - [`PHASE1_V0_SLATE.md`](PHASE1_V0_SLATE.md) - frozen first implementation
   slate with split namespaces, calibration insulation, attacker budgets, and
   success thresholds.
+- [`PHASE1_V1_SLATE.md`](PHASE1_V1_SLATE.md) - repair slate opened after the
+  v0 named quarantine, focused on certificate integrity binding, non-vacuous
+  sensor/invariance checks, and probe-derived geometry promise detection.
 
 Templates:
 
@@ -34,8 +37,8 @@ Result convention:
 
 Receipts:
 
-- [`receipts/README.md`](receipts/README.md) - receipt index. No Phase 1
-  execution receipt is filed yet.
+- [`receipts/README.md`](receipts/README.md) - receipt index, including the
+  Phase 1 v0 named-quarantine receipt.
 
 Current state:
 
@@ -44,4 +47,7 @@ Current state:
 - Project scaffold opened: 2026-05-28.
 - Phase 1 toy-verifier spec drafted: 2026-05-28.
 - Phase 1 v0 slate frozen: 2026-05-28.
-- No verifier implementation or receipt has been filed.
+- Phase 1 v0 harness executed: 2026-05-28. Verdict = named quarantine;
+  `capacity_threshold = <=small` after field-only spoof breach.
+- Phase 1 v1 repair slate opened: 2026-05-28.
+- No Phase 1 v1 execution receipt has been filed.

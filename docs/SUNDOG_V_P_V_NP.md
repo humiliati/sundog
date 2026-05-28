@@ -27,10 +27,12 @@ hidden-basin promise violations) point Phase 1 v1 toward certificate
 integrity binding, discriminating invariance / sensor fields, and a basin-
 geometry promise signal derivable from probes. Privilege-leak audit was
 green; false-accept rate was 0.087 % overall (0.34 % on the in-promise
-verification split). No complexity-theoretic result claimed. This document
-is a research bridge from Sundog mesa, ARC, Faraday, and signature-
-sufficiency work into the language of verification hardness, certificates,
-reductions, promise envelopes, and capacity-relative one-wayness.
+verification split). A v1 repair slate is open at
+[`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md). No
+complexity-theoretic result claimed. This document is a research bridge from
+Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
+verification hardness, certificates, reductions, promise envelopes, and
+capacity-relative one-wayness.
 
 ## 0. Story Shape
 
@@ -562,10 +564,12 @@ baselines, reproduced metrics, and archived artifacts.
   draft formal toy verifier spec.
 - [`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md): frozen first
   implementation slate for Phase 1.
+- [`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md): repair slate opened
+  after the v0 named quarantine.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
-- [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index; no
-  Phase 1 execution receipt filed yet.
+- [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index,
+  including the Phase 1 v0 named-quarantine receipt.
 
 ## 11. Cross-References
 

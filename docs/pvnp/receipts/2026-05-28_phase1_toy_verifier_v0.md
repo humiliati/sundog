@@ -9,7 +9,7 @@
   CPU, Python 3.14.4 + torch 2.11.0+cpu + Node 22)
 - Code commit: `403b8c8e44b9f5b1c49462ef303031f41b46a826`
 - Result directory: `results/pvnp/phase1-toy-verifier-v0/`
-- Roadmap version: [`SUNDOG_V_P_V_NP.md`](../SUNDOG_V_P_V_NP.md) (post-2026-05-28 cleanup pass)
+- Roadmap version: [`SUNDOG_V_P_V_NP.md`](../../SUNDOG_V_P_V_NP.md) (post-2026-05-28 cleanup pass)
 - Spec version: [`PHASE1_TOY_VERIFIER_SPEC.md`](../PHASE1_TOY_VERIFIER_SPEC.md) (after consistency pass + frozen v0 slate)
 
 ## Registered Domain

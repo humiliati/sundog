@@ -1,7 +1,7 @@
 # Phase 1 - Formal Toy Verifier Spec
 
-Status: draft specification with v0 slate filed. No implementation or receipt
-filed.
+Status: draft specification with v0 slate, v0 receipt, and v1 repair slate
+filed. v0 returned a named quarantine; no v1 receipt filed.
 
 Purpose:
 
