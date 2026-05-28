@@ -6,14 +6,24 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 0 ADMIT -- Phase 1 (ARC grid representation as shadow domain)
-unblocked**. The shadow-projection operator, signature decoder, and Sundog
-feature scoring are admitted against the registered 36-task subset. The
-preregistered cheap-baseline floor is `0/36` exact across `random_valid`,
-`identity_copy`, `dsl_lite_v0`, `dsl_lite_v1`, `dsl_lite_v2`, and
-`tiny_learned_v0`; any Phase 1+ Sundog result must clear that floor. Kaggle
-notebook work and public-evaluation grid inspection remain blocked until
-Phase 6.
+Status: **Phase 3 PAUSED after deterministic-low-capacity convergence**.
+Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
+projection-measurement plus baseline-comparison passed; Phase 3 filed
+three binding receipts (`nn_output_transfer_v1`, `nn_delta_transfer_v1`,
+`candidate_combinator_v1`), all verdict **task hardness / decoder
+failure**. The three-receipt convergence is characterised at
+[`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) as a finding about
+the deterministic-low-capacity-learner family rather than a
+sufficiency-failure conclusion about the shadow-projection representation.
+Per the reflection's pre-registered Branch C stance, no further Phase 3
+amendment is filed. Reopening the lane requires Branch A (admit a
+stochastic per-task learner), Branch B (Pass C threshold revision for a
+"structural support" verdict tier), or Branch D (different sufficiency
+framing entirely). The Phase 0 cheap-baseline floor (`0/36` exact across
+`random_valid`, `identity_copy`, `dsl_lite_v0`, `dsl_lite_v1`,
+`dsl_lite_v2`, `tiny_learned_v0`) remains the binding comparison for any
+reopened lane. Kaggle notebook work and public-evaluation grid inspection
+remain blocked until Phase 6.
 
 ## Official Anchors
 
@@ -111,17 +121,25 @@ amendments line is frozen. Corrections or refinements must be appended with:
 
 ## Public-Language Constraint
 
-Until Phase 3 adjudicates signature sufficiency, public copy may say:
+Phase 3 is paused per Branch C of
+[`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md); no sufficiency
+adjudication is on file. Until a future learner family produces a
+non-trivial verdict via one of the reflection's Branch A/B/D paths,
+public copy may say:
 
 - ARC-AGI abstraction coupling roadmap;
 - registered task-subset audit;
 - shadow-projection hypothesis for static grid reasoning;
-- falsifiable sufficiency test.
+- falsifiable sufficiency test, filed; the deterministic-low-capacity
+  learner branch produced three task-hardness verdicts and is paused.
 
 Avoid:
 
 - "Sundog solves ARC";
 - "human-level abstraction";
 - "the 5D subspace is universal";
-- any claim that a Kaggle entry validates the theory without the Phase 3
-  sufficiency audit.
+- any claim that a Kaggle entry validates the theory without a
+  non-trivial Phase 3 sufficiency receipt;
+- describing the three filed Phase 3 receipts as a sufficiency-failure
+  conclusion -- per the reflection, they characterise the
+  deterministic-low-capacity-learner family, not the representation.
