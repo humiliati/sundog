@@ -63,6 +63,10 @@ Checked **2026-05-28** against:
   framing: signature space does not shorten the input-output gap, so
   Phase 3 must explicitly model the transformation. No decoder or
   public-evaluation work admitted by this receipt.
+- [`PHASE3_SUFFICIENCY_SPEC.md`](PHASE3_SUFFICIENCY_SPEC.md) -- Phase 3
+  sufficiency audit spec. It freezes the harder post-Phase-2 posture:
+  `input_sig -> output_sig` is not a small-delta problem, and the primary
+  Sundog representation is `signature_palette`, not signature alone.
 
 ## Discipline Tooling
 
