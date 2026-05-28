@@ -26,6 +26,8 @@ and negative results. Do not rewrite a failed receipt into a broader claim.
 - Baselines:
 - Thresholds:
 - Seeds:
+- Calibration split and no-overlap proof:
+- Exploratory attacker envelope:
 - Verifier-access declaration:
 
 ## Claim Under Test
@@ -45,6 +47,8 @@ List files and hashes:
 | Baseline decisions | | | rollout/full-state/formal comparison |
 | Ground truth labels | | | evaluator-only labels |
 | Cost table | | | cost accounting |
+| Calibration manifest | | | split insulation and threshold selection |
+| Attacker trials | | | exploratory inversion/spoof smoke tests |
 
 ## Observed Values
 
@@ -59,6 +63,16 @@ List files and hashes:
 | Full-state cost ratio | | | |
 | Coverage rate | | | |
 | Margin slack | | | |
+
+## Calibration Insulation
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Calibration ids disjoint from train/search | | |
+| Calibration ids disjoint from verification | | |
+| Calibration ids disjoint from falsifier | | |
+| Thresholds frozen before measurement labels | | |
+| Measurement labels unavailable to verifier | | |
 
 ## Baseline Comparison
 
@@ -83,6 +97,16 @@ Certificate Vacuity falsifier below.
 | coverage_digest | | | |
 | sensor_health | | | |
 | invariance_checks | | | |
+
+## Exploratory Attacker Smoke Tests
+
+These do not close Phase 3. A breach here reports `capacity_threshold <= small`
+and quarantines the relevant Phase 1 claim.
+
+| Attacker | Budget | Success threshold | Observed value | Disposition |
+| --- | --- | --- | --- | --- |
+| `A_inv_small` | <=20k params, 3 seeds | AUROC >= 0.80 and IoU >= 0.40 | | |
+| `A_spoof_small` | <=64 candidates per unsafe item | any unsafe accepted by `V` | | |
 
 ## Falsifier Disposition
 

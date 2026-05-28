@@ -1,6 +1,7 @@
 # Phase 1 - Formal Toy Verifier Spec
 
-Status: draft specification. No implementation or receipt filed.
+Status: draft specification with v0 slate filed. No implementation or receipt
+filed.
 
 Purpose:
 
@@ -223,7 +224,85 @@ Exploratory:
 - spoof success against `V`;
 - capacity threshold where inversion or spoofing first succeeds.
 
-The exploratory metrics prepare Phase 3 but do not close Phase 1.
+For Phase 1 these metrics are smoke tests under the registered small-attacker
+envelope below. They prepare Phase 3 but do not close Phase 1. If a small
+attacker breaches the registered threshold, the Phase 1 result is reported as
+a capacity-breach quarantine rather than as a completed capacity ladder.
+
+## Exploratory Attacker Envelope
+
+Phase 1 admits one small exploratory attacker tier. This tier exists only to
+catch obvious inversion or spoofing failures before Phase 3.
+
+### Inversion Attacker
+
+`A_inv_small` may read:
+
+- `sigma`;
+- public promise parameters;
+- public environment-family tags;
+- training labels from the train/search split only.
+
+`A_inv_small` may not read:
+
+- verification or falsifier hidden fields;
+- verification or falsifier ground-truth labels during training;
+- post-result threshold edits;
+- full-state baseline internals.
+
+Budget:
+
+- at most `20k` trainable parameters;
+- at most three random seeds;
+- at most one frozen hyperparameter set named in `manifest.json`;
+- target is a `32 x 32` unsafe-basin occupancy grid or a stricter registered
+  basin-parameter target.
+
+Success threshold:
+
+- inversion success is registered when held-out measurement AUROC is at least
+  `0.80` **and** thresholded occupancy IoU is at least `0.40`;
+- if only parametric basin targets are emitted, success is registered when the
+  attacker meets the manifest's stricter family-specific reconstruction rule.
+
+### Spoofing Attacker
+
+`A_spoof_small` may read:
+
+- `sigma`;
+- public verifier thresholds;
+- the public checker code;
+- the verifier decision from submitted candidate certificates.
+
+`A_spoof_small` may not read:
+
+- hidden basin coordinates;
+- latent field parameters;
+- ground-truth labels before submitting spoof candidates;
+- rollout or full-state baseline outputs for the target measurement item.
+
+Budget:
+
+- at most `64` spoof candidates per unsafe measurement item;
+- edits are limited to analytical certificate fields unless the manifest names
+  a stricter edit set;
+- certificate integrity checks must still pass;
+- no adaptive edits after seeing ground-truth labels.
+
+Success threshold:
+
+- spoof success is any unsafe measurement item accepted by `V` after the
+  attacker edits or synthesizes a certificate inside budget.
+
+### Capacity Threshold Reporting
+
+Phase 1 runs only the small tier by default. Therefore:
+
+- if neither attacker succeeds, report `capacity_threshold = not_estimated`;
+- if either attacker succeeds, report `capacity_threshold <= small` and
+  quarantine the relevant claim;
+- do not interpolate a capacity threshold without at least two registered
+  attacker tiers in a Phase 3 run.
 
 ## Data Products
 
@@ -241,6 +320,11 @@ Required outputs under `results/pvnp/phase1-toy-verifier/`:
 - `ablation_decisions.csv` - vacuity-probe decisions, one row per
   (environment, dropped-field) pair, with decision and cost vs the full
   signature;
+- `attacker_trials.csv` - exploratory inversion/spoof attempts, budget,
+  split, and success/failure disposition;
+- `calibration_manifest.json` - calibration-only environment ids, threshold
+  selection rule, selected thresholds, and no-overlap proof against measurement
+  splits;
 - `ground_truth_labels.csv` - evaluator-only safety labels;
 - `costs.csv` - measured cost accounting;
 - `falsifier_summary.md` - named failure-mode disposition;
@@ -255,10 +339,32 @@ using [`RECEIPT_TEMPLATE.md`](RECEIPT_TEMPLATE.md).
 | --- | --- |
 | Certificate vacuity | ablated signature matches full signature, or ordinary features give the same decision/cost profile |
 | Sufficiency failure | hidden labels depend on facts absent from `sigma`, causing false accepts or quarantine |
-| Inversion / spoofing failure | exploratory attacker reconstructs basin or spoofs `V` below the registered capacity tier |
+| Inversion / spoofing failure | `A_inv_small` or `A_spoof_small` breaches the registered Phase 1 success threshold |
 | Verifier overhead failure | `C_total_signature` is not competitive with rollout/full-state baselines |
 | Boundary absence | pass/fail behavior lacks a stable promise envelope or threshold |
 | Privilege leak | `V` reads hidden state, labels, post-result thresholds, or baseline-only fields |
+
+## Calibration and Slate Insulation
+
+Calibration is not measurement. Any dry run used to set `m_min`, checker
+thresholds, grid resolution, or vacuity thresholds must use a calibration-only
+split that is disjoint from train/search, verification, and falsifier splits.
+
+Rules:
+
+- calibration environments use a separate seed namespace;
+- calibration hidden labels may be used only for threshold selection recorded
+  in `calibration_manifest.json`;
+- calibration environments do not count toward reported verifier metrics;
+- calibration environments do not appear in `ground_truth_labels.csv` for the
+  measurement run;
+- verification and falsifier hidden labels are unavailable until after `V`,
+  baselines, ablations, and attacker submissions are frozen;
+- any overlap between calibration and measurement environment ids is a
+  Privilege Leak quarantine.
+
+If an implementation cannot enforce this split, it must use fixed thresholds
+from the frozen slate and skip dry-run calibration.
 
 ## Default Draft Parameters
 
@@ -268,14 +374,15 @@ These are defaults for implementation planning, not frozen execution values.
 | --- | --- |
 | Domain | `[0, 1]^2` |
 | Horizon `T` | 128 steps |
-| Environment count | 256 train/search, 256 verification, 256 falsifier |
+| Environment count | 64 calibration, 256 train/search, 256 verification, 256 falsifier |
 | Initial policy class | hand-coded safe/unsafe controls plus small MLP |
 | Probe noise | three tiers: none, bounded Gaussian, dropout/delay |
 | Basin families | circle, ellipse, crescent, decoy doublet |
-| Margin `m_min` | fixed after dry-run calibration, before measurement |
+| Margin `m_min` | selected from calibration-only split before measurement, or fixed by frozen slate if calibration is skipped |
 | Analytical signature fields | curvature, envelope, margin, coverage, sensor health, invariance checks (admitted set) |
 | Bookkeeping signature fields | `trace_id`, `source_observations`, `cost_signature`, `limitations` (always present) |
 | Formal baseline | grid or interval reachability where feasible |
+| Phase 1 attacker tier | `A_inv_small` and `A_spoof_small` only |
 
 Any change after inspecting measured outcomes creates a new run id.
 
@@ -285,6 +392,8 @@ Phase 1 is not complete until:
 
 - this spec is frozen for one run;
 - the implementation writes all required data products;
+- calibration and measurement environment ids are disjoint in
+  `calibration_manifest.json`;
 - the verifier-access declaration is audited for privilege leaks. Audit task:
   in any module under `verifier/`, `grep` must return zero matches for the
   registered forbidden tokens (`ground_truth_labels`, `B_theta`, `F_theta`,
