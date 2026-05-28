@@ -1,7 +1,38 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
+const IS_MAIN = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (IS_MAIN) {
+  await main();
+}
+
+export const ARC_PHASE0_BASELINE_NAMES = [
+  "random_valid",
+  "identity_copy",
+  "dsl_lite_v0",
+  "dsl_lite_v1",
+  "dsl_lite_v2",
+  "tiny_learned_v0"
+];
+
+export function arcPhase0BaselinePredictions(baselineName, taskRecord, seed = 20260528) {
+  if (baselineName === "random_valid") return randomValidPredictions(taskRecord, seed);
+  if (baselineName === "identity_copy") return identityCopyPredictions(taskRecord);
+  if (baselineName === "dsl_lite_v0") return dslLitePredictions(taskRecord);
+  if (baselineName === "dsl_lite_v1") return dslLiteV1Predictions(taskRecord);
+  if (baselineName === "dsl_lite_v2") return dslLiteV2Predictions(taskRecord);
+  if (baselineName === "tiny_learned_v0") return tinyLearnedV0Predictions(taskRecord);
+  throw new Error(`Unknown Phase 0 baseline: ${baselineName}`);
+}
+
+export function arcPhase0ScoreTask(task, predictionsByPair) {
+  return scoreTask(task, predictionsByPair);
+}
+
+async function main() {
 const args = parseArgs(process.argv.slice(2));
 if (args.help || !args.dataDir || !args.register || !args.out) {
   printUsage();
@@ -90,6 +121,7 @@ for (const summary of summaries) {
 }
 console.log(`Wrote ${join(outDir, "manifest.json")}`);
 console.log(`Wrote ${join(outDir, "summary.csv")}`);
+}
 
 function randomValidPredictions(taskRecord, baseSeed) {
   const task = taskRecord.task;

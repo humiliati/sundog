@@ -362,15 +362,15 @@ Execution artifact:
 [`docs/prereg/arc/PHASE3_SUFFICIENCY_SPEC.md`](prereg/arc/PHASE3_SUFFICIENCY_SPEC.md).
 Status (2026-05-28): spec filed; decoder-admission roadmap filed; Pass A
 representation/decoder contract filed; Pass B split/floor/discrimination
-contract filed; Pass C learner/metric contract filed; decoder training held.
-Phase 2 baseline comparison sharpened the problem:
+contract filed; Pass C learner/metric contract filed; Pass D receipt/command
+contract filed; freeze-marker runner wiring implemented. Phase 2 baseline
+comparison sharpened the problem:
 `P_shadow_grid_v0` preserves distinctness but makes input-output pairs farther
 apart than raw-pixel and coarse-feature baselines. Phase 3 must therefore test
 learnability of the `input_rep -> output_rep` mapping from demonstrations, with
 `signature_palette` as the primary representation and `signature_only` as a
-stricter ablation. The next Phase 3 work is Pass D: freeze receipt paths, hash
-schema, command wiring, runner boundary, and final public-language/freeze
-marker before any runner executes.
+stricter ablation. The first receipt is admitted only under the frozen Pass A-D
+contracts and the committed Phase 3 runner surface.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 
