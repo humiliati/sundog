@@ -1,0 +1,3 @@
+task_id,split,status,primary_prior,secondary_priors,inclusion_basis,exclusion_reason,predicted_boundary,inventory_row_hash,manual_inspection,notes
+tile_2x2_to_4x4,training,include,spatial_transform,,synthetic tile,,capacity pressure,sanity,no,sanity check for v2 tile primitive
+pad_border,training,include,spatial_transform,,synthetic pad,,capacity pressure,sanity,no,sanity check for v2 pad primitive

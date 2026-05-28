@@ -22,6 +22,7 @@ results/arc/
 *.jsonl
 !chat/prompts/*.jsonl
 screenshots/
+tests/arc-baselines/out/
 
 # Editor
 .vscode/

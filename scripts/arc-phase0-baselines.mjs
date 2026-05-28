@@ -30,7 +30,10 @@ for (const row of registerRows) {
 const baselines = [
   ["random_valid", randomValidPredictions],
   ["identity_copy", identityCopyPredictions],
-  ["dsl_lite_v0", dslLitePredictions]
+  ["dsl_lite_v0", dslLitePredictions],
+  ["dsl_lite_v1", dslLiteV1Predictions],
+  ["dsl_lite_v2", dslLiteV2Predictions],
+  ["tiny_learned_v0", tinyLearnedV0Predictions]
 ];
 
 const predictionRecords = [];
@@ -69,7 +72,10 @@ const manifest = {
   notes: [
     "Uses public training tasks only.",
     "Exact task match is primary; pixel accuracy is diagnostic only.",
-    "dsl_lite_v0 fits only frozen, simple grid transforms and color maps."
+    "dsl_lite_v0 fits only frozen, simple grid transforms and color maps.",
+    "dsl_lite_v1 adds tile, translate, palette_permute (depth 1) per spec line 132 preregistered primitives; v0 logic frozen.",
+    "dsl_lite_v2 adds pad, fill_enclosed, component_copy_largest and depth-2 composition over union(v0 ∪ v1 ∪ v2) structural transforms; v0/v1 frozen.",
+    "tiny_learned_v0 is per-task nearest-neighbor over train pairs by padded pixel Hamming distance."
   ]
 };
 
@@ -146,6 +152,473 @@ function dslLitePredictions(taskRecord) {
     }
     return uniqueGrids(attempts).slice(0, 2);
   });
+}
+
+function dslLiteV1Predictions(taskRecord) {
+  const trainPairs = taskRecord.task.train;
+  const candidates = [];
+
+  const tileFactors = fitTileFactors(trainPairs);
+  if (tileFactors) {
+    const transform = (grid) => tileGrid(grid, tileFactors.ky, tileFactors.kx);
+    const colorMap = fitColorMapForTransform(trainPairs, transform);
+    if (colorMap) {
+      candidates.push((input) => applyColorMap(transform(input), colorMap));
+    }
+  }
+
+  const shift = fitTranslate(trainPairs);
+  if (shift) {
+    const transform = (grid) => translateGrid(grid, shift.dy, shift.dx);
+    const colorMap = fitColorMapForTransform(trainPairs, transform);
+    if (colorMap) {
+      candidates.push((input) => applyColorMap(transform(input), colorMap));
+    }
+  }
+
+  const permutationMaps = fitPalettePermutations(trainPairs);
+  for (const map of permutationMaps) {
+    candidates.push((input) => applyColorMap(input, map));
+  }
+
+  return taskRecord.task.test.map((pair) => {
+    const attempts = [];
+    for (const fn of candidates) {
+      attempts.push(fn(pair.input));
+    }
+    if (attempts.length === 0) {
+      attempts.push(cloneGrid(pair.input));
+    }
+    return uniqueGrids(attempts).slice(0, 2);
+  });
+}
+
+function dslLiteV2Predictions(taskRecord) {
+  const trainPairs = taskRecord.task.train;
+  const candidates = [];
+
+  const v2Structural = enumerateV2StructuralTransforms(trainPairs);
+  for (const transform of v2Structural) {
+    const colorMap = fitColorMapForTransform(trainPairs, transform);
+    if (colorMap) {
+      candidates.push((input) => applyColorMap(safeApply(transform, input), colorMap));
+    }
+  }
+
+  const allStructural = [
+    ...enumerateV0StructuralTransforms(),
+    ...enumerateV1StructuralTransforms(trainPairs),
+    ...v2Structural
+  ];
+
+  for (const t1 of allStructural) {
+    for (const t2 of allStructural) {
+      const composed = (grid) => safeApply(t2, safeApply(t1, grid));
+      const colorMap = fitColorMapForTransform(trainPairs, composed);
+      if (colorMap) {
+        candidates.push((input) => applyColorMap(composed(input), colorMap));
+      }
+    }
+  }
+
+  return taskRecord.task.test.map((pair) => {
+    const attempts = [];
+    for (const fn of candidates) {
+      try {
+        attempts.push(fn(pair.input));
+      } catch {
+        // Some composed transforms may throw on edge-case grid shapes; skip.
+      }
+    }
+    if (attempts.length === 0) {
+      attempts.push(cloneGrid(pair.input));
+    }
+    return uniqueGrids(attempts).slice(0, 2);
+  });
+}
+
+function enumerateV0StructuralTransforms() {
+  return [identity, rotate90, rotate180, rotate270, reflectHorizontal, reflectVertical, transpose, antiTranspose, cropNonZero];
+}
+
+function enumerateV1StructuralTransforms(trainPairs) {
+  const out = [];
+  const tileFactors = fitTileFactors(trainPairs);
+  if (tileFactors) {
+    out.push((grid) => tileGrid(grid, tileFactors.ky, tileFactors.kx));
+  }
+  const shift = fitTranslate(trainPairs);
+  if (shift) {
+    out.push((grid) => translateGrid(grid, shift.dy, shift.dx));
+  }
+  return out;
+}
+
+function enumerateV2StructuralTransforms(trainPairs) {
+  const out = [];
+  const padding = fitPad(trainPairs);
+  if (padding) {
+    out.push((grid) => padGrid(grid, padding));
+  }
+  out.push(fillEnclosed);
+  out.push(extractLargestComponent);
+  return out;
+}
+
+function fitPad(trainPairs) {
+  let result = null;
+  for (const pair of trainPairs) {
+    const ih = pair.input.length;
+    const iw = pair.input[0].length;
+    const oh = pair.output.length;
+    const ow = pair.output[0].length;
+    if (oh < ih || ow < iw || (oh === ih && ow === iw)) {
+      return null;
+    }
+    let pairResult = null;
+    outer: for (let top = 0; top <= oh - ih; top += 1) {
+      for (let left = 0; left <= ow - iw; left += 1) {
+        let match = true;
+        for (let y = 0; y < ih && match; y += 1) {
+          for (let x = 0; x < iw; x += 1) {
+            if (pair.output[top + y][left + x] !== pair.input[y][x]) {
+              match = false;
+              break;
+            }
+          }
+        }
+        if (!match) {
+          continue;
+        }
+        const padColors = new Set();
+        for (let y = 0; y < oh; y += 1) {
+          for (let x = 0; x < ow; x += 1) {
+            const inInput = y >= top && y < top + ih && x >= left && x < left + iw;
+            if (!inInput) {
+              padColors.add(pair.output[y][x]);
+            }
+          }
+        }
+        if (padColors.size > 1) {
+          continue;
+        }
+        const padColor = padColors.size === 0 ? 0 : [...padColors][0];
+        pairResult = {
+          top,
+          bottom: oh - ih - top,
+          left,
+          right: ow - iw - left,
+          padColor
+        };
+        break outer;
+      }
+    }
+    if (!pairResult) {
+      return null;
+    }
+    if (result === null) {
+      result = pairResult;
+    } else if (
+      result.top !== pairResult.top
+      || result.bottom !== pairResult.bottom
+      || result.left !== pairResult.left
+      || result.right !== pairResult.right
+      || result.padColor !== pairResult.padColor
+    ) {
+      return null;
+    }
+  }
+  return result;
+}
+
+function padGrid(grid, padding) {
+  const ih = grid.length;
+  const iw = grid[0].length;
+  const oh = ih + padding.top + padding.bottom;
+  const ow = iw + padding.left + padding.right;
+  const out = Array.from({ length: oh }, () => new Array(ow).fill(padding.padColor));
+  for (let y = 0; y < ih; y += 1) {
+    for (let x = 0; x < iw; x += 1) {
+      out[padding.top + y][padding.left + x] = grid[y][x];
+    }
+  }
+  return out;
+}
+
+function fillEnclosed(grid) {
+  const h = grid.length;
+  const w = grid[0].length;
+  const out = cloneGrid(grid);
+  const visited = Array.from({ length: h }, () => new Array(w).fill(false));
+  for (let y = 0; y < h; y += 1) {
+    for (let x = 0; x < w; x += 1) {
+      if (grid[y][x] !== 0 || visited[y][x]) {
+        continue;
+      }
+      const region = [[x, y]];
+      visited[y][x] = true;
+      let touchesBoundary = false;
+      const surrounding = new Set();
+      for (let i = 0; i < region.length; i += 1) {
+        const [cx, cy] = region[i];
+        if (cx === 0 || cx === w - 1 || cy === 0 || cy === h - 1) {
+          touchesBoundary = true;
+        }
+        for (const [nx, ny] of [[cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]]) {
+          if (nx < 0 || nx >= w || ny < 0 || ny >= h) {
+            continue;
+          }
+          if (grid[ny][nx] === 0 && !visited[ny][nx]) {
+            visited[ny][nx] = true;
+            region.push([nx, ny]);
+          } else if (grid[ny][nx] !== 0) {
+            surrounding.add(grid[ny][nx]);
+          }
+        }
+      }
+      if (!touchesBoundary && surrounding.size === 1) {
+        const color = [...surrounding][0];
+        for (const [cx, cy] of region) {
+          out[cy][cx] = color;
+        }
+      }
+    }
+  }
+  return out;
+}
+
+function extractLargestComponent(grid) {
+  const h = grid.length;
+  const w = grid[0].length;
+  const visited = Array.from({ length: h }, () => new Array(w).fill(false));
+  let best = null;
+  for (let y = 0; y < h; y += 1) {
+    for (let x = 0; x < w; x += 1) {
+      if (grid[y][x] === 0 || visited[y][x]) {
+        continue;
+      }
+      const color = grid[y][x];
+      const cells = [[x, y]];
+      visited[y][x] = true;
+      for (let i = 0; i < cells.length; i += 1) {
+        const [cx, cy] = cells[i];
+        for (const [nx, ny] of [[cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]]) {
+          if (nx < 0 || nx >= w || ny < 0 || ny >= h) {
+            continue;
+          }
+          if (visited[ny][nx] || grid[ny][nx] !== color) {
+            continue;
+          }
+          visited[ny][nx] = true;
+          cells.push([nx, ny]);
+        }
+      }
+      if (!best || cells.length > best.cells.length) {
+        best = { color, cells };
+      }
+    }
+  }
+  if (!best) {
+    return cloneGrid(grid);
+  }
+  const xs = best.cells.map(([x]) => x);
+  const ys = best.cells.map(([, y]) => y);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+  const out = Array.from({ length: maxY - minY + 1 }, () => new Array(maxX - minX + 1).fill(0));
+  for (const [x, y] of best.cells) {
+    out[y - minY][x - minX] = best.color;
+  }
+  return out;
+}
+
+function safeApply(transform, grid) {
+  if (!Array.isArray(grid) || grid.length === 0 || !Array.isArray(grid[0]) || grid[0].length === 0) {
+    throw new Error("invalid grid for transform");
+  }
+  return transform(grid);
+}
+
+function tinyLearnedV0Predictions(taskRecord) {
+  const trainPairs = taskRecord.task.train;
+  return taskRecord.task.test.map((pair) => {
+    const ranked = trainPairs
+      .map((tp, idx) => ({ idx, distance: paddedHammingDistance(pair.input, tp.input) }))
+      .sort((a, b) => a.distance - b.distance);
+    const attempts = [];
+    for (const entry of ranked) {
+      attempts.push(cloneGrid(trainPairs[entry.idx].output));
+      if (attempts.length >= 2) {
+        break;
+      }
+    }
+    if (attempts.length === 0) {
+      attempts.push(cloneGrid(pair.input));
+    }
+    return uniqueGrids(attempts).slice(0, 2);
+  });
+}
+
+function fitTileFactors(trainPairs) {
+  let ky = null;
+  let kx = null;
+  for (const pair of trainPairs) {
+    const ih = pair.input.length;
+    const iw = pair.input[0].length;
+    const oh = pair.output.length;
+    const ow = pair.output[0].length;
+    if (ih === 0 || iw === 0 || oh % ih !== 0 || ow % iw !== 0) {
+      return null;
+    }
+    const curKy = oh / ih;
+    const curKx = ow / iw;
+    if (ky === null) {
+      ky = curKy;
+      kx = curKx;
+    } else if (curKy !== ky || curKx !== kx) {
+      return null;
+    }
+  }
+  if (ky === null || ky < 1 || kx < 1 || (ky === 1 && kx === 1)) {
+    return null;
+  }
+  return { ky, kx };
+}
+
+function tileGrid(grid, ky, kx) {
+  const h = grid.length;
+  const w = grid[0].length;
+  const out = [];
+  for (let by = 0; by < ky; by += 1) {
+    for (let y = 0; y < h; y += 1) {
+      const row = new Array(w * kx);
+      for (let bx = 0; bx < kx; bx += 1) {
+        for (let x = 0; x < w; x += 1) {
+          row[bx * w + x] = grid[y][x];
+        }
+      }
+      out.push(row);
+    }
+  }
+  return out;
+}
+
+function fitTranslate(trainPairs) {
+  if (trainPairs.length === 0) {
+    return null;
+  }
+  const h = trainPairs[0].input.length;
+  const w = trainPairs[0].input[0].length;
+  for (const pair of trainPairs) {
+    if (pair.input.length !== h || pair.input[0].length !== w) {
+      return null;
+    }
+    if (!sameShape(pair.input, pair.output)) {
+      return null;
+    }
+  }
+  for (let dy = -h + 1; dy < h; dy += 1) {
+    for (let dx = -w + 1; dx < w; dx += 1) {
+      if (dy === 0 && dx === 0) {
+        continue;
+      }
+      const transform = (grid) => translateGrid(grid, dy, dx);
+      if (fitColorMapForTransform(trainPairs, transform)) {
+        return { dy, dx };
+      }
+    }
+  }
+  return null;
+}
+
+function translateGrid(grid, dy, dx) {
+  const h = grid.length;
+  const w = grid[0].length;
+  const out = Array.from({ length: h }, () => new Array(w).fill(0));
+  for (let y = 0; y < h; y += 1) {
+    for (let x = 0; x < w; x += 1) {
+      const ny = y + dy;
+      const nx = x + dx;
+      if (ny >= 0 && ny < h && nx >= 0 && nx < w) {
+        out[ny][nx] = grid[y][x];
+      }
+    }
+  }
+  return out;
+}
+
+function fitPalettePermutations(trainPairs) {
+  for (const pair of trainPairs) {
+    if (!sameShape(pair.input, pair.output)) {
+      return [];
+    }
+  }
+  const palette = [...new Set(
+    trainPairs.flatMap((pair) => pair.input.flat().concat(pair.output.flat()))
+  )].sort((a, b) => a - b);
+  if (palette.length === 0 || palette.length > 5) {
+    return [];
+  }
+  const results = [];
+  for (const perm of permutationsOf(palette)) {
+    let identical = true;
+    for (let i = 0; i < palette.length; i += 1) {
+      if (perm[i] !== palette[i]) {
+        identical = false;
+        break;
+      }
+    }
+    if (identical) {
+      continue;
+    }
+    const map = new Map();
+    for (let i = 0; i < palette.length; i += 1) {
+      map.set(palette[i], perm[i]);
+    }
+    let consistent = true;
+    for (const pair of trainPairs) {
+      if (!equalsGrid(applyColorMap(pair.input, map), pair.output)) {
+        consistent = false;
+        break;
+      }
+    }
+    if (consistent) {
+      results.push(map);
+    }
+  }
+  return results;
+}
+
+function permutationsOf(arr) {
+  if (arr.length <= 1) {
+    return [arr.slice()];
+  }
+  const out = [];
+  for (let i = 0; i < arr.length; i += 1) {
+    const rest = arr.slice(0, i).concat(arr.slice(i + 1));
+    for (const sub of permutationsOf(rest)) {
+      out.push([arr[i], ...sub]);
+    }
+  }
+  return out;
+}
+
+function paddedHammingDistance(a, b) {
+  const h = Math.max(a.length, b.length);
+  const w = Math.max(a[0].length, b[0].length);
+  let count = 0;
+  for (let y = 0; y < h; y += 1) {
+    for (let x = 0; x < w; x += 1) {
+      const va = (y < a.length && x < a[0].length) ? a[y][x] : 0;
+      const vb = (y < b.length && x < b[0].length) ? b[y][x] : 0;
+      if (va !== vb) {
+        count += 1;
+      }
+    }
+  }
+  return count;
 }
 
 function fitColorMapForTransform(trainPairs, transform) {
