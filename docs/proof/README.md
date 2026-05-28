@@ -88,7 +88,10 @@ that claim provably fails.
   (cell-set v0 § 4.1). Introduces the `PDE-C1-NEG-A` / `PDE-C1-NEG-B`
   parallelism mirroring the C2 receipts. Drafted, unreviewed;
   concrete parameter values are instantiated by cell-set v0 section 7
-  (and inherited unchanged by v1 and v2).
+  (and inherited unchanged by v1, v2, v3); v4 pins the new
+  `e_max_burnin_fraction = 0.25` added 2026-05-28 (E_max windowing
+  amendment, addresses burn-in transient contamination observed across
+  v0/v1/v3 lock executions).
 - [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md) — Phase 3 boundary theorem
   (reviewed, closed positive) and pushable-occluder mapping.
 - [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) — Phase 4 three-body measured
