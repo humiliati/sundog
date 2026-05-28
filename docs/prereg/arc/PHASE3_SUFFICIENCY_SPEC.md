@@ -3652,3 +3652,187 @@ output directory and rerun the same command. Read back:
 - `results/arc/phase3-rawgrid-gate-v2/phase3_receipt.json`;
 - `results/arc/phase3-rawgrid-gate-v2/branch_adjudication.md`;
 - `results/arc/phase3-rawgrid-gate-v2/hashes.json`.
+
+### 2026-05-28 -- Raw-Grid Gate V2 Shard+Merge Protocol Admission
+
+Author: Claude (Opus 4.7).
+
+Justification: the staged uncapped V2 full command has a ~11.5 h wall-clock
+estimate per the timing probe above. The three seeds in `SEED_SLATE` are
+independent (each re-seeds RNG, instantiates a fresh `TaskDecoder`, trains
+and evaluates without cross-seed state), and seed selection runs only after
+all three complete. The natural shard axis is therefore seed: three
+parallel ~3.8 h shards collapse the wall clock by ~3×, modulo
+shard-equivalence preservation. This amendment admits a shard+merge
+protocol that produces a binding receipt byte-equivalent to a serial V2
+run with the same seeds (verified by a probe-grade smoke), without
+altering the V2 frozen contract.
+
+Verdict impact: no full-grid-control gate verdict is admitted. The
+shard+merge protocol is an orchestration option for the same V2 run; the
+gate criterion, learner contract, model spec, data policy, and seed slate
+are unchanged. A binding sharded receipt's gate decision adjudicates
+identically to a serial receipt's.
+
+#### Frozen Shard Surface
+
+Added to `docs/prereg/arc/phase3_decoder_v2.py`:
+
+- `--shard-seed <int>` — must be a value in `SEED_SLATE`
+  (`{20260528, 20260529, 20260530}`). Trains and evaluates that single
+  seed using the same code path as the serial run, then writes a per-shard
+  receipt at `--out`. Sets `manifest.mode = "shard"`,
+  `manifest.shardSeed = <int>`, `manifest.gateDecision = {"gate":
+  "not_adjudicated", "reason": "shard run only"}`. Compatible with
+  `--probe-only`, `--probe-epochs`, `--max-epochs`, `--limit-aux-tasks`.
+- `--merge` plus `--shard-dirs <dir1,dir2,...>` — reads each shard's
+  intermediate, asserts frozen-config consistency across shards, sorts
+  by `shardSeed`, concatenates per-instance / per-slot / learning /
+  residual rows in seed order, runs the V2 selection rule on the merged
+  candidate list, runs `aggregate_per_task` / `aggregate_per_prior` /
+  `aggregate_scores` from `phase3_decoder.py` on the merged
+  `per_instance_any`, adjudicates the gate in `"full"` mode, and writes
+  the binding receipt at `--out`. Sets `manifest.mode = "full"`,
+  `manifest.shardedRun = true`, `manifest.shardSources = [...]` listing
+  each shard.
+
+Each shard writes the existing V2 receipt schema plus two intermediates
+required by the merge:
+
+- `per_instance_any.jsonl` — the raw `per_instance_any` rows the
+  aggregation functions consume (not a CSV roundtrip; preserves native
+  types);
+- `validation_candidates.json` — the per-seed validation candidate dict
+  (`arm`, `seed`, `best_epoch`, `validation_metric`, `validation_loss`,
+  `elapsed_seconds`).
+
+Serial runs also emit both files (cheap; lets a serial run be
+post-validated against a sharded run if needed).
+
+Npm wrappers (added to `package.json`):
+
+```json
+"arc:phase3:rawgrid-gate-v2:shard": "node scripts/arc-phase3-rawgrid-gate-v2.mjs --shard-seed",
+"arc:phase3:rawgrid-gate-v2:merge": "node scripts/arc-phase3-rawgrid-gate-v2.mjs --merge"
+```
+
+The shard command takes the seed as the next argument after `--`:
+
+```powershell
+npm run arc:phase3:rawgrid-gate-v2:shard -- 20260528 --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-rawgrid-gate-v2-shard-20260528
+```
+
+The merge command takes shard dirs comma-separated:
+
+```powershell
+npm run arc:phase3:rawgrid-gate-v2:merge -- --shard-dirs results/arc/phase3-rawgrid-gate-v2-shard-20260528,results/arc/phase3-rawgrid-gate-v2-shard-20260529,results/arc/phase3-rawgrid-gate-v2-shard-20260530 --out results/arc/phase3-rawgrid-gate-v2
+```
+
+#### Shard-Equivalence Guarantee
+
+For a sharded run to substitute for a serial V2 run, the merge must
+produce a binding receipt whose adjudication artifacts (`scores.csv`,
+`per_task.csv`, `per_instance.csv`, `per_prior.csv`,
+`learning_curves.csv`, `residuals.jsonl`, `quarantine_log.csv`,
+`branch_adjudication.md`) are byte-identical to the serial run's with
+the same seed slate, master seed, `max_epochs`, and `limit_aux_tasks`.
+
+This is the binding shard-equivalence criterion. It is enforced by:
+
+1. **Identical training per seed.** Each shard runs the same
+   `train_model` / `evaluate_model` calls with the same seed and the
+   same model spec. PyTorch CPU determinism + `set_global_determinism`
+   per-seed makes per-seed outputs deterministic.
+2. **Deterministic concatenation order.** The merge sorts shards by
+   `shardSeed` ascending, then concatenates per-instance / per-slot /
+   learning / residual rows in that order. This matches the order a
+   serial run produces (the serial run iterates `for seed in
+   SEED_SLATE`, which is also seed-ascending).
+3. **Deterministic selection.** The merge's selection rule is the
+   exact V2 rule from `phase3_decoder_v2.py:153`:
+   `sort by (-validation_metric, validation_loss, seed); pick [0]`.
+4. **Identical aggregation.** The merge calls
+   `phase3_decoder.aggregate_per_task` / `aggregate_per_prior` /
+   `aggregate_scores` on the merged `per_instance_any` with the
+   selected seed — the same functions a serial run calls.
+5. **Identical gate adjudication.** The merge calls
+   `adjudicate_raw_grid_gate(per_task_rows, "full")` — the same
+   function a serial run calls.
+
+The fields that differ between a serial and a sharded receipt are
+documented and confined to metadata (not adjudication):
+
+- `generatedAt`, `completedAt`, `mergeStartedAt`, per-shard timings;
+- `command`, `tool`, `outDir`;
+- `shardedRun`, `shardSources`, `mergeGitCommit`, `mergeGitDirty`,
+  `mergeAllowDirty` (new fields, only present in sharded receipts);
+- `hashes.json` (different because manifest differs);
+- `phase3_receipt.json` (embeds the manifest);
+- `validation_candidates.json` (functionally identical content but
+  ordering may differ — sharded merge sorts the combined list with the
+  same comparator as serial, so the contents and order are identical).
+
+Smoke verification command shape:
+
+```powershell
+# Serial baseline
+npm run arc:phase3:rawgrid-gate-v2 -- --data-dir ... --register ... --out results/arc/phase3-rawgrid-gate-v2-serial-smoke --max-epochs 2 --limit-aux-tasks 24 --allow-dirty
+
+# Three shards (cheap probe-grade)
+npm run arc:phase3:rawgrid-gate-v2:shard -- 20260528 --out results/arc/phase3-rawgrid-gate-v2-shard-20260528 --max-epochs 2 --limit-aux-tasks 24 --allow-dirty ...
+npm run arc:phase3:rawgrid-gate-v2:shard -- 20260529 --out results/arc/phase3-rawgrid-gate-v2-shard-20260529 --max-epochs 2 --limit-aux-tasks 24 --allow-dirty ...
+npm run arc:phase3:rawgrid-gate-v2:shard -- 20260530 --out results/arc/phase3-rawgrid-gate-v2-shard-20260530 --max-epochs 2 --limit-aux-tasks 24 --allow-dirty ...
+
+# Merge
+npm run arc:phase3:rawgrid-gate-v2:merge -- --shard-dirs <three-dirs> --out results/arc/phase3-rawgrid-gate-v2-merged-smoke --allow-dirty
+```
+
+Smoke result (2026-05-28, pre-amendment commit, `--max-epochs 2
+--limit-aux-tasks 24`): `scores.csv`, `per_task.csv`, and
+`per_instance.csv` are byte-identical between serial and merged
+receipts; gate decisions match (`full_grid_control_floor`).
+
+#### Frozen-Config Consistency Assertion
+
+The merge refuses to combine shards that disagree on any of:
+
+- `learnerVersion`, `protocolVersion`, `receiptSchemaVersion`,
+  `featureSchemaVersion`;
+- `arm`;
+- `registerHash`, `dataDirHash`;
+- `gitCommit`;
+- `modelSpec` (full dict equality);
+- `registerPath`, `dataDir`;
+- `limitAuxTasks`, `maxEpochsEffective`.
+
+The merge also refuses duplicate `shardSeed` values across shards. If
+any of these checks fail the merge aborts and the partial receipt is
+not written.
+
+#### Resume And Failure Recovery
+
+Each shard is independently resume-unsafe: if a shard process is
+interrupted mid-training, its output directory must be deleted and the
+shard re-run. The merge is fast (~2 minutes) and re-runnable; the
+merge itself does not need to be sharded.
+
+For the 11.5 h staged full run, sharded into three ~3.8 h shards:
+
+- if any one shard fails, restart that shard only; do not re-run the
+  others;
+- if more than one shard fails simultaneously, treat as a hardware
+  issue and audit before re-running.
+
+The shard-equivalence guarantee does not require the three shards to
+run on the same wall clock; they may overlap, be staggered, or use
+different cores/devices, as long as the merge consistency assertions
+pass.
+
+#### Public Language
+
+The shard+merge protocol does not change any public language. The
+adopted public-language drafts from prior V2 amendments apply
+unchanged to a sharded binding receipt. Any external citation of a
+sharded V2 receipt should note `shardedRun = true` and the
+`shardSources` list from the merged manifest if reproducibility
+discussion is part of the citation.

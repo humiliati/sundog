@@ -51,6 +51,8 @@ MODEL_SPEC_V2 = {
 def main() -> int:
     args = parse_args()
     patch_v1_globals()
+    if args.merge:
+        return run_merge(args)
     started_at = p3.iso_now()
     repo_root = Path(__file__).resolve().parents[3]
     out_dir = Path(args.out).resolve()
@@ -102,9 +104,19 @@ def main() -> int:
         print(f"ARC Phase 3 raw-grid gate v2 dry run wrote {out_dir}")
         return 0
 
-    seeds = [args.master_seed] if args.probe_only else SEED_SLATE
-    max_epochs = args.probe_epochs if args.probe_only else args.max_epochs
-    manifest["mode"] = "probe" if args.probe_only else "full"
+    if args.shard_seed is not None:
+        if args.shard_seed not in SEED_SLATE:
+            print(f"--shard-seed {args.shard_seed} is not in SEED_SLATE {SEED_SLATE}", file=sys.stderr)
+            return 2
+        seeds = [args.shard_seed]
+        max_epochs = args.probe_epochs if args.probe_only else args.max_epochs
+        manifest["mode"] = "shard"
+        manifest["shardSeed"] = args.shard_seed
+        manifest["seedSlateOriginal"] = SEED_SLATE
+    else:
+        seeds = [args.master_seed] if args.probe_only else SEED_SLATE
+        max_epochs = args.probe_epochs if args.probe_only else args.max_epochs
+        manifest["mode"] = "probe" if args.probe_only else "full"
     manifest["seedSlateEffective"] = seeds
     manifest["maxEpochsEffective"] = max_epochs
     manifest["epochsOverridden"] = max_epochs != MODEL_SPEC_V2["max_epochs"]
@@ -171,6 +183,8 @@ def main() -> int:
     p3.write_csv(out_dir / "scores.csv", scores, p3.SCORE_COLUMNS)
     p3.write_csv(out_dir / "quarantine_log.csv", [], p3.QUARANTINE_COLUMNS)
     p3.write_jsonl(out_dir / "residuals.jsonl", residual_rows)
+    p3.write_jsonl(out_dir / "per_instance_any.jsonl", per_instance_any)
+    p3.write_json(out_dir / "validation_candidates.json", candidates)
     p3.write_json(out_dir / "phase3_receipt.json", {
         "manifest": manifest,
         "validationRank": candidates,
@@ -188,8 +202,8 @@ def main() -> int:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="ARC Phase 3 strengthened raw-grid control gate")
-    parser.add_argument("--data-dir", required=True)
-    parser.add_argument("--register", required=True)
+    parser.add_argument("--data-dir", required=False)
+    parser.add_argument("--register", required=False)
     parser.add_argument("--out", default="results/arc/phase3-rawgrid-gate-v2")
     parser.add_argument("--master-seed", type=int, default=20260528)
     parser.add_argument("--allow-dirty", action="store_true")
@@ -199,7 +213,176 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-epochs", type=int, default=MODEL_SPEC_V2["max_epochs"])
     parser.add_argument("--limit-aux-tasks", type=int, default=0, help="Probe-only cap for auxiliary public-training tasks")
     parser.add_argument("--device", default="cpu")
-    return parser.parse_args()
+    parser.add_argument("--shard-seed", type=int, default=None, help="Run a single seed from SEED_SLATE and emit a shard intermediate (no gate adjudication).")
+    parser.add_argument("--merge", action="store_true", help="Merge shard intermediates into a binding receipt instead of training.")
+    parser.add_argument("--shard-dirs", default=None, help="Comma-separated list of shard receipt directories (--merge mode only).")
+    args = parser.parse_args()
+    if not args.merge:
+        if not args.data_dir or not args.register:
+            parser.error("--data-dir and --register are required (except in --merge mode)")
+    else:
+        if not args.shard_dirs:
+            parser.error("--merge requires --shard-dirs <dir1,dir2,...>")
+    return args
+
+
+def run_merge(args) -> int:
+    started_at = p3.iso_now()
+    repo_root = Path(__file__).resolve().parents[3]
+    out_dir = Path(args.out).resolve()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    git = p3.git_state(repo_root, args.allow_dirty)
+
+    shard_dirs = [Path(d.strip()).resolve() for d in args.shard_dirs.split(",") if d.strip()]
+    if len(shard_dirs) == 0:
+        print("--shard-dirs is empty", file=sys.stderr)
+        return 2
+
+    shards = []
+    for d in shard_dirs:
+        if not d.is_dir():
+            print(f"shard dir not found: {d}", file=sys.stderr)
+            return 2
+        manifest = json.loads((d / "manifest.json").read_text(encoding="utf-8"))
+        if manifest.get("mode") != "shard":
+            print(f"shard dir {d} has mode={manifest.get('mode')!r}, expected 'shard'", file=sys.stderr)
+            return 2
+        if manifest.get("learnerVersion") != LEARNER_VERSION:
+            print(f"shard dir {d} learnerVersion={manifest.get('learnerVersion')!r}, expected {LEARNER_VERSION!r}", file=sys.stderr)
+            return 2
+        shards.append({
+            "dir": d,
+            "manifest": manifest,
+            "per_instance_any": read_jsonl(d / "per_instance_any.jsonl"),
+            "per_slot_rows": read_csv_dicts(d / "per_instance.csv"),
+            "learning_rows": read_csv_dicts(d / "learning_curves.csv"),
+            "residual_rows": read_jsonl(d / "residuals.jsonl"),
+            "candidates": json.loads((d / "validation_candidates.json").read_text(encoding="utf-8")),
+        })
+
+    assert_shard_consistency(shards)
+    shards.sort(key=lambda s: s["manifest"]["shardSeed"])
+
+    per_instance_any: list[dict[str, Any]] = []
+    per_slot_rows: list[dict[str, Any]] = []
+    learning_rows: list[dict[str, Any]] = []
+    residual_rows: list[dict[str, Any]] = []
+    all_candidates: list[dict[str, Any]] = []
+    for sh in shards:
+        per_instance_any.extend(sh["per_instance_any"])
+        per_slot_rows.extend(sh["per_slot_rows"])
+        learning_rows.extend(sh["learning_rows"])
+        residual_rows.extend(sh["residual_rows"])
+        all_candidates.extend(sh["candidates"])
+
+    all_candidates.sort(key=lambda row: (-row["validation_metric"], row["validation_loss"], row["seed"]))
+    selected_seed = all_candidates[0]["seed"]
+    selected_seed_by_arm = {ARM: selected_seed}
+    per_task_rows = p3.aggregate_per_task(per_instance_any, selected_seed_by_arm)
+    per_prior_rows = p3.aggregate_per_prior(per_instance_any, selected_seed_by_arm)
+    scores = p3.aggregate_scores(per_instance_any, selected_seed_by_arm, shards[0]["manifest"]["masterSeed"])
+    gate = adjudicate_raw_grid_gate(per_task_rows, "full")
+
+    first_manifest = shards[0]["manifest"]
+    drop_keys = {"mode", "shardSeed", "seedSlateEffective", "seedSlateOriginal", "generatedAt", "completedAt", "command", "tool", "outDir"}
+    merged_manifest = {k: v for k, v in first_manifest.items() if k not in drop_keys}
+    merged_manifest.update({
+        "generatedAt": min(sh["manifest"]["generatedAt"] for sh in shards),
+        "completedAt": p3.iso_now(),
+        "tool": "docs/prereg/arc/phase3_decoder_v2.py (merge)",
+        "command": [sys.executable, "docs/prereg/arc/phase3_decoder_v2.py", *sys.argv[1:]],
+        "mode": "full",
+        "shardedRun": True,
+        "shardSources": [
+            {
+                "dir": str(sh["dir"]),
+                "shardSeed": sh["manifest"]["shardSeed"],
+                "generatedAt": sh["manifest"]["generatedAt"],
+                "completedAt": sh["manifest"]["completedAt"],
+                "gitCommit": sh["manifest"]["gitCommit"],
+            }
+            for sh in shards
+        ],
+        "seedSlateEffective": [sh["manifest"]["shardSeed"] for sh in shards],
+        "mergeStartedAt": started_at,
+        "mergeGitCommit": git["commit"],
+        "mergeGitDirty": git["dirty"],
+        "mergeAllowDirty": args.allow_dirty,
+        "outDir": str(out_dir),
+        "selectedSeedByArm": selected_seed_by_arm,
+        "validationRank": all_candidates,
+        "gateDecision": gate,
+    })
+
+    p3.write_json(out_dir / "manifest.json", merged_manifest)
+    p3.write_csv(out_dir / "learning_curves.csv", learning_rows, p3.LEARNING_COLUMNS)
+    p3.write_csv(out_dir / "per_instance.csv", per_slot_rows, p3.PER_SLOT_COLUMNS)
+    p3.write_csv(out_dir / "per_task.csv", per_task_rows, p3.PER_TASK_COLUMNS)
+    p3.write_csv(out_dir / "per_prior.csv", per_prior_rows, p3.PER_PRIOR_COLUMNS)
+    p3.write_csv(out_dir / "scores.csv", scores, p3.SCORE_COLUMNS)
+    p3.write_csv(out_dir / "quarantine_log.csv", [], p3.QUARANTINE_COLUMNS)
+    p3.write_jsonl(out_dir / "residuals.jsonl", residual_rows)
+    p3.write_jsonl(out_dir / "per_instance_any.jsonl", per_instance_any)
+    p3.write_json(out_dir / "validation_candidates.json", all_candidates)
+    p3.write_json(out_dir / "phase3_receipt.json", {
+        "manifest": merged_manifest,
+        "validationRank": all_candidates,
+        "scores": scores,
+        "perTask": per_task_rows,
+        "gateDecision": gate,
+        "residuals": residual_rows,
+    })
+    write_gate_summary(out_dir / "branch_adjudication.md", gate, scores, selected_seed)
+    split_first = shards[0]["dir"] / "split.csv"
+    if split_first.exists():
+        (out_dir / "split.csv").write_text(split_first.read_text(encoding="utf-8"), encoding="utf-8")
+    p3.write_json(out_dir / "hashes.json", p3.hash_receipt_files(out_dir))
+    print(f"ARC Phase 3 raw-grid gate v2 merge wrote {out_dir}")
+    print(f"Gate decision: {gate['gate']}")
+    return 0
+
+
+def assert_shard_consistency(shards: list[dict[str, Any]]) -> None:
+    if len(shards) < 2:
+        return
+    ref = shards[0]["manifest"]
+    keys = [
+        "learnerVersion", "protocolVersion", "receiptSchemaVersion", "featureSchemaVersion",
+        "arm", "registerHash", "dataDirHash", "gitCommit", "modelSpec",
+        "registerPath", "dataDir", "limitAuxTasks", "maxEpochsEffective",
+    ]
+    seeds: set[int] = set()
+    for sh in shards:
+        m = sh["manifest"]
+        seed = m.get("shardSeed")
+        if seed in seeds:
+            raise SystemExit(f"shard {sh['dir']} has duplicate shardSeed={seed}")
+        seeds.add(seed)
+        for key in keys:
+            ref_val = json.dumps(ref.get(key), sort_keys=True)
+            sh_val = json.dumps(m.get(key), sort_keys=True)
+            if ref_val != sh_val:
+                raise SystemExit(f"shard {sh['dir']} disagrees with {shards[0]['dir']} on '{key}':\n  ref={ref_val}\n  sh ={sh_val}")
+
+
+def read_jsonl(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    rows = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        rows.append(json.loads(line))
+    return rows
+
+
+def read_csv_dicts(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    with path.open("r", encoding="utf-8", newline="") as fh:
+        reader = csv.DictReader(fh)
+        return [dict(row) for row in reader]
 
 
 def patch_v1_globals() -> None:
