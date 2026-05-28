@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3D BINDING RECEIPT FILED -- `branch_d_full_grid_edit_floor`; ALL 4 REFLECTION BRANCHES + BRANCH D NOW CLOSED**.
+Status: **Phase 3D EDIT-COLOR-RULE VARIANT SPEC FILED; EXECUTION HOLD**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -117,6 +117,15 @@ require either a new pre-registered Branch D variant (wider baseline
 family, cross-task edit-color MLP, richer mask learner) or a new
 Branch E spec (e.g., generative program search, test-time LM prompting)
 with its own arena gate and verdict-amendment discipline.
+
+The first bottleneck-targeted Branch D variant is now filed at
+[`PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md`](PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md).
+It freezes `structured_edit_color_rule_v2`, which changes only the edit-color
+component of `structured_edit_residual_v1`: the learned color MLP is replaced by
+a deterministic conditioning-derived color-rule bank. The baseline picker,
+edit-mask learner, splits, seed slate, and arena discipline remain inherited.
+Status: spec only; execution hold pending runner tooling and freeze-marker
+amendment.
 
 ## Official Anchors
 
@@ -242,6 +251,13 @@ Checked **2026-05-28** against:
   (51/196 = 26%), naming the new failure mode: the per-instance scratch
   color learner knows WHERE to edit but not WHAT color. Wall: ~1h 26m
   parallel (2.9x sharded GPU speedup vs ~5.3 h serial projection).
+- [`PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md`](PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md)
+  -- first Branch D bottleneck variant. It freezes
+  `structured_edit_color_rule_v2` / `edit_color_rule_bank_v1`, keeps the
+  baseline picker and edit-mask learner inherited from
+  `structured_edit_residual_v1`, and replaces only the edit-color MLP with a
+  deterministic color-rule bank selected from conditioning residuals. Status:
+  spec only; execution hold.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,

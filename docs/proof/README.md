@@ -50,13 +50,23 @@ that claim provably fails.
   Not a `PDE-C1-NEG-B` retune; the pinned binning prescription
   doesn't adapt to attractor extent.
 - [`PDE_C1_CELLSET_KOLMOGOROV_v3.md`](PDE_C1_CELLSET_KOLMOGOROV_v3.md)
-  — Navier-Stokes Candidate 1 cell-set v3: backs Grashof off to
-  `G = 200` looking for the sweet spot between v1's energy
-  conservation and v2's high-dimensional chaos. Keep `k_f = 2`, `K = 4`,
-  all other v0/v1/v2 §7 values inherited. Drafted, desk-auditable,
-  unreviewed, unrun. Harness exposes `--preset lock_v3`. If v3 also
-  defers, the next move is a methodology amendment (adaptive `h_K` or
-  smaller `K`), not another G knob.
+  — Navier-Stokes Candidate 1 cell-set v3: `G = 200`, `k_f = 2`.
+  Lock executed 2026-05-28 (~20 min); verdict `DEFERRED_VACUITY`
+  (`proxy_selector_structurally_constant`) — burn-in had real chaotic
+  excursions (max 3.13) but the post-burn-in steady-state attractor
+  sits in `[0.7649, 0.7843]`, well below the transient-contaminated
+  `e_max = 1.07`. Cross-cell pattern across v0/v1/v3 reveals burn-in
+  transient contamination of the 95th-percentile threshold.
+- [`PDE_C1_CELLSET_KOLMOGOROV_v4.md`](PDE_C1_CELLSET_KOLMOGOROV_v4.md)
+  — Navier-Stokes Candidate 1 cell-set v4: **methodology sibling** to
+  v3, not a regime sibling. Holds the v3 regime constant
+  (`k_f = 2`, `G = 200`) and pins `e_max_burnin_fraction = 0.25`
+  (last quarter of burn-in only for the 95th-percentile threshold)
+  per the 2026-05-28 fiber-protocol E_max windowing amendment.
+  Projected `E_max` drops from `1.07` to `~0.78`, projected
+  `damp_fraction ≈ 0.05` — comfortably discriminative. Drafted,
+  desk-auditable, unreviewed, unrun. Harness exposes
+  `--preset lock_v4`.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /

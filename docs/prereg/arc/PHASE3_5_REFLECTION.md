@@ -434,3 +434,16 @@ All four PHASE3_5_REFLECTION branches plus the filed Branch D framing are now
 characterised. Any further Phase 3 reopen requires a new pre-registered Branch
 D variant or a new Branch E spec with its own arena gate, verdict discipline,
 receipt path, and public-language constraints.
+
+## Branch D Bottleneck Variant Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+The first Branch D variant is now filed in
+`PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md`. It targets the edit-color-rule
+bottleneck named by the Phase 3D receipt. The variant keeps the structured-edit
+baseline and edit-mask components fixed, and replaces only the edit-color MLP
+with a deterministic color-rule bank selected from conditioning residuals.
+
+This addendum does not admit execution. The variant remains in execution hold
+until runner tooling and a freeze-marker amendment are filed.

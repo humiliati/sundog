@@ -5723,3 +5723,61 @@ execution in progress" to "Branch D binding receipt filed,
 `branch_d_full_grid_edit_floor`; all four PHASE3_5_REFLECTION
 branches + Branch D now characterised; reopens require a new
 pre-registered Branch D variant or Branch E spec".
+
+### 2026-05-28 (PT) -- Codex (GPT-5) -- Branch D Edit-Color-Rule Variant Spec Filed
+
+Branch D variant spec:
+[`PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md`](PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md).
+
+Justification: the Phase 3D structured-edit receipt isolated the current
+bottleneck to the edit-color-rule stage: baseline shape/canvas and edit-mask
+signals were nontrivial, but the per-task scratch edit-color MLP did not recover
+exact output colors. This amendment starts the narrowest Branch D variant:
+change only the edit-color component and leave the registered task class,
+baseline picker, edit-mask learner, splits, seed slate, and arena discipline
+unchanged.
+
+Verdict impact: **no execution admission and no Branch D variant verdict**. The
+new spec freezes `structured_edit_color_rule_v2` and learner label
+`edit_color_rule_bank_v1`, but execution remains held until runner tooling, npm
+wiring, result ignore path, leak-check coverage, capped smoke/probe receipts,
+and a freeze-marker amendment are committed together.
+
+The variant replaces the learned edit-color MLP with a deterministic
+conditioning-derived color-rule bank. Frozen rule families include:
+
+- constant/modal edit-color rules;
+- baseline-color, input-nearest-neighbor-color, input-patch-majority, and
+  baseline/input-pair color maps;
+- relative palette-rank mapping;
+- object-role color mapping;
+- small row/column periodic color rules;
+- nearest edited-neighbor color transfer.
+
+The arena discipline remains conservative:
+
+1. `raw_grid_edit_color_v2` must open the non-baseline arena by achieving at
+   least one non-baseline exact task on both held-out lanes (`test_lodo` and
+   `pttest`);
+2. if raw grid floors, the verdict is `branch_d_color_rule_full_grid_floor` and
+   no signature sufficiency language is admitted;
+3. oracle rule accuracy is diagnostic only and cannot support a branch verdict;
+4. only if the raw-grid color-rule arena opens can
+   `signature_palette_edit_color_v2` be compared for
+   `branch_d_color_rule_support`, `branch_d_color_rule_bounded_failure`, or
+   diagnostic named quarantine.
+
+Reserved implementation names:
+
+- Python runner: `docs/prereg/arc/phase3d_edit_color_rule_v2.py`;
+- Node wrapper: `scripts/arc-phase3d-edit-color-rule-v2.mjs`;
+- npm script: `arc:phase3d:edit-color-rule-v2`;
+- shard npm script: `arc:phase3d:edit-color-rule-v2:shard`;
+- merge npm script: `arc:phase3d:edit-color-rule-v2:merge`;
+- binding receipt path: `results/arc/phase3d-edit-color-rule-v2/`.
+
+Public-language constraint before a binding receipt:
+
+> "Phase 3D has filed an edit-color-rule variant spec targeting the bottleneck
+> isolated by the structured-edit receipt. No variant receipt exists yet, and no
+> sufficiency claim is admitted."
