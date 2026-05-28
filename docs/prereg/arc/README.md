@@ -67,9 +67,9 @@ Checked **2026-05-28** against:
   sufficiency audit spec. It freezes the harder post-Phase-2 posture:
   `input_sig -> output_sig` is not a small-delta problem, and the primary
   Sundog representation is `signature_palette`, not signature alone. The
-  Pass A representation/decoder contract and Pass B split/floor/discrimination
-  contract are filed; Passes C-D, the runner, and decoder execution remain
-  held.
+  Pass A representation/decoder contract, Pass B split/floor/discrimination
+  contract, and Pass C learner/metric contract are filed; Pass D, the runner,
+  and decoder execution remain held.
 
 ## Discipline Tooling
 

@@ -768,3 +768,241 @@ The 30% threshold reflects that with `k=2..5` demonstrations per task,
 some genuine signature collapse is expected; pervasive collapse means the
 LODO protocol itself is not generating a meaningful prediction task and the
 verdict is uninterpretable.
+
+### 2026-05-28 -- Pass C Learner, Seeds, Metrics, And Failure Labels
+
+Author: Codex.
+
+Justification: Pass C closes the third roadmap slot by choosing the first
+learner family, pinning all distance and ranking rules, freezing the seed slate,
+and defining the metric hierarchy and failure labels used to interpret Phase 3.
+The first learner is intentionally low-capacity and deterministic so the run
+tests representation neighborhoods before adding any fitted neural capacity.
+
+Verdict impact: no execution admission. Pass C is filed. Runner implementation,
+artifact hash schema, command wiring, and decoder execution remain held pending
+Pass D.
+
+#### First Learner Family
+
+The first Phase 3 learner is `nn_output_transfer_v1`, a deterministic
+nearest-input output-transfer selector.
+
+For each lane instance and arm:
+
+1. Build the conditioning set from Pass B.
+2. Represent the query input and every conditioning input under the arm.
+3. Compute arm-specific input distance from the query input to each
+   conditioning input.
+4. Rank conditioning pairs by ascending input distance, then by deterministic
+   tie-break key, then by original pair index.
+5. Transfer the ranked conditioning output representation as the candidate
+   output. Emit at most the first two distinct candidate outputs.
+
+This learner has:
+
+- no hidden layers;
+- no optimizer;
+- no learned parameters;
+- no epochs, gradient steps, or early stopping;
+- no cross-task fitted state;
+- `candidateLimit = 2`;
+- one run seed, used only for deterministic tie-breaking.
+
+No MLP, linear regressor, CNN, or stochastic learner is admitted for the first
+Phase 3 receipt. A later learner family requires a new append-only amendment and
+must produce a separate receipt; it may not overwrite the `nn_output_transfer_v1`
+receipt.
+
+#### Candidate Identity And De-Duplication
+
+Candidate identity is arm-specific:
+
+- `signature_only`: `signatureHash|localBagHash`
+- `signature_palette`:
+  `shape|palette|nonzeroCells|nonzeroComponents|density|signatureHash|localBagHash`
+- `metadata_only`: JSON serialization of the Pass A metadata vector
+- `raw_grid_lowcap`: `JSON.stringify(grid)`
+
+If two conditioning pairs produce the same candidate identity, keep only the
+first under the ranked order and record all duplicate source pair indices in
+`per_instance.csv`. A candidate copied from a conditioning output is still a
+representation candidate for representation arms; `signature_only` does not gain
+a direct exact-grid decoder from this copy.
+
+#### Arm Distances
+
+All distances are in `[0, 1]` except where noted; lower is better.
+
+`signature_only`:
+
+- distance is cosine distance over the Pass A hashed signature suffix only:
+  `1 - dot(a_suffix, b_suffix)`;
+- the suffixes are L2-normalized by Pass A, so no metadata scale enters.
+
+`signature_palette`:
+
+- distance is `0.5 * signature_cosine_distance + 0.5 * metadata_l1`;
+- `metadata_l1` is the mean absolute difference over the 28 metadata-prefix
+  coordinates;
+- this fixed 50/50 split is the Pass C scale rule required by the Pass A L2
+  clarification.
+
+`metadata_only`:
+
+- distance is `metadata_l1`.
+
+`raw_grid_lowcap`:
+
+- convert each grid to a `[30, 30]` label field where in-grid cells are colors
+  `0..9` and out-of-grid padding cells are label `10`;
+- distance is normalized Hamming over all `900` label positions.
+
+Output-representation distance uses the same arm distance between the selected
+candidate output representation and the target output representation.
+
+#### Seed Slate And Tie-Breaks
+
+The first receipt uses exactly one master seed:
+
+- `masterSeed = 20260528`
+
+Tie-break key:
+
+1. Build the UTF-8 string
+   `arc-p3-c0-v1\0<masterSeed>\0<task_id>\0<lane>\0<query_index>\0<arm>\0<source_pair_index>`.
+2. Compute SHA-256.
+3. Interpret the first eight digest bytes as an unsigned big-endian integer.
+4. Sort ascending.
+
+For LODO, `query_index` is the held-out train pair index. For public-training
+test instances, `query_index` is the public-training test index. This rule
+clarifies Pass B's tie-break phrase: the pre-rank candidate key is the source
+pair index; the emitted `candidate_rank` is assigned only after sorting.
+
+#### Metric Columns
+
+Each `per_instance.csv` row must include these fields where applicable:
+
+- `grid_exact_slot1`
+- `grid_exact_any_slot`
+- `rep_exact_slot1`
+- `rep_exact_any_slot`
+- `shape_exact_slot1`
+- `palette_exact_slot1`
+- `pixel_accuracy_slot1`
+- `pixel_accuracy_best`
+- `output_rep_distance_slot1`
+- `output_rep_distance_best`
+- `candidate_pool_contains_target_rep`
+- `candidate_pool_contains_target_grid`
+- `top2_contains_target_rep`
+- `top2_contains_target_grid`
+- `failure_label`
+
+`grid_exact_*` and `pixel_accuracy_*` are `NA` for direct `signature_only` and
+direct `metadata_only` representation scoring. `signature_palette` grid columns
+use `top_left_palette_orbit_v1`; `raw_grid_lowcap` grid columns use identity
+decoding. Pixel accuracy follows Phase 0: if shapes differ, pixel accuracy is
+`0`.
+
+Aggregate `scores.csv` rows must report, at minimum:
+
+- `grid_exact_rate_any_slot`
+- `rep_exact_rate_slot1`
+- `rep_exact_rate_any_slot`
+- `shape_exact_rate_slot1`
+- `palette_exact_rate_slot1`
+- `mean_pixel_accuracy_best`
+- `mean_output_rep_distance_slot1`
+- `mean_output_rep_distance_best`
+- `mean_output_rep_similarity_best = 1 - mean_output_rep_distance_best`
+- `coverage_failure_rate`
+- `detection_failure_rate`
+- `residual_failure_rate`
+
+Rates are computed after applying Pass B's `learner_task_trivial` suppression
+rule. Suppressed instances still appear in `per_instance.csv` with
+`suppressed_by_discrimination = true`.
+
+#### Comparison Hierarchy
+
+Arm comparisons use this ordered metric ladder:
+
+1. `grid_exact_rate_any_slot`, only when both arms have non-`NA` grid exact;
+2. `rep_exact_rate_slot1`;
+3. `shape_exact_rate_slot1`, only when both arms expose shape;
+4. `palette_exact_rate_slot1`, only when both arms expose palette;
+5. `mean_pixel_accuracy_best`, only when both arms have non-`NA` pixel accuracy;
+6. `mean_output_rep_similarity_best`.
+
+Exact-rate comparisons are decisive only when the absolute rate difference is
+at least `0.05` and the corresponding instance-count difference is at least
+`max(2, ceil(0.05 * comparable_instance_count))`.
+
+Continuous comparisons are decisive only when the absolute difference is at
+least `0.02`.
+
+If a metric is tied or non-comparable, continue to the next metric in the
+ladder. If every comparable metric is non-decisive, the arms are
+`competitive_tie`.
+
+Definitions:
+
+- `A beats B`: the first decisive comparable metric favors `A`.
+- `A competitive_with B`: no comparable metric shows `A` materially trailing
+  `B`; this includes `competitive_tie`.
+- `A materially_trails B`: the first decisive comparable metric favors `B`.
+
+Exact-rate `0` vs `0` can never support a sufficiency claim by itself; it must
+fall through to the lower ladder metrics or end as `competitive_tie`.
+
+#### Verdict Thresholds
+
+The verdict table in the original spec is interpreted as follows:
+
+- **support on registered subset** requires:
+  - `signature_palette beats metadata_only` on LODO `k_ge_3`;
+  - `signature_palette beats metadata_only` on public-training test
+    `all_tasks`;
+  - `signature_palette competitive_with raw_grid_lowcap` on LODO `k_ge_3`;
+  - `signature_palette competitive_with raw_grid_lowcap` on public-training
+    test `all_tasks`;
+  - LODO `all_tasks` does not contradict the `k_ge_3` result.
+- **partial support / lossy representation** applies when
+  `signature_palette beats metadata_only` on LODO `k_ge_3` but
+  `signature_palette materially_trails raw_grid_lowcap` on either LODO
+  `k_ge_3` or public-training test `all_tasks`.
+- **palette-dependent support** applies when `signature_only materially_trails
+  signature_palette` on the color-role stratum and `signature_palette` otherwise
+  meets the support or partial-support criteria.
+- **sufficiency failure** applies when `signature_palette` does not beat
+  `metadata_only` on LODO `k_ge_3`.
+- **task hardness / decoder failure** applies when Pass B's discrimination
+  collapse threshold fires, or when every grid-bearing arm has
+  `grid_exact_rate_any_slot < 0.03` and every representation arm has
+  `rep_exact_rate_slot1 < 0.05` on LODO `k_ge_3`.
+
+Public-training test results can downgrade a support verdict to partial,
+sufficiency failure, or task-hardness/decoder failure. They cannot upgrade a
+LODO failure to support.
+
+#### Failure Labels
+
+Per-instance failure labels are assigned after candidate ranking and decoding:
+
+- `none`: at least one emitted candidate receives exact credit on the primary
+  available metric for that arm.
+- `coverage`: the target output representation or grid is absent from the full
+  pre-top-2 candidate pool, or the decoder cannot produce a candidate because
+  required structural fields are missing or invalid.
+- `detection`: the target is present in the full candidate pool but absent from
+  the emitted top two candidates, or the target representation is present in
+  top two but not in slot 1 for a representation-level slot-1 metric.
+- `residual`: the selected representation is exact or nearest under the arm
+  distance, but deterministic decoding leaves grid, geometry, translation,
+  orientation, or color-assignment error.
+
+When multiple failure labels could apply, precedence is:
+`coverage` before `detection` before `residual`. A row with all primary and
+secondary metrics `NA` must be labeled `coverage`.
