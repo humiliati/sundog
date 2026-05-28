@@ -17,6 +17,7 @@ results/mines/
 results/mesa/
 results/isotrophy/
 results/arc/
+results/arc/phase3-sufficiency/
 
 # Test artifacts
 *.jsonl

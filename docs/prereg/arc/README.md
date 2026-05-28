@@ -68,8 +68,9 @@ Checked **2026-05-28** against:
   `input_sig -> output_sig` is not a small-delta problem, and the primary
   Sundog representation is `signature_palette`, not signature alone. The
   Pass A representation/decoder contract, Pass B split/floor/discrimination
-  contract, and Pass C learner/metric contract are filed; Pass D, the runner,
-  and decoder execution remain held.
+  contract, Pass C learner/metric contract, and Pass D receipt/command contract
+  are filed. The freeze-marker runner wiring is implemented; the first receipt
+  is admitted only under the frozen Pass A-D contracts.
 
 ## Discipline Tooling
 

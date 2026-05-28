@@ -1347,3 +1347,30 @@ evaluation split or as an ARC solve claim. The Phase 0-2 public-language
 constraints (no "Sundog solves ARC", no "human-level abstraction", no
 "the 5D subspace is universal", no claim that a Kaggle entry validates
 the theory without the Phase 3 sufficiency audit) remain in force.
+
+### 2026-05-28 -- Freeze-Marker Implementation Note
+
+Author: Codex.
+
+Justification: the Pass D amendment landed in commit `c81c594` before the
+runner files were added. This implementation commit completes the operational
+freeze marker by adding the two required lane runners, a thin argument-forwarding
+umbrella runner, npm wiring, the explicit Phase 3 receipt ignore path, and the
+leak-check allowlist entries for the lane runners' refuse-to-read guard.
+
+Verdict impact: after this implementation commit lands, the first Phase 3
+receipt is admitted under the frozen Pass A-D contracts. The umbrella command
+choice is pinned as:
+
+```json
+"arc:phase3:sufficiency": "node scripts/arc-phase3-sufficiency.mjs"
+```
+
+The wrapper invokes `scripts/arc-phase3-lodo.mjs` first and then
+`scripts/arc-phase3-pttest.mjs`, forwarding the same user arguments to both
+lanes and supplying `--lodo-manifest <out>/manifest.json` to the second lane
+when the caller did not provide it. This is the Pass D "re-implement the chain
+inside a single wrapper script" option.
+
+The Phase 0 floor is sourced by exporting the frozen predictors from
+`scripts/arc-phase0-baselines.mjs`; its CLI behavior is preserved.

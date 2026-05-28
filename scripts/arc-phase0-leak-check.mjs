@@ -28,7 +28,9 @@ const SCRIPTS_DIR = join(ROOT, "scripts");
 const SCAN_DIRS = [join(ROOT, "scripts"), join(ROOT, "docs"), join(ROOT, "tests"), join(ROOT, "notebooks")];
 const SCRIPTS_ALLOWED_EVAL_LITERAL = new Set([
   "arc-phase0-inventory.mjs",
-  "arc-phase0-leak-check.mjs"
+  "arc-phase0-leak-check.mjs",
+  "arc-phase3-lodo.mjs",
+  "arc-phase3-pttest.mjs"
 ]);
 
 const results = [];
