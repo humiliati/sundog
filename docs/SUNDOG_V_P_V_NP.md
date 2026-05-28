@@ -81,11 +81,11 @@ This connects directly to ARC. The ARC roadmap already states the differentiator
 as a Blackwell-sufficiency question: whether the signature carries enough
 information for core-knowledge abstraction, with the 5D mesa subspace as the
 dimensionality-reduction mechanism. It explicitly says this is a structural
-argument tested against a public benchmark, not an architecture paper. :contentReference[oaicite:1]{index=1}
+argument tested against a public benchmark, not an architecture paper; see [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md).
 
 It also connects directly to Faraday. The Faraday roadmap's core move is local:
 test whether gauge-invariant local projections recover Faraday induction and
-Lorentz invariants without global state reconstruction. :contentReference[oaicite:2]{index=2} That is the right template for the P-vs-NP bridge: local certificate first,
+Lorentz invariants without global state reconstruction; see [`faraday/SUNDOG_V_FARADAY.md`](faraday/SUNDOG_V_FARADAY.md). That is the right template for the P-vs-NP bridge: local certificate first,
 global reconstruction last or never.
 
 ## 2. What Is Honest vs. What Is Reach
@@ -118,7 +118,7 @@ Reach; do not claim:
 
 The current scientific posture of the repo already requires this discipline:
 the controlled research result is narrow photometric mirror alignment, while
-applications and future work live in separate evidence tiers. :contentReference[oaicite:3]{index=3} Academic writing should keep those tiers separate. :contentReference[oaicite:4]{index=4}
+applications and future work live in separate evidence tiers, and academic writing should keep those tiers separate; see [`SCIENTIFIC_CRITERIA.md`](SCIENTIFIC_CRITERIA.md).
 
 ## 3. Ratified Hook Language
 
@@ -173,7 +173,7 @@ A Sundog certificate is a compact signature with three properties:
 
 Faraday supplies the strongest methodological template: define the local
 projection operator, prove or audit its invariance, then classify the result as
-a structural zero or named quarantine. :contentReference[oaicite:5]{index=5}
+a structural zero or named quarantine; see [`faraday/SUNDOG_V_FARADAY.md`](faraday/SUNDOG_V_FARADAY.md).
 
 ### 4.4 Capacity-Relative One-Wayness
 
@@ -190,7 +190,7 @@ only while the agent cannot cheaply reconstruct or manipulate the hidden target
 behind it.
 
 The mesa roadmap's warning fits here exactly: the field is the objective only
-as long as the agent is small enough not to imagine its own. :contentReference[oaicite:6]{index=6}
+as long as the agent is small enough not to imagine its own; see [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md).
 
 ## 5. Pre-Registered Hypothesis
 
@@ -252,7 +252,7 @@ The verifier succeeds or fails without a predictable operating envelope.
 Consequence: no useful complexity claim. A bounded verifier must say where it
 stops working.
 
-## 6.6 Lit-Pass Scaffold
+## 7. Lit-Pass Scaffold
 
 The 2026-05-28 lit pass in
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md) narrows the admissible
@@ -279,7 +279,13 @@ scaffold:
   failures define falsifiers; they are not evidence that a signature is
   sufficient.
 
-## 7. Roadmap
+## 8. Roadmap
+
+Phases run in implementation order, not lit-pass priority order. Mesa-bridge
+(Phase 2) precedes the capacity battery (Phase 3) despite ranking lower in
+the [memo's probe table](P_V_NP_LITPASS_MEMO.md#probe-ranking): mesa supplies
+the controller families, proxy structures, and causal interventions the
+capacity battery needs as instruments.
 
 ### Phase 0 — Scope and Literature Spine
 
@@ -327,7 +333,10 @@ Deliverables:
 - Cost accounting: search cost, rollout verification cost, signature
   verification cost.
 
-Exit criterion: the verifier problem is stated precisely enough to implement.
+Exit criterion: the verifier problem is stated precisely enough to implement,
+and the spec names at least one full-state or rollout baseline and one
+formal/symbolic baseline (where feasible) per the lit-pass Track F
+disposition.
 
 ### Phase 2 — Mesa Verification Bridge
 
@@ -412,8 +421,7 @@ shadow projection as a gauge-covariant discrete-grid operator and tests
 Blackwell sufficiency of the signature. Phase 0 and Phase 1 are already filed
 and admitted on the current roadmap: the 36-task subset is registered, cheap
 baselines scored 0/36, and synthetic validation passed for translation,
-rotation, reflection, color-role permutation, and a shape-mismatch negative.
-:contentReference[oaicite:7]{index=7} :contentReference[oaicite:8]{index=8}
+rotation, reflection, color-role permutation, and a shape-mismatch negative; see [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md).
 
 Deliverables:
 
@@ -427,8 +435,7 @@ Deliverables:
   - raw-pixel baseline.
 - Use ARC Phase 3's existing failure: signature-palette scored zero exact
   matches, but full-grid controls also floored, so this is task-hardness /
-  decoder-failure rather than proof against signature sufficiency.
-  :contentReference[oaicite:9]{index=9}
+  decoder-failure rather than proof against signature sufficiency; see [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md).
 
 Exit criterion: either a discrete verifier pocket is found, or the bridge is
 quarantined to continuous-field domains.
@@ -440,10 +447,10 @@ look like.
 
 The Faraday roadmap already uses the right receipt grammar: exact structural
 zero or named quarantine, minimal algebraic compute, and explicit boundary
-audit. :contentReference[oaicite:10]{index=10} Phase 7 further corrects the boundary:
+audit; see [`faraday/SUNDOG_V_FARADAY.md`](faraday/SUNDOG_V_FARADAY.md). Phase 7 further corrects the boundary:
 ordinary electric charge/current sources do not break Faraday closure; magnetic
 sources, singular strings, and non-contractible topology are the relevant
-boundary cases. :contentReference[oaicite:11]{index=11}
+boundary cases; see [`faraday/SUNDOG_V_FARADAY.md`](faraday/SUNDOG_V_FARADAY.md).
 
 Deliverables:
 
@@ -511,7 +518,7 @@ Required sections:
 
 Exit criterion: any public version leads with the boundary, not the provocation.
 
-## 8. Promotion Criteria
+## 9. Promotion Criteria
 
 Promote this roadmap from Conceptual Lineage to Active Research Roadmap only if
 Phase 1 formalizes a toy verifier and Phase 3 produces a measurable
@@ -528,13 +535,13 @@ Promote to Operating-Envelope Study only if:
 Do not promote to Research Result unless there is a controlled task, fixed
 baselines, reproduced metrics, and archived artifacts.
 
-## 9. Project Files
+## 10. Project Files
 
 - [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md): 2026-05-28 literature
   pass, citation spine, gap map, and probe-ranking disposition.
 - [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md): this roadmap.
 
-## 10. Cross-References
+## 11. Cross-References
 
 - [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md): mesa-optimization trap, reward
   proxy pressure, 5D localization, and operating-envelope evidence style.
@@ -549,7 +556,7 @@ baselines, reproduced metrics, and archived artifacts.
 - [`COARSE_GRAINING_PROOF_ROADMAP.md`](COARSE_GRAINING_PROOF_ROADMAP.md):
   related sufficiency and control-signature proof trunk.
 
-## 11. Inspection Trail
+## 12. Inspection Trail
 
 Consolidated and dated in
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md) (2026-05-28). The
@@ -569,7 +576,7 @@ important imported lessons are:
 External references are targets and constraints for the apparatus. No
 complexity-theoretic result is imported or asserted by listing them here.
 
-## 12. One-Paragraph Public Summary
+## 13. One-Paragraph Public Summary
 
 Sundog vs. P-vs-NP does not try to solve the P-vs-NP problem. It uses the
 finding-versus-verifying distinction as a discipline for alignment research.
