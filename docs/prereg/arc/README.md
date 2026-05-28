@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3A STOCHASTIC PER-TASK SPEC FILED; EXECUTION HOLD**.
+Status: **Phase 3A BRANCH A BINDING RECEIPT FILED -- `branch_a_full_grid_floor`; BRANCH D OPEN**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -58,12 +58,32 @@ Branch D (different framing) rather than further narrowing within the
 deterministic family. Kaggle notebook work and public-evaluation grid
 inspection remain blocked until Phase 6.
 
-Branch A spec work has now started in
+Branch A is filed at
 [`PHASE3A_STOCHASTIC_PER_TASK_SPEC.md`](PHASE3A_STOCHASTIC_PER_TASK_SPEC.md).
-It freezes `per_task_coord_mlp_v1`, a stochastic per-instance MLP trained from
-scratch on only that instance's conditioning demonstrations. It admits no run
-yet: execution remains held until the runner, wrapper, npm script, receipt path,
-and freeze-marker amendment are committed together.
+`per_task_coord_mlp_v1` is a stochastic per-instance coordinate MLP trained
+from scratch on only that instance's conditioning demonstrations. The
+20-shard binding receipt (4 arms x 5 seeds, ~2.1 h GPU parallel wall on a
+GTX 1080, sharded with the spec's (arm, seed) shard+merge protocol and the
+`--allow-mixed-commits` operator override after parallel Navier-Stokes
+commits landed mid-flight) returned verdict **`branch_a_full_grid_floor`**:
+zero exact tasks on both held-out lanes for arm `raw_grid_per_task`, so no
+signature_palette_per_task vs. raw_grid_per_task sufficiency comparison is
+licensed. Failure character is qualitatively distinct from V1, V2, and
+compact-7: **conditioning starvation + shape-generalisation failure**
+(61% of held-out instances quarantined as `insufficient_conditioning_pairs`
+because registered ARC tasks have k=2-3 train pairs, k-1<=2 conditioning
+after LODO). All four arms achieve identical shape_exact_slot1 rates
+(0.500 pttest, 0.474 test_lodo) -- the per-task scratch shape MLP memorizes
+conditioning shapes regardless of arm. The per-task coordinate-MLP color
+head does NOT collapse to background like compact-7 did (max collapse rate
+16.7% on pttest, 10.5% on test_lodo).
+
+Four Phase 3 binding full-grid-control receipts -- V1, V2, compact-7, and
+Phase 3A -- now agree on the held-out exact-grid floor across two task
+distributions and two learner families (transformer, per-task coordinate
+MLP). The remaining admissible Phase 3 reopen path is
+PHASE3_5_REFLECTION Branch D (different framing). A future Branch D would
+need its own pre-registered spec, arena gate, and learner contract.
 
 ## Official Anchors
 
@@ -158,8 +178,18 @@ Checked **2026-05-28** against:
   `signature_palette_per_task`, `signature_only_per_task`, and
   `metadata_only_per_task` arms, requires the raw-grid arm to open the arena
   before any signature sufficiency comparison, and adds dominant-color collapse
-  audits. Status: spec only; execution hold pending runner/wrapper/npm wiring
-  and freeze-marker amendment.
+  audits. **Binding 20-shard receipt filed**: `branch_a_full_grid_floor` at
+  selected seeds (raw=`20260530`, sig_palette=`20260528`, sig_only=`20260530`,
+  metadata=`20260601`). Zero exact tasks on both held-out lanes for any arm;
+  all four arms achieve identical shape_exact_slot1 rates (0.500/0.474).
+  Failure mode: **conditioning starvation + shape-generalisation failure**
+  (61% of held-out instances quarantined as `insufficient_conditioning_pairs`).
+  Run executed via the (arm, seed) shard+merge protocol with the operator
+  `--allow-mixed-commits` override (parallel Navier-Stokes commits landed
+  mid-launch; runner-content audit verified shard-time computational contract
+  unchanged across 6 distinct gitCommits / 2 distinct runner SHAs;
+  `mixedCommitsAudit` recorded in the merged manifest). No
+  signature_palette vs. raw_grid sufficiency comparison licensed.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -201,9 +231,10 @@ amendments line is frozen. Corrections or refinements must be appended with:
 
 ## Public-Language Constraint
 
-Phase 3 has three full-grid-control binding receipts on file (V1, V2,
-and compact-7), all floored at zero exact matches; no sufficiency
-support adjudication is on file. Public copy may say:
+Phase 3 has **four** full-grid-control binding receipts on file (V1, V2,
+compact-7, and Phase 3A `per_task_coord_mlp_v1`), all floored at zero
+exact matches; no sufficiency support adjudication is on file. Public copy
+may say:
 
 - ARC-AGI abstraction coupling roadmap;
 - registered task-subset audit;
@@ -213,17 +244,20 @@ support adjudication is on file. Public copy may say:
   `blackwell_task_decoder_v1` lane produced a Branch C bounded-failure
   receipt with the raw-grid exact-floor caveat, the strengthened
   `blackwell_publictrain_rawgrid_gate_v2` lane produced a
-  `full_grid_control_floor` receipt on all four held-out lanes, and the
+  `full_grid_control_floor` receipt on all four held-out lanes, the
   Branch B compact-subset diagnostic lane (compact-7) produced a
   `compact_full_grid_control_floor` receipt with a qualitatively
   distinct failure -- dominant-color mode collapse -- on every
-  held-out instance. All three full-grid controls now agree on the
-  floor across three distinct task distributions, so future
-  signature-vs-full-grid claims still require a passing full-grid
-  control first, and the path forward is a different decoder family
-  (PHASE3_5_REFLECTION Branch A stochastic per-task or Branch D
-  different framing) rather than further task-distribution narrowing
-  within the deterministic-low-capacity family.
+  held-out instance, and the Branch A stochastic per-task lane
+  (`per_task_coord_mlp_v1`) produced a `branch_a_full_grid_floor`
+  receipt with a third qualitatively distinct failure --
+  conditioning starvation + shape-generalisation failure. All four
+  full-grid controls now agree on the floor across two task
+  distributions and two learner families (transformer, per-task
+  coordinate MLP), so future signature-vs-full-grid claims still
+  require a passing full-grid control first, and the remaining
+  admissible Phase 3 reopen path is PHASE3_5_REFLECTION Branch D
+  (different framing).
 
 Avoid:
 
@@ -233,24 +267,28 @@ Avoid:
 - any claim that a Kaggle entry validates the theory without a
   non-trivial Phase 3 sufficiency receipt;
 - any Branch A support or Branch B narrowed-support claim from any of
-  the three filed Blackwell receipts (V1, V2, compact-7);
-- describing any Blackwell receipt as a signature-specific
+  the four filed binding receipts (V1, V2, compact-7, Phase 3A);
+- describing any Phase 3 binding receipt as a signature-specific
   falsification independent of decoder capacity;
-- describing the three filed Phase 3 receipts as a sufficiency-failure
+- describing the four filed Phase 3 receipts as a sufficiency-failure
   conclusion -- per the reflection, they characterise the
-  deterministic-low-capacity-learner family, not the representation;
+  deterministic-low-capacity and per-task-scratch families on the
+  registered task class, not the shadow-projection representation;
 - claiming "V2 failed -> signature representation is favoured" -- V2
   floored the same way V1 did; no signature-vs-full-grid comparison
   is licensed by either receipt;
 - claiming "compact-7 failed -> compact tasks are unsolvable" -- the
-  failure is of this learner family on this slice; a stochastic
-  per-task learner (Branch A) or a different framing (Branch D) might
-  or might not pass on the same slice, and that is the next question,
-  not a settled one;
-- claiming any V2 or compact-7 receipt closes Phase 3 -- they close
-  PHASE3_5_REFLECTION Branch B in the deterministic-low-capacity
-  family; the sufficiency question remains open under Branch A and
-  Branch D;
+  failure is of this learner family on this slice; a different
+  framing (Branch D) might or might not pass on the same slice, and
+  that is the next question, not a settled one;
+- claiming "Phase 3A floored -> signature representation is favoured"
+  -- the Phase 3A raw-grid arm did not open the arena, so no per-arm
+  comparison is licensed; the all-arms-equal pattern in the receipt
+  is a consequence of the floor, not evidence of per-arm equivalence;
+- claiming any V2, compact-7, or Phase 3A receipt closes Phase 3 --
+  they close PHASE3_5_REFLECTION Branches A, B, and C in the filed
+  learner families; the sufficiency question remains open under
+  Branch D (different framing);
 - any spatial_transform or local_completion claim from the compact-7
   receipt -- those priors are not represented in the compact-signal
   slice.

@@ -4823,3 +4823,257 @@ landed under mixed commits, override admitted, 6 re-launches
 pending". No binding receipt yet.
 
 **Public-language constraint**: unchanged.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch A 20-Shard Binding Receipt: `branch_a_full_grid_floor`
+
+The Phase 3A 20-shard slate (4 arms × 5 seeds × 49 held-out instances)
+completed on 2026-05-28 and merged at the run's `mergeGitCommit`
+`55FC567DD52589CC73DF41C144E517BF67DF2849`. Receipt at
+`results/arc/phase3a-per-task-coord-mlp-v1/`.
+
+Total shard compute: **14,500.6 s ≈ 4.0 h GPU** (sum across 20
+shards). Parallel-launch wall: **~2.1 h** between first launch
+(16:43:58 UTC) and final shard merge (18:51:58 UTC re-launch
+completion). 14 of 20 shards landed in the first wave under
+freeze-marker `088282A6`; 6 failed at startup once the operator's
+parallel Navier–Stokes commits dirtied the worktree mid-flight; the
+6 re-launches landed on `A160EA73` (3 shards) and `DA405138`
+(3 shards) after the `--allow-mixed-commits` override admission.
+
+**Mixed-commit composition** (per `shardSources` in the merged
+manifest):
+
+| gitCommit (8-char) | shards | gitDirty |
+| --- | ---: | --- |
+| `088282A6` (freeze marker) | 8 | False |
+| `AD0555F1` (PDE drafts) | 3 | False |
+| `8F5FEED9` (PDE cell-set) | 2 | False |
+| `3920FB2B` (Navier-Stokes memo) | 1 | False |
+| `A160EA73` (mixed-commits override admission) | 3 | True (re-launched under --allow-dirty) |
+| `DA405138` (Riemann lit-pass) | 3 | True (re-launched under --allow-dirty) |
+
+`mixedCommitsAudit.runnerIdenticalAcrossCommits = false`
+(2 distinct runner SHAs across 6 commits): the
+`0A19BD87…` runner produced 14 shards on the four pre-override
+commits and the `41F0FEAD…` runner produced 6 shards on the two
+post-override commits. The audit further verified
+`featureSchemaVersion`, `protocolVersion`, `learnerVersion`,
+`shapeModelSpec`, `colorModelSpec`, `registerHash`, and
+`dataDirHash` are equal across all 20 shards — the **shard-time**
+computational contract did not change between runner versions.
+The diff between the two runner SHAs lives entirely in the
+merge-time CLI (the `--allow-mixed-commits` admission itself) and
+in `assert_shard_consistency` — neither path executes during shard
+training. Per-shard outputs are therefore byte-equivalent to a
+hypothetical single-commit serial run.
+
+#### Validation Candidate Selection (per arm)
+
+Selection rule unchanged from the Branch A spec §"Seed Slate":
+`(-val_grid_exact_count, -val_minority_recall, +val_collapse_rate,
++val_loss, +seed)`. Selected seed per arm:
+
+| arm | selected seed |
+| --- | ---: |
+| `raw_grid_per_task` | `20260530` |
+| `signature_palette_per_task` | `20260528` |
+| `signature_only_per_task` | `20260530` |
+| `metadata_only_per_task` | `20260601` |
+
+#### Arena Gate Adjudication
+
+Pre-registered floor (PHASE3A_STOCHASTIC_PER_TASK_SPEC.md §"Arena
+Gate"): `raw_grid_per_task` must achieve at least one exact task on
+**both** `test_lodo` and `pttest` to open the comparison arena.
+
+Observed scores (selected-seed slot-1 + any-slot grid exact):
+
+| lane | arm | grid_exact_any | shape_exact_slot1 | palette_exact_slot1 | pixel_best_mean | minority_recall_mean | collapse_rate |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `pttest` | `raw_grid_per_task` | **0.000** | 0.500 | 0.333 | 0.263 | 0.264 | 0.000 |
+| `pttest` | `signature_palette_per_task` | **0.000** | 0.500 | 0.167 | 0.276 | 0.237 | 0.000 |
+| `pttest` | `signature_only_per_task` | 0.000 | 0.500 | 0.333 | 0.234 | 0.221 | 0.167 |
+| `pttest` | `metadata_only_per_task` | 0.000 | 0.500 | 0.333 | 0.258 | 0.229 | 0.000 |
+| `test_lodo` | `raw_grid_per_task` | **0.000** | 0.474 | 0.316 | 0.282 | 0.278 | 0.053 |
+| `test_lodo` | `signature_palette_per_task` | **0.000** | 0.474 | 0.316 | 0.270 | 0.220 | 0.105 |
+| `test_lodo` | `signature_only_per_task` | 0.000 | 0.474 | 0.263 | 0.242 | 0.199 | 0.000 |
+| `test_lodo` | `metadata_only_per_task` | 0.000 | 0.474 | 0.263 | 0.295 | 0.237 | 0.053 |
+
+`raw_grid_per_task`: `test_lodo_exact_tasks = 0`,
+`pttest_exact_tasks = 0`.
+
+**Arena gate: `branch_a_full_grid_floor`**. The arena does not open.
+Per the spec §"Arena Gate", no `signature_palette_per_task` vs.
+`raw_grid_per_task` sufficiency comparison is licensed.
+
+`branchAdjudication.branch = "branch_a_full_grid_floor"`.
+
+#### Quarantine Breakdown (selected seed, slot 1)
+
+196 selected-row labels (49 instances × 4 arms):
+
+| label | count | share | notes |
+| --- | ---: | ---: | --- |
+| `insufficient_conditioning_pairs` | 120 | 61.2% | structural: registered tasks with k=3 train pairs (most common) give k-1=2 conditioning pairs in LODO, below the spec's `< 3` quarantine threshold |
+| `shape_prediction_failure` | 36 | 18.4% | the per-task shape MLP overfits to memorize conditioning shapes but doesn't generalise |
+| `minority_object_recall_failure` | 21 | 10.7% | per-cell color model recovers background but misses minority colors below 0.25 recall |
+| `conditioning_overfit` | 16 | 8.2% | conditioning train exact ≥ 0.95 while held-out exact fails |
+| `palette_lift_failure` | 3 | 1.5% | strict-signature output matches but exact palette cannot be recovered |
+
+**Notably absent**: `dominant_color_mode_collapse`. The compact-7
+receipt named this label for the transformer decoder's
+predict-the-background failure; the per-task coordinate-MLP color
+head **does not collapse** (max collapse rate across arms is 16.7%
+on pttest, 10.5% on test_lodo — much lower than the 100% slot-1
+collapse rate in the compact-7 receipt). This is a **qualitatively
+different failure character** from compact-7: per-cell predictions
+are varied and individually plausible, but the model cannot recover
+the structural pattern from the tiny conditioning sample.
+
+#### Failure Character Summary
+
+| receipt | dominant failure mode | shape | palette | pixel best |
+| --- | --- | ---: | ---: | ---: |
+| `blackwell_task_decoder_v1` | "shape sometimes matches, palette never, predictions noisy" | 0.5–0.9 | 0.0 | 0.25–0.55 |
+| `blackwell_publictrain_rawgrid_gate_v2` | same as V1 | 0.5–0.7 | 0.0 | 0.24–0.34 |
+| `compact_full_grid_control_floor` (compact-7) | dominant-color mode collapse | 1.0 | 0.0 | 0.76–0.88 |
+| `branch_a_full_grid_floor` (Phase 3A) | **conditioning starvation + shape-generalisation failure** | 0.47–0.50 | 0.17–0.33 | 0.24–0.30 |
+
+Phase 3A's character: shape predictions overfit conditioning, palette
+predictions are non-trivial (0.17–0.33 across arms — higher than V1
+or V2), but no instance gets the **full grid** right. The four arms
+are remarkably similar to each other on every metric — the
+representation arm difference is not visible in held-out exact-grid
+performance, because no arm clears the floor.
+
+#### Per-Arm Comparison (Conditional, Documentation Only)
+
+Per the spec §"Arena Gate", since the raw-grid arm did not open the
+arena, **no Branch A support / bounded-failure / named-quarantine
+verdict is licensed**. The per-arm scores above are recorded for
+audit and for any future learner that wishes to outperform this
+baseline; they are **not** a signature-vs-full-grid sufficiency
+comparison.
+
+Notable observations (for the record only, not licensed as Branch A
+adjudication):
+
+- All four arms achieve **identical shape_exact_slot1 rates** (0.500
+  on pttest, 0.474 on test_lodo). The shape model converges to
+  similar predictions regardless of which arm's input vector is
+  used. Hypothesis: with only 2–5 conditioning pairs, the shape MLP
+  essentially memorizes the conditioning-pair output shapes and
+  predicts those for held-out queries — arm-specific input features
+  do not change that.
+- `metadata_only_per_task` and `raw_grid_per_task` are statistically
+  indistinguishable on every metric. The strict signature ablation
+  `signature_only_per_task` has somewhat lower palette recovery,
+  consistent with palette-information being mostly carried by
+  metadata, not signature.
+- `signature_palette_per_task` (the registered Sundog arm) does not
+  outperform `raw_grid_per_task` on any metric. With both at zero
+  exact, no support claim is available.
+
+#### What This Verdict Does And Does Not Entail
+
+**It does**:
+
+- Close the **fourth** full-grid control floor in Phase 3
+  (alongside V1, V2, compact-7) at zero exact tasks on both
+  registered held-out lanes for arm `raw_grid_per_task`.
+- Close the deterministic-low-capacity-vs-stochastic-per-task
+  distinction in PHASE3_5_REFLECTION Branch A as also flooring: a
+  per-task scratch learner is **not enough by itself** to open the
+  full-grid control arena on this registered task class.
+- Name the Phase 3A failure character as **conditioning starvation +
+  shape-generalisation failure**, distinct from V1/V2's
+  noise-dominated failure and from compact-7's dominant-color mode
+  collapse. The dominant quarantine label
+  (`insufficient_conditioning_pairs`, 61% of held-out instances) is
+  structural: registered ARC tasks with k=2–3 train pairs yield
+  k-1≤2 conditioning pairs after LODO, below the spec's `< 3`
+  threshold.
+
+**It does not**:
+
+- License any signature_palette vs. raw_grid sufficiency comparison
+  (the raw-grid arm did not open the arena).
+- License any narrowed-support Branch A or Branch B claim from this
+  receipt.
+- License extra seeds on this lane (per the spec §"Forbidden":
+  "any extra seed or narrower subset run after an arena-floor
+  receipt without a new append-only amendment").
+- Speak to PHASE3_5_REFLECTION Branch D (different framing — e.g.,
+  modelling output as a structured edit of a copy-of-input
+  baseline). That branch remains untouched.
+
+#### Remaining Reopen Paths for Phase 3
+
+After this receipt, three out of four PHASE3_5_REFLECTION branches
+are characterised:
+
+- **Branch A — stochastic per-task** (this receipt):
+  `branch_a_full_grid_floor`. Closed in the per-task-coord-MLP
+  family. A different stochastic-per-task family (e.g., program
+  synthesis, ARC-DSL search) might or might not pass.
+- **Branch B — narrowed task class** (compact-7 receipt):
+  `compact_full_grid_control_floor`. Closed in the deterministic-
+  low-capacity family.
+- **Branch C — sufficiency-failure preemption** (PHASE3_5
+  characterisation): closed; the three task-hardness receipts
+  + V1 + V2 collectively settle the deterministic-low-capacity
+  family.
+- **Branch D — different framing**: **untouched**. The remaining
+  admissible Phase 3 reopen path.
+
+A different framing would need to register a new spec
+(`PHASE3D_DIFFERENT_FRAMING_SPEC.md` or similar) with its own arena
+gate criterion, a new learner contract, and the corresponding
+verdict-amendment discipline.
+
+#### Public-Language Constraint Update
+
+Permitted additions (per PHASE3A_STOCHASTIC_PER_TASK_SPEC.md
+§"Public Language" arena-floor language):
+
+- "Phase 3A's stochastic per-task coordinate-MLP learner did not
+  open the full-grid control arena on the registered ARC
+  public-training task subset; the receipt calibrates the per-task
+  scratch learner family and does not adjudicate signature
+  sufficiency."
+- "Four Phase 3 binding full-grid-control receipts — V1, V2,
+  compact-7, and Phase 3A — now agree on the held-out exact-grid
+  floor across two task distributions and two learner families
+  (transformer, per-task coordinate MLP). The next admissible
+  Phase 3 reopen path is PHASE3_5_REFLECTION Branch D (different
+  framing)."
+
+Forbidden (carried forward + augmented):
+
+- "Phase 3A floored → signature representation is favoured" — no
+  signature sufficiency comparison is licensed.
+- "Phase 3A receipt solves ARC" or any Kaggle/public-evaluation
+  language.
+- Any claim that the per-arm comparison in this receipt favours one
+  representation over another (the arena did not open).
+
+#### Frozen By This Verdict
+
+- The Phase 3A binding receipt
+  (`results/arc/phase3a-per-task-coord-mlp-v1/`), its manifest,
+  hashes, and all 13 receipt files are frozen at the
+  `mergeGitCommit = 55FC567D…` snapshot.
+- The mixed-commits audit (`mixedCommitsAudit` in the manifest,
+  2 distinct runner SHAs across 6 distinct gitCommits, with the
+  shard-time computational contract verified equal) is frozen as
+  the canonical record of how this receipt was assembled.
+- The named failure mode "**conditioning starvation +
+  shape-generalisation failure**" is filed here for the per-task
+  coordinate-MLP family.
+- The selected-seed table per arm is frozen as the Phase 3A
+  selection trace.
+
+**Verdict impact**: no V1, V2, or compact-7 verdict changes. The
+Phase 3 status moves from "Branch A execution in progress" to
+"Branch A binding receipt filed, `branch_a_full_grid_floor`;
+Branch D is the only remaining admissible reopen path".
