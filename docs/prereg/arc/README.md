@@ -28,6 +28,10 @@ learned a rule the signature lost. Kaggle notebook work and public-evaluation
 grid inspection remain blocked until Phase 6. Any renewed sufficiency
 comparison now requires a passing full-grid control first, either by
 strengthening the decoder lane, narrowing the registered task class, or both.
+The first strengthened path, `blackwell_publictrain_rawgrid_gate_v2`, is
+admitted as a raw-grid-only control gate with all public-training auxiliary
+tasks; dry-run and capped probe receipts are filed, and the uncapped full run
+is staged for the operator because the probe projects ~11.5 hours.
 
 ## Official Anchors
 
@@ -137,7 +141,8 @@ adjudication is on file. Public copy may say:
   learner branch produced three task-hardness verdicts, and the
   `blackwell_task_decoder_v1` lane produced a Branch C bounded-failure receipt
   with the raw-grid exact-floor caveat; future signature-vs-full-grid claims
-  require a passing full-grid control first.
+  require a passing full-grid control first. A strengthened raw-grid gate V2 is
+  admitted and probe-staged, but not yet a full gate receipt.
 
 Avoid:
 

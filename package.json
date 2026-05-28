@@ -172,6 +172,7 @@
     "arc:phase3:candidate_combinator_v1:pttest": "node scripts/arc-phase3-candidate_combinator_v1-pttest.mjs",
     "arc:phase3:candidate_combinator_v1:sufficiency": "node scripts/arc-phase3-candidate_combinator_v1-sufficiency.mjs",
     "arc:phase3:blackwell:sufficiency": "node scripts/arc-phase3-blackwell-sufficiency-v1.mjs",
+    "arc:phase3:rawgrid-gate-v2": "node scripts/arc-phase3-rawgrid-gate-v2.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
     "cf:pages": "node scripts/cloudflare-pages-project.mjs",
