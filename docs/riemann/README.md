@@ -37,11 +37,16 @@ Result convention:
 - A run without a manifest, source declaration, and falsifier disposition is not
   a receipt.
 
+Receipts:
+
+- [`receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](receipts/2026-05-28_probe01_pathi_parity_decomposition.md)
+  - first Probe 01 v1 receipt under Path (i), using Odlyzko `zeros1`, `N=5000`.
+
 Current state:
 
 - Ledger opened: 2026-05-28.
 - Lit-pass filed: 2026-05-28.
 - Bridge admission (Path (i) Z₂-descent) selected: 2026-05-28.
-- No zero-data probe has run.
+- Probe 01 v1 Path (i) receipt filed: 2026-05-28.
 - Front A is design-admitted under reduced apparatus (Z₂-descent).
 - Front B is horizon only.

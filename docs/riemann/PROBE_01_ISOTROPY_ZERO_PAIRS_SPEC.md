@@ -1,6 +1,7 @@
 # Probe 01 - Isotropy v0.3 on Low-Lying Zero Pair Data
 
-Status: specification draft. Not execution-admitted. No run has occurred.
+Status: v1 execution filed. One Path (i) run has occurred; see
+[`receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](receipts/2026-05-28_probe01_pathi_parity_decomposition.md).
 
 Bridge admission (2026-05-28): per
 [`REPRESENTATION_BRIDGE_NOTES.md`](REPRESENTATION_BRIDGE_NOTES.md), the
@@ -134,3 +135,7 @@ Probe 01 is not complete until:
 - the receipt template is filled;
 - one maintainer pass checks source/version/threshold consistency;
 - the main ledger is updated with a one-paragraph status note.
+
+2026-05-28 note: the first Path (i) run satisfies this gate at the v1 receipt
+level. It does not close Probe 01 promotion, does not admit Path (ii), and does
+not produce a structural-zero receipt.

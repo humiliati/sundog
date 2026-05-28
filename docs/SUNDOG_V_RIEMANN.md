@@ -20,9 +20,11 @@ This is not a claim to RH progress. It is a claim that Sundog has a disciplined
 way to produce receipts against public mathematical targets, including null and
 falsifying receipts.
 
-Status: drafting. No Riemann probe has run. Lit-pass and bridge scoping landed
-2026-05-28; see [`RIEMANN_LITPASS_MEMO.md`](RIEMANN_LITPASS_MEMO.md) and
+Status: drafting. Lit-pass and bridge scoping landed 2026-05-28; see
+[`RIEMANN_LITPASS_MEMO.md`](RIEMANN_LITPASS_MEMO.md) and
 [`riemann/REPRESENTATION_BRIDGE_NOTES.md`](riemann/REPRESENTATION_BRIDGE_NOTES.md).
+Probe 01 v1 has one Path (i) parity-decomposition receipt filed at
+[`riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md).
 
 ## Claim Boundary
 
@@ -190,6 +192,12 @@ and falsifying receipts all count.
 - **External review path:** an analytic number theorist familiar with pair-correlation
   and unfolded-spacing statistics (Goldston / Suriajaya / Turnage-Butterbaugh tradition).
   Named at promotion.
+- **First receipt:** 2026-05-28 Path (i) run on the first 5,000 Odlyzko
+  `zeros1` ordinates produced a bounded Front A parity-decomposition receipt;
+  spacing-derived features were reflection-even under the registered mirrored
+  pair construction. This is not a structural-zero receipt and does not test RH.
+  See
+  [`riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md).
 
 Apply the v0.3 pipeline - twist operator, induced-representation cases, F_beta
 template, and tau-flag - to nearest-neighbor spacings and pair correlations of
@@ -346,6 +354,8 @@ These remain horizon until receipts exist.
   bridge notes is Path (i) Z₂-descent.
 - [`docs/riemann/RECEIPT_TEMPLATE.md`](riemann/RECEIPT_TEMPLATE.md) - receipt
   template for every probe result.
+- [`docs/riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md)
+  - first dated Probe 01 v1 receipt under Path (i).
 - [`experiments/riemann/README.md`](../experiments/riemann/README.md) -
   computational workspace notes.
 
