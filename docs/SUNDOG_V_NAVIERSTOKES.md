@@ -44,13 +44,26 @@ Promotion criteria are pinned below.
 Commissioned but **not promoted**: Candidate 1 is drafted at
 [`proof/PDE_DETERMINING_MODES_POSTULATE1.md`](proof/PDE_DETERMINING_MODES_POSTULATE1.md),
 with a desk-auditable cell-set v0 instance at
-[`proof/PDE_C1_CELLSET_KOLMOGOROV.md`](proof/PDE_C1_CELLSET_KOLMOGOROV.md).
+[`proof/PDE_C1_CELLSET_KOLMOGOROV.md`](proof/PDE_C1_CELLSET_KOLMOGOROV.md)
+and a tolerance / binning fiber protocol at
+[`proof/PDE_C1_FIBER_PROTOCOL.md`](proof/PDE_C1_FIBER_PROTOCOL.md).
 The v0 comparator has been tightened: the state-insufficiency side now rests on
 finite-Galerkin non-injectivity, while the determining-mode literature supplies
-only the state-reconstructive reference ceiling. Promotion criterion (d) is
-staged but still needs the continuous-fiber / tolerance protocol; criterion (b)
-is partially closed (procedure defined, not executed); criteria (a) Front-A
-vacuity rebuttal and (c) external PDE reviewer remain open.
+only the state-reconstructive reference ceiling. The fiber protocol closes the
+continuous-fiber gate by pinning a tolerance object plus a runnable bin-lattice
+adjudication procedure, names the cell-set v0 selector as a proxy with
+substitution conditions, bridges the support-level certificate as a separate
+follow-up, and introduces the **`PDE-C1-NEG-A` / `PDE-C1-NEG-B`** parallelism
+that mirrors the C2 receipts (`PDE-C1-NEG` reads retroactively as
+`PDE-C1-NEG-A`). The cell-set v0 patch landed 2026-05-28 (cell-set v0
+section 7): `epsilon_K = 0.05 sqrt(2 E_max)`, `h_K = epsilon_K / sqrt(d_K)`,
+`n_min = 30`, `delta_action = 0.10`, `S_pos = 0.50`, `N_sample = 50,000`,
+sampling interval `0.5` time units, integration step `dt = 0.01`, action
+tie-break favouring `no_op`, with a pre-registered single fall-back to
+`N_sample = 200,000` if the coverage gate defers. Promotion criterion (d) is
+**closed at the artifact level**; criterion (b) is closed at the procedure
+level and pending execution; criteria (a) Front-A vacuity rebuttal and
+(c) external PDE reviewer remain open. Final (d) close is coupled to (c).
 
 Candidate 2 has also been commissioned at the scoping level:
 [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)

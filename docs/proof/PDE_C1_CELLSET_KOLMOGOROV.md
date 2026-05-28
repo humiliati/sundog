@@ -75,6 +75,9 @@ look-ahead window.
 selector, because the cost of damping has not been specified. A later patch must
 either add an action cost / lexicographic objective that makes this selector
 optimal, or rename it as a tractable proxy rather than `pi*_J`.
+See [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) section 3 for the
+proxy resolution adopted in the v0 patch (section 7 below). The cost branch
+remains admissible at review.
 
 ## 4. State-Reconstruction Comparator
 
@@ -136,6 +139,11 @@ the honest status is:
 Phi_K is certified non-injective on B_abs;
 Phi_K is not yet certified non-injective on supp(mu_SRB).
 ```
+
+The [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) section 6 bridges
+this caveat with a one-line spec for the support-level twin-state certificate;
+instantiation is deferred to a dedicated artifact and is **not** part of the
+v0 patch (section 7 below).
 
 ### 4.2 Literature State-Reconstructive Reference
 
@@ -214,6 +222,100 @@ typically `mu`-null. A later patch must replace the finite-MDP phrase
 statement or a pre-registered numerical binning/tolerance scheme. Until then,
 section 6 is the intended branch logic, not yet an executable continuous-measure
 test.
+See [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) sections 1–5 for the
+tolerance + binning scheme adopted in the v0 patch (section 7 below). The
+disintegration branch remains admissible at review.
+
+## 7. Parameter Instantiation (Fiber Protocol Patch)
+
+> Filed 2026-05-28 as the v0 patch instantiating the parameter slots in
+> [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md). These are v0
+> defaults; alternative values remain admissible at review, subject to the
+> same parameter-pinning discipline (no post-hoc retuning; changes after
+> section-5 aggregation file `PDE-C1-NEG-B`).
+
+### 7.1 Integration parameters
+
+- **Integration step.** `dt = 0.01` time units. Combined with the
+  `10^5`-step burn-in from section 3, this fixes the burn-in duration at
+  `1000` time units — comfortably past steady state for Kolmogorov flow
+  at `G = 100`.
+- **Lyapunov timescale (assumed).** `T_lyap ~ 5` time units at `G = 100`.
+  Used only to defend the sub-sampling interval in section 7.4; not
+  load-bearing for the predicate.
+
+### 7.2 Tolerance object
+
+- **Signature tolerance.** `epsilon_K = 0.05 * sqrt(2 * E_max)`. Five
+  percent of the typical signature scale `||Phi_K|| ~ sqrt(2 * E_max)`.
+  Scale-free formula; numerically pinned once `E_max` is computed by the
+  section 3 burn-in.
+
+### 7.3 Binning instance
+
+- **Per-coordinate lattice spacing.** `h_K = epsilon_K / sqrt(d_K) =
+  epsilon_K / sqrt(32) ~ 0.0088 * sqrt(2 * E_max)`. Chosen so the typical
+  bin diameter is `~ epsilon_K`, per the protocol section 2 lattice
+  convention.
+- **Lattice bounding box.** Empirical range of `Phi_K(u)` over the section
+  3 burn-in trajectory, computed once at burn-in completion. Lattice
+  origin is pinned at the lower corner of that bounding box; alignment
+  is not re-optimised after sampling.
+
+### 7.4 Sample set
+
+- **Number of post-burn-in samples.** `N_sample = 50,000`.
+- **Sampling interval.** `0.5` time units `= 50` integration steps. Total
+  post-burn-in integration: `25,000` time units `= 2.5 * 10^6` steps,
+  approximately a few minutes on a laptop with a vanilla Galerkin
+  integrator.
+- **Samples per Lyapunov time.** `~10` (over-sampled but cheap).
+  Sub-sampling at every `T_lyap` for decorrelation gives an effective
+  `N_eff ~ 5,000` for per-bin minority-fraction statistics; the full
+  `50,000`-sample set is used for bin-occupation counts and coverage
+  diagnostics.
+
+### 7.5 Adjudication thresholds
+
+- **Per-bin minimum count.** `n_min = 30`. Ensures the per-bin binomial
+  standard error on a minority fraction `p ~ 0.05` is `~ 0.04`, so the
+  `delta_action = 0.10` threshold sits at least one standard error above
+  the noise floor.
+- **Minority-fraction threshold.** `delta_action = 0.10`. A bin is
+  flagged fiber-incompatible if more than `10%` of its evaluated samples
+  disagree with the bin majority action. Conservative on the positive
+  side: only flags fibers with substantial proxy-action disagreement.
+- **Coverage gate.** `S_pos = 0.50`. The verdict is interpreted only if
+  at least half of the occupied bins have `n(b) >= n_min`.
+- **Action tie-break.** Prefer `no_op` (do not damp unless damping is the
+  strict majority). Safety-conservative; matches the cell-set v0 § 3
+  framing of `damp_low_band` as an intervention triggered only when
+  needed.
+
+### 7.6 Fall-back sample size (pre-registered)
+
+If the section 5 procedure defers due to insufficient coverage
+(`S_eval < S_pos`), the admitted fall-back is **one** increase of
+`N_sample` from `50,000` to `200,000`, with all other parameters held.
+This fall-back is pre-registered here, before any sampling. Any further
+increase, or any change to other parameters in response to a deferral,
+files `PDE-C1-NEG-B` per the protocol section 7 parameter-pinning
+discipline.
+
+### 7.7 Spec self-consistency check
+
+- `dt`, `T_burnin`, `tau`, `N_sample`, sampling interval, `T_lyap` are
+  all in the same time unit (the truncated Galerkin time).
+- `epsilon_K`, `h_K`, `E_max` are all in the same signature-space norm
+  (`R^{2K^2}` with the standard `L^2` inner product induced from the
+  modal basis).
+- The look-ahead window `tau = 5` viscous turnover times from section 3
+  is **not** redefined here; this patch inherits it unchanged.
+- `K = 4`, `N = 16`, `G = 100`, `k_f = 4` from sections 1–2 are inherited
+  unchanged.
+
+No locked figure from sections 1–6 is re-stated at a different value in
+this patch.
 
 ## Sample Fiber Pairs (Illustrative, Not Adjudicated)
 
@@ -238,29 +340,36 @@ strictness-witness positive at this cell.
 
 **Closes / improves (for the C1 promotion criteria):**
 
-- Promotion criterion (d) of
-  [`SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md) remains the target:
-  the pre-registered failure boundary is fixed at a specific cell before any
-  numerical read.
+- **Promotion criterion (d)** of
+  [`SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md) is now closed at
+  the predicate-and-parameter level: the pre-registered failure boundary is
+  fixed at a specific cell, and the section 7 patch instantiates every
+  parameter slot the [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md)
+  requires (`epsilon_K`, `h_K`, `n_min`, `delta_action`, `S_pos`, `N_sample`,
+  burn-in length, integration step, action tie-break order). Final close
+  awaits the external PDE reviewer.
+- **Promotion criterion (b)** is closed at the procedure level: the section
+  7 patch makes the section 5 adjudication runnable end-to-end. Execution
+  remains the next step.
 - The comparator no longer relies on the invalid inference
   `K < m_det => state-insufficient`. The desk-certified insufficiency claim is
-  now finite-Galerkin non-injectivity on `B_abs`.
-- Partial close of promotion criterion (b): a runnable Phase-0 procedure is
-  defined at the predicate level; it has not yet been executed.
+  finite-Galerkin non-injectivity on `B_abs`.
+- The continuous-fiber gate and the provisional-selector gate are addressed
+  by the protocol: tolerance + binning for the former, named proxy `\hat{pi}`
+  with substitution conditions for the latter.
 
 **Does not close:**
 
 - Promotion criterion (a): Front-A vacuity rebuttal is the job of the C1
-  sidecar, not of this cell-set instance. The instance only enables the rebuttal
-  to be tested.
-- Promotion criterion (b), fully: the objective still needs a derived
-  `J`-optimal selector or an explicit proxy label, and the continuous-fiber
-  measure protocol is still open.
+  sidecar, not of this cell-set instance. The instance only enables the
+  rebuttal to be tested.
 - Promotion criterion (c): external PDE reviewer is still unnamed.
 - Exact-support state insufficiency: `Phi_K` is not yet certified non-injective
-  on `supp(mu_SRB)` unless the section 4.1 twin-state certificate is supplied.
-- The pre-registered negative remains unadjudicated: it can be triggered,
-  refuted, or left open by a future numerical run.
+  on `supp(mu_SRB)` unless the section 4.1 twin-state certificate is supplied
+  (bridged in protocol section 6, instantiation deferred).
+- The pre-registered negative remains unadjudicated: it can be triggered
+  (`PDE-C1-NEG-A` or `PDE-C1-NEG-B`), refuted, or left open by a future
+  numerical run.
 
 ## Status
 
@@ -268,11 +377,17 @@ strictness-witness positive at this cell.
 - **Comparator tightened.** The state-reconstruction comparator now separates
   the finite-Galerkin non-injectivity witness from the literature
   state-reconstructive sufficiency reference.
+- **Fiber protocol patched.** Section 7 instantiates every parameter slot
+  required by [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md):
+  `epsilon_K`, `h_K`, `n_min`, `delta_action`, `S_pos`, `N_sample`, burn-in
+  length, integration step, action tie-break order. Pinning is pre-registered
+  before any sampling.
 - **Desk-auditable.** A reviewer can read this file end-to-end and audit the
   predicate structure without running code.
 - **Unreviewed.** No external PDE reviewer has signed off on the regime /
   observation / objective / comparator / classifier / negative-branch quintuple
-  as a faithful instance of the Postulate-1 reading.
+  or on the section 7 parameter values as a faithful instance of the
+  Postulate-1 reading.
 - **Unrun.** No numerical execution of the section 5 classifier has been
   attempted. The "Hypothesised" column of the sample table is a predicate-shape
   demonstration, not a verdict.
@@ -283,6 +398,11 @@ strictness-witness positive at this cell.
   - the C1 sidecar this file instantiates. The cell-set requirements list there
   is what this file pins. Cross-back: that file's "Pre-Registered Cell Set For
   The Next Pass" section now points here.
+- [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md)
+  - the fiber protocol whose parameter slots the section 7 patch instantiates.
+  The protocol pins methodology (tolerance object, bin lattice, proxy selector,
+  adjudication procedure, parameter-pinning discipline); section 7 pins
+  numerical values.
 - [`../SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md)
   - the ledger. Promotion criteria for C1 are defined there.
 - [`../NAVIERSTOKES_LITPASS_MEMO.md`](../NAVIERSTOKES_LITPASS_MEMO.md)
