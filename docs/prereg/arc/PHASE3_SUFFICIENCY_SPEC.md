@@ -4136,3 +4136,104 @@ Forbidden (additions to the existing list):
 No body section above the amendments line changes; only the V2
 binding-receipt status moves from "staged" (prior amendment) to
 "filed, Branch C bounded failure" (this amendment).
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch B Compact Subset Path Admitted
+
+Following the V2 binding-receipt verdict above, a Branch B diagnostic
+lane is admitted under PHASE3_5_REFLECTION Branch B. The lane is
+pre-registered in its own artifact:
+
+- Spec: [`PHASE3B_COMPACT_SUBSET.md`](PHASE3B_COMPACT_SUBSET.md).
+- Frozen subset split file: `docs/prereg/arc/PHASE3B_COMPACT_SPLIT.csv`.
+
+**Why this is a Branch B move, not a V3 raw-grid bump**: the V1 and
+V2 receipts (both filed above) agree on the full-grid exact-grid
+floor across two structurally distinct strengthening axes (24 aux
+tasks → 971 aux tasks, plus shard+merge equivalence and token-cap
+exclusions). A third raw-grid V-bump in the deterministic-low-capacity
+family would not be informative. The Branch B lane instead narrows
+the *task distribution* — keeping the decoder, the hyperparameters,
+the selection rule, the seed slate, and the metrics frozen — to ask
+the narrower diagnostic question: **does the current decoder lane
+produce any exact-match signal at all on the compact-signal slice of
+the registered tasks**, where Phase 2 already showed the smallest
+signature-collision-residual and the smallest train-pair residuals.
+
+**Scope of admission**:
+
+- This amendment admits the diagnostic lane and the supporting
+  tooling (the `--subset-spec` plumbing in `phase3_decoder_v2.py`
+  and the `subsetSpecHash` / `subsetSplit` manifest fields, including
+  their assert_shard_consistency checks). It does **not** admit any
+  binding compact receipt. Receipt admission requires its own
+  amendment with a binding `compact_full_grid_control_*` gate
+  decision and a verdict block in the style of the V1 / V2
+  receipt-filed amendments above.
+- The minimal floor (≥1 exact task on `pttest` AND ≥1 on `test_lodo`)
+  is pre-registered in `PHASE3B_COMPACT_SUBSET.md` §3 and is the
+  smallest non-trivial integer floor compatible with the compact-7
+  held-out lanes (2 `pttest` instances, ≈4–6 `test_lodo` instances).
+- The Branch A / B / C criteria scoped to the compact subset are
+  pre-registered in `PHASE3B_COMPACT_SUBSET.md` §4. Compact-Branch-A
+  / B can only be filed if and only if the compact-Branch-C floor
+  has first been cleared by the full-grid control.
+
+**What stays frozen**: per `PHASE3B_COMPACT_SUBSET.md` §5 — decoder
+architecture, hyperparameters, seed slate, selection rule, signature
+extraction, metrics, evaluation code, leak-check, shard-equivalence,
+aux pool (same 971 admitted tasks; same 29 token-cap exclusions; the
+36 registered tasks not in the compact subset are dropped entirely,
+not promoted to aux).
+
+**What changes**: held-out task distribution (36 → 7); internal split
+(pre-registered 4 / 1 / 2 in `PHASE3B_COMPACT_SPLIT.csv`); gate floor
+(≥2 → ≥1); gate name (`full_grid_control_*` →
+`compact_full_grid_control_*`); receipt output directory namespace
+(`results/arc/phase3-rawgrid-compact-7-*`). Possibly the seed slate
+narrows to a single seed (`20260529`) for the first tranche; the
+other two seeds are admitted as optional follow-on verification.
+
+**Tooling deltas** (committed alongside this amendment):
+
+- `phase3_decoder_v2.py`: new `--subset-spec PATH` arg;
+  `read_subset_spec()`, `adjudicate_compact_subset_gate()` helpers;
+  `load_public_training_tasks()` accepts an optional `subset_split`
+  mapping and uses `dataclasses.replace` to override task splits;
+  `assert_shard_consistency` now requires `subsetSpecHash`,
+  `subsetSplit`, and `subsetTaskCount` to match across shards;
+  `run_merge` selects the compact gate adjudicator when shards
+  declare a `subsetSpecHash`; `write_gate_summary` titles the
+  compact lane separately.
+- No new npm scripts. The existing
+  `arc:phase3:rawgrid-gate-v2:{shard,merge}` wrappers pass through
+  the new flag.
+
+**Smoke-test fingerprint** (CPU, `--limit-aux-tasks 4`,
+`--probe-epochs 1`, single seed): shard run produced 7 subset tasks
++ 4 aux tasks, `pttestInstanceCount=2`, `testLodoInstanceCount=6`,
+`validationInstanceCount=5`, `subsetSpecHash`
+`5759038A94DBCAF1A192C59C27CA201E13D447E7463172A43ACEE606345A836B`.
+Merge of the single shard correctly produced
+`compact_full_grid_control_floor` as expected (probe epochs = 1, no
+learning), exercising the full compact-gate adjudication path. The
+smoke output directories were deleted before commit.
+
+**Launch posture for the first compact-7 tranche** (per
+`PHASE3B_COMPACT_SUBSET.md` §7 and §8): single seed `20260529`,
+`--device cuda`, full 120-epoch budget, with the pre-commit
+freeze-marker discipline applied. The shard receipt is then merged
+(N=1) to produce the binding compact receipt with full gate
+adjudication. If the floor clears, run the `signature_palette` arm
+under the same subset and compare. If the floor does not clear, file
+a compact-Branch-C bounded-failure amendment and close Branch B in
+the deterministic-low-capacity family.
+
+**Verdict impact**: no prior verdict changes. The V1 and V2 binding
+receipts above remain Branch C bounded failures unchanged; the
+Phase 3 lane status moves from "two full-grid controls floored" to
+"two full-grid controls floored; one Branch B diagnostic admitted,
+no binding compact receipt yet."
+
+**Public-language constraint**: see `PHASE3B_COMPACT_SUBSET.md` §10.
+Additions to `docs/prereg/arc/README.md` will land in the
+compact-receipt verdict amendment, not in this admission amendment.
