@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3 BLACKWELL UNPAUSE SPEC FILED -- EXECUTION HELD**.
+Status: **Phase 3 BLACKWELL FULL RECEIPT FILED -- BRANCH C BOUNDED FAILURE**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three binding receipts (`nn_output_transfer_v1`, `nn_delta_transfer_v1`,
@@ -16,14 +16,15 @@ failure**. The three-receipt convergence is characterised at
 the deterministic-low-capacity-learner family rather than a
 sufficiency-failure conclusion about the shadow-projection representation.
 The follow-up Blackwell sufficiency amendment in
-[`PHASE3_SUFFICIENCY_SPEC.md`](PHASE3_SUFFICIENCY_SPEC.md) reopens Phase 3 for
-spec implementation only: algebraic conditions, held-out-task splits,
-Branch A/B/C criteria, a frozen decoder design, and a quarantine taxonomy are
-filed, but no new decoder execution or sufficiency verdict is admitted until
-the runner and freeze-marker receipt land. The Phase 0 cheap-baseline floor
-(`0/36` exact across `random_valid`, `identity_copy`, `dsl_lite_v0`,
-`dsl_lite_v1`, `dsl_lite_v2`, `tiny_learned_v0`) remains the binding
-comparison for the reopened lane. Kaggle notebook work and public-evaluation
+[`PHASE3_SUFFICIENCY_SPEC.md`](PHASE3_SUFFICIENCY_SPEC.md) filed algebraic
+conditions, held-out-task splits, Branch A/B/C criteria, a frozen
+Python/PyTorch decoder design, a timing probe, and a full clean receipt for
+`blackwell_task_decoder_v1`. The full receipt is **Branch C -- bounded
+failure**: `signature_palette` scored zero exact matches on both held-out-task
+LODO and held-out public-training test lanes. The matched `raw_grid_lowcap`
+control also scored zero exact matches, so the receipt is a bounded failure of
+the registered Blackwell decoder lane rather than evidence that the full grid
+learned a rule the signature lost. Kaggle notebook work and public-evaluation
 grid inspection remain blocked until Phase 6.
 
 ## Official Anchors
@@ -80,9 +81,9 @@ Checked **2026-05-28** against:
   Sundog representation is `signature_palette`, not signature alone.
   Three binding receipts filed (`nn_output_transfer_v1`,
   `nn_delta_transfer_v1`, `candidate_combinator_v1`), all verdict
-  task hardness / decoder failure. A Blackwell sufficiency unpause amendment
-  is now filed for the next lane; execution is still held pending runner
-  implementation and freeze-marker receipt.
+  task hardness / decoder failure. A Blackwell sufficiency lane is also filed:
+  the full clean `blackwell_task_decoder_v1` receipt is Branch C bounded
+  failure with the raw-grid exact-floor caveat.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -124,16 +125,16 @@ amendments line is frozen. Corrections or refinements must be appended with:
 
 ## Public-Language Constraint
 
-Phase 3 has a Blackwell unpause spec on file, but no new sufficiency
-adjudication is on file. Until the Blackwell runner produces a non-trivial
-receipt under the amended Pass A-D discipline, public copy may say:
+Phase 3 has a full Blackwell receipt on file, but no sufficiency support
+adjudication is on file. Public copy may say:
 
 - ARC-AGI abstraction coupling roadmap;
 - registered task-subset audit;
 - shadow-projection hypothesis for static grid reasoning;
 - falsifiable sufficiency test, filed; the deterministic-low-capacity
-  learner branch produced three task-hardness verdicts, and the next
-  Blackwell sufficiency lane is specified but not yet run.
+  learner branch produced three task-hardness verdicts, and the
+  `blackwell_task_decoder_v1` lane produced a Branch C bounded-failure receipt
+  with the raw-grid exact-floor caveat.
 
 Avoid:
 
@@ -142,6 +143,8 @@ Avoid:
 - "the 5D subspace is universal";
 - any claim that a Kaggle entry validates the theory without a
   non-trivial Phase 3 sufficiency receipt;
+- any Branch A support or Branch B narrowed-support claim from the Blackwell
+  receipt;
 - describing the three filed Phase 3 receipts as a sufficiency-failure
   conclusion -- per the reflection, they characterise the
   deterministic-low-capacity-learner family, not the representation.
