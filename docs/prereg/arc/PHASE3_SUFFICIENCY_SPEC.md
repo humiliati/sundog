@@ -5129,3 +5129,130 @@ Public-language constraint before a binding receipt:
 
 > "Phase 3D has filed a structured edit/residual framing spec. No Branch D
 > receipt exists yet, and no sufficiency claim is admitted."
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch D Tooling Freeze-Marker (execution unblocked, capped-probe required)
+
+The Branch D spec admitted above held execution until "a runner,
+Node wrapper, npm script, result ignore path, leak-check coverage,
+and freeze-marker amendment [are] committed together." This
+amendment files that freeze-marker commit:
+
+- `docs/prereg/arc/phase3d_structured_edit_residual.py` (runner) —
+  standalone Python module, does not import `phase3_decoder.py`,
+  `phase3a_per_task_coord_mlp.py`, or `phase3_decoder_v2.py`. The
+  `arc-p3-feature-v1` encoders are copied verbatim under a marked
+  "Frozen feature-v1 encoders" header; the file comment notes that
+  any drift requires bumping `FEATURE_SCHEMA_VERSION` in both
+  places. Manifest captures `specHash` + `parentSpecHash` so any
+  later drift between the runner and
+  `PHASE3D_DIFFERENT_FRAMING_SPEC.md` is auditable. Implements the
+  full Branch D pipeline:
+  1. Per-(instance, arm, seed): select the lowest-residual
+     `(shape_rule, canvas_rule, background_color)` triple from the
+     5 × 10 candidate family by conditioning-residual scoring with
+     the spec's tie-break order.
+  2. Build cell-level mask + color training rows from conditioning
+     pairs against their selected baselines.
+  3. Fit a `MaskMLP` (192-hidden, positive-class-weighted BCE,
+     `max_steps=700`, `early_stop_patience=120`) and an
+     `EditColorMLP` (192-hidden, dropout 0.05,
+     class-balanced cross-entropy, same training budget).
+  4. Threshold sweep over `{0.10, 0.20, …, 0.90}`: pick the
+     threshold maximizing conditioning exact reconstruction, with
+     the spec's `(higher F1, lower mass, distance from 0.50)`
+     tie-break.
+  5. Predict query baseline, mask probs, edit colors at the chosen
+     threshold; reconstruct via `apply_edit(baseline, mask, colors)`;
+     score grid_exact / baseline_exact / nonbaseline_exact / shape /
+     palette / pixel + the 11 edit metrics.
+  6. Assign quarantine label from the 9 pre-registered options
+     (`baseline_shape_failure`, `baseline_canvas_failure`,
+     `edit_mask_underdetection`, `edit_mask_overedit`,
+     `edit_color_failure`, `conditioning_starvation`,
+     `copy_prior_absent`, `palette_lift_failure`,
+     `stochastic_instability`).
+- `scripts/arc-phase3d-structured-edit-residual-v1.mjs` (Node
+  wrapper) — pure pass-through to the Python runner, honouring
+  `$SUNDOG_PYTHON`.
+- `package.json` adds `arc:phase3d:structured-edit-residual-v1`.
+- `.gitignore` adds
+  `results/arc/phase3d-structured-edit-residual-v1/`.
+- Pre-commit + CI ARC leak-check (`arc:phase0:leak-check`) passes
+  unchanged; the new runner contains no `evaluation` literal and
+  the register discipline is untouched.
+
+**Verdict impact**: no prior verdict changes. The Branch D spec
+admission moves from "EXECUTION HOLD" to "EXECUTION ADMITTED,
+capped probe required" per the spec's own ten-minute rule. No
+binding Branch D receipt is filed by this amendment.
+
+**Smoke-test fingerprint** (CPU, `--probe-only --probe-steps 3
+--limit-arms raw_grid_edit --limit-seeds 20260528`, all 36 registered
+tasks):
+
+- 49 held-out instances (`validation_lodo=18`,
+  `validation_pttest=6`, `test_lodo=19`, `pttest=6`);
+- 49 baseline-selection rows;
+- 49 edit-metrics rows;
+- 49 residual records;
+- 294 learning-curve rows (49 instances × (3 mask + 3 color) steps);
+- 16 receipt files written (manifest + 12 data files +
+  branch_adjudication + commands + hashes);
+- elapsed total: **222.6 s wall** (probe);
+- arena gate: `not_adjudicated` (probe-only, by spec);
+- selected seed for `raw_grid_edit`: `20260528` (single-seed limit).
+
+**Baseline-picker sanity** (single-seed probe over all 49 held-out
+instances):
+
+| selected `(shape_rule, canvas_rule)` | count |
+| --- | ---: |
+| `same_as_input` + `identity_top_left` | 28 |
+| `conditioning_unanimous_output` + `constant_background` | 9 |
+| `same_as_input` + `constant_background` | 6 |
+| `conditioning_unanimous_output` + `nonzero_bbox_top_left` | 4 |
+| `same_as_input` + `nonzero_bbox_top_left` | 2 |
+
+Diversity is present and dominant pick (identity copy of input)
+matches expectation that many ARC outputs are small edits of the
+input. The picker does not collapse to a single rule.
+
+**Quarantine reachability** (3-step probe → models barely trained;
+labels reachable verified at probe-only):
+
+| label | count |
+| --- | ---: |
+| `edit_mask_overedit` | 38 |
+| `baseline_canvas_failure` | 6 |
+| `edit_mask_underdetection` | 4 |
+| `edit_color_failure` | 1 |
+
+The 4 remaining labels (`baseline_shape_failure`,
+`conditioning_starvation`, `copy_prior_absent`,
+`palette_lift_failure`, `stochastic_instability`) are reachable in
+principle from the runner code; they do not fire on this minimal
+probe because (a) the dominant baseline choice (`same_as_input`)
+makes shape exact by construction in the probe, (b) conditioning
+starvation requires `< 3` pairs which the probe set mostly satisfies,
+(c) `copy_prior_absent` requires mean residual > 0.50 which most
+selected baselines clear, (d) `palette_lift_failure` is the catch-all
+fallback, and (e) `stochastic_instability` requires multi-seed
+disagreement which a single-seed probe cannot exhibit.
+
+**What remains under the spec's ten-minute rule**: a capped timing
+probe with realistic `--probe-steps` (e.g. 100–200) must run before
+the full 4-arm × 5-seed binding execution. The 3-step smoke is
+feature-build- and baseline-iteration-dominated, so naive linear
+extrapolation to 700 steps would be misleading; a 100-step CPU
+probe will give the regression points needed to project the GPU
+serial / 3-shard parallel walls and stage the binding launch.
+
+The next amendment will file: a capped timing probe receipt, the
+extrapolated full-run wall, and the staged PowerShell command for
+the binding run (with shard+merge plumbing if the projected wall
+exceeds the ten-minute threshold — likely given the per-instance
+cost roughly doubles from Phase 3A's 4.5 s).
+
+**Public-language constraint**: no change. The pre-binding-receipt
+language from the Branch D spec §"Public Language" remains the only
+permitted public addition.
