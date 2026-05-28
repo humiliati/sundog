@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3D STRUCTURED EDIT RESIDUAL SPEC FILED; EXECUTION HOLD**.
+Status: **Phase 3D BINDING RECEIPT FILED -- `branch_d_full_grid_edit_floor`; ALL 4 REFLECTION BRANCHES + BRANCH D NOW CLOSED**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -85,14 +85,38 @@ MLP). The remaining admissible Phase 3 reopen path is
 PHASE3_5_REFLECTION Branch D (different framing). A future Branch D would
 need its own pre-registered spec, arena gate, and learner contract.
 
-Branch D is now filed at
+Branch D is filed at
 [`PHASE3D_DIFFERENT_FRAMING_SPEC.md`](PHASE3D_DIFFERENT_FRAMING_SPEC.md).
-It registers `structured_edit_residual_v1`, which models each output as an
-input-derived baseline canvas plus a residual edit mask and edit colors. The
-matched full-grid edit arm `raw_grid_edit` must open the non-baseline edit
-arena before any `signature_palette_edit` sufficiency comparison is licensed.
-Status: spec only; execution hold pending runner/wrapper/npm wiring,
-leak-check coverage, result ignore path, and freeze-marker amendment.
+`structured_edit_residual_v1` models each output as an input-derived baseline
+canvas plus a residual edit mask and edit colors. The 20-shard binding
+receipt (4 arms x 5 seeds, ~1h 26m GPU parallel wall via the (arm, seed)
+shard+merge protocol with `--allow-mixed-commits` operator override --
+3 distinct gitCommits, but `runnerIdenticalAcrossCommits=true` so no WARN
+fired) returned verdict **`branch_d_full_grid_edit_floor`**: zero
+non-baseline exact tasks on both held-out lanes for arm `raw_grid_edit`,
+so no `signature_palette_edit` vs. `raw_grid_edit` sufficiency comparison
+is licensed. Failure character is qualitatively distinct from V1, V2,
+compact-7, and Phase 3A: **edit-color-rule failure**. The structured-edit
+framing recovers shape (1.000 on pttest), partial palette (0.333), pixel
+accuracy 0.47-0.57, and edit-mask F1 0.53-0.65 with strong minority recall
+(0.61-0.72) -- but the per-instance scratch color learner cannot recover
+the exact edit colors. The dominant quarantine label (26% of held-out
+instances) is `edit_color_failure` (mask F1 >= 0.50 but color accuracy
+< 0.50): the model knows WHERE to edit but not WHAT color.
+
+Five Phase 3 binding full-grid-control receipts -- V1, V2, compact-7,
+Phase 3A, and Phase 3D -- now agree on the held-out exact-grid floor
+across two task distributions, two learner families (transformer +
+per-task MLP), and two output framings (whole-grid + structured edit
+residual). The structured-edit framing additionally decomposed the
+failure mode into its components (shape picker, canvas picker, edit-mask
+learner, edit-color learner) for the first time, isolating the bottleneck
+to the edit-color-rule stage. All four PHASE3_5_REFLECTION branches plus
+Branch D are now characterised; remaining admissible Phase 3 reopens
+require either a new pre-registered Branch D variant (wider baseline
+family, cross-task edit-color MLP, richer mask learner) or a new
+Branch E spec (e.g., generative program search, test-time LM prompting)
+with its own arena gate and verdict-amendment discipline.
 
 ## Official Anchors
 
@@ -204,7 +228,20 @@ Checked **2026-05-28** against:
   `structured_edit_residual_v1`, with `raw_grid_edit`,
   `signature_palette_edit`, `signature_only_edit`, and `metadata_only_edit`
   arms, a conditioning-selected baseline family, edit-mask/edit-color residual
-  learners, and a non-baseline arena gate. Status: spec only; execution hold.
+  learners, and a non-baseline arena gate. **20-shard binding receipt
+  filed** under `mergeGitCommit 9F3193D7` (3 distinct gitCommits via
+  `--allow-mixed-commits` override; `runnerIdenticalAcrossCommits=true` so
+  no WARN; 14 dirty + 6 clean shards). Selected seeds: raw=`20260529`,
+  sig_palette=`20260531`, sig_only=`20260529`, metadata=`20260528`.
+  Verdict: **`branch_d_full_grid_edit_floor`**. Zero non-baseline
+  exact tasks on both held-out lanes for every arm; baseline_exact also
+  zero (the baselines never produce the exact target). Shape exact 1.000
+  on pttest, 0.316 on test_lodo; palette exact 0.333; pixel mean
+  0.47-0.57; edit-mask F1 0.53-0.65; minority edit recall 0.61-0.72.
+  6 of 9 quarantine labels fire; dominant label is **`edit_color_failure`**
+  (51/196 = 26%), naming the new failure mode: the per-instance scratch
+  color learner knows WHERE to edit but not WHAT color. Wall: ~1h 26m
+  parallel (2.9x sharded GPU speedup vs ~5.3 h serial projection).
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -246,10 +283,10 @@ amendments line is frozen. Corrections or refinements must be appended with:
 
 ## Public-Language Constraint
 
-Phase 3 has **four** full-grid-control binding receipts on file (V1, V2,
-compact-7, and Phase 3A `per_task_coord_mlp_v1`), all floored at zero
-exact matches; no sufficiency support adjudication is on file. Public copy
-may say:
+Phase 3 has **five** full-grid-control binding receipts on file (V1, V2,
+compact-7, Phase 3A `per_task_coord_mlp_v1`, and Phase 3D
+`structured_edit_residual_v1`), all floored at zero exact matches; no
+sufficiency support adjudication is on file. Public copy may say:
 
 - ARC-AGI abstraction coupling roadmap;
 - registered task-subset audit;
@@ -263,16 +300,23 @@ may say:
   Branch B compact-subset diagnostic lane (compact-7) produced a
   `compact_full_grid_control_floor` receipt with a qualitatively
   distinct failure -- dominant-color mode collapse -- on every
-  held-out instance, and the Branch A stochastic per-task lane
+  held-out instance, the Branch A stochastic per-task lane
   (`per_task_coord_mlp_v1`) produced a `branch_a_full_grid_floor`
   receipt with a third qualitatively distinct failure --
-  conditioning starvation + shape-generalisation failure. All four
-  full-grid controls now agree on the floor across two task
-  distributions and two learner families (transformer, per-task
-  coordinate MLP), so future signature-vs-full-grid claims still
-  require a passing full-grid control first, and the remaining
-  admissible Phase 3 reopen path is PHASE3_5_REFLECTION Branch D
-  (different framing).
+  conditioning starvation + shape-generalisation failure -- and the
+  Branch D structured-edit-residual lane
+  (`structured_edit_residual_v1`) produced a
+  `branch_d_full_grid_edit_floor` receipt with a fourth qualitatively
+  distinct failure -- edit-color-rule failure. All five full-grid
+  controls now agree on the floor across two task distributions, two
+  learner families (transformer + per-task MLP), and two output framings
+  (whole-grid + structured edit residual). All four
+  PHASE3_5_REFLECTION branches plus Branch D are now characterised;
+  remaining admissible Phase 3 reopens require either a new
+  pre-registered Branch D variant (wider baseline family, cross-task
+  edit-color MLP, richer mask learner) or a new Branch E spec (e.g.,
+  generative program search, test-time LM prompting) with its own
+  arena gate and verdict-amendment discipline.
 
 Avoid:
 
@@ -281,14 +325,16 @@ Avoid:
 - "the 5D subspace is universal";
 - any claim that a Kaggle entry validates the theory without a
   non-trivial Phase 3 sufficiency receipt;
-- any Branch A support or Branch B narrowed-support claim from any of
-  the four filed binding receipts (V1, V2, compact-7, Phase 3A);
+- any Branch A, Branch B, or Branch D support claim from any of
+  the five filed binding receipts (V1, V2, compact-7, Phase 3A,
+  Phase 3D);
 - describing any Phase 3 binding receipt as a signature-specific
   falsification independent of decoder capacity;
-- describing the four filed Phase 3 receipts as a sufficiency-failure
+- describing the five filed Phase 3 receipts as a sufficiency-failure
   conclusion -- per the reflection, they characterise the
-  deterministic-low-capacity and per-task-scratch families on the
-  registered task class, not the shadow-projection representation;
+  deterministic-low-capacity, per-task-scratch, and structured-edit
+  framing families on the registered task class, not the
+  shadow-projection representation;
 - claiming "V2 failed -> signature representation is favoured" -- V2
   floored the same way V1 did; no signature-vs-full-grid comparison
   is licensed by either receipt;
@@ -300,10 +346,24 @@ Avoid:
   -- the Phase 3A raw-grid arm did not open the arena, so no per-arm
   comparison is licensed; the all-arms-equal pattern in the receipt
   is a consequence of the floor, not evidence of per-arm equivalence;
-- claiming any V2, compact-7, or Phase 3A receipt closes Phase 3 --
-  they close PHASE3_5_REFLECTION Branches A, B, and C in the filed
-  learner families; the sufficiency question remains open under
-  Branch D (different framing);
+- claiming "Phase 3D floored -> signature representation is favoured"
+  -- same caveat: the raw_grid_edit arm did not open the
+  non-baseline arena; `signature_palette_edit`'s slightly higher
+  pixel / minority recall in the documentation-only per-arm table
+  is unlicensed-for-adjudication data, not a support signal;
+- claiming any single Phase 3 receipt closes the sufficiency
+  question -- the five floors together close PHASE3_5_REFLECTION
+  Branches A, B, C, and D in the filed learner families and
+  framings, but the sufficiency question remains open under a
+  Branch D variant (wider baseline / cross-task color / richer
+  mask) or a Branch E (different framing entirely);
 - any spatial_transform or local_completion claim from the compact-7
   receipt -- those priors are not represented in the compact-signal
-  slice.
+  slice;
+- claiming "Phase 3D's baseline-exact = 0 means the input copy
+  baseline doesn't work" -- the baseline picker correctly identifies
+  same_as_input + identity_top_left as the dominant pick (28/49 in
+  smoke) but the target outputs of registered tasks genuinely differ
+  from the baselines after the editing operation; `baseline_exact = 0`
+  means "no task in the registered subset is solved by baseline
+  alone", which is the expected design property of ARC tasks.
