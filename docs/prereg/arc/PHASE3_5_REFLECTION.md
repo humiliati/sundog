@@ -318,3 +318,40 @@ PHASE3_SUFFICIENCY_SPEC.md, with its own Pass A--D structure.
 This document does not pre-commit to any branch. The operator's
 choice of branch becomes the next admitted Phase 3 work after this
 reflection is committed.
+
+## Post-Blackwell / Compact-7 Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+Subsequent Phase 3 amendments used this reflection's branch menu to test
+whether a stronger or narrower full-grid control could open a meaningful
+signature-vs-full-grid comparison. Those later receipts do not replace the
+three deterministic-low-capacity receipts above; they add a separate
+full-grid-control calibration layer:
+
+- V1 Blackwell runner: `signature_palette` and the matched full-grid control
+  both floored at zero exact matches, so no sufficiency comparison was
+  interpretable.
+- V2 public-training raw-grid control: `full_grid_control_floor` under freeze
+  marker `79C5B060`, with zero exact matches on both held-out lanes.
+- Compact-7 diagnostic: `compact_full_grid_control_floor` under freeze marker
+  `50EAEBBF`, with zero exact matches despite `shape_exact_slot1 = 1.000`.
+
+The compact-7 residual audit names a qualitatively new failure mode:
+**dominant-color mode collapse**. Predictions often match output shape and
+background mass while omitting the target object palette/content; 13 of 13
+held-out compact-7 predictions use at most two slot-1 colors, while targets use
+3--9 colors.
+
+After compact-7, the narrowed deterministic full-grid-control path is closed.
+No further raw-grid capacity bump, extra seed, or additional task-distribution
+narrowing in this learner family is admitted as a Phase 3 reopen path. The
+remaining reopen paths are:
+
+- **Branch A**: admit a stochastic per-task learner with a new Pass C-style
+  amendment and receipt path.
+- **Branch D**: admit a different framing, such as structured edit prediction
+  or residual learning, with its own Pass A--D contract.
+
+Branch C remains available as a pause state. Branch B is closed by the V2 and
+compact-7 receipts.
