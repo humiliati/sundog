@@ -18,6 +18,7 @@ results/mesa/
 results/isotrophy/
 results/arc/
 results/riemann/
+results/pvnp/
 results/arc/phase3-sufficiency/
 results/arc/phase3-sufficiency-nn_delta_transfer_v1/
 results/arc/phase3-sufficiency-candidate_combinator_v1/
