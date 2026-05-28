@@ -189,3 +189,40 @@ caveat, so the next admitted work is a Phase 0 hold review / taxonomy rebalance
 or synthetic-grid warmup only. No ARC shadow-projection operator, signature
 decoder, or Sundog-specific feature scoring is admitted until a later amendment
 records **ADMIT**.
+
+**2026-05-28 (PT) -- Claude (Opus 4.7).** Phase 0 baseline expansion +
+verdict upgrade. Following the prior PARTIAL ADMIT amendment's preregistered
+"Allowed next work" path ("Improve or add non-Sundog cheap baselines only by
+append-only amendment before looking at any Sundog operator result"), three
+baselines were added to `scripts/arc-phase0-baselines.mjs`, keeping
+`random_valid`, `identity_copy`, and `dsl_lite_v0` byte-frozen:
+
+- `dsl_lite_v1`: `tile`, `translate`, `palette_permute` (depth 1).
+- `dsl_lite_v2`: `pad`, `fill_enclosed`, `component_copy_largest`, plus
+  depth-2 composition over the union of v0, v1, and v2 structural transforms
+  with one final color-map fit per composed candidate.
+- `tiny_learned_v0`: per-task nearest-neighbour over train pairs by padded
+  pixel Hamming distance.
+
+Combined primitive coverage now exhausts the spec Baseline Slate item 3
+DSL-lite primitive list (rotate, reflect, translate/crop/pad, recolor
+(palette permute), connected-component copy, fill) at composition depths 1
+and 2. Optional tiny learned reference is included per Baseline Slate item 4.
+
+Result on the registered 36-task subset: all five non-random baselines score
+`0/36` exact (mean pixel accuracy `0.5585` for v0/v1/v2/identity fallback;
+`0.3993` for tiny_learned). Implementation correctness verified by synthetic
+sanity check at `tests/arc-baselines/out/summary.csv` (v1 solves a 2x2 tile
+task; v2 solves both a 2x2 tile and a pad-with-zero border task), confirming
+the registered-subset zero floor is a property of the subset, not a fitter
+bug.
+
+Verdict impact: **ADMIT** (Phase 1 -- ARC grid representation as shadow
+domain -- admitted). The preregistered "Subset, blind policy, and baselines
+are filed" outcome row from the Outcome Branching table now governs, with
+the zero-floor caveat resolved by exhaustive baseline coverage rather than
+by a nonzero solve. Phase 1 inherits `0/36` exact as the hard preregistered
+floor that any Sundog-specific result must clear.
+
+Public-evaluation discipline (no manual grid inspection, no Kaggle prep)
+remains in force until Phase 6.

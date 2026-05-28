@@ -6,10 +6,14 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 0 PARTIAL ADMIT -- operator design HOLD**. This folder is the
-append-only preregistration lane for the ARC-AGI abstraction coupling. No
-shadow-projection operator, signature decoder, Kaggle notebook, or learned
-solver is admitted until Phase 0 registers the task subset and baseline slate.
+Status: **Phase 0 ADMIT -- Phase 1 (ARC grid representation as shadow domain)
+unblocked**. The shadow-projection operator, signature decoder, and Sundog
+feature scoring are admitted against the registered 36-task subset. The
+preregistered cheap-baseline floor is `0/36` exact across `random_valid`,
+`identity_copy`, `dsl_lite_v0`, `dsl_lite_v1`, `dsl_lite_v2`, and
+`tiny_learned_v0`; any Phase 1+ Sundog result must clear that floor. Kaggle
+notebook work and public-evaluation grid inspection remain blocked until
+Phase 6.
 
 ## Official Anchors
 
