@@ -60,6 +60,38 @@ const fixtures = [
     right: negativeGrid(),
     expectSame: false,
     expectZeroResidual: false
+  },
+  {
+    name: "single_cell_flip_negative",
+    left: baseGrid(),
+    right: addCell(baseGrid(), 4, 1, 2),
+    expectSame: false,
+    expectZeroResidual: false,
+    expectBagMatch: false
+  },
+  {
+    name: "color_collision_negative",
+    left: baseGrid(),
+    right: mapColors(baseGrid(), new Map([[2, 5], [3, 5]])),
+    expectSame: false,
+    expectZeroResidual: false,
+    expectBagMatch: false
+  },
+  {
+    name: "stencil_bag_translation_positive",
+    left: baseGrid(),
+    right: translateIntoCanvas(baseGrid(), 8, 8, 3, 2),
+    expectSame: true,
+    expectZeroResidual: true,
+    expectBagMatch: true
+  },
+  {
+    name: "stencil_bag_rotation_positive",
+    left: baseGrid(),
+    right: rotate90(baseGrid()),
+    expectSame: true,
+    expectZeroResidual: true,
+    expectBagMatch: true
   }
 ];
 
@@ -69,16 +101,50 @@ const rows = fixtures.map((fixture) => {
   const sameSignature = left.canonicalObjectSignature === right.canonicalObjectSignature;
   const residual = alignmentResidual(fixture.left, fixture.right);
   const residualIsZero = residual === 0;
-  const pass = sameSignature === fixture.expectSame && residualIsZero === fixture.expectZeroResidual;
+  const bagMatch = JSON.stringify(left.localSignatureBag) === JSON.stringify(right.localSignatureBag);
+  const bagCheck = fixture.expectBagMatch === undefined ? true : bagMatch === fixture.expectBagMatch;
+  const pass = sameSignature === fixture.expectSame
+    && residualIsZero === fixture.expectZeroResidual
+    && bagCheck;
   return {
     fixture: fixture.name,
     same_signature: sameSignature,
     alignment_residual: residual,
+    bag_match: bagMatch,
     expected_same_signature: fixture.expectSame,
     expected_zero_residual: fixture.expectZeroResidual,
+    expected_bag_match: fixture.expectBagMatch ?? "",
     pass
   };
 });
+
+const DISCRIMINATION_N = 50;
+const DISCRIMINATION_SEED = 20260528;
+const DISCRIMINATION_PALETTE = [1, 2, 3, 4, 5];
+const rng = makeLcg(DISCRIMINATION_SEED);
+const discriminationSignatures = new Map();
+for (let i = 0; i < DISCRIMINATION_N; i += 1) {
+  const grid = randomGrid(rng, 5, 5, DISCRIMINATION_PALETTE, 0.5);
+  const sig = projectGridShadow(grid).canonicalObjectSignature;
+  if (!discriminationSignatures.has(sig)) {
+    discriminationSignatures.set(sig, []);
+  }
+  discriminationSignatures.get(sig).push(i);
+}
+const discriminationDistinct = discriminationSignatures.size;
+const discriminationCollisions = [...discriminationSignatures.values()].filter((indices) => indices.length > 1);
+const discriminationPass = discriminationDistinct === DISCRIMINATION_N;
+const discriminationRow = {
+  fixture: "discrimination_50_random_5x5",
+  same_signature: `${discriminationDistinct}/${DISCRIMINATION_N} distinct`,
+  alignment_residual: "",
+  bag_match: "",
+  expected_same_signature: `${DISCRIMINATION_N}/${DISCRIMINATION_N} distinct`,
+  expected_zero_residual: "",
+  expected_bag_match: "",
+  pass: discriminationPass
+};
+rows.push(discriminationRow);
 
 const manifest = {
   generatedAt: new Date().toISOString(),
@@ -93,6 +159,14 @@ const manifest = {
     fixtures: rows.length,
     passed: rows.filter((row) => row.pass).length,
     failed: rows.filter((row) => !row.pass).length
+  },
+  discrimination: {
+    N: DISCRIMINATION_N,
+    seed: DISCRIMINATION_SEED,
+    palette: DISCRIMINATION_PALETTE,
+    distinctSignatures: discriminationDistinct,
+    collisions: discriminationCollisions.map((indices) => ({ indices, count: indices.length })),
+    pass: discriminationPass
   },
   rows
 };
@@ -302,6 +376,28 @@ function translateIntoCanvas(grid, height, width, dx, dy) {
 
 function mapColors(grid, colorMap) {
   return grid.map((row) => row.map((value) => colorMap.get(value) ?? value));
+}
+
+function addCell(grid, x, y, color) {
+  const out = grid.map((row) => [...row]);
+  out[y][x] = color;
+  return out;
+}
+
+function randomGrid(rng, height, width, palette, density) {
+  return Array.from({ length: height }, () =>
+    Array.from({ length: width }, () =>
+      rng() < density ? palette[Math.floor(rng() * palette.length)] : 0
+    )
+  );
+}
+
+function makeLcg(seed) {
+  let state = seed >>> 0;
+  return () => {
+    state = (1664525 * state + 1013904223) >>> 0;
+    return state / 2 ** 32;
+  };
 }
 
 function rotate90(grid) {

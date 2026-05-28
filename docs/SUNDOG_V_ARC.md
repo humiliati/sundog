@@ -321,6 +321,15 @@ Deliverables:
 Exit criterion: projections computed, residuals measured, initial signal
 characterization filed. No sufficiency claim yet.
 
+Execution artifact:
+[`docs/prereg/arc/PHASE2_PROJECTION_SPEC.md`](prereg/arc/PHASE2_PROJECTION_SPEC.md).
+Status (2026-05-28): projection measurement passed on the registered
+public-training subset (`36` tasks, `266` grids). Mean signature-collision
+residual `0.028571`; mean train-pair residual `0.594295`; signal labels
+`20` dispersed / `9` mixed / `7` compact. Phase 3 sufficiency-spec writing is
+admitted; no decoder, sufficiency, public-evaluation, or Kaggle claim is
+admitted.
+
 ### Phase 3 — Signature Sufficiency Audit
 
 Goal: formalize and test Blackwell sufficiency of the signature for the
