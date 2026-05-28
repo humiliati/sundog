@@ -193,6 +193,19 @@ Pre-registered, in this order:
    support: every fiber is trivially action-consistent and the
    strictness predicate has no discriminative content. Record as
    **`DEFERRED_VACUITY`** and stop without verdict.
+
+   **Structural-vacuity precedence (added 2026-05-28).** If
+   `damp_fraction` is *exactly* `0` or exactly `1` (no statistical
+   noise can resolve the proxy to either action), the vacuity is
+   structural rather than statistical: increasing `N_sample` cannot
+   shake it. In this case the vacuity gate takes precedence over the
+   step-7 coverage gate — file `DEFERRED_VACUITY` even if `S_eval <
+   S_pos` would otherwise fire `DEFERRED_COVERAGE`. The standard
+   `DEFERRED_COVERAGE` fall-back to `N_sample = 200,000` is **not
+   admissible** for structural-vacuity cases, because the proxy is
+   structurally inaccessible to the safety predicate on this
+   attractor regardless of sample count. Re-pinning to a different
+   regime (a new cell-set instance) is the only honest path.
 9. **Verdict.**
    - If any evaluated bin has `m(b) > delta_action`, **file
      `PDE-C1-NEG-A`** at this cell.

@@ -119,6 +119,76 @@ on C1.
 - Criterion (c) named external PDE reviewer.
 - Attractor-support twin-state certificate.
 
+## Lock Execution Disposition (2026-05-28)
+
+The v1 lock cell was executed on 2026-05-28 via
+[`../../scripts/pde_c1_kolmogorov_cell.py`](../../scripts/pde_c1_kolmogorov_cell.py)
+with `--preset lock_v1`. Receipt and manifest at
+`results/proof/c1-kolmogorov-v1-lock/`. The harness completed in
+1101 seconds (~18 min) with `steps_per_second ≈ 2361` and reported a
+procedural `DEFERRED_COVERAGE` verdict.
+
+### Honest reading
+
+The receipt fires DEFERRED_COVERAGE because `S_eval = 0.4510 < S_pos =
+0.50` (630 of 1397 occupied bins reached `n_min = 30`). But the manifest
+shows the system is also **structurally vacuous**:
+
+- `burnin_energy_min / max / mean = 0.6301 / 1.5634 / 0.6371`. Burn-in
+  had real transient excursions to ~2.5× the mean — the laminar
+  Kolmogorov solution at `k_f = 2` is indeed unstable, as the v1
+  Discriminative-Power Expectation called for.
+- `sample_energy_min / max / mean = 0.6300717992230209 /
+  0.6300717992230307 / 0.6300717992230258`. The post-burn-in trajectory
+  sits at `E_K ≈ 0.6301` to 13 decimal places — energy is exactly
+  conserved on the post-transient attractor.
+- `damp_fraction = 0` *exactly*. Not "below `delta_proxy_min`" — exactly
+  zero. No look-ahead window can cross `E_max = 0.6382` because the
+  trajectory is energy-locked at `0.6301 < E_max`.
+- `occupied_bin_count = 1397` (v0 had 40). The signature wanders
+  meaningfully in 32-dim space — but every fiber carries the same
+  proxy action `no_op`.
+
+The diagnosis is more interesting than v0's. v0 was a trivial fixed
+point in full state space. v1 finds a **non-trivial attractor in
+signature space with E_K exactly conserved**, so the safety-trigger
+objective is structurally inaccessible to discrimination on this
+attractor.
+
+### Disposition under the amended verdict rule
+
+The fiber-protocol amendment of 2026-05-28 (see
+[`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) section 5 step 8
+"Structural-vacuity precedence") states: when `damp_fraction` is
+*exactly* `0` or `1`, vacuity takes precedence over coverage. v1
+satisfies this exactly. **The v1 lock receipt is re-read as
+`DEFERRED_VACUITY`** under the amended order rule. The procedural
+`DEFERRED_COVERAGE` in the harness output predates the amendment and
+is superseded.
+
+The standard `DEFERRED_COVERAGE` fall-back (`N_sample = 200,000`) is
+**not admissible** for v1: more samples cannot resolve a structurally
+zero `damp_fraction` on an energy-conserving attractor. This is the
+exact case the structural-precedence rule was added to avoid.
+
+### Why this is not `PDE-C1-NEG-B`
+
+The amendment is a methodology clarification — it pins the order of
+two pre-existing gates when both fire, in a case the original protocol
+hadn't named. It does not relax a pinned parameter to flip the v1
+verdict. The amendment is also wired into the harness so all future
+runs use the new order, not just v1.
+
+### Bridge to v2
+
+v1 confirmed that `k_f = 2` breaks the v0 linear-stability vacuity but
+introduces a new structural vacuity (energy conservation on the
+attractor). v2 at `G = 300` is staged at
+[`PDE_C1_CELLSET_KOLMOGOROV_v2.md`](PDE_C1_CELLSET_KOLMOGOROV_v2.md) to
+break the energy-conservation symmetry by tripling the energy
+injection while keeping `k_f = 2`. Harness exposes it as
+`--preset lock_v2`.
+
 ## 6. Status
 
 - **Drafted.** 2026-05-28.
@@ -126,8 +196,13 @@ on C1.
   audit the regime change without running code.
 - **Unreviewed.** No external PDE reviewer has signed off on the
   `k_f = 2` choice as a faithful supercritical-regime instance.
-- **Unrun.** The `lock_v1` preset is present in the harness; no
-  execution has been attempted.
+- **Executed.** v1 lock ran 2026-05-28 in 1101 sec (~18 min); receipt
+  at `results/proof/c1-kolmogorov-v1-lock/`.
+- **Disposition.** Procedural `DEFERRED_COVERAGE` superseded as
+  `DEFERRED_VACUITY` under the same-day protocol amendment
+  (structural-vacuity precedence). No verdict filed. v0 disposition's
+  no-fall-back-admissible rule applies here too — v2 is the next
+  cell-set instance, not a v1 retune.
 
 ## 7. Cross-references
 

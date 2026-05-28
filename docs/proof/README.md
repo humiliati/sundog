@@ -32,10 +32,18 @@ that claim provably fails.
   because Kolmogorov flow at this regime is linearly stable.
 - [`PDE_C1_CELLSET_KOLMOGOROV_v1.md`](PDE_C1_CELLSET_KOLMOGOROV_v1.md)
   — Navier-Stokes Candidate 1 cell-set v1: discriminative-regime
-  sibling of v0, re-pinning `k_f = 2` (supercritical at `G = 100`)
-  while inheriting all other v0 §7 parameter values. Drafted,
-  desk-auditable, unreviewed, unrun. Harness exposes it as
-  `--preset lock_v1`.
+  sibling of v0 at `k_f = 2`, `G = 100`. Lock executed 2026-05-28
+  in ~18 min; procedural `DEFERRED_COVERAGE` superseded as
+  `DEFERRED_VACUITY` under the same-day structural-vacuity-precedence
+  amendment because the post-transient attractor conserves `E_K`
+  exactly to 13 decimal places (non-trivial in signature space; 1397
+  occupied bins; but `damp_fraction = 0` structurally).
+- [`PDE_C1_CELLSET_KOLMOGOROV_v2.md`](PDE_C1_CELLSET_KOLMOGOROV_v2.md)
+  — Navier-Stokes Candidate 1 cell-set v2: triples Grashof to
+  `G = 300` while keeping `k_f = 2`, intended to break the
+  energy-conservation symmetry that made v1 vacuous. All other v0/v1
+  §7 values inherited. Drafted, desk-auditable, unreviewed, unrun.
+  Harness exposes it as `--preset lock_v2`.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /
@@ -46,15 +54,18 @@ that claim provably fails.
   Navier-Stokes Candidate 1 fiber protocol: tolerance + binning
   methodology that closes the continuous-fiber gate (cell-set v0
   § 6 Open measure item), the provisional-selector gate (cell-set v0
-  § 3 Open review item), and (after the 2026-05-28 amendment) the
+  § 3 Open review item), and (after the 2026-05-28 amendments) the
   verdict-rule completeness gap via the `delta_proxy_min` vacuity
-  gate (`DEFERRED_VACUITY` non-verdict parallel to `DEFERRED_COVERAGE`;
-  no fall-back admissible — re-pinning to a discriminative regime
-  requires a new cell-set instance, e.g. v1). Bridges the support-level
-  certificate (cell-set v0 § 4.1). Introduces the `PDE-C1-NEG-A` /
-  `PDE-C1-NEG-B` parallelism mirroring the C2 receipts. Drafted,
-  unreviewed; concrete parameter values are instantiated by the cell-set
-  v0 section 7 (and inherited unchanged by v1).
+  gate plus the structural-vacuity-precedence rule (when
+  `damp_fraction` is exactly `0` or `1`, vacuity overrides coverage
+  to avoid wasted fall-back compute). `DEFERRED_VACUITY` non-verdict
+  branch parallel to `DEFERRED_COVERAGE`; no fall-back admissible —
+  re-pinning to a discriminative regime requires a new cell-set
+  instance (e.g. v1, v2). Bridges the support-level certificate
+  (cell-set v0 § 4.1). Introduces the `PDE-C1-NEG-A` / `PDE-C1-NEG-B`
+  parallelism mirroring the C2 receipts. Drafted, unreviewed;
+  concrete parameter values are instantiated by cell-set v0 section 7
+  (and inherited unchanged by v1 and v2).
 - [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md) — Phase 3 boundary theorem
   (reviewed, closed positive) and pushable-occluder mapping.
 - [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) — Phase 4 three-body measured

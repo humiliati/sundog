@@ -59,7 +59,15 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--preset",
-        choices=["smoke", "lock", "fallback", "lock_v1", "fallback_v1"],
+        choices=[
+            "smoke",
+            "lock",
+            "fallback",
+            "lock_v1",
+            "fallback_v1",
+            "lock_v2",
+            "fallback_v2",
+        ],
         default="smoke",
     )
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
@@ -78,17 +86,13 @@ def parse_args() -> argparse.Namespace:
 
 
 def build_config(args: argparse.Namespace) -> RunConfig:
-    # Cell-set v0 / v1 pinned values. Cell-set v0 uses k_f = 4 (laminar at G=100,
-    # used to commission the harness and surface the vacuity gate). Cell-set v1
-    # re-pins k_f = 2 to enter the supercritical Kolmogorov-flow regime where
-    # the safety trigger is expected to exercise non-trivially.
+    # Cell-set v0 / v1 / v2 pinned values. v0 uses (k_f = 4, G = 100) - laminar.
+    # v1 uses (k_f = 2, G = 100) - non-trivial attractor but E_K-conserving.
+    # v2 uses (k_f = 2, G = 300) - intended to break the energy conservation.
     grid_size = 32
     n_modes = 16
     k_signature = 4
     forcing_amplitude = 1.0
-    grashof = 100.0
-    # Dimensionless normalization: G = forcing_amplitude / nu^2.
-    viscosity = math.sqrt(forcing_amplitude / grashof)
     dt = 0.01
     sample_interval_steps = 50
     lookahead_steps = int(round(5.0 / dt))
@@ -102,18 +106,32 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         burnin_steps = 100_000
         sample_count = 50_000
         kf = 4
+        grashof = 100.0
     elif args.preset == "fallback":
         burnin_steps = 100_000
         sample_count = 200_000
         kf = 4
+        grashof = 100.0
     elif args.preset == "lock_v1":
         burnin_steps = 100_000
         sample_count = 50_000
         kf = 2
+        grashof = 100.0
     elif args.preset == "fallback_v1":
         burnin_steps = 100_000
         sample_count = 200_000
         kf = 2
+        grashof = 100.0
+    elif args.preset == "lock_v2":
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 300.0
+    elif args.preset == "fallback_v2":
+        burnin_steps = 100_000
+        sample_count = 200_000
+        kf = 2
+        grashof = 300.0
     else:
         # Smoke is intentionally not the registered cell. It exists to validate
         # the integrator, binning, and receipt plumbing under the repo's
@@ -123,6 +141,10 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         sample_interval_steps = 10
         lookahead_steps = 100
         kf = 4
+        grashof = 100.0
+
+    # Dimensionless normalization: G = forcing_amplitude / nu^2.
+    viscosity = math.sqrt(forcing_amplitude / grashof)
 
     overrides = {
         "sample_count": args.sample_count,
@@ -417,15 +439,30 @@ def summarize(bin_rows: list[dict], cfg: RunConfig) -> dict:
     no_op = sum(int(row["no_op_count"]) for row in bin_rows)
     damp = sum(int(row["damp_low_band_count"]) for row in bin_rows)
 
-    verdict_bearing_presets = {"lock", "fallback", "lock_v1", "fallback_v1"}
+    verdict_bearing_presets = {
+        "lock",
+        "fallback",
+        "lock_v1",
+        "fallback_v1",
+        "lock_v2",
+        "fallback_v2",
+    }
     damp_fraction = damp / max(1, no_op + damp)
     proxy_constant = (
         damp_fraction < cfg.delta_proxy_min
         or damp_fraction > 1.0 - cfg.delta_proxy_min
     )
+    proxy_structural_constant = damp == 0 or no_op == 0
     if cfg.preset not in verdict_bearing_presets:
         verdict = "SMOKE_ONLY"
         verdict_label = ""
+        interpretable = False
+    elif proxy_structural_constant:
+        # Structural-vacuity precedence: when damp_fraction is exactly 0 or 1,
+        # increasing N_sample cannot resolve the proxy. Vacuity takes precedence
+        # over the coverage gate per the 2026-05-28 protocol amendment.
+        verdict = "DEFERRED_VACUITY"
+        verdict_label = "proxy_selector_structurally_constant"
         interpretable = False
     elif s_eval < cfg.s_pos:
         verdict = "DEFERRED_COVERAGE"
@@ -433,7 +470,7 @@ def summarize(bin_rows: list[dict], cfg: RunConfig) -> dict:
         interpretable = False
     elif proxy_constant:
         verdict = "DEFERRED_VACUITY"
-        verdict_label = "proxy_selector_constant_on_sampled_support"
+        verdict_label = "proxy_selector_near_constant_on_sampled_support"
         interpretable = False
     elif incompatible:
         verdict = "PDE-C1-NEG-A"
