@@ -60,12 +60,28 @@ section 7): `epsilon_K = 0.05 sqrt(2 E_max)`, `h_K = epsilon_K / sqrt(d_K)`,
 `n_min = 30`, `delta_action = 0.10`, `S_pos = 0.50`, `N_sample = 50,000`,
 sampling interval `0.5` time units, integration step `dt = 0.01`, action
 tie-break favouring `no_op`, with a pre-registered single fall-back to
-`N_sample = 200,000` if the coverage gate defers. Promotion criterion (d) is
-**closed at the artifact level**; criterion (b) is closed at the procedure
-level. A smoke receipt has passed at
-[`../results/proof/c1-kolmogorov-v0-smoke/manifest.json`](../results/proof/c1-kolmogorov-v0-smoke/manifest.json);
-the registered lock is staged but not run inline because the capped probe
-extrapolates to `~19.8` minutes. Criteria (a) Front-A vacuity rebuttal and (c)
+`N_sample = 200,000` if the coverage gate defers. **Lock execution
+2026-05-28** via `scripts/pde_c1_kolmogorov_cell.py --preset lock` (24 min,
+~1776 steps/sec; receipt at `results/proof/c1-kolmogorov-v0-lock/`)
+returned a procedural `STRICTNESS_WITNESS_POSITIVE` that was substantively
+non-discriminative: `damp_fraction = 0` (0 / 50,000 samples crossed
+`E_max`), `sample_energy_max = 0.09761 < E_max = 0.09765`, 70% of samples
+concentrated in a single fiber bin. Diagnosis: 2D Kolmogorov flow at
+`G = 100`, `k_f = 4` is linearly stable; the system sits at the laminar
+fixed point. **Fiber protocol amended same day** with a vacuity gate
+(`delta_proxy_min = 0.01`, new `DEFERRED_VACUITY` non-verdict branch
+parallel to `DEFERRED_COVERAGE`); v0 lock receipt re-reads as
+`DEFERRED_VACUITY` and is **not** promoted as a positive. The amendment
+closes a verdict-rule completeness gap (a constant proxy can never
+separate fibers); it is methodology, not a `PDE-C1-NEG-B` retune.
+Amendment is wired into the harness (`summarize` / `write_receipt`).
+**Cell-set v1** at
+[`proof/PDE_C1_CELLSET_KOLMOGOROV_v1.md`](proof/PDE_C1_CELLSET_KOLMOGOROV_v1.md)
+re-pins `k_f = 2` (supercritical Kolmogorov at `G = 100`) while inheriting
+all other v0 §7 values; harness exposes it as `--preset lock_v1`.
+Criterion (b) is now closed at the *procedure-and-execution* level (v0
+lock ran, methodology held under amended rule); a *substantive* C1 read
+requires the v1+ execution. Criteria (a) Front-A vacuity rebuttal and (c)
 external PDE reviewer remain open. Final (d) close is coupled to (c).
 
 Candidate 2 has also been commissioned at the scoping level:
