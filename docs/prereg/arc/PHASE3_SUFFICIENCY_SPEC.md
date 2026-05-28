@@ -3169,3 +3169,170 @@ Two harness-only corrections were made after reading the probe:
 
 A one-epoch smoke after this patch completed under the same command family and
 reported `Branch decision: not_adjudicated`.
+
+### 2026-05-28 -- Blackwell Full-Run Receipt
+
+Author: Codex, using operator-run full Blackwell receipt.
+
+Justification: the operator ran the staged full `blackwell_task_decoder_v1`
+command on a clean worktree. This amendment records the manifest, artifact
+hashes, selected seeds, score table, and Branch A/B/C adjudication.
+
+Verdict impact: **Branch C -- bounded failure** for the registered
+`blackwell_task_decoder_v1` Blackwell runner. `signature_palette` fails to
+clear the non-trivial exact-grid floor on the easiest held-out subset and on
+both held-out lanes. This is not Branch A support and not Branch B named
+quarantine. Because `raw_grid_lowcap` also remains at exact-grid zero, this
+receipt should be described as a bounded failure of the registered Blackwell
+decoder to demonstrate sufficiency, not as evidence that the full grid control
+learned a rule that the signature lost.
+
+#### Command
+
+```powershell
+npm run arc:phase3:blackwell:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-blackwell-sufficiency-v1
+```
+
+#### Provenance
+
+| field | value |
+| --- | --- |
+| `generatedAt` | `2026-05-28T11:40:25Z` |
+| `completedAt` | `2026-05-28T11:52:59Z` |
+| wall clock from manifest | `754 s` / `12m34s` |
+| `gitCommit` | `79469BC8AA36F575175FB0D00F3EF71C1EE2A71B` |
+| `gitDirty` | `false` |
+| `allowDirty` | `false` |
+| `mode` | `full` |
+| `featureSchemaVersion` | `arc-p3-feature-v1` |
+| `protocolVersion` | `arc-p3-blackwell-protocol-v1` |
+| `receiptSchemaVersion` | `arc-p3-blackwell-receipt-v1` |
+| `learnerVersion` | `blackwell_task_decoder_v1` |
+| `torchVersion` | `2.11.0+cpu` |
+| `pythonVersion` | `3.14.4` |
+| train / validation / test LODO / pttest instances | `78 / 18 / 19 / 6` |
+
+Selected seeds:
+
+| arm | selected seed |
+| --- | ---: |
+| `raw_grid_lowcap` | `20260528` |
+| `signature_palette` | `20260529` |
+| `signature_only` | `20260531` |
+| `metadata_only` | `20260528` |
+
+Console per-arm runtime:
+
+| arm | elapsed |
+| --- | ---: |
+| `raw_grid_lowcap` | `289.4 s` |
+| `signature_palette` | `144.8 s` |
+| `signature_only` | `161.3 s` |
+| `metadata_only` | `151.7 s` |
+
+Validation exact metric stayed `0.0` for all arms and seeds. Seed selection was
+therefore determined by validation loss tie-break. Selected epochs:
+
+| arm | selected seed | selected epoch | validation loss |
+| --- | ---: | ---: | ---: |
+| `raw_grid_lowcap` | `20260528` | `8` | `3.679690123` |
+| `signature_palette` | `20260529` | `10` | `3.989161015` |
+| `signature_only` | `20260531` | `11` | `3.839058638` |
+| `metadata_only` | `20260528` | `7` | `4.029307127` |
+
+#### Outcome
+
+| lane | arm | grid exact any | rep exact any | shape exact slot1 | palette exact slot1 | pixel best |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| `pttest` | `metadata_only` | `NA` | `0.000` | `0.000` | `0.000` | `0.000` |
+| `pttest` | `raw_grid_lowcap` | `0.000` | `0.000` | `0.167` | `0.000` | `0.095` |
+| `pttest` | `signature_only` | `NA` | `0.000` | `0.333` | `0.000` | `0.095` |
+| `pttest` | `signature_palette` | `0.000` | `0.000` | `0.167` | `0.000` | `0.095` |
+| `test_lodo` | `metadata_only` | `NA` | `0.000` | `0.000` | `0.000` | `0.000` |
+| `test_lodo` | `raw_grid_lowcap` | `0.000` | `0.000` | `0.158` | `0.000` | `0.110` |
+| `test_lodo` | `signature_only` | `NA` | `0.000` | `0.316` | `0.000` | `0.128` |
+| `test_lodo` | `signature_palette` | `0.000` | `0.000` | `0.158` | `0.000` | `0.111` |
+| `validation_lodo` | `metadata_only` | `NA` | `0.000` | `0.167` | `0.000` | `0.127` |
+| `validation_lodo` | `raw_grid_lowcap` | `0.000` | `0.000` | `0.167` | `0.000` | `0.127` |
+| `validation_lodo` | `signature_only` | `NA` | `0.000` | `0.167` | `0.000` | `0.127` |
+| `validation_lodo` | `signature_palette` | `0.000` | `0.000` | `0.167` | `0.000` | `0.127` |
+
+The receipt-selected `signature_palette` exact rates are:
+
+- held-out-task LODO: `0/19`;
+- held-out public-training test: `0/6`.
+
+The receipt-selected `raw_grid_lowcap` exact rates are also:
+
+- held-out-task LODO: `0/19`;
+- held-out public-training test: `0/6`.
+
+Bootstrap task metric means and confidence intervals are all `0.0` in
+`scores.csv`.
+
+#### Failure And Quarantine Readback
+
+The runner's automatic branch decision:
+
+```text
+Branch C
+signature_palette fails to clear the exact-grid floor on the easiest registered held-out subset
+```
+
+Failure labels in `per_instance.csv` are dominated by `detection` for every
+grid-scorable arm. `signature_only` additionally records `structural_zero` on
+the primary color-role rows, as pre-registered. `quarantine_log.csv` allocates
+signature-arm failures evenly across the six registered boundary categories,
+three rows per `(arm, quarantine_key)` because it covers validation LODO,
+test LODO, and pttest for each held-out task.
+
+Branch interpretation:
+
+- Branch A fails because `signature_palette` does not clear the non-trivial
+  exact-grid floor on either held-out lane.
+- Branch B fails because the non-quarantined slice does not satisfy Branch A;
+  failures are not confined to a pre-registered category.
+- Branch C fires under the pre-registered easiest-subset rule.
+
+The raw-grid exact floor is a required caveat. The full-grid control did not
+demonstrate held-out exact learning either, so this receipt closes the
+registered `blackwell_task_decoder_v1` lane as a bounded decoder/representation
+failure, not as a demonstration of a learned full-grid rule that proves a
+specific signature information loss.
+
+#### Artifact Hashes
+
+Path: `results/arc/phase3-blackwell-sufficiency-v1/`
+
+| artifact | SHA-256 |
+| --- | --- |
+| `manifest.json` | `9216312914AC53680A4A798579EB31B6B5DFBB09138A7FB20E23355E54723741` |
+| `split.csv` | `ED0341B981ED6B069FA2C9BB70C80334B70CC9B947719C5DF6CC0E25123C0A95` |
+| `learning_curves.csv` | `8FC1D83E2C2A4559A04BE4E88A3D1D608F61E8CC5D351E2C9DFE05A523DE804C` |
+| `scores.csv` | `CD03C9EA28990E0E336F1FBF2AB70FE677590FF5C5C4ECD511168729A3899287` |
+| `per_instance.csv` | `E4357681A157C054D25206F5F7EF4A5FDB798551CE15106C81BA92EE8408D804` |
+| `per_task.csv` | `8F1B69E630BFAB9BD8D65FBBCFE2B178936989A6F4717A0D812A46E4CB4D66CB` |
+| `per_prior.csv` | `D59C884C03B696C57B984BEEB892825157CA8F35BC316B794AACFA1ED719D7D3` |
+| `quarantine_log.csv` | `96F704FBFE91E25F5F662D96E461C6821FD0961E0AF4E997E9020ED4E3792CEA` |
+| `residuals.jsonl` | `33F31457946F92BC7DC4B640633AEB254C960F7346D4C5C290B0AB6C255B09AD` |
+| `phase3_receipt.json` | `7E149E941442EB1782080B56A5C1180703FEBCEBB0862B9703DCE5E175D0678F` |
+| `branch_adjudication.md` | `E52940D89CF1AE9F4338054C63FEBD309283E30B2B631E7ACF15577FF6057CD1` |
+
+#### Public Language
+
+Allowed:
+
+> "The registered Phase 3 Blackwell decoder did not support signature
+> sufficiency. In the full clean receipt, `signature_palette` scored zero
+> exact matches on both held-out-task LODO and held-out public-training test
+> lanes, so the pre-registered Branch C bounded-failure rule fired. The matched
+> full-grid control also scored zero exact matches, so this is a bounded failure
+> of the registered decoder lane rather than evidence that the full grid learned
+> a rule the signature lost."
+
+Still forbidden:
+
+- "Sundog solves ARC";
+- any public-evaluation or Kaggle private/semi-private claim;
+- any Branch A support or Branch B narrowed-support claim from this receipt;
+- describing this receipt as evidence on the public-evaluation split.

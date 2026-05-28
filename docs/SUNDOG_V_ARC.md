@@ -368,13 +368,16 @@ low-capacity receipts are filed and all are verdict task-hardness /
 decoder-failure, not support or failure of signature sufficiency. Phase 2
 baseline comparison sharpened the problem: `P_shadow_grid_v0` preserves
 distinctness but makes input-output pairs farther apart than raw-pixel and
-coarse-feature baselines. Phase 3 must therefore test learnability of the
+coarse-feature baselines. Phase 3 therefore tested learnability of the
 `input_rep -> output_rep` mapping from demonstrations, with
 `signature_palette` as the primary representation and `signature_only` as a
-stricter ablation. A Blackwell sufficiency unpause amendment is filed in the
-Phase 3 spec with algebraic conditions, held-out-task splits, Branch A/B/C
-criteria, a frozen decoder design, and a quarantine taxonomy. Execution remains
-held until the Blackwell runner and freeze-marker receipt land.
+stricter ablation. A Blackwell sufficiency lane is now filed: algebraic
+conditions, held-out-task splits, Branch A/B/C criteria, a frozen Python/PyTorch
+decoder, timing probe, and full clean receipt. The `blackwell_task_decoder_v1`
+receipt is Branch C bounded failure: `signature_palette` scored zero exact
+matches on both held-out lanes. The matched full-grid control also scored zero
+exact matches, so the receipt does not support sufficiency and should not be
+described as a full-grid superiority result.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 
