@@ -4302,3 +4302,57 @@ diagnostic lane.
 `PHASE3B_COMPACT_SUBSET.md` § "Public-Language Update (Additive)".
 `docs/prereg/arc/README.md` is updated separately for the status
 roll-up.
+
+### 2026-05-28 (PT) -- Codex (GPT-5) -- Branch A Stochastic Per-Task Spec Filed
+
+Branch A spec:
+[`PHASE3A_STOCHASTIC_PER_TASK_SPEC.md`](PHASE3A_STOCHASTIC_PER_TASK_SPEC.md).
+
+Justification: the V1 Blackwell lane, V2 public-training raw-grid gate, and
+compact-7 diagnostic all failed before a meaningful signature-vs-full-grid
+comparison could begin. Compact-7 also identified a named failure mode,
+dominant-color mode collapse, in which the decoder matched output shape and
+background mass while omitting minority object content. Per
+PHASE3_5_REFLECTION and the compact-7 closure receipt, the remaining direct
+Phase 3 reopen path is Branch A: change learner family rather than further
+narrowing the deterministic full-grid-control lane.
+
+Verdict impact: **no execution admission and no Branch A verdict**. The new
+spec starts Branch A by freezing a first stochastic per-task learner contract,
+`per_task_coord_mlp_v1`, but execution remains held until a runner, Node
+wrapper, npm script, result ignore path, leak-check allowlist update, and
+freeze-marker amendment are committed together.
+
+The Branch A learner is a per-instance, per-arm coordinate-conditioned MLP
+trained from scratch on only the conditioning demonstrations for that held-out
+instance. It admits no public auxiliary meta-training and no cross-task learned
+weight sharing. The frozen arms are:
+
+- `raw_grid_per_task` -- matched full-grid control;
+- `signature_palette_per_task` -- primary Sundog arm;
+- `signature_only_per_task` -- strict quotient ablation;
+- `metadata_only_per_task` -- nuisance discrimination control.
+
+The spec preserves the comparison discipline learned from V1/V2/compact-7:
+
+1. the raw-grid arm must first open the arena by achieving at least one exact
+   task on both held-out lanes (`test_lodo` and `pttest`);
+2. if raw grid floors, the verdict is `branch_a_full_grid_floor` and no
+   signature sufficiency language is admitted;
+3. only if raw grid opens the arena can `signature_palette_per_task` be compared
+   to the matched full-grid arm for `branch_a_support`,
+   `branch_a_bounded_failure`, or diagnostic named quarantine;
+4. dominant-color mode collapse is now a required audit column and quarantine
+   label for this lane.
+
+Reserved implementation names:
+
+- Python runner: `docs/prereg/arc/phase3a_per_task_coord_mlp.py`;
+- Node wrapper: `scripts/arc-phase3a-per-task-coord-mlp-v1.mjs`;
+- npm script: `arc:phase3a:per-task-coord-mlp-v1`;
+- binding receipt path: `results/arc/phase3a-per-task-coord-mlp-v1/`.
+
+Per the repository ten-minute rule, the first implementation receipt must run a
+capped probe before any full run. If the full run is projected over about ten
+minutes, the runner must stage exact PowerShell commands, a wall-clock
+estimate, resume-safety notes, and the branch decision each outcome selects.

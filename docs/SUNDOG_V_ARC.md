@@ -389,7 +389,12 @@ predictions with at most two slot-1 colors even when targets use 3--9 colors.
 That failure is named **dominant-color mode collapse**. With V1, V2, and
 compact-7 all floored, Branch B is closed for this learner family. The remaining
 Phase 3 reopen paths are Branch A, a stochastic per-task learner, or Branch D,
-a different framing such as structured edit or residual prediction.
+a different framing such as structured edit or residual prediction. Branch A
+spec work is now filed as `per_task_coord_mlp_v1`: a stochastic per-instance
+coordinate MLP trained from scratch on each held-out instance's conditioning
+demonstrations, with the raw-grid arm required to open the arena before any
+signature sufficiency comparison. Execution remains held until runner wiring
+and a freeze-marker amendment are committed.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

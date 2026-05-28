@@ -355,3 +355,9 @@ remaining reopen paths are:
 
 Branch C remains available as a pause state. Branch B is closed by the V2 and
 compact-7 receipts.
+
+Branch A has now been selected for spec work in
+`PHASE3A_STOCHASTIC_PER_TASK_SPEC.md`. That file freezes
+`per_task_coord_mlp_v1` as the first stochastic per-task learner contract, but
+does not admit execution until runner wiring and a freeze-marker amendment are
+filed.
