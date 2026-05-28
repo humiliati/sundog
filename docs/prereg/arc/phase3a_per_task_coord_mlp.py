@@ -1069,13 +1069,20 @@ def assert_shard_consistency(shards: list[dict[str, Any]], repo_root: Path | Non
     ref = shards[0]["manifest"]
     keys = [
         "featureSchemaVersion", "protocolVersion", "receiptSchemaVersion", "learnerVersion",
-        "specHash", "parentSpecHash", "registerHash", "dataDirHash",
+        "registerHash", "dataDirHash",
         "registerPath", "dataDir",
         "shapeModelSpec", "colorModelSpec", "seedSlate", "arms",
         "maxStepsEffective",
     ]
     if not allow_mixed_commits:
-        keys.append("gitCommit")
+        # Strict path: gitCommit AND documentation-only spec hashes must match.
+        keys.extend(["gitCommit", "specHash", "parentSpecHash"])
+    # Under --allow-mixed-commits, specHash / parentSpecHash are NOT required to
+    # match (operator amendments to either spec file change those hashes without
+    # changing the runner code that produced the per-instance outputs). The
+    # runtime audit below verifies the runner file content is byte-identical
+    # across every distinct shard gitCommit, and the per-commit specHash /
+    # parentSpecHash maps are recorded in mixedCommitsAudit for transparency.
     seen_arm_seed: set[tuple[str, int]] = set()
     for sh in shards:
         m = sh["manifest"]
