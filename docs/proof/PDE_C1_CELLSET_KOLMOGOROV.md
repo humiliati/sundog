@@ -317,6 +317,97 @@ discipline.
 No locked figure from sections 1–6 is re-stated at a different value in
 this patch.
 
+## 8. Execution Harness
+
+The runnable harness is:
+
+```powershell
+python scripts\pde_c1_kolmogorov_cell.py
+```
+
+It implements the v0 cell as a pseudospectral vorticity-form Kolmogorov-flow
+integrator with explicit nonlinear advection and implicit viscous damping
+(`pseudo_spectral_vorticity_semi_implicit_euler` in the manifest). The
+registered lock uses the section-7 values above. Smoke and manual-override runs
+are non-verdict receipts; only `--preset lock` or the pre-registered
+`--preset fallback` may adjudicate the C1 branch.
+
+### 8.1 Validation smoke
+
+```powershell
+python scripts\pde_c1_kolmogorov_cell.py `
+  --preset smoke `
+  --out results\proof\c1-kolmogorov-v0-smoke
+```
+
+Current smoke receipt (2026-05-28):
+
+- Read-back path: `results/proof/c1-kolmogorov-v0-smoke/manifest.json`.
+- Result: `SMOKE_ONLY`; no C1 negative or positive may be filed.
+- Runtime: `4090` steps in `2.046` seconds (`~1999` steps/sec).
+
+### 8.2 Capped rate probe
+
+Non-verdict probe used only to estimate the registered lock:
+
+```powershell
+python scripts\pde_c1_kolmogorov_cell.py `
+  --preset lock `
+  --allow-unregistered-overrides `
+  --sample-count 100 `
+  --out results\proof\_c1-kolmogorov-rate-probe
+```
+
+Measured 2026-05-28:
+
+- `105450` steps in `48.113` seconds (`~2192` steps/sec).
+- Registered lock step count:
+  `100000 + (50000 - 1) * 50 + 500 = 2600450` steps.
+- Extrapolated lock wall-clock: about `19.8` minutes.
+- Fallback step count:
+  `100000 + (200000 - 1) * 50 + 500 = 10100450` steps.
+- Extrapolated fallback wall-clock: about `76.8` minutes.
+
+Per [`../../AGENTS.md`](../../AGENTS.md) "The ~10-minute rule", the lock and
+fallback are **not inline-agent commands**. They are operator / long-budget
+runner commands.
+
+### 8.3 Registered lock command
+
+```powershell
+python scripts\pde_c1_kolmogorov_cell.py `
+  --preset lock `
+  --out results\proof\c1-kolmogorov-v0-lock
+```
+
+Read-back:
+
+- `results/proof/c1-kolmogorov-v0-lock/manifest.json`
+- `results/proof/c1-kolmogorov-v0-lock/bin-summary.csv`
+- `results/proof/c1-kolmogorov-v0-lock/PDE_C1_KOLMOGOROV_RESULTS.md`
+
+Branches:
+
+- `PDE-C1-NEG-A`: at least one evaluated bin has minority fraction
+  `> delta_action`.
+- `STRICTNESS_WITNESS_POSITIVE`: coverage gate passes and no evaluated bin
+  crosses `delta_action`, under the proxy selector.
+- `DEFERRED_COVERAGE`: `S_eval < S_pos`; run the one pre-registered fallback.
+
+### 8.4 Pre-registered fallback command
+
+Run only after a lock receipt returns `DEFERRED_COVERAGE`:
+
+```powershell
+python scripts\pde_c1_kolmogorov_cell.py `
+  --preset fallback `
+  --out results\proof\c1-kolmogorov-v0-fallback
+```
+
+Any further sample-count increase, binning change, or threshold change after
+the lock/fallback aggregation files `PDE-C1-NEG-B` per
+[`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) section 7.
+
 ## Sample Fiber Pairs (Illustrative, Not Adjudicated)
 
 The four pairs below are *not* a verdict. They sketch the kind of construction
