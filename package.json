@@ -179,6 +179,8 @@
     "arc:phase3a:per-task-coord-mlp-v1:shard": "node scripts/arc-phase3a-per-task-coord-mlp-v1.mjs",
     "arc:phase3a:per-task-coord-mlp-v1:merge": "node scripts/arc-phase3a-per-task-coord-mlp-v1.mjs --merge",
     "arc:phase3d:structured-edit-residual-v1": "node scripts/arc-phase3d-structured-edit-residual-v1.mjs",
+    "arc:phase3d:structured-edit-residual-v1:shard": "node scripts/arc-phase3d-structured-edit-residual-v1.mjs",
+    "arc:phase3d:structured-edit-residual-v1:merge": "node scripts/arc-phase3d-structured-edit-residual-v1.mjs --merge",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
     "cf:pages": "node scripts/cloudflare-pages-project.mjs",
