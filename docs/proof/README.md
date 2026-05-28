@@ -18,8 +18,12 @@ that claim provably fails.
   corollary.
 - [`PDE_DETERMINING_MODES_POSTULATE1.md`](PDE_DETERMINING_MODES_POSTULATE1.md)
   — Navier-Stokes Candidate 1 sidecar: determining modes read through
-  Postulate 1 (drafted; external PDE review and a runnable cell-set artifact
+  Postulate 1 (drafted; external PDE review and cell-set adjudication
   still pending).
+- [`PDE_C1_CELLSET_KOLMOGOROV.md`](PDE_C1_CELLSET_KOLMOGOROV.md) —
+  Navier-Stokes Candidate 1 cell-set v0: Kolmogorov-flow instance of the
+  pre-registered cell set required by the C1 sidecar (desk-auditable,
+  unreviewed, unrun).
 - [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md) — Phase 3 boundary theorem
   (reviewed, closed positive) and pushable-occluder mapping.
 - [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) — Phase 4 three-body measured
