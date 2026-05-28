@@ -552,3 +552,219 @@ registered tasks whose `primary_prior` is `color_role`:
 These tasks are not removed from Phase 3. They are reported as an explicit
 stratum, and any claim that depends on `signature_only` must name this stratum
 as structurally color-identity lossy.
+
+### 2026-05-28 -- Pass A Clarifications
+
+Author: Claude (Opus 4.7).
+
+Justification: post-audit of the Pass A Representation And Decoder Contract
+surfaced four implicit definitions that the runner author should not have to
+infer. This amendment pins them without altering Pass A's normative contract
+or any envelope numbers.
+
+Verdict impact: no execution admission. Pass A's freeze stands; this
+amendment supplements it.
+
+#### objectTokenCount Definition
+
+For the token-contribution formula `count / objectTokenCount`,
+`objectTokenCount` is the total number of object tokens emitted for the
+grid's canonical signature, computed before contribution accumulation:
+
+- if `canonicalObjectSignature` is `empty`, `objectTokenCount = 1` (only the
+  `obj:empty` token is emitted)
+- otherwise, `objectTokenCount = 4 + N`, where the constant `4` covers the
+  fixed `obj:bbox_w`, `obj:bbox_h`, `obj:role_count`, and `obj:cell_count`
+  tokens, and `N` is the number of `obj:cell=x:y:role` cell tokens (one per
+  non-zero cell after canonicalization)
+
+`objectTokenCount` divides every object-token contribution including the
+fixed-meta tokens, so the sum of object-token contributions equals `1` before
+the hashed-suffix L2 normalization step.
+
+#### roleCount Derivation
+
+`roleCount` in the `obj:role_count=<roleCount>` token is derived from the
+canonical signature's cell tokens, not stored in the signature string. It is
+the count of distinct roles in the cell-token set, which equals
+`nonzeroPalette.length` by construction (first-occurrence row-major
+remapping assigns exactly one role per distinct non-zero color). For an empty
+signature, `roleCount = 0` and the `obj:role_count` token is not emitted at
+all (only `obj:empty` is emitted).
+
+#### Hash Case Convention
+
+All Phase 3 hash fields are uppercase hexadecimal: `signatureHash`,
+`localBagHash`, every entry in the receipt's `hashes.json`, and any hash
+literal referenced inside this spec. Phase 2's `signature_hash` and
+`local_bag_hash` were emitted with Node's default lowercase encoding; any
+cross-check against Phase 2 artifacts must normalize case (uppercase the
+Phase 2 values or use case-insensitive comparison) before asserting
+equality.
+
+The runner is free to compute hashes in either case internally as long as
+every emitted artifact field and cross-check report uses the uppercase
+convention.
+
+#### L2 Normalization Scope
+
+L2 normalization applies only to the hashed signature suffix (indices
+`28..4123`), not to the dense 28-dimensional metadata prefix (indices
+`0..27`). This is intentional:
+
+- the signature suffix is normalized so its contribution magnitude is
+  invariant to token count (a 4-cell signature and a 40-cell signature both
+  have unit L2 norm in the suffix block);
+- the metadata prefix sits on its pre-registered per-feature scale
+  (`height/30`, `width/30`, etc.) so per-feature comparisons remain
+  interpretable.
+
+Pass C learner selection must account for the resulting scale difference.
+Any regularizer or distance metric whose behavior depends on global feature
+scale must be filed in Pass C with a justification of how it handles the
+metadata-vs-signature split.
+
+### 2026-05-28 -- Pass B Split, Floor, And Discrimination Contract
+
+Author: Claude (Opus 4.7).
+
+Justification: Pass B closes the second roadmap slot. It pins how Phase 3
+constructs LODO and public-training test instances, handles the five `k=2`
+tasks, enforces the ARC-AGI two-prediction discipline, defines the
+`oracle_copy_floor` double reading, and specifies the discrimination floor
+that must be reported alongside arm scores. Decoder/learner execution
+remains held pending Pass C.
+
+Verdict impact: no execution admission. Pass B is filed.
+
+#### LODO Instance Construction
+
+LODO instances are constructed deterministically from
+`P0_TASK_REGISTER.csv`:
+
+1. Iterate registered task rows in the order they appear in the binding
+   register CSV (the order is the `task_id`-ascending output of
+   `arc-phase0-draft-register.mjs`; verify the binding CSV matches that
+   order at runtime).
+2. For each task with `k` train pairs (`k ≥ 2` in the registered subset),
+   generate `k` LODO instances: hold out train pair index `i` (0-based) and
+   condition on the other `k-1` pairs.
+3. Instance identifier: `lodo:<task_id>:<heldout_index>`. The cross-task
+   ordering of LODO instances is the concatenation in the iteration order
+   above.
+
+Total LODO instances: `115` (sum of `k` over the 36 tasks; matches the
+Phase 2 train-pair count `trainPairCount=115`).
+
+#### Small-k Stratum
+
+The five `k=2` tasks (`00576224`, `025d127b`, `08ed6ac7`, `0b17323b`,
+`11e1fe23`) generate LODO instances whose conditioning set has size 1.
+These instances enter the audit but are reported as a separate stratum.
+Three strata appear in every receipt:
+
+| stratum | tasks | LODO instances |
+| --- | ---: | ---: |
+| `all_tasks` | 36 | 115 |
+| `k_ge_3` | 31 | 105 |
+| `k_eq_2` | 5 | 10 |
+
+Phase 3 verdict tables must report both `all_tasks` and `k_ge_3` rows. No
+support verdict may depend solely on the `k_eq_2` stratum: the `k_ge_3`
+result must independently meet the success threshold defined in Pass C. If
+the `k_eq_2` and `k_ge_3` strata diverge sharply, the receipt must name the
+divergence in the verdict text.
+
+#### Public-Training Test Instances
+
+The public-training test audit runs after the LODO scoring is complete and
+the LODO receipt is serialized to disk. It produces one instance per
+registered task per test input:
+
+1. Identifier: `pttest:<task_id>:<test_index>`.
+2. Conditioning set: all `k` train pairs for that task.
+3. Target: the held public-training test pair's output. Phase 0 admitted
+   manual inspection of public-training rows; the public-training test
+   outputs live in the same task JSON files as the train pairs and are
+   allowed at scoring time, not at predict time.
+4. Total instances: `36` (one per registered task; matches the
+   `test_inputs` envelope).
+
+Discipline guard: the runner must close and re-open the LODO manifest from
+disk before reading any public-training test pair's `output` field. The
+preferred Pass D architecture is a two-runner split (one runner per lane)
+so the order is enforced by file dependency; if Pass D chooses a single
+runner, the in-memory test outputs must remain unread until after
+`scores.csv` and `per_instance.csv` rows for the LODO lane are written and
+flushed.
+
+#### Two-Prediction Discipline
+
+Every arm emits at most two ordered candidate grids per instance, matching
+the ARC-AGI-2 evaluation protocol's two-prediction allowance. Ordering
+rules:
+
+- if the learner emits multiple candidates with confidence scores, rank by
+  descending confidence;
+- on confidence ties, rank by ascending deterministic tie-break seed derived
+  from `(master_seed, task_id, lane, heldout_index, arm, candidate_rank)`
+  (the seed-derivation rule is the same as Pass C will pin for learners);
+- if the learner emits exactly one candidate, slot `1` is filled and slot
+  `2` is empty (not duplicated);
+- if the learner emits zero candidates, both slots are empty and the
+  instance is recorded with failure label `coverage`.
+
+Exact-grid scoring credits the instance if either slot matches the target.
+Representation-level scoring uses slot `1` only; slot `2` is reported in
+`per_instance.csv` but does not enter the primary representation aggregate.
+
+#### oracle_copy_floor Double Reading
+
+`oracle_copy_floor` is reported with two readings, each emitted as a
+distinct row in `scores.csv`:
+
+1. `phase0_reference` -- the Phase 0 cheap-baseline numbers on the
+   registered subset (all five non-random baselines hit `0/36` exact). Sourced
+   from `results/arc/phase0-baselines/summary.csv`; included for traceability
+   only and not eligible to participate in Phase 3 arm comparisons.
+2. `lodo_rerun` -- the same `random_valid`, `identity_copy`, `dsl_lite_v0`,
+   `dsl_lite_v1`, `dsl_lite_v2`, and `tiny_learned_v0` baseline logic
+   re-applied per LODO instance using only the `k-1` conditioning pairs (and
+   per public-training test instance using all `k` pairs, matching the
+   conditioning set sizes of the learner arms). This is the apples-to-apples
+   floor and is the value that participates in Phase 3 verdict gates.
+
+The Pass D runner must source `lodo_rerun` from the same baseline
+implementation file (`scripts/arc-phase0-baselines.mjs`) to keep the
+oracle floor reproducible against the frozen Phase 0 implementations.
+
+#### Discrimination Floor
+
+Before arm-comparison scores are interpreted, the runner emits a
+`discrimination.csv` report covering:
+
+- `unique_heldout_signatures` -- per task, the count of distinct
+  canonical-output-signatures across that task's LODO held-outs;
+- `majority_signature_rate` -- per task, the fraction of LODO instances
+  whose held output's canonical signature equals the most common held-output
+  signature in that task;
+- `collapse_count` -- per task, the number of LODO instances whose held
+  output's canonical signature was already seen in an earlier LODO instance
+  of the same task;
+- `learner_task_trivial` -- per task, `true` if all LODO held-outputs in
+  that task collapse to a single canonical signature, else `false`.
+
+Aggregation rules:
+
+- if `learner_task_trivial = true` for a task, the arm-comparison verdict
+  for that task is suppressed (its per-task arm scores still appear in
+  `per_instance.csv` but the arm aggregate excludes it);
+- if more than `30%` of registered tasks (i.e. more than 10 of 36) are
+  `learner_task_trivial`, the overall run verdict is automatically
+  `task hardness / decoder failure` regardless of arm scores; the receipt
+  text must name the collapse rate and which tasks triggered it.
+
+The 30% threshold reflects that with `k=2..5` demonstrations per task,
+some genuine signature collapse is expected; pervasive collapse means the
+LODO protocol itself is not generating a meaningful prediction task and the
+verdict is uninterpretable.
