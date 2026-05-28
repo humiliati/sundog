@@ -4474,3 +4474,126 @@ A Tooling Freeze-Marker amendment above.
 That language remains accurate after this freeze-marker commit; the
 spec is filed AND the tooling is admitted, but neither a probe-grade
 timing receipt nor a binding receipt exists yet.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch A Capped Timing Probe + Full-Run Staging
+
+Probes were run against the post-bugfix runner under freeze-marker commit
+`417BBD45B33613369EFAF3158B191B8211214CAF` with `gitDirty=false` and
+both: `specHash = 61A7976C422A...`, `parentSpecHash = 4CCF3871EF3E...`
+matching across CPU and GPU. Configuration:
+`--probe-only --probe-steps 200 --limit-arms raw_grid_per_task
+--limit-seeds 20260528`, all 36 registered tasks, 49 held-out
+instances (`validation_lodo=18`, `validation_pttest=6`, `test_lodo=19`,
+`pttest=6`). Receipts at `results/arc/phase3a-timing-probe-{cpu,gpu}/`.
+
+#### Probe Wall And Step-Cap Saturation
+
+| device | elapsed (s) | elapsed (min) | shape cap hit | color cap hit |
+| --- | ---: | ---: | ---: | ---: |
+| CPU (i7-7820HK) | 550.4 | 9.17 | 49 / 49 (100%) | 49 / 49 (100%) |
+| CUDA (GTX 1080) | 279.6 | 4.66 | 49 / 49 (100%) | 49 / 49 (100%) |
+
+**Critical observation**: 100% of fits ran to the 200-step cap on
+both devices; **early stopping never fired** at `patience=80` (shape)
+or `patience=120` (color). The per-task scratch learner overfits the
+tiny conditioning sets (k = 2–5 demonstrations) continuously — loss
+keeps improving by at least `1e-6` every step — so projecting to the
+full registered caps (`shape.max_steps = 600`, `color.max_steps = 900`)
+should assume the cap dominates.
+
+This is consistent with the registered quarantine label
+`conditioning_overfit`, which the spec already names as an expected
+failure mode of the deterministic per-task family.
+
+#### Wall-Clock Extrapolation Method
+
+Two data points isolate per-instance feature-build cost (`F`) from
+per-step training cost (`S`) on CPU:
+
+- smoke (3 steps × 1 arm × 1 seed × 49 instances): 99.2 s wall →
+  `49 F + 49 × 3 × 2 × S = 99.2` → `49 F + 294 S = 99.2`
+- probe (200 steps × 1 arm × 1 seed × 49 instances): 550.4 s wall →
+  `49 F + 49 × 200 × 2 × S = 550.4` → `49 F + 19600 S = 550.4`
+
+Solving: **`S = 0.0234 s/step`** (CPU), **`F = 1.882 s/instance`**.
+
+Full-config per arm-seed (no early stopping, 600 shape + 900 color
+steps per instance):
+
+| component | CPU wall (s) | GPU wall (s) (≈) |
+| --- | ---: | ---: |
+| feature build (49 × F) | 92.2 | 92.2 (Python; not GPU-accelerated) |
+| shape training (49 × 600 × S) | 688.0 | ~344.0 (S_gpu ≈ S_cpu / 2) |
+| color training (49 × 900 × S) | 1031.9 | ~516.0 |
+| **per arm-seed total** | **1812.1 (30.2 min)** | **~952.2 (15.9 min)** |
+
+The GPU step-speedup is only ≈ 2× because the Python feature-build
+loop (signature suffix, raw-grid one-hot, coordinate features) is the
+bottleneck for these tiny per-task instances and does not benefit
+from CUDA. The 4.66-min GPU probe wall confirms this: 92.2 s of the
+279.6 s wall is feature build, leaving 187.4 s for 2 × 200 step
+training — consistent with `S_gpu ≈ 0.0096 s/step`, about 2.4× faster
+than CPU.
+
+#### Full-Run Wall Projection
+
+Serial execution of all `4 arms × 5 seeds = 20` (arm, seed)
+combinations:
+
+| posture | per arm-seed | full run wall | over 10-min rule? |
+| --- | ---: | ---: | --- |
+| CPU serial | 30.2 min | **~10.1 hours** | yes |
+| GPU serial | 15.9 min | **~5.3 hours** | yes |
+
+Both well over the 10-minute rule. Per the spec's
+"Runner And Command Hold" section, the full-run command, wall-clock
+estimate, resume-safety notes, and per-outcome decision rule must be
+staged before launch.
+
+#### Staged Full-Run Command (GPU Serial)
+
+The frozen launch command (PowerShell, GPU, all 4 arms × 5 seeds × 36
+tasks; uses default `--master-seed 20260528`):
+
+```powershell
+$env:SUNDOG_PYTHON = "C:\Users\hughe\AppData\Local\Programs\Python\Python312\python.exe"
+npm run arc:phase3a:per-task-coord-mlp-v1 -- `
+    --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" `
+    --register docs/prereg/arc/P0_TASK_REGISTER.csv `
+    --out results/arc/phase3a-per-task-coord-mlp-v1 `
+    --device cuda
+```
+
+Estimated wall: **~5.3 hours** (GPU serial, all four arms, full seed
+slate). The arena gate (`raw_grid_per_task` exact tasks on
+`test_lodo` AND `pttest`) and Branch A adjudication both fire when
+`mode == full`, which is the default when neither `--probe-only`,
+`--dry-run`, nor a `--limit-*` flag is set.
+
+**Resume safety**: this runner is single-process and **not**
+resume-safe at the (arm, seed, instance) granularity — interrupting
+the run mid-way and re-launching produces a fresh run that re-trains
+every instance from scratch. For first-cut binding execution this is
+acceptable because there are no intermediate checkpoints to merge.
+If a resume becomes necessary, the cleanest path is a new
+`--shard-arm <arm> --shard-seed <seed>` plumbing similar to the V2
+runner; that is not admitted by this amendment.
+
+#### Per-Outcome Decision Rule
+
+| arena gate outcome | next action |
+| --- | --- |
+| `raw_grid_arena_open` (≥ 1 exact task on `test_lodo` AND `pttest` for `raw_grid_per_task`) | Examine `branchAdjudication` field. If `branch_a_support`, file the receipt + open public-language additions per spec §"Public Language". If `branch_a_bounded_failure`, file the receipt + the named-quarantine breakdown from `quarantine_log.csv`. |
+| `branch_a_full_grid_floor` (raw_grid does not open the arena) | Per spec §"Arena Gate": no signature sufficiency language allowed; no extra seeds; the next admissible Phase 3 work must be a new append-only learner spec or PHASE3_5_REFLECTION Branch D. The compact-7 named failure mode "dominant-color mode collapse" likely re-applies here (the per-task learner may also collapse to the dominant color); the quarantine log will name it explicitly. |
+
+**Verdict impact**: no prior verdict changes. The Branch A tooling
+status moves from "EXECUTION ADMITTED, capped probe required" to
+"EXECUTION ADMITTED, full run staged" once this amendment is
+committed. No binding receipt yet.
+
+**Public-language constraint**: unchanged. Per spec §"Public
+Language", until a binding receipt lands the only permitted public
+addition remains:
+
+> "Phase 3A has filed a stochastic per-task learner spec. No Branch A
+> receipt exists yet, and no sufficiency claim is admitted."
