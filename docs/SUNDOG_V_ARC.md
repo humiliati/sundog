@@ -377,13 +377,19 @@ decoder, timing probe, and full clean receipt. The `blackwell_task_decoder_v1`
 receipt is Branch C bounded failure: `signature_palette` scored zero exact
 matches on both held-out lanes. The matched full-grid control also scored zero
 exact matches, so the receipt does not support sufficiency and should not be
-described as a full-grid superiority result. The next valid sufficiency
-comparison requires a passing full-grid control first, by strengthening the
-decoder lane, narrowing the registered task class, or both. The first
-strengthened path is admitted as a raw-grid-only public-training meta-learning
-gate (`blackwell_publictrain_rawgrid_gate_v2`); dry-run and capped probe are
-filed, and the uncapped full run is staged because the probe projects ~11.5
-hours.
+described as a full-grid superiority result. Subsequent full-grid controls did
+not open the comparison arena: V2 (`blackwell_publictrain_rawgrid_gate_v2`,
+freeze marker `79C5B060`) used the public-training auxiliary pool and filed
+`full_grid_control_floor`, with zero exact matches on both held-out lanes; the
+compact-7 diagnostic (`50EAEBBF`) narrowed to the Phase 2 compact-signal tasks
+and filed `compact_full_grid_control_floor`, also with zero exact matches.
+Compact-7 is qualitatively distinct because shape exact reached `1.000` while
+palette exact remained `0.000`; per-instance residuals show dominant-background
+predictions with at most two slot-1 colors even when targets use 3--9 colors.
+That failure is named **dominant-color mode collapse**. With V1, V2, and
+compact-7 all floored, Branch B is closed for this learner family. The remaining
+Phase 3 reopen paths are Branch A, a stochastic per-task learner, or Branch D,
+a different framing such as structured edit or residual prediction.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 
