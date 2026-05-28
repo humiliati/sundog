@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3 THREE FULL-GRID CONTROL RECEIPTS FLOORED; BRANCH B CLOSED**.
+Status: **Phase 3A STOCHASTIC PER-TASK SPEC FILED; EXECUTION HOLD**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -57,6 +57,13 @@ is PHASE3_5_REFLECTION Branch A (stochastic per-task learner) or
 Branch D (different framing) rather than further narrowing within the
 deterministic family. Kaggle notebook work and public-evaluation grid
 inspection remain blocked until Phase 6.
+
+Branch A spec work has now started in
+[`PHASE3A_STOCHASTIC_PER_TASK_SPEC.md`](PHASE3A_STOCHASTIC_PER_TASK_SPEC.md).
+It freezes `per_task_coord_mlp_v1`, a stochastic per-instance MLP trained from
+scratch on only that instance's conditioning demonstrations. It admits no run
+yet: execution remains held until the runner, wrapper, npm script, receipt path,
+and freeze-marker amendment are committed together.
 
 ## Official Anchors
 
@@ -145,6 +152,14 @@ Checked **2026-05-28** against:
   rule, Branch B closes in the deterministic-low-capacity-learner
   family; no additional seeds, no `signature_palette` arm on the
   compact subset, no further raw-grid V-bumps within the family.
+- [`PHASE3A_STOCHASTIC_PER_TASK_SPEC.md`](PHASE3A_STOCHASTIC_PER_TASK_SPEC.md)
+  -- Branch A stochastic per-task learner spec. It reserves
+  `per_task_coord_mlp_v1`, freezes the `raw_grid_per_task`,
+  `signature_palette_per_task`, `signature_only_per_task`, and
+  `metadata_only_per_task` arms, requires the raw-grid arm to open the arena
+  before any signature sufficiency comparison, and adds dominant-color collapse
+  audits. Status: spec only; execution hold pending runner/wrapper/npm wiring
+  and freeze-marker amendment.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
