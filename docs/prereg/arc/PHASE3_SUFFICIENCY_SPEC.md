@@ -3044,3 +3044,128 @@ If the probe extrapolates the full five-seed run above the repo's ten-minute
 rule, the full command must be staged for the operator instead of run inline,
 with measured seconds/epoch and projected wall clock recorded in the next
 receipt note.
+
+### 2026-05-28 -- Blackwell Probe Timing Receipt And Full-Run Staging
+
+Author: Codex, using operator-run timing probe output.
+
+Justification: the Backend Freeze amendment admitted a capped timing probe
+before any full Blackwell run. The operator ran the 5-epoch, one-seed probe.
+This amendment records the measured runtime, hashes the probe artifacts, and
+applies the repo's ten-minute rule to stage the full command rather than run it
+inline.
+
+Verdict impact: **no Branch A/B/C adjudication**. The probe used one seed,
+five epochs, and `--allow-dirty`; it is a timing and harness receipt only. The
+`Branch C` string emitted in the first probe's `branch_adjudication.md` is
+non-adjudicative and must not be cited as a verdict. The runner was patched
+after this probe so all future `mode=probe` receipts emit
+`branch=not_adjudicated`.
+
+#### Probe Command
+
+```powershell
+npm run arc:phase3:blackwell:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-blackwell-sufficiency-v1-probe --probe-only --probe-epochs 5 --allow-dirty
+```
+
+#### Probe Provenance
+
+| field | value |
+| --- | --- |
+| `generatedAt` | `2026-05-28T11:26:34Z` |
+| `completedAt` | `2026-05-28T11:27:08Z` |
+| wall clock from manifest | `34.0 s` |
+| `gitCommit` | `C8E27B36FBA25B992DE85B41276E70631B1D4825` |
+| `gitDirty` | `false` |
+| `mode` | `probe` |
+| `seedSlateEffective` | `20260528` |
+| `maxEpochsEffective` | `5` |
+| `torchVersion` | `2.11.0+cpu` |
+| `pythonVersion` | `3.14.4` |
+| train / validation / test LODO / pttest instances | `78 / 18 / 19 / 6` |
+
+Console per-arm timing:
+
+| arm | selected seed | elapsed |
+| --- | ---: | ---: |
+| `raw_grid_lowcap` | `20260528` | `8.6 s` |
+| `signature_palette` | `20260528` | `7.2 s` |
+| `signature_only` | `20260528` | `7.1 s` |
+| `metadata_only` | `20260528` | `7.1 s` |
+
+Learning-curve readback: each arm ran exactly 5 epochs and selected epoch 5.
+Validation metric remained `0.0` throughout the capped probe while validation
+loss decreased monotonically. This supports the interpretation that the probe
+is too short to adjudicate and that early-stop timing cannot be assumed to fire
+near epoch 5 in the full run.
+
+#### Probe Artifact Hashes
+
+Path: `results/arc/phase3-blackwell-sufficiency-v1-probe/`
+
+| artifact | SHA-256 |
+| --- | --- |
+| `manifest.json` | `09508F086813A11FFAF80F2183A22BD4626B716A6713902534ACE748F9DFE380` |
+| `split.csv` | `ED0341B981ED6B069FA2C9BB70C80334B70CC9B947719C5DF6CC0E25123C0A95` |
+| `learning_curves.csv` | `EBAE3E7C12408B17398B72DDEFCFFC10DFB8EBC52379E5D7930DFF25E264CF2F` |
+| `scores.csv` | `CE2E97493F648FA472E3ABA960917B03D95D2C335EAFDA96FE29415D18A056EE` |
+| `per_instance.csv` | `6396C5E80BBE63FA3CC91FA1B75FCF016C8598DEC9ACB6F83452CCEE804C934C` |
+| `per_task.csv` | `7383E11491D62EC609667BB5C409E48550EC8C234B2184E23781AD228CB08C70` |
+| `per_prior.csv` | `6010BF217A59AFD2AEB8C7DBC13C56FA5DF4583E2482F87462F26D33D81D6637` |
+| `quarantine_log.csv` | `96F704FBFE91E25F5F662D96E461C6821FD0961E0AF4E997E9020ED4E3792CEA` |
+| `residuals.jsonl` | `2BFD980B3C07AA50794F9C1EADC2ABB4B15FBD033040B873512447BC56600A3A` |
+| `phase3_receipt.json` | `DEC30F301EB0DE3120E6BE30E125360E22F9CEA0CCF1264EDD16410B7654D62F` |
+| `branch_adjudication.md` | `1DABB9A02F271BA826EC01FA4015514A2EBB099746AD73C6DC13CE1EFB5FCB8B` |
+
+#### Extrapolated Full Cost
+
+The probe measured one seed across all four arms for 5 epochs in 34 seconds.
+The registered full run is five seeds, all four arms, up to 400 epochs:
+
+```text
+34.0 s * (400 / 5) * 5 = 13600 s = 3.78 h
+```
+
+Even the optimistic earliest practical early-stop envelope exceeds the inline
+budget. If a full run stopped after 45 epochs for each of five seeds:
+
+```text
+34.0 s * (45 / 5) * 5 = 1530 s = 25.5 min
+```
+
+Therefore the full run is **not** an inline agent command under the repo's
+ten-minute rule.
+
+#### Staged Full Command
+
+After committing the runner/freeze marker and starting from a clean worktree,
+the operator can run:
+
+```powershell
+npm run arc:phase3:blackwell:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-blackwell-sufficiency-v1
+```
+
+Estimated wall clock: **~3.8 hours worst-case from the 5-epoch probe**, with a
+plausible lower bound still above the inline limit. The run is resume-unsafe in
+this first implementation; if interrupted, delete or move the partial output
+directory and restart the same command. The read-back paths are:
+
+- `results/arc/phase3-blackwell-sufficiency-v1/manifest.json`;
+- `results/arc/phase3-blackwell-sufficiency-v1/phase3_receipt.json`;
+- `results/arc/phase3-blackwell-sufficiency-v1/branch_adjudication.md`;
+- `results/arc/phase3-blackwell-sufficiency-v1/hashes.json`.
+
+Only `branch_adjudication.md` from this full clean run can select Branch A,
+Branch B, or Branch C.
+
+#### Post-Probe Runner Patch
+
+Two harness-only corrections were made after reading the probe:
+
+- probe and dry-run modes now emit `branch=not_adjudicated` instead of applying
+  Branch A/B/C logic;
+- `enable_nested_tensor=False` is passed to PyTorch's `TransformerEncoder` to
+  avoid the prototype nested-tensor warning in future receipts.
+
+A one-epoch smoke after this patch completed under the same command family and
+reported `Branch decision: not_adjudicated`.
