@@ -1355,8 +1355,9 @@ The v3 labels in 7' partially falsified the v2 `reward-coupled
 `field-coupled, under-budget`) and partially falsified the v2
 `undertrained` label for the bootstrap-failed cell (now
 `bootstrap-collapse`). Phase 7 v2 amendments to surface those
-relabels are queued in [`mesa/PHASE7_V3_RESULTS.md`](mesa/PHASE7_V3_RESULTS.md) §6
-but not yet applied to the v2 result note.
+relabels were queued in [`mesa/PHASE7_V3_RESULTS.md`](mesa/PHASE7_V3_RESULTS.md) §6
+and applied to the v2 result note as v2.1 on 2026-05-28
+([`mesa/PHASE7_V2_RESULTS.md`](mesa/PHASE7_V2_RESULTS.md) §12).
 
 Mechanistic side-thread on the v3 cliff pair (Phase 6b) closed
 2026-05-18 with GG6b-loc-D — the Phase 6 v1 activation-patching

@@ -104,7 +104,7 @@ the v1 Medium envelope did not surface:
    expands instead of contracting. Pure L-Reward at Large does not
    bootstrap.
 
-## 5. U-shape cliff finding
+## 5. U-shape cliff finding (v3-amended; see §12.1)
 
 The Medium envelope had a single sharp cliff at `λ ≈ 0.953` between
 protected and collapsed. The Large envelope has a **broader U-trough**:
@@ -123,7 +123,7 @@ critic diverges. **Signature shaping at Large is constitutive of
 learnability, not merely protective of an already-learnable
 controller.**
 
-## 6. Forward L-Signature confirmed at Large
+## 6. Forward L-Signature confirmed at Large (v3-amended earned-reading; see §12.2)
 
 P2 from v1 ("terminal-signature is the forward L-Signature canonical")
 extends cleanly to Large. signature_terminal at 5M env-steps reaches
@@ -146,7 +146,7 @@ edge. The protocol-tightening note recommends that v3 evaluations run
 two seed shifts before adopting any new hparam, and treat a single seed
 shift as a yellow flag rather than a green light.
 
-## 8. v2 traceability labels (sibling to v1 §11)
+## 8. v2 traceability labels (sibling to v1 §11) (v3-amended; see §12.3 for the probe-confirmed label table)
 
 The Large cliff-subset in v2 vocabulary:
 
@@ -186,7 +186,7 @@ tier, single seed for most cells); claims about non-PPO algorithms
 (mesa shadow-field only). The result is an in-vitro operating-envelope
 extension, not a deployed-system claim.
 
-## 10. Open edges for v3
+## 10. Open edges for v3 (v3-amended; see §12.4 for the closed/carried-forward disposition)
 
 - Single seed per non-λ=0.90 cell. v3 should triangulate `λ=0.95` and
   `λ=0.97` at two additional seeds before claiming the trough.
@@ -221,3 +221,137 @@ extension, not a deployed-system claim.
   Path B adopted candidate (`--value-coef 0.25`) with multi-substrate
   acceptance receipt, and documents the U-shape cliff plus bootstrap-
   failure findings. Sibling to v1, not a successor.
+- **v2.1 (2026-05-28)** — v3-driven amendments applied per
+  [`PHASE7_V3_RESULTS.md`](PHASE7_V3_RESULTS.md) §6. No metric numbers
+  in §2 or §5 change. §5 reframed (trough mechanism), §6 sharpened
+  (earned reading), §8 four labels upgraded from `(profile)` to
+  probe-confirmed (mixed_0_95 / mixed_0_97 / mixed_0_99 / reward_phase3),
+  §10 intervention-battery edge closed and three edges carried forward.
+  Full amendment text appended as §12 below.
+
+## 12. v3-driven amendments (2026-05-28)
+
+Source: [`PHASE7_V3_RESULTS.md`](PHASE7_V3_RESULTS.md) §6. The v3
+intervention battery against the six Large cliff-subset cells in this
+v2 note produced a different mechanistic interpretation than the v2
+profile-only labels suggested. The v3 receipt names four amendments to
+this v2 note, applied below. Numbers in v2 §2 (the eval-summary
+envelope) are unchanged; the amendments are reframings, label upgrades,
+and edge closures, not metric corrections.
+
+The v3 amendments are append-only: the original v2 §5, §6, §8, and §10
+text remains as filed for the historical record, and the section
+headers above carry `(v3-amended; see §12.x)` markers pointing the
+reader at the authoritative current interpretation in this section.
+
+### 12.1 §5 U-shape cliff finding — reframed
+
+**Geometry stands; mechanism reframed.** The terminal-alignment U-shape
+in v2 §2 and §5 (success and mean alignment numbers across
+`λ ∈ {0.90, 0.95, 0.97, 0.99, 1.00}`) is unchanged. The v3 intervention
+battery against the six cells closes the v2 caveat in favor of the
+**field-coupled-but-under-budget** reading of the trough cells:
+
+- `λ ∈ {0.95, 0.97}` Large are *field-coupled*, with healthy
+  signature-sensor responses (`sig_resp_L2` 0.580 and 0.973
+  respectively; mixed_0_97 is the highest signature response of any
+  cell in the v3 battery, exceeding signature_terminal Large at
+  0.593). `old_basin_pref` is moderately elevated (1.47–1.52) — above
+  the Medium hold-cell upper bound (0.823) but far below the Medium
+  collapse floor (5.560). These cells read the external signature and
+  are not basin-internalized; they fail to navigate competently at the
+  tested mixture weight. The trough is therefore a **third class**
+  beyond v2's pre-registered "field-coupled" and "collapse" branches:
+  `field-coupled, under-budget`.
+- `λ=0.99` Large (`sig_resp_L2` 0.579, `bp_obp` 0.459) is genuine
+  basin-attractor avoidance, not co-pointing fixed-attractor collapse.
+  The v2 caveat ("can the eval-summary recovery be distinguished from
+  collapse onto a fixed attractor that happens to co-point with the
+  basin?") closes by probe-confirmation in favor of basin-attractor
+  avoidance.
+- `λ=1.00` (reward_phase3 seg3) bootstrap-fails in a *structured* way:
+  zero intervention response across every channel (the policy is a
+  fixed open-loop trajectory) but `old_basin_pref = 7.050` (the
+  trajectory consistently terminates at the old `x_false`). This is
+  not "never reached competent behavior" — it is convergence on a
+  degenerate basin-attracted fixed trajectory. The new traceability
+  label is `bootstrap-collapse` (probe-confirmed), distinct from both
+  the spec's hypothesised `undertrained` and from the Medium
+  `reward-coupled` collapse class.
+
+The v2 §5 framing of the trough as collapse-class-shaped (via the
+"consistent with v1 collapse class" qualifier in §8 and the §5 bullet
+list pairing the trough with the `λ=1.00` collapse bullet) does not
+survive v3. The trough has hold-class intervention dynamics — healthy
+signature responsiveness, `old_basin_pref` far below collapse floor —
+combined with sub-budget navigation; it is its own class.
+
+### 12.2 §6 Earned reading at Large — sharpened
+
+The §6 conclusion "Signature shaping at Large is constitutive of
+learnability, not merely protective of an already-learnable controller"
+is sharpened by v3 to:
+
+> Signature shaping at Large is constitutive of *competent*
+> learnability. With `λ ∈ [0.90, 0.99]` the controller is field-coupled
+> at every measured point; the U-trough is field-coupled-but-under-
+> budget rather than reward-coupled. Only at `λ = 1.00` does the
+> controller fail to bootstrap, and even then it converges on a
+> degenerate basin-attracted fixed trajectory (`bootstrap-collapse`)
+> rather than an un-trained policy.
+
+Field-coupling at Large is robust across the L-Mixed family at
+`vc=0.25`: signature-sensor responses sit above or near the Medium
+L-Signature reference (0.343) at every measured `λ`, including the
+under-budget trough cells. The earned wording for v2.1 therefore
+distinguishes *field-coupling* (a probe-confirmed property of every
+non-bootstrap-failed cell) from *competent navigation* (a function of
+where the controller sits on the L-Mixed mixture-weight curve, with
+the U-trough as a measured under-budget zone).
+
+The v2 §6 echoing sentence in §1 finding 3 and §5's load-bearing
+conclusion inherits the same sharpening implicitly; v3 §6 names only
+this §6 in scope, but readers citing the v2 result note should use the
+sharpened wording wherever the original "constitutive of learnability"
+phrasing appears.
+
+### 12.3 §8 traceability labels — upgraded to probe-confirmed
+
+The v2 §8 `reward-coupled (profile)` and `undertrained
+(bootstrap-failure)` labels were filed pending the Phase 4-style
+intervention battery that v3 ran. The v3 receipt upgrades the
+following four labels (cells not listed are unchanged):
+
+| cell | v2 label (profile) | v2.1 label (probe-confirmed) |
+| --- | --- | --- |
+| `λ=0.95` Large (mixed_0_95) | `reward-coupled (profile)` | **`field-coupled, under-budget`** (probe-confirmed) |
+| `λ=0.97` Large (mixed_0_97) | `reward-coupled (profile)` | **`field-coupled, under-budget`** (probe-confirmed) |
+| `λ=0.99` Large (mixed_0_99) | `field-coupled` (recovered, profile) | **`field-coupled`** (probe-confirmed, basin-attractor avoidance) |
+| `λ=1.00` Large (reward_phase3) | `undertrained (bootstrap-failure)` | **`bootstrap-collapse`** (probe-confirmed) |
+
+The labels `field-coupled, under-budget` and `bootstrap-collapse` are
+v3 extensions to the v2 traceability vocabulary in
+[`../SUNDOG_V_MESAV2.md`](../SUNDOG_V_MESAV2.md) §11. Cells previously
+labelled `field-coupled` (signature_terminal Large, `λ=0.90` Large
+seed=10000, `λ=0.90` Large seed=30000) remain `field-coupled` and are
+now probe-confirmed by the v3 battery's GG1/GG2 PASS verdicts;
+borderline `λ=0.90` Large seed=20000 remains `borderline`.
+
+### 12.4 §10 Open edges for v3 — disposition
+
+The v2 §10 open-edge list disposes as follows after v3:
+
+| §10 edge | v3 disposition |
+| --- | --- |
+| Single seed per non-λ=0.90 cell; seed-shift triangulation of `λ=0.95 / 0.97 / 0.99` | **Carried forward.** v3 ran 64 seeds × 5 channels per cell at `seed_start=10000`, but did not triangulate the canonical seed. v3.1 candidate. |
+| Path B candidates 3 (`--entropy-coef 0.001`) and 4 (`--clip-range 0.1`) untested | **Carried forward.** v3 does not address training-side hparam selection; v3.x training-side investigation. |
+| v1 Phase 6 `net.7` patching has no Large-tier analog | **Partially closed by Phase 6b, then re-opened.** Phase 6b (filed 2026-05-18) ran activation patching on the v3 cliff pair (mixed_0_99 vs mixed_0_97) at Large `net.9`; GG6b-loc-D called destructive transfer at every MLP layer (`PHASE6B_RESULTS.md`). The v1 protocol does not generalize to Large for this cliff pair. The mechanism question remains open under a different protocol (multi-layer co-injection, alternative cliff-pair selection, or non-MLP architectural probes). |
+| Bootstrap-failure mechanism not probe-confirmed | **Closed.** v3 GG5 ran the probe-slate-style intervention battery on reward_phase3 seg3 and labelled the result `bootstrap-collapse`. |
+| Probe-slate (Phase 3) and intervention battery (Phase 4) harnesses do not run on Large | **Intervention-battery half closed by v3.** Probe-slate extension to Large remains a separate v3.x candidate. |
+
+The v3 receipt also surfaced a Phase 6-style side-finding
+(observation-channel sensitivity at the trough — v3 §7) that motivated
+the Phase 6b spec and result note. The §7 observation-pathway hint
+remains a candidate question for a future protocol; Phase 6b falsified
+the single-layer activation-patching approach but did not close the
+mechanism question.
