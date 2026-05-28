@@ -16,6 +16,9 @@ Phase specs:
 - [`PHASE1_TOY_VERIFIER_SPEC.md`](PHASE1_TOY_VERIFIER_SPEC.md) - draft spec
   for the first formal toy verifier, including promise domain, certificate
   schema, baselines, cost accounting, and falsifier mapping.
+- [`PHASE1_V0_SLATE.md`](PHASE1_V0_SLATE.md) - frozen first implementation
+  slate with split namespaces, calibration insulation, attacker budgets, and
+  success thresholds.
 
 Templates:
 
@@ -40,4 +43,5 @@ Current state:
 - Lit-pass filed: 2026-05-28.
 - Project scaffold opened: 2026-05-28.
 - Phase 1 toy-verifier spec drafted: 2026-05-28.
+- Phase 1 v0 slate frozen: 2026-05-28.
 - No verifier implementation or receipt has been filed.

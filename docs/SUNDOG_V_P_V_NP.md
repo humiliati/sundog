@@ -11,10 +11,11 @@ Short version:
 > can a sufficient signature make safety verification tractable inside a named
 > capacity envelope?
 
-Status: Roadmap draft. Lit-pass, project scaffold, and Phase 1 toy-verifier
-spec filed 2026-05-28; see
+Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier spec,
+and v0 frozen slate filed 2026-05-28; see
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md) and
-[`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md). No
+[`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md) /
+[`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md). No
 complexity-theoretic result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
@@ -548,6 +549,8 @@ baselines, reproduced metrics, and archived artifacts.
 - [`pvnp/README.md`](pvnp/README.md): project index and artifact map.
 - [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md):
   draft formal toy verifier spec.
+- [`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md): frozen first
+  implementation slate for Phase 1.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index; no
