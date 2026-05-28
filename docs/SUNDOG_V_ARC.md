@@ -379,7 +379,11 @@ matches on both held-out lanes. The matched full-grid control also scored zero
 exact matches, so the receipt does not support sufficiency and should not be
 described as a full-grid superiority result. The next valid sufficiency
 comparison requires a passing full-grid control first, by strengthening the
-decoder lane, narrowing the registered task class, or both.
+decoder lane, narrowing the registered task class, or both. The first
+strengthened path is admitted as a raw-grid-only public-training meta-learning
+gate (`blackwell_publictrain_rawgrid_gate_v2`); dry-run and capped probe are
+filed, and the uncapped full run is staged because the probe projects ~11.5
+hours.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

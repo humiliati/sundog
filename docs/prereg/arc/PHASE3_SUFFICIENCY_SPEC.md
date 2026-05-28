@@ -3420,3 +3420,235 @@ Still forbidden:
 - describing `raw_grid_lowcap` as having learned the registered task class;
 - using a narrowed future subset to make claims about the original 36-task
   register without filing a separate cross-subset receipt.
+
+### 2026-05-28 -- Strengthened Decoder Lane Admission: Raw-Grid Gate V2
+
+Author: Codex, following the post-Blackwell comparison gate.
+
+Justification: the Blackwell full receipt could not adjudicate signature
+sufficiency because the full-grid control stayed at exact zero. This amendment
+starts with the first admitted next path: strengthen the decoder lane and test
+whether `raw_grid_lowcap` can pass before any renewed signature comparison is
+attempted.
+
+Verdict impact: no signature sufficiency claim is admitted. This lane is a
+**full-grid control gate only**. If it passes, a later append-only amendment may
+admit matched signature arms under the same or explicitly comparable training
+budget. If it fails, the comparison gate remains closed.
+
+#### Learner And Scope
+
+Learner version:
+
+```text
+blackwell_publictrain_rawgrid_gate_v2
+```
+
+Primary implementation:
+
+```text
+docs/prereg/arc/phase3_decoder_v2.py
+```
+
+Npm wrapper:
+
+```text
+scripts/arc-phase3-rawgrid-gate-v2.mjs
+```
+
+Command:
+
+```powershell
+npm run arc:phase3:rawgrid-gate-v2 -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-rawgrid-gate-v2
+```
+
+This lane scores only `raw_grid_lowcap`. `signature_palette`,
+`signature_only`, and `metadata_only` are intentionally not run here; the point
+is to establish whether a strengthened full-grid control can clear the gate.
+
+#### Strengthening Moves
+
+Relative to `blackwell_task_decoder_v1`, V2 changes two things:
+
+1. **More public-training demonstrations.** Meta-training may use all ARC
+   public-training tasks except the frozen validation and test tasks from the
+   36-task register. For each meta-train task, LODO train-pair instances are
+   admitted; public-training test instances with available outputs are also
+   admitted as train instances. No public-evaluation grids, Kaggle private
+   data, or manual inspection outside the existing register is admitted.
+2. **More capacity.** The set-conditioned transformer is widened/deepened while
+   keeping the same raw-grid serialization and deterministic receipt surface.
+
+Frozen model details:
+
+| field | V2 value |
+| --- | --- |
+| arm | `raw_grid_lowcap` only |
+| layers | `4` transformer encoder layers |
+| `d_model` | `192` |
+| attention heads | `6` |
+| feed-forward width | `768` |
+| dropout | `0.10` |
+| optimizer | AdamW |
+| AdamW betas | `(0.9, 0.95)` |
+| AdamW eps | `1e-8` |
+| weight decay | `0.01` |
+| learning rate | `0.0002` |
+| learning-rate schedule | constant |
+| batch size | `24` |
+| max epochs | `120` |
+| early stop | patience `20` |
+| seed slate | `20260528`, `20260529`, `20260530` |
+| loss | same as V1: cell CE + `0.25` height CE + `0.25` width CE |
+| top-2 rule | same as V1: top cell-logit grid plus deterministic single-cell margin flip |
+
+The V2 receipt must report auxiliary public-training task count, train-instance
+count, validation-instance count, selected seed, selected epoch, validation
+loss, and held-out exact metrics.
+
+#### Gate
+
+The V2 full-grid control passes only if the selected `raw_grid_lowcap` seed
+records at least two exact successes from distinct held-out tasks on each lane:
+
+- held-out-task LODO over the six frozen test tasks;
+- held-out public-training test over the same six frozen test tasks.
+
+If the gate passes, Phase 3 may admit a matched V2 signature comparison. If the
+gate fails, the correct public language is:
+
+> "Strengthening the decoder with public-training meta-training and higher
+> capacity still did not produce a passing full-grid control, so the
+> signature-vs-full-grid sufficiency comparison remains gated."
+
+#### Probe Discipline
+
+The runner supports `--dry-run`, `--probe-only`, `--probe-epochs`, and
+`--limit-aux-tasks` for capped probes. `--limit-aux-tasks` is a smoke/probe
+control and must not be used for a full receipt unless a later amendment
+changes the data policy.
+
+First admitted smoke:
+
+```powershell
+npm run arc:phase3:rawgrid-gate-v2 -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-rawgrid-gate-v2-dryrun --dry-run --allow-dirty
+```
+
+First admitted timing probe:
+
+```powershell
+npm run arc:phase3:rawgrid-gate-v2 -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-rawgrid-gate-v2-probe --probe-only --probe-epochs 2 --limit-aux-tasks 24 --allow-dirty
+```
+
+If the uncapped full run projects above the repo's ten-minute rule, stage the
+full command for the operator with measured probe rates and expected wall
+clock. Do not run a long full V2 receipt inline.
+
+### 2026-05-28 -- Raw-Grid Gate V2 Dry-Run And Timing Probe
+
+Author: Codex.
+
+Justification: the V2 strengthened decoder lane admission required a dry-run
+and capped timing probe before any full receipt. This amendment records both,
+applies the ten-minute rule, and stages the uncapped full command.
+
+Verdict impact: no full-grid gate verdict is admitted. The dry-run and capped
+probe are harness/timing receipts only. The comparison gate remains closed
+until an uncapped clean V2 full receipt is filed.
+
+#### Dry-Run Command
+
+```powershell
+npm run arc:phase3:rawgrid-gate-v2 -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-rawgrid-gate-v2-dryrun --dry-run --allow-dirty
+```
+
+Dry-run result:
+
+| field | value |
+| --- | --- |
+| `taskCount` | `1000` |
+| `trainInstanceCount` | `4259` |
+| `validationInstanceCount` | `24` |
+| `testLodoInstanceCount` | `19` |
+| `pttestInstanceCount` | `6` |
+| `learnerVersion` | `blackwell_publictrain_rawgrid_gate_v2` |
+| `mode` | `dry_run` |
+
+This validates that the V2 data policy loads all public-training tasks while
+preserving the frozen six validation and six test tasks from the registered
+36-task split.
+
+#### Capped Probe Command
+
+```powershell
+npm run arc:phase3:rawgrid-gate-v2 -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-rawgrid-gate-v2-probe --probe-only --probe-epochs 2 --limit-aux-tasks 24 --allow-dirty
+```
+
+Probe result:
+
+| field | value |
+| --- | --- |
+| `generatedAt` | `2026-05-28T12:25:29Z` |
+| `completedAt` | `2026-05-28T12:25:40Z` |
+| wall clock from manifest | `11.0 s` |
+| selected seed | `20260528` |
+| best epoch | `2` |
+| elapsed training time | `9.699 s` |
+| `taskCount` | `60` |
+| `trainInstanceCount` | `204` |
+| `validationInstanceCount` | `24` |
+| `gateDecision` | `not_adjudicated` |
+
+Probe scores are zero exact on both held-out lanes, as expected for a two-epoch
+probe. They do not adjudicate the gate.
+
+Probe artifact hashes:
+
+| artifact | SHA-256 |
+| --- | --- |
+| `manifest.json` | `7F31096FDF4AAB5DD72797BFBA49CF96FDCF2270F2D8EC47FCD0D83202308046` |
+| `split.csv` | `C921EC8E49F7B1E86443606AA559D5F28621954EAC2C70BC13BBB3107F7AC8A5` |
+| `learning_curves.csv` | `B3F30F20C85E40DA044AB13CF945B8798BA967E6B8A851F14EB99E0B5522E69E` |
+| `scores.csv` | `A3B8E570A8562EFA917933AA4392EA100BB7F42BDEB1024E6004F1639CC2DB37` |
+| `per_instance.csv` | `CCF9EE0780AF03D349848E4C03CCBD3D7E9D45BEDDCB52C136CF0EFD16CD3BDB` |
+| `per_task.csv` | `2528EB74FD6B9D51D9EFE6414BE20AC05DCCB9BB645D90F497B5D0427068EB73` |
+| `per_prior.csv` | `32581FAB4628C8C0F210D44F3B4404D965B738158E308CDDFD9B90EFCF03079A` |
+| `quarantine_log.csv` | `E32EE735A3BF6C158D607DE5DC0354CE2C7B23D6714C3500496911398E7F586B` |
+| `residuals.jsonl` | `51FCF88DAB7F0A9422A3FFC5014766F5287ABBDAF106C7C24E316B2344007A84` |
+| `phase3_receipt.json` | `0EB3A8FD226DB013B9CAA2A00936310662BE4896AF6555EB5A719113DDF5DF55` |
+| `branch_adjudication.md` | `B2F0CAC39363EE04471F1F38739A0D298718A1B4A71E31145DFFB32357BAE8EB` |
+
+#### Full-Run Estimate
+
+Scaling from the capped probe:
+
+```text
+probe wall: 11.0 s
+probe train instances: 204
+uncapped train instances: 4259
+instance scale: 20.877
+epoch scale: 120 / 2
+seed scale: 3
+
+11.0 * 20.877 * 60 * 3 = 41337 s = 11.48 h
+```
+
+This exceeds the inline agent budget by a wide margin.
+
+#### Staged Full Command
+
+Run only after committing the V2 admission/scaffold and starting from a clean
+worktree:
+
+```powershell
+npm run arc:phase3:rawgrid-gate-v2 -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-rawgrid-gate-v2
+```
+
+Estimated wall clock: **~11.5 hours** from the capped probe. The first V2
+implementation is resume-unsafe; if interrupted, move or delete the partial
+output directory and rerun the same command. Read back:
+
+- `results/arc/phase3-rawgrid-gate-v2/manifest.json`;
+- `results/arc/phase3-rawgrid-gate-v2/phase3_receipt.json`;
+- `results/arc/phase3-rawgrid-gate-v2/branch_adjudication.md`;
+- `results/arc/phase3-rawgrid-gate-v2/hashes.json`.
