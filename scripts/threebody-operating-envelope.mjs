@@ -88,6 +88,7 @@ function parseArgs(argv) {
     else if (flag === "--precision-receipts") args.precisionReceipts = !["0", "false", "no"].includes(String(value).toLowerCase());
     else if (flag === "--counterfactual-audit") args.counterfactualAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
     else if (flag === "--counterfactual-normalizer-floor") args.counterfactualNormalizerFloor = Number.parseFloat(value);
+    else if (flag === "--multi-step-audit") args.multiStepAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
     else throw new Error(`Unknown flag: ${flag}`);
   }
 
@@ -395,6 +396,7 @@ function makeTrialConfig(args, envelopeCase, seed, regime, mode, guardThresholds
     trackActionCoupling: args.trackActionCoupling ?? false,
     precisionReceipts: args.precisionReceipts ?? false,
     counterfactualAudit: args.counterfactualAudit ?? false,
+    multiStepAudit: args.multiStepAudit ?? false,
     counterfactualNormalizerFloor: args.counterfactualNormalizerFloor,
     initialParticle: scaleInitialParticle(baseParticle, envelopeCase.radiusScale, envelopeCase.velocityScale),
   });
@@ -470,6 +472,19 @@ export function makePairedRows(trials) {
             }
             : {}),
         }
+        : {}),
+      ...(trial.summary.counterfactualH4EligibleSteps !== undefined
+        ? Object.fromEntries([4, 8, 16, 32].flatMap(N => [
+          [`counterfactualH${N}EligibleSteps`, trial.summary[`counterfactualH${N}EligibleSteps`]],
+          [`counterfactualH${N}MeanEffectVsNoop`, trial.summary[`counterfactualH${N}MeanEffectVsNoop`]],
+          [`counterfactualH${N}MeanAbsEffectVsNoop`, trial.summary[`counterfactualH${N}MeanAbsEffectVsNoop`]],
+          [`counterfactualH${N}PositiveRate`, trial.summary[`counterfactualH${N}PositiveRate`]],
+          [`counterfactualH${N}MeanRawNormalizer`, trial.summary[`counterfactualH${N}MeanRawNormalizer`]],
+          [`counterfactualH${N}NormalizerFloorRate`, trial.summary[`counterfactualH${N}NormalizerFloorRate`]],
+          [`counterfactualH${N}MeanScore`, trial.summary[`counterfactualH${N}MeanScore`]],
+          [`counterfactualH${N}FloorPositiveRate`, trial.summary[`counterfactualH${N}FloorPositiveRate`]],
+          [`counterfactualH${N}NonFloorMeanScore`, trial.summary[`counterfactualH${N}NonFloorMeanScore`]],
+        ]))
         : {}),
       ...(trial.summary.finalRelEnergyDrift !== undefined
         ? {
@@ -580,6 +595,19 @@ export function makeTrialOutcomeRows(pairedRows) {
           }
           : {}),
       }
+      : {}),
+    ...(row.counterfactualH4EligibleSteps !== undefined
+      ? Object.fromEntries([4, 8, 16, 32].flatMap(N => [
+        [`counterfactual_h${N}_eligible_steps`, row[`counterfactualH${N}EligibleSteps`]],
+        [`counterfactual_h${N}_mean_effect_vs_noop`, row[`counterfactualH${N}MeanEffectVsNoop`]],
+        [`counterfactual_h${N}_mean_abs_effect_vs_noop`, row[`counterfactualH${N}MeanAbsEffectVsNoop`]],
+        [`counterfactual_h${N}_positive_rate`, row[`counterfactualH${N}PositiveRate`]],
+        [`counterfactual_h${N}_mean_raw_normalizer`, row[`counterfactualH${N}MeanRawNormalizer`]],
+        [`counterfactual_h${N}_normalizer_floor_rate`, row[`counterfactualH${N}NormalizerFloorRate`]],
+        [`counterfactual_h${N}_mean_score`, row[`counterfactualH${N}MeanScore`]],
+        [`counterfactual_h${N}_floor_positive_rate`, row[`counterfactualH${N}FloorPositiveRate`]],
+        [`counterfactual_h${N}_non_floor_mean_score`, row[`counterfactualH${N}NonFloorMeanScore`]],
+      ]))
       : {}),
     ...(row.finalRelEnergyDrift !== undefined
       ? {

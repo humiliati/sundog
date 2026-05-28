@@ -2585,3 +2585,339 @@ Still forbidden, unchanged:
   claim from this receipt;
 - describing any Phase 3 receipt as evidence on the public-evaluation split or
   as an ARC solve.
+
+### 2026-05-28 -- Blackwell Sufficiency Unpause Spec
+
+Author: Codex, from operator-provided Blackwell sufficiency work order.
+
+Justification: Phase 3.5 paused the deterministic-low-capacity learner branch
+after three task-hardness / decoder-failure receipts. The operator has selected
+the next clean unpause path: re-state the core claim as a finite Blackwell
+sufficiency test over the registered demonstrations, then admit a held-out-task
+decoder design only after the algebraic conditions, splits, metrics, and
+quarantine taxonomy are frozen. This amendment is the algebraic receipt and
+experiment-design receipt. It does not run a decoder and it does not change any
+prior receipt verdict.
+
+Verdict impact: Phase 3 is unpaused for **Blackwell-spec implementation only**.
+Decoder execution remains held until a runner, npm command wiring, and
+freeze-marker commit implement this amendment. The three existing Phase 3
+receipts remain task-hardness / decoder-failure receipts and may not be
+reinterpreted as support or failure.
+
+#### Core Question
+
+The Phase 3 Blackwell question is:
+
+> Does `signature_palette` -- or, on the stricter quotient, `signature_only` --
+> contain enough information to learn the registered demonstration-conditioned
+> mapping `input_rep -> output_rep` for the registered core-knowledge task class,
+> with held-out-task generalization indistinguishable from the full-grid control?
+
+The full-grid control is the already frozen `raw_grid_lowcap` serialization from
+Pass A. In this amendment it is the "full projected grid" arm: it receives the
+complete registered grid tensor under the same learner family and budget as the
+signature arms. The arm remains named `raw_grid_lowcap` in receipt tables for
+schema continuity.
+
+#### Algebraic Formulation
+
+Let `G` be the finite set of ARC grids admitted by the registered public-training
+tasks, and let a task be a deterministic latent rule `theta` drawn from the
+registered class `Theta_P` for prior stratum `P`.
+
+For a query instance:
+
+- `D = ((X_1,Y_1),...,(X_k,Y_k))` is the demonstration set;
+- `X_q` is the query input;
+- `Y_q = f_theta(X_q; D)` is the target output;
+- `O_full = (D, X_q)` is the full-grid experiment;
+- `sigma_a` is the frozen representation map for arm `a`;
+- `O_a = sigma_a(O_full)` is the arm experiment, applying the same arm map to
+  every demonstration input, demonstration output, and query input.
+
+Because `O_a` is a deterministic garbling of `O_full`, the full-grid experiment
+is always weakly more informative. Arm `a` is Blackwell sufficient for the
+mapping on the registered task class only if the garbling loses no information
+needed by the output decision problem:
+
+```text
+Pr(Y_q | O_full, P) = Pr(Y_q | O_a, P)
+```
+
+for every registered prior stratum `P`, up to the declared output quotient for
+the arm. Equivalently:
+
+```text
+I(Y_q ; O_full | O_a, P) = 0
+```
+
+inside the registered finite experiment. In deterministic ARC language this
+reduces to a fiber condition:
+
+```text
+sigma_a(O_full) = sigma_a(O'_full)  =>  Y_q == Y'_q
+```
+
+for exact-grid sufficiency, or:
+
+```text
+sigma_a(O_full) = sigma_a(O'_full)  =>  tau_a(Y_q) == tau_a(Y'_q)
+```
+
+for representation-level sufficiency, where `tau_a` is the output quotient
+declared for that arm. A held-out-task decoder is an empirical attempt to learn
+the measurable decision rule:
+
+```text
+d_a: sigma_a(D), sigma_a(X_q) -> Y_q
+```
+
+or, when exact grid decoding is not well-defined:
+
+```text
+h_a: sigma_a(D), sigma_a(X_q) -> tau_a(Y_q)
+```
+
+The information that must be preserved by a signature is therefore not "the
+whole grid"; it is the equivalence class of full-grid observations that leaves
+the conditional output rule invariant. A sufficient signature must preserve:
+
+- all latent rule parameters identifiable from demonstrations and needed at
+  query time;
+- object topology, local relations, shape envelope, and palette/color-role
+  information whenever those variables change the output;
+- enough orientation and symmetry phase to choose the correct representative
+  inside a gauge orbit;
+- enough global context for completion tasks whose local bags alone do not
+  identify the fill rule;
+- a deterministic decoder from predicted output representation to exact grid,
+  or an explicitly declared output quotient that makes exact-grid scoring
+  inapplicable.
+
+Immediate structural zeros and quarantines:
+
+- `signature_only` quotients absolute color identity. Exact-grid Blackwell
+  sufficiency for primary color-role tasks is structurally zero unless the
+  receipt uses a declared color-quotient metric. The pre-registered color-role
+  quarantine is unchanged: `08ed6ac7`, `0a2355a6`, `2601afb7`, `292dd178`,
+  `37d3e8b2`, `3ad05f52`.
+- `signature_only` still has no admitted deterministic exact-grid decoder under
+  Pass A. It can support only representation-level or quotient-level claims
+  until a later append-only amendment admits a decoder.
+- The three deterministic-low-capacity receipts are not Blackwell receipts
+  because their candidate pools miss almost every held-out output. They remain
+  learner-family receipts and cannot close Branch A, B, or C below.
+- Phase 2's high shadow train-pair residual (`0.594295`) forbids a small-delta
+  assumption. The next learner must synthesize outputs from the represented
+  demonstration-conditioned mapping; copy/nearest-output transfer is already
+  exhausted.
+
+#### Branch Criteria
+
+These branches supersede no older receipt; they govern only the future
+Blackwell runner admitted by this amendment.
+
+| branch | condition | interpretation |
+| --- | --- | --- |
+| Branch A -- clean structural zero / strong sufficiency | `signature_palette` clears the non-trivial floor and is statistically indistinguishable from, or better than, `raw_grid_lowcap` on held-out-task LODO and held-out-task public-training test. `signature_only` may independently satisfy this branch only on representation-level or declared quotient metrics. | Signature is Blackwell sufficient for the registered task class under the tested learner family and quotient. |
+| Branch B -- named quarantine | A gap exists, but at least 80% of the gap mass is assigned before adjudication to one or more pre-registered quarantine categories below, and the non-quarantined slice satisfies Branch A. | The sufficiency claim is narrowed to the named non-quarantined class. |
+| Branch C -- bounded failure | `signature_palette` fails to clear the non-trivial floor on the easiest registered subset, or materially trails `raw_grid_lowcap` on the non-quarantined slice with an explicit reconstruction residual. | Signature is not sufficient for this registered Blackwell test. |
+
+The easiest registered subset is the union of tasks not marked
+`full-state-only dependency (residual category)` and not primary
+`color_role`, evaluated on the held-out-task test split. If that subset has
+fewer than four active tasks after runtime failures, no Branch C verdict is
+admitted; the run is an execution failure.
+
+Statistical comparison is paired by task ID. The runner must report:
+
+- task-level bootstrap confidence intervals with `10000` resamples over task
+  IDs and master seed recorded in the manifest;
+- a practical equivalence margin of `0.05` absolute exact-rate difference for
+  Branch A;
+- a material-trailing threshold of `0.05` absolute exact-rate difference or a
+  non-overlapping paired bootstrap interval, whichever is stricter for the
+  observed sample size.
+
+The non-trivial floor is:
+
+- exact-grid: greater than the Phase 0 cheap-baseline exact floor (`0/36`) and
+  greater than the best filed deterministic Phase 3 exact floor on comparable
+  LODO `k_ge_3` instances (`0.010`), with at least two exact successes from
+  distinct held-out tasks;
+- representation-level: greater than the best deterministic Phase 3
+  `rep_exact_any` rate on comparable LODO `k_ge_3` instances (`0.049`), with
+  at least two exact representation successes from distinct held-out tasks.
+
+#### Pass A -- Representation Freeze
+
+This Blackwell runner uses the existing frozen `arc-p3-feature-v1`
+serialization. No arm schema change is admitted here.
+
+| arm | Blackwell role | scoring note |
+| --- | --- | --- |
+| `raw_grid_lowcap` | full projected grid control | exact-grid and representation metrics |
+| `signature_palette` | primary Sundog statistic | exact-grid metrics through the admitted decoder plus representation metrics |
+| `signature_only` | strict quotient statistic | representation/quotient metrics primary; exact-grid color claims quarantined |
+| `metadata_only` | coarse nuisance control | reported for discrimination only; cannot support Branch A |
+
+Any later runner implementation must fail fast if the manifest does not report
+`featureSchemaVersion=arc-p3-feature-v1`.
+
+#### Pass B -- Held-Out-Task Splits, Floors, And Metrics
+
+The 36 registered tasks are split by primary prior, sorted by task ID within
+each prior: first four train, fifth validation, sixth test. This yields 24
+train tasks, 6 validation tasks, and 6 held-out test tasks.
+
+| prior | train tasks | validation task | test task |
+| --- | --- | --- | --- |
+| `color_role` | `08ed6ac7`, `0a2355a6`, `2601afb7`, `292dd178` | `37d3e8b2` | `3ad05f52` |
+| `counting` | `009d5c81`, `00dbd492`, `025d127b`, `045e512c` | `05269061` | `05a7bcf2` |
+| `local_completion` | `03560426`, `05f2a901`, `0b17323b`, `0e671a1a` | `11e1fe23` | `13713586` |
+| `objectness` | `11dc524f`, `150deff5`, `1acc24af`, `1b60fb0c` | `2bee17df` | `3906de3d` |
+| `spatial_transform` | `00576224`, `0a1d4ef5`, `0b148d64`, `0bb8deee` | `0c9aba6e` | `137eaa0f` |
+| `symmetry` | `007bbfb7`, `00d62c1b`, `017c7c7b`, `0520fde7` | `0692e18c` | `0a938d79` |
+
+Training instances are LODO instances from train tasks only. Validation
+instances are LODO instances from validation tasks only and are used for early
+stopping/model selection. Test instances are:
+
+1. held-out-task LODO instances from the six test tasks;
+2. public-training test inputs for the six test tasks, run only after the LODO
+   test protocol and model selection are frozen.
+
+No gradient update, hyperparameter selection, or architecture change may use
+validation or test task targets except through the declared validation early-stop
+rule. No public-evaluation grid is admitted.
+
+Primary metrics:
+
+- `grid_exact_top1`;
+- `grid_exact_any_slot` with the existing two-prediction discipline;
+- `rep_exact_top1`;
+- `rep_exact_any_slot`.
+
+Secondary metrics:
+
+- pixel accuracy;
+- shape exact;
+- palette exact;
+- output-representation cosine similarity;
+- per-prior and per-`predicted_boundary` breakdowns;
+- residual class: `coverage`, `detection`, `residual`, `structural_zero`,
+  `execution_failure`, or `none`.
+
+Floor rows must include Phase 0 cheap baselines, the three filed deterministic
+Phase 3 receipts, and a majority-output-representation control computed on the
+new train split.
+
+#### Pass C -- Learner Contract
+
+The first Blackwell learner family is `blackwell_task_decoder_v1`.
+
+It is a small set-conditioned decoder trained from scratch across train tasks,
+separately for each arm and seed:
+
+- input example: padded sequence of up to five demonstration pairs plus one
+  query input;
+- per-grid feature: the frozen Pass A arm vector for representation arms, or
+  the frozen raw grid tensor for `raw_grid_lowcap`;
+- token types: `demo_input`, `demo_output`, `query_input`, and `pad`;
+- architecture: 2 transformer encoder layers, `d_model=128`, 4 attention
+  heads, feed-forward width `256`, dropout `0.10`;
+- output heads: `height` class (`1..30`), `width` class (`1..30`), and
+  `30x30x10` color logits;
+- loss: `1.0 * masked_cell_cross_entropy + 0.25 * height_cross_entropy +
+  0.25 * width_cross_entropy`; representation heads may be added only if they
+  are reported as auxiliary and use the same weight for every arm;
+- optimizer: AdamW, learning rate `0.0003`, weight decay `0.0001`;
+- batch size: `16`;
+- maximum epochs: `400`;
+- early stop: patience `40` epochs on validation `grid_exact_any_slot`, with
+  validation loss as deterministic tie-break;
+- seed slate: `20260528`, `20260529`, `20260530`, `20260531`, `20260601`;
+- top-2 candidates: top cell-logit grid after predicted shape, plus the best
+  alternative from a single deterministic cellwise margin flip pass; tie-break
+  by lower validation loss, then seed, then arm name.
+
+The same architecture, optimizer, epoch cap, seed slate, and early-stop rule
+apply to every arm. If a representation arm cannot emit an exact grid under
+Pass A, the runner must still emit representation/quotient metrics and mark the
+grid metric `NA` rather than zero.
+
+The full five-seed run is expected to be cheap, but the repository's
+ten-minute rule still applies. If a one-seed probe projects the full run above
+ten minutes, the runner implementation receipt must stage the exact PowerShell
+command instead of running the full slate inline, and it must record the
+measured seconds/epoch and extrapolated wall clock.
+
+#### Pass D -- Receipts, Commands, And Quarantine Log
+
+Reserved output path:
+
+```text
+results/arc/phase3-blackwell-sufficiency-v1/
+```
+
+Reserved command:
+
+```powershell
+npm run arc:phase3:blackwell:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-blackwell-sufficiency-v1
+```
+
+The command is not admitted until the implementation lands with package wiring
+and a freeze-marker amendment.
+
+Required artifacts:
+
+- `manifest.json` -- git commit, dirty flag, schema versions, seed slate,
+  task split, runtime, data/register hashes, and command argv;
+- `split.csv` -- one row per task with `task_id`, `primary_prior`,
+  `predicted_boundary`, and split assignment;
+- `learning_curves.csv` -- one row per epoch, seed, and arm;
+- `per_instance.csv` -- one row per instance, arm, seed, and slot;
+- `per_task.csv` -- task-level aggregates used for paired bootstrap;
+- `per_prior.csv` -- primary-prior and predicted-boundary breakdowns;
+- `scores.csv` -- aggregate metrics, floor rows, and bootstrap intervals;
+- `residuals.jsonl` -- compact per-instance residual payloads;
+- `quarantine_log.csv` -- required for every Branch B or Branch C claim;
+- `branch_adjudication.md` -- final Branch A/B/C application with public
+  language draft.
+
+The quarantine taxonomy is frozen as:
+
+| quarantine key | registered source | attribution requirement |
+| --- | --- | --- |
+| `color_permutation_quotient` | primary `color_role`; six tasks listed above | `signature_only` loses absolute color or `signature_palette` fails only where palette role binding is ambiguous |
+| `count_capacity_cliff` | `capacity pressure (count is high-entropy)` | failures concentrate on counting tasks and residuals show missing cardinality or multiplicity |
+| `shape_capacity_cliff` | `capacity pressure (shape change carries structural info)` | failures concentrate on spatial-transform tasks and residuals show wrong output envelope |
+| `symmetry_phase_loss` | `gauge-breaking ambiguity (symmetry as gauge)` | failures require orientation/reflection representative not preserved by the signature |
+| `nonlocal_completion_context` | `non-local information (global context required to fill)` | failures require global context absent from local signature bags |
+| `full_state_residual` | `full-state-only dependency (residual category)` | full-grid control succeeds where signature arms miss cell-level residual information |
+| `learner_capacity` | any stratum | all arms, including full-grid control, remain near the floor |
+
+For Branch B, `quarantine_log.csv` must allocate each failed held-out task to
+exactly one primary quarantine key, include the evidence column(s) used for the
+allocation, and show that the non-quarantined slice meets Branch A. A
+post-hoc key may be added only as `unregistered_other`, and any use of that key
+blocks Branch B.
+
+#### Public Language Until Receipt
+
+Allowed after this amendment and before a Blackwell receipt:
+
+> "Phase 3's deterministic low-capacity branch produced three task-hardness
+> receipts and was paused. A new Blackwell sufficiency unpause spec is now
+> filed, with held-out-task splits, algebraic sufficiency conditions, and a
+> frozen decoder design. No new sufficiency verdict is admitted until the
+> Blackwell runner produces a receipt."
+
+Still forbidden:
+
+- "Sundog solves ARC";
+- any public-evaluation or Kaggle private/semi-private claim;
+- any statement that the three existing Phase 3 receipts prove or disprove
+  signature sufficiency;
+- any Branch A/B/C claim before `branch_adjudication.md` is filed and hashed.

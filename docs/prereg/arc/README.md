@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3 PAUSED after deterministic-low-capacity convergence**.
+Status: **Phase 3 BLACKWELL UNPAUSE SPEC FILED -- EXECUTION HELD**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three binding receipts (`nn_output_transfer_v1`, `nn_delta_transfer_v1`,
@@ -15,15 +15,16 @@ failure**. The three-receipt convergence is characterised at
 [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) as a finding about
 the deterministic-low-capacity-learner family rather than a
 sufficiency-failure conclusion about the shadow-projection representation.
-Per the reflection's pre-registered Branch C stance, no further Phase 3
-amendment is filed. Reopening the lane requires Branch A (admit a
-stochastic per-task learner), Branch B (Pass C threshold revision for a
-"structural support" verdict tier), or Branch D (different sufficiency
-framing entirely). The Phase 0 cheap-baseline floor (`0/36` exact across
-`random_valid`, `identity_copy`, `dsl_lite_v0`, `dsl_lite_v1`,
-`dsl_lite_v2`, `tiny_learned_v0`) remains the binding comparison for any
-reopened lane. Kaggle notebook work and public-evaluation grid inspection
-remain blocked until Phase 6.
+The follow-up Blackwell sufficiency amendment in
+[`PHASE3_SUFFICIENCY_SPEC.md`](PHASE3_SUFFICIENCY_SPEC.md) reopens Phase 3 for
+spec implementation only: algebraic conditions, held-out-task splits,
+Branch A/B/C criteria, a frozen decoder design, and a quarantine taxonomy are
+filed, but no new decoder execution or sufficiency verdict is admitted until
+the runner and freeze-marker receipt land. The Phase 0 cheap-baseline floor
+(`0/36` exact across `random_valid`, `identity_copy`, `dsl_lite_v0`,
+`dsl_lite_v1`, `dsl_lite_v2`, `tiny_learned_v0`) remains the binding
+comparison for the reopened lane. Kaggle notebook work and public-evaluation
+grid inspection remain blocked until Phase 6.
 
 ## Official Anchors
 
@@ -79,7 +80,9 @@ Checked **2026-05-28** against:
   Sundog representation is `signature_palette`, not signature alone.
   Three binding receipts filed (`nn_output_transfer_v1`,
   `nn_delta_transfer_v1`, `candidate_combinator_v1`), all verdict
-  task hardness / decoder failure.
+  task hardness / decoder failure. A Blackwell sufficiency unpause amendment
+  is now filed for the next lane; execution is still held pending runner
+  implementation and freeze-marker receipt.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -121,17 +124,16 @@ amendments line is frozen. Corrections or refinements must be appended with:
 
 ## Public-Language Constraint
 
-Phase 3 is paused per Branch C of
-[`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md); no sufficiency
-adjudication is on file. Until a future learner family produces a
-non-trivial verdict via one of the reflection's Branch A/B/D paths,
-public copy may say:
+Phase 3 has a Blackwell unpause spec on file, but no new sufficiency
+adjudication is on file. Until the Blackwell runner produces a non-trivial
+receipt under the amended Pass A-D discipline, public copy may say:
 
 - ARC-AGI abstraction coupling roadmap;
 - registered task-subset audit;
 - shadow-projection hypothesis for static grid reasoning;
 - falsifiable sufficiency test, filed; the deterministic-low-capacity
-  learner branch produced three task-hardness verdicts and is paused.
+  learner branch produced three task-hardness verdicts, and the next
+  Blackwell sufficiency lane is specified but not yet run.
 
 Avoid:
 
