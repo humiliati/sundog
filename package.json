@@ -157,6 +157,7 @@
     "arc:phase0:draft-register": "node scripts/arc-phase0-draft-register.mjs",
     "arc:phase0:baselines": "node scripts/arc-phase0-baselines.mjs",
     "arc:phase0:leak-check": "node scripts/arc-phase0-leak-check.mjs",
+    "arc:phase1:synthetic": "node scripts/arc-phase1-shadow-domain.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
     "cf:pages": "node scripts/cloudflare-pages-project.mjs",

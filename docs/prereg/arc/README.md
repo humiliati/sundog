@@ -46,6 +46,9 @@ Checked **2026-05-28** against:
 - [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) -- stub pattern for
   future Phase 1+ evaluation-blind register rows (no manual grid inspection,
   selection by preregistered metadata/hash rule).
+- [`PHASE1_SHADOW_DOMAIN_SPEC.md`](PHASE1_SHADOW_DOMAIN_SPEC.md) -- Phase 1
+  discrete grid shadow-domain spec. Synthetic validation passed; Phase 2
+  projection scaffold admitted.
 
 ## Discipline Tooling
 
