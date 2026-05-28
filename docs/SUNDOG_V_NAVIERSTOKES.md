@@ -50,6 +50,15 @@ criterion (b) is partially closed (runnable Phase-0 procedure defined, not
 yet executed); criteria (a) Front-A vacuity rebuttal and (c) external PDE
 reviewer remain open.
 
+Candidate 2 has also been commissioned at the scoping level:
+[`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)
+pins the research object, the Sabra-primary + GOY-cross-check model commitment,
+the tiered channel taxonomy (Tier 0 headline; Tiers 1–2 ablations), the
+matched-budget baseline rule, the burst-prediction task, and the two-sided
+negative as `PDE-C2-NEG-A` (Pareto vacuity) and `PDE-C2-NEG-B` (overfit /
+cell-set drift). Cell-set v0 with concrete numerics is deferred to a
+follow-up artifact, mirroring the C1 staging.
+
 ## Claim Boundary
 
 This document does **not** claim that Sundog has produced original
@@ -263,6 +272,14 @@ candidate has run.
   shell models — record and stop. (b) If signatures match baselines on
   the registered cell set but the cell set was the entire span, the
   result is over-fit to the data — record as Front-B vacuity.
+- **Scoping artifact.** Filed at
+  [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)
+  2026-05-28: drafted scoping, model commitment (Sabra primary + GOY
+  cross-check), tiered channel taxonomy, matched-budget baseline rule,
+  burst-prediction task definition, and named negatives `PDE-C2-NEG-A`
+  (Pareto vacuity) and `PDE-C2-NEG-B` (overfit / cell-set drift). Cell-set
+  v0 (concrete `N_shells`, `λ`, `ν`, `τ_burst`, `E_burst`, signature
+  truncation `D`, operating point) deferred to a follow-up artifact.
 - **Workbench surface.** Would live next to
   [`SUNDOG_V_THREEBODY.md`](SUNDOG_V_THREEBODY.md) as the
   PDE-substrate empirical sibling. No public deployment until external
@@ -313,9 +330,12 @@ As of 2026-05-28, the recommended sequencing is:
    runnable cell-set artifact.
 2. **Candidate 2** (signatures on shell-model intermittency) — smallest
    empirical leg with the cleanest data path; depends only on standard
-   shell-model machinery and off-the-shelf baselines. Should follow
-   Candidate 1's outcome (vacuous → don't run; non-vacuous → run with
-   the reading note as the framing document).
+   shell-model machinery and off-the-shelf baselines. Scoping is now
+   drafted at
+   [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md).
+   Cell-set v0 and execution should follow Candidate 1's review outcome
+   (`PDE-C1-NEG` → C2 may still run but is re-framed as a turbulence-signature
+   detector only, *not* as evidence for a determining-modes coupling).
 3. **Candidate 3** (PINN diagnostic head) — only after 1 and 2 land.
 
 Candidates 4 and 5 are deferred pending the outcome of 1 and 2.
@@ -326,8 +346,10 @@ Candidates 4 and 5 are deferred pending the outcome of 1 and 2.
   — the trunk roadmap. NSE is the natural PDE-substrate leg parallel to
   the three-body measured leg in Phase 4. Candidate 1 is drafted at
   [`proof/PDE_DETERMINING_MODES_POSTULATE1.md`](proof/PDE_DETERMINING_MODES_POSTULATE1.md)
-  and would update Phase 2 with a PDE corollary (or a named-negative) only
-  after review.
+  (Phase-2 PDE corollary, pending review) and Candidate 2 is scoped at
+  [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)
+  (Phase-4 PDE-substrate empirical sibling, pending cell-set v0 and review).
+  Neither updates the trunk roadmap before its respective review lands.
 - [`SUNDOG_V_THREEBODY.md`](SUNDOG_V_THREEBODY.md) — sibling empirical
   workbench. Different substrate, same hidden-indirect-signature-output
   pattern. The three-body Phase 13–15 results are the empirical

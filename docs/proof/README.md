@@ -24,6 +24,12 @@ that claim provably fails.
   Navier-Stokes Candidate 1 cell-set v0: Kolmogorov-flow instance of the
   pre-registered cell set required by the C1 sidecar (desk-auditable,
   unreviewed, unrun).
+- [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
+  — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
+  Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /
+  CSD / lacunarity / Rényi baselines on a pre-registered Sabra primary +
+  GOY cross-check). Drafted scoping; cell-set v0 deferred to a
+  follow-up artifact; named negatives `PDE-C2-NEG-A` and `PDE-C2-NEG-B`.
 - [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md) — Phase 3 boundary theorem
   (reviewed, closed positive) and pushable-occluder mapping.
 - [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) — Phase 4 three-body measured
