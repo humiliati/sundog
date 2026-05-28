@@ -78,6 +78,12 @@ The following candidates depend on infrastructure built by
 - **Candidate 13 - Structural Failure Coincidence Benchmark** — uses the
   geometry lane's closed-form halo boundaries as a pre-agent traceability
   falsifier.
+- **Candidate 14 - ARC-AGI Abstraction Coupling** → promoted as
+  [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md). *Status (2026-05-27): roadmap
+  filed; no phase execution yet. Targets ARC Prize 2026 Paper Track
+  (Theory category). Tests whether the shadow-coupling machinery
+  generalizes from continuous-field navigation to discrete novel-task
+  abstraction, attacking falsification mode (4): abstraction failure.*
 
 ## Claim Boundary
 
@@ -1152,3 +1158,77 @@ and the joint admission re-run; no controller run.
 **Cut-3 H0 instrument — correction, 2026-05-16 (NOT sealed).** The entry immediately above is corrected (append-only, Cut-1 precedent). Independent verification of the committed tree found: (a) artifact-identity defect — `scripts/cut3-h0-checker.mjs` is committed as a 0-byte file; the working 477-line checker is the misnamed tracked `_legacy_cut3-h0-checker-v0.mjs`; the H0 doc's §I delete-instruction is VOIDED and its §F checker hash / §G re-run claim are untrue as committed; (b) the "H0-B negative side 8/8" is a reject-branch unit check against a hardcoded modeled stub (identical for all 8, real PNGs never measured) — the H0-layer analog of the Cut-1 `g⁻¹(g(h))` tautology — so the §3 negative side on the real frames is **OPEN**. The §2 structural design is genuine and the honest disclosures stand. Wave H0-1 is **reject-branch unit check + fixture pinned, NOT sealed**; Cut-3 admission remains HOLD, execution HELD; no public implication that H0 passed.
 
 **Cut-3 H0-2 schema frozen on sign-off, 2026-05-16.** [`P2_CUT3_H0_2_SCHEMA.md`](prereg/structural-failure-coincidence/P2_CUT3_H0_2_SCHEMA.md) (sibling): the operator-pre-fill measured-sidecar + anchor-residual-table schema. Hard-gated on §0 — the H0-1 C1/C2 correction must be fixed and verified before any H0-2 step (it does **not** re-seal or rescue the Wave-H0-1 NOT-sealed correction; it is the path by which the H0-B negative side becomes provable on *real measured* frames). Carries its own measure-before-verdict keystone (SHA-mismatch primary detector via the A/B file split; no-synthetic-stub known-PASS). Phase-5 (`COARSE_GRAINING_PROOF_ROADMAP.md`) link is an explicitly **severable one-way note**, never a dependency — no Phase-5 need may relax an H0-2 rule. Cut-3 admission HOLD, execution HELD; nothing run; Public-Language Constraint in force.
+
+## Candidate 14 - ARC-AGI Abstraction Coupling
+
+Working hook:
+
+> The field knows enough. The agent doesn't need to reconstruct
+> everything — just the signature.
+
+### Why it is strong
+
+This candidate attacks a falsification surface the other roadmaps do not
+reach: abstraction failure. The mesa lane shows shadow coupling works in
+continuous synthetic environments. The geometry lane shows the
+forward-rich / inverse-narrow field-shape pattern in the wild. Neither
+tests whether the machinery generalizes to discrete, novel-task
+abstraction — the regime core-knowledge priors are supposed to enable.
+ARC-AGI is purpose-built to measure exactly this.
+
+The ARC Prize 2026 Paper Track Theory category rewards structural
+arguments about "why does abstraction work?" — the same shape of
+question Sundog already asks. The receipt-heavy, pre-registered,
+falsification-first methodology maps directly onto what the prize
+committee values. This is the most externally legible venue for the
+Sundog program.
+
+The candidate also tests the 5D mesa subspace finding's portability. If
+the effective representation under shadow coupling collapses toward a
+low-dimensional invariant structure on discrete grids — not just
+continuous fields — the two-substrate convergence narrative gains a third
+substrate. If it does not, the subspace finding is bounded to continuous
+domains, and that boundary is itself a publishable result.
+
+### Why it is weaker
+
+The port from continuous 2D shadow fields to discrete ARC grids is not
+guaranteed to preserve the gauge-covariance properties that make the
+projection operator meaningful. Color-channel permutations and discrete
+grid symmetries are structurally different from the continuous symmetries
+the existing machinery exploits. The correspondence may be forced rather
+than natural.
+
+A weak benchmark score — even a "modest" one — risks the "existence
+proof" framing reading as excuse-making. The paper's structural argument
+is independent of leaderboard position, but reviewers will weigh the
+empirical anchor.
+
+### Sundog expression
+
+- **Hidden target:** the input→output transformation rule, withheld
+  (novel task, never seen before).
+- **Indirect signal:** the training demonstrations (input-output pairs)
+  provided with each ARC task.
+- **Transformation:** shadow projection under grid-symmetry gauge
+  covariance; Procrustes alignment across demonstration pairs.
+- **Actionable output:** predicted output grid for the test input.
+- **Failure boundary:** tasks where the signature's information-theoretic
+  capacity is insufficient for the transformation rule's complexity.
+
+### Falsification target
+
+Mode (4): abstraction failure — shadow coupling produces competent
+continuous-field navigation but does not generalize to discrete
+novel-task abstraction. If the shadow-projected signature is not
+Blackwell sufficient for any non-trivial registered ARC task subset, the
+gravity claim is bounded to continuous domains and the "gravity for
+agents" hook requires a named retreat on the abstraction surface.
+
+### Current recommendation
+
+Promoted directly to [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md). The external
+deadline (ARC Prize 2026 Paper Track) provides natural phase-gating.
+Phase 3 (Signature Sufficiency Audit) is the non-negotiable gate — the
+sufficiency claim is the paper's differentiator. See the roadmap for the
+full 7-phase work order.
