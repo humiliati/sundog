@@ -1052,23 +1052,30 @@ def read_csv_dicts(path: Path) -> list[dict[str, Any]]:
         return [dict(row) for row in reader]
 
 
-def assert_shard_consistency(shards: list[dict[str, Any]]) -> None:
+def assert_shard_consistency(shards: list[dict[str, Any]], repo_root: Path | None = None, allow_mixed_commits: bool = False) -> dict[str, Any] | None:
     """Mirror V2: enforce the freeze-marker fingerprint matches across all shards.
 
     arm + seed pairs must all differ (no duplicate shard); every other
     schema/spec/register/data hash, model spec, and feature-schema version
-    must match exactly. gitCommit must also match across all shards.
+    must match exactly. gitCommit must also match across all shards UNLESS
+    `allow_mixed_commits=True`, in which case we instead require the runner
+    file content to be byte-identical at every distinct shard gitCommit.
+
+    Returns an audit dict when mixed-commit override is engaged so the merged
+    manifest can record what was bypassed and why.
     """
     if len(shards) < 2:
-        return
+        return None
     ref = shards[0]["manifest"]
     keys = [
         "featureSchemaVersion", "protocolVersion", "receiptSchemaVersion", "learnerVersion",
         "specHash", "parentSpecHash", "registerHash", "dataDirHash",
-        "gitCommit", "registerPath", "dataDir",
+        "registerPath", "dataDir",
         "shapeModelSpec", "colorModelSpec", "seedSlate", "arms",
         "maxStepsEffective",
     ]
+    if not allow_mixed_commits:
+        keys.append("gitCommit")
     seen_arm_seed: set[tuple[str, int]] = set()
     for sh in shards:
         m = sh["manifest"]
@@ -1085,6 +1092,38 @@ def assert_shard_consistency(shards: list[dict[str, Any]]) -> None:
             sh_val = json.dumps(m.get(k), sort_keys=True)
             if ref_val != sh_val:
                 raise SystemExit(f"shard dir {sh['dir']} disagrees with {shards[0]['dir']} on {k!r}:\n  ref={ref_val}\n  sh ={sh_val}")
+
+    if not allow_mixed_commits:
+        return None
+    distinct_commits = sorted({sh["manifest"]["gitCommit"] for sh in shards})
+    if len(distinct_commits) <= 1:
+        return None
+    if repo_root is None:
+        repo_root = Path(__file__).resolve().parents[3]
+    runner_path = "docs/prereg/arc/phase3a_per_task_coord_mlp.py"
+    runner_shas: dict[str, str] = {}
+    for c in distinct_commits:
+        try:
+            blob = subprocess.check_output(["git", "show", f"{c.lower()}:{runner_path}"], cwd=str(repo_root))
+        except subprocess.CalledProcessError as exc:
+            raise SystemExit(f"--allow-mixed-commits: cannot read {runner_path} at gitCommit {c}: {exc}")
+        runner_shas[c] = hashlib.sha256(blob).hexdigest().upper()
+    unique = sorted(set(runner_shas.values()))
+    if len(unique) > 1:
+        raise SystemExit(
+            f"--allow-mixed-commits requires {runner_path} byte-identical across all shard commits; "
+            f"got distinct hashes:\n  {json.dumps(runner_shas, indent=2)}"
+        )
+    print(f"--allow-mixed-commits: verified {runner_path} byte-identical across {len(distinct_commits)} commits")
+    audit = {
+        "auditedFile": runner_path,
+        "distinctCommits": distinct_commits,
+        "runnerSha256ByCommit": runner_shas,
+        "auditedSha256": unique[0],
+        "specHashByCommit": {sh["manifest"]["gitCommit"]: sh["manifest"].get("specHash") for sh in shards},
+        "parentSpecHashByCommit": {sh["manifest"]["gitCommit"]: sh["manifest"].get("parentSpecHash") for sh in shards},
+    }
+    return audit
 
 
 def run_merge(args) -> int:
@@ -1116,7 +1155,7 @@ def run_merge(args) -> int:
             "residual_rows": read_jsonl(d / "residuals.jsonl"),
         })
 
-    assert_shard_consistency(shards)
+    mixed_commits_audit = assert_shard_consistency(shards, repo_root=repo_root, allow_mixed_commits=args.allow_mixed_commits)
     # Sort shards deterministically by (arm, seed) so merged outputs are stable.
     shards.sort(key=lambda s: (s["manifest"]["shardArm"], s["manifest"]["shardSeed"]))
 
@@ -1381,10 +1420,14 @@ def run_merge(args) -> int:
                 "generatedAt": sh["manifest"]["generatedAt"],
                 "completedAt": sh["manifest"]["completedAt"],
                 "gitCommit": sh["manifest"]["gitCommit"],
+                "gitDirty": sh["manifest"].get("gitDirty", False),
+                "allowDirty": sh["manifest"].get("allowDirty", False),
                 "elapsedSecondsTotal": sh["manifest"].get("elapsedSecondsTotal"),
             }
             for sh in shards
         ],
+        "allowMixedCommits": args.allow_mixed_commits,
+        "mixedCommitsAudit": mixed_commits_audit,
         "armsEffective": arms,
         "seedsEffective": seeds,
         "mergeStartedAt": started_at,
@@ -1484,6 +1527,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--shard-seed", type=int, default=None, help="Run a single seed from SEED_SLATE as a shard (no adjudication). Requires --shard-arm.")
     parser.add_argument("--merge", action="store_true", help="Merge shard intermediates into a binding receipt instead of training.")
     parser.add_argument("--shard-dirs", default=None, help="Comma-separated list of shard receipt directories (--merge mode only).")
+    parser.add_argument("--allow-mixed-commits", action="store_true", help="Merge mode: bypass gitCommit equality across shards if and only if the runner file (docs/prereg/arc/phase3a_per_task_coord_mlp.py) is byte-identical at every distinct shard gitCommit. The audit is recorded in the merged manifest. Use when a re-launch happens on a different HEAD because parallel commits landed mid-slate, provided none of those commits touched the runner.")
     parser.add_argument("--allow-dirty", action="store_true")
     args = parser.parse_args()
     if args.merge:

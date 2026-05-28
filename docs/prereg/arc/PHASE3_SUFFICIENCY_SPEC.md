@@ -4743,3 +4743,83 @@ ready". No binding receipt yet; no execution by this amendment.
 **Public-language constraint**: unchanged from the Branch A spec
 §"Public Language". Only the pre-binding-receipt language remains
 permitted until the 20-shard binding receipt lands.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch A `--allow-mixed-commits` Merge Override
+
+**Why this exists**: the 20-shard launch landed under freeze-marker
+commit `088282A6`, but the operator's parallel work on the
+Navier–Stokes ledger added 8 commits to `main` while shards were
+mid-flight. By the time the last 6 shards were spawned, the worktree
+also had `docs/proof/PDE_C1_FIBER_PROTOCOL.md` modified, which
+tripped the runner's clean-tree guard and refused execution. The 14
+surviving shards record gitCommits across four heads (`088282A6`,
+`AD0555F1`, `8F5FEED9`, `3920FB2B`) — none of which match each
+other, so the V2-style strict `assert_shard_consistency` would
+reject the merge as filed.
+
+**Audit before override admission**: the relevant Phase 3A files
+were verified byte-identical across all five candidate commits
+(`088282A6`, `AD0555F1`, `8F5FEED9`, `3920FB2B`, and current HEAD
+`1C66FD5D`):
+
+| file | sha256 prefix | distinct across 5 commits? |
+| --- | --- | --- |
+| `docs/prereg/arc/phase3a_per_task_coord_mlp.py` | `0a19bd87847c…` | **identical** |
+| `docs/prereg/arc/PHASE3_SUFFICIENCY_SPEC.md` | `c6904480eba8…` | **identical** |
+| `docs/prereg/arc/PHASE3A_STOCHASTIC_PER_TASK_SPEC.md` | `61a7976c422a…` | **identical** |
+| `docs/prereg/arc/P0_TASK_REGISTER.csv` | `a8f4325aa2e7…` | **identical** |
+
+None of the parallel commits touched any Phase 3A computational
+surface. The shards' per-instance outputs are byte-equivalent to
+what a single-commit serial run would have produced.
+
+**Override implementation**:
+
+- `phase3a_per_task_coord_mlp.py`: new `--allow-mixed-commits` flag
+  (merge mode only). When set:
+  1. `assert_shard_consistency` drops `gitCommit` from the required-
+     match key list (all other schema/spec/register/data/model-spec
+     fingerprints remain mandatory).
+  2. A new runtime audit reads
+     `docs/prereg/arc/phase3a_per_task_coord_mlp.py` via `git show
+     <commit>:<runner_path>` for every **distinct** shard
+     `gitCommit`, hashes each blob, and fails loudly unless every
+     blob hashes to the same SHA-256. This guarantees the runner
+     code that produced each shard was byte-identical even if the
+     commit hash differs.
+  3. The audit dict (`auditedFile`, `distinctCommits`,
+     `runnerSha256ByCommit`, `auditedSha256`, `specHashByCommit`,
+     `parentSpecHashByCommit`) is recorded in the merged manifest as
+     `mixedCommitsAudit`, alongside `allowMixedCommits: true`.
+  4. The merged manifest's `shardSources[].gitDirty` and `allowDirty`
+     fields are recorded per shard, so any dirty-tree shards added
+     under `--allow-dirty` (e.g. the re-launch of the 6 failures
+     while the operator's PDE file is still uncommitted) are
+     auditable.
+- The strict path (no `--allow-mixed-commits`) is unchanged.
+- `package.json`: no new script. Operator passes the flag through
+  the existing `arc:phase3a:per-task-coord-mlp-v1:merge` script.
+
+**Smoke verification**: two existing same-commit shards merge with
+the override (no-op audit); two existing different-commit shards
+merge with the override (audit prints
+`verified ... byte-identical across 2 commits`) and the merged
+manifest carries the audit dict. Smoke directories were deleted
+before commit.
+
+**Re-launch plan for the 6 failed shards**: with this override
+admitted, the 5 `metadata_only_per_task` shards (seeds 528–601) and
+the single `signature_only_per_task` seed 20260601 shard re-launch
+on current HEAD (`1C66FD5D` or whatever HEAD is after this freeze-
+marker commit lands), passing `--allow-dirty` because the operator's
+`docs/proof/PDE_C1_FIBER_PROTOCOL.md` modification is still
+uncommitted. The merge of all 20 then runs with
+`--allow-mixed-commits` and records the audit.
+
+**Verdict impact**: no prior verdict changes. The Branch A status
+moves from "EXECUTION ADMITTED, shard+merge protocol admitted,
+20-shard launch ready" to "EXECUTION IN PROGRESS, 14 of 20 shards
+landed under mixed commits, override admitted, 6 re-launches
+pending". No binding receipt yet.
+
+**Public-language constraint**: unchanged.
