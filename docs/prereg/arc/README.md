@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 0 OPEN -- operator design HOLD**. This folder is the
+Status: **Phase 0 PARTIAL ADMIT -- operator design HOLD**. This folder is the
 append-only preregistration lane for the ARC-AGI abstraction coupling. No
 shadow-projection operator, signature decoder, Kaggle notebook, or learned
 solver is admitted until Phase 0 registers the task subset and baseline slate.
@@ -34,6 +34,9 @@ Checked **2026-05-28** against:
 - [`PHASE0_TASK_SUBSET_SPEC.md`](PHASE0_TASK_SUBSET_SPEC.md) -- frozen Phase 0
   work order for task inventory, subset registration, baselines, and evaluation
   leak control.
+- [`P0_BASELINES.md`](P0_BASELINES.md) -- Phase 0 inventory/register/baseline
+  receipt. Verdict: **PARTIAL ADMIT** because the registered subset is clean,
+  but all cheap baselines solve 0/36 exact, triggering the zero-floor caveat.
 
 ## Append-Only Rule
 
