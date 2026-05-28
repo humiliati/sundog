@@ -3974,3 +3974,165 @@ Resume rules from the shard+merge protocol amendment apply unchanged:
 each shard is independently resume-unsafe; if one fails, delete its
 output directory and re-run that shard alone, then merge when all
 three are present.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Raw-Grid Gate V2 Binding Receipt: `full_grid_control_floor`
+
+The 3-seed GPU-sharded V2 binding run completed under freeze-marker
+commit `79C5B060AC732402CE57FDD44892FC600D63854E`. All three shards ran
+clean on the same commit with `gitDirty=false`, and the merge step
+likewise ran clean (`mergeGitDirty=false`, `mergeAllowDirty=false`).
+**No prior verdict changes**: this is the first binding V2 receipt and
+it supersedes nothing.
+
+Binding receipt path: `results/arc/phase3-rawgrid-gate-v2/`.
+Shards: `results/arc/phase3-rawgrid-gate-v2-shard-{20260528,20260529,20260530}/`.
+
+#### Validation Candidate Rank And Seed Selection
+
+The pre-registered selection rule
+(`-validation_metric, +validation_loss, +seed` lexicographic) ranks
+the three candidates as follows:
+
+| rank | seed | best_epoch | val_loss | val_metric | shard wall |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | `20260529` | 12 | `1.62495446` | `0.0` | 1373.8 s (22.9 min) |
+| 2 | `20260528` | 14 | `1.62936294` | `0.0` | 1446.7 s (24.1 min) |
+| 3 | `20260530` | 15 | `1.64143372` | `0.0` | 1501.8 s (25.0 min) |
+
+All three seeds tied at `validation_metric = 0.0` (no exact grid match
+on the 24-instance validation pool), so the tiebreaker fell to
+`validation_loss`; seed `20260529` was selected. All three shards
+early-stopped under the registered `early_stop_patience = 20` floor,
+consistent with the loss plateauing without exact-match signal.
+
+Selection record written to
+`results/arc/phase3-rawgrid-gate-v2/validation_candidates.json`.
+
+#### Gate Adjudication
+
+Pre-registered floor (from §8): `lodo_success >= 2 AND pttest_success
+>= 2` where a "success" is a task with
+`grid_exact_any_rate > 0.010` on the named held-out lane for arm
+`raw_grid_lowcap`.
+
+Observed (selected seed `20260529`, from
+`results/arc/phase3-rawgrid-gate-v2/scores.csv`):
+
+| lane | instance_count | grid_exact_any | shape_exact_slot1 | palette_exact_slot1 | pixel_best_mean |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `pttest` | 6 | `0.000` | `0.667` | `0.000` | `0.235` |
+| `test_lodo` | 19 | `0.000` | `0.526` | `0.000` | `0.251` |
+| `validation_lodo` | 18 | `0.000` | `0.722` | `0.000` | `0.336` |
+| `validation_pttest` | 6 | `0.000` | `0.500` | `0.000` | `0.292` |
+
+`pttest_exact_tasks = 0`, `test_lodo_exact_tasks = 0`. Both held-out
+lanes fall the pre-registered floor.
+
+**Gate decision: `full_grid_control_floor`**.
+
+Manifest: `results/arc/phase3-rawgrid-gate-v2/manifest.json` records
+`gateDecision = {"gate": "full_grid_control_floor",
+"pttest_exact_tasks": 0, "test_lodo_exact_tasks": 0, "reason":
+"raw_grid_lowcap did not clear the pre-registered exact-grid floor on
+both held-out lanes"}`. Adjudication narrative:
+`results/arc/phase3-rawgrid-gate-v2/branch_adjudication.md`.
+
+#### Shard-Equivalence Verification
+
+The pre-registered shard-equivalence guarantee (the merged receipt's
+gate-relevant artifacts must be byte-identical to a serial run that
+used the same seed selection) was verified by `cmp` against the
+selected-seed shard's outputs:
+
+| artifact | merge vs shard-20260529 |
+| --- | --- |
+| `scores.csv` | byte-identical (cmp exit 0) |
+| `per_task.csv` | byte-identical (cmp exit 0) |
+| `branch_adjudication.md` | differs only on the gate-decision line: shard reports `not_adjudicated` ("shard run only"); merged reports `full_grid_control_floor`. Expected — only the merge step adjudicates. |
+| `per_instance.csv` | merged contains all three seeds' rows for audit; the selected-seed slice equals the shard's content. |
+
+Hash list: `results/arc/phase3-rawgrid-gate-v2/hashes.json`.
+
+#### Failure Character
+
+`shape_exact_slot1` is moderately high on every lane (0.50–0.72), i.e.
+the V2 decoder predicts the correct output **shape** for about half to
+three-quarters of held-out instances. But `palette_exact_slot1 = 0.0`
+on every lane: the decoder never produced the correct palette set,
+even when the shape matched. `pixel_best_mean` is in the 0.23–0.34
+band — well below an "almost-right" regime. This is the same
+shape-matches-but-content-fails character as the Blackwell V1 receipt
+(see the V1 receipt amendment above), now reproduced under the
+strengthened raw-grid-only V2 lane with all admitted public-training
+auxiliary tasks. The 29 token-cap exclusions documented in the latent
+bug-fix amendment above did not change the floor.
+
+#### What This Verdict Does And Does Not Entail
+
+**It does**:
+
+- Close the V2 raw-grid-only control gate as a **bounded failure** of
+  the pre-registered decoder lane on the registered held-out task
+  splits, under the strengthened V2 data policy (all 971 admitted aux
+  tasks vs. the V1 24-aux capped probe).
+- Confirm that the strengthening from V1 to V2 (24 aux → 971 aux,
+  matched architecture, matched freeze-marker discipline, matched
+  shard-equivalence merge) did **not** lift the held-out exact-match
+  floor off zero.
+- Preserve the Phase 3 PHASE3_5_REFLECTION characterisation: this is
+  another receipt within the deterministic-low-capacity-learner family;
+  the verdict speaks to that family, not to the shadow-projection
+  representation in the abstract.
+
+**It does not**:
+
+- Support Branch A (signature-shadow projection sufficient) of
+  PHASE3_5_REFLECTION. The full-grid control floored, so a Branch A
+  claim still has no full-grid baseline to outperform.
+- Support Branch B (narrowed task class) without an additional
+  narrowed-support receipt; this verdict only narrows the V1 receipt's
+  decoder-capacity caveat, not the task class.
+- Adjudicate the shadow-projection sufficiency hypothesis directly.
+  Per the spec body's framing and PHASE3_5_REFLECTION, a sufficiency
+  adjudication requires a passing full-grid control first. This
+  receipt is a second consecutive failure to produce that baseline.
+- Unblock any Kaggle, public-evaluation, or
+  signature-vs-full-grid copy. The README public-language constraint
+  remains as filed.
+
+#### Public-Language Update
+
+Permitted (additive to the body's filed constraint):
+
+- "Raw-grid gate V2, the strengthened full-grid control, also
+  returned a bounded-failure receipt at the registered held-out
+  exact-grid floor (`full_grid_control_floor`); both V1 and V2
+  full-grid controls now agree, so the held-out exact-grid floor
+  remains unobserved for any decoder in the registered deterministic
+  family."
+
+Forbidden (additions to the existing list):
+
+- "V2 failed → signature representation is favoured" — the verdict is
+  the opposite: V2 floors the same way V1 did, so no comparison is
+  licensed.
+- "V2 receipt closes Phase 3" — it does not. PHASE3_5_REFLECTION
+  Branch C remains the active framing; a Branch A (stochastic
+  per-task learner), Branch B (narrowed task class), or Branch D
+  (different framing) reopen is the only path back into Phase 3.
+
+#### Frozen By This Verdict
+
+- The V2 binding receipt body, manifest, and hashes are frozen at the
+  paths above; any subsequent V3/V4 must allocate a new `learnerVersion`
+  rather than overwriting V2 artifacts.
+- The 29-task aux exclusion list (`auxExclusions.aux_excluded_token_cap_ids`
+  in the manifest) is frozen as the V2 exclusion set under the
+  `MAX_DEMOS = 5` model spec. A future V3 with a wider encoder may
+  re-admit those tasks, but only under a new `learnerVersion`.
+- The `validation_candidates.json` ordering is frozen as the V2
+  selection trace.
+
+No body section above the amendments line changes; only the V2
+binding-receipt status moves from "staged" (prior amendment) to
+"filed, Branch C bounded failure" (this amendment).

@@ -6,32 +6,40 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3 BLACKWELL FULL RECEIPT FILED -- BRANCH C BOUNDED FAILURE**.
+Status: **Phase 3 BLACKWELL V2 BINDING RECEIPT FILED -- FULL-GRID CONTROL FLOOR**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
-three binding receipts (`nn_output_transfer_v1`, `nn_delta_transfer_v1`,
-`candidate_combinator_v1`), all verdict **task hardness / decoder
-failure**. The three-receipt convergence is characterised at
+three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
+`nn_delta_transfer_v1`, `candidate_combinator_v1`), all verdict
+**task hardness / decoder failure**, and one Blackwell sufficiency lane.
+The three-receipt convergence is characterised at
 [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) as a finding about
 the deterministic-low-capacity-learner family rather than a
 sufficiency-failure conclusion about the shadow-projection representation.
-The follow-up Blackwell sufficiency amendment in
+The Blackwell sufficiency amendment in
 [`PHASE3_SUFFICIENCY_SPEC.md`](PHASE3_SUFFICIENCY_SPEC.md) filed algebraic
 conditions, held-out-task splits, Branch A/B/C criteria, a frozen
 Python/PyTorch decoder design, a timing probe, and a full clean receipt for
-`blackwell_task_decoder_v1`. The full receipt is **Branch C -- bounded
-failure**: `signature_palette` scored zero exact matches on both held-out-task
-LODO and held-out public-training test lanes. The matched `raw_grid_lowcap`
-control also scored zero exact matches, so the receipt is a bounded failure of
-the registered Blackwell decoder lane rather than evidence that the full grid
-learned a rule the signature lost. Kaggle notebook work and public-evaluation
-grid inspection remain blocked until Phase 6. Any renewed sufficiency
-comparison now requires a passing full-grid control first, either by
-strengthening the decoder lane, narrowing the registered task class, or both.
-The first strengthened path, `blackwell_publictrain_rawgrid_gate_v2`, is
-admitted as a raw-grid-only control gate with all public-training auxiliary
-tasks; dry-run and capped probe receipts are filed, and the uncapped full run
-is staged for the operator because the probe projects ~11.5 hours.
+`blackwell_task_decoder_v1` -- **Branch C bounded failure**:
+`signature_palette` scored zero exact matches on both held-out-task LODO
+and held-out public-training test lanes, and the matched `raw_grid_lowcap`
+control also scored zero exact matches. The strengthened follow-up
+`blackwell_publictrain_rawgrid_gate_v2` was launched as a raw-grid-only
+control gate with all 971 admitted public-training auxiliary tasks (29
+excluded by the registered `MAX_DEMOS = 5` token cap), 3 seeds, 120-epoch
+budget, on GPU under a shard+merge protocol with byte-equivalence to a
+serial run; freeze-marker commit `79C5B060`. The V2 binding receipt is
+**`full_grid_control_floor`**: every held-out lane (`pttest`, `test_lodo`,
+`validation_lodo`, `validation_pttest`) scored `grid_exact_any_rate = 0.0`
+at selected seed `20260529`. The shape-exact-slot1 rate sits at 0.50-0.72
+across lanes while palette-exact-slot1 holds at 0.0 -- the same
+shape-matches-content-fails character as V1, now reproduced under the
+strengthened V2 lane. Kaggle notebook work and public-evaluation grid
+inspection remain blocked until Phase 6. Any renewed sufficiency comparison
+still requires a passing full-grid control first; both V1 and V2 controls
+now agree on the floor, so the path forward is a different decoder family
+(PHASE3_5_REFLECTION Branch A/B/D) rather than another raw-grid V-bump
+within the deterministic-low-capacity family.
 
 ## Official Anchors
 
@@ -87,9 +95,20 @@ Checked **2026-05-28** against:
   Sundog representation is `signature_palette`, not signature alone.
   Three binding receipts filed (`nn_output_transfer_v1`,
   `nn_delta_transfer_v1`, `candidate_combinator_v1`), all verdict
-  task hardness / decoder failure. A Blackwell sufficiency lane is also filed:
-  the full clean `blackwell_task_decoder_v1` receipt is Branch C bounded
-  failure with the raw-grid exact-floor caveat.
+  task hardness / decoder failure. A Blackwell sufficiency lane is also
+  filed: the full clean `blackwell_task_decoder_v1` receipt is Branch C
+  bounded failure with the raw-grid exact-floor caveat. The strengthened
+  follow-up `blackwell_publictrain_rawgrid_gate_v2` is filed as a
+  raw-grid-only control gate with all 971 admitted public-training aux
+  tasks, 3 seeds (`20260528/20260529/20260530`), 120 epochs, GPU
+  shard+merge protocol with shard-equivalence verification, freeze-marker
+  commit `79C5B060`. Selected seed `20260529` (val_loss 1.6249,
+  validation_metric ties at 0.0). V2 binding-receipt verdict:
+  **`full_grid_control_floor`** -- `grid_exact_any_rate = 0.0` on every
+  held-out lane (`pttest`, `test_lodo`, `validation_lodo`,
+  `validation_pttest`); `shape_exact_slot1` 0.50-0.72 while
+  `palette_exact_slot1 = 0.0`, the same shape-matches-content-fails
+  character as V1.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -131,18 +150,23 @@ amendments line is frozen. Corrections or refinements must be appended with:
 
 ## Public-Language Constraint
 
-Phase 3 has a full Blackwell receipt on file, but no sufficiency support
-adjudication is on file. Public copy may say:
+Phase 3 has two Blackwell binding receipts on file (V1 and V2), but no
+sufficiency support adjudication is on file. Public copy may say:
 
 - ARC-AGI abstraction coupling roadmap;
 - registered task-subset audit;
 - shadow-projection hypothesis for static grid reasoning;
 - falsifiable sufficiency test, filed; the deterministic-low-capacity
-  learner branch produced three task-hardness verdicts, and the
-  `blackwell_task_decoder_v1` lane produced a Branch C bounded-failure receipt
-  with the raw-grid exact-floor caveat; future signature-vs-full-grid claims
-  require a passing full-grid control first. A strengthened raw-grid gate V2 is
-  admitted and probe-staged, but not yet a full gate receipt.
+  learner branch produced three task-hardness verdicts, the
+  `blackwell_task_decoder_v1` lane produced a Branch C bounded-failure
+  receipt with the raw-grid exact-floor caveat, and the strengthened
+  `blackwell_publictrain_rawgrid_gate_v2` lane produced a
+  `full_grid_control_floor` receipt on all four held-out lanes. Both
+  full-grid controls now agree on the floor, so future
+  signature-vs-full-grid claims still require a passing full-grid
+  control first, and the path forward is a different decoder family
+  (PHASE3_5_REFLECTION Branch A/B/D) rather than another raw-grid
+  V-bump within the deterministic-low-capacity family.
 
 Avoid:
 
@@ -151,10 +175,15 @@ Avoid:
 - "the 5D subspace is universal";
 - any claim that a Kaggle entry validates the theory without a
   non-trivial Phase 3 sufficiency receipt;
-- any Branch A support or Branch B narrowed-support claim from the Blackwell
-  receipt;
-- describing the Blackwell full receipt as a signature-specific falsification
-  independent of decoder capacity;
+- any Branch A support or Branch B narrowed-support claim from the
+  Blackwell V1 or V2 receipts;
+- describing either Blackwell full receipt as a signature-specific
+  falsification independent of decoder capacity;
 - describing the three filed Phase 3 receipts as a sufficiency-failure
   conclusion -- per the reflection, they characterise the
-  deterministic-low-capacity-learner family, not the representation.
+  deterministic-low-capacity-learner family, not the representation;
+- claiming "V2 failed -> signature representation is favoured" -- V2
+  floored the same way V1 did; no signature-vs-full-grid comparison
+  is licensed by either receipt;
+- claiming the V2 receipt closes Phase 3 -- it does not.
+  PHASE3_5_REFLECTION Branch C remains the active framing.
