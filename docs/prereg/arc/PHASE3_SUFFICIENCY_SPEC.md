@@ -1006,3 +1006,344 @@ Per-instance failure labels are assigned after candidate ranking and decoding:
 When multiple failure labels could apply, precedence is:
 `coverage` before `detection` before `residual`. A row with all primary and
 secondary metrics `NA` must be labeled `coverage`.
+
+### 2026-05-28 -- Pass C Clarifications
+
+Author: Claude (Opus 4.7).
+
+Justification: post-audit of Pass C surfaced four operationalization notes
+that the runner author should not have to infer. This amendment pins them
+without altering Pass C's normative contract.
+
+Verdict impact: no execution admission. Pass C's freeze stands; this
+amendment supplements it.
+
+#### Lane String Values
+
+The `<lane>` token in the Pass C tie-break key takes exactly two literal
+values:
+
+- `lodo` for the LODO representation audit lane
+- `pttest` for the public-training test audit lane
+
+The instance identifier prefixes from Pass B (`lodo:<task_id>:<heldout_index>`
+and `pttest:<task_id>:<test_index>`) use the same literal strings.
+
+#### Contradict Semantics
+
+"LODO `all_tasks` does not contradict the `k_ge_3` result" in the verdict
+threshold is operationalized as: for every pairwise comparison that the
+support verdict requires on `k_ge_3`, the same comparison on `all_tasks`
+must not reverse direction. Concretely:
+
+- if `k_ge_3` says `signature_palette beats metadata_only`, `all_tasks` must
+  not say `signature_palette materially_trails metadata_only`;
+  `all_tasks` may be `beats`, `competitive_with`, or `competitive_tie`;
+- if `k_ge_3` says `signature_palette competitive_with raw_grid_lowcap`,
+  `all_tasks` must not say `signature_palette materially_trails
+  raw_grid_lowcap`.
+
+The contradiction flag must be computed deterministically by re-running the
+comparison hierarchy on the `all_tasks` stratum and recording the result
+alongside the `k_ge_3` result in `scores.csv`. The verdict text must name
+any contradiction explicitly when it fires.
+
+#### Failure-Label Distribution Disclosure
+
+`nn_output_transfer_v1` emits only de-duplicated conditioning-output
+candidates: the candidate pool for an instance is the set of unique
+conditioning outputs under the arm's candidate identity. For LODO `k_ge_3`,
+that is at most 4 candidates; for `k_eq_2`, at most 1. Most ARC tasks
+present a different output per train pair, so for the majority of LODO
+instances the held-out output's representation is **not** in the
+conditioning pool, and the failure label is `coverage`.
+
+This is a learner-class limitation, not a representation defect. The Pass D
+public-language drafts must frame a high `coverage_failure_rate` as a
+property of `nn_output_transfer_v1` rather than as evidence against any
+representation arm. Later learner families (separate amendments) may emit
+synthesized candidates and produce meaningfully different failure-label
+distributions; comparing `coverage_failure_rate` across learner-family
+amendments is not informative unless the candidate-pool construction is
+also held constant.
+
+#### Failure-Label Sum Invariant
+
+For every `per_instance.csv` row, exactly one of the following holds:
+
+- `failure_label = none` (at least one slot received exact credit on the
+  primary available metric for that arm);
+- `failure_label = coverage`;
+- `failure_label = detection`;
+- `failure_label = residual`.
+
+For each `(lane, arm, stratum)` aggregate row in `scores.csv`, the
+invariant
+
+```
+exact_credit_rate + coverage_failure_rate + detection_failure_rate + residual_failure_rate = 1
+```
+
+must hold within rounding tolerance `1e-9`, where `exact_credit_rate` is
+the rate of `failure_label == none` over the same denominator as the three
+failure-rate columns. The runner must compute this sum and abort the run
+(non-zero exit) if it fails the tolerance.
+
+Instances suppressed by Pass B's `learner_task_trivial` rule are excluded
+from both the numerator and the denominator of all four rates, matching
+the Pass C "rates are computed after applying Pass B's
+`learner_task_trivial` suppression rule" requirement.
+
+### 2026-05-28 -- Pass D Receipt, Command, Freeze, And Public Language
+
+Author: Claude (Opus 4.7).
+
+Justification: Pass D closes the final roadmap slot before runner
+implementation. It pins runner architecture, exact command shape, output
+directory layout, receipt artifact schema, freeze marker semantics,
+terminology, and per-verdict public-language drafts. After this amendment
+is committed alongside the runner script and `npm` wiring, decoder/learner
+execution against the registered Phase 0 subset is admitted.
+
+Verdict impact: no execution admission by this amendment alone. Execution
+becomes admissible once the freeze-marker commit (defined below) lands.
+
+#### Terminology
+
+Three roles are distinct and used consistently across Passes A-D and the
+runner:
+
+- `learner` -- the task-conditioned mapper or candidate ranker. For the
+  first receipt this is `nn_output_transfer_v1` per Pass C.
+- `decoder` -- deterministic conversion from a predicted representation or
+  candidate to a concrete grid. For `signature_palette` this is Pass A's
+  `top_left_palette_orbit_v1`; for `raw_grid_lowcap` it is identity; for
+  `signature_only` and `metadata_only` it is `NA`.
+- `runner` -- the complete Phase 3 protocol implementation that constructs
+  instances per Pass B, invokes the learner per arm per Pass C, scores
+  candidates, applies failure labels, and writes the receipt per the schema
+  in this amendment.
+
+The Phase 3 spec status header `DECODER TRAINING HOLD` covers all three.
+
+#### Runner Architecture
+
+Phase 3 uses the two-runner architecture preferred by Pass B's discipline
+guard:
+
+- `scripts/arc-phase3-lodo.mjs` -- runs the LODO lane only, emits the LODO
+  portion of every receipt artifact, exits non-zero on any contract
+  violation.
+- `scripts/arc-phase3-pttest.mjs` -- runs the public-training test lane,
+  requires the LODO lane's `manifest.json` as a `--lodo-manifest`
+  argument, refuses to start if the LODO manifest is missing or its
+  protocol/feature/receipt versions do not match this amendment.
+
+This split enforces the Pass B order-of-operations constraint by file
+dependency: the public-training test runner cannot read any test pair's
+`output` field until the LODO runner has written and flushed its manifest.
+A single-runner architecture is forbidden for the first receipt and would
+require a new append-only amendment.
+
+The runner scripts must be added in the same commit as this amendment to
+constitute the freeze-marker commit (see below). Until that commit lands,
+neither runner is admitted.
+
+#### npm Commands and Reproducibility
+
+The frozen command surface is three `npm` scripts:
+
+```
+"arc:phase3:lodo": "node scripts/arc-phase3-lodo.mjs"
+"arc:phase3:pttest": "node scripts/arc-phase3-pttest.mjs"
+"arc:phase3:sufficiency": "npm run arc:phase3:lodo && npm run arc:phase3:pttest"
+```
+
+The frozen reproducible invocation for the full Phase 3 first receipt is:
+
+```powershell
+npm run arc:phase3:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-sufficiency
+```
+
+(`npm run` forwards `--` only to the first script in a chain; the
+`arc:phase3:sufficiency` umbrella must thread arguments to both inner
+runners. The runner author may either re-implement the chain inside a
+single wrapper script or require the user to invoke `arc:phase3:lodo` and
+`arc:phase3:pttest` separately with explicit arguments. Pin the choice in
+the freeze-marker commit.)
+
+Each runner accepts:
+
+- `--data-dir <path>` -- path to the public ARC-AGI-2 `data/` directory;
+  the runner must only read from `<data-dir>/training/` and must refuse to
+  read from `<data-dir>/evaluation/`;
+- `--register <path>` -- path to `docs/prereg/arc/P0_TASK_REGISTER.csv`;
+- `--out <path>` -- output directory for receipt artifacts (default
+  `results/arc/phase3-sufficiency`);
+- `--master-seed <int>` -- override Pass C's `masterSeed=20260528`; the
+  default is the Pass C value and any override is recorded in `manifest.json`.
+
+The `arc-phase3-pttest.mjs` runner additionally accepts:
+
+- `--lodo-manifest <path>` -- required; path to the LODO runner's
+  `manifest.json` for protocol-version cross-check.
+
+#### Output Directory Layout
+
+The default receipt directory is `results/arc/phase3-sufficiency/`. After
+a successful `npm run arc:phase3:sufficiency` invocation, the directory
+contains:
+
+```
+results/arc/phase3-sufficiency/
+  manifest.json          -- protocol metadata, command, git commit, seed, timings, deps, version strings
+  scores.csv             -- one row per (lane, arm, stratum); columns per Pass C aggregate list
+  per_instance.csv       -- one row per (instance, arm); columns per Pass C per-instance list
+  discrimination.csv     -- one row per task and per stratum; columns per Pass B discrimination floor
+  hashes.json            -- uppercase SHA-256 of every other artifact in this directory
+  lodo/                  -- lane-local raw artifacts (per-instance candidate dumps, debug)
+  pttest/                -- lane-local raw artifacts
+```
+
+The five top-level files (`manifest.json`, `scores.csv`, `per_instance.csv`,
+`discrimination.csv`, `hashes.json`) are the canonical receipt; the
+`lodo/` and `pttest/` subdirectories may include lane-local debug
+artifacts but no field referenced by the verdict text may live there
+exclusively.
+
+`results/arc/phase3-sufficiency/` is added to `.gitignore` in the same
+freeze-marker commit. Receipt content is reproducible from `npm run
+arc:phase3:sufficiency` plus the frozen register and dataset.
+
+#### Receipt Artifact Schema
+
+Schema versions emitted in `manifest.json`:
+
+- `featureSchemaVersion`: `arc-p3-feature-v1` (matches Pass A)
+- `protocolVersion`: `arc-p3-protocol-v1`
+- `receiptSchemaVersion`: `arc-p3-receipt-v1`
+- `learnerVersion`: `nn_output_transfer_v1` (matches Pass C)
+
+`manifest.json` minimum fields (additional fields allowed):
+
+- `generatedAt` -- ISO-8601 timestamp at runner start
+- `completedAt` -- ISO-8601 timestamp after the final artifact flush
+- `tool` -- runner script path
+- `command` -- the exact argv after node arg parsing
+- `gitCommit` -- repo HEAD commit hash at runner start (uppercase hex);
+  the runner must refuse to run on a dirty worktree unless invoked with
+  `--allow-dirty`, which is recorded in `manifest.json`
+- `dataDir`, `registerPath`, `outDir`
+- `masterSeed`, `seedOverridden` (boolean)
+- `featureSchemaVersion`, `protocolVersion`, `receiptSchemaVersion`,
+  `learnerVersion`
+- `taskCount`, `lodoInstanceCount`, `pttestInstanceCount`
+- `dataDirHash` -- uppercase SHA-256 of a manifest of training-task
+  filenames and per-file SHA-256 hashes for the 36 registered tasks
+- `registerHash` -- uppercase SHA-256 of `P0_TASK_REGISTER.csv`
+- `phase2BaselinesManifestHash` -- uppercase SHA-256 of
+  `results/arc/phase2-baselines/manifest.json` for traceability; the
+  runner does not need that file to exist, but if it exists the hash is
+  recorded and any mismatch with the value pinned at the top of this spec
+  produces a warning in `manifest.json` rather than aborting
+- `platform`, `nodeVersion`, `dependencies` (only the runner's direct
+  dependencies; no `node_modules` walk)
+
+`scores.csv` columns (one row per `(lane, arm, stratum)`):
+
+- `lane`, `arm`, `stratum`, `instance_count`, `suppressed_count`
+- the Pass C aggregate metric list:
+  `grid_exact_rate_any_slot`, `rep_exact_rate_slot1`,
+  `rep_exact_rate_any_slot`, `shape_exact_rate_slot1`,
+  `palette_exact_rate_slot1`, `mean_pixel_accuracy_best`,
+  `mean_output_rep_distance_slot1`, `mean_output_rep_distance_best`,
+  `mean_output_rep_similarity_best`,
+  `coverage_failure_rate`, `detection_failure_rate`,
+  `residual_failure_rate`, `exact_credit_rate`
+
+`per_instance.csv` columns (one row per `(instance_id, arm)`):
+
+- `instance_id`, `lane`, `task_id`, `primary_prior`, `arm`, `stratum`,
+  `query_index`, `candidate_pool_size`, `candidate_pool_size_unique`,
+  `suppressed_by_discrimination`
+- the Pass C per-instance metric list (omitted here for brevity but
+  enumerated verbatim from Pass C)
+- `duplicate_source_pair_indices` -- semicolon-separated source pair
+  indices collapsed under Pass C de-duplication
+- `slot1_candidate_identity`, `slot2_candidate_identity`
+
+`discrimination.csv` columns (per Pass B):
+
+- `task_id`, `stratum`, `instance_count`, `unique_heldout_signatures`,
+  `majority_signature_rate`, `collapse_count`, `learner_task_trivial`
+
+`hashes.json` schema: object mapping artifact filename (relative to the
+receipt directory) to uppercase SHA-256 hex string. Includes every file
+under the receipt directory at write time except `hashes.json` itself.
+
+#### Freeze Marker
+
+The freeze-marker commit is the single Git commit that:
+
+1. lands this Pass D amendment;
+2. adds `scripts/arc-phase3-lodo.mjs` and `scripts/arc-phase3-pttest.mjs`;
+3. adds the three Pass D npm script entries to `package.json`;
+4. adds `results/arc/phase3-sufficiency/` to `.gitignore`;
+5. adds `arc-phase3-lodo.mjs` and `arc-phase3-pttest.mjs` to the
+   leak-check's allowlist if and only if they need `evaluation` literals
+   for the refuse-to-read guard (they do; the guard rejects
+   `<data-dir>/evaluation/` access).
+
+After the freeze-marker commit:
+
+- no post-hoc edits to arm schemas (Pass A), split or floor handling
+  (Pass B), learner choices or thresholds (Pass C), receipt schema or
+  command shape (Pass D) are allowed before the first receipt;
+- bug fixes that change runner behavior require a new append-only
+  amendment that names the defect, expected metric impact, and whether the
+  first receipt is void or superseded;
+- changes that are pure documentation (typo fix in a comment, README
+  update) do not require an amendment but must be in a commit that does
+  not touch any runner or schema file.
+
+#### Public-Language Drafts
+
+Adopted verbatim from the Decoder Admission Roadmap, with one addition
+covering the failure-label disclosure from the Pass C Clarifications:
+
+- **Support on registered subset**: "On a pre-registered public-training
+  subset, the Sundog signature-plus-palette representation supported a
+  low-capacity input-to-output audit at or near the matched raw-grid
+  control. This is not an ARC solve claim and does not use the public
+  evaluation split."
+- **Partial support / lossy representation**: "The signature-plus-palette
+  representation retained measurable task information beyond coarse
+  metadata, but trailed the matched raw-grid control; the representation
+  is useful but not sufficient for the registered subset."
+- **Palette-dependent support**: "The ARC representation that works is
+  signature-plus-palette. Canonical signature alone is insufficient on
+  color-role tasks because it quotients absolute color identity."
+- **Sufficiency failure**: "The registered Phase 3 audit did not show that
+  the shadow signature representation is sufficient for ARC-style
+  input-to-output transformations beyond coarse metadata controls."
+- **Task hardness / decoder failure**: "The first Phase 3 runner did not
+  produce an interpretable sufficiency verdict because all arms were near
+  the exact-match floor or because the LODO held-out outputs collapsed
+  beyond Pass B's discrimination threshold; the result is a decoder or
+  task-hardness finding, not evidence for or against signature
+  sufficiency."
+
+Additional disclosure required in any public copy that cites a
+`coverage_failure_rate` from the first Phase 3 receipt:
+
+> "The first Phase 3 learner (`nn_output_transfer_v1`) is a deterministic
+> nearest-input output-transfer selector. Its candidate pool is the
+> unique conditioning outputs only, so for ARC tasks where each
+> demonstration shows a different output, a high coverage failure rate
+> is a property of the learner class, not of the representation."
+
+No public copy may describe a Phase 3 result as evidence on the public
+evaluation split or as an ARC solve claim. The Phase 0-2 public-language
+constraints (no "Sundog solves ARC", no "human-level abstraction", no
+"the 5D subspace is universal", no claim that a Kaggle entry validates
+the theory without the Phase 3 sufficiency audit) remain in force.
