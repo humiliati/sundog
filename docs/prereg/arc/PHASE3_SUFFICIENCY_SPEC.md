@@ -297,3 +297,258 @@ Public-language drafts are pre-registered as follows:
   interpretable sufficiency verdict because all arms were near the exact-match
   floor; the result is a decoder or task-hardness finding, not evidence for
   signature sufficiency."
+
+### 2026-05-28 -- Pass A Representation And Decoder Contract
+
+Author: Codex.
+
+Justification: Pass A must freeze the concrete representation objects and
+learner-facing feature serialization before any Phase 3 learner, split runner,
+or decoder implementation is admitted. The Phase 2 projection cache is useful
+as a receipt, but it does not contain the full `localSignatureBag`; therefore
+Phase 3 must recompute `P_shadow_grid_v0` from the allowed public-training grids
+instead of treating `results/arc/phase2-projections/grid-projections.json` as
+the sole feature source.
+
+Verdict impact: Pass A is filed. Decoder/learner execution remains held pending
+Passes B-D.
+
+#### Schema Version And Scope
+
+All Phase 3 representation artifacts filed under this contract use:
+
+- `featureSchemaVersion`: `arc-p3-feature-v1`
+- `operatorVersion`: `P_shadow_grid_v0`
+- `localRadius`: `1`
+- `maxGridHeight`: `30`
+- `maxGridWidth`: `30`
+- `arcColors`: integer colors `0..9`, with `0` as background
+
+The registered-subset envelope measured before filing this amendment is:
+
+| quantity | value |
+| --- | ---: |
+| registered tasks | `36` |
+| train pairs | `115` |
+| public-training test inputs | `36` |
+| max grid height | `30` |
+| max grid width | `30` |
+| max grid cells | `900` |
+| max non-zero cells | `559` |
+| max distinct colors in a grid | `9` |
+
+Feature serialization must be computed from the raw ARC training task JSON
+allowed by Phase 0. It may read the Phase 2 projection receipt only for
+cross-checking hashes and counts, not as the complete source of representation
+fields.
+
+#### Shared Shadow Projection Fields
+
+For each grid, `P_shadow_grid_v0` emits the following structured fields before
+arm-specific serialization:
+
+- `shape`: `[height, width]`
+- `palette`: sorted unique ARC colors present in the grid, including `0` when
+  present
+- `nonzeroPalette`: sorted unique non-zero ARC colors present in the grid
+- `nonzeroCells`: count of cells whose color is not `0`
+- `nonzeroComponents`: 4-connected non-zero component count
+- `density`: `nonzeroCells / (height * width)`, rounded to 6 decimal places
+- `canonicalObjectSignature`: either `empty` or
+  `bboxWidthxbboxHeight|x:y:role;...`
+- `localSignatureBag`: sorted list of role-normalized radius-1 stencil strings,
+  one string per non-zero cell, each string read row-major after D4
+  canonicalization of the stencil
+- `signatureHash`: uppercase SHA-256 of `canonicalObjectSignature`
+- `localBagHash`: uppercase SHA-256 of `JSON.stringify(localSignatureBag)`
+
+The canonical object signature is the lexicographically smallest signature over
+the eight D4 transforms after translating non-zero cells to the local
+top-left corner and remapping non-zero colors to roles by first occurrence in
+row-major order. This is the same quotient used in the Phase 1 and Phase 2
+scripts: translation, D4 orientation, and bijective non-zero color relabeling
+are removed from the canonical signature.
+
+#### Learner-Feature Hashing
+
+Signature-bearing arms use a deterministic sparse hashing suffix so the runner
+does not learn a token vocabulary from held-out outputs.
+
+Constants:
+
+- `metadataDim`: `28`
+- `signatureHashDim`: `4096`
+- `signatureVectorDim`: `4124`
+
+Hash bucket rule:
+
+1. Build the UTF-8 string
+   `arc-p3-feature-v1\0<namespace>\0<token>`.
+2. Compute SHA-256.
+3. Interpret the first four digest bytes as an unsigned big-endian 32-bit
+   integer.
+4. Bucket is `metadataDim + (uint32 % signatureHashDim)`.
+
+Object-signature tokenization:
+
+- `obj:empty` for an empty signature; otherwise:
+- `obj:bbox_w=<bboxWidth>`
+- `obj:bbox_h=<bboxHeight>`
+- `obj:role_count=<roleCount>`
+- `obj:cell_count=<nonZeroTokenCount>`
+- one `obj:cell=<x>:<y>:<role>` token for each cell token in
+  `canonicalObjectSignature`
+
+Local-bag tokenization:
+
+- one `bag:stencil=<stencil>` token per unique stencil value in
+  `localSignatureBag`, with multiplicity preserved as its count
+
+Token values:
+
+- object-token contributions are `count / objectTokenCount`
+- local-bag contributions are `count / max(1, localSignatureBag.length)`
+- contributions landing in the same bucket are summed
+- after accumulation, the hashed suffix is L2-normalized if its L2 norm is
+  non-zero
+
+Sparse vectors are serialized as sorted `[index, value]` pairs with `index`
+ascending and `value` rounded to 9 decimal places.
+
+#### Metadata Vector
+
+The metadata prefix is a dense 28-dimensional vector, serialized in this exact
+order with every value rounded to 9 decimal places:
+
+| index | value |
+| ---: | --- |
+| `0` | `height / 30` |
+| `1` | `width / 30` |
+| `2` | `(height * width) / 900` |
+| `3` | `palette.length / 10` |
+| `4` | `nonzeroPalette.length / 9` |
+| `5` | `nonzeroCells / 900` |
+| `6` | `density` |
+| `7` | `nonzeroComponents / 900` |
+| `8..17` | palette mask for colors `0..9` |
+| `18..27` | color histogram for colors `0..9`, each `count(color) / (height * width)` |
+
+#### Arm Serialization
+
+`signature_only`:
+
+- Structured representation:
+  - `canonicalObjectSignature`
+  - `localSignatureBag`
+  - `signatureHash`
+  - `localBagHash`
+- Learner vector:
+  - length `4124`
+  - indices `0..27` are all `0`
+  - indices `28..4123` contain the sparse hashed signature suffix above
+- It does not include raw palette, full grid shape, absolute translation, or
+  original D4 orientation.
+
+`signature_palette`:
+
+- Structured representation:
+  - all `signature_only` structured fields
+  - `shape`
+  - `palette`
+  - `nonzeroPalette`
+  - `nonzeroCells`
+  - `nonzeroComponents`
+  - `density`
+- Learner vector:
+  - length `4124`
+  - indices `0..27` contain the metadata vector
+  - indices `28..4123` contain the sparse hashed signature suffix
+
+`metadata_only`:
+
+- Structured representation:
+  - `shape`
+  - `palette`
+  - `nonzeroPalette`
+  - `nonzeroCells`
+  - `nonzeroComponents`
+  - `density`
+  - color histogram for colors `0..9`
+- Learner vector:
+  - length `4124`
+  - indices `0..27` contain the metadata vector
+  - indices `28..4123` are all `0`
+
+`raw_grid_lowcap`:
+
+- Structured representation:
+  - original integer grid
+  - `shape`
+- Learner tensor:
+  - shape `[30, 30, 11]`
+  - channels `0..9` are ARC colors
+  - channel `10` is padding
+  - for in-grid cells `(y < height, x < width)`, exactly one color channel
+    matching `grid[y][x]` is `1` and padding channel is `0`
+  - for out-of-grid padding cells, channels `0..9` are `0` and channel `10` is
+    `1`
+- If Pass C chooses a non-convolutional learner, the tensor is flattened
+  row-major by `y`, then `x`, then channel, producing a length-`9900` dense
+  vector. If Pass C chooses a small CNN for this arm, this tensor is its only
+  input and that choice closes the Phase 2.5 simple-convolution-feature
+  baseline gap.
+
+#### Decoder Semantics
+
+The representation contract distinguishes representation prediction from grid
+decoding:
+
+- `signature_only` has no admitted exact-grid decoder. It is scored on exact
+  output-representation match and representation-distance metrics only. Any
+  exact-grid column for direct `signature_only` decoding is `NA`, not `0`.
+- `signature_palette` has a deterministic diagnostic decoder named
+  `top_left_palette_orbit_v1`; this decoder is intentionally conservative and
+  exists only to make representation loss visible.
+- `metadata_only` has no admitted exact-grid decoder unless a later Pass C
+  candidate selector carries concrete candidate grids. Direct metadata-only
+  exact-grid decoding is `NA`.
+- `raw_grid_lowcap` uses identity decoding when a learner or candidate selector
+  emits a concrete grid. If a later learner emits a per-cell channel tensor, the
+  decoder must take the argmax over channels `0..9` inside the emitted shape;
+  the emitted-shape rule must be filed in Pass C before use.
+
+`top_left_palette_orbit_v1`:
+
+1. Parse `canonicalObjectSignature`.
+2. If signature is `empty`, return the all-zero grid with the supplied `shape`.
+3. Require `shape` to be present and require the signature bounding box to fit
+   inside that shape; otherwise mark `coverage` failure.
+4. Require the number of non-zero roles in the signature to equal
+   `nonzeroPalette.length`; otherwise mark `coverage` failure.
+5. Map role `1` to the smallest non-zero palette color, role `2` to the next
+   smallest, and so on.
+6. Create an all-zero grid of `shape`.
+7. Place the canonical object at `(x=0, y=0)` in its canonical D4 orientation.
+8. Ignore `localSignatureBag` during rehydration, then re-project the decoded
+   grid and report whether the decoded `canonicalObjectSignature`,
+   `localBagHash`, `shape`, and `palette` match the predicted representation.
+
+If the diagnostic decoder's grid differs from the target because the target
+uses another translation, orientation, or color-role-to-palette assignment, the
+instance is a `residual` error, not a learner `detection` error.
+
+#### Color-Role Quarantine
+
+The pre-registered color-role quarantine set for Pass A is exactly the six
+registered tasks whose `primary_prior` is `color_role`:
+
+- `08ed6ac7`
+- `0a2355a6`
+- `2601afb7`
+- `292dd178`
+- `37d3e8b2`
+- `3ad05f52`
+
+These tasks are not removed from Phase 3. They are reported as an explicit
+stratum, and any claim that depends on `signature_only` must name this stratum
+as structurally color-identity lossy.
