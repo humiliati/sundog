@@ -5452,3 +5452,274 @@ ADMITTED, shard+merge protocol admitted, 20-shard launch ready". No
 binding receipt yet.
 
 **Public-language constraint**: unchanged.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch D 20-Shard Binding Receipt: `branch_d_full_grid_edit_floor`
+
+The Phase 3D 20-shard slate (4 arms × 5 seeds × 49 held-out
+instances) completed and merged at `mergeGitCommit
+9F3193D7…`. Receipt at
+`results/arc/phase3d-structured-edit-residual-v1/`.
+
+**Wall-clock efficiency**: total shard compute = **14945.3 s
+(4.15 h)**; **3-shard concurrent GPU parallel wall ≈ 1h 26m**
+(20:22:51 → 21:49:03 UTC), a 2.9× speedup vs. serial — close to
+ideal 3× scaling. All 20 shards landed cleanly on the first wave
+(no re-launches required this time, vs. Phase 3A's 14/20 first-wave
+attrition).
+
+**Mixed-commits audit** (per `shardSources` in the merged manifest):
+
+| gitCommit (8-char) | shards | gitDirty |
+| --- | ---: | --- |
+| `403B8C8E` | 14 | True (workspace had non-ARC mods at launch) |
+| `8C6BE6B2` (Phase 3D freeze-marker) | 3 | False |
+| `1EBE3B3D` | 3 | False |
+
+`mixedCommitsAudit.runnerIdenticalAcrossCommits = **true**` — all 3
+commits share the same byte-identical runner SHA. The override was
+used only because the docs spec hashes (parentSpecHash, specHash)
+naturally drifted across operator-amendment commits; the shard-time
+computational contract was provably identical across every shard.
+No WARN printed during merge.
+
+#### Validation Candidate Selection (per arm)
+
+Selection rule unchanged from the Branch D spec §"Seed Slate":
+`(-val_nonbaseline_exact_count, -val_edit_mask_f1,
+-val_minority_edit_recall, +val_over_edit_rate, +val_loss, +seed)`.
+Selected seed per arm:
+
+| arm | selected seed |
+| --- | ---: |
+| `raw_grid_edit` | `20260529` |
+| `signature_palette_edit` | `20260531` |
+| `signature_only_edit` | `20260529` |
+| `metadata_only_edit` | `20260528` |
+
+#### Arena Gate Adjudication
+
+Pre-registered floor (PHASE3D_DIFFERENT_FRAMING_SPEC.md §"Arena
+Gate"): `raw_grid_edit` must achieve at least one **non-baseline**
+exact task on both `test_lodo` and `pttest`. Any grid that is exact
+after applying the baseline alone (before learned edits) is
+recorded as `baseline_exact` and does NOT count toward
+`nonbaseline_exact_task_count`.
+
+Observed (selected-seed per arm):
+
+| lane | arm | grid_exact_any | **baseline_exact_any** | **nonbaseline_exact_any** | shape_exact | palette_exact | pixel_mean | edit_mask_f1 | minority_edit_recall |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `pttest` | `raw_grid_edit` | **0.000** | **0.000** | **0.000** | 1.000 | 0.333 | 0.472 | 0.584 | 0.648 |
+| `pttest` | `signature_palette_edit` | 0.000 | 0.000 | 0.000 | 1.000 | 0.333 | 0.488 | 0.654 | 0.723 |
+| `pttest` | `signature_only_edit` | 0.000 | 0.000 | 0.000 | 1.000 | 0.333 | 0.464 | 0.655 | 0.719 |
+| `pttest` | `metadata_only_edit` | 0.000 | 0.000 | 0.000 | 1.000 | 0.333 | 0.475 | 0.645 | 0.717 |
+| `test_lodo` | `raw_grid_edit` | **0.000** | **0.000** | **0.000** | 0.316 | 0.316 | 0.511 | 0.530 | 0.669 |
+| `test_lodo` | `signature_palette_edit` | 0.000 | 0.000 | 0.000 | 0.316 | 0.316 | 0.573 | 0.570 | 0.609 |
+| `test_lodo` | `signature_only_edit` | 0.000 | 0.000 | 0.000 | 0.316 | 0.316 | 0.559 | 0.562 | 0.631 |
+| `test_lodo` | `metadata_only_edit` | 0.000 | 0.000 | 0.000 | 0.316 | 0.316 | 0.567 | 0.576 | 0.632 |
+
+`raw_grid_edit`: `test_lodo_nonbaseline_exact_tasks = 0`,
+`pttest_nonbaseline_exact_tasks = 0`.
+
+**Arena gate: `branch_d_full_grid_edit_floor`**. The non-baseline
+edit arena does not open. Per the spec §"Arena Gate", no
+`signature_palette_edit` vs. `raw_grid_edit` sufficiency comparison
+is licensed.
+
+`branchAdjudication.branch = "branch_d_full_grid_edit_floor"`.
+
+#### Quarantine Breakdown (selected seed)
+
+196 quarantine labels (49 instances × 4 arms; **6 of 9
+pre-registered labels fire** in the binding run):
+
+| label | count | share | notes |
+| --- | ---: | ---: | --- |
+| `edit_color_failure` | 51 | 26.0% | mask F1 ≥ 0.50 but edit-color accuracy < 0.50 — the dominant failure: model knows WHERE to edit but not WHAT color |
+| `conditioning_starvation` | 43 | 21.9% | < 3 conditioning pairs (same structural ARC k=2-3 limitation Phase 3A hit) |
+| `palette_lift_failure` | 29 | 14.8% | catch-all when none of the more specific labels apply |
+| `edit_mask_overedit` | 26 | 13.3% | over-edit rate > 0.50 |
+| `baseline_canvas_failure` | 24 | 12.2% | selected baseline canvas has > 0.50 residual on query |
+| `edit_mask_underdetection` | 23 | 11.7% | mask recall < 0.25 |
+
+**Did not fire**: `baseline_shape_failure` (the baseline shape rules
+mostly succeed — `pttest` has 100% shape exact), `copy_prior_absent`
+(the picker rarely returns mean residual > 0.50 on conditioning),
+`stochastic_instability` (seed-disagreement label; most instances
+agreed across seeds at the "no exact" level).
+
+#### Named Failure Mode: Edit-Color-Rule Failure
+
+The Phase 3D failure character is **qualitatively distinct** from
+all four prior receipts:
+
+- V1/V2 (transformer): noise-dominated, palette ≈ 0, pixel ≈ 0.25
+- compact-7 (transformer on 7-task subset): dominant-color mode
+  collapse, palette ≈ 0, shape 1.0, pixel ≈ 0.83
+- Phase 3A (per-task coord MLP): conditioning starvation, shape
+  ≈ 0.5, palette ≈ 0.20, pixel ≈ 0.28
+- **Phase 3D (structured edit residual)**: edit-color-rule failure.
+  Shape **always exact on pttest** (1.000), pixel jumps to
+  **0.47-0.57**, edit-mask **F1 0.53-0.65** with strong minority
+  recall (0.61-0.72) — the model is doing **real work** at every
+  stage except recovering the correct edit colors. The dominant
+  quarantine label (26%) names this gap explicitly:
+  `edit_color_failure` (knows WHERE, doesn't know WHAT).
+
+The structured-edit framing **decomposes the failure mode** into
+its components in a way the direct-output framings could not:
+
+1. **Baseline shape picker**: succeeds on most tasks (100% shape
+   exact on pttest; 0.316 on test_lodo means baseline shape is
+   sometimes wrong when LODO query is more variant).
+2. **Baseline canvas picker**: gets within 0.50 residual on most
+   tasks (24/196 = 12% are `baseline_canvas_failure`).
+3. **Edit-mask learner**: achieves moderate-to-strong F1 + minority
+   recall — knows where to edit.
+4. **Edit-color learner**: this is the bottleneck. 51/196 = 26% of
+   selected-seed instances reach mask F1 ≥ 0.50 yet fail on color
+   accuracy.
+
+This decomposition is the genuine novelty of the Phase 3D receipt:
+prior lanes' failures were "the whole pipeline doesn't work";
+Phase 3D's failure is "**3 of 4 components work, but per-task
+color recovery on tiny conditioning sets is too hard for a 192-
+hidden MLP**".
+
+#### Per-Arm Comparison (Conditional, Documentation Only)
+
+Per the spec §"Arena Gate", since the raw-grid edit arm did not
+open the arena, **no Branch D support / bounded-failure /
+named-quarantine verdict is licensed**. The per-arm scores are
+recorded for audit and for any future learner that wishes to
+outperform this baseline; they are **not** a signature-vs-full-grid
+sufficiency comparison.
+
+For the record (not licensed adjudication):
+
+- All four arms produce **identical** shape_exact and palette_exact
+  rates per lane (1.000/0.333 on pttest, 0.316/0.316 on test_lodo).
+  The baseline picker dominates these dimensions and is the same
+  for all arms because it operates on arm-specific input vectors
+  but is selected by the same shape/canvas/background rules.
+- `signature_palette_edit` (the registered Sundog arm) achieves
+  the **highest pixel_accuracy** on `test_lodo` (0.573 vs raw
+  0.511) and the **highest minority_edit_recall on pttest**
+  (0.723 vs raw 0.648). With both at zero exact, this remains
+  unlicensed-for-adjudication data.
+- `metadata_only_edit` and `signature_only_edit` are within noise
+  of `signature_palette_edit` and `raw_grid_edit` on every metric.
+  The representation difference is not visible at the floor.
+
+#### What This Verdict Does And Does Not Entail
+
+**It does**:
+
+- Close the **fifth** full-grid control floor in Phase 3
+  (alongside V1, V2, compact-7, Phase 3A) at zero exact tasks on
+  both registered held-out lanes for arm `raw_grid_edit`.
+- Decompose the failure mode for the first time across the Phase 3
+  receipt history: the structured-edit framing isolates the
+  failure to the **edit-color-rule** stage rather than producing
+  another whole-pipeline failure.
+- Demonstrate that **2.9× sharded GPU parallelism is achievable in
+  practice** on this workstation for runs of this shape (4.15 h
+  serial → 1h 26m parallel wall).
+
+**It does not**:
+
+- License any signature_palette_edit vs. raw_grid_edit sufficiency
+  comparison (the raw-grid edit arm did not open the non-baseline
+  arena).
+- License any narrowed-support Branch D claim from this receipt.
+- License extra seeds on this lane (per the spec §"Forbidden":
+  "extra seeds or task narrowing after an arena-floor receipt
+  without a new append-only amendment").
+- Speak to whether **a different baseline family** or **a
+  larger-capacity color learner** (e.g., shared edit-color MLP
+  trained across all conditioning instances of similar baselines)
+  would clear the floor.
+
+#### Remaining Reopen Paths for Phase 3
+
+After this receipt, all four PHASE3_5_REFLECTION branches plus
+Branch D have produced binding floors:
+
+| branch | learner family | task distribution | verdict |
+| --- | --- | --- | --- |
+| Pre-reflection (V1) | Transformer (Blackwell) | 36 tasks | floor |
+| Pre-reflection (V2) | Transformer (Blackwell, 971 aux) | 36 tasks | floor |
+| Branch B | Transformer (Blackwell) | 7 compact tasks | floor (dominant-color mode collapse) |
+| Branch A | Per-task coord MLP | 36 tasks | floor (conditioning starvation) |
+| **Branch D** | **Per-task structured-edit residual** | **36 tasks** | **floor (edit-color-rule failure)** |
+
+The space of remaining admissible Phase 3 reopens narrows to:
+
+- **Branch D variants**: change ONE of the structured-edit
+  components and retest. Candidates: (a) wider baseline family,
+  (b) cross-task edit-color MLP (relax the per-task constraint
+  for color only, keeping mask per-task), (c) richer mask
+  learner.
+- **Branch E (new framing)**: e.g., generative program search
+  (DSL synthesis over the conditioning pairs), or per-instance
+  test-time prompting of a frozen large LM — both outside the
+  registered-deterministic and per-task-scratch families.
+- **Phase 6 / Kaggle preparation**: orthogonal — does not
+  adjudicate sufficiency.
+
+A Branch D variant or Branch E would need its own pre-registered
+spec, arena gate, and verdict-amendment discipline; this receipt
+admits none of them.
+
+#### Public-Language Constraint Update
+
+Permitted additions (per PHASE3D_DIFFERENT_FRAMING_SPEC.md
+§"Public Language" arena-floor language):
+
+- "Phase 3D's structured-edit-residual framing did not open the
+  full-grid edit arena on the registered ARC public-training task
+  subset; the receipt calibrates the structured-edit framing and
+  does not adjudicate signature sufficiency."
+- "Five Phase 3 binding full-grid-control receipts — V1, V2,
+  compact-7, Phase 3A, and Phase 3D — now agree on the held-out
+  exact-grid floor across two task distributions, two learner
+  families (transformer + per-task MLP), and two output framings
+  (whole-grid + structured edit residual). The structured-edit
+  framing additionally isolated the failure to the
+  edit-color-rule stage."
+
+Forbidden:
+
+- "Phase 3D floored → signature representation is favoured" — no
+  signature sufficiency comparison is licensed.
+- "Phase 3D solves ARC" or any Kaggle / public-evaluation
+  language.
+- Any claim that baseline-only exactness supports any sufficiency
+  position (baseline_exact = 0.000 on every lane, every arm).
+- Any claim that signature_palette_edit's slightly-higher pixel /
+  minority recall in the documentation-only per-arm table
+  constitutes a support signal (the arena did not open).
+
+#### Frozen By This Verdict
+
+- The Phase 3D binding receipt
+  (`results/arc/phase3d-structured-edit-residual-v1/`), its
+  manifest, hashes, and all 14+ receipt files are frozen at the
+  `mergeGitCommit = 9F3193D7…` snapshot.
+- The mixed-commits audit
+  (`mixedCommitsAudit.runnerIdenticalAcrossCommits = true` across
+  3 distinct gitCommits) is frozen as the canonical record of
+  how this receipt was assembled.
+- The named failure mode "**edit-color-rule failure**" is filed
+  here for the structured-edit framing on per-task-scratch
+  learners.
+- The selected-seed table per arm + the wall-time efficiency
+  measurement (2.9× sharded GPU parallel speedup) are frozen as
+  Phase 3D execution traces.
+
+**Final verdict impact**: no V1, V2, compact-7, or Phase 3A
+verdict changes. The Phase 3 status moves from "Branch D
+execution in progress" to "Branch D binding receipt filed,
+`branch_d_full_grid_edit_floor`; all four PHASE3_5_REFLECTION
+branches + Branch D now characterised; reopens require a new
+pre-registered Branch D variant or Branch E spec".
