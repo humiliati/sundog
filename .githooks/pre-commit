@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+# ARC Phase 0 discipline pre-commit hook.
+#
+# Runs the leak-check before every commit. Catches accidental commits of
+# evaluation-grid leaks, Kaggle scaffolding, register splits drifting away
+# from training, and predictions for non-registered tasks.
+#
+# To bypass for an unrelated emergency commit: git commit --no-verify.
+# Do not bypass for routine commits — fix the underlying violation instead.
+
+set -e
+
+cd "$(git rev-parse --show-toplevel)"
+
+if [ ! -f package.json ] || [ ! -f scripts/arc-phase0-leak-check.mjs ]; then
+  exit 0
+fi
+
+node scripts/arc-phase0-leak-check.mjs

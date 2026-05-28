@@ -36,11 +36,34 @@ Checked **2026-05-28** against:
 ## Current Phase Artifacts
 
 - [`PHASE0_TASK_SUBSET_SPEC.md`](PHASE0_TASK_SUBSET_SPEC.md) -- frozen Phase 0
-  work order for task inventory, subset registration, baselines, and evaluation
-  leak control.
+  work order for task inventory, subset registration, baselines, and
+  evaluation leak control. Two amendments on file (PARTIAL ADMIT then ADMIT).
 - [`P0_BASELINES.md`](P0_BASELINES.md) -- Phase 0 inventory/register/baseline
-  receipt. Verdict: **PARTIAL ADMIT** because the registered subset is clean,
-  but all cheap baselines solve 0/36 exact, triggering the zero-floor caveat.
+  receipt with both verdicts (frozen 3-baseline PARTIAL ADMIT, then 6-baseline
+  ADMIT after baseline expansion).
+- [`P0_TASK_REGISTER.csv`](P0_TASK_REGISTER.csv) -- 36 public-training tasks,
+  6 per registered prior, all manually inspected.
+- [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) -- stub pattern for
+  future Phase 1+ evaluation-blind register rows (no manual grid inspection,
+  selection by preregistered metadata/hash rule).
+
+## Discipline Tooling
+
+The following enforces public-evaluation and Kaggle discipline rather than
+just documenting it:
+
+- `npm run arc:phase0:leak-check` -- audits inventory manifest, register
+  splits, predictions ⊆ register, no Kaggle scaffolding, no non-inventory ARC
+  script with `evaluation` literals. Exits nonzero on any FAIL.
+- `.githooks/pre-commit` -- runs the leak check before every commit. Installed
+  automatically by the `prepare` npm script (sets `core.hooksPath=.githooks`).
+- `.github/workflows/arc-discipline.yml` -- runs the leak check on every push
+  or PR that touches `docs/prereg/arc/**`, `scripts/arc-*`,
+  `tests/arc-baselines/**`, or related infrastructure.
+- `scripts/arc-phase0-inventory.mjs` double-flag override -- emitting
+  evaluation test outputs requires `--include-evaluation-test-output` *and*
+  `--authorize-evaluation-leak`, and `--out` must end in `_PRIVILEGED_AUDIT`.
+  Single-flag-by-mistake leaks are blocked at runtime.
 
 ## Append-Only Rule
 

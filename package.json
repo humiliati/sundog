@@ -13,6 +13,7 @@
   "homepage": "https://sundog.cc",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "prepare": "node scripts/setup-githooks.mjs",
     "prebuild": "node scripts/build-chat-index.mjs && node scripts/build-photometric-core-media.mjs && node scripts/build-balance-public-data.mjs && node scripts/build-mines-public-data.mjs && node scripts/build-mesa-public-data.mjs && node scripts/build-bayes-public-data.mjs && node scripts/build-mesa-public-media.mjs && node scripts/build-coarse-graining-public-media.mjs && node scripts/build-structural-boundary-data.mjs && node scripts/build-structural-boundary-svg.mjs",
     "chat:index": "node scripts/build-chat-index.mjs",
     "chat:eval:static": "npm run chat:index && node chat/eval/score_static_router.mjs",
@@ -155,6 +156,7 @@
     "arc:phase0:inventory": "node scripts/arc-phase0-inventory.mjs",
     "arc:phase0:draft-register": "node scripts/arc-phase0-draft-register.mjs",
     "arc:phase0:baselines": "node scripts/arc-phase0-baselines.mjs",
+    "arc:phase0:leak-check": "node scripts/arc-phase0-leak-check.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
     "cf:pages": "node scripts/cloudflare-pages-project.mjs",
