@@ -22,14 +22,25 @@ that claim provably fails.
   still pending).
 - [`PDE_C1_CELLSET_KOLMOGOROV.md`](PDE_C1_CELLSET_KOLMOGOROV.md) —
   Navier-Stokes Candidate 1 cell-set v0: Kolmogorov-flow instance of the
-  pre-registered cell set required by the C1 sidecar (desk-auditable,
-  unreviewed, unrun).
+  pre-registered cell set required by the C1 sidecar. Section 7 patches
+  the fiber protocol's parameter slots: `epsilon_K`, `h_K`, `n_min`,
+  `delta_action`, `S_pos`, `N_sample`, burn-in length, integration step,
+  action tie-break order. Desk-auditable, unreviewed, unrun.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /
   CSD / lacunarity / Rényi baselines on a pre-registered Sabra primary +
   GOY cross-check). Drafted scoping; cell-set v0 deferred to a
   follow-up artifact; named negatives `PDE-C2-NEG-A` and `PDE-C2-NEG-B`.
+- [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) —
+  Navier-Stokes Candidate 1 fiber protocol: tolerance + binning
+  methodology that closes the continuous-fiber gate (cell-set v0
+  § 6 Open measure item) and the provisional-selector gate (cell-set v0
+  § 3 Open review item), bridges the support-level certificate
+  (cell-set v0 § 4.1 attractor-support caveat), and introduces the
+  `PDE-C1-NEG-A` / `PDE-C1-NEG-B` parallelism mirroring the C2 receipts.
+  Drafted, unreviewed, unrun; cell-set v0 patch with concrete parameter
+  values still pending.
 - [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md) — Phase 3 boundary theorem
   (reviewed, closed positive) and pushable-occluder mapping.
 - [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) — Phase 4 three-body measured
