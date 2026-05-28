@@ -62,8 +62,11 @@ sampling interval `0.5` time units, integration step `dt = 0.01`, action
 tie-break favouring `no_op`, with a pre-registered single fall-back to
 `N_sample = 200,000` if the coverage gate defers. Promotion criterion (d) is
 **closed at the artifact level**; criterion (b) is closed at the procedure
-level and pending execution; criteria (a) Front-A vacuity rebuttal and
-(c) external PDE reviewer remain open. Final (d) close is coupled to (c).
+level. A smoke receipt has passed at
+[`../results/proof/c1-kolmogorov-v0-smoke/manifest.json`](../results/proof/c1-kolmogorov-v0-smoke/manifest.json);
+the registered lock is staged but not run inline because the capped probe
+extrapolates to `~19.8` minutes. Criteria (a) Front-A vacuity rebuttal and (c)
+external PDE reviewer remain open. Final (d) close is coupled to (c).
 
 Candidate 2 has also been commissioned at the scoping level:
 [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)
