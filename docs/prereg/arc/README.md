@@ -66,7 +66,16 @@ Checked **2026-05-28** against:
 - [`PHASE3_SUFFICIENCY_SPEC.md`](PHASE3_SUFFICIENCY_SPEC.md) -- Phase 3
   sufficiency audit spec. It freezes the harder post-Phase-2 posture:
   `input_sig -> output_sig` is not a small-delta problem, and the primary
-  Sundog representation is `signature_palette`, not signature alone. The
+  Sundog representation is `signature_palette`, not signature alone.
+  Three binding receipts filed (`nn_output_transfer_v1`,
+  `nn_delta_transfer_v1`, `candidate_combinator_v1`), all verdict
+  task hardness / decoder failure.
+- [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
+  naming the three-receipt convergence under the
+  deterministic-low-capacity-learner family as a methodological finding,
+  scoping what kind of learner would produce a non-trivial sufficiency
+  verdict, and surveying four Phase 4 branch options. Admits no
+  execution and changes no verdict. The
   Pass A representation/decoder contract, Pass B split/floor/discrimination
   contract, Pass C learner/metric contract, and Pass D receipt/command contract
   are filed. The freeze-marker runner wiring is implemented; the first receipt
