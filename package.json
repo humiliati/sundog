@@ -187,7 +187,19 @@
     "cf:tokens": "node scripts/create-cloudflare-scoped-tokens.mjs",
     "cf:domain": "node scripts/ensure-pages-domain.mjs",
     "poses:pin": "node scripts/render-pose.mjs --all",
-    "poses:pin:one": "node scripts/render-pose.mjs"
+    "poses:pin:one": "node scripts/render-pose.mjs",
+    "pvnp:phase1": "node scripts/pvnp-phase1-harness.mjs",
+    "pvnp:phase1:envs": "node scripts/pvnp-phase1-generate-environments.mjs",
+    "pvnp:phase1:policies": "node scripts/pvnp-phase1-policies.mjs",
+    "pvnp:phase1:mlp-train": "python -m training.pvnp.train_mlp_policy",
+    "pvnp:phase1:baselines": "node scripts/pvnp-phase1-baselines.mjs",
+    "pvnp:phase1:signatures": "node scripts/pvnp-phase1-signatures.mjs",
+    "pvnp:phase1:verifier": "node scripts/pvnp-phase1-verifier.mjs",
+    "pvnp:phase1:ablations": "node scripts/pvnp-phase1-ablations.mjs",
+    "pvnp:phase1:attackers": "node scripts/pvnp-phase1-attackers.mjs",
+    "pvnp:phase1:costs": "node scripts/pvnp-phase1-costs.mjs",
+    "pvnp:phase1:audit": "node scripts/pvnp-phase1-privilege-audit.mjs",
+    "pvnp:phase1:falsifier": "node scripts/pvnp-phase1-falsifier-summary.mjs"
   },
   "devDependencies": {
     "vite": "^8.0.10",
