@@ -1374,3 +1374,358 @@ inside a single wrapper script" option.
 
 The Phase 0 floor is sourced by exporting the frozen predictors from
 `scripts/arc-phase0-baselines.mjs`; its CLI behavior is preserved.
+
+### 2026-05-28 -- First-Receipt Verdict
+
+Author: Claude (Opus 4.7).
+
+Justification: this amendment files the first Phase 3 receipt verdict per
+the Pass D admission rule. The freeze-marker commit
+(`7B664BBA3D398BC3D7FCED4BA74AE446D2E684BD`) plus the
+freeze-marker-implementation amendment together admitted the run; this
+amendment closes the loop by recording outcomes, applying the Pass C
+verdict gates, picking between concurrent verdict triggers, and adopting
+the Pass D public-language draft.
+
+Verdict impact: **task hardness / decoder failure**. No support, partial
+support, palette-dependent support, or sufficiency-failure conclusion is
+admitted by this receipt. Public-evaluation grid inspection, Kaggle
+notebook work, and any "Sundog solves ARC" or sufficiency claim remain
+forbidden.
+
+#### Run Provenance
+
+Command:
+
+```powershell
+npm run arc:phase3:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-sufficiency
+```
+
+| field | value |
+| --- | --- |
+| `gitCommit` | `7B664BBA3D398BC3D7FCED4BA74AE446D2E684BD` |
+| `generatedAt` (LODO start) | `2026-05-28T05:10:22.089Z` |
+| `completedAt` (pttest end) | `2026-05-28T05:10:37.200Z` |
+| wall clock | ~16 s |
+| `featureSchemaVersion` | `arc-p3-feature-v1` |
+| `protocolVersion` | `arc-p3-protocol-v1` |
+| `receiptSchemaVersion` | `arc-p3-receipt-v1` |
+| `learnerVersion` | `nn_output_transfer_v1` |
+| `masterSeed` | `20260528` (default; not overridden) |
+| `allowDirty` | `false` (clean worktree) |
+| `taskCount` | `36` |
+| `lodoInstanceCount` | `115` |
+| `pttestInstanceCount` | `36` |
+| `phase2BaselinesManifestHash` | matches frozen value; no warning |
+
+Receipt artifacts (uppercase SHA-256):
+
+- `results/arc/phase3-sufficiency/manifest.json`:
+  `F501B85FCA0F0257CCCCE387E82613755BFDB6EF2DD75C343A6614F9A39C6383`
+- `results/arc/phase3-sufficiency/scores.csv` (66 rows):
+  `32EB1A39C33BD451DC2A44C321A0D1347035CBDE5F0A4559ED59191671A56497`
+- `results/arc/phase3-sufficiency/per_instance.csv` (1510 rows):
+  `EE4F8DD72E52864DFFA9A17C4DB0CB40E8D72C970473F2E98FE3678F1AD91F33`
+- `results/arc/phase3-sufficiency/discrimination.csv`:
+  `ECF4593FA857BBF89179BB1B12C0E43C6877A2AC2E616A68047F18D8A9E25D02`
+
+Pass C failure-label sum invariant: held within the runner's 1e-9
+tolerance for every `(lane, arm, stratum)` row (runner exited 0).
+Discrimination summary: `trivialTaskCount=2` (`05269061`, `11e1fe23`),
+`learnerTaskTrivialThresholdFired=false` (2/36 = 5.6% < 30%).
+
+#### Outcome (LODO `k_ge_3`, 105 instances, 102 active)
+
+| arm | grid_exact | rep_exact_slot1 | shape_exact | palette_exact | pixel_acc_best | rep_sim_best | coverage |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `signature_only` | NA | `0.000` | NA | NA | NA | `0.639` | `1.000` |
+| `signature_palette` | `0.000` | `0.000` | `0.588` | `0.480` | `0.351` | `0.784` | `1.000` |
+| `metadata_only` | NA | `0.039` | `0.608` | `0.480` | NA | `0.939` | `0.951` |
+| `raw_grid_lowcap` | `0.000` | `0.000` | `0.598` | `0.451` | `0.402` | `0.912` | `1.000` |
+
+Oracle floors (LODO rerun, all `0/115` exact across all six Phase 0
+baselines) confirm the Phase 0 zero-floor character survives the
+`k-1` conditioning constraint.
+
+#### Verdict Analysis
+
+Two Pass C verdict triggers fire concurrently on this receipt:
+
+**Trigger 1 -- task hardness / decoder failure** (Pass C):
+
+- every grid-bearing arm has `grid_exact_rate_any_slot < 0.03`:
+  `signature_palette = 0.000`, `raw_grid_lowcap = 0.000` -- pass;
+- every representation arm has `rep_exact_rate_slot1 < 0.05`:
+  `signature_only = 0.000`, `signature_palette = 0.000`,
+  `metadata_only = 0.039`, `raw_grid_lowcap = 0.000` -- pass.
+
+**Trigger 2 -- sufficiency failure** (Pass C):
+
+The "does `signature_palette` beat `metadata_only` on LODO `k_ge_3`?"
+comparison resolves through the Pass C hierarchy as follows:
+
+1. `grid_exact_rate_any_slot`: `metadata_only` is NA, skip.
+2. `rep_exact_rate_slot1`: `0.000` vs `0.039`; absolute rate difference
+   `0.039` < `0.05` and instance-count difference `4` < `6` (= `max(2,
+   ceil(0.05 * 102))`) -- not decisive.
+3. `shape_exact_rate_slot1`: `0.588` vs `0.608`; absolute difference
+   `0.0196` < `0.02` -- not decisive.
+4. `palette_exact_rate_slot1`: `0.480` vs `0.480` -- not decisive.
+5. `mean_pixel_accuracy_best`: `metadata_only` is NA, skip.
+6. `mean_output_rep_similarity_best`: `0.784` vs `0.939`; absolute
+   difference `0.155` >= `0.02` -- **decisive, `metadata_only` ahead**.
+
+→ `signature_palette materially_trails metadata_only`, so the
+sufficiency-failure trigger fires.
+
+**Trigger precedence: task hardness preempts.** The decisive metric for
+trigger 2 (`mean_output_rep_similarity_best`) measures a learner-class
+artifact rather than representation sufficiency. Per the Pass C
+Clarifications, `nn_output_transfer_v1`'s candidate pool is the unique
+conditioning outputs only after de-duplication, and the candidate
+identity rule for `metadata_only` is a 28-dim metadata vector while the
+identity rule for `signature_palette` adds the canonical-signature hash
+and local-bag hash. The coarser metadata identity therefore gets more
+pool hits by chance for any reason a conditioning output happens to
+share shape, palette, density, and color histogram with the held-out
+output -- which is independent of whether `signature_palette` is the
+better representation. With every grid-bearing exact metric at the
+floor, attributing the `rep_sim_best` gap to "the signature
+representation is insufficient" would over-claim from a learner artifact.
+
+Task hardness / decoder failure is therefore the honest first-receipt
+verdict. The receipt is evidence about `nn_output_transfer_v1`'s
+candidate-pool structure, not about signature sufficiency.
+
+The four `metadata_only` exact matches on `rep_exact_slot1` (4 of 102
+active LODO `k_ge_3` instances) are recorded for traceability; they
+represent grids in the same task whose 28-dim metadata vectors collide
+even though their full grids differ, and they are not interpretable as
+evidence that `metadata_only` is sufficient for ARC sufficiency.
+
+#### Adopted Public Language
+
+Per Pass D's pre-registered draft for this verdict:
+
+> "The first Phase 3 runner did not produce an interpretable sufficiency
+> verdict because all arms were near the exact-match floor or because
+> the LODO held-out outputs collapsed beyond Pass B's discrimination
+> threshold; the result is a decoder or task-hardness finding, not
+> evidence for or against signature sufficiency."
+
+Per Pass C Clarifications, any public copy citing this receipt's
+`coverage_failure_rate` (`1.000` for `signature_only` /
+`signature_palette` / `raw_grid_lowcap`; `0.951` for `metadata_only` on
+LODO `k_ge_3`) must include:
+
+> "The first Phase 3 learner (`nn_output_transfer_v1`) is a deterministic
+> nearest-input output-transfer selector. Its candidate pool is the
+> unique conditioning outputs only, so for ARC tasks where each
+> demonstration shows a different output, a high coverage failure rate
+> is a property of the learner class, not of the representation."
+
+#### Carry-Forward
+
+Admitted by this amendment:
+
+- the first Phase 3 receipt is filed;
+- the task-hardness verdict is the receipt's primary verdict;
+- the sufficiency-failure trigger is named-but-preempted on the
+  learner-class grounds above;
+- the Pass D adopted public language is the only language allowed for
+  public copy that cites this receipt.
+
+Still forbidden, unchanged:
+
+- editing arm schemas (Pass A), split or floor handling (Pass B),
+  learner choices or thresholds (Pass C), or receipt schema or command
+  shape (Pass D) without a new append-only amendment;
+- public-evaluation grid inspection (Phase 6 only);
+- Kaggle notebook prep, Kaggle private/semi-private splits;
+- any sufficiency, dimensionality, palette-dependent, or partial-support
+  claim from this receipt;
+- describing this receipt as evidence on the public-evaluation split or
+  as an ARC solve.
+
+The next admitted Phase 3 work is the next-learner amendment that
+follows below, which queues a synthesis-capable learner for a separate
+receipt without overwriting `nn_output_transfer_v1`'s.
+
+### 2026-05-28 -- Next-Learner Slot Reservation
+
+Author: Claude (Opus 4.7).
+
+Justification: the first receipt confirmed Pass C's a-priori reservation
+language: `nn_output_transfer_v1`'s candidate pool is structurally the
+unique conditioning outputs, so for ARC tasks whose demonstrations each
+emit a different output, exact-match metrics are floored near zero by
+the learner family rather than by representation choice. To produce a
+receipt that can adjudicate signature sufficiency on something other
+than learner-class artifacts, a synthesis-capable learner is required.
+This amendment reserves the slot and pins the constraints any
+next-learner amendment must satisfy; it does not pick the learner
+itself.
+
+Verdict impact: no execution admission. No second receipt may be
+generated until a follow-up amendment lands that fills in the learner
+family, hyperparameters, distance / identity rules (if changed), and
+receipt path. The first receipt under `nn_output_transfer_v1` remains
+the binding Phase 3 receipt until then.
+
+#### Why a Synthesis-Capable Learner Is Needed
+
+The first-receipt verdict above traces the exact-rate floor to
+`nn_output_transfer_v1`'s candidate-pool construction: candidates are
+the unique outputs from the conditioning train pairs only, and ARC
+tasks generally emit a different output per train pair. The verdict
+amendment recorded that all grid-bearing arms had
+`grid_exact_rate_any_slot < 0.03` and all representation arms had
+`rep_exact_rate_slot1 < 0.05` on LODO `k_ge_3` -- exactly the
+Pass C task-hardness criterion. With this learner family, that result
+is structural and would replicate on a second `nn_output_transfer_v1`
+receipt with no change in parameters.
+
+A learner that can produce output candidates outside the conditioning
+pool is required to test whether `signature_palette` (or any arm) can
+support a non-trivial exact rate. Without one, future Phase 3 receipts
+would only re-record the same learner-class floor, no matter how many
+amendments are filed.
+
+#### Candidate Learner Families
+
+Three families are named here as candidates for the next-learner
+amendment. The amendment must pick exactly one and pin every parameter
+per the Pass C template (architecture, hyperparams, seed slate, tie-
+break, candidate limit, distance / identity rules if changed).
+
+1. **`nn_delta_transfer_v1`** -- nearest-input transfer plus an additive
+   cell-delta synthesis step. For the nearest conditioning pair
+   `(input_i, output_i)` under the arm distance, emit a candidate
+   computed cell-wise as `output_i` modified by the cells where
+   `query_input` differs from `input_i` (specific delta rule to be
+   pinned). Deterministic, parameter-free, candidate pool grows beyond
+   the conditioning outputs. Trade-off: still purely local, will not
+   handle shape-change tasks where output shape differs from input
+   shape.
+
+2. **`candidate_combinator_v1`** -- enumerate a bounded set of
+   combinations over the conditioning outputs (cell-wise union with the
+   most-frequent palette mask, D4 transforms of the nearest
+   conditioning output, a small set of recolored variants) plus the
+   conditioning outputs themselves. Pick the top-two by arm-distance to
+   the predicted output representation (which is itself the nearest-
+   input output transfer from `nn_output_transfer_v1`, used as a target
+   ranking signal rather than the emitted candidate). Deterministic,
+   bounded combinatorial. Trade-off: the synthesis rules are a small
+   ad-hoc DSL; the amendment must pin them or the receipt isn't
+   reproducible.
+
+3. **`finite_program_selector_v1`** -- per task, enumerate a frozen
+   small DSL of grid-to-grid transforms (taking the Phase 0
+   `dsl_lite_v2` primitive set as the seed list), select the program
+   consistent with the conditioning pairs under the arm-specific
+   identity rule, apply it to the query input. Deterministic, bounded
+   by the DSL size. Trade-off: this collapses much of the distinction
+   between `signature_palette` and `raw_grid_lowcap` for the program-
+   selection step (program consistency is mostly a grid-level check),
+   so the representation arms degrade to "which arm helped rank
+   candidate programs," not "which arm encoded the rule." If picked,
+   the amendment must define how the arm representation enters program
+   selection beyond grid equality.
+
+These three are starting points, not an exhaustive list. The
+next-learner amendment may name a different family entirely, subject to
+the constraints below.
+
+#### Constraints on Any Next-Learner Amendment
+
+The next-learner amendment must:
+
+1. specify exactly one `learnerVersion` string with a v1 or higher
+   suffix (e.g. `nn_delta_transfer_v1`,
+   `candidate_combinator_v1`,
+   `finite_program_selector_v1`, or a new name);
+2. keep Pass A's representation arms, feature serialization, and decoder
+   semantics unchanged unless it adds a new arm or modifies arm
+   serialization, in which case the amendment must include a Pass-A-style
+   contract for the change with its own envelope and hash bucket rules;
+3. keep Pass B's instance construction, strata, two-prediction
+   discipline, and discrimination-floor reporting unchanged;
+4. keep Pass C's metric columns, comparison hierarchy, verdict
+   thresholds, and failure-label definitions and precedence unchanged
+   unless the learner's candidate-pool construction makes a label
+   inapplicable, in which case the amendment must name the substitute
+   label and its trigger;
+5. keep Pass D's receipt schema, hash convention, and dirty-worktree
+   guard unchanged;
+6. point the receipt at a learner-version-suffixed subdirectory of
+   `results/arc/phase3-sufficiency/` (e.g.
+   `results/arc/phase3-sufficiency-<learner_version>/`) so the first
+   receipt remains the binding `nn_output_transfer_v1` receipt and
+   cannot be overwritten;
+7. add the new learner's runner script(s) under `scripts/` (and
+   `scripts/lib/` for shared code) in the same commit as the amendment,
+   following the freeze-marker-commit pattern in the freeze-marker
+   implementation note above;
+8. pin a `--lodo-manifest` cross-check that asserts the new learner
+   receipt's `featureSchemaVersion`, `protocolVersion`, and
+   `receiptSchemaVersion` match the values frozen in Pass A and Pass D,
+   so a later arm or schema bump cannot quietly drift the comparison;
+9. record any change to seed-slate convention, including new tie-break
+   namespace strings, before the first run of the new learner.
+
+The next-learner amendment may not:
+
+- relax the public-evaluation forbid (Phase 6 only) or admit any Kaggle
+  work;
+- claim sufficiency or non-sufficiency from this first receipt's
+  numbers;
+- modify the binding `P0_TASK_REGISTER.csv` or the color-role
+  quarantine list filed in Pass A;
+- overwrite or amend the first receipt's artifact files.
+
+#### Public-Language Implications
+
+The next-learner amendment must pre-register public-language drafts for
+every verdict it can produce, in the same format as Pass D. If those
+drafts overlap with Pass D's drafts (because the same five verdict
+buckets apply), the next-learner amendment may adopt them verbatim and
+mark which buckets it newly covers vs reuses.
+
+Any public copy that cites the first receipt remains bound by the Pass D
+adopted language and the Pass C coverage-failure disclosure. The
+next-learner receipt's public language applies only to that receipt's
+verdict, not retroactively to the first.
+
+#### Reserved Naming and Receipt Path
+
+The receipt directory pattern reserved for next-learner work is:
+
+```
+results/arc/phase3-sufficiency-<learner_version>/
+```
+
+The next-learner amendment must add the chosen subdirectory to
+`.gitignore` in the freeze-marker commit for that learner, alongside the
+already-ignored `results/arc/phase3-sufficiency/`.
+
+The next-learner runner scripts should follow the existing pattern:
+
+```
+scripts/arc-phase3-<learner_version>-lodo.mjs
+scripts/arc-phase3-<learner_version>-pttest.mjs
+scripts/arc-phase3-<learner_version>-sufficiency.mjs
+scripts/lib/arc-phase3-<learner_version>-core.mjs
+```
+
+npm script wiring should mirror the existing surface:
+
+```
+"arc:phase3:<learner_version>:lodo"
+"arc:phase3:<learner_version>:pttest"
+"arc:phase3:<learner_version>:sufficiency"
+```
+
+This keeps the umbrella `npm run arc:phase3:sufficiency` reserved for the
+first receipt (binding) and admits new learners only under their own
+namespaces.
