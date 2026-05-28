@@ -174,3 +174,18 @@ Until then, the following are forbidden:
 
 Append-only. Each amendment must carry a timestamp, author, justification, and
 verdict impact.
+
+**2026-05-28 (PT) -- Codex.** Phase 0 inventory/register/baseline receipt
+filed at [`P0_BASELINES.md`](P0_BASELINES.md). Inventory result:
+`1120` public tasks (`1000` training, `120` evaluation), with public-evaluation
+test-output metadata omitted. Register result: `36` included public-training
+tasks, balanced `6` per registered prior, no duplicate task IDs, all
+`inventory_row_hash` values resolving into the inventory CSV. Baseline result:
+`random_valid`, `identity_copy`, and `dsl_lite_v0` all scored `0/36` exact;
+diagnostic mean pixel accuracy was `0.1530`, `0.5585`, and `0.5585`
+respectively. Verdict impact: **PARTIAL ADMIT -- subset clean, operator design
+HOLD**. The subset clears the >70% too-easy guard but fires the zero-floor
+caveat, so the next admitted work is a Phase 0 hold review / taxonomy rebalance
+or synthetic-grid warmup only. No ARC shadow-projection operator, signature
+decoder, or Sundog-specific feature scoring is admitted until a later amendment
+records **ADMIT**.

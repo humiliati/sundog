@@ -258,6 +258,11 @@ Deliverables:
 
 Execution artifact:
 [`docs/prereg/arc/PHASE0_TASK_SUBSET_SPEC.md`](prereg/arc/PHASE0_TASK_SUBSET_SPEC.md).
+Phase 0 receipt:
+[`docs/prereg/arc/P0_BASELINES.md`](prereg/arc/P0_BASELINES.md) -- **PARTIAL
+ADMIT** as of 2026-05-28: 36-task public-training subset registered and
+leak-control passed; all cheap baselines scored 0/36 exact, so ARC operator
+design remains held pending the zero-floor review.
 
 Exit criterion: the task subset, exclusion criteria, baseline numbers,
 and public-evaluation leak-control policy are filed and pre-registered.

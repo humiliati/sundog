@@ -153,6 +153,8 @@
     "deploy": "npm run build && node scripts/deploy-pages.mjs",
     "faraday:phase4": "node scripts/faraday-phase4-battery.mjs",
     "arc:phase0:inventory": "node scripts/arc-phase0-inventory.mjs",
+    "arc:phase0:draft-register": "node scripts/arc-phase0-draft-register.mjs",
+    "arc:phase0:baselines": "node scripts/arc-phase0-baselines.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
     "cf:pages": "node scripts/cloudflare-pages-project.mjs",
