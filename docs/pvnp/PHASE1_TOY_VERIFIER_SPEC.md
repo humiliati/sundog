@@ -152,7 +152,7 @@ violated, the certificate is stale, or privilege leakage is detected.
 
 ## Baselines
 
-Every Phase 1 run must include at least:
+External comparators. Every Phase 1 run must include at least:
 
 1. **Rollout verifier:** replay the registered slate and evaluate task success
    and basin contact with evaluator access. This is a ground-truth labeling
@@ -161,12 +161,29 @@ Every Phase 1 run must include at least:
    This is the upper-information baseline.
 3. **Formal or symbolic baseline where feasible:** grid, interval, reachability,
    or conservative barrier-style checker on the toy environment.
-4. **Ablated signature verifier:** run `V` without one load-bearing certificate
-   field, such as margin, coverage, or sensor health.
 
 The signature verifier earns a Phase 1 positive receipt only if it reports
 lower or complementary cost relative to at least one baseline while preserving
 false-accept discipline inside the registered envelope.
+
+Neural-verification, certified-robustness, and shield-style baselines are
+deferred to later phases when policy classes and adversary models warrant
+them. Their absence in Phase 1 is registered, not an oversight.
+
+## Vacuity Probes
+
+Internal sanity checks. Not baselines — they reuse `V` and `sigma` and ask
+whether the certificate fields are pulling their weight, not whether a
+non-signature verifier could match.
+
+- **Ablated signature verifier:** run `V` with one load-bearing certificate
+  field dropped (margin, coverage, sensor health, or invariance checks). If
+  the ablated verifier returns the same decision profile as the full signature
+  at the same or lower cost, the dropped field has failed its vacuity probe
+  and triggers the Certificate Vacuity falsifier.
+
+Report ablation as `ablation_decisions.csv` separate from baseline outputs.
+One row per (environment, dropped-field) pair.
 
 ## Cost Accounting
 
@@ -194,7 +211,8 @@ Secondary:
 
 - false reject rate;
 - verifier accuracy;
-- cost ratio;
+- rollout cost ratio (`C_total_signature / C_rollout`);
+- full-state cost ratio (`C_total_signature / C_full_state`);
 - coverage rate;
 - margin slack;
 - utility or task success, reported only after safety metrics.
@@ -220,6 +238,9 @@ Required outputs under `results/pvnp/phase1-toy-verifier/`:
 - `verifier_decisions.csv` - accept/reject/quarantine decisions and reasons;
 - `baseline_decisions.csv` - rollout, full-state, and formal/symbolic baseline
   outputs;
+- `ablation_decisions.csv` - vacuity-probe decisions, one row per
+  (environment, dropped-field) pair, with decision and cost vs the full
+  signature;
 - `ground_truth_labels.csv` - evaluator-only safety labels;
 - `costs.csv` - measured cost accounting;
 - `falsifier_summary.md` - named failure-mode disposition;
@@ -252,7 +273,8 @@ These are defaults for implementation planning, not frozen execution values.
 | Probe noise | three tiers: none, bounded Gaussian, dropout/delay |
 | Basin families | circle, ellipse, crescent, decoy doublet |
 | Margin `m_min` | fixed after dry-run calibration, before measurement |
-| Signature fields | curvature, envelope, margin, coverage, sensor health |
+| Analytical signature fields | curvature, envelope, margin, coverage, sensor health, invariance checks (admitted set) |
+| Bookkeeping signature fields | `trace_id`, `source_observations`, `cost_signature`, `limitations` (always present) |
 | Formal baseline | grid or interval reachability where feasible |
 
 Any change after inspecting measured outcomes creates a new run id.
@@ -263,7 +285,11 @@ Phase 1 is not complete until:
 
 - this spec is frozen for one run;
 - the implementation writes all required data products;
-- the verifier-access declaration is audited for privilege leaks;
+- the verifier-access declaration is audited for privilege leaks. Audit task:
+  in any module under `verifier/`, `grep` must return zero matches for the
+  registered forbidden tokens (`ground_truth_labels`, `B_theta`, `F_theta`,
+  and any post-result tuning artifacts named in the manifest); failures are a
+  Privilege Leak quarantine, not a verifier reject;
 - the receipt template is filled;
 - the main roadmap is updated with one paragraph of status;
 - false accepts are reported before utility or reward.
