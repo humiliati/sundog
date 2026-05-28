@@ -306,6 +306,11 @@ Before any numerical or public-facing NSE read, pin a cell set with:
 The first pass should be desk-auditable: one page of definitions plus a small
 fiber table. It does not need to solve a PDE or train a detector.
 
+**v0 instance filed.** A Kolmogorov-flow instance of this cell set is at
+[`PDE_C1_CELLSET_KOLMOGOROV.md`](PDE_C1_CELLSET_KOLMOGOROV.md), drafted
+2026-05-28. Status: desk-auditable, unreviewed, unrun. Alternative regimes
+remain admissible if a reviewer prefers them.
+
 ## External Review Path
 
 Promotion requires a practicing PDE analyst familiar with determining modes,

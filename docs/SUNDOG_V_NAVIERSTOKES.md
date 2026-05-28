@@ -42,9 +42,13 @@ artifact (proof note, empirical workbench, or public reading).
 Promotion criteria are pinned below.
 
 Commissioned but **not promoted**: Candidate 1 is drafted at
-[`proof/PDE_DETERMINING_MODES_POSTULATE1.md`](proof/PDE_DETERMINING_MODES_POSTULATE1.md).
-It remains blocked on external PDE review and a runnable cell-set artifact
-before it can leave this ledger.
+[`proof/PDE_DETERMINING_MODES_POSTULATE1.md`](proof/PDE_DETERMINING_MODES_POSTULATE1.md),
+with a desk-auditable cell-set v0 instance at
+[`proof/PDE_C1_CELLSET_KOLMOGOROV.md`](proof/PDE_C1_CELLSET_KOLMOGOROV.md).
+Promotion criterion (d) is now closed (pre-registered failure boundary fixed);
+criterion (b) is partially closed (runnable Phase-0 procedure defined, not
+yet executed); criteria (a) Front-A vacuity rebuttal and (c) external PDE
+reviewer remain open.
 
 ## Claim Boundary
 
@@ -226,7 +230,9 @@ candidate has run.
   Postulate-1 reading is vacuous on NSE — record, do not rescue.
 - **Draft artifact.** Filed at
   [`proof/PDE_DETERMINING_MODES_POSTULATE1.md`](proof/PDE_DETERMINING_MODES_POSTULATE1.md)
-  as a C1 reading note, not yet a promotion.
+  as a C1 reading note, not yet a promotion. Cell-set v0
+  ([`proof/PDE_C1_CELLSET_KOLMOGOROV.md`](proof/PDE_C1_CELLSET_KOLMOGOROV.md))
+  pins the pre-registered failure boundary at a Kolmogorov-flow regime.
 - **Cross-files.** Would update
   [`COARSE_GRAINING_PROOF_ROADMAP.md`](COARSE_GRAINING_PROOF_ROADMAP.md)
   Phase 2 with a PDE corollary (or a named-negative).
