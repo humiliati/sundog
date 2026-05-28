@@ -1729,3 +1729,147 @@ npm script wiring should mirror the existing surface:
 This keeps the umbrella `npm run arc:phase3:sufficiency` reserved for the
 first receipt (binding) and admits new learners only under their own
 namespaces.
+
+### 2026-05-28 -- `nn_delta_transfer_v1` Next-Learner Admission
+
+Author: Codex.
+
+Justification: the next-learner slot reservation requires exactly one
+synthesis-capable learner before a second receipt can be generated.
+`nn_delta_transfer_v1` is the narrowest admitted follow-up: it keeps the
+first learner's nearest-input selection discipline, preserves all Phase A-D
+arms, metrics, split handling, thresholds, and receipt schema, and adds only
+a deterministic same-shape cell overlay candidate so the candidate pool can
+extend beyond the unique conditioning outputs.
+
+Verdict impact: execution is admitted only for a separate
+`nn_delta_transfer_v1` receipt after the amendment and runner are committed
+together as the new learner freeze marker. The binding
+`nn_output_transfer_v1` receipt remains unchanged and may not be overwritten.
+This amendment admits no public-evaluation grid inspection, Kaggle work, or
+public sufficiency claim before the second receipt is filed and interpreted.
+
+#### Frozen Learner Family
+
+The selected learner family is exactly:
+
+```
+nn_delta_transfer_v1
+```
+
+The learner has no fitted parameters, optimizer, epoch loop, minibatches,
+regularization, learned cross-task weights, or early stopping. It is fully
+deterministic except for the existing hash tie-breaker, which remains
+deterministic from the master seed. The default master seed remains
+`20260528`, and the seed namespace for this learner is
+`arc-p3-nn-delta-v1`.
+
+Distinct tie-break hashes are derived from:
+
+```
+(master_seed, task_id, lane, query_index, arm:candidate_kind, source_pair_index)
+```
+
+This replaces the first learner's tie-break namespace only for the
+`nn_delta_transfer_v1` runner. No learned parameters or random samples are
+shared across tasks.
+
+#### Candidate Construction
+
+For each LODO or public-training test instance and each representation arm:
+
+1. Represent the query input and every conditioning input under the arm's
+   frozen Pass A serialization.
+2. Score every conditioning pair by the existing arm-specific input
+   distance from Pass C.
+3. For every conditioning pair `(input_i, output_i)`, emit candidates in
+   this order:
+   - `delta_overlay` with rank `0`, only when `query_input`, `input_i`, and
+     `output_i` all have the same height and width. The candidate starts as a
+     clone of `output_i`. For every cell `(y, x)` where
+     `query_input[y][x] != input_i[y][x]`, replace the candidate cell with
+     `query_input[y][x]`. If the three grids are not same-shape, this
+     candidate is not emitted.
+   - `output_copy` with rank `1`, always emitted as a clone of `output_i`.
+     This preserves the first learner's support as a fallback while allowing
+     the delta candidate to be ranked ahead of it for the same source pair.
+4. Represent each emitted candidate grid under the same arm. For
+   `signature_palette`, the candidate grid is still decoded through the
+   already frozen top-left palette-orbit decoder; no orbit-selection rule is
+   changed here.
+5. Sort candidates by:
+   - ascending input distance;
+   - ascending candidate rank (`delta_overlay` before `output_copy`);
+   - deterministic tie-break hash;
+   - ascending source pair index;
+   - lexical candidate kind, as a final unreachable guard.
+6. Deduplicate candidates using the existing arm-specific candidate identity
+   rule, then emit no more than the top two ordered candidates.
+
+The reported `candidate_pool_size` is the pre-dedup generated candidate count.
+`candidate_pool_size_unique` remains the post-dedup support size used by the
+existing receipt schema.
+
+#### Metrics, Floors, And Failure Labels
+
+All Pass C metric columns, comparison hierarchy, verdict thresholds, failure
+label definitions, and failure-label precedence are unchanged. The existing
+LODO-rerun Phase 0 oracle floors remain in the score table. Because
+`output_copy` is always present and `delta_overlay` is only an additional
+candidate, coverage can only expand relative to the first learner under the
+same candidate identity rule; if the target is still outside the generated
+candidate pool, the failure label remains `coverage`.
+
+The `k=2` handling, color-role quarantine list, discrimination-floor report,
+two-prediction discipline, and public-training test lane are unchanged.
+
+#### Receipt Path And Commands
+
+The new receipt directory is:
+
+```
+results/arc/phase3-sufficiency-nn_delta_transfer_v1/
+```
+
+The admitted runner files are:
+
+```
+scripts/arc-phase3-nn_delta_transfer_v1-lodo.mjs
+scripts/arc-phase3-nn_delta_transfer_v1-pttest.mjs
+scripts/arc-phase3-nn_delta_transfer_v1-sufficiency.mjs
+scripts/lib/arc-phase3-nn_delta_transfer_v1-core.mjs
+```
+
+The admitted npm scripts are:
+
+```
+npm run arc:phase3:nn_delta_transfer_v1:lodo
+npm run arc:phase3:nn_delta_transfer_v1:pttest
+npm run arc:phase3:nn_delta_transfer_v1:sufficiency
+```
+
+The exact second-receipt command is:
+
+```powershell
+npm run arc:phase3:nn_delta_transfer_v1:sufficiency -- --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" --register docs/prereg/arc/P0_TASK_REGISTER.csv --out results/arc/phase3-sufficiency-nn_delta_transfer_v1
+```
+
+The pttest runner requires `--lodo-manifest` when run standalone and asserts
+that `featureSchemaVersion`, `protocolVersion`, `receiptSchemaVersion`, and
+`learnerVersion` match the frozen LODO manifest for this learner.
+
+#### Public-Language Drafts
+
+The five Pass D public-language buckets are adopted unchanged for this
+learner's future verdict, with one additional required disclosure for any
+public copy citing `nn_delta_transfer_v1`:
+
+> "The second Phase 3 learner (`nn_delta_transfer_v1`) is still a
+> deliberately low-capacity nearest-neighbor learner. It can synthesize only a
+> same-shape cell-overlay candidate plus the original conditioning-output
+> fallback, so failures on shape-changing or relational ARC tasks remain
+> learner-class limits unless the receipt shows otherwise."
+
+No public copy may combine the first and second receipts into a sufficiency
+claim unless the second receipt satisfies the already frozen Pass C support
+gate.
