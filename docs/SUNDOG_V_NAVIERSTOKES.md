@@ -77,12 +77,34 @@ separate fibers); it is methodology, not a `PDE-C1-NEG-B` retune.
 Amendment is wired into the harness (`summarize` / `write_receipt`).
 **Cell-set v1** at
 [`proof/PDE_C1_CELLSET_KOLMOGOROV_v1.md`](proof/PDE_C1_CELLSET_KOLMOGOROV_v1.md)
-re-pins `k_f = 2` (supercritical Kolmogorov at `G = 100`) while inheriting
-all other v0 §7 values; harness exposes it as `--preset lock_v1`.
-Criterion (b) is now closed at the *procedure-and-execution* level (v0
-lock ran, methodology held under amended rule); a *substantive* C1 read
-requires the v1+ execution. Criteria (a) Front-A vacuity rebuttal and (c)
-external PDE reviewer remain open. Final (d) close is coupled to (c).
+re-pinned `k_f = 2` (supercritical Kolmogorov at `G = 100`). **Lock_v1
+executed 2026-05-28** in ~18 min (receipt at
+`results/proof/c1-kolmogorov-v1-lock/`). Procedural verdict
+`DEFERRED_COVERAGE` (`S_eval = 0.4510 < S_pos = 0.50`) but **also
+structurally vacuous**: `damp_fraction = 0` exactly because the
+post-transient attractor conserves `E_K` to 13 decimal places (1397
+occupied bins, non-trivial in signature space, but the safety predicate
+is inaccessible). Burn-in had real transient excursions to 2.5× the
+mean — v1 escaped v0's laminar trap — but post-burn-in locks onto an
+energy-conserved invariant set. **Same-day protocol amendment** adds a
+structural-vacuity-precedence rule (when `damp_fraction` is exactly `0`
+or `1`, vacuity gate overrides coverage gate, since increasing
+`N_sample` cannot resolve a structurally zero proxy). v1 lock receipt
+re-reads as `DEFERRED_VACUITY` under the amended rule. Standard
+fall-back **not admissible** — `N_sample = 200,000` cannot shake loose
+an energy-locked attractor.
+**Cell-set v2** at
+[`proof/PDE_C1_CELLSET_KOLMOGOROV_v2.md`](proof/PDE_C1_CELLSET_KOLMOGOROV_v2.md)
+triples Grashof to `G = 300` while keeping `k_f = 2`, intended to
+break the energy-conservation symmetry by increasing the
+forced-dissipative imbalance. Harness exposes `--preset lock_v2`.
+Resolution check: `k_d ~ 1/sqrt(nu) ~ 4.16` sits inside the dealiased
+cutoff at `N = 16`. v2 not yet executed.
+Criterion (b) is closed at the *procedure-and-execution* level (v0 and
+v1 lock cycles ran cleanly; methodology survived both vacuity-mode
+diagnoses); a *substantive* C1 read still requires a non-vacuous v2+
+execution. Criteria (a) Front-A vacuity rebuttal and (c) external PDE
+reviewer remain open. Final (d) close is coupled to (c).
 
 Candidate 2 has also been commissioned at the scoping level:
 [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)
