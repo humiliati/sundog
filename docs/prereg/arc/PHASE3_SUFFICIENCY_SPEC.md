@@ -4356,3 +4356,93 @@ Per the repository ten-minute rule, the first implementation receipt must run a
 capped probe before any full run. If the full run is projected over about ten
 minutes, the runner must stage exact PowerShell commands, a wall-clock
 estimate, resume-safety notes, and the branch decision each outcome selects.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch A Tooling Freeze-Marker (execution unblocked, capped-probe required)
+
+The Branch A spec admitted above held execution until "a runner, Node
+wrapper, npm script, result ignore path, leak-check allowlist update, and
+freeze-marker amendment [are] committed together." This amendment files
+that freeze-marker commit:
+
+- `docs/prereg/arc/phase3a_per_task_coord_mlp.py` (runner) — standalone
+  Python module, does not import `phase3_decoder.py`. The
+  `arc-p3-feature-v1` encoders are **copied verbatim** under a marked
+  "Frozen feature-v1 encoders" header; the file comment notes that any
+  drift requires bumping `FEATURE_SCHEMA_VERSION` in both files. The
+  manifest captures `specHash` and `parentSpecHash` so a future drift
+  between this runner and `PHASE3A_STOCHASTIC_PER_TASK_SPEC.md` is
+  auditable.
+- `scripts/arc-phase3a-per-task-coord-mlp-v1.mjs` (Node wrapper) — pure
+  pass-through to the Python runner, honouring `$SUNDOG_PYTHON`.
+- `package.json` adds `arc:phase3a:per-task-coord-mlp-v1`.
+- `.gitignore` adds `results/arc/phase3a-per-task-coord-mlp-v1/`.
+- The pre-commit + CI ARC leak-check (`arc:phase0:leak-check`) passes
+  unchanged; the new runner contains no `evaluation` literal and the
+  register discipline is untouched.
+
+**Verdict impact**: no prior verdict changes. The Branch A spec
+amendment above moves from "EXECUTION HOLD" to "EXECUTION ADMITTED,
+capped probe required" per the spec's own ten-minute rule. No binding
+Branch A receipt is filed by this amendment; this amendment only
+admits the runner.
+
+**Smoke-test fingerprint** (CPU, `--probe-only --probe-steps 3
+--limit-arms raw_grid_per_task --limit-seeds 20260528`, all 36
+registered tasks):
+
+- 49 held-out instances (`validation_lodo=18`, `validation_pttest=6`,
+  `test_lodo=19`, `pttest=6`);
+- 294 learning-curve rows (49 instances × 6 steps × 1 model_kind alt);
+- 49 residual records, 98 per-instance rows (2 slots each);
+- 25 per-task rows, 24 per-prior rows;
+- elapsed total: 99.20 s wall (probe);
+- arena gate: `not_adjudicated` (probe-only, by spec);
+- selected seed for `raw_grid_per_task`: `20260528` (single-seed limit).
+
+The smoke directories were deleted before commit. The smoke verified:
+
+- CLI parses `--dry-run`, `--probe-only`, `--probe-steps`,
+  `--limit-tasks`, `--limit-arms`, `--limit-seeds`, `--device`,
+  `--allow-dirty`, `--out`, `--data-dir`, `--register`,
+  `--master-seed`.
+- Manifest captures `specHash`, `parentSpecHash`, `registerHash`,
+  `dataDirHash`, `featureSchemaVersion`, `learnerVersion`,
+  `protocolVersion`, `receiptSchemaVersion`, `seedSlate`,
+  `shapeModelSpec`, `colorModelSpec`, `selectedSeedByArm`, lane
+  counts, and elapsed total.
+- All 14 receipt files in §"Required Artifacts" are written
+  (`manifest.json`, `split.csv`, `phase3a_receipt.json`, `scores.csv`,
+  `per_task.csv`, `per_prior.csv`, `per_instance.csv`,
+  `learning_curves.csv`, `seed_stability.csv`, `quarantine_log.csv`,
+  `dominant_color_audit.csv`, `residuals.jsonl`,
+  `branch_adjudication.md`, `commands.md`, plus `hashes.json`).
+- Both adjudicators (`adjudicate_arena_gate`,
+  `adjudicate_branch_a`) only fire when `mode == "full"`; probe and
+  dry-run modes report `not_adjudicated` as specified.
+
+**Latent encoder-bug audit during smoke**: the first probe attempt
+crashed with a 4-dim shape mismatch
+(`mat1 ... 10011 vs mat2 10015 ...`) because `COORD_FEATURE_DIM` was
+initially set to `12` instead of `2 + 2 + 4 = 8`. Fixed in the same
+commit; the corrected formula is documented in the runner inline.
+
+**What remains under the spec's ten-minute rule**: a capped timing
+probe (e.g. `--probe-steps 30 --limit-arms raw_grid_per_task
+--limit-seeds 20260528`) must run before the full 4-arm × 5-seed
+binding execution. The smoke data point (99.2 s for 1 arm × 1 seed ×
+3 steps; ≈ 0.34 s per instance-step) is feature-build-dominated, not
+step-dominated, so the linear extrapolation to 1500 steps would be
+misleading. The next amendment will file an actual probe-grade
+timing measurement plus the staged full-run command in `commands.md`
+if the projected wall exceeds the ten-minute threshold.
+
+**Public-language constraint**: no change. Per the spec's own §"Public
+Language", the only permitted public-language addition before a
+binding receipt is:
+
+> "Phase 3A has filed a stochastic per-task learner spec. No Branch A
+> receipt exists yet, and no sufficiency claim is admitted."
+
+That language remains accurate after this freeze-marker commit; the
+spec is filed AND the tooling is admitted, but neither a probe-grade
+timing receipt nor a binding receipt exists yet.
