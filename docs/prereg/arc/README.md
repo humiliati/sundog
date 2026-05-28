@@ -25,7 +25,9 @@ LODO and held-out public-training test lanes. The matched `raw_grid_lowcap`
 control also scored zero exact matches, so the receipt is a bounded failure of
 the registered Blackwell decoder lane rather than evidence that the full grid
 learned a rule the signature lost. Kaggle notebook work and public-evaluation
-grid inspection remain blocked until Phase 6.
+grid inspection remain blocked until Phase 6. Any renewed sufficiency
+comparison now requires a passing full-grid control first, either by
+strengthening the decoder lane, narrowing the registered task class, or both.
 
 ## Official Anchors
 
@@ -134,7 +136,8 @@ adjudication is on file. Public copy may say:
 - falsifiable sufficiency test, filed; the deterministic-low-capacity
   learner branch produced three task-hardness verdicts, and the
   `blackwell_task_decoder_v1` lane produced a Branch C bounded-failure receipt
-  with the raw-grid exact-floor caveat.
+  with the raw-grid exact-floor caveat; future signature-vs-full-grid claims
+  require a passing full-grid control first.
 
 Avoid:
 
@@ -145,6 +148,8 @@ Avoid:
   non-trivial Phase 3 sufficiency receipt;
 - any Branch A support or Branch B narrowed-support claim from the Blackwell
   receipt;
+- describing the Blackwell full receipt as a signature-specific falsification
+  independent of decoder capacity;
 - describing the three filed Phase 3 receipts as a sufficiency-failure
   conclusion -- per the reflection, they characterise the
   deterministic-low-capacity-learner family, not the representation.
