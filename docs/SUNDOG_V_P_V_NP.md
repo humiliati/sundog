@@ -12,14 +12,25 @@ Short version:
 > capacity envelope?
 
 Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier spec,
-and v0 frozen slate filed 2026-05-28; see
-[`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md) and
-[`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md) /
-[`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md). No
-complexity-theoretic result claimed. This document is a research bridge from
-Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
-verification hardness, certificates, reductions, promise envelopes, and
-capacity-relative one-wayness.
+v0 frozen slate, and first v0 execution receipt all filed 2026-05-28; see
+[`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md),
+[`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md),
+[`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md), and
+[`pvnp/receipts/2026-05-28_phase1_toy_verifier_v0.md`](pvnp/receipts/2026-05-28_phase1_toy_verifier_v0.md).
+Phase 1 v0 returned a **named quarantine**: the v0 signature scheme has no
+integrity binding between analytical fields and the source trace, and a
+small-tier spoof attacker (`A_spoof_small`) breached 245 / 444 unsafe items
+within a 64-candidate budget, fixing `capacity_threshold = <=small`. Four
+other named falsifier triggers (Certificate Vacuity for `sensor_health` and
+`invariance_checks`, Verifier Overhead Failure, Boundary Absence for
+hidden-basin promise violations) point Phase 1 v1 toward certificate
+integrity binding, discriminating invariance / sensor fields, and a basin-
+geometry promise signal derivable from probes. Privilege-leak audit was
+green; false-accept rate was 0.087 % overall (0.34 % on the in-promise
+verification split). No complexity-theoretic result claimed. This document
+is a research bridge from Sundog mesa, ARC, Faraday, and signature-
+sufficiency work into the language of verification hardness, certificates,
+reductions, promise envelopes, and capacity-relative one-wayness.
 
 ## 0. Story Shape
 
