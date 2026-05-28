@@ -66,7 +66,9 @@ Checked **2026-05-28** against:
 - [`PHASE3_SUFFICIENCY_SPEC.md`](PHASE3_SUFFICIENCY_SPEC.md) -- Phase 3
   sufficiency audit spec. It freezes the harder post-Phase-2 posture:
   `input_sig -> output_sig` is not a small-delta problem, and the primary
-  Sundog representation is `signature_palette`, not signature alone.
+  Sundog representation is `signature_palette`, not signature alone. A
+  decoder-admission roadmap is filed, but no Phase 3 runner or decoder
+  execution is admitted yet.
 
 ## Discipline Tooling
 
