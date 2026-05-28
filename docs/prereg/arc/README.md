@@ -54,10 +54,15 @@ Checked **2026-05-28** against:
   discrimination). Phase 2 projection scaffold admitted with falsifiable
   support.
 - [`PHASE2_PROJECTION_SPEC.md`](PHASE2_PROJECTION_SPEC.md) -- Phase 2
-  registered-subset projection measurement receipt. `36` tasks / `266` grids
-  projected; low signature-collision residual but high train-pair residual.
-  Phase 3 sufficiency-spec writing admitted; no decoder or public-evaluation
-  work admitted by this receipt.
+  registered-subset projection measurement receipt with baseline-comparison
+  addendum. `36` tasks / `266` grids projected; shadow operator collapses 6
+  byte-distinct grids correctly as gauge equivalents, but its train-pair
+  residual (`0.594`) is the highest of all four representations tested
+  (raw-pixel Hamming `0.279`, shape/palette/density `0.103`, cell-count
+  `0.071`). Phase 3 sufficiency-spec writing admitted with the harder
+  framing: signature space does not shorten the input-output gap, so
+  Phase 3 must explicitly model the transformation. No decoder or
+  public-evaluation work admitted by this receipt.
 
 ## Discipline Tooling
 
