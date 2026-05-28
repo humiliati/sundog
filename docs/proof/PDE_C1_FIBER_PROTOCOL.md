@@ -269,25 +269,20 @@ increase is pre-registered as a fall-back path before sampling.
   question on the C1 sidecar, not on this protocol.
 - Criterion (c) — named external PDE reviewer remains open.
 - Criterion (d) — pre-registered failure boundary moves from "staged"
-  to **"closed pending cell-set v0 patch"**. The protocol pins the
-  parameter roles; the v0 instance must pin their values before (d)
-  is fully closed.
+  to **"closed pending external review"**. The protocol pins the parameter
+  roles, and the Kolmogorov cell-set v0 section 7 now pins their concrete
+  values.
 
 ## 9. Cross-File Consequences
 
+The cell-set v0 patch requested by this protocol landed in
+[`PDE_C1_CELLSET_KOLMOGOROV.md`](PDE_C1_CELLSET_KOLMOGOROV.md) section 7.
+
 If this protocol survives review:
 
-- patch [`PDE_C1_CELLSET_KOLMOGOROV.md`](PDE_C1_CELLSET_KOLMOGOROV.md)
-  to (i) replace the "Open measure item" in section 6 with a pointer
-  here and concrete values for `epsilon_K`, `h_K`, `n_min`,
-  `delta_action`, `S_pos`, `N_sample`, burn-in length, integration
-  step, action tie-break order; (ii) replace the "Open review item"
-  in section 3 with a pointer here and a confirmation that `\hat{pi}`
-  is the proxy of record;
 - update [`../SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md)
-  Promotions to close criterion (d) once the v0 patch lands and to
-  upgrade criterion (b) status from "partial" to "closed pending
-  execution";
+  Promotions to keep criterion (d) closed at the artifact level and to
+  adjudicate criterion (b) once the registered lock receipt lands;
 - introduce `PDE-C1-NEG-A` / `PDE-C1-NEG-B` as the parallel labels
   to `PDE-C2-NEG-A` / `PDE-C2-NEG-B`. Reading `PDE-C1-NEG` as
   `PDE-C1-NEG-A` is the retroactive convention.
@@ -330,11 +325,12 @@ pre-registration). Reviewer named at promotion.
   tolerance object, binning instance, proxy selector, or parameter
   pinning discipline.
 - **Unrun.** No numerical execution of the section 5 procedure has
-  been attempted.
-- **v0 patch deferred.** The cell-set v0 patch instantiating
+  been attempted as a verdict-bearing lock. A non-verdict smoke receipt
+  exists at `results/proof/c1-kolmogorov-v0-smoke/manifest.json`.
+- **v0 patch landed.** The cell-set v0 section 7 instantiates
   `epsilon_K`, `h_K`, `n_min`, `delta_action`, `S_pos`, `N_sample`,
-  burn-in length, integration step, action tie-break order is a
-  follow-up artifact, not part of this protocol.
+  burn-in length, integration step, action tie-break order, and section 8
+  stages the registered lock / fallback commands.
 
 ## Cross-references
 

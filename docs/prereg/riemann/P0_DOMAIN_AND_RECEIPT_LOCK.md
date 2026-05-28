@@ -100,6 +100,15 @@ template in [`../../riemann/RECEIPT_TEMPLATE.md`](../../riemann/RECEIPT_TEMPLATE
 ## Current State
 
 - 2026-05-28: project opened from roadmap draft.
+- 2026-05-28: bridge admission resolved as **Path (i) — Z₂-descent under
+  functional-equation reflection** per
+  [`../../riemann/REPRESENTATION_BRIDGE_NOTES.md`](../../riemann/REPRESENTATION_BRIDGE_NOTES.md);
+  the "representation bridge" admission-requirement field is satisfied for
+  Probe 01 v1 by Path (i). Branch B (structural-zero receipt) is **not
+  reachable** under Path (i); Branches A, C, D, E remain reachable.
+- 2026-05-28: lit-pass filed at
+  [`../../RIEMANN_LITPASS_MEMO.md`](../../RIEMANN_LITPASS_MEMO.md) with
+  time-stamped gap claims; re-audit windows live there.
 - No source selected.
 - No numeric thresholds frozen.
 - No run admitted.

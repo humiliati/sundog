@@ -6,13 +6,24 @@ Main ledger:
 
 - [`../SUNDOG_V_RIEMANN.md`](../SUNDOG_V_RIEMANN.md)
 
+Lit-pass (2026-05-28):
+
+- [`../RIEMANN_LITPASS_MEMO.md`](../RIEMANN_LITPASS_MEMO.md) - prior-art
+  reference grounding the four-probe ranking; gap claims time-stamped.
+
 Pre-registration:
 
 - [`../prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md`](../prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md)
 
+Bridge scoping:
+
+- [`REPRESENTATION_BRIDGE_NOTES.md`](REPRESENTATION_BRIDGE_NOTES.md) -
+  resolves the v0.3h-D3 vs Riemann-Z₂ admissibility question for Probe 01.
+
 Probe specs:
 
 - [`PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md`](PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md)
+  - admitted bridge is Path (i) Z₂-descent per the bridge notes above.
 
 Templates:
 
@@ -29,6 +40,8 @@ Result convention:
 Current state:
 
 - Ledger opened: 2026-05-28.
+- Lit-pass filed: 2026-05-28.
+- Bridge admission (Path (i) Z₂-descent) selected: 2026-05-28.
 - No zero-data probe has run.
-- Front A is design-admitted.
+- Front A is design-admitted under reduced apparatus (Z₂-descent).
 - Front B is horizon only.

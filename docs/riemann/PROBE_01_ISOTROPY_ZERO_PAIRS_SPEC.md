@@ -2,12 +2,23 @@
 
 Status: specification draft. Not execution-admitted. No run has occurred.
 
+Bridge admission (2026-05-28): per
+[`REPRESENTATION_BRIDGE_NOTES.md`](REPRESENTATION_BRIDGE_NOTES.md), the
+admitted bridge for Probe 01 v1 is **Path (i) — Z₂-descent under the
+functional-equation reflection `s ↔ 1-s`**. The v0.3h structural-zero
+discipline does **not** carry across this descent (the D3-standard sector
+that pins "absent by construction" has no counterpart under Z₂). Probe 01 v1
+is reinterpreted accordingly as a parity-decomposition of zero-pair
+statistics under reflection, not a v0.3h-strength structural-zero claim.
+Path (ii) S₃-via-triple is deferred to a future Probe 01b spec.
+
 Purpose:
 
-> Test whether the isotropy v0.3 machinery produces a usable, falsifiable
+> Test whether the isotropy v0.3 machinery — restricted to its Z₂ sub-
+> representations under Path (i) descent — produces a usable, falsifiable
 > catalog on low-lying Riemann-zero pair data, and record either alignment,
-> structural-zero, or quarantine receipts without upgrading the result into an
-> RH claim.
+> null, or quarantine receipts without upgrading the result into an RH claim
+> or into a v0.3h-strength structural-zero claim.
 
 ## Claim Boundary
 
@@ -15,12 +26,15 @@ This probe does not test RH. It tests whether a Sundog apparatus built for
 choreographic symmetry and structural-zero receipts can be cleanly applied to a
 registered zero-data window.
 
-Allowed outcome language:
+Allowed outcome language (under Path (i) Z₂-descent):
 
-- "Probe 01 produced a catalog under the registered zero window."
+- "Probe 01 produced a parity-decomposition receipt under functional-equation
+  reflection on the registered zero window."
+- "Probe 01 returned a null receipt under the registered zero window."
+- "Probe 01 returned a catalog-asymmetry receipt under `(12)`-action."
 - "Probe 01 failed by named falsifier."
-- "Probe 01 returned structural-zero / quarantine receipts."
-- "Probe 01 is inconclusive because the representation bridge did not admit."
+- "Probe 01 is inconclusive because the representation bridge did not admit
+  at execution time" (Path (iii) quarantine).
 
 Forbidden outcome language:
 
@@ -28,6 +42,8 @@ Forbidden outcome language:
 - "Evidence against RH."
 - "The zeros have Sundog choreography."
 - "A spectral realization has been found."
+- "Structural-zero receipt under v0.3h on RH" — not reachable under Path (i);
+  reaching it requires a defended Path (ii) bridge in a separate Probe 01b spec.
 
 ## Input Lock
 
@@ -103,11 +119,12 @@ It may also trigger:
 
 | Outcome | Disposition |
 | --- | --- |
-| Clean catalog with residuals inside thresholds | bounded Front A positive receipt |
-| Structural-zero rows dominate under the registered clean-domain rule | structural-zero receipt; no positive alignment claim |
-| Representation bridge fails admission | named quarantine; probe does not run or is voided |
+| Clean parity-decomposition catalog with residuals inside thresholds | bounded Front A positive receipt under Path (i) |
+| One reflection-sector empty after the registered clean-domain rule | null / catalog-asymmetry receipt under `(12)`; no positive alignment claim |
+| Path (i) bridge fails admission at execution (Z₂ sector degenerates) | named quarantine, Path (iii); probe does not run or is voided |
 | Threshold exceeded after execution begins | failure under Mode 2 or Mode 1 |
 | Need to expand `N`, statistic, or smoothing after seeing result | Mode 5 quarantine |
+| Path (ii) S₃-via-triple silently invoked to rescue a failed Path (i) run | Mode 5 quarantine; Path (ii) must live in a separate Probe 01b spec |
 
 ## Review Gate
 
