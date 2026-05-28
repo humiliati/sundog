@@ -1,0 +1,127 @@
+{
+  "startedAt": "2026-05-28T18:59:57.312756+00:00",
+  "script": "scripts/pde_c1_kolmogorov_cell.py",
+  "spec": "docs/proof/PDE_C1_CELLSET_KOLMOGOROV.md",
+  "protocol": "docs/proof/PDE_C1_FIBER_PROTOCOL.md",
+  "config": {
+    "preset": "lock",
+    "grid_size": 32,
+    "n_modes": 16,
+    "k_signature": 4,
+    "forcing_wavenumber": 4,
+    "grashof": 100.0,
+    "forcing_amplitude": 1.0,
+    "viscosity": 0.1,
+    "dt": 0.01,
+    "burnin_steps": 100000,
+    "sample_count": 50000,
+    "sample_interval_steps": 50,
+    "lookahead_steps": 500,
+    "n_min": 30,
+    "delta_action": 0.1,
+    "s_pos": 0.5,
+    "random_seed": 20260528,
+    "integrator": "pseudo_spectral_vorticity_semi_implicit_euler",
+    "signature_dimension": 32,
+    "action_tiebreak": "no_op"
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32",
+    "cwd": "C:\\Users\\hughe\\Dev\\sundog"
+  },
+  "result": {
+    "verdict": "STRICTNESS_WITNESS_POSITIVE",
+    "verdict_label": "proxy_fiber_constancy_on_evaluated_bins",
+    "interpretable": true,
+    "occupied_bin_count": 40,
+    "evaluated_bin_count": 25,
+    "incompatible_bin_count": 0,
+    "s_eval": 0.625,
+    "s_pos": 0.5,
+    "no_op_count": 50000,
+    "damp_low_band_count": 0,
+    "damp_fraction": 0.0,
+    "max_minority_fraction": 0.0,
+    "max_evaluated_minority_fraction": 0.0,
+    "e_max": 0.09765200641672148,
+    "epsilon_k": 0.022096606800221782,
+    "h_k": 0.0039061651274124,
+    "burnin_energy_min": 0.09761219431918035,
+    "burnin_energy_max": 0.09781495938235257,
+    "burnin_energy_mean": 0.09763985967791818,
+    "sample_energy_min": 0.09677374762407483,
+    "sample_energy_max": 0.09761219431918035,
+    "sample_energy_mean": 0.09681599212225134,
+    "low_modes": [
+      {
+        "kx": 0,
+        "ky": 1
+      },
+      {
+        "kx": 1,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 1
+      },
+      {
+        "kx": 0,
+        "ky": 2
+      },
+      {
+        "kx": 1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 0
+      },
+      {
+        "kx": 2,
+        "ky": 1
+      },
+      {
+        "kx": 2,
+        "ky": 2
+      },
+      {
+        "kx": -2,
+        "ky": 1
+      },
+      {
+        "kx": -2,
+        "ky": 2
+      },
+      {
+        "kx": -1,
+        "ky": 2
+      },
+      {
+        "kx": 0,
+        "ky": 3
+      },
+      {
+        "kx": 1,
+        "ky": 3
+      },
+      {
+        "kx": 3,
+        "ky": 0
+      },
+      {
+        "kx": 0,
+        "ky": 4
+      }
+    ],
+    "elapsed_seconds": 1463.9780985999969,
+    "total_steps": 2600450,
+    "steps_per_second": 1776.290233242224
+  }
+}
