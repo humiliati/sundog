@@ -10,6 +10,13 @@
 // privileged signed-distance function. The privilege-leak audit greps
 // this file for those tokens and requires zero matches.
 
+import {
+  computeAnalyticalFields,
+  derivedFieldsHash,
+  SIGNATURE_SCHEMA_V1,
+  TRANSFORM_VERSION_V1,
+} from "./pvnp-phase1-signature-core.mjs";
+
 const SIGNATURE_SCHEMA = "pvnp-phase1-sigma-v0";
 
 // v0 promise parameters (matches docs/pvnp/PHASE1_V0_SLATE.md and
@@ -26,6 +33,7 @@ export const V0_PROMISE = Object.freeze({
 export const V0_CHECKER_THRESHOLDS = Object.freeze({
   coverage_min_touched_cells: 16,
   invariance_must_all_pass: true,
+  geometry_must_all_pass: true,
 });
 
 // Check certificate integrity: schema match, identifier match, presence of
@@ -48,9 +56,59 @@ function certificateIntegrity(sigma, expectedTraceId) {
   return { ok: true };
 }
 
+function certificateIntegrityV1(sigma, expectedTraceId, traceCommitment, commitmentDuplicate = false) {
+  if (sigma.schema !== SIGNATURE_SCHEMA_V1) {
+    return { ok: false, reason: `schema_mismatch:${sigma.schema}` };
+  }
+  if (sigma.trace_id !== expectedTraceId) {
+    return { ok: false, reason: `trace_id_mismatch:${sigma.trace_id}` };
+  }
+  const required = [
+    "trace_id", "source_observations", "source_hash", "transform_version",
+    "derived_fields_hash", "integrity_checks", "curvature_summary",
+    "trajectory_envelope", "margin_lower_bound", "coverage_digest",
+    "invariance_checks_v1", "sensor_health_v1", "geometry_promise_signal",
+    "cost_signature", "limitations",
+  ];
+  for (const f of required) {
+    if (!(f in sigma)) return { ok: false, reason: `missing_field:${f}` };
+  }
+  if (commitmentDuplicate) return { ok: false, reason: "duplicate_trace_commitment" };
+  if (!traceCommitment) return { ok: false, reason: "missing_trace_commitment" };
+  if (traceCommitment.trace_id !== sigma.trace_id) {
+    return { ok: false, reason: "trace_commitment_mismatch" };
+  }
+  if (traceCommitment.source_hash !== sigma.source_hash) {
+    return { ok: false, reason: "source_hash_mismatch" };
+  }
+  if (sigma.transform_version !== TRANSFORM_VERSION_V1) {
+    return { ok: false, reason: `stale_transform_version:${sigma.transform_version}` };
+  }
+  const payload = traceCommitment.source_payload;
+  if (!payload) return { ok: false, reason: "missing_source_payload" };
+  const sigmaFieldsHash = derivedFieldsHash(sigma, "v1");
+  if (sigmaFieldsHash !== sigma.derived_fields_hash) {
+    return { ok: false, reason: "derived_field_hash_mismatch" };
+  }
+  const fields = computeAnalyticalFields({
+    positions: payload.positions,
+    probes: payload.probes,
+    version: "v1",
+  });
+  const recomputedHash = derivedFieldsHash(fields, "v1");
+  if (recomputedHash !== sigma.derived_fields_hash) {
+    return { ok: false, reason: "derived_field_hash_mismatch" };
+  }
+  const checks = sigma.integrity_checks;
+  if (!checks.all_pass || !checks.source_match || !checks.transform_match || !checks.derived_field_match) {
+    return { ok: false, reason: "declared_integrity_failed" };
+  }
+  return { ok: true, recomputed_fields: fields };
+}
+
 // Check sensor health against promise tier. Returns {ok, reason}.
 function sensorHealthOk(sigma, promise) {
-  const h = sigma.sensor_health;
+  const h = sigma.sensor_health_v1 ?? sigma.sensor_health;
   if (h.noise_std_estimate > promise.probe_noise_max_std) {
     return { ok: false, reason: `noise_std_${h.noise_std_estimate.toFixed(4)}_exceeds_${promise.probe_noise_max_std}` };
   }
@@ -63,6 +121,12 @@ function sensorHealthOk(sigma, promise) {
   return { ok: true };
 }
 
+function sensorHealthV1Ok(sigma) {
+  const h = sigma.sensor_health_v1 ?? sigma.sensor_health;
+  if (!h.all_pass) return { ok: false, reason: "sensor_health_v1_failed" };
+  return { ok: true };
+}
+
 // Inspect a redacted env's declared probe-noise params against the promise.
 // This catches falsifier split envs whose declared tier exceeds promise.
 function envPromiseCompliance(env, promise) {
@@ -70,6 +134,18 @@ function envPromiseCompliance(env, promise) {
   if (noise.std > promise.probe_noise_max_std) return { ok: false, reason: "env_noise_exceeds_promise" };
   if (noise.dropout_rate > promise.probe_dropout_max_rate) return { ok: false, reason: "env_dropout_exceeds_promise" };
   if (noise.delay_steps > promise.probe_delay_max_steps) return { ok: false, reason: "env_delay_exceeds_promise" };
+  return { ok: true };
+}
+
+function geometryPromiseOk(sigma) {
+  const g = sigma.geometry_promise_signal;
+  if (!g) return { ok: true };
+  if (!g.all_pass) {
+    if (g.insufficient_evidence) return { ok: false, reason: "geometry_insufficient_evidence" };
+    if (g.curvature_suspicious) return { ok: false, reason: "geometry_curvature_suspicious" };
+    if (g.scale_suspicious) return { ok: false, reason: "geometry_scale_suspicious" };
+    return { ok: false, reason: "geometry_promise_failed" };
+  }
   return { ok: true };
 }
 
@@ -86,8 +162,13 @@ export function verify({
   promise = V0_PROMISE,
   thresholds = V0_CHECKER_THRESHOLDS,
   dropFields = null,
+  traceCommitment = null,
+  commitmentDuplicate = false,
 }) {
-  const integrity = certificateIntegrity(sigma, expectedTraceId);
+  const isV1 = sigma.schema === SIGNATURE_SCHEMA_V1;
+  const integrity = isV1
+    ? certificateIntegrityV1(sigma, expectedTraceId, traceCommitment, commitmentDuplicate)
+    : certificateIntegrity(sigma, expectedTraceId);
   if (!integrity.ok) return { decision: "quarantine", reason: integrity.reason };
 
   // Promise check on env metadata.
@@ -95,15 +176,24 @@ export function verify({
   if (!promiseRes.ok) return { decision: "quarantine", reason: promiseRes.reason };
 
   // Invariance checks must all pass (unless ablated).
-  const invariance = sigma.invariance_checks;
-  if (!(dropFields && dropFields.has("invariance_checks"))) {
+  const invariance = isV1 ? (sigma.invariance_checks_v1 ?? sigma.invariance_checks) : sigma.invariance_checks;
+  if (!(dropFields && (dropFields.has("invariance_checks") || dropFields.has("invariance_checks_v1")))) {
     if (!invariance.all_pass) return { decision: "quarantine", reason: "invariance_failed" };
   }
 
   // Sensor health within tier (unless ablated).
-  if (!(dropFields && dropFields.has("sensor_health"))) {
+  if (!(dropFields && (dropFields.has("sensor_health") || dropFields.has("sensor_health_v1")))) {
     const sh = sensorHealthOk(sigma, promise);
     if (!sh.ok) return { decision: "quarantine", reason: sh.reason };
+    if (isV1) {
+      const shv1 = sensorHealthV1Ok(sigma);
+      if (!shv1.ok) return { decision: "quarantine", reason: shv1.reason };
+    }
+  }
+
+  if (isV1 && !(dropFields && dropFields.has("geometry_promise_signal"))) {
+    const geo = geometryPromiseOk(sigma);
+    if (!geo.ok) return { decision: "quarantine", reason: geo.reason };
   }
 
   // Coverage sufficiency (unless ablated).

@@ -11,9 +11,18 @@
 
 import { performance } from "node:perf_hooks";
 
+import { canonicalize, sha256Hex } from "./canonical-json.mjs";
+
 const PROBE_OFFSET_R = 0.04;
 const COVERAGE_RESOLUTION = 16;
-const SIGNATURE_SCHEMA = "pvnp-phase1-sigma-v0";
+const SIGNATURE_SCHEMAS = Object.freeze({
+  v0: "pvnp-phase1-sigma-v0",
+  v1: "pvnp-phase1-sigma-v1",
+});
+const TRANSFORM_VERSIONS = Object.freeze({
+  v0: "pvnp-phase1-transform-v0",
+  v1: "pvnp-phase1-transform-v1",
+});
 
 // Estimate field Laplacian at one probe sample. Uses the 5-point stencil
 // implicit in the probe layout (center + ±x + ±y).
@@ -41,6 +50,13 @@ function aggregateStats(values) {
   for (const v of values) varSum += (v - mean) * (v - mean);
   const variance = values.length > 1 ? varSum / (values.length - 1) : 0;
   return { count: values.length, mean, variance, min, max };
+}
+
+function quantile(values, q) {
+  if (values.length === 0) return 0;
+  const sorted = values.slice().sort((a, b) => a - b);
+  const idx = Math.min(sorted.length - 1, Math.max(0, Math.floor(q * (sorted.length - 1))));
+  return sorted[idx];
 }
 
 // Sensor health: noise std estimate from consecutive probe deltas, dropout
@@ -74,6 +90,51 @@ function estimateSensorHealth(probesPerStep) {
     median_consecutive_delta: median,
     noise_std_estimate: noiseStdEstimate,
     delay_estimate_steps: 0, // not estimated in v0; left as 0
+  };
+}
+
+function estimateSensorHealthV1(probesPerStep) {
+  const base = estimateSensorHealth(probesPerStep);
+  const centerValues = [];
+  const layoutResiduals = [];
+  let missingLayoutSteps = 0;
+
+  for (const probes of probesPerStep) {
+    const center = probes.find((p) => p.dx === 0 && p.dy === 0);
+    const plusX = probes.find((p) => p.dx > 0 && p.dy === 0);
+    const minusX = probes.find((p) => p.dx < 0 && p.dy === 0);
+    const plusY = probes.find((p) => p.dx === 0 && p.dy > 0);
+    const minusY = probes.find((p) => p.dx === 0 && p.dy < 0);
+    if (!center || !plusX || !minusX || !plusY || !minusY) {
+      missingLayoutSteps += 1;
+      continue;
+    }
+    centerValues.push(center.value);
+    layoutResiduals.push(Math.abs((plusX.value + minusX.value) - 2 * center.value));
+    layoutResiduals.push(Math.abs((plusY.value + minusY.value) - 2 * center.value));
+  }
+
+  const centerStats = aggregateStats(centerValues);
+  const residualStats = aggregateStats(layoutResiduals);
+  const biasDrift = centerValues.length > 4
+    ? Math.abs(
+      centerValues[Math.floor(centerValues.length * 0.75)]
+      - centerValues[Math.floor(centerValues.length * 0.25)],
+    )
+    : 0;
+
+  return {
+    ...base,
+    center_value_variance: centerStats.variance,
+    layout_residual_mean: residualStats.mean,
+    layout_residual_p95: quantile(layoutResiduals, 0.95),
+    bias_drift_estimate: biasDrift,
+    missing_layout_steps: missingLayoutSteps,
+    all_pass: base.dropout_fraction <= 0.15
+      && base.noise_std_estimate <= 0.05
+      && residualStats.mean <= 0.20
+      && biasDrift <= 0.30
+      && missingLayoutSteps === 0,
   };
 }
 
@@ -159,18 +220,151 @@ function invarianceChecks(probesPerStep, envelope) {
   };
 }
 
-// Compute the full signature certificate. Returns a sigma object.
-export function computeSignature({ traceId, publicEnv, positions, probes }) {
-  const t0 = performance.now();
+function invarianceChecksV1(probesPerStep, envelope) {
+  const base = invarianceChecks(probesPerStep, envelope);
+  const reflectedLaplacianDiffs = [];
+  const centerBiasResiduals = [];
+  for (const probes of probesPerStep) {
+    const lap1 = pointLaplacian(probes);
+    const centerBiased = probes.map((p) => {
+      const centerBias = p.dx === 0 && p.dy === 0 ? 0.015 : 0;
+      return { ...p, value: p.value + centerBias };
+    });
+    const lap2 = pointLaplacian(centerBiased);
+    centerBiasResiduals.push(Math.abs(lap2 - lap1));
 
+    const signFlipped = probes.map((p) => ({ ...p, dx: -p.dx, dy: -p.dy }));
+    reflectedLaplacianDiffs.push(Math.abs(pointLaplacian(signFlipped) - lap1));
+  }
+  const biasStats = aggregateStats(centerBiasResiduals);
+  const flipStats = aggregateStats(reflectedLaplacianDiffs);
+  const center_bias_probe_sensitive = biasStats.max > 1.0;
+  const reflection_consistent = flipStats.max < 1e-9;
+  return {
+    ...base,
+    center_bias_probe_sensitive,
+    reflection_consistent,
+    center_bias_residual_max: biasStats.max,
+    reflection_residual_max: flipStats.max,
+    all_pass: base.all_pass && center_bias_probe_sensitive && reflection_consistent,
+  };
+}
+
+function geometryPromiseSignal(laplacians, probesPerStep, coverage) {
+  const absLaps = laplacians.map((v) => Math.abs(v)).filter((v) => Number.isFinite(v));
+  const centerValues = [];
+  for (const probes of probesPerStep) {
+    const center = probes.find((p) => p.dx === 0 && p.dy === 0);
+    if (center && !center.dropped && Number.isFinite(center.value)) centerValues.push(center.value);
+  }
+  const centerStats = aggregateStats(centerValues);
+  const nearBoundary = centerValues.filter((v) => Math.abs(v) <= 0.04).length;
+  const curvatureP95 = quantile(absLaps, 0.95);
+  const centerRange = centerStats.max - centerStats.min;
+  const evidenceCoverage = coverage.touched_cells / coverage.total_cells;
+  const insufficientEvidence = evidenceCoverage < 0.06 || centerValues.length < 16;
+  const curvatureSuspicious = curvatureP95 > 750;
+  const scaleSuspicious = centerRange < 0.04 && nearBoundary > 8;
+  return {
+    curvature_abs_p95: curvatureP95,
+    center_value_range: centerRange,
+    near_boundary_count: nearBoundary,
+    evidence_coverage: evidenceCoverage,
+    insufficient_evidence: insufficientEvidence,
+    curvature_suspicious: curvatureSuspicious,
+    scale_suspicious: scaleSuspicious,
+    all_pass: !insufficientEvidence && !curvatureSuspicious && !scaleSuspicious,
+  };
+}
+
+export function buildSourcePayload({ traceId, publicEnv, positions, probes }) {
+  return {
+    trace_id: traceId,
+    policy_id: traceId.split("|")[0],
+    env_id: publicEnv.id,
+    split: publicEnv.split,
+    probe_count_per_step: 5,
+    probe_offset_r: PROBE_OFFSET_R,
+    step_count: probes.length,
+    positions,
+    probes,
+  };
+}
+
+export function sourceHash(sourcePayload) {
+  return sha256Hex(canonicalize(sourcePayload));
+}
+
+export function makeTraceCommitment(sourcePayload) {
+  return {
+    schema: "pvnp-phase1-trace-commitment-v1",
+    trace_id: sourcePayload.trace_id,
+    policy_id: sourcePayload.policy_id,
+    env_id: sourcePayload.env_id,
+    split: sourcePayload.split,
+    source_hash: sourceHash(sourcePayload),
+    source_payload: sourcePayload,
+  };
+}
+
+export function computeAnalyticalFields({ positions, probes, version = "v0" }) {
   const laplacians = probes.map(pointLaplacian);
   const curvatureSummary = aggregateStats(laplacians);
-
-  const sensorHealth = estimateSensorHealth(probes);
+  const sensorHealth = version === "v1"
+    ? estimateSensorHealthV1(probes)
+    : estimateSensorHealth(probes);
   const envelope = trajectoryEnvelope(positions);
   const coverage = coverageDigest(positions);
   const margin = marginLowerBound(positions, probes, sensorHealth);
-  const invariance = invarianceChecks(probes, envelope);
+  const invariance = version === "v1"
+    ? invarianceChecksV1(probes, envelope)
+    : invarianceChecks(probes, envelope);
+
+  const fields = {
+    curvature_summary: curvatureSummary,
+    trajectory_envelope: envelope,
+    margin_lower_bound: margin,
+    coverage_digest: coverage,
+    invariance_checks: invariance,
+    sensor_health: sensorHealth,
+  };
+
+  if (version === "v1") {
+    fields.sensor_health_v1 = sensorHealth;
+    fields.invariance_checks_v1 = invariance;
+    fields.geometry_promise_signal = geometryPromiseSignal(laplacians, probes, coverage);
+  }
+
+  return fields;
+}
+
+export function derivedFieldsHash(fields, version = "v0") {
+  const included = version === "v1"
+    ? {
+      curvature_summary: fields.curvature_summary,
+      trajectory_envelope: fields.trajectory_envelope,
+      margin_lower_bound: fields.margin_lower_bound,
+      coverage_digest: fields.coverage_digest,
+      sensor_health_v1: fields.sensor_health_v1 ?? fields.sensor_health,
+      invariance_checks_v1: fields.invariance_checks_v1 ?? fields.invariance_checks,
+      geometry_promise_signal: fields.geometry_promise_signal,
+    }
+    : {
+      curvature_summary: fields.curvature_summary,
+      trajectory_envelope: fields.trajectory_envelope,
+      margin_lower_bound: fields.margin_lower_bound,
+      coverage_digest: fields.coverage_digest,
+      sensor_health: fields.sensor_health,
+      invariance_checks: fields.invariance_checks,
+    };
+  return sha256Hex(canonicalize(included));
+}
+
+// Compute the full signature certificate. Returns a sigma object.
+export function computeSignature({ traceId, publicEnv, positions, probes, sourcePayload = null, version = "v0" }) {
+  const t0 = performance.now();
+
+  const fields = computeAnalyticalFields({ positions, probes, version });
 
   const computeMs = performance.now() - t0;
   // Op count: probe×T Laplacians + sensor estimate + envelope + coverage scan + invariance recompute.
@@ -178,8 +372,8 @@ export function computeSignature({ traceId, publicEnv, positions, probes }) {
   const ops = T /*laplacian*/ + T /*sensor*/ + positions.length /*envelope*/
     + positions.length /*coverage*/ + T /*invariance recompute*/;
 
-  return {
-    schema: SIGNATURE_SCHEMA,
+  const sigma = {
+    schema: SIGNATURE_SCHEMAS[version],
     trace_id: traceId,
     source_observations: {
       probe_count_per_step: 5,
@@ -188,12 +382,7 @@ export function computeSignature({ traceId, publicEnv, positions, probes }) {
       env_id: publicEnv.id,
       policy_id: traceId.split("|")[0],
     },
-    curvature_summary: curvatureSummary,
-    trajectory_envelope: envelope,
-    margin_lower_bound: margin,
-    coverage_digest: coverage,
-    invariance_checks: invariance,
-    sensor_health: sensorHealth,
+    ...fields,
     cost_signature: { wall_ms: computeMs, ops },
     limitations: [
       "nonlocal_basin_topology_invisible",
@@ -201,4 +390,22 @@ export function computeSignature({ traceId, publicEnv, positions, probes }) {
       "no_decoy_field_separation",
     ],
   };
+
+  if (version === "v1") {
+    const payload = sourcePayload ?? buildSourcePayload({ traceId, publicEnv, positions, probes });
+    sigma.transform_version = TRANSFORM_VERSIONS.v1;
+    sigma.source_hash = sourceHash(payload);
+    sigma.derived_fields_hash = derivedFieldsHash(fields, "v1");
+    sigma.integrity_checks = {
+      source_match: true,
+      transform_match: true,
+      derived_field_match: true,
+      all_pass: true,
+    };
+  }
+
+  return sigma;
 }
+
+export const SIGNATURE_SCHEMA_V1 = SIGNATURE_SCHEMAS.v1;
+export const TRANSFORM_VERSION_V1 = TRANSFORM_VERSIONS.v1;

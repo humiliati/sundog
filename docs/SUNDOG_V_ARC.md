@@ -401,8 +401,16 @@ in their filed learner families; Branch D, a different framing such as structure
 edit or residual prediction, is the only remaining admissible Phase 3 reopen
 path. That path is now started as `structured_edit_residual_v1`: model the
 output as an input-derived baseline canvas plus a residual edit mask and edit
-colors. Execution remains held until Branch D runner tooling and a freeze-marker
-amendment are filed.
+colors. Its 20-shard binding receipt returned
+**`branch_d_full_grid_edit_floor`**: `raw_grid_edit` scored zero non-baseline
+exact tasks on both held-out lanes, so no `signature_palette_edit` vs.
+`raw_grid_edit` sufficiency comparison is licensed. The named failure character
+is **edit-color-rule failure**: the structured-edit framing found nontrivial
+shape/canvas and edit-mask signal, but the per-task edit-color learner did not
+recover exact output colors. Five Phase 3 full-grid controls now agree on the
+held-out exact-grid floor across two task distributions, two learner families,
+and two output framings. Future Phase 3 reopens require a new pre-registered
+Branch D variant or a new Branch E spec.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

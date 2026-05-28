@@ -12,6 +12,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { verify, V0_PROMISE, V0_CHECKER_THRESHOLDS } from "./lib/pvnp-phase1-verifier-core.mjs";
+import { getPhase1RunConfig } from "./lib/pvnp-phase1-run-config.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -31,6 +32,14 @@ async function readJsonl(p) {
   return text.trim().split("\n").filter(Boolean).map((line) => JSON.parse(line));
 }
 
+async function readJsonlIfExists(p) {
+  try { return await readJsonl(p); }
+  catch (err) {
+    if (err.code === "ENOENT") return [];
+    throw err;
+  }
+}
+
 function redactEnv(env) {
   const { hidden_state: _hidden, ...rest } = env;
   return rest;
@@ -47,15 +56,19 @@ function csvRow(values) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(REPO_ROOT, args.runDir);
+  const slate = getPhase1RunConfig(args.runDir);
+  const isV1 = slate.schema_suffix === "v1";
   await mkdir(outDir, { recursive: true });
 
   const sigs = await readJsonl(path.join(outDir, "signatures.jsonl"));
+  const commitments = await readJsonlIfExists(path.join(outDir, "trace_commitments.jsonl"));
   const envs = await readJsonl(path.join(outDir, "environments.jsonl"));
   const calibrationManifest = JSON.parse(
     await readFile(path.join(outDir, "calibration_manifest.json"), "utf8"),
   );
   const m_min = calibrationManifest.selected_m_min;
   const envById = new Map(envs.map((e) => [e.id, redactEnv(e)]));
+  const commitmentByTrace = new Map(commitments.map((c) => [c.trace_id, c]));
 
   const rows = [[
     "env_id", "policy_id", "split", "dropped_field",
@@ -70,9 +83,11 @@ async function main() {
     const publicEnv = envById.get(envId);
     if (publicEnv.split === "calibration") continue;
     const expectedTraceId = `${policyId}|${envId}`;
+    const traceCommitment = commitmentByTrace.get(expectedTraceId);
     const result = verify({
       sigma, expectedTraceId, publicEnv, m_min,
       promise: V0_PROMISE, thresholds: V0_CHECKER_THRESHOLDS,
+      traceCommitment: isV1 ? traceCommitment : null,
     });
     fullDecisions.set(`${policyId}|${envId}`, result.decision);
   }
@@ -85,6 +100,7 @@ async function main() {
     if (publicEnv.split === "calibration") continue;
     const expectedTraceId = `${policyId}|${envId}`;
     const fullDec = fullDecisions.get(`${policyId}|${envId}`);
+    const traceCommitment = commitmentByTrace.get(expectedTraceId);
 
     for (const field of DROP_FIELDS) {
       const drop = new Set([field]);
@@ -93,6 +109,7 @@ async function main() {
         sigma, expectedTraceId, publicEnv, m_min,
         promise: V0_PROMISE, thresholds: V0_CHECKER_THRESHOLDS,
         dropFields: drop,
+        traceCommitment: isV1 ? traceCommitment : null,
       });
       const elapsed = performance.now() - t0;
       const ops = 10;

@@ -14,7 +14,7 @@
 // MLP-policy evaluation is appended later by pvnp-phase1-mlp-eval.mjs once
 // training/pvnp/train_mlp_policy.py has produced a checkpoint.
 
-import { mkdir, readFile, writeFile, appendFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { performance } from "node:perf_hooks";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -30,7 +30,6 @@ import { loadMlpWeights, makeMlpStepFn } from "./lib/pvnp-phase1-mlp-core.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const M_MIN_GRID = [0.02, 0.04, 0.06];
 const FORMAL_RESOLUTION = 64;
 const CLEAN_FRACTION_FLOOR = 0.25;
 
@@ -61,6 +60,9 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   await mkdir(outDir, { recursive: true });
 
+  const manifest = JSON.parse(await readFile(path.join(outDir, "manifest.json"), "utf8"));
+  const slate = manifest.slate;
+  const mMinGrid = slate.m_min_candidate_grid ?? [0.02, 0.04, 0.06];
   const envs = await readJsonl(path.join(outDir, "environments.jsonl"));
   const policies = await readJsonl(path.join(outDir, "policies.jsonl"));
 
@@ -131,7 +133,7 @@ async function main() {
   // non-quarantine" (i.e. decision === "accept"). Pick the largest m_min
   // whose fraction ≥ 0.25.
   const sweepResults = [];
-  for (const m_min of M_MIN_GRID) {
+  for (const m_min of mMinGrid) {
     let accepts = 0;
     let total = 0;
     for (const policy of evalPoliciesResolved) {
@@ -151,12 +153,12 @@ async function main() {
     : null;
   const calibrationDecision = chosen
     ? { selected_m_min: chosen.m_min, rule: "largest_m_min_with_clean_fraction_ge_0.25" }
-    : { selected_m_min: M_MIN_GRID[0], rule: "fallback_to_smallest_when_no_candidate_meets_floor" };
+    : { selected_m_min: mMinGrid[0], rule: "fallback_to_smallest_when_no_candidate_meets_floor" };
 
   const calibrationManifest = {
-    schema_version: "pvnp-phase1-calibration-v0",
-    rule_id: "v0_largest_m_min_with_clean_25pct_under_full_state",
-    candidate_grid: M_MIN_GRID,
+    schema_version: `pvnp-phase1-calibration-${slate.schema_suffix ?? "v0"}`,
+    rule_id: `${slate.schema_suffix ?? "v0"}_largest_m_min_with_clean_25pct_under_full_state`,
+    candidate_grid: mMinGrid,
     sweep_results: sweepResults,
     selected_m_min: calibrationDecision.selected_m_min,
     selection_rule: calibrationDecision.rule,
@@ -167,7 +169,7 @@ async function main() {
       calibration_count: calEnvs.length,
       measurement_count: envs.filter((e) => e.split !== "calibration").length,
       overlap_count: 0,
-      overlap_proof: "split prefixes are disjoint: pvnp-v0-cal-* vs pvnp-v0-{train,verify,fals}-*",
+      overlap_proof: `split prefixes are disjoint for run ${manifest.run_id}`,
     },
   };
   await writeFile(
@@ -266,7 +268,7 @@ async function main() {
 
   // Persist partial cost rollup; final costs.csv assembled later.
   const partialCosts = {
-    schema_version: "pvnp-phase1-costs-partial-v0",
+    schema_version: `pvnp-phase1-costs-partial-${slate.schema_suffix ?? "v0"}`,
     simulation: simulationCosts,
     baselines: baselineCosts,
   };
