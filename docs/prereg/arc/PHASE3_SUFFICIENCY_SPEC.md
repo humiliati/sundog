@@ -4597,3 +4597,149 @@ addition remains:
 
 > "Phase 3A has filed a stochastic per-task learner spec. No Branch A
 > receipt exists yet, and no sufficiency claim is admitted."
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch A Shard+Merge Protocol Admission
+
+The serial-staging amendment above projects ~5.3 h wall on GPU. To
+reduce that, this amendment admits a (arm × seed) shard+merge
+protocol mirroring the V2 lane, plus a byte-equivalence guarantee
+between the merged binding receipt and a hypothetical serial run with
+the same seed selection.
+
+**Tooling additions** (committed alongside this amendment):
+
+- `docs/prereg/arc/phase3a_per_task_coord_mlp.py`:
+  - New args: `--shard-arm <name>`, `--shard-seed <int>` (must be
+    provided together), `--merge`, `--shard-dirs <comma-list>`.
+  - Shard mode pins `mode="shard"`, restricts to a single (arm,
+    seed), records `shardArm`/`shardSeed` plus `seedSlateOriginal`
+    and `armsOriginal` in the manifest, and **skips arena gate /
+    branch adjudication**.
+  - New helpers: `read_jsonl`, `read_csv_dicts`,
+    `assert_shard_consistency`, `run_merge`, `_parse_bool`.
+  - `--data-dir`/`--register` become optional (still required for
+    non-merge invocations; enforced by `parse_args`).
+  - `run_merge`:
+    - Loads each shard's `manifest.json`, `per_instance.csv`,
+      `learning_curves.csv`, and `residuals.jsonl`.
+    - `assert_shard_consistency` enforces `featureSchemaVersion`,
+      `protocolVersion`, `receiptSchemaVersion`, `learnerVersion`,
+      `specHash`, `parentSpecHash`, `registerHash`, `dataDirHash`,
+      `gitCommit`, `registerPath`, `dataDir`, `shapeModelSpec`,
+      `colorModelSpec`, `seedSlate`, `arms`, `maxStepsEffective`
+      match across every shard, and rejects duplicate (arm, seed)
+      pairs.
+    - Reconstructs `per_arm_validation_metrics` and
+      `per_instance_seed_outcomes` from the merged per-instance rows,
+      pulls per-seed validation loss from each shard's manifest,
+      then runs the existing `select_seed_for_arm` + aggregation
+      + arena gate + branch adjudication pipeline unchanged.
+    - Writes a merged manifest carrying `shardedRun=True`,
+      `shardSources=[…]`, `mergeGitCommit`, `mergeGitDirty`,
+      `mergeAllowDirty`, `elapsedSecondsTotalShards`.
+- `package.json`: adds
+  `arc:phase3a:per-task-coord-mlp-v1:shard` (pass-through invocation
+  with `--shard-arm`/`--shard-seed`) and
+  `arc:phase3a:per-task-coord-mlp-v1:merge` (passes `--merge`).
+- `.gitignore`: unchanged (existing
+  `results/arc/phase3a-per-task-coord-mlp-v1/` entry already covers
+  the binding output path; shard intermediates live in
+  `results/arc/phase3a-per-task-coord-mlp-v1-shard-*` under the
+  broader `results/arc/` ignore).
+
+**Shard-equivalence smoke** (CPU, `--probe-only --probe-steps 3
+--limit-arms raw_grid_per_task --limit-seeds 20260528,20260529`
+serial vs. 2 shards merged):
+
+| artifact | merged vs serial |
+| --- | --- |
+| `scores.csv` | `cmp` exit 0 (byte-identical) |
+| `per_task.csv` | `cmp` exit 0 (byte-identical) |
+| `per_prior.csv` | `cmp` exit 0 (byte-identical) |
+| `per_instance.csv` | `cmp` exit 0 (byte-identical) |
+| `seed_stability.csv` | `cmp` exit 0 (byte-identical) |
+
+Per-shard walls in the smoke: shard A (seed 20260528) = 145.2 s,
+shard B (seed 20260529) = 175.3 s. Both shards came from
+freeze-marker commit `F60C464D` with `--allow-dirty` (smoke only).
+The merge from `F60C464D` reconstructed the full Branch A pipeline
+end-to-end and correctly emitted
+`arenaGate.gate = "branch_a_full_grid_floor"` (expected at 3-step
+probe with no learning). Smoke directories were deleted before
+commit.
+
+**Revised launch posture**: with shard+merge in place, the 20
+(arm × seed) combinations can be launched as independent processes.
+Per V2 experience on a GTX 1080 with 7 GB free VRAM and per-task
+models in the 192-hidden range (sub-50 MB per model), 3–4 concurrent
+GPU shards is safe.
+
+Estimated wall envelope (GPU, full registered configuration):
+
+| posture | concurrent shards | rounds | wall envelope |
+| --- | ---: | ---: | --- |
+| serial (1 process) | 1 | 20 sequential | ~5.3 h (per the staging amendment above) |
+| 3-shard concurrent | 3 | 7 (last round 2 shards) | ~1.85 h (≈ 16 min × 7 + ~10% GPU contention) |
+| 4-shard concurrent | 4 | 5 | ~1.5 h (≈ 16 min × 5 + ~15% contention) |
+
+The 3-shard posture is the safer admitted default given V2's clean
+3-shard track record. The 4-shard posture is admitted but
+operator-discretionary on a per-launch basis.
+
+**Frozen launch command (3-shard parallel, PowerShell)**: each shard
+is launched as a separate background process; a wave of 3 runs to
+completion, then the next wave fires. Per the spec's resume rule,
+each shard is independently resume-unsafe — if a shard fails, delete
+its output directory and re-run that single (arm, seed) shard alone,
+then merge when all 20 directories are present.
+
+```powershell
+$env:SUNDOG_PYTHON = "C:\Users\hughe\AppData\Local\Programs\Python\Python312\python.exe"
+# Per (arm, seed), launch one shard process:
+foreach ($arm in @("raw_grid_per_task","signature_palette_per_task","signature_only_per_task","metadata_only_per_task")) {
+    foreach ($seed in @(20260528, 20260529, 20260530, 20260531, 20260601)) {
+        Start-Process -NoNewWindow `
+            -RedirectStandardOutput "results/arc/phase3a-per-task-coord-mlp-v1-shard-$arm-$seed.log" `
+            -RedirectStandardError "results/arc/phase3a-per-task-coord-mlp-v1-shard-$arm-$seed.err" `
+            -FilePath "npm" -ArgumentList @(
+                "run", "arc:phase3a:per-task-coord-mlp-v1:shard", "--",
+                "--data-dir", "$env:USERPROFILE\Datasets\ARC-AGI-2\data",
+                "--register", "docs/prereg/arc/P0_TASK_REGISTER.csv",
+                "--out", "results/arc/phase3a-per-task-coord-mlp-v1-shard-$arm-$seed",
+                "--shard-arm", "$arm",
+                "--shard-seed", "$seed",
+                "--device", "cuda"
+            )
+        # Throttle to 3 concurrent shards (operator chooses 3 or 4).
+    }
+}
+
+# After all 20 shards land:
+npm run arc:phase3a:per-task-coord-mlp-v1:merge -- `
+    --shard-dirs (
+        "results/arc/phase3a-per-task-coord-mlp-v1-shard-raw_grid_per_task-20260528," +
+        # ... 19 more, comma-joined, no spaces, full enumeration
+    ) `
+    --out results/arc/phase3a-per-task-coord-mlp-v1
+```
+
+The operator launching the 20-shard slate is responsible for
+throttling concurrency (3 or 4 per wave) and for waiting on every
+shard before invoking the merge. The merge fails loudly with a
+descriptive error if any shard is missing, has the wrong
+`learnerVersion`, has a duplicate (arm, seed) pair, or disagrees on
+any frozen fingerprint key.
+
+**Resume safety**: as in the staging amendment, each shard is
+single-process and not resume-safe at the (instance) granularity. A
+crashed shard is re-run as a single unit; surviving shards remain
+intact.
+
+**Verdict impact**: no prior verdict changes. The Branch A status
+moves from "EXECUTION ADMITTED, full run staged (serial)" to
+"EXECUTION ADMITTED, shard+merge protocol admitted, 20-shard launch
+ready". No binding receipt yet; no execution by this amendment.
+
+**Public-language constraint**: unchanged from the Branch A spec
+§"Public Language". Only the pre-binding-receipt language remains
+permitted until the 20-shard binding receipt lands.
