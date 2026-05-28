@@ -259,10 +259,11 @@ Deliverables:
 Execution artifact:
 [`docs/prereg/arc/PHASE0_TASK_SUBSET_SPEC.md`](prereg/arc/PHASE0_TASK_SUBSET_SPEC.md).
 Phase 0 receipt:
-[`docs/prereg/arc/P0_BASELINES.md`](prereg/arc/P0_BASELINES.md) -- **PARTIAL
-ADMIT** as of 2026-05-28: 36-task public-training subset registered and
-leak-control passed; all cheap baselines scored 0/36 exact, so ARC operator
-design remains held pending the zero-floor review.
+[`docs/prereg/arc/P0_BASELINES.md`](prereg/arc/P0_BASELINES.md) -- **ADMIT**
+as of 2026-05-28 after baseline expansion: 36-task public-training subset
+registered, leak-control passed, and all preregistered cheap baselines scored
+0/36 exact. Phase 1 is admitted with `0/36` exact as the floor any
+Sundog-specific result must clear.
 
 Exit criterion: the task subset, exclusion criteria, baseline numbers,
 and public-evaluation leak-control policy are filed and pre-registered.
@@ -292,6 +293,12 @@ Deliverables:
 Exit criterion: the projection operator is defined, implemented, and
 validated on synthetic grids. The gauge-covariance properties are
 algebraically verified.
+
+Execution artifact:
+[`docs/prereg/arc/PHASE1_SHADOW_DOMAIN_SPEC.md`](prereg/arc/PHASE1_SHADOW_DOMAIN_SPEC.md).
+Status (2026-05-28): synthetic validation passed on translation, rotation,
+reflection, color-role permutation, and a shape-mismatch negative; Phase 2
+projection scaffold admitted, with no sufficiency or Kaggle claim.
 
 ### Phase 2 — Shadow Projection Operator on ARC Tasks
 
