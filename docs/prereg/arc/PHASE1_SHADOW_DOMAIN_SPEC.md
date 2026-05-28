@@ -109,3 +109,50 @@ canonical signature differs). Verdict impact: **synthetic validation PASS**.
 Phase 2 projection scaffold is admitted for the registered training subset;
 no sufficiency, dimensionality-collapse, public-evaluation, or Kaggle claim is
 admitted by this receipt.
+
+**2026-05-28 (PT) -- Claude (Opus 4.7).** Synthetic-gate strengthening. A
+post-pass audit of the original 5-fixture battery found that all four
+positive cases passed *tautologically*: the operator's canonical signature
+is invariant by construction (sort+normalize for translation,
+D4-min-search for rotation/reflection, role-mapping for color permutation),
+and each positive test grid is an exact gauge-orbit-mate of the base grid.
+The original receipt confirmed that the gauge-quotienting code *runs*; it
+did not confirm any non-trivial gauge-discrimination behavior. The
+`localSignatureBag` field was also computed but never asserted on, and the
+suite had no discrimination check.
+
+Four fixtures and one aggregate check were added (v0 fixtures unchanged):
+
+- `single_cell_flip_negative` -- baseGrid + one new cell at (x=4, y=1)
+  color 2. Expect signature change and non-zero residual.
+- `color_collision_negative` -- baseGrid with both non-zero colors mapped
+  to a single new color (non-bijective recoloring). Expect signature change
+  (role count drops 2 -> 1) and non-zero residual.
+- `stencil_bag_translation_positive` -- assert
+  `localSignatureBag` is byte-identical between baseGrid and its
+  translated-into-canvas copy.
+- `stencil_bag_rotation_positive` -- assert `localSignatureBag` is
+  byte-identical between baseGrid and its 90-degree rotation.
+- `discrimination_50_random_5x5` -- 50 deterministically-seeded random
+  5x5 grids (seed `20260528`, palette `1..5`, density `0.5`) must produce
+  50 distinct canonical signatures. Catches over-aggressive signature
+  collapse.
+
+Re-run results: all 9 fixtures PASS, discrimination 50/50 distinct,
+residuals scale with edit magnitude (1-cell flip `0.166667` <
+shape-mismatch `0.428571` < color-collision `0.571429`). Artifacts:
+`results/arc/phase1-shadow-domain-synthetic/manifest.json`
+(`sha256=85d63d8a6839475e63244436bfd1c39b1ccc457d498bc43ca8e7ac9a4b226557`)
+and `results/arc/phase1-shadow-domain-synthetic/summary.csv`
+(`sha256=990bf245567cdfac5ea093b4cf1c4f1310dc67b2c6f128403266a1c590fd15d5`).
+
+Open issues named but not resolved by this amendment (carried to Phase 3):
+the canonical signature quotients out *all* color identity, so any ARC
+sufficiency claim that depends on absolute colors must read the raw
+`palette` metadata alongside the signature. The Phase 3 sufficiency audit
+must explicitly treat (signature, palette) as the working representation,
+not signature alone.
+
+Verdict impact: **synthetic validation PASS sustained** with falsifiable
+support. Phase 2 admission previously recorded by Codex stands; this
+amendment substantiates rather than overturns it.

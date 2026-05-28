@@ -47,8 +47,17 @@ Checked **2026-05-28** against:
   future Phase 1+ evaluation-blind register rows (no manual grid inspection,
   selection by preregistered metadata/hash rule).
 - [`PHASE1_SHADOW_DOMAIN_SPEC.md`](PHASE1_SHADOW_DOMAIN_SPEC.md) -- Phase 1
-  discrete grid shadow-domain spec. Synthetic validation passed; Phase 2
-  projection scaffold admitted.
+  discrete grid shadow-domain spec. Two amendments: original 5-fixture
+  synthetic gate (later audited as construction-only) and a strengthened
+  9-fixture + 50-grid discrimination gate that adds falsifiable cases
+  (1-cell flip, color collision, stencil-bag invariance, signature
+  discrimination). Phase 2 projection scaffold admitted with falsifiable
+  support.
+- [`PHASE2_PROJECTION_SPEC.md`](PHASE2_PROJECTION_SPEC.md) -- Phase 2
+  registered-subset projection measurement receipt. `36` tasks / `266` grids
+  projected; low signature-collision residual but high train-pair residual.
+  Phase 3 sufficiency-spec writing admitted; no decoder or public-evaluation
+  work admitted by this receipt.
 
 ## Discipline Tooling
 
