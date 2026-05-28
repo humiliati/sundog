@@ -399,7 +399,10 @@ and compact-7's dominant-color mode collapse. Four full-grid-control receipts
 two task distributions and two learner families. Branches A, B, and C are closed
 in their filed learner families; Branch D, a different framing such as structured
 edit or residual prediction, is the only remaining admissible Phase 3 reopen
-path.
+path. That path is now started as `structured_edit_residual_v1`: model the
+output as an input-derived baseline canvas plus a residual edit mask and edit
+colors. Execution remains held until Branch D runner tooling and a freeze-marker
+amendment are filed.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

@@ -5077,3 +5077,55 @@ Forbidden (carried forward + augmented):
 Phase 3 status moves from "Branch A execution in progress" to
 "Branch A binding receipt filed, `branch_a_full_grid_floor`;
 Branch D is the only remaining admissible reopen path".
+
+### 2026-05-28 (PT) -- Codex (GPT-5) -- Branch D Structured Edit Residual Spec Filed
+
+Branch D spec:
+[`PHASE3D_DIFFERENT_FRAMING_SPEC.md`](PHASE3D_DIFFERENT_FRAMING_SPEC.md).
+
+Justification: after the Phase 3A binding receipt, the direct-output and
+full-grid-control lanes have four binding floors across two task distributions
+and two learner families. PHASE3_5_REFLECTION leaves only Branch D: change the
+framing. The first Branch D contract therefore models output as a structured
+edit residual rather than as a whole-grid emission:
+
+`input grid -> baseline canvas -> residual edit mask -> edited output grid`
+
+Verdict impact: **no execution admission and no Branch D verdict**. The new
+spec freezes `structured_edit_residual_v1`, but execution remains held until a
+runner, Node wrapper, npm script, result ignore path, leak-check coverage, and
+freeze-marker amendment are committed together.
+
+The registered Branch D framing freezes:
+
+- matched full-grid edit control: `raw_grid_edit`;
+- primary Sundog edit arm: `signature_palette_edit`;
+- strict quotient diagnostic: `signature_only_edit`;
+- nuisance control: `metadata_only_edit`;
+- baseline family: conditioning-selected shape rule, canvas rule, and modal
+  background rule;
+- residual learner: per-instance edit-mask and edit-color MLPs trained from
+  scratch on conditioning residuals.
+
+The comparison discipline remains conservative:
+
+1. `raw_grid_edit` must open the non-baseline arena by achieving at least one
+   non-baseline exact task on both held-out lanes (`test_lodo` and `pttest`);
+2. if raw grid floors, the verdict is `branch_d_full_grid_edit_floor` and no
+   signature sufficiency language is admitted;
+3. baseline-only exactness is recorded but cannot support Branch D;
+4. only if the raw-grid edit arena opens can `signature_palette_edit` be
+   compared for `branch_d_support`, `branch_d_bounded_failure`, or diagnostic
+   named quarantine.
+
+Reserved implementation names:
+
+- Python runner: `docs/prereg/arc/phase3d_structured_edit_residual.py`;
+- Node wrapper: `scripts/arc-phase3d-structured-edit-residual-v1.mjs`;
+- npm script: `arc:phase3d:structured-edit-residual-v1`;
+- binding receipt path: `results/arc/phase3d-structured-edit-residual-v1/`.
+
+Public-language constraint before a binding receipt:
+
+> "Phase 3D has filed a structured edit/residual framing spec. No Branch D
+> receipt exists yet, and no sufficiency claim is admitted."
