@@ -2211,3 +2211,202 @@ Pass C support gate. Receipts may be cited together to characterize the
 deterministic-learner family's joint coverage of the registered subset;
 the framing must remain "learner-class characterization", not a
 sufficiency claim about the representation arms.
+
+### 2026-05-28 -- `candidate_combinator_v1` Clarification: output_copy Rank
+
+Author: Claude (Opus 4.7).
+
+Justification: a pre-freeze-marker smoke run of the admitted
+`candidate_combinator_v1` runner exposed a structural regression caused
+by the candidate ranking. The original amendment placed `output_copy` at
+rank `100` as a fallback, intending to "preserve the
+nn_output_transfer_v1 fallback so coverage cannot regress." This
+preserves COVERAGE (output_copy stays in the unique pool) but does
+**not** preserve slot-1 / slot-2 SELECTION: for source pairs where
+output_copy is the correct answer, synthesis candidates at ranks 0-8+
+displace output_copy out of the top two, causing a paradoxical
+exact-rate regression vs nn_output_transfer_v1 on arms (notably
+`raw_grid_lowcap`) that previously credited output_copy.
+
+This clarification revises `output_copy`'s rank to `-1`, placing it
+ahead of every synthesis primitive within the same source pair. Slot 1
+for the nearest pair is now always output_copy; slot 2 is the
+highest-ranked synthesis primitive from the same pair. This preserves
+both the nn_output_transfer_v1 baseline AND tests synthesis as a
+secondary candidate, matching the original amendment's stated intent.
+
+Verdict impact: no execution admission. The candidate_combinator_v1
+freeze marker has not yet been committed (runner files are pre-commit).
+This clarification revises the contract before the binding receipt is
+generated. The runner must be updated so that the freeze-marker commit
+lands with the corrected ranking.
+
+#### Revised Candidate Ranking
+
+The complete candidate-rank table for `candidate_combinator_v1` is now:
+
+| candidate_kind | rank | emit condition | construction |
+| --- | ---: | --- | --- |
+| `output_copy` | `-1` | always | clone of `output_i` (slot-1 guard preserving the nn_output_transfer_v1 baseline) |
+| `colormap_fit` | `0` | (unchanged) | (unchanged) |
+| `d4_rot90` | `1` | always | `rot90(output_i)` |
+| `d4_rot180` | `2` | always | `rot180(output_i)` |
+| `d4_rot270` | `3` | always | `rot270(output_i)` |
+| `d4_reflect_h` | `4` | always | `reflectHorizontal(output_i)` |
+| `d4_reflect_v` | `5` | always | `reflectVertical(output_i)` |
+| `d4_transpose` | `6` | always | `transpose(output_i)` |
+| `d4_anti_transpose` | `7` | always | `antiTranspose(output_i)` |
+| `cell_union_<j>` | `8 + j` | (unchanged) | (unchanged) |
+
+All other contract elements remain unchanged: Pass A representation
+arms, Pass B instance handling and strata, Pass C metric hierarchy and
+verdict thresholds, Pass D receipt schema, the seed namespace
+`arc-p3-candidate-combinator-v1`, all runner script names and npm script
+names, and the receipt directory path
+`results/arc/phase3-sufficiency-candidate_combinator_v1/`.
+
+#### Expected Effect
+
+With output_copy at rank `-1`:
+
+- slot 1 for every `(instance, arm)` is now the conditioning output from
+  the nearest pair under arm distance -- identical to
+  `nn_output_transfer_v1`'s slot 1 emission for the same instance;
+- slot 2 is the highest-ranked synthesis candidate from the same
+  nearest pair (`colormap_fit` if applicable, else `d4_rot90`, then
+  `d4_rot180`, and so on);
+- coverage is unchanged (full pool is the same set);
+- exact rates can only equal or exceed `nn_output_transfer_v1`'s, never
+  regress: any slot-1 exact hit `nn_output_transfer_v1` had is
+  preserved, and slot 2 adds additional opportunities to credit
+  synthesis candidates that `nn_output_transfer_v1` lacked.
+
+This restores the "candidate_combinator_v1 cannot regress vs
+nn_output_transfer_v1" guarantee that the original amendment intended
+but did not enforce through the rank-100 ordering.
+
+#### Receipt Continuity
+
+Any pre-clarification smoke artifacts under
+`results/arc/phase3-sufficiency-candidate_combinator_v1/` from the
+original rank-100 ordering are not the binding receipt. The binding
+receipt requires:
+
+1. this clarification amendment committed;
+2. the runner core updated so that `output_copy` is emitted with
+   `rank: -1` in `candidateCombinatorCandidates`;
+3. both committed in the freeze-marker commit alongside `package.json`,
+   `.gitignore`, and the three thin entry scripts;
+4. a fresh `npm run arc:phase3:candidate_combinator_v1:sufficiency`
+   invocation without `--allow-dirty` to generate the binding receipt.
+
+### 2026-05-28 -- `candidate_combinator_v1` Clarification: delta_overlay Primitive Addition
+
+Author: Claude (Opus 4.7).
+
+Justification: a second pre-freeze-marker smoke run, after the previous
+output_copy clarification, confirmed that
+`candidate_combinator_v1`'s slot-1 receipt now exactly equals
+`nn_output_transfer_v1`'s slot-1 receipt on every learner arm
+(`rep_exact_slot1` matches `0.000 / 0.000 / 0.039 / 0.000` for
+`signature_only / signature_palette / metadata_only / raw_grid_lowcap`
+respectively). However, the smoke trace showed
+`candidate_combinator_v1` cannot reproduce
+`nn_delta_transfer_v1`'s one `1acc24af` query-3 `raw_grid_lowcap` exact
+hit because the slot-1 candidate there is the conditioning-output (a
+non-zero grid) while the actual held-out target is the all-zero grid
+that `nn_delta_transfer_v1`'s `delta_overlay` primitive produced by
+overlaying query-input zeros onto the conditioning output. No
+`candidate_combinator_v1` primitive (`output_copy`, `colormap_fit`, D4
+variants, `cell_union`) can synthesize the all-zero grid from this
+conditioning data; the hit is structurally outside the original
+primitive set.
+
+This clarification adds `delta_overlay` to
+`candidate_combinator_v1`'s primitive set as a fifth family, with rank
+`-1` between `output_copy` (rank `-2`) and `colormap_fit` (rank `0`).
+The construction is identical to `nn_delta_transfer_v1`'s
+`delta_overlay`: same-shape required across `(query_input, input_i,
+output_i)`; start from a clone of `output_i`; for every cell `(y, x)`
+where `query_input[y][x] != input_i[y][x]`, replace the candidate cell
+with `query_input[y][x]`. This makes `candidate_combinator_v1` a
+strict superset of both `nn_output_transfer_v1` (slot-1 = output_copy)
+and `nn_delta_transfer_v1` (slot-2 = delta_overlay when emitted).
+
+Scope acknowledgement: this is an honest expansion of the original
+`candidate_combinator_v1` primitive set rather than a typo or bug fix.
+The original admission amendment specified four primitive families
+(`output_copy`, `colormap_fit`, D4, `cell_union`); this clarification
+makes it five. Filing as a clarification amendment rather than a new
+learner version (`candidate_combinator_v2`) is permitted under the
+Pass-A-clarification convention used elsewhere because the contract is
+still pre-freeze-marker: no committed runner, no binding receipt, no
+verdict yet. After this clarification commits with the runner, no
+further additions to the primitive set are allowed without a new
+learner version.
+
+Verdict impact: no execution admission. The freeze marker has not yet
+been committed.
+
+#### Revised Candidate Ranking (Full Table)
+
+| candidate_kind | rank | emit condition | construction |
+| --- | ---: | --- | --- |
+| `output_copy` | `-2` | always | clone of `output_i` |
+| `delta_overlay` | `-1` | `query_input`, `input_i`, `output_i` all share shape | clone of `output_i`; for each `(y, x)` with `query_input[y][x] != input_i[y][x]`, replace candidate cell with `query_input[y][x]` |
+| `colormap_fit` | `0` | `input_i` and `output_i` share shape AND a bijective `M : color -> color` exists with `M(input_i[y][x]) = output_i[y][x]` for every cell | apply `M` to `query_input` (out-of-domain colors pass through) |
+| `d4_rot90` | `1` | always | `rot90(output_i)` |
+| `d4_rot180` | `2` | always | `rot180(output_i)` |
+| `d4_rot270` | `3` | always | `rot270(output_i)` |
+| `d4_reflect_h` | `4` | always | `reflectHorizontal(output_i)` |
+| `d4_reflect_v` | `5` | always | `reflectVertical(output_i)` |
+| `d4_transpose` | `6` | always | `transpose(output_i)` |
+| `d4_anti_transpose` | `7` | always | `antiTranspose(output_i)` |
+| `cell_union_<j>` | `8 + j` | `j != i`; `output_i` and `output_j` share shape | per cell: `output_i[y][x]` if non-zero, else `output_j[y][x]` |
+
+All other contract elements remain unchanged: arms, distances, seed
+namespace, runner script names, npm script names, receipt directory
+path.
+
+#### Expected Effect
+
+With `output_copy` at rank `-2` and `delta_overlay` at rank `-1`:
+
+- slot 1 for every `(instance, arm)` is always `output_copy` of the
+  nearest pair under arm distance -- still identical to
+  `nn_output_transfer_v1`'s slot 1;
+- slot 2 is the highest-ranked further candidate from the same nearest
+  pair: `delta_overlay` when it can be emitted, else `colormap_fit` if
+  it fits, else `d4_rot90`, and so on;
+- coverage and full-pool size both expand by up to one candidate per
+  same-shape source pair (delta_overlay only emits when shapes match);
+- exact rates can only equal or exceed both `nn_output_transfer_v1`'s
+  and `nn_delta_transfer_v1`'s slot-1 + slot-2 numbers on the same
+  registered subset, never regress against either.
+
+The 1acc24af query-3 `raw_grid_lowcap` hit specifically is expected to
+return as a `grid_exact_any_slot = true` result via slot 2; slot 1
+will remain `output_copy` (non-zero, wrong), and `grid_exact_slot1`
+will stay `false` for that instance.
+
+#### Public-Language Update
+
+The candidate_combinator_v1 admission amendment's public-language
+disclosure listed the primitive families as "D4 variants, per-pair
+fitted color maps, cross-pair cell unions, and the original
+output-copy fallback." This clarification updates the disclosure to:
+
+> "The third Phase 3 learner (`candidate_combinator_v1`) is still a
+> deliberately low-capacity nearest-neighbor learner. It generates
+> candidates only from frozen deterministic primitives applied to
+> conditioning outputs and the query input: the output-copy fallback,
+> a same-shape delta-overlay synthesis, per-pair fitted bijective color
+> maps, the eight D4 orientation variants, and cross-pair cell unions.
+> It cannot synthesize candidates that require relational reasoning
+> across multiple input-output pairs beyond the pairwise cell union,
+> programmatic composition, or learned representations. Failures on
+> those task classes remain learner-class limits unless the receipt
+> shows otherwise."
+
+This adoption supersedes the prior disclosure for any public copy
+citing `candidate_combinator_v1`.
