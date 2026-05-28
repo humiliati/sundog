@@ -13,9 +13,9 @@ the open mathematical front of incompressible Navier–Stokes existence
 and smoothness as a Clay Millennium problem.
 
 This document is not a roadmap. It is a holding pattern for ambition.
-None of the candidates below have run. Each, if executed, would either
-ratchet the coupling claim into earned language or push it back to the
-"out-of-scope analogy" pile in
+Candidate 1 has now been commissioned into a proof-track draft; the other
+candidates have not run. Each, if executed, would either ratchet the coupling
+claim into earned language or push it back to the "out-of-scope analogy" pile in
 [`presentation/claims-and-scope.md`](presentation/claims-and-scope.md).
 
 The closest existing anchors are the three-body workbench
@@ -40,6 +40,11 @@ retained for symmetry with [`SUNDOG_V_CAPSET.md`](SUNDOG_V_CAPSET.md)
 and will be populated when a candidate graduates into a committed
 artifact (proof note, empirical workbench, or public reading).
 Promotion criteria are pinned below.
+
+Commissioned but **not promoted**: Candidate 1 is drafted at
+[`proof/PDE_DETERMINING_MODES_POSTULATE1.md`](proof/PDE_DETERMINING_MODES_POSTULATE1.md).
+It remains blocked on external PDE review and a runnable cell-set artifact
+before it can leave this ledger.
 
 ## Claim Boundary
 
@@ -198,7 +203,8 @@ A candidate leaves this ledger and becomes a committed artifact
 
 ## Candidate List
 
-None have run.
+Candidate 1 has been commissioned as a proof-track reading draft. No empirical
+candidate has run.
 
 ### Candidate 1 — Postulate-1 reading of determining modes
 
@@ -218,6 +224,9 @@ None have run.
   sufficiency is open also has control sufficiency strictly equivalent
   to state sufficiency under the standard data-assimilation gauge, the
   Postulate-1 reading is vacuous on NSE — record, do not rescue.
+- **Draft artifact.** Filed at
+  [`proof/PDE_DETERMINING_MODES_POSTULATE1.md`](proof/PDE_DETERMINING_MODES_POSTULATE1.md)
+  as a C1 reading note, not yet a promotion.
 - **Cross-files.** Would update
   [`COARSE_GRAINING_PROOF_ROADMAP.md`](COARSE_GRAINING_PROOF_ROADMAP.md)
   Phase 2 with a PDE corollary (or a named-negative).
@@ -292,9 +301,10 @@ None have run.
 
 As of 2026-05-28, the recommended sequencing is:
 
-1. **Candidate 1** (Postulate-1 reading of determining modes) — lowest
-   cost, highest leverage on Front-A vacuity, strengthens the
-   Coarse-Graining trunk with a PDE corollary or named-negative.
+1. **Candidate 1** (Postulate-1 reading of determining modes) — now
+   commissioned as the active Front-A draft. It remains the lowest-cost,
+   highest-leverage move; next gate is external PDE sanity check plus a
+   runnable cell-set artifact.
 2. **Candidate 2** (signatures on shell-model intermittency) — smallest
    empirical leg with the cleanest data path; depends only on standard
    shell-model machinery and off-the-shelf baselines. Should follow
@@ -308,8 +318,10 @@ Candidates 4 and 5 are deferred pending the outcome of 1 and 2.
 
 - [`COARSE_GRAINING_PROOF_ROADMAP.md`](COARSE_GRAINING_PROOF_ROADMAP.md)
   — the trunk roadmap. NSE is the natural PDE-substrate leg parallel to
-  the three-body measured leg in Phase 4. Candidate 1 would update
-  Phase 2 with a PDE corollary (or a named-negative).
+  the three-body measured leg in Phase 4. Candidate 1 is drafted at
+  [`proof/PDE_DETERMINING_MODES_POSTULATE1.md`](proof/PDE_DETERMINING_MODES_POSTULATE1.md)
+  and would update Phase 2 with a PDE corollary (or a named-negative) only
+  after review.
 - [`SUNDOG_V_THREEBODY.md`](SUNDOG_V_THREEBODY.md) — sibling empirical
   workbench. Different substrate, same hidden-indirect-signature-output
   pattern. The three-body Phase 13–15 results are the empirical

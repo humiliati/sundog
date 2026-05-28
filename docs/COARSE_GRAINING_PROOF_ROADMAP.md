@@ -286,6 +286,11 @@ that stronger line stays unshipped regardless of Phase 1.
 - **Existing formal front (not forked):** [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md)
   (Separability appendix), [`SUNDOG_V_GRAVITY.md`](SUNDOG_V_GRAVITY.md) (ledger),
   [`MESA_CROSSOVER_NOTE.md`](MESA_CROSSOVER_NOTE.md) (in-vitro/in-the-wild pair).
+- **PDE sidecar:** [`proof/PDE_DETERMINING_MODES_POSTULATE1.md`](proof/PDE_DETERMINING_MODES_POSTULATE1.md)
+  drafts the Navier-Stokes Candidate 1 reading: determining modes imply
+  Postulate-1 sufficiency when they reconstruct state, while the stricter
+  Sundog question is whether objective-specific control sufficiency can hold on
+  coarser fibers.
 - **Boundary substrate:** [`PHASE2_BLOCKS_DESIGN.md`](PHASE2_BLOCKS_DESIGN.md)
   (pushable occluder = the Phase 3 predicted boundary).
 - **Scope guardrails:** [`SCIENTIFIC_CRITERIA.md`](SCIENTIFIC_CRITERIA.md),
