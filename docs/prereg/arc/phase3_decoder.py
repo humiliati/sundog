@@ -154,7 +154,11 @@ class TaskDecoder(nn.Module):
             batch_first=True,
             norm_first=False,
         )
-        self.encoder = nn.TransformerEncoder(layer, num_layers=MODEL_SPEC["layers"])
+        self.encoder = nn.TransformerEncoder(
+            layer,
+            num_layers=MODEL_SPEC["layers"],
+            enable_nested_tensor=False,
+        )
         self.height_head = nn.Linear(d_model, MAX_H)
         self.width_head = nn.Linear(d_model, MAX_W)
         self.cell_head = nn.Linear(d_model, MAX_H * MAX_W * MAX_COLORS)
@@ -290,7 +294,7 @@ def main() -> int:
     per_prior_rows = aggregate_per_prior(per_instance_any, selected_seed_by_arm)
     scores = aggregate_scores(per_instance_any, selected_seed_by_arm, args.master_seed)
     quarantine_log = build_quarantine_log(per_task_rows)
-    branch = adjudicate_branch(per_task_rows, scores)
+    branch = adjudicate_branch(per_task_rows, scores, manifest["mode"])
 
     manifest["completedAt"] = iso_now()
     manifest["selectedSeedByArm"] = selected_seed_by_arm
@@ -896,7 +900,12 @@ def build_quarantine_log(per_task_rows: list[dict[str, Any]]) -> list[dict[str, 
     return out
 
 
-def adjudicate_branch(per_task_rows: list[dict[str, Any]], scores: list[dict[str, Any]]) -> dict[str, Any]:
+def adjudicate_branch(per_task_rows: list[dict[str, Any]], scores: list[dict[str, Any]], mode: str) -> dict[str, Any]:
+    if mode != "full":
+        return {
+            "branch": "not_adjudicated",
+            "reason": f"{mode} run only; Branch A/B/C is reserved for the full clean five-seed receipt",
+        }
     by_lane_arm = {(row["lane"], row["arm"]): row for row in scores}
     sig_lodo = by_lane_arm.get(("test_lodo", "signature_palette"))
     sig_pttest = by_lane_arm.get(("pttest", "signature_palette"))
