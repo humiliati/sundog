@@ -781,10 +781,41 @@ Phase 15 verdict, retune the controller, or upgrade the earned claim. A positive
 result points to a separately locked multi-step counterfactual; a negative
 result shifts attention to horizon locality or the hazard score itself.
 
-Status: spec created 2026-05-27; additive audit receipts are implemented behind
-`--counterfactual-audit`. Six-trial smoke passed as a column-flow check and
-showed total denominator-floor exposure in the TRACK/delay/shuffle rows of the
-smoke cell; the 1,728-trial lock is staged, not run.
+Status: complete as of 2026-05-28. Formal branch: **Mixed / Partial
+Diagnostic**. The 1,728-trial lock confirmed that denominator-floor collapse is
+near-universal in TRACK rows (`0.971-1.000` floor-hit rate), but floor-hit steps
+carry no TRACK-specific hidden positive one-step signal: raw effect is
+noise-level, TRACK floor-hit positive rate is near chance, and shuffled arms can
+score higher on floor-hit positive rate while failing to produce candidate
+cells. Phase 15B therefore does not explain the Phase 15 magnitude miss; it
+points to multi-step trajectory steering as the next diagnostic.
+
+### Phase 15C - Multi-Step Counterfactual Horizon Audit
+
+Goal: test whether Phase 15's favorable guarded-TRACK pocket is explained by
+cumulative trajectory steering over short horizons rather than by one-step
+energy reduction.
+
+Implementation-grade spec:
+
+- [`docs/threebody/PHASE15C_SPEC.md`](threebody/PHASE15C_SPEC.md)
+
+Reserved commands, not runnable until the implementation commit adds the
+multi-step audit flag and npm scripts:
+
+```bash
+npm run threebody:phase15c:multistep-smoke
+npm run threebody:phase15c:multistep
+```
+
+Exit criterion: the project can say whether cumulative counterfactual horizon
+scores at `N in {4,8,16,32}` explain the survival pocket that one-step energy
+reduction did not. This phase is diagnostic only: it does not revise Phase 15,
+retune the controller, or upgrade the earned claim.
+
+Status: spec filed 2026-05-28. Implementation is held until an additive runner
+commit pins the CSV columns, smoke command, capped rate probe, and lock
+readback path.
 
 ### 3D Catalog / Isotrophy Sidecar
 
