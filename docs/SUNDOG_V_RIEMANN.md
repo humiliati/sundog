@@ -356,8 +356,8 @@ These remain horizon until receipts exist.
 - [`docs/prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md)
   - initial domain and admission lock.
 - [`docs/riemann/PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md`](riemann/PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md)
-  - first executable probe specification, not yet run; admitted bridge per
-  bridge notes is Path (i) Z₂-descent.
+  - first executable probe specification; Path (i) v1 run filed, while Path
+  (ii) remains deferred.
 - [`docs/riemann/RECEIPT_TEMPLATE.md`](riemann/RECEIPT_TEMPLATE.md) - receipt
   template for every probe result.
 - [`docs/riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md)
