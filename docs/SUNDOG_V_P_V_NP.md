@@ -11,12 +11,14 @@ Short version:
 > can a sufficient signature make safety verification tractable inside a named
 > capacity envelope?
 
-Status: Roadmap draft. Lit-pass and citation spine filed 2026-05-28; see
-[`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md). No complexity-theoretic
-result claimed. This document is a research bridge from Sundog mesa, ARC,
-Faraday, and signature-sufficiency work into the language of verification
-hardness, certificates, reductions, promise envelopes, and capacity-relative
-one-wayness.
+Status: Roadmap draft. Lit-pass, project scaffold, and Phase 1 toy-verifier
+spec filed 2026-05-28; see
+[`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md) and
+[`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md). No
+complexity-theoretic result claimed. This document is a research bridge from
+Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
+verification hardness, certificates, reductions, promise envelopes, and
+capacity-relative one-wayness.
 
 ## 0. Story Shape
 
@@ -338,6 +340,9 @@ and the spec names at least one full-state or rollout baseline and one
 formal/symbolic baseline (where feasible) per the lit-pass Track F
 disposition.
 
+Spec draft:
+[`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md).
+
 ### Phase 2 — Mesa Verification Bridge
 
 Goal: connect the toy verifier to the mesa lane.
@@ -540,6 +545,13 @@ baselines, reproduced metrics, and archived artifacts.
 - [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md): 2026-05-28 literature
   pass, citation spine, gap map, and probe-ranking disposition.
 - [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md): this roadmap.
+- [`pvnp/README.md`](pvnp/README.md): project index and artifact map.
+- [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md):
+  draft formal toy verifier spec.
+- [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
+  for phase and probe results.
+- [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index; no
+  Phase 1 execution receipt filed yet.
 
 ## 11. Cross-References
 
