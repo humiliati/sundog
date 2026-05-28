@@ -152,6 +152,7 @@
     "isotrophy:kfacet:bridge-audit": "python scripts/isotrophy_workbench.py kfacet-bridge-audit --input-dir results/isotrophy/k-facet-v03-sentinel-sweep-adaptive-floor-21 --rows 62,64,231,264,468,524,574,609,617,623,735,793,941,1034,1062,1114,1172,1265,1414,1488,1497 --source A --path docs/isotrophy/supplementary-A_periodic-3d_mirror.txt --m3 1 --out results/isotrophy/k-facet-v03-bridge-audit-21",
     "deploy": "npm run build && node scripts/deploy-pages.mjs",
     "faraday:phase4": "node scripts/faraday-phase4-battery.mjs",
+    "arc:phase0:inventory": "node scripts/arc-phase0-inventory.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
     "cf:pages": "node scripts/cloudflare-pages-project.mjs",
