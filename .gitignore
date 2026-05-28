@@ -22,6 +22,7 @@ results/arc/phase3-sufficiency/
 results/arc/phase3-sufficiency-nn_delta_transfer_v1/
 results/arc/phase3-sufficiency-candidate_combinator_v1/
 results/arc/phase3a-per-task-coord-mlp-v1/
+results/arc/phase3d-structured-edit-residual-v1/
 
 # Test artifacts
 *.jsonl
