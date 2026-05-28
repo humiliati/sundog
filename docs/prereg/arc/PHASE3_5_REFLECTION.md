@@ -361,3 +361,30 @@ Branch A has now been selected for spec work in
 `per_task_coord_mlp_v1` as the first stochastic per-task learner contract, but
 does not admit execution until runner wiring and a freeze-marker amendment are
 filed.
+
+## Post-Phase-3A Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+Phase 3A has now filed its binding 20-shard receipt under
+`per_task_coord_mlp_v1`. The verdict is `branch_a_full_grid_floor`:
+`raw_grid_per_task` scored zero exact tasks on both held-out lanes, so the
+arena did not open and no `signature_palette_per_task` vs.
+`raw_grid_per_task` sufficiency comparison is licensed.
+
+The named Phase 3A failure character is **conditioning starvation +
+shape-generalisation failure**. This is distinct from V1/V2's
+noise-dominated failure and compact-7's dominant-color mode collapse. The
+receipt closes this reflection's Branch A in the filed stochastic per-task
+learner family.
+
+Current reflection status:
+
+- Branch A: closed in the filed `per_task_coord_mlp_v1` learner family by
+  `branch_a_full_grid_floor`.
+- Branch B: closed in the deterministic narrowed-task-class lane by compact-7.
+- Branch C: no longer the active next move after the filed Branch A receipt.
+- Branch D: untouched and the only remaining admissible Phase 3 reopen path.
+
+Any Branch D move requires its own pre-registered spec, arena gate, learner or
+framing contract, receipt path, and public-language constraints.

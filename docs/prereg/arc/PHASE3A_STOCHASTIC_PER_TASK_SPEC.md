@@ -6,10 +6,11 @@ Reflection gate: [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md)
 
 Filed: **2026-05-28 (PT)**
 
-Status: **SPEC FILED; EXECUTION HOLD**. This file starts Branch A by
-pre-registering the first stochastic per-task learner family. It does not
-admit a run until the runner, npm wrapper, receipt path, leak-check allowlist,
-and freeze-marker amendment are committed together.
+Status: **BINDING RECEIPT FILED -- `branch_a_full_grid_floor`**. This file
+started Branch A by pre-registering the first stochastic per-task learner
+family. The runner/wrapper/freeze-marker amendments and binding receipt are
+filed in the parent spec. The raw-grid arena did not open, so no
+signature-vs-full-grid sufficiency comparison is licensed from this lane.
 
 ## Purpose
 
@@ -383,3 +384,26 @@ Forbidden:
 - any claim that Branch A support, if obtained, solves ARC;
 - any extra seed or narrower subset run after an arena-floor receipt without a
   new append-only amendment.
+
+## Binding Receipt Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+The Phase 3A binding receipt is filed in
+[`PHASE3_SUFFICIENCY_SPEC.md`](PHASE3_SUFFICIENCY_SPEC.md) under "Branch A
+20-Shard Binding Receipt: `branch_a_full_grid_floor`".
+
+Summary:
+
+- receipt path: `results/arc/phase3a-per-task-coord-mlp-v1/`;
+- merge/shard protocol: 20 shards, 4 arms x 5 seeds;
+- verdict: `branch_a_full_grid_floor`;
+- raw-grid held-out exact tasks: zero on `pttest`, zero on `test_lodo`;
+- consequence: no `signature_palette_per_task` vs. `raw_grid_per_task`
+  sufficiency comparison is licensed;
+- named failure character: **conditioning starvation + shape-generalisation
+  failure**.
+
+This addendum does not change the frozen learner contract above. It records that
+the admitted lane has now run and closed Branch A in the filed
+`per_task_coord_mlp_v1` learner family.

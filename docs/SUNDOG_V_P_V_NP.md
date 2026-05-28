@@ -11,10 +11,12 @@ Short version:
 > can a sufficient signature make safety verification tractable inside a named
 > capacity envelope?
 
-Status: Roadmap draft. No complexity-theoretic result claimed. This document
-is a research bridge from Sundog mesa, ARC, Faraday, and signature-sufficiency
-work into the language of verification hardness, certificates, reductions, and
-capacity-relative one-wayness.
+Status: Roadmap draft. Lit-pass and citation spine filed 2026-05-28; see
+[`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md). No complexity-theoretic
+result claimed. This document is a research bridge from Sundog mesa, ARC,
+Faraday, and signature-sufficiency work into the language of verification
+hardness, certificates, reductions, promise envelopes, and capacity-relative
+one-wayness.
 
 ## 0. Story Shape
 
@@ -249,6 +251,33 @@ The verifier succeeds or fails without a predictable operating envelope.
 
 Consequence: no useful complexity claim. A bounded verifier must say where it
 stops working.
+
+## 6.6 Lit-Pass Scaffold
+
+The 2026-05-28 lit pass in
+[`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md) narrows the admissible
+scaffold:
+
+- **Classical P/NP:** use Cook-Levin-Karp as vocabulary for finding versus
+  checking; do not imply a class separation or new route to P != NP.
+- **Promise problems:** formalize the operating envelope as a promise domain.
+  Inputs outside the envelope must reject or quarantine rather than silently
+  upgrading the claim.
+- **Parameterized capacity:** treat capacity, horizon, sensor tier, noise,
+  margin, and adversary class as explicit parameters.
+- **Certificates:** define a Sundog certificate as a checkable object with
+  source observations, signature transform, checker, cost accounting,
+  false-accept rule, quarantine rule, and privilege-leak audit.
+- **One-wayness:** use "capacity-relative one-wayness" only as a measured
+  verify / invert / spoof battery, not as a cryptographic one-way-function
+  claim.
+- **Verified-AI baselines:** compare signature verification against rollout,
+  full-state, formal/symbolic, neural-verification, or shield-style baselines
+  where feasible.
+- **Alignment pressure:** Goodhart, mesa-optimization, goal
+  misgeneralization, ELK, and mechanistic-interpretability compression
+  failures define falsifiers; they are not evidence that a signature is
+  sufficient.
 
 ## 7. Roadmap
 
@@ -499,7 +528,48 @@ Promote to Operating-Envelope Study only if:
 Do not promote to Research Result unless there is a controlled task, fixed
 baselines, reproduced metrics, and archived artifacts.
 
-## 9. One-Paragraph Public Summary
+## 9. Project Files
+
+- [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md): 2026-05-28 literature
+  pass, citation spine, gap map, and probe-ranking disposition.
+- [`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md): this roadmap.
+
+## 10. Cross-References
+
+- [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md): mesa-optimization trap, reward
+  proxy pressure, 5D localization, and operating-envelope evidence style.
+- [`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md): Blackwell-style signature
+  sufficiency and discrete abstraction port.
+- [`faraday/SUNDOG_V_FARADAY.md`](faraday/SUNDOG_V_FARADAY.md): structural
+  zero / named quarantine receipt grammar.
+- [`SUNDOG_V_RIEMANN.md`](SUNDOG_V_RIEMANN.md): precedent for lit-pass-first
+  scaffolding before public mathematical coupling claims.
+- [`SCIENTIFIC_CRITERIA.md`](SCIENTIFIC_CRITERIA.md): evidence-tier and
+  public-claim discipline.
+- [`COARSE_GRAINING_PROOF_ROADMAP.md`](COARSE_GRAINING_PROOF_ROADMAP.md):
+  related sufficiency and control-signature proof trunk.
+
+## 11. Inspection Trail
+
+Consolidated and dated in
+[`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md) (2026-05-28). The
+important imported lessons are:
+
+- P-vs-NP is open and off-limits as a claimed target.
+- Promise problems and parameterized complexity are the closest formal analogs
+  for named operating envelopes and capacity bounds.
+- Proof systems, proof-carrying code, and certifying algorithms motivate the
+  checker/certificate split, but Sundog signatures are not proof strings.
+- Cryptographic one-wayness motivates the invert/spoof adversary tasks, but
+  Sundog's one-wayness claim is empirical and capacity-relative.
+- Verified AI, neural verification, randomized smoothing, and shielding are
+  baselines or competitors for any signature verifier.
+- Alignment literature supplies pressure and falsifiers, not a certificate.
+
+External references are targets and constraints for the apparatus. No
+complexity-theoretic result is imported or asserted by listing them here.
+
+## 12. One-Paragraph Public Summary
 
 Sundog vs. P-vs-NP does not try to solve the P-vs-NP problem. It uses the
 finding-versus-verifying distinction as a discipline for alignment research.
