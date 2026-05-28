@@ -6,10 +6,11 @@ Reflection gate: [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md)
 
 Filed: **2026-05-28 (PT)**
 
-Status: **SPEC FILED; EXECUTION HOLD**. This file starts Branch D by
-pre-registering a different framing of the Phase 3 question. It admits no run
-until the runner, wrapper, npm script, receipt path, result ignore rule,
-leak-check coverage, and freeze-marker amendment are committed together.
+Status: **BINDING RECEIPT FILED -- `branch_d_full_grid_edit_floor`**. This
+file started Branch D by pre-registering a different framing of the Phase 3
+question. The runner/wrapper/freeze-marker amendments and binding receipt are
+filed in the parent spec. The raw-grid edit arena did not open, so no
+signature-vs-full-grid sufficiency comparison is licensed from this lane.
 
 ## Purpose
 
@@ -364,3 +365,32 @@ Forbidden:
   non-baseline arena;
 - extra seeds or task narrowing after an arena-floor receipt without a new
   append-only amendment.
+
+## Binding Receipt Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+The Phase 3D binding receipt is filed in
+[`PHASE3_SUFFICIENCY_SPEC.md`](PHASE3_SUFFICIENCY_SPEC.md) under "Branch D
+20-Shard Binding Receipt: `branch_d_full_grid_edit_floor`".
+
+Summary:
+
+- receipt path: `results/arc/phase3d-structured-edit-residual-v1/`;
+- merge/shard protocol: 20 shards, 4 arms x 5 seeds;
+- verdict: `branch_d_full_grid_edit_floor`;
+- raw-grid edit held-out non-baseline exact tasks: zero on `pttest`, zero on
+  `test_lodo`;
+- consequence: no `signature_palette_edit` vs. `raw_grid_edit` sufficiency
+  comparison is licensed;
+- named failure character: **edit-color-rule failure**.
+
+The structured-edit framing decomposed the Phase 3 failure for the first time:
+the baseline shape and canvas stages were often usable, the edit-mask learner
+found moderate-to-strong WHERE signal, but the edit-color learner failed to
+learn the WHAT-color rule well enough for exact reconstruction.
+
+This addendum does not change the frozen framing contract above. It records
+that the admitted lane has now run and closed Branch D in the filed
+`structured_edit_residual_v1` framing. Future Phase 3 reopens require either a
+new pre-registered Branch D variant or a new Branch E spec.

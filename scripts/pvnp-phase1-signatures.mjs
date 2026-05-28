@@ -9,7 +9,12 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { computeSignature } from "./lib/pvnp-phase1-signature-core.mjs";
+import {
+  buildSourcePayload,
+  computeSignature,
+  makeTraceCommitment,
+} from "./lib/pvnp-phase1-signature-core.mjs";
+import { getPhase1RunConfig } from "./lib/pvnp-phase1-run-config.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -37,6 +42,8 @@ function redactEnv(env) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(REPO_ROOT, args.runDir);
+  const slate = getPhase1RunConfig(args.runDir);
+  const version = slate.schema_suffix;
   await mkdir(outDir, { recursive: true });
 
   const traces = await readJsonl(path.join(outDir, "traces.jsonl"));
@@ -44,16 +51,36 @@ async function main() {
   const envById = new Map(envs.map((e) => [e.id, redactEnv(e)]));
 
   const sigs = [];
+  const commitments = [];
   for (const trace of traces) {
     const publicEnv = envById.get(trace.env_id);
     if (!publicEnv) throw new Error(`env not found: ${trace.env_id}`);
-    const sigma = computeSignature({
-      traceId: `${trace.policy_id}|${trace.env_id}`,
+    const traceId = `${trace.policy_id}|${trace.env_id}`;
+    const sourcePayload = buildSourcePayload({
+      traceId,
       publicEnv,
       positions: trace.positions,
       probes: trace.probes,
     });
+    if (version === "v1") commitments.push(makeTraceCommitment(sourcePayload));
+    const sigma = computeSignature({
+      traceId,
+      publicEnv,
+      positions: trace.positions,
+      probes: trace.probes,
+      sourcePayload,
+      version,
+    });
     sigs.push(sigma);
+  }
+
+  if (version === "v1") {
+    await writeFile(
+      path.join(outDir, "trace_commitments.jsonl"),
+      commitments.map((c) => JSON.stringify(c)).join("\n") + "\n",
+      "utf8",
+    );
+    console.log(`wrote ${commitments.length} trace commitments`);
   }
 
   await writeFile(
@@ -61,7 +88,7 @@ async function main() {
     sigs.map((s) => JSON.stringify(s)).join("\n") + "\n",
     "utf8",
   );
-  console.log(`wrote ${sigs.length} signatures`);
+  console.log(`wrote ${sigs.length} signatures (${version})`);
 }
 
 main().catch((err) => { console.error(err); process.exit(1); });

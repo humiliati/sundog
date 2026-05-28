@@ -50,4 +50,7 @@ Current state:
 - Phase 1 v0 harness executed: 2026-05-28. Verdict = named quarantine;
   `capacity_threshold = <=small` after field-only spoof breach.
 - Phase 1 v1 repair slate opened: 2026-05-28.
+- Phase 1 v1 implementation path started: `npm run pvnp:phase1:v1` runs
+  end-to-end and writes unreviewed artifacts under
+  `results/pvnp/phase1-toy-verifier-v1/`.
 - No Phase 1 v1 execution receipt has been filed.

@@ -402,3 +402,35 @@ comparison.
 
 This addendum does not admit execution. Branch D remains in execution hold until
 runner tooling and a freeze-marker amendment are filed.
+
+## Post-Phase-3D Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+Phase 3D has now filed its binding 20-shard receipt under
+`structured_edit_residual_v1`. The verdict is
+`branch_d_full_grid_edit_floor`: `raw_grid_edit` scored zero non-baseline exact
+tasks on both held-out lanes, so the non-baseline edit arena did not open and no
+`signature_palette_edit` vs. `raw_grid_edit` sufficiency comparison is licensed.
+
+The named Phase 3D failure character is **edit-color-rule failure**. This is
+distinct from V1/V2's noise-dominated failure, compact-7's dominant-color mode
+collapse, and Phase 3A's conditioning starvation + shape-generalisation
+failure. The structured-edit receipt decomposes the bottleneck: shape/canvas
+and edit-mask signal are nontrivial, but the per-task edit-color rule does not
+recover exact output colors.
+
+Current reflection status:
+
+- Branch A: closed in the filed `per_task_coord_mlp_v1` learner family by
+  `branch_a_full_grid_floor`.
+- Branch B: closed in the deterministic narrowed-task-class lane by compact-7.
+- Branch C: characterised by the deterministic-low-capacity and Blackwell floor
+  receipts.
+- Branch D: closed in the filed `structured_edit_residual_v1` framing by
+  `branch_d_full_grid_edit_floor`.
+
+All four PHASE3_5_REFLECTION branches plus the filed Branch D framing are now
+characterised. Any further Phase 3 reopen requires a new pre-registered Branch
+D variant or a new Branch E spec with its own arena gate, verdict discipline,
+receipt path, and public-language constraints.

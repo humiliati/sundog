@@ -10,6 +10,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { verify, V0_PROMISE, V0_CHECKER_THRESHOLDS } from "./lib/pvnp-phase1-verifier-core.mjs";
+import { getPhase1RunConfig } from "./lib/pvnp-phase1-run-config.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -25,6 +26,14 @@ function parseArgs(argv) {
 async function readJsonl(p) {
   const text = await readFile(p, "utf8");
   return text.trim().split("\n").filter(Boolean).map((line) => JSON.parse(line));
+}
+
+async function readJsonlIfExists(p) {
+  try { return await readJsonl(p); }
+  catch (err) {
+    if (err.code === "ENOENT") return [];
+    throw err;
+  }
 }
 
 function redactEnv(env) {
@@ -43,9 +52,12 @@ function csvRow(values) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(REPO_ROOT, args.runDir);
+  const slate = getPhase1RunConfig(args.runDir);
+  const isV1 = slate.schema_suffix === "v1";
   await mkdir(outDir, { recursive: true });
 
   const sigs = await readJsonl(path.join(outDir, "signatures.jsonl"));
+  const commitments = await readJsonlIfExists(path.join(outDir, "trace_commitments.jsonl"));
   const envs = await readJsonl(path.join(outDir, "environments.jsonl"));
   const calibrationManifest = JSON.parse(
     await readFile(path.join(outDir, "calibration_manifest.json"), "utf8"),
@@ -53,12 +65,26 @@ async function main() {
   const m_min = calibrationManifest.selected_m_min;
 
   const envById = new Map(envs.map((e) => [e.id, redactEnv(e)]));
+  const commitmentByTrace = new Map();
+  const duplicateTraceIds = new Set();
+  for (const c of commitments) {
+    if (commitmentByTrace.has(c.trace_id)) duplicateTraceIds.add(c.trace_id);
+    else commitmentByTrace.set(c.trace_id, c);
+  }
 
   const rows = [[
     "env_id", "policy_id", "split", "decision", "reason",
     "margin_lower_bound", "coverage_touched", "invariance_pass", "noise_std_estimate",
+    "integrity_pass", "geometry_pass",
     "verify_wall_ms", "verify_ops",
   ].join(",")];
+
+  const integrityRows = isV1 ? [[
+    "env_id", "policy_id", "split", "check", "decision", "reason",
+  ].join(",")] : null;
+  const integrityFailureRows = isV1 ? [[
+    "env_id", "policy_id", "split", "check", "registered_behavior", "observed_decision", "observed_reason",
+  ].join(",")] : null;
 
   let nAccept = 0, nReject = 0, nQuarantine = 0;
   const verifyCosts = { wall_ms: 0, ops: 0, calls: 0 };
@@ -70,6 +96,7 @@ async function main() {
     if (publicEnv.split === "calibration") continue; // measurement only
 
     const expectedTraceId = `${policyId}|${envId}`;
+    const traceCommitment = commitmentByTrace.get(expectedTraceId);
     const t0 = performance.now();
     const result = verify({
       sigma,
@@ -78,6 +105,8 @@ async function main() {
       m_min,
       promise: V0_PROMISE,
       thresholds: V0_CHECKER_THRESHOLDS,
+      traceCommitment,
+      commitmentDuplicate: duplicateTraceIds.has(expectedTraceId),
     });
     const elapsed = performance.now() - t0;
     // Verifier ops: ~10 constant-time threshold checks.
@@ -93,10 +122,52 @@ async function main() {
       envId, policyId, publicEnv.split, result.decision, result.reason,
       sigma.margin_lower_bound.toFixed(6),
       sigma.coverage_digest.touched_cells,
-      sigma.invariance_checks.all_pass ? 1 : 0,
-      sigma.sensor_health.noise_std_estimate.toFixed(6),
+      (sigma.invariance_checks_v1 ?? sigma.invariance_checks).all_pass ? 1 : 0,
+      (sigma.sensor_health_v1 ?? sigma.sensor_health).noise_std_estimate.toFixed(6),
+      sigma.integrity_checks?.all_pass === false ? 0 : 1,
+      sigma.geometry_promise_signal ? (sigma.geometry_promise_signal.all_pass ? 1 : 0) : "",
       elapsed.toFixed(3), ops,
     ]));
+
+    if (isV1) {
+      integrityRows.push(csvRow([
+        envId, policyId, publicEnv.split,
+        "normal_certificate",
+        result.reason && result.reason.includes("integrity") ? "quarantine" : "checked",
+        result.reason,
+      ]));
+    }
+  }
+
+  if (isV1 && sigs.length > 0) {
+    const target = sigs.find((s) => envById.get(s.source_observations.env_id)?.split !== "calibration") ?? sigs[0];
+    const policyId = target.source_observations.policy_id;
+    const envId = target.source_observations.env_id;
+    const publicEnv = envById.get(envId);
+    const expectedTraceId = `${policyId}|${envId}`;
+    const traceCommitment = commitmentByTrace.get(expectedTraceId);
+    const probes = [
+      ["missing_trace_commitment", { sigma: target, traceCommitment: null }],
+      ["source_hash_mismatch", { sigma: { ...target, source_hash: `bad-${target.source_hash}` }, traceCommitment }],
+      ["derived_field_hash_mismatch", { sigma: { ...target, margin_lower_bound: target.margin_lower_bound + 0.5 }, traceCommitment }],
+      ["stale_transform_version", { sigma: { ...target, transform_version: "stale-transform" }, traceCommitment }],
+      ["duplicate_trace_id", { sigma: target, traceCommitment, commitmentDuplicate: true }],
+    ];
+    for (const [check, input] of probes) {
+      const result = verify({
+        sigma: input.sigma,
+        expectedTraceId,
+        publicEnv,
+        m_min,
+        promise: V0_PROMISE,
+        thresholds: V0_CHECKER_THRESHOLDS,
+        traceCommitment: input.traceCommitment,
+        commitmentDuplicate: input.commitmentDuplicate ?? false,
+      });
+      integrityFailureRows.push(csvRow([
+        envId, policyId, publicEnv.split, check, "quarantine", result.decision, result.reason,
+      ]));
+    }
   }
 
   await writeFile(
@@ -104,6 +175,11 @@ async function main() {
     rows.join("\n") + "\n",
     "utf8",
   );
+
+  if (isV1) {
+    await writeFile(path.join(outDir, "integrity_decisions.csv"), integrityRows.join("\n") + "\n", "utf8");
+    await writeFile(path.join(outDir, "integrity_failures.csv"), integrityFailureRows.join("\n") + "\n", "utf8");
+  }
 
   // Roll verifier costs into partial costs file (additive).
   const partialPath = path.join(outDir, "costs.partial.json");
