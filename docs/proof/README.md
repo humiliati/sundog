@@ -16,6 +16,10 @@ that claim provably fails.
 - [`PHASE2_MDP.md`](PHASE2_MDP.md) — Phase 2 finite-MDP sufficiency proof
   (reviewed, closed positive), counterexample, and Formal Separability
   corollary.
+- [`PDE_DETERMINING_MODES_POSTULATE1.md`](PDE_DETERMINING_MODES_POSTULATE1.md)
+  — Navier-Stokes Candidate 1 sidecar: determining modes read through
+  Postulate 1 (drafted; external PDE review and a runnable cell-set artifact
+  still pending).
 - [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md) — Phase 3 boundary theorem
   (reviewed, closed positive) and pushable-occluder mapping.
 - [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) — Phase 4 three-body measured
