@@ -377,7 +377,9 @@ decoder, timing probe, and full clean receipt. The `blackwell_task_decoder_v1`
 receipt is Branch C bounded failure: `signature_palette` scored zero exact
 matches on both held-out lanes. The matched full-grid control also scored zero
 exact matches, so the receipt does not support sufficiency and should not be
-described as a full-grid superiority result.
+described as a full-grid superiority result. The next valid sufficiency
+comparison requires a passing full-grid control first, by strengthening the
+decoder lane, narrowing the registered task class, or both.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

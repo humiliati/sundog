@@ -3336,3 +3336,87 @@ Still forbidden:
 - any public-evaluation or Kaggle private/semi-private claim;
 - any Branch A support or Branch B narrowed-support claim from this receipt;
 - describing this receipt as evidence on the public-evaluation split.
+
+### 2026-05-28 -- Post-Blackwell Comparison Gate And Next Paths
+
+Author: Codex, from operator-provided strategic interpretation.
+
+Justification: the full Blackwell receipt fired Branch C, but the matched
+`raw_grid_lowcap` control also stayed at exact zero. This amendment freezes the
+interpretation of that fact: the current receipt calibrates the decoder lane,
+not the signature-vs-full-grid information comparison. It also names the
+minimal next paths before any renewed sufficiency comparison is meaningful.
+
+Verdict impact: no change to the Blackwell full-run verdict. Branch C bounded
+failure remains filed for `blackwell_task_decoder_v1`. This amendment narrows
+how the verdict may be interpreted and gates any future Phase 3 comparison.
+
+#### Comparison Gate
+
+A meaningful `signature_palette` vs `raw_grid_lowcap` Blackwell comparison
+requires a passing full-grid control. The minimum gate for a future lane is:
+
+- `raw_grid_lowcap` must clear the registered non-trivial exact-grid floor on
+  held-out-task LODO and held-out public-training test lanes;
+- the run must be clean, hashed, and use a pre-registered learner/subset;
+- only after that gate passes may the receipt ask whether `signature_palette`
+  is statistically indistinguishable from, better than, or materially behind
+  the full-grid control.
+
+Until that happens, a zero-exact `signature_palette` result is a decoder-lane
+calibration point rather than a clean information-loss result.
+
+#### Admitted Next Paths
+
+Future Phase 3 work must choose one of the following before execution:
+
+1. **Strengthen the decoder lane.** Admit a stronger learner by append-only
+   amendment: deeper/wider model, better optimization, improved curriculum,
+   more demonstrations or augmentation from public-training tasks, or a
+   different architecture. The amendment must freeze capacity, data policy,
+   seeds, wall-clock expectation, and a full-grid-control pass gate before
+   looking at results.
+2. **Narrow the registered task subset.** File a new subset amendment or
+   sidecar register for a class where the current lane can plausibly learn from
+   the full grid. The subset must be chosen by pre-registered criteria, not by
+   post-hoc success inspection, and must preserve leak discipline.
+3. **Do both.** Admit a stronger learner and a narrower, explicitly scoped
+   registered class. In that case the claim boundary is the narrowed class,
+   not the original 36-task Phase 0 register.
+
+No renewed sufficiency claim may be made from any of these paths unless
+`raw_grid_lowcap` passes first.
+
+#### Strategic Interpretation
+
+This result is not a setback for the Sundog-vs-ARC direction. It is a
+calibration point:
+
+- the frozen small transformer lane is too weak for the breadth of the
+  36-task Phase 0 register;
+- the next honest test needs either a stronger decoder, an easier/narrower
+  registered task distribution, or both;
+- Phase 0-2 remain useful receipts: they define the registered subset, leak
+  discipline, shadow-domain operator, projection behavior, color caveat, and
+  baseline floor;
+- Phase 3 now contributes an honest negative boundary: under the registered
+  small-transformer lane, neither signature nor full grid learned held-out
+  exact outputs.
+
+Theory-paper posture:
+
+> "We present the shadow/signature formulation and Phase 0-2 receipts, then
+> report a Phase 3 bounded-failure calibration: the registered
+> `blackwell_task_decoder_v1` did not produce a passing full-grid control and
+> therefore could not adjudicate signature sufficiency. A valid sufficiency
+> test requires either a stronger decoder, a narrower registered task class, or
+> both, with the full-grid control passing before the signature comparison is
+> interpreted."
+
+Still forbidden:
+
+- describing the Blackwell full receipt as a signature-specific falsification
+  independent of decoder capacity;
+- describing `raw_grid_lowcap` as having learned the registered task class;
+- using a narrowed future subset to make claims about the original 36-task
+  register without filing a separate cross-subset receipt.
