@@ -5256,3 +5256,199 @@ cost roughly doubles from Phase 3A's 4.5 s).
 **Public-language constraint**: no change. The pre-binding-receipt
 language from the Branch D spec §"Public Language" remains the only
 permitted public addition.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch D Capped Timing Probe + Shard+Merge Protocol Admission
+
+CPU + GPU capped timing probes ran against the post-freeze runner
+under freeze-marker commit
+`95A97C1FC04C9099CA6CA01EF87B4CAEBC586EE9` (operator's HEAD at probe
+time after several parallel commits), both `gitDirty=false`.
+Configuration: `--probe-only --probe-steps 100 --limit-arms
+raw_grid_edit --limit-seeds 20260528`, all 36 registered tasks, 49
+held-out instances (`validation_lodo=18`, `validation_pttest=6`,
+`test_lodo=19`, `pttest=6`). Receipts at
+`results/arc/phase3d-timing-probe-{cpu,gpu}/` (deleted before commit
+after extrapolation).
+
+#### Probe Wall And Step-Cap Saturation
+
+| device | elapsed (s) | elapsed (min) | mask cap hit | color cap hit |
+| --- | ---: | ---: | ---: | ---: |
+| CPU (i7-7820HK) | 489.9 | 8.17 | 49 / 49 (100%) | 49 / 49 (100%) |
+| CUDA (GTX 1080) | 318.7 | 5.31 | 49 / 49 (100%) | 49 / 49 (100%) |
+
+100% of fits ran to the 100-step cap. As with Phase 3A, the
+per-task scratch learners overfit the tiny conditioning sets
+continuously — loss keeps improving by at least `1e-6` every step —
+so projecting to the full registered caps (`mask.max_steps = 700`,
+`color.max_steps = 700`) must assume cap dominance, not early-stop.
+
+#### Wall-Clock Extrapolation Method
+
+Two CPU data points isolate per-instance overhead from per-step cost:
+
+- smoke (3 steps × 1 arm × 1 seed × 49 instances): 222.6 s
+- probe (100 steps × 1 arm × 1 seed × 49 instances): 489.9 s
+
+`49 F + 49 × 6 S = 222.6` and `49 F + 49 × 200 S = 489.9`, where
+`F` is per-instance feature-build + baseline-iteration cost and `S`
+is per-step training cost. Solving: **`S_cpu = 0.0281 s/step`**,
+**`F = 4.374 s/instance`**. Compared to Phase 3A's `F = 1.882
+s/instance`, Phase 3D's per-instance overhead is roughly 2.3× larger
+because of the 50-candidate baseline iteration (5 shape × 10 canvas
+rules evaluated against every conditioning pair) plus the threshold
+sweep over 9 candidate thresholds.
+
+GPU step cost from the GPU probe (assuming `F` is the same since
+feature build is Python-bound): **`S_gpu ≈ 0.0107 s/step`** (≈ 2.64×
+faster than CPU on steps).
+
+#### Full-Run Wall Projection
+
+Per arm-seed at registered caps (700 mask + 700 color steps × 49
+instances) with no early-stop:
+
+| component | CPU wall (s) | GPU wall (s) |
+| --- | ---: | ---: |
+| feature build + baseline iter (49 × F) | 214.4 | 214.4 (Python; not GPU-accelerated) |
+| mask training (49 × 700 × S) | 963.2 | 366.9 |
+| color training (49 × 700 × S) | 963.2 | 366.9 |
+| **per arm-seed total** | **2140.8 (35.7 min)** | **948.2 (15.8 min)** |
+
+Full 4 arms × 5 seeds = 20 combinations:
+
+| posture | concurrent shards | rounds | wall envelope |
+| --- | ---: | ---: | --- |
+| CPU serial | 1 | 20 | ~11.9 h |
+| GPU serial | 1 | 20 | ~5.25 h |
+| GPU 3-shard concurrent | 3 | 7 (last round 2 shards) | ~1.93 h (10% contention budget) |
+| GPU 4-shard concurrent | 4 | 5 | ~1.51 h (15% contention budget) |
+
+Both serial postures well over the 10-minute rule. Sharding mirrors
+Phase 3A's experience: 3-shard parallel is the safer default.
+
+#### Shard+Merge Protocol Admission
+
+The Phase 3D runner gains the (arm × seed) shard+merge protocol used
+by Phase 3A, including the `--allow-mixed-commits` override.
+
+**Tooling additions** (committed alongside this amendment):
+
+- `docs/prereg/arc/phase3d_structured_edit_residual.py`:
+  - New args: `--shard-arm <name>`, `--shard-seed <int>` (must be
+    provided together), `--merge`, `--shard-dirs <comma-list>`,
+    `--allow-mixed-commits`.
+  - Shard mode pins `mode="shard"`, restricts to a single (arm,
+    seed), records `shardArm`/`shardSeed` plus `seedSlateOriginal`
+    and `armsOriginal` in the manifest, skips arena gate + branch
+    adjudication.
+  - New helpers: `read_jsonl`, `read_csv_dicts`, `_parse_bool`,
+    `assert_shard_consistency`, `run_merge`.
+  - `--data-dir`/`--register` become optional (still enforced for
+    non-merge invocations).
+  - `assert_shard_consistency` enforces equality on
+    `featureSchemaVersion`, `protocolVersion`, `receiptSchemaVersion`,
+    `learnerVersion`, `registerHash`, `dataDirHash`, `registerPath`,
+    `dataDir`, `maskModelSpec`, `colorModelSpec`, `shapeRules`,
+    `canvasRules`, `maskThresholds`, `seedSlate`, `arms`,
+    `maxStepsEffective`. Under `--allow-mixed-commits`, `gitCommit`,
+    `specHash`, and `parentSpecHash` are dropped from the strict
+    list; the runner file content is audited via `git show
+    <commit>:<runner_path>` for every distinct shard `gitCommit`,
+    and the audit dict (including a `runnerIdenticalAcrossCommits`
+    flag) is recorded in the merged manifest as
+    `mixedCommitsAudit`. Runner-SHA mismatches print a WARN but do
+    not fail (operator override is the trust marker, audit makes
+    divergence visible).
+  - `run_merge`: loads each shard's `manifest.json`,
+    `per_instance.csv`, `learning_curves.csv`, `residuals.jsonl`,
+    `baseline_selection.csv`, and `edit_metrics.csv`; reconstructs
+    `per_arm_validation_metrics` and `per_instance_seed_outcomes`
+    from the merged per-instance rows; pulls per-seed validation
+    loss from each shard's manifest; runs the existing
+    `select_seed_for_arm` + aggregation + arena gate + Branch D
+    adjudication pipeline unchanged.
+- `package.json`: adds
+  `arc:phase3d:structured-edit-residual-v1:shard` and
+  `arc:phase3d:structured-edit-residual-v1:merge`.
+- `.gitignore`: no change (existing
+  `results/arc/phase3d-structured-edit-residual-v1/` entry covers
+  the binding output path; shard intermediates live in
+  `results/arc/phase3d-structured-edit-residual-v1-shard-*` under
+  the broader `results/arc/` ignore).
+
+**Shard-equivalence smoke** (CPU, `--probe-only --probe-steps 3
+--limit-arms raw_grid_edit --limit-seeds 20260528,20260529` serial
+vs. 2 shards merged):
+
+| artifact | merged vs serial |
+| --- | --- |
+| `scores.csv` | `cmp` exit 0 (byte-identical) |
+| `per_task.csv` | `cmp` exit 0 (byte-identical) |
+| `per_prior.csv` | `cmp` exit 0 (byte-identical) |
+| `per_instance.csv` | `cmp` exit 0 (byte-identical) |
+| `baseline_selection.csv` | `cmp` exit 0 (byte-identical) |
+| `edit_metrics.csv` | `cmp` exit 0 (byte-identical) |
+| `seed_stability.csv` | `cmp` exit 0 (byte-identical) |
+
+The merge correctly emits `branch_d_full_grid_edit_floor` (expected
+at 3-step probe with no learning). Smoke + probe directories were
+deleted before commit.
+
+#### Staged Full-Run Command (3-Shard GPU Parallel)
+
+The frozen launch command (PowerShell, GPU, 4 arms × 5 seeds = 20
+shards):
+
+```powershell
+$env:SUNDOG_PYTHON = "C:\Users\hughe\AppData\Local\Programs\Python\Python312\python.exe"
+foreach ($arm in @("raw_grid_edit","signature_palette_edit","signature_only_edit","metadata_only_edit")) {
+    foreach ($seed in @(20260528, 20260529, 20260530, 20260531, 20260601)) {
+        Start-Process -NoNewWindow `
+            -RedirectStandardOutput "results/arc/phase3d-logs/$arm-$seed.log" `
+            -RedirectStandardError "results/arc/phase3d-logs/$arm-$seed.err" `
+            -FilePath "npm" -ArgumentList @(
+                "run", "arc:phase3d:structured-edit-residual-v1:shard", "--",
+                "--data-dir", "$env:USERPROFILE\Datasets\ARC-AGI-2\data",
+                "--register", "docs/prereg/arc/P0_TASK_REGISTER.csv",
+                "--out", "results/arc/phase3d-structured-edit-residual-v1-shard-$arm-$seed",
+                "--shard-arm", "$arm",
+                "--shard-seed", "$seed",
+                "--device", "cuda"
+            )
+        # Throttle to 3 concurrent shards.
+    }
+}
+
+# After all 20 shards land:
+npm run arc:phase3d:structured-edit-residual-v1:merge -- `
+    --shard-dirs <comma-joined list of all 20 dirs> `
+    --out results/arc/phase3d-structured-edit-residual-v1
+```
+
+Operator-discretionary additions:
+
+- Pass `--allow-mixed-commits` to the merge if parallel commits
+  landed during the slate (Phase 3A precedent — likely on this
+  workstation given simultaneous Navier-Stokes/Riemann/P-vs-NP
+  lanes).
+- Pass `--allow-dirty` to individual shard re-launches if the
+  worktree carries non-ARC mods.
+
+**Resume safety**: each shard is single-process and resume-unsafe at
+the (instance) granularity. A crashed shard is re-run as a single
+unit; surviving shards remain intact.
+
+#### Per-Outcome Decision Rule
+
+| arena gate outcome | next action |
+| --- | --- |
+| `raw_grid_edit_arena_open` (≥ 1 non-baseline exact task on `test_lodo` AND `pttest` for `raw_grid_edit`) | Examine `branchAdjudication`. If `branch_d_support`, file the receipt + open public-language additions per spec §"Public Language". If `branch_d_bounded_failure`, file the receipt + the named-quarantine breakdown from `quarantine_log.csv`. |
+| `branch_d_full_grid_edit_floor` (raw_grid_edit does not open the non-baseline arena) | Per spec §"Arena Gate": no signature sufficiency language allowed; no extra seeds; the next admissible Phase 3 work must be a new append-only learner spec (Phase 3E or further Branch D variant). This would also close the *fifth* full-grid control receipt with the structured-edit framing not lifting the floor either, narrowing the space of plausible Phase 3 reopens dramatically. |
+
+**Verdict impact**: no prior verdict changes. Branch D status moves
+from "EXECUTION ADMITTED, capped probe required" to "EXECUTION
+ADMITTED, shard+merge protocol admitted, 20-shard launch ready". No
+binding receipt yet.
+
+**Public-language constraint**: unchanged.

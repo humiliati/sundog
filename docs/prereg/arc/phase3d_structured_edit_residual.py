@@ -1291,10 +1291,441 @@ def adjudicate_branch_d(per_task_rows: list[dict[str, Any]], per_lane_rows: list
 # ============================================================================
 # Main
 # ============================================================================
+def read_jsonl(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    rows = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        rows.append(json.loads(line))
+    return rows
+
+
+def read_csv_dicts(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    with path.open("r", encoding="utf-8", newline="") as fh:
+        reader = csv.DictReader(fh)
+        return [dict(row) for row in reader]
+
+
+def _parse_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.strip().lower() in {"true", "1", "yes"}
+    return bool(value)
+
+
+def assert_shard_consistency(shards: list[dict[str, Any]], repo_root: Path | None = None, allow_mixed_commits: bool = False) -> dict[str, Any] | None:
+    """Mirror Phase 3A: every shard must share schema/spec/register/data/model fingerprints.
+
+    Under `allow_mixed_commits=True`, `gitCommit` / `specHash` / `parentSpecHash`
+    may differ; the runner file content is audited across distinct gitCommits
+    and the audit dict is returned for the merged manifest. Runner SHA
+    differences print a WARN but do not fail (the operator's override is the
+    trust marker; the audit makes the divergence visible).
+    """
+    if len(shards) < 2:
+        return None
+    ref = shards[0]["manifest"]
+    keys = [
+        "featureSchemaVersion", "protocolVersion", "receiptSchemaVersion", "learnerVersion",
+        "registerHash", "dataDirHash",
+        "registerPath", "dataDir",
+        "maskModelSpec", "colorModelSpec", "shapeRules", "canvasRules", "maskThresholds",
+        "seedSlate", "arms",
+        "maxStepsEffective",
+    ]
+    if not allow_mixed_commits:
+        keys.extend(["gitCommit", "specHash", "parentSpecHash"])
+    seen_arm_seed: set[tuple[str, int]] = set()
+    for sh in shards:
+        m = sh["manifest"]
+        if m.get("mode") != "shard":
+            raise SystemExit(f"shard dir {sh['dir']} has mode={m.get('mode')!r}, expected 'shard'")
+        arm = m.get("shardArm")
+        seed = m.get("shardSeed")
+        key = (arm, seed)
+        if key in seen_arm_seed:
+            raise SystemExit(f"shard dir {sh['dir']} has duplicate (shardArm={arm!r}, shardSeed={seed}) pair")
+        seen_arm_seed.add(key)
+        for k in keys:
+            ref_val = json.dumps(ref.get(k), sort_keys=True)
+            sh_val = json.dumps(m.get(k), sort_keys=True)
+            if ref_val != sh_val:
+                raise SystemExit(f"shard dir {sh['dir']} disagrees with {shards[0]['dir']} on {k!r}:\n  ref={ref_val}\n  sh ={sh_val}")
+    if not allow_mixed_commits:
+        return None
+    distinct_commits = sorted({sh["manifest"]["gitCommit"] for sh in shards})
+    if len(distinct_commits) <= 1:
+        return None
+    if repo_root is None:
+        repo_root = Path(__file__).resolve().parents[3]
+    runner_path = "docs/prereg/arc/phase3d_structured_edit_residual.py"
+    runner_shas: dict[str, str] = {}
+    for c in distinct_commits:
+        try:
+            blob = subprocess.check_output(["git", "show", f"{c.lower()}:{runner_path}"], cwd=str(repo_root))
+        except subprocess.CalledProcessError as exc:
+            raise SystemExit(f"--allow-mixed-commits: cannot read {runner_path} at gitCommit {c}: {exc}")
+        runner_shas[c] = hashlib.sha256(blob).hexdigest().upper()
+    unique = sorted(set(runner_shas.values()))
+    runner_identical = len(unique) == 1
+    if runner_identical:
+        print(f"--allow-mixed-commits: verified {runner_path} byte-identical across {len(distinct_commits)} commits")
+    else:
+        print(
+            f"--allow-mixed-commits: WARN — {runner_path} differs across {len(distinct_commits)} commits "
+            f"({len(unique)} distinct hashes). Shard-time computational contract "
+            "(featureSchemaVersion, protocolVersion, learnerVersion, maskModelSpec, "
+            "colorModelSpec, shapeRules, canvasRules, maskThresholds) IS equal across "
+            "all shards — audit recorded for review."
+        )
+    return {
+        "auditedFile": runner_path,
+        "distinctCommits": distinct_commits,
+        "runnerSha256ByCommit": runner_shas,
+        "distinctRunnerSha256": unique,
+        "runnerIdenticalAcrossCommits": runner_identical,
+        "specHashByCommit": {sh["manifest"]["gitCommit"]: sh["manifest"].get("specHash") for sh in shards},
+        "parentSpecHashByCommit": {sh["manifest"]["gitCommit"]: sh["manifest"].get("parentSpecHash") for sh in shards},
+    }
+
+
+def run_merge(args) -> int:
+    started_at = iso_now()
+    repo_root = Path(__file__).resolve().parents[3]
+    out_dir = Path(args.out).resolve()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    git = git_state(repo_root, args.allow_dirty)
+
+    shard_dirs = [Path(d.strip()).resolve() for d in args.shard_dirs.split(",") if d.strip()]
+    if not shard_dirs:
+        print("--shard-dirs is empty", file=sys.stderr)
+        return 2
+
+    shards = []
+    for d in shard_dirs:
+        if not d.is_dir():
+            print(f"shard dir not found: {d}", file=sys.stderr)
+            return 2
+        manifest = json.loads((d / "manifest.json").read_text(encoding="utf-8"))
+        if manifest.get("learnerVersion") != LEARNER_VERSION:
+            print(f"shard dir {d} learnerVersion={manifest.get('learnerVersion')!r}, expected {LEARNER_VERSION!r}", file=sys.stderr)
+            return 2
+        shards.append({
+            "dir": d,
+            "manifest": manifest,
+            "per_instance_rows": read_csv_dicts(d / "per_instance.csv"),
+            "learning_rows": read_csv_dicts(d / "learning_curves.csv"),
+            "residual_rows": read_jsonl(d / "residuals.jsonl"),
+            "baseline_sel_rows": read_csv_dicts(d / "baseline_selection.csv"),
+            "edit_metrics_rows": read_csv_dicts(d / "edit_metrics.csv"),
+        })
+
+    mixed_audit = assert_shard_consistency(shards, repo_root=repo_root, allow_mixed_commits=args.allow_mixed_commits)
+    shards.sort(key=lambda s: (s["manifest"]["shardArm"], s["manifest"]["shardSeed"]))
+
+    # Concatenate raw shard outputs.
+    per_instance_rows: list[dict[str, Any]] = []
+    learning_rows: list[dict[str, Any]] = []
+    residual_rows: list[dict[str, Any]] = []
+    baseline_sel_rows: list[dict[str, Any]] = []
+    edit_metrics_rows: list[dict[str, Any]] = []
+    for sh in shards:
+        for row in sh["per_instance_rows"]:
+            coerced = dict(row)
+            for col, parse in (
+                ("seed", int),
+                ("background_color", int),
+                ("grid_exact", _parse_bool),
+                ("baseline_exact", _parse_bool),
+                ("nonbaseline_exact", _parse_bool),
+                ("shape_exact", _parse_bool),
+                ("palette_exact", _parse_bool),
+                ("pixel_accuracy", float),
+                ("baseline_residual_mass", float),
+                ("edit_mask_precision", float),
+                ("edit_mask_recall", float),
+                ("edit_mask_f1", float),
+                ("over_edit_rate", float),
+                ("under_edit_rate", float),
+                ("target_edit_mass", float),
+                ("predicted_edit_mass", float),
+                ("edit_color_accuracy", float),
+                ("minority_edit_recall", float),
+                ("selected_threshold", float),
+                ("copy_prior_absent", _parse_bool),
+            ):
+                if col in coerced:
+                    try:
+                        coerced[col] = parse(coerced[col])
+                    except (ValueError, TypeError):
+                        pass
+            per_instance_rows.append(coerced)
+        learning_rows.extend(sh["learning_rows"])
+        residual_rows.extend(sh["residual_rows"])
+        baseline_sel_rows.extend(sh["baseline_sel_rows"])
+        edit_metrics_rows.extend(sh["edit_metrics_rows"])
+
+    # Reconstruct per-arm validation metrics + seed outcomes from per-instance rows + manifests.
+    arms_present: list[str] = []
+    seeds_present: set[int] = set()
+    per_arm_validation_metrics: dict[str, dict[int, dict[str, Any]]] = {}
+    per_instance_seed_outcomes: dict[tuple[str, str], dict[int, bool]] = {}
+    for r in per_instance_rows:
+        seeds_present.add(r["seed"])
+        if r["arm"] not in arms_present:
+            arms_present.append(r["arm"])
+        per_arm_validation_metrics.setdefault(r["arm"], {}).setdefault(r["seed"], {})
+        per_instance_seed_outcomes.setdefault((r["arm"], r["instance_id"]), {})[r["seed"]] = r["nonbaseline_exact"]
+        if r.get("lane", "").startswith("validation_"):
+            bucket = per_arm_validation_metrics[r["arm"]][r["seed"]].setdefault("counts", {
+                "nonbaseline_exact": 0, "n": 0,
+                "f1_sum": 0.0, "min_recall_sum": 0.0, "over_edit_sum": 0.0, "loss_sum": 0.0,
+            })
+            bucket["n"] += 1
+            if r["nonbaseline_exact"]:
+                bucket["nonbaseline_exact"] += 1
+            bucket["f1_sum"] += r["edit_mask_f1"]
+            bucket["min_recall_sum"] += r["minority_edit_recall"]
+            bucket["over_edit_sum"] += r["over_edit_rate"]
+    # Pull val_loss from each shard manifest.
+    for sh in shards:
+        sm = sh["manifest"]
+        arm = sm["shardArm"]
+        seed = sm["shardSeed"]
+        sm_metrics = sm.get("perSeedValidationMetrics", {}).get(arm, {}).get(str(seed), {})
+        per_arm_validation_metrics[arm][seed]["val_loss"] = sm_metrics.get("val_loss", float("inf"))
+    for arm, by_seed in per_arm_validation_metrics.items():
+        for seed, m in by_seed.items():
+            bucket = m.get("counts", {"nonbaseline_exact": 0, "n": 0, "f1_sum": 0.0, "min_recall_sum": 0.0, "over_edit_sum": 0.0, "loss_sum": 0.0})
+            n = max(1, bucket["n"])
+            m["val_nonbaseline_exact_count"] = bucket["nonbaseline_exact"]
+            m["val_edit_mask_f1"] = round_float(bucket["f1_sum"] / n)
+            m["val_minority_edit_recall"] = round_float(bucket["min_recall_sum"] / n)
+            m["val_over_edit_rate"] = round_float(bucket["over_edit_sum"] / n)
+
+    arms = sorted(arms_present, key=lambda a: ARMS.index(a))
+    seeds = sorted(seeds_present)
+
+    selected_seed_by_arm = {arm: select_seed_for_arm(arm, per_arm_validation_metrics[arm]) for arm in arms}
+    selected_rows = [r for r in per_instance_rows if r["seed"] == selected_seed_by_arm[r["arm"]]]
+
+    def _agg_scores(rows):
+        out = []
+        groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+        for r in rows:
+            groups.setdefault((r["lane"], r["arm"]), []).append(r)
+        for (lane, arm), group in sorted(groups.items()):
+            task_ids = sorted({r["task_id"] for r in group})
+            out.append({
+                "lane": lane,
+                "arm": arm,
+                "selected_seed": selected_seed_by_arm[arm],
+                "task_count": len(task_ids),
+                "instance_count": len(group),
+                "grid_exact_any_rate": round_float(sum(1 for r in group if r["grid_exact"]) / len(group)),
+                "baseline_exact_any_rate": round_float(sum(1 for r in group if r["baseline_exact"]) / len(group)),
+                "nonbaseline_exact_any_rate": round_float(sum(1 for r in group if r["nonbaseline_exact"]) / len(group)),
+                "shape_exact_rate": round_float(sum(1 for r in group if r["shape_exact"]) / len(group)),
+                "palette_exact_rate": round_float(sum(1 for r in group if r["palette_exact"]) / len(group)),
+                "pixel_accuracy_mean": round_float(sum(r["pixel_accuracy"] for r in group) / len(group)),
+                "edit_mask_f1_mean": round_float(sum(r["edit_mask_f1"] for r in group) / len(group)),
+                "minority_edit_recall_mean": round_float(sum(r["minority_edit_recall"] for r in group) / len(group)),
+                "over_edit_rate_mean": round_float(sum(r["over_edit_rate"] for r in group) / len(group)),
+                "predicted_edit_mass_mean": round_float(sum(r["predicted_edit_mass"] for r in group) / len(group)),
+            })
+        return out
+
+    def _agg_per_task(rows):
+        out = []
+        groups: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
+        for r in rows:
+            groups.setdefault((r["lane"], r["arm"], r["task_id"]), []).append(r)
+        for (lane, arm, task_id), group in sorted(groups.items()):
+            out.append({
+                "lane": lane,
+                "task_id": task_id,
+                "primary_prior": group[0]["primary_prior"],
+                "predicted_boundary": group[0].get("predicted_boundary", ""),
+                "arm": arm,
+                "selected_seed": selected_seed_by_arm[arm],
+                "instance_count": len(group),
+                "grid_exact_any_rate": round_float(sum(1 for r in group if r["grid_exact"]) / len(group)),
+                "nonbaseline_exact_any_rate": round_float(sum(1 for r in group if r["nonbaseline_exact"]) / len(group)),
+                "baseline_exact_any_rate": round_float(sum(1 for r in group if r["baseline_exact"]) / len(group)),
+                "shape_exact_rate": round_float(sum(1 for r in group if r["shape_exact"]) / len(group)),
+                "palette_exact_rate": round_float(sum(1 for r in group if r["palette_exact"]) / len(group)),
+                "pixel_accuracy_mean": round_float(sum(r["pixel_accuracy"] for r in group) / len(group)),
+            })
+        return out
+
+    def _agg_per_prior(rows):
+        out = []
+        groups: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
+        for r in rows:
+            groups.setdefault((r["lane"], r["primary_prior"], r["arm"]), []).append(r)
+        for (lane, prior, arm), group in sorted(groups.items()):
+            out.append({
+                "lane": lane,
+                "primary_prior": prior,
+                "arm": arm,
+                "instance_count": len(group),
+                "grid_exact_any_rate": round_float(sum(1 for r in group if r["grid_exact"]) / len(group)),
+                "nonbaseline_exact_any_rate": round_float(sum(1 for r in group if r["nonbaseline_exact"]) / len(group)),
+                "edit_mask_f1_mean": round_float(sum(r["edit_mask_f1"] for r in group) / len(group)),
+            })
+        return out
+
+    scores = _agg_scores(selected_rows)
+    per_task_rows_agg = _agg_per_task(selected_rows)
+    per_prior_rows = _agg_per_prior(selected_rows)
+
+    # Seed stability
+    unstable_keys: set[tuple[str, str]] = set()
+    seed_stability_rows: list[dict[str, Any]] = []
+    for (arm, instance_id), seed_outcomes in per_instance_seed_outcomes.items():
+        outcomes = sorted(seed_outcomes.items())
+        seed_instability = len(set(seed_outcomes.values())) > 1
+        if seed_instability:
+            unstable_keys.add((arm, instance_id))
+        seed_stability_rows.append({
+            "instance_id": instance_id,
+            "arm": arm,
+            "seed_outcomes": json.dumps({str(s): bool(v) for s, v in outcomes}, separators=(",", ":")),
+            "seed_instability": seed_instability,
+        })
+
+    for r in selected_rows:
+        if r["quarantine_label"] and (r["arm"], r["instance_id"]) in unstable_keys:
+            r["quarantine_label"] = "stochastic_instability"
+
+    quarantine_rows: list[dict[str, Any]] = []
+    for r in selected_rows:
+        if r["quarantine_label"]:
+            quarantine_rows.append({
+                "instance_id": r["instance_id"],
+                "lane": r["lane"],
+                "task_id": r["task_id"],
+                "arm": r["arm"],
+                "selected_seed": r["seed"],
+                "label": r["quarantine_label"],
+            })
+
+    arena = adjudicate_arena_gate(per_task_rows_agg)
+    branch = adjudicate_branch_d(per_task_rows_agg, scores, arena)
+
+    ref_manifest = shards[0]["manifest"]
+    drop_keys = {"mode", "shardArm", "shardSeed", "seedSlateOriginal", "armsOriginal",
+                 "armsEffective", "seedsEffective", "generatedAt", "completedAt",
+                 "command", "tool", "outDir", "instanceCount", "perSeedValidationMetrics",
+                 "selectedSeedByArm", "arenaGate", "branchAdjudication", "elapsedSecondsTotal"}
+    merged_manifest = {k: v for k, v in ref_manifest.items() if k not in drop_keys}
+    merged_manifest.update({
+        "generatedAt": min(sh["manifest"]["generatedAt"] for sh in shards),
+        "completedAt": iso_now(),
+        "tool": "docs/prereg/arc/phase3d_structured_edit_residual.py (merge)",
+        "command": [sys.executable, "docs/prereg/arc/phase3d_structured_edit_residual.py", *sys.argv[1:]],
+        "mode": "full",
+        "shardedRun": True,
+        "shardSources": [
+            {
+                "dir": str(sh["dir"]),
+                "shardArm": sh["manifest"]["shardArm"],
+                "shardSeed": sh["manifest"]["shardSeed"],
+                "generatedAt": sh["manifest"]["generatedAt"],
+                "completedAt": sh["manifest"]["completedAt"],
+                "gitCommit": sh["manifest"]["gitCommit"],
+                "gitDirty": sh["manifest"].get("gitDirty", False),
+                "allowDirty": sh["manifest"].get("allowDirty", False),
+                "elapsedSecondsTotal": sh["manifest"].get("elapsedSecondsTotal"),
+            }
+            for sh in shards
+        ],
+        "armsEffective": arms,
+        "seedsEffective": seeds,
+        "mergeStartedAt": started_at,
+        "mergeGitCommit": git["commit"],
+        "mergeGitDirty": git["dirty"],
+        "mergeAllowDirty": args.allow_dirty,
+        "outDir": str(out_dir),
+        "selectedSeedByArm": selected_seed_by_arm,
+        "arenaGate": arena,
+        "branchAdjudication": branch,
+        "perSeedValidationMetrics": per_arm_validation_metrics,
+        "elapsedSecondsTotalShards": round_float(sum(sh["manifest"].get("elapsedSecondsTotal", 0.0) for sh in shards)),
+        "allowMixedCommits": args.allow_mixed_commits,
+        "mixedCommitsAudit": mixed_audit,
+    })
+
+    write_json(out_dir / "manifest.json", merged_manifest)
+    write_csv(out_dir / "scores.csv", scores, SCORE_COLS)
+    write_csv(out_dir / "per_task.csv", per_task_rows_agg, PER_TASK_COLS)
+    write_csv(out_dir / "per_prior.csv", per_prior_rows, PER_PRIOR_COLS)
+    write_csv(out_dir / "per_instance.csv", per_instance_rows, PER_INSTANCE_COLS)
+    write_csv(out_dir / "baseline_selection.csv", baseline_sel_rows, BASELINE_SEL_COLS)
+    write_csv(out_dir / "edit_metrics.csv", edit_metrics_rows, EDIT_METRICS_COLS)
+    write_csv(out_dir / "learning_curves.csv", learning_rows, LEARNING_COLS)
+    write_csv(out_dir / "seed_stability.csv", seed_stability_rows, SEED_STABILITY_COLS)
+    write_csv(out_dir / "quarantine_log.csv", quarantine_rows, QUARANTINE_COLS)
+    write_jsonl(out_dir / "residuals.jsonl", residual_rows)
+    write_json(out_dir / "phase3d_receipt.json", {
+        "manifest": merged_manifest,
+        "scores": scores,
+        "perTask": per_task_rows_agg,
+        "perPrior": per_prior_rows,
+        "selectedSeedByArm": selected_seed_by_arm,
+        "arenaGate": arena,
+        "branchAdjudication": branch,
+        "perSeedValidationMetrics": per_arm_validation_metrics,
+    })
+
+    summary_lines = [
+        "# Phase 3D Branch Adjudication (structured_edit_residual_v1, merged)",
+        "",
+        f"Mode: `full` (sharded; {len(shards)} shards merged)",
+        "",
+        f"Arena gate: **{arena.get('gate', 'not_adjudicated')}**",
+        "",
+        arena.get("reason", ""),
+        "",
+        f"Branch decision: **{branch.get('branch', 'not_adjudicated')}**",
+        "",
+        branch.get("reason", ""),
+        "",
+        "Selected seed by arm:",
+        "",
+    ]
+    for arm in arms:
+        summary_lines.append(f"- `{arm}`: `{selected_seed_by_arm[arm]}`")
+    (out_dir / "branch_adjudication.md").write_text("\n".join(summary_lines) + "\n", encoding="utf-8")
+
+    (out_dir / "commands.md").write_text(
+        "# Phase 3D merge command\n\n```\n"
+        + " ".join([sys.executable, "docs/prereg/arc/phase3d_structured_edit_residual.py", *sys.argv[1:]])
+        + "\n```\n"
+        + f"\nMerged {len(shards)} shards from arms={arms}, seeds={seeds}.\n",
+        encoding="utf-8",
+    )
+
+    split_first = shards[0]["dir"] / "split.csv"
+    if split_first.exists():
+        (out_dir / "split.csv").write_text(split_first.read_text(encoding="utf-8"), encoding="utf-8")
+
+    write_json(out_dir / "hashes.json", hash_receipt_files(out_dir))
+    print(f"ARC Phase 3D merge wrote {out_dir}")
+    print(f"Arena gate: {arena.get('gate')}; branch: {branch.get('branch')}")
+    return 0
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=f"ARC Phase 3D structured-edit-residual ({LEARNER_VERSION})")
-    parser.add_argument("--data-dir", required=True)
-    parser.add_argument("--register", required=True)
+    parser.add_argument("--data-dir", required=False, default=None)
+    parser.add_argument("--register", required=False, default=None)
     parser.add_argument("--out", required=True)
     parser.add_argument("--master-seed", type=int, default=20260528)
     parser.add_argument("--device", default="cpu")
@@ -1304,8 +1735,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--limit-tasks", type=int, default=0)
     parser.add_argument("--limit-arms", default=None)
     parser.add_argument("--limit-seeds", default=None)
+    parser.add_argument("--shard-arm", default=None, help="Run a single arm from ARMS as a shard (no adjudication). Requires --shard-seed.")
+    parser.add_argument("--shard-seed", type=int, default=None, help="Run a single seed from SEED_SLATE as a shard (no adjudication). Requires --shard-arm.")
+    parser.add_argument("--merge", action="store_true", help="Merge shard intermediates into a binding receipt instead of training.")
+    parser.add_argument("--shard-dirs", default=None, help="Comma-separated list of shard receipt directories (--merge mode only).")
+    parser.add_argument("--allow-mixed-commits", action="store_true", help="Merge mode: bypass gitCommit / specHash / parentSpecHash equality across shards if the runner file content is verified across all distinct shard gitCommits. The audit is recorded in the merged manifest.")
     parser.add_argument("--allow-dirty", action="store_true")
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.merge:
+        if not args.shard_dirs:
+            parser.error("--merge requires --shard-dirs <dir1,dir2,...>")
+    else:
+        if not args.data_dir or not args.register:
+            parser.error("--data-dir and --register are required (except in --merge mode)")
+        if (args.shard_arm is None) != (args.shard_seed is None):
+            parser.error("--shard-arm and --shard-seed must be provided together")
+    return args
 
 
 def base_manifest(args, started_at, git, data_dir, register_path, out_dir, register_hash, data_hash, spec_hash, parent_spec_hash, instance_count) -> dict[str, Any]:
@@ -1418,6 +1863,8 @@ def select_seed_for_arm(arm: str, per_seed_metrics: dict[int, dict[str, Any]]) -
 
 def main() -> int:
     args = parse_args()
+    if args.merge:
+        return run_merge(args)
     started_at = iso_now()
     repo_root = Path(__file__).resolve().parents[3]
     out_dir = Path(args.out).resolve()
@@ -1469,15 +1916,28 @@ def main() -> int:
         print(f"ARC Phase 3D dry run wrote {out_dir}")
         return 0
 
-    arms = [a.strip() for a in args.limit_arms.split(",")] if args.limit_arms else list(ARMS)
-    for arm in arms:
-        if arm not in ARMS:
-            raise SystemExit(f"--limit-arms includes unknown arm {arm!r}; expected subset of {ARMS}")
-    seeds = [int(s) for s in args.limit_seeds.split(",")] if args.limit_seeds else list(SEED_SLATE)
-    for seed in seeds:
-        if seed not in SEED_SLATE:
-            raise SystemExit(f"--limit-seeds includes {seed} which is not in SEED_SLATE {SEED_SLATE}")
-    manifest["mode"] = "probe" if args.probe_only else "full"
+    if args.shard_arm is not None:
+        if args.shard_arm not in ARMS:
+            raise SystemExit(f"--shard-arm {args.shard_arm!r} not in ARMS {ARMS}")
+        if args.shard_seed not in SEED_SLATE:
+            raise SystemExit(f"--shard-seed {args.shard_seed} not in SEED_SLATE {SEED_SLATE}")
+        arms = [args.shard_arm]
+        seeds = [args.shard_seed]
+        manifest["mode"] = "shard"
+        manifest["shardArm"] = args.shard_arm
+        manifest["shardSeed"] = args.shard_seed
+        manifest["seedSlateOriginal"] = SEED_SLATE
+        manifest["armsOriginal"] = ARMS
+    else:
+        arms = [a.strip() for a in args.limit_arms.split(",")] if args.limit_arms else list(ARMS)
+        for arm in arms:
+            if arm not in ARMS:
+                raise SystemExit(f"--limit-arms includes unknown arm {arm!r}; expected subset of {ARMS}")
+        seeds = [int(s) for s in args.limit_seeds.split(",")] if args.limit_seeds else list(SEED_SLATE)
+        for seed in seeds:
+            if seed not in SEED_SLATE:
+                raise SystemExit(f"--limit-seeds includes {seed} which is not in SEED_SLATE {SEED_SLATE}")
+        manifest["mode"] = "probe" if args.probe_only else "full"
     max_steps_mask = args.probe_steps if args.probe_only else MASK_MODEL_SPEC["max_steps"]
     max_steps_color = args.probe_steps if args.probe_only else COLOR_MODEL_SPEC["max_steps"]
     manifest["maxStepsEffective"] = {"mask": max_steps_mask, "color": max_steps_color}
