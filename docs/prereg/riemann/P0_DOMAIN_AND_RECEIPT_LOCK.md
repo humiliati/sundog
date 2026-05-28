@@ -109,6 +109,9 @@ template in [`../../riemann/RECEIPT_TEMPLATE.md`](../../riemann/RECEIPT_TEMPLATE
 - 2026-05-28: lit-pass filed at
   [`../../RIEMANN_LITPASS_MEMO.md`](../../RIEMANN_LITPASS_MEMO.md) with
   time-stamped gap claims; re-audit windows live there.
-- No source selected.
-- No numeric thresholds frozen.
-- No run admitted.
+- 2026-05-28: Probe 01 v1 Path (i) run admitted and filed against Odlyzko
+  `zeros1`, `N = 5000`, max-height ceiling `1e4`, nearest-neighbor pairs,
+  reflection-residual threshold `1e-12`, and spacing sign-component threshold
+  `1e-12`. Raw output: `results/riemann/probe01-isotropy-zero-pairs/`.
+  Reviewed receipt:
+  [`../../riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](../../riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md).
