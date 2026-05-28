@@ -62,13 +62,27 @@ List files and hashes:
 
 ## Baseline Comparison
 
+External comparators only. Ablated signature lives in the Vacuity Probes block
+below.
+
 | Verifier | Access level | Cost | False accept | False reject | Quarantine | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | Signature verifier | indirect signature | | | | | |
 | Rollout verifier | evaluator / replay | | | | | |
 | Full-state verifier | privileged hidden state | | | | | |
 | Formal baseline | symbolic / reachability | | | | | |
-| Ablated signature | indirect partial signature | | | | | |
+
+## Vacuity Probes
+
+Internal sanity checks. A "vacuity verdict" of `failed` triggers the
+Certificate Vacuity falsifier below.
+
+| Dropped field | Cost vs full | Decision match vs full | Vacuity verdict |
+| --- | --- | --- | --- |
+| margin_lower_bound | | | |
+| coverage_digest | | | |
+| sensor_health | | | |
+| invariance_checks | | | |
 
 ## Falsifier Disposition
 
