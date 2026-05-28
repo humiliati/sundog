@@ -95,16 +95,32 @@ fall-back **not admissible** — `N_sample = 200,000` cannot shake loose
 an energy-locked attractor.
 **Cell-set v2** at
 [`proof/PDE_C1_CELLSET_KOLMOGOROV_v2.md`](proof/PDE_C1_CELLSET_KOLMOGOROV_v2.md)
-triples Grashof to `G = 300` while keeping `k_f = 2`, intended to
-break the energy-conservation symmetry by increasing the
-forced-dissipative imbalance. Harness exposes `--preset lock_v2`.
-Resolution check: `k_d ~ 1/sqrt(nu) ~ 4.16` sits inside the dealiased
-cutoff at `N = 16`. v2 not yet executed.
-Criterion (b) is closed at the *procedure-and-execution* level (v0 and
-v1 lock cycles ran cleanly; methodology survived both vacuity-mode
-diagnoses); a *substantive* C1 read still requires a non-vacuous v2+
-execution. Criteria (a) Front-A vacuity rebuttal and (c) external PDE
-reviewer remain open. Final (d) close is coupled to (c).
+tripled Grashof to `G = 300` while keeping `k_f = 2`. **Lock_v2 executed
+2026-05-28** in ~22 min (receipt at `results/proof/c1-kolmogorov-v2-lock/`).
+Procedural verdict `DEFERRED_COVERAGE`. The energy-conservation
+symmetry **was successfully broken**: post-burn-in spread is ~95% of
+mean, `damp_low_band_count = 430` (not zero), `damp_fraction = 0.0086`
+(structurally non-zero, so structural-vacuity precedence does *not*
+fire). But the regime is high-dimensional: 45,103 occupied bins from
+50,000 samples (~1.1 per bin), `S_eval = 0`. Two intertwined issues —
+curse-of-dimensionality coverage collapse + near-vacuity at
+`damp_fraction = 0.0086 < delta_proxy_min = 0.01`. Honest receipt
+under the pinned methodology; the binning prescription `h_K = ε_K /
+sqrt(d_K)` adapts to `E_max` but not to attractor extent.
+**Cell-set v3** at
+[`proof/PDE_C1_CELLSET_KOLMOGOROV_v3.md`](proof/PDE_C1_CELLSET_KOLMOGOROV_v3.md)
+backs Grashof off to `G = 200` looking for the sweet spot between v1's
+energy-conserved attractor and v2's high-dimensional chaos. Keep
+`k_f = 2`, `K = 4`, all other v0/v1/v2 §7 values inherited. Harness
+exposes `--preset lock_v3`. If v3 also defers, the next move is a
+methodology amendment (adaptive `h_K` scaling with attractor extent,
+or smaller `K`), not another G knob.
+Criterion (b) is closed at the *procedure-and-execution* level (v0, v1,
+v2 lock cycles all ran cleanly; methodology survived three distinct
+vacuity / coverage diagnoses without `PDE-C1-NEG-B`); a *substantive*
+C1 read still requires a non-vacuous, non-deferred v3+ execution.
+Criteria (a) Front-A vacuity rebuttal and (c) external PDE reviewer
+remain open. Final (d) close is coupled to (c).
 
 Candidate 2 has also been commissioned at the scoping level:
 [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)

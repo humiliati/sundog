@@ -39,11 +39,24 @@ that claim provably fails.
   exactly to 13 decimal places (non-trivial in signature space; 1397
   occupied bins; but `damp_fraction = 0` structurally).
 - [`PDE_C1_CELLSET_KOLMOGOROV_v2.md`](PDE_C1_CELLSET_KOLMOGOROV_v2.md)
-  — Navier-Stokes Candidate 1 cell-set v2: triples Grashof to
-  `G = 300` while keeping `k_f = 2`, intended to break the
-  energy-conservation symmetry that made v1 vacuous. All other v0/v1
-  §7 values inherited. Drafted, desk-auditable, unreviewed, unrun.
-  Harness exposes it as `--preset lock_v2`.
+  — Navier-Stokes Candidate 1 cell-set v2: tripled Grashof to
+  `G = 300` while keeping `k_f = 2`. Lock executed 2026-05-28
+  (~22 min); procedural `DEFERRED_COVERAGE`. **Energy conservation
+  successfully broken** (`damp_fraction = 0.0086`, real post-burn-in
+  chaos at 95% of mean) — but the attractor is high-dimensional:
+  45,103 occupied bins with 50,000 samples (~1.1 per bin),
+  `S_eval = 0`. Diagnosed two-fold: curse-of-dimensionality coverage
+  + near-vacuity at `damp_fraction = 0.0086 < delta_proxy_min = 0.01`.
+  Not a `PDE-C1-NEG-B` retune; the pinned binning prescription
+  doesn't adapt to attractor extent.
+- [`PDE_C1_CELLSET_KOLMOGOROV_v3.md`](PDE_C1_CELLSET_KOLMOGOROV_v3.md)
+  — Navier-Stokes Candidate 1 cell-set v3: backs Grashof off to
+  `G = 200` looking for the sweet spot between v1's energy
+  conservation and v2's high-dimensional chaos. Keep `k_f = 2`, `K = 4`,
+  all other v0/v1/v2 §7 values inherited. Drafted, desk-auditable,
+  unreviewed, unrun. Harness exposes `--preset lock_v3`. If v3 also
+  defers, the next move is a methodology amendment (adaptive `h_K` or
+  smaller `K`), not another G knob.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /
