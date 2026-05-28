@@ -358,6 +358,16 @@ registered subset with measured residuals and named quarantines outside,
 or (b) cleanly falsified with specific failure modes named. Either
 outcome is publishable.
 
+Execution artifact:
+[`docs/prereg/arc/PHASE3_SUFFICIENCY_SPEC.md`](prereg/arc/PHASE3_SUFFICIENCY_SPEC.md).
+Status (2026-05-28): spec filed; decoder training held. Phase 2 baseline
+comparison sharpened the problem: `P_shadow_grid_v0` preserves distinctness
+but makes input-output pairs farther apart than raw-pixel and coarse-feature
+baselines. Phase 3 must therefore test learnability of the
+`input_rep -> output_rep` mapping from demonstrations, with
+`signature_palette` as the primary representation and `signature_only` as a
+stricter ablation.
+
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 
 Goal: measure whether shadow coupling induces collapse toward a
