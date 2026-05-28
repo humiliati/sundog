@@ -437,6 +437,18 @@ def feature_vector(grid: list[list[int]], arm: str) -> list[float]:
     return vector
 
 
+def representation_key(grid: list[list[int]], arm: str) -> str:
+    if arm == "raw_grid_per_task":
+        return json.dumps(grid, separators=(",", ":"))
+    rep = represent_grid(grid, arm)
+    payload: dict[str, Any] = {}
+    if arm in {"signature_palette_per_task", "metadata_only_per_task"}:
+        payload["metadata"] = rep["metadata"]
+    if arm in {"signature_palette_per_task", "signature_only_per_task"}:
+        payload["suffix"] = sorted((int(k), round_float(v)) for k, v in rep["suffix"].items())
+    return json.dumps(payload, sort_keys=True, separators=(",", ":"))
+
+
 def input_dim_for_arm(arm: str) -> int:
     return RAW_GRID_DIM if arm == "raw_grid_per_task" else SIGNATURE_VECTOR_DIM
 
@@ -830,6 +842,30 @@ def predict_colors(color_model: ColorMLP, instance: Instance, arm: str, shape_hw
     return out
 
 
+def conditioning_train_exact_rate(shape_model: ShapeMLP, color_model: ColorMLP, instance: Instance, arm: str, device: torch.device) -> float:
+    if not instance.conditioning:
+        return 0.0
+    hits = 0
+    for pair in instance.conditioning:
+        pseudo = Instance(
+            lane=f"{instance.lane}:conditioning",
+            instance_id=f"{instance.instance_id}:conditioning:{pair['index']}",
+            task_id=instance.task_id,
+            primary_prior=instance.primary_prior,
+            predicted_boundary=instance.predicted_boundary,
+            split=instance.split,
+            query_index=pair["index"],
+            query_input=pair["input"],
+            target_output=pair["output"],
+            conditioning=instance.conditioning,
+        )
+        shape = predict_shape(shape_model, pseudo, arm, device)[0]
+        pred = predict_colors(color_model, pseudo, arm, shape, device, sample_seed=None)
+        if grid_equal(pred, pair["output"]):
+            hits += 1
+    return hits / len(instance.conditioning)
+
+
 # ============================================================================
 # Scoring + quarantine labels
 # ============================================================================
@@ -857,14 +893,14 @@ def pixel_accuracy(pred: list[list[int]], target: list[list[int]]) -> float:
         return 0.0
     ph, pw = shape_of(pred)
     th, tw = shape_of(target)
-    h = min(ph, th)
-    w = min(pw, tw)
+    if ph != th or pw != tw:
+        return 0.0
     total = th * tw
     if total == 0:
         return 0.0
     correct = 0
-    for y in range(h):
-        for x in range(w):
+    for y in range(th):
+        for x in range(tw):
             if pred[y][x] == target[y][x]:
                 correct += 1
     return correct / total
@@ -922,17 +958,30 @@ def score_prediction(pred: list[list[int]], target: list[list[int]]) -> dict[str
     }
 
 
-def assign_quarantine_label(record: dict[str, Any], conditioning_n: int) -> str:
+def has_signature_collision(instance: Instance, arm: str) -> bool:
+    seen: dict[str, set[str]] = {}
+    for pair in instance.conditioning:
+        input_key = representation_key(pair["input"], arm)
+        output_key = representation_key(pair["output"], arm)
+        seen.setdefault(input_key, set()).add(output_key)
+    return any(len(outputs) > 1 for outputs in seen.values())
+
+
+def assign_quarantine_label(record: dict[str, Any], conditioning_n: int, arm: str, primary_prior: str, signature_collision: bool) -> str:
     if record["grid_exact_any_slot"]:
         return ""
     if conditioning_n < 3:
         return "insufficient_conditioning_pairs"
+    if signature_collision:
+        return "signature_collision"
     if not record["shape_exact_slot1"]:
         return "shape_prediction_failure"
     if record["dominant_color_collapse_slot1"]:
         return "dominant_color_mode_collapse"
     if record["minority_color_recall_slot1"] < 0.25:
         return "minority_object_recall_failure"
+    if arm == "signature_only_per_task" and primary_prior == "color_role":
+        return "color_permutation_quotient"
     return "conditioning_overfit" if record.get("conditioning_train_exact", False) else "palette_lift_failure"
 
 
@@ -1046,7 +1095,7 @@ def write_empty_receipt(out_dir: Path, manifest: dict[str, Any]) -> None:
     write_csv(out_dir / "scores.csv", [], ["lane", "arm", "task_count", "instance_count", "grid_exact_any_rate", "shape_exact_slot1_rate", "palette_exact_slot1_rate", "pixel_accuracy_best_mean", "minority_color_recall_mean", "dominant_color_collapse_rate"])
     write_csv(out_dir / "per_task.csv", [], ["lane", "task_id", "primary_prior", "predicted_boundary", "arm", "selected_seed", "instance_count", "grid_exact_any_rate", "shape_exact_slot1_rate", "palette_exact_slot1_rate", "pixel_accuracy_best_mean"])
     write_csv(out_dir / "per_prior.csv", [], ["lane", "primary_prior", "arm", "instance_count", "grid_exact_any_rate", "minority_color_recall_mean"])
-    write_csv(out_dir / "per_instance.csv", [], ["instance_id", "lane", "task_id", "primary_prior", "arm", "seed", "slot", "grid_exact", "shape_exact", "palette_exact", "pixel_accuracy", "minority_color_recall", "palette_jaccard_slot1", "predicted_color_count_slot1", "target_color_count", "dominant_color_collapse", "quarantine_label"])
+    write_csv(out_dir / "per_instance.csv", [], ["instance_id", "lane", "task_id", "primary_prior", "predicted_boundary", "arm", "seed", "slot", "grid_exact", "shape_exact", "palette_exact", "pixel_accuracy", "minority_color_recall", "palette_jaccard_slot1", "predicted_color_count_slot1", "target_color_count", "dominant_color_collapse", "conditioning_train_exact_rate", "signature_collision", "quarantine_label"])
     write_csv(out_dir / "learning_curves.csv", [], ["instance_id", "arm", "seed", "model_kind", "step", "loss"])
     write_csv(out_dir / "seed_stability.csv", [], ["instance_id", "arm", "seed_outcomes", "seed_instability"])
     write_csv(out_dir / "quarantine_log.csv", [], ["instance_id", "lane", "task_id", "arm", "selected_seed", "label"])
@@ -1178,6 +1227,8 @@ def main() -> int:
                 else:
                     slot2_grid = predict_colors(color_model, inst, arm, slot_shapes[0], device, sample_seed=color_info["seed"])
                 preds.append(slot2_grid)
+                conditioning_exact_rate = conditioning_train_exact_rate(shape_model, color_model, inst, arm, device)
+                collision = has_signature_collision(inst, arm)
                 scores = [score_prediction(p, inst.target_output) for p in preds]
                 grid_exact_any = any(s["grid_exact"] for s in scores)
                 pixel_best = max(s["pixel_accuracy"] for s in scores)
@@ -1201,16 +1252,19 @@ def main() -> int:
                     "predicted_color_count_slot1": slot1["predicted_color_count_slot1"],
                     "target_color_count": slot1["target_color_count"],
                     "dominant_color_collapse_slot1": slot1["dominant_color_collapse"],
-                    "conditioning_train_exact": False,
+                    "conditioning_train_exact_rate": round_float(conditioning_exact_rate),
+                    "conditioning_train_exact": conditioning_exact_rate >= 0.95,
+                    "signature_collision": collision,
                     "elapsed_seconds": round_float(elapsed),
                 }
-                row["quarantine_label"] = "" if grid_exact_any else assign_quarantine_label(row, len(inst.conditioning))
+                row["quarantine_label"] = "" if grid_exact_any else assign_quarantine_label(row, len(inst.conditioning), arm, inst.primary_prior, collision)
                 for slot_idx, sc in enumerate(scores, start=1):
                     per_instance_rows.append({
                         "instance_id": inst.instance_id,
                         "lane": inst.lane,
                         "task_id": inst.task_id,
                         "primary_prior": inst.primary_prior,
+                        "predicted_boundary": inst.predicted_boundary,
                         "arm": arm,
                         "seed": seed,
                         "slot": slot_idx,
@@ -1223,6 +1277,8 @@ def main() -> int:
                         "predicted_color_count_slot1": sc["predicted_color_count_slot1"],
                         "target_color_count": sc["target_color_count"],
                         "dominant_color_collapse": sc["dominant_color_collapse"],
+                        "conditioning_train_exact_rate": row["conditioning_train_exact_rate"],
+                        "signature_collision": collision,
                         "quarantine_label": row["quarantine_label"] if slot_idx == 1 else "",
                     })
                 for h in shape_info.get("history", []):
@@ -1281,13 +1337,28 @@ def main() -> int:
             if r["arm"] != arm or r["seed"] != sel:
                 continue
             k = (r["lane"], r["task_id"], r["instance_id"])
-            cur = by_inst.setdefault(k, {**r, "grid_exact_any": False, "shape_exact_any": False})
+            cur = by_inst.setdefault(k, {
+                "lane": r["lane"],
+                "task_id": r["task_id"],
+                "instance_id": r["instance_id"],
+                "primary_prior": r["primary_prior"],
+                "predicted_boundary": r["predicted_boundary"],
+                "arm": r["arm"],
+                "seed": r["seed"],
+                "grid_exact_any": False,
+                "shape_exact_slot1": False,
+                "palette_exact_slot1": False,
+                "pixel_accuracy_best": 0.0,
+                "minority_color_recall_slot1": 0.0,
+                "dominant_color_collapse_slot1": False,
+            })
             cur["grid_exact_any"] = cur["grid_exact_any"] or r["grid_exact"]
-            cur["shape_exact_any"] = cur["shape_exact_any"] or r["shape_exact"]
+            cur["pixel_accuracy_best"] = max(cur["pixel_accuracy_best"], r["pixel_accuracy"])
             if r["slot"] == 1:
+                cur["shape_exact_slot1"] = r["shape_exact"]
                 cur["palette_exact_slot1"] = r["palette_exact"]
-                cur["pixel_accuracy_slot1"] = r["pixel_accuracy"]
                 cur["minority_color_recall_slot1"] = r["minority_color_recall"]
+                cur["dominant_color_collapse_slot1"] = r["dominant_color_collapse"]
         selected_any_rows.extend(by_inst.values())
 
     def aggregate_scores(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -1304,9 +1375,9 @@ def main() -> int:
                 "task_count": len(task_ids),
                 "instance_count": len(group),
                 "grid_exact_any_rate": round_float(sum(1 for r in group if r["grid_exact_any"]) / len(group)),
-                "shape_exact_slot1_rate": round_float(sum(1 for r in group if r.get("shape_exact_any")) / len(group)),
+                "shape_exact_slot1_rate": round_float(sum(1 for r in group if r.get("shape_exact_slot1")) / len(group)),
                 "palette_exact_slot1_rate": round_float(sum(1 for r in group if r.get("palette_exact_slot1")) / len(group)),
-                "pixel_accuracy_best_mean": round_float(sum(r.get("pixel_accuracy_slot1", 0.0) for r in group) / len(group)),
+                "pixel_accuracy_best_mean": round_float(sum(r.get("pixel_accuracy_best", 0.0) for r in group) / len(group)),
                 "minority_color_recall_mean": round_float(sum(r.get("minority_color_recall_slot1", 0.0) for r in group) / len(group)),
                 "dominant_color_collapse_rate": round_float(sum(1 for r in group if r.get("dominant_color_collapse_slot1")) / len(group)),
             })
@@ -1327,9 +1398,9 @@ def main() -> int:
                 "selected_seed": selected_seed_by_arm[arm],
                 "instance_count": len(group),
                 "grid_exact_any_rate": round_float(sum(1 for r in group if r["grid_exact_any"]) / len(group)),
-                "shape_exact_slot1_rate": round_float(sum(1 for r in group if r.get("shape_exact_any")) / len(group)),
+                "shape_exact_slot1_rate": round_float(sum(1 for r in group if r.get("shape_exact_slot1")) / len(group)),
                 "palette_exact_slot1_rate": round_float(sum(1 for r in group if r.get("palette_exact_slot1")) / len(group)),
-                "pixel_accuracy_best_mean": round_float(sum(r.get("pixel_accuracy_slot1", 0.0) for r in group) / len(group)),
+                "pixel_accuracy_best_mean": round_float(sum(r.get("pixel_accuracy_best", 0.0) for r in group) / len(group)),
             })
         return out
 
@@ -1354,14 +1425,22 @@ def main() -> int:
     per_prior_rows = aggregate_per_prior(selected_any_rows)
 
     # Seed stability
+    unstable_keys: set[tuple[str, str]] = set()
     for (arm, instance_id), seed_outcomes in per_instance_seed_outcomes.items():
         outcomes = sorted(seed_outcomes.items())
+        seed_instability = len(set(seed_outcomes.values())) > 1
+        if seed_instability:
+            unstable_keys.add((arm, instance_id))
         seed_stability_rows.append({
             "instance_id": instance_id,
             "arm": arm,
             "seed_outcomes": json.dumps({str(s): bool(v) for s, v in outcomes}, separators=(",", ":")),
-            "seed_instability": len(set(seed_outcomes.values())) > 1,
+            "seed_instability": seed_instability,
         })
+
+    for r in selected_rows:
+        if r["quarantine_label"] and (r["arm"], r["instance_id"]) in unstable_keys:
+            r["quarantine_label"] = "stochastic_instability"
 
     # Quarantine + dominant audit
     for r in selected_rows:
@@ -1400,7 +1479,7 @@ def main() -> int:
     write_csv(out_dir / "scores.csv", scores, ["lane", "arm", "selected_seed", "task_count", "instance_count", "grid_exact_any_rate", "shape_exact_slot1_rate", "palette_exact_slot1_rate", "pixel_accuracy_best_mean", "minority_color_recall_mean", "dominant_color_collapse_rate"])
     write_csv(out_dir / "per_task.csv", per_task_rows, ["lane", "task_id", "primary_prior", "predicted_boundary", "arm", "selected_seed", "instance_count", "grid_exact_any_rate", "shape_exact_slot1_rate", "palette_exact_slot1_rate", "pixel_accuracy_best_mean"])
     write_csv(out_dir / "per_prior.csv", per_prior_rows, ["lane", "primary_prior", "arm", "instance_count", "grid_exact_any_rate", "minority_color_recall_mean"])
-    write_csv(out_dir / "per_instance.csv", per_instance_rows, ["instance_id", "lane", "task_id", "primary_prior", "arm", "seed", "slot", "grid_exact", "shape_exact", "palette_exact", "pixel_accuracy", "minority_color_recall", "palette_jaccard_slot1", "predicted_color_count_slot1", "target_color_count", "dominant_color_collapse", "quarantine_label"])
+    write_csv(out_dir / "per_instance.csv", per_instance_rows, ["instance_id", "lane", "task_id", "primary_prior", "predicted_boundary", "arm", "seed", "slot", "grid_exact", "shape_exact", "palette_exact", "pixel_accuracy", "minority_color_recall", "palette_jaccard_slot1", "predicted_color_count_slot1", "target_color_count", "dominant_color_collapse", "conditioning_train_exact_rate", "signature_collision", "quarantine_label"])
     write_csv(out_dir / "learning_curves.csv", learning_rows, ["instance_id", "arm", "seed", "model_kind", "step", "loss"])
     write_csv(out_dir / "seed_stability.csv", seed_stability_rows, ["instance_id", "arm", "seed_outcomes", "seed_instability"])
     write_csv(out_dir / "quarantine_log.csv", quarantine_rows, ["instance_id", "lane", "task_id", "arm", "selected_seed", "label"])
