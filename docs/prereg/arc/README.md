@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3 BLACKWELL V2 BINDING RECEIPT FILED -- FULL-GRID CONTROL FLOOR**.
+Status: **Phase 3 THREE FULL-GRID CONTROL RECEIPTS FLOORED; BRANCH B CLOSED**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -34,12 +34,29 @@ serial run; freeze-marker commit `79C5B060`. The V2 binding receipt is
 at selected seed `20260529`. The shape-exact-slot1 rate sits at 0.50-0.72
 across lanes while palette-exact-slot1 holds at 0.0 -- the same
 shape-matches-content-fails character as V1, now reproduced under the
-strengthened V2 lane. Kaggle notebook work and public-evaluation grid
-inspection remain blocked until Phase 6. Any renewed sufficiency comparison
-still requires a passing full-grid control first; both V1 and V2 controls
-now agree on the floor, so the path forward is a different decoder family
-(PHASE3_5_REFLECTION Branch A/B/D) rather than another raw-grid V-bump
-within the deterministic-low-capacity family.
+strengthened V2 lane.
+
+A Branch B compact-subset diagnostic lane was then admitted with a
+narrower question: does the registered decoder produce any exact-match
+signal on the 7 Phase 2 compact-signal tasks? The compact-7 single-seed
+binding receipt (
+[`PHASE3B_COMPACT_SUBSET.md`](PHASE3B_COMPACT_SUBSET.md), seed `20260529`,
+freeze-marker `50EAEBBF`) returned verdict
+**`compact_full_grid_control_floor`** with a qualitatively distinct
+failure character: every held-out instance gets the output shape exactly
+right (`shape_exact_slot1 = 1.000` on all four lanes) and pixel accuracy
+jumps to 0.757-0.877, but every prediction collapses to the dominant
+background color (palette_exact_slot1 = 0.000 everywhere; 13 of 13
+held-out predictions slot-1-use at most 2 colors regardless of target
+palette size). This is filed as a named failure mode -- **"dominant-color
+mode collapse"** -- distinct from V1/V2's noise-dominated character.
+Per the pre-registered §8 stop rule, this verdict closes Branch B in the
+deterministic-low-capacity-learner family: `signature_palette` does not
+run on this subset, additional seeds do not run, and the path forward
+is PHASE3_5_REFLECTION Branch A (stochastic per-task learner) or
+Branch D (different framing) rather than further narrowing within the
+deterministic family. Kaggle notebook work and public-evaluation grid
+inspection remain blocked until Phase 6.
 
 ## Official Anchors
 
@@ -108,7 +125,26 @@ Checked **2026-05-28** against:
   held-out lane (`pttest`, `test_lodo`, `validation_lodo`,
   `validation_pttest`); `shape_exact_slot1` 0.50-0.72 while
   `palette_exact_slot1 = 0.0`, the same shape-matches-content-fails
-  character as V1.
+  character as V1. A Branch B compact-subset diagnostic lane is then
+  admitted and the compact-7 single-seed receipt is filed (see next
+  bullet); Phase 3 then pauses with Branch B closed.
+- [`PHASE3B_COMPACT_SUBSET.md`](PHASE3B_COMPACT_SUBSET.md) +
+  [`PHASE3B_COMPACT_SPLIT.csv`](PHASE3B_COMPACT_SPLIT.csv) -- Phase 3
+  Branch B compact-subset diagnostic lane. 7 Phase 2 compact-signal
+  tasks, pre-registered 4/1/2 internal split, minimal floor (≥1 exact
+  task on `pttest` AND `test_lodo`), decoder/hyperparams/seed slate/aux
+  pool frozen relative to V2. Compact-7 single-seed binding receipt
+  filed under freeze-marker `50EAEBBF` with seed `20260529` (best_epoch
+  55, val_loss 0.7628). Verdict: **`compact_full_grid_control_floor`**.
+  Failure character is qualitatively distinct from V1/V2: every
+  held-out instance has `shape_exact_slot1 = 1.000` and pixel accuracy
+  0.757-0.877, but every prediction collapses to the dominant
+  background color (13 of 13 held-out predictions slot-1-use at most 2
+  colors regardless of target palette size). Named failure mode filed:
+  **"dominant-color mode collapse"**. Per the pre-registered §8 stop
+  rule, Branch B closes in the deterministic-low-capacity-learner
+  family; no additional seeds, no `signature_palette` arm on the
+  compact subset, no further raw-grid V-bumps within the family.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -150,8 +186,9 @@ amendments line is frozen. Corrections or refinements must be appended with:
 
 ## Public-Language Constraint
 
-Phase 3 has two Blackwell binding receipts on file (V1 and V2), but no
-sufficiency support adjudication is on file. Public copy may say:
+Phase 3 has three full-grid-control binding receipts on file (V1, V2,
+and compact-7), all floored at zero exact matches; no sufficiency
+support adjudication is on file. Public copy may say:
 
 - ARC-AGI abstraction coupling roadmap;
 - registered task-subset audit;
@@ -159,14 +196,19 @@ sufficiency support adjudication is on file. Public copy may say:
 - falsifiable sufficiency test, filed; the deterministic-low-capacity
   learner branch produced three task-hardness verdicts, the
   `blackwell_task_decoder_v1` lane produced a Branch C bounded-failure
-  receipt with the raw-grid exact-floor caveat, and the strengthened
+  receipt with the raw-grid exact-floor caveat, the strengthened
   `blackwell_publictrain_rawgrid_gate_v2` lane produced a
-  `full_grid_control_floor` receipt on all four held-out lanes. Both
-  full-grid controls now agree on the floor, so future
+  `full_grid_control_floor` receipt on all four held-out lanes, and the
+  Branch B compact-subset diagnostic lane (compact-7) produced a
+  `compact_full_grid_control_floor` receipt with a qualitatively
+  distinct failure -- dominant-color mode collapse -- on every
+  held-out instance. All three full-grid controls now agree on the
+  floor across three distinct task distributions, so future
   signature-vs-full-grid claims still require a passing full-grid
   control first, and the path forward is a different decoder family
-  (PHASE3_5_REFLECTION Branch A/B/D) rather than another raw-grid
-  V-bump within the deterministic-low-capacity family.
+  (PHASE3_5_REFLECTION Branch A stochastic per-task or Branch D
+  different framing) rather than further task-distribution narrowing
+  within the deterministic-low-capacity family.
 
 Avoid:
 
@@ -175,9 +217,9 @@ Avoid:
 - "the 5D subspace is universal";
 - any claim that a Kaggle entry validates the theory without a
   non-trivial Phase 3 sufficiency receipt;
-- any Branch A support or Branch B narrowed-support claim from the
-  Blackwell V1 or V2 receipts;
-- describing either Blackwell full receipt as a signature-specific
+- any Branch A support or Branch B narrowed-support claim from any of
+  the three filed Blackwell receipts (V1, V2, compact-7);
+- describing any Blackwell receipt as a signature-specific
   falsification independent of decoder capacity;
 - describing the three filed Phase 3 receipts as a sufficiency-failure
   conclusion -- per the reflection, they characterise the
@@ -185,5 +227,15 @@ Avoid:
 - claiming "V2 failed -> signature representation is favoured" -- V2
   floored the same way V1 did; no signature-vs-full-grid comparison
   is licensed by either receipt;
-- claiming the V2 receipt closes Phase 3 -- it does not.
-  PHASE3_5_REFLECTION Branch C remains the active framing.
+- claiming "compact-7 failed -> compact tasks are unsolvable" -- the
+  failure is of this learner family on this slice; a stochastic
+  per-task learner (Branch A) or a different framing (Branch D) might
+  or might not pass on the same slice, and that is the next question,
+  not a settled one;
+- claiming any V2 or compact-7 receipt closes Phase 3 -- they close
+  PHASE3_5_REFLECTION Branch B in the deterministic-low-capacity
+  family; the sufficiency question remains open under Branch A and
+  Branch D;
+- any spatial_transform or local_completion claim from the compact-7
+  receipt -- those priors are not represented in the compact-signal
+  slice.

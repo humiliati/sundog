@@ -4237,3 +4237,68 @@ no binding compact receipt yet."
 **Public-language constraint**: see `PHASE3B_COMPACT_SUBSET.md` §10.
 Additions to `docs/prereg/arc/README.md` will land in the
 compact-receipt verdict amendment, not in this admission amendment.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch B Compact-7 Receipt Filed, Branch B Closed
+
+The compact-7 single-seed binding receipt filed at
+[`PHASE3B_COMPACT_SUBSET.md` § "Compact-7 Single-Seed Binding
+Receipt"](PHASE3B_COMPACT_SUBSET.md) returned verdict
+`compact_full_grid_control_floor` under freeze-marker commit
+`50EAEBBFA00D146397BEA4C81FD460DEE3DED5D8`. Shard-equivalence
+verified (single-shard merge byte-identical to its input).
+
+**Verdict impact**: no prior verdict on V1 or V2 changes. Branch B
+of PHASE3_5_REFLECTION closes in the deterministic-low-capacity-
+learner family. The full-grid control floor now agrees across three
+filed receipts:
+
+| receipt | held-out lanes | grid_exact_any | shape_exact_slot1 | palette_exact_slot1 | pixel_best_mean | failure character |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| `blackwell_task_decoder_v1` | 4 | `0.000` | ≈ 0.5–0.9 | `0.000` | ≈ 0.25–0.55 | shape sometimes matches, palette never, predictions noisy |
+| `blackwell_publictrain_rawgrid_gate_v2` | 4 | `0.000` | 0.500–0.722 | `0.000` | 0.235–0.336 | same as V1; strengthening the aux pool did not lift the floor |
+| `compact-7` | 4 | `0.000` | **1.000** | `0.000` | **0.757–0.877** | dominant-color mode collapse: shape always exact, palette set always single-color, pixel accuracy high only because background dominates |
+
+The third receipt **does not** close the sufficiency question. It
+closes the **Branch B narrowed-task-distribution path** in the
+deterministic-low-capacity-learner family by demonstrating that
+narrowing the held-out distribution to the Phase 2 compact-signal
+slice produces a *different* qualitative failure (mode collapse) but
+still floors at zero exact matches.
+
+**Named failure mode added to the lexicon**: "**dominant-color mode
+collapse**". Per the per-instance audit in `PHASE3B_COMPACT_SUBSET.md`,
+13 of 13 held-out compact-7 instances slot-1-predict at most 2
+colors regardless of target palette size, and 100% of predictions
+get the output shape exactly right. This is structurally distinct
+from the V1 / V2 noise-dominated character and from a gauge-
+permutation failure. Any future receipt that claims to "fix" mode
+collapse on this slice must reference these residuals as the
+baseline.
+
+**Remaining reopen paths for Phase 3** (per PHASE3_5_REFLECTION):
+
+- **Branch A — stochastic per-task learner**: the only path that
+  has not been touched by the V1 / V2 / compact-7 deterministic
+  family of receipts. It addresses the failure mode at the learner-
+  family level rather than the task-distribution level.
+- **Branch D — different framing**: e.g., learning the residual
+  rather than the output grid, or modelling the output as a
+  structured edit of a copy-of-input baseline, which would avoid
+  the dominant-color collapse by construction.
+
+**Not viable as Phase 3 reopens** (after this receipt):
+
+- **Branch B narrowed-task-class on the deterministic family** —
+  three receipts now floor in this family on three distinct task
+  distributions (36-task V1, 36-task V2, 7-task compact-7).
+- **Any further raw-grid V-bump in the same family** — same reason.
+
+No body section above the amendments line changes. The Branch B
+admission amendment above ("Branch B Compact Subset Path Admitted")
+remains as-filed; this amendment files the receipt that closes the
+diagnostic lane.
+
+**Public-language constraint**: see
+`PHASE3B_COMPACT_SUBSET.md` § "Public-Language Update (Additive)".
+`docs/prereg/arc/README.md` is updated separately for the status
+roll-up.

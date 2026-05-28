@@ -243,3 +243,191 @@ Forbidden:
   receipt — those priors are not represented in the compact slice.
 
 ## Append-Only Amendments
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Compact-7 Single-Seed Binding Receipt: `compact_full_grid_control_floor`
+
+The single-seed compact-7 tranche (seed `20260529`, GPU, full 120-epoch
+budget) completed under freeze-marker commit
+`50EAEBBFA00D146397BEA4C81FD460DEE3DED5D8`. The shard ran clean
+(`gitDirty=false`), merged into a binding receipt with the same commit
+(`mergeGitDirty=false`, `mergeAllowDirty=false`), and the
+shard-equivalence guarantee holds: `scores.csv` and `per_task.csv` are
+byte-identical between the merge output and the input shard
+(`cmp` exit 0 on both).
+
+Binding receipt: `results/arc/phase3-rawgrid-compact-7/`.
+Shard: `results/arc/phase3-rawgrid-compact-7-shard-20260529/`.
+
+**No prior verdict changes**: this is the first binding compact
+receipt and it supersedes nothing. The V1 and V2 full-grid-control
+receipts remain Branch C bounded failures as filed in the parent
+spec.
+
+#### Validation And Wall-Clock
+
+| metric | value |
+| --- | ---: |
+| best_epoch | 55 |
+| validation_loss | `0.7627738118171692` |
+| validation_metric | `0.0` |
+| elapsed_seconds | `2272.83` (37.9 min) |
+
+`best_epoch=55` is well above V2's range (12–15) and the val_loss
+drops to less than half of V2's (`0.7628` vs V2's `1.6249`); the
+decoder kept improving for longer on the compact distribution and
+reached a much tighter loss floor. The single-seed selection rule
+trivially returns seed `20260529`.
+
+#### Gate Adjudication
+
+Pre-registered minimal floor (§3): `pttest_exact_tasks >= 1 AND
+test_lodo_exact_tasks >= 1` for arm `raw_grid_lowcap`.
+
+Observed (selected seed `20260529`, from
+`results/arc/phase3-rawgrid-compact-7/scores.csv`):
+
+| lane | instance_count | grid_exact_any | shape_exact_slot1 | palette_exact_slot1 | pixel_best_mean |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `pttest` | 2 | `0.000` | `1.000` | `0.000` | `0.877` |
+| `test_lodo` | 6 | `0.000` | `1.000` | `0.000` | `0.860` |
+| `validation_lodo` | 4 | `0.000` | `1.000` | `0.000` | `0.788` |
+| `validation_pttest` | 1 | `0.000` | `1.000` | `0.000` | `0.757` |
+
+`pttest_exact_tasks = 0`, `test_lodo_exact_tasks = 0`.
+**Gate decision: `compact_full_grid_control_floor`**.
+
+Manifest: `gateDecision = {"gate":
+"compact_full_grid_control_floor", "pttest_exact_tasks": 0,
+"test_lodo_exact_tasks": 0, "reason": "raw_grid_lowcap did not clear
+the compact-subset minimal floor on both held-out lanes"}`.
+Adjudication narrative:
+`results/arc/phase3-rawgrid-compact-7/branch_adjudication.md`.
+
+#### Named Failure Mode: Dominant-Color Mode Collapse
+
+The compact-7 failure is **qualitatively distinct** from V1 / V2 and
+deserves an explicit name:
+
+- **`shape_exact_slot1 = 1.000` on every lane** — the decoder
+  predicts the correct output dimensions for every held-out
+  instance.
+- **`palette_exact_slot1 = 0.000` on every lane** — the decoder
+  never produces the correct palette set on slot 1.
+- **`pixel_best_mean` in the 0.76–0.95 band** — much higher than
+  V2's 0.23–0.34, but obtained by predicting the dominant
+  background color almost everywhere.
+
+Direct per-instance audit of all 13 held-out predictions in
+`results/arc/phase3-rawgrid-compact-7/residuals.jsonl`:
+
+| task | target colors (count) | slot-1 predicted colors (count) | dominant-color collapse? |
+| --- | --- | --- | --- |
+| `pttest:11dc524f:0` | `{7,5,2}` (3) | `{7}` (1) | yes — full collapse to background `7` |
+| `pttest:2601afb7:0` | `{0,2,6,7,8,9}` (6) | `{7}` (1) | yes — full collapse to background `7` |
+| `test_lodo:11dc524f:{0,1,2}` | `{7,5,2}` (3) | `{7}` (1) on all 3 | yes (×3) |
+| `test_lodo:2601afb7:{0,1,2}` | various 6-color sets | `{7}` / `{5,7}` / `{2,7}` | yes — at most 2 colors out of 6 |
+| `validation_lodo:1acc24af:{0..3}` | task-specific | `{0,1}` ×3, `{0}` ×1 | yes — at most 2 colors |
+| `validation_pttest:1acc24af:0` | task-specific | `{0,1}` | yes — at most 2 colors |
+
+Pattern: 13 of 13 held-out instances use **at most 2 colors** in the
+slot-1 prediction, regardless of target palette size, and every
+shape is correct. The cross-entropy loss favors the dominant-color
+solution because background pixels swamp object pixels, and the
+decoder has learned the marginal cell distribution rather than any
+multi-color structural rule.
+
+The name **"dominant-color mode collapse"** is filed for this
+failure mode. It is structurally distinct from:
+
+- V1 / V2's character on the 36-task receipts ("decoder fails to
+  learn anything coherent"; shape ≈ 0.5–0.7, pixel ≈ 0.25–0.34,
+  palette ≈ 0).
+- A capacity-pressure failure (where the decoder would produce
+  noisy multi-color output).
+- A gauge-permutation failure (where palette set would match but
+  colors would be permuted).
+
+The compact-7 decoder is **more confident, more degenerate** than
+the V2 decoder.
+
+#### Branch Closure (Per §8 Stop Rule)
+
+The pre-registered stop rule at §8 reads:
+
+> `compact_full_grid_control_floor` (both lanes 0 exact) → File
+> Branch C; close Branch B; surface stochastic per-task
+> (PHASE3_5_REFLECTION Branch A) or different framing (Branch D) as
+> remaining options. **Do not run additional seeds.** **Do not run
+> `signature_palette`.**
+
+Applied: Branch B (compact-subset diagnostic) **closes** as a
+bounded failure in the deterministic-low-capacity-learner family.
+The other two seeds (`20260528`, `20260530`) and the
+`signature_palette` arm both stand down. No new shard or merge run
+is admitted in this lane.
+
+#### What This Verdict Does And Does Not Entail
+
+**It does**:
+
+- Confirm that narrowing the task distribution to the Phase 2
+  compact-signal slice does **not** open a comparison arena for
+  signature representations: the full-grid control still floors at
+  zero exact matches.
+- Name the qualitatively different failure mode the compact lane
+  exhibits (dominant-color mode collapse) and distinguish it from
+  the V1 / V2 failure character.
+- Provide a direct, per-instance audit of the failure mode
+  (residuals.jsonl) for any future learner that wishes to claim it
+  has fixed the mode-collapse problem on this exact subset.
+
+**It does not**:
+
+- Adjudicate the shadow-projection sufficiency hypothesis. Three
+  full-grid control receipts (V1, V2, compact-7) now agree on the
+  floor; no comparison against `signature_palette` is licensed
+  until a different family of learner clears it.
+- Support any Branch A or Branch B narrowed-support claim from
+  PHASE3_5_REFLECTION at the receipt level.
+- Speak to the `spatial_transform` or `local_completion` priors —
+  those are not represented in the compact-signal slice (§1).
+- Generalise to a "compact tasks are unsolvable" claim. The
+  deterministic-low-capacity decoder family fails on this slice
+  with this failure mode; a stochastic per-task learner (Branch A)
+  or a different framing (Branch D) might or might not pass — that
+  is the next question, not a settled one.
+
+#### Public-Language Update (Additive)
+
+Permitted:
+
+- "The Phase 3 Branch B compact-subset diagnostic lane filed a
+  `compact_full_grid_control_floor` receipt: zero exact matches on
+  the 7-task compact slice, with the decoder collapsing to the
+  dominant background color on every held-out instance
+  (dominant-color mode collapse)."
+- "All three filed Phase 3 full-grid controls (V1, V2, compact-7)
+  now floor at zero exact matches; the comparison arena for
+  signature representations remains closed in the
+  deterministic-low-capacity-learner family."
+
+Forbidden:
+
+- "Compact tasks are unsolvable" — the failure is of this learner
+  family on this slice, not of the tasks.
+- Any narrowed-support sufficiency claim from the compact receipt.
+- Any signature-vs-full-grid comparison claim from the compact
+  receipt.
+- Any spatial_transform or local_completion claim from the compact
+  receipt (those priors are absent from the slice).
+
+#### Frozen By This Verdict
+
+- The compact-7 binding receipt, manifest, hashes, and residuals
+  are frozen at the paths above.
+- The compact-7 subset spec
+  (`docs/prereg/arc/PHASE3B_COMPACT_SPLIT.csv`, sha256
+  `5759038A94DB...`) is frozen as the Branch B subset definition.
+- The named failure mode "dominant-color mode collapse" is filed
+  here as the per-instance characterisation of the compact-7
+  bounded failure.
