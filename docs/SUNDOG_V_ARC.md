@@ -30,6 +30,16 @@ architecture paper; it is a structural argument about what makes
 abstraction work, tested against the benchmark that was designed to
 measure it.
 
+**Official ARC Prize 2026 anchors (checked 2026-05-28):** competition
+submissions are due November 2, 2026; papers are due November 8, 2026;
+Paper Prize submissions must link to a working Kaggle code submission
+for ARC-AGI-2 or ARC-AGI-3; the static ARC-AGI-2 track scores exact
+task matches with two predictions per test input and no internet during
+Kaggle evaluation. The first Sundog lane targets ARC-AGI-2 because its
+static grid format is the cleanest bridge to shadow-projected
+signatures. ARC-AGI-3 is out of scope unless a later amendment opens an
+interactive-agent branch.
+
 > **Gravity Ledger dependency.** This roadmap inherits directly from
 > the mesa lane's operating-envelope result (Phases 0–7, especially
 > v3.1–v3.8 5D subspace finding) and the geometry lane's forward-rich /
@@ -246,8 +256,12 @@ Deliverables:
 - Task taxonomy mapping each included task to the core-knowledge prior(s)
   it exercises, so Phase 3 can audit sufficiency per prior.
 
-Exit criterion: the task subset, exclusion criteria, and baseline numbers
-are filed and pre-registered. No operator design has begun.
+Execution artifact:
+[`docs/prereg/arc/PHASE0_TASK_SUBSET_SPEC.md`](prereg/arc/PHASE0_TASK_SUBSET_SPEC.md).
+
+Exit criterion: the task subset, exclusion criteria, baseline numbers,
+and public-evaluation leak-control policy are filed and pre-registered.
+No operator design has begun.
 
 ### Phase 1 — ARC Grid Representation as Shadow Domain
 

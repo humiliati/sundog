@@ -84,6 +84,9 @@ code, experiments, prior theorem materials, and application bridges.
 - [Sundog Gravity ledger](SUNDOG_V_GRAVITY.md): staging pattern for the
   highest-ambition Goodhart-sidestep claim. Source of the candidate
   template the other ledgers mirror.
+- [Sundog ARC-AGI roadmap](SUNDOG_V_ARC.md): Candidate 14 promoted from the
+  Gravity ledger; ARC-AGI-2 abstraction-coupling work order with a Phase 0
+  preregistration lane under `prereg/arc/`.
 - [SEO and social-readiness roadmap](site/SEO_AND_SOCIAL_READINESS_ROADMAP.md):
   per-page OG/Twitter/JSON-LD matrix, Phase 1 cleared 2026-05-21 across
   thirteen Class A pages; Phase 2 staged.
