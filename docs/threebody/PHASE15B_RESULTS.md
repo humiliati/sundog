@@ -1,7 +1,8 @@
 # Three-Body Phase 15B - Counterfactual Normalizer Audit Results
 
 Status: spec created 2026-05-27; additive harness receipts implemented behind
-`--counterfactual-audit`. Smoke passed as an instrumentation check; lock pending.
+`--counterfactual-audit`. Smoke passed as an instrumentation check; lock
+completed 2026-05-28.
 
 Phase 15B is a diagnostic follow-up to the Phase 15 **Fail-Magnitude** verdict.
 It does not revise Phase 15, retune the controller, or upgrade the claim.

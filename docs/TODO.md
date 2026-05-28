@@ -161,7 +161,7 @@ Sources:
 [`SUNDOG_V_MESA.md`](SUNDOG_V_MESA.md),
 [`../internal/roadmaps/fix_roadmap.md`](../internal/roadmaps/fix_roadmap.md).
 
-Status: `design-blocked`, active.
+Status: `compute-blocked`, active.
 
 Current state:
 
@@ -186,31 +186,44 @@ Next actions:
    verified basin-attractor-avoiding."
 4. Measure compute cost before running a Large-tier battery.
 
-### 5. Three-Body Phase 15 Full Lock
+### 5. Three-Body Phase 15C Multi-Step Counterfactual
 
 Sources:
 [`threebody/PHASE15_SPEC.md`](threebody/PHASE15_SPEC.md),
 [`threebody/PHASE15_RESULTS.md`](threebody/PHASE15_RESULTS.md),
+[`threebody/PHASE15B_RESULTS.md`](threebody/PHASE15B_RESULTS.md),
+[`threebody/PHASE15C_SPEC.md`](threebody/PHASE15C_SPEC.md),
 [`../copilot_test_readme.md`](../copilot_test_readme.md).
 
-Status: `compute-blocked`, operator-gated.
+Status: `design-blocked`, active.
 
 Current state:
 
-The readback blocker is cleared, but the full `npm run threebody:phase15` lock is
-still operator-gated. Recorded estimate is roughly 12,960 trials and about 75
-hours. Interactive cloud agents are structurally unfit for this run.
+Phase 15 full lock is complete and landed as **Fail-Magnitude**. Phase 15B's
+1,728-trial normalizer lock is complete and landed as **Mixed / Partial
+Diagnostic**: denominator-floor collapse is real and near-universal, but it does
+not explain the Phase 15 magnitude miss. The next registered mechanism test is
+Phase 15C, a multi-step counterfactual horizon audit over
+`N in {4,8,16,32}`.
 
 Blocker:
 
-Needs long-budget execution, not a coding-agent session.
+Phase 15C has a spec but no runner implementation yet. The multi-step audit
+must be additive, behind an explicit flag, and must not retune the controller or
+revise the Phase 15 verdict.
 
 Next actions:
 
-1. Decide local multi-day operator run vs `workflow_dispatch` vs self-hosted.
-2. Record runner command, expected wall-clock, output path, and manifest readback
-   before starting.
-3. Keep full-lock interpretation separate from coarse-graining Phase 4 unless
+1. Add additive multi-step counterfactual fields in
+   `public/js/threebody-core.mjs` for horizons `4,8,16,32`.
+2. Add `npm run threebody:phase15c:multistep-smoke` and
+   `npm run threebody:phase15c:multistep` with output directories named in the
+   spec.
+3. Run only the capped smoke inline if it stays under the repo's ~10-minute
+   rule; record wall-clock and per-trial/per-cell rate in the results note.
+4. Stage the lock command, expected wall-clock, output path, and readback table
+   before running if the estimate exceeds the inline rule.
+5. Keep Phase 15C interpretation separate from coarse-graining Phase 4 unless
    Phase 4 explicitly chooses this evidence path.
 
 ## P2 Active Follow-Ups
