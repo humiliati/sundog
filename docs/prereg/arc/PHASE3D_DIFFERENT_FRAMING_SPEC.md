@@ -394,3 +394,14 @@ This addendum does not change the frozen framing contract above. It records
 that the admitted lane has now run and closed Branch D in the filed
 `structured_edit_residual_v1` framing. Future Phase 3 reopens require either a
 new pre-registered Branch D variant or a new Branch E spec.
+
+## Edit-Color-Rule Variant Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+The first Branch D bottleneck variant is filed in
+[`PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md`](PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md).
+It keeps this spec's baseline picker and edit-mask learner fixed while replacing
+the learned edit-color MLP with a deterministic conditioning-derived color-rule
+bank. Execution remains held pending runner tooling and a freeze-marker
+amendment.

@@ -49,6 +49,7 @@ class RunConfig:
     delta_action: float
     s_pos: float
     delta_proxy_min: float
+    e_max_burnin_fraction: float
     random_seed: int
     integrator: str
     signature_dimension: int
@@ -69,6 +70,8 @@ def parse_args() -> argparse.Namespace:
             "fallback_v2",
             "lock_v3",
             "fallback_v3",
+            "lock_v4",
+            "fallback_v4",
         ],
         default="smoke",
     )
@@ -102,6 +105,9 @@ def build_config(args: argparse.Namespace) -> RunConfig:
     delta_action = 0.10
     s_pos = 0.50
     delta_proxy_min = 0.01
+    # E_max windowing: cells v0..v3 use full burn-in (1.0). v4+ may pin smaller
+    # fractions to exclude transient contamination of the 95th percentile.
+    e_max_burnin_fraction = 1.0
     random_seed = 20260528
 
     if args.preset == "lock":
@@ -144,6 +150,21 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         sample_count = 200_000
         kf = 2
         grashof = 200.0
+    elif args.preset == "lock_v4":
+        # v4: same regime as v3 (k_f=2, G=200) but with the E_max amendment
+        # — E_max from the last 25% of burn-in to exclude transient
+        # contamination.
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 200.0
+        e_max_burnin_fraction = 0.25
+    elif args.preset == "fallback_v4":
+        burnin_steps = 100_000
+        sample_count = 200_000
+        kf = 2
+        grashof = 200.0
+        e_max_burnin_fraction = 0.25
     else:
         # Smoke is intentionally not the registered cell. It exists to validate
         # the integrator, binning, and receipt plumbing under the repo's
@@ -194,6 +215,7 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         delta_action=delta_action,
         s_pos=s_pos,
         delta_proxy_min=delta_proxy_min,
+        e_max_burnin_fraction=e_max_burnin_fraction,
         random_seed=random_seed,
         integrator="pseudo_spectral_vorticity_semi_implicit_euler",
         signature_dimension=2 * k_signature * k_signature,
@@ -340,7 +362,11 @@ def run_cell(cfg: RunConfig) -> dict:
             elapsed = time.perf_counter() - started
             print(f"[pde-c1] step {step}/{total_steps} ({100 * step / total_steps:.0f}%), elapsed {elapsed:.1f}s", flush=True)
 
-    e_max = float(np.percentile(np.asarray(burnin_energies), 95))
+    # E_max windowing: use the last fraction of burn-in to exclude transients
+    # that would bias the 95th percentile above the steady-state attractor.
+    burnin_array = np.asarray(burnin_energies)
+    window_len = max(1, int(cfg.e_max_burnin_fraction * len(burnin_array)))
+    e_max = float(np.percentile(burnin_array[-window_len:], 95))
     epsilon_k = 0.05 * math.sqrt(max(0.0, 2.0 * e_max))
     h_k = epsilon_k / math.sqrt(cfg.signature_dimension) if epsilon_k > 0 else 1.0
     actions = label_samples(energy_by_step, cfg, e_max)
@@ -460,6 +486,8 @@ def summarize(bin_rows: list[dict], cfg: RunConfig) -> dict:
         "fallback_v2",
         "lock_v3",
         "fallback_v3",
+        "lock_v4",
+        "fallback_v4",
     }
     damp_fraction = damp / max(1, no_op + damp)
     proxy_constant = (

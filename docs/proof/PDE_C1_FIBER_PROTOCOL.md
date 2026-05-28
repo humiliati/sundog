@@ -77,6 +77,7 @@ It claims only a runnable predicate structure:
 | `delta_action` | Pre-registered minority-fraction threshold; a bin with minority fraction above this is flagged as fiber-incompatible. |
 | `S_pos` | Pre-registered minimum fraction of evaluated bins required before the verdict is interpreted (coverage gate). |
 | `delta_proxy_min` | Pre-registered lower bound on the proxy-action discrimination floor; if the global `damp_fraction` is outside `[delta_proxy_min, 1 - delta_proxy_min]`, the proxy is essentially constant and the predicate is non-discriminative (vacuity gate). |
+| `e_max_burnin_fraction` | Cell-set parameter in `(0, 1]`; `E_max` is the 95th percentile of the last `e_max_burnin_fraction × burnin_steps` samples of the burn-in trace. Default `1.0` (full burn-in). Smaller fractions are pinned by cells that suspect transient contamination of the percentile. |
 | `N_sample` | Pre-registered number of post-burn-in samples drawn from `mu_SRB`. |
 
 All symbols above are parameter **slots**. Their values are pinned in
@@ -146,6 +147,20 @@ This resolves cell-set v0 § 3 "Open review item" by **naming the
 proxy explicitly** and pinning the substitution procedure, rather
 than by adding a cost-of-damping term. Both branches remain
 admissible at review.
+
+**E_max windowing (added 2026-05-28).** The cell-set's safety
+envelope `E_max` is a *cell-set parameter*, not a protocol parameter.
+When burn-in includes transient excursions that bias the percentile
+estimate above the steady-state attractor's typical excursions
+(observed in C1 cell-set v0/v1/v3 lock executions), the cell may pin
+an `e_max_burnin_fraction ∈ (0, 1]` and define `E_max` as the 95th
+percentile of the *last* `e_max_burnin_fraction × burnin_steps`
+samples of the burn-in trace. The default `e_max_burnin_fraction =
+1.0` reproduces the original "full burn-in percentile" rule. Cells
+that suspect transient contamination may pin a smaller fraction
+(e.g. `0.25` for the last quarter). This is a cell-set choice
+pre-registered before sampling, **not** a post-hoc retune; changing
+the fraction after a receipt files is `PDE-C1-NEG-B`.
 
 ## 4. Per-Bin Majority Selector And Minority Fraction
 

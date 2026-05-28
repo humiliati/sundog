@@ -410,7 +410,11 @@ shape/canvas and edit-mask signal, but the per-task edit-color learner did not
 recover exact output colors. Five Phase 3 full-grid controls now agree on the
 held-out exact-grid floor across two task distributions, two learner families,
 and two output framings. Future Phase 3 reopens require a new pre-registered
-Branch D variant or a new Branch E spec.
+Branch D variant or a new Branch E spec. The first bottleneck-targeted Branch D
+variant is now filed as `structured_edit_color_rule_v2`: keep the baseline and
+edit-mask components fixed, and replace only the edit-color MLP with a
+deterministic conditioning-derived color-rule bank. Execution remains held until
+variant runner tooling and a freeze-marker amendment are filed.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

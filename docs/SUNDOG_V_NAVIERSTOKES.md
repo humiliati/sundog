@@ -109,18 +109,33 @@ under the pinned methodology; the binning prescription `h_K = ε_K /
 sqrt(d_K)` adapts to `E_max` but not to attractor extent.
 **Cell-set v3** at
 [`proof/PDE_C1_CELLSET_KOLMOGOROV_v3.md`](proof/PDE_C1_CELLSET_KOLMOGOROV_v3.md)
-backs Grashof off to `G = 200` looking for the sweet spot between v1's
-energy-conserved attractor and v2's high-dimensional chaos. Keep
-`k_f = 2`, `K = 4`, all other v0/v1/v2 §7 values inherited. Harness
-exposes `--preset lock_v3`. If v3 also defers, the next move is a
-methodology amendment (adaptive `h_K` scaling with attractor extent,
-or smaller `K`), not another G knob.
-Criterion (b) is closed at the *procedure-and-execution* level (v0, v1,
-v2 lock cycles all ran cleanly; methodology survived three distinct
-vacuity / coverage diagnoses without `PDE-C1-NEG-B`); a *substantive*
-C1 read still requires a non-vacuous, non-deferred v3+ execution.
-Criteria (a) Front-A vacuity rebuttal and (c) external PDE reviewer
-remain open. Final (d) close is coupled to (c).
+backed Grashof off to `G = 200`. **Lock_v3 executed 2026-05-28** in
+~20 min; verdict `DEFERRED_VACUITY` (`proxy_selector_structurally_constant`).
+Burn-in had real chaotic excursions (max 3.13) but the post-burn-in
+steady-state attractor sits in `[0.7649, 0.7843]`, well below the
+transient-contaminated `e_max = 1.07`. **Cross-cell pattern** across
+v0 (laminar), v1 (energy-conserved), v3 (steady-state below threshold):
+3 of 4 cells have `damp_fraction = 0` *exactly*, and v2's was only
+`0.0086`. The shared signal: burn-in-derived `E_max` sits above the
+steady-state attractor's typical lookahead excursions.
+**Methodology amendment 2026-05-28** (fiber protocol §3): cells may
+pin `e_max_burnin_fraction ∈ (0, 1]` and compute `E_max` from the
+last fraction of burn-in (excluding transients). Default `1.0`
+preserves v0–v3 backwards compatibility.
+**Cell-set v4** at
+[`proof/PDE_C1_CELLSET_KOLMOGOROV_v4.md`](proof/PDE_C1_CELLSET_KOLMOGOROV_v4.md)
+is the first **methodology sibling** (not regime sibling) in the C1
+chain. Holds v3's regime constant (`k_f = 2`, `G = 200`) and pins
+`e_max_burnin_fraction = 0.25` (last 25% of burn-in). Projected E_max
+drops from 1.07 to ~0.78 (close to steady-state 95th percentile),
+projected `damp_fraction ≈ 0.05`. Harness exposes `--preset lock_v4`.
+Criterion (b) is closed at the *procedure-and-execution* level (v0–v3
+lock cycles all ran cleanly; methodology survived four distinct
+vacuity / coverage diagnoses, two protocol amendments without any
+`PDE-C1-NEG-B`); a *substantive* C1 read still requires a non-vacuous,
+non-deferred v4+ execution. Criteria (a) Front-A vacuity rebuttal and
+(c) external PDE reviewer remain open. Final (d) close is coupled to
+(c).
 
 Candidate 2 has also been commissioned at the scoping level:
 [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)
