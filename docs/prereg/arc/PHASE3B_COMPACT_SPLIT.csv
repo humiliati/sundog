@@ -1,0 +1,8 @@
+task_id,subset_split,primary_prior,predicted_boundary
+009d5c81,train,counting,capacity pressure (count is high-entropy)
+00d62c1b,train,symmetry,gauge-breaking ambiguity (symmetry as gauge)
+1b60fb0c,train,objectness,full-state-only dependency (residual category)
+292dd178,train,color_role,gauge-breaking ambiguity (color permutation as gauge)
+1acc24af,validation,objectness,full-state-only dependency (residual category)
+11dc524f,test,objectness,full-state-only dependency (residual category)
+2601afb7,test,color_role,gauge-breaking ambiguity (color permutation as gauge)

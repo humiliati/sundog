@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import dataclasses
 import json
 import os
 import sys
@@ -70,8 +71,15 @@ def main() -> int:
     data_dir = Path(args.data_dir).resolve()
     register_path = Path(args.register).resolve()
     p3.assert_training_data_dir(data_dir)
-    tasks, register_hash, data_hash, exclusion_summary = load_public_training_tasks(data_dir, register_path, args.limit_aux_tasks)
-    split_rows = p3.build_split_rows([task for task in tasks if task.task_id in p3.expected_split_by_task()])
+    subset_split, subset_spec_hash, subset_spec_path = (None, None, None)
+    if args.subset_spec:
+        subset_spec_path = Path(args.subset_spec).resolve()
+        subset_split, subset_spec_hash = read_subset_spec(subset_spec_path)
+    tasks, register_hash, data_hash, exclusion_summary = load_public_training_tasks(
+        data_dir, register_path, args.limit_aux_tasks, subset_split=subset_split
+    )
+    subset_task_ids = set(subset_split.keys()) if subset_split is not None else set(p3.expected_split_by_task())
+    split_rows = p3.build_split_rows([task for task in tasks if task.task_id in subset_task_ids])
     write_split_with_aux(out_dir / "split.csv", tasks, split_rows)
 
     train_tasks = [task for task in tasks if task.split == "train"]
@@ -104,6 +112,11 @@ def main() -> int:
         pttest_count=len(pttest_instances),
     )
     manifest["auxExclusions"] = exclusion_summary
+    if subset_split is not None:
+        manifest["subsetSpecPath"] = str(subset_spec_path)
+        manifest["subsetSpecHash"] = subset_spec_hash
+        manifest["subsetSplit"] = dict(sorted(subset_split.items()))
+        manifest["subsetTaskCount"] = len(subset_split)
 
     if args.dry_run:
         manifest["mode"] = "dry_run"
@@ -176,7 +189,10 @@ def main() -> int:
     per_task_rows = p3.aggregate_per_task(per_instance_any, selected_seed_by_arm)
     per_prior_rows = p3.aggregate_per_prior(per_instance_any, selected_seed_by_arm)
     scores = p3.aggregate_scores(per_instance_any, selected_seed_by_arm, args.master_seed)
-    gate = adjudicate_raw_grid_gate(per_task_rows, manifest["mode"])
+    if subset_split is not None:
+        gate = adjudicate_compact_subset_gate(per_task_rows, manifest["mode"])
+    else:
+        gate = adjudicate_raw_grid_gate(per_task_rows, manifest["mode"])
 
     manifest["completedAt"] = p3.iso_now()
     manifest["selectedSeedByArm"] = selected_seed_by_arm
@@ -224,6 +240,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--shard-seed", type=int, default=None, help="Run a single seed from SEED_SLATE and emit a shard intermediate (no gate adjudication).")
     parser.add_argument("--merge", action="store_true", help="Merge shard intermediates into a binding receipt instead of training.")
     parser.add_argument("--shard-dirs", default=None, help="Comma-separated list of shard receipt directories (--merge mode only).")
+    parser.add_argument("--subset-spec", default=None, help="CSV path with columns task_id,subset_split[,...]. When set, restricts the held-out task distribution to those task_ids and uses subset_split to override their train/validation/test role. Triggers the compact-subset gate adjudicator (minimal floor).")
     args = parser.parse_args()
     if not args.merge:
         if not args.data_dir or not args.register:
@@ -289,7 +306,10 @@ def run_merge(args) -> int:
     per_task_rows = p3.aggregate_per_task(per_instance_any, selected_seed_by_arm)
     per_prior_rows = p3.aggregate_per_prior(per_instance_any, selected_seed_by_arm)
     scores = p3.aggregate_scores(per_instance_any, selected_seed_by_arm, shards[0]["manifest"]["masterSeed"])
-    gate = adjudicate_raw_grid_gate(per_task_rows, "full")
+    if shards[0]["manifest"].get("subsetSpecHash"):
+        gate = adjudicate_compact_subset_gate(per_task_rows, "full")
+    else:
+        gate = adjudicate_raw_grid_gate(per_task_rows, "full")
 
     first_manifest = shards[0]["manifest"]
     drop_keys = {"mode", "shardSeed", "seedSlateEffective", "seedSlateOriginal", "generatedAt", "completedAt", "command", "tool", "outDir"}
@@ -358,6 +378,7 @@ def assert_shard_consistency(shards: list[dict[str, Any]]) -> None:
         "learnerVersion", "protocolVersion", "receiptSchemaVersion", "featureSchemaVersion",
         "arm", "registerHash", "dataDirHash", "gitCommit", "modelSpec",
         "registerPath", "dataDir", "limitAuxTasks", "maxEpochsEffective",
+        "subsetSpecHash", "subsetSplit", "subsetTaskCount",
     ]
     seeds: set[int] = set()
     for sh in shards:
@@ -401,11 +422,18 @@ def patch_v1_globals() -> None:
     p3.MODEL_SPEC.update(MODEL_SPEC_V2)
 
 
-def load_public_training_tasks(data_dir: Path, register_path: Path, limit_aux_tasks: int) -> tuple[list[p3.Task], str, str, dict[str, Any]]:
+def load_public_training_tasks(data_dir: Path, register_path: Path, limit_aux_tasks: int, subset_split: dict[str, str] | None = None) -> tuple[list[p3.Task], str, str, dict[str, Any]]:
     registered, register_hash, _ = p3.load_tasks(data_dir, register_path)
     registered_by_id = {task.task_id: task for task in registered}
     split_by_id = p3.expected_split_by_task()
     heldout = {task_id for task_id, split in split_by_id.items() if split in {"validation", "test"}}
+    if subset_split is not None:
+        missing = sorted(set(subset_split) - set(registered_by_id))
+        if missing:
+            raise SystemExit(f"--subset-spec references task_ids not in the register: {missing}")
+        # In subset mode, registered tasks not listed in the subset are dropped entirely,
+        # and registered held-out tasks (validation/test) become unrestricted aux candidates.
+        heldout = set()
     tasks: list[p3.Task] = []
     file_hashes = []
     aux_count = 0
@@ -418,6 +446,13 @@ def load_public_training_tasks(data_dir: Path, register_path: Path, limit_aux_ta
         parsed = json.loads(raw)
         if task_id in registered_by_id:
             task = registered_by_id[task_id]
+            if subset_split is not None:
+                if task_id not in subset_split:
+                    # Registered task not in subset → drop entirely (do NOT promote to aux,
+                    # because its grids were manually inspected for the Phase 0 register and
+                    # the V2 freeze excludes registered tasks from aux training).
+                    continue
+                task = dataclasses.replace(task, split=subset_split[task_id])
             tasks.append(task)
             continue
         if task_id in heldout:
@@ -551,6 +586,26 @@ def adjudicate_raw_grid_gate(per_task_rows: list[dict[str, Any]], mode: str) -> 
     }
 
 
+def adjudicate_compact_subset_gate(per_task_rows: list[dict[str, Any]], mode: str) -> dict[str, Any]:
+    if mode != "full":
+        return {"gate": "not_adjudicated", "reason": f"{mode} run only (compact-subset lane)"}
+    lodo_success = exact_task_count(per_task_rows, "test_lodo")
+    pttest_success = exact_task_count(per_task_rows, "pttest")
+    if lodo_success >= 1 and pttest_success >= 1:
+        return {
+            "gate": "compact_full_grid_control_pass",
+            "reason": "raw_grid_lowcap cleared the compact-subset minimal floor (>=1 exact task on each held-out lane)",
+            "test_lodo_exact_tasks": lodo_success,
+            "pttest_exact_tasks": pttest_success,
+        }
+    return {
+        "gate": "compact_full_grid_control_floor",
+        "reason": "raw_grid_lowcap did not clear the compact-subset minimal floor on both held-out lanes",
+        "test_lodo_exact_tasks": lodo_success,
+        "pttest_exact_tasks": pttest_success,
+    }
+
+
 def exact_task_count(rows: list[dict[str, Any]], lane: str) -> int:
     return sum(
         1
@@ -559,9 +614,35 @@ def exact_task_count(rows: list[dict[str, Any]], lane: str) -> int:
     )
 
 
+def read_subset_spec(path: Path) -> tuple[dict[str, str], str]:
+    text = path.read_text(encoding="utf-8-sig")
+    spec_hash = p3.sha256_text(text)
+    rows = list(csv.DictReader(text.splitlines()))
+    if not rows:
+        raise SystemExit(f"--subset-spec {path} is empty")
+    valid_splits = {"train", "validation", "test"}
+    subset: dict[str, str] = {}
+    for row in rows:
+        task_id = (row.get("task_id") or "").strip()
+        split = (row.get("subset_split") or "").strip()
+        if not task_id:
+            raise SystemExit(f"--subset-spec {path} has a row without a task_id")
+        if split not in valid_splits:
+            raise SystemExit(f"--subset-spec {path} task_id={task_id} has invalid subset_split={split!r}; expected one of {sorted(valid_splits)}")
+        if task_id in subset:
+            raise SystemExit(f"--subset-spec {path} task_id={task_id} appears more than once")
+        subset[task_id] = split
+    if not any(split == "train" for split in subset.values()):
+        raise SystemExit(f"--subset-spec {path} has no train tasks; the decoder needs at least one")
+    if not any(split == "test" for split in subset.values()):
+        raise SystemExit(f"--subset-spec {path} has no test tasks; the gate needs at least one")
+    return subset, spec_hash
+
+
 def write_gate_summary(path: Path, gate: dict[str, Any], scores: list[dict[str, Any]], selected_seed: int) -> None:
+    title = "# Phase 3 Raw-Grid Gate V2 — Compact Subset" if gate.get("gate", "").startswith("compact_") else "# Phase 3 Raw-Grid Gate V2"
     lines = [
-        "# Phase 3 Raw-Grid Gate V2",
+        title,
         "",
         f"Gate: **{gate['gate']}**",
         "",
