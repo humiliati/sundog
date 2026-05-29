@@ -31,6 +31,9 @@ Its first cell-set companion is filed at
 [`riemann/RIEMANN_C1_CELLSET_V0.md`](riemann/RIEMANN_C1_CELLSET_V0.md).
 The C1 linearity audit opens a nonlinear zero-statistics scoping lane at
 [`riemann/NONLINEAR_PAIR_CORRELATION_LANE.md`](riemann/NONLINEAR_PAIR_CORRELATION_LANE.md).
+Its bridge note admits only the S2 gap-pair swap as a reversibility-test hook;
+Probe 05 v0 is filed at
+[`riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md`](riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md).
 
 ## Claim Boundary
 
@@ -324,6 +327,43 @@ Receipt fields:
 - escape/collapse/mismatch events;
 - operating-envelope disposition.
 
+### Probe 5 - Nonlinear Gap-Pair Reversibility Test
+
+- **Attacks failure mode(s):** nonlinear-lane `R-NL-NEG-A` (GUE dominance),
+  `R-NL-NEG-B` (representation triviality), `R-NL-NEG-C` (sampling-floor
+  failure), and main-ledger Mode 5 (domain leakage).
+- **Cost:** Low.
+- **Front:** A (zero-statistics evaluator / stress-test lens).
+- **Bridge disposition:** admitted only on the S2 consecutive-gap-pair swap,
+  per
+  [`riemann/NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md`](riemann/NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md).
+  C3 triples are quarantined as relabeling; residual sign-bins are downgraded
+  to ordinary GUE residual analysis.
+- **Expected outcome:** bounded null / `R-NL-NEG-A`. The statistic is
+  non-forced per sample, but the sine-kernel / GUE baseline predicts
+  reversibility, hence `E[D] = 0`.
+- **Probe spec:** filed at
+  [`riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md`](riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md).
+- **External review path:** an analytic number theorist or random-matrix /
+  point-process reviewer familiar with Montgomery-Odlyzko statistics and
+  consecutive-gap tests.
+
+Test the arrow-of-time statistic
+`D = (# {s_i > s_{i+1}} - # {s_i < s_{i+1}}) / (N_zero - 2)` on registered
+consecutive unfolded gaps. A clean null is useful as a documented boundary: the
+apparatus has no structural-zero edge here because GUE already predicts the
+null. A non-null result is treated only as a finite-window reversibility anomaly
+requiring independent replication.
+
+Receipt fields:
+
+- zero source, `N_zero`, height, and unfolding rule;
+- gap-pair construction;
+- tie tolerance;
+- `D`, orientation counts, and tie count;
+- analytic and block-bootstrap floors;
+- named nonlinear-lane disposition.
+
 ## Promotion Criteria
 
 This ledger graduates to a phased `SUNDOG_V_RIEMANN_ROADMAP.md` only when all
@@ -372,11 +412,17 @@ These remain horizon until receipts exist.
 - [`docs/riemann/NONLINEAR_PAIR_CORRELATION_LANE.md`](riemann/NONLINEAR_PAIR_CORRELATION_LANE.md)
   - scoping note for a nonlinear pair-correlation / gap-statistics lane opened
   by the C1 linearity audit.
+- [`docs/riemann/NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md`](riemann/NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md)
+  - bridge scoping for the nonlinear lane; admits only the S2 gap-pair
+  reversibility hook and pre-registers NEG-A as expected.
 - [`docs/prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md)
   - initial domain and admission lock.
 - [`docs/riemann/PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md`](riemann/PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md)
   - first executable probe specification; Path (i) v1 run filed, while Path
   (ii) remains deferred.
+- [`docs/riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md`](riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md)
+  - v0 nonlinear zero-statistics reversibility-test spec; S2 hook only,
+  expected disposition `R-NL-NEG-A`.
 - [`docs/riemann/RECEIPT_TEMPLATE.md`](riemann/RECEIPT_TEMPLATE.md) - receipt
   template for every probe result.
 - [`docs/riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md)
@@ -390,6 +436,11 @@ These remain horizon until receipts exist.
   memo grounding the probe ranking in indexed prior art.
 - [`riemann/REPRESENTATION_BRIDGE_NOTES.md`](riemann/REPRESENTATION_BRIDGE_NOTES.md)
   - bridge scoping for Probe 01 admissibility.
+- [`riemann/NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md`](riemann/NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md)
+  - nonlinear bridge scoping for Probe 05; S2 admitted, C3 quarantined,
+  residual bins downgraded.
+- [`riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md`](riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md)
+  - v0 reversibility-test spec for consecutive unfolded gaps.
 - [`SUNDOG_V_NAVIERSTOKES.md`](SUNDOG_V_NAVIERSTOKES.md) - kin ledger filed
   same day (2026-05-28); same capset-pattern structure with lit-pass + C1
   reading note + cell-set v0 + fiber protocol artifacts.

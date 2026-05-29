@@ -19,6 +19,9 @@ Bridge scoping:
 
 - [`REPRESENTATION_BRIDGE_NOTES.md`](REPRESENTATION_BRIDGE_NOTES.md) -
   resolves the v0.3h-D3 vs Riemann-Z₂ admissibility question for Probe 01.
+- [`NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md`](NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md)
+  - nonlinear sibling; admits S₂ gap-pair swap (as a reversibility test, NEG-A
+  expected), quarantines C3 triple (relabeling), downgrades residual bins.
 
 Front-A reading:
 
@@ -40,6 +43,8 @@ Probe specs:
 
 - [`PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md`](PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md)
   - admitted bridge is Path (i) Z₂-descent per the bridge notes above.
+- [`PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md`](PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md)
+  - nonlinear gap-pair reversibility test; S2 hook only, NEG-A expected.
 
 Templates:
 
@@ -67,5 +72,7 @@ Current state:
 - Front-A functional-equation reading note drafted: 2026-05-28.
 - Riemann C1 cell-set v0 filed: 2026-05-28.
 - Nonlinear pair-correlation lane scoped: 2026-05-28.
+- Nonlinear bridge notes filed (S₂ admitted / C3 quarantined / bins downgraded): 2026-05-28.
+- Probe 05 v0 nonlinear reversibility-test spec filed: 2026-05-28.
 - Front A is design-admitted under reduced apparatus (Z₂-descent).
 - Front B is horizon only.

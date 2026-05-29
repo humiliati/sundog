@@ -122,13 +122,29 @@ It should answer one question before any code:
 If the answer is "none," file `R-NL-NEG-B` and stop. If an S2 gap-pair bridge
 survives, then write Probe 05.
 
+**Filed 2026-05-28:**
+[`NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md`](NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md).
+Adjudication: only the **S₂ gap-pair swap survives** — and it survives as a
+*time-reversibility test* of the gap sequence, whose expectation is pinned to
+zero by the GUE / sine-kernel baseline, so its predicted landing is
+`R-NL-NEG-A` (GUE dominance), not a structural-zero edge. The **C3 triple is a
+relabeling** (`R-NL-NEG-B`: cyclic action on linearly-ordered gaps is not a
+symmetry the data has). The **residual sign-bins are downgraded** (standard
+GUE residual analysis, no structural-zero content). Probe 05 v0 is now filed at
+[`PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md`](PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md)
+on the S₂ hook only, with `R-NL-NEG-A` pre-registered as the expected outcome.
+
 ## Status
 
 - Drafted: 2026-05-28.
 - Trigger: C1 explicit-formula linearity audit.
 - Execution: none.
-- Admission: none.
-- Next gate: nonlinear bridge notes.
+- Admission: S₂ gap-pair swap admitted for a Probe 05 v0 (NEG-A expected);
+  C3 quarantined; residual bins downgraded. See bridge notes.
+- Probe 05 v0 spec filed: 2026-05-28.
+- Next gate: execute Probe 05 under the S₂ hook only OR external review of
+  whether a reversibility-test receipt is worth running given the NEG-A
+  prediction.
 
 ## Cross-References
 
