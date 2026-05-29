@@ -1,0 +1,4 @@
+{
+  "status": "phase1_no_rank_scoring",
+  "note": "Phase 1 manifest does not score held-out targets; bin edges must be frozen by a Phase 2 manifest before rank-locality scoring."
+}

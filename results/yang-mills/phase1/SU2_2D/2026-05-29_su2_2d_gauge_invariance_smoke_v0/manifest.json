@@ -1,0 +1,46 @@
+{
+  "phase": "phase1",
+  "cell": "SU2_2D",
+  "latticeSize": [
+    16,
+    16
+  ],
+  "beta": 2,
+  "boundary": "periodic",
+  "action": "Wilson",
+  "generator": "su2_heatbath_overrelax_v1",
+  "updateMix": {
+    "heatbath": 1,
+    "overrelaxation": 4
+  },
+  "masterSeed": 202605290102,
+  "burnInSweeps": 2000,
+  "pilotTauIntPlaquette": 0.4038402078709045,
+  "registeredThinning": 32,
+  "retainedConfigurations": 32,
+  "signatureVocabularyVersion": "v1",
+  "heldOutTargetVocabularyVersion": "v1",
+  "gammaHeldBinEdgeStatus": "phase1_no_rank_scoring",
+  "heatbathFallbackCount": 0,
+  "heatbathFallbackFraction": 0,
+  "heatbathLinkUpdates": 1810432,
+  "heatbathRejectionAttempts": 2925123,
+  "maxLinkUnitarityResidual": 6.661338147750939e-16,
+  "controlSetDeclared": [
+    "CTRL_META",
+    "CTRL_RAW",
+    "CTRL_RAND",
+    "CTRL_RAND_STRAT",
+    "CTRL_PERM",
+    "CTRL_GAUGE_RAND",
+    "CTRL_FINITE_SIZE"
+  ],
+  "controlSetScored": [
+    "CTRL_RAW",
+    "CTRL_GAUGE_RAND"
+  ],
+  "codeCommit": "8f1f25f3e67364e4fd3e2e9262bb0d0c5d5df1a4",
+  "gitDirty": true,
+  "commandLine": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\hughe\\Dev\\sundog\\scripts\\yang-mills-phase1-su2-gauge-smoke.mjs --cell SU2_2D --lattice-size 16x16 --beta 2.0 --boundary periodic --action Wilson --generator su2_heatbath_overrelax_v1 --overrelax-per-heatbath 4 --seed 202605290102 --burn-in 2000 --pilot-sweeps 512 --thinning 32 --measurements 32 --gauge-transforms 8 --signature-vocab v1 --heldout-vocab v1 --out results/yang-mills/phase1/SU2_2D/2026-05-29_su2_2d_gauge_invariance_smoke_v0",
+  "wallClockSeconds": 7.1781799
+}

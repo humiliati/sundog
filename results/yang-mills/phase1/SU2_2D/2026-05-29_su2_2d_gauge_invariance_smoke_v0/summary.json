@@ -1,0 +1,37 @@
+{
+  "branch": "P1-A smoke_pass",
+  "reason": "all burn-in / autocorrelation / signature-invariance / heatbath-fallback / raw-non-invariance thresholds pass",
+  "pilot": {
+    "tauInt": 0.4038402078709045,
+    "window": 3,
+    "meanPlaquette": 0.43322159794351506,
+    "variancePlaquette": 0.000573097869958764,
+    "thinningTauRatio": 79.23926190685161
+  },
+  "measurements": {
+    "retained": 32
+  },
+  "heatbath": {
+    "linkUpdates": 1810432,
+    "fallbackCount": 0,
+    "fallbackFraction": 0,
+    "rejectionAttempts": 2925123,
+    "thresholdFallbackFraction": 0.001
+  },
+  "gaugeRandomization": {
+    "identityResidualMax": 2.220446049250313e-16,
+    "randomSignatureResidualMax": 3.0531133177191805e-16,
+    "rawMatrixMedianNormalizedL2": 1.4139401605938902,
+    "rawMatrixFractionAboveFloor": 1,
+    "maxLinkUnitarityResidual": 6.661338147750939e-16,
+    "thresholds": {
+      "identityResidualMax": 1e-12,
+      "randomGaugeResidualMax": 1e-12,
+      "rawMedianL2Min": 0.01,
+      "rawPerTransformFloor": 0.000001,
+      "rawPerTransformFracAbove": 0.95,
+      "unitarityResidualMax": 1e-10
+    }
+  },
+  "wallClockSeconds": 7.1781799
+}
