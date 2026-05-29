@@ -44,6 +44,7 @@ const AUDIT_TARGETS = Object.freeze([
   "scripts/pvnp-phase1-ablations.mjs",
   "scripts/lib/pvnp-phase1-verifier-core.mjs",
   "scripts/lib/pvnp-phase1-signature-core.mjs",
+  "scripts/lib/pvnp-phase1-cache.mjs",
 ]);
 
 const FORBIDDEN_TOKENS = Object.freeze([

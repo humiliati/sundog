@@ -15,12 +15,15 @@ import {
   derivedFieldsHash,
   SIGNATURE_SCHEMA_V1,
   SIGNATURE_SCHEMA_V2,
+  SIGNATURE_SCHEMA_V3,
   TRANSFORM_VERSION_V1,
   TRANSFORM_VERSION_V2,
+  TRANSFORM_VERSION_V3,
 } from "./pvnp-phase1-signature-core.mjs";
+import { cacheKey, lookupOrCompute } from "./pvnp-phase1-cache.mjs";
 
 const SIGNATURE_SCHEMA = "pvnp-phase1-sigma-v0";
-const SOURCE_BOUND_SCHEMAS = new Set([SIGNATURE_SCHEMA_V1, SIGNATURE_SCHEMA_V2]);
+const SOURCE_BOUND_SCHEMAS = new Set([SIGNATURE_SCHEMA_V1, SIGNATURE_SCHEMA_V2, SIGNATURE_SCHEMA_V3]);
 const RECOMPUTED_FIELDS_CACHE = new Map();
 
 // v0 promise parameters (matches docs/pvnp/PHASE1_V0_SLATE.md and
@@ -60,23 +63,35 @@ function certificateIntegrity(sigma, expectedTraceId) {
   return { ok: true };
 }
 
-function certificateIntegritySourceBound(sigma, expectedTraceId, traceCommitment, commitmentDuplicate = false) {
-  const version = sigma.schema === SIGNATURE_SCHEMA_V2 ? "v2" : "v1";
-  const expectedSchema = version === "v2" ? SIGNATURE_SCHEMA_V2 : SIGNATURE_SCHEMA_V1;
-  const expectedTransform = version === "v2" ? TRANSFORM_VERSION_V2 : TRANSFORM_VERSION_V1;
+function certificateIntegritySourceBound(sigma, expectedTraceId, traceCommitment, commitmentDuplicate = false, cacheState = null, stageLabel = "verifier") {
+  let version;
+  let expectedSchema;
+  let expectedTransform;
+  if (sigma.schema === SIGNATURE_SCHEMA_V3) {
+    version = "v3"; expectedSchema = SIGNATURE_SCHEMA_V3; expectedTransform = TRANSFORM_VERSION_V3;
+  } else if (sigma.schema === SIGNATURE_SCHEMA_V2) {
+    version = "v2"; expectedSchema = SIGNATURE_SCHEMA_V2; expectedTransform = TRANSFORM_VERSION_V2;
+  } else {
+    version = "v1"; expectedSchema = SIGNATURE_SCHEMA_V1; expectedTransform = TRANSFORM_VERSION_V1;
+  }
   if (sigma.schema !== expectedSchema) {
     return { ok: false, reason: `schema_mismatch:${sigma.schema}` };
   }
   if (sigma.trace_id !== expectedTraceId) {
     return { ok: false, reason: `trace_id_mismatch:${sigma.trace_id}` };
   }
-  const commonRequired = [
+  // v3 commonRequired drops sensor_health_v1 (which v3 demotes); v3 keeps
+  // analytical / source-binding fields and substitutes sensor_diagnostics_v3.
+  const commonRequiredBase = [
     "trace_id", "source_observations", "source_hash", "transform_version",
     "derived_fields_hash", "integrity_checks", "curvature_summary",
-    "trajectory_envelope", "margin_lower_bound", "sensor_health_v1",
+    "trajectory_envelope", "margin_lower_bound",
     "cost_signature", "limitations",
   ];
-  const versionRequired = version === "v2"
+  const commonRequired = version === "v3"
+    ? [...commonRequiredBase, "sensor_diagnostics_v3"]
+    : [...commonRequiredBase, "sensor_health_v1"];
+  const versionRequired = version === "v3" || version === "v2"
     ? ["invariance_checks_v2", "geometry_promise_signal_v2"]
     : ["coverage_digest", "invariance_checks_v1", "geometry_promise_signal"];
   const required = [...commonRequired, ...versionRequired];
@@ -100,16 +115,24 @@ function certificateIntegritySourceBound(sigma, expectedTraceId, traceCommitment
   if (sigmaFieldsHash !== sigma.derived_fields_hash) {
     return { ok: false, reason: "derived_field_hash_mismatch" };
   }
-  const cacheKey = `${version}|${traceCommitment.source_hash}`;
-  let cached = RECOMPUTED_FIELDS_CACHE.get(cacheKey);
-  if (!cached) {
+  const key = `${version}|${traceCommitment.source_hash}`;
+  const compute = () => {
     const fields = computeAnalyticalFields({
       positions: payload.positions,
       probes: payload.probes,
       version,
     });
-    cached = { fields, hash: derivedFieldsHash(fields, version) };
-    RECOMPUTED_FIELDS_CACHE.set(cacheKey, cached);
+    return { fields, hash: derivedFieldsHash(fields, version) };
+  };
+  let cached;
+  if (cacheState) {
+    cached = lookupOrCompute(cacheState, cacheKey(traceCommitment.source_hash, expectedTransform), compute, stageLabel);
+  } else {
+    cached = RECOMPUTED_FIELDS_CACHE.get(key);
+    if (!cached) {
+      cached = compute();
+      RECOMPUTED_FIELDS_CACHE.set(key, cached);
+    }
   }
   const recomputedHash = cached.hash;
   if (recomputedHash !== sigma.derived_fields_hash) {
@@ -184,11 +207,17 @@ export function verify({
   dropFields = null,
   traceCommitment = null,
   commitmentDuplicate = false,
+  cacheState = null,
+  stageLabel = "verifier",
+  // v3 sensor disposition: when true, sensor gates run even on v3 schemas;
+  // used only by the sensor_disposition_audit shadow check.
+  forceSensorGate = false,
 }) {
   const sourceBound = SOURCE_BOUND_SCHEMAS.has(sigma.schema);
   const isV2 = sigma.schema === SIGNATURE_SCHEMA_V2;
+  const isV3 = sigma.schema === SIGNATURE_SCHEMA_V3;
   const integrity = sourceBound
-    ? certificateIntegritySourceBound(sigma, expectedTraceId, traceCommitment, commitmentDuplicate)
+    ? certificateIntegritySourceBound(sigma, expectedTraceId, traceCommitment, commitmentDuplicate, cacheState, stageLabel)
     : certificateIntegrity(sigma, expectedTraceId);
   if (!integrity.ok) return { decision: "quarantine", reason: integrity.reason };
 
@@ -206,8 +235,13 @@ export function verify({
     if (!invariance.all_pass) return { decision: "quarantine", reason: "invariance_failed" };
   }
 
-  // Sensor health within tier (unless ablated).
-  if (!(dropFields && (dropFields.has("sensor_health") || dropFields.has("sensor_health_v1")))) {
+  // Sensor health within tier (unless ablated, or v3 schema with sensor demoted).
+  // v3 removes sensor_health as a gating field per PHASE1_V3_SLATE.md
+  // §Sensor Disposition Gate. The shadow check used by
+  // sensor_disposition_audit can force the gate back on via forceSensorGate.
+  const sensorGated = (!isV3 || forceSensorGate)
+    && !(dropFields && (dropFields.has("sensor_health") || dropFields.has("sensor_health_v1") || dropFields.has("sensor_diagnostics_v3")));
+  if (sensorGated) {
     const sh = sensorHealthOk(sigma, promise);
     if (!sh.ok) return { decision: "quarantine", reason: sh.reason };
     if (sourceBound) {
@@ -225,8 +259,10 @@ export function verify({
     if (!geo.ok) return { decision: "quarantine", reason: geo.reason };
   }
 
-  // Coverage sufficiency (unless ablated).
-  if (!isV2 && !(dropFields && dropFields.has("coverage_digest"))) {
+  // Coverage sufficiency (unless ablated). v2 and v3 remove standalone
+  // coverage_digest from the certificate; coverage information lives only
+  // inside geometry_promise_signal_v2.
+  if (!isV2 && !isV3 && !(dropFields && dropFields.has("coverage_digest"))) {
     if (sigma.coverage_digest.touched_cells < thresholds.coverage_min_touched_cells) {
       return { decision: "quarantine", reason: `coverage_${sigma.coverage_digest.touched_cells}_below_${thresholds.coverage_min_touched_cells}` };
     }

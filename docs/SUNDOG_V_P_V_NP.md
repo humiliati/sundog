@@ -12,37 +12,48 @@ Short version:
 > capacity envelope?
 
 Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier
-spec, v0 + v1 + v2 frozen slates, v3 repair slate, and v0 + v1 + v2
-execution receipts all filed 2026-05-28; see
+spec, v0 + v1 + v2 + v3 frozen slates, and v0 + v1 + v2 + v3 execution
+receipts all filed 2026-05-28; see
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md),
 [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md),
 [`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md),
 [`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md),
 [`pvnp/PHASE1_V2_SLATE.md`](pvnp/PHASE1_V2_SLATE.md),
 [`pvnp/PHASE1_V3_SLATE.md`](pvnp/PHASE1_V3_SLATE.md), and the receipts
-under [`pvnp/receipts/`](pvnp/receipts/). v0 returned a **named
-quarantine** with `capacity_threshold = <=small` after `A_spoof_small`
-breached 245 / 444 unsafe items by editing analytical certificate fields
-the verifier did not bind to the source trace. v1 closed that spoof
-channel via source binding (both split spoof attackers went 0 / 494
-across ~63 000 attempts; 5 / 5 integrity-mismatch probes quarantined)
-but left three slate gates open (invariance vacuity, basin-shape
-boundary, cost). v2 closed the remaining safety gates — **0 false
-accepts on measurement**, **0 / 768 out-of-promise basin-shape accepts**
-via `geometry_promise_signal_v2`, `invariance_checks_v2` at 8.03 %
-decision delta, standalone `coverage_digest` removed and subsumed into
-the geometry signal, 5 / 5 integrity probes quarantine (new
-`duplicate_trace_id` probe added) — but is also filed as **named
-quarantine**: the slate's cost gate failed (wall-time ratio 1535 × vs
-rollout, worse than v1's 1139 ×, slate required ≥ 25 % improvement),
-`sensor_health_v1` fell below the v1-inherited 2 % vacuity-delta gate
-(1.74 % delta) and is named for v3 disposition under the same
-subsumption pattern as v1's coverage_digest, and the acceptance rate
-is 9.7 % (223 / 2304) pending v3 sanity check. `capacity_threshold =
-not_estimated` for both v1 and v2; privilege-leak audit green for all
-three runs. v3 is opened as the cost/sensor-disposition/acceptance-volume
-repair slate named by the v2 receipt's Next-Allowed-Step section.
-No complexity-theoretic result claimed. This document is a research bridge from
+under [`pvnp/receipts/`](pvnp/receipts/). v0 = **named quarantine**
+(`A_spoof_small` breached 245 / 444 by editing analytical fields the
+verifier did not bind to source). v1 closed the spoof channel via
+source binding (both split spoof attackers 0 / 494 across ~63 k
+attempts; 5 / 5 integrity-mismatch probes quarantined) but left
+invariance vacuity, basin-shape boundary, and cost open. v2 closed the
+remaining safety gates (0 false accepts; 0 / 768 OOP basin-shape
+accepts via `geometry_promise_signal_v2`; `invariance_checks_v2` at
+8.03 % delta; `coverage_digest` removed and subsumed; 5 / 5 integrity
+probes incl. new `duplicate_trace_id`) but failed cost (1535 × rollout
+ratio, worse than v1) and left `sensor_health_v1` at 1.74 % delta —
+below the inherited 2 % gate, named for v3 disposition. v3 closed the
+sensor disposition by demoting `sensor_health_v1` to non-gating
+`sensor_diagnostics_v3` (shadow audit confirms 0 v3 unsafe accepts
+would be re-quarantined under v2 sensor gate), registered an
+acceptance-sanity disposition (`conservative_acceptance` route with
+named rationale), landed a source-hash keyed recompute cache shared
+across verifier/ablation/attacker stages, and dropped
+`C_total_signature` 32.6 % to 907.52 ms — **passing** the v3 slate's
+absolute 1010 ms wall-time target — but is also filed as **named
+quarantine** because the v3 cost gate's ratio clause (≤ 1150 × rollout)
+fails at 1671 × under a rollout denominator that dropped to 0.54 ms,
+and the cost-exemption path's 95 % cache-hit-rate floor is structurally
+unreachable (spoof attempts short-circuit at integrity before the
+cache lookup, yielding 83.33 % hit rate). v3 has **0 false accepts**
+on measurement (consecutive with v2), **0 / 928 spoof successes**,
+**5 / 5 integrity probes** quarantine, **0 / 768 OOP basin-shape
+accepts**; `capacity_threshold = not_estimated` for v1, v2, and v3;
+privilege-leak audit green for all four runs. v4 queued in the v3
+receipt's Next-Allowed-Step section, targeting either cost-gate
+restatement (against full-state, where v3 already moves +16 %) or
+cache-reuse reshape to clear the 95 % exemption floor; a v4 bounded
+positive is the next reachable promotion. No complexity-theoretic
+result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
 capacity-relative one-wayness.

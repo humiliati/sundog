@@ -13,13 +13,19 @@ import { fileURLToPath } from "node:url";
 
 import { verify, V0_PROMISE, V0_CHECKER_THRESHOLDS } from "./lib/pvnp-phase1-verifier-core.mjs";
 import { getPhase1RunConfig } from "./lib/pvnp-phase1-run-config.mjs";
+import { loadCacheState, saveCacheState, statsReport } from "./lib/pvnp-phase1-cache.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
+// v3 drops sensor_health from the ablation roster per PHASE1_V3_SLATE.md
+// §Sensor Disposition Gate ("ablation_decisions.csv must not include
+// sensor_health_v1 as a slate-gated load-bearing field"). The remaining
+// drop fields are the v3 load-bearing analytical fields.
 const DROP_FIELDS_BY_VERSION = Object.freeze({
   v0: ["margin_lower_bound", "coverage_digest", "sensor_health", "invariance_checks"],
   v1: ["margin_lower_bound", "coverage_digest", "sensor_health_v1", "invariance_checks_v1"],
   v2: ["margin_lower_bound", "geometry_promise_signal_v2", "sensor_health_v1", "invariance_checks_v2"],
+  v3: ["margin_lower_bound", "geometry_promise_signal_v2", "invariance_checks_v2"],
 });
 
 function parseArgs(argv) {
@@ -62,9 +68,15 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  const sourceBound = version === "v1" || version === "v2";
+  const sourceBound = version === "v1" || version === "v2" || version === "v3";
+  const isV3 = version === "v3";
   const dropFields = DROP_FIELDS_BY_VERSION[version] ?? DROP_FIELDS_BY_VERSION.v0;
   await mkdir(outDir, { recursive: true });
+
+  // v3 shares the source-hash cache with the verifier stage. Load the
+  // warm cache here; we expect ~100% hits in this stage.
+  const cachePath = path.join(outDir, "derived_fields_cache.json");
+  const cacheState = isV3 ? await loadCacheState(cachePath) : null;
 
   const sigs = await readJsonl(path.join(outDir, "signatures.jsonl"));
   const commitments = await readJsonlIfExists(path.join(outDir, "trace_commitments.jsonl"));
@@ -94,6 +106,7 @@ async function main() {
       sigma, expectedTraceId, publicEnv, m_min,
       promise: V0_PROMISE, thresholds: V0_CHECKER_THRESHOLDS,
       traceCommitment: sourceBound ? traceCommitment : null,
+      cacheState, stageLabel: "ablation_full",
     });
     fullDecisions.set(`${policyId}|${envId}`, result.decision);
   }
@@ -116,6 +129,7 @@ async function main() {
         promise: V0_PROMISE, thresholds: V0_CHECKER_THRESHOLDS,
         dropFields: drop,
         traceCommitment: sourceBound ? traceCommitment : null,
+        cacheState, stageLabel: "ablation",
       });
       const elapsed = performance.now() - t0;
       const ops = 10;
@@ -142,6 +156,16 @@ async function main() {
   const existing = JSON.parse(await readFile(partialPath, "utf8"));
   existing.ablation = ablationCosts;
   await writeFile(partialPath, JSON.stringify(existing, null, 2) + "\n", "utf8");
+
+  if (isV3) {
+    await saveCacheState(cachePath, cacheState, "ablation");
+    const stats = statsReport(cacheState);
+    await writeFile(
+      path.join(outDir, "verifier_cache_stats.partial.json"),
+      JSON.stringify(stats, null, 2) + "\n",
+      "utf8",
+    );
+  }
 
   // Vacuity verdict summary: for each dropped field, what fraction of
   // ablated decisions matched the full decision? High match → potential

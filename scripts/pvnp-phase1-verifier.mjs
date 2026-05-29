@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 
 import { verify, V0_PROMISE, V0_CHECKER_THRESHOLDS } from "./lib/pvnp-phase1-verifier-core.mjs";
 import { getPhase1RunConfig } from "./lib/pvnp-phase1-run-config.mjs";
+import { loadCacheState, saveCacheState, statsReport } from "./lib/pvnp-phase1-cache.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -54,9 +55,16 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  const sourceBound = version === "v1" || version === "v2";
+  const sourceBound = version === "v1" || version === "v2" || version === "v3";
   const isV2 = version === "v2";
+  const isV3 = version === "v3";
+  const writesGeometryAudits = isV2 || isV3;
   await mkdir(outDir, { recursive: true });
+
+  // v3 introduces a shared source-hash cache between verifier, ablation, and
+  // spoof stages. Cold-loaded here (likely empty), warm-written at exit.
+  const cachePath = path.join(outDir, "derived_fields_cache.json");
+  const cacheState = isV3 ? await loadCacheState(cachePath) : null;
 
   const sigs = await readJsonl(path.join(outDir, "signatures.jsonl"));
   const commitments = await readJsonlIfExists(path.join(outDir, "trace_commitments.jsonl"));
@@ -87,16 +95,25 @@ async function main() {
   const integrityFailureRows = sourceBound ? [[
     "env_id", "policy_id", "split", "check", "registered_behavior", "observed_decision", "observed_reason",
   ].join(",")] : null;
-  const geometryBoundaryRows = isV2 ? [[
+  const geometryBoundaryRows = writesGeometryAudits ? [[
     "env_id", "policy_id", "split", "decision", "reason",
     "geometry_pass", "geometry_reason", "geometry_evidence_coverage",
     "curvature_abs_p95", "center_value_range", "near_boundary_count",
     "scale_interval_lower", "scale_interval_upper", "topology_ambiguity_score",
     "boundary_flags",
   ].join(",")] : null;
-  const acceptedOopRows = isV2 ? [[
+  const acceptedOopRows = writesGeometryAudits ? [[
     "env_id", "policy_id", "split", "promise_compliance", "decision", "reason",
     "violation_subtype", "geometry_reason",
+  ].join(",")] : null;
+  // v3 sensor disposition audit: shadow each measurement decision with the
+  // v2-style sensor gate forced ON, recording any decision flips. The v3
+  // primary verifier does NOT gate on sensor_health (per slate); this audit
+  // proves no v3 unsafe accept would have been blocked by the old gate.
+  const sensorDispositionRows = isV3 ? [[
+    "env_id", "policy_id", "split", "v3_decision", "v3_reason",
+    "shadow_with_sensor_decision", "shadow_with_sensor_reason",
+    "decision_changed_under_old_gate",
   ].join(",")] : null;
 
   let nAccept = 0, nReject = 0, nQuarantine = 0;
@@ -120,8 +137,34 @@ async function main() {
       thresholds: V0_CHECKER_THRESHOLDS,
       traceCommitment,
       commitmentDuplicate: duplicateTraceIds.has(expectedTraceId),
+      cacheState,
+      stageLabel: "verifier",
     });
     const elapsed = performance.now() - t0;
+
+    if (isV3) {
+      // Shadow verify with the old v2 sensor gate forced ON.
+      const shadow = verify({
+        sigma,
+        expectedTraceId,
+        publicEnv,
+        m_min,
+        promise: V0_PROMISE,
+        thresholds: V0_CHECKER_THRESHOLDS,
+        traceCommitment,
+        commitmentDuplicate: duplicateTraceIds.has(expectedTraceId),
+        cacheState,
+        stageLabel: "sensor_audit",
+        forceSensorGate: true,
+      });
+      const changed = result.decision !== shadow.decision;
+      sensorDispositionRows.push(csvRow([
+        envId, policyId, publicEnv.split,
+        result.decision, result.reason,
+        shadow.decision, shadow.reason,
+        changed ? 1 : 0,
+      ]));
+    }
     // Verifier ops: ~10 constant-time threshold checks.
     const ops = 10;
     verifyCosts.wall_ms += elapsed;
@@ -136,7 +179,7 @@ async function main() {
       sigma.margin_lower_bound.toFixed(6),
       sigma.coverage_digest?.touched_cells ?? Math.round((sigma.geometry_promise_signal_v2?.geometry_evidence_coverage ?? 0) * 256),
       (sigma.invariance_checks_v2 ?? sigma.invariance_checks_v1 ?? sigma.invariance_checks).all_pass ? 1 : 0,
-      (sigma.sensor_health_v1 ?? sigma.sensor_health).noise_std_estimate.toFixed(6),
+      (sigma.sensor_diagnostics_v3 ?? sigma.sensor_health_v1 ?? sigma.sensor_health).noise_std_estimate.toFixed(6),
       sigma.integrity_checks?.all_pass === false ? 0 : 1,
       (sigma.geometry_promise_signal_v2 ?? sigma.geometry_promise_signal)
         ? ((sigma.geometry_promise_signal_v2 ?? sigma.geometry_promise_signal).all_pass ? 1 : 0)
@@ -153,7 +196,7 @@ async function main() {
       ]));
     }
 
-    if (isV2) {
+    if (writesGeometryAudits) {
       const g = sigma.geometry_promise_signal_v2;
       const failedFlag = g?.boundary_flags
         ? Object.entries(g.boundary_flags).find(([, flag]) => flag)?.[0] ?? ""
@@ -210,6 +253,8 @@ async function main() {
         thresholds: V0_CHECKER_THRESHOLDS,
         traceCommitment: input.traceCommitment,
         commitmentDuplicate: input.commitmentDuplicate ?? false,
+        cacheState,
+        stageLabel: "integrity_probe",
       });
       integrityFailureRows.push(csvRow([
         envId, policyId, publicEnv.split, check, "quarantine", result.decision, result.reason,
@@ -227,9 +272,19 @@ async function main() {
     await writeFile(path.join(outDir, "integrity_decisions.csv"), integrityRows.join("\n") + "\n", "utf8");
     await writeFile(path.join(outDir, "integrity_failures.csv"), integrityFailureRows.join("\n") + "\n", "utf8");
   }
-  if (isV2) {
+  if (writesGeometryAudits) {
     await writeFile(path.join(outDir, "geometry_boundary_audit.csv"), geometryBoundaryRows.join("\n") + "\n", "utf8");
     await writeFile(path.join(outDir, "accepted_oop_audit.csv"), acceptedOopRows.join("\n") + "\n", "utf8");
+  }
+  if (isV3) {
+    await writeFile(path.join(outDir, "sensor_disposition_audit.csv"), sensorDispositionRows.join("\n") + "\n", "utf8");
+    await saveCacheState(cachePath, cacheState, "verifier");
+    const stats = statsReport(cacheState);
+    await writeFile(
+      path.join(outDir, "verifier_cache_stats.partial.json"),
+      JSON.stringify(stats, null, 2) + "\n",
+      "utf8",
+    );
   }
 
   // Roll verifier costs into partial costs file (additive).
