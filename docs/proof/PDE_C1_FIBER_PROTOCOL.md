@@ -357,6 +357,14 @@ non-injectivity on `supp(mu_SRB)` is certified. Parameters
 `N_twin`, `delta_H`, sampling interval, acceptance count pinned at
 file time of the certificate, not here.
 
+Instantiation started 2026-05-28 in
+[`PDE_C1_TWIN_STATE_CERTIFICATE.md`](PDE_C1_TWIN_STATE_CERTIFICATE.md):
+the harness now exposes `--adjudicator twin-state`, with `k_twin = 50`,
+`delta_H = max(1e-6, 0.05 * median ||Q_K||)`, a 1% witness-sample
+threshold, and a 100 unique-pair floor. The smoke receipt is plumbing
+only; the support-level bridge remains open until a verdict-bearing
+lock receipt returns.
+
 This protocol's verdict in section 5 remains valid on `B_abs` without
 the support-level certificate. If a reviewer requires
 `supp(mu_SRB)`-level state insufficiency before the C1 strictness

@@ -494,6 +494,7 @@ def run_cell(cfg: RunConfig) -> dict:
     actions = label_samples(energy_by_step, cfg, e_max)
     knn_histogram: list = []
     knn_sweep_rows: list = []
+    twin_witness_rows: list = []
     if cfg.adjudicator == "knn":
         result, bin_rows, sample_rows, knn_histogram = aggregate_knn(
             sample_signatures, actions, epsilon_k, cfg
@@ -509,7 +510,6 @@ def run_cell(cfg: RunConfig) -> dict:
     else:
         bin_rows, sample_rows = aggregate_bins(sample_signatures, sample_energy, actions, sig_min, h_k, cfg)
         result = summarize(bin_rows, cfg)
-        twin_witness_rows = []
     result.update(
         {
             "adjudicator": cfg.adjudicator,
