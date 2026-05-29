@@ -448,7 +448,10 @@ four v1-blind priors are now non-vacuous with 6-7 of 9 facets populated) while
 leaving the frozen geometry byte-identical to v1 (0 collisions, 0 near pairs,
 minimum cross-task distance `0.207`, 0% fidelity-passing). The remaining Phase
 3E deferral cause is therefore registered-context geometric sparsity, not label
-vacuity.
+vacuity. The next certificate path is now filed as
+`PHASE0_CONTEXT_EXPANSION_FOR_FIBERS_SPEC.md`: a Phase 0 register-amendment
+protocol that keeps the v2 oracle and all Phase 3E geometry frozen while
+targeting a balanced 108-task public-training register.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

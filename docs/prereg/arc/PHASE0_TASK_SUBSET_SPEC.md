@@ -260,3 +260,21 @@ Verdict impact: none. The ADMIT verdict above continues to govern. This
 amendment is a tooling tightening, not a scope or floor change. Future
 amendments may add or modify these tools, but the verdict logic and
 preregistered constraints in the body above remain unchanged.
+
+**2026-05-29 (PT) -- Codex.** Context-expansion-for-fibers spec filed:
+[`PHASE0_CONTEXT_EXPANSION_FOR_FIBERS_SPEC.md`](PHASE0_CONTEXT_EXPANSION_FOR_FIBERS_SPEC.md).
+This is an append-only Phase 0 register-amendment path motivated by the Phase
+3E v2 receipt `phase3e_v2_deferred_sparse_fibers`: the v2 oracle defect is
+repaired, but the 36-task registered context universe has zero cross-task
+neighbors within `epsilon_primary = 0.05` and minimum cross-task distance
+`0.207`. The new spec freezes a balanced expansion target of 108 included
+public-training tasks (18 per prior), mechanical pre-inspection candidate
+ordering, no use of Phase 3E distances/sketches/solver outputs during
+selection, and unchanged Phase 3E v2 oracle/geometry thresholds.
+
+Verdict impact: **no register change and no execution admission**. The
+original 36-task Phase 0 register remains binding. A future expansion receipt
+must file `P0_CONTEXT_EXPANSION_REGISTER.csv`,
+`P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv`, audit artifacts, leak-check
+coverage, and a freeze-marker amendment before any expanded Phase 3E v2
+certificate rerun is admitted.

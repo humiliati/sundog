@@ -582,3 +582,16 @@ now solely because the registered context universe is too sparse at the frozen
 signature radius. The next certificate path is a Phase 0 register expansion; a
 Branch E solver remains possible only on independent capability grounds under a
 new pre-registered solver spec.
+
+## Phase 0 Context-Expansion Spec Addendum
+
+Filed: **2026-05-29 (PT)**.
+
+`PHASE0_CONTEXT_EXPANSION_FOR_FIBERS_SPEC.md` is now filed as the Phase 0
+register-amendment path for the Phase 3E v2 sparsity result. It keeps
+`program_sketch_v2`, `d_context_signature_palette`, `epsilon_primary = 0.05`,
+`epsilon_loose = 0.10`, and k=3 frozen, and pre-registers a balanced expansion
+target of 108 public-training tasks (18 per prior). It admits no execution: the
+original 36-task register remains binding until a future expansion receipt files
+the candidate queue, manual inspection log, expanded register, leak-check
+coverage, and freeze-marker amendment.
