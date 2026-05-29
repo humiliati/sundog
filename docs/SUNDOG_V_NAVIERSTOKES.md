@@ -361,7 +361,29 @@ forcing), (B) a cheap stationarity diagnostic run first (energy series →
 `T_eq` / `T_burst` → pin warmup ≥ 3·T_eq, blocks ≥ 50·T_burst), (C) a
 per-block stationarity gate (pairwise base-rate consistency ≤ 0.10, new
 `PDE-C2-DEFERRED-NONSTATIONARY` branch) + per-block diagnostics; rest
-inherited from v0. Proposed, not built, not run; §8 sign-off decisions.
+inherited from v0. **Built + run 2026-05-29; C2 now PAUSED at the
+numerical wall.** Fixed-amplitude forcing solved stationarity (diagnostic
+drift 0.01%); two further obstructions were fixed inline (observable
+degeneracy `max_n|u_n|²` pinned by forcing → ε dissipation rate; burst
+rarity → target-base-rate label, the C1 quantile lesson). But the v1
+headline (6.3M steps) **blew up numerically at ~step 3.5M** — fixed-dt
+RK4 (dt=1e-4) cannot integrate through a large intermittent dissipation
+burst (CFL/stiffness). The headline gate output
+(`PDE-C2-DEFERRED-BASERATE` 0.138/0/0) is a **blow-up artifact, not a
+real base-rate read** — `e_burst` finite from the clean calib block but
+post-blow-up blocks `nan` → 0; the run is numerically invalid. The 3M
+diagnostic was clean only because the blow-up sits just past its window.
+**Banked finding: the four-obstruction catalogue** (non-stationarity,
+observable degeneracy, burst rarity, numerical blow-up) — a clean,
+numerically-robust, representatively-sampled shell-model burst-detection
+cell is genuinely hard and needs real numerical-methods investment. The
+matched-budget 4-baseline comparison never ran. **Resume path:** a v2
+harness with an adaptive/stiff integrator (CFL-limited dt or
+exponential-integrator substepping) recording samples on a uniform
+*time* grid (decoupled from the variable step grid), re-diagnosed for
+burst-robustness, then the cell (design-for-sign-off, not a patch). C1
+remains the strong, defensible NSE result; C2 is an honest, well-
+characterized open problem.
 The C1 reviewer-outreach draft is staged at
 [`proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
 (criterion-(c) prep).

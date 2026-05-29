@@ -212,6 +212,48 @@ a clean shell-model burst-detection cell is genuinely thornier to pose
 than the C1 Kolmogorov cell. The target-base-rate amendment is the next
 concrete step; a pause to rethink the C2 framing is also reasonable.
 
+## 12. v1 headline run (2026-05-29) — NUMERICALLY INVALID (integrator blow-up)
+
+The target-base-rate label + per-block stationarity gate were built and
+the v1 headline cell ran (`results/proof/c2-sabra-v1-headline/`, 6.3M
+steps). **The run is numerically invalid:** RuntimeWarning overflows in
+the nonlinear term appeared at ~step 3.5M (50–60%), and the gate output
+(`PDE-C2-DEFERRED-BASERATE`, base rates train/val/test 0.138/0/0) is a
+**blow-up artifact**, not a real base-rate read — `e_burst = 4.3e-9` is
+finite (computed from the clean calib block at 2–3M), but val/test = 0
+because the post-blow-up blocks are `nan` (`nan > E_burst` is `False`).
+
+**Cause.** Fixed-dt RK4 (`dt = 1e-4`) cannot integrate through a large
+intermittent dissipation burst: when a small-scale spike drops the
+fastest nonlinear timescale below `dt` (CFL/stiffness; possibly
+compounded by the fixed-amplitude `|u_1|` rescale overcorrecting on a
+dip), the explicit step diverges. The v1 diagnostic (3M steps) was clean
+because the blow-up sits just past its window (~3.5M). The inviscid
+energy self-test does not stress bursts, so it passed throughout. **We
+are trying to detect the very events the integrator cannot survive.**
+
+**Cumulative C2 picture — four coupled obstructions:** (1) non-stationarity
+(→ fixed-amplitude forcing), (2) observable degeneracy (→ ε), (3) burst
+rarity (→ target-base-rate label), (4) **numerical blow-up through
+bursts (no quick fix)**. The first three each yielded to a clean
+diagnostic-motivated fix; the fourth needs an **adaptive CFL-limited
+timestep**, which breaks the uniform-`dt` assumption baked into the
+sampling/blocking/labeling machinery — a substantial integrator
+redesign, not an iteration.
+
+**Disposition: C2 paused at v1.** Not a verdict (no detector-vs-baseline
+comparison ran); the headline cell is numerically invalid and the burst
+objective remains unadjudicated. The honest banked finding is the
+four-obstruction catalogue: a clean, numerically-robust,
+representatively-sampled shell-model burst-detection cell is genuinely
+hard and requires real numerical-methods investment. **Resume path (if
+C2 is reopened):** a v2 harness with an adaptive/stiff integrator
+(CFL-limited dt or exponential-integrator with substepping) that records
+samples on a uniform *time* grid (decoupled from the variable step
+grid), re-run the diagnostic to confirm burst-robustness, then the cell.
+This is a design-for-sign-off, not a quick patch. C1 remains the strong,
+defensible NSE result; C2 is an honest, well-characterized open problem.
+
 ## 9. Cross-references
 
 - [`PDE_C2_CELLSET_SABRA_v0.md`](PDE_C2_CELLSET_SABRA_v0.md) — the
