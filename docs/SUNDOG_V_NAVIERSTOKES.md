@@ -201,6 +201,18 @@ deferred twin-state certificate (§4.1 certifies non-injectivity on
 acceptance or a derived `J`-optimal selector; the test resolves to
 `r_k ≈ 0.02`. It strongly advances C1 but does **not** promote it.
 
+**Replicated at d=18 (2026-05-28).** Re-running the convergence check at
+the v5 regime (K=3, signature dim 18;
+`results/proof/c1-kolmogorov-v5-knn-sweep/`) returned the same
+`STRICTNESS_WITNESS_POSITIVE` with near-identical fit (`a_mm = −0.0008`,
+slope `0.737`, `damp_fraction = 0.2977`) vs d=32 (`−0.0013`, `0.729`,
+`0.300`). The control-sufficiency reading is **invariant to halving the
+signature dimension** — ruling out a d=32 distance-concentration
+artifact, matching the dimension-robustness `damp_fraction` showed
+across the binning runs. Dimension-robustness is *not* regime-
+generality: both cells are `k_f=2, G=200`. Twin-state certificate,
+proxy faithfulness, and external review remain the open firm-up items.
+
 Criterion (b) is closed at the *procedure-and-execution* level (v0–v5
 lock cycles + v4 fall-back + the kNN run and its convergence check all
 ran cleanly; methodology survived six vacuity / coverage diagnoses, a

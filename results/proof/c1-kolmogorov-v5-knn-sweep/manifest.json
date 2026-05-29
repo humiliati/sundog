@@ -1,0 +1,154 @@
+{
+  "startedAt": "2026-05-29T05:46:16.127901+00:00",
+  "script": "scripts/pde_c1_kolmogorov_cell.py",
+  "spec": "docs/proof/PDE_C1_CELLSET_KOLMOGOROV.md",
+  "protocol": "docs/proof/PDE_C1_FIBER_PROTOCOL.md",
+  "config": {
+    "preset": "lock_v5",
+    "grid_size": 32,
+    "n_modes": 16,
+    "k_signature": 3,
+    "forcing_wavenumber": 2,
+    "grashof": 200.0,
+    "forcing_amplitude": 1.0,
+    "viscosity": 0.07071067811865475,
+    "dt": 0.01,
+    "burnin_steps": 100000,
+    "sample_count": 50000,
+    "sample_interval_steps": 50,
+    "lookahead_steps": 500,
+    "n_min": 30,
+    "delta_action": 0.1,
+    "s_pos": 0.5,
+    "delta_proxy_min": 0.01,
+    "e_max_burnin_fraction": 0.25,
+    "random_seed": 20260528,
+    "integrator": "pseudo_spectral_vorticity_semi_implicit_euler",
+    "signature_dimension": 18,
+    "action_tiebreak": "no_op",
+    "adjudicator": "knn-sweep",
+    "k_neighbors": 30,
+    "delta_incompat": 0.01
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32",
+    "cwd": "C:\\Users\\hughe\\Dev\\sundog"
+  },
+  "result": {
+    "verdict": "STRICTNESS_WITNESS_POSITIVE",
+    "verdict_label": "mean_minority_decays_to_zero_boundary_artifact",
+    "interpretable": true,
+    "n_samples": 50000,
+    "mean_minority_intercept": -0.000778309653330118,
+    "mean_minority_slope": 0.7370199193772674,
+    "incompat_intercept": -0.0021497743647219485,
+    "incompat_slope": 2.3070221614508393,
+    "fit_point_count": 7,
+    "a_mm_lo": 0.005,
+    "a_mm_hi": 0.015,
+    "delta_incompat": 0.01,
+    "delta_action": 0.1,
+    "no_op_count": 35115,
+    "damp_low_band_count": 14885,
+    "damp_fraction": 0.2977,
+    "epsilon_k_radius_threshold": 0.06059758455293647,
+    "sweep_k_values": [
+      10,
+      15,
+      20,
+      25,
+      30,
+      40,
+      50
+    ],
+    "sweep_mean_minority": [
+      0.012317999999999999,
+      0.016404000000000002,
+      0.01958,
+      0.021308800000000003,
+      0.023232666666666665,
+      0.026356000000000004,
+      0.0306996
+    ],
+    "sweep_incompat_fractions": [
+      0.03476,
+      0.05698,
+      0.06234,
+      0.06844,
+      0.06872,
+      0.08404,
+      0.09594
+    ],
+    "sweep_r_k_medians": [
+      0.01822860095809781,
+      0.022644853919794615,
+      0.027113259862723792,
+      0.0306379614720029,
+      0.032575914151624114,
+      0.03720990146435012,
+      0.04236703284297241
+    ],
+    "sweep_fidelity_coverages": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "adjudicator": "knn-sweep",
+    "e_max": 0.7344134507300568,
+    "epsilon_k": 0.06059758455293647,
+    "h_k": 0.014282987653635521,
+    "burnin_energy_min": 0.6869152989804227,
+    "burnin_energy_max": 3.1262947707916444,
+    "burnin_energy_mean": 0.8064611799186419,
+    "sample_energy_min": 0.7151529188160555,
+    "sample_energy_max": 0.734601208647869,
+    "sample_energy_mean": 0.7253547457505279,
+    "low_modes": [
+      {
+        "kx": 0,
+        "ky": 1
+      },
+      {
+        "kx": 1,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 1
+      },
+      {
+        "kx": 0,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 1
+      },
+      {
+        "kx": -2,
+        "ky": 1
+      }
+    ],
+    "elapsed_seconds": 1607.4265516999876,
+    "total_steps": 2600450,
+    "steps_per_second": 1617.772205104983
+  }
+}
