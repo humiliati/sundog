@@ -61,6 +61,26 @@ Filed receipts:
   cache lookup). v4 should re-state the cost gate against full-state (where
   v3 moves +16 %) or restructure for genuine cache reuse. Privilege-leak
   audit green (6 files, added `scripts/lib/pvnp-phase1-cache.mjs`).
+- [`2026-05-28_phase1_toy_verifier_v4.md`](2026-05-28_phase1_toy_verifier_v4.md):
+  v4 cost-gate-slate first execution; verdict = **named quarantine** (safety
+  + cache-efficiency + denominator-restatement all pass; cost alone gates
+  bounded-positive promotion, by a smaller margin than v3). `capacity_threshold
+  = not_estimated`. Safety side identical to v3 (0 false accepts, 0/497 each
+  spoof channel, 5/5 integrity, 0/768 OOP). **Cost denominator audit filed**:
+  rollout wall 0.69 ms < 5 ms gate → rollout ratio correctly downgraded to
+  diagnostic per slate. Promotion comparator named as full-state. **Cache
+  efficiency PASSED at 100 %** under the restated `cache_eligible_reuse_hit_rate`
+  definition (cold_unique_misses = 2304, eligible_reuse_hits = 11520,
+  eligible_reuse_misses = 0, pre_integrity_short_circuits = 63 621
+  correctly excluded) — proving v3's 83.33 % was a counting artifact, not a
+  structural ceiling. Cost repair **failed** across 3 back-to-back runs:
+  C_total_signature 1039–1137 ms vs ≤1010 target; full-state ratio 112–125×
+  vs ≤105× target. A fresh v3 baseline (same code, v3 slate) hits 879 ms /
+  93.16× — within v4 gates. The v4 slate runs land 15–25 % slower,
+  attributable to CPU variance + the `noteShortCircuit` closure-allocation
+  overhead added for cache-efficiency instrumentation. v5 should inline the
+  short-circuit counter and/or measure cost as median over N runs.
+  Privilege audit green (6 files).
 
 Receipt filenames should use:
 

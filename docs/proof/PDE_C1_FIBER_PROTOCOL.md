@@ -136,6 +136,25 @@ Cells facing this regime may pin a smaller `K` (per the Local Symbols
 amendment above) to reduce `d_K`, at the cost of a less rich
 signature.
 
+**Correction (2026-05-28, after C1 v5).** The `(R / h_K)^{d_K}`
+scaling above is **wrong as a remedy guide**, and the "pin smaller
+`K`" prescription it motivated was **falsified** by the C1 v5 lock.
+The attractor does not fill the `d_K`-dimensional signature box; it
+is a low-dimensional invariant set, so occupied-bin count tracks the
+attractor's **box-counting dimension `D_box` at scale `h_K`** —
+`occupied_bins ≈ (R / h_K)^{D_box}` with `D_box << d_K` — which is
+invariant to the embedding dimension. v5 halved `d_K` (32 → 18) and
+coarsened `h_K` 29%, yet occupied bins fell only 16.5% (45,827 →
+38,281) and coverage still failed. The genuine lever is `h_K`
+(equivalently `epsilon_K`), but coarsening it enough to clear
+coverage conflicts with the tolerance-fidelity requirement of §1 —
+a tension that may not be resolvable by binning-parameter tuning. See
+[`PDE_C1_LOCK_EXECUTION_SYNTHESIS.md`](PDE_C1_LOCK_EXECUTION_SYNTHESIS.md)
+§4–5 for the obstruction and the kNN/kernel adjudication fork that
+targets it. `K` remains a legitimate cell-set parameter (it affects
+signature richness and discrimination), but it is **not** the coverage
+lever it was introduced as.
+
 ## 3. Proxy Selector
 
 The cell-set v0 § 3 deterministic `E_K` overshoot check is renamed

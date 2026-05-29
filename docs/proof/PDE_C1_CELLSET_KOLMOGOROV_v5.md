@@ -126,6 +126,97 @@ verification per cell.
 - Criterion (c) named external PDE reviewer.
 - Attractor-support twin-state certificate.
 
+## Lock Execution Disposition (2026-05-28)
+
+The v5 lock cell was executed on 2026-05-28 via
+[`../../scripts/pde_c1_kolmogorov_cell.py`](../../scripts/pde_c1_kolmogorov_cell.py)
+with `--preset lock_v5`. Receipt and manifest at
+`results/proof/c1-kolmogorov-v5-lock/`. The harness completed in
+1152 seconds (~19 min) with `steps_per_second ≈ 2257` and returned
+`DEFERRED_COVERAGE`.
+
+### Signal 1 — discrimination is robust to the dimension cut (confirmed)
+
+`damp_fraction = 0.2977`, essentially unchanged from v4's `0.30014`
+(K = 4) and v4 fall-back's `0.300125`. Dropping the signature from
+16 Fourier modes to 9 — discarding `(0,3), (3,0), (1,3), (-1,3),
+(3,1), (-3,1)` — barely moved the proxy distribution. The six dropped
+modes were **not** load-bearing for the safety predicate. The
+proxy discrimination at `(k_f = 2, G = 200)` is a robust feature of
+the attractor, not an artifact of signature richness. The
+structural-vacuity precedence rule correctly did not fire; the
+forced mode `(0, 2)` was retained as designed.
+
+### Signal 2 — the K-reduction hypothesis is FALSIFIED
+
+This v5 file (§4) pre-registered: *"Bin count should drop
+dramatically ... at least an order of magnitude smaller, probably
+5k–20k bins at N_sample = 50,000. S_eval ≥ 0.5 is the pre-registered
+expectation."*
+
+The actual result:
+
+| | v4 (K=4, d_K=32) | v5 (K=3, d_K=18) | change |
+|---|---|---|---|
+| `h_K` | 0.01107 | 0.01428 | 29% coarser |
+| occupied bins | 45,827 | 38,281 | **−16.5%** |
+| `evaluated_bin_count` | 0 | 0 | unchanged |
+| `S_eval` | 0 | 0 | unchanged |
+
+Halving the embedding dimension (32 → 18) **and** coarsening the bins
+29% reduced occupied-bin count by only 16.5% — not the projected
+order of magnitude. **The pre-registered expectation is falsified.**
+
+### Root cause — occupied bins track attractor dimension, not d_K
+
+Amendment 4's scaling argument `bin_count ∝ (R_attractor / h_K)^{d_K}`
+assumed the attractor *fills* the `d_K`-dimensional signature box.
+It does not. The attractor is a low-dimensional invariant set embedded
+in `R^{d_K}`; the number of occupied bins is governed by its
+**box-counting dimension at scale `h_K`**, which is far below `d_K`
+and is invariant to the embedding-dimension change. Cutting `K`
+operated on a quantity (`d_K`) that was not the bottleneck. The
+honest scaling is `occupied_bins ≈ (R / h_K)^{D_box}` with `D_box`
+the attractor dimension — and `D_box` did not change between v4 and
+v5 because it is the same dynamical system observed through a
+slightly smaller linear projection.
+
+This is a clean negative result on the amendment-4 hypothesis,
+recorded per the pre-registration discipline (we do not silently drop
+a falsified projection).
+
+### Disposition
+
+`DEFERRED_COVERAGE`, honestly. Not `PDE-C1-NEG-B`: the methodology was
+followed exactly and `K = 3` was pre-registered before sampling. The
+fall-back (`fallback_v5`, `N_sample = 200,000`) is *not recommended*:
+the v4 fall-back already showed that 4× samples produce ~3× new bins
+on this attractor, so it would almost certainly defer again — and the
+v5 evidence now explains *why* (the attractor's box dimension fixes
+the occupied-bin growth rate). Running it would burn ~90 min to
+re-confirm a mechanism v5 already exposed.
+
+### Why the next move is not v6-with-coarser-h_K-by-reflex
+
+The genuine lever is `h_K` (equivalently `epsilon_K`), not `K`. But
+coarsening `h_K` enough to clear coverage is in **direct tension with
+the tolerance object's fidelity**: `epsilon_K` was introduced (fiber
+protocol §1) as a *small* tolerance ball approximating the continuous
+fiber. A rough estimate (attractor box-dim ~3–4) suggests coverage
+would need `h_K ≈ 0.05`, i.e. `epsilon_K ≈ 0.21` — roughly 17% of the
+signature-norm scale `sqrt(2 E_max) ≈ 1.21`. At that tolerance, a
+"fiber" lumps together signature values that are not plausibly the
+same fiber, and a coarse bin spanning the safety boundary can
+manufacture artificial incompatibility (or mask real structure). This
+is a **fundamental tension between tolerance fidelity and sample
+coverage**, governed by the attractor's measure concentration — it
+may not be resolvable by parameter tuning at the `5×10^4`–`2×10^5`
+sample budget.
+
+This is a step-back point, not a launch-the-next-knob point. See the
+C1 lock-execution synthesis (filed as a separate disposition) and the
+ledger Promotions block for the recommended fork.
+
 ## 6. Status
 
 - **Drafted.** 2026-05-28.
@@ -134,8 +225,14 @@ verification per cell.
   running code.
 - **Unreviewed.** No external PDE reviewer has signed off on the
   `K = 3` choice.
-- **Unrun.** The `lock_v5` preset is present in the harness; no
-  execution has been attempted.
+- **Executed.** v5 lock ran 2026-05-28 in 1152 sec (~19 min); receipt
+  at `results/proof/c1-kolmogorov-v5-lock/`.
+- **Disposition.** `DEFERRED_COVERAGE`. Discrimination robust
+  (`damp_fraction = 0.2977`, matching v4); K-reduction coverage
+  hypothesis **falsified** (occupied bins fell only 16.5% despite
+  halving `d_K`). Root cause: occupied bins track attractor box
+  dimension, not embedding dimension. Tolerance-fidelity vs. coverage
+  tension is now the core obstruction; this is a step-back point.
 
 ## 7. Cross-references
 
