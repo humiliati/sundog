@@ -358,3 +358,78 @@ Forbidden:
 - retuning k, permutation count, control definitions, branch thresholds, or
   sketch similarity after seeing outputs;
 - using target exact hashes or raw outputs in the locality metric.
+
+---
+
+## Amendment A — Freeze Marker (2026-05-29 PT)
+
+Append-only. Records runner tooling, leak-check coverage, frozen knobs, smoke
+fingerprint, the ten-minute-rule decision, and the exact binding command required
+by §"Reserved Implementation Names" before execution is admitted.
+
+### Tooling added
+
+- Python runner: `docs/prereg/arc/phase3e_relative_locality_certificate.py`,
+  cp-seeded from `phase3e_program_sketch_oracle_v2.py`. It reuses unchanged the
+  frozen context identities, `d_context_*` distances, `program_sketch_v2` facets,
+  the two-stage no-target barrier, `load_tasks` + `--split-mode {frozen_v2,
+  sha256_expansion}`, and the v2 incompatibility hard-pair rules; it replaces the
+  v2 absolute-fiber gate/branch section with the rank-based locality metrics,
+  controls, nulls, and five-branch adjudication. `runnerSha256` is recorded in
+  every receipt manifest.
+- Node wrapper: `scripts/arc-phase3e-relative-locality-certificate.mjs`
+  (honors `SUNDOG_PYTHON`).
+- npm: `arc:phase3e:relative-locality-certificate`.
+- Result ignore path: `results/arc/phase3e-relative-locality-certificate/`.
+- Leak-check: `npm run arc:phase0:leak-check` passes (0 fail / 0 warn; 22 scanned
+  ARC scripts; the new wrapper carries no held-split literal).
+
+### Frozen knobs (mirrored into the runner constants)
+
+- arms: `signature_palette_context` (primary), `signature_only_context`,
+  `metadata_only_context`, `raw_grid_context`.
+- `K_VALUES=[1,3,5,10]`, `K_PRIMARY=5`; `SEED_SLATE=[20260529,20260530,20260531,
+  20260601,20260602]`; `N_PERMUTATIONS=1000`; `N_BOOTSTRAP=2000`.
+- `sketch_sim` = mean per-facet Jaccard over the nine facets, dropping
+  `none`/`unknown`, omitting a facet when both contexts lack a concrete label.
+- branch thresholds: `DELTA_META_MIN=0.10`, `DELTA_RANDOM_MIN=0.15`,
+  `P_PRIMARY_MAX=0.01`, `HARD_INCOMPAT_POS_MAX=0.10`, `HARD_INCOMPAT_NEG_MIN=0.25`,
+  `DELTA_META_ONLY_MAX=0.05`.
+- Oracle caveat: syntactic leakage fatal; vacuity + prior-laundering are gates
+  (same definitions as v2 — a laundering violation is a non-vacuous context with
+  fewer than two extra facets, fraction taken over non-vacuous primary contexts,
+  threshold 0.10); `core_sketch_exact_lookup_fraction` and
+  `unique_core_sketch_fraction` are reported as diagnostics, NOT fail gates, per
+  §"Oracle Caveat" (the binding 108-task leakage regression is preserved, not
+  retuned).
+
+### Smoke fingerprint
+
+- Dry-run: empty receipt with the 16-artifact stub set.
+- Capped smoke (`--register` expanded `--split-mode sha256_expansion
+  --limit-tasks 36 --permutations 20 --bootstrap 200`): `U_primary=84`, ~57 s,
+  all 16 artifacts emit, branch `phase3e_relative_locality_inconclusive`,
+  `oracle_invalid=False` (syntactic clean, vacuity 0.0, laundering 0.0). Re-run
+  is byte-identical on effects/branch/caveat → deterministic. **This is a 36-task
+  subset with 20 permutations, not the binding result.**
+
+### Ten-minute rule
+
+The binding run uses the full 108-task expanded register (`U_primary ~336`) with
+1000 permutations × 5 seeds. Neighbor graphs are `O(U_primary² × 4 arms)` with
+bipartite conditioning-pair matching; extrapolating from the 84-context / 20-perm
+smoke (~57 s) gives an estimated **~20-25 min** full wall, exceeding the repo
+ten-minute rule. The binding run is therefore executed as a background job
+(deterministic; pinned to this freeze-marker commit), per §"Controls And Nulls".
+
+### Exact binding command
+
+```powershell
+node scripts/arc-phase3e-relative-locality-certificate.mjs `
+  --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" `
+  --register docs/prereg/arc/P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv `
+  --split-mode sha256_expansion `
+  --out results/arc/phase3e-relative-locality-certificate
+```
+
+(`SUNDOG_PYTHON` = the Python 3.12 interpreter; the certificate is CPU-only.)
