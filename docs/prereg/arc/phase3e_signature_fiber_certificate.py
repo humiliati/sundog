@@ -2317,3 +2317,695 @@ def edit_color_accuracy(mask: list[list[bool]], pred_colors: list[list[int]], ta
                     correct += 1
     return (correct / cells) if cells else 1.0
 
+
+# ============================================================================
+# Certificate: context identity + distance
+# ============================================================================
+import itertools  # noqa: E402
+
+_PROJ_CACHE: dict[str, dict[str, Any]] = {}
+
+
+def _grid_key(grid: list[list[int]]) -> str:
+    return json.dumps(grid, separators=(",", ":"))
+
+
+def grid_proj(grid: list[list[int]]) -> dict[str, Any]:
+    k = _grid_key(grid)
+    p = _PROJ_CACHE.get(k)
+    if p is None:
+        p = project_grid_shadow(grid)
+        p["_signatureHash"] = sha256_text(p["canonicalObjectSignature"])
+        p["_localBagHash"] = sha256_text(json.dumps(p["localSignatureBag"], separators=(",", ":")))
+        p["_metadata"] = metadata_vector(grid, p)
+        p["_suffix"] = signature_suffix(p)
+        _PROJ_CACHE[k] = p
+    return p
+
+
+def grid_id_cert(arm: str, grid: list[list[int]]) -> str:
+    """Per spec §"Context Identity"."""
+    if arm == "raw_grid_context":
+        return _grid_key(grid)
+    p = grid_proj(grid)
+    sh = p["_signatureHash"]
+    bh = p["_localBagHash"]
+    if arm == "signature_only_context":
+        return f"{sh}|{bh}"
+    if arm == "metadata_only_context":
+        return json.dumps(p["_metadata"], separators=(",", ":"))
+    if arm == "signature_palette_context":
+        shape = p["shape"]
+        palette = "".join(str(x) for x in p["palette"])
+        return f"{shape[0]}x{shape[1]}|{palette}|{p['nonZeroCells']}|{p['nonZeroComponents']}|{p['density']}|{sh}|{bh}"
+    raise ValueError(f"unknown cert arm {arm!r}")
+
+
+def _cosine_distance_suffix(a: dict[int, float], b: dict[int, float]) -> float:
+    if not a and not b:
+        return 0.0
+    if not a or not b:
+        return 1.0
+    # signature_suffix vectors are already L2-normalized to unit norm.
+    keys = set(a) | set(b)
+    dot = sum(a.get(k, 0.0) * b.get(k, 0.0) for k in keys)
+    na = math.sqrt(sum(v * v for v in a.values()))
+    nb = math.sqrt(sum(v * v for v in b.values()))
+    if na == 0.0 or nb == 0.0:
+        return 1.0
+    cos = dot / (na * nb)
+    return max(0.0, min(1.0, 1.0 - cos))
+
+
+def _metadata_l1(a: list[float], b: list[float]) -> float:
+    n = max(1, len(a))
+    return sum(abs(x - y) for x, y in zip(a, b)) / n
+
+
+def _raw_hamming(ga: list[list[int]], gb: list[list[int]]) -> float:
+    diff = 0
+    for y in range(MAX_H):
+        for x in range(MAX_W):
+            va = ga[y][x] if (y < len(ga) and x < len(ga[0])) else 10
+            vb = gb[y][x] if (y < len(gb) and x < len(gb[0])) else 10
+            if va != vb:
+                diff += 1
+    return diff / (MAX_H * MAX_W)
+
+
+def grid_dist_cert(arm: str, ga: list[list[int]], gb: list[list[int]]) -> float:
+    """Per spec §"Context Distance" — individual grid distances."""
+    if arm == "raw_grid_context":
+        return _raw_hamming(ga, gb)
+    pa, pb = grid_proj(ga), grid_proj(gb)
+    if arm == "metadata_only_context":
+        return _metadata_l1(pa["_metadata"], pb["_metadata"])
+    sig_cos = _cosine_distance_suffix(pa["_suffix"], pb["_suffix"])
+    if arm == "signature_only_context":
+        return sig_cos
+    if arm == "signature_palette_context":
+        return 0.5 * sig_cos + 0.5 * _metadata_l1(pa["_metadata"], pb["_metadata"])
+    raise ValueError(f"unknown cert arm {arm!r}")
+
+
+def context_identity(arm: str, ctx: dict[str, Any]) -> str:
+    qid = grid_id_cert(arm, ctx["query_input"])
+    pair_ids = sorted(
+        grid_id_cert(arm, p["input"]) + "=>" + grid_id_cert(arm, p["output"])
+        for p in ctx["conditioning"]
+    )
+    return qid + "||" + "|".join(pair_ids)
+
+
+def _pair_dist(arm: str, pa: dict[str, Any], pb: dict[str, Any]) -> float:
+    return 0.5 * grid_dist_cert(arm, pa["input"], pb["input"]) + 0.5 * grid_dist_cert(arm, pa["output"], pb["output"])
+
+
+def conditioning_distance(arm: str, da: list[dict[str, Any]], db: list[dict[str, Any]]) -> float:
+    """Min-cost bipartite matching of conditioning pairs; unmatched -> 1.0;
+    normalized by larger conditioning-pair count (spec §"Context Distance")."""
+    m, n = len(da), len(db)
+    if m == 0 and n == 0:
+        return 0.0
+    if m == 0 or n == 0:
+        return 1.0
+    cost = [[_pair_dist(arm, pa, pb) for pb in db] for pa in da]
+    k = max(m, n)
+    # Square the cost matrix with dummy rows/cols costing 1.0 (unmatched).
+    sq = [[1.0] * k for _ in range(k)]
+    for i in range(m):
+        for j in range(n):
+            sq[i][j] = cost[i][j]
+    if k <= 7:
+        best = None
+        for perm in itertools.permutations(range(k)):
+            total = sum(sq[i][perm[i]] for i in range(k))
+            if best is None or total < best:
+                best = total
+        return best / k
+    # Greedy fallback for unexpectedly large k (registered set has k<=5).
+    used_cols: set[int] = set()
+    total = 0.0
+    for i in range(k):
+        bestj, bestc = None, None
+        for j in range(k):
+            if j in used_cols:
+                continue
+            if bestc is None or sq[i][j] < bestc:
+                bestc, bestj = sq[i][j], j
+        used_cols.add(bestj)
+        total += bestc
+    return total / k
+
+
+def context_distance(arm: str, ca: dict[str, Any], cb: dict[str, Any]) -> float:
+    dq = grid_dist_cert(arm, ca["query_input"], cb["query_input"])
+    dc = conditioning_distance(arm, ca["conditioning"], cb["conditioning"])
+    return round_float(0.4 * dq + 0.6 * dc)
+
+
+# ============================================================================
+# Certificate: target labels + program_sketch_v1 oracle
+# ============================================================================
+def target_exact_hash(target: list[list[int]]) -> str:
+    return sha256_text(json.dumps(target, separators=(",", ":")))
+
+
+def target_signature_palette_id(target: list[list[int]]) -> str:
+    return grid_id_cert("signature_palette_context", target)
+
+
+def _behavior_invariants(ctx: dict[str, Any], baseline: list[list[int]]) -> dict[str, Any]:
+    qi = ctx["query_input"]
+    tgt = ctx["target_output"]
+    in_pal = sorted(palette_of(qi))
+    out_pal = sorted(palette_of(tgt))
+    in_h, in_w = shape_of(qi)
+    out_h, out_w = shape_of(tgt)
+    return {
+        "output_shape": [out_h, out_w],
+        "shape_delta": [out_h - in_h, out_w - in_w],
+        "output_palette": out_pal,
+        "palette_add": sorted(set(out_pal) - set(in_pal)),
+        "palette_remove": sorted(set(in_pal) - set(out_pal)),
+        "edit_mass_bucket": round(residual_mass(baseline, tgt) * 10) / 10 if baseline else 1.0,
+        "component_delta": count_components(tgt) - count_components(qi),
+        "prior": ctx["primary_prior"],
+    }
+
+
+def program_sketch_v1(ctx: dict[str, Any]) -> dict[str, Any]:
+    """Oracle audit label computed AFTER the target is available (spec §"Target Labels").
+    Reuses inherited Branch D families with a fixed representation-neutral grid arm."""
+    arm = PROGRAM_SKETCH_ORACLE_ARM
+    qi = ctx["query_input"]
+    tgt = ctx["target_output"]
+    cond = ctx["conditioning"]
+    tgt_shape = shape_of(tgt)
+    bg = modal_background(cond)
+
+    # --- shape_rule_oracle_set ---
+    shape_set: list[str] = []
+    for rule in SHAPE_RULES:
+        ok = shape_for_rule(rule, qi, cond, arm) == tgt_shape
+        for p in cond:
+            others = [q for q in cond if q is not p]
+            if shape_for_rule(rule, p["input"], others, arm) != shape_of(p["output"]):
+                ok = False
+                break
+        if ok:
+            shape_set.append(rule)
+
+    # --- canvas_rule_oracle_set ---
+    canvas_set: list[str] = []
+    for rule in CANVAS_RULES:
+        residuals = []
+        for p in cond:
+            cshape = shape_of(p["output"])
+            canvas = canvas_for_rule(rule, p["input"], cshape, bg)
+            residuals.append(residual_mass(canvas, p["output"]))
+        tgt_canvas = canvas_for_rule(rule, qi, tgt_shape, bg)
+        residuals.append(residual_mass(tgt_canvas, tgt))
+        if residuals and (sum(residuals) / len(residuals)) <= CANVAS_ORACLE_RESIDUAL_MAX:
+            canvas_set.append(rule)
+
+    # Selected baseline (conditioning-only) for the mask/color residual frames.
+    candidate = select_baseline_candidate(qi, cond, arm)
+    query_baseline = apply_baseline(qi, candidate, cond, arm)
+    cond_baselines = [apply_baseline(p["input"], candidate, [q for q in cond if q is not p], arm) for p in cond]
+    gold_target_mask = _conditioning_gold_mask(query_baseline, tgt)
+    cond_gold_masks = [_conditioning_gold_mask(b, p["output"]) for b, p in zip(cond_baselines, cond)]
+
+    # --- mask_candidate_oracle_family_set ---
+    no_cond_edits = all(not any(any(row) for row in gm) for gm in cond_gold_masks) if cond_gold_masks else True
+    mask_set: list[str] = []
+    mask_seed = int(hashlib.sha256(f"p3e-mask\0{ctx['instance_id']}".encode()).hexdigest()[:8], 16)
+    cands, _info = generate_mask_candidates(arm, qi, query_baseline, cond, cond_baselines, mask_seed, ORACLE_MASK_MLP_STEPS, torch.device("cpu"))
+    by_family: dict[str, list[dict[str, Any]]] = {}
+    for c in cands:
+        by_family.setdefault(c["family"], []).append(c)
+    for fam, fam_cands in by_family.items():
+        best_target_f1 = 0.0
+        best_cond_f1 = 0.0
+        for c in fam_cands:
+            tf1 = _mask_score(c["mask"], gold_target_mask)["f1"]
+            if tf1 > best_target_f1:
+                best_target_f1 = tf1
+                # mean conditioning F1 for this candidate's family is approximated by
+                # re-scoring this query-frame mask against each conditioning gold mask
+                cf1s = [_mask_score(_project_mask_to_shape(c["mask"], len(gm), len(gm[0]) if gm else 0), gm)["f1"] for gm in cond_gold_masks]
+                best_cond_f1 = (sum(cf1s) / len(cf1s)) if cf1s else 0.0
+        if best_target_f1 >= MASK_ORACLE_F1_TARGET and best_cond_f1 >= MASK_ORACLE_F1_COND:
+            mask_set.append(fam)
+
+    # --- color_rule_oracle_family_set ---
+    color_set: list[str] = []
+    color_cands = generate_candidate_rules(cond, cond_baselines)
+    by_color_family: dict[str, list[dict[str, Any]]] = {}
+    for c in color_cands:
+        by_color_family.setdefault(c["family"], []).append(c)
+    for fam, fam_cands in by_color_family.items():
+        best_target_acc = 0.0
+        best_cond_acc = 0.0
+        for c in fam_cands:
+            pred_cols = _predict_with_rule(c, qi, query_baseline, gold_target_mask)
+            tacc = edit_color_accuracy(gold_target_mask, pred_cols, tgt)
+            if tacc > best_target_acc:
+                best_target_acc = tacc
+                cacc = []
+                for p, b, gm in zip(cond, cond_baselines, cond_gold_masks):
+                    pc = _predict_with_rule(c, p["input"], b, gm)
+                    cacc.append(edit_color_accuracy(gm, pc, p["output"]))
+                best_cond_acc = (sum(cacc) / len(cacc)) if cacc else 0.0
+        if best_target_acc >= COLOR_ORACLE_ACC_TARGET and best_cond_acc >= COLOR_ORACLE_ACC_COND:
+            color_set.append(fam)
+
+    def _finalize(s: list[str], applicable: bool) -> list[str]:
+        if not applicable:
+            return ["no_conditioning_edits"]
+        return s if s else ["none"]
+
+    return {
+        "shape_rule_oracle_set": shape_set if shape_set else ["none"],
+        "canvas_rule_oracle_set": canvas_set if canvas_set else ["none"],
+        "mask_candidate_oracle_family_set": _finalize(mask_set, not no_cond_edits),
+        "color_rule_oracle_family_set": _finalize(color_set, not no_cond_edits),
+        "behavior_invariants": _behavior_invariants(ctx, query_baseline),
+    }
+
+
+# ============================================================================
+# Certificate: collision + near-fiber incompatibility
+# ============================================================================
+def _sets_disjoint(a: list[str], b: list[str]) -> bool:
+    sa = set(a) - {"none", "no_conditioning_edits"}
+    sb = set(b) - {"none", "no_conditioning_edits"}
+    if not sa or not sb:
+        return False  # cannot assert disjointness when one side is empty/vacuous
+    return sa.isdisjoint(sb)
+
+
+def _behavior_invariants_differ(ia: dict[str, Any], ib: dict[str, Any]) -> bool:
+    for key in ("output_shape", "shape_delta", "output_palette", "palette_add", "palette_remove", "edit_mass_bucket", "component_delta", "prior"):
+        if ia.get(key) != ib.get(key):
+            return True
+    return False
+
+
+def near_fiber_incompatible(sa: dict[str, Any], sb: dict[str, Any]) -> tuple[bool, int]:
+    """Spec §"Incompatibility Rules" near-fiber rule: >=2 of 4 oracle components
+    disjoint AND >=1 behavior invariant differs. Returns (incompatible, n_disjoint)."""
+    comps = ["shape_rule_oracle_set", "canvas_rule_oracle_set", "mask_candidate_oracle_family_set", "color_rule_oracle_family_set"]
+    n_disjoint = sum(1 for c in comps if _sets_disjoint(sa[c], sb[c]))
+    invariants_differ = _behavior_invariants_differ(sa["behavior_invariants"], sb["behavior_invariants"])
+    return (n_disjoint >= 2 and invariants_differ), n_disjoint
+
+
+def _sketch_jaccard_distance(sa: dict[str, Any], sb: dict[str, Any]) -> float:
+    a, b = set(), set()
+    for c in ("shape_rule_oracle_set", "canvas_rule_oracle_set", "mask_candidate_oracle_family_set", "color_rule_oracle_family_set"):
+        a |= {f"{c}:{x}" for x in sa[c]}
+        b |= {f"{c}:{x}" for x in sb[c]}
+    if not a and not b:
+        return 0.0
+    inter = len(a & b)
+    union = len(a | b)
+    return 1.0 - (inter / union if union else 0.0)
+
+
+# ============================================================================
+# Certificate: main + parse_args + artifacts
+# ============================================================================
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="ARC Phase 3E signature-fiber certificate")
+    parser.add_argument("--data-dir", required=False, default=None)
+    parser.add_argument("--register", required=False, default=None)
+    parser.add_argument("--out", required=True)
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--limit-tasks", type=int, default=0, help="Cap registered tasks processed (0 = no cap).")
+    parser.add_argument("--allow-dirty", action="store_true")
+    args = parser.parse_args()
+    if not args.dry_run and (not args.data_dir or not args.register):
+        parser.error("--data-dir and --register are required (except in --dry-run mode)")
+    return args
+
+
+CERT_FILES_EMPTY = {
+    "split.csv": ["task_id", "primary_prior", "predicted_boundary", "split"],
+    "target_labels.csv": ["context_id", "lane", "task_id", "query_index", "target_exact_hash", "target_signature_palette_id"],
+    "exact_fibers.csv": ["context_id_signature_palette", "members", "collision_type", "target_hashes", "target_sp_ids"],
+    "pairwise_top_neighbors.csv": ["context_id", "lane", "task_id", "neighbor_context_id", "neighbor_task_id", "distance", "cross_task", "fidelity_pass"],
+    "near_fiber_incompatibilities.csv": ["context_a", "task_a", "context_b", "task_b", "distance", "n_disjoint_components", "sketch_jaccard_distance", "strong_program_sketch_gap"],
+    "knn_fiber_locality.csv": ["context_id", "lane", "task_id", "prior", "fidelity_pass", "r_k", "local_incompatibility_rate", "same_prior_neighbor_rate", "n_cross_task_neighbors"],
+    "per_prior.csv": ["primary_prior", "n_contexts", "n_fidelity_pass", "mean_local_incompat", "n_none_in_2plus_sketch_sets"],
+}
+
+
+def write_empty_cert_receipt(out_dir: Path, manifest: dict[str, Any]) -> None:
+    write_json(out_dir / "manifest.json", manifest)
+    for fname, cols in CERT_FILES_EMPTY.items():
+        write_csv(out_dir / fname, [], cols)
+    write_jsonl(out_dir / "context_fingerprints_no_targets.jsonl", [])
+    (out_dir / "context_fingerprints_no_targets.sha256").write_text("", encoding="utf-8")
+    write_jsonl(out_dir / "program_sketches.jsonl", [])
+    write_json(out_dir / "phase3e_signature_fiber_certificate_receipt.json", {"manifest": manifest, "branch": None})
+    (out_dir / "branch_adjudication.md").write_text("# Phase 3E Signature-Fiber Certificate\n\nDry run / empty receipt. No branch decision.\n", encoding="utf-8")
+    (out_dir / "commands.md").write_text("# Phase 3E commands\n\nDry run / empty receipt.\n", encoding="utf-8")
+    write_json(out_dir / "hashes.json", hash_receipt_files(out_dir))
+
+
+def main() -> int:
+    args = parse_args()
+    started_at = iso_now()
+    repo_root = Path(__file__).resolve().parents[3]
+    out_dir = Path(args.out).resolve()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    git = git_state(repo_root, args.allow_dirty)
+
+    spec_path = Path(__file__).resolve().parent / "PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md"
+    parent_spec_path = Path(__file__).resolve().parent / "PHASE3_SUFFICIENCY_SPEC.md"
+    spec_hash = sha256_file(spec_path) if spec_path.exists() else "NA"
+    parent_spec_hash = sha256_file(parent_spec_path) if parent_spec_path.exists() else "NA"
+    self_hash = sha256_file(Path(__file__).resolve())
+
+    manifest: dict[str, Any] = {
+        "generatedAt": started_at,
+        "completedAt": None,
+        "tool": "docs/prereg/arc/phase3e_signature_fiber_certificate.py",
+        "command": [sys.executable, "docs/prereg/arc/phase3e_signature_fiber_certificate.py", *sys.argv[1:]],
+        "gitCommit": git["commit"],
+        "gitDirty": git["dirty"],
+        "allowDirty": args.allow_dirty,
+        "outDir": str(out_dir),
+        "featureSchemaVersion": FEATURE_SCHEMA_VERSION,
+        "protocolVersion": PROTOCOL_VERSION,
+        "receiptSchemaVersion": RECEIPT_SCHEMA_VERSION,
+        "learnerVersion": LEARNER_VERSION,
+        "specPath": "docs/prereg/arc/PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md",
+        "specHash": spec_hash,
+        "parentSpecPath": "docs/prereg/arc/PHASE3_SUFFICIENCY_SPEC.md",
+        "parentSpecHash": parent_spec_hash,
+        "runnerSha256": self_hash,
+        "pythonVersion": sys.version,
+        "platform": platform.platform(),
+        "certArms": CERT_ARMS,
+        "primaryCertArm": PRIMARY_CERT_ARM,
+        "thresholds": {
+            "epsilon_primary": EPSILON_PRIMARY,
+            "epsilon_exact": EPSILON_EXACT,
+            "epsilon_strict": EPSILON_STRICT,
+            "epsilon_loose": EPSILON_LOOSE,
+            "knn_k": KNN_K,
+            "local_incompat_max": LOCAL_INCOMPAT_MAX,
+            "fidelity_pass_fraction": FIDELITY_PASS_FRACTION,
+            "label_vacuity_fraction": LABEL_VACUITY_FRACTION,
+        },
+        "programSketchThresholds": {
+            "oracle_arm": PROGRAM_SKETCH_ORACLE_ARM,
+            "canvas_residual_max": CANVAS_ORACLE_RESIDUAL_MAX,
+            "mask_f1_target": MASK_ORACLE_F1_TARGET,
+            "mask_f1_cond": MASK_ORACLE_F1_COND,
+            "color_acc_target": COLOR_ORACLE_ACC_TARGET,
+            "color_acc_cond": COLOR_ORACLE_ACC_COND,
+            "oracle_mask_mlp_steps": ORACLE_MASK_MLP_STEPS,
+        },
+    }
+
+    if args.dry_run:
+        manifest["mode"] = "dry_run"
+        manifest["completedAt"] = iso_now()
+        write_empty_cert_receipt(out_dir, manifest)
+        print(f"ARC Phase 3E dry run wrote {out_dir}")
+        return 0
+
+    data_dir = Path(args.data_dir).resolve()
+    register_path = Path(args.register).resolve()
+    assert_training_data_dir(data_dir)
+    tasks, register_hash, data_hash = load_tasks(data_dir, register_path)
+    if args.limit_tasks > 0:
+        tasks = tasks[: args.limit_tasks]
+    manifest["dataDir"] = str(data_dir)
+    manifest["registerPath"] = str(register_path)
+    manifest["registerHash"] = register_hash
+    manifest["dataDirHash"] = data_hash
+
+    validation_tasks = [t for t in tasks if t.split == "validation"]
+    test_tasks = [t for t in tasks if t.split == "test"]
+    split_rows = [{"task_id": t.task_id, "primary_prior": t.primary_prior, "predicted_boundary": t.predicted_boundary, "split": t.split} for t in sorted(tasks, key=lambda x: x.task_id)]
+    write_csv(out_dir / "split.csv", split_rows, CERT_FILES_EMPTY["split.csv"])
+
+    def to_ctx(inst: Instance) -> dict[str, Any]:
+        return {
+            "lane": inst.lane,
+            "instance_id": inst.instance_id,
+            "task_id": inst.task_id,
+            "primary_prior": inst.primary_prior,
+            "predicted_boundary": inst.predicted_boundary,
+            "query_index": inst.query_index,
+            "query_input": inst.query_input,
+            "target_output": inst.target_output,
+            "conditioning": inst.conditioning,
+        }
+
+    val_lodo = [to_ctx(i) for i in build_lodo_instances(validation_tasks, "validation_lodo")]
+    val_pttest = [to_ctx(i) for i in build_pttest_instances(validation_tasks, "validation_pttest")]
+    test_lodo = [to_ctx(i) for i in build_lodo_instances(test_tasks, "test_lodo")]
+    test_pttest = [to_ctx(i) for i in build_pttest_instances(test_tasks, "pttest")]
+    u_all = val_lodo + val_pttest + test_lodo + test_pttest
+    u_primary = test_lodo + test_pttest
+    primary_ids = {c["instance_id"] for c in u_primary}
+    manifest["contextUniverse"] = {
+        "validation_lodo": len(val_lodo), "validation_pttest": len(val_pttest),
+        "test_lodo": len(test_lodo), "pttest": len(test_pttest),
+        "u_all": len(u_all), "u_primary": len(u_primary),
+    }
+
+    # --- Stage 1: no-target context fingerprints + barrier ---
+    fingerprints = []
+    for c in u_all:
+        fingerprints.append({
+            "instance_id": c["instance_id"],
+            "lane": c["lane"],
+            "task_id": c["task_id"],
+            "query_index": c["query_index"],
+            "in_u_primary": c["instance_id"] in primary_ids,
+            "context_id_signature_palette": context_identity("signature_palette_context", c),
+            "context_id_signature_only": context_identity("signature_only_context", c),
+            "context_id_metadata_only": context_identity("metadata_only_context", c),
+            "context_id_raw_grid": context_identity("raw_grid_context", c),
+            "n_conditioning": len(c["conditioning"]),
+        })
+    write_jsonl(out_dir / "context_fingerprints_no_targets.jsonl", fingerprints)
+    barrier_hash = sha256_file(out_dir / "context_fingerprints_no_targets.jsonl")
+    (out_dir / "context_fingerprints_no_targets.sha256").write_text(barrier_hash + "\n", encoding="utf-8")
+    manifest["targetBarrierHash"] = barrier_hash
+
+    # --- Stage 2: target labels + program sketches (post-barrier) ---
+    sketches: dict[str, dict[str, Any]] = {}
+    target_label_rows = []
+    sketch_jsonl = []
+    for c in u_all:
+        sk = program_sketch_v1(c)
+        sketches[c["instance_id"]] = sk
+        teh = target_exact_hash(c["target_output"])
+        tspid = target_signature_palette_id(c["target_output"])
+        c["_target_exact_hash"] = teh
+        c["_target_sp_id"] = tspid
+        c["_context_id_sp"] = next(f["context_id_signature_palette"] for f in fingerprints if f["instance_id"] == c["instance_id"])
+        target_label_rows.append({"context_id": c["instance_id"], "lane": c["lane"], "task_id": c["task_id"], "query_index": c["query_index"], "target_exact_hash": teh, "target_signature_palette_id": tspid})
+        sketch_jsonl.append({"instance_id": c["instance_id"], "lane": c["lane"], "task_id": c["task_id"], **sk})
+    write_csv(out_dir / "target_labels.csv", target_label_rows, CERT_FILES_EMPTY["target_labels.csv"])
+    write_jsonl(out_dir / "program_sketches.jsonl", sketch_jsonl)
+
+    # --- Exact + representation-level fibers over U_primary (and U_all diagnostic) ---
+    def fiber_groups(universe):
+        groups: dict[str, list[dict[str, Any]]] = {}
+        for c in universe:
+            groups.setdefault(c["_context_id_sp"], []).append(c)
+        return {k: v for k, v in groups.items() if len(v) > 1}
+
+    exact_rows = []
+    exact_collision_found = False
+    rep_collision_found = False
+    for cid, members in fiber_groups(u_primary).items():
+        hashes = {m["_target_exact_hash"] for m in members}
+        sp_ids = {m["_target_sp_id"] for m in members}
+        ctype = []
+        if len(hashes) > 1:
+            ctype.append("exact_output_collision")
+            exact_collision_found = True
+        if len(sp_ids) > 1:
+            ctype.append("representation_level_collision")
+            rep_collision_found = True
+        if ctype:
+            exact_rows.append({
+                "context_id_signature_palette": cid,
+                "members": ";".join(m["instance_id"] for m in members),
+                "collision_type": "+".join(ctype),
+                "target_hashes": ";".join(sorted(hashes)),
+                "target_sp_ids": ";".join(sorted(sp_ids)),
+            })
+    write_csv(out_dir / "exact_fibers.csv", exact_rows, CERT_FILES_EMPTY["exact_fibers.csv"])
+
+    # --- Pairwise cross-task near-fiber search over U_primary (signature_palette) ---
+    near_rows = []
+    near_incompat_found = False
+    for i in range(len(u_primary)):
+        for j in range(i + 1, len(u_primary)):
+            ca, cb = u_primary[i], u_primary[j]
+            if ca["task_id"] == cb["task_id"]:
+                continue
+            d = context_distance("signature_palette_context", ca, cb)
+            if d > EPSILON_PRIMARY:
+                continue
+            incompat, n_disj = near_fiber_incompatible(sketches[ca["instance_id"]], sketches[cb["instance_id"]])
+            jac = _sketch_jaccard_distance(sketches[ca["instance_id"]], sketches[cb["instance_id"]])
+            if incompat:
+                near_incompat_found = True
+            near_rows.append({
+                "context_a": ca["instance_id"], "task_a": ca["task_id"],
+                "context_b": cb["instance_id"], "task_b": cb["task_id"],
+                "distance": d, "n_disjoint_components": n_disj,
+                "sketch_jaccard_distance": round_float(jac),
+                "strong_program_sketch_gap": jac >= JACCARD_STRONG_GAP,
+            })
+    # Only rows that are actual incompatibilities go in the named file; keep all near pairs too.
+    write_csv(out_dir / "near_fiber_incompatibilities.csv", [r for r in near_rows if r["n_disjoint_components"] >= 2], CERT_FILES_EMPTY["near_fiber_incompatibilities.csv"])
+
+    # --- kNN cross-task fiber locality over U_primary ---
+    knn_rows = []
+    top_neighbor_rows = []
+    n_fidelity_pass = 0
+    local_incompat_rates = []
+    for c in u_primary:
+        dists = []
+        for other in u_primary:
+            if other["instance_id"] == c["instance_id"] or other["task_id"] == c["task_id"]:
+                continue
+            dists.append((context_distance("signature_palette_context", c, other), other))
+        dists.sort(key=lambda t: (t[0], t[1]["instance_id"]))
+        knn = dists[:KNN_K]
+        for d, nb in knn:
+            top_neighbor_rows.append({
+                "context_id": c["instance_id"], "lane": c["lane"], "task_id": c["task_id"],
+                "neighbor_context_id": nb["instance_id"], "neighbor_task_id": nb["task_id"],
+                "distance": d, "cross_task": True, "fidelity_pass": d <= EPSILON_PRIMARY,
+            })
+        r_k = knn[-1][0] if len(knn) >= KNN_K else (knn[-1][0] if knn else 1.0)
+        fidelity_neighbors = [(d, nb) for d, nb in knn if d <= EPSILON_PRIMARY]
+        fidelity_pass = len(fidelity_neighbors) >= 1
+        if fidelity_pass:
+            n_fidelity_pass += 1
+        incompat_count = 0
+        same_prior = 0
+        for d, nb in fidelity_neighbors:
+            inc, _ = near_fiber_incompatible(sketches[c["instance_id"]], sketches[nb["instance_id"]])
+            if inc:
+                incompat_count += 1
+            if nb["primary_prior"] == c["primary_prior"]:
+                same_prior += 1
+        local_incompat = (incompat_count / len(fidelity_neighbors)) if fidelity_neighbors else 0.0
+        if fidelity_pass:
+            local_incompat_rates.append(local_incompat)
+        knn_rows.append({
+            "context_id": c["instance_id"], "lane": c["lane"], "task_id": c["task_id"], "prior": c["primary_prior"],
+            "fidelity_pass": fidelity_pass, "r_k": round_float(r_k),
+            "local_incompatibility_rate": round_float(local_incompat),
+            "same_prior_neighbor_rate": round_float((same_prior / len(fidelity_neighbors)) if fidelity_neighbors else 0.0),
+            "n_cross_task_neighbors": len(knn),
+        })
+    write_csv(out_dir / "knn_fiber_locality.csv", knn_rows, CERT_FILES_EMPTY["knn_fiber_locality.csv"])
+    write_csv(out_dir / "pairwise_top_neighbors.csv", top_neighbor_rows, CERT_FILES_EMPTY["pairwise_top_neighbors.csv"])
+
+    # --- per-prior diagnostics + label vacuity ---
+    def none_in_2plus(sk: dict[str, Any]) -> bool:
+        sets = [sk["shape_rule_oracle_set"], sk["canvas_rule_oracle_set"], sk["mask_candidate_oracle_family_set"], sk["color_rule_oracle_family_set"]]
+        return sum(1 for s in sets if s == ["none"]) >= 2
+    n_vacuous = sum(1 for c in u_primary if none_in_2plus(sketches[c["instance_id"]]))
+    vacuity_fraction = (n_vacuous / len(u_primary)) if u_primary else 0.0
+
+    per_prior_rows = []
+    priors = sorted({c["primary_prior"] for c in u_primary})
+    for prior in priors:
+        ctxs = [c for c in u_primary if c["primary_prior"] == prior]
+        kr = [r for r in knn_rows if r["prior"] == prior]
+        fp = [r for r in kr if r["fidelity_pass"]]
+        per_prior_rows.append({
+            "primary_prior": prior, "n_contexts": len(ctxs),
+            "n_fidelity_pass": len(fp),
+            "mean_local_incompat": round_float(sum(r["local_incompatibility_rate"] for r in fp) / len(fp)) if fp else 0.0,
+            "n_none_in_2plus_sketch_sets": sum(1 for c in ctxs if none_in_2plus(sketches[c["instance_id"]])),
+        })
+    write_csv(out_dir / "per_prior.csv", per_prior_rows, CERT_FILES_EMPTY["per_prior.csv"])
+
+    # --- Branch adjudication (precedence) ---
+    fidelity_fraction = (n_fidelity_pass / len(u_primary)) if u_primary else 0.0
+    mean_local_incompat = (sum(local_incompat_rates) / len(local_incompat_rates)) if local_incompat_rates else 0.0
+    if exact_collision_found or rep_collision_found:
+        branch = "phase3e_exact_fiber_collision"
+        reason = "U_primary contains an exact-output or representation-level signature_palette fiber collision."
+    elif near_incompat_found:
+        branch = "phase3e_near_fiber_incompatibility"
+        reason = "No exact collision, but a U_primary cross-task near-fiber pair satisfies the program-sketch incompatibility rule at epsilon_primary."
+    elif vacuity_fraction > LABEL_VACUITY_FRACTION:
+        branch = "phase3e_deferred_label_vacuity"
+        reason = f"{vacuity_fraction:.2%} of U_primary contexts have `none` in >=2 program-sketch oracle sets (> {LABEL_VACUITY_FRACTION:.0%}); the sketch is too weak to adjudicate near-fiber incompatibility."
+    elif fidelity_fraction >= FIDELITY_PASS_FRACTION and mean_local_incompat <= LOCAL_INCOMPAT_MAX:
+        branch = "phase3e_fiber_locality_positive"
+        reason = f"No collision; {fidelity_fraction:.2%} of U_primary contexts have fidelity-passing cross-task k={KNN_K} neighborhoods and mean local incompatibility {mean_local_incompat:.3f} <= {LOCAL_INCOMPAT_MAX}."
+    else:
+        branch = "phase3e_deferred_sparse_fibers"
+        reason = f"No collision; only {fidelity_fraction:.2%} of U_primary contexts have fidelity-passing cross-task neighborhoods (< {FIDELITY_PASS_FRACTION:.0%}); too sparse at epsilon_primary to adjudicate locality."
+
+    manifest["completedAt"] = iso_now()
+    manifest["branch"] = branch
+    manifest["branchReason"] = reason
+    manifest["summary"] = {
+        "exact_collision_found": exact_collision_found,
+        "rep_collision_found": rep_collision_found,
+        "near_incompat_found": near_incompat_found,
+        "n_exact_fiber_groups": len(exact_rows),
+        "n_near_pairs_within_epsilon": len(near_rows),
+        "n_near_incompatibilities": len([r for r in near_rows if r["n_disjoint_components"] >= 2]),
+        "fidelity_pass_fraction": round_float(fidelity_fraction),
+        "mean_local_incompatibility": round_float(mean_local_incompat),
+        "label_vacuity_fraction": round_float(vacuity_fraction),
+    }
+
+    write_json(out_dir / "manifest.json", manifest)
+    write_json(out_dir / "phase3e_signature_fiber_certificate_receipt.json", {
+        "manifest": manifest,
+        "branch": branch,
+        "branchReason": reason,
+        "exactFibers": exact_rows,
+        "nearIncompatibilities": [r for r in near_rows if r["n_disjoint_components"] >= 2],
+        "perPrior": per_prior_rows,
+    })
+    summary_lines = [
+        "# Phase 3E Signature-Fiber Certificate",
+        "",
+        f"Branch: **{branch}**",
+        "",
+        reason,
+        "",
+        f"- U_primary contexts: {len(u_primary)} (U_all: {len(u_all)})",
+        f"- exact fiber collision groups: {len(exact_rows)}",
+        f"- near pairs within epsilon_primary={EPSILON_PRIMARY}: {len(near_rows)}; of which incompatible: {len([r for r in near_rows if r['n_disjoint_components'] >= 2])}",
+        f"- fidelity-passing fraction: {fidelity_fraction:.2%}; mean local incompat: {mean_local_incompat:.3f}",
+        f"- label vacuity fraction: {vacuity_fraction:.2%}",
+        f"- target barrier hash: `{barrier_hash}`",
+    ]
+    (out_dir / "branch_adjudication.md").write_text("\n".join(summary_lines) + "\n", encoding="utf-8")
+    (out_dir / "commands.md").write_text(
+        "# Phase 3E invocation\n\n```\n" + " ".join([sys.executable, "docs/prereg/arc/phase3e_signature_fiber_certificate.py", *sys.argv[1:]]) + "\n```\n",
+        encoding="utf-8",
+    )
+    write_json(out_dir / "hashes.json", hash_receipt_files(out_dir))
+    print(f"ARC Phase 3E certificate wrote {out_dir}")
+    print(f"Branch: {branch}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
