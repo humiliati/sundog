@@ -8,12 +8,14 @@ Filed: **2026-05-29 (PT)**
 Status: **Phase 1 instrumentation closed across the full ladder 2026-05-29;
 Phase 2 v0 executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`;
 Phase 2 v1 APE-smearing run executed 2026-05-29 ->
-`YM-P2-NEG-A no_rank_local_structure`**. See
+`YM-P2-NEG-A no_rank_local_structure`; Phase 2 v2 correlator probe spec
++ binding spec filed 2026-05-29**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
 The v0 and v1 Phase 2 receipts are named nulls and do not admit Phase 3
-observable-certificate work.
+observable-certificate work; v2 (connected-correlator signature on the
+same ensembles) is the next admitted scoring lane.
 
 ## Filed Artifacts
 
@@ -88,14 +90,28 @@ observable-certificate work.
   **Executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`.**
   Receipt:
   [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md).
+- [`PHASE2_SU2_3D_relative_locality_v2.md`](PHASE2_SU2_3D_relative_locality_v2.md)
+  - binding v2 spec promoting the v1 audit's T2 candidate: signature
+  vocabulary v5 = 20-dim connected 2-point correlator of bare-link
+  Wilson loops `{W11, W12, W13, W22}` at the locked five
+  cubic-symmetry displacement classes `{(1,0,0), (1,1,0), (1,1,1),
+  (2,0,0), (2,1,0)}`. Held-out target and per-β bin edges unchanged
+  from v0/v1; correlators only (no marginal moments) to keep test
+  scientifically clean. No P0 amendment needed (correlators are a new
+  vocab class within the P0 fixed-loop framework, not smearing or
+  blocking). Reuses v0 ensembles bit-for-bit; ONE aggregation
+  invocation. Runner not yet implemented.
 
 ## Required Next Artifact
 
-The next artifact should be a dated v2 probe spec under
-`docs/yang-mills/specs/`. Because both bare-loop v0 and APE-smeared v1
-landed `YM-P2-NEG-A`, the v2 probe should propose a target or signature-class
-redesign rather than a retune of the locked `(alpha, N_sm) = (0.5, 10)`
-smearing parameters.
+The next artifact should be the minimal v2 aggregation runner
+`scripts/yang-mills-phase2-v2-su2-3d-aggregate.mjs` + the correlator
+core module `scripts/lib/yang-mills-su2-3d-correlator.mjs` + the
+`yang-mills:phase2:v2:su2-3d:aggregate` npm script. v0 / v1
+aggregation runners + the bare SU(2) 3D core + the smearing module
+all remain bit-for-bit unchanged. If v2 also lands `YM-P2-NEG-A`,
+the v2 probe spec pre-states the v3 fallback (target redesign;
+likely a new P0 amendment for Polyakov or topological observables).
 
 ## Guardrail
 
@@ -209,3 +225,27 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   within-beta primary bin-purity@5 = `0.29375`, primary-minus-random =
   `-0.00208`, and metadata/raw controls beat the primary. This named null
   blocks Phase 3 from v1 and routes the lane to a dated v2 probe spec.
+  Methodology note: an early draft of the APE implementation used the
+  heatbath-staple orientation and was caught immediately by
+  `CTRL_GAUGE_RAND` (`YM-P1-NEG-A gauge_leakage`) before any
+  rank-locality score could be interpreted; the corrected implementation
+  then produced the v1 receipt numerics. Receipt-quality save.
+- 2026-05-29: v2 correlator probe spec filed at
+  [`../../yang-mills/specs/2026-05-29_phase2_v2_correlator_probe.md`](../../yang-mills/specs/2026-05-29_phase2_v2_correlator_probe.md).
+  Diagnoses v1 NEG-A: hypothesis 1 (UV-noise dominance) FALSIFIED
+  (smeared primary slightly worse than bare v0, not better); hypothesis 2
+  (small-loop mean+var summaries don't encode γ_held) strongly favored
+  — but tested only marginal-moment summaries so far. Promotes T2
+  (connected 2-point correlator) from the v1 audit as the natural last
+  small-loop richness test. Locks vocab v5 = 20-dim (4 loops × 5
+  cubic-symmetry displacement classes). No P0 amendment needed
+  (correlators are new vocab class within fixed-loop framework). Pre-
+  states v3 fallback (target redesign) if v2 also lands NEG-A.
+- 2026-05-29: Phase 2 v2 binding spec filed at
+  [`PHASE2_SU2_3D_relative_locality_v2.md`](PHASE2_SU2_3D_relative_locality_v2.md).
+  Reuses v0 ensembles bit-for-bit; same bare γ_held; same per-β bin
+  edges asserted to v0 to 1e-12; vocab v5 connected correlators on bare
+  links at frozen displacement slate `{(1,0,0), (1,1,0), (1,1,1),
+  (2,0,0), (2,1,0)}`. Six controls scored on correlator signature; same
+  promotion thresholds as v0/v1. ONE aggregation invocation only.
+  Compute estimate ~1-2 min. Runner implementation pending.
