@@ -140,6 +140,73 @@ coverage-failing point. Two pre-registration gaps caused this:
 Neither the contaminated NEG-A nor the clean-points POSITIVE recompute
 is filed; the amended re-run adjudicates.
 
+## 7. Amended-run result (2026-05-28) — provisional POSITIVE
+
+The amended convergence check
+(`results/proof/c1-kolmogorov-v4-knn-sweep2/`, sweep
+`k ∈ {10,15,20,25,30,40,50}`, all full coverage) returned
+**`STRICTNESS_WITNESS_POSITIVE`**. The provisional v4 `PDE-C1-NEG-A`
+is **overturned**.
+
+| k | r_k median | mean_minority | incompat fraction |
+|---:|---:|---:|---:|
+| 10 | 0.0196 | 0.01228 | 0.035 |
+| 15 | 0.0237 | 0.01658 | 0.058 |
+| 20 | 0.0288 | 0.02058 | 0.065 |
+| 25 | 0.0322 | 0.02153 | 0.069 |
+| 30 | 0.0346 | 0.02408 | 0.072 |
+| 40 | 0.0393 | 0.02763 | 0.087 |
+| 50 | 0.0448 | 0.03112 | 0.097 |
+
+Primary fit `mean_minority = a_mm + b·r_k`: `a_mm = −0.00125`
+(≤ 0.005 → POSITIVE), slope `0.729`. Diagnostic `incompat_fraction`
+intercept `−0.0031` (agrees).
+
+**Three robustness checks (all pass):**
+
+1. **Through-origin, no plateau.** `mean_minority / r_k ≈ 0.70`
+   constant across the sweep — a clean line through the origin, no
+   flattening at small `r_k`. A genuine plateau would level to a
+   positive constant; it does not. Decay-to-zero is robust.
+2. **Not a random-label artifact.** Unstructured iid-30%-damp labels
+   would give `mean_minority ≈ 0.30` flat in `r_k`. Observed 0.012–0.031
+   is 10–25× smaller and scales with radius → labels are spatially
+   organized into action-pure regions with mixing only in a thin
+   boundary shell (a clean decision surface). This decisively rules out
+   distance-concentration-randomness.
+3. **Grain confound neutralized.** Threshold-free `mean_minority` and
+   grain-prone `incompat_fraction` both extrapolate to ~0; they agree,
+   so the verdict is not an artifact of either statistic.
+
+**Interpretation (scoped).** On the v4 cell (`k_f=2, G=200, K=4`), the
+low-band-energy safety proxy `\hat{pi}` is **control-sufficient on
+`Phi_K`-fibers** up to a measure-zero decision surface, even though
+`Phi_K` is provably non-injective (cell-set §4.1). This is the C1
+sidecar's Reading-2 **regime 2** (state-insufficient, control-
+sufficient) — the non-vacuous Sundog target. `damp_fraction = 0.30` so
+the control-sufficiency is non-trivial (a real 30/70 action split
+determined by `Phi_K`), not a degenerate all-`no_op`.
+
+**What this does NOT establish (held against the result):**
+
+- **One cell.** v4 regime / K=4 / this objective only. No claim of
+  generality across regimes, signatures, or objectives.
+- **State-insufficiency on the attractor is not yet airtight.** §4.1
+  certifies `Phi_K` non-injective on `B_abs`; the full regime-2 claim
+  needs the deferred attractor-support twin-state certificate on
+  `supp(mu_SRB)`. The POSITIVE establishes control-sufficiency on the
+  attractor; the state-insufficiency half is `B_abs`-level pending that
+  certificate.
+- **Proxy faithfulness.** `\hat{pi}` is a proxy; a reviewer may require
+  a derived `J`-optimal selector (design §3 substitution path).
+- **Resolution floor.** The test resolves to `r_k ≈ 0.02`; genuine
+  incompatibility below that scale is unprobed (a larger `N` would
+  push lower).
+- **External review (criterion c) open.**
+
+**Verdict status: provisional POSITIVE — strongly advances C1, does
+not promote it out of the ledger.**
+
 ## 5. Cross-references
 
 - [`PDE_C1_KNN_ADJUDICATION_DESIGN.md`](PDE_C1_KNN_ADJUDICATION_DESIGN.md)

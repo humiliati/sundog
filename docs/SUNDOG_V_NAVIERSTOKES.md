@@ -170,14 +170,49 @@ pivot to kNN/kernel fiber-locality adjudication (principled fix); (B)
 report Finding A as a partial C1 read; (C) bank C1 lessons and pivot
 to C2 (structurally insulated from this tension).
 
+**Fork A executed 2026-05-28 — first interpretable C1 read, a
+provisional POSITIVE.** The kNN / disintegration adjudicator
+(fiber-protocol §5b; design at
+[`proof/PDE_C1_KNN_ADJUDICATION_DESIGN.md`](proof/PDE_C1_KNN_ADJUDICATION_DESIGN.md))
+was built (`--adjudicator knn`, exact `BallTree`) and run at the v4
+regime. It **solved the coverage obstruction** (`fidelity_coverage =
+1.0` vs binning's 0) and fired a mechanical `PDE-C1-NEG-A`
+(`incompat_fraction = 0.0716`). That NEG-A was **held provisional and
+then overturned** by a pre-registered convergence check
+([`proof/PDE_C1_KNN_CONVERGENCE_CHECK.md`](proof/PDE_C1_KNN_CONVERGENCE_CHECK.md)):
+the first sweep's NEG-A was an artifact of a coverage-failing `k=100`
+point contaminating the OLS, and the thresholded statistic carried a
+grain confound. The **amended** check (coverage-passing points only;
+threshold-free `mean_minority` primary; dense low-`k` sweep) returned
+**`STRICTNESS_WITNESS_POSITIVE`**: `mean_minority ≈ 0.70·r_k` cleanly
+through the origin (`a_mm = −0.00125 ≤ 0.005`), with three robustness
+checks passing (through-origin not plateau; 10–25× below the
+random-label level so labels are spatially organized; threshold-free
+and thresholded statistics agree). On the v4 cell the low-band-energy
+proxy is **control-sufficient on `Phi_K`-fibers** up to a measure-zero
+decision surface, with `damp_fraction = 0.30` (non-trivial) — the C1
+sidecar's Reading-2 **regime 2** (state-insufficient, control-
+sufficient), the non-vacuous Sundog target.
+
+This is **provisional and tightly scoped**: one cell (v4 / K=4 / this
+objective); the state-insufficiency-on-attractor half still needs the
+deferred twin-state certificate (§4.1 certifies non-injectivity on
+`B_abs`, not `supp(mu_SRB)`); `\hat{pi}` is a proxy pending reviewer
+acceptance or a derived `J`-optimal selector; the test resolves to
+`r_k ≈ 0.02`. It strongly advances C1 but does **not** promote it.
+
 Criterion (b) is closed at the *procedure-and-execution* level (v0–v5
-lock cycles + v4 fall-back all ran cleanly; methodology survived six
-vacuity / coverage diagnoses and four pre-registered amendments,
-including one falsified-and-corrected, without any `PDE-C1-NEG-B`); a
-*substantive fiber-adjudication* C1 read still requires either a
-method pivot (Fork A) or is partially delivered by Finding A (Fork B).
-Criteria (a) Front-A vacuity rebuttal and (c) external PDE reviewer
-remain open. Final (d) close is coupled to (c).
+lock cycles + v4 fall-back + the kNN run and its convergence check all
+ran cleanly; methodology survived six vacuity / coverage diagnoses, a
+contaminated-then-overturned NEG-A, and five pre-registered amendments
+— two of them falsified-or-corrected — without any `PDE-C1-NEG-B`); a
+*substantive fiber-adjudication* C1 read is now **delivered
+provisionally** by the Fork-A POSITIVE. Criterion (a) Front-A vacuity
+rebuttal is materially advanced (a concrete regime-2 witness shows the
+Postulate-1 reading is non-vacuous on a real substrate), pending
+reviewer judgement. Criterion (c) external PDE reviewer remains open,
+as do the twin-state certificate and proxy-faithfulness items. Final
+(d) close is coupled to (c).
 
 Candidate 2 has also been commissioned at the scoping level:
 [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)

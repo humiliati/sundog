@@ -111,7 +111,15 @@ that claim provably fails.
   genuine fiber-incompatibility, decay-to-zero (`a < 0.01`) overturns
   it as a finite-radius boundary artifact (→ POSITIVE), else
   `INCONCLUSIVE_CONVERGENCE`. Thresholds fixed before the read.
-  Harness: `--adjudicator knn-sweep`.
+  Harness: `--adjudicator knn-sweep`. **Result 2026-05-28:** first
+  sweep's mechanical NEG-A was contaminated by a coverage-failing
+  `k=100` point; pre-registration **amended** (§6: exclude
+  coverage-failing points; threshold-free `mean_minority` primary;
+  dense low-`k`). Amended re-run → **`STRICTNESS_WITNESS_POSITIVE`**
+  (`mean_minority ≈ 0.70·r_k` through origin, `a_mm = −0.00125`):
+  provisional v4 `PDE-C1-NEG-A` **overturned** → proxy
+  control-sufficient on fibers (Reading-2 regime 2). First interpretable
+  C1 read; provisional, one cell, does not promote C1.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /
