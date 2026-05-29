@@ -11,8 +11,8 @@ Short version:
 > still certify bounded structure?
 
 Status: **Phase 1 instrumentation closed across the full ladder
-2026-05-29; Phase 2 v0 spec filed 2026-05-29**. Roadmap draft at this
-file; lit-pass at
+2026-05-29; Phase 2 v0 executed 2026-05-29 ->
+`YM-P2-NEG-A no_rank_local_structure`**. Roadmap draft at this file; lit-pass at
 [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
 Phase 1 U(1) 2D smoke manifest at
@@ -28,11 +28,13 @@ Phase 1 SU(2) 3D primary-cell manifest at
 with `P1-A smoke_pass` receipt at
 [`yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md);
 Phase 2 v0 relative-locality spec at
-[`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v0.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v0.md).
-The Phase 1 receipts are instrumentation only. No Phase 2 certificate,
-continuum, confinement, mass-gap, or result-bearing Yang-Mills claim
-exists. Next artifact is the minimal Phase 2 ensemble runner +
-aggregation runner per the v0 spec.
+[`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v0.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v0.md)
+with named-null receipt at
+[`yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md).
+The Phase 1 receipts are instrumentation only. Phase 2 v0 did not earn a
+certificate. No continuum, confinement, mass-gap, or result-bearing
+Yang-Mills claim exists. Next artifact is a dated v1 probe spec under
+`docs/yang-mills/specs/`; no Phase 3 artifact is admitted from v0.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
@@ -384,6 +386,17 @@ Deliverables:
 - metadata/raw/random/permutation controls;
 - branch table over positive / metadata-only / negative / inconclusive.
 
+v0 execution:
+
+- `PHASE2_SU2_3D_relative_locality_v0.md` filed 2026-05-29;
+- four locked invocations executed 2026-05-29 on `SU2_3D`, 12x12x12,
+  beta slate `{2.0, 2.4, 2.8}`;
+- receipt filed at
+  [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md);
+- verdict `YM-P2-NEG-A no_rank_local_structure`: within-beta
+  bin-purity@5 = 0.3104, below the registered 0.5 gate, and only 0.0104
+  above `CTRL_RAND`.
+
 Failure:
 
 `YM-P2-NEG-A no_rank_local_structure` or `YM-P2-NEG-B metadata_only`.
@@ -509,10 +522,16 @@ Next agent should:
     required by that manifest.~~
     **Done 2026-05-29** - receipt filed at
     [`yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md).
-12. **New next artifact (2026-05-29):** file
-    `PHASE2_SU2_3D_relative_locality_v0.md`. It must run on the 12^3 partner,
-    freeze numeric gamma_held bin edges before scoring, and score all seven
-    P0 controls on the same frozen neighbor graph and held-out labels.
+12. ~~File and execute `PHASE2_SU2_3D_relative_locality_v0.md` on the 12^3
+    partner, freeze numeric gamma_held bin edges before scoring, and score all
+    seven P0 controls on the same frozen neighbor graph and held-out labels.~~
+    **Done 2026-05-29** - named-null receipt filed at
+    [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md).
+13. **New next artifact (2026-05-29):** file a dated v1 probe spec under
+    `docs/yang-mills/specs/`. It must explain the proposed design change after
+    the v0 null and state whether the change remains a Phase 2 v1
+    preregistration or requires a dated P0 amendment. Do not open Phase 3 from
+    the v0 receipt.
 
 ## 11. Open Decisions
 
@@ -538,7 +557,7 @@ Resolutions, restated here for navigation:
 
 Decisions still open (not §11 originals; surfaced by the P0 lock):
 
-- exact Phase 2 `SU2_3D` 12^3 manifest sizing and gamma_held bin-freeze protocol;
+- v1 probe design after the Phase 2 v0 named null;
 - gallery-card admission timing — currently still blocked per §10 item 7.
 
 ## 12. Ratified Public Boundary

@@ -44,3 +44,10 @@ the [receipt template](../RECEIPT_TEMPLATE.md).
   gauge-randomization smoke with three-plane signature averaging. Closes
   Phase 1 instrumentation across the registered ladder; no Phase 2
   certificate claim.
+- [`2026-05-29_SU2_3D_phase2_no_rank_local_structure.md`](2026-05-29_SU2_3D_phase2_no_rank_local_structure.md)
+  - `YM-P2-NEG-A no_rank_local_structure` for the non-Abelian `SU2_3D`,
+  12x12x12, beta slate `{2.0, 2.4, 2.8}` relative-locality v0 read.
+  All ensemble health gates passed, but within-beta bin-purity@5 was
+  `0.310416666667`, below the registered `0.5` promotion gate and only
+  `0.010416666667` above `CTRL_RAND`. Named null; no Phase 3 artifact
+  is admitted from this v0 run.

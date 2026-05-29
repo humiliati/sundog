@@ -5,12 +5,12 @@
   "withinCtrlRand5": 0.2999999999999997,
   "withinCtrlMeta5": 0.31458333333333316,
   "withinCtrlRaw5": 0.29791666666666644,
-  "withinCtrlPerm5": 0.2791666666666664,
+  "withinCtrlPerm5": 0.3120520833333312,
   "withinCtrlGaugeRand5": 0.3104166666666665,
   "acrossPrimary5": 0.425,
   "acrossCtrlRandStrat5": 0.3541666666666665,
   "gaugeSignatureResidualMax": 4.999611835643236e-13,
-  "wallClockSeconds": 6.763065500000001,
+  "wallClockSeconds": 7.5358499,
   "withinPrimaryMinusRand5": 0.010416666666666796,
   "withinPrimaryMinusMeta5": -0.004166666666666652,
   "withinPrimaryMinusRaw5": 0.012500000000000067,
@@ -26,6 +26,6 @@
     "acrossPrimaryMinusRandStratMin": 0.05,
     "aggregationWallClockSecondsMax": 600
   },
-  "branch": "Z graph_contamination",
-  "reason": "CTRL_PERM purity 0.2791666666666664 differs from chance 0.3333333333333333"
+  "branch": "YM-P2-NEG-A no_rank_local_structure",
+  "reason": "primary=0.3104166666666665, primary-CTRL_RAND=0.010416666666666796"
 }

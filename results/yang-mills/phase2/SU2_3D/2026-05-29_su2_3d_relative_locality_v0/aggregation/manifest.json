@@ -42,8 +42,8 @@
     "results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.4_ensemble_v0",
     "results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.8_ensemble_v0"
   ],
-  "codeCommit": "7844025aa1bf0aa6f7d783ca60521916ccfef937",
+  "codeCommit": "bb44e53da27bc8e705b1c2245eff4bae95550c3c",
   "gitDirty": true,
   "commandLine": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\hughe\\Dev\\sundog\\scripts\\yang-mills-phase2-su2-3d-aggregate.mjs --cell SU2_3D --lattice-size 12x12x12 --beta-slate 2.0,2.4,2.8 --in-beta-2.0 results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.0_ensemble_v0 --in-beta-2.4 results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.4_ensemble_v0 --in-beta-2.8 results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.8_ensemble_v0 --distance-metric euclidean_zscore --k-slate 3,5,10 --primary-k 5 --bootstrap-resamples 1000 --bin-convention per_beta_tertile_linear --gauge-rand-seed-tag phase2_aggregation --gauge-transforms-per-config 1 --out results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_relative_locality_v0",
-  "wallClockSeconds": 6.764846600000001
+  "wallClockSeconds": 7.5372065
 }
