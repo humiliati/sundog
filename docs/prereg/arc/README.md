@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3E RELATIVE-LOCALITY CERTIFICATE SPEC FILED -- EXECUTION HOLD**. The expanded Phase 3E v2 certificate verdict remains `phase3e_v2_expanded_oracle_regression` (oracle leakage regression + still-sparse fibers); the new relative-locality spec keeps those absolute-epsilon findings intact and asks a rank-based nearest-neighbor question.
+Status: **Phase 3E relative-locality certificate verdict: `phase3e_relative_locality_negative`** (pinned `f7850f0`). On the 108-task expanded register, `signature_palette_context` rank-nearest neighbors show a weak-but-unusable sketch signal: statistically above prior-stratified random (p=0.0002) yet tied with metadata (Δ +0.006), below raw_grid (Δ -0.036), sign-unstable across k, and with a 28.5% hard-incompatibility rate (>25% gate). Combined with the empty absolute-epsilon fibers and the oracle leakage regression, the Phase 3E locality program finds no certifiable usable locality for the signature representation. All absolute-epsilon receipts remain binding.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -244,9 +244,19 @@ Checked **2026-05-28** against:
   "are cross-task nearest neighbors under `signature_palette_context` more
   program-sketch-coherent than controls?" Primary k is 5, with k=1/3/10
   diagnostics, metadata/raw/random/permutation controls, and explicit
-  leakage-caveated public language. **No relative-locality receipt exists yet;
-  execution remains held** until runner tooling, npm wiring, result ignore path,
-  leak-check coverage, smoke fingerprint, and freeze-marker amendment are filed.
+  leakage-caveated public language. **Binding verdict (Amendment B, pinned
+  `f7850f0`, runnerSha256 `3DD2C97A`, U_primary=336, 5 seeds x 1000 perms, ~56m):
+  `phase3e_relative_locality_negative`.** At k=5, palette mean neighbor sketch_sim
+  0.420 vs metadata 0.414 (Δ +0.006), signature_only 0.406, raw_grid **0.456**
+  (palette is *below* raw_grid by 0.036). Palette is significantly above
+  prior-stratified random (p=0.0002) but the effect is small (Δ vs uniform +0.072
+  < 0.15 bar), metadata-tied, raw-grid-dominated, sign-unstable across k, and the
+  palette hard-incompatibility rate **0.285 > 0.25** fires the negative gate.
+  `oracle_invalid=False` (vacuity/laundering pass; the 108-task leakage regression
+  `exact_lookup 0.351` is carried as a diagnostic, not retuned). The rank test
+  **strengthens** the absolute-sparsity result: no usable fiber or rank-local
+  locality for `signature_palette` on the expanded register (and raw_grid edges it
+  on both rank-local metrics).
 - [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) -- stub pattern for
   future Phase 1+ evaluation-blind register rows (no manual grid inspection,
   selection by preregistered metadata/hash rule).
@@ -638,10 +648,17 @@ Avoid:
   loosening `leakage_exact_lookup_max` after seeing the expanded value would be
   a post-hoc p-hack. A register-size-robust metric requires a new pre-registered
   oracle spec, not a retune;
-- any claim that the relative-locality spec changes the absolute-epsilon
-  verdicts, proves sufficiency, or licenses Branch E -- it is only a filed
-  rank-neighbor certificate question until a binding receipt exists, and even a
-  positive receipt would need its own downstream selector/solver spec;
+- any claim that the relative-locality NEGATIVE verdict
+  (`phase3e_relative_locality_negative`) changes the absolute-epsilon verdicts,
+  proves or disproves sufficiency, licenses or blocks Branch E, or proves
+  `raw_grid` is sufficient -- it found no USABLE rank-local sketch geometry for
+  `signature_palette` (weak signal, metadata-tied, below raw_grid, 28.5%
+  hard-incompatible > the 25% gate); raw_grid merely edges palette on this one
+  metric (anti-privilege signal, not a sufficiency claim);
+- any claim that palette being statistically above prior-stratified random
+  (p=0.0002) is a positive result -- the positive branch additionally requires
+  Δ-vs-metadata >= 0.10, Δ-vs-uniform >= 0.15, and hard-incompat <= 0.10, none of
+  which hold; a small significant-but-unusable signal is the negative reading;
 - any "color-rule variant flipped the bottleneck -> mask is the new
   limit" claim that omits the still-floor verdict -- the color-rule
   variant achieved a diagnostic improvement (palette doubled,

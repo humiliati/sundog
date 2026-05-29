@@ -162,8 +162,16 @@ that claim provably fails.
   (`damp_fraction ∈ [0.20,0.40]` at both G=200 and G=300) and a
   mandatory **G=200 re-run** (positive control / de-confound) before the
   G=300 generality test. Specifies a `--objective portable-quantile`
-  harness mode + `lock_v7_g200` / `lock_v7_g300` presets. **Proposed,
-  not built, not run** — §10 lists the sign-off decisions.
+  harness mode + `lock_v7_g200` / `lock_v7_g300` presets. **Executed
+  2026-05-29 → `PDE-C1-RG-POS`** (§12): portability gate passed at both
+  regimes (adj damp 0.300 / 0.269 — v6's 0.004 vacuity fixed); G=200
+  control POSITIVE (re-establishes v5 under the new objective); G=300
+  generality POSITIVE; G=300 twin-state CERTIFIED (100% witness, 942,834
+  pairs, same `ε_K`). The complete regime-2 witness replicates at a
+  **second** Grashof regime — no longer cell-local; control half
+  dimension- and objective-robust. Scope: two points on the Grashof
+  axis (`k_f=2` fixed); finite-Galerkin/sampled-support; C1 still
+  unpromoted.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /

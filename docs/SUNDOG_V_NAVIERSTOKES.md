@@ -275,9 +275,38 @@ G=200 re-run first** (positive control + de-confound: the portable
 objective is a *new* objective, so the v5 witness must be re-established
 under it before G=300 generality is meaningful; if G=200 flips, the
 program pauses). Specifies a `--objective portable-quantile` harness
-mode + `lock_v7_g200` / `lock_v7_g300` presets. **Proposed, not built,
-not run** pending sign-off on split sizes (50k/50k vs 30k/30k) and
-build trigger. Burst-onset objective documented as the v2 alternative.
+mode + `lock_v7_g200` / `lock_v7_g300` presets. Burst-onset objective
+documented as the v2 alternative.
+
+**Regime-generality v1 EXECUTED 2026-05-29 → `PDE-C1-RG-POS`.** Built
+(50k/50k held-out split, `q=0.70`; overshoot-burnin path regression-
+verified byte-identical) and ran the full program:
+- `lock_v7_g200` kNN (positive control): portability gate ✓ (adj
+  `damp_fraction = 0.3003` vs calib 0.300), **POSITIVE** (`a_mm =
+  −0.00079`, slope 0.736) — near-identical to v5's old-objective
+  −0.00078 / 0.737, so the v5 witness **re-establishes under a
+  different, sounder objective** (not a fixed-percentile-threshold
+  artifact).
+- `lock_v7_g300` kNN (generality test): portability gate ✓ (adj
+  `damp_fraction = 0.2688` — v6's 0.004 vacuity is **gone**), **POSITIVE**
+  (`a_mm = +0.00058`, through-origin, 10–22× below random-label floor).
+- `lock_v7_g300` twin-state: **`TWIN_STATE_CERTIFIED`** (100% witness
+  coverage, 942,834 unique pairs, `δ_H = 0.0111` from real median
+  ‖Q_K‖ = 0.222), at the same `ε_K = 0.0664` as the control read.
+
+**Net: the complete Reading-2 regime-2 witness (state-insufficient AND
+control-sufficient) now replicates at a second Grashof regime.** It is
+no longer cell-local: it holds at (k_f=2, G=200) and (k_f=2, G=300),
+the control half is dimension-robust (v4/v5: d=32/d=18) and
+objective-robust (fixed-percentile + portable-quantile), composed at
+matching `ε_K`. **Scope held:** two points on the Grashof axis only
+(`k_f=2` fixed; both objectives energy-overshoot-type);
+finite-Galerkin / sampled-support / numerical, not an infinite-dim NSE
+theorem; proxy faithfulness strengthened but `π̂` still a proxy;
+external review (c) open. **C1 remains UNPROMOTED** — but at its
+strongest: a two-regime, dimension- and objective-robust, end-to-end
+regime-2 witness. Disposition: `proof/PDE_C1_REGIME_GENERALITY_v1.md`
+§12.
 
 Criterion (b) is closed at the *procedure-and-execution* level (v0–v5
 lock cycles + v4 fall-back + the kNN run and its convergence check all
