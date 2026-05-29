@@ -10,8 +10,8 @@ Short version:
 > discipline: if the field itself is too much, can the right invariant shadow
 > still certify bounded structure?
 
-Status: **Phase 1 U(1) 2D and SU(2) 2D smokes passed 2026-05-29**.
-Roadmap draft at this file; lit-pass at
+Status: **Phase 1 U(1) 2D and SU(2) 2D smokes passed; SU(2) 3D Phase 1
+manifest filed 2026-05-29**. Roadmap draft at this file; lit-pass at
 [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
 Phase 1 U(1) 2D smoke manifest at
@@ -21,10 +21,14 @@ with `P1-A smoke_pass` receipt at
 Phase 1 SU(2) 2D harness manifest at
 [`prereg/yang-mills/PHASE1_SU2_2D_gauge_invariance_smoke.md`](prereg/yang-mills/PHASE1_SU2_2D_gauge_invariance_smoke.md)
 with `P1-A smoke_pass` receipt at
-[`yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md).
+[`yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md);
+Phase 1 SU(2) 3D primary-cell manifest at
+[`prereg/yang-mills/PHASE1_SU2_3D_gauge_invariance_smoke.md`](prereg/yang-mills/PHASE1_SU2_3D_gauge_invariance_smoke.md).
 These are Phase 1 instrumentation receipts only. No Phase 2 certificate,
 continuum, confinement, mass-gap, or result-bearing Yang-Mills claim exists.
-Next artifact is the `SU2_3D` Phase 1 gauge-invariance smoke manifest.
+Next artifact is the SU(2) 3D core module + entry runner + package script
+for the exact SU2_3D Phase 1 manifest command; closing Phase 1 across the
+full ladder opens the Phase 2 `SU2_3D` 12³ relative-locality manifest.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
