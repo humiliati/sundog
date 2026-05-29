@@ -51,7 +51,7 @@ Result convention:
 Receipts:
 
 - [`receipts/README.md`](receipts/README.md) - receipt index, including the
-  Phase 1 v0, v1, v2, v3, and v4 named-quarantine receipts.
+  Phase 1 v0-v4 named-quarantine receipts and the v5 provisional receipt.
 
 Current state:
 
@@ -83,3 +83,8 @@ Current state:
   pass, but absolute wall-time and full-state-ratio cost gates miss by a small
   margin.
 - Phase 1 v5 cost-closure slate opened: 2026-05-28.
+- Phase 1 v5 harness executed: 2026-05-28. Receipt is PROVISIONAL:
+  safety-complete, cost-unadjudicated. The earlier stable cost claim is
+  withdrawn after incompatible v5 reruns and `environments.jsonl` hash drift.
+  Before v6 or Phase 2, rerun v5 twice on a quiescent machine and finalize or
+  void the receipt.
