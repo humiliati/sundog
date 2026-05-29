@@ -843,10 +843,36 @@ or fixed held-out combination predicts the strict oracle's 32-step
 diagnostic warning-channel audit only; all branches preserve the Phase 15 formal
 verdict and do not retune the controller.
 
-Status: spec locked 2026-05-29. Additive implementation started after lock:
-`--hazard-channel-audit`, passive `hazardSamples`, and offline AUROC/bootstrap/CV
-analysis. One-trial smoke and smoke analysis passed as column-flow / estimator
-sanity checks; the 288-trial lock is staged, not run.
+Status: completed 2026-05-29 as Branch A, hazard warnable. The 288-passive-trial
+lock found that energy missed the lower-CI bar while `radius` passed strongly
+(`0.995`, 95% CI `[0.985, 1.000]`). The result repairs the warning-instrument
+story but preserves the Phase 15 Fail-Magnitude mechanism verdict.
+
+### Phase 16B - Radius Warning Re-Pose
+
+Goal: test whether Phase 15's warning-quality verdict flips when the warning
+score is `radius` instead of energy, using the completed Phase 16 passive lock
+receipt and a Phase-15-style per-cell AUROC mean.
+
+Implementation-grade draft and pending result note:
+
+- [`docs/threebody/PHASE16B_SPEC.md`](threebody/PHASE16B_SPEC.md)
+- [`docs/threebody/PHASE16B_RESULTS.md`](threebody/PHASE16B_RESULTS.md)
+
+Reserved command:
+
+```bash
+npm run threebody:phase16b:repose
+```
+
+Exit criterion: the project can say whether the warning-quality miss was purely
+an energy-instrument artifact under the Phase-15-style warning bar: favorable
+mean AUROC at least `0.70` with at least `18/27` favorable cells defined. This
+phase is offline only and does not retune the controller or revise the Phase 15
+mechanism verdict.
+
+Status: spec drafted 2026-05-29; pending lock review. No Phase 16B code has been
+written and no Phase 16B command has been run.
 
 ### 3D Catalog / Isotrophy Sidecar
 
