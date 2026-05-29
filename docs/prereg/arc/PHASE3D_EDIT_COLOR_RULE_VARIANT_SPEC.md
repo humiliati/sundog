@@ -350,10 +350,13 @@ Primary bottleneck allocation from the binding receipt:
   `0.30` to `0.35` rule-selection regret in the locked-accuracy slice;
 - `color_rule_bank_coverage_failure`: **9%** of failures.
 
-Remaining admissible Phase 3 reopens require a new pre-registered spec. The
-measured order of leverage is:
+The measured order of leverage for later Phase 3 reopens is:
 
 1. mask-targeted Branch D variant;
 2. selection-refinement Branch D variant;
 3. rule-bank extension Branch D variant;
 4. Branch E spec such as generative program search or test-time prompting.
+
+The first item is now filed in `PHASE3D_MASK_TARGET_VARIANT_SPEC.md` as
+`structured_edit_mask_target_v3`. That filing admits no execution and no
+signature comparison before a binding receipt exists.
