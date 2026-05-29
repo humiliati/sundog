@@ -7285,3 +7285,50 @@ relative rank `relative_locality_negative`. Across 36 and 108 registered tasks,
 `signature_palette_context` shows no certifiable usable fixed-radius fiber
 locality or rank-local sketch locality. Branch E, if pursued, must be justified
 by solver capability under its own pre-registered spec.
+
+### 2026-05-29 (PT) -- Jeffery Hughes Jr. -- Branch E Program-Search Binding Receipt: `branch_e_capability_demonstrated`
+
+Branch E solver spec:
+
+- `docs/prereg/arc/PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md`
+
+The Branch E deterministic program-search solver ran on the expanded 108-task
+register (`splitMode=sha256_expansion`, `U_primary=336`), pinned to freeze-marker
+`gitCommit 6886074` (runnerSha256 `036EA6A9...`, `gitDirty=false`, deterministic,
+wall about 2m38s). Receipt path:
+
+- `results/arc/phase3-branch-e-program-search/`
+
+**Branch: `branch_e_capability_demonstrated`.**
+
+This is the first non-zero exact-match result in the Sundog-ARC program. The
+solver clears the pre-registered non-trivial floor: at least 2 distinct held-out
+tasks solved exactly on both gated lanes.
+
+| lane | instances | distinct tasks solved | exact-instance rate |
+| --- | ---: | ---: | ---: |
+| `test_lodo` | 259 | 2 | 0.027 |
+| `pttest` | 77 | 2 | 0.026 |
+
+Auditable gated solves:
+
+- `be94b721` via `extract_largest_component`;
+- `f25fbde4` via `crop_bbox >> scale`.
+
+Diagnostic validation solves:
+
+- `48131b3c` via `tile >> color_rule(relative_palette_rank, full)`;
+- `b94a9452` via `crop_bbox >> color_rule(relative_palette_rank, full)`.
+
+Three of the four solved programs are depth-2 compositions, so the composition
+stage did real work. Program selection used train-pair consistency over all
+conditioning pairs and never used `signature_palette` geometry.
+
+Verdict impact: **capability demonstrated, not sufficiency demonstrated**. The
+four Phase 3E certificate verdicts and seven full-grid-control floors stand.
+Branch E shows that deterministic search over a frozen primitive library can
+solve a modest number of held-out public-training tasks where learned decoder
+families floored at zero. It is not an ARC solve, public-evaluation/Kaggle claim,
+or Blackwell-sufficiency proof. A Branch E v2 may admit the deferred intricate
+mask families, morphology cross-products, and deeper composition under its own
+append-only spec.
