@@ -31,8 +31,9 @@ code, experiments, prior theorem materials, and application bridges.
 - [Proof artifacts index](proof/README.md): current proof-track artifacts,
   including the Phase 1 LQG draft, Phase 2 finite-MDP proof, Phase 3 boundary
   theorem, Phase 4 three-body spec, Bayesian-floor buildout, Phase 6
-  lambda-control spec, and the Navier-Stokes C1 lock synthesis and kNN
-  convergence check.
+  lambda-control spec, and the Navier-Stokes C1 lock synthesis, kNN
+  convergence check, twin-state certificate, and regime-generality design
+  notes.
 - [Bayesian floor profile template](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md):
   reusable profile contract for installing same-observation Bayesian floors
   across workbenches without reinventing the audit shape.
@@ -107,11 +108,17 @@ underlying public problems.
 - [Riemann bounded-null synthesis](riemann/RIEMANN_BOUNDED_NULL_SYNTHESIS.md):
   capstone readout for the three-lane null; shortest artifact for external
   sanity review.
+- [Riemann external-review packet](riemann/EXTERNAL_REVIEW_PACKET.md): minimal
+  sanity-check packet and questions for the current review-gated bounded-null
+  result.
 - [Navier-Stokes ledger](SUNDOG_V_NAVIERSTOKES.md): Clay Millennium PDE coupling
   held to determining-mode / Kolmogorov-flow cell sets, vacuity gates, and
   proof-track receipts; no Navier-Stokes solution claimed.
 - [Navier-Stokes lit-pass memo](NAVIERSTOKES_LITPASS_MEMO.md): prior-art spine
   and candidate ranking for the NSE lane.
+- [Navier-Stokes C1 portable-objective design](proof/PDE_C1_REGIME_GENERALITY_v1.md):
+  sign-off proposal after the `G = 300` regime-generality attempt hit objective
+  vacuity rather than a fiber-locality verdict.
 - [P-vs-NP verification ledger](SUNDOG_V_P_V_NP.md): bounded
   alignment-verification bridge asking whether compact signatures can certify
   named operating envelopes more cheaply than safe policies can be found.
@@ -119,11 +126,19 @@ underlying public problems.
   promise-bounded verifier scaffolding.
 - [P-vs-NP project folder](pvnp/README.md): Phase 1 toy-verifier slates,
   receipts, quarantines, and result conventions.
+- [P-vs-NP receipt index](pvnp/receipts/README.md): v0-v5 receipt trail,
+  including the current v5 provisional cost-adjudication hold.
 - [Capset ledger](SUNDOG_V_CAPSET.md): hard-math coupling precedent around the
   OpenAI unit-distance / cap-set disproof context; evaluator front plus
   substrate-analogue horizon.
 - [ARC-AGI roadmap](SUNDOG_V_ARC.md): abstraction-coupling trial promoted from
   the Gravity ledger, with a Phase 0 preregistration lane under `prereg/arc/`.
+- [ARC-AGI preregistration folder](prereg/arc/README.md): task registers,
+  decoder floors, Branch D variants, Phase 3E fiber certificates, and the
+  current relative-locality execution hold.
+- [ARC Phase 3E relative-locality spec](prereg/arc/PHASE3E_RELATIVE_LOCALITY_CERTIFICATE_SPEC.md):
+  rank-neighbor certificate proposal after absolute fibers stayed sparse in the
+  expanded 108-task register.
 - [Gravity ledger](SUNDOG_V_GRAVITY.md): highest-ambition staging pattern and
   candidate source ledger for Goodhart / partial-observability trials.
 - [Mesa-optimization ledger](SUNDOG_V_MESA.md): high-stakes alignment substrate

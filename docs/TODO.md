@@ -1,6 +1,6 @@
 # Sundog Active TODO
 
-Last assembled: 2026-05-18.
+Last assembled: 2026-05-29.
 
 This is the operator queue for outstanding roadmap work, experiment gates, and
 blockers that were getting scattered across docs, anniversary notes, and public
@@ -193,38 +193,183 @@ Sources:
 [`threebody/PHASE15_RESULTS.md`](threebody/PHASE15_RESULTS.md),
 [`threebody/PHASE15B_RESULTS.md`](threebody/PHASE15B_RESULTS.md),
 [`threebody/PHASE15C_SPEC.md`](threebody/PHASE15C_SPEC.md),
+[`threebody/PHASE15C_RESULTS.md`](threebody/PHASE15C_RESULTS.md),
 [`../copilot_test_readme.md`](../copilot_test_readme.md).
 
-Status: `design-blocked`, active.
+Status: `compute-blocked`, active.
 
 Current state:
 
 Phase 15 full lock is complete and landed as **Fail-Magnitude**. Phase 15B's
 1,728-trial normalizer lock is complete and landed as **Mixed / Partial
 Diagnostic**: denominator-floor collapse is real and near-universal, but it does
-not explain the Phase 15 magnitude miss. The next registered mechanism test is
-Phase 15C, a multi-step counterfactual horizon audit over
-`N in {4,8,16,32}`.
+not explain the Phase 15 magnitude miss. Phase 15C's multi-step counterfactual
+horizon audit is now implemented and smoke-passed. Operator sign-off landed
+2026-05-29, and the 12-shard lock is running in waves; as of
+[`threebody/PHASE15C_RESULTS.md`](threebody/PHASE15C_RESULTS.md), 6 / 12 shards
+are logged.
 
 Blocker:
 
-Phase 15C has a spec but no runner implementation yet. The multi-step audit
-must be additive, behind an explicit flag, and must not retune the controller or
-revise the Phase 15 verdict.
+The binding read is still incomplete. The interim trial-pooled note is not a
+branch read because the candidate-split readback has to wait for all 12 shards.
+The audit remains additive and must not retune the controller or revise the
+Phase 15 verdict.
 
 Next actions:
 
-1. Add additive multi-step counterfactual fields in
-   `public/js/threebody-core.mjs` for horizons `4,8,16,32`.
-2. Add `npm run threebody:phase15c:multistep-smoke` and
-   `npm run threebody:phase15c:multistep` with output directories named in the
-   spec.
-3. Run only the capped smoke inline if it stays under the repo's ~10-minute
-   rule; record wall-clock and per-trial/per-cell rate in the results note.
-4. Stage the lock command, expected wall-clock, output path, and readback table
-   before running if the estimate exceeds the inline rule.
+1. Finish the remaining six shards and append the shard run log.
+2. Aggregate the candidate-split readback across all 12 shard directories.
+3. Read the candidate-envelope horizon table before assigning any branch.
+4. Preserve the non-candidate pooled observations only as diagnostics.
 5. Keep Phase 15C interpretation separate from coarse-graining Phase 4 unless
    Phase 4 explicitly chooses this evidence path.
+
+## High-Stakes Math Loose Ends
+
+These are the active "hit a wall / waiting on review / do not accidentally
+promote" lanes opened during the late-May high-stakes generality push. They are
+tracked here so the math-ledger documents can stay precise without becoming the
+operator inbox.
+
+### Riemann Bounded-Null External Review
+
+Sources:
+[`SUNDOG_V_RIEMANN.md`](SUNDOG_V_RIEMANN.md),
+[`riemann/README.md`](riemann/README.md),
+[`riemann/RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](riemann/RIEMANN_BOUNDED_NULL_SYNTHESIS.md),
+[`riemann/EXTERNAL_REVIEW_PACKET.md`](riemann/EXTERNAL_REVIEW_PACKET.md),
+[`riemann/EXTERNAL_REVIEW_EMAIL_DRAFT.md`](riemann/EXTERNAL_REVIEW_EMAIL_DRAFT.md).
+
+Status: `operator-blocked`, review-gated.
+
+Current state:
+
+Three Riemann-adjacent lanes now have clean bounded-null receipts with distinct
+causes: Path-i Z2 parity, C1 explicit-formula/cell-set reading, and nonlinear
+S2 gap-pair reversibility. The synthesis explicitly says no structural-zero
+edge was found and no RH progress is claimed.
+
+Blocker:
+
+Public or promotional language is blocked on an external sanity check. The next
+step is not another probe unless the reviewer identifies a viable new lane.
+
+Next actions:
+
+1. Send the short review email using
+   [`riemann/EXTERNAL_REVIEW_EMAIL_DRAFT.md`](riemann/EXTERNAL_REVIEW_EMAIL_DRAFT.md).
+2. Attach or link only the bounded-null synthesis and external-review packet.
+3. Record the send date, reviewer category, and response disposition in the
+   Riemann folder or a dated receipt note.
+4. If the reviewer says the null is ordinary / unsurprising, close the public
+   surface as "bounded null, externally sanity-checked."
+5. If the reviewer points to a real mathematical opening, require a new
+   pre-registration before any new run or claim language.
+
+### Navier-Stokes C1 Regime-Generality Wall
+
+Sources:
+[`SUNDOG_V_NAVIERSTOKES.md`](SUNDOG_V_NAVIERSTOKES.md),
+[`proof/PDE_C1_LOCK_EXECUTION_SYNTHESIS.md`](proof/PDE_C1_LOCK_EXECUTION_SYNTHESIS.md),
+[`proof/PDE_C1_KNN_CONVERGENCE_CHECK.md`](proof/PDE_C1_KNN_CONVERGENCE_CHECK.md),
+[`proof/PDE_C1_TWIN_STATE_CERTIFICATE.md`](proof/PDE_C1_TWIN_STATE_CERTIFICATE.md),
+[`proof/PDE_C1_REGIME_GENERALITY_v0.md`](proof/PDE_C1_REGIME_GENERALITY_v0.md),
+[`proof/PDE_C1_REGIME_GENERALITY_v1.md`](proof/PDE_C1_REGIME_GENERALITY_v1.md).
+
+Status: `design-blocked`, high-stakes math.
+
+Current state:
+
+The v5 Kolmogorov cell has a tightly scoped Reading-2 regime-2 witness:
+control-sufficiency on fibers plus sampled-support twin-state non-injectivity.
+The first Grashof-axis generality attempt at `G = 300` deferred as objective
+vacuity, not as a fiber-locality failure.
+
+Blocker:
+
+[`proof/PDE_C1_REGIME_GENERALITY_v1.md`](proof/PDE_C1_REGIME_GENERALITY_v1.md)
+is a design proposal only. It needs sign-off on the portable objective, split
+sizes, and run order before any harness build or long run.
+
+Next actions:
+
+1. Decide the v1 open questions: 50k/50k split, `q = 0.70`, and build trigger.
+2. If signed off, implement `--objective portable-quantile` and the
+   `lock_v7_g200` / `lock_v7_g300` presets behind the new objective mode.
+3. Run only a smoke inline; stage the expected 25-40 minute verdict-bearing
+   runs as operator commands under the repo's long-run rule.
+4. Do not promote C1 beyond "one-cell, finite-Galerkin, sampled-support witness"
+   without external PDE review.
+
+### P-vs-NP Phase 1 v5 Cost Receipt
+
+Sources:
+[`SUNDOG_V_P_V_NP.md`](SUNDOG_V_P_V_NP.md),
+[`pvnp/README.md`](pvnp/README.md),
+[`pvnp/PHASE1_V5_SLATE.md`](pvnp/PHASE1_V5_SLATE.md),
+[`pvnp/receipts/README.md`](pvnp/receipts/README.md).
+
+Status: `operator-blocked`, cost-unadjudicated.
+
+Current state:
+
+Phase 1 v0-v5 produced a useful chain of verifier-quarantine receipts. v5 is
+provisional: safety-complete, cost-unadjudicated. The earlier stable cost claim
+was withdrawn after incompatible reruns and `environments.jsonl` hash drift.
+
+Blocker:
+
+The next move is not a Phase 2 escalation. v5 must be rerun twice on a quiescent
+machine, and determinism must be fixed first if the environment hash drifts.
+
+Next actions:
+
+1. Rerun v5 twice on a quiescent machine with the receipt's exact invocation.
+2. Compare `environments.jsonl` hashes and median-of-3 cost reports.
+3. If hashes drift, fix determinism before interpreting cost.
+4. If hashes hold, finalize or void the provisional v5 receipt.
+5. Open v6 or Phase 2 only after the v5 receipt is no longer provisional.
+
+### ARC Phase 3E Relative-Locality Hold
+
+Sources:
+[`SUNDOG_V_ARC.md`](SUNDOG_V_ARC.md),
+[`prereg/arc/README.md`](prereg/arc/README.md),
+[`prereg/arc/PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md`](prereg/arc/PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md),
+[`prereg/arc/PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md`](prereg/arc/PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md),
+[`prereg/arc/PHASE0_CONTEXT_EXPANSION_FOR_FIBERS_SPEC.md`](prereg/arc/PHASE0_CONTEXT_EXPANSION_FOR_FIBERS_SPEC.md),
+[`prereg/arc/PHASE3E_RELATIVE_LOCALITY_CERTIFICATE_SPEC.md`](prereg/arc/PHASE3E_RELATIVE_LOCALITY_CERTIFICATE_SPEC.md).
+
+Status: `design-blocked`, execution hold.
+
+Current state:
+
+The deterministic low-capacity ARC lanes have hit repeated full-grid exact-match
+floors across learner families and framings. The expanded Phase 3E oracle lane
+also found absolute-epsilon fibers still sparse and surfaced an oracle leakage
+regression on the 108-task register. The relative-locality spec asks a narrower
+rank-neighbor question without erasing those findings.
+
+Blocker:
+
+The relative-locality spec explicitly forbids execution until runner tooling,
+npm wiring, result ignore path, leak-check coverage, smoke fingerprint, and a
+freeze-marker amendment are filed together. Candidate tooling is present in the
+working tree (`docs/prereg/arc/phase3e_relative_locality_certificate.py`,
+`scripts/arc-phase3e-relative-locality-certificate.mjs`, plus package/result
+path wiring), but it is not a receipt and should be admitted and tracked with
+the freeze marker and smoke fingerprint before any run is treated as official.
+
+Next actions:
+
+1. Admit the runner in one freeze-marker change with npm wiring, result path,
+   leak checks, and smoke fingerprint.
+2. Run only the smoke inline if it stays under the ~10-minute rule.
+3. If the full relative-locality receipt is longer, stage the exact command and
+   readback path for the operator.
+4. Keep any positive language caveated as rank-local sketch coherence under a
+   leakage-caveated oracle, not a solver or sufficiency result.
 
 ## P2 Active Follow-Ups
 
