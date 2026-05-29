@@ -17,17 +17,19 @@ import {
   SIGNATURE_SCHEMA_V2,
   SIGNATURE_SCHEMA_V3,
   SIGNATURE_SCHEMA_V4,
+  SIGNATURE_SCHEMA_V5,
   TRANSFORM_VERSION_V1,
   TRANSFORM_VERSION_V2,
   TRANSFORM_VERSION_V3,
   TRANSFORM_VERSION_V4,
+  TRANSFORM_VERSION_V5,
 } from "./pvnp-phase1-signature-core.mjs";
 import { cacheKey, lookupOrCompute, recordPreIntegrityShortCircuit } from "./pvnp-phase1-cache.mjs";
 
 const SIGNATURE_SCHEMA = "pvnp-phase1-sigma-v0";
-const SOURCE_BOUND_SCHEMAS = new Set([SIGNATURE_SCHEMA_V1, SIGNATURE_SCHEMA_V2, SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4]);
-const SENSOR_DEMOTED_SCHEMAS = new Set([SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4]);
-const COVERAGE_REMOVED_SCHEMAS = new Set([SIGNATURE_SCHEMA_V2, SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4]);
+const SOURCE_BOUND_SCHEMAS = new Set([SIGNATURE_SCHEMA_V1, SIGNATURE_SCHEMA_V2, SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4, SIGNATURE_SCHEMA_V5]);
+const SENSOR_DEMOTED_SCHEMAS = new Set([SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4, SIGNATURE_SCHEMA_V5]);
+const COVERAGE_REMOVED_SCHEMAS = new Set([SIGNATURE_SCHEMA_V2, SIGNATURE_SCHEMA_V3, SIGNATURE_SCHEMA_V4, SIGNATURE_SCHEMA_V5]);
 const RECOMPUTED_FIELDS_CACHE = new Map();
 
 // v0 promise parameters (matches docs/pvnp/PHASE1_V0_SLATE.md and
@@ -71,7 +73,9 @@ function certificateIntegritySourceBound(sigma, expectedTraceId, traceCommitment
   let version;
   let expectedSchema;
   let expectedTransform;
-  if (sigma.schema === SIGNATURE_SCHEMA_V4) {
+  if (sigma.schema === SIGNATURE_SCHEMA_V5) {
+    version = "v5"; expectedSchema = SIGNATURE_SCHEMA_V5; expectedTransform = TRANSFORM_VERSION_V5;
+  } else if (sigma.schema === SIGNATURE_SCHEMA_V4) {
     version = "v4"; expectedSchema = SIGNATURE_SCHEMA_V4; expectedTransform = TRANSFORM_VERSION_V4;
   } else if (sigma.schema === SIGNATURE_SCHEMA_V3) {
     version = "v3"; expectedSchema = SIGNATURE_SCHEMA_V3; expectedTransform = TRANSFORM_VERSION_V3;
@@ -94,10 +98,10 @@ function certificateIntegritySourceBound(sigma, expectedTraceId, traceCommitment
     "trajectory_envelope", "margin_lower_bound",
     "cost_signature", "limitations",
   ];
-  const commonRequired = (version === "v3" || version === "v4")
+  const commonRequired = (version === "v3" || version === "v4" || version === "v5")
     ? [...commonRequiredBase, "sensor_diagnostics_v3"]
     : [...commonRequiredBase, "sensor_health_v1"];
-  const versionRequired = (version === "v4" || version === "v3" || version === "v2")
+  const versionRequired = (version === "v5" || version === "v4" || version === "v3" || version === "v2")
     ? ["invariance_checks_v2", "geometry_promise_signal_v2"]
     : ["coverage_digest", "invariance_checks_v1", "geometry_promise_signal"];
   const required = [...commonRequired, ...versionRequired];
@@ -106,31 +110,45 @@ function certificateIntegritySourceBound(sigma, expectedTraceId, traceCommitment
   }
   // From here on, any short-circuit return = the v4 "pre_integrity_short_circuit"
   // class: the verifier rejected the certificate before reaching the
-  // derived-fields cache. v4 cache_efficiency_report counts these separately
+  // derived-fields cache. cache_efficiency_report counts these separately
   // from cache misses so cache hit rate is computed on cache-eligible lookups
   // only.
-  const noteShortCircuit = () => {
-    if (cacheState) recordPreIntegrityShortCircuit(cacheState, stageLabel);
-  };
-  if (commitmentDuplicate) { noteShortCircuit(); return { ok: false, reason: "duplicate_trace_commitment" }; }
-  if (!traceCommitment) { noteShortCircuit(); return { ok: false, reason: "missing_trace_commitment" }; }
+  //
+  // v5 hot-path fix (PHASE1_V5_SLATE.md §Hot-Path Overhead Removal): the v4
+  // implementation allocated a `noteShortCircuit` closure on every verify()
+  // call (~74k allocations/run). v5 calls the module-level
+  // recordPreIntegrityShortCircuit() directly — no per-call allocation. The
+  // `hasCacheState` boolean is hoisted once so the guard is a cheap branch.
+  // Short-circuit semantics are byte-identical to v4.
+  const hasCacheState = cacheState !== null && cacheState !== undefined;
+  if (commitmentDuplicate) {
+    if (hasCacheState) recordPreIntegrityShortCircuit(cacheState, stageLabel);
+    return { ok: false, reason: "duplicate_trace_commitment" };
+  }
+  if (!traceCommitment) {
+    if (hasCacheState) recordPreIntegrityShortCircuit(cacheState, stageLabel);
+    return { ok: false, reason: "missing_trace_commitment" };
+  }
   if (traceCommitment.trace_id !== sigma.trace_id) {
-    noteShortCircuit();
+    if (hasCacheState) recordPreIntegrityShortCircuit(cacheState, stageLabel);
     return { ok: false, reason: "trace_commitment_mismatch" };
   }
   if (traceCommitment.source_hash !== sigma.source_hash) {
-    noteShortCircuit();
+    if (hasCacheState) recordPreIntegrityShortCircuit(cacheState, stageLabel);
     return { ok: false, reason: "source_hash_mismatch" };
   }
   if (sigma.transform_version !== expectedTransform) {
-    noteShortCircuit();
+    if (hasCacheState) recordPreIntegrityShortCircuit(cacheState, stageLabel);
     return { ok: false, reason: `stale_transform_version:${sigma.transform_version}` };
   }
   const payload = traceCommitment.source_payload;
-  if (!payload) { noteShortCircuit(); return { ok: false, reason: "missing_source_payload" }; }
+  if (!payload) {
+    if (hasCacheState) recordPreIntegrityShortCircuit(cacheState, stageLabel);
+    return { ok: false, reason: "missing_source_payload" };
+  }
   const sigmaFieldsHash = derivedFieldsHash(sigma, version);
   if (sigmaFieldsHash !== sigma.derived_fields_hash) {
-    noteShortCircuit();
+    if (hasCacheState) recordPreIntegrityShortCircuit(cacheState, stageLabel);
     return { ok: false, reason: "derived_field_hash_mismatch" };
   }
   const key = `${version}|${traceCommitment.source_hash}`;

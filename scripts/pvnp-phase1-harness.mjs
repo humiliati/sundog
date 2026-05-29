@@ -153,6 +153,7 @@ async function main() {
   runNode("scripts/pvnp-phase1-attackers.mjs", stageArgs, "stage 9: attackers (inversion + spoof)");
   runNode("scripts/pvnp-phase1-acceptance-sanity.mjs", stageArgs, "stage 9.5: acceptance-volume sanity (v3-only)");
   runNode("scripts/pvnp-phase1-costs.mjs", stageArgs, "stage 10: cost rollup");
+  runNode("scripts/pvnp-phase1-cost-median.mjs", stageArgs, "stage 10.5: cost median over 3 passes (v5-only)");
   runNode("scripts/pvnp-phase1-privilege-audit.mjs", stageArgs, "stage 11: privilege-leak audit");
   runNode("scripts/pvnp-phase1-falsifier-summary.mjs", stageArgs, "stage 12: falsifier summary");
 

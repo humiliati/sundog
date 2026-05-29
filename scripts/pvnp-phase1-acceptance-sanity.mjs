@@ -56,7 +56,7 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  if (version !== "v3" && version !== "v4") {
+  if (version !== "v3" && version !== "v4" && version !== "v5") {
     console.log(`acceptance-sanity is a v3+/v4+ artifact; skipping for ${version}`);
     return;
   }

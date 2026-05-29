@@ -55,13 +55,13 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4";
+  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4" || version === "v5";
   const isV2 = version === "v2";
   const isV3 = version === "v3";
-  const isV4 = version === "v4";
-  const sensorDemoted = isV3 || isV4;
-  const usesCache = isV3 || isV4;
-  const writesGeometryAudits = isV2 || isV3 || isV4;
+  const isV4 = version === "v4" || version === "v5";
+  const sensorDemoted = isV3 || isV4;  // isV4 now also covers v5
+  const usesCache = isV3 || isV4;  // isV4 now also covers v5
+  const writesGeometryAudits = isV2 || isV3 || isV4;  // isV4 now also covers v5
   await mkdir(outDir, { recursive: true });
 
   // v3 and v4 share a source-hash cache between verifier, ablation, and
