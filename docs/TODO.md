@@ -302,6 +302,39 @@ Next actions:
 4. Do not promote C1 beyond "one-cell, finite-Galerkin, sampled-support witness"
    without external PDE review.
 
+### Yang-Mills Phase 0 Handoff
+
+Sources:
+[`SUNDOG_V_YANG_MILLS.md`](SUNDOG_V_YANG_MILLS.md).
+
+Status: `design-blocked`, draft-handoff.
+
+Current state:
+
+The Yang-Mills lane is now a roadmap only. It proposes a finite-lattice,
+gauge-invariant certificate program influenced by the ARC relative-locality
+lesson: certify bounded invariant structure before attempting reconstruction
+or any continuum-facing claim.
+
+Blocker:
+
+No lit-pass, domain lock, pre-registration, source library, runner, or receipt
+exists. The lane must not be promoted as a Yang-Mills, mass-gap, confinement,
+or Clay-problem result.
+
+Next actions:
+
+1. Draft `docs/YANG_MILLS_LITPASS_MEMO.md`.
+2. Create `docs/prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md` with the
+   finite-lattice domain, observable labels, controls, and exact claim
+   boundary.
+3. Choose the first source library or imported ensemble path before writing
+   runner code.
+4. Register gauge-invariance, metadata-shortcut, raw-link, random-neighbor,
+   coupling-stratified, and label-permutation controls.
+5. Keep the gallery/card language at "draft finite-lattice certificate lane"
+   until Phase 0 exists.
+
 ### P-vs-NP Phase 1 v5 Cost Receipt
 
 Sources:

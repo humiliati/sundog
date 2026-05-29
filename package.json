@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "prepare": "node scripts/setup-githooks.mjs",
-    "prebuild": "node scripts/build-chat-index.mjs && node scripts/build-photometric-core-media.mjs && node scripts/build-balance-public-data.mjs && node scripts/build-mines-public-data.mjs && node scripts/build-mesa-public-data.mjs && node scripts/build-bayes-public-data.mjs && node scripts/build-mesa-public-media.mjs && node scripts/build-coarse-graining-public-media.mjs && node scripts/build-structural-boundary-data.mjs && node scripts/build-structural-boundary-svg.mjs",
+    "prebuild": "node scripts/build-chat-index.mjs && node scripts/build-photometric-core-media.mjs && node scripts/build-balance-public-data.mjs && node scripts/build-mines-public-data.mjs && node scripts/build-mesa-public-data.mjs && node scripts/build-bayes-public-data.mjs && node scripts/build-mesa-public-media.mjs && node scripts/build-coarse-graining-public-media.mjs && node scripts/build-structural-boundary-data.mjs && node scripts/build-structural-boundary-svg.mjs && node scripts/build-generality-public-data.mjs && node scripts/build-generality-svg.mjs",
     "chat:index": "node scripts/build-chat-index.mjs",
     "chat:eval:static": "npm run chat:index && node chat/eval/score_static_router.mjs",
     "chat:eval:wild": "node chat/eval/score_wild_probe.mjs",
@@ -33,6 +33,9 @@
     "structural:public-data": "node scripts/build-structural-boundary-data.mjs",
     "structural:boundary-svg": "node scripts/build-structural-boundary-svg.mjs",
     "structural:public-media": "npm run structural:public-data && npm run structural:boundary-svg",
+    "generality:public-data": "node scripts/build-generality-public-data.mjs",
+    "generality:svg": "node scripts/build-generality-svg.mjs",
+    "generality:public-media": "npm run generality:public-data && npm run generality:svg",
     "build": "vite build",
     "postbuild": "node scripts/copy-site-docs.mjs && node scripts/check-site-dist.mjs",
     "site:routes": "node scripts/check-public-routes.mjs",

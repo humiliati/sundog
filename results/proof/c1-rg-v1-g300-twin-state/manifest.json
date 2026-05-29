@@ -1,0 +1,142 @@
+{
+  "startedAt": "2026-05-29T15:42:57.554470+00:00",
+  "script": "scripts/pde_c1_kolmogorov_cell.py",
+  "spec": "docs/proof/PDE_C1_CELLSET_KOLMOGOROV.md",
+  "protocol": "docs/proof/PDE_C1_FIBER_PROTOCOL.md",
+  "config": {
+    "preset": "lock_v7_g300",
+    "grid_size": 32,
+    "n_modes": 16,
+    "k_signature": 3,
+    "forcing_wavenumber": 2,
+    "grashof": 300.0,
+    "forcing_amplitude": 1.0,
+    "viscosity": 0.05773502691896258,
+    "dt": 0.01,
+    "burnin_steps": 100000,
+    "sample_count": 50000,
+    "sample_interval_steps": 50,
+    "lookahead_steps": 500,
+    "n_min": 30,
+    "delta_action": 0.1,
+    "s_pos": 0.5,
+    "delta_proxy_min": 0.01,
+    "e_max_burnin_fraction": 1.0,
+    "random_seed": 20260528,
+    "integrator": "pseudo_spectral_vorticity_semi_implicit_euler",
+    "signature_dimension": 18,
+    "action_tiebreak": "no_op",
+    "adjudicator": "twin-state",
+    "k_neighbors": 30,
+    "delta_incompat": 0.01,
+    "twin_k_neighbors": 50,
+    "twin_delta_high_fraction": 0.05,
+    "twin_high_norm_floor": 1e-06,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "objective": "portable-quantile",
+    "objective_quantile": 0.7,
+    "calibration_sample_count": 50000,
+    "calibration_gap_steps": 5000
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32",
+    "cwd": "C:\\Users\\hughe\\Dev\\sundog"
+  },
+  "result": {
+    "verdict": "TWIN_STATE_CERTIFIED",
+    "verdict_label": "signature_near_high_mode_separated_twins",
+    "interpretable": true,
+    "n_samples": 50000,
+    "k_neighbors_effective": 50,
+    "epsilon_k_radius_threshold": 0.06642189017389008,
+    "delta_h": 0.011103242471802435,
+    "twin_delta_high_fraction": 0.05,
+    "twin_high_norm_floor": 1e-06,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "candidate_sample_count": 50000,
+    "candidate_sample_fraction": 1.0,
+    "candidate_pair_count_directed": 2450000,
+    "candidate_pair_count_unique": 1318748,
+    "witness_sample_count": 50000,
+    "witness_sample_fraction": 1.0,
+    "witness_fraction_of_candidates": 1.0,
+    "witness_pair_count_directed": 1699022,
+    "witness_pair_count_unique": 942834,
+    "max_candidate_high_distance": 0.03848489559385243,
+    "witness_high_distance_p50": 0.017289625955359864,
+    "witness_high_distance_p95": 0.02866859472200221,
+    "witness_signature_distance_p50": 0.03693782639389363,
+    "witness_signature_distance_p95": 0.05467775459773892,
+    "high_norm_median": 0.22206484943604868,
+    "high_norm_min": 0.21441611948070619,
+    "high_norm_max": 0.2330348874260355,
+    "no_op_count": 36561,
+    "damp_low_band_count": 13439,
+    "damp_fraction": 0.26878,
+    "s_pos": 0.5,
+    "high_norm_p05": 0.21527423811120688,
+    "high_norm_p50": 0.22206484943604868,
+    "high_norm_p95": 0.232137236194987,
+    "adjudicator": "twin-state",
+    "objective": "portable-quantile",
+    "objective_quantile": 0.7,
+    "calibration_sample_count": 50000,
+    "calibration_damp_fraction": 0.29994,
+    "e_max": 0.882373498854463,
+    "epsilon_k": 0.06642189017389008,
+    "h_k": 0.015655789653728595,
+    "burnin_energy_min": 0.7389714447748668,
+    "burnin_energy_max": 4.689083686387504,
+    "burnin_energy_mean": 1.0710320942200071,
+    "sample_energy_min": 0.7676635290364402,
+    "sample_energy_max": 0.8823924206501261,
+    "sample_energy_mean": 0.8294014279312012,
+    "low_modes": [
+      {
+        "kx": 0,
+        "ky": 1
+      },
+      {
+        "kx": 1,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 1
+      },
+      {
+        "kx": 0,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 1
+      },
+      {
+        "kx": -2,
+        "ky": 1
+      }
+    ],
+    "high_mode_count": 211,
+    "high_mode_dimension": 422,
+    "elapsed_seconds": 2491.09166570002,
+    "total_steps": 5105900,
+    "steps_per_second": 2049.6636345598463
+  }
+}

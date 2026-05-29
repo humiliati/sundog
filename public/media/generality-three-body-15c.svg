@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 660" width="900" height="660" role="img" aria-labelledby="title desc">
+  <title id="title">Three-Body 15C generality card</title>
+  <desc id="desc">Generated Sundog generality chart.</desc>
+  <rect width="900" height="660" fill="#F8FBFC"/>
+  
+    <rect x="40" y="40" width="820" height="580" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
+    <rect x="40" y="40" width="10" height="580" rx="5" fill="#1A3A52"/>
+    <g>
+    <rect x="686" y="70" width="154" height="30" rx="8" fill="#EAF1FA" stroke="#1A3A52" stroke-width="1"/>
+    <text x="700" y="90" fill="#1A3A52" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">RUNNING</text>
+  </g>
+    <text x="72" y="92" fill="#C9972F" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="850" letter-spacing="0.08em">WORKBENCH-DIAGNOSTIC</text>
+    <text x="72" y="132" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="850" text-anchor="start" letter-spacing="0"><tspan x="72" dy="0">Multi-step counterfactual horizon</tspan><tspan x="72" dy="38">audit</tspan></text>
+    <text x="72" y="224" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="72" dy="0">The audit is implemented and smoke-passed; 6 of 12 lock shards are logged,</tspan><tspan x="72" dy="23">but no candidate-split branch read exists yet.</tspan></text>
+    <text x="72" y="324" fill="#1A3A52" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="850" letter-spacing="0.06em">NEXT GATE</text>
+    <text x="72" y="350" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="72" dy="0">Finish the remaining shards, aggregate the candidate-split readback, and keep pooled</tspan><tspan x="72" dy="20">observations diagnostic only.</tspan></text>
+    <g>
+        <rect x="72" y="474" width="164" height="86" rx="8" fill="#EAF1FA" stroke="#1A3A52" stroke-width="1"/>
+        <text x="90" y="510" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="850" letter-spacing="0">6</text>
+        <text x="90" y="534" fill="#1A3A52" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="800" text-anchor="start" letter-spacing="0"><tspan x="90" dy="0">shards logged (of</tspan><tspan x="90" dy="14">12)</tspan></text>
+      </g><g>
+        <rect x="270" y="474" width="164" height="86" rx="8" fill="#EAF1FA" stroke="#1A3A52" stroke-width="1"/>
+        <text x="288" y="510" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="850" letter-spacing="0">4</text>
+        <text x="288" y="534" fill="#1A3A52" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="800" text-anchor="start" letter-spacing="0"><tspan x="288" dy="0">horizons (N</tspan><tspan x="288" dy="14">values)</tspan></text>
+      </g><g>
+        <rect x="468" y="474" width="164" height="86" rx="8" fill="#EAF1FA" stroke="#1A3A52" stroke-width="1"/>
+        <text x="486" y="510" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="850" letter-spacing="0">0</text>
+        <text x="486" y="534" fill="#1A3A52" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="800" text-anchor="start" letter-spacing="0"><tspan x="486" dy="0">branch reads</tspan><tspan x="486" dy="14">(reads)</tspan></text>
+      </g>
+  
+</svg>

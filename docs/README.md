@@ -119,6 +119,9 @@ underlying public problems.
 - [Navier-Stokes C1 portable-objective design](proof/PDE_C1_REGIME_GENERALITY_v1.md):
   sign-off proposal after the `G = 300` regime-generality attempt hit objective
   vacuity rather than a fiber-locality verdict.
+- [Yang-Mills handoff roadmap](SUNDOG_V_YANG_MILLS.md): draft finite-lattice
+  gauge-invariant certificate lane. No lit-pass, preregistration, runner,
+  receipt, mass-gap claim, or Clay-problem claim is live.
 - [P-vs-NP verification ledger](SUNDOG_V_P_V_NP.md): bounded
   alignment-verification bridge asking whether compact signatures can certify
   named operating envelopes more cheaply than safe policies can be found.
