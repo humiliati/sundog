@@ -218,10 +218,21 @@ pre-registers the sampled-support non-injectivity bridge: capture
 `Q_K`, query signature-near `Phi_K` neighbours, and certify if a
 positive-mass fraction of near-signature pairs are high-mode separated.
 The harness path is built as `--adjudicator twin-state` and a smoke
-receipt exists at `results/proof/c1-twin-state-smoke/`; the
-verdict-bearing v5 lock is staged but not run inline under the
-~10-minute rule. Proxy faithfulness and external review remain open
-firm-up items.
+receipt exists at `results/proof/c1-twin-state-smoke/`. **v5 run done
+2026-05-28 → `TWIN_STATE_CERTIFIED`** (`results/proof/c1-kolmogorov-v5-twin-state/`):
+all 50,000 sampled states have a signature-near twin (same `ε_K`) with
+high-mode separation above `δ_H = 0.0117` (set by real median ‖Q_K‖ =
+0.23, not the floor); 693,795 unique witness pairs vs the 100 gate.
+`Phi_K` is non-injective on the sampled SRB support — the half §4.1 had
+only argued on `B_abs`. Run at the **same `ε_K`** as the
+control-sufficiency read, so the two compose into a **complete
+Reading-2 regime-2 witness at the v5 cell**: within `ε_K` signature-balls
+the high modes vary (certified) while the proxy action stays constant up
+to measure-zero (kNN POSITIVE). This was the expected-easy half (chaotic
+attractor, 422-dim high-mode complement → near-automatic); value is in
+measuring it on the support. Scoped: finite-Galerkin / sampled-support /
+numerical (not an infinite-dim NSE theorem); one cell. Proxy faithfulness
+and external review remain open firm-up items; **C1 stays unpromoted.**
 
 Criterion (b) is closed at the *procedure-and-execution* level (v0–v5
 lock cycles + v4 fall-back + the kNN run and its convergence check all
