@@ -1,0 +1,31 @@
+{
+  "binFreezeTimestampOk": true,
+  "binDegenerateBetas": [],
+  "withinPrimary5": 0.3104166666666665,
+  "withinCtrlRand5": 0.2999999999999997,
+  "withinCtrlMeta5": 0.31458333333333316,
+  "withinCtrlRaw5": 0.29791666666666644,
+  "withinCtrlPerm5": 0.2791666666666664,
+  "withinCtrlGaugeRand5": 0.3104166666666665,
+  "acrossPrimary5": 0.425,
+  "acrossCtrlRandStrat5": 0.3541666666666665,
+  "gaugeSignatureResidualMax": 4.999611835643236e-13,
+  "wallClockSeconds": 6.763065500000001,
+  "withinPrimaryMinusRand5": 0.010416666666666796,
+  "withinPrimaryMinusMeta5": -0.004166666666666652,
+  "withinPrimaryMinusRaw5": 0.012500000000000067,
+  "gaugeRandPurityDiff": 0,
+  "acrossPrimaryMinusRandStrat5": 0.07083333333333347,
+  "thresholds": {
+    "primaryWithinMeanBinPurity5Min": 0.5,
+    "primaryMinusCtrlRandMin": 0.1,
+    "primaryMinusCtrlMetaMin": 0.1,
+    "primaryMinusCtrlRawMin": 0.1,
+    "ctrlPermChanceTolerance": 0.05,
+    "gaugeRandPurityDiffMax": 1e-12,
+    "acrossPrimaryMinusRandStratMin": 0.05,
+    "aggregationWallClockSecondsMax": 600
+  },
+  "branch": "Z graph_contamination",
+  "reason": "CTRL_PERM purity 0.2791666666666664 differs from chance 0.3333333333333333"
+}
