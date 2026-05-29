@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3E relative-locality certificate verdict: `phase3e_relative_locality_negative`** (pinned `f7850f0`). On the 108-task expanded register, `signature_palette_context` rank-nearest neighbors show a weak-but-unusable sketch signal: statistically above prior-stratified random (p=0.0002) yet tied with metadata (Δ +0.006), below raw_grid (Δ -0.036), sign-unstable across k, and with a 28.5% hard-incompatibility rate (>25% gate). Combined with the empty absolute-epsilon fibers and the oracle leakage regression, the Phase 3E locality program finds no certifiable usable locality for the signature representation. All absolute-epsilon receipts remain binding.
+Status: **Branch E (deterministic program search) verdict: `branch_e_capability_demonstrated`** (pinned `6886074`). On the 108-task expanded register, a deterministic typed search over registered transformation primitives — selecting programs by train-pair consistency, never by signature geometry — cleared the established non-trivial floor (≥2 distinct held-out tasks solved exactly on both `test_lodo` and `pttest`) that every prior decoder/learner family floored on at zero. The result is **modest** (2 distinct tasks/gated lane, ~3% instance rate; structurally simple tasks via component-extraction, crop+scale, tile/crop+recolor) and is **not** a Blackwell-sufficiency proof, an ARC solve, or any eval/Kaggle claim. The four Phase 3E certificate verdicts and the seven full-grid-control floors stand; the certificates are cited as a no-collision / no-locality boundary, not a geometric selector.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -257,6 +257,26 @@ Checked **2026-05-28** against:
   **strengthens** the absolute-sparsity result: no usable fiber or rank-local
   locality for `signature_palette` on the expanded register (and raw_grid edges it
   on both rank-local metrics).
+- [`PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md`](PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md)
+  -- Branch E, the first **solver** lane (capability grounds). A deterministic
+  typed search composes registered transformation primitives (structural
+  transforms + the imported Branch D color-rule bank + simple deterministic mask
+  families + candidate-combinator candidates), admitting only programs consistent
+  with **all** of a task's conditioning train pairs (selection is train-pair
+  consistency, never signature geometry); the four Phase 3E certificates are cited
+  as a no-collision / no-locality **boundary**, not a geometric-selector
+  motivation. **Binding verdict (Amendment B, pinned `6886074`, runnerSha256
+  `036EA6A9`, gitDirty=false, U_primary=336, ~2m38s, deterministic):
+  `branch_e_capability_demonstrated`.** It cleared the established non-trivial
+  floor — ≥2 distinct held-out tasks solved exactly on both `test_lodo` and
+  `pttest` (`be94b721` via `extract_largest_component`, `f25fbde4` via
+  `crop_bbox>>scale`; validation diagnostic also 2) — that every prior
+  decoder/learner family floored on at zero. The result is **modest** (2 distinct
+  tasks/gated lane, ~3% instance rate; 3 of 4 solves are depth-2 compositions) and
+  is explicitly **not** a Blackwell-sufficiency proof, an ARC solve, or any
+  eval/Kaggle claim; the certificate verdicts and seven floors stand. A v2 may
+  admit the deferred intricate mask families + deeper composition to test whether
+  the rate rises above this floor-clearing baseline.
 - [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) -- stub pattern for
   future Phase 1+ evaluation-blind register rows (no manual grid inspection,
   selection by preregistered metadata/hash rule).
@@ -659,6 +679,21 @@ Avoid:
   (p=0.0002) is a positive result -- the positive branch additionally requires
   Δ-vs-metadata >= 0.10, Δ-vs-uniform >= 0.15, and hard-incompat <= 0.10, none of
   which hold; a small significant-but-unusable signal is the negative reading;
+- any claim that the Branch E `branch_e_capability_demonstrated` verdict means
+  "Sundog solves ARC", proves Blackwell `signature_palette` sufficiency, validates
+  the 5D subspace, or says anything about the public-evaluation split or a Kaggle
+  entry -- it is a **modest capability** result on held-out **public-training**
+  lanes (2 distinct tasks per gated lane, ~3% instance rate, structurally simple
+  tasks) from a deterministic train-consistency program search; it does not change
+  the four Phase 3E certificate verdicts or the seven full-grid-control floors,
+  and Phase 6 still gates all eval/Kaggle work;
+- any claim that Branch E's positive result reverses the seven floors or the
+  certificate program -- those characterized *learning/representation* families
+  and signature fiber geometry; Branch E is an independent *program-search
+  capability* probe that selects by train-pair consistency (not signature
+  geometry) and rests on the certificates' no-collision / no-locality boundary;
+  searching a fixed library clearing a floor that learning-from-scratch floored on
+  is the expected come-apart, not a contradiction;
 - any "color-rule variant flipped the bottleneck -> mask is the new
   limit" claim that omits the still-floor verdict -- the color-rule
   variant achieved a diagnostic improvement (palette doubled,
