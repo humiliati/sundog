@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3D MASK-TARGET VARIANT BINDING RECEIPT FILED -- 7TH FLOOR; BRANCH E IS THE LIVE FRONTIER**.
+Status: **Phase 3E SIGNATURE-FIBER CERTIFICATE SPEC FILED -- EXECUTION HOLD**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -364,6 +364,17 @@ Checked **2026-05-28** against:
   13.8%, `conditioning_bbox_fill` 9.8%, then 5 others. With both the mask and
   color stages now deterministic banks and the floor holding at both, Branch E
   is the live frontier.
+- [`PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md`](PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md)
+  -- Phase 3E certificate spec. It freezes the first Branch E question:
+  whether registered ARC contexts contain exact or near
+  `signature_palette_context` fiber collisions with incompatible required
+  behavior. This is not a solver lane and does not train a decoder. It uses the
+  primary context universe `test_lodo union pttest`, reports the full
+  validation+test universe diagnostically, and branches into exact-fiber
+  collision, near-fiber incompatibility, fiber-locality positive, sparse-fiber
+  deferral, or label-vacuity deferral. **No binding receipt exists yet.
+  Execution remains held** until runner tooling, npm wiring, result ignore path,
+  leak-check coverage, and a freeze-marker amendment are committed together.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -459,8 +470,11 @@ sufficiency support adjudication is on file. Public copy may say:
   prompting of a frozen large LM) is the live frontier**; a
   selection-targeted within-framing variant (a joint mask+color
   selector, since both banks fail more by selection than coverage)
-  remains the smaller alternative. Any reopen needs its own
-  pre-registered spec, arena gate, and verdict-amendment discipline.
+  remains the smaller alternative. Phase 3E now has its first
+  pre-registered spec: a signature-fiber certificate that asks whether
+  the frozen `signature_palette` context representation itself has exact
+  or near collisions with incompatible required behavior. No Phase 3E
+  receipt exists yet.
 
 Avoid:
 
@@ -473,6 +487,9 @@ Avoid:
   the seven filed binding receipts (V1, V2, compact-7, Phase 3A,
   Phase 3D base, Phase 3D color-rule variant, Phase 3D mask-target
   variant);
+- any claim that Phase 3E has found a signature-fiber collision, ruled one out,
+  licensed a Branch E solver, or adjudicated signature sufficiency before a
+  binding Phase 3E receipt exists;
 - any "color-rule variant flipped the bottleneck -> mask is the new
   limit" claim that omits the still-floor verdict -- the color-rule
   variant achieved a diagnostic improvement (palette doubled,
@@ -506,11 +523,11 @@ Avoid:
   pixel / minority recall in the documentation-only per-arm table
   is unlicensed-for-adjudication data, not a support signal;
 - claiming any single Phase 3 receipt closes the sufficiency
-  question -- the six floors together close PHASE3_5_REFLECTION
+  question -- the seven floors together close PHASE3_5_REFLECTION
   Branches A, B, C, and D in the filed learner families and
   framings, but the sufficiency question remains open under the
-  filed mask-targeted Branch D variant, a later selector/rule-bank
-  variant, or Branch E (different framing entirely);
+  filed Phase 3E signature-fiber certificate, a later Branch E solver,
+  or a smaller selection-targeted Branch D variant;
 - any spatial_transform or local_completion claim from the compact-7
   receipt -- those priors are not represented in the compact-signal
   slice;

@@ -485,3 +485,38 @@ conditioning-derived mask-candidate bank.
 
 This addendum does not admit execution. The mask-targeted variant remains in
 execution hold until runner tooling and a freeze-marker amendment are filed.
+
+## Post-Mask-Target Variant Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+The `structured_edit_mask_target_v3` binding receipt is now filed. Its verdict
+is **`branch_d_mask_target_full_grid_floor`**: the raw-grid mask-targeted arm
+did not open the non-baseline exact arena, so no
+`signature_palette_edit_mask_v3` vs. `raw_grid_edit_mask_v3` sufficiency
+comparison is licensed in this variant.
+
+This closes the second Branch D bottleneck variant in its filed framing and
+marks the seventh Phase 3 full-grid-control floor. The result is a clean
+within-framing negative: replacing the learned mask MLP with a deterministic
+mask-candidate bank did not lift the mask bottleneck. Mask-stage labels still
+dominated, and the inherited learned mask candidate still won a non-trivial
+share of selections.
+
+With both structured-edit bottlenecks probed by deterministic banks and both
+floored, Branch E is now the live frontier. A smaller selection-targeted Branch
+D variant remains possible, but it would still be within the same baseline +
+mask + color composition.
+
+## Phase 3E Signature-Fiber Certificate Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+`PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md` is now filed. It asks whether
+registered ARC contexts contain exact or near `signature_palette` context-fiber
+collisions with incompatible required behavior. This is a certificate lane, not
+a decoder lane: it can find a finite-context insufficiency witness or license a
+later Branch E program-selector runner, but it does not train a solver.
+
+This addendum admits no execution. Phase 3E remains in execution hold until
+runner tooling and a freeze-marker amendment are filed.
