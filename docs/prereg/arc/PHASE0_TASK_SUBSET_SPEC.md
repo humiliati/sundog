@@ -278,3 +278,28 @@ must file `P0_CONTEXT_EXPANSION_REGISTER.csv`,
 `P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv`, audit artifacts, leak-check
 coverage, and a freeze-marker amendment before any expanded Phase 3E v2
 certificate rerun is admitted.
+
+**2026-05-29 (PT) -- Jeffery Hughes Jr.** Phase 0 fiber context expansion
+admitted and expanded certificate filed. The expansion was executed under the
+spec above:
+
+- commit `f9a1dd9`: freeze marker, candidate-ordering script, `--split-mode`,
+  inspection renderer, Amendment A;
+- commit `a0f1a4b`: inspection + register assembly,
+  **`phase0_fiber_expansion_admit`**;
+- commit `fa079b9`: expanded Phase 3E v2 certificate,
+  **`phase3e_v2_expanded_oracle_regression`**.
+
+The binding expanded register contains 108 public-training tasks, exactly 18 per
+prior (36 original + 72 new), selected from the frozen queue with 0
+hard-exclusions, 0 discipline tripwires, and no cross-prior rebalancing. The
+expanded certificate did not densify the fibers enough to adjudicate locality:
+`U_primary` increased 25 -> 336, but min cross-task distance moved only
+0.207 -> 0.196, with 0 near pairs and 0% fidelity at `epsilon_primary = 0.05`.
+
+The certificate branch is nevertheless `phase3e_v2_expanded_oracle_regression`
+because the anti-solver-leakage gate fails on the expanded register:
+`core_sketch_exact_lookup_fraction = 0.351 > 0.20`. Anti-vacuity and
+anti-prior-laundering still pass. Verdict impact: the expanded register is
+filed, but it does not promote or block signature sufficiency or Branch E. The
+36-task Phase 3E v2 receipt and the seven full-grid floors stand unchanged.

@@ -595,3 +595,25 @@ target of 108 public-training tasks (18 per prior). It admits no execution: the
 original 36-task register remains binding until a future expansion receipt files
 the candidate queue, manual inspection log, expanded register, leak-check
 coverage, and freeze-marker amendment.
+
+## Post-Context-Expansion Certificate Addendum
+
+Filed: **2026-05-29 (PT)**.
+
+The Phase 0 context expansion and expanded Phase 3E v2 certificate are now
+filed. The expansion receipt returned **`phase0_fiber_expansion_admit`**: the
+register was expanded to 108 public-training tasks, exactly 18 per prior, from a
+frozen candidate queue with 0 hard-exclusions and 0 discipline tripwires.
+
+The expanded certificate returned **`phase3e_v2_expanded_oracle_regression`**.
+`U_primary` increased from 25 to 336, but the v2 oracle's anti-solver-leakage
+gate failed on the larger register: `core_sketch_exact_lookup_fraction` rose
+from 0.04 to 0.351 against the frozen 0.20 threshold. Vacuity and
+prior-laundering still passed.
+
+The fiber geometry remained sparse: minimum cross-task distance contracted only
+from 0.207 to 0.196, with 0 near pairs and 0% fidelity-passing neighborhoods at
+`epsilon_primary = 0.05`. The expanded receipt therefore neither promotes nor
+blocks signature sufficiency or a Branch E solver. It falsifies the assumptions
+that the v2 anti-leakage gate transfers unchanged to a larger register and that
+a 3x balanced expansion populates the absolute-epsilon fibers.
