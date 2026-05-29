@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3D EDIT-COLOR-RULE VARIANT SPEC FILED; EXECUTION HOLD**.
+Status: **Phase 3D EDIT-COLOR-RULE VARIANT BINDING RECEIPT FILED -- BOTTLENECK SHIFTED, FLOOR HOLDS**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -118,14 +118,46 @@ family, cross-task edit-color MLP, richer mask learner) or a new
 Branch E spec (e.g., generative program search, test-time LM prompting)
 with its own arena gate and verdict-amendment discipline.
 
-The first bottleneck-targeted Branch D variant is now filed at
+The first bottleneck-targeted Branch D variant is filed at
 [`PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md`](PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md).
-It freezes `structured_edit_color_rule_v2`, which changes only the edit-color
-component of `structured_edit_residual_v1`: the learned color MLP is replaced by
-a deterministic conditioning-derived color-rule bank. The baseline picker,
-edit-mask learner, splits, seed slate, and arena discipline remain inherited.
-Status: spec only; execution hold pending runner tooling and freeze-marker
-amendment.
+`structured_edit_color_rule_v2` replaces only the failed edit-color MLP
+with a deterministic conditioning-derived color-rule bank
+(`edit_color_rule_bank_v1`) across 10 frozen rule families with LOCO
+scoring + spec'd tie-break chain + optional top-3 ensemble. The baseline
+picker, edit-mask learner, splits, seed slate, and arena discipline are
+inherited unchanged from `structured_edit_residual_v1`. The 20-shard
+binding receipt (4 arms x 5 seeds, ~1h 6m GPU parallel wall via the
+inherited shard+merge protocol with `--allow-mixed-commits` operator
+override -- 3 distinct gitCommits, `runnerIdenticalAcrossCommits=true`,
+no WARN) returned verdict **`branch_d_color_rule_full_grid_floor`**:
+zero non-baseline exact tasks on both held-out lanes for every arm.
+
+But the variant **achieved its design goal at the diagnostic level**:
+palette_exact roughly doubled vs the Phase 3D base (pttest 0.667-0.833
+vs 0.333; test_lodo 0.632 vs 0.316), and the `edit_color_failure` mode
+named by the Phase 3D base receipt was **eliminated** as a quarantine
+label. The dominant failure shifted from edit-color (26% in Phase 3D
+base) to **edit_mask_failure (41%)**, with the new diagnostic pair
+`color_rule_selection_failure` (16%, oracle >= 0.50 but selected < 0.50)
+vs `color_rule_bank_coverage_failure` (9%, oracle < 0.50) firing in a
+1.8:1 ratio and `rule_selection_regret_mean` of 0.30-0.35 indicating
+~30 percentage points of edit-color accuracy locked up in selector
+improvements. The variant thus provides the first **quantitative
+bottleneck decomposition** in Phase 3 (41% mask / 16% selection regret
+/ 9% bank coverage), telling the next surgical move with unusual
+specificity: mask-extension variant (biggest leverage), selection-
+refinement variant (large locked accuracy), or rule-bank extension
+(smallest expected payoff).
+
+Six Phase 3 binding full-grid-control receipts -- V1, V2, compact-7,
+Phase 3A, Phase 3D base, and Phase 3D variant -- now agree on the
+held-out exact-grid floor across two task distributions, two learner
+families (transformer + per-task MLP), two output framings (whole-grid
++ structured edit residual), and two color-prediction approaches
+(learned MLP + deterministic rule bank). Remaining admissible Phase 3
+reopens require either another Branch D variant targeting the mask
+or selector explicitly, or a Branch E spec (e.g., generative program
+search, test-time LM prompting).
 
 ## Official Anchors
 
@@ -256,8 +288,29 @@ Checked **2026-05-28** against:
   `structured_edit_color_rule_v2` / `edit_color_rule_bank_v1`, keeps the
   baseline picker and edit-mask learner inherited from
   `structured_edit_residual_v1`, and replaces only the edit-color MLP with a
-  deterministic color-rule bank selected from conditioning residuals. Status:
-  spec only; execution hold.
+  deterministic color-rule bank (10 frozen families; LOCO scoring; spec'd
+  tie-break chain; optional top-3 ensemble when 3+ candidates tie within
+  0.05 conditioning accuracy). **20-shard binding receipt filed** under
+  `mergeGitCommit 8177A578` (3 distinct gitCommits via
+  `--allow-mixed-commits` operator override; `runnerIdenticalAcrossCommits=
+  true` so no WARN; 9 dirty + 11 clean shards; ~1h 6m parallel GPU wall =
+  2.89x sharded speedup). Selected seeds: raw=`20260528`, sig_palette=
+  `20260528`, sig_only=`20260528`, metadata=`20260531`. Verdict:
+  **`branch_d_color_rule_full_grid_floor`** (zero non-baseline exact tasks
+  on any held-out lane). But: **the variant achieved its diagnostic design
+  goal** -- palette_exact roughly doubled vs the base
+  (pttest 0.667-0.833 vs 0.333; test_lodo 0.632 vs 0.316) and the
+  `edit_color_failure` quarantine label was eliminated. The failure shifted
+  to a quantitative 3-component bottleneck: **41% `edit_mask_failure`**
+  (mask MLP now dominant blocker), **16% `color_rule_selection_failure`**
+  (oracle >= 0.50 but selector picked wrong;
+  `rule_selection_regret_mean = 0.30-0.35`), **9%
+  `color_rule_bank_coverage_failure`** (no rule in bank covers). Selected
+  rule family distribution across 980 rows: `ensemble_top3` 40.8%,
+  `nearest_edited_neighbor_color` 36.7%, `relative_palette_rank_map` 20.4%,
+  `row_col_periodic_color` 2.0%. Per-arm: signature_palette slightly higher
+  on pixel + color_rule_accuracy than raw_grid, but identical
+  shape/palette_exact (baseline-picker-dominated, arm-invariant).
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -299,9 +352,10 @@ amendments line is frozen. Corrections or refinements must be appended with:
 
 ## Public-Language Constraint
 
-Phase 3 has **five** full-grid-control binding receipts on file (V1, V2,
-compact-7, Phase 3A `per_task_coord_mlp_v1`, and Phase 3D
-`structured_edit_residual_v1`), all floored at zero exact matches; no
+Phase 3 has **six** full-grid-control binding receipts on file (V1, V2,
+compact-7, Phase 3A `per_task_coord_mlp_v1`, Phase 3D
+`structured_edit_residual_v1`, and Phase 3D variant
+`structured_edit_color_rule_v2`), all floored at zero exact matches; no
 sufficiency support adjudication is on file. Public copy may say:
 
 - ARC-AGI abstraction coupling roadmap;
@@ -319,20 +373,32 @@ sufficiency support adjudication is on file. Public copy may say:
   held-out instance, the Branch A stochastic per-task lane
   (`per_task_coord_mlp_v1`) produced a `branch_a_full_grid_floor`
   receipt with a third qualitatively distinct failure --
-  conditioning starvation + shape-generalisation failure -- and the
-  Branch D structured-edit-residual lane
-  (`structured_edit_residual_v1`) produced a
-  `branch_d_full_grid_edit_floor` receipt with a fourth qualitatively
-  distinct failure -- edit-color-rule failure. All five full-grid
-  controls now agree on the floor across two task distributions, two
-  learner families (transformer + per-task MLP), and two output framings
-  (whole-grid + structured edit residual). All four
-  PHASE3_5_REFLECTION branches plus Branch D are now characterised;
-  remaining admissible Phase 3 reopens require either a new
-  pre-registered Branch D variant (wider baseline family, cross-task
-  edit-color MLP, richer mask learner) or a new Branch E spec (e.g.,
-  generative program search, test-time LM prompting) with its own
-  arena gate and verdict-amendment discipline.
+  conditioning starvation + shape-generalisation failure, the Branch D
+  structured-edit-residual lane (`structured_edit_residual_v1`)
+  produced a `branch_d_full_grid_edit_floor` receipt with a fourth
+  qualitatively distinct failure -- edit-color-rule failure, and the
+  bottleneck-targeted Branch D variant
+  (`structured_edit_color_rule_v2`) replaced the failed color MLP
+  with a deterministic conditioning-derived color-rule bank, returning
+  `branch_d_color_rule_full_grid_floor`. The variant achieved its
+  design goal at the diagnostic level -- palette recovery roughly
+  doubled vs the base (pttest 0.67-0.83 vs 0.33, test_lodo 0.63 vs
+  0.32), the `edit_color_failure` quarantine label was eliminated,
+  and the failure decomposition shifted to a quantitative
+  3-component bottleneck (41% `edit_mask_failure`, 16%
+  `color_rule_selection_failure` with `rule_selection_regret_mean`
+  0.30-0.35, 9% `color_rule_bank_coverage_failure`). All six
+  full-grid controls now agree on the floor across two task
+  distributions, two learner families (transformer + per-task MLP),
+  two output framings (whole-grid + structured edit residual), and
+  two color-prediction approaches (learned MLP + deterministic rule
+  bank). All four PHASE3_5_REFLECTION branches plus Branch D + its
+  variant are now characterised; remaining admissible Phase 3 reopens
+  require either another Branch D variant targeting the mask
+  explicitly (the dominant blocker per the variant decomposition) or
+  the selector explicitly (the largest locked-accuracy slice), or a
+  new Branch E spec (e.g., generative program search, test-time LM
+  prompting) with its own arena gate and verdict-amendment discipline.
 
 Avoid:
 
@@ -342,8 +408,13 @@ Avoid:
 - any claim that a Kaggle entry validates the theory without a
   non-trivial Phase 3 sufficiency receipt;
 - any Branch A, Branch B, or Branch D support claim from any of
-  the five filed binding receipts (V1, V2, compact-7, Phase 3A,
-  Phase 3D);
+  the six filed binding receipts (V1, V2, compact-7, Phase 3A,
+  Phase 3D base, Phase 3D variant);
+- any "variant flipped the bottleneck -> mask is the new limit"
+  claim that omits the still-floor verdict -- the variant achieved
+  a diagnostic improvement (palette doubled, decomposition gained)
+  but the arena did not open and no sufficiency comparison is
+  licensed;
 - describing any Phase 3 binding receipt as a signature-specific
   falsification independent of decoder capacity;
 - describing the five filed Phase 3 receipts as a sufficiency-failure

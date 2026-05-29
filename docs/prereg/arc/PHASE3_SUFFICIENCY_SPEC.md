@@ -6026,3 +6026,234 @@ from "EXECUTION ADMITTED, capped probe required" to "EXECUTION
 ADMITTED, 20-shard launch ready". No binding receipt yet.
 
 **Public-language constraint**: unchanged.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Variant 20-Shard Binding Receipt: `branch_d_color_rule_full_grid_floor` (bottleneck-shifted)
+
+The Phase 3D variant 20-shard slate (4 arms × 5 seeds × 49 held-out
+instances) completed and merged at `mergeGitCommit 8177A578…`.
+Receipt at `results/arc/phase3d-edit-color-rule-v2/`.
+
+**Wall-clock efficiency**: total shard compute = **11,459.0 s
+(3.18 h)**; **3-shard concurrent GPU parallel wall = 1 h 6 m**
+(00:27:08 → 01:33:25 UTC), a **2.89× speedup** vs serial — close to
+ideal 3× scaling and exactly matching the staging amendment's
+projection (~1.03 h). All 20 shards landed cleanly on the first
+wave.
+
+**Mixed-commits audit**:
+
+| gitCommit | shards | gitDirty |
+| --- | ---: | --- |
+| `90F7A895` (staging freeze-marker) | 12 | mixed |
+| `F56383C3` | 6 | mixed |
+| `E182A5C8` | 2 | mixed |
+
+9 dirty + 11 clean shards across 3 distinct gitCommits;
+`mixedCommitsAudit.runnerIdenticalAcrossCommits = **true**` — all 3
+commits share the same byte-identical runner SHA. The override was
+needed only for documentation-spec-hash drift, not for any
+shard-time computational change. No WARN printed.
+
+#### Selected Seed per Arm
+
+| arm | selected seed |
+| --- | ---: |
+| `raw_grid_edit_color_v2` | `20260528` |
+| `signature_palette_edit_color_v2` | `20260528` |
+| `signature_only_edit_color_v2` | `20260528` |
+| `metadata_only_edit_color_v2` | `20260531` |
+
+#### Arena Gate
+
+Pre-registered floor: `raw_grid_edit_color_v2` must achieve at least
+one non-baseline exact task on both `test_lodo` and `pttest`.
+
+Observed: `raw_grid_edit_color_v2` `test_lodo_nonbaseline_exact_tasks
+= 0`, `pttest_nonbaseline_exact_tasks = 0`. Every arm scored zero
+non-baseline exact tasks on every held-out lane (also zero
+baseline-exact: no baseline alone produces the exact target).
+
+**Arena gate: `branch_d_color_rule_full_grid_floor`**.
+
+#### Per-Arm Comparison (Documentation Only — Arena Did Not Open)
+
+| lane | arm | grid_ex | base_ex | nbex | shape | palette | pixel | mask_f1 | color_rule_acc | rare_recall | regret |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `pttest` | `raw_grid_edit_color_v2` | 0.000 | 0.000 | 0.000 | 1.000 | **0.667** | 0.499 | 0.654 | 0.357 | 0.348 | 0.331 |
+| `pttest` | `signature_palette_edit_color_v2` | 0.000 | 0.000 | 0.000 | 1.000 | **0.667** | **0.541** | 0.640 | **0.372** | 0.321 | 0.315 |
+| `pttest` | `signature_only_edit_color_v2` | 0.000 | 0.000 | 0.000 | 1.000 | **0.667** | 0.541 | 0.644 | 0.376 | 0.348 | 0.312 |
+| `pttest` | `metadata_only_edit_color_v2` | 0.000 | 0.000 | 0.000 | 1.000 | **0.833** | 0.548 | 0.630 | 0.386 | 0.331 | 0.301 |
+| `test_lodo` | `raw_grid_edit_color_v2` | 0.000 | 0.000 | 0.000 | 1.000 | **0.632** | 0.574 | 0.547 | 0.322 | 0.453 | 0.349 |
+| `test_lodo` | `signature_palette_edit_color_v2` | 0.000 | 0.000 | 0.000 | 1.000 | **0.632** | **0.601** | 0.567 | **0.348** | 0.387 | 0.323 |
+| `test_lodo` | `signature_only_edit_color_v2` | 0.000 | 0.000 | 0.000 | 1.000 | **0.632** | 0.591 | 0.567 | 0.334 | 0.384 | 0.337 |
+| `test_lodo` | `metadata_only_edit_color_v2` | 0.000 | 0.000 | 0.000 | 1.000 | **0.632** | 0.590 | 0.583 | 0.346 | 0.395 | 0.326 |
+
+#### Comparison Against Phase 3D Base — The Bottleneck Shifted
+
+| metric | Phase 3D base | Phase 3D variant | delta |
+| --- | ---: | ---: | --- |
+| `palette_exact` pttest | 0.333 | **0.667–0.833** | **+2.0× to +2.5×** |
+| `palette_exact` test_lodo | 0.316 | **0.632** | **+2.0×** |
+| `pixel_accuracy` test_lodo | 0.51-0.57 | 0.57-0.60 | +0.04 |
+| `edit_mask_f1` test_lodo | 0.53-0.58 | 0.55-0.58 | ~0 |
+| Dominant quarantine | `edit_color_failure` (26%) | `edit_mask_failure` (41%) | **shifted** |
+| `edit_color_failure` label | present | **eliminated** | — |
+
+**The variant achieved its design goal at the diagnostic level**:
+palette recovery roughly doubled (because the deterministic rule
+bank captures the palette structure the per-task MLP could not), and
+the named failure mode the variant was designed to fix
+(`edit_color_failure`) has been eliminated. Per the spec § "Quarantine
+Labels" the variant's `edit_color_failure` slot is structurally
+absent — it has been replaced by the more surgical pair
+`color_rule_bank_coverage_failure` + `color_rule_selection_failure`,
+both of which fire (see below).
+
+#### Quarantine Breakdown (196 selected-seed labels, 6 of 12 fire)
+
+| label | count | share | tells us |
+| --- | ---: | ---: | --- |
+| `edit_mask_failure` | 81 | 41% | **mask MLP is now the gate** — was color in Phase 3D base |
+| `color_rule_selection_failure` | 32 | 16% | oracle ≥ 0.50 but selected < 0.50 |
+| `conditioning_starvation` | 29 | 15% | structural ARC k=2-3 limitation |
+| `baseline_canvas_failure` | 24 | 12% | baseline residual > 0.50 |
+| `color_rule_bank_coverage_failure` | 18 | 9% | no rule in bank covers this instance |
+| `palette_lift_failure` | 12 | 6% | catch-all |
+
+**The new pair fires in the right ratio**: `color_rule_selection_failure
+: color_rule_bank_coverage_failure = 32 : 18 ≈ 1.8 : 1`. When color
+is wrong, the bank usually HAS the right rule but the selector did
+not pick it. Combined with `rule_selection_regret_mean ≈
+0.30–0.35` (oracle accuracy − selected accuracy), there are
+~30 percentage points of edit-color accuracy locked up in selection
+improvements.
+
+Did NOT fire (6 of 12 labels): `baseline_shape_failure` (shape
+picker still works perfectly — 1.000 shape exact on every lane),
+`no_conditioning_edits`, `source_binding_failure`, `rare_color_failure`,
+`palette_lift_failure` (the dual catch-all variant — different from
+the listed one is `palette_lift_failure` which DID fire; the other
+catch-all entries didn't), `stochastic_instability` (the four arms
+agreed on the "no exact" outcome across seeds).
+
+#### Selected Rule Family Distribution
+
+980 selected-rule rows (49 instances × 4 arms × 5 seeds):
+
+| selected family | count | share |
+| --- | ---: | ---: |
+| `ensemble_top3` | 400 | 40.8% |
+| `nearest_edited_neighbor_color` | 360 | 36.7% |
+| `relative_palette_rank_map` | 200 | 20.4% |
+| `row_col_periodic_color` | 20 | 2.0% |
+
+7 of 10 rule families never won selection: `constant_edit_color`,
+`modal_edit_color`, `baseline_color_map`, `input_nn_color_map`,
+`input_patch_majority_map`, `baseline_to_input_pair_map`,
+`object_role_color_map`. These families generated candidates but
+were dominated on conditioning accuracy by the top 4. This is
+**consistent across all four arms and all five seeds**, suggesting
+the family ordering is stable and not a representation artifact.
+
+#### Named Failure Mode: Mask-Driven + Selection-Regret-Bound
+
+This receipt closes the variant by demonstrating a **two-component
+bottleneck** that the structured-edit framing now isolates:
+
+1. **Primary**: `edit_mask_failure` at 41% — the mask MLP is the
+   leading blocker. Phase 3D and the variant agree on the mask
+   architecture (same `MaskMLP`, same MASK_MODEL_SPEC), so this is
+   not a variant-introduced regression but the dominant
+   non-color-fixable component.
+2. **Secondary**: `color_rule_selection_failure` (16%) at
+   `rule_selection_regret = 0.30–0.35` — the selector tie-break
+   leaves ~30 percentage points of edit-color accuracy on the
+   table per instance.
+3. **Coverage tertiary**: `color_rule_bank_coverage_failure` (9%) is
+   the smallest of the three named bottlenecks — the bank is not
+   the limiting factor for most failures.
+
+The receipt thus provides an unusually quantitative next-move
+direction:
+
+- **Option (a) Branch D mask-extension variant**: keep the rule bank,
+  swap the mask MLP for a higher-capacity / different-loss / pretrained
+  mask model. This is the biggest leverage point (41% of failures).
+- **Option (b) Branch D selection-refinement variant**: keep the rule
+  bank's coverage but refine the selector tie-break (e.g.,
+  per-prior selector calibration, regret-minimizing selection, or
+  a small selector MLP trained on the candidate score vector). This
+  is targeting ~30 percentage points of locked accuracy gain across
+  16% of failures.
+- **Option (c) Branch D rule-bank extension**: add families that
+  cover the 9% `bank_coverage_failure` slice. Smallest expected
+  payoff per unit work.
+
+#### What This Verdict Does And Does Not Entail
+
+**It does**:
+
+- Close the **sixth** full-grid control floor in Phase 3 (V1, V2,
+  compact-7, Phase 3A, Phase 3D base, Phase 3D variant) at zero
+  exact tasks on both registered held-out lanes for arm
+  `raw_grid_edit_color_v2`.
+- Verify that the variant's design goal (eliminating the
+  `edit_color_failure` mode named in Phase 3D base) was achieved:
+  that label is **gone**; palette recovery doubled.
+- Provide the first quantitative bottleneck decomposition for a
+  Phase 3 receipt: 41% mask, 16% selection regret, 9% bank coverage
+  — telling the next surgical move with unusual specificity.
+
+**It does not**:
+
+- License any signature_palette_edit_color_v2 vs.
+  raw_grid_edit_color_v2 sufficiency comparison (the raw-grid arm
+  did not open the arena).
+- License any Branch D narrowed-support claim from this receipt.
+- License extra seeds on this lane without a new amendment.
+
+#### Public-Language Constraint Update
+
+Permitted additions:
+
+- "The Phase 3D edit-color-rule variant achieved its design goal at
+  the diagnostic level: palette recovery roughly doubled and the
+  `edit_color_failure` mode named by the Phase 3D base was
+  eliminated. The verdict remains `branch_d_color_rule_full_grid_floor`,
+  but for the first time in Phase 3, the failure decomposition tells
+  the next surgical move quantitatively (41% mask, 16% selection
+  regret, 9% bank coverage)."
+
+Forbidden:
+
+- "Variant floored → signature representation is favoured" — the
+  variant's per-arm scores favour `signature_palette_edit_color_v2`
+  slightly on pixel and color_rule_accuracy, but the arena did not
+  open and no sufficiency comparison is licensed.
+- "Mask + selection are the only remaining bottlenecks for Phase 3"
+  — there is also `conditioning_starvation` (15%, structural ARC
+  k≤2 limitation) and `baseline_canvas_failure` (12%) below the
+  variant-fixable layer; these would require Phase 6 (Kaggle) or a
+  different framing to address.
+
+#### Frozen By This Verdict
+
+- The variant binding receipt at
+  `results/arc/phase3d-edit-color-rule-v2/` at `mergeGitCommit
+  8177A578…` is frozen.
+- The bottleneck decomposition (41/16/9% mask/selection/coverage)
+  is the canonical record of the variant's diagnostic payoff and
+  the basis for any future Branch D extension variant.
+- The selected-seed table is frozen as the variant selection trace.
+
+**Verdict impact**: no V1, V2, compact-7, Phase 3A, or Phase 3D base
+verdict changes. The Phase 3 status moves from "Branch D variant
+execution in progress" to "Variant binding receipt filed,
+`branch_d_color_rule_full_grid_floor`, with the first quantitative
+bottleneck decomposition (41% mask / 16% selection regret / 9%
+bank coverage). Six full-grid control receipts now agree on the
+floor across two task distributions, two learner families, two
+output framings, and two color-prediction approaches (learned MLP
++ deterministic rule bank). Remaining admissible reopens narrow to
+mask-targeted variants, selection-refinement variants, or
+fundamentally different framings (Branch E)."
