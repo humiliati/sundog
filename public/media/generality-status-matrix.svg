@@ -30,24 +30,24 @@
   </g>
 <g class="generality-card" data-project="navier_stokes_c1">
     <rect x="652" y="228" width="570" height="250" rx="8" fill="#FFFFFF" stroke="#DCE6EC" stroke-width="1"/>
-    <rect x="652" y="228" width="8" height="250" rx="4" fill="#64748B"/>
+    <rect x="652" y="228" width="8" height="250" rx="4" fill="#B8831E"/>
     <g>
-    <rect x="1046" y="248" width="154" height="30" rx="8" fill="#EDF2F7" stroke="#64748B" stroke-width="1"/>
-    <text x="1060" y="268" fill="#37465A" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">DESIGN HOLD</text>
+    <rect x="1046" y="248" width="154" height="30" rx="8" fill="#FFF4D6" stroke="#B8831E" stroke-width="1"/>
+    <text x="1060" y="268" fill="#684811" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="800" letter-spacing="0">REVIEW GATED</text>
   </g>
     <text x="678" y="268" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="850" letter-spacing="0">Navier-Stokes C1</text>
-    <text x="678" y="296" fill="#C9972F" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">one-cell witness; generality not</tspan><tspan x="678" dy="17">adjudicated</tspan></text>
-    <text x="678" y="344" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">The G=200 cell produced a scoped Reading-2</tspan><tspan x="678" dy="19">witness; the first G=300 transfer deferred as</tspan><tspan x="678" dy="19">objective vacuity.</tspan></text>
+    <text x="678" y="296" fill="#C9972F" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="800" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">two-regime witness; review gated</tspan></text>
+    <text x="678" y="344" fill="#40505C" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">The complete Reading-2 witness now holds at</tspan><tspan x="678" dy="19">G=200 and G=300 under a portable objective.</tspan></text>
     <line x1="678" y1="390" x2="1196" y2="390" stroke="#DCE6EC" stroke-width="1"/>
     <g>
-        <text x="678" y="420" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">0.298</text>
-        <text x="678" y="442" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">v5 damp</tspan><tspan x="678" dy="13">fraction</tspan></text>
+        <text x="678" y="420" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">2</text>
+        <text x="678" y="442" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="678" dy="0">regimes (G</tspan><tspan x="678" dy="13">points)</tspan></text>
       </g><g>
-        <text x="780" y="420" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">0.004</text>
-        <text x="780" y="442" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="780" dy="0">v6 damp</tspan><tspan x="780" dy="13">fraction</tspan></text>
+        <text x="780" y="420" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">0.269</text>
+        <text x="780" y="442" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="780" dy="0">G300 damp</tspan><tspan x="780" dy="13">fraction</tspan></text>
       </g><g>
-        <text x="882" y="420" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">693795</text>
-        <text x="882" y="442" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="882" dy="0">v5 witness</tspan><tspan x="882" dy="13">pairs (pairs)</tspan></text>
+        <text x="882" y="420" fill="#173348" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="850" letter-spacing="0">942834</text>
+        <text x="882" y="442" fill="#6B7B88" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" text-anchor="start" letter-spacing="0"><tspan x="882" dy="0">G300 witness</tspan><tspan x="882" dy="13">pairs (pairs)</tspan></text>
       </g>
   </g>
 <g class="generality-card" data-project="pvnp">
