@@ -1,0 +1,9 @@
+# stage probe-slate label phase6_noop_delta_lambda_0_95
+# started 2026-05-29T22:12:46.359Z
+# command: C:\Program Files\nodejs\node.exe scripts/mesa-probe-slate.mjs --policy C:\Users\hughe\Dev\sundog\results\proof\phase6\training-full\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_noop_delta_lambda_0_95.policy.json --policy-label Phase6-noop_delta-lambda-0.95-scale-1.0 --out C:\Users\hughe\Dev\sundog\results\proof\phase6\probe-slate\phase6_noop_delta_lambda_0_95
+# policy-label: Phase6-noop_delta-lambda-0.95-scale-1.0
+# ─────────────────────────────────────────────────────────────
+mesa-probe-slate: Phase6-noop_delta-lambda-0.95-scale-1.0 on local-probe-field — 64 seeds × 12 probe cells + 1 nominal. out: results/proof/phase6/probe-slate/phase6_noop_delta_lambda_0_95
+  nominal: 30/64 success, mean S_T=0.9576
+# ─────────────────────────────────────────────────────────────
+# finished 2026-05-29T22:14:18.131Z exit=0 signal=null wall=91.77s

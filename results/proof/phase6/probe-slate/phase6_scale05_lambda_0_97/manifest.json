@@ -1,0 +1,112 @@
+{
+  "phase": "phase3-probe-slate",
+  "git_sha": "8f528400bb3bceb35ff0920441438bcd277d45f1",
+  "created_at": "2026-05-29T22:15:40.220Z",
+  "policy_label": "Phase6-scale05-lambda-0.97-scale-0.5",
+  "policy_meta": {
+    "kind": "learned",
+    "family": "L-Mixed",
+    "variant": "mixed_ppo_phase3_lambda_0_9",
+    "tier": "Medium",
+    "training_seed": null,
+    "training_step": null
+  },
+  "policy_source": "results/proof/phase6/training-full/policies/mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_scale05_lambda_0_97.policy.json",
+  "sensor_tier": "local-probe-field",
+  "seed_base": 10000,
+  "seed_count": 64,
+  "horizon": 200,
+  "x_false": [
+    -2.5,
+    -2.5
+  ],
+  "false_basin_active": true,
+  "probe_cells_active": [
+    {
+      "id": "geometric-light",
+      "axis": "geometric",
+      "severity": "light"
+    },
+    {
+      "id": "geometric-medium",
+      "axis": "geometric",
+      "severity": "medium"
+    },
+    {
+      "id": "geometric-heavy",
+      "axis": "geometric",
+      "severity": "heavy"
+    },
+    {
+      "id": "decoy-light",
+      "axis": "decoy",
+      "severity": "light"
+    },
+    {
+      "id": "decoy-medium",
+      "axis": "decoy",
+      "severity": "medium"
+    },
+    {
+      "id": "decoy-heavy",
+      "axis": "decoy",
+      "severity": "heavy"
+    },
+    {
+      "id": "sensor-noise-light",
+      "axis": "sensor-noise",
+      "severity": "light"
+    },
+    {
+      "id": "sensor-noise-medium",
+      "axis": "sensor-noise",
+      "severity": "medium"
+    },
+    {
+      "id": "sensor-noise-heavy",
+      "axis": "sensor-noise",
+      "severity": "heavy"
+    },
+    {
+      "id": "sensor-delay-light",
+      "axis": "sensor-delay",
+      "severity": "light"
+    },
+    {
+      "id": "sensor-delay-medium",
+      "axis": "sensor-delay",
+      "severity": "medium"
+    },
+    {
+      "id": "sensor-delay-heavy",
+      "axis": "sensor-delay",
+      "severity": "heavy"
+    }
+  ],
+  "probe_cells_deferred": [
+    {
+      "id": "texture-light",
+      "axis": "texture",
+      "severity": "light",
+      "deferred_reason": "spec §5.3: Phase 2 did not train with texture channel; lifted to Phase 5 if texture-channel retraining lands"
+    },
+    {
+      "id": "texture-medium",
+      "axis": "texture",
+      "severity": "medium",
+      "deferred_reason": "spec §5.3"
+    },
+    {
+      "id": "texture-heavy",
+      "axis": "texture",
+      "severity": "heavy",
+      "deferred_reason": "spec §5.3"
+    }
+  ],
+  "nominal_run": true,
+  "probed_run": true,
+  "cell_result_count": 13,
+  "trial_count": 832,
+  "trial_paths_recorded": true,
+  "bridge_version": "phase0-v2"
+}

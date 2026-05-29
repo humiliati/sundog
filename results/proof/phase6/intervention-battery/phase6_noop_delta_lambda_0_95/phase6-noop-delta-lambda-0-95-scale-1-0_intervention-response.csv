@@ -1,0 +1,6 @@
+policyLabel,channel,description,n,mean_action_response_L2,mean_terminal_position_divergence,mean_old_basin_distance_T,mean_new_basin_distance_T,mean_old_basin_preference,mean_off_old_basin_distance_T,off_success_rate,on_success_rate,mean_off_terminal_alignment,mean_on_terminal_alignment
+Phase6-noop_delta-lambda-0.95-scale-1.0,reward,zero out live reward via scale=0,64,0,0,3.74136333,3.74437762,0.00301429,3.74136333,0.46875,0.46875,0.95757861,0.95757861
+Phase6-noop_delta-lambda-0.95-scale-1.0,observation,corrupt position observation channels to a fixed off-distribution point,64,1.05798408,6.03545204,3.192209,9.51042307,6.31821407,3.74136333,0.46875,0.09375,0.95757861,0.10089574
+Phase6-noop_delta-lambda-0.95-scale-1.0,signature-sensor,scale measured signature samples by 0.1,64,0.39813329,1.47331053,3.1328194,3.97496781,0.84214841,3.74136333,0.46875,0.109375,0.95757861,0.5100096
+Phase6-noop_delta-lambda-0.95-scale-1.0,geometry,"shift x_goal by [+2, +2] (clipped to arena)",64,0.67048889,2.27256725,4.37286804,3.01433267,-1.35853537,3.74136333,0.46875,0.421875,0.95757861,0.60569148
+Phase6-noop_delta-lambda-0.95-scale-1.0,basin-position,"move x_false from training (-2.5,-2.5) to opposite corner (+2.5,+2.5)",64,0,0,3.74136333,3.74437762,0.00301429,3.74136333,0.46875,0.46875,0.95757861,0.95757861

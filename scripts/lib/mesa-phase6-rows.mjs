@@ -107,6 +107,35 @@ export const ROWS = [
     expect: "collapsed",
     mode: "lock",
   },
+
+  // ── midpoint cells (PHASE6_LAMBDA_CONTROL.md ▸ Outcome Branches §4) ──
+  // "Add exactly one midpoint in the implicated bracket (`0.91` for
+  // `kappa=2`, or `0.975` for `kappa=0.5`) before changing the public
+  // status." Run as a second lock pass when the initial 6-row read fires
+  // Branch 4. `expect` is set per the predicted lambda_eff(λ_input, κ) map
+  // from PHASE6_LAMBDA_CONTROL.md ▸ Control B; observed-vs-expected then
+  // adjudicates whether the κ-rescale map holds within the bracket. NOT
+  // included in LOCK_LABELS — opt-in via --rows on the runner.
+  {
+    label: "phase6_scale2_lambda_0_91",
+    condition: "scale2",
+    lambda: "0.91",
+    compose: "canonical",
+    scale: "2.0",
+    // predicted: lambda_eff = 0.953, just past cliff at 0.9526
+    expect: "collapsed",
+    mode: "lock",
+  },
+  {
+    label: "phase6_scale05_lambda_0_975",
+    condition: "scale05",
+    lambda: "0.975",
+    compose: "canonical",
+    scale: "0.5",
+    // predicted: lambda_eff = 0.951, just below cliff at 0.9526
+    expect: "protected",
+    mode: "lock",
+  },
 ];
 
 // Spec-canonical probe slate (PHASE6_LAMBDA_CONTROL.md Capped Probe).
@@ -115,7 +144,21 @@ export const PROBE_LABELS = [
   "phase6_probe_noop_delta_lambda_0_95",
   "phase6_probe_scale2_lambda_0_92",
 ];
-export const LOCK_LABELS = ROWS.filter((r) => r.mode === "lock").map((r) => r.label);
+// Spec-canonical lock slate (PHASE6_LAMBDA_CONTROL.md Full Lock Commands).
+// Hardcoded so adding midpoint or follow-on cells does not silently grow defaults.
+export const LOCK_LABELS = [
+  "phase6_noop_delta_lambda_0_95",
+  "phase6_noop_delta_lambda_0_97",
+  "phase6_scale2_lambda_0_90",
+  "phase6_scale2_lambda_0_92",
+  "phase6_scale05_lambda_0_97",
+  "phase6_scale05_lambda_0_98",
+];
+// Branch 4 midpoint cells — opt-in via --rows.
+export const MIDPOINT_LABELS = [
+  "phase6_scale2_lambda_0_91",
+  "phase6_scale05_lambda_0_975",
+];
 
 export function getRow(label) {
   const row = ROWS.find((r) => r.label === label);
@@ -165,6 +208,19 @@ export function policyPath(row) {
   return `results/proof/phase6/${cfg.outSubdir}/policies/${VARIANT}_${POLICY_TIER}_seed_0_${row.label}.policy.json`;
 }
 
+// Policy-label string per PHASE6_LAMBDA_CONTROL.md Full Lock Commands:
+//   "Phase6-$($r.Condition)-lambda-$($r.Lambda)-scale-$($r.Scale)"
+// Used as --policy-label for mesa-probe-slate.mjs and mesa-intervention-battery.mjs.
+export function policyLabel(row) {
+  return `Phase6-${row.condition}-lambda-${row.lambda}-scale-${row.scale}`;
+}
+
+// Mirror of mesa-intervention-battery.mjs:170 slugify(). Lets us predict the
+// CSV / JSONL file names without having to glob after each shard finishes.
+export function slugifyLabel(s) {
+  return s.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 // Env-var overlay for a spawned shard: caps PyTorch / BLAS thread pools so
 // concurrent shards don't oversubscribe the box. `threadCap=1` is the
 // conservative "we're optimizing for fan-out" pick. Set higher only when
@@ -190,6 +246,52 @@ export function buildShardEnv(parentEnv, threadCap) {
 // (matches the spec's PowerShell command).
 export function pythonExec() {
   return process.env.PYTHON_EXEC || "python";
+}
+
+// ── Process lifecycle: signal propagation without listener leak ─────────
+//
+// Earlier versions registered a per-child `process.on("SIGINT", ...)` and
+// `process.on("SIGTERM", ...)` pair in spawnStage. That accumulates one
+// listener per shard (never removed on child exit), so a postlock run with
+// 12 spawns trips Node's MaxListenersExceededWarning at 11.
+//
+// trackChild() lazily registers ONE signal handler per module that
+// broadcasts to a Set of active children, and removes each child on its
+// `exit` event. The handler uses `process.once` so a second Ctrl-C falls
+// through to Node's default hard-exit behaviour (the "graceful first,
+// hard second" pattern).
+const _activeChildren = new Set();
+let _signalsRegistered = false;
+function _registerSignalHandlers() {
+  if (_signalsRegistered) return;
+  _signalsRegistered = true;
+  const forward = (sig) => () => {
+    for (const c of _activeChildren) {
+      if (!c.killed) c.kill(sig);
+    }
+  };
+  process.once("SIGINT", forward("SIGINT"));
+  process.once("SIGTERM", forward("SIGTERM"));
+}
+
+/**
+ * Track a spawned child process so orchestrator-level SIGINT/SIGTERM
+ * propagates to it. Auto-removes the child from tracking on its `exit`
+ * event. Returns the child so call sites can chain.
+ *
+ * Replaces the per-spawn pattern:
+ *   const onSig = (s) => child.kill(s);
+ *   process.on("SIGINT", onSig);
+ *   process.on("SIGTERM", onSig);
+ *
+ * with:
+ *   trackChild(spawn(...));
+ */
+export function trackChild(child) {
+  _registerSignalHandlers();
+  _activeChildren.add(child);
+  child.once("exit", () => _activeChildren.delete(child));
+  return child;
 }
 
 export const META = { VARIANT, TIER, POLICY_TIER, MODE_CONFIG };

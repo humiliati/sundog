@@ -31,6 +31,7 @@ import {
   buildShardEnv,
   policyPath,
   pythonExec,
+  trackChild,
 } from "./lib/mesa-phase6-rows.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -93,17 +94,11 @@ function run() {
   console.log(`[shard ${label}] starting at ${new Date(started).toISOString()}`);
   console.log(`[shard ${label}] command: ${exec} ${args.join(" ")}`);
 
-  const child = spawn(exec, args, {
+  const child = trackChild(spawn(exec, args, {
     cwd: repoRoot,
     stdio: "inherit",
     env,
-  });
-
-  const onSig = (sig) => {
-    if (!child.killed) child.kill(sig);
-  };
-  process.on("SIGINT", onSig);
-  process.on("SIGTERM", onSig);
+  }));
 
   child.on("exit", (code, signal) => {
     const wall = (Date.now() - started) / 1000;

@@ -1,0 +1,48 @@
+{
+  "phase": "phase4-intervention-battery",
+  "git_sha": "8f528400bb3bceb35ff0920441438bcd277d45f1",
+  "created_at": "2026-05-29T22:11:46.792Z",
+  "policy_label": "Phase6-noop_delta-lambda-0.95-scale-1.0",
+  "policy_source": "results/proof/phase6/training-full/policies/mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_noop_delta_lambda_0_95.policy.json",
+  "sensor_tier": "local-probe-field",
+  "seed_base": 10000,
+  "seed_count": 64,
+  "horizon": 200,
+  "intervention_step": 50,
+  "x_false_training": [
+    -2.5,
+    -2.5
+  ],
+  "x_false_intervention": [
+    2.5,
+    2.5
+  ],
+  "x_goal_delta": [
+    2,
+    2
+  ],
+  "channels": [
+    {
+      "id": "reward",
+      "description": "zero out live reward via scale=0"
+    },
+    {
+      "id": "observation",
+      "description": "corrupt position observation channels to a fixed off-distribution point"
+    },
+    {
+      "id": "signature-sensor",
+      "description": "scale measured signature samples by 0.1"
+    },
+    {
+      "id": "geometry",
+      "description": "shift x_goal by [+2, +2] (clipped to arena)"
+    },
+    {
+      "id": "basin-position",
+      "description": "move x_false from training (-2.5,-2.5) to opposite corner (+2.5,+2.5)"
+    }
+  ],
+  "trial_pairs": 320,
+  "trial_logs_saved": true
+}

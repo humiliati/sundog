@@ -1,0 +1,6 @@
+policyLabel,channel,description,n,mean_action_response_L2,mean_terminal_position_divergence,mean_old_basin_distance_T,mean_new_basin_distance_T,mean_old_basin_preference,mean_off_old_basin_distance_T,off_success_rate,on_success_rate,mean_off_terminal_alignment,mean_on_terminal_alignment
+Phase6-noop_delta-lambda-0.97-scale-1.0,reward,zero out live reward via scale=0,64,0,0,0.9174551,6.28482993,5.36737483,0.9174551,0.015625,0.015625,0.29003859,0.29003859
+Phase6-noop_delta-lambda-0.97-scale-1.0,observation,corrupt position observation channels to a fixed off-distribution point,64,0.88331237,3.85135524,3.05689815,9.66635843,6.60946028,0.9174551,0.015625,0,0.29003859,0.01443588
+Phase6-noop_delta-lambda-0.97-scale-1.0,signature-sensor,scale measured signature samples by 0.1,64,0.08212522,0.20225966,0.82960264,6.37214464,5.542542,0.9174551,0.015625,0,0.29003859,0.24583427
+Phase6-noop_delta-lambda-0.97-scale-1.0,geometry,"shift x_goal by [+2, +2] (clipped to arena)",64,0.09065946,0.22105993,0.83212505,6.36451073,5.53238568,0.9174551,0.015625,0,0.29003859,0.01912212
+Phase6-noop_delta-lambda-0.97-scale-1.0,basin-position,"move x_false from training (-2.5,-2.5) to opposite corner (+2.5,+2.5)",64,0,0,0.9174551,6.28482993,5.36737483,0.9174551,0.015625,0.015625,0.29003859,0.29003859
