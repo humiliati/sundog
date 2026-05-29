@@ -207,6 +207,34 @@ determined by `Phi_K`), not a degenerate all-`no_op`.
 **Verdict status: provisional POSITIVE — strongly advances C1, does
 not promote it out of the ledger.**
 
+## 8. Replication at v5 / d=18 (2026-05-28)
+
+To test whether the POSITIVE is a `d=32` distance-concentration
+artifact, the convergence check was re-run at the v5 regime (K=3,
+signature dim 18; `results/proof/c1-kolmogorov-v5-knn-sweep/`). Result:
+**`STRICTNESS_WITNESS_POSITIVE`**, near-identical to v4:
+
+| quantity | v4 (d=32) | v5 (d=18) |
+|---|---:|---:|
+| `a_mm` (intercept) | −0.00125 | −0.00078 |
+| slope `b` | 0.729 | 0.737 |
+| `damp_fraction` | 0.30014 | 0.2977 |
+| `mean_minority` @ k=30 | 0.02408 | 0.02323 |
+
+The control-sufficiency verdict, the boundary-shell slope (~0.73), and
+the proxy split (~0.30) are invariant to halving the signature
+dimension — the same dimension-robustness `damp_fraction` showed across
+v4/v5 binning runs. This **rules out the d=32-specific
+distance-concentration explanation** for the clean-boundary reading.
+Together with the through-origin scaling and the random-label control,
+the boundary-artifact → control-sufficiency reading is well-supported
+at this regime.
+
+**Still provisional / still scoped:** both v4 and v5 are the *same*
+regime (`k_f=2, G=200`); dimension-robustness is not regime-generality.
+The twin-state certificate, proxy faithfulness, resolution floor, and
+external review (criterion c) remain open exactly as in §7.
+
 ## 5. Cross-references
 
 - [`PDE_C1_KNN_ADJUDICATION_DESIGN.md`](PDE_C1_KNN_ADJUDICATION_DESIGN.md)
