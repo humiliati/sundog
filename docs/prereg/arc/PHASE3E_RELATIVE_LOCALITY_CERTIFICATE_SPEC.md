@@ -8,10 +8,11 @@ Parent specs:
 
 Filed: **2026-05-29 (PT)**
 
-Status: **SPEC FILED; EXECUTION HOLD**. This file freezes a rank-based
-certificate lane for the expanded 108-task ARC register. It admits no execution
-until runner tooling, npm wiring, result ignore path, leak-check coverage, a
-smoke fingerprint, and a freeze-marker amendment are committed together.
+Status: **BINDING RECEIPT FILED -- `phase3e_relative_locality_negative`**. The
+rank-locality certificate found a statistically detectable but unusable
+`signature_palette_context` signal: metadata-tied, raw-grid-dominated,
+sign-unstable, and over the hard-incompatibility gate. This does not change the
+absolute-epsilon receipts, prove/disprove sufficiency, or license/block Branch E.
 
 ## Purpose
 
