@@ -1131,6 +1131,10 @@ def aggregate_twin_state(
             witness_sample_count=0,
             witness_pair_count_directed=0,
             witness_pair_count_unique=0,
+            candidate_action_disagree_directed=0,
+            candidate_action_disagree_unique=0,
+            witness_action_disagree_directed=0,
+            witness_action_disagree_unique=0,
             max_candidate_high_distance=0.0,
             witness_high_distances=np.asarray([], dtype=np.float64),
             witness_signature_distances=np.asarray([], dtype=np.float64),
@@ -1150,6 +1154,14 @@ def aggregate_twin_state(
     witness_sample = np.zeros(n, dtype=bool)
     candidate_pair_count_directed = 0
     witness_pair_count_directed = 0
+    # Paired fiber-constancy accumulators (PDE_C1_PAIRED_FIBER_CONSTANCY.md):
+    # for each signature-near pair, does the proxy action agree? This turns the
+    # matched-radius composition (twin-state non-injectivity + kNN control read)
+    # into a paired test on the SAME pairs.
+    candidate_action_disagree_directed = 0
+    witness_action_disagree_directed = 0
+    candidate_disagree_code_chunks: list[np.ndarray] = []
+    witness_disagree_code_chunks: list[np.ndarray] = []
     max_candidate_high_distance = 0.0
     candidate_code_chunks: list[np.ndarray] = []
     witness_code_chunks: list[np.ndarray] = []
@@ -1181,6 +1193,14 @@ def aggregate_twin_state(
         codes = lo * n + hi
         candidate_code_chunks.append(codes[candidate_mask])
 
+        # Paired fiber-constancy read: do the two members of a signature-near
+        # pair require the same proxy action? Action label is symmetric in the
+        # pair, so directed disagreement de-dupes to the same unique fraction.
+        action_diff = actions[idx_chunk] != actions[row_ids[:, None]]
+        candidate_disagree = candidate_mask & action_diff
+        candidate_action_disagree_directed += int(candidate_disagree.sum())
+        candidate_disagree_code_chunks.append(codes[candidate_disagree])
+
         witness_mask = candidate_mask & (high_dist >= delta_h)
         if not bool(witness_mask.any()):
             continue
@@ -1190,6 +1210,10 @@ def aggregate_twin_state(
         witness_code_chunks.append(codes[witness_mask])
         witness_high_chunks.append(high_dist[witness_mask])
         witness_sig_chunks.append(dist_chunk[witness_mask])
+
+        witness_disagree = witness_mask & action_diff
+        witness_action_disagree_directed += int(witness_disagree.sum())
+        witness_disagree_code_chunks.append(codes[witness_disagree])
 
         if len(witness_rows) < row_limit:
             positions = np.argwhere(witness_mask)
@@ -1207,6 +1231,9 @@ def aggregate_twin_state(
                         else 0.0,
                         "sample_i_high_norm": float(high_norms[i]),
                         "sample_j_high_norm": float(high_norms[j]),
+                        "action_i": int(actions[i]),
+                        "action_j": int(actions[j]),
+                        "action_agree": bool(actions[i] == actions[j]),
                     }
                 )
                 if len(witness_rows) >= row_limit:
@@ -1214,6 +1241,8 @@ def aggregate_twin_state(
 
     candidate_pair_count_unique = unique_pair_count(candidate_code_chunks)
     witness_pair_count_unique = unique_pair_count(witness_code_chunks)
+    candidate_action_disagree_unique = unique_pair_count(candidate_disagree_code_chunks)
+    witness_action_disagree_unique = unique_pair_count(witness_disagree_code_chunks)
     witness_high_distances = (
         np.concatenate(witness_high_chunks) if witness_high_chunks else np.asarray([], dtype=np.float64)
     )
@@ -1233,6 +1262,10 @@ def aggregate_twin_state(
         witness_sample_count=int(witness_sample.sum()),
         witness_pair_count_directed=witness_pair_count_directed,
         witness_pair_count_unique=witness_pair_count_unique,
+        candidate_action_disagree_directed=candidate_action_disagree_directed,
+        candidate_action_disagree_unique=candidate_action_disagree_unique,
+        witness_action_disagree_directed=witness_action_disagree_directed,
+        witness_action_disagree_unique=witness_action_disagree_unique,
         max_candidate_high_distance=max_candidate_high_distance,
         witness_high_distances=witness_high_distances,
         witness_signature_distances=witness_signature_distances,
@@ -1270,6 +1303,10 @@ def summarize_twin_state(
     witness_sample_count: int,
     witness_pair_count_directed: int,
     witness_pair_count_unique: int,
+    candidate_action_disagree_directed: int = 0,
+    candidate_action_disagree_unique: int = 0,
+    witness_action_disagree_directed: int = 0,
+    witness_action_disagree_unique: int = 0,
     max_candidate_high_distance: float,
     witness_high_distances: np.ndarray,
     witness_signature_distances: np.ndarray,
@@ -1315,6 +1352,40 @@ def summarize_twin_state(
             False,
         )
 
+    # Paired fiber-constancy: among the state-separated (witness) pairs the
+    # certificate already found, what fraction require DIFFERENT proxy actions?
+    # This is the fiber criterion Phi_K(x0)=Phi_K(x1) => pi*(x0)=pi*(x1) tested
+    # directly on the certified non-injective pairs. Spec:
+    # docs/proof/PDE_C1_PAIRED_FIBER_CONSTANCY.md.
+    witness_action_disagree_fraction_unique = (
+        witness_action_disagree_unique / witness_pair_count_unique
+        if witness_pair_count_unique
+        else 0.0
+    )
+    witness_action_disagree_fraction_directed = (
+        witness_action_disagree_directed / witness_pair_count_directed
+        if witness_pair_count_directed
+        else 0.0
+    )
+    candidate_action_disagree_fraction_unique = (
+        candidate_action_disagree_unique / candidate_pair_count_unique
+        if candidate_pair_count_unique
+        else 0.0
+    )
+    # Secondary verdict; does NOT override the primary twin-state verdict. Only
+    # interpretable when the certificate stands and the proxy is non-constant.
+    proxy_structural_constant = damp == 0 or no_op == 0
+    if cfg.preset not in VERDICT_BEARING_PRESETS:
+        paired_fiber_verdict = "SMOKE_ONLY"
+    elif verdict != "TWIN_STATE_CERTIFIED" or witness_pair_count_unique == 0:
+        paired_fiber_verdict = "PAIRED_FIBER_UNDEFINED"
+    elif proxy_structural_constant:
+        paired_fiber_verdict = "PAIRED_FIBER_DEFERRED_VACUITY"
+    elif witness_action_disagree_fraction_unique <= cfg.delta_action:
+        paired_fiber_verdict = "PAIRED_FIBER_CONSTANCY_POSITIVE"
+    else:
+        paired_fiber_verdict = "PDE-C1-PAIRED-NEG"
+
     def pct(a: np.ndarray, q: float) -> float:
         return float(np.percentile(a, q)) if a.size else 0.0
 
@@ -1322,6 +1393,14 @@ def summarize_twin_state(
         "verdict": verdict,
         "verdict_label": verdict_label,
         "interpretable": interpretable,
+        "paired_fiber_verdict": paired_fiber_verdict,
+        "witness_action_disagree_unique": witness_action_disagree_unique,
+        "witness_action_disagree_directed": witness_action_disagree_directed,
+        "witness_action_disagree_fraction_unique": witness_action_disagree_fraction_unique,
+        "witness_action_disagree_fraction_directed": witness_action_disagree_fraction_directed,
+        "candidate_action_disagree_unique": candidate_action_disagree_unique,
+        "candidate_action_disagree_fraction_unique": candidate_action_disagree_fraction_unique,
+        "paired_fiber_delta_action": cfg.delta_action,
         "n_samples": n,
         "k_neighbors_effective": k,
         "epsilon_k_radius_threshold": epsilon_k,
@@ -1617,9 +1696,49 @@ def write_receipt_twin_state(path: Path, manifest: dict) -> None:
         f"`{r['witness_high_distance_p95']:.6g}`",
         f"- elapsed seconds: `{r['elapsed_seconds']:.3f}`",
         "",
+        "## Paired fiber-constancy",
+        "",
+        f"**Paired verdict:** `{r.get('paired_fiber_verdict', 'n/a')}`",
+        "",
+        f"- witness-pair action disagreement (unique): "
+        f"`{r.get('witness_action_disagree_fraction_unique', 0.0):.6g}` "
+        f"(`{r.get('witness_action_disagree_unique', 0)}` of `{r['witness_pair_count_unique']}`) "
+        f"vs `delta_action = {r.get('paired_fiber_delta_action', 0.1)}`",
+        f"- witness-pair action disagreement (directed): "
+        f"`{r.get('witness_action_disagree_fraction_directed', 0.0):.6g}`",
+        f"- candidate-pair action disagreement (unique, comparator): "
+        f"`{r.get('candidate_action_disagree_fraction_unique', 0.0):.6g}` "
+        f"(`{r.get('candidate_action_disagree_unique', 0)}` of `{r['candidate_pair_count_unique']}`)",
+        "",
         "## Branch",
         "",
     ]
+    pf = r.get("paired_fiber_verdict", "")
+    if pf == "PAIRED_FIBER_CONSTANCY_POSITIVE":
+        lines.append(
+            "**Paired fiber-constancy POSITIVE.** The state-separated (witness) pairs "
+            "the certificate found almost all require the SAME proxy action: action "
+            "disagreement on certified non-injective pairs is at or below `delta_action`. "
+            "This composes the non-injectivity and control-sufficiency reads on the SAME "
+            "pairs, not just at a matched radius."
+        )
+    elif pf == "PDE-C1-PAIRED-NEG":
+        lines.append(
+            "**Paired fiber-constancy NEGATIVE (regime 3 on the witnessed pairs).** A "
+            "non-trivial fraction of state-separated signature-near pairs require "
+            "incompatible actions: the certified non-injective fibers are control-"
+            "insufficient for this objective. File as the named negative, do not rescue."
+        )
+    elif pf == "PAIRED_FIBER_DEFERRED_VACUITY":
+        lines.append(
+            "Proxy action is structurally constant on this run; the paired test is "
+            "vacuous and no fiber-constancy claim is filed."
+        )
+    elif pf == "PAIRED_FIBER_UNDEFINED":
+        lines.append(
+            "No certified witness pairs (or no twin-state certificate), so the paired "
+            "fiber-constancy test is undefined for this run."
+        )
     if r["verdict"] == "SMOKE_ONLY":
         lines.append("Smoke-only run; no support-level state-insufficiency certificate may be filed.")
     elif r["verdict"] == "TWIN_STATE_DEFERRED_HIGH_MODE_FLOOR":
