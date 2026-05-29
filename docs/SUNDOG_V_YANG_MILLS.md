@@ -10,15 +10,29 @@ Short version:
 > discipline: if the field itself is too much, can the right invariant shadow
 > still certify bounded structure?
 
-Status: **handoff roadmap draft**, filed 2026-05-29. No lit-pass has been
-filed, no pre-registration exists, no runner exists, and no result-bearing
-claim is live. This document is a staging ledger for a possible future
-finite-lattice Yang-Mills certificate lane.
+Status: **Phase 0 roadmap draft**, filed 2026-05-29. Lit-pass filed at
+[`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md). No domain lock,
+runner, receipt, or result-bearing claim exists. This document is a staging
+ledger for a possible future finite-lattice Yang-Mills certificate lane.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
 signature/locality discipline can be applied honestly to gauge-invariant
 finite-lattice data without pretending to solve the continuum problem.
+
+Lit-pass disposition:
+
+- The official Jaffe-Witten / Clay problem remains the boundary object, not the
+  claim object.
+- Recent serious activity is concentrated around finite-lattice loop
+  observables, area-law regimes, large-N / t'Hooft regimes, loop equations,
+  two-dimensional continuum limits, three-dimensional stochastic
+  quantisation, bootstrap methods, and gauge-equivariant ML.
+- Recent claimed Clay-solution artifacts exist and are explicitly quarantined
+  in the lit-pass memo. They do not support any Sundog claim.
+- Sundog's possible niche is narrow: a pre-registered, lossy,
+  gauge-invariant signature that preserves a held-out finite-lattice
+  observable/regime label in rank space beyond controls.
 
 ## 0. Why ARC Changes The Approach
 
@@ -240,7 +254,7 @@ Named failures take precedence over narrative success.
 
 Deliverables:
 
-- `docs/YANG_MILLS_LITPASS_MEMO.md`;
+- `docs/YANG_MILLS_LITPASS_MEMO.md` - **filed 2026-05-29**;
 - `docs/prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`;
 - chosen finite-lattice domain, observable labels, source library, and compute
   budget;
@@ -250,6 +264,19 @@ Deliverables:
 Stop rule:
 
 Do not write runner code until the finite domain and controls are frozen.
+
+Lit-pass recommendation:
+
+```text
+default first domain: small pure SU(2) Wilson-action lattice, 2D/3D before 4D
+default toy: U(1) or 2D cell for instrumentation only
+default primary claim: rank-local structure for held-out gauge-invariant
+observable labels beyond controls
+```
+
+The first domain should be intentionally boring. The hard part is not novelty
+of the simulator; it is avoiding leakage, target-copying, and continuum
+overreach.
 
 ### Phase 1 - Gauge-Invariance Smoke
 
@@ -375,8 +402,11 @@ Candidate data shape:
 
 Next agent should:
 
-1. Create `docs/prereg/yang-mills/README.md`.
-2. Draft `docs/YANG_MILLS_LITPASS_MEMO.md`.
+1. Promote `docs/prereg/yang-mills/README.md` into a frozen Phase 0 domain
+   lock only after the exact finite-lattice cell is chosen.
+2. Use [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md) as the
+   citation spine; re-audit it before any public-facing claim or after six
+   months.
 3. Choose the first finite-lattice domain and source library.
 4. Freeze the observable labels and controls before code.
 5. Stage, not run, any compute expected to exceed the repo's ten-minute rule.
@@ -408,4 +438,3 @@ Forbidden:
 > Sundog is approaching the Clay problem directly.
 
 > Sundog found a mass gap.
-
