@@ -269,6 +269,77 @@ named ways of refusing to interpret an under-sampled or
 non-discriminative adjudication attempt, and they do **not** count as a
 positive.
 
+## 5b. kNN / Disintegration Adjudication (adopted 2026-05-28)
+
+The binning adjudicator (§2, §4, §5) was exhausted across C1
+cell-sets v0–v5: faithful (`h_K ≈ epsilon_K`) bins are under-populated
+on high-dimensional attractors, and occupied-bin count tracks the
+attractor's box dimension rather than `d_K`, so neither sample-budget
+nor `K` reduction clears coverage (see
+[`PDE_C1_LOCK_EXECUTION_SYNTHESIS.md`](PDE_C1_LOCK_EXECUTION_SYNTHESIS.md)
+and the §1 design). This section adopts the **disintegration branch**
+named in §1 as an admissible alternative, realized nonparametrically
+by k-nearest-neighbour estimation. Design proposal and sign-off:
+[`PDE_C1_KNN_ADJUDICATION_DESIGN.md`](PDE_C1_KNN_ADJUDICATION_DESIGN.md)
+(Fork A, signed off 2026-05-28). It is an **alternative adjudicator,
+not a replacement**: the binning procedure remains valid for cells
+where it achieves coverage; a cell pins `--adjudicator {bin,knn}`.
+
+The kNN adjudicator estimates the disintegration of `mu` over `Phi_K`:
+the `k` nearest neighbours of a sample approximate a draw from `mu`
+conditioned on `Phi_K ≈ Phi_K(u_i)` within radius `r_k(u_i)`, and the
+local minority fraction estimates the conditional proxy non-constancy
+`1 - max_a mu_sigma(a)`.
+
+**Per-sample statistic.** For each sample `u_i` (L2 metric, the
+tolerance-ball metric of §1):
+
+- `N_k(u_i)` = the `k` nearest neighbours including `u_i` (so
+  `|N_k| = k`);
+- `r_k(u_i)` = distance to the `k`-th neighbour (the per-sample
+  fidelity radius);
+- `a_maj(u_i)` = majority proxy action in `N_k` (ties → `no_op`);
+- `m_i` = local minority fraction `= 1 - |{u in N_k : \hat{pi}(u) =
+  a_maj}| / k`.
+
+**Gates and verdict** (pre-registered, parallels §5):
+
+1. **Vacuity gate** — global `damp_fraction` in
+   `[delta_proxy_min, 1 - delta_proxy_min]`; exact `0`/`1` →
+   `DEFERRED_VACUITY` (structural precedence unchanged).
+2. **Fidelity-coverage gate** — let `F = {i : r_k(u_i) <= epsilon_K}`.
+   If `|F| / N < S_pos`, record **`DEFERRED_FIDELITY_COVERAGE`** (a
+   receipt name distinct from the binning `DEFERRED_COVERAGE`, so the
+   two adjudicators' deferrals are never conflated) and stop — the
+   attractor is too sparse at scale `epsilon_K` for a faithful local
+   fiber test at this `k` and `N`. No automatic fall-back; admissible
+   responses (larger `N`, a pre-registered larger `epsilon_K` with the
+   same fidelity caveat, or reconsidering the continuous-fiber object)
+   are recorded, not defaulted.
+3. **Verdict on `F`** — let `incompat_fraction =
+   |{i in F : m_i > delta_action}| / |F|`. If
+   `incompat_fraction > delta_incompat`, **file `PDE-C1-NEG-A`**
+   (fiber incompatibility). Otherwise **strictness-witness positive**:
+   the proxy is locally constant on fibers across the fidelity-passing
+   coverage and the vacuity gate passed.
+
+**New pre-registered constant.** `delta_incompat` (default `0.01`) —
+the positive-mass threshold for filing `PDE-C1-NEG-A`, so a lone
+incompatible sample does not flip the verdict but a robust
+positive-mass region does. Post-hoc change → `PDE-C1-NEG-B`, same
+discipline as every other pinned parameter (§7).
+
+**Honest-deferral property.** Unlike the binning `S_eval = 0` (which
+reports only that coverage failed), the kNN deferral ships the full
+`r_k` distribution (a radius histogram), quantifying *how far from
+fidelity* the attractor sits — a measurable map even when no verdict
+is filed.
+
+**Implementation.** Exact neighbour search (`sklearn.neighbors.BallTree`,
+robust for the `d_K = 18` and `d_K = 32` regimes where KD-trees
+degrade); shares the deterministic integration via the harness
+`--adjudicator knn` flag, so only the post-sampling backend swaps.
+
 ## 6. Support-Level Certificate (Bridge)
 
 The cell-set v0 § 4.1 attractor-support caveat introduces a twin-state

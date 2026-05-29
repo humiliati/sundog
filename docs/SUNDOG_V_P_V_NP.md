@@ -12,15 +12,16 @@ Short version:
 > capacity envelope?
 
 Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier
-spec, v0-v4 frozen slates, and v0-v4 execution receipts all filed
-2026-05-28; see
+spec, v0-v4 frozen slates, v5 cost-closure slate, and v0-v4 execution
+receipts all filed 2026-05-28; see
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md),
 [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md),
 [`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md),
 [`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md),
 [`pvnp/PHASE1_V2_SLATE.md`](pvnp/PHASE1_V2_SLATE.md),
 [`pvnp/PHASE1_V3_SLATE.md`](pvnp/PHASE1_V3_SLATE.md),
-[`pvnp/PHASE1_V4_SLATE.md`](pvnp/PHASE1_V4_SLATE.md), and the receipts
+[`pvnp/PHASE1_V4_SLATE.md`](pvnp/PHASE1_V4_SLATE.md),
+[`pvnp/PHASE1_V5_SLATE.md`](pvnp/PHASE1_V5_SLATE.md), and the receipts
 under [`pvnp/receipts/`](pvnp/receipts/). v0 = **named quarantine**
 (`A_spoof_small` breached 245 / 444 by editing analytical fields the
 verifier did not bind to source). v1 closed the spoof channel via
@@ -59,8 +60,9 @@ baseline at the same commit hits 879 ms. v4 is filed as **named
 quarantine on cost alone**, attributable to ~50–150 ms of
 `noteShortCircuit` closure-allocation overhead added for the v4
 cache-efficiency instrumentation plus CPU thermal variance across three
-back-to-back v4 runs. A v5 with the closure inlined and a median-of-N
-cost measurement is the next reachable bounded-positive promotion;
+back-to-back v4 runs. v5 is opened to inline the short-circuit counter
+and use a median-of-3 cost statistic; bounded-positive promotion is the
+next reachable Phase 1 outcome if safety and cost both stay green;
 that would unlock Phase 1 → Phase 2 (mesa bridge).
 No complexity-theoretic result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
@@ -605,10 +607,12 @@ baselines, reproduced metrics, and archived artifacts.
   after the v2 safety-repair-landed quarantine.
 - [`pvnp/PHASE1_V4_SLATE.md`](pvnp/PHASE1_V4_SLATE.md): cost-gate slate
   opened after the v3 cost-only quarantine.
+- [`pvnp/PHASE1_V5_SLATE.md`](pvnp/PHASE1_V5_SLATE.md): cost-closure slate
+  opened after the v4 cost-only quarantine.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index,
-  including the Phase 1 v0, v1, v2, and v3 named-quarantine receipts.
+  including the Phase 1 v0, v1, v2, v3, and v4 named-quarantine receipts.
 
 ## 11. Cross-References
 

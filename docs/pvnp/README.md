@@ -32,6 +32,9 @@ Phase specs:
 - [`PHASE1_V4_SLATE.md`](PHASE1_V4_SLATE.md) - cost-gate slate opened after
   the v3 cost-only quarantine, focused on stable cost comparators,
   cache-eligible reuse accounting, and bounded-positive promotion criteria.
+- [`PHASE1_V5_SLATE.md`](PHASE1_V5_SLATE.md) - cost-closure slate opened
+  after the v4 cost-only quarantine, focused on short-circuit instrumentation
+  overhead and median-of-3 cost promotion.
 
 Templates:
 
@@ -48,7 +51,7 @@ Result convention:
 Receipts:
 
 - [`receipts/README.md`](receipts/README.md) - receipt index, including the
-  Phase 1 v0, v1, v2, and v3 named-quarantine receipts.
+  Phase 1 v0, v1, v2, v3, and v4 named-quarantine receipts.
 
 Current state:
 
@@ -75,3 +78,8 @@ Current state:
   time improves to 907.52 ms, but the rollout-ratio and raw cache-hit gates
   remain unsuitable for bounded-positive promotion.
 - Phase 1 v4 cost-gate slate opened: 2026-05-28.
+- Phase 1 v4 harness executed: 2026-05-28. Verdict = named quarantine on
+  cost alone; safety, denominator restatement, and cache-eligible reuse all
+  pass, but absolute wall-time and full-state-ratio cost gates miss by a small
+  margin.
+- Phase 1 v5 cost-closure slate opened: 2026-05-28.
