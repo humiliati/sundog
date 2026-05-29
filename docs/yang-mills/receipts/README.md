@@ -34,3 +34,8 @@ the [receipt template](../RECEIPT_TEMPLATE.md).
   - `P1-A smoke_pass` for the Abelian `U1_2D`, 16x16, beta 1.0
   gauge-randomization smoke. Instrumentation only; no non-Abelian or
   certificate claim.
+- [`2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md`](2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md)
+  - `P1-A smoke_pass` for the non-Abelian `SU2_2D`, 16x16, beta 2.0
+  gauge-randomization smoke with Creutz / Kennedy-Pendleton heatbath plus
+  Brown-Woch overrelaxation. Instrumentation only; no Phase 2 certificate
+  claim.
