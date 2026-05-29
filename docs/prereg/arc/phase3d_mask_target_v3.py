@@ -1974,67 +1974,6 @@ def _mask_score(predicted: list[list[bool]], gold: list[list[bool]]) -> dict[str
     return {"precision": prec, "recall": rec, "f1": f1, "iou": iou, "mass_error": mass_err, "over_edit": over_edit, "tp": tp, "fp": fp, "fn": fn, "tn": tn}
 
 
-def _score_mask_candidate_on_pairs(
-    cand: dict[str, Any],
-    conditioning: list[dict[str, Any]],
-    cond_baselines: list[list[list[int]]],
-    use_loco: bool,
-    arm: str,
-    mask_seed: int,
-    max_steps_mask: int,
-    device: torch.device,
-) -> dict[str, Any]:
-    """Score a candidate on conditioning pairs. For families that regenerate per-LOCO,
-    rebuild the candidate from k-1 conditioning pairs and score on the held-out pair."""
-    n = len(conditioning)
-    sum_f1 = sum_prec = sum_rec = sum_nonmodal = sum_mass = sum_over = 0.0
-    n_eval = 0
-    # Modal-edit-color in conditioning (for nonmodal recall)
-    all_colors: list[int] = []
-    for b, p in zip(cond_baselines, conditioning):
-        for oy, ox, t in _gold_edits_in_pair(b, p["output"]):
-            all_colors.append(t)
-    modal = _modal_color(all_colors) if all_colors else -1
-    for i, (pair, baseline) in enumerate(zip(conditioning, cond_baselines)):
-        gold_pair_mask = _conditioning_gold_mask(baseline, pair["output"])
-        if use_loco and n >= 3:
-            loco_cond = [c for j, c in enumerate(conditioning) if j != i]
-            loco_bls = [b for j, b in enumerate(cond_baselines) if j != i]
-            loco_cands, _ = generate_mask_candidates(arm, pair["input"], baseline, loco_cond, loco_bls, mask_seed, max_steps_mask, device)
-            loco_cand = next((c for c in loco_cands if c["family"] == cand["family"] and c["id"] == cand["id"]), None)
-            if loco_cand is None:
-                continue
-            pred_native = loco_cand["mask"]
-        else:
-            # Project the candidate mask (in query frame) onto this conditioning pair's frame
-            pred_native = _project_mask_to_shape(cand["mask"], len(baseline), len(baseline[0]) if baseline else 0)
-        s = _mask_score(pred_native, gold_pair_mask)
-        sum_f1 += s["f1"]; sum_prec += s["precision"]; sum_rec += s["recall"]
-        sum_mass += s["mass_error"]; sum_over += s["over_edit"]
-        # Nonmodal-edit recall: cells whose target edit color != modal
-        nonmodal_total = 0; nonmodal_hit = 0
-        bh = len(baseline); bw = len(baseline[0]) if bh else 0
-        th = len(pair["output"]); tw = len(pair["output"][0]) if th else 0
-        for y in range(min(bh, th)):
-            for x in range(min(bw, tw)):
-                if baseline[y][x] != pair["output"][y][x] and pair["output"][y][x] != modal:
-                    nonmodal_total += 1
-                    if y < len(pred_native) and x < len(pred_native[0]) and pred_native[y][x]:
-                        nonmodal_hit += 1
-        nm_recall = (nonmodal_hit / nonmodal_total) if nonmodal_total else 1.0
-        sum_nonmodal += nm_recall
-        n_eval += 1
-    n_eval = max(1, n_eval)
-    return {
-        "f1": round_float(sum_f1 / n_eval),
-        "precision": round_float(sum_prec / n_eval),
-        "recall": round_float(sum_rec / n_eval),
-        "nonmodal_recall": round_float(sum_nonmodal / n_eval),
-        "mass_error": round_float(sum_mass / n_eval),
-        "over_edit": round_float(sum_over / n_eval),
-    }
-
-
 def select_mask_candidate(
     candidates: list[dict[str, Any]],
     conditioning: list[dict[str, Any]],
@@ -2050,16 +1989,88 @@ def select_mask_candidate(
 ) -> dict[str, Any]:
     """Per spec §"Mask Selection": LOCO scoring (k>=3) else all-cells; primary
     F1, then nonmodal recall, precision, mass-error, over-edit, family index,
-    SHA-256 tie-break key. Also returns `oracle_f1` for the diagnostic regret
-    metric."""
+    SHA-256 tie-break key.
+
+    PERFORMANCE: the LOCO fold candidate banks are generated ONCE per fold
+    (not once per candidate per fold). Each fold bank is indexed by
+    (family, id) -> mask so per-candidate scoring is an O(1) lookup. This
+    avoids the O(C^2 * k) blowup of regenerating the bank for every candidate.
+    """
     if not candidates:
         return {"selected": None, "candidates": [], "low_k_mask_selection": False}
     n = len(conditioning)
     use_loco = n >= 3
     low_k = not use_loco
+
+    # Modal-edit-color across all conditioning (for nonmodal recall)
+    all_colors: list[int] = []
+    for b, p in zip(cond_baselines, conditioning):
+        for _oy, _ox, t in _gold_edits_in_pair(b, p["output"]):
+            all_colors.append(t)
+    modal = _modal_color(all_colors) if all_colors else -1
+
+    # Precompute, per conditioning pair i: the gold mask, and (LOCO) the fold
+    # candidate bank indexed by (family,id). Generated ONCE per fold.
+    fold_data: list[dict[str, Any]] = []
+    for i, (pair, baseline) in enumerate(zip(conditioning, cond_baselines)):
+        gold_pair_mask = _conditioning_gold_mask(baseline, pair["output"])
+        # Nonmodal target cells for this pair
+        bh = len(baseline); bw = len(baseline[0]) if bh else 0
+        th = len(pair["output"]); tw = len(pair["output"][0]) if th else 0
+        nonmodal_cells: list[tuple[int, int]] = []
+        for y in range(min(bh, th)):
+            for x in range(min(bw, tw)):
+                if baseline[y][x] != pair["output"][y][x] and pair["output"][y][x] != modal:
+                    nonmodal_cells.append((y, x))
+        fold_bank: dict[tuple[str, str], list[list[bool]]] = {}
+        if use_loco:
+            loco_cond = [c for j, c in enumerate(conditioning) if j != i]
+            loco_bls = [b for j, b in enumerate(cond_baselines) if j != i]
+            loco_cands, _ = generate_mask_candidates(arm, pair["input"], baseline, loco_cond, loco_bls, mask_seed, max_steps_mask, device)
+            for lc in loco_cands:
+                fold_bank[(lc["family"], lc["id"])] = lc["mask"]
+        fold_data.append({
+            "gold": gold_pair_mask,
+            "nonmodal_cells": nonmodal_cells,
+            "bank": fold_bank,
+            "baseline_shape": (bh, bw),
+        })
+
+    def _score_candidate(cand: dict[str, Any]) -> dict[str, Any]:
+        sum_f1 = sum_prec = sum_rec = sum_nonmodal = sum_mass = sum_over = 0.0
+        n_eval = 0
+        for fd in fold_data:
+            bh, bw = fd["baseline_shape"]
+            if use_loco:
+                pred_native = fd["bank"].get((cand["family"], cand["id"]))
+                if pred_native is None:
+                    # Candidate family/id absent from this fold's bank (data-dependent);
+                    # fall back to projecting the query-frame mask.
+                    pred_native = _project_mask_to_shape(cand["mask"], bh, bw)
+            else:
+                pred_native = _project_mask_to_shape(cand["mask"], bh, bw)
+            s = _mask_score(pred_native, fd["gold"])
+            sum_f1 += s["f1"]; sum_prec += s["precision"]; sum_rec += s["recall"]
+            sum_mass += s["mass_error"]; sum_over += s["over_edit"]
+            nm_total = len(fd["nonmodal_cells"]); nm_hit = 0
+            for (y, x) in fd["nonmodal_cells"]:
+                if y < len(pred_native) and x < len(pred_native[0]) and pred_native[y][x]:
+                    nm_hit += 1
+            sum_nonmodal += (nm_hit / nm_total) if nm_total else 1.0
+            n_eval += 1
+        n_eval = max(1, n_eval)
+        return {
+            "f1": round_float(sum_f1 / n_eval),
+            "precision": round_float(sum_prec / n_eval),
+            "recall": round_float(sum_rec / n_eval),
+            "nonmodal_recall": round_float(sum_nonmodal / n_eval),
+            "mass_error": round_float(sum_mass / n_eval),
+            "over_edit": round_float(sum_over / n_eval),
+        }
+
     scored: list[dict[str, Any]] = []
     for c in candidates:
-        s = _score_mask_candidate_on_pairs(c, conditioning, cond_baselines, use_loco, arm, mask_seed, max_steps_mask, device)
+        s = _score_candidate(c)
         family_idx = MASK_FAMILIES.index(c["family"])
         tk = hashlib.sha256(
             f"arc-p3d-mask-target-v3\0{master_seed}\0{lane}\0{task_id}\0{query_index}\0{arm}\0{c['family']}|{c['id']}".encode("utf-8")
