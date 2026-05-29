@@ -12,6 +12,14 @@ Synthesis (read this for the conclusion):
   three lanes, three identified vacuity causes, no structural-zero edge; the
   bounded null is the result. Public surface gated on external review.
 
+External review:
+
+- [`EXTERNAL_REVIEW_PACKET.md`](EXTERNAL_REVIEW_PACKET.md) - minimal reviewer
+  packet: what to check, what not to check, and the three specific sanity-check
+  questions.
+- [`EXTERNAL_REVIEW_EMAIL_DRAFT.md`](EXTERNAL_REVIEW_EMAIL_DRAFT.md) - short
+  email drafts and follow-ups for requesting the sanity check.
+
 Lit-pass (2026-05-28):
 
 - [`../RIEMANN_LITPASS_MEMO.md`](../RIEMANN_LITPASS_MEMO.md) - prior-art
@@ -91,3 +99,4 @@ Current state:
   structural-zero edge found.
 - Cross-lane bounded-null synthesis filed: 2026-05-28. Public surface gated on
   external review.
+- External review packet and email draft filed: 2026-05-28.

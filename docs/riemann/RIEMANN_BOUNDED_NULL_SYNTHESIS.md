@@ -143,6 +143,13 @@ Target: a point-process / random-matrix or analytic-number-theory reviewer
 familiar with Montgomery–Odlyzko statistics, consecutive-gap tests, and the
 Weil explicit formula. Named at the time of review.
 
+Reviewer materials:
+
+- [`EXTERNAL_REVIEW_PACKET.md`](EXTERNAL_REVIEW_PACKET.md) - minimal review
+  packet and three-question sanity-check ask.
+- [`EXTERNAL_REVIEW_EMAIL_DRAFT.md`](EXTERNAL_REVIEW_EMAIL_DRAFT.md) - email
+  drafts for requesting the review without implying endorsement.
+
 Until that review lands, this synthesis is an internal ledger artifact. The
 bounded null may be discussed inside the Sundog research record; it may not be
 elevated to a public RH-adjacent posture (main-ledger Falsification Mode 5 /

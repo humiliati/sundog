@@ -146,8 +146,9 @@ on the S₂ hook only, with `R-NL-NEG-A` pre-registered as the expected outcome.
   (`D=-0.0064`, inside floor `0.0424`, `0.45σ`; `tau_boot<tau_ind` confirms GUE
   anti-persistence). Receipt:
   [`receipts/2026-05-28_probe05_reversibility_null.md`](receipts/2026-05-28_probe05_reversibility_null.md).
-- Next gate: cross-lane synthesis note (three lanes, three named vacuity causes,
-  no structural-zero edge) OR external review.
+- Cross-lane synthesis filed:
+  [`RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](RIEMANN_BOUNDED_NULL_SYNTHESIS.md).
+- Next gate: external review before any public-facing claim.
 
 ## Cross-References
 
@@ -157,5 +158,8 @@ on the S₂ hook only, with `R-NL-NEG-A` pre-registered as the expected outcome.
   - Front-A reading note.
 - [`../RIEMANN_LITPASS_MEMO.md`](../RIEMANN_LITPASS_MEMO.md)
   - Track A prior art and standard baselines.
+- [`RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](RIEMANN_BOUNDED_NULL_SYNTHESIS.md)
+  - capstone synthesis: three lanes, three named vacuity causes, no
+  structural-zero edge.
 - [`../SUNDOG_V_RIEMANN.md`](../SUNDOG_V_RIEMANN.md)
   - main ledger.

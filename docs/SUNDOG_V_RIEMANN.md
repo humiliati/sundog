@@ -410,6 +410,13 @@ These remain horizon until receipts exist.
   anchoring the probe ranking; gap claims time-stamped.
 - [`docs/riemann/README.md`](riemann/README.md) - project index and artifact
   map.
+- [`docs/riemann/RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](riemann/RIEMANN_BOUNDED_NULL_SYNTHESIS.md)
+  - capstone bounded-null synthesis: three lanes, three identified causes, no
+  structural-zero edge; public surface gated on external review.
+- [`docs/riemann/EXTERNAL_REVIEW_PACKET.md`](riemann/EXTERNAL_REVIEW_PACKET.md)
+  - minimal external-review packet and three-question sanity-check ask.
+- [`docs/riemann/EXTERNAL_REVIEW_EMAIL_DRAFT.md`](riemann/EXTERNAL_REVIEW_EMAIL_DRAFT.md)
+  - email drafts for requesting review without implying endorsement.
 - [`docs/riemann/REPRESENTATION_BRIDGE_NOTES.md`](riemann/REPRESENTATION_BRIDGE_NOTES.md)
   - bridge scoping resolving the v0.3h-D3 vs Riemann-Z₂ admissibility question
   for Probe 01.
@@ -437,6 +444,8 @@ These remain horizon until receipts exist.
   template for every probe result.
 - [`docs/riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md)
   - first dated Probe 01 v1 receipt under Path (i).
+- [`docs/riemann/receipts/2026-05-28_probe05_reversibility_null.md`](riemann/receipts/2026-05-28_probe05_reversibility_null.md)
+  - dated Probe 05 S2 reversibility null; `R-NL-NEG-A` as predicted.
 - [`experiments/riemann/README.md`](../experiments/riemann/README.md) -
   computational workspace notes.
 
@@ -444,6 +453,9 @@ These remain horizon until receipts exist.
 
 - [`RIEMANN_LITPASS_MEMO.md`](RIEMANN_LITPASS_MEMO.md) - 2026-05-28 lit-pass
   memo grounding the probe ranking in indexed prior art.
+- [`riemann/RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](riemann/RIEMANN_BOUNDED_NULL_SYNTHESIS.md)
+  - capstone bounded-null synthesis and current conclusion of the Front-A
+  Riemann lane.
 - [`riemann/REPRESENTATION_BRIDGE_NOTES.md`](riemann/REPRESENTATION_BRIDGE_NOTES.md)
   - bridge scoping for Probe 01 admissibility.
 - [`riemann/NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md`](riemann/NONLINEAR_PAIR_CORRELATION_BRIDGE_NOTES.md)
