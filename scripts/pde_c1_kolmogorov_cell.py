@@ -44,6 +44,7 @@ VERDICT_BEARING_PRESETS = {
     "fallback_v4",
     "lock_v5",
     "fallback_v5",
+    "lock_v6",
 }
 
 
@@ -99,6 +100,7 @@ def parse_args() -> argparse.Namespace:
             "fallback_v4",
             "lock_v5",
             "fallback_v5",
+            "lock_v6",
         ],
         default="smoke",
     )
@@ -125,10 +127,11 @@ def parse_args() -> argparse.Namespace:
 
 
 def build_config(args: argparse.Namespace) -> RunConfig:
-    # Cell-set v0 / v1 / v2 / v3 / v4 / v5 pinned values. v0..v4 use K = 4
+    # Cell-set v0 / v1 / v2 / v3 / v4 / v5 / v6 pinned values. v0..v4 use K = 4
     # (signature dim 32). v5 uses K = 3 (signature dim 18) to address the
     # curse-of-dimensionality coverage failure observed at K = 4 with the
-    # G = 200, k_f = 2 attractor.
+    # G = 200, k_f = 2 attractor. v6 keeps K = 3 and changes the regime to
+    # G = 300 for the pre-registered regime-generality test.
     grid_size = 32
     n_modes = 16
     forcing_amplitude = 1.0
@@ -236,6 +239,15 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         sample_count = 200_000
         kf = 2
         grashof = 200.0
+        e_max_burnin_fraction = 0.25
+        k_signature = 3
+    elif args.preset == "lock_v6":
+        # v6 / regime-generality v0: same objective, k_f, K, sampling, and
+        # E_max amendment as v5, but at higher Grashof G = 300.
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 300.0
         e_max_burnin_fraction = 0.25
         k_signature = 3
     else:

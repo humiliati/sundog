@@ -234,6 +234,16 @@ measuring it on the support. Scoped: finite-Galerkin / sampled-support /
 numerical (not an infinite-dim NSE theorem); one cell. Proxy faithfulness
 and external review remain open firm-up items; **C1 stays unpromoted.**
 
+**Regime-generality v0 staged 2026-05-28.**
+[`proof/PDE_C1_REGIME_GENERALITY_v0.md`](proof/PDE_C1_REGIME_GENERALITY_v0.md)
+pins exactly one new cell, `lock_v6`: `k_f = 2`, `G = 300`, `K = 3`,
+same low-band-energy proxy, same last-quarter `E_max` rule, same kNN
+convergence check, and same twin-state certificate. This is a direct
+test of whether the complete v5 Reading-2 regime-2 witness survives a
+higher-Grashof regime or remains a localized `(k_f = 2, G = 200)` sweet
+spot. Full runs are staged, not executed inline under the ~10-minute
+rule.
+
 Criterion (b) is closed at the *procedure-and-execution* level (v0–v5
 lock cycles + v4 fall-back + the kNN run and its convergence check all
 ran cleanly; methodology survived six vacuity / coverage diagnoses, a
