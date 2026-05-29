@@ -97,9 +97,10 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--adjudicator",
-        choices=["bin", "knn"],
+        choices=["bin", "knn", "knn-sweep"],
         default="bin",
-        help="Fiber-locality adjudicator: hard binning (default) or kNN/disintegration.",
+        help="Fiber-locality adjudicator: hard binning (default), kNN/disintegration, "
+        "or knn-sweep (convergence check over k).",
     )
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--write-samples", action="store_true", help="Write per-sample rows even for large runs.")
@@ -431,18 +432,24 @@ def run_cell(cfg: RunConfig) -> dict:
     epsilon_k = 0.05 * math.sqrt(max(0.0, 2.0 * e_max))
     h_k = epsilon_k / math.sqrt(cfg.signature_dimension) if epsilon_k > 0 else 1.0
     actions = label_samples(energy_by_step, cfg, e_max)
+    knn_histogram: list = []
+    knn_sweep_rows: list = []
     if cfg.adjudicator == "knn":
         result, bin_rows, sample_rows, knn_histogram = aggregate_knn(
+            sample_signatures, actions, epsilon_k, cfg
+        )
+    elif cfg.adjudicator == "knn-sweep":
+        result, bin_rows, sample_rows, knn_sweep_rows = aggregate_knn_sweep(
             sample_signatures, actions, epsilon_k, cfg
         )
     else:
         bin_rows, sample_rows = aggregate_bins(sample_signatures, sample_energy, actions, sig_min, h_k, cfg)
         result = summarize(bin_rows, cfg)
-        knn_histogram = []
     result.update(
         {
             "adjudicator": cfg.adjudicator,
             "knn_histogram": knn_histogram,
+            "knn_sweep_rows": knn_sweep_rows,
             "e_max": e_max,
             "epsilon_k": epsilon_k,
             "h_k": h_k,
@@ -758,6 +765,144 @@ def summarize_knn(
     }
 
 
+def aggregate_knn_sweep(
+    signatures: np.ndarray,
+    actions: np.ndarray,
+    epsilon_k: float,
+    cfg: RunConfig,
+) -> tuple[dict, list, list, list]:
+    """kNN convergence check (pre-registered: PDE_C1_KNN_CONVERGENCE_CHECK.md).
+
+    Query the BallTree once at k = max(sweep), sub-slice for each k, and report
+    incompat_fraction vs neighbourhood radius. Distinguishes genuine
+    fiber-incompatibility (incompat plateaus as r_k -> 0) from a finite-radius
+    boundary-straddling artifact (incompat decays to 0).
+    """
+    from sklearn.neighbors import BallTree
+
+    n = int(signatures.shape[0])
+    k_sweep = [k for k in (10, 20, 30, 50, 100) if k <= n]
+    k_query = min(max(k_sweep), n) if k_sweep else min(1, n)
+    tree = BallTree(signatures, metric="euclidean")
+    dist, idx = tree.query(signatures, k=k_query)
+    damp = int(actions.sum())
+    no_op = int(n - damp)
+
+    rows: list[dict] = []
+    for k in k_sweep:
+        r_k = dist[:, k - 1]
+        nbr = actions[idx[:, :k]]
+        damp_count = nbr.sum(axis=1)
+        no_op_count = k - damp_count
+        majority_count = np.maximum(damp_count, no_op_count)
+        minority = 1.0 - majority_count / float(k)
+        fidelity_pass = r_k <= epsilon_k
+        f_count = int(fidelity_pass.sum())
+        fcov = f_count / n if n else 0.0
+        if f_count:
+            incompat = float(((minority > cfg.delta_action) & fidelity_pass).sum()) / f_count
+        else:
+            incompat = 0.0
+        rows.append(
+            {
+                "k": k,
+                "r_k_median": float(np.median(r_k)),
+                "r_k_median_passing": float(np.median(r_k[fidelity_pass])) if f_count else 0.0,
+                "fidelity_coverage": fcov,
+                "incompat_fraction": incompat,
+            }
+        )
+
+    xs = np.array([row["r_k_median"] for row in rows], dtype=np.float64)
+    ys = np.array([row["incompat_fraction"] for row in rows], dtype=np.float64)
+    if len(rows) >= 2:
+        slope, intercept = (float(v) for v in np.polyfit(xs, ys, 1))
+    else:
+        slope, intercept = 0.0, float(ys[0]) if len(ys) else 0.0
+
+    result = summarize_knn_sweep(
+        rows=rows,
+        slope=slope,
+        intercept=intercept,
+        damp=damp,
+        no_op=no_op,
+        n=n,
+        epsilon_k=epsilon_k,
+        cfg=cfg,
+    )
+    return result, [], [], rows
+
+
+def summarize_knn_sweep(
+    *,
+    rows: list,
+    slope: float,
+    intercept: float,
+    damp: int,
+    no_op: int,
+    n: int,
+    epsilon_k: float,
+    cfg: RunConfig,
+) -> dict:
+    # Pre-registered classification thresholds (PDE_C1_KNN_CONVERGENCE_CHECK.md §3).
+    A_HI = 0.02
+    A_LO = 0.01
+    damp_fraction = damp / max(1, n)
+    proxy_structural_constant = damp == 0 or no_op == 0
+    proxy_constant = (
+        damp_fraction < cfg.delta_proxy_min or damp_fraction > 1.0 - cfg.delta_proxy_min
+    )
+    incompat_vals = [row["incompat_fraction"] for row in rows]
+    min_incompat = min(incompat_vals) if incompat_vals else 0.0
+
+    if cfg.preset not in VERDICT_BEARING_PRESETS:
+        verdict, verdict_label, interpretable = "SMOKE_ONLY", "", False
+    elif proxy_structural_constant or proxy_constant:
+        verdict, verdict_label, interpretable = (
+            "DEFERRED_VACUITY",
+            "proxy_selector_constant_on_sampled_support",
+            False,
+        )
+    elif intercept > A_HI and min_incompat > cfg.delta_incompat:
+        verdict, verdict_label, interpretable = (
+            "PDE-C1-NEG-A",
+            "fiber_incompatibility_plateau_nonzero",
+            True,
+        )
+    elif intercept < A_LO:
+        verdict, verdict_label, interpretable = (
+            "STRICTNESS_WITNESS_POSITIVE",
+            "incompat_decays_to_zero_boundary_artifact",
+            True,
+        )
+    else:
+        verdict, verdict_label, interpretable = (
+            "INCONCLUSIVE_CONVERGENCE",
+            "intercept_in_ambiguous_band",
+            False,
+        )
+
+    return {
+        "verdict": verdict,
+        "verdict_label": verdict_label,
+        "interpretable": interpretable,
+        "n_samples": n,
+        "sweep_intercept": intercept,
+        "sweep_slope": slope,
+        "min_incompat_fraction": min_incompat,
+        "delta_incompat": cfg.delta_incompat,
+        "delta_action": cfg.delta_action,
+        "no_op_count": no_op,
+        "damp_low_band_count": damp,
+        "damp_fraction": damp_fraction,
+        "epsilon_k_radius_threshold": epsilon_k,
+        "sweep_k_values": [row["k"] for row in rows],
+        "sweep_incompat_fractions": incompat_vals,
+        "sweep_r_k_medians": [row["r_k_median"] for row in rows],
+        "sweep_fidelity_coverages": [row["fidelity_coverage"] for row in rows],
+    }
+
+
 def bin_key(idx: Iterable[int]) -> str:
     return ";".join(str(int(x)) for x in idx)
 
@@ -779,11 +924,13 @@ def write_outputs(out_dir: Path, cfg: RunConfig, result: dict, write_samples: bo
         "result": {
             k: v
             for k, v in result.items()
-            if k not in ("bin_rows", "sample_rows", "knn_histogram")
+            if k not in ("bin_rows", "sample_rows", "knn_histogram", "knn_sweep_rows")
         },
     }
     (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    if cfg.adjudicator == "knn":
+    if cfg.adjudicator == "knn-sweep":
+        write_csv(out_dir / "knn-sweep.csv", result.get("knn_sweep_rows", []))
+    elif cfg.adjudicator == "knn":
         write_csv(out_dir / "knn-radius-histogram.csv", result.get("knn_histogram", []))
     else:
         write_csv(out_dir / "bin-summary.csv", result["bin_rows"])
@@ -795,6 +942,9 @@ def write_outputs(out_dir: Path, cfg: RunConfig, result: dict, write_samples: bo
 def write_receipt(path: Path, manifest: dict) -> None:
     r = manifest["result"]
     c = manifest["config"]
+    if c.get("adjudicator") == "knn-sweep":
+        write_receipt_knn_sweep(path, manifest)
+        return
     if c.get("adjudicator") == "knn":
         write_receipt_knn(path, manifest)
         return
@@ -902,6 +1052,77 @@ def write_receipt_knn(path: Path, manifest: dict) -> None:
             "under the kNN/disintegration adjudicator."
         )
     lines.extend(["", "## Files", "", "- `manifest.json`", "- `knn-radius-histogram.csv`"])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_receipt_knn_sweep(path: Path, manifest: dict) -> None:
+    r = manifest["result"]
+    c = manifest["config"]
+    lines = [
+        "# PDE C1 Kolmogorov kNN Convergence-Check Receipt",
+        "",
+        f"**Status:** {r['verdict']}",
+        f"**Preset:** `{c['preset']}`",
+        f"**Adjudicator:** `knn-sweep`",
+        f"**Interpretable verdict:** `{r['interpretable']}`",
+        "",
+        "## Sweep (incompat_fraction vs neighbourhood radius)",
+        "",
+        "| k | r_k median | fidelity coverage | incompat fraction |",
+        "|---:|---:|---:|---:|",
+    ]
+    ks = r.get("sweep_k_values", [])
+    rks = r.get("sweep_r_k_medians", [])
+    fcs = r.get("sweep_fidelity_coverages", [])
+    incs = r.get("sweep_incompat_fractions", [])
+    for j in range(len(ks)):
+        lines.append(
+            f"| {ks[j]} | {rks[j]:.6g} | {fcs[j]:.6g} | {incs[j]:.6g} |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Readout",
+            "",
+            f"- OLS fit `incompat_fraction = a + b * r_k_median`: "
+            f"intercept `a = {r['sweep_intercept']:.6g}`, slope `b = {r['sweep_slope']:.6g}`",
+            f"- min incompat fraction over sweep: `{r['min_incompat_fraction']:.6g}` "
+            f"vs `delta_incompat = {r['delta_incompat']}`",
+            f"- damp fraction (global): `{r['damp_fraction']:.6g}`",
+            f"- classification thresholds (pre-registered): `a > 0.02` & "
+            f"`min_incompat > delta_incompat` => NEG-A; `a < 0.01` => POSITIVE; else INCONCLUSIVE",
+            f"- elapsed seconds: `{r['elapsed_seconds']:.3f}`",
+            "",
+            "## Branch",
+            "",
+        ]
+    )
+    if r["verdict"] == "SMOKE_ONLY":
+        lines.append("Smoke-only run; no C1 verdict may be filed from this receipt.")
+    elif r["verdict"] == "DEFERRED_VACUITY":
+        lines.append("Proxy selector essentially constant; no verdict filed.")
+    elif r["verdict"] == "PDE-C1-NEG-A":
+        lines.append(
+            "`incompat_fraction` extrapolates to a positive value as `r_k -> 0` "
+            "(intercept above threshold, and stays above `delta_incompat` across the "
+            "sweep): the fiber-incompatibility survives the zero-radius limit and is "
+            "**genuine**, not a finite-radius boundary artifact. The provisional v4 "
+            "`PDE-C1-NEG-A` is confirmed."
+        )
+    elif r["verdict"] == "STRICTNESS_WITNESS_POSITIVE":
+        lines.append(
+            "`incompat_fraction` extrapolates to ~zero as `r_k -> 0`: the observed "
+            "mixing was a finite-radius boundary-straddling artifact around a clean "
+            "decision surface. The proxy is control-sufficient on fibers at this cell; "
+            "the provisional v4 `PDE-C1-NEG-A` is **overturned**."
+        )
+    else:
+        lines.append(
+            "Intercept in the ambiguous band `[0.01, 0.02]`: neither genuine plateau "
+            "nor clean decay is established. `INCONCLUSIVE_CONVERGENCE` — a larger `N` "
+            "or wider `k` range is needed. No verdict filed."
+        )
+    lines.extend(["", "## Files", "", "- `manifest.json`", "- `knn-sweep.csv`"])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
