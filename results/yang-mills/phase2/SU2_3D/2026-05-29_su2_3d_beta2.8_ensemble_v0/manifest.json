@@ -1,0 +1,66 @@
+{
+  "phase": "phase2",
+  "cell": "SU2_3D",
+  "latticeSize": [
+    12,
+    12,
+    12
+  ],
+  "beta": 2.8,
+  "boundary": "periodic",
+  "action": "Wilson",
+  "generator": "su2_heatbath_overrelax_v1",
+  "updateMix": {
+    "heatbath": 1,
+    "overrelaxation": 4
+  },
+  "masterSeed": 202605290203,
+  "burnInSweeps": 2000,
+  "pilotTauIntPlaquette": 0.862567636802007,
+  "registeredThinning": 32,
+  "retainedConfigurations": 32,
+  "signatureVocabularyVersion": "v1",
+  "heldOutTargetVocabularyVersion": "v1",
+  "gammaHeldEpsilonFloor": 1e-10,
+  "heatbathFallbackCount": 0,
+  "heatbathFallbackFraction": 0,
+  "heatbathLinkUpdates": 18330624,
+  "heatbathRejectionAttempts": 43633671,
+  "linkUnitarityMaxFrobenius": 9.420554752102651e-16,
+  "perOrientationMeanPlaquette": {
+    "xy": 0.5949204313748403,
+    "xz": 0.594746533211458,
+    "yz": 0.5948027177238164
+  },
+  "perOrientationVariancePlaquette": {
+    "xy": 0.0000617424653844091,
+    "xz": 0.00006685930221235699,
+    "yz": 0.000060439588806657316
+  },
+  "perOrientationRelativeSpread": 0.0002923049103901857,
+  "controlSetDeclared": [
+    "CTRL_META",
+    "CTRL_RAW",
+    "CTRL_RAND",
+    "CTRL_RAND_STRAT",
+    "CTRL_PERM",
+    "CTRL_GAUGE_RAND",
+    "CTRL_FINITE_SIZE"
+  ],
+  "controlSetScored": [
+    "ensemble_only_phase2_aggregation_scores_controls"
+  ],
+  "codeCommit": "7844025aa1bf0aa6f7d783ca60521916ccfef937",
+  "gitDirty": true,
+  "commandLine": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\hughe\\Dev\\sundog\\scripts\\yang-mills-phase2-su2-3d-ensemble.mjs --cell SU2_3D --lattice-size 12x12x12 --beta 2.8 --boundary periodic --action Wilson --generator su2_heatbath_overrelax_v1 --overrelax-per-heatbath 4 --seed 202605290203 --burn-in 2000 --pilot-sweeps 512 --thinning 32 --measurements 32 --signature-vocab v1 --heldout-vocab v1 --gamma-held-epsilon 1e-10 --out results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.8_ensemble_v0",
+  "wallClockSeconds": 244.4304717,
+  "artifactHashes": {
+    "autocorr_pilot/plaquette_by_orientation.csv": "27af8aa8a9668c74abe9132e931361baf8d94b4f356bcf808cef435bcb12e3f9",
+    "autocorr_pilot/plaquette_series.csv": "865d2ae141214a4ae393ced67980ce1804d5eb85fcab5adc04c225e5f3aaab1b",
+    "configs/su2_links.jsonl": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19",
+    "heldout/heldout_loop_values.csv": "8be38326e932e0b413941135219683b2af732cd7cf59e3decbe9b612f62c72c4",
+    "heldout/heldout_summary.csv": "8fd656520a7a1e9774b41322cc5fb84cb834bef41939d9170b77c617bf91b2b8",
+    "signatures/signature_vectors.csv": "4df00104409a50642e0a73078b94dc3f6e6e5ab09c08dde0fd1b3c9188f2475c",
+    "summary.json": "08964c80e8f61850a4f2a51fc06318291f148e61776f1913a8e8dd51fe990df8"
+  }
+}

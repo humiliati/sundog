@@ -1,0 +1,43 @@
+{
+  "branch": "Z graph_contamination",
+  "reason": "CTRL_PERM purity 0.2791666666666664 differs from chance 0.3333333333333333",
+  "primary": {
+    "withinBetaMeanBinPurity5": 0.3104166666666665,
+    "acrossBetaMeanBinPurity5": 0.425,
+    "discriminationRatioWithin5": 0.9312499999999996,
+    "discriminationRatioAcross5": 1.2750000000000001
+  },
+  "controls": {
+    "withinBeta": {
+      "CTRL_META": 0.31458333333333316,
+      "CTRL_RAW": 0.29791666666666644,
+      "CTRL_RAND": 0.2999999999999997,
+      "CTRL_PERM": 0.2791666666666664,
+      "CTRL_GAUGE_RAND": 0.3104166666666665
+    },
+    "acrossBeta": {
+      "CTRL_RAND_STRAT": 0.3541666666666665,
+      "CTRL_GAUGE_RAND": 0.425
+    },
+    "CTRL_FINITE_SIZE": {
+      "notScored": "phase4_reserved",
+      "branch": "YM-P4-DEFERRED_FINITE_SIZE"
+    }
+  },
+  "margins": {
+    "withinPrimaryMinusRand5": 0.010416666666666796,
+    "withinPrimaryMinusMeta5": -0.004166666666666652,
+    "withinPrimaryMinusRaw5": 0.012500000000000067,
+    "acrossPrimaryMinusRandStrat5": 0.07083333333333347,
+    "gaugeRandPurityDiff": 0
+  },
+  "gammaHeld": {
+    "perBetaBinEdgesPath": "aggregation/per_beta_bin_edges.json",
+    "globalBinEdgesPath": "aggregation/global_bin_edges.json",
+    "binDegenerateBetas": []
+  },
+  "gaugeRandomization": {
+    "signatureResidualMax": 4.999611835643236e-13
+  },
+  "wallClockSeconds": 6.764846600000001
+}
