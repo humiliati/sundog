@@ -337,9 +337,23 @@ and leakage-safe contiguous splits. **Imports the C1 lesson directly:**
 plus a **base-rate gate** (`PDE-C2-DEFERRED-BASERATE`) that defers a
 degenerate-burst-rate cell rather than mis-reading it — the explicit
 guard against the C1-v6 intermittent-threshold vacuity that motivated
-the pivot here. Proposed, not built, not run; §10 lists sign-off
-decisions (Sabra params, signature library, base-rate band, compute
-budget, build trigger). The C1 reviewer-outreach draft is staged at
+the pivot here. **Objective-validity layer executed 2026-05-29 →
+`PDE-C2-DEFERRED-BASERATE`** (harness `scripts/pde_c2_sabra_cell.py`;
+integrator energy-conservation self-test passed first;
+`results/proof/c2-sabra-headline-baserate/`, §12). The base-rate gate
+deferred with a diagnostic pattern: base rate `train = 0.138` (in band)
+but `val = 0`, `test = 0` — block-dependent, so the Sabra trajectory is
+**not stationary / not representatively sampled** across the labelled
+span (burst recurrence time comparable to block length — the C1
+intermittency lesson recurring as block-representativeness failure). The
+gate caught it **before** the baseline comparison was built, so no
+compute was spent on a comparison over unrepresentative labels. Per
+discipline, no `q_burst`/`τ_burst` rescue (would be `PDE-C2-NEG-B`); the
+re-pose is a v1 cell with a per-block stationarity gate + much longer
+blocks + per-block diagnostics (its own pre-registration), mirroring the
+C1 v6→v1 deferral→diagnose→new-cell move. The matched-budget 4-baseline
+comparison stays the deferred next increment, gated on a stationary
+cell. The C1 reviewer-outreach draft is staged at
 [`proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
 (criterion-(c) prep).
 

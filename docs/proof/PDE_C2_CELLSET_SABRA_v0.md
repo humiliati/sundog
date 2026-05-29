@@ -217,6 +217,59 @@ run, and listed in the receipt.
    smoke-test (integrator energy-balance + label + signature + baseline
    plumbing), then run the headline cell first.
 
+## 12. Result (2026-05-29) — PDE-C2-DEFERRED-BASERATE (non-stationarity)
+
+The objective-validity layer ran (`results/proof/c2-sabra-headline-baserate/`,
+~32 min, 6.3M steps; integrator energy-conservation self-test passed
+first). The base-rate gate **deferred**, with a diagnostic pattern:
+
+| block | burst base rate |
+|---|---:|
+| train | **0.138** (in band) |
+| val | 0.000 |
+| test | 0.000 |
+
+`E_burst = 4.43` (held-out q=0.98 of calib max-shell-energy; calib
+median 3.12, p99 4.46).
+
+**Diagnosis: block-dependent base rate ⇒ the trajectory is not
+stationary / not representatively sampled across the labelled span.** A
+simple degenerate objective would give a uniform rate; a rate that runs
+0.138 → 0 → 0 across temporally-ordered blocks means either (a) slow
+energy drift past the 2M-step warmup, or (b) — more likely for a shell
+model — the **burst recurrence time is comparable to the block
+lengths**, so `train` caught burst activity and `val`/`test` did not.
+This is the C1 intermittency lesson in a new guise: shell-model bursts
+are intermittent enough that *block representativeness* fails at these
+trajectory lengths. The integrator is verified correct (energy
+conservation), so this is a sampling/stationarity issue, not an
+integration bug.
+
+**Disposition.** `PDE-C2-DEFERRED-BASERATE`, a non-verdict. Per §8 / the
+scoping, **no `q_burst` / `τ_burst` / `E_burst` rescue on this cell**
+(that would be `PDE-C2-NEG-B`). The gate did its designed job: it caught
+a non-stationary cell **before** any detector-vs-baseline comparison was
+built, so no compute was wasted on a comparison over unrepresentative
+labels.
+
+**Re-pose direction (a new pre-registered v1 cell, not a v0 retune).**
+A stationary, representatively-sampled Sabra cell needs:
+
+1. a **per-block stationarity gate** — require the base rate to be
+   consistent across `train`/`val`/`test` (e.g. each in band *and*
+   pairwise within a tolerance), not just `test` in band; a
+   block-dependent rate files `PDE-C2-DEFERRED-NONSTATIONARY`;
+2. **much longer blocks** (many burst recurrence times each), and/or a
+   longer warmup, chosen so each block contains O(10²) burst events;
+3. **per-block diagnostics** (mean/median max-energy, burst count) in the
+   receipt to distinguish drift (a) from rare-cluster intermittency (b);
+4. possibly a forcing/viscosity pair verified to give a statistically
+   steady cascade before labelling.
+
+This is a v1 cell-set with its own pre-registration, mirroring the C1
+v6 → v1 portable-objective move (deferral → diagnose → new pinned cell,
+never a same-cell retune).
+
 ## 11. Cross-references
 
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
