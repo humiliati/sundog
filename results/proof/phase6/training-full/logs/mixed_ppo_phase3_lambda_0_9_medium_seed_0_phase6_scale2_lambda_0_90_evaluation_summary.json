@@ -1,0 +1,13 @@
+{
+  "checkpoint": "C:\\Users\\hughe\\Dev\\sundog\\results\\proof\\phase6\\training-full\\checkpoints\\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_scale2_lambda_0_90.pt",
+  "env_config": {
+    "horizon": 200
+  },
+  "mean_steps": 194.59375,
+  "mean_terminal_alignment": 0.6929523169145179,
+  "seed_start": 10000,
+  "seeds": 64,
+  "sensor_tier": "local-probe-field",
+  "success_count": 3,
+  "success_rate": 0.046875
+}
