@@ -559,3 +559,26 @@ future runner may rerun the Phase 3E fiber certificate using the same frozen
 signature geometry thresholds (`epsilon_primary = 0.05`, `epsilon_strict =
 0.025`, `epsilon_loose = 0.10`, k=3). No execution is admitted by this
 addendum.
+
+## Post-Program-Sketch Oracle v2 Addendum
+
+Filed: **2026-05-29 (PT)**.
+
+The Phase 3E program-sketch oracle v2 binding receipt is now filed. Its verdict
+is **`phase3e_v2_deferred_sparse_fibers`**. The run was deterministic, pinned
+to `gitCommit 3B1B76D2` and runnerSha256 `6163C208`, and completed in about 8 s
+on `U_primary=25`.
+
+The result separates the two v1 deferral causes. The v2 oracle repairs the
+label-vacuity defect: anti-vacuity is `0.00`, anti-prior-laundering violations
+are 0%, anti-solver-leakage stays below the frozen thresholds
+(`unique_core=0.36`, `exact_lookup=0.04`), and the four v1-blind priors are now
+non-vacuous with 6-7 of 9 facets populated per primary context.
+
+The geometry does not move: 0 exact collisions, 0 representation-level
+collisions, 0 near pairs, minimum cross-task distance `0.207`, and 0%
+fidelity-passing neighborhoods. Therefore Phase 3E v2 is still deferred, but
+now solely because the registered context universe is too sparse at the frozen
+signature radius. The next certificate path is a Phase 0 register expansion; a
+Branch E solver remains possible only on independent capability grounds under a
+new pre-registered solver spec.

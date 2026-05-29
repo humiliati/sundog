@@ -6991,7 +6991,7 @@ deterministic. **All three gates pass cleanly**:
 
 | gate | result | margin |
 | --- | --- | --- |
-| anti-vacuity | **PASS** | overall vacuous fraction **0.00** (v1 oracle was 0.68); every prior 0/4 vacuous; both lanes non-vacuous for every prior |
+| anti-vacuity | **PASS** | overall vacuous fraction **0.00** (v1 oracle was 0.68); every prior 0-vacuous; both lanes non-vacuous for every prior |
 | anti-prior-laundering | **PASS** | 0% of non-vacuous contexts violate the two-extra-facet rule; minimum extra-facets-outside-prior = 5 |
 | anti-solver-leakage | **PASS** | no syntactic leakage; `unique_core_sketch_fraction = 0.36` (≤ 0.60); `core_sketch_exact_lookup_fraction = 0.04` (≤ 0.20) |
 
@@ -7020,8 +7020,7 @@ rule)."
 
 The binding v2-oracle certificate ran on the registered 36-task Phase 0
 set, pinned to freeze-marker `gitCommit 3B1B76D2…` (runnerSha256
-`6163C208…`; `gitDirty=true` only from the operator's unrelated
-Navier–Stokes working files, which the oracle does not read). Receipt
+`6163C208…`; `gitDirty=false`). Receipt
 at `results/arc/phase3e-program-sketch-oracle-v2/`. Wall ≈ 8 s, fully
 deterministic (binding branch matches the freeze-marker smoke exactly).
 `U_all = 49`, `U_primary = 25`.
@@ -7038,7 +7037,7 @@ pre-registered gates on `U_primary`:
 
 | gate | result | detail |
 | --- | --- | --- |
-| anti-vacuity | **PASS** | overall vacuous fraction **0.00** (v1 oracle: 0.68); all six priors 0/4 vacuous; both `test_lodo` and `pttest` lanes non-vacuous for every prior |
+| anti-vacuity | **PASS** | overall vacuous fraction **0.00** (v1 oracle: 0.68); all six priors 0-vacuous; both `test_lodo` and `pttest` lanes non-vacuous for every prior |
 | anti-prior-laundering | **PASS** | 0% of non-vacuous primary contexts violate the two-extra-facet rule; minimum extra-concrete-facets-outside-the-prior-facet = 5 (rule requires ≥ 2) |
 | anti-solver-leakage | **PASS** | no syntactic leakage; `unique_core_sketch_fraction = 0.36` (≤ 0.60); `core_sketch_exact_lookup_fraction = 0.04` (≤ 0.20) |
 

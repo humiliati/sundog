@@ -385,7 +385,7 @@ Checked **2026-05-28** against:
   freeze-marker `3B1B76D2`, runnerSha256 `6163C208`, ~8 s deterministic,
   U_primary=25): verdict **`phase3e_v2_deferred_sparse_fibers`**. The v1 oracle
   defect is **repaired and certified** -- all three gates pass: anti-vacuity
-  vacuous fraction **0.00** (v1 was 0.68; all six priors 0/4 vacuous, both
+  vacuous fraction **0.00** (v1 was 0.68; every prior 0-vacuous across both
   lanes), anti-prior-laundering 0% violations (min extra facets 5),
   anti-solver-leakage clean (`unique_core_sketch_fraction 0.36` <= 0.60,
   `core_sketch_exact_lookup_fraction 0.04` <= 0.20). Facet richness 6-7 of 9
@@ -565,11 +565,10 @@ Avoid:
   variant);
 - any claim that Phase 3E found a signature-fiber collision (it did
   not -- 0 collisions), ruled signature_palette insufficient, proved
-  it sufficient, or licensed a Branch E solver -- the binding
-  certificate is `phase3e_deferred_label_vacuity`: no collision, but
-  deferred (zero cross-task locality + 68% prior-blind oracle), so it
-  adjudicates neither sufficiency nor a locality-positive Branch E
-  license;
+  it sufficient, or licensed a Branch E solver -- the v1 binding
+  certificate is `phase3e_deferred_label_vacuity` and the v2 binding
+  certificate is `phase3e_v2_deferred_sparse_fibers`; both adjudicate
+  neither sufficiency nor a locality-positive Branch E license;
 - any claim that the maximal cross-task separation (min distance
   0.207) proves signature sufficiency -- it only shows the
   representation does not conflate distinct registered tasks at the

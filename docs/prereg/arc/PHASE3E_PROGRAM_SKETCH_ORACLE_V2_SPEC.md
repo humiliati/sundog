@@ -4,10 +4,10 @@ Parent spec: [`PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md`](PHASE3E_SIGNATURE_F
 
 Filed: **2026-05-29 (PT)**
 
-Status: **SPEC FILED; EXECUTION HOLD**. This file freezes a framing-agnostic
-program-sketch oracle for a future Phase 3E certificate rerun. It admits no run
-until runner tooling, npm wiring, result ignore path, leak-check coverage, and a
-freeze-marker amendment are committed together.
+Status: **BINDING RECEIPT FILED -- `phase3e_v2_deferred_sparse_fibers`**. The
+v2 oracle defect repair is certified; geometric sparsity is now the sole
+remaining Phase 3E certificate deferral cause. This does not prove signature
+sufficiency and does not license a Branch E solver.
 
 ## Purpose
 
@@ -421,3 +421,41 @@ Forbidden:
   Branch E solver spec;
 - retuning `epsilon_primary`, kNN `k`, oracle facets, coverage thresholds,
   laundering thresholds, or leakage thresholds after inspecting v2 output.
+
+## Binding Receipt Addendum
+
+Filed: **2026-05-29 (PT)**.
+
+The binding v2 oracle certificate is filed at
+`results/arc/phase3e-program-sketch-oracle-v2/`, pinned to
+`gitCommit 3B1B76D2BBF483F9B86DA0629301E60A58308B0E` and runner SHA-256
+`6163C20839C2BECFBCB2477FBD6C8D68AE2290E7B1BC5BA9F82856955344A126`.
+The run is deterministic, clean-tree (`gitDirty=false`), and completes in
+about 8 seconds on the registered 36-task context universe (`U_primary=25`,
+`U_all=49`).
+
+**Branch: `phase3e_v2_deferred_sparse_fibers`.**
+
+All three frozen oracle gates pass:
+
+- anti-vacuity: vacuous fraction `0.00` on `U_primary` (v1 was `0.68`);
+- anti-prior-laundering: `0.00` violations, minimum extra facets `5`;
+- anti-solver-leakage: `unique_core_sketch_fraction = 0.36`,
+  `core_sketch_exact_lookup_fraction = 0.04`, and no syntactic leakage.
+
+The four priors that were fully vacuous under v1 (`counting`,
+`local_completion`, `spatial_transform`, `symmetry`) are now non-vacuous, with
+6-7 of 9 facets populated per primary context. This repairs the v1 oracle
+defect without turning the sketch into a hidden solver.
+
+The frozen fiber geometry remains unchanged from v1: 0 exact collisions, 0
+representation-level collisions, 0 near pairs, minimum cross-task distance
+`0.207`, and 0% fidelity-passing neighborhoods. Therefore the v2 certificate
+does not issue a collision, incompatibility, or locality-positive branch. It
+separates the two v1 deferral causes and closes one of them: label vacuity is
+repaired, while registered-context geometric sparsity remains.
+
+Verdict impact: no prior verdict changes. The next certificate move is an
+expanded registered context universe under a new Phase 0 register amendment, or
+a Branch E solver justified on capability grounds under its own
+pre-registration.
