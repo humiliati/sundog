@@ -58,3 +58,11 @@ the [receipt template](../RECEIPT_TEMPLATE.md).
   but within-beta bin-purity@5 was `0.29375`, below the registered `0.5`
   gate and `0.002083333333` below `CTRL_RAND`. Named null; no Phase 3
   artifact is admitted from this v1 run.
+- [`2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md`](2026-05-29_SU2_3D_phase2_v2_no_rank_local_structure.md)
+  - `YM-P2-NEG-A no_rank_local_structure` for the bare connected-
+  correlator vocab v5 `SU2_3D`, 12x12x12, beta slate `{2.0, 2.4, 2.8}`
+  v2 read on the same v0 ensembles. Bin-edge replay and gauge-
+  randomization gates passed, but within-beta bin-purity@5 was
+  `0.308333333333`, below the registered `0.5` gate and only
+  `0.020833333333` above `CTRL_RAND`. Named null; no Phase 3 artifact
+  is admitted from this v2 run.
