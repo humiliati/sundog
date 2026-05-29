@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 0 fiber context expansion ADMITTED -- `phase0_fiber_expansion_admit` (108-task balanced register, 18/prior = 36 original + 72 new)**. The expanded Phase 3E v2 certificate rerun is filed below. The 36-task Phase 3E v2 binding receipt remains `phase3e_v2_deferred_sparse_fibers` (oracle defect repaired + certified; geometric sparsity was the sole remaining deferral cause at 36 tasks).
+Status: **Expanded Phase 3E v2 certificate verdict: `phase3e_v2_expanded_oracle_regression`** (pinned `a0f1a4b`). Phase 0 expansion was admitted (`phase0_fiber_expansion_admit`, 108-task balanced register, 18/prior). On the expanded register the v2 oracle's anti-solver-leakage gate -- clean at 36 tasks -- **fails** (`core_sketch_exact_lookup_fraction 0.35 > 0.20`), and the fibers stay sparse (min cross-task distance `0.207 -> 0.196`, still 0 near pairs). The 36-task Phase 3E v2 receipt (`phase3e_v2_deferred_sparse_fibers`) and the seven full-grid floors stand unchanged.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -222,9 +222,21 @@ Checked **2026-05-28** against:
   spot-verified), and the binding **108-task expanded register**
   (`P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv`, sha256 `7c56141c`; 36 original +
   72 new, 18/prior) is filed. The runner gained `--split-mode sha256_expansion`
-  (geometry untouched; default `frozen_v2` byte-reproduces the v2 receipt). The
-  expanded Phase 3E v2 certificate rerun is in progress; its verdict is filed
-  below on completion.
+  (geometry untouched; default `frozen_v2` byte-reproduces the v2 receipt).
+  **Expanded certificate verdict (Amendment C, pinned `a0f1a4b`,
+  `runnerSha256 9D456143`, ~5m47s, deterministic):
+  `phase3e_v2_expanded_oracle_regression`.** The expansion densified the context
+  universe (U_primary 25 -> 336, U_all 49 -> 491) but produced two findings:
+  (1) the v2 oracle's **anti-solver-leakage gate fails** on the larger register
+  (`core_sketch_exact_lookup_fraction 0.04 -> 0.351`, threshold 0.20; vacuity and
+  laundering still pass) -- the gate calibration does not transfer from 36 to 108
+  tasks; (2) the fibers stay **sparse** -- tripling the register contracted the
+  min cross-task distance only `0.207 -> 0.196` (still 0 near pairs, 0 fidelity,
+  0 collisions), far from the ~4x needed for `epsilon_primary=0.05`. The verdict
+  neither promotes nor blocks signature sufficiency or a Branch E solver; the
+  36-task v2 receipt and the seven full-grid floors stand. Next moves (each needs
+  its own pre-registered spec): a register-size-robust oracle v3, accepting the
+  sparsity result as durable, or Branch E on capability grounds.
 - [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) -- stub pattern for
   future Phase 1+ evaluation-blind register rows (no manual grid inspection,
   selection by preregistered metadata/hash rule).
@@ -602,6 +614,20 @@ Avoid:
   certify that the oracle is a faithful, non-laundering, non-leaking
   *labeler*, which is a precondition for an adjudicable certificate, not a
   result about the representation;
+- any claim that the 108-task context expansion
+  (`phase0_fiber_expansion_admit` / `phase3e_v2_expanded_oracle_regression`)
+  proved or disproved signature sufficiency, licensed or blocked Branch E,
+  certified fiber locality, or found a collision -- the expanded certificate
+  could not adjudicate fibers because the v2 oracle's anti-solver-leakage gate
+  **fails** on the larger register (`core_sketch_exact_lookup_fraction 0.35 >
+  0.20`); separately the fibers stayed sparse (min cross-task distance only
+  `0.207 -> 0.196`). It is an oracle-regression + still-sparse finding, nothing
+  more;
+- any claim that the oracle regression means the v2 oracle was "wrong" or that
+  the gate should be loosened -- the gate fired exactly as pre-registered;
+  loosening `leakage_exact_lookup_max` after seeing the expanded value would be
+  a post-hoc p-hack. A register-size-robust metric requires a new pre-registered
+  oracle spec, not a retune;
 - any "color-rule variant flipped the bottleneck -> mask is the new
   limit" claim that omits the still-floor verdict -- the color-rule
   variant achieved a diagnostic improvement (palette doubled,
