@@ -781,7 +781,9 @@ def aggregate_knn_sweep(
     from sklearn.neighbors import BallTree
 
     n = int(signatures.shape[0])
-    k_sweep = [k for k in (10, 20, 30, 50, 100) if k <= n]
+    # Amended pre-registration (PDE_C1_KNN_CONVERGENCE_CHECK.md §6):
+    # denser low-k sweep, all expected full-coverage; no coverage-failing point.
+    k_sweep = [k for k in (10, 15, 20, 25, 30, 40, 50) if k <= n]
     k_query = min(max(k_sweep), n) if k_sweep else min(1, n)
     tree = BallTree(signatures, metric="euclidean")
     dist, idx = tree.query(signatures, k=k_query)
@@ -801,8 +803,10 @@ def aggregate_knn_sweep(
         fcov = f_count / n if n else 0.0
         if f_count:
             incompat = float(((minority > cfg.delta_action) & fidelity_pass).sum()) / f_count
+            mean_minority = float(np.mean(minority[fidelity_pass]))
         else:
             incompat = 0.0
+            mean_minority = 0.0
         rows.append(
             {
                 "k": k,
@@ -810,20 +814,26 @@ def aggregate_knn_sweep(
                 "r_k_median_passing": float(np.median(r_k[fidelity_pass])) if f_count else 0.0,
                 "fidelity_coverage": fcov,
                 "incompat_fraction": incompat,
+                "mean_minority": mean_minority,
             }
         )
 
-    xs = np.array([row["r_k_median"] for row in rows], dtype=np.float64)
-    ys = np.array([row["incompat_fraction"] for row in rows], dtype=np.float64)
-    if len(rows) >= 2:
-        slope, intercept = (float(v) for v in np.polyfit(xs, ys, 1))
+    # Fit only over coverage-passing points (amended pre-registration §6 fix 1).
+    fit_rows = [row for row in rows if row["fidelity_coverage"] >= cfg.s_pos]
+    if len(fit_rows) >= 2:
+        xs = np.array([row["r_k_median"] for row in fit_rows], dtype=np.float64)
+        slope_mm, intercept_mm = (float(v) for v in np.polyfit(xs, np.array([r["mean_minority"] for r in fit_rows]), 1))
+        slope_inc, intercept_inc = (float(v) for v in np.polyfit(xs, np.array([r["incompat_fraction"] for r in fit_rows]), 1))
     else:
-        slope, intercept = 0.0, float(ys[0]) if len(ys) else 0.0
+        slope_mm = intercept_mm = slope_inc = intercept_inc = 0.0
 
     result = summarize_knn_sweep(
         rows=rows,
-        slope=slope,
-        intercept=intercept,
+        fit_rows=fit_rows,
+        intercept_mm=intercept_mm,
+        slope_mm=slope_mm,
+        intercept_inc=intercept_inc,
+        slope_inc=slope_inc,
         damp=damp,
         no_op=no_op,
         n=n,
@@ -836,24 +846,27 @@ def aggregate_knn_sweep(
 def summarize_knn_sweep(
     *,
     rows: list,
-    slope: float,
-    intercept: float,
+    fit_rows: list,
+    intercept_mm: float,
+    slope_mm: float,
+    intercept_inc: float,
+    slope_inc: float,
     damp: int,
     no_op: int,
     n: int,
     epsilon_k: float,
     cfg: RunConfig,
 ) -> dict:
-    # Pre-registered classification thresholds (PDE_C1_KNN_CONVERGENCE_CHECK.md §3).
-    A_HI = 0.02
-    A_LO = 0.01
+    # Amended classification (PDE_C1_KNN_CONVERGENCE_CHECK.md §6): primary
+    # statistic is the threshold-free mean local minority fraction; classify
+    # on its r_k -> 0 intercept a_mm over coverage-passing points only.
+    A_MM_LO = 0.005
+    A_MM_HI = 0.015
     damp_fraction = damp / max(1, n)
     proxy_structural_constant = damp == 0 or no_op == 0
     proxy_constant = (
         damp_fraction < cfg.delta_proxy_min or damp_fraction > 1.0 - cfg.delta_proxy_min
     )
-    incompat_vals = [row["incompat_fraction"] for row in rows]
-    min_incompat = min(incompat_vals) if incompat_vals else 0.0
 
     if cfg.preset not in VERDICT_BEARING_PRESETS:
         verdict, verdict_label, interpretable = "SMOKE_ONLY", "", False
@@ -863,22 +876,28 @@ def summarize_knn_sweep(
             "proxy_selector_constant_on_sampled_support",
             False,
         )
-    elif intercept > A_HI and min_incompat > cfg.delta_incompat:
+    elif len(fit_rows) < 2:
         verdict, verdict_label, interpretable = (
-            "PDE-C1-NEG-A",
-            "fiber_incompatibility_plateau_nonzero",
-            True,
+            "INCONCLUSIVE_CONVERGENCE",
+            "insufficient_coverage_passing_sweep_points",
+            False,
         )
-    elif intercept < A_LO:
+    elif intercept_mm <= A_MM_LO:
         verdict, verdict_label, interpretable = (
             "STRICTNESS_WITNESS_POSITIVE",
-            "incompat_decays_to_zero_boundary_artifact",
+            "mean_minority_decays_to_zero_boundary_artifact",
+            True,
+        )
+    elif intercept_mm >= A_MM_HI:
+        verdict, verdict_label, interpretable = (
+            "PDE-C1-NEG-A",
+            "mean_minority_plateau_nonzero_genuine",
             True,
         )
     else:
         verdict, verdict_label, interpretable = (
             "INCONCLUSIVE_CONVERGENCE",
-            "intercept_in_ambiguous_band",
+            "mean_minority_intercept_in_ambiguous_band",
             False,
         )
 
@@ -887,9 +906,13 @@ def summarize_knn_sweep(
         "verdict_label": verdict_label,
         "interpretable": interpretable,
         "n_samples": n,
-        "sweep_intercept": intercept,
-        "sweep_slope": slope,
-        "min_incompat_fraction": min_incompat,
+        "mean_minority_intercept": intercept_mm,
+        "mean_minority_slope": slope_mm,
+        "incompat_intercept": intercept_inc,
+        "incompat_slope": slope_inc,
+        "fit_point_count": len(fit_rows),
+        "a_mm_lo": A_MM_LO,
+        "a_mm_hi": A_MM_HI,
         "delta_incompat": cfg.delta_incompat,
         "delta_action": cfg.delta_action,
         "no_op_count": no_op,
@@ -897,7 +920,8 @@ def summarize_knn_sweep(
         "damp_fraction": damp_fraction,
         "epsilon_k_radius_threshold": epsilon_k,
         "sweep_k_values": [row["k"] for row in rows],
-        "sweep_incompat_fractions": incompat_vals,
+        "sweep_mean_minority": [row["mean_minority"] for row in rows],
+        "sweep_incompat_fractions": [row["incompat_fraction"] for row in rows],
         "sweep_r_k_medians": [row["r_k_median"] for row in rows],
         "sweep_fidelity_coverages": [row["fidelity_coverage"] for row in rows],
     }
@@ -1066,31 +1090,33 @@ def write_receipt_knn_sweep(path: Path, manifest: dict) -> None:
         f"**Adjudicator:** `knn-sweep`",
         f"**Interpretable verdict:** `{r['interpretable']}`",
         "",
-        "## Sweep (incompat_fraction vs neighbourhood radius)",
+        "## Sweep (vs neighbourhood radius; primary statistic = mean_minority)",
         "",
-        "| k | r_k median | fidelity coverage | incompat fraction |",
-        "|---:|---:|---:|---:|",
+        "| k | r_k median | fidelity coverage | mean_minority | incompat fraction |",
+        "|---:|---:|---:|---:|---:|",
     ]
     ks = r.get("sweep_k_values", [])
     rks = r.get("sweep_r_k_medians", [])
     fcs = r.get("sweep_fidelity_coverages", [])
+    mms = r.get("sweep_mean_minority", [])
     incs = r.get("sweep_incompat_fractions", [])
     for j in range(len(ks)):
         lines.append(
-            f"| {ks[j]} | {rks[j]:.6g} | {fcs[j]:.6g} | {incs[j]:.6g} |"
+            f"| {ks[j]} | {rks[j]:.6g} | {fcs[j]:.6g} | {mms[j]:.6g} | {incs[j]:.6g} |"
         )
     lines.extend(
         [
             "",
             "## Readout",
             "",
-            f"- OLS fit `incompat_fraction = a + b * r_k_median`: "
-            f"intercept `a = {r['sweep_intercept']:.6g}`, slope `b = {r['sweep_slope']:.6g}`",
-            f"- min incompat fraction over sweep: `{r['min_incompat_fraction']:.6g}` "
-            f"vs `delta_incompat = {r['delta_incompat']}`",
+            f"- PRIMARY fit `mean_minority = a_mm + b * r_k_median` over "
+            f"`{r['fit_point_count']}` coverage-passing points: intercept "
+            f"`a_mm = {r['mean_minority_intercept']:.6g}`, slope `{r['mean_minority_slope']:.6g}`",
+            f"- secondary (diagnostic) `incompat_fraction` fit intercept: "
+            f"`{r['incompat_intercept']:.6g}` (grain-confounded; not gated)",
             f"- damp fraction (global): `{r['damp_fraction']:.6g}`",
-            f"- classification thresholds (pre-registered): `a > 0.02` & "
-            f"`min_incompat > delta_incompat` => NEG-A; `a < 0.01` => POSITIVE; else INCONCLUSIVE",
+            f"- classification (pre-registered §6): `a_mm <= {r['a_mm_lo']}` => POSITIVE; "
+            f"`a_mm >= {r['a_mm_hi']}` => NEG-A; else INCONCLUSIVE",
             f"- elapsed seconds: `{r['elapsed_seconds']:.3f}`",
             "",
             "## Branch",
@@ -1103,24 +1129,25 @@ def write_receipt_knn_sweep(path: Path, manifest: dict) -> None:
         lines.append("Proxy selector essentially constant; no verdict filed.")
     elif r["verdict"] == "PDE-C1-NEG-A":
         lines.append(
-            "`incompat_fraction` extrapolates to a positive value as `r_k -> 0` "
-            "(intercept above threshold, and stays above `delta_incompat` across the "
-            "sweep): the fiber-incompatibility survives the zero-radius limit and is "
-            "**genuine**, not a finite-radius boundary artifact. The provisional v4 "
-            "`PDE-C1-NEG-A` is confirmed."
+            "`mean_minority` extrapolates to a clearly positive value as `r_k -> 0` "
+            f"(`a_mm >= {r['a_mm_hi']}`): the conditional proxy non-constancy survives "
+            "the zero-radius limit and is **genuine** fiber-incompatibility, not a "
+            "finite-radius boundary artifact. The provisional v4 `PDE-C1-NEG-A` is "
+            "confirmed."
         )
     elif r["verdict"] == "STRICTNESS_WITNESS_POSITIVE":
         lines.append(
-            "`incompat_fraction` extrapolates to ~zero as `r_k -> 0`: the observed "
-            "mixing was a finite-radius boundary-straddling artifact around a clean "
-            "decision surface. The proxy is control-sufficient on fibers at this cell; "
-            "the provisional v4 `PDE-C1-NEG-A` is **overturned**."
+            "`mean_minority` extrapolates to ~zero as `r_k -> 0` "
+            f"(`a_mm <= {r['a_mm_lo']}`): the observed mixing is a finite-radius "
+            "boundary-straddling artifact around a clean decision surface. The proxy "
+            "is control-sufficient on fibers at this cell (Reading-2 regime 2); the "
+            "provisional v4 `PDE-C1-NEG-A` is **overturned**."
         )
     else:
         lines.append(
-            "Intercept in the ambiguous band `[0.01, 0.02]`: neither genuine plateau "
-            "nor clean decay is established. `INCONCLUSIVE_CONVERGENCE` — a larger `N` "
-            "or wider `k` range is needed. No verdict filed."
+            f"`a_mm` in the ambiguous band `({r['a_mm_lo']}, {r['a_mm_hi']})`, or too few "
+            "coverage-passing sweep points to fit. `INCONCLUSIVE_CONVERGENCE` — a "
+            "larger `N` or wider clean-`k` range is needed. No verdict filed."
         )
     lines.extend(["", "## Files", "", "- `manifest.json`", "- `knn-sweep.csv`"])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
