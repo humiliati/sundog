@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 0 CONTEXT-EXPANSION-FOR-FIBERS SPEC FILED -- EXECUTION HOLD**. The Phase 3E v2 binding receipt remains `phase3e_v2_deferred_sparse_fibers` (oracle defect repaired + certified; geometric sparsity is the sole remaining deferral cause).
+Status: **Phase 0 fiber context expansion ADMITTED -- `phase0_fiber_expansion_admit` (108-task balanced register, 18/prior = 36 original + 72 new)**. The expanded Phase 3E v2 certificate rerun is filed below. The 36-task Phase 3E v2 binding receipt remains `phase3e_v2_deferred_sparse_fibers` (oracle defect repaired + certified; geometric sparsity was the sole remaining deferral cause at 36 tasks).
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -215,7 +215,16 @@ Checked **2026-05-28** against:
   -- Phase 0 register-amendment spec for the Phase 3E v2 sparsity blocker. It
   keeps `program_sketch_v2`, `epsilon_primary=0.05`, k=3, and all context
   geometry frozen, and pre-registers a balanced 108-task public-training
-  expansion target (18 per prior). **No expanded register or rerun exists yet.**
+  expansion target (18 per prior). **Expansion ADMITTED**
+  (`phase0_fiber_expansion_admit`, Amendment B): a candidate-ordering script
+  emitted a frozen queue (sha256 `43ea4550`), the maintainer's agent inspected
+  it in queue order (0 hard-excludes, 0 discipline tripwires, coordinator
+  spot-verified), and the binding **108-task expanded register**
+  (`P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv`, sha256 `7c56141c`; 36 original +
+  72 new, 18/prior) is filed. The runner gained `--split-mode sha256_expansion`
+  (geometry untouched; default `frozen_v2` byte-reproduces the v2 receipt). The
+  expanded Phase 3E v2 certificate rerun is in progress; its verdict is filed
+  below on completion.
 - [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) -- stub pattern for
   future Phase 1+ evaluation-blind register rows (no manual grid inspection,
   selection by preregistered metadata/hash rule).
