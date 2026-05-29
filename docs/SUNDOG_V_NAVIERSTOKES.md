@@ -210,8 +210,18 @@ slope `0.737`, `damp_fraction = 0.2977`) vs d=32 (`−0.0013`, `0.729`,
 signature dimension** — ruling out a d=32 distance-concentration
 artifact, matching the dimension-robustness `damp_fraction` showed
 across the binning runs. Dimension-robustness is *not* regime-
-generality: both cells are `k_f=2, G=200`. Twin-state certificate,
-proxy faithfulness, and external review remain the open firm-up items.
+generality: both cells are `k_f=2, G=200`.
+
+**Twin-state certificate started 2026-05-28.**
+[`proof/PDE_C1_TWIN_STATE_CERTIFICATE.md`](proof/PDE_C1_TWIN_STATE_CERTIFICATE.md)
+pre-registers the sampled-support non-injectivity bridge: capture
+`Q_K`, query signature-near `Phi_K` neighbours, and certify if a
+positive-mass fraction of near-signature pairs are high-mode separated.
+The harness path is built as `--adjudicator twin-state` and a smoke
+receipt exists at `results/proof/c1-twin-state-smoke/`; the
+verdict-bearing v5 lock is staged but not run inline under the
+~10-minute rule. Proxy faithfulness and external review remain open
+firm-up items.
 
 Criterion (b) is closed at the *procedure-and-execution* level (v0–v5
 lock cycles + v4 fall-back + the kNN run and its convergence check all
@@ -223,8 +233,8 @@ provisionally** by the Fork-A POSITIVE. Criterion (a) Front-A vacuity
 rebuttal is materially advanced (a concrete regime-2 witness shows the
 Postulate-1 reading is non-vacuous on a real substrate), pending
 reviewer judgement. Criterion (c) external PDE reviewer remains open,
-as do the twin-state certificate and proxy-faithfulness items. Final
-(d) close is coupled to (c).
+as do the full twin-state lock receipt and proxy-faithfulness items.
+Final (d) close is coupled to (c).
 
 Candidate 2 has also been commissioned at the scoping level:
 [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)

@@ -120,6 +120,16 @@ that claim provably fails.
   provisional v4 `PDE-C1-NEG-A` **overturned** → proxy
   control-sufficient on fibers (Reading-2 regime 2). First interpretable
   C1 read; provisional, one cell, does not promote C1.
+- [`PDE_C1_TWIN_STATE_CERTIFICATE.md`](PDE_C1_TWIN_STATE_CERTIFICATE.md)
+  — **pre-registration and harness path** for the support-level
+  state-insufficiency bridge left open by cell-set §4.1. Adds the
+  `--adjudicator twin-state` receipt mode: capture complementary
+  high-mode coordinates `Q_K`, query signature-near neighbours in
+  `Phi_K`, and certify sampled-support non-injectivity iff a
+  pre-registered positive-mass fraction of signature-near pairs are
+  high-mode separated. Smoke receipt passed at
+  `results/proof/c1-twin-state-smoke/`; full v5 lock command is staged
+  but not run inline under the repo's ~10-minute rule.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /
