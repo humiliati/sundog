@@ -4,7 +4,7 @@
     "horizon": 200
   },
   "mean_steps": 200.0,
-  "mean_terminal_alignment": 0.370342711362504,
+  "mean_terminal_alignment": 0.3703428033310304,
   "seed_start": 10000,
   "seeds": 8,
   "sensor_tier": "local-probe-field",
