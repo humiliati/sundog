@@ -221,6 +221,57 @@ These smokes use manual overrides and file no scientific result. The
 short burn-in is intentionally non-representative; only parser/config,
 integrator, adjudicator, manifest, and receipt wiring are checked.
 
+## 10. Result (2026-05-29) — PDE-C1-RG-DEFERRED_VACUITY
+
+The v6 kNN convergence check
+(`results/proof/c1-regime-g300-v6-knn-sweep/`, ~22 min) returned
+**`DEFERRED_VACUITY`** → branch **`PDE-C1-RG-DEFERRED_VACUITY`**.
+
+- `damp_fraction = 0.00446` < `delta_proxy_min = 0.01`. Only ~0.4% of
+  samples trigger the safety action at G=300, vs **30%** at G=200
+  (v4/v5). The vacuity gate fires before control-sufficiency can be
+  tested; `mean_minority = 0` across the whole sweep.
+- `fidelity_coverage ≈ 0.90` (vs 1.0 at v4/v5) — the higher-G attractor
+  is more spread, but coverage is well above `S_pos = 0.50`, so coverage
+  is **not** the blocker; vacuity is.
+
+**Mechanism (not a bug, not a methodology failure).** At G=200 the
+attractor energy is tightly concentrated (sample-energy spread ~2.5% of
+mean), so the 95th-percentile `E_max` sits near the bulk and the
+lookahead-max crosses it ~30% of the time. At G=300 the flow is
+intermittent/heavy-tailed (v2 showed ~95%-of-mean energy spread), so the
+95th-percentile `E_max` sits far out on a rare-burst tail and typical
+windows fall short. Cross-check: v2 (G=300, K=4, *full*-burnin E_max)
+also had `damp_fraction = 0.0086` — sub-1% regardless of the E_max
+window. **G=300 has a near-vacuous safety trigger as a regime property
+(intermittency), not an artifact.**
+
+**Interpretation.** The regime-generality question is **not answered**
+by v6 — not because regime-2 failed (no `PDE-C1-RG-NEG-A`
+control-insufficiency was observed), but because the *objective itself*
+becomes near-vacuous at G=300 under the fixed-percentile `E_max` rule.
+Per §7, a deferral preserves the current C1 status: the v5 (G=200)
+regime-2 witness **stands as cell-local**, and substrate-generality
+along the Grashof axis **remains untested**.
+
+**Twin-state companion NOT run** (§5): the control half did not return
+`STRICTNESS_WITNESS_POSITIVE`, so the cell is not a regime-2 replication
+and the support certificate is not required.
+
+**No v6 rescue.** Per §4, retuning `E_max` (or any pinned parameter) at
+G=300 to recover a discriminative objective would be `PDE-C1-RG-NEG-B`.
+The honest receipt stands.
+
+**Surfaced for future work (new pre-registration, not a v6 retune).**
+The probe revealed that the objective construction — "exceed the
+burn-in 95th-percentile `E_K` in lookahead" — does not transfer across
+regimes, because the energy-distribution *shape* is regime-dependent
+(tight at G=200, intermittent at G=300). A genuine regime-generality
+test needs a **regime-portable objective** (e.g. a relative-excursion
+threshold, a fixed absolute level, or an enstrophy-based trigger) that
+stays discriminative as `G` varies. That is a v7+ cell with its own
+pre-registration, not a modification of this artifact.
+
 ## 9. Cross-References
 
 - [`PDE_C1_KNN_CONVERGENCE_CHECK.md`](PDE_C1_KNN_CONVERGENCE_CHECK.md) -
