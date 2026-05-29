@@ -138,13 +138,16 @@ on the S₂ hook only, with `R-NL-NEG-A` pre-registered as the expected outcome.
 
 - Drafted: 2026-05-28.
 - Trigger: C1 explicit-formula linearity audit.
-- Execution: none.
+- Execution: Probe 05 executed 2026-05-28 (S₂ hook only).
 - Admission: S₂ gap-pair swap admitted for a Probe 05 v0 (NEG-A expected);
   C3 quarantined; residual bins downgraded. See bridge notes.
 - Probe 05 v0 spec filed: 2026-05-28.
-- Next gate: execute Probe 05 under the S₂ hook only OR external review of
-  whether a reversibility-test receipt is worth running given the NEG-A
-  prediction.
+- Probe 05 result: `R-NL-NEG-A` bounded reversibility null as predicted
+  (`D=-0.0064`, inside floor `0.0424`, `0.45σ`; `tau_boot<tau_ind` confirms GUE
+  anti-persistence). Receipt:
+  [`receipts/2026-05-28_probe05_reversibility_null.md`](receipts/2026-05-28_probe05_reversibility_null.md).
+- Next gate: cross-lane synthesis note (three lanes, three named vacuity causes,
+  no structural-zero edge) OR external review.
 
 ## Cross-References
 
