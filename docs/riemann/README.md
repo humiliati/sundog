@@ -6,6 +6,45 @@ Main ledger:
 
 - [`../SUNDOG_V_RIEMANN.md`](../SUNDOG_V_RIEMANN.md)
 
+## Reviewer Quick Map
+
+Use this section when preparing an outgoing sanity-check packet.
+
+One-paragraph framing:
+
+> Riemann-zero statistics are being used as a bounded stress test for whether
+> Sundog's structural-zero / isotropy apparatus can find a forced-absent sector
+> in a famous mathematical substrate. The current result is negative: three
+> registered lanes found no structural-zero edge, and each null has a distinct
+> identified cause. External review is needed to check that this bounded-null
+> framing is conservative before any public surface exists.
+
+Current status:
+
+- Primary folder: `docs/riemann/`.
+- Pre-registration folder: `docs/prereg/riemann/`, currently holding the P0
+  domain and receipt lock rather than the whole packet.
+- Public posture: blocked on external sanity review.
+- Claim boundary: no RH proof, disproof, Hilbert-Polya operator, zero formula,
+  or evidence-for/against-RH claim.
+
+Core mapping:
+
+| Sundog language | Riemann lane | Reviewer question |
+| --- | --- | --- |
+| structural-zero / absent-sector receipt | finite representation-sector read | did any registered lane really support one? Current answer: no. |
+| forced identity | Z2 functional-equation reflection | are the registered features identity-zero by construction? |
+| linearity null | explicit-formula parity | is the parity cancellation merely standard linearity? |
+| real-but-pinned statistic | consecutive-gap S2 reversibility | is the observed null already predicted by GUE / sine-kernel symmetry? |
+
+Fast read order:
+
+1. [`EXTERNAL_REVIEW_PACKET.md`](EXTERNAL_REVIEW_PACKET.md) - top-level ask.
+2. [`RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](RIEMANN_BOUNDED_NULL_SYNTHESIS.md) -
+   load-bearing statement and three-lane table.
+3. [`EXTERNAL_REVIEW_EMAIL_DRAFT.md`](EXTERNAL_REVIEW_EMAIL_DRAFT.md) - email
+   text, after the packet is ready to attach or link.
+
 Synthesis (read this for the conclusion):
 
 - [`RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](RIEMANN_BOUNDED_NULL_SYNTHESIS.md) -

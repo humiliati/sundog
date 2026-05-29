@@ -9,6 +9,51 @@
 **Status:** draft reviewer packet  
 **Primary synthesis:** [`RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](RIEMANN_BOUNDED_NULL_SYNTHESIS.md)
 
+## Reviewer Snapshot
+
+Repository map:
+
+- Primary working packet: `docs/riemann/`.
+- Main ledger: [`../SUNDOG_V_RIEMANN.md`](../SUNDOG_V_RIEMANN.md).
+- P0 domain lock only: [`../prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md`](../prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md).
+- Current conclusion: [`RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](RIEMANN_BOUNDED_NULL_SYNTHESIS.md).
+
+Why we looked at Riemann:
+
+> Riemann-zero statistics were used as a bounded stress test for whether the
+> Sundog structural-zero / isotropy apparatus can find a forced-absent
+> representation sector in a famous mathematical substrate. It did not. The
+> review question is whether that negative result is framed honestly.
+
+Current status:
+
+- Three lanes are closed as nulls: Z2 reflection, explicit-formula parity, and
+  nonlinear consecutive-gap S2 reversibility.
+- No RH proof, disproof, or evidence claim is live.
+- The public surface is blocked until an external sanity check confirms or
+  corrects the bounded-null framing.
+
+Core mapping:
+
+| Sundog concept | Riemann instantiation | Current read |
+| --- | --- | --- |
+| Structural-zero / absent-sector receipt | forced absence in a finite representation catalog | not found in the registered Riemann substrates |
+| Z2 reflection | functional-equation reflection / mirrored zero pairs | identity-zero on registered gap and center features |
+| Parity split | explicit-formula test-function parity | linearity makes odd cancellation free |
+| Nonlinear symmetry | S2 swap of consecutive unfolded gap pairs | real statistic, but expectation appears GUE / sine-kernel pinned |
+
+Ways to falsify or weaken this packet:
+
+- Show that GUE / sine-kernel symmetry does not justify the Probe 05
+  reversibility-null read.
+- Show that the C1 explicit-formula parity diagnosis depends on a nonstandard
+  normalization or misses a standard term.
+- Show that windowing, unfolding, or `N = 5000` is a better explanation than
+  the claimed substrate-level causes.
+- Identify a legitimate finite-group / representation-sector reading we
+  prematurely dismissed.
+- Recommend replacing "substrate-level" with a narrower "finite-window" null.
+
 ## One-Sentence Ask
 
 Please sanity-check whether our bounded-null conclusion is correctly framed:

@@ -5,7 +5,68 @@
 > not a referee report, not an endorsement. The whole virtue of this ask
 > is brevity; keep it that way. Placeholders in `[brackets]`.
 
-## Short Version
+## Recommended Outreach Version
+
+**Subject:** Technical framing check request: finite-Galerkin NSE signature/control result
+
+Hi [Name],
+
+I am [your name], working on Sundog, an independent research project about
+coarse-grained signatures for control. We have been testing whether a compact
+observation can be useful for a registered control action even when it does not
+reconstruct the full state. I am reaching out because your work around
+[PDE / determining modes / data assimilation / numerical NSE] seems close to
+the exact sanity check we need.
+
+The specific ask is narrow: could you tell us whether the framing below is
+mathematically honest, too strong, or simply standard observer/data-assimilation
+language that should be renamed?
+
+Candidate framing:
+
+> In a 2D Kolmogorov-flow Galerkin model (`k_f = 2`), a low-Fourier
+> observation `Phi_K` is **state-insufficient** on the sampled support
+> (signature-near pairs can have well-separated high modes) yet appears
+> **control-sufficient** for a registered low-band-energy proxy action
+> (local action-mixing vanishes as signature tolerance goes to zero, up to
+> a small decision surface). The pattern holds at two Grashof values
+> (`G = 200` and `G = 300`) under a held-out-quantile objective.
+
+What we most need checked:
+
+1. Is "state-insufficient on the sampled support" fair for the twin-state
+   certificate, or should it be weakened?
+2. Is "control-sufficient on `Phi_K`-fibers up to a measure-zero decision
+   surface" fair for the kNN/disintegration read, or overstated?
+3. Is the held-out look-ahead-max quantile a defensible way to define a
+   regime-portable proxy action, given that the older burn-in trigger went
+   vacuous at `G = 300`?
+4. Would you call this a real finite-Galerkin separation between
+   state-reconstruction and action sufficiency, or ordinary
+   data-assimilation / observer behavior that should not be made load-bearing?
+
+Scope: this is early-stage and numerical. It is not a Navier-Stokes regularity
+claim, not an existence claim, not a theorem about the infinite-dimensional
+attractor, and not a request for endorsement. We are specifically trying to
+prevent overclaiming before paper-facing use.
+
+Packet and suggested read order:
+
+1. `PDE_C1_REGIME_GENERALITY_v1.md` - current result, scope, and gates.
+2. `PDE_C1_KNN_CONVERGENCE_CHECK.md` - control-sufficiency adjudicator.
+3. `PDE_C1_TWIN_STATE_CERTIFICATE.md` - sampled-support state-insufficiency
+   bridge.
+4. `SUNDOG_V_NAVIERSTOKES.md` - project ledger and claim boundary.
+
+If you have time in the next [1-2 weeks], a paragraph or a few bullet points
+would be ideal. "This seems conservative," "weaken X," "cite Y," or "do not
+use this language because Z" are all useful outcomes. Email comments are
+perfect; I would also be happy to do a short call if that is easier.
+
+Thanks,
+[Your name]
+
+## Technical Short Version
 
 **Subject:** Bounded sanity check — finite-Galerkin signature/control-sufficiency framing
 
@@ -15,9 +76,9 @@ Could I ask for a bounded framing check on a small finite-Galerkin
 Navier-Stokes note? It is **not** a regularity or existence claim and
 **not** a theorem about the infinite-dimensional attractor. The question
 is whether we are stating a numerical signature/control-sufficiency
-result honestly.
+candidate result honestly.
 
-In determining-modes terms, the claim is a *separation*:
+In determining-modes terms, the candidate framing is a *separation*:
 
 > In a 2D Kolmogorov-flow Galerkin model (`k_f = 2`), a low-Fourier
 > observation `Phi_K` is **state-insufficient** (a twin-state search
@@ -36,7 +97,8 @@ and it is a **two-point Grashof-axis result only** — `k_f` is fixed and
 the objective family is single, so we are not claiming generality across
 forcing or objective.
 
-What I need is not endorsement but a quick read on framing:
+What I need is not endorsement but a quick read on whether that framing is
+earned:
 
 1. Given the twin-state certificate is sampled-SRB / finite-Galerkin
    (not an exact attractor theorem), is the **"state-insufficient on the
