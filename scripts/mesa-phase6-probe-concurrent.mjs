@@ -41,6 +41,7 @@ import {
   buildShardEnv,
   policyPath,
   pythonExec,
+  trackChild,
   META,
 } from "./lib/mesa-phase6-rows.mjs";
 
@@ -145,20 +146,14 @@ function spawnShard({ label, threadCap, outLogsAbs, force }) {
 
     console.log(`[${label}] spawn pid will be set ▸ log=${path.relative(repoRoot, logPath)}`);
 
-    const child = spawn(exec, args, {
+    const child = trackChild(spawn(exec, args, {
       cwd: repoRoot,
       stdio: ["ignore", "pipe", "pipe"],
       env,
-    });
+    }));
     child.stdout.pipe(logStream, { end: false });
     child.stderr.pipe(logStream, { end: false });
     console.log(`[${label}] pid=${child.pid}`);
-
-    const onSig = (sig) => {
-      if (!child.killed) child.kill(sig);
-    };
-    process.on("SIGINT", onSig);
-    process.on("SIGTERM", onSig);
 
     child.on("exit", (code, signal) => {
       const finishedAt = new Date();
