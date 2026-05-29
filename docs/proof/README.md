@@ -216,9 +216,19 @@ that claim provably fails.
   which then pin warmup ≥ 3·T_eq and blocks ≥ 50·T_burst), (C) a new
   **per-block stationarity gate** (pairwise base-rate consistency ≤ 0.10,
   new `PDE-C2-DEFERRED-NONSTATIONARY` branch) + per-block diagnostics.
-  Everything else inherited from v0. **Proposed, not built, not run** —
-  §8 sign-off decisions (forcing scheme, gate tolerance, diagnostic
-  staging, compute, build trigger).
+  Everything else inherited from v0. **Built + run 2026-05-29; C2 PAUSED
+  at the numerical wall** (§12). Three further obstructions surfaced and
+  the first two were fixed inline (observable degeneracy → ε dissipation
+  rate; burst rarity → target-base-rate label), but the **v1 headline
+  (6.3M steps) blew up numerically at ~step 3.5M** — fixed-dt RK4 can't
+  integrate through a large intermittent dissipation burst (CFL/
+  stiffness). The headline gate output (`PDE-C2-DEFERRED-BASERATE`
+  0.138/0/0) is a **blow-up artifact, not a real read** — run is
+  numerically invalid. Banked finding: the **four-obstruction catalogue**
+  (non-stationarity, observable degeneracy, burst rarity, numerical
+  blow-up) — a clean numerically-robust shell-model burst-detection cell
+  needs an adaptive/stiff integrator (resume = v2 harness, uniform-time
+  sampling, design-for-sign-off). C1 remains the strong NSE result.
 - [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) —
   Navier-Stokes Candidate 1 fiber protocol: tolerance + binning
   methodology that closes the continuous-fiber gate (cell-set v0
