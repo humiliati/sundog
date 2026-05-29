@@ -39,6 +39,28 @@ Filed receipts:
   named for v3 disposition (same pattern as v1's coverage subsumption).
   Acceptance rate 9.7 % (223/2304) is very conservative; v3 sanity check
   pending. Privilege-leak audit green.
+- [`2026-05-28_phase1_toy_verifier_v3.md`](2026-05-28_phase1_toy_verifier_v3.md):
+  v3 repair-slate first execution; verdict = **named quarantine** (all 4 v3
+  safety repair labels pass; cost alone gates the bounded-positive promotion).
+  `capacity_threshold = not_estimated`. **0 false accepts** (consecutive with
+  v2). Integrity repair **maintained**: 0/464 field-spoof + 0/464 source-spoof
+  + 5/5 integrity probes. **Sensor disposition done**: `sensor_health_v1`
+  demoted to non-gating `sensor_diagnostics_v3`; shadow audit with v2 sensor
+  gate forced ON shows 33 decision flips, **all safe** (11 v3-accepts that v2
+  would have re-quarantined are not unsafe — v2 sensor was over-cautious).
+  **Acceptance sanity registered**: `conservative_acceptance` route with named
+  rationale; in-promise verification acceptance up to 19.3 % (v2: 29 %ish
+  across all splits; v3 acceptance rate 12.2 % vs v2 9.7 %). Source-hash
+  keyed recompute cache landed (`scripts/lib/pvnp-phase1-cache.mjs`); 11 520
+  recomputes avoided; **C_total_signature 907.52 ms, –32.6 % vs v2**, passing
+  the slate's absolute 1010 ms target. Cost repair **failed** anyway because
+  ratio target (≤1150× rollout) is dominated by rollout-denominator noise
+  (rollout dropped from 0.88 ms to 0.54 ms, inflating ratio to 1671×). Cost
+  exemption unavailable: cache hit rate 83.33 % (95 % gate structurally
+  unreachable because spoof attempts short-circuit at integrity before the
+  cache lookup). v4 should re-state the cost gate against full-state (where
+  v3 moves +16 %) or restructure for genuine cache reuse. Privilege-leak
+  audit green (6 files, added `scripts/lib/pvnp-phase1-cache.mjs`).
 
 Receipt filenames should use:
 

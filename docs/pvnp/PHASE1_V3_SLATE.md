@@ -187,6 +187,14 @@ rollout remains at most 1.0, and the receipt explicitly says "safety positive;
 wall-time exemption, not cheap verification." An exemption is not a cost repair
 pass.
 
+Cache hit-rate definition: `hits / (hits + misses)` where every lookup of a
+`(source_hash, transform_version)` key counts. The first lookup of a fresh key
+is a **miss**; every subsequent lookup of the same key within the same harness
+run is a **hit**. A populate-on-write that immediately serves the inserting
+caller does not retroactively convert its own miss into a hit. This makes the
+metric a function of cache shape and reuse pattern only; it does not depend on
+warm-up tricks.
+
 ## Acceptance-Volume Sanity Gate
 
 v3 must explain the v2 acceptance rate of 9.7% (223 / 2304).

@@ -20,6 +20,7 @@ import { verify, V0_PROMISE, V0_CHECKER_THRESHOLDS } from "./lib/pvnp-phase1-ver
 import { computeSignature } from "./lib/pvnp-phase1-signature-core.mjs";
 import { getPhase1RunConfig } from "./lib/pvnp-phase1-run-config.mjs";
 import { makeRng, uniform } from "./lib/pvnp-phase1-rng.mjs";
+import { loadCacheState, saveCacheState, statsReport } from "./lib/pvnp-phase1-cache.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -147,8 +148,15 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  const sourceBound = version === "v1" || version === "v2";
+  const sourceBound = version === "v1" || version === "v2" || version === "v3";
+  const isV3 = version === "v3";
   await mkdir(outDir, { recursive: true });
+
+  // v3 attaches to the verifier+ablation shared source-hash cache. By the
+  // time this stage runs, every (env, policy) source has been computed at
+  // least once and will reuse cache entries here.
+  const cachePath = path.join(outDir, "derived_fields_cache.json");
+  const cacheState = isV3 ? await loadCacheState(cachePath) : null;
 
   // 1) Run inversion attacker via Python if not already present.
   const inversionPath = path.join(outDir, "attacker_inversion_results.json");
@@ -222,6 +230,7 @@ async function main() {
         sigma: candidate, expectedTraceId, publicEnv, m_min,
         promise: V0_PROMISE, thresholds: V0_CHECKER_THRESHOLDS,
         traceCommitment: sourceBound ? traceCommitment : null,
+        cacheState, stageLabel: "spoof_field",
       });
       const elapsed = performance.now() - t0;
       spoofCosts.wall_ms += elapsed;
@@ -256,6 +265,7 @@ async function main() {
           sigma: candidate, expectedTraceId, publicEnv, m_min,
           promise: V0_PROMISE, thresholds: V0_CHECKER_THRESHOLDS,
           traceCommitment,
+          cacheState, stageLabel: "spoof_source",
         });
         const elapsed = performance.now() - t0;
         spoofCosts.wall_ms += elapsed;
@@ -293,6 +303,42 @@ async function main() {
   };
   existing.attacker_spoof = spoofCosts;
   await writeFile(partialPath, JSON.stringify(existing, null, 2) + "\n", "utf8");
+
+  if (isV3) {
+    await saveCacheState(cachePath, cacheState, "attacker");
+    const stats = statsReport(cacheState);
+    await writeFile(
+      path.join(outDir, "verifier_cache_stats.json"),
+      JSON.stringify(stats, null, 2) + "\n",
+      "utf8",
+    );
+    // Cost batching report: list the two minimum registered moves and
+    // observed savings.
+    const report = {
+      schema: "pvnp-phase1-cost-batching-report-v3",
+      registered_moves: [
+        "source_hash_keyed_recompute_cache",
+        "batched_verifier_pass_with_shared_cache_across_stages",
+      ],
+      cache_entries: stats.cached_keys,
+      cache_hit_rate: stats.hit_rate,
+      cache_lookups: stats.lookups,
+      cache_hits: stats.hits,
+      cache_misses: stats.misses,
+      computes_avoided: stats.computes_avoided,
+      per_stage: stats.per_stage,
+      stage_history: stats.stage_history,
+      v2_wall_ms_reference: 1347.03,
+      v2_rollout_ratio_reference: 1535.08,
+      v3_target_wall_ms_max: 1010,
+      v3_target_rollout_ratio_max: 1150,
+    };
+    await writeFile(
+      path.join(outDir, "cost_batching_report.json"),
+      JSON.stringify(report, null, 2) + "\n",
+      "utf8",
+    );
+  }
 
   // Capacity threshold reporting per spec.
   const anyInvSuccess = inversionResults.evaluations

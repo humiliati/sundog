@@ -19,11 +19,13 @@ const SIGNATURE_SCHEMAS = Object.freeze({
   v0: "pvnp-phase1-sigma-v0",
   v1: "pvnp-phase1-sigma-v1",
   v2: "pvnp-phase1-sigma-v2",
+  v3: "pvnp-phase1-sigma-v3",
 });
 const TRANSFORM_VERSIONS = Object.freeze({
   v0: "pvnp-phase1-transform-v0",
   v1: "pvnp-phase1-transform-v1",
   v2: "pvnp-phase1-transform-v2",
+  v3: "pvnp-phase1-transform-v3",
 });
 
 // Estimate field Laplacian at one probe sample. Uses the 5-point stencil
@@ -390,14 +392,14 @@ export function makeTraceCommitment(sourcePayload) {
 export function computeAnalyticalFields({ positions, probes, version = "v0" }) {
   const laplacians = probes.map(pointLaplacian);
   const curvatureSummary = aggregateStats(laplacians);
-  const sourceBoundVersion = version === "v1" || version === "v2";
+  const sourceBoundVersion = version === "v1" || version === "v2" || version === "v3";
   const sensorHealth = sourceBoundVersion
     ? estimateSensorHealthV1(probes)
     : estimateSensorHealth(probes);
   const envelope = trajectoryEnvelope(positions);
   const coverage = coverageDigest(positions);
   const margin = marginLowerBound(positions, probes, sensorHealth);
-  const invariance = version === "v2"
+  const invariance = (version === "v2" || version === "v3")
     ? invarianceChecksV2(probes, envelope, margin)
     : (version === "v1" ? invarianceChecksV1(probes, envelope) : invarianceChecks(probes, envelope));
 
@@ -416,6 +418,13 @@ export function computeAnalyticalFields({ positions, probes, version = "v0" }) {
     fields.geometry_promise_signal = geometryPromiseSignal(laplacians, probes, coverage);
   } else if (version === "v2") {
     fields.sensor_health_v1 = sensorHealth;
+    fields.invariance_checks_v2 = invariance;
+    fields.geometry_promise_signal_v2 = geometryPromiseSignalV2(laplacians, probes, coverage);
+  } else if (version === "v3") {
+    // v3 demotes sensor_health to a non-gating diagnostic. The data is still
+    // emitted (same payload as v1/v2) but the field is renamed to make the
+    // demotion explicit at every consumer; verifier-core does not gate on it.
+    fields.sensor_diagnostics_v3 = sensorHealth;
     fields.invariance_checks_v2 = invariance;
     fields.geometry_promise_signal_v2 = geometryPromiseSignalV2(laplacians, probes, coverage);
   } else {
@@ -443,6 +452,18 @@ export function derivedFieldsHash(fields, version = "v0") {
       trajectory_envelope: fields.trajectory_envelope,
       margin_lower_bound: fields.margin_lower_bound,
       sensor_health_v1: fields.sensor_health_v1 ?? fields.sensor_health,
+      invariance_checks_v2: fields.invariance_checks_v2 ?? fields.invariance_checks,
+      geometry_promise_signal_v2: fields.geometry_promise_signal_v2,
+    };
+  } else if (version === "v3") {
+    // sensor_diagnostics_v3 is INCLUDED in the hash so an attacker editing
+    // the diagnostic still trips integrity, but it is NOT gated by the
+    // verifier — see verifier-core.mjs §v3 dispatch.
+    included = {
+      curvature_summary: fields.curvature_summary,
+      trajectory_envelope: fields.trajectory_envelope,
+      margin_lower_bound: fields.margin_lower_bound,
+      sensor_diagnostics_v3: fields.sensor_diagnostics_v3 ?? fields.sensor_health,
       invariance_checks_v2: fields.invariance_checks_v2 ?? fields.invariance_checks,
       geometry_promise_signal_v2: fields.geometry_promise_signal_v2,
     };
@@ -490,7 +511,7 @@ export function computeSignature({ traceId, publicEnv, positions, probes, source
     ],
   };
 
-  if (version === "v1" || version === "v2") {
+  if (version === "v1" || version === "v2" || version === "v3") {
     const payload = sourcePayload ?? buildSourcePayload({ traceId, publicEnv, positions, probes });
     sigma.transform_version = TRANSFORM_VERSIONS[version];
     sigma.source_hash = sourceHash(payload);
@@ -509,4 +530,6 @@ export function computeSignature({ traceId, publicEnv, positions, probes, source
 export const SIGNATURE_SCHEMA_V1 = SIGNATURE_SCHEMAS.v1;
 export const TRANSFORM_VERSION_V1 = TRANSFORM_VERSIONS.v1;
 export const SIGNATURE_SCHEMA_V2 = SIGNATURE_SCHEMAS.v2;
+export const SIGNATURE_SCHEMA_V3 = SIGNATURE_SCHEMAS.v3;
+export const TRANSFORM_VERSION_V3 = TRANSFORM_VERSIONS.v3;
 export const TRANSFORM_VERSION_V2 = TRANSFORM_VERSIONS.v2;
