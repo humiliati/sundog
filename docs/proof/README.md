@@ -172,6 +172,34 @@ that claim provably fails.
   dimension- and objective-robust. Scope: two points on the Grashof
   axis (`k_f=2` fixed); finite-Galerkin/sampled-support; C1 still
   unpromoted.
+- [`PDE_C1_PAIRED_FIBER_CONSTANCY.md`](PDE_C1_PAIRED_FIBER_CONSTANCY.md)
+  — **desk-first hardening, part (a): pre-registration** (2026-05-29).
+  Sharpens the regime-2 witness from a **matched-radius composition**
+  (twin-state non-injectivity + kNN control read, two population
+  statistics at the same `ε_K`) into a **paired** test on the *same*
+  pairs: among the certified `Q_K`-separated witness pairs, what fraction
+  require different proxy actions (`D_witness`)? Closes the "maybe a
+  different sub-population carries the action-homogeneity" confound and
+  instantiates the Reading-2 fiber criterion directly on the non-injective
+  support. Harness extended **additively** (twin-state adjudicator now
+  emits per-pair action agreement + a secondary `paired_fiber_verdict`
+  that never overrides `TWIN_STATE_CERTIFIED`); deterministic re-runs
+  reproduce the certificates bit-for-bit. Pre-registered threshold =
+  existing `delta_action = 0.10`; real negative branch `PDE-C1-PAIRED-NEG`
+  (regime 3 on the witnessed pairs). **Verdict-bearing runs in flight**
+  (G=200 `lock_v5`, G=300 `lock_v7_g300`).
+- [`PDE_C1_SEPARATION_STATEMENT.md`](PDE_C1_SEPARATION_STATEMENT.md)
+  — **desk-first hardening, part (b): reviewer-facing statement**
+  (2026-05-29). Consolidates the Postulate-1 reading note into one
+  self-contained **finite-Galerkin** separation claim with its empirical
+  witness, an **anti-vacuity ledger** (each vacuity mode excluded by
+  construction), and an **internal determining-modes comparator** (a
+  fixed-Galerkin K-bracket: `K=3` certified non-injective is the lower
+  bracket; smallest `K*` where injectivity returns is the registered
+  upper bracket — no borrowed asymptotic constant). States the
+  theorem-vs-witness boundary explicitly (finite-dim existence witness on
+  sampled support; **not** the ∞-dim NSE attractor, **not** a Millennium
+  claim). The artifact to attach to the reviewer email.
 - [`PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
   — reviewer outreach draft for Candidate 1 after `PDE-C1-RG-POS`.
   Keeps the ask bounded: finite-Galerkin / sampled-support /

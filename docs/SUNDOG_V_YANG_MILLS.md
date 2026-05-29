@@ -12,7 +12,8 @@ Short version:
 
 Status: **Phase 1 instrumentation closed across the full ladder
 2026-05-29; Phase 2 v0 executed -> `YM-P2-NEG-A no_rank_local_structure`;
-Phase 2 v1 APE-smearing run executed -> `YM-P2-NEG-A no_rank_local_structure`**.
+Phase 2 v1 APE-smearing run executed -> `YM-P2-NEG-A no_rank_local_structure`;
+Phase 2 v2 connected-correlator probe + binding spec filed 2026-05-29**.
 Roadmap draft at this file; lit-pass at
 [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
@@ -39,11 +40,16 @@ P0 amendment 1 (APE smearing, vocab v4, frozen α=0.5 / N_sm=10) at
 Phase 2 v1 binding spec (reuses v0 ensembles, smeared signature) at
 [`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v1.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v1.md)
 with named-null receipt at
-[`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md).
-The Phase 1 receipts are instrumentation only. Phase 2 v0 and v1 did not earn
-a certificate. No continuum, confinement, mass-gap, or result-bearing
-Yang-Mills claim exists. Next artifact is a dated v2 probe spec under
-`docs/yang-mills/specs/`.
+[`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md);
+v2 correlator probe spec at
+[`yang-mills/specs/2026-05-29_phase2_v2_correlator_probe.md`](yang-mills/specs/2026-05-29_phase2_v2_correlator_probe.md);
+Phase 2 v2 binding spec (vocab v5 = 20-dim connected correlators on
+v0 ensembles, no smearing, no P0 amendment) at
+[`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v2.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v2.md).
+The Phase 1 receipts are instrumentation only. Phase 2 v0 and v1 did
+not earn a certificate. No continuum, confinement, mass-gap, or
+result-bearing Yang-Mills claim exists. Next artifact is the minimal
+v2 aggregation runner per the v2 binding spec.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
