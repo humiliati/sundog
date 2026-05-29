@@ -541,3 +541,21 @@ does not license Branch E via `phase3e_fiber_locality_positive`, because no
 fidelity-passing neighborhoods exist and the oracle is vacuous on most primary
 contexts. A future certificate would need a framing-agnostic program-sketch
 oracle, a larger registered context universe, or both.
+
+## Program-Sketch Oracle v2 Addendum
+
+Filed: **2026-05-29 (PT)**.
+
+`PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md` is now filed. It targets the
+specific weakness named by the Phase 3E binding receipt: the inherited
+`program_sketch_v1` oracle was a Branch D edit-composition labeler, so it was
+prior-blind on the non-local-edit priors (`counting`, `local_completion`,
+`spatial_transform`, and `symmetry`).
+
+The v2 spec is deliberately a certificate-labeling repair, not a solver. It
+freezes nine framing-agnostic transformation facets plus anti-vacuity,
+anti-prior-laundering, and anti-solver-leakage gates. If those gates pass, a
+future runner may rerun the Phase 3E fiber certificate using the same frozen
+signature geometry thresholds (`epsilon_primary = 0.05`, `epsilon_strict =
+0.025`, `epsilon_loose = 0.10`, k=3). No execution is admitted by this
+addendum.

@@ -6903,3 +6903,48 @@ no sufficiency conclusion in either direction.
 permitted addition is the no-collision deferral statement; the
 collision-found and locality-positive statements remain forbidden
 (neither obtained).
+
+### 2026-05-29 (PT) -- Jeffery Hughes Jr. -- Phase 3E Program-Sketch Oracle v2 Spec Filed
+
+Phase 3E oracle-repair spec:
+
+- `docs/prereg/arc/PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md`
+
+The Phase 3E binding receipt found no registered signature-fiber collision, but
+it also exposed a label-coverage failure: `program_sketch_v1` was inherited from
+the Branch D edit-composition banks and was prior-blind on 68% of primary
+contexts. `program_sketch_v2` is the pre-registered repair for that weakness.
+It is a framing-agnostic certificate labeler, not a solver and not a Branch E
+runner.
+
+The v2 spec freezes:
+
+- nine transformation facets (`shape_relation`, `palette_relation`,
+  `object_relation`, `cardinality_relation`, `completion_relation`,
+  `spatial_transform_relation`, `symmetry_relation`, `correspondence_basis`,
+  `rule_scope`);
+- anti-vacuity gates (`overall_vacuity_fraction <= 0.20`, per-prior vacuity
+  `<= 0.25`, and lane coverage for every present prior);
+- anti-prior-laundering gates forbidding literal prior-name labels and requiring
+  concrete information beyond the most prior-associated facet;
+- anti-solver-leakage gates forbidding raw outputs, target hashes, exact masks,
+  exact coordinates, per-cell assignments, and overly unique sketch keys;
+- the same frozen Phase 3E signature geometry thresholds
+  (`epsilon_primary = 0.05`, `epsilon_strict = 0.025`,
+  `epsilon_loose = 0.10`, k=3).
+
+Reserved implementation names:
+
+- Python runner: `docs/prereg/arc/phase3e_program_sketch_oracle_v2.py`;
+- Node wrapper: `scripts/arc-phase3e-program-sketch-oracle-v2.mjs`;
+- npm script: `arc:phase3e:program-sketch-oracle-v2`;
+- receipt path: `results/arc/phase3e-program-sketch-oracle-v2/`.
+
+Verdict impact: **no execution admission and no v2 receipt**. Execution remains
+held until runner tooling, npm wiring, result ignore path, leak-check coverage,
+smoke fingerprint, and a freeze-marker amendment are committed together.
+
+Allowed public language before receipt:
+
+> "Phase 3E has filed a framing-agnostic program-sketch oracle v2 spec. It is a
+> labeler for certificate adjudication, not a solver. No v2 receipt exists yet."
