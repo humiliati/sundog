@@ -1,0 +1,48 @@
+{
+  "branch": "YM-P2-NEG-A no_rank_local_structure",
+  "reason": "primary=0.30833333333333307, primary-CTRL_RAND=0.02083333333333337",
+  "phaseVersion": "v2",
+  "signatureVocabularyVersion": "v5",
+  "signatureDimension": 20,
+  "primary": {
+    "withinBetaMeanBinPurity5": 0.30833333333333307,
+    "acrossBetaMeanBinPurity5": 0.3562499999999999,
+    "discriminationRatioWithin5": 0.9249999999999993,
+    "discriminationRatioAcross5": 1.0687499999999999
+  },
+  "controls": {
+    "withinBeta": {
+      "CTRL_META": 0.31458333333333316,
+      "CTRL_RAW": 0.29791666666666644,
+      "CTRL_RAND": 0.2874999999999997,
+      "CTRL_PERM": 0.3131187499999977,
+      "CTRL_GAUGE_RAND": 0.30833333333333307
+    },
+    "acrossBeta": {
+      "CTRL_RAND_STRAT": 0.3499999999999997,
+      "CTRL_GAUGE_RAND": 0.3562499999999999
+    },
+    "CTRL_FINITE_SIZE": {
+      "notScored": "phase4_reserved",
+      "branch": "YM-P4-DEFERRED_FINITE_SIZE"
+    }
+  },
+  "margins": {
+    "withinPrimaryMinusRand5": 0.02083333333333337,
+    "withinPrimaryMinusMeta5": -0.006250000000000089,
+    "withinPrimaryMinusRaw5": 0.01041666666666663,
+    "acrossPrimaryMinusRandStrat5": 0.0062500000000002,
+    "gaugeRandPurityDiff": 0
+  },
+  "integrity": {
+    "perBetaBinEdgeMaxAbsDiff": 0,
+    "globalBinEdgeMaxAbsDiff": 0,
+    "gaugeSignatureResidualMax": 3.3306690738754696e-16
+  },
+  "gammaHeld": {
+    "perBetaBinEdgesPath": "aggregation/per_beta_bin_edges.json",
+    "globalBinEdgesPath": "aggregation/global_bin_edges.json",
+    "binDegenerateBetas": []
+  },
+  "wallClockSeconds": 10.838720799999999
+}

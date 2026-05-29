@@ -1,0 +1,110 @@
+{
+  "phase": "phase2",
+  "phaseVersion": "v2",
+  "cell": "SU2_3D",
+  "latticeSize": [
+    12,
+    12,
+    12
+  ],
+  "betaSlate": [
+    2,
+    2.4,
+    2.8
+  ],
+  "perBetaConfigurations": 32,
+  "totalConfigurations": 96,
+  "signatureVocabularyVersion": "v5",
+  "heldOutTargetVocabularyVersion": "v1",
+  "signatureLoopClasses": [
+    "W11",
+    "W12",
+    "W13",
+    "W22"
+  ],
+  "displacementClassRepresentatives": [
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      1,
+      1,
+      0
+    ],
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      2,
+      0,
+      0
+    ],
+    [
+      2,
+      1,
+      0
+    ]
+  ],
+  "signatureDimension": 20,
+  "binConvention": "per_beta_tertile_linear",
+  "distanceMetric": "euclidean_zscore",
+  "kSlate": [
+    3,
+    5,
+    10
+  ],
+  "primaryK": 5,
+  "bootstrapResamples": 1000,
+  "controlsScored": [
+    "CTRL_META",
+    "CTRL_RAW",
+    "CTRL_RAND",
+    "CTRL_RAND_STRAT",
+    "CTRL_PERM",
+    "CTRL_GAUGE_RAND"
+  ],
+  "controlsDeferred": [
+    "CTRL_FINITE_SIZE"
+  ],
+  "v0EnsembleSources": [
+    {
+      "beta": 2,
+      "betaKey": "2.0",
+      "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.0_ensemble_v0",
+      "manifestCodeCommit": "f37ee57b70fd92dcc88bd5ecb8bceca8af02c37c",
+      "manifestGitDirty": true,
+      "summaryBranch": "P1-A ensemble_health_pass",
+      "configsSha256": "61f79ece31ad323f53bf34b8a173087da4bf3c02f0c73765ddb9c76c1b382f8d",
+      "hashesJsonConfigsSha256": "61f79ece31ad323f53bf34b8a173087da4bf3c02f0c73765ddb9c76c1b382f8d"
+    },
+    {
+      "beta": 2.4,
+      "betaKey": "2.4",
+      "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.4_ensemble_v0",
+      "manifestCodeCommit": "509222c450496e51495d47f90b569a4d5e330250",
+      "manifestGitDirty": true,
+      "summaryBranch": "P1-A ensemble_health_pass",
+      "configsSha256": "b94174654c93ef1ee793e455b3ffd0386e9d2054e98644d9ea14b818c2a39e3d",
+      "hashesJsonConfigsSha256": "b94174654c93ef1ee793e455b3ffd0386e9d2054e98644d9ea14b818c2a39e3d"
+    },
+    {
+      "beta": 2.8,
+      "betaKey": "2.8",
+      "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.8_ensemble_v0",
+      "manifestCodeCommit": "7844025aa1bf0aa6f7d783ca60521916ccfef937",
+      "manifestGitDirty": true,
+      "summaryBranch": "P1-A ensemble_health_pass",
+      "configsSha256": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19",
+      "hashesJsonConfigsSha256": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19"
+    }
+  ],
+  "v0BinEdgesSource": "results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_relative_locality_v0/aggregation/per_beta_bin_edges.json",
+  "codeCommit": "360ac2b60168e03246bc383cee88603a492d96c1",
+  "gitDirty": true,
+  "commandLine": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\hughe\\Dev\\sundog\\scripts\\yang-mills-phase2-v2-su2-3d-aggregate.mjs --cell SU2_3D --lattice-size 12x12x12 --beta-slate 2.0,2.4,2.8 --signature-vocab v5 --signature-loops W11,W12,W13,W22 --displacement-classes 1-0-0,1-1-0,1-1-1,2-0-0,2-1-0 --in-beta-2.0 results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.0_ensemble_v0 --in-beta-2.4 results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.4_ensemble_v0 --in-beta-2.8 results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.8_ensemble_v0 --v0-bin-edges results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_relative_locality_v0/aggregation/per_beta_bin_edges.json --distance-metric euclidean_zscore --k-slate 3,5,10 --primary-k 5 --bootstrap-resamples 1000 --bin-convention per_beta_tertile_linear --gauge-rand-seed-tag phase2_v2_aggregation --gauge-transforms-per-config 1 --out results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_relative_locality_v2",
+  "wallClockSeconds": 10.838720799999999
+}

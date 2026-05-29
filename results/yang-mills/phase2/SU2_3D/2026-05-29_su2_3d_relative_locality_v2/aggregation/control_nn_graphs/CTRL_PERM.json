@@ -1,0 +1,9 @@
+{
+  "kStored": 10,
+  "withinGraphSource": "primary",
+  "acrossGraphSource": "primary",
+  "permutationControlResamples": 1000,
+  "seedBase": 202605290499,
+  "withinPermutationMode": "uniform_within_beta_label_permutation",
+  "acrossPermutationMode": "uniform_global_label_permutation"
+}
