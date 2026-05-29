@@ -128,8 +128,14 @@ that claim provably fails.
   `Phi_K`, and certify sampled-support non-injectivity iff a
   pre-registered positive-mass fraction of signature-near pairs are
   high-mode separated. Smoke receipt passed at
-  `results/proof/c1-twin-state-smoke/`; full v5 lock command is staged
-  but not run inline under the repo's ~10-minute rule.
+  `results/proof/c1-twin-state-smoke/`. **v5 run 2026-05-28 →
+  `TWIN_STATE_CERTIFIED`** (`results/proof/c1-kolmogorov-v5-twin-state/`):
+  100% witness coverage, 693,795 unique witness pairs vs the 100 gate,
+  `δ_H = 0.0117` set by real median ‖Q_K‖ = 0.23 (not the floor). `Phi_K`
+  non-injective on the sampled SRB support — composes with the kNN
+  POSITIVE (same `ε_K`) into a complete Reading-2 regime-2 witness at the
+  v5 cell. Expected-easy half; scoped to finite-Galerkin / sampled-support
+  / one cell; does not promote C1.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /

@@ -231,6 +231,53 @@ If it returns any deferral or no-certificate receipt, C1 remains at the
 current honest boundary: non-injectivity certified on `B_abs`, not yet
 on `supp(mu_SRB)`.
 
+## 11. Result (2026-05-28) — TWIN_STATE_CERTIFIED at v5
+
+Primary v5 run (`results/proof/c1-kolmogorov-v5-twin-state/`, ~21 min):
+**`TWIN_STATE_CERTIFIED`**.
+
+| quantity | value | gate |
+|---|---:|---|
+| `delta_H` | 0.01167 | `0.05 × median‖Q_K‖`, floor `1e-6` |
+| median ‖Q_K‖ / min / max | 0.2333 / 0.2202 / 0.2442 | — |
+| signature-near coverage | 1.00 | ≥ `S_pos = 0.50` |
+| candidate pairs (unique) | 1,263,121 | — |
+| witness sample fraction | **1.00** | ≥ 0.01 |
+| witness pairs (unique) | **693,795** | ≥ 100 |
+| witness high-dist p50 / p95 | 0.0154 / 0.0210 | ≥ `delta_H` |
+
+**Robustness / non-degeneracy checks:**
+
+- **Not machine noise.** `delta_H` is set by the real high-mode
+  amplitude (median ‖Q_K‖ = 0.23 ≈ 27% of the ‖Φ_K‖ scale ~0.85), far
+  above the `1e-6` floor.
+- **Not "any two points."** Candidates are within `ε_K = 0.0606`; the
+  50-NN radius at this regime is ~0.045 (~5% of the signature norm), so
+  signature-near is genuinely signature-local.
+- **Overwhelmingly above the gates** (100% witness coverage; 694k
+  unique witness pairs vs the 100 threshold), not marginal.
+
+**What this closes.** `Phi_K` is non-injective on the sampled SRB-like
+support for the v5 cell — the state-insufficiency-on-attractor half
+that §4.1 of the cell-set had only established algebraically on
+`B_abs`. Tested at the **same `ε_K`** as the kNN control-sufficiency
+read, so the two halves compose into a complete Reading-2 **regime 2**
+witness at this cell: within `ε_K` signature-balls, Q_K varies
+(certified here) while the proxy action stays constant up to
+measure-zero (the kNN POSITIVE). The signature collapses distinct full
+states yet suffices for the control objective.
+
+**Honest calibration.** This was the *expected-easy* half — on a
+chaotic attractor with a 422-dim high-mode complement at ~0.23
+amplitude, signature-local states with separated high modes are nearly
+automatic. The certificate's contribution is that it is now *measured*
+on the actual support with pre-registered thresholds, not argued.
+
+**What it does NOT do.** Finite-Galerkin, sampled-support, numerical —
+not a theorem about the infinite-dimensional NSE attractor. One cell
+(k_f=2, G=200, K=3); not regime-generality. Does not touch proxy
+faithfulness or external review. **C1 stays unpromoted.**
+
 ## 10. Cross-References
 
 - [`PDE_C1_CELLSET_KOLMOGOROV.md`](PDE_C1_CELLSET_KOLMOGOROV.md) section
