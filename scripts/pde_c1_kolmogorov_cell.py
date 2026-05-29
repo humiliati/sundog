@@ -7,6 +7,8 @@ Implements the runnable side of:
 
 The default preset is a smoke. Use `--preset lock` for the registered v0
 sample count. Smoke runs are machinery checks only and never file a C1 verdict.
+The `twin-state` adjudicator is a support-level non-injectivity certificate,
+not a proxy-control verdict.
 """
 from __future__ import annotations
 
@@ -72,6 +74,11 @@ class RunConfig:
     adjudicator: str
     k_neighbors: int
     delta_incompat: float
+    twin_k_neighbors: int
+    twin_delta_high_fraction: float
+    twin_high_norm_floor: float
+    twin_min_witness_fraction: float
+    twin_min_unique_pairs: int
 
 
 def parse_args() -> argparse.Namespace:
@@ -97,10 +104,10 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--adjudicator",
-        choices=["bin", "knn", "knn-sweep"],
+        choices=["bin", "knn", "knn-sweep", "twin-state"],
         default="bin",
         help="Fiber-locality adjudicator: hard binning (default), kNN/disintegration, "
-        "or knn-sweep (convergence check over k).",
+        "knn-sweep (convergence check over k), or twin-state support certificate.",
     )
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--write-samples", action="store_true", help="Write per-sample rows even for large runs.")
@@ -139,6 +146,14 @@ def build_config(args: argparse.Namespace) -> RunConfig:
     # delta_incompat is the positive-mass threshold for filing PDE-C1-NEG-A.
     k_neighbors = 30
     delta_incompat = 0.01
+    # Twin-state support certificate defaults (pre-registered in
+    # PDE_C1_TWIN_STATE_CERTIFICATE.md): k neighbours including self; delta_H is
+    # a fixed fraction of the sample median high-mode norm.
+    twin_k_neighbors = 50
+    twin_delta_high_fraction = 0.05
+    twin_high_norm_floor = 1e-6
+    twin_min_witness_fraction = 0.01
+    twin_min_unique_pairs = 100
     random_seed = 20260528
 
     if args.preset == "lock":
@@ -282,6 +297,11 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         adjudicator=args.adjudicator,
         k_neighbors=k_neighbors,
         delta_incompat=delta_incompat,
+        twin_k_neighbors=twin_k_neighbors,
+        twin_delta_high_fraction=twin_delta_high_fraction,
+        twin_high_norm_floor=twin_high_norm_floor,
+        twin_min_witness_fraction=twin_min_witness_fraction,
+        twin_min_unique_pairs=twin_min_unique_pairs,
     )
 
 
@@ -304,6 +324,7 @@ class KolmogorovStepper:
         self.forcing_hat[~self.dealias_mask] = 0.0
         self.forcing_hat[0, 0] = 0.0
         self.low_indices = select_low_modes(wave, cfg.k_signature, cfg.forcing_wavenumber)
+        self.high_indices = select_high_modes(wave, cfg.n_modes, self.dealias_mask, self.low_indices)
 
     def initial_state(self) -> np.ndarray:
         rng = np.random.default_rng(self.cfg.random_seed)
@@ -345,16 +366,22 @@ class KolmogorovStepper:
         next_hat[0, 0] = 0.0
         return next_hat
 
-    def signature(self, omega_hat: np.ndarray) -> np.ndarray:
+    def mode_vector(self, omega_hat: np.ndarray, indices: list[tuple[int, int]]) -> np.ndarray:
         scale = float(self.cfg.grid_size * self.cfg.grid_size)
         omega_norm = omega_hat / scale
         values: list[float] = []
-        for ix, iy in self.low_indices:
+        for ix, iy in indices:
             k_norm = math.sqrt(float(self.k2[ix, iy]))
             amp = omega_norm[ix, iy] / k_norm
             values.append(float(amp.real))
             values.append(float(amp.imag))
         return np.asarray(values, dtype=np.float64)
+
+    def signature(self, omega_hat: np.ndarray) -> np.ndarray:
+        return self.mode_vector(omega_hat, self.low_indices)
+
+    def high_mode_vector(self, omega_hat: np.ndarray) -> np.ndarray:
+        return self.mode_vector(omega_hat, self.high_indices)
 
     def low_energy(self, omega_hat: np.ndarray) -> float:
         sig = self.signature(omega_hat)
@@ -390,6 +417,32 @@ def select_low_modes(wave: np.ndarray, k_signature: int, forced_k: int) -> list[
     return selected
 
 
+def select_high_modes(
+    wave: np.ndarray,
+    n_modes: int,
+    dealias_mask: np.ndarray,
+    low_indices: list[tuple[int, int]],
+) -> list[tuple[int, int]]:
+    low = set(low_indices)
+    modes: list[tuple[float, float, int, int]] = []
+    for ix, kx in enumerate(wave):
+        for iy, ky in enumerate(wave):
+            if kx == 0 and ky == 0:
+                continue
+            if not bool(dealias_mask[ix, iy]):
+                continue
+            if abs(kx) > n_modes or abs(ky) > n_modes:
+                continue
+            # Half-plane representatives for a real field.
+            if not (ky > 0 or (ky == 0 and kx > 0)):
+                continue
+            if (ix, iy) in low:
+                continue
+            modes.append((max(abs(kx), abs(ky)), kx * kx + ky * ky, ix, iy))
+    modes.sort(key=lambda row: (row[0], row[1], row[2], row[3]))
+    return [(ix, iy) for _, _, ix, iy in modes]
+
+
 def run_cell(cfg: RunConfig) -> dict:
     stepper = KolmogorovStepper(cfg)
     omega_hat = stepper.initial_state()
@@ -400,6 +453,11 @@ def run_cell(cfg: RunConfig) -> dict:
     energy_by_step = np.empty(total_steps + 1, dtype=np.float64)
     sample_signatures = np.empty((cfg.sample_count, cfg.signature_dimension), dtype=np.float64)
     sample_energy = np.empty(cfg.sample_count, dtype=np.float64)
+    sample_high_modes = (
+        np.empty((cfg.sample_count, 2 * len(stepper.high_indices)), dtype=np.float64)
+        if cfg.adjudicator == "twin-state"
+        else None
+    )
     sig_min = np.full(cfg.signature_dimension, np.inf)
     sig_max = np.full(cfg.signature_dimension, -np.inf)
 
@@ -418,6 +476,8 @@ def run_cell(cfg: RunConfig) -> dict:
             sig = stepper.signature(omega_hat)
             sample_signatures[sample_index, :] = sig
             sample_energy[sample_index] = energy
+            if sample_high_modes is not None:
+                sample_high_modes[sample_index, :] = stepper.high_mode_vector(omega_hat)
         if step < total_steps:
             omega_hat = stepper.step(omega_hat)
         if step > 0 and step % progress_stride == 0:
@@ -442,14 +502,20 @@ def run_cell(cfg: RunConfig) -> dict:
         result, bin_rows, sample_rows, knn_sweep_rows = aggregate_knn_sweep(
             sample_signatures, actions, epsilon_k, cfg
         )
+    elif cfg.adjudicator == "twin-state":
+        result, bin_rows, sample_rows, twin_witness_rows = aggregate_twin_state(
+            sample_signatures, sample_high_modes, actions, epsilon_k, cfg
+        )
     else:
         bin_rows, sample_rows = aggregate_bins(sample_signatures, sample_energy, actions, sig_min, h_k, cfg)
         result = summarize(bin_rows, cfg)
+        twin_witness_rows = []
     result.update(
         {
             "adjudicator": cfg.adjudicator,
             "knn_histogram": knn_histogram,
             "knn_sweep_rows": knn_sweep_rows,
+            "twin_witness_rows": twin_witness_rows,
             "e_max": e_max,
             "epsilon_k": epsilon_k,
             "h_k": h_k,
@@ -465,6 +531,8 @@ def run_cell(cfg: RunConfig) -> dict:
                 {"kx": int(stepper.kx[ix, iy]), "ky": int(stepper.ky[ix, iy])}
                 for ix, iy in stepper.low_indices
             ],
+            "high_mode_count": len(stepper.high_indices),
+            "high_mode_dimension": 2 * len(stepper.high_indices),
             "elapsed_seconds": time.perf_counter() - started,
             "total_steps": total_steps,
             "steps_per_second": total_steps / max(1e-9, time.perf_counter() - started),
@@ -927,6 +995,272 @@ def summarize_knn_sweep(
     }
 
 
+def aggregate_twin_state(
+    signatures: np.ndarray,
+    high_vectors: np.ndarray | None,
+    actions: np.ndarray,
+    epsilon_k: float,
+    cfg: RunConfig,
+) -> tuple[dict, list, list, list]:
+    """Support-level non-injectivity certificate.
+
+    Search the sampled SRB-like support for signature-near pairs whose
+    complementary high-mode coordinates are separated by a pre-registered
+    threshold delta_H. This is a state-insufficiency certificate, not a
+    proxy-control adjudication.
+    """
+    if high_vectors is None:
+        raise ValueError("twin-state adjudicator requires captured high-mode vectors")
+
+    from sklearn.neighbors import BallTree
+
+    n = int(signatures.shape[0])
+    high_norms = np.linalg.norm(high_vectors, axis=1) if high_vectors.size else np.zeros(n)
+    high_norm_median = float(np.median(high_norms)) if n else 0.0
+    delta_h_raw = cfg.twin_delta_high_fraction * high_norm_median
+    delta_h = max(cfg.twin_high_norm_floor, delta_h_raw)
+    damp = int(actions.sum())
+    no_op = int(n - damp)
+
+    def pct(a: np.ndarray, q: float) -> float:
+        return float(np.percentile(a, q)) if a.size else 0.0
+
+    if n < 2:
+        result = summarize_twin_state(
+            n=n,
+            k=0,
+            epsilon_k=epsilon_k,
+            delta_h=delta_h,
+            high_norms=high_norms,
+            candidate_sample_count=0,
+            candidate_pair_count_directed=0,
+            candidate_pair_count_unique=0,
+            witness_sample_count=0,
+            witness_pair_count_directed=0,
+            witness_pair_count_unique=0,
+            max_candidate_high_distance=0.0,
+            witness_high_distances=np.asarray([], dtype=np.float64),
+            witness_signature_distances=np.asarray([], dtype=np.float64),
+            damp=damp,
+            no_op=no_op,
+            cfg=cfg,
+        )
+        return result, [], [], []
+
+    k = min(max(2, cfg.twin_k_neighbors), n)
+    tree = BallTree(signatures, metric="euclidean")
+    dist, idx = tree.query(signatures, k=k)
+    nbr_dist = dist[:, 1:]
+    nbr_idx = idx[:, 1:]
+
+    candidate_sample = np.zeros(n, dtype=bool)
+    witness_sample = np.zeros(n, dtype=bool)
+    candidate_pair_count_directed = 0
+    witness_pair_count_directed = 0
+    max_candidate_high_distance = 0.0
+    candidate_code_chunks: list[np.ndarray] = []
+    witness_code_chunks: list[np.ndarray] = []
+    witness_high_chunks: list[np.ndarray] = []
+    witness_sig_chunks: list[np.ndarray] = []
+    witness_rows: list[dict] = []
+    row_limit = 200
+
+    chunk_size = 512
+    for start in range(0, n, chunk_size):
+        end = min(start + chunk_size, n)
+        row_ids = np.arange(start, end, dtype=np.int64)
+        dist_chunk = nbr_dist[start:end]
+        idx_chunk = nbr_idx[start:end]
+        candidate_mask = dist_chunk <= epsilon_k
+        if not bool(candidate_mask.any()):
+            continue
+
+        candidate_sample[start:end] = candidate_mask.any(axis=1)
+        candidate_pair_count_directed += int(candidate_mask.sum())
+        diff = high_vectors[idx_chunk] - high_vectors[row_ids[:, None]]
+        high_dist = np.linalg.norm(diff, axis=2)
+        candidate_high = high_dist[candidate_mask]
+        if candidate_high.size:
+            max_candidate_high_distance = max(max_candidate_high_distance, float(candidate_high.max()))
+
+        lo = np.minimum(row_ids[:, None], idx_chunk)
+        hi = np.maximum(row_ids[:, None], idx_chunk)
+        codes = lo * n + hi
+        candidate_code_chunks.append(codes[candidate_mask])
+
+        witness_mask = candidate_mask & (high_dist >= delta_h)
+        if not bool(witness_mask.any()):
+            continue
+
+        witness_sample[start:end] = witness_mask.any(axis=1)
+        witness_pair_count_directed += int(witness_mask.sum())
+        witness_code_chunks.append(codes[witness_mask])
+        witness_high_chunks.append(high_dist[witness_mask])
+        witness_sig_chunks.append(dist_chunk[witness_mask])
+
+        if len(witness_rows) < row_limit:
+            positions = np.argwhere(witness_mask)
+            for local_i, local_j in positions:
+                i = int(row_ids[local_i])
+                j = int(idx_chunk[local_i, local_j])
+                witness_rows.append(
+                    {
+                        "sample_i": i,
+                        "sample_j": j,
+                        "signature_distance": float(dist_chunk[local_i, local_j]),
+                        "high_mode_distance": float(high_dist[local_i, local_j]),
+                        "high_distance_over_delta_h": float(high_dist[local_i, local_j] / delta_h)
+                        if delta_h > 0
+                        else 0.0,
+                        "sample_i_high_norm": float(high_norms[i]),
+                        "sample_j_high_norm": float(high_norms[j]),
+                    }
+                )
+                if len(witness_rows) >= row_limit:
+                    break
+
+    candidate_pair_count_unique = unique_pair_count(candidate_code_chunks)
+    witness_pair_count_unique = unique_pair_count(witness_code_chunks)
+    witness_high_distances = (
+        np.concatenate(witness_high_chunks) if witness_high_chunks else np.asarray([], dtype=np.float64)
+    )
+    witness_signature_distances = (
+        np.concatenate(witness_sig_chunks) if witness_sig_chunks else np.asarray([], dtype=np.float64)
+    )
+
+    result = summarize_twin_state(
+        n=n,
+        k=k,
+        epsilon_k=epsilon_k,
+        delta_h=delta_h,
+        high_norms=high_norms,
+        candidate_sample_count=int(candidate_sample.sum()),
+        candidate_pair_count_directed=candidate_pair_count_directed,
+        candidate_pair_count_unique=candidate_pair_count_unique,
+        witness_sample_count=int(witness_sample.sum()),
+        witness_pair_count_directed=witness_pair_count_directed,
+        witness_pair_count_unique=witness_pair_count_unique,
+        max_candidate_high_distance=max_candidate_high_distance,
+        witness_high_distances=witness_high_distances,
+        witness_signature_distances=witness_signature_distances,
+        damp=damp,
+        no_op=no_op,
+        cfg=cfg,
+    )
+    result.update(
+        {
+            "high_norm_p05": pct(high_norms, 5),
+            "high_norm_p50": pct(high_norms, 50),
+            "high_norm_p95": pct(high_norms, 95),
+        }
+    )
+    return result, [], [], witness_rows
+
+
+def unique_pair_count(code_chunks: list[np.ndarray]) -> int:
+    nonempty = [chunk for chunk in code_chunks if chunk.size]
+    if not nonempty:
+        return 0
+    return int(np.unique(np.concatenate(nonempty)).size)
+
+
+def summarize_twin_state(
+    *,
+    n: int,
+    k: int,
+    epsilon_k: float,
+    delta_h: float,
+    high_norms: np.ndarray,
+    candidate_sample_count: int,
+    candidate_pair_count_directed: int,
+    candidate_pair_count_unique: int,
+    witness_sample_count: int,
+    witness_pair_count_directed: int,
+    witness_pair_count_unique: int,
+    max_candidate_high_distance: float,
+    witness_high_distances: np.ndarray,
+    witness_signature_distances: np.ndarray,
+    damp: int,
+    no_op: int,
+    cfg: RunConfig,
+) -> dict:
+    high_norm_median = float(np.median(high_norms)) if high_norms.size else 0.0
+    candidate_sample_fraction = candidate_sample_count / n if n else 0.0
+    witness_sample_fraction = witness_sample_count / n if n else 0.0
+    witness_fraction_of_candidates = (
+        witness_sample_count / candidate_sample_count if candidate_sample_count else 0.0
+    )
+    damp_fraction = damp / max(1, n)
+
+    if cfg.preset not in VERDICT_BEARING_PRESETS:
+        verdict, verdict_label, interpretable = "SMOKE_ONLY", "", False
+    elif high_norm_median <= cfg.twin_high_norm_floor:
+        verdict, verdict_label, interpretable = (
+            "TWIN_STATE_DEFERRED_HIGH_MODE_FLOOR",
+            "sampled_support_high_modes_numerically_flat",
+            False,
+        )
+    elif candidate_sample_fraction < cfg.s_pos:
+        verdict, verdict_label, interpretable = (
+            "TWIN_STATE_DEFERRED_COVERAGE",
+            "insufficient_signature_near_pair_coverage",
+            False,
+        )
+    elif (
+        witness_sample_fraction >= cfg.twin_min_witness_fraction
+        and witness_pair_count_unique >= cfg.twin_min_unique_pairs
+    ):
+        verdict, verdict_label, interpretable = (
+            "TWIN_STATE_CERTIFIED",
+            "signature_near_high_mode_separated_twins",
+            True,
+        )
+    else:
+        verdict, verdict_label, interpretable = (
+            "TWIN_STATE_NO_CERTIFICATE",
+            "no_pre_registered_positive_mass_twin_witness",
+            False,
+        )
+
+    def pct(a: np.ndarray, q: float) -> float:
+        return float(np.percentile(a, q)) if a.size else 0.0
+
+    return {
+        "verdict": verdict,
+        "verdict_label": verdict_label,
+        "interpretable": interpretable,
+        "n_samples": n,
+        "k_neighbors_effective": k,
+        "epsilon_k_radius_threshold": epsilon_k,
+        "delta_h": delta_h,
+        "twin_delta_high_fraction": cfg.twin_delta_high_fraction,
+        "twin_high_norm_floor": cfg.twin_high_norm_floor,
+        "twin_min_witness_fraction": cfg.twin_min_witness_fraction,
+        "twin_min_unique_pairs": cfg.twin_min_unique_pairs,
+        "candidate_sample_count": candidate_sample_count,
+        "candidate_sample_fraction": candidate_sample_fraction,
+        "candidate_pair_count_directed": candidate_pair_count_directed,
+        "candidate_pair_count_unique": candidate_pair_count_unique,
+        "witness_sample_count": witness_sample_count,
+        "witness_sample_fraction": witness_sample_fraction,
+        "witness_fraction_of_candidates": witness_fraction_of_candidates,
+        "witness_pair_count_directed": witness_pair_count_directed,
+        "witness_pair_count_unique": witness_pair_count_unique,
+        "max_candidate_high_distance": max_candidate_high_distance,
+        "witness_high_distance_p50": pct(witness_high_distances, 50),
+        "witness_high_distance_p95": pct(witness_high_distances, 95),
+        "witness_signature_distance_p50": pct(witness_signature_distances, 50),
+        "witness_signature_distance_p95": pct(witness_signature_distances, 95),
+        "high_norm_median": high_norm_median,
+        "high_norm_min": float(high_norms.min()) if high_norms.size else 0.0,
+        "high_norm_max": float(high_norms.max()) if high_norms.size else 0.0,
+        "no_op_count": no_op,
+        "damp_low_band_count": damp,
+        "damp_fraction": damp_fraction,
+        "s_pos": cfg.s_pos,
+    }
+
+
 def bin_key(idx: Iterable[int]) -> str:
     return ";".join(str(int(x)) for x in idx)
 
@@ -948,7 +1282,8 @@ def write_outputs(out_dir: Path, cfg: RunConfig, result: dict, write_samples: bo
         "result": {
             k: v
             for k, v in result.items()
-            if k not in ("bin_rows", "sample_rows", "knn_histogram", "knn_sweep_rows")
+            if k
+            not in ("bin_rows", "sample_rows", "knn_histogram", "knn_sweep_rows", "twin_witness_rows")
         },
     }
     (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
@@ -956,6 +1291,8 @@ def write_outputs(out_dir: Path, cfg: RunConfig, result: dict, write_samples: bo
         write_csv(out_dir / "knn-sweep.csv", result.get("knn_sweep_rows", []))
     elif cfg.adjudicator == "knn":
         write_csv(out_dir / "knn-radius-histogram.csv", result.get("knn_histogram", []))
+    elif cfg.adjudicator == "twin-state":
+        write_csv(out_dir / "twin-state-witnesses.csv", result.get("twin_witness_rows", []))
     else:
         write_csv(out_dir / "bin-summary.csv", result["bin_rows"])
         if write_samples or result["sample_rows"]:
@@ -971,6 +1308,9 @@ def write_receipt(path: Path, manifest: dict) -> None:
         return
     if c.get("adjudicator") == "knn":
         write_receipt_knn(path, manifest)
+        return
+    if c.get("adjudicator") == "twin-state":
+        write_receipt_twin_state(path, manifest)
         return
     lines = [
         "# PDE C1 Kolmogorov v0 Receipt",
@@ -1150,6 +1490,68 @@ def write_receipt_knn_sweep(path: Path, manifest: dict) -> None:
             "larger `N` or wider clean-`k` range is needed. No verdict filed."
         )
     lines.extend(["", "## Files", "", "- `manifest.json`", "- `knn-sweep.csv`"])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_receipt_twin_state(path: Path, manifest: dict) -> None:
+    r = manifest["result"]
+    c = manifest["config"]
+    lines = [
+        "# PDE C1 Twin-State Certificate Receipt",
+        "",
+        f"**Status:** {r['verdict']}",
+        f"**Preset:** `{c['preset']}`",
+        f"**Adjudicator:** `twin-state`",
+        f"**Interpretable certificate:** `{r['interpretable']}`",
+        "",
+        "## Readout",
+        "",
+        f"- samples: `{r['n_samples']}`, k (effective): `{r['k_neighbors_effective']}`",
+        f"- `epsilon_K` (signature radius): `{r['epsilon_k_radius_threshold']:.6g}`",
+        f"- `delta_H`: `{r['delta_h']:.6g}` "
+        f"(`{r['twin_delta_high_fraction']}` x median high-mode norm, floor `{r['twin_high_norm_floor']}`)",
+        f"- high-mode norm median / min / max: `{r['high_norm_median']:.6g}` / "
+        f"`{r['high_norm_min']:.6g}` / `{r['high_norm_max']:.6g}`",
+        f"- signature-near sample coverage: `{r['candidate_sample_fraction']:.6g}` "
+        f"vs `S_pos = {r['s_pos']}` (`{r['candidate_sample_count']}` of `{r['n_samples']}`)",
+        f"- candidate pairs unique / directed: `{r['candidate_pair_count_unique']}` / "
+        f"`{r['candidate_pair_count_directed']}`",
+        f"- witness sample fraction: `{r['witness_sample_fraction']:.6g}` "
+        f"vs `{r['twin_min_witness_fraction']}` (`{r['witness_sample_count']}` samples)",
+        f"- witness pairs unique / directed: `{r['witness_pair_count_unique']}` / "
+        f"`{r['witness_pair_count_directed']}` vs min unique `{r['twin_min_unique_pairs']}`",
+        f"- witness high-distance p50 / p95: `{r['witness_high_distance_p50']:.6g}` / "
+        f"`{r['witness_high_distance_p95']:.6g}`",
+        f"- elapsed seconds: `{r['elapsed_seconds']:.3f}`",
+        "",
+        "## Branch",
+        "",
+    ]
+    if r["verdict"] == "SMOKE_ONLY":
+        lines.append("Smoke-only run; no support-level state-insufficiency certificate may be filed.")
+    elif r["verdict"] == "TWIN_STATE_DEFERRED_HIGH_MODE_FLOOR":
+        lines.append(
+            "The sampled support is numerically flat in the complementary high modes at "
+            "the pre-registered scale. No support-level non-injectivity certificate is filed."
+        )
+    elif r["verdict"] == "TWIN_STATE_DEFERRED_COVERAGE":
+        lines.append(
+            "Too few samples have a signature-near neighbour within `epsilon_K`; this "
+            "run cannot adjudicate support-level non-injectivity."
+        )
+    elif r["verdict"] == "TWIN_STATE_CERTIFIED":
+        lines.append(
+            "A positive-mass fraction of sampled states has a signature-near twin with "
+            "high-mode separation above `delta_H`. This certifies `Phi_K` non-injective "
+            "on the sampled SRB-like support for this cell."
+        )
+    else:
+        lines.append(
+            "Signature-near coverage was adequate, but the pre-registered positive-mass "
+            "witness threshold did not clear. This is a no-certificate receipt, not a "
+            "proof of injectivity."
+        )
+    lines.extend(["", "## Files", "", "- `manifest.json`", "- `twin-state-witnesses.csv`"])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

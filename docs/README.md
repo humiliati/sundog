@@ -30,8 +30,9 @@ code, experiments, prior theorem materials, and application bridges.
   proof-track symbol ledger and Sundog-solvable predicate.
 - [Proof artifacts index](proof/README.md): current proof-track artifacts,
   including the Phase 1 LQG draft, Phase 2 finite-MDP proof, Phase 3 boundary
-  theorem, Phase 4 three-body spec, Bayesian-floor buildout, and Phase 6
-  lambda-control spec.
+  theorem, Phase 4 three-body spec, Bayesian-floor buildout, Phase 6
+  lambda-control spec, and the Navier-Stokes C1 lock synthesis and kNN
+  convergence check.
 - [Bayesian floor profile template](BAYESIAN_FLOOR_PROFILE_TEMPLATE.md):
   reusable profile contract for installing same-observation Bayesian floors
   across workbenches without reinventing the audit shape.
@@ -74,26 +75,6 @@ code, experiments, prior theorem materials, and application bridges.
 - [Sundog Geometry roadmap](SUNDOG_V_GEOMETRY.md): parhelion-derived
   geometry workbench shelf — parametric halo render, parhelion-offset
   inverse, calibration boundaries, and the path-to-promotion phases.
-- [Sundog Mesa roadmap](SUNDOG_V_MESA.md): mesa-optimization trap
-  empirical front; in-vitro operating envelope with sharp cliff at
-  λ ≈ 0.953 localized to a 5D basin at the actor's final hidden layer.
-- [Sundog vs. P-vs-NP roadmap](SUNDOG_V_P_V_NP.md): bounded
-  alignment-verification bridge asking whether compact signatures can verify
-  safe operating envelopes more cheaply than safe policies can be found.
-- [P-vs-NP lit-pass memo](P_V_NP_LITPASS_MEMO.md): citation spine and
-  prior-art gap map for promise-bounded verifier scaffolding.
-- [P-vs-NP project folder](pvnp/README.md): Phase 1 toy-verifier spec,
-  v0-v5 slates, receipts, and result conventions.
-- [Sundog Capset ledger](SUNDOG_V_CAPSET.md): staging ledger coupling
-  Sundog's apparatus to the 2026 OpenAI unit-distance disproof. Evaluator
-  front + substrate-analogue horizon; cap-set workbench is the one
-  current anchor.
-- [Sundog Gravity ledger](SUNDOG_V_GRAVITY.md): staging pattern for the
-  highest-ambition Goodhart-sidestep claim. Source of the candidate
-  template the other ledgers mirror.
-- [Sundog ARC-AGI roadmap](SUNDOG_V_ARC.md): Candidate 14 promoted from the
-  Gravity ledger; ARC-AGI-2 abstraction-coupling work order with a Phase 0
-  preregistration lane under `prereg/arc/`.
 - [SEO and social-readiness roadmap](site/SEO_AND_SOCIAL_READINESS_ROADMAP.md):
   per-page OG/Twitter/JSON-LD matrix, Phase 1 cleared 2026-05-21 across
   thirteen Class A pages; Phase 2 staged.
@@ -110,6 +91,43 @@ code, experiments, prior theorem materials, and application bridges.
   stress-test interpretation.
 - [Oracle leakage audit](ORACLE_LEAKAGE_AUDIT.md): P0 receipt for the
   photometric "without target-position access" claim and its API boundary.
+
+## High-Stakes Trial Ledgers
+
+These ledgers couple Sundog machinery to hard external targets. They are
+receipt-generation and boundary-mapping trials, not claims to have solved the
+underlying public problems.
+
+- [Riemann saga](SUNDOG_V_RIEMANN.md): RH-adjacent zero statistics, explicit
+  formulae, and nonlinear gap-pair probes. Current result is a bounded-null
+  synthesis: three lanes, three identified substrate causes, no structural-zero
+  edge; public surface blocked on external review.
+- [Riemann project folder](riemann/README.md): synthesis, Probe 01 and Probe 05
+  receipts, C1 cell set, bridge notes, and external-review packet.
+- [Riemann bounded-null synthesis](riemann/RIEMANN_BOUNDED_NULL_SYNTHESIS.md):
+  capstone readout for the three-lane null; shortest artifact for external
+  sanity review.
+- [Navier-Stokes ledger](SUNDOG_V_NAVIERSTOKES.md): Clay Millennium PDE coupling
+  held to determining-mode / Kolmogorov-flow cell sets, vacuity gates, and
+  proof-track receipts; no Navier-Stokes solution claimed.
+- [Navier-Stokes lit-pass memo](NAVIERSTOKES_LITPASS_MEMO.md): prior-art spine
+  and candidate ranking for the NSE lane.
+- [P-vs-NP verification ledger](SUNDOG_V_P_V_NP.md): bounded
+  alignment-verification bridge asking whether compact signatures can certify
+  named operating envelopes more cheaply than safe policies can be found.
+- [P-vs-NP lit-pass memo](P_V_NP_LITPASS_MEMO.md): prior-art spine for
+  promise-bounded verifier scaffolding.
+- [P-vs-NP project folder](pvnp/README.md): Phase 1 toy-verifier slates,
+  receipts, quarantines, and result conventions.
+- [Capset ledger](SUNDOG_V_CAPSET.md): hard-math coupling precedent around the
+  OpenAI unit-distance / cap-set disproof context; evaluator front plus
+  substrate-analogue horizon.
+- [ARC-AGI roadmap](SUNDOG_V_ARC.md): abstraction-coupling trial promoted from
+  the Gravity ledger, with a Phase 0 preregistration lane under `prereg/arc/`.
+- [Gravity ledger](SUNDOG_V_GRAVITY.md): highest-ambition staging pattern and
+  candidate source ledger for Goodhart / partial-observability trials.
+- [Mesa-optimization ledger](SUNDOG_V_MESA.md): high-stakes alignment substrate
+  with localized cliff behavior and traceable operating-envelope boundaries.
 
 ## Supporting Docs
 
