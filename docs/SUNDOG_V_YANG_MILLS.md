@@ -10,13 +10,15 @@ Short version:
 > discipline: if the field itself is too much, can the right invariant shadow
 > still certify bounded structure?
 
-Status: **Phase 0 domain lock filed 2026-05-29**. Roadmap draft at this file;
-lit-pass at [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock
-at [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
+Status: **Phase 1 runner manifest filed 2026-05-29**. Roadmap draft at this
+file; lit-pass at [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md);
+P0 lock at
+[`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
+Phase 1 U(1) 2D smoke manifest at
+[`prereg/yang-mills/PHASE1_U1_2D_gauge_invariance_smoke.md`](prereg/yang-mills/PHASE1_U1_2D_gauge_invariance_smoke.md);
 receipt template at [`yang-mills/RECEIPT_TEMPLATE.md`](yang-mills/RECEIPT_TEMPLATE.md).
-No runner code, receipt, or result-bearing claim exists yet. Next artifact is a
-Phase 1 runner manifest under `docs/prereg/yang-mills/` that fills the lock's
-Admission Requirements before any code is admitted.
+No runner code, receipt, or result-bearing claim exists yet. Next artifact is
+the minimal runner implementation for the exact Phase 1 manifest command.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
@@ -297,7 +299,8 @@ Named failures take precedence over narrative success.
 Deliverables:
 
 - `docs/YANG_MILLS_LITPASS_MEMO.md` - **filed 2026-05-29**;
-- `docs/prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`;
+- `docs/prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md` - **filed
+  2026-05-29**;
 - chosen finite-lattice domain, observable labels, source library, and compute
   budget;
 - explicit "not a Clay claim" language;
@@ -330,6 +333,8 @@ Are the proposed signatures invariant under random gauge transformations?
 
 Deliverables:
 
+- `docs/prereg/yang-mills/PHASE1_U1_2D_gauge_invariance_smoke.md` -
+  **filed 2026-05-29**;
 - tiny deterministic fixture;
 - raw-link diagnostic control;
 - gauge-randomized copies;
@@ -463,10 +468,15 @@ Next agent should:
 7. Add Yang-Mills to the generality gallery only as a draft-handoff card until
    Phase 0 is filed. **Phase 0 now filed**; gallery card admission is the next
    adjacent decision (no public surface yet).
-8. **New next artifact (2026-05-29):** file a Phase 1 runner manifest at
+8. ~~File a Phase 1 runner manifest at
    `docs/prereg/yang-mills/PHASE1_<cell>_<short-label>.md` filling every
-   Admission Requirement in the P0 lock. Recommended first:
-   `PHASE1_U1_2D_gauge_invariance_smoke.md`.
+   Admission Requirement in the P0 lock.~~
+   **Done 2026-05-29** - see
+   [`prereg/yang-mills/PHASE1_U1_2D_gauge_invariance_smoke.md`](prereg/yang-mills/PHASE1_U1_2D_gauge_invariance_smoke.md).
+9. **New next artifact (2026-05-29):** implement only the minimal U(1) 2D
+   Phase 1 runner and package script required by the manifest. Do not add
+   SU(2), Phase 2 nearest-neighbor scoring, smearing, blocking, topological
+   observables, or 4D hooks inside that runner.
 
 ## 11. Open Decisions
 
