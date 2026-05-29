@@ -12,8 +12,8 @@ Short version:
 
 Status: **Phase 1 instrumentation closed across the full ladder
 2026-05-29; Phase 2 v0 executed -> `YM-P2-NEG-A no_rank_local_structure`;
-v1 smearing probe spec + P0 amendment 1 + Phase 2 v1 binding spec all
-filed 2026-05-29**. Roadmap draft at this file; lit-pass at
+Phase 2 v1 APE-smearing run executed -> `YM-P2-NEG-A no_rank_local_structure`**.
+Roadmap draft at this file; lit-pass at
 [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
 Phase 1 U(1) 2D smoke manifest at
@@ -37,11 +37,13 @@ v1 smearing probe spec at
 P0 amendment 1 (APE smearing, vocab v4, frozen α=0.5 / N_sm=10) at
 [`prereg/yang-mills/P0_AMENDMENT_2026-05-29_ape_smearing.md`](prereg/yang-mills/P0_AMENDMENT_2026-05-29_ape_smearing.md);
 Phase 2 v1 binding spec (reuses v0 ensembles, smeared signature) at
-[`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v1.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v1.md).
-The Phase 1 receipts are instrumentation only. Phase 2 v0 did not earn
+[`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v1.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v1.md)
+with named-null receipt at
+[`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md).
+The Phase 1 receipts are instrumentation only. Phase 2 v0 and v1 did not earn
 a certificate. No continuum, confinement, mass-gap, or result-bearing
-Yang-Mills claim exists. Next artifact is the minimal v1 aggregation
-runner per the v1 spec.
+Yang-Mills claim exists. Next artifact is a dated v2 probe spec under
+`docs/yang-mills/specs/`.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
@@ -404,6 +406,19 @@ v0 execution:
   bin-purity@5 = 0.3104, below the registered 0.5 gate, and only 0.0104
   above `CTRL_RAND`.
 
+v1 execution:
+
+- `PHASE2_SU2_3D_relative_locality_v1.md` filed 2026-05-29 after the
+  smearing probe spec and P0 amendment 1;
+- one locked aggregation invocation executed 2026-05-29 on the same v0
+  ensembles, with APE-smeared vocab v4 signature `(alpha, N_sm) = (0.5, 10)`;
+- receipt filed at
+  [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md);
+- verdict `YM-P2-NEG-A no_rank_local_structure`: within-beta
+  bin-purity@5 = 0.29375, below the registered 0.5 gate and below
+  `CTRL_RAND` by 0.00208, while smearing health and gauge-invariance gates
+  passed.
+
 Failure:
 
 `YM-P2-NEG-A no_rank_local_structure` or `YM-P2-NEG-B metadata_only`.
@@ -534,11 +549,20 @@ Next agent should:
     seven P0 controls on the same frozen neighbor graph and held-out labels.~~
     **Done 2026-05-29** - named-null receipt filed at
     [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md).
-13. **New next artifact (2026-05-29):** file a dated v1 probe spec under
-    `docs/yang-mills/specs/`. It must explain the proposed design change after
-    the v0 null and state whether the change remains a Phase 2 v1
-    preregistration or requires a dated P0 amendment. Do not open Phase 3 from
-    the v0 receipt.
+13. ~~File a dated v1 probe spec under `docs/yang-mills/specs/`, then the
+    matching P0 amendment and Phase 2 v1 binding spec.~~
+    **Done 2026-05-29** - see
+    [`yang-mills/specs/2026-05-29_phase2_v1_smearing_probe.md`](yang-mills/specs/2026-05-29_phase2_v1_smearing_probe.md),
+    [`prereg/yang-mills/P0_AMENDMENT_2026-05-29_ape_smearing.md`](prereg/yang-mills/P0_AMENDMENT_2026-05-29_ape_smearing.md), and
+    [`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v1.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v1.md).
+14. ~~Implement and execute the Phase 2 v1 APE-smearing aggregation runner.~~
+    **Done 2026-05-29** - named-null receipt filed at
+    [`yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md).
+15. **New next artifact (2026-05-29):** file a dated v2 probe spec under
+    `docs/yang-mills/specs/`. Because both bare-loop v0 and APE-smeared v1
+    landed `YM-P2-NEG-A`, the v2 proposal should change target or signature
+    class rather than retuning the locked smearing parameters. Do not open
+    Phase 3 from the v1 receipt.
 
 ## 11. Open Decisions
 
@@ -564,7 +588,7 @@ Resolutions, restated here for navigation:
 
 Decisions still open (not §11 originals; surfaced by the P0 lock):
 
-- v1 probe design after the Phase 2 v0 named null;
+- v2 probe design after the Phase 2 v0 and v1 named nulls;
 - gallery-card admission timing — currently still blocked per §10 item 7.
 
 ## 12. Ratified Public Boundary
