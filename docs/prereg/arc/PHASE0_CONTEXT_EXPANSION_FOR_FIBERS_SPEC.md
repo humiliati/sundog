@@ -457,3 +457,71 @@ a single logged pass; the maintainer ratifies via the receipt +
    `phase0_fiber_expansion_hold_insufficient_tasks`.
 5. Log every inspected task (include or exclude) in `manual_inspection_log.csv`
    with its decision + reason.
+
+---
+
+## Amendment B — Expansion Receipt (2026-05-29 PT)
+
+Append-only. Records the executed Phase B inspection and Phase C register
+assembly. **Branch: `phase0_fiber_expansion_admit`.**
+
+### Inspection (Phase B)
+
+The maintainer's agent walked the frozen `candidate_queue.csv` in prior order,
+classified ~150 distinct public-training tasks from their grids (train pairs
+only; test outputs stayed under the renderer barrier), and assigned each a
+primary prior. **0 hard-exclusions** (every walked task was a genuine
+input→output transformation assignable to one of the six priors) and **0
+discipline tripwires** (no certificate/solver/distance/held-split/Kaggle
+information entered any decision). The coordinator spot-verified a sample across
+all six priors (confident calls e.g. `3af2c5a8` symmetry; borderline calls e.g.
+`af24b4cc`, `5614dbcf`, `73182012`, `e5c44e8f`, `3ee1011a` — all defensible
+best-fit assignments) and confirmed the "3×3→6×6 four-fold" symmetry cluster
+(`62c24649`, `67e8384a`, `46442a0e`, `0c786b71`) are genuinely distinct tasks
+(criterion 4), not literal duplicates.
+
+### Binding-selection correction (transparency)
+
+The inspection agent was given an over-broad new-include target (18 new per
+prior) rather than the spec's 12 new per prior (§"Expansion Target":
+`new_tasks_required = 72`, the original register supplying the other 6 per
+prior). The binding selection therefore takes the **12 lowest
+`selection_order_rank` includes per prior** (= 72 new). Because the candidate
+queue rank order was frozen and SHA-256'd before any inspection (Amendment A),
+and the agent included in ascending-rank order, this is identical to what a
+correct stop-at-12 walk over the frozen queue produces; no certificate/output/
+solver information influenced which tasks were selected. The remaining 36
+inspected includes are recorded in `P0_CONTEXT_EXPANSION_REGISTER.csv` with
+`status=exclude`, `exclusion_reason=over_inspection_surplus_beyond_12_new_per_prior`
+(over-inspection beyond the pre-registered quota, not a quality rejection). The
+full 108-include inspection trail is preserved in `manual_inspection_log.csv`.
+
+### Registers (Phase C)
+
+- `docs/prereg/arc/P0_CONTEXT_EXPANSION_REGISTER.csv` — 108 inspected new
+  candidates (72 `include` + 36 surplus `exclude`); SHA-256 `0a2e8ac3…`.
+- `docs/prereg/arc/P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv` — the binding
+  expanded register: 36 original includes + 72 new includes = **108 tasks,
+  exactly 18 per prior (6 original + 12 new)**; SHA-256 `7c56141c…`. The
+  original `P0_TASK_REGISTER.csv` is not modified.
+- Frozen inputs: `candidate_queue.csv` SHA-256 `43ea4550…`;
+  `manual_inspection_log.csv` SHA-256 `8a386029…`.
+
+### Partition (for the expanded certificate)
+
+The `sha256_expansion` rule (per `primary_prior` group, sort by
+SHA-256(`fiber_context_expansion_v1|`+task_id), first `max(3, floor(n/3))` →
+validation) over the 18-per-prior register yields **36 validation + 72 test
+tasks** (6 validation / 12 test per prior). Same-task neighbors remain excluded
+from primary kNN.
+
+### Adjudication
+
+All six priors reached 18 includes under the inclusion/exclusion rules with no
+cross-prior rebalancing → **`phase0_fiber_expansion_admit`**. The expanded
+Phase 3E v2 certificate rerun is admitted (run the unchanged-geometry runner with
+`--split-mode sha256_expansion` against
+`P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv`). Receipt artifacts:
+`results/arc/phase0-context-expansion-for-fibers/`
+(`phase0_context_expansion_receipt.json`, `prior_counts.csv`,
+`branch_adjudication.md`, `commands.md`, `hashes.json`).
