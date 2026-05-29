@@ -854,12 +854,12 @@ Goal: test whether Phase 15's warning-quality verdict flips when the warning
 score is `radius` instead of energy, using the completed Phase 16 passive lock
 receipt and a Phase-15-style per-cell AUROC mean.
 
-Implementation-grade draft and pending result note:
+Implementation-grade spec and result note:
 
 - [`docs/threebody/PHASE16B_SPEC.md`](threebody/PHASE16B_SPEC.md)
 - [`docs/threebody/PHASE16B_RESULTS.md`](threebody/PHASE16B_RESULTS.md)
 
-Reserved command:
+Command:
 
 ```bash
 npm run threebody:phase16b:repose
@@ -871,8 +871,11 @@ mean AUROC at least `0.70` with at least `18/27` favorable cells defined. This
 phase is offline only and does not retune the controller or revise the Phase 15
 mechanism verdict.
 
-Status: spec drafted 2026-05-29; pending lock review. No Phase 16B code has been
-written and no Phase 16B command has been run.
+Status: completed 2026-05-29 as Branch A. The reducer reproduced Phase 16's
+per-cell values exactly to recorded precision: `radius` `0.996624` with `27/27`
+cells defined; energy `0.655508` with `27/27` cells defined. This flips the
+warning verdict under `radius` while preserving the Phase 15 Fail-Magnitude
+mechanism verdict.
 
 ### 3D Catalog / Isotrophy Sidecar
 
