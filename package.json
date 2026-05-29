@@ -194,6 +194,7 @@
     "arc:phase3e:signature-fiber-certificate": "node scripts/arc-phase3e-signature-fiber-certificate.mjs",
     "arc:phase3e:program-sketch-oracle-v2": "node scripts/arc-phase3e-program-sketch-oracle-v2.mjs",
     "arc:phase3e:relative-locality-certificate": "node scripts/arc-phase3e-relative-locality-certificate.mjs",
+    "arc:phase3:branch-e-program-search": "node scripts/arc-phase3-branch-e-program-search.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
     "cf:pages": "node scripts/cloudflare-pages-project.mjs",

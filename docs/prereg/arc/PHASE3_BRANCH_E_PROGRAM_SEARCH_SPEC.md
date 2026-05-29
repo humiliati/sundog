@@ -250,3 +250,81 @@ Forbidden:
 - selecting programs by `signature_palette` geometry, or reading exact outputs to
   fit/select programs (train-consistency only);
 - retuning the family list, budget, depth, ranking, or floor after seeing outputs.
+
+---
+
+## Amendment A — Freeze Marker (2026-05-29 PT)
+
+Append-only. Records the runner tooling, the frozen family scope (clean torch-free
+v1), leak-check coverage, the solver-correctness sanity check, the smoke
+fingerprint, the ten-minute-rule decision, and the exact binding command.
+
+### Tooling added
+
+- Python runner: `docs/prereg/arc/phase3_branch_e_program_search.py`, cp-seeded
+  from `phase3e_relative_locality_certificate.py` for the proven loaders
+  (`load_tasks` + `--split-mode`, `build_lodo_instances`/`build_pttest_instances`),
+  D4/bbox/grid utilities, IO/hashing, `git_state`, and `assert_training_data_dir`.
+  The certificate-specific tail was replaced with the deterministic program-search
+  solver. The **color-rule bank is reused by import**
+  (`from phase3d_edit_color_rule_v2 import generate_candidate_rules,
+  _predict_with_rule`); those functions are torch-free (torch loads at module
+  import but is unused in computation). Structural transforms, candidate-combinator
+  candidates, and the simple deterministic mask families are implemented in the
+  runner.
+- Wrapper `scripts/arc-phase3-branch-e-program-search.mjs` (honors
+  `SUNDOG_PYTHON`); npm `arc:phase3:branch-e-program-search`; `.gitignore`
+  `results/arc/phase3-branch-e-program-search/`.
+- Leak-check: `npm run arc:phase0:leak-check` passes (0 fail / 0 warn; 23 scanned
+  ARC scripts; the new wrapper carries no held-split literal).
+
+### Frozen family scope (v1)
+
+Per §"Frozen Primitive Library" (as amended): structural transforms (identity,
+D4, tile, translate, pad, crop_nonzero_bbox, scale, palette_permute, fill_enclosed,
+extract_largest_component); the full imported color-rule bank (10 families); the
+**simple** deterministic mask families (empty, conditioning union/intersection/
+majority, conditioning bbox fill/outline, source_color) under the `identity`
+morphology, composed with a color rule; candidate-combinator candidates
+(output_copy, delta_overlay; bijective color-map is covered by palette_permute).
+Composition depth ≤ 2; per-instance budget 5000; top-2 attempts; selection =
+train-pair consistency over ALL conditioning. The intricate mask families
+(`row_col_periodic`, `source_color_pair`, `object_role`, `nearest_residual_patch`)
+and the `{dilate1, erode1, close1, bbox_fill}` morphology cross-product are
+deferred to a Branch E v2.
+
+### Solver-correctness sanity check
+
+Before trusting any floor, the solver was verified on known-solvable synthetic
+tasks: `palette_permute` (1→3, 2→4), `d4:rot180`, and `tile (1×2)` are each solved
+**exactly** with the correct winning family. The search/verify/apply path is
+therefore correct; a zero-solve on hard real tasks is a genuine floor, not a bug.
+
+### Smoke fingerprint
+
+- `py_compile` clean; dry-run emits the 13-artifact stub set (and exercises the
+  color-bank import successfully).
+- Capped smoke (`--register` expanded `--split-mode sha256_expansion
+  --limit-tasks 36`): 151 held-out instances, ~2m10s, all 13 artifacts, branch
+  `branch_e_capability_floor` (0 distinct tasks solved on any lane; 144/151
+  instances admit zero train-consistent programs). **This is the 36 hard curated
+  original-register tasks, not the binding result.** The search is deterministic
+  (no RNG) so re-runs are byte-identical by construction.
+- Runner `runnerSha256` recorded in the binding manifest is authoritative.
+
+### Ten-minute rule
+
+The binding run uses the full 108-task expanded register (`U_all ≈ 491`
+held-out instances). At ~0.86 s/instance from the smoke, the full wall ≈ ~7 min;
+to stay clear of the ten-minute rule and CPU variance, the binding run is executed
+as a background job pinned to this freeze-marker commit.
+
+### Exact binding command
+
+```powershell
+node scripts/arc-phase3-branch-e-program-search.mjs `
+  --data-dir "$env:USERPROFILE\Datasets\ARC-AGI-2\data" `
+  --register docs/prereg/arc/P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv `
+  --split-mode sha256_expansion `
+  --out results/arc/phase3-branch-e-program-search
+```
