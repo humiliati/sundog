@@ -89,6 +89,7 @@ function parseArgs(argv) {
     else if (flag === "--counterfactual-audit") args.counterfactualAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
     else if (flag === "--counterfactual-normalizer-floor") args.counterfactualNormalizerFloor = Number.parseFloat(value);
     else if (flag === "--multi-step-audit") args.multiStepAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
+    else if (flag === "--hazard-channel-audit") args.hazardChannelAudit = !["0", "false", "no"].includes(String(value).toLowerCase());
     else throw new Error(`Unknown flag: ${flag}`);
   }
 
@@ -397,6 +398,7 @@ function makeTrialConfig(args, envelopeCase, seed, regime, mode, guardThresholds
     precisionReceipts: args.precisionReceipts ?? false,
     counterfactualAudit: args.counterfactualAudit ?? false,
     multiStepAudit: args.multiStepAudit ?? false,
+    hazardChannelAudit: args.hazardChannelAudit ?? false,
     counterfactualNormalizerFloor: args.counterfactualNormalizerFloor,
     initialParticle: scaleInitialParticle(baseParticle, envelopeCase.radiusScale, envelopeCase.velocityScale),
   });
@@ -1253,6 +1255,7 @@ async function main() {
             sensorAudit: trial.sensorAudit,
             eventHistory: trial.eventHistory,
             ...(args.precisionReceipts ? { earlyTrajectory: trial.earlyTrajectory ?? [] } : {}),
+            ...(args.hazardChannelAudit ? { hazardSamples: trial.hazardSamples ?? [] } : {}),
           };
           trials.push(row);
           manifest.trials.push({
@@ -1273,6 +1276,7 @@ async function main() {
             summary: trial.summary,
             sensorAuditSampleCount: trial.sensorAudit.length,
             ...(args.precisionReceipts ? { earlyTrajectorySampleCount: trial.earlyTrajectory?.length ?? 0 } : {}),
+            ...(args.hazardChannelAudit ? { hazardSampleCount: trial.hazardSamples?.length ?? 0 } : {}),
           });
         }
         if (mode === "off" && args.trackGuardMode === "hazard_quantile") {
@@ -1328,10 +1332,10 @@ async function main() {
     "utf8",
   );
 
-  if (args.precisionReceipts) {
+  if (args.precisionReceipts || args.hazardChannelAudit) {
     // Per-shard reconstruction source for threebody:phase15:merge — minus eventHistory
     // (large, redundant: its outputs are already in summary), keeps summary +
-    // sensorAudit + earlyTrajectory so the merge can rerun the existing
+    // sensorAudit + earlyTrajectory/hazardSamples so the merge/analyzer can rerun the existing
     // aggregation pipeline on the union of shard trials.
     const trialsMinimalLines = trials.map((row) => {
       const { eventHistory, ...rest } = row;
@@ -1353,7 +1357,7 @@ async function main() {
   console.log(`[threebody] wrote trial-outcomes.csv, paired.csv, envelope-map.csv, aggregate-envelope.csv, best-by-cell.csv, cell-class-map.csv, cell-delta-map.csv, and candidate-envelope.csv`);
   if (cellPrecisionMapRows) console.log("[threebody] wrote cell-precision-map.csv");
   if (richardsonOrderRows) console.log("[threebody] wrote richardson-order-map.csv");
-  if (args.precisionReceipts) console.log("[threebody] wrote trials-minimal.jsonl");
+  if (args.precisionReceipts || args.hazardChannelAudit) console.log("[threebody] wrote trials-minimal.jsonl");
   console.log(`[threebody] candidate envelope rows ${candidateRows.length}/${envelopeRows.length}`);
   console.log(`[threebody] outcomes ${JSON.stringify(outcomeCounts)}`);
 }
