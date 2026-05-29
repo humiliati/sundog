@@ -55,9 +55,9 @@ import torch.nn.functional as F
 # Phase 3E signature-fiber certificate constants
 # ============================================================================
 FEATURE_SCHEMA_VERSION = "arc-p3-feature-v1"
-LEARNER_VERSION = "relative_locality_certificate"
-PROTOCOL_VERSION = "arc-p3e-relative-locality-v1"
-RECEIPT_SCHEMA_VERSION = "arc-p3e-relative-locality-receipt-v1"
+LEARNER_VERSION = "branch_e_program_search"
+PROTOCOL_VERSION = "arc-p3-branch-e-v1"
+RECEIPT_SCHEMA_VERSION = "arc-p3-branch-e-receipt-v1"
 
 # Nine required program_sketch_v2 facets (spec §"Sketch Facets"). Frozen order.
 SKETCH_FACETS = [
@@ -2966,3 +2966,594 @@ def _v2_facet_jaccard(sa: dict[str, Any], sb: dict[str, Any]) -> float:
 
 
 
+
+
+# ============================================================================
+# Branch E — deterministic program-search solver
+# (spec PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md). Selects programs by train-pair
+# consistency over a frozen primitive library. NEVER reads signature_palette,
+# arm distances, or certificate output. The color-rule bank is reused by import
+# (its functions are torch-free; torch loads at import but is unused in compute).
+# ============================================================================
+import sys as _sys
+from collections import Counter as _Counter
+
+_HERE = str(Path(__file__).resolve().parent)
+if _HERE not in _sys.path:
+    _sys.path.insert(0, _HERE)
+from phase3d_edit_color_rule_v2 import generate_candidate_rules, _predict_with_rule  # noqa: E402
+
+# ---- frozen search constants (spec §"Search Contract" / §"Capability Gate") ----
+ATTEMPTS = 2
+MAX_DEPTH = 2
+CANDIDATE_BUDGET = 5000
+CAP_MIN_TASKS = 2  # >=2 distinct held-out tasks per lane => demonstrated
+
+
+# ---- grid helpers ----
+def _dims(g: list[list[int]]) -> tuple[int, int]:
+    return (len(g), len(g[0]) if g else 0)
+
+
+def _palette_set(g: list[list[int]]) -> set:
+    return {v for row in g for v in row}
+
+
+def _safe(fn):
+    try:
+        return fn()
+    except Exception:
+        return None
+
+
+# ---- structural transforms (pure grid->grid; parameters fit from train) ----
+def _apply_tile(g, ky, kx):
+    return [list(row) * kx for _ in range(ky) for row in g]
+
+
+def _fit_tile(pairs):
+    ih, iw = _dims(pairs[0]["input"]); oh, ow = _dims(pairs[0]["output"])
+    if ih == 0 or iw == 0 or oh % ih or ow % iw:
+        return None
+    ky, kx = oh // ih, ow // iw
+    if ky < 1 or kx < 1 or (ky == 1 and kx == 1):
+        return None
+    return ("tile", lambda gg: _apply_tile(gg, ky, kx))
+
+
+def _apply_scale(g, sy, sx):
+    return [[g[y // sy][x // sx] for x in range(len(g[0]) * sx)] for y in range(len(g) * sy)]
+
+
+def _fit_scale(pairs):
+    ih, iw = _dims(pairs[0]["input"]); oh, ow = _dims(pairs[0]["output"])
+    if ih == 0 or iw == 0 or oh % ih or ow % iw:
+        return None
+    sy, sx = oh // ih, ow // iw
+    if sy < 1 or sx < 1 or (sy == 1 and sx == 1):
+        return None
+    return ("scale", lambda gg: _apply_scale(gg, sy, sx))
+
+
+def _apply_translate(g, dy, dx, fill=0):
+    h, w = _dims(g)
+    out = [[fill] * w for _ in range(h)]
+    for y in range(h):
+        for x in range(w):
+            ny, nx = y + dy, x + dx
+            if 0 <= ny < h and 0 <= nx < w:
+                out[ny][nx] = g[y][x]
+    return out
+
+
+def _fit_translate(pairs):
+    ih, iw = _dims(pairs[0]["input"]); oh, ow = _dims(pairs[0]["output"])
+    if (ih, iw) != (oh, ow) or ih == 0:
+        return None
+    best = None
+    for dy in range(-ih + 1, ih):
+        for dx in range(-iw + 1, iw):
+            if dy == 0 and dx == 0:
+                continue
+            if all(_apply_translate(p["input"], dy, dx) == p["output"] for p in pairs):
+                best = (dy, dx); break
+        if best:
+            break
+    if not best:
+        return None
+    dy, dx = best
+    return ("translate", lambda gg: _apply_translate(gg, dy, dx))
+
+
+def _fit_pad(pairs):
+    ih, iw = _dims(pairs[0]["input"]); oh, ow = _dims(pairs[0]["output"])
+    if oh < ih or ow < iw or (oh == ih and ow == iw):
+        return None
+    # find offset where the input sits inside the output for pair 0
+    found = None
+    for top in range(oh - ih + 1):
+        for left in range(ow - iw + 1):
+            ok = True
+            for y in range(oh):
+                for x in range(ow):
+                    inside = (top <= y < top + ih) and (left <= x < left + iw)
+                    val = pairs[0]["input"][y - top][x - left] if inside else 0
+                    if pairs[0]["output"][y][x] != val:
+                        ok = False; break
+                if not ok:
+                    break
+            if ok:
+                found = (top, left); break
+        if found:
+            break
+    if not found:
+        return None
+    top, left = found
+    bottom, right = oh - ih - top, ow - iw - left
+
+    def _pad(gg):
+        gh, gw = _dims(gg)
+        return [[(gg[y - top][x - left] if (top <= y < top + gh) and (left <= x < left + gw) else 0)
+                 for x in range(gw + left + right)] for y in range(gh + top + bottom)]
+    return ("pad", _pad)
+
+
+def _fit_palette_permute(pairs):
+    mapping: dict[int, int] = {}
+    for p in pairs:
+        if _dims(p["input"]) != _dims(p["output"]):
+            return None
+        for ri, ro in zip(p["input"], p["output"]):
+            for a, b in zip(ri, ro):
+                if a in mapping and mapping[a] != b:
+                    return None
+                mapping[a] = b
+    if all(k == v for k, v in mapping.items()):
+        return None
+    return ("palette_permute", lambda gg: [[mapping.get(v, v) for v in row] for row in gg])
+
+
+def _fill_enclosed(g):
+    h, w = _dims(g)
+    if h == 0:
+        return g
+    bg = 0
+    reach = [[False] * w for _ in range(h)]
+    stack = []
+    for y in range(h):
+        for x in (0, w - 1):
+            if g[y][x] == bg:
+                stack.append((y, x))
+    for x in range(w):
+        for y in (0, h - 1):
+            if g[y][x] == bg:
+                stack.append((y, x))
+    while stack:
+        y, x = stack.pop()
+        if 0 <= y < h and 0 <= x < w and not reach[y][x] and g[y][x] == bg:
+            reach[y][x] = True
+            stack.extend([(y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)])
+    # fill color = the modal nonzero color
+    nz = [v for row in g for v in row if v != bg]
+    fill = _Counter(nz).most_common(1)[0][0] if nz else bg
+    return [[(fill if (g[y][x] == bg and not reach[y][x]) else g[y][x]) for x in range(w)] for y in range(h)]
+
+
+def _extract_largest_component(g):
+    h, w = _dims(g)
+    seen = [[False] * w for _ in range(h)]
+    best = []
+    for y in range(h):
+        for x in range(w):
+            if g[y][x] != 0 and not seen[y][x]:
+                comp = []
+                stack = [(y, x)]
+                while stack:
+                    cy, cx = stack.pop()
+                    if 0 <= cy < h and 0 <= cx < w and not seen[cy][cx] and g[cy][cx] != 0:
+                        seen[cy][cx] = True
+                        comp.append((cy, cx))
+                        stack.extend([(cy + 1, cx), (cy - 1, cx), (cy, cx + 1), (cy, cx - 1)])
+                if len(comp) > len(best):
+                    best = comp
+    if not best:
+        return None
+    ys = [c[0] for c in best]; xs = [c[1] for c in best]
+    y0, y1, x0, x1 = min(ys), max(ys), min(xs), max(xs)
+    out = [[0] * (x1 - x0 + 1) for _ in range(y1 - y0 + 1)]
+    for cy, cx in best:
+        out[cy - y0][cx - x0] = g[cy][cx]
+    return out
+
+
+def _crop_bbox(g):
+    cropped = _nonzero_bbox_crop(g)
+    return cropped
+
+
+def structural_programs(pairs):
+    """Return list of (name, priority, complexity, fn) stage-1 structural programs;
+    parameterized ones are fit from the conditioning pairs."""
+    progs = [("identity", 0, 1, lambda gg: gg)]
+    # D4
+    d4 = _d4_variants(pairs[0]["input"])
+    for i, name in enumerate(sorted(d4.keys())):
+        if name == "identity":
+            continue
+        nm = name
+        progs.append((f"d4:{nm}", 2, 1, (lambda n: (lambda gg: _d4_variants(gg).get(n)))(nm)))
+    for fit in (_fit_palette_permute, _fit_translate, _fit_pad, _fit_tile, _fit_scale):
+        r = _safe(lambda: fit(pairs))
+        if r:
+            name, fn = r
+            pr = {"palette_permute": 3, "translate": 4, "pad": 10, "tile": 8, "scale": 9}[name]
+            progs.append((name, pr, 2, fn))
+    progs.append(("crop_bbox", 5, 1, _crop_bbox))
+    progs.append(("fill_enclosed", 6, 1, _fill_enclosed))
+    progs.append(("extract_largest_component", 7, 2, _extract_largest_component))
+    return progs
+
+
+# ---- candidate_combinator candidates (deterministic) ----
+def combinator_programs(pairs):
+    progs = []
+    # output_copy: output == input
+    progs.append(("output_copy", 1, 1, lambda gg: gg))
+    # bijective_color_map handled by palette_permute; delta_overlay (same-shape residual)
+    if all(_dims(p["input"]) == _dims(p["output"]) for p in pairs):
+        src = pairs[0]
+        sh, sw = _dims(src["input"])
+
+        def _delta(gg):
+            gh, gw = _dims(gg)
+            if (gh, gw) != (sh, sw):
+                return None
+            return [[(src["output"][y][x] if src["input"][y][x] != gg[y][x] else gg[y][x]) for x in range(gw)] for y in range(gh)]
+        progs.append(("delta_overlay", 12, 2, _delta))
+    return progs
+
+
+# ---- simple deterministic mask families (same-shape conditioning only) ----
+def _gold_positions(pairs):
+    """Union/intersection/majority of (input!=output) positions across pairs
+    (same shape assumed)."""
+    h, w = _dims(pairs[0]["input"])
+    counts = [[0] * w for _ in range(h)]
+    for p in pairs:
+        for y in range(h):
+            for x in range(w):
+                if p["input"][y][x] != p["output"][y][x]:
+                    counts[y][x] += 1
+    n = len(pairs)
+    return counts, n, (h, w)
+
+
+def mask_family_fns(pairs):
+    """Return list of (mask_name, mask_fn) where mask_fn(grid)->boolean mask of
+    grid's shape, derivable from the query input + conditioning-learned params."""
+    fns = []
+    try:
+        counts, n, (h, w) = _gold_positions(pairs)
+    except Exception:
+        return fns
+    union = [[counts[y][x] > 0 for x in range(w)] for y in range(h)]
+    inter = [[counts[y][x] == n for x in range(w)] for y in range(h)]
+    major = [[counts[y][x] * 2 > n for x in range(w)] for y in range(h)]
+
+    def _fixed(mask):
+        def f(gg):
+            gh, gw = _dims(gg)
+            if (gh, gw) != (h, w):
+                return None
+            return [list(r) for r in mask]
+        return f
+    fns.append(("mask_union", _fixed(union)))
+    fns.append(("mask_intersection", _fixed(inter)))
+    fns.append(("mask_majority", _fixed(major)))
+    # bbox fill / outline of union
+    pos = [(y, x) for y in range(h) for x in range(w) if union[y][x]]
+    if pos:
+        ys = [p[0] for p in pos]; xs = [p[1] for p in pos]
+        y0, y1, x0, x1 = min(ys), max(ys), min(xs), max(xs)
+        bbox_fill = [[(y0 <= y <= y1 and x0 <= x <= x1) for x in range(w)] for y in range(h)]
+        bbox_out = [[((y0 <= y <= y1 and x0 <= x <= x1) and (y in (y0, y1) or x in (x0, x1))) for x in range(w)] for y in range(h)]
+        fns.append(("bbox_fill", _fixed(bbox_fill)))
+        fns.append(("bbox_outline", _fixed(bbox_out)))
+    # source_color_mask: cells whose input color is in the learned edited-source set
+    src_colors = {pairs[0]["input"][y][x] for y in range(h) for x in range(w) if union[y][x]}
+    for p in pairs:
+        for y in range(h):
+            for x in range(w):
+                if p["input"][y][x] != p["output"][y][x]:
+                    src_colors.add(p["input"][y][x])
+
+    def _srcmask(gg):
+        gh, gw = _dims(gg)
+        return [[(gg[y][x] in src_colors) for x in range(gw)] for y in range(gh)]
+    fns.append(("source_color", _srcmask))
+    # full-grid recolor
+    fns.append(("full", lambda gg: [[True] * _dims(gg)[1] for _ in range(_dims(gg)[0])]))
+    return fns
+
+
+def color_edit_programs(pairs):
+    """Color-rule (imported bank) x simple mask families; same-shape conditioning
+    only. Returns (name, priority, complexity, fn) programs."""
+    if not all(_dims(p["input"]) == _dims(p["output"]) for p in pairs):
+        return []
+    cond_baselines = [p["input"] for p in pairs]
+    rules = _safe(lambda: generate_candidate_rules(pairs, cond_baselines)) or []
+    masks = mask_family_fns(pairs)
+    progs = []
+    for rule in rules:
+        for mname, mfn in masks:
+            pr = 13 if mname == "full" else 14
+
+            def _mk(rule, mfn):
+                def f(gg):
+                    m = mfn(gg)
+                    if m is None:
+                        return None
+                    return _predict_with_rule(rule, gg, gg, m)
+                return f
+            progs.append((f"coloredit:{rule['family']}:{rule['id']}:{mname}", pr, 3, _mk(rule, mfn)))
+    return progs
+
+
+# ---- search driver: fit-then-verify, depth<=2, train-consistency, top-2 ----
+def _consistent(fn, pairs):
+    for p in pairs:
+        out = _safe(lambda: fn(p["input"]))
+        if out is None or out != p["output"]:
+            return False
+    return True
+
+
+def solve_instance(inst) -> dict[str, Any]:
+    pairs = inst.conditioning
+    query = inst.query_input
+    admitted = []  # (priority, complexity, name, candidate_grid)
+    budget = CANDIDATE_BUDGET
+
+    base_progs = structural_programs(pairs) + combinator_programs(pairs) + color_edit_programs(pairs)
+
+    def _try(name, pr, cx, fn):
+        nonlocal budget
+        if budget <= 0:
+            return
+        budget -= 1
+        if _consistent(fn, pairs):
+            cand = _safe(lambda: fn(query))
+            if cand is not None and len(cand) > 0 and len(cand[0]) > 0:
+                admitted.append((pr, cx, name, cand))
+
+    # depth 1
+    for (name, pr, cx, fn) in base_progs:
+        _try(name, pr, cx, fn)
+    # depth 2: structural stage1 then (structural | color_edit) stage2
+    stage1 = structural_programs(pairs)
+    stage2 = structural_programs(pairs) + color_edit_programs(pairs)
+    for (n1, p1, c1, f1) in stage1:
+        if n1 == "identity":
+            continue
+        # refit stage2 on the transformed conditioning
+        t_pairs = []
+        ok = True
+        for p in pairs:
+            ti = _safe(lambda: f1(p["input"]))
+            if ti is None:
+                ok = False; break
+            t_pairs.append({"input": ti, "output": p["output"]})
+        if not ok:
+            continue
+        stage2b = structural_programs(t_pairs) + color_edit_programs(t_pairs)
+        for (n2, p2, c2, f2) in stage2b:
+            if n2 == "identity":
+                continue
+            if budget <= 0:
+                break
+            comp = (lambda f1, f2: (lambda gg: (lambda mid: f2(mid) if mid is not None else None)(f1(gg))))(f1, f2)
+            _try(f"{n1}>>{n2}", max(p1, p2) + 15, c1 + c2 + 1, comp)
+
+    # rank: family priority asc, complexity asc, name asc; dedup distinct grids
+    admitted.sort(key=lambda t: (t[0], t[1], t[2]))
+    attempts = []
+    seen = set()
+    for (_pr, _cx, name, grid) in admitted:
+        key = json.dumps(grid, separators=(",", ":"))
+        if key in seen:
+            continue
+        seen.add(key)
+        attempts.append((name, grid))
+        if len(attempts) >= ATTEMPTS:
+            break
+    target = inst.target_output
+    exact1 = bool(attempts) and attempts[0][1] == target
+    exact_any = any(g == target for _, g in attempts)
+    return {
+        "lane": inst.lane, "instance_id": inst.instance_id, "task_id": inst.task_id,
+        "primary_prior": inst.primary_prior, "n_admitted": len(admitted),
+        "exact_slot1": exact1, "exact_any": exact_any,
+        "winning_family": (next((n for n, g in attempts if g == target), "")),
+        "budget_exhausted": budget <= 0,
+    }
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="ARC Branch E deterministic program-search solver")
+    parser.add_argument("--data-dir", required=False, default=None)
+    parser.add_argument("--register", required=False, default=None)
+    parser.add_argument("--out", required=True)
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--limit-tasks", type=int, default=0)
+    parser.add_argument("--allow-dirty", action="store_true")
+    parser.add_argument("--split-mode", choices=["frozen_v2", "sha256_expansion"], default="frozen_v2")
+    args = parser.parse_args()
+    if not args.dry_run and (not args.data_dir or not args.register):
+        parser.error("--data-dir and --register are required (except in --dry-run mode)")
+    return args
+
+
+BE_FILES_EMPTY = {
+    "split.csv": ["task_id", "primary_prior", "predicted_boundary", "split"],
+    "solutions_by_instance.csv": ["lane", "instance_id", "task_id", "primary_prior", "n_admitted", "exact_slot1", "exact_any", "winning_family", "budget_exhausted"],
+    "capability_summary.csv": ["lane", "n_instances", "n_tasks", "n_tasks_solved", "exact_instance_rate"],
+    "per_prior_capability.csv": ["lane", "primary_prior", "n_tasks", "n_tasks_solved"],
+    "family_usage.csv": ["winning_family", "n_solved_instances"],
+}
+
+
+def write_empty_be_receipt(out_dir: Path, manifest: dict[str, Any]) -> None:
+    write_json(out_dir / "manifest.json", manifest)
+    for fname, cols in BE_FILES_EMPTY.items():
+        write_csv(out_dir / fname, [], cols)
+    write_jsonl(out_dir / "context_fingerprints_no_targets.jsonl", [])
+    (out_dir / "context_fingerprints_no_targets.sha256").write_text("", encoding="utf-8")
+    write_jsonl(out_dir / "programs_by_instance.jsonl", [])
+    write_json(out_dir / "phase3_branch_e_program_search_receipt.json", {"manifest": manifest, "branch": None})
+    (out_dir / "branch_adjudication.md").write_text("# Branch E program search\n\nDry run / empty receipt.\n", encoding="utf-8")
+    (out_dir / "commands.md").write_text("# Branch E commands\n\nDry run / empty receipt.\n", encoding="utf-8")
+    write_json(out_dir / "hashes.json", hash_receipt_files(out_dir))
+
+
+def main() -> int:
+    args = parse_args()
+    started_at = iso_now()
+    repo_root = Path(__file__).resolve().parents[3]
+    out_dir = Path(args.out).resolve()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    git = git_state(repo_root, args.allow_dirty)
+
+    spec_path = Path(__file__).resolve().parent / "PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md"
+    self_hash = sha256_file(Path(__file__).resolve())
+    manifest: dict[str, Any] = {
+        "generatedAt": started_at, "completedAt": None,
+        "tool": "docs/prereg/arc/phase3_branch_e_program_search.py",
+        "command": [sys.executable, "docs/prereg/arc/phase3_branch_e_program_search.py", *sys.argv[1:]],
+        "gitCommit": git["commit"], "gitDirty": git["dirty"], "allowDirty": args.allow_dirty,
+        "outDir": str(out_dir),
+        "featureSchemaVersion": FEATURE_SCHEMA_VERSION, "protocolVersion": PROTOCOL_VERSION,
+        "receiptSchemaVersion": RECEIPT_SCHEMA_VERSION, "learnerVersion": LEARNER_VERSION,
+        "specPath": "docs/prereg/arc/PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md",
+        "specHash": (sha256_file(spec_path) if spec_path.exists() else "NA"),
+        "runnerSha256": self_hash, "pythonVersion": sys.version, "platform": platform.platform(),
+        "attempts": ATTEMPTS, "maxDepth": MAX_DEPTH, "candidateBudget": CANDIDATE_BUDGET,
+        "capabilityFloorMinTasks": CAP_MIN_TASKS,
+    }
+
+    if args.dry_run:
+        manifest["mode"] = "dry_run"; manifest["completedAt"] = iso_now()
+        write_empty_be_receipt(out_dir, manifest)
+        print(f"ARC Branch E dry run wrote {out_dir}")
+        return 0
+
+    data_dir = Path(args.data_dir).resolve()
+    register_path = Path(args.register).resolve()
+    assert_training_data_dir(data_dir)
+    tasks, register_hash, data_hash = load_tasks(data_dir, register_path, args.split_mode)
+    if args.limit_tasks > 0:
+        tasks = tasks[: args.limit_tasks]
+    manifest["dataDir"] = str(data_dir); manifest["registerPath"] = str(register_path)
+    manifest["registerHash"] = register_hash; manifest["dataDirHash"] = data_hash
+    manifest["splitMode"] = args.split_mode
+
+    validation_tasks = [t for t in tasks if t.split == "validation"]
+    test_tasks = [t for t in tasks if t.split == "test"]
+    write_csv(out_dir / "split.csv", [{"task_id": t.task_id, "primary_prior": t.primary_prior, "predicted_boundary": t.predicted_boundary, "split": t.split} for t in sorted(tasks, key=lambda x: x.task_id)], BE_FILES_EMPTY["split.csv"])
+
+    instances = (build_lodo_instances(validation_tasks, "validation_lodo")
+                 + build_pttest_instances(validation_tasks, "validation_pttest")
+                 + build_lodo_instances(test_tasks, "test_lodo")
+                 + build_pttest_instances(test_tasks, "pttest"))
+
+    # Two-stage no-target barrier (fingerprints before solving/scoring)
+    fingerprints = [{"instance_id": i.instance_id, "lane": i.lane, "task_id": i.task_id,
+                     "query_index": i.query_index, "n_conditioning": len(i.conditioning)} for i in instances]
+    write_jsonl(out_dir / "context_fingerprints_no_targets.jsonl", fingerprints)
+    barrier_hash = sha256_file(out_dir / "context_fingerprints_no_targets.jsonl")
+    (out_dir / "context_fingerprints_no_targets.sha256").write_text(barrier_hash + "\n", encoding="utf-8")
+    manifest["targetBarrierHash"] = barrier_hash
+
+    rows = [solve_instance(i) for i in instances]
+    write_jsonl(out_dir / "programs_by_instance.jsonl", rows)
+    write_csv(out_dir / "solutions_by_instance.csv", rows, BE_FILES_EMPTY["solutions_by_instance.csv"])
+
+    LANES = ["validation_lodo", "validation_pttest", "test_lodo", "pttest"]
+    summary_rows = []
+    solved_tasks_by_lane: dict[str, set] = {ln: set() for ln in LANES}
+    per_prior: dict[tuple, dict] = {}
+    family_solved: dict[str, int] = {}
+    for ln in LANES:
+        lane_rows = [r for r in rows if r["lane"] == ln]
+        tasks_in = {r["task_id"] for r in lane_rows}
+        solved = {r["task_id"] for r in lane_rows if r["exact_any"]}
+        solved_tasks_by_lane[ln] = solved
+        n_inst = len(lane_rows)
+        n_exact_inst = sum(1 for r in lane_rows if r["exact_any"])
+        summary_rows.append({"lane": ln, "n_instances": n_inst, "n_tasks": len(tasks_in),
+                             "n_tasks_solved": len(solved),
+                             "exact_instance_rate": round_float(n_exact_inst / n_inst if n_inst else 0.0)})
+        for r in lane_rows:
+            k = (ln, r["primary_prior"])
+            d = per_prior.setdefault(k, {"tasks": set(), "solved": set()})
+            d["tasks"].add(r["task_id"])
+            if r["exact_any"]:
+                d["solved"].add(r["task_id"])
+                family_solved[r["winning_family"]] = family_solved.get(r["winning_family"], 0) + 1
+    write_csv(out_dir / "capability_summary.csv", summary_rows, BE_FILES_EMPTY["capability_summary.csv"])
+    write_csv(out_dir / "per_prior_capability.csv",
+              [{"lane": ln, "primary_prior": pr, "n_tasks": len(d["tasks"]), "n_tasks_solved": len(d["solved"])}
+               for (ln, pr), d in sorted(per_prior.items())], BE_FILES_EMPTY["per_prior_capability.csv"])
+    write_csv(out_dir / "family_usage.csv",
+              [{"winning_family": f, "n_solved_instances": n} for f, n in sorted(family_solved.items(), key=lambda t: (-t[1], t[0]))],
+              BE_FILES_EMPTY["family_usage.csv"])
+
+    # ---- capability gate on U_primary (test_lodo + pttest) ----
+    test_lodo_solved = len(solved_tasks_by_lane["test_lodo"])
+    pttest_solved = len(solved_tasks_by_lane["pttest"])
+    u_primary_exact = sum(1 for r in rows if r["lane"] in ("test_lodo", "pttest") and r["exact_any"])
+    if test_lodo_solved >= CAP_MIN_TASKS and pttest_solved >= CAP_MIN_TASKS:
+        branch = "branch_e_capability_demonstrated"
+        reason = f"test_lodo solved {test_lodo_solved} distinct tasks, pttest solved {pttest_solved} (both >= {CAP_MIN_TASKS})."
+    elif u_primary_exact > 0:
+        branch = "branch_e_capability_partial"
+        reason = f"Non-zero capability: test_lodo {test_lodo_solved}, pttest {pttest_solved} distinct solved tasks; below the >=2-on-both floor."
+    else:
+        branch = "branch_e_capability_floor"
+        reason = "Zero held-out tasks solved exactly on U_primary; floors like the prior learner families."
+
+    manifest["completedAt"] = iso_now()
+    manifest["contextUniverse"] = {ln: len([r for r in rows if r["lane"] == ln]) for ln in LANES}
+    manifest["capability"] = {
+        "test_lodo_solved_tasks": test_lodo_solved, "pttest_solved_tasks": pttest_solved,
+        "u_primary_exact_instances": u_primary_exact,
+        "validation_lodo_solved_tasks": len(solved_tasks_by_lane["validation_lodo"]),
+        "validation_pttest_solved_tasks": len(solved_tasks_by_lane["validation_pttest"]),
+    }
+    manifest["branch"] = branch
+    write_json(out_dir / "manifest.json", manifest)
+    write_json(out_dir / "phase3_branch_e_program_search_receipt.json", {"manifest": manifest, "branch": branch, "branchReason": reason})
+    (out_dir / "branch_adjudication.md").write_text(
+        f"# Branch E — Deterministic Program Search — Branch Adjudication\n\n"
+        f"**Branch: `{branch}`**\n\n{reason}\n\n"
+        f"- split_mode {args.split_mode}; attempts {ATTEMPTS}; max_depth {MAX_DEPTH}; budget {CANDIDATE_BUDGET}\n"
+        f"- U_primary solved tasks: test_lodo {test_lodo_solved}, pttest {pttest_solved}\n"
+        f"- diagnostic: validation_lodo {len(solved_tasks_by_lane['validation_lodo'])}, "
+        f"validation_pttest {len(solved_tasks_by_lane['validation_pttest'])}\n\n"
+        f"Selection is train-pair consistency only; signature_palette geometry is never used. The "
+        f"Phase 3E certificates are cited as a no-collision / no-locality boundary, not a selector motivation.\n",
+        encoding="utf-8")
+    (out_dir / "commands.md").write_text(
+        "# Branch E commands\n\n```\nnode scripts/arc-phase3-branch-e-program-search.mjs \\\n"
+        "  --data-dir \"$env:USERPROFILE/Datasets/ARC-AGI-2/data\" \\\n"
+        "  --register docs/prereg/arc/P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv \\\n"
+        "  --split-mode sha256_expansion \\\n"
+        "  --out results/arc/phase3-branch-e-program-search\n```\n", encoding="utf-8")
+    write_json(out_dir / "hashes.json", hash_receipt_files(out_dir))
+    print(f"ARC Branch E program search wrote {out_dir}")
+    print(f"Branch: {branch}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
