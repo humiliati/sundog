@@ -376,3 +376,14 @@ gap implications, confinement proof implications.
 - 2026-05-29: no runner code admitted yet. Next artifact:
   `docs/yang-mills/RECEIPT_TEMPLATE.md`, then a Phase 1 runner manifest
   that fills the Admission Requirements above.
+- 2026-05-29: **Amendment 1 filed**:
+  [`P0_AMENDMENT_2026-05-29_ape_smearing.md`](P0_AMENDMENT_2026-05-29_ape_smearing.md)
+  admits APE smearing as a primary-signature class (vocab v4) with
+  frozen parameters `(α, N_sm) = (0.5, 10)` for `SU2_2D` and `SU2_3D`
+  cells. Triggered by Phase 2 v0 receipt
+  `YM-P2-NEG-A no_rank_local_structure` and the v1 smearing probe spec
+  [`../../yang-mills/specs/2026-05-29_phase2_v1_smearing_probe.md`](../../yang-mills/specs/2026-05-29_phase2_v1_smearing_probe.md).
+  Held-out target unchanged; blocking remains deferred; new
+  `YM-P*-QUAR-E smearing_drift` quarantine branch introduced. §"Open
+  Decisions Closed By This Lock" item 4 amended per the amendment doc.
+  Rest of the P0 lock is unchanged by this amendment.
