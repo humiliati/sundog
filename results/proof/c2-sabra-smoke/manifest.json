@@ -1,0 +1,56 @@
+{
+  "startedAt": "2026-05-29T17:03:10.383169+00:00",
+  "script": "scripts/pde_c2_sabra_cell.py",
+  "spec": "docs/proof/PDE_C2_CELLSET_SABRA_v0.md",
+  "config": {
+    "preset": "smoke",
+    "model": "sabra",
+    "n_shells": 22,
+    "lam": 2.0,
+    "k0": 0.0625,
+    "eps": 0.5,
+    "viscosity": 1e-07,
+    "forcing_amp": 0.005,
+    "dt": 0.0001,
+    "warmup_steps": 20000,
+    "calib_steps": 20000,
+    "gap_steps": 2000,
+    "train_steps": 20000,
+    "val_steps": 8000,
+    "test_steps": 12000,
+    "sample_stride": 50,
+    "window_steps": 200,
+    "tau_burst_steps": 500,
+    "q_burst": 0.98,
+    "base_rate_lo": 0.05,
+    "base_rate_hi": 0.4,
+    "logsig_level": 2,
+    "random_seed": 20260528
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32"
+  },
+  "result": {
+    "preset": "smoke",
+    "model": "sabra",
+    "gate_status": "SMOKE_ONLY",
+    "verdict_bearing": false,
+    "e_burst": 0.0006697097110156954,
+    "q_burst": 0.98,
+    "base_rate_test": 1.0,
+    "base_rate_train": 1.0,
+    "base_rate_val": 1.0,
+    "base_rate_band": [
+      0.05,
+      0.4
+    ],
+    "calib_max_energy_median": 0.00036490411151846014,
+    "calib_max_energy_p99": 0.0006770397616276783,
+    "test_query_count": 230,
+    "elapsed_seconds": 27.053113600006327,
+    "total_steps": 86000,
+    "detector_note": "matched-budget 4-baseline comparison is the next increment; this run reports the base-rate gate only (objective-validity layer)."
+  }
+}
