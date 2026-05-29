@@ -459,7 +459,10 @@ distance `0.207 -> 0.196`, still 0 near pairs and 0% fidelity-passing). The
 expansion therefore neither promotes nor blocks signature sufficiency or Branch
 E; it says the absolute-epsilon fiber-collision approach is not populated by a
 3x balanced register expansion, and the v2 oracle leakage calibration is not
-register-size robust.
+register-size robust. The next filed certificate lane is
+`PHASE3E_RELATIVE_LOCALITY_CERTIFICATE_SPEC.md`, which keeps the absolute-radius
+results intact and tests whether rank-nearest cross-task neighbors under
+`signature_palette_context` are more sketch-coherent than controls.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

@@ -7218,3 +7218,35 @@ is forbidden; any register-size-robust oracle metric requires a new
 pre-registered spec. Separately, the 3x balanced expansion did not populate the
 absolute-epsilon fibers, making sparsity look durable rather than a small-N
 artifact.
+
+### 2026-05-29 (PT) -- Jeffery Hughes Jr. -- Phase 3E Relative-Locality Certificate Spec Filed
+
+Phase 3E rank-locality certificate spec:
+
+- `docs/prereg/arc/PHASE3E_RELATIVE_LOCALITY_CERTIFICATE_SPEC.md`
+
+The expanded Phase 3E v2 certificate showed that absolute-epsilon fibers remain
+empty even after the 108-task expansion. This new spec does not retune
+`epsilon_primary = 0.05` and does not change the expanded oracle-regression
+verdict. Instead, it registers a separate rank-based question: whether
+cross-task nearest neighbors under `signature_palette_context` are more
+`program_sketch_v2`-coherent than signature-only, metadata-only, raw-grid,
+random, prior-stratified random, and permutation controls.
+
+Frozen primary choices:
+
+- primary register: `P0_TASK_REGISTER_EXPANDED_FOR_FIBERS.csv`;
+- primary split mode: `sha256_expansion`;
+- primary k: 5, with k=1/3/10 diagnostics;
+- primary effect: `delta_palette_vs_metadata`;
+- primary null: prior-stratified random permutation test;
+- branch set: `phase3e_relative_oracle_invalid`,
+  `phase3e_relative_locality_positive`,
+  `phase3e_relative_locality_metadata_only`,
+  `phase3e_relative_locality_negative`, and
+  `phase3e_relative_locality_inconclusive`.
+
+Verdict impact: **no execution admission and no relative-locality receipt**. The
+absolute-epsilon certificates remain binding. A future positive relative
+receipt would license only a later relative-selector spec, not sufficiency and
+not a Branch E solver.

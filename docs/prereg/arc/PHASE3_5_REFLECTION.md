@@ -617,3 +617,19 @@ from 0.207 to 0.196, with 0 near pairs and 0% fidelity-passing neighborhoods at
 blocks signature sufficiency or a Branch E solver. It falsifies the assumptions
 that the v2 anti-leakage gate transfers unchanged to a larger register and that
 a 3x balanced expansion populates the absolute-epsilon fibers.
+
+## Relative-Locality Certificate Spec Addendum
+
+Filed: **2026-05-29 (PT)**.
+
+`PHASE3E_RELATIVE_LOCALITY_CERTIFICATE_SPEC.md` is now filed. It keeps the
+absolute-epsilon receipts intact and asks a separate rank-local geometry
+question on the 108-task expanded register: whether cross-task nearest
+neighbors under `signature_palette_context` are more `program_sketch_v2`
+coherent than signature-only, metadata-only, raw-grid, random, prior-stratified
+random, and permutation controls.
+
+The spec does not retune `epsilon_primary = 0.05`; it records that the fixed
+radius is empty and moves the primary test to rank cuts k=1/3/5/10, with k=5
+primary. The expanded oracle leakage regression is carried as an explicit
+caveat rather than erased. No execution is admitted by this addendum.
