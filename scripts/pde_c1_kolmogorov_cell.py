@@ -45,6 +45,8 @@ VERDICT_BEARING_PRESETS = {
     "lock_v5",
     "fallback_v5",
     "lock_v6",
+    "lock_v7_g200",
+    "lock_v7_g300",
 }
 
 
@@ -80,6 +82,10 @@ class RunConfig:
     twin_high_norm_floor: float
     twin_min_witness_fraction: float
     twin_min_unique_pairs: int
+    objective: str
+    objective_quantile: float
+    calibration_sample_count: int
+    calibration_gap_steps: int
 
 
 def parse_args() -> argparse.Namespace:
@@ -101,6 +107,8 @@ def parse_args() -> argparse.Namespace:
             "lock_v5",
             "fallback_v5",
             "lock_v6",
+            "lock_v7_g200",
+            "lock_v7_g300",
         ],
         default="smoke",
     )
@@ -123,6 +131,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--burnin-steps", type=int)
     parser.add_argument("--sample-interval-steps", type=int)
     parser.add_argument("--lookahead-steps", type=int)
+    parser.add_argument(
+        "--objective",
+        choices=["overshoot-burnin", "portable-quantile"],
+        default=None,
+        help="Override the preset's objective. Manual use is treated as an "
+        "unregistered override (requires --allow-unregistered-overrides; forces SMOKE_ONLY).",
+    )
     return parser.parse_args()
 
 
@@ -157,6 +172,13 @@ def build_config(args: argparse.Namespace) -> RunConfig:
     twin_high_norm_floor = 1e-6
     twin_min_witness_fraction = 0.01
     twin_min_unique_pairs = 100
+    # Objective (regime-generality v1, PDE_C1_REGIME_GENERALITY_v1.md): v0..v6
+    # use the burn-in overshoot proxy; lock_v7_* use a held-out look-ahead-max
+    # quantile that pins damp_fraction = 1 - q by construction at every regime.
+    objective = "overshoot-burnin"
+    objective_quantile = 0.70
+    calibration_sample_count = 0
+    calibration_gap_steps = 0
     random_seed = 20260528
 
     if args.preset == "lock":
@@ -250,6 +272,20 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         grashof = 300.0
         e_max_burnin_fraction = 0.25
         k_signature = 3
+    elif args.preset in ("lock_v7_g200", "lock_v7_g300"):
+        # Regime-generality v1 (PDE_C1_REGIME_GENERALITY_v1.md): portable
+        # objective = held-out look-ahead-max quantile (q=0.70), calibrated on a
+        # disjoint post-burn-in window. g200 is the mandatory positive control;
+        # g300 is the generality test. K=3, k_f=2 inherited from v5/v6.
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 200.0 if args.preset == "lock_v7_g200" else 300.0
+        k_signature = 3
+        objective = "portable-quantile"
+        objective_quantile = 0.70
+        calibration_sample_count = 50_000
+        calibration_gap_steps = 5_000
     else:
         # Smoke is intentionally not the registered cell. It exists to validate
         # the integrator, binning, and receipt plumbing under the repo's
@@ -270,6 +306,7 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         "burnin_steps": args.burnin_steps,
         "sample_interval_steps": args.sample_interval_steps,
         "lookahead_steps": args.lookahead_steps,
+        "objective": args.objective,
     }
     if any(value is not None for value in overrides.values()) and not args.allow_unregistered_overrides:
         raise SystemExit("Manual overrides require --allow-unregistered-overrides; override runs are smoke-only.")
@@ -282,6 +319,8 @@ def build_config(args: argparse.Namespace) -> RunConfig:
             sample_interval_steps = args.sample_interval_steps
         if args.lookahead_steps is not None:
             lookahead_steps = args.lookahead_steps
+        if args.objective is not None:
+            objective = args.objective
 
     return RunConfig(
         preset=args.preset,
@@ -309,6 +348,10 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         adjudicator=args.adjudicator,
         k_neighbors=k_neighbors,
         delta_incompat=delta_incompat,
+        objective=objective,
+        objective_quantile=objective_quantile,
+        calibration_sample_count=calibration_sample_count,
+        calibration_gap_steps=calibration_gap_steps,
         twin_k_neighbors=twin_k_neighbors,
         twin_delta_high_fraction=twin_delta_high_fraction,
         twin_high_norm_floor=twin_high_norm_floor,
@@ -458,8 +501,27 @@ def select_high_modes(
 def run_cell(cfg: RunConfig) -> dict:
     stepper = KolmogorovStepper(cfg)
     omega_hat = stepper.initial_state()
-    total_steps = cfg.burnin_steps + (cfg.sample_count - 1) * cfg.sample_interval_steps + cfg.lookahead_steps
-    sample_steps = {cfg.burnin_steps + i * cfg.sample_interval_steps: i for i in range(cfg.sample_count)}
+    interval = cfg.sample_interval_steps
+    look = cfg.lookahead_steps
+    burn = cfg.burnin_steps
+    portable = cfg.objective == "portable-quantile"
+
+    # Sampling schedule. For the portable-quantile objective a held-out
+    # calibration block precedes the adjudication block, separated by a
+    # decorrelation gap; E_max is the q-quantile of the calibration block's
+    # look-ahead-max excursions. For overshoot-burnin only the adjudication
+    # block exists and E_max comes from the burn-in window. The overshoot path
+    # is byte-identical to the prior schedule (adj_start0 == burn).
+    if portable:
+        calib_starts = [burn + i * interval for i in range(cfg.calibration_sample_count)]
+        calib_block_end = (calib_starts[-1] + look) if calib_starts else burn
+        adj_start0 = calib_block_end + cfg.calibration_gap_steps
+    else:
+        calib_starts = []
+        adj_start0 = burn
+    adj_starts = [adj_start0 + i * interval for i in range(cfg.sample_count)]
+    total_steps = adj_starts[-1] + look
+    adj_step_to_idx = {s: i for i, s in enumerate(adj_starts)}
 
     burnin_energies: list[float] = []
     energy_by_step = np.empty(total_steps + 1, dtype=np.float64)
@@ -478,32 +540,47 @@ def run_cell(cfg: RunConfig) -> dict:
     for step in range(total_steps + 1):
         energy = stepper.low_energy(omega_hat)
         energy_by_step[step] = energy
-        if step <= cfg.burnin_steps:
+        if step <= burn:
             sig = stepper.signature(omega_hat)
             sig_min = np.minimum(sig_min, sig)
             sig_max = np.maximum(sig_max, sig)
             burnin_energies.append(energy)
-        if step in sample_steps:
-            sample_index = sample_steps[step]
+        idx = adj_step_to_idx.get(step)
+        if idx is not None:
             sig = stepper.signature(omega_hat)
-            sample_signatures[sample_index, :] = sig
-            sample_energy[sample_index] = energy
+            sample_signatures[idx, :] = sig
+            sample_energy[idx] = energy
             if sample_high_modes is not None:
-                sample_high_modes[sample_index, :] = stepper.high_mode_vector(omega_hat)
+                sample_high_modes[idx, :] = stepper.high_mode_vector(omega_hat)
         if step < total_steps:
             omega_hat = stepper.step(omega_hat)
         if step > 0 and step % progress_stride == 0:
             elapsed = time.perf_counter() - started
             print(f"[pde-c1] step {step}/{total_steps} ({100 * step / total_steps:.0f}%), elapsed {elapsed:.1f}s", flush=True)
 
-    # E_max windowing: use the last fraction of burn-in to exclude transients
-    # that would bias the 95th percentile above the steady-state attractor.
+    def _lookahead_max(starts: list[int]) -> np.ndarray:
+        return np.array(
+            [float(np.max(energy_by_step[s : s + look + 1])) for s in starts],
+            dtype=np.float64,
+        )
+
     burnin_array = np.asarray(burnin_energies)
-    window_len = max(1, int(cfg.e_max_burnin_fraction * len(burnin_array)))
-    e_max = float(np.percentile(burnin_array[-window_len:], 95))
+    if portable:
+        # Held-out look-ahead-max quantile: E_max = q-quantile of the calibration
+        # block's excursions. Pins damp_fraction = 1 - q by construction.
+        calib_lookahead_max = _lookahead_max(calib_starts)
+        e_max = float(np.quantile(calib_lookahead_max, cfg.objective_quantile))
+        calibration_damp_fraction = float(np.mean(calib_lookahead_max > e_max))
+    else:
+        # E_max windowing: last fraction of burn-in to exclude transients.
+        calib_lookahead_max = np.asarray([], dtype=np.float64)
+        calibration_damp_fraction = float("nan")
+        window_len = max(1, int(cfg.e_max_burnin_fraction * len(burnin_array)))
+        e_max = float(np.percentile(burnin_array[-window_len:], 95))
     epsilon_k = 0.05 * math.sqrt(max(0.0, 2.0 * e_max))
     h_k = epsilon_k / math.sqrt(cfg.signature_dimension) if epsilon_k > 0 else 1.0
-    actions = label_samples(energy_by_step, cfg, e_max)
+    adj_lookahead_max = _lookahead_max(adj_starts)
+    actions = (adj_lookahead_max > e_max).astype(np.int8)
     knn_histogram: list = []
     knn_sweep_rows: list = []
     twin_witness_rows: list = []
@@ -525,6 +602,10 @@ def run_cell(cfg: RunConfig) -> dict:
     result.update(
         {
             "adjudicator": cfg.adjudicator,
+            "objective": cfg.objective,
+            "objective_quantile": cfg.objective_quantile if portable else None,
+            "calibration_sample_count": cfg.calibration_sample_count if portable else 0,
+            "calibration_damp_fraction": calibration_damp_fraction,
             "knn_histogram": knn_histogram,
             "knn_sweep_rows": knn_sweep_rows,
             "twin_witness_rows": twin_witness_rows,
@@ -1582,6 +1663,7 @@ def self_test() -> None:
     args = argparse.Namespace(
         preset="smoke",
         adjudicator="bin",
+        objective=None,
         out=DEFAULT_OUT,
         write_samples=False,
         self_test=True,
