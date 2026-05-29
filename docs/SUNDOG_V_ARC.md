@@ -467,7 +467,17 @@ the signal is metadata-tied (`delta=+0.006`), raw-grid-dominated
 28.5% hard-incompatible. Across absolute and relative geometry, the Phase 3E
 certificate program finds no certifiable usable fiber or rank-local locality for
 `signature_palette_context`; Branch E now rests on capability grounds, not
-certified fiber geometry.
+certified fiber geometry. Branch E then ran as a deterministic typed
+program-search solver over the registered primitive library, selecting programs
+only by train-pair consistency and never by signature geometry. Its binding
+verdict is **`branch_e_capability_demonstrated`**: the first non-zero
+exact-match result in the ARC lane, clearing the non-trivial floor with 2
+distinct held-out tasks solved on both `test_lodo` and `pttest` (`be94b721` via
+`extract_largest_component`, `f25fbde4` via `crop_bbox >> scale`) plus two
+validation solves. The result is modest and capability-grounded; it does not
+prove Blackwell sufficiency, change the certificate verdicts, or make any
+public-evaluation/Kaggle claim. It sets up Branch E v2: deferred intricate mask
+families, morphology cross-products, and deeper composition.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

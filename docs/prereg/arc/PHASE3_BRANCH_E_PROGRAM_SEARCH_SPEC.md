@@ -11,11 +11,11 @@ Parent / boundary specs:
 
 Filed: **2026-05-29 (PT)**
 
-Status: **SPEC FILED; EXECUTION HOLD**. This file freezes a capability-grounded
-deterministic program-search solver for the registered public-training ARC-AGI-2
-universe. It admits no execution until runner tooling, npm wiring, result ignore
-path, leak-check coverage, a smoke fingerprint, and a freeze-marker amendment are
-committed together.
+Status: **BINDING RECEIPT FILED -- `branch_e_capability_demonstrated`**. The
+deterministic program-search solver cleared the pre-registered non-trivial
+exact-match floor on both held-out public-training lanes. This is a modest
+capability result, not a Blackwell-sufficiency proof, ARC solve, evaluation
+claim, or signature-geometry result.
 
 ## Boundary Citation (why Branch E, and what it is NOT)
 
