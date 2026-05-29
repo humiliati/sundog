@@ -817,6 +817,37 @@ Status: spec filed 2026-05-28. Implementation is held until an additive runner
 commit pins the CSV columns, smoke command, capped rate probe, and lock
 readback path.
 
+### Phase 16 - Hazard-Score Channel Audit
+
+Goal: test whether Phase 15's missed oracle-hazard warning-quality bar was a
+channel mismatch: the frozen strict-oracle label is geometric
+(`r3 > 4` or `minPrimaryDistance < 0.08`), while Phase 15 scored only
+instantaneous energy.
+
+Implementation-grade spec and result note:
+
+- [`docs/threebody/PHASE16_SPEC.md`](threebody/PHASE16_SPEC.md)
+- [`docs/threebody/PHASE16_RESULTS.md`](threebody/PHASE16_RESULTS.md)
+
+Commands:
+
+```bash
+npm run threebody:phase16:hazard-smoke
+npm run threebody:phase16:hazard
+npm run threebody:phase16:analyze
+```
+
+Exit criterion: the project can say whether any locked instantaneous channel
+or fixed held-out combination predicts the strict oracle's 32-step
+`hazardReached` label with lower-95%-CI AUROC at or above `0.70`. This is a
+diagnostic warning-channel audit only; all branches preserve the Phase 15 formal
+verdict and do not retune the controller.
+
+Status: spec locked 2026-05-29. Additive implementation started after lock:
+`--hazard-channel-audit`, passive `hazardSamples`, and offline AUROC/bootstrap/CV
+analysis. One-trial smoke and smoke analysis passed as column-flow / estimator
+sanity checks; the 288-trial lock is staged, not run.
+
 ### 3D Catalog / Isotrophy Sidecar
 
 Goal: test whether the new Li-Liao 2025 three-dimensional orbit catalog gives

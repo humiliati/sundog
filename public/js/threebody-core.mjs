@@ -27,6 +27,7 @@ export const DEFAULT_THREEBODY_CONFIG = Object.freeze({
   precisionReceipts: false,
   counterfactualAudit: false,
   multiStepAudit: false,
+  hazardChannelAudit: false,
   counterfactualNormalizerFloor: 1e-9,
   logEvery: 10,
 });
@@ -1193,6 +1194,27 @@ export function summarizeEventDiagnostics(eventHistory, config = {}) {
   };
 }
 
+function hazardChannelSample(time, state, signatures, tidal, localAccelerationMagnitude, events, oracleHazard) {
+  const vx3 = state[10];
+  const vy3 = state[11];
+  return {
+    time: roundNumber(time, 6),
+    label: oracleHazard.hazardReached,
+    channels: {
+      energy: roundNumber(signatures.energy),
+      kineticEnergy: roundNumber(signatures.kineticEnergy),
+      potentialEnergy: roundNumber(signatures.potentialEnergy),
+      virial: roundNumber(signatures.virial),
+      inertia: roundNumber(signatures.inertia),
+      tidalMagnitude: roundNumber(tidal.magnitude),
+      localAccelerationMagnitude: roundNumber(localAccelerationMagnitude),
+      radius: roundNumber(events.testParticleRadius),
+      minPrimaryDistance: roundNumber(events.minPrimaryDistance),
+      speed: roundNumber(Math.sqrt(vx3 * vx3 + vy3 * vy3)),
+    },
+  };
+}
+
 const EARLY_TRAJECTORY_GRID_STEP = 0.12;
 const EARLY_TRAJECTORY_MAX_T = 4.8;
 
@@ -1208,6 +1230,7 @@ export function runTrial(config = {}) {
   const eventHistory = [];
   const sensorAudit = [];
   const earlyTrajectory = [];
+  const hazardSamples = [];
   const sensorStates = new Map();
   let lastEarlyTrajectoryGridIndex = -1;
   let totalDeltaV = 0;
@@ -1319,9 +1342,20 @@ export function runTrial(config = {}) {
         acSignedSum += signedAlignment;
       }
     }
-    const oracleHazard = cfg.precisionReceipts && cfg.controllerMode === "off" && shouldAuditStep
+    const oracleHazard = (cfg.precisionReceipts || cfg.hazardChannelAudit) && cfg.controllerMode === "off" && shouldAuditStep
       ? computeStrictOracleDetails(state, cfg)
       : null;
+    if (cfg.hazardChannelAudit && cfg.controllerMode === "off" && oracleHazard) {
+      hazardSamples.push(hazardChannelSample(
+        time,
+        state,
+        signatures,
+        tidal,
+        localAccelerationMagnitude,
+        events,
+        oracleHazard,
+      ));
+    }
     if (cfg.precisionReceipts && cfg.controllerMode === "off") {
       const gridIndex = Math.round(time / EARLY_TRAJECTORY_GRID_STEP);
       const gridTime = gridIndex * EARLY_TRAJECTORY_GRID_STEP;
@@ -1440,12 +1474,19 @@ export function runTrial(config = {}) {
     eventHistory,
     sensorAudit,
     ...(cfg.precisionReceipts ? { earlyTrajectory } : {}),
+    ...(cfg.hazardChannelAudit ? { hazardSamples } : {}),
     summary: {
       ...summarizeOutcome(eventHistory),
       ...summarizeEventDiagnostics(eventHistory, cfg),
       totalDeltaV: roundNumber(totalDeltaV),
       loggedRecords: records.length,
       simulatedTime: records.at(-1)?.time ?? 0,
+      ...(cfg.hazardChannelAudit
+        ? {
+          hazardChannelSampleCount: hazardSamples.length,
+          hazardChannelPositiveSampleCount: hazardSamples.filter((sample) => sample.label).length,
+        }
+        : {}),
       ...(cfg.precisionReceipts
         ? {
           finalRelEnergyDrift: roundNumber(Math.abs(finalEnergy - initialEnergy) / Math.max(Math.abs(initialEnergy), 1e-9), 10),
