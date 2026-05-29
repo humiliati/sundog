@@ -5910,3 +5910,119 @@ launch posture.
 **Public-language constraint**: unchanged. The pre-binding-receipt
 language from the variant spec §"Public Language" remains the only
 permitted public addition.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Variant Capped Timing Probe + 20-Shard Launch Staging
+
+CPU + GPU capped timing probes ran against the post-freeze runner under
+commit `61DDB7D5BD0DA1B9BC2A4F6FE10C9F0F2D86A4B5` (the variant
+freeze-marker amendment), both `gitDirty=false`. Configuration:
+`--probe-only --probe-steps 100 --limit-arms raw_grid_edit_color_v2
+--limit-seeds 20260528`, all 36 registered tasks, 49 held-out instances.
+
+#### Probe Wall
+
+| device | elapsed (s) | elapsed (min) |
+| --- | ---: | ---: |
+| CPU (i7-7820HK) | 311.3 | 5.19 |
+| CUDA (GTX 1080) | 206.3 | 3.44 |
+
+#### Wall-Clock Extrapolation Method
+
+Two CPU data points isolate per-instance overhead from per-step
+training cost (variant has only one trained model — the mask MLP —
+since the color rule bank is deterministic):
+
+- smoke (3 mask steps × 1 arm × 1 seed × 49 instances): 160.9 s
+- probe (100 mask steps × 1 arm × 1 seed × 49 instances): 311.3 s
+
+`49 F + 49 × 3 S = 160.9` and `49 F + 49 × 100 S = 311.3`. Solving:
+**`S_cpu = 0.0316 s/step`**, **`F = 3.189 s/instance`** (feature build
++ 50-candidate baseline iteration + ~19-candidate rule-bank
+generation + scoring + selection).
+
+GPU step cost (assuming F is the same — Python-bound):
+**`S_gpu ≈ 0.0102 s/step`** (≈ 3.1× faster than CPU; better than
+Phase 3D's 2.64× because the workload is more compute-bound when
+color training is gone).
+
+**Note on the per-instance F**: 3.19 s/instance is meaningfully
+*lower* than Phase 3D's 4.37 s/instance because the rule-bank
+generation + scoring + selection (~1 s per instance under LOCO over
+~19 candidates) is faster than Phase 3D's "EditColorMLP training
+data construction + full-grid color prediction at every threshold"
+sequence. The deterministic rule bank is **both cheaper to train AND
+cheaper to predict** than the learned color MLP.
+
+#### Full-Run Wall Projection
+
+Per arm-seed at registered cap (mask=700 steps × 49 instances):
+
+| component | CPU wall (s) | GPU wall (s) |
+| --- | ---: | ---: |
+| feature build + baseline + rule bank (49 × F) | 156.3 | 156.3 (Python; not GPU-accelerated) |
+| mask training (49 × 700 × S) | 1085.0 | 350.3 |
+| **per arm-seed total** | **1241.3 (20.7 min)** | **506.6 (8.4 min)** |
+
+Full 4 arms × 5 seeds = 20 combinations:
+
+| posture | concurrent shards | rounds | wall envelope |
+| --- | ---: | ---: | --- |
+| CPU serial | 1 | 20 | ~6.90 h |
+| GPU serial | 1 | 20 | **~2.81 h** |
+| GPU 3-shard concurrent | 3 | 7 | **~1.03 h** (10% contention budget) |
+| GPU 4-shard concurrent | 4 | 5 | ~0.78 h (15% contention budget) |
+
+**The variant is meaningfully faster than Phase 3D's base** (Phase 3D
+GPU serial was ~5.25 h vs. variant ~2.81 h; 3-shard parallel was
+~1.93 h vs. variant ~1.03 h). The savings come entirely from
+removing the EditColorMLP training (~half the compute in Phase 3D
+went there).
+
+#### Staged Full-Run Command (3-Shard GPU Parallel)
+
+```powershell
+$env:SUNDOG_PYTHON = "C:\Users\hughe\AppData\Local\Programs\Python\Python312\python.exe"
+foreach ($arm in @("raw_grid_edit_color_v2","signature_palette_edit_color_v2","signature_only_edit_color_v2","metadata_only_edit_color_v2")) {
+    foreach ($seed in @(20260528, 20260529, 20260530, 20260531, 20260601)) {
+        Start-Process -NoNewWindow `
+            -RedirectStandardOutput "results/arc/phase3d-color-logs/$arm-$seed.log" `
+            -RedirectStandardError "results/arc/phase3d-color-logs/$arm-$seed.err" `
+            -FilePath "npm" -ArgumentList @(
+                "run", "arc:phase3d:edit-color-rule-v2:shard", "--",
+                "--data-dir", "$env:USERPROFILE\Datasets\ARC-AGI-2\data",
+                "--register", "docs/prereg/arc/P0_TASK_REGISTER.csv",
+                "--out", "results/arc/phase3d-edit-color-rule-v2-shard-$arm-$seed",
+                "--shard-arm", "$arm",
+                "--shard-seed", "$seed",
+                "--device", "cuda"
+            )
+        # Throttle to 3 concurrent shards.
+    }
+}
+
+# After all 20 shards land:
+npm run arc:phase3d:edit-color-rule-v2:merge -- `
+    --shard-dirs <comma-joined list of all 20 dirs> `
+    --out results/arc/phase3d-edit-color-rule-v2
+```
+
+Operator-discretionary additions per Phase 3D pattern:
+`--allow-mixed-commits` to merge across parallel-commit gitCommits,
+`--allow-dirty` per shard if the worktree carries non-ARC mods at
+re-launch.
+
+**Resume safety**: each shard is single-process and resume-unsafe at
+the (instance) granularity (same as Phase 3D).
+
+#### Per-Outcome Decision Rule
+
+| arena gate outcome | next action |
+| --- | --- |
+| `raw_grid_edit_color_v2_arena_open` (≥ 1 non-baseline exact task on each held-out lane for `raw_grid_edit_color_v2`) | Examine `branchAdjudication`. If `branch_d_color_rule_support`, file the receipt + open public-language additions per variant spec §"Public Language". If `branch_d_color_rule_bounded_failure`, file the receipt + the named-quarantine breakdown emphasising the new pair (`color_rule_bank_coverage_failure` vs `color_rule_selection_failure`) — that decomposition tells the next-step direction (extend rule bank vs improve selector). |
+| `branch_d_color_rule_full_grid_floor` (raw_grid_edit_color_v2 does not open the arena) | File the receipt. This would be the **sixth** full-grid control floor in Phase 3. The quarantine breakdown would be diagnostic: if dominated by `color_rule_bank_coverage_failure`, the rule bank is structurally insufficient (file a Branch D rule-bank-extension variant); if dominated by `color_rule_selection_failure`, the selector tie-break is the bottleneck (file a Branch D selection-refinement variant); if dominated by `edit_mask_failure`, the mask MLP is the gate (the color repair didn't matter); if dominated by `baseline_canvas_failure`, the baseline family is the gate (Branch D baseline-extension variant). The decomposition makes the next surgical move predictable rather than another wild guess. |
+
+**Verdict impact**: no prior verdict changes. Variant status moves
+from "EXECUTION ADMITTED, capped probe required" to "EXECUTION
+ADMITTED, 20-shard launch ready". No binding receipt yet.
+
+**Public-language constraint**: unchanged.
