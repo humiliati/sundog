@@ -10,8 +10,9 @@ Short version:
 > discipline: if the field itself is too much, can the right invariant shadow
 > still certify bounded structure?
 
-Status: **Phase 1 U(1) 2D, SU(2) 2D, and SU(2) 3D smokes passed
-2026-05-29**. Roadmap draft at this file; lit-pass at
+Status: **Phase 1 instrumentation closed across the full ladder
+2026-05-29; Phase 2 v0 spec filed 2026-05-29**. Roadmap draft at this
+file; lit-pass at
 [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
 Phase 1 U(1) 2D smoke manifest at
@@ -25,11 +26,13 @@ with `P1-A smoke_pass` receipt at
 Phase 1 SU(2) 3D primary-cell manifest at
 [`prereg/yang-mills/PHASE1_SU2_3D_gauge_invariance_smoke.md`](prereg/yang-mills/PHASE1_SU2_3D_gauge_invariance_smoke.md)
 with `P1-A smoke_pass` receipt at
-[`yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md).
-These are Phase 1 instrumentation receipts only. No Phase 2 certificate,
-continuum, confinement, mass-gap, or result-bearing Yang-Mills claim exists.
-Next artifact is the Phase 2 `SU2_3D` 12^3 relative-locality manifest with
-numeric gamma_held bin edges frozen before scoring and all seven controls live.
+[`yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md);
+Phase 2 v0 relative-locality spec at
+[`prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v0.md`](prereg/yang-mills/PHASE2_SU2_3D_relative_locality_v0.md).
+The Phase 1 receipts are instrumentation only. No Phase 2 certificate,
+continuum, confinement, mass-gap, or result-bearing Yang-Mills claim
+exists. Next artifact is the minimal Phase 2 ensemble runner +
+aggregation runner per the v0 spec.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's

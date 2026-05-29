@@ -5,12 +5,13 @@ Lit-pass: [`YANG_MILLS_LITPASS_MEMO.md`](../../YANG_MILLS_LITPASS_MEMO.md)
 
 Filed: **2026-05-29 (PT)**
 
-Status: **Phase 1 U(1) 2D, SU(2) 2D, and SU(2) 3D smokes passed
-2026-05-29**. See
+Status: **Phase 1 instrumentation closed across the full ladder 2026-05-29;
+Phase 2 v0 spec filed 2026-05-29**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
-It still admits no Phase 2 scoring by itself.
+It still admits no Phase 2 scoring without the per-β ensemble runs +
+aggregation invocation completing per the v0 spec.
 
 ## Filed Artifacts
 
@@ -46,14 +47,35 @@ It still admits no Phase 2 scoring by itself.
   `YM-P1-QUAR-D unitarity_drift`, promoted from SU2_2D's implicit check).
   No Phase 2 or rank-locality claim admitted.
   **Executed 2026-05-29 -> `P1-A smoke_pass`.**
+- [`PHASE2_SU2_3D_relative_locality_v0.md`](PHASE2_SU2_3D_relative_locality_v0.md)
+  - the actual non-Abelian primary read. Binding v0 spec for the
+  `SU2_3D` 12³ × β slate `{2.0, 2.4, 2.8}` × 32-configs-per-β
+  relative-locality certificate. Per-β tertile bin freezing on per-config
+  `γ_held` (LS slope of `ln Re(W)` vs area on the held-out loops
+  `W14, W23, W33`); Euclidean L2 in z-score-normalized 8-dim signature
+  space; within-β k-NN bin-purity@k=5 as primary discrimination ratio
+  (chance baseline 1/3), across-β bin-purity vs `CTRL_RAND_STRAT` as the
+  coupling-triviality cross-check; six controls scored
+  (`CTRL_META`, `CTRL_RAW`, `CTRL_RAND`, `CTRL_RAND_STRAT`, `CTRL_PERM`,
+  `CTRL_GAUGE_RAND`), `CTRL_FINITE_SIZE` declared but deferred to
+  Phase 4. New branch `YM-P2-NEG-D raw_dominates` introduced. Three
+  per-β ensemble invocation commands + one aggregation invocation
+  command all locked in the spec. Runners not yet implemented.
 
 ## Required Next Artifact
 
-The next artifact should be the Phase 2 `SU2_3D` relative-locality manifest:
-`PHASE2_SU2_3D_relative_locality_v0.md`. It must run on the `12x12x12`
-partner lattice, freeze numeric gamma_held bin edges before scoring, score all
-seven P0 controls on the same frozen neighbor graph and held-out labels, and
-keep the `8x8x8` Phase 1 receipt as instrumentation only.
+The next artifact should be the minimal Phase 2 ensemble runner
+`scripts/yang-mills-phase2-su2-3d-ensemble.mjs` + the three per-β npm
+scripts required by
+[`PHASE2_SU2_3D_relative_locality_v0.md`](PHASE2_SU2_3D_relative_locality_v0.md).
+The ensemble runner reuses `scripts/lib/yang-mills-su2-3d-core.mjs`
+from Phase 1 (lattice + heatbath + overrelaxation + signature), bumps
+the lattice from 8³ to 12³, drops the Phase 1 gauge-randomization read
+(deferred to the aggregation runner per `CTRL_GAUGE_RAND` semantics),
+and adds the γ_held held-out summary computation per the v0 spec.
+The existing Phase 1 SU(2) 3D entry must remain bit-for-bit unchanged.
+After the three per-β ensemble runs land, the aggregation runner
+`scripts/yang-mills-phase2-su2-3d-aggregate.mjs` is the second piece.
 
 ## Guardrail
 
@@ -111,3 +133,20 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   fallback fraction = 0 over 5,431,296 link updates, orientation spread =
   0.00294, link unitarity max Frobenius residual 1.10e-15, wall clock 37.03 s.
   Phase 1 instrumentation is closed across `U1_2D`, `SU2_2D`, and `SU2_3D`.
+- 2026-05-29: Phase 2 v0 relative-locality spec filed at
+  [`PHASE2_SU2_3D_relative_locality_v0.md`](PHASE2_SU2_3D_relative_locality_v0.md).
+  Locks `SU2_3D` 12³ × β slate `{2.0, 2.4, 2.8}` × 32 configs/β; per-β
+  tertile bin freezing on per-config `γ_held` (LS slope of `ln Re(W)` vs
+  area on `W14, W23, W33` with 1e-10 hard ε floor); Euclidean L2 in
+  z-score-normalized 8-dim signature space; within-β bin-purity@k=5 as
+  primary discrimination ratio (chance baseline 1/3); across-β
+  bin-purity vs `CTRL_RAND_STRAT` as coupling-triviality cross-check.
+  Six controls scored (`CTRL_META`, `CTRL_RAW`, `CTRL_RAND`,
+  `CTRL_RAND_STRAT`, `CTRL_PERM`, `CTRL_GAUGE_RAND`), `CTRL_FINITE_SIZE`
+  declared but deferred to Phase 4. Promotion thresholds: primary
+  bin-purity@5 `>= 0.5` AND beats `CTRL_RAND`/`CTRL_META`/`CTRL_RAW`
+  by margin `>= 0.10`; across-β primary beats `CTRL_RAND_STRAT` by
+  margin `>= 0.05`. New branch `YM-P2-NEG-D raw_dominates` introduced.
+  Per-β master seeds `202605290201` / `0202` / `0203`. Three per-β
+  ensemble invocation commands + one aggregation invocation command
+  all locked in the spec. Runner implementation pending.
