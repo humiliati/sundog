@@ -433,3 +433,97 @@ node scripts/arc-phase3e-relative-locality-certificate.mjs `
 ```
 
 (`SUNDOG_PYTHON` = the Python 3.12 interpreter; the certificate is CPU-only.)
+
+---
+
+## Amendment B — Binding Verdict (2026-05-29 PT)
+
+Append-only. The relative-locality certificate was run on the expanded 108-task
+register, pinned to freeze-marker commit `f7850f0` (`runnerSha256 3DD2C97A…`,
+`splitMode=sha256_expansion`, 5-seed slate × 1000 permutations, `U_primary=336`,
+`U_all=491`, ~56m35s background wall — heavier than the ~20-25 min freeze-marker
+estimate; the bipartite conditioning-pair matching over 336²×4 arms plus the null
+slate dominated). `gitDirty=true` reflects only concurrent parallel-lane tracked
+edits, not any ARC-lane change; the binding inputs are pinned by `gitCommit`,
+`runnerSha256`, and the matching `registerHash`. Receipt:
+`results/arc/phase3e-relative-locality-certificate/`.
+
+**Branch: `phase3e_relative_locality_negative`.**
+
+### k=5 neighbor program-sketch coherence
+
+| arm | mean sketch_sim @k5 | hard-incompat @k5 |
+| --- | --- | --- |
+| `signature_palette_context` | 0.4197 | **0.2845** |
+| `signature_only_context` | 0.4060 | 0.2958 |
+| `metadata_only_context` | 0.4139 | 0.2262 |
+| `raw_grid_context` | **0.4561** | 0.2446 |
+
+### Effects (k=5 unless noted)
+
+- `delta_palette_vs_metadata` = **+0.0058** (k3 +0.0058, k10 −0.0022 → sign flips)
+- `delta_palette_vs_uniform_random` = **+0.0720** (threshold for positive ≥ 0.15)
+- `delta_palette_vs_signature_only` = +0.0138
+- `delta_palette_vs_raw_grid` = **−0.0364** (palette is *below* raw_grid)
+- `p_palette_vs_prior_stratified_random` = **0.0002** (palette is significantly
+  above prior-stratified random)
+- `palette_hard_incompatibility_rate` = **0.2845** ( > 0.25 negative trigger)
+- `stable_sign_k3_k10` = **False**
+
+### Why negative (and the honest nuance)
+
+The negative branch fires on `palette_hard_incompatibility_rate 0.2845 > 0.25`:
+more than a quarter of `signature_palette_context`'s rank-nearest neighbor pairs
+are behaviorally **hard-incompatible** under the v2 rules. So even the
+nearest-in-rank registered contexts are not behaviorally coherent.
+
+The nuance, recorded honestly: palette's neighbor sketch similarity **is**
+statistically above the prior-stratified random control (`p = 0.0002`), so a weak
+rank-local signal exists. But it is **not usable**: it is essentially tied with
+the coarse `metadata_only` control (Δ +0.006, and the sign flips negative by
+k=10), it is **below `raw_grid`** (Δ −0.036 — the raw-grid arm is both more
+sketch-coherent and less incompatible), it falls far short of the random-control
+margin (Δ +0.072 < 0.15), and it is dominated by the 28% hard-incompatibility
+rate. A statistically detectable but small, metadata-explained,
+raw-grid-dominated, incompatibility-laden signal is exactly the
+"no usable rank-local sketch geometry" the negative branch names.
+
+### Oracle caveat (diagnostic, not a gate here)
+
+`oracle_invalid = False`: syntactic leakage clean, vacuity 0.00, prior-laundering
+0.00 on the expanded primary universe. The binding 108-task leakage regression is
+carried as a diagnostic and **not retuned away**:
+`core_sketch_exact_lookup_fraction = 0.351`, `unique_core_sketch_fraction =
+0.551` (identical to the expanded absolute certificate). Per §"Oracle Caveat"
+these are caveats, not fail gates, because this certificate never used target
+exact hashes to train, select, or score — the locality metric is pure facet
+Jaccard.
+
+### What this establishes / does not
+
+**Establishes**: the relative (rank-based) test **strengthens** the
+absolute-sparsity result. On the expanded register `signature_palette_context`
+has neither fixed-radius fibers (absolute: 0 near pairs, min distance 0.196) nor
+**usable** rank-local program-sketch coherence (relative: weak signal, below
+metadata-tie and raw_grid, 28% hard-incompatible). Notably `raw_grid_context`
+edges `signature_palette_context` on both rank-local metrics — an anti-privilege
+signal for the signature representation.
+
+**Does not**: change any absolute-epsilon finding (they remain binding); prove or
+disprove Blackwell sufficiency; license or block a Branch E solver; or claim
+`raw_grid` is "sufficient" (it merely has marginally better rank-local geometry
+on this metric). No threshold, k, permutation count, control, or sketch-similarity
+definition was retuned after seeing outputs.
+
+### Path forward
+
+The Phase 3E locality-certificate program has now returned, in sequence:
+`deferred_label_vacuity` → `deferred_sparse_fibers` (36-task) →
+`expanded_oracle_regression` (108-task absolute) → **`relative_locality_negative`
+(108-task rank-based)**. Across absolute and relative geometry, on 36 and 108
+registered tasks, `signature_palette_context` shows no certifiable usable fiber or
+rank-local locality. The remaining admissible direction is **Branch E on
+capability grounds** — a solver justified by what it can do, not by certified
+fiber geometry — under its own pre-registered spec, arena gate, and verdict
+discipline; or to record the certificate program's negative as the durable
+finding. The absolute-epsilon and oracle-regression receipts remain binding.

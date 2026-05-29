@@ -215,6 +215,72 @@ external review.
    portable-quantile` mode + `lock_v7_g200` / `lock_v7_g300` presets,
    smoke-test, then run the §7 program.
 
+## 12. Result (2026-05-29) — PDE-C1-RG-POS
+
+The full program executed; all three verdict-bearing runs landed. The
+portable objective fixed the v6 vacuity and the complete regime-2
+witness **replicates at G=300**.
+
+| run | portability gate (adj damp ∈ [0.20,0.40]) | verdict |
+|---|---|---|
+| `lock_v7_g200` kNN (positive control) | 0.3003 ✓ (calib 0.300) | `STRICTNESS_WITNESS_POSITIVE`, `a_mm = −0.00079`, slope 0.736 |
+| `lock_v7_g300` kNN (generality test) | 0.2688 ✓ (calib 0.300) | `STRICTNESS_WITNESS_POSITIVE`, `a_mm = +0.00058`, slope 0.564 |
+| `lock_v7_g300` twin-state | — | `TWIN_STATE_CERTIFIED` (100% witness coverage, 942,834 unique pairs, `δ_H = 0.0111` from real median ‖Q_K‖ = 0.222) |
+
+Receipts: `results/proof/c1-rg-v1-g200-knn-sweep/`,
+`results/proof/c1-rg-v1-g300-knn-sweep/`,
+`results/proof/c1-rg-v1-g300-twin-state/`.
+
+### What it establishes
+
+- **Portability gate passed at both regimes.** Held-out
+  `damp_fraction` = 0.300 (G=200) and 0.269 (G=300), both in
+  [0.20,0.40]. The portable objective is genuinely regime-portable:
+  v6's `damp_fraction = 0.004` vacuity at G=300 is gone (0.269 now). The
+  small G=300 calib-vs-adj gap (0.300 → 0.269) is a mild, honest
+  signature of intermittency non-stationarity, well inside the gate.
+- **Positive control (G=200) re-establishes the v5 witness under a
+  different, sounder objective.** `a_mm = −0.00079`, slope 0.736 vs v5's
+  −0.00078 / 0.737 — near-identical despite a different `E_max`
+  construction (held-out look-ahead-max quantile 0.7344 vs burn-in
+  95th-percentile). The v5 control-sufficiency result is **not** an
+  artifact of the old threshold rule.
+- **Generality test (G=300) POSITIVE.** `mean_minority` extrapolates to
+  ~zero (`a_mm = +0.00058 ≤ 0.005`), through-origin, 10–22× below the
+  random-label floor → clean decision surface, control-sufficient.
+- **Twin-state CERTIFIED at G=300**, non-degenerately, at the same
+  `ε_K = 0.0664` as the control read, so the two halves **compose** into
+  a complete regime-2 witness at G=300.
+
+**Net: regime-2 (state-insufficient AND control-sufficient) is now a
+two-regime result on the Grashof axis — (k_f=2, G=200) and
+(k_f=2, G=300) — under a portable objective, no longer cell-local.**
+The control half is also dimension-robust (v4/v5 across d=32/d=18) and
+now objective-robust (fixed-percentile and portable-quantile both
+POSITIVE at G=200).
+
+### What it does NOT establish (scope held)
+
+- **Two points on ONE axis.** Grashof only; `k_f = 2` fixed throughout.
+  The objective family now has two members but both are
+  energy-overshoot-type. This is not full substrate-generality.
+- **Finite-Galerkin, sampled-support, numerical** — not a theorem about
+  the infinite-dimensional NSE attractor.
+- **Proxy faithfulness strengthened, not closed.** Two independent
+  objective constructions agreeing helps, but `π̂` is still a proxy, not
+  a derived `J`-optimal selector with an explicit action cost.
+- **External PDE review (criterion c) open.** **C1 remains UNPROMOTED** —
+  but this is the strongest the candidate has been: a two-regime,
+  dimension-robust, objective-robust, end-to-end regime-2 witness.
+
+### Next firm-up axes (none required, none urgent)
+
+`k_f`-axis generality (vary forcing geometry at fixed G); a genuinely
+different objective family (enstrophy / burst-onset, the documented v2
+alternative); proxy-faithfulness via a derived `J`-optimal selector;
+external review. Any of these would further harden C1; none is needed
+to bank the present two-regime result.
+
 ## 11. Cross-References
 
 - [`PDE_C1_REGIME_GENERALITY_v0.md`](PDE_C1_REGIME_GENERALITY_v0.md) —

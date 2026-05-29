@@ -117,6 +117,45 @@ The closest Sundog anchors are:
 - [`COARSE_GRAINING_PROOF_ROADMAP.md`](COARSE_GRAINING_PROOF_ROADMAP.md):
   sufficient-statistic discipline and falsification gates.
 
+### Three-Body Transfer Rules
+
+The internal three-body lane gives this roadmap its clearest operating
+discipline. Phase 13 did not establish "the accelerometer proxy works" in the
+abstract; it mapped a high-velocity near-escape pocket where the proxy helped
+and a low-velocity/equal-mass boundary where it could hurt. Yang-Mills should
+inherit that posture:
+
+```text
+do not ask whether the invariant shadow works;
+ask where, for which cell, against which controls, and where it fails.
+```
+
+Concrete transfer rules:
+
+1. **Projection audit before result.** Three-body separated compressed
+   full-state diagnostics from sensor-available signals. Yang-Mills must
+   separate gauge-invariant signatures from target observables copied into the
+   signature. "Gauge invariant" is necessary but not sufficient.
+2. **Cell map before mean score.** Report results over
+   `group x dimension x lattice size x beta x loop-set`, not as one aggregate
+   success. Boundary cells are evidence, not inconvenience.
+3. **Decompose the mechanism.** Three-body Phase 14 split warning quality,
+   action coupling, and outcome effect. Yang-Mills should split invariance
+   quality, held-out-observable coupling, and certificate effect.
+4. **Use privileged oracles honestly.** Three-body used oracle and
+   precision-lock checks without calling them deployable controllers.
+   Yang-Mills may use exact tiny fixtures, abelian/2D sanity cells, known loop
+   identities, and bootstrap-style checks as forward oracles, but the primary
+   claim remains about the compact invariant signature.
+5. **Hard-void gates before long reads.** If a gauge-randomization,
+   target-leak, metadata-only, or finite-size split gate fails, the phase is
+   void or narrowed before any favorable narrative is interpreted.
+
+The transferable claim shape is:
+
+> A projection can preserve load-bearing structure inside a bounded operating
+> envelope; the envelope is part of the result.
+
 ## 3. Honest vs. Reach
 
 Honest:
