@@ -476,8 +476,15 @@ distinct held-out tasks solved on both `test_lodo` and `pttest` (`be94b721` via
 `extract_largest_component`, `f25fbde4` via `crop_bbox >> scale`) plus two
 validation solves. The result is modest and capability-grounded; it does not
 prove Blackwell sufficiency, change the certificate verdicts, or make any
-public-evaluation/Kaggle claim. It sets up Branch E v2: deferred intricate mask
-families, morphology cross-products, and deeper composition.
+public-evaluation/Kaggle claim. Branch E v2 then admitted the deferred intricate
+mask families, morphology cross-product, and depth-3 composition. Its binding
+verdict is **`branch_e_v2_capability_replicated`**: it retained the same two
+gated solves (`be94b721`, `f25fbde4`) on both `test_lodo` and `pttest`, solved
+zero new gated tasks, and dropped validation from 2 to 1 solved task per lane
+because the larger train-consistent program set can crowd the correct answer
+out of the top two. The deterministic program-search capability is therefore
+bounded near the v1 baseline; lifting it likely requires a different solver
+class rather than more deterministic primitives.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 
