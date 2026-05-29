@@ -1,0 +1,134 @@
+{
+  "startedAt": "2026-05-29T06:28:16.537267+00:00",
+  "script": "scripts/pde_c1_kolmogorov_cell.py",
+  "spec": "docs/proof/PDE_C1_CELLSET_KOLMOGOROV.md",
+  "protocol": "docs/proof/PDE_C1_FIBER_PROTOCOL.md",
+  "config": {
+    "preset": "lock_v5",
+    "grid_size": 32,
+    "n_modes": 16,
+    "k_signature": 3,
+    "forcing_wavenumber": 2,
+    "grashof": 200.0,
+    "forcing_amplitude": 1.0,
+    "viscosity": 0.07071067811865475,
+    "dt": 0.01,
+    "burnin_steps": 100000,
+    "sample_count": 50000,
+    "sample_interval_steps": 50,
+    "lookahead_steps": 500,
+    "n_min": 30,
+    "delta_action": 0.1,
+    "s_pos": 0.5,
+    "delta_proxy_min": 0.01,
+    "e_max_burnin_fraction": 0.25,
+    "random_seed": 20260528,
+    "integrator": "pseudo_spectral_vorticity_semi_implicit_euler",
+    "signature_dimension": 18,
+    "action_tiebreak": "no_op",
+    "adjudicator": "twin-state",
+    "k_neighbors": 30,
+    "delta_incompat": 0.01,
+    "twin_k_neighbors": 50,
+    "twin_delta_high_fraction": 0.05,
+    "twin_high_norm_floor": 1e-06,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32",
+    "cwd": "C:\\Users\\hughe\\Dev\\sundog"
+  },
+  "result": {
+    "verdict": "TWIN_STATE_CERTIFIED",
+    "verdict_label": "signature_near_high_mode_separated_twins",
+    "interpretable": true,
+    "n_samples": 50000,
+    "k_neighbors_effective": 50,
+    "epsilon_k_radius_threshold": 0.06059758455293647,
+    "delta_h": 0.011666713830102926,
+    "twin_delta_high_fraction": 0.05,
+    "twin_high_norm_floor": 1e-06,
+    "twin_min_witness_fraction": 0.01,
+    "twin_min_unique_pairs": 100,
+    "candidate_sample_count": 50000,
+    "candidate_sample_fraction": 1.0,
+    "candidate_pair_count_directed": 2450000,
+    "candidate_pair_count_unique": 1263121,
+    "witness_sample_count": 50000,
+    "witness_sample_fraction": 1.0,
+    "witness_fraction_of_candidates": 1.0,
+    "witness_pair_count_directed": 1312267,
+    "witness_pair_count_unique": 693795,
+    "max_candidate_high_distance": 0.025361395385551003,
+    "witness_high_distance_p50": 0.015390280190708278,
+    "witness_high_distance_p95": 0.020976467903409974,
+    "witness_signature_distance_p50": 0.03535068642425275,
+    "witness_signature_distance_p95": 0.045294079119783934,
+    "high_norm_median": 0.23333427660205852,
+    "high_norm_min": 0.22017111362628605,
+    "high_norm_max": 0.24418242434909337,
+    "no_op_count": 35115,
+    "damp_low_band_count": 14885,
+    "damp_fraction": 0.2977,
+    "s_pos": 0.5,
+    "high_norm_p05": 0.22072760937897445,
+    "high_norm_p50": 0.23333427660205852,
+    "high_norm_p95": 0.24372805383321652,
+    "adjudicator": "twin-state",
+    "e_max": 0.7344134507300568,
+    "epsilon_k": 0.06059758455293647,
+    "h_k": 0.014282987653635521,
+    "burnin_energy_min": 0.6869152989804227,
+    "burnin_energy_max": 3.1262947707916444,
+    "burnin_energy_mean": 0.8064611799186419,
+    "sample_energy_min": 0.7151529188160555,
+    "sample_energy_max": 0.734601208647869,
+    "sample_energy_mean": 0.7253547457505279,
+    "low_modes": [
+      {
+        "kx": 0,
+        "ky": 1
+      },
+      {
+        "kx": 1,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 1
+      },
+      {
+        "kx": -1,
+        "ky": 1
+      },
+      {
+        "kx": 0,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 0
+      },
+      {
+        "kx": 1,
+        "ky": 2
+      },
+      {
+        "kx": 2,
+        "ky": 1
+      },
+      {
+        "kx": -2,
+        "ky": 1
+      }
+    ],
+    "high_mode_count": 211,
+    "high_mode_dimension": 422,
+    "elapsed_seconds": 1294.5853384000075,
+    "total_steps": 2600450,
+    "steps_per_second": 2008.7126894237958
+  }
+}
