@@ -1,0 +1,69 @@
+{
+  "phase": "phase1",
+  "cell": "SU2_3D",
+  "latticeSize": [
+    8,
+    8,
+    8
+  ],
+  "beta": 2.4,
+  "boundary": "periodic",
+  "action": "Wilson",
+  "generator": "su2_heatbath_overrelax_v1",
+  "updateMix": {
+    "heatbath": 1,
+    "overrelaxation": 4
+  },
+  "masterSeed": 202605290103,
+  "burnInSweeps": 2000,
+  "pilotTauIntPlaquette": 0.8070525419094978,
+  "registeredThinning": 32,
+  "retainedConfigurations": 32,
+  "signatureVocabularyVersion": "v1",
+  "heldOutTargetVocabularyVersion": "v1",
+  "gammaHeldBinEdgeStatus": "phase1_no_rank_scoring",
+  "heatbathFallbackCount": 0,
+  "heatbathFallbackFraction": 0,
+  "heatbathLinkUpdates": 5431296,
+  "heatbathRejectionAttempts": 11726330,
+  "linkUnitarityMaxFrobenius": 1.0990647210786425e-15,
+  "perOrientationMeanPlaquette": {
+    "xy": 0.5299769326584903,
+    "xz": 0.5284172287276812,
+    "yz": 0.5287150308113808
+  },
+  "perOrientationVariancePlaquette": {
+    "xy": 0.0002672616159366089,
+    "xz": 0.0002663830440675425,
+    "yz": 0.0002621026936618877
+  },
+  "perOrientationRelativeSpread": 0.002942965692837478,
+  "controlSetDeclared": [
+    "CTRL_META",
+    "CTRL_RAW",
+    "CTRL_RAND",
+    "CTRL_RAND_STRAT",
+    "CTRL_PERM",
+    "CTRL_GAUGE_RAND",
+    "CTRL_FINITE_SIZE"
+  ],
+  "controlSetScored": [
+    "CTRL_RAW",
+    "CTRL_GAUGE_RAND"
+  ],
+  "codeCommit": "02248316ecf6489190b67b512ba8515a80d90add",
+  "gitDirty": true,
+  "commandLine": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\hughe\\Dev\\sundog\\scripts\\yang-mills-phase1-su2-3d-gauge-smoke.mjs --cell SU2_3D --lattice-size 8x8x8 --beta 2.4 --boundary periodic --action Wilson --generator su2_heatbath_overrelax_v1 --overrelax-per-heatbath 4 --seed 202605290103 --burn-in 2000 --pilot-sweeps 512 --thinning 32 --measurements 32 --gauge-transforms 8 --signature-vocab v1 --heldout-vocab v1 --out results/yang-mills/phase1/SU2_3D/2026-05-29_su2_3d_gauge_invariance_smoke_v0",
+  "wallClockSeconds": 37.028111700000004,
+  "artifactHashes": {
+    "autocorr_pilot/plaquette_by_orientation.csv": "228001a22955ebec41725e360a88d85676da962f16ce4f1f180a65e5efe6fed8",
+    "autocorr_pilot/plaquette_series.csv": "e44249e7dc47e9cd9e223ce6c96269ceee45978e7856c62671e2383a238ddf3c",
+    "configs/su2_links.jsonl": "54c60d4c5a84c62ede281dfcc4d6cdd5368e6ea48d61ba26b74f0f15036f39ec",
+    "gauge_randomization/raw_link_residuals.csv": "d5eaa1044c50db5c42cc378963c306d6b022ec7b990b88f836c6ec4503f16ab9",
+    "gauge_randomization/signature_residuals.csv": "b3ce2a3524bdc04e9c7f8ac2465aad63dda3e3ce67f95dd9f1a5a2ea23dbcf43",
+    "heldout/gamma_bin_edges.json": "9f9c1ab71b91fd60541096a3aa5aa80676144300301fef1cff4207236067f9e9",
+    "heldout/heldout_loop_values.csv": "857ce6a0ddb44a5b7bcd173405d631b8f62662de9239bd7235012a276de23e4e",
+    "signatures/signature_vectors.csv": "9f336917af987da41057a4d3d5cb8261f1d87cb42e4dbf9475d64e804fda6183",
+    "summary.json": "c9371918ee15c12dc60d404810a57eda8ab93d05b7ccd59581654f70ef4132ab"
+  }
+}

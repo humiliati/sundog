@@ -1,0 +1,51 @@
+{
+  "branch": "P1-A smoke_pass",
+  "reason": "all burn-in / autocorrelation / signature-invariance / heatbath-fallback / raw-non-invariance / unitarity / orientation-isotropy thresholds pass",
+  "pilot": {
+    "tauInt": 0.8070525419094978,
+    "window": 6,
+    "meanPlaquette": 0.529036397399184,
+    "variancePlaquette": 0.00011935410883594534,
+    "thinningTauRatio": 39.65045438589109
+  },
+  "orientation": {
+    "meanPlaquette": {
+      "xy": 0.5299769326584903,
+      "xz": 0.5284172287276812,
+      "yz": 0.5287150308113808
+    },
+    "variancePlaquette": {
+      "xy": 0.0002672616159366089,
+      "xz": 0.0002663830440675425,
+      "yz": 0.0002621026936618877
+    },
+    "relativeSpread": 0.002942965692837478,
+    "thresholdRelativeSpread": 0.05
+  },
+  "measurements": {
+    "retained": 32
+  },
+  "heatbath": {
+    "linkUpdates": 5431296,
+    "fallbackCount": 0,
+    "fallbackFraction": 0,
+    "rejectionAttempts": 11726330,
+    "thresholdFallbackFraction": 0.001
+  },
+  "gaugeRandomization": {
+    "identityResidualMax": 2.220446049250313e-16,
+    "randomSignatureResidualMax": 3.885780586188048e-16,
+    "rawMatrixMedianNormalizedL2": 1.4151164784034174,
+    "rawMatrixFractionAboveFloor": 1,
+    "linkUnitarityMaxFrobenius": 1.0990647210786425e-15,
+    "thresholds": {
+      "identityResidualMax": 1e-12,
+      "randomGaugeResidualMax": 1e-12,
+      "rawMedianL2Min": 0.01,
+      "rawPerTransformFloor": 0.000001,
+      "rawPerTransformFracAbove": 0.95,
+      "linkUnitarityMaxFrobenius": 1e-10
+    }
+  },
+  "wallClockSeconds": 37.028111700000004
+}

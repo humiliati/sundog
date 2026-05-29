@@ -5,8 +5,8 @@ Lit-pass: [`YANG_MILLS_LITPASS_MEMO.md`](../../YANG_MILLS_LITPASS_MEMO.md)
 
 Filed: **2026-05-29 (PT)**
 
-Status: **Phase 1 U(1) 2D and SU(2) 2D smokes passed 2026-05-29; SU(2) 3D
-manifest filed 2026-05-29**. See
+Status: **Phase 1 U(1) 2D, SU(2) 2D, and SU(2) 3D smokes passed
+2026-05-29**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
@@ -44,19 +44,16 @@ It still admits no Phase 2 scoring by itself.
   `YM-P1-QUAR-C orientation_anisotropy`) and the explicit link-unitarity
   Frobenius residual ≤ 1e-10 (new named branch
   `YM-P1-QUAR-D unitarity_drift`, promoted from SU2_2D's implicit check).
-  No Phase 2 or rank-locality claim admitted. Runner not yet implemented.
+  No Phase 2 or rank-locality claim admitted.
+  **Executed 2026-05-29 -> `P1-A smoke_pass`.**
 
 ## Required Next Artifact
 
-The next artifact should be the minimal SU(2) 3D core module + entry
-runner + package script required by
-[`PHASE1_SU2_3D_gauge_invariance_smoke.md`](PHASE1_SU2_3D_gauge_invariance_smoke.md).
-The existing U(1) and SU(2) 2D entries must remain bit-for-bit unchanged;
-shared helpers (Sokal τ_int, mulberry32 substream factory, CSV writer,
-hash finalizer, git info, CLI parser, SU(2) matrix primitives, quaternion
-Haar sampler) may be copied or factored into a common library in the
-same commit. Do not implement Phase 2 nearest-neighbor scoring, smearing,
-blocking, topological observables, or 4D hooks in that runner.
+The next artifact should be the Phase 2 `SU2_3D` relative-locality manifest:
+`PHASE2_SU2_3D_relative_locality_v0.md`. It must run on the `12x12x12`
+partner lattice, freeze numeric gamma_held bin edges before scoring, score all
+seven P0 controls on the same frozen neighbor graph and held-out labels, and
+keep the `8x8x8` Phase 1 receipt as instrumentation only.
 
 ## Guardrail
 
@@ -106,4 +103,11 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   (`YM-P1-QUAR-C orientation_anisotropy` for per-plane mean-plaquette
   spread > 5%; `YM-P1-QUAR-D unitarity_drift` for link Frobenius
   residual > 1e-10), and an explicit `plaquette_by_orientation.csv`
-  output for the isotropy gate. Runner implementation pending.
+  output for the isotropy gate.
+- 2026-05-29: Phase 1 SU(2) 3D smoke executed and filed as
+  [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md).
+  Verdict: `P1-A smoke_pass`. Pilot tau_int = 0.807, random-gauge signature
+  residual max 3.89e-16, raw-matrix median normalized L2 = 1.415, heatbath
+  fallback fraction = 0 over 5,431,296 link updates, orientation spread =
+  0.00294, link unitarity max Frobenius residual 1.10e-15, wall clock 37.03 s.
+  Phase 1 instrumentation is closed across `U1_2D`, `SU2_2D`, and `SU2_3D`.
