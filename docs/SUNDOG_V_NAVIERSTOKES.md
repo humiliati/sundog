@@ -353,7 +353,16 @@ re-pose is a v1 cell with a per-block stationarity gate + much longer
 blocks + per-block diagnostics (its own pre-registration), mirroring the
 C1 v6→v1 deferral→diagnose→new-cell move. The matched-budget 4-baseline
 comparison stays the deferred next increment, gated on a stationary
-cell. The C1 reviewer-outreach draft is staged at
+cell. **C2 cell-set v1 re-pose drafted for sign-off 2026-05-29** at
+[`proof/PDE_C2_CELLSET_SABRA_v1.md`](proof/PDE_C2_CELLSET_SABRA_v1.md):
+fixes stationarity, not the threshold — (A) fixed-amplitude `|u_1|`
+forcing for a steady cascade (load-bearing change vs v0 additive
+forcing), (B) a cheap stationarity diagnostic run first (energy series →
+`T_eq` / `T_burst` → pin warmup ≥ 3·T_eq, blocks ≥ 50·T_burst), (C) a
+per-block stationarity gate (pairwise base-rate consistency ≤ 0.10, new
+`PDE-C2-DEFERRED-NONSTATIONARY` branch) + per-block diagnostics; rest
+inherited from v0. Proposed, not built, not run; §8 sign-off decisions.
+The C1 reviewer-outreach draft is staged at
 [`proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md`](proof/PDE_C1_EXTERNAL_REVIEW_EMAIL_DRAFT.md)
 (criterion-(c) prep).
 

@@ -206,6 +206,19 @@ that claim provably fails.
   stationarity gate + much longer blocks (own pre-registration). Harness
   `scripts/pde_c2_sabra_cell.py`; matched-budget 4-baseline comparison is
   the deferred next increment, gated on a stationary cell.
+- [`PDE_C2_CELLSET_SABRA_v1.md`](PDE_C2_CELLSET_SABRA_v1.md)
+  — **C2 cell-set v1 re-pose, design for sign-off** (2026-05-29).
+  Fixes the v0 non-stationarity (block-dependent burst rate) rather than
+  retuning the threshold: (A) **fixed-amplitude `|u_1|` forcing** for a
+  statistically steady cascade (the load-bearing change; vs v0 additive
+  forcing), (B) a cheap **stationarity diagnostic run first** (energy
+  time series → equilibration time `T_eq` + burst recurrence `T_burst`,
+  which then pin warmup ≥ 3·T_eq and blocks ≥ 50·T_burst), (C) a new
+  **per-block stationarity gate** (pairwise base-rate consistency ≤ 0.10,
+  new `PDE-C2-DEFERRED-NONSTATIONARY` branch) + per-block diagnostics.
+  Everything else inherited from v0. **Proposed, not built, not run** —
+  §8 sign-off decisions (forcing scheme, gate tolerance, diagnostic
+  staging, compute, build trigger).
 - [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) —
   Navier-Stokes Candidate 1 fiber protocol: tolerance + binning
   methodology that closes the continuous-fiber gate (cell-set v0
