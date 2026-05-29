@@ -16,7 +16,11 @@ import { getPhase1RunConfig } from "./lib/pvnp-phase1-run-config.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const DROP_FIELDS = ["margin_lower_bound", "coverage_digest", "sensor_health", "invariance_checks"];
+const DROP_FIELDS_BY_VERSION = Object.freeze({
+  v0: ["margin_lower_bound", "coverage_digest", "sensor_health", "invariance_checks"],
+  v1: ["margin_lower_bound", "coverage_digest", "sensor_health_v1", "invariance_checks_v1"],
+  v2: ["margin_lower_bound", "geometry_promise_signal_v2", "sensor_health_v1", "invariance_checks_v2"],
+});
 
 function parseArgs(argv) {
   const args = { runDir: "results/pvnp/phase1-toy-verifier-v0" };
@@ -57,7 +61,9 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
-  const isV1 = slate.schema_suffix === "v1";
+  const version = slate.schema_suffix;
+  const sourceBound = version === "v1" || version === "v2";
+  const dropFields = DROP_FIELDS_BY_VERSION[version] ?? DROP_FIELDS_BY_VERSION.v0;
   await mkdir(outDir, { recursive: true });
 
   const sigs = await readJsonl(path.join(outDir, "signatures.jsonl"));
@@ -87,7 +93,7 @@ async function main() {
     const result = verify({
       sigma, expectedTraceId, publicEnv, m_min,
       promise: V0_PROMISE, thresholds: V0_CHECKER_THRESHOLDS,
-      traceCommitment: isV1 ? traceCommitment : null,
+      traceCommitment: sourceBound ? traceCommitment : null,
     });
     fullDecisions.set(`${policyId}|${envId}`, result.decision);
   }
@@ -102,14 +108,14 @@ async function main() {
     const fullDec = fullDecisions.get(`${policyId}|${envId}`);
     const traceCommitment = commitmentByTrace.get(expectedTraceId);
 
-    for (const field of DROP_FIELDS) {
+    for (const field of dropFields) {
       const drop = new Set([field]);
       const t0 = performance.now();
       const result = verify({
         sigma, expectedTraceId, publicEnv, m_min,
         promise: V0_PROMISE, thresholds: V0_CHECKER_THRESHOLDS,
         dropFields: drop,
-        traceCommitment: isV1 ? traceCommitment : null,
+        traceCommitment: sourceBound ? traceCommitment : null,
       });
       const elapsed = performance.now() - t0;
       const ops = 10;
@@ -140,7 +146,7 @@ async function main() {
   // Vacuity verdict summary: for each dropped field, what fraction of
   // ablated decisions matched the full decision? High match → potential
   // vacuity (the field added nothing).
-  const summary = Object.fromEntries(DROP_FIELDS.map((f) => [f, { match: 0, total: 0 }]));
+  const summary = Object.fromEntries(dropFields.map((f) => [f, { match: 0, total: 0 }]));
   for (let i = 1; i < rows.length; i += 1) {
     const cells = rows[i].split(",");
     const field = cells[3];
@@ -148,7 +154,7 @@ async function main() {
     summary[field].total += 1;
     if (match) summary[field].match += 1;
   }
-  for (const f of DROP_FIELDS) {
+  for (const f of dropFields) {
     const s = summary[f];
     const rate = s.total > 0 ? (s.match / s.total).toFixed(4) : "n/a";
     console.log(`  dropped ${f}: match rate = ${rate} (${s.match}/${s.total})`);

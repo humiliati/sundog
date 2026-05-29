@@ -18,10 +18,12 @@ const COVERAGE_RESOLUTION = 16;
 const SIGNATURE_SCHEMAS = Object.freeze({
   v0: "pvnp-phase1-sigma-v0",
   v1: "pvnp-phase1-sigma-v1",
+  v2: "pvnp-phase1-sigma-v2",
 });
 const TRANSFORM_VERSIONS = Object.freeze({
   v0: "pvnp-phase1-transform-v0",
   v1: "pvnp-phase1-transform-v1",
+  v2: "pvnp-phase1-transform-v2",
 });
 
 // Estimate field Laplacian at one probe sample. Uses the 5-point stencil
@@ -277,6 +279,83 @@ function geometryPromiseSignal(laplacians, probesPerStep, coverage) {
   };
 }
 
+function invarianceChecksV2(probesPerStep, envelope, marginLowerBound) {
+  const base = invarianceChecksV1(probesPerStep, envelope);
+  const stabilityFloor = 0.075;
+  const perturbation = 0.018;
+  const perturbedMargin = marginLowerBound - perturbation;
+
+  const lowProbePairScores = [];
+  for (const probes of probesPerStep) {
+    const center = probes.find((p) => p.dx === 0 && p.dy === 0);
+    if (!center || center.dropped) continue;
+    const lowNeighbors = probes
+      .filter((p) => !(p.dx === 0 && p.dy === 0) && !p.dropped)
+      .map((p) => Math.max(0, center.value - p.value));
+    lowNeighbors.sort((a, b) => b - a);
+    if (lowNeighbors.length >= 2) {
+      lowProbePairScores.push(lowNeighbors[0] + lowNeighbors[1]);
+    }
+  }
+  const pairStats = aggregateStats(lowProbePairScores);
+  const decoyScore = pairStats.max;
+  const nearBoundaryClear = marginLowerBound >= stabilityFloor;
+  const counterfactualClear = perturbedMargin >= 0.06;
+  const decoyConsistencyClear = decoyScore <= 0.18;
+
+  return {
+    ...base,
+    coordinate_equivalence_residual_max: base.reflection_residual_max,
+    near_boundary_stability_floor: stabilityFloor,
+    near_boundary_counterfactual_clear: nearBoundaryClear && counterfactualClear,
+    perturbed_margin_lower_bound: perturbedMargin,
+    decoy_consistency_score: decoyScore,
+    decoy_consistency_clear: decoyConsistencyClear,
+    all_pass: base.all_pass
+      && nearBoundaryClear
+      && counterfactualClear
+      && decoyConsistencyClear,
+  };
+}
+
+function geometryPromiseSignalV2(laplacians, probesPerStep, coverage) {
+  const base = geometryPromiseSignal(laplacians, probesPerStep, coverage);
+  const absLaps = laplacians.map((v) => Math.abs(v)).filter((v) => Number.isFinite(v));
+  const evidenceCoverage = coverage.touched_cells / coverage.total_cells;
+  const boundaryEvidenceAbsent = base.near_boundary_count === 0 && base.curvature_abs_p95 < 10;
+  const insufficientCoverage = evidenceCoverage < 0.06;
+  const curvatureOut = base.curvature_abs_p95 > 650;
+  const scaleOut = base.center_value_range < 0.08 || base.center_value_range > 0.85;
+  const topologyAmbiguityScore = boundaryEvidenceAbsent
+    ? 1
+    : Math.min(1, (base.near_boundary_count / 16) + (base.curvature_abs_p95 > 500 ? 0.25 : 0));
+  const topologyAmbiguous = topologyAmbiguityScore >= 0.85;
+  const boundaryFlags = {
+    insufficient_coverage: insufficientCoverage,
+    scale_out_of_envelope: scaleOut,
+    curvature_out_of_envelope: curvatureOut,
+    topology_ambiguous: topologyAmbiguous,
+    boundary_evidence_absent: boundaryEvidenceAbsent,
+  };
+
+  return {
+    ...base,
+    geometry_evidence_coverage: evidenceCoverage,
+    scale_interval: {
+      lower: Math.max(0, base.center_value_range - 0.04),
+      upper: base.center_value_range + 0.04,
+    },
+    curvature_profile: {
+      abs_p50: quantile(absLaps, 0.50),
+      abs_p95: base.curvature_abs_p95,
+      abs_max: quantile(absLaps, 1.0),
+    },
+    topology_ambiguity_score: topologyAmbiguityScore,
+    boundary_flags: boundaryFlags,
+    all_pass: Object.values(boundaryFlags).every((flag) => !flag),
+  };
+}
+
 export function buildSourcePayload({ traceId, publicEnv, positions, probes }) {
   return {
     trace_id: traceId,
@@ -310,37 +389,45 @@ export function makeTraceCommitment(sourcePayload) {
 export function computeAnalyticalFields({ positions, probes, version = "v0" }) {
   const laplacians = probes.map(pointLaplacian);
   const curvatureSummary = aggregateStats(laplacians);
-  const sensorHealth = version === "v1"
+  const sourceBoundVersion = version === "v1" || version === "v2";
+  const sensorHealth = sourceBoundVersion
     ? estimateSensorHealthV1(probes)
     : estimateSensorHealth(probes);
   const envelope = trajectoryEnvelope(positions);
   const coverage = coverageDigest(positions);
   const margin = marginLowerBound(positions, probes, sensorHealth);
-  const invariance = version === "v1"
-    ? invarianceChecksV1(probes, envelope)
-    : invarianceChecks(probes, envelope);
+  const invariance = version === "v2"
+    ? invarianceChecksV2(probes, envelope, margin)
+    : (version === "v1" ? invarianceChecksV1(probes, envelope) : invarianceChecks(probes, envelope));
 
   const fields = {
     curvature_summary: curvatureSummary,
     trajectory_envelope: envelope,
     margin_lower_bound: margin,
-    coverage_digest: coverage,
     invariance_checks: invariance,
     sensor_health: sensorHealth,
   };
 
   if (version === "v1") {
+    fields.coverage_digest = coverage;
     fields.sensor_health_v1 = sensorHealth;
     fields.invariance_checks_v1 = invariance;
     fields.geometry_promise_signal = geometryPromiseSignal(laplacians, probes, coverage);
+  } else if (version === "v2") {
+    fields.sensor_health_v1 = sensorHealth;
+    fields.invariance_checks_v2 = invariance;
+    fields.geometry_promise_signal_v2 = geometryPromiseSignalV2(laplacians, probes, coverage);
+  } else {
+    fields.coverage_digest = coverage;
   }
 
   return fields;
 }
 
 export function derivedFieldsHash(fields, version = "v0") {
-  const included = version === "v1"
-    ? {
+  let included;
+  if (version === "v1") {
+    included = {
       curvature_summary: fields.curvature_summary,
       trajectory_envelope: fields.trajectory_envelope,
       margin_lower_bound: fields.margin_lower_bound,
@@ -348,8 +435,18 @@ export function derivedFieldsHash(fields, version = "v0") {
       sensor_health_v1: fields.sensor_health_v1 ?? fields.sensor_health,
       invariance_checks_v1: fields.invariance_checks_v1 ?? fields.invariance_checks,
       geometry_promise_signal: fields.geometry_promise_signal,
-    }
-    : {
+    };
+  } else if (version === "v2") {
+    included = {
+      curvature_summary: fields.curvature_summary,
+      trajectory_envelope: fields.trajectory_envelope,
+      margin_lower_bound: fields.margin_lower_bound,
+      sensor_health_v1: fields.sensor_health_v1 ?? fields.sensor_health,
+      invariance_checks_v2: fields.invariance_checks_v2 ?? fields.invariance_checks,
+      geometry_promise_signal_v2: fields.geometry_promise_signal_v2,
+    };
+  } else {
+    included = {
       curvature_summary: fields.curvature_summary,
       trajectory_envelope: fields.trajectory_envelope,
       margin_lower_bound: fields.margin_lower_bound,
@@ -357,6 +454,7 @@ export function derivedFieldsHash(fields, version = "v0") {
       sensor_health: fields.sensor_health,
       invariance_checks: fields.invariance_checks,
     };
+  }
   return sha256Hex(canonicalize(included));
 }
 
@@ -391,11 +489,11 @@ export function computeSignature({ traceId, publicEnv, positions, probes, source
     ],
   };
 
-  if (version === "v1") {
+  if (version === "v1" || version === "v2") {
     const payload = sourcePayload ?? buildSourcePayload({ traceId, publicEnv, positions, probes });
-    sigma.transform_version = TRANSFORM_VERSIONS.v1;
+    sigma.transform_version = TRANSFORM_VERSIONS[version];
     sigma.source_hash = sourceHash(payload);
-    sigma.derived_fields_hash = derivedFieldsHash(fields, "v1");
+    sigma.derived_fields_hash = derivedFieldsHash(fields, version);
     sigma.integrity_checks = {
       source_match: true,
       transform_match: true,
@@ -409,3 +507,5 @@ export function computeSignature({ traceId, publicEnv, positions, probes, source
 
 export const SIGNATURE_SCHEMA_V1 = SIGNATURE_SCHEMAS.v1;
 export const TRANSFORM_VERSION_V1 = TRANSFORM_VERSIONS.v1;
+export const SIGNATURE_SCHEMA_V2 = SIGNATURE_SCHEMAS.v2;
+export const TRANSFORM_VERSION_V2 = TRANSFORM_VERSIONS.v2;

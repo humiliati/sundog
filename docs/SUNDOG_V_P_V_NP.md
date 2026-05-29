@@ -12,12 +12,13 @@ Short version:
 > capacity envelope?
 
 Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier
-spec, v0 and v1 frozen slates, and v0 + v1 execution receipts all filed
-2026-05-28; see
+spec, v0 and v1 frozen slates, v2 repair slate, and v0 + v1 execution
+receipts all filed 2026-05-28; see
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md),
 [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md),
 [`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md),
-[`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md), and the receipts under
+[`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md),
+[`pvnp/PHASE1_V2_SLATE.md`](pvnp/PHASE1_V2_SLATE.md), and the receipts under
 [`pvnp/receipts/`](pvnp/receipts/). Phase 1 v0 returned a **named
 quarantine** with `capacity_threshold = <=small` after `A_spoof_small`
 breached 245 / 444 unsafe items by editing analytical certificate fields
@@ -32,9 +33,11 @@ boundary absence (131 / 768 basin-shape promise violations accepted), and
 cost (wall-time ratio 1139 × vs rollout, worse than v0's 228 ×) — and
 `coverage_digest` became structurally redundant under v1's new
 `geometry_promise_signal` gate. Privilege-leak audit was green in both
-runs; false-accept rate stayed under 0.13 % in both. v2 is queued in the
-v1 receipt's Next-Allowed-Step section. No complexity-theoretic result
-claimed. This document is a research bridge from
+runs; false-accept rate stayed under 0.13 % in both. Phase 1 v2 is now
+queued as a repair slate for decision-relevant invariance checks,
+basin-shape boundary closure, standalone coverage removal, and checker
+overhead. No complexity-theoretic result claimed. This document is a
+research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
 capacity-relative one-wayness.
@@ -571,10 +574,12 @@ baselines, reproduced metrics, and archived artifacts.
   implementation slate for Phase 1.
 - [`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md): repair slate opened
   after the v0 named quarantine.
+- [`pvnp/PHASE1_V2_SLATE.md`](pvnp/PHASE1_V2_SLATE.md): repair slate opened
+  after the v1 named quarantine.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index,
-  including the Phase 1 v0 named-quarantine receipt.
+  including the Phase 1 v0 and v1 named-quarantine receipts.
 
 ## 11. Cross-References
 
