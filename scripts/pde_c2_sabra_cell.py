@@ -40,12 +40,14 @@ VERDICT_BEARING_PRESETS = {"headline"}
 class C2Config:
     preset: str
     model: str  # "sabra" | "goy"
+    forcing_scheme: str  # "additive" (v0) | "fixed-amplitude" (v1)
     n_shells: int
     lam: float
     k0: float
     eps: float
     viscosity: float
-    forcing_amp: float
+    forcing_amp: float  # additive: |f_1|/sqrt2; fixed-amplitude: target |u_1|
+    diagnostic_steps: int
     dt: float
     warmup_steps: int
     calib_steps: int
@@ -67,6 +69,13 @@ def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--preset", choices=["smoke", "headline"], default="smoke")
     p.add_argument("--model", choices=["sabra", "goy"], default="sabra")
+    p.add_argument(
+        "--forcing",
+        choices=["additive", "fixed-amplitude"],
+        default="fixed-amplitude",
+        help="v1 default fixed-amplitude (hold |u_1|) for a steady cascade; additive reproduces v0.",
+    )
+    p.add_argument("--diagnostic", action="store_true", help="Run the stationarity diagnostic (T_eq / T_burst) then exit; files no verdict.")
     p.add_argument("--out", type=Path, default=DEFAULT_OUT)
     p.add_argument("--self-test", action="store_true", help="Inviscid energy-conservation check then exit.")
     p.add_argument("--allow-unregistered-overrides", action="store_true")
@@ -80,12 +89,15 @@ def build_config(args: argparse.Namespace) -> C2Config:
     k0 = 2.0 ** -4
     eps = 0.5
     viscosity = 1e-7
-    forcing_amp = 0.005
     dt = 1e-4
     sample_stride = 50
     window_steps = 200
     tau_burst_steps = 500
     q_burst = 0.98
+    forcing_scheme = getattr(args, "forcing", "fixed-amplitude")
+    # v1: fixed-amplitude forcing holds |u_1| at a fixed target (1.0) for a
+    # statistically steady cascade; additive reproduces v0 (|f_1| = 0.005*sqrt2).
+    forcing_amp = 1.0 if forcing_scheme == "fixed-amplitude" else 0.005
     if args.preset == "headline":
         warmup_steps = 2_000_000
         calib_steps = 1_000_000
@@ -93,6 +105,7 @@ def build_config(args: argparse.Namespace) -> C2Config:
         train_steps = 1_500_000
         val_steps = 500_000
         test_steps = 1_000_000
+        diagnostic_steps = 3_000_000
     else:
         warmup_steps = 20_000
         calib_steps = 20_000
@@ -100,9 +113,12 @@ def build_config(args: argparse.Namespace) -> C2Config:
         train_steps = 20_000
         val_steps = 8_000
         test_steps = 12_000
+        diagnostic_steps = 200_000
     return C2Config(
         preset=args.preset,
         model=args.model,
+        forcing_scheme=forcing_scheme,
+        diagnostic_steps=diagnostic_steps,
         n_shells=n_shells,
         lam=lam,
         k0=k0,
@@ -136,8 +152,11 @@ class ShellModel:
         self.k = cfg.k0 * cfg.lam ** np.arange(n)
         self.nu_k2 = cfg.viscosity * self.k ** 2
         self.forcing = np.zeros(n, dtype=np.complex128)
-        # Constant forcing on shell index 0 (the n=1 shell).
-        self.forcing[0] = cfg.forcing_amp * (1.0 + 1.0j)
+        if cfg.forcing_scheme == "additive":
+            # Constant additive forcing on shell index 0 (the n=1 shell).
+            self.forcing[0] = cfg.forcing_amp * (1.0 + 1.0j)
+        # fixed-amplitude forcing carries no additive term; it is applied in
+        # step() by renormalising |u_0| to cfg.forcing_amp each step.
 
     def rhs_nonlinear(self, u: np.ndarray) -> np.ndarray:
         cfg = self.cfg
@@ -188,7 +207,22 @@ class ShellModel:
         k2 = nl(e2 * (u + 0.5 * dt * k1))
         k3 = nl(e2 * u + 0.5 * dt * k2)
         k4 = nl(e * u + dt * e2 * k3)
-        return e * u + (dt / 6.0) * (e * k1 + 2.0 * e2 * k2 + 2.0 * e2 * k3 + k4)
+        u_new = e * u + (dt / 6.0) * (e * k1 + 2.0 * e2 * k2 + 2.0 * e2 * k3 + k4)
+        if self.cfg.forcing_scheme == "fixed-amplitude":
+            # Hold |u_1| at the target modulus (phase free) for a steady cascade.
+            a0 = abs(u_new[0])
+            if a0 > 1e-30:
+                u_new[0] = u_new[0] * (self.cfg.forcing_amp / a0)
+        return u_new
+
+    def dissipation(self, u: np.ndarray) -> float:
+        """Energy dissipation rate eps(t) = nu * sum_n k_n^2 |u_n|^2.
+
+        The v1 burst observable (PDE_C2_CELLSET_SABRA_v1.md): the canonical
+        shell-model intermittency measure, concentrated in the dissipation
+        range (k_n^2 weighting) rather than the pinned forcing shell.
+        """
+        return float(np.sum(self.nu_k2 * np.abs(u) ** 2))
 
     def initial_state(self) -> np.ndarray:
         rng = np.random.default_rng(self.cfg.random_seed)
@@ -199,8 +233,8 @@ class ShellModel:
 
 def energy_conservation_self_test() -> None:
     """Inviscid, unforced Sabra should conserve total energy under RK4."""
-    cfg = build_config(argparse.Namespace(preset="smoke", model="sabra"))
-    cfg = C2Config(**{**asdict(cfg), "viscosity": 0.0, "forcing_amp": 0.0})
+    cfg = build_config(argparse.Namespace(preset="smoke", model="sabra", forcing="additive"))
+    cfg = C2Config(**{**asdict(cfg), "viscosity": 0.0, "forcing_amp": 0.0, "forcing_scheme": "additive"})
     model = ShellModel(cfg)
     u = model.initial_state()
     e0 = float(np.sum(np.abs(u) ** 2))
@@ -211,6 +245,149 @@ def energy_conservation_self_test() -> None:
     print(f"[pde-c2] inviscid energy drift over 5000 steps: rel={rel:.3e} (E0={e0:.6e}, E1={e1:.6e})")
     assert rel < 1e-3, f"energy not conserved (rel drift {rel:.3e}); check RHS/integrator"
     print("[pde-c2] energy-conservation self-test passed")
+
+
+def run_diagnostic(cfg: C2Config) -> dict:
+    """Stationarity diagnostic: report total/max energy series, T_eq, T_burst.
+
+    Files no verdict. Distinguishes drift (energy never flattens) from
+    rare-cluster intermittency (flattens, long T_burst) and sets the v1 cell's
+    warmup/block lengths via the pre-registered rule (warmup>=3*T_eq,
+    block>=50*T_burst).
+    """
+    model = ShellModel(cfg)
+    u = model.initial_state()
+    n_steps = cfg.diagnostic_steps
+    downsample = 200
+    te: list[float] = []  # total energy (for the stationarity/plateau check)
+    diss: list[float] = []  # dissipation rate eps (the v1 burst observable)
+    started = time.perf_counter()
+    stride_report = max(1, n_steps // 10)
+    for step in range(n_steps + 1):
+        if step % downsample == 0:
+            e = np.abs(u) ** 2
+            te.append(float(e.sum()))
+            diss.append(float(np.sum(model.nu_k2 * e)))
+        if step < n_steps:
+            u = model.step(u)
+        if step > 0 and step % stride_report == 0:
+            print(f"[pde-c2-diag] step {step}/{n_steps} ({100*step/n_steps:.0f}%), elapsed {time.perf_counter()-started:.1f}s", flush=True)
+    te_arr = np.asarray(te)
+    me_arr = np.asarray(diss)
+    n = len(te_arr)
+    rec_dt = downsample * cfg.dt
+    # T_eq via 10-segment plateau detection on total energy.
+    seg = max(1, n // 10)
+    ref = float(np.mean(te_arr[-2 * seg:]))
+    t_eq_idx = n
+    for s in range(10):
+        lo = s * seg
+        hi = (s + 1) * seg if s < 9 else n
+        if abs(float(np.mean(te_arr[lo:hi])) - ref) <= 0.10 * ref:
+            ok = all(
+                abs(float(np.mean(te_arr[ss * seg : (ss + 1) * seg if ss < 9 else n])) - ref) <= 0.15 * ref
+                for ss in range(s, 10)
+            )
+            if ok:
+                t_eq_idx = lo
+                break
+    plateaued = t_eq_idx < n
+    t_eq = float(t_eq_idx * rec_dt)
+    # T_burst: mean inter-burst interval of max-energy above its post-eq q98.
+    post = me_arr[t_eq_idx:] if plateaued else me_arr[n // 2 :]
+    thr = float(np.quantile(post, 0.98)) if post.size else float("nan")
+    t_burst = float("nan")
+    n_bursts = 0
+    if post.size:
+        exceed = np.where(post > thr)[0]
+        if exceed.size >= 2:
+            gaps = np.diff(exceed)
+            inter = gaps[gaps > 1]
+            n_bursts = int(inter.size) + 1
+            t_burst = float(np.mean(inter) * rec_dt) if inter.size else float(np.mean(gaps) * rec_dt)
+    half = n // 2
+    result = {
+        "mode": "diagnostic",
+        "forcing_scheme": cfg.forcing_scheme,
+        "model": cfg.model,
+        "total_energy_first_half_mean": float(np.mean(te_arr[:half])),
+        "total_energy_second_half_mean": float(np.mean(te_arr[half:])),
+        "total_energy_min": float(np.min(te_arr)),
+        "total_energy_max": float(np.max(te_arr)),
+        "eps_median": float(np.median(me_arr)),
+        "eps_p98_posteq": thr,
+        "plateaued": plateaued,
+        "T_eq_time": t_eq,
+        "T_burst_time": t_burst,
+        "n_bursts_posteq": n_bursts,
+        "rec_dt": rec_dt,
+        "suggested_warmup_steps": int(math.ceil(3 * t_eq / cfg.dt)) if plateaued else None,
+        "suggested_block_steps": int(math.ceil(50 * t_burst / cfg.dt)) if (t_burst == t_burst) else None,
+        "elapsed_seconds": time.perf_counter() - started,
+        "n_steps": n_steps,
+    }
+    return result
+
+
+def write_diagnostic_outputs(out_dir: Path, cfg: C2Config, result: dict) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    manifest = {
+        "startedAt": datetime.now(timezone.utc).isoformat(),
+        "script": "scripts/pde_c2_sabra_cell.py",
+        "spec": "docs/proof/PDE_C2_CELLSET_SABRA_v1.md",
+        "mode": "diagnostic",
+        "config": asdict(cfg),
+        "environment": {"python": sys.version, "numpy": np.__version__, "platform": sys.platform},
+        "result": result,
+    }
+    (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    fh = result["total_energy_first_half_mean"]
+    sh = result["total_energy_second_half_mean"]
+    drift = abs(sh - fh) / fh if fh else float("nan")
+    lines = [
+        "# PDE C2 Sabra v1 Stationarity Diagnostic",
+        "",
+        f"**Forcing:** `{cfg.forcing_scheme}`   **Model:** `{cfg.model}`",
+        "",
+        "## Stationarity",
+        "",
+        f"- total energy first-half / second-half mean: `{fh:.6g}` / `{sh:.6g}` "
+        f"(drift `{drift:.3g}`)",
+        f"- total energy min / max: `{result['total_energy_min']:.6g}` / `{result['total_energy_max']:.6g}`",
+        f"- plateaued: `{result['plateaued']}`   T_eq: `{result['T_eq_time']:.4g}` time units",
+        "",
+        "## Burst timescale",
+        "",
+        f"- dissipation ε median / post-eq q98: `{result['eps_median']:.6g}` / `{result['eps_p98_posteq']:.6g}`",
+        f"- post-eq burst count: `{result['n_bursts_posteq']}`   T_burst: `{result['T_burst_time']:.4g}` time units",
+        "",
+        "## Suggested v1 cell lengths (pre-registered rule)",
+        "",
+        f"- warmup >= 3*T_eq -> `{result['suggested_warmup_steps']}` steps",
+        f"- each block >= 50*T_burst -> `{result['suggested_block_steps']}` steps",
+        "",
+        "## Read",
+        "",
+    ]
+    if not result["plateaued"]:
+        lines.append(
+            "Total energy did NOT plateau within the diagnostic window: this "
+            "forcing/regime still drifts. Lengthen warmup or reconsider the "
+            "forcing before the verdict-bearing cell."
+        )
+    elif drift < 0.10:
+        lines.append(
+            "Total energy plateaus (first/second-half drift < 10%): the cascade "
+            "is statistically steady under this forcing. Pin the v1 cell lengths "
+            "from the suggestions above and proceed to the verdict-bearing run."
+        )
+    else:
+        lines.append(
+            "Total energy plateau is marginal (first/second-half drift >= 10%): "
+            "lengthen warmup before committing the cell."
+        )
+    lines.extend(["", "## Files", "", "- `manifest.json`"])
+    (out_dir / "PDE_C2_DIAGNOSTIC.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def simulate(cfg: C2Config) -> dict:
@@ -226,20 +403,20 @@ def simulate(cfg: C2Config) -> dict:
         + cfg.gap_steps
         + cfg.test_steps
     )
-    # Only max-shell-energy is needed for the base-rate gate (this layer).
-    # Per-step channel snapshots (for the deferred detector) are NOT stored, to
-    # keep memory bounded at headline scale.
-    max_energy = np.empty(total + 1, dtype=np.float64)
+    # Only the burst observable (v1: dissipation rate eps) is needed for the
+    # base-rate gate (this layer). Per-step channel snapshots (for the deferred
+    # detector) are NOT stored, to keep memory bounded at headline scale.
+    burst_obs = np.empty(total + 1, dtype=np.float64)
     started = time.perf_counter()
     stride_report = max(1, total // 10)
     for step in range(total + 1):
-        max_energy[step] = float(np.max(np.abs(u) ** 2))
+        burst_obs[step] = model.dissipation(u)
         if step < total:
             u = model.step(u)
         if step > 0 and step % stride_report == 0:
             print(f"[pde-c2] step {step}/{total} ({100*step/total:.0f}%), elapsed {time.perf_counter()-started:.1f}s", flush=True)
     return {
-        "max_energy": max_energy,
+        "burst_obs": burst_obs,
         "total": total,
         "elapsed_seconds": time.perf_counter() - started,
     }
@@ -257,13 +434,13 @@ def block_bounds(cfg: C2Config) -> dict:
     return {"calib": calib, "train": train, "val": val, "test": test}
 
 
-def burst_label(max_energy: np.ndarray, start: int, end: int, e_burst: float, cfg: C2Config) -> np.ndarray:
-    """B(t)=1 iff max_energy exceeds e_burst somewhere in (t, t+tau_burst]."""
+def burst_label(obs_series: np.ndarray, start: int, end: int, e_burst: float, cfg: C2Config) -> np.ndarray:
+    """B(t)=1 iff the burst observable (eps) exceeds e_burst in (t, t+tau_burst]."""
     tau = cfg.tau_burst_steps
     query = list(range(start, end - tau, cfg.sample_stride))
     labels = np.zeros(len(query), dtype=np.int8)
     for i, t in enumerate(query):
-        if float(np.max(max_energy[t + 1 : t + 1 + tau])) > e_burst:
+        if float(np.max(obs_series[t + 1 : t + 1 + tau])) > e_burst:
             labels[i] = 1
     return labels
 
@@ -274,13 +451,22 @@ def main() -> None:
         energy_conservation_self_test()
         return
     cfg = build_config(args)
+    if args.diagnostic:
+        result = run_diagnostic(cfg)
+        write_diagnostic_outputs(args.out.resolve(), cfg, result)
+        print(
+            f"[pde-c2-diag] plateaued={result['plateaued']} "
+            f"T_eq={result['T_eq_time']:.4g} T_burst={result['T_burst_time']:.4g}"
+        )
+        print(f"[pde-c2-diag] wrote: {args.out.resolve()}")
+        return
     sim = simulate(cfg)
     bounds = block_bounds(cfg)
-    me = sim["max_energy"]
-    calib_max = me[bounds["calib"][0] : bounds["calib"][1]]
-    e_burst = float(np.quantile(calib_max, cfg.q_burst))
+    obs = sim["burst_obs"]
+    calib_obs = obs[bounds["calib"][0] : bounds["calib"][1]]
+    e_burst = float(np.quantile(calib_obs, cfg.q_burst))
 
-    labels = {name: burst_label(me, lo, hi, e_burst, cfg) for name, (lo, hi) in bounds.items() if name != "calib"}
+    labels = {name: burst_label(obs, lo, hi, e_burst, cfg) for name, (lo, hi) in bounds.items() if name != "calib"}
     base_rate_test = float(np.mean(labels["test"])) if labels["test"].size else 0.0
     base_rate_gate = cfg.base_rate_lo <= base_rate_test <= cfg.base_rate_hi
 
@@ -303,8 +489,9 @@ def main() -> None:
         "base_rate_train": float(np.mean(labels["train"])) if labels["train"].size else 0.0,
         "base_rate_val": float(np.mean(labels["val"])) if labels["val"].size else 0.0,
         "base_rate_band": [cfg.base_rate_lo, cfg.base_rate_hi],
-        "calib_max_energy_median": float(np.median(calib_max)),
-        "calib_max_energy_p99": float(np.quantile(calib_max, 0.99)),
+        "burst_observable": "dissipation_rate_eps",
+        "calib_eps_median": float(np.median(calib_obs)),
+        "calib_eps_p99": float(np.quantile(calib_obs, 0.99)),
         "test_query_count": int(labels["test"].size),
         "elapsed_seconds": sim["elapsed_seconds"],
         "total_steps": sim["total"],
@@ -335,7 +522,7 @@ def write_outputs(out_dir: Path, cfg: C2Config, result: dict) -> None:
         "",
         "## Base-rate gate (C1 vacuity-lesson analogue)",
         "",
-        f"- `E_burst` (held-out q={cfg.q_burst} of calib max-shell-energy): `{result['e_burst']:.6g}`",
+        f"- `E_burst` (held-out q={cfg.q_burst} of calib dissipation ε): `{result['e_burst']:.6g}`",
         f"- base rate test / train / val: `{result['base_rate_test']:.4g}` / "
         f"`{result['base_rate_train']:.4g}` / `{result['base_rate_val']:.4g}`",
         f"- gate band: `{result['base_rate_band']}` -> "
