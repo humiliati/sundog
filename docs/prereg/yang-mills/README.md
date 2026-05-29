@@ -53,3 +53,7 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
 - 2026-05-29: Phase 1 U(1) 2D gauge-invariance smoke manifest filed at
   [`PHASE1_U1_2D_gauge_invariance_smoke.md`](PHASE1_U1_2D_gauge_invariance_smoke.md).
   The next move is runner implementation against that exact manifest.
+- 2026-05-29: Phase 1 U(1) 2D smoke executed and filed as
+  [`../../yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md`](../../yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md).
+  Verdict: `P1-A smoke_pass`. The next research artifact is a `SU2_2D`
+  Phase 1 manifest, not Phase 2 scoring.
