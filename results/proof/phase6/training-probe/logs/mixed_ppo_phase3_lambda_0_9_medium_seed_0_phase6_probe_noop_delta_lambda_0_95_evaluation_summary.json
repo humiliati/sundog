@@ -1,0 +1,13 @@
+{
+  "checkpoint": "C:\\Users\\hughe\\Dev\\sundog\\results\\proof\\phase6\\training-probe\\checkpoints\\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_noop_delta_lambda_0_95.pt",
+  "env_config": {
+    "horizon": 200
+  },
+  "mean_steps": 200.0,
+  "mean_terminal_alignment": 0.3703127882625932,
+  "seed_start": 10000,
+  "seeds": 8,
+  "sensor_tier": "local-probe-field",
+  "success_count": 0,
+  "success_rate": 0.0
+}

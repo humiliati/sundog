@@ -1,0 +1,61 @@
+{
+  "algorithm": "ppo",
+  "checkpoint_path": "results/proof/phase6/training-probe/checkpoints/mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_scale2_lambda_0_92.pt",
+  "evaluation": {
+    "checkpoint": "C:\\Users\\hughe\\Dev\\sundog\\results\\proof\\phase6\\training-probe\\checkpoints\\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_scale2_lambda_0_92.pt",
+    "env_config": {
+      "horizon": 200
+    },
+    "mean_steps": 200.0,
+    "mean_terminal_alignment": 0.370342711362504,
+    "seed_start": 10000,
+    "seeds": 8,
+    "sensor_tier": "local-probe-field",
+    "success_count": 0,
+    "success_rate": 0.0
+  },
+  "evaluation_rows_path": "results/proof/phase6/training-probe/logs/mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_scale2_lambda_0_92_evaluation.csv",
+  "evaluation_summary_path": "results/proof/phase6/training-probe/logs/mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_scale2_lambda_0_92_evaluation_summary.json",
+  "family": "L-Mixed",
+  "history_path": "results/proof/phase6/training-probe/logs/mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_scale2_lambda_0_92_history.csv",
+  "load_checkpoint": null,
+  "phase": "phase2-matched-capacity",
+  "policy_json_path": "results/proof/phase6/training-probe/policies/mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_scale2_lambda_0_92.policy.json",
+  "python_version": "3.14.4",
+  "reward": {
+    "compose_form": "canonical",
+    "effective_mixed_lambda": 0.9583333333333334,
+    "env_config": {
+      "horizon": 200
+    },
+    "lambda": 0.92,
+    "mode": "mixed_phase3",
+    "reward_channel_scale": 2.0,
+    "signature_shape": "integrated",
+    "signature_threshold": 0.5
+  },
+  "run_label": "phase6_probe_scale2_lambda_0_92",
+  "seed": 0,
+  "sensor_tier": "local-probe-field",
+  "tier": "Medium",
+  "torch_version": "2.11.0+cpu",
+  "training": {
+    "actor_critic_parameter_count": 399109,
+    "batch_envs": 128,
+    "clip_range": 0.2,
+    "device": "cpu",
+    "entropy_coef": 0.01,
+    "env_steps": 262144,
+    "epochs": 4,
+    "gae_lambda": 0.95,
+    "gamma": 0.99,
+    "load_checkpoint": null,
+    "lr": 0.0001,
+    "minibatch_size": 1024,
+    "parameter_count": 199682,
+    "rollout_length": 256,
+    "updates": 8,
+    "value_coef": 0.5
+  },
+  "variant": "mixed_ppo_phase3_lambda_0_9"
+}
