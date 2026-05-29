@@ -264,6 +264,13 @@ Receipt fields:
   discipline, not a new projection. See
   [`RIEMANN_LITPASS_MEMO.md`](RIEMANN_LITPASS_MEMO.md) Track B + Connes
   competitor note.
+- **Staged cell set (pending review):** a candidate explicit-formula cell set
+  for this probe is pre-staged in
+  [`riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md`](riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md)
+  ("Candidate Cell Set For The Next Pass"). It is **not adopted** until the
+  Front-A reading clears its external sanity check; the note's
+  `R-C1-NEG-A`/`R-C1-NEG-B` (vacuity / identity-zero laundering) negatives gate
+  whether Probe 03 has any edge beyond standard even-test-function bookkeeping.
 - **External review path:** an analytic number theorist comfortable with
   smoothed explicit formulae (Iwaniec–Kowalski idiom). Named at promotion.
 
