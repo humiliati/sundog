@@ -328,3 +328,73 @@ node scripts/arc-phase3-branch-e-program-search.mjs `
   --split-mode sha256_expansion `
   --out results/arc/phase3-branch-e-program-search
 ```
+
+---
+
+## Amendment B — Binding Verdict (2026-05-29 PT)
+
+Append-only. The Branch E solver was run on the full 108-task expanded register,
+pinned to freeze-marker commit `6886074` (`runnerSha256 036EA6A9`,
+`gitDirty=false`, `splitMode=sha256_expansion`, U_primary = `test_lodo`(259) +
+`pttest`(77) = 336 held-out instances, ~2m38s, deterministic). Receipt:
+`results/arc/phase3-branch-e-program-search/`.
+
+**Branch: `branch_e_capability_demonstrated`** — the first non-zero exact-match
+result in the Sundog-ARC program.
+
+### Capability (gated U_primary)
+
+| lane | instances | tasks | distinct tasks solved | exact-instance rate |
+| --- | --- | --- | --- | --- |
+| `test_lodo` | 259 | 72 | **2** | 0.027 |
+| `pttest` | 77 | 72 | **2** | 0.026 |
+
+≥ 2 distinct held-out tasks solved exactly (top-2) on **both** lanes → the
+established non-trivial floor is cleared. Diagnostic validation lanes also solved
+2 distinct tasks each.
+
+Solved tasks + winning programs (auditable):
+
+- `test_lodo` / `pttest`: **`be94b721`** via `extract_largest_component`;
+  **`f25fbde4`** via `crop_bbox >> scale` (depth-2). Each solved on **both** its
+  LODO and its pttest query.
+- validation (diagnostic): `48131b3c` via `tile >> color_rule(relative_palette_
+  rank, full)`; `b94a9452` via `crop_bbox >> color_rule(relative_palette_rank,
+  full)`.
+
+Three of the four solved programs are **depth-2 compositions**, confirming the
+composition stage does real work. Selection was train-pair consistency only; no
+`signature_palette` geometry entered the search.
+
+### What this establishes (and the honest caveats)
+
+**Establishes**: a deterministic typed search over the registered primitive
+library, admitting only programs consistent with all of a task's conditioning
+train pairs, **clears the pre-registered non-trivial floor that every prior
+decoder/learner family floored on at zero** (V1, V2, compact-7, Phase 3A,
+Phase 3D + variants). On capability grounds — what the search can do — the
+representation/learning question and the "can anything here solve held-out tasks"
+question come apart: *searching* a fixed library succeeds (modestly) where
+*learning* the transforms from scratch did not.
+
+**Caveats (binding)**: the result is **modest** — exactly 2 distinct tasks per
+gated lane (4 distinct across all lanes), an exact-instance rate of ~2.6–3.4%;
+the solved tasks are structurally simple (largest-component extraction,
+crop+scale, tile/crop+recolor). It is a **capability result on held-out
+public-training lanes**, and it is explicitly **not**: a proof of Blackwell
+`signature_palette` sufficiency; an ARC "solve"; any claim about the
+public-evaluation split or a Kaggle entry (Phase 6 only). It does **not** change
+the four Phase 3E certificate verdicts or the seven full-grid-control floors —
+those characterized *learning/representation* families and the signature fiber
+geometry; this lane is an independent *program-search capability* probe whose
+positive result rests on the certificate program's no-collision / no-locality
+boundary (cited, not used as a geometric selector). No threshold, family, budget,
+depth, or ranking rule was retuned after seeing outputs.
+
+### Path forward
+
+A Branch E v2 may admit the deferred intricate mask families (`row_col_periodic`,
+`source_color_pair`, `object_role`, `nearest_residual_patch`) + the morphology
+cross-product + deeper composition under its own append-only amendment, to test
+whether the capability rate rises materially above this floor-clearing baseline.
+Any public-evaluation / Kaggle work remains gated to Phase 6.

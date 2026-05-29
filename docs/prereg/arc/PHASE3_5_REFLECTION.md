@@ -657,3 +657,31 @@ triggers oracle regression while staying sparse, and relative rank locality is
 negative. The remaining live path is Branch E on capability grounds under its
 own pre-registered solver spec, or recording the certificate negative as the
 durable finding.
+
+### Branch E opened and closed-positive (2026-05-29)
+
+Branch E was filed and executed as a deterministic program-search solver
+([`PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md`](PHASE3_BRANCH_E_PROGRAM_SEARCH_SPEC.md)),
+explicitly on **capability grounds**: it selects programs by train-pair
+consistency over a frozen primitive library (structural transforms + the imported
+Branch D color-rule bank + simple deterministic mask families + candidate-
+combinator candidates), never by `signature_palette` geometry. The four Phase 3E
+certificate verdicts are cited as a no-collision / no-locality **boundary**, not
+as a geometric-selector motivation.
+
+Binding verdict (pinned `6886074`, deterministic, U_primary=336):
+**`branch_e_capability_demonstrated`** — the first non-zero exact-match result in
+the program. It cleared the established non-trivial floor (≥2 distinct held-out
+tasks solved exactly on both `test_lodo` and `pttest`: `be94b721` via
+`extract_largest_component`, `f25fbde4` via `crop_bbox>>scale`; validation
+diagnostic also 2) that all seven prior decoder/learner-family floors hit at zero.
+The result is **modest** (2 distinct tasks per gated lane, ~3% instance rate,
+structurally simple tasks; 3 of 4 solves are depth-2 compositions) and is **not**
+a Blackwell-sufficiency proof, an ARC solve, or any eval/Kaggle claim — Phase 6
+still gates that. The methodological reading: *searching* a fixed primitive
+library succeeds (modestly) where *learning* the transforms from scratch floored,
+which is the expected come-apart between the capability question and the
+learning/representation question the seven floors + four certificates
+characterized. A Branch E v2 (deferred intricate mask families + deeper
+composition) is the natural next probe of whether the rate rises above this
+floor-clearing baseline.
