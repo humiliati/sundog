@@ -1,0 +1,92 @@
+{
+  "phase": "phase2",
+  "phaseVersion": "v1",
+  "cell": "SU2_3D",
+  "latticeSize": [
+    12,
+    12,
+    12
+  ],
+  "betaSlate": [
+    2,
+    2.4,
+    2.8
+  ],
+  "perBetaConfigurations": 32,
+  "totalConfigurations": 96,
+  "signatureVocabularyVersion": "v4",
+  "heldOutTargetVocabularyVersion": "v1",
+  "p0Amendment": "P0_AMD_001_APE_SMEARING_2026-05-29",
+  "smearingAlgorithm": "APE",
+  "smearingAlpha": 0.5,
+  "smearingIterations": 10,
+  "smearingProjection": "complex_sqrt_det_branch_positive_realtr",
+  "gammaHeldEpsilonFloor": 1e-10,
+  "binConvention": "per_beta_tertile_linear",
+  "distanceMetric": "euclidean_zscore",
+  "kSlate": [
+    3,
+    5,
+    10
+  ],
+  "primaryK": 5,
+  "bootstrapResamples": 1000,
+  "controlsScored": [
+    "CTRL_META",
+    "CTRL_RAW",
+    "CTRL_RAND",
+    "CTRL_RAND_STRAT",
+    "CTRL_PERM",
+    "CTRL_GAUGE_RAND"
+  ],
+  "controlsDeferred": [
+    "CTRL_FINITE_SIZE"
+  ],
+  "v0EnsembleSources": [
+    {
+      "beta": 2,
+      "betaKey": "2.0",
+      "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.0_ensemble_v0",
+      "manifestCodeCommit": "f37ee57b70fd92dcc88bd5ecb8bceca8af02c37c",
+      "manifestGitDirty": true,
+      "summaryBranch": "P1-A ensemble_health_pass",
+      "configsSha256": "61f79ece31ad323f53bf34b8a173087da4bf3c02f0c73765ddb9c76c1b382f8d",
+      "hashesJsonConfigsSha256": "61f79ece31ad323f53bf34b8a173087da4bf3c02f0c73765ddb9c76c1b382f8d"
+    },
+    {
+      "beta": 2.4,
+      "betaKey": "2.4",
+      "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.4_ensemble_v0",
+      "manifestCodeCommit": "509222c450496e51495d47f90b569a4d5e330250",
+      "manifestGitDirty": true,
+      "summaryBranch": "P1-A ensemble_health_pass",
+      "configsSha256": "b94174654c93ef1ee793e455b3ffd0386e9d2054e98644d9ea14b818c2a39e3d",
+      "hashesJsonConfigsSha256": "b94174654c93ef1ee793e455b3ffd0386e9d2054e98644d9ea14b818c2a39e3d"
+    },
+    {
+      "beta": 2.8,
+      "betaKey": "2.8",
+      "resultDir": "C:/Users/hughe/Dev/sundog/results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.8_ensemble_v0",
+      "manifestCodeCommit": "7844025aa1bf0aa6f7d783ca60521916ccfef937",
+      "manifestGitDirty": true,
+      "summaryBranch": "P1-A ensemble_health_pass",
+      "configsSha256": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19",
+      "hashesJsonConfigsSha256": "d0a76960dae0d726280f972df1bc50c8c5c4402cd899f3689373a5b84573fd19"
+    }
+  ],
+  "v0BinEdgesSource": "results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_relative_locality_v0/aggregation/per_beta_bin_edges.json",
+  "maxSmearingDetDrift": 6.661338147750939e-16,
+  "maxSmearingUnitarityResidual": 9.420554752102651e-16,
+  "perOrientationSmearedSpread": 0.00030956955364345453,
+  "apeSmearingLock": {
+    "algorithm": "APE",
+    "alpha": 0.5,
+    "iterations": 10,
+    "dimension": 3,
+    "stapleNormalization": 0.25
+  },
+  "codeCommit": "aee9e52198f6f2ac8399de89dd0cc4c967779ece",
+  "gitDirty": true,
+  "commandLine": "C:\\Program Files\\nodejs\\node.exe C:\\Users\\hughe\\Dev\\sundog\\scripts\\yang-mills-phase2-v1-su2-3d-aggregate.mjs --cell SU2_3D --lattice-size 12x12x12 --beta-slate 2.0,2.4,2.8 --p0-amendment P0_AMD_001_APE_SMEARING_2026-05-29 --smearing-algorithm APE --smearing-alpha 0.5 --smearing-iterations 10 --in-beta-2.0 results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.0_ensemble_v0 --in-beta-2.4 results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.4_ensemble_v0 --in-beta-2.8 results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_beta2.8_ensemble_v0 --v0-bin-edges results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_relative_locality_v0/aggregation/per_beta_bin_edges.json --distance-metric euclidean_zscore --k-slate 3,5,10 --primary-k 5 --bootstrap-resamples 1000 --bin-convention per_beta_tertile_linear --gauge-rand-seed-tag phase2_v1_aggregation --gauge-transforms-per-config 1 --out results/yang-mills/phase2/SU2_3D/2026-05-29_su2_3d_relative_locality_v1",
+  "wallClockSeconds": 25.777605799999996
+}

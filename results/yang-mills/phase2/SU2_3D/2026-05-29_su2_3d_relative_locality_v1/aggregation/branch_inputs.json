@@ -1,0 +1,70 @@
+{
+  "v0BinEdgeTimestampOk": true,
+  "binDegenerateBetas": [],
+  "perBetaBinEdgeMaxAbsDiff": 0,
+  "globalBinEdgeMaxAbsDiff": 0,
+  "bareSignatureIntegrityMaxAbsResidual": 4.999889391399392e-13,
+  "maxSmearingDetDrift": 6.661338147750939e-16,
+  "maxSmearingUnitarityResidual": 9.420554752102651e-16,
+  "perOrientationSmearedSpreadMax": 0.00030956955364345453,
+  "smearedOrientationByBeta": {
+    "2.0": {
+      "meanPlaquetteByOrientation": {
+        "xy": 0.9784776908038778,
+        "xz": 0.978780691505662,
+        "yz": 0.9785148159791939
+      },
+      "relativeSpread": 0.00030956955364345453
+    },
+    "2.4": {
+      "meanPlaquetteByOrientation": {
+        "xy": 0.9826884096264332,
+        "xz": 0.9826897195441234,
+        "yz": 0.9826178344205116
+      },
+      "relativeSpread": 0.00007315139477100589
+    },
+    "2.8": {
+      "meanPlaquetteByOrientation": {
+        "xy": 0.9867543200810595,
+        "xz": 0.9868918274855275,
+        "yz": 0.9869614621729059
+      },
+      "relativeSpread": 0.0002098786019369205
+    }
+  },
+  "withinPrimary5": 0.29374999999999984,
+  "withinCtrlRand5": 0.295833333333333,
+  "withinCtrlMeta5": 0.31458333333333316,
+  "withinCtrlRaw5": 0.29791666666666644,
+  "withinCtrlPerm5": 0.3130020833333311,
+  "withinCtrlGaugeRand5": 0.29374999999999984,
+  "acrossPrimary5": 0.35833333333333317,
+  "acrossCtrlRandStrat5": 0.37708333333333316,
+  "gaugeSignatureResidualMax": 1.4432899320127035e-15,
+  "wallClockSeconds": 25.776097999999998,
+  "withinPrimaryMinusRand5": -0.0020833333333331594,
+  "withinPrimaryMinusMeta5": -0.020833333333333315,
+  "withinPrimaryMinusRaw5": -0.004166666666666596,
+  "gaugeRandPurityDiff": 0,
+  "acrossPrimaryMinusRandStrat5": -0.01874999999999999,
+  "thresholds": {
+    "primaryWithinMeanBinPurity5Min": 0.5,
+    "primaryMinusCtrlRandMin": 0.1,
+    "primaryMinusCtrlMetaMin": 0.1,
+    "primaryMinusCtrlRawMin": 0.1,
+    "ctrlPermChanceTolerance": 0.05,
+    "gaugeRandPurityDiffMax": 1e-12,
+    "gaugeSignatureResidualMax": 1e-12,
+    "acrossPrimaryMinusRandStratMin": 0.05,
+    "perBetaBinEdgeMaxAbsDiff": 1e-12,
+    "globalBinEdgeMaxAbsDiff": 1e-12,
+    "bareSignatureIntegrityMaxAbsResidual": 1e-12,
+    "maxSmearingDetDrift": 1e-10,
+    "maxSmearingUnitarityResidual": 1e-10,
+    "perOrientationSmearedSpreadMax": 0.05,
+    "aggregationWallClockSecondsMax": 600
+  },
+  "branch": "YM-P2-NEG-A no_rank_local_structure",
+  "reason": "primary=0.29374999999999984, primary-CTRL_RAND=-0.0020833333333331594"
+}
