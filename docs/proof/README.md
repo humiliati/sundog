@@ -99,7 +99,19 @@ that claim provably fails.
   tolerance-fidelity vs. coverage obstruction directly. **Signed off
   and built 2026-05-28** (first target = v4 regime, d=32; defaults
   adopted). Implemented as the harness `--adjudicator knn` flag and
-  adopted as fiber-protocol §5b. First run launched at the v4 regime.
+  adopted as fiber-protocol §5b. v4-regime run **solved coverage**
+  (`fidelity_coverage = 1.0`, vs binning's 0) and fired a mechanical
+  `PDE-C1-NEG-A` (`incompat_fraction = 0.0716`) — **held provisional**
+  pending the convergence check below.
+- [`PDE_C1_KNN_CONVERGENCE_CHECK.md`](PDE_C1_KNN_CONVERGENCE_CHECK.md)
+  — **pre-registration** of the scale-dependence test that adjudicates
+  the provisional v4 NEG-A: sweep `k ∈ {10,20,30,50,100}`, fit
+  `incompat_fraction` vs neighbourhood radius `r_k`, and classify by
+  the `r_k → 0` intercept — plateau-nonzero (`a > 0.02`) confirms
+  genuine fiber-incompatibility, decay-to-zero (`a < 0.01`) overturns
+  it as a finite-radius boundary artifact (→ POSITIVE), else
+  `INCONCLUSIVE_CONVERGENCE`. Thresholds fixed before the read.
+  Harness: `--adjudicator knn-sweep`.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /
