@@ -12,15 +12,26 @@ job is to re-pose the Phase 15 warning-quality readout with the right
 instrument, preserve the Phase 15 / 15B / 15C mechanism verdicts, and keep the
 claim boundary honest.
 
+The answer is already determined by the committed Phase 16 output:
+`hazard-channel-audit.csv` reports `radius` `perCellMeanAuroc = 0.996624` with
+`27/27` favorable cells defined, while the within-16B energy baseline is
+`0.655508` with `27/27` cells defined. Phase 16B formalizes that already-published
+number in Phase 15's verdict shape; it adds no statistical evidence beyond Phase
+16's stronger pooled Branch-A result.
+
 ## 1. Decision Lock
 
-Status: **drafted 2026-05-29; pending operator lock review.** No Phase 16B code
-has been written and no Phase 16B command has been run at draft time.
+Operator lock: **2026-05-29**, after the dt-scope / decidability / already-known
+outcome amendment. Phase 16B implementation and run occurred after this lock;
+see `PHASE16B_RESULTS.md`.
 
 - **Frozen source receipt.** Use the already-completed Phase 16 lock receipt:
   `results/threebody/phase16-hazard-channel-audit-lock/trials-minimal.jsonl`.
   No new simulation is owned by this phase. If the source receipt is missing,
   malformed, or not paired with the Phase 16 Branch-A manifest, the run is void.
+  The reducer must also read Phase 16's `hazard-channel-audit.csv` and verify
+  that the `radius` row already carries `perCellMeanAuroc = 0.996624` and
+  `perCellDefinedCount = 27`; any reproduction drift is a reducer bug.
 - **Frozen label and oracle.** Reuse the Phase 15 / Phase 16 strict
   forward-oracle label `hazardReached` unchanged. The hazard geometry remains
   `r3 > 4 OR minPrimaryDistance < 0.08`; no subtype relabeling is allowed.
@@ -32,9 +43,16 @@ has been written and no Phase 16B command has been run at draft time.
   `0.95,1.05,1.1,1.15`, eight seeds, duration `16`, audit cadence `240`.
   Primary favorable pocket is `velocityScale >= 1.05` (27 cells, 216 passive
   trajectories). `velocityScale = 0.95` is reported as a boundary control.
+- **dt scope.** Phase 16B is Phase-15-shaped, not Phase-15-identical: Phase 15's
+  historical warning verdict spanned the five-timestep ladder (135 favorable
+  cell rows), while Phase 16B is the Phase 16 `dt=0.004` passive receipt only
+  (27 favorable cells). The baseline for 16B is therefore energy's `dt=0.004`
+  per-cell mean `0.655508`, not the historical ladder mean `0.683`.
 - **Phase-15-style verdict.** The primary statistic is a per-cell warning-quality
   mean, matching the shape of Phase 15's warning verdict rather than Phase 16's
-  pooled Branch-A statistic.
+  pooled Branch-A statistic. Decidability is stricter than Phase 15's historical
+  "samples present" coverage convention: a Phase 16B cell is defined only if it
+  contains both label classes, because AUROC is otherwise undefined.
 - **No claim upgrade.** Phase 16B may repair the warning-instrument read. It does
   not revise Phase 15's Fail-Magnitude branch, retune the controller, alter the
   survival envelope, or convert the three-body claim to a full mechanism pass.
@@ -44,13 +62,16 @@ has been written and no Phase 16B command has been run at draft time.
 Phase 16B owns:
 
 - a small offline reducer over the Phase 16 lock `hazardSamples` receipt;
-- future npm command:
+  the reducer must reuse Phase 16's exact `computeAuroc` and `cellKey` logic
+  (copying the helper implementations is acceptable; changing the estimator is
+  not);
+- npm command:
   - `npm run threebody:phase16b:repose`
 - outputs under `results/threebody/phase16b-radius-warning-repose/`:
   - `radius-warning-quality-map.csv`
   - `radius-warning-summary.csv`
   - `manifest.json`
-- this spec and a future `PHASE16B_RESULTS.md`.
+- this spec and `PHASE16B_RESULTS.md`.
 
 Phase 16B does **not** own a harness change, a controller run, new oracle calls,
 new channel selection, guard retuning, subtype-specific hazard labels, or public
@@ -58,13 +79,13 @@ copy changes.
 
 ## 3. Command Shape
 
-Reserved but not runnable until the offline reducer and npm script are added:
+Runnable command:
 
 ```bash
 npm run threebody:phase16b:repose
 ```
 
-Intended script shape:
+Script shape:
 
 ```bash
 node scripts/threebody-phase16b-radius-warning.mjs \
@@ -95,6 +116,11 @@ Primary readout:
 - `radiusDefinedCells / 27` in the favorable pocket (`velocityScale >= 1.05`);
 - arithmetic mean of defined favorable-pocket `radius` AUROCs;
 - the same mean and coverage for `energy`, as the baseline comparison.
+
+Reproduction targets from Phase 16's committed CSV:
+
+- `radius`: mean `0.996624`, coverage `27/27`;
+- `energy`: mean `0.655508`, coverage `27/27`.
 
 Secondary diagnostics:
 

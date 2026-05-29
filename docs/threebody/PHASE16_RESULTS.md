@@ -130,13 +130,14 @@ less-informative channels. The pass is driven by a clean single channel, so it i
 
 ### Next registered move (per Branch A)
 
-A follow-on **warning-quality re-pose with `radius` as the hazard score** is now
-drafted as [`PHASE16B_SPEC.md`](PHASE16B_SPEC.md). It tests whether a
-radius-based warning would have changed the Phase 15 warning-quality verdict.
-This is a *separate* phase and **does not upgrade Phase 15**: warnability (can an
-instantaneous observable forecast the oracle's hazard call?) is orthogonal to
-the controller's survival *mechanism*, which Phase 15C showed is not a
-multi-step energy-steering effect. Phase 16 establishes that the Phase 15
-warning miss was an **instrument choice** (energy), not a structural limit - but
-the gravity claim and the Phase 15 Fail-Magnitude verdict are preserved
-unchanged.
+The follow-on **warning-quality re-pose with `radius` as the hazard score** is
+complete as [`PHASE16B_RESULTS.md`](PHASE16B_RESULTS.md). It formalizes Phase
+16's per-cell column in Phase 15's verdict shape: `radius` clears at `0.996624`
+with `27/27` favorable cells defined, while the within-16B energy baseline misses
+at `0.655508`. This is a *separate* warning-instrument repair and **does not
+upgrade Phase 15**: warnability (can an instantaneous observable forecast the
+oracle's hazard call?) is orthogonal to the controller's survival *mechanism*,
+which Phase 15C showed is not a multi-step energy-steering effect. Phase 16
+establishes that the Phase 15 warning miss was an **instrument choice** (energy),
+not a structural limit - but the gravity claim and the Phase 15 Fail-Magnitude
+verdict are preserved unchanged.
