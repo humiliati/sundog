@@ -143,17 +143,41 @@ explicit documentation of `bin_count ∝ (R/h_K)^{d_K}` where
 `d_K = 2K^2`. Lowering K reduces dimensional cost exponentially.
 **Cell-set v5** at
 [`proof/PDE_C1_CELLSET_KOLMOGOROV_v5.md`](proof/PDE_C1_CELLSET_KOLMOGOROV_v5.md)
-holds the v4 regime and E_max windowing constant and pins `K = 3`
-(signature dim 18 vs v4's 32). Forced mode `(0, 2)` retained. Bin
-count expected to drop by orders of magnitude. Harness exposes
-`--preset lock_v5`.
-Criterion (b) is closed at the *procedure-and-execution* level (v0–v4
-lock cycles all ran cleanly; v4 fall-back also executed; methodology
-survived five vacuity / coverage diagnoses and four protocol
-amendments without any `PDE-C1-NEG-B`); a *substantive* C1 read still
-requires a non-vacuous, non-deferred v5+ execution. Criteria (a)
-Front-A vacuity rebuttal and (c) external PDE reviewer remain open.
-Final (d) close is coupled to (c).
+held the v4 regime and E_max windowing constant and pinned `K = 3`
+(signature dim 18 vs v4's 32). **Lock_v5 executed 2026-05-28** (~19 min);
+`DEFERRED_COVERAGE`. Two findings: discrimination robust
+(`damp_fraction = 0.2977`, matching v4) **and** the K-reduction
+coverage hypothesis (amendment 4) **falsified** — occupied bins fell
+only 16.5% (45,827 → 38,281) despite halving `d_K`. Root cause:
+occupied-bin count tracks the attractor's box dimension, not the
+embedding dimension `d_K`. The amendment-4 scaling note in the fiber
+protocol is annotated as corrected.
+
+**Step-back synthesis** at
+[`proof/PDE_C1_LOCK_EXECUTION_SYNTHESIS.md`](proof/PDE_C1_LOCK_EXECUTION_SYNTHESIS.md)
+consolidates v0–v5 (six runs, four amendments, all `DEFERRED_*`).
+**Finding A (positive, durable):** a discriminative cell exists at
+`(k_f = 2, G = 200)` — `damp_fraction ≈ 0.30`, robust to `K` (3 vs 4)
+and `N_sample` (50k vs 200k); a low-dimensional signature is robustly
+control-discriminative on a known-smooth 2D NSE attractor. This
+supports Reading 2's premise (the safety objective is non-trivially
+action-varying), without yet adjudicating fiber-constancy.
+**Finding B (negative):** hard-bin fiber adjudication has a
+tolerance-fidelity vs. coverage tension governed by attractor measure
+concentration; six cells bracket a window hard binning does not fit at
+feasible sample budgets. **Forks (no further binning cell):** (A)
+pivot to kNN/kernel fiber-locality adjudication (principled fix); (B)
+report Finding A as a partial C1 read; (C) bank C1 lessons and pivot
+to C2 (structurally insulated from this tension).
+
+Criterion (b) is closed at the *procedure-and-execution* level (v0–v5
+lock cycles + v4 fall-back all ran cleanly; methodology survived six
+vacuity / coverage diagnoses and four pre-registered amendments,
+including one falsified-and-corrected, without any `PDE-C1-NEG-B`); a
+*substantive fiber-adjudication* C1 read still requires either a
+method pivot (Fork A) or is partially delivered by Finding A (Fork B).
+Criteria (a) Front-A vacuity rebuttal and (c) external PDE reviewer
+remain open. Final (d) close is coupled to (c).
 
 Candidate 2 has also been commissioned at the scoping level:
 [`proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md`](proof/PDE_C2_SHELL_SIGNATURE_SCOPING.md)

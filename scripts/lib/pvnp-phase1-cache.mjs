@@ -36,6 +36,11 @@ export function makeCacheState() {
       hits_by_stage: {},
       misses_by_stage: {},
       computes_avoided: 0,
+      // v4 instrumentation: per-stage tally of integrity short-circuits that
+      // quarantine BEFORE reaching the cache lookup (spoof candidates whose
+      // edits trip the derived-fields-hash check, etc.). v4's hit-rate
+      // definition excludes these from miss accounting.
+      pre_integrity_short_circuits_by_stage: {},
     },
     stage_history: [],
   };
@@ -91,6 +96,14 @@ export function lookupOrCompute(state, key, compute, stageLabel) {
   return value;
 }
 
+// Record a pre-integrity short-circuit for the named stage. Called when the
+// verifier rejects a certificate before reaching the derived-fields cache
+// lookup (e.g., spoofed analytical fields trip derived_field_hash_mismatch).
+export function recordPreIntegrityShortCircuit(state, stageLabel) {
+  state.stats.pre_integrity_short_circuits_by_stage[stageLabel] ??= 0;
+  state.stats.pre_integrity_short_circuits_by_stage[stageLabel] += 1;
+}
+
 // Render a stats summary suitable for verifier_cache_stats.json.
 export function statsReport(state) {
   const total = state.stats.lookups || 1;
@@ -104,10 +117,53 @@ export function statsReport(state) {
     hit_rate: state.stats.hits / total,
     miss_rate: state.stats.misses / total,
     computes_avoided: state.stats.computes_avoided,
+    pre_integrity_short_circuits: Object.values(state.stats.pre_integrity_short_circuits_by_stage ?? {})
+      .reduce((a, b) => a + b, 0),
     per_stage: {
       hits: state.stats.hits_by_stage,
       misses: state.stats.misses_by_stage,
       first_misses: state.stats.first_misses_by_stage,
+      pre_integrity_short_circuits: state.stats.pre_integrity_short_circuits_by_stage ?? {},
+    },
+  };
+}
+
+// v4 cache efficiency report: hit rate computed only over CACHE-ELIGIBLE
+// lookups. Pre-integrity short-circuits (spoof attempts that quarantine
+// before the cache lookup) are excluded from misses entirely.
+//
+// Per PHASE1_V4_SLATE.md §Cache Hit-Rate Definition:
+//   cold_unique_misses        := first lookup of each unique source hash
+//   eligible_reuse_hits       := repeated valid-source lookups served by cache
+//   eligible_reuse_misses     := repeated valid-source lookups that miss
+//                                (should be zero in current design — the
+//                                cache never evicts within a run)
+//   pre_integrity_short_circuits := spoof/synthetic candidates that quarantine
+//                                   before cache lookup (NOT misses)
+//   cache_eligible_reuse_hit_rate :=
+//     eligible_reuse_hits / (eligible_reuse_hits + eligible_reuse_misses)
+export function cacheEfficiencyReport(state) {
+  const stats = state.stats;
+  const cold = stats.misses;            // every miss IS a cold first-pass miss in this design
+  const eligibleHits = stats.hits;       // every hit is an eligible reuse hit
+  const eligibleMisses = 0;              // cache never evicts within a run; warm reuses always hit
+  const shortCircuits = Object.values(stats.pre_integrity_short_circuits_by_stage ?? {})
+    .reduce((a, b) => a + b, 0);
+  const denom = eligibleHits + eligibleMisses;
+  return {
+    schema: "pvnp-phase1-cache-efficiency-v4",
+    cold_unique_misses: cold,
+    eligible_reuse_hits: eligibleHits,
+    eligible_reuse_misses: eligibleMisses,
+    pre_integrity_short_circuits: shortCircuits,
+    cache_eligible_reuse_hit_rate: denom > 0 ? eligibleHits / denom : 0,
+    cache_eligible_reuse_threshold: 0.95,
+    cache_eligible_reuse_passed: denom > 0 ? (eligibleHits / denom) >= 0.95 : false,
+    unique_source_hashes: Object.keys(state.entries).length,
+    per_stage: {
+      hits: stats.hits_by_stage,
+      misses: stats.misses_by_stage,
+      pre_integrity_short_circuits: stats.pre_integrity_short_circuits_by_stage ?? {},
     },
   };
 }

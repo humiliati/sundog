@@ -12,8 +12,8 @@ Short version:
 > capacity envelope?
 
 Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier
-spec, v0-v3 frozen slates, v4 cost-gate slate, and v0-v3 execution receipts
-all filed 2026-05-28; see
+spec, v0-v4 frozen slates, and v0-v4 execution receipts all filed
+2026-05-28; see
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md),
 [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md),
 [`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md),
@@ -49,10 +49,19 @@ cache lookup, yielding 83.33 % hit rate). v3 has **0 false accepts**
 on measurement (consecutive with v2), **0 / 928 spoof successes**,
 **5 / 5 integrity probes** quarantine, **0 / 768 OOP basin-shape
 accepts**; `capacity_threshold = not_estimated` for v1, v2, and v3;
-privilege-leak audit green for all four runs. v4 is opened from the v3
-receipt's Next-Allowed-Step section; it restates the promotion cost gate
-against stable denominators and cache-eligible reuse while preserving all
-v3 safety gates. A v4 bounded positive is the next reachable promotion.
+privilege-leak audit green for all four runs. v4 executed the cost-gate
+restatement: cost denominator audit downgrades the volatile rollout
+ratio to diagnostic, the restated `cache_eligible_reuse_hit_rate` lands
+at 100 % (proving v3's 83.33 % was a counting artifact), and safety
+gates stay green — but absolute wall-time misses the slate's ≤ 1010 ms
+target across 3 v4 runs (1039 / ~1137 / 1130 ms) while a fresh v3
+baseline at the same commit hits 879 ms. v4 is filed as **named
+quarantine on cost alone**, attributable to ~50–150 ms of
+`noteShortCircuit` closure-allocation overhead added for the v4
+cache-efficiency instrumentation plus CPU thermal variance across three
+back-to-back v4 runs. A v5 with the closure inlined and a median-of-N
+cost measurement is the next reachable bounded-positive promotion;
+that would unlock Phase 1 → Phase 2 (mesa bridge).
 No complexity-theoretic result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and

@@ -55,16 +55,19 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  const sourceBound = version === "v1" || version === "v2" || version === "v3";
+  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4";
   const isV2 = version === "v2";
   const isV3 = version === "v3";
-  const writesGeometryAudits = isV2 || isV3;
+  const isV4 = version === "v4";
+  const sensorDemoted = isV3 || isV4;
+  const usesCache = isV3 || isV4;
+  const writesGeometryAudits = isV2 || isV3 || isV4;
   await mkdir(outDir, { recursive: true });
 
-  // v3 introduces a shared source-hash cache between verifier, ablation, and
+  // v3 and v4 share a source-hash cache between verifier, ablation, and
   // spoof stages. Cold-loaded here (likely empty), warm-written at exit.
   const cachePath = path.join(outDir, "derived_fields_cache.json");
-  const cacheState = isV3 ? await loadCacheState(cachePath) : null;
+  const cacheState = usesCache ? await loadCacheState(cachePath) : null;
 
   const sigs = await readJsonl(path.join(outDir, "signatures.jsonl"));
   const commitments = await readJsonlIfExists(path.join(outDir, "trace_commitments.jsonl"));
@@ -106,11 +109,12 @@ async function main() {
     "env_id", "policy_id", "split", "promise_compliance", "decision", "reason",
     "violation_subtype", "geometry_reason",
   ].join(",")] : null;
-  // v3 sensor disposition audit: shadow each measurement decision with the
-  // v2-style sensor gate forced ON, recording any decision flips. The v3
-  // primary verifier does NOT gate on sensor_health (per slate); this audit
-  // proves no v3 unsafe accept would have been blocked by the old gate.
-  const sensorDispositionRows = isV3 ? [[
+  // v3/v4 sensor disposition audit: shadow each measurement decision with
+  // the v2-style sensor gate forced ON, recording any decision flips. The
+  // v3/v4 primary verifier does NOT gate on sensor_health (per slate);
+  // this audit proves no unsafe accept would have been blocked by the old
+  // gate.
+  const sensorDispositionRows = sensorDemoted ? [[
     "env_id", "policy_id", "split", "v3_decision", "v3_reason",
     "shadow_with_sensor_decision", "shadow_with_sensor_reason",
     "decision_changed_under_old_gate",
@@ -142,7 +146,7 @@ async function main() {
     });
     const elapsed = performance.now() - t0;
 
-    if (isV3) {
+    if (sensorDemoted) {
       // Shadow verify with the old v2 sensor gate forced ON.
       const shadow = verify({
         sigma,
@@ -276,7 +280,7 @@ async function main() {
     await writeFile(path.join(outDir, "geometry_boundary_audit.csv"), geometryBoundaryRows.join("\n") + "\n", "utf8");
     await writeFile(path.join(outDir, "accepted_oop_audit.csv"), acceptedOopRows.join("\n") + "\n", "utf8");
   }
-  if (isV3) {
+  if (sensorDemoted) {
     await writeFile(path.join(outDir, "sensor_disposition_audit.csv"), sensorDispositionRows.join("\n") + "\n", "utf8");
     await saveCacheState(cachePath, cacheState, "verifier");
     const stats = statsReport(cacheState);

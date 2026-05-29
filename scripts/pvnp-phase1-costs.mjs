@@ -18,7 +18,11 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { getPhase1RunConfig } from "./lib/pvnp-phase1-run-config.mjs";
+
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+
+const ROLLOUT_DENOMINATOR_STABILITY_FLOOR_MS = 5.0;
 
 function parseArgs(argv) {
   const args = { runDir: "results/pvnp/phase1-toy-verifier-v0" };
@@ -116,6 +120,61 @@ async function main() {
   console.log("wrote costs.csv");
   console.log(`  C_total_signature/C_rollout = ${rolloutRatio === null ? "n/a" : rolloutRatio.toFixed(4)} (wall_ms), ${rolloutRatioOps === null ? "n/a" : rolloutRatioOps.toFixed(4)} (ops)`);
   console.log(`  C_total_signature/C_full_state = ${fullStateRatio === null ? "n/a" : fullStateRatio.toFixed(4)} (wall_ms), ${fullStateRatioOps === null ? "n/a" : fullStateRatioOps.toFixed(4)} (ops)`);
+
+  // v4: rollout-denominator audit per PHASE1_V4_SLATE.md §Cost Gate
+  // Restatement. Reports whether the rollout wall-time is stable enough
+  // to serve as a ratio denominator (>= 5 ms) and names the chosen
+  // promotion comparator. For v3 and v4 the comparator is full-state.
+  const slate = getPhase1RunConfig(args.runDir);
+  const version = slate.schema_suffix;
+  if (version === "v4") {
+    const rolloutStable = cRollout >= ROLLOUT_DENOMINATOR_STABILITY_FLOOR_MS;
+    const audit = {
+      schema: "pvnp-phase1-cost-denominator-audit-v4",
+      rollout: {
+        wall_ms: cRollout,
+        ops: cRolloutOps,
+        calls: baselines.rollout?.calls ?? 0,
+        wall_ms_below_5ms: cRollout < ROLLOUT_DENOMINATOR_STABILITY_FLOOR_MS,
+        stable_enough_for_ratio_denominator: rolloutStable,
+        stability_floor_ms: ROLLOUT_DENOMINATOR_STABILITY_FLOOR_MS,
+      },
+      full_state: {
+        wall_ms: cFullState,
+        ops: cFullStateOps,
+        calls: baselines.full_state?.calls ?? 0,
+      },
+      formal: {
+        wall_ms: cFormal,
+        ops: cFormalOps,
+        calls: baselines.formal?.calls ?? 0,
+      },
+      promotion_comparator: rolloutStable ? "rollout_and_full_state" : "full_state",
+      rollout_ratio_status: rolloutStable ? "promotion_gate" : "diagnostic_only",
+      rollout_ratio_wall_diagnostic: rolloutRatio,
+      rollout_ratio_ops: rolloutRatioOps,
+      full_state_ratio_wall: fullStateRatio,
+      full_state_ratio_ops: fullStateRatioOps,
+      c_total_signature_ms: cTotalSig,
+      v4_targets: {
+        c_total_signature_ms_max: 1010,
+        full_state_ratio_wall_max: 105,
+        op_count_ratio_max: 1.0,
+      },
+      v4_passes: {
+        c_total_signature_ms: cTotalSig <= 1010,
+        full_state_ratio_wall: fullStateRatio !== null && fullStateRatio <= 105,
+        op_count_ratio: rolloutRatioOps !== null && rolloutRatioOps <= 1.0,
+      },
+    };
+    await writeFile(
+      path.join(outDir, "cost_denominator_audit.json"),
+      JSON.stringify(audit, null, 2) + "\n",
+      "utf8",
+    );
+    console.log(`  rollout stable_enough_for_ratio_denominator = ${rolloutStable}`);
+    console.log(`  v4 cost gate: C_total_signature ${audit.v4_passes.c_total_signature_ms ? "PASS" : "FAIL"} | full_state ratio ${audit.v4_passes.full_state_ratio_wall ? "PASS" : "FAIL"} | op ratio ${audit.v4_passes.op_count_ratio ? "PASS" : "FAIL"}`);
+  }
 }
 
 main().catch((err) => { console.error(err); process.exit(1); });

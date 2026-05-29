@@ -148,15 +148,16 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  const sourceBound = version === "v1" || version === "v2" || version === "v3";
-  const isV3 = version === "v3";
+  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4";
+  const isV4 = version === "v4";
+  const usesCache = version === "v3" || version === "v4";
   await mkdir(outDir, { recursive: true });
 
-  // v3 attaches to the verifier+ablation shared source-hash cache. By the
+  // v3/v4 attach to the verifier+ablation shared source-hash cache. By the
   // time this stage runs, every (env, policy) source has been computed at
   // least once and will reuse cache entries here.
   const cachePath = path.join(outDir, "derived_fields_cache.json");
-  const cacheState = isV3 ? await loadCacheState(cachePath) : null;
+  const cacheState = usesCache ? await loadCacheState(cachePath) : null;
 
   // 1) Run inversion attacker via Python if not already present.
   const inversionPath = path.join(outDir, "attacker_inversion_results.json");
@@ -304,7 +305,7 @@ async function main() {
   existing.attacker_spoof = spoofCosts;
   await writeFile(partialPath, JSON.stringify(existing, null, 2) + "\n", "utf8");
 
-  if (isV3) {
+  if (usesCache) {
     await saveCacheState(cachePath, cacheState, "attacker");
     const stats = statsReport(cacheState);
     await writeFile(
@@ -315,7 +316,7 @@ async function main() {
     // Cost batching report: list the two minimum registered moves and
     // observed savings.
     const report = {
-      schema: "pvnp-phase1-cost-batching-report-v3",
+      schema: isV4 ? "pvnp-phase1-cost-batching-report-v4" : "pvnp-phase1-cost-batching-report-v3",
       registered_moves: [
         "source_hash_keyed_recompute_cache",
         "batched_verifier_pass_with_shared_cache_across_stages",
@@ -326,18 +327,37 @@ async function main() {
       cache_hits: stats.hits,
       cache_misses: stats.misses,
       computes_avoided: stats.computes_avoided,
+      pre_integrity_short_circuits: stats.pre_integrity_short_circuits ?? 0,
       per_stage: stats.per_stage,
       stage_history: stats.stage_history,
       v2_wall_ms_reference: 1347.03,
       v2_rollout_ratio_reference: 1535.08,
       v3_target_wall_ms_max: 1010,
       v3_target_rollout_ratio_max: 1150,
+      v3_observed_wall_ms_reference: 907.52,
+      v3_observed_rollout_ratio_reference: 1671.31,
+      v4_target_wall_ms_max: 1010,
+      v4_target_full_state_ratio_max: 105,
+      v4_target_op_ratio_max: 1.0,
     };
     await writeFile(
       path.join(outDir, "cost_batching_report.json"),
       JSON.stringify(report, null, 2) + "\n",
       "utf8",
     );
+
+    if (isV4) {
+      // v4: separate cache_efficiency_report.json with the slate's
+      // cache-eligible reuse definition (excludes pre-integrity short
+      // circuits from miss accounting).
+      const { cacheEfficiencyReport } = await import("./lib/pvnp-phase1-cache.mjs");
+      const efficiency = cacheEfficiencyReport(cacheState);
+      await writeFile(
+        path.join(outDir, "cache_efficiency_report.json"),
+        JSON.stringify(efficiency, null, 2) + "\n",
+        "utf8",
+      );
+    }
   }
 
   // Capacity threshold reporting per spec.

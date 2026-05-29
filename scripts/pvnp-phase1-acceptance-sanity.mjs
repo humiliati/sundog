@@ -56,8 +56,8 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  if (version !== "v3") {
-    console.log(`acceptance-sanity is a v3-only artifact; skipping for ${version}`);
+  if (version !== "v3" && version !== "v4") {
+    console.log(`acceptance-sanity is a v3+/v4+ artifact; skipping for ${version}`);
     return;
   }
   await mkdir(outDir, { recursive: true });
@@ -132,7 +132,7 @@ async function main() {
   // by passing --route=calibrated_widening later (not implemented for the
   // initial v3 execution; the slate allows either route).
   const disposition = {
-    schema: "pvnp-phase1-acceptance-sanity-route-v3",
+    schema: `pvnp-phase1-acceptance-sanity-route-${version}`,
     route: "conservative_acceptance",
     rationale: "Retain v2-inherited geometry/invariance thresholds; report the resulting low acceptance rate as an intentional safety property because (a) 0 false accepts on measurement, (b) 0 accepted basin-shape out-of-promise items, and (c) the geometry signal correctly quarantines envs whose probe coverage is insufficient to support a basin-shape promise decision — these are exactly the trajectories where the verifier should refuse, not accept.",
     no_geometry_threshold_was_relaxed: true,

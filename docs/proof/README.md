@@ -70,13 +70,24 @@ that claim provably fails.
   regardless of `N_sample`. Triggered fiber-protocol amendment 4
   (K as cell-set parameter).
 - [`PDE_C1_CELLSET_KOLMOGOROV_v5.md`](PDE_C1_CELLSET_KOLMOGOROV_v5.md)
-  — Navier-Stokes Candidate 1 cell-set v5: methodology sibling to v4.
-  Holds v4 regime constant (`k_f = 2`, `G = 200`,
-  `e_max_burnin_fraction = 0.25`) and pins `K = 3` (signature dim 18
-  vs v4's 32). Forced mode `(0, 2)` retained. Projected bin count
-  drops by orders of magnitude; `damp_fraction` expected to remain
-  discriminative (`[0.05, 0.60]`). Drafted, desk-auditable,
-  unreviewed, unrun. Harness exposes `--preset lock_v5`.
+  — Navier-Stokes Candidate 1 cell-set v5: methodology sibling to v4,
+  `K = 3` (signature dim 18 vs v4's 32). **Lock executed 2026-05-28**
+  (~19 min); `DEFERRED_COVERAGE`. Two findings: discrimination robust
+  (`damp_fraction = 0.2977`, matching v4) **and** the K-reduction
+  coverage hypothesis **falsified** — occupied bins fell only 16.5%
+  (45,827 → 38,281) despite halving `d_K`. Root cause: occupied bins
+  track attractor box dimension, not embedding dimension `d_K`.
+- [`PDE_C1_LOCK_EXECUTION_SYNTHESIS.md`](PDE_C1_LOCK_EXECUTION_SYNTHESIS.md)
+  — **step-back consolidation of C1 lock executions v0–v5**
+  (2026-05-28). Six runs, four protocol amendments, all `DEFERRED_*`.
+  Finding A (positive): a discriminative cell exists at
+  `(k_f = 2, G = 200)` — `damp_fraction ≈ 0.30` robust to K and
+  `N_sample`. Finding B (negative): hard-bin coverage is governed by
+  attractor box dimension, not `d_K`, so the tolerance-fidelity vs.
+  coverage tension is the core obstruction. Forks: (A) pivot to
+  kNN/kernel fiber-locality adjudication; (B) report Finding A as a
+  partial C1 read; (C) bank C1 lessons and pivot to C2. Explicitly
+  rules out another binning-parameter cell.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /

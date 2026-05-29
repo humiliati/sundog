@@ -26,6 +26,7 @@ const DROP_FIELDS_BY_VERSION = Object.freeze({
   v1: ["margin_lower_bound", "coverage_digest", "sensor_health_v1", "invariance_checks_v1"],
   v2: ["margin_lower_bound", "geometry_promise_signal_v2", "sensor_health_v1", "invariance_checks_v2"],
   v3: ["margin_lower_bound", "geometry_promise_signal_v2", "invariance_checks_v2"],
+  v4: ["margin_lower_bound", "geometry_promise_signal_v2", "invariance_checks_v2"],
 });
 
 function parseArgs(argv) {
@@ -68,15 +69,15 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
-  const sourceBound = version === "v1" || version === "v2" || version === "v3";
-  const isV3 = version === "v3";
+  const sourceBound = version === "v1" || version === "v2" || version === "v3" || version === "v4";
+  const usesCache = version === "v3" || version === "v4";
   const dropFields = DROP_FIELDS_BY_VERSION[version] ?? DROP_FIELDS_BY_VERSION.v0;
   await mkdir(outDir, { recursive: true });
 
-  // v3 shares the source-hash cache with the verifier stage. Load the
+  // v3/v4 share the source-hash cache with the verifier stage. Load the
   // warm cache here; we expect ~100% hits in this stage.
   const cachePath = path.join(outDir, "derived_fields_cache.json");
-  const cacheState = isV3 ? await loadCacheState(cachePath) : null;
+  const cacheState = usesCache ? await loadCacheState(cachePath) : null;
 
   const sigs = await readJsonl(path.join(outDir, "signatures.jsonl"));
   const commitments = await readJsonlIfExists(path.join(outDir, "trace_commitments.jsonl"));
@@ -157,7 +158,7 @@ async function main() {
   existing.ablation = ablationCosts;
   await writeFile(partialPath, JSON.stringify(existing, null, 2) + "\n", "utf8");
 
-  if (isV3) {
+  if (usesCache) {
     await saveCacheState(cachePath, cacheState, "ablation");
     const stats = statsReport(cacheState);
     await writeFile(
