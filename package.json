@@ -159,6 +159,7 @@
     "arc:phase0:draft-register": "node scripts/arc-phase0-draft-register.mjs",
     "arc:phase0:baselines": "node scripts/arc-phase0-baselines.mjs",
     "arc:phase0:leak-check": "node scripts/arc-phase0-leak-check.mjs",
+    "arc:phase0:context-expansion-for-fibers": "node scripts/arc-phase0-context-expansion-for-fibers.mjs",
     "arc:phase1:synthetic": "node scripts/arc-phase1-shadow-domain.mjs",
     "arc:phase2:projections": "node scripts/arc-phase2-projections.mjs",
     "arc:phase2:baselines": "node scripts/arc-phase2-baselines.mjs",

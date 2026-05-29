@@ -685,14 +685,50 @@ def expected_split_by_task() -> dict[str, str]:
     return out
 
 
-def load_tasks(data_dir: Path, register_path: Path) -> tuple[list[Task], str, str]:
+# Fixed expansion batch tag (PHASE0_CONTEXT_EXPANSION_FOR_FIBERS_SPEC.md).
+EXPANSION_BATCH = "fiber_context_expansion_v1"
+
+
+def sha256_expansion_split_by_task(rows: list[dict[str, str]]) -> dict[str, str]:
+    """Spec PHASE0_CONTEXT_EXPANSION_FOR_FIBERS §"Context Universe" partition.
+
+    For each primary_prior group of included tasks, sort task IDs by
+    SHA-256("fiber_context_expansion_v1|" + task_id) and assign the first
+    max(3, floor(n/3)) to validation, the remainder to test. There is no train
+    split under this mode: every included task becomes validation or test. This
+    only assigns the val/test partition for the expanded certificate; all
+    Phase 3E geometry (identity, distance, k, epsilons, oracle, gates, barrier)
+    is untouched.
+    """
+    by_prior: dict[str, list[str]] = {}
+    for row in rows:
+        by_prior.setdefault(row["primary_prior"], []).append(row["task_id"])
+    out: dict[str, str] = {}
+    for prior, task_ids in by_prior.items():
+        ordered = sorted(task_ids, key=lambda tid: hashlib.sha256(f"{EXPANSION_BATCH}|{tid}".encode("utf-8")).hexdigest())
+        n = len(ordered)
+        n_val = min(n, max(3, n // 3))
+        for idx, tid in enumerate(ordered):
+            out[tid] = "validation" if idx < n_val else "test"
+    return out
+
+
+def load_tasks(data_dir: Path, register_path: Path, split_mode: str = "frozen_v2") -> tuple[list[Task], str, str]:
     register_text = register_path.read_text(encoding="utf-8-sig")
     rows = [row for row in csv.DictReader(register_text.splitlines()) if row["status"] == "include" and row["split"] == "training"]
     tasks: list[Task] = []
     file_hashes: list[dict[str, str]] = []
-    split_by_task = expected_split_by_task()
+    if split_mode == "sha256_expansion":
+        split_by_task = sha256_expansion_split_by_task(rows)
+    else:
+        split_by_task = expected_split_by_task()
     for row in rows:
         task_id = row["task_id"]
+        if task_id not in split_by_task:
+            raise SystemExit(
+                f"task_id {task_id!r} has no split assignment under split_mode={split_mode!r}. "
+                f"The expanded register requires --split-mode sha256_expansion."
+            )
         path = data_dir / "training" / f"{task_id}.json"
         raw = path.read_text(encoding="utf-8-sig")
         file_hashes.append({"file": f"training/{task_id}.json", "sha256": sha256_text(raw)})
@@ -2941,6 +2977,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--limit-tasks", type=int, default=0)
     parser.add_argument("--allow-dirty", action="store_true")
+    parser.add_argument("--split-mode", choices=["frozen_v2", "sha256_expansion"], default="frozen_v2",
+                        help="frozen_v2 = original 36-task EXPECTED_SPLIT (byte-reproduces the v2 receipt); "
+                             "sha256_expansion = PHASE0_CONTEXT_EXPANSION_FOR_FIBERS §Context Universe partition.")
     args = parser.parse_args()
     if not args.dry_run and (not args.data_dir or not args.register):
         parser.error("--data-dir and --register are required (except in --dry-run mode)")
@@ -3020,11 +3059,12 @@ def main() -> int:
     data_dir = Path(args.data_dir).resolve()
     register_path = Path(args.register).resolve()
     assert_training_data_dir(data_dir)
-    tasks, register_hash, data_hash = load_tasks(data_dir, register_path)
+    tasks, register_hash, data_hash = load_tasks(data_dir, register_path, args.split_mode)
     if args.limit_tasks > 0:
         tasks = tasks[: args.limit_tasks]
     manifest["dataDir"] = str(data_dir); manifest["registerPath"] = str(register_path)
     manifest["registerHash"] = register_hash; manifest["dataDirHash"] = data_hash
+    manifest["splitMode"] = args.split_mode
 
     validation_tasks = [t for t in tasks if t.split == "validation"]
     test_tasks = [t for t in tasks if t.split == "test"]

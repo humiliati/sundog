@@ -338,3 +338,122 @@ Forbidden:
 - retuning `epsilon_primary`, kNN `k`, or `program_sketch_v2` after seeing the
   expanded distances;
 - replacing a failed balanced expansion with surplus tasks from easier priors.
+
+---
+
+## Amendment A — Freeze Marker (2026-05-29 PT)
+
+Append-only. This amendment records the tooling, the two frozen mechanical
+interpretations, the runner partition resolution, the smoke fingerprint, and the
+exact manual-inspection protocol required by §"Reserved Implementation Names"
+before any expansion receipt is admitted. No register row exists yet; this only
+unblocks Phase B inspection.
+
+### Tooling added
+
+- Candidate-ordering script: `scripts/arc-phase0-context-expansion-for-fibers.mjs`
+  (Node, input-inventory only). Reads the frozen Phase 0 inventory
+  (`results/arc/phase0-inventory/tasks.csv`) + `P0_TASK_REGISTER.csv`; never
+  computes a Phase 3E distance, sketch, target-output hash, output-collision
+  group, or solver result; never reads the held-out split.
+- npm script: `arc:phase0:context-expansion-for-fibers`.
+- Result ignore paths added to `.gitignore`:
+  `results/arc/phase0-context-expansion-for-fibers/` and
+  `results/arc/phase3e-program-sketch-oracle-v2-expanded/`.
+- Inspection-support renderer: `scripts/arc_phase0_expansion_inspect.py`
+  (read-only; renders public-training grids in queue order; computes no
+  certificate distance/sketch/output-collision/solver result).
+- Leak-check coverage: `npm run arc:phase0:leak-check` passes (0 fail / 0 warn);
+  the new `.mjs` is among the 21 scanned non-allowlisted ARC scripts and carries
+  no held-split path/data literal, so it is not allowlisted.
+
+### Frozen mechanical interpretations (§"Candidate Ordering")
+
+Two phrases in §"Candidate Ordering" are given a fixed, reproducible reading.
+Because the candidate queue is emitted and SHA-256'd before any inspection, and
+inspection rejects only by a registered exclusion reason, these readings fix a
+deterministic inspection order without biasing the outcome:
+
+1. "descending number of matching coarse prior hints" = descending count of the
+   task's `prior_hints` tokens in the inventory (how many of the six priors the
+   input-only inventory heuristic fired). Emitted as `matching_hint_count`.
+2. "that prior's current median grid area" = the median of `max_area` over the
+   originally registered 36-task set whose `primary_prior` equals that prior; a
+   candidate is keyed by `abs(max_area − that median)`. Per-prior medians:
+   objectness 122, counting 298, symmetry 81, spatial_transform 158,
+   local_completion 168.5, color_role 210.
+
+Full sort key per prior queue: (1) desc `matching_hint_count`, (2) asc
+`abs_area_diff_from_prior_median`, (3) asc `inventory_row_hash`, (4) asc
+`task_id`.
+
+### Runner partition resolution (the §"Measurement Plan" runner)
+
+§"Context Universe For The Expanded Certificate" defines a new validation/test
+partition (SHA-256 of `fiber_context_expansion_v1|task_id`). The frozen Phase 3E
+v2 runner assigned the val/test split from a hardcoded 36-task table, so it
+cannot consume the expanded register unchanged. Resolution (geometry untouched):
+`phase3e_program_sketch_oracle_v2.py` gains `--split-mode {frozen_v2,
+sha256_expansion}`:
+
+- `frozen_v2` (default) = the original hardcoded table. Verified to reproduce the
+  committed v2 binding receipt's substantive fields byte-for-byte (registerHash,
+  dataDirHash, contextUniverse, fiber, gates, branch all MATCH). Only
+  `runnerSha256` advances `6163C208…` → `9D456143…` (file edited) and a new
+  `splitMode` manifest key appears; the v2 receipt at `6163C208` remains the
+  canonical v2 record.
+- `sha256_expansion` = implements §"Context Universe" exactly (per `primary_prior`
+  group, sort by SHA-256(`fiber_context_expansion_v1|`+task_id); first
+  `max(3, floor(n/3))` → validation, rest → test; no train split). Confirmed
+  deterministic (two runs byte-identical).
+
+All Phase 3E geometry — identity, distance, `k=3`, `epsilon_*`, oracle, gates,
+target barrier — is unchanged; only the val/test partition assignment is
+generalized, which the spec itself froze.
+
+### Smoke fingerprint
+
+- `candidate_queue.sha256` =
+  `43ea45506bc51c84f0d6603ddc2bb4d2c6c195a208bf2abf48728e4a1d11d82c` (re-run
+  identical). Eligible pool 964 tasks (training, not registered, ≥2 train pairs,
+  ≥1 test query); 4009 queue rows across 6 priors (a task may enter multiple
+  queues). Pre-flight depth per prior (all ≥ 18 target): objectness 953, counting
+  934, symmetry 311, spatial_transform 310, local_completion 558, color_role
+  943 → no `phase0_fiber_expansion_hold_insufficient_tasks`.
+- `sha256_expansion` on the current 36-task register yields contextUniverse
+  `u_primary=73` (vs `frozen_v2`'s 25), 18 validation + 18 test tasks —
+  confirming the partition path densifies the primary universe as intended (a
+  smoke only; the binding expansion run uses the 108-task register).
+- New runner `runnerSha256` =
+  `9D456143F60490D8BF6A461610A870FB8733C46C1E0589DABE9C51A1B6603EE6`.
+
+### Manual-inspection protocol (agent-performed, logged)
+
+Per the approved lane decision, the maintainer's agent performs the inspection in
+a single logged pass; the maintainer ratifies via the receipt +
+`selection_audit.md`.
+
+1. Order. Walk the six priors in the fixed order [objectness, counting, symmetry,
+   spatial_transform, local_completion, color_role]. Within a prior, walk its
+   `candidate_queue.csv` rows by ascending `selection_order_rank`.
+2. Per candidate (not already decided). Render its public-training grids
+   (`arc_phase0_expansion_inspect.py`) and decide: primary prior (one of the
+   six), assigned from the input→output transformation type and never from
+   solver/certificate behavior; secondary priors (subset of the six);
+   `status ∈ {include, exclude}` with a registered reason; predicted_boundary
+   keyed to the assigned prior by the existing register convention
+   (symmetry→gauge-breaking ambiguity; spatial_transform→capacity pressure;
+   counting→capacity pressure; local_completion→non-local information;
+   color_role→gauge-breaking ambiguity; objectness→full-state-only dependency).
+   An included task counts toward its assigned primary prior, regardless of which
+   queue surfaced it.
+3. Registered exclusion reasons (§"Exclusion Criteria"):
+   `requires_external_knowledge`, `no_assignable_primary_prior`,
+   `unconstrained_full_grid_reconstruction`, `near_duplicate_of_registered`,
+   `selected_by_certificate_or_solver_info` and `held_split_or_kaggle_influence`
+   (the last two must never fire — listed for completeness/audit).
+4. Stop a prior at 18 includes. Do not rebalance across priors. If any prior's
+   queue is exhausted before 18 includes → file
+   `phase0_fiber_expansion_hold_insufficient_tasks`.
+5. Log every inspected task (include or exclude) in `manual_inspection_log.csv`
+   with its decision + reason.
