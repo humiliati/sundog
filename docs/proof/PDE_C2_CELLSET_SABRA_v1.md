@@ -147,6 +147,36 @@ must still pass.
    mode + stationarity gate, re-run the energy self-test, run the §3
    diagnostic, then the verdict-bearing cell.
 
+## 10. Build + diagnostic-phase amendments (2026-05-29)
+
+Signed off and built (objective-validity/diagnostic layer; the
+verdict-bearing cell remains gated on the diagnostic + the §5 gate):
+
+- **Forcing = fixed-amplitude `|u_1| = 1.0`** (§8.1 resolved). The
+  diagnostic smoke confirmed it removes the v0 drift: total energy
+  plateaus with first/second-half drift **0.2%** (vs v0 drift-to-zero).
+  Inviscid energy-conservation self-test still passes.
+- **Burst observable amended: `max_n|u_n|²` → dissipation rate
+  `ε(t) = ν Σ_n k_n² |u_n|²`.** *Why:* the diagnostic immediately
+  exposed that under fixed-amplitude forcing `max_n|u_n|²` is
+  **degenerate** — it is pinned by the forced shell (`|u_1|` fixed), so
+  median = q98 = 1.0, no burst signal. `ε` (the canonical shell-model
+  intermittency observable; `k_n²` weighting concentrates it in the
+  dissipation range, and it is the quantity the instanton/large-deviation
+  literature we cited targets) is non-degenerate: smoke `ε` q98/median
+  ≈ 5.8. This is a diagnostic-motivated refinement of the *objective*
+  made **before any verdict-bearing run** (no verdict read), the
+  legitimate purpose of the diagnostic phase — not a post-hoc retune.
+  `E_burst` is now the held-out `q_burst = 0.98` quantile of `ε`.
+- **Harness built:** `--forcing {additive, fixed-amplitude}`,
+  `--diagnostic` mode (energy series → `T_eq` / `T_burst` + suggested
+  warmup/block lengths), `ε` burst observable + base-rate gate;
+  `scripts/pde_c2_sabra_cell.py`. Self-test + smoke green.
+- **Headline diagnostic running** (fixed-amplitude, `ε`, 3M steps) to
+  pin `T_eq` / `T_burst`; the verdict-bearing cell lengths (warmup ≥
+  3·T_eq, blocks ≥ 50·T_burst) get pinned in a v1 patch from its output
+  before the cell run, with the §5 per-block stationarity gate.
+
 ## 9. Cross-references
 
 - [`PDE_C2_CELLSET_SABRA_v0.md`](PDE_C2_CELLSET_SABRA_v0.md) — the
