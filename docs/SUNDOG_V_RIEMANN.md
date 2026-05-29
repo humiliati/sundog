@@ -27,6 +27,8 @@ Probe 01 v1 has one Path (i) parity-decomposition receipt filed at
 [`riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](riemann/receipts/2026-05-28_probe01_pathi_parity_decomposition.md).
 The first Front-A reading note is drafted at
 [`riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md`](riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md).
+Its first cell-set companion is filed at
+[`riemann/RIEMANN_C1_CELLSET_V0.md`](riemann/RIEMANN_C1_CELLSET_V0.md).
 
 ## Claim Boundary
 
@@ -265,10 +267,12 @@ Receipt fields:
   [`RIEMANN_LITPASS_MEMO.md`](RIEMANN_LITPASS_MEMO.md) Track B + Connes
   competitor note.
 - **Staged cell set (pending review):** a candidate explicit-formula cell set
-  for this probe is pre-staged in
-  [`riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md`](riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md)
-  ("Candidate Cell Set For The Next Pass"). It is **not adopted** until the
-  Front-A reading clears its external sanity check; the note's
+  for this probe is filed in
+  [`riemann/RIEMANN_C1_CELLSET_V0.md`](riemann/RIEMANN_C1_CELLSET_V0.md),
+  following the scaffold in
+  [`riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md`](riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md).
+  It is **not adopted** until the Front-A reading clears its external sanity
+  check; the note's
   `R-C1-NEG-A`/`R-C1-NEG-B` (vacuity / identity-zero laundering) negatives gate
   whether Probe 03 has any edge beyond standard even-test-function bookkeeping.
 - **External review path:** an analytic number theorist comfortable with
@@ -360,6 +364,9 @@ These remain horizon until receipts exist.
 - [`docs/riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md`](riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md)
   - draft Front-A reading note: functional-equation reflection as a receipt
   scaffold for smoothed explicit formulae.
+- [`docs/riemann/RIEMANN_C1_CELLSET_V0.md`](riemann/RIEMANN_C1_CELLSET_V0.md)
+  - v0 explicit-formula parity scaffold for the Front-A reading; unreviewed and
+  unrun.
 - [`docs/prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md)
   - initial domain and admission lock.
 - [`docs/riemann/PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md`](riemann/PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md)

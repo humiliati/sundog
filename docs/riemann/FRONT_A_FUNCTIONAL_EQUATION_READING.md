@@ -27,6 +27,11 @@ candidate distinction between forced parity cancellation and arithmetic
 residual, but it requires an explicit-formula cell set before it can count as a
 Sundog artifact rather than commentary.
 
+Cell-set status: v0 filed at
+[`RIEMANN_C1_CELLSET_V0.md`](RIEMANN_C1_CELLSET_V0.md). It pins a Gaussian even
+row, an odd negative-control row, and a mixed laundering-guard row, but it is
+unreviewed and unrun.
+
 ## Claim Boundary
 
 This note does **not** claim:
@@ -162,9 +167,10 @@ Window:   small finite zero window + matched prime cutoff
 Output:   parity ledger: forced cancellations, residual rows, truncation floor
 ```
 
-This cell set is intentionally not executable yet. It is the thing an analytic
-number theorist should be able to reject quickly if it is merely standard
-bookkeeping.
+The v0 instantiation of this sketch is
+[`RIEMANN_C1_CELLSET_V0.md`](RIEMANN_C1_CELLSET_V0.md). It is intentionally not
+executable yet. It is the thing an analytic number theorist should be able to
+reject quickly if it is merely standard bookkeeping.
 
 ## Named Negatives
 
@@ -215,6 +221,8 @@ If this note fails review:
 - Drafted: 2026-05-28.
 - Inputs: lit-pass memo, representation bridge notes, Probe 01 v1 receipt and
   audit clarification.
+- Cell set: [`RIEMANN_C1_CELLSET_V0.md`](RIEMANN_C1_CELLSET_V0.md), drafted
+  2026-05-28.
 - Execution: none.
 - Review: none.
 - Promotion: blocked on external sanity check and a pinned explicit-formula
