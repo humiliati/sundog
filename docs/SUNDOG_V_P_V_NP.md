@@ -11,25 +11,30 @@ Short version:
 > can a sufficient signature make safety verification tractable inside a named
 > capacity envelope?
 
-Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier spec,
-v0 frozen slate, and first v0 execution receipt all filed 2026-05-28; see
+Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier
+spec, v0 and v1 frozen slates, and v0 + v1 execution receipts all filed
+2026-05-28; see
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md),
 [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md),
-[`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md), and
-[`pvnp/receipts/2026-05-28_phase1_toy_verifier_v0.md`](pvnp/receipts/2026-05-28_phase1_toy_verifier_v0.md).
-Phase 1 v0 returned a **named quarantine**: the v0 signature scheme has no
-integrity binding between analytical fields and the source trace, and a
-small-tier spoof attacker (`A_spoof_small`) breached 245 / 444 unsafe items
-within a 64-candidate budget, fixing `capacity_threshold = <=small`. Four
-other named falsifier triggers (Certificate Vacuity for `sensor_health` and
-`invariance_checks`, Verifier Overhead Failure, Boundary Absence for
-hidden-basin promise violations) point Phase 1 v1 toward certificate
-integrity binding, discriminating invariance / sensor fields, and a basin-
-geometry promise signal derivable from probes. Privilege-leak audit was
-green; false-accept rate was 0.087 % overall (0.34 % on the in-promise
-verification split). A v1 repair slate is open at
-[`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md). No
-complexity-theoretic result claimed. This document is a research bridge from
+[`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md),
+[`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md), and the receipts under
+[`pvnp/receipts/`](pvnp/receipts/). Phase 1 v0 returned a **named
+quarantine** with `capacity_threshold = <=small` after `A_spoof_small`
+breached 245 / 444 unsafe items by editing analytical certificate fields
+the v0 verifier did not bind to the source trace. Phase 1 v1 was a
+source-binding repair slate; its execution receipt is also a **named
+quarantine** but with the load-bearing v0 falsifier closed:
+`A_spoof_field_small` and `A_spoof_source_small` both went 0 / 494 across
+~63 000 attempts, 5 / 5 synthetic integrity-mismatch probes quarantined,
+and `capacity_threshold = not_estimated`. Three v1 slate gates still
+fail — invariance vacuity (`invariance_checks_v1` 100 % match),
+boundary absence (131 / 768 basin-shape promise violations accepted), and
+cost (wall-time ratio 1139 × vs rollout, worse than v0's 228 ×) — and
+`coverage_digest` became structurally redundant under v1's new
+`geometry_promise_signal` gate. Privilege-leak audit was green in both
+runs; false-accept rate stayed under 0.13 % in both. v2 is queued in the
+v1 receipt's Next-Allowed-Step section. No complexity-theoretic result
+claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
 capacity-relative one-wayness.
