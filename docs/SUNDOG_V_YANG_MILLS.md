@@ -10,15 +10,17 @@ Short version:
 > discipline: if the field itself is too much, can the right invariant shadow
 > still certify bounded structure?
 
-Status: **Phase 1 runner manifest filed 2026-05-29**. Roadmap draft at this
-file; lit-pass at [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md);
+Status: **Phase 1 U(1) 2D smoke receipt filed 2026-05-29**. Roadmap draft at
+this file; lit-pass at [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md);
 P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
 Phase 1 U(1) 2D smoke manifest at
 [`prereg/yang-mills/PHASE1_U1_2D_gauge_invariance_smoke.md`](prereg/yang-mills/PHASE1_U1_2D_gauge_invariance_smoke.md);
-receipt template at [`yang-mills/RECEIPT_TEMPLATE.md`](yang-mills/RECEIPT_TEMPLATE.md).
-No runner code, receipt, or result-bearing claim exists yet. Next artifact is
-the minimal runner implementation for the exact Phase 1 manifest command.
+receipt at
+[`yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md).
+This is an Abelian instrumentation receipt only. No non-Abelian, Phase 2,
+certificate, or result-bearing Yang-Mills claim exists. Next research artifact
+is a `SU2_2D` Phase 1 manifest.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
@@ -339,7 +341,8 @@ Deliverables:
 - raw-link diagnostic control;
 - gauge-randomized copies;
 - receipt showing primary signature stable and raw/control lanes unstable as
-  expected.
+  expected - **filed 2026-05-29** at
+  [`yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md).
 
 Failure:
 
@@ -473,10 +476,13 @@ Next agent should:
    Admission Requirement in the P0 lock.~~
    **Done 2026-05-29** - see
    [`prereg/yang-mills/PHASE1_U1_2D_gauge_invariance_smoke.md`](prereg/yang-mills/PHASE1_U1_2D_gauge_invariance_smoke.md).
-9. **New next artifact (2026-05-29):** implement only the minimal U(1) 2D
-   Phase 1 runner and package script required by the manifest. Do not add
-   SU(2), Phase 2 nearest-neighbor scoring, smearing, blocking, topological
-   observables, or 4D hooks inside that runner.
+9. ~~Implement only the minimal U(1) 2D Phase 1 runner and package script
+   required by the manifest.~~
+   **Done 2026-05-29** - receipt filed at
+   [`yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md).
+10. **New next artifact (2026-05-29):** file a `SU2_2D` Phase 1 manifest.
+    Do not open Phase 2 nearest-neighbor scoring until the non-Abelian harness
+    cell has its own gauge-randomization smoke receipt.
 
 ## 11. Open Decisions
 

@@ -27,3 +27,10 @@ and every receipt here must cite its raw result directory.
 
 No receipt is admitted unless it cites the P0 lock version and fills
 the [receipt template](../RECEIPT_TEMPLATE.md).
+
+## Filed Receipts
+
+- [`2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md`](2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md)
+  - `P1-A smoke_pass` for the Abelian `U1_2D`, 16x16, beta 1.0
+  gauge-randomization smoke. Instrumentation only; no non-Abelian or
+  certificate claim.

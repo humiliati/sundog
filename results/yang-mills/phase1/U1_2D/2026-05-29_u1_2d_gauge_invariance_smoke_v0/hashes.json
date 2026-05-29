@@ -1,0 +1,11 @@
+{
+  "autocorr_pilot/plaquette_series.csv": "d2c44b8ca6ad885c8e555b25d252247929e8b4d5fa0772356cafe94b2595641c",
+  "configs/u1_links.jsonl": "64de2b74b4f9a8cff7ae97c8972d2a508d3adbc4e0a2261bc3005adaf58aac75",
+  "gauge_randomization/raw_link_residuals.csv": "1e34b2755d861f48d313fa28d28b156629ef37073a7891e4fe6a7528ab9755af",
+  "gauge_randomization/signature_residuals.csv": "891cc5d36bba35d5b2ad98d9c0f20cd2afebd0c6af042c40213e77782d562bad",
+  "heldout/gamma_bin_edges.json": "8541f3529f9f33f07d606ceafbb006e1d1b53941577bf20f54a9e01e4ec93eac",
+  "heldout/heldout_loop_values.csv": "1b8c97ee7530b1d88599decb1790eae78848d77926d9b1e5415d97d058f4f4af",
+  "manifest.json": "42103ad862b399092745a2c53d14c3bee4d60f42e5167dd402881433f5da698e",
+  "signatures/signature_vectors.csv": "eb5946d1500718547869142bec6c3342d0da848de3c1f6e80c9da85692b6514e",
+  "summary.json": "7218309d9a5ed03a37e46de20d9f1829617284c8635318712349947d83a807b5"
+}
