@@ -68,10 +68,12 @@ function spoofCandidate(sigma, rng) {
   // Bump margin_lower_bound to a value comfortably above m_min.
   candidate.margin_lower_bound = uniform(rng, 0.08, 0.20);
   // Optionally tweak coverage to clear the floor.
-  candidate.coverage_digest.touched_cells = Math.max(
-    candidate.coverage_digest.touched_cells,
-    20 + Math.floor(uniform(rng, 0, 40)),
-  );
+  if (candidate.coverage_digest) {
+    candidate.coverage_digest.touched_cells = Math.max(
+      candidate.coverage_digest.touched_cells,
+      20 + Math.floor(uniform(rng, 0, 40)),
+    );
+  }
   // Optionally clean sensor_health.
   candidate.sensor_health.noise_std_estimate = Math.min(
     candidate.sensor_health.noise_std_estimate,
@@ -81,10 +83,26 @@ function spoofCandidate(sigma, rng) {
     candidate.sensor_health.dropout_fraction,
     uniform(rng, 0.0, 0.05),
   );
+  if (candidate.sensor_health_v1) {
+    candidate.sensor_health_v1.noise_std_estimate = Math.min(
+      candidate.sensor_health_v1.noise_std_estimate,
+      uniform(rng, 0.001, 0.01),
+    );
+    candidate.sensor_health_v1.dropout_fraction = Math.min(
+      candidate.sensor_health_v1.dropout_fraction,
+      uniform(rng, 0.0, 0.05),
+    );
+  }
+  if (candidate.geometry_promise_signal_v2) {
+    candidate.geometry_promise_signal_v2.all_pass = true;
+  }
+  if (candidate.invariance_checks_v2) {
+    candidate.invariance_checks_v2.all_pass = true;
+  }
   return candidate;
 }
 
-function sourceSpoofCandidate(sigma, traceCommitment, publicEnv, rng) {
+function sourceSpoofCandidate(sigma, traceCommitment, publicEnv, rng, version) {
   const payload = JSON.parse(JSON.stringify(traceCommitment.source_payload));
   for (const probes of payload.probes) {
     for (const p of probes) {
@@ -99,7 +117,7 @@ function sourceSpoofCandidate(sigma, traceCommitment, publicEnv, rng) {
     positions: payload.positions,
     probes: payload.probes,
     sourcePayload: payload,
-    version: "v1",
+    version,
   });
 }
 
@@ -128,7 +146,8 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
-  const isV1 = slate.schema_suffix === "v1";
+  const version = slate.schema_suffix;
+  const sourceBound = version === "v1" || version === "v2";
   await mkdir(outDir, { recursive: true });
 
   // 1) Run inversion attacker via Python if not already present.
@@ -202,7 +221,7 @@ async function main() {
       const result = verify({
         sigma: candidate, expectedTraceId, publicEnv, m_min,
         promise: V0_PROMISE, thresholds: V0_CHECKER_THRESHOLDS,
-        traceCommitment: isV1 ? traceCommitment : null,
+        traceCommitment: sourceBound ? traceCommitment : null,
       });
       const elapsed = performance.now() - t0;
       spoofCosts.wall_ms += elapsed;
@@ -217,7 +236,7 @@ async function main() {
     }
     if (spoofAccepted) spoofSuccess += 1;
     rows.push(csvRow([
-      isV1 ? "A_spoof_field_small" : "A_spoof_small", envId, policyId, publicEnv.split,
+      sourceBound ? "A_spoof_field_small" : "A_spoof_small", envId, policyId, publicEnv.split,
       String(spoofAccepted ? spoofTrial : SPOOF_BUDGET - 1),
       spoofAccepted ? "success" : "no_success",
       spoofAccepted ? "1" : "0",
@@ -225,13 +244,13 @@ async function main() {
       `budget=${SPOOF_BUDGET};gt_intersects=${gtRow.intersects_basin};gt_min_margin=${gtRow.min_margin.toFixed(4)}`,
     ]));
 
-    if (isV1 && traceCommitment) {
+    if (sourceBound && traceCommitment) {
       const sourceRng = makeRng(`source-spoof::${policyId}::${envId}`);
       let sourceAccepted = false;
       let sourceTrial = -1;
       for (let trial = 0; trial < SPOOF_BUDGET; trial += 1) {
         const t0 = performance.now();
-        const candidate = sourceSpoofCandidate(sigma, traceCommitment, publicEnv, sourceRng);
+        const candidate = sourceSpoofCandidate(sigma, traceCommitment, publicEnv, sourceRng, version);
         const expectedTraceId = `${policyId}|${envId}`;
         const result = verify({
           sigma: candidate, expectedTraceId, publicEnv, m_min,

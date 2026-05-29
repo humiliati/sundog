@@ -1,14 +1,15 @@
 # Phase 1 v1 Repair Slate
 
-Status: repair slate opened after v0 named quarantine. Initial v1
-implementation path runs end-to-end; no reviewed execution receipt filed.
+Status: frozen after first execution receipt. v1 closed the v0 spoof channel
+but left invariance vacuity, boundary leakage, and cost overhead open for v2.
 
 Date opened: 2026-05-28
 
-Implementation note 2026-05-28: `npm run pvnp:phase1:v1` now writes the v1
+Implementation note 2026-05-28: `npm run pvnp:phase1:v1` writes the v1
 artifact set under `results/pvnp/phase1-toy-verifier-v1/`, including trace
-commitments, integrity decisions, and split spoof-attacker trials. Treat those
-outputs as run artifacts until a reviewed receipt is filed.
+commitments, integrity decisions, and split spoof-attacker trials. The reviewed
+receipt is filed at
+[`receipts/2026-05-28_phase1_toy_verifier_v1.md`](receipts/2026-05-28_phase1_toy_verifier_v1.md).
 
 This slate inherits the Phase 1 toy-verifier object but changes the certificate
 contract. It is not a domain expansion and it is not a rerun to chase a cleaner

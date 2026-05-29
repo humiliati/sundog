@@ -22,6 +22,9 @@ Phase specs:
 - [`PHASE1_V1_SLATE.md`](PHASE1_V1_SLATE.md) - repair slate opened after the
   v0 named quarantine, focused on certificate integrity binding, non-vacuous
   sensor/invariance checks, and probe-derived geometry promise detection.
+- [`PHASE1_V2_SLATE.md`](PHASE1_V2_SLATE.md) - repair slate opened after the
+  v1 named quarantine, focused on decision-relevant invariance checks,
+  basin-shape boundary closure, coverage disposition, and checker overhead.
 
 Templates:
 
@@ -38,7 +41,7 @@ Result convention:
 Receipts:
 
 - [`receipts/README.md`](receipts/README.md) - receipt index, including the
-  Phase 1 v0 named-quarantine receipt.
+  Phase 1 v0 and v1 named-quarantine receipts.
 
 Current state:
 
@@ -50,7 +53,7 @@ Current state:
 - Phase 1 v0 harness executed: 2026-05-28. Verdict = named quarantine;
   `capacity_threshold = <=small` after field-only spoof breach.
 - Phase 1 v1 repair slate opened: 2026-05-28.
-- Phase 1 v1 implementation path started: `npm run pvnp:phase1:v1` runs
-  end-to-end and writes unreviewed artifacts under
-  `results/pvnp/phase1-toy-verifier-v1/`.
-- No Phase 1 v1 execution receipt has been filed.
+- Phase 1 v1 harness executed: 2026-05-28. Verdict = named quarantine;
+  v0 spoof channel closed, but invariance vacuity, boundary leak, and cost
+  overhead remain open.
+- Phase 1 v2 repair slate opened: 2026-05-28.

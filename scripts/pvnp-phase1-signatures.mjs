@@ -44,6 +44,7 @@ async function main() {
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
   const version = slate.schema_suffix;
+  const sourceBound = version === "v1" || version === "v2";
   await mkdir(outDir, { recursive: true });
 
   const traces = await readJsonl(path.join(outDir, "traces.jsonl"));
@@ -62,7 +63,7 @@ async function main() {
       positions: trace.positions,
       probes: trace.probes,
     });
-    if (version === "v1") commitments.push(makeTraceCommitment(sourcePayload));
+    if (sourceBound) commitments.push(makeTraceCommitment(sourcePayload));
     const sigma = computeSignature({
       traceId,
       publicEnv,
@@ -74,7 +75,7 @@ async function main() {
     sigs.push(sigma);
   }
 
-  if (version === "v1") {
+  if (sourceBound) {
     await writeFile(
       path.join(outDir, "trace_commitments.jsonl"),
       commitments.map((c) => JSON.stringify(c)).join("\n") + "\n",

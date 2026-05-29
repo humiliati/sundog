@@ -70,7 +70,8 @@ function runPython(module, args, label) {
 
 async function writeRunReadme(runDir) {
   const slate = getPhase1RunConfig(runDir);
-  const isV1 = slate.schema_suffix === "v1";
+  const sourceBound = slate.schema_suffix === "v1" || slate.schema_suffix === "v2";
+  const isV2 = slate.schema_suffix === "v2";
   const md = [
     `# Phase 1 ${slate.schema_suffix} Run Artifacts`,
     ``,
@@ -90,16 +91,20 @@ async function writeRunReadme(runDir) {
     `| \`calibration_manifest.json\` | baselines | m_min sweep + selected value + insulation proof |`,
     `| \`ground_truth_labels.csv\` | baselines | evaluator-only Safe(pi, env) labels |`,
     `| \`baseline_decisions.csv\` | baselines | rollout + full-state + formal decisions |`,
-    ...(isV1 ? [
-      `| \`trace_commitments.jsonl\` | signatures | source-bound trace commitments for v1 integrity checks |`,
+    ...(sourceBound ? [
+      `| \`trace_commitments.jsonl\` | signatures | source-bound trace commitments for integrity checks |`,
     ] : []),
     `| \`signatures.jsonl\` | signatures | sigma certificates |`,
-    ...(isV1 ? [
+    ...(sourceBound ? [
       `| \`integrity_decisions.csv\` | verifier | normal-certificate integrity check records |`,
       `| \`integrity_failures.csv\` | verifier | synthetic integrity-mismatch probes |`,
     ] : []),
     `| \`verifier_decisions.csv\` | verifier | V decisions on measurement splits |`,
     `| \`ablation_decisions.csv\` | ablations | vacuity-probe decisions per dropped field |`,
+    ...(isV2 ? [
+      `| \`geometry_boundary_audit.csv\` | verifier | v2 geometry promise flags by measurement pair |`,
+      `| \`accepted_oop_audit.csv\` | verifier | v2 accepted out-of-promise rows by subtype |`,
+    ] : []),
     `| \`attacker_inversion_results.json\` | training/pvnp/train_inversion_attacker.py | A_inv_small per-env AUROC/IoU |`,
     `| \`attacker_trials.csv\` | attackers | combined inversion + spoof per-trial outcomes |`,
     `| \`costs.csv\` | costs | wall_ms + ops per component, derived ratios |`,
@@ -109,7 +114,7 @@ async function writeRunReadme(runDir) {
     `## Reproduce`,
     ``,
     `\`\`\`bash`,
-    `npm run pvnp:phase1`,
+    slate.schema_suffix === "v0" ? `npm run pvnp:phase1` : `npm run pvnp:phase1:${slate.schema_suffix}`,
     `\`\`\``,
     ``,
     `or run the harness directly:`,

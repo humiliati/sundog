@@ -53,7 +53,9 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const outDir = path.resolve(REPO_ROOT, args.runDir);
   const slate = getPhase1RunConfig(args.runDir);
-  const isV1 = slate.schema_suffix === "v1";
+  const version = slate.schema_suffix;
+  const sourceBound = version === "v1" || version === "v2";
+  const isV2 = version === "v2";
   await mkdir(outDir, { recursive: true });
 
   const sigs = await readJsonl(path.join(outDir, "signatures.jsonl"));
@@ -79,11 +81,22 @@ async function main() {
     "verify_wall_ms", "verify_ops",
   ].join(",")];
 
-  const integrityRows = isV1 ? [[
+  const integrityRows = sourceBound ? [[
     "env_id", "policy_id", "split", "check", "decision", "reason",
   ].join(",")] : null;
-  const integrityFailureRows = isV1 ? [[
+  const integrityFailureRows = sourceBound ? [[
     "env_id", "policy_id", "split", "check", "registered_behavior", "observed_decision", "observed_reason",
+  ].join(",")] : null;
+  const geometryBoundaryRows = isV2 ? [[
+    "env_id", "policy_id", "split", "decision", "reason",
+    "geometry_pass", "geometry_reason", "geometry_evidence_coverage",
+    "curvature_abs_p95", "center_value_range", "near_boundary_count",
+    "scale_interval_lower", "scale_interval_upper", "topology_ambiguity_score",
+    "boundary_flags",
+  ].join(",")] : null;
+  const acceptedOopRows = isV2 ? [[
+    "env_id", "policy_id", "split", "promise_compliance", "decision", "reason",
+    "violation_subtype", "geometry_reason",
   ].join(",")] : null;
 
   let nAccept = 0, nReject = 0, nQuarantine = 0;
@@ -121,15 +134,17 @@ async function main() {
     rows.push(csvRow([
       envId, policyId, publicEnv.split, result.decision, result.reason,
       sigma.margin_lower_bound.toFixed(6),
-      sigma.coverage_digest.touched_cells,
-      (sigma.invariance_checks_v1 ?? sigma.invariance_checks).all_pass ? 1 : 0,
+      sigma.coverage_digest?.touched_cells ?? Math.round((sigma.geometry_promise_signal_v2?.geometry_evidence_coverage ?? 0) * 256),
+      (sigma.invariance_checks_v2 ?? sigma.invariance_checks_v1 ?? sigma.invariance_checks).all_pass ? 1 : 0,
       (sigma.sensor_health_v1 ?? sigma.sensor_health).noise_std_estimate.toFixed(6),
       sigma.integrity_checks?.all_pass === false ? 0 : 1,
-      sigma.geometry_promise_signal ? (sigma.geometry_promise_signal.all_pass ? 1 : 0) : "",
+      (sigma.geometry_promise_signal_v2 ?? sigma.geometry_promise_signal)
+        ? ((sigma.geometry_promise_signal_v2 ?? sigma.geometry_promise_signal).all_pass ? 1 : 0)
+        : "",
       elapsed.toFixed(3), ops,
     ]));
 
-    if (isV1) {
+    if (sourceBound) {
       integrityRows.push(csvRow([
         envId, policyId, publicEnv.split,
         "normal_certificate",
@@ -137,9 +152,41 @@ async function main() {
         result.reason,
       ]));
     }
+
+    if (isV2) {
+      const g = sigma.geometry_promise_signal_v2;
+      const failedFlag = g?.boundary_flags
+        ? Object.entries(g.boundary_flags).find(([, flag]) => flag)?.[0] ?? ""
+        : "";
+      geometryBoundaryRows.push(csvRow([
+        envId, policyId, publicEnv.split, result.decision, result.reason,
+        g?.all_pass ? 1 : 0,
+        failedFlag,
+        g?.geometry_evidence_coverage?.toFixed(6) ?? "",
+        g?.curvature_abs_p95?.toFixed(6) ?? "",
+        g?.center_value_range?.toFixed(6) ?? "",
+        g?.near_boundary_count ?? "",
+        g?.scale_interval?.lower?.toFixed(6) ?? "",
+        g?.scale_interval?.upper?.toFixed(6) ?? "",
+        g?.topology_ambiguity_score?.toFixed(6) ?? "",
+        g?.boundary_flags ? JSON.stringify(g.boundary_flags) : "",
+      ]));
+      if (publicEnv.promise_compliance !== "in_promise" && result.decision === "accept") {
+        const noise = publicEnv.probe_noise_params;
+        const subtype = noise.std > V0_PROMISE.probe_noise_max_std
+          || noise.dropout_rate > V0_PROMISE.probe_dropout_max_rate
+          || noise.delay_steps > V0_PROMISE.probe_delay_max_steps
+          ? "probe_noise"
+          : "basin_shape";
+        acceptedOopRows.push(csvRow([
+          envId, policyId, publicEnv.split, publicEnv.promise_compliance,
+          result.decision, result.reason, subtype, failedFlag,
+        ]));
+      }
+    }
   }
 
-  if (isV1 && sigs.length > 0) {
+  if (sourceBound && sigs.length > 0) {
     const target = sigs.find((s) => envById.get(s.source_observations.env_id)?.split !== "calibration") ?? sigs[0];
     const policyId = target.source_observations.policy_id;
     const envId = target.source_observations.env_id;
@@ -176,9 +223,13 @@ async function main() {
     "utf8",
   );
 
-  if (isV1) {
+  if (sourceBound) {
     await writeFile(path.join(outDir, "integrity_decisions.csv"), integrityRows.join("\n") + "\n", "utf8");
     await writeFile(path.join(outDir, "integrity_failures.csv"), integrityFailureRows.join("\n") + "\n", "utf8");
+  }
+  if (isV2) {
+    await writeFile(path.join(outDir, "geometry_boundary_audit.csv"), geometryBoundaryRows.join("\n") + "\n", "utf8");
+    await writeFile(path.join(outDir, "accepted_oop_audit.csv"), acceptedOopRows.join("\n") + "\n", "utf8");
   }
 
   // Roll verifier costs into partial costs file (additive).

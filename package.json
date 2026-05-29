@@ -193,6 +193,7 @@
     "poses:pin:one": "node scripts/render-pose.mjs",
     "pvnp:phase1": "node scripts/pvnp-phase1-harness.mjs",
     "pvnp:phase1:v1": "node scripts/pvnp-phase1-harness.mjs --run-dir results/pvnp/phase1-toy-verifier-v1",
+    "pvnp:phase1:v2": "node scripts/pvnp-phase1-harness.mjs --run-dir results/pvnp/phase1-toy-verifier-v2",
     "pvnp:phase1:envs": "node scripts/pvnp-phase1-generate-environments.mjs",
     "pvnp:phase1:policies": "node scripts/pvnp-phase1-policies.mjs",
     "pvnp:phase1:mlp-train": "python -m training.pvnp.train_mlp_policy",

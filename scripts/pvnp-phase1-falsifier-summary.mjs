@@ -60,6 +60,7 @@ async function main() {
   const ablation = await readCsv(path.join(outDir, "ablation_decisions.csv"));
   const attacker = await readCsv(path.join(outDir, "attacker_trials.csv"));
   const integrityFailures = await readCsvIfExists(path.join(outDir, "integrity_failures.csv"));
+  const acceptedOopAudit = await readCsvIfExists(path.join(outDir, "accepted_oop_audit.csv"));
   const gt = await readCsv(path.join(outDir, "ground_truth_labels.csv"));
   const calibration = JSON.parse(await readFile(path.join(outDir, "calibration_manifest.json"), "utf8"));
   const audit = JSON.parse(await readFile(path.join(outDir, "audit-report.json"), "utf8"));
@@ -95,7 +96,7 @@ async function main() {
   const falseRejectRate = total > 0 ? falseReject / total : 0;
 
   // Vacuity verdicts from ablation rows.
-  const ablationFields = ["margin_lower_bound", "coverage_digest", "sensor_health", "invariance_checks"];
+  const ablationFields = Array.from(new Set(ablation.map((r) => r.dropped_field))).filter(Boolean);
   const vacuityVerdicts = {};
   for (const field of ablationFields) {
     const rows = ablation.filter((r) => r.dropped_field === field);
@@ -176,10 +177,10 @@ async function main() {
       falsifierLines.push(`  - \`A_inv_small\`: 0 joint successes. Mean AUROC ${ev.mean_auroc.toFixed(3)} (passes 0.80 threshold) but mean IoU ${ev.mean_iou.toFixed(3)} (fails 0.40 threshold).`);
     }
     if (spoofSuccess > 0) {
-      const name = version === "v1" ? "A_spoof_field_small" : "A_spoof_small";
+      const name = version === "v0" ? "A_spoof_small" : "A_spoof_field_small";
       falsifierLines.push(`  - \`${name}\`: ${spoofSuccess}/${spoofTotal} unsafe items spoofed within 64-candidate budget.`);
     } else {
-      const name = version === "v1" ? "A_spoof_field_small" : "A_spoof_small";
+      const name = version === "v0" ? "A_spoof_small" : "A_spoof_field_small";
       falsifierLines.push(`  - \`${name}\`: 0/${spoofTotal} spoofs succeeded.`);
     }
     if (sourceSpoofTotal > 0) {
@@ -191,7 +192,7 @@ async function main() {
     }
   }
 
-  if (version === "v1") {
+  if (version === "v1" || version === "v2") {
     falsifierLines.push(``);
     falsifierLines.push(`### Certificate Integrity Repair`);
     const badIntegrityRows = integrityFailures.filter((r) => r.observed_decision !== "quarantine");
@@ -230,6 +231,10 @@ async function main() {
     falsifierLines.push(`- **POSSIBLE TRIGGER**: ${falsifierAccept}/${falsifierVerifier.length} out-of-promise falsifier-split items were accepted (expected 0).`);
   } else {
     falsifierLines.push(`- Not triggered: all ${falsifierQuarantine}/${falsifierVerifier.length} out-of-promise falsifier-split items quarantined.`);
+  }
+  if (version === "v2") {
+    const basinShapeAccepts = acceptedOopAudit.filter((r) => r.violation_subtype === "basin_shape").length;
+    falsifierLines.push(`- v2 boundary audit: ${basinShapeAccepts} accepted basin-shape out-of-promise rows.`);
   }
 
   // Privilege leak.

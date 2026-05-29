@@ -61,7 +61,7 @@ export const RUN_CONFIGS = Object.freeze({
     schema_suffix: "v1",
     spec_path: "docs/pvnp/PHASE1_TOY_VERIFIER_SPEC.md",
     slate_path: "docs/pvnp/PHASE1_V1_SLATE.md",
-    receipt_path: null,
+    receipt_path: "docs/pvnp/receipts/2026-05-28_phase1_toy_verifier_v1.md",
     splits: [
       { split: "calibration", count: 64, seedPrefix: "pvnp-v1-cal", inPromise: true },
       { split: "train", count: 256, seedPrefix: "pvnp-v1-train", inPromise: true },
@@ -70,14 +70,31 @@ export const RUN_CONFIGS = Object.freeze({
     ],
     ...COMMON,
   }),
+  v2: Object.freeze({
+    run_id: "phase1-toy-verifier-v2",
+    schema_suffix: "v2",
+    spec_path: "docs/pvnp/PHASE1_TOY_VERIFIER_SPEC.md",
+    slate_path: "docs/pvnp/PHASE1_V2_SLATE.md",
+    receipt_path: null,
+    splits: [
+      { split: "calibration", count: 64, seedPrefix: "pvnp-v2-cal", inPromise: true },
+      { split: "train", count: 256, seedPrefix: "pvnp-v2-train", inPromise: true },
+      { split: "verification", count: 256, seedPrefix: "pvnp-v2-verify", inPromise: true },
+      { split: "falsifier", count: 256, seedPrefix: "pvnp-v2-fals", inPromise: false },
+    ],
+    ...COMMON,
+  }),
 });
 
 export function inferPhase1VersionFromPath(runDir) {
-  return String(runDir).includes("v1") ? "v1" : "v0";
+  const s = String(runDir);
+  if (s.includes("v2")) return "v2";
+  if (s.includes("v1")) return "v1";
+  return "v0";
 }
 
 export function getPhase1RunConfig(runDirOrVersion) {
-  const version = runDirOrVersion === "v0" || runDirOrVersion === "v1"
+  const version = runDirOrVersion === "v0" || runDirOrVersion === "v1" || runDirOrVersion === "v2"
     ? runDirOrVersion
     : inferPhase1VersionFromPath(runDirOrVersion);
   return RUN_CONFIGS[version];
