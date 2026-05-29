@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Expanded Phase 3E v2 certificate verdict: `phase3e_v2_expanded_oracle_regression`** (pinned `a0f1a4b`). Phase 0 expansion was admitted (`phase0_fiber_expansion_admit`, 108-task balanced register, 18/prior). On the expanded register the v2 oracle's anti-solver-leakage gate -- clean at 36 tasks -- **fails** (`core_sketch_exact_lookup_fraction 0.35 > 0.20`), and the fibers stay sparse (min cross-task distance `0.207 -> 0.196`, still 0 near pairs). The 36-task Phase 3E v2 receipt (`phase3e_v2_deferred_sparse_fibers`) and the seven full-grid floors stand unchanged.
+Status: **Phase 3E RELATIVE-LOCALITY CERTIFICATE SPEC FILED -- EXECUTION HOLD**. The expanded Phase 3E v2 certificate verdict remains `phase3e_v2_expanded_oracle_regression` (oracle leakage regression + still-sparse fibers); the new relative-locality spec keeps those absolute-epsilon findings intact and asks a rank-based nearest-neighbor question.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -237,6 +237,16 @@ Checked **2026-05-28** against:
   36-task v2 receipt and the seven full-grid floors stand. Next moves (each needs
   its own pre-registered spec): a register-size-robust oracle v3, accepting the
   sparsity result as durable, or Branch E on capability grounds.
+- [`PHASE3E_RELATIVE_LOCALITY_CERTIFICATE_SPEC.md`](PHASE3E_RELATIVE_LOCALITY_CERTIFICATE_SPEC.md)
+  -- Phase 3E rank-based locality spec. It keeps the 108-task expanded register,
+  `program_sketch_v2`, and all absolute-epsilon findings frozen, but changes the
+  certificate question from "are there pairs within `epsilon_primary=0.05`?" to
+  "are cross-task nearest neighbors under `signature_palette_context` more
+  program-sketch-coherent than controls?" Primary k is 5, with k=1/3/10
+  diagnostics, metadata/raw/random/permutation controls, and explicit
+  leakage-caveated public language. **No relative-locality receipt exists yet;
+  execution remains held** until runner tooling, npm wiring, result ignore path,
+  leak-check coverage, smoke fingerprint, and freeze-marker amendment are filed.
 - [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) -- stub pattern for
   future Phase 1+ evaluation-blind register rows (no manual grid inspection,
   selection by preregistered metadata/hash rule).
@@ -628,6 +638,10 @@ Avoid:
   loosening `leakage_exact_lookup_max` after seeing the expanded value would be
   a post-hoc p-hack. A register-size-robust metric requires a new pre-registered
   oracle spec, not a retune;
+- any claim that the relative-locality spec changes the absolute-epsilon
+  verdicts, proves sufficiency, or licenses Branch E -- it is only a filed
+  rank-neighbor certificate question until a binding receipt exists, and even a
+  positive receipt would need its own downstream selector/solver spec;
 - any "color-rule variant flipped the bottleneck -> mask is the new
   limit" claim that omits the still-floor verdict -- the color-rule
   variant achieved a diagnostic improvement (palette doubled,
