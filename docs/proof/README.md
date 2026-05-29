@@ -143,8 +143,16 @@ that claim provably fails.
   `E_max` rule, same kNN convergence check, same twin-state certificate.
   The at-risk half is run first (`--adjudicator knn-sweep`); only a
   `STRICTNESS_WITNESS_POSITIVE` proceeds to the twin-state companion for
-  a full `PDE-C1-RG-POS` replication. Full runs staged, not executed
-  inline under the repo's ~10-minute rule.
+  a full `PDE-C1-RG-POS` replication. **v6 kNN run 2026-05-29 →
+  `DEFERRED_VACUITY` (`PDE-C1-RG-DEFERRED_VACUITY`)**: `damp_fraction =
+  0.00446` (~0.4% damp vs 30% at G=200) — the safety objective goes
+  near-vacuous at G=300 because the energy distribution is intermittent
+  (95th-percentile `E_max` on a rare-burst tail). Not a regime-2 failure
+  and not a confirmation; twin-state not run (§5); no E_max rescue (§4).
+  Per §7 the deferral preserves C1 status — v5 witness stands cell-local,
+  Grashof-axis generality untested. Surfaced: the fixed-percentile
+  objective doesn't transfer across regimes → a v7+ cell needs a
+  regime-portable objective.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /

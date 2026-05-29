@@ -241,8 +241,25 @@ same low-band-energy proxy, same last-quarter `E_max` rule, same kNN
 convergence check, and same twin-state certificate. This is a direct
 test of whether the complete v5 Reading-2 regime-2 witness survives a
 higher-Grashof regime or remains a localized `(k_f = 2, G = 200)` sweet
-spot. Full runs are staged, not executed inline under the ~10-minute
-rule.
+spot. **v6 kNN run done 2026-05-29 → `DEFERRED_VACUITY`
+(`PDE-C1-RG-DEFERRED_VACUITY`)** (`results/proof/c1-regime-g300-v6-knn-sweep/`):
+`damp_fraction = 0.00446 < delta_proxy_min = 0.01` — only ~0.4% of
+samples trigger the safety action at G=300 vs 30% at G=200. The vacuity
+gate fires before control-sufficiency can be tested. **Not a regime-2
+failure** (no `PDE-C1-RG-NEG-A` control-insufficiency) **and not a
+confirmation**: the *objective itself* goes near-vacuous at G=300
+because the energy distribution is intermittent/heavy-tailed (the 95th-
+percentile `E_max` sits on a rare-burst tail, vs near the bulk at
+G=200). Cross-checked against v2 (G=300, full-burnin E_max: 0.0086) —
+sub-1% damp regardless of E_max window, so it's a regime property
+(intermittency), not an artifact. Per §5 the twin-state companion was
+**not run** (control half didn't pass); per §4 no `E_max` rescue is
+admissible (would be `PDE-C1-RG-NEG-B`). **Per §7 a deferral preserves
+C1 status**: the v5 witness stands cell-local; Grashof-axis generality
+remains **untested**. Finding surfaced (for a v7+ pre-registration, not
+a v6 retune): the fixed-percentile-`E_max` objective does not transfer
+across regimes; a regime-general test needs a regime-portable objective
+(relative-excursion / absolute / enstrophy-based).
 
 Criterion (b) is closed at the *procedure-and-execution* level (v0–v5
 lock cycles + v4 fall-back + the kNN run and its convergence check all
