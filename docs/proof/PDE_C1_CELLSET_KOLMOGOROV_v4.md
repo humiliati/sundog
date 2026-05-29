@@ -127,6 +127,91 @@ NEG-A / DEFERRED_COVERAGE) would be the first substantive C1 read.
 - Criterion (c) named external PDE reviewer.
 - Attractor-support twin-state certificate.
 
+## Lock Execution Disposition (2026-05-28 — lock + fall-back)
+
+The v4 cell was executed in two runs on 2026-05-28 via
+[`../../scripts/pde_c1_kolmogorov_cell.py`](../../scripts/pde_c1_kolmogorov_cell.py):
+`--preset lock_v4` and the pre-registered fall-back
+`--preset fallback_v4`. Receipts at
+`results/proof/c1-kolmogorov-v4-lock/` and
+`results/proof/c1-kolmogorov-v4-fallback/`. Both runs returned
+`DEFERRED_COVERAGE`. **The disposition is a single combined read of
+the two runs**, because they tell one story.
+
+### E_max amendment confirmed — methodology win
+
+The 2026-05-28 fiber-protocol E_max windowing amendment
+(`e_max_burnin_fraction = 0.25` for v4) successfully unlocked
+proxy discrimination at the v3 regime:
+
+| Parameter | v3 (full burn-in) | v4 (last 25%) |
+|---|---|---|
+| `e_max` | 1.0674 | **0.7838** |
+| `damp_low_band_count` | 0 | 15,007 (lock) / 60,025 (fall-back) |
+| `damp_fraction` | 0 exactly | **0.30014** (lock) / **0.300125** (fall-back) |
+
+The cross-cell pattern of `damp_fraction = 0 exactly` (v0, v1, v3) is
+broken at v4. Both proxy actions fire substantively. The
+structural-vacuity precedence rule correctly does **not** fire.
+Critically, `damp_fraction` is **stable to 4 decimal places** between
+the 50,000-sample lock and the 200,000-sample fall-back. This is
+strong evidence that the proxy distribution is well-estimated and
+`0.300` is the true rate on this attractor, not a sampling artifact.
+**The cell IS substantively discriminative.**
+
+### Coverage gate fires for the v2 reason
+
+But coverage fails in both runs, and the fall-back behaviour is
+diagnostic:
+
+| Run | `N_sample` | occupied bins | avg samples/bin | `evaluated_bin_count` |
+|---|---|---|---|---|
+| v4 lock | 50,000 | 45,827 | 1.09 | 0 |
+| v4 fall-back | 200,000 | **139,361** | 1.43 | **0** |
+
+**4× samples produced 3.04× bins.** Most additional samples land in
+*new* bins, not fill existing ones. Even at `N = 200,000` no bin
+reached `n_min = 30`. Empirically, the bin distribution at
+`(k_f = 2, G = 200, K = 4)` is heavy-tailed with no concentrated
+mode — uniform binning at `h_K ≈ 0.011` in 32-dim signature space is
+genuinely too fine for the attractor extent.
+
+### Disposition
+
+Both v4 receipts file `DEFERRED_COVERAGE` honestly. The pre-registered
+fall-back was the protocol-correct response to the lock's
+`DEFERRED_COVERAGE`; the fall-back's identical verdict closes the
+fall-back option. This is *not* a `PDE-C1-NEG-B` retune — the
+methodology was followed exactly. The diagnosis is empirical: at
+`K = 4`, uniform binning fundamentally fails on this regime's
+attractor regardless of sample budget.
+
+### Methodology amendment 4 (added 2026-05-28)
+
+The fiber protocol §2 was amended same day to make **`K`** (signature
+mode count) a *cell-set parameter*, with explicit documentation of
+the coverage vs. discrimination tradeoff: `bin_count ∝ (R_attractor
+/ h_K)^{d_K}` where `d_K = 2K^2`. Lowering `K` reduces `d_K`
+exponentially, addressing the curse of dimensionality.
+
+### Bridge to v5
+
+v5 at
+[`PDE_C1_CELLSET_KOLMOGOROV_v5.md`](PDE_C1_CELLSET_KOLMOGOROV_v5.md)
+holds the v4 regime constant (`k_f = 2`, `G = 200`,
+`e_max_burnin_fraction = 0.25`) and pins `K = 3` (signature
+dim 18 instead of 32). Forced mode `(0, 2)` remains in the signature
+(it sorts ahead of higher-`k^2` modes in the K=3 selection).
+Harness exposes `--preset lock_v5`.
+
+### Why this is not `PDE-C1-NEG-B`
+
+The K amendment is a methodology change introducing a new cell-set
+parameter; it does **not** relax a pinned parameter to flip the v4
+verdict. v4 stands as a `DEFERRED_COVERAGE` receipt under K = 4. v5
+is a new cell-set instance with `K = 3` pre-registered before
+sampling, not a v4 retune.
+
 ## 6. Status
 
 - **Drafted.** 2026-05-28.
@@ -134,8 +219,16 @@ NEG-A / DEFERRED_COVERAGE) would be the first substantive C1 read.
   this v4 methodology delta and audit the change without running code.
 - **Unreviewed.** No external PDE reviewer has signed off on the
   `e_max_burnin_fraction = 0.25` choice.
-- **Unrun.** The `lock_v4` preset is present in the harness; no
-  execution has been attempted.
+- **Executed.** v4 lock ran 2026-05-28 in 1140 sec (~19 min); v4
+  fall-back ran 2026-05-28 in 5264 sec (~88 min). Receipts at
+  `results/proof/c1-kolmogorov-v4-lock/` and
+  `results/proof/c1-kolmogorov-v4-fallback/`.
+- **Disposition.** Both runs `DEFERRED_COVERAGE`. Methodology
+  win: E_max amendment unlocked proxy discrimination
+  (`damp_fraction ≈ 0.30`, stable between 50k and 200k samples).
+  Methodology limit: K = 4 binning empirically infeasible on this
+  attractor regardless of N_sample. v5 at K = 3 is the next cell-set
+  instance.
 
 ## 7. Cross-references
 

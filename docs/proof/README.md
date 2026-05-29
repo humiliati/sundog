@@ -58,15 +58,25 @@ that claim provably fails.
   `e_max = 1.07`. Cross-cell pattern across v0/v1/v3 reveals burn-in
   transient contamination of the 95th-percentile threshold.
 - [`PDE_C1_CELLSET_KOLMOGOROV_v4.md`](PDE_C1_CELLSET_KOLMOGOROV_v4.md)
-  — Navier-Stokes Candidate 1 cell-set v4: **methodology sibling** to
-  v3, not a regime sibling. Holds the v3 regime constant
-  (`k_f = 2`, `G = 200`) and pins `e_max_burnin_fraction = 0.25`
-  (last quarter of burn-in only for the 95th-percentile threshold)
-  per the 2026-05-28 fiber-protocol E_max windowing amendment.
-  Projected `E_max` drops from `1.07` to `~0.78`, projected
-  `damp_fraction ≈ 0.05` — comfortably discriminative. Drafted,
-  desk-auditable, unreviewed, unrun. Harness exposes
-  `--preset lock_v4`.
+  — Navier-Stokes Candidate 1 cell-set v4: methodology sibling to v3
+  (`e_max_burnin_fraction = 0.25`, regime held constant). **Lock and
+  fall-back both executed 2026-05-28** (~19 min + ~88 min). Both
+  receipts `DEFERRED_COVERAGE`. **Methodology win**: E_max amendment
+  unlocked proxy discrimination — `damp_fraction = 0.30014` (lock) /
+  `0.300125` (fall-back), stable to 4 dp across 50k and 200k samples.
+  Structural-vacuity rule did NOT fire. **Methodology limit**: at
+  `K = 4`, 4× samples produced 3.04× bins (45k → 139k) with avg
+  ~1.1–1.4 samples/bin; uniform binning empirically infeasible
+  regardless of `N_sample`. Triggered fiber-protocol amendment 4
+  (K as cell-set parameter).
+- [`PDE_C1_CELLSET_KOLMOGOROV_v5.md`](PDE_C1_CELLSET_KOLMOGOROV_v5.md)
+  — Navier-Stokes Candidate 1 cell-set v5: methodology sibling to v4.
+  Holds v4 regime constant (`k_f = 2`, `G = 200`,
+  `e_max_burnin_fraction = 0.25`) and pins `K = 3` (signature dim 18
+  vs v4's 32). Forced mode `(0, 2)` retained. Projected bin count
+  drops by orders of magnitude; `damp_fraction` expected to remain
+  discriminative (`[0.05, 0.60]`). Drafted, desk-auditable,
+  unreviewed, unrun. Harness exposes `--preset lock_v5`.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /
@@ -91,7 +101,10 @@ that claim provably fails.
   (and inherited unchanged by v1, v2, v3); v4 pins the new
   `e_max_burnin_fraction = 0.25` added 2026-05-28 (E_max windowing
   amendment, addresses burn-in transient contamination observed across
-  v0/v1/v3 lock executions).
+  v0/v1/v3 lock executions). v5 pins `K = 3` per the same-day
+  amendment 4 (K as cell-set parameter, addresses curse-of-
+  dimensionality coverage failure observed at K = 4 across v2 / v4
+  lock+fallback).
 - [`PHASE3_BOUNDARY.md`](PHASE3_BOUNDARY.md) — Phase 3 boundary theorem
   (reviewed, closed positive) and pushable-occluder mapping.
 - [`PHASE4_THREEBODY.md`](PHASE4_THREEBODY.md) — Phase 4 three-body measured

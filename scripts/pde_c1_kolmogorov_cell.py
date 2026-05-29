@@ -72,6 +72,8 @@ def parse_args() -> argparse.Namespace:
             "fallback_v3",
             "lock_v4",
             "fallback_v4",
+            "lock_v5",
+            "fallback_v5",
         ],
         default="smoke",
     )
@@ -91,12 +93,12 @@ def parse_args() -> argparse.Namespace:
 
 
 def build_config(args: argparse.Namespace) -> RunConfig:
-    # Cell-set v0 / v1 / v2 pinned values. v0 uses (k_f = 4, G = 100) - laminar.
-    # v1 uses (k_f = 2, G = 100) - non-trivial attractor but E_K-conserving.
-    # v2 uses (k_f = 2, G = 300) - intended to break the energy conservation.
+    # Cell-set v0 / v1 / v2 / v3 / v4 / v5 pinned values. v0..v4 use K = 4
+    # (signature dim 32). v5 uses K = 3 (signature dim 18) to address the
+    # curse-of-dimensionality coverage failure observed at K = 4 with the
+    # G = 200, k_f = 2 attractor.
     grid_size = 32
     n_modes = 16
-    k_signature = 4
     forcing_amplitude = 1.0
     dt = 0.01
     sample_interval_steps = 50
@@ -115,41 +117,49 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         sample_count = 50_000
         kf = 4
         grashof = 100.0
+        k_signature = 4
     elif args.preset == "fallback":
         burnin_steps = 100_000
         sample_count = 200_000
         kf = 4
         grashof = 100.0
+        k_signature = 4
     elif args.preset == "lock_v1":
         burnin_steps = 100_000
         sample_count = 50_000
         kf = 2
         grashof = 100.0
+        k_signature = 4
     elif args.preset == "fallback_v1":
         burnin_steps = 100_000
         sample_count = 200_000
         kf = 2
         grashof = 100.0
+        k_signature = 4
     elif args.preset == "lock_v2":
         burnin_steps = 100_000
         sample_count = 50_000
         kf = 2
         grashof = 300.0
+        k_signature = 4
     elif args.preset == "fallback_v2":
         burnin_steps = 100_000
         sample_count = 200_000
         kf = 2
         grashof = 300.0
+        k_signature = 4
     elif args.preset == "lock_v3":
         burnin_steps = 100_000
         sample_count = 50_000
         kf = 2
         grashof = 200.0
+        k_signature = 4
     elif args.preset == "fallback_v3":
         burnin_steps = 100_000
         sample_count = 200_000
         kf = 2
         grashof = 200.0
+        k_signature = 4
     elif args.preset == "lock_v4":
         # v4: same regime as v3 (k_f=2, G=200) but with the E_max amendment
         # — E_max from the last 25% of burn-in to exclude transient
@@ -159,12 +169,31 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         kf = 2
         grashof = 200.0
         e_max_burnin_fraction = 0.25
+        k_signature = 4
     elif args.preset == "fallback_v4":
         burnin_steps = 100_000
         sample_count = 200_000
         kf = 2
         grashof = 200.0
         e_max_burnin_fraction = 0.25
+        k_signature = 4
+    elif args.preset == "lock_v5":
+        # v5: same regime + E_max amendment as v4, but with K = 3 (signature
+        # dim 18 instead of 32) to address the curse-of-dimensionality
+        # coverage failure observed in v2/v4 at K = 4.
+        burnin_steps = 100_000
+        sample_count = 50_000
+        kf = 2
+        grashof = 200.0
+        e_max_burnin_fraction = 0.25
+        k_signature = 3
+    elif args.preset == "fallback_v5":
+        burnin_steps = 100_000
+        sample_count = 200_000
+        kf = 2
+        grashof = 200.0
+        e_max_burnin_fraction = 0.25
+        k_signature = 3
     else:
         # Smoke is intentionally not the registered cell. It exists to validate
         # the integrator, binning, and receipt plumbing under the repo's
@@ -175,6 +204,7 @@ def build_config(args: argparse.Namespace) -> RunConfig:
         lookahead_steps = 100
         kf = 4
         grashof = 100.0
+        k_signature = 4
 
     # Dimensionless normalization: G = forcing_amplitude / nu^2.
     viscosity = math.sqrt(forcing_amplitude / grashof)
@@ -488,6 +518,8 @@ def summarize(bin_rows: list[dict], cfg: RunConfig) -> dict:
         "fallback_v3",
         "lock_v4",
         "fallback_v4",
+        "lock_v5",
+        "fallback_v5",
     }
     damp_fraction = damp / max(1, no_op + damp)
     proxy_constant = (
