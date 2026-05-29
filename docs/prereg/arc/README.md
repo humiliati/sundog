@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3E SIGNATURE-FIBER CERTIFICATE SPEC FILED -- EXECUTION HOLD**.
+Status: **Phase 3E SIGNATURE-FIBER CERTIFICATE BINDING RECEIPT FILED -- `phase3e_deferred_label_vacuity` (no collision; fibers maximally separated; oracle prior-blind)**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -470,11 +470,36 @@ sufficiency support adjudication is on file. Public copy may say:
   prompting of a frozen large LM) is the live frontier**; a
   selection-targeted within-framing variant (a joint mask+color
   selector, since both banks fail more by selection than coverage)
-  remains the smaller alternative. Phase 3E now has its first
-  pre-registered spec: a signature-fiber certificate that asks whether
-  the frozen `signature_palette` context representation itself has exact
-  or near collisions with incompatible required behavior. No Phase 3E
-  receipt exists yet.
+  remains the smaller alternative.
+
+Phase 3E reframed the question as a decoder-independent certificate:
+does the frozen `signature_palette` context representation itself have
+exact or near fiber collisions with incompatible required behavior on
+the registered contexts? The binding certificate (pinned to
+freeze-marker `C133FF70`, 25 primary contexts / 49 total, ~4 min,
+deterministic) returned **`phase3e_deferred_label_vacuity`** with a
+clean dual finding: (1) **zero** exact or representation-level
+collisions, and more strongly **zero** cross-task context pairs within
+any tested radius -- the minimum cross-task
+`d_context_signature_palette` is **0.207**, 4.1x the primary threshold
+(`epsilon_primary=0.05`) and 2.1x the loose threshold -- so
+`signature_palette` *maximally separates* distinct registered tasks
+and there is no near-fiber locality to certify either way; and (2) the
+`program_sketch_v1` oracle is **prior-blind** (68% of primary contexts
+vacuous), cleanly structured: the Branch D edit-composition banks
+characterize `color_role` and `objectness` (0/4 vacuous each) but are
+blind to `counting`, `local_completion`, `spatial_transform` (4/4
+each) and `symmetry` (5/5) -- exactly the priors whose output is not a
+local edit of an input-derived baseline. The certificate therefore
+**neither blocks nor licenses Branch E**: it found no registered
+collision (so the seven floors are not explained by a signature
+collision, though this does not prove sufficiency), but it cannot
+issue `fiber_locality_positive` (0% fidelity-passing neighborhoods,
+vacuous oracle). To get an adjudicable certificate, a future amendment
+needs a framing-agnostic program-sketch oracle (covering the four
+edit-blind priors) or a larger registered context universe; otherwise
+Branch E must be justified by capability rather than by certified
+fiber geometry.
 
 Avoid:
 
@@ -487,9 +512,18 @@ Avoid:
   the seven filed binding receipts (V1, V2, compact-7, Phase 3A,
   Phase 3D base, Phase 3D color-rule variant, Phase 3D mask-target
   variant);
-- any claim that Phase 3E has found a signature-fiber collision, ruled one out,
-  licensed a Branch E solver, or adjudicated signature sufficiency before a
-  binding Phase 3E receipt exists;
+- any claim that Phase 3E found a signature-fiber collision (it did
+  not -- 0 collisions), ruled signature_palette insufficient, proved
+  it sufficient, or licensed a Branch E solver -- the binding
+  certificate is `phase3e_deferred_label_vacuity`: no collision, but
+  deferred (zero cross-task locality + 68% prior-blind oracle), so it
+  adjudicates neither sufficiency nor a locality-positive Branch E
+  license;
+- any claim that the maximal cross-task separation (min distance
+  0.207) proves signature sufficiency -- it only shows the
+  representation does not conflate distinct registered tasks at the
+  frozen radius, which the spec explicitly forbids reading as
+  sufficiency;
 - any "color-rule variant flipped the bottleneck -> mask is the new
   limit" claim that omits the still-floor verdict -- the color-rule
   variant achieved a diagnostic improvement (palette doubled,

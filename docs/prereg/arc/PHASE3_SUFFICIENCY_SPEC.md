@@ -6758,3 +6758,148 @@ filed in the next amendment.
 
 **Public-language constraint**: unchanged from the spec
 §"Public Language" until the binding receipt lands.
+
+### 2026-05-29 (PT) — Jeffery Hughes Jr. — Phase 3E Signature-Fiber Certificate Binding Receipt: `phase3e_deferred_label_vacuity` (no collision; fibers maximally separated; oracle prior-blind)
+
+The binding certificate ran on the registered 36-task Phase 0 set,
+pinned to freeze-marker `gitCommit C133FF70…` (runnerSha256
+`884959D69876…`, specHash `56D49192…`, parentSpecHash `419647BA…`,
+target-barrier hash `32088769…`; `gitDirty=true` only from the
+operator's unrelated Navier–Stokes working files, which the
+certificate does not read). Receipt at
+`results/arc/phase3e-signature-fiber-certificate/`. Wall ≈ 4 min
+(under the ten-minute rule). Deterministic; the binding branch
+matches the freeze-marker smoke exactly.
+
+**Context universe**: `U_all = 49` (validation_lodo 18,
+validation_pttest 6, test_lodo 19, pttest 6); primary adjudication
+universe `U_primary = test_lodo ∪ pttest = 25`.
+
+**Branch: `phase3e_deferred_label_vacuity`.**
+
+#### Dual finding
+
+| signal | value | reading |
+| --- | ---: | --- |
+| exact-output collisions | **0** | no two `U_primary` contexts share a `signature_palette` context id with differing target hashes |
+| representation-level collisions | **0** | …nor with differing `signature_palette` target ids |
+| `fidelity_pass_fraction` | **0.00** | zero `U_primary` contexts have a cross-task neighbor within `epsilon_primary = 0.05` |
+| near pairs within `epsilon_primary` | **0** | no near-fiber pairs to test for incompatibility |
+| **min cross-task context distance** | **0.207** | the closest distinct-task pair is **4.1× `epsilon_primary`, 2.1× `epsilon_loose`** |
+| median / max cross-task distance | 0.359 / 0.636 | `signature_palette_context` maximally separates distinct tasks |
+| `label_vacuity_fraction` | **0.68** | 17 of 25 `U_primary` contexts have `none` in ≥2 program-sketch oracle sets |
+
+Two independent facts hold, and either alone would force a deferral:
+
+1. **No collision and no near structure.** The certificate found no
+   exact or representation-level `signature_palette` fiber collision,
+   and — more strongly — no cross-task context pair is even *close*:
+   the minimum cross-task `d_context_signature_palette` over all
+   75 nearest-neighbor edges is `0.207`, far above every diagnostic
+   threshold (`epsilon_exact=0`, `epsilon_strict=0.025`,
+   `epsilon_primary=0.05`, `epsilon_loose=0.10`). So there is no
+   locality to certify positive and no near-incompatibility to flag —
+   the registered fibers are singletons at the registered radius.
+2. **The program-sketch oracle is prior-blind.** 68% of `U_primary`
+   contexts are sketch-vacuous, and the vacuity is cleanly
+   prior-structured (per `per_prior.csv`):
+
+   | prior | contexts | vacuous (`none` in ≥2 sets) |
+   | --- | ---: | ---: |
+   | `color_role` | 4 | 0 |
+   | `objectness` | 4 | 0 |
+   | `counting` | 4 | 4 |
+   | `local_completion` | 4 | 4 |
+   | `spatial_transform` | 4 | 4 |
+   | `symmetry` | 5 | 5 |
+
+   The Branch D edit-composition oracle (baseline + mask + color
+   banks) characterizes exactly the two priors whose required output
+   is a local recolor/edit of an input-derived baseline
+   (`color_role`, `objectness`) and is blind to the four priors whose
+   output is *not* such an edit (`counting`, `local_completion`,
+   `spatial_transform`, `symmetry`). This is the same structural
+   limit the seven decoder floors exhibited, now surfaced directly as
+   a label-coverage gap rather than a training failure.
+
+By the spec's precedence (exact → near → label_vacuity → locality
+→ sparse, with `label_vacuity` elevated above `fiber_locality_positive`),
+the branch is `phase3e_deferred_label_vacuity`. The zero-locality
+fact would independently force `phase3e_deferred_sparse_fibers`; the
+certificate reports the higher-precedence vacuity branch, with the
+separation finding recorded as the co-deferral.
+
+#### What This Verdict Does And Does Not Entail
+
+**It does**:
+
+- Certify that **no `signature_palette` fiber collision exists in the
+  registered context class** under the frozen identity and distance
+  rules — there is no decoder-independent insufficiency witness on
+  this finite set. (Per spec, this does **not** prove sufficiency.)
+- Establish that `signature_palette_context` **maximally separates
+  distinct registered tasks** (min cross-task distance 0.207 ≈ 4×
+  the primary threshold) — there is no near-fiber locality structure
+  to certify, positive or negative, on the registered set.
+- Localize the program-sketch oracle's blind spot to four of six
+  priors, explaining the vacuity as a coverage gap of the
+  edit-composition framing, not noise.
+
+**It does not**:
+
+- License a Branch E program-selector via
+  `phase3e_fiber_locality_positive` — that branch requires ≥50%
+  fidelity-passing cross-task neighborhoods and a non-vacuous oracle;
+  the registered set delivers 0% fidelity-passing and 68% vacuous.
+- Prove `signature_palette` sufficient or insufficient.
+- Claim any near-fiber incompatibility (none exist within
+  `epsilon_loose`).
+- Adjudicate the four sketch-vacuous priors at all.
+
+#### Path Forward
+
+The certificate neither blocks nor licenses Branch E; it defers, and
+the deferral is doubly-caused (vacuous oracle + zero locality). To get
+an adjudicable certificate, a future amendment would need one of:
+
+- **A stronger / framing-agnostic program-sketch oracle** that covers
+  the four edit-blind priors (`counting`, `local_completion`,
+  `spatial_transform`, `symmetry`) — e.g., adding DSL-program or
+  transformation-class labels rather than only baseline+mask+color
+  edit families. This directly attacks the 68% vacuity.
+- **A larger registered context universe** (more Phase 0 tasks per
+  prior, or finer LODO) so cross-task neighbors exist within
+  `epsilon_primary` and fiber locality becomes measurable. The
+  min-distance 0.207 suggests 36 tasks are too few/too separated to
+  populate fibers at 0.05.
+- **Proceeding to Branch E on independent grounds** (the seven
+  decoder floors), accepting that the certificate could not find a
+  registered collision to block it and could not certify locality to
+  motivate a smooth selector — i.e., a Branch E solver must be
+  justified by capability, not by certified fiber geometry.
+
+Per the spec's frozen-threshold rule, `epsilon_primary`, `k`, and the
+program-sketch thresholds are **not** retuned after seeing these
+distances/labels; any change requires a new append-only amendment.
+
+#### Frozen By This Verdict
+
+- The binding receipt at
+  `results/arc/phase3e-signature-fiber-certificate/` (pinned
+  `gitCommit C133FF70…`, target-barrier hash `32088769…`) is frozen.
+- The dual finding (no collision + min cross-task distance 0.207 +
+  68% prior-structured oracle vacuity) is the canonical Phase 3E
+  result.
+
+**Verdict impact**: no prior verdict changes. The seven full-grid
+control floors stand. Phase 3E adds a decoder-independent reading:
+on the registered context class, `signature_palette` exhibits no
+fiber collision and maximal cross-task separation, so the floors are
+not explained by a registered signature collision — but the
+certificate is deferred (vacuous oracle + zero locality) and licenses
+no sufficiency conclusion in either direction.
+
+**Public-language constraint**: per the spec §"Public Language", the
+permitted addition is the no-collision deferral statement; the
+collision-found and locality-positive statements remain forbidden
+(neither obtained).
