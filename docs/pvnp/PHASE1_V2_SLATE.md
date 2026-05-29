@@ -1,14 +1,16 @@
 # Phase 1 v2 Repair Slate
 
-Status: queued after the v1 named quarantine. Initial v2 implementation path
-runs end-to-end; no reviewed execution receipt has been filed.
+Status: frozen after first execution receipt. v2 landed the safety repair but
+left cost, `sensor_health_v1` disposition, and acceptance-volume sanity open
+for v3.
 
 Date opened: 2026-05-28
 
 Implementation note 2026-05-28: `npm run pvnp:phase1:v2` writes the v2
 artifact set under `results/pvnp/phase1-toy-verifier-v2/`, including v2
-geometry boundary audits and accepted-out-of-promise audits. Treat those
-outputs as run artifacts until a reviewed receipt is filed.
+geometry boundary audits and accepted-out-of-promise audits. The reviewed
+receipt is filed at
+[`receipts/2026-05-28_phase1_toy_verifier_v2.md`](receipts/2026-05-28_phase1_toy_verifier_v2.md).
 
 This slate inherits the Phase 1 toy-verifier object and the v1 source-binding
 contract. It is not a domain expansion, a larger attacker sweep, or a rerun to
