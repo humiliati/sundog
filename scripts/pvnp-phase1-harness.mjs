@@ -120,7 +120,7 @@ async function writeRunReadme(runDir) {
     `or run the harness directly:`,
     ``,
     `\`\`\`bash`,
-    `node scripts/pvnp-phase1-harness.mjs --run-dir ${path.basename(runDir)}`,
+    `node scripts/pvnp-phase1-harness.mjs --run-dir ${path.relative(REPO_ROOT, runDir).replace(/\\/g, "/")}`,
     `\`\`\``,
     ``,
     `See \`${slate.slate_path}\` for the frozen slate.`,

@@ -94,10 +94,16 @@ def basin_occupancy_grid(basin) -> np.ndarray:
 def sigma_features(sigma) -> np.ndarray:
     """Flatten a sigma certificate into a 24-dim feature vector."""
     cs = sigma["curvature_summary"]
-    sh = sigma["sensor_health"]
+    sh = sigma.get("sensor_health_v1", sigma["sensor_health"])
     env = sigma["trajectory_envelope"]
-    inv = sigma["invariance_checks"]
-    cov = sigma["coverage_digest"]
+    inv = sigma.get("invariance_checks_v2", sigma.get("invariance_checks_v1", sigma["invariance_checks"]))
+    cov = sigma.get("coverage_digest")
+    if cov is None:
+        g = sigma.get("geometry_promise_signal_v2", {})
+        cov = {
+            "touched_cells": float(g.get("geometry_evidence_coverage", 0.0)) * 256.0,
+            "resolution": 16.0,
+        }
     return np.array([
         # margin + coverage
         sigma["margin_lower_bound"],
