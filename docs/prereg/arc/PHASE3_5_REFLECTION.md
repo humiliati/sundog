@@ -633,3 +633,27 @@ The spec does not retune `epsilon_primary = 0.05`; it records that the fixed
 radius is empty and moves the primary test to rank cuts k=1/3/5/10, with k=5
 primary. The expanded oracle leakage regression is carried as an explicit
 caveat rather than erased. No execution is admitted by this addendum.
+
+## Post-Relative-Locality Certificate Addendum
+
+Filed: **2026-05-29 (PT)**.
+
+The Phase 3E relative-locality certificate binding receipt is now filed. Its
+verdict is **`phase3e_relative_locality_negative`**. The run used the 108-task
+expanded register (`U_primary=336`), freeze-marker `f7850f0`, runnerSha256
+`3DD2C97A`, k=1/3/5/10 with k=5 primary, and 5 seeds x 1000 permutations.
+
+The result contains a real but unusable rank signal. `signature_palette_context`
+is above prior-stratified random at k=5 (`p=0.0002`), so the rank order is not
+pure noise. But it is essentially tied with `metadata_only` (`delta=+0.006`,
+with sign flipping negative by k=10), below `raw_grid_context`
+(`delta=-0.036`), below the positive random-margin bar
+(`delta_vs_uniform=+0.072 < 0.15`), and has a hard-incompatibility rate of
+0.285, above the 0.25 negative gate.
+
+This closes the Phase 3E locality-certificate program as a certificate lane:
+absolute fibers are empty on 36 and 108 tasks, expanded absolute geometry
+triggers oracle regression while staying sparse, and relative rank locality is
+negative. The remaining live path is Branch E on capability grounds under its
+own pre-registered solver spec, or recording the certificate negative as the
+durable finding.
