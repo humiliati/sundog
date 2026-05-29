@@ -1,6 +1,6 @@
 # PDE C1 Regime Generality v1 — Portable Objective
 
-> **Design proposal for sign-off**, filed 2026-05-29. Successor to
+> **Pre-registration and result**, filed 2026-05-29. Successor to
 > [`PDE_C1_REGIME_GENERALITY_v0.md`](PDE_C1_REGIME_GENERALITY_v0.md),
 > whose G=300 probe returned `PDE-C1-RG-DEFERRED_VACUITY`: the
 > kNN/twin-state machinery stayed usable, but the *registered overshoot
@@ -12,10 +12,11 @@
 > with a **regime-portable** one and re-poses the Grashof-axis generality
 > test cleanly.
 >
-> **Status: proposed, not built, not run.** §5 specifies the harness
-> objective-mode for build; no code is written and no verdict-bearing
-> run is launched until this design is signed off. §10 lists the open
-> decisions.
+> **Status: executed.** §12 records `PDE-C1-RG-POS`: the portable
+> objective passes its portability gate at G=200 and G=300, the control
+> half is POSITIVE at both regimes, and the G=300 twin-state companion
+> is CERTIFIED. C1 remains unpromoted because proxy faithfulness and
+> external PDE review remain open.
 
 ## 1. The fix in one line
 
@@ -103,9 +104,9 @@ at low cost and matches the agreed design.
 *Cost-reduced alternative (not pinned; a sign-off option):* `C = A =
 30,000` with the same gap, ~1.2× v5 cost. Decide at sign-off.
 
-## 5. Harness objective-mode (spec for build — not yet built)
+## 5. Harness objective-mode
 
-A new objective mode, selected by a flag, leaving the v0–v6 fixed-
+A new objective mode, selected by a flag, leaves the v0–v6 fixed-
 percentile path untouched:
 
 ```text
@@ -119,14 +120,13 @@ registered): `objective_quantile q = 0.70`, `calibration_sample_count =
 with `e_max_burnin_fraction` irrelevant under this objective (E_max no
 longer from burn-in) and `objective = portable-quantile`.
 
-Implementation sketch: extend `run_cell` to integrate the extra
-calibration block + gap before the adjudication block; compute
-`M(u)` for calibration samples; set `E_max = quantile(M_C, q)`; then
-label/adjudicate the adjudication block exactly as today. `label_samples`
-already computes the lookahead-max — reuse it for both blocks. All
+Implemented by extending `run_cell` to integrate the extra calibration
+block + gap before the adjudication block; compute `M(u)` for
+calibration samples; set `E_max = quantile(M_C, q)`; then
+label/adjudicate the adjudication block exactly as today. All
 adjudicators (`knn`, `knn-sweep`, `twin-state`) consume the adjudication
-block unchanged. Smoke parity required before any lock run (SMOKE_ONLY
-on overrides, as for every prior cell).
+block unchanged. Smoke parity and overshoot-burnin regression were
+checked before the lock runs.
 
 ## 6. Portability gate (new, pre-registered)
 
@@ -204,16 +204,17 @@ external review.
   **documented v2 alternative**, not part of this artifact; it carries
   more free parameters and would need its own pre-registration.
 
-## 10. Open decisions for sign-off
+## 10. Build Decisions Closed
 
-1. **Split sizes:** pinned 50k/50k (apples-to-apples with v5,
-   ~40 min/run) vs the cost-reduced 30k/30k (~27 min/run). Recommend
-   50k/50k.
-2. **q = 0.70** (damp ≈ 0.30, matches v5) — confirm, or prefer another
-   damp scale.
-3. **Build trigger:** on sign-off I implement the `--objective
-   portable-quantile` mode + `lock_v7_g200` / `lock_v7_g300` presets,
-   smoke-test, then run the §7 program.
+The sign-off choices landed as:
+
+1. **Split sizes:** 50k calibration / 50k adjudication, preserving
+   apples-to-apples comparison with v5.
+2. **Quantile:** `q = 0.70`, targeting `damp_fraction ≈ 0.30` to match
+   the v5 action scale.
+3. **Build:** `--objective portable-quantile` plus `lock_v7_g200` /
+   `lock_v7_g300` presets, with regression and smoke checks before the
+   verdict-bearing runs.
 
 ## 12. Result (2026-05-29) — PDE-C1-RG-POS
 
@@ -293,4 +294,5 @@ to bank the present two-regime result.
   the completed `G=200, K=3` witness the G=200 re-run must re-establish
   under the portable objective.
 - [`../SUNDOG_V_NAVIERSTOKES.md`](../SUNDOG_V_NAVIERSTOKES.md) — the
-  ledger; a deferral or pause here preserves current C1 status.
+  ledger; §12's `PDE-C1-RG-POS` is reflected there as a two-regime,
+  still-unpromoted C1 witness.

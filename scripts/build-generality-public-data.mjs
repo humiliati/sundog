@@ -87,30 +87,31 @@ const projects = [
     shortName: "Navier-Stokes C1",
     fullName: "Kolmogorov-flow C1 regime-generality lane",
     category: "proof-track",
-    status: "design-hold",
+    status: "review-gated",
     transferQuestion:
       "Does a one-cell finite-Galerkin C1 witness survive a Grashof-axis regime change?",
     currentRead:
-      "The G=200 cell produced a scoped Reading-2 witness; the first G=300 transfer deferred as objective vacuity.",
+      "The complete Reading-2 witness now holds at G=200 and G=300 under a portable objective.",
     blocker:
-      "Portable-objective design needs sign-off before build, smoke, or long verdict-bearing runs.",
+      "External PDE review and proxy-faithfulness work remain open before promotion.",
     nextAction:
-      "Decide the split size, q=0.70 objective scale, and build trigger for the portable-quantile mode.",
+      "Surface reviewer candidates or firm up proxy faithfulness with a derived objective selector.",
     publicBoundary:
-      "No Navier-Stokes solution or infinite-dimensional theorem is claimed; C1 remains one-cell and finite-Galerkin scoped.",
-    chartHeadline: "one-cell witness; generality not adjudicated",
+      "No Navier-Stokes solution or infinite-dimensional theorem is claimed; C1 remains finite-Galerkin, sampled-support, and unpromoted.",
+    chartHeadline: "two-regime witness; review gated",
     metrics: [
-      { label: "v5 damp fraction", value: 0.2977, unit: "fraction" },
-      { label: "v6 damp fraction", value: 0.00446, unit: "fraction" },
-      { label: "v5 witness pairs", value: 693795, unit: "pairs" },
+      { label: "regimes", value: 2, unit: "G points" },
+      { label: "G300 damp fraction", value: 0.2688, unit: "fraction" },
+      { label: "G300 witness pairs", value: 942834, unit: "pairs" },
     ],
     sources: [
       "docs/SUNDOG_V_NAVIERSTOKES.md",
       "docs/proof/PDE_C1_KNN_CONVERGENCE_CHECK.md",
       "docs/proof/PDE_C1_TWIN_STATE_CERTIFICATE.md",
+      "docs/proof/PDE_C1_REGIME_GENERALITY_v0.md",
       "docs/proof/PDE_C1_REGIME_GENERALITY_v1.md",
     ],
-    svgFocus: ["status-card", "transfer-lane", "damp-fraction-contrast"],
+    svgFocus: ["status-card", "transfer-lane", "review-gate"],
   },
   {
     id: "pvnp",
