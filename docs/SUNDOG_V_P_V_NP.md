@@ -59,26 +59,18 @@ baseline at the same commit hits 879 ms. v4 is filed as **named
 quarantine on cost alone**, attributable to ~50–150 ms of
 `noteShortCircuit` closure-allocation overhead added for the v4
 cache-efficiency instrumentation plus CPU thermal variance across three
-back-to-back v4 runs. v5 executed the cost-closure repair: it removed the v4 per-verify
-short-circuit closure (audited away) and adopted a median-of-3 cost
-statistic. The hot-path fix worked decisively — median
-`C_total_signature` fell to 889.7 ms (v4 ~1130 ms) with only 2.41 %
-spread across three passes, and 7 of 8 cost clauses pass (absolute
-≤1010 ms, max ≤1250 ms, spread ≤25 %, op-ratio 0.9473, cache-reuse
-100 %, rollout-diagnostic, short-circuit-audit). v5 is nonetheless
-filed as **named quarantine on the one failing clause**: the full-state
-wall-time ratio is a stable 108.21 × (median of 3) against the frozen
-≤105 × target — a 3.1 % miss. The sharpened finding is that the ≤105 ×
-target was set in the v4 slate from v3's single favorable 95.92 ×
-sample; the v5 median-of-3 (2.41 % spread) shows the true stable ratio
-between the recompute-bound verifier and the privileged O(T) full-state
-scan is ~108–112 ×. Safety stayed green for the 4th consecutive run
-(0 false accepts; 0/497 each spoof channel; 5/5 integrity probes;
-0/768 OOP basin-shape accepts; privilege audit green). v6 should either
-re-baseline the full-state target from the v5 distribution or
-algorithmically reduce verifier wall-cost; alternatively the owner may
-bank the four-run-clean safety result and proceed to Phase 2 (mesa
-bridge) on the v5 basis.
+back-to-back v4 runs. v5 is filed as a **PROVISIONAL named quarantine -
+safety-complete, cost-unadjudicated**. The intended code repair landed:
+the v4 per-verify short-circuit closure was removed, median-of-3 cost
+reporting was wired, and the v5 field set stayed v3/v4-compatible.
+Safety stayed green provisionally (0 false accepts; 0/509 each spoof
+channel; 5/5 integrity probes; 0/768 OOP basin-shape accepts; privilege
+audit green). The earlier Run A cost claim is withdrawn: a later clean
+run disagreed by roughly 3.5x, and `environments.jsonl` hash drifted
+despite deterministic seeds (`4934d752...` vs `5549b4c4...`). Before v6
+or Phase 2, v5 must be rerun twice on a quiescent machine; if the
+environment hash drifts, fix determinism first, otherwise adjudicate the
+median cost report and finalize or void the receipt.
 No complexity-theoretic result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
