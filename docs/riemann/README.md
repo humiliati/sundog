@@ -26,6 +26,11 @@ Front-A reading:
   - draft reading note on functional-equation reflection as a receipt scaffold
   for smoothed explicit formulae.
 
+Cell sets:
+
+- [`RIEMANN_C1_CELLSET_V0.md`](RIEMANN_C1_CELLSET_V0.md)
+  - v0 explicit-formula parity scaffold; unreviewed and unrun.
+
 Probe specs:
 
 - [`PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md`](PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md)
@@ -55,5 +60,6 @@ Current state:
 - Bridge admission (Path (i) Z₂-descent) selected: 2026-05-28.
 - Probe 01 v1 Path (i) receipt filed: 2026-05-28.
 - Front-A functional-equation reading note drafted: 2026-05-28.
+- Riemann C1 cell-set v0 filed: 2026-05-28.
 - Front A is design-admitted under reduced apparatus (Z₂-descent).
 - Front B is horizon only.
