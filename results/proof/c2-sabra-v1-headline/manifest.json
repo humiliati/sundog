@@ -1,0 +1,63 @@
+{
+  "startedAt": "2026-05-29T19:05:25.903822+00:00",
+  "script": "scripts/pde_c2_sabra_cell.py",
+  "spec": "docs/proof/PDE_C2_CELLSET_SABRA_v1.md",
+  "config": {
+    "preset": "headline",
+    "model": "sabra",
+    "forcing_scheme": "fixed-amplitude",
+    "n_shells": 22,
+    "lam": 2.0,
+    "k0": 0.0625,
+    "eps": 0.5,
+    "viscosity": 1e-07,
+    "forcing_amp": 1.0,
+    "diagnostic_steps": 3000000,
+    "dt": 0.0001,
+    "warmup_steps": 2000000,
+    "calib_steps": 1000000,
+    "gap_steps": 100000,
+    "train_steps": 1500000,
+    "val_steps": 500000,
+    "test_steps": 1000000,
+    "sample_stride": 50,
+    "window_steps": 200,
+    "tau_burst_steps": 500,
+    "q_burst": 0.98,
+    "target_base_rate": 0.15,
+    "base_rate_pairwise_tol": 0.1,
+    "base_rate_lo": 0.05,
+    "base_rate_hi": 0.4,
+    "logsig_level": 2,
+    "random_seed": 20260528
+  },
+  "environment": {
+    "python": "3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.4",
+    "platform": "win32"
+  },
+  "result": {
+    "preset": "headline",
+    "model": "sabra",
+    "forcing_scheme": "fixed-amplitude",
+    "gate_status": "PDE-C2-DEFERRED-BASERATE",
+    "verdict_bearing": true,
+    "burst_observable": "dissipation_rate_eps",
+    "label_construction": "held_out_lookahead_max_quantile_target_base_rate",
+    "target_base_rate": 0.15,
+    "e_burst": 4.278742383581073e-09,
+    "base_rate_train": 0.13807935978659552,
+    "base_rate_val": 0.0,
+    "base_rate_test": 0.0,
+    "base_rate_pairwise_max": 0.13807935978659552,
+    "base_rate_pairwise_tol": 0.1,
+    "base_rate_band": [
+      0.05,
+      0.4
+    ],
+    "test_query_count": 19990,
+    "elapsed_seconds": 1787.1007308000117,
+    "total_steps": 6300000,
+    "detector_note": "matched-budget 4-baseline comparison is the next increment; this run reports the base-rate + per-block stationarity gates only."
+  }
+}
