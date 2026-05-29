@@ -87,4 +87,29 @@ wrapper (`threebody-phase15c-shard.mjs`) is the intended launch vehicle.
 
 ## Lock Readback
 
-<!-- To be filled after all 12 shards complete -->
+Operator sign-off 2026-05-29. Lock running as 12 shards in 4 waves of 3
+(favorable pocket first). Actual per-shard wall is ~63–85 min (faster than the
+~2.1 h smoke projection — eligible-step counts per cell ran lower than the
+duration-4 smoke extrapolation).
+
+### Shard run log
+
+| # | shard | trials | wall (min) | candidate rows | outcomes (bounded·escape·close) | wave |
+|--:|---|--:|--:|--:|---|:--:|
+| 1 | mu1-v1p1 | 144 | 84.5 | 5/15 | 50·93·1 | 1 |
+| 2 | mu0p3-v1p1 | 144 | 81.5 | 3/15 | 31·109·4 | 1 |
+| 3 | mu0p01-v1p1 | 144 | 63.4 | 3/15 | 20·124·0 | 1 |
+
+### Interim directional note (provisional — NOT a branch read)
+
+Across the 3 completed v=1.1 shards, **trial-pooled** (not candidate-split)
+per-horizon TRACK guarded mean score declines monotonically with horizon
+(H4≈0.094 → H32≈0.028), i.e. no horizon lift on the pooled view. The shuffle
+arms score *higher* on this pooled metric (≈0.45), which is the same
+all-cells degeneracy Phase 15 identified: the 1e-9 normalizer floor collapses
+in non-candidate cells, making shuffled arms appear positive. The binding read
+is the **candidate-split** §6 readback after all 12 shards land — this note is
+recorded only to track the run, not to assign a branch.
+
+<!-- §6 branch readback to be filled after all 12 shards complete -->
+
