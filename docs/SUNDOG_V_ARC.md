@@ -433,7 +433,14 @@ Branch E is the live frontier. The first Phase 3E spec is now filed as
 `PHASE3E_SIGNATURE_FIBER_CERTIFICATE_SPEC.md`: before training another solver,
 test whether registered ARC contexts contain exact or near
 `signature_palette` context-fiber collisions with incompatible required
-behavior. No Phase 3E receipt exists yet.
+behavior. Its binding receipt returned **`phase3e_deferred_label_vacuity`**
+with a clean dual finding: no registered exact or near signature-fiber
+collision was found, and `signature_palette` strongly separates distinct
+registered tasks (minimum cross-task context distance `0.207`, above every
+frozen radius), but the Branch D-derived program-sketch oracle is prior-blind on
+68% of primary contexts. The seven floors are therefore not explained by a
+registered signature collision, but Phase 3E also does not prove sufficiency or
+license a locality-positive Branch E selector.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 
