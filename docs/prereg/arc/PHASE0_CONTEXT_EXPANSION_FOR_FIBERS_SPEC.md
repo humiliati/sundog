@@ -525,3 +525,90 @@ Phase 3E v2 certificate rerun is admitted (run the unchanged-geometry runner wit
 `results/arc/phase0-context-expansion-for-fibers/`
 (`phase0_context_expansion_receipt.json`, `prior_counts.csv`,
 `branch_adjudication.md`, `commands.md`, `hashes.json`).
+
+---
+
+## Amendment C — Expanded Certificate Verdict (2026-05-29 PT)
+
+Append-only. The expanded Phase 3E v2 certificate was run on the 108-task
+register, pinned to freeze-marker commit `a0f1a4b`
+(`runnerSha256 9D456143…`, `gitDirty=false`, `splitMode=sha256_expansion`,
+~5m47s, deterministic). Receipt:
+`results/arc/phase3e-program-sketch-oracle-v2-expanded/`.
+
+**Branch: `phase3e_v2_expanded_oracle_regression`** (the runner's internal branch
+`phase3e_oracle_v2_solver_leakage`; the §"Expanded Certificate Branches" name is
+`…oracle_regression`: a v2 oracle gate fails on the expanded `U_primary`).
+
+### What happened
+
+The context universe densified massively: `U_primary` **25 → 336**, `U_all`
+**49 → 491** (validation_lodo 118, validation_pttest 37, test_lodo 259,
+pttest 77). But the v2 oracle's **anti-solver-leakage gate failed**:
+
+| gate | 36-task v2 | 108-task expanded | threshold | expanded result |
+| --- | --- | --- | --- | --- |
+| anti-vacuity `vacuous_fraction` | 0.00 | **0.00** | ≤ 0.20 | PASS |
+| anti-prior-laundering `violation_fraction` | 0.00 | **0.00** | ≤ 0.10 | PASS |
+| leakage `unique_core_sketch_fraction` | 0.36 | **0.55** | ≤ 0.60 | pass |
+| leakage `core_sketch_exact_lookup_fraction` | 0.04 | **0.351** | ≤ 0.20 | **FAIL** |
+
+`core_sketch_exact_lookup_fraction` is the fraction of primary contexts whose
+`core_sketch_tuple` group maps to a single target output (a lookup keyed only on
+the core sketch would reproduce the output). At 36 tasks it was 0.04; at 108
+tasks it is 0.351. As the registered universe diversifies, the framing-agnostic
+nine-facet core sketch becomes specific enough that, on a third of primary
+contexts, the sketch alone determines the output — which the anti-solver-leakage
+gate (designed to reject a sketch acting as a covert lookup/solver) correctly
+fires on. **The v2 oracle's leakage certification does not transfer from 36 to
+108 tasks.**
+
+### Fiber geometry (computed, but not adjudicated — gate failed first)
+
+| metric | 36-task v2 | 108-task expanded |
+| --- | --- | --- |
+| min cross-task `d_context_signature_palette` | 0.207 | **0.196** |
+| near pairs within `epsilon_primary=0.05` | 0 | **0** |
+| exact / representation collisions | 0 | **0** |
+| near-fiber incompatibilities | 0 | **0** |
+| fidelity-pass fraction | 0.0 | **0.0** |
+
+Even setting the gate aside, **tripling the register contracted the
+nearest-neighbor distance by only ~5%** (0.207 → 0.196), nowhere near the ~4×
+contraction needed to reach `epsilon_primary`. The fibers remain sparse; had the
+oracle gate held, the branch would have been `…expanded_deferred_sparse_fibers`.
+
+### What this does and does not establish
+
+**Does**: (1) falsify the implicit assumption that the gate-clean v2 oracle
+remains gate-clean on a larger register — the anti-solver-leakage threshold is
+register-size/diversity-sensitive; (2) show the chosen expansion (3× the tasks,
+balanced, manually inspected) is insufficient to populate `signature_palette`
+fibers at the frozen radius (min distance barely moved).
+
+**Does not**: prove or disprove `signature_palette` sufficiency; license or block
+a Branch E solver; certify any fiber locality or incompatibility (the oracle gate
+fails before locality is adjudicable). The 36-task v2 receipt
+(`phase3e_v2_deferred_sparse_fibers`) and the seven full-grid floors stand
+unchanged. No threshold was retuned after seeing the expanded output (doing so
+would be a post-hoc p-hack; the gate fired as pre-registered).
+
+### Path forward (each needs its own pre-registered spec)
+
+- A **register-size/diversity-robust oracle (v3)** whose anti-solver-leakage
+  metric is invariant to universe size (e.g., normalize exact-lookup against the
+  per-task LODO base rate, or measure leakage on held-pairs rather than the full
+  primary set), so a larger register can be adjudicated for fiber locality.
+- Accept the **sparsity result as durable**: even a manually-curated 3× balanced
+  expansion contracts min cross-task distance only 0.207 → 0.196, so populating
+  `signature_palette` fibers at `epsilon_primary=0.05` likely needs a different
+  locality test or a far larger / differently-constructed universe — a finding in
+  its own right.
+- Proceed to **Branch E on capability grounds** (unchanged from the 36-task
+  reading: the certificate found no collision to block it and cannot certify
+  locality to motivate a smooth selector).
+
+**Public-language constraint**: the permitted addition is the factual
+oracle-regression + still-sparse statement above; sufficiency, Branch-E-license,
+collision-found, and locality-positive statements remain forbidden (none
+obtained).
