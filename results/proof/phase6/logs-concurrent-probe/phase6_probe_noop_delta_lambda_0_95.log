@@ -1,0 +1,15 @@
+# shard phase6_probe_noop_delta_lambda_0_95
+# started 2026-05-29T18:42:48.611Z
+# command: python -m training.mesa.train_ppo --variant mixed_ppo_phase3_lambda_0_9 --mixed-lambda 0.95 --reward-compose-form delta --reward-channel-scale 1.0 --tier Medium --updates 8 --batch-envs 128 --rollout-length 256 --minibatch-size 1024 --lr 1e-4 --eval-seeds 8 --out results/proof/phase6/training-probe --run-label phase6_probe_noop_delta_lambda_0_95 --success-floor 0 --progress
+# env: OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+# ─────────────────────────────────────────────────────────────
+mesa ppo status: start variant=mixed_ppo_phase3_lambda_0_9 tier=Medium updates=8 batch_envs=128 rollout_length=256 lambda=0.95 signature_shape=integrated reward_compose_form=delta reward_channel_scale=1.0 run_label=phase6_probe_noop_delta_lambda_0_95
+ppo mixed_ppo_phase3_lambda_0_9:   0%|          | 0/8 [00:00<?, ?update/s]ppo mixed_ppo_phase3_lambda_0_9:  12%|#2        | 1/8 [00:10<01:13, 10.51s/update]ppo mixed_ppo_phase3_lambda_0_9:  25%|##5       | 2/8 [00:19<00:56,  9.47s/update]ppo mixed_ppo_phase3_lambda_0_9:  38%|###7      | 3/8 [00:27<00:44,  8.98s/update]ppo mixed_ppo_phase3_lambda_0_9:  50%|#####     | 4/8 [00:36<00:35,  8.86s/update]ppo mixed_ppo_phase3_lambda_0_9:  62%|######2   | 5/8 [00:46<00:28,  9.39s/update]ppo mixed_ppo_phase3_lambda_0_9:  75%|#######5  | 6/8 [00:56<00:18,  9.39s/update]ppo mixed_ppo_phase3_lambda_0_9:  88%|########7 | 7/8 [01:05<00:09,  9.50s/update]ppo mixed_ppo_phase3_lambda_0_9: 100%|##########| 8/8 [01:16<00:00,  9.81s/update]mesa ppo status: training_loop_complete env_steps=262144
+                                                                                  mesa ppo status: bridge_closed
+mesa ppo status: writing_checkpoint path=results\proof\phase6\training-probe\checkpoints\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_noop_delta_lambda_0_95.pt
+mesa ppo status: writing_policy_json path=results\proof\phase6\training-probe\policies\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_noop_delta_lambda_0_95.policy.json
+mesa ppo status: writing_history path=results\proof\phase6\training-probe\logs\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_noop_delta_lambda_0_95_history.csv
+mesa ppo status: evaluating_checkpoint seeds=8 seed_start=10000
+mesa ppo status: writing_evaluation path=results\proof\phase6\training-probe\logs\mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_noop_delta_lambda_0_95_evaluation_summary.json
+mesa ppo train: variant=mixed_ppo_phase3_lambda_0_9 tier=Medium env_steps=262144 success=0/8 (0.0%) mean_S_T=0.3703 checkpoint=results/proof/phase6/training-probe/checkpoints/mixed_ppo_phase3_lambda_0_9_medium_seed_0_phase6_probe_noop_delta_lambda_0_95.pt
+# ─────────────────────────────────────────────────────────────
