@@ -107,10 +107,19 @@ sign_i =
 Registered tie tolerance:
 
 ```text
-tie_tol = 1e-14
+tie_tol = 1e-8
 ```
 
-Ties contribute `0` to the numerator and remain in the denominator.
+This value is pinned to the propagated source precision, not to floating-point
+epsilon. Odlyzko `zeros1` carries absolute accuracy `3e-9` per ordinate;
+subtraction gives `gap` error `~sqrt(2)*3e-9 ~= 4.2e-9`, and unfolding by
+`rho_i <= rho(gamma_5000) ~= 1.077` gives `s_i` error up to `~4.6e-9`, so
+`delta_i = s_i - s_{i+1}` is reliable only to `~sqrt(2)*4.6e-9 ~= 6.5e-9`. A
+`tie_tol` of `1e-8` therefore classifies any sign that lives inside source noise
+as a tie, rather than handing it a noise-determined `+-1`. At the `O(0.5)`
+unfolded-gap scale the expected near-tie count is `~6e-5` of `m`, so this choice
+does not move `D`; it makes the resolution principled. Ties contribute `0` to
+the numerator and remain in the denominator.
 
 Primary statistic:
 
@@ -171,13 +180,37 @@ This is a receipt-level finite-window floor, not a theorem about the zeros. If
 the bootstrap floor cannot be computed exactly as registered, file
 `R-NL-NEG-C` rather than changing the method after output inspection.
 
+## Known Systematics (checked, bounded, named)
+
+These are pre-registered as *checked and dominated* at the current `N_zero` and
+floor. They are named so a future low-height-only or tight-floor variant
+re-derives them rather than assuming they stay negligible.
+
+- **Unfolding drift.** The local-density unfolding `s_i = gap_i * rho(center_i)`
+  is not exact, so `E[s_i]` carries a slow residual trend that makes consecutive
+  descents marginally more likely and biases `D`. What biases `D` is the
+  *per-step gradient* of that trend, not its level: estimated at
+  `~1e-5` to `~1e-6`, i.e. `~10^4` below `tau_D ~= 0.042`. The bias also shrinks
+  relative to the floor as `N` grows (the low-height contribution dilutes while
+  `tau_ind ~ 1/sqrt(m)`), so it is a non-issue at any realistic `N` and becomes
+  a concern only for a deliberately low-height-restricted window. Not corrected
+  in v0; re-derive if the window is narrowed or `tau_D` is tightened by orders
+  of magnitude.
+- **Sign-only power.** `D` discards gap magnitudes, so it is a robust but
+  low-power reversibility statistic. This is the correct trade for a
+  `NEG-A`-expected null (robustness over power). If a run returns
+  `abs(D) > tau_D`, the registered replication must use a *magnitude-aware*
+  reversibility statistic (e.g. the lag-1 asymmetry of `delta_i`) on a
+  separately registered window before the anomaly is discussed as more than a
+  finite-window sign-test flag.
+
 ## Disposition Table
 
 | Outcome | Disposition |
 | --- | --- |
 | `abs(D) <= tau_D` | bounded reversibility-test null; `R-NL-NEG-A` (expected) |
 | `abs(D) > tau_D` | GUE-reversibility anomaly flag; not a Sundog structural-zero; requires independent replication |
-| tie count is unexpectedly large or source precision cannot support `tie_tol` | source / precision quarantine before interpretation |
+| tie count exceeds `0.1%` of `m` (expected `~6e-5`), i.e. far more sub-precision pairs than the `1e-8` tolerance predicts | source / precision quarantine before interpretation |
 | floor cannot be computed under the registered rule | `R-NL-NEG-C` sampling-floor failure |
 | C3 triple hook invoked to rescue or reinterpret the result | `R-NL-NEG-B` representation-triviality quarantine |
 | residual sign-bins invoked as a representation sector | `R-NL-NEG-A` / `R-NL-NEG-D` downgrade; standard residual analysis only |
@@ -248,9 +281,16 @@ consecutive-gap tests.
 
 ## Current State
 
-- 2026-05-28: Probe 05 v0 spec filed.
-- Execution: none.
-- Expected result: bounded null, `R-NL-NEG-A`.
+- 2026-05-28: Probe 05 v0 spec filed; amended pre-execution
+  (`tie_tol` 1e-14 → 1e-8 pinned to source precision; `Known Systematics`
+  section added).
+- 2026-05-28: **executed.** Runner `scripts/riemann-probe05-reversibility.mjs`;
+  result `D = -0.006402561`, `tau_D = 0.042434895` (analytic floor binds;
+  `tau_boot = 0.020409164 < tau_ind`, the GUE anti-persistence direction).
+  `|D|` clears both floors; `0.45 sigma` from zero; `0` ties. Verdict:
+  **`R-NL-NEG-A` bounded reversibility null, as predicted.** Receipt:
+  [`receipts/2026-05-28_probe05_reversibility_null.md`](receipts/2026-05-28_probe05_reversibility_null.md).
+- Expected result: bounded null, `R-NL-NEG-A` — **confirmed.**
 - Only admitted hook: S2 gap-pair reversibility.
 - Quarantined hooks: C3 triple; residual-bin representation sectors; S3/D3
   upgrades.

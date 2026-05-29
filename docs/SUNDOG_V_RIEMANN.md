@@ -33,7 +33,17 @@ The C1 linearity audit opens a nonlinear zero-statistics scoping lane at
 [`riemann/NONLINEAR_PAIR_CORRELATION_LANE.md`](riemann/NONLINEAR_PAIR_CORRELATION_LANE.md).
 Its bridge note admits only the S2 gap-pair swap as a reversibility-test hook;
 Probe 05 v0 is filed at
-[`riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md`](riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md).
+[`riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md`](riemann/PROBE_05_NONLINEAR_ZERO_STATISTICS_SPEC.md)
+and was executed 2026-05-28, returning the pre-registered `R-NL-NEG-A`
+reversibility null at
+[`riemann/receipts/2026-05-28_probe05_reversibility_null.md`](riemann/receipts/2026-05-28_probe05_reversibility_null.md).
+Three independent lanes (Path (i) Z2 / C1 explicit-formula / nonlinear S2) have
+now each returned a clean documented null by a distinct identified cause; the
+cross-lane reading is consolidated at
+[`riemann/RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](riemann/RIEMANN_BOUNDED_NULL_SYNTHESIS.md).
+No structural-zero edge has been found, and the synthesis records why none is
+expected in these substrates. External review is the registered gate before any
+public-facing claim.
 
 ## Claim Boundary
 

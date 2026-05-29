@@ -6,6 +6,12 @@ Main ledger:
 
 - [`../SUNDOG_V_RIEMANN.md`](../SUNDOG_V_RIEMANN.md)
 
+Synthesis (read this for the conclusion):
+
+- [`RIEMANN_BOUNDED_NULL_SYNTHESIS.md`](RIEMANN_BOUNDED_NULL_SYNTHESIS.md) -
+  three lanes, three identified vacuity causes, no structural-zero edge; the
+  bounded null is the result. Public surface gated on external review.
+
 Lit-pass (2026-05-28):
 
 - [`../RIEMANN_LITPASS_MEMO.md`](../RIEMANN_LITPASS_MEMO.md) - prior-art
@@ -62,6 +68,9 @@ Receipts:
 
 - [`receipts/2026-05-28_probe01_pathi_parity_decomposition.md`](receipts/2026-05-28_probe01_pathi_parity_decomposition.md)
   - first Probe 01 v1 receipt under Path (i), using Odlyzko `zeros1`, `N=5000`.
+- [`receipts/2026-05-28_probe05_reversibility_null.md`](receipts/2026-05-28_probe05_reversibility_null.md)
+  - Probe 05 S2 gap-pair reversibility null (`D=-0.0064`, inside floor `0.0424`);
+  `R-NL-NEG-A` as predicted.
 
 Current state:
 
@@ -74,5 +83,11 @@ Current state:
 - Nonlinear pair-correlation lane scoped: 2026-05-28.
 - Nonlinear bridge notes filed (S₂ admitted / C3 quarantined / bins downgraded): 2026-05-28.
 - Probe 05 v0 nonlinear reversibility-test spec filed: 2026-05-28.
+- Probe 05 executed; `R-NL-NEG-A` bounded reversibility null filed: 2026-05-28.
 - Front A is design-admitted under reduced apparatus (Z₂-descent).
 - Front B is horizon only.
+- Three lanes (Path-i Z₂ / C1 explicit-formula / nonlinear S₂) have each
+  returned a clean documented null by a distinct identified cause; no
+  structural-zero edge found.
+- Cross-lane bounded-null synthesis filed: 2026-05-28. Public surface gated on
+  external review.
