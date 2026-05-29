@@ -84,6 +84,62 @@ The vacuity gate (global `damp_fraction ∈ [delta_proxy_min,
   `fidelity_coverage` may fall below 1; `incompat_fraction` is always
   computed over the fidelity-passing set at that `k`.
 
+## 6. First-run disposition and amended pre-registration (2026-05-28)
+
+The first convergence run (`results/proof/c1-kolmogorov-v4-knn-sweep/`,
+sweep `k ∈ {10,20,30,50,100}`) returned a **mechanical `PDE-C1-NEG-A`
+that does not survive scrutiny**. The sweep:
+
+| k | r_k median | fidelity coverage | incompat fraction |
+|---:|---:|---:|---:|
+| 10 | 0.0196 | 1.00 | 0.0349 |
+| 20 | 0.0288 | 1.00 | 0.0645 |
+| 30 | 0.0346 | 1.00 | 0.0716 |
+| 50 | 0.0448 | 1.00 | 0.0974 |
+| 100 | 0.0638 | **0.447** | 0.0583 |
+
+The OLS intercept came out `+0.046` (→ NEG-A) **only because the k=100
+point is included** — and that point fails its own fidelity-coverage
+gate (`0.447 < S_pos = 0.50`). It has high `r_k` but lower
+`incompat_fraction` (its population is half-excluded), which levers the
+intercept up. Refit on the four full-coverage points (k≤50):
+`incompat ≈ 2.4·r_k`, intercept `≈ −0.010` → DECAYS_TO_ZERO →
+**boundary artifact, POSITIVE**. The verdict flips on one
+coverage-failing point. Two pre-registration gaps caused this:
+
+1. The OLS was not restricted to coverage-passing sweep points.
+2. The thresholded `incompat_fraction` has a **grain confound**: the
+   effective minority threshold is `0.20` at k=10 vs `0.125` at k=40
+   (since `minority > 0.10` rounds to a different neighbour count at
+   each k), biasing the thresholded statistic *toward* POSITIVE at
+   small k — so it cannot be the trusted primary statistic.
+
+**Amended pre-registration for the re-run** (fixed before re-reading):
+
+- **Sweep** `k ∈ {10,15,20,25,30,40,50}` — all expected full-coverage
+  at this regime (`r_k(k=50) = 0.045 < epsilon_K = 0.063`); a denser
+  low-`k` curve, no coverage-failing point.
+- **Exclusion.** Any sweep point with `fidelity_coverage < S_pos` is
+  dropped from both fits.
+- **Primary statistic: `mean_minority`** — the mean local minority
+  fraction over fidelity-passing samples (threshold-free; the canonical
+  nonparametric estimator of the conditional non-constancy
+  `E[1 - max_a mu_sigma(a)]`, whose `r_k → 0` limit is the
+  Blackwell-sufficiency-failure measure). Fit `mean_minority` vs
+  `r_k_median` over coverage-passing points; intercept `a_mm`.
+  - `a_mm ≤ 0.005` (consistent with zero) → **POSITIVE** (boundary
+    artifact; proxy control-sufficient on fibers — Reading-2 regime 2).
+  - `a_mm ≥ 0.015` → **PDE-C1-NEG-A** (genuine fiber-incompatibility).
+  - else → **INCONCLUSIVE_CONVERGENCE**.
+- **Secondary (diagnostic, not gated):** thresholded
+  `incompat_fraction(k)` with the grain caveat, reported for
+  continuity.
+- The raw `mean_minority(r_k)` curve is reported so the trend is
+  visible regardless of the threshold call.
+
+Neither the contaminated NEG-A nor the clean-points POSITIVE recompute
+is filed; the amended re-run adjudicates.
+
 ## 5. Cross-references
 
 - [`PDE_C1_KNN_ADJUDICATION_DESIGN.md`](PDE_C1_KNN_ADJUDICATION_DESIGN.md)
