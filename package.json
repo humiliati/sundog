@@ -190,6 +190,7 @@
     "arc:phase3d:mask-target-v3:merge": "node scripts/arc-phase3d-mask-target-v3.mjs --merge",
     "arc:phase3e:signature-fiber-certificate": "node scripts/arc-phase3e-signature-fiber-certificate.mjs",
     "arc:phase3e:program-sketch-oracle-v2": "node scripts/arc-phase3e-program-sketch-oracle-v2.mjs",
+    "arc:phase3e:relative-locality-certificate": "node scripts/arc-phase3e-relative-locality-certificate.mjs",
     "cf:auth": "node scripts/check-cloudflare-auth.mjs",
     "cf:inspect": "node scripts/inspect-cloudflare.mjs",
     "cf:pages": "node scripts/cloudflare-pages-project.mjs",
