@@ -5781,3 +5781,132 @@ Public-language constraint before a binding receipt:
 > "Phase 3D has filed an edit-color-rule variant spec targeting the bottleneck
 > isolated by the structured-edit receipt. No variant receipt exists yet, and no
 > sufficiency claim is admitted."
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Branch D Variant Tooling Freeze-Marker (execution unblocked, capped-probe required)
+
+The Branch D variant spec
+([`PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md`](PHASE3D_EDIT_COLOR_RULE_VARIANT_SPEC.md))
+held execution until "runner tooling, npm wiring, result ignore path,
+leak-check coverage, and a freeze-marker amendment are committed
+together." This amendment files that commit:
+
+- `docs/prereg/arc/phase3d_edit_color_rule_v2.py` (runner) —
+  standalone Python module. Does **not** import
+  `phase3_decoder.py`, `phase3a_per_task_coord_mlp.py`, or
+  `phase3d_structured_edit_residual.py`. The `arc-p3-feature-v1`
+  encoders, baseline family, mask MLP, threshold-sweep, and
+  shard+merge plumbing are **copied verbatim** from the base
+  Branch D runner under marked headers. The `EditColorMLP` is
+  removed; in its place, the runner implements the 10-family
+  deterministic **color-rule bank** from the spec §"Color Rule
+  Bank":
+  1. `constant_edit_color`, `modal_edit_color`,
+     `baseline_color_map`, `input_nn_color_map`,
+     `input_patch_majority_map`, `baseline_to_input_pair_map`,
+     `relative_palette_rank_map` (same/nearest/learned strategies),
+     `object_role_color_map`, `row_col_periodic_color` (period 1–3,
+     row/col), `nearest_edited_neighbor_color`.
+  2. `generate_candidate_rules` materialises all concrete candidates
+     from conditioning residuals (typically 15–25 per instance).
+  3. `_score_rule_on_pairs` evaluates each candidate via LOCO when
+     `k ≥ 3` else all-cells with `low_k_rule_selection=true`,
+     returning `accuracy / rare_recall / halluc_rate` per the spec.
+  4. `select_color_rule` applies the spec tie-break chain
+     `(-accuracy, -rare_recall, +halluc_rate, +family_index,
+     +SHA-256(arc-p3d-edit-color-rule-v2|master|lane|task|query|arm|rule_id))`.
+  5. Optional top-3 vote ensemble fires only if `≥ 3` candidates tie
+     within `ENSEMBLE_TIE_TOLERANCE = 0.05` on conditioning accuracy.
+  6. New metrics: `edit_color_rule_accuracy`, `rare_edit_color_recall`,
+     `color_rule_family`, `color_rule_id`, `color_rule_ensemble`,
+     `color_rule_candidate_count`, `low_k_rule_selection`,
+     `no_conditioning_edits`, `color_oracle_rule_accuracy`
+     (diagnostic-only — explicitly **excluded** from branch decisions
+     per spec), `rule_selection_regret` (oracle − selected),
+     `mask_conditioned_color_accuracy`.
+  7. New quarantine labels per spec §"Quarantine Labels": all 12
+     pre-registered labels are reachable; the critical pair
+     `color_rule_bank_coverage_failure` (oracle < 0.50) vs.
+     `color_rule_selection_failure` (oracle ≥ 0.50 but selected
+     < 0.50) is reachable and verified in the probe smoke.
+  8. Arena gate + branch adjudication renamed to
+     `raw_grid_edit_color_v2_arena_open` and
+     `branch_d_color_rule_{full_grid_floor,support,bounded_failure,named_quarantine}`;
+     support criteria use `edit_color_rule_accuracy` gap,
+     `rare_edit_color_recall` gap, and `rule_selection_regret` gap
+     (each ≤ 0.10) per spec.
+  9. Manifest records `variantVersion`, `baseBranchDSpecPath`,
+     `baseBranchDSpecHash`, `ruleFamilies`, `ensembleTieTolerance`,
+     `ensembleMinMembers`.
+- `scripts/arc-phase3d-edit-color-rule-v2.mjs` — Node wrapper
+  (`SUNDOG_PYTHON` honoured).
+- `package.json`: adds
+  `arc:phase3d:edit-color-rule-v2`,
+  `arc:phase3d:edit-color-rule-v2:shard`, and
+  `arc:phase3d:edit-color-rule-v2:merge`.
+- `.gitignore`: adds `results/arc/phase3d-edit-color-rule-v2/`.
+- Shard+merge protocol is wired from day one (mirror Phase 3D),
+  including the `--allow-mixed-commits` operator override with the
+  runner-content WARN-not-fail audit.
+- Pre-commit + CI ARC leak-check passes unchanged.
+
+**Verdict impact**: no prior verdict changes. Branch D variant
+admission moves from "EXECUTION HOLD" to "EXECUTION ADMITTED,
+capped probe required" per the spec's own ten-minute rule. No
+binding receipt yet.
+
+**Smoke-test fingerprint** (CPU, `--probe-only --probe-steps 3
+--limit-arms raw_grid_edit_color_v2 --limit-seeds 20260528`, all 36
+registered tasks):
+
+- 49 held-out instances processed; 49 baseline selections; 49
+  edit-metrics rows; 49 color-rule selections; **942 color-rule
+  candidate scores** (~19 candidates per instance, consistent with
+  the 15–25 expected from the 10 families).
+- 147 mask-learning rows (49 × 3 probe steps; no color curve —
+  deterministic rule bank);
+- 18 receipt files written.
+- elapsed total: **160.9 s wall** (probe);
+- arena gate: `not_adjudicated` (probe-only, by spec).
+
+**Rule-family diversity sanity** (selected rule on 49 instances):
+
+| selected family | count |
+| --- | ---: |
+| `ensemble_top3` | 20 (40.8%) |
+| `nearest_edited_neighbor_color` | 18 (36.7%) |
+| `relative_palette_rank_map` | 10 (20.4%) |
+| `row_col_periodic_color` | 1 |
+
+`ensemble_top3` firing on 40.8% of instances is meaningful: the
+spec's `≥ 3 within 0.05` ensemble eligibility criterion regularly
+finds candidate rules with near-identical conditioning accuracy,
+and the deterministic top-3 vote acts as a tie-break.
+
+**Quarantine reachability** (4 of 12 labels fire under the 3-step
+probe; the remaining 8 are reachable in principle):
+
+| label | count | share |
+| --- | ---: | ---: |
+| `edit_mask_failure` | 32 | 65% — expected: mask MLP barely trained at 3 steps |
+| `color_rule_selection_failure` | 8 | 16% — oracle ≥ 0.50 but selected < 0.50 |
+| `baseline_canvas_failure` | 6 | 12% |
+| `color_rule_bank_coverage_failure` | 3 | 6% — oracle < 0.50 |
+
+The new pair (`color_rule_bank_coverage_failure` ↔
+`color_rule_selection_failure`) separates "no rule in the bank can
+solve this instance" from "a rule exists but the selector picked
+wrong" — exactly the diagnostic decomposition the spec was designed
+to provide.
+
+**What remains under the spec's ten-minute rule**: a capped timing
+probe with realistic `--probe-steps` (e.g., 100) must run before the
+full 4-arm × 5-seed binding execution. Initial estimate
+(rule-bank is deterministic, mask MLP cost dominates and mirrors
+Phase 3D's S/F regression): **~5.5 h GPU serial** for the full 4×5
+binding run, **~2 h** under 3-shard concurrent GPU. The next
+amendment will file the actual capped probe timing + staged binding
+launch posture.
+
+**Public-language constraint**: unchanged. The pre-binding-receipt
+language from the variant spec §"Public Language" remains the only
+permitted public addition.
