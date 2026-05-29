@@ -126,20 +126,6 @@ export const RUN_CONFIGS = Object.freeze({
     ],
     ...COMMON,
   }),
-  v5: Object.freeze({
-    run_id: "phase1-toy-verifier-v5",
-    schema_suffix: "v5",
-    spec_path: "docs/pvnp/PHASE1_TOY_VERIFIER_SPEC.md",
-    slate_path: "docs/pvnp/PHASE1_V5_SLATE.md",
-    receipt_path: null,
-    splits: [
-      { split: "calibration", count: 64, seedPrefix: "pvnp-v5-cal", inPromise: true },
-      { split: "train", count: 256, seedPrefix: "pvnp-v5-train", inPromise: true },
-      { split: "verification", count: 256, seedPrefix: "pvnp-v5-verify", inPromise: true },
-      { split: "falsifier", count: 256, seedPrefix: "pvnp-v5-fals", inPromise: false },
-    ],
-    ...COMMON,
-  }),
 });
 
 export function inferPhase1VersionFromPath(runDir) {

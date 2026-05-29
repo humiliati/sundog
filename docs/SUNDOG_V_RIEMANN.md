@@ -29,6 +29,8 @@ The first Front-A reading note is drafted at
 [`riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md`](riemann/FRONT_A_FUNCTIONAL_EQUATION_READING.md).
 Its first cell-set companion is filed at
 [`riemann/RIEMANN_C1_CELLSET_V0.md`](riemann/RIEMANN_C1_CELLSET_V0.md).
+The C1 linearity audit opens a nonlinear zero-statistics scoping lane at
+[`riemann/NONLINEAR_PAIR_CORRELATION_LANE.md`](riemann/NONLINEAR_PAIR_CORRELATION_LANE.md).
 
 ## Claim Boundary
 
@@ -367,6 +369,9 @@ These remain horizon until receipts exist.
 - [`docs/riemann/RIEMANN_C1_CELLSET_V0.md`](riemann/RIEMANN_C1_CELLSET_V0.md)
   - v0 explicit-formula parity scaffold for the Front-A reading; unreviewed and
   unrun.
+- [`docs/riemann/NONLINEAR_PAIR_CORRELATION_LANE.md`](riemann/NONLINEAR_PAIR_CORRELATION_LANE.md)
+  - scoping note for a nonlinear pair-correlation / gap-statistics lane opened
+  by the C1 linearity audit.
 - [`docs/prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/riemann/P0_DOMAIN_AND_RECEIPT_LOCK.md)
   - initial domain and admission lock.
 - [`docs/riemann/PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md`](riemann/PROBE_01_ISOTROPY_ZERO_PAIRS_SPEC.md)
