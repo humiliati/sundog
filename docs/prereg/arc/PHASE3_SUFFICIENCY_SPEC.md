@@ -7156,3 +7156,22 @@ certificate move.
 the permitted addition is the gate-cleared sparse-deferral statement;
 the locality-positive, collision-found, and any sufficiency statements
 remain forbidden (none obtained).
+
+### 2026-05-29 (PT) -- Jeffery Hughes Jr. -- Phase 0 Context Expansion For Fibers Spec Filed
+
+Phase 0 register-amendment spec:
+
+- `docs/prereg/arc/PHASE0_CONTEXT_EXPANSION_FOR_FIBERS_SPEC.md`
+
+The Phase 3E v2 receipt isolated registered-context geometric sparsity as the
+sole remaining certificate deferral cause. This new Phase 0 spec freezes the
+admissible certificate path for testing that blocker: expand the public-training
+register to 108 included tasks, balanced at 18 per prior, while keeping
+`program_sketch_v2`, `d_context_signature_palette`, `epsilon_primary = 0.05`,
+`epsilon_loose = 0.10`, and k=3 unchanged.
+
+Verdict impact: **no register change and no execution admission**. The original
+36-task register remains binding. The expanded Phase 3E v2 certificate rerun is
+not admitted until a future Phase 0 expansion receipt files the candidate queue,
+manual inspection log, expanded register, leak-check coverage, and a
+freeze-marker amendment.
