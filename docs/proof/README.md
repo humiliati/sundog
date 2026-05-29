@@ -153,6 +153,17 @@ that claim provably fails.
   Grashof-axis generality untested. Surfaced: the fixed-percentile
   objective doesn't transfer across regimes → a v7+ cell needs a
   regime-portable objective.
+- [`PDE_C1_REGIME_GENERALITY_v1.md`](PDE_C1_REGIME_GENERALITY_v1.md)
+  — **design proposal for sign-off** (portable objective). Replaces the
+  v0 fixed-percentile proxy with a **held-out look-ahead-max quantile**
+  (`E_max = q-quantile of M(u)=max τ-window E_K` over a disjoint
+  calibration window, `q = 0.70` so `damp_fraction ≈ 0.30` is pinned by
+  construction at every regime). Adds a **portability gate**
+  (`damp_fraction ∈ [0.20,0.40]` at both G=200 and G=300) and a
+  mandatory **G=200 re-run** (positive control / de-confound) before the
+  G=300 generality test. Specifies a `--objective portable-quantile`
+  harness mode + `lock_v7_g200` / `lock_v7_g300` presets. **Proposed,
+  not built, not run** — §10 lists the sign-off decisions.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /

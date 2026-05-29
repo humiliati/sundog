@@ -261,6 +261,24 @@ a v6 retune): the fixed-percentile-`E_max` objective does not transfer
 across regimes; a regime-general test needs a regime-portable objective
 (relative-excursion / absolute / enstrophy-based).
 
+**Regime-generality v1 (portable objective) drafted for sign-off
+2026-05-29** at
+[`proof/PDE_C1_REGIME_GENERALITY_v1.md`](proof/PDE_C1_REGIME_GENERALITY_v1.md).
+Replaces v0's fixed-percentile proxy with a **held-out look-ahead-max
+quantile**: `E_max = 0.70-quantile of M(u) = max over the τ-window of
+E_K`, computed on a post-burn-in calibration window disjoint from the
+adjudication sample. This pins `damp_fraction ≈ 0.30` by construction
+at every regime (matching v5's scale), so the v6 vacuity failure cannot
+recur. Adds a **portability gate** (`damp_fraction ∈ [0.20,0.40]` at
+both G=200 and G=300, checked before any verdict) and a **mandatory
+G=200 re-run first** (positive control + de-confound: the portable
+objective is a *new* objective, so the v5 witness must be re-established
+under it before G=300 generality is meaningful; if G=200 flips, the
+program pauses). Specifies a `--objective portable-quantile` harness
+mode + `lock_v7_g200` / `lock_v7_g300` presets. **Proposed, not built,
+not run** pending sign-off on split sizes (50k/50k vs 30k/30k) and
+build trigger. Burst-onset objective documented as the v2 alternative.
+
 Criterion (b) is closed at the *procedure-and-execution* level (v0–v5
 lock cycles + v4 fall-back + the kNN run and its convergence check all
 ran cleanly; methodology survived six vacuity / coverage diagnoses, a
