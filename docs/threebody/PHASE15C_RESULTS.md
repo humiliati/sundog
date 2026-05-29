@@ -106,16 +106,124 @@ duration-4 smoke extrapolation).
 | 7 | mu1-v1p05 | 144 | 95.1 | 3/15 | 61·83·0 | 3 |
 | 8 | mu0p3-v1p05 | 144 | 91.3 | 5/15 | 41·96·7 | 3 |
 | 9 | mu0p01-v1p05 | 144 | 84.5 | 3/15 | 24·120·0 | 3 |
+| 10 | mu1-v0p95 | 144 | 107.4 | 0/15 | 63·54·27 | 4 |
+| 11 | mu0p3-v0p95 | 144 | 109.8 | 6/15 | 41·96·7 | 4 |
+| 12 | mu0p01-v0p95 | 144 | 92.3 | 2/15 | 17·118·9 | 4 |
 
-### Interim directional note (provisional — NOT a branch read)
+**Lock complete: 12/12 shards, 1,728 trials, 44/180 candidate envelope rows**
+(matches Phase 15B's 44/180 exactly — same slate, same candidate classification).
+Per-shard wall 59–110 min; total ~17.4 core-hours across 4 waves of 3-concurrent.
+All shards verified: 144 trials and 36 horizon columns each.
 
-Across the 3 completed v=1.1 shards, **trial-pooled** (not candidate-split)
-per-horizon TRACK guarded mean score declines monotonically with horizon
-(H4≈0.094 → H32≈0.028), i.e. no horizon lift on the pooled view. The shuffle
-arms score *higher* on this pooled metric (≈0.45), which is the same
-all-cells degeneracy Phase 15 identified: the 1e-9 normalizer floor collapses
-in non-candidate cells, making shuffled arms appear positive. The binding read
-is the **candidate-split** §6 readback after all 12 shards land — this note is
-recorded only to track the run, not to assign a branch.
+### §6 Branch: **Multi-step steering REJECTED**
 
-<!-- §6 branch readback to be filled after all 12 shards complete -->
+Binding candidate-split read across all 1,728 trials (1,440 paired controlled
+trials; `off` is the passive reference). Each trial joined to its
+`candidateEnvelope` flag via `(mode, massRatio, dt, radiusScale, velocityScale)`;
+per-horizon metrics from `paired.csv`; trials with zero eligible steps excluded.
+
+#### Mean normalized score — mode × candidate × horizon
+
+| mode | split | n | H4 | H8 | H16 | H32 |
+|---|---|--:|--:|--:|--:|--:|
+| `guarded` | CAND | 205 | **+0.100** | +0.091 | +0.072 | **+0.032** |
+| `signal_delay` | CAND | 127 | −0.174 | −0.185 | −0.207 | −0.248 |
+| `signal_shuffle` | CAND | 8 | −0.095 | −0.103 | −0.131 | −0.153 |
+| `action_shuffle` | CAND | 8 | +0.064 | +0.061 | +0.041 | +0.008 |
+| `guarded` | non | 78 | +0.056 | +0.048 | +0.033 | +0.001 |
+| `signal_delay` | non | 155 | +0.110 | +0.103 | +0.089 | +0.061 |
+| `signal_shuffle` | non | 275 | +0.422 | +0.418 | +0.411 | +0.396 |
+| `action_shuffle` | non | 275 | +0.435 | +0.432 | +0.425 | +0.409 |
+| `sign_flip` | non | 283 | −0.969 | −0.970 | −0.971 | −0.972 |
+
+#### Positive rate — mode × candidate × horizon
+
+| mode | split | n | H4 | H8 | H16 | H32 |
+|---|---|--:|--:|--:|--:|--:|
+| `guarded` | CAND | 205 | **0.550** | 0.546 | 0.536 | **0.516** |
+| `signal_delay` | CAND | 127 | 0.424 | 0.419 | 0.408 | 0.388 |
+| `action_shuffle` | CAND | 8 | 0.542 | 0.540 | 0.531 | 0.514 |
+| `guarded` | non | 78 | 0.526 | 0.522 | 0.514 | 0.498 |
+| `signal_delay` | non | 155 | 0.574 | 0.571 | 0.564 | 0.551 |
+| `signal_shuffle` | non | 275 | 0.747 | 0.746 | 0.742 | 0.735 |
+| `action_shuffle` | non | 275 | 0.754 | 0.752 | 0.749 | 0.742 |
+| `sign_flip` | non | 283 | 0.005 | 0.004 | 0.004 | 0.004 |
+
+Guarded-TRACK normalizer floor rate on candidate cells is **0.970 at every
+horizon** (4 → 32). The multi-step oracle reference is therefore as degenerate
+as the one-step: on 97% of eligible steps the oracle/no-op terminal-energy gap
+stays below `1e-9` even after 32 frozen-continuation steps, so the normalized
+score collapses to the sign statistic (`score ≈ 2·posRate − 1`, confirmed by the
+two tables).
+
+#### Branch criteria (§6 spec)
+
+- **Multi-step steering supported** requires TRACK candidate rows to show a
+  *monotone or material horizon lift* from N=4 to ≥1 of {N=16, N=32}. **FAILS:**
+  guarded-CAND declines monotonically at every horizon — score +0.100 → +0.032,
+  positive rate 0.550 → 0.516. The multi-step edge *erodes* toward chance, the
+  opposite of lift.
+- **Multi-step steering rejected:** "TRACK candidate rows remain near chance or
+  *do not improve with horizon*." **MET:** no horizon lift exists for any arm;
+  guarded-CAND's small above-chance edge at N=4 decays with N.
+- **Mixed / partial:** "lift appears only in non-candidate / only in signal_delay
+  / only at one horizon." Not applicable — there is *no* horizon lift anywhere to
+  localize.
+
+**Assigned branch: Multi-step steering REJECTED.** Phase 15's survival pocket is
+**not** explained by cumulative trajectory steering over 4–32 step horizons. The
+energy counterfactual is no less local at multi-step than at one-step; whatever
+makes guarded TRACK win on survival does not register as a compounding
+energy-reduction effect in this counterfactual family.
+
+#### Ablation separation (survival result remains real & sensitive)
+
+On candidate cells, guarded TRACK is the **best-scoring arm at every horizon**
+(+0.100/+0.091/+0.072/+0.032; positive rate 0.550→0.516), clearly separated from
+the ablations: `signal_delay`-CAND is *negative* (−0.174 → −0.248), and both
+shuffles barely produce candidate cells at all (8 candidate trials each vs 205
+for guarded). So Phase 15's signal/timing-sensitivity finding is intact — TRACK
+*does* carry a candidate-specific signal; it simply does **not** grow with
+horizon. The rejection is specifically of the *horizon-lift / multi-step-steering*
+hypothesis, not of TRACK's survival edge.
+
+#### Signal-delay asymmetry (elevated primary diagnostic — reproduced at multi-step)
+
+The Phase 15B one-step tell reproduces at every multi-step horizon:
+
+- `signal_delay` **CAND** (n=127): **negative** score (−0.174 → −0.248), positive
+  rate **below chance** (0.424 → 0.388).
+- `signal_delay` **non** (n=155): **positive** score (+0.110 → +0.061), positive
+  rate **above chance** (0.574 → 0.551).
+
+Where the delay arm *succeeds* (produces candidate cells) its multi-step energy
+signal is anti-correlated; where it *fails* it is positive. The delay arm "buys
+survival while scoring negative" — confirmed now over 4–32 step horizons, not just
+one step. This is the strongest evidence that the survival mechanism is
+orthogonal to the energy counterfactual yardstick.
+
+#### Non-candidate control
+
+Non-candidate shuffle arms score high (+0.42/+0.43, positive rate ~0.75) — the
+all-cells floor-collapse degeneracy Phase 15 flagged — yet produce essentially no
+candidate cells (8/283 and 8/283). Non-candidate guarded TRACK is modest and also
+declines (+0.056 → +0.001). The horizon-lift pattern is absent in both splits, so
+the non-candidate control is satisfied: there is no candidate-specific multi-step
+mechanism to contrast against.
+
+### Next registered move
+
+Per the **rejected** branch, the next move is **not** another counterfactual
+variant. The pre-registered options are: (i) **hazard-score audit** —
+Phase 15's oracle-hazard AUROC missed the 0.70 bar (favorable-pocket mean 0.683);
+re-examine the hazard score family directly; (ii) **event-warning-quality rerun**;
+or (iii) treat the gap as a **controller-design limitation** and pursue a
+mechanism that the energy counterfactual *can* see. Given that both the one-step
+(15) and multi-step (15C) energy counterfactuals are normalizer-degenerate (~97%
+floored) on the cells where TRACK wins, the energy-counterfactual yardstick is
+likely the wrong instrument for this controller, and the hazard-score audit (i) is
+the highest-value next pass.
+
+**Phase 15 formal verdict (Fail-Magnitude) is preserved.** Phase 15C is a
+mechanism diagnostic; it does not convert Phase 15 to Pass, retune the controller,
+or broaden the gravity claim.
