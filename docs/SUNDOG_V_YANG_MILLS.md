@@ -10,8 +10,8 @@ Short version:
 > discipline: if the field itself is too much, can the right invariant shadow
 > still certify bounded structure?
 
-Status: **Phase 1 U(1) 2D and SU(2) 2D smokes passed; SU(2) 3D Phase 1
-manifest filed 2026-05-29**. Roadmap draft at this file; lit-pass at
+Status: **Phase 1 U(1) 2D, SU(2) 2D, and SU(2) 3D smokes passed
+2026-05-29**. Roadmap draft at this file; lit-pass at
 [`YANG_MILLS_LITPASS_MEMO.md`](YANG_MILLS_LITPASS_MEMO.md); P0 lock at
 [`prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md`](prereg/yang-mills/P0_DOMAIN_AND_RECEIPT_LOCK.md);
 Phase 1 U(1) 2D smoke manifest at
@@ -23,12 +23,13 @@ Phase 1 SU(2) 2D harness manifest at
 with `P1-A smoke_pass` receipt at
 [`yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md);
 Phase 1 SU(2) 3D primary-cell manifest at
-[`prereg/yang-mills/PHASE1_SU2_3D_gauge_invariance_smoke.md`](prereg/yang-mills/PHASE1_SU2_3D_gauge_invariance_smoke.md).
+[`prereg/yang-mills/PHASE1_SU2_3D_gauge_invariance_smoke.md`](prereg/yang-mills/PHASE1_SU2_3D_gauge_invariance_smoke.md)
+with `P1-A smoke_pass` receipt at
+[`yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md).
 These are Phase 1 instrumentation receipts only. No Phase 2 certificate,
 continuum, confinement, mass-gap, or result-bearing Yang-Mills claim exists.
-Next artifact is the SU(2) 3D core module + entry runner + package script
-for the exact SU2_3D Phase 1 manifest command; closing Phase 1 across the
-full ladder opens the Phase 2 `SU2_3D` 12³ relative-locality manifest.
+Next artifact is the Phase 2 `SU2_3D` 12^3 relative-locality manifest with
+numeric gamma_held bin edges frozen before scoring and all seven controls live.
 
 This is not a claim to progress on the Clay Yang-Mills existence and mass gap
 problem. It is a plan for a bounded receipt program that asks whether Sundog's
@@ -347,6 +348,8 @@ Deliverables:
   **filed 2026-05-29**;
 - `docs/prereg/yang-mills/PHASE1_SU2_2D_gauge_invariance_smoke.md` -
   **filed 2026-05-29**;
+- `docs/prereg/yang-mills/PHASE1_SU2_3D_gauge_invariance_smoke.md` -
+  **filed 2026-05-29**;
 - tiny deterministic fixture;
 - raw-link diagnostic control;
 - gauge-randomized copies;
@@ -354,7 +357,9 @@ Deliverables:
   expected - **filed 2026-05-29** at
   [`yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_U1_2D_phase1_gauge_invariance_smoke_pos.md)
   and
-  [`yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md).
+  [`yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md)
+  and
+  [`yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md).
 
 Failure:
 
@@ -496,10 +501,15 @@ Next agent should:
     2D Phase 1 runner and package script required by that manifest.~~
     **Done 2026-05-29** - receipt filed at
     [`yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_2D_phase1_gauge_invariance_smoke_pos.md).
-11. **New next artifact (2026-05-29):** file a `SU2_3D` Phase 1
-    gauge-invariance smoke manifest. Do not open Phase 2 nearest-neighbor
-    scoring until the 3D primary ladder cell has its own Phase 1 smoke
-    receipt or a staged compute-cap branch.
+11. ~~File a `SU2_3D` Phase 1 gauge-invariance smoke manifest, then
+    implement the minimal SU(2) 3D Phase 1 runner and package script
+    required by that manifest.~~
+    **Done 2026-05-29** - receipt filed at
+    [`yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md`](yang-mills/receipts/2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md).
+12. **New next artifact (2026-05-29):** file
+    `PHASE2_SU2_3D_relative_locality_v0.md`. It must run on the 12^3 partner,
+    freeze numeric gamma_held bin edges before scoring, and score all seven
+    P0 controls on the same frozen neighbor graph and held-out labels.
 
 ## 11. Open Decisions
 
@@ -525,7 +535,7 @@ Resolutions, restated here for navigation:
 
 Decisions still open (not §11 originals; surfaced by the P0 lock):
 
-- exact `SU2_3D` Phase 1 manifest sizing and timing probe;
+- exact Phase 2 `SU2_3D` 12^3 manifest sizing and gamma_held bin-freeze protocol;
 - gallery-card admission timing — currently still blocked per §10 item 7.
 
 ## 12. Ratified Public Boundary

@@ -59,6 +59,8 @@ class C2Config:
     window_steps: int
     tau_burst_steps: int
     q_burst: float
+    target_base_rate: float
+    base_rate_pairwise_tol: float
     base_rate_lo: float
     base_rate_hi: float
     logsig_level: int
@@ -93,7 +95,12 @@ def build_config(args: argparse.Namespace) -> C2Config:
     sample_stride = 50
     window_steps = 200
     tau_burst_steps = 500
-    q_burst = 0.98
+    q_burst = 0.98  # retained for reference; v1 label uses target_base_rate
+    # v1 (PDE_C2_CELLSET_SABRA_v1.md section 11): the C1-proven construction —
+    # E_burst is the (1 - target_base_rate)-quantile of the held-out calib
+    # block's look-ahead-max eps, pinning the calib base rate by construction.
+    target_base_rate = 0.15
+    base_rate_pairwise_tol = 0.10
     forcing_scheme = getattr(args, "forcing", "fixed-amplitude")
     # v1: fixed-amplitude forcing holds |u_1| at a fixed target (1.0) for a
     # statistically steady cascade; additive reproduces v0 (|f_1| = 0.005*sqrt2).

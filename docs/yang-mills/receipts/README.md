@@ -39,3 +39,8 @@ the [receipt template](../RECEIPT_TEMPLATE.md).
   gauge-randomization smoke with Creutz / Kennedy-Pendleton heatbath plus
   Brown-Woch overrelaxation. Instrumentation only; no Phase 2 certificate
   claim.
+- [`2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md`](2026-05-29_SU2_3D_phase1_gauge_invariance_smoke_pos.md)
+  - `P1-A smoke_pass` for the non-Abelian `SU2_3D`, 8x8x8, beta 2.4
+  gauge-randomization smoke with three-plane signature averaging. Closes
+  Phase 1 instrumentation across the registered ladder; no Phase 2
+  certificate claim.
