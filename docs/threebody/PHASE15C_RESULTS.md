@@ -99,6 +99,9 @@ duration-4 smoke extrapolation).
 | 1 | mu1-v1p1 | 144 | 84.5 | 5/15 | 50·93·1 | 1 |
 | 2 | mu0p3-v1p1 | 144 | 81.5 | 3/15 | 31·109·4 | 1 |
 | 3 | mu0p01-v1p1 | 144 | 63.4 | 3/15 | 20·124·0 | 1 |
+| 4 | mu1-v1p15 | 144 | 82.0 | 6/15 | 36·108·0 | 2 |
+| 5 | mu0p3-v1p15 | 144 | 84.1 | 5/15 | 26·117·1 | 2 |
+| 6 | mu0p01-v1p15 | 144 | 59.1 | 3/15 | 18·126·0 | 2 |
 
 ### Interim directional note (provisional — NOT a branch read)
 
