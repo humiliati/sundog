@@ -143,6 +143,8 @@ def build_config(args: argparse.Namespace) -> C2Config:
         window_steps=window_steps,
         tau_burst_steps=tau_burst_steps,
         q_burst=q_burst,
+        target_base_rate=target_base_rate,
+        base_rate_pairwise_tol=base_rate_pairwise_tol,
         base_rate_lo=0.05,
         base_rate_hi=0.40,
         logsig_level=2,
@@ -441,15 +443,16 @@ def block_bounds(cfg: C2Config) -> dict:
     return {"calib": calib, "train": train, "val": val, "test": test}
 
 
+def lookahead_max_series(obs_series: np.ndarray, start: int, end: int, cfg: C2Config) -> np.ndarray:
+    """Per query-time look-ahead-max of the burst observable over (t, t+tau_burst]."""
+    tau = cfg.tau_burst_steps
+    query = range(start, end - tau, cfg.sample_stride)
+    return np.array([float(np.max(obs_series[t + 1 : t + 1 + tau])) for t in query], dtype=np.float64)
+
+
 def burst_label(obs_series: np.ndarray, start: int, end: int, e_burst: float, cfg: C2Config) -> np.ndarray:
     """B(t)=1 iff the burst observable (eps) exceeds e_burst in (t, t+tau_burst]."""
-    tau = cfg.tau_burst_steps
-    query = list(range(start, end - tau, cfg.sample_stride))
-    labels = np.zeros(len(query), dtype=np.int8)
-    for i, t in enumerate(query):
-        if float(np.max(obs_series[t + 1 : t + 1 + tau])) > e_burst:
-            labels[i] = 1
-    return labels
+    return (lookahead_max_series(obs_series, start, end, cfg) > e_burst).astype(np.int8)
 
 
 def main() -> None:
@@ -470,43 +473,58 @@ def main() -> None:
     sim = simulate(cfg)
     bounds = block_bounds(cfg)
     obs = sim["burst_obs"]
-    calib_obs = obs[bounds["calib"][0] : bounds["calib"][1]]
-    e_burst = float(np.quantile(calib_obs, cfg.q_burst))
+    # v1 label (C1-proven construction): E_burst = (1 - target_base_rate)-quantile
+    # of the held-out calib block's look-ahead-max eps. Pins the calib base rate
+    # by construction, so the burst rate cannot go vacuous from threshold rarity.
+    cstart, cend = bounds["calib"]
+    calib_lam = lookahead_max_series(obs, cstart, cend, cfg)
+    e_burst = float(np.quantile(calib_lam, 1.0 - cfg.target_base_rate))
 
     labels = {name: burst_label(obs, lo, hi, e_burst, cfg) for name, (lo, hi) in bounds.items() if name != "calib"}
-    base_rate_test = float(np.mean(labels["test"])) if labels["test"].size else 0.0
-    base_rate_gate = cfg.base_rate_lo <= base_rate_test <= cfg.base_rate_hi
+    base_rates = {name: (float(np.mean(v)) if v.size else 0.0) for name, v in labels.items()}
+    in_band = {name: cfg.base_rate_lo <= r <= cfg.base_rate_hi for name, r in base_rates.items()}
+    rates = [base_rates["train"], base_rates["val"], base_rates["test"]]
+    pairwise_max = max(abs(a - b) for a in rates for b in rates)
+    pairwise_ok = pairwise_max <= cfg.base_rate_pairwise_tol
 
     verdict_bearing = cfg.preset in VERDICT_BEARING_PRESETS and not args.allow_unregistered_overrides
     if not verdict_bearing:
         gate_status = "SMOKE_ONLY"
-    elif not base_rate_gate:
+    elif not all(in_band.values()):
         gate_status = "PDE-C2-DEFERRED-BASERATE"
+    elif not pairwise_ok:
+        gate_status = "PDE-C2-DEFERRED-NONSTATIONARY"
     else:
         gate_status = "BASE_RATE_GATE_PASSED"
 
     result = {
         "preset": cfg.preset,
         "model": cfg.model,
+        "forcing_scheme": cfg.forcing_scheme,
         "gate_status": gate_status,
         "verdict_bearing": verdict_bearing,
-        "e_burst": e_burst,
-        "q_burst": cfg.q_burst,
-        "base_rate_test": base_rate_test,
-        "base_rate_train": float(np.mean(labels["train"])) if labels["train"].size else 0.0,
-        "base_rate_val": float(np.mean(labels["val"])) if labels["val"].size else 0.0,
-        "base_rate_band": [cfg.base_rate_lo, cfg.base_rate_hi],
         "burst_observable": "dissipation_rate_eps",
-        "calib_eps_median": float(np.median(calib_obs)),
-        "calib_eps_p99": float(np.quantile(calib_obs, 0.99)),
+        "label_construction": "held_out_lookahead_max_quantile_target_base_rate",
+        "target_base_rate": cfg.target_base_rate,
+        "e_burst": e_burst,
+        "base_rate_train": base_rates["train"],
+        "base_rate_val": base_rates["val"],
+        "base_rate_test": base_rates["test"],
+        "base_rate_pairwise_max": pairwise_max,
+        "base_rate_pairwise_tol": cfg.base_rate_pairwise_tol,
+        "base_rate_band": [cfg.base_rate_lo, cfg.base_rate_hi],
         "test_query_count": int(labels["test"].size),
         "elapsed_seconds": sim["elapsed_seconds"],
         "total_steps": sim["total"],
         "detector_note": "matched-budget 4-baseline comparison is the next increment; "
-        "this run reports the base-rate gate only (objective-validity layer).",
+        "this run reports the base-rate + per-block stationarity gates only.",
     }
     write_outputs(args.out.resolve(), cfg, result)
-    print(f"[pde-c2] gate: {gate_status}; base_rate_test={base_rate_test:.4g}")
+    print(
+        f"[pde-c2] gate: {gate_status}; base rates train/val/test="
+        f"{base_rates['train']:.3g}/{base_rates['val']:.3g}/{base_rates['test']:.3g} "
+        f"(pairwise max {pairwise_max:.3g})"
+    )
     print(f"[pde-c2] wrote: {args.out.resolve()}")
 
 
@@ -515,25 +533,30 @@ def write_outputs(out_dir: Path, cfg: C2Config, result: dict) -> None:
     manifest = {
         "startedAt": datetime.now(timezone.utc).isoformat(),
         "script": "scripts/pde_c2_sabra_cell.py",
-        "spec": "docs/proof/PDE_C2_CELLSET_SABRA_v0.md",
+        "spec": "docs/proof/PDE_C2_CELLSET_SABRA_v1.md",
         "config": asdict(cfg),
         "environment": {"python": sys.version, "numpy": np.__version__, "platform": sys.platform},
         "result": result,
     }
     (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     lines = [
-        "# PDE C2 Sabra Cell v0 Receipt (objective-validity layer)",
+        "# PDE C2 Sabra Cell v1 Receipt (objective-validity layer)",
         "",
         f"**Gate:** {result['gate_status']}",
-        f"**Preset:** `{cfg.preset}`   **Model:** `{cfg.model}`",
+        f"**Preset:** `{cfg.preset}`   **Model:** `{cfg.model}`   **Forcing:** `{result['forcing_scheme']}`",
         "",
-        "## Base-rate gate (C1 vacuity-lesson analogue)",
+        "## Base-rate + per-block stationarity gates",
         "",
-        f"- `E_burst` (held-out q={cfg.q_burst} of calib dissipation ε): `{result['e_burst']:.6g}`",
-        f"- base rate test / train / val: `{result['base_rate_test']:.4g}` / "
-        f"`{result['base_rate_train']:.4g}` / `{result['base_rate_val']:.4g}`",
-        f"- gate band: `{result['base_rate_band']}` -> "
-        f"`{'PASS' if cfg.base_rate_lo <= result['base_rate_test'] <= cfg.base_rate_hi else 'DEFER'}`",
+        f"- burst observable: ε(t) = ν Σ k_n²|u_n|²; label = held-out look-ahead-max "
+        f"quantile at target base rate `{result['target_base_rate']}`",
+        f"- `E_burst`: `{result['e_burst']:.6g}`",
+        f"- base rate train / val / test: `{result['base_rate_train']:.4g}` / "
+        f"`{result['base_rate_val']:.4g}` / `{result['base_rate_test']:.4g}`",
+        f"- band `{result['base_rate_band']}`: "
+        f"`{'PASS' if all(cfg.base_rate_lo <= result[f'base_rate_{b}'] <= cfg.base_rate_hi for b in ('train','val','test')) else 'DEFER'}`",
+        f"- per-block pairwise max diff `{result['base_rate_pairwise_max']:.4g}` vs tol "
+        f"`{result['base_rate_pairwise_tol']}`: "
+        f"`{'PASS' if result['base_rate_pairwise_max'] <= result['base_rate_pairwise_tol'] else 'DEFER'}`",
         f"- test query count: `{result['test_query_count']}`",
         f"- elapsed: `{result['elapsed_seconds']:.1f}` s over `{result['total_steps']}` steps",
         "",
@@ -544,13 +567,21 @@ def write_outputs(out_dir: Path, cfg: C2Config, result: dict) -> None:
         lines.append("Smoke / override run; no C2 result filed.")
     elif result["gate_status"] == "PDE-C2-DEFERRED-BASERATE":
         lines.append(
-            "Burst base rate outside the pre-registered band: the objective is "
-            "degenerate at this cell. Filed as `PDE-C2-DEFERRED-BASERATE` (non-verdict). "
-            "No q_burst/tau_burst rescue (would be `PDE-C2-NEG-B`); re-pose via a new cell."
+            "A block's burst base rate is outside the pre-registered band: the "
+            "objective is degenerate at this cell. `PDE-C2-DEFERRED-BASERATE` "
+            "(non-verdict). No threshold/rate rescue (would be `PDE-C2-NEG-B`)."
+        )
+    elif result["gate_status"] == "PDE-C2-DEFERRED-NONSTATIONARY":
+        lines.append(
+            "Per-block base rates are in band but not pairwise-consistent: the "
+            "labelled blocks are not representatively sampled (clustering / residual "
+            "non-stationarity). `PDE-C2-DEFERRED-NONSTATIONARY` (non-verdict). "
+            "Re-pose with longer blocks or a steadier regime, not a threshold retune."
         )
     else:
         lines.append(
-            "Base-rate gate passed: the burst objective is non-degenerate. Proceed to "
+            "Base-rate band AND per-block stationarity gates both passed: the burst "
+            "objective is non-degenerate and representatively sampled. Proceed to "
             "build the matched-budget 4-baseline Pareto comparison (next increment)."
         )
     lines.extend(["", "## Files", "", "- `manifest.json`"])

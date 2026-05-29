@@ -177,6 +177,41 @@ verdict-bearing cell remains gated on the diagnostic + the §5 gate):
   3·T_eq, blocks ≥ 50·T_burst) get pinned in a v1 patch from its output
   before the cell run, with the §5 per-block stationarity gate.
 
+## 11. Diagnostic result (2026-05-29) and the burst-rarity finding
+
+Headline diagnostic (`results/proof/c2-sabra-v1-diagnostic/`, 3M steps /
+300 time units, fixed-amplitude, ε observable):
+
+- **Stationarity solved.** Total energy first/second-half drift
+  `0.0001` (0.01%), `T_eq ≈ 0`, plateaued. Fixed-amplitude forcing fixes
+  v0's non-stationarity decisively. ε non-degenerate (q98/median ≈ 9.9).
+- **But ε-bursts at q98 are too rare for a detection cell.** Only ~2
+  burst events in 300 time units (`T_burst ≈ 294`). The rule blocks ≥
+  50·T_burst → ~147M steps/block → ~700M total → ~46 h, infeasible; and
+  ~2 burst events is too few positives regardless.
+
+**Root cause + fix (the C1 lesson, again).** The v0/v1 label pinned
+`E_burst` at the q=0.98 quantile of *instantaneous* ε — a rare extreme.
+That is NOT the C1 construction that worked: C1's portable objective set
+the threshold as a quantile of the *look-ahead-max* targeting a fixed
+base rate by construction. **Amend the C2 label the same way:** pin a
+**target query base rate** `r_burst` (proposed 0.15) and set `E_burst`
+= the `(1 − r_burst)`-quantile of the held-out calib block's
+look-ahead-max ε. This pins ~15% positive windows by construction
+(enough examples, spread across the timeline → far less clustered than 2
+extremes), leakage-safe, with the §5 per-block stationarity gate
+confirming representativeness. This supersedes the fixed-`q_burst`
+pin in §3 (a diagnostic-phase refinement, pre-verdict).
+
+**Honest meta-note.** C2 has now surfaced three diagnostic-caught design
+issues — non-stationarity (→ fixed-amplitude forcing), observable
+degeneracy (→ ε), burst rarity (→ target-base-rate label). Each was
+caught cheaply before a verdict-bearing or infeasible run (the
+diagnostic-first discipline working), but the cumulative signal is that
+a clean shell-model burst-detection cell is genuinely thornier to pose
+than the C1 Kolmogorov cell. The target-base-rate amendment is the next
+concrete step; a pause to rethink the C2 framing is also reasonable.
+
 ## 9. Cross-references
 
 - [`PDE_C2_CELLSET_SABRA_v0.md`](PDE_C2_CELLSET_SABRA_v0.md) — the
