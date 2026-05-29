@@ -7,10 +7,12 @@ Prior Phase 3 structured-edit lane:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **SPEC FILED; EXECUTION HOLD**. This file starts Phase 3E as a
-certificate lane, not another decoder lane. It admits no run until runner
-tooling, npm wiring, result ignore path, leak-check coverage, and a
-freeze-marker amendment are committed together.
+Status: **BINDING RECEIPT FILED --
+`phase3e_deferred_label_vacuity`**. This file defines Phase 3E as a certificate
+lane, not another decoder lane. The binding receipt found no registered exact
+or near `signature_palette` context-fiber collision, but deferred because the
+program-sketch oracle is prior-blind and the registered context fibers are too
+sparse at the frozen radius.
 
 ## Purpose
 
@@ -365,6 +367,13 @@ Allowed if `phase3e_fiber_locality_positive` is filed:
 > the frozen thresholds. This licenses a later Branch E program-selector test;
 > it does not prove signature sufficiency."
 
+Allowed if `phase3e_deferred_label_vacuity` is filed:
+
+> "Phase 3E found no registered exact or near `signature_palette` fiber
+> collision, but deferred because the registered context fibers were too sparse
+> at the frozen radius and the program-sketch oracle was vacuous on most primary
+> contexts. The result neither proves sufficiency nor blocks Branch E."
+
 Forbidden:
 
 - any claim about ARC public-evaluation or Kaggle performance;
@@ -374,3 +383,48 @@ Forbidden:
 - any Branch E solver or ARC-AGI submission claim from this certificate alone;
 - changing `epsilon_primary`, kNN `k`, or program-sketch thresholds after seeing
   pairwise distances or labels without a new append-only amendment.
+
+## Binding Receipt Addendum
+
+Filed: **2026-05-29 (PT)**.
+
+Binding receipt path:
+
+`results/arc/phase3e-signature-fiber-certificate/`
+
+The binding receipt is summarized in `PHASE3_SUFFICIENCY_SPEC.md` under
+"Phase 3E Signature-Fiber Certificate Binding Receipt:
+`phase3e_deferred_label_vacuity`". The run was deterministic, completed under
+the ten-minute rule, and preserved the two-stage no-target fingerprint barrier.
+
+The branch is **`phase3e_deferred_label_vacuity`**. The branch name is a formal
+spec disposition, but the substantive receipt is a dual finding:
+
+1. **No collision and no near structure.** In `U_primary = test_lodo union
+   pttest`, the certificate found:
+   - zero exact-output collisions;
+   - zero representation-level collisions;
+   - zero cross-task context pairs within `epsilon_primary = 0.05`;
+   - minimum cross-task context distance `0.207`, which is about `4.1x`
+     `epsilon_primary` and `2.1x` `epsilon_loose = 0.10`.
+2. **Prior-structured label vacuity.** `label_vacuity_fraction = 0.68`: 17 of
+   25 primary contexts had `none` in at least two program-sketch oracle sets.
+   The vacuity is cleanly prior-structured:
+   - non-vacuous: `color_role` 0/4, `objectness` 0/4;
+   - vacuous: `counting` 4/4, `local_completion` 4/4,
+     `spatial_transform` 4/4, `symmetry` 5/5.
+
+Interpretation:
+
+- The seven Phase 3 decoder floors are not explained by a registered
+  `signature_palette` fiber collision.
+- The certificate does not prove `signature_palette` sufficient.
+- The certificate cannot issue `phase3e_fiber_locality_positive`, because 0% of
+  primary contexts had fidelity-passing cross-task neighborhoods and the
+  program-sketch oracle was vacuous on most primary contexts.
+- An adjudicable future certificate would need a framing-agnostic program-sketch
+  oracle for the four edit-blind priors, a larger registered context universe,
+  or both.
+
+Per the frozen-threshold rule, `epsilon_primary`, kNN `k`, and program-sketch
+thresholds are not retuned after this receipt.

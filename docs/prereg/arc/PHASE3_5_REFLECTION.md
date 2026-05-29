@@ -518,5 +518,26 @@ collisions with incompatible required behavior. This is a certificate lane, not
 a decoder lane: it can find a finite-context insufficiency witness or license a
 later Branch E program-selector runner, but it does not train a solver.
 
-This addendum admits no execution. Phase 3E remains in execution hold until
-runner tooling and a freeze-marker amendment are filed.
+## Post-Phase 3E Certificate Addendum
+
+Filed: **2026-05-29 (PT)**.
+
+The Phase 3E signature-fiber certificate binding receipt is now filed. Its
+verdict is **`phase3e_deferred_label_vacuity`**. The receipt found no registered
+`signature_palette` fiber collision and no near cross-task structure: zero
+exact-output collisions, zero representation-level collisions, zero cross-task
+pairs within the frozen radius, and minimum cross-task context distance `0.207`.
+
+The deferral is caused by two facts:
+
+- the registered context fibers are singletons at the frozen radius, so there is
+  no locality structure to certify positive or negative;
+- the Branch D-derived `program_sketch_v1` oracle is prior-blind on 68% of
+  primary contexts, covering `color_role` and `objectness` but not `counting`,
+  `local_completion`, `spatial_transform`, or `symmetry`.
+
+This does not block Branch E, because no collision witness was found. It also
+does not license Branch E via `phase3e_fiber_locality_positive`, because no
+fidelity-passing neighborhoods exist and the oracle is vacuous on most primary
+contexts. A future certificate would need a framing-agnostic program-sketch
+oracle, a larger registered context universe, or both.
