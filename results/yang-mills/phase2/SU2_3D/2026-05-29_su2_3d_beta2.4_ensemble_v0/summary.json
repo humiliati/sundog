@@ -1,0 +1,50 @@
+{
+  "branch": "P1-A ensemble_health_pass",
+  "reason": "all Phase-1-inherited ensemble health thresholds pass",
+  "beta": 2.4,
+  "pilot": {
+    "tauInt": 0.9412059512301147,
+    "window": 6,
+    "meanPlaquette": 0.5296812352812335,
+    "variancePlaquette": 0.000034091855180870504,
+    "thinningTauRatio": 33.99893504516988
+  },
+  "orientation": {
+    "meanPlaquette": {
+      "xy": 0.5296851517676886,
+      "xz": 0.5299138845767926,
+      "yz": 0.529444669499217
+    },
+    "variancePlaquette": {
+      "xy": 0.00007281615770839971,
+      "xz": 0.0000786398052082148,
+      "yz": 0.0000786755485734829
+    },
+    "relativeSpread": 0.000885455337616434,
+    "thresholdRelativeSpread": 0.05
+  },
+  "measurements": {
+    "retained": 32
+  },
+  "heldout": {
+    "gammaHeldEpsilonFloor": 1e-10,
+    "clampCount": 7
+  },
+  "heatbath": {
+    "linkUpdates": 18330624,
+    "fallbackCount": 0,
+    "fallbackFraction": 0,
+    "rejectionAttempts": 39592591,
+    "thresholdFallbackFraction": 0.001
+  },
+  "linkUnitarityMaxFrobenius": 9.420554752102651e-16,
+  "thresholds": {
+    "wallClockSeconds": 600,
+    "tauIntMax": 16,
+    "thinningTauRatioMin": 2,
+    "heatbathFallbackFractionMax": 0.001,
+    "unitarityFrobeniusResidualMax": 1e-10,
+    "orientationRelativeSpreadMax": 0.05
+  },
+  "wallClockSeconds": 248.1261217
+}
