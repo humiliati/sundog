@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3E PROGRAM-SKETCH ORACLE V2 SPEC FILED -- EXECUTION HOLD**. The Phase 3E signature-fiber certificate binding receipt remains `phase3e_deferred_label_vacuity` (no collision; fibers maximally separated; oracle prior-blind).
+Status: **Phase 3E PROGRAM-SKETCH ORACLE V2 BINDING RECEIPT FILED -- `phase3e_v2_deferred_sparse_fibers` (oracle defect repaired + certified; geometric sparsity is the sole remaining deferral cause)**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -381,10 +381,27 @@ Checked **2026-05-28** against:
   -- Phase 3E oracle-repair spec. It freezes a framing-agnostic
   `program_sketch_v2` labeler with nine facets, anti-vacuity,
   anti-prior-laundering, and anti-solver-leakage gates, and the same frozen
-  Phase 3E signature geometry thresholds. **No v2 receipt exists yet.
-  Execution remains held** until runner tooling, npm wiring, result ignore
-  path, leak-check coverage, smoke fingerprint, and a freeze-marker amendment
-  are committed together.
+  Phase 3E signature geometry thresholds. **Binding receipt filed** (pinned to
+  freeze-marker `3B1B76D2`, runnerSha256 `6163C208`, ~8 s deterministic,
+  U_primary=25): verdict **`phase3e_v2_deferred_sparse_fibers`**. The v1 oracle
+  defect is **repaired and certified** -- all three gates pass: anti-vacuity
+  vacuous fraction **0.00** (v1 was 0.68; all six priors 0/4 vacuous, both
+  lanes), anti-prior-laundering 0% violations (min extra facets 5),
+  anti-solver-leakage clean (`unique_core_sketch_fraction 0.36` <= 0.60,
+  `core_sketch_exact_lookup_fraction 0.04` <= 0.20). Facet richness 6-7 of 9
+  per primary context; the four priors that were 100% vacuous under v1
+  (`counting`, `local_completion`, `spatial_transform`, `symmetry`) are now
+  0/4-0/5 vacuous. With gates cleared, the **unchanged frozen geometry** is
+  byte-identical to v1 (0 collisions, 0 near pairs, min cross-task distance
+  **0.207**, 0% fidelity-passing), so the certificate now defers on **geometric
+  sparsity alone** rather than label vacuity. The two v1 deferral causes are
+  thus separated and one closed; the unambiguous next certificate move is to
+  **expand the registered context universe** (more Phase 0 tasks, requiring a
+  Phase 0 register amendment), not another oracle iteration. The alternative is
+  to proceed to a Branch E solver on capability grounds (the certificate found
+  no collision to block it and cannot certify locality to motivate a smooth
+  selector). Either path needs its own pre-registered spec + arena gate +
+  verdict discipline.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -511,12 +528,29 @@ edit-blind priors) or a larger registered context universe; otherwise
 Branch E must be justified by capability rather than by certified
 fiber geometry.
 
-The filed v2 oracle spec is
-[`PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md`](PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md).
-It is a certificate labeler, not a solver: it cannot emit candidate grids,
+The v2 oracle repair
+([`PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md`](PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md))
+is a certificate labeler, not a solver: it cannot emit candidate grids,
 choose outputs, train a selector, or retune the frozen Phase 3E geometry after
-seeing labels. Until a binding v2 receipt exists, the only public claim is that
-the v2 oracle spec has been filed under execution hold.
+seeing labels. Its binding receipt (pinned to freeze-marker `3B1B76D2`,
+runnerSha256 `6163C208`, ~8 s deterministic, 25 primary contexts) returned
+**`phase3e_v2_deferred_sparse_fibers`** and **repairs + certifies** the v1
+oracle defect: the framing-agnostic nine-facet `program_sketch_v2` labeler is
+**0.00 vacuous** (v1 was 0.68), and all four priors that were 100% vacuous under
+v1 (`counting`, `local_completion`, `spatial_transform`, `symmetry`) are now
+0/4-0/5 vacuous, with 6-7 of 9 facets populated per primary context. All three
+spec gates pass: anti-vacuity (0.00 <= 0.20), anti-prior-laundering (0%
+violations, min extra facets 5 >= 2), and anti-solver-leakage
+(`unique_core_sketch_fraction 0.36` <= 0.60, `core_sketch_exact_lookup_fraction
+0.04` <= 0.20 -- the sketch is neither a per-context fingerprint nor an
+input->output lookup table). With the labeler defect closed, the **frozen
+geometry is byte-identical to v1** (0 collisions, 0 near pairs, min cross-task
+`d_context_signature_palette` **0.207**, 0% fidelity-passing), so the two v1
+deferral causes are now **separated and one closed**: label vacuity is repaired,
+and **geometric sparsity is the sole remaining deferral cause**. The certificate
+still **neither blocks nor licenses Branch E**, but the next certificate move is
+now unambiguous -- **expand the registered context universe** (a Phase 0 register
+amendment), not another oracle iteration.
 
 Avoid:
 
@@ -541,8 +575,20 @@ Avoid:
   representation does not conflate distinct registered tasks at the
   frozen radius, which the spec explicitly forbids reading as
   sufficiency;
-- any claim that `program_sketch_v2` covers the blind priors, licenses
-  Branch E, or repairs Phase 3E before a binding v2 receipt exists;
+- any claim that the v2 oracle repair (`program_sketch_v2`,
+  `phase3e_v2_deferred_sparse_fibers`) repaired Phase 3E itself, licensed
+  Branch E, ruled signature_palette (in)sufficient, or found a collision
+  -- it repaired only the *labeler* (vacuity 0.68 -> 0.00, all four
+  edit-blind priors now 0-vacuous, all three gates pass); the frozen
+  geometry is byte-identical to v1 (still 0 collisions, still min distance
+  0.207, still 0% fidelity-passing), so the certificate is still
+  **deferred**, now on geometric sparsity alone, and still adjudicates
+  neither sufficiency nor a Branch E license;
+- any claim that the v2 gates passing (anti-vacuity, anti-prior-laundering,
+  anti-solver-leakage) is evidence about ARC sufficiency -- the gates only
+  certify that the oracle is a faithful, non-laundering, non-leaking
+  *labeler*, which is a precondition for an adjudicable certificate, not a
+  result about the representation;
 - any "color-rule variant flipped the bottleneck -> mask is the new
   limit" claim that omits the still-floor verdict -- the color-rule
   variant achieved a diagnostic improvement (palette doubled,

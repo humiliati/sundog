@@ -7015,3 +7015,145 @@ rule)."
 
 **Public-language constraint**: unchanged from the v2 spec
 §"Public Language" until the binding receipt lands.
+
+### 2026-05-29 (PT) — Jeffery Hughes Jr. — Phase 3E Program-Sketch Oracle v2 Binding Receipt: `phase3e_v2_deferred_sparse_fibers` (oracle defect repaired; geometry sparsity is now the sole deferral cause)
+
+The binding v2-oracle certificate ran on the registered 36-task Phase 0
+set, pinned to freeze-marker `gitCommit 3B1B76D2…` (runnerSha256
+`6163C208…`; `gitDirty=true` only from the operator's unrelated
+Navier–Stokes working files, which the oracle does not read). Receipt
+at `results/arc/phase3e-program-sketch-oracle-v2/`. Wall ≈ 8 s, fully
+deterministic (binding branch matches the freeze-marker smoke exactly).
+`U_all = 49`, `U_primary = 25`.
+
+**Branch: `phase3e_v2_deferred_sparse_fibers`.**
+
+#### The oracle defect from the v1 certificate is repaired and certified
+
+The v1 certificate deferred for two reasons: (a) the program-sketch
+oracle was prior-blind (68% vacuous), and (b) the fibers were
+geometrically sparse (0 cross-task pairs within `epsilon_primary`).
+The v2 oracle was the narrow repair for (a). It cleared **all three**
+pre-registered gates on `U_primary`:
+
+| gate | result | detail |
+| --- | --- | --- |
+| anti-vacuity | **PASS** | overall vacuous fraction **0.00** (v1 oracle: 0.68); all six priors 0/4 vacuous; both `test_lodo` and `pttest` lanes non-vacuous for every prior |
+| anti-prior-laundering | **PASS** | 0% of non-vacuous primary contexts violate the two-extra-facet rule; minimum extra-concrete-facets-outside-the-prior-facet = 5 (rule requires ≥ 2) |
+| anti-solver-leakage | **PASS** | no syntactic leakage; `unique_core_sketch_fraction = 0.36` (≤ 0.60); `core_sketch_exact_lookup_fraction = 0.04` (≤ 0.20) |
+
+Facet richness rose to 6–7 of the nine required facets populated per
+primary context (8 contexts at 6, 17 at 7). Crucially, the four priors
+that were **100% vacuous under v1** — `counting`, `local_completion`,
+`spatial_transform`, `symmetry` — are now **0/4 (and 0/5) vacuous**.
+The framing-agnostic raw-grid facet labelers characterize the
+non-edit-composition priors that the Branch D-derived v1 oracle could
+not see. The anti-solver-leakage margins confirm the labels stay coarse:
+`unique_core 0.36` means most contexts share their nine-facet core
+signature with at least one other context, and `exact_lookup 0.04`
+means a lookup keyed only on the core sketch would reproduce the exact
+output for 1 of 25 primary contexts — the sketch is a transformation
+*type* label, not a hidden solver.
+
+#### Geometry sparsity is now the sole remaining deferral cause
+
+With the oracle gates cleared, the certificate re-ran the fiber
+adjudication under the **unchanged** frozen geometry. The result is
+byte-identical to the v1 receipt on every geometric quantity:
+
+| quantity | v2 binding | v1 binding |
+| --- | ---: | ---: |
+| exact / representation-level collisions | 0 | 0 |
+| near pairs within `epsilon_primary = 0.05` | 0 | 0 |
+| `fidelity_pass_fraction` | 0.00 | 0.00 |
+| **min cross-task context distance** | **0.207** | **0.207** |
+
+No two distinct-task registered contexts are within `epsilon_primary`
+(or even `epsilon_loose = 0.10`); the closest cross-task pair sits at
+0.207, 4.1× the primary threshold. So the v2 certificate cannot issue
+`phase3e_v2_near_fiber_incompatibility` (no near pairs exist to test),
+cannot issue `phase3e_v2_fiber_locality_positive` (0% fidelity-passing
+neighborhoods, far below the 50% requirement), and — because the oracle
+gates now pass — defers as `phase3e_v2_deferred_sparse_fibers` rather
+than `phase3e_deferred_label_vacuity`.
+
+This is the clean, expected outcome: **the v2 oracle removed the
+label-vacuity deferral cause and certified it removed (all three gates
+pass with wide margins), isolating the registered-context geometric
+sparsity as the lone obstruction to an adjudicable fiber certificate.**
+
+#### What This Verdict Does And Does Not Entail
+
+**It does**:
+
+- Repair and certify the v1 oracle defect: a framing-agnostic,
+  deterministic, raw-grid transformation-sketch labeler is non-vacuous
+  across all six registered priors while remaining too coarse to act as
+  a solver (anti-vacuity, anti-prior-laundering, and anti-solver-leakage
+  all pass).
+- Re-confirm, under the frozen geometry, that the registered
+  `signature_palette` context fibers have no collision and no near
+  structure (min cross-task distance 0.207). The earlier finding was
+  not an artifact of the prior-blind oracle.
+- Localize the remaining obstruction unambiguously: **registered
+  context geometric sparsity at `epsilon_primary = 0.05`**, not label
+  quality.
+
+**It does not**:
+
+- Prove `signature_palette` sufficient or insufficient (no collision
+  found; spec forbids the sufficiency reading either way).
+- License a Branch E program-selector via
+  `phase3e_v2_fiber_locality_positive` (0% fidelity-passing
+  neighborhoods).
+- Retune any threshold — `epsilon_primary`, `k`, the facet vocabulary,
+  and all gate thresholds are frozen and unchanged after seeing output,
+  per the spec.
+
+#### Path Forward
+
+The two v1 deferral causes have now been separated and one has been
+closed. The oracle is certified adequate; the sole remaining blocker is
+that 36 registered tasks are too few / too separated to populate
+cross-task fibers at the frozen `epsilon_primary`. The next admissible
+move is therefore unambiguous and is **not** another oracle iteration:
+
+- **Expand the registered context universe** (more Phase 0 tasks per
+  prior, and/or a finer LODO expansion) so cross-task neighbors exist
+  within `epsilon_primary` and fiber locality becomes measurable. The
+  min-distance 0.207 quantifies the gap: roughly a 4× contraction in
+  nearest-neighbor distance is needed, which a substantially larger
+  registered set could supply. This would require its own Phase 0
+  register amendment (new manually-inspected tasks) before a rerun.
+- Alternatively, **proceed to a Branch E solver on capability grounds**,
+  accepting that the certificate (across v1 + v2) found no registered
+  collision to block it and could not certify locality to motivate a
+  smooth selector — i.e., a Branch E solver is justified by what it can
+  do, not by certified fiber geometry. A Branch E solver still needs its
+  own pre-registered spec, arena gate, and verdict-amendment discipline.
+
+#### Frozen By This Verdict
+
+- The binding receipt at
+  `results/arc/phase3e-program-sketch-oracle-v2/` (pinned
+  `gitCommit 3B1B76D2…`, target-barrier hash recorded in the manifest)
+  is frozen.
+- The certified gate margins (vacuity 0.00, laundering 0%,
+  unique_core 0.36, exact_lookup 0.04) are the canonical record that the
+  v1 prior-blindness is repaired without introducing solver leakage.
+- The unchanged geometry (min cross-task distance 0.207, 0 near pairs)
+  is the canonical record that the deferral is now purely a
+  registered-context sparsity result.
+
+**Verdict impact**: no prior verdict changes. The seven full-grid
+control floors stand; the v1 signature-fiber certificate
+(`phase3e_deferred_label_vacuity`) stands. The v2 oracle advances the
+Phase 3E lane from a two-cause deferral to a single-cause
+(sparsity-only) deferral with the oracle defect certified-repaired, and
+makes "expand the registered context universe" the unambiguous next
+certificate move.
+
+**Public-language constraint**: per the v2 spec §"Public Language",
+the permitted addition is the gate-cleared sparse-deferral statement;
+the locality-positive, collision-found, and any sufficiency statements
+remain forbidden (none obtained).
