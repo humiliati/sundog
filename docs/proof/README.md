@@ -195,9 +195,17 @@ that claim provably fails.
   quantile (`q_burst=0.98`) not a fixed level, plus a **base-rate gate**
   (`PDE-C2-DEFERRED-BASERATE`) that defers a degenerate-burst-rate cell
   rather than mis-reading it — the explicit guard against the C1-v6
-  intermittent-threshold vacuity. **Proposed, not built, not run** —
-  §10 lists sign-off decisions (Sabra params, signature library,
-  base-rate band, compute budget, build trigger).
+  intermittent-threshold vacuity. **Objective-validity layer executed
+  2026-05-29 → `PDE-C2-DEFERRED-BASERATE`** (§12): energy-conservation
+  self-test passed, but the base rate is block-dependent (train 0.138,
+  val 0, test 0) → the Sabra trajectory is not stationary /
+  representatively sampled across the labelled span (burst recurrence
+  time ~ block length; the C1 intermittency lesson recurring). Gate
+  caught it before the baseline comparison; no `q_burst`/`τ_burst`
+  rescue (would be `PDE-C2-NEG-B`). Re-pose = a v1 cell with a per-block
+  stationarity gate + much longer blocks (own pre-registration). Harness
+  `scripts/pde_c2_sabra_cell.py`; matched-budget 4-baseline comparison is
+  the deferred next increment, gated on a stationary cell.
 - [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) —
   Navier-Stokes Candidate 1 fiber protocol: tolerance + binning
   methodology that closes the continuous-fiber gate (cell-set v0
