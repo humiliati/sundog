@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Branch E (deterministic program search) verdict: `branch_e_capability_demonstrated`** (pinned `6886074`). On the 108-task expanded register, a deterministic typed search over registered transformation primitives — selecting programs by train-pair consistency, never by signature geometry — cleared the established non-trivial floor (≥2 distinct held-out tasks solved exactly on both `test_lodo` and `pttest`) that every prior decoder/learner family floored on at zero. The result is **modest** (2 distinct tasks/gated lane, ~3% instance rate; structurally simple tasks via component-extraction, crop+scale, tile/crop+recolor) and is **not** a Blackwell-sufficiency proof, an ARC solve, or any eval/Kaggle claim. Branch E v2 is now filed as a staged deterministic expansion (intricate masks + morphology + depth 3); no v2 binding receipt exists yet. The four Phase 3E certificate verdicts and the seven full-grid-control floors stand; the certificates are cited as a no-collision / no-locality boundary, not a geometric selector.
+Status: **Branch E (deterministic program search) verdict: `branch_e_capability_demonstrated`** (pinned `6886074`). On the 108-task expanded register, a deterministic typed search over registered transformation primitives — selecting programs by train-pair consistency, never by signature geometry — cleared the established non-trivial floor (≥2 distinct held-out tasks solved exactly on both `test_lodo` and `pttest`) that every prior decoder/learner family floored on at zero. The result is **modest** (2 distinct tasks/gated lane, ~3% instance rate; structurally simple tasks via component-extraction, crop+scale, tile/crop+recolor) and is **not** a Blackwell-sufficiency proof, an ARC solve, or any eval/Kaggle claim. **Branch E v2** (deterministic expansion: intricate masks + morphology + depth-3, pinned `a307340`, ~101m, `gitDirty=false`) returned **`branch_e_v2_capability_replicated`**: it retained both v1 gated solves on both lanes but solved **0 new tasks** (material-lift gate ≥4 + ≥2-new not met) and even dropped validation 2→1/lane via top-2 crowding — so the deterministic program-search capability is **bounded near the v1 baseline**; lifting it would need a different solver class. The four Phase 3E certificate verdicts and the seven full-grid-control floors stand; the certificates are cited as a no-collision / no-locality boundary, not a geometric selector.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -282,11 +282,19 @@ Checked **2026-05-28** against:
   the exact v1-deferred deterministic mask families (`row_col_periodic_mask`,
   `source_color_pair_mask`, `object_role_mask`,
   `nearest_residual_patch_mask`), the morphology cross-product, and depth-3
-  structural composition. The tooling freeze-marker smoke passed, including a
-  known-v1-retention smoke on `be94b721` and `f25fbde4`; the full 108-task
-  binding run is staged for the operator under the ten-minute rule because the
-  expanded search is estimated at roughly 30-60 minutes on the current
-  CPU-contended workstation. No v2 verdict is filed yet.
+  structural composition. **Binding verdict (Amendment B, pinned `a307340`,
+  runnerSha256 `1D486AE1`, gitDirty=false, U_primary=336, ~101m, deterministic):
+  `branch_e_v2_capability_replicated`.** v2 retained both v1 gated solves
+  (`be94b721`, `f25fbde4`) on both lanes but solved **0 new tasks** (material-lift
+  gate ≥4-distinct + ≥2-new not met), and the larger search space actually
+  **dropped validation 2→1/lane** via top-2 crowding (more train-consistent-but-
+  test-wrong programs displace the correct one). So the deterministic
+  program-search capability is **bounded near the v1 ~3% baseline**: more
+  deterministic families/depth crack no new held-out task here. Same caveats —
+  capability on held-out public-training, not sufficiency/solve/eval/Kaggle;
+  certificates + seven floors + the v1 verdict stand. Lifting the rate would need a
+  different solver class (learned ranker, richer object-centric primitives, or an
+  LM proposer) under its own spec.
 - [`EVAL_BLIND_SELECTION.md`](EVAL_BLIND_SELECTION.md) -- stub pattern for
   future Phase 1+ evaluation-blind register rows (no manual grid inspection,
   selection by preregistered metadata/hash rule).
@@ -704,6 +712,13 @@ Avoid:
   geometry) and rests on the certificates' no-collision / no-locality boundary;
   searching a fixed library clearing a floor that learning-from-scratch floored on
   is the expected come-apart, not a contradiction;
+- any claim that Branch E v2 (`branch_e_v2_capability_replicated`) lifted the
+  capability, or that its validation drop (2->1/lane) means a regression toward the
+  floor -- v2 retained both v1 gated solves on both lanes (it did not floor) but
+  solved 0 new tasks, so it *replicated, did not lift*; the validation drop is a
+  top-2-crowding artifact of the larger search space, not a capability collapse.
+  The honest reading is that deterministic program-search capability is bounded
+  near the v1 ~3% baseline; do not read v2 as either a lift or a regression;
 - any "color-rule variant flipped the bottleneck -> mask is the new
   limit" claim that omits the still-floor verdict -- the color-rule
   variant achieved a diagnostic improvement (palette doubled,

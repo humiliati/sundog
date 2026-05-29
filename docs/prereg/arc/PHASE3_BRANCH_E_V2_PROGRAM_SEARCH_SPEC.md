@@ -333,3 +333,76 @@ Branch mapping is frozen in this spec: material lift, replicated capability,
 partial capability, or floor. If the worktree must be dirty because unrelated
 long jobs are running, the operator may add `--allow-dirty`; that override must
 be called out in the verdict amendment.
+
+---
+
+## Amendment B — Binding Verdict (2026-05-29 PT)
+
+Append-only. The v2 solver was run on the full 108-task expanded register, pinned
+to freeze-marker commit `a307340` (`runnerSha256 1D486AE1`,
+`splitMode=sha256_expansion`, U_primary = `test_lodo`(259) + `pttest`(77) = 336
+held-out instances, ~101m23s background — the depth-3 composition + intricate mask
+families run far heavier than v1; the smoke's >10-min projection held).
+`--allow-dirty` was passed defensively (parallel lanes commit mid-run), but
+**`gitDirty=false`** was recorded — the worktree was tracked-clean at launch, so
+the receipt is cleanly pinned. Receipt:
+`results/arc/phase3-branch-e-v2-program-search/`.
+
+**Branch: `branch_e_v2_capability_replicated`** — v2 preserved the v1
+floor-clearing capability but did **not** materially lift it.
+
+### Capability (gated U_primary) vs v1
+
+| lane | v1 solved | v2 solved | retained v1 | new vs v1 |
+| --- | --- | --- | --- | --- |
+| `test_lodo` | 2 | **2** | 2 | **0** |
+| `pttest` | 2 | **2** | 2 | **0** |
+
+Both v1 gated solves (`be94b721` via `extract_largest_component`, `f25fbde4` via
+`crop_bbox>>scale`) were retained on both lanes; **zero new tasks** were solved.
+The material-lift gate (≥ 4 distinct on both lanes **and** ≥ 2 new beyond the v1
+set) was not met → replicated, not lifted.
+
+### Diagnostic: the expansion slightly *hurt* validation
+
+The validation lanes **dropped** from 2→1 distinct solved per lane. Adding the
+intricate mask families + morphology + depth-3 enlarges the admitted-program set,
+which admits more programs that are train-consistent on the conditioning yet wrong
+on the held-out query; with the frozen family/simplicity ranking and top-2
+attempts, these occasionally crowd the correct program out of the top two. Winning
+families: `extract_largest_component` (5), `crop_bbox>>scale` (4), and a depth-3
+`d4:anti_transpose>>crop_bbox>>color_rule` (2) — so depth-3 and the new families
+do fire, but produce no *new* gated solves.
+
+### What this establishes
+
+The deterministic program-search capability is **bounded near the v1 baseline**:
+expanding the primitive library (the deferred intricate deterministic masks +
+morphology cross-product + depth-3 composition) does not crack any new held-out
+task in the registered universe, and the larger search space marginally degrades
+held-out accuracy via top-2 crowding. The ~3% exact-instance capability is a
+small, **stable** set of structurally-simple tasks (largest-component extraction,
+crop+scale), not the visible top of a deeper deterministic well.
+
+Unchanged caveats (binding): a capability result on held-out **public-training**
+lanes; **not** a Blackwell-sufficiency proof, an ARC solve, or any
+public-evaluation / Kaggle claim (Phase 6 gates that). Selection remained
+train-pair consistency only — no `signature_palette` geometry, no learned models.
+The four Phase 3E certificate verdicts, the seven full-grid-control floors, and the
+v1 `branch_e_capability_demonstrated` verdict all stand. No threshold, family,
+budget, depth, or ranking rule was retuned after seeing outputs.
+
+### Path forward
+
+Materially lifting the exact-match rate likely requires a **different solver
+class**, not more deterministic primitives: e.g., a learned ranker over the
+train-consistent program set (to beat top-2 crowding), a richer object-centric
+primitive language, or a test-time LM proposer — each under its own pre-registered
+spec, arena gate, and verdict discipline. Alternatively, record the deterministic
+program-search capability as bounded at this baseline. Public-evaluation / Kaggle
+work remains gated to Phase 6.
+
+**Public-language constraint** (per §"Public Language"): the permitted statement
+is "Branch E v2 replicated the v1 floor-clearing capability but did not materially
+lift the exact-match solve rate under the frozen branch gate." Material-lift,
+sufficiency, solve, eval, and Kaggle statements remain forbidden (none obtained).
