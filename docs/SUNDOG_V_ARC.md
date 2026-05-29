@@ -440,7 +440,10 @@ registered tasks (minimum cross-task context distance `0.207`, above every
 frozen radius), but the Branch D-derived program-sketch oracle is prior-blind on
 68% of primary contexts. The seven floors are therefore not explained by a
 registered signature collision, but Phase 3E also does not prove sufficiency or
-license a locality-positive Branch E selector.
+license a locality-positive Branch E selector. The next filed artifact is
+`PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md`, a framing-agnostic certificate
+labeler with anti-vacuity, anti-prior-laundering, and anti-solver-leakage gates;
+no v2 receipt exists yet.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

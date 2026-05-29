@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3E SIGNATURE-FIBER CERTIFICATE BINDING RECEIPT FILED -- `phase3e_deferred_label_vacuity` (no collision; fibers maximally separated; oracle prior-blind)**.
+Status: **Phase 3E PROGRAM-SKETCH ORACLE V2 SPEC FILED -- EXECUTION HOLD**. The Phase 3E signature-fiber certificate binding receipt remains `phase3e_deferred_label_vacuity` (no collision; fibers maximally separated; oracle prior-blind).
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -372,9 +372,19 @@ Checked **2026-05-28** against:
   primary context universe `test_lodo union pttest`, reports the full
   validation+test universe diagnostically, and branches into exact-fiber
   collision, near-fiber incompatibility, fiber-locality positive, sparse-fiber
-  deferral, or label-vacuity deferral. **No binding receipt exists yet.
-  Execution remains held** until runner tooling, npm wiring, result ignore path,
-  leak-check coverage, and a freeze-marker amendment are committed together.
+  deferral, or label-vacuity deferral. Its binding receipt returned
+  **`phase3e_deferred_label_vacuity`**: no registered exact or near
+  signature-fiber collision was found, but the registered fibers are sparse at
+  the frozen radius and `program_sketch_v1` is prior-blind on 68% of primary
+  contexts.
+- [`PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md`](PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md)
+  -- Phase 3E oracle-repair spec. It freezes a framing-agnostic
+  `program_sketch_v2` labeler with nine facets, anti-vacuity,
+  anti-prior-laundering, and anti-solver-leakage gates, and the same frozen
+  Phase 3E signature geometry thresholds. **No v2 receipt exists yet.
+  Execution remains held** until runner tooling, npm wiring, result ignore
+  path, leak-check coverage, smoke fingerprint, and a freeze-marker amendment
+  are committed together.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -501,6 +511,13 @@ edit-blind priors) or a larger registered context universe; otherwise
 Branch E must be justified by capability rather than by certified
 fiber geometry.
 
+The filed v2 oracle spec is
+[`PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md`](PHASE3E_PROGRAM_SKETCH_ORACLE_V2_SPEC.md).
+It is a certificate labeler, not a solver: it cannot emit candidate grids,
+choose outputs, train a selector, or retune the frozen Phase 3E geometry after
+seeing labels. Until a binding v2 receipt exists, the only public claim is that
+the v2 oracle spec has been filed under execution hold.
+
 Avoid:
 
 - "Sundog solves ARC";
@@ -524,6 +541,8 @@ Avoid:
   representation does not conflate distinct registered tasks at the
   frozen radius, which the spec explicitly forbids reading as
   sufficiency;
+- any claim that `program_sketch_v2` covers the blind priors, licenses
+  Branch E, or repairs Phase 3E before a binding v2 receipt exists;
 - any "color-rule variant flipped the bottleneck -> mask is the new
   limit" claim that omits the still-floor verdict -- the color-rule
   variant achieved a diagnostic improvement (palette doubled,
