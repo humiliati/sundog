@@ -83,7 +83,7 @@ code, experiments, prior theorem materials, and application bridges.
 - [P-vs-NP lit-pass memo](P_V_NP_LITPASS_MEMO.md): citation spine and
   prior-art gap map for promise-bounded verifier scaffolding.
 - [P-vs-NP project folder](pvnp/README.md): Phase 1 toy-verifier spec,
-  v0-v3 slates, receipts, and result conventions.
+  v0-v4 slates, receipts, and result conventions.
 - [Sundog Capset ledger](SUNDOG_V_CAPSET.md): staging ledger coupling
   Sundog's apparatus to the 2026 OpenAI unit-distance disproof. Evaluator
   front + substrate-analogue horizon; cap-set workbench is the one

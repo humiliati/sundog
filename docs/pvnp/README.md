@@ -29,6 +29,9 @@ Phase specs:
   v2 safety-repair-landed quarantine, focused on cost batching,
   `sensor_health_v1` disposition, acceptance-volume sanity, and optional
   inversion-target widening.
+- [`PHASE1_V4_SLATE.md`](PHASE1_V4_SLATE.md) - cost-gate slate opened after
+  the v3 cost-only quarantine, focused on stable cost comparators,
+  cache-eligible reuse accounting, and bounded-positive promotion criteria.
 
 Templates:
 
@@ -45,7 +48,7 @@ Result convention:
 Receipts:
 
 - [`receipts/README.md`](receipts/README.md) - receipt index, including the
-  Phase 1 v0, v1, and v2 named-quarantine receipts.
+  Phase 1 v0, v1, v2, and v3 named-quarantine receipts.
 
 Current state:
 
@@ -67,3 +70,8 @@ Current state:
   overhead, `sensor_health_v1` disposition, and acceptance-volume sanity
   remain open.
 - Phase 1 v3 repair slate opened: 2026-05-28.
+- Phase 1 v3 harness executed: 2026-05-28. Verdict = named quarantine on
+  cost alone; all safety-repair labels pass, absolute signature+verify wall
+  time improves to 907.52 ms, but the rollout-ratio and raw cache-hit gates
+  remain unsuitable for bounded-positive promotion.
+- Phase 1 v4 cost-gate slate opened: 2026-05-28.

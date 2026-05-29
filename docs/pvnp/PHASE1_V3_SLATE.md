@@ -1,9 +1,16 @@
 # Phase 1 v3 Repair Slate
 
-Status: queued after the v2 named quarantine. No v3 implementation receipt has
-been filed.
+Status: frozen after first execution receipt. v3 passed all safety-repair
+labels but remained a named quarantine on cost alone; v4 carries the cost-gate
+restatement.
 
 Date opened: 2026-05-28
+
+Implementation note 2026-05-28: `npm run pvnp:phase1:v3` writes the v3
+artifact set under `results/pvnp/phase1-toy-verifier-v3/`, including cache
+reports, sensor-disposition audit, and acceptance-volume sanity. The reviewed
+receipt is filed at
+[`receipts/2026-05-28_phase1_toy_verifier_v3.md`](receipts/2026-05-28_phase1_toy_verifier_v3.md).
 
 This slate inherits the Phase 1 toy-verifier object, v1 source binding, and v2
 safety repairs. It is not a domain expansion and it is not a rerun to chase a

@@ -12,14 +12,15 @@ Short version:
 > capacity envelope?
 
 Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier
-spec, v0 + v1 + v2 + v3 frozen slates, and v0 + v1 + v2 + v3 execution
-receipts all filed 2026-05-28; see
+spec, v0-v3 frozen slates, v4 cost-gate slate, and v0-v3 execution receipts
+all filed 2026-05-28; see
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md),
 [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md),
 [`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md),
 [`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md),
 [`pvnp/PHASE1_V2_SLATE.md`](pvnp/PHASE1_V2_SLATE.md),
-[`pvnp/PHASE1_V3_SLATE.md`](pvnp/PHASE1_V3_SLATE.md), and the receipts
+[`pvnp/PHASE1_V3_SLATE.md`](pvnp/PHASE1_V3_SLATE.md),
+[`pvnp/PHASE1_V4_SLATE.md`](pvnp/PHASE1_V4_SLATE.md), and the receipts
 under [`pvnp/receipts/`](pvnp/receipts/). v0 = **named quarantine**
 (`A_spoof_small` breached 245 / 444 by editing analytical fields the
 verifier did not bind to source). v1 closed the spoof channel via
@@ -48,12 +49,11 @@ cache lookup, yielding 83.33 % hit rate). v3 has **0 false accepts**
 on measurement (consecutive with v2), **0 / 928 spoof successes**,
 **5 / 5 integrity probes** quarantine, **0 / 768 OOP basin-shape
 accepts**; `capacity_threshold = not_estimated` for v1, v2, and v3;
-privilege-leak audit green for all four runs. v4 queued in the v3
-receipt's Next-Allowed-Step section, targeting either cost-gate
-restatement (against full-state, where v3 already moves +16 %) or
-cache-reuse reshape to clear the 95 % exemption floor; a v4 bounded
-positive is the next reachable promotion. No complexity-theoretic
-result claimed. This document is a research bridge from
+privilege-leak audit green for all four runs. v4 is opened from the v3
+receipt's Next-Allowed-Step section; it restates the promotion cost gate
+against stable denominators and cache-eligible reuse while preserving all
+v3 safety gates. A v4 bounded positive is the next reachable promotion.
+No complexity-theoretic result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
 capacity-relative one-wayness.
@@ -594,10 +594,12 @@ baselines, reproduced metrics, and archived artifacts.
   after the v1 named quarantine.
 - [`pvnp/PHASE1_V3_SLATE.md`](pvnp/PHASE1_V3_SLATE.md): repair slate opened
   after the v2 safety-repair-landed quarantine.
+- [`pvnp/PHASE1_V4_SLATE.md`](pvnp/PHASE1_V4_SLATE.md): cost-gate slate
+  opened after the v3 cost-only quarantine.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index,
-  including the Phase 1 v0, v1, and v2 named-quarantine receipts.
+  including the Phase 1 v0, v1, v2, and v3 named-quarantine receipts.
 
 ## 11. Cross-References
 
