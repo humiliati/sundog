@@ -6316,3 +6316,129 @@ Permitted public language before a binding receipt:
 
 Forbidden: claiming the mask-targeted variant improves Phase 3, opens the arena,
 or favours `signature_palette_edit_mask_v3` before a binding receipt exists.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Mask-Target Variant Tooling Freeze-Marker (perf fix + timing probe + launch staging)
+
+The mask-target variant runner (`phase3d_mask_target_v3.py`), Node
+wrapper, npm scripts, and `.gitignore` entry landed in commit
+`1eca459`. This amendment files the freeze-marker record, a corrected
+selection algorithm, the capped-timing probe, and the staged
+20-shard launch.
+
+**Performance correctness fix (committed with this amendment)**: the
+first probe smoke did not converge in a reasonable time. Root cause:
+`select_mask_candidate` called a per-candidate scorer that, in the
+LOCO path, regenerated the entire mask-candidate bank (~143
+candidates, each rebuilding the KNN tables and re-training the legacy
+mask MLP) **once per candidate per fold** — an `O(C^2 * k)` blowup
+with `C ≈ 143` candidates and `k` conditioning pairs. The fix
+generates each LOCO fold's candidate bank **once**, indexes it by
+`(family, id) -> mask`, and reduces per-candidate scoring to an O(1)
+lookup. Net complexity `O(C * k)`. No scoring semantics change: the
+LOCO fold masks are identical; only the redundant regeneration is
+removed. This is a runner-internal performance fix, not a spec
+change — the selection rule, tie-break chain, and metrics are
+unchanged.
+
+**Smoke fingerprint** (CPU, `--probe-only --probe-steps 3
+--limit-arms raw_grid_edit_mask_v3 --limit-seeds 20260528`, all 36
+registered tasks, post-fix):
+
+- 49 held-out instances; **~143 mask candidates per instance**
+  (7029 candidate scores across 49 instances), consistent with 13
+  families × ~5 morphological variants minus data-degenerate
+  families;
+- 20 receipt files written (the 18 inherited + `mask_candidate_selection.csv`
+  + `mask_candidates.csv`);
+- wall 6m08s (down from a non-converging run pre-fix);
+- arena gate `not_adjudicated` (probe-only, by spec).
+
+**Mask-family diversity sanity** (selected mask family on 49
+instances): `conditioning_mask_union` 31, `conditioning_bbox_fill`
+9, `conditioning_mask_intersection` 2, `source_color_pair_mask` 2,
+`object_role_mask` 2, `nearest_residual_patch_mask` 2,
+`source_color_mask` 1. Seven of thirteen families won selection;
+the conditioning-union default dominates as expected.
+
+**Quarantine reachability** (9 of 16 labels fire at the 3-step
+probe). The new mask-decomposition pair fires in the expected ratio:
+`mask_selection_failure` 13 (oracle ≥ 0.50 but selected < 0.50) vs.
+`mask_candidate_coverage_failure` 7 (oracle < 0.50) — ≈ 1.9 : 1, the
+same "candidate usually exists but the selector misses it" shape the
+color-rule variant showed. Also firing: `mask_overedit_failure` 13,
+`baseline_canvas_failure` 6, `mask_underdetection_failure` 3,
+`palette_lift_failure` 3, `conditioning_starvation` 2,
+`color_rule_selection_failure` 1, `color_rule_bank_coverage_failure`
+1.
+
+**Capped timing probe** (post-fix, `--probe-steps 100`, 1 arm × 1
+seed × 49 instances, freeze-marker workspace):
+
+| device | 100-step wall |
+| --- | ---: |
+| CPU (i7-7820HK) | 778.7 s (12.98 min) |
+| CUDA (GTX 1080) | 482.2 s (8.04 min) |
+
+Two-point CPU regression with the 3-step smoke (368 s) gives a
+**fixed bank cost `A = 355 s` (5.9 min, step-independent)** and a
+per-step aggregate `B = 4.23 s/step` CPU. The bank cost is pure
+Python (candidate construction, KNN over residual cells,
+morphology) and is CPU-bound regardless of `--device`; this is why
+GPU gives only a partial speedup here (unlike the prior variants,
+where the trained model dominated). The step cost is the legacy
+mask MLP retrained `(k+1)` times per instance.
+
+**Full-run projection** (700 mask steps, 4 arms × 5 seeds = 20
+combinations):
+
+| posture | per arm-seed | 20-combo wall |
+| --- | ---: | ---: |
+| CPU serial | 55.3 min | ~18.4 h |
+| GPU serial | 20.7 min | ~6.9 h |
+| GPU 3-shard concurrent | 20.7 min | ~2.5 h nominal; **~3–3.5 h realistic** (the CPU-bound bank generation contends across 3 processes on 4 cores) |
+
+Over the ten-minute rule; the inherited shard+merge protocol (with
+`--allow-mixed-commits`) is the admitted launch posture.
+
+**Staged full-run command (3-shard GPU parallel)**:
+
+```powershell
+$env:SUNDOG_PYTHON = "C:\Users\hughe\AppData\Local\Programs\Python\Python312\python.exe"
+foreach ($arm in @("raw_grid_edit_mask_v3","signature_palette_edit_mask_v3","signature_only_edit_mask_v3","metadata_only_edit_mask_v3")) {
+    foreach ($seed in @(20260528, 20260529, 20260530, 20260531, 20260601)) {
+        Start-Process -NoNewWindow `
+            -RedirectStandardOutput "results/arc/phase3d-mask-logs/$arm-$seed.log" `
+            -RedirectStandardError "results/arc/phase3d-mask-logs/$arm-$seed.err" `
+            -FilePath "npm" -ArgumentList @(
+                "run", "arc:phase3d:mask-target-v3:shard", "--",
+                "--data-dir", "$env:USERPROFILE\Datasets\ARC-AGI-2\data",
+                "--register", "docs/prereg/arc/P0_TASK_REGISTER.csv",
+                "--out", "results/arc/phase3d-mask-target-v3-shard-$arm-$seed",
+                "--shard-arm", "$arm",
+                "--shard-seed", "$seed",
+                "--device", "cuda"
+            )
+        # Throttle to 3 concurrent shards.
+    }
+}
+
+# After all 20 shards land:
+npm run arc:phase3d:mask-target-v3:merge -- `
+    --shard-dirs <comma-joined list of all 20 dirs> `
+    --out results/arc/phase3d-mask-target-v3
+```
+
+**Per-outcome decision rule**:
+
+| arena gate outcome | next action |
+| --- | --- |
+| `raw_grid_edit_mask_v3_arena_open` | Examine `branchAdjudication`. If `branch_d_mask_target_support`, file receipt + permitted public language. If `branch_d_mask_target_bounded_failure`, file receipt + the named-quarantine breakdown. |
+| `branch_d_mask_target_full_grid_floor` | File the receipt. This would be the **seventh** full-grid control floor. The decomposition tells the next move: if dominated by `mask_candidate_coverage_failure`, the 13-family bank is structurally insufficient (extend it); if dominated by `mask_selection_failure`, the selector is the gate (refine tie-breaks / add a selector); if the inherited `color_rule_*` labels resurface, the color stage re-binds; if `baseline_*`, the baseline family is the cap. With both the mask and color stages now deterministic banks, a continued floor would strongly suggest the registered task class is not solvable by deterministic baseline+mask+color composition and points to Branch E. |
+
+**Verdict impact**: no prior verdict changes. Variant status moves
+from "EXECUTION HOLD" to "EXECUTION ADMITTED, 20-shard launch
+ready". No binding receipt yet.
+
+**Public-language constraint**: unchanged. The pre-binding-receipt
+language from the variant spec §"Public Language" remains the only
+permitted public addition.
