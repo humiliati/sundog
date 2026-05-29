@@ -6,7 +6,7 @@ Roadmaps:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **Phase 3D MASK-TARGETED VARIANT SPEC FILED -- EXECUTION HOLD**.
+Status: **Phase 3D MASK-TARGET VARIANT BINDING RECEIPT FILED -- 7TH FLOOR; BRANCH E IS THE LIVE FRONTIER**.
 Phase 0 admitted; Phase 1 synthetic gate strengthened and passed; Phase 2
 projection-measurement plus baseline-comparison passed; Phase 3 filed
 three deterministic-low-capacity binding receipts (`nn_output_transfer_v1`,
@@ -148,15 +148,40 @@ specificity: mask-extension variant (biggest leverage), selection-
 refinement variant (large locked accuracy), or rule-bank extension
 (smallest expected payoff).
 
-Six Phase 3 binding full-grid-control receipts -- V1, V2, compact-7,
-Phase 3A, Phase 3D base, and Phase 3D variant -- now agree on the
-held-out exact-grid floor across two task distributions, two learner
-families (transformer + per-task MLP), two output framings (whole-grid
-+ structured edit residual), and two color-prediction approaches
-(learned MLP + deterministic rule bank). The next Branch D reopen is now
-pre-registered as a mask-targeted variant; after that filed spec, remaining
-admissible directions are selector refinement, rule-bank extension, or a
-Branch E spec (e.g., generative program search, test-time LM prompting).
+The mask-targeted Branch D variant (`structured_edit_mask_target_v3` /
+`edit_mask_candidate_bank_v1`) then replaced the trained edit-mask MLP
+with a 13-family deterministic mask candidate bank, keeping the
+deterministic color bank from the prior variant. The 20-shard binding
+receipt (4 arms x 5 seeds, ~1h 58m GPU parallel wall via shard+merge
+with `--allow-mixed-commits` -- 8 distinct gitCommits,
+`runnerIdenticalAcrossCommits=true`, no WARN; a runner O(C^2) LOCO-rescore
+blowup was found and fixed in the probe phase) returned verdict
+**`branch_d_mask_target_full_grid_floor`** -- the **seventh** Phase 3
+full-grid control floor. The central finding is a clean negative result:
+**the mask repair did not shift the bottleneck off the mask.** Mask-stage
+quarantine labels still dominate (137 of ~196 selected-seed labels:
+`mask_selection_failure` 29%, `mask_overedit_failure` 26%,
+`mask_candidate_coverage_failure` 12%, `mask_underdetection_failure` 4%),
+the deterministic mask bank does not dominate the learned mask MLP (the
+inherited `legacy_mlp_threshold_mask` family still won 13.8% of
+selections, and `test_lodo` mask F1 dropped to 0.49-0.51 vs the
+color-rule variant's 0.53-0.58), and the bank traded higher minority-edit
+recall (0.70-0.79) for over-editing.
+
+Seven Phase 3 binding full-grid-control receipts -- V1, V2, compact-7,
+Phase 3A, Phase 3D base, Phase 3D color-rule variant, and Phase 3D
+mask-target variant -- now agree on the held-out exact-grid floor across
+two task distributions, three learner families, two output framings, and
+-- within the structured-edit framing -- both the learned and the
+deterministic-bank variants of *each* edit component (mask and color).
+With both named bottlenecks of the structured-edit framing probed by
+deterministic banks and the floor holding at both, **Branch E (a
+different framing entirely -- e.g., generative program / DSL search over
+conditioning pairs, or test-time prompting of a frozen large LM) is the
+live frontier.** A selection-targeted within-framing variant (a joint
+mask+color selector, since both banks fail more by selection than by
+coverage) remains the smaller alternative. Any reopen needs its own
+pre-registered spec, arena gate, and verdict-amendment discipline.
 
 ## Official Anchors
 
@@ -315,11 +340,30 @@ Checked **2026-05-28** against:
   `structured_edit_mask_target_v3` / `edit_mask_candidate_bank_v1`, keeps the
   baseline picker and deterministic edit-color rule bank inherited from
   `structured_edit_color_rule_v2`, and replaces only the edit-mask predictor
-  with a deterministic conditioning-derived mask-candidate bank. The variant
-  targets the largest remaining bottleneck from the edit-color-rule receipt:
-  41% `edit_mask_failure`. **No binding receipt exists yet. Execution remains
-  held** until runner tooling, npm wiring, result ignore path, leak-check
-  coverage, and a freeze-marker amendment are committed together.
+  with a deterministic conditioning-derived 13-family mask-candidate bank. It
+  targeted the largest remaining bottleneck from the edit-color-rule receipt
+  (41% `edit_mask_failure`). **20-shard binding receipt filed** under
+  `mergeGitCommit 07F29513` (8 distinct gitCommits via `--allow-mixed-commits`;
+  `runnerIdenticalAcrossCommits=true`, no WARN; ~1h 58m parallel GPU wall =
+  2.88x sharded; an O(C^2) LOCO-rescore blowup was found and fixed in the
+  probe phase by generating each fold's candidate bank once). Selected seeds:
+  raw=`20260530`, sig_palette=`20260529`, sig_only=`20260529`,
+  metadata=`20260531`. Verdict: **`branch_d_mask_target_full_grid_floor`**
+  (the **7th** Phase 3 floor; zero non-baseline exact tasks on any held-out
+  lane). Central finding -- **the mask repair did NOT shift the bottleneck off
+  the mask**: mask-stage quarantine labels still dominate (137/196:
+  `mask_selection_failure` 56, `mask_overedit_failure` 50,
+  `mask_candidate_coverage_failure` 24, `mask_underdetection_failure` 7), the
+  deterministic mask bank does not dominate the learned mask MLP (legacy MLP
+  family still won 135/980 = 13.8% of selections; `test_lodo` mask F1 fell to
+  0.49-0.51 vs the color-rule variant's 0.53-0.58), and it traded higher
+  minority-edit recall (0.70-0.79) for over-editing. `mask_selection_failure :
+  mask_candidate_coverage_failure` = 2.3:1 -- same "candidate exists but
+  selector misses it" shape as the color stage. Selected mask family
+  distribution: `conditioning_mask_union` 60.8%, `legacy_mlp_threshold_mask`
+  13.8%, `conditioning_bbox_fill` 9.8%, then 5 others. With both the mask and
+  color stages now deterministic banks and the floor holding at both, Branch E
+  is the live frontier.
 - [`PHASE3_5_REFLECTION.md`](PHASE3_5_REFLECTION.md) -- reflection doc
   naming the three-receipt convergence under the
   deterministic-low-capacity-learner family as a methodological finding,
@@ -361,10 +405,11 @@ amendments line is frozen. Corrections or refinements must be appended with:
 
 ## Public-Language Constraint
 
-Phase 3 has **six** full-grid-control binding receipts on file (V1, V2,
+Phase 3 has **seven** full-grid-control binding receipts on file (V1, V2,
 compact-7, Phase 3A `per_task_coord_mlp_v1`, Phase 3D
-`structured_edit_residual_v1`, and Phase 3D variant
-`structured_edit_color_rule_v2`), all floored at zero exact matches; no
+`structured_edit_residual_v1`, Phase 3D color-rule variant
+`structured_edit_color_rule_v2`, and Phase 3D mask-target variant
+`structured_edit_mask_target_v3`), all floored at zero exact matches; no
 sufficiency support adjudication is on file. Public copy may say:
 
 - ARC-AGI abstraction coupling roadmap;
@@ -395,23 +440,27 @@ sufficiency support adjudication is on file. Public copy may say:
   0.32), the `edit_color_failure` quarantine label was eliminated,
   and the failure decomposition shifted to a quantitative
   3-component bottleneck (41% `edit_mask_failure`, 16%
-  `color_rule_selection_failure` with `rule_selection_regret_mean`
-  0.30-0.35, 9% `color_rule_bank_coverage_failure`). All six
-  full-grid controls now agree on the floor across two task
-  distributions, two learner families (transformer + per-task MLP),
-  two output framings (whole-grid + structured edit residual), and
-  two color-prediction approaches (learned MLP + deterministic rule
-  bank). All four PHASE3_5_REFLECTION branches plus Branch D + its
-  first variant are now characterised. A second Branch D variant is
-  now pre-registered but not run:
-  `structured_edit_mask_target_v3` targets the dominant remaining
-  blocker by replacing only the edit-mask predictor with a deterministic
-  mask-candidate bank. No mask-targeted receipt exists yet, and no
-  sufficiency comparison is admitted from that filed spec. Remaining
-  admissible Phase 3 reopens after that spec require either a
-  selection-refinement variant, rule-bank-extension variant, or a new
-  Branch E spec (e.g., generative program search, test-time LM prompting)
-  with its own arena gate and verdict-amendment discipline.
+  `color_rule_selection_failure`, 9% `color_rule_bank_coverage_failure`),
+  and the second Branch D variant (`structured_edit_mask_target_v3`)
+  then replaced the edit-mask predictor with a 13-family deterministic
+  mask-candidate bank, returning `branch_d_mask_target_full_grid_floor`
+  -- the seventh floor -- and a clean negative result: the mask repair
+  did NOT shift the bottleneck off the mask (mask-stage labels still
+  137/196; the learned mask MLP still won 13.8% of selections;
+  `test_lodo` mask F1 fell). All seven full-grid controls now agree on
+  the floor across two task distributions, three learner families
+  (transformer + per-task MLP + per-task structured-edit), two output
+  framings (whole-grid + structured edit residual), and -- within the
+  structured-edit framing -- both the learned and deterministic-bank
+  variants of each edit component (mask and color). With both named
+  bottlenecks of the structured-edit framing probed by deterministic
+  banks and the floor holding at both, **Branch E (a different framing
+  entirely -- e.g., generative program / DSL search, or test-time
+  prompting of a frozen large LM) is the live frontier**; a
+  selection-targeted within-framing variant (a joint mask+color
+  selector, since both banks fail more by selection than coverage)
+  remains the smaller alternative. Any reopen needs its own
+  pre-registered spec, arena gate, and verdict-amendment discipline.
 
 Avoid:
 
@@ -421,19 +470,21 @@ Avoid:
 - any claim that a Kaggle entry validates the theory without a
   non-trivial Phase 3 sufficiency receipt;
 - any Branch A, Branch B, or Branch D support claim from any of
-  the six filed binding receipts (V1, V2, compact-7, Phase 3A,
-  Phase 3D base, Phase 3D variant);
-- any claim that the filed mask-targeted Branch D variant has run, improved
-  Phase 3, opened the arena, or favours a signature arm before a binding
-  receipt exists;
-- any "variant flipped the bottleneck -> mask is the new limit"
-  claim that omits the still-floor verdict -- the variant achieved
-  a diagnostic improvement (palette doubled, decomposition gained)
-  but the arena did not open and no sufficiency comparison is
-  licensed;
+  the seven filed binding receipts (V1, V2, compact-7, Phase 3A,
+  Phase 3D base, Phase 3D color-rule variant, Phase 3D mask-target
+  variant);
+- any "color-rule variant flipped the bottleneck -> mask is the new
+  limit" claim that omits the still-floor verdict -- the color-rule
+  variant achieved a diagnostic improvement (palette doubled,
+  decomposition gained) but the arena did not open;
+- "the mask bank beats the learned mask" -- it does not; the legacy
+  mask MLP still won 13.8% of selections and `test_lodo` mask F1 fell;
+- "the mask-target variant shifted the bottleneck off the mask" -- the
+  opposite; mask-stage labels still dominate (137/196) and the floor
+  held;
 - describing any Phase 3 binding receipt as a signature-specific
   falsification independent of decoder capacity;
-- describing the six filed Phase 3 receipts as a sufficiency-failure
+- describing the seven filed Phase 3 receipts as a sufficiency-failure
   conclusion -- per the reflection, they characterise the
   deterministic-low-capacity, per-task-scratch, and structured-edit
   framing families on the registered task class, not the

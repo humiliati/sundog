@@ -6442,3 +6442,195 @@ ready". No binding receipt yet.
 **Public-language constraint**: unchanged. The pre-binding-receipt
 language from the variant spec §"Public Language" remains the only
 permitted public addition.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Mask-Target Variant 20-Shard Binding Receipt: `branch_d_mask_target_full_grid_floor` (mask repair did not shift the bottleneck)
+
+The mask-target variant 20-shard slate (4 arms × 5 seeds × 49
+held-out instances) completed and merged at `mergeGitCommit
+07F29513…`. Receipt at `results/arc/phase3d-mask-target-v3/`.
+
+**Wall-clock**: total shard compute = **20,473.7 s (5.69 h)**;
+3-shard concurrent GPU parallel wall = **1 h 58 m** (03:56:45 →
+05:55:02 UTC), a **2.88× speedup** — beating the staging amendment's
+~3–3.5 h realistic estimate (CPU-bound bank-gen contention was
+milder than projected) and close to the 2.5 h nominal.
+
+**Mixed-commits audit**: 8 distinct gitCommits across the 20 shards
+(heavy parallel activity during the run), 13 dirty + 7 clean;
+`mixedCommitsAudit.runnerIdenticalAcrossCommits = **true**` — all 8
+commits share the byte-identical runner SHA. No WARN.
+
+#### Selected Seed per Arm
+
+| arm | selected seed |
+| --- | ---: |
+| `raw_grid_edit_mask_v3` | `20260530` |
+| `signature_palette_edit_mask_v3` | `20260529` |
+| `signature_only_edit_mask_v3` | `20260529` |
+| `metadata_only_edit_mask_v3` | `20260531` |
+
+#### Arena Gate
+
+`raw_grid_edit_mask_v3`: `test_lodo_nonbaseline_exact_tasks = 0`,
+`pttest_nonbaseline_exact_tasks = 0`. Every arm scored zero
+non-baseline exact tasks on every held-out lane (baseline-exact also
+zero). **Arena gate: `branch_d_mask_target_full_grid_floor`** — the
+**seventh** full-grid control floor in Phase 3.
+
+#### Per-Arm Comparison (Documentation Only — Arena Did Not Open)
+
+| lane | arm | grid_ex | nbex | shape | palette | pixel | mask_f1 | minority_recall |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `pttest` | `raw_grid_edit_mask_v3` | 0.000 | 0.000 | 1.000 | 0.833 | 0.509 | 0.650 | 0.786 |
+| `pttest` | `signature_palette_edit_mask_v3` | 0.000 | 0.000 | 1.000 | 0.833 | 0.533 | 0.662 | 0.734 |
+| `pttest` | `signature_only_edit_mask_v3` | 0.000 | 0.000 | 1.000 | 0.833 | 0.540 | 0.668 | 0.758 |
+| `pttest` | `metadata_only_edit_mask_v3` | 0.000 | 0.000 | 1.000 | 0.833 | 0.520 | 0.659 | 0.759 |
+| `test_lodo` | `raw_grid_edit_mask_v3` | 0.000 | 0.000 | 1.000 | 0.632 | 0.489 | 0.493 | 0.705 |
+| `test_lodo` | `signature_palette_edit_mask_v3` | 0.000 | 0.000 | 1.000 | 0.632 | 0.486 | 0.496 | 0.716 |
+| `test_lodo` | `signature_only_edit_mask_v3` | 0.000 | 0.000 | 1.000 | 0.632 | 0.500 | 0.506 | 0.725 |
+| `test_lodo` | `metadata_only_edit_mask_v3` | 0.000 | 0.000 | 1.000 | 0.632 | 0.489 | 0.495 | 0.703 |
+
+#### Central Finding: The Mask Repair Did Not Shift the Bottleneck
+
+The variant's thesis was that replacing the trained mask MLP with a
+13-family deterministic mask candidate bank would lift the
+`edit_mask_failure`-dominated bottleneck that the color-rule variant
+isolated. **It did not.** Mask-stage quarantine labels still dominate
+the decomposition (137 of ~196 selected-seed labels):
+
+| label | count | share | notes |
+| --- | ---: | ---: | --- |
+| `mask_selection_failure` | 56 | 29% | oracle ≥ 0.50 but selected < 0.50 — selector misses a covering candidate |
+| `mask_overedit_failure` | 50 | 26% | selected mask edits too many cells |
+| `mask_candidate_coverage_failure` | 24 | 12% | no candidate in the bank covers this instance |
+| `baseline_canvas_failure` | 24 | 12% | baseline residual > 0.50 |
+| `palette_lift_failure` | 17 | 9% | catch-all |
+| `conditioning_starvation` | 8 | 4% | structural ARC k≤2 |
+| `mask_underdetection_failure` | 7 | 4% | recall < 0.25 |
+| `color_rule_selection_failure` | 5 | 3% | residual color-stage misses |
+| `color_rule_bank_coverage_failure` | 5 | 3% | residual color-stage coverage gap |
+
+`mask_selection_failure : mask_candidate_coverage_failure = 56 : 24
+≈ 2.3 : 1` — the same "candidate usually exists but the selector
+misses it" shape seen at the color stage. The deterministic mask
+bank does NOT strictly dominate the learned mask MLP: the inherited
+`legacy_mlp_threshold_mask` family **still won selection 135 / 980
+times (13.8%)**, second only to `conditioning_mask_union` (596).
+
+Selected mask family distribution (980 rows = 49 × 4 arms × 5 seeds):
+
+| family | count | share |
+| --- | ---: | ---: |
+| `conditioning_mask_union` | 596 | 60.8% |
+| `legacy_mlp_threshold_mask` | 135 | 13.8% |
+| `conditioning_bbox_fill` | 96 | 9.8% |
+| `source_color_pair_mask` | 40 | 4.1% |
+| `nearest_residual_patch_mask` | 39 | 4.0% |
+| `conditioning_mask_intersection` | 37 | 3.8% |
+| `object_role_mask` | 20 | 2.0% |
+| `source_color_mask` | 17 | 1.7% |
+
+#### Comparison Against the Color-Rule Variant
+
+The deterministic mask bank **raised minority-edit recall** (it
+proposes union-of-conditioning masks that catch more true edit
+cells, pttest 0.73–0.79 / test_lodo 0.70–0.72) **at the cost of
+over-editing** (26% of failures are `mask_overedit_failure`), and on
+the harder `test_lodo` lane its F1 (0.49–0.51) is *lower* than the
+color-rule variant's mask F1 (0.53–0.58, which used the trained
+MLP). Net: the mask stage is not lifted; it is re-shaped (recall up,
+precision down) without opening the arena.
+
+#### What This Verdict Does And Does Not Entail
+
+**It does**:
+
+- Close the **seventh** full-grid control floor in Phase 3.
+- Establish a clean negative result: with **both** the mask stage
+  and the color stage now replaced by deterministic conditioning-
+  derived candidate banks, the baseline + mask + color composition
+  **still** does not open the non-baseline arena. The two
+  bottleneck-targeted repairs each fixed their named stage's
+  *failure label* without lifting the *floor*.
+- Show the deterministic mask bank does not dominate the learned
+  mask MLP (legacy MLP wins 13.8% of selections; test_lodo F1 drops).
+
+**It does not**:
+
+- License any signature_palette vs raw_grid sufficiency comparison
+  (arena did not open).
+- License any Branch D narrowed-support claim.
+- License extra seeds without a new amendment.
+
+#### Remaining Reopen Paths — Branch E Is Now the Live Frontier
+
+| Phase 3 receipt | learner / framing | verdict |
+| --- | --- | --- |
+| V1, V2 | transformer whole-grid | floor |
+| compact-7 | transformer, 7-task | floor |
+| Phase 3A | per-task coord MLP | floor |
+| Phase 3D base | structured edit residual (learned mask + learned color) | floor (edit-color bottleneck) |
+| Phase 3D color-rule | deterministic color bank | floor (mask bottleneck) |
+| **Phase 3D mask-target** | **deterministic mask bank + deterministic color bank** | **floor (mask selection/over-edit, not lifted)** |
+
+Seven floors across two task distributions, three learner families,
+two output framings, and — within the structured-edit framing — both
+the learned and the deterministic-bank variants of *each* of the two
+edit components. The structured-edit framing has now been probed at
+both its named bottlenecks (color, then mask) and floors at both.
+
+Remaining admissible reopens:
+
+- **A selection-targeted Branch D variant** (smaller move): both
+  deterministic banks fail more by *selection* than by *coverage*
+  (color 16% selection vs 9% coverage; mask 29% selection vs 12%
+  coverage). A variant that replaces the per-stage greedy tie-break
+  with a joint mask+color selector (or a small learned selector over
+  candidate-score vectors) targets the largest single failure slice.
+  Still within-framing.
+- **Branch E (different framing entirely)** (higher-information
+  move): e.g., generative program / DSL search over conditioning
+  pairs, or test-time prompting of a frozen large LM. Given two
+  deterministic-bank repairs floored, Branch E is the higher-value
+  next move. It would need its own pre-registration, arena gate, and
+  verdict-amendment discipline.
+
+#### Public-Language Constraint Update
+
+Permitted additions:
+
+- "The mask-targeted Branch D variant replaced the trained edit-mask
+  model with a deterministic 13-family mask candidate bank. The
+  verdict is `branch_d_mask_target_full_grid_floor`: the mask repair
+  re-shaped the mask stage (minority-edit recall up, over-edit up,
+  `test_lodo` F1 down) but did not lift the held-out exact-grid
+  floor. With both the mask and color stages now deterministic banks
+  and the floor holding at both, the structured-edit framing has
+  been probed at both its named bottlenecks; Branch E (a different
+  framing) is the live frontier."
+
+Forbidden:
+
+- "Mask bank beats the learned mask" — it does not; the legacy MLP
+  still wins 13.8% of selections and `test_lodo` mask F1 dropped.
+- "Mask repair shifted the bottleneck off the mask" — the opposite;
+  mask-stage labels still dominate (137/196).
+- Any sufficiency / arena-open / signature-favoured claim (arena did
+  not open).
+
+#### Frozen By This Verdict
+
+- The mask-target binding receipt at
+  `results/arc/phase3d-mask-target-v3/` (`mergeGitCommit
+  07F29513…`) is frozen.
+- The two-deterministic-bank negative result (both color and mask
+  stages deterministic, floor holds) is the canonical basis for
+  prioritising Branch E over further within-framing component swaps.
+- The selected-seed table is frozen as the variant selection trace.
+
+**Verdict impact**: no prior verdict changes. Phase 3 status moves to
+"seven full-grid control floors; structured-edit framing probed at
+both named bottlenecks (color + mask) with deterministic banks and
+floored at both; Branch E (different framing) is the live frontier,
+with a selection-targeted within-framing variant as the smaller
+alternative."
