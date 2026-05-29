@@ -36,8 +36,12 @@ cost (wall-time ratio 1139 × vs rollout, worse than v0's 228 ×) — and
 runs; false-accept rate stayed under 0.13 % in both. Phase 1 v2 is now
 queued as a repair slate for decision-relevant invariance checks,
 basin-shape boundary closure, standalone coverage removal, and checker
-overhead. No complexity-theoretic result claimed. This document is a
-research bridge from
+overhead; its initial implementation path runs end-to-end with unreviewed
+artifacts under `results/pvnp/phase1-toy-verifier-v2/`. The first v2 artifact
+run closes accepted basin-shape out-of-promise rows and keeps
+`capacity_threshold = not_estimated`, but cost overhead worsens and multiple
+fields remain near-vacuous. No v2 receipt has been filed. No
+complexity-theoretic result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
 capacity-relative one-wayness.

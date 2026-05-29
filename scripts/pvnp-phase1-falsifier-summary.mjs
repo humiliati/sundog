@@ -230,7 +230,8 @@ async function main() {
   if (falsifierVerifier.length === 0 || falsifierAccept > 0) {
     falsifierLines.push(`- **POSSIBLE TRIGGER**: ${falsifierAccept}/${falsifierVerifier.length} out-of-promise falsifier-split items were accepted (expected 0).`);
   } else {
-    falsifierLines.push(`- Not triggered: all ${falsifierQuarantine}/${falsifierVerifier.length} out-of-promise falsifier-split items quarantined.`);
+    const falsifierReject = falsifierVerifier.filter((v) => v.decision === "reject").length;
+    falsifierLines.push(`- Not triggered: 0/${falsifierVerifier.length} out-of-promise falsifier-split items were accepted (${falsifierQuarantine} quarantined, ${falsifierReject} rejected).`);
   }
   if (version === "v2") {
     const basinShapeAccepts = acceptedOopAudit.filter((r) => r.violation_subtype === "basin_shape").length;

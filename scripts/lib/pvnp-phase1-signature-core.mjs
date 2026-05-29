@@ -299,8 +299,9 @@ function invarianceChecksV2(probesPerStep, envelope, marginLowerBound) {
   }
   const pairStats = aggregateStats(lowProbePairScores);
   const decoyScore = pairStats.max;
-  const nearBoundaryClear = marginLowerBound >= stabilityFloor;
-  const counterfactualClear = perturbedMargin >= 0.06;
+  const alreadyRejectableByMargin = marginLowerBound < 0.06;
+  const nearBoundaryClear = alreadyRejectableByMargin || marginLowerBound >= stabilityFloor;
+  const counterfactualClear = alreadyRejectableByMargin || perturbedMargin >= 0.06;
   const decoyConsistencyClear = decoyScore <= 0.18;
 
   return {

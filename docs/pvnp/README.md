@@ -57,3 +57,9 @@ Current state:
   v0 spoof channel closed, but invariance vacuity, boundary leak, and cost
   overhead remain open.
 - Phase 1 v2 repair slate opened: 2026-05-28.
+- Phase 1 v2 implementation path started: `npm run pvnp:phase1:v2` runs
+  end-to-end and writes unreviewed artifacts under
+  `results/pvnp/phase1-toy-verifier-v2/`. First run: false-accept rate 0%,
+  `capacity_threshold = not_estimated`, zero accepted basin-shape
+  out-of-promise rows, but cost overhead worsened and several fields remain
+  near-vacuous.
