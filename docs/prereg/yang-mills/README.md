@@ -6,13 +6,14 @@ Lit-pass: [`YANG_MILLS_LITPASS_MEMO.md`](../../YANG_MILLS_LITPASS_MEMO.md)
 Filed: **2026-05-29 (PT)**
 
 Status: **Phase 1 instrumentation closed across the full ladder 2026-05-29;
-Phase 2 v0 executed 2026-05-29 ->
-`YM-P2-NEG-A no_rank_local_structure`**. See
+Phase 2 v0 executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`;
+P0 amendment 1 (APE smearing) + Phase 2 v1 spec filed 2026-05-29**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
 The v0 Phase 2 receipt is a named null and does not admit Phase 3
-observable-certificate work.
+observable-certificate work; v1 (smeared signature, same ensembles) is
+the next admitted scoring lane.
 
 ## Filed Artifacts
 
@@ -65,17 +66,36 @@ observable-certificate work.
   **Executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`.**
   Receipt:
   [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md).
+- [`P0_AMENDMENT_2026-05-29_ape_smearing.md`](P0_AMENDMENT_2026-05-29_ape_smearing.md)
+  - Amendment 1 to the P0 lock. Admits APE smearing as a primary-signature
+  class (vocab v4) with frozen parameters `(α, N_sm) = (0.5, 10)`,
+  closest-SU(2) projection after every iteration, applied to `SU2_2D` /
+  `SU2_3D` cells. Held-out target unchanged. New
+  `YM-P*-QUAR-E smearing_drift` quarantine branch. Triggered by the v0
+  NEG-A receipt and the v1 smearing probe spec.
+- [`PHASE2_SU2_3D_relative_locality_v1.md`](PHASE2_SU2_3D_relative_locality_v1.md)
+  - binding v1 spec mirroring v0 with signature vocabulary v4 (smeared).
+  Reuses the **same three v0 per-β ensemble dirs** as inputs (no new
+  ensemble generation; same seeds `0201`/`0202`/`0203`, same configs,
+  same bare γ_held, same per-β tertile bin edges — asserted as v1
+  bin-edge defense). One aggregation invocation only; runner reads
+  v0 configs, applies smearing per the P0 amendment, computes v4
+  signatures, scores against unchanged bare-link held-out target.
+  Six controls scored on smeared signatures. Promotion thresholds and
+  branch table inherited from v0; adds `YM-P2-QUAR-E smearing_drift`
+  per the amendment. Compute estimate ~2-3 min for the single
+  aggregation pass. Runner not yet implemented.
 
 ## Required Next Artifact
 
-The next artifact should be a dated v1 probe spec under
-`docs/yang-mills/specs/` explaining the proposed design change before any new
-runner code. Because v0 failed the registered within-beta rank-locality gate,
-the probe spec should identify which knob is being changed (for example
-signature vocabulary, smearing/blocking, held-out target, beta/lattice slate,
-or control semantics) and whether the change is small enough for a Phase 2
-v1 preregistration or crosses the P0 lock boundary and needs a dated P0
-amendment. No Phase 3 artifact is admitted from the v0 receipt.
+The next artifact should be the minimal v1 aggregation runner
+`scripts/yang-mills-phase2-v1-su2-3d-aggregate.mjs` + the
+`yang-mills:phase2:v1:su2-3d:aggregate` npm script. The smearing
+routine lives in a new shared module
+`scripts/lib/yang-mills-su2-3d-smearing.mjs` to keep the aggregation
+entry focused on validation + scoring; the bare SU(2) 3D core
+(`scripts/lib/yang-mills-su2-3d-core.mjs`) and the v0 aggregation
+runner remain bit-for-bit unchanged.
 
 ## Guardrail
 
@@ -157,3 +177,27 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   margin = 0.0104 (below the registered 0.10 gate), and metadata matched or
   beat the primary. All ensemble health gates passed. This named null blocks
   Phase 3 from v0 and routes the lane to a dated v1 probe spec.
+- 2026-05-29: v1 smearing probe spec filed at
+  [`../../yang-mills/specs/2026-05-29_phase2_v1_smearing_probe.md`](../../yang-mills/specs/2026-05-29_phase2_v1_smearing_probe.md).
+  Diagnoses v0 NEG-A as UV-noise-dominance on bare small Wilson loops;
+  selects T3 (APE smearing on signature only) over T1 (per-orientation)
+  and T2 (connected correlator) for lit-pass support, classical
+  lattice-QCD remedy, and lowest expected NEG-A repeat risk. Triggers
+  the P0 amendment + Phase 2 v1 spec.
+- 2026-05-29: P0 amendment 1 filed at
+  [`P0_AMENDMENT_2026-05-29_ape_smearing.md`](P0_AMENDMENT_2026-05-29_ape_smearing.md).
+  Admits APE smearing as primary-signature class (vocab v4) with
+  frozen `(α, N_sm) = (0.5, 10)` and exact closest-SU(2) projection
+  after every iteration, for `SU2_2D` / `SU2_3D` cells. Held-out target
+  unchanged. New `YM-P*-QUAR-E smearing_drift` quarantine branch
+  (cited by phase index in the consuming receipt).
+- 2026-05-29: Phase 2 v1 binding spec filed at
+  [`PHASE2_SU2_3D_relative_locality_v1.md`](PHASE2_SU2_3D_relative_locality_v1.md).
+  Reuses the three v0 per-β ensemble dirs as inputs (no new ensemble
+  generation; same seeds 0201/0202/0203, same configs, same bare
+  γ_held, asserted per-β bin-edge match to machine epsilon as a void
+  gate). Applies APE smearing per the amendment; recomputes v4
+  smeared signature; recomputes bare v1 signature for integrity check
+  vs v0; six controls scored on smeared signature; YM-P2-QUAR-E
+  added per amendment. ONE aggregation invocation only; estimated
+  ~2-3 min compute.
