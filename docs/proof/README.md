@@ -136,6 +136,15 @@ that claim provably fails.
   POSITIVE (same `ε_K`) into a complete Reading-2 regime-2 witness at the
   v5 cell. Expected-easy half; scoped to finite-Galerkin / sampled-support
   / one cell; does not promote C1.
+- [`PDE_C1_REGIME_GENERALITY_v0.md`](PDE_C1_REGIME_GENERALITY_v0.md)
+  — **pre-registration** for the first regime-generality probe after the
+  completed v5 witness. Pins exactly one new cell, `lock_v6`:
+  `k_f = 2`, `G = 300`, `K = 3`, same objective, same last-quarter
+  `E_max` rule, same kNN convergence check, same twin-state certificate.
+  The at-risk half is run first (`--adjudicator knn-sweep`); only a
+  `STRICTNESS_WITNESS_POSITIVE` proceeds to the twin-state companion for
+  a full `PDE-C1-RG-POS` replication. Full runs staged, not executed
+  inline under the repo's ~10-minute rule.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /
