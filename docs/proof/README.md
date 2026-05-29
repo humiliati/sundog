@@ -96,9 +96,10 @@ that claim provably fails.
   minority fraction `m_i`, neighbourhood radius `r_k` as a per-sample
   fidelity measure, fidelity-coverage gate replacing bin-coverage, new
   `DEFERRED_FIDELITY_COVERAGE` receipt. Targets the v0–v5
-  tolerance-fidelity vs. coverage obstruction directly. **Proposed,
-  not built, not run** — §7 lists open choices needing owner sign-off
-  before harness work.
+  tolerance-fidelity vs. coverage obstruction directly. **Signed off
+  and built 2026-05-28** (first target = v4 regime, d=32; defaults
+  adopted). Implemented as the harness `--adjudicator knn` flag and
+  adopted as fiber-protocol §5b. First run launched at the v4 regime.
 - [`PDE_C2_SHELL_SIGNATURE_SCOPING.md`](PDE_C2_SHELL_SIGNATURE_SCOPING.md)
   — Navier-Stokes Candidate 2 scoping: PDE-substrate empirical leg of
   Postulate 1 Phase 4 (shell-model signatures vs. matched-budget DMD /

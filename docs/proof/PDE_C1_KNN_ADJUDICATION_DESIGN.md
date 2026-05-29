@@ -6,9 +6,19 @@
 > nearest-neighbour fiber-locality adjudicator that targets the
 > tolerance-fidelity vs. coverage obstruction characterized in
 > [`PDE_C1_LOCK_EXECUTION_SYNTHESIS.md`](PDE_C1_LOCK_EXECUTION_SYNTHESIS.md)
-> §4. **Status: proposed, not built, not run.** No harness path or
-> protocol section is written until this design is signed off. §7
-> lists the open choices that need the owner's call.
+> §4. §7 lists the open choices that needed the owner's call.
+>
+> **Status update 2026-05-28: SIGNED OFF and BUILT.** Owner signed off
+> with first target = the **v4 regime (d = 32)**; all other §7 defaults
+> adopted (`k = 30`, `delta_incompat = 0.01`, augment-not-replace
+> binning, `--adjudicator knn` flag sharing the deterministic
+> integration). Implemented in
+> [`../../scripts/pde_c1_kolmogorov_cell.py`](../../scripts/pde_c1_kolmogorov_cell.py)
+> (`aggregate_knn` / `summarize_knn`, exact `BallTree` neighbour
+> search, `DEFERRED_FIDELITY_COVERAGE` receipt) and adopted as
+> [`PDE_C1_FIBER_PROTOCOL.md`](PDE_C1_FIBER_PROTOCOL.md) §5b. First run
+> launched at the v4 regime (`--preset lock_v4 --adjudicator knn`);
+> self-test and bin/knn smoke all pass.
 
 ## 1. Why this is principled, not another knob
 
