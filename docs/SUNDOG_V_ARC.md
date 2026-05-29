@@ -409,12 +409,18 @@ is **edit-color-rule failure**: the structured-edit framing found nontrivial
 shape/canvas and edit-mask signal, but the per-task edit-color learner did not
 recover exact output colors. Five Phase 3 full-grid controls now agree on the
 held-out exact-grid floor across two task distributions, two learner families,
-and two output framings. Future Phase 3 reopens require a new pre-registered
-Branch D variant or a new Branch E spec. The first bottleneck-targeted Branch D
-variant is now filed as `structured_edit_color_rule_v2`: keep the baseline and
-edit-mask components fixed, and replace only the edit-color MLP with a
-deterministic conditioning-derived color-rule bank. Execution remains held until
-variant runner tooling and a freeze-marker amendment are filed.
+and two output framings. The first bottleneck-targeted Branch D variant,
+`structured_edit_color_rule_v2`, kept the baseline and edit-mask components
+fixed and replaced only the edit-color MLP with a deterministic
+conditioning-derived color-rule bank. Its binding receipt returned
+**`branch_d_color_rule_full_grid_floor`**: the raw-grid color-rule arena did
+not open, so no signature-vs-full-grid sufficiency comparison is licensed. Six
+Phase 3 full-grid controls now agree on the held-out exact-grid floor. The
+variant did, however, shift the bottleneck into measured slices: 41%
+edit-mask failure, 16% color-rule-selection failure, and 9% rule-bank-coverage
+failure. Future Phase 3 reopens now require a new pre-registered
+mask-targeted Branch D variant, selection-refinement Branch D variant,
+rule-bank extension Branch D variant, or Branch E spec.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 

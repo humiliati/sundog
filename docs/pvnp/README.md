@@ -25,6 +25,10 @@ Phase specs:
 - [`PHASE1_V2_SLATE.md`](PHASE1_V2_SLATE.md) - repair slate opened after the
   v1 named quarantine, focused on decision-relevant invariance checks,
   basin-shape boundary closure, coverage disposition, and checker overhead.
+- [`PHASE1_V3_SLATE.md`](PHASE1_V3_SLATE.md) - repair slate opened after the
+  v2 safety-repair-landed quarantine, focused on cost batching,
+  `sensor_health_v1` disposition, acceptance-volume sanity, and optional
+  inversion-target widening.
 
 Templates:
 
@@ -41,7 +45,7 @@ Result convention:
 Receipts:
 
 - [`receipts/README.md`](receipts/README.md) - receipt index, including the
-  Phase 1 v0 and v1 named-quarantine receipts.
+  Phase 1 v0, v1, and v2 named-quarantine receipts.
 
 Current state:
 
@@ -57,9 +61,9 @@ Current state:
   v0 spoof channel closed, but invariance vacuity, boundary leak, and cost
   overhead remain open.
 - Phase 1 v2 repair slate opened: 2026-05-28.
-- Phase 1 v2 implementation path started: `npm run pvnp:phase1:v2` runs
-  end-to-end and writes unreviewed artifacts under
-  `results/pvnp/phase1-toy-verifier-v2/`. First run: false-accept rate 0%,
-  `capacity_threshold = not_estimated`, zero accepted basin-shape
-  out-of-promise rows, but cost overhead worsened and several fields remain
-  near-vacuous.
+- Phase 1 v2 harness executed: 2026-05-28. Verdict = named quarantine with
+  safety repair landed; false-accept rate 0%, `capacity_threshold =
+  not_estimated`, zero accepted basin-shape out-of-promise rows, but cost
+  overhead, `sensor_health_v1` disposition, and acceptance-volume sanity
+  remain open.
+- Phase 1 v3 repair slate opened: 2026-05-28.

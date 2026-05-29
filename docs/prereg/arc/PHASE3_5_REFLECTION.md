@@ -447,3 +447,27 @@ with a deterministic color-rule bank selected from conditioning residuals.
 
 This addendum does not admit execution. The variant remains in execution hold
 until runner tooling and a freeze-marker amendment are filed.
+
+## Post-Edit-Color-Rule Variant Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+The `structured_edit_color_rule_v2` binding receipt is now filed. Its verdict
+is **`branch_d_color_rule_full_grid_floor`**: the raw-grid color-rule arm did
+not open the non-baseline exact arena, so no
+`signature_palette_edit_color_v2` vs. `raw_grid_edit_color_v2` sufficiency
+comparison is licensed in this variant.
+
+This closes the first Branch D bottleneck variant in its filed framing and
+marks the sixth Phase 3 full-grid-control floor. The result is diagnostically
+useful because the bottleneck shifted into measured slices:
+
+- `edit_mask_failure`: **41%** of failures;
+- `color_rule_selection_failure`: **16%** of failures, including the largest
+  locked-accuracy regret slice;
+- `color_rule_bank_coverage_failure`: **9%** of failures.
+
+Further Phase 3 work requires a new pre-registered reopen spec. The admissible
+next moves are now narrowed to a mask-targeted Branch D variant,
+selection-refinement Branch D variant, rule-bank extension Branch D variant, or
+Branch E spec. This addendum admits no execution.

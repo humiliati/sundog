@@ -12,36 +12,37 @@ Short version:
 > capacity envelope?
 
 Status: Roadmap draft. Lit-pass, project scaffold, Phase 1 toy-verifier
-spec, v0 and v1 frozen slates, v2 repair slate, and v0 + v1 execution
-receipts all filed 2026-05-28; see
+spec, v0 + v1 + v2 frozen slates, v3 repair slate, and v0 + v1 + v2
+execution receipts all filed 2026-05-28; see
 [`P_V_NP_LITPASS_MEMO.md`](P_V_NP_LITPASS_MEMO.md),
 [`pvnp/PHASE1_TOY_VERIFIER_SPEC.md`](pvnp/PHASE1_TOY_VERIFIER_SPEC.md),
 [`pvnp/PHASE1_V0_SLATE.md`](pvnp/PHASE1_V0_SLATE.md),
 [`pvnp/PHASE1_V1_SLATE.md`](pvnp/PHASE1_V1_SLATE.md),
-[`pvnp/PHASE1_V2_SLATE.md`](pvnp/PHASE1_V2_SLATE.md), and the receipts under
-[`pvnp/receipts/`](pvnp/receipts/). Phase 1 v0 returned a **named
+[`pvnp/PHASE1_V2_SLATE.md`](pvnp/PHASE1_V2_SLATE.md),
+[`pvnp/PHASE1_V3_SLATE.md`](pvnp/PHASE1_V3_SLATE.md), and the receipts
+under [`pvnp/receipts/`](pvnp/receipts/). v0 returned a **named
 quarantine** with `capacity_threshold = <=small` after `A_spoof_small`
 breached 245 / 444 unsafe items by editing analytical certificate fields
-the v0 verifier did not bind to the source trace. Phase 1 v1 was a
-source-binding repair slate; its execution receipt is also a **named
-quarantine** but with the load-bearing v0 falsifier closed:
-`A_spoof_field_small` and `A_spoof_source_small` both went 0 / 494 across
-~63 000 attempts, 5 / 5 synthetic integrity-mismatch probes quarantined,
-and `capacity_threshold = not_estimated`. Three v1 slate gates still
-fail — invariance vacuity (`invariance_checks_v1` 100 % match),
-boundary absence (131 / 768 basin-shape promise violations accepted), and
-cost (wall-time ratio 1139 × vs rollout, worse than v0's 228 ×) — and
-`coverage_digest` became structurally redundant under v1's new
-`geometry_promise_signal` gate. Privilege-leak audit was green in both
-runs; false-accept rate stayed under 0.13 % in both. Phase 1 v2 is now
-queued as a repair slate for decision-relevant invariance checks,
-basin-shape boundary closure, standalone coverage removal, and checker
-overhead; its initial implementation path runs end-to-end with unreviewed
-artifacts under `results/pvnp/phase1-toy-verifier-v2/`. The first v2 artifact
-run closes accepted basin-shape out-of-promise rows and keeps
-`capacity_threshold = not_estimated`, but cost overhead worsens and multiple
-fields remain near-vacuous. No v2 receipt has been filed. No
-complexity-theoretic result claimed. This document is a research bridge from
+the verifier did not bind to the source trace. v1 closed that spoof
+channel via source binding (both split spoof attackers went 0 / 494
+across ~63 000 attempts; 5 / 5 integrity-mismatch probes quarantined)
+but left three slate gates open (invariance vacuity, basin-shape
+boundary, cost). v2 closed the remaining safety gates — **0 false
+accepts on measurement**, **0 / 768 out-of-promise basin-shape accepts**
+via `geometry_promise_signal_v2`, `invariance_checks_v2` at 8.03 %
+decision delta, standalone `coverage_digest` removed and subsumed into
+the geometry signal, 5 / 5 integrity probes quarantine (new
+`duplicate_trace_id` probe added) — but is also filed as **named
+quarantine**: the slate's cost gate failed (wall-time ratio 1535 × vs
+rollout, worse than v1's 1139 ×, slate required ≥ 25 % improvement),
+`sensor_health_v1` fell below the v1-inherited 2 % vacuity-delta gate
+(1.74 % delta) and is named for v3 disposition under the same
+subsumption pattern as v1's coverage_digest, and the acceptance rate
+is 9.7 % (223 / 2304) pending v3 sanity check. `capacity_threshold =
+not_estimated` for both v1 and v2; privilege-leak audit green for all
+three runs. v3 is opened as the cost/sensor-disposition/acceptance-volume
+repair slate named by the v2 receipt's Next-Allowed-Step section.
+No complexity-theoretic result claimed. This document is a research bridge from
 Sundog mesa, ARC, Faraday, and signature-sufficiency work into the language of
 verification hardness, certificates, reductions, promise envelopes, and
 capacity-relative one-wayness.
@@ -580,10 +581,12 @@ baselines, reproduced metrics, and archived artifacts.
   after the v0 named quarantine.
 - [`pvnp/PHASE1_V2_SLATE.md`](pvnp/PHASE1_V2_SLATE.md): repair slate opened
   after the v1 named quarantine.
+- [`pvnp/PHASE1_V3_SLATE.md`](pvnp/PHASE1_V3_SLATE.md): repair slate opened
+  after the v2 safety-repair-landed quarantine.
 - [`pvnp/RECEIPT_TEMPLATE.md`](pvnp/RECEIPT_TEMPLATE.md): receipt template
   for phase and probe results.
 - [`pvnp/receipts/README.md`](pvnp/receipts/README.md): receipt index,
-  including the Phase 1 v0 and v1 named-quarantine receipts.
+  including the Phase 1 v0, v1, and v2 named-quarantine receipts.
 
 ## 11. Cross-References
 

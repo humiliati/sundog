@@ -7,11 +7,12 @@ Base Branch D spec:
 
 Filed: **2026-05-28 (PT)**
 
-Status: **SPEC FILED; EXECUTION HOLD**. This file starts the first Branch D
-variant after `structured_edit_residual_v1`. It changes only the edit-color
-component identified as the Phase 3D bottleneck. It admits no run until runner
-tooling, npm wiring, result ignore path, leak-check coverage, and a
-freeze-marker amendment are committed together.
+Status: **BINDING RECEIPT FILED --
+`branch_d_color_rule_full_grid_floor`**. This file defines the first Branch D
+variant after `structured_edit_residual_v1`. It changed only the edit-color
+component identified as the Phase 3D bottleneck. The binding receipt did not
+open the raw-grid color-rule arena, so no signature-vs-full-grid sufficiency
+comparison is licensed in this variant.
 
 ## Purpose
 
@@ -321,3 +322,38 @@ Forbidden:
   the non-baseline arena;
 - extra seeds or task narrowing after an arena-floor receipt without a new
   append-only amendment.
+
+## Binding Receipt Addendum
+
+Filed: **2026-05-28 (PT)**.
+
+Binding receipt path:
+
+`results/arc/phase3d-edit-color-rule-v2/`
+
+The binding receipt is summarized in `PHASE3_SUFFICIENCY_SPEC.md` under
+"Variant 20-Shard Binding Receipt:
+`branch_d_color_rule_full_grid_floor` (bottleneck-shifted)". The verdict is
+**`branch_d_color_rule_full_grid_floor`**: `raw_grid_edit_color_v2` scored zero
+non-baseline exact tasks on at least one held-out arena lane, so the arena did
+not open and no `signature_palette_edit_color_v2` vs.
+`raw_grid_edit_color_v2` sufficiency comparison is licensed.
+
+This is the sixth Phase 3 full-grid floor. The variant nevertheless achieved
+its diagnostic design goal: it shifted the bottleneck from undifferentiated
+edit-color learning to a measured decomposition of the remaining failure.
+
+Primary bottleneck allocation from the binding receipt:
+
+- `edit_mask_failure`: **41%** of failures;
+- `color_rule_selection_failure`: **16%** of failures, with approximately
+  `0.30` to `0.35` rule-selection regret in the locked-accuracy slice;
+- `color_rule_bank_coverage_failure`: **9%** of failures.
+
+Remaining admissible Phase 3 reopens require a new pre-registered spec. The
+measured order of leverage is:
+
+1. mask-targeted Branch D variant;
+2. selection-refinement Branch D variant;
+3. rule-bank extension Branch D variant;
+4. Branch E spec such as generative program search or test-time prompting.
