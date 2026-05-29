@@ -7,13 +7,13 @@ Filed: **2026-05-29 (PT)**
 
 Status: **Phase 1 instrumentation closed across the full ladder 2026-05-29;
 Phase 2 v0 executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`;
-P0 amendment 1 (APE smearing) + Phase 2 v1 spec filed 2026-05-29**. See
+Phase 2 v1 APE-smearing run executed 2026-05-29 ->
+`YM-P2-NEG-A no_rank_local_structure`**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
-The v0 Phase 2 receipt is a named null and does not admit Phase 3
-observable-certificate work; v1 (smeared signature, same ensembles) is
-the next admitted scoring lane.
+The v0 and v1 Phase 2 receipts are named nulls and do not admit Phase 3
+observable-certificate work.
 
 ## Filed Artifacts
 
@@ -84,18 +84,18 @@ the next admitted scoring lane.
   Six controls scored on smeared signatures. Promotion thresholds and
   branch table inherited from v0; adds `YM-P2-QUAR-E smearing_drift`
   per the amendment. Compute estimate ~2-3 min for the single
-  aggregation pass. Runner not yet implemented.
+  aggregation pass.
+  **Executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`.**
+  Receipt:
+  [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md).
 
 ## Required Next Artifact
 
-The next artifact should be the minimal v1 aggregation runner
-`scripts/yang-mills-phase2-v1-su2-3d-aggregate.mjs` + the
-`yang-mills:phase2:v1:su2-3d:aggregate` npm script. The smearing
-routine lives in a new shared module
-`scripts/lib/yang-mills-su2-3d-smearing.mjs` to keep the aggregation
-entry focused on validation + scoring; the bare SU(2) 3D core
-(`scripts/lib/yang-mills-su2-3d-core.mjs`) and the v0 aggregation
-runner remain bit-for-bit unchanged.
+The next artifact should be a dated v2 probe spec under
+`docs/yang-mills/specs/`. Because both bare-loop v0 and APE-smeared v1
+landed `YM-P2-NEG-A`, the v2 probe should propose a target or signature-class
+redesign rather than a retune of the locked `(alpha, N_sm) = (0.5, 10)`
+smearing parameters.
 
 ## Guardrail
 
@@ -201,3 +201,11 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   vs v0; six controls scored on smeared signature; YM-P2-QUAR-E
   added per amendment. ONE aggregation invocation only; estimated
   ~2-3 min compute.
+- 2026-05-29: Phase 2 v1 APE-smearing aggregation executed and filed as
+  [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_v1_no_rank_local_structure.md).
+  Verdict: `YM-P2-NEG-A no_rank_local_structure`. Smearing health passed
+  (`det` drift `6.66e-16`, unitarity `9.42e-16`, orientation spread
+  `3.10e-4`) and gauge-randomized smeared residual was `1.44e-15`, but
+  within-beta primary bin-purity@5 = `0.29375`, primary-minus-random =
+  `-0.00208`, and metadata/raw controls beat the primary. This named null
+  blocks Phase 3 from v1 and routes the lane to a dated v2 probe spec.
