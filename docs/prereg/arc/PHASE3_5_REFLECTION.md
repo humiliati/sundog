@@ -685,3 +685,16 @@ learning/representation question the seven floors + four certificates
 characterized. A Branch E v2 (deferred intricate mask families + deeper
 composition) is the natural next probe of whether the rate rises above this
 floor-clearing baseline.
+
+Branch E v2 was executed (pinned `a307340`, deterministic): verdict
+**`branch_e_v2_capability_replicated`**. Admitting the deferred intricate
+deterministic mask families + the morphology cross-product + depth-3 composition
+**did not lift** the capability — v2 retained both v1 gated solves on both lanes
+but solved zero new tasks (material-lift gate not met), and the enlarged search
+space slightly *reduced* validation (2→1 per lane) via top-2 crowding
+(train-consistent-but-test-wrong programs displacing the correct one). So the
+deterministic program-search capability is **bounded near the v1 ~3% baseline**;
+more deterministic primitives/depth do not crack new held-out tasks in the
+registered universe. A materially higher rate would need a different solver class
+(learned ranker, richer object-centric language, or LM proposer), each under its
+own pre-registered spec; otherwise this is the durable deterministic-search bound.
