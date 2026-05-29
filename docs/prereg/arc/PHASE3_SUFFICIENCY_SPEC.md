@@ -7175,3 +7175,46 @@ Verdict impact: **no register change and no execution admission**. The original
 not admitted until a future Phase 0 expansion receipt files the candidate queue,
 manual inspection log, expanded register, leak-check coverage, and a
 freeze-marker amendment.
+
+### 2026-05-29 (PT) -- Jeffery Hughes Jr. -- Phase 0 Expansion Admitted And Expanded Certificate Filed: `phase3e_v2_expanded_oracle_regression`
+
+The Phase 0 context expansion completed in three committed steps:
+
+| commit | phase | outcome |
+| --- | --- | --- |
+| `f9a1dd9` | freeze marker | candidate-ordering script, `--split-mode`, inspection renderer, Amendment A |
+| `a0f1a4b` | inspect + admit | `phase0_fiber_expansion_admit` -- 108-task balanced register filed |
+| `fa079b9` | expanded certificate | `phase3e_v2_expanded_oracle_regression` |
+
+The expansion register contains 108 public-training tasks: the original 36 plus
+72 new tasks, exactly 18 per prior. Selection followed the frozen queue order;
+the expansion receipt reports 0 hard-exclusions, 0 discipline tripwires, and no
+cross-prior rebalancing. The expanded register hash is recorded in
+`results/arc/phase0-context-expansion-for-fibers/`.
+
+The expanded Phase 3E v2 certificate ran under the unchanged geometry and
+`program_sketch_v2` contract (`splitMode=sha256_expansion`, pinned to
+`gitCommit a0f1a4b`, runnerSha256 `9D456143...`, `gitDirty=false`, wall about
+5m47s). The runner's internal branch was `phase3e_oracle_v2_solver_leakage`,
+mapped by the expansion spec to **`phase3e_v2_expanded_oracle_regression`**.
+
+Two results are now binding:
+
+1. **The fibers barely moved.** `U_primary` increased from 25 to 336 and
+   `U_all` from 49 to 491, but minimum cross-task
+   `d_context_signature_palette` contracted only from 0.207 to 0.196. There are
+   still 0 near pairs within `epsilon_primary = 0.05`, 0 exact/representation
+   collisions, and 0% fidelity-passing neighborhoods.
+2. **The oracle gate regressed.** Anti-vacuity and anti-prior-laundering still
+   pass, but anti-solver-leakage fails: `core_sketch_exact_lookup_fraction`
+   rises from 0.04 on the 36-task v2 receipt to 0.351 on the 108-task register,
+   above the frozen 0.20 threshold. `unique_core_sketch_fraction` remains below
+   its frozen threshold (0.55 <= 0.60).
+
+Verdict impact: **no sufficiency conclusion, no Branch E license, and no
+collision/incompatibility certificate**. The 36-task v2 receipt and seven
+full-grid floors stand. Retuning `leakage_exact_lookup_max` after seeing 0.351
+is forbidden; any register-size-robust oracle metric requires a new
+pre-registered spec. Separately, the 3x balanced expansion did not populate the
+absolute-epsilon fibers, making sparsity look durable rather than a small-N
+artifact.

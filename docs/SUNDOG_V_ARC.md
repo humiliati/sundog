@@ -448,10 +448,18 @@ four v1-blind priors are now non-vacuous with 6-7 of 9 facets populated) while
 leaving the frozen geometry byte-identical to v1 (0 collisions, 0 near pairs,
 minimum cross-task distance `0.207`, 0% fidelity-passing). The remaining Phase
 3E deferral cause is therefore registered-context geometric sparsity, not label
-vacuity. The next certificate path is now filed as
-`PHASE0_CONTEXT_EXPANSION_FOR_FIBERS_SPEC.md`: a Phase 0 register-amendment
-protocol that keeps the v2 oracle and all Phase 3E geometry frozen while
-targeting a balanced 108-task public-training register.
+vacuity. The Phase 0 context expansion path then ran exactly the registered
+balanced expansion: **108 tasks, 18 per prior**, with verdict
+**`phase0_fiber_expansion_admit`**. The expanded Phase 3E v2 certificate returned
+**`phase3e_v2_expanded_oracle_regression`**: the anti-solver-leakage gate that
+was clean at 36 tasks failed on the larger register
+(`core_sketch_exact_lookup_fraction 0.04 -> 0.351`, threshold 0.20), while the
+fibers remained sparse despite `U_primary` growing 25 -> 336 (min cross-task
+distance `0.207 -> 0.196`, still 0 near pairs and 0% fidelity-passing). The
+expansion therefore neither promotes nor blocks signature sufficiency or Branch
+E; it says the absolute-epsilon fiber-collision approach is not populated by a
+3x balanced register expansion, and the v2 oracle leakage calibration is not
+register-size robust.
 
 ### Phase 4 — 5D / Low-Dimensional Collapse Check
 
