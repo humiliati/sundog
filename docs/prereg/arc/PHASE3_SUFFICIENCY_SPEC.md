@@ -6697,3 +6697,64 @@ Permitted public language before a binding receipt:
 Forbidden: claiming a collision, locality positive, Branch E solver result, or
 signature sufficiency/insufficiency conclusion before a binding Phase 3E receipt
 exists.
+
+### 2026-05-28 (PT) — Jeffery Hughes Jr. — Phase 3E Certificate Tooling Freeze-Marker (execution unblocked; certificate runs under the 10-minute rule)
+
+The Phase 3E signature-fiber certificate spec held execution until
+"runner tooling, npm wiring, result ignore path, leak-check coverage,
+and a freeze-marker amendment are committed together." This amendment
+files that commit:
+
+- `docs/prereg/arc/phase3e_signature_fiber_certificate.py` (runner) —
+  standalone certificate module. It does **not** train a grid decoder
+  and does **not** import another phase3 runner. The
+  `arc-p3-feature-v1` grid encoders, the Branch D baseline family, the
+  mask candidate bank, and the edit-color rule bank are **copied
+  verbatim** from the frozen mask-target runner under marked headers
+  and are reused **only** to compute the `program_sketch_v1` oracle
+  audit labels (run with a fixed representation-neutral grid arm,
+  `raw_grid_edit_mask_v3`, so the behavior labels reflect true grids,
+  not a signature projection). The certificate's own logic — per-arm
+  context identity, per-arm context distance (signature cosine /
+  metadata L1 / raw Hamming, with min-cost bipartite
+  conditioning-pair matching), exact/representation/near-fiber
+  collision detection, k=3 cross-task fiber locality, and the
+  5-branch precedence adjudication — is implemented in the new
+  "Certificate" section.
+- `scripts/arc-phase3e-signature-fiber-certificate.mjs` (Node wrapper).
+- `package.json`: adds `arc:phase3e:signature-fiber-certificate`.
+- `.gitignore`: adds `results/arc/phase3e-signature-fiber-certificate/`.
+- Pre-commit + CI ARC leak-check passes (now scans 19 ARC scripts;
+  the certificate contains no `evaluation` literal).
+
+**Two-stage target barrier**: the runner writes
+`context_fingerprints_no_targets.jsonl` + its `.sha256` (all four arm
+context identities, no target information) and records the hash in the
+manifest **before** any public-training test output is read for target
+labels. Honoured in `main()` Stage 1 → Stage 2.
+
+**Determinism**: the certificate is fully deterministic. The only
+torch use is the legacy mask-MLP family inside the mask oracle, which
+calls `set_global_determinism(derived_seed)` (capped at
+`ORACLE_MASK_MLP_STEPS = 50`, since the MLP is one of 13 mask families
+in an audit label, not the certificate's subject). The geometric core
+(distances, collisions, kNN) is pure Python.
+
+**Smoke fingerprint** (full universe, `--allow-dirty`, all 36
+registered tasks):
+
+- `U_all = 49` contexts (`validation_lodo=18`, `validation_pttest=6`,
+  `test_lodo=19`, `pttest=6`); `U_primary = test_lodo ∪ pttest = 25`.
+- 15 receipt files written (the spec's required artifact set).
+- wall: **3 min 49 s** — under the ten-minute rule, so the binding run
+  is a single direct invocation (no staging/sharding needed).
+- branch (smoke): `phase3e_deferred_label_vacuity`. The authoritative
+  clean-tree binding receipt is filed in the next amendment.
+
+**Verdict impact**: no prior verdict changes. Phase 3E status moves
+from "SPEC FILED; EXECUTION HOLD" to "EXECUTION ADMITTED; certificate
+runs under the ten-minute rule." The binding certificate receipt is
+filed in the next amendment.
+
+**Public-language constraint**: unchanged from the spec
+§"Public Language" until the binding receipt lands.
