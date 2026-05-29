@@ -42,6 +42,7 @@ const BETA_KEYS = Object.freeze(["2.0", "2.4", "2.8"]);
 const K_SLATE = Object.freeze([3, 5, 10]);
 const PRIMARY_K = 5;
 const CHANCE = 1 / 3;
+const PERMUTATION_CONTROL_RESAMPLES = 1000;
 
 function parseArgs(argv) {
   const out = {};
@@ -270,10 +271,10 @@ function buildRandomGraph(records, candidateFn, maxK, seedLabel) {
   });
 }
 
-function makePermutation(records, seedLabel, betaKey = null) {
+function makePermutation(records, seedLabel, betaKey = null, labelKind = "withinBin", resampleIndex = 0) {
   const selected = records.filter((r) => betaKey === null || r.betaKey === betaKey).map((r) => r.globalIndex);
-  const labels = selected.map((idx) => records[idx].withinBin);
-  const rng = mulberry32(deriveSubstreamSeed(202605290299, seedLabel, betaKey || "global"));
+  const labels = selected.map((idx) => records[idx][labelKind]);
+  const rng = mulberry32(deriveSubstreamSeed(202605290299, seedLabel, betaKey || "global", resampleIndex));
   for (let i = labels.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
     [labels[i], labels[j]] = [labels[j], labels[i]];
@@ -281,6 +282,18 @@ function makePermutation(records, seedLabel, betaKey = null) {
   const out = {};
   for (let i = 0; i < selected.length; i++) out[selected[i]] = labels[i];
   return out;
+}
+
+function makeWithinPermutation(records, resampleIndex) {
+  const out = {};
+  for (const betaKey of BETA_KEYS) {
+    Object.assign(out, makePermutation(records, "CTRL_PERM_within", betaKey, "withinBin", resampleIndex));
+  }
+  return out;
+}
+
+function makeGlobalPermutation(records, resampleIndex) {
+  return makePermutation(records, "CTRL_PERM_across", null, "globalBin", resampleIndex);
 }
 
 function scoreGraph(graph, labelOf, k) {
@@ -292,6 +305,28 @@ function scoreGraph(graph, labelOf, k) {
     }
     return { query: row.query, score: hits / k };
   });
+  return {
+    meanBinPurity: mean(queryScores.map((r) => r.score)),
+    queryScores,
+  };
+}
+
+function scorePermutationControl(graph, permutationMaps, k) {
+  const sums = new Map(graph.map((row) => [row.query, 0]));
+  for (const labels of permutationMaps) {
+    for (const row of graph) {
+      const qLabel = labels[row.query];
+      let hits = 0;
+      for (const n of row.neighbors.slice(0, k)) {
+        if (labels[n.index] === qLabel) hits++;
+      }
+      sums.set(row.query, sums.get(row.query) + hits / k);
+    }
+  }
+  const queryScores = graph.map((row) => ({
+    query: row.query,
+    score: sums.get(row.query) / permutationMaps.length,
+  }));
   return {
     meanBinPurity: mean(queryScores.map((r) => r.score)),
     queryScores,
@@ -570,22 +605,31 @@ async function main() {
       across: buildNearestGraph(records, gaugeGlobalNorm.normalized, acrossCandidate, maxK),
     },
   };
-  const withinPermutations = {};
-  for (const betaKey of BETA_KEYS) Object.assign(withinPermutations, makePermutation(records, "CTRL_PERM_within", betaKey));
-  const globalPermutation = makePermutation(records, "CTRL_PERM_across", null);
-  controls.CTRL_PERM = { within: withinPrimary, across: acrossPrimary, withinPermutations, globalPermutation };
+  const withinPermutations = [];
+  const globalPermutations = [];
+  for (let i = 0; i < PERMUTATION_CONTROL_RESAMPLES; i++) {
+    withinPermutations.push(makeWithinPermutation(records, i));
+    globalPermutations.push(makeGlobalPermutation(records, i));
+  }
+  controls.CTRL_PERM = { within: withinPrimary, across: acrossPrimary, withinPermutations, globalPermutations };
 
   for (const [controlId, graphs] of Object.entries(controls)) {
     const payload = controlId === "CTRL_PERM"
-      ? { kStored: maxK, withinGraphSource: "primary", acrossGraphSource: "primary", withinPermutations, globalPermutation }
+      ? {
+          kStored: maxK,
+          withinGraphSource: "primary",
+          acrossGraphSource: "primary",
+          permutationControlResamples: PERMUTATION_CONTROL_RESAMPLES,
+          seedBase: 202605290299,
+          withinPermutationMode: "uniform_within_beta_label_permutation",
+          acrossPermutationMode: "uniform_global_label_permutation",
+        }
       : { kStored: maxK, within: graphForFile(graphs.within), across: graphForFile(graphs.across) };
     writeJSON(path.join(aggDir, "control_nn_graphs", `${controlId}.json`), payload);
   }
 
   const labelWithin = (idx) => records[idx].withinBin;
   const labelGlobal = (idx) => records[idx].globalBin;
-  const labelWithinPerm = (idx) => withinPermutations[idx];
-  const labelGlobalPerm = (idx) => globalPermutation[idx];
   const scoreRows = [];
   const scoreLookup = {};
   const addScores = (lane, id, graph, labelFn) => {
@@ -596,12 +640,20 @@ async function main() {
       scoreLookup[`${lane}:${id}:${k}`] = scored;
     }
   };
+  const addPermutationScores = (lane, id, graph, permutationMaps) => {
+    for (const k of K_SLATE) {
+      const scored = scorePermutationControl(graph, permutationMaps, k);
+      const ci = bootstrapCi(records, scored.queryScores, LOCKED.bootstrapResamples, `${lane}:${id}:${k}`);
+      scoreRows.push([lane, id, k, scored.meanBinPurity, scored.meanBinPurity / CHANCE, ci.low, ci.high]);
+      scoreLookup[`${lane}:${id}:${k}`] = scored;
+    }
+  };
   addScores("within_beta", "PRIMARY", withinPrimary, labelWithin);
   addScores("across_beta", "PRIMARY", acrossPrimary, labelGlobal);
   for (const [controlId, graphs] of Object.entries(controls)) {
     if (controlId === "CTRL_PERM") {
-      addScores("within_beta", controlId, graphs.within, labelWithinPerm);
-      addScores("across_beta", controlId, graphs.across, labelGlobalPerm);
+      addPermutationScores("within_beta", controlId, graphs.within, graphs.withinPermutations);
+      addPermutationScores("across_beta", controlId, graphs.across, graphs.globalPermutations);
     } else {
       addScores("within_beta", controlId, graphs.within, labelWithin);
       addScores("across_beta", controlId, graphs.across, labelGlobal);

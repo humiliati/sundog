@@ -6,12 +6,13 @@ Lit-pass: [`YANG_MILLS_LITPASS_MEMO.md`](../../YANG_MILLS_LITPASS_MEMO.md)
 Filed: **2026-05-29 (PT)**
 
 Status: **Phase 1 instrumentation closed across the full ladder 2026-05-29;
-Phase 2 v0 spec filed 2026-05-29**. See
+Phase 2 v0 executed 2026-05-29 ->
+`YM-P2-NEG-A no_rank_local_structure`**. See
 [`P0_DOMAIN_AND_RECEIPT_LOCK.md`](P0_DOMAIN_AND_RECEIPT_LOCK.md). This
 directory remains the home for any future Yang-Mills pre-registrations
 (Phase 1 runner manifests, Phase 2/3/4 phase specs, and any P0 amendments).
-It still admits no Phase 2 scoring without the per-β ensemble runs +
-aggregation invocation completing per the v0 spec.
+The v0 Phase 2 receipt is a named null and does not admit Phase 3
+observable-certificate work.
 
 ## Filed Artifacts
 
@@ -60,22 +61,21 @@ aggregation invocation completing per the v0 spec.
   `CTRL_GAUGE_RAND`), `CTRL_FINITE_SIZE` declared but deferred to
   Phase 4. New branch `YM-P2-NEG-D raw_dominates` introduced. Three
   per-β ensemble invocation commands + one aggregation invocation
-  command all locked in the spec. Runners not yet implemented.
+  command all locked in the spec.
+  **Executed 2026-05-29 -> `YM-P2-NEG-A no_rank_local_structure`.**
+  Receipt:
+  [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md).
 
 ## Required Next Artifact
 
-The next artifact should be the minimal Phase 2 ensemble runner
-`scripts/yang-mills-phase2-su2-3d-ensemble.mjs` + the three per-β npm
-scripts required by
-[`PHASE2_SU2_3D_relative_locality_v0.md`](PHASE2_SU2_3D_relative_locality_v0.md).
-The ensemble runner reuses `scripts/lib/yang-mills-su2-3d-core.mjs`
-from Phase 1 (lattice + heatbath + overrelaxation + signature), bumps
-the lattice from 8³ to 12³, drops the Phase 1 gauge-randomization read
-(deferred to the aggregation runner per `CTRL_GAUGE_RAND` semantics),
-and adds the γ_held held-out summary computation per the v0 spec.
-The existing Phase 1 SU(2) 3D entry must remain bit-for-bit unchanged.
-After the three per-β ensemble runs land, the aggregation runner
-`scripts/yang-mills-phase2-su2-3d-aggregate.mjs` is the second piece.
+The next artifact should be a dated v1 probe spec under
+`docs/yang-mills/specs/` explaining the proposed design change before any new
+runner code. Because v0 failed the registered within-beta rank-locality gate,
+the probe spec should identify which knob is being changed (for example
+signature vocabulary, smearing/blocking, held-out target, beta/lattice slate,
+or control semantics) and whether the change is small enough for a Phase 2
+v1 preregistration or crosses the P0 lock boundary and needs a dated P0
+amendment. No Phase 3 artifact is admitted from the v0 receipt.
 
 ## Guardrail
 
@@ -149,4 +149,11 @@ ever needed, must be labelled exploratory and cannot be cited as receipts.
   margin `>= 0.05`. New branch `YM-P2-NEG-D raw_dominates` introduced.
   Per-β master seeds `202605290201` / `0202` / `0203`. Three per-β
   ensemble invocation commands + one aggregation invocation command
-  all locked in the spec. Runner implementation pending.
+  all locked in the spec.
+- 2026-05-29: Phase 2 v0 four-invocation verdict executed and filed as
+  [`../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md`](../../yang-mills/receipts/2026-05-29_SU2_3D_phase2_no_rank_local_structure.md).
+  Verdict: `YM-P2-NEG-A no_rank_local_structure`. Within-beta primary
+  bin-purity@5 = 0.3104 (below the registered 0.5 gate), primary-minus-random
+  margin = 0.0104 (below the registered 0.10 gate), and metadata matched or
+  beat the primary. All ensemble health gates passed. This named null blocks
+  Phase 3 from v0 and routes the lane to a dated v1 probe spec.
