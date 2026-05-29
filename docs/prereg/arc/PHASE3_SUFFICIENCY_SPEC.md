@@ -7250,3 +7250,38 @@ Verdict impact: **no execution admission and no relative-locality receipt**. The
 absolute-epsilon certificates remain binding. A future positive relative
 receipt would license only a later relative-selector spec, not sufficiency and
 not a Branch E solver.
+
+### 2026-05-29 (PT) -- Jeffery Hughes Jr. -- Phase 3E Relative-Locality Binding Receipt: `phase3e_relative_locality_negative`
+
+The relative-locality certificate ran on the expanded 108-task register
+(`U_primary=336`, `U_all=491`), pinned to freeze-marker `f7850f0`
+(runnerSha256 `3DD2C97A...`, 5 seeds x 1000 permutations, wall about 56 min).
+Receipt path:
+
+- `results/arc/phase3e-relative-locality-certificate/`
+
+**Branch: `phase3e_relative_locality_negative`.**
+
+At k=5, `signature_palette_context` has a weak but unusable rank-local signal:
+
+| metric | value | interpretation |
+| --- | ---: | --- |
+| `p_palette_vs_prior_stratified_random` | 0.0002 | statistically above prior-stratified random |
+| `delta_palette_vs_metadata` | +0.006 | metadata-tied, far below +0.10 positive bar |
+| `delta_palette_vs_uniform_random` | +0.072 | below +0.15 positive bar |
+| `delta_palette_vs_raw_grid` | -0.036 | raw grid is more sketch-coherent |
+| `palette_hard_incompatibility_rate` | 0.285 | exceeds 0.25 negative gate |
+
+The negative branch fires directly because hard-incompatibility exceeds the
+registered threshold. The result is not pure noise, but the signal is too small,
+metadata-explained, raw-grid-dominated, sign-unstable across k, and
+behaviorally incompatible too often to count as usable rank-local geometry.
+
+Verdict impact: **no sufficiency conclusion and no Branch E license/block**. The
+absolute-epsilon receipts remain binding. The Phase 3E certificate program has
+now converged across four receipts: v1 `deferred_label_vacuity`, v2
+`deferred_sparse_fibers`, expanded absolute `expanded_oracle_regression`, and
+relative rank `relative_locality_negative`. Across 36 and 108 registered tasks,
+`signature_palette_context` shows no certifiable usable fixed-radius fiber
+locality or rank-local sketch locality. Branch E, if pursued, must be justified
+by solver capability under its own pre-registered spec.
